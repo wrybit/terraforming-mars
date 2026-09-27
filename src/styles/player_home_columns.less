@@ -11,8 +11,8 @@
 // So weit ragen Brett-Elemente links bzw. rechts über .board-cont hinaus
 @player-home-board-overhang-left: 40px;
 @player-home-board-overhang-right: 24px;
-// Log unter dem Brett so hoch wie eine Projektkarte (300px + Rahmen)
-@player-home-log-height: 308px;
+// Log unter dem Brett so hoch wie die verkleinerte Karte der Hover-Vorschau (Projektkarte 308px, Zoom aus log.less)
+@player-home-log-height: floor(308px * @log-card-preview-zoom);
 
 @media only screen and (min-width: @player-home-columns-min-width) {
   .player-home-columns {

@@ -109,6 +109,9 @@
   }
 }
 
+// Größe der Karten in der Hover-Vorschau; bestimmt auch die Log-Höhe im Zwei-Spalten-Layout (player_home_columns.less)
+@log-card-preview-zoom: 0.8;
+
 // Hover-Vorschau: liegt bündig oben rechts über dem Log (gleich hoch wie eine Karte), damit nichts verrutscht.
 // fixed statt absolute, weil das Log in einer Spalte mit overflow liegen kann (player_home_columns.less)
 .card-panel--floating {
@@ -122,6 +125,7 @@
   // Außenabstand der Karten ist für Kartenreihen gedacht; hier soll die Karte bündig mit dem Log abschließen
   .card-container {
     margin: 0;
+    zoom: @log-card-preview-zoom;
   }
 }
 
