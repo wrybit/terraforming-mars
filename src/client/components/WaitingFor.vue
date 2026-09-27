@@ -44,6 +44,7 @@ import {INVALID_RUN_ID, AppErrorResponse} from '@/common/app/AppErrorId';
 import {Color} from '@/common/Color';
 import {gameDocumentTitle} from '../utils/documentTitle';
 import {setFaviconStatus, setFaviconTurnFrame} from '@/client/utils/favicon';
+import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 
 let ui_update_timeout_id: number | undefined;
 let documentTitleTimer: number | undefined;
@@ -67,6 +68,10 @@ const CANNOT_CONTACT_SERVER = 'Unable to reach the server. It may be restarting 
 
 export default defineComponent({
   name: 'WaitingFor',
+  // Oberstes Aktionsmenü als Tabs statt Radio-Liste (siehe orOptionsLayout.ts)
+  provide: {
+    [OR_OPTIONS_AS_TABS]: true,
+  },
   props: {
     playerView: {
       type: Object as () => ViewModel,

@@ -1,24 +1,42 @@
 <template>
-  <div class='wf-options'>
+  <div :class="['wf-options', {'wf-options--tabs': asTabs}]">
     <label v-if="showtitle"><div>{{ $t(playerinput.title) }}</div></label>
     <label v-if="playerinput.warning !== undefined" class="card-warning"><div>({{ $t(playerinput.warning) }})</div></label>
-    <div v-for="(option, idx) in displayedOptions" :key="idx">
-      <label class="form-radio" ref="optionLabels">
-        <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" >
-        <i class="form-icon" ></i>
-        <span>{{ $t(option.title) }}</span>
-      </label>
-      <div v-if="selectedIdx === idx" style="margin-left: 30px">
-        <PlayerInputFactory ref="inputfactory"
-                              :playerView="playerView"
-                              :playerinput="option"
-                              :onsave="playerFactorySaved(idx)"
-                              :showsave="showsave && showChildSaveButton(option)"
-                              :showtitle="false" />
+
+    <!-- Aktionsmenü: Tabs mit Zähler verfügbarer Einträge; leere Tabs sind abgeschwächt, aber anklickbar -->
+    <template v-if="asTabs">
+      <div class="or-tabs" role="tablist">
+        <button v-for="(option, idx) in displayedOptions" :key="idx"
+          ref="optionLabels"
+          type="button"
+          role="tab"
+          :aria-selected="selectedIdx === idx"
+          :class="['or-tab', {'or-tab--active': selectedIdx === idx, 'or-tab--empty': availableCount(option) === 0}]"
+          @click="selectedOption = option">
+          <span class="or-tab-title">{{ $t(option.title) }}</span>
+          <span v-if="availableCount(option) !== undefined" class="or-tab-count">{{ availableCount(option) }}</span>
+        </button>
       </div>
-    </div>
+      <div v-if="selectedIdx !== -1" class="or-tab-panel" role="tabpanel">
+        <PlayerInputFactory ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
+      </div>
+    </template>
+
+    <template v-else>
+      <div v-for="(option, idx) in displayedOptions" :key="idx">
+        <label class="form-radio" ref="optionLabels">
+          <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" >
+          <i class="form-icon" ></i>
+          <span>{{ $t(option.title) }}</span>
+        </label>
+        <div v-if="selectedIdx === idx" style="margin-left: 30px">
+          <PlayerInputFactory ref="inputfactory" v-bind="childInputProps(idx)" />
+        </div>
+      </div>
+    </template>
+
     <div v-if="showsave && selectedOption && !showChildSaveButton(selectedOption)">
-      <div style="margin: 5px 30px 10px" class="wf-action">
+      <div :class="['wf-action', {'or-tab-save': asTabs}]" :style="asTabs ? undefined : 'margin: 5px 30px 10px'">
         <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" @click="saveData" />
       </div>
     </div>
@@ -27,13 +45,14 @@
 
 <script lang="ts">
 
-import {defineComponent} from 'vue';
+import {defineComponent, inject, provide} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {isHTMLElement} from '@/client/utils/vueUtils';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
+import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 
 let unique = 0;
 
@@ -61,6 +80,12 @@ export default defineComponent({
   },
   components: {
     AppButton,
+  },
+  setup() {
+    const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
+    // Verschachtelte Auswahlen innerhalb dieses Menüs bleiben Radio-Listen
+    provide(OR_OPTIONS_AS_TABS, false);
+    return {asTabs};
   },
   data() {
     const displayedOptions: Array<PlayerInputModel> = [];
@@ -107,6 +132,24 @@ export default defineComponent({
     },
   },
   methods: {
+    // Anzahl auswählbarer Einträge (Karten, Standardprojekte, Aktionen) – undefined, wenn die Option keine Liste hat
+    availableCount(option: PlayerInputModel): number | undefined {
+      if (option.type === 'projectCard' || option.type === 'card') {
+        return option.cards.filter((card) => card.isDisabled !== true).length;
+      }
+      return undefined;
+    },
+    // Gemeinsame Props für den Kind-Input, egal ob Tab- oder Radio-Darstellung
+    childInputProps(displayedIdx: number) {
+      const option = this.displayedOptions[displayedIdx];
+      return {
+        playerView: this.playerView,
+        playerinput: option,
+        onsave: this.playerFactorySaved(displayedIdx),
+        showsave: this.showsave && this.showChildSaveButton(option),
+        showtitle: false,
+      };
+    },
     getSelectedOptionTop(): number | undefined {
       const element = this.getSelectedOptionLabelElement();
       return element?.getBoundingClientRect().top;
