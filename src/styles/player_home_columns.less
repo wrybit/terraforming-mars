@@ -94,6 +94,11 @@
     }
   }
 
+  // Zusätzliche Klasse für höhere Spezifität als die verschachtelten Originalregeln in player_home.less
+  .player-home-columns__mars .player_home_block--milestones-and-awards {
+    .milestones-awards-compact();
+  }
+
   .player-home-columns__log {
     // Breite 0 + min-width 100%: Log füllt die Spalte, bestimmt deren Breite aber nicht (das tut das Brett)
     width: 0;

@@ -1,0 +1,70 @@
+// Meilensteine und Auszeichnungen kompakt unter dem Brett (nur im Zwei-Spalten-Layout, siehe player_home_columns.less).
+// Kacheln zeigen nur das Bild; Name und Punktestand der Spieler erscheinen beim Hover über der Kachel,
+// damit keine Information verloren geht.
+
+@ma-compact-image-height: 60px; // Bildbereich von .ma-name (player_home.less: height 83px - padding-top 60px für den Namen)
+@ma-compact-gap: 6px;
+
+.milestones-awards-compact() {
+  .ma-title {
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .milestone-award-inline {
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .ma-block {
+    position: relative; // Bezug für das Hover-Overlay
+    margin: (@ma-compact-gap / 2);
+  }
+
+  .ma-name {
+    height: @ma-compact-image-height;
+    padding-top: 0;
+    border-radius: 10px;
+
+    // Name nur beim Hover (Overlay unten im Bild)
+    > span {
+      display: none;
+    }
+  }
+
+  .ma-scores {
+    display: none;
+  }
+
+  // Hover: Name und Punktestand als Overlay unter der Kachel
+  .ma-block:hover {
+    z-index: 10;
+
+    .ma-name > span {
+      display: block;
+      position: absolute;
+      top: @ma-compact-image-height;
+      left: 0;
+      right: 0;
+      padding: 2px 4px;
+      background: #e6e1e1;
+      border-radius: 0 0 6px 6px;
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    .ma-scores {
+      display: block;
+      position: absolute;
+      top: @ma-compact-image-height + 20px;
+      left: 0;
+      right: 0;
+      width: auto;
+      margin: 0;
+      padding: 2px 0;
+      // Deckend, damit die Überschrift darunter nicht durchscheint
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 0 0 6px 6px;
+    }
+  }
+}
