@@ -48,7 +48,7 @@
       :class="{'sidebar_item--is-active': ui.gamesetup_detail_open}"
       @click="ui.gamesetup_detail_open = !ui.gamesetup_detail_open"
       :title="$t('game setup details')"></i>
-    <InfoPanel v-if="ui.gamesetup_detail_open" :gameOptions="gameOptions" :playerNumber="playerNumber" :lastSoloGeneration="lastSoloGeneration" :deckSize="deckSize" :discardPileSize="discardPileSize" :otherDeckSizes="otherDeckSizes" @close="ui.gamesetup_detail_open=false" />
+    <InfoPanel v-if="ui.gamesetup_detail_open" :gameOptions="gameOptions" :playerNumber="playerNumber" :lastSoloGeneration="lastSoloGeneration" :deckSize="deckSize" :discardPileSize="discardPileSize" :otherDeckSizes="otherDeckSizes" :spectatorId="spectatorId" :expectedPurgeTimeMs="expectedPurgeTimeMs" @close="ui.gamesetup_detail_open=false" />
   </div>
 
   <a href="help" target="_blank">
@@ -137,6 +137,15 @@ export default defineComponent({
     discardPileSize: {
       type: Number,
       required: true,
+    },
+    // Für das Info-Fenster (Zuschauer-Link, Lösch-Warnung)
+    spectatorId: {
+      type: String,
+      required: false,
+    },
+    expectedPurgeTimeMs: {
+      type: Number,
+      required: false,
     },
     otherDeckSizes: {
       type: Object as () => OtherDeckSizesModel,

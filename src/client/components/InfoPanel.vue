@@ -13,6 +13,15 @@
       </ul>
     </div>
 
+    <!-- Früher unten auf der Spielseite; hier gesammelt, damit die Spielansicht aufgeräumt bleibt -->
+    <div class="info-panel-meta">
+      <div v-if="spectatorId !== undefined">
+        <a :href="'/spectator?id=' + spectatorId" target="_blank" rel="noopener noreferrer" v-i18n>Spectator link</a>
+      </div>
+      <PurgeWarning v-if="expectedPurgeTimeMs !== undefined" :expectedPurgeTimeMs="expectedPurgeTimeMs"/>
+      <div class="info-panel-notice" v-i18n>Not affiliated with FryxGames, Asmodee Digital or Steam in any way.</div>
+    </div>
+
     <div class="info_panel_actions">
       <button class="btn btn-lg btn-primary" @click="emit('close')" v-i18n>Ok</button>
       <button class="btn btn-lg" @click="gameOptionsPopupOpen = true" v-i18n>More...</button>
@@ -25,6 +34,7 @@
 import {computed, onMounted, onUnmounted, ref} from 'vue';
 import GameSetupDetail from '@/client/components/GameSetupDetail.vue';
 import GameOptionsPopup from '@/client/components/GameOptionsPopup.vue';
+import PurgeWarning from '@/client/components/common/PurgeWarning.vue';
 import {GameOptionsModel} from '@/common/models/GameOptionsModel';
 import {DeckSizeModel, OtherDeckSizesModel} from '@/common/models/GameModel';
 
@@ -35,6 +45,9 @@ const props = defineProps<{
   deckSize: number;
   discardPileSize: number;
   otherDeckSizes: OtherDeckSizesModel;
+  // Optional: nur in Spielansichten vorhanden
+  spectatorId?: string;
+  expectedPurgeTimeMs?: number;
 }>();
 
 const emit = defineEmits<{

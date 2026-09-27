@@ -24,7 +24,9 @@
       :lastSoloGeneration = "game.lastSoloGeneration"
       :deckSize = "game.deckSize"
       :discardPileSize = "game.discardPileSize"
-      :otherDeckSizes = "game.otherDeckSizes"/>
+      :otherDeckSizes = "game.otherDeckSizes"
+      :spectatorId = "game.spectatorId"
+      :expectedPurgeTimeMs = "game.expectedPurgeTimeMs"/>
 
     <div class="player_home_block nofloat">
 <LogPanel :viewModel="spectator" :step="game.step" @spaceClicked="onSpaceClicked"/>
@@ -55,10 +57,6 @@
       </div>
     </div>
     <WaitingFor v-show="false" v-if="game.phase !== 'end'" :playerView="spectator" :waitingfor="undefined"/>
-    <div>
-      <a :href="'/spectator?id=' +game.spectatorId" target="_blank" rel="noopener noreferrer" v-i18n>Spectator link</a>
-    </div>
-    <PurgeWarning :expectedPurgeTimeMs="game.expectedPurgeTimeMs"/>
     <KeyboardShortcuts v-show="keyboardShortcutOpened" @close="keyboardShortcutOpened = false"/>
   </div>
 </template>
@@ -76,7 +74,6 @@ import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import Sidebar from '@/client/components/Sidebar.vue';
 import WaitingFor from '@/client/components/WaitingFor.vue';
 import PlayersOverview from '@/client/components/overview/PlayersOverview.vue';
-import PurgeWarning from '@/client/components/common/PurgeWarning.vue';
 import KeyboardShortcuts from '@/client/components/KeyboardShortcuts.vue';
 import {range} from '@/common/utils/utils';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
@@ -102,7 +99,6 @@ export default defineComponent({
     KeyboardShortcuts,
     LogPanel,
     PlayersOverview,
-    PurgeWarning,
     Sidebar,
     WaitingFor,
   },

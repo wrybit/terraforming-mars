@@ -27,7 +27,9 @@
       :lastSoloGeneration = "game.lastSoloGeneration"
       :deckSize = "game.deckSize"
       :discardPileSize = "game.discardPileSize"
-      :otherDeckSizes = "game.otherDeckSizes"/>
+      :otherDeckSizes = "game.otherDeckSizes"
+      :spectatorId = "game.spectatorId"
+      :expectedPurgeTimeMs = "game.expectedPurgeTimeMs"/>
 
     <div v-if="thisPlayer.tableau.length > 0">
       <!-- Zwei-Spalten-Layout: Brett steht im DOM zuerst (Hotkey-Reihenfolge, schmale Screens), wird per CSS rechts platziert -->
@@ -110,10 +112,6 @@
       </div>
     </div>
 
-    <div>
-      <a :href="'/spectator?id=' +game.spectatorId" target="_blank" rel="noopener noreferrer" v-i18n>Spectator link</a>
-    </div>
-    <PurgeWarning :expectedPurgeTimeMs="game.expectedPurgeTimeMs"/>
     <KeyboardShortcuts v-show="keyboardShortcutOpened" @close="keyboardShortcutOpened = false"/>
   </div>
 </template>
@@ -132,7 +130,6 @@ import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import TopBar from '@/client/components/TopBar.vue';
-import PurgeWarning from '@/client/components/common/PurgeWarning.vue';
 import UndergroundTokens from '@/client/components/underworld/UndergroundTokens.vue';
 import KeyboardShortcuts from '@/client/components/KeyboardShortcuts.vue';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
@@ -200,7 +197,6 @@ export default defineComponent({
     TopBar,
     GameBoardView,
     PlayerSetupView,
-    PurgeWarning,
     UndergroundTokens,
     KeyboardShortcuts,
   },
