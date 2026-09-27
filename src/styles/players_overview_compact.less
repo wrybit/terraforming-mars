@@ -1,0 +1,152 @@
+// Kompakte Spielerleiste für die schmale linke Spalte (eingebunden in player_home_columns.less).
+// Statt drei hoher Zeilen (Symbol über Zahl) ein Raster mit Symbol neben Zahl:
+//   Zeile 1: Name/Timer · VP/TR/Handkarten · Aktionszähler
+//   Zeile 2: Ressourcen (Symbol links, Bestand über Produktion)
+//   Zeile 3: Tags (im Kompakt-Modus ohne Null-Tags, siehe tags_concise) · gespielte Karten
+// Die Wrapper .player-status-and-res und .player-tags werden per display: contents aufgelöst,
+// damit ihre Kinder direkt im Raster platziert werden können, ohne das Template zu ändern.
+
+@players-compact-row-gap: 10px;
+@players-compact-column-gap: 16px;
+@players-compact-icon-gap: 4px;
+@players-compact-tile-gap: 8px;
+
+.players-overview-compact() {
+  .player-info {
+    display: grid !important; // überschreibt flex-flow: column !important aus players_overview.less
+    // Spalte 1 nimmt den Rest (Tags brechen darin um), gespielte Karten überspannen Spalte 2+3
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "status main counter"
+      "res res res"
+      "tags cards cards"
+      "party party party";
+    gap: @players-compact-row-gap @players-compact-column-gap;
+    align-items: center;
+    width: auto;
+    max-width: 100%;
+    padding: 10px 12px;
+  }
+
+  .player-status-and-res,
+  .player-tags {
+    display: contents;
+  }
+
+  // Nur die äußere Statusbox (innen gibt es eine gleichnamige Klasse)
+  .player-status-and-res > .player-status {
+    grid-area: status;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .player-tags-main {
+    grid-area: main;
+    justify-self: end;
+  }
+
+  .player-board-blue-action-counter {
+    grid-area: counter;
+  }
+
+  .resource_items_cont {
+    grid-area: res;
+    flex-wrap: wrap;
+    gap: @players-compact-tile-gap;
+  }
+
+  .player-tags-secondary {
+    grid-area: tags;
+    flex-wrap: wrap;
+    gap: @players-compact-icon-gap 10px;
+  }
+
+  .player-allied-party {
+    grid-area: party;
+    // Ohne Turmoil leer (aber im DOM) – negativer Abstand hebt den Zeilenabstand davor auf
+    margin-top: -@players-compact-row-gap;
+  }
+
+  // Trennstrich zwischen Tag-Gruppen auf Zeilenhöhe kürzen (sonst 70px für die hohe Darstellung)
+  .tag-separator {
+    height: 28px;
+  }
+
+  // Gespielte Karten: Zähler und Button nebeneinander statt übereinander
+  .player-played-cards {
+    grid-area: cards;
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: auto;
+    margin: 0;
+
+    .played-cards-button {
+      width: auto;
+      margin-top: 0;
+    }
+  }
+
+  // Ressource als kleines Raster: Symbol über zwei Zeilen links, rechts Bestand über Produktion
+  .resource_item {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    column-gap: 12px;
+    align-items: center;
+    position: relative; // Bezug für das Wert-Schild an Stahl/Titan
+    min-width: 0;
+    margin: 0;
+    padding: 4px 10px 4px 6px;
+  }
+
+  // Wert-Schild (Stahl 2, Titan 3) sitzt im Produktionsblock und ist per negativem Margin für die
+  // hohe Kachel platziert; hier fest an die untere rechte Ecke des Symbols hängen
+  .resource_icon--megacredit-value {
+    position: absolute;
+    left: 28px;
+    bottom: 2px;
+    margin: 0;
+  }
+
+  // Der Pfeil Energie → Wärme ist auf die hohe Kachel ausgelegt
+  .resource_item--energy::after {
+    display: none;
+  }
+
+  .resource_item_stock {
+    display: contents;
+  }
+
+  .resource_icon {
+    grid-row: 1 / span 2;
+  }
+
+  .resource_item_stock_count {
+    font-size: 24px;
+    text-align: left;
+  }
+
+  .resource_item_prod {
+    min-width: 0;
+    font-size: 16px;
+    line-height: 1;
+    text-align: left;
+  }
+
+  // Tag: Zahl neben dem Symbol statt darunter
+  .tag-display {
+    flex-direction: row;
+    align-items: center;
+    gap: 2px;
+    width: auto;
+    height: auto;
+  }
+
+  .tag-count-display {
+    width: auto;
+    min-width: 14px;
+  }
+}

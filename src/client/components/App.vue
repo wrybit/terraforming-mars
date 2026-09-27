@@ -126,7 +126,8 @@ export default defineComponent({
       componentsVisibility: {
         'milestones': true,
         'awards_list': true,
-        'tags_concise': false,
+        // Standard kompakt: Tags mit Anzahl 0 ausblenden, per Umschalter über den Spielerleisten änderbar
+        'tags_concise': true,
         'pinned_player_0': false,
         'pinned_player_1': false,
         'pinned_player_2': false,

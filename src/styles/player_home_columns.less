@@ -23,8 +23,8 @@
     align-items: start;
   }
 
-  // Die schwarze TopBar doppelt die eigene Spielerleiste; im Zwei-Spalten-Layout übernimmt
-  // die sticky Spielerübersicht (alle Spieler) ihre Rolle. Das Terraformed-Banner im Container bleibt.
+  // Die schwarze TopBar doppelt die eigene Spielerleiste in der Spielerübersicht; im Zwei-Spalten-Layout
+  // entfällt sie. Das Terraformed-Banner im Container bleibt.
   .top-bar-container {
     margin-top: 0;
   }
@@ -39,39 +39,11 @@
     min-width: 0;
 
     // Das Spieler-Panel schaltet per Fenster-Media-Query auf eine sehr breite Einzeilen-Ansicht;
-    // in der linken Spalte gilt aber deren Breite, daher immer gestapelt und mit Umbruch
+    // in der linken Spalte gilt aber deren Breite, daher kompaktes Raster (players_overview_compact.less)
     .players-overview {
       display: block;
       max-width: 100%;
-      // Spielerleisten bleiben beim Scrollen oben stehen (ersetzen die TopBar)
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      // Deckend, damit Log und Karten sauber darunter verschwinden
-      background: #000;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      .players-overview-stacked();
-
-      .player-info {
-        max-width: 100%;
-      }
-
-      .player-status-and-res,
-      .player-tags,
-      .player-tags-secondary {
-        flex-wrap: wrap;
-      }
-
-      // Name und Timer als Kopfzeile nebeneinander – spart die Breite der Statusspalte,
-      // damit Ressourcen, Karten und Aktionszähler zusammen in eine Zeile passen
-      .player-status {
-        flex: 0 0 100%;
-        flex-direction: row;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 8px;
-      }
+      .players-overview-compact();
     }
   }
 
