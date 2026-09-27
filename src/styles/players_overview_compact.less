@@ -1,6 +1,6 @@
 // Kompakte Spielerleiste für die schmale linke Spalte (eingebunden in player_home_columns.less).
 // Statt drei hoher Zeilen (Symbol über Zahl) ein Raster mit Symbol neben Zahl:
-//   Zeile 1: Name/Timer · VP/TR/Handkarten · Aktionszähler
+//   Zeile 1: Startspieler · Name · Konzern · Status+Timer | VP/TR/Handkarten · Aktionszähler
 //   Zeile 2: Ressourcen (Symbol links, Bestand über Produktion)
 //   Zeile 3: Tags (Null-Tags per Einstellung hide_zero_tags ausblendbar) · gespielte Karten
 // Die Wrapper .player-status-and-res und .player-tags werden per display: contents aufgelöst,
@@ -33,12 +33,74 @@
     display: contents;
   }
 
+  // Außenabstände der gestapelten Ansicht entfallen – im Raster regelt das der Zeilenabstand
+  .player-tags-main,
+  .player-tags-secondary,
+  .player-board-blue-action-counter {
+    margin-top: 0;
+  }
+
+  // Kopfzeile in einer Reihe: [1.] Name · Konzern [aktiv 07:15]
   // Nur die äußere Statusbox (innen gibt es eine gleichnamige Klasse)
   .player-status-and-res > .player-status {
     grid-area: status;
-    flex-direction: row;
+    display: flex;
+    flex-flow: row nowrap;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
+    min-width: 0;
+
+    // Verschachtelte Hüllen auflösen, damit alle Teile Geschwister in dieser Zeile werden
+    > div,
+    .player-info-details > span,
+    .player-status,
+    .player-status-bottom {
+      display: contents;
+    }
+  }
+
+  .icon-first-player {
+    order: -1; // steht im DOM hinter dem Namen, soll aber vorne stehen
+    position: static;
+    flex: none;
+    margin: 0 0 0 -12px; // Pfeilform ragt wie bisher leicht aus der Leiste
+  }
+
+  .player-info-name {
+    flex: none;
+    width: auto;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  // Konzern darf gekürzt werden, Name und Status nicht
+  .player-info-corp {
+    flex: 0 1 auto;
+    min-width: 0;
+    height: auto;
+    font-size: 16px;
+    opacity: 0.8;
+    white-space: nowrap;
+  }
+
+  // Status und Timer nebeneinander; Selektor so spezifisch wie die verschachtelte Originalregel
+  .player-status-and-res > .player-status .player-status-bottom .player-action-status-container {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: auto;
+    padding: 3px 10px;
+
+    .player-action-status {
+      line-height: 1;
+      padding: 0 !important; // überschreibt padding-bottom !important der no-timer-Variante
+    }
+
+    .player-status-timer {
+      width: auto;
+      line-height: 1;
+    }
   }
 
   .player-tags-main {
