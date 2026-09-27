@@ -1,8 +1,10 @@
 // Meilensteine und Auszeichnungen kompakt unter dem Brett (nur im Zwei-Spalten-Layout, siehe player_home_columns.less).
-// Kacheln zeigen nur das Bild; Name und Punktestand der Spieler erscheinen beim Hover über der Kachel,
-// damit keine Information verloren geht.
+// Das Bild ist bekannt und wird verkleinert; wichtig sind die Punktestände der Spieler – die bleiben immer sichtbar.
+// Der Name erscheint nur beim Hover.
 
-@ma-compact-image-height: 60px; // Bildbereich von .ma-name (player_home.less: height 83px - padding-top 60px für den Namen)
+@ma-compact-image-height: 44px;
+// Verschiebt den sichtbaren Streifen auf das Symbol (Bildhöhe 60px, Symbol sitzt mittig)
+@ma-compact-image-offset: -8px;
 @ma-compact-gap: 6px;
 
 .milestones-awards-compact() {
@@ -21,50 +23,41 @@
     margin: (@ma-compact-gap / 2);
   }
 
+  // Bild in Originalgröße auf den mittleren Streifen mit dem Symbol zugeschnitten
+  // (Skalieren machte das Symbol zu klein), Punktestände direkt darunter
   .ma-name {
-    height: @ma-compact-image-height;
-    padding-top: 0;
+    height: auto;
+    padding-top: @ma-compact-image-height + 4px;
     border-radius: 10px;
+    background-position: center @ma-compact-image-offset;
+    background-repeat: no-repeat;
 
-    // Name nur beim Hover (Overlay unten im Bild)
     > span {
       display: none;
     }
   }
 
   .ma-scores {
-    display: none;
+    width: auto;
+    margin: 0;
+    padding-bottom: 2px;
   }
 
-  // Hover: Name und Punktestand als Overlay unter der Kachel
+  // Hover: Name als Overlay über dem Bild
   .ma-block:hover {
     z-index: 10;
 
     .ma-name > span {
       display: block;
       position: absolute;
-      top: @ma-compact-image-height;
+      top: 0;
       left: 0;
       right: 0;
       padding: 2px 4px;
-      background: #e6e1e1;
-      border-radius: 0 0 6px 6px;
+      background: rgba(230, 225, 225, 0.95);
+      border-radius: 10px 10px 0 0;
       font-size: 12px;
       line-height: 16px;
-    }
-
-    .ma-scores {
-      display: block;
-      position: absolute;
-      top: @ma-compact-image-height + 20px;
-      left: 0;
-      right: 0;
-      width: auto;
-      margin: 0;
-      padding: 2px 0;
-      // Deckend, damit die Überschrift darunter nicht durchscheint
-      background: rgba(0, 0, 0, 0.9);
-      border-radius: 0 0 6px 6px;
     }
   }
 }
