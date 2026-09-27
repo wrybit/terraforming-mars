@@ -1,0 +1,35 @@
+// Blinkender roter Rahmen um den gesamten Viewport, solange man selbst am Zug ist.
+// Klasse player-home--acting setzt PlayerHome.vue (isPlayerActing).
+
+@active-player-outline-width: 4px;
+@active-player-outline-color: #e53935;
+@active-player-outline-period: 1.4s;
+
+.player-home--acting::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1000; // über Sidebar, Modals und Vorschauen
+  border: @active-player-outline-width solid @active-player-outline-color;
+  // Rahmen darf keine Klicks abfangen
+  pointer-events: none;
+  animation: active-player-outline-blink @active-player-outline-period ease-in-out infinite;
+}
+
+@keyframes active-player-outline-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.15;
+  }
+}
+
+// Wer im System "Bewegung reduzieren" aktiviert hat, bekommt einen statischen Rahmen
+@media (prefers-reduced-motion: reduce) {
+  .player-home--acting::after {
+    animation: none;
+  }
+}

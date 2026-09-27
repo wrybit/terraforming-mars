@@ -1,5 +1,6 @@
 <template>
-  <div id="player-home" :class="(game.turmoil ? 'with-turmoil': '')">
+  <!-- player-home--acting: roter Rahmen um den Viewport, solange dieser Spieler am Zug ist (active_player_outline.less) -->
+  <div id="player-home" :class="{'with-turmoil': game.turmoil, 'player-home--acting': isPlayerActing(playerView)}">
     <TopBar :playerView="playerView" />
 
     <div v-if="game.phase === 'end'">
