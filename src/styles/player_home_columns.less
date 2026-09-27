@@ -3,8 +3,8 @@
 
 // Ab dieser Breite passen Brett (~670px) und eine brauchbare linke Spalte nebeneinander
 @player-home-columns-min-width: 1400px;
-// Höhe der sticky TopBar, damit das Brett nicht darunter verschwindet
-@player-home-top-bar-height: 100px;
+// Abstand des sticky Bretts zum oberen Fensterrand
+@player-home-sticky-top: 10px;
 // Abstand zwischen den Spalten größer als zwischen Blöcken einer Spalte (20px) – Gesetz der Nähe;
 // der Überhang des Bretts (s.u.) kommt optisch noch dazu
 @player-home-columns-gap: 24px;
@@ -21,6 +21,16 @@
     align-items: start;
   }
 
+  // Die schwarze TopBar doppelt die eigene Spielerleiste; im Zwei-Spalten-Layout übernimmt
+  // die sticky Spielerübersicht (alle Spieler) ihre Rolle. Das Terraformed-Banner im Container bleibt.
+  .top-bar-container {
+    margin-top: 0;
+  }
+
+  .top-bar {
+    display: none;
+  }
+
   .player-home-columns__main {
     grid-area: main;
     // Verhindert, dass breite Inhalte (Kartenreihen) die Spalte aufsprengen
@@ -31,6 +41,14 @@
     .players-overview {
       display: block;
       max-width: 100%;
+      // Spielerleisten bleiben beim Scrollen oben stehen (ersetzen die TopBar)
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      // Deckend, damit Log und Karten sauber darunter verschwinden
+      background: #000;
+      padding-top: 10px;
+      padding-bottom: 10px;
       .players-overview-stacked();
 
       .player-info {
@@ -42,6 +60,16 @@
       .player-tags-secondary {
         flex-wrap: wrap;
       }
+
+      // Name und Timer als Kopfzeile nebeneinander – spart die Breite der Statusspalte,
+      // damit Ressourcen, Karten und Aktionszähler zusammen in eine Zeile passen
+      .player-status {
+        flex: 0 0 100%;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
     }
   }
 
@@ -49,11 +77,22 @@
     grid-area: board;
     // Brett bleibt beim Scrollen durch Aktionen und Karten sichtbar
     position: sticky;
-    top: @player-home-top-bar-height;
-    max-height: calc(100vh - @player-home-top-bar-height);
+    top: @player-home-sticky-top;
+    max-height: calc(100vh - @player-home-sticky-top);
     overflow: hidden auto;
     // Board platziert Kolonie-/Raumhafen-Felder links außerhalb von .board-cont; ohne Innenabstand würde overflow sie abschneiden
     padding: 0 @player-home-board-overhang-right 0 @player-home-board-overhang-left;
     margin-bottom: 0;
+  }
+}
+
+// Auf mittleren Breiten (Laptops) Brett verkleinern, sonst wird die linke Spalte so schmal,
+// dass die sticky Spielerleiste mehrfach umbricht und den halben Bildschirm belegt
+@player-home-board-compact-max-width: 1699px;
+@player-home-board-compact-zoom: 0.8;
+
+@media only screen and (min-width: @player-home-columns-min-width) and (max-width: @player-home-board-compact-max-width) {
+  .player-home-columns__board {
+    zoom: @player-home-board-compact-zoom;
   }
 }
