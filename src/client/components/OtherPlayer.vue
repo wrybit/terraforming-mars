@@ -63,7 +63,19 @@ export default defineComponent({
     StackedCards,
     Card,
   },
+  // Escape schließt die geöffnete Kartenansicht (im Zwei-Spalten-Layout ein Modal)
+  mounted() {
+    window.addEventListener('keydown', this.closeOnEscape);
+  },
+  beforeUnmount() {
+    window.removeEventListener('keydown', this.closeOnEscape);
+  },
   methods: {
+    closeOnEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape' && this.isVisible()) {
+        this.hideMe();
+      }
+    },
     hideMe() {
       vueRoot(this).setVisibilityState('pinned_player_' + this.playerIndex, false);
     },
