@@ -118,7 +118,6 @@ describe('PlayerTags', () => {
         player: asComplete<PublicPlayerModel>(player),
         playerView: asComplete<PlayerViewModel>(playerView),
         hideZeroTags: false,
-        conciseTagsViewDefaultValue: false,
       },
     });
     // For tests.

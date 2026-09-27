@@ -26,6 +26,12 @@
       </div>
       <div class="preferences_panel_item">
         <label class="form-switch">
+          <input type="checkbox" @change="updatePreferences" v-model="prefs.hide_zero_tags" data-test="hide_zero_tags">
+          <i class="form-icon"></i> <span v-i18n>Hide tags with zero count</span>
+        </label>
+      </div>
+      <div class="preferences_panel_item">
+        <label class="form-switch">
           <input type="checkbox" @change="updatePreferences" v-model="prefs.remove_background" data-test="remove_background">
           <i class="form-icon"></i> <span v-i18n>Remove background image</span>
         </label>

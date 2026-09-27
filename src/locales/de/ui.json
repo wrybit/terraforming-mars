@@ -1130,6 +1130,7 @@
   "Must select at least ${0} corporations": "Es müssen mindestens ${0} Konzerne gewählt werden",
   "corporation": "Konzern",
   "Hide discount on cards": "Verberge den Rabatt auf den Karten",
+  "Hide tags with zero count": "Symbole mit Anzahl 0 ausblenden",
   "Hide sidebar notification": "Verberge Seitenrand Benachrichtigungen",
   "Learner Mode (req. refresh)": "Beginner Modus (erfordert Aktualisierung)",
   "The id of this game is ${0}": "Die ID des Spiels ist ${0}",

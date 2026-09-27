@@ -43,8 +43,8 @@ import PlayerTagDiscount from '@/client/components/overview/PlayerTagDiscount.vu
 import PointsPerTag from '@/client/components/overview/PointsPerTag.vue';
 import {PartyName} from '@/common/turmoil/PartyName';
 import {getCard} from '@/client/cards/ClientCardManifest';
-import {vueRoot} from '@/client/components/vueRoot';
 import {CardName} from '@/common/cards/CardName';
+import {getPreferences} from '@/client/utils/PreferencesManager';
 
 type InterfaceTagsType = Tag | SpecialTags | 'separator' | 'all';
 type TagDetail = {
@@ -153,11 +153,6 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    conciseTagsViewDefaultValue: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
   },
   data(): DataModel {
     type TagDetails = Record<InterfaceTagsType | 'all', TagDetail>;
@@ -257,8 +252,7 @@ export default defineComponent({
       return 'tooltip tooltip-' + (this.isTopBar ? 'bottom' : 'top');
     },
     tags(): Array<TagDetail> {
-      // In tests this one call to vueRoot uses `?.` because for some reason it this doesn't pass tests.
-      const concise = vueRoot(this).componentsVisibility?.['tags_concise'] ?? this.conciseTagsViewDefaultValue;
+      const concise = getPreferences().hide_zero_tags;
       return this.tagsInOrder.filter((entry) => {
         if (!isInGame(entry.name, this.playerView.game)) {
           return false;

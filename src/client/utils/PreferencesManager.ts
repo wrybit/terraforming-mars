@@ -15,6 +15,7 @@ export type Preferences = {
   hide_event_cards: boolean,
   hide_tile_confirmation: boolean,
   hide_discount_on_cards: boolean,
+  hide_zero_tags: boolean,
   hide_animated_sidebar: boolean,
   debug_view: boolean,
   symbol_overlay: boolean,
@@ -44,6 +45,8 @@ const defaults: Preferences = {
   hide_event_cards: false,
   hide_tile_confirmation: false,
   hide_discount_on_cards: false,
+  // Tags mit Anzahl 0 in der Spielerübersicht ausblenden (ersetzt den früheren Umschalter über den Spielerleisten)
+  hide_zero_tags: true,
   hide_animated_sidebar: false,
 
   symbol_overlay: false,
