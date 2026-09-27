@@ -10,6 +10,10 @@
 @players-compact-column-gap: 16px;
 @players-compact-icon-gap: 4px;
 @players-compact-tile-gap: 8px;
+// Icons (Ressourcen, Tags, VP/TR, Aktionszähler) verkleinert, damit die Leisten flacher werden.
+// zoom statt width/height, weil die Icons unterschiedliche Hintergrundgrößen nutzen
+@players-compact-icon-zoom: 0.75;
+@players-compact-number-size: 20px;
 
 .players-overview-compact() {
   .player-info {
@@ -130,15 +134,23 @@
     margin-top: -@players-compact-row-gap;
   }
 
-  // Trennstrich zwischen Tag-Gruppen auf Zeilenhöhe kürzen (sonst 70px für die hohe Darstellung)
+  // Trennstrich zwischen Tag-Gruppen auf Icon-Höhe kürzen (sonst 70px für die hohe Darstellung)
   .tag-separator {
-    height: 28px;
+    height: 22px;
   }
 
   .player-played-cards {
     grid-area: cards;
     justify-self: end;
+    display: flex; // sonst erzeugt die geerbte Schriftgröße eine 34px hohe Zeile um den Button
     margin: 0;
+
+    // Flacher Button, damit er die Tag-Zeile nicht höher macht als die verkleinerten Icons
+    .played-cards-button {
+      height: auto;
+      padding: 2px 8px;
+      line-height: 20px;
+    }
   }
 
   // Ressource als kleines Raster: Symbol über zwei Zeilen links, rechts Bestand über Produktion
@@ -158,9 +170,10 @@
   // hohe Kachel platziert; hier fest an die untere rechte Ecke des Symbols hängen
   .resource_icon--megacredit-value {
     position: absolute;
-    left: 28px;
-    bottom: 2px;
+    left: 20px; // untere rechte Ecke des verkleinerten Icons (Innenabstand 6px + 27px Icon, leicht überlappend)
+    bottom: 0;
     margin: 0;
+    zoom: 0.85;
   }
 
   // Der Pfeil Energie → Wärme ist auf die hohe Kachel ausgelegt
@@ -176,8 +189,13 @@
     grid-row: 1 / span 2;
   }
 
+  .resource_icon,
+  .tag-count {
+    zoom: @players-compact-icon-zoom;
+  }
+
   .resource_item_stock_count {
-    font-size: 24px;
+    font-size: @players-compact-number-size;
     text-align: left;
   }
 
@@ -193,6 +211,7 @@
     flex-direction: row;
     align-items: center;
     gap: 2px;
+    line-height: 1;
     width: auto;
     height: auto;
   }
@@ -202,5 +221,7 @@
     width: auto;
     min-width: 14px;
     margin: 0;
+    font-size: @players-compact-number-size;
+    line-height: 1;
   }
 }
