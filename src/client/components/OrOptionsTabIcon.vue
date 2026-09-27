@@ -1,22 +1,24 @@
 <template>
   <!-- Schlichte Strich-Icons für Tabs ohne Textlabel (Zuordnung in orOptionsShortLabels.ts) -->
-  <svg class="or-tab-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+  <svg class="or-tab-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <!-- Verkaufen: Preisschild -->
+    <!-- Verkaufen: Handkarte plus Münze mit €-Zeichen (Patente gegen M€ verkaufen) -->
     <template v-if="icon === 'sell'">
-      <path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/>
-      <circle cx="7.5" cy="7.5" r="1.5"/>
+      <rect x="2.5" y="2.5" width="11" height="16" rx="1.5"/>
+      <circle cx="16" cy="16" r="6.5" fill="currentColor" stroke="none"/>
+      <text x="16" y="19.6" text-anchor="middle" font-size="10" font-weight="bold" font-family="Arial, sans-serif"
+        fill="#1d2030" stroke="none">€</text><!-- dunkles € auf heller Münze, unabhängig vom Tab-Zustand gut lesbar -->
     </template>
-    <!-- Weitergeben: Pfeil zum Strich (Zug an den Nächsten) -->
+    <!-- Weitergeben: "Weiter zum Nächsten" wie bei Mediaplayern -->
     <template v-else-if="icon === 'pass-on'">
-      <path d="M4 12h12"/>
-      <path d="m11 6 6 6-6 6"/>
-      <path d="M20 5v14"/>
+      <path d="M5 5l10 7-10 7z" fill="currentColor" stroke="none"/>
+      <path d="M19 5v14"/>
     </template>
-    <!-- Beenden: Zielflagge (Generation passen) -->
+    <!-- Beenden: Tür mit Pfeil nach draußen (für diese Generation aussteigen) -->
     <template v-else-if="icon === 'end-generation'">
-      <path d="M5 21V4"/>
-      <path d="M5 4h11l-2 4 2 4H5"/>
+      <path d="M13 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h7"/>
+      <path d="M10 12h11"/>
+      <path d="m17 8 4 4-4 4"/>
     </template>
   </svg>
 </template>
