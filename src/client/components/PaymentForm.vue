@@ -2,10 +2,6 @@
 <section v-trim-whitespace>
   <table class="payments_table">
     <tbody>
-      <tr>
-        <td></td>
-        <td v-trim-whitespace><i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i></td>
-      </tr>
       <template v-for="unit of order" :key="unit">
         <template v-if="ledger[unit]?.available > 0">
           <tr>
@@ -21,16 +17,20 @@
               <div v-if="ledger[unit]?.reserved" class="card-warning" v-i18n="$t(unit)">
               Some ${0} are reserved and unavailable here.</div>
             </td>
-            <td class='payments_unit_subtotal' v-if="ledger[unit].rate !== undefined && payment[unit] !== 0" v-trim-whitespace>
-              {{ ledger[unit].rate * payment[unit] }}
+            <!-- Wert dieser Zeile in M€; bei 0 abgeschwächt statt leer, damit die Spalte ruhig bleibt -->
+            <td class="payments_unit_subtotal" :class="{'payments_unit_subtotal--zero': payment[unit] === 0}" v-if="ledger[unit].rate !== undefined">
+              = {{ ledger[unit].rate * payment[unit] }}
+              <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
             </td>
           </tr>
         </template>
       </template>
+    <!-- Summe gegen Kosten; Farbe zeigt, ob der Betrag passt (grün), fehlt (rot) oder zu hoch ist (gelb) -->
     <tr :class="totalSpentClass()">
-      <td class="payments_total_heading"></td>
-      <td class="payments_total_value" :title="$t(totalSpentTitle())" :aria-label="$t(totalSpentTitle())" v-trim-whitespace>
-        {{ totalSpent() }}
+      <td class="payments_total_heading" v-i18n>Total</td>
+      <td class="payments_total_value" :title="$t(totalSpentTitle())" :aria-label="$t(totalSpentTitle())">
+        {{ totalSpent() }} / {{ cost }}
+        <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
       </td>
     </tr>
     </tbody>
