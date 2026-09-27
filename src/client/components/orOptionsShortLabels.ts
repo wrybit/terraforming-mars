@@ -4,9 +4,9 @@ import {Message} from '@/common/logs/Message';
 // Schlüssel = englischer Titel-Schlüssel vom Server (Player.ts u. a.), Wert = kurzer Schlüssel (übersetzt in locales/*/ui.json).
 // Unbekannte Titel bleiben unverändert; der volle Titel steht immer im Tooltip.
 const SHORT_LABELS: Readonly<Record<string, string>> = {
-  'Play project card': 'Play card',
+  'Play project card': 'Play cards',
   'Perform an action from a played card': 'Card action',
-  'Standard projects': 'Standard projects',
+  'Standard projects': 'Projects',
   'Pass for this generation': 'Pass',
   'Sell patents': 'Patents',
   'Claim a milestone': 'Milestone',
