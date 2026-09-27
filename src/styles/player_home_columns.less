@@ -1,0 +1,59 @@
+// Zwei-Spalten-Layout der Spieleransicht: links Spielgeschehen, rechts das Mars-Brett.
+// Unterhalb des Breakpoints bleibt die bisherige Ein-Spalten-Reihenfolge (Brett oben).
+
+// Ab dieser Breite passen Brett (~670px) und eine brauchbare linke Spalte nebeneinander
+@player-home-columns-min-width: 1400px;
+// Höhe der sticky TopBar, damit das Brett nicht darunter verschwindet
+@player-home-top-bar-height: 100px;
+// Abstand zwischen den Spalten größer als zwischen Blöcken einer Spalte (20px) – Gesetz der Nähe;
+// der Überhang des Bretts (s.u.) kommt optisch noch dazu
+@player-home-columns-gap: 24px;
+// So weit ragen Brett-Elemente links bzw. rechts über .board-cont hinaus
+@player-home-board-overhang-left: 40px;
+@player-home-board-overhang-right: 24px;
+
+@media only screen and (min-width: @player-home-columns-min-width) {
+  .player-home-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "main board";
+    column-gap: @player-home-columns-gap;
+    align-items: start;
+  }
+
+  .player-home-columns__main {
+    grid-area: main;
+    // Verhindert, dass breite Inhalte (Kartenreihen) die Spalte aufsprengen
+    min-width: 0;
+
+    // Das Spieler-Panel schaltet per Fenster-Media-Query auf eine sehr breite Einzeilen-Ansicht;
+    // in der linken Spalte gilt aber deren Breite, daher immer gestapelt und mit Umbruch
+    .players-overview {
+      display: block;
+      max-width: 100%;
+      .players-overview-stacked();
+
+      .player-info {
+        max-width: 100%;
+      }
+
+      .player-status-and-res,
+      .player-tags,
+      .player-tags-secondary {
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  .player-home-columns__board {
+    grid-area: board;
+    // Brett bleibt beim Scrollen durch Aktionen und Karten sichtbar
+    position: sticky;
+    top: @player-home-top-bar-height;
+    max-height: calc(100vh - @player-home-top-bar-height);
+    overflow: hidden auto;
+    // Board platziert Kolonie-/Raumhafen-Felder links außerhalb von .board-cont; ohne Innenabstand würde overflow sie abschneiden
+    padding: 0 @player-home-board-overhang-right 0 @player-home-board-overhang-left;
+    margin-bottom: 0;
+  }
+}

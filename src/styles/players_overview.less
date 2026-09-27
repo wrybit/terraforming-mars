@@ -287,15 +287,20 @@
   position: relative;
 }
 
+// Gestapelte Darstellung (Ressourcen über Tags) – wiederverwendet im Zwei-Spalten-Layout (player_home_columns.less)
+.players-overview-stacked() {
+  .player-info {
+    flex-flow: column !important;
+    width: fit-content;
+  }
+  .player-status-and-res {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+  }
+}
+
 @media only screen and (max-width: 1740px)  {
   .players-overview {
-    .player-info {
-      flex-flow: column !important;
-      width: fit-content;
-    }
-    .player-status-and-res {
-      margin-bottom: 8px;
-      padding-bottom: 8px;
-    }
+    .players-overview-stacked();
   }
 }

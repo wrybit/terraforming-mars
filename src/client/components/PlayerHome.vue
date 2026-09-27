@@ -28,91 +28,96 @@
       :otherDeckSizes = "game.otherDeckSizes"/>
 
     <div v-if="thisPlayer.tableau.length > 0">
-      <div class="player_home_block">
-        <GameBoardView
-          ref="gameBoardView"
-          :game="game"
-          :tileView="tileView"
-          :players="playerView.players"
-          @toggleTileView="cycleTileView()"
-        />
-      </div>
-
-    <a class="hotkey-target"></a>
-    <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="playerView" v-trim-whitespace id="shortkey-playersoverview"/>
-
-      <a class="hotkey-target"></a>
-      <div class="player_home_block nofloat">
-        <LogPanel :viewModel="playerView" :step="game.step" @spaceClicked="onSpaceClicked"/>
-      </div>
-
-      <a class="hotkey-target"></a>
-      <div class="player_home_block player_home_block--actions nofloat">
-        <a name="actions" class="player_home_anchor"></a>
-        <DynamicTitle title="Actions" :color="thisPlayer.color"/>
-        <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
-      </div>
-
-      <div class="player_home_block player_home_block--hand" v-if="playerView.draftedCards.length > 0">
-        <DynamicTitle title="Drafted cards" :color="thisPlayer.color" />
-        <div v-for="card in playerView.draftedCards" :key="card.name" class="cardbox">
-          <Card :card="card"/>
+      <!-- Zwei-Spalten-Layout: Brett steht im DOM zuerst (Hotkey-Reihenfolge, schmale Screens), wird per CSS rechts platziert -->
+      <div class="player-home-columns">
+        <div class="player_home_block player-home-columns__board">
+          <GameBoardView
+            ref="gameBoardView"
+            :game="game"
+            :tileView="tileView"
+            :players="playerView.players"
+            @toggleTileView="cycleTileView()"
+          />
         </div>
-      </div>
 
-      <a name="cards" class="player_home_anchor"></a>
-      <div class="player_home_block player_home_block--hand" v-if="cardsInHandCount > 0" id="shortkey-hand">
-        <div class="hiding-card-button-row">
-          <DynamicTitle title="Cards In Hand" :color="thisPlayer.color"/>
-          <div :class="getHideButtonClass('HAND')" @click.prevent="toggle('HAND')">
-            <div class="played-cards-count">{{cardsInHandCount.toString()}}</div>
-            <div class="played-cards-selection" v-i18n>{{ getToggleLabel('HAND')}}</div>
+        <div class="player-home-columns__main">
+          <a class="hotkey-target"></a>
+          <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="playerView" v-trim-whitespace id="shortkey-playersoverview"/>
+
+          <a class="hotkey-target"></a>
+          <div class="player_home_block nofloat">
+            <LogPanel :viewModel="playerView" :step="game.step" @spaceClicked="onSpaceClicked"/>
           </div>
-          <div class="text-overview" v-i18n>[ toggle cards in hand ]</div>
-        </div>
-        <SortableCards v-show="isVisible('HAND')" :playerId="playerView.id" :cards="allCardsInHand"/>
-      </div>
 
-      <div class="player_home_block player_home_block--cards">
-        <div class="hiding-card-button-row">
-          <DynamicTitle title="Played Cards" :color="thisPlayer.color" />
-          <div class="played-cards-filters">
-            <div :class="getHideButtonClass('ACTIVE')" @click.prevent="toggle('ACTIVE')">
-              <div class="played-cards-count">{{ activeTableauCount }}</div>
-              <div class="played-cards-selection" v-i18n>{{ getToggleLabel('ACTIVE')}}</div>
-            </div>
-            <div :class="getHideButtonClass('AUTOMATED')" @click.prevent="toggle('AUTOMATED')">
-              <div class="played-cards-count">{{ automatedTableauCount }}</div>
-              <div class="played-cards-selection" v-i18n>{{ getToggleLabel('AUTOMATED')}}</div>
-            </div>
-            <div :class="getHideButtonClass('EVENT')" @click.prevent="toggle('EVENT')">
-              <div class="played-cards-count">{{ eventTableauCount }}</div>
-              <div class="played-cards-selection" v-i18n>{{ getToggleLabel('EVENT')}}</div>
+          <a class="hotkey-target"></a>
+          <div class="player_home_block player_home_block--actions nofloat">
+            <a name="actions" class="player_home_anchor"></a>
+            <DynamicTitle title="Actions" :color="thisPlayer.color"/>
+            <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
+          </div>
+
+          <div class="player_home_block player_home_block--hand" v-if="playerView.draftedCards.length > 0">
+            <DynamicTitle title="Drafted cards" :color="thisPlayer.color" />
+            <div v-for="card in playerView.draftedCards" :key="card.name" class="cardbox">
+              <Card :card="card"/>
             </div>
           </div>
-          <div class="text-overview" v-i18n>[ toggle cards filters ]</div>
-        </div>
-        <div v-for="card in getCardsByType(thisPlayer.tableau, [CardType.CORPORATION])" :key="card.name" class="cardbox">
-            <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
-        </div>
-        <div v-for="card in getCardsByType(thisPlayer.tableau, [CardType.CEO])" :key="card.name" class="cardbox">
-            <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
-        </div>
-        <div v-show="isVisible('ACTIVE')" v-for="card in activeTableauCards" :key="card.name" class="cardbox">
-            <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
-        </div>
 
-        <StackedCards v-show="isVisible('AUTOMATED')" :cards="automatedTableauCards" />
+          <a name="cards" class="player_home_anchor"></a>
+          <div class="player_home_block player_home_block--hand" v-if="cardsInHandCount > 0" id="shortkey-hand">
+            <div class="hiding-card-button-row">
+              <DynamicTitle title="Cards In Hand" :color="thisPlayer.color"/>
+              <div :class="getHideButtonClass('HAND')" @click.prevent="toggle('HAND')">
+                <div class="played-cards-count">{{cardsInHandCount.toString()}}</div>
+                <div class="played-cards-selection" v-i18n>{{ getToggleLabel('HAND')}}</div>
+              </div>
+              <div class="text-overview" v-i18n>[ toggle cards in hand ]</div>
+            </div>
+            <SortableCards v-show="isVisible('HAND')" :playerId="playerView.id" :cards="allCardsInHand"/>
+          </div>
 
-        <StackedCards v-show="isVisible('EVENT')" :cards="eventTableauCards" />
+          <div class="player_home_block player_home_block--cards">
+            <div class="hiding-card-button-row">
+              <DynamicTitle title="Played Cards" :color="thisPlayer.color" />
+              <div class="played-cards-filters">
+                <div :class="getHideButtonClass('ACTIVE')" @click.prevent="toggle('ACTIVE')">
+                  <div class="played-cards-count">{{ activeTableauCount }}</div>
+                  <div class="played-cards-selection" v-i18n>{{ getToggleLabel('ACTIVE')}}</div>
+                </div>
+                <div :class="getHideButtonClass('AUTOMATED')" @click.prevent="toggle('AUTOMATED')">
+                  <div class="played-cards-count">{{ automatedTableauCount }}</div>
+                  <div class="played-cards-selection" v-i18n>{{ getToggleLabel('AUTOMATED')}}</div>
+                </div>
+                <div :class="getHideButtonClass('EVENT')" @click.prevent="toggle('EVENT')">
+                  <div class="played-cards-count">{{ eventTableauCount }}</div>
+                  <div class="played-cards-selection" v-i18n>{{ getToggleLabel('EVENT')}}</div>
+                </div>
+              </div>
+              <div class="text-overview" v-i18n>[ toggle cards filters ]</div>
+            </div>
+            <div v-for="card in getCardsByType(thisPlayer.tableau, [CardType.CORPORATION])" :key="card.name" class="cardbox">
+                <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
+            </div>
+            <div v-for="card in getCardsByType(thisPlayer.tableau, [CardType.CEO])" :key="card.name" class="cardbox">
+                <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
+            </div>
+            <div v-show="isVisible('ACTIVE')" v-for="card in activeTableauCards" :key="card.name" class="cardbox">
+                <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
+            </div>
 
-      </div>
+            <StackedCards v-show="isVisible('AUTOMATED')" :cards="automatedTableauCards" />
 
-      <div v-if="thisPlayer.selfReplicatingRobotsCards.length > 0" class="player_home_block">
-        <DynamicTitle title="Self-replicating Robots cards" :color="thisPlayer.color"/>
-        <div>
-          <div v-for="card in thisPlayer.selfReplicatingRobotsCards" :key="card.name" class="cardbox">
-            <Card :card="card"/>
+            <StackedCards v-show="isVisible('EVENT')" :cards="eventTableauCards" />
+
+          </div>
+
+          <div v-if="thisPlayer.selfReplicatingRobotsCards.length > 0" class="player_home_block">
+            <DynamicTitle title="Self-replicating Robots cards" :color="thisPlayer.color"/>
+            <div>
+              <div v-for="card in thisPlayer.selfReplicatingRobotsCards" :key="card.name" class="cardbox">
+                <Card :card="card"/>
+              </div>
+            </div>
           </div>
         </div>
       </div>
