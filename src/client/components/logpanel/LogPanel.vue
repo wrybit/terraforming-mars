@@ -48,10 +48,6 @@ import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vu
 import {fetchLogs} from '@/client/utils/fetchLogs';
 
 const BOTTOM_SCROLL_THRESHOLD = 24; // Roughly one line of log text.
-// Abstand der Hover-Vorschau zum Log bzw. Fensterrand
-const PREVIEW_GAP = 12;
-// Ungefähre Kartenhöhe: so weit bleibt die Vorschau vom unteren Fensterrand weg
-const PREVIEW_MIN_HEIGHT = 330;
 
 type ScrollPosition = number | 'bottom';
 
@@ -123,17 +119,14 @@ export default defineComponent({
       if (!this.canHover()) {
         return;
       }
-      // Vorschau neben dem Log-Panel auf Höhe der Zeile, in Fensterkoordinaten (position: fixed),
-      // damit sie nicht vom Spalten-Overflow abgeschnitten wird. Seite mit mehr Platz gewinnt.
+      // Vorschau bündig oben rechts im Log-Panel, in Fensterkoordinaten (position: fixed),
+      // damit sie nicht vom Spalten-Overflow abgeschnitten wird
       const rowElement = event.currentTarget as HTMLElement;
-      const row = rowElement.getBoundingClientRect();
       const panel = (rowElement.closest('.log-panel') ?? rowElement).getBoundingClientRect();
-      const spaceRight = window.innerWidth - panel.right;
-      const spaceLeft = panel.left;
-      const top = Math.max(PREVIEW_GAP, Math.min(row.top, window.innerHeight - PREVIEW_MIN_HEIGHT));
-      this.typedRefs.messageInspector.preview(message, spaceRight >= spaceLeft ?
-        {top, left: panel.right + PREVIEW_GAP} :
-        {top, right: window.innerWidth - panel.left + PREVIEW_GAP});
+      this.typedRefs.messageInspector.preview(message, {
+        top: panel.top,
+        right: window.innerWidth - panel.right,
+      });
     },
     messageUnhovered() {
       this.typedRefs.messageInspector.hidePreview();

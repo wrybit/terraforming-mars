@@ -109,15 +109,28 @@
   }
 }
 
-// Hover-Vorschau: schwebt neben dem Log auf Höhe der Zeile, damit nichts darunter verrutscht.
+// Hover-Vorschau: liegt bündig oben rechts über dem Log (gleich hoch wie eine Karte), damit nichts verrutscht.
 // fixed statt absolute, weil das Log in einer Spalte mit overflow liegen kann (player_home_columns.less)
 .card-panel--floating {
-  position: fixed; // top/left/right setzt LogMessageInspector
+  position: fixed; // top/right setzt LogMessageInspector
   z-index: 100;
   display: flex;
   gap: 8px;
   // Maus bleibt auf den Log-Zeilen; sonst würde die Vorschau den Hover abfangen und flackern
   pointer-events: none;
+
+  // Außenabstand der Karten ist für Kartenreihen gedacht; hier soll die Karte bündig mit dem Log abschließen
+  .card-container {
+    margin: 0;
+  }
+}
+
+// Gehoverte Zeile hervorheben – zeigt, zu welcher Zeile die Karten-Vorschau gehört
+@media (hover: hover) {
+  .log-panel li:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
 }
 
 .log-player {

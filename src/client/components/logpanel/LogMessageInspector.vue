@@ -19,19 +19,15 @@ defineProps<{
 }>();
 
 const selectedMessage = ref<LogMessage | undefined>(undefined);
-// Fensterkoordinaten; genau eine der beiden Seiten ist gesetzt
-type PreviewPosition = {top: number, left?: number, right?: number};
+// Fensterkoordinaten der oberen rechten Ecke
+type PreviewPosition = {top: number, right: number};
 
 // undefined = per Klick angeheftet (Touch), sonst Hover-Vorschau an der Log-Zeile
 const previewPosition = ref<PreviewPosition | undefined>(undefined);
 
-const toPixels = (value: number | undefined) => value === undefined ? undefined : value + 'px';
 const previewStyle = computed(() => {
   const position = previewPosition.value;
-  if (position === undefined) {
-    return undefined;
-  }
-  return {top: toPixels(position.top), left: toPixels(position.left), right: toPixels(position.right)};
+  return position === undefined ? undefined : {top: position.top + 'px', right: position.right + 'px'};
 });
 
 function show(message: LogMessage) {
