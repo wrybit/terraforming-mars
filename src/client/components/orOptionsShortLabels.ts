@@ -5,7 +5,7 @@ import {Message} from '@/common/logs/Message';
 // Unbekannte Titel bleiben unverändert; der volle Titel steht immer im Tooltip.
 const SHORT_LABELS: Readonly<Record<string, string>> = {
   'Play project card': 'Play cards',
-  'Perform an action from a played card': 'Card action',
+  'Perform an action from a played card': 'Actions',
   'Standard projects': 'Standard',
   'Pass for this generation': 'End generation',
   'End Turn': 'Pass on',
