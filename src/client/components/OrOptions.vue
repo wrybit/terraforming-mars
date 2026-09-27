@@ -3,41 +3,42 @@
     <label v-if="showtitle"><div>{{ $t(playerinput.title) }}</div></label>
     <label v-if="playerinput.warning !== undefined" class="card-warning"><div>({{ $t(playerinput.warning) }})</div></label>
 
-    <!-- Aktionsmenü: Tabs mit Zähler verfügbarer Einträge; leere Tabs sind abgeschwächt, aber anklickbar -->
-    <template v-if="asTabs">
-      <div class="or-tabs" role="tablist">
-        <button v-for="(option, idx) in displayedOptions" :key="idx"
-          ref="optionLabels"
-          type="button"
-          role="tab"
-          :aria-selected="selectedIdx === idx"
-          :class="['or-tab', {'or-tab--active': selectedIdx === idx, 'or-tab--empty': availableCount(option) === 0}]"
-          @click="selectedOption = option">
-          <span class="or-tab-title">{{ $t(option.title) }}</span>
-          <span v-if="availableCount(option) !== undefined" class="or-tab-count">{{ availableCount(option) }}</span>
-        </button>
-      </div>
-      <div v-if="selectedIdx !== -1" class="or-tab-panel" role="tabpanel">
-        <PlayerInputFactory ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
-      </div>
-    </template>
+    <!-- Aktionsmenü: Tabs mit Kurzlabel und Zähler verfügbarer Einträge; leere Tabs sind abgeschwächt, aber anklickbar -->
+    <div v-if="asTabs" class="or-tabs" role="tablist">
+      <button v-for="(option, idx) in displayedOptions" :key="idx"
+        ref="optionLabels"
+        type="button"
+        role="tab"
+        :title="$t(fullTabTitle(option.title))"
+        :aria-selected="selectedIdx === idx"
+        :class="['or-tab', {'or-tab--active': selectedIdx === idx, 'or-tab--empty': availableCount(option) === 0}]"
+        @click="selectedOption = option">
+        <span class="or-tab-title">{{ $t(shortTabLabel(option.title)) }}</span>
+        <span v-if="availableCount(option) !== undefined" class="or-tab-count">{{ availableCount(option) }}</span>
+      </button>
+    </div>
 
-    <template v-else>
-      <div v-for="(option, idx) in displayedOptions" :key="idx">
-        <label class="form-radio" ref="optionLabels">
-          <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" >
-          <i class="form-icon" ></i>
-          <span>{{ $t(option.title) }}</span>
-        </label>
-        <div v-if="selectedIdx === idx" style="margin-left: 30px">
-          <PlayerInputFactory ref="inputfactory" v-bind="childInputProps(idx)" />
+    <!-- Im Tab-Modus ist dieser Container die mit dem aktiven Tab verbundene Box (Inhalt + Speichern) -->
+    <div :class="{'or-tab-panel': asTabs}" :role="asTabs ? 'tabpanel' : undefined">
+      <PlayerInputFactory v-if="asTabs && selectedIdx !== -1" ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
+
+      <template v-if="!asTabs">
+        <div v-for="(option, idx) in displayedOptions" :key="idx">
+          <label class="form-radio" ref="optionLabels">
+            <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" >
+            <i class="form-icon" ></i>
+            <span>{{ $t(option.title) }}</span>
+          </label>
+          <div v-if="selectedIdx === idx" style="margin-left: 30px">
+            <PlayerInputFactory ref="inputfactory" v-bind="childInputProps(idx)" />
+          </div>
         </div>
-      </div>
-    </template>
+      </template>
 
-    <div v-if="showsave && selectedOption && !showChildSaveButton(selectedOption)">
-      <div :class="['wf-action', {'or-tab-save': asTabs}]" :style="asTabs ? undefined : 'margin: 5px 30px 10px'">
-        <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" @click="saveData" />
+      <div v-if="showsave && selectedOption && !showChildSaveButton(selectedOption)">
+        <div :class="['wf-action', {'or-tab-save': asTabs}]" :style="asTabs ? undefined : 'margin: 5px 30px 10px'">
+          <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" @click="saveData" />
+        </div>
       </div>
     </div>
   </div>
@@ -53,6 +54,7 @@ import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
+import {fullTabTitle, shortTabLabel} from '@/client/components/orOptionsShortLabels';
 
 let unique = 0;
 
@@ -132,6 +134,8 @@ export default defineComponent({
     },
   },
   methods: {
+    shortTabLabel,
+    fullTabTitle,
     // Anzahl auswählbarer Einträge (Karten, Standardprojekte, Unteroptionen) – undefined, wenn die Option keine Liste hat
     availableCount(option: PlayerInputModel): number | undefined {
       if (option.type === 'projectCard' || option.type === 'card') {

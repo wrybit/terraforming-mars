@@ -1396,5 +1396,14 @@
   "Increase plants production 1 step": "Erhöhe Pflanzen-Produktion um 1",
   "Increase energy production 1 step": "Erhöhe Energie-Produktion um 1",
   "Increase heat production 1 step": "Erhöhe Wärme-Produktion um 1",
-  "Reorder Cards": "Karten neu ordnen"
+  "Reorder Cards": "Karten neu ordnen",
+  "Card action": "Kartenaktion",
+  "Patents": "Patente",
+  "Milestone": "Meilenstein",
+  "Award (${0} M€)": "Auszeichnung (${0} M€)",
+  "Corporation action": "Konzernaktion",
+  "Delegate (3 M€)": "Delegierter (3 M€)",
+  "Delegate (5 M€)": "Delegierter (5 M€)",
+  "Delegate (lobby)": "Delegierter (Lobby)",
+  "CEO action": "CEO-Aktion"
 }
