@@ -1,5 +1,11 @@
 <template>
-  <CardPanel v-if="selectedMessage !== undefined" :message="selectedMessage" :players="viewModel.players" @hide="selectedMessage = undefined"/>
+  <CardPanel
+    v-if="selectedMessage !== undefined"
+    :message="selectedMessage"
+    :players="viewModel.players"
+    :floating="previewPosition !== undefined"
+    :style="previewPosition !== undefined ? {top: previewPosition.top + 'px', left: previewPosition.left + 'px'} : undefined"
+    @hide="selectedMessage = undefined"/>
 </template>
 
 <script setup lang="ts">
@@ -13,10 +19,28 @@ defineProps<{
 }>();
 
 const selectedMessage = ref<LogMessage | undefined>(undefined);
+type PreviewPosition = {top: number, left: number};
+
+// undefined = per Klick angeheftet (Touch), sonst Hover-Vorschau an der Log-Zeile
+const previewPosition = ref<PreviewPosition | undefined>(undefined);
 
 function show(message: LogMessage) {
   selectedMessage.value = message;
+  previewPosition.value = undefined;
 }
 
-defineExpose({show});
+function preview(message: LogMessage, position: PreviewPosition) {
+  selectedMessage.value = message;
+  previewPosition.value = position;
+}
+
+// Nur die Hover-Vorschau schließen, ein per Klick angeheftetes Panel bleibt
+function hidePreview() {
+  if (previewPosition.value !== undefined) {
+    selectedMessage.value = undefined;
+    previewPosition.value = undefined;
+  }
+}
+
+defineExpose({show, preview, hidePreview});
 </script>

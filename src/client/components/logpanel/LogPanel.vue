@@ -12,8 +12,8 @@
       </template>
     </LogGenerationList>
     <div class="panel log-panel">
-      <div id="logpanel-scrollable" class="panel-body" @scroll="updateScrollState">
-        <LogMessageComponent v-for="(message, index) in messages" :key="index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @spaceClicked="$emit('spaceClicked', $event)"/>
+      <div id="logpanel-scrollable" class="panel-body" @scroll="updateScrollState" @mouseleave="messageUnhovered">
+        <LogMessageComponent v-for="(message, index) in messages" :key="index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @mouseenter="messageHovered(message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
       </div>
       <button
         v-show="showScrollToBottomButton"
@@ -106,8 +106,31 @@ export default defineComponent({
   },
   emits: ['spaceClicked'],
   methods: {
+    // Mit Maus/Trackpad öffnet Hover die Vorschau; Klick bleibt nur für Touch-Geräte ohne Hover
+    canHover(): boolean {
+      return window.matchMedia('(hover: hover)').matches;
+    },
     messageClicked(message: LogMessage) {
-      this.typedRefs.messageInspector.show(message);
+      if (!this.canHover()) {
+        this.typedRefs.messageInspector.show(message);
+      }
+    },
+    messageHovered(message: LogMessage, event: MouseEvent) {
+      if (!this.canHover()) {
+        return;
+      }
+      // Vorschau rechts neben dem Log-Panel auf Höhe der Zeile, relativ zum Log-Container (position: relative)
+      const rowElement = event.currentTarget as HTMLElement;
+      const row = rowElement.getBoundingClientRect();
+      const panel = (rowElement.closest('.log-panel') ?? rowElement).getBoundingClientRect();
+      const container = (this.$el as HTMLElement).getBoundingClientRect();
+      this.typedRefs.messageInspector.preview(message, {
+        top: row.top - container.top,
+        left: panel.right - container.left,
+      });
+    },
+    messageUnhovered() {
+      this.typedRefs.messageInspector.hidePreview();
     },
     selectGeneration(gen: number): void {
       this.following = gen === this.generation;

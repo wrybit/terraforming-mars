@@ -109,6 +109,17 @@
   }
 }
 
+// Hover-Vorschau: schwebt rechts neben dem Log auf Höhe der Zeile, damit nichts darunter verrutscht
+.card-panel--floating {
+  position: absolute; // top/left setzt LogMessageInspector
+  margin-left: 12px;
+  z-index: 100;
+  display: flex;
+  gap: 8px;
+  // Maus bleibt auf den Log-Zeilen; sonst würde die Vorschau den Hover abfangen und flackern
+  pointer-events: none;
+}
+
 .log-player {
   text-shadow:1px 1px 1px @grey_900, -1px -1px 1px #666;
   padding: 2px 10px;
@@ -172,6 +183,9 @@
 }
 
 .log-container {
+  // Bezugsrahmen für die Hover-Vorschau (.card-panel--floating)
+  position: relative;
+
   .debugid {
     font-size: 9px;
     color: #888;

@@ -1,6 +1,7 @@
 <template>
-  <div class="card-panel" v-if="message !== undefined && show">
-    <AppButton size="big" type="close" :disableOnServerBusy="false" @click="hideMe" align="right"/>
+  <div :class="['card-panel', {'card-panel--floating': floating}]" v-if="message !== undefined && show">
+    <!-- Hover-Vorschau schließt sich beim Verlassen der Zeile selbst, braucht keinen Button -->
+    <AppButton v-if="!floating" size="big" type="close" :disableOnServerBusy="false" @click="hideMe" align="right"/>
     <div id="log_panel_card" class="cardbox" v-for="name in cards" :key="name">
       <Card :card="{name, isSelfReplicatingRobotsCard: isSelfReplicatingRobotsCard(name), resources: getResourcesOnCard(name)}"/>
     </div>
@@ -38,6 +39,11 @@ export default defineComponent({
     players: {
       type: Array as () => Array<PublicPlayerModel>,
       required: true,
+    },
+    // Als schwebende Hover-Vorschau neben dem Log statt als Block darunter
+    floating: {
+      type: Boolean,
+      default: false,
     },
   },
   components: {
