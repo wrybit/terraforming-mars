@@ -30,24 +30,27 @@
     <div v-if="thisPlayer.tableau.length > 0">
       <!-- Zwei-Spalten-Layout: Brett steht im DOM zuerst (Hotkey-Reihenfolge, schmale Screens), wird per CSS rechts platziert -->
       <div class="player-home-columns">
-        <div class="player_home_block player-home-columns__board">
-          <GameBoardView
-            ref="gameBoardView"
-            :game="game"
-            :tileView="tileView"
-            :players="playerView.players"
-            @toggleTileView="cycleTileView()"
-          />
+        <div class="player-home-columns__board">
+          <div class="player_home_block player-home-columns__mars">
+            <GameBoardView
+              ref="gameBoardView"
+              :game="game"
+              :tileView="tileView"
+              :players="playerView.players"
+              @toggleTileView="cycleTileView()"
+            />
+          </div>
+
+          <!-- Log unter dem Brett: beides bleibt im Zwei-Spalten-Layout gemeinsam sichtbar -->
+          <a class="hotkey-target"></a>
+          <div class="player_home_block nofloat player-home-columns__log">
+            <LogPanel :viewModel="playerView" :step="game.step" @spaceClicked="onSpaceClicked"/>
+          </div>
         </div>
 
         <div class="player-home-columns__main">
           <a class="hotkey-target"></a>
           <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="playerView" v-trim-whitespace id="shortkey-playersoverview"/>
-
-          <a class="hotkey-target"></a>
-          <div class="player_home_block nofloat">
-            <LogPanel :viewModel="playerView" :step="game.step" @spaceClicked="onSpaceClicked"/>
-          </div>
 
           <a class="hotkey-target"></a>
           <div class="player_home_block player_home_block--actions nofloat">

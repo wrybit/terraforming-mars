@@ -109,10 +109,10 @@
   }
 }
 
-// Hover-Vorschau: schwebt rechts neben dem Log auf Höhe der Zeile, damit nichts darunter verrutscht
+// Hover-Vorschau: schwebt neben dem Log auf Höhe der Zeile, damit nichts darunter verrutscht.
+// fixed statt absolute, weil das Log in einer Spalte mit overflow liegen kann (player_home_columns.less)
 .card-panel--floating {
-  position: absolute; // top/left setzt LogMessageInspector
-  margin-left: 12px;
+  position: fixed; // top/left/right setzt LogMessageInspector
   z-index: 100;
   display: flex;
   gap: 8px;
@@ -183,9 +183,6 @@
 }
 
 .log-container {
-  // Bezugsrahmen für die Hover-Vorschau (.card-panel--floating)
-  position: relative;
-
   .debugid {
     font-size: 9px;
     color: #888;

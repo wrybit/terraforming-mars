@@ -4,12 +4,12 @@
     :message="selectedMessage"
     :players="viewModel.players"
     :floating="previewPosition !== undefined"
-    :style="previewPosition !== undefined ? {top: previewPosition.top + 'px', left: previewPosition.left + 'px'} : undefined"
+    :style="previewStyle"
     @hide="selectedMessage = undefined"/>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import {LogMessage} from '@/common/logs/LogMessage';
 import {ViewModel} from '@/common/models/PlayerModel';
 import CardPanel from '@/client/components/logpanel/CardPanel.vue';
@@ -19,10 +19,20 @@ defineProps<{
 }>();
 
 const selectedMessage = ref<LogMessage | undefined>(undefined);
-type PreviewPosition = {top: number, left: number};
+// Fensterkoordinaten; genau eine der beiden Seiten ist gesetzt
+type PreviewPosition = {top: number, left?: number, right?: number};
 
 // undefined = per Klick angeheftet (Touch), sonst Hover-Vorschau an der Log-Zeile
 const previewPosition = ref<PreviewPosition | undefined>(undefined);
+
+const toPixels = (value: number | undefined) => value === undefined ? undefined : value + 'px';
+const previewStyle = computed(() => {
+  const position = previewPosition.value;
+  if (position === undefined) {
+    return undefined;
+  }
+  return {top: toPixels(position.top), left: toPixels(position.left), right: toPixels(position.right)};
+});
 
 function show(message: LogMessage) {
   selectedMessage.value = message;

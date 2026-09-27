@@ -11,6 +11,8 @@
 // So weit ragen Brett-Elemente links bzw. rechts über .board-cont hinaus
 @player-home-board-overhang-left: 40px;
 @player-home-board-overhang-right: 24px;
+// Log unter dem Brett so hoch wie eine Projektkarte (300px + Rahmen)
+@player-home-log-height: 308px;
 
 @media only screen and (min-width: @player-home-columns-min-width) {
   .player-home-columns {
@@ -82,7 +84,18 @@
     overflow: hidden auto;
     // Board platziert Kolonie-/Raumhafen-Felder links außerhalb von .board-cont; ohne Innenabstand würde overflow sie abschneiden
     padding: 0 @player-home-board-overhang-right 0 @player-home-board-overhang-left;
+  }
+
+  .player-home-columns__log {
+    // Breite 0 + min-width 100%: Log füllt die Spalte, bestimmt deren Breite aber nicht (das tut das Brett)
+    width: 0;
+    min-width: 100%;
     margin-bottom: 0;
+
+    .log-panel {
+      height: @player-home-log-height;
+      max-height: @player-home-log-height;
+    }
   }
 }
 
@@ -92,7 +105,8 @@
 @player-home-board-compact-zoom: 0.8;
 
 @media only screen and (min-width: @player-home-columns-min-width) and (max-width: @player-home-board-compact-max-width) {
-  .player-home-columns__board {
+  // Nur das Brett verkleinern, Log-Schrift bleibt lesbar
+  .player-home-columns__mars {
     zoom: @player-home-board-compact-zoom;
   }
 }
