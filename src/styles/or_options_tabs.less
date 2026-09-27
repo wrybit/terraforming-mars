@@ -5,6 +5,7 @@
 @or-tabs-panel-background: #1d2030;
 @or-tabs-border: #3a3f5c;
 @or-tabs-radius: 8px;
+@or-tab-accent-width: 3px;
 @or-tabs-gap: 4px; // Badge ragt 4px nach rechts – passt genau in den Abstand zum Nachbarn
 // Leere Tabs (nichts spielbar) treten zurück, bleiben aber lesbar und anklickbar
 @or-tab-empty-opacity: 0.45;
@@ -28,6 +29,8 @@
   align-items: center;
   padding: 6px 8px;
   border: 1px solid transparent;
+  // Oberer Rand bei allen Tabs gleich stark (inaktiv transparent), sonst springen Badges beim Tab-Wechsel
+  border-top: @or-tab-accent-width solid transparent;
   border-bottom: none;
   border-radius: @or-tabs-radius @or-tabs-radius 0 0;
   background: rgba(255, 255, 255, 0.06);
@@ -53,7 +56,7 @@
   // Gleiche Fläche wie die Box, Unterkante in Boxfarbe überdeckt die Grundlinie
   background: @or-tabs-panel-background;
   border-color: @or-tabs-border;
-  border-top: 3px solid @bg_action;
+  border-top-color: @bg_action;
   border-bottom: 1px solid @or-tabs-panel-background;
   color: #fff;
 }
