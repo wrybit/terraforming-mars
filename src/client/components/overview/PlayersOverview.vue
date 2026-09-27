@@ -16,7 +16,6 @@
               :firstForGen="getIsFirstForGen(p)"
               :actionLabel="getActionLabel(p)"
               :playerIndex="index"/>
-            <div v-if="playerView.players.length > 1 && thisPlayer !== undefined" class="player-divider" ></div>
             <PlayerInfo
               v-if="thisPlayer !== undefined"
               :player="thisPlayer"
