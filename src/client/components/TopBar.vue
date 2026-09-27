@@ -1,7 +1,7 @@
 <template>
     <div class="top-bar-container">
       <div :class="formatCssClass()" :key="componentKey">
-        <PlayerInfo v-show="isExpanded()" :player="playerView.thisPlayer" :playerView="playerView" :actionLabel="''" :playerIndex="0" :hideZeroTags="true" :isTopBar="true"/>
+        <PlayerInfo v-show="isExpanded()" :player="playerView.thisPlayer" :playerView="playerView" :actionLabel="''" :playerIndex="ownPlayerIndex(playerView)" :hideZeroTags="true" :isTopBar="true"/>
         <div class="top-bar-collapser" @click="toggleBar()">
           <img src="assets/arrows_left.png">
         </div>
@@ -12,6 +12,7 @@
 
 <script lang="ts">
 
+import {ownPlayerIndex} from '@/client/components/overview/ownPlayerIndex';
 import {defineComponent} from 'vue';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import PlayerInfo from '@/client/components/overview/PlayerInfo.vue';
@@ -36,6 +37,7 @@ export default defineComponent({
     };
   },
   methods: {
+    ownPlayerIndex,
     forceRerender() {
       this.componentKey += 1;
     },

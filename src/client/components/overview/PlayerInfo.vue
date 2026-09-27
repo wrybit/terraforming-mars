@@ -25,8 +25,7 @@
                 <div class="played-cards-count">{{numberOfPlayedCards()}}</div>
               </div>
             </div>
-            <!-- Eigene Karten stehen ohnehin auf der Seite; der Button ist nur für Gegner sinnvoll -->
-            <AppButton v-if="!isThisPlayer" class="played-cards-button" size="tiny" @click="togglePlayerDetails" :title="buttonLabel()" />
+            <AppButton class="played-cards-button" size="tiny" @click="togglePlayerDetails" :title="buttonLabel()" />
           </div>
           <div class="tag-display player-board-blue-action-counter" :class="tooltipCss" :data-tooltip="$t('The number of available actions on active cards')">
             <div class="tag-count tag-action-card">
@@ -98,9 +97,6 @@ export default defineComponent({
     PlayerStatus,
   },
   computed: {
-    isThisPlayer(): boolean {
-      return this.player.color === this.playerView.thisPlayer?.color;
-    },
     tooltipCss(): string {
       return 'tooltip tooltip-' + (this.isTopBar ? 'bottom' : 'top');
     },
@@ -121,38 +117,22 @@ export default defineComponent({
     unpin(playerIndex: number) {
       return vueRoot(this).setVisibilityState('pinned_player_' + playerIndex, false);
     },
+    // Umschalten: dieses Modal öffnen bzw. schließen, alle anderen Spieler immer schließen.
+    // Alle Indizes – seit auch der eigene Spieler (in der Reihenfolge zuletzt) ein Modal hat.
     pinPlayer() {
-      let hiddenPlayersIndexes = [];
-      const playerPinned = this.isPinned(this.playerIndex);
-
-      // if player is already pinned, add to hidden players (toggle)
-      hiddenPlayersIndexes = range(this.playerView.players.length - 1);
-      if (!playerPinned) {
-        this.pin(this.playerIndex);
-        hiddenPlayersIndexes = hiddenPlayersIndexes.filter(
-          (index) => index !== this.playerIndex,
-        );
+      const wasPinned = this.isPinned(this.playerIndex);
+      for (const index of range(this.playerView.players.length)) {
+        this.unpin(index);
       }
-      for (let i = 0; i < hiddenPlayersIndexes.length; i++) {
-        if (hiddenPlayersIndexes.includes(i)) {
-          this.unpin(i);
-        }
+      if (!wasPinned) {
+        this.pin(this.playerIndex);
       }
     },
     buttonLabel(): string {
       return this.isPinned(this.playerIndex) ? 'hide' : 'show';
     },
+    // Gespielte Karten des Spielers anzeigen (eigene wie fremde) und alle anderen ausblenden
     togglePlayerDetails() {
-      // for the player viewing this page => scroll to cards UI
-      if (this.player.color === this.playerView.thisPlayer?.color) {
-        const el = document.getElementsByClassName(
-          'sidebar_icon--cards',
-        )[0] as HTMLElement;
-        el.click();
-
-        return;
-      }
-      // any other player show cards container and hide all other
       this.pinPlayer();
     },
     getClasses(): string {

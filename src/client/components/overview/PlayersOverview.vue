@@ -1,8 +1,12 @@
 <template>
         <div class="players-overview" v-if="hasPlayers()">
-            <div class="other_player" v-if="thisPlayer === undefined || players.length > 1">
+            <!-- Gespielte Karten aller Spieler, auch der eigenen (über "anzeigen" in der Spielerleiste) -->
+            <div class="other_player">
                 <div v-for="(otherPlayer, index) in getPlayersInOrder()" :key="otherPlayer.color">
-                    <OtherPlayer v-if="thisPlayer === undefined || otherPlayer.color !== thisPlayer.color" :player="otherPlayer" :playerIndex="index"/>
+                    <OtherPlayer :player="otherPlayer" :playerIndex="index"/>
+                </div>
+                <div v-if="thisPlayer !== undefined">
+                    <OtherPlayer :player="thisPlayer" :playerIndex="ownPlayerIndex(playerView)"/>
                 </div>
             </div>
             <PlayerInfo v-for="(p, index) in getPlayersInOrder()"
@@ -20,7 +24,7 @@
               :playerView="playerView"
               :firstForGen="getIsFirstForGen(thisPlayer)"
               :actionLabel="getActionLabel(thisPlayer)"
-              :playerIndex="-1"/>
+              :playerIndex="ownPlayerIndex(playerView)"/>
         </div>
 </template>
 
@@ -28,6 +32,7 @@
 import {defineComponent} from 'vue';
 import PlayerInfo from '@/client/components/overview/PlayerInfo.vue';
 import OtherPlayer from '@/client/components/OtherPlayer.vue';
+import {ownPlayerIndex} from '@/client/components/overview/ownPlayerIndex';
 import {ViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {ActionLabel} from '@/client/components/overview/ActionLabel';
 import {Phase} from '@/common/Phase';
@@ -71,6 +76,7 @@ export default defineComponent({
     return {};
   },
   methods: {
+    ownPlayerIndex,
     hasPlayers(): boolean {
       return this.players.length > 0;
     },
