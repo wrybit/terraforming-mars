@@ -50,7 +50,7 @@ describe('PlayerInfo', () => {
         actionLabel: 'none',
       },
     });
-    const test = playerInfo.find('div[class*="played-cards-count"]');
+    const test = playerInfo.find('[class*="played-cards-count"]');
     expect(test.text()).to.eq('3');
   });
 });

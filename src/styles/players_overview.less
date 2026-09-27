@@ -20,40 +20,26 @@
 
 .player-played-cards {
   margin: 7px 15px 0 15px;
-  width: 90px;
 
-  .player-played-cards-top {
-    display: flex;
-    background: #0008;
-    border-radius: 5px;
-    font-family: 'Prototype', sans-serif;
-    height: 36px;
-    line-height: 36px;
-    padding-left: 2px;
-  }
-  .played-cards-elements {
-    display: flex;
-    .played-cards-icon {
-      width: 12px;
-      height: 20px;
-      border-radius: 2px;
-      margin:8px 0 0 5px;
-      padding: 0px;
-    }
-    .played-cards-count {
-      width: 36px;
-      text-align: center;
-      color: #fff8;
-    }
-  }
-
+  // Button mit Anzahl der gespielten Karten als Badge
   .played-cards-button {
-    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     border-radius: 5px;
-    margin-top: 7px;
     &:hover {
       filter: brightness(120%);
     }
+  }
+
+  .played-cards-count {
+    min-width: 22px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.35);
+    font-family: 'Prototype', sans-serif;
+    line-height: 20px;
+    text-align: center;
   }
 }
 
@@ -92,6 +78,7 @@
 }
 
 .player-info {
+  cursor: pointer; // ganze Spielerleiste öffnet die gespielten Karten (PlayerInfo.vue)
   border-radius: 8px;
   margin: 10px 0;
   padding: 8px;

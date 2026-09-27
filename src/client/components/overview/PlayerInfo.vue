@@ -1,10 +1,11 @@
 <template>
-      <div :class="getClasses()">
+      <!-- Ganze Spielerleiste ist klickbar und öffnet die gespielten Karten -->
+      <div :class="getClasses()" @click="togglePlayerDetails">
         <div class="player-status-and-res">
         <div class="player-status">
           <div class="player-info-details">
-            <div class="player-info-name" @click="togglePlayerDetails">{{ playerSymbol + player.name }}</div>
-            <span @click="togglePlayerDetails" v-for="(corporationName, index) in getCorporationName()" :key="index" v-i18n>
+            <div class="player-info-name">{{ playerSymbol + player.name }}</div>
+            <span v-for="(corporationName, index) in getCorporationName()" :key="index" v-i18n>
               <div class="player-info-corp" :title="$t(corporationName)">
                 {{ corporationName }}
               </div>
@@ -17,15 +18,11 @@
         </div>
           <PlayerResources :player="player" v-trim-whitespace />
           <div class="player-played-cards">
-            <div class="player-played-cards-top">
-              <div class="played-cards-elements">
-                <div class="played-cards-icon hiding-card-button active"></div>
-                <div class="played-cards-icon hiding-card-button automated"></div>
-                <div class="played-cards-icon hiding-card-button event"></div>
-                <div class="played-cards-count">{{numberOfPlayedCards()}}</div>
-              </div>
-            </div>
-            <AppButton class="played-cards-button" size="tiny" @click="togglePlayerDetails" :title="buttonLabel()" />
+            <!-- Kein eigener Klick-Handler: der Klick läuft zur Leiste hoch; Button bleibt für Tastaturbedienung -->
+            <button type="button" class="btn btn-tiny btn-rounded played-cards-button">
+              <span>{{ $t(buttonLabel()) }}</span>
+              <span class="played-cards-count">{{ numberOfPlayedCards() }}</span>
+            </button>
           </div>
           <div class="tag-display player-board-blue-action-counter" :class="tooltipCss" :data-tooltip="$t('The number of available actions on active cards')">
             <div class="tag-count tag-action-card">
@@ -50,7 +47,6 @@ import PlayerStatus from '@/client/components/overview/PlayerStatus.vue';
 import {playerColorClass} from '@/common/utils/utils';
 import {vueRoot} from '@/client/components/vueRoot';
 import {range} from '@/common/utils/utils';
-import AppButton from '@/client/components/common/AppButton.vue';
 import {CardType} from '@/common/cards/CardType';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {Phase} from '@/common/Phase';
@@ -90,7 +86,6 @@ export default defineComponent({
     },
   },
   components: {
-    AppButton,
     PlayerResources,
     PlayerTags,
     PlayerAlliedParty,
