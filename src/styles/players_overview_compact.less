@@ -23,13 +23,12 @@
     grid-template-areas:
       "status main counter"
       "res res res"
-      "tags cards cards"
-      "party party party";
+      "tags cards cards";
     gap: @players-compact-row-gap @players-compact-column-gap;
     align-items: center;
     width: auto;
     max-width: 100%;
-    padding: 10px 12px;
+    padding: 6px 12px;
   }
 
   .player-status-and-res,
@@ -129,9 +128,14 @@
   }
 
   .player-allied-party {
-    grid-area: party;
-    // Ohne Turmoil leer (aber im DOM) – negativer Abstand hebt den Zeilenabstand davor auf
-    margin-top: -@players-compact-row-gap;
+    // Keine feste Rasterzeile: sonst bliebe ohne Turmoil ein Zeilenabstand als Leerraum unten.
+    // Mit Inhalt wird sie automatisch als letzte Zeile über die volle Breite angehängt.
+    grid-column: 1 / -1;
+
+    // Ohne Turmoil leer (aber im DOM)
+    &:not(:has(*)) {
+      display: none;
+    }
   }
 
   // Trennstrich zwischen Tag-Gruppen auf Icon-Höhe kürzen (sonst 70px für die hohe Darstellung)
