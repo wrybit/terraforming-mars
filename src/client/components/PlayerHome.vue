@@ -1,6 +1,7 @@
 <template>
-  <!-- player-home--acting: roter Rahmen um den Viewport, solange dieser Spieler am Zug ist (active_player_outline.less) -->
   <div id="player-home" :class="{'with-turmoil': game.turmoil, 'player-home--acting': isPlayerActing(playerView)}">
+    <!-- player-home--acting: roter Rahmen um den Viewport, solange dieser Spieler am Zug ist (active_player_outline.less).
+         Kommentar bewusst innerhalb der Wurzel, sonst hätte die Komponente zwei Wurzelknoten ($el wäre kein Element) -->
     <TopBar :playerView="playerView" />
 
     <div v-if="game.phase === 'end'">
