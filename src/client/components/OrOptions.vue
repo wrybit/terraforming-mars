@@ -132,10 +132,13 @@ export default defineComponent({
     },
   },
   methods: {
-    // Anzahl auswählbarer Einträge (Karten, Standardprojekte, Aktionen) – undefined, wenn die Option keine Liste hat
+    // Anzahl auswählbarer Einträge (Karten, Standardprojekte, Unteroptionen) – undefined, wenn die Option keine Liste hat
     availableCount(option: PlayerInputModel): number | undefined {
       if (option.type === 'projectCard' || option.type === 'card') {
         return option.cards.filter((card) => card.isDisabled !== true).length;
+      }
+      if (option.type === 'or') {
+        return option.options.length;
       }
       return undefined;
     },
