@@ -1398,7 +1398,6 @@
   "Increase heat production 1 step": "Erhöhe Wärme-Produktion um 1",
   "Reorder Cards": "Karten neu ordnen",
   "Card action": "Kartenaktion",
-  "Patents": "Patente",
   "Milestone": "Meilenstein",
   "Award (${0} M€)": "Auszeichnung (${0} M€)",
   "Corporation action": "Konzernaktion",
@@ -1407,5 +1406,6 @@
   "Delegate (lobby)": "Delegierter (Lobby)",
   "CEO action": "CEO-Aktion",
   "Play cards": "Ausspielen",
-  "Projects": "Projekte"
+  "Pass on": "Weitergeben",
+  "End generation": "Beenden"
 }

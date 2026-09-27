@@ -5,16 +5,23 @@
 
     <!-- Aktionsmenü: Tabs mit Kurzlabel und Zähler verfügbarer Einträge; leere Tabs sind abgeschwächt, aber anklickbar -->
     <div v-if="asTabs" class="or-tabs" role="tablist">
-      <button v-for="(option, idx) in displayedOptions" :key="idx"
-        ref="optionLabels"
+      <!-- Anzeige-Reihenfolge per tabDisplayOrder (Weitergeben/Beenden ans Ende); idx bleibt der Index in displayedOptions -->
+      <button v-for="idx in tabDisplayOrder(displayedOptions.map((option) => option.title))" :key="idx"
+        :data-option-index="idx"
         type="button"
         role="tab"
-        :title="$t(fullTabTitle(option.title))"
+        :title="$t(fullTabTitle(displayedOptions[idx].title))"
+        :aria-label="$t(shortTabLabel(displayedOptions[idx].title))"
         :aria-selected="selectedIdx === idx"
-        :class="['or-tab', {'or-tab--active': selectedIdx === idx, 'or-tab--empty': availableCount(option) === 0}]"
-        @click="selectedOption = option">
-        <span class="or-tab-title">{{ $t(shortTabLabel(option.title)) }}</span>
-        <span v-if="availableCount(option) !== undefined" class="or-tab-count">{{ availableCount(option) }}</span>
+        :class="['or-tab', {
+          'or-tab--active': selectedIdx === idx,
+          'or-tab--empty': availableCount(displayedOptions[idx]) === 0,
+          'or-tab--icon': tabIcon(displayedOptions[idx].title) !== undefined,
+        }]"
+        @click="selectedOption = displayedOptions[idx]">
+        <OrOptionsTabIcon v-if="tabIcon(displayedOptions[idx].title) !== undefined" :icon="tabIcon(displayedOptions[idx].title)!"/>
+        <span v-else class="or-tab-title">{{ $t(shortTabLabel(displayedOptions[idx].title)) }}</span>
+        <span v-if="availableCount(displayedOptions[idx]) !== undefined" class="or-tab-count">{{ availableCount(displayedOptions[idx]) }}</span>
       </button>
     </div>
 
@@ -54,7 +61,8 @@ import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
-import {fullTabTitle, shortTabLabel} from '@/client/components/orOptionsShortLabels';
+import {fullTabTitle, shortTabLabel, tabDisplayOrder, tabIcon} from '@/client/components/orOptionsShortLabels';
+import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
 
 let unique = 0;
 
@@ -82,6 +90,7 @@ export default defineComponent({
   },
   components: {
     AppButton,
+    OrOptionsTabIcon,
   },
   setup() {
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
@@ -136,6 +145,8 @@ export default defineComponent({
   methods: {
     shortTabLabel,
     fullTabTitle,
+    tabIcon,
+    tabDisplayOrder,
     // Anzahl auswählbarer Einträge (Karten, Standardprojekte, Unteroptionen) – undefined, wenn die Option keine Liste hat
     availableCount(option: PlayerInputModel): number | undefined {
       if (option.type === 'projectCard' || option.type === 'card') {
@@ -163,6 +174,11 @@ export default defineComponent({
     },
     getSelectedOptionLabelElement(): HTMLElement | undefined {
       const idx = this.selectedIdx;
+      // Tabs sind umsortiert; die ref-Liste folgt der Anzeige-Reihenfolge, daher über den Options-Index suchen
+      if (this.asTabs) {
+        const tab = (this.$el as HTMLElement).querySelector(`[data-option-index="${idx}"]`) ?? undefined;
+        return isHTMLElement(tab) ? tab : undefined;
+      }
       const optionLabels = this.$refs.optionLabels as HTMLElement | HTMLElement[] | undefined;
       if (idx === -1 || !optionLabels) {
         return undefined;
