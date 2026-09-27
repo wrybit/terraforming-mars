@@ -25,7 +25,8 @@
                 <div class="played-cards-count">{{numberOfPlayedCards()}}</div>
               </div>
             </div>
-            <AppButton class="played-cards-button" size="tiny" @click="togglePlayerDetails" :title="buttonLabel()" />
+            <!-- Eigene Karten stehen ohnehin auf der Seite; der Button ist nur für Gegner sinnvoll -->
+            <AppButton v-if="!isThisPlayer" class="played-cards-button" size="tiny" @click="togglePlayerDetails" :title="buttonLabel()" />
           </div>
           <div class="tag-display player-board-blue-action-counter" :class="tooltipCss" :data-tooltip="$t('The number of available actions on active cards')">
             <div class="tag-count tag-action-card">
@@ -97,6 +98,9 @@ export default defineComponent({
     PlayerStatus,
   },
   computed: {
+    isThisPlayer(): boolean {
+      return this.player.color === this.playerView.thisPlayer?.color;
+    },
     tooltipCss(): string {
       return 'tooltip tooltip-' + (this.isTopBar ? 'bottom' : 'top');
     },

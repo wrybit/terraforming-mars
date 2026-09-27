@@ -58,6 +58,42 @@
     padding: 0 @player-home-board-overhang-right 0 @player-home-board-overhang-left;
   }
 
+  // Gespielte Karten eines Gegners ("anzeigen") als Modal über der rechten Spalte (Brett + Log),
+  // statt als Block über den Spielerleisten. Der Container ist durchklickbar, nur das geöffnete Modal fängt Klicks.
+  .player-home-columns__main .other_player {
+    position: fixed;
+    // oben/rechts/unten/links; links = Kante der rechten Spalte, gemessen in boardColumnPosition.ts
+    inset: @player-home-sticky-top 0 @player-home-sticky-top var(--board-column-left);
+    z-index: 120;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+
+    // v-for-Hüllen auflösen, damit das geöffnete Modal direkt die Spaltenhöhe füllen kann
+    > div {
+      display: contents;
+    }
+
+    // OtherPlayer-Wurzel; ausgeblendete haben per v-show display: none inline, das gewinnt
+    > div > div {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      pointer-events: auto;
+      border-radius: 8px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+    }
+
+    .other_player_cont {
+      flex: 1;
+      min-height: 0;
+      max-height: none;
+      margin: 0;
+      padding: 10px 0 0 20px;
+    }
+  }
+
   .player-home-columns__log {
     // Breite 0 + min-width 100%: Log füllt die Spalte, bestimmt deren Breite aber nicht (das tut das Brett)
     width: 0;

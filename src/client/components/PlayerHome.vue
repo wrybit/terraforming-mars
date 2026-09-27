@@ -30,7 +30,7 @@
     <div v-if="thisPlayer.tableau.length > 0">
       <!-- Zwei-Spalten-Layout: Brett steht im DOM zuerst (Hotkey-Reihenfolge, schmale Screens), wird per CSS rechts platziert -->
       <div class="player-home-columns">
-        <div class="player-home-columns__board">
+        <div class="player-home-columns__board" :ref="trackBoardColumn">
           <div class="player_home_block player-home-columns__mars">
             <GameBoardView
               ref="gameBoardView"
@@ -185,6 +185,10 @@ import {sortActiveCards} from '@/client/utils/ActiveCardsSortingOrder';
 import {CardModel} from '@/common/models/CardModel';
 import {getCardOrThrow} from '../cards/ClientCardManifest';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
+import {observeBoardColumn} from '@/client/utils/boardColumnPosition';
+
+// Aufräumfunktion der Spalten-Beobachtung; pro Seite gibt es nur eine Spieleransicht
+let stopObservingBoardColumn: (() => void) | undefined;
 
 type PlayerHomeModel = {
   showHand: boolean;
@@ -302,7 +306,16 @@ export default defineComponent({
     UndergroundTokens,
     KeyboardShortcuts,
   },
+  beforeUnmount() {
+    stopObservingBoardColumn?.();
+    stopObservingBoardColumn = undefined;
+  },
   methods: {
+    // Funktions-Ref: wird mit dem Element bzw. beim Entfernen mit null aufgerufen
+    trackBoardColumn(element: unknown) {
+      stopObservingBoardColumn?.();
+      stopObservingBoardColumn = element instanceof HTMLElement ? observeBoardColumn(element) : undefined;
+    },
     isPlayerActing(playerView: PlayerViewModel) : boolean {
       return playerView.players.length > 1 && playerView.waitingFor !== undefined && !playerView.waitingFor.optional;
     },
