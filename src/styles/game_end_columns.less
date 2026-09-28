@@ -38,6 +38,11 @@
   --app-background-brightness: 0.5;
 }
 
+// Die Ergebnisseite hat keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt, sonst ist der Rand links größer als rechts
+.main-container:has(#game-end) {
+  margin-left: 0;
+}
+
 // Ganz zarte Umrisse auch für Tabs und Tab-Boxen von Diagrammen und Log (die setzen ihre Randfarbe selbst, or_options_tabs.less)
 #game-end .or-tab-panel {
   --or-tab-panel-border: @game-end-box-border;
