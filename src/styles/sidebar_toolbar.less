@@ -121,8 +121,19 @@
     line-height: 1.2;
   }
 
-  // Sprache: Flagge (Sprite 44px breit, language_icon.less) auf Icon-Breite verkleinert
+  // Sprache: Flagge (Sprite 44×30px, language_icon.less) auf Icon-Breite verkleinert und exakt mittig.
+  // transform verkleinert nur die Darstellung, der Platz bliebe 44px groß – daher absolut um die Mitte gelegt
+  // Bezug ist der Button selbst (der innere Icon-Container sitzt nicht genau mittig)
+  .sidebar_cont .sidebar_item.sidebar_item--language {
+    position: relative;
+    inset: auto; // alte Leiste setzt bottom: 162px (preferences.less), das würde mit relative greifen
+  }
+
   .sidebar_cont .language-icon-for-sidebar {
-    transform: scale(unit((@toolbar-icon-size / 44px)));
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0; // alte Leiste verschiebt die Flagge per Margin (3px / -4px)
+    transform: translate(-50%, -50%) scale(unit((@toolbar-icon-size / 44px)));
   }
 }
