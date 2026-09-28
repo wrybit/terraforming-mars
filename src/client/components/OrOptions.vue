@@ -28,7 +28,7 @@
     </div>
 
     <!-- Im Tab-Modus ist dieser Container die mit dem aktiven Tab verbundene Box (Inhalt + Speichern) -->
-    <div :class="{'or-tab-panel': asTabs, 'or-tab-panel--hand': asTabs && handTabActive}" :role="asTabs ? 'tabpanel' : undefined">
+    <div :class="{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive}" :role="asTabs ? 'tabpanel' : undefined">
       <SortableCards v-if="asTabs && handTabActive" :playerId="playerView.id" :cards="handCards"/>
       <!-- v-show statt v-if: Eingaben der gewählten Aktion bleiben beim Blick in die Hand erhalten -->
       <PlayerInputFactory v-if="asTabs && selectedIdx !== -1" v-show="!handTabActive" ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />

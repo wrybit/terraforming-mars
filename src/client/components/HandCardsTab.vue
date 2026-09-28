@@ -3,7 +3,7 @@
   <button type="button" role="tab"
     :title="$t('Cards In Hand')"
     :aria-selected="active"
-    :class="['or-tab', 'or-tab--hand', {'or-tab--active': active, 'or-tab--empty': count === 0}]"
+    :class="['or-tab', 'or-tab--view', 'or-tab--hand', {'or-tab--active': active, 'or-tab--empty': count === 0}]"
     @click="$emit('select')">
     <span class="or-tab-title">{{ $t('Cards In Hand') }}</span>
     <span class="or-tab-count">{{ count }}</span>

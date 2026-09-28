@@ -17,7 +17,7 @@
       </button>
     </div>
 
-    <div :class="['or-tab-panel', {'or-tab-panel--hand': handTabActive}]" role="tabpanel">
+    <div :class="['or-tab-panel', {'or-tab-panel--view': handTabActive}]" role="tabpanel">
       <SortableCards v-if="handTabActive" :playerId="playerView.id" :cards="handCards"/>
       <!-- v-show statt v-if: Eingaben bleiben beim Blick in die Hand erhalten; Titel steht bereits oben -->
       <PlayerInputFactory v-show="!handTabActive"

@@ -11,7 +11,7 @@
         </h2>
       </template>
     </LogGenerationList>
-    <div class="panel log-panel">
+    <div class="panel log-panel or-tab-panel or-tab-panel--view" role="tabpanel">
       <div id="logpanel-scrollable" class="panel-body" @scroll="updateScrollState" @mouseleave="messageUnhovered">
         <LogMessageComponent v-for="(message, index) in messages" :key="index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @mouseenter="messageHovered(message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
       </div>

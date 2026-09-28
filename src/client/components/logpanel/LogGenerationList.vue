@@ -1,11 +1,15 @@
 <template>
   <div class="log-generations">
     <slot name="title"></slot>
+    <!-- Generationen als Tabs ("nur ansehen", grau) über dem Log; das Log darunter ist die zugehörige Box -->
     <div class="log-gen-title" v-i18n>Gen: </div>
-    <div class="log-gen-numbers">
-      <div v-for="n in range" :key="n" class="log-gen-indicator" :class="selectedClass(n)" @click.prevent="$emit('selected', n)">
+    <div class="or-tabs log-gen-tabs" role="tablist">
+      <button v-for="n in range" :key="n" type="button" role="tab"
+        :aria-selected="n === selected"
+        :class="['or-tab', 'or-tab--view', 'or-tab--number', {'or-tab--active': n === selected}]"
+        @click.prevent="$emit('selected', n)">
         {{ n }}
-      </div>
+      </button>
     </div>
     <span class="label-additional" v-if="lastSoloGeneration !== undefined">
       <span :class="lastGenerationClass" v-i18n>of {{lastSoloGeneration}}</span>
@@ -33,7 +37,4 @@ const lastGenerationClass = computed(() => {
   return props.lastSoloGeneration === props.max ? 'last-generation blink-animation' : '';
 });
 
-function selectedClass(gen: number): string {
-  return gen === props.selected ? 'log-gen-indicator--selected' : '';
-}
 </script>

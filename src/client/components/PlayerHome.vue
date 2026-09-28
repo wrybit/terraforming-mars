@@ -77,7 +77,7 @@
             <div class="or-tabs" role="tablist">
               <HandCardsTab :count="cardsInHandCount" :active="true"/>
             </div>
-            <div class="or-tab-panel or-tab-panel--hand" role="tabpanel">
+            <div class="or-tab-panel or-tab-panel--view" role="tabpanel">
               <SortableCards :playerId="playerView.id" :cards="allCardsInHand"/>
             </div>
           </div>

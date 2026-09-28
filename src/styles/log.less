@@ -1,51 +1,32 @@
 .log-generations {
+  display: flex;
+  align-items: flex-end; // Tabs sitzen unten auf der Box
   .log-title {
     display: inline-block;
     margin: 0px;
     padding-bottom: 6px;
     margin-right: 16px;
   }
-  display: flex;
-  margin-bottom: 16px;
-  align-items: center;
   .log-gen-title {
-    margin-left: 16px;
+    margin: 0 8px 8px 0;
     text-transform: uppercase;
     font-family: Prototype, sans-serif;
+    font-size: 16px;
+    color: #a4a6ae;
   }
-  .log-gen-numbers {
-    display: flex;
-    .log-gen-indicator {
-      padding: 2px 12px;
-      margin-left: 8px;
-      cursor: pointer;
-      border: 2px solid rgba(170, 170, 170, 0.6);
-      border-radius: 8px;
-      &:hover{
-        background: #aaa;
-        color: black;
-      }
-    }
-    .log-gen-indicator--selected {
-      background: #ccc;
-      color: black;
-      // Beats .log-gen-indicator:hover's higher specificity so the selected
-      // color wins when a selected button is also being hovered.
-      &:hover {
-        background: #ccc;
-      }
-    }
+  // Tab-Leiste liegt 1px über der Box (siehe or_options_tabs.less), hier ohne den Badge-Abstand oben
+  .log-gen-tabs {
+    margin-top: 0;
   }
 }
 
-.log-panel {
+// Box unter den Generationen-Tabs; Rahmen und Fläche kommen von .or-tab-panel--view
+.log-panel.or-tab-panel {
   height: 240px;
   max-height: 240px;
-  border-style: none;
   font-size: 18px;
   padding: 5px;
   max-width: 860px;
-  background: @grey_900;
   position: relative;
 
   > .panel-body {

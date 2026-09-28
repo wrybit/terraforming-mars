@@ -113,7 +113,8 @@
     min-width: 100%;
     margin-bottom: 0;
 
-    .log-panel {
+    // .or-tab-panel: so spezifisch wie die Grundregel in log.less, die später geladen wird
+    .log-panel.or-tab-panel {
       height: @player-home-log-height;
       max-height: @player-home-log-height;
     }
@@ -121,7 +122,7 @@
 
   // 3) Log-Karte in voller Größe, Log so hoch wie eine Karte
   .player-home-columns__board--log-full {
-    .player-home-columns__log .log-panel {
+    .player-home-columns__log .log-panel.or-tab-panel {
       height: @player-home-card-height;
       max-height: @player-home-card-height;
     }
