@@ -10,6 +10,8 @@
         <span>{{ player.name }}</span>
       </li>
     </ol>
+    <!-- Platz für Bedienelemente rechts oben in der Box (z. B. Spielplan einklappen, PlayerHome.vue) -->
+    <slot></slot>
   </div>
 </template>
 

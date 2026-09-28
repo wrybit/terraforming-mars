@@ -1,0 +1,156 @@
+// Startauswahl als Spalten nebeneinander (SelectInitialCards.vue): Konzern, Präludien, (CEO,) Karten kaufen.
+// Konzern- und Präludium-Spalte sind genau eine Karte breit, damit man ihre Vorteile untereinander vergleichen
+// kann; die Karten-Spalte nimmt den Rest und bricht in mehrere Karten pro Zeile um. Jede Spalte scrollt für sich.
+
+@setup-columns-gap: 20px; // zwischen den Spalten deutlich mehr als zwischen den Karten (Gesetz der Nähe)
+@setup-column-padding: 12px 14px;
+@setup-column-title-size: 20px;
+@setup-column-accent-height: 3px;
+// Farben wie die Kartenköpfe der jeweiligen Kartenart – so erkennt man die Spalte auch am Rand
+@setup-column-accent-corporation: #e0a63c;
+@setup-column-accent-prelude: #e57fae;
+@setup-column-accent-ceo: #b889d6;
+@setup-column-accent-projects: #3ea55a;
+
+.setup-columns {
+  container-type: inline-size; // Kartengröße richtet sich nach der Breite der Auswahl (siehe unten)
+  display: flex;
+  gap: @setup-columns-gap;
+  align-items: stretch;
+  margin-top: 4px;
+}
+
+.setup-column {
+  .frosted-surface();
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  width: min-content; // eine Karte breit (Karten sind nicht umbrechbar, Texte schon)
+  min-height: 0;
+  border: 1px solid @or-tabs-border;
+  border-radius: @or-tabs-radius;
+  background: @or-tabs-panel-background;
+}
+
+// Die Karten-Spalte füllt den Rest; bei eingeklapptem Spielplan passen so fast alle Karten ohne Scrollen
+.setup-column--projects {
+  flex: 1 1 0;
+  width: auto;
+  min-width: min-content; // mindestens eine ganze Karte, nie abgeschnitten
+  --setup-column-accent: @setup-column-accent-projects;
+}
+
+.setup-column-head {
+  flex: none;
+  padding: @setup-column-padding;
+  border-bottom: @setup-column-accent-height solid var(--setup-column-accent);
+}
+
+.setup-column--corporation { --setup-column-accent: @setup-column-accent-corporation; }
+.setup-column--prelude { --setup-column-accent: @setup-column-accent-prelude; }
+.setup-column--ceo { --setup-column-accent: @setup-column-accent-ceo; }
+
+.setup-column-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.setup-column-title {
+  margin: 0;
+  color: #fff;
+  font-size: @setup-column-title-size;
+  font-weight: normal;
+  white-space: nowrap; // Kurztitel bleibt einzeilig, auch wenn die Spalte nur eine kleine Karte breit ist
+}
+
+// Zähler gewählt/benötigt wie das Badge der Tabs (or_options_tabs.less), hier im Fluss und etwas größer
+.setup-column-count {
+  margin-left: auto;
+  min-width: 22px;
+  padding: 0 7px;
+  border-radius: 11px;
+  background: #4a4f6a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 22px;
+  text-align: center;
+}
+
+.setup-column-count--done {
+  background: @button-success;
+}
+
+.setup-column-subtitle {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+}
+
+.setup-column-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: @setup-column-padding;
+}
+
+// Karten dicht an dicht: seitlich wenig Luft, oben genau Platz für das ✓-Fähnchen gewählter Karten (cards.less).
+// Die Spalten selbst trennen eigene Flächen, daher darf der Kartenabstand in etwa dem Spaltenabstand entsprechen.
+@setup-card-gap: 14px;
+@setup-card-selected-flag-space: 28px;
+
+.setup-column-body .wf-component--select-card {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: @setup-card-gap;
+
+  // Hinweise der Auswahl (z. B. Warnungen) über die ganze Breite statt zwischen die Karten
+  > :not(.cardbox) {
+    flex-basis: 100%;
+  }
+}
+
+// Spezifischer als die Grundregel input[type=checkbox]+.filterDiv.card-container (cards.less)
+.setup-column-body .cardbox > .filterDiv.card-container {
+  margin: @setup-card-selected-flag-space 0 0 0;
+}
+
+// Reicht die Breite nicht für drei Karten nebeneinander (Brett ausgeklappt auf Laptop-Breiten), werden die Karten
+// kleiner statt abgeschnitten. Schwellen: 3 Spalten × (Karte + Innenabstand) + 2 Spaltenabstände bei Zoom 1 bzw. 0,8
+@setup-cards-full-min-width: 880px;
+@setup-cards-reduced-min-width: 740px;
+@setup-cards-reduced-zoom: 0.8;
+@setup-cards-small-zoom: 0.68;
+
+@container (max-width: (@setup-cards-full-min-width - 1px)) {
+  .setup-column-body .cardbox {
+    zoom: @setup-cards-reduced-zoom;
+  }
+}
+
+@container (max-width: (@setup-cards-reduced-min-width - 1px)) {
+  .setup-column-body .cardbox {
+    zoom: @setup-cards-small-zoom;
+  }
+}
+
+// Unter dem Zwei-Spalten-Layout (schmale Fenster) Spalten untereinander, die Seite scrollt
+@media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
+  .setup-columns {
+    flex-direction: column;
+  }
+
+  .setup-column {
+    width: auto;
+  }
+}
+
+// Festes App-Layout (player_home_fixed.less): Spalten füllen die Höhe unter der Zugreihenfolge
+@media only screen and (min-width: @player-home-columns-min-width) {
+  .player-home--fixed .select-initial-cards .setup-columns {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+}

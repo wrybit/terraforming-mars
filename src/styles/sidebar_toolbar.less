@@ -6,6 +6,9 @@
 @toolbar-button-size: 40px;
 @toolbar-icon-size: 26px;
 @toolbar-gap: 6px;
+@toolbar-edge-offset: 10px; // Abstand zum Fensterrand oben und rechts
+// Belegte Breite am rechten Rand – Inhalte, die bis dorthin reichen, halten so viel frei (player_home_columns.less)
+@toolbar-occupied-width: @toolbar-edge-offset + 2 * @toolbar-button-size + @toolbar-gap;
 
 @media only screen and (min-width: @player-home-columns-min-width) {
   // Der freigehaltene Platz links für die Seitenleiste entfällt
@@ -15,8 +18,8 @@
   }
 
   .sidebar_cont {
-    top: 10px;
-    right: 10px;
+    top: @toolbar-edge-offset;
+    right: @toolbar-edge-offset;
     left: auto;
     width: auto;
     height: auto;

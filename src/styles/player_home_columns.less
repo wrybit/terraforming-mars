@@ -34,6 +34,19 @@
     display: none;
   }
 
+  // Startphase mit eingeklapptem Spielplan (SetupBoardToggle.vue): nur die Auswahl, volle Breite
+  .player-home-columns.player-home-columns--board-collapsed {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "main";
+    // Platz für die Icon-Gruppe oben rechts (sidebar_toolbar.less), die sonst über dem Brett liegt
+    padding-right: @toolbar-occupied-width + @player-home-columns-gap;
+
+    // Direktes Kind: spezifischer als das feste Layout (player_home_fixed.less), das die Spalte als Flexbox anzeigt
+    > .player-home-columns__board {
+      display: none;
+    }
+  }
+
   .player-home-columns__main {
     grid-area: main;
     // Verhindert, dass breite Inhalte (Kartenreihen) die Spalte aufsprengen

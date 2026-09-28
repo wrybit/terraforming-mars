@@ -1,0 +1,30 @@
+// Umschalter "Spielplan einklappen/zeigen" (SetupBoardToggle.vue) rechts oben in der Box der Zugreihenfolge
+.setup-board-toggle {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid @or-tabs-border;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  // Nur im Zwei-Spalten-Layout gibt es einen Spielplan daneben, der sich einklappen lässt
+  @media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
+    display: none;
+  }
+}
+
+.setup-board-toggle-icon {
+  font-size: 18px;
+  line-height: 1;
+}

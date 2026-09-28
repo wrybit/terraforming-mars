@@ -33,7 +33,8 @@
     <!-- Zwei-Spalten-Layout auch in der Startphase (Startkarten wählen): links Auswahl, rechts Brett und Log -->
     <div>
       <!-- Zwei-Spalten-Layout: Brett steht im DOM zuerst (Hotkey-Reihenfolge, schmale Screens), wird per CSS rechts platziert -->
-      <div class="player-home-columns">
+      <!-- Startphase: Spielplan einklappbar (SetupBoardToggle), dann haben die Auswahlspalten die volle Breite -->
+      <div :class="['player-home-columns', {'player-home-columns--board-collapsed': isSetupPhase && boardCollapsed}]">
         <div class="player-home-columns__board" :ref="trackBoardColumn">
           <div class="player_home_block player-home-columns__mars">
             <GameBoardView
@@ -58,7 +59,9 @@
         <div class="player-home-columns__main">
           <a class="hotkey-target"></a>
           <!-- Startphase: nur die Zugreihenfolge – die Spielerleisten zeigen dort noch nichts als Nullen -->
-          <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players"/>
+          <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players">
+            <SetupBoardToggle/>
+          </SetupTurnOrder>
           <PlayersOverview v-else class="player_home_block player_home_block--players nofloat" :playerView="playerView" v-trim-whitespace id="shortkey-playersoverview"/>
 
           <!-- Startphase: Startkarten-Auswahl bzw. Draft statt Aktionsmenü und Handkarten -->
@@ -137,6 +140,8 @@ import GameBoardView from '@/client/components/GameBoardView.vue';
 import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
 import SetupTurnOrder from '@/client/components/SetupTurnOrder.vue';
 import {SETUP_START_SLOT_ID} from '@/client/components/setupStartSlot';
+import SetupBoardToggle from '@/client/components/SetupBoardToggle.vue';
+import {setupBoardCollapsed} from '@/client/components/setupBoardCollapsed';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
@@ -175,11 +180,15 @@ export default defineComponent({
     },
   },
   computed: {
-    // Startphase: noch keine Karte ausgespielt (Konzern, Präludien, Startkarten werden gewählt)
+    // Spielplan in der Startphase eingeklappt (gemeinsamer Zustand, setupBoardCollapsed.ts)
+    boardCollapsed(): boolean {
+      return setupBoardCollapsed.value;
+    },
     // Platz für "Beginne" in der Startphase (Vertrag mit SelectInitialCards: setupStartSlot.ts)
     setupStartSlotId(): string {
       return SETUP_START_SLOT_ID;
     },
+    // Startphase: noch keine Karte ausgespielt (Konzern, Präludien, Startkarten werden gewählt)
     isSetupPhase(): boolean {
       return this.thisPlayer.tableau.length === 0;
     },
@@ -223,6 +232,7 @@ export default defineComponent({
     GameBoardView,
     PlayerSetupView,
     SetupTurnOrder,
+    SetupBoardToggle,
     UndergroundTokens,
     KeyboardShortcuts,
   },
