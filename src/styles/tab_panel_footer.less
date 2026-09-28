@@ -9,6 +9,8 @@
 // Dunkles Milchglas, deutlich dunkler als die Box, damit der Fuß als eigene Fläche erkennbar ist
 @tab-panel-footer-background: rgba(14, 15, 20, 0.72);
 @tab-panel-footer-blur: 10px;
+// Leichter Schatten nach oben: der Fuß liegt sichtbar vor den Karten, die darunter durchscrollen
+@tab-panel-footer-shadow: 0 -6px 16px rgba(0, 0, 0, 0.45);
 // Über gehoverten Karten (die heben sich mit z-index 100 heraus, preferences.less)
 @tab-panel-footer-z-index: 110;
 
@@ -32,6 +34,7 @@
   border-radius: 0 0 (@tab-panel-radius - 1px) (@tab-panel-radius - 1px);
   background: @tab-panel-footer-background;
   backdrop-filter: blur(@tab-panel-footer-blur);
+  box-shadow: @tab-panel-footer-shadow;
 
   // Leer (nichts zu bestätigen): kein Fuß; :has statt :empty, weil Vue leere Textknoten als Anker einfügt
   &:not(:has(> *)) {
@@ -80,6 +83,7 @@
     border: none;
     background: none;
     backdrop-filter: none;
+    box-shadow: none;
 
     > * {
       margin: 0;
