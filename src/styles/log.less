@@ -121,6 +121,11 @@ each(@players, {
 
   .log-panel li.log-line--@{value} {
     color: mix(@@c, #fff, 45%);
+
+    // Namens-Pillen bleiben weiß auf ihrer Spielerfarbe
+    .log-player {
+      color: #fff;
+    }
   }
 
   @media (hover: hover) {
