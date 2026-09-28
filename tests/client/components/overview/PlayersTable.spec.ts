@@ -5,6 +5,7 @@ import PlayersTable from '@/client/components/overview/PlayersTable.vue';
 import {Tag} from '@/common/cards/Tag';
 import {Color} from '@/common/Color';
 import {Resource} from '@/common/Resource';
+import {fitToWidth} from '@/client/components/overview/playersTableLayout';
 import {emptyTags, fakePublicPlayerModel, fakeViewModel} from '../testHelpers';
 
 function mountTable() {
@@ -46,5 +47,15 @@ describe('PlayersTable', () => {
     expect(wrapper.vm.template).not.to.contain('repeat(4, 34px)');
     // Kartenanzahl bleibt immer
     expect(wrapper.vm.template.endsWith('12px 48px')).to.be.true;
+  });
+
+  it('drops tags first, then scoring, when the column is too narrow', () => {
+    const all = {goods: true, tags: true, score: true};
+    const tagColumns = [[Tag.BUILDING, Tag.SPACE, Tag.SCIENCE, Tag.EARTH, Tag.PLANT], [Tag.EVENT]];
+    expect(fitToWidth(all, tagColumns, 1178).autoHidden).to.deep.eq([]);
+    expect(fitToWidth(all, tagColumns, 900).autoHidden).to.deep.eq(['tags']);
+    expect(fitToWidth(all, tagColumns, 780).autoHidden).to.deep.eq(['tags', 'score']);
+    // Unbekannte Breite (Tabelle unsichtbar) lässt alles, wie es ist
+    expect(fitToWidth(all, tagColumns, 0).visibility).to.deep.eq(all);
   });
 });

@@ -6,7 +6,8 @@
         :class="['players-table-toggle', 'tooltip', 'tooltip-bottom']"
         :aria-pressed="visibility[section.key] ? 'true' : 'false'"
         :aria-label="$t(section.label)"
-        :data-tooltip="$t(section.label)"
+        :disabled="autoHidden.includes(section.key)"
+        :data-tooltip="autoHidden.includes(section.key) ? $t('Not enough space') : $t(section.label)"
         :data-test="'toggle-' + section.key"
         @click="$emit('toggle', section.key)">
         <span :class="section.iconClass"></span>
@@ -77,6 +78,11 @@ export default defineComponent({
     tagColumns: {
       type: Array as () => TagColumnGroups,
       required: true,
+    },
+    // Aus Platzgründen ausgeblendete Abschnitte: Schalter gesperrt
+    autoHidden: {
+      type: Array as () => Array<TableSection>,
+      default: () => [],
     },
   },
   emits: ['toggle'],

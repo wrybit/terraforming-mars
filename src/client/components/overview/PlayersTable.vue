@@ -1,7 +1,7 @@
 <template>
   <div class="players-table" :style="{'--players-table-columns': template}">
     <!-- Spielerliste als Tabelle (nur im Zwei-Spalten-Layout sichtbar, siehe players_table.less) -->
-    <PlayersTableHeader :visibility="effectiveVisibility" :tagColumns="tagColumns" @toggle="toggleSection"/>
+    <PlayersTableHeader :visibility="effectiveVisibility" :autoHidden="fitted.autoHidden" :tagColumns="tagColumns" @toggle="toggleSection"/>
     <div class="players-table-rows">
       <PlayersTableRow v-for="row in rows" :key="row.player.color"
         :player="row.player"
@@ -28,11 +28,14 @@ import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/comp
 import {playerGoods} from '@/client/components/overview/playerGoods';
 import {
   PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
-  columnTemplate, loadSectionVisibility, saveSectionVisibility,
+  FittedVisibility, columnTemplate, fitToWidth, loadSectionVisibility, saveSectionVisibility,
 } from '@/client/components/overview/playersTableLayout';
 
 type DataModel = {
   visibility: SectionVisibility;
+  // Breite der Tabelle; 0, solange sie unsichtbar oder noch nicht gemessen ist
+  availableWidth: number;
+  resizeObserver: ResizeObserver | undefined;
 };
 
 export default defineComponent({
@@ -55,7 +58,22 @@ export default defineComponent({
   data(): DataModel {
     return {
       visibility: loadSectionVisibility(),
+      availableWidth: 0,
+      resizeObserver: undefined,
     };
+  },
+  // Spaltenbreite beobachten: in schmalen Fenstern fallen Abschnitte automatisch weg, statt abgeschnitten zu werden
+  mounted() {
+    if (typeof ResizeObserver === 'undefined') {
+      return;
+    }
+    this.resizeObserver = new ResizeObserver((entries) => {
+      this.availableWidth = Math.floor(entries[0].contentRect.width);
+    });
+    this.resizeObserver.observe(this.$el);
+  },
+  beforeUnmount() {
+    this.resizeObserver?.disconnect();
   },
   computed: {
     // Je Spielerfarbe einmal berechnet; jede Zeile hat einen Eintrag
@@ -83,9 +101,13 @@ export default defineComponent({
       }
       return groups.filter((group) => group.length > 0);
     },
-    // Tags-Abschnitt entfällt, wenn es keine einzige Tag-Spalte gibt
+    // Tags-Abschnitt entfällt, wenn es keine einzige Tag-Spalte gibt; zu Breites fällt nach Vorrang weg
+    fitted(): FittedVisibility {
+      const wanted = {...this.visibility, tags: this.visibility.tags && this.tagColumns.length > 0};
+      return fitToWidth(wanted, this.tagColumns, this.availableWidth);
+    },
     effectiveVisibility(): SectionVisibility {
-      return {...this.visibility, tags: this.visibility.tags && this.tagColumns.length > 0};
+      return this.fitted.visibility;
     },
     template(): string {
       return columnTemplate(this.effectiveVisibility, this.tagColumns);
