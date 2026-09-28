@@ -83,6 +83,15 @@ const BUTTON_TONES: Readonly<Record<string, TabButtonTone>> = {
   'Convert 6 heat into temperature': 'heat',
 };
 
+// Tabs, die ins Auge fallen sollen (fett, etwas größer; Stil in or_options_tabs.less):
+// seltene, wertvolle Gelegenheiten, die man im Zug leicht übersieht
+const HIGHLIGHTED_TABS: ReadonlySet<string> = new Set([
+  'Claim a milestone',
+  'Convert ${0} plants into greenery',
+  'Convert 8 heat into temperature',
+  'Convert 6 heat into temperature',
+]);
+
 function titleKey(title: string | Message): string {
   return typeof title === 'string' ? title : title.message;
 }
@@ -115,6 +124,10 @@ export function inputTabLabel(input: PlayerInputModel): string | Message {
     return shortTabLabel(input.title);
   }
   return INPUT_TYPE_LABELS[input.type] ?? DEFAULT_INPUT_LABEL;
+}
+
+export function tabHighlighted(title: string | Message): boolean {
+  return HIGHLIGHTED_TABS.has(titleKey(title));
 }
 
 export function tabIcon(title: string | Message): TabIcon | undefined {

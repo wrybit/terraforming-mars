@@ -19,6 +19,7 @@
           'or-tab--active': !handTabActive && selectedIdx === idx,
           'or-tab--empty': availableCount(displayedOptions[idx]) === 0,
           'or-tab--icon': tabIcon(displayedOptions[idx].title) !== undefined,
+          'or-tab--highlight': tabHighlighted(displayedOptions[idx].title),
         }, tabToneClass('or-tab--tone-', displayedOptions[idx])]"
         @click="selectOptionTab(displayedOptions[idx])">
         <OrOptionsTabIcon v-if="tabIcon(displayedOptions[idx].title) !== undefined" :icon="tabIcon(displayedOptions[idx].title)!"/>
@@ -91,7 +92,7 @@ import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
-import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOrder, tabIcon} from '@/client/components/orOptionsShortLabels';
+import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOrder, tabHighlighted, tabIcon} from '@/client/components/orOptionsShortLabels';
 import {tabIntro, temperatureHint, TabIntro} from '@/client/components/tabIntro';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
@@ -217,6 +218,7 @@ export default defineComponent({
     tabDisplayOrder,
     tabButtonLabel,
     tabButtonTone,
+    tabHighlighted,
     // Farbklasse für Tab bzw. Box von Weitergeben (grün) und Beenden (rot), sonst keine
     tabToneClass(prefix: string, option: PlayerInputModel | undefined): string {
       const tone = option === undefined ? undefined : tabButtonTone(option.title);
