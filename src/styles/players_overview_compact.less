@@ -29,6 +29,7 @@
     width: auto;
     max-width: 100%;
     padding: 6px 12px;
+    position: relative; // Bezug für die Zeit rechts in der Mitte
   }
 
   .player-status-and-res,
@@ -73,6 +74,7 @@
     flex: none;
     width: auto;
     margin: 0;
+    color: #fff;
     white-space: nowrap;
   }
 
@@ -82,12 +84,17 @@
     min-width: 0;
     height: auto;
     font-size: 16px;
-    opacity: 0.8;
+    color: #fff;
     white-space: nowrap;
   }
 
   // Status und Timer nebeneinander; Selektor so spezifisch wie die verschachtelte Originalregel
+  // Zeit samt Status rechts, senkrecht mittig – rechtsbündig mit dem "anzeigen"-Button darunter
   .player-status-and-res > .player-status .player-status-bottom .player-action-status-container {
+    position: absolute;
+    top: 50%;
+    right: 12px; // = Innenabstand der Leiste, also Kante des Buttons
+    transform: translateY(-50%);
     flex: none;
     display: flex;
     align-items: center;
