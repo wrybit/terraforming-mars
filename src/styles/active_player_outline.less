@@ -1,7 +1,9 @@
 // Blinkender roter Rahmen um den gesamten Viewport, solange man selbst am Zug ist.
 // Klasse player-home--acting setzt PlayerHome.vue (isPlayerActing).
 
-@active-player-outline-width: 4px;
+@active-player-outline-width: 8px;
+// Glühen nach innen, damit der Rahmen weich in die Seite übergeht
+@active-player-outline-glow: 24px;
 @active-player-outline-color: #e53935;
 @active-player-outline-period: 1.4s;
 
@@ -11,6 +13,7 @@
   inset: 0;
   z-index: 1000; // über Sidebar, Modals und Vorschauen
   border: @active-player-outline-width solid @active-player-outline-color;
+  box-shadow: inset 0 0 @active-player-outline-glow fade(@active-player-outline-color, 70%);
   // Rahmen darf keine Klicks abfangen
   pointer-events: none;
   animation: active-player-outline-blink @active-player-outline-period ease-in-out infinite;
