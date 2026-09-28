@@ -251,6 +251,15 @@ each(@players, {
     width: 8px;
     height: 8px;
   }
+
+  // Zeit einzeilig; Sekunden fest breit, damit die Plakette beim Ticken nicht springt
+  .player-timer {
+    display: flex;
+  }
+
+  .player-timer-seconds {
+    min-width: 2ch;
+  }
 }
 
 .players-table-name {
