@@ -15,9 +15,17 @@
 }
 
 .payments_type {
-  // margin-bottom: 15px;
+  // Kleine Lücken zwischen − / Eingabe / + / maximal, damit die Knöpfe nicht zu einem Block verschmelzen
+  display: flex;
+  align-items: center;
+  gap: 6px;
   border-spacing: 0 8px;
+}
 
+// input-group (spectre) nimmt den inneren Elementen die Rundung – mit Lücke dazwischen wieder runde Ecken
+.payments_type.input-group > .btn,
+.payments_type.input-group > .payments_input.form-input {
+  border-radius: 6px;
 }
 
 .payments_type_icon {
