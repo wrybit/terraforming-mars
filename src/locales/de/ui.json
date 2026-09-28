@@ -1424,5 +1424,6 @@
   "Click a highlighted space on Mars": "Klicke auf ein markiertes Feld auf dem Mars",
   "Temperature rises from ${0} °C to ${1} °C": "Temperatur steigt von ${0} °C auf ${1} °C",
   "Temperature is already at maximum": "Temperatur ist bereits am Maximum",
-  "Increase the temperature": "Temperatur erhöhen"
+  "Increase the temperature": "Temperatur erhöhen",
+  "Nothing is available here right now.": "Gerade ist hier nichts verfügbar."
 }

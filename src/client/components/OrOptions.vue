@@ -40,6 +40,8 @@
           <div v-else class="or-tab-intro-hint">{{ $t(temperatureHint(playerView.game.temperature)) }}</div>
         </div>
       </div>
+      <!-- Nichts auswählbar (Zähler 0, z. B. kein Standardprojekt bezahlbar): Hinweis oben statt Button unten -->
+      <div v-if="asTabs && !handTabActive && selectedOption && availableCount(selectedOption) === 0" class="or-tab-empty-hint" v-i18n>Nothing is available here right now.</div>
       <!-- v-show statt v-if: Eingaben der gewählten Aktion bleiben beim Blick in die Hand erhalten -->
       <PlayerInputFactory v-if="asTabs && selectedIdx !== -1" v-show="!handTabActive" ref="inputfactory" @validity="childValid = $event" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
 
@@ -68,7 +70,9 @@
       </template>
 
       <!-- Bei Feldauswahl im Tab-Modus kein Button: bestätigt wird über die Sprechblase am Feld (SpaceConfirmPopover) -->
-      <div v-if="showsave && selectedOption && !showChildSaveButton(selectedOption) && !(asTabs && selectedOption.type === 'space')" v-show="!(asTabs && handTabActive)">
+      <!-- Kein Button, wenn nichts auswählbar ist (Hinweis steht oben in der Box) -->
+      <div v-if="showsave && selectedOption && !showChildSaveButton(selectedOption) && !(asTabs && selectedOption.type === 'space')
+        && !(asTabs && availableCount(selectedOption) === 0)" v-show="!(asTabs && handTabActive)">
         <div :class="['wf-action', {'or-tab-save': asTabs}, asTabs && tabButtonTone(selectedOption.title) ? 'or-tab-save--' + tabButtonTone(selectedOption.title) : '']" :style="asTabs ? undefined : 'margin: 5px 30px 10px'">
           <!-- Gesperrt, solange die gewählte Option noch keine gültige Auswahl hat (z. B. keine Karte gewählt) -->
           <AppButton :title="$t(asTabs ? tabButtonLabel(selectedOption.title, selectedOption.buttonLabel) : selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid" @click="saveData" />
