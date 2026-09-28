@@ -1,0 +1,410 @@
+// Spielerliste als Tabelle (PlayersTable.vue) – nur im Zwei-Spalten-Layout sichtbar (player_home_columns.less).
+// Kopfzeile mit Icons einmal oben, darunter je Spieler eine Zeile in gedämpfter Spielerfarbe:
+//   Name | Waren (Vorrat groß, Produktion klein) | Tags | Wertung | gespielte Karten
+// Das Spaltenraster setzt PlayersTable als --players-table-columns (playersTableLayout.ts).
+
+@players-table-row-height: 48px;
+@players-table-own-row-height: 56px;
+@players-table-head-height: 34px;
+@players-table-row-gap: 4px;
+// Eigene Zeile etwas von den anderen abgesetzt
+@players-table-own-row-offset: 5px;
+@players-table-radius: 6px;
+@players-table-color-bar-width: 7px;
+@players-table-row-tint: 30%;
+@players-table-own-row-tint: 55%;
+@players-table-blur: 10px;
+@players-table-divider-color: rgba(255, 255, 255, 0.4);
+@players-table-dim: rgba(255, 255, 255, 0.25);
+@players-table-counter-color: #dcdde2;
+@players-table-muted: #c4c7cf;
+@players-table-production: #4b2f1c;
+@players-table-production-border: #9c6b3f;
+@players-table-production-leader: #8f5a2a;
+@players-table-production-leader-border: #f0b070;
+
+// Außerhalb des Zwei-Spalten-Layouts bleibt die klassische Leiste
+.players-table {
+  display: none;
+}
+
+.players-table-rows {
+  display: flex;
+  flex-direction: column;
+  gap: @players-table-row-gap;
+  margin-top: @players-table-row-gap;
+}
+
+.players-table-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--players-table-columns);
+  align-items: center;
+  height: @players-table-row-height;
+  border-radius: @players-table-radius;
+  // Galaxie-Hintergrund hinter den Zeilen weichzeichnen, damit er nicht hart durchscheint
+  backdrop-filter: blur(@players-table-blur);
+}
+
+.players-table-head {
+  height: @players-table-head-height;
+  background: rgba(0, 0, 0, 0.5);
+
+  // Icons verkleinert (zoom, weil die Icons unterschiedliche Hintergrundgrößen nutzen)
+  .resource_icon {
+    zoom: 0.75;
+  }
+
+  .tag-count {
+    zoom: 0.6;
+  }
+
+  .tag-type-main {
+    zoom: 0.55;
+  }
+}
+
+.players-table-row--player {
+  cursor: pointer;
+
+  // Balken in Original-Spielerfarbe vor dem Namen
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: @players-table-color-bar-width;
+    border-radius: @players-table-radius 0 0 @players-table-radius;
+  }
+}
+
+each(@players, {
+  @c: ~"player_@{value}";
+  .players-table-row--@{value} {
+    background: fade(@@c, @players-table-row-tint);
+
+    &::before {
+      background: @@c;
+    }
+
+    &.players-table-row--me {
+      background: fade(@@c, @players-table-own-row-tint);
+    }
+  }
+});
+
+.players-table-row--me {
+  height: @players-table-own-row-height;
+  margin-block: @players-table-own-row-offset;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.players-table-cell {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+// Trenner zwischen den Abschnitten: durchgezogen über alle Zeilen (überbrückt die Zeilenabstände)
+.players-table-divider {
+  position: relative;
+  align-self: stretch;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 1px;
+    top: -(@players-table-row-gap / 2);
+    bottom: -(@players-table-row-gap / 2);
+    background: @players-table-divider-color;
+  }
+}
+
+.players-table-head .players-table-divider::after {
+  top: 0;
+}
+
+.players-table-rows .players-table-row:last-child .players-table-divider::after {
+  bottom: 0;
+}
+
+.players-table-head-label {
+  font-size: 11px;
+  color: #aab;
+}
+
+// Schalter vorne im Kopf
+.players-table-toggles {
+  display: flex;
+  gap: 4px;
+  padding-left: 10px;
+}
+
+.players-table-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+
+  &[aria-pressed="false"] {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+
+    > span {
+      opacity: 0.3;
+      filter: grayscale(1);
+    }
+  }
+
+  .resource_icon {
+    zoom: 0.53;
+  }
+
+  .tag-count {
+    zoom: 0.56;
+  }
+
+  .tag-type-main {
+    zoom: 0.48;
+  }
+}
+
+// Namenszelle: Zeile 1 Name + Status, Zeile 2 Konzern
+.players-table-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding-left: 18px;
+}
+
+.players-table-identity-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  .icon-first-player {
+    position: static;
+    flex: none;
+    margin: 0 0 0 -18px; // Pfeil ragt wie in der klassischen Leiste über den Rand
+    height: 22px;
+    line-height: 22px;
+    font-size: 15px;
+  }
+
+  // Status (PlayerStatus.vue) als kleine Plakette; "aktiv" blinkt über active_player_outline.less
+  .player-status,
+  .player-status-bottom {
+    display: contents;
+  }
+
+  .player-action-status-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: Prototype, sans-serif;
+    font-size: 13px;
+    line-height: 1.2;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .player-action-status-container--active {
+    background: #e6e1e1;
+    color: #000;
+  }
+
+  .player-action-status-container--passed {
+    background: #000;
+    color: #e6e1e1;
+    opacity: 0.35;
+  }
+
+  .player-action-status.visibility-hidden {
+    display: none;
+  }
+
+  .player-status-timer::before {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+.players-table-name {
+  flex: none;
+  font-family: Prototype, sans-serif;
+  font-size: 19px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.players-table-row--me .players-table-name {
+  font-size: 22px;
+}
+
+.players-table-corporation {
+  font-size: 13px;
+  color: @players-table-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Warenbox: Vorrat groß, Produktion klein im braunen Kästchen, Wert je Einheit als Münze an der Ecke
+.players-table-goods {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  // Breite gedeckelt: Vorrat und Produktion bleiben beisammen, auch wenn die Spalte breiter wird
+  width: calc(100% - 8px);
+  max-width: 78px;
+  height: 34px;
+  padding: 0 6px 0 9px;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.3);
+  font-family: Prototype, sans-serif;
+}
+
+.players-table-row--me .players-table-goods {
+  height: 40px;
+}
+
+.players-table-goods-stock {
+  font-size: 20px;
+  color: #fff;
+}
+
+.players-table-row--me .players-table-goods-stock {
+  font-size: 23px;
+}
+
+.players-table-goods--empty .players-table-goods-stock {
+  color: @players-table-dim;
+}
+
+.players-table-goods-production {
+  font-size: 13px;
+  line-height: 1;
+  padding: 3px 4px 2px;
+  border-radius: 3px;
+  color: #fff;
+  background: @players-table-production;
+  box-shadow: inset 0 0 0 1px @players-table-production-border;
+}
+
+.players-table-goods-production--leader {
+  background: @players-table-production-leader;
+  box-shadow: inset 0 0 0 1px @players-table-production-leader-border;
+}
+
+.players-table-goods-production--none {
+  color: @players-table-dim;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+// Münz-Plaketten: Wert je Einheit (Warenbox) und Rabatt (Tags, Handkarten)
+.players-table-goods-value,
+.players-table-discount {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 17px;
+  height: 17px;
+  line-height: 18px;
+  text-align: center;
+  font-family: Prototype, sans-serif;
+  font-size: 11px;
+  color: #000;
+  background: url(./assets/resources/megacredit.png) center / contain no-repeat;
+}
+
+.players-table-discount {
+  top: -5px;
+  right: -3px;
+  width: 14px;
+  height: 14px;
+  line-height: 15px;
+  font-size: 10px;
+}
+
+.players-table-goods-protection {
+  position: absolute;
+  left: -5px;
+  bottom: -5px;
+  width: 14px;
+  height: 14px;
+  background-size: 14px;
+}
+
+// Zähler (Tags, Wertung): bewusst klein und leiser als die Waren
+.players-table-counter {
+  font-family: Prototype, sans-serif;
+  font-size: 15px;
+  color: @players-table-counter-color;
+}
+
+.players-table-row--me .players-table-counter {
+  font-size: 16px;
+}
+
+.players-table-counter--zero {
+  color: @players-table-dim;
+}
+
+// Punkte je Tag (PointsPerTag.vue) als kleine Plakette unten rechts
+.players-table-cell .points-per-tag {
+  position: absolute;
+  bottom: -4px;
+  right: -3px;
+  min-width: 13px;
+  height: 13px;
+  padding: 0 2px;
+  border-radius: 7px;
+  font-family: Prototype, sans-serif;
+  font-size: 9px;
+  line-height: 14px;
+  text-align: center;
+  color: #fff;
+  background: #7a4a1f;
+}
+
+.players-table-played {
+  font-family: Prototype, sans-serif;
+  font-size: 14px;
+  color: #fff;
+  background: @bg_action;
+  border: 0;
+  border-radius: 10px;
+  padding: 3px 9px;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(120%);
+  }
+}

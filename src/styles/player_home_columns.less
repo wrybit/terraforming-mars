@@ -52,12 +52,18 @@
     // Verhindert, dass breite Inhalte (Kartenreihen) die Spalte aufsprengen
     min-width: 0;
 
-    // Das Spieler-Panel schaltet per Fenster-Media-Query auf eine sehr breite Einzeilen-Ansicht;
-    // in der linken Spalte gilt aber deren Breite, daher kompaktes Raster (players_overview_compact.less)
+    // Spielerliste als Tabelle (players_table.less) statt der klassischen Leisten
     .players-overview {
       display: block;
       max-width: 100%;
-      .players-overview-compact();
+
+      > .player-info {
+        display: none !important; // players_overview.less setzt display mit !important
+      }
+
+      .players-table {
+        display: block;
+      }
     }
   }
 

@@ -24,12 +24,16 @@
               :firstForGen="getIsFirstForGen(thisPlayer)"
               :actionLabel="getActionLabel(thisPlayer)"
               :playerIndex="ownPlayerIndex(playerView)"/>
+            <!-- Dieselben Spieler als Tabelle; sichtbar nur im Zwei-Spalten-Layout (players_table.less) -->
+            <PlayersTable :playerView="playerView" :rows="tableRows"/>
         </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
 import PlayerInfo from '@/client/components/overview/PlayerInfo.vue';
+import PlayersTable from '@/client/components/overview/PlayersTable.vue';
+import {PlayersTableRowModel} from '@/client/components/overview/playersTableLayout';
 import OtherPlayer from '@/client/components/OtherPlayer.vue';
 import {ownPlayerIndex} from '@/client/components/overview/ownPlayerIndex';
 import {ViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
@@ -66,9 +70,18 @@ export default defineComponent({
     thisPlayer(): PublicPlayerModel | undefined {
       return this.playerView.thisPlayer;
     },
+    // Gleiche Reihenfolge und Indizes wie die klassische Leiste: Mitspieler in Zugfolge, man selbst zuletzt
+    tableRows(): Array<PlayersTableRowModel> {
+      const rows = this.getPlayersInOrder().map((player, index) => this.tableRow(player, index));
+      if (this.thisPlayer !== undefined) {
+        rows.push(this.tableRow(this.thisPlayer, ownPlayerIndex(this.playerView)));
+      }
+      return rows;
+    },
   },
   components: {
     PlayerInfo,
+    PlayersTable,
     OtherPlayer,
   },
   data() {
@@ -76,6 +89,9 @@ export default defineComponent({
   },
   methods: {
     ownPlayerIndex,
+    tableRow(player: PublicPlayerModel, index: number): PlayersTableRowModel {
+      return {player, firstForGen: this.getIsFirstForGen(player), actionLabel: this.getActionLabel(player), playerIndex: index};
+    },
     hasPlayers(): boolean {
       return this.players.length > 0;
     },

@@ -71,7 +71,7 @@ export default defineComponent({
   // Escape schließt die geöffnete Kartenansicht (im Zwei-Spalten-Layout ein Modal)
   mounted() {
     window.addEventListener('keydown', this.closeOnEscape);
-    // Als Overlay anmelden; die Kartenansichten der Spieler teilen einen Schlüssel (PlayerInfo.pinPlayer regelt sie)
+    // Als Overlay anmelden; die Kartenansichten der Spieler teilen einen Schlüssel (playerCardsToggle.ts regelt sie)
     unregisterByInstance.set(this, registerOverlay(PLAYER_CARDS_OVERLAY, () => {
       if (this.isVisible()) {
         this.hideMe();

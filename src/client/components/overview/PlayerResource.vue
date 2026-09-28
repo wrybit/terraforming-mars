@@ -19,9 +19,8 @@
 <script lang="ts">
 
 import {defineComponent} from 'vue';
-import {DEFAULT_STEEL_VALUE, DEFAULT_TITANIUM_VALUE} from '@/common/constants';
 import {Resource} from '@/common/Resource';
-import {getPreferences} from '@/client/utils/PreferencesManager';
+import {shouldShowResourceValue} from '@/client/components/overview/playerGoods';
 import {Protection} from '@/common/models/PlayerModel';
 
 export default defineComponent({
@@ -58,19 +57,9 @@ export default defineComponent({
     };
   },
   methods: {
+    // Regel geteilt mit der Tabelle (playerGoods.ts)
     showResourceValue(): boolean {
-      const learnerModeOn = getPreferences().learner_mode;
-
-      switch (this.type) {
-      case Resource.STEEL:
-        return learnerModeOn || this.value > DEFAULT_STEEL_VALUE;
-      case Resource.TITANIUM:
-        return learnerModeOn || this.value > DEFAULT_TITANIUM_VALUE;
-      case Resource.HEAT:
-        return this.value > 0;
-      default:
-        return false;
-      }
+      return shouldShowResourceValue(this.type, this.value);
     },
   },
   computed: {

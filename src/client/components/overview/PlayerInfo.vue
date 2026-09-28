@@ -38,8 +38,6 @@
 </template>
 
 <script lang="ts">
-import {closeOtherOverlays} from '@/client/utils/overlayCoordinator';
-import {PLAYER_CARDS_OVERLAY} from '@/client/components/overview/ownPlayerIndex';
 import {defineComponent} from 'vue';
 import {ViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import PlayerResources from '@/client/components/overview/PlayerResources.vue';
@@ -48,9 +46,8 @@ import PlayerAlliedParty from '@/client/components/overview/PlayerAlliedParty.vu
 import PlayerStatus from '@/client/components/overview/PlayerStatus.vue';
 import {playerColorClass} from '@/common/utils/utils';
 import {vueRoot} from '@/client/components/vueRoot';
-import {range} from '@/common/utils/utils';
-import {CardType} from '@/common/cards/CardType';
-import {getCard} from '@/client/cards/ClientCardManifest';
+import {isPlayerCardsPinned, togglePlayerCards} from '@/client/components/overview/playerCardsToggle';
+import {corporationNames} from '@/client/components/overview/playerCorporations';
 import {Phase} from '@/common/Phase';
 import {ActionLabel} from './ActionLabel';
 import {playerSymbol} from '@/client/utils/playerSymbol';
@@ -105,35 +102,12 @@ export default defineComponent({
     },
   },
   methods: {
-    isPinned(playerIndex: number): boolean {
-      return vueRoot(this).getVisibilityState('pinned_player_' + playerIndex);
-    },
-    pin(playerIndex: number) {
-      return vueRoot(this).setVisibilityState('pinned_player_' + playerIndex, true);
-    },
-    unpin(playerIndex: number) {
-      return vueRoot(this).setVisibilityState('pinned_player_' + playerIndex, false);
-    },
-    // Umschalten: dieses Modal öffnen bzw. schließen, alle anderen Spieler immer schließen.
-    // Alle Indizes – seit auch der eigene Spieler (in der Reihenfolge zuletzt) ein Modal hat.
-    pinPlayer() {
-      const wasPinned = this.isPinned(this.playerIndex);
-      if (!wasPinned) {
-        closeOtherOverlays(PLAYER_CARDS_OVERLAY);
-      }
-      for (const index of range(this.playerView.players.length)) {
-        this.unpin(index);
-      }
-      if (!wasPinned) {
-        this.pin(this.playerIndex);
-      }
-    },
     buttonLabel(): string {
-      return this.isPinned(this.playerIndex) ? 'hide' : 'show';
+      return isPlayerCardsPinned(vueRoot(this), this.playerIndex) ? 'hide' : 'show';
     },
     // Gespielte Karten des Spielers anzeigen (eigene wie fremde) und alle anderen ausblenden
     togglePlayerDetails() {
-      this.pinPlayer();
+      togglePlayerCards(vueRoot(this), this.playerIndex, this.playerView.players.length);
     },
     getClasses(): string {
       return `player-info ${playerColorClass(this.player.color, 'bg_transparent')}`;
@@ -145,11 +119,8 @@ export default defineComponent({
       return this.player.availableBlueCardActionCount;
     },
     getCorporationName(): string[] {
-      const cards = this.player.tableau;
-      const corporationCards = cards
-        .filter((card) => getCard(card.name)?.type === CardType.CORPORATION)
-        .map((card) => card.name);
-      return corporationCards.length === 0 ? [''] : corporationCards;
+      const corporations = corporationNames(this.player);
+      return corporations.length === 0 ? [''] : corporations;
     },
   },
 });
