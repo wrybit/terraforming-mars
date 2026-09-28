@@ -1,0 +1,109 @@
+// Festes App-Layout der Spieleransicht (Klasse player-home--fixed, gesetzt in PlayerHome.vue):
+// Die Seite scrollt nicht mehr. Beide Spalten sind fensterhoch und enden auf derselben Linie:
+// rechts wächst das Log bis unten, links füllt die Tab-Box den Platz unter den Spielerleisten und scrollt innen.
+// Nur im Zwei-Spalten-Layout und nur, wenn unterhalb der Spalten nichts mehr steht (Kolonien, Untergrund …).
+
+@player-home-fixed-top: 20px; // Innenabstand oben von #player-home (player_home.less)
+@player-home-fixed-bottom: 10px;
+@player-home-fixed-height: calc(100vh - @player-home-fixed-top - @player-home-fixed-bottom);
+
+@media only screen and (min-width: @player-home-columns-min-width) {
+  #player-home.player-home--fixed {
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .player-home--fixed .player-home-columns {
+    height: @player-home-fixed-height;
+    align-items: stretch;
+  }
+
+  // Rechts: feste Höhe (rightColumnFit.ts misst daran), Log wächst bis unten
+  .player-home--fixed .player-home-columns__board {
+    height: @player-home-fixed-height;
+    max-height: @player-home-fixed-height;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .player-home--fixed .player-home-columns__log {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+
+    > .log-container {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    // Mindesthöhe wie bisher (Karte der Hover-Vorschau), darüber hinaus füllt das Log den Rest
+    .log-panel.or-tab-panel {
+      flex: 1 1 auto;
+      height: auto;
+      max-height: none;
+      min-height: @player-home-log-height;
+    }
+  }
+
+  .player-home--fixed .player-home-columns__board--log-full .player-home-columns__log .log-panel.or-tab-panel {
+    min-height: @player-home-card-height;
+  }
+
+  // Links: Spielerleisten fest, darunter füllt die aktuelle Tab-Box den Rest
+  .player-home--fixed .player-home-columns__main {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    > * {
+      flex: none;
+    }
+
+    // Aktionen bzw. Handkarten (wenn man nicht am Zug ist) füllen den Rest
+    > .player_home_block--actions,
+    > .player_home_block--hand {
+      flex: 1 1 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0;
+    }
+
+    // Gedraftete Karten (Draft-Phase) begrenzt, damit die Tab-Box darunter Platz behält
+    > .player_home_block--hand:not(#shortkey-hand) {
+      flex: 0 1 auto;
+      max-height: 35%;
+      overflow-y: auto;
+    }
+  }
+
+  // Kette bis zur Tab-Box: WaitingFor-Hülle → wf-root → Eingabe (OrOptions / WaitingForTabs)
+  .player-home--fixed .player_home_block--actions {
+    > div,
+    .wf-root,
+    .wf-root > .wf-options {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  // Die Box unter den Tabs scrollt innen; Überschrift und Tab-Leiste bleiben stehen
+  .player-home--fixed .player-home-columns__main .or-tab-panel {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .player-home--fixed .player-home-columns__main .or-tabs {
+    flex: none;
+  }
+}

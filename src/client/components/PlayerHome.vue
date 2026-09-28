@@ -1,5 +1,5 @@
 <template>
-  <div id="player-home" :class="{'with-turmoil': game.turmoil, 'player-home--acting': isPlayerActing(playerView)}">
+  <div id="player-home" :class="{'with-turmoil': game.turmoil, 'player-home--acting': isPlayerActing(playerView), 'player-home--fixed': usesFixedLayout}">
     <!-- player-home--acting: roter Rahmen um den Viewport, solange dieser Spieler am Zug ist (active_player_outline.less).
          Kommentar bewusst innerhalb der Wurzel, sonst hätte die Komponente zwei Wurzelknoten ($el wäre kein Element) -->
     <TopBar :playerView="playerView" />
@@ -165,6 +165,14 @@ export default defineComponent({
     },
   },
   computed: {
+    // Festes App-Layout (player_home_fixed.less): nur wenn unter den Spalten nichts mehr steht,
+    // sonst wären Kolonien, Untergrund-Marker usw. nicht mehr erreichbar
+    usesFixedLayout(): boolean {
+      return this.game.phase !== 'end' &&
+        this.game.colonies.length === 0 &&
+        this.thisPlayer.underworldData.tokens.length === 0 &&
+        this.thisPlayer.tableau.length > 0;
+    },
     thisPlayer(): PublicPlayerModel {
       return this.playerView.thisPlayer;
     },
