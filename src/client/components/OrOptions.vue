@@ -19,7 +19,7 @@
           'or-tab--active': !handTabActive && selectedIdx === idx,
           'or-tab--empty': availableCount(displayedOptions[idx]) === 0,
           'or-tab--icon': tabIcon(displayedOptions[idx].title) !== undefined,
-        }]"
+        }, tabToneClass('or-tab--tone-', displayedOptions[idx])]"
         @click="selectOptionTab(displayedOptions[idx])">
         <OrOptionsTabIcon v-if="tabIcon(displayedOptions[idx].title) !== undefined" :icon="tabIcon(displayedOptions[idx].title)!"/>
         <span v-else class="or-tab-title">{{ $t(shortTabLabel(displayedOptions[idx].title)) }}</span>
@@ -28,7 +28,7 @@
     </div>
 
     <!-- Im Tab-Modus ist dieser Container die mit dem aktiven Tab verbundene Box (Inhalt + Speichern) -->
-    <div :class="{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive}" :role="asTabs ? 'tabpanel' : undefined">
+    <div :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <SortableCards v-if="asTabs && handTabActive" :playerId="playerView.id" :cards="handCards"/>
       <!-- v-show statt v-if: Eingaben der gewählten Aktion bleiben beim Blick in die Hand erhalten -->
       <PlayerInputFactory v-if="asTabs && selectedIdx !== -1" v-show="!handTabActive" ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
@@ -171,6 +171,11 @@ export default defineComponent({
     tabDisplayOrder,
     tabButtonLabel,
     tabButtonTone,
+    // Farbklasse für Tab bzw. Box von Weitergeben (grün) und Beenden (rot), sonst keine
+    tabToneClass(prefix: string, option: PlayerInputModel | undefined): string {
+      const tone = option === undefined ? undefined : tabButtonTone(option.title);
+      return tone === undefined ? '' : prefix + tone;
+    },
     // Gemeinsam mit WaitingForTabs (inputAvailableCount.ts)
     availableCount(option: PlayerInputModel): number | undefined {
       return inputAvailableCount(option);

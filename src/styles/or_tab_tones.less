@@ -1,4 +1,5 @@
-// Farbton des aktiven Eingabe-Tabs je Art der Eingabe (inputTone.ts, WaitingForTabs.vue):
+// Farbton von Tabs: je Art der Eingabe (inputTone.ts, WaitingForTabs.vue) und für
+// Weitergeben/Beenden im Aktionsmenü (tabButtonTone in orOptionsShortLabels.ts, OrOptions.vue):
 // farbiger Streifen oben, Badge und Rahmen der Box. Name = Klassen-Endung, Wert = Farbe.
 @or-tab-tones:
   prelude #e76aae, // rosa wie Präludium-Karten
@@ -7,7 +8,9 @@
   mars #b86a34, // Feld auf dem Mars
   resources #e2b52c, // Ressourcen / Menge (M€-Gelb)
   player #9b6bd8, // Spieler wählen
-  colonies #2fb0a8; // Kolonien / Turmoil
+  colonies #2fb0a8, // Kolonien / Turmoil
+  success #2e9e4f, // Aktionsmenü: Weitergeben (wie der grüne Button)
+  danger #c0392b; // Aktionsmenü: Runde beenden (wie der rote Button)
 
 // Dunkler Grundton, mit dem die Farbe für Box und aktiven Tab gemischt wird
 @or-tab-tone-base: #16171d;
