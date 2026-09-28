@@ -1,5 +1,8 @@
 <template>
-   <li v-if="message !== undefined && message.data !== undefined && message.message !== undefined" @click.prevent="$emit('click')">
+   <!-- log-line--<Farbe>: Text und Hover in der Farbe des Spielers, um den es in der Zeile geht (log.less) -->
+   <li v-if="message !== undefined && message.data !== undefined && message.message !== undefined"
+     :class="lineColor !== undefined ? 'log-line--' + lineColor : undefined"
+     @click.prevent="$emit('click')">
     <span v-if="message.type === LogMessageType.DEFAULT" :title="when" v-html="icon"></span>
     <template v-for="(data, idx) of entries" :key="idx">
       <span class="log-plain-text" v-if="typeof(data) === 'string'">{{ data }}</span>
@@ -130,6 +133,11 @@ export default defineComponent({
     },
   },
   computed: {
+    // Spieler der Zeile = erster Spieler-Eintrag der Nachricht (z. B. "${0} hat … gespielt")
+    lineColor(): Color | undefined {
+      const player = this.message.data?.find((datum) => datum.type === LogMessageDataType.PLAYER);
+      return player?.value as Color | undefined;
+    },
     entries() {
       if (this.message === undefined) {
         return [];
