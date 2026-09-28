@@ -1,15 +1,19 @@
 <template>
   <div class="wf-component wf-options">
     <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
-    <div class="form-group">
-      <label v-for="included in playerinput.include" :key="included" v-trim-whitespace class="form-inline d-flex align-items-center mb-2">
-          <input type="radio" v-model="unit" :value="included" class="form-radio mr-2" >
-          <i :data-tooltip="included" :class="'resource_icon mr-2 tooltip tooltip-bottom resource_icon--' + included" ></i>
-          {{ $t(included) }}
+    <!-- Ressourcen als auswählbare Kacheln wie Karten und Meilensteine; die gewählte pulsiert in der CTA-Farbe -->
+    <div class="resource-options" role="radiogroup">
+      <label v-for="included in playerinput.include" :key="included"
+        :class="['resource-option', {'resource-option--selected': unit === included}]">
+          <!-- Radio für Tastatur und Screenreader, sichtbar ist die Kachel -->
+          <input type="radio" v-model="unit" :value="included" class="resource-option-input">
+          <i :class="'resource_icon resource-option-icon resource_icon--' + included"></i>
+          <span class="resource-option-name">{{ $t(included) }}</span>
       </label>
     </div>
     <div v-if="showsave === true" class="nofloat">
-        <AppButton @click="saveData" :title="playerinput.buttonLabel" />
+        <!-- Gesperrt, bis eine Ressource gewählt ist -->
+        <AppButton @click="saveData" :title="playerinput.buttonLabel" :disabled="unit === undefined" />
     </div>
   </div>
 </template>
@@ -42,10 +46,19 @@ export default defineComponent({
       type: Boolean,
     },
   },
-  data() {
+  data(): {unit: SelectResourceModel['include'][number] | undefined} {
     return {
       unit: undefined,
     };
+  },
+  watch: {
+    // Meldet nach außen, ob gespeichert werden darf – OrOptions sperrt damit seinen eigenen Button
+    unit: {
+      handler() {
+        this.$emit('validity', this.unit !== undefined);
+      },
+      immediate: true,
+    },
   },
   components: {
     AppButton,

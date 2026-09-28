@@ -1,0 +1,57 @@
+// Ressourcen-Auswahl als Kacheln (SelectResource.vue); Auswahl-Rahmen wie bei Karten (selection_highlight.less)
+
+.resource-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 8px 0 16px;
+}
+
+.resource-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 110px;
+  padding: 14px 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.12s, background-color 0.12s;
+
+  &:hover {
+    transform: translateY(-2px);
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  &:focus-within {
+    outline: 2px solid @selection-color;
+    outline-offset: 3px;
+  }
+}
+
+.resource-option--selected {
+  .selection-highlight();
+}
+
+// Radio nur für Tastatur und Screenreader
+.resource-option-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.resource-option-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  background-size: contain;
+}
+
+.resource-option-name {
+  font-size: 15px;
+  text-align: center;
+  line-height: 1.2;
+}
