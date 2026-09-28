@@ -1,0 +1,28 @@
+// Farbton des aktiven Eingabe-Tabs je Art der Eingabe (inputTone.ts, WaitingForTabs.vue):
+// farbiger Streifen oben, Badge und Rahmen der Box. Name = Klassen-Endung, Wert = Farbe.
+@or-tab-tones:
+  prelude #e76aae, // rosa wie Präludium-Karten
+  attack #d9443a, // Angriff auf Mitspieler
+  cards #e8892a, // Karte auswählen
+  mars #b86a34, // Feld auf dem Mars
+  resources #e2b52c, // Ressourcen / Menge (M€-Gelb)
+  player #9b6bd8, // Spieler wählen
+  colonies #2fb0a8; // Kolonien / Turmoil
+
+each(@or-tab-tones, {
+  @tone: extract(@value, 1);
+  @color: extract(@value, 2);
+
+  .or-tab--tone-@{tone}.or-tab--active,
+  .or-tab--tone-@{tone}.or-tab--active:hover {
+    box-shadow: inset 0 @or-tab-accent-width 0 @color;
+  }
+
+  .or-tab--tone-@{tone}.or-tab--active .or-tab-count {
+    background: @color;
+  }
+
+  .or-tab-panel--tone-@{tone} {
+    border-color: @color;
+  }
+});

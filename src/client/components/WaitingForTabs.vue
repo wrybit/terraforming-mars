@@ -10,14 +10,14 @@
       <button type="button" role="tab"
         :title="$t(fullTabTitle(playerinput.title))"
         :aria-selected="!handTabActive"
-        :class="['or-tab', {'or-tab--active': !handTabActive}]"
+        :class="['or-tab', {'or-tab--active': !handTabActive}, tone !== undefined ? 'or-tab--tone-' + tone : '']"
         @click="handTabActive = false">
         <span class="or-tab-title">{{ $t(inputTabLabel(playerinput)) }}</span>
         <span v-if="count !== undefined" class="or-tab-count">{{ count }}</span>
       </button>
     </div>
 
-    <div :class="['or-tab-panel', {'or-tab-panel--view': handTabActive}]" role="tabpanel">
+    <div :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
       <SortableCards v-if="handTabActive" :playerId="playerView.id" :cards="handCards"/>
       <!-- v-show statt v-if: Eingaben bleiben beim Blick in die Hand erhalten; Titel steht bereits oben -->
       <PlayerInputFactory v-show="!handTabActive"
@@ -41,6 +41,7 @@ import SortableCards from '@/client/components/SortableCards.vue';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {fullTabTitle, inputTabLabel} from '@/client/components/orOptionsShortLabels';
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
+import {inputTone} from '@/client/components/inputTone';
 import {allCardsInHand} from '@/client/utils/handCards';
 
 const props = defineProps<{
@@ -55,4 +56,6 @@ provide(OR_OPTIONS_AS_TABS, false);
 const handTabActive = ref(false);
 const handCards = computed(() => allCardsInHand(props.playerView));
 const count = computed(() => inputAvailableCount(props.playerinput));
+// Farbton des Eingabe-Tabs (Präludium rosa, Angriff rot, Karten orange …)
+const tone = computed(() => inputTone(props.playerinput));
 </script>
