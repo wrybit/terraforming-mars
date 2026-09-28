@@ -6,6 +6,8 @@
 @or-tabs-border: #3a3f5c;
 @or-tabs-radius: 8px;
 @or-tab-accent-width: 3px;
+@or-tab-font-size: 16px;
+@or-tab-icon-size: 24px; // Symbol-Tabs (Verkaufen, Weitergeben, Beenden)
 // Zarter Umriss inaktiver Tabs
 @or-tab-inactive-border: rgba(255, 255, 255, 0.12);
 // "Nur ansehen"-Tabs (Handkarten, Spiel-Log): grau statt blau – dort lässt sich nichts tun, nur anschauen
@@ -44,7 +46,7 @@
   background: fade(@bg_action, 14%);
   border-color: fade(@bg_action, 35%);
   color: #b8bccb;
-  font-size: 14px;
+  font-size: @or-tab-font-size;
   white-space: nowrap;
   cursor: pointer;
   transition: background-color 0.15s, color 0.15s, opacity 0.15s;
@@ -117,6 +119,8 @@
 
 .or-tab-icon {
   display: block;
+  width: @or-tab-icon-size;
+  height: @or-tab-icon-size;
 }
 
 .or-tab-title {
