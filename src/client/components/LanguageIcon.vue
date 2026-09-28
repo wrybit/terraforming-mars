@@ -1,11 +1,12 @@
 <template>
-  <div class="sidebar_item sidebar_item--language" :title="$t('Language')">
+  <!-- Ganze Kachel anklickbar, nicht nur die kleine Flagge darin (wie Hilfe/Einstellungen).
+       Klicks im Modal erreichen die Kachel nicht: SidebarModal hängt per Teleport am body -->
+  <div class="sidebar_item sidebar_item--language" :title="$t('Language')" @click="languagePanelOpen = true">
     <div
       class="sidebar_icon sidebar_icon--language"
       :class="{'sidebar_item--is-active': languagePanelOpen}">
       <div :class="`language-icon language-icon-for-sidebar language-icon--${lang}`"
-      :title="title"
-      @click="languagePanelOpen = !languagePanelOpen"></div>
+      :title="title"></div>
       </div>
     <SidebarModal :open="languagePanelOpen" @close="languagePanelOpen = false">
       <LanguageSelectionDialog :preferencesManager="PreferencesManager.INSTANCE"/>

@@ -129,7 +129,9 @@
     inset: auto; // alte Leiste setzt bottom: 162px (preferences.less), das würde mit relative greifen
   }
 
-  .sidebar_cont .language-icon-for-sidebar {
+  // auch beim Hover: die allgemeine Regel .language-icon:hover (language_icon.less) würde die Flagge verschieben
+  .sidebar_cont .language-icon-for-sidebar,
+  .sidebar_cont .language-icon-for-sidebar:hover {
     position: absolute;
     top: 50%;
     left: 50%;
