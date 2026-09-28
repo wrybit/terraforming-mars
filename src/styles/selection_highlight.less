@@ -7,16 +7,16 @@
 @keyframes selection-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 2px @selection-color, 0 0 6px 3px fade(@selection-color, 55%);
+    box-shadow: 0 0 0 3px @selection-color, 0 0 12px 6px fade(@selection-color, 75%);
   }
 
   50% {
-    box-shadow: 0 0 0 2px @selection-color, 0 0 16px 9px fade(@selection-color, 85%);
+    box-shadow: 0 0 0 3px @selection-color, 0 0 28px 14px @selection-color;
   }
 }
 
 .selection-highlight() {
-  box-shadow: 0 0 0 2px @selection-color, 0 0 10px 6px fade(@selection-color, 70%);
+  box-shadow: 0 0 0 3px @selection-color, 0 0 20px 10px fade(@selection-color, 90%);
   animation: selection-pulse @selection-pulse-period ease-in-out infinite;
 
   @media (prefers-reduced-motion: reduce) {

@@ -40,6 +40,9 @@
         :selected="selectedOption"
         :groupName="radioElementName"
         @select="selectedOption = $event"/>
+      <!-- Unsichtbar mitlaufender Kind-Input der gewählten Kachel: saveData() fragt dessen Antwort ab -->
+      <PlayerInputFactory v-if="!asTabs && maKind !== undefined && selectedIdx !== -1" v-show="false"
+        ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)"/>
 
       <template v-else-if="!asTabs">
         <div v-for="(option, idx) in displayedOptions" :key="idx">
