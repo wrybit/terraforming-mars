@@ -35,6 +35,8 @@
 
 <script lang="ts">
 
+import {registerOverlay} from '@/client/utils/overlayCoordinator';
+import {PLAYER_CARDS_OVERLAY} from '@/client/components/overview/ownPlayerIndex';
 import {defineComponent} from 'vue';
 
 import StackedCards from '@/client/components/StackedCards.vue';
@@ -45,6 +47,9 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import {CardType} from '@/common/cards/CardType';
 import {getCardsByType, isCardActivated} from '@/client/utils/CardUtils';
 import {sortActiveCards} from '@/client/utils/ActiveCardsSortingOrder';
+
+// Abmelde-Funktionen je Instanz (nicht reaktiv, daher außerhalb von data)
+const unregisterByInstance = new WeakMap<object, () => void>();
 
 export default defineComponent({
   name: 'OtherPlayer',
@@ -66,9 +71,17 @@ export default defineComponent({
   // Escape schließt die geöffnete Kartenansicht (im Zwei-Spalten-Layout ein Modal)
   mounted() {
     window.addEventListener('keydown', this.closeOnEscape);
+    // Als Overlay anmelden; die Kartenansichten der Spieler teilen einen Schlüssel (PlayerInfo.pinPlayer regelt sie)
+    unregisterByInstance.set(this, registerOverlay(PLAYER_CARDS_OVERLAY, () => {
+      if (this.isVisible()) {
+        this.hideMe();
+      }
+    }));
   },
   beforeUnmount() {
     window.removeEventListener('keydown', this.closeOnEscape);
+    unregisterByInstance.get(this)?.();
+    unregisterByInstance.delete(this);
   },
   methods: {
     closeOnEscape(event: KeyboardEvent) {

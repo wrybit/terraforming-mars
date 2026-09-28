@@ -10,7 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ref} from 'vue';
+import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
+import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordinator';
 import {LogMessage} from '@/common/logs/LogMessage';
 import {ViewModel} from '@/common/models/PlayerModel';
 import CardPanel from '@/client/components/logpanel/CardPanel.vue';
@@ -40,7 +41,10 @@ function show(message: LogMessage) {
   modal.value = false;
 }
 
+const LOG_CARDS_OVERLAY = 'log-cards';
+
 function showModal(message: LogMessage) {
+  closeOtherOverlays(LOG_CARDS_OVERLAY);
   selectedMessage.value = message;
   previewPosition.value = undefined;
   modal.value = true;
@@ -62,6 +66,18 @@ function hidePreview() {
     previewPosition.value = undefined;
   }
 }
+
+// Als Overlay anmelden: schließt sich, wenn ein anderes Overlay öffnet (overlayCoordinator.ts)
+let unregisterOverlay: (() => void) | undefined;
+onMounted(() => {
+  unregisterOverlay = registerOverlay(LOG_CARDS_OVERLAY, () => {
+    if (modal.value) {
+      selectedMessage.value = undefined;
+      modal.value = false;
+    }
+  });
+});
+onBeforeUnmount(() => unregisterOverlay?.());
 
 defineExpose({show, showModal, preview, hidePreview});
 </script>

@@ -38,6 +38,8 @@
 </template>
 
 <script lang="ts">
+import {closeOtherOverlays} from '@/client/utils/overlayCoordinator';
+import {PLAYER_CARDS_OVERLAY} from '@/client/components/overview/ownPlayerIndex';
 import {defineComponent} from 'vue';
 import {ViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import PlayerResources from '@/client/components/overview/PlayerResources.vue';
@@ -116,6 +118,9 @@ export default defineComponent({
     // Alle Indizes – seit auch der eigene Spieler (in der Reihenfolge zuletzt) ein Modal hat.
     pinPlayer() {
       const wasPinned = this.isPinned(this.playerIndex);
+      if (!wasPinned) {
+        closeOtherOverlays(PLAYER_CARDS_OVERLAY);
+      }
       for (const index of range(this.playerView.players.length)) {
         this.unpin(index);
       }

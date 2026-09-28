@@ -13,7 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import {onBeforeUnmount, onMounted} from 'vue';
+import {onBeforeUnmount, onMounted, watch} from 'vue';
+import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordinator';
 
 const props = defineProps<{
   open: boolean;
@@ -31,6 +32,26 @@ function closeOnEscape(event: KeyboardEvent) {
   }
 }
 
-onMounted(() => window.addEventListener('keydown', closeOnEscape));
-onBeforeUnmount(() => window.removeEventListener('keydown', closeOnEscape));
+// Jeder Seitenleisten-Dialog ist ein eigenes Overlay (overlayCoordinator.ts)
+const overlayKey = 'sidebar-modal-' + Math.random().toString(36).slice(2);
+let unregisterOverlay: (() => void) | undefined;
+
+watch(() => props.open, (open) => {
+  if (open) {
+    closeOtherOverlays(overlayKey);
+  }
+});
+
+onMounted(() => {
+  window.addEventListener('keydown', closeOnEscape);
+  unregisterOverlay = registerOverlay(overlayKey, () => {
+    if (props.open) {
+      emit('close');
+    }
+  });
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', closeOnEscape);
+  unregisterOverlay?.();
+});
 </script>
