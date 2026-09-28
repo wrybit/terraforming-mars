@@ -1,0 +1,199 @@
+// Ergebnisseite im Look der Spielansicht: Galaxie-Hintergrund (app_background.less), Milchglas-Boxen und
+// ab @player-home-columns-min-width zwei Spalten – links das Ergebnis, rechts Brett, Diagramme und Log.
+// Die Abschnitte sind so verteilt, dass beide Spalten etwa gleich lang werden.
+
+@game-end-page-padding: 24px;
+// Gesetz der Nähe: innerhalb einer Box enger als zwischen den Boxen, zwischen den Spalten am weitesten
+@game-end-box-padding: 14px;
+@game-end-block-gap: 16px;
+@game-end-columns-gap: 32px;
+@game-end-box-radius: 10px;
+// Rechte Spalte: Brett (~670px) plus Überhang der Kolonie-/Raumhafen-Felder links und der Skalen rechts
+@game-end-board-overhang-left: 40px;
+@game-end-board-overhang-right: 24px;
+@game-end-side-width: 740px;
+@game-end-chart-height: 340px;
+// Gesamtpunkte: größte Zahl der Seite, auf eigener dunkler Fläche
+@game-end-total-font-size: 38px;
+@game-end-total-background: rgba(0, 0, 0, 0.38);
+@game-end-total-accent: #ffcc64; // Gold wie M/A-Kopf der Tabelle
+// Hervorgehobene Zeilen der Siegpunkt-Details (ab NOTABLE_DETAIL_POINTS in GameEnd.vue)
+@game-end-notable-background: rgba(255, 204, 100, 0.16);
+
+#game-end {
+  padding: @game-end-page-padding;
+}
+
+// Abschnitt als Milchglas-Box, gleiche Fläche wie die "Nur ansehen"-Tab-Boxen (or_options_tabs.less)
+.game-end-box {
+  .frosted-surface();
+  position: relative;
+  padding: @game-end-box-padding;
+  border: 1px solid @or-tabs-view-border;
+  border-radius: @game-end-box-radius;
+  background: @or-tabs-view-panel-background;
+
+  h1,
+  h2 {
+    margin: 0 0 @game-end-box-padding;
+    font-size: 22px;
+  }
+}
+
+.game-end-columns__main,
+.game-end-columns__side {
+  display: flex;
+  flex-direction: column;
+  gap: @game-end-block-gap;
+  min-width: 0;
+}
+
+// Kopf: Titel, Sieger, Navigation in einer Box
+.game-end-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px; // Zeilen enger als die Elemente nebeneinander
+
+  h1 {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 18px;
+    opacity: 0.75;
+  }
+
+  .game-end-winer-announcement {
+    font-size: 32px;
+    text-align: left;
+  }
+
+  .game_end_navigation {
+    margin: 0 0 0 auto;
+    font-size: 16px;
+    flex-direction: row;
+    gap: 16px;
+  }
+}
+
+// Tabelle: Gesamtpunkte deutlich hervorheben, Spaltengruppen durch Lücken trennen
+.game_end_table {
+  background: transparent;
+  border-collapse: separate;
+  border-spacing: 0 4px;
+
+  .game-end-table-groups th {
+    padding: 0 6px;
+    font-size: 13px;
+    line-height: 16px;
+    opacity: 0.7;
+    text-shadow: none;
+  }
+
+  td.game-end-total {
+    font-size: @game-end-total-font-size;
+    font-weight: bold;
+    color: @game-end-total-accent;
+    background-color: @game-end-total-background;
+    background-clip: padding-box;
+  }
+
+  th.game-end-total {
+    color: @game-end-total-accent;
+    font-weight: bold;
+  }
+
+  .game-end-group-start {
+    border-left: 12px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .game-end-contribution-total {
+    font-weight: bold;
+  }
+
+  // Kompakter als die alte Einzelspalten-Seite, damit die Tabelle samt Parametergruppe in die linke Spalte passt
+  td,
+  th {
+    padding: 6px;
+    min-width: 36px;
+  }
+
+  .column-corporation {
+    width: auto;
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .game-end-player-cell {
+    text-align: left !important; // überschreibt die zentrierten Zellen aus game_end.less
+    padding-left: 10px;
+  }
+}
+
+// Siegpunkt-Details: Spalten teilen sich die Breite statt fester 275px
+.game-end-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+
+  .game-end-column {
+    padding: 0;
+  }
+
+  .game-end-winer-scorebreak-player-title,
+  .game-end-column-row {
+    width: auto;
+  }
+
+  .game-end-winer-scorebreak-player-title {
+    font-size: 20px;
+  }
+
+  .game-end-player {
+    font-size: 20px;
+  }
+
+  .game-end-column-row {
+    font-size: 16px;
+  }
+
+  .game-end-column-text {
+    width: auto;
+    flex: 1;
+  }
+
+  .game-end-column-row--notable {
+    background: linear-gradient(@game-end-notable-background, @game-end-notable-background), @grey_900;
+    font-weight: bold;
+
+    .game-end-column-vp {
+      color: @game-end-total-accent;
+    }
+  }
+}
+
+.game_end_block--board {
+  // Kolonie-/Raumhafen-Felder und Skalen ragen über .board-cont hinaus
+  padding-left: @game-end-board-overhang-left;
+  padding-right: @game-end-board-overhang-right;
+
+  h2 {
+    margin-left: -(@game-end-board-overhang-left - @game-end-box-padding);
+  }
+}
+
+.game-end-charts .victory-point-chart-container {
+  width: 100%;
+  min-width: 0;
+  height: @game-end-chart-height;
+  margin: 0;
+}
+
+@media only screen and (min-width: @player-home-columns-min-width) {
+  .game-end-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) @game-end-side-width;
+    column-gap: @game-end-columns-gap;
+    align-items: start;
+  }
+}
