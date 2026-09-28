@@ -1,0 +1,54 @@
+// Startphase (Startkarten wählen): größere Tabs der Startauswahl und rechts unter Mars/Meilensteinen der Platz mit
+// Start-M€, Hinweisen und dem großen Button "Beginne" (PlayerHome.vue, SelectInitialCards.vue, setupStartSlot.ts)
+
+@setup-tab-font-size: 20px;
+@setup-start-font-size: 30px;
+
+// Nur drei bis vier Tabs – die dürfen größer sein als im Aktionsmenü
+.select-initial-cards .or-tab {
+  padding: 10px 22px;
+  font-size: @setup-tab-font-size;
+}
+
+// Platz in der rechten Spalte statt des Logs: füllt den Rest, Inhalt mittig
+// safe center: reicht der Platz nicht, wächst der Inhalt nach unten statt in die Auszeichnungen darüber
+.player-home-columns__setup-start {
+  // Breite der Spalte bestimmen Mars und Meilensteine; die Leiste soll sie nicht aufweiten
+  contain: inline-size;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: safe center;
+  justify-content: center;
+  padding: 12px 0;
+}
+
+// Start-M€ nebeneinander in einer Zeile, darunter Hinweis und Button über die volle Breite
+.player-home-columns__setup-start .select-initial-cards-footer {
+  flex-flow: row wrap;
+  justify-content: center;
+  gap: 12px 28px;
+  width: 80%;
+  margin: 0;
+
+  > div {
+    justify-content: center; // die Zeilen sind Flex-Container (player_home.less), text-align greift dort nicht
+  }
+
+  > .tm-warning,
+  > .btn {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+}
+
+// Großer Start-Button mit Pfeil
+.btn.select-initial-cards-start {
+  height: auto;
+  padding: 18px 32px;
+  font-size: @setup-start-font-size;
+
+  &::after {
+    content: "→";
+    margin-left: 16px;
+  }
+}

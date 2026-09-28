@@ -47,9 +47,12 @@
 
           <!-- Log unter dem Brett: beides bleibt im Zwei-Spalten-Layout gemeinsam sichtbar -->
           <a class="hotkey-target"></a>
-          <div class="player_home_block nofloat player-home-columns__log">
+          <div v-if="!isSetupPhase" class="player_home_block nofloat player-home-columns__log">
             <LogPanel :viewModel="playerView" :step="game.step" @spaceClicked="onSpaceClicked"/>
           </div>
+          <!-- Startphase: hierhin hängt die Startauswahl ihre Leiste mit Start-M€ und "Beginne" (SelectInitialCards, Teleport).
+               Die ID ist der gemeinsame Vertrag beider Seiten: setupStartSlot.ts -->
+          <div v-else :id="setupStartSlotId" class="player-home-columns__setup-start"></div>
         </div>
 
         <div class="player-home-columns__main">
@@ -132,6 +135,7 @@ import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
 import SetupTurnOrder from '@/client/components/SetupTurnOrder.vue';
+import {SETUP_START_SLOT_ID} from '@/client/components/setupStartSlot';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
@@ -171,6 +175,10 @@ export default defineComponent({
   },
   computed: {
     // Startphase: noch keine Karte ausgespielt (Konzern, Präludien, Startkarten werden gewählt)
+    // Platz für "Beginne" in der Startphase (Vertrag mit SelectInitialCards: setupStartSlot.ts)
+    setupStartSlotId(): string {
+      return SETUP_START_SLOT_ID;
+    },
     isSetupPhase(): boolean {
       return this.thisPlayer.tableau.length === 0;
     },

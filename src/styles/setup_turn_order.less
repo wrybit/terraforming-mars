@@ -1,22 +1,27 @@
-// Zugreihenfolge in der Startphase (SetupTurnOrder.vue): kompakte Zeile über den Auswahl-Tabs
+// Zugreihenfolge in der Startphase (SetupTurnOrder.vue): eigene Box über den Auswahl-Tabs,
+// Namen in Spielerfarbe mit Pfeilen dazwischen, der Startspieler hervorgehoben
 
 .setup-turn-order {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px; // Abstand zu den Tabs größer als zwischen den Namen (Gesetz der Nähe)
+  .frosted-surface();
+  position: relative;
+  margin-bottom: 24px; // Abstand zu den Tabs größer als zwischen den Namen (Gesetz der Nähe)
+  padding: 16px 24px 20px;
+  border: 1px solid @or-tabs-border;
+  border-radius: @or-tabs-radius;
+  background: @or-tabs-panel-background;
 }
 
 .setup-turn-order-title {
-  color: #b8bccb;
-  font-size: 15px;
-  white-space: nowrap;
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: 24px;
 }
 
 .setup-turn-order-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  gap: 10px 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -25,13 +30,33 @@
 .setup-turn-order-player {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   margin: 0;
-  padding: 4px 12px;
+  padding: 6px 18px;
   border-radius: 6px;
   color: #fff;
-  font-size: 17px;
+  font-size: 22px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+// Pfeil vor jedem weiteren Spieler
+.setup-turn-order-player + .setup-turn-order-player {
+  margin-left: 40px;
+  position: relative;
+
+  &::before {
+    content: "→";
+    position: absolute;
+    left: -30px;
+    color: #b8bccb;
+    font-size: 20px;
+    text-shadow: none;
+  }
+}
+
+// Startspieler: weißer Rahmen mit Schein
+.setup-turn-order-player--first {
+  box-shadow: 0 0 0 3px #fff, 0 0 14px 2px rgba(255, 255, 255, 0.45);
 }
 
 .setup-turn-order-number {

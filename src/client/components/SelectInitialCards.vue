@@ -34,7 +34,9 @@
       <SelectCard v-show="activeSection === 'projects'" :playerView="playerView" :playerinput="projectCardOption" :onsave="noop" :showtitle="true" @cardschanged="cardsChanged" />
     </div>
 
-    <!-- Unter der Box: Start-M€, Warnung und Start – gelten für die ganze Auswahl, nicht für einen Tab -->
+    <!-- Start-M€, Warnung und "Beginne" gelten für die ganze Auswahl, nicht für einen Tab: rechts unter Mars und
+         Meilensteinen (setupStartSlot.ts). Ohne diesen Platz (z. B. in Tests) bleibt die Leiste unter den Tabs. -->
+    <Teleport :to="'#' + setupStartSlotId" defer :disabled="!hasStartSlot">
     <div class="select-initial-cards-footer">
       <template v-if="selectedCorporations.length === 1">
         <div><span v-i18n>Starting Megacredits:</span> <div class="megacredits">{{getStartingMegacredits()}}</div></div>
@@ -44,8 +46,9 @@
         <label class="label label-error">{{ $t(warning) }}</label>
       </div>
       <!-- :key=warning is a way of validing that the state of the button should change. If the warning changes, or disappears, that's a signal that the button might change. -->
-      <AppButton :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel"/>
+      <AppButton :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel" class="select-initial-cards-start"/>
     </div>
+    </Teleport>
   </div>
 </template>
 
@@ -71,6 +74,7 @@ import {ColonyModel, simpleColonyModel} from '@/common/models/ColonyModel';
 import * as titles from '@/common/inputs/SelectInitialCards';
 import {sum} from '@/common/utils/utils';
 import {shortTabLabel} from '@/client/components/orOptionsShortLabels';
+import {SETUP_START_SLOT_ID} from '@/client/components/setupStartSlot';
 
 
 type DataModel = {
@@ -84,6 +88,7 @@ type DataModel = {
   warning: string | undefined,
   // Sichtbarer Tab der Startauswahl
   activeSection: InitialCardsSection,
+  hasStartSlot: boolean,
 }
 
 type InitialCardsSection = 'corporation' | 'prelude' | 'ceo' | 'projects';
@@ -142,6 +147,8 @@ export default defineComponent({
       valid: false,
       warning: undefined,
       activeSection: 'corporation',
+      // Gibt es den Platz in der rechten Spalte? Nach dem Einhängen geprüft
+      hasStartSlot: false,
     };
   },
   methods: {
@@ -367,6 +374,9 @@ export default defineComponent({
     },
   },
   computed: {
+    setupStartSlotId(): string {
+      return SETUP_START_SLOT_ID;
+    },
     // Tabs der Startauswahl in Spielreihenfolge; Präludien und CEO nur, wenn die Erweiterung aktiv ist
     sections(): Array<SectionTab> {
       const tabs = [this.sectionTab('corporation', this.corpCardOption, this.selectedCorporations.length)];
@@ -419,6 +429,8 @@ export default defineComponent({
   },
   mounted() {
     this.validate();
+    // Der Platz entsteht im selben Durchlauf (PlayerHome); nach dem Einhängen steht er im Dokument
+    this.hasStartSlot = document.getElementById(SETUP_START_SLOT_ID) !== null;
   },
 });
 
