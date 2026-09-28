@@ -1,0 +1,86 @@
+// Bestätigungs-Sprechblase am Feld (SpaceConfirmPopover.vue), Optik wie die Seitenleisten-Dialoge
+
+@space-confirm-background: #23242a;
+@space-confirm-border: #5755d9; // CTA-Farbe: gehört zur laufenden Aktion
+@space-confirm-arrow: 12px;
+
+.space-confirm {
+  position: fixed;
+  z-index: 1050; // über dem Brett, unter den Seitenleisten-Modals
+  width: 200px;
+  padding: 12px 14px;
+  border: 1px solid @space-confirm-border;
+  border-radius: 10px;
+  background: @space-confirm-background;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(0, 0, 0, 0.4);
+  color: #d6d7dc;
+  font-size: 15px;
+
+  // Pfeil zum Feld (gedrehtes Quadrat mit zwei Rändern)
+  &::before {
+    content: "";
+    position: absolute;
+    top: calc(50% - (@space-confirm-arrow / 2));
+    width: @space-confirm-arrow;
+    height: @space-confirm-arrow;
+    background: @space-confirm-background;
+    transform: rotate(45deg);
+  }
+}
+
+.space-confirm--right::before {
+  left: -(@space-confirm-arrow / 2) - 1px;
+  border-left: 1px solid @space-confirm-border;
+  border-bottom: 1px solid @space-confirm-border;
+}
+
+.space-confirm--left::before {
+  right: -(@space-confirm-arrow / 2) - 1px;
+  border-right: 1px solid @space-confirm-border;
+  border-top: 1px solid @space-confirm-border;
+}
+
+.space-confirm-message {
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.space-confirm-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.space-confirm-button {
+  flex: 1;
+  padding: 6px 0;
+  border: 1px solid #4b4d55;
+  border-radius: 8px;
+  background: transparent;
+  color: #d6d7dc;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background: #34363e;
+  }
+}
+
+.space-confirm-button--primary {
+  border-color: @space-confirm-border;
+  background: @space-confirm-border;
+  color: #fff;
+
+  &:hover {
+    background: lighten(@space-confirm-border, 6%);
+  }
+}
+
+.space-confirm-skip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  color: #8a8c96;
+  font-size: 12px;
+  cursor: pointer;
+}

@@ -1,9 +1,8 @@
 <template>
   <div class="select_space_cont">
-    <ConfirmDialog
-        message="Place your tile here?"
-        :enableDontShowAgainCheckbox="true"
-        ref="confirmation"
+    <!-- Bestätigung als Sprechblase am gewählten Feld (öffnet nach links, wenn rechts kein Platz ist) -->
+    <SpaceConfirmPopover
+        :anchor="confirmAnchor"
         @accept="confirmPlacement"
         @dismiss="cancelPlacement"
         @hide="hideDialog" />
@@ -24,18 +23,15 @@ import {SelectSpaceModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {SelectSpaceResponse} from '@/common/inputs/InputResponse';
-import ConfirmDialog from '@/client/components/common/ConfirmDialog.vue';
+import SpaceConfirmPopover from '@/client/components/SpaceConfirmPopover.vue';
 import GoToMap from '@/client/components/waitingFor/GoToMap.vue';
 import {SpaceId} from '@/common/Types';
-
-
-type Refs = {
-  confirmation: InstanceType<typeof ConfirmDialog>;
-};
 
 type DataModel = {
   spaces: Set<SpaceId>;
   selectedTile: HTMLElement | undefined,
+  // Feld, an dem die Bestätigungs-Blase gerade offen ist
+  confirmAnchor: HTMLElement | undefined,
   spaceId: SpaceId | undefined;
   warning: string | undefined;
 };
@@ -68,18 +64,14 @@ export default defineComponent({
     return {
       spaces: new Set(this.playerinput.spaces),
       selectedTile: undefined,
+      confirmAnchor: undefined,
       spaceId: undefined,
       warning: undefined,
     };
   },
   components: {
-    ConfirmDialog,
+    SpaceConfirmPopover,
     GoToMap,
-  },
-  computed: {
-    typedRefs(): Refs {
-      return this.$refs as unknown as Refs;
-    },
   },
   methods: {
     animateSpace(tile: Element, activate: boolean) {
@@ -98,6 +90,7 @@ export default defineComponent({
       });
     },
     cancelPlacement() {
+      this.confirmAnchor = undefined;
       if (this.selectedTile === undefined) {
         throw new Error('unexpected, no tile selected!');
       }
@@ -105,6 +98,7 @@ export default defineComponent({
       this.animateSpaces(this.getSelectableSpaces());
     },
     confirmPlacement() {
+      this.confirmAnchor = undefined;
       const tiles = this.getSelectableSpaces();
       tiles.forEach((tile) => {
         tile.onclick = null;
@@ -155,7 +149,7 @@ export default defineComponent({
       if (hideTileConfirmation) {
         this.confirmPlacement();
       } else {
-        this.typedRefs.confirmation.show();
+        this.confirmAnchor = tile;
       }
     },
     saveData() {
