@@ -1,10 +1,7 @@
 #player-home, #spectator-home {
   padding-left: 20px;
   padding-top: 20px;
-  // Milchstraße (assets/background.jpg, schon entsättigt und abgedunkelt); füllt immer das Fenster.
-  // Der Verlauf nach unten nur noch leicht – ein voller Verlauf nach Schwarz würde das Bild verschlucken
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.35)), url(./assets/background.jpg) center / cover no-repeat;
-  background-attachment: fixed;
+  // Hintergrundbild: app_background.less (deckt immer das ganze Fenster ab)
   // Umschließt auch gefloatete Karten (Handkarten) und füllt mindestens das Fenster,
   // sonst endet der Sternenhintergrund vor dem Inhalt und darunter scheint das Grau von body durch
   display: flow-root;
