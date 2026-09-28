@@ -183,6 +183,14 @@
   line-height: 1;
 }
 
+// Karten in den Tab-Boxen enger setzen (Standard: 30px rechts), damit pro Zeile möglichst eine Karte mehr passt;
+// 16px reichen auch für den Auswahl-Rahmen (selection_highlight.less)
+@or-tab-panel-card-gap: 16px;
+
+.or-tab-panel .card-container {
+  margin-right: @or-tab-panel-card-gap;
+}
+
 // Frage einer Eingabe oben in ihrer Box (WaitingForTabs)
 .or-tab-panel-title {
   display: block;
