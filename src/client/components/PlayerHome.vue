@@ -88,7 +88,7 @@
               <HandCardsTab :count="cardsInHandCount" :active="true"/>
               <WaitingForPlayersTab :players="playersToWaitFor(playerView)"/>
             </div>
-            <div class="or-tab-panel or-tab-panel--view" role="tabpanel">
+            <div v-docked-tab class="or-tab-panel or-tab-panel--view" role="tabpanel">
               <SortableCards :playerId="playerView.id" :cards="allCardsInHand"/>
             </div>
           </div>
@@ -125,6 +125,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
+import {vDockedTab} from '@/client/directives/DockedTab';
 
 import PlayersOverview from '@/client/components/overview/PlayersOverview.vue';
 import WaitingFor from '@/client/components/WaitingFor.vue';
@@ -204,6 +205,9 @@ export default defineComponent({
     },
   },
 
+  directives: {
+    dockedTab: vDockedTab,
+  },
   components: {
     DynamicTitle,
     Card,

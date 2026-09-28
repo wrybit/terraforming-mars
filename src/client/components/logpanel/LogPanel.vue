@@ -5,7 +5,7 @@
       :selected="selectedGeneration"
       :lastSoloGeneration="lastSoloGeneration"
       @selected="selectGeneration"/>
-    <div class="panel log-panel or-tab-panel or-tab-panel--view" role="tabpanel">
+    <div v-docked-tab class="panel log-panel or-tab-panel or-tab-panel--view" role="tabpanel">
       <div id="logpanel-scrollable" class="panel-body" @scroll="updateScrollState" @mouseleave="messageUnhovered">
         <LogMessageComponent v-for="(message, index) in messages" :key="index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @mouseenter="messageHovered(message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
       </div>
@@ -31,6 +31,7 @@
 <script lang="ts">
 
 import {defineComponent} from 'vue';
+import {vDockedTab} from '@/client/directives/DockedTab';
 import {LogMessage} from '@/common/logs/LogMessage';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {SoundManager} from '@/client/utils/SoundManager';
@@ -92,6 +93,9 @@ export default defineComponent({
       showScrollToBottomButton: false,
       following: true,
     };
+  },
+  directives: {
+    dockedTab: vDockedTab,
   },
   components: {
     LogMessageComponent,

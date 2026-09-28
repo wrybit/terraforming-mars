@@ -17,7 +17,7 @@
       </button>
     </div>
 
-    <div class="or-tab-panel" role="tabpanel">
+    <div v-docked-tab class="or-tab-panel" role="tabpanel">
       <div v-show="activeSection === 'corporation'">
         <SelectCard :playerView="playerView" :playerinput="corpCardOption" :showtitle="true" :onsave="noop" @cardschanged="corporationChanged" />
         <div v-if="playerCanChooseAridor" class="player_home_colony_cont">
@@ -55,6 +55,7 @@
 <script lang="ts">
 
 import {defineComponent} from 'vue';
+import {vDockedTab} from '@/client/directives/DockedTab';
 
 import AppButton from '@/client/components/common/AppButton.vue';
 import {getCard, getCardOrThrow} from '@/client/cards/ClientCardManifest';
@@ -131,6 +132,9 @@ export default defineComponent({
       type: Object as () => Readonly<Preferences>,
       default: () => PreferencesManager.INSTANCE.values(),
     },
+  },
+  directives: {
+    dockedTab: vDockedTab,
   },
   components: {
     AppButton,

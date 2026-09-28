@@ -97,8 +97,9 @@
     margin-bottom: 0;
 
     // Hülle (v-show) → WaitingFor-Wurzel → wf-root → Startauswahl
+    // (die Tab-Leiste der eigenen Startauswahl liegt auf derselben Ebene und bleibt eine Zeile)
     > div,
-    > div > div,
+    > div > div:not(.or-tabs),
     .wf-root,
     .wf-root > .select-initial-cards {
       flex: 1 1 auto;

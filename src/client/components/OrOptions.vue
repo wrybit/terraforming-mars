@@ -28,7 +28,7 @@
     </div>
 
     <!-- Im Tab-Modus ist dieser Container die mit dem aktiven Tab verbundene Box (Inhalt + Speichern) -->
-    <div :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
+    <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <SortableCards v-if="asTabs && handTabActive" :playerId="playerView.id" :cards="handCards"/>
       <!-- Erklärung, wo sonst nur ein Button stünde (tabIntro.ts): Bild, was passiert, Hinweis -->
       <div v-if="asTabs && !handTabActive && selectedIntro !== undefined" class="or-tab-intro">
@@ -83,6 +83,7 @@
 <script lang="ts">
 
 import {defineComponent, inject, provide} from 'vue';
+import {vDockedTab} from '@/client/directives/DockedTab';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {isHTMLElement} from '@/client/utils/vueUtils';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
@@ -124,6 +125,9 @@ export default defineComponent({
     showtitle: {
       type: Boolean,
     },
+  },
+  directives: {
+    dockedTab: vDockedTab,
   },
   components: {
     AppButton,

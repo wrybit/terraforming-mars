@@ -15,7 +15,7 @@
       </button>
     </div>
 
-    <div :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
+    <div v-docked-tab :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
       <SortableCards v-if="handTabActive" :playerId="playerView.id" :cards="handCards"/>
       <!-- Die Frage gehört zur Eingabe und steht daher in ihrer Box, nicht über den Tabs -->
       <label v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(playerinput.title)) }}</div></label>
@@ -33,6 +33,7 @@
 
 <script setup lang="ts">
 import {computed, provide, ref} from 'vue';
+import {vDockedTab} from '@/client/directives/DockedTab';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {InputResponse} from '@/common/inputs/InputResponse';

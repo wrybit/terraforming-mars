@@ -31,7 +31,7 @@
         <HandCardsTab :count="pickedCards.length" :active="true" label="Your selection"/>
         <WaitingForPlayersTab :players="playersToWaitFor(playerView)"/>
       </div>
-      <div class="or-tab-panel or-tab-panel--view" role="tabpanel">
+      <div v-docked-tab class="or-tab-panel or-tab-panel--view" role="tabpanel">
         <div v-for="card in pickedCards" :key="card.name" class="cardbox">
           <Card :card="card"/>
         </div>
@@ -49,6 +49,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
+import {vDockedTab} from '@/client/directives/DockedTab';
 
 import Card from '@/client/components/card/Card.vue';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
@@ -91,6 +92,9 @@ export default defineComponent({
   },
   methods: {
     playersToWaitFor,
+  },
+  directives: {
+    dockedTab: vDockedTab,
   },
   components: {
     HandCardsTab,

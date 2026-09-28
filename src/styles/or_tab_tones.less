@@ -36,7 +36,6 @@ each(@or-tab-tones, {
   .or-tab--tone-@{tone}.or-tab--active:hover {
     background: @panel;
     border-color: @color;
-    border-bottom-color: @panel;
     box-shadow: inset 0 @or-tab-accent-width 0 @color;
   }
 
@@ -45,7 +44,7 @@ each(@or-tab-tones, {
   }
 
   .or-tab-panel--tone-@{tone} {
-    border-color: @color;
+    --or-tab-panel-border: @color;
     background: @panel;
   }
 });
