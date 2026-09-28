@@ -21,6 +21,7 @@ export type PlayersTableRowModel = {
 export type TagColumnGroups = Array<Array<InterfaceTagsType>>;
 
 const STORAGE_KEY = 'players_table_sections';
+const PREFERRED_STORAGE_KEY = 'players_table_preferred';
 const DEFAULT_VISIBILITY: SectionVisibility = {goods: true, tags: true, score: true};
 
 // Schalterstellung überlebt das Neuladen; fehlt der Speicher (privates Fenster), gilt einfach alles an
@@ -36,6 +37,28 @@ export function loadSectionVisibility(): SectionVisibility {
 export function saveSectionVisibility(visibility: SectionVisibility): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(visibility));
+  } catch {
+    // Ohne Speicher gilt die Einstellung nur bis zum Neuladen
+  }
+}
+
+// Zuletzt eingeschalteter Abschnitt: fällt bei Platzmangel als letzter weg (der letzte Klick gewinnt)
+export function loadPreferredSection(): TableSection | undefined {
+  try {
+    const stored = localStorage.getItem(PREFERRED_STORAGE_KEY);
+    return TABLE_SECTIONS.find((section) => section === stored);
+  } catch {
+    return undefined;
+  }
+}
+
+export function savePreferredSection(section: TableSection | undefined): void {
+  try {
+    if (section === undefined) {
+      localStorage.removeItem(PREFERRED_STORAGE_KEY);
+    } else {
+      localStorage.setItem(PREFERRED_STORAGE_KEY, section);
+    }
   } catch {
     // Ohne Speicher gilt die Einstellung nur bis zum Neuladen
   }
@@ -93,18 +116,20 @@ const AUTO_HIDE_ORDER: Array<TableSection> = ['tags', 'score', 'goods'];
 
 export type FittedVisibility = {
   visibility: SectionVisibility;
-  // Abschnitte, die nur aus Platzgründen ausgeblendet sind (Schalter dann gesperrt)
+  // Abschnitte, die nur aus Platzgründen ausgeblendet sind
   autoHidden: Array<TableSection>;
 };
 
-// Passt die gewünschte Sichtbarkeit an die verfügbare Breite an; unbekannte Breite (0) ändert nichts
-export function fitToWidth(wanted: SectionVisibility, tagColumns: TagColumnGroups, availableWidth: number): FittedVisibility {
+// Passt die gewünschte Sichtbarkeit an die verfügbare Breite an; unbekannte Breite (0) ändert nichts.
+// Der bevorzugte (zuletzt eingeschaltete) Abschnitt fällt als letzter weg.
+export function fitToWidth(wanted: SectionVisibility, tagColumns: TagColumnGroups, availableWidth: number, preferred?: TableSection): FittedVisibility {
   const visibility = {...wanted};
   const autoHidden: Array<TableSection> = [];
   if (availableWidth <= 0) {
     return {visibility, autoHidden};
   }
-  for (const section of AUTO_HIDE_ORDER) {
+  const order = [...AUTO_HIDE_ORDER.filter((section) => section !== preferred), ...(preferred ? [preferred] : [])];
+  for (const section of order) {
     if (minimumWidth(visibility, tagColumns) <= availableWidth) {
       break;
     }

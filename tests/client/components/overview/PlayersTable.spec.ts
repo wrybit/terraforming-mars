@@ -55,6 +55,8 @@ describe('PlayersTable', () => {
     expect(fitToWidth(all, tagColumns, 1178).autoHidden).to.deep.eq([]);
     expect(fitToWidth(all, tagColumns, 900).autoHidden).to.deep.eq(['tags']);
     expect(fitToWidth(all, tagColumns, 780).autoHidden).to.deep.eq(['tags', 'score']);
+    // Zuletzt eingeschaltete Symbole bleiben, stattdessen weicht die Wertung
+    expect(fitToWidth(all, tagColumns, 900, 'tags').autoHidden).to.deep.eq(['score']);
     // Unbekannte Breite (Tabelle unsichtbar) lässt alles, wie es ist
     expect(fitToWidth(all, tagColumns, 0).visibility).to.deep.eq(all);
   });

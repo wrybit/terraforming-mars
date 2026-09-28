@@ -3,11 +3,10 @@
     <!-- Schalter vorne, auf Höhe der Icons: blenden Waren / Tags / Wertung ein und aus -->
     <div class="players-table-toggles">
       <button v-for="section in sections" :key="section.key" type="button"
-        :class="['players-table-toggle', 'tooltip', 'tooltip-bottom']"
+        :class="['players-table-toggle', 'tooltip', 'tooltip-bottom', {'players-table-toggle--squeezed': autoHidden.includes(section.key)}]"
         :aria-pressed="visibility[section.key] ? 'true' : 'false'"
         :aria-label="$t(section.label)"
-        :disabled="autoHidden.includes(section.key)"
-        :data-tooltip="autoHidden.includes(section.key) ? $t('Not enough space') : $t(section.label)"
+        :data-tooltip="autoHidden.includes(section.key) ? $t(section.label) + ': ' + $t('Not enough space') : $t(section.label)"
         :data-test="'toggle-' + section.key"
         @click="$emit('toggle', section.key)">
         <span :class="section.iconClass"></span>
@@ -79,7 +78,7 @@ export default defineComponent({
       type: Array as () => TagColumnGroups,
       required: true,
     },
-    // Aus Platzgründen ausgeblendete Abschnitte: Schalter gesperrt
+    // Aus Platzgründen ausgeblendete Abschnitte: Schalter gestrichelt, ein Klick holt sie zurück
     autoHidden: {
       type: Array as () => Array<TableSection>,
       default: () => [],

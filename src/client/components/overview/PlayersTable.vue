@@ -28,11 +28,13 @@ import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/comp
 import {playerGoods} from '@/client/components/overview/playerGoods';
 import {
   PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
-  FittedVisibility, columnTemplate, fitToWidth, loadSectionVisibility, saveSectionVisibility,
+  FittedVisibility, columnTemplate, fitToWidth, loadPreferredSection, loadSectionVisibility, savePreferredSection, saveSectionVisibility,
 } from '@/client/components/overview/playersTableLayout';
 
 type DataModel = {
   visibility: SectionVisibility;
+  // Zuletzt eingeschalteter Abschnitt – bleibt bei Platzmangel am längsten sichtbar
+  preferredSection: TableSection | undefined;
   // Breite der Tabelle; 0, solange sie unsichtbar oder noch nicht gemessen ist
   availableWidth: number;
   resizeObserver: ResizeObserver | undefined;
@@ -58,6 +60,7 @@ export default defineComponent({
   data(): DataModel {
     return {
       visibility: loadSectionVisibility(),
+      preferredSection: loadPreferredSection(),
       availableWidth: 0,
       resizeObserver: undefined,
     };
@@ -104,7 +107,7 @@ export default defineComponent({
     // Tags-Abschnitt entfällt, wenn es keine einzige Tag-Spalte gibt; zu Breites fällt nach Vorrang weg
     fitted(): FittedVisibility {
       const wanted = {...this.visibility, tags: this.visibility.tags && this.tagColumns.length > 0};
-      return fitToWidth(wanted, this.tagColumns, this.availableWidth);
+      return fitToWidth(wanted, this.tagColumns, this.availableWidth, this.preferredSection);
     },
     effectiveVisibility(): SectionVisibility {
       return this.fitted.visibility;
@@ -131,9 +134,19 @@ export default defineComponent({
     },
   },
   methods: {
+    // Ein nur aus Platzgründen ausgeblendeter Abschnitt wird bevorzugt (ein anderer macht Platz), statt ihn abzuschalten
     toggleSection(section: TableSection) {
-      this.visibility = {...this.visibility, [section]: !this.visibility[section]};
-      saveSectionVisibility(this.visibility);
+      if (this.fitted.autoHidden.includes(section)) {
+        this.preferredSection = section;
+      } else {
+        const turnedOn = !this.visibility[section];
+        this.visibility = {...this.visibility, [section]: turnedOn};
+        saveSectionVisibility(this.visibility);
+        if (turnedOn) {
+          this.preferredSection = section;
+        }
+      }
+      savePreferredSection(this.preferredSection);
     },
   },
 });
