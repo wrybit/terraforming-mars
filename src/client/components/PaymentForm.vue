@@ -32,16 +32,17 @@
             </tr>
           </template>
         </template>
-        <!-- Summe gegen Kosten; Farbe zeigt, ob der Betrag passt (grün), fehlt (rot) oder zu hoch ist (gelb) -->
-        <tr :class="totalSpentClass()">
-          <td class="payments_total_heading" v-i18n>Total</td>
-          <td class="payments_total_value" :title="$t(totalSpentTitle())" :aria-label="$t(totalSpentTitle())">
-            {{ totalSpent() }} / {{ cost }}
-            <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
-          </td>
-        </tr>
       </tbody>
     </table>
+    <!-- Summe gegen Kosten rechts neben den Währungen; Farbe zeigt, ob der Betrag passt (grün),
+         fehlt (rot) oder zu hoch ist (gelb) -->
+    <div v-if="hasCurrencyChoice" class="payments_total" :class="totalSpentClass()">
+      <div class="payments_total_heading"><span v-i18n>Total</span>:</div>
+      <div class="payments_total_value" :title="$t(totalSpentTitle())" :aria-label="$t(totalSpentTitle())">
+        {{ totalSpent() }} / {{ cost }}
+        <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
+      </div>
+    </div>
 
     <div v-if="warning !== undefined" class="tm-warning">
       <label class="label label-error">{{ $t(warning) }}</label>

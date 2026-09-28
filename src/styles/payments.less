@@ -56,21 +56,14 @@
   vertical-align: middle;
 }
 
-// Summenzeile: "Summe 3 / 3 M€" mit Trennlinie darüber
-.payments_total_heading,
-.payments_total_value {
-  padding-top: 6px;
-  border-top: 1px solid rgba(255, 255, 255, 0.25);
-  font-size: 20px;
-  vertical-align: middle;
-}
-
+// Summe rechts neben den Währungen: "Gesamt:" über "3 / 3 M€", ohne Trennlinie
 .payments_total_heading {
-  text-align: right;
+  font-size: 16px;
+  opacity: 0.8;
 }
 
 .payments_total_value {
-  padding-left: 16px;
+  font-size: 24px;
   font-weight: bold;
   white-space: nowrap;
 }
@@ -112,6 +105,18 @@
 .payments_single .payments_type_smallicon {
   width: 24px;
   height: 24px;
+}
+
+.payments_prices {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 32px; // Summe deutlich abgesetzt von den Währungszeilen
+}
+
+// Warnung (z. B. zu wenig bezahlt) in eigener Zeile darunter
+.payments_prices > .tm-warning {
+  flex-basis: 100%;
 }
 
 .payments_form .payments_save {
