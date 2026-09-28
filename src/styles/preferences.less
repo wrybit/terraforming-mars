@@ -346,6 +346,15 @@
   transform: scale(0.95);
 }
 
+// Inaktive Karten nicht vergrößern – sie sollen beim Hover inaktiv wirken (cards.less .card-unavailable)
+.preferences_magnify_cards .filterDiv.card-unavailable:hover {
+  transform: none;
+}
+
+.preferences_small_cards.preferences_magnify_cards .filterDiv.card-unavailable:hover {
+  transform: scale(0.8);
+}
+
 .info-panel-title {
   font-size: 25px;
   font-style: normal;

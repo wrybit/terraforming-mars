@@ -35,12 +35,16 @@
   }
 }
 
-.card-unavailable {
-  filter: brightness(0.55);
+// Nicht wählbare Karte (zu teuer, Bedingung nicht erfüllt) bzw. bereits genutzte Aktion:
+// deutlich zurückgenommen und bleibt es auch beim Hover; Verbots-Cursor zeigt, dass Klicken nichts bewirkt
+.card-unavailable,
+.card-unavailable:hover {
+  filter: grayscale(0.85) brightness(0.45);
+  cursor: not-allowed;
+}
 
-  &:hover {
-    filter: brightness(1.00);
-  }
+.card-unavailable * {
+  cursor: not-allowed;
 }
 
 .card-hide {
