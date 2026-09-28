@@ -1,6 +1,6 @@
 // Ab dem Zwei-Spalten-Layout wird die linke Seitenleiste (Sidebar.vue) zur Icon-Gruppe oben rechts:
-// links die Karten-Kachel (Nachziehstapel/Ablage), daneben untereinander Sprache, Spieldetails, Hilfe, Einstellungen.
-// Temperatur, Sauerstoff und Ozeane stehen am Mars, der Spielerwürfel ist durch die Leistenfarben überflüssig.
+// links oben die eigene Spielerfarbe, darunter die Karten-Kachel (Nachziehstapel/Ablage),
+// rechts untereinander Sprache, Spieldetails, Hilfe, Einstellungen. Temperatur, Sauerstoff und Ozeane stehen am Mars.
 // Icons kleiner, jedes auf einem Milchglas-Button.
 
 @toolbar-button-size: 40px;
@@ -23,22 +23,27 @@
     display: grid;
     grid-template-columns: auto auto;
     grid-template-areas:
-      "cards language"
+      "player language"
       "cards info"
-      "colonies help"
-      ". settings";
+      "cards help"
+      "colonies settings";
     gap: @toolbar-gap;
     align-items: start;
     z-index: 130; // über den Overlays der rechten Spalte (column_overlay.less: 120)
     background: none; // keine Leistenfläche mehr (preferences_acting_player / _nonacting_player)
   }
 
-  // Werte, Spielerwürfel und Turmoil-Partei stehen anderswo (Mars, Spielerleisten, Turmoil am Brett)
-  // .sidebar_item mit: sonst gewinnt die Button-Regel unten (display: flex) bei gleicher Spezifität
+  // Globale Werte und Turmoil-Partei stehen anderswo (Mars, Turmoil am Brett)
   .sidebar_cont .global_params,
-  .sidebar_cont .sidebar_item.preferences_player,
   .sidebar_cont > div:has(.party-name-indicator) {
     display: none;
+  }
+
+  // Eigene Spielerfarbe ganz oben; die alte Leiste stellte den Würfel gedreht und senkrecht
+  .sidebar_cont .preferences_player {
+    grid-area: player;
+    writing-mode: horizontal-tb;
+    transform: none;
   }
 
   .sidebar_cont > a:has(.goto-cards) {
