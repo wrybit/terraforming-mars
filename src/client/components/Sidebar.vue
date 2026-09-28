@@ -38,14 +38,18 @@
       :class="{'sidebar_item--is-active': ui.gamesetup_detail_open}"
       @click="ui.gamesetup_detail_open = !ui.gamesetup_detail_open"
       :title="$t('game setup details')"></i>
-    <InfoPanel v-if="ui.gamesetup_detail_open" :gameOptions="gameOptions" :playerNumber="playerNumber" :lastSoloGeneration="lastSoloGeneration" :deckSize="deckSize" :discardPileSize="discardPileSize" :otherDeckSizes="otherDeckSizes" :spectatorId="spectatorId" :expectedPurgeTimeMs="expectedPurgeTimeMs" @close="ui.gamesetup_detail_open=false" />
+    <SidebarModal :open="ui.gamesetup_detail_open" @close="ui.gamesetup_detail_open=false">
+      <InfoPanel v-if="ui.gamesetup_detail_open" :gameOptions="gameOptions" :playerNumber="playerNumber" :lastSoloGeneration="lastSoloGeneration" :deckSize="deckSize" :discardPileSize="discardPileSize" :otherDeckSizes="otherDeckSizes" :spectatorId="spectatorId" :expectedPurgeTimeMs="expectedPurgeTimeMs" @close="ui.gamesetup_detail_open=false" />
+    </SidebarModal>
   </div>
 
-  <a href="help" target="_blank">
-    <div class="sidebar_item sidebar_item--help">
-      <i class="sidebar_icon sidebar_icon--help" :title="$t('player aid')"></i>
-    </div>
-  </a>
+  <!-- Hilfe als Modal statt in neuem Fenster -->
+  <div class="sidebar_item sidebar_item--help" @click="ui.help_open = true">
+    <i class="sidebar_icon sidebar_icon--help" :class="{'sidebar_item--is-active': ui.help_open}" :title="$t('player aid')"></i>
+  </div>
+  <SidebarModal :open="ui.help_open" :wide="true" @close="ui.help_open = false">
+    <Help v-if="ui.help_open"/>
+  </SidebarModal>
 
   <PreferencesIcon/>
 </div>
@@ -53,7 +57,8 @@
 
 <script lang="ts">
 
-import {defineComponent} from 'vue';
+import {defineAsyncComponent, defineComponent} from 'vue';
+import SidebarModal from '@/client/components/SidebarModal.vue';
 import {Color} from '@/common/Color';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {TurmoilModel} from '@/common/models/TurmoilModel';
@@ -148,11 +153,15 @@ export default defineComponent({
     MoonGlobalParameterValue,
     PreferencesIcon,
     LanguageIcon,
+    SidebarModal,
+    // Hilfe nur bei Bedarf nachladen (eigener Chunk wie die Hilfeseite in App.vue)
+    Help: defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/help/Help.vue')),
   },
   data() {
     return {
       'ui': {
         'gamesetup_detail_open': false,
+        'help_open': false,
       },
       'globalParameter': GlobalParameter,
     };
