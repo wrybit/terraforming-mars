@@ -9,6 +9,8 @@ import {Directive} from 'vue';
 export const DOCKED_TAB_ATTRIBUTE = 'data-docked-tab';
 export const DOCKED_TAB_START = '--docked-tab-start';
 export const DOCKED_TAB_END = '--docked-tab-end';
+// Wert des Attributs, wenn der aktive Tab bündig an der rechten Kante der Box steht
+export const DOCKED_TAB_RIGHT_EDGE = 'right-edge';
 
 type Observed = {
   tabStrip: Element;
@@ -29,13 +31,16 @@ export function updateDockedTab(panel: HTMLElement): void {
     panel.removeAttribute(DOCKED_TAB_ATTRIBUTE);
     return;
   }
-  const panelLeft = panel.getBoundingClientRect().left;
+  const panelRect = panel.getBoundingClientRect();
+  const panelLeft = panelRect.left;
   const tabRect = activeTab.getBoundingClientRect();
   // Unter den Seitenrändern des Tabs bleibt der Boxrand stehen, damit die Ecken lückenlos anschließen
   const tabBorder = parseFloat(getComputedStyle(activeTab).borderLeftWidth) || 0;
   panel.style.setProperty(DOCKED_TAB_START, `${Math.round(tabRect.left - panelLeft + tabBorder)}px`);
   panel.style.setProperty(DOCKED_TAB_END, `${Math.round(tabRect.right - panelLeft - tabBorder)}px`);
-  panel.setAttribute(DOCKED_TAB_ATTRIBUTE, '');
+  // Tab bündig am rechten Rand (z. B. Beenden): dort entfällt die Rundung der Box, wie links beim ersten Tab
+  const atRightEdge = Math.round(panelRect.right - tabRect.right) <= 0;
+  panel.setAttribute(DOCKED_TAB_ATTRIBUTE, atRightEdge ? DOCKED_TAB_RIGHT_EDGE : '');
 }
 
 function stopObserving(panel: HTMLElement): void {

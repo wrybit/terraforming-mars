@@ -211,6 +211,12 @@
   background-origin: border-box;
 }
 
+// Aktiver Tab bündig am rechten Rand (Beenden): Ecke eckig wie links, ohne gezeichnete Rundung (DockedTab.ts)
+.or-tab-panel.or-tab-panel[data-docked-tab="right-edge"] {
+  border-top-right-radius: 0;
+  background-size: 100% 1px, 0 0;
+}
+
 // Status-Tab "… ist gerade am Zug" (WaitingForPlayersTab): rot, nicht klickbar
 .or-tab--status,
 .or-tab--status:hover {
