@@ -24,33 +24,26 @@
       </div>
     </div>
 
-    <template v-if="playerView.pickedCorporationCard.length === 1">
-      <DynamicTitle title="Your selected cards:" :color="thisPlayer.color"/>
-      <div>
-        <div class="cardbox">
-          <Card :card="playerView.pickedCorporationCard[0]"/>
-        </div>
-        <template v-if="game.gameOptions.expansions.prelude">
-          <div v-for="card in playerView.preludeCardsInHand" :key="card.name" class="cardbox">
-            <Card :card="card"/>
-          </div>
-        </template>
-        <template v-if="game.gameOptions.expansions.ceo">
-          <div v-for="card in playerView.ceoCardsInHand" :key="card.name" class="cardbox">
-          <Card :card="card"/>
-          </div>
-        </template>
+    <!-- Nach der Startauswahl, solange Mitspieler noch wählen: eigene Auswahl wie die Handkarten im Spiel
+         (grauer Karten-Tab, daneben der rote Status-Tab, wer noch wählt) -->
+    <div v-if="playerView.pickedCorporationCard.length === 1" class="setup-picked">
+      <div class="or-tabs" role="tablist">
+        <HandCardsTab :count="pickedCards.length" :active="true" label="Your selection"/>
+        <WaitingForPlayersTab :players="playersToWaitFor(playerView)"/>
       </div>
-      <div>
-        <div v-for="card in playerView.cardsInHand" :key="card.name" class="cardbox">
+      <div class="or-tab-panel or-tab-panel--view" role="tabpanel">
+        <div v-for="card in pickedCards" :key="card.name" class="cardbox">
           <Card :card="card"/>
         </div>
       </div>
-    </template>
+    </div>
 
     <!-- Startauswahl als Tabs (SelectInitialCards). Brett, Meilensteine, Auszeichnungen und Log stehen in der
          rechten Spalte (PlayerHome), die Zugreihenfolge zeigen die Spielerleisten ("1." = Startspieler) -->
-    <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
+    <!-- Ohne eigene Eingabe unsichtbar (Status-Tab zeigt, wer noch wählt); bleibt eingebunden, weil es den Server abfragt -->
+    <div v-show="playerView.waitingFor !== undefined">
+      <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
+    </div>
   </div>
 </template>
 
@@ -63,6 +56,10 @@ import WaitingFor from '@/client/components/WaitingFor.vue';
 import {Phase} from '@/common/Phase';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
+import {CardModel} from '@/common/models/CardModel';
+import HandCardsTab from '@/client/components/HandCardsTab.vue';
+import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
+import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
 
 export default defineComponent({
   name: 'PlayerSetupView',
@@ -73,6 +70,15 @@ export default defineComponent({
     },
   },
   computed: {
+    // Eigene Startauswahl in Spielreihenfolge: Konzern, Präludien, CEO, gekaufte Karten
+    pickedCards(): Array<CardModel> {
+      return [
+        ...this.playerView.pickedCorporationCard,
+        ...(this.game.gameOptions.expansions.prelude ? this.playerView.preludeCardsInHand : []),
+        ...(this.game.gameOptions.expansions.ceo ? this.playerView.ceoCardsInHand : []),
+        ...this.playerView.cardsInHand,
+      ];
+    },
     thisPlayer(): PublicPlayerModel {
       return this.playerView.thisPlayer;
     },
@@ -83,7 +89,12 @@ export default defineComponent({
       return (this.game.phase === Phase.INITIALDRAFTING) && this.game.gameOptions.initialDraftVariant;
     },
   },
+  methods: {
+    playersToWaitFor,
+  },
   components: {
+    HandCardsTab,
+    WaitingForPlayersTab,
     Card,
     DynamicTitle,
     WaitingFor,
