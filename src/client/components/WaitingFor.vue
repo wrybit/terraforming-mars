@@ -14,7 +14,8 @@
   <div v-if="waitingfor !== undefined" class="wf-root">
     <!-- Aktionsmenü (OrOptions) und Startauswahl (SelectInitialCards) bauen ihre Tabs selbst;
          jede andere Eingabe kommt in den Tab-Container -->
-    <PlayerInputFactory v-if="waitingfor.type === 'or' || waitingfor.type === 'initialCards'"
+    <!-- Einfache Entscheidungen (choiceMenu.ts) sind kein Aktionsmenü: ein Tab mit Kacheln -->
+    <PlayerInputFactory v-if="(waitingfor.type === 'or' && !isChoiceMenu(waitingfor)) || waitingfor.type === 'initialCards'"
                           :players="playerView.players"
                           :playerView="playerView"
                           :playerinput="waitingfor"
@@ -50,6 +51,7 @@ import {gameDocumentTitle} from '../utils/documentTitle';
 import {setFaviconStatus, setFaviconTurnFrame} from '@/client/utils/favicon';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import WaitingForTabs from '@/client/components/WaitingForTabs.vue';
+import {isChoiceMenu} from '@/client/components/choiceMenu';
 
 let ui_update_timeout_id: number | undefined;
 let documentTitleTimer: number | undefined;
@@ -96,6 +98,7 @@ export default defineComponent({
     };
   },
   methods: {
+    isChoiceMenu,
     getPlayerName(color: Color): string {
       const player = this.playerView.players.find((p) => p.color === color);
       return player ? player.name : color;

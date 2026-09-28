@@ -48,11 +48,19 @@
         :selected="selectedOption"
         :groupName="radioElementName"
         @select="selectedOption = $event"/>
+      <!-- Einfache Entscheidung (choiceMenu.ts): Optionen als Kacheln, die gewählte pulsiert wie Karten -->
+      <div v-if="!asTabs && maKind === undefined && isChoice" class="choice-options" role="radiogroup">
+        <label v-for="(option, idx) in displayedOptions" :key="idx"
+          :class="['choice-option', {'choice-option--selected': selectedIdx === idx}]">
+          <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" class="choice-option-input">
+          <span>{{ $t(option.title) }}</span>
+        </label>
+      </div>
       <!-- Unsichtbar mitlaufender Kind-Input der gewählten Kachel: saveData() fragt dessen Antwort ab -->
-      <PlayerInputFactory v-if="!asTabs && maKind !== undefined && selectedIdx !== -1" v-show="false"
+      <PlayerInputFactory v-if="!asTabs && (maKind !== undefined || isChoice) && selectedIdx !== -1" v-show="false"
         ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)"/>
 
-      <template v-else-if="!asTabs">
+      <template v-else-if="!asTabs && !isChoice">
         <div v-for="(option, idx) in displayedOptions" :key="idx">
           <label class="form-radio" ref="optionLabels">
             <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" >
@@ -65,9 +73,12 @@
         </div>
       </template>
 
-      <div v-if="!asTabs && showOwnSaveButton()" class="wf-action" style="margin: 5px 30px 10px">
-        <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid" @click="saveData" />
-      </div>
+      <!-- In einer Tab-Box (z. B. einfache Entscheidung in WaitingForTabs) sitzt der Button unten im Fuß -->
+      <TabPanelFooterSlot v-if="!asTabs && showOwnSaveButton()">
+        <div class="wf-action" style="margin: 5px 30px 10px">
+          <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid" @click="saveData" />
+        </div>
+      </TabPanelFooterSlot>
 
       <!-- Tab-Modus: klebender Fußbereich unten an der Box (tabPanelFooter.ts); Bezahlbereiche hängen sich per Teleport ein -->
       <div v-if="asTabs" v-show="!handTabActive" :id="footerId" class="or-tab-footer">
@@ -91,6 +102,8 @@ import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
+import {isChoiceMenu} from '@/client/components/choiceMenu';
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon} from '@/client/components/orOptionsShortLabels';
 import {tabIntro, TabIntro} from '@/client/components/tabIntro';
@@ -132,6 +145,7 @@ export default defineComponent({
     dockedTab: vDockedTab,
   },
   components: {
+    TabPanelFooterSlot,
     TabIntroBlock,
     AppButton,
     OrOptionsTabIcon,
@@ -184,6 +198,10 @@ export default defineComponent({
     // Erklärung oben in der Box der gewählten Aktion (tabIntro.ts)
     selectedIntro(): TabIntro | undefined {
       return this.selectedOption === undefined ? undefined : tabIntro(this.selectedOption);
+    },
+    // Einfache Entscheidung aus reinen Optionen als Kacheln (choiceMenu.ts)
+    isChoice(): boolean {
+      return isChoiceMenu(this.playerinput);
     },
     // Meilenstein- bzw. Auszeichnungswahl als Bild-Kacheln (milestoneAwardChoice.ts)
     maKind(): MilestoneAwardKind | undefined {

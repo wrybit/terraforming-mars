@@ -21,6 +21,8 @@
       <!-- Feldwahl u. Ä.: Plättchen, Frage und Hinweis (tabIntro.ts); sonst nur die Frage -->
       <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(playerinput.title)" :temperature="playerView.game.temperature"/>
       <label v-else v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(playerinput.title)) }}</div></label>
+      <!-- Einfache Entscheidung einer Karte: deren Kartentext als kurze Erklärung (choiceMenu.ts) -->
+      <p v-if="cardDescription !== undefined" v-show="!handTabActive" class="or-tab-panel-description">{{ $t(cardDescription) }}</p>
       <!-- v-show statt v-if: Eingaben bleiben beim Blick in die Hand erhalten -->
       <PlayerInputFactory v-show="!handTabActive"
         :players="playerView.players"
@@ -49,6 +51,7 @@ import {fullTabTitle, inputTabLabel} from '@/client/components/orOptionsShortLab
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {inputTone} from '@/client/components/inputTone';
 import {tabIntro} from '@/client/components/tabIntro';
+import {choiceCardDescription} from '@/client/components/choiceMenu';
 import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import {allCardsInHand} from '@/client/utils/handCards';
 
@@ -69,4 +72,5 @@ const count = computed(() => inputAvailableCount(props.playerinput));
 // Farbton des Eingabe-Tabs (Präludium rosa, Angriff rot, Karten orange …)
 const tone = computed(() => inputTone(props.playerinput));
 const intro = computed(() => tabIntro(props.playerinput));
+const cardDescription = computed(() => choiceCardDescription(props.playerinput.title));
 </script>
