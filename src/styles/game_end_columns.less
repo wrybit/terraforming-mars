@@ -130,7 +130,12 @@
     .table-moon-colony-tile,
     .table-moon-mine-tile,
     .table-planetary-track { width: 26px; height: 30px; background-size: 26px 30px; }
-    .tile { width: 30px; height: 30px; background-size: contain; }
+    // Globale Parameter proportional auf 30px Höhe (Originale in cards.less: 40×46, Thermometer 14×46, Sauerstoff 46×46, Venus 60×40)
+    .tile { height: 30px; margin: 0; background-repeat: no-repeat; }
+    .temperature-tile { width: 9px; background-size: 9px 30px; }
+    .ocean-tile { width: 26px; background-size: 26px 30px; }
+    .venus-tile { width: 45px; background-size: 45px 30px; }
+    .oxygen-tile { width: 30px; background-size: 30px 30px; }
     .table-red-arrow { width: 24px; height: 24px; background-size: 24px; }
     .mc-icon { width: 22px; height: 22px; }
   }
