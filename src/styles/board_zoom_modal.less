@@ -1,0 +1,48 @@
+// Mars-Brett bildschirmfüllend (BoardZoomModal.vue); Farben wie die Seitenleisten-Dialoge (sidebar_modal.less)
+
+.board-zoom-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1100; // wie Seitenleisten-Dialoge: über Spalten-Modals und dem Rahmen "du bist am Zug"
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  cursor: zoom-out;
+}
+
+// Innenabstand = Überhang der Brett-Elemente links/rechts von .board-cont (player_home_columns.less),
+// sonst ragen Kolonie-Felder und Skalen aus der gemessenen Box
+.board-zoom-content {
+  padding: 0 @player-home-board-overhang-right 0 @player-home-board-overhang-left;
+
+  .board-cont {
+    margin: 0;
+  }
+}
+
+.board-zoom-close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid @sidebar-modal-border;
+  border-radius: 8px;
+  background: @sidebar-modal-background;
+  color: #d6d7dc;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    background: #34363e;
+    color: #fff;
+  }
+}
+
+// Brett im Spiel: Lupen-Cursor, solange nichts platziert werden muss (dann gibt es wählbare Felder)
+.board-cont--zoomable:not(:has(.board-space--available)) {
+  cursor: zoom-in;
+}

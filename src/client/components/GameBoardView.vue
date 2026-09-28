@@ -2,19 +2,21 @@
 <template>
   <a name="board" class="player_home_anchor hotkey-target"></a>
   <Board
-    :spaces="game.spaces"
-    :expansions="game.gameOptions.expansions"
-    :venusScaleLevel="game.venusScaleLevel"
-    :boardName ="game.gameOptions.boardName"
-    :oceans_count="game.oceans"
-    :oxygen_level="game.oxygenLevel"
-    :temperature="game.temperature"
-    :altVenusBoard="game.gameOptions.altVenusBoard"
-    :aresData="game.aresData"
-    :tileView="tileView"
+    v-bind="boardProps"
     @toggleTileView="$emit('toggleTileView')"
+    @click="onBoardClick"
+    class="board-cont--zoomable"
     id="shortkey-board"
   />
+
+  <!-- Zweite Brett-Instanz nur zum Ansehen. Die IDs darin (main_board usw.) gibt es dann doppelt;
+       getElementById liefert aber das erste Vorkommen, und das Modal hängt am Ende von body -->
+  <BoardZoomModal :open="boardZoomOpen" @close="boardZoomOpen = false">
+    <Board
+      v-bind="boardProps"
+      @toggleTileView="$emit('toggleTileView')"
+    />
+  </BoardZoomModal>
 
   <template v-if="game.turmoil">
     <a class="hotkey-target"></a>
@@ -47,6 +49,7 @@ import {GameModel} from '@/common/models/GameModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {SpaceId} from '@/common/Types';
 import Board from '@/client/components/Board.vue';
+import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
 import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
@@ -73,8 +76,14 @@ export default defineComponent({
     },
   },
   emits: ['toggleTileView'],
+  data() {
+    return {
+      boardZoomOpen: false,
+    };
+  },
   components: {
     Board,
+    BoardZoomModal,
     DeltaProjectBoard,
     Milestones,
     Awards,
@@ -82,7 +91,36 @@ export default defineComponent({
     MoonBoard,
     PlanetaryTracks,
   },
+  computed: {
+    // Gleiche Props für das Brett in der Spalte und im Vergrößerungs-Modal
+    boardProps() {
+      return {
+        spaces: this.game.spaces,
+        expansions: this.game.gameOptions.expansions,
+        venusScaleLevel: this.game.venusScaleLevel,
+        boardName: this.game.gameOptions.boardName,
+        oceans_count: this.game.oceans,
+        oxygen_level: this.game.oxygenLevel,
+        temperature: this.game.temperature,
+        altVenusBoard: this.game.gameOptions.altVenusBoard,
+        aresData: this.game.aresData,
+        tileView: this.tileView,
+      };
+    },
+  },
   methods: {
+    // Klick auf den Mars vergrößert ihn – außer beim Platzieren (dann gibt es wählbare Felder)
+    // und auf Bedienelementen des Bretts
+    onBoardClick(event: MouseEvent) {
+      const target = event.target as HTMLElement | null;
+      if (target !== null && target.closest('.hide-tile-button') !== null) {
+        return;
+      }
+      if (document.querySelector('.board-space--available') !== null) {
+        return;
+      }
+      this.boardZoomOpen = true;
+    },
     highlightSpace(spaceId: SpaceId) {
       scrollToSpace(spaceId);
 
