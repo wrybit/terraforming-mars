@@ -95,6 +95,13 @@
     }
   }
 
+  // Luft über dem Mars halbieren und unten dazugeben: oben liegt ohnehin Freiraum im Brett selbst,
+  // unten ragen O2-Anzeige und Ozean-Zähler sonst bis in die Meilensteine (Werte vor Zoom)
+  .player-home-columns__mars .board-cont {
+    margin-top: 0;
+    margin-bottom: 28px;
+  }
+
   // Stufen je nach freier Höhe (gesetzt von rightColumnFit.ts):
   // 1) Mars so breit wie Meilensteine & Auszeichnungen
   .player-home-columns__board--mars-wide .board-cont {
