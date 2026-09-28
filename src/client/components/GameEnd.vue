@@ -1,18 +1,19 @@
 <template>
   <div id="game-end" class="game_end_cont">
+    <!-- Kopf über beiden Spalten, ohne eigene Box: Sieger links, Navigation rechts -->
+    <div class="game-end-hero">
+      <div v-if="!isSoloGame || game.isSoloModeWin" class="game-end-winer-announcement">
+        <span v-for="p in winners" :key="p.color"><span :class="'log-player ' + getEndGamePlayerRowColorClass(p.color)">{{ p.name }}</span></span> <span v-i18n>won!</span>
+      </div>
+      <!-- Links als Buttons: Navigation bleibt ein echter Link (Mittelklick, neuer Tab) -->
+      <div class="game_end_navigation">
+        <a href="new-game" class="btn btn-lg btn-tone-success" v-i18n>Create New Game</a>
+        <a href="." class="btn btn-lg" v-i18n>Go to main page</a>
+      </div>
+    </div>
     <!-- Ab @player-home-columns-min-width zwei Spalten wie in der Spielansicht: links Ergebnis, rechts Brett, Diagramme, Log -->
     <div class="game_end game-end-columns">
       <div class="game-end-columns__main">
-        <div class="game-end-box game-end-hero">
-          <div v-if="!isSoloGame || game.isSoloModeWin" class="game-end-winer-announcement">
-            <span v-for="p in winners" :key="p.color"><span :class="'log-player ' + getEndGamePlayerRowColorClass(p.color)">{{ p.name }}</span></span> <span v-i18n>won!</span>
-          </div>
-          <!-- Links als Buttons: Navigation bleibt ein echter Link (Mittelklick, neuer Tab) -->
-          <div class="game_end_navigation">
-            <a href="new-game" class="btn btn-lg btn-tone-success" v-i18n>Create New Game</a>
-            <a href="." class="btn btn-lg" v-i18n>Go to main page</a>
-          </div>
-        </div>
 
         <div v-if="isSoloGame" class="game-end-box">
           <div v-if="game.isSoloModeWin" class="game_end_success">

@@ -8,6 +8,8 @@
 @game-end-block-gap: 16px;
 @game-end-columns-gap: 32px;
 @game-end-box-radius: 10px;
+@game-end-box-border: rgba(255, 255, 255, 0.07); // ganz zart
+
 // Rechte Spalte: Brett (~670px) plus Überhang der Kolonie-/Raumhafen-Felder links und der Skalen rechts
 @game-end-board-overhang-left: 40px;
 @game-end-board-overhang-right: 24px;
@@ -31,6 +33,18 @@
 
 #game-end {
   padding: @game-end-page-padding;
+  // Hintergrund hier heller und farbiger als in der Spielansicht (app_background.less): keine Karten, die ablenken
+  --app-background-saturation: 0.5;
+  --app-background-brightness: 0.5;
+}
+
+// Ganz zarte Umrisse auch für Tabs und Tab-Boxen von Diagrammen und Log (die setzen ihre Randfarbe selbst, or_options_tabs.less)
+#game-end .or-tab-panel {
+  --or-tab-panel-border: @game-end-box-border;
+}
+
+#game-end .or-tab {
+  border-color: @game-end-box-border;
 }
 
 // Abschnitt als Milchglas-Box, gleiche Fläche wie die "Nur ansehen"-Tab-Boxen (or_options_tabs.less)
@@ -38,7 +52,7 @@
   .frosted-surface();
   position: relative;
   padding: @game-end-box-padding;
-  border: 1px solid @or-tabs-view-border;
+  border: 1px solid @game-end-box-border;
   border-radius: @game-end-box-radius;
   background: @or-tabs-view-panel-background;
 
@@ -56,12 +70,13 @@
   min-width: 0;
 }
 
-// Kopf: Sieger und Navigation in einer Box (Überschrift "Spiel beendet" entfällt, der Sieger sagt es schon)
+// Kopf über beiden Spalten: Sieger und Navigation ohne eigene Box (Überschrift "Spiel beendet" entfällt, der Sieger sagt es schon)
 .game-end-hero {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 24px; // Zeilen enger als die Elemente nebeneinander
+  margin-bottom: @game-end-block-gap;
 
   .game-end-winer-announcement {
     font-size: 32px;
