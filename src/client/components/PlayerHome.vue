@@ -139,10 +139,20 @@ import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {CardModel} from '@/common/models/CardModel';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
 import {observeBoardColumn} from '@/client/utils/boardColumnPosition';
+import {observeRightColumnFit} from '@/client/utils/rightColumnFit';
 import {allCardsInHand, isHandInActionTabs} from '@/client/utils/handCards';
 
-// Aufräumfunktion der Spalten-Beobachtung; pro Seite gibt es nur eine Spieleransicht
+// Aufräumfunktion der Spalten-Beobachtung (Position fürs Modal, Platzausnutzung); pro Seite gibt es nur eine Spieleransicht
 let stopObservingBoardColumn: (() => void) | undefined;
+
+function observeBoardColumnFully(column: HTMLElement): () => void {
+  const stopPosition = observeBoardColumn(column);
+  const stopFit = observeRightColumnFit(column);
+  return () => {
+    stopPosition();
+    stopFit();
+  };
+}
 
 type PlayerHomeModel = {
   showHand: boolean;
@@ -208,7 +218,7 @@ export default defineComponent({
     // Funktions-Ref: wird mit dem Element bzw. beim Entfernen mit null aufgerufen
     trackBoardColumn(element: unknown) {
       stopObservingBoardColumn?.();
-      stopObservingBoardColumn = element instanceof HTMLElement ? observeBoardColumn(element) : undefined;
+      stopObservingBoardColumn = element instanceof HTMLElement ? observeBoardColumnFully(element) : undefined;
     },
     isPlayerActing(playerView: PlayerViewModel) : boolean {
       return playerView.players.length > 1 && playerView.waitingFor !== undefined && !playerView.waitingFor.optional;

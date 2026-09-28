@@ -12,7 +12,8 @@
 @player-home-board-overhang-left: 40px;
 @player-home-board-overhang-right: 24px;
 // Log unter dem Brett so hoch wie die verkleinerte Karte der Hover-Vorschau (Projektkarte 308px, Zoom aus log.less)
-@player-home-log-height: floor(308px * @log-card-preview-zoom);
+@player-home-card-height: 308px; // Projektkarte inkl. Rahmen
+@player-home-log-height: floor(@player-home-card-height * @log-card-preview-zoom);
 
 @media only screen and (min-width: @player-home-columns-min-width) {
   .player-home-columns {
@@ -94,8 +95,15 @@
     }
   }
 
-  // Zusätzliche Klasse für höhere Spezifität als die verschachtelten Originalregeln in player_home.less
-  .player-home-columns__mars .player_home_block--milestones-and-awards {
+  // Stufen je nach freier Höhe (gesetzt von rightColumnFit.ts):
+  // 1) Mars so breit wie Meilensteine & Auszeichnungen
+  .player-home-columns__board--mars-wide .board-cont {
+    zoom: var(--board-wide-zoom, 1);
+  }
+
+  // 2) Meilensteine & Auszeichnungen kompakt, solange für die volle Höhe kein Platz ist.
+  // Zusätzliche Klassen für höhere Spezifität als die verschachtelten Originalregeln in player_home.less
+  .player-home-columns__board:not(.player-home-columns__board--milestones-full) .player-home-columns__mars .player_home_block--milestones-and-awards {
     .milestones-awards-compact();
   }
 
@@ -108,6 +116,18 @@
     .log-panel {
       height: @player-home-log-height;
       max-height: @player-home-log-height;
+    }
+  }
+
+  // 3) Log-Karte in voller Größe, Log so hoch wie eine Karte
+  .player-home-columns__board--log-full {
+    .player-home-columns__log .log-panel {
+      height: @player-home-card-height;
+      max-height: @player-home-card-height;
+    }
+
+    .card-panel--floating .card-container {
+      zoom: 1;
     }
   }
 }
