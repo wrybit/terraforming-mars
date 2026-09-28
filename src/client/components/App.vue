@@ -237,7 +237,7 @@ export default defineComponent({
           }
         })
         .catch((err) => {
-          alert('Error getting game data');
+          this.showAlert('Error', 'Error getting game data');
           console.error(err);
         });
     },
@@ -265,7 +265,7 @@ export default defineComponent({
       } else if (isSpectatorId(id)) {
         app.updateSpectator();
       } else {
-        alert('Bad id URL parameter.');
+        this.showAlert('Error', 'Bad id URL parameter.');
       }
     } else if (currentPathname === paths.GAME) {
       const url = paths.API_GAME + window.location.search;
@@ -286,7 +286,7 @@ export default defineComponent({
           );
         })
         .catch((err) => {
-          alert('Error getting game data');
+          this.showAlert('Error', 'Error getting game data');
           console.error(err);
         });
     } else if (currentPathname === paths.GAMES_OVERVIEW) {

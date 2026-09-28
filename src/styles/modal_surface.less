@@ -1,0 +1,35 @@
+// Gemeinsames Aussehen aller Dialoge: Seitenleisten-Dialoge (sidebar_modal.less) und
+// native <dialog>-Elemente (dialogs.less: Server-Meldungen, Rückfragen, Fehlerbericht).
+// Nur Variablen und Mixins – einbinden mit @import (reference).
+
+@modal-background: #23242a;
+@modal-border: #4b4d55;
+@modal-text: #d6d7dc;
+@modal-heading: #fff;
+@modal-link: #8ab4f8; // auf dunklem Grund lesbar (Standard-Blau wäre zu dunkel)
+@modal-radius: 12px;
+@modal-padding: 24px 28px 20px;
+@modal-max-height: 85vh;
+@modal-screen-gap: 24px; // Mindestabstand zum Fensterrand
+@modal-backdrop-color: rgba(0, 0, 0, 0.55);
+@modal-backdrop-blur: 4px;
+// Über Spalten-Modals und dem Rahmen "du bist am Zug" (active_player_outline.less: 1000)
+@modal-z-index: 1100;
+
+// Abgedunkelte, leicht unscharfe Fläche hinter dem Dialog – der Dialog steht klar im Vordergrund
+.modal-backdrop() {
+  background: @modal-backdrop-color;
+  backdrop-filter: blur(@modal-backdrop-blur);
+}
+
+// Die Dialogbox selbst
+.modal-surface() {
+  max-height: @modal-max-height;
+  overflow-y: auto;
+  padding: @modal-padding;
+  border: 1px solid @modal-border;
+  border-radius: @modal-radius;
+  background: @modal-background;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+  color: @modal-text;
+}

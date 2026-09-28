@@ -161,7 +161,7 @@ export default defineComponent({
           }
         })
         .catch((e) => {
-          root.showAlert('Error sending input,', CANNOT_CONTACT_SERVER);
+          root.showAlert('Error sending input', CANNOT_CONTACT_SERVER);
           console.error(e);
         })
         .finally(() => {

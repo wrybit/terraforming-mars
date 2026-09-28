@@ -596,6 +596,7 @@ import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {BoardNameType, NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
 import {vueRoot} from '@/client/components/vueRoot';
+import {showAlert} from '@/client/components/showAlert';
 import {CreateGameModel} from './CreateGameModel';
 import {paths} from '@/common/app/paths';
 import {JSONProcessor} from './JSONProcessor';
@@ -1083,7 +1084,7 @@ export default defineComponent({
         penaltyVPPerPeriod: this.escapeVelocityPenalty,
       };
       if (this.escapeVelocityMode && hasNegativeEscapeVelocityOption(escapeVelocity)) {
-        window.alert(translateText('Escape Velocity values cannot be negative'));
+        showAlert(this, 'Error with input', 'Escape Velocity values cannot be negative');
         return undefined;
       }
 

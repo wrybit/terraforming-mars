@@ -13,6 +13,7 @@
 </template>
 
 <script lang="ts">
+import {showAlert} from '@/client/components/showAlert';
 import {defineComponent} from 'vue';
 import raw_settings from '@/genfiles/settings.json';
 import {paths} from '@/common/app/paths';
@@ -51,7 +52,7 @@ export default defineComponent({
         }
       })
       .catch((err) => {
-        alert('Error getting session profile data');
+        showAlert(this, 'Error', 'Error getting session profile data');
         console.error(err);
       });
   },

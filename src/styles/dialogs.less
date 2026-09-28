@@ -1,0 +1,80 @@
+// Alle nativen <dialog>-Elemente (App.vue Server-Meldungen, ConfirmDialog.vue Rückfragen,
+// BugReportDialog.vue) im selben dunklen Stil wie die Seitenleisten-Dialoge (modal_surface.less).
+// Gilt auch für dialog-polyfill (Hintergrund dort als "dialog + .backdrop" statt ::backdrop).
+@import (reference) "./modal_surface.less";
+
+@dialog-max-width: 520px; // Meldungen sollen nicht über die ganze Breite laufen
+@dialog-menu-gap: 12px;
+
+dialog {
+  // Mittig im Fenster, unabhängig von der Scrollposition
+  position: fixed;
+  inset: 0;
+  z-index: @modal-z-index;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: min(@dialog-max-width, calc(100vw - 2 * @modal-screen-gap));
+  height: fit-content;
+  margin: auto;
+  transform: none; // dialog-polyfill verschiebt .fixed-Dialoge per translate
+  .modal-surface();
+  font-size: 16px;
+  line-height: 1.45;
+
+  p {
+    margin: 0 0 12px;
+  }
+
+  a:link,
+  a:visited {
+    color: @modal-link;
+  }
+
+  // Die globale Klasse .title (cards.less) ist für Kartentitel gedacht – im Dialog eine normale Überschrift
+  .title {
+    float: none;
+    width: auto;
+    margin: 0 0 12px;
+    border: none;
+    border-radius: 0;
+    color: @modal-heading;
+    font-size: 18px;
+    line-height: 1.3;
+    text-align: left;
+    text-transform: none;
+    white-space: normal;
+  }
+
+  textarea {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 0 12px;
+    padding: 8px;
+    border: 1px solid @modal-border;
+    border-radius: 6px;
+    background: #16171c;
+    color: @modal-text;
+    font-family: monospace;
+    font-size: 13px;
+  }
+
+  input[type="checkbox"] + label {
+    margin-left: 6px;
+  }
+}
+
+// Buttons rechtsbündig in einer Zeile (Reihenfolge aus dem jeweiligen Template)
+dialog .dialog-menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: @dialog-menu-gap;
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+dialog::backdrop,
+dialog + .backdrop {
+  .modal-backdrop();
+}

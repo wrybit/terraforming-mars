@@ -18,6 +18,7 @@
 <script lang="ts">
 
 import {defineComponent} from 'vue';
+import {showAlert} from '@/client/components/showAlert';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {AndOptionsModel} from '@/common/models/PlayerInputModel';
 import AppButton from '@/client/components/common/AppButton.vue';
@@ -79,7 +80,7 @@ export default defineComponent({
     },
     saveData() {
       if (this.canSave() === false) {
-        alert('Not all options selected');
+        showAlert(this, 'Error with input', 'Not all options selected');
         return;
       }
       const refs = this.$refs.childInputs as Array<{saveData?: () => void}> | undefined;

@@ -9,6 +9,7 @@
 </template>
 
 <script lang="ts">
+import {showAlert} from '@/client/components/showAlert';
 
 import {defineComponent} from 'vue';
 import * as constants from '@/common/constants';
@@ -46,7 +47,7 @@ export default defineComponent({
       try {
         const response = await fetch('api/games?serverId=' + this.serverId);
         if (!response.ok) {
-          alert('Unexpected response fetching games from API');
+          showAlert(this, 'Error', 'Unexpected response fetching games from API');
           return;
         }
         const result: Response[] = await response.json();
@@ -58,10 +59,10 @@ export default defineComponent({
           }));
           this.entries.forEach((_, idx) => this.getGame(idx));
         } else {
-          alert('Unexpected response fetching games from API');
+          showAlert(this, 'Error', 'Unexpected response fetching games from API');
         }
       } catch (error) {
-        alert('Error getting games data');
+        showAlert(this, 'Error', 'Error getting games data');
       }
     },
     async getGame(idx: number) {

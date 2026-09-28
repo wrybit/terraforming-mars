@@ -1426,5 +1426,17 @@
   "Temperature is already at maximum": "Temperatur ist bereits am Maximum",
   "Increase the temperature": "Temperatur erhöhen",
   "Prelude cards": "Präludien",
-  "Your selection": "Deine Auswahl"
+  "Your selection": "Deine Auswahl",
+  "Error": "Fehler",
+  "Error fetching state": "Spielstand konnte nicht geladen werden",
+  "Error sending input": "Eingabe konnte nicht gesendet werden",
+  "Error processing response": "Antwort konnte nicht verarbeitet werden",
+  "Unexpected response from server. Please try again.": "Unerwartete Antwort vom Server. Bitte versuche es noch einmal.",
+  "Error getting game data": "Spieldaten konnten nicht geladen werden.",
+  "Bad id URL parameter.": "Ungültige ID in der Adresse.",
+  "Not all options selected": "Es sind noch nicht alle Optionen ausgewählt.",
+  "Error getting session profile data": "Profildaten konnten nicht geladen werden.",
+  "Unexpected response fetching games from API": "Unerwartete Antwort beim Laden der Spiele.",
+  "Error getting games data": "Spiele konnten nicht geladen werden.",
+  "Escape Velocity values cannot be negative": "Die Werte für Escape Velocity dürfen nicht negativ sein."
 }

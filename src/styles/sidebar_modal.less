@@ -1,32 +1,25 @@
 // Modal-Hülle der Seitenleisten-Dialoge (SidebarModal.vue): Sprache, Info, Hilfe, Einstellungen
+// Farben und Fläche teilen sich alle Dialoge (modal_surface.less)
+@import (reference) "./modal_surface.less";
 
-@sidebar-modal-background: #23242a;
-@sidebar-modal-border: #4b4d55;
+@sidebar-modal-background: @modal-background;
+@sidebar-modal-border: @modal-border;
 
 .sidebar-modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 1100; // über Spalten-Modals und dem Rahmen "du bist am Zug"
+  z-index: @modal-z-index;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  background: rgba(0, 0, 0, 0.55);
-  // Seite dahinter leicht unscharf, damit der Dialog klar im Vordergrund steht
-  backdrop-filter: blur(4px);
+  padding: @modal-screen-gap;
+  .modal-backdrop();
 }
 
 .sidebar-modal {
   position: relative;
   max-width: min(720px, 100%);
-  max-height: 85vh;
-  overflow-y: auto;
-  padding: 24px 28px 20px;
-  border: 1px solid @sidebar-modal-border;
-  border-radius: 12px;
-  background: @sidebar-modal-background;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
-  color: #d6d7dc;
+  .modal-surface();
 }
 
 .sidebar-modal--wide {
