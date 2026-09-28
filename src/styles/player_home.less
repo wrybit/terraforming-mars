@@ -25,31 +25,39 @@
 }
 
 .terraformed-banner {
-  background: linear-gradient(to right, #e28c22, #ffcc64, #e28c22);
-  color: #000;
-  text-align: center;
-  padding: 12px;
-  font-size: 24px;
-  font-family: Prototype, Ubuntu, Sans-Serif;
-  font-weight: bold;
-  text-transform: uppercase;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-  z-index: 100;
-  position: relative;
-  border-bottom: 2px solid #805700;
+  // Schwebend statt im Fluss: drückt die Spielerleisten nicht nach unten.
+  // Mittig über der rechten Spalte (Brett, linke Kante aus boardColumnPosition.ts), dort ist oben Platz –
+  // mittig im Fenster läge das Banner auf den Werten der obersten Spielerleiste
+  position: fixed;
+  top: 12px;
+  left: calc((var(--board-column-left, 0px) + 100vw) / 2);
+  z-index: 900; // über der Seite, unter Rahmen "am Zug" (1000) und Dialogen (1100)
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 15px;
+  padding: 8px 28px;
+  border: 2px solid #805700;
+  border-radius: 999px;
+  background: linear-gradient(to right, #e28c22, #ffcc64, #e28c22);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  color: #000;
+  font-family: Prototype, Ubuntu, Sans-Serif;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none; // reiner Hinweis, darf keine Klicks darunter abfangen
 }
 
 .terraformed-banner--animated {
   animation: slide-down 0.6s ease-out;
 }
 
+// Mittig bleiben: die Animation ersetzt transform, daher gehört translateX(-50%) mit hinein
 @keyframes slide-down {
-  from { transform: translateY(-100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from { transform: translate(-50%, -150%); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
 }
 
 // text shadows
