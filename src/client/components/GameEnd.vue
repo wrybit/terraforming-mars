@@ -52,7 +52,7 @@
               <tr class="game-end-table-groups">
                 <th :colspan="victoryPointColumnCount"></th>
                 <th class="game-end-group-start" :colspan="globalParameterColumnCount" v-i18n>Global Parameter Contributions</th>
-                <th :colspan="statisticsColumnCount"></th>
+                <th class="game-end-group-divider" :colspan="statisticsColumnCount"></th>
               </tr>
               <tr v-i18n>
                 <th><div class="card-delegate"></div></th>
@@ -76,13 +76,13 @@
                 <th v-if="game.gameOptions.expansions.moon"><div class="table-moon-road-tile"></div></th>
                 <th v-if="game.gameOptions.expansions.moon"><div class="table-moon-mine-tile"></div></th>
                 <th>&Sigma;</th>
-                <th class="game-end-group-start"><div class="mc-icon"></div></th>
+                <th class="game-end-group-start game-end-group-divider"><div class="mc-icon"></div></th>
                 <th v-if="game.gameOptions.showTimers" class="clock-icon">&#x1F551;</th>
                 <th><div class="table-red-arrow tooltip tooltip-top" :data-tooltip="$t('Actions taken this game')"></div></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="p in playersInPlace" :key="p.color" :class="getEndGamePlayerRowColorClass(p.color)">
+              <tr v-for="p in playersInPlace" :key="p.color" :class="[getEndGamePlayerRowColorClass(p.color), {'game-end-winner-row': isWinner(p)}]">
                 <td class="game-end-player-cell">
                   <a :href="'player?id='+p.id+'&noredirect'">{{ p.name }}</a>
                   <div class="column-corporation">
@@ -109,7 +109,7 @@
                 <td v-if="game.gameOptions.expansions.moon" class="game-end-contribution">{{ contributions(p.color).moonLogistic }}</td>
                 <td v-if="game.gameOptions.expansions.moon" class="game-end-contribution">{{ contributions(p.color).moonMining }}</td>
                 <td class="game-end-contribution game-end-contribution-total">{{ contributions(p.color).total }}</td>
-                <td class="game-end-group-start game-end-mc">
+                <td class="game-end-group-start game-end-group-divider game-end-mc">
                   <div>{{ p.megacredits }}</div>
                 </td>
                 <td v-if="game.gameOptions.showTimers"><div class="game-end-timer">{{ getTimer(p) }}</div></td>
@@ -209,6 +209,7 @@ import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import {DataSet} from '@/client/components/gameend/VictoryPointChart.vue';
 import GameEndChartTabs from '@/client/components/gameend/GameEndChartTabs.vue';
+import {PLAYER_CHART_COLORS, GLOBAL_PARAMETER_CHART_STYLES} from '@/client/components/gameend/chartStyles';
 import {playerColorClass} from '@/common/utils/utils';
 import {Timer} from '@/common/Timer';
 import {Color} from '@/common/Color';
@@ -276,7 +277,7 @@ export default defineComponent({
         return {
           label: player.name,
           data: player.victoryPointsByGeneration,
-          color: player.color,
+          color: PLAYER_CHART_COLORS[player.color],
         };
       });
     },
@@ -291,16 +292,21 @@ export default defineComponent({
         });
       }
 
-      dataset.push({label: $t('Temperature'), color: 'red', data: getValues(GlobalParameter.TEMPERATURE, -30, 8)});
-      dataset.push({label: $t('Oxygen'), color: 'green', data: getValues(GlobalParameter.OXYGEN, 0, 14)});
-      dataset.push({label: $t('Oceans'), color: 'blue', data: getValues(GlobalParameter.OCEANS, 0, 9)});
+      // Farbe und Legenden-Symbol je Parameter aus chartStyles.ts
+      const add = (label: string, param: GlobalParameter, min: number, max: number) => {
+        const style = GLOBAL_PARAMETER_CHART_STYLES[param];
+        dataset.push({label: $t(label), color: style.color, icon: style.icon, data: getValues(param, min, max)});
+      };
+      add('Temperature', GlobalParameter.TEMPERATURE, -30, 8);
+      add('Oxygen', GlobalParameter.OXYGEN, 0, 14);
+      add('Oceans', GlobalParameter.OCEANS, 0, 9);
       if (this.game.gameOptions.expansions.venus === true) {
-        dataset.push({label: $t('Venus'), color: 'yellow', data: getValues(GlobalParameter.VENUS, 0, 30)});
+        add('Venus', GlobalParameter.VENUS, 0, 30);
       }
       if (this.game.gameOptions.expansions.moon === true) {
-        dataset.push({label: $t('L. Habitat'), color: 'orange', data: getValues(GlobalParameter.MOON_HABITAT_RATE, 0, 8)});
-        dataset.push({label: $t('L. Mining'), color: 'pink', data: getValues(GlobalParameter.MOON_MINING_RATE, 0, 8)});
-        dataset.push({label: $t('L. Logistic'), color: 'purple', data: getValues(GlobalParameter.MOON_LOGISTIC_RATE, 0, 8)});
+        add('L. Habitat', GlobalParameter.MOON_HABITAT_RATE, 0, 8);
+        add('L. Mining', GlobalParameter.MOON_MINING_RATE, 0, 8);
+        add('L. Logistic', GlobalParameter.MOON_LOGISTIC_RATE, 0, 8);
       }
       return dataset;
     },
@@ -368,6 +374,9 @@ export default defineComponent({
     }
   },
   methods: {
+    isWinner(player: PublicPlayerModel): boolean {
+      return this.winners.some((winner) => winner.color === player.color);
+    },
     contributions(color: Color): PlayerContributions {
       const data = this.contributionsByColor.get(color);
       if (data === undefined) {

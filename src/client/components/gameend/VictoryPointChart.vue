@@ -1,48 +1,40 @@
 <template>
-  <div class="victory-point-chart-container">
-    <canvas :id="id"></canvas>
+  <div class="victory-point-chart">
+    <!-- Eigene Legende statt der von Chart.js: dort ginge nur Farbe ODER Bild, hier stehen Farbe, Symbol und Name -->
+    <ul class="chart-legend">
+      <li v-for="dataset in datasets" :key="dataset.label" class="chart-legend-item">
+        <span class="chart-legend-swatch" :style="{backgroundColor: dataset.color}"></span>
+        <img v-if="dataset.icon !== undefined" class="chart-legend-icon" :src="dataset.icon.url" :width="dataset.icon.width" :height="dataset.icon.height" alt="">
+        <span>{{ dataset.label }}</span>
+      </li>
+    </ul>
+    <div class="victory-point-chart-container">
+      <canvas :id="id"></canvas>
+    </div>
   </div>
 </template>
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {Chart, registerables} from 'chart.js';
-import {Color} from '@/common/Color';
+import {Chart, ChartDataset, registerables} from 'chart.js';
 import {translateText} from '@/client/directives/i18n';
 
 Chart.register(...registerables);
-Chart.defaults.font.size = 20;
+// Kleinere Schrift als der Chart.js-Standard der alten Seite (20px): die Diagramme stehen jetzt in der schmaleren rechten Spalte
+Chart.defaults.font.size = 14;
 Chart.defaults.font.family = 'Ubuntu, Sans';
 Chart.defaults.color = 'rgb(240, 240, 240)';
 
-const COLOR_CODES: Record<Color, string> = {
-  ['red']: 'rgb(153, 17, 0)',
-  ['yellow']: 'rgb(170, 170, 0)',
-  ['green']: 'rgb(0, 153, 0)',
-  ['black']: 'rgb(170, 170, 170)',
-  ['blue']: 'rgb(0, 102, 255)',
-  ['purple']: 'rgb(140, 0, 255)',
-  ['orange']: 'rgb(236, 113, 12)',
-  ['pink']: 'rgb(245, 116, 187)',
-
-  // Not actual player colors
-  ['neutral']: '',
-  ['bronze']: '',
-};
-
-interface ChartDataSet {
-  label: string,
-  data: ReadonlyArray<number>,
-  fill: boolean,
-  backgroundColor: string,
-  borderColor: string,
-  tension: number,
-  pointRadius: number,
-}
+const GRID_COLOR = 'rgba(255, 255, 255, 0.14)';
+const POINT_RADIUS = 4;
+const LINE_WIDTH = 2;
 
 export type DataSet = {
   label: string;
   data: ReadonlyArray<number>,
-  color: Color,
+  // CSS-Farbe der Linie (chartStyles.ts)
+  color: string,
+  // Optionales Symbol in der Legende neben Farbe und Name
+  icon?: {url: string, width: number, height: number},
 };
 
 export default defineComponent({
@@ -68,69 +60,67 @@ export default defineComponent({
       required: false,
       default: 'Victory Points',
     },
+    // Abstand der beschrifteten Hilfslinien: wenige Zahlen, damit die Skala nicht zu voll wird
+    yAxisStep: {
+      type: Number,
+      required: false,
+      default: 20,
+    },
   },
   methods: {
     getLabels: function(): Array<number> {
       return Array.from({length: this.generation}, (_, index) => index + 1);
     },
-    getAllPlayerDataSet: function(): Array<ChartDataSet> {
+    getChartDataSets: function(): Array<ChartDataset<'line', Array<number>>> {
       return this.datasets.map((dataset) => {
         return {
           label: dataset.label,
-          data: dataset.data,
+          data: [...dataset.data],
           fill: false,
-          backgroundColor: COLOR_CODES[dataset.color],
-          borderColor: COLOR_CODES[dataset.color],
+          backgroundColor: dataset.color,
+          borderColor: dataset.color,
+          borderWidth: LINE_WIDTH,
           tension: 0.1,
-          pointRadius: 6,
+          pointRadius: POINT_RADIUS,
         };
       });
     },
     renderChart: function(): void {
       const ctx = document.getElementById(this.id) as HTMLCanvasElement;
-      if (ctx !== null) {
-        new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: this.getLabels(),
-            datasets: this.getAllPlayerDataSet(),
-          },
-          options: {
-            animation: {
-              duration: this.animation ? 1000 : 0,
-              easing: 'linear',
-            },
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                title: {text: translateText(this.yAxisLabel), display: true},
-                grid: {
-                  color: (ctx) => {
-                    return ctx.tick.value % 10 === 0 ? 'lightgray' : 'rgb(90, 90, 90)';
-                  },
-                },
-                beginAtZero: true,
-                ticks: {
-                  autoSkip: false,
-                  stepSize: 5,
-                  callback: (value: string | number) => {
-                    // I don't know what to do when it's of string type yet, so this just ensures it's displayed.
-                    if (typeof(value) === 'string') {
-                      return value;
-                    }
-                    return value % 10 === 0 ? value : '';
-                  },
-                },
-              },
-              x: {
-                title: {text: translateText('Generation'), display: true},
-                offset: true,
-              },
-            },
-          },
-        });
+      if (ctx === null) {
+        return;
       }
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: this.getLabels(),
+          datasets: this.getChartDataSets(),
+        },
+        options: {
+          animation: {
+            duration: this.animation ? 1000 : 0,
+            easing: 'linear',
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {display: false},
+          },
+          scales: {
+            y: {
+              title: {text: translateText(this.yAxisLabel), display: true},
+              grid: {color: GRID_COLOR},
+              beginAtZero: true,
+              ticks: {stepSize: this.yAxisStep},
+            },
+            x: {
+              title: {text: translateText('Generation'), display: true},
+              grid: {display: false},
+              offset: true,
+            },
+          },
+        },
+      });
     },
   },
   mounted() {

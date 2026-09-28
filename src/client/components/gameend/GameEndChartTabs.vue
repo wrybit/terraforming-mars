@@ -22,7 +22,8 @@
         :generation="generation"
         :animation="true"
         :id="'global-parameter-chart'"
-        :yAxisLabel="'% completed'"/>
+        :yAxisLabel="'% completed'"
+        :yAxisStep="25"/>
     </div>
   </div>
 </template>

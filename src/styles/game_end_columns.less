@@ -12,13 +12,19 @@
 @game-end-board-overhang-left: 40px;
 @game-end-board-overhang-right: 24px;
 @game-end-side-width: 740px;
-@game-end-chart-height: 340px;
+@game-end-chart-height: 300px;
 // Gesamtpunkte: größte Zahl der Seite, auf eigener dunkler Fläche
 @game-end-total-font-size: 38px;
 @game-end-total-background: rgba(0, 0, 0, 0.38);
 @game-end-total-accent: #ffcc64; // Gold wie M/A-Kopf der Tabelle
 // Hervorgehobene Zeilen der Siegpunkt-Details (ab NOTABLE_DETAIL_POINTS in GameEnd.vue)
 @game-end-notable-background: rgba(255, 204, 100, 0.16);
+// Trennlinie vor der Statistik-Gruppe der Tabelle
+@game-end-divider-width: 2px;
+@game-end-divider-color: rgba(255, 255, 255, 0.35);
+// Leuchten um die Siegerzeile (Farbe der Gesamtpunkte)
+@game-end-winner-glow-min: 0 0 4px fade(@game-end-total-accent, 40%);
+@game-end-winner-glow-max: 0 0 18px 3px fade(@game-end-total-accent, 75%);
 // Zeilen mit Minuspunkten
 @game-end-negative-background: rgba(230, 60, 60, 0.28);
 @game-end-negative-accent: #ff7b7b;
@@ -107,6 +113,20 @@
 
   .game-end-contribution-total {
     font-weight: bold;
+  }
+
+  // Trennlinie zwischen Wertung (inkl. globale Parameter) und Statistik (M€, Zeit, Aktionen)
+  .game-end-group-divider {
+    border-left: @game-end-divider-width solid @game-end-divider-color;
+    padding-left: 10px;
+  }
+
+  // Sieger: Rahmen in der Farbe der Gesamtpunkte mit pulsierendem Leuchten
+  tr.game-end-winner-row {
+    outline: 3px solid @game-end-total-accent;
+    outline-offset: 1px;
+    border-radius: 4px;
+    animation: game-end-winner-glow 2.4s ease-in-out infinite;
   }
 
   // Kompakter als die alte Einzelspalten-Seite, damit die Tabelle samt Parametergruppe in die linke Spalte passt
@@ -240,4 +260,46 @@
     column-gap: @game-end-columns-gap;
     align-items: start;
   }
+}
+
+@keyframes game-end-winner-glow {
+  0%,
+  100% { box-shadow: @game-end-winner-glow-min; }
+  50% { box-shadow: @game-end-winner-glow-max; }
+}
+
+// Kein Pulsieren bei "Bewegung reduzieren" – Rahmen und leichtes Leuchten bleiben
+@media (prefers-reduced-motion: reduce) {
+  .game_end_table tr.game-end-winner-row {
+    animation: none;
+    box-shadow: @game-end-winner-glow-min;
+  }
+}
+
+// Legende der Verlaufsdiagramme (VictoryPointChart.vue): Farbstrich, Symbol, Name
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 20px; // Einträge weiter auseinander als Strich, Symbol und Name eines Eintrags
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+
+.chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chart-legend-swatch {
+  width: 18px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.chart-legend-icon {
+  filter: drop-shadow(0 0 1px black);
 }
