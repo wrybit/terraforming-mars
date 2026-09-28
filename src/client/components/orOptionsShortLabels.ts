@@ -133,6 +133,15 @@ export function tabIcon(title: string | Message): TabIcon | undefined {
   return TAB_ICONS[titleKey(title)];
 }
 
+// Erklärung über dem Button von Weitergeben (Beenden bringt eine eigene Warnung vom Server mit, WarningsComponent.vue)
+const END_TAB_HINTS: Readonly<Record<string, string>> = {
+  'End Turn': 'Your turn ends here. The other players continue, and you will get another turn this generation.',
+};
+
+export function endTabHint(title: string | Message): string | undefined {
+  return END_TAB_HINTS[titleKey(title)];
+}
+
 // Weitergeben/Beenden: stehen rechtsbündig abgesetzt von den übrigen Aktionen (or_options_tabs.less)
 export function isEndTab(title: string | Message): boolean {
   return LAST_TABS.includes(titleKey(title));
