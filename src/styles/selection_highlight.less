@@ -4,19 +4,22 @@
 @selection-color: @bg_action;
 @selection-pulse-period: 1.6s;
 
+// Klarer 5px-Rahmen (steht fest), darüber ein pulsierender Schein
+@selection-outline-width: 5px;
+
 @keyframes selection-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 3px @selection-color, 0 0 12px 6px fade(@selection-color, 75%);
+    box-shadow: 0 0 0 @selection-outline-width @selection-color, 0 0 14px 8px fade(@selection-color, 60%);
   }
 
   50% {
-    box-shadow: 0 0 0 3px @selection-color, 0 0 28px 14px @selection-color;
+    box-shadow: 0 0 0 @selection-outline-width @selection-color, 0 0 34px 18px fade(@selection-color, 95%);
   }
 }
 
 .selection-highlight() {
-  box-shadow: 0 0 0 3px @selection-color, 0 0 20px 10px fade(@selection-color, 90%);
+  box-shadow: 0 0 0 @selection-outline-width @selection-color, 0 0 24px 12px fade(@selection-color, 80%);
   animation: selection-pulse @selection-pulse-period ease-in-out infinite;
 
   @media (prefers-reduced-motion: reduce) {
