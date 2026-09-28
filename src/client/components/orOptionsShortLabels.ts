@@ -39,6 +39,14 @@ const LAST_TABS: ReadonlyArray<string> = ['End Turn', 'Pass for this generation'
 // Schlüssel = Titel-Schlüssel der Option, Wert = Button-Schlüssel (übersetzt in locales/*/ui.json)
 const BUTTON_LABELS: Readonly<Record<string, string>> = {
   'Pass for this generation': 'End round',
+  'End Turn': 'Pass on',
+};
+
+// Farbe des Buttons für Optionen mit deutlicher Tragweite (Styles in or_options_tabs.less)
+export type TabButtonTone = 'danger' | 'success';
+const BUTTON_TONES: Readonly<Record<string, TabButtonTone>> = {
+  'Pass for this generation': 'danger', // Runde beenden: für diese Generation raus
+  'End Turn': 'success', // Weitergeben: Zug regulär abgeben
 };
 
 function titleKey(title: string | Message): string {
@@ -62,6 +70,10 @@ export function fullTabTitle(title: string | Message): string | Message {
 
 export function tabButtonLabel(title: string | Message, serverLabel: string): string {
   return BUTTON_LABELS[titleKey(title)] ?? serverLabel;
+}
+
+export function tabButtonTone(title: string | Message): TabButtonTone | undefined {
+  return BUTTON_TONES[titleKey(title)];
 }
 
 export function tabIcon(title: string | Message): TabIcon | undefined {

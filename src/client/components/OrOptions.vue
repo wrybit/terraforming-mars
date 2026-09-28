@@ -47,7 +47,7 @@
       </template>
 
       <div v-if="showsave && selectedOption && !showChildSaveButton(selectedOption)" v-show="!(asTabs && handTabActive)">
-        <div :class="['wf-action', {'or-tab-save': asTabs}]" :style="asTabs ? undefined : 'margin: 5px 30px 10px'">
+        <div :class="['wf-action', {'or-tab-save': asTabs}, asTabs && tabButtonTone(selectedOption.title) ? 'or-tab-save--' + tabButtonTone(selectedOption.title) : '']" :style="asTabs ? undefined : 'margin: 5px 30px 10px'">
           <AppButton :title="$t(asTabs ? tabButtonLabel(selectedOption.title, selectedOption.buttonLabel) : selectedOption.buttonLabel)" type="submit" size="normal" @click="saveData" />
         </div>
       </div>
@@ -65,7 +65,7 @@ import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
-import {fullTabTitle, shortTabLabel, tabButtonLabel, tabDisplayOrder, tabIcon} from '@/client/components/orOptionsShortLabels';
+import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOrder, tabIcon} from '@/client/components/orOptionsShortLabels';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
@@ -169,6 +169,7 @@ export default defineComponent({
     tabIcon,
     tabDisplayOrder,
     tabButtonLabel,
+    tabButtonTone,
     // Anzahl auswählbarer Einträge (Karten, Standardprojekte, Unteroptionen) – undefined, wenn die Option keine Liste hat
     availableCount(option: PlayerInputModel): number | undefined {
       if (option.type === 'projectCard' || option.type === 'card') {
