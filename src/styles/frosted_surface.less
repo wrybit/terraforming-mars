@@ -3,8 +3,10 @@
 // Die Unschärfe liegt auf einer eigenen Ebene (::before) statt direkt auf der Fläche: backdrop-filter auf der
 // Fläche selbst würde fest positionierte Kinder (z. B. das Log-Karten-Overlay) an die Fläche binden.
 
-@frosted-surface-opacity: 80%;
-@frosted-surface-blur: 12px;
+// Zart: die Galaxie soll nur weich und leicht erkennbar durchscheinen
+@frosted-surface-opacity: 65%;
+@frosted-player-opacity: 60%; // Spielerleisten (Grundwert der Spielerfarben: 70 %, common.less)
+@frosted-surface-blur: 6px;
 
 .frosted-surface() {
   isolation: isolate; // eigener Stapelkontext: die Unschärfe-Ebene liegt hinter dem Inhalt
@@ -31,3 +33,11 @@
 .or-tab-panel {
   position: relative;
 }
+
+// Spielerleisten etwas durchsichtiger als die übrigen Flächen in Spielerfarbe
+each(@players, {
+  @c: ~"player_@{value}";
+  .player-info.player_translucent_bg_color_@{value} {
+    background: fade(@@c, @frosted-player-opacity);
+  }
+});
