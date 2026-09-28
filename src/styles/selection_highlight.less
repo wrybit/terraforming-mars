@@ -1,0 +1,25 @@
+// Gemeinsame Hervorhebung einer getroffenen Auswahl (Karten in cards.less, Meilensteine/Auszeichnungen
+// in milestone_award_options.less): Rahmen und pulsierender Schein in der CTA-Farbe
+
+@selection-color: @bg_action;
+@selection-pulse-period: 1.6s;
+
+@keyframes selection-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 2px @selection-color, 0 0 6px 3px fade(@selection-color, 55%);
+  }
+
+  50% {
+    box-shadow: 0 0 0 2px @selection-color, 0 0 16px 9px fade(@selection-color, 85%);
+  }
+}
+
+.selection-highlight() {
+  box-shadow: 0 0 0 2px @selection-color, 0 0 10px 6px fade(@selection-color, 70%);
+  animation: selection-pulse @selection-pulse-period ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

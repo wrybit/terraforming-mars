@@ -1,0 +1,37 @@
+// Auswahl eines Meilensteins/einer Auszeichnung als Bild-Kacheln (MilestoneAwardOptions.vue).
+// Bilder und Kachelmaße kommen aus player_home.less (.milestones/.awards .ma-block .ma-name--<name>).
+
+.ma-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 4px 0 8px;
+}
+
+.ma-options .ma-option {
+  position: relative;
+  margin: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.12s;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+// Radio nur für Tastatur und Screenreader, sichtbar ist die Kachel
+.ma-options .ma-option-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ma-options .ma-option--selected {
+  .selection-highlight();
+}
+
+.ma-options .ma-option:focus-within {
+  outline: 2px solid @selection-color;
+  outline-offset: 3px;
+}

@@ -99,9 +99,10 @@ input[type="radio"]+.filterDiv.card-container {
   margin-top: 22px;
 }
 
+// Gewählte Karte: Rahmen und pulsierender Schein in der CTA-Farbe (selection_highlight.less)
 input[type="checkbox"]:checked+.filterDiv,
 input[type="radio"]:checked+.filterDiv {
-  box-shadow: 0 0 0 1px @grey_850, 0 0 7px 10px #c97e23;
+  .selection-highlight();
 }
 
 input[type="checkbox"]:checked+.filterDiv::after,
@@ -112,16 +113,13 @@ input[type="radio"]:checked+.filterDiv::after {
   height: 21px;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  border-top: 1px solid black;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
   top: -30px;
   left: calc(50% - 45px);
   text-align: center;
   font-weight: bold;
   font-size: 13px;
-  background: #c97e23;
-  color: black;
+  background: @selection-color;
+  color: #fff;
   z-index: 1;
 }
 

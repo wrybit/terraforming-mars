@@ -18,7 +18,8 @@
         <WarningsComponent :warnings="warnings"/>
         <div v-if="showsave === true" class="nofloat">
             <AppButton v-if="showSelectAll" @click="toggleSelectAll" type="submit" :title="allSelected ? $t('Deselect All') : $t('Select All')" />
-            <AppButton :disabled="isOptionalToManyCards && cardsSelected() === 0" type="submit" @click="saveData" :title="buttonLabel()" />
+            <!-- Gesperrt, solange weniger Karten gewählt sind als nötig: zeigt, dass erst eine Karte gewählt werden muss -->
+            <AppButton :disabled="(isOptionalToManyCards && cardsSelected() === 0) || cardsSelected() < playerinput.min" type="submit" @click="saveData" :title="buttonLabel()" />
             <AppButton :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t('Skip this action')" />
         </div>
     </div>

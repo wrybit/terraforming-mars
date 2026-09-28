@@ -33,7 +33,15 @@
       <!-- v-show statt v-if: Eingaben der gewählten Aktion bleiben beim Blick in die Hand erhalten -->
       <PlayerInputFactory v-if="asTabs && selectedIdx !== -1" v-show="!handTabActive" ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
 
-      <template v-if="!asTabs">
+      <!-- Meilenstein/Auszeichnung wählen: Bild-Kacheln wie auf dem Brett statt Radio-Liste -->
+      <MilestoneAwardOptions v-if="!asTabs && maKind !== undefined"
+        :kind="maKind"
+        :options="displayedOptions"
+        :selected="selectedOption"
+        :groupName="radioElementName"
+        @select="selectedOption = $event"/>
+
+      <template v-else-if="!asTabs">
         <div v-for="(option, idx) in displayedOptions" :key="idx">
           <label class="form-radio" ref="optionLabels">
             <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" >
@@ -69,6 +77,8 @@ import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOr
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
+import MilestoneAwardOptions from '@/client/components/MilestoneAwardOptions.vue';
+import {milestoneAwardKind, MilestoneAwardKind} from '@/client/components/milestoneAwardChoice';
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {CardModel} from '@/common/models/CardModel';
@@ -102,6 +112,7 @@ export default defineComponent({
     OrOptionsTabIcon,
     SortableCards,
     HandCardsTab,
+    MilestoneAwardOptions,
   },
   setup() {
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
@@ -138,6 +149,10 @@ export default defineComponent({
     };
   },
   computed: {
+    // Meilenstein- bzw. Auszeichnungswahl als Bild-Kacheln (milestoneAwardChoice.ts)
+    maKind(): MilestoneAwardKind | undefined {
+      return milestoneAwardKind(this.playerinput);
+    },
     handCards(): Array<CardModel> {
       return allCardsInHand(this.playerView);
     },
