@@ -54,7 +54,9 @@
 
         <div class="player-home-columns__main">
           <a class="hotkey-target"></a>
-          <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="playerView" v-trim-whitespace id="shortkey-playersoverview"/>
+          <!-- Startphase: nur die Zugreihenfolge – die Spielerleisten zeigen dort noch nichts als Nullen -->
+          <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players"/>
+          <PlayersOverview v-else class="player_home_block player_home_block--players nofloat" :playerView="playerView" v-trim-whitespace id="shortkey-playersoverview"/>
 
           <!-- Startphase: Startkarten-Auswahl bzw. Draft statt Aktionsmenü und Handkarten -->
           <PlayerSetupView v-if="isSetupPhase" :playerView="playerView"/>
@@ -129,6 +131,7 @@ import Colony from '@/client/components/colonies/Colony.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
+import SetupTurnOrder from '@/client/components/SetupTurnOrder.vue';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
@@ -207,6 +210,7 @@ export default defineComponent({
     TopBar,
     GameBoardView,
     PlayerSetupView,
+    SetupTurnOrder,
     UndergroundTokens,
     KeyboardShortcuts,
   },

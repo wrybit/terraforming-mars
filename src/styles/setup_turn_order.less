@@ -1,0 +1,39 @@
+// Zugreihenfolge in der Startphase (SetupTurnOrder.vue): kompakte Zeile über den Auswahl-Tabs
+
+.setup-turn-order {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px; // Abstand zu den Tabs größer als zwischen den Namen (Gesetz der Nähe)
+}
+
+.setup-turn-order-title {
+  color: #b8bccb;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.setup-turn-order-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.setup-turn-order-player {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 12px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 17px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+.setup-turn-order-number {
+  font-family: Prototype, sans-serif;
+}
