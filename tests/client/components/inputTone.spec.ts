@@ -28,6 +28,12 @@ describe('inputTone', () => {
     expect(inputTone(input({type: 'card', title: 'x', cards: [{name: CardName.MANGROVE}]}))).eq('cards');
   });
 
+  it('Feldwahl für Ozeane ist blau, andere Felder bleiben Mars-braun', () => {
+    expect(inputTone(input({type: 'space', title: 'Select space for first ocean'}))).eq('ocean');
+    expect(inputTone(input({type: 'space', title: {message: 'Select space for ${0} to place an ocean', data: []}}))).eq('ocean');
+    expect(inputTone(input({type: 'space', title: 'Select space for city tile'}))).eq('mars');
+  });
+
   it('Farbe nach Eingabetyp', () => {
     expect(inputTone(input({type: 'space', title: 'x'}))).eq('mars');
     expect(inputTone(input({type: 'amount', title: 'x'}))).eq('resources');
