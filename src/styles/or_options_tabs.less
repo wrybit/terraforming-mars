@@ -40,7 +40,9 @@
   border: 1px solid @or-tab-inactive-border;
   border-bottom: none;
   border-radius: @or-tabs-radius @or-tabs-radius 0 0;
-  background: rgba(255, 255, 255, 0.06);
+  // Inaktiv zart in der Aktionsfarbe (blau), damit aktiv/inaktiv klar unterscheidbar sind
+  background: fade(@bg_action, 14%);
+  border-color: fade(@bg_action, 35%);
   color: #b8bccb;
   font-size: 14px;
   white-space: nowrap;
@@ -48,7 +50,7 @@
   transition: background-color 0.15s, color 0.15s, opacity 0.15s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: fade(@bg_action, 26%);
     color: #fff;
   }
 
@@ -68,9 +70,15 @@
   color: #fff;
 }
 
-// "Nur ansehen"-Tab: grau
+// "Nur ansehen"-Tab: grau (inaktiv zart grau statt blau)
 .or-tab--view {
   color: #a4a6ae;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: @or-tab-inactive-border;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
 }
 
 .or-tab--view.or-tab--active,

@@ -9,12 +9,30 @@
   player #9b6bd8, // Spieler wählen
   colonies #2fb0a8; // Kolonien / Turmoil
 
+// Dunkler Grundton, mit dem die Farbe für Box und aktiven Tab gemischt wird
+@or-tab-tone-base: #16171d;
+
 each(@or-tab-tones, {
   @tone: extract(@value, 1);
   @color: extract(@value, 2);
+  // Fläche von aktivem Tab und Box: dunkel, aber erkennbar in der Farbe getönt
+  @panel: mix(@color, @or-tab-tone-base, 22%);
+
+  // Inaktiv: zarter Farbschleier, damit man die Art der Eingabe auch ohne Auswahl erkennt
+  .or-tab--tone-@{tone} {
+    background: fade(@color, 14%);
+    border-color: fade(@color, 35%);
+  }
+
+  .or-tab--tone-@{tone}:hover {
+    background: fade(@color, 24%);
+  }
 
   .or-tab--tone-@{tone}.or-tab--active,
   .or-tab--tone-@{tone}.or-tab--active:hover {
+    background: @panel;
+    border-color: @color;
+    border-bottom-color: @panel;
     box-shadow: inset 0 @or-tab-accent-width 0 @color;
   }
 
@@ -24,5 +42,6 @@ each(@or-tab-tones, {
 
   .or-tab-panel--tone-@{tone} {
     border-color: @color;
+    background: @panel;
   }
 });
