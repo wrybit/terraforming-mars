@@ -19,6 +19,9 @@
 @game-end-total-accent: #ffcc64; // Gold wie M/A-Kopf der Tabelle
 // Hervorgehobene Zeilen der Siegpunkt-Details (ab NOTABLE_DETAIL_POINTS in GameEnd.vue)
 @game-end-notable-background: rgba(255, 204, 100, 0.16);
+// Zeilen mit Minuspunkten
+@game-end-negative-background: rgba(230, 60, 60, 0.28);
+@game-end-negative-accent: #ff7b7b;
 
 #game-end {
   padding: @game-end-page-padding;
@@ -200,6 +203,15 @@
 
     .game-end-column-vp {
       color: @game-end-total-accent;
+    }
+  }
+
+  .game-end-column-row--negative {
+    background: linear-gradient(@game-end-negative-background, @game-end-negative-background), @grey_900;
+    font-weight: bold;
+
+    .game-end-column-vp {
+      color: @game-end-negative-accent;
     }
   }
 }

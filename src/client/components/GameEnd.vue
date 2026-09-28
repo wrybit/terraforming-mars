@@ -392,8 +392,15 @@ export default defineComponent({
       }
       return data;
     },
+    // Viele Punkte golden, Minuspunkte rot – beides soll aus den vielen 1-Punkt-Zeilen herausstechen
     detailRowClass(points: number): Array<string> {
-      return points >= NOTABLE_DETAIL_POINTS ? ['game-end-column-row', 'game-end-column-row--notable'] : ['game-end-column-row'];
+      if (points >= NOTABLE_DETAIL_POINTS) {
+        return ['game-end-column-row', 'game-end-column-row--notable'];
+      }
+      if (points < 0) {
+        return ['game-end-column-row', 'game-end-column-row--negative'];
+      }
+      return ['game-end-column-row'];
     },
     cycleTileView(): void {
       this.tileView = nextTileView(this.tileView);
