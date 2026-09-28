@@ -1421,5 +1421,8 @@
   "are taking their turn": "sind gerade am Zug",
   "Don't ask again": "Nicht mehr fragen",
   "Place greenery": "Grünfläche platzieren",
-  "Click a highlighted space on Mars": "Klicke auf ein markiertes Feld auf dem Mars"
+  "Click a highlighted space on Mars": "Klicke auf ein markiertes Feld auf dem Mars",
+  "Temperature rises from ${0} °C to ${1} °C": "Temperatur steigt von ${0} °C auf ${1} °C",
+  "Temperature is already at maximum": "Temperatur ist bereits am Maximum",
+  "Increase the temperature": "Temperatur erhöhen"
 }

@@ -30,12 +30,14 @@
     <!-- Im Tab-Modus ist dieser Container die mit dem aktiven Tab verbundene Box (Inhalt + Speichern) -->
     <div :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <SortableCards v-if="asTabs && handTabActive" :playerId="playerView.id" :cards="handCards"/>
-      <!-- Feldauswahl auf dem Mars: erklären, was passiert und wo man klickt (sonst stünde nur ein Button da) -->
-      <div v-if="asTabs && !handTabActive && selectedOption !== undefined && selectedOption.type === 'space'" class="or-tab-intro">
-        <img v-if="tabTileImage(selectedOption.title) !== undefined" class="or-tab-intro-tile" :src="tabTileImage(selectedOption.title)" alt="">
+      <!-- Erklärung, wo sonst nur ein Button stünde (tabIntro.ts): Bild, was passiert, Hinweis -->
+      <div v-if="asTabs && !handTabActive && selectedIntro !== undefined" class="or-tab-intro">
+        <img v-if="selectedIntro.tileImage !== undefined" class="or-tab-intro-tile" :src="selectedIntro.tileImage" alt="">
+        <i v-if="selectedIntro.resourceIcon !== undefined" :class="'resource_icon or-tab-intro-resource resource_icon--' + selectedIntro.resourceIcon"></i>
         <div>
-          <div class="or-tab-intro-title">{{ $t(fullTabTitle(selectedOption.title)) }}</div>
-          <div class="or-tab-intro-hint" v-i18n>Click a highlighted space on Mars</div>
+          <div class="or-tab-intro-title">{{ $t(fullTabTitle(selectedOption!.title)) }}</div>
+          <div v-if="selectedIntro.hint === 'click-space'" class="or-tab-intro-hint" v-i18n>Click a highlighted space on Mars</div>
+          <div v-else class="or-tab-intro-hint">{{ $t(temperatureHint(playerView.game.temperature)) }}</div>
         </div>
       </div>
       <!-- v-show statt v-if: Eingaben der gewählten Aktion bleiben beim Blick in die Hand erhalten -->
@@ -86,7 +88,8 @@ import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
-import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOrder, tabIcon, tabTileImage} from '@/client/components/orOptionsShortLabels';
+import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOrder, tabIcon} from '@/client/components/orOptionsShortLabels';
+import {tabIntro, temperatureHint, TabIntro} from '@/client/components/tabIntro';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
@@ -164,6 +167,10 @@ export default defineComponent({
     };
   },
   computed: {
+    // Erklärung oben in der Box der gewählten Aktion (tabIntro.ts)
+    selectedIntro(): TabIntro | undefined {
+      return this.selectedOption === undefined ? undefined : tabIntro(this.selectedOption);
+    },
     // Meilenstein- bzw. Auszeichnungswahl als Bild-Kacheln (milestoneAwardChoice.ts)
     maKind(): MilestoneAwardKind | undefined {
       return milestoneAwardKind(this.playerinput);
@@ -200,7 +207,7 @@ export default defineComponent({
     shortTabLabel,
     fullTabTitle,
     tabIcon,
-    tabTileImage,
+    temperatureHint,
     tabDisplayOrder,
     tabButtonLabel,
     tabButtonTone,
