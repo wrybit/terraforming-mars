@@ -14,6 +14,7 @@
 import {defineComponent} from 'vue';
 import {ActionLabel} from '@/client/components/overview/ActionLabel';
 import PlayerTimer from '@/client/components/overview/PlayerTimer.vue';
+import {syncActiveBlinkAnimations} from '@/client/utils/syncActiveBlinkAnimations';
 import {TimerModel} from '@/common/models/TimerModel';
 
 export default defineComponent({
@@ -36,6 +37,13 @@ export default defineComponent({
   },
   components: {
     PlayerTimer,
+  },
+  // Neu gerenderter Status blinkt im selben Takt wie die übrigen "am Zug"-Markierungen
+  mounted() {
+    syncActiveBlinkAnimations();
+  },
+  updated() {
+    syncActiveBlinkAnimations();
   },
   methods: {
     getLabelAndTimerClasses(): string {

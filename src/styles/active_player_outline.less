@@ -1,11 +1,17 @@
-// Blinkender roter Rahmen um den gesamten Viewport, solange man selbst am Zug ist.
-// Klasse player-home--acting setzt PlayerHome.vue (isPlayerActing).
+// Blinkende "am Zug"-Markierungen: roter Rahmen um den gesamten Viewport, solange man selbst am Zug ist
+// (Klasse player-home--acting setzt PlayerHome.vue, isPlayerActing), und der Status "aktiv" in der Spielerleiste.
+// Alle blinken im Gleichtakt: syncActiveBlinkAnimations.ts setzt ihre Animationen auf denselben Startzeitpunkt;
+// die Namen der Keyframes (Präfix active-player-) sind der Vertrag mit dieser Datei.
 
 @active-player-outline-width: 8px;
 // Glühen nach innen, damit der Rahmen weich in die Seite übergeht
 @active-player-outline-glow: 24px;
 @active-player-outline-color: #e53935;
 @active-player-outline-period: 1.4s;
+// Status "aktiv" in der Spielerleiste (PlayerStatus.vue)
+@active-player-status-outline-width: 2px;
+@active-player-status-dot-size: 10px;
+@active-player-status-dot-glow: 6px;
 
 .player-home--acting::after {
   content: "";
@@ -30,9 +36,47 @@
   }
 }
 
-// Wer im System "Bewegung reduzieren" aktiviert hat, bekommt einen statischen Rahmen
+// Rahmen nur in der Farbe blinken lassen – mit opacity würde der Text im Status mitblinken
+@keyframes active-player-outline-color-blink {
+  0%,
+  100% {
+    outline-color: @active-player-outline-color;
+  }
+
+  50% {
+    outline-color: fade(@active-player-outline-color, 15%);
+  }
+}
+
+// Status "aktiv": roter Rahmen und blinkender roter Punkt vor der Zeit
+.player-action-status-container--active {
+  outline: @active-player-status-outline-width solid @active-player-outline-color;
+  animation: active-player-outline-color-blink @active-player-outline-period ease-in-out infinite;
+
+  .player-status-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    &::before {
+      content: "";
+      flex: none;
+      width: @active-player-status-dot-size;
+      height: @active-player-status-dot-size;
+      border-radius: 50%;
+      background: @active-player-outline-color;
+      box-shadow: 0 0 @active-player-status-dot-glow @active-player-outline-color;
+      animation: active-player-outline-blink @active-player-outline-period ease-in-out infinite;
+    }
+  }
+}
+
+// Wer im System "Bewegung reduzieren" aktiviert hat, bekommt statische Markierungen
 @media (prefers-reduced-motion: reduce) {
-  .player-home--acting::after {
+  .player-home--acting::after,
+  .player-action-status-container--active,
+  .player-action-status-container--active .player-status-timer::before {
     animation: none;
   }
 }
