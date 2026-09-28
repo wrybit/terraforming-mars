@@ -43,8 +43,8 @@
       <LoginHome v-else-if="screen === 'login-home'"/>
       <Help v-else-if="screen === 'help'"/>
     </div>
-    <!-- In Spielansichten steht der Hinweis im Info-Fenster der Sidebar -->
-    <div v-if="screen !== 'player-home' && screen !== 'spectator-home'" class="notice" v-i18n>
+    <!-- In Spielansichten steht der Hinweis im Info-Fenster der Sidebar; auf der Ergebnisseite entfällt er (Wunsch Jens) -->
+    <div v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" v-i18n>
       Not affiliated with FryxGames, Asmodee Digital or Steam in any way.
     </div>
   </div>

@@ -36,7 +36,6 @@
   border-radius: @game-end-box-radius;
   background: @or-tabs-view-panel-background;
 
-  h1,
   h2 {
     margin: 0 0 @game-end-box-padding;
     font-size: 22px;
@@ -51,19 +50,12 @@
   min-width: 0;
 }
 
-// Kopf: Titel, Sieger, Navigation in einer Box
+// Kopf: Sieger und Navigation in einer Box (Überschrift "Spiel beendet" entfällt, der Sieger sagt es schon)
 .game-end-hero {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 24px; // Zeilen enger als die Elemente nebeneinander
-
-  h1 {
-    flex-basis: 100%;
-    margin: 0;
-    font-size: 18px;
-    opacity: 0.75;
-  }
 
   .game-end-winer-announcement {
     font-size: 32px;
@@ -73,8 +65,11 @@
   .game_end_navigation {
     margin: 0 0 0 auto;
     font-size: 16px;
-    flex-direction: row;
-    gap: 16px;
+    gap: 10px;
+
+    .btn {
+      margin: 0;
+    }
   }
 }
 

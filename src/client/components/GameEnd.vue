@@ -4,19 +4,13 @@
     <div class="game_end game-end-columns">
       <div class="game-end-columns__main">
         <div class="game-end-box game-end-hero">
-          <h1 v-i18n>{{ constants.APP_NAME }} - Game finished!</h1>
           <div v-if="!isSoloGame || game.isSoloModeWin" class="game-end-winer-announcement">
             <span v-for="p in winners" :key="p.color"><span :class="'log-player ' + getEndGamePlayerRowColorClass(p.color)">{{ p.name }}</span></span> <span v-i18n>won!</span>
           </div>
+          <!-- Links als Buttons: Navigation bleibt ein echter Link (Mittelklick, neuer Tab) -->
           <div class="game_end_navigation">
-            <a href="new-game">
-              <AppButton type="back" />
-              <span v-i18n>Create New Game</span>
-            </a>
-            <a href=".">
-              <AppButton type="back" />
-              <span v-i18n>Go to main page</span>
-            </a>
+            <a href="new-game" class="btn btn-lg btn-tone-success" v-i18n>Create New Game</a>
+            <a href="." class="btn btn-lg" v-i18n>Go to main page</a>
           </div>
         </div>
 
@@ -193,7 +187,6 @@
 
         <div class="game_end_block--log">
           <LogPanel :viewModel="participant"/>
-          <a :href="downloadLogUrl" target="_blank" v-i18n>Download game log</a>
         </div>
       </div>
     </div>
@@ -203,11 +196,9 @@
 <script lang="ts">
 
 import {defineComponent} from 'vue';
-import * as constants from '@/common/constants';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {setFaviconStatus} from '@/client/utils/favicon';
 import {getPreferences} from '@/client/utils/PreferencesManager';
-import {paths} from '@/common/app/paths';
 import {GameModel} from '@/common/models/GameModel';
 import {PublicPlayerModel, ViewModel} from '@/common/models/PlayerModel';
 import Board from '@/client/components/Board.vue';
@@ -216,7 +207,6 @@ import {nextTileView, TileView} from '@/client/components/board/TileView';
 import PlanetaryTracks from '@/client/components/pathfinders/PlanetaryTracks.vue';
 import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
-import AppButton from '@/client/components/common/AppButton.vue';
 import {DataSet} from '@/client/components/gameend/VictoryPointChart.vue';
 import GameEndChartTabs from '@/client/components/gameend/GameEndChartTabs.vue';
 import {playerColorClass} from '@/common/utils/utils';
@@ -247,9 +237,6 @@ export default defineComponent({
   computed: {
     game(): GameModel {
       return this.participant.game;
-    },
-    downloadLogUrl() {
-      return `${paths.END_GAME_LOG}?id=${this.participant.id}`;
     },
     playersInPlace(): Array<PublicPlayerModel> {
       const sorted = this.participant.players.toSorted(function(a:PublicPlayerModel, b:PublicPlayerModel) {
@@ -360,9 +347,6 @@ export default defineComponent({
     contributionsByColor(): Map<Color, PlayerContributions> {
       return new Map(this.playerContributionsData.map((data) => [data.color, data]));
     },
-    constants(): typeof constants {
-      return constants;
-    },
   },
   data(): {tileView: TileView} {
     return {
@@ -372,7 +356,6 @@ export default defineComponent({
   components: {
     Board,
     LogPanel,
-    AppButton,
     MoonBoard,
     PlanetaryTracks,
     DeltaProjectBoard,
