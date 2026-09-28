@@ -201,22 +201,12 @@
   margin: 12px 0 0;
 }
 
-// Button-Farben je Tragweite (tabButtonTone in orOptionsShortLabels.ts): Runde beenden rot, Weitergeben grün.
-// !important nötig, weil die Grundregel .btn ihre Farbe selbst mit !important setzt
+// Button-Farben je Tragweite (tabButtonTone in orOptionsShortLabels.ts): Runde beenden rot, Weitergeben grün
+// (Farben und Mixin in button_tones.less)
 .or-tab-save--danger .btn {
-  border-color: #c0392b !important;
-  background: #c0392b !important;
-
-  &:hover {
-    background: #d8483a !important;
-  }
+  .button-tone(@button-danger, @button-danger-hover);
 }
 
 .or-tab-save--success .btn {
-  border-color: #2e9e4f !important;
-  background: #2e9e4f !important;
-
-  &:hover {
-    background: #38b85d !important;
-  }
+  .button-tone(@button-success, @button-success-hover);
 }

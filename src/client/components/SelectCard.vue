@@ -16,11 +16,14 @@
         </label>
         <div v-if="hasCardWarning()" class="card-warning" v-i18n>{{ warning }}</div>
         <WarningsComponent :warnings="warnings"/>
-        <div v-if="showsave === true" class="nofloat">
+        <div v-if="showsave === true" class="nofloat select-card-actions">
             <AppButton v-if="showSelectAll" @click="toggleSelectAll" type="submit" :title="allSelected ? $t('Deselect All') : $t('Select All')" />
-            <!-- Gesperrt, solange weniger Karten gewählt sind als nötig: zeigt, dass erst eine Karte gewählt werden muss -->
-            <AppButton :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()" />
-            <AppButton :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t('Skip this action')" />
+            <!-- Gesperrt, solange weniger Karten gewählt sind als nötig: zeigt, dass erst eine Karte gewählt werden muss.
+                 Mit Überspringen daneben: Bestätigen grün, Überspringen rot (button_tones.less) -->
+            <AppButton :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
+              :class="{'btn-tone-success': isOptionalToManyCards}" />
+            <AppButton :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t('Skip this action')"
+              class="btn-tone-danger" />
         </div>
     </div>
 </template>
