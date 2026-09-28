@@ -1,0 +1,33 @@
+// Milchglas für Flächen auf dem App-Hintergrund: Spielerleisten, Tabs, Tab-Boxen.
+// Die Flächen sind leicht durchscheinend (@frosted-surface-opacity), der Hintergrund dahinter wird unscharf.
+// Die Unschärfe liegt auf einer eigenen Ebene (::before) statt direkt auf der Fläche: backdrop-filter auf der
+// Fläche selbst würde fest positionierte Kinder (z. B. das Log-Karten-Overlay) an die Fläche binden.
+
+@frosted-surface-opacity: 80%;
+@frosted-surface-blur: 12px;
+
+.frosted-surface() {
+  isolation: isolate; // eigener Stapelkontext: die Unschärfe-Ebene liegt hinter dem Inhalt
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    backdrop-filter: blur(@frosted-surface-blur) saturate(1.15);
+    pointer-events: none;
+  }
+}
+
+.player-info,
+.or-tab,
+.or-tab-panel {
+  .frosted-surface();
+}
+
+// Bezug für die Unschärfe-Ebene (Tabs sind wegen des Badges schon positioniert)
+.player-info,
+.or-tab-panel {
+  position: relative;
+}

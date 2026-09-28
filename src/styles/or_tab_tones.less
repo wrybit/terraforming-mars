@@ -20,7 +20,7 @@ each(@or-tab-tones, {
   @tone: extract(@value, 1);
   @color: extract(@value, 2);
   // Fläche von aktivem Tab und Box: dunkel, aber erkennbar in der Farbe getönt
-  @panel: mix(@color, @or-tab-tone-base, 22%);
+  @panel: fade(mix(@color, @or-tab-tone-base, 22%), @frosted-surface-opacity); // durchscheinend (frosted_surface.less)
 
   // Inaktiv: zarter Farbschleier, damit man die Art der Eingabe auch ohne Auswahl erkennt
   .or-tab--tone-@{tone} {
