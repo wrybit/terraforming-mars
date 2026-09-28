@@ -26,10 +26,11 @@ export type Preferences = {
 
 export type Preference = keyof Preferences;
 
+// Standardwerte des Forks: gelten für alle, die eine Einstellung noch nie selbst geändert haben
 const defaults: Preferences = {
   learner_mode: true,
   enable_sounds: true,
-  magnify_cards: true,
+  magnify_cards: false,
   show_alerts: true,
   lang: 'en',
 
@@ -47,12 +48,12 @@ const defaults: Preferences = {
   hide_discount_on_cards: false,
   // Tags mit Anzahl 0 in der Spielerübersicht ausblenden (ersetzt den früheren Umschalter über den Spielerleisten)
   hide_zero_tags: true,
-  hide_animated_sidebar: false,
+  hide_animated_sidebar: true,
 
   symbol_overlay: false,
   animated_title: true,
 
-  experimental_ui: false,
+  experimental_ui: true,
   debug_view: false,
 };
 
