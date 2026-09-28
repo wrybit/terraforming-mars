@@ -17,7 +17,7 @@ describe('GameBoardView', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
-  it('opens the zoom modal on board click unless a space must be placed', async () => {
+  it('opens the zoom modal on board click unless a space selection is running', async () => {
     const wrapper = shallowMount(GameBoardView, {
       ...globalConfig,
       props: {
@@ -28,14 +28,14 @@ describe('GameBoardView', () => {
     });
     const board = wrapper.findComponent({name: 'Board'});
 
-    // Platzieren aktiv: wählbares Feld vorhanden
-    const selectable = document.createElement('div');
-    selectable.className = 'board-space--available';
-    document.body.appendChild(selectable);
+    // Feldwahl läuft, auch wenn gerade kein Feld markiert ist (nach dem Antippen eines Feldes)
+    const selectSpace = document.createElement('div');
+    selectSpace.className = 'select_space_cont';
+    document.body.appendChild(selectSpace);
     await board.trigger('click');
     expect((wrapper.vm as any).boardZoomOpen).to.be.false;
 
-    selectable.remove();
+    selectSpace.remove();
     await board.trigger('click');
     expect((wrapper.vm as any).boardZoomOpen).to.be.true;
   });

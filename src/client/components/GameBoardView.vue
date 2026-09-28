@@ -2,6 +2,7 @@
 <template>
   <a name="board" class="player_home_anchor hotkey-target"></a>
   <Board
+    ref="columnBoard"
     v-bind="boardProps"
     @toggleTileView="$emit('toggleTileView')"
     @click="onBoardClick"
@@ -11,7 +12,7 @@
 
   <!-- Zweite Brett-Instanz nur zum Ansehen. Die IDs darin (main_board usw.) gibt es dann doppelt;
        getElementById liefert aber das erste Vorkommen, und das Modal hängt am Ende von body -->
-  <BoardZoomModal :open="boardZoomOpen" @close="boardZoomOpen = false">
+  <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" @close="boardZoomOpen = false">
     <Board
       v-bind="boardProps"
       @toggleTileView="$emit('toggleTileView')"
@@ -50,6 +51,7 @@ import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {SpaceId} from '@/common/Types';
 import Board from '@/client/components/Board.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
+import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
@@ -79,6 +81,8 @@ export default defineComponent({
   data() {
     return {
       boardZoomOpen: false,
+      // Startpunkt der Zoom-Animation; erst nach dem Mounten bekannt
+      columnBoardElement: undefined as HTMLElement | undefined,
     };
   },
   components: {
@@ -109,16 +113,17 @@ export default defineComponent({
     },
   },
   methods: {
-    // Klick auf den Mars vergrößert ihn – außer beim Platzieren (dann gibt es wählbare Felder)
+    // Klick auf den Mars vergrößert ihn – außer während einer Feldwahl
     // und auf Bedienelementen des Bretts
     onBoardClick(event: MouseEvent) {
       const target = event.target as HTMLElement | null;
       if (target !== null && target.closest('.hide-tile-button') !== null) {
         return;
       }
-      if (document.querySelector('.board-space--available') !== null) {
+      if (isBoardPlacementActive()) {
         return;
       }
+      this.columnBoardElement = (this.$refs.columnBoard as {$el?: HTMLElement} | undefined)?.$el;
       this.boardZoomOpen = true;
     },
     highlightSpace(spaceId: SpaceId) {

@@ -7,9 +7,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(4px);
+  // Sehr dunkel, damit sich das Brett klar vom Spiel dahinter abhebt
+  background: rgba(0, 0, 0, 0.93);
+  backdrop-filter: blur(6px);
   cursor: zoom-out;
+}
+
+// Träger der Flug-Animation (boardZoomAnimation.ts): skaliert von der linken oberen Ecke aus
+.board-zoom-stage {
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+// Das Brett in der Spalte fliegt scheinbar ins Modal; solange es offen ist, bleibt die Lücke frei
+.board-zoom-origin--hidden {
+  visibility: hidden;
 }
 
 // Innenabstand = Überhang der Brett-Elemente links/rechts von .board-cont (player_home_columns.less),
@@ -42,7 +54,7 @@
   }
 }
 
-// Brett im Spiel: Lupen-Cursor, solange nichts platziert werden muss (dann gibt es wählbare Felder)
-.board-cont--zoomable:not(:has(.board-space--available)) {
+// Brett im Spiel: Lupen-Cursor nur ohne laufende Feldwahl (Selektoren wie in boardPlacementActive.ts)
+body:not(:has(.select_space_cont)) .board-cont--zoomable:not(:has(.board-space--available)) {
   cursor: zoom-in;
 }
