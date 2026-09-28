@@ -392,7 +392,9 @@ each(@players, {
       display: inline-block;
       font-size: 15px;
       font-family: Prototype, sans-serif;
-      color: black;
+      // Weiß mit dunkler Kontur: auf allen Spielerfarben lesbar (schwarz war auf Blau/Rot kaum zu erkennen)
+      color: #fff;
+      text-shadow: 0 1px 1px black, 0 0 2px black;
       font-weight: normal;
       box-shadow: 0 0 1px 1px black;
     }
