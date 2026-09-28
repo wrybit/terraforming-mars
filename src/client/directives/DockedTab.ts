@@ -2,7 +2,7 @@
 // Tab und Box sind durchscheinend (Milchglas): Der obere Boxrand ließe sich nicht vom Tab überdecken,
 // er schiene durch. Deshalb lässt die Box ihren oberen Rand unter dem aktiven Tab aus. Die Lage dieser
 // Lücke kennt nur das DOM – die Direktive misst den Tab und gibt sie als CSS-Variablen an die Box.
-// Nutzung: v-docked-tab auf der Box; die Tab-Leiste (.or-tabs) muss direkt davor stehen.
+// Nutzung: v-docked-tab auf der Box; die Tab-Leiste (.or-tabs) steht direkt davor oder im Element davor.
 import {Directive} from 'vue';
 
 // Attribut statt Klasse: Vue setzt gebundene Klassen bei jedem Rendern neu und würde eine eigene Klasse entfernen
@@ -19,9 +19,16 @@ type Observed = {
 
 const observedPanels = new WeakMap<HTMLElement, Observed>();
 
+// Tab-Leiste direkt vor der Box – oder darin eingebettet (Log: "GEN:"-Titel und Leiste in .log-generations)
 function findTabStrip(panel: HTMLElement): Element | undefined {
   const previous = panel.previousElementSibling;
-  return previous !== null && previous.classList.contains('or-tabs') ? previous : undefined;
+  if (previous === null) {
+    return undefined;
+  }
+  if (previous.classList.contains('or-tabs')) {
+    return previous;
+  }
+  return previous.querySelector(':scope > .or-tabs') ?? undefined;
 }
 
 export function updateDockedTab(panel: HTMLElement): void {
