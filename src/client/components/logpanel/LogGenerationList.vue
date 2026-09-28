@@ -1,6 +1,5 @@
 <template>
   <div class="log-generations">
-    <slot name="title"></slot>
     <!-- Generationen als Tabs ("nur ansehen", grau) über dem Log; das Log darunter ist die zugehörige Box -->
     <div class="log-gen-title" v-i18n>Gen: </div>
     <div class="or-tabs log-gen-tabs" role="tablist">

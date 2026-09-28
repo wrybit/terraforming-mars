@@ -4,13 +4,7 @@
       :max="viewModel.game.generation"
       :selected="selectedGeneration"
       :lastSoloGeneration="lastSoloGeneration"
-      @selected="selectGeneration">
-      <template #title>
-        <h2 :class="titleClasses">
-          <span v-i18n>Game log</span>
-        </h2>
-      </template>
-    </LogGenerationList>
+      @selected="selectGeneration"/>
     <div class="panel log-panel or-tab-panel or-tab-panel--view" role="tabpanel">
       <div id="logpanel-scrollable" class="panel-body" @scroll="updateScrollState" @mouseleave="messageUnhovered">
         <LogMessageComponent v-for="(message, index) in messages" :key="index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @mouseenter="messageHovered(message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
@@ -39,7 +33,6 @@
 import {defineComponent} from 'vue';
 import {LogMessage} from '@/common/logs/LogMessage';
 import {ViewModel} from '@/common/models/PlayerModel';
-import {playerColorClass} from '@/common/utils/utils';
 import {SoundManager} from '@/client/utils/SoundManager';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
@@ -197,11 +190,6 @@ export default defineComponent({
     },
     lastSoloGeneration(): number | undefined {
       return this.viewModel.players.length === 1 ? this.viewModel.game.lastSoloGeneration : undefined;
-    },
-    titleClasses(): string {
-      const classes = ['log-title'];
-      classes.push(playerColorClass(this.viewModel.color, 'shadow'));
-      return classes.join(' ');
     },
     scrollablePanel(): HTMLElement | null {
       return document.getElementById('logpanel-scrollable');

@@ -61,7 +61,6 @@
                WaitingFor bleibt aber eingebunden, weil es den Server nach dem eigenen Zug fragt -->
           <div class="player_home_block player_home_block--actions nofloat" v-show="playerView.waitingFor !== undefined">
             <a name="actions" class="player_home_anchor"></a>
-            <DynamicTitle title="Actions" :color="thisPlayer.color"/>
             <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
           </div>
 
