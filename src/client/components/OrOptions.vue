@@ -6,14 +6,7 @@
     <!-- Aktionsmenü: Tabs mit Kurzlabel und Zähler verfügbarer Einträge; leere Tabs sind abgeschwächt, aber anklickbar -->
     <div v-if="asTabs" class="or-tabs" role="tablist">
       <!-- Handkarten immer als erster Tab (nur Ansicht); vorausgewählt bleibt die erste echte Aktion -->
-      <button type="button" role="tab"
-        :title="$t('Cards In Hand')"
-        :aria-selected="handTabActive"
-        :class="['or-tab', 'or-tab--hand', {'or-tab--active': handTabActive, 'or-tab--empty': handCards.length === 0}]"
-        @click="handTabActive = true">
-        <span class="or-tab-title">{{ $t('Cards In Hand') }}</span>
-        <span class="or-tab-count">{{ handCards.length }}</span>
-      </button>
+      <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
       <!-- Anzeige-Reihenfolge per tabDisplayOrder (Weitergeben/Beenden ans Ende); idx bleibt der Index in displayedOptions -->
       <button v-for="idx in tabDisplayOrder(displayedOptions.map((option) => option.title))" :key="idx"
         :data-option-index="idx"
@@ -75,6 +68,7 @@ import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {fullTabTitle, shortTabLabel, tabButtonLabel, tabDisplayOrder, tabIcon} from '@/client/components/orOptionsShortLabels';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
+import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {CardModel} from '@/common/models/CardModel';
 
@@ -106,6 +100,7 @@ export default defineComponent({
     AppButton,
     OrOptionsTabIcon,
     SortableCards,
+    HandCardsTab,
   },
   setup() {
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);

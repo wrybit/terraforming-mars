@@ -71,17 +71,15 @@
           </div>
 
           <a name="cards" class="player_home_anchor"></a>
-          <!-- Steht die Hand als Tab im Aktionsmenü, entfällt dieser Block (isHandInActionTabs) -->
+          <!-- Ohne Aktions-Tabs (nicht am Zug, Draft, Forschung) stehen die Handkarten im selben Tab-Container, allein.
+               Mit Aktions-Tabs sind sie dort der erste Tab (isHandInActionTabs), dann entfällt dieser Block. -->
           <div class="player_home_block player_home_block--hand" v-if="cardsInHandCount > 0 && !isHandInActionTabs(playerView)" id="shortkey-hand">
-            <div class="hiding-card-button-row">
-              <DynamicTitle title="Cards In Hand" :color="thisPlayer.color"/>
-              <div :class="['hiding-card-button', showHand ? 'hand-toggle' : 'hand-toggle-transparent']" @click.prevent="showHand = !showHand">
-                <div class="played-cards-count">{{cardsInHandCount.toString()}}</div>
-                <div class="played-cards-selection">{{ showHand ? '✔' : '' }}</div>
-              </div>
-              <div class="text-overview" v-i18n>[ toggle cards in hand ]</div>
+            <div class="or-tabs" role="tablist">
+              <HandCardsTab :count="cardsInHandCount" :active="true"/>
             </div>
-            <SortableCards v-show="showHand" :playerId="playerView.id" :cards="allCardsInHand"/>
+            <div class="or-tab-panel or-tab-panel--hand" role="tabpanel">
+              <SortableCards :playerId="playerView.id" :cards="allCardsInHand"/>
+            </div>
           </div>
 
           <!-- Eigene gespielte Karten: wie bei Gegnern über "anzeigen" in der Spielerleiste (Modal) -->
@@ -130,10 +128,10 @@ import GameBoardView from '@/client/components/GameBoardView.vue';
 import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
+import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import TopBar from '@/client/components/TopBar.vue';
 import UndergroundTokens from '@/client/components/underworld/UndergroundTokens.vue';
 import KeyboardShortcuts from '@/client/components/KeyboardShortcuts.vue';
-import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {CardModel} from '@/common/models/CardModel';
@@ -154,24 +152,9 @@ function observeBoardColumnFully(column: HTMLElement): () => void {
   };
 }
 
-type PlayerHomeModel = {
-  showHand: boolean;
-}
-
 export default defineComponent({
   name: 'PlayerHome',
   mixins: [HomeMixin],
-  data(): PlayerHomeModel {
-    const preferences = getPreferences();
-    return {
-      showHand: !preferences.hide_hand,
-    };
-  },
-  watch: {
-    showHand: function hide_hand() {
-      PreferencesManager.INSTANCE.set('hide_hand', !this.showHand);
-    },
-  },
   props: {
     playerView: {
       type: Object as () => PlayerViewModel,
@@ -203,6 +186,7 @@ export default defineComponent({
     Colony,
     LogPanel,
     SortableCards,
+    HandCardsTab,
     TopBar,
     GameBoardView,
     PlayerSetupView,
