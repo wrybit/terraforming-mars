@@ -18,16 +18,6 @@
     <div :class="getPlayerColorCubeClass()+' player_bg_color_' + playerColor"></div>
   </div>
 
-  <a href="#board" :title="$t('Jump to board')">
-      <div class="sidebar_item sidebar_item_shortcut">
-          <i class="sidebar_icon sidebar_icon--board"></i>
-      </div>
-  </a>
-  <a href="#actions" :title="$t('Jump to actions')">
-      <div class="sidebar_item sidebar_item_shortcut">
-          <i class="sidebar_icon sidebar_icon--actions"></i>
-      </div>
-  </a>
   <a href="#cards" :title="$t('Jump to cards')">
       <div class="sidebar_item goto-cards sidebar_item_shortcut-long">
           <i class="sidebar_icon sidebar_icon--cards">
