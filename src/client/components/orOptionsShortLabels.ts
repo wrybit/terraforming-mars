@@ -23,6 +23,11 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   'Send a delegate in an area (from lobby)': 'Delegate (lobby)',
   'Use CEO once per game action': 'CEO action',
   'Undo last action': 'Undo',
+  // Startauswahl (SelectInitialCards, Titel aus common/inputs/SelectInitialCards.ts)
+  'Select corporation': 'Corporation',
+  'Select 2 Prelude cards': 'Prelude cards',
+  'Select CEO': 'CEO',
+  'Select initial cards to buy': 'Buy cards',
   // Eingaben außerhalb des Aktionsmenüs (WaitingForTabs)
   'Select card(s) to buy': 'Buy cards',
   'Select a card to keep': 'Keep card',

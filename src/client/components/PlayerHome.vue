@@ -30,7 +30,8 @@
       :spectatorId = "game.spectatorId"
       :expectedPurgeTimeMs = "game.expectedPurgeTimeMs"/>
 
-    <div v-if="thisPlayer.tableau.length > 0">
+    <!-- Zwei-Spalten-Layout auch in der Startphase (Startkarten wählen): links Auswahl, rechts Brett und Log -->
+    <div>
       <!-- Zwei-Spalten-Layout: Brett steht im DOM zuerst (Hotkey-Reihenfolge, schmale Screens), wird per CSS rechts platziert -->
       <div class="player-home-columns">
         <div class="player-home-columns__board" :ref="trackBoardColumn">
@@ -55,6 +56,10 @@
           <a class="hotkey-target"></a>
           <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="playerView" v-trim-whitespace id="shortkey-playersoverview"/>
 
+          <!-- Startphase: Startkarten-Auswahl bzw. Draft statt Aktionsmenü und Handkarten -->
+          <PlayerSetupView v-if="isSetupPhase" :playerView="playerView"/>
+
+          <template v-else>
           <a class="hotkey-target"></a>
           <!-- Ohne eigene Eingabe unsichtbar (der Hinweis, wer am Zug ist, steht dann als roter Tab bei den Handkarten);
                WaitingFor bleibt aber eingebunden, weil es den Server nach dem eigenen Zug fragt -->
@@ -84,6 +89,7 @@
           </div>
 
           <!-- Eigene gespielte Karten: wie bei Gegnern über "anzeigen" in der Spielerleiste (Modal) -->
+          </template>
         </div>
       </div>
     </div>
@@ -92,10 +98,6 @@
       <DynamicTitle title="Claimed Underground Resource Tokens" :color="thisPlayer.color"/>
       <UndergroundTokens :underworldData="thisPlayer.underworldData"/>
     </div>
-
-    <template v-if="thisPlayer.tableau.length === 0">
-      <PlayerSetupView :playerView="playerView" :tileView="tileView" @toggleTileView="cycleTileView()"/>
-    </template>
 
     <div v-if="game.colonies.length > 0" class="player_home_block" ref="colonies" id="shortkey-colonies">
       <a name="colonies" class="player_home_anchor hotkey-target"></a>
@@ -165,13 +167,16 @@ export default defineComponent({
     },
   },
   computed: {
+    // Startphase: noch keine Karte ausgespielt (Konzern, Präludien, Startkarten werden gewählt)
+    isSetupPhase(): boolean {
+      return this.thisPlayer.tableau.length === 0;
+    },
     // Festes App-Layout (player_home_fixed.less): nur wenn unter den Spalten nichts mehr steht,
     // sonst wären Kolonien, Untergrund-Marker usw. nicht mehr erreichbar
     usesFixedLayout(): boolean {
       return this.game.phase !== 'end' &&
         this.game.colonies.length === 0 &&
-        this.thisPlayer.underworldData.tokens.length === 0 &&
-        this.thisPlayer.tableau.length > 0;
+        this.thisPlayer.underworldData.tokens.length === 0;
     },
     thisPlayer(): PublicPlayerModel {
       return this.playerView.thisPlayer;

@@ -12,8 +12,9 @@
     </template>
   </template>
   <div v-if="waitingfor !== undefined" class="wf-root">
-    <!-- Aktionsmenü baut seine Tabs selbst (OrOptions); jede andere Eingabe kommt in den Tab-Container -->
-    <PlayerInputFactory v-if="waitingfor.type === 'or'"
+    <!-- Aktionsmenü (OrOptions) und Startauswahl (SelectInitialCards) bauen ihre Tabs selbst;
+         jede andere Eingabe kommt in den Tab-Container -->
+    <PlayerInputFactory v-if="waitingfor.type === 'or' || waitingfor.type === 'initialCards'"
                           :players="playerView.players"
                           :playerView="playerView"
                           :playerinput="waitingfor"

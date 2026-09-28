@@ -4,27 +4,48 @@
       message="Continue without buying any project cards?"
       ref="confirmation"
       @accept="confirmSelection" />
-    <SelectCard :playerView="playerView" :playerinput="corpCardOption" :showtitle="true" :onsave="noop" @cardschanged="corporationChanged" />
-    <div v-if="playerCanChooseAridor" class="player_home_colony_cont">
-      <div v-i18n>These are the colony tiles Aridor may choose from:</div>
-      <div class="discarded-colonies-for-aridor">
-        <div class="player_home_colony small_colony" v-for="colonyName in playerView.game.discardedColonies" :key="colonyName">
-          <Colony :colony="getColony(colonyName)" :active="getColony(colonyName).isActive"/>
+    <!-- Teile der Startauswahl als Tabs (Stil wie das Aktionsmenü, or_options_tabs.less).
+         Badge: gewählt/benötigt, grün sobald erledigt. Alle Auswahlen bleiben eingebunden (v-show), damit nichts verloren geht. -->
+    <div class="or-tabs" role="tablist">
+      <button v-for="section in sections" :key="section.key" type="button" role="tab"
+        :title="$t(section.title)"
+        :aria-selected="activeSection === section.key"
+        :class="['or-tab', {'or-tab--active': activeSection === section.key, 'or-tab--done': section.done}]"
+        @click="activeSection = section.key">
+        <span class="or-tab-title">{{ $t(shortTabLabel(section.title)) }}</span>
+        <span class="or-tab-count">{{ section.badge }}</span>
+      </button>
+    </div>
+
+    <div class="or-tab-panel" role="tabpanel">
+      <div v-show="activeSection === 'corporation'">
+        <SelectCard :playerView="playerView" :playerinput="corpCardOption" :showtitle="true" :onsave="noop" @cardschanged="corporationChanged" />
+        <div v-if="playerCanChooseAridor" class="player_home_colony_cont">
+          <div v-i18n>These are the colony tiles Aridor may choose from:</div>
+          <div class="discarded-colonies-for-aridor">
+            <div class="player_home_colony small_colony" v-for="colonyName in playerView.game.discardedColonies" :key="colonyName">
+              <Colony :colony="getColony(colonyName)" :active="getColony(colonyName).isActive"/>
+            </div>
+          </div>
         </div>
       </div>
+      <SelectCard v-if="hasPrelude" v-show="activeSection === 'prelude'" :playerView="playerView" :playerinput="preludeCardOption" :onsave="noop" :showtitle="true" @cardschanged="preludesChanged" />
+      <SelectCard v-if="hasCeo" v-show="activeSection === 'ceo'" :playerView="playerView" :playerinput="ceoCardOption" :onsave="noop" :showtitle="true" @cardschanged="ceosChanged" />
+      <SelectCard v-show="activeSection === 'projects'" :playerView="playerView" :playerinput="projectCardOption" :onsave="noop" :showtitle="true" @cardschanged="cardsChanged" />
     </div>
-    <SelectCard v-if="hasPrelude" :playerView="playerView" :playerinput="preludeCardOption" :onsave="noop" :showtitle="true" @cardschanged="preludesChanged" />
-    <SelectCard v-if="hasCeo" :playerView="playerView" :playerinput="ceoCardOption" :onsave="noop" :showtitle="true" @cardschanged="ceosChanged" />
-    <SelectCard :playerView="playerView" :playerinput="projectCardOption" :onsave="noop" :showtitle="true" @cardschanged="cardsChanged" />
-    <template v-if="selectedCorporations.length === 1">
-      <div><span v-i18n>Starting Megacredits:</span> <div class="megacredits">{{getStartingMegacredits()}}</div></div>
-      <div v-if="hasPrelude"><span v-i18n>After Preludes:</span> <div class="megacredits">{{getStartingMegacredits() + getAfterPreludes()}}</div></div>
-    </template>
-    <div v-if="warning !== undefined" class="tm-warning">
-      <label class="label label-error">{{ $t(warning) }}</label>
+
+    <!-- Unter der Box: Start-M€, Warnung und Start – gelten für die ganze Auswahl, nicht für einen Tab -->
+    <div class="select-initial-cards-footer">
+      <template v-if="selectedCorporations.length === 1">
+        <div><span v-i18n>Starting Megacredits:</span> <div class="megacredits">{{getStartingMegacredits()}}</div></div>
+        <div v-if="hasPrelude"><span v-i18n>After Preludes:</span> <div class="megacredits">{{getStartingMegacredits() + getAfterPreludes()}}</div></div>
+      </template>
+      <div v-if="warning !== undefined" class="tm-warning">
+        <label class="label label-error">{{ $t(warning) }}</label>
+      </div>
+      <!-- :key=warning is a way of validing that the state of the button should change. If the warning changes, or disappears, that's a signal that the button might change. -->
+      <AppButton :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel"/>
     </div>
-    <!-- :key=warning is a way of validing that the state of the button should change. If the warning changes, or disappears, that's a signal that the button might change. -->
-    <AppButton :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel"/>
   </div>
 </template>
 
@@ -49,6 +70,7 @@ import {ColonyName} from '@/common/colonies/ColonyName';
 import {ColonyModel, simpleColonyModel} from '@/common/models/ColonyModel';
 import * as titles from '@/common/inputs/SelectInitialCards';
 import {sum} from '@/common/utils/utils';
+import {shortTabLabel} from '@/client/components/orOptionsShortLabels';
 
 
 type DataModel = {
@@ -60,7 +82,18 @@ type DataModel = {
   selectedPreludes: Array<CardName>,
   valid: boolean,
   warning: string | undefined,
+  // Sichtbarer Tab der Startauswahl
+  activeSection: InitialCardsSection,
 }
+
+type InitialCardsSection = 'corporation' | 'prelude' | 'ceo' | 'projects';
+
+type SectionTab = {
+  key: InitialCardsSection,
+  title: string,
+  badge: string,
+  done: boolean,
+};
 
 type Refs = {
   confirmation: InstanceType<typeof ConfirmDialog>;
@@ -108,9 +141,21 @@ export default defineComponent({
       selectedPreludes: [],
       valid: false,
       warning: undefined,
+      activeSection: 'corporation',
     };
   },
   methods: {
+    shortTabLabel,
+    // Badge "gewählt/benötigt" bzw. nur "gewählt", wenn es keine Pflichtanzahl gibt (Karten kaufen)
+    sectionTab(key: InitialCardsSection, input: SelectCardModel, selected: number): SectionTab {
+      const required = input.min > 0 ? input.min : undefined;
+      return {
+        key,
+        title: typeof input.title === 'string' ? input.title : input.title.message,
+        badge: required === undefined ? String(selected) : selected + '/' + required,
+        done: required !== undefined && selected >= required,
+      };
+    },
     noop() {
       throw new Error('should not be called');
     },
@@ -322,6 +367,18 @@ export default defineComponent({
     },
   },
   computed: {
+    // Tabs der Startauswahl in Spielreihenfolge; Präludien und CEO nur, wenn die Erweiterung aktiv ist
+    sections(): Array<SectionTab> {
+      const tabs = [this.sectionTab('corporation', this.corpCardOption, this.selectedCorporations.length)];
+      if (this.hasPrelude) {
+        tabs.push(this.sectionTab('prelude', this.preludeCardOption, this.selectedPreludes.length));
+      }
+      if (this.hasCeo) {
+        tabs.push(this.sectionTab('ceo', this.ceoCardOption, this.selectedCeos.length));
+      }
+      tabs.push(this.sectionTab('projects', this.projectCardOption, this.selectedCards.length));
+      return tabs;
+    },
     typedRefs(): Refs {
       return this.$refs as Refs;
     },

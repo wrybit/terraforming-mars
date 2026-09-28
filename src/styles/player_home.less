@@ -763,6 +763,30 @@ each(@players, {
   }
 }
 
+// Leiste unter den Tabs der Startauswahl (SelectInitialCards): Start-M€, Warnung, Start in einer Zeile
+.select-initial-cards-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  margin-top: 12px;
+
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tm-warning {
+    margin: 0;
+  }
+
+  // Start rechts außen, abgesetzt von den Infos
+  > .btn {
+    margin-left: auto;
+  }
+}
+
 #spectator-link + span {
   div {
     width: calc(100% - 450px);

@@ -12,14 +12,15 @@ export function observeBoardColumn(column: HTMLElement): () => void {
       column.getBoundingClientRect().left + 'px',
     );
   };
-  // Spaltenbreite ändert sich mit dem Inhalt, die Position mit der Fensterbreite
-  const resizeObserver = new ResizeObserver(update);
-  resizeObserver.observe(column);
+  // Spaltenbreite ändert sich mit dem Inhalt, die Position mit der Fensterbreite.
+  // Ohne ResizeObserver (Testumgebung) nur das Fenster beobachten
+  const resizeObserver = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(update);
+  resizeObserver?.observe(column);
   window.addEventListener('resize', update);
   update();
 
   return () => {
-    resizeObserver.disconnect();
+    resizeObserver?.disconnect();
     window.removeEventListener('resize', update);
     document.documentElement.style.removeProperty(BOARD_COLUMN_LEFT_VARIABLE);
   };

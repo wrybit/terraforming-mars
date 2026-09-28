@@ -88,6 +88,28 @@
     }
   }
 
+  // Startphase: Startkarten-Auswahl füllt den Rest wie das Aktionsmenü
+  .player-home--fixed .player-home-columns__main > .player_home_block--setup {
+    flex: 1 1 0;
+    min-height: @player-home-fixed-panel-min-height;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+
+    > div,
+    .wf-root,
+    .wf-root > .select-initial-cards {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .select-initial-cards-footer {
+      flex: none;
+    }
+  }
+
   // Kette bis zur Tab-Box: WaitingFor-Hülle → wf-root → Eingabe (OrOptions / WaitingForTabs)
   .player-home--fixed .player_home_block--actions {
     > div,

@@ -10,7 +10,6 @@ describe('PlayerSetupView', () => {
       ...globalConfig,
       props: {
         playerView: fakePlayerViewModel(),
-        tileView: 'show',
       },
     });
     expect(wrapper.exists()).to.be.true;
