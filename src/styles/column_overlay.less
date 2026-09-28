@@ -3,12 +3,14 @@
 // Rundum etwas Abstand zum Rand, Hintergrund als dunkles Milchglas.
 
 @column-overlay-gap: 16px;
+// Über allem in der rechten Spalte, auch über der Icon-Gruppe oben rechts (sidebar_toolbar.less)
+@column-overlay-z-index: 120;
 
 // Position: über der rechten Spalte (linke Kante aus boardColumnPosition.ts), mit Abstand zu allen Rändern
 .column-overlay-position() {
   position: fixed;
   inset: @column-overlay-gap @column-overlay-gap @column-overlay-gap calc(var(--board-column-left, 0px) + @column-overlay-gap);
-  z-index: 120;
+  z-index: @column-overlay-z-index;
 }
 
 // Fläche: halbtransparentes Milchglas, deutlich heller als der schwarze Seitenhintergrund,

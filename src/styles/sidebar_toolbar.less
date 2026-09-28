@@ -29,7 +29,7 @@
       "colonies settings";
     gap: @toolbar-gap;
     align-items: start;
-    z-index: 130; // über den Overlays der rechten Spalte (column_overlay.less: 120)
+    z-index: @column-overlay-z-index - 10; // unter den Overlays der rechten Spalte – sonst ragen die Icons hinein
     background: none; // keine Leistenfläche mehr (preferences_acting_player / _nonacting_player)
   }
 
