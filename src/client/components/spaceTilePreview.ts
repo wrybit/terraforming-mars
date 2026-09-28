@@ -16,7 +16,8 @@ export function previewTileForSpaceInput(title: string | Message): PreviewTile |
   return TILE_PATTERNS.find(([pattern]) => pattern.test(key))?.[1];
 }
 
-// Bild aus assets/tiles (gleiche Dateien wie das Brett)
-export function previewTileImage(tile: PreviewTile): string {
-  return 'assets/tiles/' + tile + '.png';
+// Gleiche Klasse wie ein gelegtes Plättchen auf dem Brett (board.less: .board-space-tile--<tile>),
+// damit Bildausschnitt und Größe exakt übereinstimmen
+export function previewTileClass(tile: PreviewTile): string {
+  return 'board-space-tile--' + tile;
 }

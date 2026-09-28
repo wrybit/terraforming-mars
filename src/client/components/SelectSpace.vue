@@ -24,7 +24,7 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {SelectSpaceResponse} from '@/common/inputs/InputResponse';
 import SpaceConfirmPopover from '@/client/components/SpaceConfirmPopover.vue';
-import {previewTileForSpaceInput, previewTileImage} from '@/client/components/spaceTilePreview';
+import {previewTileClass, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
 
 const PREVIEW_CLASS = 'space-tile-preview';
 import GoToMap from '@/client/components/waitingFor/GoToMap.vue';
@@ -92,17 +92,28 @@ export default defineComponent({
         }
       });
     },
-    // Halbtransparentes Plättchen mit lila Schein auf dem Feld, solange die Bestätigung offen ist
+    // Vorschau des Plättchens über dem Feld, solange die Bestätigung offen ist.
+    // Sie liegt deckungsgleich über dem Feld im Brett statt im Feld selbst: das Feld ist als Sechseck
+    // zugeschnitten (clip-path) und würde Schatten und Schein abschneiden.
     showTilePreview(tile: HTMLElement) {
       this.removeTilePreview();
       const previewTile = previewTileForSpaceInput(this.playerinput.title);
-      if (previewTile === undefined) {
+      const board = tile.parentElement;
+      if (previewTile === undefined || board === null) {
         return;
       }
+      // Geschwister des Feldes mit exakt dessen berechneter Lage und Größe (gleicher Bezugsrahmen).
+      // Die Felder teilen sich left/top; ihre Lage auf dem Brett steckt in margin-left/-top (board.less)
+      const spaceStyle = getComputedStyle(tile);
       const preview = document.createElement('div');
-      preview.className = PREVIEW_CLASS;
-      preview.style.backgroundImage = `url(${previewTileImage(previewTile)})`;
-      tile.appendChild(preview);
+      preview.className = PREVIEW_CLASS + ' ' + previewTileClass(previewTile);
+      preview.style.left = spaceStyle.left;
+      preview.style.top = spaceStyle.top;
+      preview.style.marginLeft = spaceStyle.marginLeft;
+      preview.style.marginTop = spaceStyle.marginTop;
+      preview.style.width = spaceStyle.width;
+      preview.style.height = spaceStyle.height;
+      board.appendChild(preview);
     },
     removeTilePreview() {
       document.querySelectorAll('.' + PREVIEW_CLASS).forEach((preview) => preview.remove());
