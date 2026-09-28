@@ -134,6 +134,11 @@ export function tabIcon(title: string | Message): TabIcon | undefined {
   return TAB_ICONS[titleKey(title)];
 }
 
+// Weitergeben/Beenden: stehen rechtsbündig abgesetzt von den übrigen Aktionen (or_options_tabs.less)
+export function isEndTab(title: string | Message): boolean {
+  return LAST_TABS.includes(titleKey(title));
+}
+
 // Anzeige-Reihenfolge der Tabs als Liste von Indizes; alle anderen behalten ihre Server-Reihenfolge
 export function tabDisplayOrder(titles: ReadonlyArray<string | Message>): Array<number> {
   const rank = (index: number) => LAST_TABS.indexOf(titleKey(titles[index]));

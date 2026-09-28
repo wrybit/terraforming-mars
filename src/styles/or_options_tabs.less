@@ -100,6 +100,15 @@
   margin-right: @or-tabs-hand-spacing;
 }
 
+// Aktionsmenü: Handkarten links, Weitergeben/Beenden rechts, die übrigen Tabs mittig dazwischen.
+// Zwei automatische Ränder teilen den freien Platz gleichmäßig links und rechts der mittleren Gruppe.
+.or-tabs--action-menu {
+  .or-tab--hand + .or-tab:not(.or-tab--end),
+  .or-tab:not(.or-tab--end) + .or-tab--end {
+    margin-left: auto;
+  }
+}
+
 .or-tab--view.or-tab--active .or-tab-count {
   background: @or-tabs-view-accent;
 }
