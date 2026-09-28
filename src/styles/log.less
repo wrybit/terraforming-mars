@@ -1,3 +1,7 @@
+// Schriftgröße der Log-Einträge; Karten-, Feld- und Plättchen-Namen darin (fett, Großbuchstaben) 1px kleiner
+@log-font-size: 15px;
+@log-pill-font-size: @log-font-size - 1px;
+
 .log-generations {
   display: flex;
   align-items: flex-end; // Tabs sitzen unten auf der Box
@@ -10,7 +14,7 @@
     font-size: 16px;
     color: #a4a6ae;
   }
-  // Tab-Leiste liegt 1px über der Box (siehe or_options_tabs.less), hier ohne den Badge-Abstand oben
+  // Tab-Leiste sitzt direkt auf der Box (siehe or_options_tabs.less), hier ohne den Badge-Abstand oben
   .log-gen-tabs {
     margin-top: 0;
   }
@@ -20,7 +24,7 @@
 .log-panel.or-tab-panel {
   height: 240px;
   max-height: 240px;
-  font-size: 18px;
+  font-size: @log-font-size;
   padding: 5px;
   max-width: 860px;
   position: relative;
@@ -174,7 +178,7 @@ each(@players, {
   border-radius: 2px;
   font-family: Ubuntu, sans-serif;
   font-weight: bold;
-  font-size: 16px;
+  font-size: @log-pill-font-size;
   text-transform: uppercase;
 }
 
@@ -195,7 +199,7 @@ each(@players, {
   border-radius: 2px;
   font-family: Ubuntu, sans-serif;
   font-weight: bold;
-  font-size: 16px;
+  font-size: @log-pill-font-size;
   text-transform: uppercase;
 }
 
@@ -207,7 +211,7 @@ each(@players, {
   border-radius: 2px;
   font-family: Ubuntu, sans-serif;
   font-weight: bold;
-  font-size: 16px;
+  font-size: @log-pill-font-size;
   text-transform: uppercase;
 }
 
