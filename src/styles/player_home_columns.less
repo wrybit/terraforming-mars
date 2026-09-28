@@ -62,10 +62,8 @@
   // Gespielte Karten eines Gegners ("anzeigen") als Modal über der rechten Spalte (Brett + Log),
   // statt als Block über den Spielerleisten. Der Container ist durchklickbar, nur das geöffnete Modal fängt Klicks.
   .player-home-columns__main .other_player {
-    position: fixed;
-    // oben/rechts/unten/links; links = Kante der rechten Spalte, gemessen in boardColumnPosition.ts
-    inset: @player-home-sticky-top 0 @player-home-sticky-top var(--board-column-left);
-    z-index: 120;
+    // Position und Milchglas-Optik wie alle Overlays der rechten Spalte (column_overlay.less)
+    .column-overlay-position();
     display: flex;
     flex-direction: column;
     pointer-events: none;
@@ -82,8 +80,8 @@
       display: flex;
       flex-direction: column;
       pointer-events: auto;
-      border-radius: 8px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+      overflow: hidden; // Kopfzeile folgt den runden Ecken
+      .column-overlay-surface();
     }
 
     .other_player_cont {
@@ -92,6 +90,7 @@
       max-height: none;
       margin: 0;
       padding: 10px 0 0 20px;
+      background: transparent; // Milchglas der Hülle scheint durch
     }
   }
 

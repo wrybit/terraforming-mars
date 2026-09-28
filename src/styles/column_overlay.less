@@ -1,0 +1,21 @@
+// Overlays über der rechten Spalte (Brett, Meilensteine, Log): gespielte Karten eines Spielers
+// (player_home_columns.less, .other_player) und Log-Zeilen mit vielen Karten (log.less, .card-panel--modal).
+// Rundum etwas Abstand zum Rand, Hintergrund als dunkles Milchglas.
+
+@column-overlay-gap: 16px;
+
+// Position: über der rechten Spalte (linke Kante aus boardColumnPosition.ts), mit Abstand zu allen Rändern
+.column-overlay-position() {
+  position: fixed;
+  inset: @column-overlay-gap @column-overlay-gap @column-overlay-gap calc(var(--board-column-left, 0px) + @column-overlay-gap);
+  z-index: 120;
+}
+
+// Fläche: dunkles, halbtransparentes Milchglas
+.column-overlay-surface() {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(20, 21, 28, 0.72);
+  backdrop-filter: blur(16px) saturate(1.2);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+}
