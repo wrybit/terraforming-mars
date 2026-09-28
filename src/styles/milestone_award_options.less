@@ -12,12 +12,18 @@
   position: relative;
   margin: 0;
   border-radius: 10px;
+  overflow: hidden; // Bild folgt den runden Ecken; der Auswahl-Schein (box-shadow) bleibt sichtbar
   cursor: pointer;
   transition: transform 0.12s;
 
   &:hover {
     transform: translateY(-2px);
   }
+}
+
+// Auf dem Brett schließen unten die Punkte-Zeilen an (daher dort nur oben rund); hier ist die Kachel allein
+.ma-options .ma-option .ma-name {
+  border-radius: 10px;
 }
 
 // Radio nur für Tastatur und Screenreader, sichtbar ist die Kachel
