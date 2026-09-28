@@ -3,6 +3,10 @@
   padding-top: 20px;
   background: linear-gradient(transparent, #000), url(./assets/stars.jpg);
   background-attachment: fixed;
+  // Umschließt auch gefloatete Karten (Handkarten) und füllt mindestens das Fenster,
+  // sonst endet der Sternenhintergrund vor dem Inhalt und darunter scheint das Grau von body durch
+  display: flow-root;
+  min-height: 100vh;
 
   > div:not([class]), > div:not([class]) > div.player_home_block:first-child {
     > a:after {
