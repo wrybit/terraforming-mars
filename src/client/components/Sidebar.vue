@@ -1,9 +1,5 @@
 <template>
 <div :class="'sidebar_cont sidebar '+getSideBarClass()">
-  <div class="tm" :title="$t('Generation Marker')">
-    <div class="gen-text" v-i18n>GEN</div>
-    <div class="gen-marker">{{ getGenMarker() }}</div>
-  </div>
   <div v-if="gameOptions.expansions.turmoil" :title="$t('Ruling Party')">
     <div :class="'party-name party-name-indicator party-name--'+rulingPartyToCss()"> <span v-i18n>{{ getRulingParty() }}</span></div>
   </div>
@@ -91,10 +87,6 @@ export default defineComponent({
       type: String as () => Color,
       required: true,
     },
-    generation: {
-      type: Number,
-      required: true,
-    },
     coloniesCount: {
       type: Number,
       required: true,
@@ -172,9 +164,6 @@ export default defineComponent({
     },
     getSideBarClass(): string {
       return this.actingPlayer && (getPreferences().hide_animated_sidebar === false) ? 'preferences_acting_player' : 'preferences_nonacting_player';
-    },
-    getGenMarker(): string {
-      return `${this.generation}`;
     },
     rulingPartyToCss(): string {
       if (this.turmoil?.ruling === undefined) {

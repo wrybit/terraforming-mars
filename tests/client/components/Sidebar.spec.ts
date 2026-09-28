@@ -25,7 +25,6 @@ describe('Sidebar', () => {
         gameOptions: fakeGameOptionsModel(),
         actingPlayer: true,
         playerColor: 'blue',
-        generation: 1,
         coloniesCount: 0,
         temperature: -30,
         oxygen: 0,

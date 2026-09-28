@@ -14,7 +14,6 @@
     <Sidebar v-trim-whitespace
       :actingPlayer="isPlayerActing(playerView)"
       :playerColor="thisPlayer.color"
-      :generation="game.generation"
       :coloniesCount="game.colonies.length"
       :temperature = "game.temperature"
       :oxygen = "game.oxygenLevel"
