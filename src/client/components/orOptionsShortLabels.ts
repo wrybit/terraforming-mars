@@ -14,7 +14,7 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   'Claim a milestone': 'Milestone',
   'Fund an award (${0} M€)': 'Award (${0} M€)',
   'Take first action of ${0} corporation': 'Corporation action',
-  'Convert ${0} plants into greenery': 'Greenery',
+  'Convert ${0} plants into greenery': 'Place greenery',
   'Convert 8 heat into temperature': 'Temperature',
   'Convert 6 heat into temperature': 'Temperature',
   'Trade with a colony tile': 'Trade',
@@ -71,6 +71,12 @@ export type TabButtonTone = 'danger' | 'success';
 const BUTTON_TONES: Readonly<Record<string, TabButtonTone>> = {
   'Pass for this generation': 'danger', // Runde beenden: für diese Generation raus
   'End Turn': 'success', // Weitergeben: Zug regulär abgeben
+  'Convert ${0} plants into greenery': 'success', // Grünfläche platzieren: grün wie das Plättchen
+};
+
+// Bild des Plättchens, das eine Feldauswahl platziert (assets/tiles/<name>.png), für die Erklärung in der Box
+const TAB_TILE_IMAGES: Readonly<Record<string, string>> = {
+  'Convert ${0} plants into greenery': 'greenery',
 };
 
 function titleKey(title: string | Message): string {
@@ -105,6 +111,11 @@ export function inputTabLabel(input: PlayerInputModel): string | Message {
     return shortTabLabel(input.title);
   }
   return INPUT_TYPE_LABELS[input.type] ?? DEFAULT_INPUT_LABEL;
+}
+
+export function tabTileImage(title: string | Message): string | undefined {
+  const tile = TAB_TILE_IMAGES[titleKey(title)];
+  return tile === undefined ? undefined : 'assets/tiles/' + tile + '.png';
 }
 
 export function tabIcon(title: string | Message): TabIcon | undefined {
