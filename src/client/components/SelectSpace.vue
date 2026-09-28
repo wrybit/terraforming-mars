@@ -24,6 +24,9 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {SelectSpaceResponse} from '@/common/inputs/InputResponse';
 import SpaceConfirmPopover from '@/client/components/SpaceConfirmPopover.vue';
+import {previewTileForSpaceInput, previewTileImage} from '@/client/components/spaceTilePreview';
+
+const PREVIEW_CLASS = 'space-tile-preview';
 import GoToMap from '@/client/components/waitingFor/GoToMap.vue';
 import {SpaceId} from '@/common/Types';
 
@@ -89,8 +92,24 @@ export default defineComponent({
         }
       });
     },
+    // Halbtransparentes Plättchen mit lila Schein auf dem Feld, solange die Bestätigung offen ist
+    showTilePreview(tile: HTMLElement) {
+      this.removeTilePreview();
+      const previewTile = previewTileForSpaceInput(this.playerinput.title);
+      if (previewTile === undefined) {
+        return;
+      }
+      const preview = document.createElement('div');
+      preview.className = PREVIEW_CLASS;
+      preview.style.backgroundImage = `url(${previewTileImage(previewTile)})`;
+      tile.appendChild(preview);
+    },
+    removeTilePreview() {
+      document.querySelectorAll('.' + PREVIEW_CLASS).forEach((preview) => preview.remove());
+    },
     cancelPlacement() {
       this.confirmAnchor = undefined;
+      this.removeTilePreview();
       if (this.selectedTile === undefined) {
         throw new Error('unexpected, no tile selected!');
       }
@@ -99,6 +118,7 @@ export default defineComponent({
     },
     confirmPlacement() {
       this.confirmAnchor = undefined;
+      this.removeTilePreview();
       const tiles = this.getSelectableSpaces();
       tiles.forEach((tile) => {
         tile.onclick = null;
@@ -150,6 +170,7 @@ export default defineComponent({
         this.confirmPlacement();
       } else {
         this.confirmAnchor = tile;
+        this.showTilePreview(tile);
       }
     },
     saveData() {
@@ -159,6 +180,9 @@ export default defineComponent({
       }
       this.onsave({type: 'space', spaceId: this.spaceId});
     },
+  },
+  beforeUnmount() {
+    this.removeTilePreview();
   },
   mounted() {
     this.disableAnimation();
