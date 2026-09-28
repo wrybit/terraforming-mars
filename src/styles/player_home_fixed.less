@@ -6,6 +6,9 @@
 @player-home-fixed-top: 20px; // Innenabstand oben von #player-home (player_home.less)
 @player-home-fixed-bottom: 10px;
 @player-home-fixed-height: calc(100vh - @player-home-fixed-top - @player-home-fixed-bottom);
+// Mindesthöhe der Tab-Box: bei vielen Spielern (bis zu 5 Leisten) bleibt sie benutzbar;
+// reicht die Höhe nicht, scrollt die linke Spalte als Ganzes (Seite bleibt fest)
+@player-home-fixed-panel-min-height: 320px;
 
 @media only screen and (min-width: @player-home-columns-min-width) {
   #player-home.player-home--fixed {
@@ -60,7 +63,7 @@
     min-height: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: hidden auto; // Ausweich-Scrollen bei vielen Spielern (siehe Mindesthöhe der Tab-Box)
 
     > * {
       flex: none;
@@ -70,7 +73,7 @@
     > .player_home_block--actions,
     > .player_home_block--hand {
       flex: 1 1 0;
-      min-height: 0;
+      min-height: @player-home-fixed-panel-min-height;
       display: flex;
       flex-direction: column;
       margin-bottom: 0;
@@ -79,6 +82,7 @@
     // Gedraftete Karten (Draft-Phase) begrenzt, damit die Tab-Box darunter Platz behält
     > .player_home_block--hand:not(#shortkey-hand) {
       flex: 0 1 auto;
+      min-height: 0;
       max-height: 35%;
       overflow-y: auto;
     }
