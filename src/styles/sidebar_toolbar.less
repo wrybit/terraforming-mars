@@ -1,0 +1,123 @@
+// Ab dem Zwei-Spalten-Layout wird die linke Seitenleiste (Sidebar.vue) zur Icon-Gruppe oben rechts:
+// links die Karten-Kachel (Nachziehstapel/Ablage), daneben untereinander Sprache, Spieldetails, Hilfe, Einstellungen.
+// Temperatur, Sauerstoff und Ozeane stehen am Mars, der Spielerwürfel ist durch die Leistenfarben überflüssig.
+// Icons kleiner, jedes auf einem Milchglas-Button.
+
+@toolbar-button-size: 40px;
+@toolbar-icon-size: 26px;
+@toolbar-gap: 6px;
+
+@media only screen and (min-width: @player-home-columns-min-width) {
+  // Der freigehaltene Platz links für die Seitenleiste entfällt
+  .main-container:has(#player-home),
+  .main-container:has(#spectator-home) {
+    margin-left: 0;
+  }
+
+  .sidebar_cont {
+    top: 10px;
+    right: 10px;
+    left: auto;
+    width: auto;
+    height: auto;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      "cards language"
+      "cards info"
+      "colonies help"
+      ". settings";
+    gap: @toolbar-gap;
+    align-items: start;
+    z-index: 130; // über den Overlays der rechten Spalte (column_overlay.less: 120)
+    background: none; // keine Leistenfläche mehr (preferences_acting_player / _nonacting_player)
+  }
+
+  // Werte, Spielerwürfel und Turmoil-Partei stehen anderswo (Mars, Spielerleisten, Turmoil am Brett)
+  // .sidebar_item mit: sonst gewinnt die Button-Regel unten (display: flex) bei gleicher Spezifität
+  .sidebar_cont .global_params,
+  .sidebar_cont .sidebar_item.preferences_player,
+  .sidebar_cont > div:has(.party-name-indicator) {
+    display: none;
+  }
+
+  .sidebar_cont > a:has(.goto-cards) {
+    grid-area: cards;
+  }
+
+  .sidebar_cont > a:has(.sidebar_icon--colonies) {
+    grid-area: colonies;
+  }
+
+  .sidebar_cont .sidebar_item--language {
+    grid-area: language;
+  }
+
+  .sidebar_cont .sidebar_item--info {
+    grid-area: info;
+  }
+
+  .sidebar_cont .sidebar_item--help {
+    grid-area: help;
+  }
+
+  .sidebar_cont .sidebar_item--settings {
+    grid-area: settings;
+  }
+
+  // Milchglas-Button; die Einzelpositionen der alten Leiste (absolute/fixed) entfallen
+  .sidebar_cont .sidebar_item {
+    position: static;
+    box-sizing: border-box;
+    width: @toolbar-button-size;
+    height: @toolbar-button-size;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 8px;
+    background: rgba(40, 42, 54, 0.45);
+    backdrop-filter: blur(8px) saturate(1.15);
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(60, 63, 80, 0.6);
+    }
+  }
+
+  .sidebar_cont .sidebar_icon {
+    width: @toolbar-icon-size;
+    height: @toolbar-icon-size;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  // Karten-Kachel: Symbol plus Stapelgrößen, daher höher
+  .sidebar_cont .sidebar_item_shortcut-long {
+    height: auto;
+    padding: 6px 0;
+  }
+
+  .sidebar_cont .sidebar_icon--cards {
+    height: auto;
+    padding-top: @toolbar-icon-size;
+    background-size: @toolbar-icon-size;
+    background-position: top center;
+  }
+
+  // Stapelgrößen unter dem Symbol im Fluss (in der alten Leiste absolut), damit die Kachel mitwächst
+  .sidebar_cont .deck-size {
+    position: static;
+    margin: 4px 0 0;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  // Sprache: Flagge passend verkleinert
+  .sidebar_cont .language-icon-for-sidebar {
+    transform: scale(0.75);
+  }
+}
