@@ -35,6 +35,12 @@ const TAB_ICONS: Readonly<Record<string, TabIcon>> = {
 // Diese Tabs stehen immer am Ende, in dieser Reihenfolge (Beenden ganz zuletzt)
 const LAST_TABS: ReadonlyArray<string> = ['End Turn', 'Pass for this generation'];
 
+// Eigene Button-Texte für einzelne Optionen im Aktionsmenü (Server liefert z. B. nur "Pass");
+// Schlüssel = Titel-Schlüssel der Option, Wert = Button-Schlüssel (übersetzt in locales/*/ui.json)
+const BUTTON_LABELS: Readonly<Record<string, string>> = {
+  'Pass for this generation': 'End round',
+};
+
 function titleKey(title: string | Message): string {
   return typeof title === 'string' ? title : title.message;
 }
@@ -52,6 +58,10 @@ export function shortTabLabel(title: string | Message): string | Message {
 // Voller Titel für den Tooltip, ebenfalls als Kopie (siehe oben)
 export function fullTabTitle(title: string | Message): string | Message {
   return typeof title === 'string' ? title : {...title};
+}
+
+export function tabButtonLabel(title: string | Message, serverLabel: string): string {
+  return BUTTON_LABELS[titleKey(title)] ?? serverLabel;
 }
 
 export function tabIcon(title: string | Message): TabIcon | undefined {
