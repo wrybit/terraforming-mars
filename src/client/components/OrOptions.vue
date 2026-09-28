@@ -69,6 +69,7 @@ import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOr
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
+import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {CardModel} from '@/common/models/CardModel';
 
@@ -170,15 +171,9 @@ export default defineComponent({
     tabDisplayOrder,
     tabButtonLabel,
     tabButtonTone,
-    // Anzahl auswählbarer Einträge (Karten, Standardprojekte, Unteroptionen) – undefined, wenn die Option keine Liste hat
+    // Gemeinsam mit WaitingForTabs (inputAvailableCount.ts)
     availableCount(option: PlayerInputModel): number | undefined {
-      if (option.type === 'projectCard' || option.type === 'card') {
-        return option.cards.filter((card) => card.isDisabled !== true).length;
-      }
-      if (option.type === 'or') {
-        return option.options.length;
-      }
-      return undefined;
+      return inputAvailableCount(option);
     },
     // Gemeinsame Props für den Kind-Input, egal ob Tab- oder Radio-Darstellung
     childInputProps(displayedIdx: number) {

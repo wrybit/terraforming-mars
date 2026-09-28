@@ -12,12 +12,15 @@
     </template>
   </template>
   <div v-if="waitingfor !== undefined" class="wf-root">
-    <PlayerInputFactory :players="playerView.players"
+    <!-- Aktionsmenü baut seine Tabs selbst (OrOptions); jede andere Eingabe kommt in den Tab-Container -->
+    <PlayerInputFactory v-if="waitingfor.type === 'or'"
+                          :players="playerView.players"
                           :playerView="playerView"
                           :playerinput="waitingfor"
                           :onsave="onsave"
                           :showsave="true"
                           :showtitle="true" />
+    <WaitingForTabs v-else :playerView="playerViewWithHand" :playerinput="waitingfor" :onsave="onsave"/>
     </div>
   </div>
 </template>
@@ -45,6 +48,7 @@ import {Color} from '@/common/Color';
 import {gameDocumentTitle} from '../utils/documentTitle';
 import {setFaviconStatus, setFaviconTurnFrame} from '@/client/utils/favicon';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
+import WaitingForTabs from '@/client/components/WaitingForTabs.vue';
 
 let ui_update_timeout_id: number | undefined;
 let documentTitleTimer: number | undefined;
@@ -68,6 +72,9 @@ const CANNOT_CONTACT_SERVER = 'Unable to reach the server. It may be restarting 
 
 export default defineComponent({
   name: 'WaitingFor',
+  components: {
+    WaitingForTabs,
+  },
   // Oberstes Aktionsmenü als Tabs statt Radio-Liste (siehe orOptionsLayout.ts)
   provide: {
     [OR_OPTIONS_AS_TABS]: true,
@@ -266,6 +273,11 @@ export default defineComponent({
     documentTitleTimer = undefined;
   },
   computed: {
+    // Eine Eingabe (waitingfor) gibt es nur in der Spieleransicht; der Zuschauer übergibt nie eine.
+    // Daher ist playerView hier immer ein PlayerViewModel mit Handkarten.
+    playerViewWithHand(): PlayerViewModel {
+      return this.playerView as PlayerViewModel;
+    },
     Phase(): typeof Phase {
       return Phase;
     },

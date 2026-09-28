@@ -1,4 +1,5 @@
 import {Message} from '@/common/logs/Message';
+import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 
 // Kurze Tab-Beschriftungen, Icons und Reihenfolge für das Aktionsmenü, damit die Tab-Leiste einzeilig bleibt.
 // Schlüssel = englischer Titel-Schlüssel vom Server (Player.ts u. a.), Wert = kurzer Schlüssel (übersetzt in locales/*/ui.json).
@@ -22,7 +23,30 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   'Send a delegate in an area (from lobby)': 'Delegate (lobby)',
   'Use CEO once per game action': 'CEO action',
   'Undo last action': 'Undo',
+  // Eingaben außerhalb des Aktionsmenüs (WaitingForTabs)
+  'Select card(s) to buy': 'Buy cards',
+  'Select a card to keep': 'Keep card',
+  'Select a card to keep and pass the rest to ${0}': 'Keep card',
+  'Select two cards to keep and pass the rest to ${0}': 'Keep cards',
 };
+
+// Tab-Beschriftung nach Art der Eingabe, wenn der Titel kein Kurzlabel hat (WaitingForTabs);
+// der volle Titel steht dort ohnehin als Überschrift über den Tabs
+const INPUT_TYPE_LABELS: Readonly<Partial<Record<PlayerInputModel['type'], string>>> = {
+  card: 'Cards',
+  projectCard: 'Cards',
+  space: 'Map space',
+  player: 'Player',
+  amount: 'Amount',
+  colony: 'Colony',
+  option: 'Confirm',
+  resource: 'Resources',
+  resources: 'Resources',
+  party: 'Party',
+  delegate: 'Delegate',
+  payment: 'Payment',
+};
+const DEFAULT_INPUT_LABEL = 'Choice';
 
 // Tabs, die statt Text nur ein Icon zeigen (Icons in OrOptionsTabIcon.vue)
 export type TabIcon = 'sell' | 'pass-on' | 'end-generation';
@@ -74,6 +98,13 @@ export function tabButtonLabel(title: string | Message, serverLabel: string): st
 
 export function tabButtonTone(title: string | Message): TabButtonTone | undefined {
   return BUTTON_TONES[titleKey(title)];
+}
+
+export function inputTabLabel(input: PlayerInputModel): string | Message {
+  if (SHORT_LABELS[titleKey(input.title)] !== undefined) {
+    return shortTabLabel(input.title);
+  }
+  return INPUT_TYPE_LABELS[input.type] ?? DEFAULT_INPUT_LABEL;
 }
 
 export function tabIcon(title: string | Message): TabIcon | undefined {

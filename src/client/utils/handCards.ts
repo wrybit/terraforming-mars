@@ -8,8 +8,8 @@ export function allCardsInHand(playerView: PlayerViewModel): Array<CardModel> {
     .concat(playerView.cardsInHand);
 }
 
-// Steht die Hand als erster Tab im Aktionsmenü? Das ist so, wenn das oberste Eingabeelement ein OrOptions ist
-// (nur dieses wird als Tab-Leiste dargestellt, siehe orOptionsLayout.ts). Dann entfällt der Handkarten-Block in PlayerHome.
-export function isHandInActionTabs(playerView: PlayerViewModel): boolean {
-  return playerView.waitingFor?.type === 'or';
+// Steht die Hand als erster Tab über der aktuellen Eingabe? Das ist bei jeder anstehenden Eingabe so
+// (Aktionsmenü: OrOptions, alles andere: WaitingForTabs). Dann entfällt der Handkarten-Block in PlayerHome.
+export function isHandInInputTabs(playerView: PlayerViewModel): boolean {
+  return playerView.waitingFor !== undefined;
 }

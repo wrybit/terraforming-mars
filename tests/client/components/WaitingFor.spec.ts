@@ -22,13 +22,14 @@ describe('WaitingFor', () => {
     },
   };
 
-  it('renders player-input-factory when waitingfor is provided', () => {
+  it('renders the input inside the tab container when waitingfor is provided', () => {
     const wrapper = shallowMount(WaitingFor, {
       ...globalConfig,
       global: {
         ...globalConfig.global,
         stubs: {
           'PlayerInputFactory': {template: '<div class="stub-pif"></div>'},
+          'WaitingForTabs': {template: '<div class="stub-tabs"></div>'},
         },
       },
       props: {
@@ -41,8 +42,36 @@ describe('WaitingFor', () => {
         },
       },
     });
-    expect(wrapper.find('.stub-pif').exists()).to.be.true;
+    // Einzelne Eingaben stehen im Tab-Container (WaitingForTabs), nicht direkt
+    expect(wrapper.find('.stub-tabs').exists()).to.be.true;
+    expect(wrapper.find('.stub-pif').exists()).to.be.false;
     expect(wrapper.text()).to.not.include('Not your turn');
+  });
+
+  it('renders player-input-factory directly for the action menu (or)', () => {
+    const wrapper = shallowMount(WaitingFor, {
+      ...globalConfig,
+      global: {
+        ...globalConfig.global,
+        stubs: {
+          'PlayerInputFactory': {template: '<div class="stub-pif"></div>'},
+          'WaitingForTabs': {template: '<div class="stub-tabs"></div>'},
+        },
+      },
+      props: {
+        playerView: playerView as PlayerViewModel,
+        players: [thisPlayer as PublicPlayerModel],
+        waitingfor: {
+          type: 'or',
+          title: 'test',
+          buttonLabel: 'save',
+          options: [],
+        },
+      },
+    });
+    // Das Aktionsmenü baut seine Tabs selbst (OrOptions)
+    expect(wrapper.find('.stub-pif').exists()).to.be.true;
+    expect(wrapper.find('.stub-tabs').exists()).to.be.false;
   });
 
   it('shows "not your turn" when waitingfor is undefined', () => {

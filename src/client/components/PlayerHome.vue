@@ -71,9 +71,9 @@
           </div>
 
           <a name="cards" class="player_home_anchor"></a>
-          <!-- Ohne Aktions-Tabs (nicht am Zug, Draft, Forschung) stehen die Handkarten im selben Tab-Container, allein.
-               Mit Aktions-Tabs sind sie dort der erste Tab (isHandInActionTabs), dann entfällt dieser Block. -->
-          <div class="player_home_block player_home_block--hand" v-if="cardsInHandCount > 0 && !isHandInActionTabs(playerView)" id="shortkey-hand">
+          <!-- Ohne anstehende Eingabe (nicht am Zug) stehen die Handkarten im selben Tab-Container, allein.
+               Sonst sind sie dort der erste Tab über der Eingabe (isHandInInputTabs), dann entfällt dieser Block. -->
+          <div class="player_home_block player_home_block--hand" v-if="cardsInHandCount > 0 && !isHandInInputTabs(playerView)" id="shortkey-hand">
             <div class="or-tabs" role="tablist">
               <HandCardsTab :count="cardsInHandCount" :active="true"/>
             </div>
@@ -138,7 +138,7 @@ import {CardModel} from '@/common/models/CardModel';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
 import {observeBoardColumn} from '@/client/utils/boardColumnPosition';
 import {observeRightColumnFit} from '@/client/utils/rightColumnFit';
-import {allCardsInHand, isHandInActionTabs} from '@/client/utils/handCards';
+import {allCardsInHand, isHandInInputTabs} from '@/client/utils/handCards';
 
 // Aufräumfunktion der Spalten-Beobachtung (Position fürs Modal, Platzausnutzung); pro Seite gibt es nur eine Spieleransicht
 let stopObservingBoardColumn: (() => void) | undefined;
@@ -198,7 +198,7 @@ export default defineComponent({
     stopObservingBoardColumn = undefined;
   },
   methods: {
-    isHandInActionTabs,
+    isHandInInputTabs,
     // Funktions-Ref: wird mit dem Element bzw. beim Entfernen mit null aufgerufen
     trackBoardColumn(element: unknown) {
       stopObservingBoardColumn?.();
