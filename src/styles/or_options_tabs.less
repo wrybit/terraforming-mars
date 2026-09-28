@@ -160,6 +160,16 @@
   background: @or-tabs-view-panel-background;
 }
 
+// Status-Tab "… ist gerade am Zug" (WaitingForPlayersTab): rot, nicht klickbar
+.or-tab--status,
+.or-tab--status:hover {
+  gap: 6px;
+  background: fade(#d9443a, 22%);
+  border-color: fade(#d9443a, 60%);
+  color: #ffb3ad;
+  cursor: default;
+}
+
 // Tab mit großer Zahl (Generationen im Spiel-Log)
 .or-tab--number {
   padding: 3px 14px;

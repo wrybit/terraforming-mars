@@ -57,7 +57,9 @@
           <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="playerView" v-trim-whitespace id="shortkey-playersoverview"/>
 
           <a class="hotkey-target"></a>
-          <div class="player_home_block player_home_block--actions nofloat">
+          <!-- Ohne eigene Eingabe unsichtbar (der Hinweis, wer am Zug ist, steht dann als roter Tab bei den Handkarten);
+               WaitingFor bleibt aber eingebunden, weil es den Server nach dem eigenen Zug fragt -->
+          <div class="player_home_block player_home_block--actions nofloat" v-show="playerView.waitingFor !== undefined">
             <a name="actions" class="player_home_anchor"></a>
             <DynamicTitle title="Actions" :color="thisPlayer.color"/>
             <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
@@ -76,6 +78,7 @@
           <div class="player_home_block player_home_block--hand" v-if="cardsInHandCount > 0 && !isHandInInputTabs(playerView)" id="shortkey-hand">
             <div class="or-tabs" role="tablist">
               <HandCardsTab :count="cardsInHandCount" :active="true"/>
+              <WaitingForPlayersTab :players="playersToWaitFor(playerView)"/>
             </div>
             <div class="or-tab-panel or-tab-panel--view" role="tabpanel">
               <SortableCards :playerId="playerView.id" :cards="allCardsInHand"/>
@@ -129,6 +132,8 @@ import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
+import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
+import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
 import TopBar from '@/client/components/TopBar.vue';
 import UndergroundTokens from '@/client/components/underworld/UndergroundTokens.vue';
 import KeyboardShortcuts from '@/client/components/KeyboardShortcuts.vue';
@@ -187,6 +192,7 @@ export default defineComponent({
     LogPanel,
     SortableCards,
     HandCardsTab,
+    WaitingForPlayersTab,
     TopBar,
     GameBoardView,
     PlayerSetupView,
@@ -199,6 +205,7 @@ export default defineComponent({
   },
   methods: {
     isHandInInputTabs,
+    playersToWaitFor,
     // Funktions-Ref: wird mit dem Element bzw. beim Entfernen mit null aufgerufen
     trackBoardColumn(element: unknown) {
       stopObservingBoardColumn?.();
