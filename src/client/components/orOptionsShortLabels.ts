@@ -54,9 +54,8 @@ const INPUT_TYPE_LABELS: Readonly<Partial<Record<PlayerInputModel['type'], strin
 const DEFAULT_INPUT_LABEL = 'Choice';
 
 // Tabs, die statt Text nur ein Icon zeigen (Icons in OrOptionsTabIcon.vue)
-export type TabIcon = 'sell' | 'pass-on' | 'end-generation';
+export type TabIcon = 'pass-on' | 'end-generation';
 const TAB_ICONS: Readonly<Record<string, TabIcon>> = {
-  'Sell patents': 'sell',
   'End Turn': 'pass-on',
   'Pass for this generation': 'end-generation',
 };

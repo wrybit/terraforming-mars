@@ -7,7 +7,7 @@
 @or-tabs-radius: 8px;
 @or-tab-accent-width: 3px;
 @or-tab-font-size: 16px;
-@or-tab-icon-size: 24px; // Symbol-Tabs (Verkaufen, Weitergeben, Beenden)
+@or-tab-icon-size: 24px; // Symbol-Tabs (Weitergeben, Beenden)
 // Zarter Umriss inaktiver Tabs
 @or-tab-inactive-border: rgba(255, 255, 255, 0.12);
 // "Nur ansehen"-Tabs (Handkarten, Spiel-Log): grau statt blau – dort lässt sich nichts tun, nur anschauen
@@ -15,7 +15,9 @@
 @or-tabs-view-border: #4b4d55;
 @or-tabs-view-accent: #8d909c;
 @or-tabs-hand-spacing: 20px; // zusätzlicher Abstand des Handkarten-Tabs zu den Aktions-Tabs
-@or-tabs-gap: 4px; // Badge ragt 4px nach rechts – passt genau in den Abstand zum Nachbarn
+@or-tabs-gap: 4px;
+@or-tabs-top-spacing: 8px; // Abstand zur Überschrift darüber
+@or-tab-count-spacing: 6px; // Zähler steht hinter dem Titel
 // Leere Tabs (nichts spielbar) treten zurück, bleiben aber lesbar und anklickbar
 @or-tab-empty-opacity: 0.45;
 // Luft zwischen inaktiven Tabs und der Box – deren Rahmen läuft darunter durch, nur der aktive Tab ist angedockt
@@ -27,12 +29,12 @@
   gap: @or-tabs-gap;
   position: relative;
   z-index: 1;
-  margin: 14px 0 0; // Platz für die hochgestellten Badges
+  margin: @or-tabs-top-spacing 0 0;
   padding: 0; // erster Tab bündig mit der Box (deren linke obere Ecke ist daher eckig)
 }
 
 .or-tab {
-  position: relative; // Bezug für das Zähler-Badge
+  position: relative; // Bezug für die Unschärfe-Ebene (frosted_surface.less)
   // Bei Platzmangel schrumpfen alle Tabs, Labels werden mit … gekürzt (voller Titel im Tooltip)
   flex: 0 1 auto;
   min-width: 0;
@@ -132,7 +134,7 @@
   font-size: @or-tab-font-size + 1px;
 }
 
-// Tab mit Icon statt Text (Verkaufen, Weitergeben, Beenden) – schmal, darf nicht schrumpfen
+// Tab mit Icon statt Text (Weitergeben, Beenden) – schmal, darf nicht schrumpfen
 .or-tab--icon {
   flex: none;
   padding-left: 10px;
@@ -151,13 +153,11 @@
   text-overflow: ellipsis;
 }
 
-// Zähler als kleines Badge an der oberen rechten Ecke – spart die Breite, damit die Labels ungekürzt passen
+// Zähler als kleines Badge hinter dem Titel (im Tab, nicht mehr hochgestellt an der Ecke)
 .or-tab-count {
-  position: absolute;
-  top: -8px;
-  right: -4px;
-  z-index: 2;
+  flex: none;
   min-width: 17px;
+  margin-left: @or-tab-count-spacing;
   padding: 0 4px;
   border-radius: 9px;
   background: #4a4f6a;
