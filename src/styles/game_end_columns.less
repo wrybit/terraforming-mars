@@ -38,6 +38,12 @@
   --app-background-brightness: 0.5;
 }
 
+// Seitengrund schwarz statt grau: Das Hintergrundbild deckt nur das Fenster ab; bei Ganzseiten-Screenshots
+// endet es unten – auf Schwarz fällt der Übergang kaum auf
+body:has(#game-end) {
+  background: #000;
+}
+
 // Die Ergebnisseite hat keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt, sonst ist der Rand links größer als rechts
 .main-container:has(#game-end) {
   margin-left: 0;
