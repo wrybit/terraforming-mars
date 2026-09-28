@@ -40,7 +40,7 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
 const INPUT_TYPE_LABELS: Readonly<Partial<Record<PlayerInputModel['type'], string>>> = {
   card: 'Cards',
   projectCard: 'Cards',
-  space: 'Map space',
+  space: 'Place tile',
   player: 'Player',
   amount: 'Amount',
   colony: 'Colony',
