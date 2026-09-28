@@ -1,10 +1,8 @@
 <template>
   <!-- Jede Eingabe, die kein Aktionsmenü ist (Karten kaufen, Draft, Auswahl …), im Tab-Container:
-       Titel darüber, Handkarten-Tab (grau, nur Ansicht) und ein aktiver Tab für die Eingabe selbst.
+       Handkarten-Tab (grau, nur Ansicht) und ein aktiver Tab für die Eingabe; deren Frage steht oben in der Box.
        Das Aktionsmenü (OrOptions) baut seine Tabs selbst, siehe orOptionsLayout.ts. -->
   <div class="wf-options wf-options--tabs">
-    <label><div>{{ $t(fullTabTitle(playerinput.title)) }}</div></label>
-
     <div class="or-tabs" role="tablist">
       <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
       <button type="button" role="tab"
@@ -19,7 +17,9 @@
 
     <div :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
       <SortableCards v-if="handTabActive" :playerId="playerView.id" :cards="handCards"/>
-      <!-- v-show statt v-if: Eingaben bleiben beim Blick in die Hand erhalten; Titel steht bereits oben -->
+      <!-- Die Frage gehört zur Eingabe und steht daher in ihrer Box, nicht über den Tabs -->
+      <label v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(playerinput.title)) }}</div></label>
+      <!-- v-show statt v-if: Eingaben bleiben beim Blick in die Hand erhalten -->
       <PlayerInputFactory v-show="!handTabActive"
         :players="playerView.players"
         :playerView="playerView"
