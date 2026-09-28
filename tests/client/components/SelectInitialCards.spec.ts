@@ -44,6 +44,35 @@ describe('SelectInitialCards', () => {
     ]});
   });
 
+  it('cannot start when the cards cost more than the corporation\'s starting M€', async () => {
+    // Ecoline startet mit 36 M€: 12 Karten (36) gehen, 13 (39) nicht
+    const component = createComponent([CardName.ECOLINE], [CardName.ANTS]);
+    const selectCards = component.findAllComponents({name: 'select-card'});
+    selectCards[0].vm.$emit('cardschanged', [CardName.ECOLINE]);
+    selectCards[1].vm.$emit('cardschanged', Array(13).fill(CardName.ANTS));
+    await component.vm.$nextTick();
+    expect(getButton(component).attributes().disabled).not.to.be.undefined;
+
+    selectCards[1].vm.$emit('cardschanged', Array(12).fill(CardName.ANTS));
+    await component.vm.$nextTick();
+    expect(getButton(component).attributes().disabled).is.undefined;
+  });
+
+  it('cannot start when preludes leave less than 0 M€', async () => {
+    // 36 M€ − Galileische Bergwerke (5 M€): 11 Karten (33) ergäben −2, 10 Karten (30) ergeben +1
+    const component = createComponent([CardName.ECOLINE], [CardName.ANTS], [CardName.GALILEAN_MINING, CardName.SUPPLY_DROP]);
+    const selectCards = component.findAllComponents({name: 'select-card'});
+    selectCards[0].vm.$emit('cardschanged', [CardName.ECOLINE]);
+    selectCards[1].vm.$emit('cardschanged', [CardName.GALILEAN_MINING, CardName.SUPPLY_DROP]);
+    selectCards[2].vm.$emit('cardschanged', Array(11).fill(CardName.ANTS));
+    await component.vm.$nextTick();
+    expect(getButton(component).attributes().disabled).not.to.be.undefined;
+
+    selectCards[2].vm.$emit('cardschanged', Array(10).fill(CardName.ANTS));
+    await component.vm.$nextTick();
+    expect(getButton(component).attributes().disabled).is.undefined;
+  });
+
   it('Cannot save with only one prelude', async () => {
     const component = createComponent([CardName.ECOLINE], [CardName.ANTS], [CardName.ALLIED_BANK]);
     expect(component).not.is.undefined;

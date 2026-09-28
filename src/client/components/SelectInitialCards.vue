@@ -44,9 +44,10 @@
         :purchasedCount="selectedCards.length"
         :cardCost="cardCost()"
         :status="warning ?? 'Ready to start'"
-        :statusReady="valid && warning === undefined" />
-      <!-- :key=warning is a way of validing that the state of the button should change. If the warning changes, or disappears, that's a signal that the button might change. -->
-      <AppButton :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel" class="select-initial-cards-start"/>
+        :statusReady="valid && warning === undefined">
+        <!-- :key=warning is a way of validing that the state of the button should change. If the warning changes, or disappears, that's a signal that the button might change. -->
+        <AppButton :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel" class="select-initial-cards-start"/>
+      </SetupSummary>
     </div>
   </div>
 </template>
@@ -63,6 +64,7 @@ import {PlayerInputModel, SelectCardModel, SelectInitialCardsModel} from '@/comm
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import SelectCard from '@/client/components/SelectCard.vue';
 import SetupSummary from '@/client/components/SetupSummary.vue';
+import {remainingMegacredits} from '@/client/components/setupBalance';
 import ConfirmDialog from '@/client/components/common/ConfirmDialog.vue';
 import {getPreferences, Preferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {Tag} from '@/common/cards/Tag';
@@ -252,9 +254,13 @@ export default defineComponent({
       // Effect for playing itself.
       return corpName === CardName.SAGITTA_FRONTIER_SERVICES ? starting + 4 : starting;
     },
-    // Preis je Startkarte; manche Konzerne (z. B. Polyphemos) weichen vom Standard ab
+    // Preis je Startkarte; manche Konzerne (z. B. Polyphemos) weichen vom Standard ab,
+    // der Einsteiger-Konzern bekommt seine Karten gratis (wie server/inputs/SelectInitialCards.ts)
     cardCost(): number {
       const corporation = this.selectedCorporations.length === 1 ? getCardOrThrow(this.selectedCorporations[0]) : undefined;
+      if (corporation?.name === CardName.BEGINNER_CORPORATION) {
+        return 0;
+      }
       return corporation?.cardCost ?? constants.CARD_COST;
     },
     saveIfConfirmed() {
@@ -347,6 +353,19 @@ export default defineComponent({
           this.warning = 'You selected too many CEOs';
           return false;
         }
+      }
+      // Kartenkauf zahlt man vom Start-Kapital des Konzerns, bevor Präludien wirken (Server-Prüfung in
+      // server/inputs/SelectInitialCards.ts)
+      const purchaseCost = this.selectedCards.length * this.cardCost();
+      if (purchaseCost > (getCardOrThrow(this.selectedCorporations[0]).startingMegaCredits ?? 0)) {
+        this.warning = 'Not enough starting M€ for these cards';
+        return false;
+      }
+      // Auch nach den Präludien darf nichts im Minus stehen (gleiche Rechnung wie die Bilanz, setupBalance.ts)
+      const startMegacredits = this.corporationMegacredits() ?? 0;
+      if (remainingMegacredits(startMegacredits, this.hasPrelude ? this.getAfterPreludes() : undefined, this.selectedCards.length, this.cardCost()) < 0) {
+        this.warning = 'Not enough M€ left after preludes';
+        return false;
       }
       if (this.selectedCards.length === 0) {
         this.warning = 'You haven\'t selected any project cards';

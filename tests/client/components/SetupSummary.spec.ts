@@ -33,4 +33,14 @@ describe('SetupSummary', () => {
     });
     expect(wrapper.find('.setup-summary-coin--negative').text()).eq('−1');
   });
+
+  it('marks a purchase above the starting M€ and renders the start button slot', () => {
+    const wrapper = mount(SetupSummary, {
+      ...globalConfig,
+      props: {startMegacredits: 23, preludeMegacredits: 5, purchasedCount: 8, cardCost: 3, status: 'Not enough starting M€ for these cards', statusReady: false},
+      slots: {default: '<button class="start">Start</button>'},
+    });
+    expect(wrapper.find('.setup-summary-value--negative').text()).eq('−24');
+    expect(wrapper.find('.setup-summary-actions .start').exists()).is.true;
+  });
 });

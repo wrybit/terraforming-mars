@@ -1,10 +1,10 @@
 // Bilanz der Startauswahl (SetupSummary.vue): Kennzahlen nebeneinander, oben kleine Beschriftung, darunter der Wert.
-// Steht rechts unter Mars/Meilensteinen oder – bei eingeklapptem Spielplan – unter den Auswahlspalten.
+// Steht als Karte unter den Auswahlspalten; rechts darin der Start-Button (Slot).
 
 @setup-summary-label-size: 12px;
 @setup-summary-value-size: 22px;
 @setup-summary-item-gap: 28px; // zwischen den Kennzahlen deutlich mehr als zwischen Beschriftung und Wert
-@setup-summary-negative: #ff7a6b; // Bleibt < 0: nicht genug M€
+@setup-summary-negative: #ff7a6b; // nicht genug M€ (Kauf zu teuer, Bleibt < 0)
 @setup-summary-coin-size: 34px;
 @setup-summary-open: #ffb36b; // Status: es fehlt noch etwas
 
@@ -12,14 +12,31 @@
   .frosted-surface();
   position: relative;
   display: flex;
+  align-items: center;
+  gap: @setup-summary-item-gap;
+  padding: 12px 16px 12px 20px;
+  border: 1px solid @or-tabs-border;
+  border-radius: @or-tabs-radius;
+  background: @or-tabs-panel-background;
+}
+
+// Kennzahlen füllen die Karte und brechen bei Platzmangel um; der Button bleibt rechts daneben
+.setup-summary-values {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 12px @setup-summary-item-gap;
   margin: 0;
-  padding: 12px 20px;
-  border: 1px solid @or-tabs-border;
-  border-radius: @or-tabs-radius;
-  background: @or-tabs-panel-background;
+}
+
+.setup-summary-actions {
+  flex: none;
+
+  &:empty {
+    display: none;
+  }
 }
 
 .setup-summary-item {
@@ -45,6 +62,10 @@
     white-space: nowrap;
 
     // Zustandsfarben: hier verschachtelt, damit sie die weiße Grundfarbe sicher überschreiben
+    &.setup-summary-value--negative {
+      color: @setup-summary-negative;
+    }
+
     &.setup-summary-status--open {
       color: @setup-summary-open;
     }

@@ -750,22 +750,9 @@ each(@players, {
   }
 }
 
-// Leiste der Startauswahl (SelectInitialCards): Bilanz (SetupSummary, setup_summary.less) und "Beginne" in einer Zeile
+// Leiste der Startauswahl (SelectInitialCards): Bilanz-Karte mit Start-Button (SetupSummary, setup_summary.less)
 .select-initial-cards-footer {
-  display: flex;
-  align-items: stretch;
-  gap: 20px;
   margin-top: 20px; // wie der Abstand zwischen den Spalten: Bilanz ist eine eigene Fläche
-
-  // Bilanz schrumpft (der Status bricht darin um), der Button bleibt immer daneben
-  > .setup-summary {
-    flex: 1 1 0;
-    min-width: 0;
-  }
-
-  > .btn {
-    flex: none;
-  }
 }
 
 #spectator-link + span {
