@@ -1,4 +1,11 @@
-// App-Hintergrund (Milchstraße, assets/background.jpg – entsättigt und abgedunkelt) für Spielansicht,
+// Sättigung und Helligkeit des Hintergrundbilds – zum Nachjustieren live im Browser an :root änderbar
+// (DevTools: Element <html> → Styles → --app-background-saturation / --app-background-brightness)
+:root {
+  --app-background-saturation: 0.4;
+  --app-background-brightness: 0.45;
+}
+
+// App-Hintergrund (Milchstraße, assets/background.jpg – unbearbeitetes Foto, gedämpft per Filter) für Spielansicht,
 // Zuschaueransicht und Startseite. Als fest stehendes Pseudo-Element deckt er immer genau das ganze Fenster ab
 // (cover: vollständig gefüllt, Proportionen bleiben) – unabhängig davon, wie lang der Inhalt ist oder wie gescrollt wird.
 // ::after ist bei der Spielansicht schon belegt (Rahmen "du bist am Zug", active_player_outline.less).
@@ -16,6 +23,7 @@
     inset: 0;
     z-index: -1;
     background: url(./assets/background.jpg) center / cover no-repeat;
+    filter: saturate(var(--app-background-saturation)) brightness(var(--app-background-brightness));
     pointer-events: none;
   }
 }
@@ -24,4 +32,5 @@
 .preferences_remove_background #player-home::before,
 .preferences_remove_background #spectator-home::before {
   background: @grey_900;
+  filter: none;
 }
