@@ -7,8 +7,9 @@
       :style="{left: placement.left + 'px', top: placement.top + 'px'}">
       <div class="space-confirm-message" v-i18n>Place your tile here?</div>
       <div class="space-confirm-actions">
-        <button type="button" class="space-confirm-button space-confirm-button--primary" @click="$emit('accept')" v-i18n>Yes</button>
-        <button type="button" class="space-confirm-button" @click="$emit('dismiss')" v-i18n>No</button>
+        <!-- Ja grün, Nein rot (Farben aus button_tones.less) -->
+        <button type="button" class="space-confirm-button space-confirm-button--yes" @click="$emit('accept')" v-i18n>Yes</button>
+        <button type="button" class="space-confirm-button space-confirm-button--no" @click="$emit('dismiss')" v-i18n>No</button>
       </div>
       <label class="space-confirm-skip">
         <input type="checkbox" :checked="false" @change="$emit('hide', ($event.target as HTMLInputElement).checked)">

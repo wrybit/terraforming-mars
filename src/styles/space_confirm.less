@@ -65,13 +65,24 @@
   }
 }
 
-.space-confirm-button--primary {
-  border-color: @space-confirm-border;
-  background: @space-confirm-border;
+// Ja grün, Nein rot – gleiche Farben wie die übrigen Bestätigen/Auslassen-Buttons (button_tones.less)
+.space-confirm-button--yes {
+  border-color: @button-success;
+  background: @button-success;
   color: #fff;
 
   &:hover {
-    background: lighten(@space-confirm-border, 6%);
+    background: @button-success-hover;
+  }
+}
+
+.space-confirm-button--no {
+  border-color: @button-danger;
+  background: @button-danger;
+  color: #fff;
+
+  &:hover {
+    background: @button-danger-hover;
   }
 }
 
