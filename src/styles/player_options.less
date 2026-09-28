@@ -1,0 +1,90 @@
+// Spieler-Auswahl als Kacheln (SelectPlayer.vue), Aufbau wie die Ressourcen-Kacheln (resource_options.less);
+// Auswahl-Rahmen wie bei Karten (selection_highlight.less)
+
+@player-option-width: 180px;
+
+.player-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 8px 0 16px;
+}
+
+.player-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: @player-option-width;
+  padding: 14px 12px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.12s, filter 0.12s;
+
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.12);
+  }
+
+  &:focus-within {
+    outline: 2px solid @selection-color;
+    outline-offset: 3px;
+  }
+}
+
+.player-option--selected {
+  .selection-highlight();
+}
+
+// Radio nur für Tastatur und Screenreader
+.player-option-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.player-option-name {
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+// Ressource: Symbol links, Bestand und Produktion rechts
+.player-option-resource {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.player-option-icon {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  background-size: contain;
+}
+
+.player-option-values {
+  display: flex;
+  gap: 14px;
+}
+
+.player-option-value {
+  font-family: Prototype, sans-serif;
+  font-size: 22px;
+  line-height: 1;
+  text-align: center;
+}
+
+.player-option-label {
+  margin-bottom: 4px;
+  font-family: Ubuntu, sans-serif;
+  font-size: 11px;
+  opacity: 0.8;
+}
