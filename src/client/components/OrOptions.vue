@@ -33,15 +33,7 @@
     <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <SortableCards v-if="asTabs && handTabActive" :playerId="playerView.id" :cards="handCards"/>
       <!-- Erklärung, wo sonst nur ein Button stünde (tabIntro.ts): Bild, was passiert, Hinweis -->
-      <div v-if="asTabs && !handTabActive && selectedIntro !== undefined" class="or-tab-intro">
-        <img v-if="selectedIntro.tileImage !== undefined" class="or-tab-intro-tile" :src="selectedIntro.tileImage" alt="">
-        <i v-if="selectedIntro.resourceIcon !== undefined" :class="'resource_icon or-tab-intro-resource resource_icon--' + selectedIntro.resourceIcon"></i>
-        <div>
-          <div class="or-tab-intro-title">{{ $t(fullTabTitle(selectedOption!.title)) }}</div>
-          <div v-if="selectedIntro.hint === 'click-space'" class="or-tab-intro-hint" v-i18n>Click a highlighted space on Mars</div>
-          <div v-else class="or-tab-intro-hint">{{ $t(temperatureHint(playerView.game.temperature)) }}</div>
-        </div>
-      </div>
+      <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :temperature="playerView.game.temperature"/>
       <!-- Weitergeben: Erklärung, was passiert (mittig mit dem Button, or-tab-panel--end) -->
       <p v-if="asTabs && !handTabActive && selectedOption !== undefined && endTabHint(selectedOption.title) !== undefined" class="or-tab-end-hint">
         {{ $t(endTabHint(selectedOption.title)!) }}
@@ -101,7 +93,8 @@ import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon} from '@/client/components/orOptionsShortLabels';
-import {tabIntro, temperatureHint, TabIntro} from '@/client/components/tabIntro';
+import {tabIntro, TabIntro} from '@/client/components/tabIntro';
+import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
@@ -139,6 +132,7 @@ export default defineComponent({
     dockedTab: vDockedTab,
   },
   components: {
+    TabIntroBlock,
     AppButton,
     OrOptionsTabIcon,
     SortableCards,
@@ -227,7 +221,6 @@ export default defineComponent({
     shortTabLabel,
     fullTabTitle,
     tabIcon,
-    temperatureHint,
     tabDisplayOrder,
     tabButtonLabel,
     tabButtonTone,

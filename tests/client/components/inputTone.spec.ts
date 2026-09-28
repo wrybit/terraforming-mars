@@ -31,7 +31,11 @@ describe('inputTone', () => {
   it('Feldwahl für Ozeane ist blau, andere Felder bleiben Mars-braun', () => {
     expect(inputTone(input({type: 'space', title: 'Select space for first ocean'}))).eq('ocean');
     expect(inputTone(input({type: 'space', title: {message: 'Select space for ${0} to place an ocean', data: []}}))).eq('ocean');
-    expect(inputTone(input({type: 'space', title: 'Select space for city tile'}))).eq('mars');
+    expect(inputTone(input({type: 'space', title: 'Select space for claim'}))).eq('mars');
+  });
+
+  it('Feldwahl für Städte ist hellgrau', () => {
+    expect(inputTone(input({type: 'space', title: 'Select space for city tile'}))).eq('city');
   });
 
   it('Farbe nach Eingabetyp', () => {

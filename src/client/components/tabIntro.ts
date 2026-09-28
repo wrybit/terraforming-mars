@@ -26,8 +26,20 @@ export function tabIntro(option: PlayerInputModel): TabIntro | undefined {
   if (intro !== undefined) {
     return intro;
   }
-  // Jede Feldauswahl bekommt wenigstens den Klick-Hinweis
-  return option.type === 'space' ? {hint: 'click-space'} : undefined;
+  // Jede Feldauswahl bekommt den Klick-Hinweis, bei Ozean/Stadt/Grünfläche auch das Plättchen
+  return option.type === 'space' ? {tileImage: spaceTileImage(key), hint: 'click-space'} : undefined;
+}
+
+// Plättchen einer Feldwahl, erkannt am englischen Titel-Schlüssel des Servers
+// ("Select space for ocean tile", "Select space for city", "Select space for greenery tile" …)
+const SPACE_TILES: ReadonlyArray<[RegExp, string]> = [
+  [/\bocean\b/i, 'assets/tiles/ocean.png'],
+  [/\bcity\b/i, 'assets/tiles/city.png'],
+  [/\bgreenery\b/i, 'assets/tiles/greenery.png'],
+];
+
+export function spaceTileImage(titleKey: string): string | undefined {
+  return SPACE_TILES.find(([pattern]) => pattern.test(titleKey))?.[1];
 }
 
 // "Temperatur steigt von -28 °C auf -26 °C" bzw. Hinweis, dass sie schon am Maximum ist

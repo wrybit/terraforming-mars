@@ -5,7 +5,7 @@ import {getCard} from '@/client/cards/ClientCardManifest';
 
 // Farbton des Eingabe-Tabs je nach Art der Eingabe (WaitingForTabs); Farben in or_tab_tones.less.
 // Das Aktionsmenü (OrOptions) bleibt neutral blau.
-export type InputTone = 'prelude' | 'attack' | 'cards' | 'mars' | 'ocean' | 'resources' | 'player' | 'colonies';
+export type InputTone = 'prelude' | 'attack' | 'cards' | 'mars' | 'ocean' | 'city' | 'resources' | 'player' | 'colonies';
 
 // Angriffe auf Mitspieler erkennt man nur am englischen Titel-Schlüssel des Servers (kein eigenes Kennzeichen);
 // seltene Formulierungen fallen auf die Farbe ihres Eingabetyps zurück
@@ -31,6 +31,8 @@ const TYPE_TONES: Readonly<Partial<Record<PlayerInputModel['type'], InputTone>>>
 // Feldwahl für einen Ozean (nur dann blau statt Mars-braun); erkennbar am englischen Titel-Schlüssel,
 // z. B. "Select space for ocean tile" oder "Select space for first ocean"
 const OCEAN_PATTERN = /\bocean\b/i;
+// Feldwahl für eine Stadt: hellgrau wie die Stadtplättchen
+const CITY_PATTERN = /\bcity\b/i;
 
 function titleKey(title: string | Message): string {
   return typeof title === 'string' ? title : title.message;
@@ -53,6 +55,9 @@ export function inputTone(input: PlayerInputModel): InputTone | undefined {
   }
   if (input.type === 'space' && OCEAN_PATTERN.test(titleKey(input.title))) {
     return 'ocean';
+  }
+  if (input.type === 'space' && CITY_PATTERN.test(titleKey(input.title))) {
+    return 'city';
   }
   return TYPE_TONES[input.type];
 }

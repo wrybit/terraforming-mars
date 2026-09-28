@@ -1,0 +1,24 @@
+<template>
+  <!-- Erklärung oben in einer Tab-Box (tabIntro.ts): Plättchen- oder Ressourcenbild, Frage und Hinweis.
+       Genutzt vom Aktionsmenü (OrOptions) und von einzelnen Eingaben (WaitingForTabs). -->
+  <div class="or-tab-intro">
+    <img v-if="intro.tileImage !== undefined" class="or-tab-intro-tile" :src="intro.tileImage" alt="">
+    <i v-if="intro.resourceIcon !== undefined" :class="'resource_icon or-tab-intro-resource resource_icon--' + intro.resourceIcon"></i>
+    <div>
+      <div class="or-tab-intro-title">{{ $t(title) }}</div>
+      <div v-if="intro.hint === 'click-space'" class="or-tab-intro-hint" v-i18n>Click a highlighted space on Mars</div>
+      <div v-else class="or-tab-intro-hint">{{ $t(temperatureHint(temperature)) }}</div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import {Message} from '@/common/logs/Message';
+import {TabIntro, temperatureHint} from '@/client/components/tabIntro';
+
+defineProps<{
+  intro: TabIntro;
+  title: string | Message;
+  temperature: number;
+}>();
+</script>
