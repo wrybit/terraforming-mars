@@ -2,17 +2,20 @@ import {Message} from '@/common/logs/Message';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {MAX_TEMPERATURE} from '@/common/constants';
+import {TileType} from '@/common/TileType';
+import {PreviewTile, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {specialTileImage, TileImage, tileImage} from '@/client/components/specialTileImage';
 
 // Erklärung oben in der Box eines Aktions-Tabs (OrOptions), wo sonst nur ein Button stünde:
 // Bild (Plättchen oder Ressource), was passiert und ein Hinweis.
 export type TabIntro = {
-  tileImage?: string; // Plättchen-Bild (assets/tiles/<name>.png)
+  tile?: TileImage; // Plättchen (Sechseck, bei Sonderplättchen mit Symbol darauf)
   resourceIcon?: string; // Ressourcen-Symbol (resources.less: resource_icon--<name>)
   hint: 'click-space' | 'temperature';
 };
 
 const INTROS: Readonly<Record<string, TabIntro>> = {
-  'Convert ${0} plants into greenery': {tileImage: 'assets/tiles/greenery.png', hint: 'click-space'},
+  'Convert ${0} plants into greenery': {tile: tileImage(TileType.GREENERY), hint: 'click-space'},
   'Convert 8 heat into temperature': {resourceIcon: 'heat', hint: 'temperature'},
   'Convert 6 heat into temperature': {resourceIcon: 'heat', hint: 'temperature'},
 };
@@ -26,20 +29,23 @@ export function tabIntro(option: PlayerInputModel): TabIntro | undefined {
   if (intro !== undefined) {
     return intro;
   }
-  // Jede Feldauswahl bekommt den Klick-Hinweis, bei Ozean/Stadt/Grünfläche auch das Plättchen
-  return option.type === 'space' ? {tileImage: spaceTileImage(key), hint: 'click-space'} : undefined;
+  // Jede Feldauswahl bekommt den Klick-Hinweis, dazu das Plättchen: Sonderplättchen der Karte bzw. Vulkan,
+  // sonst Ozean/Stadt/Grünfläche wie in der Vorschau auf dem Brett (spaceTilePreview.ts)
+  if (option.type !== 'space') {
+    return undefined;
+  }
+  return {tile: specialTileImage(option.title) ?? plainTile(option.title), hint: 'click-space'};
 }
 
-// Plättchen einer Feldwahl, erkannt am englischen Titel-Schlüssel des Servers
-// ("Select space for ocean tile", "Select space for city", "Select space for greenery tile" …)
-const SPACE_TILES: ReadonlyArray<[RegExp, string]> = [
-  [/\bocean\b/i, 'assets/tiles/ocean.png'],
-  [/\bcity\b/i, 'assets/tiles/city.png'],
-  [/\bgreenery\b/i, 'assets/tiles/greenery.png'],
-];
+const PREVIEW_TILES: Readonly<Record<PreviewTile, TileType>> = {
+  greenery: TileType.GREENERY,
+  city: TileType.CITY,
+  ocean: TileType.OCEAN,
+};
 
-export function spaceTileImage(titleKey: string): string | undefined {
-  return SPACE_TILES.find(([pattern]) => pattern.test(titleKey))?.[1];
+function plainTile(title: string | Message): TileImage | undefined {
+  const preview = previewTileForSpaceInput(title);
+  return preview === undefined ? undefined : tileImage(PREVIEW_TILES[preview]);
 }
 
 // "Temperatur steigt von -28 °C auf -26 °C" bzw. Hinweis, dass sie schon am Maximum ist

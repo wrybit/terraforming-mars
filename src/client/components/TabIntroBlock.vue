@@ -2,7 +2,10 @@
   <!-- Erklärung oben in einer Tab-Box (tabIntro.ts): Plättchen- oder Ressourcenbild, Frage und Hinweis.
        Genutzt vom Aktionsmenü (OrOptions) und von einzelnen Eingaben (WaitingForTabs). -->
   <div class="or-tab-intro">
-    <img v-if="intro.tileImage !== undefined" class="or-tab-intro-tile" :src="intro.tileImage" alt="">
+    <div v-if="intro.tile !== undefined" class="or-tab-intro-tile">
+      <img class="or-tab-intro-tile-base" :src="intro.tile.base" alt="">
+      <img v-if="intro.tile.symbol !== undefined" class="or-tab-intro-tile-symbol" :src="intro.tile.symbol" alt="">
+    </div>
     <i v-if="intro.resourceIcon !== undefined" :class="'resource_icon or-tab-intro-resource resource_icon--' + intro.resourceIcon"></i>
     <div>
       <div class="or-tab-intro-title">{{ $t(title) }}</div>
