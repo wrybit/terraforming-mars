@@ -1,43 +1,16 @@
-// Startphase (Startkarten wählen): rechts unter Mars/Meilensteinen der Platz mit
-// Start-M€, Hinweisen und dem großen Button "Beginne" (PlayerHome.vue, SelectInitialCards.vue, setupStartSlot.ts)
+// Startphase (Startkarten wählen): großer Button "Beginne" neben der Bilanz unter den Auswahlspalten
+// (SelectInitialCards.vue, Leiste in player_home.less)
 
 @setup-start-font-size: 30px;
 
-// Platz in der rechten Spalte statt des Logs: füllt den Rest, Inhalt mittig
-// safe center: reicht der Platz nicht, wächst der Inhalt nach unten statt in die Auszeichnungen darüber
-.player-home-columns__setup-start {
-  // Breite der Spalte bestimmen Mars und Meilensteine; die Leiste soll sie nicht aufweiten
-  contain: inline-size;
-  flex: 1 1 auto;
-  display: flex;
-  align-items: safe center;
-  justify-content: center;
-  padding: 12px 0;
-}
-
-// Start-M€ nebeneinander in einer Zeile, darunter Hinweis und Button über die volle Breite
-.player-home-columns__setup-start .select-initial-cards-footer {
-  flex-flow: row wrap;
-  justify-content: center;
-  gap: 12px 28px;
-  width: 80%;
-  margin: 0;
-
-  > div {
-    justify-content: center; // die Zeilen sind Flex-Container (player_home.less), text-align greift dort nicht
-  }
-
-  > .tm-warning,
-  > .btn {
-    flex-basis: 100%;
-    margin-left: 0;
-  }
-}
-
-// Großer Start-Button mit Pfeil
+// Großer Start-Button mit Pfeil, so hoch wie die Bilanz daneben
 .btn.select-initial-cards-start {
+  display: inline-flex;
+  align-items: center;
+  align-self: stretch;
   height: auto;
-  padding: 18px 32px;
+  margin: 0; // die Außenabstände der Button-Grundregel würden die gleiche Höhe verhindern
+  padding: 0 32px;
   font-size: @setup-start-font-size;
 
   &::after {

@@ -1,0 +1,70 @@
+// Bilanz der Startauswahl (SetupSummary.vue): Kennzahlen nebeneinander, oben kleine Beschriftung, darunter der Wert.
+// Steht rechts unter Mars/Meilensteinen oder – bei eingeklapptem Spielplan – unter den Auswahlspalten.
+
+@setup-summary-label-size: 12px;
+@setup-summary-value-size: 22px;
+@setup-summary-item-gap: 28px; // zwischen den Kennzahlen deutlich mehr als zwischen Beschriftung und Wert
+@setup-summary-negative: #ff7a6b; // Bleibt < 0: nicht genug M€
+@setup-summary-open: #ffb36b; // Status: es fehlt noch etwas
+
+.setup-summary {
+  .frosted-surface();
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px @setup-summary-item-gap;
+  margin: 0;
+  padding: 12px 20px;
+  border: 1px solid @or-tabs-border;
+  border-radius: @or-tabs-radius;
+  background: @or-tabs-panel-background;
+}
+
+.setup-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  dt {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: @setup-summary-label-size;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  dd {
+    margin: 0;
+    color: #fff;
+    font-size: @setup-summary-value-size;
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+
+    // Zustandsfarben: hier verschachtelt, damit sie die weiße Grundfarbe sicher überschreiben
+    &.setup-summary-value--negative {
+      color: @setup-summary-negative;
+    }
+
+    &.setup-summary-status--open {
+      color: @setup-summary-open;
+    }
+
+    &.setup-summary-status--ready {
+      color: @button-success;
+    }
+  }
+}
+
+// Status nimmt den Rest der Zeile und darf umbrechen (lange Hinweise)
+.setup-summary-item--status {
+  flex: 1 1 180px;
+
+  dd {
+    font-size: 16px;
+    font-weight: normal;
+    white-space: normal;
+  }
+}

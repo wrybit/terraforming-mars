@@ -117,21 +117,31 @@
   margin: @setup-card-selected-flag-space 0 0 0;
 }
 
-// Reicht die Breite nicht für drei Karten nebeneinander (Brett ausgeklappt auf Laptop-Breiten), werden die Karten
-// kleiner statt abgeschnitten. Schwellen: 3 Spalten × (Karte + Innenabstand) + 2 Spaltenabstände bei Zoom 1 bzw. 0,8
-@setup-cards-full-min-width: 880px;
-@setup-cards-reduced-min-width: 740px;
+// Kaufbare Karten kleiner: so passen bei eingeklapptem Spielplan alle zehn ohne Scrollen, Konzern und Präludien
+// bleiben groß (dort entscheidet man zuerst)
+@setup-project-cards-zoom: 0.8;
+
+.setup-column--projects .setup-column-body .cardbox {
+  zoom: @setup-project-cards-zoom;
+}
+
+// Reicht die Breite nicht für drei Karten nebeneinander (Brett ausgeklappt auf Laptop-Breiten), werden alle Karten
+// kleiner statt abgeschnitten. Schwellen: 2 große + 1 kleine Karte bzw. 3 kleine Karten, je mit Innenabstand der
+// Spalte, plus 2 Spaltenabstände
+@setup-cards-full-min-width: 830px;
+@setup-cards-reduced-min-width: 730px;
 @setup-cards-reduced-zoom: 0.8;
 @setup-cards-small-zoom: 0.68;
 
+// Selektor so spezifisch wie die Regel der Kaufkarten oben, damit die Stufen auch dort greifen
 @container (max-width: (@setup-cards-full-min-width - 1px)) {
-  .setup-column-body .cardbox {
+  .setup-columns .setup-column-body .cardbox {
     zoom: @setup-cards-reduced-zoom;
   }
 }
 
 @container (max-width: (@setup-cards-reduced-min-width - 1px)) {
-  .setup-column-body .cardbox {
+  .setup-columns .setup-column-body .cardbox {
     zoom: @setup-cards-small-zoom;
   }
 }

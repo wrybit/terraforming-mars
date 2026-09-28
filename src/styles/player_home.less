@@ -750,46 +750,21 @@ each(@players, {
   }
 }
 
-// M€-Münze auch in der Leiste, wenn diese per Teleport rechts steht (setup_start.less)
-.select-initial-cards,
-.select-initial-cards-footer {
-  .megacredits {
-    display: inline-block;
-    font-size: 26px;
-    width: 50px;
-    height: 50px;
-    line-height: 48px;
-    border-radius: 10px;
-    text-align: center;
-    background-image: url(./assets/resources/megacredit.png);
-    background-size: 50px;
-    filter: drop-shadow(0px 0px 1px black);
-    font-family: Prototype, sans-serif;
-    color: #000;
-  }
-}
-
-// Leiste unter den Tabs der Startauswahl (SelectInitialCards): Start-M€, Warnung, Start in einer Zeile
+// Leiste der Startauswahl (SelectInitialCards): Bilanz (SetupSummary, setup_summary.less) und "Beginne" in einer Zeile
 .select-initial-cards-footer {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 20px;
-  margin-top: 12px;
+  align-items: stretch;
+  gap: 20px;
+  margin-top: 20px; // wie der Abstand zwischen den Spalten: Bilanz ist eine eigene Fläche
 
-  > div {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  // Bilanz schrumpft (der Status bricht darin um), der Button bleibt immer daneben
+  > .setup-summary {
+    flex: 1 1 0;
+    min-width: 0;
   }
 
-  .tm-warning {
-    margin: 0;
-  }
-
-  // Start rechts außen, abgesetzt von den Infos
   > .btn {
-    margin-left: auto;
+    flex: none;
   }
 }
 

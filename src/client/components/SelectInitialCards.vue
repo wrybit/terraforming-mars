@@ -35,22 +35,19 @@
       </section>
     </div>
 
-    <!-- Start-M€, Warnung und "Beginne" gelten für die ganze Auswahl, nicht für eine Spalte: rechts unter Mars und
-         Meilensteinen (setupStartSlot.ts). Ohne diesen Platz (z. B. in Tests) oder bei eingeklapptem Spielplan
-         (setupBoardCollapsed.ts) steht die Leiste unter den Spalten. -->
-    <Teleport :to="'#' + setupStartSlotId" defer :disabled="!hasStartSlot || boardCollapsed">
+    <!-- Bilanz (Start-M€, Präludien, Kauf, Status) und "Beginne" gelten für die ganze Auswahl: als Leiste unter den
+         Spalten. Früher rechts unter Mars und Meilensteinen – dort passte der Button bei 1080 px Höhe nicht mehr hin. -->
     <div class="select-initial-cards-footer">
-      <template v-if="selectedCorporations.length === 1">
-        <div><span v-i18n>Starting Megacredits:</span> <div class="megacredits">{{getStartingMegacredits()}}</div></div>
-        <div v-if="hasPrelude"><span v-i18n>After Preludes:</span> <div class="megacredits">{{getStartingMegacredits() + getAfterPreludes()}}</div></div>
-      </template>
-      <div v-if="warning !== undefined" class="tm-warning">
-        <label class="label label-error">{{ $t(warning) }}</label>
-      </div>
+      <SetupSummary
+        :startMegacredits="corporationMegacredits()"
+        :preludeMegacredits="hasPrelude ? getAfterPreludes() : undefined"
+        :purchasedCount="selectedCards.length"
+        :cardCost="cardCost()"
+        :status="warning ?? 'Ready to start'"
+        :statusReady="valid && warning === undefined" />
       <!-- :key=warning is a way of validing that the state of the button should change. If the warning changes, or disappears, that's a signal that the button might change. -->
       <AppButton :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel" class="select-initial-cards-start"/>
     </div>
-    </Teleport>
   </div>
 </template>
 
@@ -65,6 +62,7 @@ import * as constants from '@/common/constants';
 import {PlayerInputModel, SelectCardModel, SelectInitialCardsModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import SelectCard from '@/client/components/SelectCard.vue';
+import SetupSummary from '@/client/components/SetupSummary.vue';
 import ConfirmDialog from '@/client/components/common/ConfirmDialog.vue';
 import {getPreferences, Preferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {Tag} from '@/common/cards/Tag';
@@ -76,8 +74,6 @@ import {ColonyModel, simpleColonyModel} from '@/common/models/ColonyModel';
 import * as titles from '@/common/inputs/SelectInitialCards';
 import {sum} from '@/common/utils/utils';
 import {shortTabLabel} from '@/client/components/orOptionsShortLabels';
-import {SETUP_START_SLOT_ID} from '@/client/components/setupStartSlot';
-import {setupBoardCollapsed} from '@/client/components/setupBoardCollapsed';
 
 
 type DataModel = {
@@ -89,7 +85,6 @@ type DataModel = {
   selectedPreludes: Array<CardName>,
   valid: boolean,
   warning: string | undefined,
-  hasStartSlot: boolean,
 }
 
 type InitialCardsSection = 'corporation' | 'prelude' | 'ceo' | 'projects';
@@ -136,6 +131,7 @@ export default defineComponent({
   components: {
     AppButton,
     SelectCard,
+    SetupSummary,
     ConfirmDialog,
     Colony,
   },
@@ -147,8 +143,6 @@ export default defineComponent({
       selectedPreludes: [],
       valid: false,
       warning: undefined,
-      // Gibt es den Platz in der rechten Spalte? Nach dem Einhängen geprüft
-      hasStartSlot: false,
     };
   },
   methods: {
@@ -247,24 +241,21 @@ export default defineComponent({
         return 0;
       }
     },
-    getStartingMegacredits() {
+    // Start-M€ des gewählten Konzerns (vor dem Kartenkauf); undefined, solange nicht genau einer gewählt ist
+    corporationMegacredits(): number | undefined {
       if (this.selectedCorporations.length !== 1) {
-        return NaN;
+        return undefined;
       }
       const corpName = this.selectedCorporations[0];
-      const corporation = getCardOrThrow(corpName);
       // The ?? 0 is only because ClientCard applies to _all_ cards.
-
-      let starting = corporation.startingMegaCredits ?? 0;
-      const cardCost = corporation.cardCost === undefined ? constants.CARD_COST : corporation.cardCost;
-      starting -= this.selectedCards.length * cardCost;
-
-      if (corpName === CardName.SAGITTA_FRONTIER_SERVICES) {
-        // Effect for playing itself.
-        starting += 4;
-      }
-
-      return starting;
+      const starting = getCardOrThrow(corpName).startingMegaCredits ?? 0;
+      // Effect for playing itself.
+      return corpName === CardName.SAGITTA_FRONTIER_SERVICES ? starting + 4 : starting;
+    },
+    // Preis je Startkarte; manche Konzerne (z. B. Polyphemos) weichen vom Standard ab
+    cardCost(): number {
+      const corporation = this.selectedCorporations.length === 1 ? getCardOrThrow(this.selectedCorporations[0]) : undefined;
+      return corporation?.cardCost ?? constants.CARD_COST;
     },
     saveIfConfirmed() {
       const projectCards = this.selectedCards.filter((name) => getCard(name)?.type !== CardType.PRELUDE);
@@ -374,13 +365,6 @@ export default defineComponent({
     },
   },
   computed: {
-    setupStartSlotId(): string {
-      return SETUP_START_SLOT_ID;
-    },
-    // Spielplan eingeklappt: dann fehlt der Platz rechts, die Leiste bleibt unter den Spalten
-    boardCollapsed(): boolean {
-      return setupBoardCollapsed.value;
-    },
     // Spalten der Startauswahl in Spielreihenfolge; Präludien und CEO nur, wenn die Erweiterung aktiv ist
     sections(): Array<SectionColumn> {
       const columns = [this.sectionColumn('corporation', this.corpCardOption, this.selectedCorporations.length)];
@@ -433,8 +417,6 @@ export default defineComponent({
   },
   mounted() {
     this.validate();
-    // Der Platz entsteht im selben Durchlauf (PlayerHome); nach dem Einhängen steht er im Dokument
-    this.hasStartSlot = document.getElementById(SETUP_START_SLOT_ID) !== null;
   },
 });
 

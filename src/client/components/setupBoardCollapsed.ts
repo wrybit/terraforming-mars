@@ -1,8 +1,7 @@
 import {ref} from 'vue';
 
 // Ob der Spielplan in der Startphase eingeklappt ist. Gemeinsamer Zustand von PlayerHome.vue (blendet die rechte
-// Spalte aus), SetupBoardToggle.vue (Button) und SelectInitialCards.vue (holt die Leiste mit "Beginne" nach links,
-// weil ihr Platz in der rechten Spalte dann fehlt). Gemerkt pro Browser, damit der Plan nach dem Neuladen nicht
+// Spalte aus) und SetupBoardToggle.vue (Button). Gemerkt pro Browser, damit der Plan nach dem Neuladen nicht
 // wieder aufklappt.
 
 const STORAGE_KEY = 'setup-board-collapsed';
