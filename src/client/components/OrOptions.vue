@@ -5,6 +5,15 @@
 
     <!-- Aktionsmenü: Tabs mit Kurzlabel und Zähler verfügbarer Einträge; leere Tabs sind abgeschwächt, aber anklickbar -->
     <div v-if="asTabs" class="or-tabs" role="tablist">
+      <!-- Handkarten immer als erster Tab (nur Ansicht); vorausgewählt bleibt die erste echte Aktion -->
+      <button type="button" role="tab"
+        :title="$t('Cards In Hand')"
+        :aria-selected="handTabActive"
+        :class="['or-tab', {'or-tab--active': handTabActive, 'or-tab--empty': handCards.length === 0}]"
+        @click="handTabActive = true">
+        <span class="or-tab-title">{{ $t('Cards In Hand') }}</span>
+        <span class="or-tab-count">{{ handCards.length }}</span>
+      </button>
       <!-- Anzeige-Reihenfolge per tabDisplayOrder (Weitergeben/Beenden ans Ende); idx bleibt der Index in displayedOptions -->
       <button v-for="idx in tabDisplayOrder(displayedOptions.map((option) => option.title))" :key="idx"
         :data-option-index="idx"
@@ -14,11 +23,11 @@
         :aria-label="$t(shortTabLabel(displayedOptions[idx].title))"
         :aria-selected="selectedIdx === idx"
         :class="['or-tab', {
-          'or-tab--active': selectedIdx === idx,
+          'or-tab--active': !handTabActive && selectedIdx === idx,
           'or-tab--empty': availableCount(displayedOptions[idx]) === 0,
           'or-tab--icon': tabIcon(displayedOptions[idx].title) !== undefined,
         }]"
-        @click="selectedOption = displayedOptions[idx]">
+        @click="selectOptionTab(displayedOptions[idx])">
         <OrOptionsTabIcon v-if="tabIcon(displayedOptions[idx].title) !== undefined" :icon="tabIcon(displayedOptions[idx].title)!"/>
         <span v-else class="or-tab-title">{{ $t(shortTabLabel(displayedOptions[idx].title)) }}</span>
         <span v-if="availableCount(displayedOptions[idx]) !== undefined" class="or-tab-count">{{ availableCount(displayedOptions[idx]) }}</span>
@@ -27,7 +36,9 @@
 
     <!-- Im Tab-Modus ist dieser Container die mit dem aktiven Tab verbundene Box (Inhalt + Speichern) -->
     <div :class="{'or-tab-panel': asTabs}" :role="asTabs ? 'tabpanel' : undefined">
-      <PlayerInputFactory v-if="asTabs && selectedIdx !== -1" ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
+      <SortableCards v-if="asTabs && handTabActive" :playerId="playerView.id" :cards="handCards"/>
+      <!-- v-show statt v-if: Eingaben der gewählten Aktion bleiben beim Blick in die Hand erhalten -->
+      <PlayerInputFactory v-if="asTabs && selectedIdx !== -1" v-show="!handTabActive" ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
 
       <template v-if="!asTabs">
         <div v-for="(option, idx) in displayedOptions" :key="idx">
@@ -42,7 +53,7 @@
         </div>
       </template>
 
-      <div v-if="showsave && selectedOption && !showChildSaveButton(selectedOption)">
+      <div v-if="showsave && selectedOption && !showChildSaveButton(selectedOption)" v-show="!(asTabs && handTabActive)">
         <div :class="['wf-action', {'or-tab-save': asTabs}]" :style="asTabs ? undefined : 'margin: 5px 30px 10px'">
           <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" @click="saveData" />
         </div>
@@ -63,6 +74,9 @@ import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {fullTabTitle, shortTabLabel, tabDisplayOrder, tabIcon} from '@/client/components/orOptionsShortLabels';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
+import SortableCards from '@/client/components/SortableCards.vue';
+import {allCardsInHand} from '@/client/utils/handCards';
+import {CardModel} from '@/common/models/CardModel';
 
 let unique = 0;
 
@@ -91,6 +105,7 @@ export default defineComponent({
   components: {
     AppButton,
     OrOptionsTabIcon,
+    SortableCards,
   },
   setup() {
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
@@ -122,7 +137,14 @@ export default defineComponent({
       radioElementName: 'selectOption' + unique++,
       selectedOption: displayedOptions[selectedIdx],
       selectedIdx,
+      // Handkarten-Tab (nur im Tab-Modus) aktiv – unabhängig von der gewählten Aktion, die erhalten bleibt
+      handTabActive: false,
     };
+  },
+  computed: {
+    handCards(): Array<CardModel> {
+      return allCardsInHand(this.playerView);
+    },
   },
   watch: {
     selectedOption(newOption: PlayerInputModel) {
@@ -143,6 +165,10 @@ export default defineComponent({
     },
   },
   methods: {
+    selectOptionTab(option: PlayerInputModel) {
+      this.handTabActive = false;
+      this.selectedOption = option;
+    },
     shortTabLabel,
     fullTabTitle,
     tabIcon,
