@@ -31,7 +31,7 @@
     <div :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <SortableCards v-if="asTabs && handTabActive" :playerId="playerView.id" :cards="handCards"/>
       <!-- v-show statt v-if: Eingaben der gewählten Aktion bleiben beim Blick in die Hand erhalten -->
-      <PlayerInputFactory v-if="asTabs && selectedIdx !== -1" v-show="!handTabActive" ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
+      <PlayerInputFactory v-if="asTabs && selectedIdx !== -1" v-show="!handTabActive" ref="inputfactory" @validity="childValid = $event" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
 
       <!-- Meilenstein/Auszeichnung wählen: Bild-Kacheln wie auf dem Brett statt Radio-Liste -->
       <MilestoneAwardOptions v-if="!asTabs && maKind !== undefined"
@@ -52,14 +52,15 @@
             <span>{{ $t(option.title) }}</span>
           </label>
           <div v-if="selectedIdx === idx" style="margin-left: 30px">
-            <PlayerInputFactory ref="inputfactory" v-bind="childInputProps(idx)" />
+            <PlayerInputFactory ref="inputfactory" v-bind="childInputProps(idx)" @validity="childValid = $event" />
           </div>
         </div>
       </template>
 
       <div v-if="showsave && selectedOption && !showChildSaveButton(selectedOption)" v-show="!(asTabs && handTabActive)">
         <div :class="['wf-action', {'or-tab-save': asTabs}, asTabs && tabButtonTone(selectedOption.title) ? 'or-tab-save--' + tabButtonTone(selectedOption.title) : '']" :style="asTabs ? undefined : 'margin: 5px 30px 10px'">
-          <AppButton :title="$t(asTabs ? tabButtonLabel(selectedOption.title, selectedOption.buttonLabel) : selectedOption.buttonLabel)" type="submit" size="normal" @click="saveData" />
+          <!-- Gesperrt, solange die gewählte Option noch keine gültige Auswahl hat (z. B. keine Karte gewählt) -->
+          <AppButton :title="$t(asTabs ? tabButtonLabel(selectedOption.title, selectedOption.buttonLabel) : selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid" @click="saveData" />
         </div>
       </div>
     </div>
@@ -149,6 +150,8 @@ export default defineComponent({
       selectedIdx,
       // Handkarten-Tab (nur im Tab-Modus) aktiv – unabhängig von der gewählten Aktion, die erhalten bleibt
       handTabActive: false,
+      // Ob der Kind-Input speichern darf (SelectCard meldet das per "validity"); andere Inputs melden nichts
+      childValid: true,
     };
   },
   computed: {
@@ -163,6 +166,8 @@ export default defineComponent({
   watch: {
     selectedOption(newOption: PlayerInputModel) {
       this.selectedIdx = this.displayedOptions.indexOf(newOption);
+      // Neuer Kind-Input: gültig, bis er etwas anderes meldet
+      this.childValid = true;
       // Clicking the option can shift elements on the page.
       // This preserves the location of the option button the user just clicked by
       // tracking where it was on the screen, where it moved, and then repositioning it.

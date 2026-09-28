@@ -19,7 +19,7 @@
         <div v-if="showsave === true" class="nofloat">
             <AppButton v-if="showSelectAll" @click="toggleSelectAll" type="submit" :title="allSelected ? $t('Deselect All') : $t('Select All')" />
             <!-- Gesperrt, solange weniger Karten gewählt sind als nötig: zeigt, dass erst eine Karte gewählt werden muss -->
-            <AppButton :disabled="(isOptionalToManyCards && cardsSelected() === 0) || cardsSelected() < playerinput.min" type="submit" @click="saveData" :title="buttonLabel()" />
+            <AppButton :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()" />
             <AppButton :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t('Skip this action')" />
         </div>
     </div>
@@ -96,6 +96,13 @@ export default defineComponent({
   watch: {
     cards() {
       this.$emit('cardschanged', this.getData());
+    },
+    // Meldet nach außen, ob gespeichert werden darf – OrOptions sperrt damit seinen eigenen Button
+    hasRequiredSelection: {
+      handler(valid: boolean) {
+        this.$emit('validity', valid);
+      },
+      immediate: true,
     },
   },
   methods: {
@@ -206,6 +213,13 @@ export default defineComponent({
     },
   },
   computed: {
+    // Genug Karten gewählt? Sonst bleibt der Button gesperrt statt nach dem Klick einen Fehler zu zeigen
+    hasRequiredSelection(): boolean {
+      if (this.isOptionalToManyCards && this.cardsSelected() === 0) {
+        return false;
+      }
+      return this.cardsSelected() >= this.playerinput.min;
+    },
     selectOnlyOneCard() : boolean {
       return this.playerinput.max === 1 && this.playerinput.min === 1;
     },
