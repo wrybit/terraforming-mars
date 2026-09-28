@@ -148,10 +148,9 @@ export default defineComponent({
       if (this.isStandardProject) {
         classes.push('card-standard-project');
       }
+      // Karten werden beim Hover nicht mehr länger (früher mit experimental_ui) – sonst springt das Raster
       if (this.autoTall) {
         classes.push('card-auto-tall');
-      } else if (getPreferences().experimental_ui) {
-        classes.push('card-hover-tall');
       }
       const learnerModeOff = !getPreferences().learner_mode;
       if (learnerModeOff && this.isStandardProject && this.card.isDisabled) {
