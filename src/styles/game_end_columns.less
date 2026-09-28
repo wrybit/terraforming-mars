@@ -273,7 +273,13 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) @game-end-side-width;
     column-gap: @game-end-columns-gap;
-    align-items: start;
+    // Beide Spalten gleich hoch, damit die letzte Box links bündig mit dem Log rechts endet
+    align-items: stretch;
+  }
+
+  // Letzte Box der linken Spalte (Siegpunkt-Details) füllt den Rest bis zum unteren Ende der rechten Spalte
+  .game-end-box--fill {
+    flex-grow: 1;
   }
 }
 

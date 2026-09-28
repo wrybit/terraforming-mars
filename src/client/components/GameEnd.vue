@@ -120,7 +120,7 @@
           </table>
         </div>
 
-        <div class="game-end-box">
+        <div class="game-end-box game-end-box--fill">
           <h2 v-i18n>Victory points details</h2>
           <div class="game-end-flexrow game-end-details">
             <div v-for="p in playersInPlace" :key="p.color" class="game-end-column">
