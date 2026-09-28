@@ -16,8 +16,11 @@
     </div>
     <div class="setup-summary-item">
       <dt>{{ $t('Remaining') }}</dt>
-      <dd :class="{'setup-summary-value--negative': remaining !== undefined && remaining < 0}">
-        {{ remaining === undefined ? '–' : withMinus(remaining) + ' M€' }}
+      <!-- Ergebnis der Rechnung als gelbe M€-Münze wie im Spiel -->
+      <dd>
+        <span v-if="remaining !== undefined"
+          :class="['setup-summary-coin', {'setup-summary-coin--negative': remaining < 0}]">{{ withMinus(remaining) }}</span>
+        <template v-else>–</template>
       </dd>
     </div>
     <div class="setup-summary-item setup-summary-item--status">

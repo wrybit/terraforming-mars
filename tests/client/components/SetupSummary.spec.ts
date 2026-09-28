@@ -13,7 +13,7 @@ describe('SetupSummary', () => {
       ...globalConfig,
       props: {startMegacredits: 42, preludeMegacredits: 30, purchasedCount: 2, cardCost: 3, status: 'Ready to start', statusReady: true},
     });
-    expect(values(wrapper)).deep.eq(['42', '+30', '−6', '66 M€', 'Ready to start']);
+    expect(values(wrapper)).deep.eq(['42', '+30', '−6', '66', 'Ready to start']);
     expect(wrapper.find('.setup-summary-status--ready').exists()).is.true;
   });
 
@@ -31,6 +31,6 @@ describe('SetupSummary', () => {
       ...globalConfig,
       props: {startMegacredits: 20, preludeMegacredits: -18, purchasedCount: 1, cardCost: 3, status: 'Ready to start', statusReady: true},
     });
-    expect(wrapper.find('.setup-summary-value--negative').text()).eq('−1 M€');
+    expect(wrapper.find('.setup-summary-coin--negative').text()).eq('−1');
   });
 });

@@ -5,6 +5,7 @@
 @setup-summary-value-size: 22px;
 @setup-summary-item-gap: 28px; // zwischen den Kennzahlen deutlich mehr als zwischen Beschriftung und Wert
 @setup-summary-negative: #ff7a6b; // Bleibt < 0: nicht genug M€
+@setup-summary-coin-size: 34px;
 @setup-summary-open: #ffb36b; // Status: es fehlt noch etwas
 
 .setup-summary {
@@ -44,10 +45,6 @@
     white-space: nowrap;
 
     // Zustandsfarben: hier verschachtelt, damit sie die weiße Grundfarbe sicher überschreiben
-    &.setup-summary-value--negative {
-      color: @setup-summary-negative;
-    }
-
     &.setup-summary-status--open {
       color: @setup-summary-open;
     }
@@ -67,4 +64,29 @@
     font-weight: normal;
     white-space: normal;
   }
+}
+
+// "Bleibt" als gelbe M€-Münze wie auf den Karten und im Spielerbereich
+.setup-summary-coin {
+  display: inline-block;
+  min-width: @setup-summary-coin-size;
+  height: @setup-summary-coin-size;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border-radius: 7px;
+  background-image: url(./assets/resources/megacredit.png);
+  background-size: 100% 100%;
+  filter: drop-shadow(0 0 1px black);
+  color: #000;
+  font-family: Prototype, sans-serif;
+  font-size: 20px;
+  font-weight: normal;
+  line-height: @setup-summary-coin-size;
+  text-align: center;
+}
+
+// Zu wenig M€: Münze rot umrandet, Zahl rot
+.setup-summary-coin--negative {
+  outline: 2px solid @setup-summary-negative;
+  color: #b3160a;
 }
