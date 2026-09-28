@@ -14,6 +14,12 @@
 // zoom statt width/height, weil die Icons unterschiedliche Hintergrundgrößen nutzen
 @players-compact-icon-zoom: 0.75;
 @players-compact-number-size: 20px;
+// Ungezoomte Breiten der Tag-Symbole (.tag-type-main / .tag-type-secondary in player_home.less)
+@players-compact-tag-main-width: 40px;
+@players-compact-tag-secondary-width: 34px;
+// Plaketten an Tags (Rabatt, Punkte je Tag): Verkleinerung und wie weit sie über die Symbolecke ragen
+@players-compact-badge-zoom: 0.6;
+@players-compact-badge-overhang: 3px;
 
 .players-overview-compact() {
   .player-info {
@@ -203,6 +209,38 @@
   .resource_icon,
   .tag-count {
     zoom: @players-compact-icon-zoom;
+  }
+
+  // Plaketten an Tags (Rabatt, Punkte je Tag): kleiner als im Original und an die Ecke des Symbols gesetzt.
+  // Ihre Positionen in players_overview.less gelten für ein ungezoomtes Symbol in der Spalte "Symbol über Zahl".
+  // zoom skaliert auch top/left, deshalb rechnen die Offsets in ungezoomten Einheiten (÷ Plaketten-Zoom).
+  .points-per-tag {
+    @size: 21px; // Durchmesser in players_overview.less
+    @offset: ((@players-compact-tag-secondary-width * @players-compact-icon-zoom + @players-compact-badge-overhang) / @players-compact-badge-zoom) - @size;
+    zoom: @players-compact-badge-zoom;
+    top: @offset;
+    left: @offset;
+  }
+
+  // Rabatt oben rechts am Symbol – ohne feste Breite stünde er an der rechten Kante von Symbol + Zahl
+  .player-tags .player-tag-discount {
+    position: absolute;
+    top: 0;
+    left: 0;
+    zoom: @players-compact-badge-zoom;
+
+    .megacredits-container {
+      top: -(@players-compact-badge-overhang / @players-compact-badge-zoom) - 8px; // 8px = oberes Padding des Containers
+      right: -(@players-compact-badge-overhang / @players-compact-badge-zoom) - 8px; // 8px = rechtes Padding
+    }
+  }
+
+  .player-tags-main .player-tag-discount {
+    width: (@players-compact-tag-main-width * @players-compact-icon-zoom / @players-compact-badge-zoom);
+  }
+
+  .player-tags-secondary .player-tag-discount {
+    width: (@players-compact-tag-secondary-width * @players-compact-icon-zoom / @players-compact-badge-zoom);
   }
 
   .resource_item_stock_count {
