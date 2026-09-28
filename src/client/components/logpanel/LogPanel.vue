@@ -35,6 +35,7 @@ import {LogMessage} from '@/common/logs/LogMessage';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {SoundManager} from '@/client/utils/SoundManager';
 import {getPreferences} from '@/client/utils/PreferencesManager';
+import {needsModalPreview} from '@/client/components/logpanel/logMessageContent';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
@@ -104,12 +105,16 @@ export default defineComponent({
       return window.matchMedia('(hover: hover)').matches;
     },
     messageClicked(message: LogMessage) {
-      if (!this.canHover()) {
+      // Viele Karten: immer per Klick als Modal über der rechten Spalte
+      if (needsModalPreview(message)) {
+        this.typedRefs.messageInspector.showModal(message);
+      } else if (!this.canHover()) {
         this.typedRefs.messageInspector.show(message);
       }
     },
     messageHovered(message: LogMessage, event: MouseEvent) {
-      if (!this.canHover()) {
+      // Zeilen mit vielen Karten haben keine Hover-Vorschau (würde übers Fenster ragen), nur Klick
+      if (!this.canHover() || needsModalPreview(message)) {
         return;
       }
       // Vorschau bündig oben rechts im Log-Panel, in Fensterkoordinaten (position: fixed),

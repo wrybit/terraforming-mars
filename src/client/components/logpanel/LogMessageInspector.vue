@@ -4,8 +4,9 @@
     :message="selectedMessage"
     :players="viewModel.players"
     :floating="previewPosition !== undefined"
+    :modal="modal"
     :style="previewStyle"
-    @hide="selectedMessage = undefined"/>
+    @hide="selectedMessage = undefined; modal = false"/>
 </template>
 
 <script setup lang="ts">
@@ -30,12 +31,26 @@ const previewStyle = computed(() => {
   return position === undefined ? undefined : {top: position.top + 'px', right: position.right + 'px'};
 });
 
+// Modal über der rechten Spalte für Zeilen mit vielen Karten
+const modal = ref(false);
+
 function show(message: LogMessage) {
   selectedMessage.value = message;
   previewPosition.value = undefined;
+  modal.value = false;
+}
+
+function showModal(message: LogMessage) {
+  selectedMessage.value = message;
+  previewPosition.value = undefined;
+  modal.value = true;
 }
 
 function preview(message: LogMessage, position: PreviewPosition) {
+  // Ein offenes Modal nicht durch Hover über andere Zeilen ersetzen
+  if (modal.value) {
+    return;
+  }
   selectedMessage.value = message;
   previewPosition.value = position;
 }
@@ -48,5 +63,5 @@ function hidePreview() {
   }
 }
 
-defineExpose({show, preview, hidePreview});
+defineExpose({show, showModal, preview, hidePreview});
 </script>

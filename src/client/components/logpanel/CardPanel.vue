@@ -1,5 +1,5 @@
 <template>
-  <div :class="['card-panel', {'card-panel--floating': floating}]" v-if="message !== undefined && show">
+  <div :class="['card-panel', {'card-panel--floating': floating, 'card-panel--modal': modal}]" v-if="message !== undefined && show">
     <!-- Hover-Vorschau schließt sich beim Verlassen der Zeile selbst, braucht keinen Button -->
     <AppButton v-if="!floating" size="big" type="close" :disableOnServerBusy="false" @click="hideMe" align="right"/>
     <div id="log_panel_card" class="cardbox" v-for="name in cards" :key="name">
@@ -18,7 +18,6 @@
 
 import {defineComponent} from 'vue';
 import {LogMessage} from '@/common/logs/LogMessage';
-import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {CardName} from '@/common/cards/CardName';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import {ColonyModel, simpleColonyModel} from '@/common/models/ColonyModel';
@@ -28,6 +27,7 @@ import GlobalEvent from '@/client/components/turmoil/GlobalEvent.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import Colony from '@/client/components/colonies/Colony.vue';
 import {GlobalEventName} from '@/common/turmoil/globalEvents/GlobalEventName';
+import {logMessageCards, logMessageColonies, logMessageGlobalEvents} from '@/client/components/logpanel/logMessageContent';
 
 export default defineComponent({
   name: 'LogPanel',
@@ -45,6 +45,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    // Als scrollbares Modal über der rechten Spalte (Zeilen mit vielen Karten, needsModalPreview)
+    modal: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     AppButton,
@@ -57,18 +62,28 @@ export default defineComponent({
       return this.cards.length + this.globalEvents.length + this.colonies.length > 0;
     },
     cards(): ReadonlyArray<CardName> {
-      return this.message.data
-        .filter((datum) => datum.type === LogMessageDataType.CARD || datum.type === LogMessageDataType.CARDS)
-        .flatMap((datum) => datum.type === LogMessageDataType.CARD ? [datum.value] : datum.value);
+      return logMessageCards(this.message);
     },
     globalEvents(): Array<GlobalEventName> {
-      return this.message.data.filter((datum) => datum.type === LogMessageDataType.GLOBAL_EVENT).map((datum) => datum.value);
+      return logMessageGlobalEvents(this.message);
     },
     colonies(): Array<ColonyName> {
-      return this.message.data.filter((datum) => datum.type === LogMessageDataType.COLONY).map((datum) => datum.value);
+      return logMessageColonies(this.message);
     },
   },
+  // Escape schließt das Modal
+  mounted() {
+    window.addEventListener('keydown', this.closeOnEscape);
+  },
+  beforeUnmount() {
+    window.removeEventListener('keydown', this.closeOnEscape);
+  },
   methods: {
+    closeOnEscape(event: KeyboardEvent) {
+      if (this.modal && event.key === 'Escape') {
+        this.hideMe();
+      }
+    },
     hideMe() {
       this.$emit('hide');
     },

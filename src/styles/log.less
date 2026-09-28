@@ -135,6 +135,35 @@ each(@players, {
   }
 });
 
+// Zeilen mit vielen Karten (needsModalPreview): per Klick als scrollbares Modal über der rechten Spalte,
+// genauso platziert wie die gespielten Karten (player_home_columns.less, --board-column-left)
+.card-panel--modal {
+  position: fixed;
+  inset: 10px 0 10px var(--board-column-left, 0);
+  z-index: 120;
+  display: block; // Karten als Reihe (cardbox), das ✕ schwebt oben rechts
+  padding: 16px;
+  overflow-y: auto;
+  border: 1px solid #4b4d55;
+  border-radius: 8px;
+  background: #2a2b30;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+
+  // Kleines ✕ oben rechts, bleibt beim Scrollen durch viele Karten sichtbar
+  > .btn {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    float: right;
+    width: auto;
+    margin: 0 0 8px 8px;
+  }
+}
+
+.log-line--expandable {
+  cursor: pointer;
+}
+
 .log-player {
   text-shadow:1px 1px 1px @grey_900, -1px -1px 1px #666;
   padding: 2px 10px;

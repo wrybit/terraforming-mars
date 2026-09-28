@@ -1,7 +1,7 @@
 <template>
    <!-- log-line--<Farbe>: Text und Hover in der Farbe des Spielers, um den es in der Zeile geht (log.less) -->
    <li v-if="message !== undefined && message.data !== undefined && message.message !== undefined"
-     :class="lineColor !== undefined ? 'log-line--' + lineColor : undefined"
+     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--expandable': expandable}]"
      @click.prevent="$emit('click')">
     <span v-if="message.type === LogMessageType.DEFAULT" :title="when" v-html="icon"></span>
     <template v-for="(data, idx) of entries" :key="idx">
@@ -56,6 +56,7 @@ import {isMoonSpace, getSpaceName} from '@/common/boards/spaces';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {range} from '@/common/utils/utils';
+import {needsModalPreview} from '@/client/components/logpanel/logMessageContent';
 
 const cardTypeToCss: Record<CardType, string | undefined> = {
   event: 'background-color-events',
@@ -134,6 +135,10 @@ export default defineComponent({
   },
   computed: {
     // Spieler der Zeile = erster Spieler-Eintrag der Nachricht (z. B. "${0} hat … gespielt")
+    // Viele Karten: öffnet per Klick ein Modal (siehe logMessageContent.ts)
+    expandable(): boolean {
+      return needsModalPreview(this.message);
+    },
     lineColor(): Color | undefined {
       const player = this.message.data?.find((datum) => datum.type === LogMessageDataType.PLAYER);
       return player?.value as Color | undefined;
