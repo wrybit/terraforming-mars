@@ -103,7 +103,7 @@
   }
 
   .game-end-group-start {
-    border-left: 12px solid transparent;
+    border-left: 8px solid transparent;
     background-clip: padding-box;
   }
 
@@ -114,8 +114,35 @@
   // Kompakter als die alte Einzelspalten-Seite, damit die Tabelle samt Parametergruppe in die linke Spalte passt
   td,
   th {
-    padding: 6px;
-    min-width: 36px;
+    padding: 4px;
+    min-width: 0;
+    font-size: 18px;
+  }
+
+  // Symbole im Kopf kleiner (Originalgrößen aus game_end.less: 34–46px)
+  thead {
+    .tr { width: 34px; height: 28px; background-size: 34px 28px; }
+    .vp,
+    .m-and-a { width: 28px; height: 28px; line-height: 28px; font-size: 14px; }
+    .card-delegate { width: 24px; height: 29px; background-size: 24px 29px; }
+    .resized-tile { width: 26px; height: 30px; background-size: 26px 30px; }
+    .table-forest-tile,
+    .table-city-tile,
+    .table-moon-road-tile,
+    .table-moon-colony-tile,
+    .table-moon-mine-tile,
+    .table-planetary-track { width: 26px; height: 30px; background-size: 26px 30px; }
+    .tile { width: 30px; height: 30px; background-size: contain; }
+    .table-red-arrow { width: 24px; height: 24px; background-size: 24px; }
+    .mc-icon { width: 22px; height: 22px; }
+  }
+
+  a {
+    font-size: 20px;
+  }
+
+  .game-end-total-column {
+    padding: 0 8px;
   }
 
   .column-corporation {
@@ -131,6 +158,11 @@
 }
 
 // Siegpunkt-Details: Spalten teilen sich die Breite statt fester 275px
+// Sicherheitsnetz: bei vielen Spalten (Mond, Venus, Pfadfinder) scrollt die Tabelle in ihrer Box statt unter das Brett zu ragen
+.game_end_victory_points {
+  overflow-x: auto;
+}
+
 .game-end-details {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
