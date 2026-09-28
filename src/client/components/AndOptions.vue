@@ -9,14 +9,17 @@
       :onsave="playerFactorySaved(idx)"
       :showsave="false"
       :showtitle="true" />
+    <TabPanelFooterSlot>
     <div v-if="showsave" class="wf-action">
       <AppButton :title="playerinput.buttonLabel" type="submit" size="normal" @click="saveData" :disabled="!canSave()"/>
     </div>
+    </TabPanelFooterSlot>
   </div>
 </template>
 
 <script lang="ts">
 
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 import {showAlert} from '@/client/components/showAlert';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
@@ -51,6 +54,7 @@ export default defineComponent({
     },
   },
   components: {
+    TabPanelFooterSlot,
     AppButton,
   },
   data(): DataModel {

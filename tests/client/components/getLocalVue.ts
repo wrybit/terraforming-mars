@@ -17,6 +17,12 @@ export const globalConfig = {
     directives: {
       'trim-whitespace': {},
     },
+    // Reiner Durchreicher (Teleport in den Fuß der Tab-Box): auch bei shallowMount echt rendern,
+    // sonst fehlen die Buttons der Eingaben
+    stubs: {
+      TabPanelFooterSlot: false,
+      teleport: false,
+    },
     config: {
       warnHandler: failOnVueWarning,
     },

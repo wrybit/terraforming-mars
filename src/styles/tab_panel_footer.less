@@ -1,0 +1,55 @@
+// Klebender Fußbereich unten an der Tab-Box (tabPanelFooter.ts): Preise links, Button rechts.
+// Er sitzt am unteren Rand der Box, auch wenn der Inhalt kürzer ist, und bleibt beim Scrollen sichtbar.
+@import (reference) "./frosted_surface.less";
+
+@tab-panel-padding: 16px; // Innenabstand der Box (.or-tab-panel in or_options_tabs.less)
+@tab-panel-radius: 8px; // Rundung der Box (@or-tabs-radius)
+@tab-panel-footer-gap: 16px;
+@tab-panel-footer-padding: 12px @tab-panel-padding;
+// Dunkles Milchglas, deutlich dunkler als die Box, damit der Fuß als eigene Fläche erkennbar ist
+@tab-panel-footer-background: rgba(14, 15, 20, 0.72);
+@tab-panel-footer-blur: 10px;
+// Über gehoverten Karten (die heben sich mit z-index 100 heraus, preferences.less)
+@tab-panel-footer-z-index: 110;
+
+// Box als Spalte, damit der Fuß per margin-top: auto an den unteren Rand rutscht
+.or-tab-panel:has(> .or-tab-footer > *) {
+  display: flex;
+  flex-direction: column;
+}
+
+.or-tab-footer {
+  position: sticky;
+  bottom: -@tab-panel-padding; // klebt sonst am Innenabstand statt am Rahmen
+  z-index: @tab-panel-footer-z-index;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @tab-panel-footer-gap;
+  margin: auto -@tab-panel-padding -@tab-panel-padding;
+  padding: @tab-panel-footer-padding;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0 0 (@tab-panel-radius - 1px) (@tab-panel-radius - 1px);
+  background: @tab-panel-footer-background;
+  backdrop-filter: blur(@tab-panel-footer-blur);
+
+  // Leer (nichts zu bestätigen): kein Fuß; :has statt :empty, weil Vue leere Textknoten als Anker einfügt
+  &:not(:has(> *)) {
+    display: none;
+  }
+
+  // Buttons bringen eigene Außenabstände mit (btn-submit: 10px/30px) – im Fuß bestimmt das Padding die Höhe
+  .btn {
+    margin: 0;
+  }
+
+  // Button-Gruppen der Eingaben (z. B. .select-card-actions) rechts; ihre eigenen Außenabstände entfallen
+  > :not(.payments_form) {
+    margin: 0 0 0 auto;
+  }
+
+  // Button des Menüs immer ganz rechts, auch wenn ein Bezahlbereich (PaymentForm) davor eingehängt wird
+  > .or-tab-save {
+    order: 1;
+  }
+}

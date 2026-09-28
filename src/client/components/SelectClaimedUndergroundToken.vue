@@ -13,12 +13,15 @@
           <br>
       </label>
     </div>
+    <TabPanelFooterSlot>
     <div v-if="showsave === true" class="nofloat">
       <AppButton @click="saveData" :title="playerinput.buttonLabel" />
     </div>
+    </TabPanelFooterSlot>
   </div>
 </template>
 <script lang="ts">
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {SelectClaimedUndergroundTokenModel} from '@/common/models/PlayerInputModel';
@@ -58,6 +61,7 @@ export default defineComponent({
     };
   },
   components: {
+    TabPanelFooterSlot,
     AppButton,
     UndergroundToken,
   },

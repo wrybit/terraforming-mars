@@ -5,14 +5,17 @@
           <input type="radio" v-model="selected" :value="globalEventName" >
           <GlobalEvent :globalEventName="globalEventName" type="distant"/>
         </label>
+        <TabPanelFooterSlot>
         <div v-if="showsave === true" class="nofloat">
           <AppButton :disabled="selected === undefined" type="submit" @click="saveData" title="OK" />
         </div>
+        </TabPanelFooterSlot>
     </div>
 </template>
 
 <script lang="ts">
 
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
@@ -55,6 +58,7 @@ export default defineComponent({
     };
   },
   components: {
+    TabPanelFooterSlot,
     GlobalEvent,
     AppButton,
   },

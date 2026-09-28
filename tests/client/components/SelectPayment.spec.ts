@@ -274,7 +274,7 @@ describe('SelectPayment', () => {
         playerView: {
           id: 'playerid-foo',
           thisPlayer: {
-            steel: 6, megacredits: 0, steelValue: 2,
+            steel: 6, megacredits: 1, steelValue: 2, // 1 M€: zwei Währungen, sonst gibt es keine Regler
             titanium: 0, titaniumValue: 3, heat: 0, tableau: [],
           } as unknown as PublicPlayerModel,
         } as unknown as PlayerViewModel,
@@ -298,10 +298,10 @@ describe('SelectPayment', () => {
 
     const tester = new PaymentTester(wrapper);
     await tester.nextTick();
-    tester.expectPayment({steel: 5});
+    tester.expectPayment({steel: 5, megacredits: 0});
 
     await tester.clickPlus('steel');
-    tester.expectPayment({steel: 6});
+    tester.expectPayment({steel: 6, megacredits: 0});
 
     (wrapper.vm as any).saveData();
 

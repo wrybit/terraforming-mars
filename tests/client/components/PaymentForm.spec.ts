@@ -29,6 +29,20 @@ function mountPaymentForm(overrides: {
 }
 
 describe('PaymentForm', () => {
+  it('shows only the price when a single currency is available', async () => {
+    const wrapper = mountPaymentForm({
+      cost: 7,
+      order: ['megacredits', 'heat'],
+      ledger: {
+        'megacredits': {available: 10, rate: 1},
+      },
+    });
+
+    expect(wrapper.find('.payments_single').text()).contains('7');
+    expect(wrapper.find('[data-test=megacredits] input').exists()).is.false;
+    expect(wrapper.find('.payments_total_value').exists()).is.false;
+  });
+
   it('renders only resources in spendableResources', async () => {
     const wrapper = mountPaymentForm({
       cost: 10,
@@ -203,9 +217,11 @@ describe('PaymentForm', () => {
   it('megacredits max caps at cost', async () => {
     const wrapper = mountPaymentForm({
       cost: 10,
-      order: ['megacredits'],
+      order: ['megacredits', 'heat'],
       ledger: {
         'megacredits': {available: 12, rate: 1},
+        // Zweite Währung, sonst zeigt das Formular keine Regler (nur den Preis)
+        'heat': {available: 1, rate: 1},
       },
     });
 
@@ -256,9 +272,11 @@ describe('PaymentForm', () => {
   it('emits change when a resource amount is adjusted', async () => {
     const wrapper = mountPaymentForm({
       cost: 7,
-      order: ['megacredits'],
+      order: ['megacredits', 'heat'],
       ledger: {
         'megacredits': {available: 10, rate: 1},
+        // Zweite Währung, sonst zeigt das Formular keine Regler (nur den Preis)
+        'heat': {available: 1, rate: 1},
       },
     });
 
@@ -300,9 +318,11 @@ describe('PaymentForm', () => {
   it('clicking save shows warning when underpaying', async () => {
     const wrapper = mountPaymentForm({
       cost: 10,
-      order: ['megacredits'],
+      order: ['megacredits', 'heat'],
       ledger: {
         'megacredits': {available: 10, rate: 1},
+        // Zweite Währung, sonst zeigt das Formular keine Regler (nur den Preis)
+        'heat': {available: 1, rate: 1},
       },
     });
     await wrapper.find('[data-test=megacredits] input').setValue(5);
@@ -317,9 +337,11 @@ describe('PaymentForm', () => {
     // payment claims 8 heat but only 5 are available
     const wrapper = mountPaymentForm({
       cost: 8,
-      order: ['megacredits'],
+      order: ['megacredits', 'heat'],
       ledger: {
         'megacredits': {available: 10, rate: 1},
+        // Zweite Währung, sonst zeigt das Formular keine Regler (nur den Preis)
+        'heat': {available: 1, rate: 1},
       },
     });
 

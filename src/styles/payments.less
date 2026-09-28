@@ -33,10 +33,6 @@
   text-align: center;
 }
 
-.payments_save {
-  text-align: center;
-}
-
 .payments_title {
   font-size: 20px;
   color: #666;
@@ -90,4 +86,34 @@
 
 .payments_total_over .payments_total_value {
   color: #ffd84d;
+}
+
+// Bezahlbereich (PaymentForm.vue): Preise links, Button rechts – im Fuß der Tab-Box (tab_panel_footer.less)
+// wie an Ort und Stelle
+.payments_form {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.payments_table {
+  border-collapse: separate;
+}
+
+// Nur eine Währung: nur der Preis, ohne Regler
+.payments_single {
+  font-size: 24px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.payments_single .payments_type_smallicon {
+  width: 24px;
+  height: 24px;
+}
+
+.payments_form .payments_save {
+  margin-left: auto;
 }

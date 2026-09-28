@@ -46,12 +46,15 @@
       <label class="label label-error">{{ $t(warning) }}</label>
     </div>
 
+    <TabPanelFooterSlot>
     <div v-if="showsave === true" class="nofloat">
         <button class="btn btn-primary btn-submit" @click="saveData">{{ $t(playerinput.buttonLabel) }}</button>
     </div>
+    </TabPanelFooterSlot>
   </div>
 </template>
 <script lang="ts">
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 
 import {SelectProductionToLoseModel} from '@/common/models/PlayerInputModel';
@@ -68,6 +71,9 @@ type DataModel = {
 
 export default defineComponent({
   name: 'SelectProductionToLose',
+  components: {
+    TabPanelFooterSlot,
+  },
   props: {
     playerView: {
       type: Object as () => PlayerViewModel,

@@ -36,12 +36,15 @@
         </label>
     </div>
 
+    <TabPanelFooterSlot>
     <div v-if="showsave === true" class="nofloat">
         <button class="btn btn-primary btn-submit" @click="saveData">{{playerinput.buttonLabel}}</button>
     </div>
+    </TabPanelFooterSlot>
 </div>
 </template>
 <script lang="ts">
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 import {AresGlobalParametersResponse} from '@/common/inputs/AresGlobalParametersResponse';
 import {ShiftAresGlobalParametersModel} from '@/common/models/PlayerInputModel';
@@ -55,6 +58,9 @@ type DataModel = AresGlobalParametersResponse & {
 
 export default defineComponent({
   name: 'ShiftAresGlobalParameters',
+  components: {
+    TabPanelFooterSlot,
+  },
   props: {
     playerView: {
       type: Object as () => PlayerViewModel,

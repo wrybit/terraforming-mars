@@ -2,12 +2,15 @@
   <div class="wf-component wf-component--select-option">
     <div v-if="showtitle === true" class="wf-component-title">{{ $t(playerinput.title) }}</div>
     <WarningsComponent :warnings="playerinput.warnings"/>
+    <TabPanelFooterSlot>
     <AppButton v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
+    </TabPanelFooterSlot>
   </div>
 </template>
 
 <script lang="ts">
 
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {SelectOptionModel} from '@/common/models/PlayerInputModel';
@@ -38,6 +41,7 @@ export default defineComponent({
     },
   },
   components: {
+    TabPanelFooterSlot,
     AppButton,
     WarningsComponent,
   },

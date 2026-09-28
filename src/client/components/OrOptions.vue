@@ -69,13 +69,15 @@
         </div>
       </template>
 
-      <!-- Bei Feldauswahl im Tab-Modus kein Button: bestätigt wird über die Sprechblase am Feld (SpaceConfirmPopover) -->
-      <!-- Kein Button, wenn nichts auswählbar ist (Zähler 0, z. B. kein Standardprojekt bezahlbar) -->
-      <div v-if="showsave && selectedOption && !showChildSaveButton(selectedOption) && !(asTabs && selectedOption.type === 'space')
-        && !(asTabs && availableCount(selectedOption) === 0)" v-show="!(asTabs && handTabActive)">
-        <div :class="['wf-action', {'or-tab-save': asTabs}, asTabs && tabButtonTone(selectedOption.title) ? 'or-tab-save--' + tabButtonTone(selectedOption.title) : '']" :style="asTabs ? undefined : 'margin: 5px 30px 10px'">
+      <div v-if="!asTabs && showOwnSaveButton()" class="wf-action" style="margin: 5px 30px 10px">
+        <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid" @click="saveData" />
+      </div>
+
+      <!-- Tab-Modus: klebender Fußbereich unten an der Box (tabPanelFooter.ts); Bezahlbereiche hängen sich per Teleport ein -->
+      <div v-if="asTabs" v-show="!handTabActive" :id="footerId" class="or-tab-footer">
+        <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabButtonTone(selectedOption.title) ? 'or-tab-save--' + tabButtonTone(selectedOption.title) : '']">
           <!-- Gesperrt, solange die gewählte Option noch keine gültige Auswahl hat (z. B. keine Karte gewählt) -->
-          <AppButton :title="$t(asTabs ? tabButtonLabel(selectedOption.title, selectedOption.buttonLabel) : selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid" @click="saveData" />
+          <AppButton :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid" @click="saveData" />
         </div>
       </div>
     </div>
@@ -92,6 +94,7 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
+import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon} from '@/client/components/orOptionsShortLabels';
 import {tabIntro, temperatureHint, TabIntro} from '@/client/components/tabIntro';
@@ -142,7 +145,12 @@ export default defineComponent({
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
     // Verschachtelte Auswahlen innerhalb dieses Menüs bleiben Radio-Listen
     provide(OR_OPTIONS_AS_TABS, false);
-    return {asTabs};
+    // Nur die Tab-Box bietet einen Fußbereich an; verschachtelte Menüs nutzen den der äußeren Box
+    const footerId = newTabPanelFooterId();
+    if (asTabs) {
+      provide(TAB_PANEL_FOOTER, '#' + footerId);
+    }
+    return {asTabs, footerId};
   },
   data() {
     const displayedOptions: Array<PlayerInputModel> = [];
@@ -272,6 +280,16 @@ export default defineComponent({
     },
     // When the child component is a multi-select card, let it render its own save button.
     // This allows the child to control the button label (e.g. "Sell 3 patents").
+    // Eigener Button des Menüs: nicht, wenn die Eingabe selbst einen hat, bei Feldauswahl im Tab-Modus
+    // (bestätigt wird über die Sprechblase am Feld, SpaceConfirmPopover) und wenn nichts auswählbar ist
+    // (Zähler 0, z. B. kein Standardprojekt bezahlbar)
+    showOwnSaveButton(): boolean {
+      const option = this.selectedOption;
+      if (!this.showsave || option === undefined || this.showChildSaveButton(option)) {
+        return false;
+      }
+      return !(this.asTabs && (option.type === 'space' || this.availableCount(option) === 0));
+    },
     showChildSaveButton(option: PlayerInputModel): boolean {
       return option.type === 'card' && !(option.max === 1 && option.min === 1);
     },

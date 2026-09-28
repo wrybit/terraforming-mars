@@ -11,12 +11,15 @@
           @minus="reduceValue(unit)"/>
         <!-- @max="onMaxClicked(unit)" -->
     </template>
+    <TabPanelFooterSlot>
     <div v-if="showsave === true" class="nofloat">
         <AppButton @click="saveData" :title="playerinput.buttonLabel" />
     </div>
+    </TabPanelFooterSlot>
   </div>
 </template>
 <script lang="ts">
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {SelectResourcesModel} from '@/common/models/PlayerInputModel';
@@ -55,6 +58,7 @@ export default defineComponent({
     };
   },
   components: {
+    TabPanelFooterSlot,
     AppButton,
     PaymentUnitComponent,
   },

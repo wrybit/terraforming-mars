@@ -1,49 +1,58 @@
 <template>
-<section v-trim-whitespace>
-  <table class="payments_table">
-    <tbody>
-      <template v-for="unit of order" :key="unit">
-        <template v-if="ledger[unit]?.available > 0">
-          <tr>
-            <td>
-              <PaymentUnitComponent
-                v-model.number="payment[unit]"
-                :unit="unit"
-                :description="descriptions[unit]"
-                :rate="ledger[unit].rate"
-                @plus="addValue(unit)"
-                @minus="reduceValue(unit)"
-                @max="maxValue(unit)"/>
-              <div v-if="ledger[unit]?.reserved" class="card-warning" v-i18n="$t(unit)">
-              Some ${0} are reserved and unavailable here.</div>
-            </td>
-            <!-- Wert dieser Zeile in M€; bei 0 abgeschwächt statt leer, damit die Spalte ruhig bleibt -->
-            <td class="payments_unit_subtotal" :class="{'payments_unit_subtotal--zero': payment[unit] === 0}" v-if="ledger[unit].rate !== undefined">
-              = {{ ledger[unit].rate * payment[unit] }}
-              <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
-            </td>
-          </tr>
+<TabPanelFooterSlot>
+<section class="payments_form" v-trim-whitespace>
+  <div class="payments_prices">
+    <!-- Nur eine Währung: keine Regler, nur der Preis -->
+    <div v-if="!hasCurrencyChoice" class="payments_single">
+      {{ cost }}
+      <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
+    </div>
+    <table v-else class="payments_table">
+      <tbody>
+        <template v-for="unit of order" :key="unit">
+          <template v-if="ledger[unit]?.available > 0">
+            <tr>
+              <td>
+                <PaymentUnitComponent
+                  v-model.number="payment[unit]"
+                  :unit="unit"
+                  :description="descriptions[unit]"
+                  :rate="ledger[unit].rate"
+                  @plus="addValue(unit)"
+                  @minus="reduceValue(unit)"
+                  @max="maxValue(unit)"/>
+                <div v-if="ledger[unit]?.reserved" class="card-warning" v-i18n="$t(unit)">
+                Some ${0} are reserved and unavailable here.</div>
+              </td>
+              <!-- Wert dieser Zeile in M€; bei 0 abgeschwächt statt leer, damit die Spalte ruhig bleibt -->
+              <td class="payments_unit_subtotal" :class="{'payments_unit_subtotal--zero': payment[unit] === 0}" v-if="ledger[unit].rate !== undefined">
+                = {{ ledger[unit].rate * payment[unit] }}
+                <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
+              </td>
+            </tr>
+          </template>
         </template>
-      </template>
-    <!-- Summe gegen Kosten; Farbe zeigt, ob der Betrag passt (grün), fehlt (rot) oder zu hoch ist (gelb) -->
-    <tr :class="totalSpentClass()">
-      <td class="payments_total_heading" v-i18n>Total</td>
-      <td class="payments_total_value" :title="$t(totalSpentTitle())" :aria-label="$t(totalSpentTitle())">
-        {{ totalSpent() }} / {{ cost }}
-        <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+        <!-- Summe gegen Kosten; Farbe zeigt, ob der Betrag passt (grün), fehlt (rot) oder zu hoch ist (gelb) -->
+        <tr :class="totalSpentClass()">
+          <td class="payments_total_heading" v-i18n>Total</td>
+          <td class="payments_total_value" :title="$t(totalSpentTitle())" :aria-label="$t(totalSpentTitle())">
+            {{ totalSpent() }} / {{ cost }}
+            <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-  <div v-if="warning !== undefined" class="tm-warning">
-    <label class="label label-error">{{ $t(warning) }}</label>
+    <div v-if="warning !== undefined" class="tm-warning">
+      <label class="label label-error">{{ $t(warning) }}</label>
+    </div>
   </div>
 
   <div v-if="showsave" class="payments_save">
     <AppButton size="big" @click="handleSave()" :title="$t(buttonLabel)" data-test="save"/>
   </div>
 </section>
+</TabPanelFooterSlot>
 </template>
 
 <script lang="ts">
@@ -51,6 +60,7 @@ import {defineComponent} from 'vue';
 import {Payment} from '@/common/inputs/Payment';
 import {SpendableResource} from '@/common/inputs/Spendable';
 import {getPreferences} from '@/client/utils/PreferencesManager';
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import PaymentUnitComponent from '@/client/components/PaymentUnit.vue';
 import {Ledger} from '@/client/components/PaymentLedger';
@@ -94,6 +104,7 @@ type DataModel = {
 export default defineComponent({
   name: 'PaymentForm',
   components: {
+    TabPanelFooterSlot,
     AppButton,
     PaymentUnitComponent,
   },
@@ -131,6 +142,10 @@ export default defineComponent({
   computed: {
     descriptions(): Record<SpendableResource, string> {
       return DESCRIPTIONS;
+    },
+    // Regler und Summe nur, wenn es wirklich etwas aufzuteilen gibt (mehr als eine verfügbare Währung)
+    hasCurrencyChoice(): boolean {
+      return this.order.filter((unit) => (this.ledger[unit]?.available ?? 0) > 0).length > 1;
     },
   },
   watch: {

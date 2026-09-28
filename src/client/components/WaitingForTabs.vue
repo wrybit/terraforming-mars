@@ -27,6 +27,8 @@
         :onsave="onsave"
         :showsave="true"
         :showtitle="false"/>
+      <!-- Klebender Fußbereich unten an der Box (tabPanelFooter.ts); Bezahlbereiche hängen sich per Teleport ein -->
+      <div v-show="!handTabActive" :id="footerId" class="or-tab-footer"></div>
     </div>
   </div>
 </template>
@@ -40,6 +42,7 @@ import {InputResponse} from '@/common/inputs/InputResponse';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
+import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
 import {fullTabTitle, inputTabLabel} from '@/client/components/orOptionsShortLabels';
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {inputTone} from '@/client/components/inputTone';
@@ -53,6 +56,8 @@ const props = defineProps<{
 
 // Verschachtelte Auswahlen in der Eingabe bleiben Radio-Listen, keine zweite Tab-Leiste
 provide(OR_OPTIONS_AS_TABS, false);
+const footerId = newTabPanelFooterId();
+provide(TAB_PANEL_FOOTER, '#' + footerId);
 
 const handTabActive = ref(false);
 const handCards = computed(() => allCardsInHand(props.playerView));

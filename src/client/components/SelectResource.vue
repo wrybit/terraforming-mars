@@ -11,13 +11,16 @@
           <span class="resource-option-name">{{ $t(included) }}</span>
       </label>
     </div>
+    <TabPanelFooterSlot>
     <div v-if="showsave === true" class="nofloat">
         <!-- Gesperrt, bis eine Ressource gewählt ist -->
         <AppButton @click="saveData" :title="playerinput.buttonLabel" :disabled="unit === undefined" />
     </div>
+    </TabPanelFooterSlot>
   </div>
 </template>
 <script lang="ts">
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {SelectResourceModel} from '@/common/models/PlayerInputModel';
@@ -61,6 +64,7 @@ export default defineComponent({
     },
   },
   components: {
+    TabPanelFooterSlot,
     AppButton,
   },
   methods: {

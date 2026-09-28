@@ -34,13 +34,24 @@ export class PaymentTester {
     await this.nextTick();
   }
 
+  // Bei nur einer Währung zeigt PaymentForm keine Eingabefelder, nur den Preis –
+  // die Werte kommen dann aus dem Zustand des Formulars statt aus dem Textfeld
+  private paymentForm(): {payment: Payment, ledger: Record<string, {available: number} | undefined>} | undefined {
+    const form = this.wrapper.findComponent({name: 'PaymentForm'});
+    return form.exists() ? form.vm as any : undefined;
+  }
+
   public getValue(unit: SpendableResource): number {
     const found = this.wrapper.find(PaymentTester.selector(unit) + ' input');
-    if (!found.exists()) {
+    if (found.exists()) {
+      const textBox = found.element as HTMLInputElement;
+      return Number.parseInt(textBox?.value);
+    }
+    const form = this.paymentForm();
+    if (form === undefined || !this.isOffered(unit)) {
       throw new Error('Cannot find text box for ' + unit);
     }
-    const textBox = found.element as HTMLInputElement;
-    return Number.parseInt(textBox?.value);
+    return form.payment[unit];
   }
 
   public getPayment(): Partial<Payment> {
@@ -65,7 +76,17 @@ export class PaymentTester {
    * Returns true when the text box for `resource` is visible.
    */
   private isAvailable(resource: SpendableResource): boolean {
-    return this.wrapper.find(PaymentTester.selector(resource) + ' input').exists();
+    return this.wrapper.find(PaymentTester.selector(resource) + ' input').exists() || this.isOffered(resource);
+  }
+
+  // Einheit wird zum Bezahlen angeboten (hätte ohne Ein-Währungs-Ansicht ein Eingabefeld)
+  private isOffered(resource: SpendableResource): boolean {
+    const form = this.paymentForm();
+    if (form === undefined) {
+      return false;
+    }
+    const units = this.wrapper.findComponent({name: 'PaymentForm'}).props('order') as ReadonlyArray<SpendableResource>;
+    return units.includes(resource) && (form.ledger[resource]?.available ?? 0) > 0;
   }
 
   /**

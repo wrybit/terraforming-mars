@@ -7,11 +7,14 @@
       <span v-if="player === 'NEUTRAL'" >Neutral</span>
       <SelectPlayerRow v-else :player="playerView.players.find((otherPlayer) => otherPlayer.color === player)"/>
     </label>
+    <TabPanelFooterSlot>
     <AppButton v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
+    </TabPanelFooterSlot>
   </div>
 </template>
 
 <script lang="ts">
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {ColorWithNeutral} from '@/common/Color';
@@ -52,6 +55,7 @@ export default defineComponent({
     };
   },
   components: {
+    TabPanelFooterSlot,
     AppButton,
     SelectPlayerRow,
   },

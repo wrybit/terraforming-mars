@@ -5,12 +5,15 @@
       <input type="radio" v-model="selectedColony" :value="colony.name" >
       <Colony :colony="colony"/>
     </label>
+    <TabPanelFooterSlot>
     <div v-if="showsave === true" class="nofloat">
       <AppButton @click="saveData" :title="playerinput.buttonLabel" :disabled="!canSave()"/>
     </div>
+    </TabPanelFooterSlot>
   </div>
 </template>
 <script lang="ts">
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 import Colony from '@/client/components/colonies/Colony.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
@@ -51,6 +54,7 @@ export default defineComponent({
     };
   },
   components: {
+    TabPanelFooterSlot,
     Colony,
     AppButton,
   },

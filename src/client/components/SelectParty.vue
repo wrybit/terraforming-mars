@@ -7,12 +7,15 @@
               <Party :party="party" :isDominant="isDominant(party.name)" :isAvailable="partyAvailableToSelect(party.name)"/>
           </label>
         </div>
+        <TabPanelFooterSlot>
         <div v-if="showsave === true" class="nofloat">
             <AppButton @click="saveData" :title="playerinput.buttonLabel" />
         </div>
+        </TabPanelFooterSlot>
     </div>
 </template>
 <script lang="ts">
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {SelectPartyModel} from '@/common/models/PlayerInputModel';
@@ -50,6 +53,7 @@ export default defineComponent({
     };
   },
   components: {
+    TabPanelFooterSlot,
     AppButton,
     Party,
   },
