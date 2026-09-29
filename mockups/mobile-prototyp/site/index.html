@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="icons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d0f14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TM Mobile">
+<title>TM Mobile Prototype</title>
+<style>
+/* Teilbare Ansicht: Das Handy steht mittig, darin läuft die App (app.html) in voller Größe */
+:root {
+  --ground: #0b0d12;
+  --ground-glow: #2a1712;
+  --text: #ece9e2;
+  --muted: #a4a9b6;
+  --accent: #f5c542;
+  --phone-body: #16181d;
+  --phone-edge: #3a3d45;
+  --phone-width: 390px;
+  --phone-height: 844px;
+  color-scheme: dark;
+}
+html, body { height: 100%; margin: 0; }
+body {
+  background: radial-gradient(circle at 50% 38%, var(--ground-glow), var(--ground) 62%);
+  color: var(--text);
+  font-family: Ubuntu, 'Helvetica Neue', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding-block: 20px;
+  padding-inline: 16px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.intro { text-align: center; display: flex; flex-direction: column; gap: 6px; max-width: 560px; }
+.intro h1 { margin: 0; font-size: 22px; letter-spacing: 0.01em; text-wrap: balance; }
+.intro p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; text-wrap: balance; }
+.intro a { color: var(--accent); }
+/* Die Stage bekommt den restlichen Platz; das Handy wird per JS auf diese Höhe skaliert */
+.stage { flex-grow: 1; min-height: 0; width: 100%; display: flex; align-items: flex-start; justify-content: center; }
+.phone {
+  position: relative;
+  width: calc(var(--phone-width) + 28px);
+  height: calc(var(--phone-height) + 28px);
+  border-radius: 62px;
+  background: var(--phone-body);
+  box-shadow: 0 0 0 2px var(--phone-edge), 0 40px 90px rgba(0, 0, 0, 0.7), inset 0 0 0 2px #000;
+  transform-origin: top center;
+  flex-shrink: 0;
+}
+/* Seitentasten nur angedeutet */
+.phone::before, .phone::after { content: ''; position: absolute; width: 4px; border-radius: 2px; background: var(--phone-edge); }
+.phone::before { left: -5px; top: 170px; height: 70px; box-shadow: 0 90px 0 var(--phone-edge); }
+.phone::after { right: -5px; top: 220px; height: 100px; }
+.screen { position: absolute; inset: 14px; border-radius: 48px; overflow: hidden; background: #0d0f14; }
+.screen iframe { width: 100%; height: 100%; border: 0; display: block; }
+.island { position: absolute; top: 24px; left: 50%; width: 110px; height: 30px; margin-left: -55px; border-radius: 16px; background: #000; z-index: 2; pointer-events: none; }
+/* Auf einem echten Handy braucht es keinen Rahmen: die App füllt den Bildschirm */
+@media (max-width: 600px) {
+  body { padding: 0; gap: 0; }
+  .intro { display: none; }
+  .stage { height: 100%; }
+  .phone { width: 100%; height: 100%; border-radius: 0; box-shadow: none; transform: none !important; }
+  .phone::before, .phone::after, .island { display: none; }
+  .screen { inset: 0; border-radius: 0; }
+}
+</style>
+</head>
+<body>
+<header class="intro">
+  <h1>Terraforming Mars on a phone – clickable prototype</h1>
+  <p>How the reworked player view could work on mobile: one task at a time, the footer switches between navigation and the current action. Cards, board and texts come from the real game. <a href="app.html" target="_blank" rel="noopener">Open full screen</a></p>
+</header>
+<main class="stage" id="stage">
+  <div class="phone" id="phone">
+    <span class="island"></span>
+    <div class="screen"><iframe src="app.html" title="Terraforming Mars mobile prototype"></iframe></div>
+  </div>
+</main>
+<script>
+// Handy auf die verfügbare Höhe skalieren, damit es auf jedem Bildschirm ganz sichtbar ist
+(function () {
+  var stage = document.getElementById('stage');
+  var phone = document.getElementById('phone');
+  function fit() {
+    if (window.innerWidth <= 600) { phone.style.transform = ''; return; }
+    var scale = Math.min(1, stage.clientHeight / phone.offsetHeight, stage.clientWidth / phone.offsetWidth);
+    phone.style.transform = 'scale(' + scale + ')';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+})();
+</script>
+</body>
+</html>

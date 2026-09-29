@@ -1,0 +1,13 @@
+import {chromium} from '/home/claude/node_modules/playwright/index.mjs';
+const b = await chromium.launch({executablePath:'/opt/pw-browsers/chromium'});
+const ctx = await b.newContext({viewport:{width:1920,height:1300}, deviceScaleFactor:2});
+await ctx.addInitScript(() => localStorage.setItem('lang','en'));
+const p = await ctx.newPage();
+await p.goto('http://localhost:8080/the-end?id=pe1c4766e5c1f'); await p.waitForTimeout(3000);
+const charts = p.locator('.game-end-charts');
+console.log(await charts.evaluate(e => [...e.querySelectorAll('button, .or-tab, [role=tab]')].map(t => t.className + ':' + t.textContent.trim())));
+const tabs = charts.locator('.or-tab, [role=tab], button');
+await charts.screenshot({path:'/home/claude/proto/src/assets-extra/chart-victory-points.png'});
+await tabs.nth(1).click(); await p.waitForTimeout(1200);
+await charts.screenshot({path:'/home/claude/proto/src/assets-extra/chart-global-parameters.png'});
+await b.close();

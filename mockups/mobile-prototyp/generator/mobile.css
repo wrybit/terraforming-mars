@@ -1,0 +1,535 @@
+/* Mobile-Hülle um die echten Spiel-Bausteine. Präfix mb- trennt eigene Klassen sauber von styles.css */
+:root {
+  --mb-surface: rgba(18, 21, 30, 0.94);
+  --mb-surface-raised: #1e2330;
+  --mb-line: #2d3343;
+  --mb-text: #ece9e2;
+  --mb-muted: #a4a9b6;
+  --mb-accent: #5b5ef0;
+  --mb-gold: #f5c542;
+  --mb-green: #2e7d32;
+  --mb-heat: #b8461f;
+  --mb-danger: #9b2c22;
+  --mb-top-height: 56px;
+  --mb-nav-height: 72px;
+}
+
+html, body { height: 100%; }
+body.mb-body { margin: 0; overflow: hidden; }
+
+.mb-app {
+  font-size: 15px;
+  line-height: 1.35;
+  position: relative;
+  max-width: 430px;
+  height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--mb-text);
+  font-family: Ubuntu, 'Helvetica Neue', Arial, sans-serif;
+  box-shadow: 0 0 0 1px var(--mb-line);
+}
+
+/* ---------- Statusleiste ---------- */
+.mb-top {
+  flex-shrink: 0;
+  height: var(--mb-top-height);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 12px;
+  background: var(--mb-surface);
+  border: 0;
+  border-bottom: 1px solid var(--mb-line);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.mb-top-gen { font-family: Prototype, sans-serif; font-size: 12px; color: var(--mb-muted); letter-spacing: 0.06em; }
+.mb-top-gen b { font-size: 20px; color: var(--mb-text); font-weight: normal; }
+.mb-globals { display: flex; gap: 10px; }
+.mb-global { display: flex; align-items: center; gap: 4px; font-family: Prototype, sans-serif; font-size: 16px; }
+.mb-global img { width: 18px; height: 18px; object-fit: contain; }
+.mb-top-spacer { flex-grow: 1; }
+.mb-money { display: flex; align-items: center; gap: 6px; font-family: Prototype, sans-serif; }
+.mb-money .resource_icon { zoom: 0.62; margin: 0; }
+.mb-money-value { font-size: 22px; }
+.mb-money-prod { font-size: 14px; color: var(--mb-muted); }
+
+/* ---------- Bildschirme ---------- */
+.mb-main { flex-grow: 1; min-height: 0; position: relative; }
+.mb-screen { overflow-anchor: none; position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; display: none; flex-direction: column; -webkit-overflow-scrolling: touch; }
+.mb-screen.is-active { display: flex; }
+.mb-section-label { font-size: 12px; font-weight: bold; letter-spacing: 0.1em; color: #f0b43c; text-transform: uppercase; }
+
+.mb-turn {
+  margin: 12px 12px 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(23, 41, 26, 0.92);
+  border: 1px solid var(--mb-green);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mb-turn-dot { width: 10px; height: 10px; border-radius: 50%; background: #5cc463; }
+.mb-turn-title { font-weight: bold; font-size: 15px; white-space: nowrap; }
+.mb-turn-sub { color: var(--mb-muted); font-size: 14px; white-space: nowrap; }
+.mb-turn-time { font-size: 15px; margin-left: auto; font-family: Prototype, sans-serif; color: var(--mb-muted); }
+
+/* Mars ohne Ring: der Ausschnitt zeigt nur Planet + Ecken, board.js setzt Zoom und Versatz */
+.mb-mars { position: relative; overflow: hidden; flex-shrink: 0; margin-top: 8px; }
+.mb-mars .board-cont { position: absolute; margin: 0 !important; translate: none !important; }
+.mb-mars .board-without-venus { background-image: url(assets-extra/mars-planet.png) !important; }
+.mb-mars .global-numbers { display: none !important; }
+/* Kolonie-Felder in die oberen Ecken, "Plätt. an" nach unten links – füllt die Flächen, wo der Ring war */
+.mb-mars .board-outer-spaces { left: 0; top: 0; width: 670px; height: 600px; pointer-events: none; }
+.mb-mars .board-outer-spaces .board-space { pointer-events: auto; }
+.mb-mars .board-space-01, .mb-mars .board-space-02 { position: absolute !important; margin: 0 !important; top: 98px; }
+.mb-mars .board-space-01 { left: 66px; }
+.mb-mars .board-space-02 { left: 520px; }
+.mb-mars .hide-tile-button-container .hide-tile-button { bottom: auto; top: 478px; left: 70px; }
+.mb-mars--place { flex-grow: 0; }
+.mb-mars--place .board-outer-spaces, .mb-mars--place .hide-tile-button-container { display: none; }
+.board-space.mb-just-placed { animation: mb-placed 1.4s ease-out; }
+@keyframes mb-placed { 0% { filter: brightness(2.2); } 100% { filter: none; } }
+
+/* Globale Parameter als Balken unter dem Mars */
+.mb-params { display: flex; flex-direction: column; gap: 10px; margin: 6px 12px 0; padding: 12px; border-radius: 12px; background: var(--mb-surface); }
+.mb-param { display: grid; grid-template-columns: 22px 1fr auto; grid-template-areas: "icon label value" "track track track" "range range range"; column-gap: 8px; row-gap: 4px; align-items: center; }
+.mb-param-icon { grid-area: icon; width: 20px; height: 20px; object-fit: contain; }
+.mb-param-label { grid-area: label; font-size: 13px; color: var(--mb-muted); }
+.mb-param-value { grid-area: value; font-family: Prototype, sans-serif; font-size: 18px; }
+.mb-param-track {
+  grid-area: track; position: relative; height: 10px; margin-bottom: 16px; border-radius: 5px; background: #2a3040;
+  background-image: repeating-linear-gradient(90deg, transparent 0, transparent calc(100% / var(--steps) - 1px), rgba(13, 15, 20, 0.9) calc(100% / var(--steps) - 1px), rgba(13, 15, 20, 0.9) calc(100% / var(--steps)));
+}
+.mb-param-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; transition: width 0.6s ease; }
+.mb-param[data-param="temperature"] .mb-param-fill { background: linear-gradient(90deg, #3d6fd6, #8d4ab8 55%, #e0643a); }
+.mb-param[data-param="oxygen"] .mb-param-fill { background: linear-gradient(90deg, #2d6f8f, #8cc4ee); }
+.mb-param[data-param="oceans"] .mb-param-fill { background: #3d8fd6; }
+.mb-param-bonus { position: absolute; top: 13px; width: 14px; height: 14px; margin-left: -7px; object-fit: contain; opacity: 0.9; }
+.mb-param-bonus.is-reached { opacity: 0.35; filter: grayscale(1); }
+.mb-param-range { grid-area: range; font-size: 11px; color: #7d8290; display: none; }
+.mb-param.is-complete .mb-param-value { color: #7fd184; }
+
+.board-space.mb-picked > .board-space { outline: 4px solid #fff; outline-offset: -4px; }
+.board-space.mb-picked { animation: none !important; background: url(assets/hex_white.png) !important; background-size: contain !important; }
+
+.mb-quick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 4px 12px 16px; }
+.mb-quick button {
+  font-size: 14px !important;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--mb-line);
+  background: var(--mb-surface);
+  color: var(--mb-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.mb-quick b { font-family: Prototype, sans-serif; font-weight: normal; color: var(--mb-muted); margin-left: 4px; }
+
+/* ---------- Echte Karten auf Handybreite ---------- */
+/* Karten sind 246 px breit; 0,62 ergibt zwei Spalten mit Luft zum Rand und zueinander */
+.mb-screen .or-tab-panel { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+.mb-screen .hand-cards-panel { padding: 14px 8px 24px; display: flex; flex-direction: column; gap: 22px; }
+.mb-screen .hand-cards-panel__section { display: flex; flex-direction: column; gap: 14px; margin: 0 !important; }
+.mb-screen .hand-cards-panel__cards,
+.mb-panel .wf-component--select-card,
+.mb-panel[data-key="standard"] .payments_cont {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 8px;
+  row-gap: 18px;
+  justify-items: center;
+  padding: 16px 8px 20px;
+}
+.mb-screen .hand-cards-panel__cards { padding: 10px 0 0; }
+.mb-screen .hand-cards-panel .cardbox, .mb-panel .cardbox, .mb-panel label.payments_cards { margin: 0 !important; padding: 0 !important; position: relative; }
+.mb-screen .hand-cards-panel .card-container,
+.mb-panel .wf-component--select-card .card-container,
+.mb-panel[data-key="standard"] .card-container,
+.mb-played .card-container { margin: 0 !important; }
+.mb-panel .cardbox input[type="radio"], .mb-panel .cardbox input[type="checkbox"] { position: absolute; opacity: 0; pointer-events: none; }
+.mb-selected > .card-container { box-shadow: 0 0 0 5px var(--mb-accent), 0 10px 24px rgba(0, 0, 0, 0.6); border-radius: 12px; }
+.mb-used > .card-container, .mb-unusable > .card-container { opacity: 0.4; filter: grayscale(0.6); }
+.mb-used { pointer-events: none; }
+
+/* Bauen: Karten einzeln durchwischen */
+.mb-panel[data-key="build"] .payments_cont {
+  display: flex !important;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 8px calc(50% - 130px) 18px;
+  scrollbar-width: none;
+}
+.mb-panel[data-key="build"] .payments_cont::-webkit-scrollbar { display: none; }
+.mb-panel[data-key="build"] .payments_cards { flex-shrink: 0; scroll-snap-align: center; }
+.mb-panel[data-key="build"] .card-container { margin: 0 !important; }
+.mb-swipe-hint { text-align: center; color: var(--mb-muted); font-size: 13px; }
+
+/* ---------- Aufgaben-Bildschirm ---------- */
+.mb-task-head { flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--mb-surface); border-bottom: 1px solid var(--mb-line); }
+.mb-task-head--success { background: var(--mb-green); }
+.mb-task-head--heat { background: var(--mb-heat); }
+.mb-task-title { font-size: 18px; font-weight: bold; white-space: nowrap; }
+.mb-task-sub:empty { display: none; }
+.mb-task-sub { color: var(--mb-muted); font-size: 14px; }
+.mb-task-head--success .mb-task-sub, .mb-task-head--heat .mb-task-sub { color: rgba(255, 255, 255, 0.85); }
+.mb-icon-button {
+  width: 40px; height: 40px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent; color: inherit; cursor: pointer;
+}
+.mb-task-body { flex-grow: 1; display: flex; flex-direction: column; min-height: 0; }
+.mb-panel { display: none; flex-direction: column; padding: 12px 0 0; }
+.mb-panel.is-active { display: flex; }
+.mb-panel .or-tab-panel { padding: 0 !important; margin: 0 !important; border: 0 !important; background: transparent !important; min-height: 0 !important; }
+.mb-panel .or-tab-intro { margin: 0 12px 12px; }
+.mb-panel .select-space-zoom { display: none; }
+.mb-panel .ma-options { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 0 12px; }
+
+/* ---------- Footer: Navigation ---------- */
+.mb-nav {
+  flex-shrink: 0;
+  height: var(--mb-nav-height);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  background: var(--mb-surface);
+  border-top: 1px solid var(--mb-line);
+  position: relative;
+  z-index: 4;
+}
+.mb-nav-item {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  border: 0; background: transparent; color: #8b90a0; font: inherit; font-size: 11px; cursor: pointer; position: relative;
+}
+.mb-nav-item img { width: 24px; height: 24px; object-fit: contain; opacity: 0.7; }
+.mb-nav-item.is-active { color: var(--mb-text); box-shadow: inset 0 2px 0 var(--mb-gold); }
+.mb-nav-item.is-active img { opacity: 1; }
+.mb-nav-badge {
+  position: absolute; top: 8px; left: calc(50% + 6px);
+  min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box;
+  border-radius: 9px; background: var(--mb-accent); color: #fff; font-size: 11px; line-height: 18px; text-align: center;
+}
+.mb-nav-turn { color: var(--mb-text); font-weight: bold; }
+.mb-turn-button {
+  margin-top: -24px; width: 58px; height: 58px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--mb-gold); color: #1b1400; border: 4px solid #0d0f14;
+  animation: mb-pulse 1.8s ease-out infinite;
+}
+.mb-turn-button.is-idle { background: #3a4152; color: #8b90a0; animation: none; }
+@keyframes mb-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(245, 197, 66, 0.55); }
+  70% { box-shadow: 0 0 0 14px rgba(245, 197, 66, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 197, 66, 0); }
+}
+
+/* ---------- Footer: Aufgabe (ersetzt die Navigation) ---------- */
+.mb-taskbar {
+  flex-shrink: 0;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 12px calc(14px + env(safe-area-inset-bottom));
+  background: var(--mb-surface);
+  border-top: 1px solid var(--mb-line);
+}
+.mb-app.is-task .mb-taskbar { display: flex; }
+.mb-app.is-task .mb-nav { display: none; }
+.mb-taskbar-row { display: flex; gap: 8px; align-items: stretch; }
+.mb-taskbar-cancel {
+  height: 48px; padding: 0 14px; border-radius: 10px;
+  border: 1px solid #3a4152; background: transparent; color: var(--mb-text); font: inherit; font-weight: bold; cursor: pointer;
+}
+.mb-taskbar-slot { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; }
+.mb-taskbar .or-tab-footer { display: flex !important; flex-direction: column; gap: 10px; padding: 0 !important; margin: 0 !important; position: static !important; background: transparent !important; border: 0 !important; }
+.mb-taskbar .or-tab-save, .mb-taskbar .select-card-actions, .mb-taskbar .wf-action { margin: 0 !important; float: none !important; }
+.mb-taskbar .btn-submit, .mb-taskbar .mb-confirm { width: 100%; height: 48px; margin: 0 !important; }
+.mb-taskbar .payments_form { margin: 0 !important; }
+.mb-taskbar .payments_table { width: 100%; }
+.mb-taskbar .payments_type { display: flex; align-items: center; gap: 6px; }
+.mb-taskbar .btn-max { display: none; }
+.mb-taskbar .payments_input { width: 46px !important; text-align: center; }
+.mb-taskbar .payments_total { display: flex; gap: 6px; justify-content: flex-end; }
+
+/* ---------- Zug-Menü ---------- */
+.mb-sheet { position: absolute; inset: 0; z-index: 10; display: none; flex-direction: column; background: rgba(5, 6, 10, 0.62); }
+.mb-sheet.is-open { display: flex; }
+.mb-sheet-backdrop { flex-grow: 1; border: 0; background: transparent; cursor: pointer; }
+.mb-sheet-panel {
+  background: #161a23; border-radius: 20px 20px 0 0; padding: 10px 14px calc(22px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; gap: 18px; max-height: 82%; overflow-y: auto;
+}
+.mb-sheet-grip { align-self: center; width: 40px; height: 4px; border-radius: 2px; background: #3a4152; }
+.mb-sheet-head { display: flex; align-items: baseline; gap: 10px; }
+.mb-sheet-title { font-size: 20px; font-weight: bold; }
+.mb-taskbar-extra:empty { display: none; }
+.mb-sheet-group { display: flex; flex-direction: column; gap: 8px; }
+.mb-sheet-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.mb-tile {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 12px; border: 1px solid var(--mb-line);
+  background: var(--mb-surface-raised); color: var(--mb-text); font: inherit; text-align: left; cursor: pointer;
+}
+.mb-tile img { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
+.mb-tile-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mb-tile-label { font-weight: bold; font-size: 15px; }
+.mb-tile-sub { font-size: 12px; color: var(--mb-muted); }
+.mb-tile--success { background: var(--mb-green); border-color: var(--mb-green); }
+.mb-tile--heat { background: var(--mb-heat); border-color: var(--mb-heat); }
+.mb-tile--highlight { background: #6b5316; border-color: #a07c1d; }
+.mb-tile--success .mb-tile-sub, .mb-tile--heat .mb-tile-sub, .mb-tile--highlight .mb-tile-sub { color: rgba(255, 255, 255, 0.85); }
+.mb-tile.is-done { opacity: 0.35; pointer-events: none; }
+.mb-pass { height: 48px; border-radius: 10px; border: 1px solid #5a2a24; background: transparent; color: #f0a39a; font: inherit; font-weight: bold; cursor: pointer; }
+
+/* ---------- Spieler ---------- */
+.mb-players { padding: 12px 12px 24px; display: flex; flex-direction: column; gap: 14px; }
+.mb-segments { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 12px; background: var(--mb-surface); }
+.mb-segment { height: 36px; border-radius: 9px; border: 0; background: transparent; color: var(--mb-muted); font: inherit; font-weight: bold; cursor: pointer; }
+.mb-segment.is-active { background: #2a3040; color: var(--mb-text); }
+.mb-player-list { display: flex; flex-direction: column; gap: 10px; }
+.mb-player { padding: 10px 12px; border-radius: 14px; border: 1px solid; display: flex; flex-direction: column; gap: 10px; }
+.mb-player--green { background: rgba(27, 58, 30, 0.94); border-color: var(--mb-green); }
+.mb-player--red { background: rgba(58, 28, 27, 0.94); border-color: #8e2a22; }
+.mb-player-head { display: flex; align-items: baseline; gap: 8px; }
+.mb-player-name { font-size: 18px; font-weight: bold; }
+.mb-player--self .mb-player-name { font-size: 21px; }
+.mb-player-corp { font-size: 12px; color: #c9ccd4; }
+.mb-player-stats { margin-left: auto; display: flex; gap: 10px; font-family: Prototype, sans-serif; color: #c9ccd4; font-size: 13px; }
+.mb-player-stats b { font-weight: normal; font-size: 18px; color: var(--mb-text); }
+.mb-resources { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.mb-resource { position: relative; display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 8px; background: rgba(0, 0, 0, 0.3); }
+.mb-resource .resource_icon { zoom: 0.55; margin: 0; flex-shrink: 0; }
+.mb-resource-value { font-family: Prototype, sans-serif; font-size: 22px; }
+.mb-player--self .mb-resource-value { font-size: 26px; }
+.mb-resource-prod { font-family: Prototype, sans-serif; font-size: 14px; color: #c9ccd4; }
+.mb-resource-badge { position: absolute; top: 4px; right: 5px; min-width: 16px; height: 16px; border-radius: 4px; background: var(--mb-gold); color: #1b1400; font-family: Prototype, sans-serif; font-size: 11px; line-height: 16px; text-align: center; }
+.mb-played-toggle { align-self: flex-start; padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.3); background: transparent; color: inherit; font: inherit; font-size: 13px; cursor: pointer; }
+.mb-played { display: none; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; row-gap: 18px; padding-top: 10px; justify-items: center; }
+.mb-played.is-open { display: grid; }
+.mb-ma-slot { overflow: hidden; }
+.mb-ma-slot > * { width: auto; }
+
+/* ---------- Log ---------- */
+.mb-log-slot { padding: 12px; }
+.mb-log-slot .panel-body li { padding: 5px 0; line-height: 1.7; }
+.mb-log-slot .panel-body li + li { border-top: 1px solid rgba(255, 255, 255, 0.05); }
+.mb-log-slot .player-home-columns__log { width: auto !important; height: auto !important; margin: 0 !important; }
+
+/* ---------- Meldung ---------- */
+.mb-toast {
+  position: absolute; left: 12px; right: 12px; bottom: calc(var(--mb-nav-height) + 12px); z-index: 12;
+  padding: 12px 14px; border-radius: 12px; background: #20283a; border: 1px solid var(--mb-line);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+  opacity: 0; transform: translateY(12px); transition: opacity 0.25s, transform 0.25s; pointer-events: none;
+}
+.mb-toast.is-visible { opacity: 1; transform: none; }
+
+/* hidden-Attribut muss gegen die display-Regeln oben gewinnen */
+.mb-app [hidden] { display: none !important; }
+.mb-taskbar .or-tab-footer > * { width: 100%; }
+.mb-taskbar .btn-submit { width: 100% !important; }
+
+/* Echte Meilenstein-/Auszeichnungs-Kacheln: Kopfzeile mit Preisen in einer Reihe, Kacheln im Raster */
+.mb-ma-slot .milestones_cont, .mb-ma-slot .awards_cont { width: auto !important; float: none !important; margin: 0 0 16px !important; }
+.mb-ma-slot .ma-title { display: flex !important; align-items: center; gap: 10px; width: auto !important; height: auto !important; margin: 0 0 8px !important; background: none !important; }
+.mb-ma-slot .ma-title > span { display: flex; gap: 4px; }
+.mb-ma-slot .milestone-award-inline { position: static !important; margin: 0 !important; }
+.mb-ma-slot .milestones > span > div, .mb-ma-slot .awards > span > div { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.mb-ma-slot .ma-block { margin: 0 !important; float: none !important; }
+
+/* styles.css setzt am body ein eigenes Layout; die Hülle soll auf breiten Fenstern mittig stehen */
+body.mb-body { display: block !important; padding: 0 !important; }
+body.mb-body .mb-app { margin: 0 auto !important; }
+
+/* ---------- Zugstatus ---------- */
+.mb-turn--waiting { background: rgba(58, 28, 27, 0.92) !important; border-color: #8e2a22 !important; }
+.mb-turn--waiting .mb-turn-dot { background: #e0645a; animation: mb-blink 1.2s ease-in-out infinite; }
+@keyframes mb-blink { 50% { opacity: 0.3; } }
+.mb-task-head--city { background: #5a5f6b; }
+.mb-task-head--ocean { background: #1f5f9e; }
+.mb-task-head--city .mb-task-sub, .mb-task-head--ocean .mb-task-sub { color: rgba(255, 255, 255, 0.85); }
+.mb-nav-badge--new { background: #d9534f; }
+
+/* ---------- Startauswahl ---------- */
+.mb-app.is-setup .mb-nav, .mb-app.is-setup .mb-top { display: none; }
+.mb-app.is-setup .mb-setupbar { display: flex; }
+.mb-steps { position: sticky; top: 0; z-index: 3; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 10px 12px; background: var(--mb-surface); border-bottom: 1px solid var(--mb-line); }
+.mb-step { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 4px; border-radius: 10px; border: 0; background: transparent; color: var(--mb-muted); font: inherit; font-size: 13px; cursor: pointer; }
+.mb-step b { font-family: Prototype, sans-serif; font-weight: normal; font-size: 14px; }
+.mb-step-number { width: 22px; height: 22px; border-radius: 50%; background: #2a3040; color: var(--mb-text); font-size: 12px; line-height: 22px; text-align: center; }
+.mb-step.is-active { background: #2a3040; color: var(--mb-text); }
+.mb-step.is-active .mb-step-number { background: var(--mb-gold); color: #1b1400; }
+.mb-setup .setup-columns { display: block !important; }
+.mb-setup .setup-column { display: none !important; width: auto !important; height: auto !important; overflow: visible !important; max-height: none !important; padding: 0 !important; margin: 0 !important; border: 0 !important; background: transparent !important; }
+.mb-setup[data-step="corporation"] .setup-column--corporation,
+.mb-setup[data-step="prelude"] .setup-column--prelude,
+.mb-setup[data-step="projects"] .setup-column--projects { display: block !important; }
+.mb-setup .setup-column-title-row { display: none; }
+.mb-setup .wf-component--select-card { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; row-gap: 18px; justify-items: center; padding: 16px 8px 20px; }
+.mb-setup[data-step="corporation"] .wf-component--select-card { grid-template-columns: minmax(0, 1fr); }
+.mb-setup .cardbox { margin: 0 !important; position: relative; }
+.mb-setup .cardbox input { position: absolute; opacity: 0; pointer-events: none; }
+.mb-setup .card-container { margin: 0 !important; }
+.mb-setup .select-initial-cards > *:not(.setup-columns) { display: none; }
+.mb-setupbar { flex-shrink: 0; display: none; flex-direction: column; gap: 10px; padding: 10px 12px calc(14px + env(safe-area-inset-bottom)); background: var(--mb-surface); border-top: 1px solid var(--mb-line); }
+.mb-setupbar .setup-summary-values { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin: 0 !important; }
+.mb-setupbar .setup-summary-item { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 6px 8px; border-radius: 8px; background: rgba(0, 0, 0, 0.3); min-width: 0; }
+.mb-setupbar .setup-summary-item dt { font-size: 10px; line-height: 1.2; color: var(--mb-muted); overflow-wrap: anywhere; }
+.mb-setupbar .setup-summary-item dd { margin: 0; font-family: Prototype, sans-serif; font-size: 18px; }
+.mb-setupbar .setup-summary-item--status { grid-column: 1 / -1; flex-direction: row; align-items: baseline; gap: 8px; background: transparent; padding: 0 2px; }
+.mb-setupbar .setup-summary-item--status dd { font-family: inherit; font-size: 14px; }
+.mb-setupbar .setup-summary-status--ready { color: #7fd184; }
+.mb-setupbar .setup-summary-status--open { color: #f0b43c; }
+.mb-setupbar .mb-remaining { color: #1b1400; background: var(--mb-gold); border-radius: 12px; padding: 0 8px; align-self: flex-start; }
+.mb-setupbar .mb-negative { color: #ff8a80; }
+.mb-setup-next { width: 100%; height: 48px; margin: 0 !important; }
+
+/* ---------- Karte groß ---------- */
+.mb-popover { position: absolute; inset: 0; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 16px; background: rgba(5, 6, 10, 0.78); }
+.mb-popover-backdrop { position: absolute; inset: 0; border: 0; background: transparent; cursor: pointer; }
+.mb-popover-card { position: relative; }
+.mb-popover-card .card-container { margin: 0 !important; }
+.mb-popover-actions { position: relative; display: flex; gap: 8px; width: 100%; max-width: 330px; }
+.mb-popover-actions .btn-submit { flex-grow: 1; height: 48px; margin: 0 !important; }
+
+/* ---------- Szenenwahl (nur Prototyp) ---------- */
+.mb-scenes { position: absolute; inset: 0; z-index: 30; display: flex; align-items: center; padding: 16px; background: rgba(5, 6, 10, 0.86); }
+.mb-scenes-panel { width: 100%; display: flex; flex-direction: column; gap: 10px; padding: 18px 16px; border-radius: 16px; background: #161a23; border: 1px solid var(--mb-line); }
+.mb-scenes-title { font-size: 20px; font-weight: bold; margin-bottom: 6px; }
+.mb-scene { display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--mb-line); background: var(--mb-surface-raised); color: var(--mb-text); font: inherit; text-align: left; cursor: pointer; }
+.mb-scene b { font-size: 16px; }
+.mb-scene span { font-size: 13px; color: var(--mb-muted); }
+.mb-scene-button { position: absolute; left: 8px; bottom: calc(var(--mb-nav-height) + 8px); z-index: 5; padding: 4px 10px; border-radius: 12px; border: 1px solid var(--mb-line); background: rgba(22, 26, 35, 0.85); color: var(--mb-muted); font: inherit; font-size: 11px; cursor: pointer; }
+.mb-app.is-task .mb-scene-button, .mb-app.is-setup .mb-scene-button { bottom: 150px; }
+
+/* ---------- Spielende ---------- */
+.mb-end-notice { position: absolute; left: 24px; right: 24px; top: 150px; z-index: 6; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px; border-radius: 16px; background: rgba(18, 21, 30, 0.95); border: 1px solid var(--mb-gold); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); text-align: center; }
+.mb-end-title { font-size: 22px; font-weight: bold; }
+.mb-end-sub { color: var(--mb-muted); }
+.mb-end-notice .btn-submit { margin: 0 !important; }
+.mb-results { display: flex; flex-direction: column; gap: 16px; padding: 16px 12px 28px; }
+.mb-results-hero .game-end-winer-announcement { font-size: 22px; margin: 0 !important; }
+.mb-results-scroll { overflow-x: auto; }
+.mb-results-scroll .game-end-box { margin: 0 !important; width: max-content; }
+.mb-results-details .game-end-details { display: flex !important; flex-direction: column; gap: 12px; }
+.mb-results-details .game-end-column { width: auto !important; margin: 0 !important; }
+.mb-ma-owner { display: inline-block; margin-top: 4px; padding: 0 6px; font-size: 12px; }
+
+.mb-app:not([data-screen="mars"]) .mb-scene-button { display: none; }
+
+/* Im Handy-Rahmen: oben Platz für die Kamera-Aussparung wie auf einem echten Gerät */
+.mb-app.is-framed { padding-top: 44px; box-sizing: border-box; background: #0d0f14; box-shadow: none; }
+.mb-app.is-framed .mb-nav, .mb-app.is-framed .mb-taskbar, .mb-app.is-framed .mb-setupbar { padding-bottom: 12px; }
+.mb-log-slot .log-container, .mb-log-slot .log-panel, .mb-log-slot .panel-body { height: auto !important; max-height: none !important; overflow: visible !important; }
+
+/* Verkleinerung per transform (scale.js): Halter trägt die Größe, das Element skaliert darin */
+.mb-scaled { zoom: 1 !important; position: relative !important; display: block; flex-shrink: 0; margin: 0 !important; padding: 0 !important; }
+.mb-scale-holder { display: block; }
+.mb-scaled-item { position: absolute !important; left: 0; top: 0; transform-origin: 0 0; margin: 0 !important; }
+
+/* Wertung: Titel, darunter die drei Preis-Felder, darunter die fünf Kacheln */
+.mb-ma-slot .ma-title { flex-direction: column; align-items: stretch !important; gap: 8px !important; }
+.mb-ma-slot .ma-title > span { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.mb-ma-slot .milestone-award-inline { display: flex !important; align-items: center; justify-content: center; width: auto !important; height: 34px; border-radius: 8px; background: rgba(255, 255, 255, 0.06) !important; }
+.mb-ma-slot .milestone-award-price { position: static !important; margin: 0 !important; }
+.mb-ma-slot .milestones > span > div, .mb-ma-slot .awards > span > div { justify-items: center; row-gap: 10px !important; }
+
+/* Ergebnis: gedrehte Tabelle – Zeilen = Wertungen, Spalten = Spieler */
+.mb-results-scroll .game_end_table.mb-transposed { width: 100%; }
+.mb-results-scroll .game_end_table.mb-transposed td, .mb-results-scroll .game_end_table.mb-transposed th { text-align: center; padding: 6px 8px; }
+.mb-results-scroll .game_end_table.mb-transposed tr > :first-child { text-align: left; width: 44px; }
+.mb-results-scroll .game-end-box:has(.mb-transposed) { width: auto !important; }
+
+/* Handkarten liegen im Original in einer Sortier-Liste statt im Raster – auf dem Handy als Raster */
+.mb-screen .sortable-cards { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; row-gap: 18px; justify-items: center; padding-top: 10px; }
+.mb-screen .sortable-slot { display: block !important; margin: 0 !important; }
+.mb-results-charts { display: flex; flex-direction: column; gap: 10px; }
+.mb-chart { width: 100%; height: auto; border-radius: 12px; display: block; }
+
+/* Überlagerungen: Hintergrund unscharf, damit der Blick auf Karte bzw. Menü geht */
+.mb-popover, .mb-sheet, .mb-scenes { -webkit-backdrop-filter: blur(7px) saturate(0.8); backdrop-filter: blur(7px) saturate(0.8); }
+.mb-popover-actions { justify-content: center; }
+
+/* Zoombarer Mars beim Platzieren */
+.mb-place-wrap { display: flex; flex-direction: column; gap: 8px; padding: 0 12px 8px; }
+.mb-mars--place { display: grid; position: relative; overflow: auto; margin: 0; border-radius: 16px; background: radial-gradient(circle at 50% 50%, #1a1d26, #0d0f14 70%); overscroll-behavior: contain; scrollbar-width: none; touch-action: pan-x pan-y; }
+.mb-mars--place::-webkit-scrollbar { display: none; }
+.mb-zoom-stage { position: relative; margin: auto; overflow: hidden; }
+.mb-zoom-stage .board-cont { position: absolute; margin: 0 !important; }
+.mb-zoom-controls { display: flex; align-items: center; gap: 8px; }
+.mb-zoom-button { min-width: 44px; height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--mb-line); background: var(--mb-surface-raised); color: var(--mb-text); font: inherit; font-size: 20px; cursor: pointer; }
+.mb-zoom-button--fit { margin-left: auto; font-size: 13px; }
+.mb-zoom-level { min-width: 52px; text-align: center; font-family: Prototype, sans-serif; color: var(--mb-muted); }
+
+/* Startbildschirm: Mars antippen öffnet die zoombare Groß-Ansicht; Hinweis unten rechts in der freien Ecke */
+.mb-mars-home { position: relative; }
+.mb-mars-home #boardHome { cursor: zoom-in; }
+.mb-mars-zoom-hint { position: absolute; right: 14px; bottom: 10px; display: flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 14px; border: 1px solid var(--mb-line); background: rgba(22, 26, 35, 0.85); color: var(--mb-text); font: inherit; font-size: 12px; cursor: pointer; }
+
+/* Punkte unter dem Karten-Karussell: Position und Anzahl auf einen Blick */
+.mb-dots { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 6px; padding: 2px 16px 12px; }
+.mb-dots::after { content: attr(data-count); margin-left: 8px; font-size: 12px; color: var(--mb-muted); font-variant-numeric: tabular-nums; }
+.mb-dot { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 4px; background: #3a4152; cursor: pointer; transition: width 0.2s, background 0.2s; }
+.mb-dot.is-active { width: 22px; background: var(--mb-accent); }
+
+/* Wertung: Preis-Münze mittig im Feld (Original schiebt sie per margin-left nach rechts), Überschriften ohne Fläche und linksbündig */
+.mb-ma-slot .milestone-award-price { margin: 0 !important; text-align: center; }
+.mb-ma-slot .milestone-award-inline { padding: 0 !important; }
+.mb-ma-slot .ma-title > .ma-clickable { background: none !important; padding: 0 !important; align-self: flex-start; text-align: left; }
+/* Groß-Ansicht: Knöpfe kompakt und mittig unter der Karte statt über die ganze Breite */
+.mb-popover-actions { width: auto; max-width: none; }
+.mb-popover-actions .btn-submit { flex-grow: 0; width: auto !important; min-width: 0 !important; height: 44px; padding: 0 22px; font-size: 16px; }
+.mb-popover-actions .mb-taskbar-cancel { height: 44px; }
+/* Footer-Knöpfe auf einer Achse: leere Fußleisten des Originals nehmen keinen Platz, Zeile mittig ausgerichtet */
+.mb-taskbar-slot > .or-tab-footer:empty, .mb-taskbar-slot > :empty:not(button) { display: none !important; }
+.mb-taskbar-row { align-items: center; }
+.mb-taskbar-cancel, .mb-taskbar .btn-submit, .mb-taskbar .mb-confirm { height: 48px; margin: 0 !important; }
+
+/* Ergebnis-Tabelle: drei gleich breite Spalten, alles achsmittig (Symbol, Spieler 1, Spieler 2) */
+.mb-results-scroll .game_end_table.mb-transposed { table-layout: fixed; width: 100% !important; border-collapse: collapse; }
+.mb-results-scroll .game_end_table.mb-transposed td,
+.mb-results-scroll .game_end_table.mb-transposed th,
+.mb-results-scroll .game_end_table.mb-transposed tr > :first-child { width: 33.33% !important; text-align: center !important; vertical-align: middle; padding: 6px 4px !important; margin: 0 !important; }
+.mb-results-scroll .game_end_table.mb-transposed td > *,
+.mb-results-scroll .game_end_table.mb-transposed td div { margin-left: auto !important; margin-right: auto !important; text-align: center !important; float: none !important; }
+.mb-results-scroll .game_end_table.mb-transposed td > div:not([class*="tile"]):not(.vp) { display: block; }
+.mb-results-scroll .game_end_table.mb-transposed tr > * { display: table-cell !important; height: 44px; }
+.mb-results-scroll .game_end_table.mb-transposed tr > * > * { display: inline-block !important; vertical-align: middle; margin: 0 !important; position: static !important; float: none !important; }
+.mb-results-scroll .game_end_table.mb-transposed tr:first-child > * > * { display: block !important; }
+.mb-log-slot .log-gen-tabs .or-tab { cursor: pointer; }
+.mb-log-slot .mb-log-past li { padding: 5px 0; line-height: 1.7; }
+.mb-log-slot .mb-log-past li + li { border-top: 1px solid rgba(255, 255, 255, 0.05); }
+.mb-log-slot .log-panel, .mb-log-slot .panel-body, .mb-log-slot .log-container { width: auto !important; max-width: none !important; }
+.mb-log-slot .panel-body { padding: 0 4px !important; }
+.mb-results-scroll .game_end_table.mb-transposed tr:first-child > :first-child > * { display: inline-block !important; }
+
+/* Zugende: links zweite Aktion auslassen (grün), rechts passen – je halbe Breite */
+.mb-sheet-end { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+/* Gleich dezent wie „Pass“: nur Umriss und Schrift in Farbe, grün statt rot */
+.mb-skip { height: 48px; border-radius: 10px; border: 1px solid #24552a; background: transparent; color: #8fd694; font: inherit; font-weight: bold; cursor: pointer; }
+.mb-skip:disabled { opacity: 0.35; cursor: default; }
+
+/* Gedrehte Ergebnis-Tabelle: Spielerfarbe als Spalte, Sieger-Spalte mit goldenem Rahmen und goldener Summe */
+.mb-results-scroll .game_end_table.mb-transposed { border-collapse: separate; border-spacing: 0; }
+.mb-results-scroll .game_end_table.mb-transposed td.mb-winner-col { box-shadow: inset 3px 0 0 #ffcc64, inset -3px 0 0 #ffcc64; }
+.mb-results-scroll .game_end_table.mb-transposed tr:first-child td.mb-winner-col { box-shadow: inset 3px 0 0 #ffcc64, inset -3px 0 0 #ffcc64, inset 0 3px 0 #ffcc64; border-radius: 6px 6px 0 0; }
+.mb-results-scroll .game_end_table.mb-transposed tr:last-child td.mb-winner-col { box-shadow: inset 3px 0 0 #ffcc64, inset -3px 0 0 #ffcc64, inset 0 -3px 0 #ffcc64; border-radius: 0 0 6px 6px; }
+.mb-results-scroll .game_end_table.mb-transposed td.game-end-total.mb-winner-col { background-color: #ffcc64 !important; font-size: 40px; font-weight: 900; text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
+.mb-results-scroll .game_end_table.mb-transposed td.game-end-total.mb-winner-col.player_translucent_bg_color_green { color: #054806; }
+.mb-results-scroll .game_end_table.mb-transposed td.game-end-total.mb-winner-col.player_translucent_bg_color_red { color: #480d06; }
+.mb-results-scroll .game_end_table.mb-transposed td { border-left: 0 !important; border-right: 0 !important; padding-left: 4px !important; padding-right: 4px !important; }
+.mb-results-scroll .game_end_table.mb-transposed th { border-left: 0 !important; padding-left: 4px !important; }
+/* Gruppen-Trenner liegen jetzt waagerecht: dünne Linie über der ersten Zeile einer Gruppe */
+.mb-results-scroll .game_end_table.mb-transposed tr:has(.game-end-group-divider) > * { border-top: 2px solid rgba(255, 255, 255, 0.35) !important; }
+/* Original dimmt die Zusatzspalten per Deckkraft – das würde die Spielerfarbe mit ausbleichen, daher nur die Schrift */
+.mb-results-scroll .game_end_table.mb-transposed .game-end-mc { opacity: 1; color: rgba(255, 255, 255, 0.55); }
+.mb-results-scroll .game_end_table.mb-transposed tr:has(.game-end-mc) ~ tr > td.mb-player-col { color: rgba(255, 255, 255, 0.55); }

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="icons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d0f14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TM Mobile">
+<title>TM Mobile Prototype</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="mobile.css">
+</head>
+<body class="mb-body">
+<div class="mb-app" id="app">
+
+<button class="mb-top" type="button" data-go="players" aria-label="Open player overview">
+  <span class="mb-top-gen">GEN <b data-value="game.generation">{{generation}}</b></span>
+  <span class="mb-globals">
+    <span class="mb-global"><img src="assets/global-parameters/oxygen.png" alt="Oxygen"><span data-value="game.oxygen" data-suffix=" %">{{oxygen}} %</span></span>
+    <span class="mb-global"><img src="assets/global-parameters/temperature.png" alt="Temperature"><span data-value="game.temperature" data-suffix=" °C">{{temperature}} °C</span></span>
+    <span class="mb-global"><img src="assets/tiles/ocean.png" alt="Oceans"><span data-value="game.oceans" data-suffix="/9">{{oceans}}/9</span></span>
+  </span>
+  <span class="mb-top-spacer"></span>
+  <span class="mb-money"><i class="resource_icon resource_icon--megacredits"></i><span class="mb-money-value" data-value="jens.megacredits">{{money}}</span><span class="mb-money-prod" data-value="jens.megacreditsProduction" data-prefix="+">+{{moneyProduction}}</span></span>
+</button>
+
+<main class="mb-main">
+
+  <section class="mb-screen" data-screen="setup">
+    <div class="mb-steps" role="tablist">
+      <button type="button" class="mb-step is-active" data-step="corporation"><span class="mb-step-number">1</span>Corporation <b data-step-count="corporation">0/1</b></button>
+      <button type="button" class="mb-step" data-step="prelude"><span class="mb-step-number">2</span>Preludes <b data-step-count="prelude">0/2</b></button>
+      <button type="button" class="mb-step" data-step="projects"><span class="mb-step-number">3</span>Cards <b data-step-count="projects">0</b></button>
+    </div>
+    <div class="mb-setup" id="setupRoot" data-step="corporation">{{setup}}</div>
+  </section>
+
+  <section class="mb-screen" data-screen="mars">
+    <div class="mb-turn" id="turnBanner">
+      <span class="mb-turn-dot"></span>
+      <span class="mb-turn-title" id="turnTitle">Your turn</span>
+      <span class="mb-turn-sub" data-turn-step>Action 1 of 2</span>
+      <span class="mb-turn-time">{{timer}}</span>
+    </div>
+    <div class="mb-mars-home">
+      <div class="mb-mars" id="boardHome">{{board}}</div>
+      <button type="button" class="mb-mars-zoom-hint" data-open-mars aria-label="Zoom Mars"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>Zoom</button>
+    </div>
+    <div class="mb-params">{{parameters}}</div>
+    <div class="mb-quick">
+      <button type="button" data-go="players" data-segment="ma">Milestones <b data-value="game.claimedMilestones" data-suffix="/3">0/3</b></button>
+      <button type="button" data-go="players" data-segment="ma">Awards <b data-value="game.fundedAwards" data-suffix="/3">0/3</b></button>
+    </div>
+    <div class="mb-end-notice" id="endNotice" hidden>
+      <span class="mb-end-title">The game is over!</span>
+      <span class="mb-end-sub">Results in <b id="endCountdown">5</b> s</span>
+      <button type="button" class="btn btn-submit btn-rounded" data-go="results">Show results</button>
+    </div>
+  </section>
+
+  <section class="mb-screen" data-screen="hand">{{handPanel}}</section>
+
+  <section class="mb-screen" data-screen="players">
+    <div class="mb-players">
+      <div class="mb-segments" role="tablist">
+        <button type="button" class="mb-segment is-active" data-segment-button="players">Players</button>
+        <button type="button" class="mb-segment" data-segment-button="ma">Milestones &amp; awards</button>
+      </div>
+      <div class="mb-player-list" data-segment-view="players">{{players}}</div>
+      <div class="mb-ma-slot" data-segment-view="ma" hidden>{{milestones}}</div>
+    </div>
+  </section>
+
+  <section class="mb-screen" data-screen="log"><div class="mb-log-slot">{{log}}</div></section>
+
+  <section class="mb-screen" data-screen="task">
+    <div class="mb-task-head" id="taskHead">
+      <button type="button" class="mb-icon-button" data-cancel aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <span class="mb-task-title" id="taskTitle"></span>
+      <span class="mb-task-sub" id="taskSub"></span>
+    </div>
+    <div class="mb-task-body">
+      {{panels}}
+      <div class="mb-place-wrap" id="placeWrap" hidden>
+        <div class="mb-mars mb-mars--place" id="boardPlace"><div class="mb-zoom-stage"></div></div>
+        <div class="mb-zoom-controls" aria-label="Zoom Mars">
+          <button type="button" class="mb-zoom-button" data-zoom="out" aria-label="Zoom out">−</button>
+          <span class="mb-zoom-level" data-zoom-level>100 %</span>
+          <button type="button" class="mb-zoom-button" data-zoom="in" aria-label="Zoom in">+</button>
+          <button type="button" class="mb-zoom-button mb-zoom-button--fit" data-zoom="fit">Whole planet</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-screen" data-screen="results">
+    <div class="mb-results">
+      <div class="mb-results-hero">{{endHero}}</div>
+      <div class="mb-results-scroll">{{endPoints}}</div>
+      <div class="mb-results-details">{{endDetails}}</div>
+      <div class="mb-results-charts">
+        <div class="mb-segments" role="tablist">
+          <button type="button" class="mb-segment is-active" data-chart-button="victory-points">Victory points</button>
+          <button type="button" class="mb-segment" data-chart-button="global-parameters">Global parameters</button>
+        </div>
+        <img class="mb-chart" data-chart="victory-points" src="assets-extra/chart-victory-points.png" alt="Victory points per generation: Jens rises from 20 to 45, Mira from 20 to 35">
+        <img class="mb-chart" data-chart="global-parameters" src="assets-extra/chart-global-parameters.png" alt="Temperature, oxygen and oceans per generation, all reaching 100 percent in generation 6" hidden>
+      </div>
+      <span class="mb-section-label">Final board</span>
+      <div class="mb-mars" id="boardFinal"></div>
+    </div>
+  </section>
+
+</main>
+
+<nav class="mb-nav" aria-label="Main navigation">
+  <button type="button" class="mb-nav-item" data-go="mars"><img src="assets/sidebar/preferences_board.png" alt=""><span>Mars</span></button>
+  <button type="button" class="mb-nav-item" data-go="hand"><img src="assets/sidebar/preferences_cards.png" alt=""><span class="mb-nav-badge" data-value="jens.cards">{{handCount}}</span><span>Hand</span></button>
+  <button type="button" class="mb-nav-item mb-nav-turn" data-open-sheet><span class="mb-turn-button" id="turnButton"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg></span><span>Turn</span></button>
+  <button type="button" class="mb-nav-item" data-go="players"><img src="assets/resources/tr.png" alt=""><span>Players</span></button>
+  <button type="button" class="mb-nav-item" data-go="log"><img src="assets/sidebar/preferences_actions.png" alt=""><span class="mb-nav-badge mb-nav-badge--new" id="logBadge" hidden>0</span><span>Log</span></button>
+</nav>
+
+<div class="mb-taskbar" id="taskbar">
+  <div class="mb-taskbar-extra" id="taskbarExtra"></div>
+  <div class="mb-taskbar-row">
+    <button type="button" class="mb-taskbar-cancel" data-cancel>Cancel</button>
+    <div class="mb-taskbar-slot" id="taskbarSlot"></div>
+  </div>
+</div>
+
+<div class="mb-setupbar" id="setupbar">
+  <div class="mb-setupbar-summary" id="setupSummary"></div>
+  <button type="button" class="btn btn-submit btn-rounded mb-setup-next" id="setupNext">Next: preludes</button>
+</div>
+
+<div class="mb-sheet" id="sheet">
+  <button type="button" class="mb-sheet-backdrop" data-close-sheet aria-label="Close"></button>
+  <div class="mb-sheet-panel">
+    <span class="mb-sheet-grip"></span>
+    <div class="mb-sheet-head"><span class="mb-sheet-title">Your turn</span><span class="mb-turn-sub" data-turn-step>Action 1 of 2</span></div>
+    <div class="mb-sheet-group">
+      <span class="mb-section-label">Available now</span>
+      {{highlightTiles}}
+    </div>
+    <div class="mb-sheet-group">
+      <span class="mb-section-label">Actions</span>
+      <div class="mb-sheet-grid">{{actionTiles}}</div>
+    </div>
+    <div class="mb-sheet-end">
+      <button type="button" class="mb-skip" data-skip>Skip 2nd action</button>
+      <button type="button" class="mb-pass" data-pass>Pass</button>
+    </div>
+  </div>
+</div>
+
+<div class="mb-popover" id="popover" hidden>
+  <button type="button" class="mb-popover-backdrop" data-close-popover aria-label="Close"></button>
+  <div class="mb-popover-card" id="popoverCard"></div>
+  <div class="mb-popover-actions" id="popoverActions"></div>
+</div>
+
+<div class="mb-scenes" id="scenes">
+  <div class="mb-scenes-panel">
+    <span class="mb-section-label">Prototype · Terraforming Mars mobile</span>
+    <span class="mb-scenes-title">Where do you want to start?</span>
+    <button type="button" class="mb-scene" data-scene="setup"><b>Initial selection</b><span>Pick corporation, preludes and cards – one step at a time</span></button>
+    <button type="button" class="mb-scene" data-scene="game"><b>Mid-game</b><span>Generation 6, your turn – Jens vs. Mira on Tharsis</span></button>
+    <button type="button" class="mb-scene" data-scene="end"><b>Game end</b><span>Notice over Mars, then the results page</span></button>
+  </div>
+</div>
+<button type="button" class="mb-scene-button" data-open-scenes aria-label="Switch scene">Scenes</button>
+
+<div class="mb-toast" id="toast" role="status"></div>
+</div>
+<script>window.TM_DATA = {{data}};</script>
+<script src="js/core.js"></script>
+<script src="js/scale.js"></script>
+<script src="js/state.js"></script>
+<script src="js/log.js"></script>
+<script src="js/board.js"></script>
+<script src="js/zoom.js"></script>
+<script src="js/cards.js"></script>
+<script src="js/payment.js"></script>
+<script src="js/navigation.js"></script>
+<script src="js/tasks.js"></script>
+<script src="js/turn.js"></script>
+<script src="js/actions.js"></script>
+<script src="js/marsview.js"></script>
+<script src="js/carousel.js"></script>
+<script src="js/opponent.js"></script>
+<script src="js/setup.js"></script>
+<script src="js/gameend.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
