@@ -30,13 +30,21 @@ Screenshots show the German UI at 1920 px width unless stated otherwise.
 
 ![Hand cards tab with active action cards and their resource counters above the hand](docs/screenshots/tab-handkarten.jpg)
 
-**A normal turn:** only the regular action tabs – action cards, build, standard projects, sell. Special tabs (milestones, greenery, temperature) appear only when they are possible.
+**A normal turn:** only the regular tabs are shown – hand cards on the left, the action tabs on the right. Special tabs (milestones, greenery, temperature) appear only when they are possible.
+
+**Actions tab:** opens by default when it's your turn. It lists the action cards you can use right now; the button at the bottom runs the selected action.
 
 ![Actions tab with the player's action cards](docs/screenshots/tab-aktionen.jpg)
 
+**Build tab:** your playable hand cards. The selected card is marked, and the payment row at the bottom lets you mix steel, titanium and M€ before playing it.
+
 ![Build tab with playable hand cards and payment](docs/screenshots/tab-bauen.jpg)
 
+**Standard tab:** the standard projects (power plant, asteroid, ocean, greenery, city) as cards with their cost; the M€ you pay is shown next to the confirm button.
+
 ![Standard projects tab](docs/screenshots/tab-standard.jpg)
+
+**Sell tab:** pick hand cards to sell for 1 M€ each; the button counts how many are selected.
 
 ![Sell tab with hand cards to sell for 1 M€ each](docs/screenshots/tab-verkaufen.jpg)
 
