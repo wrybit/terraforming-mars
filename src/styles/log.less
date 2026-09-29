@@ -93,25 +93,27 @@
 // Größe der Karten in der Hover-Vorschau; bestimmt auch die Log-Höhe im Zwei-Spalten-Layout (player_home_columns.less)
 @log-card-preview-zoom: 0.8;
 
-// Projektkarte inkl. Rahmen (ungezoomt) und wie viel von jeder weiteren Karte oben sichtbar bleibt (Preis + Titel)
+// Projektkarte inkl. Rahmen (ungezoomt)
 @log-card-preview-height: 308px;
-@log-card-preview-peek: 70px;
+@log-card-preview-gap: 8px;
 
 // Hover-Vorschau knapp vor dem rechten Rand über dem Log, mit Schlagschatten. Eine Karte sitzt vertikal mittig;
-// mehrere stapeln sich nach oben: die letzte liegt ganz vorn (mittig), von den übrigen bleiben oben Preis und Titel sichtbar.
+// mehrere (bis 3, mehr öffnen per Klick ein Modal – logMessageContent.ts) stehen vollständig übereinander und
+// wachsen nach oben: die letzte sitzt mittig, die übrigen darüber.
 // fixed statt absolute, weil das Log in einer Spalte mit overflow liegen kann (player_home_columns.less)
 .card-panel--floating {
-  // Zoom als Variable: Stapelversatz und Verschiebung rechnen mit derselben Kartengröße (Stufe "log-full" setzt 1)
+  // Zoom als Variable: die Verschiebung rechnet mit derselben Kartengröße (Stufe "log-full" setzt 1)
   --log-card-preview-zoom: @log-card-preview-zoom;
   position: fixed; // top (Mitte) und right setzt LogMessageInspector
   z-index: 100;
-  // Unterkante des Stapels eine halbe Karte unter der Mitte: die vorderste Karte steht mittig
+  // Unterkante eine halbe Karte unter der Mitte: die letzte Karte steht mittig
   transform: translateY(calc(-100% + @log-card-preview-height * var(--log-card-preview-zoom) / 2));
   // Schatten folgt der Kartenform (runde Ecken)
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.7));
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  gap: @log-card-preview-gap;
   // Maus bleibt auf den Log-Zeilen; sonst würde die Vorschau den Hover abfangen und flackern
   pointer-events: none;
 
@@ -119,11 +121,6 @@
   .card-container {
     margin: 0;
     zoom: var(--log-card-preview-zoom);
-  }
-
-  // Jede weitere Karte schiebt sich über die vorige und lässt nur deren oberen Streifen frei
-  > .cardbox + .cardbox {
-    margin-top: calc((@log-card-preview-peek - @log-card-preview-height) * var(--log-card-preview-zoom));
   }
 }
 
