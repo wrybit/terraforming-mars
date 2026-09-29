@@ -1,0 +1,59 @@
+// Spielende-Meldung (GameOverNotice.vue): schwebt mittig über dem Mars
+@import (reference) "./frosted_surface.less";
+
+.player-home-columns__mars {
+  position: relative; // Bezug für die schwebende Meldung
+}
+
+.game-over-notice {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 50;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: calc(100% - 32px);
+  padding: 28px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(14, 15, 20, 0.78);
+  backdrop-filter: blur(10px);
+  box-shadow: @floating-button-shadow;
+  text-align: center;
+  animation: game-over-notice-float 4s ease-in-out infinite;
+}
+
+.game-over-notice__title {
+  color: #fff;
+  font-size: 34px;
+  line-height: 1.15;
+  text-shadow: 0 0 18px rgba(120, 170, 255, 0.6);
+}
+
+.btn.game-over-notice__link {
+  margin: 0;
+  line-height: 50px;
+  padding: 0 24px;
+  box-shadow: @floating-button-shadow;
+}
+
+.game-over-notice__hint {
+  margin-top: -8px; // gehört zum Button darüber, nicht zum Titel
+  color: #b8bcc8;
+  font-size: 14px;
+}
+
+// Leichtes Schweben, damit die Meldung als Überlagerung und nicht als Teil des Plans gelesen wird
+@keyframes game-over-notice-float {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50% { transform: translate(-50%, calc(-50% - 6px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-over-notice {
+    animation: none;
+  }
+}

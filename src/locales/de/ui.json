@@ -422,7 +422,7 @@
   "funded by": "gegründet von",
   "claimed by": "beansprucht von",
   "Error with input": "Fehlerhafte Eingabe",
-  "This game is over!": "Das Spiel ist zuende!",
+  "This game is over!": "Das Spiel ist zu Ende!",
   "Not your turn to take any actions": "Es ist nicht dein Zug",
   "Pass": "Passen",
   "Automatically pass after this action": "Automatisch Passen",
@@ -1454,5 +1454,6 @@
   "Show Mars enlarged": "Mars groß anzeigen",
   "Place city": "Stadt platzieren",
   "Place ocean": "Ozean platzieren",
-  "Show Mars enlarged and choose a space": "Mars wird groß angezeigt – dann ein Feld wählen"
+  "Show Mars enlarged and choose a space": "Mars wird groß angezeigt – dann ein Feld wählen",
+  "You will be taken to the results in a moment": "Gleich geht es weiter zur Auswertung …"
 }

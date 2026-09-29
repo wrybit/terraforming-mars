@@ -4,13 +4,6 @@
          Kommentar bewusst innerhalb der Wurzel, sonst hätte die Komponente zwei Wurzelknoten ($el wäre kein Element) -->
     <TopBar :playerView="playerView" />
 
-    <div v-if="game.phase === 'end'">
-      <div class="player_home_block">
-        <DynamicTitle title="This game is over!" :color="thisPlayer.color"/>
-        <a :href="'the-end?id='+ playerView.id" v-i18n>Go to game results</a>
-      </div>
-    </div>
-
     <Sidebar v-trim-whitespace
       :actingPlayer="isPlayerActing(playerView)"
       :playerColor="thisPlayer.color"
@@ -45,6 +38,8 @@
               :viewerColor="playerView.thisPlayer.color"
               @toggleTileView="cycleTileView()"
             />
+            <!-- Spielende: Meldung über dem Mars, danach automatisch zur Ergebnisseite -->
+            <GameOverNotice v-if="game.phase === 'end'" :participantId="playerView.id"/>
           </div>
 
           <!-- Log unter dem Brett: beides bleibt im Zwei-Spalten-Layout gemeinsam sichtbar -->
@@ -151,6 +146,7 @@ import SetupTurnOrder from '@/client/components/SetupTurnOrder.vue';
 import SetupBoardToggle from '@/client/components/SetupBoardToggle.vue';
 import {setupBoardCollapsed} from '@/client/components/setupBoardCollapsed';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
+import GameOverNotice from '@/client/components/gameend/GameOverNotice.vue';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
@@ -245,6 +241,7 @@ export default defineComponent({
   },
   components: {
     DynamicTitle,
+    GameOverNotice,
     Card,
     PlayersOverview,
     WaitingFor,
