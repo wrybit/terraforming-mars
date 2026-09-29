@@ -2,7 +2,7 @@
   <span class="ma-table-icon">
     <template v-for="(part, index) in parts" :key="index">
       <span v-if="part.production" class="ma-table-icon-production"><img :src="imagePath(part)" alt=""></span>
-      <img v-else :src="imagePath(part)" alt="">
+      <img v-else :src="imagePath(part)" :class="{'ma-table-icon-outline': part.outline}" alt="">
     </template>
     <!-- Bedingung (Schwelle) des Meilensteins mittig auf dem Symbol -->
     <span v-if="requirement !== undefined" class="ma-table-icon-requirement" :style="{left: `${centerX}%`}" data-test="requirement">{{ requirement }}</span>
