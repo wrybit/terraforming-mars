@@ -1,5 +1,29 @@
 # <a name="README"> Terraforming Mars Open-source
 
+> **Dies ist ein Fork** von [terraforming-mars/terraforming-mars](https://github.com/terraforming-mars/terraforming-mars).
+> Spiellogik und Karten stammen unverändert aus dem Original. Der Fork überarbeitet nur die **Oberfläche der Spieleransicht**,
+> damit Design, Anordnung und Bedienung übersichtlicher werden.
+
+### Was dieser Fork an der Oberfläche ändert
+
+- **Zwei Spalten** ab 1400 px Fensterbreite: links das Spielgeschehen, rechts Mars, Meilensteine, Auszeichnungen und Log. Der Mars bleibt beim Scrollen sichtbar. Die Spaltenbreite lässt sich mit einem Griff verstellen.
+- **Spielerliste als Tabelle:** Vorrat groß, Produktion daneben, Stahl- und Titanwert als Badge. Tags und Wertung stehen als kleinere Zähler dahinter.
+- **Startauswahl** mit Konzern und Kartenkauf als nebeneinander vergleichbare Spalten. Eine Bilanz-Leiste zeigt Start-M€, Kaufkosten und Rest. Der Spielplan lässt sich einklappen.
+- **Handkarten** per Drag & Drop sortierbar. Die Reihenfolge gilt auch im Bauen- und Verkaufen-Dialog. Aktive Aktionskarten stehen als eigener Block darüber.
+- **Plättchen platzieren:** Ein Button vergrößert den Mars. Nach dem Platzieren wird er per Animation wieder klein.
+- **Aktionen als Tabs** mit einheitlichen Buttons. Hinweise zeigen z. B. die Temperatur vorher und nachher sowie die Anzahl der Ozeane.
+- **Spielende** als Meldung über dem Mars, danach geht es automatisch zur Ergebnisseite.
+
+**Startauswahl**
+
+![Startauswahl: Konzern und Kartenkauf als Spalten, Bilanz-Leiste, Mars rechts](docs/screenshots/startauswahl.jpg)
+
+**Spielansicht**
+
+![Spielansicht: Spielertabelle, Aktions-Tabs, rechts Mars, Meilenstein-Tabelle und Log](docs/screenshots/spielansicht.jpg)
+
+---
+
 <div align="center">
   <img src="https://raw.githubusercontent.com/bafolts/terraforming-mars/main/assets/expansion_icons/expansion_icon_corporateEra.png">
   <img src="https://raw.githubusercontent.com/bafolts/terraforming-mars/main/assets/expansion_icons/expansion_icon_venus.png">
