@@ -3,10 +3,10 @@
     <!-- Schalter vorne, auf Höhe der Icons: blenden Waren / Tags / Wertung ein und aus -->
     <div class="players-table-toggles">
       <button v-for="section in sections" :key="section.key" type="button"
-        :class="['players-table-toggle', 'tooltip', 'tooltip-bottom', {'players-table-toggle--squeezed': autoHidden.includes(section.key)}]"
+        :class="['players-table-toggle', {'players-table-toggle--squeezed': autoHidden.includes(section.key)}]"
         :aria-pressed="visibility[section.key] ? 'true' : 'false'"
         :aria-label="$t(section.label)"
-        :data-tooltip="autoHidden.includes(section.key) ? $t(section.label) + ': ' + $t('Not enough space') : $t(section.label)"
+        v-glass-tooltip="autoHidden.includes(section.key) ? $t(section.label) + ': ' + $t('Not enough space') : $t(section.label)"
         :data-test="'toggle-' + section.key"
         @click="$emit('toggle', section.key)">
         <span :class="['players-table-toggle-icon', 'players-table-toggle-icon--' + section.icon]"></span>
@@ -49,6 +49,7 @@
 </template>
 
 <script lang="ts">
+import {glassTooltip} from '@/client/directives/GlassTooltip';
 import {defineComponent} from 'vue';
 import Tag from '@/client/components/Tag.vue';
 import {Tag as CardTag} from '@/common/cards/Tag';
@@ -68,6 +69,9 @@ export default defineComponent({
   name: 'PlayersTableHeader',
   components: {
     Tag,
+  },
+  directives: {
+    glassTooltip,
   },
   props: {
     visibility: {

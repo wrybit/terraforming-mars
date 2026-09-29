@@ -25,6 +25,8 @@ export function tooltipPosition(anchor: Anchor, tooltipWidth: number, viewportWi
 }
 
 let tooltip: HTMLElement | undefined;
+// Element, über dem der Tooltip gerade steht
+let currentAnchor: HTMLElement | undefined;
 const texts = new WeakMap<HTMLElement, string>();
 const handlers = new WeakMap<HTMLElement, {show: () => void, hide: () => void}>();
 
@@ -43,6 +45,7 @@ function show(anchorElement: HTMLElement): void {
   if (text === '') {
     return;
   }
+  currentAnchor = anchorElement;
   const element = tooltipElement();
   element.textContent = text;
   // Erst Text setzen, dann messen
@@ -56,6 +59,7 @@ function show(anchorElement: HTMLElement): void {
 }
 
 function hide(): void {
+  currentAnchor = undefined;
   tooltip?.classList.remove(GLASS_TOOLTIP_VISIBLE_CLASS);
 }
 
@@ -69,13 +73,19 @@ export const glassTooltip: Directive<HTMLElement, string | undefined> = {
   },
   updated(element, binding) {
     texts.set(element, binding.value ?? '');
+    // Text ändert sich unter der Maus (z. B. Schalter umgelegt): sichtbaren Tooltip nachführen
+    if (currentAnchor === element) {
+      show(element);
+    }
   },
   beforeUnmount(element) {
     const events = handlers.get(element);
     if (events !== undefined) {
       element.removeEventListener('mouseenter', events.show);
       element.removeEventListener('mouseleave', events.hide);
-      events.hide();
+      if (currentAnchor === element) {
+        events.hide();
+      }
     }
   },
 };
