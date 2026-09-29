@@ -177,16 +177,29 @@
   font-size: 12px;
 }
 
+// Besitzer: Würfel + Name. Passt beides nicht, fällt der Würfel weg; passt auch der Name allein nicht, wird er gekürzt.
+// Ohne JS: Der Würfel steht im DOM nach dem Namen und bricht per row-reverse + wrap als Erster in die
+// abgeschnittene zweite Zeile um; der Name allein schrumpft dann mit Auslassungspunkten.
+@ma-table-owner-line-height: 16px;
+
 .ma-table-owner {
   display: inline-flex;
+  flex-flow: row-reverse wrap;
   align-items: center;
-  gap: 4px;
+  gap: 0 4px;
   max-width: 100%;
+  height: @ma-table-owner-line-height;
+  overflow: hidden;
   padding: 2px 6px 1px;
   border-radius: 4px;
   font-size: 12px;
+  line-height: @ma-table-owner-line-height;
   color: #fff;
   white-space: nowrap;
+}
+
+.ma-table-owner-name {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
