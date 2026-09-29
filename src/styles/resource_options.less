@@ -79,3 +79,50 @@
 .choice-option-input {
   &:extend(.resource-option-input);
 }
+
+// Option mit Ressource (ChoiceOptionTile.vue): Symbol oben, Text, darunter der eigene Stand vorher → nachher
+.choice-option--resource {
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.choice-option-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  background-size: contain;
+}
+
+.choice-option-value {
+  // Stand immer unten, auch wenn der Text der Nachbarkachel einzeilig ist: Werte einer Reihe stehen auf einer Linie
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  font-family: Prototype, sans-serif;
+  font-size: 20px;
+}
+
+.choice-option-value-label {
+  font-family: Ubuntu, sans-serif;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+// Stand danach wie bei den Spieler-Kacheln (player_options.less): kleiner, Gewinn grün, Verlust rot
+.choice-option-after {
+  margin-left: 3px;
+  font-size: 15px;
+}
+
+.choice-option-after--gain {
+  color: #9be29b;
+}
+
+.choice-option-after--loss {
+  color: #ffb4a6;
+}

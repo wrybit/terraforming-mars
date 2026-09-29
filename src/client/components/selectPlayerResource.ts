@@ -7,6 +7,7 @@ import {PublicPlayerModel} from '@/common/models/PlayerModel';
 // und in Text-Parametern (Sabotage schreibt "M€" statt "megacredits")
 const RESOURCE_WORDS: ReadonlyArray<[RegExp, Resource]> = [
   [/M€/, Resource.MEGACREDITS],
+  [/\bmegacredits?\b/i, Resource.MEGACREDITS], // Robinson Industries: "Increase megacredits production 1 step"
   [/\bsteel\b/i, Resource.STEEL],
   [/\btitanium\b/i, Resource.TITANIUM],
   [/\bplants?\b/i, Resource.PLANTS],
@@ -43,13 +44,31 @@ export function selectPlayerResource(title: string | Message): Resource | undefi
   return RESOURCE_WORDS.find(([pattern]) => pattern.test(titleText(title)))?.[1];
 }
 
-// Was ein Angriff beim Zielspieler verändert: welche Ressource, ob Vorrat oder Produktion, und um wie viel.
-// amount fehlt, wenn der Titel keine Zahl nennt – dann zeigt die Kachel nur den aktuellen Stand.
+// Was eine Wahl beim betroffenen Spieler verändert: welche Ressource, ob Vorrat oder Produktion, in welche
+// Richtung und um wie viel. amount oder direction fehlen, wenn der Titel es nicht eindeutig sagt –
+// dann zeigt die Kachel nur den aktuellen Stand.
 export type PlayerEffect = {
   resource: Resource,
   target: 'stock' | 'production',
+  direction?: 'gain' | 'loss',
   amount?: number,
 };
+
+// Verben im englischen Titel-Schlüssel; nennt ein Titel beide (z. B. "Remove microbes to gain M€"),
+// bleibt die Richtung offen, weil sich das Entfernen auf etwas anderes beziehen kann
+const GAIN_WORDS = /\b(increase|gain|add|raise)\b/i;
+const LOSS_WORDS = /\b(remove|steal|decrease|lose|reduce)\b/i;
+
+const NO_EFFECT = /^(do not|don't|skip)\b/i;
+
+function titleDirection(text: string): 'gain' | 'loss' | undefined {
+  const gain = GAIN_WORDS.test(text);
+  const loss = LOSS_WORDS.test(text);
+  if (gain === loss) {
+    return undefined;
+  }
+  return gain ? 'gain' : 'loss';
+}
 
 // Zahl im Titel: als Parameter (b.number → Text-Parameter "4") oder im Schlüssel ("up to 4 M€")
 function titleAmount(title: string | Message): number | undefined {
@@ -65,9 +84,13 @@ function titleAmount(title: string | Message): number | undefined {
   return match === null ? undefined : Number(match[1]);
 }
 
-// Wirkung einer Spielerwahl oder Spieler-Option auf den Zielspieler; undefined, wenn keine Ressource erkennbar ist.
-// Alle erkannten Titel sind Verluste für das Ziel (entfernen, stehlen, Produktion senken).
+// Wirkung einer Wahl auf den betroffenen Spieler (Angriff auf einen Gegner, eigene Produktion erhöhen …);
+// undefined, wenn keine Ressource erkennbar ist
 export function playerEffect(title: string | Message): PlayerEffect | undefined {
+  // "Entferne keine M€", "Skip removing plants": nennen die Ressource, ändern aber nichts
+  if (NO_EFFECT.test(titleText(title))) {
+    return undefined;
+  }
   const resource = selectPlayerResource(title);
   if (resource === undefined) {
     return undefined;
@@ -75,6 +98,7 @@ export function playerEffect(title: string | Message): PlayerEffect | undefined 
   return {
     resource,
     target: /production/i.test(titleText(title)) ? 'production' : 'stock',
+    direction: titleDirection(titleText(title)),
     amount: titleAmount(title),
   };
 }
@@ -93,13 +117,15 @@ export function resourceSnapshot(player: PublicPlayerModel, resource: Resource):
   }
 }
 
-// Stand nach dem Angriff: Vorrat fällt höchstens auf 0 (der Server nimmt nur, was da ist), Produktion um die volle Zahl
+// Stand nach der Wahl: ein Verlust senkt den Vorrat höchstens auf 0 (der Server nimmt nur, was da ist),
+// die Produktion um die volle Zahl; ein Gewinn erhöht um die Zahl
 export function resourceAfter(snapshot: ResourceSnapshot, effect: PlayerEffect): ResourceSnapshot {
-  if (effect.amount === undefined) {
+  if (effect.amount === undefined || effect.direction === undefined) {
     return snapshot;
   }
+  const change = effect.direction === 'gain' ? effect.amount : -effect.amount;
   if (effect.target === 'production') {
-    return {...snapshot, production: snapshot.production - effect.amount};
+    return {...snapshot, production: snapshot.production + change};
   }
-  return {...snapshot, stock: Math.max(0, snapshot.stock - effect.amount)};
+  return {...snapshot, stock: Math.max(0, snapshot.stock + change)};
 }

@@ -10,7 +10,7 @@ describe('PlayerOptionTile', () => {
   it('shows the player in its color with the state before and after', () => {
     const wrapper = mount(PlayerOptionTile, {
       ...globalConfig,
-      props: {color: 'red', player, groupName: 'g', effect: {resource: 'steel', target: 'stock', amount: 4}},
+      props: {color: 'red', player, groupName: 'g', effect: {resource: 'steel', target: 'stock', direction: 'loss', amount: 4}},
     });
     expect(wrapper.find('label').classes()).contains('player_translucent_bg_color_red');
     expect(wrapper.find('.player-option-name').text()).eq('beta');
