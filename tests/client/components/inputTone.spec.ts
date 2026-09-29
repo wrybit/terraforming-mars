@@ -38,6 +38,11 @@ describe('inputTone', () => {
     expect(inputTone(input({type: 'space', title: 'Select space for city tile'}))).eq('city');
   });
 
+  it('Feldwahl für Grünflächen ist grün', () => {
+    expect(inputTone(input({type: 'space', title: 'Select space for greenery tile'}))).eq('greenery');
+    expect(inputTone(input({type: 'space', title: {message: 'Convert ${0} plants into greenery', data: []}}))).eq('greenery');
+  });
+
   it('Farbe nach Eingabetyp', () => {
     expect(inputTone(input({type: 'space', title: 'x'}))).eq('mars');
     expect(inputTone(input({type: 'amount', title: 'x'}))).eq('resources');
