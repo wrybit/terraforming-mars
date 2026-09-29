@@ -16,7 +16,7 @@
 @player-home-board-overhang-left: 40px;
 @player-home-board-overhang-right: 24px;
 // Log unter dem Brett so hoch wie die verkleinerte Karte der Hover-Vorschau (Projektkarte 308px, Zoom aus log.less)
-@player-home-card-height: 308px; // Projektkarte inkl. Rahmen
+@player-home-card-height: @log-card-preview-height; // Projektkarte inkl. Rahmen (log.less)
 @player-home-log-height: floor(@player-home-card-height * @log-card-preview-zoom);
 
 @media only screen and (min-width: @player-home-columns-min-width) {
@@ -220,8 +220,8 @@
       max-height: @player-home-card-height;
     }
 
-    .card-panel--floating .card-container {
-      zoom: 1;
+    .card-panel--floating {
+      --log-card-preview-zoom: 1;
     }
   }
 }
