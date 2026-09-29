@@ -312,6 +312,26 @@ body:has(#game-end) {
   }
 }
 
+// Gesamtpunkte des Siegers invertiert: Gold als Fläche, Zahl in der abgedunkelten Spielerfarbe (wie die übrigen Gesamt-Felder)
+// mit hellem Leuchten, damit das Siegerfeld auf den ersten Blick heraussticht
+@game-end-winner-total-font-size: 46px;
+@game-end-winner-total-glow: 0 0 6px fade(#fff, 85%), 0 0 16px fade(#fff, 55%);
+
+.game_end_table tr.game-end-winner-row td.game-end-total {
+  background-color: @game-end-total-accent;
+  font-size: @game-end-winner-total-font-size;
+  font-weight: 900;
+  text-shadow: @game-end-winner-total-glow;
+}
+
+// Textfarbe = Spielerfarbe unter der 38-%-Abdunklung von @game-end-total-background
+each(@players, {
+  @c: ~"player_@{value}";
+  .game_end_table tr.game-end-winner-row.player_bg_color_@{value} td.game-end-total {
+    color: mix(#000, @@c, 38%);
+  }
+});
+
 @keyframes game-end-winner-glow {
   0%,
   100% { box-shadow: @game-end-winner-glow-min; }
