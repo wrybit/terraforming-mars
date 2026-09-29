@@ -21,3 +21,14 @@ export function previewTileForSpaceInput(title: string | Message): PreviewTile |
 export function previewTileClass(tile: PreviewTile): string {
   return 'board-space-tile--' + tile;
 }
+
+// Handlungs-Überschrift für den Button "Mars groß anzeigen" (SelectSpace.vue): sagt, was gleich gelegt wird
+const PLACEMENT_LABELS: Readonly<Record<PreviewTile, string>> = {
+  greenery: 'Place greenery',
+  city: 'Place city',
+  ocean: 'Place ocean',
+};
+
+export function placementLabel(tile: PreviewTile): string {
+  return PLACEMENT_LABELS[tile];
+}

@@ -1451,5 +1451,8 @@
   "Stock": "Vorrat",
   "Production": "Produktion",
   "Active cards": "Aktive Karten",
-  "Show Mars enlarged": "Mars groß anzeigen"
+  "Show Mars enlarged": "Mars groß anzeigen",
+  "Place city": "Stadt platzieren",
+  "Place ocean": "Ozean platzieren",
+  "Show Mars enlarged and choose a space": "Mars wird groß angezeigt – dann ein Feld wählen"
 }

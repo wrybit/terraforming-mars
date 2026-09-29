@@ -10,9 +10,13 @@
       {{ $t(playerinput.title) }}
       <GoToMap :playerinput="playerinput"/>
     </div>
-    <!-- Übergang zum großen Brett bewusst per Button: automatisches Aufklappen wirkt störend -->
+    <!-- Übergang zum großen Brett bewusst per Button: automatisches Aufklappen wirkt störend.
+         Oben steht, was platziert wird, darunter der nächste Schritt – so ist klar, was nach dem Klick passiert -->
     <div v-if="marsPlacement" class="select-space-zoom">
-      <button type="button" class="btn btn-primary btn-lg select-space-zoom-button" @click="enlargeBoard" v-i18n>Show Mars enlarged</button>
+      <button type="button" class="btn btn-primary btn-lg select-space-zoom-button" @click="enlargeBoard">
+        <span class="select-space-zoom-action">{{ placementAction }}</span>
+        <span class="select-space-zoom-next-step" v-i18n>Show Mars enlarged and choose a space</span>
+      </button>
     </div>
     <div v-if="warning" class="nes-container is-rounded">
       <span class="nes-text is-warning" v-i18n>{{ warning }}</span>
@@ -28,7 +32,7 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {SelectSpaceResponse} from '@/common/inputs/InputResponse';
 import SpaceConfirmPopover from '@/client/components/SpaceConfirmPopover.vue';
-import {previewTileClass, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {placementLabel, previewTileClass, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
 import {placementZoom, releasePlacementZoom, requestPlacementZoom} from '@/client/components/board/placementZoom';
 
 const PREVIEW_CLASS = 'space-tile-preview';
@@ -84,6 +88,13 @@ export default defineComponent({
       warning: undefined,
       marsPlacement: false,
     };
+  },
+  computed: {
+    // Bekanntes Plättchen als kurze Handlung ("Stadt platzieren"), sonst der Titel der Feldwahl selbst
+    placementAction(): string {
+      const tile = previewTileForSpaceInput(this.playerinput.title);
+      return tile !== undefined ? this.$t(placementLabel(tile)) : this.$t(this.playerinput.title);
+    },
   },
   components: {
     SpaceConfirmPopover,
