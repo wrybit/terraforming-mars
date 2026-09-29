@@ -26,6 +26,14 @@ Screenshots show the German UI at 1920 px width unless stated otherwise.
 
 ![Game view in the middle of a game](docs/screenshots/spielansicht.jpg)
 
+**A normal turn:** only the regular action tabs – action cards, build, standard projects, sell. Special tabs (milestones, greenery, temperature) appear only when they are possible.
+
+![Actions tab with the player's action cards](docs/screenshots/tab-aktionen.jpg)
+
+![Build tab with playable hand cards and payment](docs/screenshots/tab-bauen.jpg)
+
+![Standard projects tab](docs/screenshots/tab-standard.jpg)
+
 **Placing a tile:** the button names the tile and what happens next.
 
 ![Tile placement tab with a "place city" button](docs/screenshots/plaettchen-platzieren.jpg)
