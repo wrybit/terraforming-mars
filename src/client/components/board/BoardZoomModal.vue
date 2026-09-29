@@ -34,6 +34,8 @@ const emit = defineEmits<{
   (event: 'close'): void;
   // Brett im Modal ist gerendert (vor der Flug-Animation)
   (event: 'rendered'): void;
+  // Rück-Animation fertig, Modal ausgeblendet
+  (event: 'hidden'): void;
 }>();
 
 // Bleibt beim Schließen true, bis die Rück-Animation fertig ist
@@ -93,6 +95,7 @@ async function hide() {
   }
   props.origin?.classList.remove('board-zoom-origin--hidden');
   visible.value = false;
+  emit('hidden');
 }
 
 // Klicks auf Bedienelemente im Brett (z. B. "Plättchen ein/aus") sollen das Modal nicht schließen

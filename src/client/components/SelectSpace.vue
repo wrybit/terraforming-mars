@@ -33,7 +33,7 @@ import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesMana
 import {SelectSpaceResponse} from '@/common/inputs/InputResponse';
 import SpaceConfirmPopover from '@/client/components/SpaceConfirmPopover.vue';
 import {placementLabel, previewTileClass, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
-import {placementZoom, releasePlacementZoom, requestPlacementZoom} from '@/client/components/board/placementZoom';
+import {placementZoom, releasePlacementZoom, releasePlacementZoomAndWait, requestPlacementZoom} from '@/client/components/board/placementZoom';
 
 const PREVIEW_CLASS = 'space-tile-preview';
 // Felder auf dem Mars-Brett (inkl. Kolonie-Felder daneben); nur für sie wird das Brett vergrößert, nicht für den Mond
@@ -151,10 +151,8 @@ export default defineComponent({
       this.animateSpace(this.selectedTile, false);
       this.animateSpaces(this.getSelectableSpaces());
     },
-    confirmPlacement() {
+    async confirmPlacement() {
       this.confirmAnchor = undefined;
-      releasePlacementZoom();
-      this.removeTilePreview();
       const tiles = this.getSelectableSpaces();
       tiles.forEach((tile) => {
         tile.onclick = null;
@@ -169,7 +167,21 @@ export default defineComponent({
       }
       this.spaceId = spaceId;
       this.selectedTile.classList.add('board-space--selected');
+      // Erst absenden, wenn das große Brett zurück in der Spalte ist (sonst harter Schnitt, placementZoom.ts).
+      // Die Vorschau fliegt dabei mit und bleibt stehen, bis die Server-Antwort das echte Plättchen zeigt
+      await releasePlacementZoomAndWait();
+      this.movePreviewToColumnBoard(spaceId);
       this.saveData();
+    },
+    // Gewählt wurde im großen Brett, das jetzt weg ist: Vorschau aufs gleiche Feld im Brett der Spalte
+    movePreviewToColumnBoard(spaceId: SpaceId) {
+      if (this.selectedTile === undefined || this.selectedTile.isConnected) {
+        return;
+      }
+      const columnTile = this.getSelectableSpaces().find((tile) => tile.getAttribute('data_space_id') === spaceId);
+      if (columnTile !== undefined) {
+        this.showTilePreview(columnTile);
+      }
     },
     disableAnimation() {
       const tiles = this.getSelectableSpaces();

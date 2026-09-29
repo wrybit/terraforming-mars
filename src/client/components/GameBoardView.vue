@@ -12,7 +12,7 @@
 
   <!-- Zweite Brett-Instanz nur zum Ansehen. Die IDs darin (main_board usw.) gibt es dann doppelt;
        getElementById liefert aber das erste Vorkommen, und das Modal hängt am Ende von body -->
-  <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" @close="closeBoardZoom" @rendered="notifyZoomBoardRendered">
+  <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" @close="closeBoardZoom" @rendered="notifyZoomBoardRendered" @hidden="notifyZoomBoardHidden">
     <Board
       v-bind="boardProps"
       @toggleTileView="$emit('toggleTileView')"
@@ -55,7 +55,7 @@ import {Color} from '@/common/Color';
 import Board from '@/client/components/Board.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
-import {notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
+import {notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
 import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
@@ -151,6 +151,7 @@ export default defineComponent({
       releasePlacementZoom();
     },
     notifyZoomBoardRendered,
+    notifyZoomBoardHidden,
     // Klick auf den Mars vergrößert ihn – außer während einer Feldwahl
     // und auf Bedienelementen des Bretts
     onBoardClick(event: MouseEvent) {

@@ -48,28 +48,30 @@ export async function animateBoardZoom(options: BoardZoomAnimationOptions): Prom
     return;
   }
   const collapsed = origin !== undefined ? transformOntoOrigin(stage, origin) : undefined;
-  const stageFrames: Keyframes = collapsed !== undefined ?
+  const expandFrames: Keyframes = collapsed !== undefined ?
     [{transform: collapsed}, {transform: 'none'}] :
     [{opacity: 0, transform: 'scale(0.9)'}, {opacity: 1, transform: 'none'}];
-  // Nur Startwert angeben: der Endwert kommt aus dem Stylesheet (board_zoom_modal.less)
-  const backdropFrames: Keyframes = [
-    {backgroundColor: 'rgba(0, 0, 0, 0)', backdropFilter: 'blur(0px)', offset: 0},
-  ];
+  // Schließen spielt die Keyframes rückwärts, aber mit derselben Kurve vorwärts: schnell los, weich in der
+  // Spalte landen. direction 'reverse' würde auch die Kurve umdrehen – träger Start, harte Landung
+  const opening = direction === 'open';
+  const stageFrames: Keyframes = opening ? expandFrames : [...expandFrames].reverse();
+  // Nur den Wert am durchsichtigen Ende angeben: der dunkle kommt aus dem Stylesheet (board_zoom_modal.less)
+  const transparentBackdrop = {backgroundColor: 'rgba(0, 0, 0, 0)', backdropFilter: 'blur(0px)'};
+  const backdropFrames: Keyframes = [{...transparentBackdrop, offset: opening ? 0 : 1}];
   const timing: AnimationTiming = {
     duration: DURATION_MS,
     easing: EASING,
-    direction: direction === 'open' ? 'normal' : 'reverse',
     // Beim Schließen im Endzustand stehen bleiben, bis das Modal entfernt ist (sonst kurzes Aufblitzen)
-    fill: direction === 'open' ? 'none' : 'forwards',
+    fill: opening ? 'none' : 'forwards',
   };
-  // Schließen-Knopf nur einblenden, er fliegt nicht mit
+  // Schließen-Knopf nur ein- bzw. ausblenden, er fliegt nicht mit
   const closeButton = backdrop.querySelector('.board-zoom-close');
   const animations = [
     stage.animate(stageFrames, timing),
     backdrop.animate(backdropFrames, timing),
   ];
   if (closeButton instanceof HTMLElement) {
-    animations.push(closeButton.animate([{opacity: 0}, {opacity: 1}], timing));
+    animations.push(closeButton.animate(opening ? [{opacity: 0}, {opacity: 1}] : [{opacity: 1}, {opacity: 0}], timing));
   }
   await Promise.all(animations.map((animation) => animation.finished.catch(() => undefined)));
 }
