@@ -243,6 +243,12 @@
   margin-right: @or-tab-panel-card-gap;
 }
 
+// Der Abstand rechts an jeder Karte ersetzt am Zeilenende den Innenabstand der Box. Sonst zählten dort
+// Innenabstand + Kartenabstand, und die letzte Karte bräche um, obwohl sie noch passt.
+.or-tab-panel:has(.card-container) {
+  padding-right: max(0px, 16px - @or-tab-panel-card-gap);
+}
+
 // Erklärung einer Feldauswahl im Aktionsmenü (OrOptions): Plättchen-Bild, was passiert, wo man klickt
 .or-tab-intro {
   display: flex;

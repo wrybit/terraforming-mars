@@ -133,8 +133,9 @@
     top: @player-home-sticky-top;
     max-height: calc(100vh - @player-home-sticky-top);
     overflow: hidden auto;
-    // Board platziert Kolonie-/Raumhafen-Felder links außerhalb von .board-cont; ohne Innenabstand würde overflow sie abschneiden
-    padding: 0 @player-home-board-overhang-right 0 @player-home-board-overhang-left;
+    // Links kein Innenabstand: Der Abstand zur linken Spalte kommt vom Ziehgriff, und rightColumnFit.ts schiebt
+    // den Mars mittig über die Tabelle, so dass die Kolonie-/Raumhafen-Felder links trotzdem Platz haben
+    padding: 0 @player-home-board-overhang-right 0 0;
   }
 
   // Gespielte Karten eines Gegners ("anzeigen") als Modal über der rechten Spalte (Brett + Log),

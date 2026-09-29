@@ -1,30 +1,26 @@
-// Symbole im Tabellenkopf schrumpfen, wenn die Spalten schmaler werden als die Symbole – nie größer als im Original.
-// Alle Symbole bekommen denselben Faktor, damit sie gleich hoch bleiben. Vertrag mit milestone_award_table.less.
+// Symbole im Tabellenkopf schrumpfen, wenn ihre Spalte schmaler wird als das Symbol – nie größer als im Original.
+// Jedes Symbol einzeln: ein gemeinsamer Faktor würde alle wegen eines breiten Doppel-Symbols winzig machen.
+// Vertrag mit milestone_award_table.less.
 
 export const ICON_ZOOM_VARIABLE = '--ma-table-icon-zoom';
 const ICON_SELECTOR = '.ma-table-head .ma-table-icon';
 // Luft zwischen zwei Symbolen, damit sie nicht aneinanderstoßen
 const ICON_SPACING = 4;
 
-// Kleinster Faktor, mit dem jedes Symbol in seine Spalte passt (höchstens 1)
-export function iconZoom(widths: ReadonlyArray<{icon: number; cell: number}>): number {
-  let zoom = 1;
-  for (const {icon, cell} of widths) {
-    if (icon > 0) {
-      zoom = Math.min(zoom, Math.max(0, cell - ICON_SPACING) / icon);
-    }
+// Faktor, mit dem das Symbol in seine Spalte passt (höchstens 1)
+export function iconZoom(iconWidth: number, cellWidth: number): number {
+  if (iconWidth <= 0) {
+    return 1;
   }
-  return zoom;
+  return Math.min(1, Math.max(0, cellWidth - ICON_SPACING) / iconWidth);
 }
 
 function fit(table: HTMLElement): void {
+  const icons = [...table.querySelectorAll<HTMLElement>(ICON_SELECTOR)];
   // In Originalgröße messen; die Spaltenbreite hängt nicht von den Symbolen ab (minmax(0, 1fr))
-  table.style.setProperty(ICON_ZOOM_VARIABLE, '1');
-  const widths = [...table.querySelectorAll<HTMLElement>(ICON_SELECTOR)].map((icon) => ({
-    icon: icon.getBoundingClientRect().width,
-    cell: icon.parentElement?.getBoundingClientRect().width ?? 0,
-  }));
-  table.style.setProperty(ICON_ZOOM_VARIABLE, String(iconZoom(widths)));
+  icons.forEach((icon) => icon.style.setProperty(ICON_ZOOM_VARIABLE, '1'));
+  const zooms = icons.map((icon) => iconZoom(icon.getBoundingClientRect().width, icon.parentElement?.getBoundingClientRect().width ?? 0));
+  icons.forEach((icon, index) => icon.style.setProperty(ICON_ZOOM_VARIABLE, String(zooms[index])));
 }
 
 // Beginnt mit der Anpassung und liefert eine Aufräumfunktion zurück
