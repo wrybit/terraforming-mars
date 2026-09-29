@@ -40,6 +40,8 @@
     <a class="hotkey-target"></a>
     <Milestones :milestones="game.milestones" />
     <Awards :awards="game.awards" />
+    <!-- Dieselben Daten als Tabelle; sichtbar nur im Zwei-Spalten-Layout (milestone_award_table.less) -->
+    <MilestoneAwardTable :milestones="game.milestones" :awards="game.awards" :players="players" :viewerColor="viewerColor"/>
   </div>
 </template>
 
@@ -49,12 +51,14 @@ import {defineComponent, PropType} from 'vue';
 import {GameModel} from '@/common/models/GameModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {SpaceId} from '@/common/Types';
+import {Color} from '@/common/Color';
 import Board from '@/client/components/Board.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
+import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
 import Turmoil from '@/client/components/turmoil/Turmoil.vue';
 import MoonBoard from '@/client/components/moon/MoonBoard.vue';
 import PlanetaryTracks from '@/client/components/pathfinders/PlanetaryTracks.vue';
@@ -76,6 +80,11 @@ export default defineComponent({
       type: Array as PropType<ReadonlyArray<PublicPlayerModel>>,
       required: true,
     },
+    // Eigener Spieler (fehlt bei Zuschauern): steht in der Meilenstein-Tabelle zuletzt und hervorgehoben
+    viewerColor: {
+      type: String as PropType<Color | undefined>,
+      default: undefined,
+    },
   },
   emits: ['toggleTileView'],
   data() {
@@ -91,6 +100,7 @@ export default defineComponent({
     DeltaProjectBoard,
     Milestones,
     Awards,
+    MilestoneAwardTable,
     Turmoil,
     MoonBoard,
     PlanetaryTracks,

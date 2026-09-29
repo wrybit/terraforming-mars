@@ -177,6 +177,7 @@ export class Server {
         playerName: claimed?.player.name,
         color: claimed?.player.color,
         name: milestone.name,
+        threshold: milestone.thresholdFor?.(game),
         scores,
       });
     }

@@ -120,21 +120,22 @@
     margin-bottom: 28px;
   }
 
-  // Kopfzeile von Meilensteinen und Auszeichnungen aufgeräumt (milestones_awards_header.less), in beiden Größen
+  // Meilensteine & Auszeichnungen als Tabelle (milestone_award_table.less) statt der Kartenreihen
   .player-home-columns__mars .player_home_block--milestones-and-awards {
-    .milestones-awards-header();
+    > .milestones_cont,
+    > .awards_cont {
+      display: none;
+    }
+
+    .ma-table {
+      display: grid;
+    }
   }
 
   // Stufen je nach freier Höhe (gesetzt von rightColumnFit.ts):
   // 1) Mars so breit wie Meilensteine & Auszeichnungen
   .player-home-columns__board--mars-wide .board-cont {
     zoom: var(--board-wide-zoom, 1);
-  }
-
-  // 2) Meilensteine & Auszeichnungen kompakt, solange für die volle Höhe kein Platz ist.
-  // Zusätzliche Klassen für höhere Spezifität als die verschachtelten Originalregeln in player_home.less
-  .player-home-columns__board:not(.player-home-columns__board--milestones-full) .player-home-columns__mars .player_home_block--milestones-and-awards {
-    .milestones-awards-compact();
   }
 
   .player-home-columns__log {
@@ -150,7 +151,7 @@
     }
   }
 
-  // 3) Log-Karte in voller Größe, Log so hoch wie eine Karte
+  // 2) Log-Karte in voller Größe, Log so hoch wie eine Karte
   .player-home-columns__board--log-full {
     .player-home-columns__log .log-panel.or-tab-panel {
       height: @player-home-card-height;

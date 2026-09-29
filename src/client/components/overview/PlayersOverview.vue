@@ -36,6 +36,7 @@ import PlayersTable from '@/client/components/overview/PlayersTable.vue';
 import {PlayersTableRowModel} from '@/client/components/overview/playersTableLayout';
 import OtherPlayer from '@/client/components/OtherPlayer.vue';
 import {ownPlayerIndex} from '@/client/components/overview/ownPlayerIndex';
+import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
 import {ViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {ActionLabel} from '@/client/components/overview/ActionLabel';
 import {Phase} from '@/common/Phase';
@@ -98,26 +99,12 @@ export default defineComponent({
     getIsFirstForGen(player: PublicPlayerModel): boolean {
       return playerIndex(player.color, this.players) === 0;
     },
+    // Mitspieler in Zugreihenfolge nach einem selbst, ohne den eigenen Spieler (der wird extra angehängt)
     getPlayersInOrder(): Array<PublicPlayerModel> {
-      const players = this.players;
       if (this.thisPlayer === undefined) {
-        return players;
+        return this.players;
       }
-
-      let result = [];
-      let currentPlayerOffset = 0;
-      const currentPlayerIndex = playerIndex(
-        this.thisPlayer.color,
-        this.players,
-      );
-
-      // shift the array by putting the player on focus at the tail
-      currentPlayerOffset = currentPlayerIndex + 1;
-      result = players
-        .slice(currentPlayerOffset)
-        .concat(players.slice(0, currentPlayerOffset));
-      // return all but the focused user
-      return result.slice(0, -1);
+      return playersInTurnOrder(this.players, this.thisPlayer.color).slice(0, -1);
     },
     getActionLabel(player: PublicPlayerModel): ActionLabel {
       if (this.playerView.game.phase === Phase.DRAFTING) {

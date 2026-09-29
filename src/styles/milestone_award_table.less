@@ -1,0 +1,255 @@
+// Meilensteine & Auszeichnungen als Tabelle (MilestoneAwardTable.vue) – nur im Zwei-Spalten-Layout sichtbar
+// (player_home_columns.less), dort statt der Kartenreihen. Gleiche Bildsprache wie die Spielerliste (players_table.less).
+
+@ma-table-icon-height: 36px;
+@ma-table-row-height: 28px;
+@ma-table-own-row-height: 32px;
+@ma-table-row-gap: 4px;
+@ma-table-radius: 6px;
+@ma-table-color-bar-width: 6px;
+@ma-table-gold: #f2c14e;
+@ma-table-dim: rgba(255, 255, 255, 0.28);
+@ma-table-divider-color: rgba(255, 255, 255, 0.35);
+@ma-table-blur: 10px;
+
+// Außerhalb des Zwei-Spalten-Layouts bleiben die Kartenreihen
+.ma-table {
+  display: none;
+  row-gap: @ma-table-row-gap;
+  font-family: Prototype, sans-serif;
+  color: #f2f2f2;
+}
+
+.ma-table-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--ma-table-columns);
+  align-items: center;
+  border-radius: @ma-table-radius;
+}
+
+.ma-table-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+// Trenner zwischen Namen, Meilensteinen und Auszeichnungen, über die Zeilenabstände hinweg durchgezogen
+.ma-table-divider {
+  position: relative;
+  align-self: stretch;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 1px;
+    top: -(@ma-table-row-gap / 2);
+    bottom: -(@ma-table-row-gap / 2);
+    background: @ma-table-divider-color;
+  }
+}
+
+.ma-table-section {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  padding: 0 0 2px 8px;
+  font: 600 12px system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: @ma-table-gold;
+
+  small {
+    font: 12px system-ui, sans-serif;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #bbb;
+  }
+}
+
+.ma-table-head,
+.ma-table-status {
+  backdrop-filter: blur(@ma-table-blur);
+}
+
+.ma-table-head {
+  padding: 5px 0 4px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.ma-table-status {
+  height: 26px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+// Symbol: alle Bilder gleich hoch, Breite nach Seitenverhältnis; Bedingung mittig darauf
+.ma-table-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: @ma-table-icon-height;
+
+  img {
+    display: block;
+    height: @ma-table-icon-height;
+    width: auto;
+  }
+}
+
+// Produktion wie auf den Karten: Symbol im braunen Kasten
+.ma-table-icon-production {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 5px;
+  background: #6b4a2e;
+  box-shadow: inset 0 0 0 1px #a8773f;
+
+  img {
+    height: @ma-table-icon-height - 8px;
+  }
+}
+
+.ma-table-icon-requirement {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font: 17px Prototype, sans-serif;
+  line-height: 1;
+  color: #fff;
+  // Dunkle Kontur hält die Zahl auf jedem Symbol lesbar
+  -webkit-text-stroke: 3px #000;
+  paint-order: stroke fill;
+  pointer-events: none;
+}
+
+// Status: Kosten als M€-Münze bzw. wer beansprucht/finanziert hat
+.ma-table-coin {
+  width: 20px;
+  height: 20px;
+  line-height: 21px;
+  text-align: center;
+  font-size: 12px;
+  color: #000;
+  background: url(./assets/resources/megacredit.png) center / contain no-repeat;
+}
+
+.ma-table-none {
+  color: @ma-table-dim;
+  font-size: 12px;
+}
+
+.ma-table-owner {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  padding: 2px 6px 1px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ma-table-cube {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  margin: 0;
+}
+
+// Spielerzeilen wie in der Spielerliste: gedämpfte Farbfläche, Balken in Originalfarbe, Blur
+.ma-table-player {
+  height: @ma-table-row-height;
+  backdrop-filter: blur(@ma-table-blur);
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: @ma-table-color-bar-width;
+    border-radius: @ma-table-radius 0 0 @ma-table-radius;
+  }
+}
+
+.ma-table-player--me {
+  height: @ma-table-own-row-height;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
+}
+
+each(@players, {
+  @c: ~"player_@{value}";
+  .ma-table-player--@{value} {
+    background: fade(@@c, 28%);
+
+    &::before {
+      background: @@c;
+    }
+
+    &.ma-table-player--me {
+      background: fade(@@c, 50%);
+    }
+  }
+
+  .ma-table-owner--@{value} {
+    background: fade(@@c, 55%);
+  }
+});
+
+.ma-table-name {
+  padding-left: 14px;
+  font-size: 16px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ma-table-player--me .ma-table-name {
+  font-size: 18px;
+}
+
+// Rangfolge je Spalte: Platz 1 im Vordergrund, Platz 2 normal, Platz 3 und Nullen zurückgenommen
+.ma-table-value {
+  font-size: 15px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.ma-table-cell--rank-1 .ma-table-value {
+  padding: 2px 6px 1px;
+  border-radius: 5px;
+  font-size: 18px;
+  color: #1b1400;
+  background: @ma-table-gold;
+  box-shadow: 0 0 10px fade(@ma-table-gold, 45%);
+}
+
+.ma-table-cell--rank-2 .ma-table-value {
+  font-size: 16px;
+  color: #fff;
+}
+
+.ma-table-cell--rank-3 .ma-table-value,
+.ma-table-cell--zero .ma-table-value {
+  font-size: 13px;
+  color: @ma-table-dim;
+}
+
+// Schwelle erreicht, Meilenstein noch frei
+.ma-table-cell--claimable::after {
+  content: "✓";
+  position: absolute;
+  right: 4px;
+  top: 1px;
+  font-size: 11px;
+  color: #7ee07e;
+}

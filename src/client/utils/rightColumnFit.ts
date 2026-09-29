@@ -5,14 +5,12 @@
 
 // Vertrag mit player_home_columns.less
 export const MARS_WIDE_CLASS = 'player-home-columns__board--mars-wide';
-export const MILESTONES_FULL_CLASS = 'player-home-columns__board--milestones-full';
 export const LOG_FULL_CLASS = 'player-home-columns__board--log-full';
 export const BOARD_WIDE_ZOOM_VARIABLE = '--board-wide-zoom';
 
 const STEPS: ReadonlyArray<string> = [
   MARS_WIDE_CLASS, // 1) Mars so breit wie Meilensteine & Auszeichnungen
-  MILESTONES_FULL_CLASS, // 2) Meilensteine & Auszeichnungen in voller Höhe
-  LOG_FULL_CLASS, // 3) Log-Karte 100 % groß, Log entsprechend höher
+  LOG_FULL_CLASS, // 2) Log-Karte 100 % groß, Log entsprechend höher
 ];
 
 function fit(column: HTMLElement): void {

@@ -42,6 +42,7 @@
               :game="game"
               :tileView="tileView"
               :players="playerView.players"
+              :viewerColor="playerView.thisPlayer.color"
               @toggleTileView="cycleTileView()"
             />
           </div>
