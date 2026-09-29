@@ -11,7 +11,7 @@ export const BOARD_WIDE_ZOOM_VARIABLE = '--board-wide-zoom';
 export const BOARD_FIT_ZOOM_VARIABLE = '--board-fit-zoom';
 
 const STEPS: ReadonlyArray<string> = [
-  MARS_WIDE_CLASS, // 1) Mars so breit wie Meilensteine & Auszeichnungen
+  MARS_WIDE_CLASS, // 1) Mars so breit wie Meilensteine & Auszeichnungen (ohne diese: wie die Spalte)
   LOG_FULL_CLASS, // 2) Log-Karte 100 % groß, Log entsprechend höher
 ];
 
@@ -33,7 +33,7 @@ function globeCenter(board: HTMLElement): number | undefined {
   return (left + right) / 2;
 }
 
-// Mars (die Kugel, nicht der ganze Brett-Kasten mit Skalen und Außenfeldern) mittig über die Meilenstein-Tabelle schieben.
+// Mars (die Kugel, nicht der ganze Brett-Kasten mit Skalen und Außenfeldern) mittig über die Referenz schieben.
 // translate verändert das Layout nicht; die Verschiebung wird einmal gemessen, weil Zoom-Ebenen sie skalieren.
 function centerMars(board: HTMLElement, reference: Element): void {
   board.style.translate = '';
@@ -47,6 +47,19 @@ function centerMars(board: HTMLElement, reference: Element): void {
   board.style.translate = scale > 0 ? `${(horizontalCenter(reference) - before) / scale}px 0` : '';
 }
 
+// Breite, auf die der Mars wächst und über der er mittig steht: der Meilenstein-Block. Ohne ihn (Solospiel,
+// oder per Einstellung ausgeblendet) der Brett-Block selbst – sonst bliebe der Mars klein und links, bzw.
+// ein ausgeblendeter Block mit Breite 0 würde den Mars auf Zoom 0 schrumpfen.
+const MILESTONES_SELECTOR = '.player_home_block--milestones-and-awards';
+const MARS_BLOCK_SELECTOR = '.player-home-columns__mars';
+function widthReference(column: HTMLElement): Element | undefined {
+  const milestones = column.querySelector(MILESTONES_SELECTOR);
+  if (milestones !== null && milestones.getBoundingClientRect().width > 0) {
+    return milestones;
+  }
+  return column.querySelector(MARS_BLOCK_SELECTOR) ?? undefined;
+}
+
 function fit(column: HTMLElement): void {
   column.classList.remove(...STEPS);
   column.style.setProperty(BOARD_FIT_ZOOM_VARIABLE, '1');
@@ -57,11 +70,11 @@ function fit(column: HTMLElement): void {
     return;
   }
 
-  // Zoom, mit dem das Brett so breit wird wie der Meilenstein-Block (beide im selben Zoom-Raum gemessen)
+  // Zoom, mit dem das Brett so breit wird wie die Referenz (beide im selben Zoom-Raum gemessen)
   const board = column.querySelector<HTMLElement>('.board-cont');
-  const milestones = column.querySelector('.player_home_block--milestones-and-awards');
-  const widenZoom = board !== null && milestones !== null ?
-    milestones.getBoundingClientRect().width / board.getBoundingClientRect().width :
+  const reference = widthReference(column);
+  const widenZoom = board !== null && reference !== undefined ?
+    reference.getBoundingClientRect().width / board.getBoundingClientRect().width :
     1;
   column.style.setProperty(BOARD_WIDE_ZOOM_VARIABLE, String(widenZoom));
   // Schmale Spalte: Brett immer verkleinern, damit es nicht über den Rand ragt
@@ -79,8 +92,8 @@ function fit(column: HTMLElement): void {
     }
   }
 
-  if (board !== null && milestones !== null) {
-    centerMars(board, milestones);
+  if (board !== null && reference !== undefined) {
+    centerMars(board, reference);
   }
 }
 
