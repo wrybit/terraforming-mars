@@ -315,7 +315,9 @@ body:has(#game-end) {
 // Gesamtpunkte des Siegers invertiert: Gold als Fläche, Zahl in der abgedunkelten Spielerfarbe (wie die übrigen Gesamt-Felder)
 // mit hellem Leuchten, damit das Siegerfeld auf den ersten Blick heraussticht
 @game-end-winner-total-font-size: 46px;
-@game-end-winner-total-glow: 0 0 6px fade(#fff, 85%), 0 0 16px fade(#fff, 55%);
+@game-end-winner-total-glow: 0 0 10px fade(#fff, 70%); // weiches Leuchten ohne harten Rand, damit die Zahl lesbar bleibt
+// Untergrund der Box, auf dem die 70-%-Spielerfarbe der Zeile (player_translucent_bg_color_*) liegt
+@game-end-row-underlay: #1c1c20;
 
 .game_end_table tr.game-end-winner-row td.game-end-total {
   background-color: @game-end-total-accent;
@@ -324,11 +326,11 @@ body:has(#game-end) {
   text-shadow: @game-end-winner-total-glow;
 }
 
-// Textfarbe = Spielerfarbe unter der 38-%-Abdunklung von @game-end-total-background
+// Textfarbe = sichtbare Zeilenfarbe (70 % Spielerfarbe über der Box) unter der 38-%-Abdunklung von @game-end-total-background
 each(@players, {
   @c: ~"player_@{value}";
-  .game_end_table tr.game-end-winner-row.player_bg_color_@{value} td.game-end-total {
-    color: mix(#000, @@c, 38%);
+  .game_end_table tr.game-end-winner-row.player_translucent_bg_color_@{value} td.game-end-total {
+    color: mix(#000, mix(@@c, @game-end-row-underlay, 70%), 38%);
   }
 });
 
