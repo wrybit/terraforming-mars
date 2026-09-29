@@ -21,9 +21,11 @@ type FitRule = {
 
 // Abstand zwischen Elementen einer Liste (rechts und unten, als Teil des Außenabstands)
 const GAP_PX = 6;
-// Bezugsbreite: der Bildschirm, in dem das Element steht (Listen selbst sind oft nur so breit wie ihr Inhalt)
-const CONTAINER_SELECTOR = '.mb-screen';
+// Bezugsbreite: die nächste Box bzw. der Bildschirm, in dem das Element steht (Listen selbst sind oft nur so breit wie ihr Inhalt)
+const CONTAINER_SELECTOR = '.setup-column-body, .or-tab-panel, .mb-screen, .game-end-box';
 const FITTED_CLASS = 'mb-fit';
+// Mars ohne Skalen-Ring (mobile.less: Planet-Bild, Kolonie-Felder in die Ecken)
+const CROPPED_CLASS = 'mb-mars-cropped';
 
 /* Spaltenzahl für eine Kartenliste der Breite `width` px: Handy 2, Tablet hoch 3, Tablet quer 4. */
 export function cardColumns(width: number): number {
@@ -48,8 +50,10 @@ const BOARD_HEIGHT_SHARE = 0.62;
 const MARS_CROP: FitCrop = {left: 42, top: 62, width: 550, height: 486};
 
 const RULES: ReadonlyArray<FitRule> = [
-  {selector: '.mb-screen--mars > .board-cont.board-without-venus', crop: MARS_CROP},
-  {selector: '.mb-screen--mars > .board-cont'},
+  {selector: '.mb-screen--mars > .board-cont.board-without-venus, #game-end .board-cont.board-without-venus', crop: MARS_CROP},
+  {selector: '.mb-screen--mars > .board-cont, #game-end .board-cont'},
+  // Gedrehte Ergebnistabelle über die volle Breite
+  {selector: '#game-end .game_end_table.mb-transposed', columns: () => 1},
   // Tabellen (Spieler, Meilensteine & Auszeichnungen) über die volle Breite
   {selector: '.mb-screen--players .players-table, .mb-screen--mars .ma-table', columns: () => 1},
   {
@@ -89,6 +93,7 @@ function fit(element: HTMLElement, rule: FitRule): void {
   const scale = rule.columns === undefined ? Math.min(listWidth / crop.width, window.innerHeight * BOARD_HEIGHT_SHARE / crop.height) : fitScale(listWidth, width, rule.columns(listWidth));
   const gap = rule.columns === undefined ? 0 : GAP_PX;
   element.classList.add(FITTED_CLASS);
+  element.classList.toggle(CROPPED_CLASS, rule.crop !== undefined);
   setStyles(element, {
     transformOrigin: '0 0',
     transform: `translate(${-crop.left * scale}px, ${-crop.top * scale}px) scale(${scale.toFixed(4)})`,

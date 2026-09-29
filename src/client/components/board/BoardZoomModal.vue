@@ -20,6 +20,8 @@ import {nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordinator';
 import {animateBoardZoom} from '@/client/components/board/boardZoomAnimation';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
+import {mobileLayout} from '@/client/utils/mobileLayout';
+import {mobileBoardZoom} from '@/client/components/mobile/mobileBoardZoom';
 
 // Freiraum rund um das Brett, damit es nicht am Fensterrand klebt
 const VIEWPORT_MARGIN = 24;
@@ -59,7 +61,18 @@ function fitToViewport() {
   }
   const availableWidth = window.innerWidth - 2 * VIEWPORT_MARGIN;
   const availableHeight = window.innerHeight - 2 * VIEWPORT_MARGIN;
-  zoomFactor.value = Math.min(availableWidth / naturalSize.width, availableHeight / naturalSize.height);
+  const fitZoom = Math.min(availableWidth / naturalSize.width, availableHeight / naturalSize.height);
+  // Mobil-Ansicht: größer als der Bildschirm, damit die Felder antippbar sind; man verschiebt das Brett per Wischen
+  zoomFactor.value = mobileLayout.value ? Math.max(fitZoom, mobileBoardZoom(window.innerWidth, window.innerHeight)) : fitZoom;
+}
+
+// Brett mittig in den sichtbaren Bereich schieben (nur relevant, wenn es größer als das Fenster ist)
+function centerBoard() {
+  const element = backdrop.value;
+  if (element !== undefined) {
+    element.scrollLeft = (element.scrollWidth - element.clientWidth) / 2;
+    element.scrollTop = (element.scrollHeight - element.clientHeight) / 2;
+  }
 }
 
 function runAnimation(direction: 'open' | 'close'): Promise<void> {
@@ -83,6 +96,7 @@ async function show() {
   emit('rendered');
   // Neuen zoom erst rendern, sonst misst die Animation das Brett noch in der alten Größe
   await nextTick();
+  centerBoard();
   props.origin?.classList.add('board-zoom-origin--hidden');
   await runAnimation('open');
 }

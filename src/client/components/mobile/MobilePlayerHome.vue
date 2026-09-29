@@ -136,10 +136,9 @@ import {MOBILE_NAV, MobileNavItem, MobileScreen} from '@/client/components/mobil
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
 import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
-import {observeMobileFit} from '@/client/utils/mobileFit';
 import {requestPlacementZoom} from '@/client/components/board/placementZoom';
 
-// Aufräumfunktionen der Beobachter am Wurzelelement; pro Seite gibt es nur eine Spieleransicht
+// Aufräumfunktion der Feldwahl-Beobachtung; pro Seite gibt es nur eine Spieleransicht
 let stopObserving: (() => void) | undefined;
 
 type DataModel = {
@@ -273,13 +272,9 @@ export default defineComponent({
       if (!(element instanceof HTMLElement)) {
         return;
       }
-      const stopFit = observeMobileFit(element);
       const placement = new MutationObserver(() => this.updatePlacing(element));
       placement.observe(element, {childList: true, subtree: true, attributes: true, attributeFilter: ['class']});
-      stopObserving = () => {
-        stopFit();
-        placement.disconnect();
-      };
+      stopObserving = () => placement.disconnect();
     },
   },
 });
