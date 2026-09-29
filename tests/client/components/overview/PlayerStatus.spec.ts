@@ -17,4 +17,18 @@ describe('PlayerStatus', () => {
     });
     expect(wrapper.exists()).to.be.true;
   });
+
+  it('hides the "researching" label, keeps the timer', () => {
+    const wrapper = shallowMount(PlayerStatus, {
+      ...globalConfig,
+      props: {
+        timer: fakeTimerModel(),
+        actionLabel: 'researching',
+        showTimer: true,
+        liveTimer: false,
+      },
+    });
+    expect(wrapper.find('.player-action-status').exists()).is.false;
+    expect(wrapper.find('.player-status-timer').exists()).is.true;
+  });
 });
