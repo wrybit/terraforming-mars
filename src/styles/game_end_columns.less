@@ -184,6 +184,18 @@ body:has(#game-end) {
     .oxygen-tile { width: 30px; background-size: 30px 30px; }
     .table-red-arrow { width: 24px; height: 24px; background-size: 24px; }
     .mc-icon { width: 22px; height: 22px; }
+
+    // Block-Symbole sonst links in der Zelle – mittig, damit sie genau über den zentrierten Zahlen stehen
+    th > div {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    // Spieler-Symbol bündig mit dem Namen darunter (gleiche Einrückung wie .game-end-player-cell)
+    th:first-child {
+      text-align: left !important; // überschreibt die zentrierten Zellen aus game_end.less
+      padding-left: 10px;
+    }
   }
 
   a {
