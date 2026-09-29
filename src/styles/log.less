@@ -18,6 +18,19 @@
   .log-gen-tabs {
     margin-top: 0;
   }
+  // Solo-Limit ("of 12") als rote Marke, kleiner als die Tab-Ziffern, damit es nicht wie ein weiterer Tab wirkt
+  .label-additional {
+    align-self: center;
+    background: @player_red;
+    color: #fff;
+    font-size: 13px;
+    padding: 2px 6px;
+    margin-left: 8px;
+  }
+  // Auf roter Fläche waere rote Schrift unsichtbar; das Blinken in der letzten Generation bleibt
+  .last-generation {
+    color: inherit;
+  }
 }
 
 // Box unter den Generationen-Tabs; Rahmen und Fläche kommen von .or-tab-panel--view
