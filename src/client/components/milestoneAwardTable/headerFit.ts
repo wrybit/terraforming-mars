@@ -1,13 +1,13 @@
 // Kopf der Meilenstein-Tabelle an schmale Spalten anpassen (Vertrag mit milestone_award_table.less):
 // - Symbole schrumpfen, wenn ihre Spalte schmaler wird als das Symbol – nie größer als im Original.
 //   Jedes Symbol einzeln: ein gemeinsamer Faktor würde alle wegen eines breiten Doppel-Symbols winzig machen.
-// - Besitzer (Würfel + Name): passt beides nicht, entfällt der Würfel; den Namen kürzt danach das CSS.
+// - Besitzer (Würfel + Name): passt der Name nicht ganz daneben, bleibt nur der Würfel (Name im Tooltip).
 
 export const ICON_ZOOM_VARIABLE = '--ma-table-icon-zoom';
 const ICON_SELECTOR = '.ma-table-head .ma-table-icon';
 const OWNER_SELECTOR = '.ma-table-owner';
 const OWNER_NAME_SELECTOR = '.ma-table-owner-name';
-export const OWNER_WITHOUT_CUBE_CLASS = 'ma-table-owner--no-cube';
+export const OWNER_CUBE_ONLY_CLASS = 'ma-table-owner--cube-only';
 // Luft zwischen zwei Symbolen, damit sie nicht aneinanderstoßen
 const ICON_SPACING = 4;
 
@@ -22,13 +22,13 @@ export function iconZoom(iconWidth: number, cellWidth: number): number {
 function fitOwners(table: HTMLElement): void {
   const owners = [...table.querySelectorAll<HTMLElement>(OWNER_SELECTOR)];
   // Erst alle mit Würfel messen, dann nur die zu breiten umschalten (kein Hin und Her pro Element)
-  owners.forEach((owner) => owner.classList.remove(OWNER_WITHOUT_CUBE_CLASS));
+  owners.forEach((owner) => owner.classList.remove(OWNER_CUBE_ONLY_CLASS));
   // Der Name schrumpft (Auslassungspunkte), statt überzulaufen – gekürzter Name heißt: zu wenig Platz
   const tooWide = owners.filter((owner) => {
     const name = owner.querySelector<HTMLElement>(OWNER_NAME_SELECTOR);
     return name !== null && name.scrollWidth > name.clientWidth;
   });
-  tooWide.forEach((owner) => owner.classList.add(OWNER_WITHOUT_CUBE_CLASS));
+  tooWide.forEach((owner) => owner.classList.add(OWNER_CUBE_ONLY_CLASS));
 }
 
 function fitIcons(table: HTMLElement): void {

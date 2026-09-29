@@ -177,8 +177,8 @@
   font-size: 12px;
 }
 
-// Besitzer: Würfel + Name. Passt beides nicht, blendet headerFit.ts den Würfel aus;
-// passt auch der Name allein nicht, wird er mit Auslassungspunkten gekürzt.
+// Besitzer: Würfel + Name. Passt der Name nicht ganz daneben, zeigt headerFit.ts nur den Würfel
+// (Name dann im Tooltip). Gemessen wird am gekürzten Namen (Auslassungspunkte).
 .ma-table-owner {
   display: inline-flex;
   align-items: center;
@@ -192,7 +192,7 @@
   white-space: nowrap;
 }
 
-.ma-table-owner--no-cube .ma-table-cube {
+.ma-table-owner--cube-only .ma-table-owner-name {
   display: none;
 }
 

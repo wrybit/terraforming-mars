@@ -27,13 +27,13 @@
     <div class="ma-table-row ma-table-status">
       <div></div><div class="ma-table-divider"></div>
       <div v-for="milestone in milestones" :key="milestone.name" class="ma-table-cell">
-        <span v-if="milestone.color" :class="ownerClasses(milestone.color)" data-test="milestone-owner"><i :class="cubeClasses(milestone.color)"></i><span class="ma-table-owner-name">{{ milestone.playerName }}</span></span>
+        <span v-if="milestone.color" :class="ownerClasses(milestone.color)" v-glass-tooltip="milestone.playerName" data-test="milestone-owner"><i :class="cubeClasses(milestone.color)"></i><span class="ma-table-owner-name">{{ milestone.playerName }}</span></span>
         <span v-else-if="claimedCount >= maxMilestones" class="ma-table-none">–</span>
         <span v-else class="ma-table-coin">{{ milestoneCost }}</span>
       </div>
       <div class="ma-table-divider"></div>
       <div v-for="award in awards" :key="award.name" class="ma-table-cell">
-        <span v-if="award.color" :class="ownerClasses(award.color)" data-test="award-owner"><i :class="cubeClasses(award.color)"></i><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
+        <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner"><i :class="cubeClasses(award.color)"></i><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
         <span v-else-if="fundedCount >= maxAwards" class="ma-table-none">–</span>
         <span v-else class="ma-table-coin">{{ nextAwardCost }}</span>
       </div>
