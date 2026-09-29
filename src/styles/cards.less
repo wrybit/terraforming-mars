@@ -1108,58 +1108,60 @@ input[type="radio"]:checked+.filterDiv::after {
   }
 }
 
+// Handkarten per Drag & Drop sortieren (SortableCards.vue)
+.sortable-cards-root {
+  position: relative;
+}
+
 .sortable-cards {
-  >div {
+  >.sortable-slot {
     display: inline-block;
     vertical-align: top;
+    position: relative;
+    cursor: grab;
+    // Kein Text markieren beim Ziehen.
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+}
+
+// Andere Karten gleiten auf ihren neuen Platz statt zu springen.
+.sortable-move {
+  transition: transform 0.18s ease;
+}
+
+// Freier Platz, an dem die Karte beim Loslassen landet.
+.sortable-placeholder {
+  >.cardbox {
+    visibility: hidden;
   }
 
-  .reorder-banners-container {
-    display: flex;
-    align-items: center;
+  &::after {
+    content: '';
     position: absolute;
-    inset: 0;
+    inset: 6px;
+    border: 2px dashed rgba(255, 255, 255, 0.45);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
     pointer-events: none;
-    opacity: 0.5;
-    // filterDiv:hover has z-index 100
-    // and we need this to be on top when visible
-    z-index: 101;
-    // ideally, this would exist in CardContainer with width: 100%
-    // but that would be a bigger change to pipe through SortableCards.vue
-    // for now, hard code to filterDiv's width + border
-    width: 248px;
   }
+}
 
-  .reorder-banners-left,
-  .reorder-banners-right {
-    position: absolute;
-    height: 80%;
-    width: 10%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: grey;
-    // capsule shape
-    border-radius: 9999px;
-  }
+// Schwebende Karte unter dem Zeiger: leicht gedreht, hoch „angehoben“.
+.sortable-ghost {
+  position: absolute;
+  z-index: 1000;
+  pointer-events: none;
+  cursor: grabbing;
+  transform: rotate(4deg) scale(1.04);
+  transform-origin: 50% 30%;
 
-  .reorder-banners-left {
-    left: 0;
-
-    &::before {
-      content: '\00AB';
-    }
-  }
-
-  .reorder-banners-right {
-    right: 0;
-
-    &::before {
-      content: '\00BB';
-    }
-  }
-
-  .do-not-drag-and-drop {
-    pointer-events: none;
+  .filterDiv {
+    transform: none;
+    border-radius: 12px;
+    box-shadow:
+      0 30px 60px rgba(0, 0, 0, 0.65),
+      0 12px 24px rgba(0, 0, 0, 0.45);
   }
 }

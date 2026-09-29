@@ -6,26 +6,26 @@ import SortableCards from '@/client/components/SortableCards.vue';
 import {CardOrderStorage} from '@/client/utils/CardOrderStorage';
 import {FakeLocalStorage} from './FakeLocalStorage';
 
-type DropSide = 'left' | 'right';
-
 /**
- * Drag card at `sourceIndex` to `targetIndex` on its left or right side.
+ * Drag card at `sourceIndex` onto the card at `targetIndex`; it takes that card's place.
  */
-async function dragCard(sortable: VueWrapper<InstanceType<typeof SortableCards>>, sourceIndex: number, targetIndex: number, position: DropSide) {
-  const draggers = sortable.findAll('[draggable=true]');
-  const target = draggers[targetIndex];
+async function dragCard(sortable: VueWrapper<InstanceType<typeof SortableCards>>, sourceIndex: number, targetIndex: number) {
+  const slots = sortable.findAll('.sortable-slot');
 
-  // This test doesn't use a real layout, so cards aren't 200px wide. Here,
-  // they're simulated at 10px. Positions 0-4 are the left side and positions
-  // 5-9 are the right side.
-  target.element.getBoundingClientRect = () => {
-    return {left: 0, width: 10} as DOMRect;
-  };
+  // jsdom hat kein Layout: Karten liegen simuliert nebeneinander, je 10px breit.
+  slots.forEach((slot, index) => {
+    slot.element.getBoundingClientRect = () => {
+      return {left: index * 10, top: 0, width: 10, height: 10} as DOMRect;
+    };
+  });
 
-  await draggers[sourceIndex].trigger('dragstart');
-  // 3 is the left side, 8 is the right side.
-  await target.trigger('dragover', {clientX: position === 'left' ? 3 : 8});
-  await draggers[sourceIndex].trigger('dragend');
+  const startX = sourceIndex * 10 + 5;
+  const targetX = targetIndex * 10 + 5;
+  slots[sourceIndex].element.dispatchEvent(new MouseEvent('pointerdown', {bubbles: true, clientX: startX, clientY: 5}));
+  window.dispatchEvent(new MouseEvent('pointermove', {clientX: targetX, clientY: 5}));
+  await sortable.vm.$nextTick();
+  window.dispatchEvent(new MouseEvent('pointerup', {clientX: targetX, clientY: 5}));
+  await sortable.vm.$nextTick();
 }
 
 /**
@@ -59,9 +59,12 @@ describe('SortableCards', () => {
     });
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.ANTS, CardName.CARTEL]);
 
-    await dragCard(sortable, 0, 1, 'right');
+    await dragCard(sortable, 0, 1);
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.CARTEL, CardName.ANTS]);
+    // Nach dem Loslassen bleibt weder schwebende Karte noch Platzhalter zurück.
+    expect(sortable.find('.sortable-ghost').exists()).is.false;
+    expect(sortable.find('.sortable-placeholder').exists()).is.false;
     expect(CardOrderStorage.getCardOrder('player1')).to.deep.eq({
       [CardName.ANTS]: 2,
       [CardName.CARTEL]: 1,
@@ -84,13 +87,40 @@ describe('SortableCards', () => {
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.CARTEL, CardName.ANTS, CardName.BIRDS]);
 
-    await dragCard(sortable, 0, 2, 'left');
+    await dragCard(sortable, 0, 2);
 
-    expect(cardsInOrder(sortable)).to.deep.eq([CardName.ANTS, CardName.CARTEL, CardName.BIRDS]);
+    expect(cardsInOrder(sortable)).to.deep.eq([CardName.ANTS, CardName.BIRDS, CardName.CARTEL]);
     expect(CardOrderStorage.getCardOrder('player1')).to.deep.eq({
       [CardName.ANTS]: 1,
-      [CardName.CARTEL]: 2,
-      [CardName.BIRDS]: 3,
+      [CardName.BIRDS]: 2,
+      [CardName.CARTEL]: 3,
     });
+  });
+
+  it('has no reorder checkbox', () => {
+    const sortable = mount(SortableCards, {
+      ...globalConfig,
+      props: {
+        cards: [{name: CardName.ANTS}],
+        playerId: 'player1',
+      },
+    });
+    expect(sortable.find('input[type=checkbox]').exists()).is.false;
+  });
+
+  it('ignores small pointer movements (click, not drag)', async () => {
+    const sortable = mount(SortableCards, {
+      ...globalConfig,
+      props: {
+        cards: [{name: CardName.ANTS}, {name: CardName.CARTEL}],
+        playerId: 'player1',
+      },
+    });
+    sortable.findAll('.sortable-slot')[0].element.dispatchEvent(new MouseEvent('pointerdown', {bubbles: true, clientX: 5, clientY: 5}));
+    window.dispatchEvent(new MouseEvent('pointermove', {clientX: 7, clientY: 5}));
+    await sortable.vm.$nextTick();
+    expect(sortable.find('.sortable-placeholder').exists()).is.false;
+    window.dispatchEvent(new MouseEvent('pointerup', {clientX: 7, clientY: 5}));
+    expect(cardsInOrder(sortable)).to.deep.eq([CardName.ANTS, CardName.CARTEL]);
   });
 });
