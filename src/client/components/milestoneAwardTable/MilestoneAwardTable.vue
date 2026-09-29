@@ -15,11 +15,11 @@
 
     <div class="ma-table-row ma-table-head">
       <div></div><div class="ma-table-divider"></div>
-      <div v-for="milestone in milestones" :key="milestone.name" class="ma-table-cell" :title="tooltip(milestone.name, milestoneDescription(milestone))" :data-test="'milestone-' + milestone.name">
+      <div v-for="milestone in milestones" :key="milestone.name" class="ma-table-cell" v-glass-tooltip="tooltip(milestone.name, milestoneDescription(milestone))" :data-test="'milestone-' + milestone.name">
         <MilestoneAwardIcon :parts="milestoneIcon(milestone)" :requirement="milestone.threshold"/>
       </div>
       <div class="ma-table-divider"></div>
-      <div v-for="award in awards" :key="award.name" class="ma-table-cell" :title="tooltip(award.name, awardDescription(award))" :data-test="'award-' + award.name">
+      <div v-for="award in awards" :key="award.name" class="ma-table-cell" v-glass-tooltip="tooltip(award.name, awardDescription(award))" :data-test="'award-' + award.name">
         <MilestoneAwardIcon :parts="awardIcon(award)"/>
       </div>
     </div>
@@ -66,6 +66,7 @@ import MilestoneAwardIcon from '@/client/components/milestoneAwardTable/Mileston
 import {AWARD_ICONS, IconPart, MILESTONE_ICONS} from '@/client/components/milestoneAwardTable/milestoneAwardIcons';
 import {scoreRanks} from '@/client/components/milestoneAwardTable/scoreRanks';
 import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
+import {glassTooltip} from '@/client/directives/GlassTooltip';
 import {observeIconFit} from '@/client/components/milestoneAwardTable/iconFit';
 
 // Aufräumfunktion der Symbol-Anpassung je Tabelle (nicht reaktiv)
@@ -77,6 +78,9 @@ export default defineComponent({
   name: 'MilestoneAwardTable',
   components: {
     MilestoneAwardIcon,
+  },
+  directives: {
+    glassTooltip,
   },
   props: {
     milestones: {

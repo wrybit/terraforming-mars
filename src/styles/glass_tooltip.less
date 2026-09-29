@@ -1,0 +1,44 @@
+// Tooltip der Direktive v-glass-tooltip (GlassTooltip.ts): dunkles Milchglas, zarte Kontur, Schatten,
+// Nase unten mittig zum Element. Die Nase ist ein gedrehtes Quadrat mit denselben Farben und Rändern.
+
+@glass-tooltip-background: rgba(20, 22, 30, 0.72);
+@glass-tooltip-border: rgba(255, 255, 255, 0.18);
+@glass-tooltip-nose-size: 10px;
+
+.glass-tooltip {
+  position: fixed;
+  z-index: 10000;
+  max-width: 280px;
+  padding: 7px 11px;
+  border: 1px solid @glass-tooltip-border;
+  border-radius: 8px;
+  background: @glass-tooltip-background;
+  backdrop-filter: blur(12px) saturate(1.3);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+  font: 13px/1.35 system-ui, sans-serif;
+  color: #eee;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.12s, visibility 0.12s;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: var(--glass-tooltip-nose-x, 50%);
+    bottom: -(@glass-tooltip-nose-size / 2) - 1px;
+    width: @glass-tooltip-nose-size;
+    height: @glass-tooltip-nose-size;
+    transform: translateX(-50%) rotate(45deg);
+    // Nur die beiden unteren Ränder, die Oberseite verschmilzt mit dem Tooltip
+    border-right: 1px solid @glass-tooltip-border;
+    border-bottom: 1px solid @glass-tooltip-border;
+    // Deckend statt Milchglas: zweites Glas würde über dem Tooltip heller erscheinen
+    background: #1a1c24;
+  }
+}
+
+.glass-tooltip--visible {
+  opacity: 1;
+  visibility: visible;
+}
