@@ -61,7 +61,7 @@ function trackPointerY(handle: HTMLElement, clientY: number): void {
 // Anteil der rechten Spalte aus der Zeigerposition: alles rechts vom Zeiger gehört dem Brett
 export function shareFromPointer(containerRect: {left: number; width: number}, pointerX: number): number {
   const share = (containerRect.left + containerRect.width - pointerX) / containerRect.width * 100;
-  return Math.round(clampBoardShare(share) * 10) / 10;
+  return Math.round(clampBoardShare(share) * 100) / 100;
 }
 
 // Ziehen mit Maus, Stift oder Finger; ruft onChange bei jeder Bewegung, speichert beim Loslassen
@@ -90,6 +90,14 @@ export function startColumnResize(event: PointerEvent, container: HTMLElement, o
   handle.addEventListener('pointermove', move);
   handle.addEventListener('pointerup', stop);
   handle.addEventListener('pointercancel', stop);
+}
+
+// Anzeige "links | rechts" mit zwei Nachkommastellen (deutsches Komma); in Hundertsteln gerechnet,
+// damit beide Seiten zusammen genau 100 ergeben
+export function shareLabel(boardShare: number): string {
+  const board = Math.round(boardShare * 100);
+  const format = (hundredths: number) => (hundredths / 100).toFixed(2).replace('.', ',') + '%';
+  return `${format(10000 - board)} | ${format(board)}`;
 }
 
 // Setzt einen festen Anteil (Tastatur, Doppelklick) und speichert ihn

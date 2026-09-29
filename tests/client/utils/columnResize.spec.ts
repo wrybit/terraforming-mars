@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {labelOffsetY, DEFAULT_BOARD_SHARE, MAX_BOARD_SHARE, MIN_BOARD_SHARE, applyBoardShare, loadBoardShare, setBoardShare, shareFromPointer} from '@/client/utils/columnResize';
+import {labelOffsetY, shareLabel, DEFAULT_BOARD_SHARE, MAX_BOARD_SHARE, MIN_BOARD_SHARE, applyBoardShare, loadBoardShare, setBoardShare, shareFromPointer} from '@/client/utils/columnResize';
 
 describe('columnResize', () => {
   beforeEach(() => localStorage.removeItem('player_home_board_share'));
@@ -31,5 +31,10 @@ describe('columnResize', () => {
   it('shows the share label below the pointer, or above it near the bottom', () => {
     expect(labelOffsetY(300, 1000)).to.eq(334);
     expect(labelOffsetY(980, 1000)).to.eq(946);
+  });
+
+  it('labels both shares with two decimals adding up to 100', () => {
+    expect(shareLabel(39.58)).to.eq('60,42% | 39,58%');
+    expect(shareLabel(40)).to.eq('60,00% | 40,00%');
   });
 });

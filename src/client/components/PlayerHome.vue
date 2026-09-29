@@ -62,7 +62,7 @@
           @pointerdown="startResize" @dblclick="resetResize"
           @keydown.left.prevent="nudgeResize(1)" @keydown.right.prevent="nudgeResize(-1)">
           <!-- Aufteilung links / rechts, nur beim Ziehen bzw. mit Tastaturfokus sichtbar -->
-          <span class="player-home-columns__resizer-label" aria-hidden="true">{{ shareLabel }}</span>
+          <span class="player-home-columns__resizer-label" aria-hidden="true">{{ columnSplitLabel }}</span>
         </div>
 
         <div class="player-home-columns__main">
@@ -165,7 +165,7 @@ import {observeBoardColumn} from '@/client/utils/boardColumnPosition';
 import {observeRightColumnFit} from '@/client/utils/rightColumnFit';
 import {
   DEFAULT_BOARD_SHARE, KEYBOARD_STEP, MAX_BOARD_SHARE, MIN_BOARD_SHARE,
-  applyBoardShare, loadBoardShare, setBoardShare, startColumnResize,
+  applyBoardShare, loadBoardShare, setBoardShare, shareLabel, startColumnResize,
 } from '@/client/utils/columnResize';
 import {isHandInInputTabs} from '@/client/utils/handCards';
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
@@ -200,10 +200,8 @@ export default defineComponent({
     };
   },
   computed: {
-    // Ganze Prozent, die zusammen immer 100 ergeben
-    shareLabel(): string {
-      const board = Math.round(this.boardShare);
-      return `${100 - board} % / ${board} %`;
+    columnSplitLabel(): string {
+      return shareLabel(this.boardShare);
     },
     minBoardShare(): number {
       return MIN_BOARD_SHARE;
