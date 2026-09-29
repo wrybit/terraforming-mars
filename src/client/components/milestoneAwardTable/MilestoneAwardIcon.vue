@@ -1,6 +1,10 @@
 <template>
   <span class="ma-table-icon">
-    <template v-for="(part, index) in parts" :key="index">
+    <!-- Zwei einfache Bilder: je eine Hälfte in einem Symbol, damit es so groß bleibt wie die übrigen -->
+    <span v-if="split" class="ma-table-icon-split" data-test="split">
+      <img v-for="(part, index) in parts" :key="index" :src="imagePath(part)" alt="">
+    </span>
+    <template v-else v-for="(part, index) in parts" :key="index">
       <span v-if="part.production" class="ma-table-icon-production"><img :src="imagePath(part)" alt=""></span>
       <img v-else :src="imagePath(part)" :class="{'ma-table-icon-outline': part.outline}" alt="">
     </template>
@@ -26,6 +30,9 @@ export default defineComponent({
     },
   },
   computed: {
+    split(): boolean {
+      return this.parts.length === 2 && this.parts.every((part) => !part.production);
+    },
     centerX(): number {
       return this.parts[0]?.centerX ?? 50;
     },

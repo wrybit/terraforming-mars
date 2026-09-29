@@ -110,6 +110,23 @@
   }
 }
 
+// Zwei Bilder als ein Symbol: linke Hälfte des ersten, rechte Hälfte des zweiten
+.ma-table-icon-split {
+  position: relative;
+  display: inline-block;
+
+  img + img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    clip-path: inset(0 0 0 50%);
+  }
+
+  img:first-child {
+    clip-path: inset(0 50% 0 0);
+  }
+}
+
 // Weiße Kontur für dunkle Bilder (Karte), sonst auf dem dunklen Grund nicht zu erkennen
 .ma-table-icon .ma-table-icon-outline {
   outline: 1px solid rgba(255, 255, 255, 0.85);

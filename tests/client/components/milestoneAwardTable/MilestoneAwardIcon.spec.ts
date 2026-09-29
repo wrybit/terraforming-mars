@@ -24,4 +24,12 @@ describe('MilestoneAwardIcon', () => {
     });
     expect(wrapper.find('[data-test="requirement"]').attributes('style')).to.contain('left: 43%');
   });
+
+  it('joins two plain images half and half into one icon', () => {
+    const wrapper = shallowMount(MilestoneAwardIcon, {
+      ...globalConfig,
+      props: {parts: [{asset: 'resources/steel'}, {asset: 'resources/titanium'}]},
+    });
+    expect(wrapper.find('[data-test="split"]').findAll('img')).to.have.length(2);
+  });
 });
