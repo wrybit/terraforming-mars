@@ -157,11 +157,12 @@
   text-overflow: ellipsis;
 }
 
-.ma-table-cube {
+// Spielerwürfel aus board.less (Sprite, daher per zoom verkleinert); dort absolut für das Brett positioniert
+.ma-table .ma-table-cube {
+  position: static;
   flex: none;
-  width: 11px;
-  height: 11px;
   margin: 0;
+  zoom: 0.6;
 }
 
 // Spielerzeilen wie in der Spielerliste: gedämpfte Farbfläche, Balken in Originalfarbe, Blur
