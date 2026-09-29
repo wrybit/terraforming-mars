@@ -1,0 +1,751 @@
+// Mobil-Ansicht (Handy, Tablet hoch und quer): alle Regeln hängen an html.tm-mobile (mobileLayout.ts),
+// die Desktop-Ansicht bleibt dadurch unberührt. Eigene Klassen mit Präfix mb-, Vorbild: mockups/mobile-prototyp.
+
+@mb-surface: rgba(18, 21, 30, 0.94);
+@mb-surface-raised: #1e2330;
+@mb-line: #2d3343;
+@mb-text: #ece9e2;
+@mb-muted: #a4a9b6;
+@mb-accent: #5b5ef0;
+@mb-gold: #f5c542;
+@mb-green: #2e7d32;
+@mb-danger: #8e2a22;
+@mb-top-height: 52px;
+@mb-banner-height: 40px;
+@mb-nav-height: 68px;
+@mb-screen-width-max: 1400px;
+@mb-players-table-min-width: 700px; // Name + Waren (playersTableLayout.ts: minimumWidth)
+
+.mb-bar-surface() {
+  background: @mb-surface;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+html.tm-mobile {
+  // Sidebar-Platz und Desktop-Hinweise entfallen
+  .main-container {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body {
+    overscroll-behavior-y: none;
+  }
+
+  #player-home.mb-home {
+    display: block;
+    padding: (@mb-top-height + @mb-banner-height) 0 calc(@mb-nav-height + env(safe-area-inset-bottom));
+    min-height: 100dvh;
+    box-sizing: border-box;
+    color: @mb-text;
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  // ---------- Statusleiste ----------
+  .mb-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    height: @mb-top-height;
+    padding: 0 12px;
+    padding-top: env(safe-area-inset-top);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 0;
+    border-bottom: 1px solid @mb-line;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    .mb-bar-surface();
+  }
+
+  .mb-top-gen {
+    font-family: Prototype, sans-serif;
+    font-size: 12px;
+    color: @mb-muted;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    b {
+      font-size: 20px;
+      color: @mb-text;
+      font-weight: normal;
+    }
+  }
+
+  .mb-top-globals {
+    display: flex;
+    gap: 10px;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .mb-top-global {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: Prototype, sans-serif;
+    font-size: 15px;
+    white-space: nowrap;
+
+    img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+  }
+
+  .mb-top-money {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: Prototype, sans-serif;
+
+    .resource_icon {
+      zoom: 0.6;
+      margin: 0;
+    }
+
+    b {
+      font-size: 22px;
+      font-weight: normal;
+    }
+
+    small {
+      font-size: 14px;
+      color: @mb-muted;
+    }
+  }
+
+  // ---------- Zugstatus ----------
+  .mb-banner {
+    position: fixed;
+    top: @mb-top-height;
+    left: 0;
+    right: 0;
+    z-index: 19;
+    height: @mb-banner-height;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(23, 41, 26, 0.95);
+    border-bottom: 1px solid @mb-green;
+  }
+
+  .mb-banner-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #5cc463;
+    flex-shrink: 0;
+  }
+
+  .mb-banner-title {
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mb-banner-sub {
+    color: @mb-muted;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .mb-banner--waiting {
+    background: rgba(58, 28, 27, 0.95);
+    border-color: @mb-danger;
+
+    .mb-banner-dot {
+      background: #e0645a;
+      animation: mb-blink 1.2s ease-in-out infinite;
+    }
+  }
+
+  // ---------- Bildschirme ----------
+  .mb-main {
+    max-width: @mb-screen-width-max;
+    margin: 0 auto;
+  }
+
+  .mb-screen {
+    padding: 10px 8px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-x: hidden;
+    // v-show setzt display: none als Inline-Stil, der gewinnt
+  }
+
+  .mb-section-label {
+    margin: 4px 4px 0;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    color: #f0b43c;
+    text-transform: uppercase;
+  }
+
+  .mb-empty {
+    margin: 24px 12px;
+    color: @mb-muted;
+    text-align: center;
+  }
+
+  // Tab-Boxen wie im Desktop (ab 1400 px), nur mit weniger Innenabstand; ohne eigene Stapelebene,
+  // sonst läge der Fußbereich (Bestätigen/Bezahlen, fest unten) hinter der Aufgabenleiste
+  .mb-screen .or-tab-panel {
+    padding: 10px 8px;
+    min-height: 0;
+    isolation: auto;
+  }
+
+  // ---------- Karten: 2–4 nebeneinander (mobileFit.ts skaliert, hier nur das Raster) ----------
+  .mb-screen :has(> .cardbox),
+  .mb-screen :has(> label.cardbox),
+  .mb-screen .sortable-cards,
+  .mb-screen .wf-component--select-card {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    width: auto !important;
+  }
+
+  .mb-screen .cardbox,
+  .mb-screen .sortable-slot,
+  .mb-screen label.payments_cards {
+    // Lücken setzt mobileFit.ts als Außenabstand der skalierten Karte
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+  }
+
+  .mb-screen .sortable-slot > .cardbox {
+    margin: 0 !important;
+  }
+
+  // Skalierte Elemente (mobileFit.ts): rechts/unten steuert das Skript, daher dort kein !important
+  .mb-fit {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    float: none !important;
+  }
+
+  // Auswahl-Häkchen der Karten-Eingaben: nur die Hervorhebung zählt
+  .mb-screen .cardbox > input[type="radio"],
+  .mb-screen .cardbox > input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .mb-screen .wf-component-title,
+  .mb-screen .card-warning,
+  .mb-screen .select-card-actions {
+    flex-basis: 100%;
+  }
+
+  .hand-cards-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .hand-cards-panel__section {
+    margin: 0;
+  }
+
+  // ---------- Mars ----------
+  .mb-screen--mars {
+    > * {
+      order: 3;
+    }
+
+    > .board-cont {
+      order: 1;
+      align-self: center;
+      margin: 0;
+      translate: none;
+    }
+
+    > .mb-params {
+      order: 2;
+    }
+
+    // Skalen rund um das Brett ersetzen die Balken (MobileParameterBars)
+    .global-numbers {
+      display: none;
+    }
+
+    // Tabelle der Meilensteine nur im Zwei-Spalten-Layout des Desktops
+    .milestone-award-table {
+      display: none;
+    }
+  }
+
+  // Mars ohne Ring (Ausschnitt in mobileFit.ts): Kolonie-Felder in die oberen Ecken, Knopf "Plättchen" unten links
+  .mb-screen--mars > .board-without-venus {
+    background-image: url(./assets/board/mars-planet.png);
+
+    .board-outer-spaces {
+      left: 0;
+      top: 0;
+      width: 670px;
+      height: 600px;
+      pointer-events: none;
+
+      .board-space {
+        pointer-events: auto;
+      }
+    }
+
+    .board-space-01,
+    .board-space-02 {
+      position: absolute !important;
+      margin: 0 !important;
+      top: 98px;
+    }
+
+    .board-space-01 {
+      left: 66px;
+    }
+
+    .board-space-02 {
+      left: 520px;
+    }
+
+    .hide-tile-button-container .hide-tile-button {
+      bottom: auto;
+      top: 478px;
+      left: 70px;
+    }
+  }
+
+  // ---------- Globale Parameter als Balken ----------
+  .mb-params {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    background: @mb-surface;
+  }
+
+  .mb-param {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "label value" "track track";
+    gap: 4px 8px;
+    align-items: center;
+  }
+
+  .mb-param-label {
+    grid-area: label;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: @mb-muted;
+
+    img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+  }
+
+  .mb-param-value {
+    grid-area: value;
+    font-family: Prototype, sans-serif;
+    font-size: 18px;
+  }
+
+  .mb-param-track {
+    grid-area: track;
+    position: relative;
+    height: 10px;
+    margin-bottom: 12px;
+    border-radius: 5px;
+    background: #2a3040;
+  }
+
+  .mb-param-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 5px;
+    transition: width 0.6s ease;
+  }
+
+  .mb-param--temperature .mb-param-fill {
+    background: linear-gradient(90deg, #3d6fd6, #8d4ab8 55%, #e0643a);
+  }
+
+  .mb-param--oxygen .mb-param-fill {
+    background: linear-gradient(90deg, #2d6f8f, #8cc4ee);
+  }
+
+  .mb-param--oceans .mb-param-fill {
+    background: #3d8fd6;
+  }
+
+  .mb-param--venus .mb-param-fill {
+    background: linear-gradient(90deg, #8a6a2f, #e8c16a);
+  }
+
+  .mb-param--done .mb-param-value {
+    color: #7fd184;
+  }
+
+  .mb-param-bonus {
+    position: absolute;
+    top: 13px;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    border-radius: 3px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .mb-param-bonus--heat {
+    background-image: url(./assets/resources/heat.png);
+  }
+
+  .mb-param-bonus--ocean {
+    background-image: url(./assets/tiles/ocean.png);
+  }
+
+  .mb-param-bonus--temperature {
+    background-image: url(./assets/global-parameters/temperature.png);
+  }
+
+  .mb-param-bonus--card {
+    background-image: url(./assets/resources/card.png);
+  }
+
+  .mb-param-bonus--tr {
+    background-image: url(./assets/resources/tr.png);
+  }
+
+  .mb-param-bonus--reached {
+    opacity: 0.35;
+    filter: grayscale(1);
+  }
+
+  // ---------- Meilensteine & Auszeichnungen und Spieler: Tabellen wie im Zwei-Spalten-Layout (ab 1400 px) ----------
+  .player_home_block--milestones-and-awards {
+    width: auto !important;
+    margin: 0 !important;
+
+    > .milestones_cont,
+    > .awards_cont {
+      display: none;
+    }
+
+    // milestone_award_table.less blendet die Tabelle unter 1400 px aus
+    .ma-table {
+      display: grid !important;
+    }
+  }
+
+  .mb-screen--players .players-overview {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    margin: 0;
+
+    > .player-info {
+      display: none !important; // players_overview.less setzt display mit !important
+    }
+
+    // Mindestbreite, damit PlayersTable (fitToWidth) Name und Waren zeigt; mobileFit.ts skaliert auf die Bildschirmbreite
+    .players-table {
+      display: block !important;
+      width: max(100%, @mb-players-table-min-width);
+      box-sizing: border-box;
+    }
+  }
+
+  // ---------- Log ----------
+  .mb-screen--log {
+    .log-container,
+    .log-panel,
+    .panel-body {
+      width: auto !important;
+      max-width: none !important;
+      height: auto !important;
+      max-height: none !important;
+    }
+
+    .panel-body {
+      padding: 0 4px !important;
+      overflow: visible !important;
+
+      li {
+        padding: 5px 0;
+        line-height: 1.7;
+      }
+
+      li + li {
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+    }
+  }
+
+  // ---------- Zug: Aktionsmenü als Kachel-Raster statt Tab-Leiste ----------
+  .mb-screen--turn {
+    .or-tabs {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 8px;
+      margin: 0 0 14px;
+      border: 0;
+      flex-wrap: wrap;
+      overflow: visible;
+    }
+
+    .or-tab {
+      margin: 0 !important;
+      min-height: 48px;
+      padding: 8px 12px;
+      border-radius: 12px !important;
+      border: 1px solid @mb-line;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      text-align: left;
+      white-space: normal;
+    }
+
+    .or-tab--active {
+      box-shadow: 0 0 0 2px @mb-gold;
+    }
+
+    // Weitergeben / Passen: dezent, nur Umriss, je halbe Breite am Ende
+    .or-tab--end {
+      background: transparent !important;
+      border-color: @mb-danger !important;
+      color: #f0a39a !important;
+      justify-content: center;
+    }
+
+    .or-tabs > .or-tab--end:first-of-type:not(:last-child) {
+      border-color: #24552a !important;
+      color: #8fd694 !important;
+    }
+
+    .wf-root > label,
+    .or-tab-panel-title {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+
+  // Bestätigen/Bezahlen der Eingabe (tabPanelFooter.ts) sitzen in der Aufgabenleiste rechts neben "Zurück"
+  .mb-home--turn .mb-screen--turn .or-tab-footer {
+    position: fixed !important;
+    left: 96px;
+    right: 0;
+    bottom: 0;
+    z-index: 22;
+    margin: 0 !important;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom)) 0 !important;
+    display: flex !important;
+    flex-direction: column;
+    gap: 10px;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+
+    &:empty {
+      display: none !important;
+    }
+
+    .or-tab-save,
+    .select-card-actions,
+    .wf-action {
+      margin: 0 !important;
+      float: none !important;
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      flex-grow: 1;
+      width: 100%;
+      height: 48px;
+      margin: 0 !important;
+    }
+
+    .payments_input {
+      width: 46px !important;
+      text-align: center;
+    }
+
+    .btn-max {
+      display: none;
+    }
+  }
+
+  // ---------- Fußleiste ----------
+  .mb-nav,
+  .mb-taskbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 21;
+    min-height: @mb-nav-height;
+    padding-bottom: env(safe-area-inset-bottom);
+    border-top: 1px solid @mb-line;
+    .mb-bar-surface();
+  }
+
+  .mb-nav {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .mb-nav-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border: 0;
+    background: transparent;
+    color: #8b90a0;
+    font: inherit;
+    font-size: 11px;
+
+    img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      opacity: 0.7;
+    }
+  }
+
+  .mb-nav-item--active {
+    color: @mb-text;
+    box-shadow: inset 0 2px 0 @mb-gold;
+
+    img {
+      opacity: 1;
+    }
+  }
+
+  .mb-nav-item--turn {
+    color: @mb-text;
+    font-weight: bold;
+  }
+
+  .mb-nav-badge {
+    position: absolute;
+    top: 8px;
+    left: calc(50% + 6px);
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    box-sizing: border-box;
+    border-radius: 9px;
+    background: @mb-accent;
+    color: #fff;
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  .mb-turn-button {
+    margin-top: -24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: @mb-gold;
+    color: #1b1400;
+    border: 4px solid #0d0f14;
+    animation: mb-pulse 1.8s ease-out infinite;
+  }
+
+  .mb-turn-button--idle {
+    background: #3a4152;
+    color: #8b90a0;
+    animation: none;
+  }
+
+  .mb-taskbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .mb-taskbar-back {
+    width: 76px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    border: 1px solid #3a4152;
+    background: transparent;
+    color: @mb-text;
+    font: inherit;
+    font-weight: bold;
+  }
+
+  .mb-taskbar-hint {
+    flex-grow: 1;
+    color: @mb-muted;
+    font-size: 14px;
+  }
+
+  .mb-taskbar-zoom {
+    height: 48px;
+    margin: 0 !important;
+  }
+
+  // Tablet: Leisten nicht über die ganze Breite ziehen
+  @media (min-width: 700px) {
+    .mb-screen {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
+}
+
+@keyframes mb-blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes mb-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 197, 66, 0.55);
+  }
+
+  70% {
+    box-shadow: 0 0 0 14px rgba(245, 197, 66, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 197, 66, 0);
+  }
+}
