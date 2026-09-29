@@ -33,7 +33,7 @@
     <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption.title)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <HandCardsPanel v-if="asTabs && handTabActive" :playerView="playerView"/>
       <!-- Erklärung, wo sonst nur ein Button stünde (tabIntro.ts): Bild, was passiert, Hinweis -->
-      <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :temperature="playerView.game.temperature"/>
+      <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :playerView="playerView"/>
       <!-- Weitergeben: Erklärung, was passiert (mittig mit dem Button, or-tab-panel--end) -->
       <p v-if="asTabs && !handTabActive && selectedOption !== undefined && endTabHint(selectedOption.title) !== undefined" class="or-tab-end-hint">
         {{ $t(endTabHint(selectedOption.title)!) }}

@@ -19,7 +19,7 @@
       <HandCardsPanel v-if="handTabActive" :playerView="playerView"/>
       <!-- Die Frage gehört zur Eingabe und steht daher in ihrer Box, nicht über den Tabs -->
       <!-- Feldwahl u. Ä.: Plättchen, Frage und Hinweis (tabIntro.ts); sonst nur die Frage -->
-      <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(playerinput.title)" :temperature="playerView.game.temperature"/>
+      <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(playerinput.title)" :playerView="playerView"/>
       <label v-else v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(playerinput.title)) }}</div></label>
       <!-- Einfache Entscheidung einer Karte: deren Kartentext als kurze Erklärung (choiceMenu.ts) -->
       <p v-if="cardDescription !== undefined" v-show="!handTabActive" class="or-tab-panel-description">{{ $t(cardDescription) }}</p>

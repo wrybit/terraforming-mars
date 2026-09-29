@@ -84,3 +84,11 @@
     pointer-events: auto;
   }
 }
+
+// Schmales Layout: wie beim mittigen Tab-Button (tab_panel_footer.less) unter der Einleitung statt darüber
+@media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
+  .or-tab-panel .select-space-zoom {
+    position: static;
+    margin-top: 16px;
+  }
+}

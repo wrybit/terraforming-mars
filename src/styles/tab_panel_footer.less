@@ -119,3 +119,12 @@
     box-shadow: @floating-button-shadow;
   }
 }
+
+// Schmales Layout: Box ist nur so hoch wie ihr Inhalt, ein mittig schwebender Button läge auf der Einleitung –
+// dort steht er daher mit Abstand darunter
+@media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
+  .or-tab-panel--centered-button .or-tab-footer {
+    position: static;
+    margin-top: 16px;
+  }
+}

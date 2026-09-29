@@ -1432,6 +1432,8 @@
   "Click a highlighted space on Mars": "Klicke auf ein markiertes Feld auf dem Mars",
   "Temperature rises from ${0} °C to ${1} °C": "Temperatur steigt von ${0} °C auf ${1} °C",
   "Temperature is already at maximum": "Temperatur ist bereits am Maximum",
+  "Heat drops from ${0} to ${1}": "Wärme sinkt von ${0} auf ${1}",
+  "${0} of ${1} oceans are already on Mars": "Bereits ${0} von ${1} Ozeanen auf dem Mars",
   "Increase the temperature": "Temperatur erhöhen",
   "Prelude cards": "Präludien",
   "Your selection": "Deine Auswahl",
