@@ -30,7 +30,7 @@
     </div>
 
     <!-- Im Tab-Modus ist dieser Container die mit dem aktiven Tab verbundene Box (Inhalt + Speichern) -->
-    <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
+    <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption.title)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <HandCardsPanel v-if="asTabs && handTabActive" :playerView="playerView"/>
       <!-- Erklärung, wo sonst nur ein Button stünde (tabIntro.ts): Bild, was passiert, Hinweis -->
       <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :temperature="playerView.game.temperature"/>
@@ -105,7 +105,7 @@ import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPane
 import {isChoiceMenu} from '@/client/components/choiceMenu';
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
-import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon} from '@/client/components/orOptionsShortLabels';
+import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, tabButtonCentered, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon} from '@/client/components/orOptionsShortLabels';
 import {tabIntro, TabIntro} from '@/client/components/tabIntro';
 import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
@@ -244,6 +244,7 @@ export default defineComponent({
     tabButtonTone,
     tabHighlighted,
     isEndTab,
+    tabButtonCentered,
     endTabHint,
     // Farbklasse für Tab bzw. Box von Weitergeben (grün) und Beenden (rot), sonst keine
     tabToneClass(prefix: string, option: PlayerInputModel | undefined): string {

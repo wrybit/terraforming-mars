@@ -49,33 +49,35 @@
   margin: 32px 0 16px;
 }
 
-// In der Tab-Box genau in deren Mitte wie beim Weitergeben/Beenden (or-tab-panel--end, tab_panel_footer.less);
-// als Überlagerung (Bezug: .or-tab-panel ist positioniert, frosted_surface.less), damit der Einleitungstext oben bleibt
 // Zweizeilig: Handlung groß, nächster Schritt klein darunter (enger Abstand = eine Einheit).
-// Doppelte Klasse schlägt die feste Höhe von Spectres .btn.btn-lg
+// Grundform wie alle Aktions-Buttons (btn-submit, btn-rounded); doppelte Klasse schlägt deren feste Höhe
 .btn.select-space-zoom-button {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
   height: auto;
+  margin: 0;
+  padding: 10px 24px;
   line-height: 1.2;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  box-shadow: @floating-button-shadow;
 }
 
 .select-space-zoom-next-step {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: normal;
   text-transform: none;
   opacity: 0.85;
 }
 
+// In der Tab-Box genau in deren Mitte wie beim Weitergeben/Beenden (or-tab-panel--end, tab_panel_footer.less);
+// als Überlagerung (Bezug: .or-tab-panel ist positioniert, frosted_surface.less), damit der Einleitungstext oben bleibt
 .or-tab-panel .select-space-zoom {
   position: absolute;
   inset: 0;
   align-items: center;
   margin: 0;
+  padding: 0 16px; // schmale Box: Button stößt nicht an den Rand
   pointer-events: none; // Box darunter bleibt bedienbar, nur der Button fängt Klicks
 
   .select-space-zoom-button {

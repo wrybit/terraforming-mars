@@ -133,6 +133,16 @@ export function tabIcon(title: string | Message): TabIcon | undefined {
   return TAB_ICONS[titleKey(title)];
 }
 
+// Tabs ohne eigene Auswahl, deren Button mittig in der Box statt im Fuß sitzt (tab_panel_footer.less)
+const CENTERED_BUTTON_TABS: ReadonlySet<string> = new Set([
+  'Convert 8 heat into temperature',
+  'Convert 6 heat into temperature',
+]);
+
+export function tabButtonCentered(title: string | Message): boolean {
+  return CENTERED_BUTTON_TABS.has(titleKey(title));
+}
+
 // Erklärung über dem Button von Weitergeben (Beenden bringt eine eigene Warnung vom Server mit, WarningsComponent.vue)
 const END_TAB_HINTS: Readonly<Record<string, string>> = {
   'End Turn': 'Your turn ends here. The other players continue, and you will get another turn this generation.',

@@ -89,4 +89,33 @@
       margin: 0;
     }
   }
+
+  .btn {
+    box-shadow: @floating-button-shadow;
+  }
+}
+
+// Tabs ohne eigene Auswahl (z. B. Temperatur erhöhen, orOptionsShortLabels.ts): Einleitung bleibt oben,
+// der Button schwebt in der Mitte der Box – wie "Mars groß anzeigen" (waiting_for.less)
+.or-tab-panel--centered-button .or-tab-footer {
+  position: absolute;
+  inset: 0;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  backdrop-filter: none;
+  box-shadow: none;
+  pointer-events: none; // Einleitung darunter bleibt bedienbar, nur der Button fängt Klicks
+
+  > * {
+    margin: 0;
+    pointer-events: auto;
+  }
+
+  .btn {
+    box-shadow: @floating-button-shadow;
+  }
 }

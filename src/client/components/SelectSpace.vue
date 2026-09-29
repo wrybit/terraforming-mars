@@ -13,7 +13,7 @@
     <!-- Übergang zum großen Brett bewusst per Button: automatisches Aufklappen wirkt störend.
          Oben steht, was platziert wird, darunter der nächste Schritt – so ist klar, was nach dem Klick passiert -->
     <div v-if="marsPlacement" class="select-space-zoom">
-      <button type="button" class="btn btn-primary btn-lg select-space-zoom-button" @click="enlargeBoard">
+      <button type="button" class="btn btn-submit btn-rounded select-space-zoom-button" @click="enlargeBoard">
         <span class="select-space-zoom-action">{{ placementAction }}</span>
         <span class="select-space-zoom-next-step" v-i18n>Show Mars enlarged and choose a space</span>
       </button>
