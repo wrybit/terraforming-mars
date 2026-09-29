@@ -26,6 +26,7 @@ import PlayersTableHeader from '@/client/components/overview/PlayersTableHeader.
 import PlayersTableRow from '@/client/components/overview/PlayersTableRow.vue';
 import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/components/overview/playerTagDetails';
 import {playerGoods} from '@/client/components/overview/playerGoods';
+import {mobileLayout} from '@/client/utils/mobileLayout';
 import {
   PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
   FittedVisibility, columnTemplate, fitToWidth, loadPreferredSection, loadSectionVisibility, savePreferredSection, saveSectionVisibility,
@@ -107,7 +108,8 @@ export default defineComponent({
     // Tags-Abschnitt entfällt, wenn es keine einzige Tag-Spalte gibt; zu Breites fällt nach Vorrang weg
     fitted(): FittedVisibility {
       const wanted = {...this.visibility, tags: this.visibility.tags && this.tagColumns.length > 0};
-      return fitToWidth(wanted, this.tagColumns, this.availableWidth, this.preferredSection);
+      // Mobil-Ansicht bricht die Zeilen um (mobile.less), dort muss kein Abschnitt aus Platzgründen weichen
+      return fitToWidth(wanted, this.tagColumns, mobileLayout.value ? 0 : this.availableWidth, this.preferredSection);
     },
     effectiveVisibility(): SectionVisibility {
       return this.fitted.visibility;

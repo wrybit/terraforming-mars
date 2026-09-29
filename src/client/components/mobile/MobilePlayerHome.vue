@@ -141,6 +141,17 @@ import {requestPlacementZoom} from '@/client/components/board/placementZoom';
 // Aufräumfunktion der Feldwahl-Beobachtung; pro Seite gibt es nur eine Spieleransicht
 let stopObserving: (() => void) | undefined;
 
+// Sichtbarer Fußbereich der Eingabe (Bestätigen, Bezahlen); fest unten, der Inhalt braucht darunter so viel Platz
+const FOOTER_SELECTOR = '.mb-screen--turn .or-tab-footer';
+
+function updateFooterSpace(root: HTMLElement): void {
+  const heights = Array.from(root.querySelectorAll<HTMLElement>(FOOTER_SELECTOR)).map((footer) => footer.offsetHeight);
+  const value = Math.max(0, ...heights) + 'px';
+  if (root.style.getPropertyValue('--mb-footer-height') !== value) {
+    root.style.setProperty('--mb-footer-height', value);
+  }
+}
+
 type DataModel = {
   screen: MobileScreen;
   placing: boolean;
@@ -272,7 +283,10 @@ export default defineComponent({
       if (!(element instanceof HTMLElement)) {
         return;
       }
-      const placement = new MutationObserver(() => this.updatePlacing(element));
+      const placement = new MutationObserver(() => {
+        this.updatePlacing(element);
+        updateFooterSpace(element);
+      });
       placement.observe(element, {childList: true, subtree: true, attributes: true, attributeFilter: ['class']});
       stopObserving = () => placement.disconnect();
     },
