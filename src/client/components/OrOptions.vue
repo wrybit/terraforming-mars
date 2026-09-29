@@ -77,10 +77,13 @@
               :groupName="radioElementName"
               @select="selectPlayerTile(option, $event)"/>
           </template>
-          <label v-else :class="['choice-option', {'choice-option--selected': selectedIdx === idx}]">
-            <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" class="choice-option-input">
-            <span>{{ $t(option.title) }}</span>
-          </label>
+          <!-- Übrige Optionen: Kachel mit Text, bei einer Ressource mit Symbol und eigenem Stand vorher → nachher -->
+          <ChoiceOptionTile v-else
+            :title="option.title"
+            :player="playerView.thisPlayer"
+            :selected="selectedIdx === idx"
+            :groupName="radioElementName"
+            @select="selectedOption = option"/>
         </template>
       </div>
       <!-- Unsichtbar mitlaufender Kind-Input der gewählten Kachel: saveData() fragt dessen Antwort ab
@@ -142,6 +145,7 @@ import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import MilestoneAwardOptions from '@/client/components/MilestoneAwardOptions.vue';
 import PlayerOptionTile from '@/client/components/PlayerOptionTile.vue';
 import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
+import ChoiceOptionTile from '@/client/components/ChoiceOptionTile.vue';
 import {inputSourceCard} from '@/client/components/inputSourceCard';
 import {CardName} from '@/common/cards/CardName';
 import {PlayerEffect, playerEffect} from '@/client/components/selectPlayerResource';
@@ -190,6 +194,7 @@ export default defineComponent({
     MilestoneAwardOptions,
     PlayerOptionTile,
     CardIntroBlock,
+    ChoiceOptionTile,
   },
   setup() {
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
