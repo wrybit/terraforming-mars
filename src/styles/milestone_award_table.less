@@ -52,12 +52,20 @@
   }
 }
 
+// Überschrift einzeilig: passt der Zählerstand nicht mehr daneben, bricht er in die abgeschnittene zweite Zeile um
+@ma-table-section-line-height: 16px;
+
 .ma-table-section {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 0 8px;
   align-items: baseline;
-  padding: 0 0 2px 8px;
-  font: 600 12px system-ui, sans-serif;
+  height: @ma-table-section-line-height;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-bottom: 2px;
+  padding: 0 0 0 8px;
+  font: 600 12px/@ma-table-section-line-height system-ui, sans-serif;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: @ma-table-gold;
@@ -92,6 +100,8 @@
   align-items: center;
   gap: 2px;
   height: @ma-table-icon-height;
+  // Nur verkleinern, wenn die Spalte zu schmal wird (iconFit.ts)
+  zoom: var(--ma-table-icon-zoom, 1);
 
   img {
     display: block;

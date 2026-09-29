@@ -1,7 +1,7 @@
 <template>
   <!-- Meilensteine & Auszeichnungen als Tabelle: Symbole oben, darunter Status, je Spieler eine Zeile.
        Nur im Zwei-Spalten-Layout sichtbar (milestone_award_table.less) -->
-  <div class="ma-table" :style="{'--ma-table-columns': columnTemplate}">
+  <div ref="table" class="ma-table" :style="{'--ma-table-columns': columnTemplate}">
     <div class="ma-table-row ma-table-labels">
       <div></div><div></div>
       <div class="ma-table-section" :style="{gridColumn: `span ${milestones.length}`}">
@@ -66,6 +66,10 @@ import MilestoneAwardIcon from '@/client/components/milestoneAwardTable/Mileston
 import {AWARD_ICONS, IconPart, MILESTONE_ICONS} from '@/client/components/milestoneAwardTable/milestoneAwardIcons';
 import {scoreRanks} from '@/client/components/milestoneAwardTable/scoreRanks';
 import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
+import {observeIconFit} from '@/client/components/milestoneAwardTable/iconFit';
+
+// Aufräumfunktion der Symbol-Anpassung je Tabelle (nicht reaktiv)
+const stopIconFit = new WeakMap<object, () => void>();
 
 type Score = {color: Color; score: number};
 
@@ -92,6 +96,12 @@ export default defineComponent({
       type: String as () => Color | undefined,
       default: undefined,
     },
+  },
+  mounted() {
+    stopIconFit.set(this, observeIconFit(this.$refs.table as HTMLElement));
+  },
+  beforeUnmount() {
+    stopIconFit.get(this)?.();
   },
   computed: {
     orderedPlayers(): Array<PublicPlayerModel> {
