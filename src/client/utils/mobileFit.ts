@@ -45,8 +45,17 @@ export function fitScale(listWidth: number, itemWidth: number, columns: number):
 }
 
 // Mars ohne Skalen-Ring: Planet samt Kolonie-Feldern in den oberen Ecken (mobile.less)
-// Höchstens dieser Anteil der Fensterhöhe für das Brett (Tablet quer: Balken bleiben sichtbar)
+// Hochformat: höchstens dieser Anteil der Fensterhöhe für das Brett, darunter bleiben die Balken sichtbar
 const BOARD_HEIGHT_SHARE = 0.62;
+// Tablet quer (mobile.less: Mars links, Rest rechts): Brett so hoch wie der Platz zwischen den Leisten
+const LANDSCAPE_MIN_WIDTH = 900;
+const BARS_HEIGHT = 180;
+
+/* Höchste Brett-Höhe in px für das aktuelle Fenster. */
+export function boardMaxHeight(width: number, height: number): number {
+  const landscape = width >= LANDSCAPE_MIN_WIDTH && width > height;
+  return landscape ? height - BARS_HEIGHT : height * BOARD_HEIGHT_SHARE;
+}
 const MARS_CROP: FitCrop = {left: 42, top: 62, width: 550, height: 486};
 
 const RULES: ReadonlyArray<FitRule> = [
@@ -54,8 +63,8 @@ const RULES: ReadonlyArray<FitRule> = [
   {selector: '.mb-screen--mars > .board-cont, #game-end .board-cont'},
   // Gedrehte Ergebnistabelle über die volle Breite
   {selector: '#game-end .game_end_table.mb-transposed', columns: () => 1},
-  // Tabellen (Spieler, Meilensteine & Auszeichnungen) über die volle Breite
-  {selector: '.mb-screen--players .players-table, .mb-screen--mars .ma-table', columns: () => 1},
+  // Meilensteine & Auszeichnungen als Tabelle über die volle Breite
+  {selector: '.mb-screen--mars .ma-table', columns: () => 1},
   {
     selector: '.card-container',
     // Log-Vorschau, Karten in Erklär-Kacheln und verschachtelte Karten behalten ihre Größe
@@ -90,7 +99,7 @@ function fit(element: HTMLElement, rule: FitRule): void {
   }
   const listWidth = innerWidth(list);
   const crop = rule.crop ?? {left: 0, top: 0, width, height};
-  const scale = rule.columns === undefined ? Math.min(listWidth / crop.width, window.innerHeight * BOARD_HEIGHT_SHARE / crop.height) : fitScale(listWidth, width, rule.columns(listWidth));
+  const scale = rule.columns === undefined ? Math.min(listWidth / crop.width, boardMaxHeight(window.innerWidth, window.innerHeight) / crop.height) : fitScale(listWidth, width, rule.columns(listWidth));
   const gap = rule.columns === undefined ? 0 : GAP_PX;
   element.classList.add(FITTED_CLASS);
   element.classList.toggle(CROPPED_CLASS, rule.crop !== undefined);

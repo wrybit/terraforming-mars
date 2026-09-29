@@ -14,7 +14,8 @@
 @mb-banner-height: 40px;
 @mb-nav-height: 68px;
 @mb-screen-width-max: 1400px;
-@mb-players-table-min-width: 700px; // Name + Waren (playersTableLayout.ts: minimumWidth)
+// Spalten der umbrechenden Spieler-Tabelle: sechs Waren passen genau in eine Zeile
+@mb-players-table-columns: 6;
 
 .mb-bar-surface() {
   background: @mb-surface;
@@ -31,6 +32,11 @@ html.tm-mobile {
 
   body {
     overscroll-behavior-y: none;
+  }
+
+  // Auf dem Zug-Bildschirm wächst der Fußbereich mit dem Bezahlbereich (Höhe setzt MobilePlayerHome)
+  #player-home.mb-home.mb-home--turn {
+    padding-bottom: calc(max(@mb-nav-height, var(--mb-footer-height, 0px)) + 12px + env(safe-area-inset-bottom));
   }
 
   #player-home.mb-home {
@@ -212,6 +218,7 @@ html.tm-mobile {
   // ---------- Karten: 2–4 nebeneinander (mobileFit.ts skaliert, hier nur das Raster) ----------
   .mb-screen :has(> .cardbox),
   .mb-screen :has(> label.cardbox),
+  .mb-screen :has(> label.payments_cards),
   .mb-screen .sortable-cards,
   .mb-screen .wf-component--select-card {
     display: flex !important;
@@ -221,11 +228,14 @@ html.tm-mobile {
     width: auto !important;
   }
 
-  .mb-screen .cardbox,
+  // Manche Karten tragen selbst die Klasse cardbox (Bauen): deren Außenabstand setzt mobileFit.ts
+  .mb-screen .cardbox:not(.mb-fit),
   .mb-screen .sortable-slot,
   .mb-screen label.payments_cards {
     // Lücken setzt mobileFit.ts als Außenabstand der skalierten Karte
     margin: 0 !important;
+    width: auto !important;
+    height: auto !important;
     padding: 0 !important;
     float: none !important;
   }
@@ -481,11 +491,39 @@ html.tm-mobile {
       display: none !important; // players_overview.less setzt display mit !important
     }
 
-    // Mindestbreite, damit PlayersTable (fitToWidth) Name und Waren zeigt; mobileFit.ts skaliert auf die Bildschirmbreite
     .players-table {
       display: block !important;
-      width: max(100%, @mb-players-table-min-width);
-      box-sizing: border-box;
+    }
+
+    // Zeilen umbrechen statt schrumpfen: Name über die ganze Breite, darunter Waren, Tags und Wertung
+    // in je sechs Spalten; Kopf und Spieler haben dieselbe Zellfolge, daher stehen die Symbole über ihren Werten
+    .players-table-row {
+      grid-template-columns: repeat(@mb-players-table-columns, minmax(0, 1fr)) !important;
+      grid-auto-rows: minmax(40px, auto);
+      row-gap: 6px;
+      height: auto !important;
+      padding: 8px 6px 8px 14px;
+    }
+
+    .players-table-identity,
+    .players-table-toggles {
+      grid-column: 1 / -1;
+    }
+
+    .players-table-divider {
+      display: none;
+    }
+
+    // Tablet: doppelt so viele Spalten, jeder Spieler braucht weniger Zeilen
+    @media (min-width: 700px) {
+      .players-table-row {
+        grid-template-columns: repeat(2 * @mb-players-table-columns, minmax(0, 1fr)) !important;
+      }
+    }
+
+    .players-table-cell {
+      min-width: 0;
+      justify-content: center;
     }
   }
 
@@ -553,7 +591,17 @@ html.tm-mobile {
       justify-content: center;
     }
 
-    .or-tabs > .or-tab--end:first-of-type:not(:last-child) {
+    // Zug-Ende in eigener letzter Reihe: links zweite Aktion auslassen, rechts passen (wie im Prototyp)
+    .or-tab:not(.or-tab--end) + .or-tab--end {
+      grid-column-start: 1;
+    }
+
+    .or-tab--end + .or-tab--end,
+    .or-tab:not(.or-tab--end) + .or-tab--end:last-child {
+      grid-column: -2 / -1;
+    }
+
+    .or-tab--end:has(+ .or-tab--end) {
       border-color: #24552a !important;
       color: #8fd694 !important;
     }
@@ -575,7 +623,9 @@ html.tm-mobile {
     margin: 0 !important;
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom)) 0 !important;
     display: flex !important;
+    // Bezahlbereich über die volle Breite, darunter der Button neben "Zurück" (Reihenfolge aus tab_panel_footer.less)
     flex-direction: column;
+    align-items: stretch;
     gap: 10px;
     background: transparent !important;
     border: 0 !important;
@@ -599,6 +649,15 @@ html.tm-mobile {
       width: 100% !important;
       height: 48px;
       margin: 0 !important;
+    }
+
+    .payments_form {
+      margin: 0 0 0 -84px !important;
+      padding: 10px 12px;
+      border-radius: 12px 12px 0 0;
+      border: 1px solid @mb-line;
+      border-bottom: 0;
+      background: @mb-surface-raised;
     }
 
     .payments_input {
@@ -748,6 +807,29 @@ html.tm-mobile {
     right: 12px;
     width: 44px;
     height: 44px;
+  }
+
+  // Tablet quer: Mars links, Balken, Meilensteine & Co. rechts daneben statt darunter
+  @media (min-width: 900px) and (orientation: landscape) {
+    .mb-screen--mars {
+      display: grid; // ohne !important, sonst wirkte das Ausblenden per v-show (Inline-Stil) nicht mehr
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+      column-gap: 16px;
+
+      > * {
+        grid-column: 2;
+      }
+
+      > .board-cont {
+        grid-column: 1;
+        grid-row: 1 / span 20;
+      }
+
+      > a {
+        display: none;
+      }
+    }
   }
 
   // Tablet: Leisten nicht über die ganze Breite ziehen
