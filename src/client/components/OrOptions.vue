@@ -49,18 +49,28 @@
         :groupName="radioElementName"
         @select="selectedOption = $event"/>
       <!-- Einfache Entscheidung (choiceMenu.ts): Optionen als Kacheln, die gewählte pulsiert wie Karten;
-           eine Spielerwahl darin wird zu je einer Spieler-Kachel mit der betroffenen Ressource -->
+           eine Spielerwahl oder Option gegen einen Spieler wird zur Spieler-Kachel mit der betroffenen Ressource -->
       <div v-if="!asTabs && maKind === undefined && isChoice" :class="['choice-options', {'choice-options--players': hasPlayerChoice}]" role="radiogroup">
         <template v-for="(option, idx) in displayedOptions" :key="idx">
           <template v-if="option.type === 'player'">
             <PlayerOptionTile v-for="color in option.players" :key="color"
               :color="color"
               :player="findPlayer(color)"
-              :resource="playerChoiceResource(option)"
+              :effect="optionEffect(option)"
               :selected="selectedIdx === idx && selectedPlayer === color"
               :groupName="radioElementName"
               @select="selectPlayerTile(option, $event)"/>
           </template>
+          <!-- Option gegen einen Spieler ("Entferne 4 Stahl von …", playerTargetOption.ts): Kachel in dessen Farbe -->
+          <PlayerOptionTile v-else-if="optionTarget(option) !== undefined"
+            :color="optionTarget(option)!"
+            :player="findPlayer(optionTarget(option)!)"
+            :effect="optionEffect(option)"
+            :caption="option.title"
+            :class="{'player-option--same-player': sameTargetAsPrevious(idx)}"
+            :selected="selectedIdx === idx"
+            :groupName="radioElementName"
+            @select="selectedOption = option"/>
           <label v-else :class="['choice-option', {'choice-option--selected': selectedIdx === idx}]">
             <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" class="choice-option-input">
             <span>{{ $t(option.title) }}</span>
@@ -110,7 +120,7 @@ import {vDockedTab} from '@/client/directives/DockedTab';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {isHTMLElement} from '@/client/utils/vueUtils';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
-import {OrOptionsModel, PlayerInputModel, SelectPlayerModel} from '@/common/models/PlayerInputModel';
+import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
@@ -125,10 +135,10 @@ import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import MilestoneAwardOptions from '@/client/components/MilestoneAwardOptions.vue';
 import PlayerOptionTile from '@/client/components/PlayerOptionTile.vue';
-import {selectPlayerResource} from '@/client/components/selectPlayerResource';
-import {ColorWithNeutral} from '@/common/Color';
+import {PlayerEffect, playerEffect} from '@/client/components/selectPlayerResource';
+import {optionTargetPlayer} from '@/client/components/playerTargetOption';
+import {Color, ColorWithNeutral} from '@/common/Color';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
-import {Resource} from '@/common/Resource';
 import {milestoneAwardKind, MilestoneAwardKind} from '@/client/components/milestoneAwardChoice';
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {allCardsInHand} from '@/client/utils/handCards';
@@ -228,7 +238,7 @@ export default defineComponent({
       return milestoneAwardKind(this.playerinput);
     },
     hasPlayerChoice(): boolean {
-      return this.isChoice && this.displayedOptions.some((option) => option.type === 'player');
+      return this.isChoice && this.displayedOptions.some((option) => option.type === 'player' || optionTargetPlayer(option) !== undefined);
     },
     // Spielerwahl ausgewählt, aber noch kein Spieler angetippt: Button gesperrt
     awaitingPlayer(): boolean {
@@ -262,8 +272,16 @@ export default defineComponent({
     findPlayer(color: ColorWithNeutral): PublicPlayerModel | undefined {
       return this.playerView.players.find((player) => player.color === color);
     },
-    playerChoiceResource(option: SelectPlayerModel): Resource | undefined {
-      return selectPlayerResource(option.title);
+    optionEffect(option: PlayerInputModel): PlayerEffect | undefined {
+      return playerEffect(option.title);
+    },
+    optionTarget(option: PlayerInputModel): Color | undefined {
+      return optionTargetPlayer(option);
+    },
+    // Mehrere Optionen gegen denselben Spieler (Sabotage: Stahl oder M€) rücken zusammen (Gesetz der Nähe)
+    sameTargetAsPrevious(idx: number): boolean {
+      const target = optionTargetPlayer(this.displayedOptions[idx]);
+      return idx > 0 && target !== undefined && target === optionTargetPlayer(this.displayedOptions[idx - 1]);
     },
     selectPlayerTile(option: PlayerInputModel, color: ColorWithNeutral) {
       this.selectedOption = option;

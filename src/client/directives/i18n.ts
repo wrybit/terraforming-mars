@@ -26,8 +26,10 @@ export function setTranslationContext(playerView: PlayerViewModel) {
 }
 
 export function translateMessage(message: Message): string {
-  message.message = translateText(message.message);
-  return Log.applyData(message, (datum) => {
+  // Kopie statt Überschreiben: sonst steht nach der ersten Anzeige der übersetzte Text im Titel und
+  // Erkennungen am englischen Schlüssel (playerTargetOption.ts, selectPlayerResource.ts, choiceMenu.ts …) greifen nicht mehr
+  const translatedMessage: Message = {...message, message: translateText(message.message)};
+  return Log.applyData(translatedMessage, (datum) => {
     if (datum === undefined) {
       return '';
     }

@@ -1,7 +1,8 @@
 // Spieler-Auswahl als Kacheln (SelectPlayer.vue), Aufbau wie die Ressourcen-Kacheln (resource_options.less);
 // Auswahl-Rahmen wie bei Karten (selection_highlight.less)
 
-@player-option-width: 180px;
+// Breit genug für Symbol, Vorrat mit Stand danach ("17 →13") und Produktion
+@player-option-width: 210px;
 
 .player-options {
   display: flex;
@@ -93,4 +94,16 @@
 // so breit wie die Spieler-Kacheln, damit alle Kacheln eine gleichmäßige Reihe bilden
 .choice-options--players .choice-option {
   width: @player-option-width;
+}
+
+// Stand nach dem Angriff hinter dem aktuellen Wert, kleiner, damit der jetzige Wert der Hauptwert bleibt
+.player-option-after {
+  margin-left: 3px;
+  font-size: 16px;
+  color: #ffb4a6;
+}
+
+// Weitere Option gegen denselben Spieler direkt daneben (OrOptions.vue): kleinerer Abstand als zwischen Spielern
+.choice-options--players .player-option--same-player {
+  margin-left: -8px;
 }

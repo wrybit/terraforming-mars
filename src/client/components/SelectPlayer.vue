@@ -1,12 +1,12 @@
 <template>
   <div>
     <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
-    <!-- Spieler als Kacheln (PlayerOptionTile.vue) mit Bestand und Produktion der betroffenen Ressource -->
+    <!-- Spieler als Kacheln (PlayerOptionTile.vue) mit Bestand und Produktion der betroffenen Ressource, vorher und nachher -->
     <div class="player-options" role="radiogroup">
       <PlayerOptionTile v-for="player in (playerinput.players || [])" :key="player"
         :color="player"
         :player="findPlayer(player)"
-        :resource="resource"
+        :effect="effect"
         :selected="selectedPlayer === player"
         :groupName="groupName"
         @select="selectedPlayer = $event"/>
@@ -28,8 +28,7 @@ import PlayerOptionTile from '@/client/components/PlayerOptionTile.vue';
 import {SelectPlayerResponse} from '@/common/inputs/InputResponse';
 import {ColorWithNeutral} from '@/common/Color';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
-import {Resource} from '@/common/Resource';
-import {selectPlayerResource} from '@/client/components/selectPlayerResource';
+import {PlayerEffect, playerEffect} from '@/client/components/selectPlayerResource';
 
 type DataModel = {
   selectedPlayer: ColorWithNeutral | undefined;
@@ -72,8 +71,8 @@ export default defineComponent({
     AppButton,
   },
   computed: {
-    resource(): Resource | undefined {
-      return selectPlayerResource(this.playerinput.title);
+    effect(): PlayerEffect | undefined {
+      return playerEffect(this.playerinput.title);
     },
   },
   methods: {
