@@ -4,6 +4,7 @@ import {PlayerInputType} from '../common/input/PlayerInputType';
 import {InputResponse} from '../common/inputs/InputResponse';
 import {IPlayer} from './IPlayer';
 import {PlayerInputModel} from '../common/models/PlayerInputModel';
+import {CardName} from '../common/cards/CardName';
 
 export interface PlayerInput {
     type: PlayerInputType;
@@ -25,6 +26,11 @@ export interface PlayerInput {
      * continue to poll for updates.
      */
   optional?: boolean;
+    /**
+     * Karte, deren Wirkung diese Eingabe auslöst (z. B. Sabotage), damit der Client Name und Kartentext zeigt.
+     * Setzt DeferredActionsQueue automatisch.
+     */
+    sourceCard?: CardName;
 
     cb(...item: any): PlayerInput | undefined;
 
@@ -52,6 +58,7 @@ export abstract class BasePlayerInput<T> implements PlayerInput {
   public eligibleForDefault: boolean | undefined = undefined;
   public annotation: string | undefined;
   public optional?: boolean;
+  public sourceCard?: CardName;
 
   public abstract toModel(player: IPlayer): PlayerInputModel;
   public abstract process(response: InputResponse, player: IPlayer): PlayerInput | undefined;

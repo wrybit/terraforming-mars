@@ -871,8 +871,11 @@ export class Player implements IPlayer {
     // The issue is fixed in Double Down for the time being. But the right fix is to move this block
     // down. As I say, that's going to break a lot of things, many of which are not evident
     // in tests (because they use card.play instad of player.playCard).
-    const action = selectedCard.play(this);
-    this.defer(action, Priority.DEFAULT);
+    // Im Zusammenhang der Karte: Eingaben daraus zeigen im Client ihren Namen und Text (DeferredActionsQueue)
+    this.game.deferredActions.withSourceCard(selectedCard.name, () => {
+      const action = selectedCard.play(this);
+      this.defer(action, Priority.DEFAULT);
+    });
 
     // This could probably include 'nothing' but for now this will work.
     if (cardAction !== 'discard') {
@@ -951,8 +954,7 @@ export class Player implements IPlayer {
       {selectBlueCardAction: true})
       .andThen(([card]) => {
         this.game.log('${0} used ${1} action', (b) => b.player(this).card(card));
-        const action = card.action(this);
-        this.defer(action);
+        this.game.deferredActions.withSourceCard(card.name, () => this.defer(card.action(this)));
         this.actionsThisGeneration.add(card.name);
         return undefined;
       });
@@ -970,8 +972,7 @@ export class Player implements IPlayer {
       {selectBlueCardAction: true})
       .andThen(([card]) => {
         this.game.log('${0} used ${1} action', (b) => b.player(this).card(card));
-        const action = card.action(this);
-        this.defer(action);
+        this.game.deferredActions.withSourceCard(card.name, () => this.defer(card.action(this)));
         this.actionsThisGeneration.add(card.name);
         return undefined;
       });
