@@ -87,7 +87,7 @@
 
       <!-- In einer Tab-Box (z. B. einfache Entscheidung in WaitingForTabs) sitzt der Button unten im Fuß -->
       <TabPanelFooterSlot v-if="!asTabs && showOwnSaveButton()">
-        <div class="wf-action" style="margin: 5px 30px 10px">
+        <div class="wf-action or-options-save">
           <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid || awaitingPlayer" @click="saveData" />
         </div>
       </TabPanelFooterSlot>
