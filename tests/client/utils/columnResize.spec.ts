@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {DEFAULT_BOARD_SHARE, MAX_BOARD_SHARE, MIN_BOARD_SHARE, applyBoardShare, loadBoardShare, setBoardShare, shareFromPointer} from '@/client/utils/columnResize';
+import {labelOffsetY, DEFAULT_BOARD_SHARE, MAX_BOARD_SHARE, MIN_BOARD_SHARE, applyBoardShare, loadBoardShare, setBoardShare, shareFromPointer} from '@/client/utils/columnResize';
 
 describe('columnResize', () => {
   beforeEach(() => localStorage.removeItem('player_home_board_share'));
@@ -26,5 +26,10 @@ describe('columnResize', () => {
     setBoardShare(container, DEFAULT_BOARD_SHARE);
     applyBoardShare(container, loadBoardShare());
     expect(localStorage.getItem('player_home_board_share')).to.be.null;
+  });
+
+  it('shows the share label below the pointer, or above it near the bottom', () => {
+    expect(labelOffsetY(300, 1000)).to.eq(334);
+    expect(labelOffsetY(980, 1000)).to.eq(946);
   });
 });

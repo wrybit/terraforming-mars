@@ -41,11 +41,21 @@ export function applyBoardShare(container: HTMLElement, share: number): void {
   container.style.setProperty(BOARD_SHARE_VARIABLE, `${share}fr`);
 }
 
-// Höhe der Zeigerposition im Griff (für die Anzeige der Aufteilung am Zeiger, player_home_columns.less)
-export const POINTER_Y_VARIABLE = '--resizer-pointer-y';
+// Höhe der Prozent-Anzeige im Griff (player_home_columns.less): etwas unter dem Zeiger, damit der Mauszeiger
+// die Werte nicht verdeckt – oder darüber, wenn unten kein Platz mehr ist
+export const LABEL_Y_VARIABLE = '--resizer-label-y';
+// Abstand der Anzeigenmitte vom Zeiger und halbe Anzeigenhöhe
+const LABEL_POINTER_OFFSET = 34;
+const LABEL_HALF_HEIGHT = 16;
+
+export function labelOffsetY(pointerY: number, handleHeight: number): number {
+  const below = pointerY + LABEL_POINTER_OFFSET;
+  return below + LABEL_HALF_HEIGHT <= handleHeight ? below : pointerY - LABEL_POINTER_OFFSET;
+}
 
 function trackPointerY(handle: HTMLElement, clientY: number): void {
-  handle.style.setProperty(POINTER_Y_VARIABLE, `${clientY - handle.getBoundingClientRect().top}px`);
+  const rect = handle.getBoundingClientRect();
+  handle.style.setProperty(LABEL_Y_VARIABLE, `${labelOffsetY(clientY - rect.top, rect.height)}px`);
 }
 
 // Anteil der rechten Spalte aus der Zeigerposition: alles rechts vom Zeiger gehört dem Brett

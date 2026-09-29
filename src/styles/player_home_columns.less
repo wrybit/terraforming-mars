@@ -112,12 +112,13 @@
     }
   }
 
-  // Aufteilung in Prozent am Zeiger, solange gezogen wird (Höhe: columnResize.ts), bei Tastaturfokus an der Griffmitte
+  // Aufteilung in Prozent knapp unter bzw. über dem Zeiger, solange gezogen wird (Höhe: columnResize.ts),
+  // bei Tastaturfokus an der Griffmitte
   .player-home-columns__resizer-label {
     .glass-surface();
     position: absolute;
     left: 50%;
-    top: var(--resizer-pointer-y, 50%);
+    top: var(--resizer-label-y, 50%);
     z-index: 120;
     transform: translate(-50%, -50%);
     padding: 4px 10px;
