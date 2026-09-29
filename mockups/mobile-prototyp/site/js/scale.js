@@ -52,6 +52,15 @@
   }
 
   TM.scale = {
+    // Kopie eines Elements ohne dessen Skalierung; die Kopie wird beim nächsten Messen neu skaliert
+    fresh: function (element) {
+      var copy = element.cloneNode(true);
+      copy.style.transform = '';
+      copy.classList.remove('mb-scaled-item');
+      TM.scale.soon();
+      return copy;
+    },
+    soon: function () { schedule(); },
     visible: function () {
       var done = new Set();
       RULES.forEach(function (rule) {

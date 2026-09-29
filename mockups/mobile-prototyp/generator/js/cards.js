@@ -25,7 +25,7 @@
     // Karte in die eigene Ablage legen und Zähler nachführen
     addToPlayed: function (card, player) {
       var list = TM.$('.mb-player--' + (player === 'mira' ? 'red' : 'green') + ' .mb-played');
-      var copy = card.cloneNode(true);
+      var copy = TM.scale.fresh(card);
       copy.classList.remove('cardbox');
       list.appendChild(copy);
       var toggle = list.previousElementSibling;
@@ -48,7 +48,7 @@
     // Groß-Ansicht mit passenden Schnellaktionen
     open: function (card) {
       popover = popover || document.getElementById('popover');
-      var copy = card.cloneNode(true);
+      var copy = TM.scale.fresh(card);
       copy.classList.remove('cardbox');
       var holder = document.getElementById('popoverCard');
       holder.innerHTML = '';

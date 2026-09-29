@@ -276,7 +276,7 @@
     list.innerHTML = '';
     var pool = TM.$all('.setup-column--projects .card-container');
     for (var index = 0; index < RESEARCH_CARDS; index++) {
-      var card = pool[(researchOffset + index) % pool.length].cloneNode(true);
+      var card = TM.scale.fresh(pool[(researchOffset + index) % pool.length]);
       var label = document.createElement('label');
       label.className = 'cardbox';
       label.innerHTML = '<input type="checkbox">';
@@ -284,6 +284,7 @@
       list.appendChild(label);
     }
     researchOffset += RESEARCH_CARDS;
+    TM.scale.soon();
   }
 
   // Gekaufte Karte überall dort einfügen, wo das Original Handkarten zeigt
@@ -291,17 +292,17 @@
     var handList = TM.$all('.mb-screen[data-screen="hand"] .hand-cards-panel__cards').pop();
     var box = document.createElement('div');
     box.className = 'cardbox';
-    box.appendChild(card.cloneNode(true));
+    box.appendChild(TM.scale.fresh(card));
     handList.appendChild(box);
     var build = document.createElement('label');
     build.className = 'payments_cards';
     build.innerHTML = '<input class="hidden" type="radio" name="mb-build">';
-    build.appendChild(card.cloneNode(true));
+    build.appendChild(TM.scale.fresh(card));
     TM.$('.mb-panel[data-key="build"] .payments_cont').appendChild(build);
     var sell = document.createElement('label');
     sell.className = 'cardbox';
     sell.innerHTML = '<input type="checkbox">';
-    sell.appendChild(card.cloneNode(true));
+    sell.appendChild(TM.scale.fresh(card));
     TM.$('.mb-panel[data-key="sell"] .wf-component--select-card').appendChild(sell);
   }
 
@@ -318,6 +319,7 @@
       TM.change({'jens.megacredits': -bought.length * CARD_PRICE, 'jens.cards': bought.length});
       TM.$all('.mb-panel[data-key="actions"] label').forEach(function (label) { label.classList.remove('mb-used'); });
       TM.log([{player: 'jens'}, {text: ' bought ' + bought.length + ' card(s)'}]);
+      TM.scale.soon();
       return {message: (bought.length ? bought.length + ' card(s) bought · ' : '') + 'Generation ' + TM.state.game.generation + ' starts', free: true};
     },
   });

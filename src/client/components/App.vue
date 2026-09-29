@@ -21,6 +21,12 @@
         v-else-if="screen === 'game-home' && game !== undefined"
         :game="game"
       />
+      <!-- Touch-Geräte (Handy, Tablet) bekommen die Mobil-Ansicht, siehe mobileLayout.ts -->
+      <MobilePlayerHome
+        v-else-if="screen === 'player-home' && playerView !== undefined && isMobileLayout"
+        :player-view="playerView"
+        :key="'mobile-' + playerkey"
+      />
       <PlayerHome
         v-else-if="screen === 'player-home' && playerView !== undefined"
         :player-view="playerView"
@@ -64,6 +70,7 @@ const Help = defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@
 const LoginHome = defineAsyncComponent(() => import(/* webpackChunkName: "login" */ '@/client/components/auth/LoginHome.vue'));
 const LoadGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "load-game" */ '@/client/components/LoadGameForm.vue'));
 const PlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "player-home" */ '@/client/components/PlayerHome.vue'));
+const MobilePlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-player-home" */ '@/client/components/mobile/MobilePlayerHome.vue'));
 const SpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "spectator-home" */ '@/client/components/SpectatorHome.vue'));
 const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreen.vue'));
 import {$t, setTranslationContext} from '@/client/directives/i18n';
@@ -75,6 +82,7 @@ import {isPlayerId, isSpectatorId} from '@/common/Types';
 import {hasShowModal, showModal, windowHasHTMLDialogElement} from './HTMLDialogElementCompatibility';
 
 import dialogPolyfill from 'dialog-polyfill';
+import {initMobileLayout, mobileLayout} from '@/client/utils/mobileLayout';
 import {setDocumentTitle} from '../utils/documentTitle';
 
 type Screen = 'admin' |
@@ -146,6 +154,7 @@ export default defineComponent({
     LoadGameForm,
     GameHome,
     PlayerHome,
+    MobilePlayerHome,
     SpectatorHome,
     GameEnd,
     GamesOverview,
@@ -155,6 +164,9 @@ export default defineComponent({
     LoginHome,
   },
   computed: {
+    isMobileLayout(): boolean {
+      return mobileLayout.value;
+    },
     participant(): ViewModel | undefined {
       return this.playerView ?? this.spectator;
     },
@@ -247,6 +259,9 @@ export default defineComponent({
     updateSpectator() {
       this.update(paths.SPECTATOR);
     },
+  },
+  created() {
+    initMobileLayout();
   },
   mounted() {
     setDocumentTitle();
