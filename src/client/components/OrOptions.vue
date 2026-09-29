@@ -31,7 +31,7 @@
 
     <!-- Im Tab-Modus ist dieser Container die mit dem aktiven Tab verbundene Box (Inhalt + Speichern) -->
     <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
-      <SortableCards v-if="asTabs && handTabActive" :playerId="playerView.id" :cards="handCards"/>
+      <HandCardsPanel v-if="asTabs && handTabActive" :playerView="playerView"/>
       <!-- Erklärung, wo sonst nur ein Button stünde (tabIntro.ts): Bild, was passiert, Hinweis -->
       <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :temperature="playerView.game.temperature"/>
       <!-- Weitergeben: Erklärung, was passiert (mittig mit dem Button, or-tab-panel--end) -->
@@ -109,7 +109,7 @@ import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, endTabHint, 
 import {tabIntro, TabIntro} from '@/client/components/tabIntro';
 import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
-import SortableCards from '@/client/components/SortableCards.vue';
+import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import MilestoneAwardOptions from '@/client/components/MilestoneAwardOptions.vue';
 import {milestoneAwardKind, MilestoneAwardKind} from '@/client/components/milestoneAwardChoice';
@@ -149,7 +149,7 @@ export default defineComponent({
     TabIntroBlock,
     AppButton,
     OrOptionsTabIcon,
-    SortableCards,
+    HandCardsPanel,
     HandCardsTab,
     MilestoneAwardOptions,
   },

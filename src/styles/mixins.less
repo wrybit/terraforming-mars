@@ -33,3 +33,20 @@
   border-radius: 0px !important;
   background-position: 0px !important;
 }
+
+// Kleine goldene Abschnitts-Überschrift in Versalien (Meilensteine/Auszeichnungen, Handkarten-Tab).
+// Ein <small> darin (z. B. Zählerstand) bleibt normal geschrieben und grau.
+@section-caption-gold: #f2c14e;
+.section-caption(@line-height: 16px) {
+  font: 600 12px/@line-height system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: @section-caption-gold;
+
+  small {
+    font: 12px system-ui, sans-serif;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #bbb;
+  }
+}

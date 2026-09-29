@@ -16,7 +16,7 @@
     </div>
 
     <div v-docked-tab :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
-      <SortableCards v-if="handTabActive" :playerId="playerView.id" :cards="handCards"/>
+      <HandCardsPanel v-if="handTabActive" :playerView="playerView"/>
       <!-- Die Frage gehört zur Eingabe und steht daher in ihrer Box, nicht über den Tabs -->
       <!-- Feldwahl u. Ä.: Plättchen, Frage und Hinweis (tabIntro.ts); sonst nur die Frage -->
       <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(playerinput.title)" :temperature="playerView.game.temperature"/>
@@ -44,7 +44,7 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {InputResponse} from '@/common/inputs/InputResponse';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
-import SortableCards from '@/client/components/SortableCards.vue';
+import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
 import {fullTabTitle, inputTabLabel} from '@/client/components/orOptionsShortLabels';

@@ -95,13 +95,13 @@
           <a name="cards" class="player_home_anchor"></a>
           <!-- Ohne anstehende Eingabe (nicht am Zug) stehen die Handkarten im selben Tab-Container, allein.
                Sonst sind sie dort der erste Tab über der Eingabe (isHandInInputTabs), dann entfällt dieser Block. -->
-          <div class="player_home_block player_home_block--hand" v-if="cardsInHandCount > 0 && !isHandInInputTabs(playerView)" id="shortkey-hand">
+          <div class="player_home_block player_home_block--hand" v-if="hasHandPanelContent && !isHandInInputTabs(playerView)" id="shortkey-hand">
             <div class="or-tabs" role="tablist">
               <HandCardsTab :count="cardsInHandCount" :active="true"/>
               <WaitingForPlayersTab :players="playersToWaitFor(playerView)"/>
             </div>
             <div v-docked-tab class="or-tab-panel or-tab-panel--view" role="tabpanel">
-              <SortableCards :playerId="playerView.id" :cards="allCardsInHand"/>
+              <HandCardsPanel :playerView="playerView"/>
             </div>
           </div>
 
@@ -151,7 +151,7 @@ import SetupTurnOrder from '@/client/components/SetupTurnOrder.vue';
 import SetupBoardToggle from '@/client/components/SetupBoardToggle.vue';
 import {setupBoardCollapsed} from '@/client/components/setupBoardCollapsed';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
-import SortableCards from '@/client/components/SortableCards.vue';
+import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
 import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
@@ -160,7 +160,6 @@ import UndergroundTokens from '@/client/components/underworld/UndergroundTokens.
 import KeyboardShortcuts from '@/client/components/KeyboardShortcuts.vue';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
-import {CardModel} from '@/common/models/CardModel';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
 import {observeBoardColumn} from '@/client/utils/boardColumnPosition';
 import {observeRightColumnFit} from '@/client/utils/rightColumnFit';
@@ -168,7 +167,8 @@ import {
   DEFAULT_BOARD_SHARE, KEYBOARD_STEP, MAX_BOARD_SHARE, MIN_BOARD_SHARE,
   applyBoardShare, loadBoardShare, setBoardShare, startColumnResize,
 } from '@/client/utils/columnResize';
-import {allCardsInHand, isHandInInputTabs} from '@/client/utils/handCards';
+import {isHandInInputTabs} from '@/client/utils/handCards';
+import {ownActiveCards} from '@/client/utils/ownActiveCards';
 
 // Aufräumfunktion der Spalten-Beobachtung (Position fürs Modal, Platzausnutzung); pro Seite gibt es nur eine Spieleransicht
 let stopObservingBoardColumn: (() => void) | undefined;
@@ -236,8 +236,9 @@ export default defineComponent({
       const playerView = this.playerView;
       return playerView.cardsInHand.length + playerView.preludeCardsInHand.length + playerView.ceoCardsInHand.length;
     },
-    allCardsInHand(): Array<CardModel> {
-      return allCardsInHand(this.playerView);
+    // Der Handkarten-Block zeigt auch die eigenen aktiven Karten – er bleibt daher auch ohne Handkarten sichtbar
+    hasHandPanelContent(): boolean {
+      return this.cardsInHandCount > 0 || ownActiveCards(this.playerView).length > 0;
     },
   },
 
@@ -252,7 +253,7 @@ export default defineComponent({
     Sidebar,
     Colony,
     LogPanel,
-    SortableCards,
+    HandCardsPanel,
     HandCardsTab,
     WaitingForPlayersTab,
     TopBar,

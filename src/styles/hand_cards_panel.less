@@ -1,0 +1,17 @@
+// Handkarten-Tab (HandCardsPanel.vue): aktive Karten oben, Handkarten darunter.
+// Gesetz der Nähe: Überschrift sitzt dicht an ihren Karten, zwischen den Abschnitten ist deutlich mehr Luft
+// plus eine feine Trennlinie.
+@hand-cards-panel-title-gap: 4px;
+@hand-cards-panel-section-gap: 28px;
+
+.hand-cards-panel__section + .hand-cards-panel__section {
+  margin-top: @hand-cards-panel-section-gap;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hand-cards-panel__title {
+  .section-caption(16px);
+  margin: 0 0 @hand-cards-panel-title-gap;
+  padding-left: 8px;
+}

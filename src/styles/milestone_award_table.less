@@ -7,7 +7,7 @@
 @ma-table-row-gap: 4px;
 @ma-table-radius: 6px;
 @ma-table-color-bar-width: 6px;
-@ma-table-gold: #f2c14e;
+@ma-table-gold: @section-caption-gold;
 @ma-table-dim: rgba(255, 255, 255, 0.28);
 @ma-table-divider-color: rgba(255, 255, 255, 0.35);
 @ma-table-blur: 10px;
@@ -65,17 +65,7 @@
   white-space: nowrap;
   margin-bottom: 2px;
   padding: 0 0 0 8px;
-  font: 600 12px/@ma-table-section-line-height system-ui, sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: @ma-table-gold;
-
-  small {
-    font: 12px system-ui, sans-serif;
-    letter-spacing: 0;
-    text-transform: none;
-    color: #bbb;
-  }
+  .section-caption(@ma-table-section-line-height);
 }
 
 .ma-table-head,
