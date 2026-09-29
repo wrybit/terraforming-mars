@@ -10,8 +10,8 @@
 @player-home-columns-gap: 24px;
 @player-home-resizer-width: 12px;
 // Standardaufteilung links/rechts; der Ziehgriff überschreibt sie per CSS-Variable (columnResize.ts)
-@player-home-main-share: 65fr;
-@player-home-board-share: 35fr;
+@player-home-main-share: 60fr;
+@player-home-board-share: 40fr;
 // So weit ragen Brett-Elemente links bzw. rechts über .board-cont hinaus
 @player-home-board-overhang-left: 40px;
 @player-home-board-overhang-right: 24px;
@@ -104,6 +104,28 @@
     &:focus-visible {
       outline: none;
     }
+  }
+
+  // Aufteilung in Prozent am Zeiger, solange gezogen wird (Höhe: columnResize.ts), bei Tastaturfokus an der Griffmitte
+  .player-home-columns__resizer-label {
+    .glass-surface();
+    position: absolute;
+    left: 50%;
+    top: var(--resizer-pointer-y, 50%);
+    z-index: 120;
+    transform: translate(-50%, -50%);
+    padding: 4px 10px;
+    font: 600 14px system-ui, sans-serif;
+    color: #fff;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+
+  .player-home-columns__resizer--dragging .player-home-columns__resizer-label,
+  .player-home-columns__resizer:focus-visible .player-home-columns__resizer-label {
+    opacity: 1;
   }
 
   .player-home-columns__main {

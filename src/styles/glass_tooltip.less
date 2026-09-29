@@ -5,16 +5,21 @@
 @glass-tooltip-border: rgba(255, 255, 255, 0.18);
 @glass-tooltip-nose-size: 10px;
 
-.glass-tooltip {
-  position: fixed;
-  z-index: 10000;
-  max-width: 280px;
-  padding: 7px 11px;
+// Milchglas-Fläche; auch für andere schwebende Hinweise (z. B. Spaltenaufteilung, player_home_columns.less)
+.glass-surface() {
   border: 1px solid @glass-tooltip-border;
   border-radius: 8px;
   background: @glass-tooltip-background;
   backdrop-filter: blur(12px) saturate(1.3);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+}
+
+.glass-tooltip {
+  .glass-surface();
+  position: fixed;
+  z-index: 10000;
+  max-width: 280px;
+  padding: 7px 11px;
   font: 13px/1.35 system-ui, sans-serif;
   color: #eee;
   pointer-events: none;

@@ -6,12 +6,12 @@ describe('columnResize', () => {
 
   it('computes the board share from the pointer position and keeps it within bounds', () => {
     const container = {left: 0, width: 2000};
-    expect(shareFromPointer(container, 1300)).to.eq(35);
+    expect(shareFromPointer(container, 1200)).to.eq(40);
     expect(shareFromPointer(container, 1900)).to.eq(MIN_BOARD_SHARE);
     expect(shareFromPointer(container, 100)).to.eq(MAX_BOARD_SHARE);
   });
 
-  it('defaults to 35 % and remembers a chosen share', () => {
+  it('defaults to 40 % and remembers a chosen share', () => {
     expect(loadBoardShare()).to.eq(DEFAULT_BOARD_SHARE);
     const container = document.createElement('div');
     setBoardShare(container, 42);

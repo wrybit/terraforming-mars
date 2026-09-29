@@ -4,7 +4,7 @@
 
 export const MAIN_SHARE_VARIABLE = '--player-home-main-share';
 export const BOARD_SHARE_VARIABLE = '--player-home-board-share';
-export const DEFAULT_BOARD_SHARE = 35;
+export const DEFAULT_BOARD_SHARE = 40;
 // Grenzen, damit keine Seite unbenutzbar schmal wird
 export const MIN_BOARD_SHARE = 25;
 export const MAX_BOARD_SHARE = 60;
@@ -41,6 +41,13 @@ export function applyBoardShare(container: HTMLElement, share: number): void {
   container.style.setProperty(BOARD_SHARE_VARIABLE, `${share}fr`);
 }
 
+// Höhe der Zeigerposition im Griff (für die Anzeige der Aufteilung am Zeiger, player_home_columns.less)
+export const POINTER_Y_VARIABLE = '--resizer-pointer-y';
+
+function trackPointerY(handle: HTMLElement, clientY: number): void {
+  handle.style.setProperty(POINTER_Y_VARIABLE, `${clientY - handle.getBoundingClientRect().top}px`);
+}
+
 // Anteil der rechten Spalte aus der Zeigerposition: alles rechts vom Zeiger gehört dem Brett
 export function shareFromPointer(containerRect: {left: number; width: number}, pointerX: number): number {
   const share = (containerRect.left + containerRect.width - pointerX) / containerRect.width * 100;
@@ -55,9 +62,11 @@ export function startColumnResize(event: PointerEvent, container: HTMLElement, o
   // Beim Ziehen keinen Text markieren
   event.preventDefault();
   let share = loadBoardShare();
+  trackPointerY(handle, event.clientY);
 
   const move = (moveEvent: PointerEvent) => {
     share = shareFromPointer(container.getBoundingClientRect(), moveEvent.clientX);
+    trackPointerY(handle, moveEvent.clientY);
     applyBoardShare(container, share);
     onChange(share);
   };

@@ -60,7 +60,10 @@
           :aria-valuenow="boardShare" :aria-valuemin="minBoardShare" :aria-valuemax="maxBoardShare"
           :aria-label="$t('Column width')" :title="$t('Column width')"
           @pointerdown="startResize" @dblclick="resetResize"
-          @keydown.left.prevent="nudgeResize(1)" @keydown.right.prevent="nudgeResize(-1)"></div>
+          @keydown.left.prevent="nudgeResize(1)" @keydown.right.prevent="nudgeResize(-1)">
+          <!-- Aufteilung links / rechts, nur beim Ziehen bzw. mit Tastaturfokus sichtbar -->
+          <span class="player-home-columns__resizer-label" aria-hidden="true">{{ shareLabel }}</span>
+        </div>
 
         <div class="player-home-columns__main">
           <a class="hotkey-target"></a>
@@ -197,6 +200,11 @@ export default defineComponent({
     };
   },
   computed: {
+    // Ganze Prozent, die zusammen immer 100 ergeben
+    shareLabel(): string {
+      const board = Math.round(this.boardShare);
+      return `${100 - board} % / ${board} %`;
+    },
     minBoardShare(): number {
       return MIN_BOARD_SHARE;
     },
