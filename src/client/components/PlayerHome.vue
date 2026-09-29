@@ -50,7 +50,7 @@
           <!-- Log unter dem Brett: beides bleibt im Zwei-Spalten-Layout gemeinsam sichtbar -->
           <a class="hotkey-target"></a>
           <div v-if="!isSetupPhase" class="player_home_block nofloat player-home-columns__log">
-            <LogPanel :viewModel="playerView" :step="game.step" @spaceClicked="onSpaceClicked"/>
+            <LogPanel :viewModel="playerView" @spaceClicked="onSpaceClicked"/>
           </div>
         </div>
 
