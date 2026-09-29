@@ -77,6 +77,14 @@ export default defineComponent({
     },
   },
   computed: {
+    // Computed statt data: Der Bauen-Tab bleibt (v-show) gemountet, während die Hand umsortiert wird –
+    // so übernimmt die Liste die neue Reihenfolge sofort (CardOrderStorage ist reaktiv).
+    cards(): ReadonlyArray<CardModel> {
+      return CardOrderStorage.getOrdered(
+        CardOrderStorage.getCardOrder(this.playerView.id),
+        this.playerinput.cards ?? [],
+      );
+    },
     order(): ReadonlyArray<SpendableResource> {
       return ([
         'steel',
@@ -121,19 +129,17 @@ export default defineComponent({
   },
   data() {
     let card: CardModel | undefined;
-    let cards: ReadonlyArray<CardModel> = [];
     if ((this.playerinput?.cards?.length ?? 0) > 0) {
-      cards = CardOrderStorage.getOrdered(
+      // Vorauswahl: erste Karte in der Reihenfolge der Hand
+      card = CardOrderStorage.getOrdered(
         CardOrderStorage.getCardOrder(this.playerView.id),
         this.playerinput.cards,
-      );
-      card = cards[0];
+      )[0];
     }
     return {
       cardName: card?.name,
       card: card,
       reserveUnits: card?.reserveUnits ?? Units.EMPTY,
-      cards: cards,
       cost: card?.calculatedCost ?? 0,
       tags: card !== undefined ? getCardOrThrow(card.name).tags : [],
       available: Units.of({}),

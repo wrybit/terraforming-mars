@@ -1,6 +1,7 @@
 import {CardModel} from '@/common/models/CardModel';
 import {partition} from '@/common/utils/utils';
 import {LocalStorageStore} from '@/client/utils/LocalStorageStore';
+import {ref} from 'vue';
 
 // Stored as cardName: position
 type CardOrder = {[cardName: string]: number};
@@ -25,8 +26,13 @@ const store = new LocalStorageStore<CardOrder>({
   },
 });
 
+// Zähler macht die Reihenfolge reaktiv: Wer getCardOrder() im Rendering liest (Bauen, Verkaufen …),
+// wird neu gezeichnet, sobald die Hand umsortiert wird – localStorage selbst ist nicht reaktiv.
+const revision = ref(0);
+
 export class CardOrderStorage {
   public static getCardOrder(playerId: string): CardOrder {
+    void revision.value;
     return store.get(playerId) ?? {};
   }
 
@@ -40,5 +46,6 @@ export class CardOrderStorage {
 
   public static updateCardOrder(playerId: string, order: CardOrder): void {
     store.set(playerId, order);
+    revision.value++;
   }
 }
