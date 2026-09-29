@@ -30,10 +30,6 @@ Alle Aufnahmen in 1920 px Breite, außer wo anders angegeben.
 
 ![Tab „Plättchen platzieren“ mit Button „Stadt platzieren“](docs/screenshots/plaettchen-platzieren.jpg)
 
-**Großer Mars:** Ein Klick vergrößert den Mars. Ein gewähltes Feld wird vor dem Setzen bestätigt.
-
-![Vergrößerter Mars mit Bestätigungsfrage am gewählten Feld](docs/screenshots/mars-gross.jpg)
-
 **Grünfläche platzieren:** Tab und Box in Grün.
 
 ![Tab „Grünfläche platzieren“ in Grün](docs/screenshots/gruenflaeche.jpg)
@@ -41,6 +37,10 @@ Alle Aufnahmen in 1920 px Breite, außer wo anders angegeben.
 **Ozean platzieren:** Der Hinweis zeigt, wie viele Ozeane schon liegen.
 
 ![Ozean platzieren mit Hinweis „Bereits 4 von 9 Ozeanen auf dem Mars“](docs/screenshots/ozean.jpg)
+
+**Großer Mars:** Ein Klick vergrößert den Mars. Ein gewähltes Feld wird vor dem Setzen bestätigt.
+
+![Vergrößerter Mars mit Bestätigungsfrage am gewählten Feld](docs/screenshots/mars-gross.jpg)
 
 **Gespielte Karten eines Spielers:** Ein Klick auf seine Zeile öffnet sie als Overlay über der rechten Spalte.
 
