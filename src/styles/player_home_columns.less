@@ -104,6 +104,12 @@
     &:focus-visible {
       outline: none;
     }
+
+    // sticky bildet einen eigenen Stapelkontext: beim Ziehen über die linke Spalte heben, sonst verdeckt sie die Anzeige
+    &.player-home-columns__resizer--dragging,
+    &:focus-visible {
+      z-index: 200;
+    }
   }
 
   // Aufteilung in Prozent am Zeiger, solange gezogen wird (Höhe: columnResize.ts), bei Tastaturfokus an der Griffmitte
@@ -228,10 +234,12 @@
     min-width: 100%;
     margin-bottom: 0;
 
-    // .or-tab-panel: so spezifisch wie die Grundregel in log.less, die später geladen wird
+    // .or-tab-panel: so spezifisch wie die Grundregel in log.less, die später geladen wird.
+    // Volle Spaltenbreite (bis zum Rand wie Brett und Tabelle), ohne die Obergrenze des Ein-Spalten-Layouts
     .log-panel.or-tab-panel {
       height: @player-home-log-height;
       max-height: @player-home-log-height;
+      max-width: none;
     }
   }
 
