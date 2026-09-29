@@ -324,7 +324,7 @@ export class UnderworldExpansion {
     this.grant(player, token);
     player.underworldData.tokens.push({token, shelter: false, active: player.underworldData.activeBonus === token});
     for (const card of player.tableau) {
-      card.onClaim?.(player, isExcavate, space);
+      player.game.deferredActions.withSourceCard(card.name, () => card.onClaim?.(player, isExcavate, space));
     }
   }
 

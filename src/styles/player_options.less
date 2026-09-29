@@ -103,7 +103,9 @@
   color: #ffb4a6;
 }
 
-// Weitere Option gegen denselben Spieler direkt daneben (OrOptions.vue): kleinerer Abstand als zwischen Spielern
-.choice-options--players .player-option--same-player {
-  margin-left: -8px;
+// Optionen gegen denselben Spieler (OrOptions.vue): als Gruppe mit kleinerem Abstand als zwischen Spielern
+.player-option-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }

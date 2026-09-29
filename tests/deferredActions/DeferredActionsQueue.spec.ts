@@ -3,7 +3,9 @@ import {SimpleDeferredAction} from '../../src/server/deferredActions/DeferredAct
 import {DeferredActionsQueue} from '../../src/server/deferredActions/DeferredActionsQueue';
 import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {testGame} from '../TestGame';
-import {runAllActions} from '../TestingUtils';
+import {fakeCard, runAllActions} from '../TestingUtils';
+import {OlympusConference} from '../../src/server/cards/base/OlympusConference';
+import {Tag} from '../../src/common/cards/Tag';
 import {Sabotage} from '../../src/server/cards/base/Sabotage';
 import {CardName} from '../../src/common/cards/CardName';
 import {Server} from '../../src/server/models/ServerModel';
@@ -47,5 +49,33 @@ describe('DeferredActionsQueue', () => {
     queue.runAll(() => {});
 
     expect(player.getWaitingFor()?.sourceCard).is.undefined;
+  });
+
+  it('keeps the card for follow-up questions', () => {
+    const [game, player] = testGame(2);
+    const followUp = new SelectOption('second');
+    const first = new SelectOption('first').andThen(() => followUp);
+    const action = new SimpleDeferredAction(player, () => first);
+    action.sourceCard = CardName.SABOTAGE;
+    game.defer(action);
+    runAllActions(game);
+
+    player.process({type: 'option'});
+    runAllActions(game);
+
+    expect(player.getWaitingFor()).eq(followUp);
+    expect(followUp.sourceCard).eq(CardName.SABOTAGE);
+  });
+
+  it('attaches the reacting card to its reaction', () => {
+    const [game, player] = testGame(2);
+    const olympusConference = new OlympusConference();
+    olympusConference.resourceCount = 1;
+    player.playedCards.push(olympusConference);
+
+    player.playCard(fakeCard({tags: [Tag.SCIENCE]}));
+    runAllActions(game);
+
+    expect(player.getWaitingFor()?.sourceCard).eq(CardName.OLYMPUS_CONFERENCE);
   });
 });

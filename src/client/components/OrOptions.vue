@@ -1,6 +1,7 @@
 <template>
   <div :class="['wf-options', {'wf-options--tabs': asTabs}]">
-    <label v-if="showtitle"><div>{{ $t(playerinput.title) }}</div></label>
+    <!-- Entscheidung einer Karte mit eigenen Tabs: statt der Frage steht die Karte oben in der Box (CardIntroBlock) -->
+    <label v-if="showtitle && sourceCard === undefined"><div>{{ $t(playerinput.title) }}</div></label>
     <label v-if="playerinput.warning !== undefined" class="card-warning"><div>({{ $t(playerinput.warning) }})</div></label>
 
     <!-- Aktionsmenü: Tabs mit Kurzlabel und Zähler verfügbarer Einträge; leere Tabs sind abgeschwächt, aber anklickbar -->
@@ -33,7 +34,8 @@
     <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption.title)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <HandCardsPanel v-if="asTabs && handTabActive" :playerView="playerView"/>
       <!-- Erklärung, wo sonst nur ein Button stünde (tabIntro.ts): Bild, was passiert, Hinweis -->
-      <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :playerView="playerView"/>
+      <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :playerView="playerView" :card="sourceCard"/>
+      <CardIntroBlock v-else-if="asTabs && !handTabActive && sourceCard !== undefined && selectedOption !== undefined" :card="sourceCard" :title="fullTabTitle(selectedOption.title)"/>
       <!-- Weitergeben: Erklärung, was passiert (mittig mit dem Button, or-tab-panel--end) -->
       <p v-if="asTabs && !handTabActive && selectedOption !== undefined && endTabHint(selectedOption.title) !== undefined" class="or-tab-end-hint">
         {{ $t(endTabHint(selectedOption.title)!) }}
@@ -52,7 +54,21 @@
            eine Spielerwahl oder Option gegen einen Spieler wird zur Spieler-Kachel mit der betroffenen Ressource -->
       <div v-if="!asTabs && maKind === undefined && isChoice" :class="['choice-options', {'choice-options--players': hasPlayerChoice}]" role="radiogroup">
         <template v-for="(option, idx) in displayedOptions" :key="idx">
-          <template v-if="option.type === 'player'">
+          <!-- Optionen gegen einen Spieler ("Entferne 4 Stahl von …", playerTargetOption.ts): Kacheln in dessen Farbe,
+               mehrere gegen denselben Spieler als Gruppe mit kleinerem Abstand (Gesetz der Nähe) -->
+          <div v-if="targetGroupStarts(idx)" class="player-option-group">
+            <PlayerOptionTile v-for="member in targetGroup(idx)" :key="member"
+              :color="optionTarget(displayedOptions[member])!"
+              :player="findPlayer(optionTarget(displayedOptions[member])!)"
+              :effect="optionEffect(displayedOptions[member])"
+              :caption="displayedOptions[member].title"
+              :selected="selectedIdx === member"
+              :groupName="radioElementName"
+              @select="selectedOption = displayedOptions[member]"/>
+          </div>
+          <!-- weitere Mitglieder einer Gruppe stehen schon in ihr -->
+          <template v-else-if="optionTarget(option) !== undefined"></template>
+          <template v-else-if="option.type === 'player'">
             <PlayerOptionTile v-for="color in option.players" :key="color"
               :color="color"
               :player="findPlayer(color)"
@@ -61,16 +77,6 @@
               :groupName="radioElementName"
               @select="selectPlayerTile(option, $event)"/>
           </template>
-          <!-- Option gegen einen Spieler ("Entferne 4 Stahl von …", playerTargetOption.ts): Kachel in dessen Farbe -->
-          <PlayerOptionTile v-else-if="optionTarget(option) !== undefined"
-            :color="optionTarget(option)!"
-            :player="findPlayer(optionTarget(option)!)"
-            :effect="optionEffect(option)"
-            :caption="option.title"
-            :class="{'player-option--same-player': sameTargetAsPrevious(idx)}"
-            :selected="selectedIdx === idx"
-            :groupName="radioElementName"
-            @select="selectedOption = option"/>
           <label v-else :class="['choice-option', {'choice-option--selected': selectedIdx === idx}]">
             <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" class="choice-option-input">
             <span>{{ $t(option.title) }}</span>
@@ -135,6 +141,9 @@ import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import MilestoneAwardOptions from '@/client/components/MilestoneAwardOptions.vue';
 import PlayerOptionTile from '@/client/components/PlayerOptionTile.vue';
+import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
+import {inputSourceCard} from '@/client/components/inputSourceCard';
+import {CardName} from '@/common/cards/CardName';
 import {PlayerEffect, playerEffect} from '@/client/components/selectPlayerResource';
 import {optionTargetPlayer} from '@/client/components/playerTargetOption';
 import {Color, ColorWithNeutral} from '@/common/Color';
@@ -180,6 +189,7 @@ export default defineComponent({
     HandCardsTab,
     MilestoneAwardOptions,
     PlayerOptionTile,
+    CardIntroBlock,
   },
   setup() {
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
@@ -225,6 +235,10 @@ export default defineComponent({
     };
   },
   computed: {
+    // Karte, deren Wirkung diese Entscheidung auslöst (nur mit eigenen Tabs; sonst zeigt WaitingForTabs sie)
+    sourceCard(): CardName | undefined {
+      return this.asTabs ? inputSourceCard(this.playerinput) : undefined;
+    },
     // Erklärung oben in der Box der gewählten Aktion (tabIntro.ts)
     selectedIntro(): TabIntro | undefined {
       return this.selectedOption === undefined ? undefined : tabIntro(this.selectedOption);
@@ -278,10 +292,19 @@ export default defineComponent({
     optionTarget(option: PlayerInputModel): Color | undefined {
       return optionTargetPlayer(option);
     },
-    // Mehrere Optionen gegen denselben Spieler (Sabotage: Stahl oder M€) rücken zusammen (Gesetz der Nähe)
-    sameTargetAsPrevious(idx: number): boolean {
+    // Erste Option einer Folge gegen denselben Spieler (Sabotage: Stahl oder M€); dort beginnt die Gruppe
+    targetGroupStarts(idx: number): boolean {
       const target = optionTargetPlayer(this.displayedOptions[idx]);
-      return idx > 0 && target !== undefined && target === optionTargetPlayer(this.displayedOptions[idx - 1]);
+      return target !== undefined && (idx === 0 || optionTargetPlayer(this.displayedOptions[idx - 1]) !== target);
+    },
+    // Indizes der Folge gegen denselben Spieler ab idx
+    targetGroup(idx: number): Array<number> {
+      const target = optionTargetPlayer(this.displayedOptions[idx]);
+      const members: Array<number> = [];
+      for (let member = idx; member < this.displayedOptions.length && optionTargetPlayer(this.displayedOptions[member]) === target; member++) {
+        members.push(member);
+      }
+      return members;
     },
     selectPlayerTile(option: PlayerInputModel, color: ColorWithNeutral) {
       this.selectedOption = option;

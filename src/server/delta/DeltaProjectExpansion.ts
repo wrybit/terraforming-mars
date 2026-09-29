@@ -217,7 +217,7 @@ export class DeltaProjectExpansion {
         player.triggerOnNonCardTagAdded(Tag.JOVIAN);
         for (const p of player.game.playersInGenerationOrder) {
           for (const card of p.tableau) {
-            card.onNonCardTagAddedByAnyPlayer?.(p, Tag.JOVIAN);
+            player.game.deferredActions.withSourceCard(card.name, () => card.onNonCardTagAddedByAnyPlayer?.(p, Tag.JOVIAN));
           }
         }
         player.game.log('${0} gained a Jovian tag from the Delta Project', (b) => b.player(player));

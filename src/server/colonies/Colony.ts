@@ -100,7 +100,7 @@ export abstract class Colony implements IColony {
 
     for (const cardOwner of player.game.players) {
       for (const card of cardOwner.tableau) {
-        card.onColonyAddedByAnyPlayer?.(cardOwner, player);
+        player.game.deferredActions.withSourceCard(card.name, () => card.onColonyAddedByAnyPlayer?.(cardOwner, player));
       }
     }
 

@@ -1257,7 +1257,7 @@ export class Game implements IGame, Logger {
         }
       }
       for (const card of player.playedCards) {
-        card.onGlobalParameterIncrease?.(player, GlobalParameter.VENUS, steps);
+        this.deferredActions.withSourceCard(card.name, () => card.onGlobalParameterIncrease?.(player, GlobalParameter.VENUS, steps));
       }
       if (this.exploitationOfVenusInEffect) {
         player.stock.add(Resource.MEGACREDITS, steps * 2, {log: true, from: {card: CardName.EXPLOITATION_OF_VENUS}});
@@ -1307,7 +1307,7 @@ export class Game implements IGame, Logger {
       }
 
       for (const card of player.playedCards) {
-        card.onGlobalParameterIncrease?.(player, GlobalParameter.TEMPERATURE, steps);
+        this.deferredActions.withSourceCard(card.name, () => card.onGlobalParameterIncrease?.(player, GlobalParameter.TEMPERATURE, steps));
       }
       player.onGlobalParameterIncrease(GlobalParameter.TEMPERATURE, steps);
       TurmoilHandler.onGlobalParameterIncrease(player, GlobalParameter.TEMPERATURE, steps);
@@ -1413,7 +1413,8 @@ export class Game implements IGame, Logger {
   public triggerForAllCards(f: (cardOwner: IPlayer, card: ICard) => void) {
     for (const p of this.playersInGenerationOrder) {
       for (const playedCard of p.tableau) {
-        f(p, playedCard);
+        // Im Zusammenhang der Karte, damit Eingaben aus ihrer Reaktion sie im Client zeigen
+        this.deferredActions.withSourceCard(playedCard.name, () => f(p, playedCard));
       }
     }
   }
