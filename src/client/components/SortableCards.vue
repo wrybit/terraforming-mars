@@ -53,6 +53,8 @@ type DataModel = {
 type DragInternals = {
   pending?: PendingDrag;
   ghost?: HTMLElement;
+  /** Viewport-Position des Ghost bei left/top = 0 – gleicht transformierte Vorfahren aus, die fixed verschieben. */
+  ghostOrigin?: {x: number, y: number};
   suppressClick?: boolean;
 };
 
@@ -203,8 +205,7 @@ export default defineComponent({
     },
     startDrag(clientX: number, clientY: number): void {
       const pending = this.internals().pending;
-      const root = this.$refs.root as HTMLElement | undefined;
-      if (pending === undefined || root === undefined) {
+      if (pending === undefined) {
         return;
       }
       // Kopie der Karte als schwebende „Hand“-Karte; der Original-Slot bleibt als Platzhalter stehen.
@@ -212,21 +213,28 @@ export default defineComponent({
       ghost.classList.remove('sortable-placeholder');
       ghost.classList.add('sortable-ghost');
       ghost.removeAttribute('data-card-name');
-      root.appendChild(ghost);
+      // Direkt an body: sonst liegen Banner/Spielerliste (eigene Stacking-Contexts) über der Karte.
+      // Die Präferenz-Klassen (preferences_*) sitzen ebenfalls am body, das Aussehen bleibt also gleich.
+      document.body.appendChild(ghost);
+      // Ursprung einmal messen (ohne Drehung), danach nur noch rechnen.
+      ghost.style.transform = 'none';
+      ghost.style.left = '0px';
+      ghost.style.top = '0px';
+      const origin = ghost.getBoundingClientRect();
+      ghost.style.transform = '';
+      this.internals().ghostOrigin = {x: origin.left, y: origin.top};
       this.internals().ghost = ghost;
       this.dragCard = pending.cardName;
+      document.documentElement.classList.add('sortable-grabbing');
       this.positionGhost(clientX, clientY);
     },
     positionGhost(clientX: number, clientY: number): void {
-      const {pending, ghost} = this.internals();
-      const root = this.$refs.root as HTMLElement | undefined;
-      if (pending === undefined || ghost === undefined || root === undefined) {
+      const {pending, ghost, ghostOrigin} = this.internals();
+      if (pending === undefined || ghost === undefined || ghostOrigin === undefined) {
         return;
       }
-      // Relativ zum Wurzelelement statt position: fixed – transformierte Vorfahren würden fixed sonst verschieben.
-      const rootRect = root.getBoundingClientRect();
-      ghost.style.left = `${clientX - pending.offsetX - rootRect.left}px`;
-      ghost.style.top = `${clientY - pending.offsetY - rootRect.top}px`;
+      ghost.style.left = `${clientX - pending.offsetX - ghostOrigin.x}px`;
+      ghost.style.top = `${clientY - pending.offsetY - ghostOrigin.y}px`;
     },
     updateDropPosition(clientX: number, clientY: number): void {
       const root = this.$refs.root as HTMLElement | undefined;
@@ -251,8 +259,10 @@ export default defineComponent({
       }
       drag.ghost?.remove();
       drag.ghost = undefined;
+      drag.ghostOrigin = undefined;
       drag.pending = undefined;
       this.dragCard = undefined;
+      document.documentElement.classList.remove('sortable-grabbing');
       window.removeEventListener('pointermove', this.onPointerMove);
       window.removeEventListener('pointerup', this.onPointerUp);
       window.removeEventListener('pointercancel', this.onPointerCancel);

@@ -1109,10 +1109,6 @@ input[type="radio"]:checked+.filterDiv::after {
 }
 
 // Handkarten per Drag & Drop sortieren (SortableCards.vue)
-.sortable-cards-root {
-  position: relative;
-}
-
 .sortable-cards {
   >.sortable-slot {
     display: inline-block;
@@ -1126,31 +1122,44 @@ input[type="radio"]:checked+.filterDiv::after {
   }
 }
 
+// .filterDiv setzt cursor: pointer – hier soll die Hand signalisieren, dass Karten verschiebbar sind.
+.sortable-slot .filterDiv {
+  cursor: grab;
+}
+
+// Während des Ziehens überall die greifende Hand, auch außerhalb der Karten.
+html.sortable-grabbing,
+html.sortable-grabbing * {
+  cursor: grabbing !important;
+}
+
 // Andere Karten gleiten auf ihren neuen Platz statt zu springen.
 .sortable-move {
   transition: transform 0.18s ease;
 }
 
 // Freier Platz, an dem die Karte beim Loslassen landet.
-.sortable-placeholder {
-  >.cardbox {
-    visibility: hidden;
-  }
+// Der Rahmen sitzt auf der Kartenfläche selbst (.filterDiv), damit er deckungsgleich mit den Nachbarkarten ist –
+// der Slot hat durch die Kartenränder (margin) eine andere Größe.
+.sortable-placeholder .filterDiv {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: transparent;
+  box-shadow: none;
+  outline: 2px dashed rgba(255, 255, 255, 0.35);
+  outline-offset: -2px;
 
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 6px;
-    border: 2px dashed rgba(255, 255, 255, 0.45);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.06);
-    pointer-events: none;
+  &::before,
+  &::after,
+  * {
+    visibility: hidden;
   }
 }
 
 // Schwebende Karte unter dem Zeiger: leicht gedreht, hoch „angehoben“.
 .sortable-ghost {
-  position: absolute;
+  // fixed, damit die Karte nicht am Rand des Handkarten-Panels (overflow) abgeschnitten wird.
+  position: fixed;
+  margin: 0;
   z-index: 1000;
   pointer-events: none;
   cursor: grabbing;
