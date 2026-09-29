@@ -19,7 +19,7 @@
       <HandCardsPanel v-if="handTabActive" :playerView="playerView"/>
       <!-- Die Frage gehört zur Eingabe und steht daher in ihrer Box, nicht über den Tabs -->
       <!-- Feldwahl u. Ä.: Plättchen, Frage und Hinweis (tabIntro.ts); sonst nur die Frage -->
-      <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(playerinput.title)" :playerView="playerView"/>
+      <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(playerinput.title)" :playerView="playerView" :card="sourceCard"/>
       <!-- Löst eine Karte die Eingabe aus (Sabotage, Komet für Venus …): Karte, Name und Text statt "Wähle eine Option" -->
       <CardIntroBlock v-else-if="sourceCard !== undefined" v-show="!handTabActive" :card="sourceCard" :title="fullTabTitle(lead.title)"/>
       <label v-else v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(lead.title)) }}</div></label>

@@ -3,6 +3,7 @@ import {PlayerId} from '../common/Types';
 import {MILESTONE_COST, REDS_RULING_POLICY_COST} from '../common/constants';
 import {cardsFromJSON, ceosFromJSON, corporationCardsFromJSON, newCorporationCard, preludesFromJSON} from './createCard';
 import {CardName} from '../common/cards/CardName';
+import {DeferredActionsQueue} from './deferredActions/DeferredActionsQueue';
 import {CardType} from '../common/cards/CardType';
 import {Color} from '../common/Color';
 import {ICorporationCard} from './cards/corporation/ICorporationCard';
@@ -348,7 +349,7 @@ export class Player implements IPlayer {
       }
       for (const cardOwner of this.game.playersInGenerationOrder) {
         for (const card of cardOwner.tableau) {
-          card.onIncreaseTerraformRatingByAnyPlayer?.(cardOwner, this, steps);
+          this.inCardContext(card.name, () => card.onIncreaseTerraformRatingByAnyPlayer?.(cardOwner, this, steps));
         }
       }
     };
@@ -558,7 +559,7 @@ export class Player implements IPlayer {
 
     if (count > 0) {
       for (const playedCard of this.tableau) {
-        playedCard.onResourceAdded?.(this, card, count);
+        this.inCardContext(playedCard.name, () => playedCard.onResourceAdded?.(this, card, count));
       }
     }
 
@@ -629,7 +630,7 @@ export class Player implements IPlayer {
     this.heat += this.production.heat;
 
     for (const card of this.tableau) {
-      card.onProductionPhase?.(this);
+      this.inCardContext(card.name, () => card.onProductionPhase?.(this));
     }
 
     // Turn off CEO OPG actions that were activated this generation
@@ -872,7 +873,7 @@ export class Player implements IPlayer {
     // down. As I say, that's going to break a lot of things, many of which are not evident
     // in tests (because they use card.play instad of player.playCard).
     // Im Zusammenhang der Karte: Eingaben daraus zeigen im Client ihren Namen und Text (DeferredActionsQueue)
-    this.game.deferredActions.withSourceCard(selectedCard.name, () => {
+    this.inCardContext(selectedCard.name, () => {
       const action = selectedCard.play(this);
       this.defer(action, Priority.DEFAULT);
     });
@@ -917,9 +918,16 @@ export class Player implements IPlayer {
     return undefined;
   }
 
+  // Im Zusammenhang einer Karte ausführen, damit Eingaben daraus sie im Client zeigen (DeferredActionsQueue.withSourceCard).
+  // Spieler ohne Spiel (manche Tests) führen direkt aus.
+  private inCardContext<T>(card: CardName | undefined, fn: () => T): T {
+    const queue: DeferredActionsQueue | undefined = this.game?.deferredActions;
+    return queue === undefined ? fn() : queue.withSourceCard(card, fn);
+  }
+
   public triggerOnNonCardTagAdded(tag: Tag): void {
     for (const card of this.tableau) {
-      card.onNonCardTagAdded?.(this, tag);
+      this.inCardContext(card.name, () => card.onNonCardTagAdded?.(this, tag));
     }
   }
 
@@ -929,8 +937,9 @@ export class Player implements IPlayer {
     }
 
     /* A player responding to their own cards played. */
+    // Jede Reaktion im Zusammenhang ihrer Karte, damit der Client sie zeigt (DeferredActionsQueue.withSourceCard)
     for (const effectCard of this.playedCards) {
-      this.defer(effectCard.onCardPlayed?.(this, card));
+      this.inCardContext(effectCard.name, () => this.defer(effectCard.onCardPlayed?.(this, card)));
     }
 
     TurmoilHandler.applyOnCardPlayedEffect(this, card);
@@ -938,8 +947,10 @@ export class Player implements IPlayer {
     /* A player responding to any other player's card played. */
     for (const somePlayer of this.game.playersInGenerationOrder) {
       for (const effectCard of somePlayer.playedCards) {
-        const actionFromPlayedCard = effectCard.onCardPlayedByAnyPlayer?.(somePlayer, card, this);
-        this.defer(actionFromPlayedCard);
+        this.inCardContext(effectCard.name, () => {
+          const actionFromPlayedCard = effectCard.onCardPlayedByAnyPlayer?.(somePlayer, card, this);
+          this.defer(actionFromPlayedCard);
+        });
       }
     }
 
@@ -954,7 +965,7 @@ export class Player implements IPlayer {
       {selectBlueCardAction: true})
       .andThen(([card]) => {
         this.game.log('${0} used ${1} action', (b) => b.player(this).card(card));
-        this.game.deferredActions.withSourceCard(card.name, () => this.defer(card.action(this)));
+        this.inCardContext(card.name, () => this.defer(card.action(this)));
         this.actionsThisGeneration.add(card.name);
         return undefined;
       });
@@ -972,7 +983,7 @@ export class Player implements IPlayer {
       {selectBlueCardAction: true})
       .andThen(([card]) => {
         this.game.log('${0} used ${1} action', (b) => b.player(this).card(card));
-        this.game.deferredActions.withSourceCard(card.name, () => this.defer(card.action(this)));
+        this.inCardContext(card.name, () => this.defer(card.action(this)));
         this.actionsThisGeneration.add(card.name);
         return undefined;
       });
@@ -1001,7 +1012,7 @@ export class Player implements IPlayer {
     // Calculating this before playing the corporation card, which might change the player's hand size.
     const numberOfCardInHand = this.cardsInHand.length;
     ColoniesHandler.maybeActivateColonies(this.game, corporationCard);
-    this.defer(corporationCard.play(this));
+    this.inCardContext(corporationCard.name, () => this.defer(corporationCard.play(this)));
     if (corporationCard.initialAction !== undefined && corporationCard.initialActionText !== undefined) {
       this.pendingInitialActions.push(corporationCard);
     }
@@ -1031,7 +1042,7 @@ export class Player implements IPlayer {
       return;
     }
     this.game.projectDeck.discard(card);
-    card.onDiscard?.(this);
+    this.inCardContext(card.name, () => card.onDiscard?.(this));
     card.resourceCount = 0;
     this.game.log('${0} discarded ${1}', (b) => b.player(this).card(card));
   }
@@ -1528,7 +1539,7 @@ export class Player implements IPlayer {
           corp.initialActionText)
           .andThen(() => {
             game.log('${0} took the first action of ${1} corporation', (b) => b.player(this).card(corp)),
-            this.defer(corp.initialAction?.(this));
+            this.inCardContext(corp.name, () => this.defer(corp.initialAction?.(this)));
             inplaceRemove(this.pendingInitialActions, corp);
             return undefined;
           });
@@ -1702,7 +1713,9 @@ export class Player implements IPlayer {
       if (!waitingFor.optional) {
         this.timer.stop();
       }
-      this.defer(waitingFor.process(input, this));
+      // Folgefragen einer Karte (z. B. nach der Wahl eines Spielers) behalten deren Zusammenhang;
+      // waitingForCb läuft außerhalb, denn es setzt die Warteschlange mit eigenen Zusammenhängen fort
+      this.inCardContext(waitingFor.sourceCard, () => this.defer(waitingFor.process(input, this)));
       waitingForCb();
     } catch (err) {
       this.setWaitingFor(waitingFor, waitingForCb);

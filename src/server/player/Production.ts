@@ -32,7 +32,7 @@ export class Production extends BaseStock {
     }
 
     for (const card of this.player.tableau) {
-      card.onProductionGain?.(this.player, resource, amount);
+      this.player.game.deferredActions.withSourceCard(card.name, () => card.onProductionGain?.(this.player, resource, amount));
     }
   }
 }
