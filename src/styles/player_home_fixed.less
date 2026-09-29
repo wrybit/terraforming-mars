@@ -23,6 +23,12 @@
     align-items: stretch;
   }
 
+  // Ziehgriff nur so hoch wie die Spalten; seine Fensterhöhe (player_home_columns.less) würde die Zeile
+  // sonst strecken und die linke Spalte unten über das Log hinausragen lassen
+  .player-home--fixed .player-home-columns__resizer {
+    height: auto;
+  }
+
   // Rechts: feste Höhe (rightColumnFit.ts misst daran), Log wächst bis unten
   .player-home--fixed .player-home-columns__board {
     height: @player-home-fixed-height;

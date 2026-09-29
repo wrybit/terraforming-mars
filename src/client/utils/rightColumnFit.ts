@@ -20,14 +20,30 @@ const horizontalCenter = (element: Element) => {
   return rect.left + rect.width / 2;
 };
 
+// Mitte der Planetenscheibe = Mitte der Hex-Felder auf dem Mars. Der Kasten .board selbst ist breiter als die Scheibe
+// (rechts Platz für Skalen), seine Mitte liegt deshalb rechts neben dem Planeten.
+const GLOBE_SPACES_SELECTOR = '.board .board-space';
+function globeCenter(board: HTMLElement): number | undefined {
+  const spaces = [...board.querySelectorAll(GLOBE_SPACES_SELECTOR)].map((space) => space.getBoundingClientRect());
+  if (spaces.length === 0) {
+    return undefined;
+  }
+  const left = Math.min(...spaces.map((rect) => rect.left));
+  const right = Math.max(...spaces.map((rect) => rect.right));
+  return (left + right) / 2;
+}
+
 // Mars (die Kugel, nicht der ganze Brett-Kasten mit Skalen und Außenfeldern) mittig über die Meilenstein-Tabelle schieben.
 // translate verändert das Layout nicht; die Verschiebung wird einmal gemessen, weil Zoom-Ebenen sie skalieren.
-function centerMars(board: HTMLElement, globe: Element, reference: Element): void {
+function centerMars(board: HTMLElement, reference: Element): void {
   board.style.translate = '';
-  const before = horizontalCenter(globe);
+  const before = globeCenter(board);
+  if (before === undefined) {
+    return;
+  }
   const probe = 100;
   board.style.translate = `${probe}px 0`;
-  const scale = (horizontalCenter(globe) - before) / probe;
+  const scale = ((globeCenter(board) ?? before) - before) / probe;
   board.style.translate = scale > 0 ? `${(horizontalCenter(reference) - before) / scale}px 0` : '';
 }
 
@@ -63,9 +79,8 @@ function fit(column: HTMLElement): void {
     }
   }
 
-  const globe = board?.querySelector('.board');
-  if (board !== null && globe !== null && globe !== undefined && milestones !== null) {
-    centerMars(board, globe, milestones);
+  if (board !== null && milestones !== null) {
+    centerMars(board, milestones);
   }
 }
 
