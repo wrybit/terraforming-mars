@@ -27,13 +27,13 @@
     <div class="ma-table-row ma-table-status">
       <div></div><div class="ma-table-divider"></div>
       <div v-for="milestone in milestones" :key="milestone.name" class="ma-table-cell">
-        <span v-if="milestone.color" :class="ownerClasses(milestone.color)" data-test="milestone-owner"><span class="ma-table-owner-name">{{ milestone.playerName }}</span><i :class="cubeClasses(milestone.color)"></i></span>
+        <span v-if="milestone.color" :class="ownerClasses(milestone.color)" data-test="milestone-owner"><i :class="cubeClasses(milestone.color)"></i><span class="ma-table-owner-name">{{ milestone.playerName }}</span></span>
         <span v-else-if="claimedCount >= maxMilestones" class="ma-table-none">–</span>
         <span v-else class="ma-table-coin">{{ milestoneCost }}</span>
       </div>
       <div class="ma-table-divider"></div>
       <div v-for="award in awards" :key="award.name" class="ma-table-cell">
-        <span v-if="award.color" :class="ownerClasses(award.color)" data-test="award-owner"><span class="ma-table-owner-name">{{ award.playerName }}</span><i :class="cubeClasses(award.color)"></i></span>
+        <span v-if="award.color" :class="ownerClasses(award.color)" data-test="award-owner"><i :class="cubeClasses(award.color)"></i><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
         <span v-else-if="fundedCount >= maxAwards" class="ma-table-none">–</span>
         <span v-else class="ma-table-coin">{{ nextAwardCost }}</span>
       </div>
@@ -67,10 +67,10 @@ import {AWARD_ICONS, IconPart, MILESTONE_ICONS} from '@/client/components/milest
 import {scoreRanks} from '@/client/components/milestoneAwardTable/scoreRanks';
 import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
 import {glassTooltip} from '@/client/directives/GlassTooltip';
-import {observeIconFit} from '@/client/components/milestoneAwardTable/iconFit';
+import {observeHeaderFit} from '@/client/components/milestoneAwardTable/headerFit';
 
-// Aufräumfunktion der Symbol-Anpassung je Tabelle (nicht reaktiv)
-const stopIconFit = new WeakMap<object, () => void>();
+// Aufräumfunktion der Kopf-Anpassung je Tabelle (nicht reaktiv)
+const stopHeaderFit = new WeakMap<object, () => void>();
 
 type Score = {color: Color; score: number};
 
@@ -102,10 +102,10 @@ export default defineComponent({
     },
   },
   mounted() {
-    stopIconFit.set(this, observeIconFit(this.$refs.table as HTMLElement));
+    stopHeaderFit.set(this, observeHeaderFit(this.$refs.table as HTMLElement));
   },
   beforeUnmount() {
-    stopIconFit.get(this)?.();
+    stopHeaderFit.get(this)?.();
   },
   computed: {
     orderedPlayers(): Array<PublicPlayerModel> {

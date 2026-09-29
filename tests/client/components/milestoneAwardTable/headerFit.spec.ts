@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {iconZoom} from '@/client/components/milestoneAwardTable/iconFit';
+import {iconZoom} from '@/client/components/milestoneAwardTable/headerFit';
 
 describe('iconZoom', () => {
   it('never enlarges icons', () => {
