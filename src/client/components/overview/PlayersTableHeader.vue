@@ -9,7 +9,7 @@
         :data-tooltip="autoHidden.includes(section.key) ? $t(section.label) + ': ' + $t('Not enough space') : $t(section.label)"
         :data-test="'toggle-' + section.key"
         @click="$emit('toggle', section.key)">
-        <span :class="section.iconClass"></span>
+        <span :class="['players-table-toggle-icon', 'players-table-toggle-icon--' + section.icon]"></span>
       </button>
     </div>
 
@@ -55,13 +55,13 @@ import {Tag as CardTag} from '@/common/cards/Tag';
 import {ALL_RESOURCES} from '@/common/Resource';
 import {SectionVisibility, TableSection, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
 
-type SectionToggle = {key: TableSection; label: string; iconClass: string};
+type SectionToggle = {key: TableSection; label: string; icon: 'megacredit' | 'building' | 'vp'};
 
 // Icon je Schalter: typisches Symbol des Abschnitts
 const SECTION_TOGGLES: Array<SectionToggle> = [
-  {key: 'goods', label: 'Goods', iconClass: 'resource_icon resource_icon--megacredits'},
-  {key: 'tags', label: 'Tags', iconClass: 'tag-count tag-building tag-type-secondary'},
-  {key: 'score', label: 'Scoring', iconClass: 'tag-count tag-vp tag-type-main'},
+  {key: 'goods', label: 'Goods', icon: 'megacredit'},
+  {key: 'tags', label: 'Tags', icon: 'building'},
+  {key: 'score', label: 'Scoring', icon: 'vp'},
 ];
 
 export default defineComponent({

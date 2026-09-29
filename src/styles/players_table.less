@@ -164,42 +164,66 @@ each(@players, {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   width: 30px;
   height: 26px;
   padding: 0;
-  border: 0;
+  // Rand statt Schatten/Outline: folgt exakt der Rundung, auch gestrichelt
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 5px;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
 
   // Eingeschaltet, aber aus Platzgründen ausgeblendet
   &.players-table-toggle--squeezed {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
-    outline: 1px dashed rgba(255, 255, 255, 0.6);
-    outline-offset: -4px;
+    border-style: dashed;
+    border-color: rgba(255, 255, 255, 0.6);
   }
 
   &[aria-pressed="false"] {
     background: transparent;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.15);
 
     > span {
       opacity: 0.3;
       filter: grayscale(1);
     }
   }
+}
 
-  .resource_icon {
-    zoom: 0.53;
-  }
+// Eigene Symbole in fester Pixelgröße: die Sprite-Klassen der Spielerleiste haben Versatz-Ränder
+// und würden nur per zoom mit krummen Faktoren (unscharf, verschoben) passen
+@players-table-toggle-icon-size: 18px;
 
-  .tag-count {
-    zoom: 0.56;
-  }
+.players-table-toggle-icon {
+  display: block;
+  width: @players-table-toggle-icon-size;
+  height: @players-table-toggle-icon-size;
+  background: center / contain no-repeat;
+}
 
-  .tag-type-main {
-    zoom: 0.48;
+.players-table-toggle-icon--megacredit {
+  background-image: url(./assets/resources/megacredit.png);
+}
+
+.players-table-toggle-icon--building {
+  border-radius: 50%;
+  background-image: url(./assets/tags/building.png);
+  background-size: 112%; // Bild hat einen hellen Rand, der sonst als Ring stehen bliebe
+}
+
+// Siegpunkte wie im Spiel: goldenes Schild mit "VP"
+.players-table-toggle-icon--vp {
+  width: @players-table-toggle-icon-size + 4px;
+  border-radius: 3px;
+  background: linear-gradient(#cc8b00, #805700, #805700);
+  font: 11px/@players-table-toggle-icon-size Prototype, sans-serif;
+  color: #000;
+  text-align: center;
+  text-shadow: 0 0 3px darkorange;
+
+  &::before {
+    content: "VP";
   }
 }
 
