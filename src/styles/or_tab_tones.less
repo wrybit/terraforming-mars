@@ -55,3 +55,38 @@ each(@or-tab-tones, {
 .or-tab-panel--tone-danger .card-warning {
   color: #fff;
 }
+
+// Symbol-Tabs Weitergeben/Beenden (or-tab--icon): kräftiger als die übrigen Tabs, damit man sie sofort findet.
+// Symbol in leuchtender Farbe mit Schein, Fläche und Rahmen deutlich getönt. Name = Ton, Wert = Leuchtfarbe.
+@or-tab-icon-tones:
+  success #3dff6e, // quietschiges Grün
+  danger #ff4a1c; // feuriges Rot
+
+each(@or-tab-icon-tones, {
+  @tone: extract(@value, 1);
+  @glow: extract(@value, 2);
+
+  .or-tab--icon.or-tab--tone-@{tone}:not(.or-tab--active) {
+    color: @glow;
+    background: fade(@glow, 16%);
+    border-color: fade(@glow, 65%);
+
+    .or-tab-icon {
+      filter: drop-shadow(0 0 4px fade(@glow, 70%));
+    }
+  }
+
+  .or-tab--icon.or-tab--tone-@{tone}:not(.or-tab--active):hover {
+    background: fade(@glow, 28%);
+    border-color: @glow;
+  }
+
+  // Aktiv: Symbol bleibt leuchtend auf der getönten Fläche des aktiven Tabs
+  .or-tab--icon.or-tab--tone-@{tone}.or-tab--active {
+    color: @glow;
+
+    .or-tab-icon {
+      filter: drop-shadow(0 0 4px fade(@glow, 70%));
+    }
+  }
+});
