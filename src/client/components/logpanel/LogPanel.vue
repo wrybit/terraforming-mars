@@ -122,8 +122,11 @@ export default defineComponent({
       // (position: fixed), damit sie nicht vom Spalten-Overflow abgeschnitten wird
       const rowElement = event.currentTarget as HTMLElement;
       const panel = (rowElement.closest('.log-panel') ?? rowElement).getBoundingClientRect();
+      // Mitte des sichtbaren Teils: ragt das Log unten aus dem Fenster, würde die Karte sonst mit abgeschnitten
+      const visibleTop = Math.max(panel.top, 0);
+      const visibleBottom = Math.min(panel.bottom, window.innerHeight);
       this.typedRefs.messageInspector.preview(message, {
-        top: panel.top + panel.height / 2,
+        top: (visibleTop + visibleBottom) / 2,
         right: window.innerWidth - panel.right + LOG_PREVIEW_INSET,
       });
     },

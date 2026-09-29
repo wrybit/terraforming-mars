@@ -1,7 +1,8 @@
 <template>
   <!-- Modal an body hängen: im Log (eigener Stacking-Context) läge es sonst unter den Icons oben rechts -->
   <Teleport to="body" :disabled="!modal">
-  <div :class="['card-panel', {'card-panel--floating': floating, 'card-panel--modal': modal}]" v-if="message !== undefined && show">
+  <!-- Wurzel ist das Teleport, deshalb landen Attribute (z. B. die Position der Hover-Vorschau als style) nicht von selbst hier -->
+  <div :class="['card-panel', {'card-panel--floating': floating, 'card-panel--modal': modal}]" v-bind="$attrs" v-if="message !== undefined && show">
     <!-- Hover-Vorschau schließt sich beim Verlassen der Zeile selbst, braucht keinen Button -->
     <AppButton v-if="!floating" size="big" type="close" :disableOnServerBusy="false" @click="hideMe" align="right"/>
     <div id="log_panel_card" class="cardbox" v-for="name in cards" :key="name">
@@ -34,6 +35,8 @@ import {logMessageCards, logMessageColonies, logMessageGlobalEvents} from '@/cli
 
 export default defineComponent({
   name: 'LogPanel',
+  // Attribute gibt das Template selbst an das Panel weiter (Teleport als Wurzel)
+  inheritAttrs: false,
   props: {
     message: {
       type: Object as () => LogMessage,
