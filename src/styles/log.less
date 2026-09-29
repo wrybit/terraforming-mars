@@ -93,11 +93,14 @@
 // Größe der Karten in der Hover-Vorschau; bestimmt auch die Log-Höhe im Zwei-Spalten-Layout (player_home_columns.less)
 @log-card-preview-zoom: 0.8;
 
-// Hover-Vorschau: liegt bündig oben rechts über dem Log (gleich hoch wie eine Karte), damit nichts verrutscht.
+// Hover-Vorschau: vertikal mittig und knapp vor dem rechten Rand über dem Log, mit Schlagschatten.
 // fixed statt absolute, weil das Log in einer Spalte mit overflow liegen kann (player_home_columns.less)
 .card-panel--floating {
-  position: fixed; // top/right setzt LogMessageInspector
+  position: fixed; // top (Mitte) und right setzt LogMessageInspector
   z-index: 100;
+  transform: translateY(-50%);
+  // Schatten folgt der Kartenform (runde Ecken)
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.7));
   display: flex;
   gap: 8px;
   // Maus bleibt auf den Log-Zeilen; sonst würde die Vorschau den Hover abfangen und flackern

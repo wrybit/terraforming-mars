@@ -6,8 +6,12 @@
 // Abstand des sticky Bretts zum oberen Fensterrand
 @player-home-sticky-top: 10px;
 // Abstand zwischen den Spalten größer als zwischen Blöcken einer Spalte (20px) – Gesetz der Nähe;
-// der Überhang des Bretts (s.u.) kommt optisch noch dazu
+// der Überhang des Bretts (s.u.) kommt optisch noch dazu. Der Ziehgriff liegt mittig in diesem Abstand.
 @player-home-columns-gap: 24px;
+@player-home-resizer-width: 12px;
+// Standardaufteilung links/rechts; der Ziehgriff überschreibt sie per CSS-Variable (columnResize.ts)
+@player-home-main-share: 65fr;
+@player-home-board-share: 35fr;
 // So weit ragen Brett-Elemente links bzw. rechts über .board-cont hinaus
 @player-home-board-overhang-left: 40px;
 @player-home-board-overhang-right: 24px;
@@ -18,9 +22,12 @@
 @media only screen and (min-width: @player-home-columns-min-width) {
   .player-home-columns {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "main board";
-    column-gap: @player-home-columns-gap;
+    grid-template-columns:
+      minmax(0, var(--player-home-main-share, @player-home-main-share))
+      @player-home-resizer-width
+      minmax(0, var(--player-home-board-share, @player-home-board-share));
+    grid-template-areas: "main resizer board";
+    column-gap: ((@player-home-columns-gap - @player-home-resizer-width) / 2);
     align-items: start;
   }
 
@@ -42,8 +49,60 @@
     padding-right: @toolbar-occupied-width + @player-home-columns-gap;
 
     // Direktes Kind: spezifischer als das feste Layout (player_home_fixed.less), das die Spalte als Flexbox anzeigt
-    > .player-home-columns__board {
+    > .player-home-columns__board,
+    > .player-home-columns__resizer {
       display: none;
+    }
+  }
+
+  // Ziehgriff zwischen den Spalten: verteilt die Breite (columnResize.ts); Doppelklick setzt zurück
+  .player-home-columns__resizer {
+    grid-area: resizer;
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: @player-home-sticky-top;
+    height: calc(100vh - 2 * @player-home-sticky-top);
+    cursor: col-resize;
+    touch-action: none;
+
+    // Sichtbare Linie mit Griff in der Mitte
+    &::before {
+      content: "";
+      width: 2px;
+      height: 100%;
+      border-radius: 1px;
+      background: rgba(255, 255, 255, 0.12);
+      transition: background 0.15s;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 40px;
+      transform: translate(-50%, -50%);
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.35);
+      transition: background 0.15s;
+    }
+
+    &:hover::before,
+    &:focus-visible::before,
+    &.player-home-columns__resizer--dragging::before {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    &:hover::after,
+    &:focus-visible::after,
+    &.player-home-columns__resizer--dragging::after {
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    &:focus-visible {
+      outline: none;
     }
   }
 
@@ -118,6 +177,8 @@
   .player-home-columns__mars .board-cont {
     margin-top: 0;
     margin-bottom: 28px;
+    // Grundzoom: Brett nie breiter als die Spalte (rightColumnFit.ts), ab Stufe 1 überschrieben
+    zoom: var(--board-fit-zoom, 1);
   }
 
   // Meilensteine & Auszeichnungen als Tabelle (milestone_award_table.less) statt der Kartenreihen
@@ -161,17 +222,5 @@
     .card-panel--floating .card-container {
       zoom: 1;
     }
-  }
-}
-
-// Auf mittleren Breiten (Laptops) Brett verkleinern, sonst wird die linke Spalte so schmal,
-// dass die sticky Spielerleiste mehrfach umbricht und den halben Bildschirm belegt
-@player-home-board-compact-max-width: 1699px;
-@player-home-board-compact-zoom: 0.8;
-
-@media only screen and (min-width: @player-home-columns-min-width) and (max-width: @player-home-board-compact-max-width) {
-  // Nur das Brett verkleinern, Log-Schrift bleibt lesbar
-  .player-home-columns__mars {
-    zoom: @player-home-board-compact-zoom;
   }
 }

@@ -34,7 +34,7 @@
     <div>
       <!-- Zwei-Spalten-Layout: Brett steht im DOM zuerst (Hotkey-Reihenfolge, schmale Screens), wird per CSS rechts platziert -->
       <!-- Startphase: Spielplan einklappbar (SetupBoardToggle), dann haben die Auswahlspalten die volle Breite -->
-      <div :class="['player-home-columns', {'player-home-columns--board-collapsed': isSetupPhase && boardCollapsed}]">
+      <div :class="['player-home-columns', {'player-home-columns--board-collapsed': isSetupPhase && boardCollapsed}]" :ref="trackColumns">
         <div class="player-home-columns__board" :ref="trackBoardColumn">
           <div class="player_home_block player-home-columns__mars">
             <GameBoardView
@@ -53,6 +53,14 @@
             <LogPanel :viewModel="playerView" :step="game.step" @spaceClicked="onSpaceClicked"/>
           </div>
         </div>
+
+        <!-- Ziehgriff zwischen den Spalten (nur im Zwei-Spalten-Layout sichtbar): verteilt die Breite, Doppelklick = Standard -->
+        <div class="player-home-columns__resizer"
+          role="separator" aria-orientation="vertical" tabindex="0"
+          :aria-valuenow="boardShare" :aria-valuemin="minBoardShare" :aria-valuemax="maxBoardShare"
+          :aria-label="$t('Column width')" :title="$t('Column width')"
+          @pointerdown="startResize" @dblclick="resetResize"
+          @keydown.left.prevent="nudgeResize(1)" @keydown.right.prevent="nudgeResize(-1)"></div>
 
         <div class="player-home-columns__main">
           <a class="hotkey-target"></a>
@@ -153,10 +161,16 @@ import {CardModel} from '@/common/models/CardModel';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
 import {observeBoardColumn} from '@/client/utils/boardColumnPosition';
 import {observeRightColumnFit} from '@/client/utils/rightColumnFit';
+import {
+  DEFAULT_BOARD_SHARE, KEYBOARD_STEP, MAX_BOARD_SHARE, MIN_BOARD_SHARE,
+  applyBoardShare, loadBoardShare, setBoardShare, startColumnResize,
+} from '@/client/utils/columnResize';
 import {allCardsInHand, isHandInInputTabs} from '@/client/utils/handCards';
 
 // Aufräumfunktion der Spalten-Beobachtung (Position fürs Modal, Platzausnutzung); pro Seite gibt es nur eine Spieleransicht
 let stopObservingBoardColumn: (() => void) | undefined;
+// Spalten-Container für den Ziehgriff; pro Seite gibt es nur eine Spieleransicht
+let columnsElement: HTMLElement | undefined;
 
 function observeBoardColumnFully(column: HTMLElement): () => void {
   const stopPosition = observeBoardColumn(column);
@@ -176,7 +190,19 @@ export default defineComponent({
       required: true,
     },
   },
+  data() {
+    return {
+      // Anteil der rechten Spalte in Prozent (columnResize.ts)
+      boardShare: loadBoardShare(),
+    };
+  },
   computed: {
+    minBoardShare(): number {
+      return MIN_BOARD_SHARE;
+    },
+    maxBoardShare(): number {
+      return MAX_BOARD_SHARE;
+    },
     // Spielplan in der Startphase eingeklappt (gemeinsamer Zustand, setupBoardCollapsed.ts)
     boardCollapsed(): boolean {
       return setupBoardCollapsed.value;
@@ -237,6 +263,31 @@ export default defineComponent({
     isHandInInputTabs,
     playersToWaitFor,
     // Funktions-Ref: wird mit dem Element bzw. beim Entfernen mit null aufgerufen
+    // Funktions-Ref des Spalten-Containers: gespeicherte Aufteilung sofort anwenden
+    trackColumns(element: unknown) {
+      columnsElement = element instanceof HTMLElement ? element : undefined;
+      if (columnsElement !== undefined) {
+        applyBoardShare(columnsElement, this.boardShare);
+      }
+    },
+    startResize(event: PointerEvent) {
+      if (columnsElement !== undefined) {
+        startColumnResize(event, columnsElement, (share) => {
+          this.boardShare = share;
+        });
+      }
+    },
+    resetResize() {
+      if (columnsElement !== undefined) {
+        this.boardShare = setBoardShare(columnsElement, DEFAULT_BOARD_SHARE);
+      }
+    },
+    // Pfeiltaste links schiebt den Griff nach links, die rechte Spalte wird breiter
+    nudgeResize(direction: number) {
+      if (columnsElement !== undefined) {
+        this.boardShare = setBoardShare(columnsElement, this.boardShare + direction * KEYBOARD_STEP);
+      }
+    },
     trackBoardColumn(element: unknown) {
       stopObservingBoardColumn?.();
       stopObservingBoardColumn = element instanceof HTMLElement ? observeBoardColumnFully(element) : undefined;

@@ -73,6 +73,9 @@ type LogPanelModel = {
   following: boolean,
 };
 
+// Abstand der Hover-Vorschau zum rechten Rand des Logs
+const LOG_PREVIEW_INSET = 3;
+
 export default defineComponent({
   name: 'LogPanel',
   props: {
@@ -121,13 +124,13 @@ export default defineComponent({
       if (!this.canHover() || needsModalPreview(message)) {
         return;
       }
-      // Vorschau bündig oben rechts im Log-Panel, in Fensterkoordinaten (position: fixed),
-      // damit sie nicht vom Spalten-Overflow abgeschnitten wird
+      // Vorschau vertikal mittig im Log-Panel, knapp vor dessen rechtem Rand, in Fensterkoordinaten
+      // (position: fixed), damit sie nicht vom Spalten-Overflow abgeschnitten wird
       const rowElement = event.currentTarget as HTMLElement;
       const panel = (rowElement.closest('.log-panel') ?? rowElement).getBoundingClientRect();
       this.typedRefs.messageInspector.preview(message, {
-        top: panel.top,
-        right: window.innerWidth - panel.right,
+        top: panel.top + panel.height / 2,
+        right: window.innerWidth - panel.right + LOG_PREVIEW_INSET,
       });
     },
     messageUnhovered() {

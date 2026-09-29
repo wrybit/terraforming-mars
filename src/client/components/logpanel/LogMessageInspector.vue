@@ -21,7 +21,7 @@ defineProps<{
 }>();
 
 const selectedMessage = ref<LogMessage | undefined>(undefined);
-// Fensterkoordinaten der oberen rechten Ecke
+// Fensterkoordinaten: vertikale Mitte (top) und rechte Kante der Vorschau
 type PreviewPosition = {top: number, right: number};
 
 // undefined = per Klick angeheftet (Touch), sonst Hover-Vorschau an der Log-Zeile
