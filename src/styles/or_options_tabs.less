@@ -245,8 +245,16 @@
 
 // Der Abstand rechts an jeder Karte ersetzt am Zeilenende den Innenabstand der Box. Sonst zählten dort
 // Innenabstand + Kartenabstand, und die letzte Karte bräche um, obwohl sie noch passt.
+@or-tab-panel-card-padding-right: max(0px, 16px - @or-tab-panel-card-gap);
+
 .or-tab-panel:has(.card-container) {
-  padding-right: max(0px, 16px - @or-tab-panel-card-gap);
+  padding-right: @or-tab-panel-card-padding-right;
+
+  // Der Fuß (tab_panel_footer.less) gleicht den Innenabstand per negativem Rand aus – hier den verkleinerten,
+  // sonst ragt er rechts aus der Box und der Button klebt am Rand
+  > .or-tab-footer {
+    margin-right: -@or-tab-panel-card-padding-right;
+  }
 }
 
 // Erklärung einer Feldauswahl im Aktionsmenü (OrOptions): Plättchen-Bild, was passiert, wo man klickt
