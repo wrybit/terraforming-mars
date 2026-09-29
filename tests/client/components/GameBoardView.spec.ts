@@ -3,6 +3,7 @@ import {expect} from 'chai';
 import {globalConfig} from './getLocalVue';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import {fakeGameModel} from './testHelpers';
+import {placementZoom, releasePlacementZoom, requestPlacementZoom} from '@/client/components/board/placementZoom';
 
 describe('GameBoardView', () => {
   it('mounts without errors', () => {
@@ -38,5 +39,34 @@ describe('GameBoardView', () => {
     selectSpace.remove();
     await board.trigger('click');
     expect((wrapper.vm as any).boardZoomOpen).to.be.true;
+  });
+
+  it('follows placement zoom requests and releases them when closed', async () => {
+    releasePlacementZoom();
+    const wrapper = shallowMount(GameBoardView, {
+      ...globalConfig,
+      props: {
+        game: fakeGameModel(),
+        tileView: 'show',
+        players: [],
+      },
+    });
+    const vm = wrapper.vm as any;
+
+    requestPlacementZoom();
+    await wrapper.vm.$nextTick();
+    expect(vm.boardZoomOpen).to.be.true;
+
+    // Schließen durch den Spieler: Feldwahl läuft auf dem kleinen Brett weiter
+    vm.closeBoardZoom();
+    expect(vm.boardZoomOpen).to.be.false;
+    expect(placementZoom.requested).to.be.false;
+
+    // Bestätigte Platzierung: Brett wieder klein
+    requestPlacementZoom();
+    await wrapper.vm.$nextTick();
+    releasePlacementZoom();
+    await wrapper.vm.$nextTick();
+    expect(vm.boardZoomOpen).to.be.false;
   });
 });

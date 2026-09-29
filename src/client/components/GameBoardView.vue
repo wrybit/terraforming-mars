@@ -12,7 +12,7 @@
 
   <!-- Zweite Brett-Instanz nur zum Ansehen. Die IDs darin (main_board usw.) gibt es dann doppelt;
        getElementById liefert aber das erste Vorkommen, und das Modal hängt am Ende von body -->
-  <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" @close="boardZoomOpen = false">
+  <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" @close="closeBoardZoom" @rendered="notifyZoomBoardRendered">
     <Board
       v-bind="boardProps"
       @toggleTileView="$emit('toggleTileView')"
@@ -55,6 +55,7 @@ import {Color} from '@/common/Color';
 import Board from '@/client/components/Board.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
+import {notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
 import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
@@ -87,6 +88,9 @@ export default defineComponent({
     },
   },
   emits: ['toggleTileView'],
+  setup() {
+    return {placementZoom};
+  },
   data() {
     return {
       boardZoomOpen: false,
@@ -122,7 +126,31 @@ export default defineComponent({
       };
     },
   },
+  watch: {
+    // Plättchen platzieren: Brett groß per Button in der Feldwahl, nach der Bestätigung wieder klein (placementZoom.ts)
+    // immediate: Die Feldwahl kann vor dem Brett gemountet sein (z. B. beim Neuladen der Seite)
+    'placementZoom.requested': {
+      immediate: true,
+      handler(requested: boolean) {
+        if (requested) {
+          this.openBoardZoom();
+        } else {
+          this.boardZoomOpen = false;
+        }
+      },
+    },
+  },
   methods: {
+    openBoardZoom() {
+      this.columnBoardElement = (this.$refs.columnBoard as {$el?: HTMLElement} | undefined)?.$el;
+      this.boardZoomOpen = true;
+    },
+    // Schließen per Hintergrund, ✕ oder Escape: eine laufende Feldwahl geht auf dem kleinen Brett weiter
+    closeBoardZoom() {
+      this.boardZoomOpen = false;
+      releasePlacementZoom();
+    },
+    notifyZoomBoardRendered,
     // Klick auf den Mars vergrößert ihn – außer während einer Feldwahl
     // und auf Bedienelementen des Bretts
     onBoardClick(event: MouseEvent) {
@@ -133,8 +161,7 @@ export default defineComponent({
       if (isBoardPlacementActive()) {
         return;
       }
-      this.columnBoardElement = (this.$refs.columnBoard as {$el?: HTMLElement} | undefined)?.$el;
-      this.boardZoomOpen = true;
+      this.openBoardZoom();
     },
     highlightSpace(spaceId: SpaceId) {
       scrollToSpace(spaceId);

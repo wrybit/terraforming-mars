@@ -58,3 +58,8 @@
 body:not(:has(.select_space_cont)) .board-cont--zoomable:not(:has(.board-space--available)) {
   cursor: zoom-in;
 }
+
+// Vergrößerter Mars während einer Feldwahl: im Brett wird platziert, nicht verkleinert
+body:has(.select_space_cont) .board-zoom-content {
+  cursor: default;
+}

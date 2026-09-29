@@ -19,6 +19,7 @@
 import {nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordinator';
 import {animateBoardZoom} from '@/client/components/board/boardZoomAnimation';
+import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 
 // Freiraum rund um das Brett, damit es nicht am Fensterrand klebt
 const VIEWPORT_MARGIN = 24;
@@ -31,6 +32,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: 'close'): void;
+  // Brett im Modal ist gerendert (vor der Flug-Animation)
+  (event: 'rendered'): void;
 }>();
 
 // Bleibt beim Schließen true, bis die Rück-Animation fertig ist
@@ -75,6 +78,7 @@ async function show() {
   visible.value = true;
   await nextTick();
   fitToViewport();
+  emit('rendered');
   // Neuen zoom erst rendern, sonst misst die Animation das Brett noch in der alten Größe
   await nextTick();
   props.origin?.classList.add('board-zoom-origin--hidden');
@@ -97,11 +101,16 @@ function onBackdropClick(event: MouseEvent) {
   if (target !== null && target.closest('.hide-tile-button') !== null) {
     return;
   }
+  // Während einer Feldwahl wird im Brett platziert; nur der Hintergrund verkleinert es
+  if (target !== null && target.closest('.board-zoom-content') !== null && isBoardPlacementActive()) {
+    return;
+  }
   emit('close');
 }
 
 function closeOnEscape(event: KeyboardEvent) {
-  if (props.open && event.key === 'Escape') {
+  // Offene Platzier-Bestätigung (SpaceConfirmPopover) nimmt Escape selbst als "Nein"
+  if (props.open && event.key === 'Escape' && document.querySelector('.space-confirm') === null) {
     emit('close');
   }
 }

@@ -10,6 +10,10 @@
       {{ $t(playerinput.title) }}
       <GoToMap :playerinput="playerinput"/>
     </div>
+    <!-- Übergang zum großen Brett bewusst per Button: automatisches Aufklappen wirkt störend -->
+    <div v-if="marsPlacement" class="select-space-zoom">
+      <button type="button" class="btn btn-primary btn-lg select-space-zoom-button" @click="enlargeBoard" v-i18n>Show Mars enlarged</button>
+    </div>
     <div v-if="warning" class="nes-container is-rounded">
       <span class="nes-text is-warning" v-i18n>{{ warning }}</span>
       <GoToMap :playerinput="playerinput"/>
@@ -25,8 +29,11 @@ import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesMana
 import {SelectSpaceResponse} from '@/common/inputs/InputResponse';
 import SpaceConfirmPopover from '@/client/components/SpaceConfirmPopover.vue';
 import {previewTileClass, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {placementZoom, releasePlacementZoom, requestPlacementZoom} from '@/client/components/board/placementZoom';
 
 const PREVIEW_CLASS = 'space-tile-preview';
+// Felder auf dem Mars-Brett (inkl. Kolonie-Felder daneben); nur für sie wird das Brett vergrößert, nicht für den Mond
+const MARS_REGION_SELECTOR = '#main_board, #colony_spaces';
 import GoToMap from '@/client/components/waitingFor/GoToMap.vue';
 import {SpaceId} from '@/common/Types';
 
@@ -37,6 +44,8 @@ type DataModel = {
   confirmAnchor: HTMLElement | undefined,
   spaceId: SpaceId | undefined;
   warning: string | undefined;
+  // Wählbare Felder liegen auf dem Mars (nicht nur auf dem Mond): Button zum Vergrößern anzeigen
+  marsPlacement: boolean;
 };
 
 export default defineComponent({
@@ -63,6 +72,9 @@ export default defineComponent({
       required: true,
     },
   },
+  setup() {
+    return {placementZoom};
+  },
   data(): DataModel {
     return {
       spaces: new Set(this.playerinput.spaces),
@@ -70,6 +82,7 @@ export default defineComponent({
       confirmAnchor: undefined,
       spaceId: undefined,
       warning: undefined,
+      marsPlacement: false,
     };
   },
   components: {
@@ -129,6 +142,7 @@ export default defineComponent({
     },
     confirmPlacement() {
       this.confirmAnchor = undefined;
+      releasePlacementZoom();
       this.removeTilePreview();
       const tiles = this.getSelectableSpaces();
       tiles.forEach((tile) => {
@@ -155,15 +169,16 @@ export default defineComponent({
     getSelectableSpaces(): Array<HTMLElement> {
       const spaces: Array<HTMLElement> = [];
 
+      // Alle Vorkommen jeder Region: Das vergrößerte Brett (BoardZoomModal) ist eine zweite Instanz mit denselben IDs,
+      // getElementById fände nur das Brett in der Spalte
       const regions = ['main_board', 'moon_board', 'colony_spaces', 'moon_board_outer_spaces'];
       for (const region of regions) {
-        const board = document.getElementById(region);
-        if (board !== null) {
+        document.querySelectorAll(`[id="${region}"]`).forEach((board) => {
           const array = board.getElementsByClassName('board-space-selectable');
           for (let i = 0, length = array.length; i < length; i++) {
             spaces.push(array[i] as HTMLElement);
           }
-        }
+        });
       }
 
       return spaces;
@@ -191,24 +206,43 @@ export default defineComponent({
       }
       this.onsave({type: 'space', spaceId: this.spaceId});
     },
+    enlargeBoard() {
+      requestPlacementZoom();
+    },
+    // Wählbare Felder markieren und klickbar machen; liefert die gebundenen Felder
+    bindSpaces(): Array<HTMLElement> {
+      this.disableAnimation();
+      const tiles = this.getSelectableSpaces();
+      this.animateSpaces(tiles);
+      const bound: Array<HTMLElement> = [];
+      for (const tile of tiles) {
+        const spaceId = tile.getAttribute('data_space_id') as SpaceId;
+        if (spaceId === null || this.spaces.has(spaceId) === false) {
+          continue;
+        }
+        tile.onclick = () => this.onTileSelected(tile);
+        bound.push(tile);
+      }
+      return bound;
+    },
+  },
+  watch: {
+    // Großes Brett neu eingeblendet: seine Felder kennen die Feldwahl noch nicht.
+    // Nicht während einer offenen Bestätigung, sonst gingen deren Markierung und Vorschau verloren
+    'placementZoom.boardRenderCount'() {
+      if (this.confirmAnchor === undefined && this.spaceId === undefined) {
+        this.bindSpaces();
+      }
+    },
   },
   beforeUnmount() {
     this.removeTilePreview();
+    releasePlacementZoom();
   },
   mounted() {
-    this.disableAnimation();
-    const tiles = this.getSelectableSpaces();
-    this.animateSpaces(tiles);
-    for (let i = 0, length = tiles.length; i < length; i++) {
-      const tile = tiles[i];
-      const spaceId = tile.getAttribute('data_space_id') as SpaceId;
-
-      if (spaceId === null || this.spaces.has(spaceId) === false) {
-        continue;
-      }
-
-      tile.onclick = () => this.onTileSelected(tile);
-    }
+    const bound = this.bindSpaces();
+    // Großes Brett schließt sich nach der Bestätigung von selbst (confirmPlacement)
+    this.marsPlacement = bound.some((tile) => tile.closest(MARS_REGION_SELECTOR) !== null);
   },
 });
 

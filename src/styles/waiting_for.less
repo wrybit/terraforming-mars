@@ -41,3 +41,24 @@
     color: red;
   }
 }
+
+// Button "Mars groß anzeigen" in der Feldwahl (SelectSpace.vue): mittig, mit Luft zum Einleitungstext darüber
+.select-space-zoom {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0 16px;
+}
+
+// In der Tab-Box genau in deren Mitte wie beim Weitergeben/Beenden (or-tab-panel--end, tab_panel_footer.less);
+// als Überlagerung (Bezug: .or-tab-panel ist positioniert, frosted_surface.less), damit der Einleitungstext oben bleibt
+.or-tab-panel .select-space-zoom {
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  margin: 0;
+  pointer-events: none; // Box darunter bleibt bedienbar, nur der Button fängt Klicks
+
+  .select-space-zoom-button {
+    pointer-events: auto;
+  }
+}
