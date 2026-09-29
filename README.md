@@ -8,19 +8,57 @@
 
 - **Zwei Spalten** ab 1400 px Fensterbreite: links das Spielgeschehen, rechts Mars, Meilensteine, Auszeichnungen und Log. Der Mars bleibt beim Scrollen sichtbar. Die Spaltenbreite lässt sich mit einem Griff verstellen.
 - **Spielerliste als Tabelle:** Vorrat groß, Produktion daneben, Stahl- und Titanwert als Badge. Tags und Wertung stehen als kleinere Zähler dahinter.
-- **Startauswahl** mit Konzern und Kartenkauf als nebeneinander vergleichbare Spalten. Eine Bilanz-Leiste zeigt Start-M€, Kaufkosten und Rest. Der Spielplan lässt sich einklappen.
+- **Startauswahl** mit Konzern, Präludien und Kartenkauf als nebeneinander vergleichbare Spalten. Eine Bilanz-Leiste zeigt Start-M€, Kaufkosten und Rest. Der Spielplan lässt sich einklappen.
 - **Handkarten** per Drag & Drop sortierbar. Die Reihenfolge gilt auch im Bauen- und Verkaufen-Dialog. Aktive Aktionskarten stehen als eigener Block darüber.
 - **Plättchen platzieren:** Ein Button vergrößert den Mars. Nach dem Platzieren wird er per Animation wieder klein.
 - **Aktionen als Tabs** mit einheitlichen Buttons. Hinweise zeigen z. B. die Temperatur vorher und nachher sowie die Anzahl der Ozeane.
 - **Spielende** als Meldung über dem Mars, danach geht es automatisch zur Ergebnisseite.
 
-**Startauswahl**
+## Screenshots
 
-![Startauswahl: Konzern und Kartenkauf als Spalten, Bilanz-Leiste, Mars rechts](docs/screenshots/startauswahl.jpg)
+Alle Aufnahmen in 1920 px Breite, außer wo anders angegeben.
 
-**Spielansicht**
+**Startauswahl mit Präludien:** Konzern, Präludien und Kartenkauf als Spalten, unten die Bilanz-Leiste.
 
-![Spielansicht: Spielertabelle, Aktions-Tabs, rechts Mars, Meilenstein-Tabelle und Log](docs/screenshots/spielansicht.jpg)
+![Startauswahl mit Konzern-, Präludium- und Kartenkauf-Spalte, Bilanz-Leiste mit Beginne-Button](docs/screenshots/startauswahl.jpg)
+
+**Spielansicht:** Spielertabelle, Aktionen als Tabs, Handkarten mit aktiven Aktionskarten darüber. Rechts Mars, Meilensteine, Auszeichnungen und Log.
+
+![Spielansicht mitten im Spiel](docs/screenshots/spielansicht.jpg)
+
+**Plättchen platzieren:** Der Button nennt das Plättchen und was als Nächstes passiert.
+
+![Tab „Plättchen platzieren“ mit Button „Stadt platzieren“](docs/screenshots/plaettchen-platzieren.jpg)
+
+**Großer Mars:** Ein Klick vergrößert den Mars. Ein gewähltes Feld wird vor dem Setzen bestätigt.
+
+![Vergrößerter Mars mit Bestätigungsfrage am gewählten Feld](docs/screenshots/mars-gross.jpg)
+
+**Grünfläche platzieren:** Tab und Box in Grün.
+
+![Tab „Grünfläche platzieren“ in Grün](docs/screenshots/gruenflaeche.jpg)
+
+**Ozean platzieren:** Der Hinweis zeigt, wie viele Ozeane schon liegen.
+
+![Ozean platzieren mit Hinweis „Bereits 4 von 9 Ozeanen auf dem Mars“](docs/screenshots/ozean.jpg)
+
+**Gespielte Karten eines Spielers:** Ein Klick auf seine Zeile öffnet sie als Overlay über der rechten Spalte.
+
+![Overlay mit den gespielten Karten des Gegners](docs/screenshots/karten-overlay.jpg)
+
+**Log:** Beim Hovern über einen Kartennamen erscheint die Karte daneben.
+
+![Kartenvorschau beim Hovern im Log](docs/screenshots/log-hover.jpg)
+
+**3000 px breit:** Die Spielertabelle zeigt zusätzlich alle Tags.
+
+![Spielansicht in 3000 px Breite](docs/screenshots/breit-3000.jpg)
+
+**Spielende:** Die Meldung schwebt über dem Mars, danach geht es automatisch zur Ergebnisseite.
+
+![Meldung „Das Spiel ist zu Ende!“ über dem Mars](docs/screenshots/spielende.jpg)
+
+![Ergebnisseite mit Siegpunkten, finalem Spielbrett und Verlauf](docs/screenshots/ergebnis.jpg)
 
 ---
 
