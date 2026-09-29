@@ -30,15 +30,7 @@ Screenshots show the German UI at 1920 px width unless stated otherwise.
 
 ![Tile placement tab with a "place city" button](docs/screenshots/plaettchen-platzieren.jpg)
 
-<<<<<<< Updated upstream
-**Grünfläche platzieren:** Tab und Box in Grün.
-=======
-**Enlarged Mars:** one click enlarges Mars. A chosen space is confirmed before the tile is placed.
-
-![Enlarged Mars with a confirmation prompt at the chosen space](docs/screenshots/mars-gross.jpg)
-
 **Placing a greenery:** tab and box in green.
->>>>>>> Stashed changes
 
 ![Greenery placement tab in green](docs/screenshots/gruenflaeche.jpg)
 
@@ -46,15 +38,11 @@ Screenshots show the German UI at 1920 px width unless stated otherwise.
 
 ![Ocean placement with the hint "4 of 9 oceans already on Mars"](docs/screenshots/ozean.jpg)
 
-<<<<<<< Updated upstream
-**Großer Mars:** Ein Klick vergrößert den Mars. Ein gewähltes Feld wird vor dem Setzen bestätigt.
+**Enlarged Mars:** one click enlarges Mars. A chosen space is confirmed before the tile is placed.
 
-![Vergrößerter Mars mit Bestätigungsfrage am gewählten Feld](docs/screenshots/mars-gross.jpg)
+![Enlarged Mars with a confirmation prompt at the chosen space](docs/screenshots/mars-gross.jpg)
 
-**Gespielte Karten eines Spielers:** Ein Klick auf seine Zeile öffnet sie als Overlay über der rechten Spalte.
-=======
 **A player's played cards:** clicking their row opens them as an overlay over the right column.
->>>>>>> Stashed changes
 
 ![Overlay with the opponent's played cards](docs/screenshots/karten-overlay.jpg)
 
