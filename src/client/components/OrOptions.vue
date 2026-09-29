@@ -48,16 +48,28 @@
         :selected="selectedOption"
         :groupName="radioElementName"
         @select="selectedOption = $event"/>
-      <!-- Einfache Entscheidung (choiceMenu.ts): Optionen als Kacheln, die gewählte pulsiert wie Karten -->
-      <div v-if="!asTabs && maKind === undefined && isChoice" class="choice-options" role="radiogroup">
-        <label v-for="(option, idx) in displayedOptions" :key="idx"
-          :class="['choice-option', {'choice-option--selected': selectedIdx === idx}]">
-          <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" class="choice-option-input">
-          <span>{{ $t(option.title) }}</span>
-        </label>
+      <!-- Einfache Entscheidung (choiceMenu.ts): Optionen als Kacheln, die gewählte pulsiert wie Karten;
+           eine Spielerwahl darin wird zu je einer Spieler-Kachel mit der betroffenen Ressource -->
+      <div v-if="!asTabs && maKind === undefined && isChoice" :class="['choice-options', {'choice-options--players': hasPlayerChoice}]" role="radiogroup">
+        <template v-for="(option, idx) in displayedOptions" :key="idx">
+          <template v-if="option.type === 'player'">
+            <PlayerOptionTile v-for="color in option.players" :key="color"
+              :color="color"
+              :player="findPlayer(color)"
+              :resource="playerChoiceResource(option)"
+              :selected="selectedIdx === idx && selectedPlayer === color"
+              :groupName="radioElementName"
+              @select="selectPlayerTile(option, $event)"/>
+          </template>
+          <label v-else :class="['choice-option', {'choice-option--selected': selectedIdx === idx}]">
+            <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" class="choice-option-input">
+            <span>{{ $t(option.title) }}</span>
+          </label>
+        </template>
       </div>
-      <!-- Unsichtbar mitlaufender Kind-Input der gewählten Kachel: saveData() fragt dessen Antwort ab -->
-      <PlayerInputFactory v-if="!asTabs && (maKind !== undefined || isChoice) && selectedIdx !== -1" v-show="false"
+      <!-- Unsichtbar mitlaufender Kind-Input der gewählten Kachel: saveData() fragt dessen Antwort ab
+           (Spieler-Kacheln antworten selbst, siehe saveData) -->
+      <PlayerInputFactory v-if="!asTabs && (maKind !== undefined || isChoice) && selectedIdx !== -1 && selectedOption.type !== 'player'" v-show="false"
         ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)"/>
 
       <template v-else-if="!asTabs && !isChoice">
@@ -76,7 +88,7 @@
       <!-- In einer Tab-Box (z. B. einfache Entscheidung in WaitingForTabs) sitzt der Button unten im Fuß -->
       <TabPanelFooterSlot v-if="!asTabs && showOwnSaveButton()">
         <div class="wf-action" style="margin: 5px 30px 10px">
-          <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid" @click="saveData" />
+          <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid || awaitingPlayer" @click="saveData" />
         </div>
       </TabPanelFooterSlot>
 
@@ -98,7 +110,7 @@ import {vDockedTab} from '@/client/directives/DockedTab';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {isHTMLElement} from '@/client/utils/vueUtils';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
-import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
+import {OrOptionsModel, PlayerInputModel, SelectPlayerModel} from '@/common/models/PlayerInputModel';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
@@ -112,6 +124,11 @@ import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import MilestoneAwardOptions from '@/client/components/MilestoneAwardOptions.vue';
+import PlayerOptionTile from '@/client/components/PlayerOptionTile.vue';
+import {selectPlayerResource} from '@/client/components/selectPlayerResource';
+import {ColorWithNeutral} from '@/common/Color';
+import {PublicPlayerModel} from '@/common/models/PlayerModel';
+import {Resource} from '@/common/Resource';
 import {milestoneAwardKind, MilestoneAwardKind} from '@/client/components/milestoneAwardChoice';
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {allCardsInHand} from '@/client/utils/handCards';
@@ -152,6 +169,7 @@ export default defineComponent({
     HandCardsPanel,
     HandCardsTab,
     MilestoneAwardOptions,
+    PlayerOptionTile,
   },
   setup() {
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
@@ -192,6 +210,8 @@ export default defineComponent({
       handTabActive: false,
       // Ob der Kind-Input speichern darf (SelectCard meldet das per "validity"); andere Inputs melden nichts
       childValid: true,
+      // Gewählte Spieler-Kachel, wenn die Entscheidung eine Spielerwahl enthält (choiceMenu.ts)
+      selectedPlayer: undefined as ColorWithNeutral | undefined,
     };
   },
   computed: {
@@ -206,6 +226,13 @@ export default defineComponent({
     // Meilenstein- bzw. Auszeichnungswahl als Bild-Kacheln (milestoneAwardChoice.ts)
     maKind(): MilestoneAwardKind | undefined {
       return milestoneAwardKind(this.playerinput);
+    },
+    hasPlayerChoice(): boolean {
+      return this.isChoice && this.displayedOptions.some((option) => option.type === 'player');
+    },
+    // Spielerwahl ausgewählt, aber noch kein Spieler angetippt: Button gesperrt
+    awaitingPlayer(): boolean {
+      return this.selectedOption?.type === 'player' && this.selectedPlayer === undefined;
     },
     handCards(): Array<CardModel> {
       return allCardsInHand(this.playerView);
@@ -232,6 +259,16 @@ export default defineComponent({
     },
   },
   methods: {
+    findPlayer(color: ColorWithNeutral): PublicPlayerModel | undefined {
+      return this.playerView.players.find((player) => player.color === color);
+    },
+    playerChoiceResource(option: SelectPlayerModel): Resource | undefined {
+      return selectPlayerResource(option.title);
+    },
+    selectPlayerTile(option: PlayerInputModel, color: ColorWithNeutral) {
+      this.selectedOption = option;
+      this.selectedPlayer = color;
+    },
     selectOptionTab(option: PlayerInputModel) {
       this.handTabActive = false;
       this.selectedOption = option;
@@ -311,6 +348,13 @@ export default defineComponent({
       return option.type === 'card' && !(option.max === 1 && option.min === 1);
     },
     saveData() {
+      // Spieler-Kachel: Antwort direkt, ohne unsichtbaren SelectPlayer
+      if (!this.asTabs && this.isChoice && this.selectedOption?.type === 'player') {
+        if (this.selectedPlayer !== undefined) {
+          this.playerFactorySaved(this.selectedIdx)({type: 'player', player: this.selectedPlayer});
+        }
+        return;
+      }
       let ref = this.$refs['inputfactory'] as {saveData: () => void} | Array<{saveData: () => void}>;
       if (Array.isArray(ref)) {
         ref = ref[0];

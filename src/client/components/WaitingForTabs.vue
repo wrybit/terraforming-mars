@@ -6,11 +6,11 @@
     <div class="or-tabs" role="tablist">
       <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
       <button type="button" role="tab"
-        :title="$t(fullTabTitle(playerinput.title))"
+        :title="$t(fullTabTitle(lead.title))"
         :aria-selected="!handTabActive"
         :class="['or-tab', {'or-tab--active': !handTabActive}, tone !== undefined ? 'or-tab--tone-' + tone : '']"
         @click="handTabActive = false">
-        <span class="or-tab-title">{{ $t(inputTabLabel(playerinput)) }}</span>
+        <span class="or-tab-title">{{ $t(inputTabLabel(lead)) }}</span>
         <span v-if="count !== undefined" class="or-tab-count">{{ count }}</span>
       </button>
     </div>
@@ -20,7 +20,7 @@
       <!-- Die Frage gehört zur Eingabe und steht daher in ihrer Box, nicht über den Tabs -->
       <!-- Feldwahl u. Ä.: Plättchen, Frage und Hinweis (tabIntro.ts); sonst nur die Frage -->
       <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(playerinput.title)" :playerView="playerView"/>
-      <label v-else v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(playerinput.title)) }}</div></label>
+      <label v-else v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(lead.title)) }}</div></label>
       <!-- Einfache Entscheidung einer Karte: deren Kartentext als kurze Erklärung (choiceMenu.ts) -->
       <p v-if="cardDescription !== undefined" v-show="!handTabActive" class="or-tab-panel-description">{{ $t(cardDescription) }}</p>
       <!-- v-show statt v-if: Eingaben bleiben beim Blick in die Hand erhalten -->
@@ -51,7 +51,7 @@ import {fullTabTitle, inputTabLabel} from '@/client/components/orOptionsShortLab
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {inputTone} from '@/client/components/inputTone';
 import {tabIntro} from '@/client/components/tabIntro';
-import {choiceCardDescription} from '@/client/components/choiceMenu';
+import {choiceCardDescription, choiceMenuLead} from '@/client/components/choiceMenu';
 import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import {allCardsInHand} from '@/client/utils/handCards';
 
@@ -69,8 +69,10 @@ provide(TAB_PANEL_FOOTER, '#' + footerId);
 const handTabActive = ref(false);
 const handCards = computed(() => allCardsInHand(props.playerView));
 const count = computed(() => inputAvailableCount(props.playerinput));
+// Bei einer Entscheidung mit Spielerwahl bestimmt diese Frage, Beschriftung und Farbe (choiceMenu.ts)
+const lead = computed(() => choiceMenuLead(props.playerinput));
 // Farbton des Eingabe-Tabs (Präludium rosa, Angriff rot, Karten orange …)
-const tone = computed(() => inputTone(props.playerinput));
+const tone = computed(() => inputTone(lead.value));
 const intro = computed(() => tabIntro(props.playerinput));
 const cardDescription = computed(() => choiceCardDescription(props.playerinput.title));
 </script>

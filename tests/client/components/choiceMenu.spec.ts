@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {choiceCardDescription, isChoiceMenu} from '@/client/components/choiceMenu';
+import {choiceCardDescription, choiceMenuLead, isChoiceMenu} from '@/client/components/choiceMenu';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 
 function option(title: string): PlayerInputModel {
@@ -18,6 +18,15 @@ describe('choiceMenu', () => {
   it('keeps the action menu', () => {
     expect(isChoiceMenu(or(option('End Turn'), option('Pass for this generation')))).is.false;
     expect(isChoiceMenu(or(option('x'), {type: 'card', title: 'y', buttonLabel: ''} as unknown as PlayerInputModel))).is.false;
+  });
+
+  it('accepts one player choice beside plain options', () => {
+    const player = {type: 'player', title: 'Select player to remove up to 4 M€ from', buttonLabel: '', players: ['red']} as unknown as PlayerInputModel;
+    const menu = or(player, option('Do not remove M€'));
+    expect(isChoiceMenu(menu)).is.true;
+    expect(choiceMenuLead(menu)).eq(player);
+    expect(isChoiceMenu(or(player, player))).is.false;
+    expect(choiceMenuLead(or(option('a'), option('b'))).type).eq('or');
   });
 
   it('finds the card text for the explanation', () => {
