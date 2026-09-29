@@ -38,6 +38,8 @@ Screenshots show the German UI at 1920 px width unless stated otherwise.
 
 ![Standard projects tab](docs/screenshots/tab-standard.jpg)
 
+![Sell tab with hand cards to sell for 1 M€ each](docs/screenshots/tab-verkaufen.jpg)
+
 **Placing a tile:** the button names the tile and what happens next.
 
 ![Tile placement tab with a "place city" button](docs/screenshots/plaettchen-platzieren.jpg)
