@@ -8,7 +8,7 @@ import {CardName} from '@/common/cards/CardName';
 import {Color} from '@/common/Color';
 import {emptyTags, fakeGameModel, fakePublicPlayerModel, fakeViewModel} from '../testHelpers';
 
-function mountRow(options: {showOtherPlayersVP: boolean, setVisibilityState?: (key: string, value: boolean) => void}) {
+function mountRow(options: {showOtherPlayersVP: boolean, setVisibilityState?: (key: string, value: boolean) => void, firstForGen?: boolean, actionLabel?: 'passed' | 'active'}) {
   const me = fakePublicPlayerModel({color: 'blue' as Color});
   const other = fakePublicPlayerModel({
     color: 'red' as Color,
@@ -35,7 +35,8 @@ function mountRow(options: {showOtherPlayersVP: boolean, setVisibilityState?: (k
     props: {
       player: other,
       playerView,
-      actionLabel: 'passed',
+      actionLabel: options.actionLabel ?? 'passed',
+      firstForGen: options.firstForGen ?? false,
       playerIndex: 0,
       visibility: {goods: true, tags: true, score: true},
       tagColumns: [[Tag.BUILDING]],
@@ -64,5 +65,12 @@ describe('PlayersTableRow', () => {
     const wrapper = mountRow({showOtherPlayersVP: false, setVisibilityState: (key, value) => calls.push([key, value])});
     await wrapper.trigger('click');
     expect(calls).to.deep.include(['pinned_player_0', true]);
+  });
+
+  it('shows the first player in the color bar and drops the word for the acting player', () => {
+    const wrapper = mountRow({showOtherPlayersVP: false, firstForGen: true, actionLabel: 'active'});
+    expect(wrapper.find('[data-test="first-player"]').text()).to.eq('1');
+    expect(wrapper.classes()).to.include('players-table-row--acting');
+    expect(mountRow({showOtherPlayersVP: false}).find('[data-test="first-player"]').exists()).to.be.false;
   });
 });

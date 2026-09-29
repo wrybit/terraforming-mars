@@ -1,9 +1,10 @@
 <template>
   <div :class="rowClasses" @click="toggleCards">
     <!-- Ganze Zeile ist klickbar und öffnet die gespielten Karten (wie die klassische Spielerleiste) -->
+    <!-- Startspieler als "1" im Farbbalken, damit die Namenszeile Platz für Name und Status hat -->
+    <span v-if="firstForGen && playerView.players.length > 1" class="players-table-first-player" :title="$t('First player')" data-test="first-player">1</span>
     <div class="players-table-identity">
       <div class="players-table-identity-line">
-        <div class="icon-first-player" v-if="firstForGen && playerView.players.length > 1" v-i18n>1st</div>
         <span class="players-table-name">{{ symbol + player.name }}</span>
         <PlayerStatus :timer="player.timer" :showTimer="playerView.game.gameOptions.showTimers" :liveTimer="playerView.game.phase !== Phase.END" :actionLabel="actionLabel" v-trim-whitespace/>
       </div>
@@ -122,6 +123,10 @@ export default defineComponent({
       const classes = ['players-table-row', 'players-table-row--player', 'players-table-row--' + this.player.color];
       if (this.isThisPlayer) {
         classes.push('players-table-row--me');
+      }
+      // Am Zug: der blinkende rote Punkt zeigt das, das Wort "aktiv" entfällt
+      if (this.actionLabel === 'active') {
+        classes.push('players-table-row--acting');
       }
       return classes;
     },

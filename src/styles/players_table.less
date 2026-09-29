@@ -203,13 +203,34 @@ each(@players, {
   }
 }
 
+// Startspieler: weißes Schild mit fetter "1" im Farbbalken
+.players-table-first-player {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  width: 16px;
+  height: 22px;
+  border-radius: 0 4px 4px 0;
+  background: #fff;
+  color: #000;
+  font: bold 14px/23px Prototype, sans-serif;
+  text-align: center;
+}
+
+// Am Zug: nur Punkt und Zeit, ohne das Wort "aktiv"
+.players-table-row--acting .player-action-status {
+  display: none;
+}
+
 // Namenszelle: Zeile 1 Name + Status, Zeile 2 Konzern
 .players-table-identity {
   display: flex;
   flex-direction: column;
   gap: 3px;
   min-width: 0;
-  padding-left: 18px;
+  padding-left: 24px; // Platz für Farbbalken samt Startspieler-Schild
 }
 
 .players-table-identity-line {
@@ -217,15 +238,6 @@ each(@players, {
   align-items: center;
   gap: 8px;
   min-width: 0;
-
-  .icon-first-player {
-    position: static;
-    flex: none;
-    margin: 0 0 0 -18px; // Pfeil ragt wie in der klassischen Leiste über den Rand
-    height: 22px;
-    line-height: 22px;
-    font-size: 15px;
-  }
 
   // Status (PlayerStatus.vue) als kleine Plakette; "aktiv" blinkt über active_player_outline.less
   .player-status,
