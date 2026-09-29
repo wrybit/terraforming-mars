@@ -1,10 +1,11 @@
 import {ref} from 'vue';
+import {startMobileDocument} from '@/client/utils/mobileDocument';
 
 /*
  * Umschalter zwischen Desktop- und Mobil-Ansicht der Spieleransicht.
  *
- * Entscheidend ist die Eingabeart, nicht die Breite: Geräte, deren Hauptzeiger ein Finger ist
- * (Handy, Tablet hoch und quer), bekommen die Mobil-Ansicht. Per URL-Parameter `?mobile=on|off|auto`
+ * Mobil-Ansicht bekommen Geräte, deren Hauptzeiger ein Finger ist (Handy, Tablet hoch und quer), sowie
+ * Fenster schmaler als das Zwei-Spalten-Layout des Desktops (1400 px). Per URL-Parameter `?mobile=on|off|auto`
  * lässt sich das dauerhaft überschreiben (gespeichert im localStorage).
  */
 
@@ -17,6 +18,9 @@ export const MOBILE_ROOT_CLASS = 'tm-mobile';
 const STORAGE_KEY = 'mobile_layout';
 const URL_PARAMETER = 'mobile';
 const TOUCH_QUERY = '(pointer: coarse)';
+// Unterhalb dieser Breite gibt es kein Zwei-Spalten-Layout (@player-home-columns-min-width, player_home_columns.less)
+export const DESKTOP_MIN_WIDTH = 1400;
+const NARROW_QUERY = `(max-width: ${DESKTOP_MIN_WIDTH - 1}px)`;
 
 function isSetting(value: unknown): value is MobileLayoutSetting {
   return MOBILE_LAYOUT_SETTINGS.includes(value as MobileLayoutSetting);
@@ -40,13 +44,13 @@ function writeSetting(setting: MobileLayoutSetting): void {
   }
 }
 
-function touchQuery(): MediaQueryList | undefined {
-  return typeof window !== 'undefined' && typeof window.matchMedia === 'function' ? window.matchMedia(TOUCH_QUERY) : undefined;
+function mediaQuery(query: string): MediaQueryList | undefined {
+  return typeof window !== 'undefined' && typeof window.matchMedia === 'function' ? window.matchMedia(query) : undefined;
 }
 
-// True, wenn die Einstellung bzw. das Gerät die Mobil-Ansicht verlangt
-export function resolveMobileLayout(setting: MobileLayoutSetting, touch: boolean): boolean {
-  return setting === 'on' || (setting === 'auto' && touch);
+// True, wenn die Einstellung bzw. Gerät oder Fensterbreite die Mobil-Ansicht verlangen
+export function resolveMobileLayout(setting: MobileLayoutSetting, touch: boolean, narrow: boolean): boolean {
+  return setting === 'on' || (setting === 'auto' && (touch || narrow));
 }
 
 let setting: MobileLayoutSetting = 'auto';
@@ -71,10 +75,19 @@ function applyViewport(mobile: boolean): void {
   }
 }
 
+// Beendet die laufenden Mobil-Anpassungen am Dokument (mobileDocument.ts), solange die Mobil-Ansicht gilt
+let stopMobileDocument: (() => void) | undefined;
+
 function update(): void {
-  const mobile = resolveMobileLayout(setting, touchQuery()?.matches ?? false);
+  const mobile = resolveMobileLayout(setting, mediaQuery(TOUCH_QUERY)?.matches ?? false, mediaQuery(NARROW_QUERY)?.matches ?? false);
   if (mobile !== mobileLayout.value) {
     mobileLayout.value = mobile;
+  }
+  if (mobile && stopMobileDocument === undefined) {
+    stopMobileDocument = startMobileDocument(document.body);
+  } else if (!mobile && stopMobileDocument !== undefined) {
+    stopMobileDocument();
+    stopMobileDocument = undefined;
   }
   document.documentElement.classList.toggle(MOBILE_ROOT_CLASS, mobile);
   applyViewport(mobile);
@@ -105,7 +118,8 @@ export function initMobileLayout(): void {
     writeSetting(fromUrl);
   }
   setting = fromUrl ?? readSetting();
-  touchQuery()?.addEventListener('change', update);
+  mediaQuery(TOUCH_QUERY)?.addEventListener('change', update);
+  mediaQuery(NARROW_QUERY)?.addEventListener('change', update);
   // Manche Browser melden die Eingabeart erst nach dem Laden bzw. ohne change-Ereignis (Drehen, Andocken der Tastatur)
   window.addEventListener('resize', update);
   update();

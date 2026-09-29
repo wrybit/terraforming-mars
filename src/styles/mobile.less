@@ -217,6 +217,7 @@ html.tm-mobile {
     display: flex !important;
     flex-wrap: wrap;
     align-items: flex-start;
+    gap: 0 !important; // Lücken setzt mobileFit.ts
     width: auto !important;
   }
 
@@ -227,6 +228,16 @@ html.tm-mobile {
     margin: 0 !important;
     padding: 0 !important;
     float: none !important;
+  }
+
+  // Eigene Verkleinerungen des Desktops (Startauswahl: zoom) entfallen, sonst doppelt skaliert
+  .mb-screen .cardbox {
+    zoom: 1 !important;
+  }
+
+  // Startauswahl: Platz über der Karte für das Auswahl-Fähnchen bleibt
+  .mb-screen .setup-column-body .card-container.mb-fit {
+    margin-top: 28px !important;
   }
 
   .mb-screen .sortable-slot > .cardbox {
@@ -281,11 +292,6 @@ html.tm-mobile {
       order: 2;
     }
 
-    // Skalen rund um das Brett ersetzen die Balken (MobileParameterBars)
-    .global-numbers {
-      display: none;
-    }
-
     // Tabelle der Meilensteine nur im Zwei-Spalten-Layout des Desktops
     .milestone-award-table {
       display: none;
@@ -293,8 +299,13 @@ html.tm-mobile {
   }
 
   // Mars ohne Ring (Ausschnitt in mobileFit.ts): Kolonie-Felder in die oberen Ecken, Knopf "Plättchen" unten links
-  .mb-screen--mars > .board-without-venus {
+  .board-without-venus.mb-mars-cropped {
     background-image: url(./assets/board/mars-planet.png);
+
+    // Skalen rund um das Brett ersetzen die Balken (MobileParameterBars)
+    .global-numbers {
+      display: none;
+    }
 
     .board-outer-spaces {
       left: 0;
@@ -585,7 +596,7 @@ html.tm-mobile {
 
     .btn {
       flex-grow: 1;
-      width: 100%;
+      width: 100% !important;
       height: 48px;
       margin: 0 !important;
     }
@@ -721,6 +732,24 @@ html.tm-mobile {
     margin: 0 !important;
   }
 
+  // Vergrößertes Brett (BoardZoomModal): größer als der Bildschirm, per Wischen verschiebbar
+  .board-zoom-backdrop {
+    display: grid;
+    place-items: safe center;
+    overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    cursor: default;
+  }
+
+  .board-zoom-close {
+    z-index: 1;
+    top: calc(12px + env(safe-area-inset-top));
+    right: 12px;
+    width: 44px;
+    height: 44px;
+  }
+
   // Tablet: Leisten nicht über die ganze Breite ziehen
   @media (min-width: 700px) {
     .mb-screen {
@@ -747,5 +776,100 @@ html.tm-mobile {
 
   100% {
     box-shadow: 0 0 0 0 rgba(245, 197, 66, 0);
+  }
+}
+
+// ---------- Ergebnisseite (GameEnd) ----------
+html.tm-mobile #game-end {
+  padding: 12px 8px 24px;
+  box-sizing: border-box;
+  max-width: 100vw;
+  overflow-x: hidden;
+
+  .game-end-columns,
+  .game-end-columns__main,
+  .game-end-columns__side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: auto;
+    min-width: 0;
+  }
+
+  .game-end-box {
+    margin: 0;
+    padding: 12px 10px;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  // Breite Tabelle nur gedreht zeigen (mobileDocument.ts)
+  .mb-transposed-source {
+    display: none;
+  }
+
+  // Gedrehte Tabelle: Zeilen = Wertungen, Spalten = Spieler; drei achsmittige Bahnen
+  .game_end_table.mb-transposed {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    td,
+    th {
+      text-align: center !important;
+      vertical-align: middle;
+      height: 44px;
+      padding: 6px 4px !important;
+      border-left: 0 !important;
+      border-right: 0 !important;
+    }
+
+    tr > * > * {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 !important;
+      float: none !important;
+    }
+
+    tr:first-child > * > * {
+      display: block;
+    }
+
+    // Spielerfarbe als Spalte, Sieger-Spalte mit goldenem Rahmen
+    td.mb-winner-col {
+      box-shadow: inset 3px 0 0 @game-end-total-accent, inset -3px 0 0 @game-end-total-accent;
+    }
+
+    tr:first-child td.mb-winner-col {
+      box-shadow: inset 3px 0 0 @game-end-total-accent, inset -3px 0 0 @game-end-total-accent, inset 0 3px 0 @game-end-total-accent;
+      border-radius: 6px 6px 0 0;
+    }
+
+    tr:last-child td.mb-winner-col {
+      box-shadow: inset 3px 0 0 @game-end-total-accent, inset -3px 0 0 @game-end-total-accent, inset 0 -3px 0 @game-end-total-accent;
+      border-radius: 0 0 6px 6px;
+    }
+
+    td.game-end-total.mb-winner-col {
+      background-color: @game-end-total-accent;
+      color: fade(#000, 62%);
+      font-size: 40px;
+      font-weight: 900;
+    }
+
+    // Gruppen-Trenner liegen jetzt waagerecht
+    tr:has(.game-end-group-start) > * {
+      border-top: 2px solid rgba(255, 255, 255, 0.35) !important;
+    }
+
+    .game-end-mc {
+      opacity: 1;
+      color: rgba(255, 255, 255, 0.55);
+    }
+  }
+
+  .board-cont {
+    margin: 0;
   }
 }

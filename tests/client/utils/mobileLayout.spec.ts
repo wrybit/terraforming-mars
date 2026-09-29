@@ -3,11 +3,12 @@ import {resolveMobileLayout} from '@/client/utils/mobileLayout';
 import {cardColumns, fitScale} from '@/client/utils/mobileFit';
 
 describe('mobileLayout', () => {
-  it('follows the input type in auto mode and honours overrides', () => {
-    expect(resolveMobileLayout('auto', true)).to.be.true;
-    expect(resolveMobileLayout('auto', false)).to.be.false;
-    expect(resolveMobileLayout('on', false)).to.be.true;
-    expect(resolveMobileLayout('off', true)).to.be.false;
+  it('uses touch devices and narrow windows in auto mode and honours overrides', () => {
+    expect(resolveMobileLayout('auto', true, false)).to.be.true;
+    expect(resolveMobileLayout('auto', false, true)).to.be.true;
+    expect(resolveMobileLayout('auto', false, false)).to.be.false;
+    expect(resolveMobileLayout('on', false, false)).to.be.true;
+    expect(resolveMobileLayout('off', true, true)).to.be.false;
   });
 });
 
