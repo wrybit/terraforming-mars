@@ -26,6 +26,10 @@ Screenshots show the German UI at 1920 px width unless stated otherwise.
 
 ![Game view in the middle of a game](docs/screenshots/spielansicht.jpg)
 
+**Hand cards tab:** active action cards in their own block above the hand, with live resource counters (here 4 animals on Birds, 7 microbes on Tardigrades).
+
+![Hand cards tab with active action cards and their resource counters above the hand](docs/screenshots/tab-handkarten.jpg)
+
 **A normal turn:** only the regular action tabs – action cards, build, standard projects, sell. Special tabs (milestones, greenery, temperature) appear only when they are possible.
 
 ![Actions tab with the player's action cards](docs/screenshots/tab-aktionen.jpg)
