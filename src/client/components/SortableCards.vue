@@ -29,6 +29,16 @@ const DRAG_THRESHOLD_PX = 6;
 // Auf Touch-Geräten startet der Drag erst nach kurzem Halten, damit normales Scrollen weiter funktioniert.
 const TOUCH_HOLD_MS = 300;
 
+/** Aktuelle Verschiebung durch eine laufende CSS-Transformation (matrix(a, b, c, d, x, y)), sonst 0. */
+function currentTranslation(element: HTMLElement): [number, number] {
+  const match = /^matrix\((.+)\)$/.exec(getComputedStyle(element).transform);
+  if (match === null) {
+    return [0, 0];
+  }
+  const values = match[1].split(',').map((value) => parseFloat(value));
+  return [values[4] ?? 0, values[5] ?? 0];
+}
+
 type PendingDrag = {
   cardName: CardName;
   pointerId: number;
@@ -244,8 +254,13 @@ export default defineComponent({
       const slots = root.querySelectorAll<HTMLElement>('.sortable-slot[data-card-name]');
       for (const slot of Array.from(slots)) {
         const rect = slot.getBoundingClientRect();
-        const inside = clientX >= rect.left && clientX < rect.left + rect.width &&
-          clientY >= rect.top && clientY < rect.top + rect.height;
+        // Während des Nachgleitens (sortable-move) steht die Karte noch verschoben. Ohne diesen Abzug
+        // träfe der Zeiger die wegfahrende Karte erneut und sie spränge hin und her.
+        const [shiftX, shiftY] = currentTranslation(slot);
+        const left = rect.left - shiftX;
+        const top = rect.top - shiftY;
+        const inside = clientX >= left && clientX < left + rect.width &&
+          clientY >= top && clientY < top + rect.height;
         if (inside) {
           this.moveDraggedCard(slot.dataset.cardName as CardName);
           return;

@@ -123,4 +123,27 @@ describe('SortableCards', () => {
     window.dispatchEvent(new MouseEvent('pointerup', {clientX: 7, clientY: 5}));
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.ANTS, CardName.CARTEL]);
   });
+
+  it('ignores a card that is only visually under the pointer while sliding away', async () => {
+    const sortable = mount(SortableCards, {
+      ...globalConfig,
+      props: {
+        cards: [{name: CardName.ANTS}, {name: CardName.CARTEL}],
+        playerId: 'player1',
+      },
+    });
+    const slots = sortable.findAll('.sortable-slot');
+    slots[0].element.getBoundingClientRect = () => ({left: 0, top: 0, width: 10, height: 10} as DOMRect);
+    // CARTEL gleitet gerade von links nach rechts: sichtbar bei 0, eigentlicher Platz bei 10
+    const sliding = slots[1].element as HTMLElement;
+    sliding.getBoundingClientRect = () => ({left: 0, top: 0, width: 10, height: 10} as DOMRect);
+    sliding.style.transform = 'matrix(1, 0, 0, 1, -10, 0)';
+
+    slots[0].element.dispatchEvent(new MouseEvent('pointerdown', {bubbles: true, clientX: 2, clientY: 5}));
+    window.dispatchEvent(new MouseEvent('pointermove', {clientX: 9, clientY: 5}));
+    await sortable.vm.$nextTick();
+    window.dispatchEvent(new MouseEvent('pointerup', {clientX: 9, clientY: 5}));
+
+    expect(cardsInOrder(sortable)).to.deep.eq([CardName.ANTS, CardName.CARTEL]);
+  });
 });
