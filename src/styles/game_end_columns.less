@@ -210,6 +210,11 @@ body:has(#game-end) {
 // Sicherheitsnetz: bei vielen Spalten (Mond, Venus, Pfadfinder) scrollt die Tabelle in ihrer Box statt unter das Brett zu ragen
 .game_end_victory_points {
   overflow-x: auto;
+
+  // Tabelle füllt die ganze Box; überschüssige Breite verteilt sich auf die Spalten statt rechts leer zu bleiben
+  .game_end_table {
+    width: 100%;
+  }
 }
 
 .game-end-details {
