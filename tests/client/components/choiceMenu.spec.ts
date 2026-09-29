@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {choiceCardDescription, choiceMenuLead, isChoiceMenu} from '@/client/components/choiceMenu';
+import {choiceMenuLead, isChoiceMenu} from '@/client/components/choiceMenu';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 
 function option(title: string): PlayerInputModel {
@@ -27,10 +27,5 @@ describe('choiceMenu', () => {
     expect(choiceMenuLead(menu)).eq(player);
     expect(isChoiceMenu(or(player, player))).is.false;
     expect(choiceMenuLead(or(option('a'), option('b'))).type).eq('or');
-  });
-
-  it('finds the card text for the explanation', () => {
-    expect(choiceCardDescription('Select an option for Olympus Conference')).contains('science tag');
-    expect(choiceCardDescription('Select player')).is.undefined;
   });
 });

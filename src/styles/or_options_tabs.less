@@ -311,13 +311,6 @@
   margin: 0 0 12px;
 }
 
-.or-tab-panel-description {
-  max-width: 720px;
-  margin: -4px 0 16px;
-  color: #b8bccb;
-  font-size: 15px;
-}
-
 .or-tab-save {
   margin: 12px 0 0;
 }
@@ -340,4 +333,33 @@
 // (tab_panel_footer.less: rechts ohne eigenen Außenabstand) – daher Klasse statt Inline-Style
 .or-options-save {
   margin: 5px 30px 10px;
+}
+
+// Auslösende Karte oben in der Box (CardIntroBlock.vue): verkleinert, damit die Auswahl darunter sichtbar bleibt
+@card-intro-zoom: 0.55;
+
+.card-intro {
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.card-intro-card {
+  flex: none;
+  zoom: @card-intro-zoom;
+
+  // Die Karte bringt Außenabstände für Kartenreihen mit; hier steht sie allein
+  .card-container {
+    margin: 0;
+  }
+}
+
+.card-intro-name {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.card-intro-question {
+  margin-top: 10px;
+  color: #fff;
+  font-size: 17px;
 }

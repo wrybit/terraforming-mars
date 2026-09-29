@@ -11,12 +11,15 @@ import {GlobalEventName} from '../turmoil/globalEvents/GlobalEventName';
 import {Warning} from '../cards/Warning';
 import {Units} from '../Units';
 import {ClaimedToken} from '../underworld/UnderworldPlayerData';
+import {CardName} from '../cards/CardName';
 
 export type BaseInputModel = {
   title: string | Message;
   warning?: string | Message;
   buttonLabel: string;
   optional?: boolean;
+  // Karte, deren Wirkung diese Eingabe auslöst (nur an der obersten Eingabe gesetzt, ServerModel.getWaitingFor)
+  sourceCard?: CardName;
 }
 
 export type AndOptionsModel = BaseInputModel & {

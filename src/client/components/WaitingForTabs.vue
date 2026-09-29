@@ -20,9 +20,9 @@
       <!-- Die Frage gehört zur Eingabe und steht daher in ihrer Box, nicht über den Tabs -->
       <!-- Feldwahl u. Ä.: Plättchen, Frage und Hinweis (tabIntro.ts); sonst nur die Frage -->
       <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(playerinput.title)" :playerView="playerView"/>
+      <!-- Löst eine Karte die Eingabe aus (Sabotage, Komet für Venus …): Karte, Name und Text statt "Wähle eine Option" -->
+      <CardIntroBlock v-else-if="sourceCard !== undefined" v-show="!handTabActive" :card="sourceCard" :title="fullTabTitle(lead.title)"/>
       <label v-else v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(lead.title)) }}</div></label>
-      <!-- Einfache Entscheidung einer Karte: deren Kartentext als kurze Erklärung (choiceMenu.ts) -->
-      <p v-if="cardDescription !== undefined" v-show="!handTabActive" class="or-tab-panel-description">{{ $t(cardDescription) }}</p>
       <!-- v-show statt v-if: Eingaben bleiben beim Blick in die Hand erhalten -->
       <PlayerInputFactory v-show="!handTabActive"
         :players="playerView.players"
@@ -51,8 +51,10 @@ import {fullTabTitle, inputTabLabel} from '@/client/components/orOptionsShortLab
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {inputTone} from '@/client/components/inputTone';
 import {tabIntro} from '@/client/components/tabIntro';
-import {choiceCardDescription, choiceMenuLead} from '@/client/components/choiceMenu';
+import {choiceMenuLead} from '@/client/components/choiceMenu';
+import {inputSourceCard} from '@/client/components/inputSourceCard';
 import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
+import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
 import {allCardsInHand} from '@/client/utils/handCards';
 
 const props = defineProps<{
@@ -74,5 +76,5 @@ const lead = computed(() => choiceMenuLead(props.playerinput));
 // Farbton des Eingabe-Tabs (Präludium rosa, Angriff rot, Karten orange …)
 const tone = computed(() => inputTone(lead.value));
 const intro = computed(() => tabIntro(props.playerinput));
-const cardDescription = computed(() => choiceCardDescription(props.playerinput.title));
+const sourceCard = computed(() => inputSourceCard(props.playerinput));
 </script>

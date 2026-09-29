@@ -1,6 +1,7 @@
 import {IPlayer} from '../IPlayer';
 import {PlayerInput} from '../PlayerInput';
 import {Priority} from './Priority';
+import {CardName} from '../../common/cards/CardName';
 
 export interface AndThen<T> {
   andThen(cb: (param: T) => void): this;
@@ -10,12 +11,15 @@ export interface IDeferredAction <T = undefined> extends AndThen<T> {
   queueId: number;
   player: IPlayer;
   priority: Priority;
+  // Karte, deren Wirkung diese Aktion eingereiht hat (DeferredActionsQueue setzt das beim Einreihen)
+  sourceCard?: CardName;
   execute(): PlayerInput | undefined;
 }
 
 export abstract class DeferredAction<T = undefined> implements IDeferredAction<T> {
   // The position in the queue. Do not set directly.
   public queueId: number = -1;
+  public sourceCard: CardName | undefined = undefined;
   constructor(
     public player: IPlayer,
     public priority: Priority = Priority.DEFAULT,
