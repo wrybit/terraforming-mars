@@ -170,12 +170,13 @@ body:has(#game-end) {
     .m-and-a { width: 28px; height: 28px; line-height: 28px; font-size: 14px; }
     .card-delegate { width: 24px; height: 29px; background-size: 24px 29px; }
     .resized-tile { width: 26px; height: 30px; background-size: 26px 30px; }
+    // margin überschreibt die 2px links aus .resized-tile(), sonst stehen Wald/Stadt schief über den Zahlen
     .table-forest-tile,
     .table-city-tile,
     .table-moon-road-tile,
     .table-moon-colony-tile,
     .table-moon-mine-tile,
-    .table-planetary-track { width: 26px; height: 30px; background-size: 26px 30px; }
+    .table-planetary-track { width: 26px; height: 30px; background-size: 26px 30px; margin: 0 auto; }
     // Globale Parameter proportional auf 30px Höhe (Originale in cards.less: 40×46, Thermometer 14×46, Sauerstoff 46×46, Venus 60×40)
     .tile { height: 30px; margin: 0; background-repeat: no-repeat; }
     .temperature-tile { width: 9px; background-size: 9px 30px; }
