@@ -49,8 +49,9 @@ const emit = defineEmits<{
 
 // Dauer muss zur Transition in mobile.less passen (@mb-card-zoom-duration)
 const DURATION_MS = 260;
-// Dauer muss zu @mb-card-zoom-neighbor-duration in mobile.less passen
 const NEIGHBOR_DURATION_MS = 220;
+// Wartelage der Nachbarn außerhalb des Karussells; muss zu .mb-card-zoom--neighbors-hidden in mobile.less passen
+const NEIGHBOR_OFFSET = '120%';
 // Ruhezeit nach dem letzten Scroll-Ereignis, ab der das Wischen als beendet gilt
 const SCROLL_SETTLE_MS = 120;
 const open = ref(false);
@@ -73,11 +74,6 @@ function slideSideClass(slideIndex: number): string {
     return 'mb-card-zoom-slide--before';
   }
   return slideIndex > props.index ? 'mb-card-zoom-slide--after' : '';
-}
-
-// Feste Wartezeit statt transitionend: das Ereignis bleibt aus, wenn keine Nachbarkarte existiert
-function wait(milliseconds: number): Promise<void> {
-  return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
 }
 
 // Tap auf eine angeschnittene Nachbarkarte blättert zu ihr
@@ -136,13 +132,27 @@ function originTransform(): string {
 // Web Animations statt CSS-Transition: die Startlage gilt sofort, ohne vorher einmal gezeichnet zu werden
 const EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
 
-function animate(from: string, to: string): Promise<void> {
-  const element = track.value;
+// fill 'forwards' hält die Endlage bis zum Aushängen; 'none' übergibt danach wieder ans CSS
+function animate(element: HTMLElement | undefined, from: string, to: string, duration: number, fill: 'forwards' | 'none' = 'forwards'): Promise<void> {
   if (element === undefined || typeof element.animate !== 'function') {
     return Promise.resolve();
   }
-  const animation = element.animate([{transform: from}, {transform: to}], {duration: DURATION_MS, easing: EASING, fill: 'forwards'});
+  const animation = element.animate([{transform: from}, {transform: to}], {duration, easing: EASING, fill});
   return animation.finished.then(() => undefined, () => undefined);
+}
+
+// Vorige Karte fährt nach links, nächste nach rechts (und umgekehrt herein); weiter entfernte sind ohnehin unsichtbar.
+// Web Animations wie beim Karussell: eine CSS-Transition lief in Safari nicht zuverlässig, die Nachbarn sprangen nur
+async function slideNeighbors(direction: 'in' | 'out'): Promise<void> {
+  const neighbors = [{index: props.index - 1, sign: '-'}, {index: props.index + 1, sign: ''}];
+  const animations = neighbors.map(({index, sign}) => {
+    const card = track.value?.children[index]?.querySelector<HTMLElement>('.mb-card-zoom-card') ?? undefined;
+    const outside = `translateX(${sign}${NEIGHBOR_OFFSET})`;
+    return direction === 'in' ?
+      animate(card, outside, 'none', NEIGHBOR_DURATION_MS, 'none') :
+      animate(card, 'none', outside, NEIGHBOR_DURATION_MS);
+  });
+  await Promise.all(animations);
 }
 
 // Pfeiltasten blättern (Tablet mit Tastatur), Escape schließt
@@ -163,8 +173,10 @@ onMounted(() => {
   }
   const start = originTransform();
   open.value = true;
-  animate(start, 'none').then(() => {
+  animate(track.value, start, 'none', DURATION_MS).then(() => {
+    // Klasse weg, die Animation hält die Nachbarn bis zu ihrem ersten Bild noch draußen
     neighborsShown.value = true;
+    return slideNeighbors('in');
   });
   window.addEventListener('keydown', onKeydown);
 });
@@ -182,12 +194,11 @@ async function close() {
   closing = true;
   // Erst die Nachbarn hinausfahren, dann schrumpft die gezeigte Karte an ihren Platz zurück
   if (neighborsShown.value && props.count > 1) {
-    neighborsShown.value = false;
-    await wait(NEIGHBOR_DURATION_MS);
+    await slideNeighbors('out');
   }
   neighborsShown.value = false;
   open.value = false;
-  await Promise.race([animate('none', originTransform()), new Promise((resolve) => window.setTimeout(resolve, DURATION_MS + 100))]);
+  await Promise.race([animate(track.value, 'none', originTransform(), DURATION_MS), new Promise((resolve) => window.setTimeout(resolve, DURATION_MS + 100))]);
   emit('close');
 }
 </script>

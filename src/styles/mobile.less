@@ -36,8 +36,6 @@
 @mb-toolbar-button: 40px;
 // Dauer der Karten-Vergrößerung (vgl. DURATION_MS in MobileCardZoom.vue)
 @mb-card-zoom-duration: 260ms;
-// Muss zu NEIGHBOR_DURATION_MS in MobileCardZoom.vue passen
-@mb-card-zoom-neighbor-duration: 220ms;
 // Breite je Karte im Karussell (Karte um ein Fünftel vergrößert plus Lücke zum Nachbarn); der Rest der Breite
 // zeigt die Nachbarkarten im Anschnitt
 @mb-card-zoom-slide-width: min(86%, 310px);
@@ -1300,7 +1298,6 @@ html.tm-mobile {
   .mb-card-zoom-card {
     position: relative;
     margin: 30px 0;
-    transition: transform @mb-card-zoom-neighbor-duration cubic-bezier(0.2, 0.8, 0.2, 1);
 
     .card-container {
       margin: 0 !important;
@@ -1310,8 +1307,8 @@ html.tm-mobile {
     }
   }
 
-  // Nachbarkarten warten außerhalb des Karussells, solange die gezeigte Karte wächst oder schrumpft:
-  // vorige links, nächste rechts; das Karussell schneidet sie dort ab
+  // Nachbarkarten warten außerhalb des Karussells, bis die gezeigte Karte gewachsen ist (Wartelage wie
+  // NEIGHBOR_OFFSET in MobileCardZoom.vue); vorige links, nächste rechts; das Karussell schneidet sie dort ab
   .mb-card-zoom--neighbors-hidden {
     .mb-card-zoom-slide--before .mb-card-zoom-card {
       transform: translateX(-120%);
