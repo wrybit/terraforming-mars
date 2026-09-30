@@ -42,7 +42,8 @@ describe('buildTurnMenu', () => {
     const input = {
       type: 'or', title: 'Take your first action', buttonLabel: 'Save',
       options: [
-        option('Standard projects', {type: 'card', cards: [{name: 'Power Plant'}, {name: 'City', isDisabled: true}], min: 1, max: 1}),
+        // showOnlyInLearnerMode: false, sonst hinge die Option vom Lernmodus anderer Tests ab
+        option('Standard projects', {type: 'card', cards: [{name: 'Power Plant'}, {name: 'City', isDisabled: true}], min: 1, max: 1, showOnlyInLearnerMode: false}),
         option('Pass for this generation'),
         {type: 'option', title: {message: 'Convert ${0} plants into greenery', data: [{type: 1, value: '8'}]}, buttonLabel: 'Save'},
         option('End Turn'),

@@ -1,6 +1,6 @@
 <template>
   <div id="player-home" :ref="trackRoot"
-    :class="['mb-home', 'mb-home--' + screen, {'mb-home--acting': acting, 'mb-home--placing': placing, 'mb-home--setup': isSetupPhase}]">
+    :class="['mb-home', 'mb-home--' + screen, 'mb-setup-step-' + setupStep, {'mb-setup-last': setupStep >= setupSteps.length - 1,'mb-home--acting': acting, 'mb-home--placing': placing, 'mb-home--setup': isSetupPhase}]">
     <!-- Mobil-Ansicht der Spieleransicht (Handy, Tablet hoch und quer): immer nur ein Bildschirm, unten die Fußleiste.
          "Zug" öffnet das Aktionsmenü als Sheet; in einer Aufgabe wird die Fußleiste zur Aufgabenleiste
          (Abbrechen + Bestätigen/Bezahlen der Eingabe). -->
@@ -113,7 +113,23 @@
           </template>
           <span v-else class="mb-task-title">{{ inputTitle }}</span>
         </div>
+        <!-- Startauswahl in Schritten wie im Mockup: Konzern, Präludien, Karten – immer nur eine Spalte sichtbar -->
+        <div v-if="isSetupPhase && setupSteps.length > 1" class="mb-steps" role="tablist">
+          <button v-for="(step, index) in setupSteps" :key="index" type="button" role="tab"
+            :aria-selected="setupStep === index"
+            :class="['mb-step', {'mb-step--active': setupStep === index, 'mb-step--done': step.done}]"
+            @click="showSetupStep(index)">
+            <span class="mb-step-number">{{ index + 1 }}</span>
+            <span class="mb-step-title">{{ step.title }}</span>
+            <b class="mb-step-count">{{ step.badge }}</b>
+          </button>
+        </div>
         <PlayerSetupView v-if="isSetupPhase" :playerView="playerView"/>
+        <!-- Vor dem letzten Schritt: "Weiter" statt Start (der Start-Knopf der Auswahl erscheint im letzten Schritt) -->
+        <button v-if="isSetupPhase && setupStep < setupSteps.length - 1" type="button"
+          class="btn btn-submit btn-rounded mb-setup-next" @click="showSetupStep(setupStep + 1)">
+          {{ nextStepLabel }}
+        </button>
         <template v-else>
           <p v-if="playerView.waitingFor === undefined" class="mb-empty">{{ bannerTitle }}</p>
           <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
@@ -196,7 +212,7 @@ import {CarouselState, observeCardCarousel, scrollCarouselTo} from '@/client/com
 let stopObserving: (() => void) | undefined;
 
 // Sichtbarer Fußbereich der Eingabe (Bestätigen, Bezahlen); fest unten, der Inhalt braucht darunter so viel Platz
-const FOOTER_SELECTOR = '.mb-screen--turn .or-tab-footer';
+const FOOTER_SELECTOR = '.mb-screen--turn .or-tab-footer, .mb-screen--turn .setup-summary';
 
 function updateFooterSpace(root: HTMLElement): void {
   const heights = Array.from(root.querySelectorAll<HTMLElement>(FOOTER_SELECTOR)).map((footer) => footer.offsetHeight);
@@ -218,7 +234,25 @@ type DataModel = {
   carousel: CarouselState | undefined;
   // Groß angezeigte Karte (Antippen in Hand bzw. Spieler-Bildschirm)
   zoomedCard: CardModel | undefined;
+  // Schritte der Startauswahl (aus den Spalten von SelectInitialCards gelesen) und der sichtbare
+  setupSteps: Array<SetupStep>;
+  setupStep: number;
 };
+
+type SetupStep = {title: string, badge: string, done: boolean};
+
+// Spalten der Startauswahl (SelectInitialCards): Titel, Zähler, erledigt
+function readSetupSteps(root: HTMLElement): Array<SetupStep> {
+  const columns = root.querySelector('.mb-screen--turn .setup-columns');
+  return Array.from(columns?.querySelectorAll<HTMLElement>(':scope > .setup-column') ?? []).map((column) => {
+    const count = column.querySelector('.setup-column-count');
+    return {
+      title: column.querySelector('.setup-column-title')?.textContent?.trim() ?? '',
+      badge: count?.textContent?.trim() ?? '',
+      done: count?.classList.contains('setup-column-count--done') ?? false,
+    };
+  });
+}
 
 // Klasse, an der Card.vue den Kartennamen zeigt ('card-' + Name in Kleinbuchstaben, Leerzeichen als '-')
 function cardClassName(name: string): string {
@@ -264,6 +298,8 @@ export default defineComponent({
       playersSegment: 'players',
       carousel: undefined,
       zoomedCard: undefined,
+      setupSteps: [],
+      setupStep: 0,
     };
   },
   components: {
@@ -306,6 +342,10 @@ export default defineComponent({
       const card = this.zoomedCard;
       return card === undefined ? undefined :
         playableCardTile(this.menu, this.isActionMenu ? this.playerView.waitingFor as OrOptionsModel : undefined, card.name);
+    },
+    nextStepLabel(): string {
+      const next = this.setupSteps[this.setupStep + 1];
+      return next === undefined ? '' : translateTextWithParams('Next: ${0}', [next.title]);
     },
     playerSegments(): typeof PLAYER_SEGMENTS {
       return PLAYER_SEGMENTS;
@@ -464,6 +504,16 @@ export default defineComponent({
         }
       });
     },
+    showSetupStep(index: number) {
+      this.setupStep = index;
+      window.scrollTo({top: 0});
+    },
+    refreshSetupSteps(root: HTMLElement) {
+      const steps = readSetupSteps(root);
+      if (JSON.stringify(steps) !== JSON.stringify(this.setupSteps)) {
+        this.setupSteps = steps;
+      }
+    },
     scrollCarousel(index: number) {
       const section = this.$refs.turnSection as HTMLElement | undefined;
       if (section !== undefined) {
@@ -501,6 +551,7 @@ export default defineComponent({
         this.updatePlacing(element);
         updateFooterSpace(element);
         this.refreshInputTitle();
+        this.refreshSetupSteps(element);
       });
       placement.observe(element, {childList: true, subtree: true, attributes: true, attributeFilter: ['class']});
       const stopCarousel = observeCardCarousel(element, (state) => {
