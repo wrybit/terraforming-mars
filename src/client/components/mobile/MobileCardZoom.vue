@@ -4,17 +4,24 @@
          Hintergrund unscharf (wie im Mockup), darunter kompakte Knöpfe -->
     <button type="button" class="mb-card-zoom-backdrop" :aria-label="$t('Close')" @click="close"></button>
     <div ref="cardHolder" class="mb-card-zoom-card mb-fit-off">
-      <Card :card="card"/>
+      <Card :card="card" :key="card.name"/>
     </div>
+    <!-- Vor/Zurück an den Kartenrändern, dazwischen Spielen und Schließen; fehlt ein Nachbar, bleibt sein Platz frei -->
     <div class="mb-card-zoom-actions">
-      <AppButton v-if="playable" :title="$t('Play card')" type="submit" @click="$emit('play')"/>
-      <button type="button" class="mb-card-zoom-close" @click="close">{{ $t('Close') }}</button>
+      <button type="button" class="mb-card-zoom-step" :class="{'mb-card-zoom-step--hidden': !hasPrevious}" :disabled="!hasPrevious"
+        :aria-label="$t('Previous card')" @click="$emit('previous')">‹</button>
+      <div class="mb-card-zoom-main">
+        <AppButton v-if="playable" :title="$t('Play card')" type="submit" @click="$emit('play')"/>
+        <button type="button" class="mb-card-zoom-close" @click="close">{{ $t('Close') }}</button>
+      </div>
+      <button type="button" class="mb-card-zoom-step" :class="{'mb-card-zoom-step--hidden': !hasNext}" :disabled="!hasNext"
+        :aria-label="$t('Next card')" @click="$emit('next')">›</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
+import {onBeforeUnmount, onMounted, ref} from 'vue';
 import {CardModel} from '@/common/models/CardModel';
 import Card from '@/client/components/card/Card.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
@@ -25,11 +32,16 @@ const props = defineProps<{
   playable: boolean;
   // Position der angetippten Karte; Start- und Endpunkt der Animation (fehlt: nur Ein-/Ausblenden)
   origin?: DOMRect;
+  // Nachbarkarten in derselben Liste vorhanden
+  hasPrevious?: boolean;
+  hasNext?: boolean;
 }>();
 
 const emit = defineEmits<{
   (event: 'close'): void;
   (event: 'play'): void;
+  (event: 'previous'): void;
+  (event: 'next'): void;
 }>();
 
 // Dauer muss zur Transition in mobile.less passen (@mb-card-zoom-duration)
@@ -62,11 +74,25 @@ function animate(from: string, to: string): Promise<void> {
   return animation.finished.then(() => undefined, () => undefined);
 }
 
+// Pfeiltasten blättern (Tablet mit Tastatur), Escape schließt
+function onKeydown(event: KeyboardEvent) {
+  if (event.key === 'ArrowLeft' && props.hasPrevious) {
+    emit('previous');
+  } else if (event.key === 'ArrowRight' && props.hasNext) {
+    emit('next');
+  } else if (event.key === 'Escape') {
+    close();
+  }
+}
+
 onMounted(() => {
   const start = originTransform();
   open.value = true;
   animate(start, 'none');
+  window.addEventListener('keydown', onKeydown);
 });
+
+onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown));
 
 async function close() {
   open.value = false;

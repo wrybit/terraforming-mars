@@ -188,7 +188,8 @@
     </nav>
 
     <MobileCardZoom v-if="zoomedCard !== undefined" :card="zoomedCard" :origin="zoomedCardOrigin" :playable="zoomedCardPlayTile !== undefined"
-      @close="zoomedCard = undefined" @play="playZoomedCard"/>
+      :hasPrevious="zoomedCardIndex > 0" :hasNext="zoomedCardIndex >= 0 && zoomedCardIndex < zoomedCardList.length - 1"
+      @close="zoomedCard = undefined" @play="playZoomedCard" @previous="stepZoomedCard(-1)" @next="stepZoomedCard(1)"/>
     <Transition name="mb-sheet" @before-enter="turnButtonLifted = true" @after-leave="turnButtonLifted = false">
       <MobileTurnSheet v-if="sheetOpen && (menu !== undefined || !acting)" :menu="menu" :waitingPlayers="waitingPlayers" :title="bannerTitle"
         :action-number="actionNumber" :actions-per-turn="actionsPerTurn" @close="sheetOpen = false" @select="startTask"/>
@@ -197,7 +198,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {defineComponent, markRaw} from 'vue';
 import * as constants from '@/common/constants';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
@@ -263,6 +264,10 @@ type DataModel = {
   // Groß angezeigte Karte (Antippen in Hand bzw. Spieler-Bildschirm)
   zoomedCard: CardModel | undefined;
   zoomedCardOrigin: DOMRect | undefined;
+  // Sichtbare Karten des Bildschirms in Anzeige-Reihenfolge: Vor/Zurück in der Großansicht
+  zoomedCardList: Array<CardModel>;
+  // Bildschirm, aus dem die Karte stammt (Ziel der Schrumpf-Animation nach dem Blättern)
+  zoomedCardScreen: HTMLElement | undefined;
   // Schritte der Startauswahl (aus den Spalten von SelectInitialCards gelesen) und der sichtbare
   setupSteps: Array<SetupStep>;
   setupStep: number;
@@ -329,6 +334,8 @@ export default defineComponent({
       carousel: undefined,
       zoomedCard: undefined,
       zoomedCardOrigin: undefined,
+      zoomedCardList: [],
+      zoomedCardScreen: undefined,
       setupSteps: [],
       setupStep: 0,
     };
@@ -371,6 +378,10 @@ export default defineComponent({
         ...view.cardsInHand, ...view.preludeCardsInHand, ...view.ceoCardsInHand, ...view.draftedCards,
         ...view.players.flatMap((player) => player.tableau),
       ];
+    },
+    zoomedCardIndex(): number {
+      const card = this.zoomedCard;
+      return card === undefined ? -1 : this.zoomedCardList.findIndex((entry) => entry.name === card.name);
     },
     zoomedCardPlayTile(): TurnMenuTile | undefined {
       const card = this.zoomedCard;
@@ -528,12 +539,40 @@ export default defineComponent({
       if (container === null || container === undefined || target?.closest('button, a, input') !== null) {
         return;
       }
-      const card = this.knownCards.find((entry) => container.classList.contains(cardClassName(entry.name)));
+      const card = this.cardOfContainer(container);
       if (card !== undefined) {
         event.stopPropagation();
+        const screen = event.currentTarget as HTMLElement;
+        // markRaw: DOM-Knoten nicht reaktiv machen
+        this.zoomedCardScreen = markRaw(screen);
+        this.zoomedCardList = this.visibleCards(screen);
         this.zoomedCardOrigin = container.getBoundingClientRect();
         this.zoomedCard = card;
       }
+    },
+    cardOfContainer(container: Element): CardModel | undefined {
+      return this.knownCards.find((entry) => container.classList.contains(cardClassName(entry.name)));
+    },
+    // Alle sichtbaren Karten des Bildschirms (ausgeblendete Abschnitte zählen nicht), jede nur einmal
+    visibleCards(screen: HTMLElement): Array<CardModel> {
+      const cards: Array<CardModel> = [];
+      for (const container of Array.from(screen.querySelectorAll('.card-container'))) {
+        const card = container.getClientRects().length > 0 ? this.cardOfContainer(container) : undefined;
+        if (card !== undefined && !cards.some((entry) => entry.name === card.name)) {
+          cards.push(card);
+        }
+      }
+      return cards;
+    },
+    // Vor/Zurück in der Großansicht; die Schrumpf-Animation zielt danach auf die neue Karte in der Liste
+    stepZoomedCard(direction: 1 | -1) {
+      const card = this.zoomedCardList[this.zoomedCardIndex + direction];
+      if (card === undefined) {
+        return;
+      }
+      const container = this.zoomedCardScreen?.querySelector('.card-container.' + CSS.escape(cardClassName(card.name)));
+      this.zoomedCardOrigin = container?.getBoundingClientRect() ?? undefined;
+      this.zoomedCard = card;
     },
     // "Karte spielen" aus der Großansicht: Karussell öffnen und zu dieser Karte wischen
     playZoomedCard() {
@@ -547,7 +586,7 @@ export default defineComponent({
       this.$nextTick(() => {
         const section = this.$refs.turnSection as HTMLElement | undefined;
         const labels = Array.from(section?.querySelectorAll('.payments_cont > label.payments_cards') ?? []);
-        const index = labels.findIndex((label) => label.querySelector('.' + cardClassName(card.name)) !== null);
+        const index = labels.findIndex((label) => label.querySelector('.' + CSS.escape(cardClassName(card.name))) !== null);
         if (index >= 0) {
           this.scrollCarousel(index);
         }
