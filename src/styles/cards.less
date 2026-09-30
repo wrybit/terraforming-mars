@@ -103,15 +103,10 @@ input[type="radio"]+.filterDiv.card-container {
   margin-top: 22px;
 }
 
-// Gewählte Karte: Rahmen und pulsierender Schein in der CTA-Farbe (selection_highlight.less)
+// Gewählte Karte: Rahmen, Schein und Tönung in der CTA-Farbe (selection_highlight.less)
 input[type="checkbox"]:checked+.filterDiv,
 input[type="radio"]:checked+.filterDiv {
   .selection-highlight();
-}
-
-input[type="checkbox"]:checked+.filterDiv.card-container::before,
-input[type="radio"]:checked+.filterDiv.card-container::before {
-  .selection-tint();
 }
 
 input[type="checkbox"]:checked+.filterDiv::after,
