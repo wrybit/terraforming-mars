@@ -1419,6 +1419,16 @@ html.tm-mobile {
     gap: 8px;
   }
 
+  // Zweispaltig etwas kleinere Schrift, damit lange Übersetzungen (Auszeichnung) nicht mitten im Wort umbrechen
+  .mb-sheet-grid .mb-tile {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .mb-sheet-grid .mb-tile-label {
+    font-size: 14px;
+  }
+
   .mb-sheet-grid,
   .mb-sheet-end {
     display: grid;
@@ -1428,6 +1438,7 @@ html.tm-mobile {
 
   // Kachel wie im Mockup: Symbol, Label, Unterzeile; Farbtöne wie die Desktop-Tabs (Grünfläche, Wärme, Meilenstein)
   .mb-tile {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -1493,9 +1504,12 @@ html.tm-mobile {
     flex-direction: column;
     gap: 2px;
     min-width: 0;
+    padding-right: 12px; // Platz für den Zähler oben rechts
   }
 
   .mb-tile-label {
+    // Lange Wörter (Übersetzungen) notfalls umbrechen statt über den Rand laufen
+    overflow-wrap: break-word;
     font-weight: bold;
     font-size: 15px;
   }
@@ -1505,18 +1519,20 @@ html.tm-mobile {
     color: @mb-muted;
   }
 
-  // Zähler rechts in der Kachel wie am Desktop-Tab
+  // Zähler oben rechts an der Kachel wie am Desktop-Tab; nimmt dem Text keinen Platz weg (.mb-tile ist relativ)
   .mb-tile-count {
-    flex-shrink: 0;
-    min-width: 26px;
-    height: 26px;
-    padding: 0 6px;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
     box-sizing: border-box;
-    border-radius: 13px;
-    background: rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.14);
     font-family: Prototype, sans-serif;
-    font-size: 15px;
-    line-height: 26px;
+    font-size: 12px;
+    line-height: 20px;
     text-align: center;
   }
 
