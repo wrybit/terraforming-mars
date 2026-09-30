@@ -1,5 +1,6 @@
 // Gemeinsame Hervorhebung einer getroffenen Auswahl (Karten in cards.less, Meilensteine/Auszeichnungen
-// in milestone_award_options.less): Rahmen und pulsierender Schein in der CTA-Farbe
+// in milestone_award_options.less, Kacheln in resource_options.less/player_options.less):
+// Rahmen, pulsierender Schein und 20-%-Lila-Tönung in der CTA-Farbe – überall gleich, Desktop wie Mobil
 
 @selection-color: @bg_action;
 @selection-pulse-period: 1.6s;
@@ -7,29 +8,37 @@
 // Klarer 5px-Rahmen (steht fest), darüber ein pulsierender Schein
 @selection-outline-width: 5px;
 
+// Schein bewusst knapp: er soll die Auswahl markieren, nicht die Nachbarn überstrahlen
+@selection-glow-rest: 0 0 10px 4px fade(@selection-color, 70%);
+
 @keyframes selection-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 @selection-outline-width @selection-color, 0 0 14px 8px fade(@selection-color, 60%);
+    box-shadow: 0 0 0 @selection-outline-width @selection-color, 0 0 6px 2px fade(@selection-color, 55%);
   }
 
   50% {
-    box-shadow: 0 0 0 @selection-outline-width @selection-color, 0 0 34px 18px fade(@selection-color, 95%);
+    box-shadow: 0 0 0 @selection-outline-width @selection-color, 0 0 14px 6px fade(@selection-color, 85%);
   }
 }
 
+// Das Element braucht position: relative (für die Tönung als ::before)
 .selection-highlight() {
-  box-shadow: 0 0 0 @selection-outline-width @selection-color, 0 0 24px 12px fade(@selection-color, 80%);
+  box-shadow: 0 0 0 @selection-outline-width @selection-color, @selection-glow-rest;
   animation: selection-pulse @selection-pulse-period ease-in-out infinite;
+
+  &::before {
+    .selection-tint();
+  }
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
   }
 }
 
-// Gewählte Karten zusätzlich leicht lila einfärben, damit die Auswahl auch ohne den Schein am Rand
-// sofort auffällt (Desktop und Mobil). Als Überlagerung über dem Inhalt, weil die Karte eigene
-// Hintergrundbilder hat, die eine Hintergrundfarbe verdecken würden.
+// Gewähltes Element zusätzlich leicht lila einfärben, damit die Auswahl auch ohne den Schein am Rand
+// sofort auffällt. Als Überlagerung über dem Inhalt, weil Karten und Kacheln eigene
+// Hintergrundbilder haben, die eine Hintergrundfarbe verdecken würden.
 @selection-tint-opacity: 20%;
 
 .selection-tint() {
