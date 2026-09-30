@@ -865,6 +865,12 @@ html.tm-mobile {
     .players-table-row--player > :last-child {
       border-radius: 0 0 10px 10px;
     }
+
+    // Trennung Waren | Wertung | Tags | Karten: Linie über der ersten Zelle jedes weiteren Abschnitts,
+    // in allen Spalten gleich (auch Symbol-Spalte), damit die Zeilen bündig bleiben – wie bei Meilensteinen
+    .players-table-divider ~ .players-table-divider + * {
+      border-top: 2px solid rgba(255, 255, 255, 0.3);
+    }
   }
 
   // Spielerfarbe je Spalte (die Zeilen sind aufgelöst und tragen keinen Hintergrund mehr)
