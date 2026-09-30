@@ -170,6 +170,7 @@
 
 // Spieleinstellungen (GameSetupDetail) hier als ruhige Liste: Bezeichnung links in fester Breite, Werte als Pillen
 @game-home-setup-label-width: 150px;
+@game-home-setup-label-line-height: 18px;
 
 .game-home .game-setup-detail-container {
   > ul {
@@ -184,7 +185,8 @@
       position: relative;
       flex-wrap: wrap;
       gap: 4px;
-      min-height: 26px;
+      // Platz für eine zweizeilige Bezeichnung (steht absolut, zählt sonst nicht zur Zeilenhöhe)
+      min-height: 2 * @game-home-setup-label-line-height;
       padding-left: @game-home-setup-label-width;
       font-size: 14px;
     }
@@ -196,6 +198,7 @@
     left: 0;
     width: @game-home-setup-label-width - 12px;
     margin: 0;
+    line-height: @game-home-setup-label-line-height;
     color: @game-home-dim;
     font-size: 13px;
   }
