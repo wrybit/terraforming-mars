@@ -39,6 +39,8 @@
 
   &::after {
     .selection-tab();
+    // Direkt auf dem Auswahl-Rahmen aufsetzen: die Kachel hat keinen eigenen Rand wie die Karten
+    top: -(@selection-tab-height + @selection-outline-width);
   }
 }
 
