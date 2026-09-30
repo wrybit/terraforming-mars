@@ -46,7 +46,7 @@
               <div v-if="gameOptions.initialDraftVariant" class="game-config generic" v-i18n>Initial</div>
               <div v-if="gameOptions.draftVariant" class="game-config generic" v-i18n>Research phase</div>
               <div v-if="!gameOptions.initialDraftVariant && !gameOptions.draftVariant" class="game-config generic" v-i18n>Off</div>
-              <div v-if="gameOptions.preludeDraftVariant">Prelude</div>
+              <div v-if="gameOptions.preludeDraftVariant" class="game-config generic" v-i18n>Prelude</div>
             </li>
 
             <li v-if="gameOptions.escapeVelocity !== undefined">

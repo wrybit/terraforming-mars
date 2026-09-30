@@ -635,7 +635,7 @@
   "Select an empty space to make unavailable for the rest of the game": "Wähle ein leeres Feld, das für den Rest des Spiels nicht mehr zur Verfügung steht",
   "Select either Tharsis Tholus, Ascraeus Mons, Pavonis Mons or Arsia Mons": "Wähle entweder Tharsis Tholus, Ascraeus Mons, Pavonis Mons oder Arsia Mons",
   "Select builder card to copy": "Wähle ein Gebäude-Karte zum kopieren",
-  "Copy": "Kopiere",
+  "Copy": "Kopieren",
   "Do nothing": "Mache nichts",
   "Ok ${0}": "OK ${0}",
 
@@ -1070,7 +1070,7 @@
   "Keep 1": "Behalte 1",
   "Keep 2": "Behalte 2",
   "Start": "Beginne",
-  "Play": "Spiele",
+  "Play": "Spielen",
   "Trade": "Handle",
   "Send delegate": "Entsende Deligierten",
   "Remove delegate": "Entferne Deligierten",
