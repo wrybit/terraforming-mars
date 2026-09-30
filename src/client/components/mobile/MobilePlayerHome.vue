@@ -23,6 +23,25 @@
     <main class="mb-main">
       <!-- Mars: Brett ohne Skalen-Ring, darunter die Parameter als Balken, dann Meilensteine usw. aus GameBoardView -->
       <section v-show="screen === 'mars'" class="mb-screen mb-screen--mars">
+        <!-- Sprache, Spieldetails, Hilfe, Einstellungen: dieselben Knöpfe wie am Desktop, hier als Leiste oben -->
+        <Sidebar class="mb-toolbar"
+          :actingPlayer="acting"
+          :playerColor="thisPlayer.color"
+          :coloniesCount="game.colonies.length"
+          :temperature="game.temperature"
+          :oxygen="game.oxygenLevel"
+          :oceans="game.oceans"
+          :venus="game.venusScaleLevel"
+          :turmoil="game.turmoil"
+          :moonData="game.moon"
+          :gameOptions="game.gameOptions"
+          :playerNumber="playerView.players.length"
+          :lastSoloGeneration="game.lastSoloGeneration"
+          :deckSize="game.deckSize"
+          :discardPileSize="game.discardPileSize"
+          :otherDeckSizes="game.otherDeckSizes"
+          :spectatorId="game.spectatorId"
+          :expectedPurgeTimeMs="game.expectedPurgeTimeMs"/>
         <!-- Zugstatus wie im Mockup nur hier: wer dran ist, welche Aktion, eigene Spielzeit -->
         <div :class="['mb-banner', {'mb-banner--waiting': !acting}]">
           <span class="mb-banner-dot"></span>
@@ -199,6 +218,7 @@ import MobileTurnSheet from '@/client/components/mobile/MobileTurnSheet.vue';
 import MobileCardZoom from '@/client/components/mobile/MobileCardZoom.vue';
 import {CardModel} from '@/common/models/CardModel';
 import PlayerTimer from '@/client/components/overview/PlayerTimer.vue';
+import Sidebar from '@/client/components/Sidebar.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
 import {TurnMenu, TurnMenuTile, buildTurnMenu, playableCardTile, readInputTitle, selectTurnMenuTile} from '@/client/components/mobile/turnMenu';
 import {isChoiceMenu} from '@/client/components/choiceMenu';
@@ -323,6 +343,7 @@ export default defineComponent({
     MobileCardZoom,
     PlayerTimer,
     MilestoneAwardTable,
+    Sidebar,
   },
   computed: {
     game(): GameModel {
