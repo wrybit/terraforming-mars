@@ -204,6 +204,9 @@ html.tm-mobile {
 
     .sidebar_item {
       position: static;
+      // Die alte Leiste hebt Einstellungen per z-index an; bei Flex-Elementen wirkt das auch ohne Positionierung
+      // und legte den Knopf über das unscharfe Sheet
+      z-index: auto;
       box-sizing: border-box;
       width: @mb-toolbar-button;
       height: @mb-toolbar-button;
