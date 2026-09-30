@@ -252,7 +252,8 @@ each(@players, {
 .players-table-identity {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  justify-content: center;
+  gap: 2px; // Name und Konzern gehören zusammen: eng, der Block sitzt mittig in der Zeile
   min-width: 0;
   padding-left: 24px; // Platz für Farbbalken samt Startspieler-Schild
 }
@@ -316,6 +317,7 @@ each(@players, {
   flex: none;
   font-family: Prototype, sans-serif;
   font-size: 19px;
+  line-height: 1; // Prototype bringt viel Zeilenhöhe mit, die den Konzern sonst nach unten schiebt
   color: #fff;
   white-space: nowrap;
 }
@@ -328,6 +330,7 @@ each(@players, {
 .players-table-corporation {
   font-family: @font_family_main;
   font-size: 13px;
+  line-height: 1.2;
   color: @players-table-muted;
   white-space: nowrap;
   overflow: hidden;
