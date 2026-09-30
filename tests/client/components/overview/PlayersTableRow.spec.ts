@@ -67,10 +67,10 @@ describe('PlayersTableRow', () => {
     expect(calls).to.deep.include(['pinned_player_0', true]);
   });
 
-  it('shows the first player in the color bar and drops the word for the acting player', () => {
+  it('shows the first player in the color bar and hands the status to the player head', () => {
     const wrapper = mountRow({showOtherPlayersVP: false, firstForGen: true, actionLabel: 'active'});
     expect(wrapper.find('[data-test="first-player"]').text()).to.eq('1');
-    expect(wrapper.classes()).to.include('players-table-row--acting');
+    expect(wrapper.findComponent({name: 'PlayerIdentity'}).props('actionLabel')).to.eq('active');
     expect(mountRow({showOtherPlayersVP: false}).find('[data-test="first-player"]').exists()).to.be.false;
   });
 });

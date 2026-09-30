@@ -3,13 +3,7 @@
     <!-- Ganze Zeile ist klickbar und öffnet die gespielten Karten (wie die klassische Spielerleiste) -->
     <!-- Startspieler als "1" im Farbbalken, damit die Namenszeile Platz für Name und Status hat -->
     <span v-if="firstForGen && playerView.players.length > 1" class="players-table-first-player" :title="$t('First player')" data-test="first-player">1</span>
-    <div class="players-table-identity">
-      <div class="players-table-identity-line">
-        <span class="players-table-name">{{ symbol + player.name }}</span>
-        <PlayerStatus :timer="player.timer" :showTimer="playerView.game.gameOptions.showTimers" :liveTimer="playerView.game.phase !== Phase.END" :actionLabel="actionLabel" v-trim-whitespace/>
-      </div>
-      <div class="players-table-corporation" :title="corporations">{{ corporations }}</div>
-    </div>
+    <PlayerIdentity :player="player" :playerView="playerView" :actionLabel="actionLabel" :highlighted="isThisPlayer"/>
 
     <!-- Reihenfolge der Abschnitte aus PlayersTable (Desktop: Waren, Tags, Wertung; mobil: Waren, Wertung, Tags) -->
     <template v-for="section in sectionOrder" :key="section">
@@ -56,23 +50,20 @@
 import {defineComponent} from 'vue';
 import {ViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Resource} from '@/common/Resource';
-import {Phase} from '@/common/Phase';
 import {ActionLabel} from '@/client/components/overview/ActionLabel';
-import PlayerStatus from '@/client/components/overview/PlayerStatus.vue';
+import PlayerIdentity from '@/client/components/overview/PlayerIdentity.vue';
 import PlayersTableGoods from '@/client/components/overview/PlayersTableGoods.vue';
 import PointsPerTag from '@/client/components/overview/PointsPerTag.vue';
 import {PlayerGood, playerGoods} from '@/client/components/overview/playerGoods';
 import {InterfaceTagsType, TagDetail, TagDetails, isVictoryPointCountHidden} from '@/client/components/overview/playerTagDetails';
 import {DESKTOP_SECTION_ORDER, SectionVisibility, TableSection, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
-import {corporationNames} from '@/client/components/overview/playerCorporations';
 import {togglePlayerCards} from '@/client/components/overview/playerCardsToggle';
-import {playerSymbol} from '@/client/utils/playerSymbol';
 import {vueRoot} from '@/client/components/vueRoot';
 
 export default defineComponent({
   name: 'PlayersTableRow',
   components: {
-    PlayerStatus,
+    PlayerIdentity,
     PlayersTableGoods,
     PointsPerTag,
   },
@@ -121,9 +112,6 @@ export default defineComponent({
     },
   },
   computed: {
-    Phase(): typeof Phase {
-      return Phase;
-    },
     isThisPlayer(): boolean {
       return this.player.color === this.playerView.thisPlayer?.color;
     },
@@ -132,17 +120,7 @@ export default defineComponent({
       if (this.isThisPlayer) {
         classes.push('players-table-row--me');
       }
-      // Am Zug: der blinkende rote Punkt zeigt das, das Wort "aktiv" entfällt
-      if (this.actionLabel === 'active') {
-        classes.push('players-table-row--acting');
-      }
       return classes;
-    },
-    symbol(): string {
-      return playerSymbol(this.player.color, ' ');
-    },
-    corporations(): string {
-      return corporationNames(this.player).map((name) => this.$t(name)).join(' · ');
     },
     goods(): Array<PlayerGood> {
       return playerGoods(this.player);

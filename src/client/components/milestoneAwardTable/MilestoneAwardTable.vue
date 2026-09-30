@@ -41,7 +41,8 @@
     </div>
 
     <div v-for="player in orderedPlayers" :key="player.color" :class="rowClasses(player)" :data-test="'row-' + player.color">
-      <div class="ma-table-name">{{ player.name }}</div>
+      <!-- Slot "player": Mobil-Ansicht setzt hier denselben Spieler-Kopf ein wie in der Spieler-Tabelle -->
+      <div class="ma-table-name"><slot name="player" :player="player">{{ player.name }}</slot></div>
       <div class="ma-table-divider"></div>
       <div v-for="milestone in milestones" :key="milestone.name" :class="milestoneCellClasses(milestone, player)">
         <i v-if="milestone.color === player.color" :class="cubeClasses(player.color)" :title="player.name"></i>

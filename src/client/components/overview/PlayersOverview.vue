@@ -39,10 +39,8 @@ import {ownPlayerIndex} from '@/client/components/overview/ownPlayerIndex';
 import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
 import {ViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {ActionLabel} from '@/client/components/overview/ActionLabel';
-import {Phase} from '@/common/Phase';
+import {playerActionLabel} from '@/client/components/overview/playerActionLabel';
 import {Color} from '@/common/Color';
-
-const SHOW_NEXT_LABEL_MIN = 2;
 
 export const playerIndex = (
   color: Color,
@@ -107,49 +105,7 @@ export default defineComponent({
       return playersInTurnOrder(this.players, this.thisPlayer.color).slice(0, -1);
     },
     getActionLabel(player: PublicPlayerModel): ActionLabel {
-      if (this.playerView.game.phase === Phase.DRAFTING) {
-        if (player.needsToDraft) {
-          return 'drafting';
-        } else {
-          return 'none';
-        }
-      } else if (this.playerView.game.phase === Phase.RESEARCH) {
-        if (player.needsToResearch) {
-          return 'researching';
-        } else {
-          return 'none';
-        }
-      }
-      if (this.playerView.game.passedPlayers.includes(player.color)) {
-        return 'passed';
-      }
-      if (player.isActive) {
-        return 'active';
-      }
-      const notPassedPlayers = this.players.filter(
-        (p: PublicPlayerModel) => !this.playerView.game.passedPlayers.includes(p.color),
-      );
-
-      const currentPlayerIndex = playerIndex(
-        player.color,
-        notPassedPlayers,
-      );
-
-      if (currentPlayerIndex === -1) {
-        return 'none';
-      }
-
-      const prevPlayerIndex =
-                currentPlayerIndex === 0 ?
-                  notPassedPlayers.length - 1 :
-                  currentPlayerIndex - 1;
-      const isNext = notPassedPlayers[prevPlayerIndex].isActive;
-
-      if (isNext && this.players.length > SHOW_NEXT_LABEL_MIN) {
-        return 'next';
-      }
-
-      return 'none';
+      return playerActionLabel(player, this.playerView);
     },
   },
 });

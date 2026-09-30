@@ -109,7 +109,12 @@
           <PlayersOverview v-show="playersSegment === 'players'" :playerView="playerView" v-trim-whitespace/>
           <!-- Hülle trägt v-show: die Tabelle selbst ist in der Mobil-Ansicht per !important sichtbar geschaltet -->
           <div v-if="playerView.players.length > 1" v-show="playersSegment === 'ma'" class="mb-ma">
-            <MilestoneAwardTable :milestones="game.milestones" :awards="game.awards" :players="playerView.players" :viewerColor="thisPlayer.color"/>
+            <MilestoneAwardTable :milestones="game.milestones" :awards="game.awards" :players="playerView.players" :viewerColor="thisPlayer.color">
+              <!-- Gleicher Kopf wie im Spieler-Abschnitt: Name, Status/Zeit, Konzern -->
+              <template #player="{player}">
+                <PlayerIdentity :player="player" :playerView="playerView" :actionLabel="actionLabelOf(player)" :highlighted="player.color === thisPlayer.color"/>
+              </template>
+            </MilestoneAwardTable>
           </div>
         </template>
       </section>
@@ -237,6 +242,9 @@ import {ownActiveCards} from '@/client/utils/ownActiveCards';
 import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
 import {requestPlacementZoom} from '@/client/components/board/placementZoom';
 import {CarouselState, observeCardCarousel, scrollCarouselTo} from '@/client/components/mobile/cardCarousel';
+import PlayerIdentity from '@/client/components/overview/PlayerIdentity.vue';
+import {playerActionLabel} from '@/client/components/overview/playerActionLabel';
+import {ActionLabel} from '@/client/components/overview/ActionLabel';
 
 // Aufräumfunktion der Beobachter (Feldwahl, Karussell); pro Seite gibt es nur eine Spieleransicht
 let stopObserving: (() => void) | undefined;
@@ -368,6 +376,7 @@ export default defineComponent({
     MobileTurnButton,
     PlayerTimer,
     MilestoneAwardTable,
+    PlayerIdentity,
     Sidebar,
   },
   computed: {
@@ -479,6 +488,9 @@ export default defineComponent({
     stopObserving = undefined;
   },
   methods: {
+    actionLabelOf(player: PublicPlayerModel): ActionLabel {
+      return playerActionLabel(player, this.playerView);
+    },
     signed(value: number): string {
       return value >= 0 ? '+' + value : String(value);
     },
