@@ -306,6 +306,10 @@ type PlayersSegment = typeof PLAYER_SEGMENTS[number]['key'];
 // Zuletzt gewählter Bildschirm außerhalb der Aufgabe. Nach jedem Server-Update wird die Ansicht neu aufgebaut
 // (App.vue: key), der Bildschirm soll dabei erhalten bleiben
 let rememberedScreen: MobileScreen = 'mars';
+// Erster Mount nach dem Laden der Seite: Turn-Drawer nicht automatisch öffnen.
+// App.vue baut die Ansicht bei jedem Server-Update neu auf (playerkey) – dort soll er weiter
+// aufgehen, damit nach einer Aktion direkt das Menü für die nächste da ist.
+let pageJustLoaded = true;
 
 /* True, wenn `input` das Aktionsmenü des Zuges ist (dieselbe Unterscheidung wie WaitingFor). */
 function isActionMenuInput(input: PlayerInputModel | undefined): boolean {
@@ -326,11 +330,13 @@ export default defineComponent({
     const menu = isActionMenuInput(waitingFor);
     // Aktionsmenü: Sheet über dem bisherigen Bildschirm; andere Pflicht-Eingaben direkt als Aufgabe
     const acting = waitingFor !== undefined && !waitingFor.optional;
+    const openSheet = menu && !pageJustLoaded;
+    pageJustLoaded = false;
     return {
       screen: acting && !menu ? 'turn' : rememberedScreen,
       placing: false,
-      sheetOpen: menu,
-      turnButtonLifted: menu,
+      sheetOpen: openSheet,
+      turnButtonLifted: openSheet,
       task: undefined,
       inputTitle: undefined,
       playersSegment: 'players',
