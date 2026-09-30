@@ -8,6 +8,7 @@
   .log-gen-title {
     // Mittig auf der Achse der Tab-Ziffern (die Leiste selbst sitzt unten auf der Box)
     align-self: center;
+    flex: none;
     margin: 0 8px 0 0;
     text-transform: uppercase;
     font-family: Prototype, sans-serif;
@@ -15,8 +16,22 @@
     color: #a4a6ae;
   }
   // Tab-Leiste sitzt direkt auf der Box (siehe or_options_tabs.less), hier ohne den Badge-Abstand oben
+  // Bei vielen Generationen waagerecht scrollbar statt die Ziffern zu stauchen (LogGenerationList.vue hält den gewählten Tab im Blick)
   .log-gen-tabs {
     margin-top: 0;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .or-tab {
+      flex-shrink: 0;
+    }
   }
   // Solo-Limit ("of 12") als rote Marke, kleiner als die Tab-Ziffern, damit es nicht wie ein weiterer Tab wirkt
   .label-additional {
