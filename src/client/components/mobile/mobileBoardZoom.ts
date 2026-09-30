@@ -1,6 +1,7 @@
-// Planet im Brett-Hintergrund (px bei zoom 1, Ellipse aus assets/board/mars-planet.png)
-const PLANET_WIDTH = 449;
-const PLANET_HEIGHT = 449;
+/* Mars ohne Skalen-Ring: Ausschnitt des Bretts (.board-cont, px bei zoom 1) mit Planet und den
+   Kolonie-Feldern in den oberen Ecken. Startscreen (mobileFit.ts) und großer Mars (BoardZoomModal) zeigen
+   denselben Ausschnitt, damit Proportionen und Lage der Kolonie-Felder übereinstimmen. */
+export const MARS_CROP = {left: 42, top: 62, width: 550, height: 486};
 /* Mitte des Planeten relativ zur linken oberen Ecke des Bretts (.board-cont), px bei zoom 1. */
 export const PLANET_CENTER = {x: 316, y: 310};
 // Platz für Statusleiste, Kopf und Zoom-Leiste des großen Mars
@@ -19,7 +20,7 @@ export function steppedZoomRatio(ratio: number, direction: 1 | -1): number {
   return Math.min(MAX_ZOOM_RATIO, Math.max(1, steps * ZOOM_STEP_RATIO));
 }
 
-/* Zoom, bei dem der ganze Planet in ein Fenster `width` × `height` px passt. */
+/* Zoom, bei dem der ganze Ausschnitt (Planet samt Kolonie-Feldern) in ein Fenster `width` × `height` px passt – ohne Scrollen. */
 export function wholePlanetZoom(width: number, height: number): number {
-  return Math.min((width - 2 * SIDE_MARGIN) / PLANET_WIDTH, (height - CHROME_HEIGHT) / PLANET_HEIGHT);
+  return Math.min((width - 2 * SIDE_MARGIN) / MARS_CROP.width, (height - CHROME_HEIGHT) / MARS_CROP.height);
 }

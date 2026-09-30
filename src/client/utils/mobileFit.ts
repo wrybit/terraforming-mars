@@ -6,6 +6,8 @@
  * Stile gesetzt, keine Knoten verschoben – sonst käme Vue beim Aktualisieren durcheinander.
  */
 
+import {MARS_CROP} from '@/client/components/mobile/mobileBoardZoom';
+
 /* Sichtbarer Ausschnitt eines Elements in dessen eigenen px (vor der Skalierung). */
 export type FitCrop = {left: number, top: number, width: number, height: number};
 
@@ -56,7 +58,6 @@ export function boardMaxHeight(width: number, height: number): number {
   const landscape = width >= LANDSCAPE_MIN_WIDTH && width > height;
   return landscape ? height - BARS_HEIGHT : height * BOARD_HEIGHT_SHARE;
 }
-const MARS_CROP: FitCrop = {left: 42, top: 62, width: 550, height: 486};
 
 const RULES: ReadonlyArray<FitRule> = [
   {selector: '.mb-screen--mars > .board-cont.board-without-venus, #game-end .board-cont.board-without-venus', crop: MARS_CROP},
