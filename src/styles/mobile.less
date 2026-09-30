@@ -150,7 +150,7 @@ html.tm-mobile {
   }
 
   // ---------- Knöpfe der Desktop-Seitenleiste (Sidebar.vue) als Leiste oben im Mars-Bildschirm ----------
-  // Eigene Farbe, Sprache, Spieldetails, Hilfe, Einstellungen; Parameter und Sprunglinks stehen anderswo
+  // Links, was zum eigenen Spiel gehört (Farbe, Sprache, Kartenstapel), rechts abgesetzt Info, Hilfe, Einstellungen
   .mb-toolbar.sidebar_cont {
     order: 0;
     position: static;
@@ -158,7 +158,7 @@ html.tm-mobile {
     height: auto;
     display: flex;
     flex-flow: row nowrap;
-    justify-content: flex-end;
+    align-items: stretch;
     gap: 6px;
     padding: 0;
     background: none;
@@ -166,8 +166,40 @@ html.tm-mobile {
 
     .global_params,
     > div:has(.party-name-indicator),
-    > a {
+    > a:has(.sidebar_icon--colonies) {
       display: none;
+    }
+
+    .preferences_player {
+      order: 1;
+      writing-mode: horizontal-tb;
+      transform: none;
+    }
+
+    .sidebar_item--language {
+      order: 2;
+      position: relative;
+      inset: auto;
+    }
+
+    > a:has(.goto-cards) {
+      order: 3;
+      text-decoration: none;
+      pointer-events: none; // Sprunglink ergibt mobil keinen Sinn; die Hand hat ihren eigenen Tab
+    }
+
+    // Rechte Gruppe abgesetzt (doppelter Selektor, sonst setzt die allgemeine Knopf-Regel margin zurück)
+    .sidebar_item.sidebar_item--info {
+      order: 4;
+      margin-left: auto;
+    }
+
+    .sidebar_item--help {
+      order: 5;
+    }
+
+    .sidebar_item--settings {
+      order: 6;
     }
 
     .sidebar_item {
@@ -193,8 +225,43 @@ html.tm-mobile {
       background-position: center;
     }
 
-    .language-icon-for-sidebar {
+    // Sprache: Flagge (Sprite 44×30px) auf Icon-Breite verkleinert und exakt mittig im Knopf, auch beim Hover
+    .sidebar_item.sidebar_item--language {
+      position: relative;
+    }
+
+    .language-icon-for-sidebar,
+    .language-icon-for-sidebar:hover {
+      position: absolute;
+      top: 50%;
+      left: 50%;
       margin: 0;
+      transform: translate(-50%, -50%) scale(0.6);
+    }
+
+    // Kartenstapel: Symbol links, Nachziehstapel und Ablage rechts daneben (Kachel breiter statt höher)
+    .goto-cards.sidebar_item {
+      width: auto;
+      padding: 0 8px;
+      gap: 6px;
+    }
+
+    .sidebar_icon--cards {
+      display: flex;
+      align-items: center;
+      width: auto;
+      padding-left: 28px;
+      background-size: 24px;
+      background-position: left center;
+    }
+
+    .deck-size {
+      position: static;
+      width: auto;
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.2;
+      text-align: left;
     }
   }
 
