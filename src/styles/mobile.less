@@ -10,6 +10,8 @@
 // Fußleiste: Lila der Buttons (@bg_action) für Aktives, Grau für Inaktives
 @mb-action: @bg_action;
 @mb-nav-inactive: #8b90a0;
+// Strichstärke der Outline-Symbole bei 24 px (Standard von strokeWidth in MobileGlyph.vue), auch für Umrisse daneben
+@mb-glyph-stroke: 1.8px;
 @mb-nav-background: #12151e;
 @mb-gold: #f5c542;
 @mb-green: #2e7d32;
@@ -1983,12 +1985,13 @@ html.tm-mobile {
     border-radius: 9px;
     // Inaktiv nur Umriss und Zahl in der Farbe des inaktiven Symbols (wie die Outline-Symbole);
     // die Fläche in Leistenfarbe verdeckt das Symbol dahinter. Gefüllt lila nur, wenn der Eintrag aktiv ist
-    border: 1.5px solid @mb-nav-inactive;
+    // Browser runden Rahmen auf ganze px ab (1.8 → 1); gerundet trifft er die Strichstärke der Symbole am besten
+    border: round(@mb-glyph-stroke) solid @mb-nav-inactive;
     background: @mb-nav-background;
     color: @mb-nav-inactive;
     font-size: 11px;
     font-weight: bold;
-    line-height: 15px;
+    line-height: 18px - 2 * round(@mb-glyph-stroke);
     text-align: center;
     box-shadow: 0 0 0 2px @mb-nav-background;
   }
