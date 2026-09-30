@@ -56,8 +56,8 @@ export function fitScale(listWidth: number, itemWidth: number, columns: number, 
 // Mars ohne Skalen-Ring: Planet samt Kolonie-Feldern in den oberen Ecken (mobile.less)
 // Hochformat: höchstens dieser Anteil der Fensterhöhe für das Brett, darunter bleiben die Balken sichtbar
 const BOARD_HEIGHT_SHARE = 0.62;
-// Tablet quer (mobile.less: Mars links, Rest rechts): Brett so hoch wie der Platz zwischen den Leisten
-const LANDSCAPE_MIN_WIDTH = 900;
+// Tablet quer (mobile.less, @mb-landscape: Mars links, Rest rechts; Spieler-Tabellen waagerecht): ab dieser Breite im Querformat
+export const LANDSCAPE_MIN_WIDTH = 900;
 const BARS_HEIGHT = 180;
 
 /* Höchste Brett-Höhe in px für das aktuelle Fenster. */

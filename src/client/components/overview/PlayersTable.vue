@@ -27,7 +27,7 @@ import PlayersTableHeader from '@/client/components/overview/PlayersTableHeader.
 import PlayersTableRow from '@/client/components/overview/PlayersTableRow.vue';
 import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/components/overview/playerTagDetails';
 import {playerGoods} from '@/client/components/overview/playerGoods';
-import {mobileLayout} from '@/client/utils/mobileLayout';
+import {mobileLandscape, mobileLayout} from '@/client/utils/mobileLayout';
 import {
   DESKTOP_SECTION_ORDER, GOODS_COUNT, MOBILE_SECTION_ORDER, SCORE_COUNT, PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
   FittedVisibility, columnTemplate, fitToWidth, loadPreferredSection, loadSectionVisibility, savePreferredSection, saveSectionVisibility,
@@ -81,6 +81,10 @@ export default defineComponent({
     this.resizeObserver?.disconnect();
   },
   computed: {
+    // Mobil-Ansicht außer Tablet quer dreht die Tabelle (Spieler als Spalten, mobile.less @mb-portrait)
+    transposed(): boolean {
+      return mobileLayout.value && !mobileLandscape.value;
+    },
     // Je Spielerfarbe einmal berechnet; jede Zeile hat einen Eintrag
     tagDetailsByColor(): Record<string, TagDetails> {
       return Object.fromEntries(this.rows.map((row) => [row.player.color, buildTagDetails(row.player, this.playerView)]));
@@ -109,8 +113,8 @@ export default defineComponent({
     // Tags-Abschnitt entfällt, wenn es keine einzige Tag-Spalte gibt; zu Breites fällt nach Vorrang weg
     fitted(): FittedVisibility {
       const wanted = {...this.visibility, tags: this.visibility.tags && this.tagColumns.length > 0};
-      // Mobil-Ansicht bricht die Zeilen um (mobile.less), dort muss kein Abschnitt aus Platzgründen weichen
-      return fitToWidth(wanted, this.tagColumns, mobileLayout.value ? 0 : this.availableWidth, this.preferredSection);
+      // Gedrehte Tabelle (mobile.less) wächst nach unten, dort muss kein Abschnitt aus Platzgründen weichen
+      return fitToWidth(wanted, this.tagColumns, this.transposed ? 0 : this.availableWidth, this.preferredSection);
     },
     effectiveVisibility(): SectionVisibility {
       return this.fitted.visibility;
@@ -118,7 +122,7 @@ export default defineComponent({
     // Zellen je Zeile ohne Trenner (Name, Waren, Tags samt Gruppen-Lücken, Wertung, Karten);
     // die Mobil-Ansicht dreht die Tabelle damit um (mobile.less: Spieler als Spalten)
     sectionOrder(): ReadonlyArray<TableSection> {
-      return mobileLayout.value ? MOBILE_SECTION_ORDER : DESKTOP_SECTION_ORDER;
+      return this.transposed ? MOBILE_SECTION_ORDER : DESKTOP_SECTION_ORDER;
     },
     cellCount(): number {
       const visibility = this.effectiveVisibility;
