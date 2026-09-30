@@ -1,11 +1,12 @@
 <template>
-  <div :class="['mb-card-zoom', {'mb-card-zoom--open': open}]" role="dialog" aria-modal="true">
+  <div :class="['mb-card-zoom', {'mb-card-zoom--open': open, 'mb-card-zoom--neighbors-hidden': !neighborsShown}]" role="dialog" aria-modal="true">
     <!-- Karte wächst aus ihrer Position in der Liste in die Mitte und schrumpft beim Schließen dorthin zurück;
          Hintergrund unscharf (wie im Mockup), darunter kompakte Knöpfe -->
     <button type="button" class="mb-card-zoom-backdrop" :aria-label="$t('Close')" @click="close"></button>
     <!-- Karussell: alle Karten nebeneinander, per Wischen durchschiebbar, rastet auf je einer Karte ein -->
     <div ref="track" class="mb-card-zoom-track" @scroll.passive="onScroll">
-      <div v-for="slide in count" :key="slide" class="mb-card-zoom-slide" @click="onSlideClick(slide - 1)">
+      <!-- Seite der Karte relativ zur gezeigten: Nachbarn fahren von dort herein und dorthin wieder hinaus -->
+      <div v-for="slide in count" :key="slide" :class="['mb-card-zoom-slide', slideSideClass(slide - 1)]" @click="onSlideClick(slide - 1)">
         <div class="mb-card-zoom-card mb-fit-off">
           <slot name="slide" :index="slide - 1"></slot>
         </div>
@@ -48,9 +49,13 @@ const emit = defineEmits<{
 
 // Dauer muss zur Transition in mobile.less passen (@mb-card-zoom-duration)
 const DURATION_MS = 260;
+// Dauer muss zu @mb-card-zoom-neighbor-duration in mobile.less passen
+const NEIGHBOR_DURATION_MS = 220;
 // Ruhezeit nach dem letzten Scroll-Ereignis, ab der das Wischen als beendet gilt
 const SCROLL_SETTLE_MS = 120;
 const open = ref(false);
+// Nachbarkarten erst nach dem Wachsen hereinfahren und vor dem Schrumpfen wieder hinaus
+const neighborsShown = ref(false);
 const track = ref<HTMLElement | undefined>(undefined);
 
 const hasPrevious = computed(() => props.index > 0);
@@ -61,6 +66,18 @@ const hasNext = computed(() => props.index < props.count - 1);
 function slideWidth(): number {
   const slide = track.value?.querySelector<HTMLElement>('.mb-card-zoom-slide');
   return slide?.offsetWidth || 1;
+}
+
+function slideSideClass(slideIndex: number): string {
+  if (slideIndex < props.index) {
+    return 'mb-card-zoom-slide--before';
+  }
+  return slideIndex > props.index ? 'mb-card-zoom-slide--after' : '';
+}
+
+// Feste Wartezeit statt transitionend: das Ereignis bleibt aus, wenn keine Nachbarkarte existiert
+function wait(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
 }
 
 // Tap auf eine angeschnittene Nachbarkarte blättert zu ihr
@@ -146,7 +163,9 @@ onMounted(() => {
   }
   const start = originTransform();
   open.value = true;
-  animate(start, 'none');
+  animate(start, 'none').then(() => {
+    neighborsShown.value = true;
+  });
   window.addEventListener('keydown', onKeydown);
 });
 
@@ -155,7 +174,18 @@ onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown);
 });
 
+let closing = false;
 async function close() {
+  if (closing) {
+    return;
+  }
+  closing = true;
+  // Erst die Nachbarn hinausfahren, dann schrumpft die gezeigte Karte an ihren Platz zurück
+  if (neighborsShown.value && props.count > 1) {
+    neighborsShown.value = false;
+    await wait(NEIGHBOR_DURATION_MS);
+  }
+  neighborsShown.value = false;
   open.value = false;
   await Promise.race([animate('none', originTransform()), new Promise((resolve) => window.setTimeout(resolve, DURATION_MS + 100))]);
   emit('close');
