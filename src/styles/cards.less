@@ -109,6 +109,11 @@ input[type="radio"]:checked+.filterDiv {
   .selection-highlight();
 }
 
+input[type="checkbox"]:checked+.filterDiv.card-container::before,
+input[type="radio"]:checked+.filterDiv.card-container::before {
+  .selection-tint();
+}
+
 input[type="checkbox"]:checked+.filterDiv::after,
 input[type="radio"]:checked+.filterDiv::after {
   content: "✓";
