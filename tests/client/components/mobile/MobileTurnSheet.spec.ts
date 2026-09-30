@@ -6,8 +6,8 @@ import MobileTurnTile from '@/client/components/mobile/MobileTurnTile.vue';
 import {TurnMenu, TurnMenuTile, buildTurnMenu} from '@/client/components/mobile/turnMenu';
 import {OrOptionsModel} from '@/common/models/PlayerInputModel';
 
-function tile(index: number, key: string, tone?: TurnMenuTile['tone']): TurnMenuTile {
-  return {index, key, label: key, detail: undefined, count: 2, glyph: 'more', glyphTone: 'neutral', tone, empty: false};
+function tile(index: number, key: string, tone?: TurnMenuTile['tone'], confirmation?: TurnMenuTile['confirmation']): TurnMenuTile {
+  return {index, key, label: key, detail: undefined, count: 2, glyph: 'more', glyphTone: 'neutral', tone, empty: false, confirmation};
 }
 
 describe('MobileTurnSheet', () => {
@@ -15,7 +15,7 @@ describe('MobileTurnSheet', () => {
     available: [tile(0, 'Claim a milestone', 'highlight')],
     actions: [tile(1, 'Play project card'), tile(2, 'Standard projects')],
     skip: undefined,
-    pass: tile(3, 'Pass for this generation', 'danger'),
+    pass: tile(3, 'Pass for this generation', 'danger', {hint: 'You will not take any more actions this generation.', button: 'End round'}),
   };
 
   it('groups tiles and disables skip before the first action', () => {
@@ -47,6 +47,21 @@ describe('MobileTurnSheet', () => {
   });
 });
 
+describe('MobileTurnSheet turn end', () => {
+  it('asks inside the drawer before passing and confirms from there', async () => {
+    const menu: TurnMenu = {available: [], actions: [], skip: undefined, pass: tile(3, 'Pass for this generation', 'danger', {hint: 'Hint', button: 'End round'})};
+    const wrapper = mount(MobileTurnSheet, {...globalConfig, props: {menu, title: 'Take your first action', actionNumber: 1, actionsPerTurn: 2}});
+    await wrapper.find('.mb-tile--pass').trigger('click');
+    expect(wrapper.emitted('select')).to.be.undefined;
+    expect(wrapper.find('.mb-sheet-hint').text()).to.eq('Hint');
+    expect(wrapper.find('.mb-sheet-end').exists()).to.be.false;
+    await wrapper.find('.mb-sheet-confirm-button').trigger('click');
+    expect(wrapper.emitted('confirm')?.[0]).to.deep.eq([3]);
+    await wrapper.find('.mb-sheet-confirm .mb-taskbar-back').trigger('click');
+    expect(wrapper.find('.mb-sheet-end').exists()).to.be.true;
+  });
+});
+
 describe('buildTurnMenu', () => {
   it('sorts options into available now, actions and turn end with counts', () => {
     const option = (title: string, extra: object = {}) => ({type: 'option', title, buttonLabel: 'Save', ...extra});
@@ -67,5 +82,8 @@ describe('buildTurnMenu', () => {
     expect(menu.available[0].detail).to.not.be.undefined;
     expect(menu.skip?.index).to.eq(3);
     expect(menu.pass?.index).to.eq(1);
+    expect(menu.skip?.confirmation?.button).to.eq('Pass on');
+    expect(menu.pass?.confirmation?.button).to.eq('End round');
+    expect(menu.actions[0].confirmation).to.be.undefined;
   });
 });

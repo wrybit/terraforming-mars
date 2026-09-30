@@ -202,7 +202,7 @@
     </MobileCardZoom>
     <Transition name="mb-sheet" @before-enter="turnButtonLifted = true" @after-leave="turnButtonLifted = false">
       <MobileTurnSheet v-if="sheetOpen && (menu !== undefined || !acting)" :menu="menu" :waitingPlayers="waitingPlayers" :title="bannerTitle"
-        :action-number="actionNumber" :actions-per-turn="actionsPerTurn" @close="sheetOpen = false" @select="startTask"/>
+        :action-number="actionNumber" :actions-per-turn="actionsPerTurn" @close="sheetOpen = false" @select="startTask" @confirm="confirmTurnEnd"/>
     </Transition>
   </div>
 </template>
@@ -235,7 +235,7 @@ import {CardModel} from '@/common/models/CardModel';
 import PlayerTimer from '@/client/components/overview/PlayerTimer.vue';
 import Sidebar from '@/client/components/Sidebar.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
-import {TurnMenu, TurnMenuTile, buildTurnMenu, playableCardTile, readInputTitle, selectTurnMenuTile} from '@/client/components/mobile/turnMenu';
+import {TurnMenu, TurnMenuTile, buildTurnMenu, playableCardTile, readInputTitle, selectTurnMenuTile, submitTurnMenuTile} from '@/client/components/mobile/turnMenu';
 import {isChoiceMenu} from '@/client/components/choiceMenu';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {MOBILE_NAV, MobileNavItem, MobileScreen} from '@/client/components/mobile/mobileScreens';
@@ -528,6 +528,14 @@ export default defineComponent({
         [...menu.available, ...menu.actions, menu.skip, menu.pass].find((tile) => tile?.index === index);
       this.sheetOpen = false;
       this.go('turn');
+    },
+    // Weitergeben/Beenden nach der Rückfrage im Sheet: direkt auslösen, ohne eigene Aufgaben-Ansicht
+    confirmTurnEnd(index: number) {
+      const section = this.$refs.turnSection as HTMLElement | undefined;
+      this.sheetOpen = false;
+      if (section !== undefined) {
+        submitTurnMenuTile(section, index);
+      }
     },
     // Aufgabe abbrechen: zurück zum Menü (bzw. zum Mars); aus der Feldwahl zurück in die Aufgabe
     leaveTask() {
