@@ -24,7 +24,8 @@ type FitRule = {
 // Abstand zwischen Elementen einer Liste (rechts und unten, als Teil des Außenabstands)
 const GAP_PX = 6;
 // Bezugsbreite: die nächste Box bzw. der Bildschirm, in dem das Element steht (Listen selbst sind oft nur so breit wie ihr Inhalt)
-const CONTAINER_SELECTOR = '.setup-column-body, .or-tab-panel, .mb-screen, .game-end-box';
+// Gespielte Karten (mobile_played_cards.less) reichen breiter als der Bildschirm-Innenabstand
+const CONTAINER_SELECTOR = '.setup-column-body, .or-tab-panel, .other_player_cont, .mb-screen, .game-end-box';
 const FITTED_CLASS = 'mb-fit';
 // Mars ohne Skalen-Ring (mobile.less: Planet-Bild, Kolonie-Felder in die Ecken)
 const CROPPED_CLASS = 'mb-mars-cropped';
