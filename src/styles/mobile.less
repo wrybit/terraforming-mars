@@ -42,6 +42,8 @@
 @mb-carousel-room-top: 34px;
 @mb-carousel-room-bottom: 28px;
 @mb-carousel-dots-height: 26px;
+// Höhe des Fußbereichs beim Bezahlen mit drei Währungen (Stahl, Titan, M€): feste Achse der Karussell-Karten
+@mb-carousel-footer-reserve: 253px;
 // Höhe des Aufgaben-Kopfs (Zurück-Knopf 40 px + Innenabstand)
 @mb-task-head-height: 61px;
 // Zoom-Leiste unten am großen Mars (vgl. CONTROLS_HEIGHT in BoardZoomModal.vue)
@@ -1241,9 +1243,11 @@ html.tm-mobile {
     display: flex !important;
     flex-wrap: nowrap !important;
     gap: 14px !important;
-    // Karten mittig im Platz zwischen Aufgaben-Kopf und Bezahlbereich (Höhe des Bezahlbereichs aus MobilePlayerHome)
+    // Karten mittig im Platz zwischen Aufgaben-Kopf und Bezahlbereich (Höhe des Bezahlbereichs aus MobilePlayerHome).
+    // Gerechnet wird immer mit dem höchsten üblichen Bezahlbereich (drei Währungen), damit die Karten auf derselben
+    // Achse bleiben, egal ob mit einer, zwei oder drei Währungen bezahlt wird; nur ein noch höherer Fußbereich schiebt sie hoch
     align-items: center;
-    min-height: calc(100dvh - @mb-top-height - @mb-task-head-height - @mb-carousel-dots-height - var(--mb-footer-height, @mb-nav-height) - 24px);
+    min-height: calc(100dvh - @mb-top-height - @mb-task-head-height - @mb-carousel-dots-height - max(var(--mb-footer-height, @mb-nav-height), @mb-carousel-footer-reserve) - 24px);
     box-sizing: border-box;
     margin: 0 -8px;
     // Oben Platz fürs Auswahl-Häkchen über der Karte, unten für ihren Glow (overflow-x schneidet sonst beides ab)
