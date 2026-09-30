@@ -1,5 +1,6 @@
 <template>
   <div :class="'topmost-'+screen">
+    <RotateHint/>
     <section>
       <dialog id="alert-dialog" class="alert-dialog">
         <form method="dialog">
@@ -83,6 +84,7 @@ import {hasShowModal, showModal, windowHasHTMLDialogElement} from './HTMLDialogE
 
 import dialogPolyfill from 'dialog-polyfill';
 import {initMobileLayout, mobileLayout} from '@/client/utils/mobileLayout';
+import RotateHint from '@/client/components/RotateHint.vue';
 import {setDocumentTitle} from '../utils/documentTitle';
 
 type Screen = 'admin' |
@@ -149,6 +151,7 @@ export default defineComponent({
     };
   },
   components: {
+    RotateHint,
     StartScreen,
     CreateGameForm,
     LoadGameForm,
@@ -203,6 +206,9 @@ export default defineComponent({
     update(path: typeof paths.PLAYER | typeof paths.SPECTATOR): void {
       const currentPathname = getLastPathSegment();
       const app = this as unknown as MainAppData;
+      // Endet das Spiel, während die Ansicht offen ist, bleibt sie stehen: Die schwebende Meldung (GameOverNotice)
+      // leitet selbst zur Ergebnisseite weiter. Nur beim Öffnen eines beendeten Spiels geht es direkt dorthin.
+      const alreadyShowingGame = app.screen === 'player-home' || app.screen === 'spectator-home';
 
       const url = 'api/' + path + window.location.search.replace('&noredirect', '');
 
@@ -223,6 +229,7 @@ export default defineComponent({
           app.playerkey++;
           if (
             model.game.phase === 'end' &&
+              !alreadyShowingGame &&
               window.location.search.includes('&noredirect') === false
           ) {
             app.screen = 'the-end';
