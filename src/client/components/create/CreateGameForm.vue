@@ -249,10 +249,6 @@
           />
         </div>
 
-        <div class="create-game-links">
-          <a :href="wikiUrls.changelog" target="_blank" v-i18n>Read our changelog to get the latest updates.</a>
-          <span>(<span v-i18n>Looking for people to play with</span>? <a :href="constants.DISCORD_INVITE" target="_blank" v-i18n>Join us on Discord</a>.)</span>
-        </div>
       </main>
 
       <aside class="create-game-side">
@@ -544,9 +540,6 @@ export default defineComponent({
     },
     RandomBoardOption(): typeof RandomBoardOption {
       return RandomBoardOption;
-    },
-    constants(): typeof constants {
-      return constants;
     },
     PLAYER_COLORS(): typeof PLAYER_COLORS {
       return PLAYER_COLORS;
