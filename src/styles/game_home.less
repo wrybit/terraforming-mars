@@ -179,15 +179,22 @@
     margin: 0;
     padding: 0;
 
+    // Werte stehen in einer eigenen Spalte rechts der Bezeichnung; brechen sie um, bleiben sie in dieser Spalte
     > li {
+      position: relative;
       flex-wrap: wrap;
       gap: 4px;
+      min-height: 26px;
+      padding-left: @game-home-setup-label-width;
       font-size: 14px;
     }
   }
 
   .setup-item {
-    width: @game-home-setup-label-width;
+    position: absolute;
+    top: 4px;
+    left: 0;
+    width: @game-home-setup-label-width - 12px;
     margin: 0;
     color: @game-home-dim;
     font-size: 13px;
