@@ -6,7 +6,8 @@
 /* Stand des Karussells für die Punkte darunter. */
 export type CarouselState = {count: number, index: number};
 
-const LIST_SELECTOR = '.mb-screen--turn .payments_cont';
+// Standardprojekte liegen als Raster, nicht im Karussell (mobile.less, mobileFit.ts)
+const LIST_SELECTOR = '.mb-screen--turn .payments_cont:not(:has(.card-standard-project))';
 const ITEM_SELECTOR = ':scope > label.payments_cards';
 
 function visibleList(root: HTMLElement): HTMLElement | undefined {
