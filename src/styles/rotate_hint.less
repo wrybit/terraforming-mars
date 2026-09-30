@@ -1,0 +1,32 @@
+// Handy quer (siehe RotateHint.vue): nur auf Touch-Geräten mit sehr wenig Höhe. Tablets quer haben
+// deutlich mehr als 500 px Höhe und bleiben unberührt.
+.rotate-hint {
+  display: none;
+}
+
+@media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
+  .rotate-hint {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px;
+    background: #0e1116;
+    color: #e6e9ee;
+    text-align: center;
+  }
+
+  .rotate-hint__icon {
+    color: #5b57e0;
+  }
+
+  .rotate-hint__text {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
