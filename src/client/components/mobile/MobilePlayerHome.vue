@@ -97,7 +97,9 @@
         <HandCardsPanel :playerView="playerView"/>
       </section>
 
-      <section v-show="screen === 'players'" class="mb-screen mb-screen--players" @click.capture="zoomCard">
+      <!-- Ab drei Spielern scrollen die Tabellen waagerecht unter stehenbleibenden Symbol-Spalten (mobile.less) -->
+      <section v-show="screen === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': playerView.players.length > 2}]"
+        @click.capture="zoomCard" @scroll.capture="markHorizontalScroll">
         <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players"/>
         <template v-else>
           <div v-if="playerView.players.length > 1" class="mb-segments" role="tablist">
@@ -241,6 +243,7 @@ import {isBoardPlacementActive} from '@/client/components/board/boardPlacementAc
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
 import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
 import {requestPlacementZoom} from '@/client/components/board/placementZoom';
+import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
 import {CarouselState, observeCardCarousel, scrollCarouselTo} from '@/client/components/mobile/cardCarousel';
 import PlayerIdentity from '@/client/components/overview/PlayerIdentity.vue';
 import {playerActionLabel} from '@/client/components/overview/playerActionLabel';
@@ -488,6 +491,7 @@ export default defineComponent({
     stopObserving = undefined;
   },
   methods: {
+    markHorizontalScroll,
     actionLabelOf(player: PublicPlayerModel): ActionLabel {
       return playerActionLabel(player, this.playerView);
     },

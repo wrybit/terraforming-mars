@@ -25,8 +25,8 @@
 @mb-players-icon-column: 44px;
 // Lücke zwischen den Spalten der Spieler- und Meilenstein-Tabelle
 @mb-players-column-gap: 4px;
-// Ab drei Spielern: Mindestbreite je Spieler-Spalte, darüber hinaus wird waagerecht gescrollt
-@mb-players-column-min: 150px;
+// Kosten-Spalte der Meilenstein-Tabelle (M€-Münze neben dem Symbol)
+@mb-ma-cost-column: 24px;
 // Sheet auf Tablets mittig statt über die volle Breite
 @mb-sheet-max-width: 560px;
 @mb-sheet-duration: 320ms;
@@ -938,19 +938,50 @@ html.tm-mobile {
   });
 
   // ---------- Viele Spieler: waagerecht scrollen ----------
-  // Ab drei Spielern behalten die Spieler-Spalten eine Mindestbreite und die Tabellen scrollen waagerecht.
-  // Die Symbol-Spalten bleiben vorne stehen (sticky), die Spieler gleiten darunter durch.
+  // Ab drei Spielern scrollen die Tabellen waagerecht; die Symbol-Spalten bleiben vorne stehen (sticky),
+  // die Spieler gleiten darunter durch. Spalten so breit, dass genau --mb-players-visible Spieler neben die
+  // Symbole passen (Handy 2, Tablet hoch 3, quer 4 – wie cardColumns in mobileFit.ts): beim Einrasten bleibt
+  // so kein Rest einer Spalte neben den Symbolen stehen
   .mb-screen--players-scroll {
-    .players-table,
+    --mb-players-visible: 2;
+
+    @media (min-width: 560px) {
+      --mb-players-visible: 3;
+    }
+
+    @media (min-width: 900px) {
+      --mb-players-visible: 4;
+    }
+
+    .players-overview .players-table,
     .mb-ma .ma-table {
-      grid-auto-columns: minmax(@mb-players-column-min, 1fr);
       overflow-x: auto;
       overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
       scrollbar-width: none;
 
       &::-webkit-scrollbar {
         display: none;
       }
+    }
+
+    // .players-overview: schlägt die Grundregel der gedrehten Spieler-Tabelle.
+    // Einrasten: nach dem Wischen beginnt die erste sichtbare Spieler-Spalte direkt hinter den Symbolen
+    .players-overview .players-table {
+      grid-auto-columns: calc((100% - @mb-players-icon-column) / var(--mb-players-visible) - @mb-players-column-gap);
+      scroll-padding-left: @mb-players-icon-column + @mb-players-column-gap;
+    }
+
+    // Kosten-Spalte fest: "auto" fiele im scrollenden Raster auf null zusammen
+    .mb-ma .ma-table {
+      grid-template-columns: @mb-players-icon-column @mb-ma-cost-column;
+      grid-auto-columns: calc((100% - @mb-players-icon-column - @mb-ma-cost-column - @mb-players-column-gap) / var(--mb-players-visible) - @mb-players-column-gap);
+      scroll-padding-left: @mb-players-icon-column + @mb-ma-cost-column + 2 * @mb-players-column-gap;
+    }
+
+    .players-table-row--player > .players-table-identity,
+    .mb-ma .ma-table-name {
+      scroll-snap-align: start;
     }
 
     // Symbol-Spalte der Spieler-Tabelle (Kopfzeile) bzw. Symbole und Kosten der Meilenstein-Tabelle.
@@ -974,7 +1005,7 @@ html.tm-mobile {
     .mb-scrolled-x .players-table-row.players-table-head > *,
     .mb-scrolled-x .ma-table-row.ma-table-head > *,
     .mb-scrolled-x .ma-table-row.ma-table-status > * {
-      background-color: rgba(13, 15, 20, 0.72);
+      background-color: rgba(13, 15, 20, 0.82);
       -webkit-backdrop-filter: blur(10px) saturate(1.2);
       backdrop-filter: blur(10px) saturate(1.2);
     }
