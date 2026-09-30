@@ -4,6 +4,7 @@
       <div class="create-game-card create-game-head">
         <h1 v-i18n>Create New Game</h1>
         <div class="create-game-head-actions">
+          <PreferencesIcon/>
           <label class="create-game-icon-button" :title="$t('Load settings from file')">
             <i class="icon icon-upload"></i>
             <input style="display: none" type="file" accept=".json" id="settings-file" ref="file" @change="uploadSettings()">
@@ -309,7 +310,6 @@
       </aside>
     </div>
 
-    <PreferencesIcon/>
     <ValidationErrorsPopup v-if="showValidationErrors" :errors="validationErrors" @close="showValidationErrors = false"/>
   </div>
 </template>

@@ -120,26 +120,16 @@
   align-items: center;
   gap: @create-game-gap-inner;
 
+  // gleich hoch wie die Milchglas-Buttons daneben
   .create-game-reset {
+    height: @toolbar-button-size;
     margin: 0;
   }
 }
 
 .create-game-icon-button {
-  display: inline-grid;
-  place-items: center;
-  width: @create-game-control-height;
-  height: @create-game-control-height;
-  margin: 0;
-  border: 0;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
+  .toolbar-glass-button();
   color: #eee;
-  cursor: pointer;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.18);
-  }
 }
 
 .create-game-settings {
@@ -700,10 +690,20 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  // links frei für das Zahnrad der Einstellungen
-  padding: 4px 0 8px 48px;
+  padding: 4px 0 8px;
   font-size: 13px;
   color: @create-game-dim;
+}
+
+// Knöpfe der Kopf-Karte (Einstellungen, Laden, Speichern) als Milchglas-Buttons wie die Icon-Gruppe
+// der Spielansicht (sidebar_toolbar.less); das Zahnrad sitzt hier statt fest in der Ecke
+.create-game-head .sidebar_item--settings {
+  .toolbar-glass-button();
+  position: static;
+
+  .sidebar_icon {
+    .toolbar-glass-icon();
+  }
 }
 
 // ---------- Symbole, Warnungen, Popup ----------
@@ -786,14 +786,12 @@
     overflow: visible;
   }
 
-  // Erstellen-Karte klebt am unteren Rand, bis sie ihren Platz am Seitenende erreicht;
-  // links Platz für das feste Zahnrad der Einstellungen (PreferencesIcon)
+  // Erstellen-Karte klebt am unteren Rand, bis sie ihren Platz am Seitenende erreicht
   .create-game-create-card {
     order: 1;
     position: sticky;
     bottom: 12px;
     z-index: 5;
-    margin-left: 44px;
     box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.45);
   }
 
