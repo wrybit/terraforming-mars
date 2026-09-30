@@ -19,16 +19,23 @@ describe('MobileTurnSheet', () => {
   };
 
   it('groups tiles and disables skip before the first action', () => {
-    const wrapper = mount(MobileTurnSheet, {...globalConfig, props: {menu, title: 'Your turn', sub: 'Action 1 of 2'}});
+    const wrapper = mount(MobileTurnSheet, {...globalConfig, props: {menu, title: 'Your turn', sub: 'Action 1 of 2', actionNumber: 1, actionsPerTurn: 2}});
     expect(wrapper.findAll('.mb-sheet-list .mb-tile')).to.have.length(1);
     expect(wrapper.findAll('.mb-sheet-grid .mb-tile')).to.have.length(2);
     const skip = wrapper.find('.mb-tile--skip');
     expect(skip.attributes('disabled')).to.not.be.undefined;
     expect(wrapper.find('.mb-tile--highlight .mb-tile-sub').text()).to.eq('2 available');
+    expect(wrapper.find('.mb-sheet-turn .mb-turn-count').text()).to.eq('1/2');
+  });
+
+  it('closes from the turn button on its edge', async () => {
+    const wrapper = mount(MobileTurnSheet, {...globalConfig, props: {menu, title: 'Your turn', sub: '', actionNumber: 2, actionsPerTurn: 2}});
+    await wrapper.find('.mb-sheet-turn').trigger('click');
+    expect(wrapper.emitted('close')).to.have.length(1);
   });
 
   it('emits the option index of a tile', async () => {
-    const wrapper = mount(MobileTurnSheet, {...globalConfig, props: {menu, title: 'Your turn', sub: ''}});
+    const wrapper = mount(MobileTurnSheet, {...globalConfig, props: {menu, title: 'Your turn', sub: '', actionNumber: undefined, actionsPerTurn: 2}});
     await wrapper.findAllComponents(MobileTurnTile)[1].trigger('click');
     expect(wrapper.emitted('select')?.[0]).to.deep.eq([1]);
     await wrapper.find('.mb-sheet-backdrop').trigger('click');

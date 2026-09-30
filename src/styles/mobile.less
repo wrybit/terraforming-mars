@@ -24,6 +24,9 @@
 @mb-players-icon-column: 44px;
 // Sheet auf Tablets mittig statt über die volle Breite
 @mb-sheet-max-width: 560px;
+@mb-sheet-duration: 320ms;
+// Abstand der Zug-Button-Mitte vom unteren Rand in der Fußleiste (ohne Safe Area); Startlage des Sheets
+@mb-turn-button-rest: 55px;
 // Knöpfe der Leiste oben im Mars-Bildschirm (Sprache, Info, Hilfe, Einstellungen)
 @mb-toolbar-button: 40px;
 // Dauer der Karten-Vergrößerung (vgl. DURATION_MS in MobileCardZoom.vue)
@@ -1299,13 +1302,22 @@ html.tm-mobile {
     background: transparent;
   }
 
-  .mb-sheet-panel {
+  // Schublade um das scrollende Panel, damit der Zug-Button über die Oberkante ragen kann (Panel schneidet per overflow ab)
+  .mb-sheet-drawer {
+    position: relative;
     width: 100%;
     max-width: @mb-sheet-max-width;
     max-height: 82%;
-    box-sizing: border-box;
     margin: 0 auto;
-    padding: 10px 14px calc(22px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mb-sheet-panel {
+    min-height: 0;
+    box-sizing: border-box;
+    // oben Platz für die untere Hälfte des Zug-Buttons
+    padding: 42px 14px calc(22px + env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -1314,12 +1326,50 @@ html.tm-mobile {
     background: #161a23;
   }
 
-  .mb-sheet-grip {
-    align-self: center;
-    width: 40px;
-    height: 4px;
-    border-radius: 2px;
-    background: #3a4152;
+  // Zug-Button mittig auf der Oberkante; Antippen schließt das Sheet wieder
+  .mb-sheet-turn {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    padding: 0;
+    border: 0;
+    background: transparent;
+
+    .mb-turn-button {
+      margin-top: 0;
+    }
+  }
+
+  // Ein-/Ausfahren: Schublade kommt aus der Fußleiste; Startlage so, dass ihr Zug-Button genau auf dem der Leiste liegt
+  .mb-sheet-enter-active,
+  .mb-sheet-leave-active {
+    transition: background-color @mb-sheet-duration ease, backdrop-filter @mb-sheet-duration ease, -webkit-backdrop-filter @mb-sheet-duration ease;
+
+    .mb-sheet-drawer {
+      transition: transform @mb-sheet-duration cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+  }
+
+  .mb-sheet-leave-active .mb-sheet-drawer {
+    transition-timing-function: cubic-bezier(0.5, 0, 0.8, 0.4);
+  }
+
+  .mb-sheet-enter-from,
+  .mb-sheet-leave-to {
+    background-color: rgba(5, 6, 10, 0);
+    -webkit-backdrop-filter: blur(0) saturate(1);
+    backdrop-filter: blur(0) saturate(1);
+
+    .mb-sheet-drawer {
+      transform: translateY(calc(100% - @mb-turn-button-rest - env(safe-area-inset-bottom)));
+    }
+  }
+
+  // Der Button der Fußleiste bleibt unsichtbar, solange sein Doppel im Sheet unterwegs ist
+  .mb-turn-button--lifted {
+    visibility: hidden;
   }
 
   .mb-sheet-head {
