@@ -98,8 +98,9 @@ export default defineComponent({
   },
   emits: ['toggle'],
   computed: {
+    // Schalter in derselben Reihenfolge wie die Abschnitte (mobil: Waren, Wertung, Tags)
     sections(): Array<SectionToggle> {
-      return SECTION_TOGGLES;
+      return this.sectionOrder.flatMap((key) => SECTION_TOGGLES.filter((toggle) => toggle.key === key));
     },
     resources(): typeof ALL_RESOURCES {
       return ALL_RESOURCES;
