@@ -32,6 +32,9 @@
 @mb-toolbar-button: 40px;
 // Dauer der Karten-Vergrößerung (vgl. DURATION_MS in MobileCardZoom.vue)
 @mb-card-zoom-duration: 260ms;
+// Breite je Karte im Karussell (Karte um ein Fünftel vergrößert plus Lücke zum Nachbarn); der Rest der Breite
+// zeigt die Nachbarkarten im Anschnitt
+@mb-card-zoom-slide-width: min(86%, 310px);
 // Fußbereich der Aufgabe beginnt rechts neben dem Zurück-Pfeil (12 px Rand + 56 px Knopf + 8 px Lücke)
 @mb-footer-left: 76px;
 // Währungssymbol im Eingabefeld beim Bezahlen
@@ -1178,11 +1181,18 @@ html.tm-mobile {
     &::-webkit-scrollbar {
       display: none;
     }
+    // Abstandhalter vorn und hinten, damit auch die erste und letzte Karte mittig einrasten
+    &::before,
+    &::after {
+      content: "";
+      flex: 0 0 calc((100% - @mb-card-zoom-slide-width) / 2);
+    }
   }
-  // Eine Karte je Bildschirmbreite; oben Platz für Kosten und Tags, die über die Karte ragen,
-  // unten für den Schatten – das Karussell schneidet sonst alles außerhalb ab
+  // Schmaler als der Bildschirm, damit vorige und nächste Karte links und rechts angeschnitten hereinschauen.
+  // Oben Platz für Kosten und Tags, die über die Karte ragen, unten für den Schatten –
+  // das Karussell schneidet sonst alles außerhalb ab
   .mb-card-zoom-slide {
-    flex: 0 0 100%;
+    flex: 0 0 @mb-card-zoom-slide-width;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1194,7 +1204,7 @@ html.tm-mobile {
   // Karte um ein Fünftel größer mit Schatten darunter; der Rand um die skalierte Karte hält den Platz frei
   .mb-card-zoom-card {
     position: relative;
-    margin: 30px 26px;
+    margin: 30px 0;
 
     .card-container {
       margin: 0 !important;
