@@ -21,9 +21,12 @@
   cursor: pointer;
   transition: transform 0.12s, background-color 0.12s;
 
-  &:hover {
-    transform: translateY(-2px);
-    background: rgba(0, 0, 0, 0.4);
+  // Nur mit echter Maus: auf Touch bleibt :hover nach dem Antippen hängen, die gewählte Kachel stünde versetzt
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-2px);
+      background: rgba(0, 0, 0, 0.4);
+    }
   }
 
   &:focus-within {
