@@ -4,15 +4,16 @@
 .ma-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  // Zeilen weiter auseinander: darüber sitzt das Häkchen-Fähnchen der gewählten Kachel
+  gap: (@selection-tab-offset + 6px) 14px;
   margin: 4px 0 8px;
+  padding-top: @selection-tab-offset;
 }
 
 .ma-options .ma-option {
   position: relative;
   margin: 0;
   border-radius: 10px;
-  overflow: hidden; // Bild folgt den runden Ecken; der Auswahl-Schein (box-shadow) bleibt sichtbar
   cursor: pointer;
   transition: transform 0.12s;
 
@@ -35,6 +36,10 @@
 
 .ma-options .ma-option--selected {
   .selection-highlight();
+
+  &::after {
+    .selection-tab();
+  }
 }
 
 .ma-options .ma-option:focus-within {

@@ -43,8 +43,10 @@
 @mb-carousel-dots-height: 26px;
 // Höhe des Fußbereichs beim Bezahlen mit drei Währungen (Stahl, Titan, M€): feste Achse der Karussell-Karten
 @mb-carousel-footer-reserve: 253px;
-// Lücke zwischen Auswahl-Kacheln (Meilensteine/Auszeichnungen, Standardprojekte; vgl. CHOICE_GAP_PX in mobileFit.ts)
+// Lücken zwischen Auswahl-Kacheln (Meilensteine/Auszeichnungen, Standardprojekte; vgl. CHOICE_GAP in mobileFit.ts):
+// zwischen den Zeilen zusätzlich Platz fürs Häkchen-Fähnchen (selection_highlight.less)
 @mb-choice-gap: 14px;
+@mb-choice-row-gap: 36px;
 // Höhe des Aufgaben-Kopfs (Zurück-Knopf 40 px + Innenabstand)
 @mb-task-head-height: 61px;
 // Zoom-Leiste unten am großen Mars (vgl. CONTROLS_HEIGHT in BoardZoomModal.vue)
@@ -1159,8 +1161,34 @@ html.tm-mobile {
     background: transparent;
   }
 
-  // Karte um ein Fünftel größer mit Schatten darunter; der Rand um die skalierte Karte hält den Platz frei.
-  // Die Hülle trägt die Wachs-/Schrumpf-Animation (MobileCardZoom, Web Animations)
+  // Karussell über die volle Breite (Rand des Dialogs aufgehoben), rastet auf je einer Karte ein.
+  // Es trägt die Wachs-/Schrumpf-Animation (MobileCardZoom, Web Animations)
+  .mb-card-zoom-track {
+    position: relative;
+    align-self: stretch;
+    display: flex;
+    margin: 0 -16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  // Eine Karte je Bildschirmbreite; unten Platz für den Schatten, den das Karussell sonst abschneidet
+  .mb-card-zoom-slide {
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 24px;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  // Karte um ein Fünftel größer mit Schatten darunter; der Rand um die skalierte Karte hält den Platz frei
   .mb-card-zoom-card {
     position: relative;
     margin: 30px 26px;
@@ -1307,12 +1335,24 @@ html.tm-mobile {
   // ---------- Meilenstein/Auszeichnung wählen (MilestoneAwardOptions.vue) ----------
   // Zwei Spalten über die volle Breite statt fester 140-px-Kacheln am linken Rand; auf breiten Geräten gedeckelt und mittig
   @mb-ma-option-max: 240px;
+
+  // Auswahl-Raster senkrecht mittig zwischen Aufgaben-Kopf und Fußbereich (Höhe aus MobilePlayerHome);
+  // oben Platz fürs Fähnchen der ersten Zeile
+  .mb-choice-area() {
+    box-sizing: border-box;
+    min-height: calc(100dvh - @mb-top-height - @mb-task-head-height - var(--mb-footer-height, @mb-nav-height) - 24px);
+    padding-top: @selection-tab-offset;
+    padding-bottom: @selection-tab-offset;
+    align-content: center;
+  }
+
   .mb-screen--turn .ma-options {
+    .mb-choice-area();
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: @mb-choice-gap;
+    gap: @mb-choice-row-gap @mb-choice-gap;
     max-width: 2 * @mb-ma-option-max + @mb-choice-gap;
-    margin: 4px auto 8px;
+    margin: 0 auto;
 
     .ma-option {
       width: auto;
@@ -1333,14 +1373,12 @@ html.tm-mobile {
   }
 
   // ---------- Standardprojekte wählen: alle sichtbar im Raster (mobileFit.ts skaliert) ----------
-  // Rechts um die Lücke überstehen: die Lücke hinter der rechten Spalte fällt so aus dem Bild (choiceGap in mobileFit.ts)
   .mb-screen--turn .payments_cont:has(.card-standard-project) {
+    .mb-choice-area();
+    // Rechts um die Lücke überstehen: die Lücke hinter der rechten Spalte fällt so aus dem Bild (choiceGap in mobileFit.ts)
     margin-right: -@mb-choice-gap;
-  }
-
-  // Gewählt zeigt nur der Schein wie bei den Auszeichnungen; das Häkchen-Fähnchen über der Karte stieße an die Zeile darüber
-  .mb-screen--turn .payments_cont input[type="radio"]:checked + .card-standard-project::after {
-    content: none;
+    // Unten reicht die Zeilenlücke der letzten Karte (Außenabstand aus mobileFit.ts) statt eigenem Innenabstand
+    padding-bottom: 0;
   }
 
   // ---------- Zug: Aufgaben-Ansicht ----------
