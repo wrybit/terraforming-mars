@@ -2,6 +2,7 @@ import {Message} from '@/common/logs/Message';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
+import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
 import {isEndTab, shortTabLabel, tabButtonTone, tabDisplayOrder, tabHighlighted, titleKey} from '@/client/components/orOptionsShortLabels';
 
 /*
@@ -14,6 +15,9 @@ import {isEndTab, shortTabLabel, tabButtonTone, tabDisplayOrder, tabHighlighted,
 /* Farbton einer Kachel: Grünfläche grün, Temperatur orange, Meilenstein gold. */
 export type TurnTileTone = 'success' | 'heat' | 'highlight' | 'danger';
 
+/* Farbe der Symbol-Kachel nach Spielbereich (Klassen mb-tile-icon--… in mobile.less). */
+export type TurnTileGlyphTone = 'cards' | 'megacredits' | 'plants' | 'heat' | 'honors' | 'colonies' | 'neutral';
+
 /* Eintrag im Sheet bzw. Kopf der daraus geöffneten Aufgabe. */
 export type TurnMenuTile = {
   // Index in den angezeigten Optionen von OrOptions (data-option-index des Tabs)
@@ -23,7 +27,9 @@ export type TurnMenuTile = {
   label: string | Message;
   // Unterzeile, bereits mit Werten gefüllt; undefined, wenn es nichts zu sagen gibt
   sub: TurnTileSub | undefined;
-  icon: string | undefined;
+  // Symbol in einer Farbkachel; die Farbe steht für den Spielbereich (Karten, M€, Pflanzen …)
+  glyph: GlyphName;
+  glyphTone: TurnTileGlyphTone;
   tone: TurnTileTone | undefined;
   // Nichts wählbar (Zähler 0): Kachel abgeschwächt
   empty: boolean;
@@ -41,21 +47,23 @@ export type TurnMenu = {
   pass: TurnMenuTile | undefined;
 };
 
-type TileLook = {icon: string, sub?: string};
+type TileLook = {glyph: GlyphName, glyphTone: TurnTileGlyphTone, sub?: string};
 
-// Symbol und Unterzeile je Titel-Schlüssel ({count} = Zähler der Aktion); unbekannte Aktionen ohne Symbol
+// Symbol, Farbe und Unterzeile je Titel-Schlüssel ({count} = Zähler der Aktion)
 const TILE_LOOKS: Readonly<Record<string, TileLook>> = {
-  'Claim a milestone': {icon: 'assets/ma/gardener.png', sub: '${0} reachable'},
-  'Convert ${0} plants into greenery': {icon: 'assets/tiles/greenery.png'},
-  'Convert 8 heat into temperature': {icon: 'assets/global-parameters/temperature.png'},
-  'Convert 6 heat into temperature': {icon: 'assets/global-parameters/temperature.png'},
-  'Perform an action from a played card': {icon: 'assets/sidebar/preferences_actions.png', sub: '${0} available'},
-  'Play project card': {icon: 'assets/resources/card.png', sub: '${0} playable'},
-  'Fund an award (${0} M€)': {icon: 'assets/ma/landlord.png', sub: '${0} to choose from'},
-  'Standard projects': {icon: 'assets/misc/standard_projects.png', sub: '${0} affordable'},
-  'Sell patents': {icon: 'assets/misc/1mc.png', sub: '${0} cards in hand'},
-  'Trade with a colony tile': {icon: 'assets/tiles/colony.png', sub: '${0} available'},
+  'Claim a milestone': {glyph: 'milestone', glyphTone: 'honors', sub: '${0} reachable'},
+  'Convert ${0} plants into greenery': {glyph: 'greenery', glyphTone: 'plants'},
+  'Convert 8 heat into temperature': {glyph: 'temperature', glyphTone: 'heat'},
+  'Convert 6 heat into temperature': {glyph: 'temperature', glyphTone: 'heat'},
+  'Perform an action from a played card': {glyph: 'cardActions', glyphTone: 'cards', sub: '${0} available'},
+  'Play project card': {glyph: 'playCard', glyphTone: 'cards', sub: '${0} playable'},
+  'Fund an award (${0} M€)': {glyph: 'award', glyphTone: 'honors', sub: '${0} to choose from'},
+  'Standard projects': {glyph: 'standardProjects', glyphTone: 'megacredits', sub: '${0} affordable'},
+  'Sell patents': {glyph: 'sellPatents', glyphTone: 'megacredits', sub: '${0} cards in hand'},
+  'Trade with a colony tile': {glyph: 'colonyTrade', glyphTone: 'colonies', sub: '${0} available'},
 };
+// Unbekannte Aktionen (Erweiterungen) bekommen ein neutrales Symbol, damit das Raster einheitlich bleibt
+const DEFAULT_LOOK: TileLook = {glyph: 'more', glyphTone: 'neutral'};
 const DEFAULT_SUB = '${0} available';
 const END_TURN = 'End Turn';
 
@@ -73,17 +81,18 @@ function describe(option: PlayerInputModel, temperature: number): TurnTileSub | 
 
 function toTile(option: PlayerInputModel, index: number, temperature: number): TurnMenuTile {
   const key = titleKey(option.title);
-  const look: TileLook | undefined = TILE_LOOKS[key];
+  const look: TileLook = TILE_LOOKS[key] ?? DEFAULT_LOOK;
   const count = inputAvailableCount(option);
   const buttonTone = tabButtonTone(option.title);
   const sub = describe(option, temperature) ??
-    (count === undefined ? undefined : {text: look?.sub ?? DEFAULT_SUB, params: [String(count)]});
+    (count === undefined ? undefined : {text: look.sub ?? DEFAULT_SUB, params: [String(count)]});
   return {
     index,
     key,
     label: shortTabLabel(option.title),
     sub,
-    icon: look?.icon,
+    glyph: look.glyph,
+    glyphTone: look.glyphTone,
     tone: buttonTone ?? (tabHighlighted(option.title) ? 'highlight' : undefined),
     empty: count === 0,
   };

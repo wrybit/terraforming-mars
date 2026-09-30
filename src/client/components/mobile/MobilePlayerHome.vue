@@ -180,7 +180,7 @@
         <!-- Während das Zug-Sheet offen ist (inkl. Ein-/Ausfahren), fährt sein eigener Button mit; der hier bleibt unsichtbar -->
         <MobileTurnButton v-if="item.screen === 'turn'" :class="{'mb-turn-button--lifted': turnButtonLifted}"
           :acting="acting" :action-number="actionNumber" :actions-per-turn="actionsPerTurn"/>
-        <MobileNavIcon v-else :name="item.icon" :filled="screen === item.screen"/>
+        <MobileGlyph v-else :name="item.icon" :filled="screen === item.screen"/>
         <span v-if="item.screen === 'hand' && cardsInHandCount > 0" class="mb-nav-badge">{{ cardsInHandCount }}</span>
         <span class="mb-nav-label">{{ $t(item.label) }}</span>
       </button>
@@ -218,7 +218,7 @@ import WaitingFor from '@/client/components/WaitingFor.vue';
 import MobileParameterBars from '@/client/components/mobile/MobileParameterBars.vue';
 import MobileTurnSheet from '@/client/components/mobile/MobileTurnSheet.vue';
 import MobileCardZoom from '@/client/components/mobile/MobileCardZoom.vue';
-import MobileNavIcon from '@/client/components/mobile/MobileNavIcon.vue';
+import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
 import MobileTurnButton from '@/client/components/mobile/MobileTurnButton.vue';
 import {CardModel} from '@/common/models/CardModel';
 import PlayerTimer from '@/client/components/overview/PlayerTimer.vue';
@@ -348,7 +348,7 @@ export default defineComponent({
     MobileParameterBars,
     MobileTurnSheet,
     MobileCardZoom,
-    MobileNavIcon,
+    MobileGlyph,
     MobileTurnButton,
     PlayerTimer,
     MilestoneAwardTable,

@@ -2,7 +2,7 @@
   <button type="button" :class="['mb-tile', tile.tone !== undefined ? 'mb-tile--' + tile.tone : '', {'mb-tile--empty': tile.empty}]"
     :disabled="disabled" @click="$emit('select', tile.index)">
     <!-- Kachel im Zug-Menü wie im Mockup: Symbol, Kurzlabel, darunter was die Aktion bietet -->
-    <img v-if="tile.icon !== undefined" :src="tile.icon" alt="">
+    <span v-if="!compact" :class="['mb-tile-icon', 'mb-tile-icon--' + tile.glyphTone]"><MobileGlyph :name="tile.glyph"/></span>
     <span class="mb-tile-text">
       <span class="mb-tile-label">{{ label ?? $t(tile.label) }}</span>
       <span v-if="tile.sub !== undefined && !compact" class="mb-tile-sub">{{ subText }}</span>
@@ -14,6 +14,7 @@
 import {computed} from 'vue';
 import {TurnMenuTile} from '@/client/components/mobile/turnMenu';
 import {translateTextWithParams} from '@/client/directives/i18n';
+import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
 
 const props = withDefaults(defineProps<{
   tile: TurnMenuTile;

@@ -1,16 +1,16 @@
 <template>
-  <svg class="mb-nav-icon" viewBox="0 0 24 24" :stroke-width="strokeWidth" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <svg class="mb-glyph" viewBox="0 0 24 24" :stroke-width="strokeWidth" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <!-- Outline für inaktive, gefüllte Form für aktive Einträge; Farbe kommt über currentColor (mobile.less) -->
     <g v-for="(layer, index) in glyph.layers" :key="index">
       <!-- Gefüllt: vordere Ebenen bekommen einen Spalt, damit sich die Formen nicht zu einer Fläche verbinden -->
-      <g v-if="filled && index > 0" class="mb-nav-icon-gap">
+      <g v-if="filled && index > 0" class="mb-glyph-gap">
         <component :is="shape.tag" v-for="(shape, shapeIndex) in layer" :key="shapeIndex" v-bind="shape.attributes"/>
       </g>
       <g :class="layerClass(index)">
         <component :is="shape.tag" v-for="(shape, shapeIndex) in layer" :key="shapeIndex" v-bind="shape.attributes"/>
       </g>
     </g>
-    <g :class="filled ? 'mb-nav-icon-cut' : 'mb-nav-icon-line'">
+    <g :class="filled ? 'mb-glyph-cut' : 'mb-glyph-line'">
       <component :is="shape.tag" v-for="(shape, shapeIndex) in glyph.details" :key="shapeIndex" v-bind="shape.attributes"/>
     </g>
   </svg>
@@ -18,13 +18,13 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
-import {NAV_GLYPHS, NavGlyph, NavGlyphName} from '@/client/components/mobile/mobileNavGlyphs';
+import {GLYPHS, Glyph, GlyphName} from '@/client/components/mobile/mobileGlyphs';
 
 export default defineComponent({
-  name: 'MobileNavIcon',
+  name: 'MobileGlyph',
   props: {
     name: {
-      type: String as PropType<NavGlyphName>,
+      type: String as PropType<GlyphName>,
       required: true,
     },
     filled: {
@@ -37,17 +37,17 @@ export default defineComponent({
     },
   },
   computed: {
-    glyph(): NavGlyph {
-      return NAV_GLYPHS[this.name];
+    glyph(): Glyph {
+      return GLYPHS[this.name];
     },
   },
   methods: {
     layerClass(index: number): string {
       if (this.filled) {
-        return 'mb-nav-icon-fill';
+        return 'mb-glyph-fill';
       }
       // Outline: vordere Ebenen decken ab, damit Linien der hinteren Ebene nicht durchscheinen
-      return index > 0 ? 'mb-nav-icon-cover' : 'mb-nav-icon-line';
+      return index > 0 ? 'mb-glyph-cover' : 'mb-glyph-line';
     },
   },
 });

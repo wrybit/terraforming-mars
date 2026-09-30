@@ -1434,13 +1434,52 @@ html.tm-mobile {
     color: @mb-text;
     font: inherit;
     text-align: left;
+  }
 
-    img {
-      width: 30px;
-      height: 30px;
-      object-fit: contain;
-      flex-shrink: 0;
+  // Symbol in einer zarten Farbkachel; Farbe nach Spielbereich (TurnTileGlyphTone in turnMenu.ts)
+  .mb-tile-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mb-tile-tone);
+    background: color-mix(in srgb, var(--mb-tile-tone) 18%, transparent);
+
+    .mb-glyph {
+      width: 22px;
+      height: 22px;
     }
+  }
+
+  .mb-tile-icon--cards {
+    --mb-tile-tone: #7aa7ff;
+  }
+
+  .mb-tile-icon--megacredits {
+    --mb-tile-tone: @mb-gold;
+  }
+
+  .mb-tile-icon--plants {
+    --mb-tile-tone: #5cb85c;
+  }
+
+  .mb-tile-icon--heat {
+    --mb-tile-tone: #ff7a3d;
+  }
+
+  .mb-tile-icon--honors {
+    --mb-tile-tone: #d9a2f0;
+  }
+
+  .mb-tile-icon--colonies {
+    --mb-tile-tone: #5fd0c9;
+  }
+
+  .mb-tile-icon--neutral {
+    --mb-tile-tone: @mb-muted;
   }
 
   .mb-tile-text {
@@ -1480,6 +1519,12 @@ html.tm-mobile {
   .mb-tile--highlight {
     .mb-tile-sub {
       color: rgba(255, 255, 255, 0.85);
+    }
+
+    // Auf farbiger Kachel verschwände die Themenfarbe: Symbol weiß auf heller Fläche
+    .mb-tile-icon {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.18);
     }
   }
 
@@ -1714,38 +1759,38 @@ html.tm-mobile {
     font-weight: bold;
   }
 
-  // Symbole der Leiste (MobileNavIcon.vue); --mb-nav-cut ist die Farbe für Aussparungen und Abdeckungen
-  .mb-nav-icon {
-    --mb-nav-cut: @mb-nav-background;
+  // Symbole der Leiste (MobileGlyph.vue); --mb-glyph-cut ist die Farbe für Aussparungen und Abdeckungen
+  .mb-glyph {
+    --mb-glyph-cut: @mb-nav-background;
     display: block;
     width: 24px;
     height: 24px;
   }
 
-  .mb-nav-icon-line {
+  .mb-glyph-line {
     fill: none;
     stroke: currentColor;
   }
 
-  .mb-nav-icon-cover {
-    fill: var(--mb-nav-cut);
+  .mb-glyph-cover {
+    fill: var(--mb-glyph-cut);
     stroke: currentColor;
   }
 
-  .mb-nav-icon-fill {
+  .mb-glyph-fill {
     fill: currentColor;
     stroke: currentColor;
   }
 
-  .mb-nav-icon-gap {
-    fill: var(--mb-nav-cut);
-    stroke: var(--mb-nav-cut);
+  .mb-glyph-gap {
+    fill: var(--mb-glyph-cut);
+    stroke: var(--mb-glyph-cut);
     stroke-width: 4.2;
   }
 
-  .mb-nav-icon-cut {
-    fill: var(--mb-nav-cut);
-    stroke: var(--mb-nav-cut);
+  .mb-glyph-cut {
+    fill: var(--mb-glyph-cut);
+    stroke: var(--mb-glyph-cut);
   }
 
   .mb-nav-badge {
@@ -1787,7 +1832,7 @@ html.tm-mobile {
     border: 4px solid #0d0f14;
     animation: mb-pulse 1.8s ease-out infinite;
 
-    .mb-nav-icon {
+    .mb-glyph {
       width: 28px;
       height: 28px;
     }
