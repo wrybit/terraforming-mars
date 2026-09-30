@@ -53,7 +53,6 @@ describe('MilestoneAwardTable', () => {
 
   it('shows who claimed or funded', () => {
     const wrapper = mountTable();
-    // Meilenstein: Würfel nur in der Zeile des Besitzers, oben keine Kosten mehr
     expect(wrapper.find('[data-test="row-blue"] [data-test="milestone-owner"]').exists()).to.be.true;
     expect(wrapper.find('.ma-table-status [data-test="milestone-owner"]').exists()).to.be.false;
     expect(wrapper.find('[data-test="award-owner"]').text()).to.eq('Daniel');
@@ -67,7 +66,6 @@ describe('MilestoneAwardTable', () => {
     });
     expect(wrapper.find('[data-test="milestone-Terraformer"]').classes()).to.include('ma-table-cell--closed');
     expect(wrapper.find('[data-test="milestone-Mayor"]').classes()).to.not.include('ma-table-cell--closed');
-    // Meilensteine beansprucht oder zu, Banker finanziert: keine Kosten mehr in der Statuszeile
     expect(wrapper.findAll('.ma-table-status .ma-table-coin')).to.have.length(0);
   });
 });
