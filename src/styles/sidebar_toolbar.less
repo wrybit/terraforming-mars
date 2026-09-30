@@ -10,6 +10,35 @@
 // Belegte Breite am rechten Rand – Inhalte, die bis dorthin reichen, halten so viel frei (player_home_columns.less)
 @toolbar-occupied-width: @toolbar-edge-offset + 2 * @toolbar-button-size + @toolbar-gap;
 
+// Milchglas-Button der Icon-Gruppe; auch fürs Zahnrad auf "Spiel erstellen" (create_game_form.less)
+.toolbar-glass-button() {
+  box-sizing: border-box;
+  width: @toolbar-button-size;
+  height: @toolbar-button-size;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(40, 42, 54, 0.45);
+  backdrop-filter: blur(8px) saturate(1.15);
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(60, 63, 80, 0.6);
+  }
+}
+
+.toolbar-glass-icon() {
+  width: @toolbar-icon-size;
+  height: @toolbar-icon-size;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 @media only screen and (min-width: @player-home-columns-min-width) {
   // Der freigehaltene Platz links für die Seitenleiste entfällt
   .main-container:has(#player-home),
@@ -75,32 +104,12 @@
 
   // Milchglas-Button; die Einzelpositionen der alten Leiste (absolute/fixed) entfallen
   .sidebar_cont .sidebar_item {
+    .toolbar-glass-button();
     position: static;
-    box-sizing: border-box;
-    width: @toolbar-button-size;
-    height: @toolbar-button-size;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 8px;
-    background: rgba(40, 42, 54, 0.45);
-    backdrop-filter: blur(8px) saturate(1.15);
-    cursor: pointer;
-
-    &:hover {
-      background: rgba(60, 63, 80, 0.6);
-    }
   }
 
   .sidebar_cont .sidebar_icon {
-    width: @toolbar-icon-size;
-    height: @toolbar-icon-size;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    .toolbar-glass-icon();
   }
 
   // Karten-Kachel: Symbol plus Stapelgrößen, daher höher
