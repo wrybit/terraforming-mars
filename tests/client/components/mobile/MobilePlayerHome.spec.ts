@@ -20,6 +20,8 @@ describe('MobilePlayerHome', () => {
   function mountHome() {
     return shallowMount(MobilePlayerHome, {
       ...globalConfig,
+      // Fußleiste echt rendern: die Tests klicken ihre Einträge
+      global: {...globalConfig.global, stubs: {...globalConfig.global.stubs, MobileNav: false}},
       props: {playerView: fakePlayerViewModel()},
     });
   }

@@ -60,6 +60,26 @@ function widthReference(column: HTMLElement): Element | undefined {
   return column.querySelector(MARS_BLOCK_SELECTOR) ?? undefined;
 }
 
+// Außenfelder links vom Planeten (Kolonie, Raumhafen) samt Beschriftung: Steht ein großer Mars mittig über einer breiten
+// Referenz, ragen sie links aus der Spalte, und deren overflow schneidet sie ab. Liefert den Faktor, um den der Zoom
+// sinken muss, damit alles ab der linken Spaltenkante sichtbar bleibt (1 = passt).
+function leftOverflowScale(column: HTMLElement, board: HTMLElement): number {
+  const center = globeCenter(board);
+  if (center === undefined) {
+    return 1;
+  }
+  const columnLeft = column.getBoundingClientRect().left;
+  const lefts = [...board.querySelectorAll('*')]
+    .map((element) => element.getBoundingClientRect())
+    .filter((rect) => rect.width > 0 && rect.height > 0)
+    .map((rect) => rect.left);
+  const leftmost = Math.min(...lefts);
+  if (leftmost >= columnLeft || center <= columnLeft) {
+    return 1;
+  }
+  return (center - columnLeft) / (center - leftmost);
+}
+
 function fit(column: HTMLElement): void {
   column.classList.remove(...STEPS);
   column.style.setProperty(BOARD_FIT_ZOOM_VARIABLE, '1');
@@ -94,6 +114,14 @@ function fit(column: HTMLElement): void {
 
   if (board !== null && reference !== undefined) {
     centerMars(board, reference);
+    const scale = leftOverflowScale(column, board);
+    if (scale < 1) {
+      // Wirksam ist der Zoom der höchsten erreichten Stufe
+      const variable = column.classList.contains(MARS_WIDE_CLASS) ? BOARD_WIDE_ZOOM_VARIABLE : BOARD_FIT_ZOOM_VARIABLE;
+      const current = parseFloat(column.style.getPropertyValue(variable)) || 1;
+      column.style.setProperty(variable, String(current * scale));
+      centerMars(board, reference);
+    }
   }
 }
 

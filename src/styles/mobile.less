@@ -99,7 +99,8 @@ html.tm-mobile {
     padding-bottom: calc(max(@mb-nav-height, var(--mb-footer-height, 0px)) + 12px + env(safe-area-inset-bottom));
   }
 
-  #player-home.mb-home {
+  #player-home.mb-home,
+  #spectator-home.mb-home {
     display: block;
     padding: @mb-top-height 0 calc(@mb-nav-height + env(safe-area-inset-bottom));
     min-height: 100dvh;
@@ -2059,7 +2060,9 @@ html.tm-mobile {
 
   .mb-nav {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    // Gleich breite Spalten für beliebig viele Einträge (Spieler 5, Zuschauer 3)
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
   }
 
   .mb-nav-item {
@@ -2366,6 +2369,14 @@ html.tm-mobile {
       > .board-cont {
         grid-column: 1;
         grid-row: 1 / span 20;
+      }
+
+      // Zoom-Knopf bleibt unten rechts am Planeten; in Spalte 2 zöge ihn der negative Rand über den Zugstatus
+      > .mb-mars-zoom {
+        grid-column: 1;
+        grid-row: 1 / span 20;
+        place-self: end;
+        margin: 0 8px 12px 0;
       }
 
       > a {

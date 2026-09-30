@@ -18,3 +18,13 @@ export const MOBILE_NAV: ReadonlyArray<MobileNavItem> = [
   {screen: 'players', label: 'Players', icon: 'players'},
   {screen: 'log', label: 'Game log', icon: 'log'},
 ];
+
+/* Zuschauer haben weder Hand noch Zug: nur Mars, Spieler und Log. */
+export const SPECTATOR_NAV: ReadonlyArray<MobileNavItem> = MOBILE_NAV.filter((item) => item.screen !== 'hand' && item.screen !== 'turn');
+
+/* Umschalter im Spieler-Bildschirm: Spielertabelle bzw. Meilensteine & Auszeichnungen. */
+export const PLAYER_SEGMENTS = [
+  {key: 'players', labels: ['Players']},
+  {key: 'ma', labels: ['Milestones', 'Awards']},
+] as const;
+export type PlayersSegment = typeof PLAYER_SEGMENTS[number]['key'];

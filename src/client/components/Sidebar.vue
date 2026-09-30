@@ -10,7 +10,8 @@
     <GlobalParameterValue v-if="gameOptions.expansions.venus" :param="globalParameter.VENUS" :value="venus"/>
     <MoonGlobalParameterValue v-if="moonData" :moonData="moonData"/>
   </div>
-  <div class="sidebar_item preferences_player" :title="$t('Player Color Cube')">
+  <!-- Zuschauer (Farbe neutral) haben keinen eigenen Würfel: ein leeres schwarzes Feld wäre nur rätselhaft -->
+  <div v-if="playerColor !== 'neutral'" class="sidebar_item preferences_player" :title="$t('Player Color Cube')">
     <div :class="getPlayerColorCubeClass()+' player_bg_color_' + playerColor"></div>
   </div>
 

@@ -5,85 +5,27 @@
          "Zug" öffnet das Aktionsmenü als Sheet; in einer Aufgabe wird die Fußleiste zur Aufgabenleiste
          (Abbrechen + Bestätigen/Bezahlen der Eingabe). -->
 
-    <button type="button" class="mb-top" @click="go('players')" :aria-label="$t('Players')">
-      <span class="mb-top-gen">{{ $t('GEN') }} <b>{{ game.generation }}</b></span>
-      <span class="mb-top-globals">
-        <span class="mb-top-global"><img src="assets/global-parameters/oxygen.png" alt="">{{ game.oxygenLevel }} %</span>
-        <span class="mb-top-global"><img src="assets/global-parameters/temperature.png" alt="">{{ game.temperature }} °C</span>
-        <span class="mb-top-global"><img src="assets/tiles/ocean.png" alt="">{{ game.oceans }}/{{ maxOceans }}</span>
-        <span v-if="hasVenus" class="mb-top-global"><img src="assets/global-parameters/venus.png" alt="">{{ game.venusScaleLevel }} %</span>
-      </span>
+    <MobileHeader :game="game" @click="go('players')" :aria-label="$t('Players')">
       <span class="mb-top-money">
         <i class="resource_icon resource_icon--megacredits"></i>
         <b>{{ thisPlayer.megacredits }}</b>
         <small>{{ signed(thisPlayer.megacreditProduction) }}</small>
       </span>
-    </button>
+    </MobileHeader>
 
     <main class="mb-main">
-      <!-- Mars: Brett ohne Skalen-Ring, darunter die Parameter als Balken, dann Meilensteine usw. aus GameBoardView -->
-      <section v-show="screen === 'mars'" class="mb-screen mb-screen--mars">
-        <!-- Sprache, Spieldetails, Hilfe, Einstellungen: dieselben Knöpfe wie am Desktop, hier als Leiste oben -->
-        <Sidebar class="mb-toolbar"
-          :actingPlayer="acting"
-          :playerColor="thisPlayer.color"
-          :coloniesCount="game.colonies.length"
-          :temperature="game.temperature"
-          :oxygen="game.oxygenLevel"
-          :oceans="game.oceans"
-          :venus="game.venusScaleLevel"
-          :turmoil="game.turmoil"
-          :moonData="game.moon"
-          :gameOptions="game.gameOptions"
-          :playerNumber="playerView.players.length"
-          :lastSoloGeneration="game.lastSoloGeneration"
-          :deckSize="game.deckSize"
-          :discardPileSize="game.discardPileSize"
-          :otherDeckSizes="game.otherDeckSizes"
-          :spectatorId="game.spectatorId"
-          :expectedPurgeTimeMs="game.expectedPurgeTimeMs"/>
-        <!-- Zugstatus wie im Mockup nur hier: wer dran ist, welche Aktion, eigene Spielzeit -->
-        <div :class="['mb-banner', {'mb-banner--waiting': !acting}]">
-          <span class="mb-banner-dot"></span>
-          <span class="mb-banner-title">{{ bannerTitle }}</span>
+      <MobileMarsScreen v-show="screen === 'mars'" ref="gameBoardView"
+        :game="game" :players="playerView.players" :participantId="playerView.id" :tileView="tileView"
+        :acting="acting" :bannerTitle="bannerTitle" :viewerColor="thisPlayer.color"
+        @toggleTileView="cycleTileView()" @showMilestones="showMilestones">
+        <template #timer>
           <PlayerTimer v-if="game.gameOptions.showTimers" class="mb-banner-timer" :timer="thisPlayer.timer" :live="game.phase !== 'end'"/>
-        </div>
-        <GameBoardView
-          ref="gameBoardView"
-          :game="game"
-          :tileView="tileView"
-          :players="playerView.players"
-          :viewerColor="thisPlayer.color"
-          @toggleTileView="cycleTileView()"
-        />
-        <!-- Antippen des Mars öffnet ebenfalls die Großansicht (GameBoardView) -->
-        <button type="button" class="mb-mars-zoom" @click="zoomMars">
-          <!-- Nur Symbol: keine eigenen Texte neben den vorhandenen Übersetzungen -->
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>
-        </button>
-        <MobileParameterBars
-          :temperature="game.temperature"
-          :oxygen="game.oxygenLevel"
-          :oceans="game.oceans"
-          :venus="hasVenus ? game.venusScaleLevel : undefined"/>
-        <div v-if="playerView.players.length > 1" class="mb-quick">
-          <button type="button" @click="showMilestones">{{ $t('Milestones') }} <b>{{ claimedMilestones }}/{{ maxMilestones }}</b></button>
-          <button type="button" @click="showMilestones">{{ $t('Awards') }} <b>{{ fundedAwards }}/{{ maxAwards }}</b></button>
-        </div>
-        <GameOverNotice v-if="game.phase === 'end'" :participantId="playerView.id"/>
-        <div v-if="game.colonies.length > 0" class="mb-colonies">
-          <h3 class="mb-section-label">{{ $t('Colonies') }}</h3>
-          <div class="player_home_colony_cont">
-            <div class="player_home_colony" v-for="colony in game.colonies" :key="colony.name">
-              <Colony :colony="colony" :active="colony.isActive"/>
-            </div>
-          </div>
-        </div>
+        </template>
         <div v-if="thisPlayer.underworldData.tokens.length > 0" class="mb-underground">
           <h3 class="mb-section-label">{{ $t('Claimed Underground Resource Tokens') }}</h3>
           <UndergroundTokens :underworldData="thisPlayer.underworldData"/>
         </div>
-      </section>
+      </MobileMarsScreen>
 
       <section v-show="screen === 'hand'" class="mb-screen mb-screen--hand" @click.capture="zoomCard">
         <div v-if="playerView.draftedCards.length > 0" class="mb-drafted">
@@ -101,24 +43,7 @@
       <section v-show="screen === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': playerView.players.length > 2}]"
         @click.capture="zoomCard" @scroll.capture="markHorizontalScroll">
         <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players"/>
-        <template v-else>
-          <div v-if="playerView.players.length > 1" class="mb-segments" role="tablist">
-            <button v-for="segment in playerSegments" :key="segment.key" type="button" role="tab"
-              :aria-selected="playersSegment === segment.key"
-              :class="['mb-segment', {'mb-segment--active': playersSegment === segment.key}]"
-              @click="playersSegment = segment.key">{{ segment.labels.map((label) => $t(label)).join(' & ') }}</button>
-          </div>
-          <PlayersOverview v-show="playersSegment === 'players'" :playerView="playerView" v-trim-whitespace/>
-          <!-- Hülle trägt v-show: die Tabelle selbst ist in der Mobil-Ansicht per !important sichtbar geschaltet -->
-          <div v-if="playerView.players.length > 1" v-show="playersSegment === 'ma'" class="mb-ma">
-            <MilestoneAwardTable :milestones="game.milestones" :awards="game.awards" :players="playerView.players" :viewerColor="thisPlayer.color">
-              <!-- Gleicher Kopf wie im Spieler-Abschnitt: Name, Status/Zeit, Konzern -->
-              <template #player="{player}">
-                <PlayerIdentity :player="player" :playerView="playerView" :actionLabel="actionLabelOf(player)" :highlighted="player.color === thisPlayer.color"/>
-              </template>
-            </MilestoneAwardTable>
-          </div>
-        </template>
+        <MobilePlayersPanel v-else :viewModel="playerView" :viewerColor="thisPlayer.color" v-model:segment="playersSegment"/>
       </section>
 
       <section v-show="screen === 'log'" class="mb-screen mb-screen--log">
@@ -183,18 +108,13 @@
         </button>
       </template>
     </div>
-    <nav v-else class="mb-nav">
-      <button v-for="item in navItems" :key="item.screen" type="button"
-        :class="['mb-nav-item', 'mb-nav-item--' + item.screen, {'mb-nav-item--active': screen === item.screen}]"
-        @click="navigate(item.screen)">
+    <MobileNav v-else :items="navItems" :active="screen" :handCount="cardsInHandCount" @navigate="navigate">
+      <template #turn>
         <!-- Während das Zug-Sheet offen ist (inkl. Ein-/Ausfahren), fährt sein eigener Button mit; der hier bleibt unsichtbar -->
-        <MobileTurnButton v-if="item.screen === 'turn'" :class="{'mb-turn-button--lifted': turnButtonLifted}"
+        <MobileTurnButton :class="{'mb-turn-button--lifted': turnButtonLifted}"
           :acting="acting" :action-number="actionNumber" :actions-per-turn="actionsPerTurn"/>
-        <MobileGlyph v-else :name="item.icon" :filled="screen === item.screen"/>
-        <span v-if="item.screen === 'hand' && cardsInHandCount > 0" class="mb-nav-badge">{{ cardsInHandCount }}</span>
-        <span class="mb-nav-label">{{ $t(item.label) }}</span>
-      </button>
-    </nav>
+      </template>
+    </MobileNav>
 
     <MobileCardZoom v-if="zoomedCard !== undefined" :count="zoomedCardList.length" :index="zoomedCardIndex" :origin="zoomedCardOrigin"
       :playable="zoomedCardPlayTile !== undefined" @close="zoomedCard = undefined" @play="playZoomedCard" @update:index="showZoomedCard">
@@ -211,45 +131,37 @@
 
 <script lang="ts">
 import {defineComponent, markRaw} from 'vue';
-import * as constants from '@/common/constants';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Phase} from '@/common/Phase';
 import {SpaceId} from '@/common/Types';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
-import GameBoardView from '@/client/components/GameBoardView.vue';
-import GameOverNotice from '@/client/components/gameend/GameOverNotice.vue';
-import Colony from '@/client/components/colonies/Colony.vue';
 import UndergroundTokens from '@/client/components/underworld/UndergroundTokens.vue';
 import Card from '@/client/components/card/Card.vue';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
-import PlayersOverview from '@/client/components/overview/PlayersOverview.vue';
 import SetupTurnOrder from '@/client/components/SetupTurnOrder.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
 import WaitingFor from '@/client/components/WaitingFor.vue';
-import MobileParameterBars from '@/client/components/mobile/MobileParameterBars.vue';
 import MobileTurnSheet from '@/client/components/mobile/MobileTurnSheet.vue';
 import MobileCardZoom from '@/client/components/mobile/MobileCardZoom.vue';
-import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
 import MobileTurnButton from '@/client/components/mobile/MobileTurnButton.vue';
 import {CardModel} from '@/common/models/CardModel';
 import PlayerTimer from '@/client/components/overview/PlayerTimer.vue';
-import Sidebar from '@/client/components/Sidebar.vue';
-import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
 import {TurnMenu, TurnMenuTile, buildTurnMenu, playableCardTile, readInputTitle, findTurnMenuTile, selectTurnMenuTile, submitTurnMenuTile} from '@/client/components/mobile/turnMenu';
 import {isChoiceMenu} from '@/client/components/choiceMenu';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
-import {MOBILE_NAV, MobileNavItem, MobileScreen} from '@/client/components/mobile/mobileScreens';
+import {MOBILE_NAV, MobileNavItem, MobileScreen, PlayersSegment} from '@/client/components/mobile/mobileScreens';
+import MobileHeader from '@/client/components/mobile/MobileHeader.vue';
+import MobileMarsScreen from '@/client/components/mobile/MobileMarsScreen.vue';
+import MobileNav from '@/client/components/mobile/MobileNav.vue';
+import MobilePlayersPanel from '@/client/components/mobile/MobilePlayersPanel.vue';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
 import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
 import {requestPlacementZoom} from '@/client/components/board/placementZoom';
 import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
 import {CarouselState, observeCardCarousel, scrollCarouselTo} from '@/client/components/mobile/cardCarousel';
-import PlayerIdentity from '@/client/components/overview/PlayerIdentity.vue';
-import {playerActionLabel} from '@/client/components/overview/playerActionLabel';
-import {ActionLabel} from '@/client/components/overview/ActionLabel';
 
 // Aufräumfunktion der Beobachter (Feldwahl, Karussell); pro Seite gibt es nur eine Spieleransicht
 let stopObserving: (() => void) | undefined;
@@ -309,12 +221,6 @@ function cardClassName(name: string): string {
   return 'card-' + name.toLowerCase().replaceAll(' ', '-');
 }
 
-// Umschalter im Spieler-Bildschirm wie im Mockup
-const PLAYER_SEGMENTS = [
-  {key: 'players', labels: ['Players']},
-  {key: 'ma', labels: ['Milestones', 'Awards']},
-] as const;
-type PlayersSegment = typeof PLAYER_SEGMENTS[number]['key'];
 
 // Zuletzt gewählter Bildschirm außerhalb der Aufgabe. Nach jedem Server-Update wird die Ansicht neu aufgebaut
 // (App.vue: key), der Bildschirm soll dabei erhalten bleiben
@@ -363,26 +269,21 @@ export default defineComponent({
     };
   },
   components: {
-    GameBoardView,
-    GameOverNotice,
-    Colony,
     UndergroundTokens,
     Card,
     HandCardsPanel,
-    PlayersOverview,
     SetupTurnOrder,
     LogPanel,
     PlayerSetupView,
     WaitingFor,
-    MobileParameterBars,
+    MobileHeader,
+    MobileMarsScreen,
+    MobileNav,
+    MobilePlayersPanel,
     MobileTurnSheet,
     MobileCardZoom,
-    MobileGlyph,
     MobileTurnButton,
     PlayerTimer,
-    MilestoneAwardTable,
-    PlayerIdentity,
-    Sidebar,
   },
   computed: {
     game(): GameModel {
@@ -414,27 +315,6 @@ export default defineComponent({
     nextStepLabel(): string {
       const next = this.setupSteps[this.setupStep + 1];
       return next === undefined ? '' : next.title + ' →';
-    },
-    playerSegments(): typeof PLAYER_SEGMENTS {
-      return PLAYER_SEGMENTS;
-    },
-    claimedMilestones(): number {
-      return this.game.milestones.filter((milestone) => milestone.playerName !== undefined).length;
-    },
-    fundedAwards(): number {
-      return this.game.awards.filter((award) => award.playerName !== undefined).length;
-    },
-    maxMilestones(): number {
-      return constants.MAX_MILESTONES;
-    },
-    maxAwards(): number {
-      return constants.MAX_AWARDS;
-    },
-    maxOceans(): number {
-      return constants.MAX_OCEAN_TILES;
-    },
-    hasVenus(): boolean {
-      return this.game.gameOptions.expansions.venus;
     },
     // Startphase: noch keine Karte ausgespielt (Konzern, Präludien, Startkarten werden gewählt)
     isSetupPhase(): boolean {
@@ -494,9 +374,6 @@ export default defineComponent({
   },
   methods: {
     markHorizontalScroll,
-    actionLabelOf(player: PublicPlayerModel): ActionLabel {
-      return playerActionLabel(player, this.playerView);
-    },
     signed(value: number): string {
       return value >= 0 ? '+' + value : String(value);
     },

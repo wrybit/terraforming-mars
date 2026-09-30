@@ -33,6 +33,11 @@
         :player-view="playerView"
         :key="playerkey"
       />
+      <MobileSpectatorHome
+        v-else-if="screen === 'spectator-home' && spectator !== undefined && isMobileLayout"
+        :spectator="spectator"
+        :key="'mobile-spectator-' + playerkey"
+      />
       <SpectatorHome
         v-else-if="screen === 'spectator-home' && spectator !== undefined"
         :spectator="spectator"
@@ -72,6 +77,7 @@ const LoginHome = defineAsyncComponent(() => import(/* webpackChunkName: "login"
 const LoadGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "load-game" */ '@/client/components/LoadGameForm.vue'));
 const PlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "player-home" */ '@/client/components/PlayerHome.vue'));
 const MobilePlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-player-home" */ '@/client/components/mobile/MobilePlayerHome.vue'));
+const MobileSpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-spectator-home" */ '@/client/components/mobile/MobileSpectatorHome.vue'));
 const SpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "spectator-home" */ '@/client/components/SpectatorHome.vue'));
 const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreen.vue'));
 import {$t, setTranslationContext} from '@/client/directives/i18n';
@@ -158,6 +164,7 @@ export default defineComponent({
     GameHome,
     PlayerHome,
     MobilePlayerHome,
+    MobileSpectatorHome,
     SpectatorHome,
     GameEnd,
     GamesOverview,

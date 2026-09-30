@@ -1,13 +1,6 @@
 <template>
-  <div id="spectator-home" :class="(game.turmoil ? 'with-turmoil': '')">
-
-    <div v-if="game.phase === 'end'">
-      <div class="player_home_block">
-        <DynamicTitle title="This game is over!" :color="spectator.color"/>
-        <a :href="'the-end?id='+ spectator.id" v-i18n>Go to game results</a>
-      </div>
-    </div>
-
+  <div id="spectator-home" :class="{'with-turmoil': game.turmoil, 'player-home--fixed': usesFixedLayout}">
+    <!-- Aufbau wie die Spieleransicht (PlayerHome.vue), nur ohne eigene Hand und Eingabe -->
     <Sidebar v-trim-whitespace
       :actingPlayer="false"
       :playerColor="spectator.color"
@@ -27,22 +20,34 @@
       :spectatorId = "game.spectatorId"
       :expectedPurgeTimeMs = "game.expectedPurgeTimeMs"/>
 
-    <div class="player_home_block nofloat">
-<LogPanel :viewModel="spectator" @spaceClicked="onSpaceClicked"/>
-    </div>
+    <HomeColumns>
+      <template #board>
+        <div class="player_home_block player-home-columns__mars">
+          <GameBoardView
+            ref="gameBoardView"
+            :game="game"
+            :tileView="tileView"
+            :players="spectator.players"
+            @toggleTileView="cycleTileView()"
+          />
+          <!-- Spielende: Meldung über dem Mars, danach automatisch zur Ergebnisseite -->
+          <GameOverNotice v-if="game.phase === 'end'" :participantId="spectator.id"/>
+        </div>
+      </template>
 
-    <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="spectator" v-trim-whitespace id="shortkey-playersoverview"/>
-
-    <GameBoardView
-      ref="gameBoardView"
-      :game="game"
-      :tileView="tileView"
-      :players="spectator.players"
-      @toggleTileView="cycleTileView()"
-    />
+      <!-- Links statt Handkarten das Log: es füllt den Platz unter der Spielertabelle -->
+      <template #main>
+        <a class="hotkey-target"></a>
+        <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="spectator" v-trim-whitespace id="shortkey-playersoverview"/>
+        <a class="hotkey-target"></a>
+        <div class="player_home_block nofloat player-home-columns__log player_home_block--spectator-log">
+          <LogPanel :viewModel="spectator" @spaceClicked="onSpaceClicked"/>
+        </div>
+      </template>
+    </HomeColumns>
 
     <div v-if="game.colonies.length > 0" class="player_home_block" ref="colonies" id="shortkey-colonies">
-      <a name="colonies" class="player_home_anchor"></a>
+      <a name="colonies" class="player_home_anchor hotkey-target"></a>
       <DynamicTitle title="Colonies" :color="spectator.color"/>
       <div class="colonies-fleets-cont">
         <div class="colonies-player-fleets" v-for="player in spectator.players" :key="player.color">
@@ -68,6 +73,8 @@ import {vueRoot} from '@/client/components/vueRoot';
 import {SpectatorModel} from '@/common/models/SpectatorModel';
 import Colony from '@/client/components/colonies/Colony.vue';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
+import GameOverNotice from '@/client/components/gameend/GameOverNotice.vue';
+import HomeColumns from '@/client/components/HomeColumns.vue';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import Sidebar from '@/client/components/Sidebar.vue';
@@ -90,11 +97,17 @@ export default defineComponent({
     game(): GameModel {
       return this.spectator.game;
     },
+    // Festes App-Layout wie in der Spieleransicht (player_home_fixed.less): nur ohne Kolonien darunter
+    usesFixedLayout(): boolean {
+      return this.game.phase !== 'end' && this.game.colonies.length === 0;
+    },
   },
   components: {
     Colony,
     DynamicTitle,
     GameBoardView,
+    GameOverNotice,
+    HomeColumns,
     KeyboardShortcuts,
     LogPanel,
     PlayersOverview,
