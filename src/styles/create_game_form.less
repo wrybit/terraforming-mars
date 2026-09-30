@@ -1,448 +1,726 @@
-.create-game-player {
-  padding: 25px;
-  margin: 10px 0px 10px 15px
+// Formular "Spiel erstellen": oben eine Kopf-Karte über die volle Breite (wie auf "Spiel erstellt"),
+// darunter links die Einstellungen als kompakte Milchglas-Karten in zwei Spalten, rechts eine eigene, mitlaufende Spalte mit den Spielern und
+// dem Erstellen-Button. Schmal (Handy, Tablet hochkant): eine Spalte, Spieler zuerst, Button fest unten.
+
+// Nähe: innerhalb einer Karte 6–8px, zwischen Karten 16px, zwischen den Spalten 24px
+@create-game-gap-inner: 6px;
+@create-game-gap-card: 16px;
+@create-game-gap-column: 24px;
+@create-game-page-padding: 24px;
+@create-game-players-width: 380px;
+@create-game-radius: 10px;
+@create-game-radius-small: 8px;
+@create-game-line: rgba(255, 255, 255, 0.14);
+@create-game-dim: rgba(238, 238, 238, 0.62);
+@create-game-surface: @or-tabs-view-panel-background; // gleiche Fläche wie die Tab-Boxen im Spiel
+@create-game-surface-strong: fade(#22252f, 85%);
+@create-game-chip-background: rgba(255, 255, 255, 0.05);
+@create-game-chip-hover: rgba(255, 255, 255, 0.1);
+@create-game-chip-min-width: 155px;
+@create-game-control-height: 36px;
+@create-game-gold: #ffcc64; // wie Kopf der Meilenstein-Tabelle
+// Unterhalb dieser Breite eine Spalte: Spieler oben, Erstellen-Karte klebt am unteren Rand
+@create-game-narrow: 820px;
+// Unterhalb dieser Breite die Einstellungs-Karten einspaltig
+@create-game-single-settings: 1150px;
+
+// Hinweis unten rechts (App.vue) unter dem Inhalt statt darüber schwebend; verbreitert die Seite auch nicht
+.topmost-create-game-form .notice {
+  position: static;
+  padding: 0 @create-game-page-padding 16px;
+  text-align: right;
 }
 
+// Die Seite hat keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt
+.main-container:has(#create-game) {
+  margin-left: 0;
+}
+
+.create-game {
+  // Versteckte Tooltips der Info-Links ragen rechts heraus; clip statt hidden, damit sticky weiter geht
+  overflow-x: clip;
+  color: #eee;
+  font-size: 14px;
+  line-height: 1.35;
+
+  h1,
+  h2 {
+    margin: 0;
+    padding: 0;
+    font-weight: 500;
+  }
+
+  // Farben der Spielbrett-Sechsecke
+  .create-game-tharsis {
+    color: @board-tharsis;
+  }
+
+  .create-game-hellas {
+    color: @board-hellas;
+  }
+
+  .create-game-elysium {
+    color: @board-elysium;
+  }
+
+  .create-game-amazonis {
+    color: @board-amazonis;
+  }
+
+  .create-game-arabia-terra {
+    color: @board-arabia_terra;
+  }
+
+  .create-game-terra-cimmeria {
+    color: @board-terra_cimmeria;
+  }
+
+  .create-game-vastitas-borealis {
+    color: @board-vastitas_borealis;
+  }
+
+  .create-game-hollandia {
+    color: @board-hollandia;
+  }
+
+  .create-game-utopia-planitia,
+  .create-game-vastitas-borealis-nova {
+    color: #eee;
+  }
+
+  .create-game-random {
+    color: rgb(130, 130, 130);
+  }
+}
+
+.create-game-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) @create-game-players-width;
+  gap: @create-game-gap-card @create-game-gap-column;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: @create-game-page-padding;
+}
+
+.create-game-head {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  h1 {
+    font-size: 26px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  }
+}
+
+.create-game-head-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: @create-game-gap-inner;
+
+  .create-game-reset {
+    margin: 0;
+  }
+}
+
+.create-game-icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: @create-game-control-height;
+  height: @create-game-control-height;
+  margin: 0;
+  border: 0;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #eee;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+}
+
+.create-game-settings {
+  grid-column: 1;
+  min-width: 0;
+}
+
+// Mauerwerk: Karten fließen in zwei Spalten
+.create-game-cards {
+  columns: 2;
+  column-gap: @create-game-gap-card;
+}
+
+.create-game-card,
 .create-game--block {
-  margin: 16px 16px 0 18px;
-  padding: 20px;
-  border-radius: 10px;
-  background: black;
+  .frosted-surface();
+  position: relative;
+  padding: 12px 14px 14px;
+  border: 1px solid @create-game-line;
+  border-radius: @create-game-radius;
+  background: @create-game-surface;
 }
 
-.create-game-form {
-  padding-top: 5px;
+.create-game-card {
+  break-inside: avoid;
+  margin-bottom: @create-game-gap-card;
+
+  // Kopf-Karte sitzt im Raster, der Abstand kommt dort vom gap
+  &.create-game-head {
+    margin-bottom: 0;
+  }
 }
 
-.create_game_form {
-  margin: 40px 5px;
-  padding-left: 15px;
-  text-align: left;
-  width: 100%;
+// Filter-Listen (Konzerne, Karten …) unter den Karten
+.create-game--block {
+  margin-bottom: @create-game-gap-card;
 }
 
-.create-game-corporation {
-  padding: 0 0 25px 25px;
+.create-game-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+
+  h2 {
+    font-size: 16px;
+  }
 }
 
-.create-game-corporations-count {
-  width: 80px;
-  margin-right: 10px;
-  height: 40px;
-  padding-left: 30px;
+.create-game-subhead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0 @create-game-gap-inner;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: @create-game-dim;
 }
 
-.player-handicap {
-  width: 80px;
-  margin-right: 10px;
+.create-game-card-head + .create-game-subhead {
+  margin-top: 0;
 }
 
-.form-input::placeholder {
-  /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #888888;
-  opacity: 1; /* Firefox */
+.create-game-link {
+  margin-left: auto;
+  padding: 2px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  color: lighten(@bg_action, 18%);
+  font-size: 13px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &--selected {
+    border-color: lighten(@bg_action, 18%);
+  }
 }
 
-.form-input::-ms-input-placeholder {
-  /* Internet Explorer 10-11, Microsoft Edge */
-  color: #888888;
+.create-game-info {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.55;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .tooltip:hover {
   text-decoration: none;
 }
 
-.create-game-subsection-label {
-  font-size: 22px;
-  color: gray;
-  padding-top: 10px;
-  padding-bottom: 10px;
+// ---------- wählbare Kacheln ----------
+.create-game-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(@create-game-chip-min-width, 1fr));
+  gap: @create-game-gap-inner;
+
+  &--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: @create-game-gap-inner;
+  }
 }
 
-.create-game-page-container {
+// Gewählt wie überall im Spiel: 20 % Lila (selection_highlight.less) und ein Häkchen-Fähnchen ohne Abstand zum Rahmen
+.create-game-chip {
+  position: relative;
   display: flex;
-  flex-flow: row wrap;
-  background-color: black;
-  border-radius: 10px;
-}
-
-.create-game-page-column {
-  display: flex;
-  flex-flow: column wrap;
-  padding: 20px 10px;
-}
-
-.create-game-page-column-row {
-  display: flex;
-  flex-flow: row nowrap;
-}
-
-
-.create-game-page-column-row > div{
-  flex-grow: 1;
-}
-
-.create-game-page-column input[type="checkbox"] {
-  opacity: 0;
-  position: fixed;
-  width: 0;
-}
-
-.create-game-page-column input:focus-visible + label {
-  outline: 3px solid #ffcc64;
-  outline-offset: 2px;
-}
-.create-game-page-column input[type="radio"] {
-  opacity: 0;
-  position: fixed;
-  width: 0;
-}
-
-.create-game-page-column label {
-  color: #ccc;
-  background-color: @grey_850;
-  padding: 10px 20px 10px 20px;
-  font-family: Ubuntu, sans-serif;
-  font-size: 23px;
-  border-radius: 8px;
-  text-align: center;
-  margin: 4px;
-  min-width: 125px;
-  height: 60px;
-  line-height: 40px;
-  display: flex;
-  justify-content: center;
-}
-
-.create-game-page-column .expansion-button {
-  text-align: left;
-  justify-content: left;
-}
-
-.create-game-page-column label:hover {
-  background-color: rgb(104, 104, 104);
+  align-items: center;
+  gap: 8px;
+  min-height: @create-game-control-height;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: @create-game-radius-small;
+  background: @create-game-chip-background;
   cursor: pointer;
-}
+  user-select: none;
 
-.create-game-page-column input[type="radio"]:checked + label {
-  background-color: rgb(199, 199, 199);
-  color: black;
-}
-.create-game-page-column input[type="radio"]:checked + label a {
-  color:black
-}
+  &:hover {
+    background: @create-game-chip-hover;
+  }
 
-.create-game-page-column input[type="checkbox"]:checked + label {
-  background-color: rgb(199, 199, 199);
-  color: black;
-}
-.create-game-page-column input[type="checkbox"]:checked + label a {
-  color:black
-}
+  &:focus-visible {
+    outline: 2px solid @create-game-gold;
+    outline-offset: 2px;
+  }
 
-.create-game-page-column .create-game-board-hexagon {
-  font-size: 30px;
-  vertical-align: top;
-  line-height: 34px;
-  margin-right: 10px;
-}
+  .create-game-expansion-icon {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    background-size: 20px 20px;
+  }
 
-// stylelint-disable-next-line no-duplicate-selectors
-.create-game-page-column {
-  .create-game-tharsis {
-    color: @board-tharsis;
-  }
-  .create-game-hellas {
-    color: @board-hellas;
-  }
-  .create-game-elysium {
-    color: @board-elysium;
-  }
-  .create-game-amazonis {
-    color: @board-amazonis;
-  }
-  .create-game-arabia-terra {
-    color: @board-arabia_terra;
-  }
-  .create-game-terra-cimmeria{
-    color: @board-terra_cimmeria;
-  }
-  .create-game-vastitas-borealis{
-    color: @board-vastitas_borealis;
-  }
-  .create-game-hollandia {
-    color: @board-hollandia;
+  &--selected {
+    border-color: lighten(@selection-color, 12%);
+    background: fade(@selection-color, @selection-tint-opacity);
+    box-shadow: 0 0 5px fade(@selection-color, 55%);
+
+    &::after {
+      content: "✓";
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      display: grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 0 @create-game-radius-small 0 6px;
+      background: lighten(@selection-color, 12%);
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+    }
   }
 }
 
-.create-game-page-column .create-game-random {
-  color: rgb(106,106,106);
+.create-game-chip-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+// Platz fürs Häkchen-Fähnchen
+.create-game-chip .create-game-info,
+.create-game-chip .create-game-count {
+  margin-right: 8px;
+}
+
+.create-game-count {
+  padding: 1px 7px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 11px;
+}
+
+.create-game-alpha {
+  opacity: 0.7;
+}
+
+// Farbiges Sechseck der Spielbretter (Farbe per create-game-<brett>)
+.create-game-board-hexagon {
+  flex: none;
+  width: 14px;
+  height: 16px;
+  background: currentColor;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+
+// ---------- Einstellungszeilen ----------
+.create-game-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+
+  &--sub {
+    padding-left: 16px;
+    color: @create-game-dim;
+  }
+}
+
+.create-game-option-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+
+  .create-game-expansion-icon {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    background-size: 18px 18px;
+  }
+}
+
+.create-game-subhead + .create-game-segmented,
+.create-game-chip-grid + .create-game-option {
+  margin-top: @create-game-gap-inner;
+}
+
+.create-game-option-group + .create-game-option-group {
+  margin-top: 10px;
+}
+
+.create-game-option-group-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+  font-size: 12px;
+  color: @create-game-dim;
+
+  .create-game-expansion-icon {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    background-size: 16px 16px;
+  }
+}
+
+.create-game-note {
+  margin: 2px 0 6px;
+  font-size: 12px;
+  color: @create-game-dim;
+}
+
+.create-game-text-input {
+  width: 100%;
+  height: 32px;
+  margin-top: 4px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #eee;
+}
+
+// Schalter: echte Checkbox, nur anders gezeichnet
+.create-game-switch {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 34px;
+  height: 20px;
+  margin: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.15s;
+  }
+
+  &:checked {
+    background: @bg_action;
+
+    &::after {
+      transform: translateX(14px);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid @create-game-gold;
+    outline-offset: 2px;
+  }
+}
+
+.create-game-stepper {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.3);
+
+  button {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: @create-game-dim;
+    font-size: 16px;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      color: #fff;
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+  }
+}
+
+.create-game-stepper-value {
+  min-width: 26px;
+  text-align: center;
+  font-weight: 500;
+  color: #eee;
+}
+
+.create-game-segmented {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: @create-game-radius-small;
+  background: rgba(0, 0, 0, 0.3);
+
+  button {
+    flex: 1;
+    padding: 6px 8px;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    color: @create-game-dim;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  .create-game-segmented--selected {
+    background: @bg_action;
+    color: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  &.create-game-segmented--sub {
+    margin: 2px 0 4px 16px;
+  }
+}
+
+// ---------- rechte Spalte: Spieler-Karte und Erstellen-Karte, laufen zusammen mit ----------
+.create-game-side {
+  grid-column: 2;
+  grid-row: 2;
+  position: sticky;
+  top: @create-game-page-padding;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: @create-game-gap-card;
+  max-height: calc(100dvh - 2 * @create-game-page-padding);
+}
+
+.create-game-players {
+  .frosted-surface();
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 1px solid @create-game-line;
+  border-radius: @create-game-radius;
+  background: @create-game-surface-strong;
+}
+
+.create-game-players-head {
+  padding: 14px 14px 10px;
+
+  h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+}
+
+.create-game-player-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 14px 14px;
+}
+
+.create-game-player {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: @create-game-radius-small;
+}
+
+.create-game-player-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.create-game-player-position {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.create-game-player-name {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 15px;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  &:focus {
+    outline: 2px solid @create-game-gold;
+    outline-offset: 0;
+  }
+}
+
+.create-game-first {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  color: @create-game-dim;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &--selected {
+    background: @create-game-gold;
+    color: #222;
+    font-weight: bold;
+  }
+}
+
+.create-game-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.create-game-swatch {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  cursor: pointer;
+
+  &--selected {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.45);
+  }
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+}
+
+.create-game-player-extra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  font-size: 13px;
+}
+
+.create-game-player-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.create-game-create-card {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 0;
+  background: @create-game-surface-strong;
+}
+
+.create-game-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 12px;
+  color: @create-game-dim;
+}
+
+.create-game-create-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .create-game-create {
+    flex: 1;
+    margin: 0;
+  }
+}
+
+.create-game-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  // links frei für das Zahnrad der Einstellungen
+  padding: 4px 0 8px 48px;
+  font-size: 13px;
+  color: @create-game-dim;
+}
+
+// ---------- Symbole, Warnungen, Popup ----------
 .create-game-expansion-icon {
   display: inline-block;
   width: 30px;
   height: 30px;
   background-size: 30px 30px;
-  background-position: 0px 0px;
+  background-position: 0 0;
   background-repeat: no-repeat;
   vertical-align: middle;
-  margin: 5px 10px 5px 0px;
+  margin: 5px 10px 5px 0;
 }
 
-.create-game-player-name {
-  height: 40px;
-  border: none;
-  color: #ccc;
-  text-shadow: 0 0 2px black;
-  border-bottom: none;
-  font-size: 20px;
-  letter-spacing: 1px;
-  font-weight: bold;
-  border-radius: 5px;
-  background: linear-gradient(@grey_850,transparent);
-  background: rgba(0,0,0,.3);
-}
-
-.create-game-player-name:focus {
-  border: none;
-  box-shadow: none;
-}
-
-.create-game-page-color-row {
-  display: flex;
-  flex-flow: row nowrap;
-  margin-top: 10px;
-}
-
-.create-game-page-color-row div > input[type="radio"] {
-  opacity: 0;
-  position: fixed;
-  width: 0;
-}
-
-.create-game-page-color-row div > label {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  border-radius: 5px;
-  text-align: center;
-  vertical-align: middle;
-  padding: 4px 6px;
-  margin: 0px 0px;
-  cursor: pointer;
-}
-
-.create-game-page-color-row label:hover {
-  background-color:rgba(0,0,0,.1)
-}
-
-
-.create-game-page-color-row input[type="radio"]:checked + label {
-  background-color: rgba(0,0,0,.3);
-}
-
-.create-game-page-column input[type="radio"]:checked + label.label-randomMAOption {
-  position: relative;
-}
-.create-game-page-column input[type="radio"]:checked + label.label-randomMAOption::after {
-  position: absolute;
-  width: 40px;
-  height: 12px;
-  top: -10px;
-  left: 50%;
-  margin-left: -20px;
-  content: " ";
-  background-color: rgb(199, 199, 199);
-}
-
-.create-game-page-column input[type="radio"]:checked + label.label-agendaStyle {
-  position: relative;
-}
-.create-game-page-column input[type="radio"]:checked + label.label-agendaStyle::after {
-  position: absolute;
-  width: 40px;
-  height: 12px;
-  top: -10px;
-  left: 50%;
-  margin-left: -20px;
-  content: " ";
-  background-color: rgb(199, 199, 199);
-}
-
-.agendaStyle-random {
-  width: 105px;
-  min-width: 105px !important;
-}
-
-.agendaStyle-chairman {
-  width: 115px;
-  min-width: 115px !important;
-}
-
-.agendas-text {
-  font-size: 22px;
-}
-
-.create-game-colorbox {
-  width: 24px;
-  height: 24px;
-  border-radius: 5px;
-  display: inline-block;
-  text-align: center;
-  vertical-align: text-top;
-}
-
-.create-game-beginner-option-label {
-  margin-top: 15px;
-}
-
-@media only screen and (min-width: 1024px) {
-  .create-game {
-    // Fit the page to the screen: the form panel takes the leftover height and its options
-    // scroll on their own, so the heading, the action bar under the options, and the links
-    // below the panel are always visible. Narrower screens stack the options, which leaves
-    // too little room for this, so the whole page scrolls instead.
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    height: 100dvh;
-
-    > * {
-      flex: none;
-    }
-
-    > .create-game-form {
-      flex: 1 1 auto;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-
-      > .create-game-options {
-        flex: 1 1 auto;
-        min-height: 0;
-        // Hidden tooltips can stick out past the right edge; don't scroll sideways for them.
-        overflow: hidden auto;
-      }
-
-      > .create-game-action-row {
-        flex: none;
-      }
-    }
-  }
-}
-
-.create-game {
-  > h1 {
-    margin: 0px;
-  }
-
-  // The left padding clears the fixed preferences gear in the bottom-left corner.
-  .discord-invite {
-    padding: 0px 15px 0px 60px;
-    font-size: 20px;
-  }
-
-  .changelog {
-    padding: 0px 15px 0px 60px;
-  }
-
-  .create-game-players-cont {
-    // Keep the gap under the Players heading the same as under the other column headings.
-    > .create-game-page-column {
-      padding-bottom: 0;
-    }
-
-    > .container {
-      margin-top: 0;
-    }
-  }
-
-  // When the whole page scrolls, keep the action buttons pinned to the bottom of the screen.
-  // The row is transparent and lets clicks through, so only the bar itself covers the form.
-  .create-game-action-row {
-    position: sticky;
-    bottom: 0;
-    z-index: 2;
-    pointer-events: none;
-  }
-
-  .create-game-action {
-    width: fit-content;
-    padding: 10px;
-    background: #000000;
-    pointer-events: auto;
-  }
-
-  .create-game-action-gap {
-    margin-left: 12px;
-  }
-}
-
-@media only screen and (max-width: 1023px) {
-  .topmost-create-game-form {
-    min-height: 100dvh;
-    overflow-x: clip;
-
-    .main-container {
-      margin: 0;
-    }
-
-    .notice {
-      position: static;
-      padding: 16px;
-      text-align: center;
-    }
-  }
-
-  .create-game {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 12px;
-  }
-
-  .create-game--block {
-    margin: 16px 0 0;
-    padding: 0px 10px;
-  }
-
-  .create-game-page-container {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .create-game-page-column {
-    min-width: 0;
-    padding: 16px;
-
-    label {
-      min-height: 52px;
-      height: auto;
-      padding: 6px 12px;
-      font-size: 18px;
-      line-height: 1.25;
-      align-items: center;
-    }
-  }
-
-  .create-game-players-cont {
-    grid-column: 1 / -1;
-  }
-
-  .create-game-action {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-
-    .btn {
-      min-height: 44px;
-    }
-  }
-
-  .create-game-player {
-    width: 100%;
-    padding: 16px;
-  }
+.form-input::placeholder {
+  color: #888;
+  opacity: 1;
 }
 
 .create-game-custom-preludes-warning {
@@ -454,31 +732,79 @@
   cursor: pointer;
 }
 
-// The text-style warning sign renders smaller than the emoji one.
+// Das Textsymbol der Warnung ist kleiner als das Emoji
 .create-game-validation-blocker {
   font-size: 1.5em;
   line-height: 1;
   vertical-align: middle;
 }
 
-// Size the popup to its content rather than PopupPanel's fixed 90vw x 90vh.
+// Popup so groß wie sein Inhalt statt des festen 90vw x 90vh von PopupPanel
 .popup-outer.create-game-validation-popup .popup-inner {
   width: min(90vw, 800px);
   height: auto;
   max-height: 90vh;
 }
 
-@media only screen and (max-width: 767px) {
+// ---------- schmaler ----------
+@media only screen and (max-width: @create-game-single-settings) {
+  .create-game-cards {
+    columns: 1;
+  }
+}
 
-  .create-game {
+@media only screen and (max-width: @create-game-narrow) {
+  .topmost-create-game-form .notice {
+    padding: 16px;
+    text-align: center;
+  }
+
+  .create-game-layout {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px;
+  }
+
+  .create-game-head {
+    grid-column: auto;
+    order: -2;
+
     h1 {
-      font-size: 28px;
-      line-height: 1.15;
+      font-size: 20px;
     }
   }
 
-  .create-game-page-container,
-  .create-game-page-column {
-    display: block;
+  // Rechte Spalte löst sich auf: Spieler oben (wer spielt, dann wie), Erstellen-Karte am Ende
+  .create-game-side {
+    display: contents;
+  }
+
+  .create-game-players {
+    order: -1;
+  }
+
+  .create-game-player-list {
+    overflow: visible;
+  }
+
+  // Erstellen-Karte klebt am unteren Rand, bis sie ihren Platz am Seitenende erreicht;
+  // links Platz für das feste Zahnrad der Einstellungen (PreferencesIcon)
+  .create-game-create-card {
+    order: 1;
+    position: sticky;
+    bottom: 12px;
+    z-index: 5;
+    margin-left: 44px;
+    box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.45);
+  }
+
+  .create-game-segmented button {
+    padding: 6px 4px;
+    font-size: 13px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .create-game-chip-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

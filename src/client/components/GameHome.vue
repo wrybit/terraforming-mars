@@ -1,32 +1,49 @@
 <template>
-  <div id="game-home" class="game-home-container">
-    <h1><span v-i18n>Terraforming Mars</span> [<span v-i18n>game id:</span> <span>{{getGameId()}}</span>]</h1>
-    <h4><span v-i18n>Instructions: To start the game, separately copy and share the links with all players, and then click on your name.</span><br><span v-i18n>Save this page in case you or one of your opponents loses a link.</span></h4>
-    <ul>
-      <li v-for="(player, index) in (game === undefined ? [] : game.players)" :key="player.color">
-        <span class="turn-order" v-i18n>{{getTurnOrder(index)}}</span>
-        <span :class="'color-square ' + getPlayerCubeColorClass(player.color)">{{playerSymbol(player.color)}}</span>
-        <span class="player-name"><a :href="getHref(player.id)">{{player.name}}</a></span>
-        <AppButton title="copy" size="tiny" @click="copyUrl(player.id)"/>
-        <span v-if="isPlayerUrlCopied(player.id)" class="copied-notice"><span v-i18n>Copied!</span></span>
-      </li>
-      <li v-if="game !== undefined">
-        <p></p>
-        <span class="turn-order"></span>
-        <span class="color-square"></span>
-        <span class="player-name"><a :href="getHref(game.spectatorId)" v-i18n>Spectator</a></span>
-        <AppButton title="copy" size="tiny" @click="copyUrl(game.spectatorId)"/>
-      </li>
-    </ul>
+  <div id="game-home" class="game-home">
+    <section class="game-home-card game-home-hero">
+      <div class="game-home-check">✓</div>
+      <div class="game-home-hero-text">
+        <h1>
+          <span v-i18n>Game created</span>
+          <span class="game-home-id">{{ getGameId() }}</span>
+        </h1>
+        <p v-i18n>Send every player their own link, then open yours.</p>
+      </div>
+    </section>
 
-    <div class="spacing-setup"></div>
+    <div class="game-home-columns">
+      <section class="game-home-card">
+        <h2 v-i18n>Player links</h2>
+        <div class="game-home-links">
+          <div v-for="(player, index) in game.players" :key="player.color"
+            :class="'game-home-link ' + getPlayerRowColorClass(player.color)">
+            <span class="game-home-order" v-i18n>{{ getTurnOrder(index) }}</span>
+            <div class="game-home-who">
+              <strong>{{ player.name }}</strong>
+              <code>{{ getUrl(player.id) }}</code>
+            </div>
+            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(player.id) ? 'Copied!' : 'Copy'" @click="copyUrl(player.id)"/>
+            <a class="btn btn-primary" :href="getHref(player.id)" v-i18n>Play</a>
+          </div>
+          <div class="game-home-link game-home-link--spectator">
+            <span class="game-home-order"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            <div class="game-home-who">
+              <strong v-i18n>Spectator</strong>
+              <code>{{ getUrl(game.spectatorId) }}</code>
+            </div>
+            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(game.spectatorId) ? 'Copied!' : 'Copy'" @click="copyUrl(game.spectatorId)"/>
+            <a class="btn btn-primary" :href="getHref(game.spectatorId)" v-i18n>Watch</a>
+          </div>
+        </div>
+        <div class="game-home-purge">
+          <PurgeWarning :expectedPurgeTimeMs="game.expectedPurgeTimeMs"/>
+        </div>
+      </section>
 
-    <PurgeWarning :expectedPurgeTimeMs="game.expectedPurgeTimeMs"/>
-
-    <div class="spacing-setup"></div>
-    <div v-if="game !== undefined">
-      <h1 v-i18n>Game settings</h1>
-      <GameSetupDetail :gameOptions="game.gameOptions" :playerNumber="game.players.length" :lastSoloGeneration="game.lastSoloGeneration"/>
+      <section class="game-home-card">
+        <h2 v-i18n>Game settings</h2>
+        <GameSetupDetail :gameOptions="game.gameOptions" :playerNumber="game.players.length" :lastSoloGeneration="game.lastSoloGeneration"/>
+      </section>
     </div>
   </div>
 </template>
@@ -41,7 +58,6 @@ import {playerColorClass} from '@/common/utils/utils';
 import GameSetupDetail from '@/client/components/GameSetupDetail.vue';
 import {ParticipantId} from '@/common/Types';
 import {Color} from '@/common/Color';
-import {playerSymbol} from '@/client/utils/playerSymbol';
 import {setDocumentTitle} from '../utils/documentTitle';
 
 // taken from https://stackoverflow.com/a/46215202/83336
@@ -102,8 +118,13 @@ export default defineComponent({
     setCopiedIdToDefault() {
       this.urlCopiedPlayerId = DEFAULT_COPIED_PLAYER_ID;
     },
-    getPlayerCubeColorClass(color: Color): string {
-      return playerColorClass(color, 'bg');
+    getPlayerRowColorClass(color: Color): string {
+      return playerColorClass(color, 'bg_transparent');
+    },
+    // Volle Adresse des Links, wie sie auch kopiert wird
+    getUrl(playerId: ParticipantId): string {
+      const path = window.location.href.replace(/game\?id=.*/, '');
+      return path + this.getHref(playerId);
     },
     getHref(playerId: ParticipantId): string {
       if (playerId === this.game.spectatorId) {
@@ -115,16 +136,11 @@ export default defineComponent({
       if (playerId === undefined) {
         return;
       }
-      // Get current location path without game?id=xxxxxxx
-      const path = window.location.href.replace(/game\?id=.*/, '');
-      copyToClipboard(path + this.getHref(playerId));
+      copyToClipboard(this.getUrl(playerId));
       this.urlCopiedPlayerId = playerId;
     },
     isPlayerUrlCopied(playerId: string): boolean {
       return playerId === this.urlCopiedPlayerId;
-    },
-    playerSymbol(color: Color) {
-      return playerSymbol(color);
     },
   },
   mounted() {
