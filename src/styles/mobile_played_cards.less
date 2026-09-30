@@ -3,7 +3,9 @@
 // Bildschirmrand, damit zwei Kartenspalten möglichst groß werden (Skalierung: mobileFit.ts).
 // Maße aus mobile.less (@mb-top-height, @mb-nav-height).
 
-html.tm-mobile .mb-screen--players .other_player > div {
+// Nur die Tafel selbst (Wurzel von OtherPlayer.vue, per v-show ein-/ausgeblendet) – nicht ihr Wrapper aus
+// PlayersOverview: der bleibt immer sichtbar und würde sonst als leere Fläche über der Spieler-Tabelle liegen
+html.tm-mobile .mb-screen--players .other_player_panel {
   // Unter Status- und Fußleiste (z-index 20/21), damit Zug-Button und Leisten bedienbar bleiben
   position: fixed;
   inset: @mb-top-height 0 calc(@mb-nav-height + env(safe-area-inset-bottom));

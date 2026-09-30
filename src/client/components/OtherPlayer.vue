@@ -1,5 +1,5 @@
 <template>
-  <div v-show="isVisible()">
+  <div v-show="isVisible()" class="other_player_panel">
     <div :class="'player_translucent_bg_color_' + player.color" class="other_player_header">
       <div class="player_name">{{ player.name }} <span v-i18n>played cards</span></div>
       <AppButton size="big" type="close" @click="hideMe" :disableOnServerBusy="false" align="right" />
