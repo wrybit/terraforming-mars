@@ -7,7 +7,7 @@ import {TurnMenu, TurnMenuTile, buildTurnMenu} from '@/client/components/mobile/
 import {OrOptionsModel} from '@/common/models/PlayerInputModel';
 
 function tile(index: number, key: string, tone?: TurnMenuTile['tone']): TurnMenuTile {
-  return {index, key, label: key, sub: {text: '${0} available', params: ['2']}, icon: undefined, tone, empty: false};
+  return {index, key, label: key, sub: {text: '${0} available', params: ['2']}, glyph: 'more', glyphTone: 'neutral', tone, empty: false};
 }
 
 describe('MobileTurnSheet', () => {
@@ -26,6 +26,9 @@ describe('MobileTurnSheet', () => {
     expect(skip.attributes('disabled')).to.not.be.undefined;
     expect(wrapper.find('.mb-tile--highlight .mb-tile-sub').text()).to.eq('2 available');
     expect(wrapper.find('.mb-sheet-turn .mb-turn-count').text()).to.eq('1/2');
+    // Symbol-Kachel nur bei den Aktionen, nicht beim dezenten Zug-Ende
+    expect(wrapper.find('.mb-sheet-grid .mb-tile-icon--neutral svg').exists()).to.be.true;
+    expect(wrapper.find('.mb-sheet-end .mb-tile-icon').exists()).to.be.false;
   });
 
   it('closes from the turn button on its edge', async () => {

@@ -1,4 +1,4 @@
-import {NavGlyphName} from '@/client/components/mobile/mobileNavGlyphs';
+import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
 
 /* Bildschirme der Mobil-Ansicht; `turn` ist die aktuelle Eingabe (Aktionsmenü, Karten kaufen, Startauswahl …). */
 export const MOBILE_SCREENS = ['mars', 'hand', 'turn', 'players', 'log'] as const;
@@ -8,7 +8,7 @@ export type MobileScreen = typeof MOBILE_SCREENS[number];
 export type MobileNavItem = {
   screen: MobileScreen;
   label: string;
-  icon: NavGlyphName;
+  icon: GlyphName;
 };
 
 export const MOBILE_NAV: ReadonlyArray<MobileNavItem> = [
