@@ -13,34 +13,37 @@
       </button>
     </div>
 
-    <template v-if="visibility.goods">
-      <div class="players-table-divider"></div>
-      <div class="players-table-cell" v-for="type in resources" :key="type">
-        <span :class="'resource_icon resource_icon--' + type"></span>
-      </div>
-    </template>
-
-    <template v-if="visibility.tags">
-      <div class="players-table-divider"></div>
-      <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
-        <div v-if="groupIndex > 0"></div>
-        <div class="players-table-cell" v-for="tag in group" :key="tag" :data-test="'tag-head-' + tag">
-          <Tag :tag="(tag as CardTag)" size="big" type="secondary"/>
+    <!-- Reihenfolge der Abschnitte aus PlayersTable (Desktop: Waren, Tags, Wertung; mobil: Waren, Wertung, Tags) -->
+    <template v-for="section in sectionOrder" :key="section">
+      <template v-if="section === 'goods' && visibility.goods">
+        <div class="players-table-divider"></div>
+        <div class="players-table-cell" v-for="type in resources" :key="type">
+          <span :class="'resource_icon resource_icon--' + type"></span>
         </div>
       </template>
-    </template>
 
-    <template v-if="visibility.score">
-      <div class="players-table-divider"></div>
-      <div class="players-table-cell"><div class="tag-count tag-vp tag-type-main tooltip tooltip-bottom" :data-tooltip="$t('Victory Points')"></div></div>
-      <div class="players-table-cell"><div class="tag-count tag-tr tag-type-main tooltip tooltip-bottom" :data-tooltip="$t('Terraform Rating')"></div></div>
-      <div class="players-table-cell"><div class="tag-count tag-cards tag-type-main tooltip tooltip-bottom" :data-tooltip="$t('Cards in hand')"></div></div>
-      <div class="players-table-cell">
-        <div class="tag-count tag-action-card tooltip tooltip-bottom" :data-tooltip="$t('The number of available actions on active cards')">
-          <div class="blue-stripe"></div>
-          <div class="red-arrow"></div>
+      <template v-if="section === 'tags' && visibility.tags">
+        <div class="players-table-divider"></div>
+        <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
+          <div v-if="groupIndex > 0"></div>
+          <div class="players-table-cell" v-for="tag in group" :key="tag" :data-test="'tag-head-' + tag">
+            <Tag :tag="(tag as CardTag)" size="big" type="secondary"/>
+          </div>
+        </template>
+      </template>
+
+      <template v-if="section === 'score' && visibility.score">
+        <div class="players-table-divider"></div>
+        <div class="players-table-cell"><div class="tag-count tag-vp tag-type-main tooltip tooltip-bottom" :data-tooltip="$t('Victory Points')"></div></div>
+        <div class="players-table-cell"><div class="tag-count tag-tr tag-type-main tooltip tooltip-bottom" :data-tooltip="$t('Terraform Rating')"></div></div>
+        <div class="players-table-cell"><div class="tag-count tag-cards tag-type-main tooltip tooltip-bottom" :data-tooltip="$t('Cards in hand')"></div></div>
+        <div class="players-table-cell">
+          <div class="tag-count tag-action-card tooltip tooltip-bottom" :data-tooltip="$t('The number of available actions on active cards')">
+            <div class="blue-stripe"></div>
+            <div class="red-arrow"></div>
+          </div>
         </div>
-      </div>
+      </template>
     </template>
 
     <div class="players-table-divider"></div>
@@ -54,7 +57,7 @@ import {defineComponent} from 'vue';
 import Tag from '@/client/components/Tag.vue';
 import {Tag as CardTag} from '@/common/cards/Tag';
 import {ALL_RESOURCES} from '@/common/Resource';
-import {SectionVisibility, TableSection, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
+import {DESKTOP_SECTION_ORDER, SectionVisibility, TableSection, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
 
 type SectionToggle = {key: TableSection; label: string; icon: 'megacredit' | 'building' | 'vp'};
 
@@ -77,6 +80,11 @@ export default defineComponent({
     visibility: {
       type: Object as () => SectionVisibility,
       required: true,
+    },
+    // Reihenfolge der Abschnitte (playersTableLayout.ts: sectionOrder)
+    sectionOrder: {
+      type: Array as () => ReadonlyArray<TableSection>,
+      default: () => DESKTOP_SECTION_ORDER,
     },
     tagColumns: {
       type: Array as () => TagColumnGroups,

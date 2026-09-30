@@ -9,6 +9,11 @@ export const TABLE_SECTIONS = ['goods', 'tags', 'score'] as const;
 export type TableSection = typeof TABLE_SECTIONS[number];
 export type SectionVisibility = Record<TableSection, boolean>;
 
+// Reihenfolge der Abschnitte: am Desktop Tags vor der Wertung (Spalten nach Breite), mobil die Wertung
+// vor den vielen Tag-Zeilen, damit Siegpunkte und TW ohne Scrollen sichtbar sind
+export const DESKTOP_SECTION_ORDER: ReadonlyArray<TableSection> = ['goods', 'tags', 'score'];
+export const MOBILE_SECTION_ORDER: ReadonlyArray<TableSection> = ['goods', 'score', 'tags'];
+
 // Eine Zeile der Tabelle: Spieler plus das, was PlayersOverview schon für die klassische Leiste berechnet
 export type PlayersTableRowModel = {
   player: PublicPlayerModel;

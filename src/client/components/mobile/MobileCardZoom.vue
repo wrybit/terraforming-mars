@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import {nextTick, onMounted, ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {CardModel} from '@/common/models/CardModel';
 import Card from '@/client/components/card/Card.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
@@ -50,25 +50,27 @@ function originTransform(): string {
   return `translate(${x}px, ${y}px) scale(${scale})`;
 }
 
-function setTransform(value: string) {
-  if (cardHolder.value !== undefined) {
-    cardHolder.value.style.transform = value;
+// Web Animations statt CSS-Transition: die Startlage gilt sofort, ohne vorher einmal gezeichnet zu werden
+const EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+
+function animate(from: string, to: string): Promise<void> {
+  const holder = cardHolder.value;
+  if (holder === undefined || typeof holder.animate !== 'function') {
+    return Promise.resolve();
   }
+  const animation = holder.animate([{transform: from}, {transform: to}], {duration: DURATION_MS, easing: EASING, fill: 'forwards'});
+  return animation.finished.then(() => undefined, () => undefined);
 }
 
-onMounted(async () => {
-  setTransform(originTransform());
-  await nextTick();
-  // Erst nach dem Zeichnen der Startlage umschalten, sonst springt die Karte ohne Animation
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    open.value = true;
-    setTransform('');
-  }));
+onMounted(() => {
+  const start = originTransform();
+  open.value = true;
+  animate(start, 'none');
 });
 
-function close() {
+async function close() {
   open.value = false;
-  setTransform(originTransform());
-  window.setTimeout(() => emit('close'), DURATION_MS);
+  await Promise.race([animate('none', originTransform()), new Promise((resolve) => window.setTimeout(resolve, DURATION_MS + 100))]);
+  emit('close');
 }
 </script>
