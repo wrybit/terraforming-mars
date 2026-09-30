@@ -5,7 +5,7 @@
     <button type="button" class="mb-card-zoom-backdrop" :aria-label="$t('Close')" @click="close"></button>
     <!-- Karussell: alle Karten nebeneinander, per Wischen durchschiebbar, rastet auf je einer Karte ein -->
     <div ref="track" class="mb-card-zoom-track" @scroll.passive="onScroll">
-      <div v-for="slide in count" :key="slide" class="mb-card-zoom-slide">
+      <div v-for="slide in count" :key="slide" class="mb-card-zoom-slide" @click="onSlideClick(slide - 1)">
         <div class="mb-card-zoom-card mb-fit-off">
           <slot name="slide" :index="slide - 1"></slot>
         </div>
@@ -56,8 +56,18 @@ const track = ref<HTMLElement | undefined>(undefined);
 const hasPrevious = computed(() => props.index > 0);
 const hasNext = computed(() => props.index < props.count - 1);
 
+// Eine Karte ist schmaler als das Karussell (Nachbarn schauen herein); Abstandhalter vorn und hinten sind
+// so breit, dass Karte n genau bei n * Kartenbreite mittig einrastet
 function slideWidth(): number {
-  return track.value?.clientWidth || 1;
+  const slide = track.value?.querySelector<HTMLElement>('.mb-card-zoom-slide');
+  return slide?.offsetWidth || 1;
+}
+
+// Tap auf eine angeschnittene Nachbarkarte blättert zu ihr
+function onSlideClick(slideIndex: number) {
+  if (slideIndex !== props.index) {
+    emit('update:index', slideIndex);
+  }
 }
 
 // Karte, auf der das Karussell gerade eingerastet ist
