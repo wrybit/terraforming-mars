@@ -2,10 +2,10 @@
   <div class="players-table-cell">
     <!-- Warenbox: Vorrat groß (darauf schaut man), Produktion als zweiter Wert, Wert je Einheit als Münze an der Ecke -->
     <div :class="boxClasses">
-      <span class="players-table-goods-stock" data-test="stock">{{ good.count }}</span>
+      <!-- Schild vor dem Vorrat: Geschütztes steht als weiße Fläche mit schwarzer Zahl heraus -->
+      <span class="players-table-goods-stock" data-test="stock"><span v-if="protectionIcon !== ''" :class="['players-table-protection', protectionIcon]" data-test="protection"></span>{{ good.count }}</span>
       <span :class="productionClasses" data-test="production" :data-tooltip="$t('Production count')">{{ productionText }}</span>
       <span v-if="showValue" class="players-table-goods-value" data-test="value">{{ good.value }}</span>
-      <span v-if="protectionIcon !== ''" :class="['players-table-goods-protection', protectionIcon]" data-test="protection"></span>
     </div>
   </div>
 </template>
@@ -32,6 +32,9 @@ export default defineComponent({
       const classes = ['players-table-goods', 'players-table-goods--' + this.good.type];
       if (this.good.count === 0) {
         classes.push('players-table-goods--empty');
+      }
+      if (this.protectionIcon !== '') {
+        classes.push('players-table-protected');
       }
       return classes;
     },

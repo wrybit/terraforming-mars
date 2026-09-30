@@ -17,7 +17,7 @@
         <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
           <div v-if="groupIndex > 0"></div>
           <div class="players-table-cell" v-for="tag in group" :key="tag" :data-test="'tag-' + tag">
-            <span :class="['players-table-counter', {'players-table-counter--zero': tagDetail(tag).count === 0}]">{{ tagDetail(tag).count || '·' }}</span>
+            <span :class="tagCounterClasses(tag)"><span v-if="protectedTags.includes(tag)" class="players-table-protection shield_icon" :data-test="'protection-' + tag"></span>{{ tagDetail(tag).count || '·' }}</span>
             <span v-if="tagDetail(tag).discount > 0" class="players-table-discount" :data-test="'discount-' + tag" :title="$t('Discount')">{{ tagDetail(tag).discount }}</span>
             <PointsPerTag :points="tagDetail(tag)"/>
           </div>
@@ -55,6 +55,7 @@ import PlayerIdentity from '@/client/components/overview/PlayerIdentity.vue';
 import PlayersTableGoods from '@/client/components/overview/PlayersTableGoods.vue';
 import PointsPerTag from '@/client/components/overview/PointsPerTag.vue';
 import {PlayerGood, playerGoods} from '@/client/components/overview/playerGoods';
+import {protectedTagsOf} from '@/client/components/overview/protectedTags';
 import {InterfaceTagsType, TagDetail, TagDetails, isVictoryPointCountHidden} from '@/client/components/overview/playerTagDetails';
 import {DESKTOP_SECTION_ORDER, SectionVisibility, TableSection, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
 import {togglePlayerCards} from '@/client/components/overview/playerCardsToggle';
@@ -125,6 +126,9 @@ export default defineComponent({
     goods(): Array<PlayerGood> {
       return playerGoods(this.player);
     },
+    protectedTags(): ReadonlyArray<InterfaceTagsType> {
+      return protectedTagsOf(this.player);
+    },
     victoryPoints(): number | string {
       return isVictoryPointCountHidden(this.player, this.playerView) ? '?' : this.player.victoryPointsBreakdown.total;
     },
@@ -133,6 +137,15 @@ export default defineComponent({
     tagDetail(tag: InterfaceTagsType): TagDetail {
       // Zu jeder sichtbaren Spalte gibt es einen Eintrag – die Spalten stammen aus derselben Reihenfolge
       return this.tagDetails.tagsInOrder.find((detail) => detail.name === tag) as TagDetail;
+    },
+    tagCounterClasses(tag: InterfaceTagsType): Array<string> {
+      const classes = ['players-table-counter'];
+      if (this.protectedTags.includes(tag)) {
+        classes.push('players-table-protected');
+      } else if (this.tagDetail(tag).count === 0) {
+        classes.push('players-table-counter--zero');
+      }
+      return classes;
     },
     toggleCards() {
       togglePlayerCards(vueRoot(this), this.playerIndex, this.playerView.players.length);
