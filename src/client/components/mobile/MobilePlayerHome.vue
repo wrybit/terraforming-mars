@@ -156,7 +156,9 @@
           class="btn btn-submit btn-rounded mb-setup-next" @click="showSetupStep(setupStep + 1)">
           {{ nextStepLabel }}
         </button>
-        <template v-else>
+        <!-- In der Startauswahl steckt die Eingabe schon in PlayerSetupView; eine zweite (WaitingFor) im letzten
+             Schritt hätte eine eigene, leere Bilanz-Leiste über die richtige gelegt -->
+        <template v-else-if="!isSetupPhase">
           <p v-if="playerView.waitingFor === undefined" class="mb-empty">{{ bannerTitle }}</p>
           <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
           <!-- Karten-Karussell (Karte spielen): Position und Anzahl, Punkt antippen wischt dorthin -->
@@ -654,8 +656,11 @@ export default defineComponent({
     },
     // Feldwahl (SelectSpace) erkennen: dann gleich der große Mars; die Eingabe bleibt im Hintergrund eingebunden
     updatePlacing(root: HTMLElement) {
-      // Eine Feldwahl im Menü zählt erst, wenn sie als Aufgabe gewählt ist (oder als eigene Eingabe kommt)
-      const placing = isBoardPlacementActive(root) && (this.placing || this.screen === 'turn' || !this.isActionMenu);
+      // Eine Feldwahl im Menü zählt erst, wenn sie als Aufgabe gewählt ist (oder als eigene Eingabe kommt).
+      // Nur der Wechsel auf den Zug-Bildschirm reicht nicht: Beim Öffnen von "Bauen" steht kurz noch der
+      // Grünflächen-Tab im DOM, und der große Mars ginge fälschlich auf.
+      const placementTask = this.screen === 'turn' && this.task?.confirmation?.action === 'place';
+      const placing = isBoardPlacementActive(root) && (this.placing || placementTask || !this.isActionMenu);
       if (placing !== this.placing) {
         this.placing = placing;
         // Feldwahl gleich im großen, zoombaren Mars (BoardZoomModal) wie im Mockup

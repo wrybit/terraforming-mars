@@ -177,9 +177,8 @@ export default defineComponent({
       root.playerView = playerView;
       root.playerkey++;
       root.screen = 'player-home';
-      if (this.playerView.game.phase === 'end' && window.location.pathname !== paths.THE_END) {
-        window.location = window.location as any as (string & Location);
-      }
+      // Kein Neuladen bei Spielende: Die Spieleransicht zeigt dann die schwebende Meldung (GameOverNotice),
+      // die selbst zur Ergebnisseite weiterleitet. Ein Neuladen sprang sofort dorthin, die Meldung war nie zu sehen.
     },
     waitForUpdate() {
       const vueApp = this;
