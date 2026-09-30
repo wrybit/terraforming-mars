@@ -10,7 +10,6 @@
 // Fußleiste: Lila der Buttons (@bg_action) für Aktives, Grau für Inaktives
 @mb-action: @bg_action;
 @mb-nav-inactive: #8b90a0;
-@mb-nav-badge-inactive: #4a5163;
 @mb-nav-background: #12151e;
 @mb-gold: #f5c542;
 @mb-green: #2e7d32;
@@ -1902,17 +1901,20 @@ html.tm-mobile {
     padding: 0 4px;
     box-sizing: border-box;
     border-radius: 9px;
-    // Grau wie das inaktive Symbol; lila nur, wenn der Eintrag aktiv ist
-    background: @mb-nav-badge-inactive;
-    color: @mb-text;
+    // Inaktiv nur Umriss und Zahl in der Farbe des inaktiven Symbols (wie die Outline-Symbole);
+    // die Fläche in Leistenfarbe verdeckt das Symbol dahinter. Gefüllt lila nur, wenn der Eintrag aktiv ist
+    border: 1.5px solid @mb-nav-inactive;
+    background: @mb-nav-background;
+    color: @mb-nav-inactive;
     font-size: 11px;
     font-weight: bold;
-    line-height: 18px;
+    line-height: 15px;
     text-align: center;
     box-shadow: 0 0 0 2px @mb-nav-background;
   }
 
   .mb-nav-item--active .mb-nav-badge {
+    border-color: @mb-action;
     background: @mb-action;
     color: #fff;
   }
