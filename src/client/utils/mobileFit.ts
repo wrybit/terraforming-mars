@@ -19,15 +19,16 @@ type FitRule = {
   // Anzahl Elemente nebeneinander (je nach Listenbreite) oder volle Breite mit Ausschnitt
   columns?: (listWidth: number) => number;
   crop?: FitCrop;
-  // Auswahl-Raster: Lücke in px statt GAP_PX; die Liste ragt rechts um diese Lücke über (mobile.less),
+  // Auswahl-Raster: Lücken in px statt GAP_PX; die Liste ragt rechts um die Spaltenlücke über (mobile.less),
   // damit die Spalten die volle Breite füllen und nur zwischen den Kacheln Luft bleibt
-  choiceGap?: number;
+  choiceGap?: {column: number, row: number};
 };
 
 // Abstand zwischen Elementen einer Liste (rechts und unten, als Teil des Außenabstands)
 const GAP_PX = 6;
-// Lücke zwischen Auswahl-Kacheln (Standardprojekte), vgl. @mb-choice-gap in mobile.less
-const CHOICE_GAP_PX = 14;
+// Lücken zwischen Auswahl-Kacheln (Standardprojekte), vgl. @mb-choice-gap/@mb-choice-row-gap in mobile.less;
+// zwischen den Zeilen sitzt das Häkchen-Fähnchen
+const CHOICE_GAP = {column: 14, row: 36};
 // Bezugsbreite: die nächste Box bzw. der Bildschirm, in dem das Element steht (Listen selbst sind oft nur so breit wie ihr Inhalt)
 // Gespielte Karten (mobile_played_cards.less) reichen breiter als der Bildschirm-Innenabstand
 const CONTAINER_SELECTOR = '.setup-column-body, .or-tab-panel, .other_player_cont, .mb-screen, .game-end-box';
@@ -73,8 +74,8 @@ const RULES: ReadonlyArray<FitRule> = [
   // Meilensteine & Auszeichnungen als Tabelle über die volle Breite
   {selector: '.mb-screen .ma-table', columns: () => 1},
   // Standardprojekte: alle auf einen Blick im Raster wie die übrigen Kartenlisten, kein Karussell (vgl. cardCarousel.ts)
-  // Lücke wie bei den Meilenstein-/Auszeichnungs-Kacheln (@mb-choice-gap in mobile.less)
-  {selector: '.mb-screen--turn .payments_cont .card-container.card-standard-project', columns: cardColumns, choiceGap: CHOICE_GAP_PX},
+  // Lücken wie bei den Meilenstein-/Auszeichnungs-Kacheln (mobile.less)
+  {selector: '.mb-screen--turn .payments_cont .card-container.card-standard-project', columns: cardColumns, choiceGap: CHOICE_GAP},
   // Karten-Karussell (Karte spielen): eine Karte groß in der Mitte
   {selector: '.mb-screen--turn .payments_cont .card-container', columns: () => 1},
   {
@@ -111,8 +112,9 @@ function fit(element: HTMLElement, rule: FitRule): void {
   }
   const listWidth = innerWidth(list);
   const crop = rule.crop ?? {left: 0, top: 0, width, height};
-  const gap = rule.columns === undefined ? 0 : rule.choiceGap ?? GAP_PX;
-  const fitWidth = listWidth + (rule.choiceGap ?? 0);
+  const gap = rule.columns === undefined ? 0 : rule.choiceGap?.column ?? GAP_PX;
+  const rowGap = rule.columns === undefined ? 0 : rule.choiceGap?.row ?? GAP_PX;
+  const fitWidth = listWidth + (rule.choiceGap?.column ?? 0);
   const scale = rule.columns === undefined ? Math.min(listWidth / crop.width, boardMaxHeight(window.innerWidth, window.innerHeight) / crop.height) : fitScale(fitWidth, width, rule.columns(listWidth), gap);
   element.classList.add(FITTED_CLASS);
   element.classList.toggle(CROPPED_CLASS, rule.crop !== undefined);
@@ -122,7 +124,7 @@ function fit(element: HTMLElement, rule: FitRule): void {
     // Layout-Box auf den sichtbaren Ausschnitt verkleinern; in Listen plus Lücke zum Nachbarn
     // (abgerundet, sonst passt die letzte Spalte wegen Rundung nicht mehr in die Reihe)
     marginRight: Math.floor(crop.width * scale + gap) - width + 'px',
-    marginBottom: Math.floor(crop.height * scale + gap) - height + 'px',
+    marginBottom: Math.floor(crop.height * scale + rowGap) - height + 'px',
     clipPath: rule.crop === undefined ? '' :
       `inset(${crop.top}px ${width - crop.left - crop.width}px ${height - crop.top - crop.height}px ${crop.left}px)`,
   });
