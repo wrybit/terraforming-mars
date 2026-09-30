@@ -10,6 +10,7 @@
 // Fußleiste: Lila der Buttons (@bg_action) für Aktives, Grau für Inaktives
 @mb-action: @bg_action;
 @mb-nav-inactive: #8b90a0;
+@mb-nav-badge-inactive: #4a5163;
 @mb-nav-background: #12151e;
 @mb-gold: #f5c542;
 @mb-green: #2e7d32;
@@ -1697,13 +1698,19 @@ html.tm-mobile {
     padding: 0 4px;
     box-sizing: border-box;
     border-radius: 9px;
-    background: @mb-action;
-    color: #fff;
+    // Grau wie das inaktive Symbol; lila nur, wenn der Eintrag aktiv ist
+    background: @mb-nav-badge-inactive;
+    color: @mb-text;
     font-size: 11px;
     font-weight: bold;
     line-height: 18px;
     text-align: center;
     box-shadow: 0 0 0 2px @mb-nav-background;
+  }
+
+  .mb-nav-item--active .mb-nav-badge {
+    background: @mb-action;
+    color: #fff;
   }
 
   // Zug-Button: am Zug lila mit Puls und Aktions-Badge
