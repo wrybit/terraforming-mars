@@ -56,15 +56,21 @@
       <Help v-else-if="screen === 'help'"/>
     </div>
     <!-- In Spielansichten steht der Hinweis im Info-Fenster der Sidebar; auf der Ergebnisseite entfällt er (Wunsch Jens) -->
-    <div v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" v-i18n>
-      Not affiliated with FryxGames, Asmodee Digital or Steam in any way.
-    </div>
+    <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice">
+      <!-- Auf "Spiel erstellen" gehören Changelog und Discord mit in die Fußzeile (die Startseite hat eigene Buttons dafür) -->
+      <template v-if="screen === 'create-game-form'">
+        <a :href="changelogUrl" target="_blank" v-i18n>Read our changelog to get the latest updates.</a>
+        <span>(<span v-i18n>Looking for people to play with</span>? <a :href="discordInvite" target="_blank" v-i18n>Join us on Discord</a>.)</span>
+      </template>
+      <span v-i18n>Not affiliated with FryxGames, Asmodee Digital or Steam in any way.</span>
+    </footer>
   </div>
 </template>
 
 <script lang="ts">
 import {defineAsyncComponent, defineComponent} from 'vue';
 import * as constants from '@/common/constants';
+import {WIKI_URLS} from '@/client/utils/WikiLinks';
 
 const AdminHome = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminHome.vue'));
 const CardList = defineAsyncComponent(() => import(/* webpackChunkName: "card-list" */ '@/client/components/cardlist/CardList.vue'));
@@ -174,6 +180,12 @@ export default defineComponent({
     LoginHome,
   },
   computed: {
+    changelogUrl(): string {
+      return WIKI_URLS.changelog;
+    },
+    discordInvite(): string {
+      return constants.DISCORD_INVITE;
+    },
     isMobileLayout(): boolean {
       return mobileLayout.value;
     },
