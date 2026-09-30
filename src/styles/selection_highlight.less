@@ -26,3 +26,20 @@
     animation: none;
   }
 }
+
+// Gewählte Karten zusätzlich leicht lila einfärben, damit die Auswahl auch ohne den Schein am Rand
+// sofort auffällt (Desktop und Mobil). Als Überlagerung über dem Inhalt, weil die Karte eigene
+// Hintergrundbilder hat, die eine Hintergrundfarbe verdecken würden.
+@selection-tint-opacity: 20%;
+
+.selection-tint() {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: fade(@selection-color, @selection-tint-opacity);
+  // Klicks gehen weiter an die Karte (Auswahl aufheben, Tooltips)
+  pointer-events: none;
+  // Über den Karteninhalten (die bis z-index 4 gehen)
+  z-index: 5;
+}
