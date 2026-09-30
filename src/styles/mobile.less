@@ -7,6 +7,10 @@
 @mb-text: #ece9e2;
 @mb-muted: #a4a9b6;
 @mb-accent: #5b5ef0;
+// Fußleiste: Lila der Buttons (@bg_action) für Aktives, Grau für Inaktives
+@mb-action: @bg_action;
+@mb-nav-inactive: #8b90a0;
+@mb-nav-background: #12151e;
 @mb-gold: #f5c542;
 @mb-green: #2e7d32;
 @mb-heat: #b8461f;
@@ -1629,30 +1633,59 @@ html.tm-mobile {
     gap: 4px;
     border: 0;
     background: transparent;
-    color: #8b90a0;
+    color: @mb-nav-inactive;
     font: inherit;
     font-size: 11px;
-
-    img {
-      width: 24px;
-      height: 24px;
-      object-fit: contain;
-      opacity: 0.7;
-    }
   }
 
+  // Aktiv: gefülltes Symbol in Button-Lila, Linie oben in derselben Farbe, Beschriftung hell
   .mb-nav-item--active {
-    color: @mb-text;
-    box-shadow: inset 0 2px 0 @mb-gold;
+    color: @mb-action;
+    box-shadow: inset 0 2px 0 @mb-action;
 
-    img {
-      opacity: 1;
+    .mb-nav-label {
+      color: @mb-text;
+      font-weight: bold;
     }
   }
 
-  .mb-nav-item--turn {
+  .mb-nav-item--turn .mb-nav-label {
     color: @mb-text;
     font-weight: bold;
+  }
+
+  // Symbole der Leiste (MobileNavIcon.vue); --mb-nav-cut ist die Farbe für Aussparungen und Abdeckungen
+  .mb-nav-icon {
+    --mb-nav-cut: @mb-nav-background;
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+
+  .mb-nav-icon-line {
+    fill: none;
+    stroke: currentColor;
+  }
+
+  .mb-nav-icon-cover {
+    fill: var(--mb-nav-cut);
+    stroke: currentColor;
+  }
+
+  .mb-nav-icon-fill {
+    fill: currentColor;
+    stroke: currentColor;
+  }
+
+  .mb-nav-icon-gap {
+    fill: var(--mb-nav-cut);
+    stroke: var(--mb-nav-cut);
+    stroke-width: 4.2;
+  }
+
+  .mb-nav-icon-cut {
+    fill: var(--mb-nav-cut);
+    stroke: var(--mb-nav-cut);
   }
 
   .mb-nav-badge {
@@ -1664,14 +1697,18 @@ html.tm-mobile {
     padding: 0 4px;
     box-sizing: border-box;
     border-radius: 9px;
-    background: @mb-accent;
+    background: @mb-action;
     color: #fff;
     font-size: 11px;
+    font-weight: bold;
     line-height: 18px;
     text-align: center;
+    box-shadow: 0 0 0 2px @mb-nav-background;
   }
 
+  // Zug-Button: am Zug lila mit Puls und Aktions-Badge
   .mb-turn-button {
+    position: relative;
     margin-top: -24px;
     width: 56px;
     height: 56px;
@@ -1679,16 +1716,43 @@ html.tm-mobile {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: @mb-gold;
-    color: #1b1400;
+    background: @mb-action;
+    color: #fff;
     border: 4px solid #0d0f14;
     animation: mb-pulse 1.8s ease-out infinite;
+
+    .mb-nav-icon {
+      width: 28px;
+      height: 28px;
+    }
   }
 
+  // Nicht am Zug: grauer Button, graue Rakete, kein Badge, kein Puls, Beschriftung gedämpft
   .mb-turn-button--idle {
     background: #3a4152;
-    color: #8b90a0;
+    color: @mb-nav-inactive;
     animation: none;
+
+    + .mb-nav-label {
+      color: @mb-nav-inactive;
+      font-weight: normal;
+    }
+  }
+
+  // Aktion 1/2 bzw. 2/2 als Badge wie die Handkarten-Zahl, aber hell auf dem lila Button
+  .mb-turn-count {
+    position: absolute;
+    top: -6px;
+    right: -14px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: #fff;
+    color: @mb-action;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 18px;
+    box-shadow: 0 0 0 2px @mb-nav-background;
   }
 
   .mb-taskbar {
@@ -1859,15 +1923,15 @@ html.tm-mobile {
 
 @keyframes mb-pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(245, 197, 66, 0.55);
+    box-shadow: 0 0 0 0 fade(@mb-action, 55%);
   }
 
   70% {
-    box-shadow: 0 0 0 14px rgba(245, 197, 66, 0);
+    box-shadow: 0 0 0 14px fade(@mb-action, 0%);
   }
 
   100% {
-    box-shadow: 0 0 0 0 rgba(245, 197, 66, 0);
+    box-shadow: 0 0 0 0 fade(@mb-action, 0%);
   }
 }
 

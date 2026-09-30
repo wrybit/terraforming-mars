@@ -177,10 +177,12 @@
       <button v-for="item in navItems" :key="item.screen" type="button"
         :class="['mb-nav-item', 'mb-nav-item--' + item.screen, {'mb-nav-item--active': screen === item.screen}]"
         @click="navigate(item.screen)">
-        <span v-if="item.icon === undefined" :class="['mb-turn-button', {'mb-turn-button--idle': !acting}]">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg>
+        <!-- Zug-Button: lila, solange man dran ist (Badge zeigt Aktion 1/2 bzw. 2/2); grau ohne Badge, wenn andere am Zug sind -->
+        <span v-if="item.screen === 'turn'" :class="['mb-turn-button', {'mb-turn-button--idle': !acting}]">
+          <MobileNavIcon :name="item.icon" :stroke-width="2"/>
+          <span v-if="actionNumber !== undefined" class="mb-turn-count">{{ actionNumber }}/{{ actionsPerTurn }}</span>
         </span>
-        <img v-else :src="item.icon" alt="">
+        <MobileNavIcon v-else :name="item.icon" :filled="screen === item.screen"/>
         <span v-if="item.screen === 'hand' && cardsInHandCount > 0" class="mb-nav-badge">{{ cardsInHandCount }}</span>
         <span class="mb-nav-label">{{ $t(item.label) }}</span>
       </button>
@@ -216,6 +218,7 @@ import WaitingFor from '@/client/components/WaitingFor.vue';
 import MobileParameterBars from '@/client/components/mobile/MobileParameterBars.vue';
 import MobileTurnSheet from '@/client/components/mobile/MobileTurnSheet.vue';
 import MobileCardZoom from '@/client/components/mobile/MobileCardZoom.vue';
+import MobileNavIcon from '@/client/components/mobile/MobileNavIcon.vue';
 import {CardModel} from '@/common/models/CardModel';
 import PlayerTimer from '@/client/components/overview/PlayerTimer.vue';
 import Sidebar from '@/client/components/Sidebar.vue';
@@ -341,6 +344,7 @@ export default defineComponent({
     MobileParameterBars,
     MobileTurnSheet,
     MobileCardZoom,
+    MobileNavIcon,
     PlayerTimer,
     MilestoneAwardTable,
     Sidebar,
@@ -424,10 +428,19 @@ export default defineComponent({
       return names.length === 0 ? this.$t('Waiting for other players') : translateTextWithParams('Waiting for ${0}', [names.join(', ')]);
     },
     bannerSub(): string {
+      return this.actionNumber === undefined ? '' :
+        translateTextWithParams('Action ${0} of ${1}', [String(this.actionNumber), String(this.actionsPerTurn)]);
+    },
+    // Das Modell kennt nur die genommenen Aktionen, nicht die erlaubten; Sonderfälle mit mehr Aktionen gibt es kaum
+    actionsPerTurn(): number {
+      return 2;
+    },
+    // Wievielte Aktion dieses Zugs gerade ansteht; undefined, wenn man nicht in der Aktionsphase dran ist
+    actionNumber(): number | undefined {
       if (!this.acting || this.game.phase !== Phase.ACTION) {
-        return '';
+        return undefined;
       }
-      return translateTextWithParams('Action ${0} of ${1}', [String(this.thisPlayer.actionsTakenThisRound + 1), '2']);
+      return Math.min(this.thisPlayer.actionsTakenThisRound + 1, this.actionsPerTurn);
     },
   },
 
