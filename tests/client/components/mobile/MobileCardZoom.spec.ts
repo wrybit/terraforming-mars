@@ -24,6 +24,18 @@ describe('MobileCardZoom', () => {
     expect(wrapper.emitted('update:index')).to.deep.eq([[1]]);
   });
 
+  it('keeps the neighbours outside on their side until the card has grown', async () => {
+    const wrapper = shallowMount(MobileCardZoom, {...globalConfig, props: {count: 3, index: 1}, slots});
+    expect(wrapper.classes()).to.include('mb-card-zoom--neighbors-hidden');
+    const sides = wrapper.findAll('.mb-card-zoom-slide').map((slide) => slide.classes());
+    expect(sides[0]).to.include('mb-card-zoom-slide--before');
+    expect(sides[1]).not.to.include('mb-card-zoom-slide--before').and.not.to.include('mb-card-zoom-slide--after');
+    expect(sides[2]).to.include('mb-card-zoom-slide--after');
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await wrapper.vm.$nextTick();
+    expect(wrapper.classes()).not.to.include('mb-card-zoom--neighbors-hidden');
+  });
+
   it('closes from the backdrop (after the shrink animation, if the browser supports it)', async () => {
     const wrapper = shallowMount(MobileCardZoom, {...globalConfig, props: {count: 1, index: 0}});
     await wrapper.find('.mb-card-zoom-backdrop').trigger('click');
