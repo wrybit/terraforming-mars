@@ -53,6 +53,16 @@
 @mb-bar-shadow-up: 0 -6px 18px rgba(0, 0, 0, 0.6);
 @mb-sheet-shadow: 0 -12px 36px rgba(0, 0, 0, 0.8);
 
+// Frosted Glass für Knöpfe über unscharfem Hintergrund (Karten-Großansicht): halbtransparent, dahinter weichgezeichnet
+.mb-frosted-button() {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
 .mb-bar-surface() {
   background: @mb-surface;
   -webkit-backdrop-filter: blur(8px);
@@ -1195,14 +1205,11 @@ html.tm-mobile {
     width: 44px;
     height: 44px;
     padding: 0 0 4px;
-    border: 0;
     border-radius: 10px;
-    background: #fff;
-    color: #111;
     font: inherit;
     font-size: 30px;
     line-height: 1;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    .mb-frosted-button();
   }
   .mb-card-zoom-step--hidden {
     visibility: hidden;
@@ -1222,13 +1229,10 @@ html.tm-mobile {
   .mb-card-zoom-close {
     height: 44px;
     padding: 0 12px;
-    border: 0;
     border-radius: 10px;
-    background: #fff;
-    color: #111;
     font: inherit;
     font-weight: bold;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    .mb-frosted-button();
   }
 
   // ---------- Karten-Karussell (Karte spielen, cardCarousel.ts) ----------
