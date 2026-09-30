@@ -33,6 +33,16 @@ describe('PlayersTableGoods', () => {
     expect(wrapper.find('[data-test="production"]').classes()).to.include('players-table-goods-production--leader');
   });
 
+  it('marks protected goods with a shield in front of the stock', () => {
+    const wrapper = shallowMount(PlayersTableGoods, {
+      ...globalConfig,
+      props: {good: good({type: Resource.PLANTS, count: 3, resourceProtection: 'on'})},
+    });
+    expect(wrapper.find('.players-table-goods').classes()).to.include('players-table-protected');
+    expect(wrapper.find('[data-test="stock"] [data-test="protection"]').exists()).to.be.true;
+    expect(wrapper.find('[data-test="stock"]').text()).to.eq('3');
+  });
+
   it('shows the value badge for raised values, never for M€', () => {
     const megacredits = shallowMount(PlayersTableGoods, {
       ...globalConfig,

@@ -359,6 +359,9 @@ each(@players, {
 }
 
 .players-table-goods-stock {
+  display: inline-flex; // Platz für das Schild vor der Zahl (geschützter Vorrat)
+  align-items: center;
+  gap: 3px;
   font-size: 20px;
   color: #fff;
 }
@@ -417,13 +420,42 @@ each(@players, {
   font-size: 10px;
 }
 
-.players-table-goods-protection {
-  position: absolute;
-  left: -5px;
-  bottom: -5px;
-  width: 14px;
-  height: 14px;
-  background-size: 14px;
+// Geschützt (Waren, Natur-Tags bei Geschützte Habitate): weiße Fläche, schwarze Zahl, Schild davor.
+// Ein Stil für beide Stellen, damit Schutz überall gleich aussieht
+.players-table-protected {
+  background: #fff;
+
+  &,
+  .players-table-goods-stock {
+    color: #111;
+  }
+}
+
+// Leere Produktion ist weiß auf dunkel angelegt; auf der weißen Fläche dieselbe Zurücknahme in Schwarz
+.players-table-protected .players-table-goods-production--none {
+  color: rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.players-table-counter.players-table-protected {
+  display: inline-flex;
+  color: #111; // Zählerfarbe (.players-table-counter) steht weiter unten und würde sonst gewinnen
+  align-items: center;
+  gap: 3px;
+  padding: 3px 6px 2px;
+  border-radius: 5px;
+}
+
+// Schild schwarz auf Weiß: die Grafik ist schwarz, shield_icon (resources.less) invertiert sie für dunklen Grund
+.players-table-protection {
+  flex: none;
+  position: static;
+  width: 13px;
+  height: 13px;
+  background-size: 13px;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: none;
 }
 
 // Zähler (Tags, Wertung): bewusst klein und leiser als die Waren
