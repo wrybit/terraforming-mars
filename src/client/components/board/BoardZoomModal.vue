@@ -26,7 +26,7 @@ import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordin
 import {animateBoardZoom} from '@/client/components/board/boardZoomAnimation';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {mobileLayout} from '@/client/utils/mobileLayout';
-import {MAX_ZOOM_RATIO, PLACEMENT_ZOOM_RATIO, PLANET_CENTER, wholePlanetZoom} from '@/client/components/mobile/mobileBoardZoom';
+import {DEFAULT_ZOOM_RATIO, MAX_ZOOM_RATIO, PLANET_CENTER, steppedZoomRatio, wholePlanetZoom} from '@/client/components/mobile/mobileBoardZoom';
 import {attachPinchZoom} from '@/client/components/board/boardPinchZoom';
 import MobileZoomControls from '@/client/components/mobile/MobileZoomControls.vue';
 
@@ -92,9 +92,9 @@ let stopPinch: (() => void) | undefined;
 
 function fitMobile() {
   wholeZoom.value = wholePlanetZoom(window.innerWidth, window.innerHeight);
-  // Beim Platzieren etwas näher, damit die Felder gleich antippbar sind
+  // Start bei 200 %: Felder sind gleich antippbar
   placing.value = isBoardPlacementActive();
-  zoomFactor.value = wholeZoom.value * (placing.value ? PLACEMENT_ZOOM_RATIO : 1);
+  zoomFactor.value = wholeZoom.value * DEFAULT_ZOOM_RATIO;
 }
 
 // Planet mittig in den sichtbaren Bereich über der Zoom-Leiste schieben
@@ -126,8 +126,10 @@ function setZoom(value: number, x: number, y: number) {
   });
 }
 
+// − und +: in 25-%-Schritten (100–300 %), um die Mitte des sichtbaren Bereichs
 function zoomAtCenter(factor: number) {
-  setZoom(zoomFactor.value * factor, window.innerWidth / 2, (window.innerHeight - CONTROLS_HEIGHT) / 2);
+  const ratio = steppedZoomRatio(zoomFactor.value / wholeZoom.value, factor > 1 ? 1 : -1);
+  setZoom(wholeZoom.value * ratio, window.innerWidth / 2, (window.innerHeight - CONTROLS_HEIGHT) / 2);
 }
 
 async function fitWholePlanet() {
@@ -141,7 +143,7 @@ function startGestures() {
   stopPinch = backdrop.value === undefined ? undefined : attachPinchZoom(backdrop.value, {
     zoomBy: (factor, x, y) => setZoom(zoomFactor.value * factor, x, y),
     // Doppel-Tap: nah heran bzw. zurück zum ganzen Planeten
-    toggle: (x, y) => zoomFactor.value > wholeZoom.value * 1.05 ? fitWholePlanet() : setZoom(wholeZoom.value * 2, x, y),
+    toggle: (x, y) => zoomFactor.value > wholeZoom.value * 1.05 ? fitWholePlanet() : setZoom(wholeZoom.value * DEFAULT_ZOOM_RATIO, x, y),
   });
 }
 

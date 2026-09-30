@@ -19,6 +19,12 @@
 @mb-players-icon-column: 44px;
 // Sheet auf Tablets mittig statt über die volle Breite
 @mb-sheet-max-width: 560px;
+// Dauer der Karten-Vergrößerung (vgl. DURATION_MS in MobileCardZoom.vue)
+@mb-card-zoom-duration: 260ms;
+// Fußbereich der Aufgabe beginnt rechts neben "Zurück" (12 px Rand + 76 px Knopf + 8 px Lücke)
+@mb-footer-left: 96px;
+// Währungssymbol im Eingabefeld beim Bezahlen
+@mb-payment-icon: 28px;
 // Höhe der Spielende-Meldung über dem Planeten (Mitte des Bretts im Mars-Bildschirm)
 @mb-game-over-top: 240px;
 // Halbe Kartenbreite im Karussell (Karten ungezoomt 248 px, vgl. mobileFit.ts)
@@ -219,6 +225,14 @@ html.tm-mobile {
     margin: 24px 12px;
     color: @mb-muted;
     text-align: center;
+  }
+
+  // Aufgaben-Ansicht: keine Box um Karten und Inhalte, sie reichen bis zum Bildschirmrand (wie im Mockup)
+  .mb-screen--turn .or-tab-panel {
+    padding: 0 !important;
+    border: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
   }
 
   // Tab-Boxen wie im Desktop (ab 1400 px), nur mit weniger Innenabstand; ohne eigene Stapelebene,
@@ -447,9 +461,65 @@ html.tm-mobile {
     color: @mb-text;
   }
 
-  // Meilenstein-Tabelle ist sonst nur im Zwei-Spalten-Layout sichtbar (milestone_award_table.less)
-  .mb-screen--players .ma-table {
-    display: grid !important;
+  // Meilensteine & Auszeichnungen gedreht wie die Spieler-Tabelle: Symbole links, dann Kosten bzw. Besitzer,
+  // danach je Spieler eine Spalte (Zellen je Zeile: --ma-table-cell-count aus MilestoneAwardTable)
+  .mb-ma .ma-table {
+    display: grid !important; // sonst nur im Zwei-Spalten-Layout sichtbar (milestone_award_table.less)
+    grid-template-rows: repeat(var(--ma-table-cell-count), auto);
+    grid-template-columns: @mb-players-icon-column auto;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    gap: 0 4px;
+
+    .ma-table-row {
+      display: contents;
+    }
+
+
+    .ma-table-row > * {
+      min-height: 44px;
+      padding: 4px 2px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    // Nach der Zell-Regel, damit sie gewinnt: Überschriften und Trenner entfallen im gedrehten Raster
+    .ma-table-labels,
+    .ma-table-row > .ma-table-divider,
+    .ma-table-player::before {
+      display: none;
+    }
+
+    // Die leere Ecke oben links (Namensspalte von Kopf- und Statuszeile)
+    .ma-table-head > :first-child,
+    .ma-table-status > :first-child {
+      min-height: 0;
+      height: 100%;
+    }
+
+    .ma-table-name {
+      padding: 8px 4px;
+      border-radius: 10px 10px 0 0;
+      font-size: 15px;
+      white-space: normal;
+      text-align: center;
+    }
+
+    .ma-table-player > :last-child {
+      border-radius: 0 0 10px 10px;
+    }
+
+    // Trennung Meilensteine | Auszeichnungen: Linie über der ersten Auszeichnung (Nähe statt Überschrift)
+    .ma-table-divider ~ .ma-table-divider + * {
+      border-top: 2px solid rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  // Spieler-Tabelle: Farbbalken der aufgelösten Zeilen würde sonst am Tabellenrand stehen
+  .mb-screen--players .players-table-row::before {
+    display: none;
   }
 
   // ---------- Globale Parameter als Balken ----------
@@ -667,7 +737,7 @@ html.tm-mobile {
     }
   }
 
-  // Spielerfarbe je Spalte (die Zeile selbst ist aufgelöst und trägt keinen Hintergrund mehr)
+  // Spielerfarbe je Spalte (die Zeilen sind aufgelöst und tragen keinen Hintergrund mehr)
   each(@players, {
     @c: ~"player_@{value}";
     .mb-screen--players .players-table-row--@{value} > * {
@@ -676,6 +746,15 @@ html.tm-mobile {
 
     .mb-screen--players .players-table-row--@{value}.players-table-row--me > * {
       background: fade(@@c, 55%);
+    }
+
+    // Meilensteine & Auszeichnungen (gedreht) in denselben Spielerfarben
+    .mb-ma .ma-table-player--@{value} > * {
+      background: fade(@@c, 28%);
+    }
+
+    .mb-ma .ma-table-player--@{value}.ma-table-player--me > * {
+      background: fade(@@c, 50%);
     }
   });
 
@@ -904,6 +983,13 @@ html.tm-mobile {
     justify-content: center;
     gap: 18px;
     padding: 16px;
+    background: rgba(5, 6, 10, 0);
+    -webkit-backdrop-filter: blur(0);
+    backdrop-filter: blur(0);
+    transition: background @mb-card-zoom-duration ease, backdrop-filter @mb-card-zoom-duration ease;
+  }
+
+  .mb-card-zoom--open {
     background: rgba(5, 6, 10, 0.6);
     -webkit-backdrop-filter: blur(7px) saturate(0.8);
     backdrop-filter: blur(7px) saturate(0.8);
@@ -916,14 +1002,18 @@ html.tm-mobile {
     background: transparent;
   }
 
-  // Karte um ein Fünftel größer; der Rand um die skalierte Karte hält den Platz frei
+  // Karte um ein Fünftel größer mit Schatten darunter; der Rand um die skalierte Karte hält den Platz frei.
+  // Die Hülle trägt die Wachs-/Schrumpf-Animation (MobileCardZoom setzt transform)
   .mb-card-zoom-card {
     position: relative;
     margin: 30px 26px;
+    transition: transform @mb-card-zoom-duration cubic-bezier(0.2, 0.8, 0.2, 1);
 
     .card-container {
       margin: 0 !important;
       transform: scale(1.2);
+      border-radius: 12px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), 0 4px 10px rgba(0, 0, 0, 0.5);
     }
   }
 
@@ -932,12 +1022,31 @@ html.tm-mobile {
     display: flex;
     justify-content: center;
     gap: 8px;
+    opacity: 0;
+    transition: opacity @mb-card-zoom-duration ease;
 
     .btn {
       height: 44px;
       margin: 0 !important;
       padding: 0 22px;
     }
+  }
+
+  .mb-card-zoom--open .mb-card-zoom-actions {
+    opacity: 1;
+  }
+
+  // Schließen gut sichtbar: weiße Fläche, schwarze Schrift
+  .mb-card-zoom-close {
+    height: 44px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 10px;
+    background: #fff;
+    color: #111;
+    font: inherit;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
 
   // ---------- Karten-Karussell (Karte spielen, cardCarousel.ts) ----------
@@ -1234,7 +1343,7 @@ html.tm-mobile {
   // Bestätigen/Bezahlen der Eingabe (tabPanelFooter.ts) sitzen in der Aufgabenleiste rechts neben "Zurück"
   .mb-home--turn .mb-screen--turn .or-tab-footer {
     position: fixed !important;
-    left: 96px;
+    left: @mb-footer-left;
     right: 0;
     bottom: 0;
     z-index: 22;
@@ -1269,18 +1378,100 @@ html.tm-mobile {
       margin: 0 !important;
     }
 
+    // Bezahlbereich randlos über die ganze Breite (Fußbereich beginnt rechts neben "Zurück")
     .payments_form {
-      margin: 0 0 0 -84px !important;
-      padding: 10px 12px;
-      border-radius: 12px 12px 0 0;
-      border: 1px solid @mb-line;
-      border-bottom: 0;
+      margin: 0 -12px 0 -@mb-footer-left !important;
+      padding: 12px;
+      border-radius: 0;
+      border: 0;
+      border-top: 1px solid @mb-line;
       background: @mb-surface-raised;
     }
 
+    // Links die Währungen, rechts daneben klein die Summe
+    .payments_prices {
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .payments_table {
+      flex: 1 1 auto;
+      border-spacing: 0 6px;
+    }
+
+    // Währung als Symbol im Eingabefeld statt als Reihe davor: [−] [Symbol Anzahl] [+]
+    .payments_type {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr) 40px;
+      align-items: center;
+      gap: 6px;
+
+      > .btn:first-of-type {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      > .btn:nth-of-type(2) {
+        grid-column: 3;
+        grid-row: 1;
+      }
+
+      .btn {
+        width: 40px !important;
+        height: 40px;
+        min-width: 0;
+        padding: 0;
+      }
+    }
+
+    .payments_type_icon {
+      grid-column: 2;
+      grid-row: 1;
+      z-index: 1;
+      justify-self: start;
+      width: @mb-payment-icon !important;
+      height: @mb-payment-icon !important;
+      margin: 0 0 0 8px;
+      flex-shrink: 0;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      pointer-events: none;
+    }
+
     .payments_input {
-      width: 46px !important;
+      grid-column: 2;
+      grid-row: 1;
+      width: 100% !important;
+      max-width: none;
+      height: 40px;
+      box-sizing: border-box;
+      padding: 0 8px 0 (@mb-payment-icon + 14px);
+      font-size: 20px;
       text-align: center;
+    }
+
+    .payments_unit_subtotal {
+      padding-left: 8px;
+      font-size: 15px;
+    }
+
+    .payments_total {
+      flex: 0 0 auto;
+      margin: 0;
+      text-align: right;
+    }
+
+    .payments_total_heading {
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .payments_total_value {
+      font-size: 18px;
+      white-space: nowrap;
     }
 
     .btn-max {

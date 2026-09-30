@@ -1,7 +1,8 @@
 <template>
   <!-- Meilensteine & Auszeichnungen als Tabelle: Symbole oben, darunter Status, je Spieler eine Zeile.
        Nur im Zwei-Spalten-Layout sichtbar (milestone_award_table.less) -->
-  <div ref="table" class="ma-table" :style="{'--ma-table-columns': columnTemplate}">
+  <!-- --ma-table-cell-count: Zellen je Zeile ohne Trenner; die Mobil-Ansicht dreht die Tabelle damit um (mobile.less) -->
+  <div ref="table" class="ma-table" :style="{'--ma-table-columns': columnTemplate, '--ma-table-cell-count': 1 + milestones.length + awards.length}">
     <div class="ma-table-row ma-table-labels">
       <div></div><div></div>
       <div class="ma-table-section" :style="{gridColumn: `span ${milestones.length}`}">

@@ -90,8 +90,10 @@
               @click="playersSegment = segment.key">{{ $t(segment.label) }}</button>
           </div>
           <PlayersOverview v-show="playersSegment === 'players'" :playerView="playerView" v-trim-whitespace/>
-          <MilestoneAwardTable v-if="playerView.players.length > 1" v-show="playersSegment === 'ma'"
-            :milestones="game.milestones" :awards="game.awards" :players="playerView.players" :viewerColor="thisPlayer.color"/>
+          <!-- Hülle trägt v-show: die Tabelle selbst ist in der Mobil-Ansicht per !important sichtbar geschaltet -->
+          <div v-if="playerView.players.length > 1" v-show="playersSegment === 'ma'" class="mb-ma">
+            <MilestoneAwardTable :milestones="game.milestones" :awards="game.awards" :players="playerView.players" :viewerColor="thisPlayer.color"/>
+          </div>
         </template>
       </section>
 
@@ -165,7 +167,7 @@
       </button>
     </nav>
 
-    <MobileCardZoom v-if="zoomedCard !== undefined" :card="zoomedCard" :playable="zoomedCardPlayTile !== undefined"
+    <MobileCardZoom v-if="zoomedCard !== undefined" :card="zoomedCard" :origin="zoomedCardOrigin" :playable="zoomedCardPlayTile !== undefined"
       @close="zoomedCard = undefined" @play="playZoomedCard"/>
     <MobileTurnSheet v-if="sheetOpen && menu !== undefined" :menu="menu" :title="bannerTitle" :sub="bannerSub"
       @close="sheetOpen = false" @select="startTask"/>
@@ -234,6 +236,7 @@ type DataModel = {
   carousel: CarouselState | undefined;
   // Groß angezeigte Karte (Antippen in Hand bzw. Spieler-Bildschirm)
   zoomedCard: CardModel | undefined;
+  zoomedCardOrigin: DOMRect | undefined;
   // Schritte der Startauswahl (aus den Spalten von SelectInitialCards gelesen) und der sichtbare
   setupSteps: Array<SetupStep>;
   setupStep: number;
@@ -298,6 +301,7 @@ export default defineComponent({
       playersSegment: 'players',
       carousel: undefined,
       zoomedCard: undefined,
+      zoomedCardOrigin: undefined,
       setupSteps: [],
       setupStep: 0,
     };
@@ -483,6 +487,7 @@ export default defineComponent({
       const card = this.knownCards.find((entry) => container.classList.contains(cardClassName(entry.name)));
       if (card !== undefined) {
         event.stopPropagation();
+        this.zoomedCardOrigin = container.getBoundingClientRect();
         this.zoomedCard = card;
       }
     },
