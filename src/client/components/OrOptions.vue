@@ -130,7 +130,6 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import {isHTMLElement} from '@/client/utils/vueUtils';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
-import {getPreferences} from '@/client/utils/PreferencesManager';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
 import {isChoiceMenu} from '@/client/components/choiceMenu';
@@ -154,6 +153,7 @@ import {Color, ColorWithNeutral} from '@/common/Color';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {milestoneAwardKind, MilestoneAwardKind} from '@/client/components/milestoneAwardChoice';
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
+import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {CardModel} from '@/common/models/CardModel';
 
@@ -208,15 +208,8 @@ export default defineComponent({
     return {asTabs, footerId};
   },
   data() {
-    const displayedOptions: Array<PlayerInputModel> = [];
-    const originalIndices: Array<number> = [];
-    this.playerinput.options.forEach((option, i) => {
-      if (option.type === 'card' && option.showOnlyInLearnerMode !== false && !getPreferences().learner_mode) {
-        return;
-      }
-      displayedOptions.push(option);
-      originalIndices.push(i);
-    });
+    const originalIndices = displayedOptionIndices(this.playerinput);
+    const displayedOptions: Array<PlayerInputModel> = originalIndices.map((index) => this.playerinput.options[index]);
     const initialIdx = this.playerinput.initialIdx ?? 0;
     // Special case: If the first recommended displayed option is SelectProjectCardToPlay, and none of them are enabled, skip it.
     let selectedIdx = initialIdx;
