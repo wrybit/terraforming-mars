@@ -1,14 +1,18 @@
 <!-- Handy quer: zu wenig Höhe für Spielplan und Fußleiste. Statt einer gequetschten Ansicht die Bitte,
-     das Gerät hochkant zu drehen. Sichtbar schaltet allein rotate_hint.less (Touch, quer, flach). -->
+     das Gerät hochkant zu drehen – nur als Bild (Handy + Drehpfeil), damit nichts übersetzt werden muss.
+     Sichtbar schaltet allein rotate_hint.less (Touch, quer, flach). -->
 <template>
-  <div class="rotate-hint" role="alert">
-    <svg class="rotate-hint__icon" width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <rect x="22" y="6" width="20" height="36" rx="4"/>
-      <path d="M30 36h4"/>
-      <path d="M12 50a22 22 0 0 0 40 0"/>
-      <path d="M48 44l4 6 6-3"/>
+  <div class="rotate-hint">
+    <svg class="rotate-hint__icon" width="120" height="120" viewBox="0 0 96 96" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <g class="rotate-hint__phone">
+        <rect x="36" y="22" width="24" height="44" rx="4"/>
+        <path d="M45 60h6"/>
+      </g>
+      <g class="rotate-hint__arrow">
+        <path d="M14.1 58A36 36 0 0 0 81.9 58"/>
+        <path d="M73.9 64L81.9 58L84.8 67.6"/>
+      </g>
     </svg>
-    <p class="rotate-hint__text" v-i18n>Please turn your phone upright</p>
   </div>
 </template>
 
