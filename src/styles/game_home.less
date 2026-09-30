@@ -9,13 +9,6 @@
 @game-home-dim: rgba(238, 238, 238, 0.62);
 @game-home-success: #2e9e4f;
 
-// Hinweis unten rechts (App.vue) unter dem Inhalt statt darüber schwebend
-.topmost-game-home .notice {
-  position: static;
-  padding: 0 24px 16px;
-  text-align: right;
-}
-
 // Keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt
 .main-container:has(#game-home) {
   margin-left: 0;
@@ -283,11 +276,6 @@
 }
 
 @media only screen and (max-width: 820px) {
-  .topmost-game-home .notice {
-    padding: 16px;
-    text-align: center;
-  }
-
   .game-home {
     padding: 16px;
   }

@@ -24,13 +24,6 @@
 // Unterhalb dieser Breite die Einstellungs-Karten einspaltig
 @create-game-single-settings: 1150px;
 
-// Hinweis unten rechts (App.vue) unter dem Inhalt statt darüber schwebend; verbreitert die Seite auch nicht
-.topmost-create-game-form .notice {
-  position: static;
-  padding: 0 @create-game-page-padding 16px;
-  text-align: right;
-}
-
 // Die Seite hat keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt
 .main-container:has(#create-game) {
   margin-left: 0;
@@ -754,11 +747,6 @@
 }
 
 @media only screen and (max-width: @create-game-narrow) {
-  .topmost-create-game-form .notice {
-    padding: 16px;
-    text-align: center;
-  }
-
   .create-game-layout {
     grid-template-columns: minmax(0, 1fr);
     padding: 16px;
