@@ -19,6 +19,8 @@
 @mb-players-icon-column: 44px;
 // Sheet auf Tablets mittig statt über die volle Breite
 @mb-sheet-max-width: 560px;
+// Höhe der Spielende-Meldung über dem Planeten (Mitte des Bretts im Mars-Bildschirm)
+@mb-game-over-top: 240px;
 // Halbe Kartenbreite im Karussell (Karten ungezoomt 248 px, vgl. mobileFit.ts)
 @mb-carousel-card-half: 124px;
 // Zoom-Leiste unten am großen Mars (vgl. CONTROLS_HEIGHT in BoardZoomModal.vue)
@@ -299,6 +301,9 @@ html.tm-mobile {
 
   // ---------- Mars ----------
   .mb-screen--mars {
+    // Bezug für die schwebende Spielende-Meldung
+    position: relative;
+
     > * {
       order: 3;
     }
@@ -698,6 +703,194 @@ html.tm-mobile {
         border-top: 1px solid rgba(255, 255, 255, 0.05);
       }
     }
+  }
+
+  // ---------- Spielende: Meldung schwebt über dem Planeten (wie im Mockup) ----------
+  .mb-screen--mars .game-over-notice {
+    top: @mb-game-over-top;
+    width: calc(100% - 48px);
+    box-sizing: border-box;
+    gap: 10px;
+    padding: 18px;
+    border-color: @mb-gold;
+    animation: none;
+
+    .game-over-notice__title {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .game-over-notice__hint {
+      font-size: 13px;
+      color: @mb-muted;
+    }
+  }
+
+  // ---------- Startauswahl in Schritten ----------
+  .mb-steps {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    gap: 4px;
+    margin: -10px -8px 0;
+    padding: 8px;
+    background: @mb-surface;
+    border-bottom: 1px solid @mb-line;
+  }
+
+  .mb-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 4px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: @mb-muted;
+    font: inherit;
+    font-size: 12px;
+  }
+
+  .mb-step-number {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #3a4152;
+    color: @mb-text;
+    line-height: 22px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .mb-step-count {
+    font-family: Prototype, sans-serif;
+    font-weight: normal;
+    color: @mb-text;
+  }
+
+  .mb-step--active {
+    background: #2a3040;
+    color: @mb-text;
+
+    .mb-step-number {
+      background: @mb-gold;
+      color: #1b1400;
+    }
+  }
+
+  .mb-step--done .mb-step-number {
+    background: @mb-green;
+  }
+
+  // Nur die Spalte des gewählten Schritts; Spaltenkopf entfällt (steht in den Schritten)
+  .mb-setup-step-0 .setup-columns > .setup-column:not(:nth-child(1)) {
+    display: none;
+  }
+
+  .mb-setup-step-1 .setup-columns > .setup-column:not(:nth-child(2)) {
+    display: none;
+  }
+
+  .mb-setup-step-2 .setup-columns > .setup-column:not(:nth-child(3)) {
+    display: none;
+  }
+
+  .mb-setup-step-3 .setup-columns > .setup-column:not(:nth-child(4)) {
+    display: none;
+  }
+
+  .mb-home--setup .setup-columns {
+    display: block !important;
+  }
+
+  .mb-home--setup .setup-column-head .setup-column-title-row {
+    display: none;
+  }
+
+  // Bilanz und Start-Knopf unten fest statt der Aufgabenleiste (wie im Mockup)
+  .mb-home--setup .setup-summary {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 22;
+    margin: 0;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    border-top: 1px solid @mb-line;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    .mb-bar-surface();
+  }
+
+  .mb-home--setup .mb-taskbar {
+    display: none;
+  }
+
+  // Bilanz kompakt wie im Mockup: vier Werte im 2er-Raster, darunter Status und Knopf über die volle Breite
+  .mb-home--setup .setup-summary-values {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  .mb-home--setup .setup-summary-item {
+    margin: 0;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+
+    dt {
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: @mb-muted;
+    }
+
+    dd {
+      margin: 0;
+      font-size: 16px;
+    }
+  }
+
+  .mb-home--setup .setup-summary-item--status {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    background: none;
+    padding: 0 2px;
+  }
+
+  .mb-home--setup .setup-summary-actions {
+    width: 100%;
+
+    > *,
+    .btn {
+      width: 100%;
+      height: 48px;
+      margin: 0;
+    }
+  }
+
+  // Vor dem letzten Schritt ersetzt "Weiter" den Start-Knopf an derselben Stelle
+  .mb-home--setup:not(.mb-setup-last) .setup-summary-actions {
+    visibility: hidden;
+  }
+
+  .mb-setup-next {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    z-index: 23;
+    height: 48px;
+    margin: 0 !important;
   }
 
   // ---------- Karte groß (MobileCardZoom) ----------
@@ -1387,6 +1580,33 @@ html.tm-mobile #game-end {
     padding: 12px 10px;
     min-width: 0;
     overflow: hidden;
+  }
+
+  // Kopf wie im Mockup: Sieger groß, Navigation darunter als zwei gleich breite Knöpfe
+  .game-end-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin: 0 0 12px;
+  }
+
+  .game-end-winer-announcement {
+    margin: 0;
+    font-size: 26px;
+  }
+
+  .game_end_navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+
+    .btn {
+      margin: 0;
+      font-size: 15px;
+      white-space: normal;
+    }
   }
 
   // Breite Tabelle nur gedreht zeigen (mobileDocument.ts)
