@@ -15,6 +15,15 @@ export function playerActionLabel(player: PublicPlayerModel, playerView: ViewMod
   if (game.phase === Phase.RESEARCH) {
     return player.needsToResearch ? 'researching' : 'none';
   }
+  if (game.phase === Phase.SOLAR) {
+    // Berater der Weltregierung und Terra betreten die Solarphase kurz im Zug des aktiven Spielers.
+    // Sonst ist es die Terraformung der Weltregierung: Der aktive Spieler ist dann veraltet,
+    // wer entscheidet, zeigt die laufende Uhr (aus dem Original übernommen, #5187)
+    const activePlayerIsDeciding = playerView.players.some((candidate) => candidate.isActive && candidate.timer.running);
+    if (!activePlayerIsDeciding) {
+      return player.timer.running ? 'active' : 'none';
+    }
+  }
   if (game.passedPlayers.includes(player.color)) {
     return 'passed';
   }
