@@ -15,7 +15,7 @@ describe('MobileTurnSheet', () => {
     available: [tile(0, 'Claim a milestone', 'highlight')],
     actions: [tile(1, 'Play project card'), tile(2, 'Standard projects')],
     skip: undefined,
-    pass: tile(3, 'Pass for this generation', 'danger', {hint: 'You will not take any more actions this generation.', button: 'End round'}),
+    pass: tile(3, 'Pass for this generation', 'danger', {intro: undefined, title: 'Pass for this generation', hint: 'You will not take any more actions this generation.', button: 'End round', action: 'submit'}),
   };
 
   it('groups tiles and disables skip before the first action', () => {
@@ -49,7 +49,7 @@ describe('MobileTurnSheet', () => {
 
 describe('MobileTurnSheet turn end', () => {
   it('asks inside the drawer before passing and confirms from there', async () => {
-    const menu: TurnMenu = {available: [], actions: [], skip: undefined, pass: tile(3, 'Pass for this generation', 'danger', {hint: 'Hint', button: 'End round'})};
+    const menu: TurnMenu = {available: [], actions: [], skip: undefined, pass: tile(3, 'Pass for this generation', 'danger', {intro: undefined, title: 'Pass for this generation', hint: 'Hint', button: 'End round', action: 'submit'})};
     const wrapper = mount(MobileTurnSheet, {...globalConfig, props: {menu, title: 'Take your first action', actionNumber: 1, actionsPerTurn: 2}});
     await wrapper.find('.mb-tile--pass').trigger('click');
     expect(wrapper.emitted('select')).to.be.undefined;
@@ -85,5 +85,6 @@ describe('buildTurnMenu', () => {
     expect(menu.skip?.confirmation?.button).to.eq('Pass on');
     expect(menu.pass?.confirmation?.button).to.eq('End round');
     expect(menu.actions[0].confirmation).to.be.undefined;
+    expect(menu.pass?.confirmation?.action).to.eq('submit');
   });
 });

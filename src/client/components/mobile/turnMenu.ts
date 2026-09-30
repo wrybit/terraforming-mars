@@ -6,6 +6,8 @@ import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
 import {endTabHint, fullTabTitle, isEndTab, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOrder, tabHighlighted, titleKey} from '@/client/components/orOptionsShortLabels';
 import {warningDescription} from '@/client/components/warningDescriptions';
+import {tabIntro, TabIntro} from '@/client/components/tabIntro';
+import {placementLabel, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
 
 /*
  * Zug-Menü der Mobil-Ansicht (Bottom-Sheet), gebaut aus demselben Aktionsmenü wie die Desktop-Tabs.
@@ -20,10 +22,19 @@ export type TurnTileTone = 'success' | 'heat' | 'highlight' | 'danger';
 /* Farbe der Symbol-Kachel nach Spielbereich (Klassen mb-tile-icon--… in mobile.less). */
 export type TurnTileGlyphTone = 'cards' | 'megacredits' | 'plants' | 'heat' | 'honors' | 'colonies' | 'neutral';
 
-/* Rückfrage im Sheet vor Weitergeben/Beenden: dieselben Texte wie im Desktop-Tab (Hinweis bzw. Server-Warnung, Button). */
+/*
+ * Aktionen ohne eigene Auswahl (Temperatur, Grünfläche, Weitergeben, Beenden) fragen direkt in der Schublade nach,
+ * statt eine fast leere Vollbild-Aufgabe zu öffnen. Inhalt wie im Desktop-Tab: Erklärung (tabIntro.ts), Hinweis
+ * bzw. Server-Warnung und der Button.
+ */
 export type TurnConfirmation = {
+  // Bild, voller Titel und Spielstand-Zeilen; fehlt, dann nur Kurzlabel und Hinweis
+  intro: TabIntro | undefined;
+  title: string | Message;
   hint: string | undefined;
-  button: string;
+  button: string | Message;
+  // submit: Button des Tabs sofort auslösen; place: Aufgabe öffnen, die gleich die Feldwahl auf dem Mars startet
+  action: 'submit' | 'place';
 };
 
 /* Eintrag im Sheet bzw. Kopf der daraus geöffneten Aufgabe. */
@@ -43,7 +54,7 @@ export type TurnMenuTile = {
   tone: TurnTileTone | undefined;
   // Nichts wählbar (Zähler 0): Kachel abgeschwächt
   empty: boolean;
-  // Nur Zug-Ende: statt einer eigenen Aufgabe eine Rückfrage im Sheet
+  // Aktion ohne Auswahl: statt einer eigenen Aufgabe eine Rückfrage im Sheet
   confirmation: TurnConfirmation | undefined;
 };
 
@@ -92,16 +103,30 @@ function toTile(option: PlayerInputModel, index: number): TurnMenuTile {
     glyphTone: look.glyphTone,
     tone: buttonTone ?? (tabHighlighted(option.title) ? 'highlight' : undefined),
     empty: count === 0,
-    confirmation: isEndTab(option.title) ? endConfirmation(option) : undefined,
+    confirmation: quickConfirmation(option),
   };
 }
 
-function endConfirmation(option: PlayerInputModel): TurnConfirmation {
-  const warnings = option.type === 'option' ? option.warnings ?? [] : [];
-  return {
-    hint: endTabHint(option.title) ?? (warnings.length > 0 ? warningDescription(warnings[0]) : undefined),
-    button: tabButtonLabel(option.title, option.buttonLabel),
-  };
+function quickConfirmation(option: PlayerInputModel): TurnConfirmation | undefined {
+  const intro = tabIntro(option);
+  // "Feld auf dem Mars antippen" gilt erst nach dem Button, nicht schon in der Rückfrage
+  const drawerIntro = intro === undefined ? undefined : {...intro, hint: undefined};
+  const title = fullTabTitle(option.title);
+  if (option.type === 'option') {
+    const warnings = option.warnings ?? [];
+    return {
+      intro: drawerIntro,
+      title,
+      hint: endTabHint(option.title) ?? (warnings.length > 0 ? warningDescription(warnings[0]) : undefined),
+      button: tabButtonLabel(option.title, option.buttonLabel),
+      action: 'submit',
+    };
+  }
+  if (option.type === 'space') {
+    const tile = previewTileForSpaceInput(option.title);
+    return {intro: drawerIntro, title, hint: undefined, button: tile === undefined ? title : placementLabel(tile), action: 'place'};
+  }
+  return undefined;
 }
 
 /* Baut das Sheet aus dem Aktionsmenü `input`. */
@@ -117,6 +142,11 @@ export function buildTurnMenu(input: OrOptionsModel): TurnMenu {
     skip: end.find(({option}) => titleKey(option.title) === END_TURN)?.tile,
     pass: end.find(({option}) => titleKey(option.title) !== END_TURN)?.tile,
   };
+}
+
+/* Kachel zur Option `index`, gleich in welchem Bereich des Sheets sie steht. */
+export function findTurnMenuTile(menu: TurnMenu | undefined, index: number): TurnMenuTile | undefined {
+  return menu === undefined ? undefined : [...menu.available, ...menu.actions, menu.skip, menu.pass].find((tile) => tile?.index === index);
 }
 
 const TAB_SELECTOR = '.wf-options--tabs > .or-tabs > .or-tab[data-option-index]';
