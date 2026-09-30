@@ -144,6 +144,7 @@ export class ServeAsset extends Handler {
     case 'assets/Prototype-ru.ttf':
     case 'assets/Prototype-pl.ttf':
     case 'assets/futureforces.ttf':
+    case 'assets/pwa/manifest.webmanifest': // PWA-Manifest: fester Pfad, da die Endung sonst nicht freigegeben ist
       return {file: urlPath};
 
     case 'styles.css':
