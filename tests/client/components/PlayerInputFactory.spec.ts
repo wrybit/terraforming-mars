@@ -71,8 +71,9 @@ describe('PlayerInputFactory', () => {
     runTest({
       type: 'initialCards',
       options: [
-        {type: 'card', title: SELECT_CORPORATION_TITLE} as SelectCardModel,
-        {type: 'card', title: SELECT_PROJECTS_TITLE} as SelectCardModel,
+        // Echte Eingaben bringen immer eine Kartenliste mit; die Konzernspalte liest deren Länge
+        {type: 'card', title: SELECT_CORPORATION_TITLE, cards: []} as unknown as SelectCardModel,
+        {type: 'card', title: SELECT_PROJECTS_TITLE, cards: []} as unknown as SelectCardModel,
       ],
     });
   });
