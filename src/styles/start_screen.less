@@ -130,12 +130,22 @@
   margin-top: -5px;
 }
 
+// Hinweis "Not affiliated …" (App.vue, alle Seiten außer Spiel, Zuschauer, Ergebnis) als Fußzeile am Seitenende:
+// nicht fest über dem Inhalt, sondern nach ihm. Bei kurzen Seiten schiebt margin-top: auto ihn an den Fensterrand.
+[class^="topmost-"]:has(> .notice) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
 .notice {
-  font-size: @font_size_small;
-  position: fixed;
-  bottom: 0px;
-  right: 0px;
+  // über dem fest stehenden App-Hintergrund der Seiten (app_background.less), der sonst darüber liegt
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
   padding: 16px 24px;
+  font-size: @font_size_small;
+  text-align: right;
 }
 
 .source-code {
@@ -205,15 +215,14 @@
 }
 
 @media only screen and (max-width: 767px) {
+  .notice {
+    padding: 16px;
+    text-align: center;
+  }
+
   .topmost-start-screen {
     overflow-x: clip;
     padding-bottom: max(40px, env(safe-area-inset-bottom));
-
-    .notice {
-      position: static;
-      padding: 16px;
-      text-align: center;
-    }
   }
 
   .start-screen {
