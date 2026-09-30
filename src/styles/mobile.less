@@ -657,12 +657,17 @@ html.tm-mobile {
       height: 100%;
     }
 
+    // Zelle ist nur Hülle; Abstände und Schrift kommen aus dem Spieler-Kopf (PlayerIdentity.vue)
     .ma-table-name {
-      padding: 8px 4px;
+      align-items: stretch;
+      padding: 0;
       border-radius: 10px 10px 0 0;
-      font-size: 15px;
       white-space: normal;
-      text-align: center;
+
+      > .players-table-identity {
+        flex: 1;
+        min-width: 0;
+      }
     }
 
     .ma-table-player > :last-child {
@@ -821,6 +826,25 @@ html.tm-mobile {
     }
   }
 
+  // Spieler-Kopf (PlayerIdentity.vue) in Spieler- und Meilenstein-Tabelle gleich:
+  // Name, Status, Konzern untereinander und mittig
+  .mb-screen--players .players-table-identity {
+    padding: 8px 4px;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+  }
+
+  .mb-screen--players .players-table-identity-line {
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .mb-screen--players .players-table-corporation {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
   .mb-screen--players .players-overview {
     display: block;
     width: auto;
@@ -859,24 +883,6 @@ html.tm-mobile {
       min-height: 40px;
       padding: 4px 2px;
       box-sizing: border-box;
-    }
-
-    // Namenszeile oben: Name, Status, Konzern untereinander und mittig
-    .players-table-identity {
-      padding: 8px 4px;
-      border-radius: 10px 10px 0 0;
-      text-align: center;
-    }
-
-    .players-table-identity-line {
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .players-table-corporation {
-      white-space: normal;
-      overflow-wrap: anywhere;
     }
 
     // Umschalter der Abschnitte oben in der Symbol-Spalte untereinander
