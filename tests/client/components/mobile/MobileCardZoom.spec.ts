@@ -13,9 +13,11 @@ describe('MobileCardZoom', () => {
     expect(shallowMount(MobileCardZoom, {...globalConfig, props: {card, playable: true}}).findComponent({name: 'AppButton'}).exists()).to.be.true;
   });
 
-  it('closes from the backdrop', async () => {
+  it('closes from the backdrop after the shrink animation', async () => {
     const wrapper = shallowMount(MobileCardZoom, {...globalConfig, props: {card, playable: false}});
     await wrapper.find('.mb-card-zoom-backdrop').trigger('click');
+    expect(wrapper.emitted('close')).to.be.undefined;
+    await new Promise((resolve) => setTimeout(resolve, 300));
     expect(wrapper.emitted('close')).to.have.length(1);
   });
 });
