@@ -7,8 +7,15 @@
       </div>
       <!-- Links als Buttons: Navigation bleibt ein echter Link (Mittelklick, neuer Tab) -->
       <div class="game_end_navigation">
-        <a href="new-game" class="btn btn-lg btn-tone-success" v-i18n>Create New Game</a>
-        <a href="." class="btn btn-lg" v-i18n>Go to main page</a>
+        <!-- Symbol + Text wie die übrigen Aktions-Buttons; runde Ecken (btn-rounded), Höhe wächst mit umbrochenem Text -->
+        <a href="new-game" class="btn btn-lg btn-rounded btn-tone-success game-end-nav-button">
+          <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          <span v-i18n>Create New Game</span>
+        </a>
+        <a href="." class="btn btn-lg btn-rounded game-end-nav-button">
+          <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+          <span v-i18n>Go to main page</span>
+        </a>
       </div>
     </div>
     <!-- Ab @player-home-columns-min-width zwei Spalten wie in der Spielansicht: links Ergebnis, rechts Brett, Diagramme, Log -->

@@ -105,6 +105,25 @@ body:has(#game-end) {
   }
 }
 
+// Symbol links vom Text; feste Höhe von .btn-lg aufgehoben (daher drei Klassen), damit umbrochener Text im Button bleibt
+// (mobil stehen beide nebeneinander im Raster und werden gemeinsam höher, mobile.less)
+.btn.btn-lg.game-end-nav-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: auto;
+  min-height: 44px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.game-end-nav-icon {
+  flex: none;
+}
+
 // Tabelle: Gesamtpunkte deutlich hervorheben, Spaltengruppen durch Lücken trennen
 .game_end_table {
   background: transparent;
