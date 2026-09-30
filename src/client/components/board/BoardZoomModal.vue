@@ -13,8 +13,6 @@
     </div>
     <!-- Außerhalb des scrollenden Hintergrunds, damit Schließen und Zoom-Leiste beim Verschieben stehen bleiben -->
     <button v-if="visible" type="button" class="board-zoom-close" :aria-label="$t('Close')" @click.stop="$emit('close')">✕</button>
-    <!-- Mobil-Ansicht: beim Platzieren oben der Hinweis, was zu tun ist -->
-    <div v-if="visible && mobileLayout && placing" class="mb-zoom-hint">{{ $t('Tap a highlighted space') }}</div>
     <!-- Mobil-Ansicht: Zoom-Leiste unten (Pinch und Doppel-Tap gehen zusätzlich) -->
     <MobileZoomControls v-if="visible && mobileLayout" :percent="zoomPercent" @zoom="zoomAtCenter" @fit="fitWholePlanet"/>
   </Teleport>
@@ -86,14 +84,12 @@ const CONTROLS_HEIGHT = 72;
 // Zoom, bei dem der ganze Planet sichtbar ist (= 100 %)
 const wholeZoom = ref(1);
 const zoomPercent = computed(() => Math.round(zoomFactor.value / wholeZoom.value * 100));
-// Großer Mars wurde für eine Feldwahl geöffnet (Hinweis oben)
-const placing = ref(false);
+
 let stopPinch: (() => void) | undefined;
 
 function fitMobile() {
   wholeZoom.value = wholePlanetZoom(window.innerWidth, window.innerHeight);
   // Start bei 200 %: Felder sind gleich antippbar
-  placing.value = isBoardPlacementActive();
   zoomFactor.value = wholeZoom.value * DEFAULT_ZOOM_RATIO;
 }
 

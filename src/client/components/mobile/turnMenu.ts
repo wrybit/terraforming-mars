@@ -3,13 +3,13 @@ import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
-import {isEndTab, shortTabLabel, tabButtonTone, tabDisplayOrder, tabHighlighted, titleKey} from '@/client/components/orOptionsShortLabels';
+import {fullTabTitle, isEndTab, shortTabLabel, tabButtonTone, tabDisplayOrder, tabHighlighted, titleKey} from '@/client/components/orOptionsShortLabels';
 
 /*
  * Zug-Menü der Mobil-Ansicht (Bottom-Sheet), gebaut aus demselben Aktionsmenü wie die Desktop-Tabs.
  *
- * Kurzlabel, Zähler, Reihenfolge und Farbton kommen aus denselben Helfern wie in OrOptions; neu sind nur
- * Symbol und Unterzeile je Aktion (wie im Mockup).
+ * Kurzlabel, Zähler, Reihenfolge und Farbton kommen aus denselben Helfern wie in OrOptions; neu ist nur das
+ * Symbol je Aktion. Texte ausschließlich aus vorhandenen Übersetzungen (Server-Titel, Kurzlabels), keine eigenen.
  */
 
 /* Farbton einer Kachel: Grünfläche grün, Temperatur orange, Meilenstein gold. */
@@ -25,8 +25,10 @@ export type TurnMenuTile = {
   // Englischer Titel-Schlüssel der Option (z. B. 'Play project card')
   key: string;
   label: string | Message;
-  // Unterzeile, bereits mit Werten gefüllt; undefined, wenn es nichts zu sagen gibt
-  sub: TurnTileSub | undefined;
+  // Unterzeile: voller Titel der Option, wenn er mehr sagt als das Kurzlabel (Grünfläche, Temperatur)
+  detail: string | Message | undefined;
+  // Anzahl wählbarer Einträge wie am Desktop-Tab; undefined, wenn die Aktion keine Auswahl hat
+  count: number | undefined;
   // Symbol in einer Farbkachel; die Farbe steht für den Spielbereich (Karten, M€, Pflanzen …)
   glyph: GlyphName;
   glyphTone: TurnTileGlyphTone;
@@ -34,9 +36,6 @@ export type TurnMenuTile = {
   // Nichts wählbar (Zähler 0): Kachel abgeschwächt
   empty: boolean;
 };
-
-/* Unterzeile als i18n-Schlüssel mit Parametern. */
-export type TurnTileSub = {text: string, params: Array<string>};
 
 /* Sheet-Inhalt, gruppiert wie im Mockup. */
 export type TurnMenu = {
@@ -47,50 +46,38 @@ export type TurnMenu = {
   pass: TurnMenuTile | undefined;
 };
 
-type TileLook = {glyph: GlyphName, glyphTone: TurnTileGlyphTone, sub?: string};
+type TileLook = {glyph: GlyphName, glyphTone: TurnTileGlyphTone};
 
-// Symbol, Farbe und Unterzeile je Titel-Schlüssel ({count} = Zähler der Aktion)
+// Symbol und Farbe je Titel-Schlüssel
 const TILE_LOOKS: Readonly<Record<string, TileLook>> = {
-  'Claim a milestone': {glyph: 'milestone', glyphTone: 'honors', sub: '${0} reachable'},
+  'Claim a milestone': {glyph: 'milestone', glyphTone: 'honors'},
   'Convert ${0} plants into greenery': {glyph: 'greenery', glyphTone: 'plants'},
   'Convert 8 heat into temperature': {glyph: 'temperature', glyphTone: 'heat'},
   'Convert 6 heat into temperature': {glyph: 'temperature', glyphTone: 'heat'},
-  'Perform an action from a played card': {glyph: 'cardActions', glyphTone: 'cards', sub: '${0} available'},
-  'Play project card': {glyph: 'playCard', glyphTone: 'cards', sub: '${0} playable'},
-  'Fund an award (${0} M€)': {glyph: 'award', glyphTone: 'honors', sub: '${0} to choose from'},
-  'Standard projects': {glyph: 'standardProjects', glyphTone: 'megacredits', sub: '${0} affordable'},
-  'Sell patents': {glyph: 'sellPatents', glyphTone: 'megacredits', sub: '${0} cards in hand'},
-  'Trade with a colony tile': {glyph: 'colonyTrade', glyphTone: 'colonies', sub: '${0} available'},
+  'Perform an action from a played card': {glyph: 'cardActions', glyphTone: 'cards'},
+  'Play project card': {glyph: 'playCard', glyphTone: 'cards'},
+  'Fund an award (${0} M€)': {glyph: 'award', glyphTone: 'honors'},
+  'Standard projects': {glyph: 'standardProjects', glyphTone: 'megacredits'},
+  'Sell patents': {glyph: 'sellPatents', glyphTone: 'megacredits'},
+  'Trade with a colony tile': {glyph: 'colonyTrade', glyphTone: 'colonies'},
 };
 // Unbekannte Aktionen (Erweiterungen) bekommen ein neutrales Symbol, damit das Raster einheitlich bleibt
 const DEFAULT_LOOK: TileLook = {glyph: 'more', glyphTone: 'neutral'};
-const DEFAULT_SUB = '${0} available';
 const END_TURN = 'End Turn';
 
-// Unterzeile für Aktionen ohne Auswahl: was genau passiert (z. B. Temperatur von … auf …)
-function describe(option: PlayerInputModel, temperature: number): TurnTileSub | undefined {
-  const key = titleKey(option.title);
-  if (key === 'Convert ${0} plants into greenery') {
-    return {text: key, params: typeof option.title === 'string' ? [] : option.title.data.map((entry) => String(entry.value))};
-  }
-  if (key.endsWith('heat into temperature')) {
-    return {text: 'Temperature rises from ${0} to ${1} °C', params: [String(temperature), String(temperature + 2)]};
-  }
-  return undefined;
-}
-
-function toTile(option: PlayerInputModel, index: number, temperature: number): TurnMenuTile {
+function toTile(option: PlayerInputModel, index: number): TurnMenuTile {
   const key = titleKey(option.title);
   const look: TileLook = TILE_LOOKS[key] ?? DEFAULT_LOOK;
+  const label = shortTabLabel(option.title);
   const count = inputAvailableCount(option);
   const buttonTone = tabButtonTone(option.title);
-  const sub = describe(option, temperature) ??
-    (count === undefined ? undefined : {text: look.sub ?? DEFAULT_SUB, params: [String(count)]});
   return {
     index,
     key,
-    label: shortTabLabel(option.title),
-    sub,
+    label,
+    // Aktionen ohne Auswahl (Grünfläche, Temperatur): der volle Titel sagt, was passiert
+    detail: count === undefined && titleKey(label) !== key ? fullTabTitle(option.title) : undefined,
+    count,
     glyph: look.glyph,
     glyphTone: look.glyphTone,
     tone: buttonTone ?? (tabHighlighted(option.title) ? 'highlight' : undefined),
@@ -98,11 +85,11 @@ function toTile(option: PlayerInputModel, index: number, temperature: number): T
   };
 }
 
-/* Baut das Sheet aus dem Aktionsmenü `input`; `temperature` für die Unterzeile "Temperatur erhöhen". */
-export function buildTurnMenu(input: OrOptionsModel, temperature: number): TurnMenu {
+/* Baut das Sheet aus dem Aktionsmenü `input`. */
+export function buildTurnMenu(input: OrOptionsModel): TurnMenu {
   const displayed = displayedOptionIndices(input).map((index) => input.options[index]);
   const order = tabDisplayOrder(displayed.map((option) => option.title));
-  const tiles = order.map((index) => ({option: displayed[index], tile: toTile(displayed[index], index, temperature)}));
+  const tiles = order.map((index) => ({option: displayed[index], tile: toTile(displayed[index], index)}));
   const regular = tiles.filter(({option}) => !isEndTab(option.title));
   const end = tiles.filter(({option}) => isEndTab(option.title));
   return {

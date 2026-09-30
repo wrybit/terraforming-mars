@@ -4,7 +4,7 @@ import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
 export const MOBILE_SCREENS = ['mars', 'hand', 'turn', 'players', 'log'] as const;
 export type MobileScreen = typeof MOBILE_SCREENS[number];
 
-/* Eintrag der Fußleiste; `turn` zeigt sein Symbol im runden Zug-Button. */
+/* Eintrag der Fußleiste; `turn` zeigt sein Symbol im runden Zug-Button. Beschriftungen nur aus vorhandenen Übersetzungen. */
 export type MobileNavItem = {
   screen: MobileScreen;
   label: string;
@@ -13,8 +13,8 @@ export type MobileNavItem = {
 
 export const MOBILE_NAV: ReadonlyArray<MobileNavItem> = [
   {screen: 'mars', label: 'Mars', icon: 'mars'},
-  {screen: 'hand', label: 'Hand', icon: 'hand'},
-  {screen: 'turn', label: 'Turn', icon: 'rocket'},
+  {screen: 'hand', label: 'Cards In Hand', icon: 'hand'},
+  {screen: 'turn', label: 'Actions', icon: 'rocket'},
   {screen: 'players', label: 'Players', icon: 'players'},
-  {screen: 'log', label: 'Log', icon: 'log'},
+  {screen: 'log', label: 'Game log', icon: 'log'},
 ];
