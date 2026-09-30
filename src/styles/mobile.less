@@ -1647,6 +1647,25 @@ html.tm-mobile {
     font-weight: bold;
   }
 
+  // Rückfrage vor Weitergeben/Beenden: Erklärung, darunter Zurück und der farbige Button wie in der Aufgabenleiste
+  .mb-sheet-hint {
+    margin: 0;
+    color: @mb-text;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .mb-sheet-confirm {
+    display: flex;
+    gap: 10px;
+  }
+
+  .mb-sheet-confirm-button {
+    flex-grow: 1;
+    height: 48px;
+    margin: 0;
+  }
+
 
   // Innerhalb einer Gruppe enger als zwischen den Gruppen (Gesetz der Nähe)
   .mb-sheet-group {
@@ -1888,6 +1907,19 @@ html.tm-mobile {
 
     &:empty {
       display: none !important;
+    }
+
+    // Zwei Buttons übereinander (Kaufen und Überspringen): die Leiste wächst mit, statt den oberen Button
+    // frei über dem Inhalt schweben zu lassen; "Zurück" bleibt unten neben dem letzten Button
+    &:has(.select-card-actions .btn + .btn) {
+      left: 0;
+      padding-left: @mb-footer-left !important;
+      border-top: 1px solid @mb-line !important;
+      // wie .mb-bar-surface(), aber gegen das transparent !important oben
+      background: @mb-surface !important;
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      box-shadow: @mb-bar-shadow-up !important;
     }
 
     .or-tab-save,
@@ -2174,6 +2206,22 @@ html.tm-mobile {
     gap: 10px;
     padding-left: 12px;
     padding-right: 12px;
+  }
+
+  // Wächst der Fuß der Eingabe über die ganze Breite (zwei Buttons, s. o.), trägt er den Hintergrund;
+  // die Leiste liegt dann durchsichtig darüber und lässt nur "Zurück" antippbar
+  .mb-home--turn:has(.mb-screen--turn .or-tab-footer .select-card-actions .btn + .btn) .mb-taskbar {
+    z-index: 23;
+    border-top-color: transparent;
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    pointer-events: none;
+
+    .mb-taskbar-back {
+      pointer-events: auto;
+    }
   }
 
   .mb-taskbar-back {

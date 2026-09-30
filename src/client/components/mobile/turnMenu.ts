@@ -1,9 +1,11 @@
+import {nextTick} from 'vue';
 import {Message} from '@/common/logs/Message';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
-import {fullTabTitle, isEndTab, shortTabLabel, tabButtonTone, tabDisplayOrder, tabHighlighted, titleKey} from '@/client/components/orOptionsShortLabels';
+import {endTabHint, fullTabTitle, isEndTab, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOrder, tabHighlighted, titleKey} from '@/client/components/orOptionsShortLabels';
+import {warningDescription} from '@/client/components/warningDescriptions';
 
 /*
  * Zug-Menü der Mobil-Ansicht (Bottom-Sheet), gebaut aus demselben Aktionsmenü wie die Desktop-Tabs.
@@ -17,6 +19,12 @@ export type TurnTileTone = 'success' | 'heat' | 'highlight' | 'danger';
 
 /* Farbe der Symbol-Kachel nach Spielbereich (Klassen mb-tile-icon--… in mobile.less). */
 export type TurnTileGlyphTone = 'cards' | 'megacredits' | 'plants' | 'heat' | 'honors' | 'colonies' | 'neutral';
+
+/* Rückfrage im Sheet vor Weitergeben/Beenden: dieselben Texte wie im Desktop-Tab (Hinweis bzw. Server-Warnung, Button). */
+export type TurnConfirmation = {
+  hint: string | undefined;
+  button: string;
+};
 
 /* Eintrag im Sheet bzw. Kopf der daraus geöffneten Aufgabe. */
 export type TurnMenuTile = {
@@ -35,6 +43,8 @@ export type TurnMenuTile = {
   tone: TurnTileTone | undefined;
   // Nichts wählbar (Zähler 0): Kachel abgeschwächt
   empty: boolean;
+  // Nur Zug-Ende: statt einer eigenen Aufgabe eine Rückfrage im Sheet
+  confirmation: TurnConfirmation | undefined;
 };
 
 /* Sheet-Inhalt, gruppiert wie im Mockup. */
@@ -82,6 +92,15 @@ function toTile(option: PlayerInputModel, index: number): TurnMenuTile {
     glyphTone: look.glyphTone,
     tone: buttonTone ?? (tabHighlighted(option.title) ? 'highlight' : undefined),
     empty: count === 0,
+    confirmation: isEndTab(option.title) ? endConfirmation(option) : undefined,
+  };
+}
+
+function endConfirmation(option: PlayerInputModel): TurnConfirmation {
+  const warnings = option.type === 'option' ? option.warnings ?? [] : [];
+  return {
+    hint: endTabHint(option.title) ?? (warnings.length > 0 ? warningDescription(warnings[0]) : undefined),
+    button: tabButtonLabel(option.title, option.buttonLabel),
   };
 }
 
@@ -110,6 +129,16 @@ export function selectTurnMenuTile(root: HTMLElement, index: number): void {
 /* Titel der gerade offenen Eingabe außerhalb des Aktionsmenüs (aktiver Eingabe-Tab von WaitingForTabs). */
 export function readInputTitle(root: HTMLElement): string | undefined {
   return root.querySelector<HTMLElement>('.or-tabs > .or-tab--active:not(.or-tab--hand)')?.getAttribute('title') ?? undefined;
+}
+
+/* Löst im Aktionsmenü unter `root` die Aktion `index` direkt aus (Tab wählen, dann dessen Button), z. B. nach der Rückfrage im Sheet. */
+export async function submitTurnMenuTile(root: HTMLElement, index: number): Promise<void> {
+  selectTurnMenuTile(root, index);
+  await nextTick();
+  const menu = root.querySelector<HTMLElement>('.wf-options--tabs');
+  // Nur der Fuß des Aktionsmenüs selbst, nicht der eines darin verschachtelten Menüs
+  const footer = Array.from(root.querySelectorAll<HTMLElement>('.or-tab-footer')).find((element) => element.closest('.wf-options--tabs') === menu);
+  footer?.querySelector<HTMLButtonElement>('.or-tab-save .btn')?.click();
 }
 
 export const PLAY_CARD_KEY = 'Play project card';
