@@ -3,55 +3,99 @@
     <!-- Karte wächst aus ihrer Position in der Liste in die Mitte und schrumpft beim Schließen dorthin zurück;
          Hintergrund unscharf (wie im Mockup), darunter kompakte Knöpfe -->
     <button type="button" class="mb-card-zoom-backdrop" :aria-label="$t('Close')" @click="close"></button>
-    <div ref="cardHolder" class="mb-card-zoom-card mb-fit-off">
-      <Card :card="card" :key="card.name"/>
+    <!-- Karussell: alle Karten nebeneinander, per Wischen durchschiebbar, rastet auf je einer Karte ein -->
+    <div ref="track" class="mb-card-zoom-track" @scroll.passive="onScroll">
+      <div v-for="slide in count" :key="slide" class="mb-card-zoom-slide">
+        <div class="mb-card-zoom-card mb-fit-off">
+          <slot name="slide" :index="slide - 1"></slot>
+        </div>
+      </div>
     </div>
-    <!-- Vor/Zurück an den Kartenrändern, dazwischen Spielen und Schließen; fehlt ein Nachbar, bleibt sein Platz frei -->
+    <!-- Vor/Zurück an den Rändern, dazwischen Spielen und Schließen; fehlt ein Nachbar, bleibt sein Platz frei -->
     <div class="mb-card-zoom-actions">
       <button type="button" class="mb-card-zoom-step" :class="{'mb-card-zoom-step--hidden': !hasPrevious}" :disabled="!hasPrevious"
-        :aria-label="$t('Previous card')" @click="$emit('previous')">‹</button>
+        :aria-label="$t('Previous card')" @click="step(-1)">‹</button>
       <div class="mb-card-zoom-main">
         <AppButton v-if="playable" :title="$t('Play card')" type="submit" @click="$emit('play')"/>
         <button type="button" class="mb-card-zoom-close" @click="close">{{ $t('Close') }}</button>
       </div>
       <button type="button" class="mb-card-zoom-step" :class="{'mb-card-zoom-step--hidden': !hasNext}" :disabled="!hasNext"
-        :aria-label="$t('Next card')" @click="$emit('next')">›</button>
+        :aria-label="$t('Next card')" @click="step(1)">›</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {onBeforeUnmount, onMounted, ref} from 'vue';
-import {CardModel} from '@/common/models/CardModel';
-import Card from '@/client/components/card/Card.vue';
+import {computed, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 
-const props = defineProps<{
-  card: CardModel;
-  // Karte ist jetzt spielbar: Knopf "Karte spielen" (öffnet das Karussell mit dieser Karte)
-  playable: boolean;
-  // Position der angetippten Karte; Start- und Endpunkt der Animation (fehlt: nur Ein-/Ausblenden)
+const props = withDefaults(defineProps<{
+  // Anzahl der Karten im Karussell; Inhalt je Karte liefert der Slot "slide"
+  count: number;
+  // Gezeigte Karte
+  index: number;
+  // Gezeigte Karte ist jetzt spielbar: Knopf "Karte spielen"
+  playable?: boolean;
+  // Position der angetippten Karte; Start- und Endpunkt der Animation (fehlt: nur Wachsen aus der Mitte)
   origin?: DOMRect;
-  // Nachbarkarten in derselben Liste vorhanden
-  hasPrevious?: boolean;
-  hasNext?: boolean;
-}>();
+}>(), {playable: false, origin: undefined});
 
 const emit = defineEmits<{
   (event: 'close'): void;
   (event: 'play'): void;
-  (event: 'previous'): void;
-  (event: 'next'): void;
+  (event: 'update:index', index: number): void;
 }>();
 
 // Dauer muss zur Transition in mobile.less passen (@mb-card-zoom-duration)
 const DURATION_MS = 260;
+// Ruhezeit nach dem letzten Scroll-Ereignis, ab der das Wischen als beendet gilt
+const SCROLL_SETTLE_MS = 120;
 const open = ref(false);
-const cardHolder = ref<HTMLElement | undefined>(undefined);
+const track = ref<HTMLElement | undefined>(undefined);
 
-// Transform, der die große Karte genau auf die angetippte legt
+const hasPrevious = computed(() => props.index > 0);
+const hasNext = computed(() => props.index < props.count - 1);
+
+function slideWidth(): number {
+  return track.value?.clientWidth || 1;
+}
+
+// Karte, auf der das Karussell gerade eingerastet ist
+function scrolledIndex(): number {
+  return Math.round((track.value?.scrollLeft ?? 0) / slideWidth());
+}
+
+function step(direction: 1 | -1) {
+  const target = props.index + direction;
+  if (target >= 0 && target < props.count) {
+    emit('update:index', target);
+  }
+}
+
+// Wischen beendet: gewählte Karte an den Aufrufer melden (u. a. Ziel der Schrumpf-Animation)
+let settleTimer = 0;
+function onScroll() {
+  window.clearTimeout(settleTimer);
+  settleTimer = window.setTimeout(() => {
+    const index = scrolledIndex();
+    if (index !== props.index && index >= 0 && index < props.count) {
+      emit('update:index', index);
+    }
+  }, SCROLL_SETTLE_MS);
+}
+
+// Knöpfe und Pfeiltasten ändern index: sanft dorthin schieben
+watch(() => props.index, (index) => {
+  if (index !== scrolledIndex()) {
+    track.value?.scrollTo({left: index * slideWidth(), behavior: 'smooth'});
+  }
+});
+
+// Transform, der das Karussell so verschiebt und skaliert, dass die gezeigte Karte genau auf der angetippten liegt.
+// Die Karte sitzt mittig im Karussell, deshalb genügt es, das ganze Karussell zu bewegen.
 function originTransform(): string {
-  const element = cardHolder.value?.firstElementChild as HTMLElement | null | undefined;
+  const slide = track.value?.children[props.index] as HTMLElement | undefined;
+  const element = slide?.querySelector<HTMLElement>('.mb-card-zoom-card > *');
   if (props.origin === undefined || element === null || element === undefined) {
     return 'scale(0.6)';
   }
@@ -66,33 +110,40 @@ function originTransform(): string {
 const EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
 
 function animate(from: string, to: string): Promise<void> {
-  const holder = cardHolder.value;
-  if (holder === undefined || typeof holder.animate !== 'function') {
+  const element = track.value;
+  if (element === undefined || typeof element.animate !== 'function') {
     return Promise.resolve();
   }
-  const animation = holder.animate([{transform: from}, {transform: to}], {duration: DURATION_MS, easing: EASING, fill: 'forwards'});
+  const animation = element.animate([{transform: from}, {transform: to}], {duration: DURATION_MS, easing: EASING, fill: 'forwards'});
   return animation.finished.then(() => undefined, () => undefined);
 }
 
 // Pfeiltasten blättern (Tablet mit Tastatur), Escape schließt
 function onKeydown(event: KeyboardEvent) {
-  if (event.key === 'ArrowLeft' && props.hasPrevious) {
-    emit('previous');
-  } else if (event.key === 'ArrowRight' && props.hasNext) {
-    emit('next');
+  if (event.key === 'ArrowLeft') {
+    step(-1);
+  } else if (event.key === 'ArrowRight') {
+    step(1);
   } else if (event.key === 'Escape') {
     close();
   }
 }
 
 onMounted(() => {
+  // Ohne Animation auf die gewählte Karte springen, bevor sie aus der Liste herauswächst
+  if (track.value !== undefined) {
+    track.value.scrollLeft = props.index * slideWidth();
+  }
   const start = originTransform();
   open.value = true;
   animate(start, 'none');
   window.addEventListener('keydown', onKeydown);
 });
 
-onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown));
+onBeforeUnmount(() => {
+  window.clearTimeout(settleTimer);
+  window.removeEventListener('keydown', onKeydown);
+});
 
 async function close() {
   open.value = false;

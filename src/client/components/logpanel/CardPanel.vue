@@ -6,7 +6,7 @@
     <!-- Hover-Vorschau schließt sich beim Verlassen der Zeile selbst, braucht keinen Button -->
     <AppButton v-if="!floating" size="big" type="close" :disableOnServerBusy="false" @click="hideMe" align="right"/>
     <div id="log_panel_card" class="cardbox" v-for="name in cards" :key="name">
-      <Card :card="{name, isSelfReplicatingRobotsCard: isSelfReplicatingRobotsCard(name), resources: getResourcesOnCard(name)}"/>
+      <Card :card="cardModel(name)"/>
     </div>
     <div id="log_panel_card" class="cardbox" v-for="name in globalEvents" :key="name">
       <GlobalEvent :globalEventName="name" type="prior" :showIcons="false"/>
@@ -31,6 +31,8 @@ import GlobalEvent from '@/client/components/turmoil/GlobalEvent.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import Colony from '@/client/components/colonies/Colony.vue';
 import {GlobalEventName} from '@/common/turmoil/globalEvents/GlobalEventName';
+import {CardModel} from '@/common/models/CardModel';
+import {logCardModel} from '@/client/components/logpanel/logCardModel';
 import {logMessageCards, logMessageColonies, logMessageGlobalEvents} from '@/client/components/logpanel/logMessageContent';
 
 export default defineComponent({
@@ -96,27 +98,8 @@ export default defineComponent({
     getColony(name: ColonyName): ColonyModel {
       return simpleColonyModel(name);
     },
-    isSelfReplicatingRobotsCard(cardName: CardName) {
-      for (const player of this.players) {
-        if (player.selfReplicatingRobotsCards.some((card) => card.name === cardName)) {
-          return true;
-        }
-      }
-      return false;
-    },
-    getResourcesOnCard(cardName: CardName) {
-      for (const player of this.players) {
-        const playedCard = player.tableau.find((card) => card.name === cardName);
-        if (playedCard !== undefined) {
-          return playedCard.resources;
-        }
-        const srrCard = player.selfReplicatingRobotsCards.find((card) => card.name === cardName);
-        if (srrCard !== undefined) {
-          return srrCard.resources;
-        }
-      }
-
-      return undefined;
+    cardModel(name: CardName): CardModel {
+      return logCardModel(name, this.players);
     },
   },
 });

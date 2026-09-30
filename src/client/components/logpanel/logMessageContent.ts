@@ -20,7 +20,7 @@ export function logMessageColonies(message: LogMessage): Array<ColonyName> {
   return message.data.filter((datum) => datum.type === LogMessageDataType.COLONY).map((datum) => datum.value);
 }
 
-function logMessageItemCount(message: LogMessage): number {
+export function logMessageItemCount(message: LogMessage): number {
   return logMessageCards(message).length + logMessageGlobalEvents(message).length + logMessageColonies(message).length;
 }
 

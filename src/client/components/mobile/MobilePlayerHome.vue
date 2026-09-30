@@ -115,7 +115,7 @@
       </section>
 
       <section v-show="screen === 'log'" class="mb-screen mb-screen--log">
-        <LogPanel v-if="!isSetupPhase" :viewModel="playerView" @spaceClicked="showSpace"/>
+        <LogPanel v-if="!isSetupPhase" :viewModel="playerView" zoomCarousel @spaceClicked="showSpace"/>
       </section>
 
       <!-- Eingabe bleibt immer eingebunden: WaitingFor fragt den Server nach dem eigenen Zug.
@@ -187,9 +187,12 @@
       </button>
     </nav>
 
-    <MobileCardZoom v-if="zoomedCard !== undefined" :card="zoomedCard" :origin="zoomedCardOrigin" :playable="zoomedCardPlayTile !== undefined"
-      :hasPrevious="zoomedCardIndex > 0" :hasNext="zoomedCardIndex >= 0 && zoomedCardIndex < zoomedCardList.length - 1"
-      @close="zoomedCard = undefined" @play="playZoomedCard" @previous="stepZoomedCard(-1)" @next="stepZoomedCard(1)"/>
+    <MobileCardZoom v-if="zoomedCard !== undefined" :count="zoomedCardList.length" :index="zoomedCardIndex" :origin="zoomedCardOrigin"
+      :playable="zoomedCardPlayTile !== undefined" @close="zoomedCard = undefined" @play="playZoomedCard" @update:index="showZoomedCard">
+      <template #slide="{index}">
+        <Card :card="zoomedCardList[index]"/>
+      </template>
+    </MobileCardZoom>
     <Transition name="mb-sheet" @before-enter="turnButtonLifted = true" @after-leave="turnButtonLifted = false">
       <MobileTurnSheet v-if="sheetOpen && (menu !== undefined || !acting)" :menu="menu" :waitingPlayers="waitingPlayers" :title="bannerTitle"
         :action-number="actionNumber" :actions-per-turn="actionsPerTurn" @close="sheetOpen = false" @select="startTask"/>
@@ -564,9 +567,9 @@ export default defineComponent({
       }
       return cards;
     },
-    // Vor/Zurück in der Großansicht; die Schrumpf-Animation zielt danach auf die neue Karte in der Liste
-    stepZoomedCard(direction: 1 | -1) {
-      const card = this.zoomedCardList[this.zoomedCardIndex + direction];
+    // Blättern/Wischen in der Großansicht; die Schrumpf-Animation zielt danach auf die neue Karte in der Liste
+    showZoomedCard(index: number) {
+      const card = this.zoomedCardList[index];
       if (card === undefined) {
         return;
       }

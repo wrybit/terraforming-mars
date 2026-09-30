@@ -1179,13 +1179,14 @@ html.tm-mobile {
       display: none;
     }
   }
-  // Eine Karte je Bildschirmbreite; unten Platz für den Schatten, den das Karussell sonst abschneidet
+  // Eine Karte je Bildschirmbreite; oben Platz für Kosten und Tags, die über die Karte ragen,
+  // unten für den Schatten – das Karussell schneidet sonst alles außerhalb ab
   .mb-card-zoom-slide {
     flex: 0 0 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 24px;
+    padding: 24px 0;
     scroll-snap-align: center;
     scroll-snap-stop: always;
   }
@@ -1259,11 +1260,13 @@ html.tm-mobile {
       justify-content: center;
     }
   }
+  // Schriftgröße fest wie bei den Knöpfen daneben: das Modal des Logs hängt am body und erbt dort eine andere
   .mb-card-zoom-close {
     height: 44px;
     padding: 0 12px;
     border-radius: 10px;
     font: inherit;
+    font-size: 16px;
     font-weight: bold;
     .mb-frosted-button();
   }
