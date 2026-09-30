@@ -9,8 +9,10 @@ describe('RotateHint', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
-  it('asks to turn the phone upright', () => {
+  it('shows phone and rotation arrow without text', () => {
     const wrapper = shallowMount(RotateHint, {...globalConfig});
-    expect(wrapper.find('.rotate-hint__text').text()).to.contain('upright');
+    expect(wrapper.find('.rotate-hint__phone').exists()).to.be.true;
+    expect(wrapper.find('.rotate-hint__arrow').exists()).to.be.true;
+    expect(wrapper.text()).to.equal('');
   });
 });

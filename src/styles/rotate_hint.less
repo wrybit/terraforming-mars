@@ -1,5 +1,8 @@
 // Handy quer (siehe RotateHint.vue): nur auf Touch-Geräten mit sehr wenig Höhe. Tablets quer haben
 // deutlich mehr als 500 px Höhe und bleiben unberührt.
+
+// Lila der Mobil-Ansicht (@mb-accent in mobile.less), Handy weiß
+@rotate-hint-accent: #5b5ef0;
 .rotate-hint {
   display: none;
 }
@@ -13,20 +16,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 16px;
     padding: 24px;
     background: #0e1116;
-    color: #e6e9ee;
-    text-align: center;
   }
 
-  .rotate-hint__icon {
-    color: #5b57e0;
+  .rotate-hint__phone {
+    stroke: #fff;
   }
 
-  .rotate-hint__text {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
+  .rotate-hint__arrow {
+    stroke: @rotate-hint-accent;
   }
 }
