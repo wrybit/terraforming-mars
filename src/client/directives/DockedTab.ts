@@ -41,12 +41,23 @@ export function updateDockedTab(panel: HTMLElement): void {
   const panelRect = panel.getBoundingClientRect();
   const panelLeft = panelRect.left;
   const tabRect = activeTab.getBoundingClientRect();
-  // Unter den Seitenrändern des Tabs bleibt der Boxrand stehen, damit die Ecken lückenlos anschließen
+  // Waagerecht scrollbare Leiste (Log-Generationen): nur der sichtbare Teil des Tabs öffnet den Rand
+  const stripRect = activeTab.parentElement?.getBoundingClientRect() ?? tabRect;
+  const visibleLeft = Math.max(tabRect.left, stripRect.left);
+  const visibleRight = Math.min(tabRect.right, stripRect.right);
+  if (visibleRight - visibleLeft < 1) {
+    panel.removeAttribute(DOCKED_TAB_ATTRIBUTE);
+    return;
+  }
+  // Unter den Seitenrändern des Tabs bleibt der Boxrand stehen, damit die Ecken lückenlos anschließen;
+  // an einer abgeschnittenen Seite gibt es keinen Tabrand
   const tabBorder = parseFloat(getComputedStyle(activeTab).borderLeftWidth) || 0;
-  panel.style.setProperty(DOCKED_TAB_START, `${Math.round(tabRect.left - panelLeft + tabBorder)}px`);
-  panel.style.setProperty(DOCKED_TAB_END, `${Math.round(tabRect.right - panelLeft - tabBorder)}px`);
+  const startBorder = visibleLeft === tabRect.left ? tabBorder : 0;
+  const endBorder = visibleRight === tabRect.right ? tabBorder : 0;
+  panel.style.setProperty(DOCKED_TAB_START, `${Math.round(visibleLeft - panelLeft + startBorder)}px`);
+  panel.style.setProperty(DOCKED_TAB_END, `${Math.round(visibleRight - panelLeft - endBorder)}px`);
   // Tab bündig am rechten Rand (z. B. Beenden): dort entfällt die Rundung der Box, wie links beim ersten Tab
-  const atRightEdge = Math.round(panelRect.right - tabRect.right) <= 0;
+  const atRightEdge = Math.round(panelRect.right - visibleRight) <= 0;
   panel.setAttribute(DOCKED_TAB_ATTRIBUTE, atRightEdge ? DOCKED_TAB_RIGHT_EDGE : '');
 }
 
@@ -55,7 +66,7 @@ function stopObserving(panel: HTMLElement): void {
   observedPanels.delete(panel);
 }
 
-// Tabwechsel (Klasse) und Breitenänderungen (Schrift, Fenster) verschieben die Lücke
+// Tabwechsel (Klasse), Breitenänderungen (Schrift, Fenster) und waagerechtes Scrollen der Leiste verschieben die Lücke
 function observe(panel: HTMLElement): void {
   const tabStrip = findTabStrip(panel);
   if (observedPanels.get(panel)?.tabStrip === tabStrip) {
@@ -79,6 +90,8 @@ function observe(panel: HTMLElement): void {
     resizeObserver.observe(panel);
     observers.push(resizeObserver);
   }
+  tabStrip.addEventListener('scroll', update, {passive: true});
+  observers.push({disconnect: () => tabStrip.removeEventListener('scroll', update)});
   observedPanels.set(panel, {tabStrip, observers});
 }
 

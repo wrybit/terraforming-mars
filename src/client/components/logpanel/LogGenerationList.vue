@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, nextTick, onMounted, ref, watch} from 'vue';
+import {computed, nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import * as utils from '@/common/utils/utils';
 
 const props = defineProps<{
@@ -34,7 +34,7 @@ defineEmits<{
 const tabs = ref<HTMLElement | undefined>(undefined);
 
 // Gewählten Tab ins Sichtfeld der Leiste schieben (nur waagerecht; scrollIntoView würde auch die Seite verschieben)
-function revealSelected() {
+function revealSelected(behavior: 'smooth' | 'auto' = 'smooth') {
   const bar = tabs.value;
   const tab = bar?.querySelector<HTMLElement>('.or-tab--active');
   if (bar === undefined || tab === null || tab === undefined) {
@@ -44,14 +44,24 @@ function revealSelected() {
   const left = bar.scrollLeft + tab.getBoundingClientRect().left - bar.getBoundingClientRect().left;
   const right = left + tab.offsetWidth;
   if (left < bar.scrollLeft) {
-    bar.scrollTo({left, behavior: 'smooth'});
+    bar.scrollTo({left, behavior});
   } else if (right > bar.scrollLeft + bar.clientWidth) {
-    bar.scrollTo({left: right - bar.clientWidth, behavior: 'smooth'});
+    bar.scrollTo({left: right - bar.clientWidth, behavior});
   }
 }
 
-onMounted(revealSelected);
-watch(() => [props.selected, props.max], () => nextTick(revealSelected));
+// Mobil liegt das Log beim Laden auf einem verborgenen Bildschirm (Breite 0): erst wenn es sichtbar wird
+// bzw. seine Breite ändert, sofort (ohne Animation) zum gewählten Tab springen
+let resizeObserver: ResizeObserver | undefined;
+onMounted(() => {
+  revealSelected('auto');
+  if (typeof ResizeObserver !== 'undefined' && tabs.value !== undefined) {
+    resizeObserver = new ResizeObserver(() => revealSelected('auto'));
+    resizeObserver.observe(tabs.value);
+  }
+});
+onBeforeUnmount(() => resizeObserver?.disconnect());
+watch(() => [props.selected, props.max], () => nextTick(() => revealSelected()));
 
 const range = computed(() => utils.range(props.max + 1).slice(1));
 
