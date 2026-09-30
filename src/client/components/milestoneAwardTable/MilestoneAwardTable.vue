@@ -16,11 +16,11 @@
 
     <div class="ma-table-row ma-table-head">
       <div></div><div class="ma-table-divider"></div>
-      <div v-for="milestone in milestones" :key="milestone.name" class="ma-table-cell" v-glass-tooltip="tooltip(milestone.name, milestoneDescription(milestone))" :data-test="'milestone-' + milestone.name">
+      <div v-for="milestone in milestones" :key="milestone.name" :class="headCellClasses(milestoneClosed(milestone))" v-glass-tooltip="tooltip(milestone.name, milestoneDescription(milestone))" :data-test="'milestone-' + milestone.name">
         <MilestoneAwardIcon :parts="milestoneIcon(milestone)" :requirement="milestone.threshold"/>
       </div>
       <div class="ma-table-divider"></div>
-      <div v-for="award in awards" :key="award.name" class="ma-table-cell" v-glass-tooltip="tooltip(award.name, awardDescription(award))" :data-test="'award-' + award.name">
+      <div v-for="award in awards" :key="award.name" :class="headCellClasses(awardClosed(award))" v-glass-tooltip="tooltip(award.name, awardDescription(award))" :data-test="'award-' + award.name">
         <MilestoneAwardIcon :parts="awardIcon(award)"/>
       </div>
     </div>
@@ -28,15 +28,14 @@
     <div class="ma-table-row ma-table-status">
       <div></div><div class="ma-table-divider"></div>
       <div v-for="milestone in milestones" :key="milestone.name" class="ma-table-cell">
-        <span v-if="milestone.color" :class="ownerClasses(milestone.color)" v-glass-tooltip="milestone.playerName" data-test="milestone-owner"><i :class="cubeClasses(milestone.color)"></i><span class="ma-table-owner-name">{{ milestone.playerName }}</span></span>
-        <span v-else-if="claimedCount >= maxMilestones" class="ma-table-none">–</span>
-        <span v-else class="ma-table-coin">{{ milestoneCost }}</span>
+        <!-- Beansprucht: Würfel nur in der Spielerzeile; vergeben oder zu: keine Kosten mehr -->
+        <span v-if="milestone.color === undefined && !milestoneClosed(milestone)" class="ma-table-coin">{{ milestoneCost }}</span>
       </div>
       <div class="ma-table-divider"></div>
       <div v-for="award in awards" :key="award.name" class="ma-table-cell">
+        <!-- Finanziert: Würfel nur hier oben (die Spielerzeilen zeigen weiter die Wertung); zu: keine Kosten mehr -->
         <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner"><i :class="cubeClasses(award.color)"></i><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
-        <span v-else-if="fundedCount >= maxAwards" class="ma-table-none">–</span>
-        <span v-else class="ma-table-coin">{{ nextAwardCost }}</span>
+        <span v-else-if="!awardClosed(award)" class="ma-table-coin">{{ nextAwardCost }}</span>
       </div>
     </div>
 
@@ -45,7 +44,7 @@
       <div class="ma-table-name"><slot name="player" :player="player">{{ player.name }}</slot></div>
       <div class="ma-table-divider"></div>
       <div v-for="milestone in milestones" :key="milestone.name" :class="milestoneCellClasses(milestone, player)">
-        <i v-if="milestone.color === player.color" :class="cubeClasses(player.color)" :title="player.name"></i>
+        <i v-if="milestone.color === player.color" :class="cubeClasses(player.color)" :title="player.name" data-test="milestone-owner"></i>
         <span v-else class="ma-table-value">{{ scoreOf(milestone.scores, player) }}</span>
       </div>
       <div class="ma-table-divider"></div>
@@ -149,6 +148,16 @@ export default defineComponent({
     },
     awardDescription(award: FundedAwardModel): string {
       return getAward(award.name)?.description ?? '';
+    },
+    // Alle Plätze vergeben: die übrigen sind nicht mehr wählbar und treten zurück
+    milestoneClosed(milestone: ClaimedMilestoneModel): boolean {
+      return milestone.color === undefined && this.claimedCount >= this.maxMilestones;
+    },
+    awardClosed(award: FundedAwardModel): boolean {
+      return award.color === undefined && this.fundedCount >= this.maxAwards;
+    },
+    headCellClasses(closed: boolean): Array<string> {
+      return closed ? ['ma-table-cell', 'ma-table-cell--closed'] : ['ma-table-cell'];
     },
     tooltip(name: string, description: string): string {
       return `${this.$t(name)}: ${this.$t(description)}`;
