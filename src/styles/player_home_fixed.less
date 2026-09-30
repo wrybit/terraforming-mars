@@ -1,4 +1,5 @@
-// Festes App-Layout der Spieleransicht (Klasse player-home--fixed, gesetzt in PlayerHome.vue):
+// Festes App-Layout der Spiel- und Zuschaueransicht (Klasse player-home--fixed, gesetzt in PlayerHome.vue
+// bzw. SpectatorHome.vue):
 // Die Seite scrollt nicht mehr. Beide Spalten sind fensterhoch und enden auf derselben Linie:
 // rechts wächst das Log bis unten, links füllt die Tab-Box den Platz unter den Spielerleisten und scrollt innen.
 // Nur im Zwei-Spalten-Layout und nur, wenn unterhalb der Spalten nichts mehr steht (Kolonien, Untergrund …).
@@ -11,7 +12,8 @@
 @player-home-fixed-panel-min-height: 320px;
 
 @media only screen and (min-width: @player-home-columns-min-width) {
-  #player-home.player-home--fixed {
+  #player-home.player-home--fixed,
+  #spectator-home.player-home--fixed {
     height: 100vh;
     min-height: 0;
     overflow: hidden;
@@ -92,6 +94,13 @@
       max-height: 35%;
       overflow-y: auto;
     }
+  }
+
+  // Zuschauer: das Log links unter der Spielertabelle füllt den Rest wie beim Spieler die Tab-Box
+  .player-home--fixed .player-home-columns__main > .player_home_block--spectator-log {
+    flex: 1 1 0;
+    min-height: @player-home-fixed-panel-min-height;
+    margin-bottom: 0;
   }
 
   // Startphase: Startkarten-Auswahl füllt den Rest wie das Aktionsmenü

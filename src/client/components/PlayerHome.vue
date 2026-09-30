@@ -23,12 +23,11 @@
       :spectatorId = "game.spectatorId"
       :expectedPurgeTimeMs = "game.expectedPurgeTimeMs"/>
 
-    <!-- Zwei-Spalten-Layout auch in der Startphase (Startkarten wählen): links Auswahl, rechts Brett und Log -->
+    <!-- Zwei-Spalten-Layout (HomeColumns) auch in der Startphase (Startkarten wählen): links Auswahl, rechts Brett und Log -->
     <div>
-      <!-- Zwei-Spalten-Layout: Brett steht im DOM zuerst (Hotkey-Reihenfolge, schmale Screens), wird per CSS rechts platziert -->
       <!-- Startphase: Spielplan einklappbar (SetupBoardToggle), dann haben die Auswahlspalten die volle Breite -->
-      <div :class="['player-home-columns', {'player-home-columns--board-collapsed': isSetupPhase && boardCollapsed}]" :ref="trackColumns">
-        <div class="player-home-columns__board" :ref="trackBoardColumn">
+      <HomeColumns :boardCollapsed="isSetupPhase && boardCollapsed">
+        <template #board>
           <div class="player_home_block player-home-columns__mars">
             <GameBoardView
               ref="gameBoardView"
@@ -47,20 +46,9 @@
           <div v-if="!isSetupPhase" class="player_home_block nofloat player-home-columns__log">
             <LogPanel :viewModel="playerView" @spaceClicked="onSpaceClicked"/>
           </div>
-        </div>
+        </template>
 
-        <!-- Ziehgriff zwischen den Spalten (nur im Zwei-Spalten-Layout sichtbar): verteilt die Breite, Doppelklick = Standard -->
-        <div class="player-home-columns__resizer"
-          role="separator" aria-orientation="vertical" tabindex="0"
-          :aria-valuenow="boardShare" :aria-valuemin="minBoardShare" :aria-valuemax="maxBoardShare"
-          :aria-label="$t('Column width')" :title="$t('Column width')"
-          @pointerdown="startResize" @dblclick="resetResize"
-          @keydown.left.prevent="nudgeResize(1)" @keydown.right.prevent="nudgeResize(-1)">
-          <!-- Aufteilung links / rechts, nur beim Ziehen bzw. mit Tastaturfokus sichtbar -->
-          <span class="player-home-columns__resizer-label" aria-hidden="true">{{ columnSplitLabel }}</span>
-        </div>
-
-        <div class="player-home-columns__main">
+        <template #main>
           <a class="hotkey-target"></a>
           <!-- Startphase: nur die Zugreihenfolge – die Spielerleisten zeigen dort noch nichts als Nullen -->
           <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players">
@@ -102,8 +90,8 @@
 
           <!-- Eigene gespielte Karten: wie bei Gegnern über "anzeigen" in der Spielerleiste (Modal) -->
           </template>
-        </div>
-      </div>
+        </template>
+      </HomeColumns>
     </div>
 
     <div v-if="thisPlayer.underworldData.tokens.length > 0">
@@ -142,6 +130,7 @@ import Colony from '@/client/components/colonies/Colony.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
+import HomeColumns from '@/client/components/HomeColumns.vue';
 import SetupTurnOrder from '@/client/components/SetupTurnOrder.vue';
 import SetupBoardToggle from '@/client/components/SetupBoardToggle.vue';
 import {setupBoardCollapsed} from '@/client/components/setupBoardCollapsed';
@@ -157,28 +146,8 @@ import KeyboardShortcuts from '@/client/components/KeyboardShortcuts.vue';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
-import {observeBoardColumn} from '@/client/utils/boardColumnPosition';
-import {observeRightColumnFit} from '@/client/utils/rightColumnFit';
-import {
-  DEFAULT_BOARD_SHARE, KEYBOARD_STEP, MAX_BOARD_SHARE, MIN_BOARD_SHARE,
-  applyBoardShare, loadBoardShare, setBoardShare, shareLabel, startColumnResize,
-} from '@/client/utils/columnResize';
 import {isHandInInputTabs} from '@/client/utils/handCards';
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
-
-// Aufräumfunktion der Spalten-Beobachtung (Position fürs Modal, Platzausnutzung); pro Seite gibt es nur eine Spieleransicht
-let stopObservingBoardColumn: (() => void) | undefined;
-// Spalten-Container für den Ziehgriff; pro Seite gibt es nur eine Spieleransicht
-let columnsElement: HTMLElement | undefined;
-
-function observeBoardColumnFully(column: HTMLElement): () => void {
-  const stopPosition = observeBoardColumn(column);
-  const stopFit = observeRightColumnFit(column);
-  return () => {
-    stopPosition();
-    stopFit();
-  };
-}
 
 export default defineComponent({
   name: 'PlayerHome',
@@ -189,22 +158,7 @@ export default defineComponent({
       required: true,
     },
   },
-  data() {
-    return {
-      // Anteil der rechten Spalte in Prozent (columnResize.ts)
-      boardShare: loadBoardShare(),
-    };
-  },
   computed: {
-    columnSplitLabel(): string {
-      return shareLabel(this.boardShare);
-    },
-    minBoardShare(): number {
-      return MIN_BOARD_SHARE;
-    },
-    maxBoardShare(): number {
-      return MAX_BOARD_SHARE;
-    },
     // Spielplan in der Startphase eingeklappt (gemeinsamer Zustand, setupBoardCollapsed.ts)
     boardCollapsed(): boolean {
       return setupBoardCollapsed.value;
@@ -253,49 +207,16 @@ export default defineComponent({
     WaitingForPlayersTab,
     TopBar,
     GameBoardView,
+    HomeColumns,
     PlayerSetupView,
     SetupTurnOrder,
     SetupBoardToggle,
     UndergroundTokens,
     KeyboardShortcuts,
   },
-  beforeUnmount() {
-    stopObservingBoardColumn?.();
-    stopObservingBoardColumn = undefined;
-  },
   methods: {
     isHandInInputTabs,
     playersToWaitFor,
-    // Funktions-Ref: wird mit dem Element bzw. beim Entfernen mit null aufgerufen
-    // Funktions-Ref des Spalten-Containers: gespeicherte Aufteilung sofort anwenden
-    trackColumns(element: unknown) {
-      columnsElement = element instanceof HTMLElement ? element : undefined;
-      if (columnsElement !== undefined) {
-        applyBoardShare(columnsElement, this.boardShare);
-      }
-    },
-    startResize(event: PointerEvent) {
-      if (columnsElement !== undefined) {
-        startColumnResize(event, columnsElement, (share) => {
-          this.boardShare = share;
-        });
-      }
-    },
-    resetResize() {
-      if (columnsElement !== undefined) {
-        this.boardShare = setBoardShare(columnsElement, DEFAULT_BOARD_SHARE);
-      }
-    },
-    // Pfeiltaste links schiebt den Griff nach links, die rechte Spalte wird breiter
-    nudgeResize(direction: number) {
-      if (columnsElement !== undefined) {
-        this.boardShare = setBoardShare(columnsElement, this.boardShare + direction * KEYBOARD_STEP);
-      }
-    },
-    trackBoardColumn(element: unknown) {
-      stopObservingBoardColumn?.();
-      stopObservingBoardColumn = element instanceof HTMLElement ? observeBoardColumnFully(element) : undefined;
-    },
     isPlayerActing(playerView: PlayerViewModel) : boolean {
       return playerView.players.length > 1 && playerView.waitingFor !== undefined && !playerView.waitingFor.optional;
     },
