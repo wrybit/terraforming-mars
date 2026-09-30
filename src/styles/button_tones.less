@@ -8,6 +8,8 @@
 @button-danger-hover: #d8483a;
 @button-heat: #e0701f; // Wärme/Temperatur
 @button-heat-hover: #f0822f;
+@button-quiet: rgba(255, 255, 255, 0.12); // Nebenaktion neben einem lila Hauptbutton (Zurücksetzen, Kopieren)
+@button-quiet-hover: rgba(255, 255, 255, 0.2);
 
 .button-tone(@color, @hover-color) {
   border-color: @color !important;
@@ -35,4 +37,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+.btn.btn-tone-quiet {
+  .button-tone(@button-quiet, @button-quiet-hover);
+
+  box-shadow: none;
 }
