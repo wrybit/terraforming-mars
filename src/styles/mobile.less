@@ -43,6 +43,8 @@
 @mb-carousel-dots-height: 26px;
 // Höhe des Fußbereichs beim Bezahlen mit drei Währungen (Stahl, Titan, M€): feste Achse der Karussell-Karten
 @mb-carousel-footer-reserve: 253px;
+// Lücke zwischen Auswahl-Kacheln (Meilensteine/Auszeichnungen, Standardprojekte; vgl. CHOICE_GAP_PX in mobileFit.ts)
+@mb-choice-gap: 14px;
 // Höhe des Aufgaben-Kopfs (Zurück-Knopf 40 px + Innenabstand)
 @mb-task-head-height: 61px;
 // Zoom-Leiste unten am großen Mars (vgl. CONTROLS_HEIGHT in BoardZoomModal.vue)
@@ -1238,7 +1240,8 @@ html.tm-mobile {
 
   // ---------- Karten-Karussell (Karte spielen, cardCarousel.ts) ----------
   // Karten nebeneinander, eine je Wisch, die mittige ist gewählt; links und rechts lugen die Nachbarn herein
-  .mb-screen--turn .payments_cont:has(> label.payments_cards) {
+  // Standardprojekte ausgenommen: sie liegen alle sichtbar im Kartenraster (mobileFit.ts, cardCarousel.ts)
+  .mb-screen--turn .payments_cont:has(> label.payments_cards):not(:has(.card-standard-project)) {
     display: flex !important;
     flex-wrap: nowrap !important;
     gap: 14px !important;
@@ -1299,6 +1302,45 @@ html.tm-mobile {
     font-size: 12px;
     color: @mb-muted;
     font-variant-numeric: tabular-nums;
+  }
+
+  // ---------- Meilenstein/Auszeichnung wählen (MilestoneAwardOptions.vue) ----------
+  // Zwei Spalten über die volle Breite statt fester 140-px-Kacheln am linken Rand; auf breiten Geräten gedeckelt und mittig
+  @mb-ma-option-max: 240px;
+  .mb-screen--turn .ma-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: @mb-choice-gap;
+    max-width: 2 * @mb-ma-option-max + @mb-choice-gap;
+    margin: 4px auto 8px;
+
+    .ma-option {
+      width: auto;
+      margin: 0;
+      // Bild und Schrift wachsen mit der Kachel: Maße relativ zur Kachelbreite (Vorlage 140 × 83 px)
+      container-type: inline-size;
+    }
+
+    .ma-name {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 140 / 83;
+      padding-top: (60 / 140 * 100cqw);
+      font-size: (15 / 140 * 100cqw);
+      background-size: 100% 100%;
+    }
+  }
+
+  // ---------- Standardprojekte wählen: alle sichtbar im Raster (mobileFit.ts skaliert) ----------
+  // Rechts um die Lücke überstehen: die Lücke hinter der rechten Spalte fällt so aus dem Bild (choiceGap in mobileFit.ts)
+  .mb-screen--turn .payments_cont:has(.card-standard-project) {
+    margin-right: -@mb-choice-gap;
+  }
+
+  // Gewählt zeigt nur der Schein wie bei den Auszeichnungen; das Häkchen-Fähnchen über der Karte stieße an die Zeile darüber
+  .mb-screen--turn .payments_cont input[type="radio"]:checked + .card-standard-project::after {
+    content: none;
   }
 
   // ---------- Zug: Aufgaben-Ansicht ----------
