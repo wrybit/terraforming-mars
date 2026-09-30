@@ -9,3 +9,25 @@ import {disableAutoUnmount, enableAutoUnmount} from '@vue/test-utils';
 // the reset.
 disableAutoUnmount();
 enableAutoUnmount(afterEach);
+
+// Node 25 bringt ein eigenes globales localStorage mit. Ohne --localstorage-file fehlt ihm getItem, und es
+// verdeckt das von jsdom – dann schlagen alle Specs fehl, die Einstellungen lesen. In dem Fall ein
+// schlichter Speicher im Arbeitsspeicher, der sich wie Web Storage verhält.
+if (typeof global.localStorage?.getItem !== 'function') {
+  const values = new Map<string, string>();
+  const memoryStorage: Storage = {
+    get length() {
+      return values.size;
+    },
+    clear: () => values.clear(),
+    getItem: (key) => values.get(key) ?? null,
+    key: (index) => [...values.keys()][index] ?? null,
+    removeItem: (key) => {
+      values.delete(key);
+    },
+    setItem: (key, value) => {
+      values.set(key, String(value));
+    },
+  };
+  Object.defineProperty(global, 'localStorage', {value: memoryStorage, configurable: true, writable: true});
+}
