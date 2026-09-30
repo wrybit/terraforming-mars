@@ -9,13 +9,22 @@
 @mb-accent: #5b5ef0;
 @mb-gold: #f5c542;
 @mb-green: #2e7d32;
+@mb-heat: #b8461f;
 @mb-danger: #8e2a22;
 @mb-top-height: 52px;
-@mb-banner-height: 40px;
 @mb-nav-height: 68px;
 @mb-screen-width-max: 1400px;
 // Spalten der umbrechenden Spieler-Tabelle: sechs Waren passen genau in eine Zeile
-@mb-players-table-columns: 6;
+// Symbol-Spalte der gedrehten Spieler-Tabelle
+@mb-players-icon-column: 44px;
+// Sheet auf Tablets mittig statt über die volle Breite
+@mb-sheet-max-width: 560px;
+// Halbe Kartenbreite im Karussell (Karten ungezoomt 248 px, vgl. mobileFit.ts)
+@mb-carousel-card-half: 124px;
+// Zoom-Leiste unten am großen Mars (vgl. CONTROLS_HEIGHT in BoardZoomModal.vue)
+@mb-zoom-bar-height: 72px;
+// Fuge zwischen den Segmenten der Parameter-Balken (Farbe der Fläche dahinter)
+@mb-bar-gap: rgba(13, 15, 20, 0.95);
 
 .mb-bar-surface() {
   background: @mb-surface;
@@ -41,7 +50,7 @@ html.tm-mobile {
 
   #player-home.mb-home {
     display: block;
-    padding: (@mb-top-height + @mb-banner-height) 0 calc(@mb-nav-height + env(safe-area-inset-bottom));
+    padding: @mb-top-height 0 calc(@mb-nav-height + env(safe-area-inset-bottom));
     min-height: 100dvh;
     box-sizing: border-box;
     color: @mb-text;
@@ -130,20 +139,23 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Zugstatus ----------
+  // ---------- Zugstatus (nur auf dem Mars-Bildschirm, wie im Mockup) ----------
   .mb-banner {
-    position: fixed;
-    top: @mb-top-height;
-    left: 0;
-    right: 0;
-    z-index: 19;
-    height: @mb-banner-height;
-    padding: 0 14px;
+    order: 0;
+    padding: 10px 14px;
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(23, 41, 26, 0.95);
-    border-bottom: 1px solid @mb-green;
+    border-radius: 12px;
+    background: rgba(23, 41, 26, 0.92);
+    border: 1px solid @mb-green;
+  }
+
+  .mb-banner-timer {
+    display: flex;
+    margin-left: auto;
+    font-family: Prototype, sans-serif;
+    color: @mb-muted;
   }
 
   .mb-banner-dot {
@@ -298,8 +310,18 @@ html.tm-mobile {
       translate: none;
     }
 
+    > .mb-banner {
+      order: 0;
+    }
+
+    > .mb-mars-zoom,
     > .mb-params {
       order: 2;
+    }
+
+    // Meilensteine & Auszeichnungen stehen im Spieler-Bildschirm; hier nur die Schnellknöpfe
+    .player_home_block--milestones-and-awards {
+      display: none;
     }
 
     // Tabelle der Meilensteine nur im Zwei-Spalten-Layout des Desktops
@@ -309,7 +331,8 @@ html.tm-mobile {
   }
 
   // Mars ohne Ring (Ausschnitt in mobileFit.ts): Kolonie-Felder in die oberen Ecken, Knopf "Plättchen" unten links
-  .board-without-venus.mb-mars-cropped {
+  .board-without-venus.mb-mars-cropped,
+  .board-zoom-content .board-without-venus {
     background-image: url(./assets/board/mars-planet.png);
 
     // Skalen rund um das Brett ersetzen die Balken (MobileParameterBars)
@@ -349,6 +372,79 @@ html.tm-mobile {
       top: 478px;
       left: 70px;
     }
+  }
+
+  // Zoom-Knopf unten rechts am Planeten (über dem Brett, dessen Ecke dort frei ist)
+  .mb-mars-zoom {
+    align-self: flex-end;
+    z-index: 2;
+    margin: -52px 8px 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 14px;
+    border: 1px solid @mb-line;
+    background: rgba(22, 26, 35, 0.85);
+    color: @mb-text;
+    font: inherit;
+    font-size: 12px;
+  }
+
+  // Schnellknöpfe unter den Balken: Meilensteine / Auszeichnungen (öffnen den Spieler-Bildschirm)
+  .mb-quick {
+    order: 2;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+
+    button {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid @mb-line;
+      background: @mb-surface;
+      color: @mb-text;
+      font: inherit;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    b {
+      font-family: Prototype, sans-serif;
+      font-weight: normal;
+      color: @mb-muted;
+      margin-left: 4px;
+    }
+  }
+
+  // Umschalter im Spieler-Bildschirm
+  .mb-segments {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    padding: 4px;
+    border-radius: 12px;
+    background: @mb-surface;
+  }
+
+  .mb-segment {
+    height: 36px;
+    border-radius: 9px;
+    border: 0;
+    background: transparent;
+    color: @mb-muted;
+    font: inherit;
+    font-weight: bold;
+  }
+
+  .mb-segment--active {
+    background: #2a3040;
+    color: @mb-text;
+  }
+
+  // Meilenstein-Tabelle ist sonst nur im Zwei-Spalten-Layout sichtbar (milestone_award_table.less)
+  .mb-screen--players .ma-table {
+    display: grid !important;
   }
 
   // ---------- Globale Parameter als Balken ----------
@@ -397,6 +493,17 @@ html.tm-mobile {
     margin-bottom: 12px;
     border-radius: 5px;
     background: #2a3040;
+
+    // Segmente je Schritt der Skala (--steps aus MobileParameterBars), wie die Felder auf dem Brett
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      border-radius: inherit;
+      background-image: repeating-linear-gradient(90deg, transparent 0, transparent calc(100% / var(--steps) - 2px), @mb-bar-gap calc(100% / var(--steps) - 2px), @mb-bar-gap calc(100% / var(--steps)));
+      pointer-events: none;
+    }
   }
 
   .mb-param-fill {
@@ -491,41 +598,81 @@ html.tm-mobile {
       display: none !important; // players_overview.less setzt display mit !important
     }
 
+    // Achsen gedreht: Spieler als Spalten (Name oben), Werte untereinander, Symbole in der ersten Spalte.
+    // Kopf und Spielerzeilen lösen sich auf, ihre Zellen füllen das Raster spaltenweise
+    // (Zellen je Zeile: --players-table-cell-count aus PlayersTable)
     .players-table {
-      display: block !important;
+      display: grid !important;
+      grid-template-rows: repeat(var(--players-table-cell-count), auto);
+      grid-template-columns: @mb-players-icon-column;
+      grid-auto-columns: minmax(0, 1fr);
+      grid-auto-flow: column;
+      column-gap: 4px;
+      max-width: 100%;
     }
 
-    // Zeilen umbrechen statt schrumpfen: Name über die ganze Breite, darunter Waren, Tags und Wertung
-    // in je sechs Spalten; Kopf und Spieler haben dieselbe Zellfolge, daher stehen die Symbole über ihren Werten
+    .players-table-rows,
     .players-table-row {
-      grid-template-columns: repeat(@mb-players-table-columns, minmax(0, 1fr)) !important;
-      grid-auto-rows: minmax(40px, auto);
-      row-gap: 6px;
-      height: auto !important;
-      padding: 8px 6px 8px 14px;
+      display: contents;
     }
 
-    .players-table-identity,
-    .players-table-toggles {
-      grid-column: 1 / -1;
-    }
-
-    .players-table-divider {
+    .players-table-divider,
+    .players-table-first-player {
       display: none;
     }
 
-    // Tablet: doppelt so viele Spalten, jeder Spieler braucht weniger Zeilen
-    @media (min-width: 700px) {
-      .players-table-row {
-        grid-template-columns: repeat(2 * @mb-players-table-columns, minmax(0, 1fr)) !important;
-      }
+    .players-table-row > * {
+      min-width: 0;
+      min-height: 40px;
+      padding: 4px 2px;
+      box-sizing: border-box;
+    }
+
+    // Namenszeile oben: Name, Status, Konzern untereinander und mittig
+    .players-table-identity {
+      padding: 8px 4px;
+      border-radius: 10px 10px 0 0;
+      text-align: center;
+    }
+
+    .players-table-identity-line {
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .players-table-corporation {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    // Umschalter der Abschnitte oben in der Symbol-Spalte untereinander
+    .players-table-toggles {
+      flex-direction: column;
+      align-items: center;
+      padding-left: 0;
     }
 
     .players-table-cell {
-      min-width: 0;
       justify-content: center;
     }
+
+    .players-table-row--player > :last-child {
+      border-radius: 0 0 10px 10px;
+    }
   }
+
+  // Spielerfarbe je Spalte (die Zeile selbst ist aufgelöst und trägt keinen Hintergrund mehr)
+  each(@players, {
+    @c: ~"player_@{value}";
+    .mb-screen--players .players-table-row--@{value} > * {
+      background: fade(@@c, 30%);
+    }
+
+    .mb-screen--players .players-table-row--@{value}.players-table-row--me > * {
+      background: fade(@@c, 55%);
+    }
+  });
 
   // ---------- Log ----------
   .mb-screen--log {
@@ -553,63 +700,341 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Zug: Aktionsmenü als Kachel-Raster statt Tab-Leiste ----------
-  .mb-screen--turn {
-    .or-tabs {
-      display: grid !important;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 8px;
-      margin: 0 0 14px;
-      border: 0;
-      flex-wrap: wrap;
-      overflow: visible;
-    }
+  // ---------- Karte groß (MobileCardZoom) ----------
+  .mb-card-zoom {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 16px;
+    background: rgba(5, 6, 10, 0.6);
+    -webkit-backdrop-filter: blur(7px) saturate(0.8);
+    backdrop-filter: blur(7px) saturate(0.8);
+  }
 
-    .or-tab {
+  .mb-card-zoom-backdrop {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  // Karte um ein Fünftel größer; der Rand um die skalierte Karte hält den Platz frei
+  .mb-card-zoom-card {
+    position: relative;
+    margin: 30px 26px;
+
+    .card-container {
       margin: 0 !important;
-      min-height: 48px;
-      padding: 8px 12px;
-      border-radius: 12px !important;
-      border: 1px solid @mb-line;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      text-align: left;
-      white-space: normal;
+      transform: scale(1.2);
+    }
+  }
+
+  .mb-card-zoom-actions {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+
+    .btn {
+      height: 44px;
+      margin: 0 !important;
+      padding: 0 22px;
+    }
+  }
+
+  // ---------- Karten-Karussell (Karte spielen, cardCarousel.ts) ----------
+  // Karten nebeneinander, eine je Wisch, die mittige ist gewählt; links und rechts lugen die Nachbarn herein
+  .mb-screen--turn .payments_cont:has(> label.payments_cards) {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 14px !important;
+    margin: 0 -8px;
+    padding: 8px calc(50% - @mb-carousel-card-half) 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
     }
 
-    .or-tab--active {
-      box-shadow: 0 0 0 2px @mb-gold;
+    > label.payments_cards {
+      flex-shrink: 0;
+      scroll-snap-align: center;
     }
 
-    // Weitergeben / Passen: dezent, nur Umriss, je halbe Breite am Ende
-    .or-tab--end {
-      background: transparent !important;
-      border-color: @mb-danger !important;
-      color: #f0a39a !important;
-      justify-content: center;
+    > :not(label) {
+      flex-basis: 100%;
+      flex-shrink: 0;
     }
+  }
 
-    // Zug-Ende in eigener letzter Reihe: links zweite Aktion auslassen, rechts passen (wie im Prototyp)
-    .or-tab:not(.or-tab--end) + .or-tab--end {
-      grid-column-start: 1;
+  .mb-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 2px 16px 12px;
+  }
+
+  .mb-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: #3a4152;
+    transition: width 0.2s, background 0.2s;
+  }
+
+  .mb-dot--active {
+    width: 22px;
+    background: @mb-accent;
+  }
+
+  .mb-dots-count {
+    margin-left: 8px;
+    font-size: 12px;
+    color: @mb-muted;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // ---------- Zug: Aufgaben-Ansicht ----------
+  // Tab-Leisten und Menü-Überschrift entfallen: gewählt wird im Sheet, oben steht der Aufgaben-Kopf
+  .mb-screen--turn {
+    .or-tabs,
+    .wf-options--tabs > label:not(.card-warning) {
+      display: none !important;
     }
+  }
 
-    .or-tab--end + .or-tab--end,
-    .or-tab:not(.or-tab--end) + .or-tab--end:last-child {
-      grid-column: -2 / -1;
+  .mb-task-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: -10px -8px 0;
+    padding: 10px 12px;
+    background: @mb-surface;
+    border-bottom: 1px solid @mb-line;
+  }
+
+  .mb-task-title {
+    font-size: 18px;
+    font-weight: bold;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mb-task-sub {
+    color: @mb-muted;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .mb-icon-button {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: transparent;
+    color: inherit;
+  }
+
+  // ---------- Zug-Menü als Bottom-Sheet (MobileTurnSheet) ----------
+  .mb-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    background: rgba(5, 6, 10, 0.62);
+    -webkit-backdrop-filter: blur(7px) saturate(0.8);
+    backdrop-filter: blur(7px) saturate(0.8);
+  }
+
+  .mb-sheet-backdrop {
+    flex-grow: 1;
+    border: 0;
+    background: transparent;
+  }
+
+  .mb-sheet-panel {
+    width: 100%;
+    max-width: @mb-sheet-max-width;
+    max-height: 82%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 10px 14px calc(22px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    overflow-y: auto;
+    border-radius: 20px 20px 0 0;
+    background: #161a23;
+  }
+
+  .mb-sheet-grip {
+    align-self: center;
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: #3a4152;
+  }
+
+  .mb-sheet-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .mb-sheet-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .mb-sheet-sub {
+    color: @mb-muted;
+    font-size: 14px;
+  }
+
+  // Innerhalb einer Gruppe enger als zwischen den Gruppen (Gesetz der Nähe)
+  .mb-sheet-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .mb-section-label {
+      margin: 0;
     }
+  }
 
-    .or-tab--end:has(+ .or-tab--end) {
-      border-color: #24552a !important;
-      color: #8fd694 !important;
+  .mb-sheet-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mb-sheet-grid,
+  .mb-sheet-end {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  // Kachel wie im Mockup: Symbol, Label, Unterzeile; Farbtöne wie die Desktop-Tabs (Grünfläche, Wärme, Meilenstein)
+  .mb-tile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid @mb-line;
+    background: @mb-surface-raised;
+    color: @mb-text;
+    font: inherit;
+    text-align: left;
+
+    img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      flex-shrink: 0;
     }
+  }
 
-    .wf-root > label,
-    .or-tab-panel-title {
-      font-size: 16px;
-      font-weight: bold;
+  .mb-tile-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .mb-tile-label {
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  .mb-tile-sub {
+    font-size: 12px;
+    color: @mb-muted;
+  }
+
+  .mb-tile--success {
+    background: @mb-green;
+    border-color: @mb-green;
+  }
+
+  .mb-tile--heat {
+    background: @mb-heat;
+    border-color: @mb-heat;
+  }
+
+  .mb-tile--highlight {
+    background: #6b5316;
+    border-color: #a07c1d;
+  }
+
+  .mb-tile--success,
+  .mb-tile--heat,
+  .mb-tile--highlight {
+    .mb-tile-sub {
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+  .mb-tile--empty {
+    opacity: 0.45;
+  }
+
+  // Zug-Ende dezent: nur Umriss und Schrift, links zweite Aktion auslassen (grün), rechts passen (rot)
+  .mb-sheet-end .mb-tile {
+    justify-content: center;
+    min-height: 48px;
+    background: transparent;
+    text-align: center;
+  }
+
+  .mb-sheet-end .mb-tile--skip {
+    border-color: #24552a;
+    color: #8fd694;
+
+    &:disabled {
+      opacity: 0.35;
+    }
+  }
+
+  .mb-sheet-end .mb-tile--pass {
+    grid-column: 2;
+    border-color: #5a2a24;
+    color: #f0a39a;
+  }
+
+  // Aufgaben-Kopf im Ton der Aktion (Grünfläche grün, Temperatur orange)
+  .mb-task-head--success {
+    background: @mb-green;
+  }
+
+  .mb-task-head--heat {
+    background: @mb-heat;
+  }
+
+  .mb-task-head--success,
+  .mb-task-head--heat {
+    .mb-task-sub {
+      color: rgba(255, 255, 255, 0.85);
     }
   }
 
@@ -791,22 +1216,101 @@ html.tm-mobile {
     margin: 0 !important;
   }
 
-  // Vergrößertes Brett (BoardZoomModal): größer als der Bildschirm, per Wischen verschiebbar
+  // Großer Mars (BoardZoomModal) wie im Mockup: Planet ohne Ring, per Pinch/Doppel-Tap/Leiste zoombar, per Wischen verschiebbar
   .board-zoom-backdrop {
-    display: grid;
-    place-items: safe center;
+    display: block;
     overflow: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+    // Eigene Zoom-Gesten statt Zoom der ganzen Seite (boardPinchZoom.ts)
+    touch-action: pan-x pan-y;
+    padding-bottom: @mb-zoom-bar-height;
+    box-sizing: border-box;
     cursor: default;
+    background: radial-gradient(circle at 50% 45%, #1a1d26, #0d0f14 70%);
+  }
+
+  // Bühne so breit wie der gezoomte Inhalt, mindestens wie das Fenster: alles bleibt erreichbar, der Planet mittig
+  .board-zoom-stage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+    min-width: 100%;
+    min-height: 100%;
+    padding: 56px 0 16px;
+    box-sizing: border-box;
+  }
+
+  .board-zoom-content {
+    .global-numbers,
+    .hide-tile-button-container {
+      display: none;
+    }
+
+    .board-without-venus {
+      background-image: url(./assets/board/mars-planet.png);
+    }
   }
 
   .board-zoom-close {
-    z-index: 1;
     top: calc(12px + env(safe-area-inset-top));
     right: 12px;
     width: 44px;
     height: 44px;
+  }
+
+  .mb-zoom-hint {
+    position: fixed;
+    top: calc(12px + env(safe-area-inset-top));
+    left: 12px;
+    right: 68px;
+    z-index: 1101; // über dem großen Mars (board-zoom-backdrop: 1100)
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: @mb-green;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .mb-zoom-controls {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1101; // über dem großen Mars (board-zoom-backdrop: 1100)
+    height: @mb-zoom-bar-height;
+    padding: 0 12px env(safe-area-inset-bottom);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid @mb-line;
+    .mb-bar-surface();
+  }
+
+  .mb-zoom-button {
+    min-width: 44px;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid @mb-line;
+    background: @mb-surface-raised;
+    color: @mb-text;
+    font: inherit;
+    font-size: 20px;
+  }
+
+  .mb-zoom-button--fit {
+    margin-left: auto;
+    font-size: 13px;
+  }
+
+  .mb-zoom-level {
+    min-width: 52px;
+    text-align: center;
+    font-family: Prototype, sans-serif;
+    color: @mb-muted;
   }
 
   // Tablet quer: Mars links, Balken, Meilensteine & Co. rechts daneben statt darunter

@@ -64,7 +64,9 @@ const RULES: ReadonlyArray<FitRule> = [
   // Gedrehte Ergebnistabelle über die volle Breite
   {selector: '#game-end .game_end_table.mb-transposed', columns: () => 1},
   // Meilensteine & Auszeichnungen als Tabelle über die volle Breite
-  {selector: '.mb-screen--mars .ma-table', columns: () => 1},
+  {selector: '.mb-screen .ma-table', columns: () => 1},
+  // Karten-Karussell (Karte spielen): eine Karte groß in der Mitte
+  {selector: '.mb-screen--turn .payments_cont .card-container', columns: () => 1},
   {
     selector: '.card-container',
     // Log-Vorschau, Karten in Erklär-Kacheln und verschachtelte Karten behalten ihre Größe

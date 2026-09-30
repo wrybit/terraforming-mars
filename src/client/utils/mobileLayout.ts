@@ -6,7 +6,7 @@ import {startMobileDocument} from '@/client/utils/mobileDocument';
  *
  * Mobil-Ansicht bekommen Geräte, deren Hauptzeiger ein Finger ist (Handy, Tablet hoch und quer), sowie
  * Fenster schmaler als das Zwei-Spalten-Layout des Desktops (1400 px). Per URL-Parameter `?mobile=on|off|auto`
- * lässt sich das dauerhaft überschreiben (gespeichert im localStorage).
+ * lässt sich das für diesen Tab überschreiben (sessionStorage); ein neuer Tab entscheidet wieder automatisch.
  */
 
 export const MOBILE_LAYOUT_SETTINGS = ['auto', 'on', 'off'] as const;
@@ -26,10 +26,12 @@ function isSetting(value: unknown): value is MobileLayoutSetting {
   return MOBILE_LAYOUT_SETTINGS.includes(value as MobileLayoutSetting);
 }
 
-// Gespeicherte Einstellung; fehlender oder gesperrter Speicher gilt als 'auto'
+// Gespeicherte Einstellung dieses Tabs; fehlender oder gesperrter Speicher gilt als 'auto'
 function readSetting(): MobileLayoutSetting {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    // Frühere Versionen merkten sich die Einstellung dauerhaft; das hielt die Mobil-Ansicht auch auf breiten Fenstern fest
+    localStorage.removeItem(STORAGE_KEY);
+    const stored = sessionStorage.getItem(STORAGE_KEY);
     return isSetting(stored) ? stored : 'auto';
   } catch {
     return 'auto';
@@ -38,7 +40,7 @@ function readSetting(): MobileLayoutSetting {
 
 function writeSetting(setting: MobileLayoutSetting): void {
   try {
-    localStorage.setItem(STORAGE_KEY, setting);
+    sessionStorage.setItem(STORAGE_KEY, setting);
   } catch {
     // Privates Fenster o. Ä.: gilt dann nur für diese Seite
   }
@@ -125,7 +127,7 @@ export function initMobileLayout(): void {
   update();
 }
 
-/* Setzt die Einstellung dauerhaft und wendet sie sofort an. */
+/* Setzt die Einstellung für diesen Tab und wendet sie sofort an. */
 export function setMobileLayoutSetting(value: MobileLayoutSetting): void {
   setting = value;
   writeSetting(value);

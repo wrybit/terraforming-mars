@@ -1,12 +1,12 @@
 <template>
-  <!-- Globale Parameter als Balken unter dem Mars (statt der Skalen rund um das Brett) -->
   <div class="mb-params">
+    <!-- Globale Parameter als Balken unter dem Mars (statt der Skalen rund um das Brett) -->
     <div v-for="bar in bars" :key="bar.key" :class="['mb-param', 'mb-param--' + bar.key, {'mb-param--done': bar.done}]">
       <span class="mb-param-label">
         <img :src="bar.icon" alt="">
         <span>{{ $t(bar.label) }}</span>
       </span>
-      <span class="mb-param-track" role="meter" :aria-label="$t(bar.label)" :aria-valuemin="bar.min" :aria-valuemax="bar.max" :aria-valuenow="bar.value">
+      <span class="mb-param-track" :style="{'--steps': bar.steps}" role="meter" :aria-label="$t(bar.label)" :aria-valuemin="bar.min" :aria-valuemax="bar.max" :aria-valuenow="bar.value">
         <span class="mb-param-fill" :style="{width: bar.percent + '%'}"></span>
         <!-- Bonus-Schwellen wie auf dem Brett (Wärmeproduktion, Ozean, Temperaturschritt …) -->
         <span v-for="bonus in bar.bonuses" :key="bonus.at"

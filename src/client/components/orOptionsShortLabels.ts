@@ -91,7 +91,7 @@ const HIGHLIGHTED_TABS: ReadonlySet<string> = new Set([
   'Convert 6 heat into temperature',
 ]);
 
-function titleKey(title: string | Message): string {
+export function titleKey(title: string | Message): string {
   return typeof title === 'string' ? title : title.message;
 }
 

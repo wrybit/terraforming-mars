@@ -1,5 +1,5 @@
 <template>
-  <div class="players-table" :style="{'--players-table-columns': template}">
+  <div class="players-table" :style="{'--players-table-columns': template, '--players-table-cell-count': cellCount}">
     <!-- Spielerliste als Tabelle (nur im Zwei-Spalten-Layout sichtbar, siehe players_table.less) -->
     <PlayersTableHeader :visibility="effectiveVisibility" :autoHidden="fitted.autoHidden" :tagColumns="tagColumns" @toggle="toggleSection"/>
     <div class="players-table-rows">
@@ -28,7 +28,7 @@ import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/comp
 import {playerGoods} from '@/client/components/overview/playerGoods';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import {
-  PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
+  GOODS_COUNT, SCORE_COUNT, PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
   FittedVisibility, columnTemplate, fitToWidth, loadPreferredSection, loadSectionVisibility, savePreferredSection, saveSectionVisibility,
 } from '@/client/components/overview/playersTableLayout';
 
@@ -113,6 +113,13 @@ export default defineComponent({
     },
     effectiveVisibility(): SectionVisibility {
       return this.fitted.visibility;
+    },
+    // Zellen je Zeile ohne Trenner (Name, Waren, Tags samt Gruppen-Lücken, Wertung, Karten);
+    // die Mobil-Ansicht dreht die Tabelle damit um (mobile.less: Spieler als Spalten)
+    cellCount(): number {
+      const visibility = this.effectiveVisibility;
+      const tagCells = this.tagColumns.reduce((sum, group) => sum + group.length, 0) + Math.max(0, this.tagColumns.length - 1);
+      return 1 + (visibility.goods ? GOODS_COUNT : 0) + (visibility.tags ? tagCells : 0) + (visibility.score ? SCORE_COUNT : 0) + 1;
     },
     template(): string {
       return columnTemplate(this.effectiveVisibility, this.tagColumns);

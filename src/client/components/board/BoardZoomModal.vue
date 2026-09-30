@@ -3,7 +3,6 @@
        rechten Spalte das Modal weder beschneiden noch mitskalieren. -->
   <Teleport to="body">
     <div v-if="visible" class="board-zoom-backdrop" ref="backdrop" role="dialog" aria-modal="true" @click="onBackdropClick">
-      <button type="button" class="board-zoom-close" :aria-label="$t('Close')" @click.stop="$emit('close')">✕</button>
       <!-- Die Bühne trägt nur die Flug-Animation; zoom sitzt eine Ebene tiefer, sonst würde er die
            Verschiebung der Animation mitskalieren -->
       <div class="board-zoom-stage" ref="stage">
@@ -12,16 +11,24 @@
         </div>
       </div>
     </div>
+    <!-- Außerhalb des scrollenden Hintergrunds, damit Schließen und Zoom-Leiste beim Verschieben stehen bleiben -->
+    <button v-if="visible" type="button" class="board-zoom-close" :aria-label="$t('Close')" @click.stop="$emit('close')">✕</button>
+    <!-- Mobil-Ansicht: beim Platzieren oben der Hinweis, was zu tun ist -->
+    <div v-if="visible && mobileLayout && placing" class="mb-zoom-hint">{{ $t('Tap a highlighted space') }}</div>
+    <!-- Mobil-Ansicht: Zoom-Leiste unten (Pinch und Doppel-Tap gehen zusätzlich) -->
+    <MobileZoomControls v-if="visible && mobileLayout" :percent="zoomPercent" @zoom="zoomAtCenter" @fit="fitWholePlanet"/>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import {nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue';
+import {computed, nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordinator';
 import {animateBoardZoom} from '@/client/components/board/boardZoomAnimation';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {mobileLayout} from '@/client/utils/mobileLayout';
-import {mobileBoardZoom} from '@/client/components/mobile/mobileBoardZoom';
+import {MAX_ZOOM_RATIO, PLACEMENT_ZOOM_RATIO, PLANET_CENTER, wholePlanetZoom} from '@/client/components/mobile/mobileBoardZoom';
+import {attachPinchZoom} from '@/client/components/board/boardPinchZoom';
+import MobileZoomControls from '@/client/components/mobile/MobileZoomControls.vue';
 
 // Freiraum rund um das Brett, damit es nicht am Fensterrand klebt
 const VIEWPORT_MARGIN = 24;
@@ -61,9 +68,81 @@ function fitToViewport() {
   }
   const availableWidth = window.innerWidth - 2 * VIEWPORT_MARGIN;
   const availableHeight = window.innerHeight - 2 * VIEWPORT_MARGIN;
-  const fitZoom = Math.min(availableWidth / naturalSize.width, availableHeight / naturalSize.height);
-  // Mobil-Ansicht: größer als der Bildschirm, damit die Felder antippbar sind; man verschiebt das Brett per Wischen
-  zoomFactor.value = mobileLayout.value ? Math.max(fitZoom, mobileBoardZoom(window.innerWidth, window.innerHeight)) : fitZoom;
+  zoomFactor.value = Math.min(availableWidth / naturalSize.width, availableHeight / naturalSize.height);
+}
+
+// Fenstergröße geändert: Desktop passt das Brett neu ein, mobil bleibt der gewählte Zoom (nur 100 % neu berechnet)
+function onResize() {
+  if (mobileLayout.value) {
+    wholeZoom.value = wholePlanetZoom(window.innerWidth, window.innerHeight);
+  } else {
+    fitToViewport();
+  }
+}
+
+// ---------- Mobil-Ansicht: Planet ohne Ring, frei zoombar und per Wischen verschiebbar ----------
+// Höhe der Zoom-Leiste unten; der Planet wird im Bereich darüber mittig gesetzt
+const CONTROLS_HEIGHT = 72;
+// Zoom, bei dem der ganze Planet sichtbar ist (= 100 %)
+const wholeZoom = ref(1);
+const zoomPercent = computed(() => Math.round(zoomFactor.value / wholeZoom.value * 100));
+// Großer Mars wurde für eine Feldwahl geöffnet (Hinweis oben)
+const placing = ref(false);
+let stopPinch: (() => void) | undefined;
+
+function fitMobile() {
+  wholeZoom.value = wholePlanetZoom(window.innerWidth, window.innerHeight);
+  // Beim Platzieren etwas näher, damit die Felder gleich antippbar sind
+  placing.value = isBoardPlacementActive();
+  zoomFactor.value = wholeZoom.value * (placing.value ? PLACEMENT_ZOOM_RATIO : 1);
+}
+
+// Planet mittig in den sichtbaren Bereich über der Zoom-Leiste schieben
+function centerPlanet() {
+  const element = backdrop.value;
+  const board = content.value?.querySelector('.board-cont');
+  if (element === undefined || board === null || board === undefined) {
+    return;
+  }
+  const rect = board.getBoundingClientRect();
+  element.scrollLeft += rect.left + PLANET_CENTER.x * zoomFactor.value - element.clientWidth / 2;
+  element.scrollTop += rect.top + PLANET_CENTER.y * zoomFactor.value - (element.clientHeight - CONTROLS_HEIGHT) / 2;
+}
+
+// Zoom auf `value` setzen; der Punkt (`x`, `y`) im Fenster bleibt an seiner Stelle
+function setZoom(value: number, x: number, y: number) {
+  const element = backdrop.value;
+  if (element === undefined) {
+    return;
+  }
+  const clamped = Math.min(wholeZoom.value * MAX_ZOOM_RATIO, Math.max(wholeZoom.value, value));
+  const ratio = clamped / zoomFactor.value;
+  const pointX = element.scrollLeft + x;
+  const pointY = element.scrollTop + y;
+  zoomFactor.value = clamped;
+  nextTick(() => {
+    element.scrollLeft = pointX * ratio - x;
+    element.scrollTop = pointY * ratio - y;
+  });
+}
+
+function zoomAtCenter(factor: number) {
+  setZoom(zoomFactor.value * factor, window.innerWidth / 2, (window.innerHeight - CONTROLS_HEIGHT) / 2);
+}
+
+async function fitWholePlanet() {
+  zoomFactor.value = wholeZoom.value;
+  await nextTick();
+  centerPlanet();
+}
+
+function startGestures() {
+  stopPinch?.();
+  stopPinch = backdrop.value === undefined ? undefined : attachPinchZoom(backdrop.value, {
+    zoomBy: (factor, x, y) => setZoom(zoomFactor.value * factor, x, y),
+    // Doppel-Tap: nah heran bzw. zurück zum ganzen Planeten
+    toggle: (x, y) => zoomFactor.value > wholeZoom.value * 1.05 ? fitWholePlanet() : setZoom(wholeZoom.value * 2, x, y),
+  });
 }
 
 // Brett mittig in den sichtbaren Bereich schieben (nur relevant, wenn es größer als das Fenster ist)
@@ -76,7 +155,8 @@ function centerBoard() {
 }
 
 function runAnimation(direction: 'open' | 'close'): Promise<void> {
-  if (backdrop.value === undefined || stage.value === undefined) {
+  // Mobil ohne Flug-Animation: der große Mars ist eine eigene Ansicht, kein vergrößertes Spalten-Brett
+  if (backdrop.value === undefined || stage.value === undefined || mobileLayout.value) {
     return Promise.resolve();
   }
   return animateBoardZoom({
@@ -92,11 +172,20 @@ async function show() {
   zoomFactor.value = 1;
   visible.value = true;
   await nextTick();
-  fitToViewport();
+  if (mobileLayout.value) {
+    fitMobile();
+  } else {
+    fitToViewport();
+  }
   emit('rendered');
   // Neuen zoom erst rendern, sonst misst die Animation das Brett noch in der alten Größe
   await nextTick();
-  centerBoard();
+  if (mobileLayout.value) {
+    centerPlanet();
+    startGestures();
+  } else {
+    centerBoard();
+  }
   props.origin?.classList.add('board-zoom-origin--hidden');
   await runAnimation('open');
 }
@@ -108,12 +197,18 @@ async function hide() {
     return;
   }
   props.origin?.classList.remove('board-zoom-origin--hidden');
+  stopPinch?.();
+  stopPinch = undefined;
   visible.value = false;
   emit('hidden');
 }
 
 // Klicks auf Bedienelemente im Brett (z. B. "Plättchen ein/aus") sollen das Modal nicht schließen
 function onBackdropClick(event: MouseEvent) {
+  // Mobil schließt nur ✕: Wischen und Zoomen auf dem Hintergrund sollen den Mars nicht zuklappen
+  if (mobileLayout.value) {
+    return;
+  }
   const target = event.target as HTMLElement | null;
   if (target !== null && target.closest('.hide-tile-button') !== null) {
     return;
@@ -145,7 +240,7 @@ watch(() => props.open, (open) => {
 
 onMounted(() => {
   window.addEventListener('keydown', closeOnEscape);
-  window.addEventListener('resize', fitToViewport);
+  window.addEventListener('resize', onResize);
   unregisterOverlay = registerOverlay(overlayKey, () => {
     if (props.open) {
       emit('close');
@@ -157,7 +252,8 @@ onMounted(() => {
 });
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', closeOnEscape);
-  window.removeEventListener('resize', fitToViewport);
+  window.removeEventListener('resize', onResize);
+  stopPinch?.();
   props.origin?.classList.remove('board-zoom-origin--hidden');
   unregisterOverlay?.();
 });
