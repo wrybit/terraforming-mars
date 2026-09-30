@@ -19,6 +19,8 @@
 @mb-players-icon-column: 44px;
 // Sheet auf Tablets mittig statt über die volle Breite
 @mb-sheet-max-width: 560px;
+// Knöpfe der Leiste oben im Mars-Bildschirm (Sprache, Info, Hilfe, Einstellungen)
+@mb-toolbar-button: 40px;
 // Dauer der Karten-Vergrößerung (vgl. DURATION_MS in MobileCardZoom.vue)
 @mb-card-zoom-duration: 260ms;
 // Fußbereich der Aufgabe beginnt rechts neben "Zurück" (12 px Rand + 76 px Knopf + 8 px Lücke)
@@ -144,6 +146,55 @@ html.tm-mobile {
     small {
       font-size: 14px;
       color: @mb-muted;
+    }
+  }
+
+  // ---------- Knöpfe der Desktop-Seitenleiste (Sidebar.vue) als Leiste oben im Mars-Bildschirm ----------
+  // Eigene Farbe, Sprache, Spieldetails, Hilfe, Einstellungen; Parameter und Sprunglinks stehen anderswo
+  .mb-toolbar.sidebar_cont {
+    order: 0;
+    position: static;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 0;
+    background: none;
+    z-index: auto;
+
+    .global_params,
+    > div:has(.party-name-indicator),
+    > a {
+      display: none;
+    }
+
+    .sidebar_item {
+      position: static;
+      box-sizing: border-box;
+      width: @mb-toolbar-button;
+      height: @mb-toolbar-button;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 8px;
+      background: rgba(40, 42, 54, 0.6);
+    }
+
+    .sidebar_icon {
+      width: 24px;
+      height: 24px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .language-icon-for-sidebar {
+      margin: 0;
     }
   }
 
@@ -329,6 +380,7 @@ html.tm-mobile {
       translate: none;
     }
 
+    > .mb-toolbar,
     > .mb-banner {
       order: 0;
     }
