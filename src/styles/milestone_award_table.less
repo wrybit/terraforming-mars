@@ -260,13 +260,11 @@ each(@players, {
   color: rgba(255, 255, 255, 0.75);
 }
 
+// Platz 1 dezent: goldene, fette Zahl ohne Fläche – hebt sich ab, ohne die Zeile zu dominieren
 .ma-table-cell--rank-1 .ma-table-value {
-  padding: 2px 6px 1px;
-  border-radius: 5px;
   font-size: 18px;
-  color: #1b1400;
-  background: @ma-table-gold;
-  box-shadow: 0 0 10px fade(@ma-table-gold, 45%);
+  font-weight: bold;
+  color: @ma-table-gold;
 }
 
 .ma-table-cell--rank-2 .ma-table-value {
