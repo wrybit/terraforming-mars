@@ -24,6 +24,7 @@
       </button>
     </div>
     <LogMessageInspector ref="messageInspector" :viewModel="viewModel"/>
+    <LogCardsZoom v-if="zoomedMessage !== undefined" :message="zoomedMessage" :players="viewModel.players" @close="zoomedMessage = undefined"/>
   </div>
 </template>
 
@@ -35,10 +36,11 @@ import {LogMessage} from '@/common/logs/LogMessage';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {SoundManager} from '@/client/utils/SoundManager';
 import {getPreferences} from '@/client/utils/PreferencesManager';
-import {needsModalPreview} from '@/client/components/logpanel/logMessageContent';
+import {logMessageItemCount, needsModalPreview} from '@/client/components/logpanel/logMessageContent';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
+import LogCardsZoom from '@/client/components/logpanel/LogCardsZoom.vue';
 import {fetchLogs} from '@/client/utils/fetchLogs';
 
 const BOTTOM_SCROLL_THRESHOLD = 24; // Roughly one line of log text.
@@ -70,6 +72,8 @@ type LogPanelModel = {
   // True while the panel should keep following the newest generation as it changes.
   // False once the player manually navigates to an earlier generation.
   following: boolean,
+  // Log-Zeile, deren Karten gerade im Karussell-Modal liegen (nur mit zoomCarousel)
+  zoomedMessage: LogMessage | undefined,
 };
 
 // Abstand der Hover-Vorschau zum rechten Rand des Logs
@@ -82,6 +86,11 @@ export default defineComponent({
       type: Object as () => ViewModel,
       required: true,
     },
+    // Mobil-Ansicht: Antippen öffnet die Karten der Zeile als Karussell im Modal, keine Hover-Vorschau
+    zoomCarousel: {
+      type: Boolean,
+      default: false,
+    },
   },
   data(): LogPanelModel {
     return {
@@ -89,6 +98,7 @@ export default defineComponent({
       selectedGeneration: -1,
       showScrollToBottomButton: false,
       following: true,
+      zoomedMessage: undefined,
     };
   },
   directives: {
@@ -98,6 +108,7 @@ export default defineComponent({
     LogMessageComponent,
     LogMessageInspector,
     LogGenerationList,
+    LogCardsZoom,
   },
   emits: ['spaceClicked'],
   methods: {
@@ -106,6 +117,12 @@ export default defineComponent({
       return window.matchMedia('(hover: hover)').matches;
     },
     messageClicked(message: LogMessage) {
+      if (this.zoomCarousel) {
+        if (logMessageItemCount(message) > 0) {
+          this.zoomedMessage = message;
+        }
+        return;
+      }
       // Viele Karten: immer per Klick als Modal über der rechten Spalte
       if (needsModalPreview(message)) {
         this.typedRefs.messageInspector.showModal(message);
@@ -115,7 +132,7 @@ export default defineComponent({
     },
     messageHovered(message: LogMessage, event: MouseEvent) {
       // Zeilen mit vielen Karten haben keine Hover-Vorschau (würde übers Fenster ragen), nur Klick
-      if (!this.canHover() || needsModalPreview(message)) {
+      if (this.zoomCarousel || !this.canHover() || needsModalPreview(message)) {
         return;
       }
       // Vorschau vertikal mittig im Log-Panel, knapp vor dessen rechtem Rand, in Fensterkoordinaten
