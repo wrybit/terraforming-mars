@@ -11,34 +11,37 @@
       <div class="players-table-corporation" :title="corporations">{{ corporations }}</div>
     </div>
 
-    <template v-if="visibility.goods">
-      <div class="players-table-divider"></div>
-      <PlayersTableGoods v-for="good in goods" :key="good.type" :good="good" :isProductionLeader="productionLeaders.includes(good.type)"/>
-    </template>
+    <!-- Reihenfolge der Abschnitte aus PlayersTable (Desktop: Waren, Tags, Wertung; mobil: Waren, Wertung, Tags) -->
+    <template v-for="section in sectionOrder" :key="section">
+      <template v-if="section === 'goods' && visibility.goods">
+        <div class="players-table-divider"></div>
+        <PlayersTableGoods v-for="good in goods" :key="good.type" :good="good" :isProductionLeader="productionLeaders.includes(good.type)"/>
+      </template>
 
-    <template v-if="visibility.tags">
-      <div class="players-table-divider"></div>
-      <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
-        <div v-if="groupIndex > 0"></div>
-        <div class="players-table-cell" v-for="tag in group" :key="tag" :data-test="'tag-' + tag">
-          <span :class="['players-table-counter', {'players-table-counter--zero': tagDetail(tag).count === 0}]">{{ tagDetail(tag).count || '·' }}</span>
-          <span v-if="tagDetail(tag).discount > 0" class="players-table-discount" :data-test="'discount-' + tag" :title="$t('Discount')">{{ tagDetail(tag).discount }}</span>
-          <PointsPerTag :points="tagDetail(tag)"/>
+      <template v-if="section === 'tags' && visibility.tags">
+        <div class="players-table-divider"></div>
+        <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
+          <div v-if="groupIndex > 0"></div>
+          <div class="players-table-cell" v-for="tag in group" :key="tag" :data-test="'tag-' + tag">
+            <span :class="['players-table-counter', {'players-table-counter--zero': tagDetail(tag).count === 0}]">{{ tagDetail(tag).count || '·' }}</span>
+            <span v-if="tagDetail(tag).discount > 0" class="players-table-discount" :data-test="'discount-' + tag" :title="$t('Discount')">{{ tagDetail(tag).discount }}</span>
+            <PointsPerTag :points="tagDetail(tag)"/>
+          </div>
+        </template>
+      </template>
+
+      <template v-if="section === 'score' && visibility.score">
+        <div class="players-table-divider"></div>
+        <div class="players-table-cell"><span class="players-table-counter" data-test="vp">{{ victoryPoints }}</span></div>
+        <div class="players-table-cell"><span class="players-table-counter" data-test="tr">{{ player.terraformRating }}</span></div>
+        <div class="players-table-cell">
+          <span class="players-table-counter" data-test="hand">{{ player.cardsInHandNbr ?? 0 }}</span>
+          <span v-if="tagDetails.all.discount > 0" class="players-table-discount" data-test="discount-all" :title="$t('Discount')">{{ tagDetails.all.discount }}</span>
+        </div>
+        <div class="players-table-cell">
+          <span :class="['players-table-counter', {'players-table-counter--zero': player.availableBlueCardActionCount === 0}]" data-test="actions">{{ player.availableBlueCardActionCount }}</span>
         </div>
       </template>
-    </template>
-
-    <template v-if="visibility.score">
-      <div class="players-table-divider"></div>
-      <div class="players-table-cell"><span class="players-table-counter" data-test="vp">{{ victoryPoints }}</span></div>
-      <div class="players-table-cell"><span class="players-table-counter" data-test="tr">{{ player.terraformRating }}</span></div>
-      <div class="players-table-cell">
-        <span class="players-table-counter" data-test="hand">{{ player.cardsInHandNbr ?? 0 }}</span>
-        <span v-if="tagDetails.all.discount > 0" class="players-table-discount" data-test="discount-all" :title="$t('Discount')">{{ tagDetails.all.discount }}</span>
-      </div>
-      <div class="players-table-cell">
-        <span :class="['players-table-counter', {'players-table-counter--zero': player.availableBlueCardActionCount === 0}]" data-test="actions">{{ player.availableBlueCardActionCount }}</span>
-      </div>
     </template>
 
     <div class="players-table-divider"></div>
@@ -60,7 +63,7 @@ import PlayersTableGoods from '@/client/components/overview/PlayersTableGoods.vu
 import PointsPerTag from '@/client/components/overview/PointsPerTag.vue';
 import {PlayerGood, playerGoods} from '@/client/components/overview/playerGoods';
 import {InterfaceTagsType, TagDetail, TagDetails, isVictoryPointCountHidden} from '@/client/components/overview/playerTagDetails';
-import {SectionVisibility, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
+import {DESKTOP_SECTION_ORDER, SectionVisibility, TableSection, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
 import {corporationNames} from '@/client/components/overview/playerCorporations';
 import {togglePlayerCards} from '@/client/components/overview/playerCardsToggle';
 import {playerSymbol} from '@/client/utils/playerSymbol';
@@ -97,6 +100,11 @@ export default defineComponent({
     visibility: {
       type: Object as () => SectionVisibility,
       required: true,
+    },
+    // Reihenfolge der Abschnitte (playersTableLayout.ts: sectionOrder)
+    sectionOrder: {
+      type: Array as () => ReadonlyArray<TableSection>,
+      default: () => DESKTOP_SECTION_ORDER,
     },
     tagColumns: {
       type: Array as () => TagColumnGroups,

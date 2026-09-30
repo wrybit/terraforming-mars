@@ -1,7 +1,7 @@
 <template>
   <div class="players-table" :style="{'--players-table-columns': template, '--players-table-cell-count': cellCount}">
     <!-- Spielerliste als Tabelle (nur im Zwei-Spalten-Layout sichtbar, siehe players_table.less) -->
-    <PlayersTableHeader :visibility="effectiveVisibility" :autoHidden="fitted.autoHidden" :tagColumns="tagColumns" @toggle="toggleSection"/>
+    <PlayersTableHeader :visibility="effectiveVisibility" :sectionOrder="sectionOrder" :autoHidden="fitted.autoHidden" :tagColumns="tagColumns" @toggle="toggleSection"/>
     <div class="players-table-rows">
       <PlayersTableRow v-for="row in rows" :key="row.player.color"
         :player="row.player"
@@ -10,6 +10,7 @@
         :actionLabel="row.actionLabel"
         :playerIndex="row.playerIndex"
         :visibility="effectiveVisibility"
+        :sectionOrder="sectionOrder"
         :tagColumns="tagColumns"
         :tagDetails="tagDetailsByColor[row.player.color]"
         :productionLeaders="productionLeadersByColor[row.player.color] ?? []"/>
@@ -28,7 +29,7 @@ import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/comp
 import {playerGoods} from '@/client/components/overview/playerGoods';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import {
-  GOODS_COUNT, SCORE_COUNT, PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
+  DESKTOP_SECTION_ORDER, GOODS_COUNT, MOBILE_SECTION_ORDER, SCORE_COUNT, PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
   FittedVisibility, columnTemplate, fitToWidth, loadPreferredSection, loadSectionVisibility, savePreferredSection, saveSectionVisibility,
 } from '@/client/components/overview/playersTableLayout';
 
@@ -116,6 +117,9 @@ export default defineComponent({
     },
     // Zellen je Zeile ohne Trenner (Name, Waren, Tags samt Gruppen-Lücken, Wertung, Karten);
     // die Mobil-Ansicht dreht die Tabelle damit um (mobile.less: Spieler als Spalten)
+    sectionOrder(): ReadonlyArray<TableSection> {
+      return mobileLayout.value ? MOBILE_SECTION_ORDER : DESKTOP_SECTION_ORDER;
+    },
     cellCount(): number {
       const visibility = this.effectiveVisibility;
       const tagCells = this.tagColumns.reduce((sum, group) => sum + group.length, 0) + Math.max(0, this.tagColumns.length - 1);
