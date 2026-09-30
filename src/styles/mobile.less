@@ -20,6 +20,11 @@
 @mb-top-height: 52px;
 @mb-nav-height: 68px;
 @mb-screen-width-max: 1400px;
+// Tablet quer (auch breite Fenster im Querformat): Mars neben den Balken, Spieler-Tabellen waagerecht wie am Desktop.
+// Grenze wie LANDSCAPE_MIN_WIDTH in mobileLayout.ts
+@mb-landscape: ~"(min-width: 900px) and (orientation: landscape)";
+// Alles übrige (Handy, Tablet hoch, schmale Fenster): Spieler-Tabellen gedreht, Spieler als Spalten
+@mb-portrait: ~"not all and (min-width: 900px) and (orientation: landscape)";
 // Spalten der umbrechenden Spieler-Tabelle: sechs Waren passen genau in eine Zeile
 // Symbol-Spalte der gedrehten Spieler-Tabelle
 @mb-players-icon-column: 44px;
@@ -27,6 +32,11 @@
 @mb-players-column-gap: 4px;
 // Kosten-Spalte der Meilenstein-Tabelle (M€-Münze neben dem Symbol)
 @mb-ma-cost-column: 24px;
+// Namensspalte der waagerechten Tabellen (Tablet quer), wie NAME_WIDTH in playersTableLayout.ts
+@mb-players-name-width: 196px;
+// Zeilenhöhen der Spielerliste (players_table.less), damit beide Abschnitte denselben Kopf zeigen
+@mb-players-row-height: 48px;
+@mb-players-own-row-height: 56px;
 // Sheet auf Tablets mittig statt über die volle Breite
 @mb-sheet-max-width: 560px;
 @mb-sheet-duration: 320ms;
@@ -623,70 +633,103 @@ html.tm-mobile {
     color: @mb-text;
   }
 
-  // Meilensteine & Auszeichnungen gedreht wie die Spieler-Tabelle: Symbole links, dann Kosten bzw. Besitzer,
-  // danach je Spieler eine Spalte (Zellen je Zeile: --ma-table-cell-count aus MilestoneAwardTable)
+  // Meilensteine & Auszeichnungen im Spieler-Bildschirm immer als Tabelle (milestone_award_table.less blendet sie unter 1400 px aus)
   .mb-ma .ma-table {
-    display: grid !important; // sonst nur im Zwei-Spalten-Layout sichtbar (milestone_award_table.less)
-    grid-template-rows: repeat(var(--ma-table-cell-count), auto);
-    grid-template-columns: @mb-players-icon-column auto;
-    grid-auto-columns: minmax(0, 1fr);
-    grid-auto-flow: column;
-    gap: 0 @mb-players-column-gap;
+    display: grid !important;
+  }
 
-    .ma-table-row {
-      display: contents;
+  // Tablet quer: Meilensteine & Auszeichnungen waagerecht, Spieler-Kopf (PlayerIdentity.vue) so breit und hoch
+  // wie in der Spielerliste – beide Abschnitte zeigen denselben Kopf
+  @media @mb-landscape {
+    .mb-ma .ma-table {
+      --ma-table-name-width: @mb-players-name-width;
     }
 
+    .mb-ma .ma-table-player {
+      height: auto;
+      min-height: @mb-players-row-height;
+    }
 
-    .ma-table-row > * {
-      min-height: 44px;
-      padding: 4px 2px;
-      box-sizing: border-box;
+    .mb-ma .ma-table-player--me {
+      min-height: @mb-players-own-row-height;
+    }
+
+    .mb-ma .ma-table-name {
+      align-self: stretch;
       display: flex;
       align-items: center;
-      justify-content: center;
-    }
-
-    // Nach der Zell-Regel, damit sie gewinnt: Überschriften und Trenner entfallen im gedrehten Raster
-    .ma-table-labels,
-    .ma-table-row > .ma-table-divider,
-    .ma-table-player::before {
-      display: none;
-    }
-
-    // Die leere Ecke oben links (Namensspalte von Kopf- und Statuszeile)
-    .ma-table-head > :first-child,
-    .ma-table-status > :first-child {
-      min-height: 0;
-      height: 100%;
-    }
-
-    // Zelle ist nur Hülle; Abstände und Schrift kommen aus dem Spieler-Kopf (PlayerIdentity.vue)
-    .ma-table-name {
-      align-items: stretch;
-      padding: 0;
-      border-radius: 10px 10px 0 0;
+      padding-left: 0;
       white-space: normal;
-
-      > .players-table-identity {
-        flex: 1;
-        min-width: 0;
-      }
-    }
-
-    .ma-table-player > :last-child {
-      border-radius: 0 0 10px 10px;
-    }
-
-    // Trennung Meilensteine | Auszeichnungen: Linie über der ersten Auszeichnung (Nähe statt Überschrift)
-    .ma-table-divider ~ .ma-table-divider + * {
-      border-top: 2px solid rgba(255, 255, 255, 0.3);
     }
   }
 
-  // Spieler-Tabelle: Farbbalken der aufgelösten Zeilen würde sonst am Tabellenrand stehen
-  .mb-screen--players .players-table-row::before {
-    display: none;
+  // Handy und Tablet hoch: Tabellen gedreht (Spieler als Spalten); Tablet quer behält die waagerechten Zeilen des Desktops
+  @media @mb-portrait {
+    // Meilensteine & Auszeichnungen gedreht wie die Spieler-Tabelle: Symbole links, dann Kosten bzw. Besitzer,
+    // danach je Spieler eine Spalte (Zellen je Zeile: --ma-table-cell-count aus MilestoneAwardTable)
+    .mb-ma .ma-table {
+      display: grid !important; // sonst nur im Zwei-Spalten-Layout sichtbar (milestone_award_table.less)
+      grid-template-rows: repeat(var(--ma-table-cell-count), auto);
+      grid-template-columns: @mb-players-icon-column auto;
+      grid-auto-columns: minmax(0, 1fr);
+      grid-auto-flow: column;
+      gap: 0 @mb-players-column-gap;
+
+      .ma-table-row {
+        display: contents;
+      }
+
+
+      .ma-table-row > * {
+        min-height: 44px;
+        padding: 4px 2px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      // Nach der Zell-Regel, damit sie gewinnt: Überschriften und Trenner entfallen im gedrehten Raster
+      .ma-table-labels,
+      .ma-table-row > .ma-table-divider,
+      .ma-table-player::before {
+        display: none;
+      }
+
+      // Die leere Ecke oben links (Namensspalte von Kopf- und Statuszeile)
+      .ma-table-head > :first-child,
+      .ma-table-status > :first-child {
+        min-height: 0;
+        height: 100%;
+      }
+
+      // Zelle ist nur Hülle; Abstände und Schrift kommen aus dem Spieler-Kopf (PlayerIdentity.vue)
+      .ma-table-name {
+        align-items: stretch;
+        padding: 0;
+        border-radius: 10px 10px 0 0;
+        white-space: normal;
+
+        > .players-table-identity {
+          flex: 1;
+          min-width: 0;
+        }
+      }
+
+      .ma-table-player > :last-child {
+        border-radius: 0 0 10px 10px;
+      }
+
+      // Trennung Meilensteine | Auszeichnungen: Linie über der ersten Auszeichnung (Nähe statt Überschrift)
+      .ma-table-divider ~ .ma-table-divider + * {
+        border-top: 2px solid rgba(255, 255, 255, 0.3);
+      }
+    }
+
+    // Spieler-Tabelle: Farbbalken der aufgelösten Zeilen würde sonst am Tabellenrand stehen
+    .mb-screen--players .players-table-row::before {
+      display: none;
+    }
   }
 
   // ---------- Globale Parameter als Balken ----------
@@ -830,28 +873,6 @@ html.tm-mobile {
     }
   }
 
-  // Spieler-Kopf (PlayerIdentity.vue) in Spieler- und Meilenstein-Tabelle gleich:
-  // Name, Status, Konzern untereinander und mittig
-  // Zweiter Selektor schlägt die allgemeine Zellregel der Spieler-Tabelle (.players-table-row > *),
-  // sonst säße der Name dort 4 px höher als in der Meilenstein-Tabelle
-  .mb-screen--players .players-table-identity,
-  .mb-screen--players .players-overview .players-table-row > .players-table-identity {
-    padding: 8px 4px;
-    border-radius: 10px 10px 0 0;
-    text-align: center;
-  }
-
-  .mb-screen--players .players-table-identity-line {
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .mb-screen--players .players-table-corporation {
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-
   .mb-screen--players .players-overview {
     display: block;
     width: auto;
@@ -861,157 +882,191 @@ html.tm-mobile {
     > .player-info {
       display: none !important; // players_overview.less setzt display mit !important
     }
+  }
 
-    // Achsen gedreht: Spieler als Spalten (Name oben), Werte untereinander, Symbole in der ersten Spalte.
-    // Kopf und Spielerzeilen lösen sich auf, ihre Zellen füllen das Raster spaltenweise
-    // (Zellen je Zeile: --players-table-cell-count aus PlayersTable)
-    .players-table {
-      display: grid !important;
-      grid-template-rows: repeat(var(--players-table-cell-count), auto);
-      grid-template-columns: @mb-players-icon-column;
-      grid-auto-columns: minmax(0, 1fr);
-      grid-auto-flow: column;
-      column-gap: @mb-players-column-gap;
-      max-width: 100%;
-    }
-
-    .players-table-rows,
-    .players-table-row {
-      display: contents;
-    }
-
-    .players-table-divider,
-    .players-table-first-player {
-      display: none;
-    }
-
-    .players-table-row > * {
-      min-width: 0;
-      min-height: 40px;
-      padding: 4px 2px;
-      box-sizing: border-box;
-    }
-
-    // Umschalter der Abschnitte oben in der Symbol-Spalte untereinander
-    .players-table-toggles {
-      flex-direction: column;
-      align-items: center;
-      padding-left: 0;
-    }
-
-    .players-table-cell {
-      justify-content: center;
-    }
-
-    .players-table-row--player > :last-child {
-      border-radius: 0 0 10px 10px;
-    }
-
-    // Trennung Waren | Wertung | Tags | Karten: Linie über der ersten Zelle jedes weiteren Abschnitts,
-    // in allen Spalten gleich (auch Symbol-Spalte), damit die Zeilen bündig bleiben – wie bei Meilensteinen
-    .players-table-divider ~ .players-table-divider + * {
-      border-top: 2px solid rgba(255, 255, 255, 0.3);
+  // Tablet quer: Spielerliste als waagerechte Tabelle wie im Zwei-Spalten-Layout (players_table.less), Spalten passend zur Breite
+  @media @mb-landscape {
+    .mb-screen--players .players-overview .players-table {
+      display: block;
     }
   }
 
-  // Spielerfarbe je Spalte (die Zeilen sind aufgelöst und tragen keinen Hintergrund mehr)
-  each(@players, {
-    @c: ~"player_@{value}";
-    .mb-screen--players .players-table-row--@{value} > * {
-      background: fade(@@c, 30%);
+  // Handy und Tablet hoch: Spieler-Tabelle gedreht
+  @media @mb-portrait {
+    // Spieler-Kopf (PlayerIdentity.vue) in Spieler- und Meilenstein-Tabelle gleich:
+    // Name, Status, Konzern untereinander und mittig
+    // Zweiter Selektor schlägt die allgemeine Zellregel der Spieler-Tabelle (.players-table-row > *),
+    // sonst säße der Name dort 4 px höher als in der Meilenstein-Tabelle
+    .mb-screen--players .players-table-identity,
+    .mb-screen--players .players-overview .players-table-row > .players-table-identity {
+      padding: 8px 4px;
+      border-radius: 10px 10px 0 0;
+      text-align: center;
     }
 
-    .mb-screen--players .players-table-row--@{value}.players-table-row--me > * {
-      background: fade(@@c, 55%);
+    .mb-screen--players .players-table-identity-line {
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
     }
 
-    // Meilensteine & Auszeichnungen (gedreht) in denselben Spielerfarben
-    .mb-ma .ma-table-player--@{value} > * {
-      background: fade(@@c, 28%);
+    .mb-screen--players .players-table-corporation {
+      white-space: normal;
+      overflow-wrap: anywhere;
     }
 
-    .mb-ma .ma-table-player--@{value}.ma-table-player--me > * {
-      background: fade(@@c, 50%);
-    }
-  });
+    .mb-screen--players .players-overview {
+      // Achsen gedreht: Spieler als Spalten (Name oben), Werte untereinander, Symbole in der ersten Spalte.
+      // Kopf und Spielerzeilen lösen sich auf, ihre Zellen füllen das Raster spaltenweise
+      // (Zellen je Zeile: --players-table-cell-count aus PlayersTable)
+      .players-table {
+        display: grid !important;
+        grid-template-rows: repeat(var(--players-table-cell-count), auto);
+        grid-template-columns: @mb-players-icon-column;
+        grid-auto-columns: minmax(0, 1fr);
+        grid-auto-flow: column;
+        column-gap: @mb-players-column-gap;
+        max-width: 100%;
+      }
 
-  // ---------- Viele Spieler: waagerecht scrollen ----------
-  // Ab drei Spielern scrollen die Tabellen waagerecht; die Symbol-Spalten bleiben vorne stehen (sticky),
-  // die Spieler gleiten darunter durch. Spalten so breit, dass genau --mb-players-visible Spieler neben die
-  // Symbole passen (Handy 2, Tablet hoch 3, quer 4 – wie cardColumns in mobileFit.ts): beim Einrasten bleibt
-  // so kein Rest einer Spalte neben den Symbolen stehen
-  .mb-screen--players-scroll {
-    --mb-players-visible: 2;
+      .players-table-rows,
+      .players-table-row {
+        display: contents;
+      }
 
-    @media (min-width: 560px) {
-      --mb-players-visible: 3;
-    }
-
-    @media (min-width: 900px) {
-      --mb-players-visible: 4;
-    }
-
-    .players-overview .players-table,
-    .mb-ma .ma-table {
-      overflow-x: auto;
-      overscroll-behavior-x: contain;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
-
-      &::-webkit-scrollbar {
+      .players-table-divider,
+      .players-table-first-player {
         display: none;
+      }
+
+      .players-table-row > * {
+        min-width: 0;
+        min-height: 40px;
+        padding: 4px 2px;
+        box-sizing: border-box;
+      }
+
+      // Umschalter der Abschnitte oben in der Symbol-Spalte untereinander
+      .players-table-toggles {
+        flex-direction: column;
+        align-items: center;
+        padding-left: 0;
+      }
+
+      .players-table-cell {
+        justify-content: center;
+      }
+
+      .players-table-row--player > :last-child {
+        border-radius: 0 0 10px 10px;
+      }
+
+      // Trennung Waren | Wertung | Tags | Karten: Linie über der ersten Zelle jedes weiteren Abschnitts,
+      // in allen Spalten gleich (auch Symbol-Spalte), damit die Zeilen bündig bleiben – wie bei Meilensteinen
+      .players-table-divider ~ .players-table-divider + * {
+        border-top: 2px solid rgba(255, 255, 255, 0.3);
       }
     }
 
-    // .players-overview: schlägt die Grundregel der gedrehten Spieler-Tabelle.
-    // Einrasten: nach dem Wischen beginnt die erste sichtbare Spieler-Spalte direkt hinter den Symbolen
-    .players-overview .players-table {
-      grid-auto-columns: calc((100% - @mb-players-icon-column) / var(--mb-players-visible) - @mb-players-column-gap);
-      scroll-padding-left: @mb-players-icon-column + @mb-players-column-gap;
-    }
+    // Spielerfarbe je Spalte (die Zeilen sind aufgelöst und tragen keinen Hintergrund mehr)
+    each(@players, {
+      @c: ~"player_@{value}";
+      .mb-screen--players .players-table-row--@{value} > * {
+        background: fade(@@c, 30%);
+      }
 
-    // Kosten-Spalte fest: "auto" fiele im scrollenden Raster auf null zusammen
-    .mb-ma .ma-table {
-      grid-template-columns: @mb-players-icon-column @mb-ma-cost-column;
-      grid-auto-columns: calc((100% - @mb-players-icon-column - @mb-ma-cost-column - @mb-players-column-gap) / var(--mb-players-visible) - @mb-players-column-gap);
-      scroll-padding-left: @mb-players-icon-column + @mb-ma-cost-column + 2 * @mb-players-column-gap;
-    }
+      .mb-screen--players .players-table-row--@{value}.players-table-row--me > * {
+        background: fade(@@c, 55%);
+      }
 
-    .players-table-row--player > .players-table-identity,
-    .mb-ma .ma-table-name {
-      scroll-snap-align: start;
-    }
+      // Meilensteine & Auszeichnungen (gedreht) in denselben Spielerfarben
+      .mb-ma .ma-table-player--@{value} > * {
+        background: fade(@@c, 28%);
+      }
 
-    // Symbol-Spalte der Spieler-Tabelle (Kopfzeile) bzw. Symbole und Kosten der Meilenstein-Tabelle.
-    // Negativer Rand: die Fläche deckt auch die Spaltenlücke rechts daneben ab
-    .players-overview .players-table-row.players-table-head > *,
-    .mb-ma .ma-table-row.ma-table-head > *,
-    .mb-ma .ma-table-row.ma-table-status > * {
-      position: sticky;
-      left: 0;
-      z-index: 2;
-      margin-right: -@mb-players-column-gap;
-      transition: background-color 0.2s ease, box-shadow 0.2s ease;
-    }
+      .mb-ma .ma-table-player--@{value}.ma-table-player--me > * {
+        background: fade(@@c, 50%);
+      }
+    });
 
-    .mb-ma .ma-table-row.ma-table-status > * {
-      left: @mb-players-icon-column + @mb-players-column-gap;
-    }
+    // ---------- Viele Spieler: waagerecht scrollen ----------
+    // Ab drei Spielern scrollen die Tabellen waagerecht; die Symbol-Spalten bleiben vorne stehen (sticky),
+    // die Spieler gleiten darunter durch. Spalten so breit, dass genau --mb-players-visible Spieler neben die
+    // Symbole passen (Handy 2, Tablet hoch 3, quer 4 – wie cardColumns in mobileFit.ts): beim Einrasten bleibt
+    // so kein Rest einer Spalte neben den Symbolen stehen
+    .mb-screen--players-scroll {
+      --mb-players-visible: 2;
 
-    // Erst wenn Spieler darunter liegen (waagerecht gescrollt, horizontalScroll.ts): dunkles Frosted Glass,
-    // damit Symbole und Spielerwerte nicht ineinanderlaufen
-    .mb-scrolled-x .players-table-row.players-table-head > *,
-    .mb-scrolled-x .ma-table-row.ma-table-head > *,
-    .mb-scrolled-x .ma-table-row.ma-table-status > * {
-      background-color: rgba(13, 15, 20, 0.82);
-      -webkit-backdrop-filter: blur(10px) saturate(1.2);
-      backdrop-filter: blur(10px) saturate(1.2);
-    }
+      @media (min-width: 560px) {
+        --mb-players-visible: 3;
+      }
 
-    // Kante zur Spielerfläche: nur an der äußersten Symbol-Spalte
-    .mb-scrolled-x .players-table-row.players-table-head > *,
-    .mb-scrolled-x .ma-table-row.ma-table-status > * {
-      box-shadow: 6px 0 10px -6px rgba(0, 0, 0, 0.7);
+      @media (min-width: 900px) {
+        --mb-players-visible: 4;
+      }
+
+      .players-overview .players-table,
+      .mb-ma .ma-table {
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
+
+      // .players-overview: schlägt die Grundregel der gedrehten Spieler-Tabelle.
+      // Einrasten: nach dem Wischen beginnt die erste sichtbare Spieler-Spalte direkt hinter den Symbolen
+      .players-overview .players-table {
+        grid-auto-columns: calc((100% - @mb-players-icon-column) / var(--mb-players-visible) - @mb-players-column-gap);
+        scroll-padding-left: @mb-players-icon-column + @mb-players-column-gap;
+      }
+
+      // Kosten-Spalte fest: "auto" fiele im scrollenden Raster auf null zusammen
+      .mb-ma .ma-table {
+        grid-template-columns: @mb-players-icon-column @mb-ma-cost-column;
+        grid-auto-columns: calc((100% - @mb-players-icon-column - @mb-ma-cost-column - @mb-players-column-gap) / var(--mb-players-visible) - @mb-players-column-gap);
+        scroll-padding-left: @mb-players-icon-column + @mb-ma-cost-column + 2 * @mb-players-column-gap;
+      }
+
+      .players-table-row--player > .players-table-identity,
+      .mb-ma .ma-table-name {
+        scroll-snap-align: start;
+      }
+
+      // Symbol-Spalte der Spieler-Tabelle (Kopfzeile) bzw. Symbole und Kosten der Meilenstein-Tabelle.
+      // Negativer Rand: die Fläche deckt auch die Spaltenlücke rechts daneben ab
+      .players-overview .players-table-row.players-table-head > *,
+      .mb-ma .ma-table-row.ma-table-head > *,
+      .mb-ma .ma-table-row.ma-table-status > * {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        margin-right: -@mb-players-column-gap;
+        transition: background-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .mb-ma .ma-table-row.ma-table-status > * {
+        left: @mb-players-icon-column + @mb-players-column-gap;
+      }
+
+      // Erst wenn Spieler darunter liegen (waagerecht gescrollt, horizontalScroll.ts): dunkles Frosted Glass,
+      // damit Symbole und Spielerwerte nicht ineinanderlaufen
+      .mb-scrolled-x .players-table-row.players-table-head > *,
+      .mb-scrolled-x .ma-table-row.ma-table-head > *,
+      .mb-scrolled-x .ma-table-row.ma-table-status > * {
+        background-color: rgba(13, 15, 20, 0.82);
+        -webkit-backdrop-filter: blur(10px) saturate(1.2);
+        backdrop-filter: blur(10px) saturate(1.2);
+      }
+
+      // Kante zur Spielerfläche: nur an der äußersten Symbol-Spalte
+      .mb-scrolled-x .players-table-row.players-table-head > *,
+      .mb-scrolled-x .ma-table-row.ma-table-status > * {
+        box-shadow: 6px 0 10px -6px rgba(0, 0, 0, 0.7);
+      }
     }
   }
 
@@ -2355,7 +2410,7 @@ html.tm-mobile {
   }
 
   // Tablet quer: Mars links, Balken, Meilensteine & Co. rechts daneben statt darunter
-  @media (min-width: 900px) and (orientation: landscape) {
+  @media @mb-landscape {
     .mb-screen--mars {
       display: grid; // ohne !important, sonst wirkte das Ausblenden per v-show (Inline-Stil) nicht mehr
       grid-template-columns: auto minmax(0, 1fr);
@@ -2438,6 +2493,12 @@ html.tm-mobile #game-end {
     overflow: hidden;
   }
 
+  // Überschrift der Brett-Box: der Desktop zieht sie um den Überhang des Bretts nach links (game_end_columns.less),
+  // hier fehlt dieser Innenabstand – sonst wird der Anfang abgeschnitten
+  .game_end_block--board h2 {
+    margin-left: 0;
+  }
+
   // Kopf wie im Mockup: Sieger groß, Navigation darunter als zwei gleich breite Knöpfe
   .game-end-hero {
     display: flex;
@@ -2465,9 +2526,18 @@ html.tm-mobile #game-end {
     }
   }
 
-  // Breite Tabelle nur gedreht zeigen (mobileDocument.ts)
-  .mb-transposed-source {
-    display: none;
+  // Breite Tabelle auf Handy und Tablet hoch nur gedreht zeigen (mobileDocument.ts);
+  // Tablet quer zeigt das Original mit Spielern als Zeilen wie am Desktop
+  @media @mb-portrait {
+    .mb-transposed-source {
+      display: none;
+    }
+  }
+
+  @media @mb-landscape {
+    .game_end_table.mb-transposed {
+      display: none;
+    }
   }
 
   // Gedrehte Tabelle: Zeilen = Wertungen, Spalten = Spieler; drei achsmittige Bahnen

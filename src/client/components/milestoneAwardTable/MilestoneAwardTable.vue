@@ -115,7 +115,8 @@ export default defineComponent({
     },
     // Name | Trenner | Meilensteine | Trenner | Auszeichnungen
     columnTemplate(): string {
-      return `104px 12px repeat(${this.milestones.length}, minmax(0, 1fr)) 16px repeat(${this.awards.length}, minmax(0, 1fr))`;
+      // Namensspalte per CSS überschreibbar (mobile.less: Tablet quer so breit wie in der Spielerliste)
+      return `var(--ma-table-name-width, 104px) 12px repeat(${this.milestones.length}, minmax(0, 1fr)) 16px repeat(${this.awards.length}, minmax(0, 1fr))`;
     },
     claimedCount(): number {
       return this.milestones.filter((milestone) => milestone.color !== undefined).length;

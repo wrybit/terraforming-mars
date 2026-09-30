@@ -1,5 +1,6 @@
 import {ref} from 'vue';
 import {startMobileDocument} from '@/client/utils/mobileDocument';
+import {LANDSCAPE_MIN_WIDTH} from '@/client/utils/mobileFit';
 
 /*
  * Umschalter zwischen Desktop- und Mobil-Ansicht der Spieleransicht.
@@ -21,6 +22,8 @@ const TOUCH_QUERY = '(pointer: coarse)';
 // Unterhalb dieser Breite gibt es kein Zwei-Spalten-Layout (@player-home-columns-min-width, player_home_columns.less)
 export const DESKTOP_MIN_WIDTH = 1400;
 const NARROW_QUERY = `(max-width: ${DESKTOP_MIN_WIDTH - 1}px)`;
+// Gleiche Bedingung wie @mb-landscape in mobile.less
+const LANDSCAPE_QUERY = `(min-width: ${LANDSCAPE_MIN_WIDTH}px) and (orientation: landscape)`;
 
 function isSetting(value: unknown): value is MobileLayoutSetting {
   return MOBILE_LAYOUT_SETTINGS.includes(value as MobileLayoutSetting);
@@ -60,6 +63,9 @@ let setting: MobileLayoutSetting = 'auto';
 /* Aktueller Zustand: true, solange die Mobil-Ansicht gilt. Reagiert auf Wechsel der Eingabeart (z. B. Maus am Tablet). */
 export const mobileLayout = ref(false);
 
+/* True im Querformat ab LANDSCAPE_MIN_WIDTH (Tablet quer): Spieler-Tabellen bleiben dann waagerecht wie am Desktop. */
+export const mobileLandscape = ref(false);
+
 const DEVICE_VIEWPORT = 'width=device-width, initial-scale=1, viewport-fit=cover';
 // Viewport-Angabe aus index.html (Desktop-Layout mit fester Breite), wiederhergestellt beim Verlassen der Mobil-Ansicht
 let desktopViewport: string | undefined;
@@ -84,6 +90,10 @@ function update(): void {
   const mobile = resolveMobileLayout(setting, mediaQuery(TOUCH_QUERY)?.matches ?? false, mediaQuery(NARROW_QUERY)?.matches ?? false);
   if (mobile !== mobileLayout.value) {
     mobileLayout.value = mobile;
+  }
+  const landscape = mediaQuery(LANDSCAPE_QUERY)?.matches ?? false;
+  if (landscape !== mobileLandscape.value) {
+    mobileLandscape.value = landscape;
   }
   if (mobile && stopMobileDocument === undefined) {
     stopMobileDocument = startMobileDocument(document.body);
@@ -122,6 +132,7 @@ export function initMobileLayout(): void {
   setting = fromUrl ?? readSetting();
   mediaQuery(TOUCH_QUERY)?.addEventListener('change', update);
   mediaQuery(NARROW_QUERY)?.addEventListener('change', update);
+  mediaQuery(LANDSCAPE_QUERY)?.addEventListener('change', update);
   // Manche Browser melden die Eingabeart erst nach dem Laden bzw. ohne change-Ereignis (Drehen, Andocken der Tastatur)
   window.addEventListener('resize', update);
   update();
