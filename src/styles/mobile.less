@@ -1207,6 +1207,18 @@ html.tm-mobile {
   .mb-card-zoom-step--hidden {
     visibility: hidden;
   }
+  // Sehr schmale Handys: Pfeile passen nicht mehr neben Spielen/Schließen und rutschen in eine zweite Zeile darunter
+  @media (max-width: 359px) {
+    .mb-card-zoom-actions {
+      flex-wrap: wrap;
+      row-gap: 10px;
+    }
+    .mb-card-zoom-main {
+      order: -1;
+      flex-basis: 100%;
+      justify-content: center;
+    }
+  }
   .mb-card-zoom-close {
     height: 44px;
     padding: 0 12px;
