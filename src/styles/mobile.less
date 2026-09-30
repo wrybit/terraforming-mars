@@ -1160,6 +1160,7 @@ html.tm-mobile {
     }
   }
 
+  // Pfeile außen, Spielen/Schließen in der Mitte; feste Breite, damit die Pfeile mit und ohne "Spiele Karte" am selben Platz stehen
   .mb-card-zoom-actions {
     position: relative;
     display: flex;
@@ -1170,9 +1171,9 @@ html.tm-mobile {
     opacity: 0;
     transition: opacity @mb-card-zoom-duration ease;
 
-  // Pfeile außen, Spielen/Schließen in der Mitte; feste Breite, damit die Pfeile mit und ohne "Spiele Karte" am selben Platz stehen
     .btn {
       height: 44px;
+      min-width: 0; // Mindestbreite der Desktop-Knöpfe weg, sonst passen Pfeile und beide Knöpfe nicht in eine Handy-Zeile
       margin: 0 !important;
       padding: 0 12px;
       font-size: 16px;
@@ -1182,17 +1183,8 @@ html.tm-mobile {
   .mb-card-zoom--open .mb-card-zoom-actions {
     opacity: 1;
   }
-      min-width: 0; // Mindestbreite der Desktop-Knöpfe weg, sonst passen Pfeile und beide Knöpfe nicht in eine Handy-Zeile
 
   // Schließen gut sichtbar: weiße Fläche, schwarze Schrift
-  .mb-card-zoom-close {
-    height: 44px;
-    padding: 0 12px;
-    border: 0;
-    border-radius: 10px;
-    background: #fff;
-    color: #111;
-    font: inherit;
   .mb-card-zoom-main {
     display: flex;
     gap: 6px;
@@ -1215,6 +1207,14 @@ html.tm-mobile {
   .mb-card-zoom-step--hidden {
     visibility: hidden;
   }
+  .mb-card-zoom-close {
+    height: 44px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 10px;
+    background: #fff;
+    color: #111;
+    font: inherit;
     font-weight: bold;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
