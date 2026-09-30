@@ -52,8 +52,8 @@ export function parameterBars(levels: Levels): Array<ParameterBar> {
       key: 'temperature', label: 'Temperature', icon: 'assets/global-parameters/temperature.png',
       min: c.MIN_TEMPERATURE, max: c.MAX_TEMPERATURE, step: 2, value: levels.temperature, text: levels.temperature + ' °C',
       bonuses: [
-        {at: c.TEMPERATURE_BONUS_FOR_HEAT_1, kind: 'heat', title: 'Heat production'},
-        {at: c.TEMPERATURE_BONUS_FOR_HEAT_2, kind: 'heat', title: 'Heat production'},
+        {at: c.TEMPERATURE_BONUS_FOR_HEAT_1, kind: 'heat', title: 'Heat'},
+        {at: c.TEMPERATURE_BONUS_FOR_HEAT_2, kind: 'heat', title: 'Heat'},
         {at: c.TEMPERATURE_FOR_OCEAN_BONUS, kind: 'ocean', title: 'Ocean'},
       ],
     },
@@ -73,8 +73,8 @@ export function parameterBars(levels: Levels): Array<ParameterBar> {
       key: 'venus', label: 'Venus', icon: 'assets/global-parameters/venus.png',
       min: c.MIN_VENUS_SCALE, max: c.MAX_VENUS_SCALE, step: 2, value: levels.venus, text: levels.venus + ' %',
       bonuses: [
-        {at: c.VENUS_LEVEL_FOR_CARD_BONUS, kind: 'card', title: 'Card'},
-        {at: c.VENUS_LEVEL_FOR_TR_BONUS, kind: 'tr', title: 'Terraform rating'},
+        {at: c.VENUS_LEVEL_FOR_CARD_BONUS, kind: 'card', title: 'Cards'},
+        {at: c.VENUS_LEVEL_FOR_TR_BONUS, kind: 'tr', title: 'Terraform Rating'},
       ],
     });
   }

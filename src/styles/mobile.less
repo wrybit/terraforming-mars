@@ -31,8 +31,8 @@
 @mb-toolbar-button: 40px;
 // Dauer der Karten-Vergrößerung (vgl. DURATION_MS in MobileCardZoom.vue)
 @mb-card-zoom-duration: 260ms;
-// Fußbereich der Aufgabe beginnt rechts neben "Zurück" (12 px Rand + 76 px Knopf + 8 px Lücke)
-@mb-footer-left: 96px;
+// Fußbereich der Aufgabe beginnt rechts neben dem Zurück-Pfeil (12 px Rand + 56 px Knopf + 8 px Lücke)
+@mb-footer-left: 76px;
 // Währungssymbol im Eingabefeld beim Bezahlen
 @mb-payment-icon: 28px;
 // Höhe der Spielende-Meldung über dem Planeten (Mitte des Bretts im Mars-Bildschirm)
@@ -315,11 +315,6 @@ html.tm-mobile {
     text-overflow: ellipsis;
   }
 
-  .mb-banner-sub {
-    color: @mb-muted;
-    font-size: 14px;
-    white-space: nowrap;
-  }
 
   .mb-banner--waiting {
     background: rgba(58, 28, 27, 0.95);
@@ -1392,10 +1387,6 @@ html.tm-mobile {
     font-weight: bold;
   }
 
-  .mb-sheet-sub {
-    color: @mb-muted;
-    font-size: 14px;
-  }
 
   // Innerhalb einer Gruppe enger als zwischen den Gruppen (Gesetz der Nähe)
   .mb-sheet-group {
@@ -1406,6 +1397,20 @@ html.tm-mobile {
     .mb-section-label {
       margin: 0;
     }
+  }
+
+  .mb-waiting-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .mb-waiting-player {
+    padding: 8px 14px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
   }
 
   .mb-sheet-list {
@@ -1483,6 +1488,7 @@ html.tm-mobile {
   }
 
   .mb-tile-text {
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -1497,6 +1503,21 @@ html.tm-mobile {
   .mb-tile-sub {
     font-size: 12px;
     color: @mb-muted;
+  }
+
+  // Zähler rechts in der Kachel wie am Desktop-Tab
+  .mb-tile-count {
+    flex-shrink: 0;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 6px;
+    box-sizing: border-box;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.12);
+    font-family: Prototype, sans-serif;
+    font-size: 15px;
+    line-height: 26px;
+    text-align: center;
   }
 
   .mb-tile--success {
@@ -1875,7 +1896,11 @@ html.tm-mobile {
   }
 
   .mb-taskbar-back {
-    width: 76px;
+    width: @mb-footer-left - 20px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 48px;
     flex-shrink: 0;
     border-radius: 10px;
@@ -1883,6 +1908,7 @@ html.tm-mobile {
     background: transparent;
     color: @mb-text;
     font: inherit;
+    font-size: 14px;
     font-weight: bold;
   }
 
@@ -1941,18 +1967,6 @@ html.tm-mobile {
     height: 44px;
   }
 
-  .mb-zoom-hint {
-    position: fixed;
-    top: calc(12px + env(safe-area-inset-top));
-    left: 12px;
-    right: 68px;
-    z-index: 1101; // über dem großen Mars (board-zoom-backdrop: 1100)
-    padding: 10px 14px;
-    border-radius: 12px;
-    background: @mb-green;
-    color: #fff;
-    font-weight: bold;
-  }
 
   .mb-zoom-controls {
     position: fixed;

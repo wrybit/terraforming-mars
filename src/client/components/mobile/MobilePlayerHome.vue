@@ -6,7 +6,7 @@
          (Abbrechen + Bestätigen/Bezahlen der Eingabe). -->
 
     <button type="button" class="mb-top" @click="go('players')" :aria-label="$t('Players')">
-      <span class="mb-top-gen">{{ $t('Gen') }} <b>{{ game.generation }}</b></span>
+      <span class="mb-top-gen">{{ $t('GEN') }} <b>{{ game.generation }}</b></span>
       <span class="mb-top-globals">
         <span class="mb-top-global"><img src="assets/global-parameters/oxygen.png" alt="">{{ game.oxygenLevel }} %</span>
         <span class="mb-top-global"><img src="assets/global-parameters/temperature.png" alt="">{{ game.temperature }} °C</span>
@@ -46,7 +46,6 @@
         <div :class="['mb-banner', {'mb-banner--waiting': !acting}]">
           <span class="mb-banner-dot"></span>
           <span class="mb-banner-title">{{ bannerTitle }}</span>
-          <span class="mb-banner-sub">{{ bannerSub }}</span>
           <PlayerTimer v-if="game.gameOptions.showTimers" class="mb-banner-timer" :timer="thisPlayer.timer" :live="game.phase !== 'end'"/>
         </div>
         <GameBoardView
@@ -59,8 +58,8 @@
         />
         <!-- Antippen des Mars öffnet ebenfalls die Großansicht (GameBoardView) -->
         <button type="button" class="mb-mars-zoom" @click="zoomMars">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>
-          {{ $t('Zoom') }}
+          <!-- Nur Symbol: keine eigenen Texte neben den vorhandenen Übersetzungen -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>
         </button>
         <MobileParameterBars
           :temperature="game.temperature"
@@ -96,7 +95,6 @@
           </div>
         </div>
         <HandCardsPanel :playerView="playerView"/>
-        <p v-if="!hasHandPanelContent" class="mb-empty">{{ $t('No cards in hand') }}</p>
       </section>
 
       <section v-show="screen === 'players'" class="mb-screen mb-screen--players" @click.capture="zoomCard">
@@ -106,7 +104,7 @@
             <button v-for="segment in playerSegments" :key="segment.key" type="button" role="tab"
               :aria-selected="playersSegment === segment.key"
               :class="['mb-segment', {'mb-segment--active': playersSegment === segment.key}]"
-              @click="playersSegment = segment.key">{{ $t(segment.label) }}</button>
+              @click="playersSegment = segment.key">{{ segment.labels.map((label) => $t(label)).join(' & ') }}</button>
           </div>
           <PlayersOverview v-show="playersSegment === 'players'" :playerView="playerView" v-trim-whitespace/>
           <!-- Hülle trägt v-show: die Tabelle selbst ist in der Mobil-Ansicht per !important sichtbar geschaltet -->
@@ -167,13 +165,16 @@
 
     <!-- Aufgabenleiste: auf dem Zug-Bildschirm und während einer Feldwahl; Bestätigen/Bezahlen sitzen rechts daneben (mobile.less) -->
     <div v-if="screen === 'turn' || placing" class="mb-taskbar">
-      <button type="button" class="mb-taskbar-back" @click="leaveTask">{{ $t(screen !== 'turn' ? 'Actions' : isActionMenu ? 'Cancel' : 'Back') }}</button>
+      <!-- Zurück als Symbol: keine eigenen Texte neben den vorhandenen Übersetzungen -->
+      <button type="button" class="mb-taskbar-back" :aria-label="$t('Close')" @click="leaveTask"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
       <template v-if="screen !== 'turn'">
-        <span class="mb-taskbar-hint">{{ $t('Tap a highlighted space') }}</span>
-        <button type="button" class="btn btn-submit btn-rounded mb-taskbar-zoom" @click="zoomMars">{{ $t('Zoom') }}</button>
+        <span class="mb-taskbar-hint">{{ task !== undefined ? $t(task.label) : '' }}</span>
+        <button type="button" class="btn btn-submit btn-rounded mb-taskbar-zoom" @click="zoomMars">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>
+        </button>
       </template>
     </div>
-    <nav v-else class="mb-nav" :aria-label="$t('Navigation')">
+    <nav v-else class="mb-nav">
       <button v-for="item in navItems" :key="item.screen" type="button"
         :class="['mb-nav-item', 'mb-nav-item--' + item.screen, {'mb-nav-item--active': screen === item.screen}]"
         @click="navigate(item.screen)">
@@ -189,7 +190,7 @@
     <MobileCardZoom v-if="zoomedCard !== undefined" :card="zoomedCard" :origin="zoomedCardOrigin" :playable="zoomedCardPlayTile !== undefined"
       @close="zoomedCard = undefined" @play="playZoomedCard"/>
     <Transition name="mb-sheet" @before-enter="turnButtonLifted = true" @after-leave="turnButtonLifted = false">
-      <MobileTurnSheet v-if="sheetOpen && menu !== undefined" :menu="menu" :title="bannerTitle" :sub="bannerSub"
+      <MobileTurnSheet v-if="sheetOpen && (menu !== undefined || !acting)" :menu="menu" :waitingPlayers="waitingPlayers" :title="bannerTitle"
         :action-number="actionNumber" :actions-per-turn="actionsPerTurn" @close="sheetOpen = false" @select="startTask"/>
     </Transition>
   </div>
@@ -203,7 +204,6 @@ import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Phase} from '@/common/Phase';
 import {SpaceId} from '@/common/Types';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
-import {translateTextWithParams} from '@/client/directives/i18n';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import GameOverNotice from '@/client/components/gameend/GameOverNotice.vue';
 import Colony from '@/client/components/colonies/Colony.vue';
@@ -290,8 +290,8 @@ function cardClassName(name: string): string {
 
 // Umschalter im Spieler-Bildschirm wie im Mockup
 const PLAYER_SEGMENTS = [
-  {key: 'players', label: 'Players'},
-  {key: 'ma', label: 'Milestones & awards'},
+  {key: 'players', labels: ['Players']},
+  {key: 'ma', labels: ['Milestones', 'Awards']},
 ] as const;
 type PlayersSegment = typeof PLAYER_SEGMENTS[number]['key'];
 
@@ -379,7 +379,7 @@ export default defineComponent({
     },
     nextStepLabel(): string {
       const next = this.setupSteps[this.setupStep + 1];
-      return next === undefined ? '' : translateTextWithParams('Next: ${0}', [next.title]);
+      return next === undefined ? '' : next.title + ' →';
     },
     playerSegments(): typeof PLAYER_SEGMENTS {
       return PLAYER_SEGMENTS;
@@ -406,11 +406,14 @@ export default defineComponent({
     isSetupPhase(): boolean {
       return this.thisPlayer.tableau.length === 0;
     },
+    waitingPlayers(): Array<PublicPlayerModel> {
+      return playersToWaitFor(this.playerView);
+    },
     isActionMenu(): boolean {
       return isActionMenuInput(this.playerView.waitingFor);
     },
     menu(): TurnMenu | undefined {
-      return this.isActionMenu ? buildTurnMenu(this.playerView.waitingFor as OrOptionsModel, this.game.temperature) : undefined;
+      return this.isActionMenu ? buildTurnMenu(this.playerView.waitingFor as OrOptionsModel) : undefined;
     },
     acting(): boolean {
       return this.playerView.waitingFor !== undefined && !this.playerView.waitingFor.optional;
@@ -422,19 +425,17 @@ export default defineComponent({
     hasHandPanelContent(): boolean {
       return this.cardsInHandCount > 0 || ownActiveCards(this.playerView).length > 0;
     },
+    // Nur vorhandene Übersetzungen: Titel der Eingabe vom Server bzw. "… ist gerade am Zug"
     bannerTitle(): string {
       if (this.game.phase === Phase.END) {
-        return this.$t('The game is over!');
+        return this.$t('This game is over!');
       }
-      if (this.acting) {
-        return this.$t(this.isSetupPhase ? 'Initial selection' : 'Your turn');
+      const waitingFor = this.playerView.waitingFor;
+      if (this.acting && waitingFor !== undefined) {
+        return this.$t(waitingFor.title);
       }
       const names = playersToWaitFor(this.playerView).map((player) => player.name);
-      return names.length === 0 ? this.$t('Waiting for other players') : translateTextWithParams('Waiting for ${0}', [names.join(', ')]);
-    },
-    bannerSub(): string {
-      return this.actionNumber === undefined ? '' :
-        translateTextWithParams('Action ${0} of ${1}', [String(this.actionNumber), String(this.actionsPerTurn)]);
+      return names.length === 0 ? this.$t('Waiting for other players') : names.join(', ') + ' ' + this.$t('is taking their turn');
     },
     // Das Modell kennt nur die genommenen Aktionen, nicht die erlaubten; Sonderfälle mit mehr Aktionen gibt es kaum
     actionsPerTurn(): number {
@@ -468,9 +469,10 @@ export default defineComponent({
       }
       window.scrollTo({top: 0});
     },
-    // Fußleiste: "Zug" öffnet das Aktionsmenü als Sheet, alle anderen wechseln den Bildschirm
+    // Fußleiste: "Zug" öffnet das Aktionsmenü als Sheet (nicht am Zug: Sheet mit dem, der dran ist),
+    // alle anderen wechseln den Bildschirm
     navigate(screen: MobileScreen) {
-      if (screen === 'turn' && this.isActionMenu) {
+      if (screen === 'turn' && (this.isActionMenu || !this.acting)) {
         this.openSheet();
       } else {
         this.go(screen);
@@ -503,7 +505,10 @@ export default defineComponent({
       }
     },
     taskSubText(tile: TurnMenuTile): string {
-      return tile.sub === undefined ? '' : translateTextWithParams(tile.sub.text, tile.sub.params);
+      if (tile.detail !== undefined) {
+        return this.$t(tile.detail);
+      }
+      return tile.count === undefined ? '' : String(tile.count);
     },
     refreshInputTitle() {
       const section = this.$refs.turnSection as HTMLElement | undefined;

@@ -4,27 +4,24 @@
     <!-- Kachel im Zug-Menü wie im Mockup: Symbol, Kurzlabel, darunter was die Aktion bietet -->
     <span v-if="!compact" :class="['mb-tile-icon', 'mb-tile-icon--' + tile.glyphTone]"><MobileGlyph :name="tile.glyph"/></span>
     <span class="mb-tile-text">
-      <span class="mb-tile-label">{{ label ?? $t(tile.label) }}</span>
-      <span v-if="tile.sub !== undefined && !compact" class="mb-tile-sub">{{ subText }}</span>
+      <span class="mb-tile-label">{{ $t(tile.label) }}</span>
+      <span v-if="tile.detail !== undefined && !compact" class="mb-tile-sub">{{ $t(tile.detail) }}</span>
     </span>
+    <!-- Zähler wie am Desktop-Tab (wählbare Karten, Projekte …) -->
+    <span v-if="tile.count !== undefined && !compact" class="mb-tile-count">{{ tile.count }}</span>
   </button>
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue';
 import {TurnMenuTile} from '@/client/components/mobile/turnMenu';
-import {translateTextWithParams} from '@/client/directives/i18n';
 import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
 
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   tile: TurnMenuTile;
-  // Eigene Beschriftung (Zug-Ende: "Skip 2nd action" / "Pass" statt der Desktop-Kurzlabels)
-  label?: string;
-  // Nur Beschriftung, ohne Unterzeile (Zug-Ende)
+  // Nur Beschriftung, ohne Unterzeile und Zähler (Zug-Ende)
   compact?: boolean;
   disabled?: boolean;
 }>(), {
-  label: undefined,
   compact: false,
   disabled: false,
 });
@@ -32,6 +29,4 @@ const props = withDefaults(defineProps<{
 defineEmits<{
   (event: 'select', index: number): void;
 }>();
-
-const subText = computed(() => props.tile.sub === undefined ? '' : translateTextWithParams(props.tile.sub.text, props.tile.sub.params));
 </script>

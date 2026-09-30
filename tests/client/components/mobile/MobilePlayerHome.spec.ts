@@ -37,11 +37,10 @@ describe('MobilePlayerHome', () => {
     expect(wrapper.classes()).to.include('mb-home--log');
   });
 
-  it('shows the task bar instead of the navigation on the turn screen', async () => {
+  it('opens the sheet with the waiting players when it is not the own turn', async () => {
     const wrapper = mountHome();
     await wrapper.find('.mb-nav-item--turn').trigger('click');
-    expect(wrapper.find('.mb-nav').exists()).to.be.false;
-    await wrapper.find('.mb-taskbar-back').trigger('click');
-    expect(wrapper.classes()).to.include('mb-home--mars');
+    expect(wrapper.classes()).to.not.include('mb-home--turn');
+    expect((wrapper.vm as unknown as {sheetOpen: boolean}).sheetOpen).to.be.true;
   });
 });
