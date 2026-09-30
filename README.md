@@ -7,80 +7,74 @@
 ### What this fork changes in the UI
 
 - **Two columns** from a window width of 1400 px: game actions on the left; Mars, milestones, awards and log on the right. Mars stays visible while scrolling. A drag handle adjusts the column widths.
+- **Mobile view** on touch devices and below 1400 px: one task at a time with a bottom navigation and a turn drawer that slides up. Mars without the ring, global parameters as bars. Phones in landscape show a hint to rotate the device.
+- **Create game** with the settings as compact cards and the players in their own column. Only options that apply are shown (e.g. expansion options only for active expansions).
+- **Game created** page with one link per player in their colour, copy and play buttons, and the game settings next to them.
 - **Player list as a table:** current stock large, production next to it, steel and titanium value as a badge. Tags and scores follow as smaller counters.
-- **Initial selection** with corporation, preludes and card purchase as side-by-side columns you can compare. A summary bar shows starting M€, purchase cost and what remains. The board can be collapsed.
+- **Initial selection** with corporation, preludes and card purchase as side-by-side columns you can compare. A summary bar shows starting M€, purchase cost and what remains.
 - **Hand cards** can be sorted by drag and drop. The order also applies in the build and sell dialogs. Active action cards get their own block above the hand.
 - **Placing tiles:** a button enlarges Mars. After placing, it shrinks back with an animation.
-- **Actions as tabs** with consistent buttons. Hints show e.g. the temperature before and after, or the number of oceans already placed.
+- **Actions as tabs** with consistent buttons. Hints show e.g. the temperature before and after, or the number of oceans already placed. Attacks on players show tiles in the target player's colour.
+- **Spectator view** in the same layout as the player view.
 - **Game end** as a notice floating over Mars, followed by an automatic redirect to the results page.
 
 ## Screenshots
 
-Screenshots show the German UI at 1920 px width unless stated otherwise.
+English UI. Desktop at 1920 px width, mobile on a 390 px phone.
 
-**Initial selection with preludes:** corporation, preludes and card purchase as columns, summary bar at the bottom.
-
-![Initial selection with corporation, prelude and card purchase columns and a summary bar with the start button](docs/screenshots/startauswahl.jpg)
-
-**Game view:** player table, actions as tabs, hand cards with active action cards above. On the right: Mars, milestones, awards and log.
-
-![Game view in the middle of a game](docs/screenshots/spielansicht.jpg)
-
-**Hand cards tab:** active action cards in their own block above the hand, with live resource counters (here 4 animals on Birds, 7 microbes on Tardigrades).
-
-![Hand cards tab with active action cards and their resource counters above the hand](docs/screenshots/tab-handkarten.jpg)
-
-**A normal turn:** only the regular tabs are shown – hand cards on the left, the action tabs on the right. Special tabs (milestones, greenery, temperature) appear only when they are possible.
-
-**Actions tab:** opens by default when it's your turn. It lists the action cards you can use right now; the button at the bottom runs the selected action.
-
-![Actions tab with the player's action cards](docs/screenshots/tab-aktionen.jpg)
-
-**Build tab:** your playable hand cards. The selected card is marked, and the payment row at the bottom lets you mix steel, titanium and M€ before playing it.
-
-![Build tab with playable hand cards and payment](docs/screenshots/tab-bauen.jpg)
-
-**Standard tab:** the standard projects (power plant, asteroid, ocean, greenery, city) as cards with their cost; the M€ you pay is shown next to the confirm button.
-
-![Standard projects tab](docs/screenshots/tab-standard.jpg)
-
-**Sell tab:** pick hand cards to sell for 1 M€ each; the button counts how many are selected.
-
-![Sell tab with hand cards to sell for 1 M€ each](docs/screenshots/tab-verkaufen.jpg)
-
-**Placing a tile:** the button names the tile and what happens next.
-
-![Tile placement tab with a "place city" button](docs/screenshots/plaettchen-platzieren.jpg)
-
-**Placing a greenery:** tab and box in green.
-
-![Greenery placement tab in green](docs/screenshots/gruenflaeche.jpg)
-
-**Placing an ocean:** the hint shows how many oceans are already on Mars.
-
-![Ocean placement with the hint "4 of 9 oceans already on Mars"](docs/screenshots/ozean.jpg)
-
-**Enlarged Mars:** one click enlarges Mars. A chosen space is confirmed before the tile is placed.
-
-![Enlarged Mars with a confirmation prompt at the chosen space](docs/screenshots/mars-gross.jpg)
-
-**A player's played cards:** clicking their row opens them as an overlay over the right column.
-
-![Overlay with the opponent's played cards](docs/screenshots/karten-overlay.jpg)
-
-**Log:** hovering a card name shows the card next to the log.
-
-![Card preview when hovering a card name in the log](docs/screenshots/log-hover.jpg)
-
-**3000 px wide:** the player table additionally shows all tags.
-
-![Game view at 3000 px width](docs/screenshots/breit-3000.jpg)
-
-**Game end:** the notice floats over Mars, then the results page opens automatically.
-
-![Notice "The game is over!" over Mars](docs/screenshots/spielende.jpg)
-
-![Results page with victory points, final board and point history](docs/screenshots/ergebnis.jpg)
+<table>
+<tr><th>View</th><th>Desktop</th><th>Mobile</th></tr>
+<tr>
+<td><b>Create game</b><br>Settings as compact cards, players in their own column on the right. On phones the players come first and the create button sticks to the bottom.</td>
+<td><img src="docs/screenshots/create-desktop.webp" width="560" alt="Create game on desktop"></td>
+<td><img src="docs/screenshots/create-phone.webp" width="180" alt="Create game on a phone"></td>
+</tr>
+<tr>
+<td><b>Game created</b><br>One link per player in their colour with copy and play buttons, game settings next to them.</td>
+<td><img src="docs/screenshots/game-home-desktop.webp" width="560" alt="Game created on desktop"></td>
+<td><img src="docs/screenshots/game-home-phone.webp" width="180" alt="Game created on a phone"></td>
+</tr>
+<tr>
+<td><b>Initial selection</b><br>Corporation, preludes and card purchase side by side, with a summary bar and the start button.</td>
+<td><img src="docs/screenshots/setup-selected-desktop.webp" width="560" alt="Initial selection on desktop"></td>
+<td><img src="docs/screenshots/setup-selected-phone.webp" width="180" alt="Initial selection on a phone"></td>
+</tr>
+<tr>
+<td><b>Mars</b><br>Desktop: two columns with Mars on the right. Phone: Mars without the ring; temperature, oxygen and oceans as bars below.</td>
+<td><img src="docs/screenshots/mars-desktop.webp" width="560" alt="Mars on desktop"></td>
+<td><img src="docs/screenshots/mars-phone.webp" width="180" alt="Mars on a phone"></td>
+</tr>
+<tr>
+<td><b>Hand</b><br>Active action cards above the hand. Cards can be sorted by drag and drop.</td>
+<td><img src="docs/screenshots/hand-desktop.webp" width="560" alt="Hand on desktop"></td>
+<td><img src="docs/screenshots/hand-phone.webp" width="180" alt="Hand on a phone"></td>
+</tr>
+<tr>
+<td><b>Players</b><br>Player table with stock and production. On phones in its own tab.</td>
+<td><img src="docs/screenshots/players-2-desktop.webp" width="560" alt="Players on desktop"></td>
+<td><img src="docs/screenshots/players-2-phone.webp" width="180" alt="Players on a phone"></td>
+</tr>
+<tr>
+<td><b>Playing a card</b><br>Card chosen, payment with M€, steel and titanium. On phones the cards are a carousel and the payment sits in the footer.</td>
+<td><img src="docs/screenshots/build-1-desktop.webp" width="560" alt="Playing a card on desktop"></td>
+<td><img src="docs/screenshots/build-1-phone.webp" width="180" alt="Playing a card on a phone"></td>
+</tr>
+<tr>
+<td><b>Placing a tile</b><br>Mars enlarged, a chosen space is confirmed before placing.</td>
+<td><img src="docs/screenshots/place-zoom-desktop.webp" width="560" alt="Placing a tile on desktop"></td>
+<td><img src="docs/screenshots/place-zoom-phone.webp" width="180" alt="Placing a tile on a phone"></td>
+</tr>
+<tr>
+<td><b>Log</b><br>Cards named in the log open in a large view; on phones as a carousel to swipe through.</td>
+<td><img src="docs/screenshots/log-cards-desktop.webp" width="560" alt="Log on desktop"></td>
+<td><img src="docs/screenshots/log-cards-phone.webp" width="180" alt="Log on a phone"></td>
+</tr>
+<tr>
+<td><b>Results</b><br>Victory points, final board and point history.</td>
+<td><img src="docs/screenshots/results-multi-desktop.webp" width="560" alt="Results on desktop"></td>
+<td><img src="docs/screenshots/results-multi-phone.webp" width="180" alt="Results on a phone"></td>
+</tr>
+</table>
 
 ---
 
