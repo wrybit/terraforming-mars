@@ -1,6 +1,6 @@
 <template>
-  <!-- Outline für inaktive, gefüllte Form für aktive Einträge; Farbe kommt über currentColor (mobile.less) -->
   <svg class="mb-nav-icon" viewBox="0 0 24 24" :stroke-width="strokeWidth" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <!-- Outline für inaktive, gefüllte Form für aktive Einträge; Farbe kommt über currentColor (mobile.less) -->
     <g v-for="(layer, index) in glyph.layers" :key="index">
       <!-- Gefüllt: vordere Ebenen bekommen einen Spalt, damit sich die Formen nicht zu einer Fläche verbinden -->
       <g v-if="filled && index > 0" class="mb-nav-icon-gap">

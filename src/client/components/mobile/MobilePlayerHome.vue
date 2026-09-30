@@ -177,11 +177,9 @@
       <button v-for="item in navItems" :key="item.screen" type="button"
         :class="['mb-nav-item', 'mb-nav-item--' + item.screen, {'mb-nav-item--active': screen === item.screen}]"
         @click="navigate(item.screen)">
-        <!-- Zug-Button: lila, solange man dran ist (Badge zeigt Aktion 1/2 bzw. 2/2); grau ohne Badge, wenn andere am Zug sind -->
-        <span v-if="item.screen === 'turn'" :class="['mb-turn-button', {'mb-turn-button--idle': !acting}]">
-          <MobileNavIcon :name="item.icon" :stroke-width="2"/>
-          <span v-if="actionNumber !== undefined" class="mb-turn-count">{{ actionNumber }}/{{ actionsPerTurn }}</span>
-        </span>
+        <!-- Während das Zug-Sheet offen ist (inkl. Ein-/Ausfahren), fährt sein eigener Button mit; der hier bleibt unsichtbar -->
+        <MobileTurnButton v-if="item.screen === 'turn'" :class="{'mb-turn-button--lifted': turnButtonLifted}"
+          :acting="acting" :action-number="actionNumber" :actions-per-turn="actionsPerTurn"/>
         <MobileNavIcon v-else :name="item.icon" :filled="screen === item.screen"/>
         <span v-if="item.screen === 'hand' && cardsInHandCount > 0" class="mb-nav-badge">{{ cardsInHandCount }}</span>
         <span class="mb-nav-label">{{ $t(item.label) }}</span>
@@ -190,8 +188,10 @@
 
     <MobileCardZoom v-if="zoomedCard !== undefined" :card="zoomedCard" :origin="zoomedCardOrigin" :playable="zoomedCardPlayTile !== undefined"
       @close="zoomedCard = undefined" @play="playZoomedCard"/>
-    <MobileTurnSheet v-if="sheetOpen && menu !== undefined" :menu="menu" :title="bannerTitle" :sub="bannerSub"
-      @close="sheetOpen = false" @select="startTask"/>
+    <Transition name="mb-sheet" @before-enter="turnButtonLifted = true" @after-leave="turnButtonLifted = false">
+      <MobileTurnSheet v-if="sheetOpen && menu !== undefined" :menu="menu" :title="bannerTitle" :sub="bannerSub"
+        :action-number="actionNumber" :actions-per-turn="actionsPerTurn" @close="sheetOpen = false" @select="startTask"/>
+    </Transition>
   </div>
 </template>
 
@@ -219,6 +219,7 @@ import MobileParameterBars from '@/client/components/mobile/MobileParameterBars.
 import MobileTurnSheet from '@/client/components/mobile/MobileTurnSheet.vue';
 import MobileCardZoom from '@/client/components/mobile/MobileCardZoom.vue';
 import MobileNavIcon from '@/client/components/mobile/MobileNavIcon.vue';
+import MobileTurnButton from '@/client/components/mobile/MobileTurnButton.vue';
 import {CardModel} from '@/common/models/CardModel';
 import PlayerTimer from '@/client/components/overview/PlayerTimer.vue';
 import Sidebar from '@/client/components/Sidebar.vue';
@@ -251,6 +252,8 @@ type DataModel = {
   screen: MobileScreen;
   placing: boolean;
   sheetOpen: boolean;
+  // Zug-Button fährt mit dem Sheet: bleibt bis zum Ende des Schließens aus der Fußleiste gehoben
+  turnButtonLifted: boolean;
   // Im Sheet gewählte Aktion; ihr Label und ihre Unterzeile bilden den Aufgaben-Kopf
   task: TurnMenuTile | undefined;
   // Titel einer Eingabe außerhalb des Aktionsmenüs (aus dem Eingabe-Tab gelesen)
@@ -319,6 +322,7 @@ export default defineComponent({
       screen: acting && !menu ? 'turn' : rememberedScreen,
       placing: false,
       sheetOpen: menu,
+      turnButtonLifted: menu,
       task: undefined,
       inputTitle: undefined,
       playersSegment: 'players',
@@ -345,6 +349,7 @@ export default defineComponent({
     MobileTurnSheet,
     MobileCardZoom,
     MobileNavIcon,
+    MobileTurnButton,
     PlayerTimer,
     MilestoneAwardTable,
     Sidebar,
