@@ -1966,12 +1966,23 @@ html.tm-mobile {
   }
 
   .board-zoom-content {
+    // Ausschnitt wie auf dem Startscreen (Maße aus MARS_CROP, BoardZoomModal): Rest des Bretts abschneiden.
+    // Ohne den Desktop-Innenabstand (board_zoom_modal.less), sonst sitzt der Ausschnitt seitlich versetzt
+    overflow: hidden;
+    padding: 0;
+
     .global-numbers,
     .hide-tile-button-container {
       display: none;
     }
 
+    > .board-cont {
+      margin: calc(-1 * var(--mb-crop-top)) 0 0 calc(-1 * var(--mb-crop-left));
+    }
+
     .board-without-venus {
+      // Bezugsrahmen der Kolonie-Felder (board-outer-spaces), sonst hängen sie am Fenster statt am Planeten
+      position: relative;
       background-image: url(./assets/board/mars-planet.png);
     }
   }

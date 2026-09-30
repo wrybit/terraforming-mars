@@ -6,7 +6,7 @@
       <!-- Die Bühne trägt nur die Flug-Animation; zoom sitzt eine Ebene tiefer, sonst würde er die
            Verschiebung der Animation mitskalieren -->
       <div class="board-zoom-stage" ref="stage">
-        <div class="board-zoom-content" ref="content" :style="{zoom: zoomFactor}">
+        <div class="board-zoom-content" ref="content" :style="contentStyle">
           <slot></slot>
         </div>
       </div>
@@ -24,7 +24,7 @@ import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordin
 import {animateBoardZoom} from '@/client/components/board/boardZoomAnimation';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {mobileLayout} from '@/client/utils/mobileLayout';
-import {DEFAULT_ZOOM_RATIO, MAX_ZOOM_RATIO, PLANET_CENTER, steppedZoomRatio, wholePlanetZoom} from '@/client/components/mobile/mobileBoardZoom';
+import {DEFAULT_ZOOM_RATIO, MARS_CROP, MAX_ZOOM_RATIO, PLANET_CENTER, steppedZoomRatio, wholePlanetZoom} from '@/client/components/mobile/mobileBoardZoom';
 import {attachPinchZoom} from '@/client/components/board/boardPinchZoom';
 import MobileZoomControls from '@/client/components/mobile/MobileZoomControls.vue';
 
@@ -84,7 +84,14 @@ const CONTROLS_HEIGHT = 72;
 // Zoom, bei dem der ganze Planet sichtbar ist (= 100 %)
 const wholeZoom = ref(1);
 const zoomPercent = computed(() => Math.round(zoomFactor.value / wholeZoom.value * 100));
-
+// Mobil: nur der Ausschnitt des Startscreens (Planet samt Kolonie-Feldern), der Ring drumherum fällt weg (mobile.less)
+const contentStyle = computed(() => mobileLayout.value ? {
+  'zoom': zoomFactor.value,
+  'width': MARS_CROP.width + 'px',
+  'height': MARS_CROP.height + 'px',
+  '--mb-crop-left': MARS_CROP.left + 'px',
+  '--mb-crop-top': MARS_CROP.top + 'px',
+} : {zoom: zoomFactor.value});
 let stopPinch: (() => void) | undefined;
 
 function fitMobile() {
