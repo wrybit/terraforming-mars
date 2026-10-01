@@ -2,7 +2,7 @@
   <div>
     <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
     <!-- Spieler als Kacheln (PlayerOptionTile.vue) mit Bestand und Produktion der betroffenen Ressource, vorher und nachher -->
-    <div class="player-options" role="radiogroup">
+    <div class="player-options choice-block" :style="choiceBlockStyle((playerinput.players || []).length)" role="radiogroup">
       <PlayerOptionTile v-for="player in (playerinput.players || [])" :key="player"
         :color="player"
         :player="findPlayer(player)"
@@ -20,6 +20,7 @@
 <script lang="ts">
 
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
+import {choiceBlockStyle} from '@/client/components/choiceBlock';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {SelectPlayerModel} from '@/common/models/PlayerInputModel';
@@ -76,6 +77,7 @@ export default defineComponent({
     },
   },
   methods: {
+    choiceBlockStyle,
     findPlayer(color: ColorWithNeutral): PublicPlayerModel | undefined {
       return this.playerView.players.find((otherPlayer) => otherPlayer.color === color);
     },
