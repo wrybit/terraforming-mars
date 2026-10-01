@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {resolveMobileLayout} from '@/client/utils/mobileLayout';
-import {boardMaxHeight, cardColumns, fitScale} from '@/client/utils/mobileFit';
+import {boardMaxHeight, cardColumns, choiceGridColumns, fitScale} from '@/client/utils/mobileFit';
 import {transposedCopy} from '@/client/utils/transposeTable';
 
 describe('mobileLayout', () => {
@@ -18,6 +18,13 @@ describe('mobileFit', () => {
     expect(cardColumns(374)).to.eq(2);
     expect(cardColumns(788)).to.eq(3);
     expect(cardColumns(1334)).to.eq(4);
+  });
+
+  it('arranges choice grids as square as the width allows', () => {
+    expect(choiceGridColumns(374, 5)).to.eq(2);
+    expect(choiceGridColumns(788, 5)).to.eq(3);
+    expect(choiceGridColumns(1334, 5)).to.eq(3);
+    expect(choiceGridColumns(1334, 4)).to.eq(2);
   });
 
   it('scales items to fit the columns, never enlarging them', () => {
