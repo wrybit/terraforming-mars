@@ -1,66 +1,73 @@
 <template>
-  <tr>
-
-  <!-- single item in GamesOverview -->
-  <td><span :class="statusClass"></span></td>
-  <td><a :href="'game?id='+id" class="game-id">{{id}}</a></td>
-  <template v-if="game !== undefined">
-    <td v-for="player in game.players" :key="player.color">
-      <span class="player-name" :class="'player_bg_color_'+ player.color">
-        <a calassc target="blank" :href="'player?id=' + player.id">{{player.name}}</a>
-      </span>
+  <!-- Eine Partie der Admin-Übersicht: je Spielername eine feste Spalte, Sieger mit Pokal -->
+  <tr class="games-overview-row" :class="{'games-overview-row--imported': summary.source === 'imported'}">
+    <td class="games-overview-status">
+      <span :class="summary.isFinished ? 'status-finished' : 'status-running'" :title="summary.isFinished ? 'Finished' : 'Running'"></span>
     </td>
-    <td><a target="blank" :href="'spectator?id=' + game.spectatorId" v-i18n class="player-name spectator">Spectator</a></td>
-  </template>
+    <td class="games-overview-game">
+      <a v-if="summary.externalUrl !== undefined" :href="summary.externalUrl" target="_blank" class="games-overview-source">imported</a>
+      <span v-else class="games-overview-id">{{ summary.id }}</span>
+      <span class="games-overview-date">{{ dateText }}</span>
+    </td>
+    <td class="games-overview-generation">{{ summary.generation }}</td>
+    <td>
+      <a v-if="summary.spectatorUrl !== undefined" :href="summary.spectatorUrl" target="_blank" class="games-overview-chip games-overview-chip--spectator">Watch</a>
+    </td>
+    <td v-for="name in columns" :key="name">
+      <component :is="playerByName(name)?.url === undefined ? 'span' : 'a'"
+        v-if="playerByName(name) !== undefined"
+        :href="playerByName(name)?.url"
+        target="_blank"
+        class="games-overview-chip"
+        :class="[playerColorClass(playerByName(name)!.color), {'games-overview-chip--winner': playerByName(name)!.isWinner}]"
+        :title="playerByName(name)!.isWinner ? 'Winner' : ''">
+        <span v-if="playerByName(name)!.isWinner" class="games-overview-trophy">🏆</span>{{ playerByName(name)!.victoryPoints }}
+      </component>
+    </td>
+    <td class="games-overview-actions">
+      <DeleteGameButton :isDeleting="isDeleting" @delete="$emit('delete', summary.id)"/>
+    </td>
   </tr>
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {SimpleGameModel} from '@/common/models/SimpleGameModel';
-import {Phase} from '@/common/Phase';
-
-type Status = 'loading' | 'error' | 'done';
+import {AdminGameSummary, AdminPlayerSummary} from '@/common/admin/AdminGameSummary';
+import {Color} from '@/common/Color';
+import {playerColorClass} from '@/common/utils/utils';
+import DeleteGameButton from '@/client/components/admin/DeleteGameButton.vue';
 
 export default defineComponent({
   name: 'GameOverview',
-  data() {
-    return {
-    };
+  components: {
+    DeleteGameButton,
   },
+  emits: ['delete'],
   props: {
-    status: {
-      type: String as () => Status,
+    summary: {
+      type: Object as () => AdminGameSummary,
       required: true,
     },
-    game: {
-      type: Object as () => SimpleGameModel | undefined,
+    columns: {
+      type: Array as () => Array<string>,
       required: true,
     },
-    id: {
-      type: String,
-      required: true,
+    isDeleting: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
-    statusClass(): string {
-      switch (this.status) {
-      case 'loading':
-        return 'status-loading';
-      case 'error':
-        return 'status-error';
-      case 'done':
-        if (this.isRunning) {
-          return 'status-running';
-        } else {
-          return 'status-finished';
-        }
-      default:
-        return '';
-      }
+    dateText(): string {
+      return new Date(this.summary.createdTimeMs).toLocaleString(undefined, {dateStyle: 'short', timeStyle: 'short'});
     },
-    isRunning(): boolean {
-      return this.game?.phase !== Phase.END;
+  },
+  methods: {
+    playerByName(name: string): AdminPlayerSummary | undefined {
+      return this.summary.players.find((player) => player.name === name);
+    },
+    playerColorClass(color: Color): string {
+      return playerColorClass(color, 'bg_transparent');
     },
   },
 });

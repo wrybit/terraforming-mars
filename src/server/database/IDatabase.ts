@@ -94,6 +94,13 @@ export interface IDatabase {
     deleteGameNbrSaves(gameId: GameId, rollbackCount: number): Promise<void>;
 
     /**
+     * Removes a game completely: every save, its participants, results and completion mark.
+     *
+     * Used by the admin overview to clean up test games.
+     */
+    deleteGame(gameId: GameId): Promise<void>;
+
+    /**
      * A maintenance task on a single game to mark it as complete.
      *
      * It will:

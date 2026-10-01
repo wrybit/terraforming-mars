@@ -277,6 +277,19 @@ export class GameLoader implements IGameLoader {
     return Database.getInstance().saveGame(game);
   }
 
+  public async deleteGame(gameId: GameId): Promise<void> {
+    const d = await this.cache.getGames();
+    d.games.delete(gameId);
+    // Teilnehmer-Links zuerst einsammeln, da Löschen während des Durchlaufs die Map verändern würde
+    const participantIds = Array.from(d.participantIds.entries())
+      .filter(([, participantGameId]) => participantGameId === gameId)
+      .map(([participantId]) => participantId);
+    participantIds.forEach((participantId) => d.participantIds.delete(participantId));
+    // Ein noch offener Spielzug darf das gelöschte Spiel nicht wieder in die Datenbank schreiben
+    this.purgedGames.push(gameId);
+    await Database.getInstance().deleteGame(gameId);
+  }
+
   public async maintenance() {
     const database = Database.getInstance();
     const purgedGames = await database.purgeUnfinishedGames();

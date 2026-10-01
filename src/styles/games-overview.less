@@ -1,20 +1,227 @@
+// Admin-Übersicht aller Spiele: Kopf-Karte mit Import, darunter eine Tabelle mit einer festen Spalte je Spielername.
+// Gleiche Milchglas-Karten wie "Spiel erstellt" (game_home.less), damit die Admin-Seite zur App passt.
+
+@games-overview-gap-card: 16px;
+@games-overview-gap-cell: 4px; // innerhalb einer Zeile enger als zwischen den Karten (Gesetz der Nähe)
+@games-overview-radius: 10px;
+@games-overview-line: rgba(255, 255, 255, 0.14);
+@games-overview-dim: rgba(238, 238, 238, 0.62);
+@games-overview-winner: #f4c20d;
+
+// Keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt
+.main-container:has(#games-overview) {
+  margin-left: 0;
+}
+
 .games-overview-container {
+  display: flex;
+  flex-direction: column;
+  gap: @games-overview-gap-card;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  color: #eee;
+  font-size: 14px;
+
+  h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  a {
+    color: inherit;
+  }
+
   .status-running {
-    display: inline-block; /* Element must be block or inline-block for transform to work well */
+    display: inline-block; // Spiegeln per transform braucht ein Block-Element
     transform: scaleX(-1);
   }
 
   .status-running::after {
     content: '🏎️';
   }
-  .status-finished:after {
-    content: '🏁';
 
+  .status-finished::after {
+    content: '🏁';
   }
-  .status-error:after {
-    content: '⚠️';
+}
+
+.games-overview-card {
+  .frosted-surface();
+  position: relative;
+  padding: 14px 16px;
+  border: 1px solid @games-overview-line;
+  border-radius: @games-overview-radius;
+  background: @or-tabs-view-panel-background;
+}
+
+.games-overview-container h2 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+// Siegerstatistik: je Spieler eine Kachel, Zahl groß, Partien klein darunter
+.games-overview-wins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.games-overview-win {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 96px;
+  padding: 8px 12px;
+  border: 1px solid @games-overview-line;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.games-overview-win-number {
+  color: @games-overview-winner;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1.1;
+}
+
+.games-overview-win-games {
+  color: @games-overview-dim;
+  font-size: 12px;
+}
+
+.games-overview-head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.games-overview-import {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  .btn {
+    height: 36px;
   }
-  .spectator {
-    background-color: gray;
+}
+
+.games-overview-import-input {
+  flex: 1 1 320px;
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid @games-overview-line;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #eee;
+  font-size: 14px;
+}
+
+.games-overview-import-message {
+  flex-basis: 100%;
+  margin: 0;
+  color: @games-overview-dim;
+}
+
+.games-overview-note {
+  margin: 0;
+  color: @games-overview-dim;
+}
+
+.games-overview-import-message--error,
+.games-overview-note--error {
+  color: #ff8a80;
+}
+
+// Breite Tabellen (viele Namen) scrollen innerhalb der Karte, nicht die ganze Seite
+.games-overview-scroll {
+  overflow-x: auto;
+}
+
+.games-overview-table {
+  border-collapse: separate;
+  border-spacing: @games-overview-gap-cell;
+  white-space: nowrap;
+
+  th {
+    padding: 0 6px 4px;
+    color: @games-overview-dim;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  td {
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+  }
+}
+
+// Trennlinie zwischen Partien: Abstand zwischen Zeilen größer wirken lassen als innerhalb einer Zeile
+.games-overview-row td {
+  padding-top: 6px;
+  border-top: 1px solid @games-overview-line;
+}
+
+.games-overview-game {
+  text-align: left !important;
+
+  .games-overview-id,
+  .games-overview-source {
+    display: block;
+    font-family: monospace;
+  }
+
+  .games-overview-source {
+    color: @games-overview-winner;
+    font-family: inherit;
+  }
+}
+
+.games-overview-date {
+  color: @games-overview-dim;
+  font-size: 12px;
+}
+
+.games-overview-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 64px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.games-overview-chip--spectator {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.games-overview-chip--winner {
+  box-shadow: inset 0 0 0 2px @games-overview-winner;
+  font-weight: bold;
+}
+
+.games-overview-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  min-width: 120px;
+}
+
+// Handy: Standard-Seitenrand statt des breiten Desktop-Rands
+@media (max-width: 600px) {
+  .games-overview-container {
+    padding: 16px;
   }
 }

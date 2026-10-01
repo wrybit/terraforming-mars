@@ -10,6 +10,9 @@ import {ApiCreateGame} from '../routes/ApiCreateGame';
 import {ApiGame} from '../routes/ApiGame';
 import {ApiGameHistory} from '../routes/ApiGameHistory';
 import {ApiGameLogs} from '../routes/ApiGameLogs';
+import {ApiAdminDeleteGame} from '../routes/ApiAdminDeleteGame';
+import {ApiAdminGames} from '../routes/ApiAdminGames';
+import {ApiAdminImportGame} from '../routes/ApiAdminImportGame';
 import {ApiGames} from '../routes/ApiGames';
 import {ApiHeapSnapshot} from '../routes/ApiHeapSnapshot';
 import {ApiIPs} from '../routes/ApiIPs';
@@ -90,6 +93,9 @@ const handlers: Map<string, IHandler> = new Map(
   [
     ['', ServeApp.INSTANCE],
     [paths.ADMIN, ServeApp.INSTANCE],
+    [paths.API_ADMIN_DELETE_GAME, ApiAdminDeleteGame.INSTANCE],
+    [paths.API_ADMIN_GAMES, ApiAdminGames.INSTANCE],
+    [paths.API_ADMIN_IMPORT_GAME, ApiAdminImportGame.INSTANCE],
     [paths.API_CLONEABLEGAME, ApiCloneableGame.INSTANCE],
     [paths.API_CREATEGAME, ApiCreateGame.INSTANCE],
     [paths.API_GAME, ApiGame.INSTANCE],

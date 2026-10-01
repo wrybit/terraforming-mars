@@ -461,6 +461,13 @@ export class PostgreSQL implements IDatabase {
     await this.client.query('DELETE FROM games WHERE ctid IN (SELECT ctid FROM games WHERE game_id = $1 ORDER BY save_id DESC LIMIT $2)', [gameId, rollbackCount]);
   }
 
+  async deleteGame(gameId: GameId): Promise<void> {
+    // Alle Tabellen, die eine game_id kennen – sonst bleiben Teilnehmer-Links auf ein Spiel stehen, das es nicht mehr gibt
+    for (const table of ['games', 'game', 'participants', 'game_results', 'completed_game']) {
+      await this.client.query(`DELETE FROM ${table} WHERE game_id = $1`, [gameId]);
+    }
+  }
+
   public async storeParticipants(entry: GameIdLedger): Promise<void> {
     await this.client.query('INSERT INTO participants (game_id, participants) VALUES($1, $2) ON CONFLICT (game_id) DO NOTHING', [entry.gameId, entry.participantIds]);
   }
