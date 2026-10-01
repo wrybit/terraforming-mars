@@ -20,5 +20,8 @@
   "No tags": "Ohne Tags",
   "No resources": "Ohne Ressourcen",
   "Automated": "Automatisch",
-  "Active": "Aktiv"
+  "Active": "Aktiv",
+  "Cost": "Preis",
+  "Minimum cost": "Mindestpreis",
+  "Maximum cost": "Höchstpreis"
 }

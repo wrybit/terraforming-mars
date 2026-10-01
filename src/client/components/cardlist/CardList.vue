@@ -35,7 +35,9 @@
             <span v-for="item in activeFilters" :key="`${item.group}:${item.key}`" class="card-list-active-chip">
               <span v-if="item.iconClass" class="card-list-icon" :class="item.iconClass"></span>
               <span v-else-if="item.colorClass" class="card-list-dot" :class="item.colorClass"></span>
-              <span v-i18n>{{ item.label }}</span>
+              <!-- Preisbereich besteht aus Zahlen und wird nicht übersetzt -->
+              <span v-if="item.group === 'cost'">{{ item.label }}</span>
+              <span v-else v-i18n>{{ item.label }}</span>
               <button type="button" :title="$t('Remove')" @click="removeFilter(item)">✕</button>
             </span>
           </div>
@@ -44,6 +46,13 @@
 
         <CardListFilterGroup title="Card type" :options="typeOptions" :selection="types" :counts="typeCounts"
           @toggle="toggle('types', $event)" @reset="reset('types')"/>
+        <section class="card-list-group">
+          <header class="card-list-group-head">
+            <h2 v-i18n>Cost</h2>
+            <button v-if="hasCostFilter" type="button" class="card-list-link" @click="resetCost()" v-i18n>Reset</button>
+          </header>
+          <CardListCostRange v-model:costMin="costMin" v-model:costMax="costMax" :highest="highestCost"/>
+        </section>
         <CardListFilterGroup title="Tags" variant="icons" :options="tagOptions" :selection="tags" :counts="tagCounts"
           @toggle="toggle('tags', $event)" @reset="reset('tags')"/>
         <CardListFilterGroup title="Expansions" :options="expansionOptions" :selection="expansions" :counts="expansionCounts"
@@ -160,7 +169,7 @@ import {ClaimedMilestoneModel} from '@/common/models/ClaimedMilestoneModel';
 import {FundedAwardModel} from '@/common/models/FundedAwardModel';
 import {TypeOption, CardListModel, hashToModel, modelToHash} from '@/client/components/cardlist/CardListModel';
 import {BonusId, BONUS_IDS, PolicyId, POLICY_IDS} from '@/common/turmoil/Types';
-import {buildEntries, CardListEntry, countOptions, FilterGroup, FilterState, passesFilters} from '@/client/components/cardlist/cardListEntries';
+import {buildEntries, CardListEntry, countOptions, FilterGroup, FilterState, hasCostRange, highestCost, passesFilters} from '@/client/components/cardlist/cardListEntries';
 import {EXPANSION_OPTIONS, FilterOption, optionKeys, RESOURCE_OPTIONS, SectionPart, TAG_OPTIONS, TYPE_COLOR_CLASSES, TYPE_OPTIONS, typeLabel} from '@/client/components/cardlist/cardListOptions';
 import {markedOptions, resetOptions, toggleOption} from '@/client/components/cardlist/filterSelection';
 import {clearSearchHighlight, highlightSearch} from '@/client/components/cardlist/searchHighlight';
@@ -176,6 +185,7 @@ import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
 import CardListFilterGroup from '@/client/components/cardlist/CardListFilterGroup.vue';
 import CardListSection from '@/client/components/cardlist/CardListSection.vue';
 import CardListCardGrid from '@/client/components/cardlist/CardListCardGrid.vue';
+import CardListCostRange from '@/client/components/cardlist/CardListCostRange.vue';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {textFitMetrics} from '@/client/utils/textFit';
 
@@ -198,7 +208,7 @@ const CARD_SECTIONS: ReadonlyArray<{title: string, types: ReadonlyArray<CardType
 type CardSection = {title: string, names: Array<CardName>, parts: Array<SectionPart>};
 
 // Ein aktiver Filter als entfernbarer Chip in der Zusammenfassung
-type ActiveFilter = FilterOption & {group: FilterGroup | 'vps'};
+type ActiveFilter = FilterOption & {group: FilterGroup | 'vps' | 'cost'};
 
 const FILTER_GROUP_OPTIONS: Record<FilterGroup, ReadonlyArray<FilterOption>> = {
   types: TYPE_OPTIONS,
@@ -218,6 +228,7 @@ export default defineComponent({
   name: 'CardList',
   components: {
     CardListCardGrid,
+    CardListCostRange,
     GlobalEvent,
     Colony,
     Milestone,
@@ -303,7 +314,10 @@ export default defineComponent({
       return translateText(this.namesOnly ? 'Search names' : 'Search all card texts');
     },
     filterState(): FilterState {
-      return {types: this.types, tags: this.tags, expansions: this.expansions, resources: this.resources, vps: this.vps};
+      return {
+        types: this.types, tags: this.tags, expansions: this.expansions, resources: this.resources,
+        vps: this.vps, costMin: this.costMin, costMax: this.costMax,
+      };
     },
     // Einträge, die zum Suchtext passen – Grundlage für Ergebnisse und Trefferzahlen
     textMatches(): Array<CardListEntry> {
@@ -343,10 +357,19 @@ export default defineComponent({
         const marked = markedOptions(this[group] as Record<string, boolean>, optionKeys(options));
         options.filter((option) => marked.includes(option.key)).forEach((option) => active.push({...option, group}));
       }
+      if (this.hasCostFilter) {
+        active.push({group: 'cost', key: 'cost', label: `${this.costMin ?? 0}–${this.costMax ?? this.highestCost} M€`});
+      }
       if (this.vps !== 0) {
         active.push({group: 'vps', key: String(this.vps), label: this.vps === 1 ? '+VPs' : '-VPs'});
       }
       return active;
+    },
+    highestCost(): number {
+      return highestCost(this.entries);
+    },
+    hasCostFilter(): boolean {
+      return hasCostRange(this.filterState);
     },
     hasFilters(): boolean {
       return this.activeFilters.length > 0 || this.filterText !== '';
@@ -411,6 +434,8 @@ export default defineComponent({
     removeFilter(filter: ActiveFilter): void {
       if (filter.group === 'vps') {
         this.vps = 0;
+      } else if (filter.group === 'cost') {
+        this.resetCost();
       } else {
         this.toggle(filter.group, filter.key);
       }
@@ -418,7 +443,12 @@ export default defineComponent({
     resetAll(): void {
       (Object.keys(FILTER_GROUP_OPTIONS) as Array<FilterGroup>).forEach((group) => this.reset(group));
       this.vps = 0;
+      this.resetCost();
       this.filterText = '';
+    },
+    resetCost(): void {
+      this.costMin = undefined;
+      this.costMax = undefined;
     },
     clearSearch(): void {
       this.filterText = '';

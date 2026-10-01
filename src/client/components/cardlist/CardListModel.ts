@@ -20,6 +20,9 @@ export type CardListModel = {
   showMetadata: boolean;
   tallCards: boolean;
   vps: number; // 0: all, 1: VPs, 2: no vps
+  // Preisbereich in M€; undefined = keine Grenze auf dieser Seite
+  costMin: number | undefined;
+  costMax: number | undefined;
 }
 
 const MODULE_ABBREVIATIONS = {
@@ -171,6 +174,8 @@ export function hashToModel(windowLocationHash: string): CardListModel {
     sortOrder: 'a',
     showMetadata: true,
     tallCards: false,
+    costMin: undefined,
+    costMax: undefined,
   };
   if (windowLocationHash.length > 1) {
     const hash = decodeURIComponent(windowLocationHash).slice(1);
@@ -202,6 +207,12 @@ export function hashToModel(windowLocationHash: string): CardListModel {
           model.tags[type] = tags.includes(abbrev);
         }
       }
+      // Preisbereich, z. B. "c5-20", "c-12" oder "c8-"
+      if (e.startsWith('c')) {
+        const [low, high] = e.slice(1).split('-');
+        model.costMin = parseCost(low);
+        model.costMax = parseCost(high);
+      }
       // metadata
       if (e.startsWith('d')) {
         const metadata = e.slice(1);
@@ -219,6 +230,18 @@ export function hashToModel(windowLocationHash: string): CardListModel {
   }
 
   return model;
+}
+
+function parseCost(text: string | undefined): number | undefined {
+  const value = Number.parseInt(text ?? '', 10);
+  return Number.isNaN(value) ? undefined : value;
+}
+
+function encodeCost(model: CardListModel): string | undefined {
+  if (model.costMin === undefined && model.costMax === undefined) {
+    return undefined;
+  }
+  return `${model.costMin ?? ''}-${model.costMax ?? ''}`;
 }
 
 function encode<T extends string>(vals: Record<T, boolean>, abbreviations: Record<T, string>) {
@@ -248,11 +271,12 @@ export function modelToHash(model: CardListModel) {
   parts.t = encode(model.types, TYPE_ABBREVIATIONS);
   parts.g = encode(model.tags, TAG_ABBREVIATIONS);
   parts.d = encodeMetadata(model);
+  parts.c = encodeCost(model);
 
   function tostring(key: string): string {
     const content = parts[key] ?? '';
     return content === '' ? '' : `~${key}${content}`;
   }
-  const text = model.filterText + tostring('m') + tostring('t') + tostring('g') + tostring('d');
+  const text = model.filterText + tostring('m') + tostring('t') + tostring('g') + tostring('d') + tostring('c');
   return '#' + encodeURIComponent(text);
 }

@@ -317,6 +317,105 @@
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
 }
 
+// ---------- Preisbereich: zwei übereinanderliegende Schieberegler auf einer Spur ----------
+@card-list-range-thumb: 20px;
+
+.card-list-cost-range {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-list-cost-range-track {
+  position: relative;
+  flex: 1;
+  height: @card-list-range-thumb;
+
+  // Graue Grundspur
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 4px;
+    margin-top: -2px;
+    border-radius: 2px;
+    background: @create-game-chip-hover;
+  }
+
+  input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: none;
+    appearance: none;
+    // Nur die Griffe fangen Klicks, damit beide Regler bedienbar bleiben
+    pointer-events: none;
+
+    &::-webkit-slider-thumb {
+      appearance: none;
+      width: @card-list-range-thumb;
+      height: @card-list-range-thumb;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: @bg_action;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    &::-moz-range-thumb {
+      width: @card-list-range-thumb;
+      height: @card-list-range-thumb;
+      box-sizing: border-box;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: @bg_action;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    &:focus-visible::-webkit-slider-thumb {
+      outline: 2px solid @create-game-gold;
+      outline-offset: 2px;
+    }
+  }
+}
+
+// Gewählter Bereich in der Aktiv-Farbe
+.card-list-cost-range-fill {
+  position: absolute;
+  top: 50%;
+  height: 4px;
+  margin-top: -2px;
+  border-radius: 2px;
+  background: @bg_action;
+}
+
+.card-list-cost-range-values {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: @create-game-dim;
+}
+
+// Preis als gelbe M€-Münze wie auf den Karten
+.card-list-cost-range-coin {
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  background: url(./assets/resources/megacredit.png) center / contain no-repeat;
+  color: #000;
+  font-weight: bold;
+}
+
 // ---------- Zusammenfassung oben in der Filterspalte ----------
 .card-list-summary {
   display: flex;
