@@ -67,6 +67,10 @@ type DragInternals = {
   /** Viewport-Position des Ghost bei left/top = 0 – gleicht transformierte Vorfahren aus, die fixed verschieben. */
   ghostOrigin?: {x: number, y: number};
   suppressClick?: boolean;
+  /** Eigene Reihenfolge vor dem ersten Sortieren – "Manuell" stellt sie wieder her. */
+  manualOrder?: {[x: string]: number};
+  /** true, wenn die Sortierung durch Ziehen aufgehoben wurde: dann ist die aktuelle Reihenfolge die manuelle. */
+  sortClearedByDrag?: boolean;
 };
 
 export default defineComponent({
@@ -95,10 +99,20 @@ export default defineComponent({
   },
   emits: ['update:sortOrder'],
   watch: {
-    sortOrder(sortOrder: SortOrder | undefined): void {
+    sortOrder(sortOrder: SortOrder | undefined, previous: SortOrder | undefined): void {
+      const internals = this.internals();
       if (sortOrder !== undefined) {
+        if (previous === undefined) {
+          internals.manualOrder = {...this.cardOrder};
+        }
         this.sortBy(sortOrder);
+        return;
       }
+      if (internals.sortClearedByDrag !== true && internals.manualOrder !== undefined) {
+        this.restoreManualOrder(internals.manualOrder);
+      }
+      internals.sortClearedByDrag = false;
+      internals.manualOrder = undefined;
     },
   },
   data(): DataModel {
@@ -139,6 +153,15 @@ export default defineComponent({
         this.cards,
       );
     },
+    /** Stellt die eigene Reihenfolge wieder her; seitdem neu gezogene Karten kommen ans Ende. */
+    restoreManualOrder(manualOrder: {[x: string]: number}): void {
+      const cards = this.getSortedCards();
+      const known = cards.filter((card) => manualOrder[card.name] !== undefined)
+        .sort((first, second) => manualOrder[first.name] - manualOrder[second.name]);
+      const added = cards.filter((card) => manualOrder[card.name] === undefined);
+      [...known, ...added].forEach((card, index) => this.cardOrder[card.name] = index + 1);
+      CardOrderStorage.updateCardOrder(this.playerId, this.cardOrder);
+    },
     sortBy(sortOrder: SortOrder): void {
       sortCards(this.getSortedCards(), sortOrder).forEach((card, index) => this.cardOrder[card.name] = index + 1);
       CardOrderStorage.updateCardOrder(this.playerId, this.cardOrder);
@@ -161,7 +184,10 @@ export default defineComponent({
       cardNames.splice(dragIndex, 1);
       cardNames.splice(targetIndex, 0, this.dragCard);
       cardNames.forEach((cardName, index) => this.cardOrder[cardName] = index + 1);
-      // Handsortierung hebt die gewählte Sortierung auf (Sortier-Buttons zeigen keinen Pfeil mehr).
+      // Handsortierung hebt die gewählte Sortierung auf; die Leiste springt auf "Manuell".
+      if (this.sortOrder !== undefined) {
+        this.internals().sortClearedByDrag = true;
+      }
       this.$emit('update:sortOrder');
       CardOrderStorage.updateCardOrder(this.playerId, this.cardOrder);
     },

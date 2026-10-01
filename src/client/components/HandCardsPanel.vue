@@ -11,10 +11,10 @@
       </div>
     </section>
     <section v-if="handCards.length > 0" class="hand-cards-panel__section">
-      <!-- Kopfzeile: Überschrift links, Sortier-Buttons (Upstream-Funktion) rechts; ohne Überschrift nur die Buttons -->
+      <!-- Kopfzeile: Überschrift links, Sortierung (Manuell oder Upstream-Sortierungen) rechts; ohne Überschrift nur die Buttons -->
       <div v-if="activeCards.length > 0 || handCards.length > 1" class="hand-cards-panel__header">
         <h3 v-if="activeCards.length > 0" class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ handCards.length }}</small></h3>
-        <CardSortButtons v-if="handCards.length > 1" v-model:sortOrder="handSortOrder" class="hand-cards-panel__sort"/>
+        <HandSortControl v-if="handCards.length > 1" v-model:sortOrder="handSortOrder" class="hand-cards-panel__sort"/>
       </div>
       <SortableCards :playerId="playerView.id" :cards="handCards" v-model:sortOrder="handSortOrder"/>
     </section>
@@ -25,7 +25,7 @@
 import {computed, ref} from 'vue';
 import Card from '@/client/components/card/Card.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
-import CardSortButtons from '@/client/components/CardSortButtons.vue';
+import HandSortControl from '@/client/components/HandSortControl.vue';
 import {SortOrder} from '@/client/utils/SortOrder';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {allCardsInHand} from '@/client/utils/handCards';

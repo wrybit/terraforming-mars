@@ -1459,5 +1459,9 @@
   "Show Mars enlarged and choose a space": "Mars wird groß angezeigt – dann ein Feld wählen",
   "You will be taken to the results in a moment": "Gleich geht es weiter zur Auswertung …",
   "Previous card": "Vorherige Karte",
-  "Next card": "Nächste Karte"
+  "Next card": "Nächste Karte",
+  "Sort by:": "Sortierung:",
+  "Manual": "Manuell",
+  "Type": "Typ",
+  "Resource": "Ressource"
 }
