@@ -7,11 +7,12 @@
         <span>{{ $t(bar.label) }}</span>
       </span>
       <span class="mb-param-track" :style="{'--steps': bar.steps}" role="meter" :aria-label="$t(bar.label)" :aria-valuemin="bar.min" :aria-valuemax="bar.max" :aria-valuenow="bar.value">
-        <span class="mb-param-fill" :style="{width: bar.percent + '%'}"></span>
+        <!-- Stand als CSS-Variable statt width/left: mobile.less legt den Balken je Ausrichtung waagerecht oder senkrecht -->
+        <span class="mb-param-fill" :style="{'--percent': bar.percent + '%'}"></span>
         <!-- Bonus-Schwellen wie auf dem Brett (Wärmeproduktion, Ozean, Temperaturschritt …) -->
         <span v-for="bonus in bar.bonuses" :key="bonus.at"
           :class="['mb-param-bonus', 'mb-param-bonus--' + bonus.kind, {'mb-param-bonus--reached': bar.value >= bonus.at}]"
-          :style="{left: bonus.percent + '%'}"
+          :style="{'--percent': bonus.percent + '%'}"
           :title="$t(bonus.title)"></span>
       </span>
       <span class="mb-param-value">{{ bar.text }}</span>

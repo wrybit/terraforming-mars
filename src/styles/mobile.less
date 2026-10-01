@@ -734,6 +734,8 @@ html.tm-mobile {
 
   // ---------- Globale Parameter als Balken ----------
   .mb-params {
+    // Verlaufsrichtung der Balken: waagerecht; Tablet quer stellt sie senkrecht (unten = Minimum)
+    --bar-direction: 90deg;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -786,7 +788,7 @@ html.tm-mobile {
       inset: 0;
       z-index: 1;
       border-radius: inherit;
-      background-image: repeating-linear-gradient(90deg, transparent 0, transparent calc(100% / var(--steps) - 2px), @mb-bar-gap calc(100% / var(--steps) - 2px), @mb-bar-gap calc(100% / var(--steps)));
+      background-image: repeating-linear-gradient(var(--bar-direction), transparent 0, transparent calc(100% / var(--steps) - 2px), @mb-bar-gap calc(100% / var(--steps) - 2px), @mb-bar-gap calc(100% / var(--steps)));
       pointer-events: none;
     }
   }
@@ -796,16 +798,17 @@ html.tm-mobile {
     left: 0;
     top: 0;
     bottom: 0;
+    width: var(--percent);
     border-radius: 5px;
-    transition: width 0.6s ease;
+    transition: width 0.6s ease, height 0.6s ease;
   }
 
   .mb-param--temperature .mb-param-fill {
-    background: linear-gradient(90deg, #3d6fd6, #8d4ab8 55%, #e0643a);
+    background: linear-gradient(var(--bar-direction), #3d6fd6, #8d4ab8 55%, #e0643a);
   }
 
   .mb-param--oxygen .mb-param-fill {
-    background: linear-gradient(90deg, #2d6f8f, #8cc4ee);
+    background: linear-gradient(var(--bar-direction), #2d6f8f, #8cc4ee);
   }
 
   .mb-param--oceans .mb-param-fill {
@@ -813,7 +816,7 @@ html.tm-mobile {
   }
 
   .mb-param--venus .mb-param-fill {
-    background: linear-gradient(90deg, #8a6a2f, #e8c16a);
+    background: linear-gradient(var(--bar-direction), #8a6a2f, #e8c16a);
   }
 
   .mb-param--done .mb-param-value {
@@ -822,6 +825,7 @@ html.tm-mobile {
 
   .mb-param-bonus {
     position: absolute;
+    left: var(--percent);
     top: 13px;
     width: 12px;
     height: 12px;
@@ -855,6 +859,74 @@ html.tm-mobile {
   .mb-param-bonus--reached {
     opacity: 0.35;
     filter: grayscale(1);
+  }
+
+  // Tablet quer: Balken senkrecht nebeneinander, füllen die Höhe neben dem Mars (Zeile 3 im Raster von .mb-screen--mars);
+  // Subgrid hält Beschriftung, Wert und Balken aller Spalten auf derselben Höhe, auch wenn ein Name umbricht
+  @media @mb-landscape {
+    .mb-params {
+      --bar-direction: 0deg;
+      display: grid;
+      grid-template-rows: auto auto minmax(160px, 1fr);
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+      gap: 8px 12px;
+      padding: 16px 12px;
+    }
+
+    .mb-param {
+      grid-row: 1 / -1;
+      // Zeilen aus .mb-params; Bereiche der Kinder per Nummer, die Namen der waagerechten Fassung gelten hier nicht
+      grid-template: subgrid / minmax(0, 1fr);
+      gap: 0;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .mb-param-label {
+      grid-area: 1 / 1;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 14px;
+
+      img {
+        width: 26px;
+        height: 26px;
+      }
+    }
+
+    .mb-param-value {
+      grid-area: 2 / 1;
+      font-size: 22px;
+    }
+
+    // Balken mittig in der Spalte, Bonus-Symbole rechts daneben
+    .mb-param-track {
+      grid-area: 3 / 1;
+      align-self: stretch;
+      width: 22px;
+      height: auto;
+      margin: 8px 0 0;
+      border-radius: 11px;
+    }
+
+    .mb-param-fill {
+      top: auto;
+      right: 0;
+      width: auto;
+      height: var(--percent);
+      border-radius: 11px;
+    }
+
+    .mb-param-bonus {
+      top: auto;
+      left: calc(100% + 6px);
+      bottom: var(--percent);
+      width: 22px;
+      height: 22px;
+      margin: 0 0 -11px;
+      border-radius: 4px;
+    }
   }
 
   // ---------- Meilensteine & Auszeichnungen und Spieler: Tabellen wie im Zwei-Spalten-Layout (ab 1400 px) ----------
@@ -2410,11 +2482,13 @@ html.tm-mobile {
     color: @mb-muted;
   }
 
-  // Tablet quer: Mars links, Balken, Meilensteine & Co. rechts daneben statt darunter
+  // Tablet quer: Mars links, rechts daneben Leiste, Zugstatus, Balken und Meilenstein-Knöpfe; die Balken-Zeile nimmt
+  // die Resthöhe des Mars ein, die Knöpfe sitzen bündig mit seiner Unterkante. Kolonien usw. folgen darunter in Spalte 2
   @media @mb-landscape {
     .mb-screen--mars {
       display: grid; // ohne !important, sonst wirkte das Ausblenden per v-show (Inline-Stil) nicht mehr
       grid-template-columns: auto minmax(0, 1fr);
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
       align-items: start;
       column-gap: 16px;
 
@@ -2422,15 +2496,32 @@ html.tm-mobile {
         grid-column: 2;
       }
 
+      > .mb-toolbar {
+        grid-row: 1;
+      }
+
+      > .mb-banner {
+        grid-row: 2;
+      }
+
+      > .mb-params {
+        grid-row: 3;
+        align-self: stretch;
+      }
+
+      > .mb-quick {
+        grid-row: 4;
+      }
+
       > .board-cont {
         grid-column: 1;
-        grid-row: 1 / span 20;
+        grid-row: 1 / span 4;
       }
 
       // Zoom-Knopf bleibt unten rechts am Planeten; in Spalte 2 zöge ihn der negative Rand über den Zugstatus
       > .mb-mars-zoom {
         grid-column: 1;
-        grid-row: 1 / span 20;
+        grid-row: 1 / span 4;
         place-self: end;
         margin: 0 8px 12px 0;
       }
