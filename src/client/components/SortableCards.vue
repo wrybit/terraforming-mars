@@ -23,6 +23,7 @@ import Card from '@/client/components/card/Card.vue';
 import {CardName} from '@/common/cards/CardName';
 import {CardModel} from '@/common/models/CardModel';
 import {CardOrderStorage} from '@/client/utils/CardOrderStorage';
+import {SortOrder, sortCards} from '@/client/utils/SortOrder';
 
 // Ab dieser Mausbewegung (px) wird aus einem Klick ein Drag – sonst würden Klicks auf Karten zu Mini-Drags.
 const DRAG_THRESHOLD_PX = 6;
@@ -82,6 +83,23 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    /**
+     * Current sort order, or undefined once the player reorders by hand.
+     *
+     * Changing it re-sorts the cards.
+     */
+    sortOrder: {
+      type: Object as () => SortOrder | undefined,
+      required: false,
+    },
+  },
+  emits: ['update:sortOrder'],
+  watch: {
+    sortOrder(sortOrder: SortOrder | undefined): void {
+      if (sortOrder !== undefined) {
+        this.sortBy(sortOrder);
+      }
+    },
   },
   data(): DataModel {
     const cache = CardOrderStorage.getCardOrder(this.playerId);
@@ -121,6 +139,10 @@ export default defineComponent({
         this.cards,
       );
     },
+    sortBy(sortOrder: SortOrder): void {
+      sortCards(this.getSortedCards(), sortOrder).forEach((card, index) => this.cardOrder[card.name] = index + 1);
+      CardOrderStorage.updateCardOrder(this.playerId, this.cardOrder);
+    },
     /**
      * Die gezogene Karte übernimmt den Platz der Zielkarte; die übrigen rücken nach.
      * Unabhängig von der Anordnung (Raster oder eine Spalte) und ohne Flackern,
@@ -139,6 +161,8 @@ export default defineComponent({
       cardNames.splice(dragIndex, 1);
       cardNames.splice(targetIndex, 0, this.dragCard);
       cardNames.forEach((cardName, index) => this.cardOrder[cardName] = index + 1);
+      // Handsortierung hebt die gewählte Sortierung auf (Sortier-Buttons zeigen keinen Pfeil mehr).
+      this.$emit('update:sortOrder');
       CardOrderStorage.updateCardOrder(this.playerId, this.cardOrder);
     },
     onPointerDown(cardName: CardName, event: PointerEvent): void {

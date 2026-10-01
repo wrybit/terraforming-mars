@@ -15,3 +15,53 @@
   margin: 0 0 @hand-cards-panel-title-gap;
   padding-left: 8px;
 }
+
+// Kopfzeile der Handkarten: Überschrift und Sortier-Buttons in einer Zeile, dicht über den Karten.
+.hand-cards-panel__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  // Etwas mehr Luft als zur Überschrift: die Preis-Badges der Karten ragen nach oben heraus.
+  margin: 0 0 10px;
+  padding-left: 8px;
+
+  .hand-cards-panel__title {
+    margin: 0;
+    padding-left: 0;
+  }
+}
+
+// Sortier-Buttons (CardSortButtons.vue aus Upstream): rechtsbündig, Buttons eng beieinander als eine Gruppe.
+.hand-cards-panel__sort {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+
+  > span {
+    margin-right: 4px;
+  }
+
+  .btn {
+    border-radius: 8px;
+  }
+}
+
+// Mobil: Buttons kompakt halten, sonst wirken sie größer als die Navigation darunter.
+html.tm-mobile .hand-cards-panel__header {
+  margin-bottom: 18px;
+}
+
+html.tm-mobile .hand-cards-panel__sort {
+  font-size: 12px;
+
+  .btn {
+    height: 26px;
+    padding: 0 8px;
+    font-size: 12px;
+    line-height: 24px;
+  }
+}
