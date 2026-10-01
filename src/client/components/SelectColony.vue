@@ -1,5 +1,5 @@
 <template>
-  <div class="wf-component wf-component--select-card">
+  <div class="wf-component wf-component--select-card choice-block choice-block--natural">
     <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
     <label v-for="colony in (playerinput.coloniesModel || [])" class="cardbox" :key="colony.name">
       <input type="radio" v-model="selectedColony" :value="colony.name" >

@@ -2,7 +2,7 @@
   <div class="wf-component wf-options">
     <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
     <!-- Ressourcen als auswählbare Kacheln wie Karten und Meilensteine; die gewählte pulsiert in der CTA-Farbe -->
-    <div class="resource-options" role="radiogroup">
+    <div class="resource-options choice-block" :style="choiceBlockStyle(playerinput.include.length)" role="radiogroup">
       <label v-for="included in playerinput.include" :key="included"
         :class="['resource-option', {'resource-option--selected': unit === included}]">
           <!-- Radio für Tastatur und Screenreader, sichtbar ist die Kachel -->
@@ -21,6 +21,7 @@
 </template>
 <script lang="ts">
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
+import {choiceBlockStyle} from '@/client/components/choiceBlock';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {SelectResourceModel} from '@/common/models/PlayerInputModel';
@@ -68,6 +69,7 @@ export default defineComponent({
     AppButton,
   },
   methods: {
+    choiceBlockStyle,
     canSave() {
       return this.unit !== undefined;
     },

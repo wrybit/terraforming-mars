@@ -1,7 +1,7 @@
 <template>
   <div class="wf-component wf-options">
     <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
-    <div class="underground-tokens">
+    <div class="underground-tokens choice-block choice-block--natural">
       <label v-for="(token, idx) in playerinput.tokens" :key="idx">
          <!-- disabled="selected.length >= playerinput.count -->
         <input type="checkbox" :name="String(idx)" v-model="selected" :value="idx" >
