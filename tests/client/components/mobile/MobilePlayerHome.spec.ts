@@ -17,12 +17,12 @@ describe('MobilePlayerHome', () => {
     FakeLocalStorage.deregister(localStorage);
   });
 
-  function mountHome() {
+  function mountHome(playerView = fakePlayerViewModel()) {
     return shallowMount(MobilePlayerHome, {
       ...globalConfig,
       // Fußleiste echt rendern: die Tests klicken ihre Einträge
       global: {...globalConfig.global, stubs: {...globalConfig.global.stubs, MobileNav: false}},
-      props: {playerView: fakePlayerViewModel()},
+      props: {playerView},
     });
   }
 
@@ -44,5 +44,15 @@ describe('MobilePlayerHome', () => {
     await wrapper.find('.mb-nav-item--turn').trigger('click');
     expect(wrapper.classes()).to.not.include('mb-home--turn');
     expect((wrapper.vm as unknown as {sheetOpen: boolean}).sheetOpen).to.be.true;
+  });
+
+  // Nach bestätigter Startauswahl zeigt der Zug-Bildschirm die eigene Auswahl statt des Warte-Sheets
+  it('shows the own initial selection instead of the sheet once the setup is confirmed', async () => {
+    const playerView = fakePlayerViewModel();
+    playerView.pickedCorporationCard = [{name: 'Tharsis Republic'} as typeof playerView.pickedCorporationCard[number]];
+    const wrapper = mountHome(playerView);
+    await wrapper.find('.mb-nav-item--turn').trigger('click');
+    expect(wrapper.classes()).to.include('mb-home--turn');
+    expect((wrapper.vm as unknown as {sheetOpen: boolean}).sheetOpen).to.be.false;
   });
 });
