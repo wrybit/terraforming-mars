@@ -20,11 +20,12 @@ describe('mobileFit', () => {
     expect(cardColumns(1334)).to.eq(4);
   });
 
-  it('arranges choice grids as square as the width allows', () => {
-    expect(choiceGridColumns(374, 5)).to.eq(2);
-    expect(choiceGridColumns(788, 5)).to.eq(3);
-    expect(choiceGridColumns(1334, 5)).to.eq(3);
-    expect(choiceGridColumns(1334, 4)).to.eq(2);
+  it('arranges choice grids square in landscape and upright in portrait, as far as the width allows', () => {
+    expect(choiceGridColumns(374, 5, true)).to.eq(2);
+    expect(choiceGridColumns(788, 5, true)).to.eq(2);
+    expect(choiceGridColumns(788, 10, true)).to.eq(3);
+    expect(choiceGridColumns(1334, 5, false)).to.eq(3);
+    expect(choiceGridColumns(1334, 4, false)).to.eq(2);
   });
 
   it('scales items to fit the columns, never enlarging them', () => {

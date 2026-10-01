@@ -119,6 +119,16 @@ html.tm-mobile {
       justify-content: safe center;
     }
 
+    // Tablet hochkant: Kacheln als hochkant stehender Block (2 → 1×2, 5–6 → 2×3), Spaltenzahl aus choiceBlock.ts.
+    // Ab 560px wie cardColumns() in mobileFit.ts; auf dem Handy umbrechen die Kacheln von selbst.
+    // Ohne Spieler-Gruppen (eine Gruppe enthält mehrere Kacheln) und ohne Karten (eigenes Raster, mobile.less)
+    @media (min-width: 560px) and (orientation: portrait) {
+      &:not(.wf-component--select-card, .choice-block--natural):not(:has(.player-option-group)) {
+        display: grid;
+        grid-template-columns: repeat(var(--choice-columns-portrait, 1), max-content);
+      }
+    }
+
     // Kolonie-Wahl (SelectColony): die Tafeln (418px breit, .colony-card in cards.less) sind breiter als ein Handy
     @media (max-width: 440px) {
       .colony-card {
