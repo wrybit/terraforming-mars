@@ -145,6 +145,19 @@ export class LocalFilesystem implements IDatabase {
     writeFileSync(this.completedFilename(gameId), text);
   }
 
+  async deleteGame(gameId: GameId): Promise<void> {
+    // Neuester Stand, alle Zwischenstände und die Abschlussdatei – sonst taucht das Spiel beim nächsten Start wieder auf
+    const saveIds = await this.getSaveIds(gameId);
+    for (const saveId of saveIds) {
+      this.deleteVersion(gameId, saveId);
+    }
+    for (const filename of [this.filename(gameId), this.completedFilename(gameId)]) {
+      if (existsSync(filename)) {
+        unlinkSync(filename);
+      }
+    }
+  }
+
   markFinished(_gameId: GameId): Promise<void> {
     // Not implemented here.
     return Promise.resolve();

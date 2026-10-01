@@ -41,6 +41,10 @@ export interface IGameLoader {
    * Do not call IDatabase.saveGame directly in a running system.
    */
   saveGame(game: IGame): Promise<void>;
+  /**
+   * Removes a game from memory and from the database. Later saves of that game are refused.
+   */
+  deleteGame(gameId: GameId): Promise<void>;
   completeGame(game: IGame): Promise<void>;
   maintenance(): Promise<void>;
 }

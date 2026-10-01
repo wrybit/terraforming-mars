@@ -396,6 +396,29 @@ export function describeDatabaseSuite<T extends ITestDatabase>(dtor: DatabaseTes
       expect(db.getGameId('spectator-unknown')).to.be.rejected;
     });
 
+    it('deleteGame removes every save and the participants', async () => {
+      const player = TestPlayer.BLACK.newPlayer();
+      const game = Game.newInstance('game-id-3434', [player], player, 'spectatorid');
+      await db.lastSaveGamePromise;
+      await db.saveGame(game);
+      const otherPlayer = TestPlayer.RED.newPlayer();
+      const other = Game.newInstance('game-id-5656', [otherPlayer], otherPlayer, 'spectatorid2');
+      await db.lastSaveGamePromise;
+
+      await db.deleteGame(game.id);
+
+      // getSaveIds wirft je nach Datenbank bei unbekannten Spielen – die Spielliste ist der gemeinsame Nenner
+      expect(await db.getGameIds()).deep.eq([other.id]);
+      // Manche Datenbanken werfen sofort, andere liefern ein abgelehntes Promise – beides heißt: weg
+      let isStillLoadable = true;
+      try {
+        await db.getGame(game.id);
+      } catch {
+        isStillLoadable = false;
+      }
+      expect(isStillLoadable).is.false;
+    });
+
     it('deleteGameNbrSaves', async () => {
       const player = TestPlayer.BLACK.newPlayer();
       const game = Game.newInstance('game-id-1212', [player], player, 'spectatorid');

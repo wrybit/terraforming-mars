@@ -184,6 +184,13 @@ export class SQLite implements IDatabase {
     }
   }
 
+  async deleteGame(gameId: GameId): Promise<void> {
+    // Alle Tabellen, die eine game_id kennen – sonst bleiben Teilnehmer-Links auf ein Spiel stehen, das es nicht mehr gibt
+    for (const table of ['games', 'participants', 'game_results', 'completed_game']) {
+      await this.asyncRun(`DELETE FROM ${table} WHERE game_id = ?`, [gameId]);
+    }
+  }
+
   async compressCompletedGame(gameId: GameId): Promise<BetterSqlite3.RunResult> {
     const maxSaveId = await this.getMaxSaveId(gameId);
     return this.asyncRun('DELETE FROM games WHERE game_id = ? AND save_id < ? AND save_id > 0', [gameId, maxSaveId])

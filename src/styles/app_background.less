@@ -16,6 +16,7 @@
 #create-game,
 #game-home,
 #card-list,
+#games-overview,
 .topmost-start-screen {
   position: relative;
   z-index: 0; // eigener Stapelkontext: das Bild (z-index -1) liegt hinter dem Inhalt, aber vor dem body-Grau
@@ -38,7 +39,8 @@
 .preferences_remove_background #game-end::before,
 .preferences_remove_background #create-game::before,
 .preferences_remove_background #game-home::before,
-.preferences_remove_background #card-list::before {
+.preferences_remove_background #card-list::before,
+.preferences_remove_background #games-overview::before {
   background: @grey_900;
   filter: none;
 }
@@ -46,6 +48,7 @@
 // Seitengrund schwarz statt grau: das Bild deckt nur das Fenster ab, bei langen Seiten fällt das Ende auf Schwarz kaum auf
 body:has(#create-game),
 body:has(#game-home),
-body:has(#card-list) {
+body:has(#card-list),
+body:has(#games-overview) {
   background: #000;
 }
