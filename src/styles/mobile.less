@@ -216,6 +216,8 @@ html.tm-mobile {
     padding: 0;
     background: none;
     z-index: auto;
+    // Upstream vergrößert .sidebar_cont auf Touch-Geräten hochkant per zoom: 2 (preferences.less) – gilt nur für die Desktop-Leiste
+    zoom: 1;
 
     .global_params,
     > div:has(.party-name-indicator),
@@ -1708,9 +1710,8 @@ html.tm-mobile {
     z-index: 30;
     display: flex;
     flex-direction: column;
-    background: rgba(5, 6, 10, 0.62);
-    -webkit-backdrop-filter: blur(7px) saturate(0.8);
-    backdrop-filter: blur(7px) saturate(0.8);
+    // Bewusst kein Weichzeichner und nur leicht abgedunkelt: der Kontext dahinter (Mars, Werte) muss für die Entscheidung lesbar bleiben
+    background: rgba(5, 6, 10, 0.35);
   }
 
   .mb-sheet-backdrop {
@@ -1763,7 +1764,7 @@ html.tm-mobile {
   // Ein-/Ausfahren: Schublade kommt aus der Fußleiste; Startlage so, dass ihr Zug-Button genau auf dem der Leiste liegt
   .mb-sheet-enter-active,
   .mb-sheet-leave-active {
-    transition: background-color @mb-sheet-duration ease, backdrop-filter @mb-sheet-duration ease, -webkit-backdrop-filter @mb-sheet-duration ease;
+    transition: background-color @mb-sheet-duration ease;
 
     .mb-sheet-drawer {
       transition: transform @mb-sheet-duration cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -1777,8 +1778,6 @@ html.tm-mobile {
   .mb-sheet-enter-from,
   .mb-sheet-leave-to {
     background-color: rgba(5, 6, 10, 0);
-    -webkit-backdrop-filter: blur(0) saturate(1);
-    backdrop-filter: blur(0) saturate(1);
 
     .mb-sheet-drawer {
       transform: translateY(calc(100% - @mb-turn-button-rest - env(safe-area-inset-bottom)));
@@ -2206,7 +2205,10 @@ html.tm-mobile {
     right: 0;
     bottom: 0;
     z-index: 21;
-    min-height: @mb-nav-height;
+    // border-box: der Sicherheitsabstand unten (iPhone-Home-Leiste) kommt zur Leistenhöhe dazu, statt von ihr abzugehen –
+    // sonst sitzt "Zurück" tiefer als die Buttons der Eingabe daneben (die rechnen 10px + Sicherheitsabstand)
+    box-sizing: border-box;
+    min-height: calc(@mb-nav-height + env(safe-area-inset-bottom));
     padding-bottom: env(safe-area-inset-bottom);
     border-top: 1px solid @mb-line;
     .mb-bar-surface();
