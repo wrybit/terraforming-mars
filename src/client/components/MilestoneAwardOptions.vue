@@ -1,6 +1,6 @@
 <template>
   <!-- Meilenstein/Auszeichnung als Bild-Kacheln wie auf dem Brett; die gewählte pulsiert in der CTA-Farbe -->
-  <div :class="['ma-options', kind]" role="radiogroup">
+  <div :class="['ma-options', 'choice-block', kind]" :style="choiceBlockStyle(options.length)" role="radiogroup">
     <label v-for="option in options" :key="optionName(option)"
       :class="['ma-block', 'ma-option', {'ma-option--selected': option === selected}]">
       <input type="radio" class="ma-option-input" :name="groupName" :checked="option === selected" @change="$emit('select', option)">
@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {MilestoneAwardKind, milestoneAwardImageClass} from '@/client/components/milestoneAwardChoice';
+import {choiceBlockStyle} from '@/client/components/choiceBlock';
 
 defineProps<{
   kind: MilestoneAwardKind;

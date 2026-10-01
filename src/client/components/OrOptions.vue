@@ -52,7 +52,7 @@
         @select="selectedOption = $event"/>
       <!-- Einfache Entscheidung (choiceMenu.ts): Optionen als Kacheln, die gewählte pulsiert wie Karten;
            eine Spielerwahl oder Option gegen einen Spieler wird zur Spieler-Kachel mit der betroffenen Ressource -->
-      <div v-if="!asTabs && maKind === undefined && isChoice" :class="['choice-options', {'choice-options--players': hasPlayerChoice}]" role="radiogroup">
+      <div v-if="!asTabs && maKind === undefined && isChoice" :class="['choice-options', 'choice-block', {'choice-options--players': hasPlayerChoice}]" :style="choiceBlockStyle(choiceTileCount)" role="radiogroup">
         <template v-for="(option, idx) in displayedOptions" :key="idx">
           <!-- Optionen gegen einen Spieler ("Entferne 4 Stahl von …", playerTargetOption.ts): Kacheln in dessen Farbe,
                mehrere gegen denselben Spieler als Gruppe mit kleinerem Abstand (Gesetz der Nähe) -->
@@ -155,6 +155,7 @@ import {milestoneAwardKind, MilestoneAwardKind} from '@/client/components/milest
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 import {allCardsInHand} from '@/client/utils/handCards';
+import {choiceBlockStyle} from '@/client/components/choiceBlock';
 import {CardModel} from '@/common/models/CardModel';
 
 let unique = 0;
@@ -210,7 +211,8 @@ export default defineComponent({
   data() {
     const originalIndices = displayedOptionIndices(this.playerinput);
     const displayedOptions: Array<PlayerInputModel> = originalIndices.map((index) => this.playerinput.options[index]);
-    const initialIdx = this.playerinput.initialIdx ?? 0;
+    // initialIdx zählt in Server-Reihenfolge; die Anzeige ist gefiltert und umsortiert (orOptionsDisplayed.ts)
+    const initialIdx = Math.max(0, originalIndices.indexOf(this.playerinput.initialIdx ?? 0));
     // Special case: If the first recommended displayed option is SelectProjectCardToPlay, and none of them are enabled, skip it.
     let selectedIdx = initialIdx;
     if (displayedOptions.length > 1 &&
@@ -255,6 +257,10 @@ export default defineComponent({
     // Spielerwahl ausgewählt, aber noch kein Spieler angetippt: Button gesperrt
     awaitingPlayer(): boolean {
       return this.selectedOption?.type === 'player' && this.selectedPlayer === undefined;
+    },
+    // Kacheln der einfachen Entscheidung: eine je Option, bei einer Spielerwahl eine je Spieler (Spalten des Auswahl-Blocks)
+    choiceTileCount(): number {
+      return this.displayedOptions.reduce((count, option) => count + (option.type === 'player' ? option.players.length : 1), 0);
     },
     handCards(): Array<CardModel> {
       return allCardsInHand(this.playerView);
@@ -312,6 +318,7 @@ export default defineComponent({
       this.handTabActive = false;
       this.selectedOption = option;
     },
+    choiceBlockStyle,
     shortTabLabel,
     fullTabTitle,
     tabIcon,
