@@ -1,142 +1,750 @@
-.card-list-container {
-  .selection-row label {
-    color: #ccc;
-    background-color: @grey_850;
-    padding: 10px 20px 10px 20px;
-    font-family: Ubuntu, sans-serif;
-    font-size: 23px;
-    border-radius: 8px;
-    text-align: center;
-    margin: 4px;
-    min-width: 125px;
-    height: 60px;
-    line-height: 40px;
-    display: flex;
+// Kartenliste: fester Kopf (Titel, Suche mit Name/Volltext, Sprache, Einstellungen), links eine mitlaufende Filterspalte
+// aus Milchglas-Kacheln, rechts die Ergebnisse in Abschnitten mit stehenbleibendem Kopf. Schmal: Filter als Bottom-Sheet.
+// Farben, Flächen, Kacheln und Segmente stammen aus "Spiel erstellen" (create_game_form.less) und dem Spiel
+// (frosted_surface.less, selection_highlight.less, cards.less) – hier keine eigenen Grundwerte.
+
+// Nähe: innerhalb einer Kachel 6px, zwischen Kacheln 16px, zwischen den Spalten 24px (wie create_game_form.less)
+@card-list-header-height: 64px;
+// Schmal zwei Zeilen: oben Titel und Knöpfe, darunter die Suche über die volle Breite
+@card-list-header-height-narrow: 104px;
+// Unterhalb dieser Breite Karten verkleinert, damit zwei nebeneinander passen
+@card-list-phone: 600px;
+@card-list-phone-card-zoom: 0.68;
+@card-list-filters-width: 320px;
+@card-list-icon-size: 26px;
+// Unterhalb dieser Breite Filter als Bottom-Sheet
+@card-list-narrow: 900px;
+
+// Die Seite hat keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt
+.main-container:has(#card-list) {
+  margin-left: 0;
+}
+
+.card-list {
+  --card-list-header: @card-list-header-height;
+
+  color: #eee;
+  font-size: 14px;
+  line-height: 1.35;
+
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    padding: 0;
+    font-weight: 500;
+  }
+}
+
+// Farben der Nicht-Karten-Einträge (Karten nutzen .background-color-* aus cards.less)
+.card-list-color-milestone,
+.card-list-color-award {
+  background: @create-game-gold;
+}
+
+.card-list-color-agenda {
+  background: @button-quiet-hover;
+}
+
+// ---------- Kopf ----------
+.card-list-header {
+  .frosted-surface();
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: var(--card-list-header);
+  padding: 0 @create-game-page-padding;
+  border-bottom: 1px solid @create-game-line;
+  background: @create-game-surface;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+
+  h1 {
+    font-size: 22px;
+    white-space: nowrap;
+  }
+}
+
+.card-list-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+
+  // Sprache und Einstellungen als Milchglas-Buttons wie im Spiel (sidebar_toolbar.less)
+  .sidebar_item--settings,
+  .sidebar_item--language {
+    .toolbar-glass-button();
+    position: relative;
+    inset: auto;
+
+    .sidebar_icon {
+      .toolbar-glass-icon();
+    }
+  }
+
+  .toolbar-language-flag();
+}
+
+// ---------- Suche: Feld mit Name/Volltext-Schalter darin ----------
+.card-list-search {
+  position: relative;
+  flex: 1;
+  max-width: 640px;
+  display: flex;
+  align-items: center;
+}
+
+.card-list-search-input {
+  box-sizing: border-box;
+  width: 100%;
+  height: @toolbar-button-size;
+  margin: 0;
+  // Platz links fürs Lupen-Symbol, rechts für Löschen-Knopf und Schalter
+  padding: 0 210px 0 38px;
+  border: 1px solid @create-game-line;
+  border-radius: @create-game-radius-small;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 15px;
+
+  &::placeholder {
+    color: @create-game-dim;
+  }
+
+  &:focus {
+    border-color: @bg_action;
+    outline: none;
+    box-shadow: 0 0 0 3px fade(@bg_action, 35%);
+  }
+
+  // Eigener Löschen-Knopf statt des Browser-Kreuzes
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
+}
+
+// Lupe als Rahmen-Kreis mit Stiel, ohne zusätzliche Grafik
+.card-list-search-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin-top: -8px;
+  border: 2px solid @create-game-dim;
+  border-radius: 50%;
+  pointer-events: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+    width: 6px;
+    height: 2px;
+    background: @create-game-dim;
+    transform: rotate(45deg);
+  }
+}
+
+.card-list-search-clear {
+  position: absolute;
+  right: 172px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: @create-game-dim;
+  cursor: pointer;
+
+  &:hover {
+    color: #fff;
+    background: @create-game-chip-hover;
+  }
+}
+
+.card-list-search-scope.create-game-segmented {
+  position: absolute;
+  right: 4px;
+  width: 164px;
+  padding: 2px;
+
+  button {
+    padding: 4px 6px;
+    font-size: 13px;
+  }
+}
+
+// ---------- Grundraster: Filterspalte links, Ergebnisse rechts ----------
+.card-list-layout {
+  display: grid;
+  grid-template-columns: @card-list-filters-width minmax(0, 1fr);
+  gap: @create-game-gap-column;
+  align-items: start;
+  padding: @create-game-page-padding;
+}
+
+.card-list-filters {
+  position: sticky;
+  top: calc(var(--card-list-header) + @create-game-gap-card);
+  display: flex;
+  flex-direction: column;
+  gap: @create-game-gap-card;
+  max-height: calc(100vh - var(--card-list-header) - 2 * @create-game-gap-card);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  // Schatten und Fokusrahmen der Kacheln nicht abschneiden
+  padding: 2px 4px 2px 2px;
+}
+
+// Milchglas-Kachel wie die Karten in "Spiel erstellen"
+.card-list-group {
+  .create-game-card();
+  margin-bottom: 0;
+}
+
+.card-list-group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+
+  h2 {
+    font-size: 16px;
+  }
+}
+
+.card-list-link {
+  padding: 2px 4px;
+  border: 0;
+  background: none;
+  color: @create-game-dim;
+  font-size: 13px;
+  cursor: pointer;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+// ---------- Kacheln der Filtergruppen ----------
+.card-list-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: @create-game-gap-inner;
+}
+
+// Gleiche Kachel wie in "Spiel erstellen", Auswahl in 20 % Lila mit Häkchen-Fähnchen
+.card-list-chip {
+  .create-game-chip();
+  color: #eee;
+  font: inherit;
+  text-align: left;
+
+  // Ohne Treffer bei den übrigen Filtern: bleibt wählbar, tritt aber zurück
+  &--empty {
+    opacity: 0.4;
+  }
+}
+
+.card-list-chip-label {
+  white-space: nowrap;
+}
+
+// Platz fürs Häkchen-Fähnchen
+.card-list-count {
+  .create-game-count();
+  margin-left: auto;
+  margin-right: 6px;
+}
+
+// Reine Symbole (Tags, Ressourcen): gleich breite Kacheln im Raster, Zahl darunter
+.card-list-chips--icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+
+  .card-list-chip {
+    flex-direction: column;
     justify-content: center;
+    gap: 2px;
+    padding: 6px 2px 4px;
   }
 
-  .selection-row {
-    display: flex;
-    flex-flow: row wrap !important;
+  .card-list-count {
+    margin: 0;
+    padding: 0 5px;
+  }
+}
 
-    .expansion-button {
-      justify-content: center;
-      text-align: center;
-    }
+.card-list-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  width: @card-list-icon-size;
+  height: @card-list-icon-size;
+  margin: 0;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
-    label {
-      min-width: 50px;
-      padding: 10px;
-    }
+// Basisspiel hat kein Symbol: Buchstabe statt Bild
+.card-list-icon.expansion-icon-base::before {
+  content: "B";
+  display: grid;
+  place-items: center;
+  height: 100%;
+  border-radius: 50%;
+  background: @create-game-chip-hover;
+  font-weight: bold;
+}
 
-    .expansion-icon-base::before {
-      content: "B";
-    }
+.card-list-chips--chips .card-list-icon {
+  width: 20px;
+  height: 20px;
+}
 
-    button {
-      min-width: 50px;
-      padding: 10px;
-      text-align: center;
-      margin: 4px;
-    }
+.card-list-dot {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+// ---------- Zusammenfassung oben in der Filterspalte ----------
+.card-list-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-list-summary-total {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+
+  strong {
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1;
   }
 
-  input[type="checkbox"] {
-    opacity: 0;
-    position: fixed;
-    width: 0;
+  span {
+    color: @create-game-dim;
   }
 
-  input[type="radio"] {
-    opacity: 0;
-    position: fixed;
-    width: 0;
+  .card-list-link {
+    margin-left: auto;
+  }
+}
+
+.card-list-active {
+  display: flex;
+  flex-wrap: wrap;
+  gap: @create-game-gap-inner;
+}
+
+.card-list-active-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 4px 0 8px;
+  border: 1px solid lighten(@selection-color, 12%);
+  border-radius: @create-game-radius-small;
+  background: fade(@selection-color, @selection-tint-opacity);
+  font-size: 13px;
+
+  .card-list-icon {
+    width: 18px;
+    height: 18px;
   }
 
-  .expansion-button {
-    text-align: left;
-    justify-content: left;
+  button {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: @create-game-chip-hover;
+    color: #fff;
+    font-size: 11px;
+    line-height: 1;
+    cursor: pointer;
   }
+}
 
-  label:hover {
-    background-color: rgb(104, 104, 104);
+// ---------- Weitere Filter ----------
+.card-list-more {
+  summary {
+    font-size: 16px;
     cursor: pointer;
   }
 
-  input[type="radio"]:checked+label {
-    background-color: rgb(199, 199, 199);
-    color: black;
+  &[open] summary {
+    margin-bottom: 12px;
   }
 
-  input[type="radio"]:checked+label a {
-    color: black
-  }
+  // Ressourcen-Gruppe sitzt hier ohne eigene Kachel
+  .card-list-group {
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
 
-  input[type="checkbox"]:checked+label {
-    background-color: rgb(199, 199, 199);
-    color: black;
-  }
-
-  input[type="checkbox"]:checked+label a {
-    color: black
-  }
-
-  .expansion-icon {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    background-size: 30px 30px;
-    background-position: 0px 0px;
-    background-repeat: no-repeat;
-    vertical-align: middle;
-    margin: 5px;
-  }
-
-  .search-container {
-    display: flex;
-    /* Make the container a flexbox */
-    justify-content: flex-end;
-    /* Align items to the right */
-    /* When the row is too narrow, wrap whole widgets to the next line rather
-       than letting the button labels wrap inside their buttons. */
-    flex-wrap: wrap;
-    row-gap: 5px;
-
-    input {
-      flex: 1;
-      margin-right: 5px;
-    }
-
-    button {
-      width: 150px;
-      margin-right: 5px;
-      /* Keep each label on one line so the widget wraps, not its text. */
-      white-space: nowrap;
-      flex-shrink: 0;
+    &::before {
+      display: none;
     }
   }
 
-  .small-card {
-    font-size: 75%;
+  .card-list-group-head h2,
+  h3 {
+    font-size: 13px;
+    color: @create-game-dim;
   }
 }
 
-// "Scroll to top" widget, pinned in the bottom-left corner stack above the
-// language flag. Styled like the sibling .sidebar_item boxes so it matches the
-// gear and flag; position: fixed so it stacks above them (which are also fixed).
-.card-list-scroll-top.sidebar_item {
-  position: fixed;
-  bottom: 112px;
-  left: 0;
-  height: 46px;
+.card-list-more-body {
+  display: flex;
+  flex-direction: column;
+  gap: @create-game-gap-card;
+}
+
+.card-list-more-row h3 {
+  margin-bottom: @create-game-gap-inner;
+}
+
+// ---------- Ergebnisse ----------
+.card-list-results {
+  min-width: 0;
+  // Nichts darf die Seite seitlich verbreitern (sonst wird das Bottom-Sheet breiter als der Bildschirm)
+  overflow-x: clip;
+}
+
+.card-list-section + .card-list-section {
+  margin-top: 32px;
+}
+
+// Abschnittskopf: Milchglas-Leiste, bleibt unter dem Seitenkopf stehen
+.card-list-section-head {
+  .frosted-surface();
+  position: sticky;
+  // Bündig unter dem Seitenkopf, sonst scheinen in der Lücke die Karten durch
+  top: var(--card-list-header);
+  z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  gap: 12px;
+  height: 48px;
+  margin-bottom: @create-game-gap-card;
+  padding-right: 6px;
+  overflow: hidden;
+  border: 1px solid @create-game-line;
+  border-radius: @create-game-radius;
+  background: @create-game-surface-strong;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+
+  h2 {
+    margin-right: auto;
+    font-size: 20px;
+  }
 }
 
-.card-list-scroll-top-arrow {
-  color: #c6c6c6;
-  font-size: 30px;
-  line-height: 1;
+// Farbstreifen links: je enthaltenem Kartentyp ein gleich hohes Stück
+.card-list-section-stripe {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  width: 8px;
+
+  span {
+    flex: 1;
+  }
+}
+
+.card-list-section-legend {
+  display: flex;
+  gap: 14px;
+  color: @create-game-dim;
+  font-size: 13px;
+
+  > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.card-list-section-count {
+  display: grid;
+  place-items: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  border-radius: @create-game-radius-small;
+  background: @create-game-chip-hover;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.card-list-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+
+  // Abstand kommt vom gap statt vom Außenrand der Karte (rechts 30px), sonst passen schmal keine zwei nebeneinander.
+  // Oben bleibt Luft für Kostenmünze und Tags, die über die Karte ragen.
+  .card-container {
+    margin: 15px 0 0;
+  }
+}
+
+.card-list-empty {
+  padding: 48px 0;
+  text-align: center;
+  color: @create-game-dim;
+}
+
+// Suchtreffer (searchHighlight.ts)
+::highlight(card-list-search) {
+  background-color: fade(@create-game-gold, 75%);
+  color: #000;
+}
+
+// ---------- Nach oben: unten rechts in der Daumenzone, erst nach weitem Scrollen ----------
+.card-list-scroll-top {
+  position: fixed;
+  right: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  z-index: 30;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: @create-game-radius;
+  background: @bg_action;
+  color: #fff;
+  font-size: 24px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+
+  &--visible {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// ---------- Nur schmal: Filter-Knopf im Kopf, Filter als Bottom-Sheet ----------
+.card-list-filter-toggle,
+.card-list-sheet-head,
+.card-list-sheet-foot,
+.card-list-scrim {
+  display: none;
+}
+
+@media only screen and (max-width: @card-list-narrow) {
+  .card-list {
+    --card-list-header: @card-list-header-height-narrow;
+  }
+
+  .card-list-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "title actions"
+      "search search";
+    align-content: center;
+    gap: 8px;
+    padding: 0 12px;
+
+    h1 {
+      grid-area: title;
+      font-size: 18px;
+    }
+  }
+
+  .card-list-header-actions {
+    grid-area: actions;
+  }
+
+  .card-list-search {
+    grid-area: search;
+    max-width: none;
+  }
+
+  .card-list-search-input {
+    padding-right: 170px;
+  }
+
+  .card-list-search-clear {
+    right: 134px;
+  }
+
+  .card-list-search-scope.create-game-segmented {
+    width: 128px;
+
+    button {
+      padding: 4px 2px;
+      font-size: 12px;
+    }
+  }
+
+  // Filter-Knopf mit Trefferzahl, Plakette = Zahl aktiver Filter
+  .card-list-filter-toggle {
+    .toolbar-glass-button();
+    position: relative;
+    display: flex;
+    gap: 6px;
+    width: auto;
+    padding: 0 12px 0 10px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .card-list-filter-toggle-icon {
+    width: 16px;
+    height: 12px;
+    background:
+      linear-gradient(#fff, #fff) top / 100% 2px no-repeat,
+      linear-gradient(#fff, #fff) center / 66% 2px no-repeat,
+      linear-gradient(#fff, #fff) bottom / 33% 2px no-repeat;
+  }
+
+  .card-list-filter-toggle-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    box-sizing: border-box;
+    border-radius: 9px;
+    background: @bg_action;
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  .card-list-layout {
+    display: block;
+    padding: 12px;
+  }
+
+  .card-list-filters {
+    .frosted-surface();
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 40;
+    max-height: 85vh;
+    padding: 0 12px calc(12px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid @create-game-line;
+    border-radius: 16px 16px 0 0;
+    background: @create-game-surface-strong;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+    transform: translateY(105%);
+    transition: transform 0.25s ease;
+
+    &--open {
+      transform: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  .card-list-sheet-head {
+    display: block;
+    position: relative;
+    padding: 18px 2px 0;
+
+    // Griff als Hinweis, dass das Sheet von unten kommt
+    &::before {
+      content: "";
+      position: absolute;
+      top: 7px;
+      left: 50%;
+      width: 40px;
+      height: 4px;
+      margin-left: -20px;
+      border-radius: 2px;
+      background: @create-game-line;
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+  }
+
+  .card-list-sheet-foot {
+    display: flex;
+    position: sticky;
+    bottom: 0;
+
+    .btn {
+      flex: 1;
+      height: 44px;
+      margin: 0;
+    }
+  }
+
+  .card-list-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    background: rgba(0, 0, 0, 0.5);
+
+    &--open {
+      display: block;
+    }
+  }
+
+  .card-list-section-legend {
+    display: none;
+  }
+
+  .card-list-section-head h2 {
+    font-size: 18px;
+  }
+
+  .card-list-section-head {
+    margin-bottom: 10px;
+  }
+
+  .card-list-scroll-top {
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+// Handy: Karten verkleinert, zwei nebeneinander
+@media only screen and (max-width: @card-list-phone) {
+  .card-list-cards {
+    justify-content: center;
+
+    .cardbox {
+      zoom: @card-list-phone-card-zoom;
+    }
+  }
+
+  // Kolonien, Meilensteine, Auszeichnungen, Agenden haben feste Breiten (Kolonie gut 440px) und würden die Seite verbreitern
+  .card-list-section-body .player_home_colony {
+    zoom: @card-list-phone-card-zoom;
+  }
 }

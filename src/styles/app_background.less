@@ -6,7 +6,7 @@
 }
 
 // App-Hintergrund (Milchstraße, assets/background.jpg – Foto, zusätzlich gedämpft per Filter) für Spielansicht,
-// Zuschaueransicht, Ergebnisseite, Startseite, Spiel erstellen und "Spiel erstellt". Als fest stehendes Pseudo-Element deckt er immer genau das ganze Fenster ab
+// Zuschaueransicht, Ergebnisseite, Startseite, Spiel erstellen, "Spiel erstellt" und Kartenliste. Als fest stehendes Pseudo-Element deckt er immer genau das ganze Fenster ab
 // (cover: vollständig gefüllt, Proportionen bleiben) – unabhängig davon, wie lang der Inhalt ist oder wie gescrollt wird.
 // ::after ist bei der Spielansicht schon belegt (Rahmen "du bist am Zug", active_player_outline.less).
 
@@ -15,6 +15,7 @@
 #game-end,
 #create-game,
 #game-home,
+#card-list,
 .topmost-start-screen {
   position: relative;
   z-index: 0; // eigener Stapelkontext: das Bild (z-index -1) liegt hinter dem Inhalt, aber vor dem body-Grau
@@ -36,13 +37,15 @@
 .preferences_remove_background #spectator-home::before,
 .preferences_remove_background #game-end::before,
 .preferences_remove_background #create-game::before,
-.preferences_remove_background #game-home::before {
+.preferences_remove_background #game-home::before,
+.preferences_remove_background #card-list::before {
   background: @grey_900;
   filter: none;
 }
 
 // Seitengrund schwarz statt grau: das Bild deckt nur das Fenster ab, bei langen Seiten fällt das Ende auf Schwarz kaum auf
 body:has(#create-game),
-body:has(#game-home) {
+body:has(#game-home),
+body:has(#card-list) {
   background: #000;
 }

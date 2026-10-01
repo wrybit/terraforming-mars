@@ -1,224 +1,170 @@
 <template>
-  <div class="card-list-container" :class="getLanguageCssClass()">
-    <h1 v-i18n>Cards List</h1>
-
-      <!-- start filters -->
-
-      <div class="search-container">
-        <input ref="filter" class="filter" :placeholder="$t('filter')" v-model="filterText">
-        <button id="namesOnlyToggle" name="namesOnly" @click="toggleNamesOnly()">
-            <span v-if="namesOnly === true" v-i18n>Names only</span>
-            <span v-else v-i18n>Full text</span>
-        </button>
-
-        <button id="sort-order" @click="toggleSortOrder()" style="width: 85px;">
-            <span v-if="sortOrder === 'a'" v-i18n>A-Z</span>
-            <span v-else v-i18n>0-9</span>
-            &#x2195;
-        </button>
-
-        <button id="show-vps-only" @click="toggleVps()" style="width: 63px;">
-            <span v-if="vps === 0" v-i18n>all</span>
-            <span v-if="vps === 1" v-i18n>+VPs</span>
-            <span v-if="vps === 2" v-i18n>-VPs</span>
-        </button>
-
-        <button id="show-metadata" @click="toggleShowMetadata()" style="width: 60px;" title="Show/hide colony metadata">
-            <span v-if="showMetadata === true">🛰️■</span>
-            <span v-else>🛰️□</span>
-        </button>
-
-        <button id="tall-cards" @click="toggleTallCards()" style="width: 90px;" title="Show tall / short cards">
-            <span v-if="tallCards === true">🂠→<span class="small-card">🂠</span></span>
-              <span v-else><span class="small-card">🂠</span>→🂠</span>
-        </button>
-
-        <button id="advanced-search-collapser" @click="toggleAdvancedSearch()">
-            <span v-if="showAdvanced === true" v-i18n>Advanced «</span>
-            <span v-else v-i18n>Advanced »</span>
-        </button>
+  <div id="card-list" class="card-list" :class="getLanguageCssClass()" @keydown.esc="filtersOpen = false">
+    <header class="card-list-header">
+      <h1 v-i18n>Cards List</h1>
+      <div class="card-list-search">
+        <span class="card-list-search-icon" aria-hidden="true"></span>
+        <input ref="filter" type="search" class="card-list-search-input" autocomplete="off" :placeholder="searchPlaceholder" :title="$t('Hint: ^ at the start finds names that begin with the text')" v-model="filterText">
+        <button v-if="filterText !== ''" type="button" class="card-list-search-clear" :title="$t('Clear')" @click="clearSearch()">✕</button>
+        <SegmentedControl class="card-list-search-scope" :options="searchScopeOptions" v-model="searchScope"/>
       </div>
-
-      <div id="selections" v-show="showAdvanced">
-        <!-- expansions -->
-        <div class="selection-row">
-          <button id="toggle-checkbox" @click="invertExpansions()">-</button>
-
-          <span v-for="expansion in allModules" :key="expansion">
-            <input type="checkbox" :name="expansion" :id="`${expansion}-checkbox`" v-model="expansions[expansion]">
-            <label :for="`${expansion}-checkbox`" class="expansion-button">
-              <div class='expansion-icon' :class="expansionIconClass(expansion)"></div>
-            </label>
-          </span>
-        </div>
-
-        <!-- types -->
-        <div class="selection-row">
-          <button id="toggle-checkbox" @click="invertTypes()">
-              <span v-i18n>-</span>
-          </button>
-
-          <span v-for="type in allTypes" :key="type">
-            <input type="checkbox" :name="`${type}-cardType`" :id="`${type}-cardType-checkbox`" v-model="types[type]">
-            <label :for="`${type}-cardType-checkbox`" class="expansion-button">
-                <span v-if="type === 'colonyTiles'" v-i18n>Colony Tiles</span>
-                <span v-else-if="type === 'globalEvents'" v-i18n>Global Events</span>
-                <span v-else v-i18n>{{type}}</span>
-            </label>
-          </span>
-        </div>
-
-        <!-- tags -->
-        <div class="selection-row">
-          <button id="toggle-checkbox" @click="invertTags()">
-              <span v-i18n>-</span>
-          </button>
-          <span v-for="tag in allTags" :key="tag">
-            <input v-if="tag === 'event'" type="checkbox" :name="`${tag}-cardType`" :id="`${tag}-tag-checkbox`" v-model="types.event">
-            <input v-else type="checkbox" :name="`${tag}-cardType`" :id="`${tag}-tag-checkbox`" v-model="tags[tag]">
-            <label :for="`${tag}-tag-checkbox`" class="expansion-button">
-              <!-- a terrible hack, using expansion-icon because card-tag isn't enough to show the tag.-->
-              <div :class="`expansion-icon card-tag tag-${tag}`"></div>
-            </label>
-          </span>
-        </div>
-
-        <!-- card resources -->
-        <div class="selection-row">
-          <button id="toggle-checkbox" @click="invertResources()">
-              <span v-i18n>-</span>
-          </button>
-          <span v-for="resource in allResources" :key="resource">
-            <input type="checkbox" :name="`${resource}-cardType`" :id="`${resource}-resource-checkbox`" v-model="resources[resource]">
-            <label :for="`${resource}-resource-checkbox`" class="expansion-button">
-              <!-- a terrible hack, using expansion-icon because card-resource isn't enough to show the resource.-->
-              <div v-if="resource !== 'none'" class="expansion-icon card-resource" :class="cardResourceCSS[resource]"></div>
-              <div v-else class="expansion-icon card-tag tag-none"></div>
-            </label>
-          </span>
-        </div>
-
-      </div>
-      <!-- start cards -->
-
-      <section v-show="visibleProjectCards.length > 0" class="card-list-cards-list">
-          <h2 v-i18n>Project Cards</h2>
-          <div class="cardbox" v-for="card in visibleProjectCards" :key="card" v-memo="[card, tallCards]">
-              <Card :card="{'name': card}" :autoTall="tallCards" />
-          </div>
-          <br>
-      </section>
-      <section v-show="visibleCorporationCards.length > 0" class="card-list-cards-list">
-          <h2 v-i18n>Corporations</h2>
-          <div class="cardbox" v-for="card in visibleCorporationCards" :key="card" v-memo="[card, tallCards]">
-              <Card :card="{'name': card}" :autoTall="tallCards"/>
-          </div>
-          <br>
-      </section>
-      <section v-show="visiblePreludeCards.length > 0" class="card-list-cards-list">
-          <h2 v-i18n>Preludes</h2>
-          <div class="cardbox" v-for="card in visiblePreludeCards" :key="card" v-memo="[card, tallCards]">
-              <Card :card="{'name': card}" :autoTall="tallCards"/>
-          </div>
-          <br>
-      </section>
-      <section v-show="visibleCeoCards.length > 0" class="card-list-cards-list">
-          <h2 v-i18n>CEOs</h2>
-          <div class="cardbox" v-for="card in visibleCeoCards" :key="card" v-memo="[card, tallCards]">
-              <Card :card="{'name': card}" :autoTall="tallCards" />
-          </div>
-          <br>
-      </section>
-      <section v-show="visibleStandardProjectCards.length > 0" class="card-list-cards-list">
-        <h2 v-i18n>Standard Projects</h2>
-        <div class="cardbox" v-for="card in visibleStandardProjectCards" :key="card" v-memo="[card, tallCards]">
-            <Card :card="{'name': card}" :autoTall="tallCards" />
-        </div>
-      </section>
-
-      <section v-show="visibleGlobalEvents.length > 0" class="card-list-cards-list">
-        <h2 v-i18n>Global Events</h2>
-        <div class="cardbox" v-for="globalEventName in visibleGlobalEvents" :key="globalEventName" v-memo="[globalEventName]">
-          <GlobalEvent :globalEventName="globalEventName" type="distant"/>
-        </div>
-      </section>
-
-      <section v-show="visibleColonyNames.length > 0">
-        <h2 v-i18n>Colonies</h2>
-        <div class="player_home_colony_cont">
-          <div class="player_home_colony" v-for="colonyName in visibleColonyNames" :key="colonyName" v-memo="[colonyName, showMetadata]">
-            <Colony :colony="colonyModel(colonyName)"/>
-          </div>
-        </div>
-      </section>
-
-      <section v-show="visibleMilestoneNames.length > 0">
-        <h2 v-i18n>Milestones</h2>
-        <div class="player_home_colony_cont">
-          <div class="player_home_colony" v-for="milestoneName in visibleMilestoneNames" :key="milestoneName" v-memo="[milestoneName]">
-            <div class="milestones"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
-              <Milestone :milestone="milestoneModel(milestoneName)" :showDescription="true"/>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section v-show="visibleAwardNames.length > 0">
-        <h2 v-i18n>Awards</h2>
-        <div class="player_home_colony_cont">
-          <div class="player_home_colony" v-for="awardName in visibleAwardNames" :key="awardName" v-memo="[awardName]">
-            <div class="awards"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
-              <Award :award="awardModel(awardName)" :showDescription="true"/>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section v-show="visibleAgendaIds.length > 0">
-        <h2 v-i18n>Agendas</h2>
-        <div class="player_home_colony_cont">
-          <div class="player_home_colony" v-for="id in visibleAgendaIds" :key="id" v-memo="[id]">
-            <TurmoilAgendaContainer :agendaId="id" />
-          </div>
-        </div>
-      </section>
-
-      <div class="free-floating-preferences-icon">
-        <div v-show="scrolled" class="sidebar_item card-list-scroll-top" title="Scroll to top" @click="scrollToTop()">
-          <div class="card-list-scroll-top-arrow">↑</div>
-        </div>
-        <LanguageIcon class="corner-language-icon"/>
+      <div class="card-list-header-actions">
+        <button type="button" class="card-list-filter-toggle" :title="$t('Filters')" @click="filtersOpen = true">
+          <span class="card-list-filter-toggle-icon" aria-hidden="true"></span>
+          <span>{{ visibleCount }}</span>
+          <span v-if="activeFilters.length > 0" class="card-list-filter-toggle-badge">{{ activeFilters.length }}</span>
+        </button>
+        <LanguageIcon/>
         <PreferencesIcon/>
       </div>
+    </header>
+
+    <div class="card-list-scrim" :class="{'card-list-scrim--open': filtersOpen}" @click="filtersOpen = false"></div>
+
+    <div class="card-list-layout">
+      <aside ref="filters" class="card-list-filters" :class="{'card-list-filters--open': filtersOpen}">
+        <div class="card-list-sheet-head"><h2 v-i18n>Filters</h2></div>
+
+        <section class="card-list-group card-list-summary">
+          <div class="card-list-summary-total">
+            <strong>{{ visibleCount }}</strong>
+            <span>{{ ofTotalText }}</span>
+            <button v-if="hasFilters" type="button" class="card-list-link" @click="resetAll()" v-i18n>Clear all</button>
+          </div>
+          <div v-if="activeFilters.length > 0" class="card-list-active">
+            <span v-for="item in activeFilters" :key="`${item.group}:${item.key}`" class="card-list-active-chip">
+              <span v-if="item.iconClass" class="card-list-icon" :class="item.iconClass"></span>
+              <span v-else-if="item.colorClass" class="card-list-dot" :class="item.colorClass"></span>
+              <span v-i18n>{{ item.label }}</span>
+              <button type="button" :title="$t('Remove')" @click="removeFilter(item)">✕</button>
+            </span>
+          </div>
+          <SegmentedControl class="card-list-sort" :options="sortOptions" v-model="sortOrder"/>
+        </section>
+
+        <CardListFilterGroup title="Card type" :options="typeOptions" :selection="types" :counts="typeCounts"
+          @toggle="toggle('types', $event)" @reset="reset('types')"/>
+        <CardListFilterGroup title="Tags" variant="icons" :options="tagOptions" :selection="tags" :counts="tagCounts"
+          @toggle="toggle('tags', $event)" @reset="reset('tags')"/>
+        <CardListFilterGroup title="Expansions" :options="expansionOptions" :selection="expansions" :counts="expansionCounts"
+          @toggle="toggle('expansions', $event)" @reset="reset('expansions')"/>
+
+        <details ref="moreFilters" class="card-list-group card-list-more">
+          <summary @click="moreFiltersChosen = true" v-i18n>More filters</summary>
+          <div class="card-list-more-body">
+            <div class="card-list-more-row">
+              <h3 v-i18n>Victory points</h3>
+              <SegmentedControl :options="vpOptions" v-model="vps"/>
+            </div>
+            <CardListFilterGroup title="Card resources" variant="icons" :options="resourceOptions" :selection="resources" :counts="resourceCounts"
+              @toggle="toggle('resources', $event)" @reset="reset('resources')"/>
+            <div class="card-list-more-row">
+              <h3 v-i18n>Display</h3>
+              <div class="card-list-chips card-list-chips--chips">
+                <button type="button" class="card-list-chip" :class="{'card-list-chip--selected': tallCards}" :aria-pressed="tallCards" @click="tallCards = !tallCards">
+                  <span class="card-list-chip-label" v-i18n>Tall cards</span>
+                </button>
+                <button type="button" class="card-list-chip" :class="{'card-list-chip--selected': showMetadata}" :aria-pressed="showMetadata" @click="showMetadata = !showMetadata">
+                  <span class="card-list-chip-label" v-i18n>Colony details</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <div class="card-list-sheet-foot">
+          <button type="button" class="btn btn-primary" @click="filtersOpen = false">{{ showResultsText }}</button>
+        </div>
+      </aside>
+
+      <main ref="results" class="card-list-results">
+        <CardListSection v-for="section in cardSections" :key="section.title" v-show="section.names.length > 0"
+          :title="section.title" :count="section.names.length" :parts="section.parts">
+          <CardListCardGrid :names="section.names" :tallCards="tallCards"/>
+        </CardListSection>
+
+        <CardListSection v-show="visibleGlobalEvents.length > 0" title="Global Events" :count="visibleGlobalEvents.length" :parts="partsFor('globalEvents', visibleGlobalEvents.length)">
+          <div class="card-list-cards">
+            <div class="cardbox" v-for="globalEventName in visibleGlobalEvents" :key="globalEventName" v-memo="[globalEventName]">
+              <GlobalEvent :globalEventName="globalEventName" type="distant"/>
+            </div>
+          </div>
+        </CardListSection>
+
+        <CardListSection v-show="visibleColonyNames.length > 0" title="Colonies" :count="visibleColonyNames.length" :parts="partsFor('colonyTiles', visibleColonyNames.length)">
+          <div class="player_home_colony_cont">
+            <div class="player_home_colony" v-for="colonyName in visibleColonyNames" :key="colonyName" v-memo="[colonyName, showMetadata]">
+              <Colony :colony="colonyModel(colonyName)"/>
+            </div>
+          </div>
+        </CardListSection>
+
+        <CardListSection v-show="visibleMilestoneNames.length > 0" title="Milestones" :count="visibleMilestoneNames.length" :parts="partsFor('milestones', visibleMilestoneNames.length)">
+          <div class="player_home_colony_cont">
+            <div class="player_home_colony" v-for="milestoneName in visibleMilestoneNames" :key="milestoneName" v-memo="[milestoneName]">
+              <div class="milestones"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
+                <Milestone :milestone="milestoneModel(milestoneName)" :showDescription="true"/>
+              </div>
+            </div>
+          </div>
+        </CardListSection>
+
+        <CardListSection v-show="visibleAwardNames.length > 0" title="Awards" :count="visibleAwardNames.length" :parts="partsFor('awards', visibleAwardNames.length)">
+          <div class="player_home_colony_cont">
+            <div class="player_home_colony" v-for="awardName in visibleAwardNames" :key="awardName" v-memo="[awardName]">
+              <div class="awards"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
+                <Award :award="awardModel(awardName)" :showDescription="true"/>
+              </div>
+            </div>
+          </div>
+        </CardListSection>
+
+        <CardListSection v-show="visibleAgendaIds.length > 0" title="Agendas" :count="visibleAgendaIds.length" :parts="partsFor('agendas', visibleAgendaIds.length)">
+          <div class="player_home_colony_cont">
+            <div class="player_home_colony" v-for="id in visibleAgendaIds" :key="id" v-memo="[id]">
+              <TurmoilAgendaContainer :agendaId="id"/>
+            </div>
+          </div>
+        </CardListSection>
+
+        <div v-if="visibleCount === 0" class="card-list-empty">
+          <p v-i18n>Nothing matches these filters.</p>
+          <button type="button" class="btn btn-tone-quiet" @click="resetAll()" v-i18n>Clear all</button>
+        </div>
+      </main>
+    </div>
+
+    <button type="button" class="card-list-scroll-top" :class="{'card-list-scroll-top--visible': showScrollTop}" :title="$t('Back to top')" @click="scrollToTop()">
+      <span aria-hidden="true">↑</span>
+    </button>
   </div>
 </template>
 
 <script lang="ts">
 
-import {defineComponent} from 'vue';
+import {defineComponent, markRaw} from 'vue';
 import {CardType} from '@/common/cards/CardType';
 import {CardName} from '@/common/cards/CardName';
-import {getEnumStringValues, partition, toName} from '@/common/utils/utils';
+import {partition} from '@/common/utils/utils';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {GlobalEventName} from '@/common/turmoil/globalEvents/GlobalEventName';
-import {allGlobalEventNames, getGlobalEvent} from '@/client/turmoil/ClientGlobalEventManifest';
-import {byType, getCard, getCardOrThrow, getCards} from '@/client/cards/ClientCardManifest';
+import {allGlobalEventNames} from '@/client/turmoil/ClientGlobalEventManifest';
+import {getCardOrThrow} from '@/client/cards/ClientCardManifest';
 import {COMMUNITY_COLONY_NAMES, OFFICIAL_COLONY_NAMES, PATHFINDERS_COLONY_NAMES} from '@/common/colonies/AllColonies';
 import {ColonyModel} from '@/common/models/ColonyModel';
 import {ColonyName} from '@/common/colonies/ColonyName';
-import {GameModule, GAME_MODULES} from '@/common/cards/GameModule';
-import {Tag} from '@/common/cards/Tag';
-import {getColonyOrThrow} from '@/client/colonies/ClientColonyManifest';
-import {ClientCard} from '@/common/cards/ClientCard';
-import {translateText} from '@/client/directives/i18n';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {MilestoneName, milestoneNames} from '@/common/ma/MilestoneName';
 import {AwardName, awardNames} from '@/common/ma/AwardName';
 import {ClaimedMilestoneModel} from '@/common/models/ClaimedMilestoneModel';
 import {FundedAwardModel} from '@/common/models/FundedAwardModel';
-import {TypeOption, CardListModel, hashToModel, modelToHash, ResourceOption, TagOption} from '@/client/components/cardlist/CardListModel';
-import {getAward, getMilestone} from '@/client/MilestoneAwardManifest';
-import {BonusId, BONUS_IDS, PolicyId, POLICY_IDS, agendaIdDescription} from '@/common/turmoil/Types';
-import Card from '@/client/components/card/Card.vue';
+import {TypeOption, CardListModel, hashToModel, modelToHash} from '@/client/components/cardlist/CardListModel';
+import {BonusId, BONUS_IDS, PolicyId, POLICY_IDS} from '@/common/turmoil/Types';
+import {buildEntries, CardListEntry, countOptions, FilterGroup, FilterState, passesFilters} from '@/client/components/cardlist/cardListEntries';
+import {EXPANSION_OPTIONS, FilterOption, optionKeys, RESOURCE_OPTIONS, SectionPart, TAG_OPTIONS, TYPE_COLOR_CLASSES, TYPE_OPTIONS, typeLabel} from '@/client/components/cardlist/cardListOptions';
+import {markedOptions, resetOptions, toggleOption} from '@/client/components/cardlist/filterSelection';
+import {clearSearchHighlight, highlightSearch} from '@/client/components/cardlist/searchHighlight';
+import {SegmentOption} from '@/client/components/create/createGameChoices';
 import Colony from '@/client/components/colonies/Colony.vue';
 import GlobalEvent from '@/client/components/turmoil/GlobalEvent.vue';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
@@ -226,20 +172,52 @@ import LanguageIcon from '@/client/components/LanguageIcon.vue';
 import Milestone from '@/client/components/Milestone.vue';
 import Award from '@/client/components/Award.vue';
 import TurmoilAgendaContainer from '@/client/components/cardlist/TurmoilAgendaContainer.vue';
-import {CardResource} from '@/common/CardResource';
-import {cardResourceCSS} from '../common/cardResources';
+import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
+import CardListFilterGroup from '@/client/components/cardlist/CardListFilterGroup.vue';
+import CardListSection from '@/client/components/cardlist/CardListSection.vue';
+import CardListCardGrid from '@/client/components/cardlist/CardListCardGrid.vue';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {textFitMetrics} from '@/client/utils/textFit';
 
-
 type Refs = {
   filter: HTMLInputElement;
+  filters: HTMLElement;
+  moreFilters: HTMLDetailsElement;
+  results: HTMLElement;
 };
+
+// Abschnitte mit Spielkarten, in dieser Reihenfolge
+const CARD_SECTIONS: ReadonlyArray<{title: string, types: ReadonlyArray<CardType>}> = [
+  {title: 'Project Cards', types: [CardType.AUTOMATED, CardType.ACTIVE, CardType.EVENT]},
+  {title: 'Corporations', types: [CardType.CORPORATION]},
+  {title: 'Preludes', types: [CardType.PRELUDE]},
+  {title: 'CEOs', types: [CardType.CEO]},
+  {title: 'Standard Projects', types: [CardType.STANDARD_PROJECT]},
+];
+
+type CardSection = {title: string, names: Array<CardName>, parts: Array<SectionPart>};
+
+// Ein aktiver Filter als entfernbarer Chip in der Zusammenfassung
+type ActiveFilter = FilterOption & {group: FilterGroup | 'vps'};
+
+const FILTER_GROUP_OPTIONS: Record<FilterGroup, ReadonlyArray<FilterOption>> = {
+  types: TYPE_OPTIONS,
+  tags: TAG_OPTIONS,
+  expansions: EXPANSION_OPTIONS,
+  resources: RESOURCE_OPTIONS,
+};
+
+const VP_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 0, label: 'all'}, {value: 1, label: '+VPs'}, {value: 2, label: '-VPs'}];
+const SORT_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'a', label: 'A-Z'}, {value: '1', label: '0-9'}];
+const SEARCH_SCOPE_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'name', label: 'Name'}, {value: 'text', label: 'Full text'}];
+
+// Suchmarkierung erst, wenn das Tippen kurz ruht – die Liste rendert sonst bei jedem Zeichen neu durch
+const HIGHLIGHT_DELAY_MS = 120;
 
 export default defineComponent({
   name: 'CardList',
   components: {
-    Card,
+    CardListCardGrid,
     GlobalEvent,
     Colony,
     Milestone,
@@ -247,122 +225,165 @@ export default defineComponent({
     TurmoilAgendaContainer,
     PreferencesIcon,
     LanguageIcon,
+    SegmentedControl,
+    CardListFilterGroup,
+    CardListSection,
   },
   data() {
     return {
       ...hashToModel(window.location.hash),
-      // Whether the page has been scrolled down at all; gates the "scroll to top" widget.
-      scrolled: false,
+      // Alle Einträge einmal aufbauen; markRaw, weil sie sich nie ändern und groß sind
+      entries: markRaw(buildEntries()) as ReadonlyArray<CardListEntry>,
+      showScrollTop: false,
+      // Mobil: Filter als Bottom-Sheet
+      filtersOpen: false,
+      // Hat jemand "Weitere Filter" selbst auf- oder zugeklappt, gilt das statt der Automatik
+      moreFiltersChosen: false,
+      highlightTimer: undefined as ReturnType<typeof setTimeout> | undefined,
     };
   },
   mounted() {
     setDocumentTitle('Cards List');
-    this.typedRefs.filter.focus();
+    // Auf Touch-Geräten nicht fokussieren, sonst springt sofort die Tastatur auf
+    if (!window.matchMedia('(pointer: coarse)').matches) {
+      this.typedRefs.filter.focus();
+    }
     this.delayedSetLocationHash();
     this.measureTitleFit();
     window.addEventListener('scroll', this.handleScroll, {passive: true});
+    window.addEventListener('resize', this.fitMoreFilters);
+    this.fitMoreFilters();
+    this.scheduleHighlight();
+  },
+  updated() {
+    // Filter-Chips in der Zusammenfassung ändern die Höhe der Filterspalte
+    this.fitMoreFilters();
+    this.scheduleHighlight();
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('resize', this.fitMoreFilters);
+    clearTimeout(this.highlightTimer);
+    clearSearchHighlight();
   },
   computed: {
     typedRefs(): Refs {
       return this.$refs as unknown as Refs;
     },
-    allModules(): ReadonlyArray<GameModule> {
-      return GAME_MODULES;
+    typeOptions(): typeof TYPE_OPTIONS {
+      return TYPE_OPTIONS;
     },
-    allTypes(): Array<TypeOption> {
-      return [
-        CardType.EVENT,
-        CardType.ACTIVE,
-        CardType.AUTOMATED,
-        CardType.PRELUDE,
-        CardType.CORPORATION,
-        CardType.STANDARD_PROJECT,
-        CardType.CEO,
-        'colonyTiles',
-        'globalEvents',
-        'milestones',
-        'awards',
-        'agendas',
-      ];
+    tagOptions(): typeof TAG_OPTIONS {
+      return TAG_OPTIONS;
     },
-    allTags(): Array<TagOption> {
-      const results: Array<TagOption> = [];
-      for (const tag in Tag) {
-        if (Object.hasOwn(Tag, tag)) {
-          results.push((<any>Tag)[tag]);
-        }
+    expansionOptions(): typeof EXPANSION_OPTIONS {
+      return EXPANSION_OPTIONS;
+    },
+    resourceOptions(): typeof RESOURCE_OPTIONS {
+      return RESOURCE_OPTIONS;
+    },
+    vpOptions(): typeof VP_OPTIONS {
+      return VP_OPTIONS;
+    },
+    sortOptions(): typeof SORT_OPTIONS {
+      return SORT_OPTIONS;
+    },
+    searchScopeOptions(): typeof SEARCH_SCOPE_OPTIONS {
+      return SEARCH_SCOPE_OPTIONS;
+    },
+    searchScope: {
+      get(): string {
+        return this.namesOnly ? 'name' : 'text';
+      },
+      set(scope: string) {
+        this.namesOnly = scope === 'name';
+      },
+    },
+    searchPlaceholder(): string {
+      return translateText(this.namesOnly ? 'Search names' : 'Search all card texts');
+    },
+    filterState(): FilterState {
+      return {types: this.types, tags: this.tags, expansions: this.expansions, resources: this.resources, vps: this.vps};
+    },
+    // Einträge, die zum Suchtext passen – Grundlage für Ergebnisse und Trefferzahlen
+    textMatches(): Array<CardListEntry> {
+      return this.entries.filter((entry) => this.include(entry.name, entry.searchKind));
+    },
+    visibleEntries(): Array<CardListEntry> {
+      return this.textMatches.filter((entry) => passesFilters(entry, this.filterState));
+    },
+    visibleKeys(): Set<string> {
+      return new Set(this.visibleEntries.map((entry) => `${entry.type}:${entry.name}`));
+    },
+    visibleCount(): number {
+      return this.visibleEntries.length;
+    },
+    typeCounts(): Map<string, number> {
+      return countOptions(this.textMatches, this.filterState, 'types');
+    },
+    tagCounts(): Map<string, number> {
+      return countOptions(this.textMatches, this.filterState, 'tags');
+    },
+    expansionCounts(): Map<string, number> {
+      return countOptions(this.textMatches, this.filterState, 'expansions');
+    },
+    resourceCounts(): Map<string, number> {
+      return countOptions(this.textMatches, this.filterState, 'resources');
+    },
+    ofTotalText(): string {
+      return translateTextWithParams('of ${0}', [String(this.entries.length)]);
+    },
+    showResultsText(): string {
+      return translateTextWithParams('Show ${0} results', [String(this.visibleCount)]);
+    },
+    activeFilters(): Array<ActiveFilter> {
+      const active: Array<ActiveFilter> = [];
+      for (const group of Object.keys(FILTER_GROUP_OPTIONS) as Array<FilterGroup>) {
+        const options = FILTER_GROUP_OPTIONS[group];
+        const marked = markedOptions(this[group] as Record<string, boolean>, optionKeys(options));
+        options.filter((option) => marked.includes(option.key)).forEach((option) => active.push({...option, group}));
       }
-      return results.concat('none');
+      if (this.vps !== 0) {
+        active.push({group: 'vps', key: String(this.vps), label: this.vps === 1 ? '+VPs' : '-VPs'});
+      }
+      return active;
     },
-    allResources(): Array<ResourceOption> {
-      return [...getEnumStringValues(CardResource), 'none'];
+    hasFilters(): boolean {
+      return this.activeFilters.length > 0 || this.filterText !== '';
     },
-    allMilestoneNames(): ReadonlyArray<MilestoneName> {
-      return milestoneNames.toSorted();
+    cardSections(): Array<CardSection> {
+      return CARD_SECTIONS.map((section) => {
+        const entries = this.visibleEntries.filter((entry) => entry.card !== undefined && section.types.includes(entry.card.type));
+        return {
+          title: section.title,
+          names: this.sort(entries.map((entry) => entry.name as CardName)),
+          parts: section.types.map((type) => ({
+            label: typeLabel(type),
+            colorClass: TYPE_COLOR_CLASSES[type],
+            count: entries.filter((entry) => entry.type === type).length,
+          })),
+        };
+      });
     },
-    allAwardNames(): ReadonlyArray<AwardName> {
-      return awardNames.toSorted();
+    visibleGlobalEvents(): Array<GlobalEventName> {
+      const names = Array.from(allGlobalEventNames()).filter((name) => this.isVisible('globalEvents', name));
+      return this.sortOrder === 'a' ? this.sort(names) : names;
     },
-    allAgendaIds(): ReadonlyArray<PolicyId | BonusId> {
+    visibleColonyNames(): Array<ColonyName> {
+      return [...OFFICIAL_COLONY_NAMES, ...COMMUNITY_COLONY_NAMES, ...PATHFINDERS_COLONY_NAMES].filter((name) => this.isVisible('colonyTiles', name));
+    },
+    visibleMilestoneNames(): Array<MilestoneName> {
+      return milestoneNames.toSorted().filter((name) => this.isVisible('milestones', name));
+    },
+    visibleAwardNames(): Array<AwardName> {
+      return awardNames.toSorted().filter((name) => this.isVisible('awards', name));
+    },
+    visibleAgendaIds(): Array<PolicyId | BonusId> {
       const ids = (POLICY_IDS as ReadonlyArray<PolicyId | BonusId>).concat(BONUS_IDS);
       const [official, expansion] = partition(ids, (id) => id.endsWith('01'));
       official.sort(); // This puts matching party content together.
       expansion.sort();
-      return [...official, ...expansion];
-    },
-    cardResourceCSS(): typeof cardResourceCSS {
-      return cardResourceCSS;
-    },
-    visibleProjectCards(): Array<CardName> {
-      return this.getAllProjectCards().filter((c) => this.showCard(c));
-    },
-    visibleCorporationCards(): Array<CardName> {
-      return this.getAllCorporationCards().filter((c) => this.showCard(c));
-    },
-    visiblePreludeCards(): Array<CardName> {
-      return this.getAllPreludeCards().filter((c) => this.showCard(c));
-    },
-    visibleCeoCards(): Array<CardName> {
-      return this.getAllCeoCards().filter((c) => this.showCard(c));
-    },
-    visibleStandardProjectCards(): Array<CardName> {
-      return this.getAllStandardProjectCards().filter((c) => this.showCard(c));
-    },
-    visibleGlobalEvents(): Array<GlobalEventName> {
-      if (!this.types.globalEvents) {
-        return [];
-      }
-      return this.getAllGlobalEvents().filter((e) => this.showGlobalEvent(e));
-    },
-    visibleColonyNames(): Array<ColonyName> {
-      if (!this.types.colonyTiles) {
-        return [];
-      }
-      return this.getAllColonyNames().filter((c) => this.showColony(c));
-    },
-    visibleMilestoneNames(): Array<MilestoneName> {
-      if (!this.types.milestones) {
-        return [];
-      }
-      return this.allMilestoneNames.filter((m) => this.showMilestone(m));
-    },
-    visibleAwardNames(): Array<AwardName> {
-      if (!this.types.awards) {
-        return [];
-      }
-      return this.allAwardNames.filter((a) => this.showAward(a));
-    },
-    visibleAgendaIds(): Array<PolicyId | BonusId> {
-      if (!this.types.agendas) {
-        return [];
-      }
-      return this.allAgendaIds.filter((id) => this.include(id, 'agenda'));
-    },
-    agendaIdDescription(): typeof agendaIdDescription {
-      return agendaIdDescription;
+      return [...official, ...expansion].filter((id) => this.isVisible('agendas', id));
     },
   },
   methods: {
@@ -378,17 +399,36 @@ export default defineComponent({
       window.location.hash = hash;
       return changed;
     },
-    invertExpansions() {
-      GAME_MODULES.forEach((module) => this.expansions[module] = !this.expansions[module]);
+    selectionOf(group: FilterGroup): Record<string, boolean> {
+      return this[group] as Record<string, boolean>;
     },
-    invertTags() {
-      this.allTags.forEach((tag) => this.tags[tag] = !this.tags[tag]);
+    toggle(group: FilterGroup, key: string): void {
+      toggleOption(this.selectionOf(group), optionKeys(FILTER_GROUP_OPTIONS[group]), key);
     },
-    invertResources() {
-      this.allResources.forEach((resource) => this.resources[resource] = !this.resources[resource]);
+    reset(group: FilterGroup): void {
+      resetOptions(this.selectionOf(group), optionKeys(FILTER_GROUP_OPTIONS[group]));
     },
-    invertTypes() {
-      this.allTypes.forEach((type) => this.types[type] = !this.types[type]);
+    removeFilter(filter: ActiveFilter): void {
+      if (filter.group === 'vps') {
+        this.vps = 0;
+      } else {
+        this.toggle(filter.group, filter.key);
+      }
+    },
+    resetAll(): void {
+      (Object.keys(FILTER_GROUP_OPTIONS) as Array<FilterGroup>).forEach((group) => this.reset(group));
+      this.vps = 0;
+      this.filterText = '';
+    },
+    clearSearch(): void {
+      this.filterText = '';
+      this.typedRefs.filter.focus();
+    },
+    isVisible(type: TypeOption, name: string): boolean {
+      return this.visibleKeys.has(`${type}:${name}`);
+    },
+    partsFor(type: TypeOption, count: number): Array<SectionPart> {
+      return [{label: typeLabel(type), colorClass: TYPE_COLOR_CLASSES[type], count}];
     },
     sort<T extends string>(names: Array<T>): Array<T> {
       if (this.sortOrder === 'a') {
@@ -400,39 +440,6 @@ export default defineComponent({
         numbered.sort((a, b) => a.number.localeCompare(b.number));
         return numbered.map((e) => e.name);
       }
-    },
-    getAllStandardProjectCards() {
-      const names = getCards(byType(CardType.STANDARD_PROJECT)).map(toName);
-      return this.sort(names);
-    },
-    getAllProjectCards() {
-      const names: Array<CardName> = [];
-      names.push(...getCards(byType(CardType.AUTOMATED)).map(toName));
-      names.push(...getCards(byType(CardType.ACTIVE)).map(toName));
-      names.push(...getCards(byType(CardType.EVENT)).map(toName));
-      return this.sort(names);
-    },
-    getAllCorporationCards() {
-      const names = getCards(byType(CardType.CORPORATION)).map(toName);
-      return this.sort(names);
-    },
-    getAllPreludeCards() {
-      const names = getCards(byType(CardType.PRELUDE)).map(toName);
-      return this.sort(names);
-    },
-    getAllCeoCards() {
-      const names = getCards(byType(CardType.CEO)).map(toName);
-      return this.sort(names);
-    },
-    getAllGlobalEvents() {
-      if (this.sortOrder === 'a') {
-        return this.sort(Array.from(allGlobalEventNames()));
-      } else {
-        return Array.from(allGlobalEventNames());
-      }
-    },
-    getAllColonyNames() {
-      return OFFICIAL_COLONY_NAMES.concat(COMMUNITY_COLONY_NAMES).concat(PATHFINDERS_COLONY_NAMES);
     },
     include(name: string, type: 'card' | 'globalEvent' | 'colony' | 'ma' | 'agenda') {
       const normalized = this.filterText.toLocaleUpperCase();
@@ -448,92 +455,30 @@ export default defineComponent({
         return this.searchIndex.matches(this.filterText, type, name);
       }
     },
-    expansionIconClass(expansion: GameModule): string {
-      switch (expansion) {
-      case 'base': return 'expansion-icon-base';
-      case 'corpera': return 'expansion-icon-CE';
-      case 'colonies': return 'expansion-icon-colony';
-      case 'moon': return 'expansion-icon-themoon';
-      default: return `expansion-icon-${expansion}`;
+    // "Weitere Filter" aufgeklappt, solange die Filterspalte dann noch ohne Scrollen passt
+    fitMoreFilters(): void {
+      const details = this.typedRefs.moreFilters;
+      const column = this.typedRefs.filters;
+      if (this.moreFiltersChosen || details === undefined || column === undefined) {
+        return;
+      }
+      details.open = true;
+      if (column.scrollHeight > column.clientHeight + 1) {
+        details.open = false;
       }
     },
-    filterByTags(card: ClientCard): boolean {
-      if (card.tags.length === 0) {
-        return this.tags['none'] === true;
-      }
-
-      let matches = false;
-      for (const tag of card.tags) {
-        if (this.tags[tag]) {
-          matches = true;
-        }
-      }
-      return matches;
+    scheduleHighlight(): void {
+      clearTimeout(this.highlightTimer);
+      this.highlightTimer = setTimeout(() => this.highlight(), HIGHLIGHT_DELAY_MS);
     },
-    showCard(cardName: CardName): boolean {
-      if (!this.include(cardName, 'card')) {
-        return false;
+    highlight(): void {
+      const results = this.typedRefs.results;
+      if (results === undefined) {
+        return;
       }
-
-      const card = getCard(cardName);
-      if (card === undefined) {
-        return false;
-      }
-
-      if (!this.filterByTags(card)) {
-        return false;
-      }
-      if (!this.types[card.type]) {
-        return false;
-      }
-      if (card.resourceType === undefined) {
-        if (this.resources.none === false) {
-          return false;
-        }
-      } else {
-        if (!this.resources[card.resourceType]) {
-          return false;
-        }
-      }
-      switch (this.vps) {
-      case 1:
-        if (card.victoryPoints === undefined) {
-          return false;
-        }
-        break;
-      case 2:
-        if (card.victoryPoints !== undefined) {
-          return false;
-        }
-        break;
-      }
-      return this.expansions[card.module] === true;
-    },
-    showGlobalEvent(name: GlobalEventName): boolean {
-      if (!this.include(name, 'globalEvent')) {
-        return false;
-      }
-      const globalEvent = getGlobalEvent(name);
-      return globalEvent !== undefined && this.expansions[globalEvent.module] === true;
-    },
-    showColony(name: ColonyName): boolean {
-      if (!this.include(name, 'colony')) {
-        return false;
-      }
-      const colony = getColonyOrThrow(name);
-      return this.expansions[colony.module ?? 'base'] === true;
-    },
-    showMilestone(name: MilestoneName): boolean {
-      if (!this.include(name, 'ma')) {
-        return false;
-      }
-      return this.expansions[getMilestone(name).requirements ?? 'base'] === true;
-    },
-    showAward(name: AwardName): boolean {
-      if (!this.include(name, 'ma')) {
-        return false;
-      }
-      return this.expansions[getAward(name).requirements ?? 'base'] === true;
+      // Bei der Namenssuche nur die Titel markieren, sonst alles, was der Volltext durchsucht
+      const containers = this.namesOnly ? results.querySelectorAll('.card-title') : [results];
+      highlightSearch(containers, this.filterText);
     },
     getLanguageCssClass() {
       const language = getPreferences().lang;
@@ -554,10 +499,6 @@ export default defineComponent({
     awardModel(name: AwardName): FundedAwardModel {
       return {name, playerName: undefined, color: undefined, scores: []};
     },
-    // experimentalUI might not be used at the moment, but it's fine to just leave it here.
-    experimentalUI(): boolean {
-      return getPreferences().experimental_ui;
-    },
     // Reports how long it took to resize every card title once they've all been
     // fitted. Each CardTitle defers its fit until document.fonts.ready, so we
     // wait on the same signal: our child components register their fit callbacks
@@ -574,28 +515,12 @@ export default defineComponent({
       }
     },
     scrollToTop(): void {
-      window.scrollTo({top: 0, behavior: 'smooth'});
+      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({top: 0, behavior: smooth ? 'smooth' : 'auto'});
     },
+    // Nach-oben-Button erst nach gut einem Bildschirm Scrollen
     handleScroll(): void {
-      this.scrolled = window.scrollY > 0;
-    },
-    toggleNamesOnly(): void {
-      this.namesOnly = !this.namesOnly;
-    },
-    toggleAdvancedSearch(): void {
-      this.showAdvanced = !this.showAdvanced;
-    },
-    toggleSortOrder(): void {
-      this.sortOrder = this.sortOrder === 'a' ? '1' : 'a';
-    },
-    toggleVps(): void {
-      this.vps = (this.vps + 1) % 3;
-    },
-    toggleShowMetadata(): void {
-      this.showMetadata = !this.showMetadata;
-    },
-    toggleTallCards(): void {
-      this.tallCards = !this.tallCards;
+      this.showScrollTop = window.scrollY > window.innerHeight;
     },
   },
 });
