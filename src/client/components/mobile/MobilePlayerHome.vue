@@ -64,6 +64,14 @@
           </template>
           <span v-else class="mb-task-title">{{ inputTitle }}</span>
         </div>
+        <!-- Startauswahl bestätigt: Kopf wie bei einer Aufgabe, darunter die eigene Auswahl (PlayerSetupView); Status, wer noch wählt -->
+        <div v-else-if="isSetupConfirmed" class="mb-task-head">
+          <button type="button" class="mb-icon-button" :aria-label="$t('Back')" @click="go('mars')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <span class="mb-task-title">{{ $t('Your selection') }}</span>
+          <span class="mb-task-sub">{{ bannerTitle }}</span>
+        </div>
         <!-- Startauswahl in Schritten wie im Mockup: Konzern, Präludien, Karten – immer nur eine Spalte sichtbar -->
         <div v-if="isSetupPhase && setupSteps.length > 1" class="mb-steps" role="tablist">
           <button v-for="(step, index) in setupSteps" :key="index" type="button" role="tab"
@@ -97,8 +105,9 @@
       </section>
     </main>
 
-    <!-- Aufgabenleiste: auf dem Zug-Bildschirm und während einer Feldwahl; Bestätigen/Bezahlen sitzen rechts daneben (mobile.less) -->
-    <div v-if="screen === 'turn' || placing" class="mb-taskbar">
+    <!-- Aufgabenleiste: auf dem Zug-Bildschirm und während einer Feldwahl; Bestätigen/Bezahlen sitzen rechts daneben (mobile.less).
+         Nach bestätigter Startauswahl gibt es nichts zu bestätigen: dann bleibt die Navigation stehen -->
+    <div v-if="(screen === 'turn' && !isSetupConfirmed) || placing" class="mb-taskbar">
       <!-- Zurück als Symbol: keine eigenen Texte neben den vorhandenen Übersetzungen -->
       <button type="button" class="mb-taskbar-back" :aria-label="$t('Close')" @click="leaveTask"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
       <template v-if="screen !== 'turn'">
