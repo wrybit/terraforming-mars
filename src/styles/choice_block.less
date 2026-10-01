@@ -5,7 +5,7 @@
 // Nur Desktop: die Mobil-Ansicht hat eigene Raster (mobile.less); die Startauswahl eigene Spalten (setup_columns.less).
 @import (reference) "./selection_highlight.less";
 
-@choice-tile-width: 240px; // Breite einer Projektkarte (.filterDiv in cards.less)
+@choice-tile-width: 248px; // Außenbreite einer Projektkarte: 240px plus 2 × 4px Rand (.filterDiv in cards.less)
 @choice-column-gap: 16px; // Kartenabstand in Tab-Boxen (@or-tab-panel-card-gap in or_options_tabs.less)
 @choice-row-gap: (@selection-tab-offset + 6px); // darüber sitzt das Häkchen-Fähnchen der gewählten Kachel
 @choice-panel-padding: 16px; // Innenabstand der Tab-Box (tab_panel_footer.less)
@@ -38,14 +38,16 @@ html:not(.tm-mobile) {
       zoom: unit((@choice-tile-width / @ma-tile-width));
     }
 
-    // Karten: Abstände macht der Block (gap), nicht die Außenränder der Karten
+    // Karten (SelectCard: label.cardbox, Karte ausspielen/Standardprojekt: label.payments_cards):
+    // Abstände macht der Block (gap), nicht die Außenränder der Karten
     > .cardbox,
-    > .cardbox > .card-container {
+    > .payments_cards,
+    > label > .card-container {
       margin: 0;
     }
 
-    // Titel, Hinweise und Buttons einer Kartenwahl stehen in eigener Zeile über bzw. unter dem Block
-    &.wf-component--select-card > :not(.cardbox) {
+    // Titel, Hinweise, Bezahlbereich und Buttons einer Kartenwahl stehen in eigener Zeile über bzw. unter dem Block
+    &:has(> .cardbox, > .payments_cards) > :not(.cardbox, .payments_cards) {
       flex: 0 0 100%;
     }
   }
