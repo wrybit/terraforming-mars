@@ -4,6 +4,13 @@
 > Game logic and cards are unchanged from the original. The fork only reworks the **player view UI**
 > to make its design, layout and interaction clearer.
 
+**Live demo:** [tm.baiz.org/demo](https://tm.baiz.org/demo/) – a screen viewer with screenshots of every view and game state, desktop, tablet and phone, in English and German.
+
+### Kept up to date
+
+- **Daily upstream merge:** every day at 15:45 (Berlin time) the latest changes from the original [terraforming-mars/terraforming-mars](https://github.com/terraforming-mars/terraforming-mars) are merged into this fork. Game logic, cards, bug fixes and new features come from the original; UI conflicts are resolved in favour of the fork's layout. The merge is only pushed when build, lint and all tests pass.
+- **Screenshots refresh themselves:** after each merge, only the views affected by the changes are captured again and uploaded to the [demo page](https://tm.baiz.org/demo/). Each screenshot there shows the date it was taken.
+
 ### What this fork changes in the UI
 
 - **Two columns** from a window width of 1400 px: game actions on the left; Mars, milestones, awards and log on the right. Mars stays visible while scrolling. A drag handle adjusts the column widths.
@@ -20,7 +27,7 @@
 
 ## Screenshots
 
-English UI. Desktop at 1920 px width, mobile on a 390 px phone.
+English UI. Desktop at 1920 px width, mobile on a 390 px phone. All views and states: [demo page](https://tm.baiz.org/demo/).
 
 <table>
 <tr><th>View</th><th>Desktop</th><th>Mobile</th></tr>
@@ -85,11 +92,103 @@ English UI. Desktop at 1920 px width, mobile on a 390 px phone.
 
 ## Running locally
 
+### 1. Requirements
+
+| Tool | Version | Note |
+|---|---|---|
+| [Git](https://git-scm.com/) | any | to clone the repository |
+| [Node.js](https://nodejs.org/) | 24 (see `.nvmrc`), 22 works too | includes `npm`. With [nvm](https://github.com/nvm-sh/nvm): `nvm install && nvm use` in the project folder |
+| Build tools | – | only needed if `npm ci` has to compile the SQLite driver (`better-sqlite3`) because no prebuilt binary fits your system. macOS: `xcode-select --install`. Debian/Ubuntu: `sudo apt install python3 make g++`. Windows: “Desktop development with C++” from the Visual Studio Build Tools |
+
+No database server is needed: by default games are stored in a SQLite file.
+
+### 2. Install and build
+
 ```bash
-npm install
-npm run build
+git clone https://github.com/wrybit/terraforming-mars.git
+cd terraforming-mars
+nvm use            # optional, picks the Node version from .nvmrc
+npm ci             # installs the exact dependency versions from package-lock.json
+npm run build      # CSS, card data, server (TypeScript) and client (webpack) – takes a few minutes
+```
+
+### 3. Start
+
+```bash
 npm start
 ```
+
+The server prints `Starting server on port 8080`. Then:
+
+1. Open <http://localhost:8080> and click **New game** (or go straight to <http://localhost:8080/new-game>).
+2. Choose players and options, then **Create game**.
+3. The *Game created* page shows one link per player. Open each link in its own browser tab or send it to the other players. Other devices in your network can join via `http://<your-computer's-IP>:8080`.
+
+Stop the server with `Ctrl+C`. Games are kept in `db/game.db` and survive a restart.
+
+### 4. Configuration (optional)
+
+Copy the sample file and uncomment what you need:
+
+```bash
+cp .env.sample .env
+```
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `PORT` | `8080` | port the server listens on (e.g. if 8080 is already in use) |
+| `HOST` | all interfaces | e.g. `localhost` to block access from other devices |
+| `LOCAL_FS_DB` | – | any value: store each game as a JSON file in `db/` instead of SQLite (handy for debugging) |
+| `POSTGRES_HOST` | – | use PostgreSQL instead of SQLite, see the [Databases wiki page](https://github.com/terraforming-mars/terraforming-mars/wiki/Databases) |
+| `SERVER_ID` | random | fixed passphrase for the admin pages |
+
+All other options are explained in [`.env.sample`](.env.sample) and on the [dot-env wiki page](https://github.com/terraforming-mars/terraforming-mars/wiki/dot-env).
+
+### 5. Development mode
+
+Run `npm run build` once, then:
+
+```bash
+npm run dev
+```
+
+This starts the server and watchers for client code, styles and cards at the same time. The server restarts on changes; reload the browser to see client and style changes. Stop everything with `Ctrl+C`.
+
+Checks before committing:
+
+```bash
+npm run lint       # ESLint, translation check, Vue type check
+npm run test       # server tests (Mocha) and client tests (Vitest)
+```
+
+More in [CLAUDE.md](CLAUDE.md) (architecture, single test files) and the [development tips](https://github.com/terraforming-mars/terraforming-mars/wiki/Development-tips) of the original.
+
+### Alternative: Docker
+
+Needs only [Docker](https://docs.docker.com/get-docker/) with Compose, no Node.js:
+
+```bash
+git clone https://github.com/wrybit/terraforming-mars.git
+cd terraforming-mars
+docker compose up -d --build
+```
+
+The game runs on <http://localhost:8080>; games are kept in the Docker volume `tm-db`. Logs: `docker compose logs -f`, stop: `docker compose down`.
+
+### Updating
+
+```bash
+git pull
+npm ci
+npm run build
+npm start          # Docker: docker compose up -d --build
+```
+
+### Troubleshooting
+
+- **`npm ci` fails at `better-sqlite3`** – wrong Node version or missing build tools, see step 1. After switching Node versions, delete `node_modules` and run `npm ci` again.
+- **`EADDRINUSE: address already in use :::8080`** – another program uses the port. Start with `PORT=8081 npm start` or set `PORT` in `.env`.
+- **Blank page or missing styles** – the build did not finish. Run `npm run build` again and check its output for errors.
 
 ## License
 
