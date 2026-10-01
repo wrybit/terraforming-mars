@@ -28,7 +28,7 @@ export type CardListEntry = {
 };
 
 export type FilterGroup = 'types' | 'tags' | 'expansions' | 'resources';
-export type FilterState = Pick<CardListModel, 'types' | 'tags' | 'expansions' | 'resources' | 'vps'>;
+export type FilterState = Pick<CardListModel, 'types' | 'tags' | 'expansions' | 'resources' | 'vps' | 'costMin' | 'costMax'>;
 
 const LISTED_CARD_TYPES: ReadonlyArray<CardType> = [
   CardType.AUTOMATED, CardType.ACTIVE, CardType.EVENT, CardType.PRELUDE,
@@ -76,6 +76,9 @@ export function passesFilters(entry: CardListEntry, state: FilterState, ignore?:
   if (ignore !== 'expansions' && entry.module !== undefined && state.expansions[entry.module] !== true) {
     return false;
   }
+  if (!isInCostRange(entry.card?.cost, state)) {
+    return false;
+  }
   const card = entry.card;
   if (card === undefined) {
     return true;
@@ -93,6 +96,26 @@ export function passesFilters(entry: CardListEntry, state: FilterState, ignore?:
     return false;
   }
   return true;
+}
+
+export function hasCostRange(state: FilterState): boolean {
+  return state.costMin !== undefined || state.costMax !== undefined;
+}
+
+// Ist ein Preisbereich gesetzt, bleibt nur, was einen Preis darin hat. Konzerne, Präludien, Kolonien usw. haben
+// keinen Preis und verschwinden dann – "Preis 5–10" soll genau die Karten zeigen, die 5 bis 10 M€ kosten.
+function isInCostRange(cost: number | undefined, state: FilterState): boolean {
+  if (!hasCostRange(state)) {
+    return true;
+  }
+  return cost !== undefined &&
+    (state.costMin === undefined || cost >= state.costMin) &&
+    (state.costMax === undefined || cost <= state.costMax);
+}
+
+// Höchster Kartenpreis: obere Grenze des Preisreglers
+export function highestCost(entries: ReadonlyArray<CardListEntry>): number {
+  return entries.reduce((highest, entry) => Math.max(highest, entry.card?.cost ?? 0), 0);
 }
 
 function optionsOf(entry: CardListEntry, group: FilterGroup): ReadonlyArray<string> {
