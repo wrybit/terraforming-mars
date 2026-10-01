@@ -7,7 +7,7 @@
  */
 
 import {MARS_CROP} from '@/client/components/mobile/mobileBoardZoom';
-import {choiceBlockColumns} from '@/client/components/choiceBlock';
+import {choiceBlockColumns, choiceBlockColumnsPortrait} from '@/client/components/choiceBlock';
 
 /* Sichtbarer Ausschnitt eines Elements in dessen eigenen px (vor der Skalierung). */
 export type FitCrop = {left: number, top: number, width: number, height: number};
@@ -25,6 +25,8 @@ type FitRule = {
   choiceGap?: {column: number, row: number};
   // Auswahl-Raster: diese Liste bekommt die Spaltenzahl als --mb-grid-columns (mobile.less ordnet danach an)
   grid?: string;
+  // Regel gilt nur, solange dies zutrifft (sonst greift eine spätere Regel)
+  when?: () => boolean;
 };
 
 // Abstand zwischen Elementen einer Liste (rechts und unten, als Teil des Außenabstands)
@@ -47,15 +49,27 @@ export function cardColumns(width: number): number {
   return width >= 560 ? 3 : 2;
 }
 
-/* Spalten eines Auswahl-Rasters mit `count` Kacheln: möglichst quadratisch (choiceBlock.ts), höchstens so viele wie Karten nebeneinander passen. */
-export function choiceGridColumns(width: number, count: number): number {
-  return Math.min(cardColumns(width), choiceBlockColumns(count));
+/*
+ * Spalten eines Auswahl-Rasters mit `count` Karten: quer möglichst quadratisch, hochkant mehr Zeilen als Spalten
+ * (choiceBlock.ts) – höchstens so viele, wie Karten nebeneinander passen.
+ */
+export function choiceGridColumns(width: number, count: number, portrait: boolean): number {
+  const columns = portrait ? choiceBlockColumnsPortrait(count) : choiceBlockColumns(count);
+  return Math.min(cardColumns(width), columns);
 }
 
-// Standardprojekte in der Liste des Elements (Auswahl-Raster)
+// Auswahl-Raster: Standardprojekte und Kartenwahl (Draft, Karten kaufen, Karte wählen); je Karte ein label im Block
 const STANDARD_PROJECT_LIST = '.payments_cont';
-function standardProjectCount(element: HTMLElement): number {
-  return element.closest(STANDARD_PROJECT_LIST)?.querySelectorAll('.card-standard-project').length ?? 1;
+const CARD_CHOICE_LIST = '.wf-component--select-card.choice-block';
+function choiceGridColumnsFor(listSelector: string) {
+  return (listWidth: number, element: HTMLElement): number => {
+    const count = element.closest(listSelector)?.querySelectorAll(':scope > label').length ?? 1;
+    return choiceGridColumns(listWidth, count, isPortrait());
+  };
+}
+
+function isPortrait(): boolean {
+  return window.innerHeight > window.innerWidth;
 }
 
 /* Maßstab, mit dem `columns` Elemente der Breite `itemWidth` samt Lücke `gap` in `listWidth` passen (höchstens 1). */
@@ -87,13 +101,24 @@ const RULES: ReadonlyArray<FitRule> = [
   {selector: '#game-end .game_end_table.mb-transposed', columns: () => 1},
   // Meilensteine & Auszeichnungen als Tabelle über die volle Breite
   {selector: '.mb-screen .ma-table', columns: () => 1},
-  // Standardprojekte: alle auf einen Blick, kein Karussell (vgl. cardCarousel.ts); möglichst quadratisch (5 → 3×2) und
+  // Standardprojekte: alle auf einen Blick, kein Karussell (vgl. cardCarousel.ts); quer möglichst quadratisch (5 → 3×2),
+  // hochkant mehr Zeilen (5 → 2×3), und
   // mittig wie am Desktop (choiceBlock.ts). Lücken wie bei den Meilenstein-/Auszeichnungs-Kacheln (mobile.less)
   {
     selector: '.mb-screen--turn .payments_cont .card-container.card-standard-project',
-    columns: (listWidth, element) => choiceGridColumns(listWidth, standardProjectCount(element)),
+    columns: choiceGridColumnsFor(STANDARD_PROJECT_LIST),
     choiceGap: CHOICE_GAP,
     grid: STANDARD_PROJECT_LIST,
+  },
+  // Kartenwahl auf dem Zug-Bildschirm nur hochkant als Raster (mobile.less); quer gilt die allgemeine Kartenregel unten.
+  // Startauswahl hat eigene Spalten
+  {
+    selector: `.mb-screen--turn ${CARD_CHOICE_LIST} > label > .card-container`,
+    exclude: '.setup-column-body',
+    when: isPortrait,
+    columns: choiceGridColumnsFor(CARD_CHOICE_LIST),
+    choiceGap: CHOICE_GAP,
+    grid: CARD_CHOICE_LIST,
   },
   // Karten-Karussell (Karte spielen): eine Karte groß in der Mitte
   {selector: '.mb-screen--turn .payments_cont .card-container', columns: () => 1},
@@ -160,6 +185,9 @@ function fit(element: HTMLElement, rule: FitRule): void {
 function fitAll(root: HTMLElement): void {
   const done = new Set<Element>();
   for (const rule of RULES) {
+    if (rule.when !== undefined && !rule.when()) {
+      continue;
+    }
     root.querySelectorAll<HTMLElement>(rule.selector).forEach((element) => {
       if (done.has(element) || (rule.exclude !== undefined && element.matches(`:is(${rule.exclude}) *, :is(${rule.exclude})`))) {
         return;
