@@ -1,5 +1,6 @@
 <template>
-<div class="payments_cont">
+<div class="payments_cont choice-block" :style="choiceBlockStyle(cards.length)">
+  <!-- Karten als Auswahl-Block (choice_block.less) wie beim Kaufen und bei Standardprojekten -->
   <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
   <label v-for="availableCard in cards" class="payments_cards" :key="availableCard.name">
     <input v-if="!availableCard.isDisabled" class="hidden" type="radio" v-model="cardName" :value="availableCard.name" >
@@ -52,6 +53,7 @@ import {SelectProjectCardToPlayResponse} from '@/common/inputs/InputResponse';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import PaymentForm from '@/client/components/PaymentForm.vue';
 import {Ledger} from '@/client/components/PaymentLedger';
+import {choiceBlockStyle} from '@/client/components/choiceBlock';
 
 export default defineComponent({
   name: 'SelectProjectCardToPlay',
@@ -157,6 +159,7 @@ export default defineComponent({
     this.updateAvailableUnits();
   },
   methods: {
+    choiceBlockStyle,
     getCard() {
       const card = this.cards.find((c) => c.name === this.cardName);
       if (card === undefined) {
