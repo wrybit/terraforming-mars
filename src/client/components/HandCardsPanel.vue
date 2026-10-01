@@ -11,16 +11,22 @@
       </div>
     </section>
     <section v-if="handCards.length > 0" class="hand-cards-panel__section">
-      <h3 v-if="activeCards.length > 0" class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ handCards.length }}</small></h3>
-      <SortableCards :playerId="playerView.id" :cards="handCards"/>
+      <!-- Kopfzeile: Überschrift links, Sortier-Buttons (Upstream-Funktion) rechts; ohne Überschrift nur die Buttons -->
+      <div v-if="activeCards.length > 0 || handCards.length > 1" class="hand-cards-panel__header">
+        <h3 v-if="activeCards.length > 0" class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ handCards.length }}</small></h3>
+        <CardSortButtons v-if="handCards.length > 1" v-model:sortOrder="handSortOrder" class="hand-cards-panel__sort"/>
+      </div>
+      <SortableCards :playerId="playerView.id" :cards="handCards" v-model:sortOrder="handSortOrder"/>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue';
+import {computed, ref} from 'vue';
 import Card from '@/client/components/card/Card.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
+import CardSortButtons from '@/client/components/CardSortButtons.vue';
+import {SortOrder} from '@/client/utils/SortOrder';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
@@ -33,4 +39,6 @@ const props = defineProps<{
 const thisPlayer = computed(() => props.playerView.thisPlayer);
 const activeCards = computed(() => ownActiveCards(props.playerView));
 const handCards = computed(() => allCardsInHand(props.playerView));
+// Gewählte Sortierung; undefined, sobald per Drag & Drop von Hand umsortiert wird.
+const handSortOrder = ref<SortOrder | undefined>(undefined);
 </script>

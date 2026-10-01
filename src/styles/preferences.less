@@ -11,6 +11,18 @@
   height: 100%;
 }
 
+/* On touch screens the page is scaled down to fit the 1260px viewport, which makes the sidebar and corner icons too small to tap.
+   Portrait only: in landscape there is not enough height for a larger sidebar. */
+@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+  .sidebar_cont,
+  .card-list-container .free-floating-preferences-icon {
+    zoom: 2;
+  }
+  .main-container:has(.sidebar_cont) {
+    margin-left: 120px;
+  }
+}
+
 .sidebar {
   .global_params {
     width: 60px;
@@ -299,34 +311,37 @@
 }
 
 /* Card Magnification */
-.preferences_magnify_cards {
-  .filterDiv {
-    transition: transform 0.15s;
-  }
-  .filterDiv:hover {
-    transform: scale(1.2);
-    z-index: 100;
-  }
+/* Only on devices with a real pointer; on touch screens :hover sticks after a tap. */
+@media (hover: hover) and (pointer: fine) {
+  .preferences_magnify_cards {
+    .filterDiv {
+      transition: transform 0.15s;
+    }
+    .filterDiv:hover {
+      transform: scale(1.2);
+      z-index: 100;
+    }
 
-  .sortable-dragging .filterDiv:hover,
-  .sortable-placeholder .filterDiv:hover {
-    transform: none;
-  }
+    .sortable-dragging .filterDiv:hover,
+    .sortable-placeholder .filterDiv:hover {
+      transform: none;
+    }
 
-  .cards-stack:hover,
-  .cards-stack-first:hover {
-    z-index: 2;
-    transform: scale(1);
-  }
+    .cards-stack:hover,
+    .cards-stack-first:hover {
+      z-index: 2;
+      transform: scale(1);
+    }
 
-  .global-event:hover {
-    transform: scale(1.2);
-    z-index: 2;
+    .global-event:hover {
+      transform: scale(1.2);
+      z-index: 2;
+    }
   }
-}
-/* Magnify the wee little cards in a special way, if requested */
-.preferences_small_cards.preferences_magnify_cards .filterDiv:hover {
-  transform: scale(0.95);
+  /* Magnify the wee little cards in a special way, if requested */
+  .preferences_small_cards.preferences_magnify_cards .filterDiv:hover {
+    transform: scale(0.95);
+  }
 }
 
 // Inaktive Karten nicht vergrößern – sie sollen beim Hover inaktiv wirken (cards.less .card-unavailable)
