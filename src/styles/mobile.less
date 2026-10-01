@@ -1621,6 +1621,15 @@ html.tm-mobile {
   // ---------- Standardprojekte wählen: alle sichtbar im Raster (mobileFit.ts skaliert) ----------
   .mb-screen--turn .payments_cont:has(.card-standard-project) {
     .mb-choice-area();
+    // Raster mit der Spaltenzahl aus mobileFit.ts (möglichst quadratisch, 5 → 3×2), waagerecht mittig;
+    // Spaltenbreite = skalierte Karte samt Lücke (Außenabstände aus mobileFit.ts)
+    display: grid !important;
+    grid-template-columns: repeat(var(--mb-grid-columns, 2), max-content);
+    justify-content: center;
+
+    > :not(label) {
+      grid-column: 1 / -1;
+    }
     // Rechts um die Lücke überstehen: die Lücke hinter der rechten Spalte fällt so aus dem Bild (choiceGap in mobileFit.ts)
     margin-right: -@mb-choice-gap;
     // Unten reicht die Zeilenlücke der letzten Karte (Außenabstand aus mobileFit.ts) statt eigenem Innenabstand

@@ -7,6 +7,7 @@
  */
 
 import {MARS_CROP} from '@/client/components/mobile/mobileBoardZoom';
+import {choiceBlockColumns} from '@/client/components/choiceBlock';
 
 /* Sichtbarer Ausschnitt eines Elements in dessen eigenen px (vor der Skalierung). */
 export type FitCrop = {left: number, top: number, width: number, height: number};
@@ -16,12 +17,14 @@ type FitRule = {
   selector: string;
   // Innerhalb dieser Bereiche nicht anfassen
   exclude?: string;
-  // Anzahl Elemente nebeneinander (je nach Listenbreite) oder volle Breite mit Ausschnitt
-  columns?: (listWidth: number) => number;
+  // Anzahl Elemente nebeneinander (je nach Listenbreite, bei Auswahl-Rastern auch nach Anzahl) oder volle Breite mit Ausschnitt
+  columns?: (listWidth: number, element: HTMLElement) => number;
   crop?: FitCrop;
   // Auswahl-Raster: Lücken in px statt GAP_PX; die Liste ragt rechts um die Spaltenlücke über (mobile.less),
   // damit die Spalten die volle Breite füllen und nur zwischen den Kacheln Luft bleibt
   choiceGap?: {column: number, row: number};
+  // Auswahl-Raster: diese Liste bekommt die Spaltenzahl als --mb-grid-columns (mobile.less ordnet danach an)
+  grid?: string;
 };
 
 // Abstand zwischen Elementen einer Liste (rechts und unten, als Teil des Außenabstands)
@@ -42,6 +45,17 @@ export function cardColumns(width: number): number {
     return 4;
   }
   return width >= 560 ? 3 : 2;
+}
+
+/* Spalten eines Auswahl-Rasters mit `count` Kacheln: möglichst quadratisch (choiceBlock.ts), höchstens so viele wie Karten nebeneinander passen. */
+export function choiceGridColumns(width: number, count: number): number {
+  return Math.min(cardColumns(width), choiceBlockColumns(count));
+}
+
+// Standardprojekte in der Liste des Elements (Auswahl-Raster)
+const STANDARD_PROJECT_LIST = '.payments_cont';
+function standardProjectCount(element: HTMLElement): number {
+  return element.closest(STANDARD_PROJECT_LIST)?.querySelectorAll('.card-standard-project').length ?? 1;
 }
 
 /* Maßstab, mit dem `columns` Elemente der Breite `itemWidth` samt Lücke `gap` in `listWidth` passen (höchstens 1). */
@@ -73,9 +87,14 @@ const RULES: ReadonlyArray<FitRule> = [
   {selector: '#game-end .game_end_table.mb-transposed', columns: () => 1},
   // Meilensteine & Auszeichnungen als Tabelle über die volle Breite
   {selector: '.mb-screen .ma-table', columns: () => 1},
-  // Standardprojekte: alle auf einen Blick im Raster wie die übrigen Kartenlisten, kein Karussell (vgl. cardCarousel.ts)
-  // Lücken wie bei den Meilenstein-/Auszeichnungs-Kacheln (mobile.less)
-  {selector: '.mb-screen--turn .payments_cont .card-container.card-standard-project', columns: cardColumns, choiceGap: CHOICE_GAP},
+  // Standardprojekte: alle auf einen Blick, kein Karussell (vgl. cardCarousel.ts); möglichst quadratisch (5 → 3×2) und
+  // mittig wie am Desktop (choiceBlock.ts). Lücken wie bei den Meilenstein-/Auszeichnungs-Kacheln (mobile.less)
+  {
+    selector: '.mb-screen--turn .payments_cont .card-container.card-standard-project',
+    columns: (listWidth, element) => choiceGridColumns(listWidth, standardProjectCount(element)),
+    choiceGap: CHOICE_GAP,
+    grid: STANDARD_PROJECT_LIST,
+  },
   // Karten-Karussell (Karte spielen): eine Karte groß in der Mitte
   {selector: '.mb-screen--turn .payments_cont .card-container', columns: () => 1},
   {
@@ -115,7 +134,15 @@ function fit(element: HTMLElement, rule: FitRule): void {
   const gap = rule.columns === undefined ? 0 : rule.choiceGap?.column ?? GAP_PX;
   const rowGap = rule.columns === undefined ? 0 : rule.choiceGap?.row ?? GAP_PX;
   const fitWidth = listWidth + (rule.choiceGap?.column ?? 0);
-  const scale = rule.columns === undefined ? Math.min(listWidth / crop.width, boardMaxHeight(window.innerWidth, window.innerHeight) / crop.height) : fitScale(fitWidth, width, rule.columns(listWidth), gap);
+  const columns = rule.columns?.(listWidth, element);
+  const scale = columns === undefined ? Math.min(listWidth / crop.width, boardMaxHeight(window.innerWidth, window.innerHeight) / crop.height) : fitScale(fitWidth, width, columns, gap);
+  if (rule.grid !== undefined && columns !== undefined) {
+    const grid = element.closest<HTMLElement>(rule.grid);
+    // Nur bei Änderung schreiben (MutationObserver auf style)
+    if (grid !== null && grid.style.getPropertyValue('--mb-grid-columns') !== String(columns)) {
+      grid.style.setProperty('--mb-grid-columns', String(columns));
+    }
+  }
   element.classList.add(FITTED_CLASS);
   element.classList.toggle(CROPPED_CLASS, rule.crop !== undefined);
   setStyles(element, {
