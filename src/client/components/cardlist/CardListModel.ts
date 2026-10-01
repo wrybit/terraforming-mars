@@ -16,7 +16,6 @@ export type CardListModel = {
   resources: Record<ResourceOption, boolean>,
   searchIndex: SearchIndex,
   namesOnly: boolean,
-  showAdvanced: boolean;
   sortOrder: 'a' | '1';
   showMetadata: boolean;
   tallCards: boolean;
@@ -168,7 +167,6 @@ export function hashToModel(windowLocationHash: string): CardListModel {
     },
     searchIndex: SearchIndex.create(),
     namesOnly: true,
-    showAdvanced: false,
     vps: 0,
     sortOrder: 'a',
     showMetadata: true,
@@ -210,9 +208,6 @@ export function hashToModel(windowLocationHash: string): CardListModel {
         if (metadata.includes('f')) {
           model.namesOnly = false;
         }
-        if (metadata.includes('!')) {
-          model.showAdvanced = true;
-        }
         if (metadata.includes('1')) {
           model.sortOrder = '1';
         }
@@ -236,9 +231,6 @@ function encodeMetadata(model: CardListModel) {
   let text = '';
   if (model.namesOnly === false) {
     text += 'f';
-  }
-  if (model.showAdvanced === true) {
-    text += '!';
   }
   if (model.sortOrder === '1') {
     text += '1';
