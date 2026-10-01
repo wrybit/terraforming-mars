@@ -91,8 +91,8 @@
 // ---------- Suche: Feld mit Name/Volltext-Schalter darin ----------
 .card-list-search {
   position: relative;
+  // Füllt den Platz zwischen Titel und Knöpfen
   flex: 1;
-  max-width: 640px;
   display: flex;
   align-items: center;
 }
@@ -103,7 +103,7 @@
   height: @toolbar-button-size;
   margin: 0;
   // Platz links fürs Lupen-Symbol, rechts für Löschen-Knopf und Schalter
-  padding: 0 210px 0 38px;
+  padding: 0 236px 0 38px;
   border: 1px solid @create-game-line;
   border-radius: @create-game-radius-small;
   background: rgba(0, 0, 0, 0.3);
@@ -152,7 +152,7 @@
 
 .card-list-search-clear {
   position: absolute;
-  right: 172px;
+  right: 198px;
   width: 28px;
   height: 28px;
   border: 0;
@@ -170,7 +170,7 @@
 .card-list-search-scope.create-game-segmented {
   position: absolute;
   right: 4px;
-  width: 164px;
+  width: 190px;
   padding: 2px;
 
   button {
@@ -687,15 +687,15 @@
   }
 
   .card-list-search-input {
-    padding-right: 170px;
+    padding-right: 186px;
   }
 
   .card-list-search-clear {
-    right: 134px;
+    right: 150px;
   }
 
   .card-list-search-scope.create-game-segmented {
-    width: 128px;
+    width: 144px;
 
     button {
       padding: 4px 2px;

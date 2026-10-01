@@ -4,7 +4,7 @@
       <h1 v-i18n>Cards List</h1>
       <div class="card-list-search">
         <span class="card-list-search-icon" aria-hidden="true"></span>
-        <input ref="filter" type="search" class="card-list-search-input" autocomplete="off" :placeholder="searchPlaceholder" :title="$t('Hint: ^ at the start finds names that begin with the text')" v-model="filterText">
+        <input ref="filter" type="search" class="card-list-search-input" autocomplete="off" :placeholder="searchPlaceholder" :title="$t('Hint: ^ at the start finds titles that begin with the text')" v-model="filterText">
         <button v-if="filterText !== ''" type="button" class="card-list-search-clear" :title="$t('Clear')" @click="clearSearch()">✕</button>
         <SegmentedControl class="card-list-search-scope" :options="searchScopeOptions" v-model="searchScope"/>
       </div>
@@ -219,7 +219,7 @@ const FILTER_GROUP_OPTIONS: Record<FilterGroup, ReadonlyArray<FilterOption>> = {
 
 const VP_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 0, label: 'all'}, {value: 1, label: '+VPs'}, {value: 2, label: '-VPs'}];
 const SORT_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'a', label: 'A-Z'}, {value: '1', label: '0-9'}];
-const SEARCH_SCOPE_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'name', label: 'Name'}, {value: 'text', label: 'Full text'}];
+const SEARCH_SCOPE_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'name', label: 'Card title'}, {value: 'text', label: 'Full text'}];
 
 // Suchmarkierung erst, wenn das Tippen kurz ruht – die Liste rendert sonst bei jedem Zeichen neu durch
 const HIGHLIGHT_DELAY_MS = 120;
@@ -311,7 +311,7 @@ export default defineComponent({
       },
     },
     searchPlaceholder(): string {
-      return translateText(this.namesOnly ? 'Search names' : 'Search all card texts');
+      return translateText(this.namesOnly ? 'Search titles' : 'Search all card texts');
     },
     filterState(): FilterState {
       return {
@@ -477,10 +477,12 @@ export default defineComponent({
         return true;
       }
       if (this.namesOnly) {
+        // Englischer und übersetzter Titel: auf Deutsch soll "Ackerbau" ebenso treffen wie "Farming"
+        const titles = [name, translateText(name)].map((title) => title.toLocaleUpperCase());
         if (normalized.startsWith('^')) {
-          return name.toLocaleUpperCase().startsWith(normalized.substring(1));
+          return titles.some((title) => title.startsWith(normalized.substring(1)));
         }
-        return name.toLocaleUpperCase().includes(normalized);
+        return titles.some((title) => title.includes(normalized));
       } else {
         return this.searchIndex.matches(this.filterText, type, name);
       }
