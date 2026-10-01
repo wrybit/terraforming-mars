@@ -1695,7 +1695,15 @@ export class Game implements IGame, Logger {
     if (this.createdTime.getTime() === 0) {
       return 0;
     }
-    const days = stringToNumber(process.env.MAX_GAME_DAYS, 10);
+    // Gleiche Reihenfolge wie bei der Datenbank-Auswahl: nur PostgreSQL löscht ohne MAX_GAME_DAYS (Standard 10 Tage).
+    // SQLite löscht nur mit gesetztem MAX_GAME_DAYS, das Dateisystem nie – sonst zeigt die Warnung eine Löschung an, die nie kommt.
+    const maxGameDays = process.env.MAX_GAME_DAYS;
+    const usesPostgres = process.env.POSTGRES_HOST !== undefined;
+    const usesLocalFilesystem = !usesPostgres && process.env.LOCAL_FS_DB !== undefined;
+    if (usesLocalFilesystem || (!usesPostgres && maxGameDays === undefined)) {
+      return 0;
+    }
+    const days = stringToNumber(maxGameDays, 10);
     return addDays(this.createdTime, days).getTime();
   }
 
