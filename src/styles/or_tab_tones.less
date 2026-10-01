@@ -50,6 +50,15 @@ each(@or-tab-tones, {
     --or-tab-panel-border: @color;
     background: @panel;
   }
+
+  // Button mittig in der Box (Plättchen platzieren, Temperatur erhöhen, Weitergeben/Beenden) in der Tabfarbe;
+  // Schrift dunkel auf hellen Tönen (Stadt, Ressourcen), sonst weiß. !important wie in button_tones.less
+  .or-tab-panel--tone-@{tone} .select-space-zoom-button,
+  .or-tab-panel--tone-@{tone}.or-tab-panel--centered-button .or-tab-footer .btn,
+  .or-tab-panel--tone-@{tone}.or-tab-panel--end .btn {
+    .button-tone(@color, lighten(@color, 8%));
+    color: contrast(@color, @or-tab-tone-base, #fff) !important;
+  }
 });
 
 // In der roten Box (Runde beenden) wäre der rote Warnhinweis kaum lesbar – dort weiß
