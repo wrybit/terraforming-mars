@@ -320,6 +320,10 @@ export default defineComponent({
     isSetupPhase(): boolean {
       return this.thisPlayer.tableau.length === 0;
     },
+    // Startauswahl bestätigt, Mitspieler wählen noch: PlayerSetupView zeigt dann die eigene Auswahl
+    isSetupConfirmed(): boolean {
+      return this.isSetupPhase && this.playerView.pickedCorporationCard.length === 1;
+    },
     waitingPlayers(): Array<PublicPlayerModel> {
       return playersToWaitFor(this.playerView);
     },
@@ -385,9 +389,10 @@ export default defineComponent({
       window.scrollTo({top: 0});
     },
     // Fußleiste: "Zug" öffnet das Aktionsmenü als Sheet (nicht am Zug: Sheet mit dem, der dran ist),
-    // alle anderen wechseln den Bildschirm
+    // alle anderen wechseln den Bildschirm. Ausnahme Startauswahl: nach dem Bestätigen zeigt der Zug-Bildschirm
+    // die eigene Auswahl (PlayerSetupView) – das Sheet hätte nur "warten auf …" und die Karten wären unerreichbar
     navigate(screen: MobileScreen) {
-      if (screen === 'turn' && (this.isActionMenu || !this.acting)) {
+      if (screen === 'turn' && !this.isSetupConfirmed && (this.isActionMenu || !this.acting)) {
         this.openSheet();
       } else {
         this.go(screen);
