@@ -270,4 +270,40 @@ describe('SortableCards', () => {
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.ASTEROID_MINING, CardName.ANTS, CardName.CARTEL, CardName.NUCLEAR_ZONE]);
   });
+
+  it('manual restores the own order after sorting', async () => {
+    // Ants: 9, Cartel: 8, Birds: 10 – eigene Reihenfolge Birds, Ants, Cartel
+    CardOrderStorage.updateCardOrder('player1', {[CardName.BIRDS]: 1, [CardName.ANTS]: 2, [CardName.CARTEL]: 3});
+    const sortable = mount(SortableCards, {
+      ...globalConfig,
+      props: {
+        cards: [{name: CardName.ANTS}, {name: CardName.CARTEL}, {name: CardName.BIRDS}],
+        playerId: 'player1',
+      },
+    });
+
+    await sortable.setProps({sortOrder: {key: 'cost', reversed: false}});
+    expect(cardsInOrder(sortable)).to.deep.eq([CardName.CARTEL, CardName.ANTS, CardName.BIRDS]);
+    await sortable.setProps({sortOrder: {key: 'cost', reversed: true}});
+    await sortable.setProps({sortOrder: undefined});
+
+    expect(cardsInOrder(sortable)).to.deep.eq([CardName.BIRDS, CardName.ANTS, CardName.CARTEL]);
+  });
+
+  it('keeps the dragged order when dragging clears the sort', async () => {
+    const sortable = mount(SortableCards, {
+      ...globalConfig,
+      props: {
+        cards: [{name: CardName.ANTS}, {name: CardName.CARTEL}, {name: CardName.BIRDS}],
+        playerId: 'player1',
+      },
+    });
+
+    await sortable.setProps({sortOrder: {key: 'cost', reversed: false}});
+    // Cartel, Ants, Birds -> Cartel auf Birds ziehen
+    await dragCard(sortable, 0, 2);
+    await sortable.setProps({sortOrder: undefined});
+
+    expect(cardsInOrder(sortable)).to.deep.eq([CardName.ANTS, CardName.BIRDS, CardName.CARTEL]);
+  });
 });

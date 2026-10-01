@@ -2,7 +2,7 @@ import {mount} from '@vue/test-utils';
 import {globalConfig} from './getLocalVue';
 import {expect} from 'chai';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
-import CardSortButtons from '@/client/components/CardSortButtons.vue';
+import HandSortControl from '@/client/components/HandSortControl.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {CardModel} from '@/common/models/CardModel';
@@ -54,7 +54,7 @@ describe('HandCardsPanel', () => {
       props: {playerView: playerView([], [card(CardName.SOLETTA), card(CardName.ALGAE)])},
     });
 
-    wrapper.findComponent(CardSortButtons).vm.$emit('update:sortOrder', {key: 'vp', reversed: false});
+    wrapper.findComponent(HandSortControl).vm.$emit('update:sortOrder', {key: 'vp', reversed: false});
     await wrapper.vm.$nextTick();
 
     expect(wrapper.findComponent(SortableCards).props('sortOrder')).to.deep.eq({key: 'vp', reversed: false});
@@ -65,6 +65,6 @@ describe('HandCardsPanel', () => {
       ...globalConfig,
       props: {playerView: playerView([], [card(CardName.SOLETTA)])},
     });
-    expect(wrapper.findComponent(CardSortButtons).exists()).is.false;
+    expect(wrapper.findComponent(HandSortControl).exists()).is.false;
   });
 });

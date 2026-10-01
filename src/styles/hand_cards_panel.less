@@ -32,25 +32,34 @@
   }
 }
 
-// Sortier-Buttons (CardSortButtons.vue aus Upstream): rechtsbündig, Buttons eng beieinander als eine Gruppe.
+// Sortierung (HandSortControl.vue): rechtsbündig; Beschriftung dicht an der Segment-Leiste.
+// Segment-Optik kommt von .create-game-segmented (SegmentedControl, auch in der Kartenliste).
 .hand-cards-panel__sort {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   margin-left: auto;
   font-size: 13px;
   color: rgba(255, 255, 255, 0.75);
 
-  > span {
-    margin-right: 4px;
+  .create-game-segmented button {
+    flex: 0 0 auto;
+    padding: 4px 10px;
+    font-size: 13px;
   }
 
-  .btn {
-    border-radius: 8px;
+  // Richtung der gewählten Sortierung; "Manuell" (erstes Segment) hat keine.
+  .create-game-segmented--selected:not(:first-child)::after {
+    content: ' ▼';
+    font-size: 10px;
   }
 }
 
-// Mobil: Buttons kompakt halten, sonst wirken sie größer als die Navigation darunter.
+.hand-sort-control--reversed .create-game-segmented--selected:not(:first-child)::after {
+  content: ' ▲';
+}
+
+// Mobil: mehr Luft zu den Karten, deren Preis-Badges nach oben herausragen; Segmente kompakter.
 html.tm-mobile .hand-cards-panel__header {
   margin-bottom: 18px;
 }
@@ -58,10 +67,8 @@ html.tm-mobile .hand-cards-panel__header {
 html.tm-mobile .hand-cards-panel__sort {
   font-size: 12px;
 
-  .btn {
-    height: 26px;
-    padding: 0 8px;
+  .create-game-segmented button {
+    padding: 4px 8px;
     font-size: 12px;
-    line-height: 24px;
   }
 }
