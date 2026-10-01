@@ -1,0 +1,75 @@
+// Auswahl-Block (choiceBlock.ts): Kacheln und Karten einer Entscheidung – Meilensteine, Auszeichnungen,
+// Standardprojekte, Spieler- und Options-Kacheln, Karten kaufen – als möglichst quadratischer Block
+// (4 → 2×2, 5–6 → 3×2) mittig in der Tab-Box: waagerecht immer, senkrecht, wo die Box eine feste Höhe hat
+// (player_home_fixed.less). Jede Kachel so breit wie eine Projektkarte, Abstände wie zwischen Karten.
+// Nur Desktop: die Mobil-Ansicht hat eigene Raster (mobile.less); die Startauswahl eigene Spalten (setup_columns.less).
+@import (reference) "./selection_highlight.less";
+
+@choice-tile-width: 240px; // Breite einer Projektkarte (.filterDiv in cards.less)
+@choice-column-gap: 16px; // Kartenabstand in Tab-Boxen (@or-tab-panel-card-gap in or_options_tabs.less)
+@choice-row-gap: (@selection-tab-offset + 6px); // darüber sitzt das Häkchen-Fähnchen der gewählten Kachel
+@choice-panel-padding: 16px; // Innenabstand der Tab-Box (tab_panel_footer.less)
+@ma-tile-width: 140px; // Bildgröße der Meilenstein-/Auszeichnungs-Kacheln (player_home.less)
+
+html:not(.tm-mobile) {
+  .or-tab-panel .choice-block:not(.setup-column-body *) {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: @choice-row-gap @choice-column-gap;
+    width: min(100%, calc(var(--choice-columns) * @choice-tile-width + (var(--choice-columns) - 1) * @choice-column-gap));
+    margin: auto;
+    padding: @selection-tab-offset 0 0;
+
+    // Kacheln auf Kartenbreite
+    > .choice-option,
+    .player-option {
+      box-sizing: border-box;
+      width: @choice-tile-width;
+    }
+
+    // Meilensteine/Auszeichnungen: Bild-Kachel auf Kartenbreite vergrößern (Bild und Schrift wachsen mit)
+    > .ma-option {
+      width: auto;
+      margin: 0;
+    }
+
+    > .ma-option .ma-name {
+      zoom: unit((@choice-tile-width / @ma-tile-width));
+    }
+
+    // Karten: Abstände macht der Block (gap), nicht die Außenränder der Karten
+    > .cardbox,
+    > .cardbox > .card-container {
+      margin: 0;
+    }
+
+    // Titel, Hinweise und Buttons einer Kartenwahl stehen in eigener Zeile über bzw. unter dem Block
+    &.wf-component--select-card > :not(.cardbox) {
+      flex: 0 0 100%;
+    }
+  }
+
+  // Senkrecht mittig: die Box und jede Hülle bis zum Block werden zur Spalte, die den freien Platz füllt;
+  // der Block sitzt darin per margin: auto. Hüllen mit v-show behalten ihr display: none (Inline-Stil gewinnt)
+  .or-tab-panel:has(.choice-block):not(:has(.setup-column-body)) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .or-tab-panel :has(.choice-block):not(.setup-column-body, .setup-column-body *) {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Mit Karten verkleinert or_options_tabs.less den rechten Innenabstand der Box (Kartenreihen bis zum Rand);
+  // der Block ist mittig und braucht beidseitig denselben Abstand
+  .or-tab-panel:has(.choice-block .card-container):not(:has(.setup-column-body)) {
+    padding-right: @choice-panel-padding;
+
+    > .or-tab-footer {
+      margin-right: -@choice-panel-padding;
+    }
+  }
+}

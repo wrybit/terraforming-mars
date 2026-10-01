@@ -1,5 +1,7 @@
 <template>
-    <div class="wf-component wf-component--select-card">
+    <div class="wf-component wf-component--select-card choice-block" :style="choiceBlockStyle(playerinput.cards.length)">
+        <!-- Karten als Auswahl-Block (choice_block.less): möglichst quadratisch und mittig in der Tab-Box;
+             Kommentar innen, damit v-show des Aufrufers die Wurzel trifft -->
         <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
         <label v-for="card in getOrderedCards()" :key="card.name" :class="getCardBoxClass(card)">
             <template v-if="!card.isDisabled">
@@ -48,6 +50,7 @@ import {SelectCardModel} from '@/common/models/PlayerInputModel';
 import {sortActiveCards} from '@/client/utils/ActiveCardsSortingOrder';
 import {SelectCardResponse} from '@/common/inputs/InputResponse';
 import {Warning} from '@/common/cards/Warning';
+import {choiceBlockStyle} from '@/client/components/choiceBlock';
 
 type Owner = {
   name: string;
@@ -113,6 +116,7 @@ export default defineComponent({
     },
   },
   methods: {
+    choiceBlockStyle,
     cardsSelected(): number {
       if (Array.isArray(this.cards)) {
         return this.cards.length;
