@@ -54,5 +54,8 @@ describe('MobilePlayerHome', () => {
     await wrapper.find('.mb-nav-item--turn').trigger('click');
     expect(wrapper.classes()).to.include('mb-home--turn');
     expect((wrapper.vm as unknown as {sheetOpen: boolean}).sheetOpen).to.be.false;
+    // Nichts zu bestätigen: Navigation bleibt, keine Aufgabenleiste
+    expect(wrapper.find('.mb-nav').exists()).to.be.true;
+    expect(wrapper.find('.mb-taskbar').exists()).to.be.false;
   });
 });
