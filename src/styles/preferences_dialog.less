@@ -24,12 +24,14 @@
   background: @dialog-surface;
 }
 
-// Group header: icon + title; separates the groups for quick scanning
+// Group header: icon + title, divider across the full card width; separates the groups for quick scanning
 .preferences-group-head {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px 4px;
+  margin: -4px 0 4px; // cancels the card's top padding so the header sits symmetric above the divider
+  padding: 10px 12px;
+  border-bottom: 1px solid @dialog-surface-border;
   color: @dialog-accent-text;
   list-style: none;
 
@@ -44,7 +46,7 @@
   color: #fff;
   font-family: "Ubuntu", sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0;
   text-transform: none;
 }
@@ -136,8 +138,10 @@
   border-style: dashed;
   background: transparent;
 
+  // Closed: no divider (nothing below it), the header is the whole card
   .preferences-group-head {
-    padding-bottom: 8px;
+    margin-bottom: -4px;
+    border-bottom-color: transparent;
     color: @dialog-muted;
     cursor: pointer;
   }
@@ -147,7 +151,8 @@
   }
 
   &[open] .preferences-group-head {
-    padding-bottom: 4px;
+    margin-bottom: 4px;
+    border-bottom-color: @dialog-surface-border;
   }
 }
 
