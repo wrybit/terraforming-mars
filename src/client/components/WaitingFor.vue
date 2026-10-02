@@ -47,7 +47,7 @@ import {isPlayerId} from '@/common/Types';
 import {InputResponse} from '@/common/inputs/InputResponse';
 import {INVALID_RUN_ID, AppErrorResponse} from '@/common/app/AppErrorId';
 import {Color} from '@/common/Color';
-import {gameDocumentTitle} from '../utils/documentTitle';
+import {gameDocumentTitle, turnTitlePrefix} from '../utils/documentTitle';
 import {setFaviconStatus, setFaviconTurnFrame} from '@/client/utils/favicon';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import WaitingForTabs from '@/client/components/WaitingForTabs.vue';
@@ -124,7 +124,7 @@ export default defineComponent({
       // experimental UI on a desktop browser we show it only in the tab favicon
       // instead; otherwise keep animating the title.
       if (!(experimental && isDesktopBrowser())) {
-        document.title = TURN_SEQUENCE[animationFrame] + ' ' + gameDocumentTitle(this.playerView.game);
+        document.title = gameDocumentTitle(this.playerView.game, turnTitlePrefix(TURN_SEQUENCE[animationFrame]));
       }
     },
     onsave(out: InputResponse) {
@@ -293,7 +293,9 @@ export default defineComponent({
     },
   },
   mounted() {
-    document.title = gameDocumentTitle(this.playerView.game);
+    // "Am Zug" nur, wenn eine Pflichteingabe wartet – dieselbe Bedingung wie für die Titel-Animation.
+    const isMyTurn = this.waitingfor !== undefined && !this.waitingfor.optional;
+    document.title = gameDocumentTitle(this.playerView.game, isMyTurn ? turnTitlePrefix() : undefined);
     if (getPreferences().experimental_ui) {
       setFaviconStatus(this.waitingfor !== undefined ? 'turn' : 'idle');
     }

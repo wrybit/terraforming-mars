@@ -204,7 +204,7 @@
 <script lang="ts">
 
 import {defineComponent} from 'vue';
-import {setDocumentTitle} from '@/client/utils/documentTitle';
+import {gameDocumentTitle} from '@/client/utils/documentTitle';
 import {setFaviconStatus} from '@/client/utils/favicon';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {GameModel} from '@/common/models/GameModel';
@@ -376,7 +376,7 @@ export default defineComponent({
     GameEndChartTabs,
   },
   mounted() {
-    setDocumentTitle('🏁 | ' + this.game.name);
+    document.title = gameDocumentTitle(this.game, '🏁');
     if (getPreferences().experimental_ui) {
       setFaviconStatus('ended');
     }

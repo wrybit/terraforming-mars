@@ -146,7 +146,8 @@ export default defineComponent({
   mounted() {
     // Reset the copied player id after 3 seconds to hide the "copied" message
     setInterval(this.setCopiedIdToDefault, 3000);
-    setDocumentTitle(this.game.name);
+    // Kein zufälliger Spielname im Titel, er sagt nichts aus.
+    setDocumentTitle();
     // Set the viewport width to width=device-width on the create game form so mobile browsers use their actual CSS viewport width.
     // The current global viewport is width=1260, which prevents the create game form from using the device width on phones.
     // This is a temporary solution in order to make this edit scoped to the create game form.
