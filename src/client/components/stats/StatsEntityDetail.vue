@@ -1,6 +1,6 @@
 <template>
   <div class="stats-stack">
-    <section class="stats-card stats-detail-head" :class="{'stats-detail-head--card': isCard}">
+    <section class="stats-card stats-detail-head" :class="{'stats-detail-head--asset': hasAsset}">
       <div class="stats-detail-main">
         <a :href="backHref" data-stats-link class="stats-link">← <span v-i18n>{{ backLabel }}</span></a>
         <h2 class="stats-detail-title">
@@ -10,10 +10,12 @@
         <p v-if="detail.results.length === 0" class="stats-note" v-i18n>No games for these filters.</p>
         <StatsKpis v-else :tiles="tiles"/>
       </div>
-      <!-- Die Karte selbst; ein Klick zeigt sie groß -->
-      <button v-if="isCard" type="button" class="stats-detail-card" :title="$t('Show card')" @click="showOwnCard">
-        <Card :card="{name: cardName}"/>
-      </button>
+      <!-- Das Spielmaterial selbst (Karte, Meilenstein, Auszeichnung); Karten zeigt ein Klick groß -->
+      <StatsEntityAsset v-if="hasAsset" class="stats-detail-asset" :kind="kind" :name="name"/>
+    </section>
+
+    <section v-if="kind === 'board'" class="stats-card">
+      <StatsBoardPreview :boardName="boardName"/>
     </section>
 
     <div v-if="detail.results.length > 0" class="stats-columns">
@@ -28,18 +30,33 @@
         <h2 v-i18n>By player</h2>
         <StatsTable :columns="playerColumns" :rows="stats.players" :rowKey="keyByName" initialSort="plays">
           <template #name="{row}"><StatsEntityName kind="player" :name="row.name"/></template>
+          <template #winRate="{row}"><StatsWinRate :winRate="share(row.wins, row.plays) ?? 0" :expected="row.expectedWinRate"/></template>
         </StatsTable>
       </section>
 
       <section class="stats-card">
         <h2 v-i18n>By number of players</h2>
-        <StatsTable :columns="playerCountColumns" :rows="detail.byPlayerCount" :rowKey="keyByPlayerCount" initialSort="playerCount"/>
+        <StatsTable :columns="playerCountColumns" :rows="detail.byPlayerCount" :rowKey="keyByPlayerCount" initialSort="playerCount">
+          <template #winRate="{row}"><StatsWinRate :winRate="share(row.wins, row.plays) ?? 0" :expected="row.expectedWinRate"/></template>
+        </StatsTable>
+      </section>
+    </div>
+
+    <!-- Verteilungen wie bei tfmstats: Säule = Partien, gelber Anteil = davon gewonnen -->
+    <div v-if="detail.results.length > 0" class="stats-columns">
+      <section class="stats-card">
+        <h2 v-i18n>Final scores</h2>
+        <StatsBarChart :bars="pointBars" axisLabel="Victory points in steps of 10" highlightLabel="Of these won"/>
+      </section>
+      <section class="stats-card">
+        <h2 v-i18n>Game length</h2>
+        <StatsBarChart :bars="generationBars" axisLabel="Generations" highlightLabel="Of these won"/>
       </section>
     </div>
 
     <section v-if="hasPointSources" class="stats-card">
       <h2 v-i18n>Where the points come from</h2>
-      <StatsPointSources :results="detail.results"/>
+      <StatsPointSources :results="detail.results" :baseline="kind === 'player' || kind === 'board' ? undefined : results"/>
     </section>
 
     <div v-if="companions.length > 0" class="stats-columns">
@@ -65,19 +82,20 @@ import {defineComponent, PropType} from 'vue';
 import {StatsGame} from '@/common/stats/StatsGame';
 import StatsTable from './StatsTable.vue';
 import StatsKpis from './StatsKpis.vue';
-import {StatsColumn, StatsKpi} from './statsTypes';
+import {StatsBar, StatsColumn, StatsKpi} from './statsTypes';
 import StatsEntityName from './StatsEntityName.vue';
 import StatsWinRate from './StatsWinRate.vue';
 import StatsGameList from './StatsGameList.vue';
 import StatsPointSources from './StatsPointSources.vue';
-import Card from '@/client/components/card/Card.vue';
-import {CardName} from '@/common/cards/CardName';
-import {CARD_ZOOM_KEY, OpenCardZoom} from './statsCardZoom';
+import StatsEntityAsset from './StatsEntityAsset.vue';
+import StatsBoardPreview from './StatsBoardPreview.vue';
+import StatsBarChart from './StatsBarChart.vue';
+import {BoardName} from '@/common/boards/BoardName';
 import {EntityStats, entityStats} from './statsAggregate';
 import {COMPANION_COLUMNS} from './statsColumns';
-import {EntityDetail, entityDetail, HeadToHead, headToHead, PlayerCountStats} from './statsDetail';
+import {EntityDetail, entityDetail, HeadToHead, headToHead, histogram, PlayerCountStats} from './statsDetail';
 import {StatsKind, StatsKindDefinition, STATS_KINDS} from './statsKinds';
-import {formatLift, formatNumber, formatPercent} from './statsLabels';
+import {formatNumber, formatPercent} from './statsLabels';
 import {STATS_TABS, statsHref, tabOfKind} from './statsNavigation';
 import {StatsPlayerResult} from './statsResults';
 
@@ -89,10 +107,7 @@ const share = (wins: number, plays: number) => plays === 0 ? undefined : wins / 
 // Detailseite eines Eintrags: Kennzahlen, je Spieler, je Spielerzahl, Kombinationen und alle Partien
 export default defineComponent({
   name: 'StatsEntityDetail',
-  components: {StatsTable, StatsKpis, StatsEntityName, StatsWinRate, StatsGameList, StatsPointSources, Card},
-  inject: {
-    openCardZoom: {from: CARD_ZOOM_KEY, default: () => () => {}},
-  },
+  components: {StatsTable, StatsKpis, StatsEntityName, StatsWinRate, StatsGameList, StatsPointSources, StatsEntityAsset, StatsBoardPreview, StatsBarChart},
   props: {
     kind: {type: String as PropType<StatsKind>, required: true},
     name: {type: String, required: true},
@@ -136,14 +151,20 @@ export default defineComponent({
     companions(): EntityDetail['companions'] {
       return this.detail.companions.filter((companion) => companion.entries.length > 0);
     },
-    cardName(): CardName {
-      return this.name as CardName;
+    boardName(): BoardName {
+      return this.name as BoardName;
     },
-    isCard(): boolean {
-      return this.kind === 'card' || this.kind === 'prelude' || this.kind === 'corporation';
+    hasAsset(): boolean {
+      return this.kind !== 'board' && this.kind !== 'player';
     },
     hasPointSources(): boolean {
       return this.detail.results.some((result) => result.details?.victoryPoints !== undefined);
+    },
+    pointBars(): Array<StatsBar> {
+      return histogram(this.detail.results, (result) => result.player.victoryPoints, 10);
+    },
+    generationBars(): Array<StatsBar> {
+      return histogram(this.detail.results, (result) => result.game.summary.generation, 1);
     },
     headToHead(): Array<HeadToHead> {
       return headToHead(this.results, this.name);
@@ -181,7 +202,7 @@ export default defineComponent({
         {label: 'Played', value: stats.plays},
         {label: 'Wins', value: stats.wins},
         {label: 'Win rate', value: formatPercent(stats.winRate)},
-        {label: 'vs. luck', value: formatLift(stats.winRate, stats.expectedWinRate)},
+        {label: 'Expected win rate', value: formatPercent(stats.expectedWinRate)},
         {label: 'Avg. points', value: formatNumber(stats.averagePoints)},
         {label: 'Avg. place', value: formatNumber(stats.averagePlace)},
         {label: 'Avg. generations', value: formatNumber(stats.averageGeneration)},
@@ -190,11 +211,9 @@ export default defineComponent({
     },
   },
   methods: {
+    share,
     namesOf(rows: ReadonlyArray<{name: string}>): Array<string> {
       return rows.map((row) => row.name);
-    },
-    showOwnCard(event: MouseEvent): void {
-      (this.openCardZoom as OpenCardZoom)({names: [this.name as CardName], index: 0, origin: (event.currentTarget as HTMLElement).getBoundingClientRect()});
     },
     keyByName(row: {name: string}): string {
       return row.name;

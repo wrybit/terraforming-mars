@@ -18,6 +18,12 @@ import StatsBarChart from '@/client/components/stats/StatsBarChart.vue';
 import StatsEntityName from '@/client/components/stats/StatsEntityName.vue';
 import StatsPointSources from '@/client/components/stats/StatsPointSources.vue';
 import {CardName} from '@/common/cards/CardName';
+import StatsShowcase from '@/client/components/stats/StatsShowcase.vue';
+import StatsEntityAsset from '@/client/components/stats/StatsEntityAsset.vue';
+import StatsBoardPreview from '@/client/components/stats/StatsBoardPreview.vue';
+import {aggregate} from '@/client/components/stats/statsAggregate';
+import {flushPromises} from '@vue/test-utils';
+import {BoardName} from '@/common/boards/BoardName';
 import StatsCardZoom from '@/client/components/stats/StatsCardZoom.vue';
 import {CARD_ZOOM_KEY, StatsCardZoomRequest} from '@/client/components/stats/statsCardZoom';
 
@@ -97,5 +103,17 @@ describe('Stats components', () => {
     const wrapper = mount(StatsCardZoom, {...config, props: {names: [CardName.ANTS, CardName.BIRDS], index: 1}, attachTo: document.body});
     expect(document.body.querySelectorAll('.mb-card-zoom-slide .card-container').length).eq(2);
     wrapper.unmount();
+  });
+
+  it('shows game material: cards, milestone and award tiles, boards', async () => {
+    expect(mount(StatsShowcase, {...config, props: {kind: 'corporation', entries: aggregate(results, 'corporation')}}).findAll('.card-container')).has.length(2);
+    expect(mount(StatsEntityAsset, {...config, props: {kind: 'milestone', name: 'Gardener'}}).find('.milestones').exists()).is.true;
+    expect(mount(StatsEntityAsset, {...config, props: {kind: 'award', name: 'Landlord'}}).find('.awards').exists()).is.true;
+    const originalFetch = global.fetch;
+    global.fetch = () => Promise.resolve({ok: true, json: () => Promise.resolve([])} as unknown as Response);
+    const board = mount(StatsBoardPreview, {...config, props: {boardName: BoardName.THARSIS}});
+    await flushPromises();
+    expect(board.find('.stats-note').exists()).is.false;
+    global.fetch = originalFetch;
   });
 });

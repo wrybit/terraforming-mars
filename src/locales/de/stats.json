@@ -41,7 +41,7 @@
   "Most wins": "Meiste Siege",
   "Search": "Suchen",
   "The line in the bar is the win rate by luck alone (1 ÷ number of players); \"vs. luck\" is the difference in percentage points.": "Der Strich im Balken ist die Siegquote bei reinem Zufall (1 ÷ Spielerzahl); „vs. Zufall“ ist der Abstand dazu in Prozentpunkten.",
-  "Chance by luck alone": "Bei reinem Zufall",
+  "Chance by luck alone": "Zu erwarten, wenn es keinen Unterschied macht (1 ÷ Spielerzahl)",
   "Head to head": "Direktvergleich",
   "Shared games: ahead of / behind the opponent.": "Gemeinsame Partien: vor bzw. hinter dem Gegner.",
   "By player": "Je Spieler",
@@ -87,5 +87,16 @@
   "Most milestone and award points": "Meiste Punkte aus Meilensteinen und Auszeichnungen",
   "Most actions": "Meiste Aktionen",
   "Longest thinking time": "Längste Bedenkzeit",
-  "Show card": "Karte groß zeigen"
+  "Show card": "Karte groß zeigen",
+  "Most played project cards": "Meistgespielte Projektkarten",
+  "Most played corporations": "Meistgespielte Konzerne",
+  "Most funded awards": "Häufigste Auszeichnungen",
+  "wins": "Siege",
+  "The board could not be loaded.": "Das Spielbrett konnte nicht geladen werden.",
+  "Final scores": "Endpunktzahlen",
+  "Game length": "Spieldauer",
+  "Victory points in steps of 10": "Siegpunkte in Zehnerschritten",
+  "Of these won": "davon gewonnen",
+  "Expected win rate": "Erwartete Siegquote",
+  "All games": "Ø alle Partien"
 }

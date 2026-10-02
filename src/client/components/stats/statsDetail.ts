@@ -1,12 +1,14 @@
 import {StatsGame} from '@/common/stats/StatsGame';
 import {aggregate, EntityStats, resultsWith} from './statsAggregate';
 import {COMPANION_KINDS, StatsKind} from './statsKinds';
-import {StatsPlayerResult} from './statsResults';
+import {expectedWinRate, StatsPlayerResult} from './statsResults';
+import {StatsBar} from './statsTypes';
 
 export type PlayerCountStats = {
   playerCount: number;
   plays: number;
   wins: number;
+  expectedWinRate: number;
 };
 
 export type HeadToHead = {
@@ -30,7 +32,7 @@ export function entityDetail(allResults: ReadonlyArray<StatsPlayerResult>, kind:
   const counts = new Map<number, PlayerCountStats>();
   for (const result of results) {
     const playerCount = result.game.summary.players.length;
-    const entry = counts.get(playerCount) ?? {playerCount, plays: 0, wins: 0};
+    const entry = counts.get(playerCount) ?? {playerCount, plays: 0, wins: 0, expectedWinRate: expectedWinRate(result.game)};
     entry.plays++;
     if (result.place === 1) {
       entry.wins++;
@@ -68,4 +70,36 @@ export function headToHead(allResults: ReadonlyArray<StatsPlayerResult>, name: s
     }
   }
   return Array.from(opponents.values()).sort((first, second) => (second.ahead + second.behind) - (first.ahead + first.behind));
+}
+
+/**
+ * Verteilung als lückenlose Säulen (leere Klassen bleiben sichtbar), hervorgehoben jeweils die Siege.
+ * bucketSize 1 → eine Säule je Wert (Generationen), 10 → Zehnerklassen (Punkte).
+ */
+export function histogram(results: ReadonlyArray<StatsPlayerResult>, valueOf: (result: StatsPlayerResult) => number | undefined, bucketSize: number): Array<StatsBar> {
+  const buckets = new Map<number, {value: number, highlight: number}>();
+  for (const result of results) {
+    const value = valueOf(result);
+    if (value === undefined || value <= 0) {
+      continue;
+    }
+    const bucket = Math.floor(value / bucketSize) * bucketSize;
+    const entry = buckets.get(bucket) ?? {value: 0, highlight: 0};
+    entry.value++;
+    if (result.place === 1) {
+      entry.highlight++;
+    }
+    buckets.set(bucket, entry);
+  }
+  const keys = Array.from(buckets.keys());
+  if (keys.length === 0) {
+    return [];
+  }
+  const bars: Array<StatsBar> = [];
+  for (let bucket = Math.min(...keys); bucket <= Math.max(...keys); bucket += bucketSize) {
+    const entry = buckets.get(bucket) ?? {value: 0, highlight: 0};
+    const range = bucketSize === 1 ? String(bucket) : `${bucket}–${bucket + bucketSize - 1}`;
+    bars.push({label: String(bucket), value: entry.value, highlight: entry.highlight, title: `${range}: ${entry.highlight} / ${entry.value}`});
+  }
+  return bars;
 }
