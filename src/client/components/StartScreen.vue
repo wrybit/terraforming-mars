@@ -1,46 +1,48 @@
 <template>
 <div class="start-screen">
-  <div v-i18n class="start-screen-links">
+  <!-- Sprache und Einstellungen oben rechts als Milchglas-Buttons, wie im Spiel -->
+  <div class="start-screen-toolbar">
+    <LanguageIcon/>
+    <PreferencesIcon/>
+  </div>
+  <div class="start-screen-links">
     <div class="start-screen-header start-screen-link--title">
       <div class="start-screen-title-top">TERRAFORMING</div>
       <div class="start-screen-title-bottom">MARS</div>
     </div>
-    <a class="start-screen-link start-screen-link--new-game" href="new-game" v-i18n>New game</a>
-    <a class="start-screen-link start-screen-link--how-to-play" href="https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks" target="_blank" v-i18n>How to Play</a>
-    <a class="start-screen-link start-screen-link--cards-list" href="cards" target="_blank" v-i18n>Cards list</a>
-    <a class="start-screen-link start-screen-link--board-game" href="https://boardgamegeek.com/boardgame/167791/terraforming-mars" target="_blank" v-i18n>Board game</a>
-    <a class="start-screen-link start-screen-link--about" href="https://github.com/terraforming-mars/terraforming-mars#README" target="_blank" v-i18n>About us</a>
-    <a class="start-screen-link start-screen-link--changelog" href="https://github.com/terraforming-mars/terraforming-mars/wiki/Changelog" target="_blank" v-i18n>Whats new?</a>
-    <a class="start-screen-link start-screen-link--chat" :href="DISCORD_INVITE" target="_blank" v-i18n>Join us on Discord</a>
-    <div class="start-screen-header start-screen-link--languages">
-      <LanguageSwitcher />
-      <div class="start-screen-version-cont">
-        <div class="nowrap start-screen-date"><span v-i18n>deployed</span>: {{raw_settings.builtAt}}</div>
-        <div class="nowrap start-screen-version"><span v-i18n>version</span>: {{raw_settings.head}}</div>
-      </div>
-      <div class="source-code">
-        <a href="https://github.com/terraforming-mars/terraforming-mars" target="_blank" class="source-code-text">
-        <img src="assets/misc/github.png" class="source-code-img">
-          source code
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="free-floating-preferences-icon">
-    <LanguageIcon class="corner-language-icon"/>
-    <PreferencesIcon/>
+    <!-- Reihe im Planeten-Bild (planets.jpg) ergibt sich aus der Position: Reihe 0 ist der Titel -->
+    <a v-for="(link, index) in links"
+      :key="link.label"
+      class="start-screen-link"
+      :style="{'--sprite-row': index + 1}"
+      :href="link.href"
+      :target="link.external ? '_blank' : undefined"
+      v-i18n>{{ link.label }}</a>
   </div>
 </div>
 </template>
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import LanguageSwitcher from '@/client/components/LanguageSwitcher.vue';
 import LanguageIcon from '@/client/components/LanguageIcon.vue';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
-
-import raw_settings from '@/genfiles/settings.json';
 import * as constants from '@/common/constants';
+import {WIKI_URLS} from '@/client/utils/WikiLinks';
+import {UPSTREAM_REPOSITORY_URL} from '@/client/utils/RepositoryLinks';
+
+type StartScreenLink = {label: string, href: string, external: boolean};
+
+// Reihenfolge = Reihenfolge der Planeten-Hintergründe; ein neuer Eintrag schiebt alle folgenden eine Reihe weiter
+const links: ReadonlyArray<StartScreenLink> = [
+  {label: 'New game', href: 'new-game', external: false},
+  {label: 'Game rules', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true},
+  {label: 'Statistics', href: 'stats', external: false},
+  {label: 'Cards list', href: 'cards', external: true},
+  {label: 'Board game', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true},
+  {label: 'About us', href: UPSTREAM_REPOSITORY_URL + '#README', external: true},
+  {label: 'Whats new?', href: WIKI_URLS.changelog, external: true},
+  {label: 'Join us on Discord', href: constants.DISCORD_INVITE, external: true},
+];
 
 const previousViewport = ref('');
 
@@ -64,6 +66,4 @@ onBeforeUnmount(() => {
     .querySelector('meta[name="viewport"]')
     ?.setAttribute('content', previousViewport.value);
 });
-
-const DISCORD_INVITE = constants.DISCORD_INVITE;
 </script>

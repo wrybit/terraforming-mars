@@ -47,6 +47,9 @@
   padding-bottom: 15px;
   flex-direction: column-reverse;
   background-image: url("assets/buttons-homepage/planets.jpg");
+  // planets.jpg hat 9 gleich hohe Reihen (0 = Titel); --sprite-row setzt StartScreen.vue aus der Position.
+  // Prozentwert, damit es auch mit der gestreckten Größe auf schmalen Fenstern stimmt
+  background-position: 0 calc(var(--sprite-row) * 12.5%);
 
   &:hover,
   &:visited,
@@ -76,6 +79,11 @@
   background: url("assets/buttons-homepage/planets.jpg") no-repeat;
 }
 
+.start-screen-link--title {
+  // Deutlich mehr Abstand zum Menü als zwischen den Buttons (5px): Titel ist eigene Gruppe
+  margin-bottom: 24px;
+}
+
 .start-screen-title-top {
   transform: scaleX(2);
   text-align: center;
@@ -88,46 +96,35 @@
   font-size: 30px;
 }
 
-.start-screen-link--new-game {
-  background-position: 0px -90px;
+// Sprache und Einstellungen oben rechts, wie im Spiel (sidebar_toolbar.less)
+.start-screen-toolbar {
+  position: fixed;
+  top: @toolbar-edge-offset;
+  right: @toolbar-edge-offset;
+  z-index: 20;
+  display: flex;
+  gap: @toolbar-gap;
+  .toolbar-glass-icon-buttons();
 }
 
-.start-screen-link--how-to-play {
-  background-position: 0px -180px;
+// Fußzeile der Startseite (StartScreenFooter.vue): Build-Stand und Quellcode je als eigene Gruppe,
+// innen enger als der Abstand zwischen den Gruppen (.notice: 24px)
+.start-screen-footer-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 12px;
 }
 
-.start-screen-link--cards-list {
-  background-position: 0px -270px;
+.start-screen-footer-repository {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.start-screen-link--board-game {
-  background-position: 0px -360px;
-}
-
-.start-screen-link--about {
-  background-position: 0px -450px;
-}
-
-.start-screen-link--changelog {
-  background-position: 0px -540px;
-}
-
-.start-screen-link--chat {
-  background-position: 0px -630px;
-}
-
-.start-screen-link--languages {
-  padding-top: 10px;
-  background-position: 0px -720px;
-}
-
-.start-screen-version-cont {
-  margin-top: 10px;
-  text-align: center;
-}
-
-.start-screen-version {
-  margin-top: -5px;
+.start-screen-footer-github {
+  width: 16px;
+  height: 16px;
 }
 
 // Hinweis "Not affiliated …" (App.vue, alle Seiten außer Spiel, Zuschauer, Ergebnis) als Fußzeile am Seitenende:
@@ -150,37 +147,6 @@
   gap: 4px 24px;
   padding: 16px 24px;
   font-size: @font_size_small;
-}
-
-.source-code {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.source-code-img {
-  vertical-align: middle;
-}
-
-.source-code-text {
-  color: white;
-  font-size: smaller;
-  text-shadow:
-    0 0 2px darkgrey,
-    0 2px 2px darkgrey;
-  letter-spacing: 0.25rem;
-  text-decoration: none;
-}
-
-.source-code-text:focus {
-  text-decoration: none;
-}
-
-.source-code-text:hover {
-  text-decoration: none;
-}
-
-.source-code-text:visited {
-  color: white;
 }
 
 @media only screen and (max-width: 1023px) {
@@ -212,15 +178,13 @@
     white-space: nowrap;
   }
 
-  .start-screen-link--languages {
-    background-size: 100% 810px;
-    background-position: center -720px;
-  }
 }
 
 @media only screen and (max-width: 767px) {
   .notice {
     justify-content: center;
+    // Gruppen (Build-Stand, Quellcode, Hinweis) brechen hier untereinander um: Abstand größer als innerhalb einer Gruppe
+    row-gap: 12px;
     padding: 16px;
     text-align: center;
   }
@@ -236,7 +200,7 @@
   }
 
   .start-screen-links {
-    padding-top: max(24px, env(safe-area-inset-top));
+    padding-top: max(@toolbar-button-size + 2 * @toolbar-edge-offset, env(safe-area-inset-top));
   }
 
   .start-screen-link {

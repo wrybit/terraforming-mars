@@ -144,6 +144,23 @@
   }
 }
 
+// Sprache und Einstellungen außerhalb des Spiels als Milchglas-Buttons wie im Spiel
+// (Kopf von Kartenliste/Statistik, Startseite oben rechts)
+.toolbar-glass-icon-buttons() {
+  .sidebar_item--settings,
+  .sidebar_item--language {
+    .toolbar-glass-button();
+    position: relative;
+    inset: auto;
+
+    .sidebar_icon {
+      .toolbar-glass-icon();
+    }
+  }
+
+  .toolbar-language-flag();
+}
+
 // Flagge mittig im Milchglas-Button (auch genutzt von der Kartenliste, card_list.less).
 // Auch beim Hover: die allgemeine Regel .language-icon:hover (language_icon.less) würde die Flagge verschieben
 .toolbar-language-flag() {
