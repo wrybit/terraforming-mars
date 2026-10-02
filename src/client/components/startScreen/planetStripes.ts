@@ -11,7 +11,7 @@ export const SPRITE_ROW = {width: 369, height: 90} as const;
 // Globus-Kreis, per Kreis-Fit aus dem Planetenrand von planets.jpg bestimmt
 export const GLOBE = {centerX: -174.7, centerY: 402.5, radius: 522} as const;
 
-export type PlanetStripeName = 'venus' | 'earth' | 'mars' | 'jupiter' | 'saturn' | 'darkBlue' | 'neptune' | 'moon';
+export type PlanetStripeName = 'mercury' | 'venus' | 'earth' | 'mars' | 'jupiter' | 'saturn' | 'darkBlue' | 'neptune' | 'moon';
 
 export type PlanetStripe = {
   // Oberkante und Höhe in Original-Pixeln der Textur (aus den Farbsprüngen gemessen)
@@ -24,6 +24,8 @@ export type PlanetStripe = {
 const DEFAULT_START_X = 700;
 
 export const PLANET_STRIPES: Readonly<Record<PlanetStripeName, PlanetStripe>> = {
+  // oberster Streifen: Hintergrund des Titels (Reihe 0)
+  mercury: {top: 0, height: 101, startX: DEFAULT_START_X},
   venus: {top: 102, height: 86, startX: DEFAULT_START_X},
   earth: {top: 188, height: 85, startX: DEFAULT_START_X},
   mars: {top: 273, height: 86, startX: DEFAULT_START_X},

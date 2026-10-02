@@ -133,19 +133,8 @@
   display: none;
 }
 
-.start-screen-links--globe .start-screen-link {
-  background-image: none;
-
-  &::before {
-    background: rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(10px);
-  }
-
-  &:hover::before,
-  &:focus-visible::before {
-    backdrop-filter: blur(10px);
-  }
-
+.start-screen-links--globe {
+  // Planeten-Fläche hinter Text (Titel und Menüpunkte)
   .start-screen-link-planet {
     display: block;
     position: absolute;
@@ -158,9 +147,40 @@
     transition: filter @start-screen-hover-duration ease;
   }
 
-  &:hover .start-screen-link-planet,
-  &:focus-visible .start-screen-link-planet {
-    filter: brightness(1.1) saturate(1.35);
+  // Glas neben dem Planeten: Galaxie dahinter weichgezeichnet
+  .start-screen-link::before,
+  .start-screen-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+  }
+
+  .start-screen-link {
+    background-image: none;
+
+    &:hover::before,
+    &:focus-visible::before {
+      backdrop-filter: blur(10px);
+    }
+
+    &:hover .start-screen-link-planet,
+    &:focus-visible .start-screen-link-planet {
+      filter: brightness(1.1) saturate(1.35);
+    }
+  }
+
+  // Titel wie die Buttons auf Glas statt im schwarzen Kasten; overflow bleibt sichtbar, weil der Titeltext angehoben über dem Kasten steht
+  .start-screen-header {
+    position: relative;
+    isolation: isolate;
+    border-radius: 10px;
+    background: none;
+    box-shadow: none;
+    outline: 1px solid @start-screen-link-outline;
   }
 }
 
