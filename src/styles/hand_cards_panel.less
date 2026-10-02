@@ -19,6 +19,8 @@
 
 // Kopfzeile der Handkarten: Überschrift und Sortier-Buttons in einer Zeile, dicht über den Karten.
 .hand-cards-panel__header {
+  // Container für die Wahl Segment-Leiste/Auswahlliste der Sortierung (siehe unten)
+  container: hand-sort-bar / inline-size;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -65,28 +67,33 @@ html.tm-mobile .hand-cards-panel__header {
   margin-bottom: 18px;
 }
 
-// Auswahlliste der Sortierung (HandSortControl.vue): nur mobil, dort ersetzt sie die Segment-Leiste.
-// Optik wie die übrigen Mobil-Buttons: dunkle Fläche, feiner Rand, runde Ecken, eigener Pfeil.
+// Segment-Leiste oder Auswahlliste – je nach Platz in der Zeile, nicht nach Gerät: Die Kopfzeile der Hand und die
+// Kopfzeile einer Kartenauswahl (select_card_toolbar.less) sind Container; reicht ihre Breite nicht für die
+// ausgeschriebene Leiste (Handy), zeigt HandSortControl.vue die Auswahlliste.
+// Mindestbreite: Überschrift bzw. "Alle auswählen" plus Beschriftung und fünf Segmente (deutsche Texte sind die längsten)
+@hand-sort-bar-min-width: 600px;
+
+// Optik wie die übrigen Buttons der Mobil-Ansicht: dunkle Fläche, feiner Rand, runde Ecken, eigener Pfeil
 .hand-sort-control__select {
   display: none;
+  height: 36px;
+  padding: 0 32px 0 12px;
+  border: 1px solid @mb-line;
+  border-radius: 8px;
+  font-size: 14px;
+  color: @mb-text;
+  background: @mb-surface-raised url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23ece9e2' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat right 12px center;
+  appearance: none;
 }
 
-html.tm-mobile .hand-cards-panel__sort {
-  font-size: 12px;
+@container hand-sort-bar (max-width: (@hand-sort-bar-min-width - 1px)) {
+  .hand-cards-panel__sort {
+    .create-game-segmented {
+      display: none;
+    }
 
-  .create-game-segmented {
-    display: none;
-  }
-
-  .hand-sort-control__select {
-    display: block;
-    height: 36px;
-    padding: 0 32px 0 12px;
-    border: 1px solid @mb-line;
-    border-radius: 8px;
-    font-size: 14px;
-    color: @mb-text;
-    background: @mb-surface-raised url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23ece9e2' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat right 12px center;
-    appearance: none;
+    .hand-sort-control__select {
+      display: block;
+    }
   }
 }
