@@ -6,9 +6,10 @@
       <div class="create-game-head-actions">
         <label class="create-game-icon-button" :title="$t('Load settings from file')">
           <i class="icon icon-upload"></i>
+          <span class="create-game-head-label" v-i18n>Import</span>
           <input style="display: none" type="file" accept=".json" id="settings-file" ref="file" @change="uploadSettings()">
         </label>
-        <button type="button" class="create-game-icon-button" :title="$t('Save settings to file')" @click="downloadSettings()"><i class="icon icon-download"></i></button>
+        <button type="button" class="create-game-icon-button" :title="$t('Save settings to file')" @click="downloadSettings()"><i class="icon icon-download"></i><span class="create-game-head-label" v-i18n>Export</span></button>
         <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings"/>
       </div>
       <PageToolbar/>
