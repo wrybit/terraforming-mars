@@ -62,6 +62,8 @@ describe('collectStatsGames', () => {
     const playerDetails = details.players.find((entry) => entry.name === player.name)!;
     expect(playerDetails.cards).includes(CardName.ECOLINE);
     expect([playerDetails.greeneries, playerDetails.cities]).deep.eq([1, 1]);
+    // Für die Heatmap: Feld, Art und Besitzer jedes Plättchens
+    expect(details.tiles?.filter((tile) => tile.playerName === player.name).map((tile) => tile.type).sort()).deep.eq(['city', 'greenery']);
     expect(details.source).eq('game');
     expect(playerDetails.victoryPoints?.total).eq(player.getVictoryPoints().total);
   });

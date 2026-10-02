@@ -2,7 +2,7 @@ import {paths} from '@/common/app/paths';
 import {isStatsKind, StatsKind} from './statsKinds';
 
 // Jede Ansicht der Statistik hat eine eigene Adresse: Links lassen sich teilen, Zurück im Browser funktioniert.
-export type StatsTab = 'overview' | 'players' | 'corporation' | 'prelude' | 'card' | 'milestone' | 'award' | 'board' | 'records';
+export type StatsTab = 'overview' | 'players' | 'corporation' | 'prelude' | 'card' | 'combinations' | 'milestone' | 'award' | 'board' | 'records';
 
 export const STATS_TABS: ReadonlyArray<{tab: StatsTab, label: string}> = [
   {tab: 'overview', label: 'Overview'},
@@ -10,6 +10,7 @@ export const STATS_TABS: ReadonlyArray<{tab: StatsTab, label: string}> = [
   {tab: 'corporation', label: 'Corporations'},
   {tab: 'prelude', label: 'Prelude cards'},
   {tab: 'card', label: 'Project cards'},
+  {tab: 'combinations', label: 'Combinations'},
   {tab: 'milestone', label: 'Milestones'},
   {tab: 'award', label: 'Awards'},
   {tab: 'board', label: 'Boards'},

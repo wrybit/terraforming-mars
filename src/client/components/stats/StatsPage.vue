@@ -71,6 +71,7 @@
           <StatsOverview v-else-if="view.tab === 'overview'" :games="filteredGames" :results="results" :chartWidth="chartWidth"/>
           <StatsPlayersView v-else-if="view.tab === 'players'" :results="results" :names="names"/>
           <StatsRecordsView v-else-if="view.tab === 'records'" :results="results"/>
+          <StatsCombinationsView v-else-if="view.tab === 'combinations'" :results="results"/>
           <StatsEntityList v-else :key="view.tab" :kind="view.tab" :results="results"/>
         </template>
       </main>
@@ -94,6 +95,7 @@ import StatsOverview from './StatsOverview.vue';
 import StatsPlayersView from './StatsPlayersView.vue';
 import StatsRecordsView from './StatsRecordsView.vue';
 import StatsEntityList from './StatsEntityList.vue';
+import StatsCombinationsView from './StatsCombinationsView.vue';
 import StatsEntityDetail from './StatsEntityDetail.vue';
 import {activeFilterCount, emptyFilters, filterGames, filterGroups, optionCounts, StatsFilterGroup, StatsFilters} from './statsFilter';
 import {parseStatsView, STATS_TABS, statsHref, StatsTab, StatsView, tabOfKind} from './statsNavigation';
@@ -119,7 +121,7 @@ type DataModel = {
 // Aufbau, Filter und Kacheln wie in der Kartenliste, damit sie sich wie ein Teil der App anfühlt.
 export default defineComponent({
   name: 'StatsPage',
-  components: {CardListFilterGroup, LanguageIcon, PreferencesIcon, StatsOverview, StatsPlayersView, StatsRecordsView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
+  components: {CardListFilterGroup, LanguageIcon, PreferencesIcon, StatsOverview, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
   provide() {
     // Spielerfarbe überall gleich: die Farbe, in der jemand meistens gespielt hat
     return {

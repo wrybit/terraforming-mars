@@ -90,7 +90,6 @@
   "Show card": "Karte groß zeigen",
   "Most played project cards": "Meistgespielte Projektkarten",
   "Most played corporations": "Meistgespielte Konzerne",
-  "Most funded awards": "Häufigste Auszeichnungen",
   "wins": "Siege",
   "The board could not be loaded.": "Das Spielbrett konnte nicht geladen werden.",
   "Final scores": "Endpunktzahlen",
@@ -98,5 +97,17 @@
   "Victory points in steps of 10": "Siegpunkte in Zehnerschritten",
   "Of these won": "davon gewonnen",
   "Expected win rate": "Erwartete Siegquote",
-  "All games": "Ø alle Partien"
+  "All games": "Ø alle Partien",
+  "Combinations": "Kombinationen",
+  "Corporation + Prelude": "Konzern + Präludium",
+  "Corporation + Card": "Konzern + Karte",
+  "Prelude + Prelude": "Präludium + Präludium",
+  "Prelude + Card": "Präludium + Karte",
+  "Card + Card": "Karte + Karte",
+  "vs. alone": "vs. einzeln",
+  "\"vs. alone\": win rate of the pair minus the average win rate of both entries on their own, in percentage points.": "„vs. einzeln“: Siegquote des Paars minus dem Mittel der beiden Einzel-Siegquoten, in Prozentpunkten. Positiv heißt: zusammen besser als jeder für sich.",
+  "Only the 100 most played pairs are shown; use the search to find others.": "Gezeigt werden die 100 häufigsten Paare; andere findest du über die Suche.",
+  "Where cities and greeneries end up": "Wo Städte und Grünflächen landen",
+  "No game with a saved board yet. Screenshots do not show the board; every game finished here counts.": "Noch keine Partie mit gespeichertem Spielbrett. Screenshots zeigen das Brett nicht; jede hier beendete Partie zählt.",
+  "From ${0} games with a saved board. Screenshots do not show the board; every game finished here counts.": "Aus ${0} Partien mit gespeichertem Spielbrett. Screenshots zeigen das Brett nicht; jede hier beendete Partie zählt mit."
 }
