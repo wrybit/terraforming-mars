@@ -588,12 +588,17 @@ each(@players, {
   content: " / ";
 }
 
+// Titel, Mindestanzahl und Suche auf einer Achse; erst schmal brechen sie um
 .stats-list-tools {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 8px;
   font-size: 13px;
+
+  .stats-search {
+    flex: 0 0 220px;
+  }
 
   .create-game-segmented button {
     padding: 4px 10px;
@@ -611,9 +616,13 @@ each(@players, {
 }
 
 @media only screen and (max-width: @stats-narrow) {
-  .stats-list-tools,
-  .stats-search {
+  .stats-list-tools {
     flex: 1 1 100%;
+    flex-wrap: wrap;
+
+    .stats-search {
+      flex: 1 1 100%;
+    }
   }
 }
 
