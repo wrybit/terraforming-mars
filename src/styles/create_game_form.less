@@ -18,7 +18,6 @@
 @create-game-chip-hover: rgba(255, 255, 255, 0.1);
 @create-game-chip-min-width: 155px;
 @create-game-control-height: 36px;
-@create-game-gold: #ffcc64; // wie Kopf der Meilenstein-Tabelle
 // Unterhalb dieser Breite eine Spalte: Spieler oben, Erstellen-Karte klebt am unteren Rand
 @create-game-narrow: 820px;
 // Unterhalb dieser Breite die Einstellungs-Karten einspaltig
@@ -274,7 +273,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid @create-game-gold;
+    outline: 2px solid @highlight-gold;
     outline-offset: 2px;
   }
 
@@ -446,7 +445,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid @create-game-gold;
+    outline: 2px solid @highlight-gold;
     outline-offset: 2px;
   }
 }
@@ -605,7 +604,7 @@
   }
 
   &:focus {
-    outline: 2px solid @create-game-gold;
+    outline: 2px solid @highlight-gold;
     outline-offset: 0;
   }
 }
@@ -625,7 +624,7 @@
   cursor: pointer;
 
   &--selected {
-    background: @create-game-gold;
+    background: @highlight-gold;
     color: #222;
     font-weight: bold;
   }
