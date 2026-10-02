@@ -237,10 +237,8 @@ html.tm-mobile {
       inset: auto;
     }
 
-    > a:has(.goto-cards) {
+    > .deck-sizes {
       order: 3;
-      text-decoration: none;
-      pointer-events: none; // Jump link makes no sense on mobile; the hand has its own tab
     }
 
     // Right group set apart (doubled selector, otherwise the general button rule resets the margin)
@@ -296,7 +294,7 @@ html.tm-mobile {
     }
 
     // Card deck: icon on the left, draw pile and discard pile to its right (tile wider instead of taller)
-    .goto-cards.sidebar_item {
+    .deck-sizes.sidebar_item {
       width: auto;
       padding: 0 8px;
       gap: 6px;

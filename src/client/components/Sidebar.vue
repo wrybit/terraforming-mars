@@ -15,13 +15,12 @@
     <div :class="getPlayerColorCubeClass()+' player_bg_color_' + playerColor"></div>
   </div>
 
-  <a href="#cards" :title="$t('Jump to cards')">
-      <div class="sidebar_item goto-cards sidebar_item_shortcut-long">
-          <i class="sidebar_icon sidebar_icon--cards">
-            <div class="deck-size">🂠{{ deckSize }}<br>🗑{{ discardPileSize }}</div>
-          </i>
-      </div>
-  </a>
+  <!-- Display only: the old jump link pointed to the long page of the original, which the tab layout no longer has -->
+  <div class="sidebar_item deck-sizes sidebar_item_shortcut-long" :title="$t('Draw pile') + ' / ' + $t('Discard pile')">
+    <i class="sidebar_icon sidebar_icon--cards">
+      <div class="deck-size">🂠{{ deckSize }}<br>🗑{{ discardPileSize }}</div>
+    </i>
+  </div>
   <a v-if="coloniesCount > 0" href="#colonies" :title="$t('Jump to colonies')">
       <div class="sidebar_item sidebar_item_shortcut">
           <i class="sidebar_icon sidebar_icon--colonies"></i>
