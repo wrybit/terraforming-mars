@@ -1,7 +1,14 @@
 <template>
   <div id="stats" class="card-list stats" @keydown.esc="filtersOpen = false" @click="followStatsLink">
     <header class="card-list-header">
-      <h1><a :href="overviewHref" data-stats-link v-i18n>Statistics</a></h1>
+      <!-- App-Symbol und Name wie die App selbst; mobil bleibt nur Symbol + „Statistik“ -->
+      <h1>
+        <a :href="overviewHref" data-stats-link class="stats-title">
+          <img src="assets/pwa/icon-192.png" alt="" class="stats-title-icon">
+          <span class="stats-title-app">Terraforming Mars –</span>
+          <span v-i18n>Statistics</span>
+        </a>
+      </h1>
       <span class="stats-header-info">{{ headerInfo }}</span>
       <div class="card-list-header-actions">
         <button type="button" class="card-list-filter-toggle" :title="$t('Filters')" @click="filtersOpen = true">
