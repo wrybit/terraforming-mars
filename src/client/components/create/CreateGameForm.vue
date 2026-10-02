@@ -1,10 +1,10 @@
 <template>
   <div id="create-game" class="create-game">
+    <PageToolbar/>
     <div class="create-game-layout">
       <div class="create-game-card create-game-head">
         <h1 v-i18n>Create New Game</h1>
         <div class="create-game-head-actions">
-          <PreferencesIcon/>
           <label class="create-game-icon-button" :title="$t('Load settings from file')">
             <i class="icon icon-upload"></i>
             <input style="display: none" type="file" accept=".json" id="settings-file" ref="file" @change="uploadSettings()">
@@ -329,7 +329,7 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import {playerColorClass} from '@/common/utils/utils';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
-import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
+import PageToolbar from '@/client/components/PageToolbar.vue';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {BoardNameType, NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
 import {vueRoot} from '@/client/components/vueRoot';
@@ -389,7 +389,7 @@ export default defineComponent({
     NumberStepper,
     OptionRow,
     PreludesFilter,
-    PreferencesIcon,
+    PageToolbar,
     SegmentedControl,
     SwitchInput,
     ValidationErrorsPopup,

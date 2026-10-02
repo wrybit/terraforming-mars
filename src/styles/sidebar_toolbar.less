@@ -161,6 +161,44 @@
   .toolbar-language-flag();
 }
 
+// Sprache und Einstellungen fest oben rechts auf Seiten außerhalb des Spiels (PageToolbar.vue):
+// Startseite, Spiel erstellen, Spiel erstellt
+.page-toolbar {
+  position: fixed;
+  top: @toolbar-edge-offset;
+  right: @toolbar-edge-offset;
+  z-index: 20;
+  display: flex;
+  gap: @toolbar-gap;
+  .toolbar-glass-icon-buttons();
+}
+
+// Seiten mit fester Ecke: Inhalt so breit wie die Spielansicht (player_home.less, 20px Rand). Wie dort das Brett
+// unter der Icon-Gruppe weiterläuft, reicht der Inhalt bis an den rechten Rand; nur die Kopf-Karte daneben
+// hält so viel frei, wie die Ecke belegt (wie die Zugreihenfolge-Karte im Spiel). Schmal liegt die Ecke über dem Inhalt.
+@page-toolbar-content-edge: 20px;
+@page-toolbar-content-gap: 24px;
+@page-toolbar-narrow: 820px;
+
+.page-toolbar-content() {
+  box-sizing: border-box;
+  max-width: none;
+  margin: 0;
+  padding: @page-toolbar-content-edge;
+
+  @media only screen and (max-width: @page-toolbar-narrow) {
+    padding: (@toolbar-button-size + 2 * @toolbar-edge-offset) 16px 16px;
+  }
+}
+
+.page-toolbar-head() {
+  margin-right: @toolbar-occupied-width + @page-toolbar-content-gap - @page-toolbar-content-edge;
+
+  @media only screen and (max-width: @page-toolbar-narrow) {
+    margin-right: 0;
+  }
+}
+
 // Flagge mittig im Milchglas-Button (auch genutzt von der Kartenliste, card_list.less).
 // Auch beim Hover: die allgemeine Regel .language-icon:hover (language_icon.less) würde die Flagge verschieben
 .toolbar-language-flag() {

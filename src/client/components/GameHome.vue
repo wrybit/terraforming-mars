@@ -1,5 +1,6 @@
 <template>
   <div id="game-home" class="game-home">
+    <PageToolbar/>
     <section class="game-home-card game-home-hero">
       <div class="game-home-check">✓</div>
       <div class="game-home-hero-text">
@@ -53,6 +54,7 @@
 import {defineComponent} from 'vue';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import AppButton from '@/client/components/common/AppButton.vue';
+import PageToolbar from '@/client/components/PageToolbar.vue';
 import PurgeWarning from '@/client/components/common/PurgeWarning.vue';
 import {playerColorClass} from '@/common/utils/utils';
 import GameSetupDetail from '@/client/components/GameSetupDetail.vue';
@@ -88,6 +90,7 @@ export default defineComponent({
   },
   components: {
     AppButton,
+    PageToolbar,
     GameSetupDetail,
     PurgeWarning,
   },

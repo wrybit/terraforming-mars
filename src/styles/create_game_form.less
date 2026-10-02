@@ -6,7 +6,7 @@
 @create-game-gap-inner: 6px;
 @create-game-gap-card: 16px;
 @create-game-gap-column: 24px;
-@create-game-page-padding: 24px;
+@create-game-page-padding: @page-toolbar-content-edge; // Abstand der mitlaufenden Spalte oben/unten
 @create-game-players-width: 380px;
 @create-game-radius: 10px;
 @create-game-radius-small: 8px;
@@ -90,13 +90,12 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) @create-game-players-width;
   gap: @create-game-gap-card @create-game-gap-column;
-  max-width: 1560px;
-  margin: 0 auto;
-  padding: @create-game-page-padding;
+  .page-toolbar-content();
 }
 
 .create-game-head {
   grid-column: 1 / -1;
+  .page-toolbar-head();
   display: flex;
   align-items: center;
   gap: 12px;
@@ -679,17 +678,6 @@
   }
 }
 
-// Knöpfe der Kopf-Karte (Einstellungen, Laden, Speichern) als Milchglas-Buttons wie die Icon-Gruppe
-// der Spielansicht (sidebar_toolbar.less); das Zahnrad sitzt hier statt fest in der Ecke
-.create-game-head .sidebar_item--settings {
-  .toolbar-glass-button();
-  position: static;
-
-  .sidebar_icon {
-    .toolbar-glass-icon();
-  }
-}
-
 // ---------- Symbole, Warnungen, Popup ----------
 .create-game-expansion-icon {
   display: inline-block;
@@ -740,7 +728,6 @@
 @media only screen and (max-width: @create-game-narrow) {
   .create-game-layout {
     grid-template-columns: minmax(0, 1fr);
-    padding: 16px;
   }
 
   .create-game-head {
