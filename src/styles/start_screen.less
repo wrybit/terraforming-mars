@@ -3,14 +3,14 @@
 }
 .topmost-start-screen {
   margin: 0px;
-  padding-bottom: 40px;
+  // Kein Innenabstand unten: sonst säße die Fußzeile höher als ihr seitlicher Abstand; Luft unter dem Menü hält .start-screen
   // Hintergrundbild: app_background.less
   min-height: 100%;
 }
 
 .start-screen {
   width: 400px;
-  margin: 0 auto;
+  margin: 0 auto 40px;
 }
 
 .start-screen-game-title {
@@ -32,9 +32,10 @@
   line-height: 28px;
   border-radius: 10px;
   color: #eee;
+  // weicher Schatten ohne Versatz, mittig um die Schrift: hebt sie vom Planeten ab, ohne Kante nach unten
   text-shadow:
-    0 0 2px black,
-    0 2px 1px black;
+    0 0 6px rgba(0, 0, 0, 0.9),
+    0 0 14px rgba(0, 0, 0, 0.6);
   padding-left: 17px;
   width: 369px;
   height: 90px;
@@ -44,8 +45,9 @@
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: 1px;
-  padding-bottom: 15px;
-  flex-direction: column-reverse;
+  // Beschriftung senkrecht mittig im Button
+  flex-direction: column;
+  justify-content: center;
   background-image: url("assets/buttons-homepage/planets.jpg");
   // planets.jpg hat 9 gleich hohe Reihen (0 = Titel); --sprite-row setzt StartScreen.vue aus der Position.
   // Prozentwert, damit es auch mit der gestreckten Größe auf schmalen Fenstern stimmt
@@ -76,7 +78,7 @@
   width: 1.1em;
   height: 1.1em;
   // SVG erbt keinen text-shadow: gleicher Schatten als Filter, damit das Symbol auf hellen Planeten lesbar bleibt
-  filter: drop-shadow(0 0 2px black) drop-shadow(0 2px 1px black);
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 14px rgba(0, 0, 0, 0.6));
 
   .mb-glyph-line {
     fill: none;
@@ -127,24 +129,14 @@
   .toolbar-glass-icon-buttons();
 }
 
-// Fußzeile der Startseite (StartScreenFooter.vue): Build-Stand und Quellcode je als eigene Gruppe,
-// innen enger als der Abstand zwischen den Gruppen (.notice: 24px)
-.start-screen-footer-group {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 4px 12px;
-}
-
-.start-screen-footer-repository {
-  display: inline-flex;
-  align-items: center;
+// Fußzeile der Startseite (StartScreenFooter.vue): Fakten untereinander, eng (4px), damit sie als eine Gruppe lesen
+.start-screen-footer-facts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
   gap: 4px;
-}
-
-.start-screen-footer-github {
-  width: 16px;
-  height: 16px;
 }
 
 // Hinweis "Not affiliated …" (App.vue, alle Seiten außer Spiel, Zuschauer, Ergebnis) als Fußzeile am Seitenende:
@@ -165,8 +157,15 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 4px 24px;
-  padding: 16px 24px;
+  // unten so viel Abstand wie links und rechts
+  padding: 16px 24px 24px;
   font-size: @font_size_small;
+}
+
+// Startseite: links Build-Stand und Quellcode, rechts der Hinweis – beide unten bündig
+.notice--split {
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 @media only screen and (max-width: 1023px) {
@@ -211,7 +210,17 @@
 
   .topmost-start-screen {
     overflow-x: clip;
-    padding-bottom: max(40px, env(safe-area-inset-bottom));
+  }
+
+  // Startseite: Hinweis und Fakten untereinander, mittig; unten Platz für die Home-Leiste des iPhones
+  .notice--split {
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .start-screen-footer-facts {
+    align-items: center;
   }
 
   .start-screen {
