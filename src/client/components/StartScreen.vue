@@ -60,7 +60,7 @@ const links: ReadonlyArray<StartScreenLink> = [
   {label: 'Statistics', icon: 'statistics', planet: 'mars', href: 'stats', external: true},
   {label: 'Cards list', icon: 'cardsList', planet: 'jupiter', href: 'cards', external: true},
   {label: 'Board game', icon: 'boardGame', planet: 'saturn', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true},
-  {label: 'Developer team', icon: 'about', planet: 'darkBlue', href: UPSTREAM_REPOSITORY_URL + '#-contributors-', external: true},
+  {label: 'Project team', icon: 'about', planet: 'darkBlue', href: UPSTREAM_REPOSITORY_URL + '#-contributors-', external: true},
   {label: 'Updates', icon: 'updates', planet: 'neptune', href: WIKI_URLS.changelog, external: true},
   {label: 'Discord', icon: 'discord', planet: 'moon', href: constants.DISCORD_INVITE, external: true},
 ];
