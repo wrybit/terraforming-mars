@@ -17,6 +17,10 @@
               <span class="games-overview-win-games">{{ percentText(count.wins, lineup.games) }}</span>
             </div>
           </div>
+          <p class="games-overview-averages">
+            <span v-if="lineup.averageGenerations !== undefined">Ø {{ formatAverage(lineup.averageGenerations) }} generations</span>
+            <span v-if="lineup.averageWinnerPoints !== undefined">Ø {{ formatAverage(lineup.averageWinnerPoints) }} points for the winner</span>
+          </p>
         </div>
       </div>
     </section>
@@ -98,6 +102,9 @@ export default defineComponent({
     },
   },
   methods: {
+    formatAverage(value: number): string {
+      return value.toLocaleString(undefined, {maximumFractionDigits: 1});
+    },
     percentText(wins: number, games: number): string {
       return `${Math.round(wins / games * 100)} %`;
     },
