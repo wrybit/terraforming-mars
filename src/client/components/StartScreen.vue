@@ -16,13 +16,16 @@
     <a v-for="(link, index) in links"
       :key="link.label"
       class="start-screen-link"
+      :class="{'start-screen-link--active': activeIndex === index}"
       :style="{'--sprite-row': index + 1}"
       :href="link.href"
       :target="link.external ? '_blank' : undefined"
-      @mouseenter="setHovered(index, true)"
-      @mouseleave="setHovered(index, false)"
-      @focus="setHovered(index, true)"
-      @blur="setHovered(index, false)">
+      @pointerdown="lastPointerType = $event.pointerType"
+      @pointerenter="$event.pointerType === 'mouse' && activate(index)"
+      @pointerleave="$event.pointerType === 'mouse' && deactivate(index)"
+      @focus="($event.target as HTMLElement).matches(':focus-visible') && activate(index)"
+      @blur="deactivate(index)"
+      @click="onClick(index, $event)">
       <!-- Planeten-Oberfläche: WebGL (planetGlobeRenderer.ts) oder ohne WebGL flach per CSS (planetFlatRenderer.ts) -->
       <canvas class="start-screen-link-planet" :ref="(element) => setCanvas(index, element)" aria-hidden="true"></canvas>
       <span class="start-screen-link-content">
@@ -90,6 +93,58 @@ function setHovered(index: number, hovered: boolean): void {
   }
 }
 
+// Hervorhebung (Leuchten, Drehen): Maus-Hover, Tastatur-Fokus oder erster Tap auf Touch-Geräten
+const activeIndex = ref<number | undefined>(undefined);
+const lastPointerType = ref('');
+// Doppel-Tap: kommt der zweite Tap innerhalb dieser Zeit, öffnet er den Link sofort, ohne dass vorher etwas leuchtet
+const DOUBLE_TAP_WINDOW = 300;
+let pendingTap: {index: number, timer: number} | undefined;
+
+function activate(index: number): void {
+  if (activeIndex.value !== undefined && activeIndex.value !== index) {
+    setHovered(activeIndex.value, false);
+  }
+  activeIndex.value = index;
+  setHovered(index, true);
+}
+
+function deactivate(index: number): void {
+  if (activeIndex.value === index) {
+    activeIndex.value = undefined;
+    setHovered(index, false);
+  }
+}
+
+// Touch: erster Tap hebt hervor, zweiter öffnet den Link; ein schneller Doppel-Tap öffnet direkt
+function onClick(index: number, event: MouseEvent): void {
+  if (lastPointerType.value !== 'touch' || activeIndex.value === index) {
+    return;
+  }
+  if (pendingTap?.index === index) {
+    window.clearTimeout(pendingTap.timer);
+    pendingTap = undefined;
+    return;
+  }
+  event.preventDefault();
+  if (pendingTap !== undefined) {
+    window.clearTimeout(pendingTap.timer);
+  }
+  pendingTap = {
+    index,
+    timer: window.setTimeout(() => {
+      pendingTap = undefined;
+      activate(index);
+    }, DOUBLE_TAP_WINDOW),
+  };
+}
+
+// Tap außerhalb der Menüpunkte nimmt die Hervorhebung zurück
+function onDocumentPointerDown(event: PointerEvent): void {
+  if (activeIndex.value !== undefined && !(event.target instanceof Element && event.target.closest('.start-screen-link'))) {
+    deactivate(activeIndex.value);
+  }
+}
+
 async function startGlobe(): Promise<void> {
   // WebGL wölbt den Streifen und beleuchtet ihn; ohne WebGL dreht er flach per CSS
   const renderer = await PlanetGlobeRenderer.create() ?? new PlanetFlatRenderer();
@@ -116,12 +171,17 @@ async function startGlobe(): Promise<void> {
 }
 
 onMounted(() => {
+  document.addEventListener('pointerdown', onDocumentPointerDown);
   if (typeof ResizeObserver !== 'undefined') {
     void startGlobe();
   }
 });
 
 onBeforeUnmount(() => {
+  document.removeEventListener('pointerdown', onDocumentPointerDown);
+  if (pendingTap !== undefined) {
+    window.clearTimeout(pendingTap.timer);
+  }
   rotation?.stop();
   resizeObserver?.disconnect();
 });

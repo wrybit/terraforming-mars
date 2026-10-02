@@ -99,12 +99,12 @@
     transition: backdrop-filter @start-screen-hover-duration ease;
   }
 
-  &:hover::before,
+  &.start-screen-link--active::before,
   &:focus-visible::before {
     backdrop-filter: brightness(1.1) saturate(1.2);
   }
 
-  &:hover,
+  &.start-screen-link--active,
   &:focus-visible {
     outline-color: @start-screen-link-outline-hover;
     box-shadow: 0 0 6px 2px fade(@start-screen-link-glow, 55%);
@@ -162,12 +162,12 @@
   .start-screen-link {
     background-image: none;
 
-    &:hover::before,
+    &.start-screen-link--active::before,
     &:focus-visible::before {
       backdrop-filter: blur(10px);
     }
 
-    &:hover .start-screen-link-planet,
+    &.start-screen-link--active .start-screen-link-planet,
     &:focus-visible .start-screen-link-planet {
       filter: brightness(1.1) saturate(1.35);
     }
@@ -184,6 +184,8 @@
   }
 }
 
+// Hervorhebung über die Klasse start-screen-link--active statt :hover: StartScreen.vue setzt sie bei Maus-Hover und beim
+// ersten Tap auf Touch-Geräten (dort öffnet erst der zweite Tap den Link).
 // Beschriftung ruhend kleiner, beim Hover etwas größer als normal; Skalierung von links, damit sie an Ort und Stelle wächst
 .start-screen-link .start-screen-link-content {
   transform: scale(0.86);
@@ -191,7 +193,7 @@
   transition: transform @start-screen-hover-duration ease;
 }
 
-.start-screen-link:hover .start-screen-link-content,
+.start-screen-link.start-screen-link--active .start-screen-link-content,
 .start-screen-link:focus-visible .start-screen-link-content {
   transform: scale(1.06);
 }
