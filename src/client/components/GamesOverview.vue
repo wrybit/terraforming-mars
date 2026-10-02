@@ -18,8 +18,8 @@
             </div>
           </div>
           <p class="games-overview-averages">
-            <span v-if="lineup.averageGenerations !== undefined">Ø {{ formatAverage(lineup.averageGenerations) }} generations</span>
-            <span v-if="lineup.averageWinnerPoints !== undefined">Ø {{ formatAverage(lineup.averageWinnerPoints) }} points for the winner</span>
+            <span v-if="lineup.averageGenerations !== undefined" title="Average generations">Generation: ∅ <strong>{{ formatAverage(lineup.averageGenerations) }}</strong></span>
+            <span v-if="lineup.averageWinnerPoints !== undefined" title="Average victory points of the winner">Points: ∅ <strong>{{ formatAverage(lineup.averageWinnerPoints) }}</strong></span>
           </p>
         </div>
       </div>
