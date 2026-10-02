@@ -23,6 +23,15 @@ export type PlanetStripe = {
 
 const DEFAULT_START_X = 700;
 
+// An den Streifen-Grenzen liegen helle Trennlinien und der Nachbarstreifen: oben und unten so viel abschneiden
+// (Textur-Pixel), dass nur der eigene Streifen zu sehen ist – auch mit Glättung beim Skalieren
+export const STRIPE_EDGE_TRIM = 2;
+
+/** Sichtbarer Teil eines Streifens ohne die Ränder. */
+export function trimmedStripe(stripe: PlanetStripe): PlanetStripe {
+  return {...stripe, top: stripe.top + STRIPE_EDGE_TRIM, height: stripe.height - 2 * STRIPE_EDGE_TRIM};
+}
+
 export const PLANET_STRIPES: Readonly<Record<PlanetStripeName, PlanetStripe>> = {
   venus: {top: 102, height: 86, startX: DEFAULT_START_X},
   earth: {top: 188, height: 85, startX: DEFAULT_START_X},

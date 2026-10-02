@@ -2,7 +2,7 @@
    Licht von oben links. Eine gemeinsame WebGL-Fläche für alle Buttons (Browser erlauben nur wenige Kontexte);
    das Ergebnis wird in die 2D-Canvas des jeweiligen Buttons kopiert. */
 import {PlanetDrawRequest, PlanetRenderer} from './planetRenderer';
-import {GLOBE, SPRITE_ROW, STRIPES_TEXTURE_SIZE, STRIPES_TEXTURE_URL} from './planetStripes';
+import {GLOBE, SPRITE_ROW, STRIPES_TEXTURE_SIZE, STRIPES_TEXTURE_URL, trimmedStripe} from './planetStripes';
 
 const float = (value: number) => value.toFixed(3);
 
@@ -126,9 +126,11 @@ export class PlanetGlobeRenderer implements PlanetRenderer {
     gl.uniform2f(this.uniforms.buttonSize, cssWidth, cssHeight);
     gl.uniform1f(this.uniforms.globeScale, request.placement.scale);
     gl.uniform1f(this.uniforms.spriteTop, request.placement.spriteTop);
-    gl.uniform1f(this.uniforms.stripeTop, request.stripe.top);
-    gl.uniform1f(this.uniforms.stripeHeight, request.stripe.height);
-    gl.uniform1f(this.uniforms.startX, request.stripe.startX);
+    // ohne die Ränder: sonst blitzen Trennlinie und Nachbarstreifen oben/unten durch
+    const stripe = trimmedStripe(request.stripe);
+    gl.uniform1f(this.uniforms.stripeTop, stripe.top);
+    gl.uniform1f(this.uniforms.stripeHeight, stripe.height);
+    gl.uniform1f(this.uniforms.startX, stripe.startX);
     gl.uniform1f(this.uniforms.offset, request.offset);
     gl.uniform1f(this.uniforms.glow, request.glow);
     gl.viewport(0, 0, width, height);
