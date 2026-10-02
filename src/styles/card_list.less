@@ -72,9 +72,20 @@
   gap: 8px;
 }
 
-// Kopfleiste ohne Suche ("Spiel erstellen", "Spiel erstellt"): Höhe wie die Kartenliste
+// Kopf ohne Suche ("Spiel erstellen", "Spiel erstellt"): Höhe und Inhalt wie die Kartenliste, aber als Karte
+// im Raster der Seite – mit Rand nach außen, nicht mitlaufend. Zum Inhalt darunter derselbe Abstand
+// wie zwischen den Karten (Inhalt hat oben @page-content-edge, daher negativer Rest).
 .card-list-header--plain {
   --card-list-header: @card-list-header-height;
+  position: relative;
+  margin: @page-content-edge @page-content-edge (@create-game-gap-card - @page-content-edge);
+  border: 1px solid @create-game-line;
+  border-radius: @create-game-radius;
+  box-shadow: none;
+
+  @media only screen and (max-width: @page-content-narrow) {
+    margin: @page-content-edge-narrow @page-content-edge-narrow (@create-game-gap-card - @page-content-edge-narrow);
+  }
 }
 
 .card-list-header-actions {

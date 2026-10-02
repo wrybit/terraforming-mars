@@ -93,7 +93,7 @@
   .page-content();
 }
 
-// Kopfleiste: Grundstil von der Kartenliste (.card-list-header, card_list.less)
+// Kopf-Karte: Grundstil von der Kartenliste (.card-list-header, card_list.less)
 .create-game-head-actions {
   margin-left: auto;
   display: flex;
@@ -486,13 +486,12 @@
   grid-column: 2;
   grid-row: 1;
   position: sticky;
-  // unter der mitlaufenden Kopfleiste
-  top: calc(var(--card-list-header) + @create-game-page-padding);
+  top: @create-game-page-padding;
   align-self: start;
   display: flex;
   flex-direction: column;
   gap: @create-game-gap-card;
-  max-height: calc(100dvh - var(--card-list-header) - 2 * @create-game-page-padding);
+  max-height: calc(100dvh - 2 * @create-game-page-padding);
 }
 
 .create-game-players {
@@ -748,7 +747,7 @@
   }
 }
 
-// Handy: Titel mit Sprache/Einstellungen oben, Datei-Knöpfe darunter – die Leiste wächst dafür in der Höhe
+// Handy: Titel mit Sprache/Einstellungen oben, Datei-Knöpfe darunter – die Kopf-Karte wächst dafür in der Höhe
 @media only screen and (max-width: @card-list-phone) {
   .card-list-header.create-game-head {
     flex-wrap: wrap;

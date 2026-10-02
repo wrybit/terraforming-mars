@@ -1,6 +1,6 @@
 <template>
   <div id="create-game" class="create-game">
-    <!-- Kopf wie Kartenliste/Statistik: Titel, Datei-Knöpfe, Sprache und Einstellungen in einer Leiste -->
+    <!-- Kopf wie Kartenliste/Statistik: Titel, Datei-Knöpfe, Sprache und Einstellungen in einer Kopf-Karte -->
     <header class="card-list-header card-list-header--plain create-game-head">
       <h1 v-i18n>Create New Game</h1>
       <div class="create-game-head-actions">
