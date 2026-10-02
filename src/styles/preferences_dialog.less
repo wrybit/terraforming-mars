@@ -155,10 +155,12 @@
   margin-left: auto;
   font-size: 18px;
   line-height: 1;
+  // Closed: points down (will open below), open: points up (will close)
+  transform: rotate(90deg);
   transition: transform 0.15s;
 
   details[open] & {
-    transform: rotate(90deg);
+    transform: rotate(-90deg);
   }
 }
 
