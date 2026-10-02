@@ -7,6 +7,8 @@
   </div>
   <div class="start-screen-links" :class="{'start-screen-links--globe': globeReady}">
     <div class="start-screen-header start-screen-link--title">
+      <!-- Titel liegt auf der obersten Globus-Reihe (Merkur), wie die Buttons auf Glas -->
+      <canvas class="start-screen-link-planet" :ref="setTitleCanvas" aria-hidden="true"></canvas>
       <div class="start-screen-title-top">TERRAFORMING</div>
       <div class="start-screen-title-bottom">MARS</div>
     </div>
@@ -67,6 +69,9 @@ const previousViewport = ref('');
 // Drehende Planeten: sobald der Zeichner bereit ist, ersetzt die Planeten-Fläche das Bild planets.jpg
 const globeReady = ref(false);
 const canvases: Array<HTMLCanvasElement | undefined> = [];
+let titleCanvas: HTMLCanvasElement | undefined;
+// Index jedes Menüpunkts in der PlanetRotation (fehlt eine Canvas, verschieben sich die Indizes sonst)
+const rotationIndexes: Array<number | undefined> = [];
 let rotation: PlanetRotation | undefined;
 let resizeObserver: ResizeObserver | undefined;
 
@@ -74,8 +79,15 @@ function setCanvas(index: number, element: unknown): void {
   canvases[index] = element instanceof HTMLCanvasElement ? element : undefined;
 }
 
+function setTitleCanvas(element: unknown): void {
+  titleCanvas = element instanceof HTMLCanvasElement ? element : undefined;
+}
+
 function setHovered(index: number, hovered: boolean): void {
-  rotation?.setHovered(index, hovered);
+  const rotationIndex = rotationIndexes[index];
+  if (rotationIndex !== undefined) {
+    rotation?.setHovered(rotationIndex, hovered);
+  }
 }
 
 async function startGlobe(): Promise<void> {
@@ -86,9 +98,13 @@ async function startGlobe(): Promise<void> {
   links.forEach((link, index) => {
     const canvas = canvases[index];
     if (canvas !== undefined) {
-      rotation?.add(canvas, index + 1, PLANET_STRIPES[link.planet]);
+      rotationIndexes[index] = rotation?.add(canvas, index + 1, PLANET_STRIPES[link.planet]);
     }
   });
+  // Titel: Reihe 0, dreht sich nicht (kein Hover)
+  if (titleCanvas !== undefined) {
+    rotation.add(titleCanvas, 0, PLANET_STRIPES.mercury);
+  }
   globeReady.value = true;
   // Buttonmaße ändern sich mit der Fensterbreite/-höhe (Handy): dann neu zeichnen
   const container = canvases[0]?.parentElement?.parentElement;
