@@ -5,11 +5,13 @@
       <span :class="summary.isFinished ? 'status-finished' : 'status-running'" :title="summary.isFinished ? 'Finished' : 'Running'"></span>
     </td>
     <td class="games-overview-game">
-      <a v-if="summary.externalUrl !== undefined" :href="summary.externalUrl" target="_blank" class="games-overview-source" title="Original on the other server">imported</a>
+      <a v-if="summary.screenshotUrl !== undefined" :href="summary.screenshotUrl" target="_blank" class="games-overview-source" title="Saved screenshot of the result page">Screenshot</a>
+      <a v-else-if="summary.externalUrl !== undefined" :href="summary.externalUrl" target="_blank" class="games-overview-source" title="Original on the other server">imported</a>
       <span v-else class="games-overview-id">{{ summary.id }}</span>
       <span class="games-overview-date">{{ dateText }}</span>
     </td>
-    <td class="games-overview-generation">{{ summary.generation }}</td>
+    <!-- 0 = unbekannt (z. B. Screenshot ohne Generationsangabe) -->
+    <td class="games-overview-generation">{{ summary.generation > 0 ? summary.generation : '–' }}</td>
     <td>
       <a v-if="summary.spectatorUrl !== undefined" :href="summary.spectatorUrl" target="_blank" class="games-overview-chip games-overview-chip--spectator">Watch</a>
     </td>
@@ -20,7 +22,7 @@
         target="_blank"
         class="games-overview-chip"
         :class="[playerColorClass(playerByName(name)!.color), {'games-overview-chip--winner': playerByName(name)!.isWinner}]"
-        :title="playerByName(name)!.isWinner ? 'Winner' : ''">
+        :title="chipTitle(playerByName(name)!)">
         <span v-if="playerByName(name)!.isWinner" class="games-overview-trophy">🏆</span>{{ playerByName(name)!.victoryPoints }}
       </component>
     </td>
@@ -65,6 +67,10 @@ export default defineComponent({
   methods: {
     playerByName(name: string): AdminPlayerSummary | undefined {
       return this.summary.players.find((player) => player.name === name);
+    },
+    // Konzern und Sieg im Tooltip: die Kachel selbst bleibt kompakt (nur Punkte)
+    chipTitle(player: AdminPlayerSummary): string {
+      return [player.corporation, player.isWinner ? 'Winner' : undefined].filter((part) => part !== undefined).join(' · ');
     },
     playerColorClass(color: Color): string {
       return playerColorClass(color, 'bg_transparent');

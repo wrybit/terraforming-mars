@@ -13,6 +13,7 @@ import {ApiGameLogs} from '../routes/ApiGameLogs';
 import {ApiAdminDeleteGame} from '../routes/ApiAdminDeleteGame';
 import {ApiAdminGames} from '../routes/ApiAdminGames';
 import {ApiAdminImportGame} from '../routes/ApiAdminImportGame';
+import {ImportedScreenshot} from '../routes/ImportedScreenshot';
 import {ApiGames} from '../routes/ApiGames';
 import {ApiHeapSnapshot} from '../routes/ApiHeapSnapshot';
 import {ApiIPs} from '../routes/ApiIPs';
@@ -116,6 +117,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.GAME, GameHandler.INSTANCE],
     [paths.GAMES_OVERVIEW, GamesOverview.INSTANCE],
     [paths.HELP, ServeApp.INSTANCE],
+    [paths.IMPORTED_SCREENSHOT, ImportedScreenshot.INSTANCE],
     [paths.LOAD, Load.INSTANCE],
     [paths.LOAD_GAME, LoadGame.INSTANCE],
     [paths.LOGIN, Login.INSTANCE],

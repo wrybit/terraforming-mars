@@ -8,7 +8,7 @@ import {AdminGameSummary} from '../../src/common/admin/AdminGameSummary';
 describe('ImportedGamesStore', () => {
   let folder: string;
   let store: ImportedGamesStore;
-  const summary = (id: string) => ({id, source: 'imported', createdTimeMs: 1, isFinished: true, generation: 1, spectatorUrl: undefined, externalUrl: 'x', importedParticipantId: undefined, players: []}) as AdminGameSummary;
+  const summary = (id: string) => ({id, source: 'imported', createdTimeMs: 1, isFinished: true, generation: 1, spectatorUrl: undefined, externalUrl: 'x', importedParticipantId: undefined, screenshotUrl: undefined, players: []}) as AdminGameSummary;
 
   beforeEach(() => {
     folder = mkdtempSync(path.join(os.tmpdir(), 'imported-games-'));

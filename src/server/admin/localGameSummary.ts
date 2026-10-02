@@ -13,6 +13,7 @@ export function localGameSummary(game: IGame): AdminGameSummary {
     url: `${paths.PLAYER}?id=${player.id}`,
     victoryPoints: player.getVictoryPoints().total,
     megaCredits: player.megaCredits,
+    corporation: player.playedCards.corporations().map((card) => card.name).join(' / ') || undefined,
   }));
   return {
     id: game.id,
@@ -23,6 +24,7 @@ export function localGameSummary(game: IGame): AdminGameSummary {
     spectatorUrl: `${paths.SPECTATOR}?id=${game.spectatorId}`,
     externalUrl: undefined,
     importedParticipantId: undefined,
+    screenshotUrl: undefined,
     players: toAdminPlayerSummaries(scores, isFinished, game.isSoloModeWin()),
   };
 }

@@ -5,13 +5,18 @@
       <ImportGameForm :serverId="serverId" @imported="loadGames"/>
     </section>
 
-    <section v-if="wins.length > 0" class="games-overview-card">
+    <section v-if="lineups.length > 0" class="games-overview-card">
       <h2>Wins</h2>
-      <div class="games-overview-wins">
-        <div v-for="count in wins" :key="count.name" class="games-overview-win">
-          <strong>{{ count.name }}</strong>
-          <span class="games-overview-win-number">{{ count.wins }}</span>
-          <span class="games-overview-win-games">of {{ count.games }} games</span>
+      <div class="games-overview-lineups">
+        <div v-for="lineup in lineups" :key="lineup.lineup" class="games-overview-lineup">
+          <h3>{{ lineup.lineup }} <span class="games-overview-lineup-games">{{ lineup.games }} {{ lineup.games === 1 ? 'game' : 'games' }}</span></h3>
+          <div class="games-overview-wins">
+            <div v-for="count in lineup.counts" :key="count.name" class="games-overview-win">
+              <strong>{{ count.name }}</strong>
+              <span class="games-overview-win-number">{{ count.wins }}</span>
+              <span class="games-overview-win-games">{{ percentText(count.wins, lineup.games) }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -51,7 +56,7 @@ import GameOverview from '@/client/components/admin/GameOverview.vue';
 import ImportGameForm from '@/client/components/admin/ImportGameForm.vue';
 import HomeLink from '@/client/components/common/HomeLink.vue';
 import {playerColumns} from '@/client/components/admin/playerColumns';
-import {WinCount, winCounts} from '@/client/components/admin/winCounts';
+import {LineupWinCounts, winCountsByLineup} from '@/client/components/admin/winCounts';
 
 type DataModel = {
   summaries: Array<AdminGameSummary>;
@@ -88,11 +93,14 @@ export default defineComponent({
     columns(): Array<string> {
       return playerColumns(this.summaries);
     },
-    wins(): Array<WinCount> {
-      return winCounts(this.summaries);
+    lineups(): Array<LineupWinCounts> {
+      return winCountsByLineup(this.summaries);
     },
   },
   methods: {
+    percentText(wins: number, games: number): string {
+      return `${Math.round(wins / games * 100)} %`;
+    },
     adminUrl(path: string): string {
       return `${path}?serverId=${encodeURIComponent(this.serverId)}`;
     },

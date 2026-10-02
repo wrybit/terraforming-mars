@@ -83,6 +83,8 @@ export async function importExternalGame(input: string, fetcher: JsonFetcher = f
     url: !isSpectator && player.color === view.color ? localUrl : undefined,
     victoryPoints: player.victoryPointsBreakdown?.total ?? 0,
     megaCredits: player.megacredits ?? 0,
+    // Der Konzern steht in der fremden Ansicht nur als Karte im Tableau – für die Übersicht verzichtbar
+    corporation: undefined,
   }));
   const summary: AdminGameSummary = {
     id: `import-${host}-${participantId}`,
@@ -94,6 +96,7 @@ export async function importExternalGame(input: string, fetcher: JsonFetcher = f
     spectatorUrl: localUrl,
     externalUrl: link,
     importedParticipantId: participantId,
+    screenshotUrl: undefined,
     players: toAdminPlayerSummaries(scores, isFinished, view.game.isSoloModeWin === true),
   };
   return {summary, snapshot: {participantId, view, logsByGeneration}};

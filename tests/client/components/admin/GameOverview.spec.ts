@@ -14,9 +14,10 @@ describe('GameOverview', () => {
     spectatorUrl: 'spectator?id=s1',
     externalUrl: undefined,
     importedParticipantId: undefined,
+    screenshotUrl: undefined,
     players: [
-      {name: 'Jens', color: 'blue', url: 'player?id=p1', victoryPoints: 76, megaCredits: 0, isWinner: true},
-      {name: 'Daniel', color: 'red', url: 'player?id=p2', victoryPoints: 66, megaCredits: 0, isWinner: false},
+      {name: 'Jens', color: 'blue', url: 'player?id=p1', victoryPoints: 76, megaCredits: 0, isWinner: true, corporation: 'Helion'},
+      {name: 'Daniel', color: 'red', url: 'player?id=p2', victoryPoints: 66, megaCredits: 0, isWinner: false, corporation: undefined},
     ],
   };
 
@@ -32,6 +33,10 @@ describe('GameOverview', () => {
     const cells = mountRow().findAll('td').map((cell) => cell.text());
     // Status, Spiel, Generation, Zuschauer, Jens, Martin, Daniel, Löschen
     expect(cells.slice(4, 7)).deep.eq(['🏆76', '', '66']);
+  });
+
+  it('corporation and win in the tooltip', () => {
+    expect(mountRow().findAll('.games-overview-chip[title]').map((chip) => chip.attributes('title'))).contains('Helion · Winner');
   });
 
   it('delete needs a second click', async () => {
