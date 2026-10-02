@@ -85,7 +85,7 @@ body.mb-body { margin: 0; overflow: hidden; }
 .mb-mars .board-cont { position: absolute; margin: 0 !important; translate: none !important; }
 .mb-mars .board-without-venus { background-image: url(assets-extra/mars-planet.png) !important; }
 .mb-mars .global-numbers { display: none !important; }
-/* Colony spaces into the top corners, "Plätt. an" to the bottom left – fills the areas where the ring was */
+/* Colony spaces into the top corners, the "show tiles" toggle to the bottom left – fills the areas where the ring was */
 .mb-mars .board-outer-spaces { left: 0; top: 0; width: 670px; height: 600px; pointer-events: none; }
 .mb-mars .board-outer-spaces .board-space { pointer-events: auto; }
 .mb-mars .board-space-01, .mb-mars .board-space-02 { position: absolute !important; margin: 0 !important; top: 98px; }
