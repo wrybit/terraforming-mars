@@ -772,13 +772,15 @@
 // ---- Handy: Baum wird zur Chip-Leiste über dem Inhalt ----
 @media only screen and (max-width: @help-mobile-max) {
   .help-overlay--page {
-    height: calc(100vh - 32px);
-    margin: 16px 0 0;
-    border-radius: 16px 16px 0 0;
+    height: 100dvh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
   }
 
+  // Bildschirmfüllend: Kopf rückt unter Notch/Statusleiste weg
   .help-overlay-head {
-    padding: 14px 16px 0;
+    padding: max(14px, env(safe-area-inset-top)) 16px 0;
   }
 
   .help-overlay-toprow {
