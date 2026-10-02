@@ -5,6 +5,7 @@ import {Context} from './IHandler';
 import {Request} from '../Request';
 import {Response} from '../Response';
 import {RouteError} from './RouteError';
+import {ImportedSnapshotsStore} from '../admin/ImportedSnapshotsStore';
 
 export class ApiPlayer extends Handler {
   public static readonly INSTANCE = new ApiPlayer();
@@ -17,6 +18,12 @@ export class ApiPlayer extends Handler {
     const playerId = ctx.urlParams.playerId('id');
     const game = await ctx.gameLoader.getGame(playerId);
     if (game === undefined) {
+      // Von anderen Servern importierte Spiele gibt es hier nur als gespeicherten Endstand
+      const imported = ImportedSnapshotsStore.getInstance().get(playerId);
+      if (imported !== undefined) {
+        responses.writeJson(res, ctx, imported.view);
+        return;
+      }
       throw RouteError.notFound();
     }
     try {

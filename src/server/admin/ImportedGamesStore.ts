@@ -24,8 +24,12 @@ export class ImportedGamesStore {
     return JSON.parse(readFileSync(this.filename, 'utf8'));
   }
 
+  public get(id: string): AdminGameSummary | undefined {
+    return this.list().find((summary) => summary.id === id);
+  }
+
   public has(id: string): boolean {
-    return this.list().some((summary) => summary.id === id);
+    return this.get(id) !== undefined;
   }
 
   public add(summary: AdminGameSummary): void {

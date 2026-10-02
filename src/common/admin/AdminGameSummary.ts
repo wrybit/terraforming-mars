@@ -25,6 +25,8 @@ export type AdminGameSummary = {
   spectatorUrl: string | undefined;
   /** Ursprünglicher Link eines importierten Spiels. */
   externalUrl: string | undefined;
+  /** Teilnehmer-ID, unter der ein importiertes Spiel hier gespeichert ist (Ergebnisseite the-end?id=…). */
+  importedParticipantId: string | undefined;
   players: Array<AdminPlayerSummary>;
 };
 

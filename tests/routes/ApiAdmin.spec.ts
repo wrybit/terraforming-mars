@@ -6,6 +6,9 @@ import {ApiAdminGames} from '../../src/server/routes/ApiAdminGames';
 import {ApiAdminDeleteGame} from '../../src/server/routes/ApiAdminDeleteGame';
 import {ApiAdminImportGame} from '../../src/server/routes/ApiAdminImportGame';
 import {ImportedGamesStore} from '../../src/server/admin/ImportedGamesStore';
+import {ImportedSnapshotsStore} from '../../src/server/admin/ImportedSnapshotsStore';
+import {ApiPlayer} from '../../src/server/routes/ApiPlayer';
+import {ApiGameLogs} from '../../src/server/routes/ApiGameLogs';
 import {Game} from '../../src/server/Game';
 import {TestPlayer} from '../TestPlayer';
 import {MockResponse} from './HttpMocks';
@@ -20,19 +23,28 @@ describe('ApiAdmin', () => {
   let scaffolding: RouteTestScaffolding;
   let folder: string;
   let store: ImportedGamesStore;
+  let snapshots: ImportedSnapshotsStore;
 
   beforeEach(async () => {
     scaffolding = new RouteTestScaffolding();
     res = new MockResponse();
     folder = mkdtempSync(path.join(os.tmpdir(), 'api-admin-'));
     store = new ImportedGamesStore(path.join(folder, 'imported-games.json'));
+    snapshots = new ImportedSnapshotsStore(path.join(folder, 'imported'));
+    ImportedSnapshotsStore.setInstanceForTesting(snapshots);
     const player = TestPlayer.BLACK.newPlayer({name: 'Jens'});
     await scaffolding.ctx.gameLoader.add(Game.newInstance('game-id', [player], player, 'spectatorid'));
   });
 
   afterEach(() => {
+    ImportedSnapshotsStore.setInstanceForTesting(undefined);
     rmSync(folder, {recursive: true, force: true});
   });
+
+  // Fremder Server: Ansicht ohne generation-Parameter, sonst ein Log
+  function fakeServer(view: object) {
+    return async (url: string) => new URL(url).searchParams.has('generation') ? [{message: 'log'}] : view;
+  }
 
   // Die Routen lesen den Body über 'data'/'end'-Events – erst senden, nachdem post() gestartet ist
   function post(handler: Handler, body: object): Promise<unknown> {
@@ -46,7 +58,7 @@ describe('ApiAdmin', () => {
   }
 
   it('all admin routes need the server id', async () => {
-    for (const handler of [new ApiAdminGames(store), new ApiAdminDeleteGame(store), new ApiAdminImportGame(store)]) {
+    for (const handler of [new ApiAdminGames(store), new ApiAdminDeleteGame(store, snapshots), new ApiAdminImportGame(store, snapshots)]) {
       scaffolding.url = '/api/admin';
       res = new MockResponse();
       await handler.processRequest(scaffolding.req, res, scaffolding.ctx);
@@ -62,28 +74,40 @@ describe('ApiAdmin', () => {
   });
 
   it('deletes a local game', async () => {
-    await post(new ApiAdminDeleteGame(store), {id: 'game-id'});
+    await post(new ApiAdminDeleteGame(store, snapshots), {id: 'game-id'});
     expect(await scaffolding.ctx.gameLoader.getGame('game-id')).is.undefined;
   });
 
   it('unknown game cannot be deleted', async () => {
-    await post(new ApiAdminDeleteGame(store), {id: 'g-unknown'});
+    await post(new ApiAdminDeleteGame(store, snapshots), {id: 'g-unknown'});
     expect(res.statusCode).eq(statusCode.notFound);
   });
 
-  it('imports and then deletes an external result', async () => {
-    const view = {color: 'red', game: {phase: Phase.END, generation: 9}, players: [{name: 'Jens', color: 'red', megacredits: 1, victoryPointsBreakdown: {total: 80}}]};
-    await post(new ApiAdminImportGame(store, async () => view), {url: 'https://example.org/the-end?id=p123456789abc'});
+  it('an imported game lives on here: result page and log, until it is deleted', async () => {
+    const view = {color: 'red', game: {phase: Phase.END, generation: 1}, players: [{name: 'Jens', color: 'red', megacredits: 1, victoryPointsBreakdown: {total: 80}}]};
+    await post(new ApiAdminImportGame(store, snapshots, fakeServer(view)), {url: 'https://example.org/the-end?id=p123456789abc'});
     expect(store.list().map((s) => s.id)).deep.eq(['import-example.org-p123456789abc']);
 
     res = new MockResponse();
-    await post(new ApiAdminDeleteGame(store), {id: 'import-example.org-p123456789abc'});
+    scaffolding.url = '/api/player?id=p123456789abc';
+    scaffolding.req.method = 'GET';
+    await ApiPlayer.INSTANCE.processRequest(scaffolding.req, res, scaffolding.ctx);
+    expect(JSON.parse(res.content).players[0].name).eq('Jens');
+
+    res = new MockResponse();
+    scaffolding.url = '/api/game/logs?id=p123456789abc&generation=1';
+    await ApiGameLogs.INSTANCE.processRequest(scaffolding.req, res, scaffolding.ctx);
+    expect(JSON.parse(res.content)).deep.eq([{message: 'log'}]);
+
+    res = new MockResponse();
+    await post(new ApiAdminDeleteGame(store, snapshots), {id: 'import-example.org-p123456789abc'});
     expect(store.list()).deep.eq([]);
+    expect(snapshots.get('p123456789abc')).is.undefined;
   });
 
   it('refuses a second import of the same game', async () => {
     const view = {color: 'red', game: {phase: Phase.END, generation: 9}, players: []};
-    const handler = new ApiAdminImportGame(store, async () => view);
+    const handler = new ApiAdminImportGame(store, snapshots, fakeServer(view));
     await post(handler, {url: 'https://example.org/the-end?id=p123456789abc'});
     res = new MockResponse();
     await post(handler, {url: 'https://example.org/the-end?id=p123456789abc'});

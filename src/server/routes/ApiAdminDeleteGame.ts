@@ -8,17 +8,25 @@ import {readBody} from './readBody';
 import {isGameId} from '../../common/Types';
 import {AdminDeleteGameRequest} from '../../common/admin/AdminGameSummary';
 import {ImportedGamesStore} from '../admin/ImportedGamesStore';
+import {ImportedSnapshotsStore} from '../admin/ImportedSnapshotsStore';
 
 /** Löscht ein eigenes Spiel endgültig aus Speicher und Datenbank oder entfernt ein importiertes Ergebnis. */
 export class ApiAdminDeleteGame extends Handler {
   public static readonly INSTANCE = new ApiAdminDeleteGame();
-  constructor(private readonly importedGames: ImportedGamesStore = ImportedGamesStore.getInstance()) {
+  constructor(
+    private readonly importedGames: ImportedGamesStore = ImportedGamesStore.getInstance(),
+    private readonly snapshots: ImportedSnapshotsStore = ImportedSnapshotsStore.getInstance()) {
     super({validateServerId: true});
   }
 
   public override async post(req: Request, res: Response, ctx: Context): Promise<void> {
     const {id} = JSON.parse(await readBody(req)) as AdminDeleteGameRequest;
-    if (this.importedGames.remove(id)) {
+    const importedSummary = this.importedGames.get(id);
+    if (importedSummary !== undefined) {
+      if (importedSummary.importedParticipantId !== undefined) {
+        this.snapshots.remove(importedSummary.importedParticipantId);
+      }
+      this.importedGames.remove(id);
       responses.writeJson(res, ctx, {deleted: id});
       return;
     }

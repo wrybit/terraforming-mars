@@ -5,6 +5,7 @@ import {GameLogs} from './GameLogs';
 import {Request} from '../Request';
 import {Response} from '../Response';
 import {RouteError} from './RouteError';
+import {ImportedSnapshotsStore} from '../admin/ImportedSnapshotsStore';
 
 export class ApiGameLogs extends Handler {
   public static readonly INSTANCE = new ApiGameLogs();
@@ -17,6 +18,12 @@ export class ApiGameLogs extends Handler {
     const generation = ctx.urlParams.numberOrUndefined('generation');
     const game = await ctx.gameLoader.getGame(id);
     if (game === undefined) {
+      // Von anderen Servern importierte Spiele: das beim Import gesicherte Log der Generation
+      const imported = ImportedSnapshotsStore.getInstance().get(id);
+      if (imported !== undefined) {
+        responses.writeJson(res, ctx, imported.logsByGeneration[generation ?? imported.view.game.generation] ?? []);
+        return;
+      }
       throw RouteError.notFound('game not found');
     }
     const logs = this.gameLogs.getLogsForGameView(id, game, generation);
