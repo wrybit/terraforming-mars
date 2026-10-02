@@ -1,0 +1,119 @@
+// Spielinfo (InfoPanel.vue): Abschnitte Spielaufbau, Karten, Zuschauer-Link; Rahmen aus dialog_frame.less
+@import (reference) "./dialog_frame.less";
+
+.info-panel-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dialog-frame .info-panel-section-title {
+  margin: 0;
+  padding: 0;
+  color: @dialog-muted;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+// Nachziehstapel groß, Ablage klein dahinter; bei Platzmangel Ablage in die nächste Zeile
+.info-panel-deck {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+}
+
+.info-panel-deck-draw,
+.info-panel-deck-discard {
+  display: inline-flex;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.info-panel-deck-draw {
+  gap: 6px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
+
+  svg {
+    color: @dialog-accent-text;
+  }
+}
+
+.info-panel-deck-discard {
+  gap: 4px;
+  color: @dialog-muted;
+  font-size: 14px;
+}
+
+.info-panel-link {
+  display: flex;
+  gap: 8px;
+}
+
+.info-panel-link-field {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid @dialog-surface-border;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  color: @dialog-muted;
+  font-size: 13px;
+  white-space: nowrap;
+  user-select: all;
+
+  svg {
+    flex: none;
+  }
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.btn.info-panel-icon-button {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn.info-panel-options {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-panel-notice {
+  margin-right: auto;
+  color: @dialog-muted;
+  font-size: 12px;
+}
+
+@media only screen and (max-width: 520px) {
+  .info-panel-deck-draw {
+    font-size: 20px;
+  }
+
+  // Hinweis unter die Buttons, mittig
+  .info-panel-notice {
+    order: 2;
+    flex-basis: 100%;
+    margin-right: 0;
+    text-align: center;
+  }
+}

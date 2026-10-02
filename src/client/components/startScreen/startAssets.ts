@@ -5,7 +5,6 @@ const IMAGES = [
   'assets/background.jpg',
   'assets/buttons-homepage/planets.jpg',
   'assets/buttons-homepage/planet-stripes.jpg',
-  'assets/flags_responsive.png',
   'assets/sidebar/preferences_settings.svg',
   'assets/misc/github.png',
 ];

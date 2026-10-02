@@ -35,7 +35,7 @@
       :class="{'sidebar_item--is-active': ui.gamesetup_detail_open}"
       @click="ui.gamesetup_detail_open = !ui.gamesetup_detail_open"
       :title="$t('game setup details')"></i>
-    <SidebarModal :open="ui.gamesetup_detail_open" @close="ui.gamesetup_detail_open=false">
+    <SidebarModal :open="ui.gamesetup_detail_open" :framed="true" @close="ui.gamesetup_detail_open=false">
       <InfoPanel v-if="ui.gamesetup_detail_open" :gameOptions="gameOptions" :playerNumber="playerNumber" :lastSoloGeneration="lastSoloGeneration" :deckSize="deckSize" :discardPileSize="discardPileSize" :otherDeckSizes="otherDeckSizes" :spectatorId="spectatorId" :expectedPurgeTimeMs="expectedPurgeTimeMs" @close="ui.gamesetup_detail_open=false" />
     </SidebarModal>
   </div>

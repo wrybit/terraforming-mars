@@ -241,11 +241,6 @@
   max-height: calc(75vh);
   overflow-y: auto;
   white-space: nowrap;
-
-  &.preferences_panel--language-switcher {
-    bottom: -140px;
-    left: 52px;
-  }
 }
 
 .sidebar_item--is-active::after {
@@ -353,52 +348,6 @@
   transform: scale(0.8);
 }
 
-.info-panel-title {
-  font-size: 25px;
-  font-style: normal;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  text-align: left;
-  padding-top: 15px;
-}
-
-.info_panel {
-  padding: 15px 50px 15px 20px;
-  display: inline-block;
-  position: absolute;
-  bottom: 0px;
-  left: 53px;
-  color: #c6c6c6;
-  background: #000000;
-  max-height: calc(85vh);
-  overflow-y: auto;
-}
-
-// Outranks .game-setup-detail-container .game-config, which sets the margin.
-.info_panel .game-config.info-panel-deck-size {
-  margin-left: auto;
-}
-
-// Zuschauer-Link, Lösch-Warnung, Hinweis – vom Seitenende ins Info-Fenster verlegt
-.info-panel-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin: 15px 0;
-  padding-top: 12px;
-  border-top: 1px solid #333;
-  font-size: 16px;
-}
-
-.info-panel-notice {
-  font-size: 13px;
-  color: #888;
-}
-
-.info_panel_actions {
-  text-align: center;
-}
-
 .bug-dialog {
   .center {
     text-align: center;
@@ -409,8 +358,7 @@
 }
 
 @media only screen and (max-width: 767px) {
-  .preferences_panel:not(.preferences_panel--language-switcher),
-  .preferences_panel.preferences_panel--language-switcher {
+  .preferences_panel {
     box-sizing: border-box;
     position: fixed;
     left: 8px;
