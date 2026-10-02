@@ -742,12 +742,15 @@ each(@stats-source-colors, {
   }
 }
 
-// Leeres Spielbrett: Skalen ragen über das Brett hinaus, daher Luft links und rechts
+// Leeres Spielbrett (auch als Heatmap)
 .stats-board-preview {
   display: flex;
   justify-content: center;
+}
+
+// Skalen ragen links und rechts über das Brett hinaus: Luft einrechnen, damit die Verkleinerung sie mitnimmt
+.stats-board-scaled {
   padding: 0 24px;
-  overflow-x: auto;
 }
 
 // In der Überschrift der Detailseite steht die Karte schon groß daneben
