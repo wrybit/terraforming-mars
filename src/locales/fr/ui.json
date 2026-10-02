@@ -1236,5 +1236,10 @@
   "Increase energy production 1 step": "Augmenter la production d'énergie de 1",
   "Increase heat production 1 step": "Augmenter la production de chaleur de 1",
   "Reorder Cards": "Réorganiser les cartes",
-  "Your turn": "À vous"
+  "Your turn": "À vous",
+  "Draft": "Draft",
+  "Buying": "Achat",
+  "Starting selection": "Sélection initiale",
+  "Solar phase": "Phase solaire",
+  "Production": "Production"
 }

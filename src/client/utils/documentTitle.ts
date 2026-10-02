@@ -1,5 +1,7 @@
 import {APP_NAME} from '@/common/constants';
 import {$t} from '../directives/i18n';
+import {Phase} from '@/common/Phase';
+import {turnTaskLabel} from './turnTaskLabel';
 
 // Kurzform im Spiel-Tab: Status, Spieler und Generation sollen im schmalen Tab sichtbar bleiben.
 const SHORT_APP_NAME = 'TM';
@@ -9,7 +11,7 @@ export const TURN_MARKER = '●';
 
 // Nur das, was der Titel braucht – passt auf Spieler-, Zuschauer- und Endansicht.
 export type TitleView = {
-  game: {name: string, generation: number};
+  game: {name: string, generation: number, phase: Phase};
   thisPlayer?: {name: string};
   waitingFor?: {optional?: boolean};
 };
@@ -27,15 +29,15 @@ export function isOwnTurn(view: TitleView): boolean {
   return view.waitingFor !== undefined && view.waitingFor.optional !== true;
 }
 
-// Status-Teil für den eigenen Zug, z.B. "● Am Zug".
-export function turnTitleState(marker: string = TURN_MARKER): string {
-  return `${marker} ${$t('Your turn')}`;
+// Status-Teil für den eigenen Zug: Marker plus aktuelle Aufgabe, z.B. "● Kaufen".
+export function turnTitleState(view: TitleView, marker: string = TURN_MARKER): string {
+  return `${marker} ${$t(turnTaskLabel(view.game))}`;
 }
 
-// Titel im Spiel: <Status> · <Spieler> · <Gen.> · <Spielname> | TM
-// z.B. "● Am Zug · Jens · Gen. 5 · Cosmic Pressure Flow | TM"; leere Teile entfallen.
-export function gameDocumentTitle(view: TitleView, state: string | undefined = isOwnTurn(view) ? turnTitleState() : undefined): string {
-  return shortDocumentTitle([state, view.thisPlayer?.name, `${$t('Gen')} ${view.game.generation}`, view.game.name]);
+// Titel im Spiel: <Aufgabe> · <Spieler> · G<Generation> · <Spielname> | TM
+// z.B. "● Kaufen · Daniel · G2 · Remote Plasma Trace | TM"; leere Teile entfallen.
+export function gameDocumentTitle(view: TitleView, state: string | undefined = isOwnTurn(view) ? turnTitleState(view) : undefined): string {
+  return shortDocumentTitle([state, view.thisPlayer?.name, `G${view.game.generation}`, view.game.name]);
 }
 
 // Gemeinsamer Aufbau aller Spiel-Titel: Teile mit " · " verbunden, leere Teile entfallen, "| TM" am Ende.

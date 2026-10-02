@@ -1206,5 +1206,10 @@
     "The server has restarted. Click OK to refresh this page.": "서버가 재시작되었습니다. 확인 버튼을 눌러 이 페이지를 다시 불러오십시오.",
     "OK": "확인",
     "Reorder Cards": "카드 재정렬",
-  "Your turn": "내 차례"
+  "Your turn": "내 차례",
+  "Draft": "드래프트",
+  "Buying": "구매",
+  "Starting selection": "초기 선택",
+  "Solar phase": "태양 단계",
+  "Production": "생산"
 }

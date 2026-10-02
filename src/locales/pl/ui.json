@@ -522,5 +522,10 @@
   "#bug-reports Discord channel": "na kanale Discorda #bug-reports",
   "a GitHub issue": "jako błąd na stronie GitHub",
   "Reorder Cards": "Zmień kolejność kart",
-  "Your turn": "Twoja kolej"
+  "Your turn": "Twoja kolej",
+  "Draft": "Draft",
+  "Buying": "Kupowanie",
+  "Starting selection": "Wybór początkowy",
+  "Solar phase": "Faza słoneczna",
+  "Production": "Produkcja"
 }
