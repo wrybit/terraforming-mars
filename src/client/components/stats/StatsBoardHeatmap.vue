@@ -1,22 +1,24 @@
 <template>
   <div class="stats-heatmap-block">
+    <!-- Titel links, Farbskala oben rechts in der Ecke der Karte -->
+    <div class="stats-card-head">
+      <h2 v-i18n>Where cities and greeneries end up</h2>
+      <div class="stats-heat-legend" aria-hidden="true">
+        <span v-for="step in steps" :key="step" class="stats-heat-legend-step" :data-heat-step="step">{{ step * 10 }}</span>
+        <span class="stats-dim">%</span>
+      </div>
+    </div>
     <div class="stats-heatmap-tools">
       <SegmentedControl :options="typeOptions" v-model="type"/>
       <SegmentedControl v-if="playerOptions.length > 2" :options="playerOptions" v-model="player"/>
     </div>
     <StatsBoardPreview :boardName="boardName" :heatmap="map" :heatmapType="type"/>
-    <!-- Farbskala: jede Stufe steht für 10 Prozentpunkte -->
-    <div class="stats-heat-legend" aria-hidden="true">
-      <span v-for="step in steps" :key="step" class="stats-heat-legend-step" :data-heat-step="step">{{ step * 10 }}</span>
-      <span class="stats-dim">%</span>
-    </div>
-    <p class="stats-note">{{ note }}</p>
+    <p v-if="map.games === 0" class="stats-note" v-i18n>No game with a saved board yet.</p>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
-import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
 import {SegmentOption} from '@/client/components/create/createGameChoices';
 import {BoardName} from '@/common/boards/BoardName';
@@ -50,12 +52,6 @@ export default defineComponent({
     },
     map(): Heatmap {
       return heatmap(this.games, this.boardName, this.type, this.player === ALL_PLAYERS ? undefined : this.player);
-    },
-    note(): string {
-      if (this.map.games === 0) {
-        return translateText('No game with a saved board yet.');
-      }
-      return translateTextWithParams('Percent of the ${0} games with a saved board in which a tile of this kind was on that space at the end.', [String(this.map.games)]);
     },
   },
 });
