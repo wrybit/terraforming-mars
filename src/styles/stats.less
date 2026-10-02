@@ -766,7 +766,8 @@ each(@stats-source-colors, {
   display: flex;
   gap: 16px;
   overflow-x: auto;
-  padding-bottom: 6px;
+  // Ein Scroller schneidet auch oben ab: Platz für Kosten-Plakette und Konzern-Banner, die über den Kartenrand ragen
+  padding: 14px 0 6px;
   scroll-snap-type: x proximity;
   overscroll-behavior-x: contain;
 
@@ -834,7 +835,7 @@ each(@stats-source-colors, {
     justify-content: center;
     background: rgba(var(--stats-heat-color), calc(0.25 + 0.7 * var(--stats-heat)));
     color: #111;
-    font-size: 15px;
+    font-size: 12px;
     font-weight: bold;
     pointer-events: none;
     z-index: 5;
