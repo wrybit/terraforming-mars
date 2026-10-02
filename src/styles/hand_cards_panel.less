@@ -1,3 +1,4 @@
+@import (reference) "./mobile.less";
 // Handkarten-Tab (HandCardsPanel.vue): aktive Karten oben, Handkarten darunter.
 // Gesetz der Nähe: Überschrift sitzt dicht an ihren Karten, zwischen den Abschnitten ist deutlich mehr Luft
 // plus eine feine Trennlinie.
@@ -59,16 +60,33 @@
   content: ' ▲';
 }
 
-// Mobil: mehr Luft zu den Karten, deren Preis-Badges nach oben herausragen; Segmente kompakter.
+// Mobil: mehr Luft zu den Karten, deren Preis-Badges nach oben herausragen.
 html.tm-mobile .hand-cards-panel__header {
   margin-bottom: 18px;
+}
+
+// Auswahlliste der Sortierung (HandSortControl.vue): nur mobil, dort ersetzt sie die Segment-Leiste.
+// Optik wie die übrigen Mobil-Buttons: dunkle Fläche, feiner Rand, runde Ecken, eigener Pfeil.
+.hand-sort-control__select {
+  display: none;
 }
 
 html.tm-mobile .hand-cards-panel__sort {
   font-size: 12px;
 
-  .create-game-segmented button {
-    padding: 4px 8px;
-    font-size: 12px;
+  .create-game-segmented {
+    display: none;
+  }
+
+  .hand-sort-control__select {
+    display: block;
+    height: 36px;
+    padding: 0 32px 0 12px;
+    border: 1px solid @mb-line;
+    border-radius: 8px;
+    font-size: 14px;
+    color: @mb-text;
+    background: @mb-surface-raised url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23ece9e2' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat right 12px center;
+    appearance: none;
   }
 }
