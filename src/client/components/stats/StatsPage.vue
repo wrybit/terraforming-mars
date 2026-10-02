@@ -5,8 +5,7 @@
       <h1>
         <a :href="overviewHref" data-stats-link class="stats-title">
           <img src="assets/stats/mars.png" alt="" class="stats-title-icon">
-          <span class="stats-title-app">Terraforming Mars –</span>
-          <span v-i18n>Statistics</span>
+          <span><span class="stats-title-app">Terraforming Mars – </span><span v-i18n>Statistics</span></span>
         </a>
       </h1>
       <span class="stats-header-info">{{ headerInfo }}</span>
