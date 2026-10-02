@@ -6,6 +6,8 @@
 @toolbar-button-size: 40px;
 @toolbar-icon-size: 26px;
 @toolbar-gap: 6px;
+@toolbar-glass-background: rgba(40, 42, 54, 0.45);
+@toolbar-glass-hover-background: rgba(60, 63, 80, 0.6);
 @toolbar-edge-offset: 10px; // Distance to the window edge at top and right
 // Width occupied at the right edge – content reaching that far keeps this much free (player_home_columns.less)
 @toolbar-occupied-width: @toolbar-edge-offset + 2 * @toolbar-button-size + @toolbar-gap;
@@ -22,12 +24,12 @@
   justify-content: center;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 8px;
-  background: rgba(40, 42, 54, 0.45);
+  background: @toolbar-glass-background;
   backdrop-filter: blur(8px) saturate(1.15);
   cursor: pointer;
 
   &:hover {
-    background: rgba(60, 63, 80, 0.6);
+    background: @toolbar-glass-hover-background;
   }
 }
 
@@ -80,14 +82,8 @@
     transform: none;
   }
 
-  // Pile sizes are display only: no pointer, no hover highlight
   .sidebar_cont > .deck-sizes {
     grid-area: cards;
-    cursor: default;
-
-    &:hover {
-      background: rgba(40, 42, 54, 0.45);
-    }
   }
 
   .sidebar_cont > a:has(.sidebar_icon--colonies) {
@@ -114,6 +110,16 @@
   .sidebar_cont .sidebar_item {
     .toolbar-glass-button();
     position: static;
+  }
+
+  // Player color and pile sizes are display only: no pointer, no hover highlight
+  .sidebar_cont .sidebar_item.preferences_player,
+  .sidebar_cont .sidebar_item.deck-sizes {
+    cursor: default;
+
+    &:hover {
+      background: @toolbar-glass-background;
+    }
   }
 
   .sidebar_cont .sidebar_icon {
