@@ -1,13 +1,22 @@
 import {AdminGameSummary} from '../../common/admin/AdminGameSummary';
 import {toAdminPlayerSummaries} from '../../common/admin/adminPlayerSummaries';
+import {LogMessage} from '../../common/logs/LogMessage';
 import {ViewModel} from '../../common/models/PlayerModel';
 import {Phase} from '../../common/Phase';
-import {isPlayerId, isSpectatorId} from '../../common/Types';
+import {paths} from '../../common/app/paths';
+import {isImportableParticipantId} from './isImportableParticipantId';
+import {ImportedSnapshot} from './ImportedSnapshotsStore';
 
 // Fremde Server geben nur die Ansicht eines Teilnehmers heraus, keinen vollständigen Spielstand.
-// Importiert wird deshalb das Ergebnis (Spieler, Punkte, Sieger, Generation), nicht eine spielbare Partie.
+// Importiert wird deshalb diese Ansicht samt Log – genug, um die Ergebnisseite dauerhaft auf dem eigenen Server
+// zu zeigen, auch wenn der fremde Server das Spiel längst gelöscht hat. Weiterspielen geht damit nicht.
 
 export type JsonFetcher = (url: string) => Promise<unknown>;
+
+export type ImportedGame = {
+  summary: AdminGameSummary;
+  snapshot: ImportedSnapshot;
+};
 
 const requestTimeoutMs = 15_000;
 
@@ -17,17 +26,11 @@ export const defaultExternalServer = 'https://terraforming-mars.herokuapp.com';
 /** Ergänzt eine nackte Teilnehmer-ID zum Link auf den öffentlichen Hauptserver; Links bleiben unverändert. */
 export function toExternalLink(input: string): string {
   const trimmed = input.trim();
-  if (isPlayerId(trimmed)) {
-    return `${defaultExternalServer}/the-end?id=${trimmed}`;
-  }
-  if (isSpectatorId(trimmed)) {
-    return `${defaultExternalServer}/spectator?id=${trimmed}`;
-  }
-  return trimmed;
+  return isImportableParticipantId(trimmed) ? `${defaultExternalServer}/${paths.THE_END}?id=${trimmed}` : trimmed;
 }
 
-/** Wandelt Links wie .../the-end?id=p…, .../player?id=p… oder .../spectator?id=s… in den passenden API-Aufruf um. */
-export function toExternalApiUrl(link: string): {apiUrl: string, participantId: string, host: string} {
+/** Zerlegt Links wie .../the-end?id=p…, .../player?id=p… oder .../spectator?id=s… in Server-Basis und Teilnehmer-ID. */
+export function parseExternalLink(link: string): {baseUrl: string, participantId: string, host: string} {
   let parsed: URL;
   try {
     parsed = new URL(link);
@@ -38,15 +41,12 @@ export function toExternalApiUrl(link: string): {apiUrl: string, participantId: 
     throw new Error('Only http and https links can be imported');
   }
   const participantId = parsed.searchParams.get('id') ?? '';
+  if (!isImportableParticipantId(participantId)) {
+    throw new Error('The link needs a player id (p…) or spectator id (s…)');
+  }
   // Der Pfad vor der letzten Seite bleibt erhalten, damit auch Server unter einem Unterordner funktionieren
-  const basePath = parsed.pathname.replace(/[^/]*$/, '');
-  if (isPlayerId(participantId)) {
-    return {apiUrl: `${parsed.origin}${basePath}api/player?id=${participantId}`, participantId, host: parsed.host};
-  }
-  if (isSpectatorId(participantId)) {
-    return {apiUrl: `${parsed.origin}${basePath}api/spectator?id=${participantId}`, participantId, host: parsed.host};
-  }
-  throw new Error('The link needs a player id (p…) or spectator id (s…)');
+  const baseUrl = parsed.origin + parsed.pathname.replace(/[^/]*$/, '');
+  return {baseUrl, participantId, host: parsed.host};
 }
 
 export async function fetchJson(url: string): Promise<unknown> {
@@ -57,30 +57,44 @@ export async function fetchJson(url: string): Promise<unknown> {
   return response.json();
 }
 
-export async function importExternalGame(input: string, fetcher: JsonFetcher = fetchJson, now: () => number = Date.now): Promise<AdminGameSummary> {
+export async function importExternalGame(input: string, fetcher: JsonFetcher = fetchJson, now: () => number = Date.now): Promise<ImportedGame> {
   const link = toExternalLink(input);
-  const {apiUrl, participantId, host} = toExternalApiUrl(link);
-  const view = await fetcher(apiUrl) as Partial<ViewModel>;
+  const {baseUrl, participantId, host} = parseExternalLink(link);
+  const isSpectator = participantId.startsWith('s');
+  const viewPath = isSpectator ? paths.API_SPECTATOR : paths.API_PLAYER;
+  const view = await fetcher(`${baseUrl}${viewPath}?id=${participantId}`) as ViewModel;
   if (view?.game === undefined || !Array.isArray(view.players)) {
     throw new Error('The other server did not return a game');
   }
+
+  // Die Ergebnisseite lädt das Log generationsweise nach – deshalb jede Generation einzeln sichern
+  const logsByGeneration: Record<number, Array<LogMessage>> = {};
+  for (let generation = 1; generation <= view.game.generation; generation++) {
+    logsByGeneration[generation] = await fetcher(`${baseUrl}${paths.API_GAME_LOGS}?id=${participantId}&generation=${generation}`) as Array<LogMessage>;
+  }
+
+  // Die Ergebnisseite liegt danach auf diesem Server unter derselben Teilnehmer-ID
+  const localUrl = `${paths.THE_END}?id=${participantId}`;
   const isFinished = view.game.phase === Phase.END;
   const scores = view.players.map((player) => ({
     name: player.name,
     color: player.color,
     // Nur der importierte Teilnehmer hat einen bekannten Link; die IDs der anderen gibt der fremde Server nicht heraus
-    url: player.color === view.color ? link : undefined,
+    url: !isSpectator && player.color === view.color ? localUrl : undefined,
     victoryPoints: player.victoryPointsBreakdown?.total ?? 0,
     megaCredits: player.megacredits ?? 0,
   }));
-  return {
+  const summary: AdminGameSummary = {
     id: `import-${host}-${participantId}`,
     source: 'imported',
     createdTimeMs: now(),
     isFinished,
     generation: view.game.generation,
-    spectatorUrl: isSpectatorId(participantId) ? link : undefined,
+    // "Watch" in der Übersicht öffnet die hier gespeicherte Ergebnisseite
+    spectatorUrl: localUrl,
     externalUrl: link,
+    importedParticipantId: participantId,
     players: toAdminPlayerSummaries(scores, isFinished, view.game.isSoloModeWin === true),
   };
+  return {summary, snapshot: {participantId, view, logsByGeneration}};
 }

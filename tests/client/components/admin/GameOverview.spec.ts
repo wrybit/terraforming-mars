@@ -13,6 +13,7 @@ describe('GameOverview', () => {
     generation: 10,
     spectatorUrl: 'spectator?id=s1',
     externalUrl: undefined,
+    importedParticipantId: undefined,
     players: [
       {name: 'Jens', color: 'blue', url: 'player?id=p1', victoryPoints: 76, megaCredits: 0, isWinner: true},
       {name: 'Daniel', color: 'red', url: 'player?id=p2', victoryPoints: 66, megaCredits: 0, isWinner: false},

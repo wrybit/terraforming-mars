@@ -22,6 +22,7 @@ export function localGameSummary(game: IGame): AdminGameSummary {
     generation: game.getGeneration(),
     spectatorUrl: `${paths.SPECTATOR}?id=${game.spectatorId}`,
     externalUrl: undefined,
+    importedParticipantId: undefined,
     players: toAdminPlayerSummaries(scores, isFinished, game.isSoloModeWin()),
   };
 }

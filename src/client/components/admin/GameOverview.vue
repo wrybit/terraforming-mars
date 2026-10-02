@@ -5,7 +5,7 @@
       <span :class="summary.isFinished ? 'status-finished' : 'status-running'" :title="summary.isFinished ? 'Finished' : 'Running'"></span>
     </td>
     <td class="games-overview-game">
-      <a v-if="summary.externalUrl !== undefined" :href="summary.externalUrl" target="_blank" class="games-overview-source">imported</a>
+      <a v-if="summary.externalUrl !== undefined" :href="summary.externalUrl" target="_blank" class="games-overview-source" title="Original on the other server">imported</a>
       <span v-else class="games-overview-id">{{ summary.id }}</span>
       <span class="games-overview-date">{{ dateText }}</span>
     </td>
