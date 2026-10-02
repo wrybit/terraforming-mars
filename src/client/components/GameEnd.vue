@@ -2,7 +2,12 @@
   <div id="game-end" class="game_end_cont">
     <!-- Kopf über beiden Spalten, ohne eigene Box: Sieger links, Navigation rechts -->
     <div class="game-end-hero">
-      <div v-if="!isSoloGame || game.isSoloModeWin" class="game-end-winer-announcement">
+      <!-- Solo: Ergebnis als Satz an derselben Stelle wie der Sieger im Mehrspielerspiel, damit beide Ansichten gleich aufgebaut sind -->
+      <div v-if="isSoloGame" class="game-end-winer-announcement">
+        <span v-if="game.isSoloModeWin" v-i18n>You win!</span>
+        <span v-else v-i18n>Sorry, you lose.</span>
+      </div>
+      <div v-else class="game-end-winer-announcement">
         <span v-for="p in winners" :key="p.color"><span :class="'log-player ' + getEndGamePlayerRowColorClass(p.color)">{{ p.name }}</span></span> <span v-i18n>won!</span>
       </div>
       <!-- Links als Buttons: Navigation bleibt ein echter Link (Mittelklick, neuer Tab) -->
@@ -28,7 +33,6 @@
 
         <div v-if="isSoloGame" class="game-end-box">
           <div v-if="game.isSoloModeWin" class="game_end_success">
-            <h2 v-i18n>You win!</h2>
             <div class="game_end_solo_img">
               <img src="assets/solo_win.png" >
             </div>
@@ -42,7 +46,6 @@
             </ul>
           </div>
           <div v-else class="game_end_fail">
-            <h2 v-i18n>Sorry, you lose.</h2>
             <div class="game_end_notice">
               <span v-i18n>Next time you will get more luck!</span><br>
               <span v-i18n>Also, take into account these small hints to win:</span>
