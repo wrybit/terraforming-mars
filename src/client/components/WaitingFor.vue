@@ -47,7 +47,7 @@ import {isPlayerId} from '@/common/Types';
 import {InputResponse} from '@/common/inputs/InputResponse';
 import {INVALID_RUN_ID, AppErrorResponse} from '@/common/app/AppErrorId';
 import {Color} from '@/common/Color';
-import {gameDocumentTitle, turnTitlePrefix} from '../utils/documentTitle';
+import {gameDocumentTitle, TitleView, turnTitleState} from '../utils/documentTitle';
 import {setFaviconStatus, setFaviconTurnFrame} from '@/client/utils/favicon';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import WaitingForTabs from '@/client/components/WaitingForTabs.vue';
@@ -124,7 +124,7 @@ export default defineComponent({
       // experimental UI on a desktop browser we show it only in the tab favicon
       // instead; otherwise keep animating the title.
       if (!(experimental && isDesktopBrowser())) {
-        document.title = gameDocumentTitle(this.playerView.game, turnTitlePrefix(TURN_SEQUENCE[animationFrame]));
+        document.title = gameDocumentTitle(this.titleView, turnTitleState(TURN_SEQUENCE[animationFrame]));
       }
     },
     onsave(out: InputResponse) {
@@ -293,9 +293,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    // "Am Zug" nur, wenn eine Pflichteingabe wartet – dieselbe Bedingung wie für die Titel-Animation.
-    const isMyTurn = this.waitingfor !== undefined && !this.waitingfor.optional;
-    document.title = gameDocumentTitle(this.playerView.game, isMyTurn ? turnTitlePrefix() : undefined);
+    document.title = gameDocumentTitle(this.titleView);
     if (getPreferences().experimental_ui) {
       setFaviconStatus(this.waitingfor !== undefined ? 'turn' : 'idle');
     }
@@ -318,6 +316,10 @@ export default defineComponent({
     documentTitleTimer = undefined;
   },
   computed: {
+    // Die Eingabe kommt als eigene Prop; der Zuschauer übergibt keine.
+    titleView(): TitleView {
+      return {game: this.playerView.game, thisPlayer: this.playerView.thisPlayer, waitingFor: this.waitingfor};
+    },
     // Eine Eingabe (waitingfor) gibt es nur in der Spieleransicht; der Zuschauer übergibt nie eine.
     // Daher ist playerView hier immer ein PlayerViewModel mit Handkarten.
     playerViewWithHand(): PlayerViewModel {
