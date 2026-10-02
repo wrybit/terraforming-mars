@@ -16,6 +16,10 @@
           <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
           <span v-i18n>Go to main page</span>
         </a>
+        <a href="stats" class="btn btn-lg btn-rounded game-end-nav-button">
+          <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+          <span v-i18n>Statistics</span>
+        </a>
       </div>
     </div>
     <!-- Ab @player-home-columns-min-width zwei Spalten wie in der Spielansicht: links Ergebnis, rechts Brett, Diagramme, Log -->
