@@ -55,6 +55,7 @@ import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
 import * as constants from '@/common/constants';
 import {WIKI_URLS} from '@/client/utils/WikiLinks';
 import {UPSTREAM_REPOSITORY_URL} from '@/client/utils/RepositoryLinks';
+import {prefersReducedMotion} from '@/client/utils/motion';
 
 type StartScreenLink = {label: string, icon: GlyphName, planet: PlanetStripeName, href: string, external: boolean};
 
@@ -178,8 +179,7 @@ async function startGlobe(): Promise<void> {
   if (layout === undefined) {
     return;
   }
-  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-  rotation = new PlanetRotation(renderer, reducedMotion);
+  rotation = new PlanetRotation(renderer, prefersReducedMotion());
   links.forEach((link, index) => {
     const canvas = canvases[index];
     const placement = layout.placements[index];

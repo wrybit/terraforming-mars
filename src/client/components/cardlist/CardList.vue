@@ -188,6 +188,7 @@ import CardListCardGrid from '@/client/components/cardlist/CardListCardGrid.vue'
 import CardListCostRange from '@/client/components/cardlist/CardListCostRange.vue';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {textFitMetrics} from '@/client/utils/textFit';
+import {prefersReducedMotion} from '@/client/utils/motion';
 
 type Refs = {
   filter: HTMLInputElement;
@@ -547,7 +548,7 @@ export default defineComponent({
       }
     },
     scrollToTop(): void {
-      const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const smooth = !prefersReducedMotion();
       window.scrollTo({top: 0, behavior: smooth ? 'smooth' : 'auto'});
     },
     // Back-to-top button only after scrolling a good screen height
