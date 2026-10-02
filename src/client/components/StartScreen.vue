@@ -4,11 +4,8 @@
   <div v-if="loading" class="start-screen-preloader" role="progressbar" :aria-valuenow="Math.round(loadProgress * 100)" aria-valuemin="0" aria-valuemax="100">
     <div class="start-screen-preloader-fill" :style="{width: `${loadProgress * 100}%`}"></div>
   </div>
-  <!-- Sprache und Einstellungen oben rechts als Milchglas-Buttons, wie im Spiel -->
-  <div class="start-screen-toolbar">
-    <LanguageIcon/>
-    <PreferencesIcon/>
-  </div>
+  <!-- Sprache und Einstellungen oben rechts; eigene Klasse fürs Intro (start_intro.less) -->
+  <PageToolbar class="start-screen-toolbar"/>
   <div class="start-screen-links" :class="{'start-screen-links--globe': globeReady}">
     <div class="start-screen-header start-screen-link--title">
       <!-- Logo: eigener Rahmen, damit das Intro es als Ganzes bewegen kann -->
@@ -52,8 +49,7 @@ import {PlanetGlobeRenderer} from '@/client/components/startScreen/planetGlobeRe
 import {PlanetFlatRenderer} from '@/client/components/startScreen/planetFlatRenderer';
 import {PlanetRotation} from '@/client/components/startScreen/planetRotation';
 import {PLANET_STRIPES, PlanetStripeName} from '@/client/components/startScreen/planetStripes';
-import LanguageIcon from '@/client/components/LanguageIcon.vue';
-import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
+import PageToolbar from '@/client/components/PageToolbar.vue';
 import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
 import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
 import * as constants from '@/common/constants';
