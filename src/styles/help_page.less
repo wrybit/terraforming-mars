@@ -1,0 +1,51 @@
+// Hilfe-Seite (Fork): Upstream-Komponenten unter components/help bleiben unverändert, Anpassungen nur hier.
+// Gesetz der Nähe: Überschrift sitzt dicht an ihrem Abschnitt, zwischen den Abschnitten ist mehr Luft.
+@help-page-section-gap: 22px;
+@help-page-heading-gap: 6px;
+@help-page-mobile-gutter: 16px;
+
+.help-solo-rules-container {
+  .help-icons-section-heading {
+    padding-bottom: 0;
+    margin: @help-page-section-gap 0 @help-page-heading-gap;
+  }
+
+  .help-icons-section-heading:first-child {
+    margin-top: 8px;
+  }
+
+  > p,
+  > ul {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  // Unterlisten hängen dicht am Eltern-Punkt
+  li > ul {
+    margin: 2px 0 0;
+  }
+}
+
+// Handy: Reiter umbrechen statt die Seite seitlich zu verbreitern, Text mit Seitenrand
+html.tm-mobile .help-container {
+  padding: 0 @help-page-mobile-gutter;
+  box-sizing: border-box;
+  max-width: 100vw;
+
+  .help-tabs {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  label {
+    margin: 0;
+    padding: 4px 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
+  .help-solo-rules-container ul {
+    padding-left: 1.1em;
+  }
+}
