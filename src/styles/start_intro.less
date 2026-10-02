@@ -12,9 +12,10 @@
 @intro-logo-duration: 0.8s;
 @intro-chrome-delay: 0.35s;
 @intro-chrome-duration: 0.5s;
-@intro-buttons-delay: 0.95s;
-@intro-buttons-stagger: 0.03s;
-@intro-buttons-duration: 0.3s;
+// Menüpunkte erst, wenn das Logo oben angekommen ist
+@intro-buttons-delay: (@intro-logo-delay + @intro-logo-duration);
+@intro-buttons-stagger: 0.02s;
+@intro-buttons-duration: 0.25s;
 @intro-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
 .topmost-start-screen:has(.start-screen--intro) {

@@ -2,7 +2,7 @@
    reduzierter Bewegung und in automatisierten Browsern (Screenshots des TM Screen-Viewers). */
 
 // so lange läuft das Intro insgesamt (muss zu den Zeiten in start_intro.less passen)
-export const INTRO_DURATION = 1600;
+export const INTRO_DURATION = 1700;
 
 export function shouldPlayIntro(): boolean {
   if (navigator.webdriver) {
