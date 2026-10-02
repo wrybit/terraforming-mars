@@ -858,15 +858,17 @@ each(@stats-source-colors, {
 
 .stats-heat-legend {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 2px;
   font-size: 11px;
 }
 
+// Skala als durchgehender Balken; die zehn Stufen teilen sich die Breite, mobil bleibt alles in einer Zeile
 .stats-heat-legend-step {
-  min-width: 34px;
-  padding: 2px 4px;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 64px;
+  padding: 2px 0;
   border-radius: 3px;
   text-align: center;
   font-weight: bold;
