@@ -53,9 +53,9 @@ export default defineComponent({
     },
     note(): string {
       if (this.map.games === 0) {
-        return translateText('No game with a saved board yet. Screenshots do not show the board; every game finished here counts.');
+        return translateText('No game with a saved board yet.');
       }
-      return translateTextWithParams('Percent of the ${0} games with a saved board in which a tile of this kind was on that space at the end. Screenshots do not show the board; every game finished here counts.', [String(this.map.games)]);
+      return translateTextWithParams('Percent of the ${0} games with a saved board in which a tile of this kind was on that space at the end.', [String(this.map.games)]);
     },
   },
 });

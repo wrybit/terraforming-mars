@@ -67,7 +67,7 @@
           <template #name="{row, rows: shownRows}"><StatsEntityName :kind="companion.kind" :name="row.name" :siblings="namesOf(shownRows)"/></template>
           <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate"/></template>
         </StatsTable>
-        <p class="stats-note" v-i18n>From screenshots only cards with victory points are known.</p>
+        <p class="stats-note" v-i18n>Cards without victory points only count in games with the full game state.</p>
       </section>
     </div>
 
