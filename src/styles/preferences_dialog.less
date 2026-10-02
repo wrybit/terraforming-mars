@@ -5,7 +5,8 @@
 
 @preferences-switch-width: 36px;
 @preferences-switch-height: 20px;
-@preferences-switch-knob: 14px;
+@preferences-switch-inset: 3px; // Abstand des Knopfs zum Rand der Spur
+@preferences-switch-knob: 14px; // = Höhe - 2 × Abstand
 
 .preferences-groups {
   display: grid;
@@ -105,8 +106,8 @@
   &::after {
     content: "";
     position: absolute;
-    top: (@preferences-switch-height - @preferences-switch-knob) / 2;
-    left: (@preferences-switch-height - @preferences-switch-knob) / 2;
+    top: @preferences-switch-inset;
+    left: @preferences-switch-inset;
     width: @preferences-switch-knob;
     height: @preferences-switch-knob;
     border-radius: 50%;
