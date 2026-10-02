@@ -137,6 +137,12 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+
+  // globale Listen-Abstände (Basis-CSS) würden die Zeilen sonst weit auseinanderziehen
+  li {
+    margin: 0;
+    line-height: 1.4;
+  }
 }
 
 // Hinweis "Not affiliated …" (App.vue, alle Seiten außer Spiel, Zuschauer, Ergebnis) als Fußzeile am Seitenende:
