@@ -213,8 +213,9 @@
 // Titel-Hintergrund: oberste Reihe von planets.jpg, nur der Planet – der schwarze Rest ist per Maske ausgeblendet
 // (Globus-Kreis wie bei den Buttons). Als ::before, damit die Maske nicht den Titeltext darüber abschneidet.
 @start-screen-title-mask: radial-gradient(ellipse 522px 522px at -174.7px 402.5px, #000 calc(100% - 1px), transparent 100%);
-// Oben läuft der Planet im Bild hart aus (Bildkante): weich nach oben ausblenden
-@start-screen-title-fade: linear-gradient(to bottom, transparent, #000 75%);
+// Rand weich ausblenden wie früher der schwarze Innenschatten: oben, unten und links (rechts endet der Planet selbst)
+@start-screen-title-fade: linear-gradient(to bottom, transparent, #000 35%, #000 65%, transparent);
+@start-screen-title-fade-left: linear-gradient(to right, transparent, #000 25%);
 // Bei gestreckter Reihe (schmale Fenster, background-size 100% 900%) derselbe Kreis in Prozent der Box (369 × 90)
 @start-screen-title-mask-stretched: radial-gradient(ellipse 141.46% 580% at -47.34% 447.22%, #000 calc(100% - 1px), transparent 100%);
 
@@ -238,9 +239,9 @@
     inset: 0;
     z-index: -1;
     background: url("assets/buttons-homepage/planets.jpg") no-repeat;
-    -webkit-mask-image: @start-screen-title-mask, @start-screen-title-fade;
+    -webkit-mask-image: @start-screen-title-mask, @start-screen-title-fade, @start-screen-title-fade-left;
     -webkit-mask-composite: source-in;
-    mask-image: @start-screen-title-mask, @start-screen-title-fade;
+    mask-image: @start-screen-title-mask, @start-screen-title-fade, @start-screen-title-fade-left;
     mask-composite: intersect;
   }
 }
@@ -363,8 +364,8 @@
 
   .start-screen-header::before {
     background-size: 100% 900%;
-    -webkit-mask-image: @start-screen-title-mask-stretched, @start-screen-title-fade;
-    mask-image: @start-screen-title-mask-stretched, @start-screen-title-fade;
+    -webkit-mask-image: @start-screen-title-mask-stretched, @start-screen-title-fade, @start-screen-title-fade-left;
+    mask-image: @start-screen-title-mask-stretched, @start-screen-title-fade, @start-screen-title-fade-left;
   }
 
   .start-screen-title-top,
