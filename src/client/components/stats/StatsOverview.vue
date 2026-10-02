@@ -113,7 +113,7 @@ export default defineComponent({
       return this.games.filter((game) => game.details?.cardsComplete === true).length;
     },
     detailNote(): string {
-      return translateTextWithParams('Cities and cards played: only the ${0} games with the full game state; the rest also from screenshots.', [String(this.completeGames)]);
+      return translateTextWithParams('Cities and cards played: complete only for the ${0} games with the full game state.', [String(this.completeGames)]);
     },
     recentSeries(): Array<StatsChartSeries> {
       return this.names.map((name) => ({

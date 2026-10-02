@@ -46,7 +46,7 @@ export const STATS_KINDS: Record<StatsKind, StatsKindDefinition> = {
     label: 'Project cards',
     singular: 'Project card',
     // Screenshots listen nur Karten mit Siegpunkten – für diese Karten sind sie vollständig
-    note: 'Cards without victory points only count in games with the full game state; cards with victory points also in screenshots.',
+    note: 'Cards without victory points only count in games with the full game state.',
     namesOf: (result) => cardsOfType(result, (type) => PROJECT_TYPES.has(type)),
   },
   milestone: {
