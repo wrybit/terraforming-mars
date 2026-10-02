@@ -72,11 +72,23 @@
   overflow: hidden;
 }
 
-// Handy: als Vollbild-Blatt von unten, oben bleibt ein Streifen der Spielansicht sichtbar
+// Mobil-Ansicht (Handy, Tablet) und schmale Fenster: bildschirmfüllend, ohne Rand und Spalt
+html.tm-mobile .sidebar-modal-backdrop:has(.sidebar-modal--bare) {
+  padding: 0;
+}
+
+html.tm-mobile .sidebar-modal--bare {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+}
+
 @media only screen and (max-width: 760px) {
   .sidebar-modal-backdrop:has(.sidebar-modal--bare) {
-    align-items: flex-end;
-    padding: 24px 0 0;
+    padding: 0;
   }
 
   .sidebar-modal--bare {
@@ -84,7 +96,7 @@
     max-width: 100%;
     height: 100%;
     max-height: none;
-    border-bottom: 0;
-    border-radius: 16px 16px 0 0;
+    border: 0;
+    border-radius: 0;
   }
 }
