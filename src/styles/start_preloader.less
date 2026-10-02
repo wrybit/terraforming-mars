@@ -1,0 +1,32 @@
+// Preloader der Startseite (StartScreen.vue, startScreen/startAssets.ts): schmaler Ladebalken in der CTA-Farbe
+// mittig auf Schwarz; alles andere bleibt bis zum Intro verborgen.
+
+.start-screen-preloader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 30;
+  width: 160px;
+  height: 2px;
+  margin-left: -80px;
+  border-radius: 1px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.start-screen-preloader-fill {
+  height: 100%;
+  background: @bg_action;
+  transition: width 0.2s ease-out;
+}
+
+.start-screen--loading > :not(.start-screen-preloader) {
+  visibility: hidden;
+}
+
+.topmost-start-screen:has(.start-screen--loading) {
+  &::before,
+  .notice {
+    visibility: hidden;
+  }
+}
