@@ -52,49 +52,53 @@ export class Playwrights extends CorporationCard implements ICorporationCard, IH
   }
 
   public action(player: IPlayer): SelectCard<IProjectCard> | undefined {
-    const players = player.game.players;
     const replayableEvents = this.getReplayableEvents(player);
 
     return new SelectCard<IProjectCard>(
       'Select event card to replay at cost in M€ and remove from play', 'Select', replayableEvents, {played: false})
       .andThen(
         ([card]) => {
-          const selectedCard: IProjectCard = card;
+          // Remove the card before computing its cost, so it can't discount its own replay.
+          const owner = player.game.getCardPlayerOrThrow(card.name);
+          owner.playedCards.remove(card);
+          if (owner !== player) {
+            // Keep any pending 'next card' discount alive for the original owner.
+            // (The replaying player gets the card in removedFromPlayCards below.)
+            owner.removedFromPlayCards.push(card);
+          }
 
-          players.forEach((p) => {
-            if (p.playedCards.get(selectedCard.name)) {
-              p.playedCards.remove(card);
-            }
-          });
-
-          const cost = player.getCardCost(selectedCard);
+          const cost = player.getCardCost(card);
           player.game.defer(new SelectPaymentDeferred(player, cost, {title: 'Select how to pay to replay the event'}))
             .andThen(() => {
-              player.playCard(selectedCard, undefined, 'nothing'); // Play the card but don't add it to played cards
-              player.removedFromPlayCards.push(selectedCard); // Remove card from the game
-              if (selectedCard.name === CardName.SPECIAL_DESIGN) {
+              player.playCard(card, undefined, 'nothing'); // Play the card but don't add it to played cards
+              player.removedFromPlayCards.push(card); // Remove card from the game
+
+              if (card.name === CardName.SPECIAL_DESIGN) {
                 player.playedCards.push(new SpecialDesignProxy());
-              } else if (selectedCard.name === CardName.LAW_SUIT) {
-              /*
-               * If the card played is Law Suit we need to remove it from the newly sued player's played cards.
-               * Needs to be deferred to happen after Law Suit's `play()` method.
-               */
-                player.defer(() => {
-                  player.game.players.some((p) => {
-                    const card = p.playedCards.last();
-                    if (card?.name === selectedCard.name) {
-                      p.playedCards.remove(card);
-                      return true;
-                    }
-                    return false;
-                  });
-                  return undefined;
-                });
+              } else if (card.name === CardName.LAW_SUIT) {
+                this.processLawSuit(player);
               }
             });
           return undefined;
         },
       );
+  }
+
+  /*
+   * If the card played is Law Suit we need to remove it from the newly sued player's played cards.
+   * Needs to be deferred to happen after Law Suit's `play()` method.
+   */
+  private processLawSuit(player: IPlayer) {
+    player.defer(() => {
+      for (const p of player.game.players) {
+        const card = p.playedCards.last();
+        if (card?.name === CardName.LAW_SUIT) {
+          p.playedCards.remove(card);
+          break;
+        }
+      }
+      return undefined;
+    });
   }
 
   public getCheckLoops(): number {
