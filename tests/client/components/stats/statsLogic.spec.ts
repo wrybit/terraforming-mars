@@ -6,7 +6,7 @@ import {emptyFilters, filterGames, filterGroups, optionCounts} from '@/client/co
 import {toggleOption} from '@/client/components/cardlist/filterSelection';
 import {entityDetail, headToHead, histogram} from '@/client/components/stats/statsDetail';
 import {statsRecords} from '@/client/components/stats/statsRecords';
-import {parseStatsView, statsHref} from '@/client/components/stats/statsNavigation';
+import {parseStatsView, statsHref, tabOfView} from '@/client/components/stats/statsNavigation';
 import {withFunderWinShare} from '@/client/components/stats/statsColumns';
 import {averageByGeneration, averageCardPoints} from '@/client/components/stats/statsSeries';
 import {pointSourcesByPlayer, pointSourcesOverall} from '@/client/components/stats/statsPointSources';
@@ -76,6 +76,11 @@ describe('stats logic', () => {
     const href = statsHref({type: 'detail', kind: 'card', name: 'Ants & Birds'});
     expect(parseStatsView(href.slice(href.indexOf('?')))).deep.eq({type: 'detail', kind: 'card', name: 'Ants & Birds'});
     expect(parseStatsView('?tab=unknown')).deep.eq({type: 'tab', tab: 'overview'});
+    // Top-20-Seite: eigene Adresse, gehört zum Übersicht-Tab
+    const top = statsHref({type: 'top', kind: 'corporation'});
+    expect(parseStatsView(top.slice(top.indexOf('?')))).deep.eq({type: 'top', kind: 'corporation'});
+    expect(tabOfView({type: 'top', kind: 'card'})).eq('overview');
+    expect(parseStatsView('?top=milestone')).deep.eq({type: 'tab', tab: 'overview'});
   });
 
   it('averages per generation and card points', () => {

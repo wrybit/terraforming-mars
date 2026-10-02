@@ -67,7 +67,8 @@
         <p v-else-if="status === 'error'" class="stats-card stats-note" v-i18n>Could not load the statistics.</p>
         <p v-else-if="games.length === 0" class="stats-card stats-note" v-i18n>No finished games yet.</p>
         <template v-else>
-          <StatsEntityDetail v-if="view.type === 'detail'" :key="`${view.kind}:${view.name}`" :kind="view.kind" :name="view.name" :results="results"/>
+          <StatsTopView v-if="view.type === 'top'" :key="`top:${view.kind}`" :kind="view.kind" :results="results"/>
+          <StatsEntityDetail v-else-if="view.type === 'detail'" :key="`${view.kind}:${view.name}`" :kind="view.kind" :name="view.name" :results="results"/>
           <StatsOverview v-else-if="view.tab === 'overview'" :games="filteredGames" :results="results" :chartWidth="chartWidth"/>
           <StatsPlayersView v-else-if="view.tab === 'players'" :results="results" :names="names"/>
           <StatsRecordsView v-else-if="view.tab === 'records'" :results="results"/>
@@ -95,10 +96,11 @@ import StatsOverview from './StatsOverview.vue';
 import StatsPlayersView from './StatsPlayersView.vue';
 import StatsRecordsView from './StatsRecordsView.vue';
 import StatsEntityList from './StatsEntityList.vue';
+import StatsTopView from './StatsTopView.vue';
 import StatsCombinationsView from './StatsCombinationsView.vue';
 import StatsEntityDetail from './StatsEntityDetail.vue';
 import {activeFilterCount, emptyFilters, filterGames, filterGroups, optionCounts, StatsFilterGroup, StatsFilters} from './statsFilter';
-import {parseStatsView, STATS_TABS, statsHref, StatsTab, StatsView, tabOfKind} from './statsNavigation';
+import {parseStatsView, STATS_TABS, statsHref, StatsTab, StatsView, tabOfView} from './statsNavigation';
 import {allPlayerResults, playerColors, playerNames, StatsPlayerResult} from './statsResults';
 import {formatDate} from './statsLabels';
 import StatsCardZoom from './StatsCardZoom.vue';
@@ -121,7 +123,7 @@ type DataModel = {
 // Aufbau, Filter und Kacheln wie in der Kartenliste, damit sie sich wie ein Teil der App anfühlt.
 export default defineComponent({
   name: 'StatsPage',
-  components: {CardListFilterGroup, LanguageIcon, PreferencesIcon, StatsOverview, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
+  components: {CardListFilterGroup, LanguageIcon, PreferencesIcon, StatsOverview, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsTopView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
   provide() {
     // Spielerfarbe überall gleich: die Farbe, in der jemand meistens gespielt hat
     return {
@@ -176,7 +178,7 @@ export default defineComponent({
       return activeFilterCount(this.filters);
     },
     activeTab(): StatsTab {
-      return this.view.type === 'tab' ? this.view.tab : tabOfKind(this.view.kind);
+      return tabOfView(this.view);
     },
     tabs(): typeof STATS_TABS {
       return STATS_TABS;

@@ -40,6 +40,7 @@ export function statsRecords(results: ReadonlyArray<StatsPlayerResult>): Array<S
   return [
     {title: 'Highest score', unit: 'VP', entries: topEntries(results, (result) => result.player.victoryPoints)},
     {title: 'Biggest winning margin', unit: 'VP', entries: topEntries(results, winningMargin)},
+    {title: 'Highest score without winning', unit: 'VP', entries: topEntries(results, (result) => result.place === 1 ? undefined : result.player.victoryPoints)},
     {title: 'Highest terraform rating', unit: 'TR', entries: topEntries(results, (result) => result.details?.terraformRating)},
     {title: 'Most greeneries', unit: '', entries: topEntries(results, (result) => result.details?.greeneries)},
     {title: 'Most cities', unit: '', entries: topEntries(results, (result) => result.details?.cities)},

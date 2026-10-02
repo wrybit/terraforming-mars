@@ -82,3 +82,10 @@ export function resultsWith(results: ReadonlyArray<StatsPlayerResult>, kind: Sta
 export function entityStats(results: ReadonlyArray<StatsPlayerResult>, kind: StatsKind, name: string): EntityStats {
   return toEntityStats(name, resultsWith(results, kind, name));
 }
+
+/** Die am häufigsten gespielten Einträge einer Art (bei Gleichstand die mit der höheren Siegquote zuerst). */
+export function mostPlayed(results: ReadonlyArray<StatsPlayerResult>, kind: StatsKind, count: number): Array<EntityStats> {
+  return aggregate(results, kind)
+    .sort((first, second) => second.plays - first.plays || second.winRate - first.winRate)
+    .slice(0, count);
+}
