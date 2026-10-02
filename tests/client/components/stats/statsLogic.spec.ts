@@ -11,7 +11,7 @@ import {withFunderWinShare} from '@/client/components/stats/statsColumns';
 import {averageByGeneration, averageCardPoints} from '@/client/components/stats/statsSeries';
 import {pointSourcesByPlayer, pointSourcesOverall} from '@/client/components/stats/statsPointSources';
 import {combinations} from '@/client/components/stats/statsCombinations';
-import {heatmap} from '@/client/components/stats/statsHeatmap';
+import {heatmap, heatStep} from '@/client/components/stats/statsHeatmap';
 import {chooseMinPlays} from '@/client/components/stats/statsMinPlays';
 import {BoardName} from '@/common/boards/BoardName';
 
@@ -132,6 +132,8 @@ describe('stats logic', () => {
     expect([cities.games, cities.counts.get('20'), cities.maximum]).deep.eq([2, 2, 2]);
     expect(heatmap(withTiles, BoardName.THARSIS, 'city', 'Jens').counts.get('20')).eq(1);
     expect(heatmap(withTiles, BoardName.HELLAS, 'city', undefined).games).eq(0);
+    // Farbstufen à 10 %: 1–10 % → 1, 11–20 % → 2, 100 % → 10
+    expect([heatStep(1), heatStep(10), heatStep(11), heatStep(80), heatStep(100)]).deep.eq([1, 1, 2, 8, 10]);
   });
 
   it('minimum plays keep at least ten rows visible', () => {
