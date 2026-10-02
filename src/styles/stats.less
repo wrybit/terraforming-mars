@@ -25,6 +25,19 @@
   text-decoration: none;
 }
 
+.stats-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.stats-title-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+}
+
 .stats-main {
   display: flex;
   flex-direction: column;
@@ -573,6 +586,10 @@ each(@players, {
 // ---------- Schmal: alles einspaltig, erste Tabellenspalte bleibt beim seitlichen Schieben stehen ----------
 @media only screen and (max-width: @stats-narrow) {
   .card-list-header .stats-header-info {
+    display: none;
+  }
+
+  .stats-title-app {
     display: none;
   }
 
