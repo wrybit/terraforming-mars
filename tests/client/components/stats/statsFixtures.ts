@@ -7,7 +7,7 @@ type PlayerSpec = {name: string, color: Color, points: number, corporation: stri
 
 let counter = 0;
 
-/** Beendete Partie; der Erste in der Liste mit den meisten Punkten gewinnt. */
+/** Finished game; the first in the list with the most points wins. */
 export function statsGame(players: Array<PlayerSpec>, options: {generation?: number, board?: BoardName, details?: boolean, timeMs?: number} = {}): StatsGame {
   counter++;
   const best = Math.max(...players.map((player) => player.points));
@@ -47,7 +47,7 @@ export function statsGame(players: Array<PlayerSpec>, options: {generation?: num
   };
 }
 
-/** Drei Partien: zwei zu dritt, eine zu zweit, eine davon nur als Screenshot (ohne Details). */
+/** Three games: two three-player, one two-player, one of them only as a screenshot (without details). */
 export function sampleGames(): Array<StatsGame> {
   return [
     statsGame([

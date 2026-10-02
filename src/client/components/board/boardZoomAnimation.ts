@@ -1,21 +1,21 @@
-// Flug-Animation des Mars-Bretts zwischen Spalte und Vergrößerungs-Modal (BoardZoomModal.vue).
-// Prinzip "FLIP": Das Modal steht schon an seiner Endposition; die Bühne wird per transform so
-// verschoben und skaliert, dass ihr Brett exakt über dem Brett in der Spalte liegt, und läuft dann
-// in die Endposition. Schließen ist dieselbe Bewegung rückwärts.
+// Flight animation of the Mars board between the column and the zoom modal (BoardZoomModal.vue).
+// "FLIP" principle: the modal is already at its final position; the stage is moved and scaled via
+// transform so its board lies exactly over the board in the column, and then runs
+// to the final position. Closing is the same movement in reverse.
 
 const DURATION_MS = 320;
 const EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
 
-// DOM-Typen über animate() herleiten: eslint kennt die globalen Keyframe-Typen nicht
+// Derive DOM types via animate(): eslint does not know the global keyframe types
 type Keyframes = Parameters<HTMLElement['animate']>[0];
 type AnimationTiming = Parameters<HTMLElement['animate']>[1];
 
 export type BoardZoomAnimationOptions = {
   direction: 'open' | 'close';
   backdrop: HTMLElement;
-  // Bühne im Modal, trägt die Transformation; enthält das vergrößerte Brett (.board-cont)
+  // Stage in the modal, carries the transform; contains the enlarged board (.board-cont)
   stage: HTMLElement;
-  // Brett in der Spalte; fehlt es, wird nur ein- bzw. ausgeblendet
+  // Board in the column; if missing, only fade in/out
   origin: HTMLElement | undefined;
 };
 
@@ -23,7 +23,7 @@ function prefersReducedMotion(): boolean {
   return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-// transform, der das Brett der Bühne auf das Brett in der Spalte legt (transform-origin: 0 0)
+// transform that puts the stage's board onto the board in the column (transform-origin: 0 0)
 function transformOntoOrigin(stage: HTMLElement, origin: HTMLElement): string | undefined {
   const target = stage.querySelector('.board-cont');
   if (target === null) {
@@ -43,7 +43,7 @@ function transformOntoOrigin(stage: HTMLElement, origin: HTMLElement): string | 
 
 export async function animateBoardZoom(options: BoardZoomAnimationOptions): Promise<void> {
   const {direction, backdrop, stage, origin} = options;
-  // jsdom (Tests) kennt keine Web Animations
+  // jsdom (tests) does not know Web Animations
   if (typeof stage.animate !== 'function' || prefersReducedMotion()) {
     return;
   }
@@ -51,20 +51,20 @@ export async function animateBoardZoom(options: BoardZoomAnimationOptions): Prom
   const expandFrames: Keyframes = collapsed !== undefined ?
     [{transform: collapsed}, {transform: 'none'}] :
     [{opacity: 0, transform: 'scale(0.9)'}, {opacity: 1, transform: 'none'}];
-  // Schließen spielt die Keyframes rückwärts, aber mit derselben Kurve vorwärts: schnell los, weich in der
-  // Spalte landen. direction 'reverse' würde auch die Kurve umdrehen – träger Start, harte Landung
+  // Closing plays the keyframes backwards, but with the same curve forwards: fast start, soft landing in the
+  // column. direction 'reverse' would also flip the curve – sluggish start, hard landing
   const opening = direction === 'open';
   const stageFrames: Keyframes = opening ? expandFrames : [...expandFrames].reverse();
-  // Nur den Wert am durchsichtigen Ende angeben: der dunkle kommt aus dem Stylesheet (board_zoom_modal.less)
+  // Only specify the value at the transparent end: the dark one comes from the stylesheet (board_zoom_modal.less)
   const transparentBackdrop = {backgroundColor: 'rgba(0, 0, 0, 0)', backdropFilter: 'blur(0px)'};
   const backdropFrames: Keyframes = [{...transparentBackdrop, offset: opening ? 0 : 1}];
   const timing: AnimationTiming = {
     duration: DURATION_MS,
     easing: EASING,
-    // Beim Schließen im Endzustand stehen bleiben, bis das Modal entfernt ist (sonst kurzes Aufblitzen)
+    // When closing, stay in the end state until the modal is removed (otherwise a brief flash)
     fill: opening ? 'none' : 'forwards',
   };
-  // Schließen-Knopf nur ein- bzw. ausblenden, er fliegt nicht mit
+  // Only fade the close button in/out, it does not fly along
   const closeButton = backdrop.querySelector('.board-zoom-close');
   const animations = [
     stage.animate(stageFrames, timing),

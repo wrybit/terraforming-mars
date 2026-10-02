@@ -4,16 +4,16 @@ import {LogMessage} from '../../common/logs/LogMessage';
 import {ViewModel} from '../../common/models/PlayerModel';
 import {isImportableParticipantId} from './isImportableParticipantId';
 
-/** Vollständiger Endstand eines importierten Spiels, so wie der fremde Server ihn dem Teilnehmer gezeigt hat. */
+/** Complete final state of an imported game, as the foreign server showed it to the participant. */
 export type ImportedSnapshot = {
   participantId: string;
   view: ViewModel;
-  /** Log je Generation, wie es die Ergebnisseite generationsweise nachlädt. */
+  /** Log per generation, as the results page lazy-loads it generation by generation. */
   logsByGeneration: Record<number, Array<LogMessage>>;
 };
 
-// Eine Datei je Import: die Ansichten sind groß (alle Karten aller Spieler), die Übersicht soll sie nicht mitladen.
-// Liegt im db-Ordner, damit sie auf mint im Docker-Volume landet und Neubauten übersteht.
+// One file per import: the views are large (all cards of all players), the overview shouldn't load them too.
+// Lives in the db folder so on mint it ends up in the Docker volume and survives rebuilds.
 const defaultFolder = path.resolve(process.cwd(), './db/imported');
 
 export class ImportedSnapshotsStore {
@@ -26,7 +26,7 @@ export class ImportedSnapshotsStore {
     return ImportedSnapshotsStore.instance;
   }
 
-  /** Tests lenken die Routen auf einen Temp-Ordner um, statt in den echten db-Ordner zu schreiben. */
+  /** Tests redirect the routes to a temp folder instead of writing into the real db folder. */
   public static setInstanceForTesting(store: ImportedSnapshotsStore | undefined): void {
     ImportedSnapshotsStore.instance = store;
   }
@@ -55,7 +55,7 @@ export class ImportedSnapshotsStore {
     }
   }
 
-  // Nur strenge Teilnehmer-IDs werden zu Dateinamen – verhindert Pfade wie "../" aus der URL
+  // Only strict participant IDs become file names – prevents paths like "../" from the URL
   private filename(participantId: string): string | undefined {
     if (!isImportableParticipantId(participantId)) {
       return undefined;

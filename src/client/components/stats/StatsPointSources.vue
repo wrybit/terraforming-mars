@@ -27,13 +27,13 @@ import {StatsPlayerResult} from './statsResults';
 import {formatNumber} from './statsLabels';
 import {POINT_SOURCES, PointSource, PointSourcesRow, pointSourcesByPlayer, pointSourcesOverall} from './statsPointSources';
 
-// Woher die Siegpunkte kommen: Ø je Herkunft und Spieler, mit gestapeltem Balken
+// Where the victory points come from: avg. per source and player, with a stacked bar
 export default defineComponent({
   name: 'StatsPointSources',
   components: {StatsTable, StatsEntityName},
   props: {
     results: {type: Array as PropType<ReadonlyArray<StatsPlayerResult>>, required: true},
-    /** Vergleichszeile „Alle Partien“, damit sichtbar wird, was der Eintrag verschiebt. */
+    /** Comparison row "all games", so it's visible what the entry shifts. */
     baseline: {type: Array as PropType<ReadonlyArray<StatsPlayerResult>>, default: undefined},
   },
   data() {
@@ -55,7 +55,7 @@ export default defineComponent({
       return [
         {key: 'name', label: 'Player', value: (row: PointSourcesRow) => row.name, text: true},
         {key: 'games', label: 'Games', value: (row: PointSourcesRow) => row.games},
-        // Spalten, die bei allen 0 sind (z. B. Sonstiges ohne Erweiterungen), lenken nur ab
+        // Columns that are 0 for everyone (e.g. "other" without expansions) are just a distraction
         ...POINT_SOURCES.filter((source) => this.rows.some((row) => (row.averages[source.key] ?? 0) !== 0)).map((source) => average(source.key)),
         average('total'),
         {key: 'bar', label: '', value: (row: PointSourcesRow) => row.averages.total, text: true},

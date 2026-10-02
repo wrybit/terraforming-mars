@@ -10,66 +10,66 @@ import {tabIntro, TabIntro} from '@/client/components/tabIntro';
 import {placementLabel, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
 
 /*
- * Zug-Menü der Mobil-Ansicht (Bottom-Sheet), gebaut aus demselben Aktionsmenü wie die Desktop-Tabs.
+ * Turn menu of the mobile view (bottom sheet), built from the same action menu as the desktop tabs.
  *
- * Kurzlabel, Zähler, Reihenfolge und Farbton kommen aus denselben Helfern wie in OrOptions; neu ist nur das
- * Symbol je Aktion. Texte ausschließlich aus vorhandenen Übersetzungen (Server-Titel, Kurzlabels), keine eigenen.
+ * Short label, counter, order and tone come from the same helpers as in OrOptions; the only new thing is the
+ * icon per action. Texts come only from existing translations (server titles, short labels), none of its own.
  */
 
-/* Farbton einer Kachel: Grünfläche grün, Temperatur orange, Meilenstein gold. */
+/* Tone of a tile: greenery green, temperature orange, milestone gold. */
 export type TurnTileTone = 'success' | 'heat' | 'highlight' | 'danger';
 
-/* Farbe der Symbol-Kachel nach Spielbereich (Klassen mb-tile-icon--… in mobile.less). */
+/* Color of the icon tile by game area (classes mb-tile-icon--… in mobile.less). */
 export type TurnTileGlyphTone = 'cards' | 'megacredits' | 'plants' | 'heat' | 'honors' | 'colonies' | 'neutral';
 
 /*
- * Aktionen ohne eigene Auswahl (Temperatur, Grünfläche, Weitergeben, Beenden) fragen direkt in der Schublade nach,
- * statt eine fast leere Vollbild-Aufgabe zu öffnen. Inhalt wie im Desktop-Tab: Erklärung (tabIntro.ts), Hinweis
- * bzw. Server-Warnung und der Button.
+ * Actions without their own selection (temperature, greenery, pass, end) ask for confirmation right in the drawer
+ * instead of opening an almost empty full-screen task. Content as in the desktop tab: explanation (tabIntro.ts), hint
+ * or server warning, and the button.
  */
 export type TurnConfirmation = {
-  // Bild, voller Titel und Spielstand-Zeilen; fehlt, dann nur Kurzlabel und Hinweis
+  // Image, full title and game state lines; if missing, only short label and hint
   intro: TabIntro | undefined;
   title: string | Message;
   hint: string | undefined;
   button: string | Message;
-  // submit: Button des Tabs sofort auslösen; place: Aufgabe öffnen, die gleich die Feldwahl auf dem Mars startet
+  // submit: trigger the tab's button immediately; place: open a task that starts space selection on Mars right away
   action: 'submit' | 'place';
 };
 
-/* Eintrag im Sheet bzw. Kopf der daraus geöffneten Aufgabe. */
+/* Entry in the sheet, or header of the task opened from it. */
 export type TurnMenuTile = {
-  // Index in den angezeigten Optionen von OrOptions (data-option-index des Tabs)
+  // Index in the displayed options of OrOptions (data-option-index of the tab)
   index: number;
-  // Englischer Titel-Schlüssel der Option (z. B. 'Play project card')
+  // English title key of the option (e.g. 'Play project card')
   key: string;
   label: string | Message;
-  // Unterzeile: voller Titel der Option, wenn er mehr sagt als das Kurzlabel (Grünfläche, Temperatur)
+  // Subline: full title of the option when it says more than the short label (greenery, temperature)
   detail: string | Message | undefined;
-  // Anzahl wählbarer Einträge wie am Desktop-Tab; undefined, wenn die Aktion keine Auswahl hat
+  // Number of selectable entries as on the desktop tab; undefined if the action has no selection
   count: number | undefined;
-  // Symbol in einer Farbkachel; die Farbe steht für den Spielbereich (Karten, M€, Pflanzen …)
+  // Icon in a colored tile; the color stands for the game area (cards, M€, plants …)
   glyph: GlyphName;
   glyphTone: TurnTileGlyphTone;
   tone: TurnTileTone | undefined;
-  // Nichts wählbar (Zähler 0): Kachel abgeschwächt
+  // Nothing selectable (counter 0): tile dimmed
   empty: boolean;
-  // Aktion ohne Auswahl: statt einer eigenen Aufgabe eine Rückfrage im Sheet
+  // Action without selection: a confirmation in the sheet instead of its own task
   confirmation: TurnConfirmation | undefined;
 };
 
-/* Sheet-Inhalt, gruppiert wie im Mockup. */
+/* Sheet content, grouped as in the mockup. */
 export type TurnMenu = {
   available: Array<TurnMenuTile>;
   actions: Array<TurnMenuTile>;
-  // Zweite Aktion auslassen (nur nach der ersten Aktion möglich)
+  // Skip the second action (only possible after the first action)
   skip: TurnMenuTile | undefined;
   pass: TurnMenuTile | undefined;
 };
 
 type TileLook = {glyph: GlyphName, glyphTone: TurnTileGlyphTone};
 
-// Symbol und Farbe je Titel-Schlüssel
+// Icon and color per title key
 const TILE_LOOKS: Readonly<Record<string, TileLook>> = {
   'Claim a milestone': {glyph: 'milestone', glyphTone: 'honors'},
   'Convert ${0} plants into greenery': {glyph: 'greenery', glyphTone: 'plants'},
@@ -82,7 +82,7 @@ const TILE_LOOKS: Readonly<Record<string, TileLook>> = {
   'Sell patents': {glyph: 'sellPatents', glyphTone: 'megacredits'},
   'Trade with a colony tile': {glyph: 'colonyTrade', glyphTone: 'colonies'},
 };
-// Unbekannte Aktionen (Erweiterungen) bekommen ein neutrales Symbol, damit das Raster einheitlich bleibt
+// Unknown actions (expansions) get a neutral icon so the grid stays uniform
 const DEFAULT_LOOK: TileLook = {glyph: 'more', glyphTone: 'neutral'};
 const END_TURN = 'End Turn';
 
@@ -96,7 +96,7 @@ function toTile(option: PlayerInputModel, index: number): TurnMenuTile {
     index,
     key,
     label,
-    // Aktionen ohne Auswahl (Grünfläche, Temperatur): der volle Titel sagt, was passiert
+    // Actions without selection (greenery, temperature): the full title says what happens
     detail: count === undefined && titleKey(label) !== key ? fullTabTitle(option.title) : undefined,
     count,
     glyph: look.glyph,
@@ -109,7 +109,7 @@ function toTile(option: PlayerInputModel, index: number): TurnMenuTile {
 
 function quickConfirmation(option: PlayerInputModel): TurnConfirmation | undefined {
   const intro = tabIntro(option);
-  // "Feld auf dem Mars antippen" gilt erst nach dem Button, nicht schon in der Rückfrage
+  // "Tap a space on Mars" only applies after the button, not yet in the confirmation
   const drawerIntro = intro === undefined ? undefined : {...intro, hint: undefined};
   const title = fullTabTitle(option.title);
   if (option.type === 'option') {
@@ -129,7 +129,7 @@ function quickConfirmation(option: PlayerInputModel): TurnConfirmation | undefin
   return undefined;
 }
 
-/* Baut das Sheet aus dem Aktionsmenü `input`. */
+/* Builds the sheet from the action menu `input`. */
 export function buildTurnMenu(input: OrOptionsModel): TurnMenu {
   const displayed = displayedOptionIndices(input).map((index) => input.options[index]);
   const order = tabDisplayOrder(displayed.map((option) => option.title));
@@ -144,36 +144,36 @@ export function buildTurnMenu(input: OrOptionsModel): TurnMenu {
   };
 }
 
-/* Kachel zur Option `index`, gleich in welchem Bereich des Sheets sie steht. */
+/* Tile for option `index`, regardless of which sheet section it is in. */
 export function findTurnMenuTile(menu: TurnMenu | undefined, index: number): TurnMenuTile | undefined {
   return menu === undefined ? undefined : [...menu.available, ...menu.actions, menu.skip, menu.pass].find((tile) => tile?.index === index);
 }
 
 const TAB_SELECTOR = '.wf-options--tabs > .or-tabs > .or-tab[data-option-index]';
 
-/* Wählt im eingebundenen Aktionsmenü unter `root` die Aktion `index` (wie ein Klick auf ihren Tab). */
+/* Selects action `index` in the embedded action menu under `root` (like a click on its tab). */
 export function selectTurnMenuTile(root: HTMLElement, index: number): void {
   root.querySelector<HTMLElement>(`${TAB_SELECTOR}[data-option-index="${index}"]`)?.click();
 }
 
-/* Titel der gerade offenen Eingabe außerhalb des Aktionsmenüs (aktiver Eingabe-Tab von WaitingForTabs). */
+/* Title of the currently open input outside the action menu (active input tab of WaitingForTabs). */
 export function readInputTitle(root: HTMLElement): string | undefined {
   return root.querySelector<HTMLElement>('.or-tabs > .or-tab--active:not(.or-tab--hand)')?.getAttribute('title') ?? undefined;
 }
 
-/* Löst im Aktionsmenü unter `root` die Aktion `index` direkt aus (Tab wählen, dann dessen Button), z. B. nach der Rückfrage im Sheet. */
+/* Triggers action `index` in the action menu under `root` directly (select tab, then its button), e.g. after the confirmation in the sheet. */
 export async function submitTurnMenuTile(root: HTMLElement, index: number): Promise<void> {
   selectTurnMenuTile(root, index);
   await nextTick();
   const menu = root.querySelector<HTMLElement>('.wf-options--tabs');
-  // Nur der Fuß des Aktionsmenüs selbst, nicht der eines darin verschachtelten Menüs
+  // Only the footer of the action menu itself, not that of a menu nested inside it
   const footer = Array.from(root.querySelectorAll<HTMLElement>('.or-tab-footer')).find((element) => element.closest('.wf-options--tabs') === menu);
   footer?.querySelector<HTMLButtonElement>('.or-tab-save .btn')?.click();
 }
 
 export const PLAY_CARD_KEY = 'Play project card';
 
-/* Kachel "Karte spielen", wenn `cardName` darin spielbar ist. */
+/* "Play card" tile, if `cardName` is playable in it. */
 export function playableCardTile(menu: TurnMenu | undefined, input: OrOptionsModel | undefined, cardName: string): TurnMenuTile | undefined {
   const tile = menu?.actions.find((entry) => entry.key === PLAY_CARD_KEY);
   if (tile === undefined || input === undefined) {

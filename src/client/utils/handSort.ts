@@ -4,10 +4,10 @@ import {CardName} from '@/common/cards/CardName';
 import {CardOrder, CardOrderStorage} from '@/client/utils/CardOrderStorage';
 import {SortOrder, sortCards} from '@/client/utils/SortOrder';
 
-// Gewählte Sortierung der Handkarten, geteilt von Hand-Tab und Auswahl-Dialogen (z. B. Verkaufen):
-// wer an einer Stelle sortiert, sieht dieselbe Sortierung an allen anderen. undefined = "Manuell".
+// Chosen sort order of the hand cards, shared by the hand tab and selection dialogs (e.g. selling):
+// sorting in one place shows the same order in all others. undefined = "Manual".
 const currentSortOrder = ref<SortOrder | undefined>(undefined);
-// Eigene Reihenfolge vor dem ersten Sortieren – "Manuell" stellt sie wieder her. Nicht reaktiv: nur Zwischenspeicher.
+// Own order before the first sort – "Manual" restores it. Not reactive: just a cache.
 let manualOrder: CardOrder | undefined;
 
 function writeOrder(playerId: string, cardNames: ReadonlyArray<CardName>): void {
@@ -20,14 +20,14 @@ function orderedHand(playerId: string, cards: ReadonlyArray<CardModel>): Readonl
   return CardOrderStorage.getOrdered(CardOrderStorage.getCardOrder(playerId), cards);
 }
 
-/** Aktuelle Sortierung der Hand; undefined, solange die eigene Reihenfolge gilt. */
+/** Current sort order of the hand; undefined while the own order applies. */
 export function handSortOrder(): SortOrder | undefined {
   return currentSortOrder.value;
 }
 
 /**
- * Sortiert die ganze Hand (`cards`) nach `sortOrder` und speichert die Reihenfolge.
- * undefined stellt die eigene Reihenfolge von vor dem ersten Sortieren wieder her; seitdem neu gezogene Karten ans Ende.
+ * Sorts the whole hand (`cards`) by `sortOrder` and stores the order.
+ * undefined restores the own order from before the first sort; cards drawn since then go to the end.
  */
 export function sortHand(playerId: string, cards: ReadonlyArray<CardModel>, sortOrder: SortOrder | undefined): void {
   const ordered = orderedHand(playerId, cards);
@@ -47,14 +47,14 @@ export function sortHand(playerId: string, cards: ReadonlyArray<CardModel>, sort
   currentSortOrder.value = sortOrder;
 }
 
-/** Eigene Reihenfolge per Drag & Drop: hebt die gewählte Sortierung auf, die Leiste springt auf "Manuell". */
+/** Own order via drag & drop: clears the chosen sort order, the bar switches to "Manual". */
 export function reorderHandManually(playerId: string, cardNames: ReadonlyArray<CardName>): void {
   currentSortOrder.value = undefined;
   manualOrder = undefined;
   writeOrder(playerId, cardNames);
 }
 
-/** Nur für Tests: Ausgangszustand ohne gewählte Sortierung. */
+/** For tests only: initial state without a chosen sort order. */
 export function resetHandSort(): void {
   currentSortOrder.value = undefined;
   manualOrder = undefined;

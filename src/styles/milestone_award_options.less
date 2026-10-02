@@ -1,10 +1,10 @@
-// Auswahl eines Meilensteins/einer Auszeichnung als Bild-Kacheln (MilestoneAwardOptions.vue).
-// Bilder und Kachelmaße kommen aus player_home.less (.milestones/.awards .ma-block .ma-name--<name>).
+// Choosing a milestone/award as image tiles (MilestoneAwardOptions.vue).
+// Images and tile dimensions come from player_home.less (.milestones/.awards .ma-block .ma-name--<name>).
 
 .ma-options {
   display: flex;
   flex-wrap: wrap;
-  // Zeilen weiter auseinander: darüber sitzt das Häkchen-Fähnchen der gewählten Kachel
+  // Rows further apart: the checkmark flag of the chosen tile sits above them
   gap: (@selection-tab-offset + 6px) 14px;
   margin: 4px 0 8px;
   padding-top: @selection-tab-offset;
@@ -17,7 +17,7 @@
   cursor: pointer;
   transition: transform 0.12s;
 
-  // Nur mit echter Maus: auf Touch bleibt :hover nach dem Antippen hängen, die gewählte Kachel stünde versetzt
+  // Only with a real mouse: on touch :hover sticks after tapping, the chosen tile would be offset
   @media (hover: hover) {
     &:hover {
       transform: translateY(-2px);
@@ -25,12 +25,12 @@
   }
 }
 
-// Auf dem Brett schließen unten die Punkte-Zeilen an (daher dort nur oben rund); hier ist die Kachel allein
+// On the board the score rows attach below (hence rounded only on top there); here the tile stands alone
 .ma-options .ma-option .ma-name {
   border-radius: 10px;
 }
 
-// Radio nur für Tastatur und Screenreader, sichtbar ist die Kachel
+// Radio only for keyboard and screen readers; the tile is what's visible
 .ma-options .ma-option-input {
   position: absolute;
   opacity: 0;
@@ -42,7 +42,7 @@
 
   &::after {
     .selection-tab();
-    // Direkt auf dem Auswahl-Rahmen aufsetzen: die Kachel hat keinen eigenen Rand wie die Karten
+    // Sit directly on the selection frame: the tile has no border of its own like the cards
     top: -(@selection-tab-height + @selection-outline-width);
   }
 }

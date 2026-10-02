@@ -1,6 +1,6 @@
 <template>
         <div class="players-overview" v-if="hasPlayers()">
-            <!-- Gespielte Karten aller Spieler, auch der eigenen (über "anzeigen" in der Spielerleiste) -->
+            <!-- Played cards of all players, including your own (via "show" in the player bar) -->
             <div class="other_player">
                 <div v-for="(otherPlayer, index) in getPlayersInOrder()" :key="otherPlayer.color">
                     <OtherPlayer :player="otherPlayer" :playerIndex="index"/>
@@ -24,7 +24,7 @@
               :firstForGen="getIsFirstForGen(thisPlayer)"
               :actionLabel="getActionLabel(thisPlayer)"
               :playerIndex="ownPlayerIndex(playerView)"/>
-            <!-- Dieselben Spieler als Tabelle; sichtbar nur im Zwei-Spalten-Layout (players_table.less) -->
+            <!-- The same players as a table; visible only in the two-column layout (players_table.less) -->
             <PlayersTable :playerView="playerView" :rows="tableRows"/>
         </div>
 </template>
@@ -69,7 +69,7 @@ export default defineComponent({
     thisPlayer(): PublicPlayerModel | undefined {
       return this.playerView.thisPlayer;
     },
-    // Gleiche Reihenfolge und Indizes wie die klassische Leiste: Mitspieler in Zugfolge, man selbst zuletzt
+    // Same order and indices as the classic bar: other players in turn order, yourself last
     tableRows(): Array<PlayersTableRowModel> {
       const rows = this.getPlayersInOrder().map((player, index) => this.tableRow(player, index));
       if (this.thisPlayer !== undefined) {
@@ -97,7 +97,7 @@ export default defineComponent({
     getIsFirstForGen(player: PublicPlayerModel): boolean {
       return playerIndex(player.color, this.players) === 0;
     },
-    // Mitspieler in Zugreihenfolge nach einem selbst, ohne den eigenen Spieler (der wird extra angehängt)
+    // Other players in turn order after yourself, without your own player (that one is appended separately)
     getPlayersInOrder(): Array<PublicPlayerModel> {
       if (this.thisPlayer === undefined) {
         return this.players;

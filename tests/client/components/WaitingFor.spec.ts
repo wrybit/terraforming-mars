@@ -43,7 +43,7 @@ describe('WaitingFor', () => {
         },
       },
     });
-    // Einzelne Eingaben stehen im Tab-Container (WaitingForTabs), nicht direkt
+    // Single inputs sit in the tab container (WaitingForTabs), not directly
     expect(wrapper.find('.stub-tabs').exists()).to.be.true;
     expect(wrapper.find('.stub-pif').exists()).to.be.false;
     expect(wrapper.text()).to.not.include('Not your turn');
@@ -70,7 +70,7 @@ describe('WaitingFor', () => {
         },
       },
     });
-    // Das Aktionsmenü baut seine Tabs selbst (OrOptions)
+    // The action menu builds its tabs itself (OrOptions)
     expect(wrapper.find('.stub-pif').exists()).to.be.true;
     expect(wrapper.find('.stub-tabs').exists()).to.be.false;
   });
@@ -105,7 +105,7 @@ describe('WaitingFor', () => {
       ...globalConfig,
       global: {
         ...globalConfig.global,
-        // Tab-Leiste des Forks wie in den übrigen Tests ersetzt: hier zählt nur das Abfragen
+        // Fork's tab bar replaced like in the other tests: only the polling matters here
         stubs: {'PlayerInputFactory': {template: '<div class="stub-pif"></div>'}, 'WaitingForTabs': {template: '<div class="stub-tabs"></div>'}},
       },
       props: {

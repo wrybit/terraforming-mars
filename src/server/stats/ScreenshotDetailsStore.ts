@@ -2,16 +2,16 @@ import * as path from 'path';
 import {existsSync, readFileSync} from 'fs';
 import {StatsGameDetails} from '../../common/stats/StatsGame';
 
-/** Aus einem Screenshot der Ergebnisseite abgelesene Angaben (Punkteaufschlüsselung, Karten, Diagramme …). */
+/** Data read from a screenshot of the results page (points breakdown, cards, charts …). */
 export type ScreenshotDetails = {
   screenshotId: string;
-  /** Spiel-ID aus dem Log des Screenshots, falls sichtbar. */
+  /** Game ID from the screenshot's log, if visible. */
   gameId: string | undefined;
   details: StatsGameDetails;
 };
 
-// Eine Datei je Screenshot neben den Screenshots selbst, im Docker-Volume auf mint – wie die übrigen Importe.
-// Erzeugt wird sie außerhalb des Servers (Auswertung der Screenshots); der Server liest sie nur.
+// One file per screenshot next to the screenshots themselves, in the Docker volume on mint – like the other imports.
+// It is produced outside the server (screenshot analysis); the server only reads it.
 const defaultFolder = path.resolve(process.cwd(), './db/imported/screenshot-details');
 
 const SCREENSHOT_ID = /^[0-9]{1,30}$/;
@@ -27,7 +27,7 @@ export class ScreenshotDetailsStore {
   }
 
   public get(screenshotId: string): ScreenshotDetails | undefined {
-    // Nur Ziffern: die ID landet im Dateinamen
+    // Digits only: the ID ends up in the file name
     if (!SCREENSHOT_ID.test(screenshotId)) {
       return undefined;
     }

@@ -1,5 +1,5 @@
-// Mobil-Ansicht (Handy, Tablet hoch und quer): alle Regeln hängen an html.tm-mobile (mobileLayout.ts),
-// die Desktop-Ansicht bleibt dadurch unberührt. Eigene Klassen mit Präfix mb-, Vorbild: mockups/mobile-prototyp.
+// Mobile view (phone, tablet portrait and landscape): all rules hang off html.tm-mobile (mobileLayout.ts),
+// so the desktop view stays untouched. Own classes with prefix mb-, model: mockups/mobile-prototyp.
 
 @mb-surface: rgba(18, 21, 30, 0.94);
 @mb-surface-raised: #1e2330;
@@ -7,10 +7,10 @@
 @mb-text: #ece9e2;
 @mb-muted: #a4a9b6;
 @mb-accent: #5b5ef0;
-// Fußleiste: Lila der Buttons (@bg_action) für Aktives, Grau für Inaktives
+// Footer bar: button purple (@bg_action) for active items, grey for inactive ones
 @mb-action: @bg_action;
 @mb-nav-inactive: #8b90a0;
-// Strichstärke der Outline-Symbole bei 24 px (Standard von strokeWidth in MobileGlyph.vue), auch für Umrisse daneben
+// Stroke width of the outline glyphs at 24 px (default strokeWidth in MobileGlyph.vue), also for outlines next to them
 @mb-glyph-stroke: 1.8px;
 @mb-nav-background: #12151e;
 @mb-gold: #f5c542;
@@ -20,64 +20,64 @@
 @mb-top-height: 52px;
 @mb-nav-height: 68px;
 @mb-screen-width-max: 1400px;
-// Tablet quer (auch breite Fenster im Querformat): Mars neben den Balken, Spieler-Tabellen waagerecht wie am Desktop.
-// Grenze wie LANDSCAPE_MIN_WIDTH in mobileLayout.ts
+// Tablet landscape (also wide windows in landscape): Mars next to the bars, player tables horizontal like on desktop.
+// Breakpoint like LANDSCAPE_MIN_WIDTH in mobileLayout.ts
 @mb-landscape: ~"(min-width: 900px) and (orientation: landscape)";
-// Alles übrige (Handy, Tablet hoch, schmale Fenster): Spieler-Tabellen gedreht, Spieler als Spalten
+// Everything else (phone, tablet portrait, narrow windows): player tables rotated, players as columns
 @mb-portrait: ~"not all and (min-width: 900px) and (orientation: landscape)";
-// Spalten der umbrechenden Spieler-Tabelle: sechs Waren passen genau in eine Zeile
-// Symbol-Spalte der gedrehten Spieler-Tabelle
+// Columns of the wrapping player table: exactly six resources fit in one row
+// Icon column of the rotated player table
 @mb-players-icon-column: 44px;
-// Lücke zwischen den Spalten der Spieler- und Meilenstein-Tabelle
+// Gap between the columns of the player and milestone tables
 @mb-players-column-gap: 4px;
-// Kosten-Spalte der Meilenstein-Tabelle (M€-Münze neben dem Symbol)
+// Cost column of the milestone table (M€ coin next to the icon)
 @mb-ma-cost-column: 24px;
-// Namensspalte der waagerechten Tabellen (Tablet quer), wie NAME_WIDTH in playersTableLayout.ts
+// Name column of the horizontal tables (tablet landscape), like NAME_WIDTH in playersTableLayout.ts
 @mb-players-name-width: 196px;
-// Zeilenhöhen der Spielerliste (players_table.less), damit beide Abschnitte denselben Kopf zeigen
+// Row heights of the player list (players_table.less), so both sections show the same header
 @mb-players-row-height: 48px;
 @mb-players-own-row-height: 56px;
-// Sheet auf Tablets mittig statt über die volle Breite
+// Sheet centered on tablets instead of full width
 @mb-sheet-max-width: 560px;
 @mb-sheet-duration: 320ms;
-// Abstand der Zug-Button-Mitte vom unteren Rand in der Fußleiste (ohne Safe Area); Startlage des Sheets
+// Distance of the turn button's center from the bottom edge in the footer bar (without safe area); start position of the sheet
 @mb-turn-button-rest: 55px;
-// Knöpfe der Leiste oben im Mars-Bildschirm (Sprache, Info, Hilfe, Einstellungen)
+// Buttons of the bar at the top of the Mars screen (language, info, help, settings)
 @mb-toolbar-button: 40px;
-// Dauer der Karten-Vergrößerung (vgl. DURATION_MS in MobileCardZoom.vue)
+// Duration of the card enlargement (cf. DURATION_MS in MobileCardZoom.vue)
 @mb-card-zoom-duration: 260ms;
-// Breite je Karte im Karussell (Karte um ein Fünftel vergrößert plus Lücke zum Nachbarn); der Rest der Breite
-// zeigt die Nachbarkarten im Anschnitt
+// Width per card in the carousel (card enlarged by a fifth plus gap to the neighbour); the rest of the width
+// shows the neighbouring cards cut off at the edge
 @mb-card-zoom-slide-width: min(86%, 310px);
-// Fußbereich der Aufgabe beginnt rechts neben dem Zurück-Pfeil (12 px Rand + 56 px Knopf + 8 px Lücke)
+// The task footer starts right of the back arrow (12 px margin + 56 px button + 8 px gap)
 @mb-footer-left: 76px;
-// Währungssymbol im Eingabefeld beim Bezahlen
+// Currency icon in the input field when paying
 @mb-payment-icon: 28px;
-// Höhe der Spielende-Meldung über dem Planeten (Mitte des Bretts im Mars-Bildschirm)
+// Height of the game-end notice above the planet (center of the board in the Mars screen)
 @mb-game-over-top: 240px;
-// Halbe Kartenbreite im Karussell (Karten ungezoomt 248 px, vgl. mobileFit.ts)
+// Half card width in the carousel (cards unzoomed 248 px, cf. mobileFit.ts)
 @mb-carousel-card-half: 124px;
 @mb-carousel-room-top: 34px;
 @mb-carousel-room-bottom: 28px;
 @mb-carousel-dots-height: 26px;
-// Höhe des Fußbereichs beim Bezahlen mit drei Währungen (Stahl, Titan, M€): feste Achse der Karussell-Karten
+// Height of the footer when paying with three currencies (steel, titanium, M€): fixed axis for the carousel cards
 @mb-carousel-footer-reserve: 253px;
-// Lücken zwischen Auswahl-Kacheln (Meilensteine/Auszeichnungen, Standardprojekte; vgl. CHOICE_GAP in mobileFit.ts):
-// zwischen den Zeilen zusätzlich Platz fürs Häkchen-Fähnchen (selection_highlight.less)
+// Gaps between choice tiles (milestones/awards, standard projects; cf. CHOICE_GAP in mobileFit.ts):
+// between rows additionally room for the checkmark flag (selection_highlight.less)
 @mb-choice-gap: 14px;
 @mb-choice-row-gap: 36px;
-// Höhe des Aufgaben-Kopfs (Zurück-Knopf 40 px + Innenabstand)
+// Height of the task header (back button 40 px + padding)
 @mb-task-head-height: 61px;
-// Zoom-Leiste unten am großen Mars (vgl. CONTROLS_HEIGHT in BoardZoomModal.vue)
+// Zoom bar at the bottom of the big Mars (cf. CONTROLS_HEIGHT in BoardZoomModal.vue)
 @mb-zoom-bar-height: 72px;
-// Fuge zwischen den Segmenten der Parameter-Balken (Farbe der Fläche dahinter)
+// Joint between the segments of the parameter bars (color of the surface behind)
 @mb-bar-gap: rgba(13, 15, 20, 0.95);
-// Schatten fester Leisten und der Schublade: zeigt, dass sie vor allem anderen liegen
+// Shadow of fixed bars and the drawer: shows that they sit in front of everything else
 @mb-bar-shadow-down: 0 6px 18px rgba(0, 0, 0, 0.6);
 @mb-bar-shadow-up: 0 -6px 18px rgba(0, 0, 0, 0.6);
 @mb-sheet-shadow: 0 -12px 36px rgba(0, 0, 0, 0.8);
 
-// Frosted Glass für Knöpfe über unscharfem Hintergrund (Karten-Großansicht): halbtransparent, dahinter weichgezeichnet
+// Frosted glass for buttons over a blurred background (card close-up): semi-transparent, blurred behind
 .mb-frosted-button() {
   border: 1px solid rgba(255, 255, 255, 0.28);
   background: rgba(255, 255, 255, 0.16);
@@ -94,7 +94,7 @@
 }
 
 html.tm-mobile {
-  // Sidebar-Platz und Desktop-Hinweise entfallen
+  // Sidebar space and desktop hints are dropped
   .main-container {
     margin: 0 !important;
     padding: 0 !important;
@@ -104,7 +104,7 @@ html.tm-mobile {
     overscroll-behavior-y: none;
   }
 
-  // Auf dem Zug-Bildschirm wächst der Fußbereich mit dem Bezahlbereich (Höhe setzt MobilePlayerHome)
+  // On the turn screen the footer grows with the payment area (height is set by MobilePlayerHome)
   #player-home.mb-home.mb-home--turn {
     padding-bottom: calc(max(@mb-nav-height, var(--mb-footer-height, 0px)) + 12px + env(safe-area-inset-bottom));
   }
@@ -120,7 +120,7 @@ html.tm-mobile {
     line-height: 1.35;
   }
 
-  // ---------- Statusleiste ----------
+  // ---------- Status bar ----------
   .mb-top {
     position: fixed;
     top: 0;
@@ -202,8 +202,8 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Knöpfe der Desktop-Seitenleiste (Sidebar.vue) als Leiste oben im Mars-Bildschirm ----------
-  // Links, was zum eigenen Spiel gehört (Farbe, Sprache, Kartenstapel), rechts abgesetzt Info, Hilfe, Einstellungen
+  // ---------- Buttons of the desktop sidebar (Sidebar.vue) as a bar at the top of the Mars screen ----------
+  // Left: what belongs to your own game (color, language, card deck); right, set apart: info, help, settings
   .mb-toolbar.sidebar_cont {
     order: 0;
     position: static;
@@ -216,7 +216,7 @@ html.tm-mobile {
     padding: 0;
     background: none;
     z-index: auto;
-    // Upstream vergrößert .sidebar_cont auf Touch-Geräten hochkant per zoom: 2 (preferences.less) – gilt nur für die Desktop-Leiste
+    // Upstream enlarges .sidebar_cont on touch devices in portrait via zoom: 2 (preferences.less) – only meant for the desktop bar
     zoom: 1;
 
     .global_params,
@@ -240,10 +240,10 @@ html.tm-mobile {
     > a:has(.goto-cards) {
       order: 3;
       text-decoration: none;
-      pointer-events: none; // Sprunglink ergibt mobil keinen Sinn; die Hand hat ihren eigenen Tab
+      pointer-events: none; // Jump link makes no sense on mobile; the hand has its own tab
     }
 
-    // Rechte Gruppe abgesetzt (doppelter Selektor, sonst setzt die allgemeine Knopf-Regel margin zurück)
+    // Right group set apart (doubled selector, otherwise the general button rule resets the margin)
     .sidebar_item.sidebar_item--info {
       order: 4;
       margin-left: auto;
@@ -259,8 +259,8 @@ html.tm-mobile {
 
     .sidebar_item {
       position: static;
-      // Die alte Leiste hebt Einstellungen per z-index an; bei Flex-Elementen wirkt das auch ohne Positionierung
-      // und legte den Knopf über das unscharfe Sheet
+      // The old bar raises settings via z-index; on flex items that works even without positioning
+      // and put the button above the blurred sheet
       z-index: auto;
       box-sizing: border-box;
       width: @mb-toolbar-button;
@@ -295,7 +295,7 @@ html.tm-mobile {
       transform: translate(-50%, -50%);
     }
 
-    // Kartenstapel: Symbol links, Nachziehstapel und Ablage rechts daneben (Kachel breiter statt höher)
+    // Card deck: icon on the left, draw pile and discard pile to its right (tile wider instead of taller)
     .goto-cards.sidebar_item {
       width: auto;
       padding: 0 8px;
@@ -321,7 +321,7 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Zugstatus (nur auf dem Mars-Bildschirm, wie im Mockup) ----------
+  // ---------- Turn status (only on the Mars screen, as in the mockup) ----------
   .mb-banner {
     order: 0;
     padding: 10px 14px;
@@ -366,7 +366,7 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Bildschirme ----------
+  // ---------- Screens ----------
   .mb-main {
     max-width: @mb-screen-width-max;
     margin: 0 auto;
@@ -378,7 +378,7 @@ html.tm-mobile {
     flex-direction: column;
     gap: 12px;
     overflow-x: hidden;
-    // v-show setzt display: none als Inline-Stil, der gewinnt
+    // v-show sets display: none as an inline style, which wins
   }
 
   .mb-section-label {
@@ -396,7 +396,7 @@ html.tm-mobile {
     text-align: center;
   }
 
-  // Aufgaben-Ansicht: keine Box um Karten und Inhalte, sie reichen bis zum Bildschirmrand (wie im Mockup)
+  // Task view: no box around cards and content, they reach the screen edge (as in the mockup)
   .mb-screen--turn .or-tab-panel {
     padding: 0 !important;
     border: 0 !important;
@@ -404,15 +404,15 @@ html.tm-mobile {
     box-shadow: none !important;
   }
 
-  // Tab-Boxen wie im Desktop (ab 1400 px), nur mit weniger Innenabstand; ohne eigene Stapelebene,
-  // sonst läge der Fußbereich (Bestätigen/Bezahlen, fest unten) hinter der Aufgabenleiste
+  // Tab boxes like on desktop (from 1400 px), just with less padding; without their own stacking context,
+  // otherwise the footer (confirm/pay, fixed at the bottom) would sit behind the task bar
   .mb-screen .or-tab-panel {
     padding: 10px 8px;
     min-height: 0;
     isolation: auto;
   }
 
-  // ---------- Karten: 2–4 nebeneinander (mobileFit.ts skaliert, hier nur das Raster) ----------
+  // ---------- Cards: 2–4 side by side (mobileFit.ts scales, here only the grid) ----------
   .mb-screen :has(> .cardbox),
   .mb-screen :has(> label.cardbox),
   .mb-screen :has(> label.payments_cards),
@@ -421,15 +421,15 @@ html.tm-mobile {
     display: flex !important;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: 0 !important; // Lücken setzt mobileFit.ts
+    gap: 0 !important; // gaps are set by mobileFit.ts
     width: auto !important;
   }
 
-  // Manche Karten tragen selbst die Klasse cardbox (Bauen): deren Außenabstand setzt mobileFit.ts
+  // Some cards carry the cardbox class themselves (build): their margin is set by mobileFit.ts
   .mb-screen .cardbox:not(.mb-fit),
   .mb-screen .sortable-slot,
   .mb-screen label.payments_cards {
-    // Lücken setzt mobileFit.ts als Außenabstand der skalierten Karte
+    // mobileFit.ts sets the gaps as margin of the scaled card
     margin: 0 !important;
     width: auto !important;
     height: auto !important;
@@ -437,12 +437,12 @@ html.tm-mobile {
     float: none !important;
   }
 
-  // Eigene Verkleinerungen des Desktops (Startauswahl: zoom) entfallen, sonst doppelt skaliert
+  // Desktop's own shrinking (initial selection: zoom) is dropped, otherwise scaled twice
   .mb-screen .cardbox {
     zoom: 1 !important;
   }
 
-  // Startauswahl: Platz über der Karte für das Auswahl-Fähnchen bleibt
+  // Initial selection: space above the card for the selection flag stays
   .mb-screen .setup-column-body .card-container.mb-fit {
     margin-top: 28px !important;
   }
@@ -451,14 +451,14 @@ html.tm-mobile {
     margin: 0 !important;
   }
 
-  // Skalierte Elemente (mobileFit.ts): rechts/unten steuert das Skript, daher dort kein !important
+  // Scaled elements (mobileFit.ts): the script controls right/bottom, so no !important there
   .mb-fit {
     margin-left: 0 !important;
     margin-top: 0 !important;
     float: none !important;
   }
 
-  // Auswahl-Häkchen der Karten-Eingaben: nur die Hervorhebung zählt
+  // Selection checkmark of card inputs: only the highlight matters
   .mb-screen .cardbox > input[type="radio"],
   .mb-screen .cardbox > input[type="checkbox"] {
     position: absolute;
@@ -484,7 +484,7 @@ html.tm-mobile {
 
   // ---------- Mars ----------
   .mb-screen--mars {
-    // Bezug für die schwebende Spielende-Meldung
+    // Reference for the floating game-end notice
     position: relative;
 
     > * {
@@ -508,23 +508,23 @@ html.tm-mobile {
       order: 2;
     }
 
-    // Meilensteine & Auszeichnungen stehen im Spieler-Bildschirm; hier nur die Schnellknöpfe
+    // Milestones & awards live in the player screen; here only the quick buttons
     .player_home_block--milestones-and-awards {
       display: none;
     }
 
-    // Tabelle der Meilensteine nur im Zwei-Spalten-Layout des Desktops
+    // Milestone table only in the desktop's two-column layout
     .milestone-award-table {
       display: none;
     }
   }
 
-  // Mars ohne Ring (Ausschnitt in mobileFit.ts): Kolonie-Felder in die oberen Ecken, Knopf "Plättchen" unten links
+  // Mars without ring (crop in mobileFit.ts): colony spaces into the top corners, "Tiles" button bottom left
   .board-without-venus.mb-mars-cropped,
   .board-zoom-content .board-without-venus {
     background-image: url(./assets/board/mars-planet.png);
 
-    // Skalen rund um das Brett ersetzen die Balken (MobileParameterBars)
+    // Scales around the board replace the bars (MobileParameterBars)
     .global-numbers {
       display: none;
     }
@@ -563,7 +563,7 @@ html.tm-mobile {
     }
   }
 
-  // Zoom-Knopf unten rechts am Planeten (über dem Brett, dessen Ecke dort frei ist)
+  // Zoom button bottom right on the planet (above the board, whose corner is free there)
   .mb-mars-zoom {
     align-self: flex-end;
     z-index: 2;
@@ -580,7 +580,7 @@ html.tm-mobile {
     font-size: 12px;
   }
 
-  // Schnellknöpfe unter den Balken: Meilensteine / Auszeichnungen (öffnen den Spieler-Bildschirm)
+  // Quick buttons below the bars: milestones / awards (open the player screen)
   .mb-quick {
     order: 2;
     display: grid;
@@ -606,7 +606,7 @@ html.tm-mobile {
     }
   }
 
-  // Umschalter im Spieler-Bildschirm
+  // Toggle in the player screen
   .mb-segments {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -616,7 +616,7 @@ html.tm-mobile {
     background: @mb-surface;
   }
 
-  // Mindesthöhe statt fester Höhe: lange Labels (z. B. "Meilensteine & Auszeichnungen") brechen zweizeilig um und bleiben in der Fläche
+  // Min height instead of fixed height: long labels (e.g. "Meilensteine & Auszeichnungen") wrap onto two lines and stay inside the area
   .mb-segment {
     min-height: 36px;
     padding: 6px 8px;
@@ -633,13 +633,13 @@ html.tm-mobile {
     color: @mb-text;
   }
 
-  // Meilensteine & Auszeichnungen im Spieler-Bildschirm immer als Tabelle (milestone_award_table.less blendet sie unter 1400 px aus)
+  // Milestones & awards in the player screen always as a table (milestone_award_table.less hides them below 1400 px)
   .mb-ma .ma-table {
     display: grid !important;
   }
 
-  // Tablet quer: Meilensteine & Auszeichnungen waagerecht, Spieler-Kopf (PlayerIdentity.vue) so breit und hoch
-  // wie in der Spielerliste – beide Abschnitte zeigen denselben Kopf
+  // Tablet landscape: milestones & awards horizontal, player header (PlayerIdentity.vue) as wide and tall
+  // as in the player list – both sections show the same header
   @media @mb-landscape {
     .mb-ma .ma-table {
       --ma-table-name-width: @mb-players-name-width;
@@ -663,12 +663,12 @@ html.tm-mobile {
     }
   }
 
-  // Handy und Tablet hoch: Tabellen gedreht (Spieler als Spalten); Tablet quer behält die waagerechten Zeilen des Desktops
+  // Phone and tablet portrait: tables rotated (players as columns); tablet landscape keeps the desktop's horizontal rows
   @media @mb-portrait {
-    // Meilensteine & Auszeichnungen gedreht wie die Spieler-Tabelle: Symbole links, dann Kosten bzw. Besitzer,
-    // danach je Spieler eine Spalte (Zellen je Zeile: --ma-table-cell-count aus MilestoneAwardTable)
+    // Milestones & awards rotated like the player table: icons on the left, then cost or owner,
+    // then one column per player (cells per row: --ma-table-cell-count from MilestoneAwardTable)
     .mb-ma .ma-table {
-      display: grid !important; // sonst nur im Zwei-Spalten-Layout sichtbar (milestone_award_table.less)
+      display: grid !important; // otherwise only visible in the two-column layout (milestone_award_table.less)
       grid-template-rows: repeat(var(--ma-table-cell-count), auto);
       grid-template-columns: @mb-players-icon-column auto;
       grid-auto-columns: minmax(0, 1fr);
@@ -689,21 +689,21 @@ html.tm-mobile {
         justify-content: center;
       }
 
-      // Nach der Zell-Regel, damit sie gewinnt: Überschriften und Trenner entfallen im gedrehten Raster
+      // After the cell rule so it wins: headings and separators are dropped in the rotated grid
       .ma-table-labels,
       .ma-table-row > .ma-table-divider,
       .ma-table-player::before {
         display: none;
       }
 
-      // Die leere Ecke oben links (Namensspalte von Kopf- und Statuszeile)
+      // The empty top-left corner (name column of header and status row)
       .ma-table-head > :first-child,
       .ma-table-status > :first-child {
         min-height: 0;
         height: 100%;
       }
 
-      // Zelle ist nur Hülle; Abstände und Schrift kommen aus dem Spieler-Kopf (PlayerIdentity.vue)
+      // Cell is only a wrapper; spacing and font come from the player header (PlayerIdentity.vue)
       .ma-table-name {
         align-items: stretch;
         padding: 0;
@@ -720,21 +720,21 @@ html.tm-mobile {
         border-radius: 0 0 10px 10px;
       }
 
-      // Trennung Meilensteine | Auszeichnungen: Linie über der ersten Auszeichnung (Nähe statt Überschrift)
+      // Separation milestones | awards: line above the first award (proximity instead of a heading)
       .ma-table-divider ~ .ma-table-divider + * {
         border-top: 2px solid rgba(255, 255, 255, 0.3);
       }
     }
 
-    // Spieler-Tabelle: Farbbalken der aufgelösten Zeilen würde sonst am Tabellenrand stehen
+    // Player table: the color bar of the dissolved rows would otherwise sit at the table edge
     .mb-screen--players .players-table-row::before {
       display: none;
     }
   }
 
-  // ---------- Globale Parameter als Balken ----------
+  // ---------- Global parameters as bars ----------
   .mb-params {
-    // Verlaufsrichtung der Balken: waagerecht; Tablet quer stellt sie senkrecht (unten = Minimum)
+    // Fill direction of the bars: horizontal; tablet landscape makes them vertical (bottom = minimum)
     --bar-direction: 90deg;
     display: flex;
     flex-direction: column;
@@ -781,7 +781,7 @@ html.tm-mobile {
     border-radius: 5px;
     background: #2a3040;
 
-    // Segmente je Schritt der Skala (--steps aus MobileParameterBars), wie die Felder auf dem Brett
+    // Segments per scale step (--steps from MobileParameterBars), like the spaces on the board
     &::after {
       content: "";
       position: absolute;
@@ -861,8 +861,8 @@ html.tm-mobile {
     filter: grayscale(1);
   }
 
-  // Tablet quer: Balken senkrecht nebeneinander, füllen die Höhe neben dem Mars (Zeile 3 im Raster von .mb-screen--mars);
-  // Subgrid hält Beschriftung, Wert und Balken aller Spalten auf derselben Höhe, auch wenn ein Name umbricht
+  // Tablet landscape: bars vertical side by side, filling the height next to Mars (row 3 in the grid of .mb-screen--mars);
+  // subgrid keeps label, value and bar of all columns at the same height, even when a name wraps
   @media @mb-landscape {
     .mb-params {
       --bar-direction: 0deg;
@@ -876,7 +876,7 @@ html.tm-mobile {
 
     .mb-param {
       grid-row: 1 / -1;
-      // Zeilen aus .mb-params; Bereiche der Kinder per Nummer, die Namen der waagerechten Fassung gelten hier nicht
+      // Rows from .mb-params; children's areas by number, the names of the horizontal version don't apply here
       grid-template: subgrid / minmax(0, 1fr);
       gap: 0;
       justify-items: center;
@@ -900,7 +900,7 @@ html.tm-mobile {
       font-size: 22px;
     }
 
-    // Balken mittig in der Spalte, Bonus-Symbole rechts daneben
+    // Bar centered in the column, bonus icons to its right
     .mb-param-track {
       grid-area: 3 / 1;
       align-self: stretch;
@@ -929,7 +929,7 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Meilensteine & Auszeichnungen und Spieler: Tabellen wie im Zwei-Spalten-Layout (ab 1400 px) ----------
+  // ---------- Milestones & awards and players: tables like in the two-column layout (from 1400 px) ----------
   .player_home_block--milestones-and-awards {
     width: auto !important;
     margin: 0 !important;
@@ -939,7 +939,7 @@ html.tm-mobile {
       display: none;
     }
 
-    // milestone_award_table.less blendet die Tabelle unter 1400 px aus
+    // milestone_award_table.less hides the table below 1400 px
     .ma-table {
       display: grid !important;
     }
@@ -952,26 +952,26 @@ html.tm-mobile {
     margin: 0;
 
     > .player-info {
-      display: none !important; // players_overview.less setzt display mit !important
+      display: none !important; // players_overview.less sets display with !important
     }
   }
 
-  // Tablet quer: Spielerliste als waagerechte Tabelle wie im Zwei-Spalten-Layout (players_table.less), Spalten passend zur Breite
+  // Tablet landscape: player list as a horizontal table like in the two-column layout (players_table.less), columns fitted to the width
   @media @mb-landscape {
     .mb-screen--players .players-overview .players-table {
       display: block;
     }
   }
 
-  // Handy und Tablet hoch: Spieler-Tabelle gedreht
+  // Phone and tablet portrait: player table rotated
   @media @mb-portrait {
-    // Spieler-Kopf (PlayerIdentity.vue) in Spieler- und Meilenstein-Tabelle gleich:
-    // Name, Status, Konzern untereinander und mittig
-    // Zweiter Selektor schlägt die allgemeine Zellregel der Spieler-Tabelle (.players-table-row > *),
-    // sonst säße der Name dort 4 px höher als in der Meilenstein-Tabelle
+    // Player header (PlayerIdentity.vue) identical in player and milestone table:
+    // name, status, corporation stacked and centered
+    // The second selector beats the general cell rule of the player table (.players-table-row > *),
+    // otherwise the name there would sit 4 px higher than in the milestone table
     .mb-screen--players .players-table-identity,
     .mb-screen--players .players-overview .players-table-row > .players-table-identity {
-      justify-content: flex-start; // Spalten nebeneinander: Namen auf einer Höhe statt je Spalte mittig
+      justify-content: flex-start; // Columns side by side: names at one height instead of centered per column
       padding: 8px 4px;
       border-radius: 10px 10px 0 0;
       text-align: center;
@@ -989,9 +989,9 @@ html.tm-mobile {
     }
 
     .mb-screen--players .players-overview {
-      // Achsen gedreht: Spieler als Spalten (Name oben), Werte untereinander, Symbole in der ersten Spalte.
-      // Kopf und Spielerzeilen lösen sich auf, ihre Zellen füllen das Raster spaltenweise
-      // (Zellen je Zeile: --players-table-cell-count aus PlayersTable)
+      // Axes rotated: players as columns (name on top), values stacked, icons in the first column.
+      // Header and player rows dissolve, their cells fill the grid column by column
+      // (cells per row: --players-table-cell-count from PlayersTable)
       .players-table {
         display: grid !important;
         grid-template-rows: repeat(var(--players-table-cell-count), auto);
@@ -1019,7 +1019,7 @@ html.tm-mobile {
         box-sizing: border-box;
       }
 
-      // Umschalter der Abschnitte oben in der Symbol-Spalte untereinander
+      // Section toggles stacked at the top of the icon column
       .players-table-toggles {
         flex-direction: column;
         align-items: center;
@@ -1034,14 +1034,14 @@ html.tm-mobile {
         border-radius: 0 0 10px 10px;
       }
 
-      // Trennung Waren | Wertung | Tags | Karten: Linie über der ersten Zelle jedes weiteren Abschnitts,
-      // in allen Spalten gleich (auch Symbol-Spalte), damit die Zeilen bündig bleiben – wie bei Meilensteinen
+      // Separation resources | scoring | tags | cards: line above the first cell of each further section,
+      // identical in all columns (icon column too) so the rows stay aligned – as with milestones
       .players-table-divider ~ .players-table-divider + * {
         border-top: 2px solid rgba(255, 255, 255, 0.3);
       }
     }
 
-    // Spielerfarbe je Spalte (die Zeilen sind aufgelöst und tragen keinen Hintergrund mehr)
+    // Player color per column (the rows are dissolved and no longer carry a background)
     each(@players, {
       @c: ~"player_@{value}";
       .mb-screen--players .players-table-row--@{value} > * {
@@ -1052,7 +1052,7 @@ html.tm-mobile {
         background: fade(@@c, 55%);
       }
 
-      // Meilensteine & Auszeichnungen (gedreht) in denselben Spielerfarben
+      // Milestones & awards (rotated) in the same player colors
       .mb-ma .ma-table-player--@{value} > * {
         background: fade(@@c, 28%);
       }
@@ -1062,11 +1062,11 @@ html.tm-mobile {
       }
     });
 
-    // ---------- Viele Spieler: waagerecht scrollen ----------
-    // Ab drei Spielern scrollen die Tabellen waagerecht; die Symbol-Spalten bleiben vorne stehen (sticky),
-    // die Spieler gleiten darunter durch. Spalten so breit, dass genau --mb-players-visible Spieler neben die
-    // Symbole passen (Handy 2, Tablet hoch 3, quer 4 – wie cardColumns in mobileFit.ts): beim Einrasten bleibt
-    // so kein Rest einer Spalte neben den Symbolen stehen
+    // ---------- Many players: scroll horizontally ----------
+    // From three players on the tables scroll horizontally; the icon columns stay in front (sticky),
+    // the players glide underneath. Columns just wide enough that exactly --mb-players-visible players fit next to the
+    // icons (phone 2, tablet portrait 3, landscape 4 – like cardColumns in mobileFit.ts): when snapping,
+    // no leftover part of a column remains next to the icons
     .mb-screen--players-scroll {
       --mb-players-visible: 2;
 
@@ -1090,14 +1090,14 @@ html.tm-mobile {
         }
       }
 
-      // .players-overview: schlägt die Grundregel der gedrehten Spieler-Tabelle.
-      // Einrasten: nach dem Wischen beginnt die erste sichtbare Spieler-Spalte direkt hinter den Symbolen
+      // .players-overview: beats the base rule of the rotated player table.
+      // Snapping: after swiping, the first visible player column starts right behind the icons
       .players-overview .players-table {
         grid-auto-columns: calc((100% - @mb-players-icon-column) / var(--mb-players-visible) - @mb-players-column-gap);
         scroll-padding-left: @mb-players-icon-column + @mb-players-column-gap;
       }
 
-      // Kosten-Spalte fest: "auto" fiele im scrollenden Raster auf null zusammen
+      // Fixed cost column: "auto" would collapse to zero in the scrolling grid
       .mb-ma .ma-table {
         grid-template-columns: @mb-players-icon-column @mb-ma-cost-column;
         grid-auto-columns: calc((100% - @mb-players-icon-column - @mb-ma-cost-column - @mb-players-column-gap) / var(--mb-players-visible) - @mb-players-column-gap);
@@ -1109,8 +1109,8 @@ html.tm-mobile {
         scroll-snap-align: start;
       }
 
-      // Symbol-Spalte der Spieler-Tabelle (Kopfzeile) bzw. Symbole und Kosten der Meilenstein-Tabelle.
-      // Negativer Rand: die Fläche deckt auch die Spaltenlücke rechts daneben ab
+      // Icon column of the player table (header row) or icons and cost of the milestone table.
+      // Negative margin: the surface also covers the column gap to its right
       .players-overview .players-table-row.players-table-head > *,
       .mb-ma .ma-table-row.ma-table-head > *,
       .mb-ma .ma-table-row.ma-table-status > * {
@@ -1125,8 +1125,8 @@ html.tm-mobile {
         left: @mb-players-icon-column + @mb-players-column-gap;
       }
 
-      // Erst wenn Spieler darunter liegen (waagerecht gescrollt, horizontalScroll.ts): dunkles Frosted Glass,
-      // damit Symbole und Spielerwerte nicht ineinanderlaufen
+      // Only once players lie underneath (scrolled horizontally, horizontalScroll.ts): dark frosted glass,
+      // so icons and player values don't run into each other
       .mb-scrolled-x .players-table-row.players-table-head > *,
       .mb-scrolled-x .ma-table-row.ma-table-head > *,
       .mb-scrolled-x .ma-table-row.ma-table-status > * {
@@ -1135,7 +1135,7 @@ html.tm-mobile {
         backdrop-filter: blur(10px) saturate(1.2);
       }
 
-      // Kante zur Spielerfläche: nur an der äußersten Symbol-Spalte
+      // Edge towards the player area: only on the outermost icon column
       .mb-scrolled-x .players-table-row.players-table-head > *,
       .mb-scrolled-x .ma-table-row.ma-table-status > * {
         box-shadow: 6px 0 10px -6px rgba(0, 0, 0, 0.7);
@@ -1169,7 +1169,7 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Spielende: Meldung schwebt über dem Planeten (wie im Mockup) ----------
+  // ---------- Game end: notice floats above the planet (as in the mockup) ----------
   .mb-screen--mars .game-over-notice {
     top: @mb-game-over-top;
     width: calc(100% - 48px);
@@ -1190,7 +1190,7 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Startauswahl in Schritten ----------
+  // ---------- Initial selection in steps ----------
   .mb-steps {
     display: grid;
     grid-auto-columns: minmax(0, 1fr);
@@ -1247,7 +1247,7 @@ html.tm-mobile {
     background: @mb-green;
   }
 
-  // Nur die Spalte des gewählten Schritts; Spaltenkopf entfällt (steht in den Schritten)
+  // Only the column of the chosen step; column header is dropped (it is shown in the steps)
   .mb-setup-step-0 .setup-columns > .setup-column:not(:nth-child(1)) {
     display: none;
   }
@@ -1272,7 +1272,7 @@ html.tm-mobile {
     display: none;
   }
 
-  // Bilanz und Start-Knopf unten fest statt der Aufgabenleiste (wie im Mockup)
+  // Summary and start button fixed at the bottom instead of the task bar (as in the mockup)
   .mb-home--setup .setup-summary {
     position: fixed;
     left: 0;
@@ -1293,7 +1293,7 @@ html.tm-mobile {
     display: none;
   }
 
-  // Bilanz kompakt wie im Mockup: vier Werte im 2er-Raster, darunter Status und Knopf über die volle Breite
+  // Compact summary as in the mockup: four values in a 2-column grid, below them status and button at full width
   .mb-home--setup .setup-summary-values {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1342,7 +1342,7 @@ html.tm-mobile {
     }
   }
 
-  // Vor dem letzten Schritt ersetzt "Weiter" den Start-Knopf an derselben Stelle
+  // Before the last step "Continue" replaces the start button in the same place
   .mb-home--setup:not(.mb-setup-last) .setup-summary-actions {
     visibility: hidden;
   }
@@ -1357,21 +1357,21 @@ html.tm-mobile {
     margin: 0 !important;
   }
 
-  // ---------- Karten-Karussell (Karte spielen, cardCarousel.ts) ----------
-  // Karten nebeneinander, eine je Wisch, die mittige ist gewählt; links und rechts lugen die Nachbarn herein
-  // Standardprojekte ausgenommen: sie liegen alle sichtbar im Kartenraster (mobileFit.ts, cardCarousel.ts)
+  // ---------- Card carousel (play card, cardCarousel.ts) ----------
+  // Cards side by side, one per swipe, the centered one is selected; the neighbours peek in left and right
+  // Standard projects excluded: they all lie visible in the card grid (mobileFit.ts, cardCarousel.ts)
   .mb-screen--turn .payments_cont:has(> label.payments_cards):not(:has(.card-standard-project)) {
     display: flex !important;
     flex-wrap: nowrap !important;
     gap: 14px !important;
-    // Karten mittig im Platz zwischen Aufgaben-Kopf und Bezahlbereich (Höhe des Bezahlbereichs aus MobilePlayerHome).
-    // Gerechnet wird immer mit dem höchsten üblichen Bezahlbereich (drei Währungen), damit die Karten auf derselben
-    // Achse bleiben, egal ob mit einer, zwei oder drei Währungen bezahlt wird; nur ein noch höherer Fußbereich schiebt sie hoch
+    // Cards centered in the space between task header and payment area (payment area height from MobilePlayerHome).
+    // Always computed with the tallest usual payment area (three currencies) so the cards stay on the same
+    // axis whether paying with one, two or three currencies; only an even taller footer pushes them up
     align-items: center;
     min-height: calc(100dvh - @mb-top-height - @mb-task-head-height - @mb-carousel-dots-height - max(var(--mb-footer-height, @mb-nav-height), @mb-carousel-footer-reserve) - 24px);
     box-sizing: border-box;
     margin: 0 -8px;
-    // Oben Platz fürs Auswahl-Häkchen über der Karte, unten für ihren Glow (overflow-x schneidet sonst beides ab)
+    // Room at the top for the selection checkmark above the card, at the bottom for its glow (overflow-x would clip both)
     padding: @mb-carousel-room-top calc(50% - @mb-carousel-card-half) @mb-carousel-room-bottom;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -1423,12 +1423,12 @@ html.tm-mobile {
     font-variant-numeric: tabular-nums;
   }
 
-  // ---------- Meilenstein/Auszeichnung wählen (MilestoneAwardOptions.vue) ----------
-  // Zwei Spalten über die volle Breite statt fester 140-px-Kacheln am linken Rand; auf breiten Geräten gedeckelt und mittig
+  // ---------- Choose milestone/award (MilestoneAwardOptions.vue) ----------
+  // Two columns at full width instead of fixed 140 px tiles at the left edge; capped and centered on wide devices
   @mb-ma-option-max: 240px;
 
-  // Auswahl-Raster senkrecht mittig zwischen Aufgaben-Kopf und Fußbereich (Höhe aus MobilePlayerHome);
-  // oben Platz fürs Fähnchen der ersten Zeile
+  // Choice grid vertically centered between task header and footer (height from MobilePlayerHome);
+  // room at the top for the flag of the first row
   .mb-choice-area() {
     box-sizing: border-box;
     min-height: calc(100dvh - @mb-top-height - @mb-task-head-height - var(--mb-footer-height, @mb-nav-height) - 24px);
@@ -1448,7 +1448,7 @@ html.tm-mobile {
     .ma-option {
       width: auto;
       margin: 0;
-      // Bild und Schrift wachsen mit der Kachel: Maße relativ zur Kachelbreite (Vorlage 140 × 83 px)
+      // Image and text grow with the tile: sizes relative to the tile width (template 140 × 83 px)
       container-type: inline-size;
     }
 
@@ -1463,11 +1463,11 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Standardprojekte wählen: alle sichtbar im Raster (mobileFit.ts skaliert) ----------
+  // ---------- Choose standard projects: all visible in the grid (mobileFit.ts scales) ----------
   .mb-screen--turn .payments_cont:has(.card-standard-project) {
     .mb-choice-area();
-    // Raster mit der Spaltenzahl aus mobileFit.ts (möglichst quadratisch, 5 → 3×2), waagerecht mittig;
-    // Spaltenbreite = skalierte Karte samt Lücke (Außenabstände aus mobileFit.ts)
+    // Grid with the column count from mobileFit.ts (as square as possible, 5 → 3×2), horizontally centered;
+    // column width = scaled card including gap (margins from mobileFit.ts)
     display: grid !important;
     grid-template-columns: repeat(var(--mb-grid-columns, 2), max-content);
     justify-content: center;
@@ -1475,19 +1475,19 @@ html.tm-mobile {
     > :not(label) {
       grid-column: 1 / -1;
     }
-    // Rechts um die Lücke überstehen: die Lücke hinter der rechten Spalte fällt so aus dem Bild (choiceGap in mobileFit.ts)
+    // Overhang on the right by the gap: the gap behind the right column thus falls out of view (choiceGap in mobileFit.ts)
     margin-right: -@mb-choice-gap;
-    // Unten reicht die Zeilenlücke der letzten Karte (Außenabstand aus mobileFit.ts) statt eigenem Innenabstand
+    // At the bottom the row gap of the last card (margin from mobileFit.ts) suffices instead of own padding
     padding-bottom: 0;
   }
 
-  // ---------- Kartenwahl (Draft, Karten kaufen, Karte wählen) hochkant: Raster wie die Standardprojekte ----------
-  // Quer bleibt die umbrechende Kartenliste. Spaltenzahl aus mobileFit.ts (mehr Zeilen als Spalten);
-  // Titel, Hinweise und Buttons über die volle Breite.
-  // Lücken wie bei den Standardprojekten (CHOICE_GAP in mobileFit.ts, Platz fürs Häkchen-Fähnchen); rechts um die Lücke
-  // überstehen wie dort, damit die Lücke hinter der letzten Spalte den Block nicht nach links versetzt
-  // Mit Kopfzeile (Alle auswählen, Sortierung) auch quer als Raster, damit die Leiste mit den Kartenrändern fluchtet
-  // (mobileFit.ts setzt dann ebenfalls die Spaltenzahl)
+  // ---------- Card choice (draft, buy cards, select card) in portrait: grid like the standard projects ----------
+  // Landscape keeps the wrapping card list. Column count from mobileFit.ts (more rows than columns);
+  // title, hints and buttons at full width.
+  // Gaps as with the standard projects (CHOICE_GAP in mobileFit.ts, room for the checkmark flag); overhang right by the gap
+  // as there, so the gap behind the last column doesn't shift the block to the left
+  // With a header row (select all, sorting) also a grid in landscape, so the bar lines up with the card edges
+  // (mobileFit.ts then sets the column count too)
   .mb-screen--turn .wf-component--select-card.choice-block:has(> .select-card-toolbar):not(.setup-column-body *) {
     display: grid !important;
     grid-template-columns: repeat(var(--mb-grid-columns, 2), max-content);
@@ -1512,8 +1512,8 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Zug: Aufgaben-Ansicht ----------
-  // Tab-Leisten und Menü-Überschrift entfallen: gewählt wird im Sheet, oben steht der Aufgaben-Kopf
+  // ---------- Turn: task view ----------
+  // Tab bars and menu heading are dropped: the choice is made in the sheet, the task header sits on top
   .mb-screen--turn {
     .or-tabs,
     .wf-options--tabs > label:not(.card-warning) {
@@ -1559,14 +1559,14 @@ html.tm-mobile {
     color: inherit;
   }
 
-  // ---------- Zug-Menü als Bottom-Sheet (MobileTurnSheet) ----------
+  // ---------- Turn menu as bottom sheet (MobileTurnSheet) ----------
   .mb-sheet {
     position: fixed;
     inset: 0;
     z-index: 30;
     display: flex;
     flex-direction: column;
-    // Bewusst kein Weichzeichner und nur leicht abgedunkelt: der Kontext dahinter (Mars, Werte) muss für die Entscheidung lesbar bleiben
+    // Deliberately no blur and only slightly darkened: the context behind (Mars, values) must stay readable for the decision
     background: rgba(5, 6, 10, 0.35);
   }
 
@@ -1576,7 +1576,7 @@ html.tm-mobile {
     background: transparent;
   }
 
-  // Schublade um das scrollende Panel, damit der Zug-Button über die Oberkante ragen kann (Panel schneidet per overflow ab)
+  // Drawer around the scrolling panel so the turn button can stick out over the top edge (panel clips via overflow)
   .mb-sheet-drawer {
     position: relative;
     width: 100%;
@@ -1590,7 +1590,7 @@ html.tm-mobile {
   .mb-sheet-panel {
     min-height: 0;
     box-sizing: border-box;
-    // oben Platz für die untere Hälfte des Zug-Buttons
+    // room at the top for the lower half of the turn button
     padding: 42px 14px calc(22px + env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
@@ -1601,7 +1601,7 @@ html.tm-mobile {
     box-shadow: @mb-sheet-shadow;
   }
 
-  // Zug-Button mittig auf der Oberkante; Antippen schließt das Sheet wieder
+  // Turn button centered on the top edge; tapping it closes the sheet again
   .mb-sheet-turn {
     position: absolute;
     top: 0;
@@ -1617,7 +1617,7 @@ html.tm-mobile {
     }
   }
 
-  // Ein-/Ausfahren: Schublade kommt aus der Fußleiste; Startlage so, dass ihr Zug-Button genau auf dem der Leiste liegt
+  // Slide in/out: the drawer comes out of the footer bar; start position so its turn button lies exactly on the bar's one
   .mb-sheet-enter-active,
   .mb-sheet-leave-active {
     transition: background-color @mb-sheet-duration ease;
@@ -1640,7 +1640,7 @@ html.tm-mobile {
     }
   }
 
-  // Der Button der Fußleiste bleibt unsichtbar, solange sein Doppel im Sheet unterwegs ist
+  // The footer bar's button stays invisible while its double in the sheet is in motion
   .mb-turn-button--lifted {
     visibility: hidden;
   }
@@ -1656,7 +1656,7 @@ html.tm-mobile {
     font-weight: bold;
   }
 
-  // Rückfrage vor Weitergeben/Beenden: Erklärung, darunter Zurück und der farbige Button wie in der Aufgabenleiste
+  // Confirmation before pass/end: explanation, below it back and the colored button as in the task bar
   .mb-sheet-hint {
     margin: 0;
     color: @mb-text;
@@ -1664,7 +1664,7 @@ html.tm-mobile {
     line-height: 1.4;
   }
 
-  // Erklärung im Sheet: Abstände regelt das Sheet selbst
+  // Explanation in the sheet: the sheet handles spacing itself
   .mb-sheet-intro {
     margin: 0;
   }
@@ -1681,7 +1681,7 @@ html.tm-mobile {
   }
 
 
-  // Innerhalb einer Gruppe enger als zwischen den Gruppen (Gesetz der Nähe)
+  // Tighter within a group than between groups (law of proximity)
   .mb-sheet-group {
     display: flex;
     flex-direction: column;
@@ -1712,7 +1712,7 @@ html.tm-mobile {
     gap: 8px;
   }
 
-  // Zweispaltig etwas kleinere Schrift, damit lange Übersetzungen (Auszeichnung) nicht mitten im Wort umbrechen
+  // Slightly smaller font in two columns so long translations (award) don't break mid-word
   .mb-sheet-grid .mb-tile {
     gap: 8px;
     padding: 10px;
@@ -1729,7 +1729,7 @@ html.tm-mobile {
     gap: 8px;
   }
 
-  // Kachel wie im Mockup: Symbol, Label, Unterzeile; Farbtöne wie die Desktop-Tabs (Grünfläche, Wärme, Meilenstein)
+  // Tile as in the mockup: icon, label, subline; tints like the desktop tabs (greenery, heat, milestone)
   .mb-tile {
     position: relative;
     display: flex;
@@ -1745,7 +1745,7 @@ html.tm-mobile {
     text-align: left;
   }
 
-  // Symbol in einer zarten Farbkachel; Farbe nach Spielbereich (TurnTileGlyphTone in turnMenu.ts)
+  // Icon in a subtle color tile; color by game area (TurnTileGlyphTone in turnMenu.ts)
   .mb-tile-icon {
     flex-shrink: 0;
     width: 36px;
@@ -1797,11 +1797,11 @@ html.tm-mobile {
     flex-direction: column;
     gap: 2px;
     min-width: 0;
-    padding-right: 12px; // Platz für den Zähler oben rechts
+    padding-right: 12px; // room for the counter top right
   }
 
   .mb-tile-label {
-    // Lange Wörter (Übersetzungen) notfalls umbrechen statt über den Rand laufen
+    // Break long words (translations) if necessary instead of running over the edge
     overflow-wrap: break-word;
     font-weight: bold;
     font-size: 15px;
@@ -1812,7 +1812,7 @@ html.tm-mobile {
     color: @mb-muted;
   }
 
-  // Zähler oben rechts an der Kachel wie am Desktop-Tab; nimmt dem Text keinen Platz weg (.mb-tile ist relativ)
+  // Counter top right on the tile like on the desktop tab; takes no space from the text (.mb-tile is relative)
   .mb-tile-count {
     position: absolute;
     top: 6px;
@@ -1851,7 +1851,7 @@ html.tm-mobile {
       color: rgba(255, 255, 255, 0.85);
     }
 
-    // Auf farbiger Kachel verschwände die Themenfarbe: Symbol weiß auf heller Fläche
+    // On a colored tile the theme color would vanish: icon white on a light surface
     .mb-tile-icon {
       color: #fff;
       background: rgba(255, 255, 255, 0.18);
@@ -1862,7 +1862,7 @@ html.tm-mobile {
     opacity: 0.45;
   }
 
-  // Zug-Ende dezent: nur Umriss und Schrift, links zweite Aktion auslassen (grün), rechts passen (rot)
+  // Subtle turn end: only outline and text, left skip second action (green), right pass (red)
   .mb-sheet-end .mb-tile {
     justify-content: center;
     min-height: 48px;
@@ -1885,7 +1885,7 @@ html.tm-mobile {
     color: #f0a39a;
   }
 
-  // Aufgaben-Kopf im Ton der Aktion (Grünfläche grün, Temperatur orange)
+  // Task header in the action's tone (greenery green, temperature orange)
   .mb-task-head--success {
     background: @mb-green;
   }
@@ -1901,7 +1901,7 @@ html.tm-mobile {
     }
   }
 
-  // Bestätigen/Bezahlen der Eingabe (tabPanelFooter.ts) sitzen in der Aufgabenleiste rechts neben "Zurück"
+  // Confirm/pay of the input (tabPanelFooter.ts) sit in the task bar to the right of "Back"
   .mb-home--turn .mb-screen--turn .or-tab-footer {
     position: fixed !important;
     left: @mb-footer-left;
@@ -1911,7 +1911,7 @@ html.tm-mobile {
     margin: 0 !important;
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom)) 0 !important;
     display: flex !important;
-    // Bezahlbereich über die volle Breite, darunter der Button neben "Zurück" (Reihenfolge aus tab_panel_footer.less)
+    // Payment area at full width, below it the button next to "Back" (order from tab_panel_footer.less)
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
@@ -1923,13 +1923,13 @@ html.tm-mobile {
       display: none !important;
     }
 
-    // Zwei Buttons übereinander (Kaufen und Überspringen): die Leiste wächst mit, statt den oberen Button
-    // frei über dem Inhalt schweben zu lassen; "Zurück" bleibt unten neben dem letzten Button
+    // Two buttons stacked (buy and skip): the bar grows with them instead of letting the upper button
+    // float freely above the content; "Back" stays at the bottom next to the last button
     &:has(.select-card-actions .btn + .btn) {
       left: 0;
       padding-left: @mb-footer-left !important;
       border-top: 1px solid @mb-line !important;
-      // wie .mb-bar-surface(), aber gegen das transparent !important oben
+      // like .mb-bar-surface(), but against the transparent !important above
       background: @mb-surface !important;
       -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
@@ -1952,7 +1952,7 @@ html.tm-mobile {
       margin: 0 !important;
     }
 
-    // Bezahlbereich randlos über die ganze Breite (Fußbereich beginnt rechts neben "Zurück")
+    // Payment area edge to edge across the full width (footer starts right of "Back")
     .payments_form {
       margin: 0 -12px 0 -@mb-footer-left !important;
       padding: 12px;
@@ -1962,7 +1962,7 @@ html.tm-mobile {
       background: @mb-surface-raised;
     }
 
-    // Links die Währungen, rechts daneben klein die Summe
+    // Currencies on the left, the total small to their right
     .payments_prices {
       flex-wrap: nowrap;
       align-items: center;
@@ -1974,7 +1974,7 @@ html.tm-mobile {
       border-spacing: 0 6px;
     }
 
-    // Währung als Symbol im Eingabefeld statt als Reihe davor: [−] [Symbol Anzahl] [+]
+    // Currency as an icon in the input field instead of a row in front: [−] [icon amount] [+]
     .payments_type {
       display: grid;
       grid-template-columns: 40px minmax(0, 1fr) 40px;
@@ -2053,7 +2053,7 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Fußleiste ----------
+  // ---------- Footer bar ----------
   .mb-nav,
   .mb-taskbar {
     position: fixed;
@@ -2061,8 +2061,8 @@ html.tm-mobile {
     right: 0;
     bottom: 0;
     z-index: 21;
-    // border-box: der Sicherheitsabstand unten (iPhone-Home-Leiste) kommt zur Leistenhöhe dazu, statt von ihr abzugehen –
-    // sonst sitzt "Zurück" tiefer als die Buttons der Eingabe daneben (die rechnen 10px + Sicherheitsabstand)
+    // border-box: the safe-area inset at the bottom (iPhone home bar) is added to the bar height instead of taken from it –
+    // otherwise "Back" sits lower than the input's buttons next to it (they use 10px + safe-area inset)
     box-sizing: border-box;
     min-height: calc(@mb-nav-height + env(safe-area-inset-bottom));
     padding-bottom: env(safe-area-inset-bottom);
@@ -2073,7 +2073,7 @@ html.tm-mobile {
 
   .mb-nav {
     display: grid;
-    // Gleich breite Spalten für beliebig viele Einträge (Spieler 5, Zuschauer 3)
+    // Equal-width columns for any number of entries (player 5, spectator 3)
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);
   }
@@ -2092,7 +2092,7 @@ html.tm-mobile {
     font-size: 11px;
   }
 
-  // Aktiv: gefülltes Symbol in Button-Lila, Linie oben in derselben Farbe, Beschriftung hell
+  // Active: filled icon in button purple, line on top in the same color, light label
   .mb-nav-item--active {
     color: @mb-action;
     box-shadow: inset 0 2px 0 @mb-action;
@@ -2108,7 +2108,7 @@ html.tm-mobile {
     font-weight: bold;
   }
 
-  // Symbole der Leiste (MobileGlyph.vue); --mb-glyph-cut ist die Farbe für Aussparungen und Abdeckungen
+  // Bar icons (MobileGlyph.vue); --mb-glyph-cut is the color for cut-outs and covers
   .mb-glyph {
     --mb-glyph-cut: @mb-nav-background;
     display: block;
@@ -2151,9 +2151,9 @@ html.tm-mobile {
     padding: 0 4px;
     box-sizing: border-box;
     border-radius: 9px;
-    // Inaktiv nur Umriss und Zahl in der Farbe des inaktiven Symbols (wie die Outline-Symbole);
-    // die Fläche in Leistenfarbe verdeckt das Symbol dahinter. Gefüllt lila nur, wenn der Eintrag aktiv ist
-    // Browser runden Rahmen auf ganze px ab (1.8 → 1); gerundet trifft er die Strichstärke der Symbole am besten
+    // Inactive only outline and number in the inactive icon color (like the outline icons);
+    // the surface in bar color covers the icon behind. Filled purple only when the entry is active
+    // Browsers round borders down to whole px (1.8 → 1); rounded, it matches the icons' stroke width best
     border: round(@mb-glyph-stroke) solid @mb-nav-inactive;
     background: @mb-nav-background;
     color: @mb-nav-inactive;
@@ -2170,7 +2170,7 @@ html.tm-mobile {
     color: #fff;
   }
 
-  // Zug-Button: am Zug lila mit Puls und Aktions-Badge
+  // Turn button: on your turn purple with pulse and action badge
   .mb-turn-button {
     position: relative;
     margin-top: -24px;
@@ -2191,7 +2191,7 @@ html.tm-mobile {
     }
   }
 
-  // Nicht am Zug: grauer Button, graue Rakete, kein Badge, kein Puls, Beschriftung gedämpft
+  // Not your turn: grey button, grey rocket, no badge, no pulse, muted label
   .mb-turn-button--idle {
     background: #3a4152;
     color: @mb-nav-inactive;
@@ -2203,7 +2203,7 @@ html.tm-mobile {
     }
   }
 
-  // Aktion 1/2 bzw. 2/2 als Badge wie die Handkarten-Zahl, aber hell auf dem lila Button
+  // Action 1/2 or 2/2 as a badge like the hand card count, but light on the purple button
   .mb-turn-count {
     position: absolute;
     top: -6px;
@@ -2227,8 +2227,8 @@ html.tm-mobile {
     padding-right: 12px;
   }
 
-  // Wächst der Fuß der Eingabe über die ganze Breite (zwei Buttons, s. o.), trägt er den Hintergrund;
-  // die Leiste liegt dann durchsichtig darüber und lässt nur "Zurück" antippbar
+  // If the input's footer grows across the full width (two buttons, see above), it carries the background;
+  // the bar then lies transparently above it and leaves only "Back" tappable
   .mb-home--turn:has(.mb-screen--turn .or-tab-footer .select-card-actions .btn + .btn) .mb-taskbar {
     z-index: 23;
     border-top-color: transparent;
@@ -2271,13 +2271,13 @@ html.tm-mobile {
     margin: 0 !important;
   }
 
-  // Großer Mars (BoardZoomModal) wie im Mockup: Planet ohne Ring, per Pinch/Doppel-Tap/Leiste zoombar, per Wischen verschiebbar
+  // Big Mars (BoardZoomModal) as in the mockup: planet without ring, zoomable via pinch/double tap/bar, pannable by swiping
   .board-zoom-backdrop {
     display: block;
     overflow: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
-    // Eigene Zoom-Gesten statt Zoom der ganzen Seite (boardPinchZoom.ts)
+    // Own zoom gestures instead of zooming the whole page (boardPinchZoom.ts)
     touch-action: pan-x pan-y;
     padding-bottom: @mb-zoom-bar-height;
     box-sizing: border-box;
@@ -2285,7 +2285,7 @@ html.tm-mobile {
     background: radial-gradient(circle at 50% 45%, #1a1d26, #0d0f14 70%);
   }
 
-  // Bühne so breit wie der gezoomte Inhalt, mindestens wie das Fenster: alles bleibt erreichbar, der Planet mittig
+  // Stage as wide as the zoomed content, at least as wide as the window: everything stays reachable, the planet centered
   .board-zoom-stage {
     display: flex;
     justify-content: center;
@@ -2298,8 +2298,8 @@ html.tm-mobile {
   }
 
   .board-zoom-content {
-    // Ausschnitt wie auf dem Startscreen (Maße aus MARS_CROP, BoardZoomModal): Rest des Bretts abschneiden.
-    // Ohne den Desktop-Innenabstand (board_zoom_modal.less), sonst sitzt der Ausschnitt seitlich versetzt
+    // Crop like on the start screen (sizes from MARS_CROP, BoardZoomModal): cut off the rest of the board.
+    // Without the desktop padding (board_zoom_modal.less), otherwise the crop sits offset sideways
     overflow: hidden;
     padding: 0;
 
@@ -2313,7 +2313,7 @@ html.tm-mobile {
     }
 
     .board-without-venus {
-      // Bezugsrahmen der Kolonie-Felder (board-outer-spaces), sonst hängen sie am Fenster statt am Planeten
+      // Reference frame for the colony spaces (board-outer-spaces), otherwise they hang off the window instead of the planet
       position: relative;
       background-image: url(./assets/board/mars-planet.png);
     }
@@ -2332,7 +2332,7 @@ html.tm-mobile {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 1101; // über dem großen Mars (board-zoom-backdrop: 1100)
+    z-index: 1101; // above the big Mars (board-zoom-backdrop: 1100)
     height: @mb-zoom-bar-height;
     padding: 0 12px env(safe-area-inset-bottom);
     box-sizing: border-box;
@@ -2367,11 +2367,11 @@ html.tm-mobile {
     color: @mb-muted;
   }
 
-  // Tablet quer: Mars links, rechts daneben Leiste, Zugstatus, Balken und Meilenstein-Knöpfe; die Balken-Zeile nimmt
-  // die Resthöhe des Mars ein, die Knöpfe sitzen bündig mit seiner Unterkante. Kolonien usw. folgen darunter in Spalte 2
+  // Tablet landscape: Mars on the left, to its right bar, turn status, bars and milestone buttons; the bar row takes
+  // the remaining height of Mars, the buttons sit flush with its bottom edge. Colonies etc. follow below in column 2
   @media @mb-landscape {
     .mb-screen--mars {
-      display: grid; // ohne !important, sonst wirkte das Ausblenden per v-show (Inline-Stil) nicht mehr
+      display: grid; // without !important, otherwise hiding via v-show (inline style) would no longer work
       grid-template-columns: auto minmax(0, 1fr);
       grid-template-rows: auto auto minmax(0, 1fr) auto;
       align-items: start;
@@ -2403,7 +2403,7 @@ html.tm-mobile {
         grid-row: 1 / span 4;
       }
 
-      // Zoom-Knopf bleibt unten rechts am Planeten; in Spalte 2 zöge ihn der negative Rand über den Zugstatus
+      // Zoom button stays bottom right on the planet; in column 2 the negative margin would pull it over the turn status
       > .mb-mars-zoom {
         grid-column: 1;
         grid-row: 1 / span 4;
@@ -2417,7 +2417,7 @@ html.tm-mobile {
     }
   }
 
-  // Tablet: Leisten nicht über die ganze Breite ziehen
+  // Tablet: don't stretch bars across the full width
   @media (min-width: 700px) {
     .mb-screen {
       padding-left: 16px;
@@ -2446,7 +2446,7 @@ html.tm-mobile {
   }
 }
 
-// ---------- Ergebnisseite (GameEnd) ----------
+// ---------- Results page (GameEnd) ----------
 html.tm-mobile #game-end {
   padding: 12px 8px 24px;
   box-sizing: border-box;
@@ -2470,13 +2470,13 @@ html.tm-mobile #game-end {
     overflow: hidden;
   }
 
-  // Überschrift der Brett-Box: der Desktop zieht sie um den Überhang des Bretts nach links (game_end_columns.less),
-  // hier fehlt dieser Innenabstand – sonst wird der Anfang abgeschnitten
+  // Heading of the board box: the desktop pulls it left by the board's overhang (game_end_columns.less),
+  // that padding is missing here – otherwise the beginning gets cut off
   .game_end_block--board h2 {
     margin-left: 0;
   }
 
-  // Kopf wie im Mockup: Sieger groß, Navigation darunter als zwei gleich breite Knöpfe
+  // Header as in the mockup: winner large, navigation below as two equally wide buttons
   .game-end-hero {
     display: flex;
     flex-direction: column;
@@ -2490,7 +2490,7 @@ html.tm-mobile #game-end {
     font-size: 26px;
   }
 
-  // Drei Buttons (Neues Spiel, Startseite, Statistik) in einer Reihe, Symbol über dem Text – keine halbleere Zeile
+  // Three buttons (new game, home, statistics) in one row, icon above the text – no half-empty row
   .game_end_navigation {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2511,8 +2511,8 @@ html.tm-mobile #game-end {
     }
   }
 
-  // Breite Tabelle auf Handy und Tablet hoch nur gedreht zeigen (mobileDocument.ts);
-  // Tablet quer zeigt das Original mit Spielern als Zeilen wie am Desktop
+  // Show the wide table on phone and tablet portrait only rotated (mobileDocument.ts);
+  // tablet landscape shows the original with players as rows like on desktop
   @media @mb-portrait {
     .mb-transposed-source {
       display: none;
@@ -2525,7 +2525,7 @@ html.tm-mobile #game-end {
     }
   }
 
-  // Gedrehte Tabelle: Zeilen = Wertungen, Spalten = Spieler; drei achsmittige Bahnen
+  // Rotated table: rows = scorings, columns = players; three axis-centered lanes
   .game_end_table.mb-transposed {
     table-layout: fixed;
     width: 100%;
@@ -2553,7 +2553,7 @@ html.tm-mobile #game-end {
       display: block;
     }
 
-    // Spielerfarbe als Spalte, Sieger-Spalte mit goldenem Rahmen
+    // Player color as a column, winner column with a golden border
     td.mb-winner-col {
       box-shadow: inset 3px 0 0 @game-end-total-accent, inset -3px 0 0 @game-end-total-accent;
     }
@@ -2575,7 +2575,7 @@ html.tm-mobile #game-end {
       font-weight: 900;
     }
 
-    // Gruppen-Trenner liegen jetzt waagerecht
+    // Group separators now lie horizontally
     tr:has(.game-end-group-start) > * {
       border-top: 2px solid rgba(255, 255, 255, 0.35) !important;
     }

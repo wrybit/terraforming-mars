@@ -18,7 +18,7 @@ import {EntityStats} from './statsAggregate';
 import {StatsKind} from './statsKinds';
 import {formatPercent} from './statsLabels';
 
-// Spielmaterial nebeneinander mit Häufigkeit und Siegquote darunter (Übersicht: meistgespielte Karten usw.)
+// Game components side by side with frequency and win rate below (overview: most played cards etc.)
 export default defineComponent({
   name: 'StatsShowcase',
   components: {StatsEntityAsset, StatsEntityName},

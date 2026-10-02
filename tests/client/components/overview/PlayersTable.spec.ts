@@ -25,7 +25,7 @@ function mountTable() {
 }
 
 describe('PlayersTable', () => {
-  // Gespeicherte Schalterstellung darf nicht von einem Test in den nächsten wandern
+  // Stored toggle state must not carry over from one test to the next
   beforeEach(() => localStorage.removeItem('players_table_sections'));
 
   it('shows only tags that at least one player has', () => {
@@ -35,7 +35,7 @@ describe('PlayersTable', () => {
 
   it('marks only a sole production leader', () => {
     const table = mountTable().vm;
-    // M€-Produktion ist gleich (kein Spitzenreiter), Wärme hat nur Rot
+    // M€ production is equal (no leader), only Red has heat
     expect(table.productionLeadersByColor).to.deep.eq({red: [Resource.HEAT]});
   });
 
@@ -45,7 +45,7 @@ describe('PlayersTable', () => {
     wrapper.vm.toggleSection('score');
     await wrapper.vm.$nextTick();
     expect(wrapper.vm.template).not.to.contain('repeat(4, 34px)');
-    // Kartenanzahl bleibt immer
+    // Card count always stays
     expect(wrapper.vm.template.endsWith('12px 48px')).to.be.true;
   });
 
@@ -55,9 +55,9 @@ describe('PlayersTable', () => {
     expect(fitToWidth(all, tagColumns, 1178).autoHidden).to.deep.eq([]);
     expect(fitToWidth(all, tagColumns, 900).autoHidden).to.deep.eq(['tags']);
     expect(fitToWidth(all, tagColumns, 780).autoHidden).to.deep.eq(['tags', 'score']);
-    // Zuletzt eingeschaltete Symbole bleiben, stattdessen weicht die Wertung
+    // Most recently enabled symbols stay, scoring gives way instead
     expect(fitToWidth(all, tagColumns, 900, 'tags').autoHidden).to.deep.eq(['score']);
-    // Unbekannte Breite (Tabelle unsichtbar) lässt alles, wie es ist
+    // Unknown width (table invisible) leaves everything as is
     expect(fitToWidth(all, tagColumns, 0).visibility).to.deep.eq(all);
   });
 });

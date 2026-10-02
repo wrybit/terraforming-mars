@@ -9,7 +9,7 @@ import {emptyBoardSpaces} from '../stats/emptyBoardSpaces';
 
 const BOARD_NAMES = new Set<string>(Object.values(BoardName));
 
-/** Leeres Spielbrett für die Detailseite eines Bretts in der Statistik (/stats). */
+/** Empty game board for a board's detail page in the statistics (/stats). */
 export class ApiStatsBoard extends Handler {
   public static readonly INSTANCE = new ApiStatsBoard();
   private constructor() {

@@ -6,8 +6,8 @@ import {PartyName} from '@/common/turmoil/PartyName';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {CardName} from '@/common/cards/CardName';
 
-// Tag-Zählung eines Spielers samt Rabatten und Punkten je Tag.
-// Gemeinsame Quelle für die klassische Tag-Leiste (PlayerTags) und die Tabelle im Zwei-Spalten-Layout (PlayersTable).
+// Tag count of a player including discounts and points per tag.
+// Shared source for the classic tag bar (PlayerTags) and the table in the two-column layout (PlayersTable).
 
 export type InterfaceTagsType = Tag | SpecialTags | 'separator' | 'all';
 export type TagDetail = {
@@ -163,7 +163,7 @@ export function buildTagDetails(player: PublicPlayerModel, playerView: ViewModel
   };
 }
 
-// Siegpunkte anderer Spieler bleiben verborgen, wenn die Spieloption das so will
+// Other players' victory points stay hidden if the game option requires it
 export function isVictoryPointCountHidden(player: PublicPlayerModel, playerView: ViewModel): boolean {
   return !playerView.game.gameOptions.showOtherPlayersVP && player.color !== playerView.thisPlayer?.color;
 }

@@ -2,11 +2,11 @@ import {observeMobileFit} from '@/client/utils/mobileFit';
 import {transposedCopy} from '@/client/utils/transposeTable';
 
 /*
- * Anpassungen der Mobil-Ansicht, die über die Spieleransicht hinaus gelten (Ergebnisseite, Modals):
- * Skalierung per mobileFit.ts und gedrehte Ergebnistabelle.
+ * Mobile view adjustments that apply beyond the player view (results page, modals):
+ * scaling via mobileFit.ts and the rotated results table.
  */
 
-// Breite Tabellen, die auf dem Handy gedreht erscheinen; das Original wird per CSS ausgeblendet (mobile.less)
+// Wide tables that appear rotated on the phone; the original is hidden via CSS (mobile.less)
 const TRANSPOSE_SELECTOR = '.game_end_table:not(.mb-transposed)';
 const SOURCE_CLASS = 'mb-transposed-source';
 
@@ -22,7 +22,7 @@ function transposeTables(root: HTMLElement): void {
   });
 }
 
-/* Startet die Anpassungen für `root` und liefert die Funktion, die sie wieder beendet. */
+/* Starts the adjustments for `root` and returns the function that stops them again. */
 export function startMobileDocument(root: HTMLElement): () => void {
   const stopFit = observeMobileFit(root);
   let frame = 0;
@@ -37,7 +37,7 @@ export function startMobileDocument(root: HTMLElement): () => void {
     stopFit();
     cancelAnimationFrame(frame);
     mutations.disconnect();
-    // Gedrehte Kopien entfernen, das Original wieder zeigen (Wechsel zur Desktop-Ansicht)
+    // Remove rotated copies, show the original again (switch to the desktop view)
     root.querySelectorAll('.mb-transposed').forEach((copy) => copy.remove());
     root.querySelectorAll('.' + SOURCE_CLASS).forEach((table) => table.classList.remove(SOURCE_CLASS));
   };

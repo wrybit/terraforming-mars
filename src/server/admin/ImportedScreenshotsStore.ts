@@ -1,12 +1,12 @@
 import * as path from 'path';
 import {existsSync, readFileSync} from 'fs';
 
-// Screenshots von Ergebnisseiten, deren Spiele es nirgends mehr gibt (aus dem Discord-Verlauf übernommen).
-// Discord-Links auf Anhänge laufen nach einem Tag ab – deshalb liegen die Bilder hier, im db-Ordner und damit
-// auf mint im Docker-Volume. Dateiname ist die Discord-Nachrichten-ID.
+// Screenshots of results pages whose games no longer exist anywhere (taken from the Discord history).
+// Discord attachment links expire after a day – so the images live here, in the db folder and thus
+// on mint in the Docker volume. The file name is the Discord message ID.
 const defaultFolder = path.resolve(process.cwd(), './db/imported/screenshots');
 
-// Nur Ziffern (Discord-IDs): verhindert Pfade wie "../" aus der URL
+// Digits only (Discord IDs): prevents paths like "../" from the URL
 const screenshotIdPattern = /^[0-9]{5,25}$/;
 
 export class ImportedScreenshotsStore {
@@ -19,7 +19,7 @@ export class ImportedScreenshotsStore {
     return ImportedScreenshotsStore.instance;
   }
 
-  /** JPEG-Daten des Screenshots oder undefined, wenn die ID ungültig ist oder es kein Bild gibt. */
+  /** JPEG data of the screenshot, or undefined if the ID is invalid or there is no image. */
   public get(id: string): Buffer | undefined {
     if (!screenshotIdPattern.test(id)) {
       return undefined;

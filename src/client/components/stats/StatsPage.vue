@@ -1,7 +1,7 @@
 <template>
   <div id="stats" class="card-list stats" @keydown.esc="filtersOpen = false" @click="followStatsLink">
     <header class="card-list-header">
-      <!-- Mars aus dem App-Symbol (ohne dunklen Hintergrund) und Name der App; mobil bleibt nur Symbol + „Statistik“ -->
+      <!-- Mars from the app icon (without dark background) and app name; on mobile only icon + "Statistics" remain -->
       <h1>
         <a :href="overviewHref" data-stats-link class="stats-title">
           <img src="assets/stats/mars.png" alt="" class="stats-title-icon">
@@ -113,7 +113,7 @@ import {boardLabel, formatDate} from './statsLabels';
 import StatsCardZoom from './StatsCardZoom.vue';
 import {CARD_ZOOM_KEY, StatsCardZoomRequest} from './statsCardZoom';
 
-// Unterhalb dieser Breite schmalere Diagramme (gleiche Grenze wie das Filter-Sheet der Kartenliste)
+// Below this width narrower charts (same breakpoint as the card list's filter sheet)
 const NARROW_WIDTH = 900;
 
 type DataModel = {
@@ -126,16 +126,16 @@ type DataModel = {
   cardZoom: StatsCardZoomRequest | undefined;
 };
 
-// Öffentliche Statistikseite (/stats). Eigenständig: liest nur /api/stats/games und rechnet alles im Browser aus.
-// Aufbau, Filter und Kacheln wie in der Kartenliste, damit sie sich wie ein Teil der App anfühlt.
+// Public statistics page (/stats). Standalone: only reads /api/stats/games and computes everything in the browser.
+// Structure, filters and tiles as in the card list, so it feels like part of the app.
 export default defineComponent({
   name: 'StatsPage',
   components: {CardListFilterGroup, LanguageIcon, PreferencesIcon, StatsOverview, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsTopView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
   provide() {
-    // Spielerfarbe überall gleich: die Farbe, in der jemand meistens gespielt hat
+    // Player color the same everywhere: the color someone played most often
     return {
       playerColors: computed(() => this.colors),
-      // Großansicht der Karten: alle Bausteine öffnen sie über diese eine Stelle
+      // Large card view: all building blocks open it through this single place
       [CARD_ZOOM_KEY]: (request: StatsCardZoomRequest) => this.cardZoom = request,
     };
   },
@@ -160,7 +160,7 @@ export default defineComponent({
     activeTab(): void {
       this.revealActiveTab();
     },
-    // Browser-Tab nennt die Seite, z. B. „TM Statistik – Spielbretter“ oder „TM Statistik – Tharsis“
+    // Browser tab names the page, e.g. "TM Statistics – Boards" or "TM Statistics – Tharsis"
     pageTitle: {
       immediate: true,
       handler(title: string): void {
@@ -197,7 +197,7 @@ export default defineComponent({
     pageTitle(): string {
       const view = this.view;
       if (view.type === 'detail') {
-        // Gleicher Anzeigename wie auf der Seite (Spielbretter heißen intern klein, z. B. „tharsis“)
+        // Same display name as on the page (boards are named in lowercase internally, e.g. "tharsis")
         return translateText(view.kind === 'board' ? boardLabel(view.name) : view.name);
       }
       if (view.type === 'top') {
@@ -264,7 +264,7 @@ export default defineComponent({
     tabHref(tab: StatsTab): string {
       return statsHref({type: 'tab', tab});
     },
-    // Links innerhalb der Statistik wechseln nur die Ansicht, ohne die Seite neu zu laden; Filter bleiben erhalten
+    // Links within the statistics only switch the view without reloading the page; filters are kept
     followStatsLink(event: MouseEvent): void {
       const link = (event.target as HTMLElement).closest('a[data-stats-link]') as HTMLAnchorElement | null;
       if (link === null || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
@@ -275,7 +275,7 @@ export default defineComponent({
       this.readLocation();
       window.scrollTo({top: 0});
     },
-    // Schmal passen nicht alle Reiter nebeneinander: der aktive soll immer zu sehen sein
+    // When narrow, not all tabs fit side by side: the active one should always be visible
     revealActiveTab(): void {
       this.$nextTick(() => {
         const tabs = this.$refs.tabs as HTMLElement | undefined;

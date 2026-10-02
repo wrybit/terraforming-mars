@@ -1,16 +1,16 @@
 import {MilestoneName} from '@/common/ma/MilestoneName';
 import {AwardName} from '@/common/ma/AwardName';
 
-// Symbol je Meilenstein/Auszeichnung aus den vorhandenen Bildern unter assets/ (Zuordnung abgestimmt in
-// "Claude outputs/meilensteine-icons.html"). Mehrere Teile = Summe (z. B. Stahl + Titan);
-// production = im braunen Produktionskasten wie auf den Karten.
-// Record über alle Namen: fehlt ein neuer Meilenstein/eine neue Auszeichnung, meldet das der Typprüfer.
+// Icon per milestone/award from the existing images under assets/ (mapping agreed in
+// "Claude outputs/meilensteine-icons.html"). Multiple parts = sum (e.g. steel + titanium);
+// production = inside the brown production box like on the cards.
+// Record over all names: if a new milestone/award is missing, the type checker reports it.
 export type IconPart = {
   asset: string;
   production?: boolean;
-  // Optische Mitte in Prozent der Breite, falls das Bild nicht symmetrisch ist (Grünfläche mit Marker oben rechts)
+  // Optical center in percent of the width, in case the image isn't symmetric (greenery with marker top right)
   centerX?: number;
-  // Weiße Kontur für dunkle Bilder, die sonst im dunklen Hintergrund verschwinden (schwarze Karte)
+  // White outline for dark images that would otherwise vanish against the dark background (black card)
   outline?: boolean;
 };
 

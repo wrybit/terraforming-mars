@@ -7,7 +7,7 @@ import {CardName} from '../../common/cards/CardName';
 import {GlobalParameter} from '../../common/GlobalParameter';
 import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MAX_VENUS_SCALE, MIN_TEMPERATURE} from '../../common/constants';
 
-/** Plätze 1 und 2 einer Auszeichnung nach Punktestand. */
+/** 1st and 2nd place of an award by score. */
 function awardPlaces(scores: ReadonlyArray<{color: Color, score: number}>, nameByColor: Map<Color, string>): [Array<string>, Array<string>] {
   const values = Array.from(new Set(scores.map((score) => score.score))).sort((first, second) => second - first);
   const namesWith = (value: number | undefined) => scores
@@ -15,20 +15,20 @@ function awardPlaces(scores: ReadonlyArray<{color: Color, score: number}>, nameB
     .map((score) => nameByColor.get(score.color))
     .filter((name): name is string => name !== undefined);
   const winners = namesWith(values[0]);
-  // Bei geteiltem ersten Platz gibt es keinen zweiten
+  // With a shared first place there is no second
   return [winners, winners.length > 1 ? [] : namesWith(values[1])];
 }
 
 const percent = (value: number | undefined, minimum: number, maximum: number) =>
   value === undefined ? undefined : Math.round((value - minimum) / (maximum - minimum) * 100);
 
-/** Globale Parameter je Generation in Prozent – gleiche Skala wie das Diagramm der Ergebnisseite. */
+/** Global parameters per generation in percent – same scale as the results page chart. */
 function globals(view: ViewModel): StatsGlobals | undefined {
   const perGeneration = view.game.globalsPerGeneration;
   if (perGeneration.length === 0) {
     return undefined;
   }
-  // Fehlt ein Wert, gilt der der Vorgeneration (der Parameter hat sich nicht bewegt)
+  // If a value is missing, the previous generation's applies (the parameter didn't move)
   const series = (parameter: GlobalParameter, minimum: number, maximum: number): Array<number> => {
     let last = 0;
     return perGeneration.map((values) => last = percent(values[parameter], minimum, maximum) ?? last);
@@ -44,7 +44,7 @@ function globals(view: ViewModel): StatsGlobals | undefined {
   return result;
 }
 
-/** Städte und Grünflächen mit Besitzer; andere Plättchen (Ozeane, Sonderplättchen) zeigt die Heatmap nicht. */
+/** Cities and greeneries with owner; other tiles (oceans, special tiles) are not shown by the heatmap. */
 function tiles(view: ViewModel, nameByColor: Map<Color, string>): Array<StatsTile> {
   const result: Array<StatsTile> = [];
   for (const space of view.game.spaces) {
@@ -62,9 +62,9 @@ function tiles(view: ViewModel, nameByColor: Map<Color, string>): Array<StatsTil
 }
 
 /**
- * Liest die Statistik-Angaben aus dem öffentlichen Endstand (ViewModel).
- * Bewusst das ViewModel statt der Spiel-Interna: dieselbe Form liefern eigene Partien und importierte Endstände,
- * und die Statistik bleibt von Änderungen an der Spiel-Engine unberührt.
+ * Reads the statistics data from the public final state (ViewModel).
+ * Deliberately the ViewModel instead of game internals: own games and imported final states provide the same shape,
+ * and the statistics stay unaffected by changes to the game engine.
  */
 export function statsGameDetails(view: ViewModel): StatsGameDetails {
   const nameByColor = new Map<Color, string>(view.players.map((player) => [player.color, player.name]));

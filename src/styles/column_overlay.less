@@ -1,20 +1,20 @@
-// Overlays über der rechten Spalte (Brett, Meilensteine, Log): gespielte Karten eines Spielers
-// (player_home_columns.less, .other_player) und Log-Zeilen mit vielen Karten (log.less, .card-panel--modal).
-// Rundum etwas Abstand zum Rand, Hintergrund als dunkles Milchglas.
+// Overlays above the right column (board, milestones, log): played cards of a player
+// (player_home_columns.less, .other_player) and log lines with many cards (log.less, .card-panel--modal).
+// Some spacing to the edge all around, background as dark frosted glass.
 
 @column-overlay-gap: 16px;
-// Über allem in der rechten Spalte, auch über der Icon-Gruppe oben rechts (sidebar_toolbar.less)
+// Above everything in the right column, also above the icon group at the top right (sidebar_toolbar.less)
 @column-overlay-z-index: 120;
 
-// Position: über der rechten Spalte (linke Kante aus boardColumnPosition.ts), mit Abstand zu allen Rändern
+// Position: above the right column (left edge from boardColumnPosition.ts), with spacing to all edges
 .column-overlay-position() {
   position: fixed;
   inset: @column-overlay-gap @column-overlay-gap @column-overlay-gap calc(var(--board-column-left, 0px) + @column-overlay-gap);
   z-index: @column-overlay-z-index;
 }
 
-// Fläche: halbtransparentes Milchglas, deutlich heller als der schwarze Seitenhintergrund,
-// mit kräftigem Schatten, damit das Overlay klar über der Seite liegt
+// Surface: semi-transparent frosted glass, clearly lighter than the black page background,
+// with a strong shadow so the overlay clearly sits above the page
 .column-overlay-surface() {
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 12px;

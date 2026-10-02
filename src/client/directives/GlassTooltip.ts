@@ -1,21 +1,21 @@
-// Eigener Tooltip statt des nativen title: Milchglas, öffnet nach oben, Nase zeigt mittig auf das Element.
-// Ein gemeinsames Element am Seitenende (position: fixed), damit es weder von overflow noch von
-// backdrop-filter der Vorfahren abgeschnitten oder falsch geblurrt wird. Stil in glass_tooltip.less.
-// Nutzung: v-glass-tooltip="text" (leerer Text = kein Tooltip).
+// Custom tooltip instead of the native title: frosted glass, opens upward, the nose points at the element's center.
+// One shared element at the end of the page (position: fixed), so it is neither clipped by overflow nor
+// wrongly blurred by ancestors' backdrop-filter. Styles in glass_tooltip.less.
+// Usage: v-glass-tooltip="text" (empty text = no tooltip).
 import {Directive} from 'vue';
 
 export const GLASS_TOOLTIP_CLASS = 'glass-tooltip';
 export const GLASS_TOOLTIP_VISIBLE_CLASS = 'glass-tooltip--visible';
 export const GLASS_TOOLTIP_NOSE_VARIABLE = '--glass-tooltip-nose-x';
-// Mindestabstand zum Fensterrand und Abstand zwischen Nasenspitze und Element (Vertrag mit glass_tooltip.less)
+// Minimum distance to the window edge and gap between nose tip and element (contract with glass_tooltip.less)
 const VIEWPORT_MARGIN = 8;
 const ANCHOR_GAP = 10;
-// Nase nie direkt in der abgerundeten Ecke
+// Nose never directly in the rounded corner
 const NOSE_EDGE_MARGIN = 14;
 
 type Anchor = {left: number; width: number};
 
-// Waagerecht mittig über dem Element, am Fensterrand eingeklemmt; die Nase bleibt über der Elementmitte
+// Horizontally centered above the element, clamped at the window edge; the nose stays above the element center
 export function tooltipPosition(anchor: Anchor, tooltipWidth: number, viewportWidth: number): {left: number; noseX: number} {
   const center = anchor.left + anchor.width / 2;
   const maxLeft = Math.max(VIEWPORT_MARGIN, viewportWidth - VIEWPORT_MARGIN - tooltipWidth);
@@ -25,7 +25,7 @@ export function tooltipPosition(anchor: Anchor, tooltipWidth: number, viewportWi
 }
 
 let tooltip: HTMLElement | undefined;
-// Element, über dem der Tooltip gerade steht
+// Element the tooltip is currently showing for
 let currentAnchor: HTMLElement | undefined;
 const texts = new WeakMap<HTMLElement, string>();
 const handlers = new WeakMap<HTMLElement, {show: () => void, hide: () => void}>();
@@ -48,7 +48,7 @@ function show(anchorElement: HTMLElement): void {
   currentAnchor = anchorElement;
   const element = tooltipElement();
   element.textContent = text;
-  // Erst Text setzen, dann messen
+  // Set the text first, then measure
   element.style.left = '0px';
   const anchor = anchorElement.getBoundingClientRect();
   const {left, noseX} = tooltipPosition(anchor, element.offsetWidth, document.documentElement.clientWidth);
@@ -73,7 +73,7 @@ export const glassTooltip: Directive<HTMLElement, string | undefined> = {
   },
   updated(element, binding) {
     texts.set(element, binding.value ?? '');
-    // Text ändert sich unter der Maus (z. B. Schalter umgelegt): sichtbaren Tooltip nachführen
+    // Text changes under the mouse (e.g. switch toggled): update the visible tooltip
     if (currentAnchor === element) {
       show(element);
     }

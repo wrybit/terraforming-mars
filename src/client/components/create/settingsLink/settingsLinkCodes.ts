@@ -4,7 +4,7 @@ import {ByteWriter} from './ByteWriter';
 
 export type CodeTableName = keyof typeof codeTables;
 
-/** Code 0 heißt: Wert steht als Text dahinter (z. B. Karte, die neuer ist als die Tabelle). */
+/** Code 0 means: the value follows as text (e.g. a card newer than the table). */
 const TEXT_FALLBACK_CODE = 0;
 
 const codesByValue = new Map<CodeTableName, Map<string, number>>();
@@ -12,7 +12,7 @@ const codesByValue = new Map<CodeTableName, Map<string, number>>();
 function codeIndex(table: CodeTableName): Map<string, number> {
   let index = codesByValue.get(table);
   if (index === undefined) {
-    // Code = Position + 1, weil 0 für den Text-Ersatz reserviert ist
+    // Code = position + 1, because 0 is reserved for the text fallback
     index = new Map(codeTables[table].map((value, position) => [value, position + 1]));
     codesByValue.set(table, index);
   }
@@ -36,7 +36,7 @@ export function readCodedValue(reader: ByteReader, table: CodeTableName): string
   if (code === TEXT_FALLBACK_CODE) {
     return reader.readText();
   }
-  // Unbekannter Code (Link von neuerer Version): leer lassen, die Formularprüfung meldet es
+  // Unknown code (link from a newer version): leave empty, the form validation reports it
   return codeTables[table][code - 1] ?? '';
 }
 

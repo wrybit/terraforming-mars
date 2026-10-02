@@ -1,7 +1,7 @@
 import {CreateGameModel} from '../CreateGameModel';
 
-// Feldreihenfolge des Teilen-Links – Vertrag zwischen Encoder und Decoder.
-// Neue Felder nur HINTEN anhängen, nie umsortieren: sonst lesen alte Lesezeichen falsche Werte.
+// Field order of the share link – contract between encoder and decoder.
+// Only ever append new fields at the END, never reorder: otherwise old bookmarks read wrong values.
 
 export const SETTINGS_LINK_FORMAT_VERSION = 1;
 
@@ -46,7 +46,7 @@ export const NUMBER_FIELDS: ReadonlyArray<NumberModelField> = [
   'firstIndex',
 ];
 
-/** Nur im Link, wenn escapeVelocityMode an ist. */
+/** Only in the link when escapeVelocityMode is on. */
 export const ESCAPE_VELOCITY_FIELDS: ReadonlyArray<NumberModelField> = [
   'escapeVelocityThreshold',
   'escapeVelocityBonusSeconds',
@@ -62,5 +62,5 @@ export const CARD_LIST_FIELDS = [
   'includedCards',
 ] as const satisfies ReadonlyArray<keyof CreateGameModel>;
 
-/** Spieler-Bits im Link */
+/** Player bits in the link */
 export const PLAYER_BEGINNER_FLAG = 1;

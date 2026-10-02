@@ -1,7 +1,7 @@
 import {paths} from '@/common/app/paths';
 import {isStatsKind, StatsKind} from './statsKinds';
 
-// Jede Ansicht der Statistik hat eine eigene Adresse: Links lassen sich teilen, Zurück im Browser funktioniert.
+// Every statistics view has its own address: links can be shared, browser back works.
 export type StatsTab = 'overview' | 'players' | 'corporation' | 'prelude' | 'card' | 'combinations' | 'milestone' | 'award' | 'board' | 'records';
 
 export const STATS_TABS: ReadonlyArray<{tab: StatsTab, label: string}> = [
@@ -17,7 +17,7 @@ export const STATS_TABS: ReadonlyArray<{tab: StatsTab, label: string}> = [
   {tab: 'records', label: 'Records'},
 ];
 
-/** Arten, deren Meistgespielte die Übersicht zeigt und die sich zur Top-20-Seite aufklappen lassen. */
+/** Kinds whose most played the overview shows and that can be expanded to the top-20 page. */
 export type StatsTopKind = Extract<StatsKind, 'card' | 'corporation'>;
 const TOP_KINDS: ReadonlyArray<StatsTopKind> = ['card', 'corporation'];
 
@@ -26,7 +26,7 @@ export type StatsView =
   {type: 'detail', kind: StatsKind, name: string} |
   {type: 'top', kind: StatsTopKind};
 
-/** Tab, der zu einer Ansicht gehört: Detailseite → ihre Liste, Top 20 → Übersicht. */
+/** Tab belonging to a view: detail page → its list, top 20 → overview. */
 export function tabOfView(view: StatsView): StatsTab {
   if (view.type === 'tab') {
     return view.tab;
@@ -34,7 +34,7 @@ export function tabOfView(view: StatsView): StatsTab {
   return view.type === 'top' ? 'overview' : tabOfKind(view.kind);
 }
 
-/** Liste, zu der eine Detailseite gehört (Spieler → Spieler-Tab). */
+/** List a detail page belongs to (player → players tab). */
 export function tabOfKind(kind: StatsKind): StatsTab {
   return kind === 'player' ? 'players' : kind;
 }

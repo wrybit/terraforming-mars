@@ -1,35 +1,35 @@
 import {Color} from '../Color';
 
-// Vertrag zwischen Admin-API (Server) und Admin-Übersicht (Client): beide Seiten lesen und schreiben genau diese Form.
+// Contract between admin API (server) and admin overview (client): both sides read and write exactly this shape.
 
-/** Herkunft eines Eintrags: hier gespieltes Spiel oder nur importiertes Ergebnis eines fremden Servers. */
+/** Origin of an entry: game played here or only an imported result from another server. */
 export type AdminGameSource = 'local' | 'imported';
 
 export type AdminPlayerSummary = {
   name: string;
   color: Color;
-  /** Link zur Spieleransicht; bei Importen nur für den Spieler, dessen Link importiert wurde. */
+  /** Link to the player view; for imports only for the player whose link was imported. */
   url: string | undefined;
   victoryPoints: number;
   megaCredits: number;
   isWinner: boolean;
-  /** Gespielte(r) Konzern(e), bei mehreren mit " / " getrennt. */
+  /** Corporation(s) played, separated by " / " if several. */
   corporation: string | undefined;
 };
 
 export type AdminGameSummary = {
   id: string;
   source: AdminGameSource;
-  /** Bei lokalen Spielen der Spielstart, bei Importen der Zeitpunkt des Imports. */
+  /** For local games the game start, for imports the time of the import. */
   createdTimeMs: number;
   isFinished: boolean;
   generation: number;
   spectatorUrl: string | undefined;
-  /** Ursprünglicher Link eines importierten Spiels. */
+  /** Original link of an imported game. */
   externalUrl: string | undefined;
-  /** Teilnehmer-ID, unter der ein importiertes Spiel hier gespeichert ist (Ergebnisseite the-end?id=…). */
+  /** Participant ID under which an imported game is stored here (results page the-end?id=…). */
   importedParticipantId: string | undefined;
-  /** Hier gespeicherter Screenshot der Ergebnisseite, wenn das Spiel selbst nicht mehr existiert (aus Discord übernommen). */
+  /** Screenshot of the results page stored here when the game itself no longer exists (taken over from Discord). */
   screenshotUrl: string | undefined;
   players: Array<AdminPlayerSummary>;
 };

@@ -5,28 +5,28 @@ export type StatsPlayerShare = {
   name: string;
   plays: number;
   wins: number;
-  /** Siegquote bei reinem Zufall, gemittelt über die Partien dieses Spielers. */
+  /** Win rate by pure chance, averaged over this player's games. */
   expectedWinRate: number;
 };
 
-/** Kennzahlen eines Eintrags (Konzern, Karte, Spieler …) über alle Spieler-Partien, in denen er vorkam. */
+/** Metrics of an entry (corporation, card, player …) across all player-games in which it appeared. */
 export type EntityStats = {
   name: string;
-  /** Spieler-Partien: ein Spielplan in einer Dreierpartie zählt dreimal, ein Konzern einmal. */
+  /** Player-games: a board in a three-player game counts three times, a corporation once. */
   plays: number;
-  /** Verschiedene Partien. */
+  /** Distinct games. */
   games: number;
   wins: number;
   winRate: number;
-  /** Siegquote bei reinem Zufall (1 ÷ Spielerzahl), gemittelt über die Partien. */
+  /** Win rate by pure chance (1 ÷ player count), averaged over the games. */
   expectedWinRate: number;
   averagePoints: number | undefined;
   averagePlace: number | undefined;
   averageGeneration: number | undefined;
   players: Array<StatsPlayerShare>;
-  /** Wer den Eintrag am häufigsten hatte. */
+  /** Who had the entry most often. */
   mostPlayedBy: string | undefined;
-  /** Wer damit am häufigsten gewonnen hat. */
+  /** Who won with it most often. */
   mostWinsBy: string | undefined;
 };
 
@@ -36,7 +36,7 @@ function toEntityStats(name: string, results: ReadonlyArray<StatsPlayerResult>):
   const shares = new Map<string, StatsPlayerShare>();
   for (const result of results) {
     const share = shares.get(result.player.name) ?? {name: result.player.name, plays: 0, wins: 0, expectedWinRate: 0};
-    // Laufender Mittelwert, damit kein zweiter Durchlauf nötig ist
+    // Running average, so no second pass is needed
     share.expectedWinRate += (expectedWinRate(result.game) - share.expectedWinRate) / (share.plays + 1);
     share.plays++;
     if (result.place === 1) {
@@ -62,11 +62,11 @@ function toEntityStats(name: string, results: ReadonlyArray<StatsPlayerResult>):
   };
 }
 
-/** Gruppiert Spieler-Partien nach den Einträgen, die eine Art liefert. */
+/** Groups player-games by the entries a kind provides. */
 export function aggregate(results: ReadonlyArray<StatsPlayerResult>, kind: StatsKind): Array<EntityStats> {
   const groups = new Map<string, Array<StatsPlayerResult>>();
   for (const result of results) {
-    // Doppelte Einträge (z. B. zwei gleiche Präludien) zählen je Partie nur einmal
+    // Duplicate entries (e.g. two identical preludes) count only once per game
     for (const name of new Set(STATS_KINDS[kind].namesOf(result))) {
       groups.set(name, [...(groups.get(name) ?? []), result]);
     }
@@ -74,7 +74,7 @@ export function aggregate(results: ReadonlyArray<StatsPlayerResult>, kind: Stats
   return Array.from(groups.entries()).map(([name, group]) => toEntityStats(name, group));
 }
 
-/** Alle Spieler-Partien, in denen ein Eintrag vorkam. */
+/** All player-games in which an entry appeared. */
 export function resultsWith(results: ReadonlyArray<StatsPlayerResult>, kind: StatsKind, name: string): Array<StatsPlayerResult> {
   return results.filter((result) => STATS_KINDS[kind].namesOf(result).includes(name));
 }
@@ -83,7 +83,7 @@ export function entityStats(results: ReadonlyArray<StatsPlayerResult>, kind: Sta
   return toEntityStats(name, resultsWith(results, kind, name));
 }
 
-/** Die am häufigsten gespielten Einträge einer Art (bei Gleichstand die mit der höheren Siegquote zuerst). */
+/** The most played entries of a kind (on a tie, those with the higher win rate first). */
 export function mostPlayed(results: ReadonlyArray<StatsPlayerResult>, kind: StatsKind, count: number): Array<EntityStats> {
   return aggregate(results, kind)
     .sort((first, second) => second.plays - first.plays || second.winRate - first.winRate)

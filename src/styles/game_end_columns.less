@@ -1,55 +1,55 @@
-// Ergebnisseite im Look der Spielansicht: Galaxie-Hintergrund (app_background.less), Milchglas-Boxen und
-// ab @player-home-columns-min-width zwei Spalten – links das Ergebnis, rechts Brett, Diagramme und Log.
-// Die Abschnitte sind so verteilt, dass beide Spalten etwa gleich lang werden.
+// Results page in the look of the game view: galaxy background (app_background.less), frosted-glass boxes and
+// from @player-home-columns-min-width two columns – results on the left, board, charts and log on the right.
+// The sections are distributed so that both columns end up roughly the same length.
 
 @game-end-page-padding: 24px;
-// Gesetz der Nähe: innerhalb einer Box enger als zwischen den Boxen, zwischen den Spalten am weitesten
+// Law of proximity: tighter within a box than between boxes, widest between the columns
 @game-end-box-padding: 14px;
 @game-end-block-gap: 16px;
 @game-end-columns-gap: 32px;
 @game-end-box-radius: 10px;
-@game-end-box-border: rgba(255, 255, 255, 0.07); // ganz zart
+@game-end-box-border: rgba(255, 255, 255, 0.07); // very subtle
 
-// Rechte Spalte: Brett (~670px) plus Überhang der Kolonie-/Raumhafen-Felder links und der Skalen rechts
+// Right column: board (~670px) plus overhang of the colony/spaceport spaces on the left and the scales on the right
 @game-end-board-overhang-left: 40px;
 @game-end-board-overhang-right: 24px;
 @game-end-side-width: 740px;
 @game-end-chart-height: 300px;
-// Gesamtpunkte: größte Zahl der Seite, auf eigener dunkler Fläche
+// Total points: largest number on the page, on its own dark surface
 @game-end-total-font-size: 38px;
 @game-end-total-background: rgba(0, 0, 0, 0.38);
-@game-end-total-accent: #ffcc64; // Gold wie M/A-Kopf der Tabelle
-// Hervorgehobene Zeilen der Siegpunkt-Details (ab NOTABLE_DETAIL_POINTS in GameEnd.vue)
+@game-end-total-accent: #ffcc64; // gold like the M/A header of the table
+// Highlighted rows of the victory point details (from NOTABLE_DETAIL_POINTS in GameEnd.vue)
 @game-end-notable-background: rgba(255, 204, 100, 0.16);
-// Trennlinie vor der Statistik-Gruppe der Tabelle
+// Divider before the statistics group of the table
 @game-end-divider-width: 2px;
 @game-end-divider-color: rgba(255, 255, 255, 0.35);
-// Leuchten um die Siegerzeile (Farbe der Gesamtpunkte)
+// Glow around the winner row (color of the total points)
 @game-end-winner-glow-min: 0 0 4px fade(@game-end-total-accent, 40%);
 @game-end-winner-glow-max: 0 0 18px 3px fade(@game-end-total-accent, 75%);
-// Zeilen mit Minuspunkten
+// Rows with negative points
 @game-end-negative-background: rgba(230, 60, 60, 0.28);
 @game-end-negative-accent: #ff7b7b;
 
 #game-end {
   padding: @game-end-page-padding;
-  // Hintergrund hier heller und farbiger als in der Spielansicht (app_background.less): keine Karten, die ablenken
+  // Background brighter and more colorful here than in the game view (app_background.less): no cards to distract
   --app-background-saturation: 0.5;
   --app-background-brightness: 0.5;
 }
 
-// Seitengrund schwarz statt grau: Das Hintergrundbild deckt nur das Fenster ab; bei Ganzseiten-Screenshots
-// endet es unten – auf Schwarz fällt der Übergang kaum auf
+// Page background black instead of gray: the background image only covers the window; in full-page screenshots
+// it ends at the bottom – on black the transition is barely noticeable
 body:has(#game-end) {
   background: #000;
 }
 
-// Die Ergebnisseite hat keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt, sonst ist der Rand links größer als rechts
+// The results page has no sidebar: drop its reserved space on the left (common.less), otherwise the left margin is larger than the right
 .main-container:has(#game-end) {
   margin-left: 0;
 }
 
-// Ganz zarte Umrisse auch für Tabs und Tab-Boxen von Diagrammen und Log (die setzen ihre Randfarbe selbst, or_options_tabs.less)
+// Very subtle outlines also for tabs and tab boxes of charts and log (they set their border color themselves, or_options_tabs.less)
 #game-end .or-tab-panel {
   --or-tab-panel-border: @game-end-box-border;
 }
@@ -58,7 +58,7 @@ body:has(#game-end) {
   border-color: @game-end-box-border;
 }
 
-// Abschnitt als Milchglas-Box, gleiche Fläche wie die "Nur ansehen"-Tab-Boxen (or_options_tabs.less)
+// Section as a frosted-glass box, same surface as the "view only" tab boxes (or_options_tabs.less)
 .game-end-box {
   .frosted-surface();
   position: relative;
@@ -81,12 +81,12 @@ body:has(#game-end) {
   min-width: 0;
 }
 
-// Kopf über beiden Spalten: Sieger und Navigation ohne eigene Box (Überschrift "Spiel beendet" entfällt, der Sieger sagt es schon)
+// Header across both columns: winner and navigation without their own box (no "game over" heading, the winner already says it)
 .game-end-hero {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 24px; // Zeilen enger als die Elemente nebeneinander
+  gap: 8px 24px; // rows tighter than the elements side by side
   margin-bottom: @game-end-block-gap;
 
   .game-end-winer-announcement {
@@ -105,8 +105,8 @@ body:has(#game-end) {
   }
 }
 
-// Symbol links vom Text; feste Höhe von .btn-lg aufgehoben (daher drei Klassen), damit umbrochener Text im Button bleibt
-// (mobil stehen beide nebeneinander im Raster und werden gemeinsam höher, mobile.less)
+// Icon left of the text; fixed height of .btn-lg removed (hence three classes) so wrapped text stays inside the button
+// (on mobile both sit side by side in the grid and grow taller together, mobile.less)
 .btn.btn-lg.game-end-nav-button {
   display: inline-flex;
   align-items: center;
@@ -124,7 +124,7 @@ body:has(#game-end) {
   flex: none;
 }
 
-// Tabelle: Gesamtpunkte deutlich hervorheben, Spaltengruppen durch Lücken trennen
+// Table: clearly emphasize total points, separate column groups with gaps
 .game_end_table {
   background: transparent;
   border-collapse: separate;
@@ -160,13 +160,13 @@ body:has(#game-end) {
     font-weight: bold;
   }
 
-  // Trennlinie zwischen Wertung (inkl. globale Parameter) und Statistik (M€, Zeit, Aktionen)
+  // Divider between scoring (incl. global parameters) and statistics (M€, time, actions)
   .game-end-group-divider {
     border-left: @game-end-divider-width solid @game-end-divider-color;
     padding-left: 10px;
   }
 
-  // Sieger: Rahmen in der Farbe der Gesamtpunkte mit pulsierendem Leuchten
+  // Winner: border in the color of the total points with a pulsing glow
   tr.game-end-winner-row {
     outline: 3px solid @game-end-total-accent;
     outline-offset: 1px;
@@ -174,7 +174,7 @@ body:has(#game-end) {
     animation: game-end-winner-glow 2.4s ease-in-out infinite;
   }
 
-  // Kompakter als die alte Einzelspalten-Seite, damit die Tabelle samt Parametergruppe in die linke Spalte passt
+  // More compact than the old single-column page so the table including the parameter group fits in the left column
   td,
   th {
     padding: 4px;
@@ -182,21 +182,21 @@ body:has(#game-end) {
     font-size: 18px;
   }
 
-  // Symbole im Kopf kleiner (Originalgrößen aus game_end.less: 34–46px)
+  // Smaller icons in the header (original sizes from game_end.less: 34–46px)
   thead {
     .tr { width: 34px; height: 28px; background-size: 34px 28px; }
     .vp,
     .m-and-a { width: 28px; height: 28px; line-height: 28px; font-size: 14px; }
     .card-delegate { width: 24px; height: 29px; background-size: 24px 29px; }
     .resized-tile { width: 26px; height: 30px; background-size: 26px 30px; }
-    // margin überschreibt die 2px links aus .resized-tile(), sonst stehen Wald/Stadt schief über den Zahlen
+    // margin overrides the 2px left from .resized-tile(), otherwise greenery/city sit askew above the numbers
     .table-forest-tile,
     .table-city-tile,
     .table-moon-road-tile,
     .table-moon-colony-tile,
     .table-moon-mine-tile,
     .table-planetary-track { width: 26px; height: 30px; background-size: 26px 30px; margin: 0 auto; }
-    // Globale Parameter proportional auf 30px Höhe (Originale in cards.less: 40×46, Thermometer 14×46, Sauerstoff 46×46, Venus 60×40)
+    // Global parameters scaled proportionally to 30px height (originals in cards.less: 40×46, thermometer 14×46, oxygen 46×46, Venus 60×40)
     .tile { height: 30px; margin: 0; background-repeat: no-repeat; }
     .temperature-tile { width: 9px; background-size: 9px 30px; }
     .ocean-tile { width: 26px; background-size: 26px 30px; }
@@ -205,15 +205,15 @@ body:has(#game-end) {
     .table-red-arrow { width: 24px; height: 24px; background-size: 24px; }
     .mc-icon { width: 22px; height: 22px; }
 
-    // Block-Symbole sonst links in der Zelle – mittig, damit sie genau über den zentrierten Zahlen stehen
+    // Block icons would otherwise sit left in the cell – centered so they sit exactly above the centered numbers
     th > div {
       margin-left: auto;
       margin-right: auto;
     }
 
-    // Spieler-Symbol bündig mit dem Namen darunter (gleiche Einrückung wie .game-end-player-cell)
+    // Player icon flush with the name below (same indent as .game-end-player-cell)
     th:first-child {
-      text-align: left !important; // überschreibt die zentrierten Zellen aus game_end.less
+      text-align: left !important; // overrides the centered cells from game_end.less
       padding-left: 10px;
     }
   }
@@ -233,17 +233,17 @@ body:has(#game-end) {
   }
 
   .game-end-player-cell {
-    text-align: left !important; // überschreibt die zentrierten Zellen aus game_end.less
+    text-align: left !important; // overrides the centered cells from game_end.less
     padding-left: 10px;
   }
 }
 
-// Siegpunkt-Details: Spalten teilen sich die Breite statt fester 275px
-// Sicherheitsnetz: bei vielen Spalten (Mond, Venus, Pfadfinder) scrollt die Tabelle in ihrer Box statt unter das Brett zu ragen
+// Victory point details: columns share the width instead of a fixed 275px
+// Safety net: with many columns (Moon, Venus, Pathfinders) the table scrolls inside its box instead of reaching under the board
 .game_end_victory_points {
   overflow-x: auto;
 
-  // Tabelle füllt die ganze Box; überschüssige Breite verteilt sich auf die Spalten statt rechts leer zu bleiben
+  // Table fills the whole box; excess width is spread across the columns instead of staying empty on the right
   .game_end_table {
     width: 100%;
   }
@@ -300,7 +300,7 @@ body:has(#game-end) {
 }
 
 .game_end_block--board {
-  // Kolonie-/Raumhafen-Felder und Skalen ragen über .board-cont hinaus
+  // Colony/spaceport spaces and scales extend beyond .board-cont
   padding-left: @game-end-board-overhang-left;
   padding-right: @game-end-board-overhang-right;
 
@@ -321,21 +321,21 @@ body:has(#game-end) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) @game-end-side-width;
     column-gap: @game-end-columns-gap;
-    // Beide Spalten gleich hoch, damit die letzte Box links bündig mit dem Log rechts endet
+    // Both columns equally tall so the last box on the left ends flush with the log on the right
     align-items: stretch;
   }
 
-  // Letzte Box der linken Spalte (Siegpunkt-Details) füllt den Rest bis zum unteren Ende der rechten Spalte
+  // Last box of the left column (victory point details) fills the rest down to the bottom of the right column
   .game-end-box--fill {
     flex-grow: 1;
   }
 }
 
-// Gesamtpunkte des Siegers invertiert: Gold als Fläche, Zahl in der abgedunkelten Spielerfarbe (wie die übrigen Gesamt-Felder)
-// mit hellem Leuchten, damit das Siegerfeld auf den ersten Blick heraussticht
+// Winner's total points inverted: gold as the surface, number in the darkened player color (like the other total cells)
+// with a bright glow so the winner cell stands out at first glance
 @game-end-winner-total-font-size: 46px;
-@game-end-winner-total-glow: 0 0 10px fade(#fff, 70%); // weiches Leuchten ohne harten Rand, damit die Zahl lesbar bleibt
-// Untergrund der Box, auf dem die 70-%-Spielerfarbe der Zeile (player_translucent_bg_color_*) liegt
+@game-end-winner-total-glow: 0 0 10px fade(#fff, 70%); // soft glow without a hard edge so the number stays readable
+// Box background on which the row's 70 % player color (player_translucent_bg_color_*) sits
 @game-end-row-underlay: #1c1c20;
 
 .game_end_table tr.game-end-winner-row td.game-end-total {
@@ -345,7 +345,7 @@ body:has(#game-end) {
   text-shadow: @game-end-winner-total-glow;
 }
 
-// Textfarbe = sichtbare Zeilenfarbe (70 % Spielerfarbe über der Box) unter der 38-%-Abdunklung von @game-end-total-background
+// Text color = visible row color (70 % player color over the box) under the 38 % darkening of @game-end-total-background
 each(@players, {
   @c: ~"player_@{value}";
   .game_end_table tr.game-end-winner-row.player_translucent_bg_color_@{value} td.game-end-total {
@@ -359,7 +359,7 @@ each(@players, {
   50% { box-shadow: @game-end-winner-glow-max; }
 }
 
-// Kein Pulsieren bei "Bewegung reduzieren" – Rahmen und leichtes Leuchten bleiben
+// No pulsing with "reduce motion" – border and slight glow remain
 @media (prefers-reduced-motion: reduce) {
   .game_end_table tr.game-end-winner-row {
     animation: none;
@@ -367,12 +367,12 @@ each(@players, {
   }
 }
 
-// Legende der Verlaufsdiagramme (VictoryPointChart.vue): Farbstrich, Symbol, Name
+// Legend of the history charts (VictoryPointChart.vue): color stroke, icon, name
 .chart-legend {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 6px 20px; // Einträge weiter auseinander als Strich, Symbol und Name eines Eintrags
+  gap: 6px 20px; // entries further apart than stroke, icon and name of one entry
   margin: 0 0 8px;
   padding: 0;
   list-style: none;

@@ -32,10 +32,10 @@ describe('HandCardsPanel', () => {
     });
     const titles = wrapper.findAll('.hand-cards-panel__title').map((title) => title.text());
     expect(titles).to.have.length(2);
-    // Nur die blaue Karte (Pets) landet oben, Algae (grün) nicht
+    // Only the blue card (Pets) ends up on top, Algae (green) doesn't
     const active = wrapper.find('.hand-cards-panel__section--active');
     expect(active.findAllComponents({name: 'Card'})).to.have.length(1);
-    // Zähler der Karte ist live sichtbar
+    // The card's counter is visible live
     expect(active.find('.card-resources-counter-number').text()).eq('3');
   });
 
@@ -48,7 +48,7 @@ describe('HandCardsPanel', () => {
     expect(wrapper.findAllComponents({name: 'SortableCards'})).to.have.length(1);
   });
 
-  // Aus Upstream (PlayerHome.spec) hierher verschoben: die Handkarten liegen im Fork in HandCardsPanel.
+  // Moved here from upstream (PlayerHome.spec): in the fork the hand cards live in HandCardsPanel.
   it('sort buttons sort the hand', async () => {
     resetHandSort();
     const wrapper = mount(HandCardsPanel, {
@@ -56,7 +56,7 @@ describe('HandCardsPanel', () => {
       props: {playerView: playerView([], [card(CardName.CARTEL), card(CardName.ASTEROID_MINING)])},
     });
 
-    // Segmente: Manuell, Kosten, Typ, Ressource, Siegpunkte
+    // Segments: Manual, Cost, Type, Resource, Victory points
     await wrapper.findComponent(HandSortControl).findAll('button')[4].trigger('click');
 
     const names = wrapper.findComponent(SortableCards).findAllComponents({name: 'Card'}).map((c) => c.props('card').name);

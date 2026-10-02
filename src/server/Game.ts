@@ -1413,7 +1413,7 @@ export class Game implements IGame, Logger {
   public triggerForAllCards(f: (cardOwner: IPlayer, card: ICard) => void) {
     for (const p of this.playersInGenerationOrder) {
       for (const playedCard of p.tableau) {
-        // Im Zusammenhang der Karte, damit Eingaben aus ihrer Reaktion sie im Client zeigen
+        // In the card's context, so inputs from its reaction show it in the client
         this.deferredActions.withSourceCard(playedCard.name, () => f(p, playedCard));
       }
     }
@@ -1695,8 +1695,8 @@ export class Game implements IGame, Logger {
     if (this.createdTime.getTime() === 0) {
       return 0;
     }
-    // Gleiche Reihenfolge wie bei der Datenbank-Auswahl: nur PostgreSQL löscht ohne MAX_GAME_DAYS (Standard 10 Tage).
-    // SQLite löscht nur mit gesetztem MAX_GAME_DAYS, das Dateisystem nie – sonst zeigt die Warnung eine Löschung an, die nie kommt.
+    // Same order as in the database selection: only PostgreSQL deletes without MAX_GAME_DAYS (default 10 days).
+    // SQLite deletes only with MAX_GAME_DAYS set, the filesystem never – otherwise the warning announces a deletion that never comes.
     const maxGameDays = process.env.MAX_GAME_DAYS;
     const usesPostgres = process.env.POSTGRES_HOST !== undefined;
     const usesLocalFilesystem = !usesPostgres && process.env.LOCAL_FS_DB !== undefined;

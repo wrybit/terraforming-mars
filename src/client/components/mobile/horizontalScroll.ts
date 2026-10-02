@@ -1,8 +1,8 @@
-// Klasse an waagerecht gescrollten Elementen: erst dann liegen Spieler-Spalten unter den stehenbleibenden
-// Symbol-Spalten, und diese brauchen ihren Frosted-Glass-Hintergrund (mobile.less)
+// Class on horizontally scrolled elements: only then do player columns lie below the sticky
+// icon columns, and those need their frosted-glass background (mobile.less)
 export const HORIZONTALLY_SCROLLED_CLASS = 'mb-scrolled-x';
 
-/* Scroll-Ereignis (in der Capture-Phase eines Vorfahren abgefangen, da scroll nicht hochblubbert). */
+/* Scroll event (caught in the capture phase of an ancestor, since scroll doesn't bubble). */
 export function markHorizontalScroll(event: Event): void {
   const target = event.target;
   if (target instanceof HTMLElement) {

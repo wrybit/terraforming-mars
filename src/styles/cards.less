@@ -35,8 +35,8 @@
   }
 }
 
-// Nicht wählbare Karte (zu teuer, Bedingung nicht erfüllt) bzw. bereits genutzte Aktion:
-// deutlich zurückgenommen und bleibt es auch beim Hover; Verbots-Cursor zeigt, dass Klicken nichts bewirkt
+// Unselectable card (too expensive, requirement not met) or already used action:
+// clearly toned down and stays so on hover; not-allowed cursor shows that clicking does nothing
 .card-unavailable,
 .card-unavailable:hover {
   filter: grayscale(0.85) brightness(0.45);
@@ -103,7 +103,7 @@ input[type="radio"]+.filterDiv.card-container {
   margin-top: 22px;
 }
 
-// Gewählte Karte: Rahmen, Schein und Tönung in der CTA-Farbe (selection_highlight.less)
+// Selected card: border, glow and tint in the CTA color (selection_highlight.less)
 input[type="checkbox"]:checked+.filterDiv,
 input[type="radio"]:checked+.filterDiv {
   .selection-highlight();
@@ -1095,39 +1095,39 @@ input[type="radio"]:checked+.filterDiv::after {
   }
 }
 
-// Handkarten per Drag & Drop sortieren (SortableCards.vue)
+// Sort hand cards via drag & drop (SortableCards.vue)
 .sortable-cards {
   >.sortable-slot {
     display: inline-block;
     vertical-align: top;
     position: relative;
     cursor: grab;
-    // Kein Text markieren beim Ziehen.
+    // No text selection while dragging.
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
   }
 }
 
-// .filterDiv setzt cursor: pointer – hier soll die Hand signalisieren, dass Karten verschiebbar sind.
+// .filterDiv sets cursor: pointer – here the hand should signal that cards can be moved.
 .sortable-slot .filterDiv {
   cursor: grab;
 }
 
-// Während des Ziehens überall die greifende Hand, auch außerhalb der Karten.
+// While dragging, the grabbing hand everywhere, even outside the cards.
 html.sortable-grabbing,
 html.sortable-grabbing * {
   cursor: grabbing !important;
 }
 
-// Andere Karten gleiten auf ihren neuen Platz statt zu springen.
+// Other cards glide to their new place instead of jumping.
 .sortable-move {
   transition: transform 0.18s ease;
 }
 
-// Freier Platz, an dem die Karte beim Loslassen landet.
-// Der Rahmen sitzt auf der Kartenfläche selbst (.filterDiv), damit er deckungsgleich mit den Nachbarkarten ist –
-// der Slot hat durch die Kartenränder (margin) eine andere Größe.
+// Free slot where the card lands when released.
+// The border sits on the card surface itself (.filterDiv) so it lines up exactly with the neighboring cards –
+// the slot has a different size because of the card margins.
 .sortable-placeholder .filterDiv {
   background: rgba(255, 255, 255, 0.03);
   border-color: transparent;
@@ -1142,9 +1142,9 @@ html.sortable-grabbing * {
   }
 }
 
-// Schwebende Karte unter dem Zeiger: leicht gedreht, hoch „angehoben“.
+// Floating card under the pointer: slightly rotated, "lifted" high.
 .sortable-ghost {
-  // fixed, damit die Karte nicht am Rand des Handkarten-Panels (overflow) abgeschnitten wird.
+  // fixed, so the card is not clipped at the edge of the hand cards panel (overflow).
   position: fixed;
   margin: 0;
   z-index: 1000;

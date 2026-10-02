@@ -1,16 +1,16 @@
 <template>
   <div class="mb-sheet" role="dialog" aria-modal="true">
-    <!-- Zug-Menü als Bottom-Sheet über dem aktuellen Bildschirm: erst die jetzt lohnenden Aktionen (farbig),
-         dann alle übrigen im Raster, ganz unten dezent Zug-Ende (links zweite Aktion auslassen, rechts passen) -->
+    <!-- Turn menu as a bottom sheet over the current screen: first the actions worthwhile now (colored),
+         then all others in a grid, at the very bottom subtly turn end (left skip second action, right pass) -->
     <button type="button" class="mb-sheet-backdrop" :aria-label="$t('Close')" @click="$emit('close')"></button>
-    <!-- Schublade: der Zug-Button sitzt auf der Oberkante und fährt beim Öffnen/Schließen mit (Übergang mb-sheet in mobile.less) -->
+    <!-- Drawer: the turn button sits on the top edge and moves along when opening/closing (transition mb-sheet in mobile.less) -->
     <div class="mb-sheet-drawer">
       <button type="button" class="mb-sheet-turn" :aria-label="$t('Close')" @click="$emit('close')">
         <MobileTurnButton :acting="menu !== undefined" :action-number="actionNumber" :actions-per-turn="actionsPerTurn"/>
       </button>
       <div class="mb-sheet-panel">
-        <!-- Aktion ohne Auswahl (Temperatur, Grünfläche, Zug-Ende): Rückfrage gleich in der Schublade statt einer fast leeren Vollbild-Aufgabe;
-             Erklärung wie im Desktop-Tab (Bild, voller Titel, Spielstand vorher/nachher) -->
+        <!-- Action without a choice (temperature, greenery, turn end): confirmation right in the drawer instead of an almost empty full-screen task;
+             explanation as in the desktop tab (image, full title, game state before/after) -->
         <template v-if="confirming !== undefined && confirming.confirmation !== undefined">
           <TabIntroBlock v-if="confirming.confirmation.intro !== undefined && playerView !== undefined" class="mb-sheet-intro"
             :intro="confirming.confirmation.intro" :title="confirming.confirmation.title" :playerView="playerView"/>
@@ -29,7 +29,7 @@
         <div v-else class="mb-sheet-head">
           <span class="mb-sheet-title">{{ title }}</span>
         </div>
-        <!-- Nicht am Zug: nur wer gerade dran ist, statt eines leeren Aktionsmenüs -->
+        <!-- Not your turn: only who is currently acting, instead of an empty action menu -->
         <div v-if="menu === undefined" class="mb-sheet-group">
           <span class="mb-section-label">{{ $t('Waiting for other players') }}</span>
           <div class="mb-waiting-list">
@@ -37,7 +37,7 @@
           </div>
         </div>
         <template v-else-if="confirming === undefined">
-          <!-- Jetzt lohnende Aktionen ohne eigene Überschrift: die Farbe hebt sie hervor -->
+          <!-- Actions worthwhile now without their own heading: the color highlights them -->
           <div v-if="menu.available.length > 0" class="mb-sheet-list">
             <MobileTurnTile v-for="tile in menu.available" :key="tile.index" :tile="tile" @select="choose(tile)"/>
           </div>
@@ -48,7 +48,7 @@
             </div>
           </div>
           <div v-if="menu.pass !== undefined || menu.skip !== undefined" class="mb-sheet-end">
-            <!-- Weitergeben gibt es erst nach der ersten Aktion; bis dahin sichtbar, aber gesperrt (Beschriftungen wie am Desktop) -->
+            <!-- Pass on is only available after the first action; until then visible but disabled (labels as on desktop) -->
             <MobileTurnTile v-if="menu.skip !== undefined" :tile="menu.skip" :compact="true" class="mb-tile--skip" @select="choose(menu.skip)"/>
             <button v-else type="button" class="mb-tile mb-tile--skip" disabled><span class="mb-tile-label">{{ $t('Pass on') }}</span></button>
             <MobileTurnTile v-if="menu.pass !== undefined" :tile="menu.pass" :compact="true" class="mb-tile--pass" @select="choose(menu.pass)"/>
@@ -68,13 +68,13 @@ import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 
 withDefaults(defineProps<{
-  // Aktionsmenü; fehlt es, ist man nicht am Zug und das Sheet zeigt nur, auf wen gewartet wird
+  // Action menu; if missing, it's not your turn and the sheet only shows who is being waited for
   menu?: TurnMenu;
   waitingPlayers?: ReadonlyArray<PublicPlayerModel>;
   title: string;
   actionNumber: number | undefined;
   actionsPerTurn: number;
-  // Spielstand für die Vorher/Nachher-Zeilen der Rückfrage (z. B. Temperatur steigt von … auf …)
+  // Game state for the before/after lines of the confirmation (e.g. temperature rises from … to …)
   playerView?: PlayerViewModel;
 }>(), {
   menu: undefined,
@@ -85,14 +85,14 @@ withDefaults(defineProps<{
 const emit = defineEmits<{
   (event: 'close'): void;
   (event: 'select', index: number): void;
-  // Aktion nach der Rückfrage auslösen
+  // Trigger the action after the confirmation
   (event: 'confirm', index: number): void;
 }>();
 
-// Aktion, zu der gerade die Rückfrage offen ist
+// Action whose confirmation is currently open
 const confirming = ref<TurnMenuTile | undefined>(undefined);
 
-// Aktionen ohne Auswahl fragen im Sheet nach, alle anderen öffnen ihre Aufgabe
+// Actions without a choice ask for confirmation in the sheet, all others open their task
 function choose(tile: TurnMenuTile) {
   if (tile.confirmation !== undefined) {
     confirming.value = tile;

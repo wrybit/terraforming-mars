@@ -1,8 +1,8 @@
 import {Message} from '@/common/logs/Message';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 
-// Auswahl eines Meilensteins bzw. einer Auszeichnung (Player.ts: Unteroptionen tragen den Namen als Titel).
-// Solche Auswahlen zeigt OrOptions als Bild-Kacheln (MilestoneAwardOptions.vue) statt als Radio-Liste.
+// Selection of a milestone or award (Player.ts: sub-options carry the name as their title).
+// OrOptions shows such selections as image tiles (MilestoneAwardOptions.vue) instead of a radio list.
 export type MilestoneAwardKind = 'milestones' | 'awards';
 
 const CHOICE_TITLES: Readonly<Record<string, MilestoneAwardKind>> = {
@@ -18,7 +18,7 @@ export function milestoneAwardKind(input: PlayerInputModel): MilestoneAwardKind 
   return CHOICE_TITLES[titleKey(input.title)];
 }
 
-// Gleiche Bildklasse wie auf dem Brett (Milestone.vue / Award.vue, player_home.less: .ma-name--<name>)
+// Same image class as on the board (Milestone.vue / Award.vue, player_home.less: .ma-name--<name>)
 export function milestoneAwardImageClass(name: string): string {
   return 'ma-name--' + name.replaceAll(' ', '-').replaceAll('.', '').toLowerCase();
 }

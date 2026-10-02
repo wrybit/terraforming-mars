@@ -1,10 +1,10 @@
-// Stellt die linke Kante der rechten Spalte (Brett + Log) als CSS-Variable bereit.
-// Das Gegner-Modal (player_home_columns.less) überdeckt damit genau diese Spalte, auch wenn deren
-// Breite je nach Inhalt (Meilensteine, Turmoil, Zoom) schwankt – feste Werte im CSS wären zu fragil.
+// Provides the left edge of the right column (board + log) as a CSS variable.
+// The opponent modal (player_home_columns.less) uses it to cover exactly this column, even if its
+// width varies with the content (milestones, Turmoil, zoom) – fixed values in CSS would be too fragile.
 
 export const BOARD_COLUMN_LEFT_VARIABLE = '--board-column-left';
 
-// Beginnt mit der Beobachtung und liefert eine Aufräumfunktion zurück
+// Starts observing and returns a cleanup function
 export function observeBoardColumn(column: HTMLElement): () => void {
   const update = () => {
     document.documentElement.style.setProperty(
@@ -12,8 +12,8 @@ export function observeBoardColumn(column: HTMLElement): () => void {
       column.getBoundingClientRect().left + 'px',
     );
   };
-  // Spaltenbreite ändert sich mit dem Inhalt, die Position mit der Fensterbreite.
-  // Ohne ResizeObserver (Testumgebung) nur das Fenster beobachten
+  // Column width changes with the content, the position with the window width.
+  // Without ResizeObserver (test environment) only observe the window
   const resizeObserver = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(update);
   resizeObserver?.observe(column);
   window.addEventListener('resize', update);

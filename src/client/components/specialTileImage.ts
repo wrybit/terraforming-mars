@@ -4,11 +4,11 @@ import {CardName} from '@/common/cards/CardName';
 import {TileType} from '@/common/TileType';
 import {getCard} from '@/client/cards/ClientCardManifest';
 
-// Bild eines Sonderplättchens für die Erklärung einer Feldwahl (tabIntro.ts, TabIntroBlock.vue):
-// braunes Sonder-Sechseck mit dem Symbol der Karte darauf – wie auf den Karten selbst (cards_v2.less).
+// Image of a special tile for the explanation of a space selection (tabIntro.ts, TabIntroBlock.vue):
+// brown special hexagon with the card's symbol on it – as on the cards themselves (cards_v2.less).
 export type TileImage = {
-  base: string; // Sechseck (assets/tiles/*.png)
-  symbol?: string; // Symbol darauf (assets/tiles/special_tile_icons/*.png)
+  base: string; // Hexagon (assets/tiles/*.png)
+  symbol?: string; // Symbol on it (assets/tiles/special_tile_icons/*.png)
 };
 
 const SPECIAL_TILE_BASE = 'assets/tiles/special.png';
@@ -36,7 +36,7 @@ const SYMBOLS: Readonly<Partial<Record<TileType, string>>> = {
   [TileType.SOLAR_FARM]: 'solar_farm.png',
 };
 
-// Plättchen, die wie ein normales Plättchen aussehen
+// Tiles that look like a normal tile
 const PLAIN_TILES: Readonly<Partial<Record<TileType, string>>> = {
   [TileType.CAPITAL]: 'assets/tiles/city.png',
   [TileType.CITY]: 'assets/tiles/city.png',
@@ -53,10 +53,10 @@ export function tileImage(tile: TileType): TileImage {
   return {base: SPECIAL_TILE_BASE, symbol: symbol === undefined ? undefined : SYMBOL_DIRECTORY + symbol};
 }
 
-// Vulkanfelder (Lava Flows, Lava Tube Settlement): der Titel nennt die vier Vulkane, keine Karte
+// Volcanic spaces (Lava Flows, Lava Tube Settlement): the title names the four volcanoes, not a card
 const VOLCANO_PATTERN = /Tharsis Tholus/;
 
-// Erstes Plättchen im Kartenbild (metadata.renderData) – der Server nennt bei Sonderplättchen nur die Karte
+// First tile in the card image (metadata.renderData) – for special tiles the server only names the card
 function firstTileOnCard(node: unknown): TileType | undefined {
   if (node === null || typeof node !== 'object') {
     return undefined;
@@ -74,7 +74,7 @@ function firstTileOnCard(node: unknown): TileType | undefined {
   return undefined;
 }
 
-// Sonderplättchen einer Feldwahl, erkannt an der Karte im Titel ("Select space for ${0} tile") oder den Vulkanen
+// Special tile of a space selection, recognised by the card in the title ("Select space for ${0} tile") or the volcanoes
 export function specialTileImage(title: string | Message): TileImage | undefined {
   const key = typeof title === 'string' ? title : title.message;
   if (VOLCANO_PATTERN.test(key)) {

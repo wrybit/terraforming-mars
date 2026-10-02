@@ -1,19 +1,19 @@
-// Gemeinsame Formen der Statistik-Bausteine. In einer .ts-Datei, weil .ts-Dateien keine Typen aus .vue-Dateien
-// importieren können (Webpack kennt dort nur den Standard-Export).
+// Shared shapes of the stats building blocks. In a .ts file because .ts files can't import types from .vue files
+// (Webpack only knows the default export there).
 
-/** Eine Tabellenspalte: value liefert den Sortierwert, format die Anzeige (ohne Slot). Zellen mit Links/Balken kommen per Slot. */
+/** A table column: value returns the sort value, format the display (without slot). Cells with links/bars come via slot. */
 export type StatsColumn = {
   key: string;
-  /** Englisch, wird übersetzt. */
+  /** English, gets translated. */
   label: string;
   value: (row: any) => number | string | undefined;
   format?: (row: any) => string;
-  /** Text links ausgerichtet und aufsteigend sortiert; Zahlen rechts und absteigend. */
+  /** Text left-aligned and sorted ascending; numbers right-aligned and descending. */
   text?: boolean;
 };
 
 export type StatsKpi = {
-  /** Englisch, wird übersetzt. */
+  /** English, gets translated. */
   label: string;
   value: string | number;
 };
@@ -21,13 +21,13 @@ export type StatsKpi = {
 export type StatsBar = {
   label: string;
   value: number;
-  /** Anteil der Säule, der hervorgehoben unten gestapelt wird (z. B. davon Siege). */
+  /** Part of the bar that is stacked highlighted at the bottom (e.g. of which wins). */
   highlight?: number;
-  /** Tooltip; ohne wird „label: value“ gezeigt. */
+  /** Tooltip; without one, “label: value” is shown. */
   title?: string;
 };
 
-/** Ein Punkt einer Linie; hervorgehobene Punkte (z. B. Siege) werden größer und gelb gezeichnet. */
+/** A point of a line; highlighted points (e.g. wins) are drawn larger and yellow. */
 export type StatsChartPoint = {
   value: number | undefined;
   highlight?: boolean;
@@ -35,9 +35,9 @@ export type StatsChartPoint = {
 };
 
 export type StatsChartSeries = {
-  /** Anzeigename; wird übersetzt (Spielernamen bleiben dabei unverändert). */
+  /** Display name; gets translated (player names stay unchanged). */
   name: string;
-  /** Farbe wie die Spielerfarben (red, green, blue …). */
+  /** Color like the player colors (red, green, blue …). */
   color: string;
   points: Array<StatsChartPoint>;
 };

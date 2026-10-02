@@ -27,7 +27,7 @@ describe('MobileTurnSheet', () => {
     expect(skip.attributes('disabled')).to.not.be.undefined;
     expect(wrapper.find('.mb-tile--highlight .mb-tile-count').text()).to.eq('2');
     expect(wrapper.find('.mb-sheet-turn .mb-turn-count').text()).to.eq('1/2');
-    // Symbol-Kachel nur bei den Aktionen, nicht beim dezenten Zug-Ende
+    // Icon tile only for the actions, not for the subtle turn end
     expect(wrapper.find('.mb-sheet-grid .mb-tile-icon--neutral svg').exists()).to.be.true;
     expect(wrapper.find('.mb-sheet-end .mb-tile-icon').exists()).to.be.false;
   });
@@ -68,7 +68,7 @@ describe('buildTurnMenu', () => {
     const input = {
       type: 'or', title: 'Take your first action', buttonLabel: 'Save',
       options: [
-        // showOnlyInLearnerMode: false, sonst hinge die Option vom Lernmodus anderer Tests ab
+        // showOnlyInLearnerMode: false, otherwise the option would depend on other tests' learner mode
         option('Standard projects', {type: 'card', cards: [{name: 'Power Plant'}, {name: 'City', isDisabled: true}], min: 1, max: 1, showOnlyInLearnerMode: false}),
         option('Pass for this generation'),
         {type: 'option', title: {message: 'Convert ${0} plants into greenery', data: [{type: 1, value: '8'}]}, buttonLabel: 'Save'},

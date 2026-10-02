@@ -6,9 +6,9 @@ import {MilestoneName} from '../ma/MilestoneName';
 import {AwardName} from '../ma/AwardName';
 import {SpaceId} from '../Types';
 
-// Vertrag zwischen Statistik-API (Server) und Statistikseite (Client): beide Seiten lesen und schreiben genau diese Form.
+// Contract between the stats API (server) and the stats page (client): both sides read and write exactly this shape.
 
-/** Siegpunkte nach Herkunft, wie in der Aufschlüsselung der Ergebnisseite. */
+/** Victory points by source, as in the breakdown on the results page. */
 export type StatsVictoryPoints = {
   terraformRating: number;
   milestones: number;
@@ -16,7 +16,7 @@ export type StatsVictoryPoints = {
   greenery: number;
   city: number;
   cards: number;
-  /** Alles Übrige (Mond, Fluchtgeschwindigkeit, Pfadfinder-Leisten …). */
+  /** Everything else (Moon, escape velocity, Pathfinders tracks …). */
   other: number;
   total: number;
 };
@@ -26,21 +26,21 @@ export type StatsCardPoints = {
   points: number;
 };
 
-/** Was über einen Spieler einer Partie bekannt ist, wenn der Endstand vorliegt. Fehlende Werte waren nicht ablesbar. */
+/** What is known about a player of a game once the final score is available. Missing values were not readable. */
 export type StatsPlayerDetails = {
   name: string;
-  /** Ausgespielte Karten inkl. Konzern und Präludien; bei Screenshots nur die Karten mit Siegpunkten (cardsComplete). */
+  /** Played cards incl. corporation and preludes; for screenshots only the cards with victory points (cardsComplete). */
   cards: Array<CardName>;
-  /** Siegpunkte je Karte (nur Karten, die Punkte geben können). */
+  /** Victory points per card (only cards that can give points). */
   cardPoints?: Array<StatsCardPoints>;
   terraformRating?: number;
   greeneries?: number;
   cities?: number;
   victoryPoints?: StatsVictoryPoints;
-  /** Siegpunkte am Ende jeder Generation (Index 0 = Generation 1). */
+  /** Victory points at the end of each generation (index 0 = generation 1). */
   pointsByGeneration?: Array<number>;
   megaCredits?: number;
-  /** Bedenkzeit über die ganze Partie. */
+  /** Thinking time over the whole game. */
   timeSeconds?: number;
   actions?: number;
 };
@@ -53,13 +53,13 @@ export type StatsClaimedMilestone = {
 export type StatsFundedAward = {
   name: AwardName;
   funderName: string;
-  /** Alle Spieler auf Platz 1 der Auszeichnung (bei Gleichstand mehrere). */
+  /** All players in 1st place of the award (several on a tie). */
   winnerNames: Array<string>;
-  /** Spieler auf Platz 2 (nur bei mehr als zwei Spielern punktet er). */
+  /** Players in 2nd place (they only score with more than two players). */
   secondNames?: Array<string>;
 };
 
-/** Fortschritt der globalen Parameter in Prozent am Ende jeder Generation. */
+/** Progress of the global parameters in percent at the end of each generation. */
 export type StatsGlobals = {
   temperature: Array<number>;
   oxygen: Array<number>;
@@ -67,7 +67,7 @@ export type StatsGlobals = {
   venus?: Array<number>;
 };
 
-/** Ein Stadt- oder Grünflächenplättchen am Ende der Partie – Grundlage der Heatmap. */
+/** A city or greenery tile at the end of the game – basis of the heatmap. */
 export type StatsTile = {
   spaceId: SpaceId;
   type: 'city' | 'greenery';
@@ -75,9 +75,9 @@ export type StatsTile = {
 };
 
 export type StatsGameDetails = {
-  /** Aus dem Spielstand gelesen oder aus einem Screenshot der Ergebnisseite abgelesen. */
+  /** Read from the game state or read off a screenshot of the results page. */
   source: 'game' | 'screenshot';
-  /** False: in cards stehen nur die Karten mit Siegpunkten (mehr zeigt ein Screenshot nicht). */
+  /** False: cards only contains the cards with victory points (a screenshot shows no more). */
   cardsComplete: boolean;
   boardName: BoardName | undefined;
   expansions: Array<Expansion>;
@@ -85,16 +85,16 @@ export type StatsGameDetails = {
   milestones: Array<StatsClaimedMilestone>;
   awards: Array<StatsFundedAward>;
   globalsByGeneration?: StatsGlobals;
-  /** Nur aus dem Spielstand; ein Screenshot zeigt das Spielbrett nicht. */
+  /** Only from the game state; a screenshot doesn't show the board. */
   tiles?: Array<StatsTile>;
 };
 
-/** Eine beendete Partie, wie die Statistik sie sieht. */
+/** A finished game, as the stats see it. */
 export type StatsGame = {
-  /** Gleiche Zusammenfassung wie in der Admin-Übersicht – ohne Spieler-Links, die Seite ist öffentlich. */
+  /** Same summary as in the admin overview – without player links, the page is public. */
   summary: AdminGameSummary;
-  /** Ergebnisseite auf diesem Server oder gespeicherter Screenshot. */
+  /** Results page on this server or stored screenshot. */
   resultUrl: string | undefined;
-  /** Fehlt, wenn vom Ergebnis nichts weiter bekannt ist. */
+  /** Missing if nothing further is known about the result. */
   details: StatsGameDetails | undefined;
 };

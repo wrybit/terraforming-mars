@@ -1,11 +1,11 @@
 <template>
   <div :class="rowClasses" @click="toggleCards">
-    <!-- Ganze Zeile ist klickbar und öffnet die gespielten Karten (wie die klassische Spielerleiste) -->
-    <!-- Startspieler als "1" im Farbbalken, damit die Namenszeile Platz für Name und Status hat -->
+    <!-- The whole row is clickable and opens the played cards (like the classic player bar) -->
+    <!-- First player as "1" in the color bar so the name row has room for name and status -->
     <span v-if="firstForGen && playerView.players.length > 1" class="players-table-first-player" :title="$t('First player')" data-test="first-player">1</span>
     <PlayerIdentity :player="player" :playerView="playerView" :actionLabel="actionLabel" :highlighted="isThisPlayer"/>
 
-    <!-- Reihenfolge der Abschnitte aus PlayersTable (Desktop: Waren, Tags, Wertung; mobil: Waren, Wertung, Tags) -->
+    <!-- Section order from PlayersTable (desktop: goods, tags, scoring; mobile: goods, scoring, tags) -->
     <template v-for="section in sectionOrder" :key="section">
       <template v-if="section === 'goods' && visibility.goods">
         <div class="players-table-divider"></div>
@@ -40,7 +40,7 @@
 
     <div class="players-table-divider"></div>
     <div class="players-table-cell">
-      <!-- Kein eigener Klick-Handler: der Klick läuft zur Zeile hoch; Button bleibt für Tastaturbedienung -->
+      <!-- No own click handler: the click bubbles up to the row; the button stays for keyboard use -->
       <button type="button" class="players-table-played" :aria-label="$t('Played cards')" data-test="played-cards">{{ player.tableau.length }}</button>
     </div>
   </div>
@@ -93,7 +93,7 @@ export default defineComponent({
       type: Object as () => SectionVisibility,
       required: true,
     },
-    // Reihenfolge der Abschnitte (playersTableLayout.ts: sectionOrder)
+    // Section order (playersTableLayout.ts: sectionOrder)
     sectionOrder: {
       type: Array as () => ReadonlyArray<TableSection>,
       default: () => DESKTOP_SECTION_ORDER,
@@ -106,7 +106,7 @@ export default defineComponent({
       type: Object as () => TagDetails,
       required: true,
     },
-    // Waren, bei denen dieser Spieler allein die höchste Produktion hat
+    // Goods where this player alone has the highest production
     productionLeaders: {
       type: Array as () => Array<Resource>,
       default: () => [],
@@ -135,7 +135,7 @@ export default defineComponent({
   },
   methods: {
     tagDetail(tag: InterfaceTagsType): TagDetail {
-      // Zu jeder sichtbaren Spalte gibt es einen Eintrag – die Spalten stammen aus derselben Reihenfolge
+      // Every visible column has an entry – the columns come from the same order
       return this.tagDetails.tagsInOrder.find((detail) => detail.name === tag) as TagDetail;
     },
     tagCounterClasses(tag: InterfaceTagsType): Array<string> {

@@ -4,9 +4,9 @@
       message="Continue without buying any project cards?"
       ref="confirmation"
       @accept="confirmSelection" />
-    <!-- Teile der Startauswahl als Spalten nebeneinander (setup_columns.less): Konzern, Präludien und Karten lassen sich
-         direkt vergleichen. Jede Spalte scrollt für sich; Kopf mit Kurztitel, voller Aufforderung und Zähler
-         gewählt/benötigt (grün sobald erledigt). -->
+    <!-- Parts of the initial selection as side-by-side columns (setup_columns.less): corporation, preludes and cards can be
+         compared directly. Each column scrolls on its own; header with short title, full prompt and counter
+         selected/required (green once done). -->
     <div class="setup-columns">
       <section v-for="section in sections" :key="section.key" :class="['setup-column', 'setup-column--' + section.key]">
         <header class="setup-column-head">
@@ -35,8 +35,8 @@
       </section>
     </div>
 
-    <!-- Bilanz (Start-M€, Präludien, Kauf, Status) und "Beginne" gelten für die ganze Auswahl: als Leiste unter den
-         Spalten. Früher rechts unter Mars und Meilensteinen – dort passte der Button bei 1080 px Höhe nicht mehr hin. -->
+    <!-- Balance (starting M€, preludes, purchase, status) and "Start" apply to the whole selection: as a bar below the
+         columns. Formerly on the right below Mars and milestones – there the button no longer fit at 1080 px height. -->
     <div class="select-initial-cards-footer">
       <SetupSummary
         :startMegacredits="corporationMegacredits()"
@@ -149,7 +149,7 @@ export default defineComponent({
   },
   methods: {
     shortTabLabel,
-    // Badge "gewählt/benötigt" bzw. nur "gewählt", wenn es keine Pflichtanzahl gibt (Karten kaufen)
+    // Badge "selected/required", or just "selected" when there is no required count (buying cards)
     sectionColumn(key: InitialCardsSection, input: SelectCardModel, selected: number): SectionColumn {
       const required = input.min > 0 ? input.min : undefined;
       return {
@@ -243,7 +243,7 @@ export default defineComponent({
         return 0;
       }
     },
-    // Start-M€ des gewählten Konzerns (vor dem Kartenkauf); undefined, solange nicht genau einer gewählt ist
+    // Starting M€ of the selected corporation (before buying cards); undefined unless exactly one is selected
     corporationMegacredits(): number | undefined {
       if (this.selectedCorporations.length !== 1) {
         return undefined;
@@ -254,8 +254,8 @@ export default defineComponent({
       // Effect for playing itself.
       return corpName === CardName.SAGITTA_FRONTIER_SERVICES ? starting + 4 : starting;
     },
-    // Preis je Startkarte; manche Konzerne (z. B. Polyphemos) weichen vom Standard ab,
-    // der Einsteiger-Konzern bekommt seine Karten gratis (wie server/inputs/SelectInitialCards.ts)
+    // Price per starting card; some corporations (e.g. Polyphemos) deviate from the standard,
+    // the beginner corporation gets its cards for free (as in server/inputs/SelectInitialCards.ts)
     cardCost(): number {
       const corporation = this.selectedCorporations.length === 1 ? getCardOrThrow(this.selectedCorporations[0]) : undefined;
       if (corporation?.name === CardName.BEGINNER_CORPORATION) {
@@ -354,14 +354,14 @@ export default defineComponent({
           return false;
         }
       }
-      // Kartenkauf zahlt man vom Start-Kapital des Konzerns, bevor Präludien wirken (Server-Prüfung in
+      // Cards are bought from the corporation's starting capital, before preludes take effect (server check in
       // server/inputs/SelectInitialCards.ts)
       const purchaseCost = this.selectedCards.length * this.cardCost();
       if (purchaseCost > (getCardOrThrow(this.selectedCorporations[0]).startingMegaCredits ?? 0)) {
         this.warning = 'Not enough starting M€ for these cards';
         return false;
       }
-      // Auch nach den Präludien darf nichts im Minus stehen (gleiche Rechnung wie die Bilanz, setupBalance.ts)
+      // Nothing may be negative after the preludes either (same calculation as the balance, setupBalance.ts)
       const startMegacredits = this.corporationMegacredits() ?? 0;
       if (remainingMegacredits(startMegacredits, this.hasPrelude ? this.getAfterPreludes() : undefined, this.selectedCards.length, this.cardCost()) < 0) {
         this.warning = 'Not enough M€ left after preludes';
@@ -384,7 +384,7 @@ export default defineComponent({
     },
   },
   computed: {
-    // Spalten der Startauswahl in Spielreihenfolge; Präludien und CEO nur, wenn die Erweiterung aktiv ist
+    // Columns of the initial selection in game order; preludes and CEO only if the expansion is active
     sections(): Array<SectionColumn> {
       const columns = [this.sectionColumn('corporation', this.corpCardOption, this.selectedCorporations.length)];
       if (this.hasPrelude) {

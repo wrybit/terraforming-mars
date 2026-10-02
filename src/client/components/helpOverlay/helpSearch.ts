@@ -1,17 +1,17 @@
 /*
- * Suche im aktuellen Hilfe-Tab (Fork): blendet nicht passende Einträge aus, danach leere Gruppen.
- * Ausgeblendet wird per Attribut statt per Klasse, damit Vue beim Neuzeichnen nichts überschreibt.
+ * Search in the current help tab (fork): hides non-matching entries, then empty groups.
+ * Hiding is done via an attribute instead of a class so Vue overwrites nothing when re-rendering.
  */
 
 export const HELP_HIDDEN_ATTRIBUTE = 'data-help-hidden';
 
-// Wo im Tab gesucht wird – jeweils aus dem gerenderten Inhalt des Tabs gelesen
+// Where in the tab to search – each read from the tab's rendered content
 export type HelpSearchConfig = {
-  // Einzelne Einträge (Symbolzeile, Karte, Listenpunkt …)
+  // Individual entries (icon row, card, list item …)
   items: (root: HTMLElement) => Array<Element>;
-  // Behälter, die ausgeblendet werden, wenn kein Eintrag darin passt
+  // Containers that are hidden when no entry inside matches
   scopes?: (root: HTMLElement) => Array<Element>;
-  // Überschriften, deren Gruppe aus den folgenden Geschwistern bis zur nächsten Überschrift besteht
+  // Headings whose group consists of the following siblings up to the next heading
   headings?: (root: HTMLElement) => Array<Element>;
 };
 
@@ -27,7 +27,7 @@ function isVisible(element: Element): boolean {
   return !element.hasAttribute(HELP_HIDDEN_ATTRIBUTE);
 }
 
-// Gibt die Zahl der passenden Einträge zurück; leere Suche zeigt alles
+// Returns the number of matching entries; an empty search shows everything
 export function applyHelpSearch(root: HTMLElement, config: HelpSearchConfig, query: string): number {
   const needle = query.trim().toLocaleLowerCase();
   const items = config.items(root);
@@ -50,7 +50,7 @@ export function applyHelpSearch(root: HTMLElement, config: HelpSearchConfig, que
       const contains = (element: Element) => items.some((item) => element === item || element.contains(item));
       const empty = needle !== '' && !items.some((item) => isVisible(item) && group.some((element) => element === item || element.contains(item)));
       setHidden(heading, empty);
-      // Fließtext ohne eigene Einträge (z. B. Einleitungen) gehört mit zur Gruppe
+      // Body text without own entries (e.g. introductions) belongs to the group
       group.filter((element) => !contains(element)).forEach((element) => setHidden(element, empty));
     }
   }

@@ -1,5 +1,5 @@
 <template>
-   <!-- log-line--<Farbe>: Text und Hover in der Farbe des Spielers, um den es in der Zeile geht (log.less) -->
+   <!-- log-line--<colour>: text and hover in the colour of the player the line is about (log.less) -->
    <li v-if="message !== undefined && message.data !== undefined && message.message !== undefined"
      :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--expandable': expandable}]"
      @click.prevent="$emit('click')">
@@ -134,8 +134,8 @@ export default defineComponent({
     },
   },
   computed: {
-    // Spieler der Zeile = erster Spieler-Eintrag der Nachricht (z. B. "${0} hat … gespielt")
-    // Viele Karten: öffnet per Klick ein Modal (siehe logMessageContent.ts)
+    // Player of the line = first player entry of the message (e.g. "${0} played …")
+    // Many cards: opens a modal on click (see logMessageContent.ts)
     expandable(): boolean {
       return needsModalPreview(this.message);
     },

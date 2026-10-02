@@ -1,26 +1,26 @@
-/* Ersatz ohne WebGL: der Streifen liegt flach als CSS-Hintergrund im Globus-Kreis (Maske) und wird verschoben;
-   ein radialer Verlauf dunkelt zum Rand ab, damit er trotzdem rund wirkt. */
+/* Fallback without WebGL: the strip lies flat as a CSS background inside the globe circle (mask) and is shifted;
+   a radial gradient darkens towards the edge so it still looks round. */
 import {PlanetDrawRequest, PlanetRenderer} from './planetRenderer';
 import {GLOBE, SPRITE_ROW, STRIPES_TEXTURE_SIZE, STRIPES_TEXTURE_URL, trimmedStripe} from './planetStripes';
 
 export class PlanetFlatRenderer implements PlanetRenderer {
   public draw(request: PlanetDrawRequest): void {
     const {target, placement, offset, glow} = request;
-    // ohne die Ränder: sonst blitzen Trennlinie und Nachbarstreifen oben/unten durch
+    // without the edges: otherwise the divider and neighbouring strips flash through at the top/bottom
     const stripe = trimmedStripe(request.stripe);
     const width = target.clientWidth;
     const height = target.clientHeight;
     if (width === 0 || height === 0) {
       return;
     }
-    // Sprite-Raster einheitlich skaliert wie bei WebGL (globeLayout.ts), damit die Bögen zusammenpassen
+    // Sprite grid scaled uniformly like with WebGL (globeLayout.ts) so the arcs match up
     const {scale, spriteTop} = placement;
     const circle = `circle ${GLOBE.radius * scale}px at ${GLOBE.centerX * scale}px ${(GLOBE.centerY - spriteTop) * scale}px`;
-    // Streifen so skalieren, dass er die Reihenhöhe füllt
+    // Scale the strip so it fills the row height
     const textureScale = SPRITE_ROW.height * scale / stripe.height;
     const positionX = -stripe.startX * textureScale + offset * scale;
     const positionY = -stripe.top * textureScale;
-    // Beim Hover bleibt weniger Abdunklung, wie das flachere Licht im WebGL-Zeichner
+    // On hover less darkening remains, like the flatter light in the WebGL renderer
     const darkness = 1 - 0.45 * glow;
     const shading = `radial-gradient(${circle}, transparent 45%, rgba(0, 0, 0, ${0.25 * darkness}) 70%, ` +
       `rgba(0, 0, 0, ${0.6 * darkness}) 90%, rgba(0, 0, 0, ${0.85 * darkness}) 100%)`;

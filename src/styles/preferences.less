@@ -185,7 +185,7 @@
   width: 26px;
   height: 26px;
   border-radius: 3px;
-  // Am Zug: kein Drehen, kein Leuchten – das lenkt dauerhaft ab; wer am Zug ist, zeigt der Rahmen der Seite
+  // On your turn: no spinning, no glow – that is a permanent distraction; the page border shows whose turn it is
 }
 
 .sidebar_icon {
@@ -214,7 +214,7 @@
 }
 
 .sidebar_icon.sidebar_icon--settings {
-  // Kontur-Zahnrad mit Sechseck-Nabe (wie die Spielfelder) – gleiche Strichstärke wie Info/Hilfe
+  // Outline gear with a hexagonal hub (like the board spaces) – same stroke width as info/help
   background-image: url(./assets/sidebar/preferences_settings.svg);
 }
 
@@ -317,7 +317,7 @@
   }
 }
 
-// Inaktive Karten nicht vergrößern – sie sollen beim Hover inaktiv wirken (cards.less .card-unavailable)
+// Don't magnify inactive cards – they should look inactive on hover (cards.less .card-unavailable)
 .preferences_magnify_cards .filterDiv.card-unavailable:hover {
   transform: none;
 }

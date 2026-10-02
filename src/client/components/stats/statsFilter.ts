@@ -4,8 +4,8 @@ import {markedOptions, Selection} from '@/client/components/cardlist/filterSelec
 import {lineupOf, yearOf} from './statsResults';
 import {boardLabel} from './statsLabels';
 
-// Filter der Statistik. Gleiche Auswahl-Logik und Kacheln wie in der Kartenliste (filterSelection.ts,
-// CardListFilterGroup.vue): nichts markiert = alles; der erste Klick grenzt ein.
+// Filters of the statistics. Same selection logic and tiles as in the card list (filterSelection.ts,
+// CardListFilterGroup.vue): nothing selected = everything; the first click narrows down.
 export type StatsFilterKey = 'lineup' | 'board' | 'expansion' | 'year';
 
 export type StatsFilterGroup = {
@@ -16,7 +16,7 @@ export type StatsFilterGroup = {
 
 export type StatsFilters = {
   selections: Record<StatsFilterKey, Selection<string>>;
-  /** Höchstens so viele Generationen; undefined = keine Grenze. */
+  /** At most this many generations; undefined = no limit. */
   maxGeneration: number | undefined;
 };
 
@@ -26,7 +26,7 @@ function distinct(values: ReadonlyArray<string>): Array<string> {
   return Array.from(new Set(values)).sort((first, second) => first.localeCompare(second));
 }
 
-/** Optionen ergeben sich aus den vorhandenen Partien – es gibt nichts zu wählen, was nie gespielt wurde. */
+/** Options derive from the existing games – there is nothing to choose that was never played. */
 export function filterGroups(games: ReadonlyArray<StatsGame>): Array<StatsFilterGroup> {
   const expansions = new Set<string>(games.flatMap((game) => game.details?.expansions ?? []));
   return [
@@ -39,7 +39,7 @@ export function filterGroups(games: ReadonlyArray<StatsGame>): Array<StatsFilter
 }
 
 export function emptyFilters(groups: ReadonlyArray<StatsFilterGroup>): StatsFilters {
-  // Jede Gruppe ist immer da (auch bevor die Partien geladen sind), alle Optionen eingeschlossen = kein Filter
+  // Every group is always present (even before the games are loaded), all options included = no filter
   const selections: Record<StatsFilterKey, Selection<string>> = {lineup: {}, board: {}, expansion: {}, year: {}};
   for (const group of groups) {
     selections[group.key] = Object.fromEntries(optionKeys(group.options).map((key) => [key, true]));
@@ -56,7 +56,7 @@ export function matchesOption(game: StatsGame, key: StatsFilterKey, marked: Read
     return marked.includes(lineupOf(game));
   case 'year':
     return marked.includes(yearOf(game));
-  // Ohne Endstand ist Spielplan/Erweiterung unbekannt: solche Partien fallen bei diesen Filtern heraus
+  // Without a final score, board/expansion is unknown: such games drop out with these filters
   case 'board':
     return game.details?.boardName !== undefined && marked.includes(game.details.boardName);
   case 'expansion': {
@@ -70,14 +70,14 @@ export function markedOf(filters: StatsFilters, key: StatsFilterKey): Array<stri
   return markedOptions(filters.selections[key], Object.keys(filters.selections[key]));
 }
 
-/** skipKey: diese Gruppe nicht anwenden – für die Trefferzahlen an ihren eigenen Optionen. */
+/** skipKey: do not apply this group – for the match counts on its own options. */
 export function filterGames(games: ReadonlyArray<StatsGame>, filters: StatsFilters, skipKey?: StatsFilterKey): Array<StatsGame> {
   return games.filter((game) =>
     (filters.maxGeneration === undefined || game.summary.generation <= filters.maxGeneration) &&
     FILTER_KEYS.every((key) => key === skipKey || matchesOption(game, key, markedOf(filters, key))));
 }
 
-/** Trefferzahl je Option, wenn man sie (zu den übrigen Filtern) wählt. */
+/** Match count per option if you select it (in addition to the other filters). */
 export function optionCounts(games: ReadonlyArray<StatsGame>, filters: StatsFilters, group: StatsFilterGroup): Map<string, number> {
   const base = filterGames(games, filters, group.key);
   return new Map(group.options.map((option) => [option.key, base.filter((game) => matchesOption(game, group.key, [option.key])).length]));

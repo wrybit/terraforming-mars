@@ -14,7 +14,7 @@ import {SortOrder} from '@/client/utils/SortOrder';
 async function dragCard(sortable: VueWrapper<InstanceType<typeof SortableCards>>, sourceIndex: number, targetIndex: number) {
   const slots = sortable.findAll('.sortable-slot');
 
-  // jsdom hat kein Layout: Karten liegen simuliert nebeneinander, je 10px breit.
+  // jsdom has no layout: cards are simulated side by side, 10px wide each.
   slots.forEach((slot, index) => {
     slot.element.getBoundingClientRect = () => {
       return {left: index * 10, top: 0, width: 10, height: 10} as DOMRect;
@@ -40,7 +40,7 @@ function cardsInOrder(sortable: VueWrapper<InstanceType<typeof SortableCards>>):
 }
 
 
-// Sortierung läuft über den gemeinsamen Zustand (handSort.ts), den auch die Sortierleiste nutzt
+// Sorting runs through the shared state (handSort.ts) that the sort bar also uses
 async function sortBy(sortable: VueWrapper<InstanceType<typeof SortableCards>>, sortOrder: SortOrder | undefined) {
   sortHand('player1', sortable.props('cards'), sortOrder);
   await sortable.vm.$nextTick();
@@ -71,7 +71,7 @@ describe('SortableCards', () => {
     await dragCard(sortable, 0, 1);
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.CARTEL, CardName.ANTS]);
-    // Nach dem Loslassen bleibt weder schwebende Karte noch Platzhalter zurück.
+    // After release neither a floating card nor a placeholder remains.
     expect(sortable.find('.sortable-ghost').exists()).is.false;
     expect(sortable.find('.sortable-placeholder').exists()).is.false;
     expect(CardOrderStorage.getCardOrder('player1')).to.deep.eq({
@@ -143,7 +143,7 @@ describe('SortableCards', () => {
     });
     const slots = sortable.findAll('.sortable-slot');
     slots[0].element.getBoundingClientRect = () => ({left: 0, top: 0, width: 10, height: 10} as DOMRect);
-    // CARTEL gleitet gerade von links nach rechts: sichtbar bei 0, eigentlicher Platz bei 10
+    // CARTEL is sliding from left to right: visible at 0, actual position at 10
     const sliding = slots[1].element as HTMLElement;
     sliding.getBoundingClientRect = () => ({left: 0, top: 0, width: 10, height: 10} as DOMRect);
     sliding.style.transform = 'matrix(1, 0, 0, 1, -10, 0)';
@@ -281,7 +281,7 @@ describe('SortableCards', () => {
   });
 
   it('manual restores the own order after sorting', async () => {
-    // Ants: 9, Cartel: 8, Birds: 10 – eigene Reihenfolge Birds, Ants, Cartel
+    // Ants: 9, Cartel: 8, Birds: 10 – own order Birds, Ants, Cartel
     CardOrderStorage.updateCardOrder('player1', {[CardName.BIRDS]: 1, [CardName.ANTS]: 2, [CardName.CARTEL]: 3});
     const sortable = mount(SortableCards, {
       ...globalConfig,
@@ -309,7 +309,7 @@ describe('SortableCards', () => {
     });
 
     await sortBy(sortable, {key: 'cost', reversed: false});
-    // Cartel, Ants, Birds -> Cartel auf Birds ziehen
+    // Cartel, Ants, Birds -> drag Cartel onto Birds
     await dragCard(sortable, 0, 2);
     await sortBy(sortable, undefined);
 

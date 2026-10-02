@@ -1,6 +1,6 @@
 <template>
-  <!-- Zugreihenfolge in der Startphase (statt der Spielerleisten, die dort nur Nullen zeigen):
-       nummerierte Namen in Spielerfarbe, der Startspieler steht vorne -->
+  <!-- Turn order in the setup phase (instead of the player bars, which only show zeros there):
+       numbered names in player color, the starting player first -->
   <div class="setup-turn-order">
     <h2 class="setup-turn-order-title" v-i18n>Turn order</h2>
     <ol class="setup-turn-order-list">
@@ -10,7 +10,7 @@
         <span>{{ player.name }}</span>
       </li>
     </ol>
-    <!-- Platz für Bedienelemente rechts oben in der Box (z. B. Spielplan einklappen, PlayerHome.vue) -->
+    <!-- Room for controls at the top right of the box (e.g. collapse the board, PlayerHome.vue) -->
     <slot></slot>
   </div>
 </template>
@@ -20,7 +20,7 @@ import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {playerColorClass} from '@/common/utils/utils';
 
 defineProps<{
-  // In Zugreihenfolge (Startspieler zuerst), wie vom Server geliefert
+  // In turn order (starting player first), as delivered by the server
   players: ReadonlyArray<PublicPlayerModel>;
 }>();
 </script>

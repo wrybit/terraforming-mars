@@ -32,10 +32,10 @@ import {StatsKind, StatsKindDefinition, STATS_KINDS} from './statsKinds';
 import {StatsPlayerResult} from './statsResults';
 import {chooseMinPlays, MIN_PLAYS_OPTIONS} from './statsMinPlays';
 
-// Ab so vielen Einträgen lohnen sich Suchfeld und Mindestanzahl (Projektkarten)
+// From this many entries on a search field and a minimum count are worthwhile (project cards)
 const SEARCH_THRESHOLD = 15;
 
-// Liste einer Art (Konzerne, Präludien, Karten, Meilensteine, Auszeichnungen, Spielpläne)
+// List of one kind (corporations, preludes, cards, milestones, awards, boards)
 export default defineComponent({
   name: 'StatsEntityList',
   components: {StatsTable, StatsEntityName, StatsWinRate, SegmentedControl},
@@ -65,7 +65,7 @@ export default defineComponent({
         return this.rows;
       }
       const search = this.search.trim().toLowerCase();
-      // Gesucht wird im übersetzten und im englischen Namen
+      // Search both the translated and the English name
       return this.rows.filter((row) => row.plays >= this.minPlays &&
         (search === '' || row.name.toLowerCase().includes(search) || translateText(row.name).toLowerCase().includes(search)));
     },

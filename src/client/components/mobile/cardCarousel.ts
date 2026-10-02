@@ -1,12 +1,12 @@
 /*
- * Karten-Karussell der Mobil-Ansicht ("Karte spielen"): die Karten liegen nebeneinander und werden
- * durchgewischt (mobile.less); die Karte in der Mitte ist die gewählte.
+ * Card carousel of the mobile view ("play card"): the cards lie side by side and are
+ * swiped through (mobile.less); the card in the middle is the selected one.
  */
 
-/* Stand des Karussells für die Punkte darunter. */
+/* Carousel state for the dots below it. */
 export type CarouselState = {count: number, index: number};
 
-// Standardprojekte liegen als Raster, nicht im Karussell (mobile.less, mobileFit.ts)
+// Standard projects are laid out as a grid, not in the carousel (mobile.less, mobileFit.ts)
 const LIST_SELECTOR = '.mb-screen--turn .payments_cont:not(:has(.card-standard-project))';
 const ITEM_SELECTOR = ':scope > label.payments_cards';
 
@@ -18,7 +18,7 @@ function items(list: HTMLElement): Array<HTMLElement> {
   return Array.from(list.querySelectorAll<HTMLElement>(ITEM_SELECTOR));
 }
 
-// Karte, deren Mitte der Mitte der Liste am nächsten ist
+// Card whose center is closest to the center of the list
 function centeredIndex(list: HTMLElement): number {
   const center = list.getBoundingClientRect().left + list.clientWidth / 2;
   let best = 0;
@@ -34,7 +34,7 @@ function centeredIndex(list: HTMLElement): number {
   return best;
 }
 
-// Mittige Karte auswählen (nur spielbare Karten haben ein Auswahlfeld)
+// Select the centered card (only playable cards have a selection input)
 function selectItem(item: HTMLElement | undefined): void {
   const input = item?.querySelector<HTMLInputElement>('input[type="radio"]');
   if (input !== null && input !== undefined && !input.checked) {
@@ -42,14 +42,14 @@ function selectItem(item: HTMLElement | undefined): void {
   }
 }
 
-/* Wischt zur Karte `index` im sichtbaren Karussell unter `root`. */
+/* Swipes to card `index` in the visible carousel under `root`. */
 export function scrollCarouselTo(root: HTMLElement, index: number): void {
   const list = visibleList(root);
   const item = list === undefined ? undefined : items(list)[index];
   item?.scrollIntoView({behavior: 'smooth', inline: 'center', block: 'nearest'});
 }
 
-/* Hält `onChange` über das sichtbare Karussell unter `root` auf dem Laufenden (undefined: keins sichtbar). */
+/* Keeps `onChange` up to date about the visible carousel under `root` (undefined: none visible). */
 export function observeCardCarousel(root: HTMLElement, onChange: (state: CarouselState | undefined) => void): () => void {
   let list: HTMLElement | undefined;
   let timer = 0;
@@ -60,7 +60,7 @@ export function observeCardCarousel(root: HTMLElement, onChange: (state: Carouse
     }
     onChange({count: items(list).length, index: centeredIndex(list)});
   };
-  // Nach dem Wischen (Scrollen kommt zur Ruhe) die mittige Karte wählen
+  // After swiping (scrolling comes to rest) select the centered card
   const onScroll = () => {
     report();
     window.clearTimeout(timer);

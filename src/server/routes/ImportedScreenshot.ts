@@ -5,10 +5,10 @@ import {Response} from '../Response';
 import {RouteError} from './RouteError';
 import {ImportedScreenshotsStore} from '../admin/ImportedScreenshotsStore';
 
-// Bilder ändern sich nie (ein Screenshot je Discord-Nachricht) – der Browser darf sie lange behalten
+// Images never change (one screenshot per Discord message) – the browser may keep them for a long time
 const cacheSeconds = 30 * 24 * 60 * 60;
 
-/** Liefert den gespeicherten Screenshot einer Ergebnisseite – öffentlich wie die Ergebnisseiten selbst. */
+/** Serves the stored screenshot of a results page – public like the results pages themselves. */
 export class ImportedScreenshot extends Handler {
   public static readonly INSTANCE = new ImportedScreenshot();
   constructor(private readonly screenshots: ImportedScreenshotsStore = ImportedScreenshotsStore.getInstance()) {

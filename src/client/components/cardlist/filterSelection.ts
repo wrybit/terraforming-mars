@@ -1,16 +1,16 @@
-// Auswahl-Logik der Filtergruppen der Kartenliste.
-// Das Modell speichert je Option "eingeschlossen" (alle true = kein Filter) – so bleibt das URL-Format unverändert.
-// In der Oberfläche heißt das: keine Option markiert = alles sichtbar; der erste Klick grenzt auf diese Option ein,
-// weitere Klicks nehmen Optionen dazu oder wieder weg. Wird die letzte markierte Option abgewählt, ist wieder alles sichtbar.
+// Selection logic of the card list filter groups.
+// The model stores "included" per option (all true = no filter) – so the URL format stays unchanged.
+// In the UI this means: no option checked = everything visible; the first click narrows down to that option,
+// further clicks add or remove options. If the last checked option is unchecked, everything is visible again.
 
 export type Selection<K extends string> = Record<K, boolean>;
 
-// True, wenn in dieser Gruppe nichts eingeschränkt ist
+// True if nothing is restricted in this group
 export function isUnfiltered<K extends string>(selection: Selection<K>, keys: ReadonlyArray<K>): boolean {
   return keys.every((key) => selection[key] === true);
 }
 
-// Markiert = gewählt, solange die Gruppe überhaupt einschränkt
+// Checked = selected, as long as the group restricts at all
 export function isMarked<K extends string>(selection: Selection<K>, keys: ReadonlyArray<K>, key: K): boolean {
   return selection[key] === true && !isUnfiltered(selection, keys);
 }
@@ -29,7 +29,7 @@ export function toggleOption<K extends string>(selection: Selection<K>, keys: Re
     return;
   }
   selection[key] = !selection[key];
-  // Nichts mehr markiert hieße "nichts sichtbar" – gemeint ist aber "Filter weg"
+  // Nothing checked would mean "nothing visible" – but "no filter" is what is meant
   if (keys.every((other) => selection[other] !== true)) {
     resetOptions(selection, keys);
   }

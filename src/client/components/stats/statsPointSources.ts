@@ -3,7 +3,7 @@ import {average, StatsPlayerResult} from './statsResults';
 
 export type PointSource = Exclude<keyof StatsVictoryPoints, 'total'>;
 
-/** Herkunft der Siegpunkte in der Reihenfolge der Ergebnisseite (Englisch, wird übersetzt). */
+/** Sources of victory points in the order of the results page (English, gets translated). */
 export const POINT_SOURCES: ReadonlyArray<{key: PointSource, label: string}> = [
   {key: 'terraformRating', label: 'Terraform rating'},
   {key: 'milestones', label: 'Milestones'},
@@ -18,7 +18,7 @@ export type PointSourcesRow = {
   name: string;
   games: number;
   averages: Record<PointSource | 'total', number | undefined>;
-  /** Vergleichszeile über alle Partien statt eines Spielers. */
+  /** Comparison row across all games instead of one player. */
   baseline?: boolean;
 };
 
@@ -30,7 +30,7 @@ function toRow(name: string, list: ReadonlyArray<StatsVictoryPoints>): PointSour
   return {name, games: list.length, averages};
 }
 
-/** Ø Siegpunkte je Herkunft, je Spieler – nur Partien mit Punkteaufschlüsselung. */
+/** Avg victory points per source, per player – only games with a points breakdown. */
 export function pointSourcesByPlayer(results: ReadonlyArray<StatsPlayerResult>): Array<PointSourcesRow> {
   const byPlayer = new Map<string, Array<StatsVictoryPoints>>();
   for (const result of results) {
@@ -42,7 +42,7 @@ export function pointSourcesByPlayer(results: ReadonlyArray<StatsPlayerResult>):
   return Array.from(byPlayer.entries()).map(([name, list]) => toRow(name, list));
 }
 
-/** Ø über alle Spieler-Partien mit Aufschlüsselung – die Vergleichszeile; undefined ohne Daten. */
+/** Avg across all player games with a breakdown – the comparison row; undefined without data. */
 export function pointSourcesOverall(results: ReadonlyArray<StatsPlayerResult>): PointSourcesRow | undefined {
   const list = results.flatMap((result) => result.details?.victoryPoints === undefined ? [] : [result.details.victoryPoints]);
   return list.length === 0 ? undefined : {...toRow('All games', list), baseline: true};

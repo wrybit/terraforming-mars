@@ -1,6 +1,6 @@
 import {Warning} from '@/common/cards/Warning';
 
-// Übersetzungsschlüssel je Warnung der Server-Eingaben; genutzt von WarningsComponent (Desktop) und dem Zug-Menü der Mobil-Ansicht
+// Translation keys per warning of the server inputs; used by WarningsComponent (desktop) and the mobile view's turn menu
 export const WARNING_DESCRIPTIONS: Record<Warning, string> = {
   'pass': 'You will not take any more actions this generation.',
   'undoBestEffort': 'Undo is best effort only. Please do not report any bugs if it is broken.',

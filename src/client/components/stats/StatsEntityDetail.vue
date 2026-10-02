@@ -10,7 +10,7 @@
         <p v-if="detail.results.length === 0" class="stats-note" v-i18n>No games for these filters.</p>
         <StatsKpis v-else :tiles="tiles"/>
       </div>
-      <!-- Das Spielmaterial selbst (Karte, Meilenstein, Auszeichnung); Karten zeigt ein Klick groß -->
+      <!-- The game material itself (card, milestone, award); a click shows cards large -->
       <StatsEntityAsset v-if="hasAsset" class="stats-detail-asset" :kind="kind" :name="name"/>
     </section>
 
@@ -41,7 +41,7 @@
       </section>
     </div>
 
-    <!-- Verteilungen wie bei tfmstats: Säule = Partien, gelber Anteil = davon gewonnen -->
+    <!-- Distributions like tfmstats: column = games, yellow part = of those won -->
     <div v-if="detail.results.length > 0" class="stats-columns">
       <section class="stats-card">
         <h2 v-i18n>Final scores</h2>
@@ -97,12 +97,12 @@ import {formatNumber, formatPercent} from './statsLabels';
 import {STATS_TABS, statsHref, tabOfKind} from './statsNavigation';
 import {StatsPlayerResult} from './statsResults';
 
-// Zeilen je "zusammen gespielt"-Tabelle; mehr wird bei vielen Karten unübersichtlich
+// Rows per "played together" table; more gets cluttered with many cards
 const COMPANION_LIMIT = 10;
 
 const share = (wins: number, plays: number) => plays === 0 ? undefined : wins / plays;
 
-// Detailseite eines Eintrags: Kennzahlen, je Spieler, je Spielerzahl, Kombinationen und alle Partien
+// Detail page of an entry: key figures, per player, per player count, combinations and all games
 export default defineComponent({
   name: 'StatsEntityDetail',
   components: {StatsTable, StatsKpis, StatsEntityName, StatsWinRate, StatsGameList, StatsPointSources, StatsEntityAsset, StatsBoardHeatmap, StatsBarChart},
@@ -170,7 +170,7 @@ export default defineComponent({
     games(): Array<StatsGame> {
       return Array.from(new Set(this.detail.results.map((result) => result.game)));
     },
-    /** Wer den Eintrag in welcher Partie hatte – in der Partienliste hervorgehoben (Spielplan: alle). */
+    /** Who had the entry in which game – highlighted in the game list (board: everyone). */
     highlighted(): Map<string, Array<string>> {
       const byGame = new Map<string, Array<string>>();
       for (const result of this.detail.results) {
@@ -187,7 +187,7 @@ export default defineComponent({
     },
     tiles(): Array<StatsKpi> {
       const stats = this.stats;
-      // Spielplan gehört allen in der Partie: dort zählen Partien, Siegquote wäre immer der Zufallswert
+      // The board belongs to everyone in the game: there games count, win rate would always be the chance value
       if (this.kind === 'board') {
         return [
           {label: 'Games', value: stats.games},

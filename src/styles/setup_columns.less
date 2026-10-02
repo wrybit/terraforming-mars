@@ -1,19 +1,19 @@
-// Startauswahl als Spalten nebeneinander (SelectInitialCards.vue): Konzern, Präludien, (CEO,) Karten kaufen.
-// Konzern- und Präludium-Spalte sind genau eine Karte breit, damit man ihre Vorteile untereinander vergleichen
-// kann; die Karten-Spalte nimmt den Rest und bricht in mehrere Karten pro Zeile um. Jede Spalte scrollt für sich.
+// Initial selection as side-by-side columns (SelectInitialCards.vue): corporation, preludes, (CEO,) buy cards.
+// Corporation and prelude columns are exactly one card wide, so their benefits can be compared one below
+// the other; the cards column takes the rest and wraps to several cards per row. Each column scrolls on its own.
 
-@setup-columns-gap: 20px; // zwischen den Spalten deutlich mehr als zwischen den Karten (Gesetz der Nähe)
+@setup-columns-gap: 20px; // much more between the columns than between the cards (law of proximity)
 @setup-column-padding: 12px 14px;
 @setup-column-title-size: 20px;
 @setup-column-accent-height: 3px;
-// Farben wie die Kartenköpfe der jeweiligen Kartenart – so erkennt man die Spalte auch am Rand
+// Colors like the card headers of the respective card type – so the column is recognizable by its edge too
 @setup-column-accent-corporation: #e0a63c;
 @setup-column-accent-prelude: #e57fae;
 @setup-column-accent-ceo: #b889d6;
 @setup-column-accent-projects: #3ea55a;
 
 .setup-columns {
-  container-type: inline-size; // Kartengröße richtet sich nach der Breite der Auswahl (siehe unten)
+  container-type: inline-size; // card size follows the width of the selection (see below)
   display: flex;
   gap: @setup-columns-gap;
   align-items: stretch;
@@ -26,18 +26,18 @@
   display: flex;
   flex-direction: column;
   flex: 0 0 auto;
-  width: min-content; // eine Karte breit (Karten sind nicht umbrechbar, Texte schon)
+  width: min-content; // one card wide (cards can't wrap, texts can)
   min-height: 0;
   border: 1px solid @or-tabs-border;
   border-radius: @or-tabs-radius;
   background: @or-tabs-panel-background;
 }
 
-// Die Karten-Spalte füllt den Rest; bei eingeklapptem Spielplan passen so fast alle Karten ohne Scrollen
+// The cards column fills the rest; with the board collapsed almost all cards fit without scrolling
 .setup-column--projects {
   flex: 1 1 0;
   width: auto;
-  min-width: min-content; // mindestens eine ganze Karte, nie abgeschnitten
+  min-width: min-content; // at least one whole card, never cut off
   --setup-column-accent: @setup-column-accent-projects;
 }
 
@@ -62,10 +62,10 @@
   color: #fff;
   font-size: @setup-column-title-size;
   font-weight: normal;
-  white-space: nowrap; // Kurztitel bleibt einzeilig, auch wenn die Spalte nur eine kleine Karte breit ist
+  white-space: nowrap; // short title stays on one line, even if the column is only one small card wide
 }
 
-// Zähler gewählt/benötigt wie das Badge der Tabs (or_options_tabs.less), hier im Fluss und etwas größer
+// Counter chosen/required like the tab badge (or_options_tabs.less), here inline and somewhat larger
 .setup-column-count {
   margin-left: auto;
   min-width: 22px;
@@ -96,8 +96,8 @@
   padding: @setup-column-padding;
 }
 
-// Karten dicht an dicht: seitlich wenig Luft, oben genau Platz für das ✓-Fähnchen gewählter Karten (cards.less).
-// Die Spalten selbst trennen eigene Flächen, daher darf der Kartenabstand in etwa dem Spaltenabstand entsprechen.
+// Cards packed tightly: little space at the sides, on top exactly room for the ✓ flag of chosen cards (cards.less).
+// The columns themselves are separated by their own surfaces, so the card gap may roughly equal the column gap.
 @setup-card-gap: 14px;
 @setup-card-selected-flag-space: 28px;
 
@@ -106,34 +106,34 @@
   flex-wrap: wrap;
   column-gap: @setup-card-gap;
 
-  // Hinweise der Auswahl (z. B. Warnungen) über die ganze Breite statt zwischen die Karten
+  // Selection notes (e.g. warnings) across the full width instead of between the cards
   > :not(.cardbox) {
     flex-basis: 100%;
   }
 }
 
-// Spezifischer als die Grundregel input[type=checkbox]+.filterDiv.card-container (cards.less)
+// More specific than the base rule input[type=checkbox]+.filterDiv.card-container (cards.less)
 .setup-column-body .cardbox > .filterDiv.card-container {
   margin: @setup-card-selected-flag-space 0 0 0;
 }
 
-// Kaufbare Karten kleiner: so passen bei eingeklapptem Spielplan alle zehn ohne Scrollen, Konzern und Präludien
-// bleiben groß (dort entscheidet man zuerst)
+// Buyable cards smaller: so with the board collapsed all ten fit without scrolling; corporation and preludes
+// stay large (that's what you decide first)
 @setup-project-cards-zoom: 0.8;
 
 .setup-column--projects .setup-column-body .cardbox {
   zoom: @setup-project-cards-zoom;
 }
 
-// Reicht die Breite nicht für drei Karten nebeneinander (Brett ausgeklappt auf Laptop-Breiten), werden alle Karten
-// kleiner statt abgeschnitten. Schwellen: 2 große + 1 kleine Karte bzw. 3 kleine Karten, je mit Innenabstand der
-// Spalte, plus 2 Spaltenabstände
+// If the width isn't enough for three cards side by side (board expanded at laptop widths), all cards get
+// smaller instead of cut off. Thresholds: 2 large + 1 small card or 3 small cards, each with the column's
+// padding, plus 2 column gaps
 @setup-cards-full-min-width: 830px;
 @setup-cards-reduced-min-width: 730px;
 @setup-cards-reduced-zoom: 0.8;
 @setup-cards-small-zoom: 0.68;
 
-// Selektor so spezifisch wie die Regel der Kaufkarten oben, damit die Stufen auch dort greifen
+// Selector as specific as the rule for the buyable cards above, so the steps apply there too
 @container (max-width: (@setup-cards-full-min-width - 1px)) {
   .setup-columns .setup-column-body .cardbox {
     zoom: @setup-cards-reduced-zoom;
@@ -146,7 +146,7 @@
   }
 }
 
-// Unter dem Zwei-Spalten-Layout (schmale Fenster) Spalten untereinander, die Seite scrollt
+// Below the two-column layout (narrow windows) columns stack vertically, the page scrolls
 @media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
   .setup-columns {
     flex-direction: column;
@@ -157,7 +157,7 @@
   }
 }
 
-// Festes App-Layout (player_home_fixed.less): Spalten füllen die Höhe unter der Zugreihenfolge
+// Fixed app layout (player_home_fixed.less): columns fill the height below the turn order
 @media only screen and (min-width: @player-home-columns-min-width) {
   .player-home--fixed .select-initial-cards .setup-columns {
     flex: 1 1 auto;

@@ -15,7 +15,7 @@ describe('TabPanelFooterSlot', () => {
   });
 
   it('moves its content into the footer of the tab panel', async () => {
-    // Tab-Box mit Fußbereich; der Inhalt steht im Template vor dem Fuß
+    // Tab box with footer area; the content is in the template before the footer
     const Panel = defineComponent({
       setup(_, {slots}) {
         provide(TAB_PANEL_FOOTER, '#test-footer');

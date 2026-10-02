@@ -1,7 +1,7 @@
 <template>
   <div :class="['players-table-identity', {'players-table-identity--me': highlighted, 'players-table-identity--acting': actionLabel === 'active'}]">
-    <!-- Spieler-Kopf: Zeile 1 Name + Status/Zeit, Zeile 2 Konzern.
-         Gemeinsam für Spieler-Tabelle und Meilenstein-Tabelle, damit beide Ansichten denselben Kopf zeigen -->
+    <!-- Player header: row 1 name + status/time, row 2 corporation.
+         Shared by the player table and milestone table so both views show the same header -->
     <div class="players-table-identity-line">
       <span class="players-table-name">{{ symbol + player.name }}</span>
       <PlayerStatus :timer="player.timer" :showTimer="playerView.game.gameOptions.showTimers" :liveTimer="playerView.game.phase !== Phase.END" :actionLabel="actionLabel" v-trim-whitespace/>
@@ -37,7 +37,7 @@ export default defineComponent({
       type: String as () => ActionLabel,
       required: true,
     },
-    // Eigener Spieler: Name etwas größer
+    // Own player: name slightly larger
     highlighted: {
       type: Boolean,
       default: false,

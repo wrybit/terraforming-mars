@@ -1,8 +1,8 @@
 import {PublicPlayerModel, ViewModel} from '@/common/models/PlayerModel';
 import {Phase} from '@/common/Phase';
 
-// Mitspieler, auf die gerade gewartet wird (ohne einen selbst; Zuschauer haben kein thisPlayer) – aus dem Spielstand abgeleitet
-// wie die Status-Anzeige in PlayersOverview: Draft/Forschung laufen parallel, sonst ist genau einer am Zug.
+// Other players currently being waited for (excluding oneself; spectators have no thisPlayer) – derived from the game state
+// like the status display in PlayersOverview: draft/research run in parallel, otherwise exactly one is taking their turn.
 export function playersToWaitFor(playerView: ViewModel): Array<PublicPlayerModel> {
   const phase = playerView.game.phase;
   const others = playerView.players.filter((player) => player.color !== playerView.thisPlayer?.color);

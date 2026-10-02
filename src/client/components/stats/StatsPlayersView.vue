@@ -40,7 +40,7 @@ import {formatDuration, formatNumber, formatPercent} from './statsLabels';
 import StatsPointSources from './StatsPointSources.vue';
 import {statsHref} from './statsNavigation';
 
-// Erfolgreichster Konzern erst ab zwei Partien – ein einzelner Sieg sagt nichts
+// Most successful corporation only from two games on – a single win says nothing
 const MIN_PLAYS_FOR_BEST = 2;
 
 type PlayerCard = {
@@ -54,7 +54,7 @@ type PlayerCard = {
   best: EntityStats | undefined;
 };
 
-// Eine Karte je Spieler; ein Klick öffnet seine Detailseite
+// One card per player; a click opens their detail page
 export default defineComponent({
   name: 'StatsPlayersView',
   components: {StatsPointSources},

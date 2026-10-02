@@ -1,13 +1,13 @@
 /*
- * Zoom-Gesten auf einem scrollbaren Bereich: zwei Finger zum Zoomen, Doppel-Tap zum Umschalten,
- * Strg + Mausrad am Rechner. Das Verschieben übernimmt das normale Scrollen des Bereichs.
+ * Zoom gestures on a scrollable area: two fingers to zoom, double tap to toggle,
+ * Ctrl + mouse wheel on a computer. Panning is handled by the area's normal scrolling.
  */
 
-/* Rückmeldung an den Besitzer des Zooms: Faktor relativ ändern bzw. zwischen zwei Stufen umschalten. */
+/* Callback to the owner of the zoom: change the factor relatively or toggle between two levels. */
 export type PinchZoomTarget = {
-  // Ändert den Zoom um `factor`; der Punkt (`x`, `y`, Fenster-Koordinaten) bleibt an seiner Stelle
+  // Changes the zoom by `factor`; the point (`x`, `y`, window coordinates) stays in place
   zoomBy(factor: number, x: number, y: number): void;
-  // Doppel-Tap an (`x`, `y`)
+  // Double tap at (`x`, `y`)
   toggle(x: number, y: number): void;
 };
 
@@ -15,7 +15,7 @@ const DOUBLE_TAP_MS = 300;
 const DOUBLE_TAP_DISTANCE = 30;
 const WHEEL_STEP = 1.1;
 
-/* Hängt die Gesten an `element` und liefert die Funktion, die sie wieder entfernt. */
+/* Attaches the gestures to `element` and returns the function that removes them again. */
 export function attachPinchZoom(element: HTMLElement, target: PinchZoomTarget): () => void {
   const pointers = new Map<number, {x: number, y: number}>();
   let lastDistance = 0;

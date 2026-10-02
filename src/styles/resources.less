@@ -3,8 +3,8 @@
   flex-flow: row;
   white-space: nowrap;
   filter: grayscale(0.3);
-  // filter macht die Leiste zur eigenen Stapelebene: ihre Tooltips lägen sonst hinter den Tags darunter
-  // (die sind mit z-index 2 positioniert). Beim Überfahren hebt sich die ganze Leiste darüber.
+  // filter makes the bar its own stacking context: its tooltips would otherwise lie behind the tags below
+  // (which are positioned with z-index 2). On hover the whole bar rises above them.
   &:hover {
     position: relative;
     z-index: 10;

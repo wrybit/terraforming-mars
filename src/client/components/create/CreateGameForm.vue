@@ -1,6 +1,6 @@
 <template>
   <div id="create-game" class="create-game">
-    <!-- Kopf wie Kartenliste/Statistik: Titel, Datei-Knöpfe, Sprache und Einstellungen in einer Kopf-Karte -->
+    <!-- Header like card list/statistics: title, file buttons, language and settings in one header card -->
     <header class="card-list-header card-list-header--plain create-game-head">
       <h1 v-i18n>Create New Game</h1>
       <div class="create-game-head-actions">
@@ -10,7 +10,7 @@
           <input style="display: none" type="file" accept=".json" id="settings-file" ref="file" @change="uploadSettings()">
         </label>
         <button type="button" class="create-game-icon-button" :title="$t('Save settings to file')" @click="downloadSettings()"><i class="icon icon-download"></i><span class="create-game-head-label" v-i18n>Export</span></button>
-        <!-- Teilen-Link: die URL trägt die Einstellungen ohnehin schon, der Knopf kopiert sie nur -->
+        <!-- Share link: the URL already carries the settings anyway, the button just copies it -->
         <button type="button" class="create-game-icon-button" :title="$t('Copy link with these settings')" @click="copySettingsLink()"><svg class="create-game-link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span class="create-game-head-label">{{ $t(settingsLinkCopied ? 'Link copied' : 'Copy link') }}</span></button>
         <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings"/>
       </div>
@@ -369,12 +369,12 @@ type FormModel = {
   preludeToggled: boolean;
   uploading: boolean;
   previousViewport: string;
-  /** Erst nach dem Laden die URL mitschreiben, sonst überschreibt der Standardstand den geteilten Link */
+  /** Only start writing the URL after loading, otherwise the default state overwrites the shared link */
   settingsLinkReady: boolean;
   settingsLinkCopied: boolean;
 };
 
-// So lange zeigt der Knopf "Link kopiert"
+// How long the button shows "Link copied"
 const LINK_COPIED_FEEDBACK_MS = 2000;
 
 export default defineComponent({
@@ -450,7 +450,7 @@ export default defineComponent({
       }
     },
     uploading(value: boolean) {
-      // Nach einem Import (Datei, Link, letzte Einstellungen) den Endstand in die URL übernehmen
+      // After an import (file, link, last settings) carry the final state into the URL
       if (value === false && this.settingsLinkReady) {
         replaceSettingsHash(this.currentSettingsHash);
       }
@@ -463,7 +463,7 @@ export default defineComponent({
   },
   mounted() {
     setDocumentTitle('Create New Game');
-    // Ein geteilter Link hat Vorrang vor den zuletzt benutzten Einstellungen
+    // A shared link takes precedence over the most recently used settings
     if (!this.restoreSettingsFromLink()) {
       this.restoreLastSettings();
     }
@@ -550,7 +550,7 @@ export default defineComponent({
         startingPreludes: this.startingPreludes,
       };
     },
-    /** Die Einstellungen als URL-Hash; ändert sich bei jeder Formular-Änderung mit. */
+    /** The settings as a URL hash; changes along with every form change. */
     currentSettingsHash(): string {
       return settingsHash(this);
     },
@@ -601,7 +601,7 @@ export default defineComponent({
         {title: 'Fan-made', boards: FAN_BOARDS},
       ];
     },
-    // Karte "Erweiterungs-Optionen" hat nur Inhalt, wenn eine dieser Erweiterungen aktiv ist
+    // The "Expansion options" card only has content if one of these expansions is active
     hasExpansionOptions(): boolean {
       return this.expansions.venus || this.expansions.turmoil || this.expansions.moon || this.expansions.ares;
     },
@@ -639,7 +639,7 @@ export default defineComponent({
           this.settingsLinkCopied = false;
         }, LINK_COPIED_FEEDBACK_MS);
       } catch (e) {
-        // Ohne Zwischenablage-Recht (z. B. http ohne TLS) bleibt die URL in der Adresszeile zum Kopieren
+        // Without clipboard permission (e.g. http without TLS) the URL stays in the address bar for copying
         vueRoot(this).showAlert('Copy link', String(e));
       }
     },
@@ -766,7 +766,7 @@ export default defineComponent({
     updateCustomCeos(customCeos: Array<CardName>) {
       this.customCeos = customCeos;
     },
-    // Eine Farbe, die schon ein anderer Mitspieler hat, ist nicht wählbar
+    // A colour that another player already has can't be chosen
     isColorTaken(color: Color, index: number): boolean {
       return this.getPlayers().some((player, otherIndex) => otherIndex !== index && player.color === color);
     },

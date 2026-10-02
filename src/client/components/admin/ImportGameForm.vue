@@ -36,7 +36,7 @@ export default defineComponent({
         const body: AdminImportGameRequest = {url: this.url};
         const response = await fetch(`${paths.API_ADMIN_IMPORT_GAME}?serverId=${encodeURIComponent(this.serverId)}`, {method: 'POST', body: JSON.stringify(body)});
         if (!response.ok) {
-          // Der Server liefert bei Fehlern einen lesbaren Grund (z. B. "already imported")
+          // On errors the server returns a readable reason (e.g. "already imported")
           throw new Error(await response.text());
         }
         const summary: AdminGameSummary = await response.json();

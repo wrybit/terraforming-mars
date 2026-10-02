@@ -1,5 +1,5 @@
 <template>
-  <!-- Inhalt des Spieler-Bildschirms: Umschalter, Spielertabelle, Meilensteine & Auszeichnungen (Spieler und Zuschauer) -->
+  <!-- Content of the players screen: toggle, player table, milestones & awards (player and spectator) -->
   <div v-if="viewModel.players.length > 1" class="mb-segments" role="tablist">
     <button v-for="entry in PLAYER_SEGMENTS" :key="entry.key" type="button" role="tab"
       :aria-selected="segment === entry.key"
@@ -7,10 +7,10 @@
       @click="emit('update:segment', entry.key)">{{ entry.labels.map((label) => $t(label)).join(' & ') }}</button>
   </div>
   <PlayersOverview v-show="segment === 'players'" :playerView="viewModel" v-trim-whitespace/>
-  <!-- Hülle trägt v-show: die Tabelle selbst ist in der Mobil-Ansicht per !important sichtbar geschaltet -->
+  <!-- The wrapper carries v-show: the table itself is forced visible in the mobile view via !important -->
   <div v-if="viewModel.players.length > 1" v-show="segment === 'ma'" class="mb-ma">
     <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewerColor">
-      <!-- Gleicher Kopf wie im Spieler-Abschnitt: Name, Status/Zeit, Konzern -->
+      <!-- Same header as in the player section: name, status/time, corporation -->
       <template #player="{player}">
         <PlayerIdentity :player="player" :playerView="viewModel" :actionLabel="playerActionLabel(player, viewModel)" :highlighted="player.color === viewerColor"/>
       </template>
@@ -30,7 +30,7 @@ import {PLAYER_SEGMENTS, PlayersSegment} from '@/client/components/mobile/mobile
 defineProps<{
   viewModel: ViewModel;
   segment: PlayersSegment;
-  // Farbe des eigenen Spielers (hervorgehoben); Zuschauer haben keine
+  // Color of your own player (highlighted); spectators have none
   viewerColor?: Color;
 }>();
 

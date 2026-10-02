@@ -1,6 +1,6 @@
 <template>
   <div class="stats-heatmap-block">
-    <!-- Titel links, Farbskala oben rechts in der Ecke der Karte -->
+    <!-- Title on the left, color scale in the top right corner of the card -->
     <div class="stats-card-head">
       <h2 v-i18n>Where cities and greeneries end up</h2>
       <div class="stats-heat-legend" aria-hidden="true">
@@ -26,10 +26,10 @@ import {StatsGame} from '@/common/stats/StatsGame';
 import StatsBoardPreview from './StatsBoardPreview.vue';
 import {Heatmap, heatmap, HeatmapTileType, HEAT_STEPS} from './statsHeatmap';
 
-// Leerer Wert der Spielerauswahl: alle Spieler zusammen
+// Empty value of the player selection: all players combined
 const ALL_PLAYERS = '';
 
-// Heatmap wie bei tfmstats: je heller ein Feld, desto öfter stand dort am Ende eine Stadt bzw. Grünfläche
+// Heatmap like tfmstats: the brighter a space, the more often a city or greenery stood there at the end
 export default defineComponent({
   name: 'StatsBoardHeatmap',
   components: {SegmentedControl, StatsBoardPreview},

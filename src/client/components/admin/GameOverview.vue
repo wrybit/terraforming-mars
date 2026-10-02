@@ -1,17 +1,17 @@
 <template>
-  <!-- Eine Partie der Admin-Übersicht: je Spielername eine feste Spalte, Sieger mit Pokal -->
+  <!-- One game of the admin overview: a fixed column per player name, winner with a trophy -->
   <tr class="games-overview-row" :class="{'games-overview-row--imported': summary.source === 'imported'}">
     <td class="games-overview-status">
       <span :class="summary.isFinished ? 'status-finished' : 'status-running'" :title="summary.isFinished ? 'Finished' : 'Running'"></span>
     </td>
     <td class="games-overview-game">
       <a v-if="summary.screenshotUrl !== undefined" :href="summary.screenshotUrl" target="_blank" class="games-overview-source" title="Saved screenshot of the result page">Screenshot</a>
-      <!-- Ziel ist die hier gespeicherte Ergebnisseite: der fremde Server löscht das Spiel bald -->
+      <!-- Target is the results page stored here: the external server deletes the game soon -->
       <a v-else-if="summary.importedParticipantId !== undefined" :href="importedResultUrl" target="_blank" class="games-overview-source" title="Result page saved on this server">imported</a>
       <span v-else class="games-overview-id">{{ summary.id }}</span>
       <span class="games-overview-date">{{ dateText }}</span>
     </td>
-    <!-- 0 = unbekannt (z. B. Screenshot ohne Generationsangabe) -->
+    <!-- 0 = unknown (e.g. screenshot without generation info) -->
     <td class="games-overview-generation">{{ summary.generation > 0 ? summary.generation : '–' }}</td>
     <td>
       <a v-if="summary.spectatorUrl !== undefined" :href="summary.spectatorUrl" target="_blank" class="games-overview-chip games-overview-chip--spectator">Watch</a>
@@ -60,7 +60,7 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    // Löschen gibt es nur über die Heimnetz-Adresse (entscheidet die Übersicht, der Server prüft es selbst nochmal)
+    // Deleting is only available via the home network address (the overview decides, the server checks it again itself)
     canDelete: {
       type: Boolean,
       default: false,
@@ -78,7 +78,7 @@ export default defineComponent({
     playerByName(name: string): AdminPlayerSummary | undefined {
       return this.summary.players.find((player) => player.name === name);
     },
-    // Konzern und Sieg im Tooltip: die Kachel selbst bleibt kompakt (nur Punkte)
+    // Corporation and win in the tooltip: the tile itself stays compact (points only)
     chipTitle(player: AdminPlayerSummary): string {
       return [player.corporation, player.isWinner ? 'Winner' : undefined].filter((part) => part !== undefined).join(' · ');
     },

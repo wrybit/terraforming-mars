@@ -21,10 +21,10 @@ defineProps<{
 }>();
 
 const selectedMessage = ref<LogMessage | undefined>(undefined);
-// Fensterkoordinaten: vertikale Mitte (top) und rechte Kante der Vorschau
+// Window coordinates: vertical center (top) and right edge of the preview
 type PreviewPosition = {top: number, right: number};
 
-// undefined = per Klick angeheftet (Touch), sonst Hover-Vorschau an der Log-Zeile
+// undefined = pinned by click (touch), otherwise hover preview at the log row
 const previewPosition = ref<PreviewPosition | undefined>(undefined);
 
 const previewStyle = computed(() => {
@@ -32,7 +32,7 @@ const previewStyle = computed(() => {
   return position === undefined ? undefined : {top: position.top + 'px', right: position.right + 'px'};
 });
 
-// Modal über der rechten Spalte für Zeilen mit vielen Karten
+// Modal over the right column for rows with many cards
 const modal = ref(false);
 
 function show(message: LogMessage) {
@@ -51,7 +51,7 @@ function showModal(message: LogMessage) {
 }
 
 function preview(message: LogMessage, position: PreviewPosition) {
-  // Ein offenes Modal nicht durch Hover über andere Zeilen ersetzen
+  // Don't replace an open modal by hovering over other rows
   if (modal.value) {
     return;
   }
@@ -59,7 +59,7 @@ function preview(message: LogMessage, position: PreviewPosition) {
   previewPosition.value = position;
 }
 
-// Nur die Hover-Vorschau schließen, ein per Klick angeheftetes Panel bleibt
+// Only close the hover preview; a panel pinned by click stays
 function hidePreview() {
   if (previewPosition.value !== undefined) {
     selectedMessage.value = undefined;
@@ -67,7 +67,7 @@ function hidePreview() {
   }
 }
 
-// Als Overlay anmelden: schließt sich, wenn ein anderes Overlay öffnet (overlayCoordinator.ts)
+// Register as overlay: closes when another overlay opens (overlayCoordinator.ts)
 let unregisterOverlay: (() => void) | undefined;
 onMounted(() => {
   unregisterOverlay = registerOverlay(LOG_CARDS_OVERLAY, () => {

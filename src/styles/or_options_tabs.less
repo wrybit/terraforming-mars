@@ -1,52 +1,52 @@
-// Aktionsmenü als klassische Tab-Leiste (OrOptions mit OR_OPTIONS_AS_TABS, siehe orOptionsLayout.ts).
-// Der aktive Tab hat dieselbe Fläche wie die Box darunter und sitzt direkt auf ihr; die Box lässt ihren oberen Rand
-// unter ihm aus (DockedTab.ts) – so wirken beide verbunden. Überdecken ginge nicht: beide sind durchscheinend.
+// Action menu as a classic tab bar (OrOptions with OR_OPTIONS_AS_TABS, see orOptionsLayout.ts).
+// The active tab has the same surface as the box below and sits directly on it; the box omits its top border
+// beneath it (DockedTab.ts) – so the two look connected. Overlapping wouldn't work: both are translucent.
 
-@or-tabs-panel-background: fade(#1d2030, @frosted-surface-opacity); // durchscheinend (frosted_surface.less)
+@or-tabs-panel-background: fade(#1d2030, @frosted-surface-opacity); // translucent (frosted_surface.less)
 @or-tabs-border: #3a3f5c;
 @or-tabs-radius: 8px;
 @or-tab-accent-width: 3px;
 @or-tab-font-size: 16px;
-@or-tab-icon-size: 24px; // Symbol-Tabs (Weitergeben, Beenden)
-// Zarter Umriss inaktiver Tabs
+@or-tab-icon-size: 24px; // Icon tabs (Pass, End)
+// Subtle outline for inactive tabs
 @or-tab-inactive-border: rgba(255, 255, 255, 0.12);
-// "Nur ansehen"-Tabs (Handkarten, Spiel-Log): grau statt blau – dort lässt sich nichts tun, nur anschauen
+// "View only" tabs (hand cards, game log): grey instead of blue – nothing can be done there, only viewed
 @or-tabs-view-panel-background: fade(#2a2b30, @frosted-surface-opacity);
 @or-tabs-view-border: #4b4d55;
 @or-tabs-view-accent: #8d909c;
-@or-tabs-gap: 4px; // Badge ragt 4px nach rechts – passt genau in den Abstand zum Nachbarn
-@or-tabs-top-spacing: 14px; // Platz für die hochgestellten Badges
-// Leere Tabs (nichts spielbar) treten zurück, bleiben aber lesbar und anklickbar
+@or-tabs-gap: 4px; // Badge sticks out 4px to the right – fits exactly into the gap to the neighbour
+@or-tabs-top-spacing: 14px; // Room for the raised badges
+// Empty tabs (nothing playable) recede, but stay readable and clickable
 @or-tab-empty-opacity: 0.45;
-// Luft zwischen inaktiven Tabs und der Box – deren Rahmen läuft darunter durch, nur der aktive Tab ist angedockt
+// Space between inactive tabs and the box – its border runs underneath, only the active tab is docked
 @or-tab-inactive-gap: 2px;
 
 .or-tabs {
   display: flex;
-  flex-wrap: nowrap; // einzeilig; Kurzlabels (orOptionsShortLabels.ts) sorgen für die Breite
+  flex-wrap: nowrap; // single line; short labels (orOptionsShortLabels.ts) take care of the width
   gap: @or-tabs-gap;
   position: relative;
   z-index: 1;
   margin: @or-tabs-top-spacing 0 0;
-  padding: 0; // erster Tab bündig mit der Box (deren linke obere Ecke ist daher eckig)
+  padding: 0; // first tab flush with the box (whose top left corner is therefore square)
 }
 
 .or-tab {
-  position: relative; // Bezug für das Zähler-Badge und die Unschärfe-Ebene (frosted_surface.less)
-  // Bei Platzmangel schrumpfen alle Tabs, Labels werden mit … gekürzt (voller Titel im Tooltip)
+  position: relative; // Reference for the counter badge and the blur layer (frosted_surface.less)
+  // When space is short all tabs shrink, labels are truncated with … (full title in the tooltip)
   flex: 0 1 auto;
   min-width: 0;
   display: inline-flex;
   align-items: center;
   padding: 6px 8px;
-  // Inaktive Tabs enden über dem Boxrahmen
+  // Inactive tabs end above the box border
   margin-bottom: @or-tab-inactive-gap;
-  // Alle Tabs haben denselben 1px-Rand (inaktiv zart), sonst springen Badges beim Tab-Wechsel;
-  // der farbige Akzent des aktiven Tabs ist ein innerer Schatten und ändert keine Maße
+  // All tabs have the same 1px border (subtle when inactive), otherwise badges jump when switching tabs;
+  // the coloured accent of the active tab is an inset shadow and changes no dimensions
   border: 1px solid @or-tab-inactive-border;
   border-bottom: none;
   border-radius: @or-tabs-radius @or-tabs-radius 0 0;
-  // Inaktiv zart in der Aktionsfarbe (blau), damit aktiv/inaktiv klar unterscheidbar sind
+  // Inactive: subtle in the action colour (blue), so active/inactive are clearly distinguishable
   background: fade(@bg_action, 14%);
   border-color: fade(@bg_action, 35%);
   color: #b8bccb;
@@ -68,7 +68,7 @@
 
 .or-tab--active,
 .or-tab--active:hover {
-  // Gleiche Fläche wie die Box, ohne Unterkante direkt auf ihr
+  // Same surface as the box, without a bottom edge, directly on it
   margin-bottom: 0;
   background: @or-tabs-panel-background;
   border-color: @or-tabs-border;
@@ -76,7 +76,7 @@
   color: #fff;
 }
 
-// "Nur ansehen"-Tab: grau (inaktiv zart grau statt blau)
+// "View only" tab: grey (inactive: subtle grey instead of blue)
 .or-tab--view {
   color: #a4a6ae;
   background: rgba(255, 255, 255, 0.06);
@@ -95,10 +95,10 @@
   color: #fff;
 }
 
-// Leisten mit Handkarten-Tab (Aktionsmenü, andere Eingaben, Startphase): Handkarten links,
-// Weitergeben/Beenden rechts, die übrigen Tabs mittig dazwischen. Automatische Ränder teilen den
-// freien Platz gleichmäßig links und rechts der mittleren Gruppe; ohne Weitergeben/Beenden
-// übernimmt der letzte Tab den rechten automatischen Rand.
+// Bars with a hand cards tab (action menu, other inputs, start phase): hand cards on the left,
+// Pass/End on the right, the remaining tabs centred in between. Automatic margins split the
+// free space evenly left and right of the middle group; without Pass/End
+// the last tab takes the right automatic margin.
 .or-tab--hand + .or-tab:not(.or-tab--end),
 .or-tab--hand ~ .or-tab:not(.or-tab--end) + .or-tab--end {
   margin-left: auto;
@@ -116,18 +116,18 @@
   opacity: @or-tab-empty-opacity;
 }
 
-// Aktiver Tab bleibt voll sichtbar, auch wenn er leer ist – sonst wirkt die Auswahl deaktiviert
+// Active tab stays fully visible even when empty – otherwise the selection looks disabled
 .or-tab--active.or-tab--empty {
   opacity: 1;
 }
 
-// Hervorgehobene Tabs (Meilenstein, Grünfläche, Temperatur; tabHighlighted in orOptionsShortLabels.ts)
+// Highlighted tabs (milestone, greenery, temperature; tabHighlighted in orOptionsShortLabels.ts)
 .or-tab--highlight {
   font-weight: bold;
   font-size: @or-tab-font-size + 1px;
 }
 
-// Tab mit Icon statt Text (Weitergeben, Beenden) – schmal, darf nicht schrumpfen
+// Tab with icon instead of text (Pass, End) – narrow, must not shrink
 .or-tab--icon {
   flex: none;
   padding-left: 10px;
@@ -141,12 +141,12 @@
 }
 
 .or-tab-title {
-  min-width: 0; // sonst kann das Label nicht unter seine Textbreite schrumpfen
+  min-width: 0; // otherwise the label can't shrink below its text width
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-// Zähler als kleines Badge an der oberen rechten Ecke – spart die Breite, damit die Labels ungekürzt passen
+// Counter as a small badge at the top right corner – saves width so the labels fit untruncated
 .or-tab-count {
   position: absolute;
   top: -8px;
@@ -167,29 +167,29 @@
   background: @bg_action;
 }
 
-// Erledigter Teil (z. B. Startauswahl: Konzern gewählt) – grünes Badge, auch wenn der Tab aktiv ist
+// Completed part (e.g. start selection: corporation chosen) – green badge, even when the tab is active
 .or-tab--done .or-tab-count {
   background: @button-success;
 }
 
-// Mit dem aktiven Tab verbundene Box (Inhalt + Speichern)
+// Box connected to the active tab (content + save)
 .or-tab-panel {
-  --or-tab-panel-border: @or-tabs-border; // Randfarbe als Variable: auch der Rand mit Lücke (unten) braucht sie
+  --or-tab-panel-border: @or-tabs-border; // Border colour as a variable: the border with a gap (below) needs it too
   padding: 16px;
   border: 1px solid var(--or-tab-panel-border);
   border-radius: 0 @or-tabs-radius @or-tabs-radius @or-tabs-radius;
   background: @or-tabs-panel-background;
 }
 
-// Box eines "Nur ansehen"-Tabs grau statt blau
+// Box of a "view only" tab grey instead of blue
 .or-tab-panel--view {
   --or-tab-panel-border: @or-tabs-view-border;
   background: @or-tabs-view-panel-background;
 }
 
-// Oberer Rand mit Lücke unter dem aktiven Tab (Lage von DockedTab.ts). Der echte obere Rand wird durchsichtig,
-// Linie und obere rechte Rundung zeichnen Hintergrundbilder – die scrollen nicht mit dem Inhalt der Box mit.
-// Zwei Klassen, damit die background-Kurzschreibweisen der Farbtöne die Bilder nicht zurücksetzen.
+// Top border with a gap under the active tab (position from DockedTab.ts). The real top border becomes transparent,
+// the line and the top right rounding are drawn by background images – they don't scroll with the box content.
+// Two classes so the background shorthands of the colour tones don't reset the images.
 .or-tab-panel.or-tab-panel[data-docked-tab] {
   @line: var(--or-tab-panel-border);
   border-top-color: transparent;
@@ -206,13 +206,13 @@
   background-origin: border-box;
 }
 
-// Aktiver Tab bündig am rechten Rand (Beenden): Ecke eckig wie links, ohne gezeichnete Rundung (DockedTab.ts)
+// Active tab flush with the right edge (End): corner square like on the left, no drawn rounding (DockedTab.ts)
 .or-tab-panel.or-tab-panel[data-docked-tab="right-edge"] {
   border-top-right-radius: 0;
   background-size: 100% 1px, 0 0;
 }
 
-// Status-Tab "… ist gerade am Zug" (WaitingForPlayersTab): rot, nicht klickbar
+// Status tab "… is currently taking their turn" (WaitingForPlayersTab): red, not clickable
 .or-tab--status,
 .or-tab--status:hover {
   gap: 6px;
@@ -221,13 +221,13 @@
   color: #ffb3ad;
   cursor: default;
 
-  // Namens-Pille bleibt weiß auf ihrer Spielerfarbe
+  // Name pill stays white on its player colour
   .log-player {
     color: #fff;
   }
 }
 
-// Tab mit großer Zahl (Generationen im Spiel-Log)
+// Tab with a large number (generations in the game log)
 .or-tab--number {
   padding: 3px 14px;
   font-family: Prototype, sans-serif;
@@ -235,29 +235,29 @@
   line-height: 1;
 }
 
-// Karten in den Tab-Boxen enger setzen (Standard: 30px rechts), damit pro Zeile möglichst eine Karte mehr passt;
-// 16px reichen auch für den Auswahl-Rahmen (selection_highlight.less)
+// Set cards tighter in the tab boxes (default: 30px right) so one more card fits per row where possible;
+// 16px is still enough for the selection frame (selection_highlight.less)
 @or-tab-panel-card-gap: 16px;
 
 .or-tab-panel .card-container {
   margin-right: @or-tab-panel-card-gap;
 }
 
-// Der Abstand rechts an jeder Karte ersetzt am Zeilenende den Innenabstand der Box. Sonst zählten dort
-// Innenabstand + Kartenabstand, und die letzte Karte bräche um, obwohl sie noch passt.
+// The right margin on each card replaces the box padding at the end of the row. Otherwise padding
+// + card margin would both count there, and the last card would wrap even though it still fits.
 @or-tab-panel-card-padding-right: max(0px, 16px - @or-tab-panel-card-gap);
 
 .or-tab-panel:has(.card-container) {
   padding-right: @or-tab-panel-card-padding-right;
 
-  // Der Fuß (tab_panel_footer.less) gleicht den Innenabstand per negativem Rand aus – hier den verkleinerten,
-  // sonst ragt er rechts aus der Box und der Button klebt am Rand
+  // The footer (tab_panel_footer.less) offsets the padding with a negative margin – here the reduced one,
+  // otherwise it sticks out of the box on the right and the button hugs the edge
   > .or-tab-footer {
     margin-right: -@or-tab-panel-card-padding-right;
   }
 }
 
-// Erklärung einer Feldauswahl im Aktionsmenü (OrOptions): Plättchen-Bild, was passiert, wo man klickt
+// Explanation of a space selection in the action menu (OrOptions): tile image, what happens, where to click
 .or-tab-intro {
   display: flex;
   align-items: center;
@@ -277,7 +277,7 @@
   height: auto;
 }
 
-// Symbol eines Sonderplättchens mittig auf dem Sechseck (Symbolbilder haben viel Rand, 152×152)
+// Icon of a special tile centred on the hexagon (icon images have a lot of margin, 152×152)
 .or-tab-intro-tile-symbol {
   position: absolute;
   top: 50%;
@@ -305,7 +305,7 @@
   font-size: 15px;
 }
 
-// Frage einer Eingabe oben in ihrer Box (WaitingForTabs)
+// Question of an input at the top of its box (WaitingForTabs)
 .or-tab-panel-title {
   display: block;
   margin: 0 0 12px;
@@ -315,8 +315,8 @@
   margin: 12px 0 0;
 }
 
-// Button-Farben je Tragweite (tabButtonTone in orOptionsShortLabels.ts): Runde beenden rot, Weitergeben grün
-// (Farben und Mixin in button_tones.less)
+// Button colours by consequence (tabButtonTone in orOptionsShortLabels.ts): end round red, pass green
+// (colours and mixin in button_tones.less)
 .or-tab-save--danger .btn {
   .button-tone(@button-danger, @button-danger-hover);
 }
@@ -329,13 +329,13 @@
   .button-tone(@button-heat, @button-heat-hover);
 }
 
-// Button eines verschachtelten Menüs außerhalb einer Tab-Box; im Fuß einer Tab-Box gilt dessen Regel
-// (tab_panel_footer.less: rechts ohne eigenen Außenabstand) – daher Klasse statt Inline-Style
+// Button of a nested menu outside a tab box; in the footer of a tab box its rule applies
+// (tab_panel_footer.less: right without its own margin) – hence a class instead of an inline style
 .or-options-save {
   margin: 5px 30px 10px;
 }
 
-// Auslösende Karte oben in der Box (CardIntroBlock.vue): verkleinert, damit die Auswahl darunter sichtbar bleibt
+// Triggering card at the top of the box (CardIntroBlock.vue): scaled down so the selection below stays visible
 @card-intro-zoom: 0.55;
 
 .card-intro {
@@ -347,7 +347,7 @@
   flex: none;
   zoom: @card-intro-zoom;
 
-  // Die Karte bringt Außenabstände für Kartenreihen mit; hier steht sie allein
+  // The card brings margins meant for card rows; here it stands alone
   .card-container {
     margin: 0;
   }

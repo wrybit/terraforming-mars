@@ -1,5 +1,5 @@
-// Seite "Spiel erstellt": Bestätigung mit Spiel-ID oben, darunter links die Links je Spieler
-// (Zeilen in Spielerfarbe), rechts die Spieleinstellungen. Gleiche Milchglas-Karten wie "Spiel erstellen".
+// "Game created" page: confirmation with game ID at the top, below it the links per player on the left
+// (rows in player color), game settings on the right. Same frosted-glass cards as "Create game".
 
 @game-home-gap-card: 16px;
 @game-home-gap-column: 24px;
@@ -9,7 +9,7 @@
 @game-home-dim: rgba(238, 238, 238, 0.62);
 @game-home-success: #2e9e4f;
 
-// Keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt
+// No sidebar: its reserved space on the left (common.less) is dropped
 .main-container:has(#game-home) {
   margin-left: 0;
 }
@@ -40,14 +40,14 @@
   background: @or-tabs-view-panel-background;
 }
 
-// Kopf-Karte: Grundstil von der Kartenliste (.card-list-header, card_list.less)
-// doppelte Klasse: schlägt die Titel-Regeln der Kartenliste unabhängig von der Ladereihenfolge
+// Header card: base style from the card list (.card-list-header, card_list.less)
+// doubled class: beats the card list's title rules regardless of load order
 .card-list-header.game-home-head {
   h1 {
-    // darf schrumpfen und umbrechen, damit Sprache/Einstellungen rechts im Bild bleiben
+    // may shrink and wrap so language/settings stay in view on the right
     flex: 0 1 auto;
     min-width: 0;
-    white-space: normal; // die Kartenliste hält ihren Titel einzeilig
+    white-space: normal; // the card list keeps its title on one line
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -72,13 +72,13 @@
   font-weight: bold;
 }
 
-// Hinweis unter der Überschrift der Spieler-Links: gehört zur Überschrift, daher enger als zu den Zeilen
+// Hint below the player links heading: belongs to the heading, so tighter than to the rows
 .game-home-hint {
   margin: -6px 0 10px;
   color: @game-home-dim;
 }
 
-// Spielname und ID hinter dem Titel: kleiner und gedämpft, ohne Schatten der Überschrift
+// Game name and ID after the title: smaller and muted, without the heading's shadow
 .game-home-meta {
   color: @game-home-dim;
   font-size: 14px;
@@ -88,7 +88,7 @@
   overflow-wrap: anywhere;
 }
 
-// Klammern und Trenner als Pseudo-Elemente: mobil stehen Name und ID ohne sie untereinander
+// Brackets and separators as pseudo-elements: on mobile, name and ID stack without them
 .game-home-meta::before {
   content: "(";
 }
@@ -127,7 +127,7 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: @game-home-radius-small;
 
-  // Kopieren (AppButton) und Spielen (Link) gleich hoch, Text mittig
+  // Copy (AppButton) and play (link) equally tall, text centered
   .btn {
     display: inline-flex;
     align-items: center;
@@ -137,7 +137,7 @@
     margin: 0;
   }
 
-  // Zuschauer gehört nicht zur Spielreihenfolge: abgesetzt
+  // Spectator is not part of the turn order: set apart
   &--spectator {
     margin-top: 6px;
     background: rgba(255, 255, 255, 0.05);
@@ -203,7 +203,7 @@
   }
 }
 
-// Handy: drei Zeilen – Titel, Spielname, ID; die Kopf-Karte wächst dafür in der Höhe
+// Phone: three lines – title, game name, ID; the header card grows in height for that
 @media only screen and (max-width: @card-list-phone) {
   .game-home-meta {
     &::before,

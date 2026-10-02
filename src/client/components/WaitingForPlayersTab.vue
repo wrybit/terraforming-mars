@@ -1,5 +1,5 @@
 <template>
-  <!-- Roter Status-Tab neben den Handkarten, solange ein anderer Spieler am Zug ist (nicht klickbar) -->
+  <!-- Red status tab next to the hand cards while another player's turn is running (not clickable) -->
   <div v-if="players.length > 0" class="or-tab or-tab--status" role="status">
     <span aria-hidden="true">⌛</span>
     <span v-for="player in players" :key="player.color" class="log-player" :class="'player_bg_color_' + player.color">{{ player.name }}</span>

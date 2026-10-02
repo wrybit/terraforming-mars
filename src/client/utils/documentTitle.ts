@@ -3,13 +3,13 @@ import {$t} from '../directives/i18n';
 import {Phase} from '@/common/Phase';
 import {turnTaskLabel} from './turnTaskLabel';
 
-// Kurzform im Spiel-Tab: Status, Spieler und Generation sollen im schmalen Tab sichtbar bleiben.
+// Short form in the game tab: status, player and generation should stay visible in the narrow tab.
 const SHORT_APP_NAME = 'TM';
 
-// Statisches Zeichen für "am Zug"; animiert wird es durch die Drehsymbole in WaitingFor ersetzt.
+// Static character for "your turn"; when animated it is replaced by the spinning symbols in WaitingFor.
 export const TURN_MARKER = '●';
 
-// Nur das, was der Titel braucht – passt auf Spieler-, Zuschauer- und Endansicht.
+// Only what the title needs – fits the player, spectator and end views.
 export type TitleView = {
   game: {name: string, generation: number, phase: Phase};
   thisPlayer?: {name: string};
@@ -24,23 +24,23 @@ export function setDocumentTitle(title?: string): void {
   }
 }
 
-// "Am Zug" nur bei einer Pflichteingabe – dieselbe Bedingung wie für die Titel-Animation.
+// "Your turn" only for mandatory input – the same condition as for the title animation.
 export function isOwnTurn(view: TitleView): boolean {
   return view.waitingFor !== undefined && view.waitingFor.optional !== true;
 }
 
-// Status-Teil für den eigenen Zug: Marker plus aktuelle Aufgabe, z.B. "● Kaufen".
+// Status part for your own turn: marker plus current task, e.g. "● Buying".
 export function turnTitleState(view: TitleView, marker: string = TURN_MARKER): string {
   return `${marker} ${$t(turnTaskLabel(view.game))}`;
 }
 
-// Titel im Spiel: <Aufgabe> · <Spieler> · G<Generation> · <Spielname> | TM
-// z.B. "● Kaufen · Daniel · G2 · Remote Plasma Trace | TM"; leere Teile entfallen.
+// Title in the game: <task> · <player> · G<generation> · <game name> | TM
+// e.g. "● Buying · Daniel · G2 · Remote Plasma Trace | TM"; empty parts are dropped.
 export function gameDocumentTitle(view: TitleView, state: string | undefined = isOwnTurn(view) ? turnTitleState(view) : undefined): string {
   return shortDocumentTitle([state, view.thisPlayer?.name, `G${view.game.generation}`, view.game.name]);
 }
 
-// Gemeinsamer Aufbau aller Spiel-Titel: Teile mit " · " verbunden, leere Teile entfallen, "| TM" am Ende.
+// Shared structure of all game titles: parts joined with " · ", empty parts dropped, "| TM" at the end.
 export function shortDocumentTitle(parts: ReadonlyArray<string | undefined>): string {
   return `${parts.filter((part) => part !== undefined && part !== '').join(' · ')} | ${SHORT_APP_NAME}`;
 }

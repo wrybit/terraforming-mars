@@ -1,5 +1,5 @@
-/* Symbole der Mobil-Ansicht (Fußleiste, Zug-Sheet) als SVG-Bausteine im 24er-Raster: eine Formensprache für alle,
-   und Outline und gefüllte Form teilen denselben Umriss. */
+/* Mobile view icons (footer bar, turn sheet) as SVG building blocks on a 24 grid: one visual language for all,
+   and outline and filled form share the same contour. */
 
 export type SvgShape = {
   tag: 'circle' | 'path' | 'rect';
@@ -7,9 +7,9 @@ export type SvgShape = {
 };
 
 export type Glyph = {
-  // Ebenen von hinten nach vorn; vordere Ebenen verdecken, was dahinter liegt
+  // Layers from back to front; front layers cover what lies behind them
   layers: ReadonlyArray<ReadonlyArray<SvgShape>>;
-  // Details: als Linie gezeichnet bzw. in der gefüllten Form ausgespart
+  // Details: drawn as a line or cut out in the filled form
   details: ReadonlyArray<SvgShape>;
 };
 
@@ -19,7 +19,7 @@ export type GlyphName = 'mars' | 'hand' | 'players' | 'log' | 'rocket' |
 
 const circle = (cx: number, cy: number, r: number): SvgShape => ({tag: 'circle', attributes: {cx: String(cx), cy: String(cy), r: String(r)}});
 const path = (d: string): SvgShape => ({tag: 'path', attributes: {d}});
-// Kleiner gefüllter Punkt (Listenpunkte); Inline-Style, weil die Linien-Klasse sonst fill: none setzt
+// Small filled dot (list bullets); inline style because the line class would otherwise set fill: none
 const dot = (cx: number, cy: number): SvgShape => ({tag: 'circle', attributes: {cx: String(cx), cy: String(cy), r: '1.1', style: 'fill: currentColor'}});
 const rect = (x: number, y: number, width: number, height: number, radius: number): SvgShape =>
   ({tag: 'rect', attributes: {x: String(x), y: String(y), width: String(width), height: String(height), rx: String(radius)}});
@@ -42,7 +42,7 @@ export const GLYPHS: Record<GlyphName, Glyph> = {
     layers: [[path('M12 2.5c2.8 1.9 4.5 5.2 4.5 9V16l-1.8 2.5H9.3L7.5 16v-4.5c0-3.8 1.7-7.1 4.5-9z')]],
     details: [circle(12, 10, 1.8), path('M7.5 13.5L4.5 16.5v3l3-1.5M16.5 13.5l3 3v3l-3-1.5M10.5 21.5h3')],
   },
-  // Zug-Sheet: Motive angelehnt an die früheren Bilder der Kacheln
+  // Turn sheet: motifs based on the tiles' earlier images
   cardActions: {layers: [[path('M9.5 7h10M9.5 12h10M9.5 17h10')]], details: [dot(5, 7), dot(5, 12), dot(5, 17)]},
   playCard: {layers: [[{tag: 'rect', attributes: {x: '5', y: '2.5', width: '14', height: '19', rx: '2.2'}}]], details: [circle(12, 8.8, 3), path('M8.5 15h7M8.5 18h4.5')]},
   standardProjects: {layers: [[path(HEXAGON)]], details: [path('M12 8.5v7M8.5 12h7')]},
@@ -53,7 +53,7 @@ export const GLYPHS: Record<GlyphName, Glyph> = {
   award: {layers: [[circle(12, 9, 5.5)]], details: [path('M9 13.8l-1.5 7.7 4.5-2.4 4.5 2.4-1.5-7.7')]},
   colonyTrade: {layers: [[circle(12, 12, 5.2)]], details: [path('M3.5 15.5c-1.2-2 3-5.2 8.5-6.9s10-1.9 11 0-3 5.2-8.5 6.9-9.8 2-11 0z')]},
   more: {layers: [[{tag: 'rect', attributes: {x: '3.5', y: '3.5', width: '17', height: '17', rx: '4'}}]], details: [dot(8, 12), dot(12, 12), dot(16, 12)]},
-  // Startseite (StartScreen.vue): je Menüpunkt ein Symbol, nur einlagig, weil Abdeckungen auf dem Foto-Hintergrund auffielen
+  // Start page (StartScreen.vue): one icon per menu item, single-layer only, because covers stood out on the photo background
   newGame: {layers: [[circle(12, 12, 8.5)]], details: [path('M12 8v8M8 12h8')]},
   rules: {layers: [[path('M3.5 5.5c2.8-1.4 5.7-1.4 8.5 0 2.8-1.4 5.7-1.4 8.5 0v13c-2.8-1.4-5.7-1.4-8.5 0-2.8-1.4-5.7-1.4-8.5 0z')]], details: [path('M12 5.5v13')]},
   statistics: {layers: [[rect(4, 12, 4, 8.5, 1), rect(10, 7, 4, 13.5, 1), rect(16, 3.5, 4, 17, 1)]], details: []},

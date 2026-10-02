@@ -1,6 +1,6 @@
 <template>
   <div id="spectator-home" :class="{'with-turmoil': game.turmoil, 'player-home--fixed': usesFixedLayout}">
-    <!-- Aufbau wie die Spieleransicht (PlayerHome.vue), nur ohne eigene Hand und Eingabe -->
+    <!-- Built like the player view (PlayerHome.vue), just without own hand and input -->
     <Sidebar v-trim-whitespace
       :actingPlayer="false"
       :playerColor="spectator.color"
@@ -30,12 +30,12 @@
             :players="spectator.players"
             @toggleTileView="cycleTileView()"
           />
-          <!-- Spielende: Meldung über dem Mars, danach automatisch zur Ergebnisseite -->
+          <!-- Game end: notice above Mars, then automatically to the results page -->
           <GameOverNotice v-if="game.phase === 'end'" :participantId="spectator.id"/>
         </div>
       </template>
 
-      <!-- Links statt Handkarten das Log: es füllt den Platz unter der Spielertabelle -->
+      <!-- On the left the log instead of hand cards: it fills the space below the player table -->
       <template #main>
         <a class="hotkey-target"></a>
         <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="spectator" v-trim-whitespace id="shortkey-playersoverview"/>
@@ -97,7 +97,7 @@ export default defineComponent({
     game(): GameModel {
       return this.spectator.game;
     },
-    // Festes App-Layout wie in der Spieleransicht (player_home_fixed.less): nur ohne Kolonien darunter
+    // Fixed app layout like in the player view (player_home_fixed.less): just without colonies below
     usesFixedLayout(): boolean {
       return this.game.phase !== 'end' && this.game.colonies.length === 0;
     },

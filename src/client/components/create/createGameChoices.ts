@@ -4,10 +4,10 @@ import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
 import {BoardNameType} from '@/common/game/NewGameConfig';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 
-// Auswahlmöglichkeiten des Formulars "Spiel erstellen" als Daten: das Template rendert sie per v-for,
-// statt jede Kachel einzeln auszuschreiben.
+// Choices of the "Create game" form as data: the template renders them via v-for
+// instead of writing out each tile individually.
 
-// Eine Möglichkeit im Segment-Schalter (SegmentedControl.vue)
+// One option in the segmented control (SegmentedControl.vue)
 export type SegmentOption = {
   value: string | number;
   label: string;
@@ -17,9 +17,9 @@ export type ExpansionChoice = {
   expansion: Expansion;
   label: string;
   iconClass: string;
-  // Wiki-Link (RULEBOOK_URLS) als Info-Symbol anzeigen
+  // Show the wiki link (RULEBOOK_URLS) as an info icon
   info?: boolean;
-  // Noch in Entwicklung: kleines α hinter dem Namen
+  // Still in development: small α after the name
   alpha?: boolean;
 };
 

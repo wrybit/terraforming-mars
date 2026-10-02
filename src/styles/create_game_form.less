@@ -1,35 +1,35 @@
-// Formular "Spiel erstellen": oben eine Kopf-Karte über die volle Breite (wie auf "Spiel erstellt"),
-// darunter links die Einstellungen als kompakte Milchglas-Karten in zwei Spalten, rechts eine eigene, mitlaufende Spalte mit den Spielern und
-// dem Erstellen-Button. Schmal (Handy, Tablet hochkant): eine Spalte, Spieler zuerst, Button fest unten.
+// "Create game" form: on top a header card across the full width (as on "Game created"),
+// below it on the left the settings as compact frosted-glass cards in two columns, on the right a separate sticky column with the players and
+// the Create button. Narrow (phone, tablet portrait): one column, players first, button fixed at the bottom.
 
-// Nähe: innerhalb einer Karte 6–8px, zwischen Karten 16px, zwischen den Spalten 24px
+// Proximity: within a card 6–8px, between cards 16px, between the columns 24px
 @create-game-gap-inner: 6px;
 @create-game-gap-card: 16px;
 @create-game-gap-column: 24px;
-@create-game-page-padding: @page-content-edge; // Abstand der mitlaufenden Spalte oben/unten
+@create-game-page-padding: @page-content-edge; // spacing of the sticky column at top/bottom
 @create-game-players-width: 380px;
 @create-game-radius: 10px;
 @create-game-radius-small: 8px;
 @create-game-line: rgba(255, 255, 255, 0.14);
 @create-game-dim: rgba(238, 238, 238, 0.62);
-@create-game-surface: @or-tabs-view-panel-background; // gleiche Fläche wie die Tab-Boxen im Spiel
+@create-game-surface: @or-tabs-view-panel-background; // same surface as the tab boxes in the game
 @create-game-surface-strong: fade(#22252f, 85%);
 @create-game-chip-background: rgba(255, 255, 255, 0.05);
 @create-game-chip-hover: rgba(255, 255, 255, 0.1);
 @create-game-chip-min-width: 155px;
 @create-game-control-height: 36px;
-// Unterhalb dieser Breite eine Spalte: Spieler oben, Erstellen-Karte klebt am unteren Rand
+// Below this width one column: players on top, Create card sticks to the bottom edge
 @create-game-narrow: 820px;
-// Unterhalb dieser Breite die Einstellungs-Karten einspaltig
+// Below this width the settings cards in a single column
 @create-game-single-settings: 1150px;
 
-// Die Seite hat keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt
+// The page has no sidebar: the space reserved for it on the left (common.less) is dropped
 .main-container:has(#create-game) {
   margin-left: 0;
 }
 
 .create-game {
-  // Versteckte Tooltips der Info-Links ragen rechts heraus; clip statt hidden, damit sticky weiter geht
+  // Hidden tooltips of the info links stick out on the right; clip instead of hidden, so sticky keeps working
   overflow-x: clip;
   color: #eee;
   font-size: 14px;
@@ -42,7 +42,7 @@
     font-weight: 500;
   }
 
-  // Farben der Spielbrett-Sechsecke
+  // Colors of the game board hexagons
   .create-game-tharsis {
     color: @board-tharsis;
   }
@@ -92,21 +92,21 @@
   .page-content();
 }
 
-// Kopf-Karte: Grundstil von der Kartenliste (.card-list-header, card_list.less)
+// Header card: base style from the card list (.card-list-header, card_list.less)
 .create-game-head-actions {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 8px; // wie Sprache/Einstellungen daneben
+  gap: 8px; // like language/settings next to it
 
-  // gleich hoch wie die Milchglas-Buttons daneben
+  // same height as the frosted-glass buttons next to it
   .create-game-reset {
     height: @toolbar-button-size;
     margin: 0;
   }
 }
 
-// Import/Export/Link mit Beschriftung, solange der Kopf Platz hat; sonst nur das Symbol (Container-Abfrage unten)
+// Import/Export/Link with labels as long as the header has room; otherwise only the icon (container query below)
 .create-game-icon-button {
   .toolbar-glass-button();
   gap: 6px;
@@ -117,7 +117,7 @@
   font-size: 15px;
 }
 
-// Kettenglied-Symbol für "Link kopieren"; das CSS-Symbol icon-link der Icon-Bibliothek ist als Link kaum erkennbar
+// Chain-link icon for "Copy link"; the icon library's CSS icon icon-link is hardly recognizable as a link
 .create-game-link-icon {
   width: 18px;
   height: 18px;
@@ -133,14 +133,14 @@
   container: create-game-head / inline-size;
 }
 
-// Innenbreiten des Kopfes (Container-Abfragen messen ohne Innenabstand), ab denen die Beschriftungen passen:
-// einzeilig zwischen Titel und Sprache/Einstellungen, auf dem Handy in der eigenen zweiten Zeile.
-// Gemessen mit Deutsch (längere Sprache, mit "Link kopieren"): 794px bzw. 464px, plus etwas Luft.
+// Inner widths of the header (container queries measure without padding) from which the labels fit:
+// single line between title and language/settings, on the phone in its own second row.
+// Measured with German (longer language, with "Link kopieren"): 794px and 464px, plus some slack.
 @create-game-head-labels-min-one-row: 810px;
 @create-game-head-labels-min-two-rows: 480px;
 
-// Innenbreite des Kopfes, bis zu der er auf dem Handy zweizeilig ist (Media-Abfrage unten):
-// Seitenrand, Innenabstand (12px, card_list.less schmal) und Rahmen abgezogen
+// Inner width of the header up to which it is two rows on the phone (media query below):
+// page margin, padding (12px, card_list.less narrow) and border subtracted
 @create-game-head-two-rows-width: @card-list-phone - 2 * @page-content-edge-narrow - 2 * 12px - 2px;
 
 .create-game-icon-only() {
@@ -166,7 +166,7 @@
   min-width: 0;
 }
 
-// Mauerwerk: Karten fließen in zwei Spalten
+// Masonry: cards flow in two columns
 .create-game-cards {
   columns: 2;
   column-gap: @create-game-gap-card;
@@ -187,7 +187,7 @@
   margin-bottom: @create-game-gap-card;
 }
 
-// Filter-Listen (Konzerne, Karten …) unter den Karten
+// Filter lists (corporations, cards …) below the cards
 .create-game--block {
   margin-bottom: @create-game-gap-card;
 }
@@ -254,7 +254,7 @@
   text-decoration: none;
 }
 
-// ---------- wählbare Kacheln ----------
+// ---------- selectable tiles ----------
 .create-game-chip-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(@create-game-chip-min-width, 1fr));
@@ -266,7 +266,7 @@
   }
 }
 
-// Gewählt wie überall im Spiel: 20 % Lila (selection_highlight.less) und ein Häkchen-Fähnchen ohne Abstand zum Rahmen
+// Selected as everywhere in the game: 20 % purple (selection_highlight.less) and a checkmark flag flush with the border
 .create-game-chip {
   position: relative;
   display: flex;
@@ -327,7 +327,7 @@
   white-space: nowrap;
 }
 
-// Platz fürs Häkchen-Fähnchen
+// Room for the checkmark flag
 .create-game-chip .create-game-info,
 .create-game-chip .create-game-count {
   margin-right: 8px;
@@ -344,7 +344,7 @@
   opacity: 0.7;
 }
 
-// Farbiges Sechseck der Spielbretter (Farbe per create-game-<brett>)
+// Colored hexagon of the game boards (color via create-game-<board>)
 .create-game-board-hexagon {
   flex: none;
   width: 14px;
@@ -353,7 +353,7 @@
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 }
 
-// ---------- Einstellungszeilen ----------
+// ---------- settings rows ----------
 .create-game-option {
   display: flex;
   align-items: center;
@@ -423,7 +423,7 @@
   color: #eee;
 }
 
-// Schalter: echte Checkbox, nur anders gezeichnet
+// Switch: a real checkbox, just drawn differently
 .create-game-switch {
   appearance: none;
   position: relative;
@@ -530,7 +530,7 @@
   }
 }
 
-// ---------- rechte Spalte: Spieler-Karte und Erstellen-Karte, laufen zusammen mit ----------
+// ---------- right column: player card and Create card, sticky together ----------
 .create-game-side {
   grid-column: 2;
   grid-row: 1;
@@ -710,7 +710,7 @@
   }
 }
 
-// ---------- Symbole, Warnungen, Popup ----------
+// ---------- icons, warnings, popup ----------
 .create-game-expansion-icon {
   display: inline-block;
   width: 30px;
@@ -736,21 +736,21 @@
   cursor: pointer;
 }
 
-// Das Textsymbol der Warnung ist kleiner als das Emoji
+// The warning's text symbol is smaller than the emoji
 .create-game-validation-blocker {
   font-size: 1.5em;
   line-height: 1;
   vertical-align: middle;
 }
 
-// Popup so groß wie sein Inhalt statt des festen 90vw x 90vh von PopupPanel
+// Popup as large as its content instead of PopupPanel's fixed 90vw x 90vh
 .popup-outer.create-game-validation-popup .popup-inner {
   width: min(90vw, 800px);
   height: auto;
   max-height: 90vh;
 }
 
-// ---------- schmaler ----------
+// ---------- narrower ----------
 @media only screen and (max-width: @create-game-single-settings) {
   .create-game-cards {
     columns: 1;
@@ -762,7 +762,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  // Rechte Spalte löst sich auf: Spieler oben (wer spielt, dann wie), Erstellen-Karte am Ende
+  // Right column dissolves: players on top (who plays, then how), Create card at the end
   .create-game-side {
     display: contents;
   }
@@ -775,7 +775,7 @@
     overflow: visible;
   }
 
-  // Erstellen-Karte klebt am unteren Rand, bis sie ihren Platz am Seitenende erreicht
+  // Create card sticks to the bottom edge until it reaches its place at the end of the page
   .create-game-create-card {
     order: 1;
     position: sticky;
@@ -796,7 +796,7 @@
   }
 }
 
-// Handy: Titel mit Sprache/Einstellungen oben, Datei-Knöpfe darunter – die Kopf-Karte wächst dafür in der Höhe
+// Phone: title with language/settings on top, file buttons below – the header card grows in height for that
 @media only screen and (max-width: @card-list-phone) {
   .card-list-header.create-game-head {
     flex-wrap: wrap;

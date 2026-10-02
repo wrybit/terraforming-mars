@@ -1,8 +1,8 @@
-// Linienfarben und Legenden-Symbole der Verlaufsdiagramme auf der Ergebnisseite (VictoryPointChart.vue).
+// Line colors and legend symbols of the history charts on the results page (VictoryPointChart.vue).
 import {Color} from '@/common/Color';
 import {GlobalParameter} from '@/common/GlobalParameter';
 
-// Spielerfarben als Linienfarbe (Schwarz als Hellgrau, sonst unsichtbar auf dunklem Grund)
+// Player colors as line color (black as light grey, otherwise invisible on the dark background)
 export const PLAYER_CHART_COLORS: Record<Color, string> = {
   ['red']: 'rgb(153, 17, 0)',
   ['yellow']: 'rgb(170, 170, 0)',
@@ -13,18 +13,18 @@ export const PLAYER_CHART_COLORS: Record<Color, string> = {
   ['orange']: 'rgb(236, 113, 12)',
   ['pink']: 'rgb(245, 116, 187)',
 
-  // Keine echten Spielerfarben
+  // Not real player colors
   ['neutral']: '',
   ['bronze']: '',
 };
 
 export type GlobalParameterChartStyle = {
   color: string;
-  // Symbol neben dem Namen in der Legende; Höhe/Breite in Pixeln für die Legende
+  // Symbol next to the name in the legend; height/width in pixels for the legend
   icon?: {url: string, width: number, height: number};
 };
 
-// Globale Parameter bewusst in Farben, die kein Spieler haben kann – sonst hält man die Linie für einen Spieler
+// Global parameters deliberately in colors no player can have – otherwise the line would be mistaken for a player
 const LEGEND_ICON_HEIGHT = 20;
 function icon(url: string, naturalWidth: number, naturalHeight: number) {
   return {url, width: Math.round(LEGEND_ICON_HEIGHT * naturalWidth / naturalHeight), height: LEGEND_ICON_HEIGHT};

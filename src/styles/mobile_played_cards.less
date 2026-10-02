@@ -1,12 +1,12 @@
-// Mobil-Ansicht: gespielte Karten eines Spielers (OtherPlayer.vue, geöffnet aus der Spieler-Tabelle).
-// Füllt den ganzen Bereich zwischen Statusleiste und Fußleiste, deckt die Tabs ab und reicht bis an den
-// Bildschirmrand, damit zwei Kartenspalten möglichst groß werden (Skalierung: mobileFit.ts).
-// Maße aus mobile.less (@mb-top-height, @mb-nav-height).
+// Mobile view: a player's played cards (OtherPlayer.vue, opened from the player table).
+// Fills the whole area between status bar and footer bar, covers the tabs and reaches the
+// screen edge so two card columns become as large as possible (scaling: mobileFit.ts).
+// Dimensions from mobile.less (@mb-top-height, @mb-nav-height).
 
-// Nur die Tafel selbst (Wurzel von OtherPlayer.vue, per v-show ein-/ausgeblendet) – nicht ihr Wrapper aus
-// PlayersOverview: der bleibt immer sichtbar und würde sonst als leere Fläche über der Spieler-Tabelle liegen
+// Only the panel itself (root of OtherPlayer.vue, shown/hidden via v-show) – not its wrapper from
+// PlayersOverview: that always stays visible and would otherwise lie as an empty area over the player table
 html.tm-mobile .mb-screen--players .other_player_panel {
-  // Unter Status- und Fußleiste (z-index 20/21), damit Zug-Button und Leisten bedienbar bleiben
+  // Below status and footer bar (z-index 20/21) so the turn button and bars stay usable
   position: fixed;
   inset: @mb-top-height 0 calc(@mb-nav-height + env(safe-area-inset-bottom));
   z-index: 19;
@@ -22,7 +22,7 @@ html.tm-mobile .mb-screen--players .other_player_panel {
     border-radius: 0;
   }
 
-  // Innenabstand nur minimal: jeder Pixel Breite macht die Karten größer
+  // Only minimal padding: every pixel of width makes the cards larger
   .other_player_cont {
     flex: 1;
     min-height: 0;

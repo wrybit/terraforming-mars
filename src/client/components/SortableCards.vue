@@ -25,12 +25,12 @@ import {CardModel} from '@/common/models/CardModel';
 import {CardOrderStorage} from '@/client/utils/CardOrderStorage';
 import {reorderHandManually} from '@/client/utils/handSort';
 
-// Ab dieser Mausbewegung (px) wird aus einem Klick ein Drag – sonst würden Klicks auf Karten zu Mini-Drags.
+// From this mouse movement (px) a click becomes a drag – otherwise clicks on cards would turn into mini drags.
 const DRAG_THRESHOLD_PX = 6;
-// Auf Touch-Geräten startet der Drag erst nach kurzem Halten, damit normales Scrollen weiter funktioniert.
+// On touch devices the drag only starts after a short hold so normal scrolling keeps working.
 const TOUCH_HOLD_MS = 300;
 
-/** Aktuelle Verschiebung durch eine laufende CSS-Transformation (matrix(a, b, c, d, x, y)), sonst 0. */
+/** Current offset from a running CSS transform (matrix(a, b, c, d, x, y)), otherwise 0. */
 function currentTranslation(element: HTMLElement): [number, number] {
   const match = /^matrix\((.+)\)$/.exec(getComputedStyle(element).transform);
   if (match === null) {
@@ -46,7 +46,7 @@ type PendingDrag = {
   pointerType: string;
   startX: number;
   startY: number;
-  /** Abstand Zeiger ↔ linke obere Kartenecke, damit die Karte nicht zum Zeiger springt. */
+  /** Distance pointer ↔ top-left card corner so the card doesn't jump to the pointer. */
   offsetX: number;
   offsetY: number;
   slot: HTMLElement;
@@ -58,11 +58,11 @@ type DataModel = {
   dragCard: CardName | undefined;
 };
 
-// Nicht reaktiv gehalten: Zeiger- und DOM-Daten ändern sich bei jedem pointermove und gehören nicht ins Rendering.
+// Not kept reactive: pointer and DOM data change on every pointermove and don't belong in rendering.
 type DragInternals = {
   pending?: PendingDrag;
   ghost?: HTMLElement;
-  /** Viewport-Position des Ghost bei left/top = 0 – gleicht transformierte Vorfahren aus, die fixed verschieben. */
+  /** Viewport position of the ghost at left/top = 0 – compensates for transformed ancestors that shift fixed. */
   ghostOrigin?: {x: number, y: number};
   suppressClick?: boolean;
 };
@@ -82,8 +82,8 @@ export default defineComponent({
       required: true,
     },
   },
-  // Reihenfolge kommt aus CardOrderStorage (reaktiv): Sortieren im Hand-Tab oder in einem Auswahl-Dialog
-  // (handSort.ts) erscheint sofort hier; neue Karten stehen am Ende.
+  // Order comes from CardOrderStorage (reactive): sorting in the hand tab or in a selection dialog
+  // (handSort.ts) shows up here immediately; new cards go at the end.
   data(): DataModel {
     return {
       dragCard: undefined,
@@ -106,9 +106,9 @@ export default defineComponent({
       );
     },
     /**
-     * Die gezogene Karte übernimmt den Platz der Zielkarte; die übrigen rücken nach.
-     * Unabhängig von der Anordnung (Raster oder eine Spalte) und ohne Flackern,
-     * weil der Zeiger danach über dem Platzhalter liegt.
+     * The dragged card takes the target card's place; the others shift along.
+     * Independent of the arrangement (grid or single column) and without flicker,
+     * because the pointer then lies over the placeholder.
      */
     moveDraggedCard(target: CardName): void {
       if (this.dragCard === undefined || target === this.dragCard) {
@@ -162,7 +162,7 @@ export default defineComponent({
           return;
         }
         if (pending.pointerType === 'touch') {
-          // Bewegung vor Ablauf der Haltezeit = Scrollen, kein Drag.
+          // Movement before the hold time elapses = scrolling, not a drag.
           this.finishDrag();
           return;
         }
@@ -172,7 +172,7 @@ export default defineComponent({
       this.updateDropPosition(event.clientX, event.clientY);
     },
     onTouchMove(event: TouchEvent): void {
-      // Während eines laufenden Drags darf der Browser nicht scrollen.
+      // The browser must not scroll during an active drag.
       if (this.dragCard !== undefined) {
         event.preventDefault();
       }
@@ -181,7 +181,7 @@ export default defineComponent({
       const wasDragging = this.dragCard !== undefined;
       this.finishDrag();
       if (wasDragging) {
-        // Der Klick nach dem Loslassen soll keine Kartenaktion auslösen.
+        // The click after releasing must not trigger a card action.
         this.internals().suppressClick = true;
         window.addEventListener('click', this.onClickAfterDrag, {capture: true, once: true});
         window.setTimeout(() => this.internals().suppressClick = false, 0);
@@ -201,15 +201,15 @@ export default defineComponent({
       if (pending === undefined) {
         return;
       }
-      // Kopie der Karte als schwebende „Hand“-Karte; der Original-Slot bleibt als Platzhalter stehen.
+      // Copy of the card as a floating "hand" card; the original slot stays as a placeholder.
       const ghost = pending.slot.cloneNode(true) as HTMLElement;
       ghost.classList.remove('sortable-placeholder');
       ghost.classList.add('sortable-ghost');
       ghost.removeAttribute('data-card-name');
-      // Direkt an body: sonst liegen Banner/Spielerliste (eigene Stacking-Contexts) über der Karte.
-      // Die Präferenz-Klassen (preferences_*) sitzen ebenfalls am body, das Aussehen bleibt also gleich.
+      // Directly on body: otherwise banner/player list (own stacking contexts) lie over the card.
+      // The preference classes (preferences_*) also sit on body, so the look stays the same.
       document.body.appendChild(ghost);
-      // Ursprung einmal messen (ohne Drehung), danach nur noch rechnen.
+      // Measure the origin once (without rotation), then only calculate.
       ghost.style.transform = 'none';
       ghost.style.left = '0px';
       ghost.style.top = '0px';
@@ -237,8 +237,8 @@ export default defineComponent({
       const slots = root.querySelectorAll<HTMLElement>('.sortable-slot[data-card-name]');
       for (const slot of Array.from(slots)) {
         const rect = slot.getBoundingClientRect();
-        // Während des Nachgleitens (sortable-move) steht die Karte noch verschoben. Ohne diesen Abzug
-        // träfe der Zeiger die wegfahrende Karte erneut und sie spränge hin und her.
+        // While gliding (sortable-move) the card is still offset. Without this subtraction
+        // the pointer would hit the departing card again and it would jump back and forth.
         const [shiftX, shiftY] = currentTranslation(slot);
         const left = rect.left - shiftX;
         const top = rect.top - shiftY;

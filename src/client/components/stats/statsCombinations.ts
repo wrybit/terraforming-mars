@@ -4,7 +4,7 @@ import {expectedWinRate, StatsPlayerResult} from './statsResults';
 
 export type CombinationKind = Extract<StatsKind, 'corporation' | 'prelude' | 'card'>;
 
-/** Welche Paare es gibt (wie bei tfmstats): Konzern, Präludium und Projektkarte untereinander. */
+/** Which pairs exist (as in tfmstats): corporation, prelude and project card among each other. */
 export const COMBINATION_TYPES: ReadonlyArray<{key: string, first: CombinationKind, second: CombinationKind, label: string}> = [
   {key: 'corporation-prelude', first: 'corporation', second: 'prelude', label: 'Corporation + Prelude'},
   {key: 'corporation-card', first: 'corporation', second: 'card', label: 'Corporation + Card'},
@@ -19,13 +19,13 @@ export type CombinationStats = {
   plays: number;
   wins: number;
   winRate: number;
-  /** Siegquote bei reinem Zufall (1 ÷ Spielerzahl), gemittelt über die Partien. */
+  /** Win rate by pure chance (1 ÷ player count), averaged over the games. */
   expectedWinRate: number;
-  /** Mittel der beiden Einzel-Siegquoten: so gut wären die beiden ohne gegenseitige Wirkung. */
+  /** Mean of the two individual win rates: how good the two would be without mutual effect. */
   baselineWinRate: number;
 };
 
-/** Alle Paare zweier Arten, die ein Spieler in derselben Partie hatte. */
+/** All pairs of two kinds that a player had in the same game. */
 export function combinations(results: ReadonlyArray<StatsPlayerResult>, first: CombinationKind, second: CombinationKind): Array<CombinationStats> {
   const single = (kind: CombinationKind) => new Map(aggregate(results, kind).map((entry) => [entry.name, entry.winRate]));
   const firstRates = single(first);
@@ -36,7 +36,7 @@ export function combinations(results: ReadonlyArray<StatsPlayerResult>, first: C
     const secondNames = first === second ? firstNames : Array.from(new Set(STATS_KINDS[second].namesOf(result)));
     for (const firstName of firstNames) {
       for (const secondName of secondNames) {
-        // Gleiche Art: jedes Paar nur einmal und nie mit sich selbst
+        // Same kind: each pair only once and never with itself
         if (first === second && firstName >= secondName) {
           continue;
         }

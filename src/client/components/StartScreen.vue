@@ -1,20 +1,20 @@
 <template>
 <div class="start-screen" :class="{'start-screen--intro': introPlaying, 'start-screen--loading': loading}">
-  <!-- Preloader: bis Schriften und Bilder da sind, bleibt alles andere verborgen -->
+  <!-- Preloader: until fonts and images are loaded, everything else stays hidden -->
   <div v-if="loading" class="start-screen-preloader" role="progressbar" :aria-valuenow="Math.round(loadProgress * 100)" aria-valuemin="0" aria-valuemax="100">
     <div class="start-screen-preloader-fill" :style="{width: `${loadProgress * 100}%`}"></div>
   </div>
-  <!-- Sprache und Einstellungen oben rechts; eigene Klasse fürs Intro (start_intro.less) -->
+  <!-- Language and settings at the top right; own class for the intro (start_intro.less) -->
   <PageToolbar class="start-screen-toolbar"/>
   <div class="start-screen-links" :class="{'start-screen-links--globe': globeReady}">
     <div class="start-screen-header start-screen-link--title">
-      <!-- Logo: eigener Rahmen, damit das Intro es als Ganzes bewegen kann -->
+      <!-- Logo: own frame so the intro can move it as a whole -->
       <div class="start-screen-title" :ref="setLogo" :style="logoOffset">
         <div class="start-screen-title-top">TERRAFORMING</div>
         <div class="start-screen-title-bottom">MARS</div>
       </div>
     </div>
-    <!-- Reihe im Planeten-Bild (planets.jpg) ergibt sich aus der Position: Reihe 0 ist der Titel -->
+    <!-- Row in the planet image (planets.jpg) follows from the position: row 0 is the title -->
     <a v-for="(link, index) in links"
       :key="link.label"
       class="start-screen-link"
@@ -28,11 +28,11 @@
       @focus="($event.target as HTMLElement).matches(':focus-visible') && activate(index)"
       @blur="deactivate(index)"
       @click="onClick(index, $event)">
-      <!-- Planeten-Oberfläche: WebGL (planetGlobeRenderer.ts) oder ohne WebGL flach per CSS (planetFlatRenderer.ts) -->
+      <!-- Planet surface: WebGL (planetGlobeRenderer.ts) or without WebGL flat via CSS (planetFlatRenderer.ts) -->
       <canvas class="start-screen-link-planet" :ref="(element) => setCanvas(index, element)" aria-hidden="true"></canvas>
       <span class="start-screen-link-content">
         <MobileGlyph class="start-screen-link-icon" :name="link.icon" :strokeWidth="2"/>
-        <!-- v-i18n am Text-Span: die Übersetzung sucht den exakten Textinhalt, das Symbol würde stören -->
+        <!-- v-i18n on the text span: the translation looks up the exact text content, the icon would interfere -->
         <span v-i18n>{{ link.label }}</span>
       </span>
     </a>
@@ -58,8 +58,8 @@ import {UPSTREAM_REPOSITORY_URL} from '@/client/utils/RepositoryLinks';
 
 type StartScreenLink = {label: string, icon: GlyphName, planet: PlanetStripeName, href: string, external: boolean};
 
-// Alles außer "Neues Spiel" öffnet einen neuen Tab (external), damit die Startseite offen bleibt.
-// Reihenfolge = Reihenfolge der Planeten-Hintergründe (Globus-Reihe); planet = Streifen in planet-stripes.jpg
+// Everything except "New game" opens a new tab (external), so the start page stays open.
+// Order = order of the planet backgrounds (globe row); planet = stripe in planet-stripes.jpg
 const links: ReadonlyArray<StartScreenLink> = [
   {label: 'New game', icon: 'newGame', planet: 'venus', href: 'new-game', external: false},
   {label: 'Statistics', icon: 'statistics', planet: 'earth', href: 'stats', external: true},
@@ -73,10 +73,10 @@ const links: ReadonlyArray<StartScreenLink> = [
 
 const previousViewport = ref('');
 
-// Drehende Planeten: sobald der Zeichner bereit ist, ersetzt die Planeten-Fläche das Bild planets.jpg
+// Rotating planets: as soon as the renderer is ready, the planet surface replaces the image planets.jpg
 const globeReady = ref(false);
 const canvases: Array<HTMLCanvasElement | undefined> = [];
-// Index jedes Menüpunkts in der PlanetRotation (fehlt eine Canvas, verschieben sich die Indizes sonst)
+// Index of each menu item in the PlanetRotation (if a canvas is missing, the indices would otherwise shift)
 const rotationIndexes: Array<number | undefined> = [];
 let rotation: PlanetRotation | undefined;
 let resizeObserver: ResizeObserver | undefined;
@@ -92,10 +92,10 @@ function setHovered(index: number, hovered: boolean): void {
   }
 }
 
-// Hervorhebung (Leuchten, Drehen): Maus-Hover, Tastatur-Fokus oder erster Tap auf Touch-Geräten
+// Highlight (glow, rotation): mouse hover, keyboard focus or first tap on touch devices
 const activeIndex = ref<number | undefined>(undefined);
 const lastPointerType = ref('');
-// Doppel-Tap: kommt der zweite Tap innerhalb dieser Zeit, öffnet er den Link sofort, ohne dass vorher etwas leuchtet
+// Double tap: if the second tap comes within this time, it opens the link immediately without anything glowing first
 const DOUBLE_TAP_WINDOW = 300;
 let pendingTap: {index: number, timer: number} | undefined;
 
@@ -114,7 +114,7 @@ function deactivate(index: number): void {
   }
 }
 
-// Touch: erster Tap hebt hervor, zweiter öffnet den Link; ein schneller Doppel-Tap öffnet direkt
+// Touch: first tap highlights, second opens the link; a quick double tap opens directly
 function onClick(index: number, event: MouseEvent): void {
   if (lastPointerType.value !== 'touch' || activeIndex.value === index) {
     return;
@@ -137,14 +137,14 @@ function onClick(index: number, event: MouseEvent): void {
   };
 }
 
-// Tap außerhalb der Menüpunkte nimmt die Hervorhebung zurück
+// A tap outside the menu items removes the highlight
 function onDocumentPointerDown(event: PointerEvent): void {
   if (activeIndex.value !== undefined && !(event.target instanceof Element && event.target.closest('.start-screen-link'))) {
     deactivate(activeIndex.value);
   }
 }
 
-// Lage des Globus aus dem tatsächlichen Layout (globeLayout.ts); Titel-Hintergrund bekommt Maßstab und Versatz als CSS-Variablen
+// Globe position from the actual layout (globeLayout.ts); title background gets scale and offset as CSS variables
 function measureLayout(): GlobeLayout | undefined {
   const buttons = canvases.map((canvas) => canvas?.parentElement).filter((element): element is HTMLElement => element instanceof HTMLElement);
   const container = buttons[0]?.parentElement;
@@ -172,7 +172,7 @@ function relayout(): void {
 }
 
 async function startGlobe(): Promise<void> {
-  // WebGL wölbt den Streifen und beleuchtet ihn; ohne WebGL dreht er flach per CSS
+  // WebGL curves the stripe and lights it; without WebGL it rotates flat via CSS
   const renderer = await PlanetGlobeRenderer.create() ?? new PlanetFlatRenderer();
   const layout = measureLayout();
   if (layout === undefined) {
@@ -188,18 +188,18 @@ async function startGlobe(): Promise<void> {
     }
   });
   globeReady.value = true;
-  // Buttonmaße ändern sich mit der Fensterbreite/-höhe (Handy, Tablet): dann neu vermessen und zeichnen
+  // Button dimensions change with window width/height (phone, tablet): then measure and draw again
   const container = canvases[0]?.parentElement?.parentElement;
   if (container) {
     resizeObserver = new ResizeObserver(() => relayout());
     resizeObserver.observe(container);
   }
-  // nach dem Umschalten auf Glas zeichnen, wenn die Canvas sichtbar und vermessen ist
+  // draw after switching to glass, once the canvas is visible and measured
   await nextTick();
   relayout();
 }
 
-// Intro bei jedem Laden; Klick oder Taste überspringt es
+// Intro on every load; a click or key press skips it
 const introPlaying = ref(false);
 const logoOffset = ref<Record<string, string>>({});
 let logo: HTMLElement | undefined;
@@ -228,7 +228,7 @@ function startIntro(): void {
   document.addEventListener('keydown', endIntro, true);
 }
 
-// Preloader: in automatisierten Browsern (Screenshots) nicht, die warten selbst aufs Laden
+// Preloader: not in automated browsers (screenshots), they wait for loading themselves
 const loading = ref(false);
 const loadProgress = ref(0);
 

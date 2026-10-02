@@ -38,7 +38,7 @@ export default defineComponent({
   components: {
     PlayerTimer,
   },
-  // Neu gerenderter Status blinkt im selben Takt wie die übrigen "am Zug"-Markierungen
+  // Newly rendered status blinks in the same rhythm as the other "current turn" markers
   mounted() {
     syncActiveBlinkAnimations();
   },
@@ -60,7 +60,7 @@ export default defineComponent({
       }
       return classes.join(' ');
     },
-    // "erforschen" passt nicht in die Spielerzeile; Blinkpunkt und Timer zeigen den Zustand ohnehin.
+    // "researching" doesn't fit in the player row; the blinking dot and timer show the state anyway.
     showsLabel(): boolean {
       return this.actionLabel !== 'researching';
     },

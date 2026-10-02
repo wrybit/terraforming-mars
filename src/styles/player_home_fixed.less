@@ -1,14 +1,14 @@
-// Festes App-Layout der Spiel- und Zuschaueransicht (Klasse player-home--fixed, gesetzt in PlayerHome.vue
-// bzw. SpectatorHome.vue):
-// Die Seite scrollt nicht mehr. Beide Spalten sind fensterhoch und enden auf derselben Linie:
-// rechts wächst das Log bis unten, links füllt die Tab-Box den Platz unter den Spielerleisten und scrollt innen.
-// Nur im Zwei-Spalten-Layout und nur, wenn unterhalb der Spalten nichts mehr steht (Kolonien, Untergrund …).
+// Fixed app layout of the player and spectator view (class player-home--fixed, set in PlayerHome.vue
+// or SpectatorHome.vue):
+// The page no longer scrolls. Both columns are window-high and end on the same line:
+// on the right the log grows to the bottom, on the left the tab box fills the space below the player bars and scrolls inside.
+// Only in the two-column layout and only when nothing else sits below the columns (colonies, underworld …).
 
-@player-home-fixed-top: 20px; // Innenabstand oben von #player-home (player_home.less)
+@player-home-fixed-top: 20px; // top padding of #player-home (player_home.less)
 @player-home-fixed-bottom: 10px;
 @player-home-fixed-height: calc(100vh - @player-home-fixed-top - @player-home-fixed-bottom);
-// Mindesthöhe der Tab-Box: bei vielen Spielern (bis zu 5 Leisten) bleibt sie benutzbar;
-// reicht die Höhe nicht, scrollt die linke Spalte als Ganzes (Seite bleibt fest)
+// Minimum height of the tab box: stays usable with many players (up to 5 bars);
+// if the height is not enough, the left column scrolls as a whole (page stays fixed)
 @player-home-fixed-panel-min-height: 320px;
 
 @media only screen and (min-width: @player-home-columns-min-width) {
@@ -25,13 +25,13 @@
     align-items: stretch;
   }
 
-  // Ziehgriff nur so hoch wie die Spalten; seine Fensterhöhe (player_home_columns.less) würde die Zeile
-  // sonst strecken und die linke Spalte unten über das Log hinausragen lassen
+  // Drag handle only as tall as the columns; its window height (player_home_columns.less) would otherwise
+  // stretch the row and make the left column extend below the log
   .player-home--fixed .player-home-columns__resizer {
     height: auto;
   }
 
-  // Rechts: feste Höhe (rightColumnFit.ts misst daran), Log wächst bis unten
+  // Right: fixed height (rightColumnFit.ts measures against it), log grows to the bottom
   .player-home--fixed .player-home-columns__board {
     height: @player-home-fixed-height;
     max-height: @player-home-fixed-height;
@@ -52,7 +52,7 @@
       min-height: 0;
     }
 
-    // Mindesthöhe wie bisher (Karte der Hover-Vorschau), darüber hinaus füllt das Log den Rest
+    // Minimum height as before (card of the hover preview), beyond that the log fills the rest
     .log-panel.or-tab-panel {
       flex: 1 1 auto;
       height: auto;
@@ -65,19 +65,19 @@
     min-height: @player-home-card-height;
   }
 
-  // Links: Spielerleisten fest, darunter füllt die aktuelle Tab-Box den Rest
+  // Left: player bars fixed, below them the current tab box fills the rest
   .player-home--fixed .player-home-columns__main {
     height: 100%;
     min-height: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden auto; // Ausweich-Scrollen bei vielen Spielern (siehe Mindesthöhe der Tab-Box)
+    overflow: hidden auto; // fallback scrolling with many players (see minimum height of the tab box)
 
     > * {
       flex: none;
     }
 
-    // Aktionen bzw. Handkarten (wenn man nicht am Zug ist) füllen den Rest
+    // Actions or hand cards (when it is not your turn) fill the rest
     > .player_home_block--actions,
     > .player_home_block--hand {
       flex: 1 1 0;
@@ -87,7 +87,7 @@
       margin-bottom: 0;
     }
 
-    // Gedraftete Karten (Draft-Phase) begrenzt, damit die Tab-Box darunter Platz behält
+    // Drafted cards (draft phase) limited so the tab box below keeps its space
     > .player_home_block--hand:not(#shortkey-hand) {
       flex: 0 1 auto;
       min-height: 0;
@@ -96,14 +96,14 @@
     }
   }
 
-  // Zuschauer: das Log links unter der Spielertabelle füllt den Rest wie beim Spieler die Tab-Box
+  // Spectator: the log on the left below the player table fills the rest like the tab box for players
   .player-home--fixed .player-home-columns__main > .player_home_block--spectator-log {
     flex: 1 1 0;
     min-height: @player-home-fixed-panel-min-height;
     margin-bottom: 0;
   }
 
-  // Startphase: Startkarten-Auswahl füllt den Rest wie das Aktionsmenü
+  // Start phase: starting card selection fills the rest like the action menu
   .player-home--fixed .player-home-columns__main > .player_home_block--setup {
     flex: 1 1 0;
     min-height: @player-home-fixed-panel-min-height;
@@ -111,9 +111,9 @@
     flex-direction: column;
     margin-bottom: 0;
 
-    // Hülle (v-show) → WaitingFor-Wurzel → wf-root → Startauswahl
-    // (Tab-Leiste und Tab-Box der eigenen Startauswahl liegen auf derselben Ebene: die Leiste bleibt eine Zeile,
-    // die Box bleibt ein normaler Block, damit die Karten wie bei den Handkarten nebeneinander fließen)
+    // Wrapper (v-show) → WaitingFor root → wf-root → start selection
+    // (tab bar and tab box of the own start selection are on the same level: the bar stays one row,
+    // the box stays a normal block so the cards flow side by side like the hand cards)
     > div,
     > div > div:not(.or-tabs, .or-tab-panel),
     .wf-root,
@@ -129,7 +129,7 @@
     }
   }
 
-  // Kette bis zur Tab-Box: WaitingFor-Hülle → wf-root → Eingabe (OrOptions / WaitingForTabs)
+  // Chain down to the tab box: WaitingFor wrapper → wf-root → input (OrOptions / WaitingForTabs)
   .player-home--fixed .player_home_block--actions {
     > div,
     .wf-root,
@@ -141,7 +141,7 @@
     }
   }
 
-  // Die Box unter den Tabs scrollt innen; Überschrift und Tab-Leiste bleiben stehen
+  // The box below the tabs scrolls inside; heading and tab bar stay put
   .player-home--fixed .player-home-columns__main .or-tab-panel {
     flex: 1 1 auto;
     min-height: 0;

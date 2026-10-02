@@ -1,17 +1,17 @@
-/* Gemeinsamer Vertrag der Planeten-Zeichner: WebGL (planetGlobeRenderer.ts, gewölbt mit Licht) oder,
-   ohne WebGL, CSS (planetFlatRenderer.ts, flach verschobener Streifen mit Verlauf). */
+/* Shared contract of the planet renderers: WebGL (planetGlobeRenderer.ts, curved with lighting) or,
+   without WebGL, CSS (planetFlatRenderer.ts, flat shifted strip with gradient). */
 import {GlobePlacement} from './globeLayout';
 import {PlanetStripe} from './planetStripes';
 
 export type PlanetDrawRequest = {
-  // Fläche hinter dem Button-Text; WebGL zeichnet hinein, CSS nutzt sie als Hintergrund-Box
+  // Surface behind the button text; WebGL draws into it, CSS uses it as a background box
   target: HTMLCanvasElement;
-  // Lage des Buttons im Globus (globeLayout.ts)
+  // Button's position in the globe (globeLayout.ts)
   placement: GlobePlacement;
   stripe: PlanetStripe;
-  // Drehung in Sprite-Pixeln Oberfläche
+  // Rotation in sprite pixels of surface
   offset: number;
-  // 0 = Ruhe, 1 = Hover
+  // 0 = idle, 1 = hover
   glow: number;
 };
 

@@ -42,15 +42,15 @@
   }
 }
 
-// Button "Mars groß anzeigen" in der Feldwahl (SelectSpace.vue): mittig, mit Luft zum Einleitungstext darüber
+// "Show Mars enlarged" button in the space selection (SelectSpace.vue): centered, with room to the intro text above
 .select-space-zoom {
   display: flex;
   justify-content: center;
   margin: 32px 0 16px;
 }
 
-// Zweizeilig: Handlung groß, nächster Schritt klein darunter (enger Abstand = eine Einheit).
-// Grundform wie alle Aktions-Buttons (btn-submit, btn-rounded); doppelte Klasse schlägt deren feste Höhe
+// Two lines: action large, next step small below (tight spacing = one unit).
+// Base shape like all action buttons (btn-submit, btn-rounded); the doubled class beats their fixed height
 .btn.select-space-zoom-button {
   display: flex;
   flex-direction: column;
@@ -70,22 +70,22 @@
   opacity: 0.85;
 }
 
-// In der Tab-Box genau in deren Mitte wie beim Weitergeben/Beenden (or-tab-panel--end, tab_panel_footer.less);
-// als Überlagerung (Bezug: .or-tab-panel ist positioniert, frosted_surface.less), damit der Einleitungstext oben bleibt
+// Exactly centered in the tab box like for pass/end (or-tab-panel--end, tab_panel_footer.less);
+// as an overlay (reference: .or-tab-panel is positioned, frosted_surface.less) so the intro text stays on top
 .or-tab-panel .select-space-zoom {
   position: absolute;
   inset: 0;
   align-items: center;
   margin: 0;
-  padding: 0 16px; // schmale Box: Button stößt nicht an den Rand
-  pointer-events: none; // Box darunter bleibt bedienbar, nur der Button fängt Klicks
+  padding: 0 16px; // narrow box: button doesn't touch the edge
+  pointer-events: none; // box below stays usable, only the button catches clicks
 
   .select-space-zoom-button {
     pointer-events: auto;
   }
 }
 
-// Schmales Layout: wie beim mittigen Tab-Button (tab_panel_footer.less) unter der Einleitung statt darüber
+// Narrow layout: like the centered tab button (tab_panel_footer.less) below the intro instead of above
 @media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
   .or-tab-panel .select-space-zoom {
     position: static;

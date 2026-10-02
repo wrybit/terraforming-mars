@@ -1,12 +1,12 @@
-// Schriftgröße der Log-Einträge; Karten-, Feld- und Plättchen-Namen darin (fett, Großbuchstaben) 1px kleiner
+// Font size of log entries; card, space and tile names in them (bold, uppercase) 1px smaller
 @log-font-size: 15px;
 @log-pill-font-size: @log-font-size - 1px;
 
 .log-generations {
   display: flex;
-  align-items: flex-end; // Tabs sitzen unten auf der Box
+  align-items: flex-end; // Tabs sit at the bottom, on the box
   .log-gen-title {
-    // Mittig auf der Achse der Tab-Ziffern (die Leiste selbst sitzt unten auf der Box)
+    // Centered on the axis of the tab numbers (the bar itself sits at the bottom, on the box)
     align-self: center;
     flex: none;
     margin: 0 8px 0 0;
@@ -15,8 +15,8 @@
     font-size: 16px;
     color: #a4a6ae;
   }
-  // Tab-Leiste sitzt direkt auf der Box (siehe or_options_tabs.less), hier ohne den Badge-Abstand oben
-  // Bei vielen Generationen waagerecht scrollbar statt die Ziffern zu stauchen (LogGenerationList.vue hält den gewählten Tab im Blick)
+  // Tab bar sits directly on the box (see or_options_tabs.less), here without the badge spacing on top
+  // With many generations, scroll horizontally instead of squeezing the numbers (LogGenerationList.vue keeps the selected tab in view)
   .log-gen-tabs {
     margin-top: 0;
     min-width: 0;
@@ -32,7 +32,7 @@
       flex-shrink: 0;
     }
   }
-  // Solo-Limit ("of 12") als rote Marke, kleiner als die Tab-Ziffern, damit es nicht wie ein weiterer Tab wirkt
+  // Solo limit ("of 12") as a red mark, smaller than the tab numbers, so it doesn't look like another tab
   .label-additional {
     align-self: center;
     background: @player_red;
@@ -41,13 +41,13 @@
     padding: 2px 6px;
     margin-left: 8px;
   }
-  // Auf roter Fläche waere rote Schrift unsichtbar; das Blinken in der letzten Generation bleibt
+  // Red text would be invisible on a red surface; the blinking in the last generation stays
   .last-generation {
     color: inherit;
   }
 }
 
-// Box unter den Generationen-Tabs; Rahmen und Fläche kommen von .or-tab-panel--view
+// Box below the generation tabs; border and surface come from .or-tab-panel--view
 .log-panel.or-tab-panel {
   height: 240px;
   max-height: 240px;
@@ -117,41 +117,41 @@
   }
 }
 
-// Größe der Karten in der Hover-Vorschau; bestimmt auch die Log-Höhe im Zwei-Spalten-Layout (player_home_columns.less)
+// Size of the cards in the hover preview; also determines the log height in the two-column layout (player_home_columns.less)
 @log-card-preview-zoom: 0.8;
 
-// Projektkarte inkl. Rahmen (ungezoomt)
+// Project card incl. border (unzoomed)
 @log-card-preview-height: 308px;
 @log-card-preview-gap: 8px;
 
-// Hover-Vorschau knapp vor dem rechten Rand über dem Log, mit Schlagschatten. Eine Karte sitzt vertikal mittig;
-// mehrere (bis 3, mehr öffnen per Klick ein Modal – logMessageContent.ts) stehen vollständig übereinander und
-// wachsen nach oben: die letzte sitzt mittig, die übrigen darüber.
-// fixed statt absolute, weil das Log in einer Spalte mit overflow liegen kann (player_home_columns.less)
+// Hover preview just inside the right edge above the log, with a drop shadow. A single card is vertically centered;
+// several (up to 3; more open a modal on click – logMessageContent.ts) stack fully on top of each other and
+// grow upwards: the last one is centered, the others above it.
+// fixed instead of absolute, because the log can sit in a column with overflow (player_home_columns.less)
 .card-panel--floating {
-  // Zoom als Variable: die Verschiebung rechnet mit derselben Kartengröße (Stufe "log-full" setzt 1)
+  // Zoom as a variable: the offset is computed from the same card size (level "log-full" sets 1)
   --log-card-preview-zoom: @log-card-preview-zoom;
-  position: fixed; // top (Mitte) und right setzt LogMessageInspector
+  position: fixed; // top (center) and right are set by LogMessageInspector
   z-index: 100;
-  // Unterkante eine halbe Karte unter der Mitte: die letzte Karte steht mittig
+  // Bottom edge half a card below the center: the last card is centered
   transform: translateY(calc(-100% + @log-card-preview-height * var(--log-card-preview-zoom) / 2));
-  // Schatten folgt der Kartenform (runde Ecken)
+  // Shadow follows the card shape (rounded corners)
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.7));
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: @log-card-preview-gap;
-  // Maus bleibt auf den Log-Zeilen; sonst würde die Vorschau den Hover abfangen und flackern
+  // Mouse stays on the log lines; otherwise the preview would catch the hover and flicker
   pointer-events: none;
 
-  // Außenabstand der Karten ist für Kartenreihen gedacht; hier soll die Karte bündig mit dem Log abschließen
+  // The cards' margin is meant for card rows; here the card should end flush with the log
   .card-container {
     margin: 0;
     zoom: var(--log-card-preview-zoom);
   }
 }
 
-// Gehoverte Zeile hervorheben – zeigt, zu welcher Zeile die Karten-Vorschau gehört
+// Highlight the hovered line – shows which line the card preview belongs to
 @media (hover: hover) {
   .log-panel li:hover {
     background: rgba(255, 255, 255, 0.1);
@@ -159,15 +159,15 @@
   }
 }
 
-// Zeilen in der Farbe ihres Spielers (LogMessageComponent: log-line--<Farbe>):
-// Text mit Weiß aufgehellt, damit auch dunkle Farben (schwarz, blau) auf dem Log lesbar bleiben; Hover zart getönt
+// Lines in their player's color (LogMessageComponent: log-line--<color>):
+// text lightened with white so dark colors (black, blue) stay readable on the log too; hover lightly tinted
 each(@players, {
   @c: ~"player_@{value}";
 
   .log-panel li.log-line--@{value} {
     color: mix(@@c, #fff, 45%);
 
-    // Namens-Pillen bleiben weiß auf ihrer Spielerfarbe
+    // Name pills stay white on their player color
     .log-player {
       color: #fff;
     }
@@ -180,16 +180,16 @@ each(@players, {
   }
 });
 
-// Zeilen mit vielen Karten (needsModalPreview): per Klick als scrollbares Modal über der rechten Spalte,
-// genauso platziert wie die gespielten Karten (player_home_columns.less, --board-column-left)
+// Lines with many cards (needsModalPreview): on click, a scrollable modal over the right column,
+// placed exactly like the played cards (player_home_columns.less, --board-column-left)
 .card-panel--modal {
   .column-overlay-position();
   .column-overlay-surface();
-  display: block; // Karten als Reihe (cardbox), das ✕ schwebt oben rechts
+  display: block; // cards as a row (cardbox), the ✕ floats top right
   padding: 16px;
   overflow-y: auto;
 
-  // Kleines ✕ oben rechts, bleibt beim Scrollen durch viele Karten sichtbar
+  // Small ✕ top right, stays visible while scrolling through many cards
   > .btn {
     position: sticky;
     top: 0;

@@ -31,8 +31,8 @@ import {defineComponent, PropType} from 'vue';
 import {FilterOption, optionKeys} from '@/client/components/cardlist/cardListOptions';
 import {isMarked, isUnfiltered} from '@/client/components/cardlist/filterSelection';
 
-// Eine Filtergruppe der Kartenliste (Kartentyp, Tags, Erweiterungen, Ressourcen): Kopf mit Zurücksetzen, darunter
-// die Optionen als Kacheln (mit Text) oder als reine Symbole. Die Auswahl selbst ändert die Elternkomponente.
+// A filter group of the card list (card type, tags, expansions, resources): header with reset, below it
+// the options as tiles (with text) or as icons only. The selection itself is changed by the parent component.
 export default defineComponent({
   name: 'CardListFilterGroup',
   emits: ['toggle', 'reset'],
@@ -40,7 +40,7 @@ export default defineComponent({
     title: {type: String, required: true},
     options: {type: Array as PropType<ReadonlyArray<FilterOption>>, required: true},
     selection: {type: Object as PropType<Record<string, boolean>>, required: true},
-    // Trefferzahl je Option; ohne Angabe keine Zahlen
+    // Match count per option; without it no numbers
     counts: {type: Object as PropType<Map<string, number>>, required: false},
     variant: {type: String as PropType<'chips' | 'icons'>, default: 'chips'},
   },

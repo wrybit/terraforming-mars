@@ -1,8 +1,8 @@
 /**
- * Liest die Bytefolge des Teilen-Links (Gegenstück zum ByteWriter).
+ * Reads the byte sequence of the share link (counterpart to ByteWriter).
  *
- * Hinter dem Ende liefert jede Lesefunktion 0 bzw. leer, weil der ByteWriter
- * Nullen am Schluss abschneidet und neuere Felder hinten angehängt werden.
+ * Past the end every read function returns 0 or empty, because ByteWriter
+ * trims trailing zeros and newer fields are appended at the end.
  */
 export class ByteReader {
   private position = 0;
@@ -36,7 +36,7 @@ export class ByteReader {
   }
 
   public readText(): string {
-    // Länge auf den Rest begrenzen, damit kaputte Links nicht riesige Puffer anlegen
+    // Limit the length to the remainder so broken links don't allocate huge buffers
     const length = Math.min(this.readUnsigned(), Math.max(0, this.bytes.length - this.position));
     const text = new TextDecoder().decode(this.bytes.subarray(this.position, this.position + length));
     this.position += length;

@@ -10,8 +10,8 @@
     id="shortkey-board"
   />
 
-  <!-- Zweite Brett-Instanz nur zum Ansehen. Die IDs darin (main_board usw.) gibt es dann doppelt;
-       getElementById liefert aber das erste Vorkommen, und das Modal hängt am Ende von body -->
+  <!-- Second board instance for viewing only. The IDs in it (main_board etc.) then exist twice;
+       getElementById returns the first occurrence though, and the modal is attached at the end of body -->
   <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" @close="closeBoardZoom" @rendered="notifyZoomBoardRendered" @hidden="notifyZoomBoardHidden">
     <Board
       v-bind="boardProps"
@@ -40,7 +40,7 @@
     <a class="hotkey-target"></a>
     <Milestones :milestones="game.milestones" />
     <Awards :awards="game.awards" />
-    <!-- Dieselben Daten als Tabelle; sichtbar nur im Zwei-Spalten-Layout (milestone_award_table.less) -->
+    <!-- The same data as a table; only visible in the two-column layout (milestone_award_table.less) -->
     <MilestoneAwardTable :milestones="game.milestones" :awards="game.awards" :players="players" :viewerColor="viewerColor"/>
   </div>
 </template>
@@ -81,7 +81,7 @@ export default defineComponent({
       type: Array as PropType<ReadonlyArray<PublicPlayerModel>>,
       required: true,
     },
-    // Eigener Spieler (fehlt bei Zuschauern): steht in der Meilenstein-Tabelle zuletzt und hervorgehoben
+    // Own player (missing for spectators): listed last and highlighted in the milestone table
     viewerColor: {
       type: String as PropType<Color | undefined>,
       default: undefined,
@@ -94,7 +94,7 @@ export default defineComponent({
   data() {
     return {
       boardZoomOpen: false,
-      // Startpunkt der Zoom-Animation; erst nach dem Mounten bekannt
+      // Start point of the zoom animation; only known after mounting
       columnBoardElement: undefined as HTMLElement | undefined,
     };
   },
@@ -110,7 +110,7 @@ export default defineComponent({
     PlanetaryTracks,
   },
   computed: {
-    // Gleiche Props für das Brett in der Spalte und im Vergrößerungs-Modal
+    // Same props for the board in the column and in the enlargement modal
     boardProps() {
       return {
         spaces: this.game.spaces,
@@ -127,8 +127,8 @@ export default defineComponent({
     },
   },
   watch: {
-    // Plättchen platzieren: Brett groß per Button in der Feldwahl, nach der Bestätigung wieder klein (placementZoom.ts)
-    // immediate: Die Feldwahl kann vor dem Brett gemountet sein (z. B. beim Neuladen der Seite)
+    // Placing tiles: board enlarged via button in the space selection, small again after confirming (placementZoom.ts)
+    // immediate: the space selection may be mounted before the board (e.g. when reloading the page)
     'placementZoom.requested': {
       immediate: true,
       handler(requested: boolean) {
@@ -145,15 +145,15 @@ export default defineComponent({
       this.columnBoardElement = (this.$refs.columnBoard as {$el?: HTMLElement} | undefined)?.$el;
       this.boardZoomOpen = true;
     },
-    // Schließen per Hintergrund, ✕ oder Escape: eine laufende Feldwahl geht auf dem kleinen Brett weiter
+    // Closing via backdrop, ✕ or Escape: an ongoing space selection continues on the small board
     closeBoardZoom() {
       this.boardZoomOpen = false;
       releasePlacementZoom();
     },
     notifyZoomBoardRendered,
     notifyZoomBoardHidden,
-    // Klick auf den Mars vergrößert ihn – außer während einer Feldwahl
-    // und auf Bedienelementen des Bretts
+    // Clicking Mars enlarges it – except during a space selection
+    // and on the board's controls
     onBoardClick(event: MouseEvent) {
       const target = event.target as HTMLElement | null;
       if (target !== null && target.closest('.hide-tile-button') !== null) {

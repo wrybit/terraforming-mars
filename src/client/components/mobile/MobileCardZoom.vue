@@ -1,18 +1,18 @@
 <template>
   <div :class="['mb-card-zoom', {'mb-card-zoom--open': open, 'mb-card-zoom--neighbors-hidden': !neighborsShown}]" role="dialog" aria-modal="true">
-    <!-- Karte wächst aus ihrer Position in der Liste in die Mitte und schrumpft beim Schließen dorthin zurück;
-         Hintergrund unscharf (wie im Mockup), darunter kompakte Knöpfe -->
+    <!-- Card grows from its position in the list to the center and shrinks back there on close;
+         background blurred (like in the mockup), compact buttons below -->
     <button type="button" class="mb-card-zoom-backdrop" :aria-label="$t('Close')" @click="close"></button>
-    <!-- Karussell: alle Karten nebeneinander, per Wischen durchschiebbar, rastet auf je einer Karte ein -->
+    <!-- Carousel: all cards side by side, swipeable, snaps to one card at a time -->
     <div ref="track" class="mb-card-zoom-track" @scroll.passive="onScroll">
-      <!-- Seite der Karte relativ zur gezeigten: Nachbarn fahren von dort herein und dorthin wieder hinaus -->
+      <!-- Side of the card relative to the shown one: neighbors slide in from there and back out there -->
       <div v-for="slide in count" :key="slide" :class="['mb-card-zoom-slide', slideSideClass(slide - 1)]" @click="onSlideClick(slide - 1)">
         <div class="mb-card-zoom-card mb-fit-off">
           <slot name="slide" :index="slide - 1"></slot>
         </div>
       </div>
     </div>
-    <!-- Vor/Zurück an den Rändern, dazwischen Spielen und Schließen; fehlt ein Nachbar, bleibt sein Platz frei -->
+    <!-- Previous/next at the edges, Play and Close in between; if a neighbor is missing, its slot stays empty -->
     <div class="mb-card-zoom-actions">
       <button type="button" class="mb-card-zoom-step" :class="{'mb-card-zoom-step--hidden': !hasPrevious}" :disabled="!hasPrevious"
         :aria-label="$t('Previous card')" @click="step(-1)">‹</button>
@@ -31,13 +31,13 @@ import {computed, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 
 const props = withDefaults(defineProps<{
-  // Anzahl der Karten im Karussell; Inhalt je Karte liefert der Slot "slide"
+  // Number of cards in the carousel; the "slide" slot provides each card's content
   count: number;
-  // Gezeigte Karte
+  // Shown card
   index: number;
-  // Gezeigte Karte ist jetzt spielbar: Knopf "Karte spielen"
+  // Shown card is playable now: "Play card" button
   playable?: boolean;
-  // Position der angetippten Karte; Start- und Endpunkt der Animation (fehlt: nur Wachsen aus der Mitte)
+  // Position of the tapped card; start and end point of the animation (missing: only grow from the center)
   origin?: DOMRect;
 }>(), {playable: false, origin: undefined});
 
@@ -47,23 +47,23 @@ const emit = defineEmits<{
   (event: 'update:index', index: number): void;
 }>();
 
-// Dauer muss zur Transition in mobile.less passen (@mb-card-zoom-duration)
+// Duration must match the transition in mobile.less (@mb-card-zoom-duration)
 const DURATION_MS = 260;
 const NEIGHBOR_DURATION_MS = 220;
-// Wartelage der Nachbarn außerhalb des Karussells; muss zu .mb-card-zoom--neighbors-hidden in mobile.less passen
+// Waiting position of the neighbors outside the carousel; must match .mb-card-zoom--neighbors-hidden in mobile.less
 const NEIGHBOR_OFFSET = '120%';
-// Ruhezeit nach dem letzten Scroll-Ereignis, ab der das Wischen als beendet gilt
+// Idle time after the last scroll event after which swiping counts as finished
 const SCROLL_SETTLE_MS = 120;
 const open = ref(false);
-// Nachbarkarten erst nach dem Wachsen hereinfahren und vor dem Schrumpfen wieder hinaus
+// Slide neighbor cards in only after growing and back out before shrinking
 const neighborsShown = ref(false);
 const track = ref<HTMLElement | undefined>(undefined);
 
 const hasPrevious = computed(() => props.index > 0);
 const hasNext = computed(() => props.index < props.count - 1);
 
-// Eine Karte ist schmaler als das Karussell (Nachbarn schauen herein); Abstandhalter vorn und hinten sind
-// so breit, dass Karte n genau bei n * Kartenbreite mittig einrastet
+// A card is narrower than the carousel (neighbors peek in); spacers at the front and back are
+// so wide that card n snaps centered exactly at n * card width
 function slideWidth(): number {
   const slide = track.value?.querySelector<HTMLElement>('.mb-card-zoom-slide');
   return slide?.offsetWidth || 1;
@@ -76,14 +76,14 @@ function slideSideClass(slideIndex: number): string {
   return slideIndex > props.index ? 'mb-card-zoom-slide--after' : '';
 }
 
-// Tap auf eine angeschnittene Nachbarkarte blättert zu ihr
+// Tap on a partially visible neighbor card pages to it
 function onSlideClick(slideIndex: number) {
   if (slideIndex !== props.index) {
     emit('update:index', slideIndex);
   }
 }
 
-// Karte, auf der das Karussell gerade eingerastet ist
+// Card the carousel is currently snapped to
 function scrolledIndex(): number {
   return Math.round((track.value?.scrollLeft ?? 0) / slideWidth());
 }
@@ -95,7 +95,7 @@ function step(direction: 1 | -1) {
   }
 }
 
-// Wischen beendet: gewählte Karte an den Aufrufer melden (u. a. Ziel der Schrumpf-Animation)
+// Swiping finished: report the chosen card to the caller (among other things the target of the shrink animation)
 let settleTimer = 0;
 function onScroll() {
   window.clearTimeout(settleTimer);
@@ -107,15 +107,15 @@ function onScroll() {
   }, SCROLL_SETTLE_MS);
 }
 
-// Knöpfe und Pfeiltasten ändern index: sanft dorthin schieben
+// Buttons and arrow keys change index: scroll there smoothly
 watch(() => props.index, (index) => {
   if (index !== scrolledIndex()) {
     track.value?.scrollTo({left: index * slideWidth(), behavior: 'smooth'});
   }
 });
 
-// Transform, der das Karussell so verschiebt und skaliert, dass die gezeigte Karte genau auf der angetippten liegt.
-// Die Karte sitzt mittig im Karussell, deshalb genügt es, das ganze Karussell zu bewegen.
+// Transform that moves and scales the carousel so that the shown card lies exactly on the tapped one.
+// The card sits centered in the carousel, so moving the whole carousel is enough.
 function originTransform(): string {
   const slide = track.value?.children[props.index] as HTMLElement | undefined;
   const element = slide?.querySelector<HTMLElement>('.mb-card-zoom-card > *');
@@ -129,10 +129,10 @@ function originTransform(): string {
   return `translate(${x}px, ${y}px) scale(${scale})`;
 }
 
-// Web Animations statt CSS-Transition: die Startlage gilt sofort, ohne vorher einmal gezeichnet zu werden
+// Web Animations instead of a CSS transition: the start position applies immediately, without being painted once first
 const EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
 
-// fill 'forwards' hält die Endlage bis zum Aushängen; 'none' übergibt danach wieder ans CSS
+// fill 'forwards' holds the end position until unmount; 'none' hands back to the CSS afterwards
 function animate(element: HTMLElement | undefined, from: string, to: string, duration: number, fill: 'forwards' | 'none' = 'forwards'): Promise<void> {
   if (element === undefined || typeof element.animate !== 'function') {
     return Promise.resolve();
@@ -141,8 +141,8 @@ function animate(element: HTMLElement | undefined, from: string, to: string, dur
   return animation.finished.then(() => undefined, () => undefined);
 }
 
-// Vorige Karte fährt nach links, nächste nach rechts (und umgekehrt herein); weiter entfernte sind ohnehin unsichtbar.
-// Web Animations wie beim Karussell: eine CSS-Transition lief in Safari nicht zuverlässig, die Nachbarn sprangen nur
+// Previous card slides to the left, next to the right (and in reverse when entering); cards further away are invisible anyway.
+// Web Animations like the carousel: a CSS transition didn't run reliably in Safari, the neighbors only jumped
 async function slideNeighbors(direction: 'in' | 'out'): Promise<void> {
   const neighbors = [{index: props.index - 1, sign: '-'}, {index: props.index + 1, sign: ''}];
   const animations = neighbors.map(({index, sign}) => {
@@ -155,7 +155,7 @@ async function slideNeighbors(direction: 'in' | 'out'): Promise<void> {
   await Promise.all(animations);
 }
 
-// Pfeiltasten blättern (Tablet mit Tastatur), Escape schließt
+// Arrow keys page (tablet with keyboard), Escape closes
 function onKeydown(event: KeyboardEvent) {
   if (event.key === 'ArrowLeft') {
     step(-1);
@@ -167,14 +167,14 @@ function onKeydown(event: KeyboardEvent) {
 }
 
 onMounted(() => {
-  // Ohne Animation auf die gewählte Karte springen, bevor sie aus der Liste herauswächst
+  // Jump to the chosen card without animation before it grows out of the list
   if (track.value !== undefined) {
     track.value.scrollLeft = props.index * slideWidth();
   }
   const start = originTransform();
   open.value = true;
   animate(track.value, start, 'none', DURATION_MS).then(() => {
-    // Klasse weg, die Animation hält die Nachbarn bis zu ihrem ersten Bild noch draußen
+    // Class removed, the animation keeps the neighbors outside until their first frame
     neighborsShown.value = true;
     return slideNeighbors('in');
   });
@@ -192,7 +192,7 @@ async function close() {
     return;
   }
   closing = true;
-  // Erst die Nachbarn hinausfahren, dann schrumpft die gezeigte Karte an ihren Platz zurück
+  // First slide the neighbors out, then the shown card shrinks back to its place
   if (neighborsShown.value && props.count > 1) {
     await slideNeighbors('out');
   }

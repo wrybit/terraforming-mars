@@ -148,7 +148,7 @@ export default defineComponent({
       if (this.isStandardProject) {
         classes.push('card-standard-project');
       }
-      // Karten werden beim Hover nicht mehr länger (früher mit experimental_ui) – sonst springt das Raster
+      // Cards no longer grow taller on hover (formerly with experimental_ui) – otherwise the grid jumps
       if (this.autoTall) {
         classes.push('card-auto-tall');
       }

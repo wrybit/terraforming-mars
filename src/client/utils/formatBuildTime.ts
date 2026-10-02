@@ -1,5 +1,5 @@
-// Build-Zeitpunkt aus settings.json (RFC-2822-Text) als "02.10.2026 @ 11:19:27" in Ortszeit des Betrachters.
-// Fehlt der Wert oder ist er unlesbar, bleibt der Originaltext stehen, statt "NaN" anzuzeigen.
+// Build time from settings.json (RFC 2822 text) as "02.10.2026 @ 11:19:27" in the viewer's local time.
+// If the value is missing or unreadable, the original text stays instead of showing "NaN".
 const twoDigits = (value: number): string => String(value).padStart(2, '0');
 
 export function formatBuildTime(builtAt: string): string {

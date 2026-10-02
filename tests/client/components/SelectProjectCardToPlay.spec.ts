@@ -674,7 +674,7 @@ describe('SelectProjectCardToPlay', () => {
     // must set a warning and NOT call onsave.
     const wrapper = setupCardForPurchase(
       CardName.REGO_PLASTICS, 10,
-      {steel: 6, megacredits: 1, steelValue: 2}, // 1 M€: zwei Währungen, sonst gibt es keine Regler
+      {steel: 6, megacredits: 1, steelValue: 2}, // 1 M€: two currencies, otherwise there are no sliders
       {paymentOptions: {steel: true}});
 
     const tester = new PaymentTester(wrapper);

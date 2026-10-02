@@ -2,7 +2,7 @@ import {closeOtherOverlays} from '@/client/utils/overlayCoordinator';
 import {PLAYER_CARDS_OVERLAY} from '@/client/components/overview/ownPlayerIndex';
 import {range} from '@/common/utils/utils';
 
-// Zugriff auf den Sichtbarkeitszustand der App (vueRoot), auf das Nötigste beschränkt
+// Access to the app's visibility state (vueRoot), limited to the bare minimum
 export type VisibilityStore = {
   getVisibilityState(key: string): boolean;
   setVisibilityState(key: string, value: boolean): void;
@@ -14,8 +14,8 @@ export function isPlayerCardsPinned(store: VisibilityStore, playerIndex: number)
   return store.getVisibilityState(pinnedKey(playerIndex));
 }
 
-// Gespielte Karten eines Spielers umschalten: dieses Modal öffnen bzw. schließen, alle anderen Spieler immer schließen.
-// Gemeinsam für die klassische Spielerleiste (PlayerInfo) und die Tabelle (PlayersTableRow).
+// Toggle a player's played cards: open or close this modal, always close all other players.
+// Shared by the classic player bar (PlayerInfo) and the table (PlayersTableRow).
 export function togglePlayerCards(store: VisibilityStore, playerIndex: number, playerCount: number): void {
   const wasPinned = isPlayerCardsPinned(store, playerIndex);
   if (!wasPinned) {

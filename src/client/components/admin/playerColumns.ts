@@ -1,14 +1,14 @@
 import {AdminGameSummary} from '@/common/admin/AdminGameSummary';
 
 /**
- * Spaltenreihenfolge der Admin-Übersicht: wer in den meisten Partien mitspielt, steht vorne.
- * So stehen die festen Mitspieler immer in denselben Spalten, einmalige Namen bekommen hinten eine eigene Spalte.
- * Bei gleicher Anzahl alphabetisch, damit die Spalten nicht springen, wenn Partien dazukommen oder gelöscht werden.
+ * Column order of the admin overview: whoever plays in the most games comes first.
+ * That way regular players always sit in the same columns; one-off names get their own column at the end.
+ * Ties are alphabetical so the columns don't jump when games are added or deleted.
  */
 export function playerColumns(summaries: ReadonlyArray<AdminGameSummary>): Array<string> {
   const counts = new Map<string, number>();
   for (const summary of summaries) {
-    // Ein Name zählt pro Partie nur einmal, auch wenn er doppelt vorkommt
+    // A name counts only once per game, even if it appears twice
     for (const name of new Set(summary.players.map((player) => player.name))) {
       counts.set(name, (counts.get(name) ?? 0) + 1);
     }

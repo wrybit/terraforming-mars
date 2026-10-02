@@ -1,7 +1,7 @@
-/* Intro der Startseite (Ablauf und Zeiten in start_intro.less): bei jedem Laden der Startseite, außer bei
-   reduzierter Bewegung und in automatisierten Browsern (Screenshots des TM Screen-Viewers). */
+/* Start page intro (sequence and timings in start_intro.less): on every load of the start page, except with
+   reduced motion and in automated browsers (screenshots of the TM Screen-Viewer). */
 
-// so lange läuft das Intro insgesamt (muss zu den Zeiten in start_intro.less passen)
+// total duration of the intro (must match the timings in start_intro.less)
 export const INTRO_DURATION = 1700;
 
 export function shouldPlayIntro(): boolean {
@@ -10,7 +10,7 @@ export function shouldPlayIntro(): boolean {
   }
   return !(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false);
 }
-/** Versatz vom Platz des Logos zur Bildschirmmitte: dort zoomt es zuerst hinein, dann fährt es an seinen Platz. */
+/** Offset from the logo's place to the screen center: it zooms in there first, then moves to its place. */
 export function logoOffsetToCenter(logo: HTMLElement): {x: number, y: number} {
   const rect = logo.getBoundingClientRect();
   return {

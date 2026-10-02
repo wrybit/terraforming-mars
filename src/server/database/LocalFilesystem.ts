@@ -146,7 +146,7 @@ export class LocalFilesystem implements IDatabase {
   }
 
   async deleteGame(gameId: GameId): Promise<void> {
-    // Neuester Stand, alle Zwischenstände und die Abschlussdatei – sonst taucht das Spiel beim nächsten Start wieder auf
+    // Latest state, all intermediate states and the final file – otherwise the game reappears on the next start
     const saveIds = await this.getSaveIds(gameId);
     for (const saveId of saveIds) {
       this.deleteVersion(gameId, saveId);

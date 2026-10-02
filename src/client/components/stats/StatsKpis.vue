@@ -11,7 +11,7 @@
 import {defineComponent, PropType} from 'vue';
 import {StatsKpi} from './statsTypes';
 
-// Kennzahlen-Kacheln (Übersicht, Detailseiten)
+// Metric tiles (overview, detail pages)
 export default defineComponent({
   name: 'StatsKpis',
   props: {

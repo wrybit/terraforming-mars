@@ -1,6 +1,6 @@
 <template>
-  <!-- Karten-Tab (nur Ansicht, grau): Handkarten im Aktionsmenü (OrOptions) und im Handkarten-Block (PlayerHome),
-       in der Startphase mit anderem Label für die eigene Startauswahl (PlayerSetupView) -->
+  <!-- Cards tab (view only, gray): hand cards in the action menu (OrOptions) and in the hand cards block (PlayerHome),
+       in the setup phase with a different label for the own initial selection (PlayerSetupView) -->
   <button type="button" role="tab"
     :title="$t(label)"
     :aria-selected="active"

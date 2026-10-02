@@ -1,5 +1,5 @@
-// Meilensteine & Auszeichnungen als Tabelle (MilestoneAwardTable.vue) – nur im Zwei-Spalten-Layout sichtbar
-// (player_home_columns.less), dort statt der Kartenreihen. Gleiche Bildsprache wie die Spielerliste (players_table.less).
+// Milestones & awards as a table (MilestoneAwardTable.vue) – only visible in the two-column layout
+// (player_home_columns.less), there instead of the card rows. Same visual language as the player list (players_table.less).
 
 @ma-table-icon-height: 36px;
 @ma-table-row-height: 28px;
@@ -12,7 +12,7 @@
 @ma-table-divider-color: rgba(255, 255, 255, 0.35);
 @ma-table-blur: 10px;
 
-// Außerhalb des Zwei-Spalten-Layouts bleiben die Kartenreihen
+// Outside the two-column layout the card rows stay
 .ma-table {
   display: none;
   row-gap: @ma-table-row-gap;
@@ -36,7 +36,7 @@
   min-width: 0;
 }
 
-// Trenner zwischen Namen, Meilensteinen und Auszeichnungen, über die Zeilenabstände hinweg durchgezogen
+// Dividers between names, milestones and awards, drawn through across the row gaps
 .ma-table-divider {
   position: relative;
   align-self: stretch;
@@ -52,7 +52,7 @@
   }
 }
 
-// Überschrift einzeilig: passt der Zählerstand nicht mehr daneben, bricht er in die abgeschnittene zweite Zeile um
+// Heading on one line: if the score no longer fits next to it, it wraps into the clipped second line
 @ma-table-section-line-height: 16px;
 
 .ma-table-section {
@@ -83,14 +83,14 @@
   background: rgba(0, 0, 0, 0.35);
 }
 
-// Symbol: alle Bilder gleich hoch, Breite nach Seitenverhältnis; Bedingung mittig darauf
+// Icon: all images equally tall, width by aspect ratio; requirement centered on top
 .ma-table-icon {
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: 2px;
   height: @ma-table-icon-height;
-  // Nur verkleinern, wenn die Spalte zu schmal wird (headerFit.ts)
+  // Only shrink if the column gets too narrow (headerFit.ts)
   zoom: var(--ma-table-icon-zoom, 1);
 
   img {
@@ -100,7 +100,7 @@
   }
 }
 
-// Zwei Bilder als ein Symbol: linke Hälfte des ersten, rechte Hälfte des zweiten
+// Two images as one icon: left half of the first, right half of the second
 .ma-table-icon-split {
   position: relative;
   display: inline-block;
@@ -117,14 +117,14 @@
   }
 }
 
-// Weiße Kontur für dunkle Bilder (Karte), sonst auf dem dunklen Grund nicht zu erkennen
+// White outline for dark images (card), otherwise not recognizable on the dark background
 .ma-table-icon .ma-table-icon-outline {
   outline: 1px solid rgba(255, 255, 255, 0.85);
   outline-offset: -1px;
   border-radius: 2px;
 }
 
-// Produktion wie auf den Karten: Symbol im braunen Kasten
+// Production like on the cards: icon in the brown box
 .ma-table-icon-production {
   display: inline-flex;
   padding: 4px;
@@ -145,13 +145,13 @@
   font: 17px Prototype, sans-serif;
   line-height: 1;
   color: #fff;
-  // Dunkle Kontur hält die Zahl auf jedem Symbol lesbar
+  // Dark outline keeps the number readable on every icon
   -webkit-text-stroke: 3px #000;
   paint-order: stroke fill;
   pointer-events: none;
 }
 
-// Status: Kosten als M€-Münze bzw. wer beansprucht/finanziert hat
+// Status: cost as an M€ coin, or who claimed/funded
 .ma-table-coin {
   width: 20px;
   height: 20px;
@@ -167,8 +167,8 @@
   filter: grayscale(1);
 }
 
-// Besitzer: Würfel + Name. Passt der Name nicht ganz daneben, zeigt headerFit.ts nur den Würfel
-// (Name dann im Tooltip). Gemessen wird am gekürzten Namen (Auslassungspunkte).
+// Owner: cube + name. If the name doesn't fully fit next to it, headerFit.ts shows only the cube
+// (name then in the tooltip). Measured on the truncated name (ellipsis).
 .ma-table-owner {
   display: inline-flex;
   align-items: center;
@@ -192,7 +192,7 @@
   text-overflow: ellipsis;
 }
 
-// Spielerwürfel aus board.less (Sprite, daher per zoom verkleinert); dort absolut für das Brett positioniert
+// Player cube from board.less (sprite, hence shrunk via zoom); positioned absolutely for the board there
 .ma-table .ma-table-cube {
   position: static;
   flex: none;
@@ -200,7 +200,7 @@
   zoom: 0.6;
 }
 
-// Spielerzeilen wie in der Spielerliste: gedämpfte Farbfläche, Balken in Originalfarbe, Blur
+// Player rows like in the player list: muted color surface, bar in the original color, blur
 .ma-table-player {
   height: @ma-table-row-height;
   backdrop-filter: blur(@ma-table-blur);
@@ -253,14 +253,14 @@ each(@players, {
   font-size: 18px;
 }
 
-// Rangfolge je Spalte: Platz 1 im Vordergrund, Platz 2 normal, Platz 3 und Nullen zurückgenommen
+// Ranking per column: 1st place in front, 2nd place normal, 3rd place and zeros toned down
 .ma-table-value {
   font-size: 15px;
   line-height: 1;
   color: rgba(255, 255, 255, 0.75);
 }
 
-// Platz 1 dezent: goldene, fette Zahl ohne Fläche – hebt sich ab, ohne die Zeile zu dominieren
+// 1st place subtle: golden bold number without a surface – stands out without dominating the row
 .ma-table-cell--rank-1 .ma-table-value {
   font-size: 18px;
   font-weight: bold;
@@ -278,7 +278,7 @@ each(@players, {
   color: @ma-table-dim;
 }
 
-// Schwelle erreicht, Meilenstein noch frei
+// Threshold reached, milestone still free
 .ma-table-cell--claimable::after {
   content: "✓";
   position: absolute;

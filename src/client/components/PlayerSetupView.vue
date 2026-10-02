@@ -24,8 +24,8 @@
       </div>
     </div>
 
-    <!-- Nach der Startauswahl, solange Mitspieler noch wählen: eigene Auswahl wie die Handkarten im Spiel
-         (grauer Karten-Tab, daneben der rote Status-Tab, wer noch wählt) -->
+    <!-- After the initial selection, while opponents are still choosing: own selection like the hand cards in the game
+         (gray cards tab, next to it the red status tab showing who is still choosing) -->
     <div v-if="playerView.pickedCorporationCard.length === 1" class="setup-picked">
       <div class="or-tabs" role="tablist">
         <HandCardsTab :count="pickedCards.length" :active="true" label="Your selection"/>
@@ -38,9 +38,9 @@
       </div>
     </div>
 
-    <!-- Startauswahl als Tabs (SelectInitialCards). Brett, Meilensteine, Auszeichnungen und Log stehen in der
-         rechten Spalte (PlayerHome), die Zugreihenfolge zeigen die Spielerleisten ("1." = Startspieler) -->
-    <!-- Ohne eigene Eingabe unsichtbar (Status-Tab zeigt, wer noch wählt); bleibt eingebunden, weil es den Server abfragt -->
+    <!-- Initial selection as tabs (SelectInitialCards). Board, milestones, awards and log are in the
+         right column (PlayerHome), the player bars show the turn order ("1." = starting player) -->
+    <!-- Invisible without own input (status tab shows who is still choosing); stays mounted because it polls the server -->
     <div v-show="playerView.waitingFor !== undefined">
       <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
     </div>
@@ -71,7 +71,7 @@ export default defineComponent({
     },
   },
   computed: {
-    // Eigene Startauswahl in Spielreihenfolge: Konzern, Präludien, CEO, gekaufte Karten
+    // Own initial selection in game order: corporation, preludes, CEO, bought cards
     pickedCards(): Array<CardModel> {
       return [
         ...this.playerView.pickedCorporationCard,

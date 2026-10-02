@@ -1,7 +1,7 @@
-// Spieler-Auswahl als Kacheln (SelectPlayer.vue), Aufbau wie die Ressourcen-Kacheln (resource_options.less);
-// Auswahl-Rahmen wie bei Karten (selection_highlight.less)
+// Player selection as tiles (SelectPlayer.vue), built like the resource tiles (resource_options.less);
+// selection border like on cards (selection_highlight.less)
 
-// Breit genug für Symbol, Vorrat mit Stand danach ("17 →13") und Produktion
+// Wide enough for icon, stock with the value afterwards ("17 →13") and production
 @player-option-width: 210px;
 
 .player-options {
@@ -25,7 +25,7 @@
   cursor: pointer;
   transition: transform 0.12s, filter 0.12s;
 
-  // Nur mit echter Maus: auf Touch bleibt :hover nach dem Antippen hängen, die gewählte Kachel stünde versetzt
+  // Only with a real mouse: on touch :hover sticks after tapping, the selected tile would appear offset
   @media (hover: hover) {
     &:hover {
       transform: translateY(-2px);
@@ -43,7 +43,7 @@
   .selection-highlight();
 }
 
-// Radio nur für Tastatur und Screenreader
+// Radio only for keyboard and screen readers
 .player-option-input {
   position: absolute;
   opacity: 0;
@@ -56,7 +56,7 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
-// Ressource: Symbol links, Bestand und Produktion rechts
+// Resource: icon on the left, stock and production on the right
 .player-option-resource {
   display: flex;
   align-items: center;
@@ -93,20 +93,20 @@
   opacity: 0.8;
 }
 
-// Entscheidung mit Spielerwahl (OrOptions.vue): die übrigen Optionen (z. B. "Entferne keine M€")
-// so breit wie die Spieler-Kacheln, damit alle Kacheln eine gleichmäßige Reihe bilden
+// Decision with player choice (OrOptions.vue): the other options (e.g. "Do not remove M€")
+// as wide as the player tiles, so all tiles form an even row
 .choice-options--players .choice-option {
   width: @player-option-width;
 }
 
-// Stand nach dem Angriff hinter dem aktuellen Wert, kleiner, damit der jetzige Wert der Hauptwert bleibt
+// Value after the attack behind the current value, smaller, so the current value stays the main value
 .player-option-after {
   margin-left: 3px;
   font-size: 16px;
   color: #ffb4a6;
 }
 
-// Optionen gegen denselben Spieler (OrOptions.vue): als Gruppe mit kleinerem Abstand als zwischen Spielern
+// Options against the same player (OrOptions.vue): as a group with smaller spacing than between players
 .player-option-group {
   display: flex;
   flex-wrap: wrap;

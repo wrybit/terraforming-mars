@@ -18,7 +18,7 @@ export class ApiSpectator extends Handler {
     const id = ctx.urlParams.spectatorId('id');
     const game = await ctx.gameLoader.getGame(id);
     if (game === undefined) {
-      // Von anderen Servern importierte Spiele gibt es hier nur als gespeicherten Endstand
+      // Games imported from other servers only exist here as a stored final state
       const imported = ImportedSnapshotsStore.getInstance().get(id);
       if (imported !== undefined) {
         responses.writeJson(res, ctx, imported.view);

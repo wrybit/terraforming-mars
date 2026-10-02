@@ -20,7 +20,7 @@ describe('MobilePlayerHome', () => {
   function mountHome(playerView = fakePlayerViewModel()) {
     return shallowMount(MobilePlayerHome, {
       ...globalConfig,
-      // Fußleiste echt rendern: die Tests klicken ihre Einträge
+      // Render the footer bar for real: the tests click its entries
       global: {...globalConfig.global, stubs: {...globalConfig.global.stubs, MobileNav: false}},
       props: {playerView},
     });
@@ -46,7 +46,7 @@ describe('MobilePlayerHome', () => {
     expect((wrapper.vm as unknown as {sheetOpen: boolean}).sheetOpen).to.be.true;
   });
 
-  // Nach bestätigter Startauswahl zeigt der Zug-Bildschirm die eigene Auswahl statt des Warte-Sheets
+  // After the initial selection is confirmed, the turn screen shows the own selection instead of the waiting sheet
   it('shows the own initial selection instead of the sheet once the setup is confirmed', async () => {
     const playerView = fakePlayerViewModel();
     playerView.pickedCorporationCard = [{name: 'Tharsis Republic'} as typeof playerView.pickedCorporationCard[number]];
@@ -54,7 +54,7 @@ describe('MobilePlayerHome', () => {
     await wrapper.find('.mb-nav-item--turn').trigger('click');
     expect(wrapper.classes()).to.include('mb-home--turn');
     expect((wrapper.vm as unknown as {sheetOpen: boolean}).sheetOpen).to.be.false;
-    // Nichts zu bestätigen: Navigation bleibt, keine Aufgabenleiste
+    // Nothing to confirm: navigation stays, no task bar
     expect(wrapper.find('.mb-nav').exists()).to.be.true;
     expect(wrapper.find('.mb-taskbar').exists()).to.be.false;
   });

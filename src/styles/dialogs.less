@@ -1,13 +1,13 @@
-// Alle nativen <dialog>-Elemente (App.vue Server-Meldungen, ConfirmDialog.vue Rückfragen,
-// BugReportDialog.vue) im selben dunklen Stil wie die Seitenleisten-Dialoge (modal_surface.less).
-// Gilt auch für dialog-polyfill (Hintergrund dort als "dialog + .backdrop" statt ::backdrop).
+// All native <dialog> elements (App.vue server messages, ConfirmDialog.vue confirmations,
+// BugReportDialog.vue) in the same dark style as the sidebar dialogs (modal_surface.less).
+// Also applies to dialog-polyfill (background there as "dialog + .backdrop" instead of ::backdrop).
 @import (reference) "./modal_surface.less";
 
-@dialog-max-width: 520px; // Meldungen sollen nicht über die ganze Breite laufen
+@dialog-max-width: 520px; // Messages should not span the whole width
 @dialog-menu-gap: 12px;
 
 dialog {
-  // Mittig im Fenster, unabhängig von der Scrollposition
+  // Centred in the window, independent of the scroll position
   position: fixed;
   inset: 0;
   z-index: @modal-z-index;
@@ -16,7 +16,7 @@ dialog {
   max-width: min(@dialog-max-width, calc(100vw - 2 * @modal-screen-gap));
   height: fit-content;
   margin: auto;
-  transform: none; // dialog-polyfill verschiebt .fixed-Dialoge per translate
+  transform: none; // dialog-polyfill shifts .fixed dialogs via translate
   .modal-surface();
   font-size: 16px;
   line-height: 1.45;
@@ -30,7 +30,7 @@ dialog {
     color: @modal-link;
   }
 
-  // Die globale Klasse .title (cards.less) ist für Kartentitel gedacht – im Dialog eine normale Überschrift
+  // The global class .title (cards.less) is meant for card titles – in the dialog a normal heading
   .title {
     float: none;
     width: auto;
@@ -63,7 +63,7 @@ dialog {
   }
 }
 
-// Buttons rechtsbündig in einer Zeile (Reihenfolge aus dem jeweiligen Template)
+// Buttons right-aligned in one row (order from the respective template)
 dialog .dialog-menu {
   display: flex;
   flex-wrap: wrap;

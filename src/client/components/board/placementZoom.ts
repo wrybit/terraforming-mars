@@ -1,20 +1,20 @@
 import {reactive} from 'vue';
 
-// Vergrößerter Mars während einer Plättchen-Platzierung.
-// Die Feldwahl (SelectSpace.vue) und das Brett (GameBoardView.vue) liegen in getrennten Teilbäumen;
-// dieser gemeinsame Zustand verbindet sie, ohne Props oder Events durch die halbe App zu reichen.
+// Enlarged Mars during a tile placement.
+// The space selection (SelectSpace.vue) and the board (GameBoardView.vue) live in separate subtrees;
+// this shared state connects them without passing props or events through half the app.
 export const placementZoom = reactive({
-  // Spieler hat in der Feldwahl das große Brett angefordert
+  // Player requested the large board in the space selection
   requested: false,
-  // Zählt jedes Einblenden des großen Bretts: dessen Felder sind dann neu im DOM
-  // und brauchen Markierung und Klick-Handler der laufenden Feldwahl
+  // Counts every showing of the large board: its spaces are then new in the DOM
+  // and need the highlighting and click handlers of the running space selection
   boardRenderCount: 0,
-  // Großes Brett ist zu sehen (von der Einblendung bis zum Ende der Rück-Animation)
+  // Large board is visible (from showing until the end of the return animation)
   boardVisible: false,
 });
 
-// Obergrenze fürs Warten auf die Rück-Animation (boardZoomAnimation.ts: 320 ms), falls das Modal
-// ohne Abschluss verschwindet – die Platzierung darf nie hängen bleiben
+// Upper limit for waiting on the return animation (boardZoomAnimation.ts: 320 ms), in case the modal
+// disappears without completing – the placement must never hang
 const CLOSE_WAIT_LIMIT_MS = 1000;
 
 let closeWaiters: Array<() => void> = [];
@@ -27,8 +27,8 @@ export function releasePlacementZoom(): void {
   placementZoom.requested = false;
 }
 
-// Brett verkleinern und warten, bis es wieder in der Spalte liegt. Nötig vor dem Absenden einer Platzierung:
-// Die Server-Antwort baut die ganze Spieleransicht neu auf und würde die Rück-Animation hart abschneiden
+// Shrink the board and wait until it's back in the column. Needed before submitting a placement:
+// the server response rebuilds the whole player view and would abruptly cut off the return animation
 export function releasePlacementZoomAndWait(): Promise<void> {
   releasePlacementZoom();
   if (!placementZoom.boardVisible) {

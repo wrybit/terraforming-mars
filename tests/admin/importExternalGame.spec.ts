@@ -16,7 +16,7 @@ describe('importExternalGame', () => {
     ],
   };
 
-  // Antwortet wie der fremde Server: Ansicht für api/player, je Generation ein Log
+  // Responds like the external server: view for api/player, one log per generation
   function fakeServer(requested: Array<string> = []) {
     return async (url: string) => {
       requested.push(url);

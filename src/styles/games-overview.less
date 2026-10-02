@@ -1,14 +1,14 @@
-// Admin-Übersicht aller Spiele: Kopf-Karte mit Import, darunter eine Tabelle mit einer festen Spalte je Spielername.
-// Gleiche Milchglas-Karten wie "Spiel erstellt" (game_home.less), damit die Admin-Seite zur App passt.
+// Admin overview of all games: header card with import, below it a table with a fixed column per player name.
+// Same frosted-glass cards as "Game created" (game_home.less), so the admin page matches the app.
 
 @games-overview-gap-card: 16px;
-@games-overview-gap-cell: 4px; // innerhalb einer Zeile enger als zwischen den Karten (Gesetz der Nähe)
+@games-overview-gap-cell: 4px; // tighter within a row than between the cards (law of proximity)
 @games-overview-radius: 10px;
 @games-overview-line: rgba(255, 255, 255, 0.14);
 @games-overview-dim: rgba(238, 238, 238, 0.62);
 @games-overview-winner: #f4c20d;
 
-// Keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt
+// No sidebar: the space reserved for it on the left (common.less) is dropped
 .main-container:has(#games-overview) {
   margin-left: 0;
 }
@@ -35,7 +35,7 @@
   }
 
   .status-running {
-    display: inline-block; // Spiegeln per transform braucht ein Block-Element
+    display: inline-block; // Mirroring via transform needs a block element
     transform: scaleX(-1);
   }
 
@@ -63,8 +63,8 @@
   font-weight: 500;
 }
 
-// Siegerstatistik je Besetzung: Überschrift mit Partienzahl, darunter je Spieler eine Kachel.
-// Zwischen den Besetzungen mehr Abstand als zwischen den Kacheln einer Besetzung (Gesetz der Nähe).
+// Win statistics per line-up: heading with number of games, below it one tile per player.
+// More space between line-ups than between the tiles of one line-up (law of proximity).
 .games-overview-lineups {
   display: flex;
   flex-wrap: wrap;
@@ -77,7 +77,7 @@
   font-weight: 500;
 }
 
-// Kennzahlen direkt unter den Kacheln der Besetzung (eng dran: gehören zur selben Gruppe)
+// Key figures directly below the line-up's tiles (close: they belong to the same group)
 .games-overview-averages {
   display: flex;
   flex-wrap: wrap;
@@ -96,7 +96,7 @@
   font-weight: normal;
 }
 
-// Siegerstatistik: je Spieler eine Kachel, Zahl groß, Anteil klein darunter
+// Win statistics: one tile per player, number large, share small below it
 .games-overview-wins {
   display: flex;
   flex-wrap: wrap;
@@ -172,7 +172,7 @@
   color: #ff8a80;
 }
 
-// Breite Tabellen (viele Namen) scrollen innerhalb der Karte, nicht die ganze Seite
+// Wide tables (many names) scroll inside the card, not the whole page
 .games-overview-scroll {
   overflow-x: auto;
 }
@@ -196,7 +196,7 @@
   }
 }
 
-// Trennlinie zwischen Partien: Abstand zwischen Zeilen größer wirken lassen als innerhalb einer Zeile
+// Separator between games: make the gap between rows look larger than within a row
 .games-overview-row td {
   padding-top: 6px;
   border-top: 1px solid @games-overview-line;
@@ -232,7 +232,7 @@
   padding: 0 8px;
   border-radius: 6px;
   font-weight: 500;
-  text-decoration: none !important; // Link-Kacheln (eigener Spieler bei Importen) wie alle anderen ohne Unterstrich
+  text-decoration: none !important; // Link tiles (own player in imports) without underline like all others
 }
 
 .games-overview-chip--spectator {
@@ -252,7 +252,7 @@
   min-width: 120px;
 }
 
-// Handy: Standard-Seitenrand statt des breiten Desktop-Rands
+// Phone: standard page margin instead of the wide desktop margin
 @media (max-width: 600px) {
   .games-overview-container {
     padding: 16px;

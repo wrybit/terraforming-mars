@@ -1,15 +1,15 @@
-// Milchglas für Flächen auf dem App-Hintergrund: Spielerleisten, Tabs, Tab-Boxen.
-// Die Flächen sind leicht durchscheinend (@frosted-surface-opacity), der Hintergrund dahinter wird unscharf.
-// Die Unschärfe liegt auf einer eigenen Ebene (::before) statt direkt auf der Fläche: backdrop-filter auf der
-// Fläche selbst würde fest positionierte Kinder (z. B. das Log-Karten-Overlay) an die Fläche binden.
+// Frosted glass for surfaces on the app background: player bars, tabs, tab boxes.
+// The surfaces are slightly translucent (@frosted-surface-opacity), the background behind them is blurred.
+// The blur sits on its own layer (::before) instead of directly on the surface: backdrop-filter on the
+// surface itself would bind fixed-position children (e.g. the log card overlay) to the surface.
 
-// Zart: die Galaxie soll nur weich und leicht erkennbar durchscheinen
+// Subtle: the galaxy should only shine through softly and be slightly recognisable
 @frosted-surface-opacity: 65%;
-@frosted-player-opacity: 60%; // Spielerleisten (Grundwert der Spielerfarben: 70 %, common.less)
+@frosted-player-opacity: 60%; // Player bars (base value of the player colours: 70 %, common.less)
 @frosted-surface-blur: 6px;
 
 .frosted-surface() {
-  isolation: isolate; // eigener Stapelkontext: die Unschärfe-Ebene liegt hinter dem Inhalt
+  isolation: isolate; // own stacking context: the blur layer sits behind the content
 
   &::before {
     content: "";
@@ -28,13 +28,13 @@
   .frosted-surface();
 }
 
-// Bezug für die Unschärfe-Ebene (Tabs sind wegen des Badges schon positioniert)
+// Reference for the blur layer (tabs are already positioned because of the badge)
 .player-info,
 .or-tab-panel {
   position: relative;
 }
 
-// Spielerleisten etwas durchsichtiger als die übrigen Flächen in Spielerfarbe
+// Player bars slightly more transparent than the other surfaces in player colour
 each(@players, {
   @c: ~"player_@{value}";
   .player-info.player_translucent_bg_color_@{value} {

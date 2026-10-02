@@ -1,4 +1,4 @@
-// Vertrag zwischen WaitingFor (Anbieter) und OrOptions (Nutzer):
-// Das oberste OrOptions im Aktionsbereich wird als Tab-Leiste statt als Radio-Liste dargestellt.
-// OrOptions reicht für verschachtelte Auswahlen wieder false weiter, damit nur die oberste Ebene Tabs bekommt.
+// Contract between WaitingFor (provider) and OrOptions (consumer):
+// The top-level OrOptions in the action area is shown as a tab bar instead of a radio list.
+// OrOptions passes false on again for nested selections, so only the top level gets tabs.
 export const OR_OPTIONS_AS_TABS = 'orOptionsAsTabs';

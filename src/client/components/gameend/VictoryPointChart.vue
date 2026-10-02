@@ -1,6 +1,6 @@
 <template>
   <div class="victory-point-chart">
-    <!-- Eigene Legende statt der von Chart.js: dort ginge nur Farbe ODER Bild, hier stehen Farbe, Symbol und Name -->
+    <!-- Own legend instead of Chart.js's: there only color OR image would work, here color, icon and name are shown -->
     <ul class="chart-legend">
       <li v-for="dataset in datasets" :key="dataset.label" class="chart-legend-item">
         <span class="chart-legend-swatch" :style="{backgroundColor: dataset.color}"></span>
@@ -19,7 +19,7 @@ import {Chart, ChartDataset, registerables} from 'chart.js';
 import {translateText} from '@/client/directives/i18n';
 
 Chart.register(...registerables);
-// Kleinere Schrift als der Chart.js-Standard der alten Seite (20px): die Diagramme stehen jetzt in der schmaleren rechten Spalte
+// Smaller font than the old page's Chart.js default (20px): the charts now sit in the narrower right column
 Chart.defaults.font.size = 14;
 Chart.defaults.font.family = 'Ubuntu, Sans';
 Chart.defaults.color = 'rgb(240, 240, 240)';
@@ -31,9 +31,9 @@ const LINE_WIDTH = 2;
 export type DataSet = {
   label: string;
   data: ReadonlyArray<number>,
-  // CSS-Farbe der Linie (chartStyles.ts)
+  // CSS color of the line (chartStyles.ts)
   color: string,
-  // Optionales Symbol in der Legende neben Farbe und Name
+  // Optional icon in the legend next to color and name
   icon?: {url: string, width: number, height: number},
 };
 
@@ -60,7 +60,7 @@ export default defineComponent({
       required: false,
       default: 'Victory Points',
     },
-    // Abstand der beschrifteten Hilfslinien: wenige Zahlen, damit die Skala nicht zu voll wird
+    // Spacing of the labeled grid lines: few numbers so the scale doesn't get too crowded
     yAxisStep: {
       type: Number,
       required: false,

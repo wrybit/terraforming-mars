@@ -18,7 +18,7 @@ export type BaseInputModel = {
   warning?: string | Message;
   buttonLabel: string;
   optional?: boolean;
-  // Karte, deren Wirkung diese Eingabe auslöst (nur an der obersten Eingabe gesetzt, ServerModel.getWaitingFor)
+  // Card whose effect triggers this input (only set on the topmost input, ServerModel.getWaitingFor)
   sourceCard?: CardName;
 }
 

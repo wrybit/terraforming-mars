@@ -1,17 +1,17 @@
-// Auswahl-Block (choiceBlock.ts): Kacheln und Karten einer Entscheidung – Meilensteine, Auszeichnungen,
-// Standardprojekte, Spieler- und Options-Kacheln, Karten kaufen – als möglichst quadratischer Block
-// (4 → 2×2, 5–6 → 3×2) mittig in der Tab-Box: waagerecht immer, senkrecht, wo die Box eine feste Höhe hat
-// (player_home_fixed.less). Jede Kachel so breit wie eine Projektkarte, Abstände wie zwischen Karten.
-// Mobil (unten): Kacheln behalten ihre Größe, der Block sitzt ebenso mittig im Restplatz unter der Karten-Erklärung.
-// Die Startauswahl hat eigene Spalten (setup_columns.less).
+// Choice block (choiceBlock.ts): tiles and cards of a decision – milestones, awards,
+// standard projects, player and option tiles, buying cards – as a block as square as possible
+// (4 → 2×2, 5–6 → 3×2) centered in the tab box: always horizontally, vertically where the box has a fixed height
+// (player_home_fixed.less). Each tile as wide as a project card, gaps as between cards.
+// Mobile (below): tiles keep their size, the block likewise sits centered in the remaining space below the card intro.
+// The initial selection has its own columns (setup_columns.less).
 @import (reference) "./selection_highlight.less";
 @import (reference) "./mobile.less";
 
-@choice-tile-width: 248px; // Außenbreite einer Projektkarte: 240px plus 2 × 4px Rand (.filterDiv in cards.less)
-@choice-column-gap: 16px; // Kartenabstand in Tab-Boxen (@or-tab-panel-card-gap in or_options_tabs.less)
-@choice-row-gap: (@selection-tab-offset + 6px); // darüber sitzt das Häkchen-Fähnchen der gewählten Kachel
-@choice-panel-padding: 16px; // Innenabstand der Tab-Box (tab_panel_footer.less)
-@ma-tile-width: 140px; // Bildgröße der Meilenstein-/Auszeichnungs-Kacheln (player_home.less)
+@choice-tile-width: 248px; // Outer width of a project card: 240px plus 2 × 4px border (.filterDiv in cards.less)
+@choice-column-gap: 16px; // Card gap in tab boxes (@or-tab-panel-card-gap in or_options_tabs.less)
+@choice-row-gap: (@selection-tab-offset + 6px); // the check-mark flag of the selected tile sits above
+@choice-panel-padding: 16px; // Padding of the tab box (tab_panel_footer.less)
+@ma-tile-width: 140px; // Image size of the milestone/award tiles (player_home.less)
 
 html:not(.tm-mobile) {
   .or-tab-panel .choice-block:not(.setup-column-body *) {
@@ -23,7 +23,7 @@ html:not(.tm-mobile) {
     margin: auto;
     padding: @selection-tab-offset 0 0;
 
-    // Kacheln auf Kartenbreite
+    // Tiles at card width
     > .choice-option,
     > .resource-option,
     .player-option {
@@ -31,7 +31,7 @@ html:not(.tm-mobile) {
       width: @choice-tile-width;
     }
 
-    // Meilensteine/Auszeichnungen: Bild-Kachel auf Kartenbreite vergrößern (Bild und Schrift wachsen mit)
+    // Milestones/awards: enlarge the image tile to card width (image and text grow with it)
     > .ma-option {
       width: auto;
       margin: 0;
@@ -41,30 +41,30 @@ html:not(.tm-mobile) {
       zoom: unit((@choice-tile-width / @ma-tile-width));
     }
 
-    // Karten (SelectCard: label.cardbox, Karte ausspielen/Standardprojekt: label.payments_cards):
-    // Abstände macht der Block (gap), nicht die Außenränder der Karten
+    // Cards (SelectCard: label.cardbox, play card/standard project: label.payments_cards):
+    // the block handles spacing (gap), not the cards' outer margins
     > .cardbox,
     > .payments_cards,
     > label > .card-container {
       margin: 0;
     }
 
-    // Elemente ohne Kartenbreite (Kolonien, globale Ereignisse, Parteien, Untergrund-Marker): Block so breit wie
-    // sein Inhalt, Reihen mittig – die Rechnung mit der Kartenbreite passte nicht zu diesen Kacheln
+    // Elements without card width (colonies, global events, parties, underground tokens): block as wide as
+    // its content, rows centered – the card-width calculation didn't fit these tiles
     &.choice-block--natural {
       width: fit-content;
       max-width: 100%;
       justify-content: center;
     }
 
-    // Titel, Hinweise, Bezahlbereich und Buttons einer Kartenwahl stehen in eigener Zeile über bzw. unter dem Block
+    // Title, hints, payment area and buttons of a card selection sit on their own line above or below the block
     &:has(> .cardbox, > .payments_cards) > :not(.cardbox, .payments_cards) {
       flex: 0 0 100%;
     }
   }
 
-  // Senkrecht mittig: die Box und jede Hülle bis zum Block werden zur Spalte, die den freien Platz füllt;
-  // der Block sitzt darin per margin: auto. Hüllen mit v-show behalten ihr display: none (Inline-Stil gewinnt)
+  // Vertically centered: the box and every wrapper down to the block become a column that fills the free space;
+  // the block sits inside via margin: auto. Wrappers with v-show keep their display: none (inline style wins)
   .or-tab-panel:has(.choice-block):not(:has(.setup-column-body)) {
     display: flex;
     flex-direction: column;
@@ -76,8 +76,8 @@ html:not(.tm-mobile) {
     flex-direction: column;
   }
 
-  // Mit Karten verkleinert or_options_tabs.less den rechten Innenabstand der Box (Kartenreihen bis zum Rand);
-  // der Block ist mittig und braucht beidseitig denselben Abstand
+  // With cards, or_options_tabs.less reduces the box's right padding (card rows up to the edge);
+  // the block is centered and needs the same padding on both sides
   .or-tab-panel:has(.choice-block .card-container):not(:has(.setup-column-body)) {
     padding-right: @choice-panel-padding;
 
@@ -87,12 +87,12 @@ html:not(.tm-mobile) {
   }
 }
 
-// Mobil: Auswahl-Block waagerecht und senkrecht mittig im Platz zwischen Karten-Erklärung (Aufgaben-Kopf,
-// CardIntroBlock) und Fußbereich. Der Zug-Bildschirm füllt dafür die Höhe zwischen Statusleiste und Fußbereich
-// (Innenabstände von #player-home.mb-home--turn in mobile.less); jede Hülle bis zum Block wird zur Spalte,
-// die den freien Platz füllt. Ausgenommen sind Auswahlen mit eigenem Layout in mobile.less:
-// Meilensteine/Auszeichnungen und Standardprojekte (.mb-choice-area), das Karten-Karussell (payments_cont)
-// und die Startauswahl
+// Mobile: choice block centered horizontally and vertically in the space between the card intro (task header,
+// CardIntroBlock) and the footer. For this the turn screen fills the height between status bar and footer
+// (padding of #player-home.mb-home--turn in mobile.less); every wrapper down to the block becomes a column
+// that fills the free space. Excluded are selections with their own layout in mobile.less:
+// milestones/awards and standard projects (.mb-choice-area), the card carousel (payments_cont)
+// and the initial selection
 @mobile-choice: ~".choice-block:not(.ma-options, .payments_cont, .setup-column-body *)";
 
 html.tm-mobile {
@@ -108,20 +108,20 @@ html.tm-mobile {
   }
 
   .mb-screen--turn @{mobile-choice} {
-    // safe: zu breite Elemente (Kolonien auf dem Handy) beginnen am linken Rand, statt links abgeschnitten zu werden
+    // safe: elements that are too wide (colonies on a phone) start at the left edge instead of being clipped on the left
     justify-content: safe center;
-    // senkrecht mittig; oben Platz fürs Häkchen-Fähnchen der ersten Reihe
+    // vertically centered; room at the top for the check-mark flag of the first row
     margin: auto 0;
     padding-top: @selection-tab-offset;
 
-    // Optionen gegen denselben Spieler (OrOptions.vue) als Gruppe: deren Kacheln ebenso mittig
+    // Options against the same player (OrOptions.vue) as a group: their tiles centered too
     .player-option-group {
       justify-content: safe center;
     }
 
-    // Tablet hochkant: Kacheln als hochkant stehender Block (2 → 1×2, 5–6 → 2×3), Spaltenzahl aus choiceBlock.ts.
-    // Ab 560px wie cardColumns() in mobileFit.ts; auf dem Handy umbrechen die Kacheln von selbst.
-    // Ohne Spieler-Gruppen (eine Gruppe enthält mehrere Kacheln) und ohne Karten (eigenes Raster, mobile.less)
+    // Tablet portrait: tiles as a portrait block (2 → 1×2, 5–6 → 2×3), column count from choiceBlock.ts.
+    // From 560px like cardColumns() in mobileFit.ts; on a phone the tiles wrap by themselves.
+    // Without player groups (a group contains several tiles) and without cards (own grid, mobile.less)
     @media (min-width: 560px) and (orientation: portrait) {
       &:not(.wf-component--select-card, .choice-block--natural):not(:has(.player-option-group)) {
         display: grid;
@@ -129,11 +129,11 @@ html.tm-mobile {
       }
     }
 
-    // Kolonie-Wahl (SelectColony): die Tafeln (418px breit, .colony-card in cards.less) sind breiter als ein Handy
+    // Colony choice (SelectColony): the panels (418px wide, .colony-card in cards.less) are wider than a phone
     @media (max-width: 440px) {
       .colony-card {
         zoom: 0.8;
-        // nur Abstand nach unten, damit die Tafel genau mittig steht
+        // only a bottom margin so the panel sits exactly centered
         margin: 0 0 16px;
       }
     }

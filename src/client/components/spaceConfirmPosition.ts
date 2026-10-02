@@ -1,11 +1,11 @@
-// Lage der Bestätigungs-Sprechblase am Feld (SpaceConfirmPopover.vue).
-// Standard rechts vom Feld; reicht der Platz bis zum Fensterrand nicht (Mars reicht bis rechts), dann links.
+// Position of the confirmation speech bubble at the space (SpaceConfirmPopover.vue).
+// Default to the right of the space; if there isn't enough room up to the window edge (Mars reaches the right), then left.
 
 export type Rect = {left: number, top: number, right: number, bottom: number};
 export type PopoverPlacement = {side: 'left' | 'right', left: number, top: number};
 
-const GAP = 12; // Abstand Feld ↔ Blase (Platz für den Pfeil)
-const EDGE_MARGIN = 8; // Mindestabstand zum Fensterrand
+const GAP = 12; // Gap space ↔ bubble (room for the arrow)
+const EDGE_MARGIN = 8; // Minimum distance to the window edge
 
 export function spaceConfirmPosition(
   space: Rect, popoverWidth: number, popoverHeight: number, viewportWidth: number, viewportHeight: number,
@@ -13,7 +13,7 @@ export function spaceConfirmPosition(
   const fitsRight = space.right + GAP + popoverWidth <= viewportWidth - EDGE_MARGIN;
   const side = fitsRight ? 'right' : 'left';
   const left = fitsRight ? space.right + GAP : space.left - GAP - popoverWidth;
-  // Senkrecht mittig zum Feld, aber innerhalb des Fensters
+  // Vertically centred on the space, but within the window
   const centeredTop = (space.top + space.bottom) / 2 - popoverHeight / 2;
   const top = Math.min(Math.max(centeredTop, EDGE_MARGIN), viewportHeight - EDGE_MARGIN - popoverHeight);
   return {side, left: Math.max(left, EDGE_MARGIN), top};

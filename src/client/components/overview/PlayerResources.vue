@@ -1,6 +1,6 @@
 <template>
   <div class="resource_items_cont">
-    <!-- Waren samt Wert und Schutz aus playerGoods.ts (gemeinsam mit der Tabelle) -->
+    <!-- Goods with value and protection from playerGoods.ts (shared with the table) -->
     <PlayerResource v-for="good in goods" :key="good.type"
       :type="good.type"
       :count="good.count"

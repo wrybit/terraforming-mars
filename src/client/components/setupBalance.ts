@@ -1,6 +1,6 @@
-// Rechnung der Startauswahl: was vom Start-Kapital nach Präludien und Kartenkauf bleibt.
-// Gemeinsam genutzt von der Anzeige (SetupSummary.vue) und der Prüfung vor dem Start (SelectInitialCards.vue),
-// damit beide garantiert dieselbe Zahl sehen.
+// Initial selection calculation: what remains of the starting money after preludes and card purchase.
+// Shared by the display (SetupSummary.vue) and the check before starting (SelectInitialCards.vue),
+// so both are guaranteed to see the same number.
 export function remainingMegacredits(
   startMegacredits: number,
   preludeMegacredits: number | undefined,

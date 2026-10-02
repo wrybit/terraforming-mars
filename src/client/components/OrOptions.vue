@@ -1,14 +1,14 @@
 <template>
   <div :class="['wf-options', {'wf-options--tabs': asTabs}]">
-    <!-- Entscheidung einer Karte mit eigenen Tabs: statt der Frage steht die Karte oben in der Box (CardIntroBlock) -->
+    <!-- A card's decision with its own tabs: instead of the question, the card sits at the top of the box (CardIntroBlock) -->
     <label v-if="showtitle && sourceCard === undefined"><div>{{ $t(playerinput.title) }}</div></label>
     <label v-if="playerinput.warning !== undefined" class="card-warning"><div>({{ $t(playerinput.warning) }})</div></label>
 
-    <!-- Aktionsmenü: Tabs mit Kurzlabel und Zähler verfügbarer Einträge; leere Tabs sind abgeschwächt, aber anklickbar -->
+    <!-- Action menu: tabs with short label and count of available entries; empty tabs are dimmed but clickable -->
     <div v-if="asTabs" class="or-tabs" role="tablist">
-      <!-- Handkarten immer als erster Tab (nur Ansicht); vorausgewählt bleibt die erste echte Aktion -->
+      <!-- Hand cards always as the first tab (view only); the first real action stays preselected -->
       <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
-      <!-- Anzeige-Reihenfolge per tabDisplayOrder (Weitergeben/Beenden ans Ende); idx bleibt der Index in displayedOptions -->
+      <!-- Display order via tabDisplayOrder (pass/end at the end); idx stays the index in displayedOptions -->
       <button v-for="idx in tabDisplayOrder(displayedOptions.map((option) => option.title))" :key="idx"
         :data-option-index="idx"
         type="button"
@@ -30,32 +30,32 @@
       </button>
     </div>
 
-    <!-- Im Tab-Modus ist dieser Container die mit dem aktiven Tab verbundene Box (Inhalt + Speichern) -->
+    <!-- In tab mode this container is the box attached to the active tab (content + save) -->
     <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption.title)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <HandCardsPanel v-if="asTabs && handTabActive" :playerView="playerView"/>
-      <!-- Erklärung, wo sonst nur ein Button stünde (tabIntro.ts): Bild, was passiert, Hinweis -->
+      <!-- Explanation where there would otherwise be just a button (tabIntro.ts): image, what happens, hint -->
       <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :playerView="playerView" :card="sourceCard"/>
       <CardIntroBlock v-else-if="asTabs && !handTabActive && sourceCard !== undefined && selectedOption !== undefined" :card="sourceCard" :title="fullTabTitle(selectedOption.title)"/>
-      <!-- Weitergeben: Erklärung, was passiert (mittig mit dem Button, or-tab-panel--end) -->
+      <!-- Pass: explanation of what happens (centered with the button, or-tab-panel--end) -->
       <p v-if="asTabs && !handTabActive && selectedOption !== undefined && endTabHint(selectedOption.title) !== undefined" class="or-tab-end-hint">
         {{ $t(endTabHint(selectedOption.title)!) }}
       </p>
-      <!-- v-show statt v-if: Eingaben der gewählten Aktion bleiben beim Blick in die Hand erhalten -->
+      <!-- v-show instead of v-if: inputs of the selected action survive a look at the hand -->
       <PlayerInputFactory v-if="asTabs && selectedIdx !== -1" v-show="!handTabActive" ref="inputfactory" @validity="childValid = $event" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
 
-      <!-- Meilenstein/Auszeichnung wählen: Bild-Kacheln wie auf dem Brett statt Radio-Liste -->
+      <!-- Choose milestone/award: image tiles as on the board instead of a radio list -->
       <MilestoneAwardOptions v-if="!asTabs && maKind !== undefined"
         :kind="maKind"
         :options="displayedOptions"
         :selected="selectedOption"
         :groupName="radioElementName"
         @select="selectedOption = $event"/>
-      <!-- Einfache Entscheidung (choiceMenu.ts): Optionen als Kacheln, die gewählte pulsiert wie Karten;
-           eine Spielerwahl oder Option gegen einen Spieler wird zur Spieler-Kachel mit der betroffenen Ressource -->
+      <!-- Simple decision (choiceMenu.ts): options as tiles, the selected one pulses like cards;
+           a player selection or an option against a player becomes a player tile with the affected resource -->
       <div v-if="!asTabs && maKind === undefined && isChoice" :class="['choice-options', 'choice-block', {'choice-options--players': hasPlayerChoice}]" :style="choiceBlockStyle(choiceTileCount)" role="radiogroup">
         <template v-for="(option, idx) in displayedOptions" :key="idx">
-          <!-- Optionen gegen einen Spieler ("Entferne 4 Stahl von …", playerTargetOption.ts): Kacheln in dessen Farbe,
-               mehrere gegen denselben Spieler als Gruppe mit kleinerem Abstand (Gesetz der Nähe) -->
+          <!-- Options against a player ("Remove 4 steel from …", playerTargetOption.ts): tiles in that player's color,
+               several against the same player as a group with smaller spacing (law of proximity) -->
           <div v-if="targetGroupStarts(idx)" class="player-option-group">
             <PlayerOptionTile v-for="member in targetGroup(idx)" :key="member"
               :color="optionTarget(displayedOptions[member])!"
@@ -66,7 +66,7 @@
               :groupName="radioElementName"
               @select="selectedOption = displayedOptions[member]"/>
           </div>
-          <!-- weitere Mitglieder einer Gruppe stehen schon in ihr -->
+          <!-- further members of a group are already inside it -->
           <template v-else-if="optionTarget(option) !== undefined"></template>
           <template v-else-if="option.type === 'player'">
             <PlayerOptionTile v-for="color in option.players" :key="color"
@@ -77,7 +77,7 @@
               :groupName="radioElementName"
               @select="selectPlayerTile(option, $event)"/>
           </template>
-          <!-- Übrige Optionen: Kachel mit Text, bei einer Ressource mit Symbol und eigenem Stand vorher → nachher -->
+          <!-- Remaining options: tile with text; for a resource with icon and own amount before → after -->
           <ChoiceOptionTile v-else
             :title="option.title"
             :player="playerView.thisPlayer"
@@ -86,8 +86,8 @@
             @select="selectedOption = option"/>
         </template>
       </div>
-      <!-- Unsichtbar mitlaufender Kind-Input der gewählten Kachel: saveData() fragt dessen Antwort ab
-           (Spieler-Kacheln antworten selbst, siehe saveData) -->
+      <!-- Invisible child input of the selected tile running alongside: saveData() queries its answer
+           (player tiles answer themselves, see saveData) -->
       <PlayerInputFactory v-if="!asTabs && (maKind !== undefined || isChoice) && selectedIdx !== -1 && selectedOption.type !== 'player'" v-show="false"
         ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)"/>
 
@@ -104,17 +104,17 @@
         </div>
       </template>
 
-      <!-- In einer Tab-Box (z. B. einfache Entscheidung in WaitingForTabs) sitzt der Button unten im Fuß -->
+      <!-- In a tab box (e.g. simple decision in WaitingForTabs) the button sits in the footer -->
       <TabPanelFooterSlot v-if="!asTabs && showOwnSaveButton()">
         <div class="wf-action or-options-save">
           <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid || awaitingPlayer" @click="saveData" />
         </div>
       </TabPanelFooterSlot>
 
-      <!-- Tab-Modus: klebender Fußbereich unten an der Box (tabPanelFooter.ts); Bezahlbereiche hängen sich per Teleport ein -->
+      <!-- Tab mode: sticky footer at the bottom of the box (tabPanelFooter.ts); payment areas hook in via Teleport -->
       <div v-if="asTabs" v-show="!handTabActive" :id="footerId" class="or-tab-footer">
         <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabButtonTone(selectedOption.title) ? 'or-tab-save--' + tabButtonTone(selectedOption.title) : '']">
-          <!-- Gesperrt, solange die gewählte Option noch keine gültige Auswahl hat (z. B. keine Karte gewählt) -->
+          <!-- Disabled while the selected option has no valid selection yet (e.g. no card chosen) -->
           <AppButton :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid" @click="saveData" />
         </div>
       </div>
@@ -199,9 +199,9 @@ export default defineComponent({
   },
   setup() {
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
-    // Verschachtelte Auswahlen innerhalb dieses Menüs bleiben Radio-Listen
+    // Nested selections within this menu stay radio lists
     provide(OR_OPTIONS_AS_TABS, false);
-    // Nur die Tab-Box bietet einen Fußbereich an; verschachtelte Menüs nutzen den der äußeren Box
+    // Only the tab box offers a footer; nested menus use the outer box's
     const footerId = newTabPanelFooterId();
     if (asTabs) {
       provide(TAB_PANEL_FOOTER, '#' + footerId);
@@ -211,7 +211,7 @@ export default defineComponent({
   data() {
     const originalIndices = displayedOptionIndices(this.playerinput);
     const displayedOptions: Array<PlayerInputModel> = originalIndices.map((index) => this.playerinput.options[index]);
-    // initialIdx zählt in Server-Reihenfolge; die Anzeige ist gefiltert und umsortiert (orOptionsDisplayed.ts)
+    // initialIdx counts in server order; the display is filtered and reordered (orOptionsDisplayed.ts)
     const initialIdx = Math.max(0, originalIndices.indexOf(this.playerinput.initialIdx ?? 0));
     // Special case: If the first recommended displayed option is SelectProjectCardToPlay, and none of them are enabled, skip it.
     let selectedIdx = initialIdx;
@@ -226,39 +226,39 @@ export default defineComponent({
       radioElementName: 'selectOption' + unique++,
       selectedOption: displayedOptions[selectedIdx],
       selectedIdx,
-      // Handkarten-Tab (nur im Tab-Modus) aktiv – unabhängig von der gewählten Aktion, die erhalten bleibt
+      // Hand cards tab (tab mode only) active – independent of the selected action, which is kept
       handTabActive: false,
-      // Ob der Kind-Input speichern darf (SelectCard meldet das per "validity"); andere Inputs melden nichts
+      // Whether the child input may save (SelectCard reports this via "validity"); other inputs report nothing
       childValid: true,
-      // Gewählte Spieler-Kachel, wenn die Entscheidung eine Spielerwahl enthält (choiceMenu.ts)
+      // Selected player tile when the decision contains a player selection (choiceMenu.ts)
       selectedPlayer: undefined as ColorWithNeutral | undefined,
     };
   },
   computed: {
-    // Karte, deren Wirkung diese Entscheidung auslöst (nur mit eigenen Tabs; sonst zeigt WaitingForTabs sie)
+    // Card whose effect triggers this decision (only with own tabs; otherwise WaitingForTabs shows it)
     sourceCard(): CardName | undefined {
       return this.asTabs ? inputSourceCard(this.playerinput) : undefined;
     },
-    // Erklärung oben in der Box der gewählten Aktion (tabIntro.ts)
+    // Explanation at the top of the selected action's box (tabIntro.ts)
     selectedIntro(): TabIntro | undefined {
       return this.selectedOption === undefined ? undefined : tabIntro(this.selectedOption);
     },
-    // Einfache Entscheidung aus reinen Optionen als Kacheln (choiceMenu.ts)
+    // Simple decision of plain options as tiles (choiceMenu.ts)
     isChoice(): boolean {
       return isChoiceMenu(this.playerinput);
     },
-    // Meilenstein- bzw. Auszeichnungswahl als Bild-Kacheln (milestoneAwardChoice.ts)
+    // Milestone or award choice as image tiles (milestoneAwardChoice.ts)
     maKind(): MilestoneAwardKind | undefined {
       return milestoneAwardKind(this.playerinput);
     },
     hasPlayerChoice(): boolean {
       return this.isChoice && this.displayedOptions.some((option) => option.type === 'player' || optionTargetPlayer(option) !== undefined);
     },
-    // Spielerwahl ausgewählt, aber noch kein Spieler angetippt: Button gesperrt
+    // Player selection chosen but no player tapped yet: button disabled
     awaitingPlayer(): boolean {
       return this.selectedOption?.type === 'player' && this.selectedPlayer === undefined;
     },
-    // Kacheln der einfachen Entscheidung: eine je Option, bei einer Spielerwahl eine je Spieler (Spalten des Auswahl-Blocks)
+    // Tiles of the simple decision: one per option, for a player selection one per player (columns of the choice block)
     choiceTileCount(): number {
       return this.displayedOptions.reduce((count, option) => count + (option.type === 'player' ? option.players.length : 1), 0);
     },
@@ -269,7 +269,7 @@ export default defineComponent({
   watch: {
     selectedOption(newOption: PlayerInputModel) {
       this.selectedIdx = this.displayedOptions.indexOf(newOption);
-      // Neuer Kind-Input: gültig, bis er etwas anderes meldet
+      // New child input: valid until it reports otherwise
       this.childValid = true;
       // Clicking the option can shift elements on the page.
       // This preserves the location of the option button the user just clicked by
@@ -296,12 +296,12 @@ export default defineComponent({
     optionTarget(option: PlayerInputModel): Color | undefined {
       return optionTargetPlayer(option);
     },
-    // Erste Option einer Folge gegen denselben Spieler (Sabotage: Stahl oder M€); dort beginnt die Gruppe
+    // First option of a run against the same player (Sabotage: steel or M€); the group starts there
     targetGroupStarts(idx: number): boolean {
       const target = optionTargetPlayer(this.displayedOptions[idx]);
       return target !== undefined && (idx === 0 || optionTargetPlayer(this.displayedOptions[idx - 1]) !== target);
     },
-    // Indizes der Folge gegen denselben Spieler ab idx
+    // Indices of the run against the same player starting at idx
     targetGroup(idx: number): Array<number> {
       const target = optionTargetPlayer(this.displayedOptions[idx]);
       const members: Array<number> = [];
@@ -329,16 +329,16 @@ export default defineComponent({
     isEndTab,
     tabButtonCentered,
     endTabHint,
-    // Farbklasse für Tab bzw. Box von Weitergeben (grün) und Beenden (rot), sonst keine
+    // Color class for the tab/box of pass (green) and end (red), otherwise none
     tabToneClass(prefix: string, option: PlayerInputModel | undefined): string {
       const tone = option === undefined ? undefined : tabButtonTone(option.title);
       return tone === undefined ? '' : prefix + tone;
     },
-    // Gemeinsam mit WaitingForTabs (inputAvailableCount.ts)
+    // Shared with WaitingForTabs (inputAvailableCount.ts)
     availableCount(option: PlayerInputModel): number | undefined {
       return inputAvailableCount(option);
     },
-    // Gemeinsame Props für den Kind-Input, egal ob Tab- oder Radio-Darstellung
+    // Shared props for the child input, whether tab or radio presentation
     childInputProps(displayedIdx: number) {
       const option = this.displayedOptions[displayedIdx];
       return {
@@ -355,7 +355,7 @@ export default defineComponent({
     },
     getSelectedOptionLabelElement(): HTMLElement | undefined {
       const idx = this.selectedIdx;
-      // Tabs sind umsortiert; die ref-Liste folgt der Anzeige-Reihenfolge, daher über den Options-Index suchen
+      // Tabs are reordered; the ref list follows display order, so look up by option index
       if (this.asTabs) {
         const tab = (this.$el as HTMLElement).querySelector(`[data-option-index="${idx}"]`) ?? undefined;
         return isHTMLElement(tab) ? tab : undefined;
@@ -380,9 +380,9 @@ export default defineComponent({
     },
     // When the child component is a multi-select card, let it render its own save button.
     // This allows the child to control the button label (e.g. "Sell 3 patents").
-    // Eigener Button des Menüs: nicht, wenn die Eingabe selbst einen hat, bei Feldauswahl im Tab-Modus
-    // (bestätigt wird über die Sprechblase am Feld, SpaceConfirmPopover) und wenn nichts auswählbar ist
-    // (Zähler 0, z. B. kein Standardprojekt bezahlbar)
+    // The menu's own button: not when the input has its own, for space selection in tab mode
+    // (confirmed via the speech bubble at the space, SpaceConfirmPopover) and when nothing is selectable
+    // (count 0, e.g. no standard project affordable)
     showOwnSaveButton(): boolean {
       const option = this.selectedOption;
       if (!this.showsave || option === undefined || this.showChildSaveButton(option)) {
@@ -394,7 +394,7 @@ export default defineComponent({
       return option.type === 'card' && !(option.max === 1 && option.min === 1);
     },
     saveData() {
-      // Spieler-Kachel: Antwort direkt, ohne unsichtbaren SelectPlayer
+      // Player tile: answer directly, without an invisible SelectPlayer
       if (!this.asTabs && this.isChoice && this.selectedOption?.type === 'player') {
         if (this.selectedPlayer !== undefined) {
           this.playerFactorySaved(this.selectedIdx)({type: 'player', player: this.selectedPlayer});

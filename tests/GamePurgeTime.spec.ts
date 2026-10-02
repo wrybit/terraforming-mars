@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {testGame} from './TestGame';
 
-// Die Lösch-Warnung muss zur tatsächlichen Datenbank passen, sonst warnt sie vor einer Löschung, die nie stattfindet.
+// The purge warning must match the actual database, otherwise it warns about a purge that never happens.
 describe('Game.expectedPurgeTimeMs', () => {
   const variableNames = ['MAX_GAME_DAYS', 'POSTGRES_HOST', 'LOCAL_FS_DB'] as const;
   let savedValues: Record<string, string | undefined>;

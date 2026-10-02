@@ -1,23 +1,23 @@
-/* Lage des Globus über dem tatsächlichen Layout: Die Buttons sind je nach Gerät unterschiedlich hoch und breit.
-   Damit die Bögen von Button zu Button (und zum Titel) zusammenpassen, wird der Globus einheitlich skaliert –
-   nach dem Abstand der Buttons untereinander, nicht nach ihrer Breite – und jeder Button bekommt seine Lage darin. */
+/* Position of the globe over the actual layout: the buttons differ in height and width depending on the device.
+   So the arcs from button to button (and to the title) line up, the globe is scaled uniformly –
+   by the spacing between the buttons, not by their width – and each button gets its position within it. */
 import {SPRITE_ROW} from './planetStripes';
 
 export type GlobePlacement = {
-  // CSS-Pixel je Sprite-Pixel (Desktop: 1)
+  // CSS pixels per sprite pixel (desktop: 1)
   scale: number;
-  // Oberkante des Buttons im Sprite-Raster (erster Button: 90 = Reihe 1)
+  // Top edge of the button in the sprite grid (first button: 90 = row 1)
   spriteTop: number;
 };
 
 export type GlobeLayout = {
   scale: number;
   placements: Array<GlobePlacement>;
-  // Abstand Titel-Oberkante zur Oberkante der Sprite-Reihe 0 (CSS-Pixel), für den Titel-Hintergrund
+  // Distance from title top edge to top edge of sprite row 0 (CSS pixels), for the title background
   titleOffset: number;
 };
 
-// Abstand der Buttons auf dem Desktop (90px hoch + 5px Lücke): dort ist der Globus unskaliert
+// Button spacing on desktop (90px high + 5px gap): there the globe is unscaled
 const DESKTOP_PITCH = SPRITE_ROW.height + 5;
 
 export function measureGlobeLayout(buttons: ReadonlyArray<HTMLElement>, title: HTMLElement | undefined): GlobeLayout | undefined {
@@ -32,7 +32,7 @@ export function measureGlobeLayout(buttons: ReadonlyArray<HTMLElement>, title: H
   }
   const scale = pitch / DESKTOP_PITCH;
   const placements = tops.map((top) => ({scale, spriteTop: SPRITE_ROW.height + (top - first) / scale}));
-  // Sprite-Reihe 0 endet dort, wo der erste Button beginnt
+  // Sprite row 0 ends where the first button begins
   const titleOffset = title === undefined ? 0 : first - title.getBoundingClientRect().top - SPRITE_ROW.height * scale;
   return {scale, placements, titleOffset};
 }

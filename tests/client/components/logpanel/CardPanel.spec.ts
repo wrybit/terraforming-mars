@@ -21,11 +21,11 @@ describe('CardPanel', () => {
 });
 
 describe('CardPanel attributes', () => {
-  // Die Wurzel ist ein Teleport: die Position der Hover-Vorschau (style) muss trotzdem am Panel landen
+  // The root is a Teleport: the hover preview position (style) must still end up on the panel
   it('passes style to the panel', () => {
     const wrapper = shallowMount(CardPanel, {
       ...globalConfig,
-      // Teleport-Inhalt an Ort und Stelle rendern, sonst ist das Panel nicht auffindbar
+      // Render Teleport content in place, otherwise the panel cannot be found
       global: {...globalConfig.global, stubs: {teleport: true}},
       props: {
         message: new LogMessage(LogMessageType.DEFAULT, '${0}', [{type: LogMessageDataType.CARD, value: CardName.POWER_PLANT}]),

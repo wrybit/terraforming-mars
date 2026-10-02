@@ -5,8 +5,8 @@
       <StatsKpis :tiles="tiles"/>
     </section>
 
-    <!-- Top 5 nebeneinander; die Karten darin scrollen waagerecht, mobil stehen die Boxen untereinander -->
-    <!-- Titel führt zur Top-20-Seite -->
+    <!-- Top 5 side by side; the cards inside scroll horizontally, on mobile the boxes stack vertically -->
+    <!-- Title leads to the top 20 page -->
     <div v-if="showcases.some((showcase) => showcase.entries.length > 0)" class="stats-columns">
       <section v-for="showcase in showcases" :key="showcase.kind" class="stats-card">
         <h2><a :href="topHref(showcase.kind)" data-stats-link class="stats-heading-link"><span v-i18n>{{ showcase.title }}</span> <span class="stats-dim">→ Top 20</span></a></h2>
@@ -78,7 +78,7 @@ function sum(results: ReadonlyArray<StatsPlayerResult>, valueOf: (result: StatsP
   return results.reduce((total, result) => total + (valueOf(result) ?? 0), 0);
 }
 
-// Startansicht: Kennzahlen, Siege je Besetzung (wie in der Admin-Übersicht), Verlauf und Verteilung
+// Start view: key figures, wins per line-up (as in the admin overview), history and distribution
 export default defineComponent({
   name: 'StatsOverview',
   components: {StatsKpis, StatsLineChart, StatsBarChart, StatsShowcase},
@@ -155,7 +155,7 @@ export default defineComponent({
   },
   methods: {
     formatNumber,
-    // Häufigste zuerst, bei Gleichstand die erfolgreichere
+    // Most frequent first, on a tie the more successful one
     topHref(kind: StatsTopKind): string {
       return statsHref({type: 'top', kind});
     },

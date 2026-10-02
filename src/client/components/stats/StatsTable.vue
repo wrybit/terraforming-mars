@@ -27,7 +27,7 @@
 import {defineComponent, PropType} from 'vue';
 import {StatsColumn} from './statsTypes';
 
-// Sortierbare Tabelle für alle Listen der Statistik
+// Sortable table for all statistics lists
 export default defineComponent({
   name: 'StatsTable',
   props: {
@@ -53,7 +53,7 @@ export default defineComponent({
       return [...this.rows].sort((first, second) => {
         const left = column.value(first);
         const right = column.value(second);
-        // Unbekannte Werte immer ans Ende, egal in welche Richtung sortiert wird
+        // Unknown values always at the end, regardless of sort direction
         if (left === undefined || right === undefined) {
           return left === right ? 0 : left === undefined ? 1 : -1;
         }

@@ -15,7 +15,7 @@ describe('planetStripes', () => {
       const limits = rotationLimits(stripe);
       expect(limits.max).to.be.greaterThan(0);
       expect(limits.min).to.be.at.most(0);
-      // linker Button-Rand bei voller Drehung bleibt rechts der runden Streifen-Enden
+      // left button edge at full rotation stays right of the round stripe ends
       const leftEdge = stripe.startX - limits.max * stripe.height / 90;
       expect(leftEdge).to.be.at.least(300);
     }

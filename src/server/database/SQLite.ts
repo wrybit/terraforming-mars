@@ -185,7 +185,7 @@ export class SQLite implements IDatabase {
   }
 
   async deleteGame(gameId: GameId): Promise<void> {
-    // Alle Tabellen, die eine game_id kennen – sonst bleiben Teilnehmer-Links auf ein Spiel stehen, das es nicht mehr gibt
+    // All tables that know a game_id – otherwise participant links remain pointing to a game that no longer exists
     for (const table of ['games', 'participants', 'game_results', 'completed_game']) {
       await this.asyncRun(`DELETE FROM ${table} WHERE game_id = ?`, [gameId]);
     }

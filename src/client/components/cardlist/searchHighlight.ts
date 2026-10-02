@@ -1,6 +1,6 @@
-// Markiert Suchtreffer in der Kartenliste über die CSS Custom Highlight API (::highlight(card-list-search) in card_list.less).
-// Vorteil: die Karten-Komponenten bleiben unberührt – markiert wird einfach der fertig gerenderte, übersetzte Text.
-// Browser ohne die API zeigen die Treffer ohne Markierung.
+// Highlights search hits in the card list via the CSS Custom Highlight API (::highlight(card-list-search) in card_list.less).
+// Advantage: the card components stay untouched – it simply marks the fully rendered, translated text.
+// Browsers without the API show the hits without highlighting.
 
 const HIGHLIGHT_NAME = 'card-list-search';
 
@@ -16,7 +16,7 @@ function highlightConstructor(): HighlightConstructor | undefined {
   return (window as unknown as {Highlight?: HighlightConstructor}).Highlight;
 }
 
-// "^" am Anfang heißt in der Namenssuche "beginnt mit" und gehört nicht zum Suchtext
+// A leading "^" means "starts with" in the name search and is not part of the search text
 export function searchTerm(filterText: string): string {
   return filterText.trim().replace(/^\^/, '').toLocaleLowerCase();
 }
@@ -35,7 +35,7 @@ function rangesIn(node: Text, term: string): Array<Range> {
   return ranges;
 }
 
-// containers: Bereiche, in denen gesucht wird (bei der Namenssuche nur die Titel)
+// containers: areas that are searched (for the name search only the titles)
 export function highlightSearch(containers: Iterable<Element>, filterText: string): void {
   const highlights = registry();
   const Highlight = highlightConstructor();

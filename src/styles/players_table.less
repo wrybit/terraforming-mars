@@ -1,13 +1,13 @@
-// Spielerliste als Tabelle (PlayersTable.vue) – nur im Zwei-Spalten-Layout sichtbar (player_home_columns.less).
-// Kopfzeile mit Icons einmal oben, darunter je Spieler eine Zeile in gedämpfter Spielerfarbe:
-//   Name | Waren (Vorrat groß, Produktion klein) | Tags | Wertung | gespielte Karten
-// Das Spaltenraster setzt PlayersTable als --players-table-columns (playersTableLayout.ts).
+// Player list as a table (PlayersTable.vue) – only visible in the two-column layout (player_home_columns.less).
+// Header row with icons once at the top, below it one row per player in a muted player colour:
+//   Name | Resources (stock large, production small) | Tags | Score | played cards
+// PlayersTable sets the column grid as --players-table-columns (playersTableLayout.ts).
 
 @players-table-row-height: 48px;
 @players-table-own-row-height: 56px;
 @players-table-head-height: 34px;
 @players-table-row-gap: 4px;
-// Eigene Zeile etwas von den anderen abgesetzt
+// Own row set slightly apart from the others
 @players-table-own-row-offset: 5px;
 @players-table-radius: 6px;
 @players-table-color-bar-width: 7px;
@@ -23,7 +23,7 @@
 @players-table-production-leader: #8f5a2a;
 @players-table-production-leader-border: #f0b070;
 
-// Außerhalb des Zwei-Spalten-Layouts bleibt die klassische Leiste
+// Outside the two-column layout the classic bar remains
 .players-table {
   display: none;
 }
@@ -42,17 +42,17 @@
   align-items: center;
   height: @players-table-row-height;
   border-radius: @players-table-radius;
-  // Galaxie-Hintergrund hinter den Zeilen weichzeichnen, damit er nicht hart durchscheint
+  // Blur the galaxy background behind the rows so it doesn't shine through harshly
   backdrop-filter: blur(@players-table-blur);
 }
 
 .players-table-head {
-  // Über den Spielerzeilen, sonst verdecken diese die Tooltips der Kopf-Icons (jede Zeile ist wegen Blur eine eigene Ebene)
+  // Above the player rows, otherwise they cover the tooltips of the header icons (each row is its own layer due to blur)
   z-index: 2;
   height: @players-table-head-height;
   background: rgba(0, 0, 0, 0.5);
 
-  // Icons verkleinert (zoom, weil die Icons unterschiedliche Hintergrundgrößen nutzen)
+  // Icons scaled down (zoom, because the icons use different background sizes)
   .resource_icon {
     zoom: 0.75;
   }
@@ -69,12 +69,12 @@
 .players-table-row--player {
   cursor: pointer;
 
-  // Zeile unter der Maus nach vorn, damit ihre Tooltips nicht unter der nächsten Zeile liegen
+  // Bring the hovered row to the front so its tooltips don't sit under the next row
   &:hover {
     z-index: 3;
   }
 
-  // Balken in Original-Spielerfarbe vor dem Namen
+  // Bar in the original player colour before the name
   &::before {
     content: "";
     position: absolute;
@@ -124,7 +124,7 @@ each(@players, {
   min-width: 0;
 }
 
-// Trenner zwischen den Abschnitten: durchgezogen über alle Zeilen (überbrückt die Zeilenabstände)
+// Separator between the sections: continuous across all rows (bridges the row gaps)
 .players-table-divider {
   position: relative;
   align-self: stretch;
@@ -153,7 +153,7 @@ each(@players, {
   color: #aab;
 }
 
-// Schalter vorne im Kopf
+// Toggle at the front of the header
 .players-table-toggles {
   display: flex;
   gap: 4px;
@@ -168,13 +168,13 @@ each(@players, {
   width: 30px;
   height: 26px;
   padding: 0;
-  // Rand statt Schatten/Outline: folgt exakt der Rundung, auch gestrichelt
+  // Border instead of shadow/outline: follows the rounding exactly, also when dashed
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 5px;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.14);
 
-  // Eingeschaltet, aber aus Platzgründen ausgeblendet
+  // Switched on, but hidden for lack of space
   &.players-table-toggle--squeezed {
     border-style: dashed;
     border-color: rgba(255, 255, 255, 0.6);
@@ -191,8 +191,8 @@ each(@players, {
   }
 }
 
-// Eigene Symbole in fester Pixelgröße: die Sprite-Klassen der Spielerleiste haben Versatz-Ränder
-// und würden nur per zoom mit krummen Faktoren (unscharf, verschoben) passen
+// Own icons at a fixed pixel size: the sprite classes of the player bar have offset margins
+// and would only fit via zoom with odd factors (blurry, shifted)
 @players-table-toggle-icon-size: 18px;
 
 .players-table-toggle-icon {
@@ -209,10 +209,10 @@ each(@players, {
 .players-table-toggle-icon--building {
   border-radius: 50%;
   background-image: url(./assets/tags/building.png);
-  background-size: 112%; // Bild hat einen hellen Rand, der sonst als Ring stehen bliebe
+  background-size: 112%; // Image has a light rim that would otherwise remain as a ring
 }
 
-// Siegpunkte wie im Spiel: goldenes Schild mit "VP"
+// Victory points as in the game: golden shield with "VP"
 .players-table-toggle-icon--vp {
   width: @players-table-toggle-icon-size + 4px;
   border-radius: 3px;
@@ -227,7 +227,7 @@ each(@players, {
   }
 }
 
-// Startspieler: weißes Schild mit fetter "1" im Farbbalken
+// Starting player: white shield with a bold "1" in the colour bar
 .players-table-first-player {
   position: absolute;
   left: 0;
@@ -243,19 +243,19 @@ each(@players, {
   text-align: center;
 }
 
-// Am Zug: nur Punkt und Zeit, ohne das Wort "aktiv"
+// Taking their turn: only dot and time, without the word "active"
 .players-table-identity--acting .player-action-status {
   display: none;
 }
 
-// Namenszelle: Zeile 1 Name + Status, Zeile 2 Konzern
+// Name cell: row 1 name + status, row 2 corporation
 .players-table-identity {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2px; // Name und Konzern gehören zusammen: eng, der Block sitzt mittig in der Zeile
+  gap: 2px; // Name and corporation belong together: tight, the block sits centred in the row
   min-width: 0;
-  padding-left: 24px; // Platz für Farbbalken samt Startspieler-Schild
+  padding-left: 24px; // Room for the colour bar including the starting player shield
 }
 
 .players-table-identity-line {
@@ -264,7 +264,7 @@ each(@players, {
   gap: 8px;
   min-width: 0;
 
-  // Status (PlayerStatus.vue) als kleine Plakette; "aktiv" blinkt über active_player_outline.less
+  // Status (PlayerStatus.vue) as a small plaque; "active" blinks via active_player_outline.less
   .player-status,
   .player-status-bottom {
     display: contents;
@@ -303,7 +303,7 @@ each(@players, {
     height: 8px;
   }
 
-  // Zeit einzeilig; Sekunden fest breit, damit die Plakette beim Ticken nicht springt
+  // Time on one line; seconds at a fixed width so the plaque doesn't jump while ticking
   .player-timer {
     display: flex;
   }
@@ -317,7 +317,7 @@ each(@players, {
   flex: none;
   font-family: Prototype, sans-serif;
   font-size: 19px;
-  line-height: 1; // Prototype bringt viel Zeilenhöhe mit, die den Konzern sonst nach unten schiebt
+  line-height: 1; // Prototype brings a lot of line height that would otherwise push the corporation down
   color: #fff;
   white-space: nowrap;
 }
@@ -326,7 +326,7 @@ each(@players, {
   font-size: 22px;
 }
 
-// Grundschrift ausdrücklich: in der Meilenstein-Tabelle (gleicher Kopf, mobile.less) erbte der Konzern sonst Prototype
+// Base font set explicitly: in the milestone table (same header, mobile.less) the corporation would otherwise inherit Prototype
 .players-table-corporation {
   font-family: @font_family_main;
   font-size: 13px;
@@ -337,14 +337,14 @@ each(@players, {
   text-overflow: ellipsis;
 }
 
-// Warenbox: Vorrat groß, Produktion klein im braunen Kästchen, Wert je Einheit als Münze an der Ecke
+// Resource box: stock large, production small in the brown box, value per unit as a coin at the corner
 .players-table-goods {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 6px;
-  // Breite gedeckelt: Vorrat und Produktion bleiben beisammen, auch wenn die Spalte breiter wird
+  // Width capped: stock and production stay together even when the column gets wider
   width: calc(100% - 8px);
   max-width: 78px;
   height: 34px;
@@ -359,7 +359,7 @@ each(@players, {
 }
 
 .players-table-goods-stock {
-  display: inline-flex; // Platz für das Schild vor der Zahl (geschützter Vorrat)
+  display: inline-flex; // Room for the shield before the number (protected stock)
   align-items: center;
   gap: 3px;
   font-size: 20px;
@@ -395,7 +395,7 @@ each(@players, {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
-// Münz-Plaketten: Wert je Einheit (Warenbox) und Rabatt (Tags, Handkarten)
+// Coin plaques: value per unit (resource box) and discount (tags, hand cards)
 .players-table-goods-value,
 .players-table-discount {
   position: absolute;
@@ -420,8 +420,8 @@ each(@players, {
   font-size: 10px;
 }
 
-// Geschützt (Waren, Natur-Tags bei Geschützte Habitate): weiße Fläche, schwarze Zahl, Schild davor.
-// Ein Stil für beide Stellen, damit Schutz überall gleich aussieht
+// Protected (resources, plant tags with Protected Habitats): white surface, black number, shield before it.
+// One style for both places so protection looks the same everywhere
 .players-table-protected {
   background: #fff;
 
@@ -431,7 +431,7 @@ each(@players, {
   }
 }
 
-// Leere Produktion ist weiß auf dunkel angelegt; auf der weißen Fläche dieselbe Zurücknahme in Schwarz
+// Empty production is laid out white on dark; on the white surface the same dimming in black
 .players-table-protected .players-table-goods-production--none {
   color: rgba(0, 0, 0, 0.35);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
@@ -439,14 +439,14 @@ each(@players, {
 
 .players-table-counter.players-table-protected {
   display: inline-flex;
-  color: #111; // Zählerfarbe (.players-table-counter) steht weiter unten und würde sonst gewinnen
+  color: #111; // Counter colour (.players-table-counter) comes further down and would otherwise win
   align-items: center;
   gap: 3px;
   padding: 3px 6px 2px;
   border-radius: 5px;
 }
 
-// Schild schwarz auf Weiß: die Grafik ist schwarz, shield_icon (resources.less) invertiert sie für dunklen Grund
+// Shield black on white: the graphic is black, shield_icon (resources.less) inverts it for dark backgrounds
 .players-table-protection {
   flex: none;
   position: static;
@@ -458,7 +458,7 @@ each(@players, {
   filter: none;
 }
 
-// Zähler (Tags, Wertung): bewusst klein und leiser als die Waren
+// Counters (tags, score): deliberately small and quieter than the resources
 .players-table-counter {
   font-family: Prototype, sans-serif;
   font-size: 15px;
@@ -473,7 +473,7 @@ each(@players, {
   color: @players-table-dim;
 }
 
-// Punkte je Tag (PointsPerTag.vue) als kleine Plakette unten rechts
+// Points per tag (PointsPerTag.vue) as a small plaque at the bottom right
 .players-table-cell .points-per-tag {
   position: absolute;
   bottom: -4px;

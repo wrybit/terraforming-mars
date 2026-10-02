@@ -34,8 +34,8 @@ export class PaymentTester {
     await this.nextTick();
   }
 
-  // Bei nur einer Währung zeigt PaymentForm keine Eingabefelder, nur den Preis –
-  // die Werte kommen dann aus dem Zustand des Formulars statt aus dem Textfeld
+  // With only one currency PaymentForm shows no input fields, only the price –
+  // the values then come from the form state instead of the text box
   private paymentForm(): {payment: Payment, ledger: Record<string, {available: number} | undefined>} | undefined {
     const form = this.wrapper.findComponent({name: 'PaymentForm'});
     return form.exists() ? form.vm as any : undefined;
@@ -79,7 +79,7 @@ export class PaymentTester {
     return this.wrapper.find(PaymentTester.selector(resource) + ' input').exists() || this.isOffered(resource);
   }
 
-  // Einheit wird zum Bezahlen angeboten (hätte ohne Ein-Währungs-Ansicht ein Eingabefeld)
+  // Unit is offered for payment (would have an input field without the single-currency view)
   private isOffered(resource: SpendableResource): boolean {
     const form = this.paymentForm();
     if (form === undefined) {

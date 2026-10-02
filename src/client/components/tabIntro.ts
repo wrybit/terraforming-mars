@@ -7,16 +7,16 @@ import {TileType} from '@/common/TileType';
 import {PreviewTile, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
 import {specialTileImage, TileImage, tileImage} from '@/client/components/specialTileImage';
 
-// Erklärung oben in der Box eines Aktions-Tabs (OrOptions), wo sonst nur ein Button stünde:
-// Bild (Plättchen oder Ressource), was passiert und Hinweiszeilen.
+// Explanation at the top of an action tab's box (OrOptions), where otherwise there would only be a button:
+// image (tile or resource), what happens and hint lines.
 export type TabIntro = {
-  tile?: TileImage; // Plättchen (Sechseck, bei Sonderplättchen mit Symbol darauf)
-  resourceIcon?: string; // Ressourcen-Symbol (resources.less: resource_icon--<name>)
+  tile?: TileImage; // Tile (hexagon, with an icon on it for special tiles)
+  resourceIcon?: string; // Resource icon (resources.less: resource_icon--<name>)
   hint?: 'click-space';
-  facts?: ReadonlyArray<IntroFact>; // Spielstand-Zeilen, damit man die Folgen der Aktion ohne Suchen sieht
+  facts?: ReadonlyArray<IntroFact>; // Game-state lines so the consequences of the action are visible without searching
 };
 
-// Eine Spielstand-Zeile unter der Erklärung; Werte kommen erst beim Anzeigen aus dem Spielstand (introFacts)
+// One game-state line below the explanation; values come from the game state only when displayed (introFacts)
 export type IntroFact =
   {kind: 'temperature'} |
   {kind: 'heat', cost: number} |
@@ -32,7 +32,7 @@ const INTROS: Readonly<Record<string, TabIntro>> = {
   'Convert 6 heat into temperature': heatConversion(6),
 };
 
-// Ein Temperaturschritt sind 2 °C (Brett-Skala)
+// One temperature step is 2 °C (board scale)
 const TEMPERATURE_STEP = 2;
 
 export function tabIntro(option: PlayerInputModel): TabIntro | undefined {
@@ -41,13 +41,13 @@ export function tabIntro(option: PlayerInputModel): TabIntro | undefined {
   if (intro !== undefined) {
     return intro;
   }
-  // Jede Feldauswahl bekommt den Klick-Hinweis, dazu das Plättchen: Sonderplättchen der Karte bzw. Vulkan,
-  // sonst Ozean/Stadt/Grünfläche wie in der Vorschau auf dem Brett (spaceTilePreview.ts)
+  // Every space selection gets the click hint, plus the tile: the card's special tile or volcano,
+  // otherwise ocean/city/greenery like the preview on the board (spaceTilePreview.ts)
   if (option.type !== 'space') {
     return undefined;
   }
   const tile = specialTileImage(option.title) ?? plainTile(option.title);
-  // Beim Ozean zählt, wie viele schon liegen (Obergrenze, Ozean-Bonus auf Nachbarfeldern)
+  // For oceans what counts is how many are already placed (limit, ocean bonus on adjacent spaces)
   if (previewTileForSpaceInput(option.title) === 'ocean') {
     return {tile, hint: 'click-space', facts: [{kind: 'oceans'}]};
   }
@@ -69,7 +69,7 @@ function rawValues(...values: ReadonlyArray<number>): Message['data'] {
   return values.map((value) => ({type: LogMessageDataType.RAW_STRING, value: String(value)}));
 }
 
-// Textzeilen zu den Spielstand-Zeilen einer Erklärung
+// Text lines for the game-state lines of an explanation
 export function introFacts(intro: TabIntro, playerView: PlayerViewModel): Array<string | Message> {
   return (intro.facts ?? []).map((fact) => {
     switch (fact.kind) {
@@ -85,7 +85,7 @@ export function introFacts(intro: TabIntro, playerView: PlayerViewModel): Array<
   });
 }
 
-// "Temperatur steigt von -28 °C auf -26 °C" bzw. Hinweis, dass sie schon am Maximum ist
+// "Temperature rises from -28 °C to -26 °C" or a hint that it is already at the maximum
 function temperatureHint(currentTemperature: number): string | Message {
   if (currentTemperature >= MAX_TEMPERATURE) {
     return 'Temperature is already at maximum';

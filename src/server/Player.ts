@@ -873,7 +873,7 @@ export class Player implements IPlayer {
     // The issue is fixed in Double Down for the time being. But the right fix is to move this block
     // down. As I say, that's going to break a lot of things, many of which are not evident
     // in tests (because they use card.play instad of player.playCard).
-    // Im Zusammenhang der Karte: Eingaben daraus zeigen im Client ihren Namen und Text (DeferredActionsQueue)
+    // In the context of the card: inputs from it show its name and text in the client (DeferredActionsQueue)
     this.inCardContext(selectedCard.name, () => {
       const action = selectedCard.play(this);
       this.defer(action, Priority.DEFAULT);
@@ -919,8 +919,8 @@ export class Player implements IPlayer {
     return undefined;
   }
 
-  // Im Zusammenhang einer Karte ausführen, damit Eingaben daraus sie im Client zeigen (DeferredActionsQueue.withSourceCard).
-  // Spieler ohne Spiel (manche Tests) führen direkt aus.
+  // Run in the context of a card so inputs from it show the card in the client (DeferredActionsQueue.withSourceCard).
+  // Players without a game (some tests) run directly.
   private inCardContext<T>(card: CardName | undefined, fn: () => T): T {
     const queue: DeferredActionsQueue | undefined = this.game?.deferredActions;
     return queue === undefined ? fn() : queue.withSourceCard(card, fn);
@@ -938,7 +938,7 @@ export class Player implements IPlayer {
     }
 
     /* A player responding to their own cards played. */
-    // Jede Reaktion im Zusammenhang ihrer Karte, damit der Client sie zeigt (DeferredActionsQueue.withSourceCard)
+    // Each reaction in the context of its card so the client shows it (DeferredActionsQueue.withSourceCard)
     for (const effectCard of this.playedCards) {
       this.inCardContext(effectCard.name, () => this.defer(effectCard.onCardPlayed?.(this, card)));
     }
@@ -1714,8 +1714,8 @@ export class Player implements IPlayer {
       if (!waitingFor.optional) {
         this.timer.stop();
       }
-      // Folgefragen einer Karte (z. B. nach der Wahl eines Spielers) behalten deren Zusammenhang;
-      // waitingForCb läuft außerhalb, denn es setzt die Warteschlange mit eigenen Zusammenhängen fort
+      // Follow-up questions of a card (e.g. after choosing a player) keep its context;
+      // waitingForCb runs outside it, because it continues the queue with its own contexts
       this.inCardContext(waitingFor.sourceCard, () => this.defer(waitingFor.process(input, this)));
       waitingForCb();
     } catch (err) {

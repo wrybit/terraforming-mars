@@ -7,7 +7,7 @@ export interface IMilestone {
   description: string;
   canClaim(player: IPlayer): boolean;
   getScore(player: IPlayer): number;
-  // Schwelle für die Anzeige in der Meilenstein-Tabelle; nur bei Meilensteinen mit einfacher Zahl
+  // Threshold for display in the milestone table; only for milestones with a simple number
   thresholdFor?(game: IGame): number;
 }
 

@@ -46,7 +46,7 @@ describe('MilestoneAwardTable', () => {
     const wrapper = mountTable();
     const terraformer = wrapper.find('[data-test="row-blue"]').findAll('.ma-table-cell')[0];
     expect(terraformer.classes()).to.include('ma-table-cell--rank-1');
-    // Gleichstand an der Spitze: beide auf Platz 1
+    // Tie at the top: both in 1st place
     const bankerCells = ['row-green', 'row-red'].map((row) => wrapper.find(`[data-test="${row}"]`).findAll('.ma-table-cell').at(-1)!);
     bankerCells.forEach((cell) => expect(cell.classes()).to.include('ma-table-cell--rank-1'));
   });

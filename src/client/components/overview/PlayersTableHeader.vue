@@ -1,6 +1,6 @@
 <template>
   <div class="players-table-row players-table-head">
-    <!-- Schalter vorne, auf Höhe der Icons: blenden Waren / Tags / Wertung ein und aus -->
+    <!-- Toggles in front, level with the icons: show and hide goods / tags / scoring -->
     <div class="players-table-toggles">
       <button v-for="section in sections" :key="section.key" type="button"
         :class="['players-table-toggle', {'players-table-toggle--squeezed': autoHidden.includes(section.key)}]"
@@ -13,7 +13,7 @@
       </button>
     </div>
 
-    <!-- Reihenfolge der Abschnitte aus PlayersTable (Desktop: Waren, Tags, Wertung; mobil: Waren, Wertung, Tags) -->
+    <!-- Section order from PlayersTable (desktop: goods, tags, scoring; mobile: goods, scoring, tags) -->
     <template v-for="section in sectionOrder" :key="section">
       <template v-if="section === 'goods' && visibility.goods">
         <div class="players-table-divider"></div>
@@ -61,7 +61,7 @@ import {DESKTOP_SECTION_ORDER, SectionVisibility, TableSection, TagColumnGroups}
 
 type SectionToggle = {key: TableSection; label: string; icon: 'megacredit' | 'building' | 'vp'};
 
-// Icon je Schalter: typisches Symbol des Abschnitts
+// Icon per toggle: typical symbol of the section
 const SECTION_TOGGLES: Array<SectionToggle> = [
   {key: 'goods', label: 'Goods', icon: 'megacredit'},
   {key: 'tags', label: 'Tags', icon: 'building'},
@@ -81,7 +81,7 @@ export default defineComponent({
       type: Object as () => SectionVisibility,
       required: true,
     },
-    // Reihenfolge der Abschnitte (playersTableLayout.ts: sectionOrder)
+    // Section order (playersTableLayout.ts: sectionOrder)
     sectionOrder: {
       type: Array as () => ReadonlyArray<TableSection>,
       default: () => DESKTOP_SECTION_ORDER,
@@ -90,7 +90,7 @@ export default defineComponent({
       type: Array as () => TagColumnGroups,
       required: true,
     },
-    // Aus Platzgründen ausgeblendete Abschnitte: Schalter gestrichelt, ein Klick holt sie zurück
+    // Sections hidden for lack of space: toggle dashed, a click brings them back
     autoHidden: {
       type: Array as () => Array<TableSection>,
       default: () => [],
@@ -98,7 +98,7 @@ export default defineComponent({
   },
   emits: ['toggle'],
   computed: {
-    // Schalter in derselben Reihenfolge wie die Abschnitte (mobil: Waren, Wertung, Tags)
+    // Toggles in the same order as the sections (mobile: goods, scoring, tags)
     sections(): Array<SectionToggle> {
       return this.sectionOrder.flatMap((key) => SECTION_TOGGLES.filter((toggle) => toggle.key === key));
     },

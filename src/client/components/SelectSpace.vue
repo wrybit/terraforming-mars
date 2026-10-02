@@ -1,6 +1,6 @@
 <template>
   <div class="select_space_cont">
-    <!-- Bestätigung als Sprechblase am gewählten Feld (öffnet nach links, wenn rechts kein Platz ist) -->
+    <!-- Confirmation as a speech bubble at the chosen space (opens to the left if there's no room on the right) -->
     <SpaceConfirmPopover
         :anchor="confirmAnchor"
         @accept="confirmPlacement"
@@ -10,8 +10,8 @@
       {{ $t(playerinput.title) }}
       <GoToMap :playerinput="playerinput"/>
     </div>
-    <!-- Übergang zum großen Brett bewusst per Button: automatisches Aufklappen wirkt störend.
-         Oben steht, was platziert wird, darunter der nächste Schritt – so ist klar, was nach dem Klick passiert -->
+    <!-- Transition to the large board deliberately via a button: automatic expanding feels disruptive.
+         The top line says what is being placed, below it the next step – so it's clear what happens after the click -->
     <div v-if="marsPlacement" class="select-space-zoom">
       <button type="button" class="btn btn-submit btn-rounded select-space-zoom-button" @click="enlargeBoard">
         <span class="select-space-zoom-action">{{ placementAction }}</span>
@@ -36,7 +36,7 @@ import {placementLabel, previewTileClass, previewTileForSpaceInput} from '@/clie
 import {placementZoom, releasePlacementZoom, releasePlacementZoomAndWait, requestPlacementZoom} from '@/client/components/board/placementZoom';
 
 const PREVIEW_CLASS = 'space-tile-preview';
-// Felder auf dem Mars-Brett (inkl. Kolonie-Felder daneben); nur für sie wird das Brett vergrößert, nicht für den Mond
+// Spaces on the Mars board (incl. colony spaces next to it); the board is enlarged only for these, not for the Moon
 const MARS_REGION_SELECTOR = '#main_board, #colony_spaces';
 import GoToMap from '@/client/components/waitingFor/GoToMap.vue';
 import {SpaceId} from '@/common/Types';
@@ -44,11 +44,11 @@ import {SpaceId} from '@/common/Types';
 type DataModel = {
   spaces: Set<SpaceId>;
   selectedTile: HTMLElement | undefined,
-  // Feld, an dem die Bestätigungs-Blase gerade offen ist
+  // Space at which the confirmation bubble is currently open
   confirmAnchor: HTMLElement | undefined,
   spaceId: SpaceId | undefined;
   warning: string | undefined;
-  // Wählbare Felder liegen auf dem Mars (nicht nur auf dem Mond): Button zum Vergrößern anzeigen
+  // Selectable spaces are on Mars (not only on the Moon): show the enlarge button
   marsPlacement: boolean;
 };
 
@@ -90,7 +90,7 @@ export default defineComponent({
     };
   },
   computed: {
-    // Bekanntes Plättchen als kurze Handlung ("Stadt platzieren"), sonst der Titel der Feldwahl selbst
+    // Known tile as a short action ("Place city"), otherwise the title of the space selection itself
     placementAction(): string {
       const tile = previewTileForSpaceInput(this.playerinput.title);
       return tile !== undefined ? this.$t(placementLabel(tile)) : this.$t(this.playerinput.title);
@@ -116,9 +116,9 @@ export default defineComponent({
         }
       });
     },
-    // Vorschau des Plättchens über dem Feld, solange die Bestätigung offen ist.
-    // Sie liegt deckungsgleich über dem Feld im Brett statt im Feld selbst: das Feld ist als Sechseck
-    // zugeschnitten (clip-path) und würde Schatten und Schein abschneiden.
+    // Preview of the tile above the space while the confirmation is open.
+    // It sits congruently above the space in the board instead of inside the space: the space is clipped
+    // as a hexagon (clip-path) and would cut off shadow and glow.
     showTilePreview(tile: HTMLElement) {
       this.removeTilePreview();
       const previewTile = previewTileForSpaceInput(this.playerinput.title);
@@ -126,8 +126,8 @@ export default defineComponent({
       if (previewTile === undefined || board === null) {
         return;
       }
-      // Geschwister des Feldes mit exakt dessen berechneter Lage und Größe (gleicher Bezugsrahmen).
-      // Die Felder teilen sich left/top; ihre Lage auf dem Brett steckt in margin-left/-top (board.less)
+      // Sibling of the space with exactly its computed position and size (same frame of reference).
+      // The spaces share left/top; their position on the board lives in margin-left/-top (board.less)
       const spaceStyle = getComputedStyle(tile);
       const preview = document.createElement('div');
       preview.className = PREVIEW_CLASS + ' ' + previewTileClass(previewTile);
@@ -167,13 +167,13 @@ export default defineComponent({
       }
       this.spaceId = spaceId;
       this.selectedTile.classList.add('board-space--selected');
-      // Erst absenden, wenn das große Brett zurück in der Spalte ist (sonst harter Schnitt, placementZoom.ts).
-      // Die Vorschau fliegt dabei mit und bleibt stehen, bis die Server-Antwort das echte Plättchen zeigt
+      // Only submit once the large board is back in the column (otherwise a hard cut, placementZoom.ts).
+      // The preview flies along and stays until the server response shows the real tile
       await releasePlacementZoomAndWait();
       this.movePreviewToColumnBoard(spaceId);
       this.saveData();
     },
-    // Gewählt wurde im großen Brett, das jetzt weg ist: Vorschau aufs gleiche Feld im Brett der Spalte
+    // The choice was made in the large board, which is now gone: preview on the same space in the column's board
     movePreviewToColumnBoard(spaceId: SpaceId) {
       if (this.selectedTile === undefined || this.selectedTile.isConnected) {
         return;
@@ -192,8 +192,8 @@ export default defineComponent({
     getSelectableSpaces(): Array<HTMLElement> {
       const spaces: Array<HTMLElement> = [];
 
-      // Alle Vorkommen jeder Region: Das vergrößerte Brett (BoardZoomModal) ist eine zweite Instanz mit denselben IDs,
-      // getElementById fände nur das Brett in der Spalte
+      // All occurrences of each region: the enlarged board (BoardZoomModal) is a second instance with the same IDs,
+      // getElementById would only find the board in the column
       const regions = ['main_board', 'moon_board', 'colony_spaces', 'moon_board_outer_spaces'];
       for (const region of regions) {
         document.querySelectorAll(`[id="${region}"]`).forEach((board) => {
@@ -232,7 +232,7 @@ export default defineComponent({
     enlargeBoard() {
       requestPlacementZoom();
     },
-    // Wählbare Felder markieren und klickbar machen; liefert die gebundenen Felder
+    // Mark selectable spaces and make them clickable; returns the bound spaces
     bindSpaces(): Array<HTMLElement> {
       this.disableAnimation();
       const tiles = this.getSelectableSpaces();
@@ -250,8 +250,8 @@ export default defineComponent({
     },
   },
   watch: {
-    // Großes Brett neu eingeblendet: seine Felder kennen die Feldwahl noch nicht.
-    // Nicht während einer offenen Bestätigung, sonst gingen deren Markierung und Vorschau verloren
+    // Large board shown again: its spaces don't know about the space selection yet.
+    // Not while a confirmation is open, otherwise its highlight and preview would be lost
     'placementZoom.boardRenderCount'() {
       if (this.confirmAnchor === undefined && this.spaceId === undefined) {
         this.bindSpaces();
@@ -260,8 +260,8 @@ export default defineComponent({
   },
   beforeUnmount() {
     this.removeTilePreview();
-    // Markierungen und Klick-Handler gehören zu dieser Feldwahl: beim Wechsel in einen anderen Tab blieben sie sonst
-    // am Brett hängen – das Brett sähe weiter wählbar aus, ließe sich nicht vergrößern und ein Klick wählte ein Feld
+    // Highlights and click handlers belong to this space selection: when switching to another tab they would otherwise
+    // stay on the board – it would still look selectable, couldn't be enlarged, and a click would pick a space
     this.disableAnimation();
     this.getSelectableSpaces().forEach((tile) => {
       tile.onclick = null;
@@ -270,7 +270,7 @@ export default defineComponent({
   },
   mounted() {
     const bound = this.bindSpaces();
-    // Großes Brett schließt sich nach der Bestätigung von selbst (confirmPlacement)
+    // The large board closes by itself after confirmation (confirmPlacement)
     this.marsPlacement = bound.some((tile) => tile.closest(MARS_REGION_SELECTOR) !== null);
   },
 });

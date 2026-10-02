@@ -1,5 +1,5 @@
 <template>
-  <!-- Zweistufig statt Browser-Dialog: erster Klick fragt nach, erst der zweite löscht -->
+  <!-- Two-step instead of a browser dialog: the first click asks, only the second deletes -->
   <button type="button" class="btn games-overview-delete" :class="isConfirming ? 'btn-tone-danger' : 'btn-tone-quiet'" :disabled="isDeleting" @click="onClick">
     {{ isDeleting ? 'Deleting…' : isConfirming ? 'Really delete?' : 'Delete' }}
   </button>
@@ -8,7 +8,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 
-// So lange bleibt die Rückfrage stehen, danach fällt der Button von selbst zurück
+// How long the confirmation stays; afterwards the button reverts by itself
 const confirmWindowMs = 4000;
 
 export default defineComponent({

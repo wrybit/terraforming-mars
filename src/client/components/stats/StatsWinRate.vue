@@ -13,7 +13,7 @@ import {defineComponent} from 'vue';
 import {formatPercent} from './statsLabels';
 import {translateText} from '@/client/directives/i18n';
 
-// Siegquote als Balken; der Strich zeigt die Quote bei reinem Zufall (1 ÷ Spielerzahl)
+// Win rate as a bar; the line shows the rate by pure chance (1 ÷ player count)
 export default defineComponent({
   name: 'StatsWinRate',
   props: {

@@ -1,6 +1,6 @@
 <template>
-  <!-- Auslösende Karte verkleinert oben in einer Tab-Box (or_options_tabs.less, .card-intro-card);
-       gemeinsam genutzt von CardIntroBlock.vue und TabIntroBlock.vue -->
+  <!-- Triggering card, scaled down at the top of a tab box (or_options_tabs.less, .card-intro-card);
+       shared by CardIntroBlock.vue and TabIntroBlock.vue -->
   <div class="card-intro-card">
     <Card :card="{name: card}"/>
   </div>

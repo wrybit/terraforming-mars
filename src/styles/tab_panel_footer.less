@@ -1,20 +1,20 @@
-// Klebender Fußbereich unten an der Tab-Box (tabPanelFooter.ts): Preise links, Button rechts.
-// Er sitzt am unteren Rand der Box, auch wenn der Inhalt kürzer ist, und bleibt beim Scrollen sichtbar.
+// Sticky footer at the bottom of the tab box (tabPanelFooter.ts): prices left, button right.
+// It sits at the bottom edge of the box even when the content is shorter, and stays visible while scrolling.
 @import (reference) "./frosted_surface.less";
 
-@tab-panel-padding: 16px; // Innenabstand der Box (.or-tab-panel in or_options_tabs.less)
-@tab-panel-radius: 8px; // Rundung der Box (@or-tabs-radius)
+@tab-panel-padding: 16px; // Padding of the box (.or-tab-panel in or_options_tabs.less)
+@tab-panel-radius: 8px; // Corner radius of the box (@or-tabs-radius)
 @tab-panel-footer-gap: 16px;
 @tab-panel-footer-padding: 12px @tab-panel-padding;
-// Dunkles Milchglas, deutlich dunkler als die Box, damit der Fuß als eigene Fläche erkennbar ist
+// Dark frosted glass, clearly darker than the box, so the footer reads as its own surface
 @tab-panel-footer-background: rgba(14, 15, 20, 0.72);
 @tab-panel-footer-blur: 10px;
-// Leichter Schatten nach oben: der Fuß liegt sichtbar vor den Karten, die darunter durchscrollen
+// Light upward shadow: the footer visibly sits in front of the cards scrolling beneath it
 @tab-panel-footer-shadow: 0 -6px 16px rgba(0, 0, 0, 0.45);
-// Über gehoverten Karten (die heben sich mit z-index 100 heraus, preferences.less)
+// Above hovered cards (they lift out with z-index 100, preferences.less)
 @tab-panel-footer-z-index: 110;
 
-// Box als Spalte, damit der Fuß per margin-top: auto an den unteren Rand rutscht
+// Box as a column, so the footer slides to the bottom edge via margin-top: auto
 .or-tab-panel:has(> .or-tab-footer > *) {
   display: flex;
   flex-direction: column;
@@ -22,7 +22,7 @@
 
 .or-tab-footer {
   position: sticky;
-  bottom: -@tab-panel-padding; // klebt sonst am Innenabstand statt am Rahmen
+  bottom: -@tab-panel-padding; // otherwise it sticks to the padding instead of the border
   z-index: @tab-panel-footer-z-index;
   display: flex;
   align-items: center;
@@ -36,29 +36,29 @@
   backdrop-filter: blur(@tab-panel-footer-blur);
   box-shadow: @tab-panel-footer-shadow;
 
-  // Leer (nichts zu bestätigen): kein Fuß; :has statt :empty, weil Vue leere Textknoten als Anker einfügt
+  // Empty (nothing to confirm): no footer; :has instead of :empty, because Vue inserts empty text nodes as anchors
   &:not(:has(> *)) {
     display: none;
   }
 
-  // Buttons bringen eigene Außenabstände mit (btn-submit: 10px/30px) – im Fuß bestimmt das Padding die Höhe
+  // Buttons bring their own margins (btn-submit: 10px/30px) – in the footer the padding determines the height
   .btn {
     margin: 0;
   }
 
-  // Button-Gruppen der Eingaben (z. B. .select-card-actions) rechts; ihre eigenen Außenabstände entfallen
+  // Button groups of the inputs (e.g. .select-card-actions) on the right; their own margins are dropped
   > :not(.payments_form) {
     margin: 0 0 0 auto;
   }
 
-  // Button des Menüs immer ganz rechts, auch wenn ein Bezahlbereich (PaymentForm) davor eingehängt wird
+  // The menu's button always at the far right, even when a payment area (PaymentForm) is inserted before it
   > .or-tab-save {
     order: 1;
   }
 }
 
-// Weitergeben/Beenden (or-tab-panel--end, OrOptions.vue): Erklärung und Button mittig in der Box statt im Fuß –
-// es gibt nichts auszuwählen, nur diese eine Entscheidung
+// Pass/End (or-tab-panel--end, OrOptions.vue): explanation and button centered in the box instead of the footer –
+// there is nothing to select, only this one decision
 .or-tab-panel--end {
   display: flex;
   flex-direction: column;
@@ -95,8 +95,8 @@
   }
 }
 
-// Tabs ohne eigene Auswahl (z. B. Temperatur erhöhen, orOptionsShortLabels.ts): Einleitung bleibt oben,
-// der Button schwebt in der Mitte der Box – wie "Mars groß anzeigen" (waiting_for.less)
+// Tabs without their own selection (e.g. raise temperature, orOptionsShortLabels.ts): intro stays on top,
+// the button floats in the middle of the box – like "Show Mars large" (waiting_for.less)
 .or-tab-panel--centered-button .or-tab-footer {
   position: absolute;
   inset: 0;
@@ -108,7 +108,7 @@
   background: none;
   backdrop-filter: none;
   box-shadow: none;
-  pointer-events: none; // Einleitung darunter bleibt bedienbar, nur der Button fängt Klicks
+  pointer-events: none; // intro below stays usable, only the button catches clicks
 
   > * {
     margin: 0;
@@ -120,8 +120,8 @@
   }
 }
 
-// Schmales Layout: Box ist nur so hoch wie ihr Inhalt, ein mittig schwebender Button läge auf der Einleitung –
-// dort steht er daher mit Abstand darunter
+// Narrow layout: the box is only as tall as its content, a centered floating button would sit on the intro –
+// so there it sits below it, with spacing
 @media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
   .or-tab-panel--centered-button .or-tab-footer {
     position: static;

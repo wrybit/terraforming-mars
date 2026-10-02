@@ -35,7 +35,7 @@ function sampleModel(): CreateGameModel {
   return model;
 }
 
-// Liest einen Link wie das Formular: über den JSONProcessor in ein frisches Modell
+// Reads a link like the form does: via the JSONProcessor into a fresh model
 function applyLink(text: string): {model: CreateGameModel, warnings: Array<string>} {
   const model = defaultCreateGameModel();
   const processor = new JSONProcessor(model);
@@ -114,7 +114,7 @@ describe('settings link', () => {
     expect(readSettingsFromHash(hash)?.board).eq(BoardName.HELLAS);
   });
 
-  // Fehlt ein Wert in settingsLinkCodes.json, wird er als Text kodiert – das geht, macht Links aber länger
+  // If a value is missing from settingsLinkCodes.json, it is encoded as text – that works, but makes links longer
   it('has a code for every current value (run npm run make:linkcodes otherwise)', () => {
     const expected: Record<string, ReadonlyArray<string>> = {
       boards: [...Object.values(BoardName), ...Object.values(RandomBoardOption)],

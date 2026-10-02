@@ -17,8 +17,8 @@ export const globalConfig = {
     directives: {
       'trim-whitespace': {},
     },
-    // Reiner Durchreicher (Teleport in den Fuß der Tab-Box): auch bei shallowMount echt rendern,
-    // sonst fehlen die Buttons der Eingaben
+    // Pure pass-through (Teleport into the tab box footer): render for real even with shallowMount,
+    // otherwise the inputs' buttons are missing
     stubs: {
       TabPanelFooterSlot: false,
       teleport: false,

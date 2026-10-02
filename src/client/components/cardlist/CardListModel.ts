@@ -20,7 +20,7 @@ export type CardListModel = {
   showMetadata: boolean;
   tallCards: boolean;
   vps: number; // 0: all, 1: VPs, 2: no vps
-  // Preisbereich in M€; undefined = keine Grenze auf dieser Seite
+  // Price range in M€; undefined = no limit on this side
   costMin: number | undefined;
   costMax: number | undefined;
 }
@@ -207,7 +207,7 @@ export function hashToModel(windowLocationHash: string): CardListModel {
           model.tags[type] = tags.includes(abbrev);
         }
       }
-      // Preisbereich, z. B. "c5-20", "c-12" oder "c8-"
+      // Price range, e.g. "c5-20", "c-12" or "c8-"
       if (e.startsWith('c')) {
         const [low, high] = e.slice(1).split('-');
         model.costMin = parseCost(low);

@@ -407,9 +407,9 @@ export function describeDatabaseSuite<T extends ITestDatabase>(dtor: DatabaseTes
 
       await db.deleteGame(game.id);
 
-      // getSaveIds wirft je nach Datenbank bei unbekannten Spielen – die Spielliste ist der gemeinsame Nenner
+      // getSaveIds throws for unknown games depending on the database – the game list is the common denominator
       expect(await db.getGameIds()).deep.eq([other.id]);
-      // Manche Datenbanken werfen sofort, andere liefern ein abgelehntes Promise – beides heißt: weg
+      // Some databases throw immediately, others return a rejected promise – both mean: gone
       let isStillLoadable = true;
       try {
         await db.getGame(game.id);

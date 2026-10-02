@@ -1,28 +1,28 @@
-// Gemeinsames Aussehen aller Dialoge: Seitenleisten-Dialoge (sidebar_modal.less) und
-// native <dialog>-Elemente (dialogs.less: Server-Meldungen, Rückfragen, Fehlerbericht).
-// Nur Variablen und Mixins – einbinden mit @import (reference).
+// Shared look of all dialogs: sidebar dialogs (sidebar_modal.less) and
+// native <dialog> elements (dialogs.less: server messages, confirmations, bug report).
+// Only variables and mixins – include with @import (reference).
 
 @modal-background: #23242a;
 @modal-border: #4b4d55;
 @modal-text: #d6d7dc;
 @modal-heading: #fff;
-@modal-link: #8ab4f8; // auf dunklem Grund lesbar (Standard-Blau wäre zu dunkel)
+@modal-link: #8ab4f8; // readable on a dark background (default blue would be too dark)
 @modal-radius: 12px;
 @modal-padding: 24px 28px 20px;
 @modal-max-height: 85vh;
-@modal-screen-gap: 24px; // Mindestabstand zum Fensterrand
+@modal-screen-gap: 24px; // minimum distance to the window edge
 @modal-backdrop-color: rgba(0, 0, 0, 0.55);
 @modal-backdrop-blur: 4px;
-// Über Spalten-Modals und dem Rahmen "du bist am Zug" (active_player_outline.less: 1000)
+// Above column modals and the "your turn" frame (active_player_outline.less: 1000)
 @modal-z-index: 1100;
 
-// Abgedunkelte, leicht unscharfe Fläche hinter dem Dialog – der Dialog steht klar im Vordergrund
+// Darkened, slightly blurred area behind the dialog – the dialog clearly stands in the foreground
 .modal-backdrop() {
   background: @modal-backdrop-color;
   backdrop-filter: blur(@modal-backdrop-blur);
 }
 
-// Die Dialogbox selbst
+// The dialog box itself
 .modal-surface() {
   max-height: @modal-max-height;
   overflow-y: auto;

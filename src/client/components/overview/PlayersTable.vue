@@ -1,6 +1,6 @@
 <template>
   <div class="players-table" :style="{'--players-table-columns': template, '--players-table-cell-count': cellCount}">
-    <!-- Spielerliste als Tabelle (nur im Zwei-Spalten-Layout sichtbar, siehe players_table.less) -->
+    <!-- Player list as a table (only visible in the two-column layout, see players_table.less) -->
     <PlayersTableHeader :visibility="effectiveVisibility" :sectionOrder="sectionOrder" :autoHidden="fitted.autoHidden" :tagColumns="tagColumns" @toggle="toggleSection"/>
     <div class="players-table-rows">
       <PlayersTableRow v-for="row in rows" :key="row.player.color"
@@ -35,9 +35,9 @@ import {
 
 type DataModel = {
   visibility: SectionVisibility;
-  // Zuletzt eingeschalteter Abschnitt – bleibt bei Platzmangel am längsten sichtbar
+  // Most recently enabled section – stays visible longest when space is short
   preferredSection: TableSection | undefined;
-  // Breite der Tabelle; 0, solange sie unsichtbar oder noch nicht gemessen ist
+  // Width of the table; 0 while it is invisible or not yet measured
   availableWidth: number;
   resizeObserver: ResizeObserver | undefined;
 };
@@ -53,7 +53,7 @@ export default defineComponent({
       type: Object as () => ViewModel,
       required: true,
     },
-    // Reihenfolge wie in der klassischen Leiste: Mitspieler in Zugfolge, man selbst zuletzt
+    // Order as in the classic bar: opponents in turn order, yourself last
     rows: {
       type: Array as () => Array<PlayersTableRowModel>,
       required: true,
@@ -67,7 +67,7 @@ export default defineComponent({
       resizeObserver: undefined,
     };
   },
-  // Spaltenbreite beobachten: in schmalen Fenstern fallen Abschnitte automatisch weg, statt abgeschnitten zu werden
+  // Watch the column width: in narrow windows sections drop out automatically instead of being clipped
   mounted() {
     if (typeof ResizeObserver === 'undefined') {
       return;
@@ -81,15 +81,15 @@ export default defineComponent({
     this.resizeObserver?.disconnect();
   },
   computed: {
-    // Mobil-Ansicht außer Tablet quer dreht die Tabelle (Spieler als Spalten, mobile.less @mb-portrait)
+    // Mobile view except tablet landscape transposes the table (players as columns, mobile.less @mb-portrait)
     transposed(): boolean {
       return mobileLayout.value && !mobileLandscape.value;
     },
-    // Je Spielerfarbe einmal berechnet; jede Zeile hat einen Eintrag
+    // Computed once per player color; every row has an entry
     tagDetailsByColor(): Record<string, TagDetails> {
       return Object.fromEntries(this.rows.map((row) => [row.player.color, buildTagDetails(row.player, this.playerView)]));
     },
-    // Nur Tags, die mindestens ein Spieler hat (oder auf die jemand Rabatt bekommt) – sonst für alle ausgeblendet
+    // Only tags at least one player has (or someone gets a discount on) – otherwise hidden for everyone
     tagColumns(): TagColumnGroups {
       const groups: TagColumnGroups = [[]];
       for (const tag of TAG_ORDER) {
@@ -110,17 +110,17 @@ export default defineComponent({
       }
       return groups.filter((group) => group.length > 0);
     },
-    // Tags-Abschnitt entfällt, wenn es keine einzige Tag-Spalte gibt; zu Breites fällt nach Vorrang weg
+    // The tags section is dropped if there is not a single tag column; what's too wide drops out by priority
     fitted(): FittedVisibility {
       const wanted = {...this.visibility, tags: this.visibility.tags && this.tagColumns.length > 0};
-      // Gedrehte Tabelle (mobile.less) wächst nach unten, dort muss kein Abschnitt aus Platzgründen weichen
+      // The transposed table (mobile.less) grows downward, so no section has to give way for lack of space
       return fitToWidth(wanted, this.tagColumns, this.transposed ? 0 : this.availableWidth, this.preferredSection);
     },
     effectiveVisibility(): SectionVisibility {
       return this.fitted.visibility;
     },
-    // Zellen je Zeile ohne Trenner (Name, Waren, Tags samt Gruppen-Lücken, Wertung, Karten);
-    // die Mobil-Ansicht dreht die Tabelle damit um (mobile.less: Spieler als Spalten)
+    // Cells per row without separators (name, goods, tags incl. group gaps, scoring, cards);
+    // the mobile view uses this to transpose the table (mobile.less: players as columns)
     sectionOrder(): ReadonlyArray<TableSection> {
       return this.transposed ? MOBILE_SECTION_ORDER : DESKTOP_SECTION_ORDER;
     },
@@ -132,7 +132,7 @@ export default defineComponent({
     template(): string {
       return columnTemplate(this.effectiveVisibility, this.tagColumns);
     },
-    // Pro Ware der Spieler mit der alleinigen höchsten Produktion; bei Gleichstand niemand
+    // Per resource the player with the sole highest production; nobody on a tie
     productionLeadersByColor(): Partial<Record<Color, Array<Resource>>> {
       const leaders: Partial<Record<Color, Array<Resource>>> = {};
       const goodsByColor = this.rows.map((row) => ({color: row.player.color, goods: playerGoods(row.player)}));
@@ -151,7 +151,7 @@ export default defineComponent({
     },
   },
   methods: {
-    // Ein nur aus Platzgründen ausgeblendeter Abschnitt wird bevorzugt (ein anderer macht Platz), statt ihn abzuschalten
+    // A section hidden only for lack of space gets preferred (another one makes room) instead of being turned off
     toggleSection(section: TableSection) {
       if (this.fitted.autoHidden.includes(section)) {
         this.preferredSection = section;

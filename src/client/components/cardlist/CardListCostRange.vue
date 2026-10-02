@@ -16,15 +16,15 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 
-// Preisbereich mit zwei Griffen (zwei übereinanderliegende Schieberegler). Ein Griff am Rand heißt "keine Grenze"
-// und wird als undefined gemeldet – so bleibt die Adresszeile ohne Preisfilter kurz.
+// Price range with two handles (two stacked range sliders). A handle at the edge means "no limit"
+// and is reported as undefined – that keeps the address bar short without a price filter.
 export default defineComponent({
   name: 'CardListCostRange',
   emits: ['update:costMin', 'update:costMax'],
   props: {
     costMin: {type: Number, required: false},
     costMax: {type: Number, required: false},
-    // Höchster Kartenpreis
+    // Highest card price
     highest: {type: Number, required: true},
   },
   computed: {
@@ -43,7 +43,7 @@ export default defineComponent({
     valueOf(event: Event): number {
       return Number((event.target as HTMLInputElement).value);
     },
-    // Griffe dürfen sich nicht überholen
+    // Handles must not overtake each other
     changeLow(event: Event): void {
       const value = Math.min(this.valueOf(event), this.high);
       (event.target as HTMLInputElement).value = String(value);

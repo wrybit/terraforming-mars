@@ -1,19 +1,19 @@
 <template>
-  <!-- Mars-Brett bildschirmfüllend. Teleport in body, damit sticky Spalte, overflow und zoom der
-       rechten Spalte das Modal weder beschneiden noch mitskalieren. -->
+  <!-- Mars board fullscreen. Teleport into body so the sticky column, overflow and zoom of the
+       right column neither clip nor scale the modal. -->
   <Teleport to="body">
     <div v-if="visible" class="board-zoom-backdrop" ref="backdrop" role="dialog" aria-modal="true" @click="onBackdropClick">
-      <!-- Die Bühne trägt nur die Flug-Animation; zoom sitzt eine Ebene tiefer, sonst würde er die
-           Verschiebung der Animation mitskalieren -->
+      <!-- The stage only carries the flight animation; zoom sits one level deeper, otherwise it would
+           scale the animation's translation too -->
       <div class="board-zoom-stage" ref="stage">
         <div class="board-zoom-content" ref="content" :style="contentStyle">
           <slot></slot>
         </div>
       </div>
     </div>
-    <!-- Außerhalb des scrollenden Hintergrunds, damit Schließen und Zoom-Leiste beim Verschieben stehen bleiben -->
+    <!-- Outside the scrolling background so close and the zoom bar stay put while panning -->
     <button v-if="visible" type="button" class="board-zoom-close" :aria-label="$t('Close')" @click.stop="$emit('close')">✕</button>
-    <!-- Mobil-Ansicht: Zoom-Leiste unten (Pinch und Doppel-Tap gehen zusätzlich) -->
+    <!-- Mobile view: zoom bar at the bottom (pinch and double tap work as well) -->
     <MobileZoomControls v-if="visible && mobileLayout" :percent="zoomPercent" @zoom="zoomAtCenter" @fit="fitWholePlanet"/>
   </Teleport>
 </template>
@@ -28,30 +28,30 @@ import {DEFAULT_ZOOM_RATIO, MARS_CROP, MAX_ZOOM_RATIO, PLANET_CENTER, steppedZoo
 import {attachPinchZoom} from '@/client/components/board/boardPinchZoom';
 import MobileZoomControls from '@/client/components/mobile/MobileZoomControls.vue';
 
-// Freiraum rund um das Brett, damit es nicht am Fensterrand klebt
+// Free space around the board so it doesn't stick to the window edge
 const VIEWPORT_MARGIN = 24;
 
 const props = defineProps<{
   open: boolean;
-  // Brett in der Spalte: Start- und Zielpunkt der Animation, solange das Modal offen ist ausgeblendet
+  // Board in the column: start and end point of the animation, hidden while the modal is open
   origin?: HTMLElement;
 }>();
 
 const emit = defineEmits<{
   (event: 'close'): void;
-  // Brett im Modal ist gerendert (vor der Flug-Animation)
+  // Board in the modal is rendered (before the flight animation)
   (event: 'rendered'): void;
-  // Rück-Animation fertig, Modal ausgeblendet
+  // Return animation done, modal hidden
   (event: 'hidden'): void;
 }>();
 
-// Bleibt beim Schließen true, bis die Rück-Animation fertig ist
+// Stays true while closing until the return animation is done
 const visible = ref(false);
 const backdrop = ref<HTMLElement | undefined>(undefined);
 const stage = ref<HTMLElement | undefined>(undefined);
 const content = ref<HTMLElement | undefined>(undefined);
 const zoomFactor = ref(1);
-// Ungezoomte Größe des Inhalts; einmal bei zoom 1 gemessen, weil gezoomte Maße browserabhängig sind
+// Unzoomed size of the content; measured once at zoom 1 because zoomed dimensions are browser-dependent
 let naturalSize: {width: number, height: number} | undefined;
 
 function fitToViewport() {
@@ -69,7 +69,7 @@ function fitToViewport() {
   zoomFactor.value = Math.min(availableWidth / naturalSize.width, availableHeight / naturalSize.height);
 }
 
-// Fenstergröße geändert: Desktop passt das Brett neu ein, mobil bleibt der gewählte Zoom (nur 100 % neu berechnet)
+// Window resized: desktop refits the board, mobile keeps the chosen zoom (only 100 % is recomputed)
 function onResize() {
   if (mobileLayout.value) {
     wholeZoom.value = wholePlanetZoom(window.innerWidth, window.innerHeight);
@@ -78,13 +78,13 @@ function onResize() {
   }
 }
 
-// ---------- Mobil-Ansicht: Planet ohne Ring, frei zoombar und per Wischen verschiebbar ----------
-// Höhe der Zoom-Leiste unten; der Planet wird im Bereich darüber mittig gesetzt
+// ---------- Mobile view: planet without ring, freely zoomable and pannable by swiping ----------
+// Height of the zoom bar at the bottom; the planet is centred in the area above it
 const CONTROLS_HEIGHT = 72;
-// Zoom, bei dem der ganze Planet sichtbar ist (= 100 %)
+// Zoom at which the whole planet is visible (= 100 %)
 const wholeZoom = ref(1);
 const zoomPercent = computed(() => Math.round(zoomFactor.value / wholeZoom.value * 100));
-// Mobil: nur der Ausschnitt des Startscreens (Planet samt Kolonie-Feldern), der Ring drumherum fällt weg (mobile.less)
+// Mobile: only the start screen's section (planet including colony spaces), the ring around it is dropped (mobile.less)
 const contentStyle = computed(() => mobileLayout.value ? {
   'zoom': zoomFactor.value,
   'width': MARS_CROP.width + 'px',
@@ -96,11 +96,11 @@ let stopPinch: (() => void) | undefined;
 
 function fitMobile() {
   wholeZoom.value = wholePlanetZoom(window.innerWidth, window.innerHeight);
-  // Start bei 200 %: Felder sind gleich antippbar
+  // Start at 200 %: spaces are immediately tappable
   zoomFactor.value = wholeZoom.value * DEFAULT_ZOOM_RATIO;
 }
 
-// Planet mittig in den sichtbaren Bereich über der Zoom-Leiste schieben
+// Move the planet to the centre of the visible area above the zoom bar
 function centerPlanet() {
   const element = backdrop.value;
   const board = content.value?.querySelector('.board-cont');
@@ -112,7 +112,7 @@ function centerPlanet() {
   element.scrollTop += rect.top + PLANET_CENTER.y * zoomFactor.value - (element.clientHeight - CONTROLS_HEIGHT) / 2;
 }
 
-// Zoom auf `value` setzen; der Punkt (`x`, `y`) im Fenster bleibt an seiner Stelle
+// Set zoom to `value`; the point (`x`, `y`) in the window stays in place
 function setZoom(value: number, x: number, y: number) {
   const element = backdrop.value;
   if (element === undefined) {
@@ -129,7 +129,7 @@ function setZoom(value: number, x: number, y: number) {
   });
 }
 
-// − und +: in 25-%-Schritten (100–300 %), um die Mitte des sichtbaren Bereichs
+// − and +: in 25 % steps (100–300 %), around the centre of the visible area
 function zoomAtCenter(factor: number) {
   const ratio = steppedZoomRatio(zoomFactor.value / wholeZoom.value, factor > 1 ? 1 : -1);
   setZoom(wholeZoom.value * ratio, window.innerWidth / 2, (window.innerHeight - CONTROLS_HEIGHT) / 2);
@@ -145,12 +145,12 @@ function startGestures() {
   stopPinch?.();
   stopPinch = backdrop.value === undefined ? undefined : attachPinchZoom(backdrop.value, {
     zoomBy: (factor, x, y) => setZoom(zoomFactor.value * factor, x, y),
-    // Doppel-Tap: nah heran bzw. zurück zum ganzen Planeten
+    // Double tap: zoom in close or back to the whole planet
     toggle: (x, y) => zoomFactor.value > wholeZoom.value * 1.05 ? fitWholePlanet() : setZoom(wholeZoom.value * DEFAULT_ZOOM_RATIO, x, y),
   });
 }
 
-// Brett mittig in den sichtbaren Bereich schieben (nur relevant, wenn es größer als das Fenster ist)
+// Move the board to the centre of the visible area (only relevant if it is larger than the window)
 function centerBoard() {
   const element = backdrop.value;
   if (element !== undefined) {
@@ -160,7 +160,7 @@ function centerBoard() {
 }
 
 function runAnimation(direction: 'open' | 'close'): Promise<void> {
-  // Mobil ohne Flug-Animation: der große Mars ist eine eigene Ansicht, kein vergrößertes Spalten-Brett
+  // Mobile without flight animation: the large Mars is a view of its own, not an enlarged column board
   if (backdrop.value === undefined || stage.value === undefined || mobileLayout.value) {
     return Promise.resolve();
   }
@@ -183,7 +183,7 @@ async function show() {
     fitToViewport();
   }
   emit('rendered');
-  // Neuen zoom erst rendern, sonst misst die Animation das Brett noch in der alten Größe
+  // Render the new zoom first, otherwise the animation still measures the board at the old size
   await nextTick();
   if (mobileLayout.value) {
     centerPlanet();
@@ -197,7 +197,7 @@ async function show() {
 
 async function hide() {
   await runAnimation('close');
-  // Zwischenzeitlich wieder geöffnet: sichtbar lassen
+  // Reopened in the meantime: keep visible
   if (props.open) {
     return;
   }
@@ -208,9 +208,9 @@ async function hide() {
   emit('hidden');
 }
 
-// Klicks auf Bedienelemente im Brett (z. B. "Plättchen ein/aus") sollen das Modal nicht schließen
+// Clicks on controls in the board (e.g. "tiles on/off") should not close the modal
 function onBackdropClick(event: MouseEvent) {
-  // Mobil schließt nur ✕: Wischen und Zoomen auf dem Hintergrund sollen den Mars nicht zuklappen
+  // On mobile only ✕ closes: swiping and zooming on the background should not collapse Mars
   if (mobileLayout.value) {
     return;
   }
@@ -218,7 +218,7 @@ function onBackdropClick(event: MouseEvent) {
   if (target !== null && target.closest('.hide-tile-button') !== null) {
     return;
   }
-  // Während einer Feldwahl wird im Brett platziert; nur der Hintergrund verkleinert es
+  // During a space selection placing happens in the board; only the background shrinks it
   if (target !== null && target.closest('.board-zoom-content') !== null && isBoardPlacementActive()) {
     return;
   }
@@ -226,7 +226,7 @@ function onBackdropClick(event: MouseEvent) {
 }
 
 function closeOnEscape(event: KeyboardEvent) {
-  // Offene Platzier-Bestätigung (SpaceConfirmPopover) nimmt Escape selbst als "Nein"
+  // An open placement confirmation (SpaceConfirmPopover) handles Escape itself as "No"
   if (props.open && event.key === 'Escape' && document.querySelector('.space-confirm') === null) {
     emit('close');
   }

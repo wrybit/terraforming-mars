@@ -1,6 +1,6 @@
 /*
- * Tabs des Hilfe-Overlays (Fork): Inhalt kommt aus den unveränderten Upstream-Komponenten,
- * Seitenbaum und Suche werden je Tab aus deren gerendertem Markup gelesen.
+ * Tabs of the help overlay (fork): content comes from the unchanged upstream components,
+ * page tree and search are read per tab from their rendered markup.
  */
 import {Component} from 'vue';
 import HelpIconology from '@/client/components/help/HelpIconology.vue';
@@ -13,16 +13,16 @@ import HelpKeyboardShortcuts from '@/client/components/helpOverlay/HelpKeyboardS
 import {HelpOutlineEntry, plainText} from '@/client/components/helpOverlay/helpOutline';
 import {HelpSearchConfig} from '@/client/components/helpOverlay/helpSearch';
 
-// Gleiche Schlüssel wie die Upstream-Hilfeseite, damit Links wie /help#rulebooks weiter funktionieren
+// Same keys as the upstream help page, so links like /help#rulebooks keep working
 export const HELP_TAB_KEYS = ['iconology', 'standard-projects', 'phases', 'turmoil-parties', 'solo-rules', 'rulebooks', 'hotkeys'] as const;
 export type HelpTabKey = typeof HELP_TAB_KEYS[number];
 
 export type HelpOverlayTab = {
   key: HelpTabKey;
-  // Englischer Schlüssel für v-i18n (Upstream-Texte, schon übersetzt)
+  // English key for v-i18n (upstream texts, already translated)
   label: string;
   component: Component;
-  // Nur mit Tastatur sinnvoll – auf Touch-Geräten ausgeblendet
+  // Only useful with a keyboard – hidden on touch devices
   desktopOnly?: boolean;
   outline: (root: HTMLElement) => Array<HelpOutlineEntry>;
   search: HelpSearchConfig;
@@ -36,17 +36,17 @@ function childrenByTag(element: Element, tagName: string): Array<HTMLElement> {
   return Array.from(element.children).filter((child): child is HTMLElement => child.tagName === tagName);
 }
 
-// Symbolzeilen erkennt man am Namensfeld; Überschriften-Hüllen haben keins
+// Symbol rows are recognized by the name field; heading wrappers have none
 function iconologyRows(root: HTMLElement): Array<Element> {
   return all(root, '.help-icon-label').map((label) => label.parentElement).filter((row): row is HTMLElement => row !== null);
 }
 
-// Parteinamen stehen im Spiel in Großbuchstaben; im Seitenbaum lesen sie sich normal geschrieben besser
+// Party names are uppercase in the game; in the page tree they read better in normal case
 function capitalizeWords(text: string): string {
   return text.toLocaleLowerCase().replace(/(^|\s)(\S)/g, (_match, space: string, letter: string) => space + letter.toLocaleUpperCase());
 }
 
-// Phasen: Listenpunkt mit eigenem Label = Abschnitt; "i. …" bis "iv. …" der Solar-Phase = Unterschritt
+// Phases: list item with its own label = section; "i. …" to "iv. …" of the solar phase = sub-step
 const ROMAN_STEP = /^[ivx]+\./i;
 
 function phaseEntry(item: HTMLElement): HelpOutlineEntry | undefined {
@@ -95,7 +95,7 @@ export const HELP_OVERLAY_TABS: ReadonlyArray<HelpOverlayTab> = [
     component: HelpPhases,
     outline: (root) => all(root, '.help-phases-container > ul > li').map(phaseEntry).filter((entry): entry is HelpOutlineEntry => entry !== undefined),
     search: {
-      // Einträge sind die innersten Listenpunkte; alles mit Unterliste ist eine Gruppe
+      // Entries are the innermost list items; anything with a sublist is a group
       items: (root) => all(root, '.help-phases-container li').filter((item) => item.querySelector('ul') === null),
       scopes: (root) => all(root, '.help-phases-container li').filter((item) => item.querySelector('ul') !== null),
     },

@@ -1,5 +1,5 @@
 <template>
-  <!-- Meilenstein/Auszeichnung als Bild-Kacheln wie auf dem Brett; die gewählte pulsiert in der CTA-Farbe -->
+  <!-- Milestone/award as image tiles like on the board; the chosen one pulses in the CTA colour -->
   <div :class="['ma-options', 'choice-block', kind]" :style="choiceBlockStyle(options.length)" role="radiogroup">
     <label v-for="option in options" :key="optionName(option)"
       :class="['ma-block', 'ma-option', {'ma-option--selected': option === selected}]">
@@ -27,7 +27,7 @@ defineEmits<{
   (event: 'select', option: PlayerInputModel): void;
 }>();
 
-// Die Unteroptionen tragen den Namen des Meilensteins bzw. der Auszeichnung als Titel
+// The sub-options carry the name of the milestone or award as their title
 function optionName(option: PlayerInputModel): string {
   return typeof option.title === 'string' ? option.title : option.title.message;
 }

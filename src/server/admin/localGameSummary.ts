@@ -4,7 +4,7 @@ import {AdminGameSummary} from '../../common/admin/AdminGameSummary';
 import {toAdminPlayerSummaries} from '../../common/admin/adminPlayerSummaries';
 import {paths} from '../../common/app/paths';
 
-/** Fasst ein auf diesem Server gespieltes Spiel für die Admin-Übersicht zusammen. */
+/** Summarizes a game played on this server for the admin overview. */
 export function localGameSummary(game: IGame): AdminGameSummary {
   const isFinished = game.phase === Phase.END;
   const scores = game.playersInGenerationOrder.map((player) => ({

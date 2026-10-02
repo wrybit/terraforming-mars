@@ -1,25 +1,25 @@
-// Intro der Startseite (StartScreen.vue, startScreen/startIntro.ts): solange .start-screen--intro gesetzt ist.
-// Ablauf: schwarz → Galaxie per Iris-Blende → Logo zoomt in der Mitte hinein (ab halber Blende), dabei kommen
-// Fußzeile von unten und Werkzeug-Buttons von rechts oben → Logo wird kleiner und fährt an seinen Platz →
-// Menüpunkte blenden von oben nach unten einzeln ein (Blur-Fade).
-// Gesamtdauer etwa 1,5 s (Wunsch Jens: fix).
-// fill-mode backwards: vor dem Start gilt der Anfangszustand, nach dem Ende wieder das normale Layout.
+// Start page intro (StartScreen.vue, startScreen/startIntro.ts): active while .start-screen--intro is set.
+// Sequence: black → galaxy via iris wipe → logo zooms in at the center (from half iris), meanwhile the
+// footer comes up from below and tool buttons from the top right → logo shrinks and moves into place →
+// menu items fade in one by one from top to bottom (blur fade).
+// Total duration about 1.5 s (Jens' request: snappy).
+// fill-mode backwards: before the start the initial state applies, after the end the normal layout again.
 
 @intro-iris-delay: 0.05s;
 @intro-iris-duration: 0.6s;
-// Logo startet bei etwa halber Blende
+// Logo starts at about half iris
 @intro-logo-delay: 0.3s;
 @intro-logo-duration: 0.8s;
 @intro-chrome-delay: 0.35s;
 @intro-chrome-duration: 0.5s;
-// Menüpunkte erst, wenn das Logo oben angekommen ist
+// Menu items only once the logo has arrived at the top
 @intro-buttons-delay: (@intro-logo-delay + @intro-logo-duration);
 @intro-buttons-stagger: 0.02s;
 @intro-buttons-duration: 0.25s;
 @intro-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
 .topmost-start-screen:has(.start-screen--intro) {
-  // Galaxie öffnet sich als Kreis aus der Mitte
+  // Galaxy opens as a circle from the center
   &::before {
     animation: start-intro-iris @intro-iris-duration ease-in-out @intro-iris-delay backwards;
   }
@@ -38,7 +38,7 @@
     animation: start-intro-logo @intro-logo-duration ease-in-out @intro-logo-delay backwards;
   }
 
-  // Planet hinter dem Titel kommt mit, wenn das Logo an seinem Platz ankommt
+  // Planet behind the title comes along when the logo reaches its place
   .start-screen-header::before {
     animation: start-intro-fade 0.3s ease-out (@intro-buttons-delay - 0.1s) backwards;
   }
@@ -59,7 +59,7 @@
   }
 }
 
-// --intro-logo-x/-y: Versatz zur Bildschirmmitte, setzt StartScreen.vue
+// --intro-logo-x/-y: offset from the screen center, set by StartScreen.vue
 @keyframes start-intro-logo {
   0% {
     opacity: 0;

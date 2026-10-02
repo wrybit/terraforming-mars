@@ -1,5 +1,5 @@
 <template>
-      <!-- Ganze Spielerleiste ist klickbar und öffnet die gespielten Karten -->
+      <!-- The whole player bar is clickable and opens the played cards -->
       <div :class="getClasses()" @click="togglePlayerDetails">
         <div class="player-status-and-res">
         <div class="player-status">
@@ -18,7 +18,7 @@
         </div>
           <PlayerResources :player="player" v-trim-whitespace />
           <div class="player-played-cards">
-            <!-- Kein eigener Klick-Handler: der Klick läuft zur Leiste hoch; Button bleibt für Tastaturbedienung -->
+            <!-- No click handler of its own: the click bubbles up to the bar; button stays for keyboard use -->
             <button type="button" class="btn btn-tiny btn-rounded played-cards-button">
               <span>{{ $t(buttonLabel()) }}</span>
               <span class="played-cards-count">{{ numberOfPlayedCards() }}</span>
@@ -105,7 +105,7 @@ export default defineComponent({
     buttonLabel(): string {
       return isPlayerCardsPinned(vueRoot(this), this.playerIndex) ? 'hide' : 'show';
     },
-    // Gespielte Karten des Spielers anzeigen (eigene wie fremde) und alle anderen ausblenden
+    // Show the player's played cards (own and others') and hide all others
     togglePlayerDetails() {
       togglePlayerCards(vueRoot(this), this.playerIndex, this.playerView.players.length);
     },

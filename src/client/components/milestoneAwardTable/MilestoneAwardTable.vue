@@ -1,7 +1,7 @@
 <template>
-  <!-- Meilensteine & Auszeichnungen als Tabelle: Symbole oben, darunter Status, je Spieler eine Zeile.
-       Nur im Zwei-Spalten-Layout sichtbar (milestone_award_table.less) -->
-  <!-- --ma-table-cell-count: Zellen je Zeile ohne Trenner; die Mobil-Ansicht dreht die Tabelle damit um (mobile.less) -->
+  <!-- Milestones & awards as a table: icons on top, status below, one row per player.
+       Only visible in the two-column layout (milestone_award_table.less) -->
+  <!-- --ma-table-cell-count: cells per row without separators; the mobile view uses it to transpose the table (mobile.less) -->
   <div ref="table" class="ma-table" :style="{'--ma-table-columns': columnTemplate, '--ma-table-cell-count': 1 + milestones.length + awards.length}">
     <div class="ma-table-row ma-table-labels">
       <div></div><div></div>
@@ -28,19 +28,19 @@
     <div class="ma-table-row ma-table-status">
       <div></div><div class="ma-table-divider"></div>
       <div v-for="milestone in milestones" :key="milestone.name" class="ma-table-cell">
-        <!-- Beansprucht: Würfel nur in der Spielerzeile; vergeben oder zu: keine Kosten mehr -->
+        <!-- Claimed: cube only in the player row; awarded or closed: no more costs -->
         <span v-if="milestone.color === undefined && !milestoneClosed(milestone)" class="ma-table-coin">{{ milestoneCost }}</span>
       </div>
       <div class="ma-table-divider"></div>
       <div v-for="award in awards" :key="award.name" class="ma-table-cell">
-        <!-- Finanziert: Würfel nur hier oben (die Spielerzeilen zeigen weiter die Wertung); zu: keine Kosten mehr -->
+        <!-- Funded: cube only up here (the player rows keep showing the score); closed: no more costs -->
         <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner"><i :class="cubeClasses(award.color)"></i><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
         <span v-else-if="!awardClosed(award)" class="ma-table-coin">{{ nextAwardCost }}</span>
       </div>
     </div>
 
     <div v-for="player in orderedPlayers" :key="player.color" :class="rowClasses(player)" :data-test="'row-' + player.color">
-      <!-- Slot "player": Mobil-Ansicht setzt hier denselben Spieler-Kopf ein wie in der Spieler-Tabelle -->
+      <!-- Slot "player": the mobile view inserts the same player header here as in the players table -->
       <div class="ma-table-name"><slot name="player" :player="player">{{ player.name }}</slot></div>
       <div class="ma-table-divider"></div>
       <div v-for="milestone in milestones" :key="milestone.name" :class="milestoneCellClasses(milestone, player)">
@@ -70,7 +70,7 @@ import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
 import {glassTooltip} from '@/client/directives/GlassTooltip';
 import {observeHeaderFit} from '@/client/components/milestoneAwardTable/headerFit';
 
-// Aufräumfunktion der Kopf-Anpassung je Tabelle (nicht reaktiv)
+// Cleanup function of the header adjustment per table (not reactive)
 const stopHeaderFit = new WeakMap<object, () => void>();
 
 type Score = {color: Color; score: number};
@@ -96,7 +96,7 @@ export default defineComponent({
       type: Array as () => ReadonlyArray<PublicPlayerModel>,
       required: true,
     },
-    // Eigener Spieler: steht zuletzt und ist hervorgehoben (fehlt bei Zuschauern)
+    // Own player: comes last and is highlighted (missing for spectators)
     viewerColor: {
       type: String as () => Color | undefined,
       default: undefined,
@@ -112,9 +112,9 @@ export default defineComponent({
     orderedPlayers(): Array<PublicPlayerModel> {
       return playersInTurnOrder(this.players, this.viewerColor);
     },
-    // Name | Trenner | Meilensteine | Trenner | Auszeichnungen
+    // Name | separator | milestones | separator | awards
     columnTemplate(): string {
-      // Namensspalte per CSS überschreibbar (mobile.less: Tablet quer so breit wie in der Spielerliste)
+      // Name column overridable via CSS (mobile.less: tablet landscape as wide as in the player list)
       return `var(--ma-table-name-width, 104px) 12px repeat(${this.milestones.length}, minmax(0, 1fr)) 16px repeat(${this.awards.length}, minmax(0, 1fr))`;
     },
     claimedCount(): number {
@@ -149,7 +149,7 @@ export default defineComponent({
     awardDescription(award: FundedAwardModel): string {
       return getAward(award.name)?.description ?? '';
     },
-    // Alle Plätze vergeben: die übrigen sind nicht mehr wählbar und treten zurück
+    // All slots taken: the remaining ones can no longer be chosen and recede
     milestoneClosed(milestone: ClaimedMilestoneModel): boolean {
       return milestone.color === undefined && this.claimedCount >= this.maxMilestones;
     },
@@ -162,7 +162,7 @@ export default defineComponent({
     tooltip(name: string, description: string): string {
       return `${this.$t(name)}: ${this.$t(description)}`;
     },
-    // Ohne Werte (Meilenstein beansprucht bzw. alle Plätze vergeben) bleibt die Zelle leer
+    // Without values (milestone claimed or all slots taken) the cell stays empty
     scoreOf(scores: ReadonlyArray<Score>, player: PublicPlayerModel): number | string {
       return scores.find((entry) => entry.color === player.color)?.score ?? '';
     },
@@ -176,7 +176,7 @@ export default defineComponent({
     },
     milestoneCellClasses(milestone: ClaimedMilestoneModel, player: PublicPlayerModel): Array<string> {
       const classes = ['ma-table-cell', ...this.rankClasses(milestone.scores, player)];
-      // Schwelle erreicht, Meilenstein noch frei: könnte jetzt beansprucht werden
+      // Threshold reached, milestone still free: could be claimed now
       if (milestone.scores.find((entry) => entry.color === player.color)?.claimable) {
         classes.push('ma-table-cell--claimable');
       }

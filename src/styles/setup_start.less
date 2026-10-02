@@ -1,14 +1,14 @@
-// Startphase (Startkarten wählen): Button "Beginne" rechts in der Bilanz-Karte unter den Auswahlspalten
+// Setup phase (choosing initial cards): "Start" button on the right in the balance card below the selection columns
 // (SelectInitialCards.vue, SetupSummary.vue)
 
 @setup-start-font-size: 20px;
 
-// Start-Button mit Pfeil, deutlich, aber nicht höher als die Kennzahlen daneben
+// Start button with arrow, prominent but not taller than the figures next to it
 .btn.select-initial-cards-start {
   display: inline-flex;
   align-items: center;
   height: auto;
-  margin: 0; // Außenabstände der Button-Grundregel würden ihn in der Karte verrutschen lassen
+  margin: 0; // the button base rule's margins would shift it within the card
   padding: 10px 24px;
   font-size: @setup-start-font-size;
 

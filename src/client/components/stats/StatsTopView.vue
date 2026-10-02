@@ -15,7 +15,7 @@ import {statsHref, StatsTopKind} from './statsNavigation';
 import {StatsPlayerResult} from './statsResults';
 import {SHOWCASE_TITLES, TOP_PAGE_SIZE} from './statsShowcase';
 
-// Aufgeklappte Top-Liste der Übersicht: die 20 meistgespielten Karten bzw. Konzerne als Raster
+// Expanded top list of the overview: the 20 most played cards or corporations as a grid
 export default defineComponent({
   name: 'StatsTopView',
   components: {StatsShowcase},

@@ -5,11 +5,11 @@ import {formatLift, formatNumber, formatPercent} from './statsLabels';
 import {StatsPlayerResult} from './statsResults';
 import {averageCardPoints} from './statsSeries';
 
-/** Zeile der Listen: Kennzahlen plus Werte, die nur einzelne Arten haben. */
+/** Row of the lists: key figures plus values only some kinds have. */
 export type EntityRow = EntityStats & {
-  /** Auszeichnungen: Anteil, in dem der Finanzierer sie auch gewonnen hat. */
+  /** Awards: share in which the funder also won it. */
   funderWinShare?: number;
-  /** Karten: Ø Siegpunkte, die die Karte gebracht hat. */
+  /** Cards: avg victory points the card yielded. */
   averageCardPoints?: number;
 };
 
@@ -36,7 +36,7 @@ const COLUMNS_BY_KIND: Record<Exclude<StatsKind, 'player'>, ReadonlyArray<string
   card: ['name', 'winRate', 'lift', 'plays', 'averageCardPoints', 'averagePoints', 'averagePlace', 'mostPlayedBy'],
   milestone: ['name', 'winRate', 'lift', 'claimed', 'averagePoints', 'mostPlayedBy'],
   award: ['name', 'winRate', 'lift', 'funded', 'funderWinShare', 'mostPlayedBy'],
-  // Ein Spielplan gehört allen Spielern einer Partie: Siegquote sagt da nichts, wer dort gewinnt schon
+  // A board belongs to all players of a game: win rate says nothing there, who wins there already does
   board: ['name', 'games', 'averageGeneration', 'averagePoints', 'mostWinsBy'],
 };
 
@@ -44,14 +44,14 @@ export function entityColumns(kind: Exclude<StatsKind, 'player'>): Array<StatsCo
   return COLUMNS_BY_KIND[kind].map((key) => COLUMNS[key]);
 }
 
-/** Kurze Spalten für die "zusammen gespielt"-Tabellen der Detailseiten. */
+/** Short columns for the "played together" tables of the detail pages. */
 export const COMPANION_COLUMNS: ReadonlyArray<StatsColumn> = [COLUMNS.name, COLUMNS.plays, COLUMNS.winRate];
 
 export function initialSortOf(kind: StatsKind): string {
   return kind === 'board' ? 'games' : 'winRate';
 }
 
-/** Hat der Finanzierer die Auszeichnung selbst gewonnen? (auch geteilter erster Platz zählt) */
+/** Did the funder win the award themselves? (a shared first place counts too) */
 export function withFunderWinShare(row: EntityStats, results: ReadonlyArray<StatsPlayerResult>): EntityRow {
   const funded = results.flatMap((result) => (result.game.details?.awards ?? [])
     .filter((award) => award.name === row.name && award.funderName === result.player.name));
@@ -59,7 +59,7 @@ export function withFunderWinShare(row: EntityStats, results: ReadonlyArray<Stat
   return {...row, funderWinShare: funded.length === 0 ? undefined : won / funded.length};
 }
 
-/** Siegpunkte, die eine Karte im Schnitt gebracht hat (Karten ohne Punkte bleiben leer). */
+/** Victory points a card yielded on average (cards without points stay empty). */
 export function withCardPoints(row: EntityRow, results: ReadonlyArray<StatsPlayerResult>): EntityRow {
   return {...row, averageCardPoints: averageCardPoints(results, row.name)};
 }

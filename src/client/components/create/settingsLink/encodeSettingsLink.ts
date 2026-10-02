@@ -5,9 +5,9 @@ import {codeTableValues, writeCodedList, writeCodedValue} from './settingsLinkCo
 import {BOOLEAN_FIELDS, CARD_LIST_FIELDS, ESCAPE_VELOCITY_FIELDS, NUMBER_FIELDS, PLAYER_BEGINNER_FLAG, SETTINGS_LINK_FORMAT_VERSION} from './settingsLinkFields';
 
 /**
- * Packt die Formular-Einstellungen in einen kurzen URL-tauglichen Text.
+ * Packs the form settings into a short URL-safe string.
  *
- * Seed und Klon-Spiel bleiben bewusst draußen: Jeder Link soll ein neues Spiel erzeugen.
+ * Seed and clone game deliberately stay out: every link should create a new game.
  */
 export function encodeSettingsLink(model: CreateGameModel): string {
   const writer = new ByteWriter();

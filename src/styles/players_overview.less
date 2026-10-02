@@ -12,7 +12,7 @@
   letter-spacing: 0px;
   margin-top: 8px;
   left: -17px;
-  background: #fff; // einfarbig weiß statt Verlauf von Schwarz
+  background: #fff; // solid white instead of a gradient from black
   color: black;
   clip-path: polygon(85% 0%, 100% 50%, 85% 100%, 0% 100%, 0% 0%);
   z-index: 1;
@@ -21,7 +21,7 @@
 .player-played-cards {
   margin: 7px 15px 0 15px;
 
-  // Button mit Anzahl der gespielten Karten als Badge
+  // Button with the number of played cards as a badge
   .played-cards-button {
     display: inline-flex;
     align-items: center;
@@ -73,7 +73,7 @@
 }
 
 .player-info {
-  cursor: pointer; // ganze Spielerleiste öffnet die gespielten Karten (PlayerInfo.vue)
+  cursor: pointer; // the whole player bar opens the played cards (PlayerInfo.vue)
   border-radius: 8px;
   margin: 10px 0;
   padding: 8px;
@@ -236,7 +236,7 @@
   position: relative;
 }
 
-// Gestapelte Darstellung (Ressourcen über Tags) – wiederverwendet im Zwei-Spalten-Layout (player_home_columns.less)
+// Stacked layout (resources above tags) – reused in the two-column layout (player_home_columns.less)
 .players-overview-stacked() {
   .player-info {
     flex-flow: column !important;

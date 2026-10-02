@@ -1,14 +1,14 @@
-// Farbige Buttons für Aktionen mit Tragweite: grün = weitermachen/bestätigen, rot = auslassen/beenden.
-// Genutzt von den Tab-Buttons (or_options_tabs.less) und Kaufen/Überspringen (SelectCard.vue).
-// !important nötig, weil die Grundregel .btn ihre Farbe selbst mit !important setzt.
+// Colored buttons for consequential actions: green = continue/confirm, red = skip/end.
+// Used by the tab buttons (or_options_tabs.less) and buy/skip (SelectCard.vue).
+// !important needed because the base rule .btn sets its own color with !important.
 
 @button-success: #2e9e4f;
 @button-success-hover: #38b85d;
 @button-danger: #c0392b;
 @button-danger-hover: #d8483a;
-@button-heat: #e0701f; // Wärme/Temperatur
+@button-heat: #e0701f; // heat/temperature
 @button-heat-hover: #f0822f;
-@button-quiet: rgba(255, 255, 255, 0.12); // Nebenaktion neben einem lila Hauptbutton (Zurücksetzen, Kopieren)
+@button-quiet: rgba(255, 255, 255, 0.12); // secondary action next to a purple main button (reset, copy)
 @button-quiet-hover: rgba(255, 255, 255, 0.2);
 
 .button-tone(@color, @hover-color) {
@@ -32,7 +32,7 @@
   .button-tone(@button-heat, @button-heat-hover);
 }
 
-// Button-Reihe unter einer Kartenauswahl mit Abstand zwischen den Buttons
+// Button row below a card selection with spacing between the buttons
 .select-card-actions {
   display: flex;
   flex-wrap: wrap;
