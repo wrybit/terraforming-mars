@@ -57,7 +57,7 @@ export default defineComponent({
     };
   },
   methods: {
-    // Regel geteilt mit der Tabelle (playerGoods.ts)
+    // Rule shared with the table (playerGoods.ts)
     showResourceValue(): boolean {
       return shouldShowResourceValue(this.type, this.value);
     },

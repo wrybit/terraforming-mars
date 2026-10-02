@@ -1,6 +1,6 @@
 <template>
 <div class="payments_cont choice-block" :style="choiceBlockStyle(cards.length)">
-  <!-- Karten als Auswahl-Block (choice_block.less) wie beim Kaufen und bei Standardprojekten -->
+  <!-- Cards as a choice block (choice_block.less) like when buying and for standard projects -->
   <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
   <label v-for="availableCard in cards" class="payments_cards" :key="availableCard.name">
     <input v-if="!availableCard.isDisabled" class="hidden" type="radio" v-model="cardName" :value="availableCard.name" >
@@ -79,8 +79,8 @@ export default defineComponent({
     },
   },
   computed: {
-    // Computed statt data: Der Bauen-Tab bleibt (v-show) gemountet, während die Hand umsortiert wird –
-    // so übernimmt die Liste die neue Reihenfolge sofort (CardOrderStorage ist reaktiv).
+    // Computed instead of data: the Build tab stays mounted (v-show) while the hand is re-sorted –
+    // so the list picks up the new order immediately (CardOrderStorage is reactive).
     cards(): ReadonlyArray<CardModel> {
       return CardOrderStorage.getOrdered(
         CardOrderStorage.getCardOrder(this.playerView.id),
@@ -132,7 +132,7 @@ export default defineComponent({
   data() {
     let card: CardModel | undefined;
     if ((this.playerinput?.cards?.length ?? 0) > 0) {
-      // Vorauswahl: erste Karte in der Reihenfolge der Hand
+      // Preselection: first card in hand order
       card = CardOrderStorage.getOrdered(
         CardOrderStorage.getCardOrder(this.playerView.id),
         this.playerinput.cards,

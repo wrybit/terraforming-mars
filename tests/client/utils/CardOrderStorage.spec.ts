@@ -15,7 +15,7 @@ describe('CardOrderStorage', () => {
     FakeLocalStorage.deregister(localStorage);
   });
 
-  // Bauen- und Verkaufen-Dialog bleiben gemountet, während die Hand umsortiert wird.
+  // Build and sell dialogs stay mounted while the hand is re-sorted.
   it('is reactive: readers see a new order without remount', () => {
     const cards = [{name: CardName.ANTS}, {name: CardName.CARTEL}];
     const ordered = computed(() => CardOrderStorage.getOrdered(CardOrderStorage.getCardOrder('player1'), cards).map((card) => card.name));

@@ -1,11 +1,11 @@
-// Neue Log-Zeilen im Markup des echten Logs (li mit Spieler- und Karten-Chip).
+// New log lines in the markup of the real log (li with player and card chip).
 (function (TM) {
   'use strict';
 
   var PLAYER_COLORS = {jens: ['Jens', 'green'], mira: ['Mira', 'red']};
   var unread = 0;
 
-  // parts: Liste aus {player: 'jens'}, {text: ' hat '}, {card: 'Titel', kind: 'automated'|'events'|'active'}
+  // parts: list of {player: 'jens'}, {text: ' hat '}, {card: 'Titel', kind: 'automated'|'events'|'active'}
   TM.log = function (parts) {
     var list = TM.$('.mb-log-slot .panel-body');
     var line = document.createElement('li');
@@ -43,11 +43,11 @@
   });
 })(window.TM);
 
-// Frühere Generationen: Reiter antippbar, Inhalt als Beispieldaten aus den tatsächlich gespielten Karten
+// Earlier generations: tabs tappable, content as sample data from the cards actually played
 (function (TM) {
   'use strict';
 
-  // Generationen 1–5: echte Einträge eines beendeten Spiels (build.py wandelt sie um)
+  // Generations 1–5: real entries from a finished game (build.py converts them)
   var HISTORY = Object.assign({}, window.TM_DATA.logHistory);
 
   function render(entries) {
@@ -87,7 +87,7 @@
 
   TM.onClick('.mb-log-slot .log-gen-tabs .or-tab', function (tab) { show(tab); });
 
-  // Neue Generation: eigener Reiter, der gleich aktiv ist
+  // New generation: own tab, which is active right away
   var addLine = TM.log.generation;
   TM.log.generation = function (number) {
     var list = TM.$('.mb-log-slot .log-gen-tabs');
@@ -96,7 +96,7 @@
     tab.className = 'or-tab or-tab--view or-tab--number';
     tab.textContent = number;
     list.appendChild(tab);
-    // Log der neuen Generation beginnt leer; die alte wandert in die Beispieldaten
+    // The new generation's log starts empty; the old one moves into the sample data
     var live = TM.$('.mb-log-slot #logpanel-scrollable');
     HISTORY[number - 1] = {html: live.innerHTML};
     live.innerHTML = '';

@@ -1,15 +1,15 @@
 <template>
   <div class="mb-params">
-    <!-- Globale Parameter als Balken unter dem Mars (statt der Skalen rund um das Brett) -->
+    <!-- Global parameters as bars below Mars (instead of the scales around the board) -->
     <div v-for="bar in bars" :key="bar.key" :class="['mb-param', 'mb-param--' + bar.key, {'mb-param--done': bar.done}]">
       <span class="mb-param-label">
         <img :src="bar.icon" alt="">
         <span>{{ $t(bar.label) }}</span>
       </span>
       <span class="mb-param-track" :style="{'--steps': bar.steps}" role="meter" :aria-label="$t(bar.label)" :aria-valuemin="bar.min" :aria-valuemax="bar.max" :aria-valuenow="bar.value">
-        <!-- Stand als CSS-Variable statt width/left: mobile.less legt den Balken je Ausrichtung waagerecht oder senkrecht -->
+        <!-- Level as a CSS variable instead of width/left: mobile.less lays the bar horizontally or vertically per orientation -->
         <span class="mb-param-fill" :style="{'--percent': bar.percent + '%'}"></span>
-        <!-- Bonus-Schwellen wie auf dem Brett (Wärmeproduktion, Ozean, Temperaturschritt …) -->
+        <!-- Bonus thresholds as on the board (heat production, ocean, temperature step …) -->
         <span v-for="bonus in bar.bonuses" :key="bonus.at"
           :class="['mb-param-bonus', 'mb-param-bonus--' + bonus.kind, {'mb-param-bonus--reached': bar.value >= bonus.at}]"
           :style="{'--percent': bonus.percent + '%'}"

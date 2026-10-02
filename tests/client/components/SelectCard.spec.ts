@@ -30,7 +30,7 @@ describe('SelectCard', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
-  // Button gesperrt, solange weniger Karten gewählt sind als nötig
+  // Button disabled while fewer cards are selected than required
   function mountWithMin(min: number) {
     return shallowMount(SelectCard, {
       ...globalConfig,
@@ -57,7 +57,7 @@ describe('SelectCard', () => {
 
   it('disables the save button until the required card is selected', async () => {
     const wrapper = mountWithMin(1);
-    // Erster Button = Hauptbutton ("Alle auswählen" ist hier aus)
+    // First button = main button ("Select all" is off here)
     const saveButton = () => wrapper.findAllComponents({name: 'AppButton'})[0];
     expect(saveButton().props('disabled')).to.be.true;
     await wrapper.setData({cards: {name: 'Ants'}});
@@ -70,7 +70,7 @@ describe('SelectCard', () => {
     expect(saveButton.props('disabled')).to.be.false;
   });
 
-  // Kopfzeile: "Alle auswählen" links, Hand-Sortierung rechts
+  // Header row: "Select all" on the left, hand sorting on the right
   function mountSelection(max: number, hand: Array<string>) {
     const cards = [{name: 'Ants'}, {name: 'Birds'}, {name: 'Cartel'}];
     return shallowMount(SelectCard, {

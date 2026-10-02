@@ -41,12 +41,12 @@ describe('ApiAdmin', () => {
     rmSync(folder, {recursive: true, force: true});
   });
 
-  // Fremder Server: Ansicht ohne generation-Parameter, sonst ein Log
+  // External server: view without generation parameter, otherwise a log
   function fakeServer(view: object) {
     return async (url: string) => new URL(url).searchParams.has('generation') ? [{message: 'log'}] : view;
   }
 
-  // Die Routen lesen den Body über 'data'/'end'-Events – erst senden, nachdem post() gestartet ist
+  // The routes read the body via 'data'/'end' events – only send after post() has started
   function post(handler: Handler, body: object): Promise<unknown> {
     scaffolding.url = '/api/admin?serverId=1';
     scaffolding.req.headers.host = '192.168.178.77:17745';

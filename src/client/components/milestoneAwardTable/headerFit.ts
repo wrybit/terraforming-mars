@@ -1,17 +1,17 @@
-// Kopf der Meilenstein-Tabelle an schmale Spalten anpassen (Vertrag mit milestone_award_table.less):
-// - Symbole schrumpfen, wenn ihre Spalte schmaler wird als das Symbol – nie größer als im Original.
-//   Jedes Symbol einzeln: ein gemeinsamer Faktor würde alle wegen eines breiten Doppel-Symbols winzig machen.
-// - Besitzer (Würfel + Name): passt der Name nicht ganz daneben, bleibt nur der Würfel (Name im Tooltip).
+// Fit the milestone table header to narrow columns (contract with milestone_award_table.less):
+// - Icons shrink when their column gets narrower than the icon – never larger than the original.
+//   Each icon individually: a shared factor would make all of them tiny because of one wide double icon.
+// - Owner (cube + name): if the name doesn't fully fit beside it, only the cube remains (name in tooltip).
 
 export const ICON_ZOOM_VARIABLE = '--ma-table-icon-zoom';
 const ICON_SELECTOR = '.ma-table-head .ma-table-icon';
 const OWNER_SELECTOR = '.ma-table-owner';
 const OWNER_NAME_SELECTOR = '.ma-table-owner-name';
 export const OWNER_CUBE_ONLY_CLASS = 'ma-table-owner--cube-only';
-// Luft zwischen zwei Symbolen, damit sie nicht aneinanderstoßen
+// Space between two icons so they don't touch
 const ICON_SPACING = 4;
 
-// Faktor, mit dem das Symbol in seine Spalte passt (höchstens 1)
+// Factor at which the icon fits its column (at most 1)
 export function iconZoom(iconWidth: number, cellWidth: number): number {
   if (iconWidth <= 0) {
     return 1;
@@ -21,9 +21,9 @@ export function iconZoom(iconWidth: number, cellWidth: number): number {
 
 function fitOwners(table: HTMLElement): void {
   const owners = [...table.querySelectorAll<HTMLElement>(OWNER_SELECTOR)];
-  // Erst alle mit Würfel messen, dann nur die zu breiten umschalten (kein Hin und Her pro Element)
+  // First measure all with cube, then switch only the too-wide ones (no back and forth per element)
   owners.forEach((owner) => owner.classList.remove(OWNER_CUBE_ONLY_CLASS));
-  // Der Name schrumpft (Auslassungspunkte), statt überzulaufen – gekürzter Name heißt: zu wenig Platz
+  // The name shrinks (ellipsis) instead of overflowing – a truncated name means: not enough room
   const tooWide = owners.filter((owner) => {
     const name = owner.querySelector<HTMLElement>(OWNER_NAME_SELECTOR);
     return name !== null && name.scrollWidth > name.clientWidth;
@@ -33,7 +33,7 @@ function fitOwners(table: HTMLElement): void {
 
 function fitIcons(table: HTMLElement): void {
   const icons = [...table.querySelectorAll<HTMLElement>(ICON_SELECTOR)];
-  // In Originalgröße messen; die Spaltenbreite hängt nicht von den Symbolen ab (minmax(0, 1fr))
+  // Measure at original size; the column width doesn't depend on the icons (minmax(0, 1fr))
   icons.forEach((icon) => icon.style.setProperty(ICON_ZOOM_VARIABLE, '1'));
   const zooms = icons.map((icon) => iconZoom(icon.getBoundingClientRect().width, icon.parentElement?.getBoundingClientRect().width ?? 0));
   icons.forEach((icon, index) => icon.style.setProperty(ICON_ZOOM_VARIABLE, String(zooms[index])));
@@ -44,7 +44,7 @@ function fit(table: HTMLElement): void {
   fitOwners(table);
 }
 
-// Beginnt mit der Anpassung und liefert eine Aufräumfunktion zurück
+// Starts fitting and returns a cleanup function
 export function observeHeaderFit(table: HTMLElement): () => void {
   let frame: number | undefined;
   const schedule = () => {
@@ -55,7 +55,7 @@ export function observeHeaderFit(table: HTMLElement): () => void {
       });
     }
   };
-  // Tabellenbreite ändert sich mit Fenster und Ziehgriff; Bilder haben ihre Breite erst nach dem Laden
+  // Table width changes with window and drag handle; images only have their width after loading
   const resizeObserver = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
   resizeObserver?.observe(table);
   table.addEventListener('load', schedule, true);

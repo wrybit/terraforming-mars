@@ -2,9 +2,9 @@ import * as path from 'path';
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs';
 import {AdminGameSummary} from '../../common/admin/AdminGameSummary';
 
-// Importierte Ergebnisse sind keine spielbaren Partien (der fremde Server liefert keinen vollständigen Spielstand).
-// Deshalb eine eigene kleine JSON-Datei neben der Datenbank statt neuer Tabellen in allen Datenbank-Varianten –
-// das hält den Fork beim Übernehmen von Upstream-Änderungen konfliktarm.
+// Imported results are not playable games (the foreign server doesn't provide a complete game state).
+// Hence a small JSON file of its own next to the database instead of new tables in every database variant –
+// that keeps the fork low on conflicts when taking over upstream changes.
 const defaultFilename = path.resolve(process.cwd(), './db/imported-games.json');
 
 export class ImportedGamesStore {
@@ -36,7 +36,7 @@ export class ImportedGamesStore {
     this.write([...this.list().filter((existing) => existing.id !== summary.id), summary]);
   }
 
-  /** Liefert false, wenn es keinen Import mit dieser ID gab. */
+  /** Returns false if there was no import with this ID. */
   public remove(id: string): boolean {
     const summaries = this.list();
     const remaining = summaries.filter((summary) => summary.id !== id);

@@ -6,9 +6,9 @@ import {CardName} from '../../common/cards/CardName';
 export class DeferredActionsQueue {
   private insertId: number = 0;
   private queue: Array<IDeferredAction<any>> = [];
-  // Karte, deren Wirkung gerade abläuft (Ausspielen, Kartenaktion, Ausführen einer ihrer Aktionen).
-  // Alles, was währenddessen eingereiht wird, merkt sie sich, und daraus entstehende Eingaben tragen sie
-  // zum Client (PlayerInput.sourceCard), damit dort Kartenname und -text statt "Wähle eine Option" stehen.
+  // Card whose effect is currently running (playing it, card action, executing one of its actions).
+  // Everything queued in the meantime remembers it, and inputs arising from that carry it
+  // to the client (PlayerInput.sourceCard), so card name and text appear there instead of "Select one option".
   private currentSourceCard: CardName | undefined = undefined;
 
   get length(): number {
@@ -39,7 +39,7 @@ export class DeferredActionsQueue {
     this.run(b, () => this.runAllFor(player, cb));
   }
 
-  // Führt fn im Zusammenhang mit einer Karte aus; ohne Karte bleibt der äußere Zusammenhang bestehen
+  // Runs fn in the context of a card; without a card the outer context remains
   public withSourceCard<T>(card: CardName | undefined, fn: () => T): T {
     if (card === undefined) {
       return fn();

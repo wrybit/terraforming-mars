@@ -1,16 +1,16 @@
-# Screenshot-Auswertung für die Statistik
+# Screenshot analysis for the statistics
 
-Partien, von denen nur ein Screenshot der Ergebnisseite existiert (aus Discord importiert), liefern so trotzdem
-Punkteaufschlüsselung, Siegpunkt-Karten, Meilensteine, Auszeichnungen, Punkte je Generation und den Verlauf der
-globalen Parameter für `/stats`.
+Games for which only a screenshot of the results page exists (imported from Discord) still provide
+points breakdown, VP cards, milestones, awards, points per generation and the history of the
+global parameters for `/stats` this way.
 
-1. Screenshots und `imported-games.json` vom Server holen (`db/imported/screenshots/`, `db/imported-games.json`).
-2. Text ablesen: je Screenshot eine `extracted/<id>.json` nach `INSTRUCTIONS.md` (Claude mit Bildansicht).
-3. Zusammenführen, Namen ins Englische übersetzen, Diagramme pixelgenau auslesen:
-   `python3 convert.py --screenshots <ordner> --extracted extracted --out screenshot-details`
-   (braucht `opencv-python` und `numpy`; vorher `npm run make:json` für `assets/locales/de.json`).
-4. `screenshot-details/*.json` nach `db/imported/screenshot-details/` auf den Server kopieren.
+1. Fetch the screenshots and `imported-games.json` from the server (`db/imported/screenshots/`, `db/imported-games.json`).
+2. Read off the text: one `extracted/<id>.json` per screenshot following `INSTRUCTIONS.md` (Claude with image view).
+3. Merge, translate names into English, read the charts pixel-accurately:
+   `python3 convert.py --screenshots <folder> --extracted extracted --out screenshot-details`
+   (needs `opencv-python` and `numpy`; run `npm run make:json` first for `assets/locales/de.json`).
+4. Copy `screenshot-details/*.json` to `db/imported/screenshot-details/` on the server.
 
-`charts.py` findet die Diagramme über ihre Gitterlinien, liest die Linien an den Generationen über ihre Farbe und
-eicht die Siegpunkte an den Endständen aus der Tabelle. Weicht der letzte Wert um mehr als 3 Punkte ab, wird der
-Verlauf verworfen.
+`charts.py` finds the charts via their grid lines, reads the lines at the generations by their color and
+calibrates the victory points against the final scores from the table. If the last value deviates by more than 3 points, the
+history is discarded.

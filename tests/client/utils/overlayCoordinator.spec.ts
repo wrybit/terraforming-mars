@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordinator';
 
 describe('overlayCoordinator', () => {
-  it('schließt beim Öffnen alle Overlays mit anderem Schlüssel', () => {
+  it('closes all overlays with a different key on open', () => {
     const closed: Array<string> = [];
     const unregisterA = registerOverlay('a', () => closed.push('a'));
     const unregisterB1 = registerOverlay('b', () => closed.push('b1'));
@@ -19,7 +19,7 @@ describe('overlayCoordinator', () => {
     unregisterB2();
   });
 
-  it('abgemeldete Overlays werden nicht mehr geschlossen', () => {
+  it('unregistered overlays are no longer closed', () => {
     const closed: Array<string> = [];
     const unregister = registerOverlay('a', () => closed.push('a'));
     unregister();

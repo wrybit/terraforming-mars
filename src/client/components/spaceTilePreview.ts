@@ -1,8 +1,8 @@
 import {Message} from '@/common/logs/Message';
 
-// Welches Plättchen eine Feldauswahl platziert – als halbtransparente Vorschau auf dem gewählten Feld
-// (SelectSpace.vue). Der Server liefert dafür kein eigenes Feld, nur den Titel (z. B. "Select space for city tile",
-// "Convert ${0} plants into greenery"); unbekannte Titel bekommen keine Vorschau.
+// Which tile a space selection places – as a semi-transparent preview on the selected space
+// (SelectSpace.vue). The server provides no field for this, only the title (e.g. "Select space for city tile",
+// "Convert ${0} plants into greenery"); unknown titles get no preview.
 export type PreviewTile = 'greenery' | 'city' | 'ocean';
 
 const TILE_PATTERNS: ReadonlyArray<[RegExp, PreviewTile]> = [
@@ -16,13 +16,13 @@ export function previewTileForSpaceInput(title: string | Message): PreviewTile |
   return TILE_PATTERNS.find(([pattern]) => pattern.test(key))?.[1];
 }
 
-// Gleiche Klasse wie ein gelegtes Plättchen auf dem Brett (board.less: .board-space-tile--<tile>),
-// damit Bildausschnitt und Größe exakt übereinstimmen
+// Same class as a placed tile on the board (board.less: .board-space-tile--<tile>),
+// so that image crop and size match exactly
 export function previewTileClass(tile: PreviewTile): string {
   return 'board-space-tile--' + tile;
 }
 
-// Handlungs-Überschrift für den Button "Mars groß anzeigen" (SelectSpace.vue): sagt, was gleich gelegt wird
+// Action heading for the "Show Mars enlarged" button (SelectSpace.vue): says what is about to be placed
 const PLACEMENT_LABELS: Readonly<Record<PreviewTile, string>> = {
   greenery: 'Place greenery',
   city: 'Place city',

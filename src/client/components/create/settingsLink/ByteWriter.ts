@@ -1,13 +1,13 @@
 /**
- * Schreibt die Einstellungen als kompakte Bytefolge für den Teilen-Link.
+ * Writes the settings as a compact byte sequence for the share link.
  *
- * Zahlen als LEB128 (kleine Werte = 1 Byte), Texte als UTF-8 mit Längenpräfix.
+ * Numbers as LEB128 (small values = 1 byte), strings as UTF-8 with a length prefix.
  */
 export class ByteWriter {
   private readonly bytes: Array<number> = [];
 
   public writeUnsigned(value: number): void {
-    // Negative oder gebrochene Werte kann der Link nicht abbilden; die Formularprüfung meldet sie ohnehin
+    // The link can't represent negative or fractional values; the form validation reports them anyway
     let rest = Math.max(0, Math.floor(value));
     do {
       let byte = rest % 128;
@@ -19,7 +19,7 @@ export class ByteWriter {
     } while (rest > 0);
   }
 
-  /** Schalter als Bitfeld; die Anzahl vorneweg erlaubt es, später Schalter hinten anzuhängen. */
+  /** Switches as a bit field; the leading count allows appending switches at the end later. */
   public writeFlags(flags: ReadonlyArray<boolean>): void {
     this.writeUnsigned(flags.length);
     for (let start = 0; start < flags.length; start += 8) {
@@ -40,8 +40,8 @@ export class ByteWriter {
   }
 
   /**
-   * Nullen am Ende fallen weg: Der ByteReader liest hinter dem Ende ohnehin 0,
-   * leere Listen und Standardwerte am Schluss kosten so kein Zeichen.
+   * Trailing zeros are dropped: the ByteReader reads 0 past the end anyway,
+   * so empty lists and default values at the end cost no character.
    */
   public toBytes(): Uint8Array {
     let end = this.bytes.length;

@@ -1,8 +1,8 @@
-// Läuft gerade eine Feldwahl (Plättchen, Kolonie-Feld, Mond …)? Dann darf ein Klick aufs Brett
-// nicht das Vergrößerungs-Modal öffnen, sonst lässt sich nichts mehr platzieren.
-// Signal ist die gemountete Feldwahl selbst (SelectSpace.vue), nicht die markierten Felder:
-// Nach dem Antippen eines Feldes nimmt SelectSpace alle Markierungen weg, bevor der Klick das Brett erreicht.
-// Dieselben Selektoren stehen in board_zoom_modal.less (Lupen-Cursor).
+// Is a space selection running (tile, colony space, Moon …)? Then a click on the board must
+// not open the zoom modal, otherwise nothing can be placed anymore.
+// The signal is the mounted space selection itself (SelectSpace.vue), not the highlighted spaces:
+// after a space is tapped, SelectSpace removes all highlights before the click reaches the board.
+// The same selectors are in board_zoom_modal.less (magnifier cursor).
 export const SELECT_SPACE_SELECTOR = '.select_space_cont';
 export const AVAILABLE_SPACE_SELECTOR = '.board-space--available';
 

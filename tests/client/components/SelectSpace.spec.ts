@@ -21,7 +21,7 @@ describe('SelectSpace', () => {
     releasePlacementZoom();
   });
 
-  // Zwei Brett-Instanzen wie im Spiel: Spalte und vergrößerter Mars mit denselben IDs
+  // Two board instances as in the game: column and enlarged Mars with the same IDs
   function addBoard(regionId: string, spaceId: string): HTMLElement {
     const board = document.createElement('div');
     board.id = regionId;
@@ -66,7 +66,7 @@ describe('SelectSpace', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
-  // Tab-Wechsel weg von der Feldwahl: das Brett darf danach weder markiert noch anklickbar sein
+  // Tab switch away from space selection: afterwards the board must be neither highlighted nor clickable
   it('removes highlight and click handler when unmounted', () => {
     const space = addBoard('main_board', '03');
     const wrapper = mountFor(['03' as SpaceId]);
@@ -86,7 +86,7 @@ describe('SelectSpace', () => {
     expect(zoomSpace.classList.contains('board-space--available')).to.be.true;
     expect(placementZoom.requested).to.be.false;
 
-    await wrapper.vm.$nextTick(); // Button erscheint erst nach dem Binden der Felder in mounted()
+    await wrapper.vm.$nextTick(); // Button only appears after the spaces are bound in mounted()
     await wrapper.find('.select-space-zoom-button').trigger('click');
     expect(placementZoom.requested).to.be.true;
 

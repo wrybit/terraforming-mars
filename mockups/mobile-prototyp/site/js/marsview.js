@@ -1,4 +1,4 @@
-// Mars groß ansehen: Antippen des Mars auf dem Startbildschirm öffnet ihn zoombar im Aufgaben-Modus.
+// View Mars large: tapping Mars on the start screen opens it zoomable in task mode.
 (function (TM) {
   'use strict';
 
@@ -16,7 +16,7 @@
   TM.marsView = { init: buildPanel };
   TM.tasks.define('view-mars', {view: true});
 
-  // Klick auf den kleinen Mars (nicht auf den Kacheln-Schalter) öffnet die Groß-Ansicht
+  // Click on the small Mars (not on the tiles toggle) opens the large view
   TM.onClick('#boardHome, [data-open-mars]', function (target, event) {
     if (event.target.closest('.hide-tile-button')) return false;
     TM.tasks.open('view-mars');

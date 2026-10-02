@@ -1,8 +1,8 @@
-"""Erzeugt den Mobil-Prototyp aus echten, im Browser gerenderten Spiel-Bausteinen.
+"""Generates the mobile prototype from real game building blocks rendered in the browser.
 
-Eingaben: capture/*.json (von den capture/*.mjs-Skripten aus dem laufenden Fork abgegriffen).
-Ausgabe: <ziel>/index.html plus CSS, JS und Zusatzgrafiken – nie von Hand ändern, sondern hier.
-Aufruf: python3 build.py [zielordner]
+Inputs: capture/*.json (captured from the running fork by the capture/*.mjs scripts).
+Output: <target>/index.html plus CSS, JS and extra graphics – never edit by hand, change it here.
+Usage: python3 build.py [target_folder]
 """
 import json
 import re
@@ -27,13 +27,13 @@ PLACE_CITY = load('sp-City.json')
 PLACE_OCEAN = load('sp-Aquifer.json')
 END = load('end-parts.json')
 
-# Echte Log-Einträge der Generationen 1–5 aus einem beendeten Spiel auf dem Server (Jens = blau, Martin = grün);
-# im Prototyp als Jens (grün) und Mira (rot) gezeigt, der dritte Spieler fällt weg
+# Real log entries of generations 1–5 from a finished game on the server (Jens = blue, Martin = green);
+# shown in the prototype as Jens (green) and Mira (red), the third player is dropped
 REAL_LOG_PLAYERS = {'blue': ('Jens', 'green'), 'green': ('Mira', 'red')}
 REAL_CARD_TYPES = load('realgame/card-types.json')
 CARD_KIND = {'active': 'active', 'automated': 'automated', 'event': 'events', 'corporation': 'corporation', 'prelude': 'prelude'}
 
-# Spielstand des Testspiels (so in der Datenbank gesetzt, siehe capture/edit.py)
+# Game state of the test game (set like this in the database, see capture/edit.py)
 GAME = {'generation': 6, 'oxygen': 5, 'temperature': -16, 'oceans': 4, 'timer': '01:22'}
 PLAYERS = [
     {'id': 'jens', 'name': 'Jens', 'color': 'green', 'corp': 'Saturn Systems', 'tr': 31, 'cards': 7, 'self': True,
@@ -48,7 +48,7 @@ PLAYERS = [
 RESOURCES = ['megacredits', 'steel', 'titanium', 'plants', 'energy', 'heat']
 RESOURCE_BADGES = {'steel': 2, 'titanium': 3}
 
-# Reiter des Originals -> Schlüssel, Symbol und Unterzeile im Zug-Menü
+# Tabs of the original -> key, icon and subtitle in the turn menu
 TABS = [
     ('Milestone', 'milestone', 'assets/ma/gardener.png', '{count} reachable'),
     ('Place greenery', 'greenery', 'assets/tiles/greenery.png', None),
@@ -61,7 +61,7 @@ TABS = [
 ]
 TONES = {'or-tab--tone-success': 'success', 'or-tab--tone-heat': 'heat', 'or-tab--highlight': 'highlight'}
 
-# Globale Parameter mit ihren Bonus-Stufen (Tharsis, Grundspiel)
+# Global parameters with their bonus steps (Tharsis, base game)
 PARAMETERS = [
     {'key': 'temperature', 'label': 'Temperature', 'icon': 'assets/global-parameters/temperature.png',
      'min': -30, 'max': 8, 'step': 2, 'unit': ' °C',
@@ -77,7 +77,7 @@ PARAMETERS = [
 
 
 def clean(html: str) -> str:
-    """Vue-Reste entfernen, die im statischen Prototyp nur Ballast sind."""
+    """Remove Vue leftovers that are only dead weight in the static prototype."""
     html = html.replace('<!---->', '')
     html = re.sub(r' style="translate: [^"]*"', '', html)
     return re.sub(r' style="--docked-tab-start: [^"]*"', '', html)
@@ -106,7 +106,7 @@ def parse_tabs() -> list:
 
 
 def placement_tabs() -> list:
-    """Platzier-Aufgaben aus Standardprojekten: gleiche Hülle, anderes Plättchen."""
+    """Placement tasks from standard projects: same shell, different tile."""
     result = []
     for key, capture, label in (('place-city', PLACE_CITY, 'Place city'), ('place-ocean', PLACE_OCEAN, 'Place ocean')):
         panel = clean(capture['panel'])
@@ -129,7 +129,7 @@ def panel(tab: dict) -> str:
 
 
 def played_cards(slugs: list) -> str:
-    # Beide Übersichten liegen im selben Abgriff; Zuordnung über die Kartenklasse card-<slug>
+    # Both overviews are in the same capture; mapped via the card class card-<slug>
     cards = {}
     for html in PLAYED['played0']['cards'] + PLAYED['played1']['cards']:
         slug = re.search(r'card-container[^"]* card-([a-z0-9-]+)', html).group(1)
@@ -207,7 +207,7 @@ def real_history() -> dict:
 
 
 def game_data() -> dict:
-    """Werte, die mobile.js zum Nachstellen der Spiellogik braucht."""
+    """Values mobile.js needs to emulate the game logic."""
     greenery = re.findall(r'board-space--available" data_space_id="(\d+)"', FRAGMENTS['boardPlace'])
     return {
         'game': GAME,
@@ -229,7 +229,7 @@ def main() -> None:
         'money': str(self_player['resources'][0][0]),
         'moneyProduction': str(self_player['resources'][0][1]),
         'handCount': re.search(r'\d+$', hand_tab['text']).group(0),
-        # Die Platzier-Variante enthält die markierten Felder; board.js blendet sie außerhalb des Platzierens aus
+        # The placement variant contains the highlighted spaces; board.js hides them outside of placing
         'board': clean(FRAGMENTS['boardPlace']),
         'parameters': ''.join(parameter_bar(parameter) for parameter in PARAMETERS),
         'handPanel': clean(FRAGMENTS['panels'][hand_tab['text']]),
@@ -253,19 +253,19 @@ def main() -> None:
     shutil.copy(HERE / 'mobile.css', SITE / 'mobile.css')
     shutil.copytree(HERE / 'js', SITE / 'js', dirs_exist_ok=True)
     shutil.copytree(HERE / 'assets-extra', SITE / 'assets-extra', dirs_exist_ok=True)
-    # App-Icons und Favicon (erzeugt von icons/make_icons.py) plus Web-App-Manifest
+    # App icons and favicon (generated by icons/make_icons.py) plus web app manifest
     shutil.copytree(HERE / 'icons' / 'chosen', SITE / 'icons', dirs_exist_ok=True)
     shutil.copy(HERE / 'manifest.webmanifest', SITE / 'manifest.webmanifest')
 
-    # Teilbare Startseite: Handy-Rahmen mit der App darin
+    # Shareable start page: phone frame with the app inside
     share = (HERE / 'share.html').read_text()
     (SITE / 'index.html').write_text(share)
-    # Artifact-Variante der Startseite: Das Hosting legt selbst doctype/head/body herum
+    # Artifact variant of the start page: the hosting wraps doctype/head/body itself
     head = re.search(r'<head>(.*)</head>', share, re.S).group(1)
     head = re.sub(r'<meta [^>]*>\s*', '', head)
     body = re.search(r'<body[^>]*>(.*)</body>', share, re.S).group(1)
     (SITE / 'artifact.html').write_text(head.strip() + '\n' + body)
-    print('geschrieben:', SITE, '(index.html = Teilen-Seite, app.html = App)')
+    print('written:', SITE, '(index.html = share page, app.html = app)')
 
 
 if __name__ == '__main__':

@@ -27,8 +27,8 @@ export interface PlayerInput {
      */
   optional?: boolean;
     /**
-     * Karte, deren Wirkung diese Eingabe auslöst (z. B. Sabotage), damit der Client Name und Kartentext zeigt.
-     * Setzt DeferredActionsQueue automatisch.
+     * Card whose effect triggers this input (e.g. Sabotage), so the client shows the name and card text.
+     * Set automatically by DeferredActionsQueue.
      */
     sourceCard?: CardName;
 

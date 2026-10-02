@@ -1,7 +1,7 @@
 <template>
-  <!-- Bilanz der Startauswahl als Kennzahlen-Leiste (setup_summary.less): was vom Start-Kapital nach Präludien und
-       Kartenkauf bleibt, daneben der Status (was noch fehlt). Werte ohne gewählten Konzern als Gedankenstrich.
-       Rechts in der Karte der Slot für den Start-Button. -->
+  <!-- Balance of the start selection as a key-figure bar (setup_summary.less): what remains of the starting capital after
+       preludes and card purchase, next to it the status (what is still missing). Values without a chosen corporation as a dash.
+       On the right of the card the slot for the start button. -->
   <div class="setup-summary">
     <dl class="setup-summary-values">
       <div class="setup-summary-item">
@@ -14,14 +14,14 @@
       </div>
       <div class="setup-summary-item">
         <dt>{{ $t('Purchase') }} ({{ purchasedCount }} × {{ cardCost }})</dt>
-        <!-- Rot, wenn der Kauf das Start-Kapital übersteigt: Karten zahlt man, bevor die Präludien wirken -->
+        <!-- Red if the purchase exceeds the starting capital: cards are paid before the preludes take effect -->
         <dd :class="{'setup-summary-value--negative': startMegacredits !== undefined && purchasedCount * cardCost > startMegacredits}">
           {{ signed(-purchasedCount * cardCost) }}
         </dd>
       </div>
       <div class="setup-summary-item">
         <dt>{{ $t('Remaining') }}</dt>
-        <!-- Ergebnis der Rechnung als gelbe M€-Münze wie im Spiel -->
+        <!-- Result of the calculation as a yellow M€ coin like in the game -->
         <dd>
           <span v-if="remaining !== undefined"
             :class="['setup-summary-coin', {'setup-summary-coin--negative': remaining < 0}]">{{ withMinus(remaining) }}</span>
@@ -44,13 +44,13 @@ import {computed} from 'vue';
 import {remainingMegacredits} from '@/client/components/setupBalance';
 
 const props = defineProps<{
-  // Start-M€ des gewählten Konzerns; undefined, solange keiner (oder mehrere) gewählt sind
+  // Starting M€ of the chosen corporation; undefined while none (or several) are chosen
   startMegacredits: number | undefined;
-  // M€-Wirkung der gewählten Präludien; undefined ohne Präludium-Erweiterung (dann entfällt die Kennzahl)
+  // M€ effect of the chosen preludes; undefined without the prelude expansion (then the figure is omitted)
   preludeMegacredits: number | undefined;
   purchasedCount: number;
   cardCost: number;
-  // Hinweis, was noch fehlt, bzw. "bereit" (Übersetzungsschlüssel)
+  // Hint about what is still missing, or "ready" (translation key)
   status: string;
   statusReady: boolean;
 }>();
@@ -59,12 +59,12 @@ const remaining = computed(() => props.startMegacredits === undefined ?
   undefined :
   remainingMegacredits(props.startMegacredits, props.preludeMegacredits, props.purchasedCount, props.cardCost));
 
-// Negative Werte mit typografischem Minus, wie in der ganzen Leiste
+// Negative values with a typographic minus, as in the whole bar
 function withMinus(value: number): string {
   return value < 0 ? '−' + Math.abs(value) : String(value);
 }
 
-// Vorzeichen immer zeigen, 0 als ±0 – so liest sich die Zeile als Rechnung
+// Always show the sign, 0 as ±0 – so the row reads as a calculation
 function signed(value: number): string {
   if (value === 0) {
     return '±0';

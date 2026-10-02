@@ -1,5 +1,5 @@
-// Aufgaben-Modus: Eine Aktion füllt den Bildschirm, ihr Bestätigen/Bezahlen wandert in den Footer.
-// Aktionen melden sich mit TM.tasks.define an; eine Aktion kann eine Folge-Aufgabe anhängen (z. B. Stadt platzieren).
+// Task mode: one action fills the screen, its confirm/pay moves into the footer.
+// Actions register via TM.tasks.define; an action can append a follow-up task (e.g. place city).
 (function (TM) {
   'use strict';
 
@@ -57,12 +57,12 @@
         slot.appendChild(confirm);
         TM.board.startPlacing(definition.place);
       }
-      // Nur Ansehen (Mars zoomen): kein Platzieren, Footer hat nur „Close“
+      // View only (zoom Mars): no placing, footer only has "Close"
       if (definition.view) TM.board.startViewing();
       TM.$('.mb-taskbar-cancel', taskbar).textContent = definition.view ? 'Close' : 'Cancel';
       TM.$('.mb-taskbar-cancel', taskbar).hidden = !!options.chained;
 
-      // Vorauswahl wie im Original (erste Karte) oder gezielt aus der Groß-Ansicht
+      // Preselection as in the original (first card) or specifically from the large view
       var inputs = TM.$all('label input', panel);
       if (options.preselect) {
         inputs.forEach(function (input) { input.checked = !!input.closest('label').querySelector('.card-' + options.preselect); });
@@ -80,7 +80,7 @@
       if (chosen) requestAnimationFrame(function () { chosen.scrollIntoView({inline: 'center', block: 'nearest'}); });
     },
 
-    // Fußleiste an die aktuelle Auswahl anpassen (Preis, Knopftext, gesperrt/frei)
+    // Adapt the footer bar to the current selection (price, button text, locked/free)
     refresh: function (change) {
       if (!current) return;
       var panel = panelOf(current.key);

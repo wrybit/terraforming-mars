@@ -11,8 +11,8 @@ import {defineComponent, PropType} from 'vue';
 import {CardName} from '@/common/cards/CardName';
 import Card from '@/client/components/card/Card.vue';
 
-// Kartenraster eines Abschnitts der Kartenliste. Eigene Komponente, damit v-memo direkt an der Kartenschleife sitzt:
-// beim Tippen in der Suche werden so nur neu hinzukommende Karten gerendert, nicht alle.
+// Card grid of one card list section. Its own component so v-memo sits directly on the card loop:
+// that way, when typing in the search, only newly added cards are rendered, not all of them.
 export default defineComponent({
   name: 'CardListCardGrid',
   components: {Card},

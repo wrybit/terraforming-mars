@@ -18,7 +18,7 @@ export class ApiPlayer extends Handler {
     const playerId = ctx.urlParams.playerId('id');
     const game = await ctx.gameLoader.getGame(playerId);
     if (game === undefined) {
-      // Von anderen Servern importierte Spiele gibt es hier nur als gespeicherten Endstand
+      // Games imported from other servers exist here only as a stored final state
       const imported = ImportedSnapshotsStore.getInstance().get(playerId);
       if (imported !== undefined) {
         responses.writeJson(res, ctx, imported.view);

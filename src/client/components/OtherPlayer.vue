@@ -48,7 +48,7 @@ import {CardType} from '@/common/cards/CardType';
 import {getCardsByType, isCardActivated} from '@/client/utils/CardUtils';
 import {sortActiveCards} from '@/client/utils/ActiveCardsSortingOrder';
 
-// Abmelde-Funktionen je Instanz (nicht reaktiv, daher außerhalb von data)
+// Unregister functions per instance (not reactive, hence outside of data)
 const unregisterByInstance = new WeakMap<object, () => void>();
 
 export default defineComponent({
@@ -68,10 +68,10 @@ export default defineComponent({
     StackedCards,
     Card,
   },
-  // Escape schließt die geöffnete Kartenansicht (im Zwei-Spalten-Layout ein Modal)
+  // Escape closes the open card view (a modal in the two-column layout)
   mounted() {
     window.addEventListener('keydown', this.closeOnEscape);
-    // Als Overlay anmelden; die Kartenansichten der Spieler teilen einen Schlüssel (playerCardsToggle.ts regelt sie)
+    // Register as overlay; the players' card views share one key (playerCardsToggle.ts manages them)
     unregisterByInstance.set(this, registerOverlay(PLAYER_CARDS_OVERLAY, () => {
       if (this.isVisible()) {
         this.hideMe();

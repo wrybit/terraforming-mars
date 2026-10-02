@@ -33,10 +33,10 @@ import {formatLift} from './statsLabels';
 import {STATS_KINDS} from './statsKinds';
 import {StatsPlayerResult} from './statsResults';
 
-// Mehr Zeilen machen die Seite träge; bei Karte + Karte gibt es Tausende Paare
+// More rows make the page sluggish; card + card yields thousands of pairs
 const ROW_LIMIT = 100;
 
-// Paare aus Konzern, Präludium und Projektkarte: wie oft zusammen gespielt und ob sie zusammen mehr bringen als einzeln
+// Pairs of corporation, prelude and project card: how often played together and whether they yield more together than alone
 export default defineComponent({
   name: 'StatsCombinationsView',
   components: {SegmentedControl, StatsTable, StatsEntityName, StatsWinRate},
@@ -64,7 +64,7 @@ export default defineComponent({
     },
     visibleRows(): Array<CombinationStats> {
       const search = this.search.trim().toLowerCase();
-      // Gesucht wird im übersetzten und im englischen Namen beider Einträge
+      // Search covers the translated and the English name of both entries
       const matches = (name: string) => name.toLowerCase().includes(search) || translateText(name).toLowerCase().includes(search);
       return this.rows
         .filter((row) => row.plays >= this.minPlays && (search === '' || matches(row.first) || matches(row.second)))

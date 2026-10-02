@@ -1,7 +1,7 @@
 <template>
-  <!-- Erklärung oben in einer Tab-Box, wenn eine Karte die Eingabe auslöst (inputSourceCard.ts):
-       die Karte selbst verkleinert, daneben ihr Name statt "Wähle eine Option", ihr Text und – falls
-       sie mehr sagt als "Wähle eine Option" – die eigentliche Frage. Aufbau wie TabIntroBlock.vue. -->
+  <!-- Intro at the top of a tab box when a card triggers the input (inputSourceCard.ts):
+       the card itself scaled down, next to it its name instead of "Select an option", its text and – if
+       it says more than "Select an option" – the actual question. Structure like TabIntroBlock.vue. -->
   <div class="or-tab-intro card-intro">
     <SourceCardThumbnail :card="card"/>
     <div>

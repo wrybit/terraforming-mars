@@ -1,6 +1,6 @@
 <template>
-  <!-- Tastaturkürzel (Fork): ersetzt die alten Bilder der Upstream-Hilfe durch Tasten im App-Stil
-       und je Kürzel eine kleine Skizze der Spielansicht, in der der Zielbereich hervorgehoben ist -->
+  <!-- Keyboard shortcuts (fork): replaces the old images of the upstream help with keys in app style
+       and per shortcut a small sketch of the game view with the target area highlighted -->
   <div class="help-shortcuts">
     <section class="help-overlay-section">
       <h2 class="help-overlay-section-title" v-i18n>Switch view</h2>
@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-// Zielbereiche der Skizze; Reihenfolge und Tasten wie in KeyboardShortcuts.vue
+// Target areas of the sketch; order and keys as in KeyboardShortcuts.vue
 type SketchTarget = 'board' | 'players' | 'hand' | 'colonies';
 type Shortcut = {key: string; label: string; target: SketchTarget};
 
@@ -49,7 +49,7 @@ const SHORTCUTS: ReadonlyArray<Shortcut> = [
   {key: 'F', label: 'Colonies', target: 'colonies'},
 ];
 
-// Grundreihe der Tastatur, damit man die Kürzel auf einen Blick unter den Fingern findet
+// Home row of the keyboard, so you find the shortcuts under your fingers at a glance
 const HOME_ROW: ReadonlyArray<string> = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
 
 function isShortcutKey(key: string): boolean {

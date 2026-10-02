@@ -35,7 +35,7 @@
             <span v-for="item in activeFilters" :key="`${item.group}:${item.key}`" class="card-list-active-chip">
               <span v-if="item.iconClass" class="card-list-icon" :class="item.iconClass"></span>
               <span v-else-if="item.colorClass" class="card-list-dot" :class="item.colorClass"></span>
-              <!-- Preisbereich besteht aus Zahlen und wird nicht übersetzt -->
+              <!-- The price section consists of numbers and is not translated -->
               <span v-if="item.group === 'cost'">{{ item.label }}</span>
               <span v-else v-i18n>{{ item.label }}</span>
               <button type="button" :title="$t('Remove')" @click="removeFilter(item)">✕</button>
@@ -196,7 +196,7 @@ type Refs = {
   results: HTMLElement;
 };
 
-// Abschnitte mit Spielkarten, in dieser Reihenfolge
+// Sections with game cards, in this order
 const CARD_SECTIONS: ReadonlyArray<{title: string, types: ReadonlyArray<CardType>}> = [
   {title: 'Project Cards', types: [CardType.AUTOMATED, CardType.ACTIVE, CardType.EVENT]},
   {title: 'Corporations', types: [CardType.CORPORATION]},
@@ -207,7 +207,7 @@ const CARD_SECTIONS: ReadonlyArray<{title: string, types: ReadonlyArray<CardType
 
 type CardSection = {title: string, names: Array<CardName>, parts: Array<SectionPart>};
 
-// Ein aktiver Filter als entfernbarer Chip in der Zusammenfassung
+// One active filter as a removable chip in the summary
 type ActiveFilter = FilterOption & {group: FilterGroup | 'vps' | 'cost'};
 
 const FILTER_GROUP_OPTIONS: Record<FilterGroup, ReadonlyArray<FilterOption>> = {
@@ -221,7 +221,7 @@ const VP_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 0, label: 'all'}, {val
 const SORT_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'a', label: 'A-Z'}, {value: '1', label: '0-9'}];
 const SEARCH_SCOPE_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'name', label: 'Card title'}, {value: 'text', label: 'Full text'}];
 
-// Suchmarkierung erst, wenn das Tippen kurz ruht – die Liste rendert sonst bei jedem Zeichen neu durch
+// Highlight search matches only once typing pauses briefly – otherwise the list re-renders on every keystroke
 const HIGHLIGHT_DELAY_MS = 120;
 
 export default defineComponent({
@@ -243,19 +243,19 @@ export default defineComponent({
   data() {
     return {
       ...hashToModel(window.location.hash),
-      // Alle Einträge einmal aufbauen; markRaw, weil sie sich nie ändern und groß sind
+      // Build all entries once; markRaw because they never change and are large
       entries: markRaw(buildEntries()) as ReadonlyArray<CardListEntry>,
       showScrollTop: false,
-      // Mobil: Filter als Bottom-Sheet
+      // Mobile: filters as a bottom sheet
       filtersOpen: false,
-      // Hat jemand "Weitere Filter" selbst auf- oder zugeklappt, gilt das statt der Automatik
+      // If someone expanded or collapsed "More filters" themselves, that wins over the automatic behavior
       moreFiltersChosen: false,
       highlightTimer: undefined as ReturnType<typeof setTimeout> | undefined,
     };
   },
   mounted() {
     setDocumentTitle('Cards List');
-    // Auf Touch-Geräten nicht fokussieren, sonst springt sofort die Tastatur auf
+    // Don't focus on touch devices, otherwise the keyboard pops up immediately
     if (!window.matchMedia('(pointer: coarse)').matches) {
       this.typedRefs.filter.focus();
     }
@@ -267,7 +267,7 @@ export default defineComponent({
     this.scheduleHighlight();
   },
   updated() {
-    // Filter-Chips in der Zusammenfassung ändern die Höhe der Filterspalte
+    // Filter chips in the summary change the height of the filter column
     this.fitMoreFilters();
     this.scheduleHighlight();
   },
@@ -319,7 +319,7 @@ export default defineComponent({
         vps: this.vps, costMin: this.costMin, costMax: this.costMax,
       };
     },
-    // Einträge, die zum Suchtext passen – Grundlage für Ergebnisse und Trefferzahlen
+    // Entries matching the search text – basis for results and hit counts
     textMatches(): Array<CardListEntry> {
       return this.entries.filter((entry) => this.include(entry.name, entry.searchKind));
     },
@@ -477,7 +477,7 @@ export default defineComponent({
         return true;
       }
       if (this.namesOnly) {
-        // Englischer und übersetzter Titel: auf Deutsch soll "Ackerbau" ebenso treffen wie "Farming"
+        // English and translated title: in German "Ackerbau" should match just like "Farming"
         const titles = [name, translateText(name)].map((title) => title.toLocaleUpperCase());
         if (normalized.startsWith('^')) {
           return titles.some((title) => title.startsWith(normalized.substring(1)));
@@ -487,7 +487,7 @@ export default defineComponent({
         return this.searchIndex.matches(this.filterText, type, name);
       }
     },
-    // "Weitere Filter" aufgeklappt, solange die Filterspalte dann noch ohne Scrollen passt
+    // "More filters" expanded as long as the filter column then still fits without scrolling
     fitMoreFilters(): void {
       const details = this.typedRefs.moreFilters;
       const column = this.typedRefs.filters;
@@ -508,7 +508,7 @@ export default defineComponent({
       if (results === undefined) {
         return;
       }
-      // Bei der Namenssuche nur die Titel markieren, sonst alles, was der Volltext durchsucht
+      // For name search only highlight the titles, otherwise everything the full-text search covers
       const containers = this.namesOnly ? results.querySelectorAll('.card-title') : [results];
       highlightSearch(containers, this.filterText);
     },
@@ -550,7 +550,7 @@ export default defineComponent({
       const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({top: 0, behavior: smooth ? 'smooth' : 'auto'});
     },
-    // Nach-oben-Button erst nach gut einem Bildschirm Scrollen
+    // Back-to-top button only after scrolling a good screen height
     handleScroll(): void {
       this.showScrollTop = window.scrollY > window.innerHeight;
     },

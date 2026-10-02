@@ -24,18 +24,18 @@
 import {defineComponent, PropType} from 'vue';
 import {StatsBar} from './statsTypes';
 
-// Höchstens so viele Achsenbeschriftungen unten; bei vielen Säulen wird nur jede n-te beschriftet
+// At most this many axis labels at the bottom; with many bars only every n-th is labeled
 const MAX_X_LABELS = 16;
 
-// Säulen mit Hilfslinien, optional mit hervorgehobenem Anteil (z. B. Siege) unten in der Säule
+// Bars with grid lines, optionally with a highlighted share (e.g. wins) at the bottom of the bar
 export default defineComponent({
   name: 'StatsBarChart',
   props: {
     bars: {type: Array as PropType<ReadonlyArray<StatsBar>>, required: true},
     width: {type: Number, default: 640},
-    /** Erklärt die x-Achse, z. B. „Siegpunkte“ (Englisch, wird übersetzt). */
+    /** Explains the x axis, e.g. "Victory points" (English, gets translated). */
     axisLabel: {type: String, default: undefined},
-    /** Legende für den hervorgehobenen Anteil (Englisch, wird übersetzt). */
+    /** Legend for the highlighted share (English, gets translated). */
     highlightLabel: {type: String, default: undefined},
   },
   data() {
@@ -46,7 +46,7 @@ export default defineComponent({
       return (this.width - this.left) / Math.max(1, this.bars.length);
     },
     step(): number {
-      // „Glatte“ Schrittweite (1, 2, 5, 10 …) für etwa vier Hilfslinien
+      // "Round" step size (1, 2, 5, 10 …) for about four grid lines
       const raw = Math.max(1, ...this.bars.map((bar) => bar.value)) / 4;
       const magnitude = Math.pow(10, Math.floor(Math.log10(raw)));
       const nice = [1, 2, 5, 10].find((factor) => factor * magnitude >= raw) ?? 10;

@@ -1,8 +1,8 @@
 import {ref} from 'vue';
 
-// Ob der Spielplan in der Startphase eingeklappt ist. Gemeinsamer Zustand von PlayerHome.vue (blendet die rechte
-// Spalte aus) und SetupBoardToggle.vue (Button). Gemerkt pro Browser, damit der Plan nach dem Neuladen nicht
-// wieder aufklappt.
+// Whether the game board is collapsed during the setup phase. Shared state of PlayerHome.vue (hides the right
+// column) and SetupBoardToggle.vue (button). Remembered per browser so the board does not expand again
+// after a reload.
 
 const STORAGE_KEY = 'setup-board-collapsed';
 
@@ -10,7 +10,7 @@ function readStored(): boolean {
   try {
     return localStorage.getItem(STORAGE_KEY) === '1';
   } catch {
-    // Privater Modus o. Ä.: ohne Speicher einfach ausgeklappt starten
+    // Private mode or similar: without storage, simply start expanded
     return false;
   }
 }
@@ -22,6 +22,6 @@ export function toggleSetupBoard(): void {
   try {
     localStorage.setItem(STORAGE_KEY, setupBoardCollapsed.value ? '1' : '0');
   } catch {
-    // Merken ist nur Komfort
+    // Remembering is only a convenience
   }
 }

@@ -1,11 +1,11 @@
-// Tooltip der Direktive v-glass-tooltip (GlassTooltip.ts): dunkles Milchglas, zarte Kontur, Schatten,
-// Nase unten mittig zum Element. Die Nase ist ein gedrehtes Quadrat mit denselben Farben und Rändern.
+// Tooltip of the v-glass-tooltip directive (GlassTooltip.ts): dark frosted glass, subtle outline, shadow,
+// nose at the bottom center pointing to the element. The nose is a rotated square with the same colors and borders.
 
 @glass-tooltip-background: rgba(20, 22, 30, 0.72);
 @glass-tooltip-border: rgba(255, 255, 255, 0.18);
 @glass-tooltip-nose-size: 10px;
 
-// Milchglas-Fläche; auch für andere schwebende Hinweise (z. B. Spaltenaufteilung, player_home_columns.less)
+// Frosted glass surface; also for other floating hints (e.g. column split, player_home_columns.less)
 .glass-surface() {
   border: 1px solid @glass-tooltip-border;
   border-radius: 8px;
@@ -35,10 +35,10 @@
     width: @glass-tooltip-nose-size;
     height: @glass-tooltip-nose-size;
     transform: translateX(-50%) rotate(45deg);
-    // Nur die beiden unteren Ränder, die Oberseite verschmilzt mit dem Tooltip
+    // Only the two bottom borders, the top merges with the tooltip
     border-right: 1px solid @glass-tooltip-border;
     border-bottom: 1px solid @glass-tooltip-border;
-    // Deckend statt Milchglas: zweites Glas würde über dem Tooltip heller erscheinen
+    // Opaque instead of frosted glass: a second glass would appear brighter over the tooltip
     background: #1a1c24;
   }
 }

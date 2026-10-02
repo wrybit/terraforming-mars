@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-title" content="TM Mobile">
 <title>TM Mobile Prototype</title>
 <style>
-/* Teilbare Ansicht: Das Handy steht mittig, darin läuft die App (app.html) in voller Größe */
+/* Shareable view: the phone stands centered, the app (app.html) runs inside it at full size */
 :root {
   --ground: #000;
   --ground-glow: #000;
@@ -44,7 +44,7 @@ body {
 .intro h1 { margin: 0; font-size: 22px; letter-spacing: 0.01em; text-wrap: balance; }
 .intro p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; text-wrap: balance; }
 .intro a { color: var(--accent); }
-/* Die Stage bekommt den restlichen Platz; das Handy wird per JS auf diese Höhe skaliert */
+/* The stage gets the remaining space; the phone is scaled to this height via JS */
 .stage { flex-grow: 1; min-height: 0; width: 100%; display: flex; align-items: flex-start; justify-content: center; }
 .phone {
   position: relative;
@@ -56,14 +56,14 @@ body {
   transform-origin: top center;
   flex-shrink: 0;
 }
-/* Seitentasten nur angedeutet */
+/* Side buttons only hinted at */
 .phone::before, .phone::after { content: ''; position: absolute; width: 4px; border-radius: 2px; background: var(--phone-edge); }
 .phone::before { left: -5px; top: 170px; height: 70px; box-shadow: 0 90px 0 var(--phone-edge); }
 .phone::after { right: -5px; top: 220px; height: 100px; }
 .screen { position: absolute; inset: 14px; border-radius: 48px; overflow: hidden; background: #0d0f14; }
 .screen iframe { width: 100%; height: 100%; border: 0; display: block; }
 .island { position: absolute; top: 24px; left: 50%; width: 110px; height: 30px; margin-left: -55px; border-radius: 16px; background: #000; z-index: 2; pointer-events: none; }
-/* Auf einem echten Handy braucht es keinen Rahmen: die App füllt den Bildschirm */
+/* A real phone needs no frame: the app fills the screen */
 @media (max-width: 600px) {
   body { padding: 0; gap: 0; }
   .intro { display: none; }
@@ -86,7 +86,7 @@ body {
   </div>
 </main>
 <script>
-// Handy auf die verfügbare Höhe skalieren, damit es auf jedem Bildschirm ganz sichtbar ist
+// Scale the phone to the available height so it is fully visible on every screen
 (function () {
   var stage = document.getElementById('stage');
   var phone = document.getElementById('phone');

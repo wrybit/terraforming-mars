@@ -1,7 +1,7 @@
 <template>
-  <!-- Jede Eingabe, die kein Aktionsmenü ist (Karten kaufen, Draft, Auswahl …), im Tab-Container:
-       Handkarten-Tab (grau, nur Ansicht) und ein aktiver Tab für die Eingabe; deren Frage steht oben in der Box.
-       Das Aktionsmenü (OrOptions) baut seine Tabs selbst, siehe orOptionsLayout.ts. -->
+  <!-- Every input that is not an action menu (buy cards, draft, selection …), in the tab container:
+       hand cards tab (gray, view only) and an active tab for the input; its question sits at the top of the box.
+       The action menu (OrOptions) builds its own tabs, see orOptionsLayout.ts. -->
   <div class="wf-options wf-options--tabs">
     <div class="or-tabs" role="tablist">
       <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
@@ -17,13 +17,13 @@
 
     <div v-docked-tab :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
       <HandCardsPanel v-if="handTabActive" :playerView="playerView"/>
-      <!-- Die Frage gehört zur Eingabe und steht daher in ihrer Box, nicht über den Tabs -->
-      <!-- Feldwahl u. Ä.: Plättchen, Frage und Hinweis (tabIntro.ts); sonst nur die Frage -->
+      <!-- The question belongs to the input and therefore sits in its box, not above the tabs -->
+      <!-- Space selection etc.: tile, question and hint (tabIntro.ts); otherwise only the question -->
       <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(playerinput.title)" :playerView="playerView" :card="sourceCard"/>
-      <!-- Löst eine Karte die Eingabe aus (Sabotage, Komet für Venus …): Karte, Name und Text statt "Wähle eine Option" -->
+      <!-- If a card triggers the input (Sabotage, Comet for Venus …): card, name and text instead of "Select an option" -->
       <CardIntroBlock v-else-if="sourceCard !== undefined" v-show="!handTabActive" :card="sourceCard" :title="fullTabTitle(lead.title)"/>
       <label v-else v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(lead.title)) }}</div></label>
-      <!-- v-show statt v-if: Eingaben bleiben beim Blick in die Hand erhalten -->
+      <!-- v-show instead of v-if: inputs are kept while looking at the hand -->
       <PlayerInputFactory v-show="!handTabActive"
         :players="playerView.players"
         :playerView="playerView"
@@ -31,7 +31,7 @@
         :onsave="onsave"
         :showsave="true"
         :showtitle="false"/>
-      <!-- Klebender Fußbereich unten an der Box (tabPanelFooter.ts); Bezahlbereiche hängen sich per Teleport ein -->
+      <!-- Sticky footer at the bottom of the box (tabPanelFooter.ts); payment areas attach via Teleport -->
       <div v-show="!handTabActive" :id="footerId" class="or-tab-footer"></div>
     </div>
   </div>
@@ -63,7 +63,7 @@ const props = defineProps<{
   onsave: (out: InputResponse) => void;
 }>();
 
-// Verschachtelte Auswahlen in der Eingabe bleiben Radio-Listen, keine zweite Tab-Leiste
+// Nested selections in the input stay radio lists, no second tab bar
 provide(OR_OPTIONS_AS_TABS, false);
 const footerId = newTabPanelFooterId();
 provide(TAB_PANEL_FOOTER, '#' + footerId);
@@ -71,9 +71,9 @@ provide(TAB_PANEL_FOOTER, '#' + footerId);
 const handTabActive = ref(false);
 const handCards = computed(() => allCardsInHand(props.playerView));
 const count = computed(() => inputAvailableCount(props.playerinput));
-// Bei einer Entscheidung mit Spielerwahl bestimmt diese Frage, Beschriftung und Farbe (choiceMenu.ts)
+// For a decision with player selection this determines question, label and color (choiceMenu.ts)
 const lead = computed(() => choiceMenuLead(props.playerinput));
-// Farbton des Eingabe-Tabs (Präludium rosa, Angriff rot, Karten orange …)
+// Tone of the input tab (prelude pink, attack red, cards orange …)
 const tone = computed(() => inputTone(lead.value));
 const intro = computed(() => tabIntro(props.playerinput));
 const sourceCard = computed(() => inputSourceCard(props.playerinput));

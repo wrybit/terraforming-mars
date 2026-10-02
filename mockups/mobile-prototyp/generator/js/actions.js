@@ -1,5 +1,5 @@
-// Die einzelnen Aktionen des Zugs: was sie kosten, was sie bewirken, wann sie möglich sind.
-// Werte und Karteneffekte folgen den echten Karten des Testspiels (Grundspiel + Corporate Era).
+// The individual actions of a turn: what they cost, what they do, when they are possible.
+// Values and card effects follow the real cards of the test game (base game + Corporate Era).
 (function (TM) {
   'use strict';
 
@@ -10,7 +10,7 @@
   var CARD_PRICE = 3;
   var RESEARCH_CARDS = 4;
 
-  // Effekte der Handkarten, die im Prototyp gespielt werden können
+  // Effects of the hand cards that can be played in the prototype
   var CARD_EFFECTS = {
     'domed-crater': {change: {'jens.plants': 3, 'jens.energyProduction': -1, 'jens.megacreditsProduction': 3}, chain: 'place-city'},
     'fueled-generators': {change: {'jens.megacreditsProduction': -1, 'jens.energyProduction': 1}},
@@ -40,7 +40,7 @@
     return match ? match[1] : 'automated';
   }
 
-  // Globale Parameter heben und dafür TW gutschreiben, wie im Original
+  // Raise global parameters and credit TR for it, as in the original
   function raise(parameter, steps, player) {
     var limits = {temperature: [8, 2], oxygen: [14, 1], oceans: [9, 1]}[parameter];
     var raised = 0;
@@ -66,11 +66,11 @@
 
   function awardCost() { return AWARD_COSTS[Math.min(TM.state.game.fundedAwards, AWARD_COSTS.length - 1)]; }
 
-  // ---------- Zug-Menü: Kacheln nach Spielstand freigeben ----------
+  // ---------- Turn menu: enable tiles according to game state ----------
   function setTile(key, enabled, sub) {
     TM.$all('.mb-tile[data-task="' + key + '"]').forEach(function (tile) {
       var highlighted = /mb-tile--(success|heat|highlight)/.test(tile.className);
-      if (highlighted) tile.hidden = !enabled; // wie im Original: Sonder-Reiter nur, wenn möglich
+      if (highlighted) tile.hidden = !enabled; // as in the original: special tab only when possible
       tile.classList.toggle('is-done', !enabled);
       if (sub) tile.querySelector('.mb-tile-sub').textContent = sub;
     });
@@ -99,7 +99,7 @@
     return Object.keys(action.needs).every(function (resource) { return TM.get('jens.' + resource) >= action.needs[resource]; });
   }
 
-  // ---------- Platzieren ----------
+  // ---------- Placing ----------
   function placement(type, onPlaced) {
     return {
       place: type,
@@ -128,7 +128,7 @@
     return {message: 'Ocean placed · ' + TM.state.game.oceans + ' of 9'};
   }));
 
-  // ---------- Wärme ----------
+  // ---------- Heat ----------
   TM.tasks.define('heat', {
     confirm: function () {
       TM.add('jens.heat', -HEAT_FOR_TEMPERATURE);
@@ -139,7 +139,7 @@
     },
   });
 
-  // ---------- Meilenstein und Auszeichnung ----------
+  // ---------- Milestone and award ----------
   function markOwner(selector) {
     var block = TM.$('.mb-ma-slot ' + selector);
     if (block) block.insertAdjacentHTML('beforeend', '<span class="mb-ma-owner log-player player_bg_color_green">Jens</span>');
@@ -174,7 +174,7 @@
     },
   });
 
-  // ---------- Kartenaktionen ----------
+  // ---------- Card actions ----------
   TM.tasks.define('actions', {
     open: function (panel) {
       TM.$all('label', panel).forEach(function (label) { label.classList.toggle('mb-unusable', !canUseAction(label)); });
@@ -197,7 +197,7 @@
     },
   });
 
-  // ---------- Bauen ----------
+  // ---------- Build ----------
   TM.tasks.define('build', {
     preselectFirst: true,
     open: function () { TM.carousel.show(); },
@@ -223,7 +223,7 @@
     },
   });
 
-  // ---------- Standardprojekte ----------
+  // ---------- Standard projects ----------
   TM.tasks.define('standard', {
     preselectFirst: true,
     refresh: function (panel, button) {
@@ -242,7 +242,7 @@
     },
   });
 
-  // ---------- Verkaufen ----------
+  // ---------- Sell ----------
   TM.tasks.define('sell', {
     refresh: function (panel, button) {
       var count = TM.$all('input:checked', panel).length;
@@ -258,7 +258,7 @@
     },
   });
 
-  // ---------- Forschungsphase: Karten kaufen ----------
+  // ---------- Research phase: buy cards ----------
   function buildResearchPanel() {
     var panel = document.createElement('div');
     panel.className = 'mb-panel';
@@ -287,7 +287,7 @@
     TM.scale.soon();
   }
 
-  // Gekaufte Karte überall dort einfügen, wo das Original Handkarten zeigt
+  // Insert the bought card everywhere the original shows hand cards
   function addToHand(card) {
     var handList = TM.$all('.mb-screen[data-screen="hand"] .hand-cards-panel__cards').pop();
     var box = document.createElement('div');

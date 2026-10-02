@@ -13,17 +13,17 @@ export type PlayerCountStats = {
 
 export type HeadToHead = {
   opponent: string;
-  /** Gemeinsame Partien, in denen der Spieler vor dem Gegner lag … */
+  /** Shared games in which the player finished ahead of the opponent … */
   ahead: number;
-  /** … und dahinter (gleicher Platz zählt nirgends). */
+  /** … and behind (a tie counts nowhere). */
   behind: number;
 };
 
-/** Alles für die Detailseite eines Eintrags. */
+/** Everything for an entry's detail page. */
 export type EntityDetail = {
   results: Array<StatsPlayerResult>;
   byPlayerCount: Array<PlayerCountStats>;
-  /** Was in denselben Spieler-Partien sonst noch gespielt wurde, je Art. */
+  /** What else was played in the same player games, per kind. */
   companions: Array<{kind: StatsKind, entries: Array<EntityStats>}>;
 };
 
@@ -53,7 +53,7 @@ function placeIn(game: StatsGame, results: ReadonlyArray<StatsPlayerResult>, nam
   return results.find((result) => result.game === game && result.player.name === name)?.place;
 }
 
-/** Direktvergleich: in gemeinsamen Partien, wie oft lag der Spieler vor bzw. hinter jedem anderen. */
+/** Head-to-head: in shared games, how often the player finished ahead of or behind each other player. */
 export function headToHead(allResults: ReadonlyArray<StatsPlayerResult>, name: string): Array<HeadToHead> {
   const own = allResults.filter((result) => result.player.name === name);
   const opponents = new Map<string, HeadToHead>();
@@ -73,8 +73,8 @@ export function headToHead(allResults: ReadonlyArray<StatsPlayerResult>, name: s
 }
 
 /**
- * Verteilung als lückenlose Säulen (leere Klassen bleiben sichtbar), hervorgehoben jeweils die Siege.
- * bucketSize 1 → eine Säule je Wert (Generationen), 10 → Zehnerklassen (Punkte).
+ * Distribution as gapless bars (empty buckets stay visible), with the wins highlighted.
+ * bucketSize 1 → one bar per value (generations), 10 → buckets of ten (points).
  */
 export function histogram(results: ReadonlyArray<StatsPlayerResult>, valueOf: (result: StatsPlayerResult) => number | undefined, bucketSize: number): Array<StatsBar> {
   const buckets = new Map<number, {value: number, highlight: number}>();

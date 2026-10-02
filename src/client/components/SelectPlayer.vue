@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
-    <!-- Spieler als Kacheln (PlayerOptionTile.vue) mit Bestand und Produktion der betroffenen Ressource, vorher und nachher -->
+    <!-- Players as tiles (PlayerOptionTile.vue) with stock and production of the affected resource, before and after -->
     <div class="player-options choice-block" :style="choiceBlockStyle((playerinput.players || []).length)" role="radiogroup">
       <PlayerOptionTile v-for="player in (playerinput.players || [])" :key="player"
         :color="player"

@@ -13,7 +13,7 @@
 import {defineComponent} from 'vue';
 import InfoLink from './InfoLink.vue';
 
-// Eine Einstellung: Name (mit Icon und Info-Link) links, Bedienelement rechts
+// One setting: name (with icon and info link) on the left, control on the right
 export default defineComponent({
   name: 'OptionRow',
   components: {InfoLink},
@@ -30,7 +30,7 @@ export default defineComponent({
       type: String,
       required: false,
     },
-    // Unteroption einer anderen Einstellung: eingerückt
+    // Sub-option of another setting: indented
     sub: {
       type: Boolean,
       default: false,

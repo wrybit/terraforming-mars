@@ -2,7 +2,7 @@
 <TabPanelFooterSlot>
 <section class="payments_form" v-trim-whitespace>
   <div class="payments_prices">
-    <!-- Nur eine Währung: keine Regler, nur der Preis -->
+    <!-- Only one currency: no sliders, just the price -->
     <div v-if="!hasCurrencyChoice" class="payments_single">
       {{ cost }}
       <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
@@ -24,7 +24,7 @@
                 <div v-if="ledger[unit]?.reserved" class="card-warning" v-i18n="$t(unit)">
                 Some ${0} are reserved and unavailable here.</div>
               </td>
-              <!-- Wert dieser Zeile in M€; bei 0 abgeschwächt statt leer, damit die Spalte ruhig bleibt -->
+              <!-- Value of this row in M€; dimmed at 0 instead of empty, so the column stays calm -->
               <td class="payments_unit_subtotal" :class="{'payments_unit_subtotal--zero': payment[unit] === 0}" v-if="ledger[unit].rate !== undefined">
                 = {{ ledger[unit].rate * payment[unit] }}
                 <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
@@ -34,8 +34,8 @@
         </template>
       </tbody>
     </table>
-    <!-- Summe gegen Kosten rechts neben den Währungen; Farbe zeigt, ob der Betrag passt (grün),
-         fehlt (rot) oder zu hoch ist (gelb) -->
+    <!-- Total vs. cost to the right of the currencies; colour shows whether the amount fits (green),
+         is short (red) or is too high (yellow) -->
     <div v-if="hasCurrencyChoice" class="payments_total" :class="totalSpentClass()">
       <div class="payments_total_heading"><span v-i18n>Total</span>:</div>
       <div class="payments_total_value" :title="$t(totalSpentTitle())" :aria-label="$t(totalSpentTitle())">
@@ -144,7 +144,7 @@ export default defineComponent({
     descriptions(): Record<SpendableResource, string> {
       return DESCRIPTIONS;
     },
-    // Regler und Summe nur, wenn es wirklich etwas aufzuteilen gibt (mehr als eine verfügbare Währung)
+    // Sliders and total only if there is really something to split (more than one available currency)
     hasCurrencyChoice(): boolean {
       return this.order.filter((unit) => (this.ledger[unit]?.available ?? 0) > 0).length > 1;
     },

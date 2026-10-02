@@ -1,5 +1,5 @@
-// Gemeinsame Werkzeuge aller Prototyp-Module: Namensraum, DOM-Helfer, Ereignisse, Meldung.
-// Jedes Modul hängt sich an window.TM, damit die Dateien ohne Bundler nacheinander laden können.
+// Shared tools of all prototype modules: namespace, DOM helpers, events, message.
+// Each module attaches itself to window.TM so the files can load one after another without a bundler.
 window.TM = window.TM || {};
 (function (TM) {
   'use strict';
@@ -8,13 +8,13 @@ window.TM = window.TM || {};
   TM.$all = function (selector, root) { return Array.prototype.slice.call((root || document).querySelectorAll(selector)); };
   TM.wait = function (milliseconds) { return new Promise(function (resolve) { setTimeout(resolve, milliseconds); }); };
 
-  // Einfache Ereignisse zwischen Modulen, damit kein Modul die anderen direkt kennen muss
+  // Simple events between modules, so no module has to know the others directly
   var listeners = {};
   TM.on = function (name, listener) { (listeners[name] = listeners[name] || []).push(listener); };
   TM.emit = function (name, detail) { (listeners[name] || []).forEach(function (listener) { listener(detail); }); };
 
-  // Eine zentrale Klick-Weiche: Module melden Selektor + Handler an, der erste passende gewinnt.
-  // Gibt ein Handler false zurück, gilt der Klick als nicht behandelt und die Suche läuft weiter.
+  // One central click switch: modules register selector + handler, the first match wins.
+  // If a handler returns false, the click counts as unhandled and the search continues.
   var clickHandlers = [];
   TM.onClick = function (selector, handler) { clickHandlers.push({selector: selector, handler: handler}); };
   document.addEventListener('click', function (event) {
@@ -24,18 +24,18 @@ window.TM = window.TM || {};
     }
   });
 
-  // Kartenname aus der CSS-Klasse card-<slug> der echten Karten
+  // Card name from the CSS class card-<slug> of the real cards
   TM.slugOf = function (card) {
     var classes = card.className.match(/card-([a-z0-9-]+)/g) || [];
     return classes.length ? classes[classes.length - 1].slice(5) : '';
   };
-  // Sichtbarer (übersetzter) Titel einer echten Karte
+  // Visible (translated) title of a real card
   TM.titleOf = function (card) {
     var titles = card.querySelectorAll('.card-title');
     return titles.length ? titles[titles.length - 1].textContent.trim() : '';
   };
 
-  // Preis einer echten Karte; Standardprojekte zeigen ihn als M€-Symbol statt im Kosten-Feld
+  // Price of a real card; standard projects show it as an M€ symbol instead of in the cost field
   TM.costOf = function (card) {
     var cost = card.querySelector('.card-cost') || card.querySelector('.card-resource-money');
     return cost ? Number(cost.textContent.trim()) : 0;

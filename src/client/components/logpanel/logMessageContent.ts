@@ -4,7 +4,7 @@ import {CardName} from '@/common/cards/CardName';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import {GlobalEventName} from '@/common/turmoil/globalEvents/GlobalEventName';
 
-// Was eine Log-Zeile an Karten, globalen Ereignissen und Kolonien enthält (CardPanel, LogPanel)
+// The cards, global events and colonies a log line contains (CardPanel, LogPanel)
 
 export function logMessageCards(message: LogMessage): ReadonlyArray<CardName> {
   return message.data
@@ -24,8 +24,8 @@ export function logMessageItemCount(message: LogMessage): number {
   return logMessageCards(message).length + logMessageGlobalEvents(message).length + logMessageColonies(message).length;
 }
 
-// Mehr passt als Hover-Vorschau nicht über das Log (z. B. "29 Karten wurden verworfen");
-// solche Zeilen öffnen per Klick ein scrollbares Modal über der rechten Spalte
+// More does not fit over the log as a hover preview (e.g. "29 cards were discarded");
+// such lines open a scrollable modal over the right column on click
 const MAX_HOVER_PREVIEW_ITEMS = 3;
 
 export function needsModalPreview(message: LogMessage): boolean {

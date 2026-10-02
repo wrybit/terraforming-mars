@@ -1,4 +1,4 @@
-// Nachbau der Bezahl-Leiste des Originals: Stahl/Titan frei wählbar, M€ ergibt den Rest.
+// Replica of the original's payment bar: steel/titanium freely selectable, M€ makes up the rest.
 (function (TM) {
   'use strict';
 
@@ -11,7 +11,7 @@
   }
 
   TM.payment = {
-    // area: Bereich mit den Zeilen (Taskbar oder Panel-Fuß); change: {row, delta} bei +/−
+    // area: region containing the rows (taskbar or panel footer); change: {row, delta} on +/−
     update: function (card, area, change) {
       if (!card) return 0;
       var cost = TM.costOf(card);
@@ -26,8 +26,8 @@
         var limit = Math.min(usable, Math.ceil(cost / rate));
         var value = Number(input.value) || 0;
         if (change && change.row === row) value += change.delta;
-        if (change && change.row !== row && change.row.dataset.test === 'megacredits') value -= change.delta; // M€ hoch heißt Stahl runter
-        if (!change) value = limit; // wie das Original: Vorrat zuerst einsetzen
+        if (change && change.row !== row && change.row.dataset.test === 'megacredits') value -= change.delta; // M€ up means steel down
+        if (!change) value = limit; // like the original: use stock first
         value = Math.max(0, Math.min(limit, value));
         input.value = value;
         row.closest('tr').hidden = limit === 0;
@@ -45,7 +45,7 @@
       return megacredits;
     },
 
-    // Was die aktuelle Eingabe an Rohstoffen verbraucht
+    // Which resources the current input consumes
     spent: function (area) {
       var result = {megacredits: 0, steel: 0, titanium: 0};
       TM.$all('.payments_type', area).forEach(function (row) {

@@ -31,7 +31,7 @@ describe('GameOverview', () => {
 
   it('one cell per column, empty where the player did not play', () => {
     const cells = mountRow().findAll('td').map((cell) => cell.text());
-    // Status, Spiel, Generation, Zuschauer, Jens, Martin, Daniel, Löschen
+    // Status, game, generation, spectators, Jens, Martin, Daniel, delete
     expect(cells.slice(4, 7)).deep.eq(['🏆76', '', '66']);
   });
 

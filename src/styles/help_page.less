@@ -1,5 +1,5 @@
-// Hilfe-Seite (Fork): Upstream-Komponenten unter components/help bleiben unverändert, Anpassungen nur hier.
-// Gesetz der Nähe: Überschrift sitzt dicht an ihrem Abschnitt, zwischen den Abschnitten ist mehr Luft.
+// Help page (fork): upstream components under components/help stay unchanged, adjustments only here.
+// Law of proximity: a heading sits close to its section, there is more space between sections.
 @help-page-section-gap: 22px;
 @help-page-heading-gap: 6px;
 @help-page-mobile-gutter: 16px;
@@ -20,13 +20,13 @@
     margin-bottom: 8px;
   }
 
-  // Unterlisten hängen dicht am Eltern-Punkt
+  // Sub-lists hang close to the parent item
   li > ul {
     margin: 2px 0 0;
   }
 }
 
-// Handy: Reiter umbrechen statt die Seite seitlich zu verbreitern, Text mit Seitenrand
+// Phone: wrap tabs instead of widening the page sideways, text with a page margin
 html.tm-mobile .help-container {
   padding: 0 @help-page-mobile-gutter;
   box-sizing: border-box;

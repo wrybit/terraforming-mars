@@ -4,9 +4,9 @@ import {Protection, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {DEFAULT_STEEL_VALUE, DEFAULT_TITANIUM_VALUE} from '@/common/constants';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 
-// Eine Ware eines Spielers: Vorrat, Produktion, Wert je Einheit und Schutz.
-// Gemeinsame Quelle für die klassische Ressourcenleiste (PlayerResources) und die Tabelle im
-// Zwei-Spalten-Layout (PlayersTable), damit beide dieselben Werte und Regeln zeigen.
+// One good of a player: stock, production, value per unit and protection.
+// Shared source for the classic resource bar (PlayerResources) and the table in the
+// two-column layout (PlayersTable), so both show the same values and rules.
 export type PlayerGood = {
   type: Resource;
   count: number;
@@ -37,7 +37,7 @@ export function playerGoods(player: PublicPlayerModel): Array<PlayerGood> {
   ];
 }
 
-// Wert je Einheit nur zeigen, wenn er vom Normalwert abweicht (oder im Lernmodus immer)
+// Only show value per unit if it differs from the default (or always in learner mode)
 export function shouldShowResourceValue(type: Resource, value: number): boolean {
   const learnerModeOn = getPreferences().learner_mode;
   switch (type) {

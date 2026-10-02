@@ -16,7 +16,7 @@
 import {defineComponent, PropType} from 'vue';
 import {SegmentOption} from './createGameChoices';
 
-// Genau eine von wenigen Möglichkeiten (Spieleranzahl, Meilensteine, Agenden)
+// Exactly one of a few options (player count, milestones, agendas)
 export default defineComponent({
   name: 'SegmentedControl',
   emits: ['update:modelValue'],

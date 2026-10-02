@@ -1,16 +1,16 @@
-// Ab dem Zwei-Spalten-Layout wird die linke Seitenleiste (Sidebar.vue) zur Icon-Gruppe oben rechts:
-// links oben die eigene Spielerfarbe, darunter die Karten-Kachel (Nachziehstapel/Ablage),
-// rechts untereinander Sprache, Spieldetails, Hilfe, Einstellungen. Temperatur, Sauerstoff und Ozeane stehen am Mars.
-// Icons kleiner, jedes auf einem Milchglas-Button.
+// From the two-column layout on, the left sidebar (Sidebar.vue) becomes an icon group at the top right:
+// own player color top left, below it the cards tile (draw pile/discard pile),
+// stacked on the right: language, game details, help, settings. Temperature, oxygen and oceans are shown at Mars.
+// Icons smaller, each on a frosted-glass button.
 
 @toolbar-button-size: 40px;
 @toolbar-icon-size: 26px;
 @toolbar-gap: 6px;
-@toolbar-edge-offset: 10px; // Abstand zum Fensterrand oben und rechts
-// Belegte Breite am rechten Rand – Inhalte, die bis dorthin reichen, halten so viel frei (player_home_columns.less)
+@toolbar-edge-offset: 10px; // Distance to the window edge at top and right
+// Width occupied at the right edge – content reaching that far keeps this much free (player_home_columns.less)
 @toolbar-occupied-width: @toolbar-edge-offset + 2 * @toolbar-button-size + @toolbar-gap;
 
-// Milchglas-Button der Icon-Gruppe; auch fürs Zahnrad auf "Spiel erstellen" (create_game_form.less)
+// Frosted-glass button of the icon group; also used for the gear on "Create game" (create_game_form.less)
 .toolbar-glass-button() {
   box-sizing: border-box;
   width: @toolbar-button-size;
@@ -40,7 +40,7 @@
 }
 
 @media only screen and (min-width: @player-home-columns-min-width) {
-  // Der freigehaltene Platz links für die Seitenleiste entfällt
+  // The space reserved on the left for the sidebar is dropped
   .main-container:has(#player-home),
   .main-container:has(#spectator-home) {
     margin-left: 0;
@@ -63,17 +63,17 @@
       "colonies settings";
     gap: @toolbar-gap;
     align-items: start;
-    z-index: @column-overlay-z-index - 10; // unter den Overlays der rechten Spalte – sonst ragen die Icons hinein
-    background: none; // keine Leistenfläche mehr (preferences_acting_player / _nonacting_player)
+    z-index: @column-overlay-z-index - 10; // below the right column's overlays – otherwise the icons poke into them
+    background: none; // no bar background anymore (preferences_acting_player / _nonacting_player)
   }
 
-  // Globale Werte und Turmoil-Partei stehen anderswo (Mars, Turmoil am Brett)
+  // Global parameters and Turmoil party are shown elsewhere (Mars, Turmoil at the board)
   .sidebar_cont .global_params,
   .sidebar_cont > div:has(.party-name-indicator) {
     display: none;
   }
 
-  // Eigene Spielerfarbe ganz oben; die alte Leiste stellte den Würfel gedreht und senkrecht
+  // Own player color at the very top; the old bar showed the cube rotated and vertical
   .sidebar_cont .preferences_player {
     grid-area: player;
     writing-mode: horizontal-tb;
@@ -104,7 +104,7 @@
     grid-area: settings;
   }
 
-  // Milchglas-Button; die Einzelpositionen der alten Leiste (absolute/fixed) entfallen
+  // Frosted-glass button; the old bar's individual positions (absolute/fixed) are dropped
   .sidebar_cont .sidebar_item {
     .toolbar-glass-button();
     position: static;
@@ -114,7 +114,7 @@
     .toolbar-glass-icon();
   }
 
-  // Karten-Kachel: Symbol plus Stapelgrößen, daher höher
+  // Cards tile: icon plus pile sizes, hence taller
   .sidebar_cont .sidebar_item_shortcut-long {
     height: auto;
     padding: 6px 0;
@@ -127,7 +127,7 @@
     background-position: top center;
   }
 
-  // Stapelgrößen unter dem Symbol im Fluss (in der alten Leiste absolut), damit die Kachel mitwächst
+  // Pile sizes below the icon in the flow (absolute in the old bar), so the tile grows with them
   .sidebar_cont .deck-size {
     position: static;
     margin: 4px 0 0;
@@ -139,12 +139,12 @@
   // relative to the button itself (the inner icon container is not exactly centred)
   .sidebar_cont .sidebar_item.sidebar_item--language {
     position: relative;
-    inset: auto; // alte Leiste setzt bottom: 162px (preferences.less), das würde mit relative greifen
+    inset: auto; // old bar sets bottom: 162px (preferences.less), which would take effect with relative
   }
 }
 
-// Sprache und Einstellungen außerhalb des Spiels als Milchglas-Buttons wie im Spiel
-// (Kopf von Kartenliste/Statistik, Startseite oben rechts)
+// Language and settings outside the game as frosted-glass buttons, like in the game
+// (header of card list/statistics, start page top right)
 .toolbar-glass-icon-buttons() {
   .sidebar_item--settings,
   .sidebar_item--language {
@@ -160,15 +160,15 @@
   .toolbar-language-flag();
 }
 
-// Sprache und Einstellungen außerhalb des Spiels (PageToolbar.vue): auf der Startseite fest in der Ecke
-// (start_screen.less), auf "Spiel erstellen"/"Spiel erstellt" in der Kopfleiste wie bei der Kartenliste
+// Language and settings outside the game (PageToolbar.vue): fixed in the corner on the start page
+// (start_screen.less), on "Create game"/"Game created" in the header bar like on the card list
 .page-toolbar {
   display: flex;
   gap: @toolbar-gap;
   .toolbar-glass-icon-buttons();
 }
 
-// Inhalt unter der Kopfleiste so breit wie die Spielansicht (player_home.less, 20px Rand)
+// Content below the header bar as wide as the game view (player_home.less, 20px margin)
 @page-content-edge: 20px;
 @page-content-edge-narrow: 16px;
 @page-content-narrow: 820px;

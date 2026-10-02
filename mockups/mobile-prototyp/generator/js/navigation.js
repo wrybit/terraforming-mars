@@ -1,4 +1,4 @@
-// Bildschirme, Zug-Menü, Reiter der Spielerseite und Szenenwahl.
+// Screens, turn menu, player page tabs and scene selection.
 (function (TM) {
   'use strict';
 
@@ -42,7 +42,7 @@
   TM.onClick('[data-played-toggle]', function (toggle) { toggle.nextElementSibling.classList.toggle('is-open'); });
   TM.onClick('[data-open-scenes]', function () { TM.nav.openScenes(); });
   TM.onClick('[data-scene]', function (button) {
-    // Szenen starten jeweils mit frischem Spielstand: neu laden mit Anker
+    // Scenes each start with a fresh game state: reload with anchor
     location.hash = button.dataset.scene;
     location.reload();
   });

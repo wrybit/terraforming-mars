@@ -1,10 +1,10 @@
 import {StatsGame, StatsGlobals} from '@/common/stats/StatsGame';
 import {average, StatsPlayerResult} from './statsResults';
 
-// Späte Generationen erreichen nur wenige lange Partien – ein Mittel aus ein, zwei Werten wäre ein Ausreißer
+// Only a few long games reach late generations – an average of one or two values would be an outlier
 const MIN_GAMES_PER_GENERATION = 3;
 
-/** Mittelwert je Generation über mehrere Verläufe unterschiedlicher Länge; nur solange genug Partien so lang waren. */
+/** Mean per generation across several series of different lengths; only while enough games lasted that long. */
 export function averageByGeneration(series: ReadonlyArray<ReadonlyArray<number>>, minimumGames: number = MIN_GAMES_PER_GENERATION): Array<number | undefined> {
   const result: Array<number | undefined> = [];
   for (let index = 0; ; index++) {
@@ -16,7 +16,7 @@ export function averageByGeneration(series: ReadonlyArray<ReadonlyArray<number>>
   }
 }
 
-/** Ø Siegpunkte am Ende jeder Generation, je Spieler. */
+/** Avg. victory points at the end of each generation, per player. */
 export function averagePointsByGeneration(results: ReadonlyArray<StatsPlayerResult>, names: ReadonlyArray<string>): Array<{name: string, values: Array<number | undefined>}> {
   return names.map((name) => ({
     name,
@@ -33,7 +33,7 @@ export const GLOBAL_PARAMETERS: ReadonlyArray<{key: keyof StatsGlobals, label: s
   {key: 'venus', label: 'Venus', color: 'yellow'},
 ];
 
-/** Ø Fortschritt der globalen Parameter in Prozent je Generation. */
+/** Avg. progress of the global parameters in percent per generation. */
 export function averageGlobalsByGeneration(games: ReadonlyArray<StatsGame>): Array<{key: keyof StatsGlobals, label: string, color: string, values: Array<number | undefined>}> {
   return GLOBAL_PARAMETERS.map((parameter) => ({
     ...parameter,
@@ -44,7 +44,7 @@ export function averageGlobalsByGeneration(games: ReadonlyArray<StatsGame>): Arr
   })).filter((entry) => entry.values.length > 0);
 }
 
-/** Ø Siegpunkte einer Karte, wenn sie gespielt wurde. */
+/** Avg. victory points of a card when it was played. */
 export function averageCardPoints(results: ReadonlyArray<StatsPlayerResult>, cardName: string): number | undefined {
   return average(results.flatMap((result) => (result.details?.cardPoints ?? [])
     .filter((card) => card.name === cardName)

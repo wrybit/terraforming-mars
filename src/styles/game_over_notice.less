@@ -1,8 +1,8 @@
-// Spielende-Meldung (GameOverNotice.vue): schwebt mittig über dem Mars
+// Game-end notice (GameOverNotice.vue): floats centered above Mars
 @import (reference) "./frosted_surface.less";
 
 .player-home-columns__mars {
-  position: relative; // Bezug für die schwebende Meldung
+  position: relative; // reference for the floating notice
 }
 
 .game-over-notice {
@@ -41,12 +41,12 @@
 }
 
 .game-over-notice__hint {
-  margin-top: -8px; // gehört zum Button darüber, nicht zum Titel
+  margin-top: -8px; // belongs to the button above, not to the title
   color: #b8bcc8;
   font-size: 14px;
 }
 
-// Leichtes Schweben, damit die Meldung als Überlagerung und nicht als Teil des Plans gelesen wird
+// Slight floating so the notice reads as an overlay and not as part of the board
 @keyframes game-over-notice-float {
   0%, 100% { transform: translate(-50%, -50%); }
   50% { transform: translate(-50%, calc(-50% - 6px)); }

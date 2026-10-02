@@ -1,10 +1,10 @@
 import {StatsTopKind} from './statsNavigation';
 
-// Übersicht zeigt die Top 5 als Scroller, ein Klick auf den Titel öffnet die Top 20 als eigene Seite
+// Overview shows the top 5 as a scroller, a click on the title opens the top 20 as its own page
 export const SHOWCASE_SIZE = 5;
 export const TOP_PAGE_SIZE = 20;
 
-/** Überschriften (Englisch, werden übersetzt) – gleich auf Übersicht und Top-Seite. */
+/** Headings (English, get translated) – same on overview and top page. */
 export const SHOWCASE_TITLES: Record<StatsTopKind, string> = {
   card: 'Most played project cards',
   corporation: 'Most played corporations',

@@ -220,7 +220,7 @@ describe('PaymentForm', () => {
       order: ['megacredits', 'heat'],
       ledger: {
         'megacredits': {available: 12, rate: 1},
-        // Zweite Währung, sonst zeigt das Formular keine Regler (nur den Preis)
+        // Second currency, otherwise the form shows no sliders (only the price)
         'heat': {available: 1, rate: 1},
       },
     });
@@ -275,7 +275,7 @@ describe('PaymentForm', () => {
       order: ['megacredits', 'heat'],
       ledger: {
         'megacredits': {available: 10, rate: 1},
-        // Zweite Währung, sonst zeigt das Formular keine Regler (nur den Preis)
+        // Second currency, otherwise the form shows no sliders (only the price)
         'heat': {available: 1, rate: 1},
       },
     });
@@ -321,7 +321,7 @@ describe('PaymentForm', () => {
       order: ['megacredits', 'heat'],
       ledger: {
         'megacredits': {available: 10, rate: 1},
-        // Zweite Währung, sonst zeigt das Formular keine Regler (nur den Preis)
+        // Second currency, otherwise the form shows no sliders (only the price)
         'heat': {available: 1, rate: 1},
       },
     });
@@ -340,7 +340,7 @@ describe('PaymentForm', () => {
       order: ['megacredits', 'heat'],
       ledger: {
         'megacredits': {available: 10, rate: 1},
-        // Zweite Währung, sonst zeigt das Formular keine Regler (nur den Preis)
+        // Second currency, otherwise the form shows no sliders (only the price)
         'heat': {available: 1, rate: 1},
       },
     });

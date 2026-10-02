@@ -1,22 +1,22 @@
-// Zwei-Spalten-Layout der Spieleransicht: links Spielgeschehen, rechts das Mars-Brett.
-// Unterhalb des Breakpoints bleibt die bisherige Ein-Spalten-Reihenfolge (Brett oben).
+// Two-column layout of the player view: game action on the left, Mars board on the right.
+// Below the breakpoint the previous single-column order stays (board on top).
 
-// Ab dieser Breite passen Brett (~670px) und eine brauchbare linke Spalte nebeneinander
+// From this width, board (~670px) and a usable left column fit side by side
 @player-home-columns-min-width: 1400px;
-// Abstand des sticky Bretts zum oberen Fensterrand
+// Distance of the sticky board from the top of the window
 @player-home-sticky-top: 10px;
-// Abstand zwischen den Spalten größer als zwischen Blöcken einer Spalte (20px) – Gesetz der Nähe;
-// der Überhang des Bretts (s.u.) kommt optisch noch dazu. Der Ziehgriff liegt mittig in diesem Abstand.
+// Gap between columns larger than between blocks within a column (20px) – law of proximity;
+// the board's overhang (see below) adds to it visually. The drag handle sits centered in this gap.
 @player-home-columns-gap: 24px;
 @player-home-resizer-width: 12px;
-// Standardaufteilung links/rechts; der Ziehgriff überschreibt sie per CSS-Variable (columnResize.ts)
+// Default left/right split; the drag handle overrides it via CSS variable (columnResize.ts)
 @player-home-main-share: 60fr;
 @player-home-board-share: 40fr;
-// So weit ragen Brett-Elemente links bzw. rechts über .board-cont hinaus
+// How far board elements stick out beyond .board-cont on the left and right
 @player-home-board-overhang-left: 40px;
 @player-home-board-overhang-right: 24px;
-// Log unter dem Brett so hoch wie die verkleinerte Karte der Hover-Vorschau (Projektkarte 308px, Zoom aus log.less)
-@player-home-card-height: @log-card-preview-height; // Projektkarte inkl. Rahmen (log.less)
+// Log below the board as tall as the scaled-down hover preview card (project card 308px, zoom from log.less)
+@player-home-card-height: @log-card-preview-height; // project card incl. border (log.less)
 @player-home-log-height: floor(@player-home-card-height * @log-card-preview-zoom);
 
 @media only screen and (min-width: @player-home-columns-min-width) {
@@ -31,8 +31,8 @@
     align-items: start;
   }
 
-  // Die schwarze TopBar doppelt die eigene Spielerleiste in der Spielerübersicht; im Zwei-Spalten-Layout
-  // entfällt sie. Das Terraformed-Banner im Container bleibt.
+  // The black TopBar duplicates the own player bar in the players overview; in the two-column layout
+  // it is dropped. The Terraformed banner in the container stays.
   .top-bar-container {
     margin-top: 0;
   }
@@ -41,21 +41,21 @@
     display: none;
   }
 
-  // Startphase mit eingeklapptem Spielplan (SetupBoardToggle.vue): nur die Auswahl, volle Breite
+  // Setup phase with collapsed board (SetupBoardToggle.vue): only the selection, full width
   .player-home-columns.player-home-columns--board-collapsed {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "main";
-    // Platz für die Icon-Gruppe oben rechts (sidebar_toolbar.less), die sonst über dem Brett liegt
+    // Room for the icon group at the top right (sidebar_toolbar.less), which otherwise sits over the board
     padding-right: @toolbar-occupied-width + @player-home-columns-gap;
 
-    // Direktes Kind: spezifischer als das feste Layout (player_home_fixed.less), das die Spalte als Flexbox anzeigt
+    // Direct child: more specific than the fixed layout (player_home_fixed.less), which shows the column as a flexbox
     > .player-home-columns__board,
     > .player-home-columns__resizer {
       display: none;
     }
   }
 
-  // Ziehgriff zwischen den Spalten: verteilt die Breite (columnResize.ts); Doppelklick setzt zurück
+  // Drag handle between the columns: distributes the width (columnResize.ts); double-click resets
   .player-home-columns__resizer {
     grid-area: resizer;
     display: flex;
@@ -66,7 +66,7 @@
     cursor: col-resize;
     touch-action: none;
 
-    // Sichtbare Linie mit Griff in der Mitte
+    // Visible line with grip in the middle
     &::before {
       content: "";
       width: 2px;
@@ -105,15 +105,15 @@
       outline: none;
     }
 
-    // sticky bildet einen eigenen Stapelkontext: beim Ziehen über die linke Spalte heben, sonst verdeckt sie die Anzeige
+    // sticky forms its own stacking context: raise above the left column while dragging, otherwise it hides the indicator
     &.player-home-columns__resizer--dragging,
     &:focus-visible {
       z-index: 200;
     }
   }
 
-  // Aufteilung in Prozent knapp unter bzw. über dem Zeiger, solange gezogen wird (Höhe: columnResize.ts),
-  // bei Tastaturfokus an der Griffmitte
+  // Split in percent just below/above the pointer while dragging (height: columnResize.ts),
+  // with keyboard focus at the middle of the grip
   .player-home-columns__resizer-label {
     .glass-surface();
     position: absolute;
@@ -137,16 +137,16 @@
 
   .player-home-columns__main {
     grid-area: main;
-    // Verhindert, dass breite Inhalte (Kartenreihen) die Spalte aufsprengen
+    // Prevents wide content (card rows) from blowing up the column
     min-width: 0;
 
-    // Spielerliste als Tabelle (players_table.less) statt der klassischen Leisten
+    // Player list as a table (players_table.less) instead of the classic bars
     .players-overview {
       display: block;
       max-width: 100%;
 
       > .player-info {
-        display: none !important; // players_overview.less setzt display mit !important
+        display: none !important; // players_overview.less sets display with !important
       }
 
       .players-table {
@@ -157,38 +157,38 @@
 
   .player-home-columns__board {
     grid-area: board;
-    // Brett bleibt beim Scrollen durch Aktionen und Karten sichtbar
+    // Board stays visible while scrolling through actions and cards
     position: sticky;
     top: @player-home-sticky-top;
     max-height: calc(100vh - @player-home-sticky-top);
     overflow: hidden auto;
-    // Links kein Innenabstand: Der Abstand zur linken Spalte kommt vom Ziehgriff, und rightColumnFit.ts schiebt
-    // den Mars mittig über die Tabelle, so dass die Kolonie-/Raumhafen-Felder links trotzdem Platz haben
+    // No left padding: the gap to the left column comes from the drag handle, and rightColumnFit.ts moves
+    // Mars centered over the table so the colony/spaceport spaces on the left still have room
     padding: 0 @player-home-board-overhang-right 0 0;
   }
 
-  // Gespielte Karten eines Gegners ("anzeigen") als Modal über der rechten Spalte (Brett + Log),
-  // statt als Block über den Spielerleisten. Der Container ist durchklickbar, nur das geöffnete Modal fängt Klicks.
+  // An opponent's played cards ("show") as a modal over the right column (board + log),
+  // instead of a block above the player bars. The container is click-through; only the open modal catches clicks.
   .player-home-columns__main .other_player {
-    // Position und Milchglas-Optik wie alle Overlays der rechten Spalte (column_overlay.less)
+    // Position and frosted-glass look like all overlays of the right column (column_overlay.less)
     .column-overlay-position();
     display: flex;
     flex-direction: column;
     pointer-events: none;
 
-    // v-for-Hüllen auflösen, damit das geöffnete Modal direkt die Spaltenhöhe füllen kann
+    // Dissolve v-for wrappers so the open modal can fill the column height directly
     > div {
       display: contents;
     }
 
-    // OtherPlayer-Wurzel; ausgeblendete haben per v-show display: none inline, das gewinnt
+    // OtherPlayer root; hidden ones have display: none inline via v-show, which wins
     > div > div {
       flex: 1;
       min-height: 0;
       display: flex;
       flex-direction: column;
       pointer-events: auto;
-      overflow: hidden; // Kopfzeile folgt den runden Ecken
+      overflow: hidden; // header follows the rounded corners
       .column-overlay-surface();
     }
 
@@ -198,20 +198,20 @@
       max-height: none;
       margin: 0;
       padding: 10px 0 0 20px;
-      background: transparent; // Milchglas der Hülle scheint durch
+      background: transparent; // wrapper's frosted glass shows through
     }
   }
 
-  // Luft über dem Mars halbieren und unten dazugeben: oben liegt ohnehin Freiraum im Brett selbst,
-  // unten ragen O2-Anzeige und Ozean-Zähler sonst bis in die Meilensteine (Werte vor Zoom)
+  // Halve the space above Mars and add it below: the board itself already has free space at the top,
+  // at the bottom the O2 gauge and ocean counter would otherwise reach into the milestones (values before zoom)
   .player-home-columns__mars .board-cont {
     margin-top: 0;
     margin-bottom: 28px;
-    // Grundzoom: Brett nie breiter als die Spalte (rightColumnFit.ts), ab Stufe 1 überschrieben
+    // Base zoom: board never wider than the column (rightColumnFit.ts), overridden from level 1
     zoom: var(--board-fit-zoom, 1);
   }
 
-  // Meilensteine & Auszeichnungen als Tabelle (milestone_award_table.less) statt der Kartenreihen
+  // Milestones & awards as a table (milestone_award_table.less) instead of the card rows
   .player-home-columns__mars .player_home_block--milestones-and-awards {
     > .milestones_cont,
     > .awards_cont {
@@ -223,20 +223,20 @@
     }
   }
 
-  // Stufen je nach freier Höhe (gesetzt von rightColumnFit.ts):
-  // 1) Mars so breit wie Meilensteine & Auszeichnungen (Solospiel ohne diese: so breit wie die Spalte)
+  // Levels depending on free height (set by rightColumnFit.ts):
+  // 1) Mars as wide as milestones & awards (solo game without them: as wide as the column)
   .player-home-columns__board--mars-wide .board-cont {
     zoom: var(--board-wide-zoom, 1);
   }
 
   .player-home-columns__log {
-    // Breite 0 + min-width 100%: Log füllt die Spalte, bestimmt deren Breite aber nicht (das tut das Brett)
+    // Width 0 + min-width 100%: log fills the column but doesn't determine its width (the board does)
     width: 0;
     min-width: 100%;
     margin-bottom: 0;
 
-    // .or-tab-panel: so spezifisch wie die Grundregel in log.less, die später geladen wird.
-    // Volle Spaltenbreite (bis zum Rand wie Brett und Tabelle), ohne die Obergrenze des Ein-Spalten-Layouts
+    // .or-tab-panel: as specific as the base rule in log.less, which is loaded later.
+    // Full column width (to the edge like board and table), without the single-column layout's cap
     .log-panel.or-tab-panel {
       height: @player-home-log-height;
       max-height: @player-home-log-height;
@@ -244,7 +244,7 @@
     }
   }
 
-  // 2) Log-Karte in voller Größe, Log so hoch wie eine Karte
+  // 2) Log card at full size, log as tall as a card
   .player-home-columns__board--log-full {
     .player-home-columns__log .log-panel.or-tab-panel {
       height: @player-home-card-height;

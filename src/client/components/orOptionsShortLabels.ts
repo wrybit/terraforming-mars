@@ -1,9 +1,9 @@
 import {Message} from '@/common/logs/Message';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 
-// Kurze Tab-Beschriftungen, Icons und Reihenfolge für das Aktionsmenü, damit die Tab-Leiste einzeilig bleibt.
-// Schlüssel = englischer Titel-Schlüssel vom Server (Player.ts u. a.), Wert = kurzer Schlüssel (übersetzt in locales/*/ui.json).
-// Unbekannte Titel bleiben unverändert; der volle Titel steht immer im Tooltip.
+// Short tab labels, icons and order for the action menu, so the tab bar stays on one line.
+// Key = English title key from the server (Player.ts etc.), value = short key (translated in locales/*/ui.json).
+// Unknown titles stay unchanged; the full title is always in the tooltip.
 const SHORT_LABELS: Readonly<Record<string, string>> = {
   'Play project card': 'Play cards',
   'Perform an action from a played card': 'Actions',
@@ -23,20 +23,20 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   'Send a delegate in an area (from lobby)': 'Delegate (lobby)',
   'Use CEO once per game action': 'CEO action',
   'Undo last action': 'Undo',
-  // Startauswahl (SelectInitialCards, Titel aus common/inputs/SelectInitialCards.ts)
+  // Initial selection (SelectInitialCards, titles from common/inputs/SelectInitialCards.ts)
   'Select corporation': 'Corporation',
   'Select 2 Prelude cards': 'Prelude cards',
   'Select CEO': 'CEO',
   'Select initial cards to buy': 'Buy cards',
-  // Eingaben außerhalb des Aktionsmenüs (WaitingForTabs)
+  // Inputs outside the action menu (WaitingForTabs)
   'Select card(s) to buy': 'Buy cards',
   'Select a card to keep': 'Keep card',
   'Select a card to keep and pass the rest to ${0}': 'Keep card',
   'Select two cards to keep and pass the rest to ${0}': 'Keep cards',
 };
 
-// Tab-Beschriftung nach Art der Eingabe, wenn der Titel kein Kurzlabel hat (WaitingForTabs);
-// der volle Titel steht dort ohnehin als Überschrift über den Tabs
+// Tab label by input type when the title has no short label (WaitingForTabs);
+// the full title is shown there anyway as a heading above the tabs
 const INPUT_TYPE_LABELS: Readonly<Partial<Record<PlayerInputModel['type'], string>>> = {
   card: 'Cards',
   projectCard: 'Cards',
@@ -53,18 +53,18 @@ const INPUT_TYPE_LABELS: Readonly<Partial<Record<PlayerInputModel['type'], strin
 };
 const DEFAULT_INPUT_LABEL = 'Choice';
 
-// Tabs, die statt Text nur ein Icon zeigen (Icons in OrOptionsTabIcon.vue)
+// Tabs that show only an icon instead of text (icons in OrOptionsTabIcon.vue)
 export type TabIcon = 'pass-on' | 'end-generation';
 const TAB_ICONS: Readonly<Record<string, TabIcon>> = {
   'End Turn': 'pass-on',
   'Pass for this generation': 'end-generation',
 };
 
-// Diese Tabs stehen immer am Ende, in dieser Reihenfolge (Beenden ganz zuletzt)
+// These tabs always come last, in this order (end generation at the very end)
 const LAST_TABS: ReadonlyArray<string> = ['End Turn', 'Pass for this generation'];
 
-// Eigene Button-Texte für einzelne Optionen im Aktionsmenü (Server liefert z. B. nur "Pass");
-// Schlüssel = Titel-Schlüssel der Option, Wert = Button-Schlüssel (übersetzt in locales/*/ui.json)
+// Custom button texts for individual options in the action menu (server delivers e.g. only "Pass");
+// key = title key of the option, value = button key (translated in locales/*/ui.json)
 const BUTTON_LABELS: Readonly<Record<string, string>> = {
   'Pass for this generation': 'End round',
   'End Turn': 'Pass on',
@@ -72,18 +72,18 @@ const BUTTON_LABELS: Readonly<Record<string, string>> = {
   'Convert 6 heat into temperature': 'Increase the temperature',
 };
 
-// Farbe des Buttons für Optionen mit deutlicher Tragweite (Styles in or_options_tabs.less)
+// Button color for options with significant consequences (styles in or_options_tabs.less)
 export type TabButtonTone = 'danger' | 'success' | 'heat';
 const BUTTON_TONES: Readonly<Record<string, TabButtonTone>> = {
-  'Pass for this generation': 'danger', // Runde beenden: für diese Generation raus
-  'End Turn': 'success', // Weitergeben: Zug regulär abgeben
-  'Convert ${0} plants into greenery': 'success', // Grünfläche platzieren: grün wie das Plättchen
-  'Convert 8 heat into temperature': 'heat', // Temperatur erhöhen: orange wie Wärme
+  'Pass for this generation': 'danger', // End generation: out for this generation
+  'End Turn': 'success', // Pass on: hand over the turn normally
+  'Convert ${0} plants into greenery': 'success', // Place greenery: green like the tile
+  'Convert 8 heat into temperature': 'heat', // Raise temperature: orange like heat
   'Convert 6 heat into temperature': 'heat',
 };
 
-// Tabs, die ins Auge fallen sollen (fett, etwas größer; Stil in or_options_tabs.less):
-// seltene, wertvolle Gelegenheiten, die man im Zug leicht übersieht
+// Tabs that should catch the eye (bold, slightly larger; style in or_options_tabs.less):
+// rare, valuable opportunities that are easily overlooked during a turn
 const HIGHLIGHTED_TABS: ReadonlySet<string> = new Set([
   'Claim a milestone',
   'Convert ${0} plants into greenery',
@@ -95,17 +95,17 @@ export function titleKey(title: string | Message): string {
   return typeof title === 'string' ? title : title.message;
 }
 
-// Liefert immer eine Kopie: translateMessage() (i18n.ts) überschreibt message.message im übergebenen Objekt,
-// sonst würde das Original übersetzt und die Zuordnung per englischem Schlüssel fände nichts mehr
+// Always returns a copy: translateMessage() (i18n.ts) overwrites message.message in the passed object,
+// otherwise the original would be translated and the lookup by English key would find nothing
 export function shortTabLabel(title: string | Message): string | Message {
   if (typeof title === 'string') {
     return SHORT_LABELS[title] ?? title;
   }
-  // Parameter (z. B. Kosten) bleiben erhalten
+  // Parameters (e.g. costs) are preserved
   return {...title, message: SHORT_LABELS[title.message] ?? title.message};
 }
 
-// Voller Titel für den Tooltip, ebenfalls als Kopie (siehe oben)
+// Full title for the tooltip, also as a copy (see above)
 export function fullTabTitle(title: string | Message): string | Message {
   return typeof title === 'string' ? title : {...title};
 }
@@ -133,7 +133,7 @@ export function tabIcon(title: string | Message): TabIcon | undefined {
   return TAB_ICONS[titleKey(title)];
 }
 
-// Tabs ohne eigene Auswahl, deren Button mittig in der Box statt im Fuß sitzt (tab_panel_footer.less)
+// Tabs without their own selection, whose button sits centered in the box instead of the footer (tab_panel_footer.less)
 const CENTERED_BUTTON_TABS: ReadonlySet<string> = new Set([
   'Convert 8 heat into temperature',
   'Convert 6 heat into temperature',
@@ -143,7 +143,7 @@ export function tabButtonCentered(title: string | Message): boolean {
   return CENTERED_BUTTON_TABS.has(titleKey(title));
 }
 
-// Erklärung über dem Button von Weitergeben (Beenden bringt eine eigene Warnung vom Server mit, WarningsComponent.vue)
+// Explanation above the pass-on button (end generation brings its own warning from the server, WarningsComponent.vue)
 const END_TAB_HINTS: Readonly<Record<string, string>> = {
   'End Turn': 'Your turn ends here. The other players continue, and you will get another turn this generation.',
 };
@@ -152,12 +152,12 @@ export function endTabHint(title: string | Message): string | undefined {
   return END_TAB_HINTS[titleKey(title)];
 }
 
-// Weitergeben/Beenden: stehen rechtsbündig abgesetzt von den übrigen Aktionen (or_options_tabs.less)
+// Pass on/end generation: set apart right-aligned from the other actions (or_options_tabs.less)
 export function isEndTab(title: string | Message): boolean {
   return LAST_TABS.includes(titleKey(title));
 }
 
-// Anzeige-Reihenfolge der Tabs als Liste von Indizes; alle anderen behalten ihre Server-Reihenfolge
+// Display order of the tabs as a list of indices; all others keep their server order
 export function tabDisplayOrder(titles: ReadonlyArray<string | Message>): Array<number> {
   const rank = (index: number) => LAST_TABS.indexOf(titleKey(titles[index]));
   return titles.map((_title, index) => index).sort((a, b) => rank(a) - rank(b) || a - b);

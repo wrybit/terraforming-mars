@@ -1,9 +1,9 @@
 <template>
-  <!-- Modal an body hängen: im Log (eigener Stacking-Context) läge es sonst unter den Icons oben rechts -->
+  <!-- Attach the modal to body: in the log (own stacking context) it would otherwise lie below the icons at top right -->
   <Teleport to="body" :disabled="!modal">
-  <!-- Wurzel ist das Teleport, deshalb landen Attribute (z. B. die Position der Hover-Vorschau als style) nicht von selbst hier -->
+  <!-- The root is the Teleport, so attributes (e.g. the hover preview's position as style) don't land here on their own -->
   <div :class="['card-panel', {'card-panel--floating': floating, 'card-panel--modal': modal}]" v-bind="$attrs" v-if="message !== undefined && show">
-    <!-- Hover-Vorschau schließt sich beim Verlassen der Zeile selbst, braucht keinen Button -->
+    <!-- Hover preview closes itself when leaving the row, needs no button -->
     <AppButton v-if="!floating" size="big" type="close" :disableOnServerBusy="false" @click="hideMe" align="right"/>
     <div id="log_panel_card" class="cardbox" v-for="name in cards" :key="name">
       <Card :card="cardModel(name)"/>
@@ -37,7 +37,7 @@ import {logMessageCards, logMessageColonies, logMessageGlobalEvents} from '@/cli
 
 export default defineComponent({
   name: 'LogPanel',
-  // Attribute gibt das Template selbst an das Panel weiter (Teleport als Wurzel)
+  // The template passes attributes on to the panel itself (Teleport as root)
   inheritAttrs: false,
   props: {
     message: {
@@ -48,12 +48,12 @@ export default defineComponent({
       type: Array as () => Array<PublicPlayerModel>,
       required: true,
     },
-    // Als schwebende Hover-Vorschau neben dem Log statt als Block darunter
+    // As a floating hover preview next to the log instead of a block below it
     floating: {
       type: Boolean,
       default: false,
     },
-    // Als scrollbares Modal über der rechten Spalte (Zeilen mit vielen Karten, needsModalPreview)
+    // As a scrollable modal over the right column (rows with many cards, needsModalPreview)
     modal: {
       type: Boolean,
       default: false,
@@ -79,7 +79,7 @@ export default defineComponent({
       return logMessageColonies(this.message);
     },
   },
-  // Escape schließt das Modal
+  // Escape closes the modal
   mounted() {
     window.addEventListener('keydown', this.closeOnEscape);
   },

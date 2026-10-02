@@ -1,20 +1,20 @@
 <template>
   <div :class="['player-home-columns', {'player-home-columns--board-collapsed': boardCollapsed}]" :ref="trackColumns">
-    <!-- Zwei-Spalten-Layout der Spiel- und Zuschaueransicht (player_home_columns.less): links #main, rechts #board.
-         Das Brett steht im DOM zuerst (Hotkey-Reihenfolge, schmale Screens) und wird per CSS rechts platziert.
-         Kommentar innen, damit die Wurzel ein Element bleibt -->
+    <!-- Two-column layout of the player and spectator view (player_home_columns.less): left #main, right #board.
+         The board comes first in the DOM (hotkey order, narrow screens) and is placed on the right via CSS.
+         Comment inside so the root stays a single element -->
     <div class="player-home-columns__board" :ref="trackBoardColumn">
       <slot name="board"></slot>
     </div>
 
-    <!-- Ziehgriff zwischen den Spalten (nur im Zwei-Spalten-Layout sichtbar): verteilt die Breite, Doppelklick = Standard -->
+    <!-- Drag handle between the columns (only visible in the two-column layout): splits the width, double click = default -->
     <div class="player-home-columns__resizer"
       role="separator" aria-orientation="vertical" tabindex="0"
       :aria-valuenow="boardShare" :aria-valuemin="minBoardShare" :aria-valuemax="maxBoardShare"
       :aria-label="$t('Column width')" :title="$t('Column width')"
       @pointerdown="startResize" @dblclick="resetResize"
       @keydown.left.prevent="nudgeResize(1)" @keydown.right.prevent="nudgeResize(-1)">
-      <!-- Aufteilung links / rechts, nur beim Ziehen bzw. mit Tastaturfokus sichtbar -->
+      <!-- Left / right split, only visible while dragging or with keyboard focus -->
       <span class="player-home-columns__resizer-label" aria-hidden="true">{{ columnSplitLabel }}</span>
     </div>
 
@@ -33,9 +33,9 @@ import {
   applyBoardShare, loadBoardShare, setBoardShare, shareLabel, startColumnResize,
 } from '@/client/utils/columnResize';
 
-// Aufräumfunktion der Spalten-Beobachtung (Position fürs Modal, Platzausnutzung); pro Seite gibt es nur eine Spielansicht
+// Cleanup function of the column observer (position for the modal, space usage); there is only one game view per page
 let stopObservingBoardColumn: (() => void) | undefined;
-// Spalten-Container für den Ziehgriff; pro Seite gibt es nur eine Spielansicht
+// Column container for the drag handle; there is only one game view per page
 let columnsElement: HTMLElement | undefined;
 
 function observeBoardColumnFully(column: HTMLElement): () => void {
@@ -50,7 +50,7 @@ function observeBoardColumnFully(column: HTMLElement): () => void {
 export default defineComponent({
   name: 'HomeColumns',
   props: {
-    // Rechte Spalte (Brett) ausgeblendet, die linke nimmt die volle Breite (Startphase, SetupBoardToggle)
+    // Right column (board) hidden, the left one takes the full width (setup phase, SetupBoardToggle)
     boardCollapsed: {
       type: Boolean,
       default: false,
@@ -58,7 +58,7 @@ export default defineComponent({
   },
   data() {
     return {
-      // Anteil der rechten Spalte in Prozent (columnResize.ts)
+      // Share of the right column in percent (columnResize.ts)
       boardShare: loadBoardShare(),
     };
   },
@@ -78,8 +78,8 @@ export default defineComponent({
     stopObservingBoardColumn = undefined;
   },
   methods: {
-    // Funktions-Ref des Spalten-Containers: gespeicherte Aufteilung sofort anwenden
-    // (wird mit dem Element bzw. beim Entfernen mit null aufgerufen)
+    // Function ref of the column container: apply the saved split immediately
+    // (called with the element, or with null on removal)
     trackColumns(element: unknown) {
       columnsElement = element instanceof HTMLElement ? element : undefined;
       if (columnsElement !== undefined) {
@@ -102,7 +102,7 @@ export default defineComponent({
         this.boardShare = setBoardShare(columnsElement, DEFAULT_BOARD_SHARE);
       }
     },
-    // Pfeiltaste links schiebt den Griff nach links, die rechte Spalte wird breiter
+    // Left arrow key moves the handle left, the right column gets wider
     nudgeResize(direction: number) {
       if (columnsElement !== undefined) {
         this.boardShare = setBoardShare(columnsElement, this.boardShare + direction * KEYBOARD_STEP);

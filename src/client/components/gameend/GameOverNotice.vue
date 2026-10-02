@@ -1,5 +1,5 @@
 <template>
-  <!-- Schwebt über dem Mars statt als Textblock über der Seite: das Spielende ist das Ereignis, nicht ein Absatz -->
+  <!-- Floats over Mars instead of a text block above the page: the game end is the event, not a paragraph -->
   <div class="game-over-notice" role="status">
     <div class="game-over-notice__title" v-i18n>This game is over!</div>
     <a class="btn btn-submit btn-rounded game-over-notice__link" :href="resultsUrl" v-i18n>Go to game results</a>
@@ -13,7 +13,7 @@ import {ParticipantId} from '@/common/Types';
 
 const props = withDefaults(defineProps<{
   participantId: ParticipantId;
-  // Zeit, die Meldung zu lesen, bevor die Ergebnisseite öffnet
+  // Time to read the notice before the results page opens
   redirectDelayMilliseconds?: number;
 }>(), {
   redirectDelayMilliseconds: 4000,
@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<{
 
 const resultsUrl = computed(() => 'the-end?id=' + props.participantId);
 
-// Nur einmal je Spieler automatisch weiterleiten: wer später zurück auf den Plan schaut, soll bleiben dürfen
+// Redirect automatically only once per player: whoever looks back at the board later should be allowed to stay
 const storageKey = computed(() => 'game-over-redirected-' + props.participantId);
 const redirecting = ref(false);
 let timer: ReturnType<typeof setTimeout> | undefined;
@@ -30,7 +30,7 @@ function alreadyRedirected(): boolean {
   try {
     return sessionStorage.getItem(storageKey.value) !== null;
   } catch {
-    // Ohne Speicher lieber weiterleiten: das Ergebnis ist wichtiger als der Blick zurück
+    // Without storage, rather redirect: the result matters more than the look back
     return false;
   }
 }
@@ -39,7 +39,7 @@ function rememberRedirect(): void {
   try {
     sessionStorage.setItem(storageKey.value, '1');
   } catch {
-    // Speicher gesperrt (privater Modus): dann eben bei jedem Öffnen weiterleiten
+    // Storage blocked (private mode): then just redirect on every open
   }
 }
 

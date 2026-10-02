@@ -33,18 +33,18 @@ import {StatsChartPoint, StatsChartSeries} from './statsTypes';
 
 type Dot = StatsChartPoint & {index: number, value: number};
 
-// Liniendiagramm für alle Verläufe der Statistik (Punkte der letzten Partien, Ø je Generation, globale Parameter)
+// Line chart for all of the statistics' time series (points of recent games, Ø per generation, global parameters)
 export default defineComponent({
   name: 'StatsLineChart',
   props: {
     series: {type: Array as PropType<ReadonlyArray<StatsChartSeries>>, required: true},
     labels: {type: Array as PropType<ReadonlyArray<string>>, required: true},
-    // Schmale Zeichenfläche auf dem Handy, damit die Schrift nicht winzig skaliert wird
+    // Narrow drawing area on the phone, so the text isn't scaled tiny
     width: {type: Number, default: 640},
     step: {type: Number, default: 20},
-    // Feste Obergrenze (Prozent-Diagramme), sonst aus den Daten
+    // Fixed upper bound (percent charts), otherwise from the data
     maximumValue: {type: Number, required: false},
-    // Bedeutung der hervorgehobenen Punkte für die Legende (Englisch, wird übersetzt)
+    // Meaning of the highlighted points for the legend (English, gets translated)
     highlightLabel: {type: String, required: false},
   },
   data() {
@@ -84,7 +84,7 @@ export default defineComponent({
       }).filter((line) => line.dots.length > 0);
     },
     xLabels(): Array<{index: number, text: string}> {
-      // Nur jede zweite/dritte Beschriftung, wenn es eng wird
+      // Only every second/third label when it gets tight
       const every = Math.max(1, Math.ceil(this.labels.length / (this.width < 500 ? 6 : 12)));
       return this.labels
         .map((text, index) => ({index, text}))

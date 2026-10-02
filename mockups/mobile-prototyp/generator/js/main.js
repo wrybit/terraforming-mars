@@ -1,8 +1,8 @@
-// Start: Module verdrahten und die gewählte Szene zeigen (#setup, #game, #end – sonst Szenenwahl).
+// Start: wire up modules and show the chosen scene (#setup, #game, #end – otherwise scene picker).
 (function (TM) {
   'use strict';
 
-  // Im Handy-Rahmen der Teilen-Seite: Platz für Statusleiste und Kamera-Aussparung lassen
+  // Inside the phone frame of the share page: leave room for the status bar and camera notch
   var framed = false;
   try { framed = window.self !== window.top && window.top.innerWidth > 600; } catch (error) { framed = window.self !== window.top; }
   if (framed) document.getElementById('app').classList.add('is-framed');

@@ -4,12 +4,12 @@ import {CardType} from '@/common/cards/CardType';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
 
-// Farbton des Eingabe-Tabs je nach Art der Eingabe (WaitingForTabs); Farben in or_tab_tones.less.
-// Das Aktionsmenü (OrOptions) bleibt neutral blau.
+// Color tone of the input tab depending on the kind of input (WaitingForTabs); colors in or_tab_tones.less.
+// The action menu (OrOptions) stays neutral blue.
 export type InputTone = 'prelude' | 'attack' | 'cards' | 'mars' | 'ocean' | 'city' | 'greenery' | 'resources' | 'player' | 'colonies';
 
-// Angriffe auf Mitspieler erkennt man nur am englischen Titel-Schlüssel des Servers (kein eigenes Kennzeichen);
-// seltene Formulierungen fallen auf die Farbe ihres Eingabetyps zurück
+// Attacks on other players can only be recognized by the server's English title key (no flag of their own);
+// rare phrasings fall back to the color of their input type
 const ATTACK_PATTERN = /\b(steal|blackmail|sue|sting)\b|^Select player to (decrease|remove|discard|lose)|^Remove \$\{0\}.* from \$\{/i;
 
 const TYPE_TONES: Readonly<Partial<Record<PlayerInputModel['type'], InputTone>>> = {
@@ -34,7 +34,7 @@ function titleKey(title: string | Message): string {
   return typeof title === 'string' ? title : title.message;
 }
 
-// Präludien sind rosa wie die Karten selbst – erkennbar, wenn alle angebotenen Karten Präludien sind
+// Preludes are pink like the cards themselves – recognizable when all offered cards are preludes
 function offersOnlyPreludes(input: PlayerInputModel): boolean {
   if (input.type !== 'card' || input.cards.length === 0) {
     return false;
@@ -49,8 +49,8 @@ export function inputTone(input: PlayerInputModel): InputTone | undefined {
   if (offersOnlyPreludes(input)) {
     return 'prelude';
   }
-  // Feldwahl für Ozean, Stadt oder Grünfläche in der Farbe des Plättchens statt Mars-braun;
-  // gleiche Erkennung wie die Plättchen-Vorschau (spaceTilePreview.ts)
+  // Space selection for ocean, city or greenery in the tile's color instead of Mars brown;
+  // same detection as the tile preview (spaceTilePreview.ts)
   if (input.type === 'space') {
     const tile = previewTileForSpaceInput(input.title);
     if (tile !== undefined) {

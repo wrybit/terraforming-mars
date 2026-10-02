@@ -14,11 +14,11 @@ import {ScreenshotDetailsStore} from './ScreenshotDetailsStore';
 import {CardName} from '../../common/cards/CardName';
 import {StatsGameDetails} from '../../common/stats/StatsGame';
 
-// Beendete Partien ändern sich nicht mehr: einmal ausgewertet, bleiben sie im Speicher.
-// Spart bei jedem Aufruf der Statistik das Erzeugen der kompletten Endstände.
+// Finished games no longer change: once evaluated, they stay in memory.
+// Saves building the complete final states on every statistics request.
 const finishedLocalGames = new Map<string, StatsGame>();
 
-/** Konzerne unter ihrem englischen Kartennamen; Unbekanntes (z. B. "Steam-Version") fällt weg. */
+/** Corporations under their English card name; unknown ones (e.g. "Steam-Version") are dropped. */
 function canonicalCorporations(corporation: string | undefined): string | undefined {
   const names = (corporation ?? '').split(' / ')
     .map(resolveCardName)
@@ -26,7 +26,7 @@ function canonicalCorporations(corporation: string | undefined): string | undefi
   return names.length === 0 ? undefined : names.join(' / ');
 }
 
-/** Die Statistikseite ist öffentlich: Spieler- und Zuschauer-Links haben dort nichts zu suchen. */
+/** The statistics page is public: player and spectator links do not belong there. */
 function publicSummary(summary: AdminGameSummary): AdminGameSummary {
   return {
     ...summary,
@@ -43,7 +43,7 @@ function localStatsGame(game: IGame): StatsGame {
   };
 }
 
-/** Kartennamen aus abgelesenen Screenshots absichern: Unbekanntes fällt weg, statt die Statistik zu verfälschen. */
+/** Sanitize card names read from screenshots: unknown ones are dropped instead of skewing the statistics. */
 function knownCards(details: StatsGameDetails): StatsGameDetails {
   const known = (name: string): name is CardName => resolveCardName(name) === name;
   return {
@@ -78,7 +78,7 @@ function importedStatsGame(summary: AdminGameSummary, snapshots: ImportedSnapsho
   };
 }
 
-/** Alle beendeten Partien: hier gespielte und importierte (mit Endstand oder nur als Screenshot). */
+/** All finished games: played here and imported (with final state or only as a screenshot). */
 export async function collectStatsGames(
   gameLoader: IGameLoader,
   importedGames: ImportedGamesStore = ImportedGamesStore.getInstance(),
@@ -93,7 +93,7 @@ export async function collectStatsGames(
       continue;
     }
     const game = await gameLoader.getGame(gameId);
-    // Defekte oder laufende Partien zählen nicht – laufende werden beim nächsten Aufruf erneut geprüft
+    // Broken or running games do not count – running ones are checked again on the next request
     if (game === undefined || game.phase !== Phase.END) {
       continue;
     }
@@ -101,14 +101,14 @@ export async function collectStatsGames(
     finishedLocalGames.set(gameId, statsGame);
     games.push(statsGame);
   }
-  // Importe sind kleine JSON-Dateien; gelöschte oder neue Importe sollen sofort wirken, daher ohne Zwischenspeicher
+  // Imports are small JSON files; deleted or new imports should take effect immediately, hence no cache
   for (const summary of importedGames.list().filter((candidate) => candidate.isFinished)) {
     games.push(importedStatsGame(summary, snapshots, screenshots));
   }
   return games.sort((first, second) => first.summary.createdTimeMs - second.summary.createdTimeMs);
 }
 
-/** Für Tests: gelöschte Partien fallen ohnehin heraus, weil nur über die aktuelle Spieleliste gelesen wird. */
+/** For tests: deleted games drop out anyway because only the current game list is read. */
 export function forgetStatsGamesForTesting(): void {
   finishedLocalGames.clear();
 }

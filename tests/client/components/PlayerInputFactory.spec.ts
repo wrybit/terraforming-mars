@@ -71,7 +71,7 @@ describe('PlayerInputFactory', () => {
     runTest({
       type: 'initialCards',
       options: [
-        // Echte Eingaben bringen immer eine Kartenliste mit; die Konzernspalte liest deren Länge
+        // Real inputs always bring a card list; the corporation column reads its length
         {type: 'card', title: SELECT_CORPORATION_TITLE, cards: []} as unknown as SelectCardModel,
         {type: 'card', title: SELECT_PROJECTS_TITLE, cards: []} as unknown as SelectCardModel,
       ],

@@ -1,4 +1,4 @@
-// Umschalter "Spielplan einklappen/zeigen" (SetupBoardToggle.vue) rechts oben in der Box der Zugreihenfolge
+// "Collapse/show board" toggle (SetupBoardToggle.vue) at the top right of the turn order box
 .setup-board-toggle {
   position: absolute;
   top: 16px;
@@ -18,7 +18,7 @@
     background: rgba(255, 255, 255, 0.14);
   }
 
-  // Nur im Zwei-Spalten-Layout gibt es einen Spielplan daneben, der sich einklappen lässt
+  // Only the two-column layout has a board beside it that can be collapsed
   @media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
     display: none;
   }

@@ -2,19 +2,19 @@ import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {ActionLabel} from '@/client/components/overview/ActionLabel';
 import {InterfaceTagsType} from '@/client/components/overview/playerTagDetails';
 
-// Spielerliste als Tabelle im Zwei-Spalten-Layout: Abschnitte, gespeicherte Schalter und Spaltenraster.
-// Alle Zeilen (Kopf und Spieler) nutzen dasselbe Raster, damit die Spalten untereinander stehen.
+// Player list as a table in the two-column layout: sections, stored toggles and column grid.
+// All rows (header and players) use the same grid so the columns line up.
 
 export const TABLE_SECTIONS = ['goods', 'tags', 'score'] as const;
 export type TableSection = typeof TABLE_SECTIONS[number];
 export type SectionVisibility = Record<TableSection, boolean>;
 
-// Reihenfolge der Abschnitte: am Desktop Tags vor der Wertung (Spalten nach Breite), mobil die Wertung
-// vor den vielen Tag-Zeilen, damit Siegpunkte und TW ohne Scrollen sichtbar sind
+// Order of the sections: on desktop tags before the score (columns by width), on mobile the score
+// before the many tag rows, so VP and TR are visible without scrolling
 export const DESKTOP_SECTION_ORDER: ReadonlyArray<TableSection> = ['goods', 'tags', 'score'];
 export const MOBILE_SECTION_ORDER: ReadonlyArray<TableSection> = ['goods', 'score', 'tags'];
 
-// Eine Zeile der Tabelle: Spieler plus das, was PlayersOverview schon für die klassische Leiste berechnet
+// One table row: player plus what PlayersOverview already computes for the classic bar
 export type PlayersTableRowModel = {
   player: PublicPlayerModel;
   firstForGen: boolean;
@@ -22,14 +22,14 @@ export type PlayersTableRowModel = {
   playerIndex: number;
 };
 
-// Sichtbare Tag-Spalten in Gruppen (Haupt-Tags | Sonder-Tags), wie in der klassischen Leiste durch einen Abstand getrennt
+// Visible tag columns in groups (main tags | special tags), separated by a gap as in the classic bar
 export type TagColumnGroups = Array<Array<InterfaceTagsType>>;
 
 const STORAGE_KEY = 'players_table_sections';
 const PREFERRED_STORAGE_KEY = 'players_table_preferred';
 const DEFAULT_VISIBILITY: SectionVisibility = {goods: true, tags: true, score: true};
 
-// Schalterstellung überlebt das Neuladen; fehlt der Speicher (privates Fenster), gilt einfach alles an
+// Toggle state survives reloading; if storage is missing (private window), simply everything is on
 export function loadSectionVisibility(): SectionVisibility {
   try {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}');
@@ -43,11 +43,11 @@ export function saveSectionVisibility(visibility: SectionVisibility): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(visibility));
   } catch {
-    // Ohne Speicher gilt die Einstellung nur bis zum Neuladen
+    // Without storage the setting only lasts until reload
   }
 }
 
-// Zuletzt eingeschalteter Abschnitt: fällt bei Platzmangel als letzter weg (der letzte Klick gewinnt)
+// Section switched on last: is dropped last when space runs short (the last click wins)
 export function loadPreferredSection(): TableSection | undefined {
   try {
     const stored = localStorage.getItem(PREFERRED_STORAGE_KEY);
@@ -65,12 +65,12 @@ export function savePreferredSection(section: TableSection | undefined): void {
       localStorage.setItem(PREFERRED_STORAGE_KEY, section);
     }
   } catch {
-    // Ohne Speicher gilt die Einstellung nur bis zum Neuladen
+    // Without storage the setting only lasts until reload
   }
 }
 
-// Breiten: Name fest, Wertung fest, nur Waren und Tags teilen sich den freien Platz.
-// Trenner-Spalten sind breiter als die Abstände innerhalb eines Abschnitts (Gesetz der Nähe).
+// Widths: name fixed, score fixed, only resources and tags share the free space.
+// Divider columns are wider than the gaps within a section (law of proximity).
 const NAME_WIDTH = 196;
 const DIVIDER_WIDTH = 12;
 const TAG_GROUP_GAP = 6;
@@ -95,12 +95,12 @@ export function columnTemplate(visibility: SectionVisibility, tagColumns: TagCol
   if (visibility.score) {
     tracks.push(divider, `repeat(${SCORE_COUNT}, ${px(SCORE_WIDTH)})`);
   }
-  // Kartenanzahl immer sichtbar, mit eigenem Trenner
+  // Card count always visible, with its own divider
   tracks.push(divider, px(PLAYED_CARDS_WIDTH));
   return tracks.join(' ');
 }
 
-// Mindestbreite des Rasters – dieselben Maße wie columnTemplate
+// Minimum width of the grid – same measures as columnTemplate
 export function minimumWidth(visibility: SectionVisibility, tagColumns: TagColumnGroups): number {
   let width = NAME_WIDTH + DIVIDER_WIDTH + PLAYED_CARDS_WIDTH;
   if (visibility.goods) {
@@ -116,17 +116,17 @@ export function minimumWidth(visibility: SectionVisibility, tagColumns: TagColum
   return width;
 }
 
-// Reihenfolge, in der Abschnitte bei zu schmaler Spalte wegfallen: Waren sind am wichtigsten und bleiben am längsten
+// Order in which sections drop out when the column is too narrow: resources matter most and stay longest
 const AUTO_HIDE_ORDER: Array<TableSection> = ['tags', 'score', 'goods'];
 
 export type FittedVisibility = {
   visibility: SectionVisibility;
-  // Abschnitte, die nur aus Platzgründen ausgeblendet sind
+  // Sections hidden only for lack of space
   autoHidden: Array<TableSection>;
 };
 
-// Passt die gewünschte Sichtbarkeit an die verfügbare Breite an; unbekannte Breite (0) ändert nichts.
-// Der bevorzugte (zuletzt eingeschaltete) Abschnitt fällt als letzter weg.
+// Adapts the desired visibility to the available width; unknown width (0) changes nothing.
+// The preferred (last switched on) section is dropped last.
 export function fitToWidth(wanted: SectionVisibility, tagColumns: TagColumnGroups, availableWidth: number, preferred?: TableSection): FittedVisibility {
   const visibility = {...wanted};
   const autoHidden: Array<TableSection> = [];

@@ -26,7 +26,7 @@ export type Preferences = {
 
 export type Preference = keyof Preferences;
 
-// Standardwerte des Forks: gelten für alle, die eine Einstellung noch nie selbst geändert haben
+// The fork's defaults: apply to everyone who has never changed a setting themselves
 const defaults: Preferences = {
   learner_mode: true,
   enable_sounds: true,
@@ -46,7 +46,7 @@ const defaults: Preferences = {
   hide_event_cards: false,
   hide_tile_confirmation: false,
   hide_discount_on_cards: false,
-  // Tags mit Anzahl 0 in der Spielerübersicht ausblenden (ersetzt den früheren Umschalter über den Spielerleisten)
+  // Hide tags with count 0 in the player overview (replaces the former toggle above the player bars)
   hide_zero_tags: true,
   hide_animated_sidebar: true,
 

@@ -1,6 +1,6 @@
 <template>
-  <!-- Hilfe (Fork): feste Kopfzeile mit Suche und Tabs, links ein Seitenbaum, rechts der scrollende Inhalt.
-       Im Spiel steckt sie in SidebarModal (closable), unter /help steht sie als eigene Seite. -->
+  <!-- Help (fork): fixed header with search and tabs, a page tree on the left, scrolling content on the right.
+       In the game it lives in SidebarModal (closable); at /help it is a page of its own. -->
   <div class="help-overlay" :class="{'help-overlay--page': !closable}">
     <header class="help-overlay-head">
       <div class="help-overlay-toprow">
@@ -44,7 +44,7 @@
 <script lang="ts">
 import {HelpTabKey} from '@/client/components/helpOverlay/helpOverlayTabs';
 
-// Zuletzt gewählter Tab gilt für die ganze Sitzung, auch wenn das Overlay zwischendurch geschlossen wird
+// The last chosen tab applies for the whole session, even if the overlay is closed in between
 let lastTabKey: HelpTabKey = 'iconology';
 </script>
 
@@ -56,7 +56,7 @@ import {HelpOutlineNode, outlineIds, toOutlineNodes} from '@/client/components/h
 import {applyHelpSearch} from '@/client/components/helpOverlay/helpSearch';
 
 const props = defineProps<{
-  // Im Spiel als Overlay mit Schließen-Button; ohne ist es die Seite /help
+  // In the game as an overlay with close button; without it, it is the /help page
   closable?: boolean;
 }>();
 
@@ -64,7 +64,7 @@ const emit = defineEmits<{
   (event: 'close'): void;
 }>();
 
-// Ab dieser Höhe über dem Inhalt gilt ein Abschnitt als "aktuell" (Kopfabstand der Abschnitte)
+// From this height above the content a section counts as "current" (header offset of the sections)
 const ACTIVE_THRESHOLD_PX = 32;
 
 function initialTabKey(): HelpTabKey {
@@ -88,7 +88,7 @@ const outlineNav = ref<HTMLElement>();
 let sections: Array<HTMLElement> = [];
 let frameRequested = false;
 
-// Seitenbaum aus dem frisch gerenderten Tab lesen
+// Read the page tree from the freshly rendered tab
 async function refreshOutline(): Promise<void> {
   await nextTick();
   const root = content.value;
@@ -102,7 +102,7 @@ async function refreshOutline(): Promise<void> {
   updateActiveSection();
 }
 
-// Aktiv ist der tiefste Abschnitt, dessen Anfang schon oben angekommen ist; ganz unten der letzte sichtbare
+// Active is the deepest section whose start has already reached the top; at the very bottom the last visible one
 function updateActiveSection(): void {
   const root = content.value;
   const visible = sections.filter((element) => element.offsetParent !== null);
@@ -111,7 +111,7 @@ function updateActiveSection(): void {
     return;
   }
   const top = root.getBoundingClientRect().top + ACTIVE_THRESHOLD_PX;
-  // Nur wenn überhaupt gescrollt werden kann – sonst wäre bei kurzen Tabs gleich der letzte Abschnitt aktiv
+  // Only if scrolling is possible at all – otherwise short tabs would make the last section active right away
   const scrollable = root.scrollHeight > root.clientHeight + 2;
   const atBottom = scrollable && root.scrollTop + root.clientHeight >= root.scrollHeight - 2;
   let active = visible[0];
@@ -141,7 +141,7 @@ function scrollToSection(id: string): void {
   activeId.value = id;
 }
 
-// Am Handy ist der Baum eine waagerechte Chip-Leiste: aktiven Chip im Blick halten
+// On phones the tree is a horizontal chip bar: keep the active chip in view
 watch(activeId, (id) => {
   const nav = outlineNav.value;
   const link = nav?.querySelector<HTMLElement>(`[data-outline-id="${id}"]`);

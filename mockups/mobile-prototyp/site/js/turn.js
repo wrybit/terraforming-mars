@@ -1,4 +1,4 @@
-// Zugfolge: zwei Aktionen je Zug, Passen, Gegnerzug, Generationsende mit Produktion.
+// Turn sequence: two actions per turn, passing, opponent turn, generation end with production.
 (function (TM) {
   'use strict';
 
@@ -25,14 +25,14 @@
         : mine ? 'Action ' + Math.min(TM.turn.actionsDone + 1, ACTIONS_PER_TURN) + ' of ' + ACTIONS_PER_TURN : 'please wait';
       TM.$all('[data-turn-step]').forEach(function (element) { element.textContent = step; });
       document.getElementById('turnButton').classList.toggle('is-idle', !TM.turn.canAct());
-      // Wie im Original: die zweite Aktion darf man auslassen, erst nachdem die erste gemacht ist
+      // As in the original: the second action may be skipped, but only after the first is done
       var skip = TM.$('[data-skip]');
       if (skip) skip.disabled = !(mine && TM.turn.actionsDone === 1);
     },
 
     actionDone: function (message, result) {
       TM.toast(message);
-      // Kartenkauf der Forschungsphase ist keine Aktion
+      // Buying cards in the research phase is not an action
       if (result && result.free) { TM.turn.renderBanner(); return; }
       TM.turn.actionsDone += 1;
       if (TM.state.game.over) return;
@@ -48,7 +48,7 @@
       TM.turn.handOver();
     },
 
-    // Zweite Aktion auslassen: Zug endet, Spieler bleibt in der Generation
+    // Skip second action: turn ends, player stays in the generation
     skip: function () {
       TM.nav.closeSheet();
       TM.log([{player: 'jens'}, {text: ' ended turn'}]);
@@ -73,7 +73,7 @@
       TM.toast('Your turn again');
     },
 
-    // Produktionsphase wie im Original: M€ = Produktion + TW, Energie wird zu Wärme
+    // Production phase as in the original: M€ = production + TR, energy becomes heat
     endGeneration: function () {
       ['jens', 'mira'].forEach(function (id) {
         var player = TM.state[id];

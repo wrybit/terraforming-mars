@@ -15,14 +15,14 @@
 }
 
 .payments_type {
-  // Kleine Lücken zwischen − / Eingabe / + / maximal, damit die Knöpfe nicht zu einem Block verschmelzen
+  // Small gaps between − / input / + / maximal so the buttons don't merge into one block
   display: flex;
   align-items: center;
   gap: 6px;
   border-spacing: 0 8px;
 }
 
-// input-group (spectre) nimmt den inneren Elementen die Rundung – mit Lücke dazwischen wieder runde Ecken
+// input-group (spectre) strips the rounding from inner elements – with a gap between, corners are round again
 .payments_type.input-group > .btn,
 .payments_type.input-group > .payments_input.form-input {
   border-radius: 6px;
@@ -46,7 +46,7 @@
   color: #666;
 }
 
-// Wert je Zeile in M€ ("= 3 M€"); bei 0 abgeschwächt
+// Value per row in M€ ("= 3 M€"); dimmed at 0
 .payments_unit_subtotal {
   padding-left: 16px;
   font-size: 20px;
@@ -64,7 +64,7 @@
   vertical-align: middle;
 }
 
-// Summe rechts neben den Währungen: "Gesamt:" über "3 / 3 M€", ohne Trennlinie
+// Total to the right of the currencies: "Total:" above "3 / 3 M€", without a divider
 .payments_total_heading {
   font-size: 16px;
   opacity: 0.8;
@@ -76,7 +76,7 @@
   white-space: nowrap;
 }
 
-// Farbe zeigt, ob der Betrag passt – ersetzt die früheren Balken-Symbole
+// Color shows whether the amount fits – replaces the former bar icons
 .payments_total_exact .payments_total_value {
   color: #6fd36f;
 }
@@ -89,8 +89,8 @@
   color: #ffd84d;
 }
 
-// Bezahlbereich (PaymentForm.vue): Preise links, Button rechts – im Fuß der Tab-Box (tab_panel_footer.less)
-// wie an Ort und Stelle
+// Payment area (PaymentForm.vue): prices left, button right – in the tab box footer (tab_panel_footer.less)
+// as well as in place
 .payments_form {
   display: flex;
   flex: 1 1 auto;
@@ -103,7 +103,7 @@
   border-collapse: separate;
 }
 
-// Nur eine Währung: nur der Preis, ohne Regler
+// Only one currency: just the price, without controls
 .payments_single {
   font-size: 24px;
   font-weight: bold;
@@ -119,10 +119,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 32px; // Summe deutlich abgesetzt von den Währungszeilen
+  gap: 8px 32px; // total clearly set apart from the currency rows
 }
 
-// Warnung (z. B. zu wenig bezahlt) in eigener Zeile darunter
+// Warning (e.g. underpaid) on its own line below
 .payments_prices > .tm-warning {
   flex-basis: 100%;
 }

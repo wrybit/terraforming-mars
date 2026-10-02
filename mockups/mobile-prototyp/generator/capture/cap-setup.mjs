@@ -15,7 +15,7 @@ const info = await p.evaluate(() => {
   return {cols, chain, summaryCls: summary?.className, summary: summary?.outerHTML.slice(0,3000)};
 });
 console.log(JSON.stringify(info,null,1));
-// Ganzer Setup-Bereich für den Prototyp
+// Entire setup area for the prototype
 const html = await p.evaluate(() => { let e=document.querySelector('.setup-column'); while(e && !e.querySelector('[class*=setup-summary]')) e=e.parentElement; return {cls:e.className, html:e.outerHTML}; });
 fs.writeFileSync('/tmp/setup.json', JSON.stringify(html));
 console.log(html.cls, html.html.length);

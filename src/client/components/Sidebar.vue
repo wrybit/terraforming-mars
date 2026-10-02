@@ -10,7 +10,7 @@
     <GlobalParameterValue v-if="gameOptions.expansions.venus" :param="globalParameter.VENUS" :value="venus"/>
     <MoonGlobalParameterValue v-if="moonData" :moonData="moonData"/>
   </div>
-  <!-- Zuschauer (Farbe neutral) haben keinen eigenen Würfel: ein leeres schwarzes Feld wäre nur rätselhaft -->
+  <!-- Spectators (neutral colour) have no own cube: an empty black square would only be puzzling -->
   <div v-if="playerColor !== 'neutral'" class="sidebar_item preferences_player" :title="$t('Player Color Cube')">
     <div :class="getPlayerColorCubeClass()+' player_bg_color_' + playerColor"></div>
   </div>
@@ -40,7 +40,7 @@
     </SidebarModal>
   </div>
 
-  <!-- Hilfe als Modal statt in neuem Fenster -->
+  <!-- Help as a modal instead of in a new window -->
   <div class="sidebar_item sidebar_item--help" @click="ui.help_open = true">
     <i class="sidebar_icon sidebar_icon--help" :class="{'sidebar_item--is-active': ui.help_open}" :title="$t('player aid')"></i>
   </div>
@@ -126,7 +126,7 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    // Für das Info-Fenster (Zuschauer-Link, Lösch-Warnung)
+    // For the info window (spectator link, deletion warning)
     spectatorId: {
       type: String,
       required: false,
@@ -147,7 +147,7 @@ export default defineComponent({
     PreferencesIcon,
     LanguageIcon,
     SidebarModal,
-    // Hilfe nur bei Bedarf nachladen (eigener Chunk wie die Hilfeseite in App.vue)
+    // Load help only on demand (own chunk like the help page in App.vue)
     HelpOverlay: defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/helpOverlay/HelpOverlay.vue')),
   },
   data() {

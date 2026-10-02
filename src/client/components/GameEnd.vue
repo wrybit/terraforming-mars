@@ -1,8 +1,8 @@
 <template>
   <div id="game-end" class="game_end_cont">
-    <!-- Kopf über beiden Spalten, ohne eigene Box: Sieger links, Navigation rechts -->
+    <!-- Header across both columns, without its own box: winner on the left, navigation on the right -->
     <div class="game-end-hero">
-      <!-- Solo: Ergebnis als Satz an derselben Stelle wie der Sieger im Mehrspielerspiel, damit beide Ansichten gleich aufgebaut sind -->
+      <!-- Solo: result as a sentence in the same place as the winner in a multiplayer game, so both views are built the same -->
       <div v-if="isSoloGame" class="game-end-winer-announcement">
         <span v-if="game.isSoloModeWin" v-i18n>You win!</span>
         <span v-else v-i18n>Sorry, you lose.</span>
@@ -10,9 +10,9 @@
       <div v-else class="game-end-winer-announcement">
         <span v-for="p in winners" :key="p.color"><span :class="'log-player ' + getEndGamePlayerRowColorClass(p.color)">{{ p.name }}</span></span> <span v-i18n>won!</span>
       </div>
-      <!-- Links als Buttons: Navigation bleibt ein echter Link (Mittelklick, neuer Tab) -->
+      <!-- Links as buttons: navigation stays a real link (middle click, new tab) -->
       <div class="game_end_navigation">
-        <!-- Symbol + Text wie die übrigen Aktions-Buttons; runde Ecken (btn-rounded), Höhe wächst mit umbrochenem Text -->
+        <!-- Icon + text like the other action buttons; rounded corners (btn-rounded), height grows with wrapped text -->
         <a href="new-game" class="btn btn-lg btn-rounded btn-tone-success game-end-nav-button">
           <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
           <span v-i18n>Create New Game</span>
@@ -27,7 +27,7 @@
         </a>
       </div>
     </div>
-    <!-- Ab @player-home-columns-min-width zwei Spalten wie in der Spielansicht: links Ergebnis, rechts Brett, Diagramme, Log -->
+    <!-- From @player-home-columns-min-width two columns as in the game view: result on the left, board, charts, log on the right -->
     <div class="game_end game-end-columns">
       <div class="game-end-columns__main">
 
@@ -61,7 +61,7 @@
 
         <div class="game-end-box game_end_victory_points">
           <h2><span v-i18n>Victory point breakdown after</span> {{game.generation}} <span v-i18n>generations</span></h2>
-          <!-- Beiträge zu den globalen Parametern als eigene Spaltengruppe in derselben Tabelle (früher eigene Tabelle) -->
+          <!-- Contributions to the global parameters as their own column group in the same table (formerly a separate table) -->
           <table class="table game_end_table">
             <thead>
               <tr class="game-end-table-groups">
@@ -239,7 +239,7 @@ import {AwardName} from '@/common/ma/AwardName';
 
 type PlayerContributions = {player: string, color: Color, temp: number, oxygen: number, oceans: number, venus?: number, moonHabitat?: number, moonMining?: number, moonLogistic?: number, total: number};
 
-// Ab dieser Punktzahl wird eine Zeile der Siegpunkt-Details hervorgehoben: die vielen 1-Punkt-Karten treten zurück
+// From this score on a victory point detail row is highlighted: the many 1-point cards recede
 const NOTABLE_DETAIL_POINTS = 2;
 
 export default defineComponent({
@@ -307,7 +307,7 @@ export default defineComponent({
         });
       }
 
-      // Farbe und Legenden-Symbol je Parameter aus chartStyles.ts
+      // Color and legend icon per parameter from chartStyles.ts
       const add = (label: string, param: GlobalParameter, min: number, max: number) => {
         const style = GLOBAL_PARAMETER_CHART_STYLES[param];
         dataset.push({label: $t(label), color: style.color, icon: style.icon, data: getValues(param, min, max)});
@@ -350,7 +350,7 @@ export default defineComponent({
         };
       });
     },
-    // Spalten der Siegpunkt-Gruppe (Spieler bis Gesamt) – für die Gruppen-Kopfzeile der Tabelle
+    // Columns of the victory point group (player to total) – for the table's group header row
     victoryPointColumnCount(): number {
       const moonColumns = this.game.moon !== undefined ? 3 : 0;
       const pathfindersColumns = this.game.pathfinders !== undefined ? 1 : 0;
@@ -399,7 +399,7 @@ export default defineComponent({
       }
       return data;
     },
-    // Viele Punkte golden, Minuspunkte rot – beides soll aus den vielen 1-Punkt-Zeilen herausstechen
+    // Many points golden, negative points red – both should stand out from the many 1-point rows
     detailRowClass(points: number): Array<string> {
       if (points >= NOTABLE_DETAIL_POINTS) {
         return ['game-end-column-row', 'game-end-column-row--notable'];

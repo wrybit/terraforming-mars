@@ -10,7 +10,7 @@ import {ImportedGamesStore} from '../admin/ImportedGamesStore';
 import {ImportedSnapshotsStore} from '../admin/ImportedSnapshotsStore';
 import {ImportedGame, importExternalGame, JsonFetcher, fetchJson} from '../admin/importExternalGame';
 
-/** Holt ein beendetes Spiel von einem fremden Server (z. B. herokuapp) und legt es dauerhaft hier ab. */
+/** Fetches a finished game from a foreign server (e.g. herokuapp) and stores it here permanently. */
 export class ApiAdminImportGame extends Handler {
   public static readonly INSTANCE = new ApiAdminImportGame();
   constructor(
@@ -31,7 +31,7 @@ export class ApiAdminImportGame extends Handler {
     if (this.importedGames.has(imported.summary.id)) {
       throw RouteError.badRequest('This game was already imported');
     }
-    // Erst der Endstand, dann die Übersicht: ein Eintrag ohne Endstand würde ins Leere verlinken
+    // First the final state, then the overview: an entry without a final state would link to nothing
     this.snapshots.save(imported.snapshot);
     this.importedGames.add(imported.summary);
     responses.writeJson(res, ctx, imported.summary);

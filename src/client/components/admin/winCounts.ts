@@ -5,14 +5,14 @@ export type WinCount = {
   wins: number;
 };
 
-/** Siege einer festen Besetzung, z. B. "Daniel vs Jens". */
+/** Wins of a fixed line-up, e.g. "Daniel vs Jens". */
 export type LineupWinCounts = {
   lineup: string;
   games: number;
   counts: Array<WinCount>;
-  /** Ø Generationen; nur Partien mit bekannter Generation (Screenshots aus anderen Versionen haben keine). */
+  /** Avg. generations; only games with a known generation (screenshots from other versions have none). */
   averageGenerations: number | undefined;
-  /** Ø Siegpunkte des Siegers (bei Gleichstand zählt der Sieger einmal). */
+  /** Avg. victory points of the winner (on a tie the winner counts once). */
   averageWinnerPoints: number | undefined;
 };
 
@@ -23,14 +23,14 @@ function average(sum: number, count: number): number | undefined {
 }
 
 /**
- * Siege je Besetzung über alle beendeten Partien (eigene und importierte).
- * Getrennt nach Besetzung, weil ein Sieg zu zweit etwas anderes ist als ein Sieg zu dritt.
- * Laufende Partien zählen nicht mit, sonst entstünden Besetzungen aus angefangenen Testspielen.
+ * Wins per line-up across all finished games (own and imported).
+ * Separated by line-up, because a win with two players is something else than a win with three.
+ * Running games don't count, otherwise line-ups from started test games would appear.
  */
 export function winCountsByLineup(summaries: ReadonlyArray<AdminGameSummary>): Array<LineupWinCounts> {
   const lineups = new Map<string, LineupTotals>();
   for (const summary of summaries.filter((candidate) => candidate.isFinished)) {
-    // Alphabetisch, damit dieselbe Besetzung unabhängig von der Zugreihenfolge zusammenfällt
+    // Alphabetical, so the same line-up coincides regardless of turn order
     const names = Array.from(new Set(summary.players.map((player) => player.name))).sort((first, second) => first.localeCompare(second));
     const key = names.join(' vs ');
     const lineup = lineups.get(key) ?? {

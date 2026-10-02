@@ -1,9 +1,9 @@
 <template>
     <div class="wf-component wf-component--select-card choice-block" :style="choiceBlockStyle(playerinput.cards?.length ?? 0)">
-        <!-- Karten als Auswahl-Block (choice_block.less): möglichst quadratisch und mittig in der Tab-Box;
-             Kommentar innen, damit v-show des Aufrufers die Wurzel trifft -->
+        <!-- Cards as a choice block (choice_block.less): as square as possible and centered in the tab box;
+             comment inside, so the caller's v-show hits the root -->
         <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
-        <!-- Kopfzeile über den Karten: links "Alle auswählen", rechts dieselbe Sortierung wie im Hand-Tab -->
+        <!-- Header row above the cards: "Select all" on the left, on the right the same sorting as in the hand tab -->
         <div v-if="showSelectAll || isHandSelection" class="select-card-toolbar">
           <AppButton v-if="showSelectAll" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll"
             :title="allSelected ? $t('Deselect All') : $t('Select All')" />
@@ -26,8 +26,8 @@
         <WarningsComponent :warnings="warnings"/>
         <TabPanelFooterSlot>
         <div v-if="showsave === true" class="nofloat select-card-actions">
-            <!-- Gesperrt, solange weniger Karten gewählt sind als nötig: zeigt, dass erst eine Karte gewählt werden muss.
-                 Mit Überspringen daneben: Bestätigen grün, Überspringen rot (button_tones.less) -->
+            <!-- Disabled while fewer cards are chosen than required: shows that a card must be chosen first.
+                 With Skip next to it: Confirm green, Skip red (button_tones.less) -->
             <AppButton :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
               :class="{'btn-tone-success': isOptionalToManyCards}" />
             <AppButton :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t('Skip this action')"
@@ -115,7 +115,7 @@ export default defineComponent({
     cards() {
       this.$emit('cardschanged', this.getData());
     },
-    // Meldet nach außen, ob gespeichert werden darf – OrOptions sperrt damit seinen eigenen Button
+    // Reports outward whether saving is allowed – OrOptions uses it to disable its own button
     hasRequiredSelection: {
       handler(valid: boolean) {
         this.$emit('validity', valid);
@@ -232,7 +232,7 @@ export default defineComponent({
     },
   },
   computed: {
-    // Genug Karten gewählt? Sonst bleibt der Button gesperrt statt nach dem Klick einen Fehler zu zeigen
+    // Enough cards chosen? Otherwise the button stays disabled instead of showing an error after the click
     hasRequiredSelection(): boolean {
       if (this.isOptionalToManyCards && this.cardsSelected() === 0) {
         return false;
@@ -248,12 +248,12 @@ export default defineComponent({
              this.playerinput.min === 0;
     },
     selectableCards(): Array<CardModel> {
-      // ?? []: nicht jede Eingabe in den Upstream-Tests liefert Karten mit
+      // ?? []: not every input in the upstream tests provides cards
       return (this.playerinput.cards ?? []).filter((card) => !card.isDisabled);
     },
-    // "Alle auswählen", wenn der Server es verlangt oder alle wählbaren Karten auf einmal genommen werden dürfen
-    // (Verkaufen, Karten kaufen …) – nicht, wenn nur ein Teil gewählt werden darf. Nur in Dialogen mit eigenem
-    // Bestätigen-Button (showsave); die Startauswahl (SelectInitialCards) hat ihre eigene Bilanz-Leiste
+    // "Select all" if the server requires it or all selectable cards may be taken at once
+    // (selling, buying cards …) – not if only some may be chosen. Only in dialogs with their own
+    // confirm button (showsave); the initial selection (SelectInitialCards) has its own balance bar
     showSelectAll(): boolean {
       if (!this.showsave || this.selectOnlyOneCard || this.playerinput.selectBlueCardAction || this.selectableCards.length < 2) {
         return false;
@@ -261,7 +261,7 @@ export default defineComponent({
       const max = this.playerinput.max ?? this.selectableCards.length;
       return this.playerinput.showSelectAll === true || max >= this.selectableCards.length;
     },
-    // Auswahl aus der eigenen Hand (Verkaufen, Abwerfen …): dann gibt es dieselbe Sortierung wie im Hand-Tab
+    // Selection from the own hand (selling, discarding …): then the same sorting as in the hand tab is offered
     isHandSelection(): boolean {
       const cards = this.playerinput.cards ?? [];
       if (this.playerinput.selectBlueCardAction || cards.length < 2) {

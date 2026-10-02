@@ -1,6 +1,6 @@
 <template>
-  <!-- Inhalt des Handkarten-Tabs: oben die eigenen aktiven (blauen) Karten mit live Zählern und
-       Aktions-Würfel, darunter die sortierbaren Handkarten. Überschriften nur, wenn es beide Abschnitte gibt. -->
+  <!-- Content of the hand cards tab: at the top the own active (blue) cards with live counters and
+       action cubes, below them the sortable hand cards. Headings only when both sections exist. -->
   <div class="hand-cards-panel">
     <section v-if="activeCards.length > 0" class="hand-cards-panel__section hand-cards-panel__section--active">
       <h3 class="hand-cards-panel__title">{{ $t('Active cards') }} <small>{{ activeCards.length }}</small></h3>
@@ -11,7 +11,7 @@
       </div>
     </section>
     <section v-if="handCards.length > 0" class="hand-cards-panel__section">
-      <!-- Kopfzeile: Überschrift links, Sortierung (Manuell oder Upstream-Sortierungen) rechts; ohne Überschrift nur die Buttons -->
+      <!-- Header row: heading on the left, sorting (manual or upstream sortings) on the right; without heading only the buttons -->
       <div v-if="activeCards.length > 0 || handCards.length > 1" class="hand-cards-panel__header">
         <h3 v-if="activeCards.length > 0" class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ handCards.length }}</small></h3>
         <HandSortControl v-if="handCards.length > 1" :playerView="playerView" class="hand-cards-panel__sort"/>

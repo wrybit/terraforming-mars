@@ -1,18 +1,18 @@
-"""Führt die abgelesenen Screenshot-Daten mit den Diagrammwerten zusammen und übersetzt Namen ins Englische.
-Ergebnis je Screenshot: screenshot-details/<id>.json im Format, das der Server als StatsGameDetails einliest."""
+"""Merges the screenshot data read off with the chart values and translates names into English.
+Result per screenshot: screenshot-details/<id>.json in the format the server reads as StatsGameDetails."""
 import argparse, json, glob, os, re, difflib
 from charts import extract
 
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--screenshots', required=True, help='Ordner mit <id>.jpg und imported-games.json (vom Server)')
-parser.add_argument('--extracted', required=True, help='Ordner mit den abgelesenen <id>.json (siehe INSTRUCTIONS.md)')
-parser.add_argument('--out', required=True, help='Zielordner, Inhalt gehört nach db/imported/screenshot-details/')
-parser.add_argument('--locales', default='assets/locales/de.json', help='Übersetzungen (nach npm run make:json)')
+parser.add_argument('--screenshots', required=True, help='Folder with <id>.jpg and imported-games.json (from the server)')
+parser.add_argument('--extracted', required=True, help='Folder with the read-off <id>.json (see INSTRUCTIONS.md)')
+parser.add_argument('--out', required=True, help='Target folder, contents belong in db/imported/screenshot-details/')
+parser.add_argument('--locales', default='assets/locales/de.json', help='Translations (after npm run make:json)')
 args = parser.parse_args()
 SCREENSHOTS = args.screenshots
 MILESTONES = ['Terraformer', 'Mayor', 'Gardener', 'Planner', 'Builder', 'Generalist', 'Specialist', 'Ecologist', 'Tycoon', 'Legend', 'Diversifier', 'Tactician', 'Polar Explorer', 'Energizer', 'Rim Settler']
 AWARDS = ['Landlord', 'Scientist', 'Banker', 'Thermalist', 'Miner', 'Celebrity', 'Industrialist', 'Desert Settler', 'Estate Dealer', 'Benefactor', 'Contractor', 'Cultivator', 'Excentric', 'Magnate', 'Space Baron', 'Venuphile']
-# Abweichende Schreibweisen auf den Screenshots (ältere Übersetzungen, Tippfehler der Oberfläche)
+# Deviating spellings on the screenshots (older translations, UI typos)
 MA_ALIASES = {'forschung': 'Scientist', 'wärmetechnicker': 'Thermalist', 'banker': 'Banker', 'tycoon': 'Tycoon', 'terraformer': 'Terraformer'}
 CARD_ALIASES = {'asteroiden des hauptgürtels': None, 'neptunische energieberater': 'Neptunian Power Consultants'}
 
@@ -35,7 +35,7 @@ def card_name(name, context):
     key = name.strip().lower()
     if key in CARD_ALIASES:
         if CARD_ALIASES[key] is None:
-            problems.append(f'{context}: Karte "{name}" unbekannt, ausgelassen')
+            problems.append(f'{context}: card "{name}" unknown, skipped')
         return CARD_ALIASES[key]
     if key in card_by_german:
         return card_by_german[key]
@@ -43,9 +43,9 @@ def card_name(name, context):
         return name
     match = difflib.get_close_matches(key, card_by_german.keys(), 1, 0.88)
     if match:
-        problems.append(f'{context}: Karte "{name}" → "{card_by_german[match[0]]}" (ähnlich)')
+        problems.append(f'{context}: card "{name}" → "{card_by_german[match[0]]}" (similar)')
         return card_by_german[match[0]]
-    problems.append(f'{context}: Karte "{name}" unbekannt, ausgelassen')
+    problems.append(f'{context}: card "{name}" unknown, skipped')
     return None
 
 
@@ -70,7 +70,7 @@ summaries = {summary['screenshotUrl'].split('=')[1]: summary for summary in json
 
 
 def match_players(extracted, summary):
-    """Spieler des Screenshots den Spielern der Übersicht zuordnen (Namen dort sind vereinheitlicht)."""
+    """Match the screenshot's players to the players of the summary (names there are normalized)."""
     by_name = {player['name'].lower(): player['name'] for player in summary['players']}
     result = {}
     for player in extracted:
@@ -89,11 +89,11 @@ for path in sorted(glob.glob(os.path.join(args.extracted, '*.json'))):
     context = screenshot_id
     summary = summaries.get(screenshot_id)
     if summary is None:
-        problems.append(f'{context}: keine Partie in imported-games.json')
+        problems.append(f'{context}: no game in imported-games.json')
         continue
     names = match_players(data['players'], summary)
     if None in names.values() or len(set(names.values())) != len(names):
-        problems.append(f'{context}: Spieler nicht eindeutig zuzuordnen {names}')
+        problems.append(f'{context}: players cannot be matched unambiguously {names}')
         continue
     players, milestones, awards = [], [], {}
     for player in data['players']:
@@ -140,25 +140,25 @@ for path in sorted(glob.glob(os.path.join(args.extracted, '*.json'))):
         'milestones': milestones,
         'awards': list(awards.values()),
     }
-    # Diagramme: Punkte je Generation und globale Parameter
+    # Charts: points per generation and global parameters
     generations = data.get('generations')
     colors = {player['name']: player['color'] for player in players}
     totals = {player['name']: (player['victoryPoints'] or {}).get('total') for player in players}
     if generations and all(colors.values()) and len(set(colors.values())) == len(colors) and all(totals.values()):
         try:
             charts = extract(f'{SCREENSHOTS}/{screenshot_id}.jpg', colors, generations, totals)
-        except Exception as error:  # noqa: BLE001 – ein kaputtes Bild soll den Rest nicht aufhalten
+        except Exception as error:  # noqa: BLE001 – a broken image shouldn't hold up the rest
             charts = {'error': str(error)}
         if 'error' in charts:
-            problems.append(f'{context}: Diagramme nicht lesbar ({charts["error"]})')
+            problems.append(f'{context}: charts not readable ({charts["error"]})')
         elif charts['endDeviation'] > 3:
-            problems.append(f'{context}: Punkteverlauf weicht am Ende um {charts["endDeviation"]} ab, verworfen')
+            problems.append(f'{context}: point history deviates at the end by {charts["endDeviation"]}, discarded')
         else:
             for player in players:
                 player['pointsByGeneration'] = charts['pointsByGeneration'][player['name']]
             details['globalsByGeneration'] = charts['globalsByGeneration']
     else:
-        problems.append(f'{context}: ohne Diagramme (Generationen/Farben fehlen)')
+        problems.append(f'{context}: without charts (generations/colors missing)')
     for player in players:
         player.pop('color')
     json.dump({'screenshotId': screenshot_id, 'gameId': data.get('gameId'), 'details': details}, open(os.path.join(args.out, f'{screenshot_id}.json'), 'w'), ensure_ascii=False, indent=1)

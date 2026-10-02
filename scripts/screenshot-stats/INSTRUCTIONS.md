@@ -1,46 +1,46 @@
-# Auswertung von Ergebnis-Screenshots (Terraforming Mars)
+# Evaluating result screenshots (Terraforming Mars)
 
-Jeder Screenshot zeigt die Ergebnisseite einer Partie ("Terraforming Mars - Spiel beendet!", meist deutsch,
-manchmal englisch). Lies ALLES Textliche ab und schreibe pro Screenshot genau eine JSON-Datei `extracted/<screenshotId>.json`
-(screenshotId = Dateiname ohne .jpg). Die Diagramme NICHT ablesen – das macht `charts.py`.
+Each screenshot shows the results page of a game ("Terraforming Mars - Spiel beendet!", usually German,
+sometimes English). Read ALL the text and write exactly one JSON file `extracted/<screenshotId>.json` per screenshot
+(screenshotId = file name without .jpg). Do NOT read the charts – `charts.py` does that.
 
-Kleine Schrift: Ausschnitte 2–3fach vergrößert speichern und diese lesen (jeder Durchlauf mit eigenem
-Hilfsskript, nicht gemeinsam genutzt). Genauigkeit geht vor Tempo.
+Small text: save crops enlarged 2–3x and read those (each run with its own
+helper script, not shared). Accuracy before speed.
 
-## JSON-Format
+## JSON format
 
 ```json
 {
   "screenshotId": "1187895540952862800",
-  "generations": 11,                      // aus "Siegpunkteaufschlüsselung nach N Generationen"
-  "gameId": "g6d1300d1444d",              // aus der Log-Zeile "Die Spiel-ID war …", sonst null
-  "board": "tharsis",                     // tharsis | hellas | elysium | null (Tharsis: Beschriftungen Tharsis Tholus, Ascraeus Mons, Pavonis Mons, Arsia Mons, Noctis City)
-  "venus": false,                         // true, wenn ein Venus-Diagramm/Venus-Spalte zu sehen ist
-  "notes": "",                            // Auffälligkeiten, Unsicherheiten
+  "generations": 11,                      // from "Siegpunkteaufschlüsselung nach N Generationen"
+  "gameId": "g6d1300d1444d",              // from the log line "Die Spiel-ID war …", otherwise null
+  "board": "tharsis",                     // tharsis | hellas | elysium | null (Tharsis: labels Tharsis Tholus, Ascraeus Mons, Pavonis Mons, Arsia Mons, Noctis City)
+  "venus": false,                         // true if a Venus chart/Venus column is visible
+  "notes": "",                            // anomalies, uncertainties
   "players": [
     {
       "name": "Daniel",
-      "color": "red",                     // Farbe der Tabellenzeile: red | green | blue | yellow | black | purple | orange | pink
-      "corporation": "Tharsis Republik",  // wie angezeigt (Zeile unter dem Namen); mehrere mit " / "
-      "points": {                         // Spalten der Siegpunkte-Tabelle in Reihenfolge der Symbole
-        "terraformRating": 45,            // orangenes TR-Symbol
+      "color": "red",                     // color of the table row: red | green | blue | yellow | black | purple | orange | pink
+      "corporation": "Tharsis Republik",  // as displayed (line under the name); several joined with " / "
+      "points": {                         // columns of the victory point table in the order of the icons
+        "terraformRating": 45,            // orange TR icon
         "milestones": 10,                 // "M"
         "awards": 2,                      // "A"
-        "greenery": 11,                   // grünes Plättchen
-        "city": 23,                       // Stadt-Plättchen
-        "cards": 8,                       // "SP"-Münze = Siegpunkte aus Karten
-        "other": {},                      // weitere Spalten (z. B. Venus, Mond, Fluchtgeschwindigkeit) als {"<Bezeichnung>": Zahl}
-        "total": 99                       // "Gesamt"
+        "greenery": 11,                   // green tile
+        "city": 23,                       // city tile
+        "cards": 8,                       // "SP" coin = victory points from cards
+        "other": {},                      // further columns (e.g. Venus, Moon, escape velocity) as {"<label>": number}
+        "total": 99                       // "Gesamt" (total)
       },
-      "megaCredits": 81,                  // gelbes M€-Symbol (graue Zahl rechts)
-      "time": "35:08",                    // Uhr-Symbol
-      "actions": 73,                      // Pfeil-Symbol
-      "cards": [                          // Kartenliste unter dem Spielernamen (Kasten in Spielerfarbe): Punkte + Name, GENAU wie geschrieben
+      "megaCredits": 81,                  // yellow M€ icon (gray number on the right)
+      "time": "35:08",                    // clock icon
+      "actions": 73,                      // arrow icon
+      "cards": [                          // card list under the player name (box in player color): points + name, EXACTLY as written
         {"name": "Kallisto Strafmine", "points": 2},
         {"name": "Biomasse-Brennkammer", "points": -1}
       ],
-      "milestones": ["Bürgermeister", "Gärtner"],   // aus "X-Meilenstein beansprucht" (nur der Name ohne "-Meilenstein")
-      "awards": [                                   // aus "1. Platz für X (finanziert durch Y)" / "2nd place for X award (funded by Y)"
+      "milestones": ["Bürgermeister", "Gärtner"],   // from "X-Meilenstein beansprucht" (only the name without "-Meilenstein")
+      "awards": [                                   // from "1. Platz für X (finanziert durch Y)" / "2nd place for X award (funded by Y)"
         {"name": "Bergmann", "place": 2, "funder": "Jens"}
       ]
     }
@@ -48,14 +48,14 @@ Hilfsskript, nicht gemeinsam genutzt). Genauigkeit geht vor Tempo.
 }
 ```
 
-## Regeln
-- Spielerreihenfolge wie in der Tabelle (Sieger oben).
-- Kartennamen exakt übernehmen (Umlaute, Bindestriche); über zwei Zeilen umbrochene Namen zusammenfügen
+## Rules
+- Player order as in the table (winner on top).
+- Copy card names exactly (umlauts, hyphens); join names wrapped over two lines
   ("Fortgeschrittenes" + "Ökosystem" → "Fortgeschrittenes Ökosystem").
-- Meilenstein-/Auszeichnungszeilen stehen am Ende der Kartenliste (nach einer Leerzeile); sie gehören NICHT in "cards".
-- Auszeichnungen: Name ohne "award"; Platz 1 = 5 Punkte, Platz 2 = 2 Punkte.
-- Prüfe selbst: Summe der Spalten = Gesamt; Summe der Kartenpunkte = "cards"-Spalte; 5 × Meilensteine = "milestones";
-  Auszeichnungspunkte = "awards". Wenn etwas nicht aufgeht, nochmal vergrößert lesen; bleibt es so, in "notes" vermerken.
-- Weicht ein Screenshot ab (andere Oberfläche, z. B. Steam-Version, fehlende Teile), trage ein, was sichtbar ist,
-  setze Unbekanntes auf null und beschreibe es in "notes".
-- Antworte am Ende nur mit einer kurzen Liste: Datei → OK oder Problem (eine Zeile je Screenshot).
+- Milestone/award lines are at the end of the card list (after a blank line); they do NOT belong in "cards".
+- Awards: name without "award"; place 1 = 5 points, place 2 = 2 points.
+- Check yourself: sum of columns = total; sum of card points = "cards" column; 5 × milestones = "milestones";
+  award points = "awards". If something doesn't add up, read it again enlarged; if it stays that way, note it in "notes".
+- If a screenshot differs (different UI, e.g. Steam version, missing parts), enter what is visible,
+  set unknowns to null and describe it in "notes".
+- At the end, reply only with a short list: file → OK or problem (one line per screenshot).

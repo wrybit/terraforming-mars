@@ -1,6 +1,6 @@
-"""Erzeugt fünf App-Icon-Varianten (512 px, maskable) aus den echten Spiel-Assets.
+"""Generates five app icon variants (512 px, maskable) from the real game assets.
 
-Ausgabe: icons/idea-<n>.png und eine Übersicht icons/overview.png.
+Output: icons/idea-<n>.png and an overview icons/overview.png.
 """
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
@@ -23,7 +23,7 @@ def asset(name, height):
 
 
 def space(dark=(8, 10, 16)):
-    # Sternenhimmel aus stars.jpg, abgedunkelt, damit der Planet leuchtet
+    # Starry sky from stars.jpg, darkened so the planet glows
     stars = Image.open(ASSETS / 'stars.jpg').convert('RGB')
     side = min(stars.size)
     stars = stars.crop((0, 0, side, side)).resize((SIZE, SIZE), Image.LANCZOS)
@@ -42,14 +42,14 @@ def paste_center(base, image, center):
 
 
 def idea_planet():
-    # 1: Freigestellter Mars im All, mit leichtem Atmosphären-Schein
+    # 1: Cut-out Mars in space, with a slight atmospheric glow
     base = glow(space(), (256, 256), 210, (230, 110, 60, 120))
     paste_center(base, planet(360), (256, 256))
     return base
 
 
 def idea_planet_greenery():
-    # 2: Mars mit Grünfläche davor – Terraforming auf einen Blick
+    # 2: Mars with a greenery in front – terraforming at a glance
     base = glow(space(), (236, 236), 190, (230, 110, 60, 110))
     paste_center(base, planet(330), (236, 236))
     paste_center(base, asset('tiles/greenery.png', 190), (360, 360))
@@ -57,7 +57,7 @@ def idea_planet_greenery():
 
 
 def idea_tiles():
-    # 3: Die drei Plättchen Stadt, Grünfläche, Ozean als Wabe auf Rostrot
+    # 3: The three tiles city, greenery, ocean as a honeycomb on rust red
     base = Image.new('RGBA', (SIZE, SIZE), (150, 62, 30, 255))
     base = glow(base, (256, 256), 260, (214, 110, 60, 255))
     for name, center in (('tiles/ocean.png', (256, 150)), ('tiles/greenery.png', (170, 300)), ('tiles/city.png', (342, 300))):
@@ -66,7 +66,7 @@ def idea_tiles():
 
 
 def idea_terraform_rating():
-    # 4: TW-Symbol des Spiels vor dem Mars
+    # 4: The game's TR symbol in front of Mars
     base = glow(space(), (256, 256), 210, (230, 110, 60, 100))
     paste_center(base, planet(380), (256, 256))
     shade = Image.new('RGBA', (SIZE, SIZE), (0, 0, 0, 90))
@@ -76,7 +76,7 @@ def idea_terraform_rating():
 
 
 def idea_horizon():
-    # 5: Mars als Horizont unten, Ozean-Plättchen und Temperatur darüber
+    # 5: Mars as horizon at the bottom, ocean tile and temperature above
     base = space((6, 8, 20))
     big = planet(760)
     base = glow(base, (256, 560), 360, (230, 110, 60, 140))
@@ -103,7 +103,7 @@ def main():
         icon = make().convert('RGB')
         icon.save(OUT / f'idea-{number}.png')
         icons.append(icon)
-    # Übersicht: groß als App-Icon, darunter klein wie ein Favicon im Tab
+    # Overview: large as an app icon, below it small like a favicon in the tab
     sheet = Image.new('RGB', (5 * 230 + 20, 330), (30, 32, 40))
     draw = ImageDraw.Draw(sheet)
     for index, icon in enumerate(icons):
@@ -119,7 +119,7 @@ def main():
 
 
 def export_chosen(target: Path):
-    """Gewählte Idee 1 als App-Icons, Favicon ohne Hintergrund (bei 16 px klarer)."""
+    """Chosen idea 1 as app icons, favicon without background (clearer at 16 px)."""
     target.mkdir(parents=True, exist_ok=True)
     app_icon = idea_planet().convert('RGB')
     for size in (512, 192):

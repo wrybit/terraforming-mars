@@ -1,10 +1,10 @@
-// Echte Karten und Wertungs-Kacheln verkleinern, ohne CSS-zoom: Browser rechnen zoom im Raster
-// unterschiedlich (Safari/Electron ließen Karten überlappen). Stattdessen transform: scale()
-// plus ein Halter, der die verkleinerte Größe ins Layout einträgt.
+// Shrink real cards and scoring tiles without CSS zoom: browsers compute zoom in the grid
+// differently (Safari/Electron let cards overlap). Instead transform: scale()
+// plus a holder that enters the shrunk size into the layout.
 (function (TM) {
   'use strict';
 
-  // Reihenfolge zählt: die erste passende Regel gewinnt
+  // Order matters: the first matching rule wins
   var RULES = [
     {selector: '.mb-popover-card .card-container', scale: 1.2},
     {selector: '.mb-setup[data-step="corporation"] .card-container', scale: 0.9},
@@ -14,7 +14,7 @@
   ];
 
   function holderOf(element, wrap) {
-    // Eigener Halter nötig, wenn das Element Geschwister hat (z. B. Ablage mit vielen Karten)
+    // Own holder needed if the element has siblings (e.g. pile with many cards)
     var siblings = Array.prototype.filter.call(element.parentElement.children, function (child) { return child.tagName !== 'INPUT'; });
     if (!wrap && siblings.length === 1) return element.parentElement;
     if (element.parentElement.classList.contains('mb-scale-holder')) return element.parentElement;
@@ -25,7 +25,7 @@
     return holder;
   }
 
-  // Zwei Karten nebeneinander über die volle Breite des Rasters (abzüglich Innenabstand und Spaltenlücke)
+  // Two cards side by side across the full width of the grid (minus padding and column gap)
   function twoColumnScale(holder, width) {
     var grid = holder.parentElement;
     while (grid && getComputedStyle(grid).display !== 'grid') grid = grid.parentElement;
@@ -36,7 +36,7 @@
   }
 
   function apply(element, rule) {
-    if (!element.offsetParent && element.offsetWidth === 0) return; // unsichtbar: später messen
+    if (!element.offsetParent && element.offsetWidth === 0) return; // invisible: measure later
     var holder = holderOf(element, rule.wrap);
     element.style.transform = '';
     var width = element.offsetWidth;
@@ -52,7 +52,7 @@
   }
 
   TM.scale = {
-    // Kopie eines Elements ohne dessen Skalierung; die Kopie wird beim nächsten Messen neu skaliert
+    // Copy of an element without its scaling; the copy is rescaled on the next measurement
     fresh: function (element) {
       var copy = element.cloneNode(true);
       copy.style.transform = '';
@@ -74,8 +74,8 @@
     },
   };
 
-  // Nach jedem Klick und jeder Größenänderung neu messen: Bildschirme, Aufgaben und Ablagen
-  // werden erst dann sichtbar, vorher haben die Elemente keine Maße
+  // Re-measure after every click and every resize: screens, tasks and piles
+  // only become visible then, before that the elements have no dimensions
   function schedule() { requestAnimationFrame(function () { requestAnimationFrame(TM.scale.visible); }); }
   document.addEventListener('click', schedule);
   document.addEventListener('change', schedule);

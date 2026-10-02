@@ -22,8 +22,8 @@
 import {defineComponent, PropType} from 'vue';
 import {SectionPart} from '@/client/components/cardlist/cardListOptions';
 
-// Abschnitt der Kartenliste: Kopf als Milchglas-Leiste, links ein Farbstreifen aus den Farben der enthaltenen
-// Kartentypen, bei mehreren Typen eine kleine Legende, rechts die Anzahl. Der Kopf bleibt beim Scrollen stehen.
+// Card list section: header as a frosted-glass bar, on the left a colour strip from the colours of the contained
+// card types, with several types a small legend, on the right the count. The header stays put while scrolling.
 export default defineComponent({
   name: 'CardListSection',
   props: {

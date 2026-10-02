@@ -7,7 +7,7 @@ import {AdminGameSummary} from '../../common/admin/AdminGameSummary';
 import {localGameSummary} from '../admin/localGameSummary';
 import {ImportedGamesStore} from '../admin/ImportedGamesStore';
 
-/** Alle Spiele für die Admin-Übersicht: eigene Partien und importierte Ergebnisse, neueste zuerst. */
+/** All games for the admin overview: own games and imported results, newest first. */
 export class ApiAdminGames extends Handler {
   public static readonly INSTANCE = new ApiAdminGames();
   constructor(private readonly importedGames: ImportedGamesStore = ImportedGamesStore.getInstance()) {
@@ -19,7 +19,7 @@ export class ApiAdminGames extends Handler {
     const localSummaries: Array<AdminGameSummary> = [];
     for (const {gameId} of ledger) {
       const game = await ctx.gameLoader.getGame(gameId);
-      // Ein defekter Spielstand soll nicht die ganze Übersicht verhindern
+      // A broken game state must not break the whole overview
       if (game !== undefined) {
         localSummaries.push(localGameSummary(game));
       }

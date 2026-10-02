@@ -5,7 +5,7 @@
       <MilestoneAwardIcon v-if="iconParts !== undefined" class="stats-entity-icon" :parts="iconParts"/>
       <span v-i18n>{{ label }}</span>
     </a>
-    <!-- Karten lassen sich groß ansehen; das Symbol ist eine kleine Karte -->
+    <!-- Cards can be viewed large; the icon is a small card -->
     <button v-if="isCard" type="button" class="stats-card-button" :title="$t('Show card')" :aria-label="$t('Show card')" @click="showCard"></button>
   </span>
 </template>
@@ -23,10 +23,10 @@ import {boardLabel} from './statsLabels';
 import {CardName} from '@/common/cards/CardName';
 import {CARD_ZOOM_KEY, OpenCardZoom} from './statsCardZoom';
 
-// Arten, deren Einträge Karten sind
+// Kinds whose entries are cards
 const CARD_KINDS: ReadonlyArray<StatsKind> = ['corporation', 'prelude', 'card'];
 
-// Name eines Eintrags als Link zur Detailseite; Spieler in ihrer Spielerfarbe, Meilensteine/Auszeichnungen mit Symbol
+// Name of an entry as a link to the detail page; players in their player color, milestones/awards with icon
 export default defineComponent({
   name: 'StatsEntityName',
   components: {MilestoneAwardIcon},
@@ -37,7 +37,7 @@ export default defineComponent({
   props: {
     kind: {type: String as PropType<StatsKind>, required: true},
     name: {type: String, required: true},
-    // Karten in Anzeigereihenfolge, durch die die Großansicht blättert (ohne Angabe nur diese Karte)
+    // Cards in display order that the large view pages through (if omitted, only this card)
     siblings: {type: Array as PropType<ReadonlyArray<string>>, required: false},
   },
   computed: {

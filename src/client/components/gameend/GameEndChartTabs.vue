@@ -1,5 +1,5 @@
 <template>
-  <!-- Beide Verlaufsdiagramme der Ergebnisseite in einer Tab-Box statt untereinander: spart in der rechten Spalte Höhe -->
+  <!-- Both history charts of the results page in one tab box instead of stacked: saves height in the right column -->
   <div class="game-end-charts">
     <div class="or-tabs" role="tablist">
       <button v-for="tab in tabs" :key="tab.id" type="button" role="tab"
@@ -11,7 +11,7 @@
       </button>
     </div>
     <div v-docked-tab class="or-tab-panel or-tab-panel--view" role="tabpanel">
-      <!-- v-if statt v-show: Chart.js misst die Zeichenfläche beim Aufbau, verborgen hätte sie keine Größe -->
+      <!-- v-if instead of v-show: Chart.js measures the canvas on setup; hidden, it would have no size -->
       <VictoryPointChart v-if="selected === 'victoryPoints'" key="victoryPoints"
         :datasets="victoryPointDatasets"
         :generation="generation"

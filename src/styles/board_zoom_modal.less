@@ -1,31 +1,31 @@
-// Mars-Brett bildschirmfüllend (BoardZoomModal.vue); Farben wie die Seitenleisten-Dialoge (sidebar_modal.less)
+// Mars board full screen (BoardZoomModal.vue); colors like the sidebar dialogs (sidebar_modal.less)
 
 .board-zoom-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 1100; // wie Seitenleisten-Dialoge: über Spalten-Modals und dem Rahmen "du bist am Zug"
+  z-index: 1100; // like sidebar dialogs: above column modals and the "your turn" frame
   display: flex;
   align-items: center;
   justify-content: center;
-  // Sehr dunkel, damit sich das Brett klar vom Spiel dahinter abhebt
+  // Very dark so the board clearly stands out from the game behind it
   background: rgba(0, 0, 0, 0.93);
   backdrop-filter: blur(6px);
   cursor: zoom-out;
 }
 
-// Träger der Flug-Animation (boardZoomAnimation.ts): skaliert von der linken oberen Ecke aus
+// Carrier of the flight animation (boardZoomAnimation.ts): scales from the top left corner
 .board-zoom-stage {
   transform-origin: 0 0;
   will-change: transform;
 }
 
-// Das Brett in der Spalte fliegt scheinbar ins Modal; solange es offen ist, bleibt die Lücke frei
+// The board in the column seemingly flies into the modal; while it's open, the gap stays empty
 .board-zoom-origin--hidden {
   visibility: hidden;
 }
 
-// Innenabstand = Überhang der Brett-Elemente links/rechts von .board-cont (player_home_columns.less),
-// sonst ragen Kolonie-Felder und Skalen aus der gemessenen Box
+// Padding = overhang of the board elements left/right of .board-cont (player_home_columns.less),
+// otherwise colony spaces and scales stick out of the measured box
 .board-zoom-content {
   padding: 0 @player-home-board-overhang-right 0 @player-home-board-overhang-left;
 
@@ -36,7 +36,7 @@
 
 .board-zoom-close {
   position: fixed;
-  z-index: 1101; // über dem Hintergrund des Modals (steht jetzt daneben statt darin)
+  z-index: 1101; // above the modal's backdrop (now sits next to it instead of inside it)
   top: 16px;
   right: 16px;
   width: 36px;
@@ -55,12 +55,12 @@
   }
 }
 
-// Brett im Spiel: Lupen-Cursor nur ohne laufende Feldwahl (Selektoren wie in boardPlacementActive.ts)
+// Board in the game: magnifier cursor only without an ongoing space selection (selectors as in boardPlacementActive.ts)
 body:not(:has(.select_space_cont)) .board-cont--zoomable:not(:has(.board-space--available)) {
   cursor: zoom-in;
 }
 
-// Vergrößerter Mars während einer Feldwahl: im Brett wird platziert, nicht verkleinert
+// Enlarged Mars during a space selection: you place on the board, not shrink it
 body:has(.select_space_cont) .board-zoom-content {
   cursor: default;
 }

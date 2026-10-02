@@ -8,8 +8,8 @@ import {codeTableValues, readCodedList, readCodedValue} from './settingsLinkCode
 import {BOOLEAN_FIELDS, CARD_LIST_FIELDS, ESCAPE_VELOCITY_FIELDS, NUMBER_FIELDS, PLAYER_BEGINNER_FLAG, SETTINGS_LINK_FORMAT_VERSION} from './settingsLinkFields';
 
 /**
- * Entpackt einen Teilen-Link in dasselbe JSON, das auch der Datei-Import liefert.
- * So läuft alles durch den bewährten JSONProcessor samt Prüfungen und Warnungen.
+ * Unpacks a share link into the same JSON that the file import produces.
+ * That way everything goes through the proven JSONProcessor, including checks and warnings.
  */
 export function decodeSettingsLink(text: string): JSONObject {
   const reader = new ByteReader(base64UrlToBytes(text));
@@ -24,7 +24,7 @@ export function decodeSettingsLink(text: string): JSONObject {
     json[field] = flags[index] ?? false;
   });
 
-  // Alle bekannten Erweiterungen erst aus, damit der Link genau seinen Stand herstellt
+  // Turn all known expansions off first, so the link restores exactly its own state
   const expansions: JSONObject = Object.fromEntries(EXPANSIONS.map((expansion) => [expansion, false]));
   const expansionFlags = reader.readFlags();
   codeTableValues('expansions').forEach((expansion, index) => {
@@ -57,7 +57,7 @@ export function decodeSettingsLink(text: string): JSONObject {
   json.players = withDistinctColors(players);
 
   for (const field of CARD_LIST_FIELDS) {
-    // Umbenannte Karten auf den heutigen Namen bringen, damit alte Links gültig bleiben
+    // Map renamed cards to their current name, so old links stay valid
     json[field] = readCodedList(reader, 'cards').map((name) => CARD_RENAMES.get(name) ?? name);
   }
   json.customColonies = readCodedList(reader, 'colonies');
@@ -66,8 +66,8 @@ export function decodeSettingsLink(text: string): JSONObject {
 }
 
 /**
- * Das Formular erlaubt doppelte Farben (erst beim Erstellen verteilt es neu), der Import lehnt sie ab.
- * Damit ein solcher Link trotzdem lädt, bekommen doppelte oder unbekannte Farben eine freie.
+ * The form allows duplicate colors (it only reassigns them on creation), the import rejects them.
+ * So such a link still loads, duplicate or unknown colors get a free one.
  */
 function withDistinctColors(players: Array<JSONObject>): Array<JSONObject> {
   const used = new Set<string>();

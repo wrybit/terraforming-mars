@@ -1,8 +1,8 @@
 <template>
   <section class="mb-screen mb-screen--mars">
-    <!-- Mars-Bildschirm der Mobil-Ansicht (Spieler und Zuschauer): Brett ohne Skalen-Ring, darunter die Parameter als Balken,
-         dann Meilensteine usw. aus GameBoardView. Kommentar innen, damit v-show des Aufrufers die Wurzel trifft -->
-    <!-- Sprache, Spieldetails, Hilfe, Einstellungen: dieselben Knöpfe wie am Desktop, hier als Leiste oben -->
+    <!-- Mars screen of the mobile view (players and spectators): board without the scale ring, below it the parameters as bars,
+         then milestones etc. from GameBoardView. Comment inside so the caller's v-show hits the root -->
+    <!-- Language, game details, help, settings: the same buttons as on desktop, here as a bar at the top -->
     <Sidebar class="mb-toolbar"
       :actingPlayer="acting"
       :playerColor="viewerColor ?? 'neutral'"
@@ -21,7 +21,7 @@
       :otherDeckSizes="game.otherDeckSizes"
       :spectatorId="game.spectatorId"
       :expectedPurgeTimeMs="game.expectedPurgeTimeMs"/>
-    <!-- Zugstatus: wer dran ist bzw. welche Aufgabe ansteht; rechts optional die eigene Spielzeit (Slot) -->
+    <!-- Turn status: who is up or which task is pending; optionally your own game time on the right (slot) -->
     <div :class="['mb-banner', {'mb-banner--waiting': !acting}]">
       <span class="mb-banner-dot"></span>
       <span class="mb-banner-title">{{ bannerTitle }}</span>
@@ -35,9 +35,9 @@
       :viewerColor="viewerColor"
       @toggleTileView="emit('toggleTileView')"
     />
-    <!-- Antippen des Mars öffnet ebenfalls die Großansicht (GameBoardView) -->
+    <!-- Tapping Mars also opens the large view (GameBoardView) -->
     <button type="button" class="mb-mars-zoom" @click="requestPlacementZoom">
-      <!-- Nur Symbol: keine eigenen Texte neben den vorhandenen Übersetzungen -->
+      <!-- Icon only: no own texts next to the existing translations -->
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>
     </button>
     <MobileParameterBars
@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <!-- Weitere Abschnitte des Aufrufers (z. B. eigene Untergrund-Marker) -->
+    <!-- Further sections from the caller (e.g. own underground tokens) -->
     <slot></slot>
   </section>
 </template>
@@ -85,7 +85,7 @@ const props = defineProps<{
   tileView: TileView;
   acting: boolean;
   bannerTitle: string;
-  // Farbe des eigenen Spielers; Zuschauer haben keine
+  // Own player's color; spectators have none
   viewerColor?: Color;
 }>();
 
@@ -97,7 +97,7 @@ const emit = defineEmits<{
 const claimedMilestones = computed(() => props.game.milestones.filter((milestone) => milestone.playerName !== undefined).length);
 const fundedAwards = computed(() => props.game.awards.filter((award) => award.playerName !== undefined).length);
 
-// Feld hervorheben (Log-Eintrag angetippt): HomeMixin ruft das über ref="gameBoardView" des Aufrufers auf
+// Highlight a space (log entry tapped): HomeMixin calls this via the caller's ref="gameBoardView"
 const gameBoardView = ref<{highlightSpace: (spaceId: SpaceId) => void} | null>(null);
 function highlightSpace(spaceId: SpaceId): void {
   gameBoardView.value?.highlightSpace(spaceId);

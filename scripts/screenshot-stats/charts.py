@@ -1,8 +1,8 @@
-"""Liest die beiden Liniendiagramme der Ergebnisseite (Siegpunkte je Generation, globale Parameter) aus einem Screenshot."""
+"""Reads the two line charts of the results page (victory points per generation, global parameters) from a screenshot."""
 import sys, json, cv2, numpy as np
 
 COLOR_RANGES = {
-    # Farbton (OpenCV 0..180), Mindest-Sättigung, Mindest-Helligkeit
+    # Hue (OpenCV 0..180), minimum saturation, minimum brightness
     'red': ((0, 8), (172, 180), 120, 80),
     'green': ((45, 80), None, 120, 80),
     'blue': ((100, 125), None, 120, 120),
@@ -22,7 +22,7 @@ def color_mask(hsv, color):
 
 
 def longest_run(row, max_gap=25):
-    """Längster Abschnitt einer Gitterlinie; Lücken durch kreuzende Datenlinien und Punkte werden überbrückt."""
+    """Longest segment of a grid line; gaps from crossing data lines and points are bridged."""
     xs = np.where(row)[0]
     if len(xs) == 0:
         return 0, 0
@@ -50,7 +50,7 @@ def gridlines(img):
     img = img.astype(int)
     b, g, r = img[..., 0], img[..., 1], img[..., 2]
     gray = (abs(r - g) < 15) & (abs(g - b) < 15) & (r > 85) & (r < 200)
-    # Grobe Suche über die ganze Breite, dann je Diagramm genau innerhalb seiner Zeichenfläche
+    # Coarse search across the full width, then precisely within each chart's plot area
     lines = group_rows(np.where(gray.mean(axis=1) > 0.15)[0])
     clusters = []
     for y in lines:
@@ -59,7 +59,7 @@ def gridlines(img):
         else:
             clusters.append([y])
     result = []
-    # Diagramme haben mindestens sechs Gitterlinien mit deutlichem Abstand (Tabellenränder o. ä. fallen heraus)
+    # Charts have at least six grid lines with clear spacing (table borders etc. drop out)
     for cluster in [c for c in clusters if len(c) >= 6 and np.median(np.diff(c)) >= 8]:
         runs = [longest_run(gray[y]) for y in cluster]
         left = int(np.median([run[0] for run in runs]))
@@ -69,12 +69,12 @@ def gridlines(img):
         chart_lines = [y + y_from for y in group_rows(np.where(local > 0.5)[0])]
         if len(chart_lines) < 6:
             continue
-        # Abstand aus der Gesamthöhe statt aus dem Median: bei kleinen Bildern summieren sich Rundungsfehler sonst auf
+        # Spacing from the total height instead of the median: on small images rounding errors add up otherwise
         median = float(np.median(np.diff(chart_lines)))
         spacing = (chart_lines[-1] - chart_lines[0]) / max(1, round((chart_lines[-1] - chart_lines[0]) / median))
-        # Nur gleichmäßig verteilte Linien zählen (Achsenbeschriftung o. ä. fällt heraus)
+        # Only evenly spaced lines count (axis labels etc. drop out)
         chart_lines = [y for y in chart_lines if abs(((y - chart_lines[-1]) / spacing) - round((y - chart_lines[-1]) / spacing)) < 0.25]
-        # Kartenlisten o. ä. haben auch helle Querlinien, sind aber schmal oder haben wenige Linien
+        # Card lists etc. also have light horizontal lines, but are narrow or have few lines
         if right - left < max(300, 0.2 * img.shape[1]) or len(chart_lines) < 7:
             continue
         result.append({'top': chart_lines[0], 'bottom': chart_lines[-1], 'spacing': spacing, 'left': left, 'right': right, 'lines': len(chart_lines)})
@@ -85,7 +85,7 @@ def series(hsv, chart, colors, generations):
     top = int(chart['top'] - 0.4 * chart['spacing'])
     bottom = int(chart['bottom'] + 0.4 * chart['spacing'])
     masks = {color: color_mask(hsv, color)[top:bottom, chart['left']:chart['right']] for color in colors}
-    # Erste und letzte Generation: äußerste farbige Spalten (Mittelpunkte der Randpunkte, Radius abziehen)
+    # First and last generation: outermost colored columns (centers of the edge points, subtract radius)
     combined = np.zeros_like(next(iter(masks.values())))
     for mask in masks.values():
         combined |= mask
@@ -105,7 +105,7 @@ def series(hsv, chart, colors, generations):
 
 
 def fill_hidden(pixel_series):
-    """Verdeckte Punkte: eine andere Linie liegt darüber – also derselbe Wert wie die nächstliegende sichtbare."""
+    """Hidden points: another line lies on top – so the same value as the nearest visible one."""
     names = list(pixel_series)
     length = len(pixel_series[names[0]])
     for name in names:
@@ -123,7 +123,7 @@ def fill_hidden(pixel_series):
 
 
 def remove_spikes(values, monotonic):
-    """Einzelne Ausreißer (Pixel einer anderen Linie oder Beschriftung erwischt) durch den Median der Nachbarn ersetzen."""
+    """Replace single outliers (pixels of another line or a label caught) with the median of the neighbors."""
     cleaned = list(values)
     for index in range(len(values)):
         window = [values[i] for i in (index - 1, index, index + 1) if 0 <= i < len(values) and values[i] is not None]
@@ -132,7 +132,7 @@ def remove_spikes(values, monotonic):
         elif 0 < index < len(values) - 1 and len(window) == 3:
             cleaned[index] = sorted(window)[1]
     if monotonic:
-        # Globale Parameter sinken nie
+        # Global parameters never decrease
         for index in range(1, len(cleaned)):
             cleaned[index] = max(cleaned[index], cleaned[index - 1])
     return cleaned
@@ -145,17 +145,17 @@ def extract(path, player_colors, generations, totals):
     if len(charts) < 2:
         return {'error': f'{len(charts)} Diagramme gefunden'}
     points_chart, globals_chart = charts[0], charts[1]
-    # Siegpunkte: Gitterlinien alle 10 Punkte; Nulllinie aus den bekannten Endständen bestimmt
+    # Victory points: grid lines every 10 points; zero line determined from the known final scores
     pixels = fill_hidden(series(hsv, points_chart, list(player_colors.values()), generations))
     per_point = points_chart['spacing'] / 10
     offsets = [pixels[color][-1] + totals[name] * per_point for name, color in player_colors.items() if pixels[color][-1] is not None]
     zero = float(np.median(offsets))
     points = {name: [None if y is None else round((zero - y) / per_point) for y in pixels[color]] for name, color in player_colors.items()}
-    # Globale Parameter: 0–100 %, am Ende sind alle voll – oberster Endpunkt = 100 %
+    # Global parameters: 0–100 %, at the end all are maxed – topmost end point = 100 %
     global_colors = {'temperature': 'red', 'oxygen': 'green', 'oceans': 'blue'}
     gpixels = fill_hidden(series(hsv, globals_chart, list(global_colors.values()), generations))
     per_percent = globals_chart['spacing'] / 10
-    # Elf Linien = 0 bis 100 % vollständig sichtbar; sonst ist der höchste Endpunkt 100 % (am Ende ist alles voll)
+    # Eleven lines = 0 to 100 % fully visible; otherwise the highest end point is 100 % (at the end everything is maxed)
     lines = round((globals_chart['bottom'] - globals_chart['top']) / globals_chart['spacing']) + 1
     full = globals_chart['top'] if lines >= 11 else min(gpixels[color][-1] for color in global_colors.values() if gpixels[color][-1] is not None)
     parameters = {name: [None if y is None else max(0, min(100, round((full - y) / per_percent + 100))) for y in gpixels[color]] for name, color in global_colors.items()}

@@ -61,7 +61,7 @@ export default defineComponent({
       default: false,
     },
   },
-  // Zählung, Rabatte und Punkte je Tag teilt sich die Leiste mit der Tabelle (playerTagDetails.ts)
+  // The bar shares counting, discounts and points per tag with the table (playerTagDetails.ts)
   data(): TagDetails {
     return buildTagDetails(this.player, this.playerView);
   },

@@ -1,21 +1,21 @@
-// Kartenliste: fester Kopf (Titel, Suche mit Name/Volltext, Sprache, Einstellungen), links eine mitlaufende Filterspalte
-// aus Milchglas-Kacheln, rechts die Ergebnisse in Abschnitten mit stehenbleibendem Kopf. Schmal: Filter als Bottom-Sheet.
-// Farben, Flächen, Kacheln und Segmente stammen aus "Spiel erstellen" (create_game_form.less) und dem Spiel
-// (frosted_surface.less, selection_highlight.less, cards.less) – hier keine eigenen Grundwerte.
+// Card list: fixed header (title, search with name/full text, language, settings), on the left a sticky filter column
+// of frosted-glass tiles, on the right the results in sections with sticky headers. Narrow: filters as a bottom sheet.
+// Colors, surfaces, tiles and segments come from "Create game" (create_game_form.less) and the game
+// (frosted_surface.less, selection_highlight.less, cards.less) – no base values of its own here.
 
-// Nähe: innerhalb einer Kachel 6px, zwischen Kacheln 16px, zwischen den Spalten 24px (wie create_game_form.less)
+// Proximity: within a tile 6px, between tiles 16px, between the columns 24px (as in create_game_form.less)
 @card-list-header-height: 64px;
-// Schmal zwei Zeilen: oben Titel und Knöpfe, darunter die Suche über die volle Breite
+// Narrow, two rows: title and buttons on top, the search across the full width below
 @card-list-header-height-narrow: 104px;
-// Unterhalb dieser Breite Karten verkleinert, damit zwei nebeneinander passen
+// Below this width cards are scaled down so two fit side by side
 @card-list-phone: 600px;
 @card-list-phone-card-zoom: 0.68;
 @card-list-filters-width: 320px;
 @card-list-icon-size: 26px;
-// Unterhalb dieser Breite Filter als Bottom-Sheet
+// Below this width filters as a bottom sheet
 @card-list-narrow: 900px;
 
-// Die Seite hat keine Seitenleiste: deren freigehaltener Platz links (common.less) entfällt
+// The page has no sidebar: the space reserved for it on the left (common.less) is dropped
 .main-container:has(#card-list) {
   margin-left: 0;
 }
@@ -36,7 +36,7 @@
   }
 }
 
-// Farben der Nicht-Karten-Einträge (Karten nutzen .background-color-* aus cards.less)
+// Colors of the non-card entries (cards use .background-color-* from cards.less)
 .card-list-color-milestone,
 .card-list-color-award {
   background: @highlight-gold;
@@ -46,7 +46,7 @@
   background: @button-quiet-hover;
 }
 
-// ---------- Kopf ----------
+// ---------- Header ----------
 .card-list-header {
   .frosted-surface();
   position: sticky;
@@ -67,14 +67,14 @@
   }
 }
 
-// Sprache/Einstellungen in der Kopfleiste so weit auseinander wie in .card-list-header-actions
+// Language/settings in the header bar as far apart as in .card-list-header-actions
 .card-list-header .page-toolbar {
   gap: 8px;
 }
 
-// Kopf ohne Suche ("Spiel erstellen", "Spiel erstellt"): Höhe und Inhalt wie die Kartenliste, aber als Karte
-// im Raster der Seite – mit Rand nach außen, nicht mitlaufend. Zum Inhalt darunter derselbe Abstand
-// wie zwischen den Karten (Inhalt hat oben @page-content-edge, daher negativer Rest).
+// Header without search ("Create game", "Game created"): height and content like the card list, but as a card
+// in the page grid – with a margin to the outside, not sticky. Same spacing to the content below
+// as between the cards (content has @page-content-edge on top, hence a negative remainder).
 .card-list-header--plain {
   --card-list-header: @card-list-header-height;
   position: relative;
@@ -97,10 +97,10 @@
   .toolbar-glass-icon-buttons();
 }
 
-// ---------- Suche: Feld mit Name/Volltext-Schalter darin ----------
+// ---------- Search: field with name/full-text toggle inside ----------
 .card-list-search {
   position: relative;
-  // Füllt den Platz zwischen Titel und Knöpfen
+  // Fills the space between title and buttons
   flex: 1;
   display: flex;
   align-items: center;
@@ -111,7 +111,7 @@
   width: 100%;
   height: @toolbar-button-size;
   margin: 0;
-  // Platz links fürs Lupen-Symbol, rechts für Löschen-Knopf und Schalter
+  // Space on the left for the magnifier icon, on the right for the clear button and toggle
   padding: 0 236px 0 38px;
   border: 1px solid @create-game-line;
   border-radius: @create-game-radius-small;
@@ -129,13 +129,13 @@
     box-shadow: 0 0 0 3px fade(@bg_action, 35%);
   }
 
-  // Eigener Löschen-Knopf statt des Browser-Kreuzes
+  // Own clear button instead of the browser's cross
   &::-webkit-search-cancel-button {
     display: none;
   }
 }
 
-// Lupe als Rahmen-Kreis mit Stiel, ohne zusätzliche Grafik
+// Magnifier as an outlined circle with a handle, without extra graphics
 .card-list-search-icon {
   position: absolute;
   left: 13px;
@@ -188,7 +188,7 @@
   }
 }
 
-// ---------- Grundraster: Filterspalte links, Ergebnisse rechts ----------
+// ---------- Base grid: filter column on the left, results on the right ----------
 .card-list-layout {
   display: grid;
   grid-template-columns: @card-list-filters-width minmax(0, 1fr);
@@ -206,11 +206,11 @@
   max-height: calc(100vh - var(--card-list-header) - 2 * @create-game-gap-card);
   overflow-y: auto;
   scrollbar-width: thin;
-  // Schatten und Fokusrahmen der Kacheln nicht abschneiden
+  // Do not clip the tiles' shadows and focus rings
   padding: 2px 4px 2px 2px;
 }
 
-// Milchglas-Kachel wie die Karten in "Spiel erstellen"
+// Frosted-glass tile like the cards in "Create game"
 .card-list-group {
   .create-game-card();
   margin-bottom: 0;
@@ -241,21 +241,21 @@
   }
 }
 
-// ---------- Kacheln der Filtergruppen ----------
+// ---------- Tiles of the filter groups ----------
 .card-list-chips {
   display: flex;
   flex-wrap: wrap;
   gap: @create-game-gap-inner;
 }
 
-// Gleiche Kachel wie in "Spiel erstellen", Auswahl in 20 % Lila mit Häkchen-Fähnchen
+// Same tile as in "Create game", selection in 20 % purple with a checkmark flag
 .card-list-chip {
   .create-game-chip();
   color: #eee;
   font: inherit;
   text-align: left;
 
-  // Ohne Treffer bei den übrigen Filtern: bleibt wählbar, tritt aber zurück
+  // No matches with the other filters: stays selectable but recedes
   &--empty {
     opacity: 0.4;
   }
@@ -265,14 +265,14 @@
   white-space: nowrap;
 }
 
-// Platz fürs Häkchen-Fähnchen
+// Space for the checkmark flag
 .card-list-count {
   .create-game-count();
   margin-left: auto;
   margin-right: 6px;
 }
 
-// Reine Symbole (Tags, Ressourcen): gleich breite Kacheln im Raster, Zahl darunter
+// Icons only (tags, resources): equal-width tiles in a grid, count below
 .card-list-chips--icons {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
@@ -301,7 +301,7 @@
   background-repeat: no-repeat;
 }
 
-// Basisspiel hat kein Symbol: Buchstabe statt Bild
+// Base game has no icon: letter instead of image
 .card-list-icon.expansion-icon-base::before {
   content: "B";
   display: grid;
@@ -326,7 +326,7 @@
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
 }
 
-// ---------- Preisbereich: zwei übereinanderliegende Schieberegler auf einer Spur ----------
+// ---------- Price range: two stacked sliders on one track ----------
 @card-list-range-thumb: 20px;
 
 .card-list-cost-range {
@@ -340,7 +340,7 @@
   flex: 1;
   height: @card-list-range-thumb;
 
-  // Graue Grundspur
+  // Gray base track
   &::before {
     content: "";
     position: absolute;
@@ -361,7 +361,7 @@
     margin: 0;
     background: none;
     appearance: none;
-    // Nur die Griffe fangen Klicks, damit beide Regler bedienbar bleiben
+    // Only the thumbs catch clicks so both sliders remain usable
     pointer-events: none;
 
     &::-webkit-slider-thumb {
@@ -395,7 +395,7 @@
   }
 }
 
-// Gewählter Bereich in der Aktiv-Farbe
+// Selected range in the active color
 .card-list-cost-range-fill {
   position: absolute;
   top: 50%;
@@ -412,7 +412,7 @@
   color: @create-game-dim;
 }
 
-// Preis als gelbe M€-Münze wie auf den Karten
+// Price as a yellow M€ coin as on the cards
 .card-list-cost-range-coin {
   display: grid;
   place-items: center;
@@ -425,7 +425,7 @@
   font-weight: bold;
 }
 
-// ---------- Zusammenfassung oben in der Filterspalte ----------
+// ---------- Summary at the top of the filter column ----------
 .card-list-summary {
   display: flex;
   flex-direction: column;
@@ -488,7 +488,7 @@
   }
 }
 
-// ---------- Weitere Filter ----------
+// ---------- More filters ----------
 .card-list-more {
   summary {
     font-size: 16px;
@@ -499,7 +499,7 @@
     margin-bottom: 12px;
   }
 
-  // Ressourcen-Gruppe sitzt hier ohne eigene Kachel
+  // Resource group sits here without its own tile
   .card-list-group {
     padding: 0;
     border: 0;
@@ -528,10 +528,10 @@
   margin-bottom: @create-game-gap-inner;
 }
 
-// ---------- Ergebnisse ----------
+// ---------- Results ----------
 .card-list-results {
   min-width: 0;
-  // Nichts darf die Seite seitlich verbreitern (sonst wird das Bottom-Sheet breiter als der Bildschirm)
+  // Nothing may widen the page sideways (otherwise the bottom sheet gets wider than the screen)
   overflow-x: clip;
 }
 
@@ -539,11 +539,11 @@
   margin-top: 32px;
 }
 
-// Abschnittskopf: Milchglas-Leiste, bleibt unter dem Seitenkopf stehen
+// Section header: frosted-glass bar, stays put below the page header
 .card-list-section-head {
   .frosted-surface();
   position: sticky;
-  // Bündig unter dem Seitenkopf, sonst scheinen in der Lücke die Karten durch
+  // Flush below the page header, otherwise the cards show through in the gap
   top: var(--card-list-header);
   z-index: 10;
   display: flex;
@@ -564,7 +564,7 @@
   }
 }
 
-// Farbstreifen links: je enthaltenem Kartentyp ein gleich hohes Stück
+// Color stripe on the left: one equally tall piece per contained card type
 .card-list-section-stripe {
   align-self: stretch;
   display: flex;
@@ -607,8 +607,8 @@
   flex-wrap: wrap;
   gap: 10px 20px;
 
-  // Abstand kommt vom gap statt vom Außenrand der Karte (rechts 30px), sonst passen schmal keine zwei nebeneinander.
-  // Oben bleibt Luft für Kostenmünze und Tags, die über die Karte ragen.
+  // Spacing comes from the gap instead of the card's margin (30px on the right), otherwise two won't fit side by side when narrow.
+  // Space remains on top for the cost coin and tags that stick out above the card.
   .card-container {
     margin: 15px 0 0;
   }
@@ -620,13 +620,13 @@
   color: @create-game-dim;
 }
 
-// Suchtreffer (searchHighlight.ts)
+// Search matches (searchHighlight.ts)
 ::highlight(card-list-search) {
   background-color: fade(@highlight-gold, 75%);
   color: #000;
 }
 
-// ---------- Nach oben: unten rechts in der Daumenzone, erst nach weitem Scrollen ----------
+// ---------- Back to top: bottom right in the thumb zone, only after scrolling far ----------
 .card-list-scroll-top {
   position: fixed;
   right: 20px;
@@ -657,7 +657,7 @@
   }
 }
 
-// ---------- Nur schmal: Filter-Knopf im Kopf, Filter als Bottom-Sheet ----------
+// ---------- Narrow only: filter button in the header, filters as a bottom sheet ----------
 .card-list-filter-toggle,
 .card-list-sheet-head,
 .card-list-sheet-foot,
@@ -690,7 +690,7 @@
     grid-area: actions;
   }
 
-  // Ohne Suche bleibt es eine Zeile, nur die Schrift wird kleiner wie oben
+  // Without search it stays one row, only the font gets smaller as above
   .card-list-header.card-list-header--plain {
     display: flex;
     gap: 16px;
@@ -718,7 +718,7 @@
     }
   }
 
-  // Filter-Knopf mit Trefferzahl, Plakette = Zahl aktiver Filter
+  // Filter button with match count, badge = number of active filters
   .card-list-filter-toggle {
     .toolbar-glass-button();
     position: relative;
@@ -788,7 +788,7 @@
     position: relative;
     padding: 18px 2px 0;
 
-    // Griff als Hinweis, dass das Sheet von unten kommt
+    // Handle as a hint that the sheet comes from below
     &::before {
       content: "";
       position: absolute;
@@ -847,7 +847,7 @@
   }
 }
 
-// Handy: Karten verkleinert, zwei nebeneinander
+// Phone: cards scaled down, two side by side
 @media only screen and (max-width: @card-list-phone) {
   .card-list-cards {
     justify-content: center;
@@ -857,7 +857,7 @@
     }
   }
 
-  // Kolonien, Meilensteine, Auszeichnungen, Agenden haben feste Breiten (Kolonie gut 440px) und würden die Seite verbreitern
+  // Colonies, milestones, awards, agendas have fixed widths (colony a good 440px) and would widen the page
   .card-list-section-body .player_home_colony {
     zoom: @card-list-phone-card-zoom;
   }

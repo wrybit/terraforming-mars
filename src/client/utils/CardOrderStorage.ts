@@ -26,8 +26,8 @@ const store = new LocalStorageStore<CardOrder>({
   },
 });
 
-// Zähler macht die Reihenfolge reaktiv: Wer getCardOrder() im Rendering liest (Bauen, Verkaufen …),
-// wird neu gezeichnet, sobald die Hand umsortiert wird – localStorage selbst ist nicht reaktiv.
+// A counter makes the order reactive: whoever reads getCardOrder() while rendering (build, sell …)
+// is re-rendered as soon as the hand is re-sorted – localStorage itself is not reactive.
 const revision = ref(0);
 
 export class CardOrderStorage {

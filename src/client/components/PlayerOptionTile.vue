@@ -1,11 +1,11 @@
 <template>
-  <!-- Ein Spieler als Kachel in seiner Farbe; die gewählte pulsiert wie Karten (player_options.less).
-       Geht es um eine Ressource, zeigt die Kachel deren Bestand und Produktion, beim betroffenen Wert
-       auch den Stand danach (selectPlayerResource.ts). Gemeinsam genutzt von SelectPlayer.vue und der
-       Kachel-Entscheidung in OrOptions.vue (dort auch für Optionen wie "Entferne 4 Stahl von …"). -->
+  <!-- A player as a tile in their color; the selected one pulses like cards (player_options.less).
+       If a resource is involved, the tile shows its stock and production, and for the affected value
+       also the amount afterwards (selectPlayerResource.ts). Shared by SelectPlayer.vue and the
+       tile decision in OrOptions.vue (there also for options like "Remove 4 steel from …"). -->
   <label :class="['player-option', 'player_translucent_bg_color_' + color, {'player-option--selected': selected}]"
     :title="caption === undefined ? undefined : $t(caption)">
-    <!-- Radio für Tastatur und Screenreader, sichtbar ist die Kachel -->
+    <!-- Radio for keyboard and screen readers; the tile is what's visible -->
     <input type="radio" :name="groupName" :value="color" :checked="selected" class="player-option-input" @change="$emit('select', color)">
     <SelectPlayerRow class="player-option-name" :player="player"/>
     <div v-if="snapshot !== undefined && after !== undefined" class="player-option-resource">
@@ -47,14 +47,14 @@ export default defineComponent({
       required: false,
       default: undefined,
     },
-    // Was die Wahl beim Spieler verändert; ohne Ressource bleibt die Kachel beim Namen
+    // What the choice changes for the player; without a resource the tile shows just the name
     effect: {
       type: Object as () => PlayerEffect | undefined,
       required: false,
       default: undefined,
     },
-    // Voller Text der Option (z. B. "Entferne 4 Stahl von …") als Tooltip; sichtbar sind Name, Symbol und vorher → nachher,
-    // damit der Name nicht doppelt steht
+    // Full option text (e.g. "Remove 4 steel from …") as tooltip; visible are name, icon and before → after,
+    // so the name isn't shown twice
     caption: {
       type: [String, Object] as unknown as () => string | Message | undefined,
       required: false,
@@ -71,7 +71,7 @@ export default defineComponent({
   },
   emits: ['select'],
   computed: {
-    // Bestand und Produktion der betroffenen Ressource; undefined, wenn es um keine Ressource geht
+    // Stock and production of the affected resource; undefined if no resource is involved
     snapshot(): ResourceSnapshot | undefined {
       if (this.effect === undefined || this.player === undefined) {
         return undefined;
@@ -86,7 +86,7 @@ export default defineComponent({
     },
   },
   methods: {
-    // Produktion mit Vorzeichen wie in den Spielerleisten (+2, 0, -1)
+    // Production with sign, as in the player bars (+2, 0, -1)
     signed(value: number): string {
       return value > 0 ? '+' + value : String(value);
     },

@@ -77,7 +77,7 @@ export const HomeMixin = defineComponent({
     },
   },
   mounted() {
-    // Kinder (WaitingFor) werden vor dem Elternteil gemountet; daher hier denselben vollständigen Titel setzen.
+    // Children (WaitingFor) are mounted before the parent; so set the same full title here.
     const props = this.$props as {playerView?: TitleView, spectator?: TitleView};
     document.title = gameDocumentTitle(props.playerView ?? props.spectator ?? {game: this.game});
     window.addEventListener('keydown', this.navigatePage);

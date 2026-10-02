@@ -72,11 +72,11 @@ type LogPanelModel = {
   // True while the panel should keep following the newest generation as it changes.
   // False once the player manually navigates to an earlier generation.
   following: boolean,
-  // Log-Zeile, deren Karten gerade im Karussell-Modal liegen (nur mit zoomCarousel)
+  // Log line whose cards are currently shown in the carousel modal (only with zoomCarousel)
   zoomedMessage: LogMessage | undefined,
 };
 
-// Abstand der Hover-Vorschau zum rechten Rand des Logs
+// Distance of the hover preview from the log's right edge
 const LOG_PREVIEW_INSET = 3;
 
 export default defineComponent({
@@ -86,7 +86,7 @@ export default defineComponent({
       type: Object as () => ViewModel,
       required: true,
     },
-    // Mobil-Ansicht: Antippen öffnet die Karten der Zeile als Karussell im Modal, keine Hover-Vorschau
+    // Mobile view: tapping opens the line's cards as a carousel in a modal, no hover preview
     zoomCarousel: {
       type: Boolean,
       default: false,
@@ -112,7 +112,7 @@ export default defineComponent({
   },
   emits: ['spaceClicked'],
   methods: {
-    // Mit Maus/Trackpad öffnet Hover die Vorschau; Klick bleibt nur für Touch-Geräte ohne Hover
+    // With mouse/trackpad, hover opens the preview; click is only for touch devices without hover
     canHover(): boolean {
       return window.matchMedia('(hover: hover)').matches;
     },
@@ -123,7 +123,7 @@ export default defineComponent({
         }
         return;
       }
-      // Viele Karten: immer per Klick als Modal über der rechten Spalte
+      // Many cards: always on click, as a modal over the right column
       if (needsModalPreview(message)) {
         this.typedRefs.messageInspector.showModal(message);
       } else if (!this.canHover()) {
@@ -131,15 +131,15 @@ export default defineComponent({
       }
     },
     messageHovered(message: LogMessage, event: MouseEvent) {
-      // Zeilen mit vielen Karten haben keine Hover-Vorschau (würde übers Fenster ragen), nur Klick
+      // Lines with many cards have no hover preview (it would overflow the window), only click
       if (this.zoomCarousel || !this.canHover() || needsModalPreview(message)) {
         return;
       }
-      // Vorschau vertikal mittig im Log-Panel, knapp vor dessen rechtem Rand, in Fensterkoordinaten
-      // (position: fixed), damit sie nicht vom Spalten-Overflow abgeschnitten wird
+      // Preview vertically centered in the log panel, just inside its right edge, in window coordinates
+      // (position: fixed), so it isn't clipped by the column overflow
       const rowElement = event.currentTarget as HTMLElement;
       const panel = (rowElement.closest('.log-panel') ?? rowElement).getBoundingClientRect();
-      // Mitte des sichtbaren Teils: ragt das Log unten aus dem Fenster, würde die Karte sonst mit abgeschnitten
+      // Center of the visible part: if the log extends below the window, the card would otherwise be clipped too
       const visibleTop = Math.max(panel.top, 0);
       const visibleBottom = Math.min(panel.bottom, window.innerHeight);
       this.typedRefs.messageInspector.preview(message, {

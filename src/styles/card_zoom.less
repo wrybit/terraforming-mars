@@ -1,5 +1,5 @@
-// Großansicht einer Karte als Karussell (MobileCardZoom.vue). Eigene Datei und global statt nur unter
-// html.tm-mobile: auch die Statistik nutzt die Großansicht, dort auch am Desktop.
+// Large view of a card as a carousel (MobileCardZoom.vue). Own file and global instead of only under
+// html.tm-mobile: the statistics use the large view too, there also on desktop.
 
 .mb-card-zoom {
   position: fixed;
@@ -30,8 +30,8 @@
   background: transparent;
 }
 
-// Karussell über die volle Breite (Rand des Dialogs aufgehoben), rastet auf je einer Karte ein.
-// Es trägt die Wachs-/Schrumpf-Animation (MobileCardZoom, Web Animations)
+// Carousel across the full width (dialog margin cancelled), snaps to one card at a time.
+// It carries the grow/shrink animation (MobileCardZoom, Web Animations)
 .mb-card-zoom-track {
   position: relative;
   align-self: stretch;
@@ -44,16 +44,16 @@
   &::-webkit-scrollbar {
     display: none;
   }
-  // Abstandhalter vorn und hinten, damit auch die erste und letzte Karte mittig einrasten
+  // Spacers at start and end, so the first and last card also snap to the center
   &::before,
   &::after {
     content: "";
     flex: 0 0 calc((100% - @mb-card-zoom-slide-width) / 2);
   }
 }
-// Schmaler als der Bildschirm, damit vorige und nächste Karte links und rechts angeschnitten hereinschauen.
-// Oben Platz für Kosten und Tags, die über die Karte ragen, unten für den Schatten –
-// das Karussell schneidet sonst alles außerhalb ab
+// Narrower than the screen, so the previous and next cards peek in, cut off, on the left and right.
+// Room on top for cost and tags sticking out of the card, at the bottom for the shadow –
+// otherwise the carousel clips everything outside
 .mb-card-zoom-slide {
   flex: 0 0 @mb-card-zoom-slide-width;
   display: flex;
@@ -64,7 +64,7 @@
   scroll-snap-stop: always;
 }
 
-// Karte um ein Fünftel größer mit Schatten darunter; der Rand um die skalierte Karte hält den Platz frei
+// Card a fifth larger with a shadow below; the margin around the scaled card keeps the space free
 .mb-card-zoom-card {
   position: relative;
   margin: 30px 0;
@@ -77,8 +77,8 @@
   }
 }
 
-// Nachbarkarten warten außerhalb des Karussells, bis die gezeigte Karte gewachsen ist (Wartelage wie
-// NEIGHBOR_OFFSET in MobileCardZoom.vue); vorige links, nächste rechts; das Karussell schneidet sie dort ab
+// Neighbor cards wait outside the carousel until the shown card has grown (waiting position like
+// NEIGHBOR_OFFSET in MobileCardZoom.vue); previous left, next right; the carousel clips them there
 .mb-card-zoom--neighbors-hidden {
   .mb-card-zoom-slide--before .mb-card-zoom-card {
     transform: translateX(-120%);
@@ -88,7 +88,7 @@
   }
 }
 
-// Pfeile außen, Spielen/Schließen in der Mitte; feste Breite, damit die Pfeile mit und ohne "Spiele Karte" am selben Platz stehen
+// Arrows outside, Play/Close in the middle; fixed width so the arrows stay in the same place with and without "Play card"
 .mb-card-zoom-actions {
   position: relative;
   display: flex;
@@ -101,7 +101,7 @@
 
   .btn {
     height: 44px;
-    min-width: 0; // Mindestbreite der Desktop-Knöpfe weg, sonst passen Pfeile und beide Knöpfe nicht in eine Handy-Zeile
+    min-width: 0; // drop the desktop buttons' min width, otherwise arrows and both buttons don't fit in one phone row
     margin: 0 !important;
     padding: 0 12px;
     font-size: 16px;
@@ -112,12 +112,12 @@
   opacity: 1;
 }
 
-// Schließen gut sichtbar: weiße Fläche, schwarze Schrift
+// Close clearly visible: white surface, black text
 .mb-card-zoom-main {
   display: flex;
   gap: 6px;
 }
-// Vor/Zurück: gleiche Fläche wie Schließen, nur quadratisch
+// Next/Previous: same surface as Close, just square
 .mb-card-zoom-step {
   flex-shrink: 0;
   width: 44px;
@@ -132,7 +132,7 @@
 .mb-card-zoom-step--hidden {
   visibility: hidden;
 }
-// Sehr schmale Handys: Pfeile passen nicht mehr neben Spielen/Schließen und rutschen in eine zweite Zeile darunter
+// Very narrow phones: arrows no longer fit next to Play/Close and move to a second row below
 @media (max-width: 359px) {
   .mb-card-zoom-actions {
     flex-wrap: wrap;
@@ -144,7 +144,7 @@
     justify-content: center;
   }
 }
-// Schriftgröße fest wie bei den Knöpfen daneben: das Modal des Logs hängt am body und erbt dort eine andere
+// Fixed font size like the buttons next to it: the log's modal hangs off body and inherits a different one there
 .mb-card-zoom-close {
   height: 44px;
   padding: 0 12px;

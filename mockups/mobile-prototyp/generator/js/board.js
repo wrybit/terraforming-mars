@@ -1,8 +1,8 @@
-// Echter Mars ohne Ring: freigestellter Planet, Kolonie-Felder in den Ecken, globale Parameter als Balken.
+// Real Mars without ring: cut-out planet, colony spaces in the corners, global parameters as bars.
 (function (TM) {
   'use strict';
 
-  // Ausschnitte in Koordinaten der .board-cont (670 px breit, Planet bei x 92–541, y 85–534)
+  // Crops in coordinates of .board-cont (670 px wide, planet at x 92–541, y 85–534)
   var CROP_HOME = {left: 42, top: 62, width: 550, height: 486};
   var TILE_TITLES = {
     greenery: 'Greenery: 1 VP',
@@ -27,7 +27,7 @@
   TM.board = {
     init: function () {
       board = TM.$('#boardHome .board-cont');
-      // Wählbare Felder je Plättchen-Art merken; außerhalb des Platzierens neutral zeigen
+      // Remember selectable spaces per tile type; show neutral outside of placing
       available = JSON.parse(JSON.stringify(window.TM_DATA.available));
       TM.$all('.board-space--available', board).forEach(function (space) { space.classList.remove('board-space--available'); });
       TM.on('state', TM.board.renderParameters);
@@ -55,7 +55,7 @@
       });
     },
 
-    // Freie Felder für eine Plättchen-Art (bereits belegte fallen heraus)
+    // Free spaces for a tile type (already occupied ones drop out)
     freeSpaces: function (type) {
       return available[type].filter(function (id) {
         var space = TM.$('.board-space[data_space_id="' + id + '"]', board);
@@ -72,7 +72,7 @@
       TM.zoom.start(board);
     },
 
-    // Mars nur ansehen und zoomen, ohne wählbare Felder
+    // Just view and zoom Mars, without selectable spaces
     startViewing: function () {
       placing = null;
       document.getElementById('placeWrap').hidden = false;
@@ -100,7 +100,7 @@
       return space ? space.getAttribute('data_space_id') : null;
     },
 
-    // Plättchen so setzen, wie der echte Client es rendert: Kachel-Klasse plus Spielerwürfel
+    // Place tiles the way the real client renders them: tile class plus player cube
     placeTile: function (spaceId, type, color) {
       var space = TM.$('.board-space[data_space_id="' + spaceId + '"]', board);
       var tile = space.querySelector('.board-space');
@@ -113,7 +113,7 @@
       setTimeout(function () { space.classList.remove('mb-just-placed'); }, 1600);
     },
 
-    // Für die Ergebnisseite: aktueller Stand als Kopie
+    // For the results page: current state as a copy
     cloneInto: function (container) {
       container.innerHTML = '';
       var copy = board.cloneNode(true);

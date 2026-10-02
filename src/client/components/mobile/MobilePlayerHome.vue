@@ -1,9 +1,9 @@
 <template>
   <div id="player-home" :ref="trackRoot"
     :class="['mb-home', 'mb-home--' + screen, 'mb-setup-step-' + setupStep, {'mb-setup-last': setupStep >= setupSteps.length - 1,'mb-home--acting': acting, 'mb-home--placing': placing, 'mb-home--setup': isSetupPhase}]">
-    <!-- Mobil-Ansicht der Spieleransicht (Handy, Tablet hoch und quer): immer nur ein Bildschirm, unten die Fußleiste.
-         "Zug" öffnet das Aktionsmenü als Sheet; in einer Aufgabe wird die Fußleiste zur Aufgabenleiste
-         (Abbrechen + Bestätigen/Bezahlen der Eingabe). -->
+    <!-- Mobile player view (phone, tablet portrait and landscape): always just one screen, footer bar at the bottom.
+         "Turn" opens the action menu as a sheet; inside a task the footer bar becomes the task bar
+         (Cancel + Confirm/Pay for the input). -->
 
     <MobileHeader :game="game" @click="go('players')" :aria-label="$t('Players')">
       <span class="mb-top-money">
@@ -39,7 +39,7 @@
         <HandCardsPanel :playerView="playerView"/>
       </section>
 
-      <!-- Ab drei Spielern scrollen die Tabellen waagerecht unter stehenbleibenden Symbol-Spalten (mobile.less) -->
+      <!-- From three players on, the tables scroll horizontally beneath sticky icon columns (mobile.less) -->
       <section v-show="screen === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': playerView.players.length > 2}]"
         @click.capture="zoomCard" @scroll.capture="markHorizontalScroll">
         <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players"/>
@@ -50,8 +50,8 @@
         <LogPanel v-if="!isSetupPhase" :viewModel="playerView" zoomCarousel @spaceClicked="showSpace"/>
       </section>
 
-      <!-- Eingabe bleibt immer eingebunden: WaitingFor fragt den Server nach dem eigenen Zug.
-           Als Aufgaben-Ansicht: Kopf mit Zurück, Titel und Zähler, darunter nur der Inhalt der gewählten Aufgabe -->
+      <!-- The input always stays mounted: WaitingFor asks the server about the own turn.
+           As task view: header with Back, title and counter, below it only the content of the chosen task -->
       <section v-show="screen === 'turn'" class="mb-screen mb-screen--turn" ref="turnSection">
         <div v-if="!isSetupPhase && (isActionMenu ? task !== undefined : inputTitle !== undefined)"
           :class="['mb-task-head', isActionMenu && task?.tone !== undefined && task.tone !== 'highlight' ? 'mb-task-head--' + task.tone : '']">
@@ -64,7 +64,7 @@
           </template>
           <span v-else class="mb-task-title">{{ inputTitle }}</span>
         </div>
-        <!-- Startauswahl bestätigt: Kopf wie bei einer Aufgabe, darunter die eigene Auswahl (PlayerSetupView); Status, wer noch wählt -->
+        <!-- Initial selection confirmed: header like a task, below it the own selection (PlayerSetupView); status of who is still choosing -->
         <div v-else-if="isSetupConfirmed" class="mb-task-head">
           <button type="button" class="mb-icon-button" :aria-label="$t('Back')" @click="go('mars')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
@@ -72,7 +72,7 @@
           <span class="mb-task-title">{{ $t('Your selection') }}</span>
           <span class="mb-task-sub">{{ bannerTitle }}</span>
         </div>
-        <!-- Startauswahl in Schritten wie im Mockup: Konzern, Präludien, Karten – immer nur eine Spalte sichtbar -->
+        <!-- Initial selection in steps like in the mockup: corporation, preludes, cards – only one column visible at a time -->
         <div v-if="isSetupPhase && setupSteps.length > 1" class="mb-steps" role="tablist">
           <button v-for="(step, index) in setupSteps" :key="index" type="button" role="tab"
             :aria-selected="setupStep === index"
@@ -84,17 +84,17 @@
           </button>
         </div>
         <PlayerSetupView v-if="isSetupPhase" :playerView="playerView"/>
-        <!-- Vor dem letzten Schritt: "Weiter" statt Start (der Start-Knopf der Auswahl erscheint im letzten Schritt) -->
+        <!-- Before the last step: "Next" instead of Start (the selection's start button appears in the last step) -->
         <button v-if="isSetupPhase && setupStep < setupSteps.length - 1" type="button"
           class="btn btn-submit btn-rounded mb-setup-next" @click="showSetupStep(setupStep + 1)">
           {{ nextStepLabel }}
         </button>
-        <!-- In der Startauswahl steckt die Eingabe schon in PlayerSetupView; eine zweite (WaitingFor) im letzten
-             Schritt hätte eine eigene, leere Bilanz-Leiste über die richtige gelegt -->
+        <!-- During initial selection the input already lives in PlayerSetupView; a second one (WaitingFor) in the last
+             step would have laid its own empty balance bar over the correct one -->
         <template v-else-if="!isSetupPhase">
           <p v-if="playerView.waitingFor === undefined" class="mb-empty">{{ bannerTitle }}</p>
           <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
-          <!-- Karten-Karussell (Karte spielen): Position und Anzahl, Punkt antippen wischt dorthin -->
+          <!-- Card carousel (play card): position and count, tapping a dot swipes there -->
           <div v-if="carousel !== undefined && carousel.count > 1" class="mb-dots">
             <button v-for="index in carousel.count" :key="index" type="button"
               :class="['mb-dot', {'mb-dot--active': index - 1 === carousel.index}]"
@@ -105,10 +105,10 @@
       </section>
     </main>
 
-    <!-- Aufgabenleiste: auf dem Zug-Bildschirm und während einer Feldwahl; Bestätigen/Bezahlen sitzen rechts daneben (mobile.less).
-         Nach bestätigter Startauswahl gibt es nichts zu bestätigen: dann bleibt die Navigation stehen -->
+    <!-- Task bar: on the turn screen and during space selection; Confirm/Pay sit to its right (mobile.less).
+         After the initial selection is confirmed there is nothing to confirm: then the navigation stays -->
     <div v-if="(screen === 'turn' && !isSetupConfirmed) || placing" class="mb-taskbar">
-      <!-- Zurück als Symbol: keine eigenen Texte neben den vorhandenen Übersetzungen -->
+      <!-- Back as an icon: no own texts besides the existing translations -->
       <button type="button" class="mb-taskbar-back" :aria-label="$t('Close')" @click="leaveTask"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
       <template v-if="screen !== 'turn'">
         <span class="mb-taskbar-hint">{{ task !== undefined ? $t(task.label) : '' }}</span>
@@ -119,7 +119,7 @@
     </div>
     <MobileNav v-else :items="navItems" :active="screen" :handCount="cardsInHandCount" @navigate="navigate">
       <template #turn>
-        <!-- Während das Zug-Sheet offen ist (inkl. Ein-/Ausfahren), fährt sein eigener Button mit; der hier bleibt unsichtbar -->
+        <!-- While the turn sheet is open (incl. sliding in/out), its own button moves with it; this one stays invisible -->
         <MobileTurnButton :class="{'mb-turn-button--lifted': turnButtonLifted}"
           :acting="acting" :action-number="actionNumber" :actions-per-turn="actionsPerTurn"/>
       </template>
@@ -172,10 +172,10 @@ import {requestPlacementZoom} from '@/client/components/board/placementZoom';
 import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
 import {CarouselState, observeCardCarousel, scrollCarouselTo} from '@/client/components/mobile/cardCarousel';
 
-// Aufräumfunktion der Beobachter (Feldwahl, Karussell); pro Seite gibt es nur eine Spieleransicht
+// Cleanup function of the observers (space selection, carousel); there is only one player view per page
 let stopObserving: (() => void) | undefined;
 
-// Sichtbarer Fußbereich der Eingabe (Bestätigen, Bezahlen); fest unten, der Inhalt braucht darunter so viel Platz
+// Visible footer area of the input (Confirm, Pay); fixed at the bottom, the content needs that much space below it
 const FOOTER_SELECTOR = '.mb-screen--turn .or-tab-footer, .mb-screen--turn .setup-summary';
 
 function updateFooterSpace(root: HTMLElement): void {
@@ -190,29 +190,29 @@ type DataModel = {
   screen: MobileScreen;
   placing: boolean;
   sheetOpen: boolean;
-  // Zug-Button fährt mit dem Sheet: bleibt bis zum Ende des Schließens aus der Fußleiste gehoben
+  // Turn button moves with the sheet: stays lifted out of the footer bar until closing has finished
   turnButtonLifted: boolean;
-  // Im Sheet gewählte Aktion; ihr Label und ihre Unterzeile bilden den Aufgaben-Kopf
+  // Action chosen in the sheet; its label and subline form the task header
   task: TurnMenuTile | undefined;
-  // Titel einer Eingabe außerhalb des Aktionsmenüs (aus dem Eingabe-Tab gelesen)
+  // Title of an input outside the action menu (read from the input tab)
   inputTitle: string | undefined;
   playersSegment: PlayersSegment;
   carousel: CarouselState | undefined;
-  // Groß angezeigte Karte (Antippen in Hand bzw. Spieler-Bildschirm)
+  // Card shown large (tap in hand or on a player screen)
   zoomedCard: CardModel | undefined;
   zoomedCardOrigin: DOMRect | undefined;
-  // Sichtbare Karten des Bildschirms in Anzeige-Reihenfolge: Vor/Zurück in der Großansicht
+  // Visible cards of the screen in display order: previous/next in the large view
   zoomedCardList: Array<CardModel>;
-  // Bildschirm, aus dem die Karte stammt (Ziel der Schrumpf-Animation nach dem Blättern)
+  // Screen the card comes from (target of the shrink animation after paging)
   zoomedCardScreen: HTMLElement | undefined;
-  // Schritte der Startauswahl (aus den Spalten von SelectInitialCards gelesen) und der sichtbare
+  // Steps of the initial selection (read from the columns of SelectInitialCards) and the visible one
   setupSteps: Array<SetupStep>;
   setupStep: number;
 };
 
 type SetupStep = {title: string, badge: string, done: boolean};
 
-// Spalten der Startauswahl (SelectInitialCards): Titel, Zähler, erledigt
+// Columns of the initial selection (SelectInitialCards): title, counter, done
 function readSetupSteps(root: HTMLElement): Array<SetupStep> {
   const columns = root.querySelector('.mb-screen--turn .setup-columns');
   return Array.from(columns?.querySelectorAll<HTMLElement>(':scope > .setup-column') ?? []).map((column) => {
@@ -225,21 +225,21 @@ function readSetupSteps(root: HTMLElement): Array<SetupStep> {
   });
 }
 
-// Klasse, an der Card.vue den Kartennamen zeigt ('card-' + Name in Kleinbuchstaben, Leerzeichen als '-')
+// Class on which Card.vue shows the card name ('card-' + name in lowercase, spaces as '-')
 function cardClassName(name: string): string {
   return 'card-' + name.toLowerCase().replaceAll(' ', '-');
 }
 
 
-// Zuletzt gewählter Bildschirm außerhalb der Aufgabe. Nach jedem Server-Update wird die Ansicht neu aufgebaut
-// (App.vue: key), der Bildschirm soll dabei erhalten bleiben
+// Last chosen screen outside a task. After every server update the view is rebuilt
+// (App.vue: key); the screen should be kept across that
 let rememberedScreen: MobileScreen = 'mars';
-// Erster Mount nach dem Laden der Seite: Turn-Drawer nicht automatisch öffnen.
-// App.vue baut die Ansicht bei jedem Server-Update neu auf (playerkey) – dort soll er weiter
-// aufgehen, damit nach einer Aktion direkt das Menü für die nächste da ist.
+// First mount after page load: don't open the turn drawer automatically.
+// App.vue rebuilds the view on every server update (playerkey) – there it should keep
+// opening, so that after an action the menu for the next one is right there.
 let pageJustLoaded = true;
 
-/* True, wenn `input` das Aktionsmenü des Zuges ist (dieselbe Unterscheidung wie WaitingFor). */
+/* True if `input` is the turn's action menu (same distinction as WaitingFor). */
 function isActionMenuInput(input: PlayerInputModel | undefined): boolean {
   return input !== undefined && !input.optional && input.type === 'or' && !isChoiceMenu(input);
 }
@@ -256,7 +256,7 @@ export default defineComponent({
   data(): DataModel {
     const waitingFor = this.playerView.waitingFor;
     const menu = isActionMenuInput(waitingFor);
-    // Aktionsmenü: Sheet über dem bisherigen Bildschirm; andere Pflicht-Eingaben direkt als Aufgabe
+    // Action menu: sheet over the previous screen; other mandatory inputs directly as a task
     const acting = waitingFor !== undefined && !waitingFor.optional;
     const openSheet = menu && !pageJustLoaded;
     pageJustLoaded = false;
@@ -304,7 +304,7 @@ export default defineComponent({
     navItems(): ReadonlyArray<MobileNavItem> {
       return MOBILE_NAV;
     },
-    // Alle Karten, die man antippen kann: eigene Hand, Draft, gespielte Karten aller Spieler
+    // All cards that can be tapped: own hand, draft, played cards of all players
     knownCards(): Array<CardModel> {
       const view = this.playerView;
       return [
@@ -325,11 +325,11 @@ export default defineComponent({
       const next = this.setupSteps[this.setupStep + 1];
       return next === undefined ? '' : next.title + ' →';
     },
-    // Startphase: noch keine Karte ausgespielt (Konzern, Präludien, Startkarten werden gewählt)
+    // Setup phase: no card played yet (corporation, preludes, initial cards are being chosen)
     isSetupPhase(): boolean {
       return this.thisPlayer.tableau.length === 0;
     },
-    // Startauswahl bestätigt, Mitspieler wählen noch: PlayerSetupView zeigt dann die eigene Auswahl
+    // Initial selection confirmed, other players still choosing: PlayerSetupView then shows the own selection
     isSetupConfirmed(): boolean {
       return this.isSetupPhase && this.playerView.pickedCorporationCard.length === 1;
     },
@@ -352,7 +352,7 @@ export default defineComponent({
     hasHandPanelContent(): boolean {
       return this.cardsInHandCount > 0 || ownActiveCards(this.playerView).length > 0;
     },
-    // Nur vorhandene Übersetzungen: Titel der Eingabe vom Server bzw. "… ist gerade am Zug"
+    // Only existing translations: title of the input from the server or "… is taking their turn"
     bannerTitle(): string {
       if (this.game.phase === Phase.END) {
         return this.$t('This game is over!');
@@ -364,11 +364,11 @@ export default defineComponent({
       const names = playersToWaitFor(this.playerView).map((player) => player.name);
       return names.length === 0 ? this.$t('Waiting for other players') : names.join(', ') + ' ' + this.$t('is taking their turn');
     },
-    // Das Modell kennt nur die genommenen Aktionen, nicht die erlaubten; Sonderfälle mit mehr Aktionen gibt es kaum
+    // The model only knows the actions taken, not the allowed ones; special cases with more actions barely exist
     actionsPerTurn(): number {
       return 2;
     },
-    // Wievielte Aktion dieses Zugs gerade ansteht; undefined, wenn man nicht in der Aktionsphase dran ist
+    // Which action of this turn is currently due; undefined if it's not your turn in the action phase
     actionNumber(): number | undefined {
       if (!this.acting || this.game.phase !== Phase.ACTION) {
         return undefined;
@@ -378,7 +378,7 @@ export default defineComponent({
   },
 
   mounted() {
-    // Titel einer schon gerenderten Eingabe lesen (Aufgaben-Kopf außerhalb des Aktionsmenüs)
+    // Read the title of an already rendered input (task header outside the action menu)
     this.$nextTick(() => this.refreshInputTitle());
   },
   beforeUnmount() {
@@ -397,9 +397,9 @@ export default defineComponent({
       }
       window.scrollTo({top: 0});
     },
-    // Fußleiste: "Zug" öffnet das Aktionsmenü als Sheet (nicht am Zug: Sheet mit dem, der dran ist),
-    // alle anderen wechseln den Bildschirm. Ausnahme Startauswahl: nach dem Bestätigen zeigt der Zug-Bildschirm
-    // die eigene Auswahl (PlayerSetupView) – das Sheet hätte nur "warten auf …" und die Karten wären unerreichbar
+    // Footer bar: "Turn" opens the action menu as a sheet (not your turn: sheet showing who is up),
+    // all others switch the screen. Exception initial selection: after confirming, the turn screen shows
+    // the own selection (PlayerSetupView) – the sheet would only have "waiting for …" and the cards would be unreachable
     navigate(screen: MobileScreen) {
       if (screen === 'turn' && !this.isSetupConfirmed && (this.isActionMenu || !this.acting)) {
         this.openSheet();
@@ -410,7 +410,7 @@ export default defineComponent({
     openSheet() {
       this.sheetOpen = true;
     },
-    // Kachel im Sheet: passende Aktion im Menü wählen und als Aufgabe zeigen
+    // Tile in the sheet: choose the matching action in the menu and show it as a task
     startTask(index: number) {
       const section = this.$refs.turnSection as HTMLElement | undefined;
       if (section !== undefined) {
@@ -420,8 +420,8 @@ export default defineComponent({
       this.sheetOpen = false;
       this.go('turn');
     },
-    // Rückfrage im Sheet bestätigt: Button des Tabs gleich auslösen (Temperatur, Zug-Ende) bzw. Feldwahl starten
-    // (Grünfläche: die Aufgabe öffnet sofort den großen Mars, updatePlacing)
+    // Prompt in the sheet confirmed: trigger the tab's button right away (temperature, end turn) or start space selection
+    // (greenery: the task immediately opens the large Mars, updatePlacing)
     confirmTask(index: number) {
       if (findTurnMenuTile(this.menu, index)?.confirmation?.action === 'place') {
         this.startTask(index);
@@ -433,7 +433,7 @@ export default defineComponent({
         submitTurnMenuTile(section, index);
       }
     },
-    // Aufgabe abbrechen: zurück zum Menü (bzw. zum Mars); aus der Feldwahl zurück in die Aufgabe
+    // Cancel task: back to the menu (or to Mars); from space selection back into the task
     leaveTask() {
       if (this.screen !== 'turn') {
         this.go('turn');
@@ -457,11 +457,11 @@ export default defineComponent({
         this.inputTitle = title;
       }
     },
-    // Großes, zoombares Brett für die Feldwahl (BoardZoomModal)
+    // Large, zoomable board for space selection (BoardZoomModal)
     zoomMars() {
       requestPlacementZoom();
     },
-    // Karte antippen: groß zeigen (Klick auf Bedienelemente der Karte bleibt unberührt)
+    // Tap a card: show it large (clicks on the card's controls stay untouched)
     zoomCard(event: MouseEvent) {
       const target = event.target as HTMLElement | null;
       const container = target?.closest('.card-container');
@@ -472,7 +472,7 @@ export default defineComponent({
       if (card !== undefined) {
         event.stopPropagation();
         const screen = event.currentTarget as HTMLElement;
-        // markRaw: DOM-Knoten nicht reaktiv machen
+        // markRaw: don't make DOM nodes reactive
         this.zoomedCardScreen = markRaw(screen);
         this.zoomedCardList = this.visibleCards(screen);
         this.zoomedCardOrigin = container.getBoundingClientRect();
@@ -482,7 +482,7 @@ export default defineComponent({
     cardOfContainer(container: Element): CardModel | undefined {
       return this.knownCards.find((entry) => container.classList.contains(cardClassName(entry.name)));
     },
-    // Alle sichtbaren Karten des Bildschirms (ausgeblendete Abschnitte zählen nicht), jede nur einmal
+    // All visible cards of the screen (hidden sections don't count), each only once
     visibleCards(screen: HTMLElement): Array<CardModel> {
       const cards: Array<CardModel> = [];
       for (const container of Array.from(screen.querySelectorAll('.card-container'))) {
@@ -493,7 +493,7 @@ export default defineComponent({
       }
       return cards;
     },
-    // Blättern/Wischen in der Großansicht; die Schrumpf-Animation zielt danach auf die neue Karte in der Liste
+    // Paging/swiping in the large view; the shrink animation then targets the new card in the list
     showZoomedCard(index: number) {
       const card = this.zoomedCardList[index];
       if (card === undefined) {
@@ -503,7 +503,7 @@ export default defineComponent({
       this.zoomedCardOrigin = container?.getBoundingClientRect() ?? undefined;
       this.zoomedCard = card;
     },
-    // "Karte spielen" aus der Großansicht: Karussell öffnen und zu dieser Karte wischen
+    // "Play card" from the large view: open the carousel and swipe to this card
     playZoomedCard() {
       const card = this.zoomedCard;
       const tile = this.zoomedCardPlayTile;
@@ -545,22 +545,22 @@ export default defineComponent({
       this.go('mars');
       this.onSpaceClicked(spaceId);
     },
-    // Feldwahl (SelectSpace) erkennen: dann gleich der große Mars; die Eingabe bleibt im Hintergrund eingebunden
+    // Detect space selection (SelectSpace): then go straight to the large Mars; the input stays mounted in the background
     updatePlacing(root: HTMLElement) {
-      // Eine Feldwahl im Menü zählt erst, wenn sie als Aufgabe gewählt ist (oder als eigene Eingabe kommt).
-      // Nur der Wechsel auf den Zug-Bildschirm reicht nicht: Beim Öffnen von "Bauen" steht kurz noch der
-      // Grünflächen-Tab im DOM, und der große Mars ginge fälschlich auf.
+      // A space selection in the menu only counts once it is chosen as a task (or arrives as its own input).
+      // Merely switching to the turn screen is not enough: when opening "Build", the
+      // greenery tab is still in the DOM briefly, and the large Mars would open by mistake.
       const placementTask = this.screen === 'turn' && this.task?.confirmation?.action === 'place';
       const placing = isBoardPlacementActive(root) && (this.placing || placementTask || !this.isActionMenu);
       if (placing !== this.placing) {
         this.placing = placing;
-        // Feldwahl gleich im großen, zoombaren Mars (BoardZoomModal) wie im Mockup
+        // Space selection right in the large, zoomable Mars (BoardZoomModal) like in the mockup
         if (placing) {
           requestPlacementZoom();
         }
       }
     },
-    // Funktions-Ref: wird mit dem Element bzw. beim Entfernen mit null aufgerufen
+    // Function ref: called with the element, or with null on removal
     trackRoot(element: unknown) {
       stopObserving?.();
       stopObserving = undefined;

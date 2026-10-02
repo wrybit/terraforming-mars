@@ -1,4 +1,4 @@
-// Spielstand des Prototyps und seine Anzeige. Jede Zahl im DOM mit data-value="pfad" wird hier nachgeführt.
+// Game state of the prototype and its display. Every number in the DOM with data-value="path" is kept in sync here.
 (function (TM) {
   'use strict';
 
@@ -22,7 +22,7 @@
 
   TM.add = function (path, delta) { TM.set(path, TM.get(path) + delta); };
 
-  // Mehrere Änderungen auf einmal, z. B. {'jens.plants': -8, 'game.oxygen': 1}
+  // Several changes at once, e.g. {'jens.plants': -8, 'game.oxygen': 1}
   TM.change = function (deltas) {
     Object.keys(deltas).forEach(function (path) {
       var keys = path.split('.');

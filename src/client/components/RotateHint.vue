@@ -1,6 +1,6 @@
-<!-- Handy quer: zu wenig Höhe für Spielplan und Fußleiste. Statt einer gequetschten Ansicht die Bitte,
-     das Gerät hochkant zu drehen – nur als Bild (Handy + Drehpfeil), damit nichts übersetzt werden muss.
-     Sichtbar schaltet allein rotate_hint.less (Touch, quer, flach). -->
+<!-- Phone in landscape: too little height for the board and footer. Instead of a squeezed view, the request
+     to rotate the device to portrait – as an image only (phone + rotation arrow), so nothing needs translating.
+     Visibility is controlled solely by rotate_hint.less (touch, landscape, short). -->
 <template>
   <div class="rotate-hint">
     <svg class="rotate-hint__icon" width="120" height="120" viewBox="0 0 96 96" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

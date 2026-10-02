@@ -28,7 +28,7 @@ import {StatsPlayerResult} from './statsResults';
 import {STATS_KINDS} from './statsKinds';
 import {formatDate} from './statsLabels';
 
-// Bestenlisten: Punkte, Vorsprung, TR, Grünflächen, Städte, Karten, kürzeste Partien
+// Leaderboards: points, margin, TR, greeneries, cities, cards, shortest games
 export default defineComponent({
   name: 'StatsRecordsView',
   components: {StatsEntityName},

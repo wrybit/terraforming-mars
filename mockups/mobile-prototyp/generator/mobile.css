@@ -1,4 +1,4 @@
-/* Mobile-Hülle um die echten Spiel-Bausteine. Präfix mb- trennt eigene Klassen sauber von styles.css */
+/* Mobile shell around the real game building blocks. Prefix mb- cleanly separates own classes from styles.css */
 :root {
   --mb-surface: rgba(18, 21, 30, 0.94);
   --mb-surface-raised: #1e2330;
@@ -32,7 +32,7 @@ body.mb-body { margin: 0; overflow: hidden; }
   box-shadow: 0 0 0 1px var(--mb-line);
 }
 
-/* ---------- Statusleiste ---------- */
+/* ---------- Status bar ---------- */
 .mb-top {
   flex-shrink: 0;
   height: var(--mb-top-height);
@@ -59,7 +59,7 @@ body.mb-body { margin: 0; overflow: hidden; }
 .mb-money-value { font-size: 22px; }
 .mb-money-prod { font-size: 14px; color: var(--mb-muted); }
 
-/* ---------- Bildschirme ---------- */
+/* ---------- Screens ---------- */
 .mb-main { flex-grow: 1; min-height: 0; position: relative; }
 .mb-screen { overflow-anchor: none; position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; display: none; flex-direction: column; -webkit-overflow-scrolling: touch; }
 .mb-screen.is-active { display: flex; }
@@ -80,12 +80,12 @@ body.mb-body { margin: 0; overflow: hidden; }
 .mb-turn-sub { color: var(--mb-muted); font-size: 14px; white-space: nowrap; }
 .mb-turn-time { font-size: 15px; margin-left: auto; font-family: Prototype, sans-serif; color: var(--mb-muted); }
 
-/* Mars ohne Ring: der Ausschnitt zeigt nur Planet + Ecken, board.js setzt Zoom und Versatz */
+/* Mars without ring: the crop shows only planet + corners, board.js sets zoom and offset */
 .mb-mars { position: relative; overflow: hidden; flex-shrink: 0; margin-top: 8px; }
 .mb-mars .board-cont { position: absolute; margin: 0 !important; translate: none !important; }
 .mb-mars .board-without-venus { background-image: url(assets-extra/mars-planet.png) !important; }
 .mb-mars .global-numbers { display: none !important; }
-/* Kolonie-Felder in die oberen Ecken, "Plätt. an" nach unten links – füllt die Flächen, wo der Ring war */
+/* Colony spaces into the top corners, "Plätt. an" to the bottom left – fills the areas where the ring was */
 .mb-mars .board-outer-spaces { left: 0; top: 0; width: 670px; height: 600px; pointer-events: none; }
 .mb-mars .board-outer-spaces .board-space { pointer-events: auto; }
 .mb-mars .board-space-01, .mb-mars .board-space-02 { position: absolute !important; margin: 0 !important; top: 98px; }
@@ -97,7 +97,7 @@ body.mb-body { margin: 0; overflow: hidden; }
 .board-space.mb-just-placed { animation: mb-placed 1.4s ease-out; }
 @keyframes mb-placed { 0% { filter: brightness(2.2); } 100% { filter: none; } }
 
-/* Globale Parameter als Balken unter dem Mars */
+/* Global parameters as bars below Mars */
 .mb-params { display: flex; flex-direction: column; gap: 10px; margin: 6px 12px 0; padding: 12px; border-radius: 12px; background: var(--mb-surface); }
 .mb-param { display: grid; grid-template-columns: 22px 1fr auto; grid-template-areas: "icon label value" "track track track" "range range range"; column-gap: 8px; row-gap: 4px; align-items: center; }
 .mb-param-icon { grid-area: icon; width: 20px; height: 20px; object-fit: contain; }
@@ -133,8 +133,8 @@ body.mb-body { margin: 0; overflow: hidden; }
 }
 .mb-quick b { font-family: Prototype, sans-serif; font-weight: normal; color: var(--mb-muted); margin-left: 4px; }
 
-/* ---------- Echte Karten auf Handybreite ---------- */
-/* Karten sind 246 px breit; 0,62 ergibt zwei Spalten mit Luft zum Rand und zueinander */
+/* ---------- Real cards at phone width ---------- */
+/* Cards are 246 px wide; 0.62 gives two columns with room to the edge and between them */
 .mb-screen .or-tab-panel { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; }
 .mb-screen .hand-cards-panel { padding: 14px 8px 24px; display: flex; flex-direction: column; gap: 22px; }
 .mb-screen .hand-cards-panel__section { display: flex; flex-direction: column; gap: 14px; margin: 0 !important; }
@@ -159,7 +159,7 @@ body.mb-body { margin: 0; overflow: hidden; }
 .mb-used > .card-container, .mb-unusable > .card-container { opacity: 0.4; filter: grayscale(0.6); }
 .mb-used { pointer-events: none; }
 
-/* Bauen: Karten einzeln durchwischen */
+/* Building: swipe through cards one by one */
 .mb-panel[data-key="build"] .payments_cont {
   display: flex !important;
   gap: 14px;
@@ -173,7 +173,7 @@ body.mb-body { margin: 0; overflow: hidden; }
 .mb-panel[data-key="build"] .card-container { margin: 0 !important; }
 .mb-swipe-hint { text-align: center; color: var(--mb-muted); font-size: 13px; }
 
-/* ---------- Aufgaben-Bildschirm ---------- */
+/* ---------- Task screen ---------- */
 .mb-task-head { flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--mb-surface); border-bottom: 1px solid var(--mb-line); }
 .mb-task-head--success { background: var(--mb-green); }
 .mb-task-head--heat { background: var(--mb-heat); }
@@ -195,7 +195,7 @@ body.mb-body { margin: 0; overflow: hidden; }
 .mb-panel .select-space-zoom { display: none; }
 .mb-panel .ma-options { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 0 12px; }
 
-/* ---------- Footer: Navigation ---------- */
+/* ---------- Footer: navigation ---------- */
 .mb-nav {
   flex-shrink: 0;
   height: var(--mb-nav-height);
@@ -232,7 +232,7 @@ body.mb-body { margin: 0; overflow: hidden; }
   100% { box-shadow: 0 0 0 0 rgba(245, 197, 66, 0); }
 }
 
-/* ---------- Footer: Aufgabe (ersetzt die Navigation) ---------- */
+/* ---------- Footer: task (replaces the navigation) ---------- */
 .mb-taskbar {
   flex-shrink: 0;
   display: none;
@@ -260,7 +260,7 @@ body.mb-body { margin: 0; overflow: hidden; }
 .mb-taskbar .payments_input { width: 46px !important; text-align: center; }
 .mb-taskbar .payments_total { display: flex; gap: 6px; justify-content: flex-end; }
 
-/* ---------- Zug-Menü ---------- */
+/* ---------- Turn menu ---------- */
 .mb-sheet { position: absolute; inset: 0; z-index: 10; display: none; flex-direction: column; background: rgba(5, 6, 10, 0.62); }
 .mb-sheet.is-open { display: flex; }
 .mb-sheet-backdrop { flex-grow: 1; border: 0; background: transparent; cursor: pointer; }
@@ -290,7 +290,7 @@ body.mb-body { margin: 0; overflow: hidden; }
 .mb-tile.is-done { opacity: 0.35; pointer-events: none; }
 .mb-pass { height: 48px; border-radius: 10px; border: 1px solid #5a2a24; background: transparent; color: #f0a39a; font: inherit; font-weight: bold; cursor: pointer; }
 
-/* ---------- Spieler ---------- */
+/* ---------- Players ---------- */
 .mb-players { padding: 12px 12px 24px; display: flex; flex-direction: column; gap: 14px; }
 .mb-segments { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 12px; background: var(--mb-surface); }
 .mb-segment { height: 36px; border-radius: 9px; border: 0; background: transparent; color: var(--mb-muted); font: inherit; font-weight: bold; cursor: pointer; }
@@ -324,7 +324,7 @@ body.mb-body { margin: 0; overflow: hidden; }
 .mb-log-slot .panel-body li + li { border-top: 1px solid rgba(255, 255, 255, 0.05); }
 .mb-log-slot .player-home-columns__log { width: auto !important; height: auto !important; margin: 0 !important; }
 
-/* ---------- Meldung ---------- */
+/* ---------- Notice ---------- */
 .mb-toast {
   position: absolute; left: 12px; right: 12px; bottom: calc(var(--mb-nav-height) + 12px); z-index: 12;
   padding: 12px 14px; border-radius: 12px; background: #20283a; border: 1px solid var(--mb-line);
@@ -333,12 +333,12 @@ body.mb-body { margin: 0; overflow: hidden; }
 }
 .mb-toast.is-visible { opacity: 1; transform: none; }
 
-/* hidden-Attribut muss gegen die display-Regeln oben gewinnen */
+/* hidden attribute must win against the display rules above */
 .mb-app [hidden] { display: none !important; }
 .mb-taskbar .or-tab-footer > * { width: 100%; }
 .mb-taskbar .btn-submit { width: 100% !important; }
 
-/* Echte Meilenstein-/Auszeichnungs-Kacheln: Kopfzeile mit Preisen in einer Reihe, Kacheln im Raster */
+/* Real milestone/award tiles: header with prices in one row, tiles in a grid */
 .mb-ma-slot .milestones_cont, .mb-ma-slot .awards_cont { width: auto !important; float: none !important; margin: 0 0 16px !important; }
 .mb-ma-slot .ma-title { display: flex !important; align-items: center; gap: 10px; width: auto !important; height: auto !important; margin: 0 0 8px !important; background: none !important; }
 .mb-ma-slot .ma-title > span { display: flex; gap: 4px; }
@@ -346,11 +346,11 @@ body.mb-body { margin: 0; overflow: hidden; }
 .mb-ma-slot .milestones > span > div, .mb-ma-slot .awards > span > div { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .mb-ma-slot .ma-block { margin: 0 !important; float: none !important; }
 
-/* styles.css setzt am body ein eigenes Layout; die Hülle soll auf breiten Fenstern mittig stehen */
+/* styles.css sets its own layout on body; the shell should be centered on wide windows */
 body.mb-body { display: block !important; padding: 0 !important; }
 body.mb-body .mb-app { margin: 0 auto !important; }
 
-/* ---------- Zugstatus ---------- */
+/* ---------- Turn status ---------- */
 .mb-turn--waiting { background: rgba(58, 28, 27, 0.92) !important; border-color: #8e2a22 !important; }
 .mb-turn--waiting .mb-turn-dot { background: #e0645a; animation: mb-blink 1.2s ease-in-out infinite; }
 @keyframes mb-blink { 50% { opacity: 0.3; } }
@@ -359,7 +359,7 @@ body.mb-body .mb-app { margin: 0 auto !important; }
 .mb-task-head--city .mb-task-sub, .mb-task-head--ocean .mb-task-sub { color: rgba(255, 255, 255, 0.85); }
 .mb-nav-badge--new { background: #d9534f; }
 
-/* ---------- Startauswahl ---------- */
+/* ---------- Initial selection ---------- */
 .mb-app.is-setup .mb-nav, .mb-app.is-setup .mb-top { display: none; }
 .mb-app.is-setup .mb-setupbar { display: flex; }
 .mb-steps { position: sticky; top: 0; z-index: 3; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 10px 12px; background: var(--mb-surface); border-bottom: 1px solid var(--mb-line); }
@@ -393,7 +393,7 @@ body.mb-body .mb-app { margin: 0 auto !important; }
 .mb-setupbar .mb-negative { color: #ff8a80; }
 .mb-setup-next { width: 100%; height: 48px; margin: 0 !important; }
 
-/* ---------- Karte groß ---------- */
+/* ---------- Large card ---------- */
 .mb-popover { position: absolute; inset: 0; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 16px; background: rgba(5, 6, 10, 0.78); }
 .mb-popover-backdrop { position: absolute; inset: 0; border: 0; background: transparent; cursor: pointer; }
 .mb-popover-card { position: relative; }
@@ -401,7 +401,7 @@ body.mb-body .mb-app { margin: 0 auto !important; }
 .mb-popover-actions { position: relative; display: flex; gap: 8px; width: 100%; max-width: 330px; }
 .mb-popover-actions .btn-submit { flex-grow: 1; height: 48px; margin: 0 !important; }
 
-/* ---------- Szenenwahl (nur Prototyp) ---------- */
+/* ---------- Scene picker (prototype only) ---------- */
 .mb-scenes { position: absolute; inset: 0; z-index: 30; display: flex; align-items: center; padding: 16px; background: rgba(5, 6, 10, 0.86); }
 .mb-scenes-panel { width: 100%; display: flex; flex-direction: column; gap: 10px; padding: 18px 16px; border-radius: 16px; background: #161a23; border: 1px solid var(--mb-line); }
 .mb-scenes-title { font-size: 20px; font-weight: bold; margin-bottom: 6px; }
@@ -411,7 +411,7 @@ body.mb-body .mb-app { margin: 0 auto !important; }
 .mb-scene-button { position: absolute; left: 8px; bottom: calc(var(--mb-nav-height) + 8px); z-index: 5; padding: 4px 10px; border-radius: 12px; border: 1px solid var(--mb-line); background: rgba(22, 26, 35, 0.85); color: var(--mb-muted); font: inherit; font-size: 11px; cursor: pointer; }
 .mb-app.is-task .mb-scene-button, .mb-app.is-setup .mb-scene-button { bottom: 150px; }
 
-/* ---------- Spielende ---------- */
+/* ---------- Game end ---------- */
 .mb-end-notice { position: absolute; left: 24px; right: 24px; top: 150px; z-index: 6; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px; border-radius: 16px; background: rgba(18, 21, 30, 0.95); border: 1px solid var(--mb-gold); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); text-align: center; }
 .mb-end-title { font-size: 22px; font-weight: bold; }
 .mb-end-sub { color: var(--mb-muted); }
@@ -426,40 +426,40 @@ body.mb-body .mb-app { margin: 0 auto !important; }
 
 .mb-app:not([data-screen="mars"]) .mb-scene-button { display: none; }
 
-/* Im Handy-Rahmen: oben Platz für die Kamera-Aussparung wie auf einem echten Gerät */
+/* In the phone frame: room at the top for the camera notch as on a real device */
 .mb-app.is-framed { padding-top: 44px; box-sizing: border-box; background: #0d0f14; box-shadow: none; }
 .mb-app.is-framed .mb-nav, .mb-app.is-framed .mb-taskbar, .mb-app.is-framed .mb-setupbar { padding-bottom: 12px; }
 .mb-log-slot .log-container, .mb-log-slot .log-panel, .mb-log-slot .panel-body { height: auto !important; max-height: none !important; overflow: visible !important; }
 
-/* Verkleinerung per transform (scale.js): Halter trägt die Größe, das Element skaliert darin */
+/* Scaling via transform (scale.js): the holder carries the size, the element scales inside it */
 .mb-scaled { zoom: 1 !important; position: relative !important; display: block; flex-shrink: 0; margin: 0 !important; padding: 0 !important; }
 .mb-scale-holder { display: block; }
 .mb-scaled-item { position: absolute !important; left: 0; top: 0; transform-origin: 0 0; margin: 0 !important; }
 
-/* Wertung: Titel, darunter die drei Preis-Felder, darunter die fünf Kacheln */
+/* Scoring: title, below it the three price fields, below them the five tiles */
 .mb-ma-slot .ma-title { flex-direction: column; align-items: stretch !important; gap: 8px !important; }
 .mb-ma-slot .ma-title > span { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 .mb-ma-slot .milestone-award-inline { display: flex !important; align-items: center; justify-content: center; width: auto !important; height: 34px; border-radius: 8px; background: rgba(255, 255, 255, 0.06) !important; }
 .mb-ma-slot .milestone-award-price { position: static !important; margin: 0 !important; }
 .mb-ma-slot .milestones > span > div, .mb-ma-slot .awards > span > div { justify-items: center; row-gap: 10px !important; }
 
-/* Ergebnis: gedrehte Tabelle – Zeilen = Wertungen, Spalten = Spieler */
+/* Result: transposed table – rows = scoring categories, columns = players */
 .mb-results-scroll .game_end_table.mb-transposed { width: 100%; }
 .mb-results-scroll .game_end_table.mb-transposed td, .mb-results-scroll .game_end_table.mb-transposed th { text-align: center; padding: 6px 8px; }
 .mb-results-scroll .game_end_table.mb-transposed tr > :first-child { text-align: left; width: 44px; }
 .mb-results-scroll .game-end-box:has(.mb-transposed) { width: auto !important; }
 
-/* Handkarten liegen im Original in einer Sortier-Liste statt im Raster – auf dem Handy als Raster */
+/* In the original, hand cards sit in a sortable list instead of a grid – on the phone as a grid */
 .mb-screen .sortable-cards { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; row-gap: 18px; justify-items: center; padding-top: 10px; }
 .mb-screen .sortable-slot { display: block !important; margin: 0 !important; }
 .mb-results-charts { display: flex; flex-direction: column; gap: 10px; }
 .mb-chart { width: 100%; height: auto; border-radius: 12px; display: block; }
 
-/* Überlagerungen: Hintergrund unscharf, damit der Blick auf Karte bzw. Menü geht */
+/* Overlays: background blurred so the eye goes to the card or menu */
 .mb-popover, .mb-sheet, .mb-scenes { -webkit-backdrop-filter: blur(7px) saturate(0.8); backdrop-filter: blur(7px) saturate(0.8); }
 .mb-popover-actions { justify-content: center; }
 
-/* Zoombarer Mars beim Platzieren */
+/* Zoomable Mars when placing */
 .mb-place-wrap { display: flex; flex-direction: column; gap: 8px; padding: 0 12px 8px; }
 .mb-mars--place { display: grid; position: relative; overflow: auto; margin: 0; border-radius: 16px; background: radial-gradient(circle at 50% 50%, #1a1d26, #0d0f14 70%); overscroll-behavior: contain; scrollbar-width: none; touch-action: pan-x pan-y; }
 .mb-mars--place::-webkit-scrollbar { display: none; }
@@ -470,31 +470,31 @@ body.mb-body .mb-app { margin: 0 auto !important; }
 .mb-zoom-button--fit { margin-left: auto; font-size: 13px; }
 .mb-zoom-level { min-width: 52px; text-align: center; font-family: Prototype, sans-serif; color: var(--mb-muted); }
 
-/* Startbildschirm: Mars antippen öffnet die zoombare Groß-Ansicht; Hinweis unten rechts in der freien Ecke */
+/* Start screen: tapping Mars opens the zoomable large view; hint at the bottom right in the free corner */
 .mb-mars-home { position: relative; }
 .mb-mars-home #boardHome { cursor: zoom-in; }
 .mb-mars-zoom-hint { position: absolute; right: 14px; bottom: 10px; display: flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 14px; border: 1px solid var(--mb-line); background: rgba(22, 26, 35, 0.85); color: var(--mb-text); font: inherit; font-size: 12px; cursor: pointer; }
 
-/* Punkte unter dem Karten-Karussell: Position und Anzahl auf einen Blick */
+/* Dots below the card carousel: position and count at a glance */
 .mb-dots { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 6px; padding: 2px 16px 12px; }
 .mb-dots::after { content: attr(data-count); margin-left: 8px; font-size: 12px; color: var(--mb-muted); font-variant-numeric: tabular-nums; }
 .mb-dot { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 4px; background: #3a4152; cursor: pointer; transition: width 0.2s, background 0.2s; }
 .mb-dot.is-active { width: 22px; background: var(--mb-accent); }
 
-/* Wertung: Preis-Münze mittig im Feld (Original schiebt sie per margin-left nach rechts), Überschriften ohne Fläche und linksbündig */
+/* Scoring: price coin centered in the field (original pushes it right via margin-left), headings without background and left-aligned */
 .mb-ma-slot .milestone-award-price { margin: 0 !important; text-align: center; }
 .mb-ma-slot .milestone-award-inline { padding: 0 !important; }
 .mb-ma-slot .ma-title > .ma-clickable { background: none !important; padding: 0 !important; align-self: flex-start; text-align: left; }
-/* Groß-Ansicht: Knöpfe kompakt und mittig unter der Karte statt über die ganze Breite */
+/* Large view: buttons compact and centered below the card instead of full width */
 .mb-popover-actions { width: auto; max-width: none; }
 .mb-popover-actions .btn-submit { flex-grow: 0; width: auto !important; min-width: 0 !important; height: 44px; padding: 0 22px; font-size: 16px; }
 .mb-popover-actions .mb-taskbar-cancel { height: 44px; }
-/* Footer-Knöpfe auf einer Achse: leere Fußleisten des Originals nehmen keinen Platz, Zeile mittig ausgerichtet */
+/* Footer buttons on one axis: the original's empty footer bars take no space, row centered */
 .mb-taskbar-slot > .or-tab-footer:empty, .mb-taskbar-slot > :empty:not(button) { display: none !important; }
 .mb-taskbar-row { align-items: center; }
 .mb-taskbar-cancel, .mb-taskbar .btn-submit, .mb-taskbar .mb-confirm { height: 48px; margin: 0 !important; }
 
-/* Ergebnis-Tabelle: drei gleich breite Spalten, alles achsmittig (Symbol, Spieler 1, Spieler 2) */
+/* Result table: three equal-width columns, everything centered on axis (icon, player 1, player 2) */
 .mb-results-scroll .game_end_table.mb-transposed { table-layout: fixed; width: 100% !important; border-collapse: collapse; }
 .mb-results-scroll .game_end_table.mb-transposed td,
 .mb-results-scroll .game_end_table.mb-transposed th,
@@ -512,13 +512,13 @@ body.mb-body .mb-app { margin: 0 auto !important; }
 .mb-log-slot .panel-body { padding: 0 4px !important; }
 .mb-results-scroll .game_end_table.mb-transposed tr:first-child > :first-child > * { display: inline-block !important; }
 
-/* Zugende: links zweite Aktion auslassen (grün), rechts passen – je halbe Breite */
+/* End of turn: skip second action on the left (green), pass on the right – half width each */
 .mb-sheet-end { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-/* Gleich dezent wie „Pass“: nur Umriss und Schrift in Farbe, grün statt rot */
+/* As subtle as "Pass": only outline and text in color, green instead of red */
 .mb-skip { height: 48px; border-radius: 10px; border: 1px solid #24552a; background: transparent; color: #8fd694; font: inherit; font-weight: bold; cursor: pointer; }
 .mb-skip:disabled { opacity: 0.35; cursor: default; }
 
-/* Gedrehte Ergebnis-Tabelle: Spielerfarbe als Spalte, Sieger-Spalte mit goldenem Rahmen und goldener Summe */
+/* Transposed result table: player color as a column, winner column with golden border and golden total */
 .mb-results-scroll .game_end_table.mb-transposed { border-collapse: separate; border-spacing: 0; }
 .mb-results-scroll .game_end_table.mb-transposed td.mb-winner-col { box-shadow: inset 3px 0 0 #ffcc64, inset -3px 0 0 #ffcc64; }
 .mb-results-scroll .game_end_table.mb-transposed tr:first-child td.mb-winner-col { box-shadow: inset 3px 0 0 #ffcc64, inset -3px 0 0 #ffcc64, inset 0 3px 0 #ffcc64; border-radius: 6px 6px 0 0; }
@@ -528,8 +528,8 @@ body.mb-body .mb-app { margin: 0 auto !important; }
 .mb-results-scroll .game_end_table.mb-transposed td.game-end-total.mb-winner-col.player_translucent_bg_color_red { color: #480d06; }
 .mb-results-scroll .game_end_table.mb-transposed td { border-left: 0 !important; border-right: 0 !important; padding-left: 4px !important; padding-right: 4px !important; }
 .mb-results-scroll .game_end_table.mb-transposed th { border-left: 0 !important; padding-left: 4px !important; }
-/* Gruppen-Trenner liegen jetzt waagerecht: dünne Linie über der ersten Zeile einer Gruppe */
+/* Group separators are now horizontal: thin line above the first row of a group */
 .mb-results-scroll .game_end_table.mb-transposed tr:has(.game-end-group-divider) > * { border-top: 2px solid rgba(255, 255, 255, 0.35) !important; }
-/* Original dimmt die Zusatzspalten per Deckkraft – das würde die Spielerfarbe mit ausbleichen, daher nur die Schrift */
+/* The original dims the extra columns via opacity – that would also fade the player color, so only the text */
 .mb-results-scroll .game_end_table.mb-transposed .game-end-mc { opacity: 1; color: rgba(255, 255, 255, 0.55); }
 .mb-results-scroll .game_end_table.mb-transposed tr:has(.game-end-mc) ~ tr > td.mb-player-col { color: rgba(255, 255, 255, 0.55); }

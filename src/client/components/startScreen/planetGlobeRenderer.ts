@@ -1,6 +1,6 @@
-/* Zeichnet einen Planeten-Streifen per WebGL echt auf die Kugel: Bogenlänge statt x (zum Rand hin gestaucht),
-   Licht von oben links. Eine gemeinsame WebGL-Fläche für alle Buttons (Browser erlauben nur wenige Kontexte);
-   das Ergebnis wird in die 2D-Canvas des jeweiligen Buttons kopiert. */
+/* Draws a planet strip onto a real sphere via WebGL: arc length instead of x (compressed towards the edge),
+   light from the top left. One shared WebGL surface for all buttons (browsers allow only a few contexts);
+   the result is copied into each button's 2D canvas. */
 import {PlanetDrawRequest, PlanetRenderer} from './planetRenderer';
 import {GLOBE, SPRITE_ROW, STRIPES_TEXTURE_SIZE, STRIPES_TEXTURE_URL, trimmedStripe} from './planetStripes';
 
@@ -11,7 +11,7 @@ const VERTEX_SOURCE = `
   uniform vec2 buttonSize;
   varying vec2 buttonPoint;
   void main() {
-    // Button-Koordinaten in CSS-Pixeln, y nach unten wie im Layout
+    // Button coordinates in CSS pixels, y downwards as in the layout
     buttonPoint = vec2((position.x + 1.0) * 0.5 * buttonSize.x, (1.0 - position.y) * 0.5 * buttonSize.y);
     gl_Position = vec4(position, 0.0, 1.0);
   }`;
@@ -21,8 +21,8 @@ const FRAGMENT_SOURCE = `
   varying vec2 buttonPoint;
   uniform sampler2D stripes;
   uniform vec2 buttonSize;
-  uniform float globeScale;   // CSS-Pixel je Sprite-Pixel
-  uniform float spriteTop;    // Oberkante des Buttons im Sprite-Raster
+  uniform float globeScale;   // CSS pixels per sprite pixel
+  uniform float spriteTop;    // Button's top edge in the sprite grid
   uniform float stripeTop;
   uniform float stripeHeight;
   uniform float startX;
@@ -32,27 +32,27 @@ const FRAGMENT_SOURCE = `
   const vec3 globe = vec3(${float(GLOBE.centerX)}, ${float(GLOBE.centerY)}, ${float(GLOBE.radius)});
   const vec2 spriteRow = vec2(${float(SPRITE_ROW.width)}, ${float(SPRITE_ROW.height)});
   void main() {
-    // Button-Punkt ins Sprite-Raster: einheitlich skaliert, damit die Bögen aller Buttons zusammenpassen
+    // Button point into the sprite grid: scaled uniformly so the arcs of all buttons match up
     float scale = globeScale;
     vec2 spritePoint = vec2(buttonPoint.x / scale, spriteTop + buttonPoint.y / scale);
     vec2 point = spritePoint - globe.xy;
     float radius = globe.z;
     float distanceFromCenter = length(point);
-    // Kantenglättung am Planetenrand (1 Bildschirmpixel)
+    // Anti-aliasing at the planet's edge (1 screen pixel)
     float coverage = clamp((radius - distanceFromCenter) * scale, 0.0, 1.0);
     if (coverage <= 0.0) { gl_FragColor = vec4(0.0); return; }
-    // Bogenlänge auf dem Breitenkreis statt x: links fast unverzerrt, zum Rand hin gestaucht
+    // Arc length on the circle of latitude instead of x: almost undistorted on the left, compressed towards the edge
     float circleRadius = sqrt(max(radius * radius - point.y * point.y, 1.0));
     float surfaceX = circleRadius * asin(clamp(point.x / circleRadius, -1.0, 1.0));
     float stripeScale = spriteRow.y / stripeHeight;
     float sourceX = startX + (surfaceX + globe.x - offset) / stripeScale;
     float sourceY = clamp(stripeTop + (spritePoint.y - spriteTop) / stripeScale, stripeTop + 0.5, stripeTop + stripeHeight - 0.5);
     vec3 color = texture2D(stripes, vec2(sourceX, sourceY) / textureSize).rgb;
-    // Licht von oben links vorn
+    // Light from the top left front
     vec3 normal = vec3(point.x, -point.y, sqrt(max(radius * radius - distanceFromCenter * distanceFromCenter, 0.0))) / radius;
     float diffuse = max(dot(normal, normalize(vec3(-0.38, 0.2, 0.9))), 0.0);
-    // Hover: flacheres, helleres Licht (alle Reihen leuchten gleich), aber mit Randabdunklung je Reihe – bezogen auf
-    // den Breitenkreis, damit die unteren Reihen nicht insgesamt dunkler werden; hält die Kugel rund
+    // Hover: flatter, brighter light (all rows equally lit), but with edge darkening per row – relative to
+    // the circle of latitude, so the lower rows don't get darker overall; keeps the sphere round
     float rowDepth = sqrt(max(1.0 - pow(point.x / circleRadius, 2.0), 0.0));
     float limb = mix(0.3, 1.0, smoothstep(0.0, 0.6, rowDepth));
     float shade = mix(0.26 + 0.92 * diffuse, (0.85 + 0.35 * diffuse) * limb, glow);
@@ -68,7 +68,7 @@ export class PlanetGlobeRenderer implements PlanetRenderer {
     private readonly uniforms: Uniforms,
   ) {}
 
-  /** Baut den Renderer und lädt die Textur; undefined, wenn der Browser kein WebGL kann (dann bleibt planets.jpg). */
+  /** Builds the renderer and loads the texture; undefined if the browser has no WebGL (then planets.jpg stays). */
   public static async create(): Promise<PlanetGlobeRenderer | undefined> {
     const canvas = document.createElement('canvas');
     const gl = canvas.getContext('webgl', {premultipliedAlpha: true, alpha: true});
@@ -97,7 +97,7 @@ export class PlanetGlobeRenderer implements PlanetRenderer {
     }
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
-    // Textur ist keine Zweierpotenz: ohne Mipmaps und mit CLAMP, sonst bleibt sie in WebGL 1 schwarz
+    // Texture is not a power of two: no mipmaps and CLAMP, otherwise it stays black in WebGL 1
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -126,7 +126,7 @@ export class PlanetGlobeRenderer implements PlanetRenderer {
     gl.uniform2f(this.uniforms.buttonSize, cssWidth, cssHeight);
     gl.uniform1f(this.uniforms.globeScale, request.placement.scale);
     gl.uniform1f(this.uniforms.spriteTop, request.placement.spriteTop);
-    // ohne die Ränder: sonst blitzen Trennlinie und Nachbarstreifen oben/unten durch
+    // without the edges: otherwise the divider and neighboring strips flash through at top/bottom
     const stripe = trimmedStripe(request.stripe);
     gl.uniform1f(this.uniforms.stripeTop, stripe.top);
     gl.uniform1f(this.uniforms.stripeHeight, stripe.height);

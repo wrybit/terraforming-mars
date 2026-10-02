@@ -1,5 +1,5 @@
-// Modal-Hülle der Seitenleisten-Dialoge (SidebarModal.vue): Sprache, Info, Hilfe, Einstellungen
-// Farben und Fläche teilen sich alle Dialoge (modal_surface.less)
+// Modal shell of the sidebar dialogs (SidebarModal.vue): language, info, help, settings
+// All dialogs share colors and surface (modal_surface.less)
 @import (reference) "./modal_surface.less";
 
 @sidebar-modal-background: @modal-background;
@@ -26,7 +26,7 @@
   max-width: min(1100px, 100%);
 }
 
-// Eigene Zeile oben rechts (überdeckt keinen Inhalt), bleibt beim Scrollen sichtbar
+// Own row at the top right (covers no content), stays visible while scrolling
 .sidebar-modal-close {
   position: sticky;
   top: 0;
@@ -49,7 +49,7 @@
   }
 }
 
-// Inhalt mit eigenem Kopf und eigenem Scrollen (Hilfe-Overlay): feste Höhe, damit beim Tab-Wechsel nichts springt
+// Content with its own header and own scrolling (help overlay): fixed height, so nothing jumps when switching tabs
 .sidebar-modal--bare {
   display: flex;
   width: min(1180px, 100%);
@@ -60,7 +60,7 @@
   overflow: hidden;
 }
 
-// Nur Handy: bildschirmfüllend, ohne Rand und Spalt (Tablets behalten die Box)
+// Phone only: full screen, without margin or gap (tablets keep the box)
 @media only screen and (max-width: 760px) {
   .sidebar-modal-backdrop:has(.sidebar-modal--bare) {
     padding: 0;

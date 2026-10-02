@@ -1,9 +1,9 @@
 #player-home, #spectator-home {
   padding-left: 20px;
   padding-top: 20px;
-  // Hintergrundbild: app_background.less (deckt immer das ganze Fenster ab)
-  // Umschließt auch gefloatete Karten (Handkarten) und füllt mindestens das Fenster,
-  // sonst endet der Sternenhintergrund vor dem Inhalt und darunter scheint das Grau von body durch
+  // Background image: app_background.less (always covers the whole window)
+  // Also encloses floated cards (hand cards) and fills at least the window,
+  // otherwise the star background ends before the content and the gray of body shows through below
   display: flow-root;
   min-height: 100vh;
 
@@ -25,13 +25,13 @@
 }
 
 .terraformed-banner {
-  // Schwebend statt im Fluss: drückt die Spielerleisten nicht nach unten.
-  // Mittig über der rechten Spalte (Brett, linke Kante aus boardColumnPosition.ts), dort ist oben Platz –
-  // mittig im Fenster läge das Banner auf den Werten der obersten Spielerleiste
+  // Floating instead of in the flow: doesn't push the player bars down.
+  // Centered over the right column (board, left edge from boardColumnPosition.ts), there is room on top there –
+  // centered in the window, the banner would cover the values of the topmost player bar
   position: fixed;
   top: 12px;
   left: calc((var(--board-column-left, 0px) + 100vw) / 2);
-  z-index: 900; // über der Seite, unter Rahmen "am Zug" (1000) und Dialogen (1100)
+  z-index: 900; // above the page, below the "active player" frame (1000) and dialogs (1100)
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
@@ -47,14 +47,14 @@
   font-weight: bold;
   text-transform: uppercase;
   white-space: nowrap;
-  pointer-events: none; // reiner Hinweis, darf keine Klicks darunter abfangen
+  pointer-events: none; // just a notice, must not catch clicks underneath
 }
 
 .terraformed-banner--animated {
   animation: slide-down 0.6s ease-out;
 }
 
-// Mittig bleiben: die Animation ersetzt transform, daher gehört translateX(-50%) mit hinein
+// Stay centered: the animation replaces transform, so translateX(-50%) has to be included
 @keyframes slide-down {
   from { transform: translate(-50%, -150%); opacity: 0; }
   to { transform: translate(-50%, 0); opacity: 1; }
@@ -400,7 +400,7 @@ each(@players, {
       display: inline-block;
       font-size: 15px;
       font-family: Prototype, sans-serif;
-      // Weiß mit dunkler Kontur: auf allen Spielerfarben lesbar (schwarz war auf Blau/Rot kaum zu erkennen)
+      // White with a dark outline: readable on all player colors (black was barely visible on blue/red)
       color: #fff;
       text-shadow: 0 1px 1px black, 0 0 2px black;
       font-weight: normal;
@@ -750,9 +750,9 @@ each(@players, {
   }
 }
 
-// Leiste der Startauswahl (SelectInitialCards): Bilanz-Karte mit Start-Button (SetupSummary, setup_summary.less)
+// Bar of the initial selection (SelectInitialCards): balance card with start button (SetupSummary, setup_summary.less)
 .select-initial-cards-footer {
-  margin-top: 20px; // wie der Abstand zwischen den Spalten: Bilanz ist eine eigene Fläche
+  margin-top: 20px; // like the gap between the columns: the balance is its own surface
 }
 
 #spectator-link + span {

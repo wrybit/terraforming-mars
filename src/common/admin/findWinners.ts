@@ -1,12 +1,12 @@
-// Gleiche Regel wie auf der Ergebnisseite (GameEnd.vue): meiste Siegpunkte, bei Gleichstand entscheiden die M€.
-// Liegt in common, weil Server (eigene Spiele) und Import (fremde Spiele) dieselbe Regel brauchen.
+// Same rule as on the results page (GameEnd.vue): most victory points, M€ break ties.
+// Lives in common because the server (own games) and import (external games) need the same rule.
 
 export type ScoreLine = {
   victoryPoints: number;
   megaCredits: number;
 };
 
-/** Liefert die Positionen aller Sieger; bei echtem Gleichstand mehrere. */
+/** Returns the positions of all winners; several in case of a true tie. */
 export function findWinnerIndexes(scores: ReadonlyArray<ScoreLine>): Array<number> {
   if (scores.length === 0) {
     return [];

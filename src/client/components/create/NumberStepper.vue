@@ -9,12 +9,12 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 
-// Zahl mit −/+ statt Zahlenfeld: auf Touch-Geräten ohne Tastatur bedienbar und schmal
+// Number with −/+ instead of a number field: usable on touch devices without a keyboard, and narrow
 export default defineComponent({
   name: 'NumberStepper',
   emits: ['update:modelValue'],
   props: {
-    // Alte gespeicherte Einstellungen können den Wert noch als Text enthalten (früher Zahlenfeld)
+    // Old saved settings may still contain the value as text (formerly a number field)
     modelValue: {
       type: [Number, String],
       required: true,

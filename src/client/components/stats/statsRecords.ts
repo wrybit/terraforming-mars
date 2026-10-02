@@ -8,17 +8,17 @@ export type StatsRecordEntry = {
 };
 
 export type StatsRecord = {
-  /** Englisch, wird beim Anzeigen übersetzt. */
+  /** English, translated when displayed. */
   title: string;
   unit: string;
   entries: Array<StatsRecordEntry>;
-  /** Anzeige des Werts, wenn er keine einfache Zahl ist (z. B. Zeit). */
+  /** Display of the value when it isn't a simple number (e.g. time). */
   format?: (value: number) => string;
 };
 
 const RECORD_SIZE = 5;
 
-/** Vorsprung des Siegers auf den Zweiten. */
+/** Winner's lead over second place. */
 function winningMargin(result: StatsPlayerResult): number | undefined {
   if (result.place !== 1) {
     return undefined;
@@ -49,16 +49,16 @@ export function statsRecords(results: ReadonlyArray<StatsPlayerResult>): Array<S
       const points = result.details?.victoryPoints;
       return points === undefined ? undefined : points.milestones + points.awards;
     })},
-    // Vollständige Kartenliste gibt es nur mit Spielstand – Screenshots zeigen nur Karten mit Punkten
+    // The full card list only exists with a saved game state – screenshots only show cards with points
     {title: 'Most cards played', unit: '', entries: topEntries(results, (result) => result.game.details?.cardsComplete === true ? result.details?.cards.length : undefined)},
     {title: 'Most actions', unit: '', entries: topEntries(results, (result) => result.details?.actions)},
     {title: 'Longest thinking time', unit: '', entries: topEntries(results, (result) => result.details?.timeSeconds), format: formatDuration},
-    // Generation 0 = unbekannt (Screenshots aus anderen Versionen)
+    // Generation 0 = unknown (screenshots from other versions)
     {title: 'Shortest games', unit: 'Gen', entries: topEntries(winners, (result) => result.game.summary.generation || undefined, true)},
   ].filter((record) => record.entries.length > 0);
 }
 
-/** Partien je Generationenzahl, für das Balkendiagramm der Übersicht. */
+/** Games per generation count, for the overview's bar chart. */
 export function gamesByGeneration(games: ReadonlyArray<StatsGame>): Array<{generation: number, games: number}> {
   const known = games.map((game) => game.summary.generation).filter((generation) => generation > 0);
   if (known.length === 0) {

@@ -1,6 +1,6 @@
 import {chromium} from '/tmp/tmshot/node_modules/playwright-core/index.mjs';
 import fs from 'fs';
-// Prüfbilder des Mockups: alle Tabs, Desktop + Handy
+// Check images of the mockup: all tabs, desktop + phone
 const dir = new URL('.', import.meta.url).pathname;
 const out = dir + 'shots/'; fs.mkdirSync(out, {recursive: true});
 const tabs = ['symbole', 'projekte', 'phasen', 'parteien', 'solo', 'regelhefte', 'tastatur'];
@@ -17,4 +17,4 @@ for (const [w, h, mobile] of [[1700, 1000, false], [390, 844, true]]) {
   }
   ctx.close();
 }
-await b.close(); console.log('fertig');
+await b.close(); console.log('done');

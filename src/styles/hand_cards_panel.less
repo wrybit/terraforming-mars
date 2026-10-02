@@ -1,7 +1,7 @@
 @import (reference) "./mobile.less";
-// Handkarten-Tab (HandCardsPanel.vue): aktive Karten oben, Handkarten darunter.
-// Gesetz der Nähe: Überschrift sitzt dicht an ihren Karten, zwischen den Abschnitten ist deutlich mehr Luft
-// plus eine feine Trennlinie.
+// Hand cards tab (HandCardsPanel.vue): active cards on top, hand cards below.
+// Law of proximity: the heading sits close to its cards, between the sections there is clearly more space
+// plus a fine separator line.
 @hand-cards-panel-title-gap: 4px;
 @hand-cards-panel-section-gap: 28px;
 
@@ -17,15 +17,15 @@
   padding-left: 8px;
 }
 
-// Kopfzeile der Handkarten: Überschrift und Sortier-Buttons in einer Zeile, dicht über den Karten.
+// Hand cards header row: heading and sort buttons on one line, close above the cards.
 .hand-cards-panel__header {
-  // Container für die Wahl Segment-Leiste/Auswahlliste der Sortierung (siehe unten)
+  // Container for choosing segmented bar/select list for sorting (see below)
   container: hand-sort-bar / inline-size;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px 12px;
-  // Etwas mehr Luft als zur Überschrift: die Preis-Badges der Karten ragen nach oben heraus.
+  // A bit more space than to the heading: the cards' price badges stick out at the top.
   margin: 0 0 10px;
   padding-left: 8px;
 
@@ -35,8 +35,8 @@
   }
 }
 
-// Sortierung (HandSortControl.vue): rechtsbündig; Beschriftung dicht an der Segment-Leiste.
-// Segment-Optik kommt von .create-game-segmented (SegmentedControl, auch in der Kartenliste).
+// Sorting (HandSortControl.vue): right-aligned; label close to the segmented bar.
+// Segmented look comes from .create-game-segmented (SegmentedControl, also in the card list).
 .hand-cards-panel__sort {
   display: flex;
   align-items: center;
@@ -51,7 +51,7 @@
     font-size: 13px;
   }
 
-  // Richtung der gewählten Sortierung; "Manuell" (erstes Segment) hat keine.
+  // Direction of the chosen sort; "Manual" (first segment) has none.
   .create-game-segmented--selected:not(:first-child)::after {
     content: ' ▼';
     font-size: 10px;
@@ -62,18 +62,18 @@
   content: ' ▲';
 }
 
-// Mobil: mehr Luft zu den Karten, deren Preis-Badges nach oben herausragen.
+// Mobile: more space to the cards, whose price badges stick out at the top.
 html.tm-mobile .hand-cards-panel__header {
   margin-bottom: 18px;
 }
 
-// Segment-Leiste oder Auswahlliste – je nach Platz in der Zeile, nicht nach Gerät: Die Kopfzeile der Hand und die
-// Kopfzeile einer Kartenauswahl (select_card_toolbar.less) sind Container; reicht ihre Breite nicht für die
-// ausgeschriebene Leiste (Handy), zeigt HandSortControl.vue die Auswahlliste.
-// Mindestbreite: Überschrift bzw. "Alle auswählen" plus Beschriftung und fünf Segmente (deutsche Texte sind die längsten)
+// Segmented bar or select list – depending on the room in the row, not on the device: the hand header row and the
+// header row of a card selection (select_card_toolbar.less) are containers; if their width isn't enough for the
+// full bar (phone), HandSortControl.vue shows the select list.
+// Minimum width: heading or "Select all" plus label and five segments (German texts are the longest)
 @hand-sort-bar-min-width: 600px;
 
-// Optik wie die übrigen Buttons der Mobil-Ansicht: dunkle Fläche, feiner Rand, runde Ecken, eigener Pfeil
+// Look like the other buttons of the mobile view: dark surface, fine border, rounded corners, own arrow
 .hand-sort-control__select {
   display: none;
   height: 36px;

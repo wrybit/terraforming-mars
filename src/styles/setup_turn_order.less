@@ -1,10 +1,10 @@
-// Zugreihenfolge in der Startphase (SetupTurnOrder.vue): eigene Box über den Auswahl-Tabs,
-// Namen in Spielerfarbe mit Pfeilen dazwischen, der Startspieler hervorgehoben
+// Turn order in the setup phase (SetupTurnOrder.vue): own box above the selection tabs,
+// names in player color with arrows between them, the starting player highlighted
 
 .setup-turn-order {
   .frosted-surface();
   position: relative;
-  margin-bottom: 24px; // Abstand zu den Tabs größer als zwischen den Namen (Gesetz der Nähe)
+  margin-bottom: 24px; // Gap to the tabs larger than between the names (law of proximity)
   padding: 16px 24px 20px;
   border: 1px solid @or-tabs-border;
   border-radius: @or-tabs-radius;
@@ -39,7 +39,7 @@
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }
 
-// Pfeil vor jedem weiteren Spieler
+// Arrow before each further player
 .setup-turn-order-player + .setup-turn-order-player {
   margin-left: 40px;
   position: relative;
@@ -54,7 +54,7 @@
   }
 }
 
-// Startspieler: weißer Rahmen mit Schein
+// Starting player: white border with glow
 .setup-turn-order-player--first {
   box-shadow: 0 0 0 3px #fff, 0 0 14px 2px rgba(255, 255, 255, 0.45);
 }

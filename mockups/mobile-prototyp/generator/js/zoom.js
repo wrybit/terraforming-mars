@@ -1,9 +1,9 @@
-// Zoombarer Mars beim Platzieren: Pinch mit zwei Fingern, Trackpad-Pinch (Strg+Rad),
-// Doppel-Tap und +/− Knöpfe. Start so, dass die wählbaren Felder den Ausschnitt füllen.
+// Zoomable Mars when placing: two-finger pinch, trackpad pinch (Ctrl+wheel),
+// double tap and +/− buttons. Starts so the selectable spaces fill the viewport.
 (function (TM) {
   'use strict';
 
-  var CROP = {left: 84, top: 78, width: 466, height: 464}; // Planet in .board-cont-Koordinaten
+  var CROP = {left: 84, top: 78, width: 466, height: 464}; // planet in .board-cont coordinates
   var MIN_LEVEL = 1;
   var MAX_LEVEL = 3.2;
 
@@ -15,7 +15,7 @@
 
   function zoomFactor() { return baseZoom * level; }
 
-  // Größe der Bühne und Zoom der Karte setzen; Karte liegt mit negativem Versatz auf dem Planeten
+  // Set stage size and map zoom; the map sits on the planet with a negative offset
   function applyLevel() {
     var zoom = zoomFactor();
     board.style.zoom = zoom;
@@ -26,7 +26,7 @@
     TM.$('[data-zoom-level]').textContent = Math.round(level * 100) + ' %';
   }
 
-  // Zoomen um einen Punkt im Ausschnitt (clientX/Y), damit dieser Punkt unter dem Finger bleibt
+  // Zoom around a point in the viewport (clientX/Y) so that point stays under the finger
   function zoomTo(newLevel, clientX, clientY) {
     newLevel = Math.max(MIN_LEVEL, Math.min(MAX_LEVEL, newLevel));
     var rect = viewport.getBoundingClientRect();
@@ -40,7 +40,7 @@
     viewport.scrollTop = contentY * level - focusY;
   }
 
-  // Start: Ausschnitt auf die markierten Felder, so groß wie möglich
+  // Start: viewport on the highlighted spaces, as large as possible
   function focusAvailable() {
     var spaces = TM.$all('.board-space--available', board);
     if (!spaces.length) return;
@@ -70,12 +70,12 @@
       bindGestures();
     },
 
-    // Karte in die Bühne holen und auf die markierten Felder zoomen
+    // Move the map into the stage and zoom to the highlighted spaces
     start: function (boardElement) {
       board = boardElement;
       stage.appendChild(board);
       level = 1;
-      // Erst nach dem Layout messen: Höhe = restlicher Platz bis zum Footer, abzüglich Zoom-Leiste
+      // Measure only after layout: height = remaining space down to the footer, minus the zoom bar
       requestAnimationFrame(function () {
         var screen = viewport.closest('.mb-screen');
         var controls = TM.$('.mb-zoom-controls');
@@ -88,7 +88,7 @@
 
     fit: function () {
       if (!board || !board.closest('#boardPlace')) return;
-      // 100 % = ganzer Planet sichtbar, egal ob der Ausschnitt schmal oder niedrig ist
+      // 100 % = whole planet visible, whether the viewport is narrow or low
       baseZoom = Math.min(viewport.clientWidth / CROP.width, viewport.clientHeight / CROP.height);
       applyLevel();
     },
@@ -105,13 +105,13 @@
     }, {passive: true});
     viewport.addEventListener('touchmove', function (event) {
       if (!pinch || event.touches.length !== 2) return;
-      event.preventDefault(); // eigenes Zoomen statt Seiten-Zoom
+      event.preventDefault(); // own zoom instead of page zoom
       var center = middle(event.touches);
       zoomTo(pinch.level * distance(event.touches) / pinch.distance, center.x, center.y);
     }, {passive: false});
     viewport.addEventListener('touchend', function (event) {
       if (event.touches.length < 2) pinch = null;
-      // Doppel-Tap: stufenweise näher, am Maximum zurück auf ganz
+      // Double tap: zoom in step by step, at the maximum back to full view
       if (event.changedTouches.length === 1 && event.touches.length === 0) {
         var now = Date.now();
         if (now - lastTap < 300) {
@@ -123,7 +123,7 @@
         }
       }
     });
-    // Trackpad-Pinch kommt im Browser als Rad mit Strg-Taste
+    // Trackpad pinch arrives in the browser as a wheel event with the Ctrl key
     viewport.addEventListener('wheel', function (event) {
       if (!event.ctrlKey) return;
       event.preventDefault();

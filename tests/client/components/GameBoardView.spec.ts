@@ -29,7 +29,7 @@ describe('GameBoardView', () => {
     });
     const board = wrapper.findComponent({name: 'Board'});
 
-    // Feldwahl läuft, auch wenn gerade kein Feld markiert ist (nach dem Antippen eines Feldes)
+    // Space selection is running, even if no space is currently highlighted (after tapping a space)
     const selectSpace = document.createElement('div');
     selectSpace.className = 'select_space_cont';
     document.body.appendChild(selectSpace);
@@ -57,12 +57,12 @@ describe('GameBoardView', () => {
     await wrapper.vm.$nextTick();
     expect(vm.boardZoomOpen).to.be.true;
 
-    // Schließen durch den Spieler: Feldwahl läuft auf dem kleinen Brett weiter
+    // Closed by the player: space selection continues on the small board
     vm.closeBoardZoom();
     expect(vm.boardZoomOpen).to.be.false;
     expect(placementZoom.requested).to.be.false;
 
-    // Bestätigte Platzierung: Brett wieder klein
+    // Confirmed placement: board small again
     requestPlacementZoom();
     await wrapper.vm.$nextTick();
     releasePlacementZoom();

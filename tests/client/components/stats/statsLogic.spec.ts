@@ -22,7 +22,7 @@ describe('stats logic', () => {
   it('corporations count screenshots too, with expected win rate per player count', () => {
     const ecoline = entityStats(results, 'corporation', 'Ecoline');
     expect([ecoline.plays, ecoline.wins, ecoline.games]).deep.eq([3, 3, 3]);
-    // zwei Dreierpartien und eine Zweierpartie
+    // two three-player games and one two-player game
     expect(ecoline.expectedWinRate).closeTo((1 / 3 + 1 / 2 + 1 / 3) / 3, 0.0001);
     expect(entityStats(results, 'corporation', 'Helion').winRate).eq(0);
   });
@@ -76,7 +76,7 @@ describe('stats logic', () => {
     const href = statsHref({type: 'detail', kind: 'card', name: 'Ants & Birds'});
     expect(parseStatsView(href.slice(href.indexOf('?')))).deep.eq({type: 'detail', kind: 'card', name: 'Ants & Birds'});
     expect(parseStatsView('?tab=unknown')).deep.eq({type: 'tab', tab: 'overview'});
-    // Top-20-Seite: eigene Adresse, gehört zum Übersicht-Tab
+    // Top 20 page: own address, belongs to the overview tab
     const top = statsHref({type: 'top', kind: 'corporation'});
     expect(parseStatsView(top.slice(top.indexOf('?')))).deep.eq({type: 'top', kind: 'corporation'});
     expect(tabOfView({type: 'top', kind: 'card'})).eq('overview');
@@ -95,7 +95,7 @@ describe('stats logic', () => {
     const bars = histogram(own, (result) => result.player.victoryPoints, 10);
     expect(bars.reduce((sum, bar) => sum + bar.value, 0)).eq(own.length);
     expect(bars.reduce((sum, bar) => sum + (bar.highlight ?? 0), 0)).eq(own.filter((result) => result.place === 1).length);
-    // lückenlos: aufeinanderfolgende Zehnerklassen
+    // gapless: consecutive classes of ten
     bars.forEach((bar, index) => expect(Number(bar.label)).eq(Number(bars[0].label) + index * 10));
     expect(histogram([], () => 1, 1)).deep.eq([]);
   });
@@ -113,7 +113,7 @@ describe('stats logic', () => {
         entityStats([result], 'corporation', pair.first).plays > 0 && entityStats([result], 'card', pair.second).plays > 0).length);
       expect(pair.winRate).within(0, 1);
     }
-    // Gleiche Art: kein Paar mit sich selbst, keine doppelte Reihenfolge
+    // Same kind: no pair with itself, no duplicate order
     for (const pair of combinations(results, 'card', 'card')) {
       expect(pair.first < pair.second).eq(true);
     }
@@ -132,7 +132,7 @@ describe('stats logic', () => {
     expect([cities.games, cities.counts.get('20'), cities.maximum]).deep.eq([2, 2, 2]);
     expect(heatmap(withTiles, BoardName.THARSIS, 'city', 'Jens').counts.get('20')).eq(1);
     expect(heatmap(withTiles, BoardName.HELLAS, 'city', undefined).games).eq(0);
-    // Farbstufen à 10 %: 1–10 % → 1, 11–20 % → 2, 100 % → 10
+    // Colour levels of 10 %: 1–10 % → 1, 11–20 % → 2, 100 % → 10
     expect([heatStep(1), heatStep(10), heatStep(11), heatStep(80), heatStep(100)]).deep.eq([1, 1, 2, 8, 10]);
   });
 

@@ -18,7 +18,7 @@ export class ApiGameLogs extends Handler {
     const generation = ctx.urlParams.numberOrUndefined('generation');
     const game = await ctx.gameLoader.getGame(id);
     if (game === undefined) {
-      // Von anderen Servern importierte Spiele: das beim Import gesicherte Log der Generation
+      // Games imported from other servers: the generation's log saved during import
       const imported = ImportedSnapshotsStore.getInstance().get(id);
       if (imported !== undefined) {
         responses.writeJson(res, ctx, imported.logsByGeneration[generation ?? imported.view.game.generation] ?? []);

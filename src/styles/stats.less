@@ -1,15 +1,15 @@
-// Statistikseite (/stats). Gerüst (Kopf, Filterspalte, Bottom-Sheet, Filterkacheln) kommt aus card_list.less,
-// Flächen und Abstände aus create_game_form.less – hier nur, was es nur in der Statistik gibt.
+// Statistics page (/stats). Scaffold (header, filter column, bottom sheet, filter tiles) comes from card_list.less,
+// surfaces and spacing from create_game_form.less – only statistics-specific styles here.
 
-@stats-narrow: 900px; // wie @card-list-narrow
-@stats-winner: #f4c20d; // wie die Siegerzahlen der Admin-Übersicht
+@stats-narrow: 900px; // like @card-list-narrow
+@stats-winner: #f4c20d; // like the winner numbers of the admin overview
 @stats-bar-width: 90px;
 
 .main-container:has(#stats) {
   margin-left: 0;
 }
 
-// Ohne Suchfeld braucht der Kopf auch schmal nur eine Zeile
+// Without a search field the header needs only one row, even when narrow
 .stats {
   --card-list-header: 64px;
 }
@@ -25,7 +25,7 @@
   text-decoration: none;
 }
 
-// Symbol und Text auf einer Mittelachse: Zeilenhöhe 1, damit die Schrift keinen Leerraum oben/unten mitbringt
+// Icon and text on one center axis: line height 1 so the font brings no extra space above/below
 .stats-title {
   display: inline-flex;
   align-items: center;
@@ -57,10 +57,10 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: @create-game-gap-card;
-  // Gleich hohe Nachbarn: keine Lücken unter der kürzeren Karte
+  // Equal-height neighbors: no gaps under the shorter card
   align-items: stretch;
 
-  // Eine übrig gebliebene Karte nimmt die ganze Breite statt eine leere Hälfte zu lassen
+  // A leftover card takes the full width instead of leaving an empty half
   > :last-child:nth-child(odd) {
     grid-column: 1 / -1;
   }
@@ -118,7 +118,7 @@
   font-weight: bold;
 }
 
-// ---------- Reiter: Segmentschalter wie in "Spiel erstellen", bei Platzmangel waagerecht verschiebbar ----------
+// ---------- Tabs: segmented control like in "create game", horizontally scrollable when space is short ----------
 .stats-tabs.create-game-segmented {
   overflow-x: auto;
   scrollbar-width: none;
@@ -170,7 +170,7 @@
   }
 }
 
-// ---------- Kennzahlen ----------
+// ---------- Key figures ----------
 .stats-kpis {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -200,8 +200,8 @@
   white-space: nowrap;
 }
 
-// ---------- Siege je Besetzung: wie in der Admin-Übersicht ----------
-// Zwischen den Besetzungen mehr Abstand als zwischen den Kacheln einer Besetzung (Gesetz der Nähe)
+// ---------- Wins per lineup: like in the admin overview ----------
+// More space between lineups than between the tiles of one lineup (law of proximity)
 .stats-lineups {
   display: flex;
   flex-wrap: wrap;
@@ -250,7 +250,7 @@
   }
 }
 
-// ---------- Tabellen ----------
+// ---------- Tables ----------
 .stats-table-scroll {
   overflow-x: auto;
 }
@@ -335,7 +335,7 @@
   text-decoration: none;
 }
 
-// Siegquote: Balken mit Strich beim Zufallswert
+// Win rate: bar with a mark at the chance value
 .stats-win-rate {
   display: inline-flex;
   align-items: center;
@@ -370,7 +370,7 @@
   background: rgba(255, 255, 255, 0.6);
 }
 
-// ---------- Partienliste ----------
+// ---------- Game list ----------
 .stats-game-players {
   display: inline-flex;
   flex-wrap: wrap;
@@ -388,7 +388,7 @@
   border-color: @stats-winner;
 }
 
-// ---------- Spieler-Karten ----------
+// ---------- Player cards ----------
 .stats-players {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -434,7 +434,7 @@
   }
 }
 
-// Label und Wert eng zusammen, die Spalten deutlich weiter auseinander (Gesetz der Nähe)
+// Label and value close together, columns clearly further apart (law of proximity)
 .stats-player-card-values {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2px 28px;
@@ -447,7 +447,7 @@
   }
 }
 
-// Konzernnamen sind lang: Label klein über dem Namen
+// Corporation names are long: small label above the name
 .stats-player-card-corporations {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px 28px;
@@ -462,7 +462,7 @@
   }
 }
 
-// ---------- Detailseite ----------
+// ---------- Detail page ----------
 .stats-detail-head .stats-detail-title {
   display: flex;
   flex-wrap: wrap;
@@ -481,12 +481,12 @@
   }
 }
 
-// ---------- Rekorde ----------
+// ---------- Records ----------
 .stats-records {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: @create-game-gap-card;
-  // Wie .stats-columns: gleich hohe Nachbarn, eine übrige Karte über die volle Breite
+  // Like .stats-columns: equal-height neighbors, a leftover card spans the full width
   align-items: stretch;
 
   > :last-child:nth-child(odd) {
@@ -499,7 +499,7 @@
   color: @create-game-dim;
 }
 
-// ---------- Diagramme ----------
+// ---------- Charts ----------
 .stats-chart svg {
   display: block;
   width: 100%;
@@ -585,7 +585,7 @@ each(@players, {
   }
 }
 
-// ---------- Schmal: alles einspaltig, erste Tabellenspalte bleibt beim seitlichen Schieben stehen ----------
+// ---------- Narrow: everything single-column, first table column stays put when scrolling sideways ----------
 @media only screen and (max-width: @stats-narrow) {
   .card-list-header .stats-header-info {
     display: none;
@@ -612,7 +612,7 @@ each(@players, {
     font-size: 20px;
   }
 
-  // Dunkles Milchglas, damit die vorbeigeschobenen Spalten nicht mit dem Namen kollidieren
+  // Dark frosted glass so the columns scrolling past do not collide with the name
   .stats-table td:first-child,
   .stats-table th:first-child {
     position: sticky;
@@ -623,12 +623,12 @@ each(@players, {
   }
 }
 
-// Mehrere Konzerne (Merger) nebeneinander
+// Several corporations (Merger) side by side
 .stats-record-corporation + .stats-record-corporation::before {
   content: " / ";
 }
 
-// Titel, Mindestanzahl und Suche auf einer Achse; erst schmal brechen sie um
+// Title, minimum count and search on one axis; they only wrap when narrow
 .stats-list-tools {
   display: flex;
   flex-wrap: nowrap;
@@ -645,12 +645,12 @@ each(@players, {
   }
 }
 
-// Auf Detailseiten: Mitspieler ohne den Eintrag treten zurück
+// On detail pages: other players without the entry recede
 .stats-game-other {
   opacity: 0.45;
 }
 
-// Bezug für die Lage der Reiter beim Mitscrollen (offsetLeft)
+// Reference for the tab position while scrolling along (offsetLeft)
 .stats-tabs {
   position: relative;
 }
@@ -666,7 +666,7 @@ each(@players, {
   }
 }
 
-// ---------- Herkunft der Siegpunkte: gestapelter Balken ----------
+// ---------- Victory point sources: stacked bar ----------
 @stats-source-colors: {
   terraformRating: @button-heat;
   milestones: @bg_action;
@@ -700,7 +700,7 @@ each(@stats-source-colors, {
   height: 8px;
 }
 
-// ---------- Karten: kleines Kartensymbol neben dem Namen öffnet die Großansicht ----------
+// ---------- Cards: small card icon next to the name opens the large view ----------
 .stats-entity-group {
   display: inline-flex;
   align-items: center;
@@ -722,20 +722,20 @@ each(@stats-source-colors, {
   }
 }
 
-// Detailseite mit Spielmaterial: Kennzahlen links, Karte/Kachel rechts (schmal: darüber)
+// Detail page with game material: key figures on the left, card/tile on the right (narrow: above)
 .stats-detail-head--asset {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: @create-game-gap-column;
   align-items: center;
 
-  // Karte so klein, dass der Kopf nicht höher als die Kennzahlen wird; groß per Klick
+  // Card small enough that the header is not taller than the key figures; large on click
   .stats-asset--card .card-container {
     zoom: 0.6;
   }
 }
 
-// Karten und Kacheln aus dem Spiel ohne ihre Außenabstände
+// Cards and tiles from the game without their outer margins
 .stats-asset {
   padding: 0;
   border: 0;
@@ -761,23 +761,23 @@ each(@stats-source-colors, {
   }
 }
 
-// Leeres Spielbrett (auch als Heatmap)
+// Empty game board (also as heatmap)
 .stats-board-preview {
   display: flex;
   justify-content: center;
 }
 
-// Skalen ragen links und rechts über das Brett hinaus: Luft einrechnen, damit die Verkleinerung sie mitnimmt
+// Scales extend past the board left and right: include the room so the scaling covers them
 .stats-board-scaled {
   padding: 0 24px;
 }
 
-// In der Überschrift der Detailseite steht die Karte schon groß daneben
+// In the detail page heading the card is already shown large next to it
 .stats-detail-head--asset .stats-detail-title .stats-card-button {
   display: none;
 }
 
-// Am Desktop passen viele Karten ins Karussell: die gezeigte hervorheben, die übrigen treten zurück
+// On desktop many cards fit in the carousel: highlight the shown one, the others recede
 .stats-card-zoom {
   .mb-card-zoom-slide--before,
   .mb-card-zoom-slide--after {
@@ -786,14 +786,14 @@ each(@stats-source-colors, {
   }
 }
 
-// ---------- Übersicht: Spielmaterial nebeneinander ----------
-// Abstand zwischen den Karten größer als zwischen Karte und Beschriftung (Gesetz der Nähe)
-// Waagerechter Scroller: die Box bleibt so hoch wie eine Karte, egal wie schmal sie ist
+// ---------- Overview: game material side by side ----------
+// Space between cards larger than between card and label (law of proximity)
+// Horizontal scroller: the box stays as tall as one card, however narrow it is
 .stats-showcase {
   display: flex;
   gap: 16px;
   overflow-x: auto;
-  // Ein Scroller schneidet auch oben ab: Platz für Kosten-Plakette und Konzern-Banner, die über den Kartenrand ragen
+  // A scroller also clips at the top: room for the cost badge and corporation banner that extend past the card edge
   padding: 14px 0 6px;
   scroll-snap-type: x proximity;
   overscroll-behavior-x: contain;
@@ -813,13 +813,13 @@ each(@stats-source-colors, {
     flex-direction: column;
     align-items: center;
     gap: 2px;
-    // Lange Namen brechen um statt die Spalte zu verbreitern
+    // Long names wrap instead of widening the column
     max-width: 160px;
     font-size: 13px;
     text-align: center;
   }
 
-  // Karten etwas kleiner, damit mehrere auf einmal sichtbar sind
+  // Cards slightly smaller so several are visible at once
   .stats-asset--card .card-container {
     zoom: 0.62;
   }
@@ -831,7 +831,7 @@ each(@stats-source-colors, {
 }
 
 
-// ---------- Heatmap auf dem Spielbrett ----------
+// ---------- Heatmap on the game board ----------
 .stats-heatmap-block {
   display: flex;
   flex-direction: column;
@@ -849,8 +849,8 @@ each(@stats-source-colors, {
   margin-bottom: 10px;
 }
 
-// Heatmap-Farbskala in 10 Stufen à 10 %: dunkelblau → blau → türkis → grün → gelb → orange → hellrot → dunkelrot.
-// Helle Stufen bekommen dunkle Schrift, dunkle Stufen helle – beides gut lesbar.
+// Heatmap color scale in 10 steps of 10 %: dark blue → blue → turquoise → green → yellow → orange → light red → dark red.
+// Light steps get dark text, dark steps light text – both easy to read.
 @stats-heat-steps: #0b1d5c, #13348f, #1d55c7, #2f7ff0, #18bcc4, #2bbf4a, #f2d41c, #fb9420, #f2483f, #9e1018;
 @stats-heat-hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 
@@ -860,7 +860,7 @@ each(@stats-source-colors, {
   color: if((@step >= 5) and (@step <= 8), #111, #fff);
 }
 
-// Zahl = Anteil der Partien; auch die Felder neben dem Brett (Phobos, Ganymed) als Sechseck
+// Number = share of games; the spaces next to the board (Phobos, Ganymede) as hexagons too
 .stats-heatmap .stats-heat-space::after {
   content: attr(data-heat);
   position: absolute;
@@ -882,7 +882,7 @@ each(@stats-source-colors, {
   font-size: 10px;
 }
 
-// Kompakte Skala: zehn schmale Stufen à 10 %
+// Compact scale: ten narrow steps of 10 %
 .stats-heat-legend-step {
   width: 26px;
   padding: 1px 0;
@@ -899,8 +899,8 @@ each(range(10), {
   }
 });
 
-// ---------- Top-Listen ----------
-// Überschrift als Link zur Top-20-Seite, sieht aber aus wie eine Überschrift
+// ---------- Top lists ----------
+// Heading as a link to the top-20 page, but looks like a heading
 .stats-heading-link {
   color: inherit;
   text-decoration: none;
@@ -914,7 +914,7 @@ each(range(10), {
   margin: 8px 0 12px;
 }
 
-// Auf der Top-20-Seite umbrechen statt scrollen
+// On the top-20 page wrap instead of scrolling
 .stats-showcase.stats-showcase--grid {
   flex-wrap: wrap;
   overflow-x: visible;

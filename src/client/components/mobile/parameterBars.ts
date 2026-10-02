@@ -1,6 +1,6 @@
 import * as c from '@/common/constants';
 
-/* Bonus-Schwelle auf einem Parameter-Balken. */
+/* Bonus threshold on a parameter bar. */
 export type ParameterBonus = {
   at: number;
   percent: number;
@@ -8,7 +8,7 @@ export type ParameterBonus = {
   title: string;
 };
 
-/* Ein globaler Parameter, wie ihn die Mobil-Ansicht als Balken zeigt. */
+/* A global parameter as the mobile view shows it as a bar. */
 export type ParameterBar = {
   key: 'temperature' | 'oxygen' | 'oceans' | 'venus';
   label: string;
@@ -19,7 +19,7 @@ export type ParameterBar = {
   percent: number;
   text: string;
   done: boolean;
-  // Anzahl der Schritte bis zum Maximum (Segmente des Balkens wie die Felder der Skala auf dem Brett)
+  // Number of steps up to the maximum (bar segments like the fields of the scale on the board)
   steps: number;
   bonuses: ReadonlyArray<ParameterBonus>;
 };
@@ -45,7 +45,7 @@ function build(spec: BarSpec): ParameterBar {
   };
 }
 
-/* Balken für Temperatur, Sauerstoff, Ozeane und (mit Venus) die Venus-Skala in Brett-Reihenfolge. */
+/* Bars for temperature, oxygen, oceans and (with Venus) the Venus scale, in board order. */
 export function parameterBars(levels: Levels): Array<ParameterBar> {
   const specs: Array<BarSpec> = [
     {

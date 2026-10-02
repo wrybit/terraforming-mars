@@ -1,5 +1,5 @@
-/* Preloader der Startseite: alles, was Menü und Intro brauchen (Schriften, Hintergrund, Planeten-Bilder, Symbole),
-   wird vor dem Intro geladen – sonst baut sich die Seite während der Animation sichtbar nach. */
+/* Start page preloader: everything the menu and intro need (fonts, background, planet images, icons)
+   is loaded before the intro – otherwise the page visibly builds up during the animation. */
 
 const IMAGES = [
   'assets/background.jpg',
@@ -9,17 +9,17 @@ const IMAGES = [
   'assets/misc/github.png',
 ];
 
-// Schriften mit Beispieltext, damit genau die benötigten Zeichensätze (unicode-range) geladen werden
+// Fonts with sample text, so exactly the needed character sets (unicode-range) are loaded
 const FONTS = ['26px Prototype', '14px Ubuntu'];
 const FONT_SAMPLE = 'TERRAFORMING MARS';
 
-// Spätestens dann geht es weiter, auch wenn etwas hängt – lieber unvollständig als gar nicht
+// Continue at the latest by then, even if something hangs – better incomplete than not at all
 export const PRELOAD_TIMEOUT = 5000;
 
 function loadImage(url: string): Promise<void> {
   return new Promise((resolve) => {
     const image = new Image();
-    // Fehler zählen wie geladen: ein fehlendes Bild soll die Startseite nicht blockieren
+    // Errors count as loaded: a missing image must not block the start page
     image.onload = () => resolve();
     image.onerror = () => resolve();
     image.src = url;
@@ -33,7 +33,7 @@ function loadFont(font: string): Promise<void> {
   return document.fonts.load(font, FONT_SAMPLE).then(() => undefined, () => undefined);
 }
 
-/** Lädt alle Bausteine; onProgress bekommt den Anteil (0–1) nach jedem fertigen Teil. */
+/** Loads all parts; onProgress receives the fraction (0–1) after each finished part. */
 export function preloadStartAssets(onProgress: (share: number) => void): Promise<void> {
   const tasks = [...IMAGES.map(loadImage), ...FONTS.map(loadFont)];
   let done = 0;

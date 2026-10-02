@@ -1,4 +1,4 @@
-// base64url ohne Auffüllzeichen: kommt so unverändert durch URLs, Messenger und Lesezeichen
+// base64url without padding: passes unchanged through URLs, messengers and bookmarks
 
 export function bytesToBase64Url(bytes: Uint8Array): string {
   let binary = '';

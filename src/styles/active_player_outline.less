@@ -1,14 +1,14 @@
-// Blinkende "am Zug"-Markierungen: roter Rahmen um den gesamten Viewport, solange man selbst am Zug ist
-// (Klasse player-home--acting setzt PlayerHome.vue, isPlayerActing), und der Status "aktiv" in der Spielerleiste.
-// Alle blinken im Gleichtakt: syncActiveBlinkAnimations.ts setzt ihre Animationen auf denselben Startzeitpunkt;
-// die Namen der Keyframes (Präfix active-player-) sind der Vertrag mit dieser Datei.
+// Blinking "your turn" markers: red border around the whole viewport while it's your own turn
+// (class player-home--acting is set by PlayerHome.vue, isPlayerActing), and the "active" status in the player bar.
+// All blink in sync: syncActiveBlinkAnimations.ts sets their animations to the same start time;
+// the keyframe names (prefix active-player-) are the contract with this file.
 
 @active-player-outline-width: 8px;
-// Glühen nach innen, damit der Rahmen weich in die Seite übergeht
+// Inner glow so the border blends softly into the page
 @active-player-outline-glow: 24px;
 @active-player-outline-color: #e53935;
 @active-player-outline-period: 1.4s;
-// Status "aktiv" in der Spielerleiste (PlayerStatus.vue)
+// "Active" status in the player bar (PlayerStatus.vue)
 @active-player-status-outline-width: 2px;
 @active-player-status-dot-size: 10px;
 @active-player-status-dot-glow: 6px;
@@ -17,10 +17,10 @@
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 1000; // über Sidebar, Modals und Vorschauen
+  z-index: 1000; // above sidebar, modals and previews
   border: @active-player-outline-width solid @active-player-outline-color;
   box-shadow: inset 0 0 @active-player-outline-glow fade(@active-player-outline-color, 70%);
-  // Rahmen darf keine Klicks abfangen
+  // Border must not catch clicks
   pointer-events: none;
   animation: active-player-outline-blink @active-player-outline-period ease-in-out infinite;
 }
@@ -36,7 +36,7 @@
   }
 }
 
-// Rahmen nur in der Farbe blinken lassen – mit opacity würde der Text im Status mitblinken
+// Blink only the border color – with opacity the text in the status would blink too
 @keyframes active-player-outline-color-blink {
   0%,
   100% {
@@ -48,7 +48,7 @@
   }
 }
 
-// Status "aktiv": roter Rahmen und blinkender roter Punkt vor der Zeit
+// "Active" status: red border and blinking red dot before the time
 .player-action-status-container--active {
   outline: @active-player-status-outline-width solid @active-player-outline-color;
   animation: active-player-outline-color-blink @active-player-outline-period ease-in-out infinite;
@@ -72,7 +72,7 @@
   }
 }
 
-// Wer im System "Bewegung reduzieren" aktiviert hat, bekommt statische Markierungen
+// Anyone who enabled "reduce motion" in the system gets static markers
 @media (prefers-reduced-motion: reduce) {
   .player-home--acting::after,
   .player-action-status-container--active,

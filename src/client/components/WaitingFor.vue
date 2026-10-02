@@ -12,9 +12,9 @@
     </template>
   </template>
   <div v-if="waitingfor !== undefined" class="wf-root">
-    <!-- Aktionsmenü (OrOptions) und Startauswahl (SelectInitialCards) bauen ihre Tabs selbst;
-         jede andere Eingabe kommt in den Tab-Container -->
-    <!-- Einfache Entscheidungen (choiceMenu.ts) sind kein Aktionsmenü: ein Tab mit Kacheln -->
+    <!-- Action menu (OrOptions) and start selection (SelectInitialCards) build their tabs themselves;
+         every other input goes into the tab container -->
+    <!-- Simple decisions (choiceMenu.ts) are not an action menu: one tab with tiles -->
     <PlayerInputFactory v-if="(waitingfor.type === 'or' && !isChoiceMenu(waitingfor)) || waitingfor.type === 'initialCards'"
                           :players="playerView.players"
                           :playerView="playerView"
@@ -84,7 +84,7 @@ export default defineComponent({
   components: {
     WaitingForTabs,
   },
-  // Oberstes Aktionsmenü als Tabs statt Radio-Liste (siehe orOptionsLayout.ts)
+  // Top-level action menu as tabs instead of a radio list (see orOptionsLayout.ts)
   provide: {
     [OR_OPTIONS_AS_TABS]: true,
   },
@@ -183,8 +183,8 @@ export default defineComponent({
       root.playerView = playerView;
       root.playerkey++;
       root.screen = 'player-home';
-      // Kein Neuladen bei Spielende: Die Spieleransicht zeigt dann die schwebende Meldung (GameOverNotice),
-      // die selbst zur Ergebnisseite weiterleitet. Ein Neuladen sprang sofort dorthin, die Meldung war nie zu sehen.
+      // No reload at game end: the player view then shows the floating message (GameOverNotice),
+      // which itself forwards to the results page. A reload jumped there immediately, the message was never seen.
     },
     waitForUpdate() {
       const vueApp = this;
@@ -316,12 +316,12 @@ export default defineComponent({
     documentTitleTimer = undefined;
   },
   computed: {
-    // Die Eingabe kommt als eigene Prop; der Zuschauer übergibt keine.
+    // The input comes as its own prop; the spectator passes none.
     titleView(): TitleView {
       return {game: this.playerView.game, thisPlayer: this.playerView.thisPlayer, waitingFor: this.waitingfor};
     },
-    // Eine Eingabe (waitingfor) gibt es nur in der Spieleransicht; der Zuschauer übergibt nie eine.
-    // Daher ist playerView hier immer ein PlayerViewModel mit Handkarten.
+    // An input (waitingfor) only exists in the player view; the spectator never passes one.
+    // So playerView here is always a PlayerViewModel with hand cards.
     playerViewWithHand(): PlayerViewModel {
       return this.playerView as PlayerViewModel;
     },

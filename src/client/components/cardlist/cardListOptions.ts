@@ -7,19 +7,19 @@ import {cardResourceCSS} from '@/client/components/common/cardResources';
 import {FAN_EXPANSIONS, OFFICIAL_EXPANSIONS} from '@/client/components/create/createGameChoices';
 import {ResourceOption, TagOption, TypeOption} from '@/client/components/cardlist/CardListModel';
 
-// Wählbare Optionen der Filtergruppen als Daten: CardListFilterGroup rendert sie per v-for.
+// Selectable options of the filter groups as data: CardListFilterGroup renders them via v-for.
 
 export type FilterOption<K extends string = string> = {
   key: K;
-  // Englischer Text, wird beim Anzeigen übersetzt
+  // English text, translated when displayed
   label: string;
-  // Symbol (Tag, Erweiterung, Ressource) …
+  // Icon (tag, expansion, resource) …
   iconClass?: string;
-  // … oder Farbpunkt in der Farbe des Kartentyps (cards.less)
+  // … or a color dot in the card type's color (cards.less)
   colorClass?: string;
 };
 
-// Farbe je Eintragsart: die Titel-Hintergründe der Karten (cards.less), für Meilensteine/Agenden eigene Töne (card_list.less)
+// Color per entry kind: the cards' title backgrounds (cards.less), own shades for milestones/agendas (card_list.less)
 export const TYPE_COLOR_CLASSES: Record<TypeOption, string> = {
   [CardType.AUTOMATED]: 'background-color-automated',
   [CardType.ACTIVE]: 'background-color-active',
@@ -37,7 +37,7 @@ export const TYPE_COLOR_CLASSES: Record<TypeOption, string> = {
   agendas: 'card-list-color-agenda',
 };
 
-// Lesbare Namen statt der internen Schlüssel (z. B. standard_project)
+// Readable names instead of the internal keys (e.g. standard_project)
 const TYPE_LABELS: Record<TypeOption, string> = {
   [CardType.AUTOMATED]: 'Automated',
   [CardType.ACTIVE]: 'Active',
@@ -80,7 +80,7 @@ export const TYPE_OPTIONS: ReadonlyArray<FilterOption<TypeOption>> = VISIBLE_TYP
   colorClass: TYPE_COLOR_CLASSES[type],
 }));
 
-// Das Ereignis-Tag fehlt bewusst: es ist identisch mit dem Kartentyp "Ereignis"
+// The event tag is left out on purpose: it is identical to the card type "Event"
 const VISIBLE_TAGS: ReadonlyArray<TagOption> = [
   ...getEnumStringValues(Tag).filter((tag) => tag !== Tag.EVENT) as Array<Tag>,
   'none',
@@ -109,7 +109,7 @@ export const RESOURCE_OPTIONS: ReadonlyArray<FilterOption<ResourceOption>> = VIS
   iconClass: resource === 'none' ? 'card-tag tag-none' : `card-resource ${cardResourceCSS[resource]}`,
 }));
 
-// Teil eines Abschnitts (CardListSection): ein Kartentyp mit Farbe und Anzahl
+// Part of a section (CardListSection): a card type with color and count
 export type SectionPart = {
   label: string;
   colorClass: string;

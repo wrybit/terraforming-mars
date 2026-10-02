@@ -5,7 +5,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 
-// Ein-/Aus-Schalter; bleibt eine echte Checkbox (Tastatur, Screenreader) und ist nur anders gezeichnet
+// On/off switch; remains a real checkbox (keyboard, screen reader) and is just drawn differently
 export default defineComponent({
   name: 'SwitchInput',
   emits: ['update:modelValue'],

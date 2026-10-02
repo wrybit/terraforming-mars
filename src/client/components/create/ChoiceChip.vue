@@ -21,7 +21,7 @@ import {defineComponent} from 'vue';
 import {translateText} from '@/client/directives/i18n';
 import InfoLink from './InfoLink.vue';
 
-// Wählbare Kachel (Erweiterung, Spielbrett, Filter). Kein <button>, weil darin ein Info-Link stecken darf
+// Selectable tile (expansion, game board, filter). Not a <button>, because it may contain an info link
 export default defineComponent({
   name: 'ChoiceChip',
   components: {InfoLink},
@@ -43,7 +43,7 @@ export default defineComponent({
       type: String,
       required: false,
     },
-    // Spielbrett-Namen kommen klein geschrieben aus dem Enum
+    // Game board names come lowercase from the enum
     capitalized: {
       type: Boolean,
       default: false,

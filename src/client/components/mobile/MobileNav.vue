@@ -1,10 +1,10 @@
 <template>
   <nav class="mb-nav">
-    <!-- Fußleiste der Mobil-Ansicht; Spieler und Zuschauer unterscheiden sich nur in den Einträgen (mobileScreens.ts) -->
+    <!-- Footer bar of the mobile view; player and spectator differ only in the entries (mobileScreens.ts) -->
     <button v-for="item in items" :key="item.screen" type="button"
       :class="['mb-nav-item', 'mb-nav-item--' + item.screen, {'mb-nav-item--active': active === item.screen}]"
       @click="emit('navigate', item.screen)">
-      <!-- Der Zug-Eintrag zeigt statt des Symbols den runden Zug-Button des Aufrufers -->
+      <!-- The turn entry shows the caller's round turn button instead of the icon -->
       <slot v-if="item.screen === 'turn'" name="turn"></slot>
       <MobileGlyph v-else :name="item.icon" :filled="active === item.screen"/>
       <span v-if="item.screen === 'hand' && handCount > 0" class="mb-nav-badge">{{ handCount }}</span>

@@ -61,7 +61,7 @@ describe('CreateGameForm', () => {
   beforeEach(() => {
     localStorage = new FakeLocalStorage();
     FakeLocalStorage.register(localStorage);
-    // Das Formular schreibt seine Einstellungen in den URL-Hash; nicht in den nächsten Test mitnehmen
+    // The form writes its settings into the URL hash; don't carry that into the next test
     window.history.replaceState(null, '', '/new-game');
   });
 

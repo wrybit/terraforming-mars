@@ -1,4 +1,4 @@
-// Spielende wie im Fork: schwebende Meldung über dem Mars, dann automatisch zur Ergebnisseite.
+// Game end as in the fork: floating message over Mars, then automatically to the results page.
 (function (TM) {
   'use strict';
 
@@ -7,7 +7,7 @@
 
   TM.gameEnd = {
     start: function () {
-      // Letzter Stand: alle globalen Parameter erreicht
+      // Final state: all global parameters reached
       TM.state.game.temperature = 8;
       TM.state.game.oxygen = 14;
       TM.state.game.oceans = 9;
@@ -33,13 +33,13 @@
     },
   };
 
-  // Auf dem Handy passt die breite Tabelle nicht: Wertungen als Zeilen, Spieler als Spalten.
-  // Die Gruppen-Kopfzeile mit colspan fällt dabei weg, alle Zellen bleiben die echten.
+  // The wide table doesn't fit on a phone: scoring categories as rows, players as columns.
+  // The group header row with colspan is dropped; all cells stay the real ones.
   function transpose(table) {
     var rows = Array.prototype.slice.call(table.rows).filter(function (row) {
       return !Array.prototype.some.call(row.cells, function (cell) { return cell.colSpan > 1; });
     });
-    // Spielerfarbe und Sieger-Markierung hingen an der Zeile – nach dem Drehen an jede Zelle der Spalte
+    // Player color and winner marker were on the row – after transposing, on every cell of the column
     rows.forEach(function (row) {
       var colorClass = (row.className.match(/player_translucent_bg_color_\w+/) || [])[0];
       Array.prototype.forEach.call(row.cells, function (cell) {
@@ -57,7 +57,7 @@
     table.appendChild(body);
     table.classList.add('mb-transposed');
   }
-  // Diagramme: echte Grafiken der Ergebnisseite, per Reiter umschaltbar
+  // Charts: real graphics from the results page, switchable via tabs
   TM.onClick('[data-chart-button]', function (button) {
     TM.$all('[data-chart-button]').forEach(function (other) { other.classList.toggle('is-active', other === button); });
     TM.$all('.mb-chart').forEach(function (chart) { chart.hidden = chart.dataset.chart !== button.dataset.chartButton; });

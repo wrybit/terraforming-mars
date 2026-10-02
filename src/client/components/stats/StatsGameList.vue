@@ -38,13 +38,13 @@ import {StatsGame} from '@/common/stats/StatsGame';
 import StatsEntityName from './StatsEntityName.vue';
 import {formatDate} from './statsLabels';
 
-// Partien einer Detailseite, neueste zuerst, mit Link zur Ergebnisseite
+// Games of a detail page, newest first, with a link to the results page
 export default defineComponent({
   name: 'StatsGameList',
   components: {StatsEntityName},
   props: {
     games: {type: Array as PropType<ReadonlyArray<StatsGame>>, required: true},
-    // Partie-ID → Spieler, um die es auf der Detailseite geht; die übrigen treten zurück
+    // Game ID → players the detail page is about; the others recede
     highlighted: {type: Map as PropType<Map<string, Array<string>>>, required: false},
   },
   methods: {

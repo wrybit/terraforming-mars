@@ -1,6 +1,6 @@
 <template>
   <span class="ma-table-icon">
-    <!-- Zwei einfache Bilder: je eine Hälfte in einem Symbol, damit es so groß bleibt wie die übrigen -->
+    <!-- Two plain images: one half each in one icon, so it stays as large as the others -->
     <span v-if="split" class="ma-table-icon-split" data-test="split">
       <img v-for="(part, index) in parts" :key="index" :src="imagePath(part)" alt="">
     </span>
@@ -8,7 +8,7 @@
       <span v-if="part.production" class="ma-table-icon-production"><img :src="imagePath(part)" alt=""></span>
       <img v-else :src="imagePath(part)" :class="{'ma-table-icon-outline': part.outline}" alt="">
     </template>
-    <!-- Bedingung (Schwelle) des Meilensteins mittig auf dem Symbol -->
+    <!-- Milestone requirement (threshold) centered on the icon -->
     <span v-if="requirement !== undefined" class="ma-table-icon-requirement" :style="{left: `${centerX}%`}" data-test="requirement">{{ requirement }}</span>
   </span>
 </template>

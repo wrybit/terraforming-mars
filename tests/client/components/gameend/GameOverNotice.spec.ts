@@ -17,12 +17,12 @@ describe('GameOverNotice', () => {
     vi.useRealTimers();
   });
 
-  it('verlinkt die Ergebnisseite', () => {
+  it('links to the results page', () => {
     const wrapper = mount(GameOverNotice, {...globalConfig, props: {participantId}});
     expect(wrapper.find('a').attributes('href')).eq('the-end?id=p-notice');
   });
 
-  it('merkt sich die Weiterleitung und kündigt sie beim zweiten Öffnen nicht mehr an', async () => {
+  it('remembers the redirect and no longer announces it on the second open', async () => {
     const assign = vi.fn();
     vi.stubGlobal('location', {...window.location, assign});
     const first = mount(GameOverNotice, {...globalConfig, props: {participantId, redirectDelayMilliseconds: 10}});

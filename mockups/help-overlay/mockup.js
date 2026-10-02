@@ -1,12 +1,12 @@
-// Mockup Hilfe-Overlay: baut alle Tabs aus window.HELP_DATA (echte App-Inhalte, siehe extract.mjs).
-// Jeder Tab liefert einen Abschnittsbaum (Seitenbaum/Chips) und den Inhalt – gleiches Muster für alle Tabs.
+// Help overlay mockup: builds all tabs from window.HELP_DATA (real app content, see extract.mjs).
+// Each tab provides a section tree (page tree/chips) and the content – same pattern for all tabs.
 (function () {
   const data = window.HELP_DATA;
   const textOf = (html) => { const d = document.createElement('div'); d.innerHTML = html; return d.textContent.replace(/\s+/g, ' ').trim(); };
   let idCounter = 0;
   const newId = (prefix) => `${prefix}-${++idCounter}`;
 
-  // Kurze, sprechende Untertitel statt der langen Originalüberschriften
+  // Short, descriptive subtitles instead of the long original headings
   const symbolGroupTitles = {
     '': 'Grundspiel & offizielle Erweiterungen',
     'Kartensymbole von Fan-Erweiterungen': 'Fan-Erweiterungen',
@@ -17,7 +17,7 @@
   const projectTitles = ['Grundspiel', 'Erweiterungen & Solo', 'Fan-Erweiterungen'];
   const partyNames = {'MARS ZUERST': 'Mars zuerst', 'FORSCHUNG': 'Forschung', 'EINIGKEIT': 'Einigkeit', 'KELVINISTEN': 'Kelvinisten', 'DIE ROTEN': 'Die Roten', 'DIE GRÜNEN': 'Die Grünen'};
 
-  // ---- Tab-Bausteine ----
+  // ---- Tab building blocks ----
   function buildSymbols() {
     const nav = []; let html = '';
     for (const section of data.symbols) {
@@ -54,7 +54,7 @@
     return {nav, html};
   }
 
-  // Phasen: Baum aus der App (li mit Label = Knoten). Inhaltszeilen der Form "<span>Titel</span><ul>…" werden zu Unterschritten.
+  // Phases: tree from the app (li with label = node). Content lines of the form "<span>Titel</span><ul>…" become sub-steps.
   function buildPhases() {
     const nav = []; let html = '';
     const leafToSubstep = (leafHtml) => {
@@ -101,7 +101,7 @@
 
   function buildParties() {
     const nav = [];
-    // Original-Einleitung ist noch unübersetzt – hier die deutsche Fassung
+    // Original intro is still untranslated – here the German version
     let html = `<p class="hx-section-lead" style="margin:0 0 16px">Der Bonus einer Partei gilt einmalig in der Aufruhr-Phase. Ihre Politik gilt nur während der Aktionsphase der folgenden Generation.</p>`;
     for (const party of data.parties.list) {
       const id = newId('pty');
@@ -137,9 +137,9 @@
     return {nav, html};
   }
 
-  // Tastatur: dunkle Tastenreihe (A–F hervorgehoben) + je Taste eine Mini-Skizze der Spielansicht mit Zielbereich
+  // Keyboard: dark key row (A–F highlighted) + per key a mini sketch of the game view with the target area
   function screenSketch(target) {
-    // Schematische Spielansicht: Spielertabelle oben links, Karten unten links, Mars rechts, Kolonien unter dem Mars
+    // Schematic game view: player table top left, cards bottom left, Mars right, colonies below Mars
     const area = (name, shape) => shape.replace('<rect', `<rect class="hx-sk-area${name === target ? ' is-target' : ''}"`).replace('<circle', `<circle class="hx-sk-area${name === target ? ' is-target' : ''}"`);
     return `<svg class="hx-sketch" viewBox="0 0 160 100" aria-hidden="true">
       <rect class="hx-sk-frame" x="0.5" y="0.5" width="159" height="99" rx="6"/>
@@ -168,7 +168,7 @@
     {key: 'parteien', label: 'Parteien', build: buildParties},
     {key: 'solo', label: 'Solo-Regeln', build: buildSolo},
     {key: 'regelhefte', label: 'Regelhefte', build: buildRulebooks},
-    // Tastatur nur mit Maus/Tastatur sinnvoll – am Handy ausgeblendet
+    // Keyboard only makes sense with mouse/keyboard – hidden on phones
     {key: 'tastatur', label: 'Tastatur', build: buildHotkeys, desktopOnly: true},
   ];
 
@@ -182,7 +182,7 @@
   const renderTree = (items) => `<ul>${items.map((item) => `<li><a data-target="${item.id}">${item.label}${item.count ? `<span class="hx-count">${item.count}</span>` : ''}</a>${item.children && item.children.length ? renderTree(item.children) : ''}</li>`).join('')}</ul>`;
 
   function fitIcons() {
-    // Icons unterschiedlicher Größe einheitlich in ihren Slot einpassen
+    // Fit icons of different sizes uniformly into their slot
     for (const slot of content.querySelectorAll('.hx-icon')) {
       const el = slot.firstElementChild; if (!el) continue;
       el.style.transform = '';
@@ -195,7 +195,7 @@
   function setActiveNav(id) {
     for (const a of subnav.querySelectorAll('a')) a.classList.toggle('is-active', a.dataset.target === id);
     const active = subnav.querySelector('a.is-active');
-    // Am Handy aktiven Chip im Blick halten
+    // On phones keep the active chip in view
     if (active && getComputedStyle(subnav).overflowX === 'auto') active.scrollIntoView({block: 'nearest', inline: 'nearest'});
   }
 
@@ -205,7 +205,7 @@
     const visible = new Set();
     observer = new IntersectionObserver((entries) => {
       for (const e of entries) e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
-      // Tiefster sichtbarer Eintrag in Dokumentreihenfolge, der oben im Bild ist
+      // Deepest visible entry in document order that is at the top of the view
       const top = content.getBoundingClientRect().top;
       let best = null;
       for (const t of targets) { if (!visible.has(t)) continue; if (t.getBoundingClientRect().top <= top + 80) best = t; else if (!best) best = t; }
@@ -234,7 +234,7 @@
     setActiveNav(a.dataset.target);
   });
 
-  // Suche im aktuellen Tab: blendet nicht passende Einträge und leere Abschnitte aus
+  // Search in the current tab: hides non-matching entries and empty sections
   searchInput.addEventListener('input', () => {
     const q = searchInput.value.trim().toLowerCase();
     for (const el of content.querySelectorAll('[data-search]')) el.classList.toggle('hx-hidden', q !== '' && !el.dataset.search.toLowerCase().includes(q));

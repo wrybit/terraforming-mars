@@ -1,6 +1,6 @@
 <template>
-  <!-- In einer Tab-Box wandert der Inhalt (Bestätigen-Buttons, Bezahlbereich) in deren klebenden Fußbereich
-       (tabPanelFooter.ts, tab_panel_footer.less); außerhalb bleibt er an Ort und Stelle -->
+  <!-- In a tab box the content (confirm buttons, payment area) moves into its sticky footer
+       (tabPanelFooter.ts, tab_panel_footer.less); outside one it stays in place -->
   <Teleport :to="target" :disabled="target === undefined" defer>
     <slot></slot>
   </Teleport>

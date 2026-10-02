@@ -1,6 +1,6 @@
 <template>
   <div id="game-home" class="game-home">
-    <!-- Kopf wie Kartenliste/Statistik: Bestätigung mit Spiel-ID, Sprache und Einstellungen in einer Kopf-Karte -->
+    <!-- Header like card list/statistics: confirmation with game ID, language and settings in a header card -->
     <header class="card-list-header card-list-header--plain game-home-head">
       <div class="game-home-check">✓</div>
       <h1>
@@ -124,7 +124,7 @@ export default defineComponent({
     getPlayerRowColorClass(color: Color): string {
       return playerColorClass(color, 'bg_transparent');
     },
-    // Volle Adresse des Links, wie sie auch kopiert wird
+    // Full URL of the link, as it is copied
     getUrl(playerId: ParticipantId): string {
       const path = window.location.href.replace(/game\?id=.*/, '');
       return path + this.getHref(playerId);

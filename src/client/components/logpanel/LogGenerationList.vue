@@ -1,8 +1,8 @@
 <template>
   <div class="log-generations">
-    <!-- Generationen als Tabs ("nur ansehen", grau) über dem Log; das Log darunter ist die zugehörige Box -->
+    <!-- Generations as tabs ("view only", gray) above the log; the log below is the associated box -->
     <div class="log-gen-title" v-i18n>Gen: </div>
-    <!-- Mehr Generationen als Platz: nur die Tabs scrollen waagerecht, "Gen:" bleibt stehen; die gewählte bleibt im Blick -->
+    <!-- More generations than space: only the tabs scroll horizontally, "Gen:" stays put; the selected one stays in view -->
     <div ref="tabs" class="or-tabs log-gen-tabs" role="tablist">
       <button v-for="n in range" :key="n" type="button" role="tab"
         :aria-selected="n === selected"
@@ -33,14 +33,14 @@ defineEmits<{
 
 const tabs = ref<HTMLElement | undefined>(undefined);
 
-// Gewählten Tab ins Sichtfeld der Leiste schieben (nur waagerecht; scrollIntoView würde auch die Seite verschieben)
+// Scroll the selected tab into view within the bar (horizontally only; scrollIntoView would also move the page)
 function revealSelected(behavior: 'smooth' | 'auto' = 'smooth') {
   const bar = tabs.value;
   const tab = bar?.querySelector<HTMLElement>('.or-tab--active');
   if (bar === undefined || tab === null || tab === undefined) {
     return;
   }
-  // Lage des Tabs im Scroll-Inhalt der Leiste
+  // Position of the tab within the bar's scroll content
   const left = bar.scrollLeft + tab.getBoundingClientRect().left - bar.getBoundingClientRect().left;
   const right = left + tab.offsetWidth;
   if (left < bar.scrollLeft) {
@@ -50,8 +50,8 @@ function revealSelected(behavior: 'smooth' | 'auto' = 'smooth') {
   }
 }
 
-// Mobil liegt das Log beim Laden auf einem verborgenen Bildschirm (Breite 0): erst wenn es sichtbar wird
-// bzw. seine Breite ändert, sofort (ohne Animation) zum gewählten Tab springen
+// On mobile the log sits on a hidden screen when loading (width 0): only once it becomes visible
+// or its width changes, jump to the selected tab immediately (without animation)
 let resizeObserver: ResizeObserver | undefined;
 onMounted(() => {
   revealSelected('auto');

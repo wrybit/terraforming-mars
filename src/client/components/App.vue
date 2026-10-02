@@ -22,7 +22,7 @@
         v-else-if="screen === 'game-home' && game !== undefined"
         :game="game"
       />
-      <!-- Touch-Geräte (Handy, Tablet) bekommen die Mobil-Ansicht, siehe mobileLayout.ts -->
+      <!-- Touch devices (phone, tablet) get the mobile view, see mobileLayout.ts -->
       <MobilePlayerHome
         v-else-if="screen === 'player-home' && playerView !== undefined && isMobileLayout"
         :player-view="playerView"
@@ -56,9 +56,9 @@
       <LoginHome v-else-if="screen === 'login-home'"/>
       <HelpOverlay v-else-if="screen === 'help'"/>
     </div>
-    <!-- In Spielansichten steht der Hinweis im Info-Fenster der Sidebar; auf der Ergebnisseite entfällt er (Wunsch Jens) -->
+    <!-- In game views the notice sits in the sidebar's info window; on the results page it is dropped (Jens' request) -->
     <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': screen === 'start-screen'}">
-      <!-- Auf "Spiel erstellen" gehören Changelog und Discord mit in die Fußzeile (die Startseite hat eigene Buttons dafür) -->
+      <!-- On "Create game", changelog and Discord belong in the footer too (the start page has its own buttons for them) -->
       <template v-if="screen === 'create-game-form'">
         <a :href="changelogUrl" target="_blank" v-i18n>Read our changelog to get the latest updates.</a>
         <span>(<span v-i18n>Looking for people to play with</span>? <a :href="discordInvite" target="_blank" v-i18n>Join us on Discord</a>.)</span>
@@ -80,7 +80,7 @@ const CreateGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "c
 const GameEnd = defineAsyncComponent(() => import(/* webpackChunkName: "game-end" */ '@/client/components/GameEnd.vue'));
 const GameHome = defineAsyncComponent(() => import(/* webpackChunkName: "game-home" */ '@/client/components/GameHome.vue'));
 const GamesOverview = defineAsyncComponent(() => import(/* webpackChunkName: "games-overview" */ '@/client/components/GamesOverview.vue'));
-// Fork: neue Hilfe mit Seitenbaum und Suche; die Upstream-Inhalte stecken darin
+// Fork: new help with page tree and search; the upstream content lives inside it
 const HelpOverlay = defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/helpOverlay/HelpOverlay.vue'));
 const LoginHome = defineAsyncComponent(() => import(/* webpackChunkName: "login" */ '@/client/components/auth/LoginHome.vue'));
 const LoadGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "load-game" */ '@/client/components/LoadGameForm.vue'));
@@ -233,8 +233,8 @@ export default defineComponent({
     update(path: typeof paths.PLAYER | typeof paths.SPECTATOR): void {
       const currentPathname = getLastPathSegment();
       const app = this as unknown as MainAppData;
-      // Endet das Spiel, während die Ansicht offen ist, bleibt sie stehen: Die schwebende Meldung (GameOverNotice)
-      // leitet selbst zur Ergebnisseite weiter. Nur beim Öffnen eines beendeten Spiels geht es direkt dorthin.
+      // If the game ends while the view is open, it stays: the floating notice (GameOverNotice)
+      // redirects to the results page itself. Only when opening a finished game do we go there directly.
       const alreadyShowingGame = app.screen === 'player-home' || app.screen === 'spectator-home';
 
       const url = 'api/' + path + window.location.search.replace('&noredirect', '');

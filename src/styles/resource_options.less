@@ -1,4 +1,4 @@
-// Ressourcen-Auswahl als Kacheln (SelectResource.vue); Auswahl-Rahmen wie bei Karten (selection_highlight.less)
+// Resource selection as tiles (SelectResource.vue); selection border like on cards (selection_highlight.less)
 
 .resource-options {
   display: flex;
@@ -21,7 +21,7 @@
   cursor: pointer;
   transition: transform 0.12s, background-color 0.12s;
 
-  // Nur mit echter Maus: auf Touch bleibt :hover nach dem Antippen hängen, die gewählte Kachel stünde versetzt
+  // Only with a real mouse: on touch :hover sticks after tapping, the selected tile would appear offset
   @media (hover: hover) {
     &:hover {
       transform: translateY(-2px);
@@ -39,7 +39,7 @@
   .selection-highlight();
 }
 
-// Radio nur für Tastatur und Screenreader
+// Radio only for keyboard and screen readers
 .resource-option-input {
   position: absolute;
   opacity: 0;
@@ -59,7 +59,7 @@
   line-height: 1.2;
 }
 
-// Einfache Entscheidung (OrOptions, choiceMenu.ts): gleiche Kacheln, breiter für Text
+// Simple decision (OrOptions, choiceMenu.ts): same tiles, wider for text
 .choice-options {
   &:extend(.resource-options);
 }
@@ -83,7 +83,7 @@
   &:extend(.resource-option-input);
 }
 
-// Option mit Ressource (ChoiceOptionTile.vue): Symbol oben, Text, darunter der eigene Stand vorher → nachher
+// Option with resource (ChoiceOptionTile.vue): icon on top, text, below it your own value before → after
 .choice-option--resource {
   flex-direction: column;
   justify-content: flex-start;
@@ -98,7 +98,7 @@
 }
 
 .choice-option-value {
-  // Stand immer unten, auch wenn der Text der Nachbarkachel einzeilig ist: Werte einer Reihe stehen auf einer Linie
+  // Value always at the bottom, even if the neighbouring tile's text is one line: values of a row sit on one line
   margin-top: auto;
   display: flex;
   align-items: baseline;
@@ -116,7 +116,7 @@
   opacity: 0.8;
 }
 
-// Stand danach wie bei den Spieler-Kacheln (player_options.less): kleiner, Gewinn grün, Verlust rot
+// Value afterwards like on the player tiles (player_options.less): smaller, gain green, loss red
 .choice-option-after {
   margin-left: 3px;
   font-size: 15px;

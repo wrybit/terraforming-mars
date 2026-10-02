@@ -1,6 +1,6 @@
 <template>
   <div id="spectator-home" :class="['mb-home', 'mb-home--spectator', 'mb-home--' + screen]">
-    <!-- Mobil-Ansicht für Zuschauer: dieselben Bausteine wie MobilePlayerHome, ohne Hand, Zug und eigenes Geld -->
+    <!-- Mobile view for spectators: the same building blocks as MobilePlayerHome, without hand, turn and own money -->
     <MobileHeader :game="game" @click="go('players')" :aria-label="$t('Players')"/>
 
     <main class="mb-main">
@@ -9,7 +9,7 @@
         :acting="false" :bannerTitle="bannerTitle"
         @toggleTileView="cycleTileView()" @showMilestones="showMilestones"/>
 
-      <!-- Ab drei Spielern scrollen die Tabellen waagerecht unter stehenbleibenden Symbol-Spalten (mobile.less) -->
+      <!-- From three players on, the tables scroll horizontally beneath fixed icon columns (mobile.less) -->
       <section v-show="screen === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': spectator.players.length > 2}]"
         @scroll.capture="markHorizontalScroll">
         <MobilePlayersPanel :viewModel="spectator" v-model:segment="playersSegment"/>
@@ -21,7 +21,7 @@
     </main>
 
     <MobileNav :items="navItems" :active="screen" @navigate="go"/>
-    <!-- Fragt den Server regelmäßig nach Neuem (wie die Desktop-Zuschaueransicht) -->
+    <!-- Polls the server regularly for updates (like the desktop spectator view) -->
     <WaitingFor v-show="false" v-if="game.phase !== 'end'" :playerView="spectator" :waitingfor="undefined"/>
   </div>
 </template>
@@ -43,7 +43,7 @@ import {MobileNavItem, MobileScreen, PlayersSegment, SPECTATOR_NAV} from '@/clie
 import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
 import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
 
-// Gewählter Bildschirm; App.vue baut die Ansicht bei jedem Server-Update neu auf (key), er soll dabei erhalten bleiben
+// Selected screen; App.vue rebuilds the view on every server update (key), and it should survive that
 let rememberedScreen: MobileScreen = 'mars';
 
 export default defineComponent({
@@ -76,7 +76,7 @@ export default defineComponent({
     navItems(): ReadonlyArray<MobileNavItem> {
       return SPECTATOR_NAV;
     },
-    // Nur vorhandene Übersetzungen: wer gerade am Zug ist bzw. Spielende
+    // Only existing translations: whose turn it is, or game end
     bannerTitle(): string {
       if (this.game.phase === Phase.END) {
         return this.$t('This game is over!');

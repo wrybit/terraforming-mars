@@ -1,10 +1,10 @@
-// Echte Karten: Auswahl in Aufgaben, Groß-Ansicht beim Antippen, Karten verschieben (Hand → gespielt).
+// Real cards: selection in tasks, large view on tap, moving cards (hand → played).
 (function (TM) {
   'use strict';
 
   var popover;
 
-  // Auswahlzustand der Labels an die Inputs koppeln (Radio und Checkbox)
+  // Couple the labels' selection state to the inputs (radio and checkbox)
   TM.cards = {
     syncSelection: function (container) {
       TM.$all('label', container).forEach(function (label) {
@@ -13,7 +13,7 @@
       });
     },
 
-    // Alle Vorkommen einer Karte außerhalb der Ablagen entfernen (Hand, Bauen, Verkaufen)
+    // Remove all occurrences of a card outside the piles (hand, build, sell)
     removeEverywhere: function (slug) {
       TM.$all('.card-' + slug).forEach(function (card) {
         if (card.closest('.mb-played') || card.closest('#popover')) return;
@@ -22,7 +22,7 @@
       });
     },
 
-    // Karte in die eigene Ablage legen und Zähler nachführen
+    // Put the card on the own pile and update the counters
     addToPlayed: function (card, player) {
       var list = TM.$('.mb-player--' + (player === 'mira' ? 'red' : 'green') + ' .mb-played');
       var copy = TM.scale.fresh(card);
@@ -45,7 +45,7 @@
       });
     },
 
-    // Groß-Ansicht mit passenden Schnellaktionen
+    // Large view with matching quick actions
     open: function (card) {
       popover = popover || document.getElementById('popover');
       var copy = TM.scale.fresh(card);
@@ -72,7 +72,7 @@
     TM.tasks.open(button.dataset.popoverTask, {preselect: button.dataset.slug});
   });
 
-  // Antippen einer Karte außerhalb einer Auswahl öffnet die Groß-Ansicht
+  // Tapping a card outside a selection opens the large view
   TM.onClick('.mb-screen[data-screen="hand"] .card-container, .mb-played .card-container', function (card) {
     TM.cards.open(card);
   });
@@ -84,7 +84,7 @@
 
   document.addEventListener('change', function (event) {
     var container = event.target.closest('.mb-panel, .mb-setup');
-    // Die abgegriffenen Radios haben keinen gemeinsamen name – Einzelwahl daher hier herstellen
+    // The captured radios have no common name – so enforce single selection here
     if (container && event.target.type === 'radio' && event.target.checked) {
       TM.$all('input[type="radio"]', container).forEach(function (other) { if (other !== event.target) other.checked = false; });
     }

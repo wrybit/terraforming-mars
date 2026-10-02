@@ -136,7 +136,7 @@ export default defineComponent({
         if (!response.ok) {
           throw new Error(await response.text());
         }
-        // Lokal entfernen statt neu laden: die Zeile verschwindet sofort, die Spalten passen sich an
+        // Remove locally instead of reloading: the row disappears immediately, the columns adjust
         this.summaries = this.summaries.filter((summary) => summary.id !== id);
       } catch (error) {
         this.deleteError = `Could not delete ${id}: ${error instanceof Error ? error.message : String(error)}`;

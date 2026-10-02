@@ -11,7 +11,7 @@ export interface IDeferredAction <T = undefined> extends AndThen<T> {
   queueId: number;
   player: IPlayer;
   priority: Priority;
-  // Karte, deren Wirkung diese Aktion eingereiht hat (DeferredActionsQueue setzt das beim Einreihen)
+  // Card whose effect queued this action (DeferredActionsQueue sets this when queueing)
   sourceCard?: CardName;
   execute(): PlayerInput | undefined;
 }

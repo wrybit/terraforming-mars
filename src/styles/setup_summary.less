@@ -1,12 +1,12 @@
-// Bilanz der Startauswahl (SetupSummary.vue): Kennzahlen nebeneinander, oben kleine Beschriftung, darunter der Wert.
-// Steht als Karte unter den Auswahlspalten; rechts darin der Start-Button (Slot).
+// Balance of the initial selection (SetupSummary.vue): figures side by side, small label on top, value below.
+// Sits as a card below the selection columns; the start button (slot) on its right.
 
 @setup-summary-label-size: 12px;
 @setup-summary-value-size: 22px;
-@setup-summary-item-gap: 28px; // zwischen den Kennzahlen deutlich mehr als zwischen Beschriftung und Wert
-@setup-summary-negative: #ff7a6b; // nicht genug M€ (Kauf zu teuer, Bleibt < 0)
+@setup-summary-item-gap: 28px; // clearly more between figures than between label and value
+@setup-summary-negative: #ff7a6b; // not enough M€ (purchase too expensive, Remaining < 0)
 @setup-summary-coin-size: 34px;
-@setup-summary-open: #ffb36b; // Status: es fehlt noch etwas
+@setup-summary-open: #ffb36b; // Status: something is still missing
 
 .setup-summary {
   .frosted-surface();
@@ -20,7 +20,7 @@
   background: @or-tabs-panel-background;
 }
 
-// Kennzahlen füllen die Karte und brechen bei Platzmangel um; der Button bleibt rechts daneben
+// Figures fill the card and wrap when space is short; the button stays to their right
 .setup-summary-values {
   flex: 1 1 0;
   min-width: 0;
@@ -61,7 +61,7 @@
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
 
-    // Zustandsfarben: hier verschachtelt, damit sie die weiße Grundfarbe sicher überschreiben
+    // State colors: nested here so they reliably override the white base color
     &.setup-summary-value--negative {
       color: @setup-summary-negative;
     }
@@ -76,7 +76,7 @@
   }
 }
 
-// Status nimmt den Rest der Zeile und darf umbrechen (lange Hinweise)
+// Status takes the rest of the row and may wrap (long notices)
 .setup-summary-item--status {
   flex: 1 1 180px;
 
@@ -87,7 +87,7 @@
   }
 }
 
-// "Bleibt" als gelbe M€-Münze wie auf den Karten und im Spielerbereich
+// "Remaining" as a yellow M€ coin, like on the cards and in the player area
 .setup-summary-coin {
   display: inline-block;
   min-width: @setup-summary-coin-size;
@@ -106,7 +106,7 @@
   text-align: center;
 }
 
-// Zu wenig M€: Münze rot umrandet, Zahl rot
+// Too few M€: coin outlined in red, number red
 .setup-summary-coin--negative {
   outline: 2px solid @setup-summary-negative;
   color: #b3160a;

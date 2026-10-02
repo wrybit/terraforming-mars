@@ -3,8 +3,8 @@ import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {ALL_RESOURCES, Resource} from '@/common/Resource';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 
-// Ressourcen-Wörter in englischen Titel-Schlüsseln ohne Parameter (z. B. "Select player to remove up to 4 M€ from")
-// und in Text-Parametern (Sabotage schreibt "M€" statt "megacredits")
+// Resource words in English title keys without parameters (e.g. "Select player to remove up to 4 M€ from")
+// and in text parameters (Sabotage writes "M€" instead of "megacredits")
 const RESOURCE_WORDS: ReadonlyArray<[RegExp, Resource]> = [
   [/M€/, Resource.MEGACREDITS],
   [/\bmegacredits?\b/i, Resource.MEGACREDITS], // Robinson Industries: "Increase megacredits production 1 step"
@@ -26,10 +26,10 @@ function resourceInWord(text: string): Resource | undefined {
   return RESOURCE_WORDS.find(([pattern]) => pattern.test(text))?.[1];
 }
 
-// Um welche Ressource es bei einer Spielerwahl geht (z. B. "Stahl-Produktion senken", "Pflanzen stehlen"),
-// damit die Spieler-Kacheln (PlayerOptionTile.vue) Bestand und Produktion genau dieser Ressource zeigen.
-// Meist schreibt der Server die Ressource als Parameter in den Titel (DecreaseAnyProduction, StealResources, Sabotage …),
-// manche Karten nennen sie nur im Text (CometForVenus, RemoveAnyPlants) – dann zählt das Wort im Titel-Schlüssel.
+// Which resource a player selection is about (e.g. "decrease steel production", "steal plants"),
+// so the player tiles (PlayerOptionTile.vue) show stock and production of exactly this resource.
+// Usually the server puts the resource as a parameter in the title (DecreaseAnyProduction, StealResources, Sabotage …),
+// some cards only name it in the text (CometForVenus, RemoveAnyPlants) – then the word in the title key counts.
 export function selectPlayerResource(title: string | Message): Resource | undefined {
   if (typeof title !== 'string') {
     for (const datum of title.data) {
@@ -44,9 +44,9 @@ export function selectPlayerResource(title: string | Message): Resource | undefi
   return RESOURCE_WORDS.find(([pattern]) => pattern.test(titleText(title)))?.[1];
 }
 
-// Was eine Wahl beim betroffenen Spieler verändert: welche Ressource, ob Vorrat oder Produktion, in welche
-// Richtung und um wie viel. amount oder direction fehlen, wenn der Titel es nicht eindeutig sagt –
-// dann zeigt die Kachel nur den aktuellen Stand.
+// What a selection changes for the affected player: which resource, stock or production, in which
+// direction and by how much. amount or direction are missing if the title does not say so unambiguously –
+// then the tile only shows the current state.
 export type PlayerEffect = {
   resource: Resource,
   target: 'stock' | 'production',
@@ -54,8 +54,8 @@ export type PlayerEffect = {
   amount?: number,
 };
 
-// Verben im englischen Titel-Schlüssel; nennt ein Titel beide (z. B. "Remove microbes to gain M€"),
-// bleibt die Richtung offen, weil sich das Entfernen auf etwas anderes beziehen kann
+// Verbs in the English title key; if a title names both (e.g. "Remove microbes to gain M€"),
+// the direction stays open because the removal can refer to something else
 const GAIN_WORDS = /\b(increase|gain|add|raise)\b/i;
 const LOSS_WORDS = /\b(remove|steal|decrease|lose|reduce)\b/i;
 
@@ -70,7 +70,7 @@ function titleDirection(text: string): 'gain' | 'loss' | undefined {
   return gain ? 'gain' : 'loss';
 }
 
-// Zahl im Titel: als Parameter (b.number → Text-Parameter "4") oder im Schlüssel ("up to 4 M€")
+// Number in the title: as a parameter (b.number → text parameter "4") or in the key ("up to 4 M€")
 function titleAmount(title: string | Message): number | undefined {
   if (typeof title !== 'string') {
     for (const datum of title.data) {
@@ -79,15 +79,15 @@ function titleAmount(title: string | Message): number | undefined {
       }
     }
   }
-  // Platzhalter wie ${0} zählen nicht als Zahl
+  // Placeholders like ${0} do not count as a number
   const match = /\b(\d+)\b/.exec(titleText(title).replace(/\$\{\d+\}/g, ''));
   return match === null ? undefined : Number(match[1]);
 }
 
-// Wirkung einer Wahl auf den betroffenen Spieler (Angriff auf einen Gegner, eigene Produktion erhöhen …);
-// undefined, wenn keine Ressource erkennbar ist
+// Effect of a selection on the affected player (attack on an opponent, raise own production …);
+// undefined if no resource can be identified
 export function playerEffect(title: string | Message): PlayerEffect | undefined {
-  // "Entferne keine M€", "Skip removing plants": nennen die Ressource, ändern aber nichts
+  // "Do not remove M€", "Skip removing plants": name the resource but change nothing
   if (NO_EFFECT.test(titleText(title))) {
     return undefined;
   }
@@ -105,7 +105,7 @@ export function playerEffect(title: string | Message): PlayerEffect | undefined 
 
 export type ResourceSnapshot = {stock: number, production: number};
 
-// Bestand und Produktion eines Spielers für eine Ressource
+// Stock and production of a player for one resource
 export function resourceSnapshot(player: PublicPlayerModel, resource: Resource): ResourceSnapshot {
   switch (resource) {
   case 'megacredits': return {stock: player.megacredits, production: player.megacreditProduction};
@@ -117,8 +117,8 @@ export function resourceSnapshot(player: PublicPlayerModel, resource: Resource):
   }
 }
 
-// Stand nach der Wahl: ein Verlust senkt den Vorrat höchstens auf 0 (der Server nimmt nur, was da ist),
-// die Produktion um die volle Zahl; ein Gewinn erhöht um die Zahl
+// State after the selection: a loss lowers the stock to 0 at most (the server only takes what is there),
+// production by the full number; a gain raises it by the number
 export function resourceAfter(snapshot: ResourceSnapshot, effect: PlayerEffect): ResourceSnapshot {
   if (effect.amount === undefined || effect.direction === undefined) {
     return snapshot;

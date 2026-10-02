@@ -1,6 +1,6 @@
 <template>
   <div class="stats-board-preview" :class="heatmap === undefined ? undefined : `stats-heatmap stats-heatmap--${heatmapType}`">
-    <!-- Das Brett ist fest ~700 px breit; auf schmalen Bildschirmen verkleinern statt abschneiden -->
+    <!-- The board is a fixed ~700 px wide; on narrow screens shrink it instead of clipping -->
     <div v-if="spaces !== undefined" ref="scaled" class="stats-board-scaled" :style="{zoom: scale}">
       <Board
         :spaces="spaces"
@@ -22,13 +22,13 @@ import {Heatmap, heatStep, HeatmapTileType} from './statsHeatmap';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import Board from '@/client/components/Board.vue';
 
-// Leeres Spielbrett, wie es im Spiel aussieht (Felder und Boni vom Server)
+// Empty game board as it looks in the game (spaces and bonuses from the server)
 export default defineComponent({
   name: 'StatsBoardPreview',
   components: {Board},
   props: {
     boardName: {type: String as PropType<BoardName>, required: true},
-    /** Optional: Felder nach Häufigkeit einfärben (Städte oder Grünflächen). */
+    /** Optional: color the spaces by frequency (cities or greeneries). */
     heatmap: {type: Object as PropType<Heatmap>, default: undefined},
     heatmapType: {type: String as PropType<HeatmapTileType>, default: 'city'},
   },
@@ -46,8 +46,8 @@ export default defineComponent({
       this.scale = this.naturalWidth <= 0 ? 1 : Math.min(1, available / this.naturalWidth);
     },
     /**
-     * Färbt die Felder des gerenderten Spielbretts ein. Board.vue kennt keine Heatmap; statt es dafür umzubauen,
-     * bekommt jedes Feld (data_space_id) eine CSS-Variable, die das Stylesheet als Farbe darüberlegt.
+     * Colors the spaces of the rendered game board. Board.vue knows no heatmap; instead of rebuilding it for that,
+     * each space (data_space_id) gets a CSS variable that the stylesheet overlays as a color.
      */
     paintHeatmap(): void {
       const root = this.$el as HTMLElement | undefined;
@@ -56,7 +56,7 @@ export default defineComponent({
       }
       for (const element of Array.from(root.querySelectorAll<HTMLElement>('[data_space_id]'))) {
         const count = this.heatmap?.counts.get(element.getAttribute('data_space_id') as SpaceModel['id']) ?? 0;
-        // Anteil der Partien statt Anzahl: „60 %“ versteht man ohne zu wissen, wie viele Partien es sind
+        // Share of games instead of count: "60 %" is understandable without knowing how many games there are
         const games = this.heatmap?.games ?? 0;
         const percent = games === 0 ? 0 : Math.round(count / games * 100);
         element.classList.toggle('stats-heat-space', count > 0);
@@ -71,10 +71,10 @@ export default defineComponent({
       spaces: undefined as Array<SpaceModel> | undefined,
       failed: false,
       scale: 1,
-      /** Breite des Bretts in Originalgröße, einmal bei Zoom 1 gemessen. */
+      /** Width of the board at original size, measured once at zoom 1. */
       naturalWidth: 0,
       resizeObserver: undefined as ResizeObserver | undefined,
-      // Ohne Erweiterungen: es geht um das Brett selbst, nicht um Venus-/Mond-Leisten
+      // Without expansions: this is about the board itself, not Venus/Moon tracks
       expansions: {} as Record<Expansion, boolean>,
     };
   },
@@ -88,7 +88,7 @@ export default defineComponent({
       await this.$nextTick();
       this.naturalWidth = (this.$refs.scaled as HTMLElement | undefined)?.scrollWidth ?? 0;
       this.fitToWidth();
-      // Ältere Browser und Testumgebungen ohne ResizeObserver behalten die erste Anpassung
+      // Older browsers and test environments without ResizeObserver keep the first fit
       if (typeof ResizeObserver !== 'undefined') {
         this.resizeObserver = new ResizeObserver(() => this.fitToWidth());
         this.resizeObserver.observe(this.$el as HTMLElement);

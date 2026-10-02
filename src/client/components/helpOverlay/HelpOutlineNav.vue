@@ -1,6 +1,6 @@
 <template>
-  <!-- Seitenbaum des Hilfe-Overlays; ruft sich für Unterebenen selbst auf.
-       Am Handy macht help_overlay.less daraus eine waagerechte Chip-Leiste. -->
+  <!-- Page tree of the help overlay; calls itself for sub-levels.
+       On phones help_overlay.less turns it into a horizontal chip bar. -->
   <ul class="help-outline-list" :class="{'help-outline-list--nested': nested}">
     <li v-for="node in nodes" :key="node.id">
       <a

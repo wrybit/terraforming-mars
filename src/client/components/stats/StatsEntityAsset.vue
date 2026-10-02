@@ -21,8 +21,8 @@ import Award from '@/client/components/Award.vue';
 import {StatsKind} from './statsKinds';
 import {CARD_ZOOM_KEY, OpenCardZoom} from './statsCardZoom';
 
-// Das Spielmaterial eines Eintrags, so wie es im Spiel aussieht: Karte, Meilenstein- oder Auszeichnungskachel.
-// Karten öffnen beim Klick die Großansicht (durch "siblings" blätterbar).
+// The game component of an entry as it looks in the game: card, milestone or award tile.
+// Cards open the large view on click (pageable through "siblings").
 export default defineComponent({
   name: 'StatsEntityAsset',
   components: {Card, Milestone, Award},

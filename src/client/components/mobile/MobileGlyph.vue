@@ -1,8 +1,8 @@
 <template>
   <svg class="mb-glyph" viewBox="0 0 24 24" :stroke-width="strokeWidth" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <!-- Outline für inaktive, gefüllte Form für aktive Einträge; Farbe kommt über currentColor (mobile.less) -->
+    <!-- Outline for inactive, filled shape for active entries; color comes via currentColor (mobile.less) -->
     <g v-for="(layer, index) in glyph.layers" :key="index">
-      <!-- Gefüllt: vordere Ebenen bekommen einen Spalt, damit sich die Formen nicht zu einer Fläche verbinden -->
+      <!-- Filled: front layers get a gap so the shapes don't merge into one area -->
       <g v-if="filled && index > 0" class="mb-glyph-gap">
         <component :is="shape.tag" v-for="(shape, shapeIndex) in layer" :key="shapeIndex" v-bind="shape.attributes"/>
       </g>
@@ -46,7 +46,7 @@ export default defineComponent({
       if (this.filled) {
         return 'mb-glyph-fill';
       }
-      // Outline: vordere Ebenen decken ab, damit Linien der hinteren Ebene nicht durchscheinen
+      // Outline: front layers cover up so lines of the back layer don't show through
       return index > 0 ? 'mb-glyph-cover' : 'mb-glyph-line';
     },
   },

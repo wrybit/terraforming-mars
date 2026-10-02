@@ -1,5 +1,5 @@
 <template>
-  <!-- An body hängen, damit Kopfleiste und Filter-Sheet nicht darüber liegen -->
+  <!-- Attach to body so the header bar and filter sheet don't sit above it -->
   <Teleport to="body">
     <MobileCardZoom class="stats-card-zoom" :count="names.length" v-model:index="shown" :origin="origin" @close="$emit('close')">
       <template #slide="{index: slide}">
@@ -15,11 +15,11 @@ import {CardName} from '@/common/cards/CardName';
 import Card from '@/client/components/card/Card.vue';
 import MobileCardZoom from '@/client/components/mobile/MobileCardZoom.vue';
 
-// Karten der Statistik groß: dieselbe Großansicht wie im Spiel, durch die Karten der Liste blätterbar
+// Statistics cards enlarged: the same large view as in the game, browsable through the cards of the list
 const props = defineProps<{
   names: ReadonlyArray<CardName>;
   index: number;
-  // Position des angeklickten Elements: dort wächst die Karte heraus und schrumpft wieder hinein
+  // Position of the clicked element: the card grows out of it and shrinks back into it
   origin?: DOMRect;
 }>();
 

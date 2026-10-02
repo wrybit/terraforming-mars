@@ -1,5 +1,5 @@
-/* Mockup Hilfe-Overlay. Präfix hx- (nie "ad-": Adblocker blenden das aus).
-   Farben aus der App: Modal (modal_surface.less), Lila = @bg_action */
+/* Help overlay mockup. Prefix hx- (never "ad-": adblockers hide that).
+   Colors from the app: modal (modal_surface.less), purple = @bg_action */
 :root {
   --hx-modal-bg: #23242a;
   --hx-modal-border: #4b4d55;
@@ -13,13 +13,13 @@
   --hx-accent-text: #b3b2ff;
   --hx-radius: 12px;
   --hx-card-radius: 10px;
-  /* Abstände nach Gesetz der Nähe: Zeile < Gruppe < Abschnitt */
+  /* Spacing by the law of proximity: row < group < section */
   --hx-gap-row: 4px;
   --hx-gap-group: 20px;
   --hx-gap-section: 16px;
 }
 
-/* Seite: echte Spielansicht als Hintergrund, abgedunkelt + unscharf wie in der App */
+/* Page: real game view as background, darkened + blurred as in the app */
 body.hx-page {
   margin: 0; padding: 0; height: 100vh; overflow: hidden;
   background: #0b0c10 url(bg-desktop.jpg) center / cover no-repeat;
@@ -30,7 +30,7 @@ body.hx-page {
   background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(4px);
 }
 
-/* Box: feste Höhe, damit nichts springt; nur der Inhalt scrollt */
+/* Box: fixed height so nothing jumps; only the content scrolls */
 .hx-modal {
   width: min(1180px, 100%); height: min(85vh, 900px);
   display: flex; flex-direction: column; overflow: hidden;
@@ -38,7 +38,7 @@ body.hx-page {
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
 }
 
-/* Kopf */
+/* Header */
 .hx-head { flex: none; padding: 16px 20px 0; border-bottom: 1px solid var(--hx-surface-border); }
 .hx-toprow { display: flex; align-items: center; gap: 12px; }
 .hx-title { margin: 0 auto 0 0; font-family: "Ubuntu", sans-serif; letter-spacing: 0; font-size: 20px; font-weight: 500; color: var(--hx-heading); }
@@ -55,7 +55,7 @@ body.hx-page {
 }
 .hx-close:hover { background: #34363e; color: #fff; }
 
-/* Tabs: einzeilig, bei Platzmangel waagerecht scrollbar */
+/* Tabs: single row, horizontally scrollable when space is short */
 .hx-tabs { display: flex; gap: 2px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; }
 .hx-tabs::-webkit-scrollbar { display: none; }
 .hx-tab {
@@ -69,7 +69,7 @@ body.hx-page {
   border-radius: 3px 3px 0 0; background: var(--hx-accent);
 }
 
-/* Hauptbereich: Seitenbaum links, Inhalt rechts */
+/* Main area: page tree on the left, content on the right */
 .hx-main { flex: 1; min-height: 0; display: flex; }
 .hx-subnav {
   flex: none; width: 230px; overflow-y: auto; padding: 16px 8px 16px 12px;
@@ -89,7 +89,7 @@ body.hx-page {
 
 .hx-content { flex: 1; min-width: 0; overflow-y: auto; padding: 20px; scroll-behavior: smooth; }
 
-/* Abschnitte als eigene Flächen */
+/* Sections as separate surfaces */
 .hx-section {
   scroll-margin-top: 16px; margin-bottom: var(--hx-gap-section); padding: 16px 18px 18px;
   border-radius: var(--hx-card-radius); background: var(--hx-surface); border: 1px solid var(--hx-surface-border);
@@ -102,7 +102,7 @@ body.hx-page {
   margin: 0 0 8px; text-shadow: none; font-family: "Ubuntu", sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--hx-muted);
 }
 
-/* Symbol-Zeilen: Raster füllt die Breite */
+/* Icon rows: grid fills the width */
 .hx-rows { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: var(--hx-gap-row) 16px; }
 .hx-row { display: flex; align-items: center; gap: 12px; min-height: 36px; }
 .hx-icon { flex: none; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; }
@@ -111,11 +111,11 @@ body.hx-page {
 .hx-exp { display: flex; gap: 4px; margin-left: -4px; opacity: 0.8; }
 .hx-exp .expansion-icon { margin: 0 !important; }
 
-/* Standardprojekte: Karten im Raster */
+/* Standard projects: cards in a grid */
 .hx-cards { display: flex; flex-wrap: wrap; gap: 16px; }
 .hx-cards .cardbox { margin: 0 !important; zoom: 0.84; }
 
-/* Phasen: Schritte mit Nummer, alles aufgeklappt */
+/* Phases: numbered steps, all expanded */
 .hx-step { scroll-margin-top: 16px; position: relative; padding-left: 40px; }
 .hx-step + .hx-step { margin-top: var(--hx-gap-group); }
 .hx-step-no {
@@ -136,11 +136,11 @@ body.hx-page {
 .hx-substep + .hx-substep { margin-top: 12px; }
 .hx-substep-title { font-weight: 500; color: var(--hx-text); margin-bottom: 4px; }
 
-/* Parteien */
+/* Parties */
 .hx-party-logo { flex: none; transform: scale(0.8); transform-origin: left center; margin: -6px -8px -6px 0 !important; }
 .hx-agendas { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
 
-/* Regelhefte als Link-Kacheln */
+/* Rulebooks as link tiles */
 .hx-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
 .hx-link {
   display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px;
@@ -151,7 +151,7 @@ body.hx-page {
 .hx-link-name { flex: 1; min-width: 0; }
 .hx-link-arrow { color: var(--hx-muted); font-size: 14px; }
 
-/* Tastatur: Tastenkappen im App-Dunkel, Kürzel-Tasten in Lila */
+/* Keyboard: keycaps in app dark, shortcut keys in purple */
 .hx-key {
   flex: none; min-width: 36px; height: 36px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center;
   border-radius: 7px; background: linear-gradient(#3a3c45, #2c2e35); border: 1px solid #4d4f58; box-shadow: 0 3px 0 #17181c;
@@ -172,12 +172,12 @@ body.hx-page {
 .hx-empty { padding: 40px 0; text-align: center; color: var(--hx-muted); }
 .hx-hidden { display: none !important; }
 
-/* Tablet: Seitenbaum schmaler */
+/* Tablet: narrower page tree */
 @media (max-width: 1000px) {
   .hx-subnav { width: 190px; }
 }
 
-/* Handy: Vollbild-Sheet, Unternavigation als Chip-Leiste über dem Inhalt */
+/* Phone: full-screen sheet, sub-navigation as a chip bar above the content */
 @media (max-width: 700px) {
   body.hx-page { background-image: url(bg-mobile.jpg); }
   .hx-backdrop { padding: 24px 0 0; align-items: flex-end; }
@@ -213,17 +213,17 @@ body.hx-page {
   .hx-links { grid-template-columns: 1fr; }
 }
 
-/* App-Überschriften haben Schatten und eigene Schrift – im Overlay nicht gewünscht */
+/* App headings have shadows and their own font – not wanted in the overlay */
 .hx-modal h1, .hx-modal h2, .hx-modal h3 { text-shadow: none !important; font-family: "Ubuntu", sans-serif !important; letter-spacing: 0 !important; }
-/* Globale App-Liste setzt Aufzählungszeichen nach innen – hier außen, damit Folgezeilen bündig sind */
+/* Global app list puts bullets inside – outside here so wrapped lines align */
 .hx-prose ul { list-style-position: outside !important; padding-left: 1.2em !important; }
 .hx-prose li { margin: 0 !important; padding-left: 2px; }
 .hx-prose li + li { margin-top: 4px !important; }
 .hx-cards .cardbox { zoom: 0.76; }
 @media (max-width: 700px) { .hx-cards .cardbox { zoom: 0.56; } }
-/* App setzt auf Überschriften einen Schlagschatten per filter */
+/* App adds a drop shadow to headings via filter */
 .hx-modal h1, .hx-modal h2, .hx-modal h3 { filter: none !important; }
-/* Karten ohne eigenen Außenrand – Abstand regelt nur das Raster */
+/* Cards without their own outer margin – spacing is handled by the grid only */
 .hx-cards { width: 100%; }
 .hx-cards .card-container { margin: 0 !important; }
 .hx-cards .cardbox { zoom: 0.9; }

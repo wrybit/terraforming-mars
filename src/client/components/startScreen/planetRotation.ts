@@ -1,16 +1,16 @@
-/* Drehung der Planeten-Buttons: beim Hover langsam nach rechts, am Ende der Textur weich umkehren;
-   beim Verlassen erst schnell, dann weich auslaufend zurück. Die Schleife läuft nur, solange sich etwas bewegt. */
+/* Rotation of the planet buttons: on hover slowly to the right, reversing smoothly at the end of the texture;
+   on leave back quickly at first, then easing out. The loop only runs while something is moving. */
 import {GlobePlacement} from './globeLayout';
 import {PlanetRenderer} from './planetRenderer';
 import {PlanetStripe, rotationLimits} from './planetStripes';
 
-// Sprite-Pixel Oberfläche pro Sekunde beim Hover
+// Sprite pixels of surface per second on hover
 const ROTATE_SPEED = 1000 / 45;
-// je kleiner, desto weicher bremst die Drehung an den Enden ab und kehrt um
+// the smaller, the more softly the rotation brakes and reverses at the ends
 const TURN_SOFTNESS = 1.2;
-// 1/s: wie schnell das Leuchten beim Hover ein- und ausblendet
+// 1/s: how fast the glow fades in and out on hover
 const GLOW_SPEED = 4;
-// Zurückdrehen: Dauer wächst mit der gedrehten Strecke (kurzer Hover = kurzes Zurück)
+// Rotating back: duration grows with the distance rotated (short hover = short return)
 const returnDuration = (distance: number) => Math.min(3000, 900 + Math.abs(distance) * 4);
 const easeOutCubic = (progress: number) => 1 - Math.pow(1 - Math.min(progress, 1), 3);
 
@@ -56,7 +56,7 @@ export class PlanetRotation {
     this.startLoop();
   }
 
-  /** Neue Lage eines Buttons im Globus (nach Größenänderung). */
+  /** New position of a button in the globe (after a resize). */
   public setPlacement(index: number, placement: GlobePlacement): void {
     const button = this.buttons[index];
     if (button !== undefined) {
@@ -64,7 +64,7 @@ export class PlanetRotation {
     }
   }
 
-  /** Alle neu zeichnen, z. B. nach Größenänderung. */
+  /** Redraw all, e.g. after a resize. */
   public drawAll(): void {
     this.buttons.forEach((button) => this.draw(button));
   }
@@ -105,7 +105,7 @@ export class PlanetRotation {
     }
   }
 
-  // Ein Zeitschritt für einen Button; true, solange er sich noch verändert
+  // One time step for a button; true while it is still changing
   private advance(button: PlanetButton, now: number, elapsed: number): boolean {
     let changed = false;
     const glowTarget = button.hovered ? 1 : 0;
@@ -115,7 +115,7 @@ export class PlanetRotation {
       changed = true;
     }
     if (button.hovered && !this.reducedMotion) {
-      // Am Ende der Textur umkehren; die Geschwindigkeit folgt weich, damit die Umkehr nicht ruckt
+      // Reverse at the end of the texture; the speed follows smoothly so the reversal doesn't jerk
       if (button.offset >= button.limits.max) {
         button.direction = -1;
       }

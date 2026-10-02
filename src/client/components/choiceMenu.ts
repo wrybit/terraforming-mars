@@ -1,10 +1,10 @@
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {isEndTab} from '@/client/components/orOptionsShortLabels';
 
-// Einfache Entscheidung (z. B. Olympus-Konferenz: "Ressource hinzufügen" oder "entfernen"): nur reine Optionen
-// ohne eigene Eingabe, dazu höchstens eine Spielerwahl (z. B. Komet für Venus: "Spieler wählen" oder "Entferne keine M€").
-// Sie kommt in einen einzigen Tab (WaitingForTabs) mit Auswahl-Kacheln (OrOptions) – jeder Spieler und jede
-// Option eine Kachel –, nicht als eigene Tab-Leiste wie das Aktionsmenü. Weitergeben/Beenden gehören immer zum Aktionsmenü.
+// Simple decision (e.g. Olympus Conference: "add resource" or "remove"): only plain options
+// without their own input, plus at most one player selection (e.g. Comet for Venus: "select player" or "remove no M€").
+// It goes into a single tab (WaitingForTabs) with choice tiles (OrOptions) – each player and each
+// option one tile –, not its own tab bar like the action menu. Pass/end always belong to the action menu.
 export function isChoiceMenu(input: PlayerInputModel): input is OrOptionsModel {
   return input.type === 'or' &&
     input.options.length > 0 &&
@@ -12,8 +12,8 @@ export function isChoiceMenu(input: PlayerInputModel): input is OrOptionsModel {
     input.options.every((option) => (option.type === 'option' && !isEndTab(option.title)) || option.type === 'player');
 }
 
-// Eingabe, die eine Entscheidung nach außen vertritt (Frage, Tab-Beschriftung, Farbe in WaitingForTabs):
-// die Spielerwahl, falls es eine gibt – deren Titel sagt, worum es geht –, sonst die Entscheidung selbst
+// Input that represents a decision outwardly (question, tab label, color in WaitingForTabs):
+// the player selection if there is one – its title says what it is about –, otherwise the decision itself
 export function choiceMenuLead(input: PlayerInputModel): PlayerInputModel {
   if (!isChoiceMenu(input)) {
     return input;

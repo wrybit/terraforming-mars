@@ -1,7 +1,7 @@
 <template>
   <div id="player-home" :class="{'with-turmoil': game.turmoil, 'player-home--acting': isPlayerActing(playerView), 'player-home--fixed': usesFixedLayout}">
-    <!-- player-home--acting: roter Rahmen um den Viewport, solange dieser Spieler am Zug ist (active_player_outline.less).
-         Kommentar bewusst innerhalb der Wurzel, sonst hätte die Komponente zwei Wurzelknoten ($el wäre kein Element) -->
+    <!-- player-home--acting: red frame around the viewport while this player is taking their turn (active_player_outline.less).
+         Comment deliberately inside the root, otherwise the component would have two root nodes ($el would not be an element) -->
     <TopBar :playerView="playerView" />
 
     <Sidebar v-trim-whitespace
@@ -23,9 +23,9 @@
       :spectatorId = "game.spectatorId"
       :expectedPurgeTimeMs = "game.expectedPurgeTimeMs"/>
 
-    <!-- Zwei-Spalten-Layout (HomeColumns) auch in der Startphase (Startkarten wählen): links Auswahl, rechts Brett und Log -->
+    <!-- Two-column layout (HomeColumns) also in the start phase (choosing starting cards): selection on the left, board and log on the right -->
     <div>
-      <!-- Startphase: Spielplan einklappbar (SetupBoardToggle), dann haben die Auswahlspalten die volle Breite -->
+      <!-- Start phase: game board collapsible (SetupBoardToggle), then the selection columns get the full width -->
       <HomeColumns :boardCollapsed="isSetupPhase && boardCollapsed">
         <template #board>
           <div class="player_home_block player-home-columns__mars">
@@ -37,11 +37,11 @@
               :viewerColor="playerView.thisPlayer.color"
               @toggleTileView="cycleTileView()"
             />
-            <!-- Spielende: Meldung über dem Mars, danach automatisch zur Ergebnisseite -->
+            <!-- Game end: message above Mars, then automatically to the results page -->
             <GameOverNotice v-if="game.phase === 'end'" :participantId="playerView.id"/>
           </div>
 
-          <!-- Log unter dem Brett: beides bleibt im Zwei-Spalten-Layout gemeinsam sichtbar -->
+          <!-- Log below the board: both stay visible together in the two-column layout -->
           <a class="hotkey-target"></a>
           <div v-if="!isSetupPhase" class="player_home_block nofloat player-home-columns__log">
             <LogPanel :viewModel="playerView" @spaceClicked="onSpaceClicked"/>
@@ -50,19 +50,19 @@
 
         <template #main>
           <a class="hotkey-target"></a>
-          <!-- Startphase: nur die Zugreihenfolge – die Spielerleisten zeigen dort noch nichts als Nullen -->
+          <!-- Start phase: only the turn order – the player bars show nothing but zeros there yet -->
           <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players">
             <SetupBoardToggle/>
           </SetupTurnOrder>
           <PlayersOverview v-else class="player_home_block player_home_block--players nofloat" :playerView="playerView" v-trim-whitespace id="shortkey-playersoverview"/>
 
-          <!-- Startphase: Startkarten-Auswahl bzw. Draft statt Aktionsmenü und Handkarten -->
+          <!-- Start phase: starting card selection or draft instead of action menu and hand cards -->
           <PlayerSetupView v-if="isSetupPhase" :playerView="playerView"/>
 
           <template v-else>
           <a class="hotkey-target"></a>
-          <!-- Ohne eigene Eingabe unsichtbar (der Hinweis, wer am Zug ist, steht dann als roter Tab bei den Handkarten);
-               WaitingFor bleibt aber eingebunden, weil es den Server nach dem eigenen Zug fragt -->
+          <!-- Invisible without an own input (the note on whose turn it is then appears as a red tab by the hand cards);
+               WaitingFor stays mounted though, because it polls the server after the own turn -->
           <div class="player_home_block player_home_block--actions nofloat" v-show="playerView.waitingFor !== undefined">
             <a name="actions" class="player_home_anchor"></a>
             <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
@@ -76,8 +76,8 @@
           </div>
 
           <a name="cards" class="player_home_anchor"></a>
-          <!-- Ohne anstehende Eingabe (nicht am Zug) stehen die Handkarten im selben Tab-Container, allein.
-               Sonst sind sie dort der erste Tab über der Eingabe (isHandInInputTabs), dann entfällt dieser Block. -->
+          <!-- Without a pending input (not our turn) the hand cards sit alone in the same tab container.
+               Otherwise they are the first tab there above the input (isHandInInputTabs), and this block is dropped. -->
           <div class="player_home_block player_home_block--hand" v-if="hasHandPanelContent && !isHandInInputTabs(playerView)" id="shortkey-hand">
             <div class="or-tabs" role="tablist">
               <HandCardsTab :count="cardsInHandCount" :active="true"/>
@@ -88,7 +88,7 @@
             </div>
           </div>
 
-          <!-- Eigene gespielte Karten: wie bei Gegnern über "anzeigen" in der Spielerleiste (Modal) -->
+          <!-- Own played cards: as for opponents, via "show" in the player bar (modal) -->
           </template>
         </template>
       </HomeColumns>
@@ -159,16 +159,16 @@ export default defineComponent({
     },
   },
   computed: {
-    // Spielplan in der Startphase eingeklappt (gemeinsamer Zustand, setupBoardCollapsed.ts)
+    // Game board collapsed in the start phase (shared state, setupBoardCollapsed.ts)
     boardCollapsed(): boolean {
       return setupBoardCollapsed.value;
     },
-    // Startphase: noch keine Karte ausgespielt (Konzern, Präludien, Startkarten werden gewählt)
+    // Start phase: no card played yet (corporation, preludes, starting cards are being chosen)
     isSetupPhase(): boolean {
       return this.thisPlayer.tableau.length === 0;
     },
-    // Festes App-Layout (player_home_fixed.less): nur wenn unter den Spalten nichts mehr steht,
-    // sonst wären Kolonien, Untergrund-Marker usw. nicht mehr erreichbar
+    // Fixed app layout (player_home_fixed.less): only when nothing is left below the columns,
+    // otherwise colonies, underground markers etc. would no longer be reachable
     usesFixedLayout(): boolean {
       return this.game.phase !== 'end' &&
         this.game.colonies.length === 0 &&
@@ -184,7 +184,7 @@ export default defineComponent({
       const playerView = this.playerView;
       return playerView.cardsInHand.length + playerView.preludeCardsInHand.length + playerView.ceoCardsInHand.length;
     },
-    // Der Handkarten-Block zeigt auch die eigenen aktiven Karten – er bleibt daher auch ohne Handkarten sichtbar
+    // The hand cards block also shows the own active cards – so it stays visible even without hand cards
     hasHandPanelContent(): boolean {
       return this.cardsInHandCount > 0 || ownActiveCards(this.playerView).length > 0;
     },

@@ -2,16 +2,16 @@ import {StatsGame, StatsPlayerDetails} from '@/common/stats/StatsGame';
 import {AdminPlayerSummary} from '@/common/admin/AdminGameSummary';
 import {Color} from '@/common/Color';
 
-/** Ein Spieler in einer Partie – die Einheit, über die fast alle Kennzahlen gezählt werden. */
+/** A player in a game – the unit by which almost all metrics are counted. */
 export type StatsPlayerResult = {
   game: StatsGame;
   player: AdminPlayerSummary;
-  /** 1 = Sieger; bei Gleichstand teilen sich Spieler den Platz. */
+  /** 1 = winner; on a tie players share the place. */
   place: number;
   details: StatsPlayerDetails | undefined;
 };
 
-/** Platzierung wie im Spiel: Siegpunkte, bei Gleichstand M€. */
+/** Placement as in the game: victory points, on a tie M€. */
 function placeOf(player: AdminPlayerSummary, players: ReadonlyArray<AdminPlayerSummary>): number {
   if (player.isWinner) {
     return 1;
@@ -34,7 +34,7 @@ export function allPlayerResults(games: ReadonlyArray<StatsGame>): Array<StatsPl
   return games.flatMap(playerResults);
 }
 
-/** Gleiche Schreibweise wie die Siegerstatistik der Admin-Übersicht (winCounts.ts), damit beide zusammenpassen. */
+/** Same notation as the winner statistics of the admin overview (winCounts.ts), so both match. */
 export function lineupOf(game: StatsGame): string {
   return Array.from(new Set(game.summary.players.map((player) => player.name)))
     .sort((first, second) => first.localeCompare(second))
@@ -45,7 +45,7 @@ export function yearOf(game: StatsGame): string {
   return String(new Date(game.summary.createdTimeMs).getFullYear());
 }
 
-/** Wahrscheinlichkeit zu gewinnen, wenn alle gleich gut wären. */
+/** Probability of winning if everyone were equally good. */
 export function expectedWinRate(game: StatsGame): number {
   return 1 / Math.max(1, game.summary.players.length);
 }
@@ -54,7 +54,7 @@ export function winnerOf(game: StatsGame): AdminPlayerSummary | undefined {
   return game.summary.players.find((player) => player.isWinner);
 }
 
-/** Spielernamen, die meistbeteiligten zuerst. */
+/** Player names, most frequently participating first. */
 export function playerNames(games: ReadonlyArray<StatsGame>): Array<string> {
   const counts = new Map<string, number>();
   for (const result of allPlayerResults(games)) {
@@ -63,7 +63,7 @@ export function playerNames(games: ReadonlyArray<StatsGame>): Array<string> {
   return Array.from(counts.keys()).sort((first, second) => (counts.get(second) ?? 0) - (counts.get(first) ?? 0) || first.localeCompare(second));
 }
 
-/** Farbe, in der ein Spieler meistens gespielt hat – so erkennt man ihn überall in der Statistik wieder. */
+/** Color a player played most often – so you recognize them everywhere in the statistics. */
 export function playerColors(games: ReadonlyArray<StatsGame>): Map<string, Color> {
   const counts = new Map<string, Map<Color, number>>();
   for (const {player} of allPlayerResults(games)) {

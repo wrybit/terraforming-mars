@@ -1,6 +1,6 @@
 import {CardName} from '@/common/cards/CardName';
 
-// Schnittstelle, über die jeder Baustein der Statistik die Kartengroßansicht öffnet (StatsPage stellt sie bereit)
+// Interface through which every stats building block opens the large card view (StatsPage provides it)
 export type StatsCardZoomRequest = {
   names: ReadonlyArray<CardName>;
   index: number;

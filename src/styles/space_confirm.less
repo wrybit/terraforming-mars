@@ -1,12 +1,12 @@
-// Bestätigungs-Sprechblase am Feld (SpaceConfirmPopover.vue), Optik wie die Seitenleisten-Dialoge
+// Confirmation speech bubble at the space (SpaceConfirmPopover.vue), look like the sidebar dialogs
 
 @space-confirm-background: #23242a;
-@space-confirm-border: #5755d9; // CTA-Farbe: gehört zur laufenden Aktion
+@space-confirm-border: #5755d9; // CTA colour: belongs to the ongoing action
 @space-confirm-arrow: 12px;
 
 .space-confirm {
   position: fixed;
-  z-index: 1150; // über dem Brett und dem vergrößerten Mars (board_zoom_modal.less, 1100)
+  z-index: 1150; // above the board and the enlarged Mars (board_zoom_modal.less, 1100)
   width: 200px;
   padding: 12px 14px;
   border: 1px solid @space-confirm-border;
@@ -16,7 +16,7 @@
   color: #d6d7dc;
   font-size: 15px;
 
-  // Pfeil zum Feld (gedrehtes Quadrat mit zwei Rändern)
+  // Arrow to the space (rotated square with two borders)
   &::before {
     content: "";
     position: absolute;
@@ -65,7 +65,7 @@
   }
 }
 
-// Ja grün, Nein rot – gleiche Farben wie die übrigen Bestätigen/Auslassen-Buttons (button_tones.less)
+// Yes green, No red – same colours as the other confirm/skip buttons (button_tones.less)
 .space-confirm-button--yes {
   border-color: @button-success;
   background: @button-success;
@@ -96,13 +96,13 @@
   cursor: pointer;
 }
 
-// Vorschau des Plättchens über dem gewählten Feld (SelectSpace.vue): fast deckend, leicht angehoben mit Schatten
-// darunter (noch nicht gelegt) und pulsierendem lila Schein. Bild und Größe kommen von .board-space-tile--<tile>.
+// Preview of the tile above the chosen space (SelectSpace.vue): almost opaque, slightly raised with a shadow
+// beneath (not placed yet) and a pulsing purple glow. Image and size come from .board-space-tile--<tile>.
 .space-tile-preview {
   position: absolute;
   z-index: 5;
   opacity: 0.9;
-  transform: translateY(-1px); // nur angedeutet angehoben – der Schatten zeigt "noch nicht gelegt"
+  transform: translateY(-1px); // only hinted as raised – the shadow signals "not placed yet"
   filter: drop-shadow(0 6px 5px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 5px @space-confirm-border);
   pointer-events: none;
   animation: space-tile-preview-pulse 1.6s ease-in-out infinite;

@@ -1,33 +1,33 @@
-/* Planeten-Streifen der Startseite: Lage der Streifen in planet-stripes.jpg und Geometrie des Globus,
-   den die Menü-Buttons zusammen bilden. Alle Maße im 369er-Raster des alten Sprites planets.jpg
-   (369 × 810, Reihen à 90px, Reihe 0 = Titel), damit Titel-Hintergrund und Buttons denselben Globus zeigen. */
+/* Planet stripes of the start page: position of the stripes in planet-stripes.jpg and geometry of the globe
+   that the menu buttons form together. All measures in the 369 grid of the old sprite planets.jpg
+   (369 × 810, rows of 90px, row 0 = title), so title background and buttons show the same globe. */
 
 export const STRIPES_TEXTURE_URL = 'assets/buttons-homepage/planet-stripes.jpg';
 export const STRIPES_TEXTURE_SIZE = {width: 1942, height: 809} as const;
 
-// Ein Button entspricht im Sprite-Raster dieser Fläche
+// One button corresponds to this area in the sprite grid
 export const SPRITE_ROW = {width: 369, height: 90} as const;
 
-// Globus-Kreis, per Kreis-Fit aus dem Planetenrand von planets.jpg bestimmt
+// Globe circle, determined by a circle fit to the planet edge of planets.jpg
 export const GLOBE = {centerX: -174.7, centerY: 402.5, radius: 522} as const;
 
 export type PlanetStripeName = 'venus' | 'earth' | 'mars' | 'jupiter' | 'saturn' | 'darkBlue' | 'neptune' | 'moon';
 
 export type PlanetStripe = {
-  // Oberkante und Höhe in Original-Pixeln der Textur (aus den Farbsprüngen gemessen)
+  // Top edge and height in original texture pixels (measured from the color jumps)
   top: number;
   height: number;
-  // Textur-Spalte, die in Ruhe am linken Button-Rand sitzt; der unterste Streifen ist nur rechts farbig
+  // Texture column that sits at the left button edge at rest; the bottom stripe is colored only on the right
   startX: number;
 };
 
 const DEFAULT_START_X = 700;
 
-// An den Streifen-Grenzen liegen helle Trennlinien und der Nachbarstreifen: oben und unten so viel abschneiden
-// (Textur-Pixel), dass nur der eigene Streifen zu sehen ist – auch mit Glättung beim Skalieren
+// At the stripe boundaries there are bright dividing lines and the neighboring stripe: cut off this much at top and bottom
+// (texture pixels) so that only the own stripe is visible – even with smoothing when scaling
 export const STRIPE_EDGE_TRIM = 2;
 
-/** Sichtbarer Teil eines Streifens ohne die Ränder. */
+/** Visible part of a stripe without the edges. */
 export function trimmedStripe(stripe: PlanetStripe): PlanetStripe {
   return {...stripe, top: stripe.top + STRIPE_EDGE_TRIM, height: stripe.height - 2 * STRIPE_EDGE_TRIM};
 }
@@ -43,13 +43,13 @@ export const PLANET_STRIPES: Readonly<Record<PlanetStripeName, PlanetStripe>> = 
   darkBlue: {top: 709, height: 100, startX: 1130},
 };
 
-// Nutzbarer Bereich der Textur in x: außerhalb sind die Streifen-Enden rund bzw. schwarz (mit Abstand, damit die
-// Rundung nie sichtbar wird)
+// Usable area of the texture in x: outside it the stripe ends are round or black (with a margin, so the
+// rounding never becomes visible)
 const TEXTURE_USABLE = {left: 300, right: 1700};
-// Sichtbare Oberflächen-Bogenlänge vom linken Button-Rand bis zum Planetenrand (am Äquator, Sprite-Pixel)
+// Visible surface arc length from the left button edge to the planet edge (at the equator, sprite pixels)
 const VISIBLE_ARC = 650;
 
-/** Wie weit sich ein Streifen in jede Richtung drehen lässt, bis die Textur endet (Sprite-Pixel Oberfläche). */
+/** How far a stripe can rotate in each direction until the texture ends (sprite pixels of surface). */
 export function rotationLimits(stripe: PlanetStripe): {min: number, max: number} {
   const scale = SPRITE_ROW.height / stripe.height;
   return {

@@ -1,4 +1,4 @@
-// Miras Züge als festes Drehbuch mit Karten aus ihrer echten Hand (Teractor, Generation 6).
+// Mira's moves as a fixed script with cards from her real hand (Teractor, generation 6).
 (function (TM) {
   'use strict';
 
@@ -8,7 +8,7 @@
       {card: 'Deep Well Heating', kind: 'automated', cost: 13, change: {'mira.energyProduction': 1}, temperature: 1},
       {standard: 'City', cost: 25, change: {'mira.megacreditsProduction': 1}, tile: 'city'},
     ],
-    // Danach hat Mira nur noch 3 M€ – sie passt
+    // After that Mira only has 3 M€ left – she passes
     [{pass: true}],
   ];
   var turnIndex = 0;
@@ -41,7 +41,7 @@
   }
 
   TM.opponent = {
-    // Spielt Miras nächsten Zug; Rückgabe erst, wenn alle Aktionen gezeigt wurden
+    // Plays Mira's next move; resolves only once all actions have been shown
     play: function () {
       var moves = TM.turn.passed.mira ? [] : (SCRIPT[turnIndex++] || [{pass: true}]);
       return moves.reduce(function (chain, move) {

@@ -1,6 +1,6 @@
-// Hilfe-Overlay (Fork, HelpOverlay.vue): Kopf mit Suche und Tabs, Seitenbaum links, Inhalt als Flächen.
-// Die Inhalte kommen aus den unveränderten Upstream-Komponenten (components/help); ihr Markup wird hier
-// umgestaltet. Gesetz der Nähe: Zeile < Gruppe < Abschnitt, Abschnitte zusätzlich als eigene Flächen.
+// Help overlay (fork, HelpOverlay.vue): header with search and tabs, page tree on the left, content as surfaces.
+// The content comes from the unchanged upstream components (components/help); their markup is
+// restyled here. Law of proximity: line < group < section, sections additionally as their own surfaces.
 @import (reference) "./variables.less";
 @import (reference) "./modal_surface.less";
 
@@ -43,7 +43,7 @@
   }
 }
 
-// Eigene Seite /help: gleiche Box wie im Spiel, mittig auf der Seite
+// Dedicated /help page: same box as in the game, centered on the page
 .help-overlay--page {
   max-width: 1180px;
   height: calc(100vh - 120px);
@@ -135,7 +135,7 @@
   }
 }
 
-// Tabs: einzeilig, bei Platzmangel waagerecht wischbar
+// Tabs: single line, horizontally swipeable when space is short
 .help-overlay-tabs {
   display: flex;
   gap: 2px;
@@ -180,7 +180,7 @@
   }
 }
 
-// Tastaturkürzel brauchen eine Tastatur
+// Keyboard shortcuts need a keyboard
 @media (hover: none) and (pointer: coarse) {
   .help-overlay-tab--desktop-only {
     display: none;
@@ -279,7 +279,7 @@
   text-align: center;
 }
 
-// ---- Gemeinsame Bausteine: Fläche, Abschnittstitel, Gruppentitel ----
+// ---- Shared building blocks: surface, section title, group title ----
 .help-surface() {
   margin: 0 0 @help-gap-section;
   padding: 16px 18px 18px;
@@ -325,7 +325,7 @@
     display: none;
   }
 
-  // Überschriften-Hüllen gehen über die volle Breite
+  // Heading wrappers span the full width
   > div:has(.help-icons-section-heading),
   > div:has(.help-icon-sublabel) {
     grid-column: 1 / -1;
@@ -340,7 +340,7 @@
     margin-top: 0;
   }
 
-  // Symbolzeile: Symbol im festen Feld, Name, Erweiterungs-Symbole direkt dahinter
+  // Icon row: icon in a fixed box, name, expansion icons right after it
   > div:has(.help-icon-label) {
     display: flex;
     align-items: center;
@@ -384,7 +384,7 @@
     margin-bottom: 0;
   }
 
-  // Symbole unterschiedlicher Größe einheitlich in ein Feld fassen
+  // Fit icons of different sizes uniformly into one box
   .help-other-symbols {
     display: flex;
     align-items: center;
@@ -394,7 +394,7 @@
   }
 }
 
-// ---- Standardprojekte (HelpStandardProjects): eine Fläche, Gruppen mit Untertitel ----
+// ---- Standard projects (HelpStandardProjects): one surface, groups with subtitles ----
 .help-overlay-content .help-standard-projects-container {
   display: flex;
   flex-wrap: wrap;
@@ -402,7 +402,7 @@
   padding: 16px 18px 18px;
   .help-surface();
 
-  // Untertitel dicht an seinen Karten, mit mehr Luft zur vorigen Gruppe (Flex-Abstand 16px kommt dazu)
+  // Subtitle close to its cards, with more room to the previous group (plus the 16px flex gap)
   h2 {
     flex-basis: 100%;
     .help-group-title();
@@ -425,7 +425,7 @@
   }
 }
 
-// ---- Phasen (HelpPhases): alles aufgeklappt, Hauptphasen als Flächen, Schritte nummeriert ----
+// ---- Phases (HelpPhases): everything expanded, main phases as surfaces, steps numbered ----
 .help-overlay-content .help-phases-container {
   padding: 0;
   line-height: 1.5;
@@ -434,7 +434,7 @@
     display: none;
   }
 
-  // Upstream klappt per Checkbox auf – hier ist immer alles offen
+  // Upstream expands via checkbox – here everything is always open
   input[type="checkbox"] ~ ul {
     height: auto;
     transform: none;
@@ -483,7 +483,7 @@
     background: none;
   }
 
-  // Hauptphasen: eigene Fläche mit Titel
+  // Main phases: own surface with title
   > ul {
     padding: 0;
     list-style: none;
@@ -501,12 +501,12 @@
     .help-section-title();
   }
 
-  // Schritte innerhalb einer Hauptphase: nummeriert, Inhalt eingerückt
+  // Steps within a main phase: numbered, content indented
   > ul > li > ul {
     counter-reset: help-phase-step;
   }
 
-  // Liste aus nummerierten Schritten braucht keinen Aufzählungs-Einzug – die Nummer steht schon davor
+  // A list of numbered steps needs no bullet indent – the number already precedes it
   > ul > li > ul:has(> li > label) {
     padding-left: 0;
   }
@@ -547,12 +547,12 @@
     }
   }
 
-  // Liste unter einem nummerierten Schritt sitzt unter dem Titel, nicht unter der Nummer
+  // A list under a numbered step sits under the title, not under the number
   > ul > li > ul > li:has(> label) > ul {
     padding-left: 1.2em;
   }
 
-  // Unterschritte mit eigener Unterliste (z. B. "i. Spielende prüfen"): Titel hervorheben
+  // Sub-steps with their own sublist (e.g. "i. Game end check"): emphasize the title
   li:has(> ul) > span:first-child {
     color: @help-heading;
     font-weight: 700;
@@ -569,7 +569,7 @@
   }
 }
 
-// ---- Politische Parteien (HelpTurmoilParties): je Partei eine Fläche ----
+// ---- Political parties (HelpTurmoilParties): one surface per party ----
 .help-overlay-content .help-turmoil-parties-container {
   padding: 0;
   font-size: 14px;
@@ -608,7 +608,7 @@
   }
 }
 
-// ---- Solo-Regeln (HelpSoloRules): eine Fläche, Überschriften gliedern ----
+// ---- Solo rules (HelpSoloRules): one surface, headings structure it ----
 .help-overlay-content .help-solo-rules-container {
   padding: 16px 18px 18px;
   line-height: 1.5;
@@ -635,7 +635,7 @@
   }
 }
 
-// ---- Regelhefte (HelpRulebooks): Link-Kacheln wie Buttons, ohne Unterstreichung ----
+// ---- Rulebooks (HelpRulebooks): link tiles like buttons, without underline ----
 .help-overlay-content .help-rulebooks-container {
   display: block;
   padding: 0;
@@ -688,7 +688,7 @@
   }
 }
 
-// ---- Tastaturkürzel (HelpKeyboardShortcuts): Tasten im App-Dunkel, Kürzel in Lila ----
+// ---- Keyboard shortcuts (HelpKeyboardShortcuts): keys in app dark, shortcuts in purple ----
 .help-key {
   display: inline-flex;
   flex: none;
@@ -769,7 +769,7 @@
   stroke-width: 1.5;
 }
 
-// ---- Handy: Baum wird zur Chip-Leiste über dem Inhalt ----
+// ---- Phone: the tree becomes a chip bar above the content ----
 @media only screen and (max-width: @help-mobile-max) {
   .help-overlay--page {
     height: 100dvh;
@@ -778,7 +778,7 @@
     border-radius: 0;
   }
 
-  // Bildschirmfüllend: Kopf rückt unter Notch/Statusleiste weg
+  // Full screen: header moves out from under the notch/status bar
   .help-overlay-head {
     padding: max(14px, env(safe-area-inset-top)) 16px 0;
   }

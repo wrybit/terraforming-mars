@@ -1,4 +1,4 @@
-// Startauswahl als drei Schritte: Konzern, Präludien, Karten kaufen. Die Bilanz steht im Footer.
+// Start selection in three steps: corporation, preludes, buy cards. The balance sits in the footer.
 (function (TM) {
   'use strict';
 
@@ -64,7 +64,7 @@
     evaluate();
   }
 
-  // Grenzen wie im Original, aber handyfreundlich: beim Konzern ersetzt die neue Wahl die alte
+  // Limits as in the original, but phone-friendly: for the corporation the new choice replaces the old one
   function enforceLimit(input) {
     var name = STEPS.filter(function (candidate) { return column(candidate).contains(input); })[0];
     if (!input.checked || !LIMITS[name]) return;
@@ -82,7 +82,7 @@
     start: function () {
       setup = document.getElementById('setupRoot');
       document.getElementById('app').classList.add('is-setup');
-      // Die echte Bilanz-Leiste wandert in den Footer
+      // The real balance bar moves into the footer
       document.getElementById('setupSummary').appendChild(TM.$('.setup-summary-values', setup));
       TM.$all('.setup-summary', setup).forEach(function (summary) { summary.hidden = true; });
       TM.nav.go('setup');

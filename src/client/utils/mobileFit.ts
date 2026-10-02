@@ -1,47 +1,47 @@
 /*
- * Größenanpassung fester Spiel-Bausteine (Karten, Mars-Brett) an die Breite der Mobil-Ansicht.
+ * Scales fixed game building blocks (cards, Mars board) to the width of the mobile view.
  *
- * Kein CSS-`zoom` (Safari rechnet ihn in Rastern anders, Karten überlappen), sondern `transform: scale()`
- * am Element; negative Außenabstände ziehen die Layout-Box auf die sichtbare Größe zusammen. Es werden nur
- * Stile gesetzt, keine Knoten verschoben – sonst käme Vue beim Aktualisieren durcheinander.
+ * No CSS `zoom` (Safari computes it differently in grids, cards overlap), but `transform: scale()`
+ * on the element; negative margins shrink the layout box to the visible size. Only styles
+ * are set, no nodes are moved – otherwise Vue would get confused when updating.
  */
 
 import {MARS_CROP} from '@/client/components/mobile/mobileBoardZoom';
 import {choiceBlockColumns, choiceBlockColumnsPortrait} from '@/client/components/choiceBlock';
 
-/* Sichtbarer Ausschnitt eines Elements in dessen eigenen px (vor der Skalierung). */
+/* Visible area of an element in its own px (before scaling). */
 export type FitCrop = {left: number, top: number, width: number, height: number};
 
-/* Regel: welche Elemente wie skaliert werden. */
+/* Rule: which elements get scaled and how. */
 type FitRule = {
   selector: string;
-  // Innerhalb dieser Bereiche nicht anfassen
+  // Do not touch inside these areas
   exclude?: string;
-  // Anzahl Elemente nebeneinander (je nach Listenbreite, bei Auswahl-Rastern auch nach Anzahl) oder volle Breite mit Ausschnitt
+  // Number of elements side by side (depending on list width, for choice grids also on count) or full width with a crop
   columns?: (listWidth: number, element: HTMLElement) => number;
   crop?: FitCrop;
-  // Auswahl-Raster: Lücken in px statt GAP_PX; die Liste ragt rechts um die Spaltenlücke über (mobile.less),
-  // damit die Spalten die volle Breite füllen und nur zwischen den Kacheln Luft bleibt
+  // Choice grid: gaps in px instead of GAP_PX; the list overhangs on the right by the column gap (mobile.less),
+  // so the columns fill the full width and space only remains between the tiles
   choiceGap?: {column: number, row: number};
-  // Auswahl-Raster: diese Liste bekommt die Spaltenzahl als --mb-grid-columns (mobile.less ordnet danach an)
+  // Choice grid: this list gets the column count as --mb-grid-columns (mobile.less arranges by it)
   grid?: string;
-  // Regel gilt nur, solange dies zutrifft (sonst greift eine spätere Regel)
+  // Rule applies only while this is true (otherwise a later rule takes over)
   when?: () => boolean;
 };
 
-// Abstand zwischen Elementen einer Liste (rechts und unten, als Teil des Außenabstands)
+// Spacing between elements of a list (right and bottom, as part of the margin)
 const GAP_PX = 6;
-// Lücken zwischen Auswahl-Kacheln (Standardprojekte), vgl. @mb-choice-gap/@mb-choice-row-gap in mobile.less;
-// zwischen den Zeilen sitzt das Häkchen-Fähnchen
+// Gaps between choice tiles (standard projects), cf. @mb-choice-gap/@mb-choice-row-gap in mobile.less;
+// the checkmark flag sits between the rows
 const CHOICE_GAP = {column: 14, row: 36};
-// Bezugsbreite: die nächste Box bzw. der Bildschirm, in dem das Element steht (Listen selbst sind oft nur so breit wie ihr Inhalt)
-// Gespielte Karten (mobile_played_cards.less) reichen breiter als der Bildschirm-Innenabstand
+// Reference width: the nearest box or screen the element is in (lists themselves are often only as wide as their content)
+// Played cards (mobile_played_cards.less) extend wider than the screen padding
 const CONTAINER_SELECTOR = '.setup-column-body, .or-tab-panel, .other_player_cont, .mb-screen, .game-end-box';
 const FITTED_CLASS = 'mb-fit';
-// Mars ohne Skalen-Ring (mobile.less: Planet-Bild, Kolonie-Felder in die Ecken)
+// Mars without the scale ring (mobile.less: planet image, colony spaces in the corners)
 const CROPPED_CLASS = 'mb-mars-cropped';
 
-/* Spaltenzahl für eine Kartenliste der Breite `width` px: Handy 2, Tablet hoch 3, Tablet quer 4. */
+/* Column count for a card list of width `width` px: phone 2, tablet portrait 3, tablet landscape 4. */
 export function cardColumns(width: number): number {
   if (width >= 900) {
     return 4;
@@ -50,15 +50,15 @@ export function cardColumns(width: number): number {
 }
 
 /*
- * Spalten eines Auswahl-Rasters mit `count` Karten: quer möglichst quadratisch, hochkant mehr Zeilen als Spalten
- * (choiceBlock.ts) – höchstens so viele, wie Karten nebeneinander passen.
+ * Columns of a choice grid with `count` cards: landscape as square as possible, portrait more rows than columns
+ * (choiceBlock.ts) – at most as many as cards fit side by side.
  */
 export function choiceGridColumns(width: number, count: number, portrait: boolean): number {
   const columns = portrait ? choiceBlockColumnsPortrait(count) : choiceBlockColumns(count);
   return Math.min(cardColumns(width), columns);
 }
 
-// Auswahl-Raster: Standardprojekte und Kartenwahl (Draft, Karten kaufen, Karte wählen); je Karte ein label im Block
+// Choice grid: standard projects and card selection (draft, buy cards, select card); one label per card in the block
 const STANDARD_PROJECT_LIST = '.payments_cont';
 const CARD_CHOICE_LIST = '.wf-component--select-card.choice-block';
 function choiceGridColumnsFor(listSelector: string) {
@@ -72,7 +72,7 @@ function isPortrait(): boolean {
   return window.innerHeight > window.innerWidth;
 }
 
-/* Maßstab, mit dem `columns` Elemente der Breite `itemWidth` samt Lücke `gap` in `listWidth` passen (höchstens 1). */
+/* Scale at which `columns` elements of width `itemWidth` plus gap `gap` fit into `listWidth` (at most 1). */
 export function fitScale(listWidth: number, itemWidth: number, columns: number, gap: number = GAP_PX): number {
   if (itemWidth <= 0) {
     return 1;
@@ -81,14 +81,14 @@ export function fitScale(listWidth: number, itemWidth: number, columns: number, 
   return Math.max(0.3, Math.min(1, available / itemWidth));
 }
 
-// Mars ohne Skalen-Ring: Planet samt Kolonie-Feldern in den oberen Ecken (mobile.less)
-// Hochformat: höchstens dieser Anteil der Fensterhöhe für das Brett, darunter bleiben die Balken sichtbar
+// Mars without the scale ring: planet including colony spaces in the top corners (mobile.less)
+// Portrait: at most this share of the window height for the board, so the bars below stay visible
 const BOARD_HEIGHT_SHARE = 0.62;
-// Tablet quer (mobile.less, @mb-landscape: Mars links, Rest rechts; Spieler-Tabellen waagerecht): ab dieser Breite im Querformat
+// Tablet landscape (mobile.less, @mb-landscape: Mars left, rest right; player tables horizontal): from this width in landscape
 export const LANDSCAPE_MIN_WIDTH = 900;
 const BARS_HEIGHT = 180;
 
-/* Höchste Brett-Höhe in px für das aktuelle Fenster. */
+/* Maximum board height in px for the current window. */
 export function boardMaxHeight(width: number, height: number): number {
   const landscape = width >= LANDSCAPE_MIN_WIDTH && width > height;
   return landscape ? height - BARS_HEIGHT : height * BOARD_HEIGHT_SHARE;
@@ -97,21 +97,21 @@ export function boardMaxHeight(width: number, height: number): number {
 const RULES: ReadonlyArray<FitRule> = [
   {selector: '.mb-screen--mars > .board-cont.board-without-venus, #game-end .board-cont.board-without-venus', crop: MARS_CROP},
   {selector: '.mb-screen--mars > .board-cont, #game-end .board-cont'},
-  // Gedrehte Ergebnistabelle über die volle Breite
+  // Rotated results table across the full width
   {selector: '#game-end .game_end_table.mb-transposed', columns: () => 1},
-  // Meilensteine & Auszeichnungen als Tabelle über die volle Breite
+  // Milestones & awards as a table across the full width
   {selector: '.mb-screen .ma-table', columns: () => 1},
-  // Standardprojekte: alle auf einen Blick, kein Karussell (vgl. cardCarousel.ts); quer möglichst quadratisch (5 → 3×2),
-  // hochkant mehr Zeilen (5 → 2×3), und
-  // mittig wie am Desktop (choiceBlock.ts). Lücken wie bei den Meilenstein-/Auszeichnungs-Kacheln (mobile.less)
+  // Standard projects: all at a glance, no carousel (cf. cardCarousel.ts); landscape as square as possible (5 → 3×2),
+  // portrait more rows (5 → 2×3), and
+  // centered as on desktop (choiceBlock.ts). Gaps like the milestone/award tiles (mobile.less)
   {
     selector: '.mb-screen--turn .payments_cont .card-container.card-standard-project',
     columns: choiceGridColumnsFor(STANDARD_PROJECT_LIST),
     choiceGap: CHOICE_GAP,
     grid: STANDARD_PROJECT_LIST,
   },
-  // Kartenwahl auf dem Zug-Bildschirm nur hochkant als Raster (mobile.less); quer gilt die allgemeine Kartenregel unten.
-  // Startauswahl hat eigene Spalten
+  // Card selection on the turn screen as a grid only in portrait (mobile.less); in landscape the general card rule below applies.
+  // Initial selection has its own columns
   {
     selector: `.mb-screen--turn ${CARD_CHOICE_LIST} > label > .card-container`,
     exclude: '.setup-column-body',
@@ -120,7 +120,7 @@ const RULES: ReadonlyArray<FitRule> = [
     choiceGap: CHOICE_GAP,
     grid: CARD_CHOICE_LIST,
   },
-  // Kartenwahl mit Kopfzeile (Alle auswählen, Sortierung) quer ebenfalls als Raster, damit die Leiste mit den Karten fluchtet
+  // Card selection with header (select all, sorting) also as a grid in landscape, so the bar lines up with the cards
   {
     selector: `.mb-screen--turn ${CARD_CHOICE_LIST}:has(> .select-card-toolbar) > label > .card-container`,
     exclude: '.setup-column-body',
@@ -128,11 +128,11 @@ const RULES: ReadonlyArray<FitRule> = [
     choiceGap: CHOICE_GAP,
     grid: CARD_CHOICE_LIST,
   },
-  // Karten-Karussell (Karte spielen): eine Karte groß in der Mitte
+  // Card carousel (play card): one large card in the middle
   {selector: '.mb-screen--turn .payments_cont .card-container', columns: () => 1},
   {
     selector: '.card-container',
-    // Log-Vorschau, Karten in Erklär-Kacheln und verschachtelte Karten behalten ihre Größe
+    // Log preview, cards in explainer tiles and nested cards keep their size
     exclude: '.log-container, .mb-fit-off, .card-intro-block, .tab-intro-block, .mb-fit > .card-container .card-container',
     columns: cardColumns,
   },
@@ -147,7 +147,7 @@ type StyleProperty = 'transform' | 'marginRight' | 'marginBottom' | 'clipPath' |
 
 function setStyles(element: HTMLElement, styles: Partial<Record<StyleProperty, string>>): void {
   for (const [property, value] of Object.entries(styles) as Array<[StyleProperty, string]>) {
-    // Nur bei Änderung schreiben, sonst weckt jede Messung den MutationObserver erneut
+    // Only write on change, otherwise every measurement wakes the MutationObserver again
     if (element.style[property] !== value) {
       element.style[property] = value;
     }
@@ -156,11 +156,11 @@ function setStyles(element: HTMLElement, styles: Partial<Record<StyleProperty, s
 
 function fit(element: HTMLElement, rule: FitRule): void {
   const list = element.closest<HTMLElement>(CONTAINER_SELECTOR);
-  // offsetWidth/-Height ignorieren transform: das sind die natürlichen Maße
+  // offsetWidth/-Height ignore transform: these are the natural dimensions
   const width = element.offsetWidth;
   const height = element.offsetHeight;
   if (list === null || width === 0) {
-    return; // unsichtbar (anderer Bildschirm): beim nächsten Sichtbarwerden messen
+    return; // invisible (other screen): measure the next time it becomes visible
   }
   const listWidth = innerWidth(list);
   const crop = rule.crop ?? {left: 0, top: 0, width, height};
@@ -171,7 +171,7 @@ function fit(element: HTMLElement, rule: FitRule): void {
   const scale = columns === undefined ? Math.min(listWidth / crop.width, boardMaxHeight(window.innerWidth, window.innerHeight) / crop.height) : fitScale(fitWidth, width, columns, gap);
   if (rule.grid !== undefined && columns !== undefined) {
     const grid = element.closest<HTMLElement>(rule.grid);
-    // Nur bei Änderung schreiben (MutationObserver auf style)
+    // Only write on change (MutationObserver on style)
     if (grid !== null && grid.style.getPropertyValue('--mb-grid-columns') !== String(columns)) {
       grid.style.setProperty('--mb-grid-columns', String(columns));
     }
@@ -181,8 +181,8 @@ function fit(element: HTMLElement, rule: FitRule): void {
   setStyles(element, {
     transformOrigin: '0 0',
     transform: `translate(${-crop.left * scale}px, ${-crop.top * scale}px) scale(${scale.toFixed(4)})`,
-    // Layout-Box auf den sichtbaren Ausschnitt verkleinern; in Listen plus Lücke zum Nachbarn
-    // (abgerundet, sonst passt die letzte Spalte wegen Rundung nicht mehr in die Reihe)
+    // Shrink the layout box to the visible area; in lists plus the gap to the neighbor
+    // (rounded down, otherwise the last column no longer fits into the row due to rounding)
     marginRight: Math.floor(crop.width * scale + gap) - width + 'px',
     marginBottom: Math.floor(crop.height * scale + rowGap) - height + 'px',
     clipPath: rule.crop === undefined ? '' :
@@ -206,7 +206,7 @@ function fitAll(root: HTMLElement): void {
   }
 }
 
-/* Hält Karten und Brett unter `root` passend skaliert, bis die zurückgegebene Funktion aufgerufen wird. */
+/* Keeps cards and board under `root` scaled to fit until the returned function is called. */
 export function observeMobileFit(root: HTMLElement): () => void {
   let frame = 0;
   const schedule = () => {
@@ -214,9 +214,9 @@ export function observeMobileFit(root: HTMLElement): () => void {
     frame = requestAnimationFrame(() => fitAll(root));
   };
   const mutations = new MutationObserver(schedule);
-  // style/class: Bildschirmwechsel per v-show machen Elemente erst sichtbar
+  // style/class: screen switches via v-show only make elements visible
   mutations.observe(root, {childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class']});
-  // Ohne ResizeObserver (Testumgebung) genügt das Fenster-Ereignis
+  // Without ResizeObserver (test environment) the window event is enough
   const resize = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
   resize?.observe(root);
   window.addEventListener('resize', schedule);

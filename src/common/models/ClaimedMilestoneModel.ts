@@ -11,7 +11,7 @@ export type ClaimedMilestoneModel = {
   name: MilestoneName;
   playerName: string | undefined;
   color: Color | undefined;
-  // Zu erreichender Wert (z. B. 35 TR); fehlt bei Meilensteinen ohne einfache Schwelle
+  // Target value (e.g. 35 TR); missing for milestones without a simple threshold
   threshold?: number;
   scores: Array<MilestoneScore>;
 }

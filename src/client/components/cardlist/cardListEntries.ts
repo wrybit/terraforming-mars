@@ -12,17 +12,17 @@ import {getAward, getMilestone} from '@/client/MilestoneAwardManifest';
 import {BONUS_IDS, POLICY_IDS} from '@/common/turmoil/Types';
 import {CardListModel, ResourceOption, TagOption, TypeOption} from '@/client/components/cardlist/CardListModel';
 
-// Alle Einträge der Kartenliste (Karten, globale Ereignisse, Kolonien, Meilensteine, Auszeichnungen, Agenden)
-// in einer Form. Alle laufen durch dieselbe Filterprüfung – so stimmen Ergebnisse und Trefferzahlen an den Filtern überein.
+// All entries of the card list (cards, global events, colonies, milestones, awards, agendas)
+// in one shape. All go through the same filter check – so results and match counts on the filters agree.
 
-// Art für den Suchindex (SearchIndex.store)
+// Kind for the search index (SearchIndex.store)
 export type SearchKind = 'card' | 'globalEvent' | 'colony' | 'ma' | 'agenda';
 
 export type CardListEntry = {
   name: string;
   searchKind: SearchKind;
   type: TypeOption;
-  // undefined: gilt unabhängig von den Erweiterungen (Agenden)
+  // undefined: applies regardless of expansions (agendas)
   module: GameModule | undefined;
   card?: ClientCard;
 };
@@ -58,7 +58,7 @@ export function buildEntries(): Array<CardListEntry> {
   return entries;
 }
 
-// Tags, nach denen gefiltert wird; das Ereignis-Tag steckt schon im Kartentyp "Ereignis"
+// Tags to filter by; the event tag is already covered by the card type "Event"
 export function filterTags(card: ClientCard): Array<TagOption> {
   const tags = card.tags.filter((tag) => tag !== Tag.EVENT);
   return tags.length === 0 ? ['none'] : tags;
@@ -68,7 +68,7 @@ export function filterResource(card: ClientCard): ResourceOption {
   return card.resourceType ?? 'none';
 }
 
-// Prüft alle Filter außer Text; ignore lässt eine Gruppe aus (für deren Trefferzahlen)
+// Checks all filters except text; ignore leaves out one group (for its match counts)
 export function passesFilters(entry: CardListEntry, state: FilterState, ignore?: FilterGroup): boolean {
   if (ignore !== 'types' && state.types[entry.type] !== true) {
     return false;
@@ -102,8 +102,8 @@ export function hasCostRange(state: FilterState): boolean {
   return state.costMin !== undefined || state.costMax !== undefined;
 }
 
-// Ist ein Preisbereich gesetzt, bleibt nur, was einen Preis darin hat. Konzerne, Präludien, Kolonien usw. haben
-// keinen Preis und verschwinden dann – "Preis 5–10" soll genau die Karten zeigen, die 5 bis 10 M€ kosten.
+// If a price range is set, only what has a price within it remains. Corporations, preludes, colonies etc. have
+// no price and then disappear – "Price 5–10" should show exactly the cards that cost 5 to 10 M€.
 function isInCostRange(cost: number | undefined, state: FilterState): boolean {
   if (!hasCostRange(state)) {
     return true;
@@ -113,7 +113,7 @@ function isInCostRange(cost: number | undefined, state: FilterState): boolean {
     (state.costMax === undefined || cost <= state.costMax);
 }
 
-// Höchster Kartenpreis: obere Grenze des Preisreglers
+// Highest card price: upper bound of the price slider
 export function highestCost(entries: ReadonlyArray<CardListEntry>): number {
   return entries.reduce((highest, entry) => Math.max(highest, entry.card?.cost ?? 0), 0);
 }
@@ -127,7 +127,7 @@ function optionsOf(entry: CardListEntry, group: FilterGroup): ReadonlyArray<stri
   }
 }
 
-// Trefferzahl je Option einer Gruppe: alle übrigen Filter gelten, die Gruppe selbst nicht
+// Match count per option of a group: all other filters apply, the group itself does not
 export function countOptions(entries: ReadonlyArray<CardListEntry>, state: FilterState, group: FilterGroup): Map<string, number> {
   const counts = new Map<string, number>();
   for (const entry of entries) {

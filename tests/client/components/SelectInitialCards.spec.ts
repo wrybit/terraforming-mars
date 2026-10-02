@@ -45,7 +45,7 @@ describe('SelectInitialCards', () => {
   });
 
   it('cannot start when the cards cost more than the corporation\'s starting M€', async () => {
-    // Ecoline startet mit 36 M€: 12 Karten (36) gehen, 13 (39) nicht
+    // Ecoline starts with 36 M€: 12 cards (36) work, 13 (39) don't
     const component = createComponent([CardName.ECOLINE], [CardName.ANTS]);
     const selectCards = component.findAllComponents({name: 'select-card'});
     selectCards[0].vm.$emit('cardschanged', [CardName.ECOLINE]);
@@ -59,7 +59,7 @@ describe('SelectInitialCards', () => {
   });
 
   it('cannot start when preludes leave less than 0 M€', async () => {
-    // 36 M€ − Galileische Bergwerke (5 M€): 11 Karten (33) ergäben −2, 10 Karten (30) ergeben +1
+    // 36 M€ − Galilean Mining (5 M€): 11 cards (33) would give −2, 10 cards (30) give +1
     const component = createComponent([CardName.ECOLINE], [CardName.ANTS], [CardName.GALILEAN_MINING, CardName.SUPPLY_DROP]);
     const selectCards = component.findAllComponents({name: 'select-card'});
     selectCards[0].vm.$emit('cardschanged', [CardName.ECOLINE]);

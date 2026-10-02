@@ -1,5 +1,5 @@
 <template>
-  <!-- An body hängen: im Log (eigener Stacking-Context) läge das Modal sonst unter Kopf- und Fußleiste -->
+  <!-- Attach to body: inside the log (own stacking context) the modal would otherwise sit below header and footer bars -->
   <Teleport to="body">
     <MobileCardZoom :count="items.length" v-model:index="index" @close="$emit('close')">
       <template #slide="{index: slide}">
@@ -26,7 +26,7 @@ import MobileCardZoom from '@/client/components/mobile/MobileCardZoom.vue';
 import {logCardModel} from '@/client/components/logpanel/logCardModel';
 import {logMessageCards, logMessageColonies, logMessageGlobalEvents} from '@/client/components/logpanel/logMessageContent';
 
-// Mobil-Ansicht: Karten, globale Ereignisse und Kolonien einer Log-Zeile als Karussell im Modal
+// Mobile view: cards, global events and colonies of a log line as a carousel in the modal
 
 const props = defineProps<{
   message: LogMessage;
@@ -39,7 +39,7 @@ defineEmits<{
 
 type LogItem = {kind: 'card' | 'globalEvent' | 'colony', name: string};
 
-// Reihenfolge wie im Block unter dem Log: Karten, dann Ereignisse, dann Kolonien
+// Order as in the block below the log: cards, then events, then colonies
 const items = computed<Array<LogItem>>(() => [
   ...logMessageCards(props.message).map((name) => ({kind: 'card' as const, name})),
   ...logMessageGlobalEvents(props.message).map((name) => ({kind: 'globalEvent' as const, name})),

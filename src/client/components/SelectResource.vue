@@ -1,11 +1,11 @@
 <template>
   <div class="wf-component wf-options">
     <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
-    <!-- Ressourcen als auswählbare Kacheln wie Karten und Meilensteine; die gewählte pulsiert in der CTA-Farbe -->
+    <!-- Resources as selectable tiles like cards and milestones; the selected one pulses in the CTA color -->
     <div class="resource-options choice-block" :style="choiceBlockStyle(playerinput.include.length)" role="radiogroup">
       <label v-for="included in playerinput.include" :key="included"
         :class="['resource-option', {'resource-option--selected': unit === included}]">
-          <!-- Radio für Tastatur und Screenreader, sichtbar ist die Kachel -->
+          <!-- Radio for keyboard and screen readers, the tile is what's visible -->
           <input type="radio" v-model="unit" :value="included" class="resource-option-input">
           <i :class="'resource_icon resource-option-icon resource_icon--' + included"></i>
           <span class="resource-option-name">{{ $t(included) }}</span>
@@ -13,7 +13,7 @@
     </div>
     <TabPanelFooterSlot>
     <div v-if="showsave === true" class="nofloat">
-        <!-- Gesperrt, bis eine Ressource gewählt ist -->
+        <!-- Disabled until a resource is selected -->
         <AppButton @click="saveData" :title="playerinput.buttonLabel" :disabled="unit === undefined" />
     </div>
     </TabPanelFooterSlot>
@@ -56,7 +56,7 @@ export default defineComponent({
     };
   },
   watch: {
-    // Meldet nach außen, ob gespeichert werden darf – OrOptions sperrt damit seinen eigenen Button
+    // Reports outward whether saving is allowed – OrOptions uses it to disable its own button
     unit: {
       handler() {
         this.$emit('validity', this.unit !== undefined);

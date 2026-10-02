@@ -1,4 +1,4 @@
-// Karten-Karussell beim Bauen: Punkte zeigen Position und Anzahl, die mittige Karte ist die gewählte.
+// Card carousel while building: dots show position and count, the centred card is the selected one.
 (function (TM) {
   'use strict';
 
@@ -8,7 +8,7 @@
 
   function cards() { return TM.$all('label.payments_cards', track); }
 
-  // Karte, deren Mitte der Mitte des sichtbaren Bereichs am nächsten liegt
+  // Card whose centre is closest to the centre of the visible area
   function centeredIndex() {
     var middle = track.getBoundingClientRect().left + track.clientWidth / 2;
     var best = 0;
@@ -32,7 +32,7 @@
     dots.dataset.count = (active + 1) + ' / ' + list.length;
   }
 
-  // Wischen wählt die Karte: nach dem Einrasten die mittige Karte ankreuzen, damit Bezahlen mitzieht
+  // Swiping selects the card: after snapping, tick the centred card so payment follows
   function selectCentered() {
     var index = centeredIndex();
     var input = cards()[index] && cards()[index].querySelector('input');
@@ -64,7 +64,7 @@
       }, {passive: true});
     },
 
-    // Beim Öffnen: auf die gewählte Karte springen und Punkte aufbauen
+    // On opening: jump to the selected card and build the dots
     show: function () {
       var list = cards();
       var chosen = list.findIndex(function (card) { return card.querySelector('input').checked; });
@@ -76,7 +76,7 @@
   };
 
   TM.onClick('[data-carousel-dot]', function (dot) { scrollToIndex(Number(dot.dataset.carouselDot), true); });
-  // Antippen einer Seitenkarte holt sie in die Mitte
+  // Tapping a side card brings it to the centre
   TM.onClick('.mb-panel[data-key="build"] label.payments_cards', function (card) {
     scrollToIndex(cards().indexOf(card), true);
     return false;

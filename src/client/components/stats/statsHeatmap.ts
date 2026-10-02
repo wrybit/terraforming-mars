@@ -4,10 +4,10 @@ import {SpaceId} from '@/common/Types';
 
 export type HeatmapTileType = StatsTile['type'];
 
-/** Wie oft auf jedes Feld gebaut wurde – über alle Partien auf diesem Spielbrett mit bekanntem Endstand. */
+/** How often each space was built on – across all games on this board with a known final state. */
 export type Heatmap = {
   counts: Map<SpaceId, number>;
-  /** Partien, aus denen die Zahlen stammen (nur solche mit Spielstand, Screenshots zeigen kein Brett). */
+  /** Games the numbers come from (only those with a game state, screenshots show no board). */
   games: number;
   maximum: number;
 };
@@ -30,10 +30,10 @@ export function heatmap(games: ReadonlyArray<StatsGame>, boardName: BoardName, t
   return {counts, games: gameCount, maximum: Math.max(0, ...counts.values())};
 }
 
-/** Farbstufen der Heatmap: 10 Stufen à 10 Prozentpunkte, von dunkelblau (selten) bis dunkelrot (fast immer). */
+/** Heatmap color steps: 10 steps of 10 percentage points, from dark blue (rare) to dark red (almost always). */
 export const HEAT_STEPS = 10;
 
-/** Stufe 1–10 für einen Anteil in Prozent: 1–10 % → 1, 91–100 % → 10. */
+/** Step 1–10 for a share in percent: 1–10 % → 1, 91–100 % → 10. */
 export function heatStep(percent: number): number {
   return Math.min(HEAT_STEPS, Math.max(1, Math.ceil(percent / 10)));
 }

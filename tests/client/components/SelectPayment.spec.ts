@@ -274,7 +274,7 @@ describe('SelectPayment', () => {
         playerView: {
           id: 'playerid-foo',
           thisPlayer: {
-            steel: 6, megacredits: 1, steelValue: 2, // 1 M€: zwei Währungen, sonst gibt es keine Regler
+            steel: 6, megacredits: 1, steelValue: 2, // 1 M€: two currencies, otherwise there are no sliders
             titanium: 0, titaniumValue: 3, heat: 0, tableau: [],
           } as unknown as PublicPlayerModel,
         } as unknown as PlayerViewModel,

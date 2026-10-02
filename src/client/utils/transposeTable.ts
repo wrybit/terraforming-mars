@@ -1,11 +1,11 @@
 /*
- * Gedrehte Kopie einer Tabelle für schmale Bildschirme: Zeilen werden Spalten.
+ * Transposed copy of a table for narrow screens: rows become columns.
  *
- * Kopfzeilen mit zusammengefassten Zellen (colspan) entfallen. Klassen, die an der Zeile hingen
- * (Spielerfarbe, Sieger), wandern auf jede Zelle der neuen Spalte.
+ * Header rows with merged cells (colspan) are dropped. Classes that were on the row
+ * (player color, winner) move to every cell of the new column.
  */
 
-// Zeilen-Klassen, die nach dem Drehen an den Zellen gebraucht werden
+// Row classes needed on the cells after transposing
 const ROW_CLASS_PATTERN = /player_translucent_bg_color_\w+/;
 export const PLAYER_COLUMN_CLASS = 'mb-player-col';
 export const WINNER_COLUMN_CLASS = 'mb-winner-col';
@@ -15,7 +15,7 @@ function hasSpanningCell(row: HTMLTableRowElement): boolean {
   return Array.from(row.cells).some((cell) => cell.colSpan > 1);
 }
 
-/* Liefert eine gedrehte Kopie von `table` (Klasse `mb-transposed`); das Original bleibt unverändert. */
+/* Returns a transposed copy of `table` (class `mb-transposed`); the original stays unchanged. */
 export function transposedCopy(table: HTMLTableElement): HTMLTableElement {
   const rows = Array.from(table.rows).filter((row) => !hasSpanningCell(row));
   const copy = document.createElement('table');

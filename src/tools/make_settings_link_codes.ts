@@ -1,8 +1,8 @@
-// Ergänzt src/client/components/create/settingsLink/settingsLinkCodes.json um neue Werte.
+// Adds new values to src/client/components/create/settingsLink/settingsLinkCodes.json.
 //
-// Die Datei ist die Vertragstabelle für Teilen-Links: Position in der Liste = Code im Link.
-// Deshalb wird nur hinten angehängt, nie umsortiert oder gelöscht – sonst zeigen alte
-// Lesezeichen auf andere Karten/Pläne. Aufruf nach jedem Upstream-Merge: npm run make:linkcodes
+// The file is the contract table for share links: position in the list = code in the link.
+// So entries are only appended, never reordered or deleted – otherwise old
+// bookmarks point to other cards/boards. Run after every upstream merge: npm run make:linkcodes
 import fs from 'fs';
 import path from 'path';
 import {BoardName} from '../common/boards/BoardName';
@@ -18,7 +18,7 @@ const AGENDA_STYLES: ReadonlyArray<AgendaStyle> = ['Standard', 'Random', 'Chairm
 
 const CODES_FILE = path.resolve('src/client/components/create/settingsLink/settingsLinkCodes.json');
 
-// Aktuelle Werte je Tabelle; die Reihenfolge zählt nur beim allerersten Anlegen
+// Current values per table; the order only matters on the very first creation
 const currentValues: Record<string, ReadonlyArray<string>> = {
   boards: [...Object.values(BoardName), ...Object.values(RandomBoardOption)],
   expansions: EXPANSIONS,
@@ -49,11 +49,11 @@ for (const [table, values] of Object.entries(currentValues)) {
 
 if (checkOnly) {
   if (added > 0) {
-    console.error(`${added} Werte fehlen in settingsLinkCodes.json – npm run make:linkcodes ausführen`);
+    console.error(`${added} values missing in settingsLinkCodes.json – run npm run make:linkcodes`);
     process.exit(1);
   }
 } else {
-  // Ein Eintrag je Zeile, damit Ergänzungen im Diff klar sichtbar sind
+  // One entry per line, so additions are clearly visible in the diff
   const lines = Object.entries(existing).map(([table, entries]) =>
     `  ${JSON.stringify(table)}: [\n${entries.map((entry) => `    ${JSON.stringify(entry)}`).join(',\n')}\n  ]`);
   fs.writeFileSync(CODES_FILE, `{\n${lines.join(',\n')}\n}\n`);

@@ -1,8 +1,8 @@
 <template>
-  <!-- Erklärung oben in einer Tab-Box (tabIntro.ts): Plättchen- oder Ressourcenbild, Frage und Hinweis.
-       Genutzt vom Aktionsmenü (OrOptions) und von einzelnen Eingaben (WaitingForTabs). -->
+  <!-- Explanation at the top of a tab box (tabIntro.ts): tile or resource image, question and hint.
+       Used by the action menu (OrOptions) and by individual inputs (WaitingForTabs). -->
   <div :class="['or-tab-intro', {'card-intro': card !== undefined}]">
-    <!-- Löst eine Karte das aus (z. B. Stadt legen durch Kartenwirkung): Karte vorn, ihr Name über der Frage -->
+    <!-- If a card triggers this (e.g. place city via card effect): card in front, its name above the question -->
     <SourceCardThumbnail v-if="card !== undefined" :card="card"/>
     <div v-if="intro.tile !== undefined" class="or-tab-intro-tile">
       <img class="or-tab-intro-tile-base" :src="intro.tile.base" alt="">
@@ -29,7 +29,7 @@ defineProps<{
   intro: TabIntro;
   title: string | Message;
   playerView: PlayerViewModel;
-  // Karte, deren Wirkung die Eingabe auslöst (inputSourceCard.ts); ohne Karte wie bisher nur Bild und Frage
+  // Card whose effect triggers the input (inputSourceCard.ts); without a card only image and question as before
   card?: CardName;
 }>();
 </script>

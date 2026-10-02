@@ -1,14 +1,14 @@
-// Aufteilung der Spieleransicht (links Spielgeschehen, rechts Brett + Log) per Ziehgriff.
-// Der Anteil der rechten Spalte landet als CSS-Variablen am Spalten-Container (Vertrag mit player_home_columns.less)
-// und im Browser, damit er das Neuladen überlebt.
+// Split of the player view (game on the left, board + log on the right) via a drag handle.
+// The right column's share ends up as CSS variables on the column container (contract with player_home_columns.less)
+// and in the browser, so it survives a reload.
 
 export const MAIN_SHARE_VARIABLE = '--player-home-main-share';
 export const BOARD_SHARE_VARIABLE = '--player-home-board-share';
 export const DEFAULT_BOARD_SHARE = 40;
-// Grenzen, damit keine Seite unbenutzbar schmal wird
+// Limits so neither side becomes unusably narrow
 export const MIN_BOARD_SHARE = 25;
 export const MAX_BOARD_SHARE = 60;
-// Schrittweite für die Pfeiltasten am Griff
+// Step size for the arrow keys on the handle
 export const KEYBOARD_STEP = 1;
 
 const STORAGE_KEY = 'player_home_board_share';
@@ -32,7 +32,7 @@ function saveBoardShare(share: number): void {
       localStorage.setItem(STORAGE_KEY, String(share));
     }
   } catch {
-    // Ohne Speicher gilt die Aufteilung nur bis zum Neuladen
+    // Without storage the split only lasts until reload
   }
 }
 
@@ -41,10 +41,10 @@ export function applyBoardShare(container: HTMLElement, share: number): void {
   container.style.setProperty(BOARD_SHARE_VARIABLE, `${share}fr`);
 }
 
-// Höhe der Prozent-Anzeige im Griff (player_home_columns.less): etwas unter dem Zeiger, damit der Mauszeiger
-// die Werte nicht verdeckt – oder darüber, wenn unten kein Platz mehr ist
+// Height of the percentage display in the handle (player_home_columns.less): a bit below the pointer so the mouse pointer
+// doesn't cover the values – or above it if there is no room left below
 export const LABEL_Y_VARIABLE = '--resizer-label-y';
-// Abstand der Anzeigenmitte vom Zeiger und halbe Anzeigenhöhe
+// Distance of the display centre from the pointer and half the display height
 const LABEL_POINTER_OFFSET = 34;
 const LABEL_HALF_HEIGHT = 16;
 
@@ -58,18 +58,18 @@ function trackPointerY(handle: HTMLElement, clientY: number): void {
   handle.style.setProperty(LABEL_Y_VARIABLE, `${labelOffsetY(clientY - rect.top, rect.height)}px`);
 }
 
-// Anteil der rechten Spalte aus der Zeigerposition: alles rechts vom Zeiger gehört dem Brett
+// Right column share from the pointer position: everything right of the pointer belongs to the board
 export function shareFromPointer(containerRect: {left: number; width: number}, pointerX: number): number {
   const share = (containerRect.left + containerRect.width - pointerX) / containerRect.width * 100;
   return Math.round(clampBoardShare(share) * 100) / 100;
 }
 
-// Ziehen mit Maus, Stift oder Finger; ruft onChange bei jeder Bewegung, speichert beim Loslassen
+// Dragging with mouse, pen or finger; calls onChange on every move, saves on release
 export function startColumnResize(event: PointerEvent, container: HTMLElement, onChange: (share: number) => void): void {
   const handle = event.currentTarget as HTMLElement;
   handle.setPointerCapture(event.pointerId);
   handle.classList.add('player-home-columns__resizer--dragging');
-  // Beim Ziehen keinen Text markieren
+  // Don't select text while dragging
   event.preventDefault();
   let share = loadBoardShare();
   trackPointerY(handle, event.clientY);
@@ -92,15 +92,15 @@ export function startColumnResize(event: PointerEvent, container: HTMLElement, o
   handle.addEventListener('pointercancel', stop);
 }
 
-// Anzeige "links | rechts" mit zwei Nachkommastellen (deutsches Komma); in Hundertsteln gerechnet,
-// damit beide Seiten zusammen genau 100 ergeben
+// Display "left | right" with two decimal places (German comma); calculated in hundredths
+// so both sides add up to exactly 100
 export function shareLabel(boardShare: number): string {
   const board = Math.round(boardShare * 100);
   const format = (hundredths: number) => (hundredths / 100).toFixed(2).replace('.', ',') + '%';
   return `${format(10000 - board)} | ${format(board)}`;
 }
 
-// Setzt einen festen Anteil (Tastatur, Doppelklick) und speichert ihn
+// Sets a fixed share (keyboard, double click) and saves it
 export function setBoardShare(container: HTMLElement, share: number): number {
   const clamped = clampBoardShare(share);
   applyBoardShare(container, clamped);

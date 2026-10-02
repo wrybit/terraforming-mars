@@ -5,7 +5,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 
-// Verweis ins Wiki; click.stop, damit ein Klick darauf nicht die umgebende Kachel/Option umschaltet
+// Link into the wiki; click.stop so a click on it doesn't toggle the surrounding tile/option
 export default defineComponent({
   name: 'InfoLink',
   props: {

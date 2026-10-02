@@ -1,8 +1,8 @@
 <template>
   <div class="players-table-cell">
-    <!-- Warenbox: Vorrat groß (darauf schaut man), Produktion als zweiter Wert, Wert je Einheit als Münze an der Ecke -->
+    <!-- Goods box: stock large (that's what you look at), production as second value, value per unit as a coin at the corner -->
     <div :class="boxClasses">
-      <!-- Schild vor dem Vorrat: Geschütztes steht als weiße Fläche mit schwarzer Zahl heraus -->
+      <!-- Shield before the stock: protected amounts stand out as a white area with a black number -->
       <span class="players-table-goods-stock" data-test="stock"><span v-if="protectionIcon !== ''" :class="['players-table-protection', protectionIcon]" data-test="protection"></span>{{ good.count }}</span>
       <span :class="productionClasses" data-test="production" :data-tooltip="$t('Production count')">{{ productionText }}</span>
       <span v-if="showValue" class="players-table-goods-value" data-test="value">{{ good.value }}</span>
@@ -21,7 +21,7 @@ export default defineComponent({
       type: Object as () => PlayerGood,
       required: true,
     },
-    // Alleinige höchste Produktion am Tisch – wird hervorgehoben
+    // Sole highest production at the table – gets highlighted
     isProductionLeader: {
       type: Boolean,
       default: false,
@@ -53,7 +53,7 @@ export default defineComponent({
     showValue(): boolean {
       return shouldShowResourceValue(this.good.type, this.good.value);
     },
-    // Schutz (z. B. durch Karten gegen Angriffe) als kleines Schild, wie in der klassischen Leiste
+    // Protection (e.g. via cards against attacks) as a small shield, as in the classic bar
     protectionIcon(): string {
       if (this.good.resourceProtection === 'on' || this.good.productionProtection === 'on') {
         return 'shield_icon';

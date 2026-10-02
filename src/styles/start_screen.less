@@ -1,4 +1,4 @@
-// Takt des Auswahl-Pulsierens (@selection-pulse-period) wird für den Hover-Glow der Menü-Buttons mitbenutzt
+// The selection pulse period (@selection-pulse-period) is reused for the hover glow of the menu buttons
 @import (reference) "./selection_highlight.less";
 
 #app {
@@ -6,8 +6,8 @@
 }
 .topmost-start-screen {
   margin: 0px;
-  // Kein Innenabstand unten: sonst säße die Fußzeile höher als ihr seitlicher Abstand; Luft unter dem Menü hält .start-screen
-  // Hintergrundbild: app_background.less
+  // No bottom padding: otherwise the footer would sit higher than its side margin; .start-screen keeps the space below the menu
+  // Background image: app_background.less
   min-height: 100%;
 }
 
@@ -23,39 +23,39 @@
   text-align: center;
 }
 
-// Titeltext steht so viel höher als sein Globus-Hintergrund, damit er mehr Abstand zum Menü hat (Text–Menü wie 100px Lücke);
-// der Hintergrund bleibt mit 24px am Menü, als Teil der Globus-Reihe
+// The title text sits this much higher than its globe background so it has more distance to the menu (text–menu gap like 100px);
+// the background stays 24px from the menu, as part of the globe row
 @start-screen-title-lift: 76px;
-// Auf dem Handy muss das ganze Menü auf den Bildschirm passen: Titel nur wenig angehoben
+// On a phone the whole menu must fit on screen: lift the title only slightly
 @start-screen-title-lift-phone: 16px;
-// Dauer der Hover-Animation der Menü-Buttons (Hintergrund und Schriftgröße gemeinsam)
+// Duration of the menu buttons' hover animation (background and font size together)
 @start-screen-hover-duration: 0.25s;
-// Rahmen der Menü-Buttons in der CTA-Farbe der App (@bg_action): ruhend gedämpft, beim Hover heller;
-// Glow pulsiert im selben Takt und in derselben Farbe wie eine Auswahl im Spiel (selection_highlight.less)
+// Menu button outline in the app's CTA color (@bg_action): muted at rest, brighter on hover;
+// the glow pulses at the same rate and in the same color as an in-game selection (selection_highlight.less)
 @start-screen-link-outline: fade(@bg_action, 30%);
 @start-screen-link-outline-hover: #908fdbab;
 @start-screen-link-glow: @bg_action;
-// Glas der Menü-Buttons neben dem Planeten: so stark wird die Galaxie dahinter weichgezeichnet und abgedunkelt
+// Glass of the menu buttons next to the planet: how strongly the galaxy behind is blurred and darkened
 @start-screen-glass-blur: 4px;
 @start-screen-glass-tint: 0.1;
 
 .start-screen-links {
   margin: 0 auto;
-  // Platz für den angehobenen Titeltext
+  // Room for the lifted title text
   padding-top: 50px + @start-screen-title-lift;
 }
 
 .start-screen-link {
   text-decoration: none;
   cursor: pointer;
-  // Rahmen in gedämpftem Button-Lila als echte Outline (ein inset-Schatten läge unter dem Planeten und gäbe Farbsäume);
-  // beim Hover heller mit pulsierendem Glow nach außen
+  // Outline in muted button purple as a real outline (an inset shadow would sit under the planet and cause color fringes);
+  // brighter on hover with a pulsing glow outward
   outline: 1px solid @start-screen-link-outline;
   transition: outline-color @start-screen-hover-duration ease;
   line-height: 28px;
   border-radius: 10px;
   color: #eee;
-  // weicher Schatten ohne Versatz, mittig um die Schrift: hebt sie vom Planeten ab, ohne Kante nach unten
+  // soft shadow without offset, centered around the text: lifts it off the planet without an edge below
   text-shadow:
     0 0 6px rgba(0, 0, 0, 0.9),
     0 0 14px rgba(0, 0, 0, 0.6);
@@ -64,18 +64,18 @@
   height: 90px;
   display: flex;
   margin-bottom: 5px;
-  // Schrift des Spiels (wie Titel und Kartennamen) statt der Systemschrift
+  // The game's font (like the title and card names) instead of the system font
   font-family: Prototype, sans-serif;
   font-size: 26px;
   text-transform: uppercase;
   font-weight: normal;
   letter-spacing: 1px;
-  // Beschriftung senkrecht mittig im Button
+  // Label vertically centered in the button
   flex-direction: column;
   justify-content: center;
   background-image: url("assets/buttons-homepage/planets.jpg");
-  // planets.jpg hat 9 gleich hohe Reihen (0 = Titel); --sprite-row setzt StartScreen.vue aus der Position.
-  // Prozentwert, damit es auch mit der gestreckten Größe auf schmalen Fenstern stimmt
+  // planets.jpg has 9 rows of equal height (0 = title); StartScreen.vue sets --sprite-row from the position.
+  // Percentage so it also works with the stretched size on narrow windows
   background-position: 0 calc(var(--sprite-row) * 12.5%);
 
   &:hover,
@@ -86,8 +86,8 @@
     text-decoration: none;
   }
 
-  // Planetenbild ruhend gedämpft (dunkler, weniger satt), beim Hover hell und kräftig – über eine Ebene mit
-  // backdrop-filter, damit nur der Hintergrund gefiltert wird und die Schrift unverändert hell bleibt
+  // Planet image muted at rest (darker, less saturated), bright and vivid on hover – via a layer with
+  // backdrop-filter, so only the background is filtered and the text stays bright
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -112,12 +112,12 @@
     outline-color: @start-screen-link-outline-hover;
     box-shadow: 0 0 6px 2px fade(@start-screen-link-glow, 55%);
     animation: start-screen-link-glow @selection-pulse-period ease-in-out infinite;
-    // über den Nachbar-Buttons, damit der Glow nicht vom nächsten Button verdeckt wird
+    // above the neighboring buttons so the glow isn't covered by the next button
     z-index: 1;
   }
 }
 
-// Gleicher Verlauf wie selection-pulse, nur der Schein (der Rahmen ist die Outline)
+// Same curve as selection-pulse, only the glow (the outline is the border)
 @keyframes start-screen-link-glow {
   0%,
   100% {
@@ -129,15 +129,15 @@
   }
 }
 
-// Drehende Planeten (StartScreen.vue, startScreen/*Renderer.ts): sobald der Zeichner bereit ist, zeigt die Planeten-Fläche
-// den Planeten (WebGL oder flach per CSS); daneben ist der Button Glas – die Galaxie scheint weichgezeichnet durch.
-// Bis dahin (bzw. ohne JavaScript) bleibt planets.jpg.
+// Rotating planets (StartScreen.vue, startScreen/*Renderer.ts): once the renderer is ready, the planet area shows
+// the planet (WebGL or flat via CSS); next to it the button is glass – the galaxy shows through blurred.
+// Until then (or without JavaScript) planets.jpg stays.
 .start-screen-link-planet {
   display: none;
 }
 
 .start-screen-links--globe {
-  // Planeten-Fläche hinter Text (Titel und Menüpunkte)
+  // Planet area behind the text (title and menu items)
   .start-screen-link-planet {
     display: block;
     position: absolute;
@@ -145,12 +145,12 @@
     z-index: -1;
     width: 100%;
     height: 100%;
-    // ruhend gedämpft, beim Hover hell und satt (über 100 %), damit die Planeten richtig leuchten
+    // muted at rest, bright and saturated on hover (above 100 %) so the planets really glow
     filter: brightness(0.85) saturate(0.75);
     transition: filter @start-screen-hover-duration ease;
   }
 
-  // Glas neben dem Planeten: Galaxie dahinter leicht weichgezeichnet
+  // Glass next to the planet: galaxy behind slightly blurred
   .start-screen-link::before {
     content: '';
     position: absolute;
@@ -176,9 +176,9 @@
   }
 }
 
-// Hervorhebung über die Klasse start-screen-link--active statt :hover: StartScreen.vue setzt sie bei Maus-Hover und beim
-// ersten Tap auf Touch-Geräten (dort öffnet erst der zweite Tap den Link).
-// Beschriftung ruhend kleiner, beim Hover etwas größer als normal; Skalierung von links, damit sie an Ort und Stelle wächst
+// Highlight via the start-screen-link--active class instead of :hover: StartScreen.vue sets it on mouse hover and on the
+// first tap on touch devices (there only the second tap opens the link).
+// Label smaller at rest, slightly larger than normal on hover; scaled from the left so it grows in place
 .start-screen-link .start-screen-link-content {
   transform: scale(0.86);
   transform-origin: left center;
@@ -190,7 +190,7 @@
   transform: scale(1.06);
 }
 
-// Symbol links neben der Beschriftung; Abstand kleiner als die Buttons untereinander, damit beides als Einheit liest
+// Icon left of the label; gap smaller than between the buttons so both read as one unit
 .start-screen-link-content {
   display: flex;
   align-items: center;
@@ -201,7 +201,7 @@
   flex-shrink: 0;
   width: 1.1em;
   height: 1.1em;
-  // SVG erbt keinen text-shadow: gleicher Schatten als Filter, damit das Symbol auf hellen Planeten lesbar bleibt
+  // SVG doesn't inherit text-shadow: same shadow as a filter so the icon stays readable on bright planets
   filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 14px rgba(0, 0, 0, 0.6));
 
   .mb-glyph-line {
@@ -210,18 +210,18 @@
   }
 }
 
-// Titel-Hintergrund: oberste Reihe von planets.jpg, nur der Planet – der schwarze Rest ist per Maske ausgeblendet
-// (Globus-Kreis wie bei den Buttons). Als ::before, damit die Maske nicht den Titeltext darüber abschneidet.
-// Maßstab und Versatz setzt StartScreen.vue (globeLayout.ts) passend zu den Buttons, damit die Bögen zusammenpassen;
-// ohne JavaScript gelten die Desktop-Werte (1 und 0)
+// Title background: top row of planets.jpg, only the planet – the black rest is masked out
+// (globe circle as with the buttons). As ::before so the mask doesn't clip the title text above it.
+// StartScreen.vue (globeLayout.ts) sets scale and offset to match the buttons so the arcs line up;
+// without JavaScript the desktop values apply (1 and 0)
 @start-screen-globe-scale: var(--globe-scale, 1);
 @start-screen-title-offset: var(--globe-title-offset, 0px);
 @start-screen-title-mask: radial-gradient(
   circle calc(522px * @start-screen-globe-scale)
   at calc(-174.7px * @start-screen-globe-scale) calc(402.5px * @start-screen-globe-scale + @start-screen-title-offset),
   #000 calc(100% - 1px), transparent 100%);
-// Rand weich ausblenden wie früher der schwarze Innenschatten: oben, unten und links (rechts endet der Planet selbst)
-// Oben ab der Bildkante (sie sitzt um den Titel-Versatz tiefer als der Kasten), unten zum Kastenende
+// Fade the edge softly like the black inner shadow used to: top, bottom and left (on the right the planet ends itself)
+// Top from the image edge (it sits lower than the box by the title offset), bottom to the end of the box
 @start-screen-title-fade: linear-gradient(
   to bottom,
   transparent max(0px, @start-screen-title-offset),
@@ -250,7 +250,7 @@
     inset: 0;
     z-index: -1;
     background: url("assets/buttons-homepage/planets.jpg") no-repeat;
-    // Sprite im selben Maßstab wie der Globus der Buttons, Reihe 0 endet an der Oberkante des ersten Buttons
+    // Sprite at the same scale as the buttons' globe, row 0 ends at the top edge of the first button
     background-size: calc(369px * @start-screen-globe-scale) calc(810px * @start-screen-globe-scale);
     background-position: 0 @start-screen-title-offset;
     -webkit-mask-image: @start-screen-title-mask, @start-screen-title-fade, @start-screen-title-fade-left;
@@ -261,17 +261,17 @@
 }
 
 .start-screen-link--title {
-  // Deutlich mehr Abstand zum Menü als zwischen den Buttons (5px): Titel ist eigene Gruppe
+  // Much more distance to the menu than between the buttons (5px): the title is its own group
   margin-bottom: 24px;
 }
 
-// Logo als Ganzes angehoben (nicht die Zeilen einzeln), damit sein Rahmen dort liegt, wo man es sieht (Intro misst ihn)
+// Logo lifted as a whole (not the lines individually) so its box is where you see it (the intro measures it)
 .start-screen-title {
   position: relative;
   top: -@start-screen-title-lift;
 }
 
-// Titelgrößen gelten für alle Breiten (Wunsch Jens: 22px / 35px)
+// Title sizes apply to all widths (Jens' request: 22px / 35px)
 .start-screen-title-top {
   transform: scaleX(2);
   text-align: center;
@@ -285,7 +285,7 @@
   font-size: 35px;
 }
 
-// Sprache und Einstellungen fest oben rechts, wie im Spiel (Grundstil: .page-toolbar, sidebar_toolbar.less)
+// Language and settings fixed top right, as in the game (base style: .page-toolbar, sidebar_toolbar.less)
 .start-screen-toolbar {
   position: fixed;
   top: @toolbar-edge-offset;
@@ -293,8 +293,8 @@
   z-index: 20;
 }
 
-// Fußzeile der Startseite (StartScreenFooter.vue): Fakten in einer Zeile, untereinander enger (12px) als zum Hinweis (24px),
-// damit sie als eine Gruppe lesen; bricht nur um, wenn der Platz fehlt
+// Start page footer (StartScreenFooter.vue): facts in one line, closer together (12px) than to the notice (24px),
+// so they read as one group; wraps only when space runs out
 .start-screen-footer-facts {
   margin: 0;
   padding: 0;
@@ -303,7 +303,7 @@
   flex-wrap: wrap;
   gap: 4px 12px;
 
-  // globale Listen-Abstände (Basis-CSS) würden die Zeile sonst aufblähen
+  // global list spacing (base CSS) would otherwise bloat the line
   li {
     margin: 0;
     white-space: nowrap;
@@ -321,8 +321,8 @@
   height: 16px;
 }
 
-// Hinweis "Not affiliated …" (App.vue, alle Seiten außer Spiel, Zuschauer, Ergebnis) als Fußzeile am Seitenende:
-// nicht fest über dem Inhalt, sondern nach ihm. Bei kurzen Seiten schiebt margin-top: auto ihn an den Fensterrand.
+// "Not affiliated …" notice (App.vue, all pages except game, spectator, results) as a footer at the page end:
+// not fixed over the content but after it. On short pages margin-top: auto pushes it to the window edge.
 [class^="topmost-"]:has(> .notice) {
   display: flex;
   flex-direction: column;
@@ -330,21 +330,21 @@
 }
 
 .notice {
-  // über dem fest stehenden App-Hintergrund der Seiten (app_background.less), der sonst darüber liegt
+  // above the pages' fixed app background (app_background.less), which would otherwise lie on top
   position: relative;
   z-index: 1;
   margin-top: auto;
-  // alle Teile (Changelog, Discord, Hinweis) in einer Zeile, rechtsbündig; bricht nur um, wenn der Platz fehlt
+  // all parts (changelog, Discord, notice) in one line, right-aligned; wraps only when space runs out
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 4px 24px;
-  // unten so viel Abstand wie links und rechts
+  // as much space at the bottom as left and right
   padding: 16px 24px 24px;
   font-size: @font_size_small;
 }
 
-// Startseite: links Build-Stand und Quellcode, rechts der Hinweis
+// Start page: build info and source code on the left, the notice on the right
 .notice--split {
   justify-content: space-between;
   align-items: center;
@@ -384,7 +384,7 @@
 @media only screen and (max-width: 767px) {
   .notice {
     justify-content: center;
-    // Gruppen (Build-Stand, Quellcode, Hinweis) brechen hier untereinander um: Abstand größer als innerhalb einer Gruppe
+    // Groups (build info, source code, notice) wrap below each other here: gap larger than within a group
     row-gap: 12px;
     padding: 16px;
     text-align: center;
@@ -394,7 +394,7 @@
     overflow-x: clip;
   }
 
-  // Startseite: Hinweis und Fakten untereinander, mittig; unten Platz für die Home-Leiste des iPhones
+  // Start page: notice and facts stacked, centered; room at the bottom for the iPhone home bar
   .notice--split {
     flex-direction: column;
     align-items: center;
@@ -412,7 +412,7 @@
 
   .start-screen-links {
     padding-top: calc(max(@toolbar-button-size + 2 * @toolbar-edge-offset, env(safe-area-inset-top)) + @start-screen-title-lift-phone);
-    // Bezug für 100cqw: Breite der Buttons
+    // Reference for 100cqw: width of the buttons
     container-type: inline-size;
   }
 
@@ -420,9 +420,9 @@
     top: -@start-screen-title-lift-phone;
   }
 
-  // Button-Höhe aus der Fensterhöhe: alle acht Menüpunkte samt Titel passen auf den Bildschirm.
-  // 240px = Werkzeugleiste, Titel-Kasten, Abstand Titel–Menü und Lücken zwischen den Buttons.
-  // Bildreihe behält ihr Seitenverhältnis (369 × 90) und wird senkrecht mittig angeschnitten, statt gestaucht zu werden
+  // Button height from the window height: all eight menu items plus the title fit on screen.
+  // 240px = toolbar, title box, title–menu gap and gaps between the buttons.
+  // Image row keeps its aspect ratio (369 × 90) and is cropped vertically centered instead of squashed
   .start-screen-link {
     --button-height: clamp(44px, calc((100dvh - 240px) / 8), 90px);
     --sprite-row-height: calc(100cqw * 90 / 369);
@@ -441,7 +441,7 @@
   }
 }
 
-// Wer reduzierte Bewegung eingestellt hat, bekommt den Hover-Wechsel ohne Animation
+// Users with reduced motion enabled get the hover change without animation
 @media (prefers-reduced-motion: reduce) {
   .start-screen-link,
   .start-screen-link::before,

@@ -2,8 +2,8 @@ import {CardName} from '@/common/cards/CardName';
 import {CardModel} from '@/common/models/CardModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 
-// Karte aus einer Log-Zeile mit dem, was gerade auf ihr liegt (Ressourcen, Selbstreplizierende Roboter),
-// damit die Anzeige dem Spielstand entspricht (CardPanel, LogCardsZoom)
+// Card from a log line with what currently lies on it (resources, Self-Replicating Robots),
+// so the display matches the game state (CardPanel, LogCardsZoom)
 
 function isSelfReplicatingRobotsCard(name: CardName, players: ReadonlyArray<PublicPlayerModel>): boolean {
   return players.some((player) => player.selfReplicatingRobotsCards.some((card) => card.name === name));
