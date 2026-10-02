@@ -63,7 +63,26 @@
   font-weight: 500;
 }
 
-// Siegerstatistik: je Spieler eine Kachel, Zahl groß, Partien klein darunter
+// Siegerstatistik je Besetzung: Überschrift mit Partienzahl, darunter je Spieler eine Kachel.
+// Zwischen den Besetzungen mehr Abstand als zwischen den Kacheln einer Besetzung (Gesetz der Nähe).
+.games-overview-lineups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+}
+
+.games-overview-lineup h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.games-overview-lineup-games {
+  color: @games-overview-dim;
+  font-weight: normal;
+}
+
+// Siegerstatistik: je Spieler eine Kachel, Zahl groß, Anteil klein darunter
 .games-overview-wins {
   display: flex;
   flex-wrap: wrap;

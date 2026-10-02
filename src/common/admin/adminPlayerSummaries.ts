@@ -8,6 +8,7 @@ export type AdminPlayerScore = {
   url: string | undefined;
   victoryPoints: number;
   megaCredits: number;
+  corporation: string | undefined;
 };
 
 /**

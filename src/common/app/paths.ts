@@ -25,6 +25,7 @@ export const paths = {
   GAME: 'game',
   GAMES_OVERVIEW: 'games-overview',
   HELP: 'help',
+  IMPORTED_SCREENSHOT: 'imported-screenshot',
   LOAD: 'load',
   LOAD_GAME: 'load_game',
   LOGIN: 'login',

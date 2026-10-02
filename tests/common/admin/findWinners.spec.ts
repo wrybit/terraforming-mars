@@ -21,7 +21,7 @@ describe('findWinnerIndexes', () => {
 });
 
 describe('toAdminPlayerSummaries', () => {
-  const line = (name: string, victoryPoints: number) => ({name, color: 'red' as const, url: undefined, victoryPoints, megaCredits: 0});
+  const line = (name: string, victoryPoints: number) => ({name, color: 'red' as const, url: undefined, victoryPoints, megaCredits: 0, corporation: undefined});
 
   it('running games have no winner', () => {
     expect(toAdminPlayerSummaries([line('Jens', 50), line('Daniel', 40)], false, false).map((p) => p.isWinner)).deep.eq([false, false]);

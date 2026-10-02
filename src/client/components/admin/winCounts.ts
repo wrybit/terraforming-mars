@@ -3,24 +3,37 @@ import {AdminGameSummary} from '@/common/admin/AdminGameSummary';
 export type WinCount = {
   name: string;
   wins: number;
+};
+
+/** Siege einer festen Besetzung, z. B. "Daniel vs Jens". */
+export type LineupWinCounts = {
+  lineup: string;
   games: number;
+  counts: Array<WinCount>;
 };
 
 /**
- * Siege und gespielte Partien je Name über alle beendeten Partien (eigene und importierte).
- * Laufende Partien zählen nicht mit, sonst sänke die Siegquote durch angefangene Spiele.
+ * Siege je Besetzung über alle beendeten Partien (eigene und importierte).
+ * Getrennt nach Besetzung, weil ein Sieg zu zweit etwas anderes ist als ein Sieg zu dritt.
+ * Laufende Partien zählen nicht mit, sonst entstünden Besetzungen aus angefangenen Testspielen.
  */
-export function winCounts(summaries: ReadonlyArray<AdminGameSummary>): Array<WinCount> {
-  const counts = new Map<string, WinCount>();
+export function winCountsByLineup(summaries: ReadonlyArray<AdminGameSummary>): Array<LineupWinCounts> {
+  const lineups = new Map<string, LineupWinCounts>();
   for (const summary of summaries.filter((candidate) => candidate.isFinished)) {
-    for (const player of summary.players) {
-      const count = counts.get(player.name) ?? {name: player.name, wins: 0, games: 0};
-      count.games++;
-      if (player.isWinner) {
+    // Alphabetisch, damit dieselbe Besetzung unabhängig von der Zugreihenfolge zusammenfällt
+    const names = Array.from(new Set(summary.players.map((player) => player.name))).sort((first, second) => first.localeCompare(second));
+    const key = names.join(' vs ');
+    const lineup = lineups.get(key) ?? {lineup: key, games: 0, counts: names.map((name) => ({name, wins: 0}))};
+    lineup.games++;
+    for (const player of summary.players.filter((candidate) => candidate.isWinner)) {
+      const count = lineup.counts.find((candidate) => candidate.name === player.name);
+      if (count !== undefined) {
         count.wins++;
       }
-      counts.set(player.name, count);
     }
+    lineups.set(key, lineup);
   }
-  return Array.from(counts.values()).sort((first, second) => second.wins - first.wins || second.games - first.games || first.name.localeCompare(second.name));
+  return Array.from(lineups.values())
+    .map((lineup) => ({...lineup, counts: [...lineup.counts].sort((first, second) => second.wins - first.wins || first.name.localeCompare(second.name))}))
+    .sort((first, second) => second.games - first.games || first.lineup.localeCompare(second.lineup));
 }

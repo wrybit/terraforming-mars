@@ -13,6 +13,8 @@ export type AdminPlayerSummary = {
   victoryPoints: number;
   megaCredits: number;
   isWinner: boolean;
+  /** Gespielte(r) Konzern(e), bei mehreren mit " / " getrennt. */
+  corporation: string | undefined;
 };
 
 export type AdminGameSummary = {
@@ -27,6 +29,8 @@ export type AdminGameSummary = {
   externalUrl: string | undefined;
   /** Teilnehmer-ID, unter der ein importiertes Spiel hier gespeichert ist (Ergebnisseite the-end?id=…). */
   importedParticipantId: string | undefined;
+  /** Hier gespeicherter Screenshot der Ergebnisseite, wenn das Spiel selbst nicht mehr existiert (aus Discord übernommen). */
+  screenshotUrl: string | undefined;
   players: Array<AdminPlayerSummary>;
 };
 
