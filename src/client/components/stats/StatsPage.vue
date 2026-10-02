@@ -86,7 +86,8 @@ import {computed, defineComponent} from 'vue';
 import {paths} from '@/common/app/paths';
 import {Color} from '@/common/Color';
 import {StatsGame} from '@/common/stats/StatsGame';
-import {translateTextWithParams} from '@/client/directives/i18n';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {SHOWCASE_TITLES} from './statsShowcase';
 import CardListFilterGroup from '@/client/components/cardlist/CardListFilterGroup.vue';
 import {optionKeys} from '@/client/components/cardlist/cardListOptions';
 import {resetOptions, toggleOption} from '@/client/components/cardlist/filterSelection';
@@ -153,6 +154,13 @@ export default defineComponent({
     activeTab(): void {
       this.revealActiveTab();
     },
+    // Browser-Tab nennt die Seite, z. B. „TM Statistik – Spielbretter“ oder „TM Statistik – Tharsis“
+    pageTitle: {
+      immediate: true,
+      handler(title: string): void {
+        document.title = `TM ${translateText('Statistics')} – ${title}`;
+      },
+    },
   },
   beforeUnmount() {
     window.removeEventListener('popstate', this.readLocation);
@@ -179,6 +187,16 @@ export default defineComponent({
     },
     activeTab(): StatsTab {
       return tabOfView(this.view);
+    },
+    pageTitle(): string {
+      const view = this.view;
+      if (view.type === 'detail') {
+        return translateText(view.name);
+      }
+      if (view.type === 'top') {
+        return translateText(SHOWCASE_TITLES[view.kind]);
+      }
+      return translateText(STATS_TABS.find((entry) => entry.tab === view.tab)?.label ?? 'Overview');
     },
     tabs(): typeof STATS_TABS {
       return STATS_TABS;
