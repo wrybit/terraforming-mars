@@ -1,6 +1,8 @@
 {
   "Load settings from file": "Einstellungen aus Datei laden",
   "Save settings to file": "Einstellungen als Datei speichern",
+  "Import": "Import",
+  "Export": "Export",
   "Setup": "Spielstart",
   "Expansion options": "Optionen der Erweiterungen",
   "Card pool": "Kartenauswahl",

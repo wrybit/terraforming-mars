@@ -107,9 +107,47 @@
   }
 }
 
+// Import/Export mit Beschriftung, solange der Kopf Platz hat; sonst nur das Symbol (Container-Abfrage unten)
 .create-game-icon-button {
   .toolbar-glass-button();
+  gap: 6px;
+  width: auto;
+  min-width: @toolbar-button-size;
+  padding: 0 12px;
   color: #eee;
+  font-size: 15px;
+}
+
+.create-game-head {
+  container: create-game-head / inline-size;
+}
+
+// Innenbreiten des Kopfes (Container-Abfragen messen ohne Innenabstand), ab denen die Beschriftungen passen:
+// einzeilig zwischen Titel und Sprache/Einstellungen, auf dem Handy in der eigenen zweiten Zeile.
+// Gemessen mit Deutsch (längere Sprache): 648px bzw. 318px, plus etwas Luft.
+@create-game-head-labels-min-one-row: 660px;
+@create-game-head-labels-min-two-rows: 330px;
+
+// Innenbreite des Kopfes, bis zu der er auf dem Handy zweizeilig ist (Media-Abfrage unten):
+// Seitenrand, Innenabstand (12px, card_list.less schmal) und Rahmen abgezogen
+@create-game-head-two-rows-width: @card-list-phone - 2 * @page-content-edge-narrow - 2 * 12px - 2px;
+
+.create-game-icon-only() {
+  .create-game-head-label {
+    display: none;
+  }
+
+  .create-game-icon-button {
+    padding: 0;
+  }
+}
+
+@container create-game-head (min-width: (@create-game-head-two-rows-width + 1)) and (max-width: @create-game-head-labels-min-one-row) {
+  .create-game-icon-only();
+}
+
+@container create-game-head (max-width: @create-game-head-labels-min-two-rows) {
+  .create-game-icon-only();
 }
 
 .create-game-settings {
