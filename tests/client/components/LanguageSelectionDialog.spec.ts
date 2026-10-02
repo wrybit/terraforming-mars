@@ -12,6 +12,8 @@ describe('LanguageSelectionDialog', () => {
   beforeEach(() => {
     localStorage = new FakeLocalStorage();
     FakeLocalStorage.register(localStorage);
+    // Other specs (e.g. LogMessageComponent) set 'lang' on the shared instance; start from defaults
+    PreferencesManager.resetForTest();
   });
 
   afterEach(() => {
