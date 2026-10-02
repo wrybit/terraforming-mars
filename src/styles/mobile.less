@@ -1643,6 +1643,19 @@ html.tm-mobile {
   // Titel, Hinweise und Buttons über die volle Breite.
   // Lücken wie bei den Standardprojekten (CHOICE_GAP in mobileFit.ts, Platz fürs Häkchen-Fähnchen); rechts um die Lücke
   // überstehen wie dort, damit die Lücke hinter der letzten Spalte den Block nicht nach links versetzt
+  // Mit Kopfzeile (Alle auswählen, Sortierung) auch quer als Raster, damit die Leiste mit den Kartenrändern fluchtet
+  // (mobileFit.ts setzt dann ebenfalls die Spaltenzahl)
+  .mb-screen--turn .wf-component--select-card.choice-block:has(> .select-card-toolbar):not(.setup-column-body *) {
+    display: grid !important;
+    grid-template-columns: repeat(var(--mb-grid-columns, 2), max-content);
+    justify-content: center;
+    margin-right: -@mb-choice-gap;
+
+    > :not(label) {
+      grid-column: 1 / -1;
+    }
+  }
+
   @media (orientation: portrait) {
     .mb-screen--turn .wf-component--select-card.choice-block:not(.setup-column-body *) {
       display: grid !important;

@@ -79,4 +79,15 @@ describe('HandSortControl', () => {
     await first.findAll('button')[4].trigger('click');
     expect(selectedLabel(second)).eq('VP');
   });
+
+  it('mobile select list chooses sort and direction', async () => {
+    const wrapper = mountControl();
+    await wrapper.find('select').setValue('cost:reversed');
+    expect(handSortOrder()).to.deep.eq({key: 'cost', reversed: true});
+    expect(handOrder()).to.deep.eq([CardName.BIRDS, CardName.ANTS, CardName.CARTEL]);
+
+    await wrapper.find('select').setValue('manual');
+    expect(handSortOrder()).is.undefined;
+    expect(handOrder()).to.deep.eq(HAND);
+  });
 });

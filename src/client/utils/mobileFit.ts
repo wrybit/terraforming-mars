@@ -120,6 +120,14 @@ const RULES: ReadonlyArray<FitRule> = [
     choiceGap: CHOICE_GAP,
     grid: CARD_CHOICE_LIST,
   },
+  // Kartenwahl mit Kopfzeile (Alle auswählen, Sortierung) quer ebenfalls als Raster, damit die Leiste mit den Karten fluchtet
+  {
+    selector: `.mb-screen--turn ${CARD_CHOICE_LIST}:has(> .select-card-toolbar) > label > .card-container`,
+    exclude: '.setup-column-body',
+    columns: choiceGridColumnsFor(CARD_CHOICE_LIST),
+    choiceGap: CHOICE_GAP,
+    grid: CARD_CHOICE_LIST,
+  },
   // Karten-Karussell (Karte spielen): eine Karte groß in der Mitte
   {selector: '.mb-screen--turn .payments_cont .card-container', columns: () => 1},
   {
