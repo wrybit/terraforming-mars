@@ -6,7 +6,8 @@
     </td>
     <td class="games-overview-game">
       <a v-if="summary.screenshotUrl !== undefined" :href="summary.screenshotUrl" target="_blank" class="games-overview-source" title="Saved screenshot of the result page">Screenshot</a>
-      <a v-else-if="summary.externalUrl !== undefined" :href="summary.externalUrl" target="_blank" class="games-overview-source" title="Original on the other server">imported</a>
+      <!-- Ziel ist die hier gespeicherte Ergebnisseite: der fremde Server löscht das Spiel bald -->
+      <a v-else-if="summary.importedParticipantId !== undefined" :href="importedResultUrl" target="_blank" class="games-overview-source" title="Result page saved on this server">imported</a>
       <span v-else class="games-overview-id">{{ summary.id }}</span>
       <span class="games-overview-date">{{ dateText }}</span>
     </td>
@@ -37,6 +38,7 @@ import {defineComponent} from 'vue';
 import {AdminGameSummary, AdminPlayerSummary} from '@/common/admin/AdminGameSummary';
 import {Color} from '@/common/Color';
 import {playerColorClass} from '@/common/utils/utils';
+import {paths} from '@/common/app/paths';
 import DeleteGameButton from '@/client/components/admin/DeleteGameButton.vue';
 
 export default defineComponent({
@@ -60,6 +62,9 @@ export default defineComponent({
     },
   },
   computed: {
+    importedResultUrl(): string {
+      return `${paths.THE_END}?id=${this.summary.importedParticipantId}`;
+    },
     dateText(): string {
       return new Date(this.summary.createdTimeMs).toLocaleString(undefined, {dateStyle: 'short', timeStyle: 'short'});
     },
