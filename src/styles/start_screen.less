@@ -23,6 +23,8 @@
 // Titeltext steht so viel höher als sein Globus-Hintergrund, damit er mehr Abstand zum Menü hat (Text–Menü wie 100px Lücke);
 // der Hintergrund bleibt mit 24px am Menü, als Teil der Globus-Reihe
 @start-screen-title-lift: 76px;
+// Auf dem Handy muss das ganze Menü auf den Bildschirm passen: Titel nur wenig angehoben
+@start-screen-title-lift-phone: 16px;
 // Dauer der Hover-Animation der Menü-Buttons (Hintergrund und Schriftgröße gemeinsam)
 @start-screen-hover-duration: 0.25s;
 
@@ -293,12 +295,18 @@
   }
 
   .start-screen-links {
-    padding-top: calc(max(@toolbar-button-size + 2 * @toolbar-edge-offset, env(safe-area-inset-top)) + @start-screen-title-lift);
+    padding-top: calc(max(@toolbar-button-size + 2 * @toolbar-edge-offset, env(safe-area-inset-top)) + @start-screen-title-lift-phone);
   }
 
+  .start-screen-title-top,
+  .start-screen-title-bottom {
+    top: -@start-screen-title-lift-phone;
+  }
+
+  // Button-Höhe aus der Fensterhöhe: alle acht Menüpunkte samt Titel passen auf den Bildschirm.
+  // 240px = Werkzeugleiste, Titel-Kasten, Abstand Titel–Menü und Lücken zwischen den Buttons
   .start-screen-link {
-    min-height: 90px;
-    height: 90px;
+    height: clamp(60px, calc((100dvh - 240px) / 8), 90px);
     padding: 12px 16px;
     font-size: 20px;
   }
