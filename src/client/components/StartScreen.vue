@@ -67,8 +67,8 @@ type StartScreenLink = {label: string, icon: GlyphName, planet: PlanetStripeName
 const links: ReadonlyArray<StartScreenLink> = [
   {label: 'New game', icon: 'newGame', planet: 'venus', href: 'new-game', external: false},
   {label: 'Statistics', icon: 'statistics', planet: 'earth', href: 'stats', external: true},
-  {label: 'Game rules', icon: 'rules', planet: 'mars', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true},
-  {label: 'Cards list', icon: 'cardsList', planet: 'jupiter', href: 'cards', external: true},
+  {label: 'Cards list', icon: 'cardsList', planet: 'mars', href: 'cards', external: true},
+  {label: 'Game rules', icon: 'rules', planet: 'jupiter', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true},
   {label: 'Board game', icon: 'boardGame', planet: 'saturn', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true},
   {label: 'Updates', icon: 'updates', planet: 'darkBlue', href: WIKI_URLS.changelog, external: true},
   {label: 'Discord', icon: 'discord', planet: 'neptune', href: constants.DISCORD_INVITE, external: true},
