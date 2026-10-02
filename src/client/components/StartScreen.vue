@@ -41,7 +41,7 @@ const links: ReadonlyArray<StartScreenLink> = [
   {label: 'Board game', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true},
   {label: 'About us', href: UPSTREAM_REPOSITORY_URL + '#README', external: true},
   {label: 'Whats new?', href: WIKI_URLS.changelog, external: true},
-  {label: 'Join us on Discord', href: constants.DISCORD_INVITE, external: true},
+  {label: 'Discord', href: constants.DISCORD_INVITE, external: true},
 ];
 
 const previousViewport = ref('');
