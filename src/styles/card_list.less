@@ -67,6 +67,16 @@
   }
 }
 
+// Sprache/Einstellungen in der Kopfleiste so weit auseinander wie in .card-list-header-actions
+.card-list-header .page-toolbar {
+  gap: 8px;
+}
+
+// Kopfleiste ohne Suche ("Spiel erstellen", "Spiel erstellt"): Höhe wie die Kartenliste
+.card-list-header--plain {
+  --card-list-header: @card-list-header-height;
+}
+
 .card-list-header-actions {
   display: flex;
   align-items: center;
@@ -667,6 +677,12 @@
 
   .card-list-header-actions {
     grid-area: actions;
+  }
+
+  // Ohne Suche bleibt es eine Zeile, nur die Schrift wird kleiner wie oben
+  .card-list-header.card-list-header--plain {
+    display: flex;
+    gap: 16px;
   }
 
   .card-list-search {

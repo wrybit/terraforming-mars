@@ -1,20 +1,19 @@
 <template>
   <div id="game-home" class="game-home">
-    <PageToolbar/>
-    <section class="game-home-card game-home-hero">
+    <!-- Kopf wie Kartenliste/Statistik: Bestätigung mit Spiel-ID, Sprache und Einstellungen in einer Leiste -->
+    <header class="card-list-header card-list-header--plain game-home-head">
       <div class="game-home-check">✓</div>
-      <div class="game-home-hero-text">
-        <h1>
-          <span v-i18n>Game created</span>
-          <span class="game-home-id">{{ getGameId() }}</span>
-        </h1>
-        <p v-i18n>Send every player their own link, then open yours.</p>
-      </div>
-    </section>
+      <h1>
+        <span v-i18n>Game created</span>
+        <span class="game-home-meta">({{ game.name }} | <span class="game-home-id">{{ getGameId() }}</span>)</span>
+      </h1>
+      <PageToolbar/>
+    </header>
 
     <div class="game-home-columns">
       <section class="game-home-card">
         <h2 v-i18n>Player links</h2>
+        <p class="game-home-hint" v-i18n>Send every player their own link, then open yours.</p>
         <div class="game-home-links">
           <div v-for="(player, index) in game.players" :key="player.color"
             :class="'game-home-link ' + getPlayerRowColorClass(player.color)">
