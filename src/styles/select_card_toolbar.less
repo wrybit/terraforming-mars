@@ -1,3 +1,5 @@
+@import (reference) "./mobile.less";
+
 // Kopfzeile einer Kartenauswahl (SelectCard.vue): links "Alle auswählen", rechts die Hand-Sortierung
 // (Optik aus hand_cards_panel.less). Steht als eigene Zeile über dem Auswahl-Block, so breit wie der Block –
 // die Buttons fluchten mit dem linken und rechten Kartenrand.
@@ -20,7 +22,12 @@
   margin-left: auto;
 }
 
-// Mobil: Sortierung in eigener Zeile über die volle Breite, wenn beides nicht nebeneinander passt
+// Mobil: Im Karten-Raster (mobile.less) darf die Leiste die Spalten nicht verbreitern – sie nimmt die Breite
+// des Rasters an (width 0 + min-width 100 %) und bricht um: Sortierung dann in eigener Zeile, rechtsbündig.
+// Rechts zieht das Raster um eine Lücke über (margin-right in mobile.less); die Leiste endet am Kartenrand.
 html.tm-mobile .select-card-toolbar {
   flex-basis: 100%;
+  width: 0;
+  min-width: calc(100% - @mb-choice-gap);
+  margin-bottom: 8px;
 }
