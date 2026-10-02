@@ -1,5 +1,6 @@
 /* Drehung der Planeten-Buttons: beim Hover langsam nach rechts, am Ende der Textur weich umkehren;
    beim Verlassen erst schnell, dann weich auslaufend zurück. Die Schleife läuft nur, solange sich etwas bewegt. */
+import {GlobePlacement} from './globeLayout';
 import {PlanetRenderer} from './planetRenderer';
 import {PlanetStripe, rotationLimits} from './planetStripes';
 
@@ -15,7 +16,7 @@ const easeOutCubic = (progress: number) => 1 - Math.pow(1 - Math.min(progress, 1
 
 type PlanetButton = {
   target: HTMLCanvasElement;
-  row: number;
+  placement: GlobePlacement;
   stripe: PlanetStripe;
   limits: {min: number, max: number};
   offset: number;
@@ -34,8 +35,8 @@ export class PlanetRotation {
 
   constructor(private readonly renderer: PlanetRenderer, private readonly reducedMotion: boolean) {}
 
-  public add(target: HTMLCanvasElement, row: number, stripe: PlanetStripe): number {
-    this.buttons.push({target, row, stripe, limits: rotationLimits(stripe), offset: 0, velocity: 0, direction: 1, glow: 0, hovered: false});
+  public add(target: HTMLCanvasElement, placement: GlobePlacement, stripe: PlanetStripe): number {
+    this.buttons.push({target, placement, stripe, limits: rotationLimits(stripe), offset: 0, velocity: 0, direction: 1, glow: 0, hovered: false});
     return this.buttons.length - 1;
   }
 
@@ -55,6 +56,14 @@ export class PlanetRotation {
     this.startLoop();
   }
 
+  /** Neue Lage eines Buttons im Globus (nach Größenänderung). */
+  public setPlacement(index: number, placement: GlobePlacement): void {
+    const button = this.buttons[index];
+    if (button !== undefined) {
+      button.placement = placement;
+    }
+  }
+
   /** Alle neu zeichnen, z. B. nach Größenänderung. */
   public drawAll(): void {
     this.buttons.forEach((button) => this.draw(button));
@@ -66,7 +75,7 @@ export class PlanetRotation {
   }
 
   private draw(button: PlanetButton): void {
-    this.renderer.draw({target: button.target, row: button.row, stripe: button.stripe, offset: button.offset, glow: button.glow});
+    this.renderer.draw({target: button.target, placement: button.placement, stripe: button.stripe, offset: button.offset, glow: button.glow});
   }
 
   private startLoop(): void {
