@@ -21,7 +21,8 @@ const FRAGMENT_SOURCE = `
   varying vec2 buttonPoint;
   uniform sampler2D stripes;
   uniform vec2 buttonSize;
-  uniform float row;
+  uniform float globeScale;   // CSS-Pixel je Sprite-Pixel
+  uniform float spriteTop;    // Oberkante des Buttons im Sprite-Raster
   uniform float stripeTop;
   uniform float stripeHeight;
   uniform float startX;
@@ -31,10 +32,9 @@ const FRAGMENT_SOURCE = `
   const vec3 globe = vec3(${float(GLOBE.centerX)}, ${float(GLOBE.centerY)}, ${float(GLOBE.radius)});
   const vec2 spriteRow = vec2(${float(SPRITE_ROW.width)}, ${float(SPRITE_ROW.height)});
   void main() {
-    // Button-Punkt ins Sprite-Raster: Breite füllt die Reihe, die Höhe wird mittig angeschnitten (schmale Buttons am Handy)
-    float scale = buttonSize.x / spriteRow.x;
-    float rowTop = row * spriteRow.y;
-    vec2 spritePoint = vec2(buttonPoint.x / scale, rowTop + spriteRow.y * 0.5 + (buttonPoint.y - buttonSize.y * 0.5) / scale);
+    // Button-Punkt ins Sprite-Raster: einheitlich skaliert, damit die Bögen aller Buttons zusammenpassen
+    float scale = globeScale;
+    vec2 spritePoint = vec2(buttonPoint.x / scale, spriteTop + buttonPoint.y / scale);
     vec2 point = spritePoint - globe.xy;
     float radius = globe.z;
     float distanceFromCenter = length(point);
@@ -46,7 +46,7 @@ const FRAGMENT_SOURCE = `
     float surfaceX = circleRadius * asin(clamp(point.x / circleRadius, -1.0, 1.0));
     float stripeScale = spriteRow.y / stripeHeight;
     float sourceX = startX + (surfaceX + globe.x - offset) / stripeScale;
-    float sourceY = clamp(stripeTop + (spritePoint.y - rowTop) / stripeScale, stripeTop + 0.5, stripeTop + stripeHeight - 0.5);
+    float sourceY = clamp(stripeTop + (spritePoint.y - spriteTop) / stripeScale, stripeTop + 0.5, stripeTop + stripeHeight - 0.5);
     vec3 color = texture2D(stripes, vec2(sourceX, sourceY) / textureSize).rgb;
     // Licht von oben links vorn
     vec3 normal = vec3(point.x, -point.y, sqrt(max(radius * radius - distanceFromCenter * distanceFromCenter, 0.0))) / radius;
@@ -59,7 +59,7 @@ const FRAGMENT_SOURCE = `
     gl_FragColor = vec4(color * shade * coverage, coverage);
   }`;
 
-type Uniforms = Record<'buttonSize' | 'row' | 'stripeTop' | 'stripeHeight' | 'startX' | 'offset' | 'glow', WebGLUniformLocation | null>;
+type Uniforms = Record<'buttonSize' | 'globeScale' | 'spriteTop' | 'stripeTop' | 'stripeHeight' | 'startX' | 'offset' | 'glow', WebGLUniformLocation | null>;
 
 export class PlanetGlobeRenderer implements PlanetRenderer {
   private constructor(
@@ -88,7 +88,7 @@ export class PlanetGlobeRenderer implements PlanetRenderer {
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
     const location = (name: keyof Uniforms) => gl.getUniformLocation(program, name);
     const uniforms: Uniforms = {
-      buttonSize: location('buttonSize'), row: location('row'), stripeTop: location('stripeTop'), stripeHeight: location('stripeHeight'),
+      buttonSize: location('buttonSize'), globeScale: location('globeScale'), spriteTop: location('spriteTop'), stripeTop: location('stripeTop'), stripeHeight: location('stripeHeight'),
       startX: location('startX'), offset: location('offset'), glow: location('glow'),
     };
     const image = await loadImage(STRIPES_TEXTURE_URL);
@@ -124,7 +124,8 @@ export class PlanetGlobeRenderer implements PlanetRenderer {
     }
     const gl = this.gl;
     gl.uniform2f(this.uniforms.buttonSize, cssWidth, cssHeight);
-    gl.uniform1f(this.uniforms.row, request.row);
+    gl.uniform1f(this.uniforms.globeScale, request.placement.scale);
+    gl.uniform1f(this.uniforms.spriteTop, request.placement.spriteTop);
     gl.uniform1f(this.uniforms.stripeTop, request.stripe.top);
     gl.uniform1f(this.uniforms.stripeHeight, request.stripe.height);
     gl.uniform1f(this.uniforms.startX, request.stripe.startX);

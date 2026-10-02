@@ -37,7 +37,8 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
+import {GlobeLayout, measureGlobeLayout} from '@/client/components/startScreen/globeLayout';
 import {PlanetGlobeRenderer} from '@/client/components/startScreen/planetGlobeRenderer';
 import {PlanetFlatRenderer} from '@/client/components/startScreen/planetFlatRenderer';
 import {PlanetRotation} from '@/client/components/startScreen/planetRotation';
@@ -138,25 +139,59 @@ function onDocumentPointerDown(event: PointerEvent): void {
   }
 }
 
+// Lage des Globus aus dem tatsächlichen Layout (globeLayout.ts); Titel-Hintergrund bekommt Maßstab und Versatz als CSS-Variablen
+function measureLayout(): GlobeLayout | undefined {
+  const buttons = canvases.map((canvas) => canvas?.parentElement).filter((element): element is HTMLElement => element instanceof HTMLElement);
+  const container = buttons[0]?.parentElement;
+  const title = container?.querySelector('.start-screen-header');
+  const layout = measureGlobeLayout(buttons, title instanceof HTMLElement ? title : undefined);
+  if (layout !== undefined && container) {
+    container.style.setProperty('--globe-scale', String(layout.scale));
+    container.style.setProperty('--globe-title-offset', `${layout.titleOffset}px`);
+  }
+  return layout;
+}
+
+function relayout(): void {
+  const layout = measureLayout();
+  if (layout === undefined || rotation === undefined) {
+    return;
+  }
+  rotationIndexes.forEach((rotationIndex, index) => {
+    const placement = layout.placements[index];
+    if (rotationIndex !== undefined && placement !== undefined) {
+      rotation?.setPlacement(rotationIndex, placement);
+    }
+  });
+  rotation.drawAll();
+}
+
 async function startGlobe(): Promise<void> {
   // WebGL wölbt den Streifen und beleuchtet ihn; ohne WebGL dreht er flach per CSS
   const renderer = await PlanetGlobeRenderer.create() ?? new PlanetFlatRenderer();
+  const layout = measureLayout();
+  if (layout === undefined) {
+    return;
+  }
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   rotation = new PlanetRotation(renderer, reducedMotion);
   links.forEach((link, index) => {
     const canvas = canvases[index];
-    if (canvas !== undefined) {
-      rotationIndexes[index] = rotation?.add(canvas, index + 1, PLANET_STRIPES[link.planet]);
+    const placement = layout.placements[index];
+    if (canvas !== undefined && placement !== undefined) {
+      rotationIndexes[index] = rotation?.add(canvas, placement, PLANET_STRIPES[link.planet]);
     }
   });
   globeReady.value = true;
-  // Buttonmaße ändern sich mit der Fensterbreite/-höhe (Handy): dann neu zeichnen
+  // Buttonmaße ändern sich mit der Fensterbreite/-höhe (Handy, Tablet): dann neu vermessen und zeichnen
   const container = canvases[0]?.parentElement?.parentElement;
   if (container) {
-    resizeObserver = new ResizeObserver(() => rotation?.drawAll());
+    resizeObserver = new ResizeObserver(() => relayout());
     resizeObserver.observe(container);
   }
-  rotation.drawAll();
+  // nach dem Umschalten auf Glas zeichnen, wenn die Canvas sichtbar und vermessen ist
+  await nextTick();
+  relayout();
 }
 
 onMounted(() => {

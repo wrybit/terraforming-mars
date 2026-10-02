@@ -212,12 +212,17 @@
 
 // Titel-Hintergrund: oberste Reihe von planets.jpg, nur der Planet – der schwarze Rest ist per Maske ausgeblendet
 // (Globus-Kreis wie bei den Buttons). Als ::before, damit die Maske nicht den Titeltext darüber abschneidet.
-@start-screen-title-mask: radial-gradient(ellipse 522px 522px at -174.7px 402.5px, #000 calc(100% - 1px), transparent 100%);
+// Maßstab und Versatz setzt StartScreen.vue (globeLayout.ts) passend zu den Buttons, damit die Bögen zusammenpassen;
+// ohne JavaScript gelten die Desktop-Werte (1 und 0)
+@start-screen-globe-scale: var(--globe-scale, 1);
+@start-screen-title-offset: var(--globe-title-offset, 0px);
+@start-screen-title-mask: radial-gradient(
+  circle calc(522px * @start-screen-globe-scale)
+  at calc(-174.7px * @start-screen-globe-scale) calc(402.5px * @start-screen-globe-scale + @start-screen-title-offset),
+  #000 calc(100% - 1px), transparent 100%);
 // Rand weich ausblenden wie früher der schwarze Innenschatten: oben, unten und links (rechts endet der Planet selbst)
 @start-screen-title-fade: linear-gradient(to bottom, transparent, #000 35%, #000 65%, transparent);
 @start-screen-title-fade-left: linear-gradient(to right, transparent, #000 25%);
-// Bei gestreckter Reihe (schmale Fenster, background-size 100% 900%) derselbe Kreis in Prozent der Box (369 × 90)
-@start-screen-title-mask-stretched: radial-gradient(ellipse 141.46% 580% at -47.34% 447.22%, #000 calc(100% - 1px), transparent 100%);
 
 .start-screen-header {
   position: relative;
@@ -239,6 +244,9 @@
     inset: 0;
     z-index: -1;
     background: url("assets/buttons-homepage/planets.jpg") no-repeat;
+    // Sprite im selben Maßstab wie der Globus der Buttons, Reihe 0 endet an der Oberkante des ersten Buttons
+    background-size: calc(369px * @start-screen-globe-scale) calc(810px * @start-screen-globe-scale);
+    background-position: 0 @start-screen-title-offset;
     -webkit-mask-image: @start-screen-title-mask, @start-screen-title-fade, @start-screen-title-fade-left;
     -webkit-mask-composite: source-in;
     mask-image: @start-screen-title-mask, @start-screen-title-fade, @start-screen-title-fade-left;
@@ -360,12 +368,6 @@
     width: 100%;
     background-repeat: no-repeat;
     background-size: 100% 900%;
-  }
-
-  .start-screen-header::before {
-    background-size: 100% 900%;
-    -webkit-mask-image: @start-screen-title-mask-stretched, @start-screen-title-fade, @start-screen-title-fade-left;
-    mask-image: @start-screen-title-mask-stretched, @start-screen-title-fade, @start-screen-title-fade-left;
   }
 
   .start-screen-title-top,

@@ -5,21 +5,19 @@ import {GLOBE, SPRITE_ROW, STRIPES_TEXTURE_SIZE, STRIPES_TEXTURE_URL} from './pl
 
 export class PlanetFlatRenderer implements PlanetRenderer {
   public draw(request: PlanetDrawRequest): void {
-    const {target, row, stripe, offset, glow} = request;
+    const {target, placement, stripe, offset, glow} = request;
     const width = target.clientWidth;
     const height = target.clientHeight;
     if (width === 0 || height === 0) {
       return;
     }
-    // Sprite-Raster auf Button-Breite; die Höhe wird wie bei WebGL mittig angeschnitten
-    const scale = width / SPRITE_ROW.width;
-    const verticalShift = (height - SPRITE_ROW.height * scale) / 2;
-    const circle = `circle ${GLOBE.radius * scale}px at ${GLOBE.centerX * scale}px ` +
-      `${(GLOBE.centerY - row * SPRITE_ROW.height) * scale + verticalShift}px`;
+    // Sprite-Raster einheitlich skaliert wie bei WebGL (globeLayout.ts), damit die Bögen zusammenpassen
+    const {scale, spriteTop} = placement;
+    const circle = `circle ${GLOBE.radius * scale}px at ${GLOBE.centerX * scale}px ${(GLOBE.centerY - spriteTop) * scale}px`;
     // Streifen so skalieren, dass er die Reihenhöhe füllt
     const textureScale = SPRITE_ROW.height * scale / stripe.height;
     const positionX = -stripe.startX * textureScale + offset * scale;
-    const positionY = -stripe.top * textureScale + verticalShift;
+    const positionY = -stripe.top * textureScale;
     // Beim Hover bleibt weniger Abdunklung, wie das flachere Licht im WebGL-Zeichner
     const darkness = 1 - 0.45 * glow;
     const shading = `radial-gradient(${circle}, transparent 45%, rgba(0, 0, 0, ${0.25 * darkness}) 70%, ` +
