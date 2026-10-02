@@ -15,7 +15,7 @@
       <tbody>
         <tr v-for="row in sortedRows" :key="rowKey(row)">
           <td v-for="column in columns" :key="column.key" :class="{'stats-table-text': column.text}">
-            <slot :name="column.key" :row="row">{{ column.format ? column.format(row) : column.value(row) }}</slot>
+            <slot :name="column.key" :row="row" :rows="sortedRows">{{ column.format ? column.format(row) : column.value(row) }}</slot>
           </td>
         </tr>
       </tbody>

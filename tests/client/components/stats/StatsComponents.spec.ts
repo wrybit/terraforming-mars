@@ -17,6 +17,9 @@ import StatsLineChart from '@/client/components/stats/StatsLineChart.vue';
 import StatsBarChart from '@/client/components/stats/StatsBarChart.vue';
 import StatsEntityName from '@/client/components/stats/StatsEntityName.vue';
 import StatsPointSources from '@/client/components/stats/StatsPointSources.vue';
+import {CardName} from '@/common/cards/CardName';
+import StatsCardZoom from '@/client/components/stats/StatsCardZoom.vue';
+import {CARD_ZOOM_KEY, StatsCardZoomRequest} from '@/client/components/stats/statsCardZoom';
 
 const games = sampleGames();
 const results = allPlayerResults(games);
@@ -77,5 +80,22 @@ describe('Stats components', () => {
     expect(mount(StatsPointSources, {...config, props: {results}}).findAll('tbody tr')).has.length(3);
     expect(mount(StatsBarChart, {...config, props: {bars: [{label: '9', value: 1}]}}).findAll('rect')).has.length(1);
     expect(mount(StatsEntityName, {...config, props: {kind: 'player', name: 'Martin'}}).classes()).to.include('player_translucent_bg_color_green');
+  });
+
+  it('card names open the card zoom with their neighbours', async () => {
+    const requests: Array<StatsCardZoomRequest> = [];
+    const wrapper = mount(StatsEntityName, {
+      global: {...config.global, provide: {...config.global.provide, [CARD_ZOOM_KEY]: (request: StatsCardZoomRequest) => requests.push(request)}},
+      props: {kind: 'card', name: 'Birds', siblings: ['Ants', 'Birds']},
+    });
+    await wrapper.find('.stats-card-button').trigger('click');
+    expect(requests.map((request) => [request.names, request.index])).deep.eq([[['Ants', 'Birds'], 1]]);
+    expect(mount(StatsEntityName, {...config, props: {kind: 'milestone', name: 'Mayor'}}).find('.stats-card-button').exists()).is.false;
+  });
+
+  it('StatsCardZoom shows the cards', () => {
+    const wrapper = mount(StatsCardZoom, {...config, props: {names: [CardName.ANTS, CardName.BIRDS], index: 1}, attachTo: document.body});
+    expect(document.body.querySelectorAll('.mb-card-zoom-slide .card-container').length).eq(2);
+    wrapper.unmount();
   });
 });

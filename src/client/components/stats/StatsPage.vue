@@ -75,6 +75,7 @@
         </template>
       </main>
     </div>
+    <StatsCardZoom v-if="cardZoom !== undefined" :names="cardZoom.names" :index="cardZoom.index" :origin="cardZoom.origin" @close="cardZoom = undefined"/>
   </div>
 </template>
 
@@ -98,6 +99,8 @@ import {activeFilterCount, emptyFilters, filterGames, filterGroups, optionCounts
 import {parseStatsView, STATS_TABS, statsHref, StatsTab, StatsView, tabOfKind} from './statsNavigation';
 import {allPlayerResults, playerColors, playerNames, StatsPlayerResult} from './statsResults';
 import {formatDate} from './statsLabels';
+import StatsCardZoom from './StatsCardZoom.vue';
+import {CARD_ZOOM_KEY, StatsCardZoomRequest} from './statsCardZoom';
 
 // Unterhalb dieser Breite schmalere Diagramme (gleiche Grenze wie das Filter-Sheet der Kartenliste)
 const NARROW_WIDTH = 900;
@@ -109,16 +112,21 @@ type DataModel = {
   view: StatsView;
   filtersOpen: boolean;
   chartWidth: number;
+  cardZoom: StatsCardZoomRequest | undefined;
 };
 
 // Öffentliche Statistikseite (/stats). Eigenständig: liest nur /api/stats/games und rechnet alles im Browser aus.
 // Aufbau, Filter und Kacheln wie in der Kartenliste, damit sie sich wie ein Teil der App anfühlt.
 export default defineComponent({
   name: 'StatsPage',
-  components: {CardListFilterGroup, LanguageIcon, PreferencesIcon, StatsOverview, StatsPlayersView, StatsRecordsView, StatsEntityList, StatsEntityDetail},
+  components: {CardListFilterGroup, LanguageIcon, PreferencesIcon, StatsOverview, StatsPlayersView, StatsRecordsView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
   provide() {
     // Spielerfarbe überall gleich: die Farbe, in der jemand meistens gespielt hat
-    return {playerColors: computed(() => this.colors)};
+    return {
+      playerColors: computed(() => this.colors),
+      // Großansicht der Karten: alle Bausteine öffnen sie über diese eine Stelle
+      [CARD_ZOOM_KEY]: (request: StatsCardZoomRequest) => this.cardZoom = request,
+    };
   },
   data(): DataModel {
     return {
@@ -128,6 +136,7 @@ export default defineComponent({
       view: parseStatsView(window.location.search),
       filtersOpen: false,
       chartWidth: this.currentChartWidth(),
+      cardZoom: undefined,
     };
   },
   mounted() {
