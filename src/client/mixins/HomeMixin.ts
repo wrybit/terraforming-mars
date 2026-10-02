@@ -6,7 +6,7 @@ import {GameModel} from '@/common/models/GameModel';
 import {SpaceId} from '@/common/Types';
 import {KeyboardNavigation} from '@/client/components/KeyboardNavigation';
 import {nextTileView, TileView} from '@/client/components/board/TileView';
-import {gameDocumentTitle} from '@/client/utils/documentTitle';
+import {gameDocumentTitle, TitleView} from '@/client/utils/documentTitle';
 
 type DataModel = {
   tileView: TileView;
@@ -77,7 +77,9 @@ export const HomeMixin = defineComponent({
     },
   },
   mounted() {
-    document.title = gameDocumentTitle(this.game);
+    // Kinder (WaitingFor) werden vor dem Elternteil gemountet; daher hier denselben vollständigen Titel setzen.
+    const props = this.$props as {playerView?: TitleView, spectator?: TitleView};
+    document.title = gameDocumentTitle(props.playerView ?? props.spectator ?? {game: this.game});
     window.addEventListener('keydown', this.navigatePage);
     const targets = this.$el.getElementsByClassName('hotkey-target');
     for (let i = 0; i < targets.length; i++) {

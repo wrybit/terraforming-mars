@@ -1,16 +1,25 @@
 import {expect} from 'chai';
-import {gameDocumentTitle, turnTitlePrefix} from '@/client/utils/documentTitle';
+import {gameDocumentTitle, turnTitleState} from '@/client/utils/documentTitle';
+
+const game = {name: 'Cosmic Pressure Flow', generation: 5};
 
 describe('documentTitle', () => {
-  it('shows generation only when not on turn', () => {
-    expect(gameDocumentTitle({generation: 5})).to.eq('Gen 5 | TM');
+  it('shows state, player, generation and name on own turn', () => {
+    expect(gameDocumentTitle({game, thisPlayer: {name: 'Jens'}, waitingFor: {}}))
+      .to.eq('● Your turn · Jens · Gen 5 · Cosmic Pressure Flow | TM');
   });
 
-  it('shows turn marker first when on turn', () => {
-    expect(gameDocumentTitle({generation: 5}, turnTitlePrefix())).to.eq('● Your turn · Gen 5 | TM');
+  it('omits state when not on turn or input is optional', () => {
+    expect(gameDocumentTitle({game, thisPlayer: {name: 'Jens'}})).to.eq('Jens · Gen 5 · Cosmic Pressure Flow | TM');
+    expect(gameDocumentTitle({game, thisPlayer: {name: 'Jens'}, waitingFor: {optional: true}})).to.eq('Jens · Gen 5 · Cosmic Pressure Flow | TM');
   });
 
-  it('accepts animated marker', () => {
-    expect(gameDocumentTitle({generation: 3}, turnTitlePrefix('◑'))).to.eq('◑ Your turn · Gen 3 | TM');
+  it('omits player for spectators', () => {
+    expect(gameDocumentTitle({game})).to.eq('Gen 5 · Cosmic Pressure Flow | TM');
+  });
+
+  it('accepts explicit state', () => {
+    expect(gameDocumentTitle({game, waitingFor: {}}, turnTitleState('◑'))).to.eq('◑ Your turn · Gen 5 · Cosmic Pressure Flow | TM');
+    expect(gameDocumentTitle({game}, '🏁')).to.eq('🏁 · Gen 5 · Cosmic Pressure Flow | TM');
   });
 });

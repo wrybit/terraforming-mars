@@ -376,7 +376,7 @@ export default defineComponent({
     GameEndChartTabs,
   },
   mounted() {
-    document.title = gameDocumentTitle(this.game, '🏁');
+    document.title = gameDocumentTitle({game: this.game, thisPlayer: this.participant.thisPlayer}, '🏁');
     if (getPreferences().experimental_ui) {
       setFaviconStatus('ended');
     }
