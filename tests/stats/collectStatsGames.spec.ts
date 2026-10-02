@@ -12,7 +12,7 @@ import {Phase} from '../../src/common/Phase';
 import {Server} from '../../src/server/models/ServerModel';
 import {AdminGameSummary} from '../../src/common/admin/AdminGameSummary';
 import {CardName} from '../../src/common/cards/CardName';
-import {EcoLine} from '../../src/server/cards/corporation/Ecoline';
+import {EcoLine} from '../../src/server/cards/corporation/EcoLine';
 import {ScreenshotDetailsStore} from '../../src/server/stats/ScreenshotDetailsStore';
 
 describe('collectStatsGames', () => {
