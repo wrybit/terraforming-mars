@@ -60,3 +60,31 @@
   padding: 0;
   background: transparent;
 }
+
+// Inhalt mit eigenem Kopf und eigenem Scrollen (Hilfe-Overlay): feste Höhe, damit beim Tab-Wechsel nichts springt
+.sidebar-modal--bare {
+  display: flex;
+  width: min(1180px, 100%);
+  max-width: min(1180px, 100%);
+  flex-direction: column;
+  height: min(@modal-max-height, 900px);
+  padding: 0;
+  overflow: hidden;
+}
+
+// Handy: als Vollbild-Blatt von unten, oben bleibt ein Streifen der Spielansicht sichtbar
+@media only screen and (max-width: 760px) {
+  .sidebar-modal-backdrop:has(.sidebar-modal--bare) {
+    align-items: flex-end;
+    padding: 24px 0 0;
+  }
+
+  .sidebar-modal--bare {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: none;
+    border-bottom: 0;
+    border-radius: 16px 16px 0 0;
+  }
+}

@@ -1,0 +1,904 @@
+// Hilfe-Overlay (Fork, HelpOverlay.vue): Kopf mit Suche und Tabs, Seitenbaum links, Inhalt als Flächen.
+// Die Inhalte kommen aus den unveränderten Upstream-Komponenten (components/help); ihr Markup wird hier
+// umgestaltet. Gesetz der Nähe: Zeile < Gruppe < Abschnitt, Abschnitte zusätzlich als eigene Flächen.
+@import (reference) "./variables.less";
+@import (reference) "./modal_surface.less";
+
+@help-accent: @bg_action;
+@help-accent-soft: fade(@bg_action, 22%);
+@help-accent-text: #b3b2ff;
+@help-text: @modal-text;
+@help-muted: #8b8d96;
+@help-heading: @modal-heading;
+@help-surface: rgba(255, 255, 255, 0.045);
+@help-surface-border: rgba(255, 255, 255, 0.08);
+@help-control: rgba(255, 255, 255, 0.07);
+@help-gap-row: 4px;
+@help-gap-group: 20px;
+@help-gap-section: 16px;
+@help-card-radius: 10px;
+@help-icon-slot: 34px;
+@help-mobile-max: 760px;
+
+.help-overlay {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  color: @help-text;
+  font-family: Ubuntu, sans-serif;
+  font-size: 15px;
+
+  h1,
+  h2,
+  h3 {
+    filter: none;
+    text-shadow: none;
+    font-family: Ubuntu, sans-serif;
+    letter-spacing: 0;
+  }
+
+  [data-help-hidden] {
+    display: none !important;
+  }
+}
+
+// Eigene Seite /help: gleiche Box wie im Spiel, mittig auf der Seite
+.help-overlay--page {
+  max-width: 1180px;
+  height: calc(100vh - 120px);
+  margin: 24px auto;
+  overflow: hidden;
+  border: 1px solid @modal-border;
+  border-radius: @modal-radius;
+  background: @modal-background;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+}
+
+// ---- Kopf ----
+.help-overlay-head {
+  flex: none;
+  padding: 16px 20px 0;
+  border-bottom: 1px solid @help-surface-border;
+}
+
+.help-overlay-toprow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.help-overlay .help-overlay-title {
+  margin: 0 auto 0 0;
+  padding: 0;
+  color: @help-heading;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.help-overlay-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 280px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid @help-surface-border;
+  border-radius: 8px;
+  background: @help-control;
+  color: @help-muted;
+  cursor: text;
+
+  &:focus-within {
+    border-color: @help-accent;
+  }
+
+  svg {
+    flex: none;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    box-shadow: none;
+    background: transparent;
+    color: @help-text;
+    font: inherit;
+    font-size: 14px;
+  }
+
+  input::placeholder {
+    color: @help-muted;
+  }
+}
+
+.help-overlay-close {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border: 1px solid @modal-border;
+  border-radius: 8px;
+  background: transparent;
+  color: @help-text;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    background: #34363e;
+    color: #fff;
+  }
+}
+
+// Tabs: einzeilig, bei Platzmangel waagerecht wischbar
+.help-overlay-tabs {
+  display: flex;
+  gap: 2px;
+  margin-top: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.help-overlay-tab {
+  position: relative;
+  flex: none;
+  padding: 10px 14px 12px;
+  border: 0;
+  background: none;
+  color: @help-muted;
+  font: inherit;
+  font-size: 15px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    color: @help-text;
+  }
+
+  &[aria-selected="true"] {
+    color: #fff;
+  }
+
+  &[aria-selected="true"]::after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    bottom: -1px;
+    left: 10px;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background: @help-accent;
+  }
+}
+
+// Tastaturkürzel brauchen eine Tastatur
+@media (hover: none) and (pointer: coarse) {
+  .help-overlay-tab--desktop-only {
+    display: none;
+  }
+}
+
+// ---- Seitenbaum + Inhalt ----
+.help-overlay-main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.help-overlay-outline {
+  position: relative;
+  flex: none;
+  width: 230px;
+  padding: 16px 8px 16px 12px;
+  overflow-y: auto;
+  border-right: 1px solid @help-surface-border;
+}
+
+.help-outline-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    margin: 0;
+  }
+
+  li + li {
+    margin-top: 2px;
+  }
+}
+
+.help-outline-list--nested {
+  margin: 2px 0 6px 12px;
+  padding-left: 8px;
+  border-left: 1px solid @help-surface-border;
+}
+
+.help-outline-link {
+  display: block;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: @help-text;
+  font-size: 14px;
+  line-height: 1.3;
+  text-decoration: none;
+  cursor: pointer;
+
+  .help-outline-list--nested & {
+    padding: 5px 10px;
+    color: @help-muted;
+    font-size: 13px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+.help-outline-link--active,
+.help-outline-list--nested .help-outline-link--active {
+  background: @help-accent-soft;
+  color: #fff;
+}
+
+.help-overlay-content {
+  flex: 1;
+  min-width: 0;
+  padding: 20px;
+  overflow-y: auto;
+
+  .help-overlay-section {
+    .help-surface();
+  }
+
+  .help-overlay-section-title {
+    .help-section-title();
+  }
+
+  .help-overlay-section-lead {
+    margin: -8px 0 14px;
+    color: @help-muted;
+    font-size: 13px;
+  }
+}
+
+.help-overlay-empty {
+  padding: 40px 0;
+  color: @help-muted;
+  text-align: center;
+}
+
+// ---- Gemeinsame Bausteine: Fläche, Abschnittstitel, Gruppentitel ----
+.help-surface() {
+  margin: 0 0 @help-gap-section;
+  padding: 16px 18px 18px;
+  border: 1px solid @help-surface-border;
+  border-radius: @help-card-radius;
+  background: @help-surface;
+  scroll-margin-top: 16px;
+}
+
+.help-section-title() {
+  margin: 0 0 12px;
+  padding: 0;
+  color: @help-heading;
+  font-family: Ubuntu, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.help-group-title() {
+  margin: 0 0 8px;
+  color: @help-muted;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+// ---- Symbole (HelpIconology) ----
+.help-overlay-content .help-iconology-container {
+  display: block;
+  padding: 0;
+}
+
+.help-overlay-content .help-icons-column {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: @help-gap-row 16px;
+  padding: 16px 18px 18px;
+  .help-surface();
+
+  > br {
+    display: none;
+  }
+
+  // Überschriften-Hüllen gehen über die volle Breite
+  > div:has(.help-icons-section-heading),
+  > div:has(.help-icon-sublabel) {
+    grid-column: 1 / -1;
+  }
+
+  > div:has(.help-icon-sublabel) {
+    margin-top: @help-gap-group - @help-gap-row;
+    scroll-margin-top: 16px;
+  }
+
+  > div:has(.help-icons-section-heading) + div:has(.help-icon-sublabel) {
+    margin-top: 0;
+  }
+
+  // Symbolzeile: Symbol im festen Feld, Name, Erweiterungs-Symbole direkt dahinter
+  > div:has(.help-icon-label) {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 36px;
+
+    > :first-child {
+      flex: none;
+      margin: 0;
+    }
+  }
+
+  .help-icons-section-heading {
+    .help-section-title();
+    margin-bottom: 4px;
+  }
+
+  .help-icon-sublabel {
+    display: block;
+    .help-group-title();
+  }
+
+  .help-icon-label {
+    padding-left: 0;
+  }
+
+  .expansion-icon {
+    margin: 0 0 0 -4px;
+    opacity: 0.85;
+  }
+
+  .expansion-icon + .expansion-icon {
+    margin-left: 0;
+  }
+
+  .help-icon-resource,
+  .help-icon-param-box-temperature,
+  .help-icon-param-box-oxygen,
+  .help-icon-param-box-ocean,
+  .help-icon-param-box-venus {
+    margin-bottom: 0;
+  }
+
+  // Symbole unterschiedlicher Größe einheitlich in ein Feld fassen
+  .help-other-symbols {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: @help-icon-slot;
+    height: @help-icon-slot;
+  }
+}
+
+// ---- Standardprojekte (HelpStandardProjects): eine Fläche, Gruppen mit Untertitel ----
+.help-overlay-content .help-standard-projects-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px 18px 18px;
+  .help-surface();
+
+  // Untertitel dicht an seinen Karten, mit mehr Luft zur vorigen Gruppe (Flex-Abstand 16px kommt dazu)
+  h2 {
+    flex-basis: 100%;
+    .help-group-title();
+    margin: @help-gap-group - 16px 0 -8px;
+    padding: 0;
+    scroll-margin-top: 16px;
+  }
+
+  h2:first-child {
+    margin-top: 0;
+  }
+
+  .cardbox {
+    margin: 0;
+    zoom: 0.8;
+  }
+
+  .card-container {
+    margin: 0;
+  }
+}
+
+// ---- Phasen (HelpPhases): alles aufgeklappt, Hauptphasen als Flächen, Schritte nummeriert ----
+.help-overlay-content .help-phases-container {
+  padding: 0;
+  line-height: 1.5;
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  // Upstream klappt per Checkbox auf – hier ist immer alles offen
+  input[type="checkbox"] ~ ul {
+    height: auto;
+    transform: none;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0 0 0 1.2em;
+    list-style: disc outside;
+  }
+
+  ul ul li,
+  ul li ul li {
+    margin-left: 0;
+  }
+
+  li {
+    margin: 0;
+  }
+
+  li + li {
+    margin-top: 4px;
+  }
+
+  li::marker {
+    color: @help-muted;
+  }
+
+  label,
+  ul li ul label {
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    cursor: default;
+
+    &:hover {
+      background: none;
+    }
+  }
+
+  input[type="checkbox"]:checked + label,
+  ul li ul input[type="checkbox"]:checked + label {
+    background: none;
+  }
+
+  // Hauptphasen: eigene Fläche mit Titel
+  > ul {
+    padding: 0;
+    list-style: none;
+  }
+
+  > ul > li {
+    .help-surface();
+  }
+
+  > ul > li + li {
+    margin-top: 0;
+  }
+
+  > ul > li > label {
+    .help-section-title();
+  }
+
+  // Schritte innerhalb einer Hauptphase: nummeriert, Inhalt eingerückt
+  > ul > li > ul {
+    counter-reset: help-phase-step;
+  }
+
+  // Liste aus nummerierten Schritten braucht keinen Aufzählungs-Einzug – die Nummer steht schon davor
+  > ul > li > ul:has(> li > label) {
+    padding-left: 0;
+  }
+
+  > ul > li > ul > li:has(> label) {
+    position: relative;
+    padding-left: 40px;
+    list-style: none;
+    counter-increment: help-phase-step;
+    scroll-margin-top: 16px;
+  }
+
+  > ul > li > ul > li:has(> label) + li:has(> label) {
+    margin-top: @help-gap-group;
+  }
+
+  > ul > li > ul > li:has(> label) > label {
+    margin-bottom: 6px;
+    color: @help-heading;
+    font-weight: 700;
+
+    &::before {
+      content: counter(help-phase-step);
+      position: absolute;
+      top: -1px;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border: 1px solid fade(@bg_action, 50%);
+      border-radius: 50%;
+      background: @help-accent-soft;
+      color: @help-accent-text;
+      font-size: 13px;
+      font-weight: 500;
+    }
+  }
+
+  // Liste unter einem nummerierten Schritt sitzt unter dem Titel, nicht unter der Nummer
+  > ul > li > ul > li:has(> label) > ul {
+    padding-left: 1.2em;
+  }
+
+  // Unterschritte mit eigener Unterliste (z. B. "i. Spielende prüfen"): Titel hervorheben
+  li:has(> ul) > span:first-child {
+    color: @help-heading;
+    font-weight: 700;
+  }
+
+  li:has(> span:first-child) {
+    scroll-margin-top: 16px;
+  }
+
+  .expansion-icon {
+    display: inline-block;
+    margin: 0 4px;
+    vertical-align: middle;
+  }
+}
+
+// ---- Politische Parteien (HelpTurmoilParties): je Partei eine Fläche ----
+.help-overlay-content .help-turmoil-parties-container {
+  padding: 0;
+  font-size: 14px;
+
+  > h2 {
+    display: none;
+  }
+
+  > p {
+    max-width: none;
+    margin: 0 0 @help-gap-section;
+    color: @help-muted;
+    font-size: 13px;
+  }
+
+  .help-parties-grid {
+    display: block;
+  }
+
+  .help-party-card {
+    gap: 0;
+    .help-surface();
+  }
+
+  .help-party-label {
+    margin-bottom: 12px;
+  }
+
+  .help-agenda-section {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  .help-agenda-divider {
+    margin: 14px 0;
+    border-top-color: @help-surface-border;
+  }
+}
+
+// ---- Solo-Regeln (HelpSoloRules): eine Fläche, Überschriften gliedern ----
+.help-overlay-content .help-solo-rules-container {
+  padding: 16px 18px 18px;
+  line-height: 1.5;
+  .help-surface();
+
+  .help-icons-section-heading,
+  .help-icons-section-heading:first-child {
+    .help-section-title();
+    margin: @help-gap-group + 8px 0 6px;
+    padding: 0;
+    scroll-margin-top: 16px;
+  }
+
+  .help-icons-section-heading:first-child {
+    margin-top: 0;
+  }
+
+  ul {
+    padding-left: 1.2em;
+  }
+
+  li::marker {
+    color: @help-muted;
+  }
+}
+
+// ---- Regelhefte (HelpRulebooks): Link-Kacheln wie Buttons, ohne Unterstreichung ----
+.help-overlay-content .help-rulebooks-container {
+  display: block;
+  padding: 0;
+}
+
+.help-overlay-content .help-rulebooks-section {
+  text-align: left;
+  .help-surface();
+
+  .help-icons-section-heading {
+    .help-section-title();
+  }
+}
+
+.help-overlay-content .help-rulebook-rows {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px;
+}
+
+.help-overlay-content .help-rulebook-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid @help-surface-border;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: @help-text;
+  text-decoration: none;
+
+  &::after {
+    content: "↗";
+    margin-left: auto;
+    color: @help-muted;
+    font-size: 14px;
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: @help-accent;
+    background: @help-accent-soft;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .create-game-expansion-icon {
+    flex: none;
+    margin: 0;
+  }
+}
+
+// ---- Tastaturkürzel (HelpKeyboardShortcuts): Tasten im App-Dunkel, Kürzel in Lila ----
+.help-key {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid #4d4f58;
+  border-radius: 7px;
+  background: linear-gradient(#3a3c45, #2c2e35);
+  box-shadow: 0 3px 0 #17181c;
+  color: #9a9ca5;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.help-key--wide {
+  min-width: 52px;
+}
+
+.help-key--hot {
+  border-color: lighten(@bg_action, 15%);
+  background: linear-gradient(lighten(@bg_action, 8%), @bg_action);
+  box-shadow: 0 3px 0 darken(@bg_action, 25%);
+  color: #fff;
+}
+
+.help-keyrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 20px;
+}
+
+.help-shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.help-shortcut {
+  padding: 12px;
+  border: 1px solid @help-surface-border;
+  border-radius: @help-card-radius;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.help-shortcut-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .help-sketch + & {
+    margin-top: 10px;
+  }
+}
+
+.help-sketch {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.help-sketch-frame {
+  fill: #191a1f;
+  stroke: #3a3c44;
+}
+
+.help-sketch-area {
+  fill: #2d2f37;
+  stroke: #3d3f48;
+}
+
+.help-sketch-area--target {
+  fill: fade(@bg_action, 45%);
+  stroke: lighten(@bg_action, 15%);
+  stroke-width: 1.5;
+}
+
+// ---- Handy: Baum wird zur Chip-Leiste über dem Inhalt ----
+@media only screen and (max-width: @help-mobile-max) {
+  .help-overlay--page {
+    height: calc(100vh - 32px);
+    margin: 16px 0 0;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .help-overlay-head {
+    padding: 14px 16px 0;
+  }
+
+  .help-overlay-toprow {
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .help-overlay .help-overlay-title {
+    font-size: 18px;
+  }
+
+  .help-overlay-search {
+    order: 3;
+    width: 100%;
+  }
+
+  .help-overlay-tabs {
+    margin: 8px -16px 0;
+    padding: 0 6px;
+  }
+
+  .help-overlay-tab {
+    padding: 10px 10px 12px;
+    font-size: 14px;
+  }
+
+  .help-overlay-main {
+    flex-direction: column;
+  }
+
+  .help-overlay-outline {
+    width: auto;
+    padding: 10px 12px;
+    overflow: auto hidden;
+    border-right: 0;
+    border-bottom: 1px solid @help-surface-border;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .help-outline-list,
+  .help-outline-list--nested {
+    display: flex;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    li {
+      display: contents;
+    }
+  }
+
+  .help-outline-link,
+  .help-outline-list--nested .help-outline-link {
+    flex: none;
+    padding: 6px 12px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    color: @help-text;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .help-outline-list--nested .help-outline-link {
+    border: 1px solid @help-surface-border;
+    background: transparent;
+    color: @help-muted;
+  }
+
+  .help-outline-link--active,
+  .help-outline-list--nested .help-outline-link--active {
+    background: @help-accent-soft;
+    color: #fff;
+  }
+
+  .help-overlay-content {
+    padding: 12px;
+  }
+
+  .help-overlay-content .help-icons-column {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 8px;
+    padding: 14px;
+
+    > div:has(.help-icon-label) {
+      gap: 8px;
+      font-size: 14px;
+    }
+  }
+
+  .help-overlay-content .help-standard-projects-container {
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+
+    .cardbox {
+      zoom: 0.66;
+    }
+  }
+
+  .help-overlay-content .help-phases-container > ul > li,
+  .help-overlay-content .help-solo-rules-container,
+  .help-overlay-content .help-party-card,
+  .help-overlay-content .help-rulebooks-section {
+    padding: 14px;
+  }
+
+  .help-overlay-content .help-phases-container > ul > li > ul > li:has(> label) {
+    padding-left: 34px;
+  }
+
+  .help-overlay-content .help-turmoil-parties-container .help-agenda-section {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .help-overlay-content .help-rulebook-rows {
+    grid-template-columns: 1fr;
+  }
+}
