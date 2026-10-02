@@ -5,6 +5,8 @@ import {CardName} from '@/common/cards/CardName';
 import SortableCards from '@/client/components/SortableCards.vue';
 import {CardOrderStorage} from '@/client/utils/CardOrderStorage';
 import {FakeLocalStorage} from './FakeLocalStorage';
+import {handSortOrder, resetHandSort, sortHand} from '@/client/utils/handSort';
+import {SortOrder} from '@/client/utils/SortOrder';
 
 /**
  * Drag card at `sourceIndex` onto the card at `targetIndex`; it takes that card's place.
@@ -38,12 +40,19 @@ function cardsInOrder(sortable: VueWrapper<InstanceType<typeof SortableCards>>):
 }
 
 
+// Sortierung läuft über den gemeinsamen Zustand (handSort.ts), den auch die Sortierleiste nutzt
+async function sortBy(sortable: VueWrapper<InstanceType<typeof SortableCards>>, sortOrder: SortOrder | undefined) {
+  sortHand('player1', sortable.props('cards'), sortOrder);
+  await sortable.vm.$nextTick();
+}
+
 describe('SortableCards', () => {
   let localStorage: FakeLocalStorage;
 
   beforeEach(() => {
     localStorage = new FakeLocalStorage();
     FakeLocalStorage.register(localStorage);
+    resetHandSort();
   });
   afterEach(() => {
     FakeLocalStorage.deregister(localStorage);
@@ -157,7 +166,7 @@ describe('SortableCards', () => {
       },
     });
 
-    await sortable.setProps({sortOrder: {key: 'cost', reversed: false}});
+    await sortBy(sortable, {key: 'cost', reversed: false});
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.CARTEL, CardName.ANTS, CardName.BIRDS]);
     expect(CardOrderStorage.getCardOrder('player1')).to.deep.eq({
@@ -177,7 +186,7 @@ describe('SortableCards', () => {
       },
     });
 
-    await sortable.setProps({sortOrder: {key: 'cost', reversed: true}});
+    await sortBy(sortable, {key: 'cost', reversed: true});
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.BIRDS, CardName.ANTS, CardName.CARTEL]);
   });
@@ -191,10 +200,10 @@ describe('SortableCards', () => {
       },
     });
 
-    await sortable.setProps({sortOrder: {key: 'cost', reversed: false}});
+    await sortBy(sortable, {key: 'cost', reversed: false});
     await dragCard(sortable, 0, 1);
 
-    expect(sortable.emitted('update:sortOrder')).to.deep.eq([[]]);
+    expect(handSortOrder()).is.undefined;
   });
 
   it('sorts by cost, preferring calculated cost', async () => {
@@ -206,7 +215,7 @@ describe('SortableCards', () => {
       },
     });
 
-    await sortable.setProps({sortOrder: {key: 'cost', reversed: false}});
+    await sortBy(sortable, {key: 'cost', reversed: false});
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.BIRDS, CardName.ANTS]);
   });
@@ -221,7 +230,7 @@ describe('SortableCards', () => {
       },
     });
 
-    await sortable.setProps({sortOrder: {key: 'type', reversed: false}});
+    await sortBy(sortable, {key: 'type', reversed: false});
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.MINE, CardName.CARTEL, CardName.ANTS, CardName.ASTEROID]);
   });
@@ -236,7 +245,7 @@ describe('SortableCards', () => {
       },
     });
 
-    await sortable.setProps({sortOrder: {key: 'type', reversed: false}});
+    await sortBy(sortable, {key: 'type', reversed: false});
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.ECOLINE, CardName.DONATION, CardName.MINE, CardName.ASTEROID]);
   });
@@ -251,7 +260,7 @@ describe('SortableCards', () => {
       },
     });
 
-    await sortable.setProps({sortOrder: {key: 'resource', reversed: false}});
+    await sortBy(sortable, {key: 'resource', reversed: false});
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.BIRDS, CardName.TARDIGRADES, CardName.ANTS, CardName.CARTEL]);
   });
@@ -266,7 +275,7 @@ describe('SortableCards', () => {
       },
     });
 
-    await sortable.setProps({sortOrder: {key: 'vp', reversed: false}});
+    await sortBy(sortable, {key: 'vp', reversed: false});
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.ASTEROID_MINING, CardName.ANTS, CardName.CARTEL, CardName.NUCLEAR_ZONE]);
   });
@@ -282,10 +291,10 @@ describe('SortableCards', () => {
       },
     });
 
-    await sortable.setProps({sortOrder: {key: 'cost', reversed: false}});
+    await sortBy(sortable, {key: 'cost', reversed: false});
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.CARTEL, CardName.ANTS, CardName.BIRDS]);
-    await sortable.setProps({sortOrder: {key: 'cost', reversed: true}});
-    await sortable.setProps({sortOrder: undefined});
+    await sortBy(sortable, {key: 'cost', reversed: true});
+    await sortBy(sortable, undefined);
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.BIRDS, CardName.ANTS, CardName.CARTEL]);
   });
@@ -299,10 +308,10 @@ describe('SortableCards', () => {
       },
     });
 
-    await sortable.setProps({sortOrder: {key: 'cost', reversed: false}});
+    await sortBy(sortable, {key: 'cost', reversed: false});
     // Cartel, Ants, Birds -> Cartel auf Birds ziehen
     await dragCard(sortable, 0, 2);
-    await sortable.setProps({sortOrder: undefined});
+    await sortBy(sortable, undefined);
 
     expect(cardsInOrder(sortable)).to.deep.eq([CardName.ANTS, CardName.BIRDS, CardName.CARTEL]);
   });

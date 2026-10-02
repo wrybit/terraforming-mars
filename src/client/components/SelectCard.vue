@@ -3,6 +3,12 @@
         <!-- Karten als Auswahl-Block (choice_block.less): möglichst quadratisch und mittig in der Tab-Box;
              Kommentar innen, damit v-show des Aufrufers die Wurzel trifft -->
         <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
+        <!-- Kopfzeile über den Karten: links "Alle auswählen", rechts dieselbe Sortierung wie im Hand-Tab -->
+        <div v-if="showSelectAll || isHandSelection" class="select-card-toolbar">
+          <AppButton v-if="showSelectAll" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll"
+            :title="allSelected ? $t('Deselect All') : $t('Select All')" />
+          <HandSortControl v-if="isHandSelection" :playerView="playerView" class="select-card-toolbar__sort hand-cards-panel__sort"/>
+        </div>
         <label v-for="card in getOrderedCards()" :key="card.name" :class="getCardBoxClass(card)">
             <template v-if="!card.isDisabled">
               <input v-if="selectOnlyOneCard" type="radio" v-model="cards" :value="card" >
@@ -20,7 +26,6 @@
         <WarningsComponent :warnings="warnings"/>
         <TabPanelFooterSlot>
         <div v-if="showsave === true" class="nofloat select-card-actions">
-            <AppButton v-if="showSelectAll" @click="toggleSelectAll" type="submit" :title="allSelected ? $t('Deselect All') : $t('Select All')" />
             <!-- Gesperrt, solange weniger Karten gewählt sind als nötig: zeigt, dass erst eine Karte gewählt werden muss.
                  Mit Überspringen daneben: Bestätigen grün, Überspringen rot (button_tones.less) -->
             <AppButton :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
@@ -38,6 +43,8 @@ import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
+import HandSortControl from '@/client/components/HandSortControl.vue';
+import {allCardsInHand} from '@/client/utils/handCards';
 import {Color} from '@/common/Color';
 import {Message} from '@/common/logs/Message';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
@@ -102,6 +109,7 @@ export default defineComponent({
     Card,
     WarningsComponent,
     AppButton,
+    HandSortControl,
   },
   watch: {
     cards() {
@@ -240,12 +248,27 @@ export default defineComponent({
              this.playerinput.min === 0;
     },
     selectableCards(): Array<CardModel> {
-      return this.playerinput.cards.filter((card) => !card.isDisabled);
+      // ?? []: nicht jede Eingabe in den Upstream-Tests liefert Karten mit
+      return (this.playerinput.cards ?? []).filter((card) => !card.isDisabled);
     },
+    // "Alle auswählen", wenn der Server es verlangt oder alle wählbaren Karten auf einmal genommen werden dürfen
+    // (Verkaufen, Karten kaufen …) – nicht, wenn nur ein Teil gewählt werden darf. Nur in Dialogen mit eigenem
+    // Bestätigen-Button (showsave); die Startauswahl (SelectInitialCards) hat ihre eigene Bilanz-Leiste
     showSelectAll(): boolean {
-      return this.playerinput.showSelectAll === true &&
-             !this.selectOnlyOneCard &&
-             this.selectableCards.length > 1;
+      if (!this.showsave || this.selectOnlyOneCard || this.playerinput.selectBlueCardAction || this.selectableCards.length < 2) {
+        return false;
+      }
+      const max = this.playerinput.max ?? this.selectableCards.length;
+      return this.playerinput.showSelectAll === true || max >= this.selectableCards.length;
+    },
+    // Auswahl aus der eigenen Hand (Verkaufen, Abwerfen …): dann gibt es dieselbe Sortierung wie im Hand-Tab
+    isHandSelection(): boolean {
+      const cards = this.playerinput.cards ?? [];
+      if (this.playerinput.selectBlueCardAction || cards.length < 2) {
+        return false;
+      }
+      const hand = new Set(allCardsInHand(this.playerView).map((card) => card.name));
+      return cards.every((card) => hand.has(card.name));
     },
     allSelected(): boolean {
       return Array.isArray(this.cards) && this.cards.length === this.selectableCards.length;

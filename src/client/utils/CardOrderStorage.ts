@@ -4,7 +4,7 @@ import {LocalStorageStore} from '@/client/utils/LocalStorageStore';
 import {ref} from 'vue';
 
 // Stored as cardName: position
-type CardOrder = {[cardName: string]: number};
+export type CardOrder = {[cardName: string]: number};
 
 // Delete card orderings after 90 days. It's possible some locally hosted games
 // will last longer, and that's unfortunate.
