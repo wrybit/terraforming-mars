@@ -1,6 +1,7 @@
 <template>
   <!-- Sortierung der Handkarten: "Manuell" (Drag & Drop) oder eine der Upstream-Sortierungen.
-       Nutzt dieselbe SegmentedControl wie Kartenliste und "Spiel erstellen". -->
+       Nutzt dieselbe SegmentedControl wie Kartenliste und "Spiel erstellen". Hand-Tab und Auswahl-Dialoge
+       (z. B. Verkaufen) teilen sich die Sortierung (handSort.ts). -->
   <div class="hand-sort-control" :class="{'hand-sort-control--reversed': sortOrder?.reversed === true}">
     <span class="hand-sort-control__label" v-i18n>Sort by:</span>
     <SegmentedControl :options="options" :modelValue="selectedValue" @update:modelValue="select"/>
@@ -11,17 +12,16 @@
 import {computed} from 'vue';
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
 import {SegmentOption} from '@/client/components/create/createGameChoices';
-import {SortKey, SortOrder, SORT_OPTIONS, sortOrderClicked} from '@/client/utils/SortOrder';
+import {SortKey, SORT_OPTIONS, sortOrderClicked} from '@/client/utils/SortOrder';
+import {handSortOrder, sortHand} from '@/client/utils/handSort';
+import {allCardsInHand} from '@/client/utils/handCards';
+import {PlayerViewModel} from '@/common/models/PlayerModel';
 
 // Eigener Wert für die Handsortierung; kollidiert nicht mit den SortKeys aus Upstream.
 const MANUAL = 'manual';
 
 const props = defineProps<{
-  sortOrder?: SortOrder;
-}>();
-
-const emit = defineEmits<{
-  (event: 'update:sortOrder', sortOrder: SortOrder | undefined): void;
+  playerView: PlayerViewModel;
 }>();
 
 const options: ReadonlyArray<SegmentOption> = [
@@ -29,18 +29,21 @@ const options: ReadonlyArray<SegmentOption> = [
   ...SORT_OPTIONS.map((option) => ({value: option.key, label: option.label})),
 ];
 
+const sortOrder = computed(() => handSortOrder());
 // Ohne gewählte Sortierung gilt die eigene Reihenfolge – also "Manuell".
-const selectedValue = computed(() => props.sortOrder?.key ?? MANUAL);
+const selectedValue = computed(() => sortOrder.value?.key ?? MANUAL);
 
 function select(value: string | number): void {
+  // Immer die ganze Hand sortieren, auch wenn ein Dialog nur einen Teil zeigt – sonst ginge deren Reihenfolge verloren
+  const cards = allCardsInHand(props.playerView);
   if (value === MANUAL) {
     // Erneutes Antippen von "Manuell" ändert nichts
-    if (props.sortOrder !== undefined) {
-      emit('update:sortOrder', undefined);
+    if (sortOrder.value !== undefined) {
+      sortHand(props.playerView.id, cards, undefined);
     }
     return;
   }
   // Erneutes Antippen derselben Sortierung dreht die Richtung (Upstream-Verhalten)
-  emit('update:sortOrder', sortOrderClicked(props.sortOrder, value as SortKey));
+  sortHand(props.playerView.id, cards, sortOrderClicked(sortOrder.value, value as SortKey));
 }
 </script>

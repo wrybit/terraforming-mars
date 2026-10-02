@@ -23,7 +23,7 @@ import Card from '@/client/components/card/Card.vue';
 import {CardName} from '@/common/cards/CardName';
 import {CardModel} from '@/common/models/CardModel';
 import {CardOrderStorage} from '@/client/utils/CardOrderStorage';
-import {SortOrder, sortCards} from '@/client/utils/SortOrder';
+import {reorderHandManually} from '@/client/utils/handSort';
 
 // Ab dieser Mausbewegung (px) wird aus einem Klick ein Drag – sonst würden Klicks auf Karten zu Mini-Drags.
 const DRAG_THRESHOLD_PX = 6;
@@ -54,8 +54,6 @@ type PendingDrag = {
 };
 
 type DataModel = {
-  /** Mapping from card name to its order */
-  cardOrder: {[x: string]: number};
   /** When defined, it is the name of the card being dragged. */
   dragCard: CardName | undefined;
 };
@@ -67,10 +65,6 @@ type DragInternals = {
   /** Viewport-Position des Ghost bei left/top = 0 – gleicht transformierte Vorfahren aus, die fixed verschieben. */
   ghostOrigin?: {x: number, y: number};
   suppressClick?: boolean;
-  /** Eigene Reihenfolge vor dem ersten Sortieren – "Manuell" stellt sie wieder her. */
-  manualOrder?: {[x: string]: number};
-  /** true, wenn die Sortierung durch Ziehen aufgehoben wurde: dann ist die aktuelle Reihenfolge die manuelle. */
-  sortClearedByDrag?: boolean;
 };
 
 export default defineComponent({
@@ -87,53 +81,11 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    /**
-     * Current sort order, or undefined once the player reorders by hand.
-     *
-     * Changing it re-sorts the cards.
-     */
-    sortOrder: {
-      type: Object as () => SortOrder | undefined,
-      required: false,
-    },
   },
-  emits: ['update:sortOrder'],
-  watch: {
-    sortOrder(sortOrder: SortOrder | undefined, previous: SortOrder | undefined): void {
-      const internals = this.internals();
-      if (sortOrder !== undefined) {
-        if (previous === undefined) {
-          internals.manualOrder = {...this.cardOrder};
-        }
-        this.sortBy(sortOrder);
-        return;
-      }
-      if (internals.sortClearedByDrag !== true && internals.manualOrder !== undefined) {
-        this.restoreManualOrder(internals.manualOrder);
-      }
-      internals.sortClearedByDrag = false;
-      internals.manualOrder = undefined;
-    },
-  },
+  // Reihenfolge kommt aus CardOrderStorage (reaktiv): Sortieren im Hand-Tab oder in einem Auswahl-Dialog
+  // (handSort.ts) erscheint sofort hier; neue Karten stehen am Ende.
   data(): DataModel {
-    const cache = CardOrderStorage.getCardOrder(this.playerId);
-    const cardOrder: {[x: string]: number} = {};
-    const keys = Object.keys(cache);
-    let max = 0;
-    for (const key of keys) {
-      if (this.cards.find((card) => card.name === key) !== undefined) {
-        cardOrder[key] = cache[key];
-        max = Math.max(max, cache[key]);
-      }
-    }
-    max++;
-    for (const card of this.cards) {
-      if (cardOrder[card.name] === undefined) {
-        cardOrder[card.name] = max++;
-      }
-    }
     return {
-      cardOrder: cardOrder,
       dragCard: undefined,
     };
   },
@@ -149,22 +101,9 @@ export default defineComponent({
     },
     getSortedCards() {
       return CardOrderStorage.getOrdered(
-        this.cardOrder,
+        CardOrderStorage.getCardOrder(this.playerId),
         this.cards,
       );
-    },
-    /** Stellt die eigene Reihenfolge wieder her; seitdem neu gezogene Karten kommen ans Ende. */
-    restoreManualOrder(manualOrder: {[x: string]: number}): void {
-      const cards = this.getSortedCards();
-      const known = cards.filter((card) => manualOrder[card.name] !== undefined)
-        .sort((first, second) => manualOrder[first.name] - manualOrder[second.name]);
-      const added = cards.filter((card) => manualOrder[card.name] === undefined);
-      [...known, ...added].forEach((card, index) => this.cardOrder[card.name] = index + 1);
-      CardOrderStorage.updateCardOrder(this.playerId, this.cardOrder);
-    },
-    sortBy(sortOrder: SortOrder): void {
-      sortCards(this.getSortedCards(), sortOrder).forEach((card, index) => this.cardOrder[card.name] = index + 1);
-      CardOrderStorage.updateCardOrder(this.playerId, this.cardOrder);
     },
     /**
      * Die gezogene Karte übernimmt den Platz der Zielkarte; die übrigen rücken nach.
@@ -183,13 +122,7 @@ export default defineComponent({
       }
       cardNames.splice(dragIndex, 1);
       cardNames.splice(targetIndex, 0, this.dragCard);
-      cardNames.forEach((cardName, index) => this.cardOrder[cardName] = index + 1);
-      // Handsortierung hebt die gewählte Sortierung auf; die Leiste springt auf "Manuell".
-      if (this.sortOrder !== undefined) {
-        this.internals().sortClearedByDrag = true;
-      }
-      this.$emit('update:sortOrder');
-      CardOrderStorage.updateCardOrder(this.playerId, this.cardOrder);
+      reorderHandManually(this.playerId, cardNames);
     },
     onPointerDown(cardName: CardName, event: PointerEvent): void {
       if (event.button !== 0 || this.internals().pending !== undefined) {

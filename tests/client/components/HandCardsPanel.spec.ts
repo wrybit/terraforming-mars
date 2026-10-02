@@ -8,6 +8,7 @@ import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {CardModel} from '@/common/models/CardModel';
 import {CardName} from '@/common/cards/CardName';
 import {asComplete} from './utils/models';
+import {resetHandSort} from '@/client/utils/handSort';
 
 function playerView(tableau: Array<CardModel>, hand: Array<CardModel>): PlayerViewModel {
   return asComplete<PlayerViewModel>({
@@ -49,15 +50,17 @@ describe('HandCardsPanel', () => {
 
   // Aus Upstream (PlayerHome.spec) hierher verschoben: die Handkarten liegen im Fork in HandCardsPanel.
   it('sort buttons sort the hand', async () => {
+    resetHandSort();
     const wrapper = mount(HandCardsPanel, {
       ...globalConfig,
-      props: {playerView: playerView([], [card(CardName.SOLETTA), card(CardName.ALGAE)])},
+      props: {playerView: playerView([], [card(CardName.CARTEL), card(CardName.ASTEROID_MINING)])},
     });
 
-    wrapper.findComponent(HandSortControl).vm.$emit('update:sortOrder', {key: 'vp', reversed: false});
-    await wrapper.vm.$nextTick();
+    // Segmente: Manuell, Kosten, Typ, Ressource, Siegpunkte
+    await wrapper.findComponent(HandSortControl).findAll('button')[4].trigger('click');
 
-    expect(wrapper.findComponent(SortableCards).props('sortOrder')).to.deep.eq({key: 'vp', reversed: false});
+    const names = wrapper.findComponent(SortableCards).findAllComponents({name: 'Card'}).map((c) => c.props('card').name);
+    expect(names).to.deep.eq([CardName.ASTEROID_MINING, CardName.CARTEL]);
   });
 
   it('hides sort buttons for a single hand card', () => {

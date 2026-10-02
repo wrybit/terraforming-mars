@@ -69,4 +69,49 @@ describe('SelectCard', () => {
     const saveButton = wrapper.findAllComponents({name: 'AppButton'})[0];
     expect(saveButton.props('disabled')).to.be.false;
   });
+
+  // Kopfzeile: "Alle auswählen" links, Hand-Sortierung rechts
+  function mountSelection(max: number, hand: Array<string>) {
+    const cards = [{name: 'Ants'}, {name: 'Birds'}, {name: 'Cartel'}];
+    return shallowMount(SelectCard, {
+      ...globalConfig,
+      props: {
+        playerView: fakePlayerViewModel({cardsInHand: hand.map((name) => ({name})) as any}),
+        playerinput: {
+          title: 'Sell patents',
+          buttonLabel: 'Sell',
+          type: 'card',
+          cards,
+          max,
+          min: 0,
+          showOnlyInLearnerMode: false,
+          selectBlueCardAction: false,
+          showOwner: false,
+          showSelectAll: false,
+        },
+        onsave: () => {},
+        showsave: true,
+        showtitle: false,
+      },
+    } as any);
+  }
+
+  it('offers select all when every card may be chosen, and selects them all', async () => {
+    const wrapper = mountSelection(3, []);
+    const selectAll = wrapper.findComponent('.select-card-toolbar__select-all' as any);
+    expect(selectAll.exists()).is.true;
+    selectAll.vm.$emit('click');
+    await wrapper.vm.$nextTick();
+    expect((wrapper.vm as any).cards).to.have.length(3);
+  });
+
+  it('hides select all when only some cards may be chosen', () => {
+    const wrapper = mountSelection(2, []);
+    expect(wrapper.find('.select-card-toolbar__select-all').exists()).is.false;
+  });
+
+  it('shows the hand sort only for cards from the hand', () => {
+    expect(mountSelection(3, ['Ants', 'Birds', 'Cartel']).findComponent({name: 'HandSortControl'}).exists()).is.true;
+    expect(mountSelection(3, ['Ants']).findComponent({name: 'HandSortControl'}).exists()).is.false;
+  });
 });
