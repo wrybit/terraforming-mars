@@ -21,4 +21,13 @@ describe('StartScreen', () => {
     expect(links.map((link) => link.attributes('style'))).to.deep.eq(
       [1, 2, 3, 4, 5, 6, 7, 8].map((row) => `--sprite-row: ${row};`));
   });
+
+  it('shows an icon on every menu entry', () => {
+    const wrapper = shallowMount(StartScreen, {
+      ...globalConfig,
+    });
+    const icons = wrapper.findAll('a.start-screen-link .start-screen-link-icon');
+    expect(icons).has.length(8);
+    expect(new Set(icons.map((icon) => icon.attributes('name'))).size).eq(8);
+  });
 });

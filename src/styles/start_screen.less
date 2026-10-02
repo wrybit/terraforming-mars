@@ -64,6 +64,26 @@
   }
 }
 
+// Symbol links neben der Beschriftung; Abstand kleiner als die Buttons untereinander, damit beides als Einheit liest
+.start-screen-link-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.start-screen-link-icon {
+  flex-shrink: 0;
+  width: 1.1em;
+  height: 1.1em;
+  // SVG erbt keinen text-shadow: gleicher Schatten als Filter, damit das Symbol auf hellen Planeten lesbar bleibt
+  filter: drop-shadow(0 0 2px black) drop-shadow(0 2px 1px black);
+
+  .mb-glyph-line {
+    fill: none;
+    stroke: currentColor;
+  }
+}
+
 .start-screen-header {
   box-shadow: inset 0 0 20px 20px black;
   font-family: Prototype, sans-serif;

@@ -16,8 +16,13 @@
       class="start-screen-link"
       :style="{'--sprite-row': index + 1}"
       :href="link.href"
-      :target="link.external ? '_blank' : undefined"
-      v-i18n>{{ link.label }}</a>
+      :target="link.external ? '_blank' : undefined">
+      <span class="start-screen-link-content">
+        <MobileGlyph class="start-screen-link-icon" :name="link.icon" :strokeWidth="2"/>
+        <!-- v-i18n am Text-Span: die Übersetzung sucht den exakten Textinhalt, das Symbol würde stören -->
+        <span v-i18n>{{ link.label }}</span>
+      </span>
+    </a>
   </div>
 </div>
 </template>
@@ -26,22 +31,24 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import LanguageIcon from '@/client/components/LanguageIcon.vue';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
+import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
+import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
 import * as constants from '@/common/constants';
 import {WIKI_URLS} from '@/client/utils/WikiLinks';
 import {UPSTREAM_REPOSITORY_URL} from '@/client/utils/RepositoryLinks';
 
-type StartScreenLink = {label: string, href: string, external: boolean};
+type StartScreenLink = {label: string, icon: GlyphName, href: string, external: boolean};
 
 // Reihenfolge = Reihenfolge der Planeten-Hintergründe; ein neuer Eintrag schiebt alle folgenden eine Reihe weiter
 const links: ReadonlyArray<StartScreenLink> = [
-  {label: 'New game', href: 'new-game', external: false},
-  {label: 'Game rules', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true},
-  {label: 'Statistics', href: 'stats', external: false},
-  {label: 'Cards list', href: 'cards', external: true},
-  {label: 'Board game', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true},
-  {label: 'About us', href: UPSTREAM_REPOSITORY_URL + '#README', external: true},
-  {label: 'Whats new?', href: WIKI_URLS.changelog, external: true},
-  {label: 'Discord', href: constants.DISCORD_INVITE, external: true},
+  {label: 'New game', icon: 'newGame', href: 'new-game', external: false},
+  {label: 'Game rules', icon: 'rules', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true},
+  {label: 'Statistics', icon: 'statistics', href: 'stats', external: false},
+  {label: 'Cards list', icon: 'cardsList', href: 'cards', external: true},
+  {label: 'Board game', icon: 'boardGame', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true},
+  {label: 'About us', icon: 'about', href: UPSTREAM_REPOSITORY_URL + '#README', external: true},
+  {label: 'Whats new?', icon: 'updates', href: WIKI_URLS.changelog, external: true},
+  {label: 'Discord', icon: 'discord', href: constants.DISCORD_INVITE, external: true},
 ];
 
 const previousViewport = ref('');
