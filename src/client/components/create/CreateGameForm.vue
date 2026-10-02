@@ -10,6 +10,8 @@
           <input style="display: none" type="file" accept=".json" id="settings-file" ref="file" @change="uploadSettings()">
         </label>
         <button type="button" class="create-game-icon-button" :title="$t('Save settings to file')" @click="downloadSettings()"><i class="icon icon-download"></i><span class="create-game-head-label" v-i18n>Export</span></button>
+        <!-- Teilen-Link: die URL trägt die Einstellungen ohnehin schon, der Knopf kopiert sie nur -->
+        <button type="button" class="create-game-icon-button" :title="$t('Copy link with these settings')" @click="copySettingsLink()"><i class="icon icon-link"></i><span class="create-game-head-label">{{ $t(settingsLinkCopied ? 'Link copied' : 'Copy link') }}</span></button>
         <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings"/>
       </div>
       <PageToolbar/>
@@ -339,6 +341,7 @@ import {paths} from '@/common/app/paths';
 import {JSONProcessor} from './JSONProcessor';
 import {defaultCreateGameModel} from './defaultCreateGameModel';
 import {CreateGameSettingsStorage} from './CreateGameSettingsStorage';
+import {readSettingsFromHash, replaceSettingsHash, settingsHash} from './settingsLink/settingsLinkHash';
 import {getColony} from '@/client/colonies/ClientColonyManifest';
 import {RULEBOOK_URLS, WIKI, WIKI_URLS} from '@/client/utils/WikiLinks';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
@@ -366,7 +369,13 @@ type FormModel = {
   preludeToggled: boolean;
   uploading: boolean;
   previousViewport: string;
+  /** Erst nach dem Laden die URL mitschreiben, sonst überschreibt der Standardstand den geteilten Link */
+  settingsLinkReady: boolean;
+  settingsLinkCopied: boolean;
 };
+
+// So lange zeigt der Knopf "Link kopiert"
+const LINK_COPIED_FEEDBACK_MS = 2000;
 
 export default defineComponent({
   name: 'CreateGameForm',
@@ -377,6 +386,8 @@ export default defineComponent({
       preludeToggled: false,
       uploading: false,
       previousViewport: '',
+      settingsLinkReady: false,
+      settingsLinkCopied: false,
     };
   },
   components: {
@@ -433,6 +444,17 @@ export default defineComponent({
         this.preludeToggled = true;
       }
     },
+    currentSettingsHash(hash: string) {
+      if (this.settingsLinkReady && !this.uploading) {
+        replaceSettingsHash(hash);
+      }
+    },
+    uploading(value: boolean) {
+      // Nach einem Import (Datei, Link, letzte Einstellungen) den Endstand in die URL übernehmen
+      if (value === false && this.settingsLinkReady) {
+        replaceSettingsHash(this.currentSettingsHash);
+      }
+    },
     playersCount(value: number) {
       if (value === 1) {
         this.expansions.corpera = true;
@@ -441,7 +463,16 @@ export default defineComponent({
   },
   mounted() {
     setDocumentTitle('Create New Game');
-    this.restoreLastSettings();
+    // Ein geteilter Link hat Vorrang vor den zuletzt benutzten Einstellungen
+    if (!this.restoreSettingsFromLink()) {
+      this.restoreLastSettings();
+    }
+    nextTick(() => {
+      this.settingsLinkReady = true;
+      if (!this.uploading) {
+        replaceSettingsHash(this.currentSettingsHash);
+      }
+    });
 
     // Set the viewport width to width=device-width on the create game form so mobile browsers use their actual CSS viewport width.
     // The current global viewport is width=1260, which prevents the create game form from using the device width on phones.
@@ -519,6 +550,10 @@ export default defineComponent({
         startingPreludes: this.startingPreludes,
       };
     },
+    /** Die Einstellungen als URL-Hash; ändert sich bei jeder Formular-Änderung mit. */
+    currentSettingsHash(): string {
+      return settingsHash(this);
+    },
     validationErrors(): ValidationErrors {
       return validateNewGameConfig(this.newGameConfig, {
         getCardCompatibility: (name) => getCard(name)?.compatibility ?? [],
@@ -579,6 +614,35 @@ export default defineComponent({
     },
   },
   methods: {
+    restoreSettingsFromLink(): boolean {
+      try {
+        const settings = readSettingsFromHash(window.location.hash);
+        if (settings === undefined) {
+          return false;
+        }
+        const processor = this.applySettings(settings);
+        if (processor.warnings.length > 0) {
+          this.showSettingsLoadResult('Settings link', processor);
+        }
+        return true;
+      } catch (e) {
+        vueRoot(this).showAlert('Settings link', 'Error loading settings ' + e);
+        return false;
+      }
+    },
+    async copySettingsLink() {
+      replaceSettingsHash(this.currentSettingsHash);
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        this.settingsLinkCopied = true;
+        window.setTimeout(() => {
+          this.settingsLinkCopied = false;
+        }, LINK_COPIED_FEEDBACK_MS);
+      } catch (e) {
+        // Ohne Zwischenablage-Recht (z. B. http ohne TLS) bleibt die URL in der Adresszeile zum Kopieren
+        vueRoot(this).showAlert('Copy link', String(e));
+      }
+    },
     restoreLastSettings() {
       const settings = createGameSettingsStorage.loadSettings();
       if (settings === undefined) {
