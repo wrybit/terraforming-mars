@@ -11,8 +11,6 @@ export type StatsKindDefinition = {
   /** Englisch, wird beim Anzeigen übersetzt. */
   label: string;
   singular: string;
-  /** Hinweis unter der Liste, woher die Einträge stammen (Englisch, wird übersetzt). */
-  note?: string;
   namesOf(result: StatsPlayerResult): Array<string>;
 };
 
@@ -38,7 +36,6 @@ export const STATS_KINDS: Record<StatsKind, StatsKindDefinition> = {
   prelude: {
     label: 'Prelude cards',
     singular: 'Prelude',
-    note: 'Only games with the full game state count.',
     // Screenshots zeigen Präludien nicht (sie geben keine Siegpunkte)
     namesOf: (result) => result.game.details?.cardsComplete === true ? cardsOfType(result, (type) => type === CardType.PRELUDE) : [],
   },
@@ -46,13 +43,11 @@ export const STATS_KINDS: Record<StatsKind, StatsKindDefinition> = {
     label: 'Project cards',
     singular: 'Project card',
     // Screenshots listen nur Karten mit Siegpunkten – für diese Karten sind sie vollständig
-    note: 'Cards without victory points only count in games with the full game state.',
     namesOf: (result) => cardsOfType(result, (type) => PROJECT_TYPES.has(type)),
   },
   milestone: {
     label: 'Milestones',
     singular: 'Milestone',
-    note: 'Only games with a known final state count.',
     namesOf: (result) => (result.game.details?.milestones ?? [])
       .filter((milestone) => milestone.playerName === result.player.name)
       .map((milestone) => milestone.name),
@@ -60,7 +55,6 @@ export const STATS_KINDS: Record<StatsKind, StatsKindDefinition> = {
   award: {
     label: 'Awards',
     singular: 'Award',
-    note: 'Only games with a known final state count.',
     // Gezählt beim Finanzierer: die Frage ist, ob sich das Finanzieren gelohnt hat
     namesOf: (result) => (result.game.details?.awards ?? [])
       .filter((award) => award.funderName === result.player.name)
@@ -69,7 +63,6 @@ export const STATS_KINDS: Record<StatsKind, StatsKindDefinition> = {
   board: {
     label: 'Boards',
     singular: 'Board',
-    note: 'Only games with a known final state count.',
     namesOf: (result) => result.game.details?.boardName === undefined ? [] : [result.game.details.boardName],
   },
   player: {

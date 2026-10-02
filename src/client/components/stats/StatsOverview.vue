@@ -3,7 +3,6 @@
     <section class="stats-card">
       <h2 v-i18n>At a glance</h2>
       <StatsKpis :tiles="tiles"/>
-      <p v-if="completeGames < games.length" class="stats-note">{{ detailNote }}</p>
     </section>
 
     <!-- Top 5 nebeneinander; die Karten darin scrollen waagerecht, mobil stehen die Boxen untereinander -->
@@ -50,7 +49,6 @@
       <section class="stats-card">
         <h2 v-i18n>Avg. terraforming per generation</h2>
         <StatsLineChart :series="globalsSeries" :labels="generationLabels(globalsSeries)" :width="chartWidth" :maximumValue="100" :step="20"/>
-        <p class="stats-note" v-i18n>Percent of the way to the maximum.</p>
       </section>
     </div>
   </div>
@@ -71,7 +69,6 @@ import {average, playerNames, StatsPlayerResult} from './statsResults';
 import {gamesByGeneration} from './statsRecords';
 import {formatDate, formatNumber} from './statsLabels';
 import {averageGlobalsByGeneration, averagePointsByGeneration} from './statsSeries';
-import {translateTextWithParams} from '@/client/directives/i18n';
 import {statsHref, StatsTopKind} from './statsNavigation';
 import {SHOWCASE_SIZE, SHOWCASE_TITLES} from './statsShowcase';
 
@@ -108,12 +105,6 @@ export default defineComponent({
         {label: 'Awards', value: details.reduce((total, entry) => total + entry.awards.length, 0)},
         {label: 'Cards played', value: sum(complete, (result) => result.details?.cards.length)},
       ];
-    },
-    completeGames(): number {
-      return this.games.filter((game) => game.details?.cardsComplete === true).length;
-    },
-    detailNote(): string {
-      return translateTextWithParams('Cities and cards played: complete only for the ${0} games with the full game state.', [String(this.completeGames)]);
     },
     recentSeries(): Array<StatsChartSeries> {
       return this.names.map((name) => ({

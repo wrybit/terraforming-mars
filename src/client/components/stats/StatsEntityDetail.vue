@@ -15,7 +15,6 @@
     </section>
 
     <section v-if="kind === 'board'" class="stats-card">
-      <h2 v-i18n>Where cities and greeneries end up</h2>
       <StatsBoardHeatmap :boardName="boardName" :games="games"/>
     </section>
 
@@ -25,7 +24,6 @@
         <StatsTable :columns="headToHeadColumns" :rows="headToHead" :rowKey="keyByOpponent" initialSort="games">
           <template #opponent="{row}"><StatsEntityName kind="player" :name="row.opponent"/></template>
         </StatsTable>
-        <p class="stats-note" v-i18n>Shared games: ahead of / behind the opponent.</p>
       </section>
       <section v-else-if="kind !== 'board' || stats.players.length > 1" class="stats-card">
         <h2 v-i18n>By player</h2>
@@ -67,7 +65,6 @@
           <template #name="{row, rows: shownRows}"><StatsEntityName :kind="companion.kind" :name="row.name" :siblings="namesOf(shownRows)"/></template>
           <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate"/></template>
         </StatsTable>
-        <p class="stats-note" v-i18n>Cards without victory points only count in games with the full game state.</p>
       </section>
     </div>
 

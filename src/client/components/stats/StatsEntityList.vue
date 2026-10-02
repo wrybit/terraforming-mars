@@ -15,7 +15,6 @@
       <template #mostPlayedBy="{row}"><StatsEntityName v-if="row.mostPlayedBy" kind="player" :name="row.mostPlayedBy"/></template>
       <template #mostWinsBy="{row}"><StatsEntityName v-if="row.mostWinsBy" kind="player" :name="row.mostWinsBy"/></template>
     </StatsTable>
-    <p class="stats-note">{{ note }}</p>
   </section>
 </template>
 
@@ -72,13 +71,6 @@ export default defineComponent({
     },
     columns(): Array<StatsColumn> {
       return entityColumns(this.kind);
-    },
-    note(): string {
-      const notes = ['The line in the bar is the win rate by luck alone (1 ÷ number of players); "vs. luck" is the difference in percentage points.'];
-      if (this.definition.note !== undefined) {
-        notes.push(this.definition.note);
-      }
-      return notes.map(translateText).join(' ');
     },
     initialSort(): string {
       return initialSortOf(this.kind);

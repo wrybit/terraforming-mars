@@ -27,7 +27,6 @@
     <section class="stats-card">
       <h2 v-i18n>Where the points come from</h2>
       <StatsPointSources :results="results"/>
-      <p class="stats-note" v-i18n>Average per game; only games with a points breakdown.</p>
     </section>
   </div>
 </template>

@@ -15,7 +15,6 @@
       <template #second="{row}"><StatsEntityName :kind="type.second" :name="row.second"/></template>
       <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate"/></template>
     </StatsTable>
-    <p class="stats-note">{{ note }}</p>
   </section>
 </template>
 
@@ -34,7 +33,7 @@ import {formatLift} from './statsLabels';
 import {STATS_KINDS} from './statsKinds';
 import {StatsPlayerResult} from './statsResults';
 
-// Mehr Zeilen machen die Seite träge; bei Karte + Karte gibt es Tausende Paare (Zahl steht auch im Hinweistext)
+// Mehr Zeilen machen die Seite träge; bei Karte + Karte gibt es Tausende Paare
 const ROW_LIMIT = 100;
 
 // Paare aus Konzern, Präludium und Projektkarte: wie oft zusammen gespielt und ob sie zusammen mehr bringen als einzeln
@@ -80,17 +79,6 @@ export default defineComponent({
         {key: 'winRate', label: 'Win rate', value: (row: CombinationStats) => row.winRate},
         {key: 'lift', label: 'vs. alone', value: (row: CombinationStats) => row.winRate - row.baselineWinRate, format: (row: CombinationStats) => formatLift(row.winRate, row.baselineWinRate)},
       ];
-    },
-    note(): string {
-      const notes = ['"vs. alone": win rate of the pair minus the average win rate of both entries on their own, in percentage points.'];
-      notes.push('Only the 100 most played pairs are shown; use the search to find others.');
-      for (const kind of new Set([this.type.first, this.type.second])) {
-        const note = STATS_KINDS[kind].note;
-        if (note !== undefined) {
-          notes.push(note);
-        }
-      }
-      return notes.map(translateText).join(' ');
     },
   },
   methods: {
