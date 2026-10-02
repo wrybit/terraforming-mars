@@ -1,10 +1,13 @@
 <template>
   <div class="stats-board-preview" :class="heatmap === undefined ? undefined : `stats-heatmap stats-heatmap--${heatmapType}`">
-    <Board v-if="spaces !== undefined"
-      :spaces="spaces"
-      :expansions="expansions"
-      :venusScaleLevel="0"
-      :boardName="boardName"/>
+    <!-- Das Brett ist fest ~700 px breit; auf schmalen Bildschirmen verkleinern statt abschneiden -->
+    <div v-if="spaces !== undefined" ref="scaled" class="stats-board-scaled" :style="{zoom: scale}">
+      <Board
+        :spaces="spaces"
+        :expansions="expansions"
+        :venusScaleLevel="0"
+        :boardName="boardName"/>
+    </div>
     <p v-else-if="failed" class="stats-note" v-i18n>The board could not be loaded.</p>
   </div>
 </template>
@@ -34,7 +37,14 @@ export default defineComponent({
       this.$nextTick(() => this.paintHeatmap());
     },
   },
+  beforeUnmount() {
+    this.resizeObserver?.disconnect();
+  },
   methods: {
+    fitToWidth(): void {
+      const available = (this.$el as HTMLElement).clientWidth;
+      this.scale = this.naturalWidth <= 0 ? 1 : Math.min(1, available / this.naturalWidth);
+    },
     /**
      * Färbt die Felder des gerenderten Spielbretts ein. Board.vue kennt keine Heatmap; statt es dafür umzubauen,
      * bekommt jedes Feld (data_space_id) eine CSS-Variable, die das Stylesheet als Farbe darüberlegt.
@@ -60,6 +70,10 @@ export default defineComponent({
     return {
       spaces: undefined as Array<SpaceModel> | undefined,
       failed: false,
+      scale: 1,
+      /** Breite des Bretts in Originalgröße, einmal bei Zoom 1 gemessen. */
+      naturalWidth: 0,
+      resizeObserver: undefined as ResizeObserver | undefined,
       // Ohne Erweiterungen: es geht um das Brett selbst, nicht um Venus-/Mond-Leisten
       expansions: {} as Record<Expansion, boolean>,
     };
@@ -72,6 +86,13 @@ export default defineComponent({
       }
       this.spaces = await response.json();
       await this.$nextTick();
+      this.naturalWidth = (this.$refs.scaled as HTMLElement | undefined)?.scrollWidth ?? 0;
+      this.fitToWidth();
+      // Ältere Browser und Testumgebungen ohne ResizeObserver behalten die erste Anpassung
+      if (typeof ResizeObserver !== 'undefined') {
+        this.resizeObserver = new ResizeObserver(() => this.fitToWidth());
+        this.resizeObserver.observe(this.$el as HTMLElement);
+      }
       this.paintHeatmap();
     } catch (error) {
       console.error(error);
