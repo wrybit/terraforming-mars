@@ -44,8 +44,8 @@
   <div class="sidebar_item sidebar_item--help" @click="ui.help_open = true">
     <i class="sidebar_icon sidebar_icon--help" :class="{'sidebar_item--is-active': ui.help_open}" :title="$t('player aid')"></i>
   </div>
-  <SidebarModal :open="ui.help_open" :wide="true" @close="ui.help_open = false">
-    <Help v-if="ui.help_open"/>
+  <SidebarModal :open="ui.help_open" :wide="true" :bare="true" @close="ui.help_open = false">
+    <HelpOverlay v-if="ui.help_open" :closable="true" @close="ui.help_open = false"/>
   </SidebarModal>
 
   <PreferencesIcon/>
@@ -148,7 +148,7 @@ export default defineComponent({
     LanguageIcon,
     SidebarModal,
     // Hilfe nur bei Bedarf nachladen (eigener Chunk wie die Hilfeseite in App.vue)
-    Help: defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/help/Help.vue')),
+    HelpOverlay: defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/helpOverlay/HelpOverlay.vue')),
   },
   data() {
     return {

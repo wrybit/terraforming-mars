@@ -4,8 +4,8 @@
        Teleport in body, damit Seitenleiste und Spalten-Overflow die Box nicht beschneiden. -->
   <Teleport to="body">
     <div v-if="open" class="sidebar-modal-backdrop" @click.self="$emit('close')">
-      <div class="sidebar-modal" role="dialog" aria-modal="true" :class="{'sidebar-modal--wide': wide}">
-        <button type="button" class="sidebar-modal-close" :aria-label="$t('Close')" @click="$emit('close')">✕</button>
+      <div class="sidebar-modal" role="dialog" aria-modal="true" :class="{'sidebar-modal--wide': wide, 'sidebar-modal--bare': bare}">
+        <button v-if="!bare" type="button" class="sidebar-modal-close" :aria-label="$t('Close')" @click="$emit('close')">✕</button>
         <slot></slot>
       </div>
     </div>
@@ -20,6 +20,9 @@ const props = defineProps<{
   open: boolean;
   // Breiter für umfangreiche Inhalte (Hilfe)
   wide?: boolean;
+  // Inhalt bringt Kopf, Schließen-Button und eigenes Scrollen selbst mit (Hilfe-Overlay):
+  // feste Höhe, kein Innenabstand, am Handy als Vollbild-Blatt von unten
+  bare?: boolean;
 }>();
 
 const emit = defineEmits<{

@@ -54,7 +54,7 @@
       <StatsPage v-else-if="screen === 'stats'"/>
       <AdminHome v-else-if="screen === 'admin'"/>
       <LoginHome v-else-if="screen === 'login-home'"/>
-      <Help v-else-if="screen === 'help'"/>
+      <HelpOverlay v-else-if="screen === 'help'"/>
     </div>
     <!-- In Spielansichten steht der Hinweis im Info-Fenster der Sidebar; auf der Ergebnisseite entfällt er (Wunsch Jens) -->
     <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': screen === 'start-screen'}">
@@ -80,7 +80,8 @@ const CreateGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "c
 const GameEnd = defineAsyncComponent(() => import(/* webpackChunkName: "game-end" */ '@/client/components/GameEnd.vue'));
 const GameHome = defineAsyncComponent(() => import(/* webpackChunkName: "game-home" */ '@/client/components/GameHome.vue'));
 const GamesOverview = defineAsyncComponent(() => import(/* webpackChunkName: "games-overview" */ '@/client/components/GamesOverview.vue'));
-const Help = defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/help/Help.vue'));
+// Fork: neue Hilfe mit Seitenbaum und Suche; die Upstream-Inhalte stecken darin
+const HelpOverlay = defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/helpOverlay/HelpOverlay.vue'));
 const LoginHome = defineAsyncComponent(() => import(/* webpackChunkName: "login" */ '@/client/components/auth/LoginHome.vue'));
 const LoadGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "load-game" */ '@/client/components/LoadGameForm.vue'));
 const PlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "player-home" */ '@/client/components/PlayerHome.vue'));
@@ -182,7 +183,7 @@ export default defineComponent({
     GamesOverview,
     CardList,
     StatsPage,
-    Help,
+    HelpOverlay,
     AdminHome,
     LoginHome,
   },
