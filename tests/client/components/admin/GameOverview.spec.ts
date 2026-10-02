@@ -39,6 +39,12 @@ describe('GameOverview', () => {
     expect(mountRow().findAll('.games-overview-chip[title]').map((chip) => chip.attributes('title'))).contains('Helion · Winner');
   });
 
+  it('an imported game links to the result page saved here, not to the other server', () => {
+    const imported = {...summary, source: 'imported' as const, externalUrl: 'https://terraforming-mars.herokuapp.com/the-end?id=p66b9daab6513', importedParticipantId: 'p66b9daab6513'};
+    const wrapper = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'), props: {summary: imported, columns: ['Jens']}});
+    expect(wrapper.find('.games-overview-source').attributes('href')).eq('the-end?id=p66b9daab6513');
+  });
+
   it('delete needs a second click', async () => {
     const wrapper = mountRow();
     const button = wrapper.find('.games-overview-delete');
