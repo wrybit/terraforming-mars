@@ -30,4 +30,12 @@ describe('StartScreen', () => {
     expect(icons).has.length(8);
     expect(new Set(icons.map((icon) => icon.attributes('name'))).size).eq(8);
   });
+
+  it('opens everything except "New game" in a new tab', () => {
+    const wrapper = shallowMount(StartScreen, {
+      ...globalConfig,
+    });
+    const targets = wrapper.findAll('a.start-screen-link').map((link) => link.attributes('target'));
+    expect(targets).to.deep.eq([undefined, ...Array(7).fill('_blank')]);
+  });
 });
