@@ -1,0 +1,178 @@
+// Einstellungen (PreferencesDialog.vue, Gruppen aus preferencesGroups.ts): Gruppen als Karten im Raster,
+// je Einstellung eine Zeile mit Text links und Schalter rechts. "Erweitert" zusammengeklappt und zurückgenommen.
+@import (reference) "./dialog_frame.less";
+@import (reference) "./variables.less";
+
+@preferences-switch-width: 36px;
+@preferences-switch-height: 20px;
+@preferences-switch-knob: 14px;
+
+.preferences-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: @dialog-gap-tile;
+}
+
+.preferences-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 4px 0;
+  border: 1px solid @dialog-surface-border;
+  border-radius: @dialog-tile-radius;
+  background: @dialog-surface;
+}
+
+// Gruppenkopf: Symbol + Titel; trennt die Gruppen auch für schnelles Überfliegen
+.preferences-group-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 4px;
+  color: @dialog-accent-text;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+.dialog-frame .preferences-group-title {
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+// Zeile: ganze Fläche klickbar, Hover hebt sie leicht hervor
+.preferences-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 4px;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.preferences-switch-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.preferences-switch-label {
+  color: #e4e5ea;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.preferences-switch-hint {
+  color: @dialog-muted;
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: pre-line;
+}
+
+// Schalter: Checkbox unsichtbar (bleibt bedienbar und testbar), daneben die gezeichnete Spur mit Knopf
+.preferences-switch-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preferences-switch-track {
+  position: relative;
+  flex: none;
+  width: @preferences-switch-width;
+  height: @preferences-switch-height;
+  border-radius: @preferences-switch-height;
+  background: rgba(255, 255, 255, 0.18);
+  transition: background 0.15s;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: (@preferences-switch-height - @preferences-switch-knob) / 2;
+    left: (@preferences-switch-height - @preferences-switch-knob) / 2;
+    width: @preferences-switch-knob;
+    height: @preferences-switch-knob;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    transition: transform 0.15s;
+  }
+}
+
+.preferences-switch-input:checked + .preferences-switch-track {
+  background: @bg_action;
+
+  &::after {
+    transform: translateX(@preferences-switch-width - @preferences-switch-height);
+  }
+}
+
+.preferences-switch-input:focus-visible + .preferences-switch-track {
+  outline: 2px solid @dialog-accent-text;
+  outline-offset: 2px;
+}
+
+// Selten gebraucht: über die volle Breite, gestrichelt und gedämpft, standardmäßig zu
+.preferences-group--optional {
+  grid-column: 1 / -1;
+  border-style: dashed;
+  background: transparent;
+
+  .preferences-group-head {
+    padding-bottom: 8px;
+    color: @dialog-muted;
+    cursor: pointer;
+  }
+
+  .preferences-group-title {
+    color: @dialog-muted;
+  }
+
+  &[open] .preferences-group-head {
+    padding-bottom: 4px;
+  }
+}
+
+.preferences-group-chevron {
+  margin-left: auto;
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.15s;
+
+  details[open] & {
+    transform: rotate(90deg);
+  }
+}
+
+// Fehler melden als Nebenaktion links, OK rechts
+.btn.preferences-bug-button {
+  margin-right: auto;
+}
+
+// Handy: eine Spalte, Untertexte weg (sonst wird die Liste zu lang)
+@media only screen and (max-width: 520px) {
+  .preferences-groups {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .preferences-switch-hint {
+    display: none;
+  }
+}

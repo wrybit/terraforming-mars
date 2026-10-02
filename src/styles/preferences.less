@@ -226,23 +226,6 @@
   margin-left: 5px;
 }
 
-.preferences_panel_actions {
-  text-align: center;
-}
-
-.preferences_panel {
-  padding: 15px 15px 15px 20px;
-  display: inline-block;
-  position: absolute;
-  bottom: 0px;
-  left: 53px;
-  color: #c6c6c6;
-  background: #000000;
-  max-height: calc(75vh);
-  overflow-y: auto;
-  white-space: nowrap;
-}
-
 .sidebar_item--is-active::after {
   content: " ";
   width: 10px;
@@ -255,11 +238,6 @@
 .sidebar_icon--language.sidebar_item--is-active::after {
   height: 46px;
   margin: -38px 0 0 38px;
-}
-
-.preferences_panel .tooltip::after {
-  right: auto;
-  white-space: normal;
 }
 
 /* Visual effects of changing settings */
@@ -354,32 +332,5 @@
   }
   .invisible {
     visibility: hidden;
-  }
-}
-
-@media only screen and (max-width: 767px) {
-  .preferences_panel {
-    box-sizing: border-box;
-    position: fixed;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    z-index: 110;
-    width: auto;
-    max-height: calc(100dvh - 16px);
-    overflow-x: hidden;
-    white-space: normal;
-  }
-
-
-  .preferences_panel_item label {
-    white-space: normal;
-    line-height: 1.35;
-  }
-
-  .preferences_panel_actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
   }
 }
