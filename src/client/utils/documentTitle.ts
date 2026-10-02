@@ -35,6 +35,10 @@ export function turnTitleState(marker: string = TURN_MARKER): string {
 // Titel im Spiel: <Status> · <Spieler> · <Gen.> · <Spielname> | TM
 // z.B. "● Am Zug · Jens · Gen. 5 · Cosmic Pressure Flow | TM"; leere Teile entfallen.
 export function gameDocumentTitle(view: TitleView, state: string | undefined = isOwnTurn(view) ? turnTitleState() : undefined): string {
-  const parts = [state, view.thisPlayer?.name, `${$t('Gen')} ${view.game.generation}`, view.game.name];
+  return shortDocumentTitle([state, view.thisPlayer?.name, `${$t('Gen')} ${view.game.generation}`, view.game.name]);
+}
+
+// Gemeinsamer Aufbau aller Spiel-Titel: Teile mit " · " verbunden, leere Teile entfallen, "| TM" am Ende.
+export function shortDocumentTitle(parts: ReadonlyArray<string | undefined>): string {
   return `${parts.filter((part) => part !== undefined && part !== '').join(' · ')} | ${SHORT_APP_NAME}`;
 }

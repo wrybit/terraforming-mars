@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {gameDocumentTitle, turnTitleState} from '@/client/utils/documentTitle';
+import {gameDocumentTitle, shortDocumentTitle, turnTitleState} from '@/client/utils/documentTitle';
 
 const game = {name: 'Cosmic Pressure Flow', generation: 5};
 
@@ -21,5 +21,11 @@ describe('documentTitle', () => {
   it('accepts explicit state', () => {
     expect(gameDocumentTitle({game, waitingFor: {}}, turnTitleState('◑'))).to.eq('◑ Your turn · Gen 5 · Cosmic Pressure Flow | TM');
     expect(gameDocumentTitle({game}, '🏁')).to.eq('🏁 · Gen 5 · Cosmic Pressure Flow | TM');
+  });
+});
+
+describe('shortDocumentTitle', () => {
+  it('joins non-empty parts', () => {
+    expect(shortDocumentTitle(['Game created', undefined, 'Cosmic Pressure Flow'])).to.eq('Game created · Cosmic Pressure Flow | TM');
   });
 });
