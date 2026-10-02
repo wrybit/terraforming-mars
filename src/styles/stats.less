@@ -471,7 +471,12 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: @create-game-gap-card;
-  align-items: start;
+  // Wie .stats-columns: gleich hohe Nachbarn, eine übrige Karte über die volle Breite
+  align-items: stretch;
+
+  > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
 }
 
 .stats-record-rank {
@@ -844,4 +849,26 @@ each(@stats-source-colors, {
 
 .stats-heatmap--greenery {
   --stats-heat-color: 80, 220, 90;
+}
+
+// ---------- Top-Listen ----------
+// Überschrift als Link zur Top-20-Seite, sieht aber aus wie eine Überschrift
+.stats-heading-link {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.stats-top-title {
+  margin: 8px 0 12px;
+}
+
+// Auf der Top-20-Seite umbrechen statt scrollen
+.stats-showcase.stats-showcase--grid {
+  flex-wrap: wrap;
+  overflow-x: visible;
+  row-gap: 24px;
 }

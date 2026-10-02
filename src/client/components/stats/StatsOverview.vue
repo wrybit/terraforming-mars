@@ -7,14 +7,11 @@
     </section>
 
     <!-- Top 5 nebeneinander; die Karten darin scrollen waagerecht, mobil stehen die Boxen untereinander -->
-    <div v-if="topCards.length > 0 || topCorporations.length > 0" class="stats-columns">
-      <section class="stats-card">
-        <h2 v-i18n>Most played project cards</h2>
-        <StatsShowcase kind="card" :entries="topCards"/>
-      </section>
-      <section class="stats-card">
-        <h2 v-i18n>Most played corporations</h2>
-        <StatsShowcase kind="corporation" :entries="topCorporations"/>
+    <!-- Titel führt zur Top-20-Seite -->
+    <div v-if="showcases.some((showcase) => showcase.entries.length > 0)" class="stats-columns">
+      <section v-for="showcase in showcases" :key="showcase.kind" class="stats-card">
+        <h2><a :href="topHref(showcase.kind)" data-stats-link class="stats-heading-link"><span v-i18n>{{ showcase.title }}</span> <span class="stats-dim">→ Top 20</span></a></h2>
+        <StatsShowcase :kind="showcase.kind" :entries="showcase.entries"/>
       </section>
     </div>
 
@@ -69,18 +66,16 @@ import {StatsBar, StatsChartSeries, StatsKpi} from './statsTypes';
 import StatsLineChart from './StatsLineChart.vue';
 import StatsBarChart from './StatsBarChart.vue';
 import StatsShowcase from './StatsShowcase.vue';
-import {aggregate, EntityStats} from './statsAggregate';
-import {StatsKind} from './statsKinds';
+import {EntityStats, mostPlayed} from './statsAggregate';
 import {average, playerNames, StatsPlayerResult} from './statsResults';
 import {gamesByGeneration} from './statsRecords';
 import {formatDate, formatNumber} from './statsLabels';
 import {averageGlobalsByGeneration, averagePointsByGeneration} from './statsSeries';
 import {translateTextWithParams} from '@/client/directives/i18n';
-import {statsHref} from './statsNavigation';
+import {statsHref, StatsTopKind} from './statsNavigation';
+import {SHOWCASE_SIZE, SHOWCASE_TITLES} from './statsShowcase';
 
 const RECENT_GAMES = 15;
-// Meistgespielte Karten und Konzerne auf der Übersicht
-const SHOWCASE_SIZE = 5;
 
 function sum(results: ReadonlyArray<StatsPlayerResult>, valueOf: (result: StatsPlayerResult) => number | undefined): number {
   return results.reduce((total, result) => total + (valueOf(result) ?? 0), 0);
@@ -151,11 +146,8 @@ export default defineComponent({
         points: entry.values.map((value, index) => ({value: value === undefined ? undefined : Math.round(value), title: `${index + 1}: ${formatNumber(value, 0)} %`})),
       }));
     },
-    topCards(): Array<EntityStats> {
-      return this.mostPlayed('card', SHOWCASE_SIZE);
-    },
-    topCorporations(): Array<EntityStats> {
-      return this.mostPlayed('corporation', SHOWCASE_SIZE);
+    showcases(): Array<{kind: StatsTopKind, title: string, entries: Array<EntityStats>}> {
+      return (['card', 'corporation'] as const).map((kind) => ({kind, title: SHOWCASE_TITLES[kind], entries: mostPlayed(this.results, kind, SHOWCASE_SIZE)}));
     },
     lineups(): Array<LineupWinCounts> {
       return winCountsByLineup(this.games.map((game) => game.summary));
@@ -173,10 +165,8 @@ export default defineComponent({
   methods: {
     formatNumber,
     // Häufigste zuerst, bei Gleichstand die erfolgreichere
-    mostPlayed(kind: StatsKind, count: number): Array<EntityStats> {
-      return aggregate(this.results, kind)
-        .sort((first, second) => second.plays - first.plays || second.winRate - first.winRate)
-        .slice(0, count);
+    topHref(kind: StatsTopKind): string {
+      return statsHref({type: 'top', kind});
     },
     generationLabels(series: ReadonlyArray<StatsChartSeries>): Array<string> {
       const length = Math.max(0, ...series.map((line) => line.points.length));
