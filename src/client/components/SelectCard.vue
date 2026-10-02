@@ -252,10 +252,14 @@ export default defineComponent({
       return (this.playerinput.cards ?? []).filter((card) => !card.isDisabled);
     },
     // "Select all" if the server requires it or all selectable cards may be taken at once
-    // (selling, buying cards …) – not if only some may be chosen. Only in dialogs with their own
-    // confirm button (showsave); the initial selection (SelectInitialCards) has its own balance bar
+    // (selling, discarding …) – not if only some may be chosen. Only in dialogs with their own
+    // confirm button (showsave); the initial selection (SelectInitialCards) has its own balance bar.
+    // Never when buying: every card costs M€, so buying should be a deliberate choice per card
     showSelectAll(): boolean {
       if (!this.showsave || this.selectOnlyOneCard || this.playerinput.selectBlueCardAction || this.selectableCards.length < 2) {
+        return false;
+      }
+      if (this.playerinput.buttonLabel === 'Buy') {
         return false;
       }
       const max = this.playerinput.max ?? this.selectableCards.length;
