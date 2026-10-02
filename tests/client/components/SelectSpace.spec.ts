@@ -66,6 +66,18 @@ describe('SelectSpace', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
+  // Tab-Wechsel weg von der Feldwahl: das Brett darf danach weder markiert noch anklickbar sein
+  it('removes highlight and click handler when unmounted', () => {
+    const space = addBoard('main_board', '03');
+    const wrapper = mountFor(['03' as SpaceId]);
+    expect(space.classList.contains('board-space--available')).to.be.true;
+    expect(space.onclick).to.not.be.null;
+
+    wrapper.unmount();
+    expect(space.classList.contains('board-space--available')).to.be.false;
+    expect(space.onclick).to.be.null;
+  });
+
   it('marks spaces on every board instance and zooms the Mars board only on button click', async () => {
     const columnSpace = addBoard('main_board', '03');
     const zoomSpace = addBoard('main_board', '03');

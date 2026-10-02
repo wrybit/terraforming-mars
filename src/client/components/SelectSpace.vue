@@ -260,6 +260,12 @@ export default defineComponent({
   },
   beforeUnmount() {
     this.removeTilePreview();
+    // Markierungen und Klick-Handler gehören zu dieser Feldwahl: beim Wechsel in einen anderen Tab blieben sie sonst
+    // am Brett hängen – das Brett sähe weiter wählbar aus, ließe sich nicht vergrößern und ein Klick wählte ein Feld
+    this.disableAnimation();
+    this.getSelectableSpaces().forEach((tile) => {
+      tile.onclick = null;
+    });
     releasePlacementZoom();
   },
   mounted() {
