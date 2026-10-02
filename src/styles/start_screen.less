@@ -82,7 +82,7 @@
     inset: 0;
     z-index: -1;
     border-radius: inherit;
-    backdrop-filter: brightness(0.8) saturate(0.8);
+    backdrop-filter: brightness(0.7) saturate(0.6);
     transition: backdrop-filter @start-screen-hover-duration ease;
   }
 
@@ -92,16 +92,16 @@
   }
 }
 
-// Beschriftung ruhend etwas kleiner, beim Hover volle Größe; Skalierung von links, damit sie an Ort und Stelle wächst
+// Beschriftung ruhend kleiner, beim Hover etwas größer als normal; Skalierung von links, damit sie an Ort und Stelle wächst
 .start-screen-link .start-screen-link-content {
-  transform: scale(0.92);
+  transform: scale(0.86);
   transform-origin: left center;
   transition: transform @start-screen-hover-duration ease;
 }
 
 .start-screen-link:hover .start-screen-link-content,
 .start-screen-link:focus-visible .start-screen-link-content {
-  transform: scale(1);
+  transform: scale(1.06);
 }
 
 // Symbol links neben der Beschriftung; Abstand kleiner als die Buttons untereinander, damit beides als Einheit liest
