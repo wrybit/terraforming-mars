@@ -155,7 +155,7 @@ const entries = computed((): Array<SetupEntry> => {
       {text: translateText(`${props.lastSoloGeneration} Gens`)},
       chip(options.soloTR ? '63 TR' : 'TR all'),
     ]},
-    {label: label('WGT:'), values: [options.solarPhaseOption ? chip('On') : chip('Off', 'off')]},
+    {label: label('World Government Terraforming'), values: [options.solarPhaseOption ? chip('On') : chip('Off', 'off')]},
     configValues.value.length > 0 && {label: label('Game configs:'), values: configValues.value},
     options.escapeVelocity !== undefined && {label: label('Escape Velocity'), values: [{text: escapeVelocityText.value, iconClass: 'expansion-icon-escape-velocity'}], wide: true},
     options.bannedCards.length > 0 && {label: label('Banned cards:'), values: options.bannedCards.map((card) => ({text: translateText(card)})), wide: true},
