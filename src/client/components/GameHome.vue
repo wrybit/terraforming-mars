@@ -58,7 +58,8 @@ import {playerColorClass} from '@/common/utils/utils';
 import GameSetupDetail from '@/client/components/GameSetupDetail.vue';
 import {ParticipantId} from '@/common/Types';
 import {Color} from '@/common/Color';
-import {setDocumentTitle} from '../utils/documentTitle';
+import {shortDocumentTitle} from '../utils/documentTitle';
+import {$t} from '../directives/i18n';
 
 // taken from https://stackoverflow.com/a/46215202/83336
 // The solution to copying to the clipboard in this case is
@@ -146,7 +147,7 @@ export default defineComponent({
   mounted() {
     // Reset the copied player id after 3 seconds to hide the "copied" message
     setInterval(this.setCopiedIdToDefault, 3000);
-    setDocumentTitle(this.game.name);
+    document.title = shortDocumentTitle([$t('Game created'), this.game.name]);
     // Set the viewport width to width=device-width on the create game form so mobile browsers use their actual CSS viewport width.
     // The current global viewport is width=1260, which prevents the create game form from using the device width on phones.
     // This is a temporary solution in order to make this edit scoped to the create game form.
