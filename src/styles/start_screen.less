@@ -221,7 +221,13 @@
   at calc(-174.7px * @start-screen-globe-scale) calc(402.5px * @start-screen-globe-scale + @start-screen-title-offset),
   #000 calc(100% - 1px), transparent 100%);
 // Rand weich ausblenden wie früher der schwarze Innenschatten: oben, unten und links (rechts endet der Planet selbst)
-@start-screen-title-fade: linear-gradient(to bottom, transparent, #000 35%, #000 65%, transparent);
+// Oben ab der Bildkante (sie sitzt um den Titel-Versatz tiefer als der Kasten), unten zum Kastenende
+@start-screen-title-fade: linear-gradient(
+  to bottom,
+  transparent max(0px, @start-screen-title-offset),
+  #000 calc(max(0px, @start-screen-title-offset) + 30px),
+  #000 calc(100% - 25px),
+  transparent 100%);
 @start-screen-title-fade-left: linear-gradient(to right, transparent, #000 25%);
 
 .start-screen-header {
