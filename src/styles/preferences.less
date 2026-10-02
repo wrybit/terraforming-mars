@@ -14,8 +14,7 @@
 /* On touch screens the page is scaled down to fit the 1260px viewport, which makes the sidebar and corner icons too small to tap.
    Portrait only: in landscape there is not enough height for a larger sidebar. */
 @media (hover: none) and (pointer: coarse) and (orientation: portrait) {
-  .sidebar_cont,
-  .card-list-container .free-floating-preferences-icon {
+  .sidebar_cont {
     zoom: 2;
   }
   .main-container:has(.sidebar_cont) {
@@ -399,44 +398,6 @@
   text-align: center;
 }
 
-.free-floating-preferences-icon {
-  position: fixed;
-  bottom: 0px;
-  left: 0px;
-  /* This is only used on non-game pages (the start screen and the cards list);
-     the in-game sidebar is a separate component. Sit flush in the corner rather
-     than inset like the game UI. */
-  padding: 0;
-  /* This matches z-index with some card elements and ensures the popup is above it. */
-  z-index: 10;
-}
-
-// LanguageIcon is built for the in-game sidebar: its root is absolutely
-// positioned (bottom: 162px) and its popup opens at bottom: -140px. On the
-// non-game pages (the cards list and the start screen) we want it in the
-// bottom-left corner, just above the preferences gear. That gear
-// (.sidebar_item--settings) is position: fixed; bottom: 4px and ~46px tall, so
-// it ignores normal flow and pins itself to the viewport bottom. To sit above
-// it we likewise pin the flag, clearing the gear, and align it flush with the
-// gear's left edge (the free-floating container sits flush in the corner).
-.corner-language-icon.sidebar_item--language {
-  position: fixed;
-  bottom: 58px;
-  left: 0;
-
-  // The little black connector tab that points back at the sidebar makes no
-  // sense in the corner.
-  .sidebar_icon--language.sidebar_item--is-active::after {
-    display: none;
-  }
-
-  // Open the language popup up-and-to-the-right of the flag so it stays on screen.
-  .preferences_panel.preferences_panel--language-switcher {
-    bottom: 0;
-    left: 100%;
-  }
-}
-
 .bug-dialog {
   .center {
     text-align: center;
@@ -461,11 +422,6 @@
     white-space: normal;
   }
 
-  .corner-language-icon.sidebar_item--language
-  .preferences_panel.preferences_panel--language-switcher {
-    left: 8px;
-    bottom: 8px;
-  }
 
   .preferences_panel_item label {
     white-space: normal;

@@ -63,6 +63,7 @@
         <a :href="changelogUrl" target="_blank" v-i18n>Read our changelog to get the latest updates.</a>
         <span>(<span v-i18n>Looking for people to play with</span>? <a :href="discordInvite" target="_blank" v-i18n>Join us on Discord</a>.)</span>
       </template>
+      <StartScreenFooter v-if="screen === 'start-screen'"/>
       <span v-i18n>Not affiliated with FryxGames, Asmodee Digital or Steam in any way.</span>
     </footer>
   </div>
@@ -87,6 +88,7 @@ const MobilePlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: 
 const MobileSpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-spectator-home" */ '@/client/components/mobile/MobileSpectatorHome.vue'));
 const SpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "spectator-home" */ '@/client/components/SpectatorHome.vue'));
 const StatsPage = defineAsyncComponent(() => import(/* webpackChunkName: "stats" */ '@/client/components/stats/StatsPage.vue'));
+const StartScreenFooter = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreenFooter.vue'));
 const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreen.vue'));
 import {$t, setTranslationContext} from '@/client/directives/i18n';
 import {paths} from '@/common/app/paths';
@@ -168,6 +170,7 @@ export default defineComponent({
   components: {
     RotateHint,
     StartScreen,
+    StartScreenFooter,
     CreateGameForm,
     LoadGameForm,
     GameHome,
