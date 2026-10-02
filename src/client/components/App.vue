@@ -57,7 +57,7 @@
       <Help v-else-if="screen === 'help'"/>
     </div>
     <!-- In Spielansichten steht der Hinweis im Info-Fenster der Sidebar; auf der Ergebnisseite entfällt er (Wunsch Jens) -->
-    <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice">
+    <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': screen === 'start-screen'}">
       <!-- Auf "Spiel erstellen" gehören Changelog und Discord mit in die Fußzeile (die Startseite hat eigene Buttons dafür) -->
       <template v-if="screen === 'create-game-form'">
         <a :href="changelogUrl" target="_blank" v-i18n>Read our changelog to get the latest updates.</a>
