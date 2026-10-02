@@ -296,6 +296,8 @@
 
   .start-screen-links {
     padding-top: calc(max(@toolbar-button-size + 2 * @toolbar-edge-offset, env(safe-area-inset-top)) + @start-screen-title-lift-phone);
+    // Bezug für 100cqw: Breite der Buttons
+    container-type: inline-size;
   }
 
   .start-screen-title-top,
@@ -304,9 +306,14 @@
   }
 
   // Button-Höhe aus der Fensterhöhe: alle acht Menüpunkte samt Titel passen auf den Bildschirm.
-  // 240px = Werkzeugleiste, Titel-Kasten, Abstand Titel–Menü und Lücken zwischen den Buttons
+  // 240px = Werkzeugleiste, Titel-Kasten, Abstand Titel–Menü und Lücken zwischen den Buttons.
+  // Bildreihe behält ihr Seitenverhältnis (369 × 90) und wird senkrecht mittig angeschnitten, statt gestaucht zu werden
   .start-screen-link {
-    height: clamp(60px, calc((100dvh - 240px) / 8), 90px);
+    --button-height: clamp(44px, calc((100dvh - 240px) / 8), 90px);
+    --sprite-row-height: calc(100cqw * 90 / 369);
+    height: var(--button-height);
+    background-size: 100% auto;
+    background-position: 0 calc(var(--sprite-row) * -1 * var(--sprite-row-height) + (var(--button-height) - var(--sprite-row-height)) / 2);
     padding: 12px 16px;
     font-size: 20px;
   }
