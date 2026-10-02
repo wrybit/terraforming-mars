@@ -29,11 +29,20 @@ export function statsGame(players: Array<PlayerSpec>, options: {generation?: num
     },
     resultUrl: `the-end?id=p${counter}`,
     details: options.details === false ? undefined : {
+      source: 'game',
+      cardsComplete: true,
       boardName: options.board ?? BoardName.THARSIS,
       expansions: ['corpera', 'prelude'],
-      players: players.map((player) => ({name: player.name, cards: player.cards ?? [], terraformRating: 30, greeneries: 3, cities: 2})),
+      players: players.map((player) => ({
+        name: player.name, cards: player.cards ?? [], terraformRating: 30, greeneries: 3, cities: 2,
+        cardPoints: (player.cards ?? []).includes(CardName.BIRDS) ? [{name: CardName.BIRDS, points: 4}] : [],
+        victoryPoints: {terraformRating: 30, milestones: 5, awards: 5, greenery: 3, city: 4, cards: player.points - 47, other: 0, total: player.points},
+        pointsByGeneration: [20, Math.round(player.points / 2), player.points],
+        timeSeconds: 1800, actions: 90,
+      })),
       milestones: [{name: 'Gardener', playerName: players[0].name}],
       awards: [{name: 'Landlord', funderName: players[1].name, winnerNames: [players[0].name]}],
+      globalsByGeneration: {temperature: [0, 50, 100], oxygen: [0, 40, 100], oceans: [10, 60, 100]},
     },
   };
 }

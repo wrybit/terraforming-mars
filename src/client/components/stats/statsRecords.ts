@@ -1,5 +1,6 @@
 import {StatsGame} from '@/common/stats/StatsGame';
 import {StatsPlayerResult} from './statsResults';
+import {formatDuration} from './statsLabels';
 
 export type StatsRecordEntry = {
   result: StatsPlayerResult;
@@ -11,6 +12,8 @@ export type StatsRecord = {
   title: string;
   unit: string;
   entries: Array<StatsRecordEntry>;
+  /** Anzeige des Werts, wenn er keine einfache Zahl ist (z. B. Zeit). */
+  format?: (value: number) => string;
 };
 
 const RECORD_SIZE = 5;
@@ -40,7 +43,15 @@ export function statsRecords(results: ReadonlyArray<StatsPlayerResult>): Array<S
     {title: 'Highest terraform rating', unit: 'TR', entries: topEntries(results, (result) => result.details?.terraformRating)},
     {title: 'Most greeneries', unit: '', entries: topEntries(results, (result) => result.details?.greeneries)},
     {title: 'Most cities', unit: '', entries: topEntries(results, (result) => result.details?.cities)},
-    {title: 'Most cards played', unit: '', entries: topEntries(results, (result) => result.details?.cards.length)},
+    {title: 'Most victory points from cards', unit: 'VP', entries: topEntries(results, (result) => result.details?.victoryPoints?.cards)},
+    {title: 'Most milestone and award points', unit: 'VP', entries: topEntries(results, (result) => {
+      const points = result.details?.victoryPoints;
+      return points === undefined ? undefined : points.milestones + points.awards;
+    })},
+    // Vollständige Kartenliste gibt es nur mit Spielstand – Screenshots zeigen nur Karten mit Punkten
+    {title: 'Most cards played', unit: '', entries: topEntries(results, (result) => result.game.details?.cardsComplete === true ? result.details?.cards.length : undefined)},
+    {title: 'Most actions', unit: '', entries: topEntries(results, (result) => result.details?.actions)},
+    {title: 'Longest thinking time', unit: '', entries: topEntries(results, (result) => result.details?.timeSeconds), format: formatDuration},
     // Generation 0 = unbekannt (Screenshots aus anderen Versionen)
     {title: 'Shortest games', unit: 'Gen', entries: topEntries(winners, (result) => result.game.summary.generation || undefined, true)},
   ].filter((record) => record.entries.length > 0);

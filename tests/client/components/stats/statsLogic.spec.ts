@@ -8,6 +8,8 @@ import {entityDetail, headToHead} from '@/client/components/stats/statsDetail';
 import {statsRecords} from '@/client/components/stats/statsRecords';
 import {parseStatsView, statsHref} from '@/client/components/stats/statsNavigation';
 import {withFunderWinShare} from '@/client/components/stats/statsColumns';
+import {averageByGeneration, averageCardPoints} from '@/client/components/stats/statsSeries';
+import {pointSourcesByPlayer} from '@/client/components/stats/statsPointSources';
 
 describe('stats logic', () => {
   const games = sampleGames();
@@ -70,5 +72,12 @@ describe('stats logic', () => {
     const href = statsHref({type: 'detail', kind: 'card', name: 'Ants & Birds'});
     expect(parseStatsView(href.slice(href.indexOf('?')))).deep.eq({type: 'detail', kind: 'card', name: 'Ants & Birds'});
     expect(parseStatsView('?tab=unknown')).deep.eq({type: 'tab', tab: 'overview'});
+  });
+
+  it('averages per generation and card points', () => {
+    expect(averageByGeneration([[20, 40], [30, 50, 70]], 1)).deep.eq([25, 45, 70]);
+    expect(averageByGeneration([[20, 40], [30, 50, 70], [10, 30, 50]])).deep.eq([20, 40]);
+    expect(averageCardPoints(results, 'Birds')).eq(4);
+    expect(pointSourcesByPlayer(results).find((row) => row.name === 'Jens')?.games).eq(2);
   });
 });

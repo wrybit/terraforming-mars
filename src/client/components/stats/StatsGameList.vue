@@ -22,7 +22,7 @@
           </td>
           <td>{{ game.summary.generation || '–' }}</td>
           <td class="stats-table-text">
-            <StatsEntityName v-if="game.details !== undefined" kind="board" :name="game.details.boardName"/>
+            <StatsEntityName v-if="game.details?.boardName !== undefined" kind="board" :name="game.details.boardName"/>
             <span v-else class="stats-dim">–</span>
           </td>
           <td><a v-if="game.resultUrl !== undefined" :href="game.resultUrl" target="_blank" class="stats-link" v-i18n>Result</a></td>

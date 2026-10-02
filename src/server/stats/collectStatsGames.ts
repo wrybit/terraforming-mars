@@ -10,6 +10,9 @@ import {ImportedSnapshotsStore} from '../admin/ImportedSnapshotsStore';
 import {Server} from '../models/ServerModel';
 import {statsGameDetails} from './statsGameDetails';
 import {resolveCardName} from './cardNameResolver';
+import {ScreenshotDetailsStore} from './ScreenshotDetailsStore';
+import {CardName} from '../../common/cards/CardName';
+import {StatsGameDetails} from '../../common/stats/StatsGame';
 
 // Beendete Partien ändern sich nicht mehr: einmal ausgewertet, bleiben sie im Speicher.
 // Spart bei jedem Aufruf der Statistik das Erzeugen der kompletten Endstände.
@@ -40,12 +43,38 @@ function localStatsGame(game: IGame): StatsGame {
   };
 }
 
-function importedStatsGame(summary: AdminGameSummary, snapshots: ImportedSnapshotsStore): StatsGame {
+/** Kartennamen aus abgelesenen Screenshots absichern: Unbekanntes fällt weg, statt die Statistik zu verfälschen. */
+function knownCards(details: StatsGameDetails): StatsGameDetails {
+  const known = (name: string): name is CardName => resolveCardName(name) === name;
+  return {
+    ...details,
+    players: details.players.map((player) => ({
+      ...player,
+      cards: player.cards.filter(known),
+      cardPoints: player.cardPoints?.filter((card) => known(card.name)),
+    })),
+  };
+}
+
+function screenshotIdOf(summary: AdminGameSummary): string | undefined {
+  return summary.screenshotUrl === undefined ? undefined : new URLSearchParams(summary.screenshotUrl.split('?')[1] ?? '').get('id') ?? undefined;
+}
+
+function importedDetails(summary: AdminGameSummary, snapshots: ImportedSnapshotsStore, screenshots: ScreenshotDetailsStore): StatsGameDetails | undefined {
   const snapshot = summary.importedParticipantId === undefined ? undefined : snapshots.get(summary.importedParticipantId);
+  if (snapshot !== undefined) {
+    return statsGameDetails(snapshot.view);
+  }
+  const screenshotId = screenshotIdOf(summary);
+  const fromScreenshot = screenshotId === undefined ? undefined : screenshots.get(screenshotId);
+  return fromScreenshot === undefined ? undefined : knownCards(fromScreenshot.details);
+}
+
+function importedStatsGame(summary: AdminGameSummary, snapshots: ImportedSnapshotsStore, screenshots: ScreenshotDetailsStore): StatsGame {
   return {
     summary: publicSummary(summary),
     resultUrl: summary.screenshotUrl ?? (summary.importedParticipantId === undefined ? undefined : `${paths.THE_END}?id=${summary.importedParticipantId}`),
-    details: snapshot === undefined ? undefined : statsGameDetails(snapshot.view),
+    details: importedDetails(summary, snapshots, screenshots),
   };
 }
 
@@ -54,6 +83,7 @@ export async function collectStatsGames(
   gameLoader: IGameLoader,
   importedGames: ImportedGamesStore = ImportedGamesStore.getInstance(),
   snapshots: ImportedSnapshotsStore = ImportedSnapshotsStore.getInstance(),
+  screenshots: ScreenshotDetailsStore = ScreenshotDetailsStore.getInstance(),
 ): Promise<Array<StatsGame>> {
   const games: Array<StatsGame> = [];
   for (const {gameId} of await gameLoader.getIds()) {
@@ -73,7 +103,7 @@ export async function collectStatsGames(
   }
   // Importe sind kleine JSON-Dateien; gelöschte oder neue Importe sollen sofort wirken, daher ohne Zwischenspeicher
   for (const summary of importedGames.list().filter((candidate) => candidate.isFinished)) {
-    games.push(importedStatsGame(summary, snapshots));
+    games.push(importedStatsGame(summary, snapshots, screenshots));
   }
   return games.sort((first, second) => first.summary.createdTimeMs - second.summary.createdTimeMs);
 }

@@ -616,3 +616,37 @@ each(@players, {
     flex: 1 1 100%;
   }
 }
+
+// ---------- Herkunft der Siegpunkte: gestapelter Balken ----------
+@stats-source-colors: {
+  terraformRating: @button-heat;
+  milestones: @bg_action;
+  awards: @create-game-gold;
+  greenery: @button-success;
+  city: #9aa0a6;
+  cards: #b9813b;
+  other: rgba(255, 255, 255, 0.35);
+}
+
+each(@stats-source-colors, {
+  .stats-source-@{key} {
+    background: @value;
+  }
+});
+
+.stats-sources-bar {
+  display: flex;
+  width: 160px;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+
+  span {
+    height: 100%;
+  }
+}
+
+.stats-legend i[class*="stats-source-"] {
+  height: 8px;
+}

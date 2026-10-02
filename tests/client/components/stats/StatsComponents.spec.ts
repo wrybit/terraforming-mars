@@ -16,6 +16,7 @@ import StatsKpis from '@/client/components/stats/StatsKpis.vue';
 import StatsLineChart from '@/client/components/stats/StatsLineChart.vue';
 import StatsBarChart from '@/client/components/stats/StatsBarChart.vue';
 import StatsEntityName from '@/client/components/stats/StatsEntityName.vue';
+import StatsPointSources from '@/client/components/stats/StatsPointSources.vue';
 
 const games = sampleGames();
 const results = allPlayerResults(games);
@@ -72,7 +73,8 @@ describe('Stats components', () => {
     expect(mount(StatsGameList, {...config, props: {games}}).findAll('tbody tr')).has.length(3);
     expect(mount(StatsWinRate, {...config, props: {winRate: 0.5, expected: 0.33}}).text()).to.include('50 %');
     expect(mount(StatsKpis, {...config, props: {tiles: [{label: 'Games', value: 3}]}}).text()).to.include('3');
-    expect(mount(StatsLineChart, {...config, props: {games, names: ['Jens']}}).findAll('circle')).has.length(3);
+    expect(mount(StatsLineChart, {...config, props: {series: [{name: 'Jens', color: 'blue', points: [{value: 1}, {value: 3, highlight: true}, {value: undefined}]}], labels: ['1', '2', '3']}}).findAll('circle')).has.length(2);
+    expect(mount(StatsPointSources, {...config, props: {results}}).findAll('tbody tr')).has.length(3);
     expect(mount(StatsBarChart, {...config, props: {bars: [{label: '9', value: 1}]}}).findAll('rect')).has.length(1);
     expect(mount(StatsEntityName, {...config, props: {kind: 'player', name: 'Martin'}}).classes()).to.include('player_translucent_bg_color_green');
   });

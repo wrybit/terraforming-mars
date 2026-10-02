@@ -3,7 +3,7 @@
     <section class="stats-card">
       <h2 v-i18n>At a glance</h2>
       <StatsKpis :tiles="tiles"/>
-      <p v-if="detailedGames < games.length" class="stats-note">{{ detailNote }}</p>
+      <p v-if="completeGames < games.length" class="stats-note">{{ detailNote }}</p>
     </section>
 
     <section v-if="lineups.length > 0" class="stats-card">
@@ -28,11 +28,20 @@
     <div class="stats-columns">
       <section class="stats-card">
         <h2 v-i18n>Points in the last games</h2>
-        <StatsLineChart :games="recentGames" :names="names" :width="chartWidth"/>
+        <StatsLineChart :series="recentSeries" :labels="recentLabels" :width="chartWidth" highlightLabel="Win"/>
       </section>
       <section class="stats-card">
         <h2 v-i18n>Games by generations</h2>
         <StatsBarChart :bars="generationBars" :width="chartWidth"/>
+      </section>
+      <section class="stats-card">
+        <h2 v-i18n>Avg. points per generation</h2>
+        <StatsLineChart :series="pointsSeries" :labels="generationLabels(pointsSeries)" :width="chartWidth"/>
+      </section>
+      <section class="stats-card">
+        <h2 v-i18n>Avg. terraforming per generation</h2>
+        <StatsLineChart :series="globalsSeries" :labels="generationLabels(globalsSeries)" :width="chartWidth" :maximumValue="100" :step="20"/>
+        <p class="stats-note" v-i18n>Percent of the way to the maximum.</p>
       </section>
     </div>
   </div>
@@ -44,12 +53,13 @@ import {Color} from '@/common/Color';
 import {StatsGame} from '@/common/stats/StatsGame';
 import {LineupWinCounts, winCountsByLineup} from '@/client/components/admin/winCounts';
 import StatsKpis from './StatsKpis.vue';
-import {StatsBar, StatsKpi} from './statsTypes';
+import {StatsBar, StatsChartSeries, StatsKpi} from './statsTypes';
 import StatsLineChart from './StatsLineChart.vue';
 import StatsBarChart from './StatsBarChart.vue';
 import {average, playerNames, StatsPlayerResult} from './statsResults';
 import {gamesByGeneration} from './statsRecords';
-import {formatNumber} from './statsLabels';
+import {formatDate, formatNumber} from './statsLabels';
+import {averageGlobalsByGeneration, averagePointsByGeneration} from './statsSeries';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import {statsHref} from './statsNavigation';
 
@@ -75,22 +85,54 @@ export default defineComponent({
     tiles(): Array<StatsKpi> {
       const winners = this.results.filter((result) => result.place === 1);
       const details = this.games.flatMap((game) => game.details === undefined ? [] : [game.details]);
+      const complete = this.results.filter((result) => result.game.details?.cardsComplete === true);
       return [
         {label: 'Games', value: this.games.length},
         {label: 'Avg. generations', value: formatNumber(average(this.games.map((game) => game.summary.generation).filter((generation) => generation > 0)))},
         {label: 'Avg. winner points', value: formatNumber(average(winners.map((result) => result.player.victoryPoints)), 0)},
-        {label: 'Cities', value: sum(this.results, (result) => result.details?.cities)},
+        {label: 'Cities', value: sum(complete, (result) => result.details?.cities)},
         {label: 'Greeneries', value: sum(this.results, (result) => result.details?.greeneries)},
         {label: 'Milestones', value: details.reduce((total, entry) => total + entry.milestones.length, 0)},
         {label: 'Awards', value: details.reduce((total, entry) => total + entry.awards.length, 0)},
-        {label: 'Cards played', value: sum(this.results, (result) => result.details?.cards.length)},
+        {label: 'Cards played', value: sum(complete, (result) => result.details?.cards.length)},
       ];
     },
-    detailedGames(): number {
-      return this.games.filter((game) => game.details !== undefined).length;
+    completeGames(): number {
+      return this.games.filter((game) => game.details?.cardsComplete === true).length;
     },
     detailNote(): string {
-      return translateTextWithParams('Cities, greeneries, milestones, awards and cards: only the ${0} games with a saved final state.', [String(this.detailedGames)]);
+      return translateTextWithParams('Cities and cards played: only the ${0} games with the full game state; the rest also from screenshots.', [String(this.completeGames)]);
+    },
+    recentSeries(): Array<StatsChartSeries> {
+      return this.names.map((name) => ({
+        name,
+        color: this.colorOf(name),
+        points: this.recentGames.map((game) => {
+          const player = game.summary.players.find((candidate) => candidate.name === name);
+          return {
+            value: player?.victoryPoints,
+            highlight: player?.isWinner,
+            title: player === undefined ? undefined : `${name}: ${player.victoryPoints} · ${formatDate(game.summary.createdTimeMs)}`,
+          };
+        }),
+      }));
+    },
+    recentLabels(): Array<string> {
+      return this.recentGames.map((game) => formatDate(game.summary.createdTimeMs).slice(0, 5));
+    },
+    pointsSeries(): Array<StatsChartSeries> {
+      return averagePointsByGeneration(this.results, this.names).map((entry) => ({
+        name: entry.name,
+        color: this.colorOf(entry.name),
+        points: entry.values.map((value, index) => ({value: value === undefined ? undefined : Math.round(value), title: `${entry.name} · ${index + 1}: ${formatNumber(value, 0)}`})),
+      }));
+    },
+    globalsSeries(): Array<StatsChartSeries> {
+      return averageGlobalsByGeneration(this.games).map((entry) => ({
+        name: entry.label,
+        color: entry.color,
+        points: entry.values.map((value, index) => ({value: value === undefined ? undefined : Math.round(value), title: `${index + 1}: ${formatNumber(value, 0)} %`})),
+      }));
     },
     lineups(): Array<LineupWinCounts> {
       return winCountsByLineup(this.games.map((game) => game.summary));
@@ -107,6 +149,10 @@ export default defineComponent({
   },
   methods: {
     formatNumber,
+    generationLabels(series: ReadonlyArray<StatsChartSeries>): Array<string> {
+      const length = Math.max(0, ...series.map((line) => line.points.length));
+      return Array.from({length}, (_, index) => String(index + 1));
+    },
     colorOf(name: string): Color {
       return (this.playerColors as Map<string, Color>).get(name) ?? 'neutral';
     },

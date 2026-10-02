@@ -31,6 +31,11 @@
       </section>
     </div>
 
+    <section v-if="hasPointSources" class="stats-card">
+      <h2 v-i18n>Where the points come from</h2>
+      <StatsPointSources :results="detail.results"/>
+    </section>
+
     <div v-if="companions.length > 0" class="stats-columns">
       <section v-for="companion in companions" :key="companion.kind" class="stats-card">
         <h2><span v-i18n>Played together</span>: <span v-i18n>{{ kindLabel(companion.kind) }}</span></h2>
@@ -38,7 +43,7 @@
           <template #name="{row}"><StatsEntityName :kind="companion.kind" :name="row.name"/></template>
           <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate"/></template>
         </StatsTable>
-        <p class="stats-note" v-i18n>Only games with a saved final state count.</p>
+        <p class="stats-note" v-i18n>From screenshots only cards with victory points are known.</p>
       </section>
     </div>
 
@@ -58,6 +63,7 @@ import {StatsColumn, StatsKpi} from './statsTypes';
 import StatsEntityName from './StatsEntityName.vue';
 import StatsWinRate from './StatsWinRate.vue';
 import StatsGameList from './StatsGameList.vue';
+import StatsPointSources from './StatsPointSources.vue';
 import {EntityStats, entityStats} from './statsAggregate';
 import {COMPANION_COLUMNS} from './statsColumns';
 import {EntityDetail, entityDetail, HeadToHead, headToHead, PlayerCountStats} from './statsDetail';
@@ -74,7 +80,7 @@ const share = (wins: number, plays: number) => plays === 0 ? undefined : wins / 
 // Detailseite eines Eintrags: Kennzahlen, je Spieler, je Spielerzahl, Kombinationen und alle Partien
 export default defineComponent({
   name: 'StatsEntityDetail',
-  components: {StatsTable, StatsKpis, StatsEntityName, StatsWinRate, StatsGameList},
+  components: {StatsTable, StatsKpis, StatsEntityName, StatsWinRate, StatsGameList, StatsPointSources},
   props: {
     kind: {type: String as PropType<StatsKind>, required: true},
     name: {type: String, required: true},
@@ -117,6 +123,9 @@ export default defineComponent({
     },
     companions(): EntityDetail['companions'] {
       return this.detail.companions.filter((companion) => companion.entries.length > 0);
+    },
+    hasPointSources(): boolean {
+      return this.detail.results.some((result) => result.details?.victoryPoints !== undefined);
     },
     headToHead(): Array<HeadToHead> {
       return headToHead(this.results, this.name);
