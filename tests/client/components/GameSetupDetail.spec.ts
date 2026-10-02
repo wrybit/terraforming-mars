@@ -27,7 +27,7 @@ describe('GameSetupDetail', () => {
       },
     });
     const labels = wrapper.findAll('.setup-tile-label').map((label) => label.text());
-    expect(labels).deep.eq(['Board', 'Expansions', 'Draft', 'Milestones and Awards', 'WGT', 'Game configs']);
+    expect(labels).deep.eq(['Board', 'Expansions', 'Draft', 'Milestones and Awards', 'World Government Terraforming', 'Game configs']);
     expect(wrapper.find('.setup-chip--board-tharsis').exists()).is.true;
     expect(wrapper.find('.setup-chip--accent').text()).eq('timer');
   });
@@ -42,6 +42,6 @@ describe('GameSetupDetail', () => {
       },
     });
     const labels = wrapper.findAll('.setup-tile-label').map((label) => label.text());
-    expect(labels).deep.eq(['Board', 'Expansions', 'Solo', 'WGT']);
+    expect(labels).deep.eq(['Board', 'Expansions', 'Solo', 'World Government Terraforming']);
   });
 });
