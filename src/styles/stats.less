@@ -650,3 +650,69 @@ each(@stats-source-colors, {
 .stats-legend i[class*="stats-source-"] {
   height: 8px;
 }
+
+// ---------- Karten: kleines Kartensymbol neben dem Namen öffnet die Großansicht ----------
+.stats-entity-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stats-card-button {
+  flex-shrink: 0;
+  width: 14px;
+  height: 19px;
+  padding: 0;
+  border: 1.5px solid @create-game-dim;
+  border-radius: 3px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 0 30%, transparent 30%);
+  cursor: zoom-in;
+
+  &:hover {
+    border-color: #fff;
+  }
+}
+
+// Detailseite einer Karte: Kennzahlen links, die Karte rechts (schmal: Karte über den Kennzahlen)
+.stats-detail-head--card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: @create-game-gap-column;
+  align-items: start;
+}
+
+.stats-detail-card {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+
+  .card-container {
+    margin: 0 !important;
+  }
+}
+
+@media only screen and (max-width: @stats-narrow) {
+  .stats-detail-head--card {
+    grid-template-columns: minmax(0, 1fr);
+
+    .stats-detail-card {
+      order: -1;
+      justify-self: center;
+    }
+  }
+}
+
+// In der Überschrift der Detailseite steht die Karte schon groß daneben
+.stats-detail-title .stats-card-button {
+  display: none;
+}
+
+// Am Desktop passen viele Karten ins Karussell: die gezeigte hervorheben, die übrigen treten zurück
+.stats-card-zoom {
+  .mb-card-zoom-slide--before,
+  .mb-card-zoom-slide--after {
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+  }
+}

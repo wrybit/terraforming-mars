@@ -10,7 +10,7 @@
     </div>
     <p v-if="rows.length === 0" class="stats-note" v-i18n>No games for these filters.</p>
     <StatsTable v-else :columns="columns" :rows="visibleRows" :rowKey="rowKey" :initialSort="initialSort">
-      <template #name="{row}"><StatsEntityName :kind="kind" :name="row.name"/></template>
+      <template #name="{row, rows: shownRows}"><StatsEntityName :kind="kind" :name="row.name" :siblings="namesOf(shownRows)"/></template>
       <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate"/></template>
       <template #mostPlayedBy="{row}"><StatsEntityName v-if="row.mostPlayedBy" kind="player" :name="row.mostPlayedBy"/></template>
       <template #mostWinsBy="{row}"><StatsEntityName v-if="row.mostWinsBy" kind="player" :name="row.mostWinsBy"/></template>
@@ -87,6 +87,9 @@ export default defineComponent({
   methods: {
     rowKey(row: EntityRow): string {
       return row.name;
+    },
+    namesOf(rows: ReadonlyArray<EntityRow>): Array<string> {
+      return rows.map((row) => row.name);
     },
   },
 });

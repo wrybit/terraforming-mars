@@ -1,13 +1,19 @@
 <template>
   <div class="stats-stack">
-    <section class="stats-card stats-detail-head">
-      <a :href="backHref" data-stats-link class="stats-link">← <span v-i18n>{{ backLabel }}</span></a>
-      <h2 class="stats-detail-title">
-        <StatsEntityName :kind="kind" :name="name"/>
-        <span class="stats-dim" v-i18n>{{ definition.singular }}</span>
-      </h2>
-      <p v-if="detail.results.length === 0" class="stats-note" v-i18n>No games for these filters.</p>
-      <StatsKpis v-else :tiles="tiles"/>
+    <section class="stats-card stats-detail-head" :class="{'stats-detail-head--card': isCard}">
+      <div class="stats-detail-main">
+        <a :href="backHref" data-stats-link class="stats-link">← <span v-i18n>{{ backLabel }}</span></a>
+        <h2 class="stats-detail-title">
+          <StatsEntityName :kind="kind" :name="name"/>
+          <span class="stats-dim" v-i18n>{{ definition.singular }}</span>
+        </h2>
+        <p v-if="detail.results.length === 0" class="stats-note" v-i18n>No games for these filters.</p>
+        <StatsKpis v-else :tiles="tiles"/>
+      </div>
+      <!-- Die Karte selbst; ein Klick zeigt sie groß -->
+      <button v-if="isCard" type="button" class="stats-detail-card" :title="$t('Show card')" @click="showOwnCard">
+        <Card :card="{name: cardName}"/>
+      </button>
     </section>
 
     <div v-if="detail.results.length > 0" class="stats-columns">
@@ -40,7 +46,7 @@
       <section v-for="companion in companions" :key="companion.kind" class="stats-card">
         <h2><span v-i18n>Played together</span>: <span v-i18n>{{ kindLabel(companion.kind) }}</span></h2>
         <StatsTable :columns="companionColumns" :rows="companion.entries.slice(0, companionLimit)" :rowKey="keyByName" initialSort="plays">
-          <template #name="{row}"><StatsEntityName :kind="companion.kind" :name="row.name"/></template>
+          <template #name="{row, rows: shownRows}"><StatsEntityName :kind="companion.kind" :name="row.name" :siblings="namesOf(shownRows)"/></template>
           <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate"/></template>
         </StatsTable>
         <p class="stats-note" v-i18n>From screenshots only cards with victory points are known.</p>
@@ -64,6 +70,9 @@ import StatsEntityName from './StatsEntityName.vue';
 import StatsWinRate from './StatsWinRate.vue';
 import StatsGameList from './StatsGameList.vue';
 import StatsPointSources from './StatsPointSources.vue';
+import Card from '@/client/components/card/Card.vue';
+import {CardName} from '@/common/cards/CardName';
+import {CARD_ZOOM_KEY, OpenCardZoom} from './statsCardZoom';
 import {EntityStats, entityStats} from './statsAggregate';
 import {COMPANION_COLUMNS} from './statsColumns';
 import {EntityDetail, entityDetail, HeadToHead, headToHead, PlayerCountStats} from './statsDetail';
@@ -80,7 +89,10 @@ const share = (wins: number, plays: number) => plays === 0 ? undefined : wins / 
 // Detailseite eines Eintrags: Kennzahlen, je Spieler, je Spielerzahl, Kombinationen und alle Partien
 export default defineComponent({
   name: 'StatsEntityDetail',
-  components: {StatsTable, StatsKpis, StatsEntityName, StatsWinRate, StatsGameList, StatsPointSources},
+  components: {StatsTable, StatsKpis, StatsEntityName, StatsWinRate, StatsGameList, StatsPointSources, Card},
+  inject: {
+    openCardZoom: {from: CARD_ZOOM_KEY, default: () => () => {}},
+  },
   props: {
     kind: {type: String as PropType<StatsKind>, required: true},
     name: {type: String, required: true},
@@ -123,6 +135,12 @@ export default defineComponent({
     },
     companions(): EntityDetail['companions'] {
       return this.detail.companions.filter((companion) => companion.entries.length > 0);
+    },
+    cardName(): CardName {
+      return this.name as CardName;
+    },
+    isCard(): boolean {
+      return this.kind === 'card' || this.kind === 'prelude' || this.kind === 'corporation';
     },
     hasPointSources(): boolean {
       return this.detail.results.some((result) => result.details?.victoryPoints !== undefined);
@@ -172,6 +190,12 @@ export default defineComponent({
     },
   },
   methods: {
+    namesOf(rows: ReadonlyArray<{name: string}>): Array<string> {
+      return rows.map((row) => row.name);
+    },
+    showOwnCard(event: MouseEvent): void {
+      (this.openCardZoom as OpenCardZoom)({names: [this.name as CardName], index: 0, origin: (event.currentTarget as HTMLElement).getBoundingClientRect()});
+    },
     keyByName(row: {name: string}): string {
       return row.name;
     },
