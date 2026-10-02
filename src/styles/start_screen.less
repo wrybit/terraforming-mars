@@ -45,9 +45,10 @@
 .start-screen-link {
   text-decoration: none;
   cursor: pointer;
-  // Rahmen in gedämpftem Button-Lila; beim Hover heller mit pulsierendem Glow nach außen
-  box-shadow: inset 0 0 0 1px @start-screen-link-outline;
-  transition: box-shadow @start-screen-hover-duration ease;
+  // Rahmen in gedämpftem Button-Lila als echte Outline (ein inset-Schatten läge unter dem Planeten und gäbe Farbsäume);
+  // beim Hover heller mit pulsierendem Glow nach außen
+  outline: 1px solid @start-screen-link-outline;
+  transition: outline-color @start-screen-hover-duration ease;
   line-height: 28px;
   border-radius: 10px;
   color: #eee;
@@ -105,22 +106,60 @@
 
   &:hover,
   &:focus-visible {
-    box-shadow: inset 0 0 0 1px @start-screen-link-outline-hover, 0 0 6px 2px fade(@start-screen-link-glow, 55%);
+    outline-color: @start-screen-link-outline-hover;
+    box-shadow: 0 0 6px 2px fade(@start-screen-link-glow, 55%);
     animation: start-screen-link-glow @selection-pulse-period ease-in-out infinite;
     // über den Nachbar-Buttons, damit der Glow nicht vom nächsten Button verdeckt wird
     z-index: 1;
   }
 }
 
-// Gleicher Verlauf wie selection-pulse, nur mit dünnem Innenrahmen statt 5px-Auswahlrahmen
+// Gleicher Verlauf wie selection-pulse, nur der Schein (der Rahmen ist die Outline)
 @keyframes start-screen-link-glow {
   0%,
   100% {
-    box-shadow: inset 0 0 0 1px @start-screen-link-outline-hover, 0 0 6px 2px fade(@start-screen-link-glow, 55%);
+    box-shadow: 0 0 6px 2px fade(@start-screen-link-glow, 55%);
   }
 
   50% {
-    box-shadow: inset 0 0 0 1px @start-screen-link-outline-hover, 0 0 14px 6px fade(@start-screen-link-glow, 85%);
+    box-shadow: 0 0 14px 6px fade(@start-screen-link-glow, 85%);
+  }
+}
+
+// Drehende Planeten (StartScreen.vue, planetGlobeRenderer.ts): sobald WebGL bereit ist, zeichnet die Canvas den
+// Planeten; daneben ist der Button Glas – die Galaxie scheint weichgezeichnet durch. Ohne WebGL bleibt planets.jpg.
+.start-screen-link-planet {
+  display: none;
+}
+
+.start-screen-links--globe .start-screen-link {
+  background-image: none;
+
+  &::before {
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+  }
+
+  &:hover::before,
+  &:focus-visible::before {
+    backdrop-filter: blur(10px);
+  }
+
+  .start-screen-link-planet {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    // ruhend gedämpft, beim Hover hell und satt (über 100 %), damit die Planeten richtig leuchten
+    filter: brightness(0.85) saturate(0.75);
+    transition: filter @start-screen-hover-duration ease;
+  }
+
+  &:hover .start-screen-link-planet,
+  &:focus-visible .start-screen-link-planet {
+    filter: brightness(1.1) saturate(1.35);
   }
 }
 

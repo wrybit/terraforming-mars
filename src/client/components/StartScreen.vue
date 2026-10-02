@@ -5,7 +5,7 @@
     <LanguageIcon/>
     <PreferencesIcon/>
   </div>
-  <div class="start-screen-links">
+  <div class="start-screen-links" :class="{'start-screen-links--globe': globeReady}">
     <div class="start-screen-header start-screen-link--title">
       <div class="start-screen-title-top">TERRAFORMING</div>
       <div class="start-screen-title-bottom">MARS</div>
@@ -16,7 +16,13 @@
       class="start-screen-link"
       :style="{'--sprite-row': index + 1}"
       :href="link.href"
-      :target="link.external ? '_blank' : undefined">
+      :target="link.external ? '_blank' : undefined"
+      @mouseenter="setHovered(index, true)"
+      @mouseleave="setHovered(index, false)"
+      @focus="setHovered(index, true)"
+      @blur="setHovered(index, false)">
+      <!-- Planeten-Oberfläche per WebGL (planetGlobeRenderer.ts); ohne WebGL bleibt das Bild planets.jpg -->
+      <canvas class="start-screen-link-planet" :ref="(element) => setCanvas(index, element)" aria-hidden="true"></canvas>
       <span class="start-screen-link-content">
         <MobileGlyph class="start-screen-link-icon" :name="link.icon" :strokeWidth="2"/>
         <!-- v-i18n am Text-Span: die Übersetzung sucht den exakten Textinhalt, das Symbol würde stören -->
@@ -29,6 +35,9 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
+import {PlanetGlobeRenderer} from '@/client/components/startScreen/planetGlobeRenderer';
+import {PlanetRotation} from '@/client/components/startScreen/planetRotation';
+import {PLANET_STRIPES, PlanetStripeName} from '@/client/components/startScreen/planetStripes';
 import LanguageIcon from '@/client/components/LanguageIcon.vue';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
 import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
@@ -37,22 +46,70 @@ import * as constants from '@/common/constants';
 import {WIKI_URLS} from '@/client/utils/WikiLinks';
 import {UPSTREAM_REPOSITORY_URL} from '@/client/utils/RepositoryLinks';
 
-type StartScreenLink = {label: string, icon: GlyphName, href: string, external: boolean};
+type StartScreenLink = {label: string, icon: GlyphName, planet: PlanetStripeName, href: string, external: boolean};
 
 // Alles außer "Neues Spiel" öffnet einen neuen Tab (external), damit die Startseite offen bleibt.
-// Reihenfolge = Reihenfolge der Planeten-Hintergründe; ein neuer Eintrag schiebt alle folgenden eine Reihe weiter
+// Reihenfolge = Reihenfolge der Planeten-Hintergründe (Globus-Reihe); planet = Streifen in planet-stripes.jpg
 const links: ReadonlyArray<StartScreenLink> = [
-  {label: 'New game', icon: 'newGame', href: 'new-game', external: false},
-  {label: 'Game rules', icon: 'rules', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true},
-  {label: 'Statistics', icon: 'statistics', href: 'stats', external: true},
-  {label: 'Cards list', icon: 'cardsList', href: 'cards', external: true},
-  {label: 'Board game', icon: 'boardGame', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true},
-  {label: 'Developer team', icon: 'about', href: UPSTREAM_REPOSITORY_URL + '#-contributors-', external: true},
-  {label: 'Updates', icon: 'updates', href: WIKI_URLS.changelog, external: true},
-  {label: 'Discord', icon: 'discord', href: constants.DISCORD_INVITE, external: true},
+  {label: 'New game', icon: 'newGame', planet: 'venus', href: 'new-game', external: false},
+  {label: 'Game rules', icon: 'rules', planet: 'earth', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true},
+  {label: 'Statistics', icon: 'statistics', planet: 'mars', href: 'stats', external: true},
+  {label: 'Cards list', icon: 'cardsList', planet: 'jupiter', href: 'cards', external: true},
+  {label: 'Board game', icon: 'boardGame', planet: 'saturn', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true},
+  {label: 'Developer team', icon: 'about', planet: 'darkBlue', href: UPSTREAM_REPOSITORY_URL + '#-contributors-', external: true},
+  {label: 'Updates', icon: 'updates', planet: 'neptune', href: WIKI_URLS.changelog, external: true},
+  {label: 'Discord', icon: 'discord', planet: 'moon', href: constants.DISCORD_INVITE, external: true},
 ];
 
 const previousViewport = ref('');
+
+// Drehende Planeten: erst wenn WebGL und Textur bereit sind, ersetzt die Canvas das Bild planets.jpg
+const globeReady = ref(false);
+const canvases: Array<HTMLCanvasElement | undefined> = [];
+let rotation: PlanetRotation | undefined;
+let resizeObserver: ResizeObserver | undefined;
+
+function setCanvas(index: number, element: unknown): void {
+  canvases[index] = element instanceof HTMLCanvasElement ? element : undefined;
+}
+
+function setHovered(index: number, hovered: boolean): void {
+  rotation?.setHovered(index, hovered);
+}
+
+async function startGlobe(): Promise<void> {
+  const renderer = await PlanetGlobeRenderer.create();
+  if (renderer === undefined) {
+    return;
+  }
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+  rotation = new PlanetRotation(renderer, reducedMotion);
+  links.forEach((link, index) => {
+    const canvas = canvases[index];
+    if (canvas !== undefined) {
+      rotation?.add(canvas, index + 1, PLANET_STRIPES[link.planet]);
+    }
+  });
+  globeReady.value = true;
+  // Buttonmaße ändern sich mit der Fensterbreite/-höhe (Handy): dann neu zeichnen
+  const container = canvases[0]?.parentElement?.parentElement;
+  if (container) {
+    resizeObserver = new ResizeObserver(() => rotation?.drawAll());
+    resizeObserver.observe(container);
+  }
+  rotation.drawAll();
+}
+
+onMounted(() => {
+  if (typeof ResizeObserver !== 'undefined') {
+    void startGlobe();
+  }
+});
+
+onBeforeUnmount(() => {
+  rotation?.stop();
+  resizeObserver?.disconnect();
+});
 
 // Set the viewport width to width=device-width on the start screen so mobile browsers use their actual CSS viewport width.
 // The current global viewport is width=1260, which prevents the home page from using the device width on phones.
