@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-// Spielaufbau als Kachelraster: je Einstellung eine Kachel mit Beschriftung und Werte-Chips
+// Game setup as a tile grid: one tile per setting with a label and value chips
 import {computed} from 'vue';
 import {GameOptionsModel} from '@/common/models/GameOptionsModel';
 import {BoardName} from '@/common/boards/BoardName';
@@ -36,11 +36,11 @@ const props = defineProps<{
   lastSoloGeneration: number;
 }>();
 
-// Ton eines Chips: board = Farbe des Spielbretts, accent = aktive Option (lila), off = ausgeschaltet (dezent)
+// Chip tone: board = board colour, accent = active option (purple), off = switched off (subtle)
 type SetupValue = {text: string, tone?: string, iconClass?: string, href?: string};
 type SetupEntry = {label: string, values: Array<SetupValue>, wide?: boolean};
 
-// Farbklasse je Spielbrett (setup_tiles.less)
+// Colour class per board (setup_tiles.less)
 const BOARD_TONE: Record<BoardName, string> = {
   [BoardName.THARSIS]: 'board-tharsis',
   [BoardName.HELLAS]: 'board-hellas',
@@ -55,7 +55,7 @@ const BOARD_TONE: Record<BoardName, string> = {
   [BoardName.HOLLANDIA]: 'board-hollandia',
 };
 
-// Die vorhandenen Übersetzungen tragen einen Doppelpunkt ("Spielbrett: ") – als Kachel-Beschriftung ohne
+// Existing translations end with a colon ("Board: ") – tile labels drop it
 function label(key: string): string {
   return translateText(key).replace(/[\s:：]+$/, '');
 }
@@ -108,7 +108,7 @@ const randomMAValues = computed((): Array<SetupValue> => {
   return values;
 });
 
-// Schalter ohne eigene Kachel: nur sichtbar, wenn eingeschaltet
+// Switches without their own tile: only shown when enabled
 const configValues = computed((): Array<SetupValue> => {
   const options = props.gameOptions;
   const switches: Array<[boolean, string]> = [

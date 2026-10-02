@@ -1,7 +1,7 @@
 <template>
-  <!-- Gemeinsame Modal-Hülle für die Dialoge der Seitenleiste (Sprache, Info, Hilfe, Einstellungen):
-       zentrierte Box mit Rahmen, Schatten und Hintergrund über abgedunkelter Seite.
-       Teleport in body, damit Seitenleiste und Spalten-Overflow die Box nicht beschneiden. -->
+  <!-- Shared modal shell for the sidebar dialogs (language, info, help, settings):
+       centred box with border, shadow and background over a dimmed page.
+       Teleported to body so the sidebar and column overflow don't clip the box. -->
   <Teleport to="body">
     <div v-if="open" class="sidebar-modal-backdrop" @click.self="$emit('close')">
       <div class="sidebar-modal" role="dialog" aria-modal="true" :class="{'sidebar-modal--wide': wide, 'sidebar-modal--bare': bare, 'sidebar-modal--framed': framed}">
@@ -18,12 +18,12 @@ import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordin
 
 const props = defineProps<{
   open: boolean;
-  // Breiter für umfangreiche Inhalte (Hilfe)
+  // Wider for extensive content (help)
   wide?: boolean;
-  // Inhalt bringt Kopf, Schließen-Button und eigenes Scrollen selbst mit (Hilfe-Overlay):
-  // feste Höhe, kein Innenabstand, am Handy als Vollbild-Blatt von unten
+  // Content brings its own header, close button and scrolling (help overlay):
+  // fixed height, no padding, full-screen sheet on phones
   bare?: boolean;
-  // Inhalt ist ein DialogFrame (Kopf mit Titel und ✕, scrollender Inhalt, Fußzeile): Box ohne Innenabstand
+  // Content is a DialogFrame (header with title and ✕, scrolling content, footer): box without padding
   framed?: boolean;
 }>();
 
@@ -37,7 +37,7 @@ function closeOnEscape(event: KeyboardEvent) {
   }
 }
 
-// Jeder Seitenleisten-Dialog ist ein eigenes Overlay (overlayCoordinator.ts)
+// Every sidebar dialog is its own overlay (overlayCoordinator.ts)
 const overlayKey = 'sidebar-modal-' + Math.random().toString(36).slice(2);
 let unregisterOverlay: (() => void) | undefined;
 

@@ -14,7 +14,7 @@ import {PreferencesManager} from '@/client/utils/PreferencesManager';
 import PreferencesDialog from '@/client/components/PreferencesDialog.vue';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 
-// Geschlossen wird über SidebarModal (Escape, Klick daneben), das ✕ im Dialogkopf oder den OK-Button
+// Closed via SidebarModal (Escape, click outside), the ✕ in the dialog header or the OK button
 const preferencesPanelOpen = ref(false);
 
 </script>

@@ -1,5 +1,5 @@
-// Seitenleisten-Dialog mit Titel (DialogFrame.vue in SidebarModal :framed): Kopf mit Symbol, Titel und ✕,
-// scrollender Inhalt, Fußzeile. Gleicher Kopf wie das Hilfe-Overlay (help_overlay.less).
+// Titled sidebar dialog (DialogFrame.vue in SidebarModal :framed): header with icon, title and ✕,
+// scrolling content, footer. Same header as the help overlay (help_overlay.less).
 @import (reference) "./modal_surface.less";
 @import (reference) "./variables.less";
 
@@ -8,7 +8,7 @@
 @dialog-muted: #8b8d96;
 @dialog-accent-text: #b3b2ff;
 @dialog-tile-radius: 10px;
-// Gesetz der Nähe: innerhalb einer Kachel < zwischen Kacheln < zwischen Abschnitten
+// Law of proximity: inside a tile < between tiles < between sections
 @dialog-gap-inner: 6px;
 @dialog-gap-tile: 8px;
 @dialog-gap-section: 24px;
@@ -101,7 +101,7 @@
   }
 }
 
-// Handy: weniger Rand, damit die Kacheln Platz haben
+// Phone: less padding so the tiles have room
 @media only screen and (max-width: 520px) {
   .dialog-frame-head {
     padding: 12px 12px 12px 16px;

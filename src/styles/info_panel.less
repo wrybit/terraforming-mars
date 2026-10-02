@@ -1,4 +1,4 @@
-// Spielinfo (InfoPanel.vue): Abschnitte Spielaufbau, Karten, Zuschauer-Link; Rahmen aus dialog_frame.less
+// Game info (InfoPanel.vue): sections game setup, cards, spectator link; frame from dialog_frame.less
 @import (reference) "./dialog_frame.less";
 
 .info-panel-section {
@@ -18,7 +18,7 @@
   text-transform: uppercase;
 }
 
-// Nachziehstapel groß, Ablage klein dahinter; bei Platzmangel Ablage in die nächste Zeile
+// Draw pile large, discard small behind it; wraps to the next line when space is short
 .info-panel-deck {
   display: flex;
   flex-wrap: wrap;
@@ -109,7 +109,7 @@
     font-size: 20px;
   }
 
-  // Hinweis unter die Buttons, mittig
+  // Notice below the buttons, centred
   .info-panel-notice {
     order: 2;
     flex-basis: 100%;

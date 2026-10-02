@@ -1,6 +1,6 @@
 <template>
-  <!-- Ganze Kachel anklickbar, nicht nur die kleine Flagge darin (wie Hilfe/Einstellungen).
-       Klicks im Modal erreichen die Kachel nicht: SidebarModal hängt per Teleport am body -->
+  <!-- The whole tile is clickable, not just the small flag inside (like help/settings).
+       Clicks inside the modal don't reach the tile: SidebarModal is teleported to body -->
   <div class="sidebar_item sidebar_item--language" :title="$t('Language')" @click="languagePanelOpen = true">
     <div
       class="sidebar_icon sidebar_icon--language"
@@ -22,7 +22,7 @@ import LanguageSelectionDialog from '@/client/components/LanguageSelectionDialog
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import {LANGUAGE, LANGUAGES} from '@/common/constants';
 
-// Geschlossen wird über SidebarModal (Escape, Klick daneben) oder das ✕ im Dialogkopf
+// Closed via SidebarModal (Escape, click outside) or the ✕ in the dialog header
 const languagePanelOpen = ref(false);
 const lang = computed(() => PreferencesManager.INSTANCE.values().lang as LANGUAGE);
 const title = computed(() => {

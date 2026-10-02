@@ -1,4 +1,4 @@
-// Rechteckige Flaggen (LanguageFlag.vue, assets/flags/*.svg) – ersetzt die runden Sprite-Flaggen
+// Rectangular flags (LanguageFlag.vue, assets/flags/*.svg) – replace the round sprite flags
 @import (reference) "./dialog_frame.less";
 @import (reference) "./selection_highlight.less";
 
@@ -8,21 +8,21 @@
   width: 36px;
   height: 24px;
   border-radius: 3px;
-  // Kontur über dem Bild, damit weiße Flaggen (Japan, Polen, Finnland) auf dunklem Grund eine Kante haben
+  // Outline above the image so white flags (Japan, Poland, Finland) keep an edge on dark backgrounds
   outline: 1px solid rgba(255, 255, 255, 0.18);
   outline-offset: -1px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   object-fit: cover;
 }
 
-// In Kopf- und Seitenleiste: auf Icon-Größe (26px breit)
+// In header and sidebar: icon size (26px wide)
 .language-flag.language-flag--toolbar {
   width: 26px;
   height: 17px;
   border-radius: 2px;
 }
 
-// ---- Sprachauswahl (LanguageSelectionDialog.vue) ----
+// ---- Language selection (LanguageSelectionDialog.vue) ----
 .language-selection-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -51,7 +51,7 @@
     background: rgba(255, 255, 255, 0.08);
   }
 
-  // Aktuelle Sprache: 20 % lila wie jede Auswahl, knapper Schein, Häkchen-Fähnchen in der Ecke ohne Abstand zum Rahmen
+  // Current language: 20% purple like every selection, small glow, check tab in the corner flush with the border
   &.is-selected {
     border-color: @selection-color;
     box-shadow: 0 0 0 1px @selection-color, 0 0 8px fade(@selection-color, 45%);
@@ -102,7 +102,7 @@
   font-size: 12px;
 }
 
-// Handy: zwei Spalten, kleinere Flagge; lange Namen umbrechen statt abschneiden
+// Phone: two columns, smaller flag; long names wrap instead of being cut off
 @media only screen and (max-width: 520px) {
   .language-selection-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

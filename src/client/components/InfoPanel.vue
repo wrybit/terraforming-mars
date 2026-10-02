@@ -11,7 +11,7 @@
 
     <section class="info-panel-section">
       <h3 class="info-panel-section-title" v-i18n>Cards</h3>
-      <!-- Nachziehstapel als Hauptwert groß, Ablagestapel klein dahinter -->
+      <!-- Draw pile as the main value (large), discard pile small behind it -->
       <div class="setup-tiles setup-tiles--decks">
         <div v-for="deck in decks" :key="deck.label" class="setup-tile">
           <div class="setup-tile-label">{{ $t(deck.label) }}</div>
@@ -75,7 +75,7 @@ const props = defineProps<{
   deckSize: number;
   discardPileSize: number;
   otherDeckSizes: OtherDeckSizesModel;
-  // Optional: nur in Spielansichten vorhanden
+  // Optional: only present in game views
   spectatorId?: string;
   expectedPurgeTimeMs?: number;
 }>();
@@ -99,7 +99,7 @@ const decks = computed(() => {
   return all.filter((deck): deck is {label: string, sizes: DeckSizeModel} => deck.sizes !== undefined);
 });
 
-// Volle Adresse, damit man sie direkt weitergeben kann
+// Full address so it can be shared directly
 const spectatorUrl = computed(() => {
   if (props.spectatorId === undefined) {
     return undefined;

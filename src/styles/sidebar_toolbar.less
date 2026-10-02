@@ -135,8 +135,8 @@
     line-height: 1.2;
   }
 
-  // Sprache: Flagge absolut um die Mitte des Buttons gelegt (toolbar-language-flag);
-  // Bezug ist der Button selbst (der innere Icon-Container sitzt nicht genau mittig)
+  // Language: flag positioned absolutely around the button centre (toolbar-language-flag);
+  // relative to the button itself (the inner icon container is not exactly centred)
   .sidebar_cont .sidebar_item.sidebar_item--language {
     position: relative;
     inset: auto; // alte Leiste setzt bottom: 162px (preferences.less), das würde mit relative greifen
@@ -182,7 +182,7 @@
   }
 }
 
-// Flagge mittig im Milchglas-Button (auch genutzt von der Kartenliste, card_list.less)
+// Flag centred in the frosted-glass button (also used by the card list, card_list.less)
 .toolbar-language-flag() {
   .language-flag {
     position: absolute;

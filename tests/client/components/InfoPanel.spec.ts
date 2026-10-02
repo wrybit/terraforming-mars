@@ -4,7 +4,7 @@ import {globalConfig} from './getLocalVue';
 import InfoPanel from '@/client/components/InfoPanel.vue';
 import {fakeGameOptionsModel} from './testHelpers';
 
-// DialogFrame echt rendern, sonst fehlen bei shallowMount die Inhalte seiner Slots
+// Render DialogFrame for real, otherwise shallowMount drops its slot content
 const withDialogFrame = {global: {...globalConfig.global, stubs: {...globalConfig.global.stubs, DialogFrame: false}}};
 
 describe('InfoPanel', () => {
