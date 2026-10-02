@@ -10,7 +10,7 @@ export function turnTaskLabel(game: {phase: Phase, generation: number}): string 
     return 'Draft';
   case Phase.RESEARCH:
     // In der ersten Generation wählt man Konzern, Präludien und Karten zugleich.
-    return game.generation === 1 ? 'Starting selection' : 'Buying';
+    return game.generation === 1 ? 'Opening' : 'Buying';
   case Phase.PRELUDES:
     return 'Prelude';
   case Phase.CEOS:
