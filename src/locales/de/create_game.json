@@ -1,6 +1,9 @@
 {
   "Load settings from file": "Einstellungen aus Datei laden",
   "Save settings to file": "Einstellungen als Datei speichern",
+  "Copy link with these settings": "Link mit diesen Einstellungen kopieren",
+  "Copy link": "Link kopieren",
+  "Link copied": "Link kopiert",
   "Setup": "Spielstart",
   "Expansion options": "Optionen der Erweiterungen",
   "Card pool": "Kartenauswahl",

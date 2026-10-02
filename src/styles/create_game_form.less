@@ -106,7 +106,7 @@
   }
 }
 
-// Import/Export mit Beschriftung, solange der Kopf Platz hat; sonst nur das Symbol (Container-Abfrage unten)
+// Import/Export/Link mit Beschriftung, solange der Kopf Platz hat; sonst nur das Symbol (Container-Abfrage unten)
 .create-game-icon-button {
   .toolbar-glass-button();
   gap: 6px;
@@ -123,9 +123,9 @@
 
 // Innenbreiten des Kopfes (Container-Abfragen messen ohne Innenabstand), ab denen die Beschriftungen passen:
 // einzeilig zwischen Titel und Sprache/Einstellungen, auf dem Handy in der eigenen zweiten Zeile.
-// Gemessen mit Deutsch (längere Sprache): 648px bzw. 318px, plus etwas Luft.
-@create-game-head-labels-min-one-row: 660px;
-@create-game-head-labels-min-two-rows: 330px;
+// Gemessen mit Deutsch (längere Sprache, mit "Link kopieren"): 794px bzw. 464px, plus etwas Luft.
+@create-game-head-labels-min-one-row: 810px;
+@create-game-head-labels-min-two-rows: 480px;
 
 // Innenbreite des Kopfes, bis zu der er auf dem Handy zweizeilig ist (Media-Abfrage unten):
 // Seitenrand, Innenabstand (12px, card_list.less schmal) und Rahmen abgezogen

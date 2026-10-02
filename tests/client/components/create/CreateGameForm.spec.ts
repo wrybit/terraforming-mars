@@ -7,12 +7,14 @@ import {FakeLocalStorage} from '../FakeLocalStorage';
 import {BoardName} from '@/common/boards/BoardName';
 import {DEFAULT_EXPANSIONS} from '@/common/cards/GameModule';
 import {JSONObject} from '@/common/Types';
-import {defineComponent} from 'vue';
+import {defineComponent, nextTick} from 'vue';
 import {NewGameConfig} from '@/common/game/NewGameConfig';
 import {CardName} from '@/common/cards/CardName';
 import {CreateGameModel} from '@/client/components/create/CreateGameModel';
 import {ValidationErrors} from '@/common/game/validateNewGameConfig';
 import {ColonyName} from '@/common/colonies/ColonyName';
+import {defaultCreateGameModel} from '@/client/components/create/defaultCreateGameModel';
+import {readSettingsFromHash, settingsHash} from '@/client/components/create/settingsLink/settingsLinkHash';
 
 // Minimal serialized Create Game payload used by settings restore tests.
 function createNewGameConfig(overrides: JSONObject = {}):  NewGameConfig {
@@ -59,6 +61,8 @@ describe('CreateGameForm', () => {
   beforeEach(() => {
     localStorage = new FakeLocalStorage();
     FakeLocalStorage.register(localStorage);
+    // Das Formular schreibt seine Einstellungen in den URL-Hash; nicht in den nächsten Test mitnehmen
+    window.history.replaceState(null, '', '/new-game');
   });
 
   afterEach(() => {
@@ -70,6 +74,38 @@ describe('CreateGameForm', () => {
       ...globalConfig,
     });
     expect(wrapper.exists()).to.be.true;
+  });
+
+  it('prefers settings from the link hash over saved settings', async () => {
+    new CreateGameSettingsStorage(localStorage).saveSettings(createNewGameConfig());
+    const model = defaultCreateGameModel();
+    model.playersCount = 3;
+    model.players[0].name = 'Jens';
+    model.board = BoardName.ELYSIUM;
+    window.history.replaceState(null, '', '/new-game' + settingsHash(model));
+
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    await nextTick();
+    await nextTick();
+
+    const vm = wrapper.vm as any;
+    expect(vm.playersCount).eq(3);
+    expect(vm.players[0].name).eq('Jens');
+    expect(vm.board).eq(BoardName.ELYSIUM);
+  });
+
+  it('writes the current settings into the link hash', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    await nextTick();
+    const vm = wrapper.vm as any;
+    vm.board = BoardName.HELLAS;
+    await nextTick();
+
+    expect(readSettingsFromHash(window.location.hash)?.board).eq(BoardName.HELLAS);
   });
 
   it('restores the last saved game settings on load', async () => {
