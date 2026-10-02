@@ -1,0 +1,618 @@
+// Statistikseite (/stats). Gerüst (Kopf, Filterspalte, Bottom-Sheet, Filterkacheln) kommt aus card_list.less,
+// Flächen und Abstände aus create_game_form.less – hier nur, was es nur in der Statistik gibt.
+
+@stats-narrow: 900px; // wie @card-list-narrow
+@stats-winner: #f4c20d; // wie die Siegerzahlen der Admin-Übersicht
+@stats-bar-width: 90px;
+
+.main-container:has(#stats) {
+  margin-left: 0;
+}
+
+// Ohne Suchfeld braucht der Kopf auch schmal nur eine Zeile
+.stats {
+  --card-list-header: 64px;
+}
+
+.stats-header-info {
+  flex: 1;
+  color: @create-game-dim;
+  font-size: 13px;
+}
+
+.card-list-header h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.stats-main {
+  display: flex;
+  flex-direction: column;
+  gap: @create-game-gap-card;
+  min-width: 0;
+}
+
+.stats-stack {
+  display: flex;
+  flex-direction: column;
+  gap: @create-game-gap-card;
+}
+
+.stats-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: @create-game-gap-card;
+  align-items: start;
+}
+
+.stats-card {
+  .create-game-card();
+  margin: 0;
+
+  h2 {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  h3 {
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+}
+
+.stats-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.stats-dim {
+  color: @create-game-dim;
+  font-weight: normal;
+}
+
+.stats-note {
+  margin: 8px 0 0;
+  color: @create-game-dim;
+  font-size: 12px;
+}
+
+.stats-link {
+  color: @create-game-dim;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+.stats-best {
+  color: @stats-winner;
+  font-weight: bold;
+}
+
+// ---------- Reiter: Segmentschalter wie in "Spiel erstellen", bei Platzmangel waagerecht verschiebbar ----------
+.stats-tabs.create-game-segmented {
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  a {
+    flex: 1 0 auto;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: @create-game-dim;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.stats-search {
+  flex: 0 1 260px;
+  min-width: 0;
+  height: @create-game-control-height;
+  padding: 0 10px;
+  border: 1px solid @create-game-line;
+  border-radius: @create-game-radius-small;
+  background: rgba(0, 0, 0, 0.3);
+  color: #eee;
+  font: inherit;
+
+  &:focus {
+    outline: 2px solid @bg_action;
+    outline-offset: -1px;
+  }
+}
+
+.stats-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input {
+    flex: 1;
+    accent-color: @bg_action;
+  }
+}
+
+// ---------- Kennzahlen ----------
+.stats-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: @create-game-gap-inner;
+}
+
+.stats-kpi {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: @create-game-radius-small;
+  background: @create-game-chip-background;
+}
+
+.stats-kpi-label {
+  color: @create-game-dim;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stats-kpi-value {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ---------- Siege je Besetzung: wie in der Admin-Übersicht ----------
+// Zwischen den Besetzungen mehr Abstand als zwischen den Kacheln einer Besetzung (Gesetz der Nähe)
+.stats-lineups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+}
+
+.stats-wins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.stats-win {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 84px;
+  padding: 6px 10px;
+  border-radius: @create-game-radius-small;
+  color: #fff;
+  text-decoration: none;
+}
+
+.stats-win-number {
+  color: @stats-winner;
+  font-size: 26px;
+  font-weight: bold;
+  line-height: 1.1;
+}
+
+.stats-win-name {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.stats-averages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  margin: 4px 0 0;
+  color: @create-game-dim;
+  font-size: 12px;
+
+  strong {
+    color: #eee;
+  }
+}
+
+// ---------- Tabellen ----------
+.stats-table-scroll {
+  overflow-x: auto;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+
+  th,
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid @create-game-line;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .stats-table-text {
+    text-align: left;
+  }
+
+  th {
+    color: @create-game-dim;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  th.stats-table-sorted {
+    color: #fff;
+
+    &::after {
+      content: " ▼";
+      font-size: 9px;
+    }
+  }
+
+  th.stats-table-ascending::after {
+    content: " ▲";
+  }
+
+  tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  tr:last-child td {
+    border-bottom: 0;
+  }
+}
+
+.stats-entity {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.stats-entity-icon {
+  flex-shrink: 0;
+  transform: scale(0.7);
+  margin: -6px -4px;
+}
+
+.stats-player {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+// Siegquote: Balken mit Strich beim Zufallswert
+.stats-win-rate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.stats-win-rate-value {
+  min-width: 40px;
+}
+
+.stats-win-rate-track {
+  position: relative;
+  width: @stats-bar-width;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.stats-win-rate-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 4px;
+  background: @bg_action;
+}
+
+.stats-win-rate-expected {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+// ---------- Partienliste ----------
+.stats-game-players {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.stats-game-player {
+  padding: 1px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.stats-game-winner {
+  border-color: @stats-winner;
+}
+
+// ---------- Spieler-Karten ----------
+.stats-players {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: @create-game-gap-card;
+}
+
+.stats-player-card {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  color: #eee;
+  text-decoration: none;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  dl {
+    display: grid;
+    margin: 0;
+    padding: 10px 14px;
+  }
+
+  dt {
+    color: @create-game-dim;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: bold;
+  }
+}
+
+.stats-player-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 14px;
+  color: #fff;
+
+  strong {
+    font-size: 18px;
+  }
+}
+
+// Label und Wert eng zusammen, die Spalten deutlich weiter auseinander (Gesetz der Nähe)
+.stats-player-card-values {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px 28px;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 13px;
+  }
+}
+
+// Konzernnamen sind lang: Label klein über dem Namen
+.stats-player-card-corporations {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 28px;
+  border-top: 1px solid @create-game-line;
+
+  dt {
+    font-size: 11px;
+  }
+
+  dd {
+    font-size: 13px;
+  }
+}
+
+// ---------- Detailseite ----------
+.stats-detail-head .stats-detail-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin: 8px 0 12px;
+  font-size: 22px;
+
+  .stats-entity,
+  .stats-player {
+    font-size: 22px;
+  }
+
+  .stats-dim {
+    font-size: 14px;
+  }
+}
+
+// ---------- Rekorde ----------
+.stats-records {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: @create-game-gap-card;
+  align-items: start;
+}
+
+.stats-record-rank {
+  width: 1%;
+  color: @create-game-dim;
+}
+
+// ---------- Diagramme ----------
+.stats-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.stats-chart-grid {
+  stroke: rgba(255, 255, 255, 0.1);
+}
+
+.stats-chart-label {
+  fill: @create-game-dim;
+  font-size: 10px;
+}
+
+.stats-chart-value {
+  fill: #eee;
+  font-size: 11px;
+}
+
+.stats-chart-bar {
+  fill: @bg_action;
+}
+
+.stats-chart-line {
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.stats-chart-win {
+  fill: @stats-winner;
+  stroke: #111;
+}
+
+each(@players, {
+  @color: ~"player_@{value}";
+  .stats-chart-stroke-@{value} {
+    stroke: @@color;
+  }
+  .stats-chart-fill-@{value} {
+    fill: @@color;
+    background: @@color;
+  }
+});
+
+.stats-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 6px;
+  color: @create-game-dim;
+  font-size: 12px;
+
+  > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  i {
+    display: inline-block;
+    width: 14px;
+    height: 3px;
+    border-radius: 2px;
+  }
+
+  .stats-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: @stats-winner;
+  }
+}
+
+// ---------- Schmal: alles einspaltig, erste Tabellenspalte bleibt beim seitlichen Schieben stehen ----------
+@media only screen and (max-width: @stats-narrow) {
+  .card-list-header .stats-header-info {
+    display: none;
+  }
+
+  .stats .card-list-header {
+    grid-template-areas: "title actions";
+  }
+
+  .stats-columns,
+  .stats-records {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stats-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stats-kpi-value {
+    font-size: 20px;
+  }
+
+  // Dunkles Milchglas, damit die vorbeigeschobenen Spalten nicht mit dem Namen kollidieren
+  .stats-table td:first-child,
+  .stats-table th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: @create-game-surface-strong;
+    backdrop-filter: blur(6px);
+  }
+}
+
+// Mehrere Konzerne (Merger) nebeneinander
+.stats-record-corporation + .stats-record-corporation::before {
+  content: " / ";
+}
+
+.stats-list-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+
+  .create-game-segmented button {
+    padding: 4px 10px;
+  }
+}
+
+// Auf Detailseiten: Mitspieler ohne den Eintrag treten zurück
+.stats-game-other {
+  opacity: 0.45;
+}
+
+// Bezug für die Lage der Reiter beim Mitscrollen (offsetLeft)
+.stats-tabs {
+  position: relative;
+}
+
+@media only screen and (max-width: @stats-narrow) {
+  .stats-list-tools,
+  .stats-search {
+    flex: 1 1 100%;
+  }
+}

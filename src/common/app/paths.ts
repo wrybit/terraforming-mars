@@ -17,6 +17,7 @@ export const paths = {
   API_PROFILE: 'api/profile',
   API_SPECTATOR: 'api/spectator',
   API_STATS: 'api/stats',
+  API_STATS_GAMES: 'api/stats/games',
   API_WAITING_FOR: 'api/waitingfor',
   AUTH_DISCORD_CALLBACK: 'auth/discord/callback',
   AUTOPASS: 'autopass',
@@ -34,5 +35,6 @@ export const paths = {
   PLAYER_INPUT: 'player/input',
   RESET: 'reset',
   SPECTATOR: 'spectator',
+  STATS: 'stats',
   THE_END: 'the-end',
 } as const;
