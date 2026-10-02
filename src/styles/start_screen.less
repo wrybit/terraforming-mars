@@ -20,9 +20,14 @@
   text-align: center;
 }
 
+// Titeltext steht so viel höher als sein Globus-Hintergrund, damit er mehr Abstand zum Menü hat (Text–Menü wie 64px Lücke);
+// der Hintergrund bleibt mit 24px am Menü, als Teil der Globus-Reihe
+@start-screen-title-lift: 40px;
+
 .start-screen-links {
   margin: 0 auto;
-  padding-top: 50px;
+  // Platz für den angehobenen Titeltext
+  padding-top: 50px + @start-screen-title-lift;
 }
 
 .start-screen-link {
@@ -104,6 +109,12 @@
 .start-screen-link--title {
   // Deutlich mehr Abstand zum Menü als zwischen den Buttons (5px): Titel ist eigene Gruppe
   margin-bottom: 24px;
+}
+
+.start-screen-title-top,
+.start-screen-title-bottom {
+  position: relative;
+  top: -@start-screen-title-lift;
 }
 
 .start-screen-title-top {
@@ -247,7 +258,7 @@
   }
 
   .start-screen-links {
-    padding-top: max(@toolbar-button-size + 2 * @toolbar-edge-offset, env(safe-area-inset-top));
+    padding-top: calc(max(@toolbar-button-size + 2 * @toolbar-edge-offset, env(safe-area-inset-top)) + @start-screen-title-lift);
   }
 
   .start-screen-link {
