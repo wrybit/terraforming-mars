@@ -39,7 +39,7 @@
 // Farben der Nicht-Karten-Einträge (Karten nutzen .background-color-* aus cards.less)
 .card-list-color-milestone,
 .card-list-color-award {
-  background: @create-game-gold;
+  background: @highlight-gold;
 }
 
 .card-list-color-agenda {
@@ -389,7 +389,7 @@
     }
 
     &:focus-visible::-webkit-slider-thumb {
-      outline: 2px solid @create-game-gold;
+      outline: 2px solid @highlight-gold;
       outline-offset: 2px;
     }
   }
@@ -622,7 +622,7 @@
 
 // Suchtreffer (searchHighlight.ts)
 ::highlight(card-list-search) {
-  background-color: fade(@create-game-gold, 75%);
+  background-color: fade(@highlight-gold, 75%);
   color: #000;
 }
 
