@@ -1,18 +1,8 @@
 /* Zeichnet einen Planeten-Streifen per WebGL echt auf die Kugel: Bogenlänge statt x (zum Rand hin gestaucht),
    Licht von oben links. Eine gemeinsame WebGL-Fläche für alle Buttons (Browser erlauben nur wenige Kontexte);
    das Ergebnis wird in die 2D-Canvas des jeweiligen Buttons kopiert. */
-import {GLOBE, PlanetStripe, SPRITE_ROW, STRIPES_TEXTURE_SIZE, STRIPES_TEXTURE_URL} from './planetStripes';
-
-export type PlanetDrawRequest = {
-  target: HTMLCanvasElement;
-  // Reihe im Globus (1 = erster Menüpunkt)
-  row: number;
-  stripe: PlanetStripe;
-  // Drehung in Sprite-Pixeln Oberfläche
-  offset: number;
-  // 0 = Ruhe, 1 = Hover (flacheres, helleres Licht)
-  glow: number;
-};
+import {PlanetDrawRequest, PlanetRenderer} from './planetRenderer';
+import {GLOBE, SPRITE_ROW, STRIPES_TEXTURE_SIZE, STRIPES_TEXTURE_URL} from './planetStripes';
 
 const float = (value: number) => value.toFixed(3);
 
@@ -71,7 +61,7 @@ const FRAGMENT_SOURCE = `
 
 type Uniforms = Record<'buttonSize' | 'row' | 'stripeTop' | 'stripeHeight' | 'startX' | 'offset' | 'glow', WebGLUniformLocation | null>;
 
-export class PlanetGlobeRenderer {
+export class PlanetGlobeRenderer implements PlanetRenderer {
   private constructor(
     private readonly canvas: HTMLCanvasElement,
     private readonly gl: WebGLRenderingContext,

@@ -1,6 +1,6 @@
 /* Drehung der Planeten-Buttons: beim Hover langsam nach rechts, am Ende der Textur weich umkehren;
    beim Verlassen erst schnell, dann weich auslaufend zurück. Die Schleife läuft nur, solange sich etwas bewegt. */
-import {PlanetGlobeRenderer} from './planetGlobeRenderer';
+import {PlanetRenderer} from './planetRenderer';
 import {PlanetStripe, rotationLimits} from './planetStripes';
 
 // Sprite-Pixel Oberfläche pro Sekunde beim Hover
@@ -32,7 +32,7 @@ export class PlanetRotation {
   private lastTime = 0;
   private frame = 0;
 
-  constructor(private readonly renderer: PlanetGlobeRenderer, private readonly reducedMotion: boolean) {}
+  constructor(private readonly renderer: PlanetRenderer, private readonly reducedMotion: boolean) {}
 
   public add(target: HTMLCanvasElement, row: number, stripe: PlanetStripe): number {
     this.buttons.push({target, row, stripe, limits: rotationLimits(stripe), offset: 0, velocity: 0, direction: 1, glow: 0, hovered: false});

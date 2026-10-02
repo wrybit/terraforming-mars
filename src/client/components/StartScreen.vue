@@ -21,7 +21,7 @@
       @mouseleave="setHovered(index, false)"
       @focus="setHovered(index, true)"
       @blur="setHovered(index, false)">
-      <!-- Planeten-Oberfläche per WebGL (planetGlobeRenderer.ts); ohne WebGL bleibt das Bild planets.jpg -->
+      <!-- Planeten-Oberfläche: WebGL (planetGlobeRenderer.ts) oder ohne WebGL flach per CSS (planetFlatRenderer.ts) -->
       <canvas class="start-screen-link-planet" :ref="(element) => setCanvas(index, element)" aria-hidden="true"></canvas>
       <span class="start-screen-link-content">
         <MobileGlyph class="start-screen-link-icon" :name="link.icon" :strokeWidth="2"/>
@@ -36,6 +36,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import {PlanetGlobeRenderer} from '@/client/components/startScreen/planetGlobeRenderer';
+import {PlanetFlatRenderer} from '@/client/components/startScreen/planetFlatRenderer';
 import {PlanetRotation} from '@/client/components/startScreen/planetRotation';
 import {PLANET_STRIPES, PlanetStripeName} from '@/client/components/startScreen/planetStripes';
 import LanguageIcon from '@/client/components/LanguageIcon.vue';
@@ -63,7 +64,7 @@ const links: ReadonlyArray<StartScreenLink> = [
 
 const previousViewport = ref('');
 
-// Drehende Planeten: erst wenn WebGL und Textur bereit sind, ersetzt die Canvas das Bild planets.jpg
+// Drehende Planeten: sobald der Zeichner bereit ist, ersetzt die Planeten-Fläche das Bild planets.jpg
 const globeReady = ref(false);
 const canvases: Array<HTMLCanvasElement | undefined> = [];
 let rotation: PlanetRotation | undefined;
@@ -78,10 +79,8 @@ function setHovered(index: number, hovered: boolean): void {
 }
 
 async function startGlobe(): Promise<void> {
-  const renderer = await PlanetGlobeRenderer.create();
-  if (renderer === undefined) {
-    return;
-  }
+  // WebGL wölbt den Streifen und beleuchtet ihn; ohne WebGL dreht er flach per CSS
+  const renderer = await PlanetGlobeRenderer.create() ?? new PlanetFlatRenderer();
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   rotation = new PlanetRotation(renderer, reducedMotion);
   links.forEach((link, index) => {
