@@ -1,3 +1,6 @@
+// Takt des Auswahl-Pulsierens (@selection-pulse-period) wird für den Hover-Glow der Menü-Buttons mitbenutzt
+@import (reference) "./selection_highlight.less";
+
 #app {
   position: relative;
 }
@@ -27,6 +30,11 @@
 @start-screen-title-lift-phone: 16px;
 // Dauer der Hover-Animation der Menü-Buttons (Hintergrund und Schriftgröße gemeinsam)
 @start-screen-hover-duration: 0.25s;
+// Rahmen der Menü-Buttons in der CTA-Farbe der App (@bg_action): ruhend gedämpft, beim Hover heller;
+// Glow pulsiert im selben Takt und in derselben Farbe wie eine Auswahl im Spiel (selection_highlight.less)
+@start-screen-link-outline: fade(@bg_action, 30%);
+@start-screen-link-outline-hover: #908fdbab;
+@start-screen-link-glow: @bg_action;
 
 .start-screen-links {
   margin: 0 auto;
@@ -37,7 +45,9 @@
 .start-screen-link {
   text-decoration: none;
   cursor: pointer;
-  box-shadow: inset 0 0 0px 1px #333;
+  // Rahmen in gedämpftem Button-Lila; beim Hover heller mit pulsierendem Glow nach außen
+  box-shadow: inset 0 0 0 1px @start-screen-link-outline;
+  transition: box-shadow @start-screen-hover-duration ease;
   line-height: 28px;
   border-radius: 10px;
   color: #eee;
@@ -91,6 +101,26 @@
   &:hover::before,
   &:focus-visible::before {
     backdrop-filter: brightness(1.1) saturate(1.2);
+  }
+
+  &:hover,
+  &:focus-visible {
+    box-shadow: inset 0 0 0 1px @start-screen-link-outline-hover, 0 0 6px 2px fade(@start-screen-link-glow, 55%);
+    animation: start-screen-link-glow @selection-pulse-period ease-in-out infinite;
+    // über den Nachbar-Buttons, damit der Glow nicht vom nächsten Button verdeckt wird
+    z-index: 1;
+  }
+}
+
+// Gleicher Verlauf wie selection-pulse, nur mit dünnem Innenrahmen statt 5px-Auswahlrahmen
+@keyframes start-screen-link-glow {
+  0%,
+  100% {
+    box-shadow: inset 0 0 0 1px @start-screen-link-outline-hover, 0 0 6px 2px fade(@start-screen-link-glow, 55%);
+  }
+
+  50% {
+    box-shadow: inset 0 0 0 1px @start-screen-link-outline-hover, 0 0 14px 6px fade(@start-screen-link-glow, 85%);
   }
 }
 
@@ -328,8 +358,10 @@
 
 // Wer reduzierte Bewegung eingestellt hat, bekommt den Hover-Wechsel ohne Animation
 @media (prefers-reduced-motion: reduce) {
+  .start-screen-link,
   .start-screen-link::before,
   .start-screen-link .start-screen-link-content {
     transition: none;
+    animation: none !important;
   }
 }
