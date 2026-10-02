@@ -827,29 +827,54 @@ each(@stats-source-colors, {
   margin-bottom: 10px;
 }
 
-// Jedes Feld bekommt per CSS-Variable --stats-heat (0–1) eine Farbe; die Zahl sagt, wie oft dort gebaut wurde
-.stats-heatmap {
-  --stats-heat-color: 255, 196, 0;
+// Heatmap-Farbskala in 10 Stufen à 10 %: dunkelblau → blau → türkis → grün → gelb → orange → hellrot → dunkelrot.
+// Helle Stufen bekommen dunkle Schrift, dunkle Stufen helle – beides gut lesbar.
+@stats-heat-steps: #0b1d5c, #13348f, #1d55c7, #2f7ff0, #18bcc4, #2bbf4a, #f2d41c, #fb9420, #f2483f, #9e1018;
+@stats-heat-hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
 
-  .stats-heat-space::after {
-    content: attr(data-heat);
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(var(--stats-heat-color), calc(0.25 + 0.7 * var(--stats-heat)));
-    color: #111;
-    font-size: 12px;
-    font-weight: bold;
-    pointer-events: none;
-    z-index: 5;
+.stats-heat-color(@step) {
+  @color: extract(@stats-heat-steps, @step);
+  background: fade(@color, 88%);
+  color: if((@step >= 5) and (@step <= 8), #111, #fff);
+}
+
+// Zahl = Anteil der Partien; auch die Felder neben dem Brett (Phobos, Ganymed) als Sechseck
+.stats-heatmap .stats-heat-space::after {
+  content: attr(data-heat);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: @stats-heat-hex;
+  font-size: 12px;
+  font-weight: bold;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.stats-heat-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+}
+
+.stats-heat-legend-step {
+  min-width: 34px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  text-align: center;
+  font-weight: bold;
+}
+
+each(range(10), {
+  .stats-heatmap .stats-heat-space[data-heat-step="@{value}"]::after,
+  .stats-heat-legend-step[data-heat-step="@{value}"] {
+    .stats-heat-color(@value);
   }
-}
-
-.stats-heatmap--greenery {
-  --stats-heat-color: 80, 220, 90;
-}
+});
 
 // ---------- Top-Listen ----------
 // Überschrift als Link zur Top-20-Seite, sieht aber aus wie eine Überschrift

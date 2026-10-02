@@ -29,3 +29,11 @@ export function heatmap(games: ReadonlyArray<StatsGame>, boardName: BoardName, t
   }
   return {counts, games: gameCount, maximum: Math.max(0, ...counts.values())};
 }
+
+/** Farbstufen der Heatmap: 10 Stufen à 10 Prozentpunkte, von dunkelblau (selten) bis dunkelrot (fast immer). */
+export const HEAT_STEPS = 10;
+
+/** Stufe 1–10 für einen Anteil in Prozent: 1–10 % → 1, 91–100 % → 10. */
+export function heatStep(percent: number): number {
+  return Math.min(HEAT_STEPS, Math.max(1, Math.ceil(percent / 10)));
+}

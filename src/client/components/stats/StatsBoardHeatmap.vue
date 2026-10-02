@@ -5,6 +5,11 @@
       <SegmentedControl v-if="playerOptions.length > 2" :options="playerOptions" v-model="player"/>
     </div>
     <StatsBoardPreview :boardName="boardName" :heatmap="map" :heatmapType="type"/>
+    <!-- Farbskala: jede Stufe steht für 10 Prozentpunkte -->
+    <div class="stats-heat-legend" aria-hidden="true">
+      <span v-for="step in steps" :key="step" class="stats-heat-legend-step" :data-heat-step="step">{{ step * 10 }}</span>
+      <span class="stats-dim">%</span>
+    </div>
     <p class="stats-note">{{ note }}</p>
   </div>
 </template>
@@ -17,7 +22,7 @@ import {SegmentOption} from '@/client/components/create/createGameChoices';
 import {BoardName} from '@/common/boards/BoardName';
 import {StatsGame} from '@/common/stats/StatsGame';
 import StatsBoardPreview from './StatsBoardPreview.vue';
-import {Heatmap, heatmap, HeatmapTileType} from './statsHeatmap';
+import {Heatmap, heatmap, HeatmapTileType, HEAT_STEPS} from './statsHeatmap';
 
 // Leerer Wert der Spielerauswahl: alle Spieler zusammen
 const ALL_PLAYERS = '';
@@ -34,6 +39,7 @@ export default defineComponent({
     return {
       type: 'city' as HeatmapTileType,
       player: ALL_PLAYERS,
+      steps: Array.from({length: HEAT_STEPS}, (_, index) => index + 1),
       typeOptions: [{value: 'city', label: 'Cities'}, {value: 'greenery', label: 'Greeneries'}] as ReadonlyArray<SegmentOption>,
     };
   },

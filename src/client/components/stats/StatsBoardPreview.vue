@@ -15,7 +15,7 @@ import {paths} from '@/common/app/paths';
 import {BoardName} from '@/common/boards/BoardName';
 import {Expansion} from '@/common/cards/GameModule';
 import {SpaceModel} from '@/common/models/SpaceModel';
-import {Heatmap, HeatmapTileType} from './statsHeatmap';
+import {Heatmap, heatStep, HeatmapTileType} from './statsHeatmap';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import Board from '@/client/components/Board.vue';
 
@@ -46,12 +46,12 @@ export default defineComponent({
       }
       for (const element of Array.from(root.querySelectorAll<HTMLElement>('[data_space_id]'))) {
         const count = this.heatmap?.counts.get(element.getAttribute('data_space_id') as SpaceModel['id']) ?? 0;
-        const share = this.heatmap === undefined || this.heatmap.maximum === 0 ? 0 : count / this.heatmap.maximum;
-        element.classList.toggle('stats-heat-space', count > 0);
-        element.style.setProperty('--stats-heat', String(share));
         // Anteil der Partien statt Anzahl: „60 %“ versteht man ohne zu wissen, wie viele Partien es sind
         const games = this.heatmap?.games ?? 0;
-        element.dataset.heat = count > 0 && games > 0 ? `${Math.round(count / games * 100)}%` : '';
+        const percent = games === 0 ? 0 : Math.round(count / games * 100);
+        element.classList.toggle('stats-heat-space', count > 0);
+        element.dataset.heat = count > 0 ? `${percent}%` : '';
+        element.dataset.heatStep = count > 0 ? String(heatStep(percent)) : '';
         element.title = count > 0 ? translateTextWithParams('${0} of ${1} games', [String(count), String(games)]) : '';
       }
     },
