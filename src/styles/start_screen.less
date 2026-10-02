@@ -23,6 +23,8 @@
 // Titeltext steht so viel höher als sein Globus-Hintergrund, damit er mehr Abstand zum Menü hat (Text–Menü wie 80px Lücke);
 // der Hintergrund bleibt mit 24px am Menü, als Teil der Globus-Reihe
 @start-screen-title-lift: 56px;
+// Dauer der Hover-Animation der Menü-Buttons (Hintergrund und Schriftgröße gemeinsam)
+@start-screen-hover-duration: 0.25s;
 
 .start-screen-links {
   margin: 0 auto;
@@ -66,9 +68,38 @@
     text-decoration: none;
   }
 
-  &:hover {
-    filter: brightness(120%);
+  // Planetenbild ruhend gedämpft (dunkler, weniger satt), beim Hover hell und kräftig – über eine Ebene mit
+  // backdrop-filter, damit nur der Hintergrund gefiltert wird und die Schrift unverändert hell bleibt
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    backdrop-filter: brightness(0.8) saturate(0.8);
+    transition: backdrop-filter @start-screen-hover-duration ease;
   }
+
+  &:hover::before,
+  &:focus-visible::before {
+    backdrop-filter: brightness(1.1) saturate(1.2);
+  }
+}
+
+// Beschriftung ruhend etwas kleiner, beim Hover volle Größe; Skalierung von links, damit sie an Ort und Stelle wächst
+.start-screen-link .start-screen-link-content {
+  transform: scale(0.92);
+  transform-origin: left center;
+  transition: transform @start-screen-hover-duration ease;
+}
+
+.start-screen-link:hover .start-screen-link-content,
+.start-screen-link:focus-visible .start-screen-link-content {
+  transform: scale(1);
 }
 
 // Symbol links neben der Beschriftung; Abstand kleiner als die Buttons untereinander, damit beides als Einheit liest
@@ -281,5 +312,13 @@
 
   .start-screen-title-bottom {
     font-size: 38px;
+  }
+}
+
+// Wer reduzierte Bewegung eingestellt hat, bekommt den Hover-Wechsel ohne Animation
+@media (prefers-reduced-motion: reduce) {
+  .start-screen-link::before,
+  .start-screen-link .start-screen-link-content {
+    transition: none;
   }
 }
