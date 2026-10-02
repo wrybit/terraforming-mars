@@ -16,4 +16,32 @@ describe('GameSetupDetail', () => {
     });
     expect(wrapper.exists()).to.be.true;
   });
+
+  it('shows one tile per setting', () => {
+    const wrapper = shallowMount(GameSetupDetail, {
+      ...globalConfig,
+      props: {
+        playerNumber: 2,
+        gameOptions: {...fakeGameOptionsModel(), showTimers: true},
+        lastSoloGeneration: 14,
+      },
+    });
+    const labels = wrapper.findAll('.setup-tile-label').map((label) => label.text());
+    expect(labels).deep.eq(['Board', 'Expansions', 'Draft', 'Milestones and Awards', 'WGT', 'Game configs']);
+    expect(wrapper.find('.setup-chip--board-tharsis').exists()).is.true;
+    expect(wrapper.find('.setup-chip--accent').text()).eq('timer');
+  });
+
+  it('shows solo settings instead of draft and milestones', () => {
+    const wrapper = shallowMount(GameSetupDetail, {
+      ...globalConfig,
+      props: {
+        playerNumber: 1,
+        gameOptions: fakeGameOptionsModel(),
+        lastSoloGeneration: 14,
+      },
+    });
+    const labels = wrapper.findAll('.setup-tile-label').map((label) => label.text());
+    expect(labels).deep.eq(['Board', 'Expansions', 'Solo', 'WGT']);
+  });
 });

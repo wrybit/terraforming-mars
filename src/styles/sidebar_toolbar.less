@@ -135,8 +135,7 @@
     line-height: 1.2;
   }
 
-  // Sprache: Flagge (Sprite 44×30px, language_icon.less) auf Icon-Breite verkleinert und exakt mittig.
-  // transform verkleinert nur die Darstellung, der Platz bliebe 44px groß – daher absolut um die Mitte gelegt
+  // Sprache: Flagge absolut um die Mitte des Buttons gelegt (toolbar-language-flag);
   // Bezug ist der Button selbst (der innere Icon-Container sitzt nicht genau mittig)
   .sidebar_cont .sidebar_item.sidebar_item--language {
     position: relative;
@@ -183,15 +182,12 @@
   }
 }
 
-// Flagge mittig im Milchglas-Button (auch genutzt von der Kartenliste, card_list.less).
-// Auch beim Hover: die allgemeine Regel .language-icon:hover (language_icon.less) würde die Flagge verschieben
+// Flagge mittig im Milchglas-Button (auch genutzt von der Kartenliste, card_list.less)
 .toolbar-language-flag() {
-  .language-icon-for-sidebar,
-  .language-icon-for-sidebar:hover {
+  .language-flag {
     position: absolute;
     top: 50%;
     left: 50%;
-    margin: 0; // alte Leiste verschiebt die Flagge per Margin (3px / -4px)
-    transform: translate(-50%, -50%) scale(unit((@toolbar-icon-size / 44px)));
+    transform: translate(-50%, -50%);
   }
 }

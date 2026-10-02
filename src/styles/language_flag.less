@@ -1,0 +1,125 @@
+// Rechteckige Flaggen (LanguageFlag.vue, assets/flags/*.svg) – ersetzt die runden Sprite-Flaggen
+@import (reference) "./dialog_frame.less";
+@import (reference) "./selection_highlight.less";
+
+.language-flag {
+  display: block;
+  flex: none;
+  width: 36px;
+  height: 24px;
+  border-radius: 3px;
+  // Kontur über dem Bild, damit weiße Flaggen (Japan, Polen, Finnland) auf dunklem Grund eine Kante haben
+  outline: 1px solid rgba(255, 255, 255, 0.18);
+  outline-offset: -1px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  object-fit: cover;
+}
+
+// In Kopf- und Seitenleiste: auf Icon-Größe (26px breit)
+.language-flag.language-flag--toolbar {
+  width: 26px;
+  height: 17px;
+  border-radius: 2px;
+}
+
+// ---- Sprachauswahl (LanguageSelectionDialog.vue) ----
+.language-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: @dialog-gap-tile;
+}
+
+.language-selection-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid @dialog-surface-border;
+  border-radius: @dialog-tile-radius;
+  background: @dialog-surface;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  // Aktuelle Sprache: 20 % lila wie jede Auswahl, knapper Schein, Häkchen-Fähnchen in der Ecke ohne Abstand zum Rahmen
+  &.is-selected {
+    border-color: @selection-color;
+    box-shadow: 0 0 0 1px @selection-color, 0 0 8px fade(@selection-color, 45%);
+
+    &::before {
+      .selection-tint();
+    }
+
+    &::after {
+      content: "✓";
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      width: 22px;
+      height: 22px;
+      border-radius: 0 @dialog-tile-radius 0 8px;
+      background: @selection-color;
+      color: #fff;
+      font-size: 13px;
+      font-weight: bold;
+      line-height: 22px;
+      text-align: center;
+    }
+  }
+}
+
+.language-selection-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.language-selection-native,
+.language-selection-english {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.language-selection-native {
+  color: #fff;
+  font-size: 15px;
+}
+
+.language-selection-english {
+  color: @dialog-muted;
+  font-size: 12px;
+}
+
+// Handy: zwei Spalten, kleinere Flagge; lange Namen umbrechen statt abschneiden
+@media only screen and (max-width: 520px) {
+  .language-selection-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .language-selection-tile {
+    gap: 10px;
+    padding: 10px;
+
+    .language-flag {
+      width: 30px;
+      height: 20px;
+    }
+  }
+
+  .language-selection-native,
+  .language-selection-english {
+    white-space: normal;
+  }
+}

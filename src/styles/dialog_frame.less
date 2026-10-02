@@ -1,0 +1,117 @@
+// Seitenleisten-Dialog mit Titel (DialogFrame.vue in SidebarModal :framed): Kopf mit Symbol, Titel und ✕,
+// scrollender Inhalt, Fußzeile. Gleicher Kopf wie das Hilfe-Overlay (help_overlay.less).
+@import (reference) "./modal_surface.less";
+@import (reference) "./variables.less";
+
+@dialog-surface: rgba(255, 255, 255, 0.045);
+@dialog-surface-border: rgba(255, 255, 255, 0.08);
+@dialog-muted: #8b8d96;
+@dialog-accent-text: #b3b2ff;
+@dialog-tile-radius: 10px;
+// Gesetz der Nähe: innerhalb einer Kachel < zwischen Kacheln < zwischen Abschnitten
+@dialog-gap-inner: 6px;
+@dialog-gap-tile: 8px;
+@dialog-gap-section: 24px;
+
+.sidebar-modal.sidebar-modal--framed {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.dialog-frame {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-width: 100%;
+  flex: 1 1 auto;
+}
+
+.dialog-frame-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px 14px 20px;
+  border-bottom: 1px solid @dialog-surface-border;
+}
+
+.dialog-frame-icon {
+  display: flex;
+  color: @dialog-accent-text;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.dialog-frame .dialog-frame-title {
+  margin: 0 auto 0 0;
+  padding: 0;
+  color: @modal-heading;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.dialog-frame-close {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border: 1px solid @modal-border;
+  border-radius: 8px;
+  background: transparent;
+  color: @modal-text;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    background: #34363e;
+    color: #fff;
+  }
+}
+
+.dialog-frame-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: @dialog-gap-section;
+}
+
+.dialog-frame-foot {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 12px 16px 12px 20px;
+  border-top: 1px solid @dialog-surface-border;
+
+  .btn {
+    margin: 0;
+  }
+}
+
+// Handy: weniger Rand, damit die Kacheln Platz haben
+@media only screen and (max-width: 520px) {
+  .dialog-frame-head {
+    padding: 12px 12px 12px 16px;
+  }
+
+  .dialog-frame-body {
+    padding: 16px;
+  }
+
+  .dialog-frame-foot {
+    padding: 12px 16px;
+  }
+}

@@ -5,11 +5,10 @@
     <div
       class="sidebar_icon sidebar_icon--language"
       :class="{'sidebar_item--is-active': languagePanelOpen}">
-      <div :class="`language-icon language-icon-for-sidebar language-icon--${lang}`"
-      :title="title"></div>
-      </div>
-    <SidebarModal :open="languagePanelOpen" @close="languagePanelOpen = false">
-      <LanguageSelectionDialog :preferencesManager="PreferencesManager.INSTANCE"/>
+      <LanguageFlag :lang="lang" class="language-flag--toolbar" :title="title"/>
+    </div>
+    <SidebarModal :open="languagePanelOpen" :framed="true" @close="languagePanelOpen = false">
+      <LanguageSelectionDialog :preferencesManager="PreferencesManager.INSTANCE" @close="languagePanelOpen = false"/>
     </SidebarModal>
   </div>
 </template>
@@ -18,13 +17,14 @@
 
 import {computed, ref} from 'vue';
 import {PreferencesManager} from '@/client/utils/PreferencesManager';
+import LanguageFlag from '@/client/components/LanguageFlag.vue';
 import LanguageSelectionDialog from '@/client/components/LanguageSelectionDialog.vue';
 import SidebarModal from '@/client/components/SidebarModal.vue';
-import {LANGUAGES} from '@/common/constants';
+import {LANGUAGE, LANGUAGES} from '@/common/constants';
 
-// Geschlossen wird über SidebarModal (✕, Escape, Klick daneben)
+// Geschlossen wird über SidebarModal (Escape, Klick daneben) oder das ✕ im Dialogkopf
 const languagePanelOpen = ref(false);
-const lang = computed(() => PreferencesManager.INSTANCE.values().lang as keyof typeof LANGUAGES);
+const lang = computed(() => PreferencesManager.INSTANCE.values().lang as LANGUAGE);
 const title = computed(() => {
   const language = LANGUAGES[lang.value];
   return `${language[0]} (${language[1]})`;
