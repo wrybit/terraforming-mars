@@ -1,5 +1,9 @@
 <template>
-<div class="start-screen" :class="{'start-screen--intro': introPlaying}">
+<div class="start-screen" :class="{'start-screen--intro': introPlaying, 'start-screen--loading': loading}">
+  <!-- Preloader: bis Schriften und Bilder da sind, bleibt alles andere verborgen -->
+  <div v-if="loading" class="start-screen-preloader" role="progressbar" :aria-valuenow="Math.round(loadProgress * 100)" aria-valuemin="0" aria-valuemax="100">
+    <div class="start-screen-preloader-fill" :style="{width: `${loadProgress * 100}%`}"></div>
+  </div>
   <!-- Sprache und Einstellungen oben rechts als Milchglas-Buttons, wie im Spiel -->
   <div class="start-screen-toolbar">
     <LanguageIcon/>
@@ -43,6 +47,7 @@
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import {GlobeLayout, measureGlobeLayout} from '@/client/components/startScreen/globeLayout';
 import {INTRO_DURATION, logoOffsetToCenter, shouldPlayIntro} from '@/client/components/startScreen/startIntro';
+import {preloadStartAssets} from '@/client/components/startScreen/startAssets';
 import {PlanetGlobeRenderer} from '@/client/components/startScreen/planetGlobeRenderer';
 import {PlanetFlatRenderer} from '@/client/components/startScreen/planetFlatRenderer';
 import {PlanetRotation} from '@/client/components/startScreen/planetRotation';
@@ -227,9 +232,24 @@ function startIntro(): void {
   document.addEventListener('keydown', endIntro, true);
 }
 
-onMounted(() => {
-  startIntro();
+// Preloader: in automatisierten Browsern (Screenshots) nicht, die warten selbst aufs Laden
+const loading = ref(false);
+const loadProgress = ref(0);
+
+async function preload(): Promise<void> {
+  if (navigator.webdriver) {
+    return;
+  }
+  loading.value = true;
+  await preloadStartAssets((share) => loadProgress.value = share);
+  loading.value = false;
+  await nextTick();
+}
+
+onMounted(async () => {
   document.addEventListener('pointerdown', onDocumentPointerDown);
+  await preload();
+  startIntro();
   if (typeof ResizeObserver !== 'undefined') {
     void startGlobe();
   }
