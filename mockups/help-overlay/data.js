@@ -1,0 +1,782 @@
+// Erzeugt von extract.mjs – nicht von Hand ändern
+window.HELP_DATA = {
+ "symbols": [
+  {
+   "title": "Kartensymbole",
+   "groups": [
+    {
+     "title": "",
+     "rows": [
+      {
+       "icon": "<div class=\"resource-tag tag-building\"></div>",
+       "label": "Gebäude",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-space\"></div>",
+       "label": "Weltraum",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-science\"></div>",
+       "label": "Wissenschaft",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-power\"></div>",
+       "label": "Energie",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-earth\"></div>",
+       "label": "Erde",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-jovian\"></div>",
+       "label": "Jupiter",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-venus\"></div>",
+       "label": "Venus",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-venus\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-plant\"></div>",
+       "label": "Pflanze",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-microbe\"></div>",
+       "label": "Mikrobe",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-animal\"></div>",
+       "label": "Tier",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-city\"></div>",
+       "label": "Stadt",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-wild\"></div>",
+       "label": "Joker",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-prelude\"></div>",
+        "<div class=\"expansion-icon expansion-icon-colony\"></div>",
+        "<div class=\"expansion-icon expansion-icon-turmoil\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-event\"></div>",
+       "label": "Ereignis",
+       "expansions": []
+      }
+     ]
+    },
+    {
+     "title": "Kartensymbole von Fan-Erweiterungen",
+     "rows": [
+      {
+       "icon": "<div class=\"resource-tag tag-moon\"></div>",
+       "label": "Mond",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-themoon\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-mars\"></div>",
+       "label": "Mars",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-pathfinders\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-clone\"></div>",
+       "label": "Klon",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-pathfinders\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"resource-tag tag-crime\"></div>",
+       "label": "Crime",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-underworld\"></div>"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Ressourcen",
+   "groups": [
+    {
+     "title": "Standardressourcen",
+     "rows": [
+      {
+       "icon": "<div class=\"help-icon-resource money\"><div class=\"help-icon-mc-font\">€</div></div>",
+       "label": "Mega Credits (M€)",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-icon-resource steel\"><!----></div>",
+       "label": "Stahl",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-icon-resource titanium\"><!----></div>",
+       "label": "Titan",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-icon-resource plant\"><!----></div>",
+       "label": "Pflanze",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-icon-resource energy\"><!----></div>",
+       "label": "Energie",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-icon-resource heat\"><!----></div>",
+       "label": "Wärme",
+       "expansions": []
+      }
+     ]
+    },
+    {
+     "title": "Ressourcen auf Karten",
+     "rows": [
+      {
+       "icon": "<div class=\"help-icon-resource animal\"></div>",
+       "label": "Tier",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-icon-resource microbe\"></div>",
+       "label": "Mikrobe",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-icon-resource science\"></div>",
+       "label": "Wissenschaft",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-icon-resource floater\"></div>",
+       "label": "Schweber",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-icon-resource asteroid\"></div>",
+       "label": "Asteroideneinschlag",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-venus\"></div>",
+        "<div class=\"expansion-icon expansion-icon-promo\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource preservation\"></div>",
+       "label": "Erhaltungsressource",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-turmoil\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource camp\"></div>",
+       "label": "Lager",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-colony\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource disease\"></div>",
+       "label": "Krankheit",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-promo\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource fighter\"></div>",
+       "label": "Jäger",
+       "expansions": []
+      }
+     ]
+    },
+    {
+     "title": "Fan Expansion Card Resources",
+     "rows": [
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-cube\"></div>",
+       "label": "Rohstoffwürfel",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-themoon\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-data\"></div>",
+       "label": "Data",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-themoon\"></div>",
+        "<div class=\"expansion-icon expansion-icon-pathfinders\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-syndicate-fleet\"></div>",
+       "label": "Syndikat Flotte",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-themoon\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-venusian-habitat\"></div>",
+       "label": "Venusian Habitat",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-pathfinders\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-specialized-robot\"></div>",
+       "label": "Specialized Robot",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-pathfinders\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-seed\"></div>",
+       "label": "Saatgut",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-pathfinders\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-agenda\"></div>",
+       "label": "Agenda",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-pathfinders\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-orbital\"></div>",
+       "label": "Orbitale",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-pathfinders\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-clone-trooper\"></div>",
+       "label": "Klonkrieger",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-starwars\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-tool\"></div>",
+       "label": "Werkzeug",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-underworld\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-ware\"></div>",
+       "label": "Ware",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-underworld\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-journalism\"></div>",
+       "label": "Journalismus Ressource(n)",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-underworld\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-activist\"></div>",
+       "label": "Aktivist",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-underworld\"></div>"
+       ]
+      },
+      {
+       "icon": "<div class=\"help-icon-resource card-resource-supply-chain\"></div>",
+       "label": "Lieferketten Ressource",
+       "expansions": [
+        "<div class=\"expansion-icon expansion-icon-underworld\"></div>"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Felder",
+   "groups": [
+    {
+     "title": "",
+     "rows": [
+      {
+       "icon": "<div class=\"tile greenery-no-O2-tile\"></div>",
+       "label": "Grünfläche",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"tile city-tile\"></div>",
+       "label": "Stadt",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"tile ocean-tile\"></div>",
+       "label": "Ozean",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"tile special-tile\"></div>",
+       "label": "Spezial",
+       "expansions": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Globale Parameter",
+   "groups": [
+    {
+     "title": "",
+     "rows": [
+      {
+       "icon": "<div class=\"tile help-icon-param-box-temperature\"></div>",
+       "label": "Temperatur",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"tile help-icon-param-box-oxygen\"></div>",
+       "label": "Sauerstoff",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"tile help-icon-param-box-ocean\"></div>",
+       "label": "Ozeane",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"tile help-icon-param-box-venus\"></div>",
+       "label": "Venus",
+       "expansions": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Andere",
+   "groups": [
+    {
+     "title": "",
+     "rows": [
+      {
+       "icon": "<div class=\"help-other-symbols\"><div class=\"help-icon-victory-point\">?</div></div>",
+       "label": "Siegpunkte (SP)",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-other-symbols\"><div class=\"tile rating\"></div></div>",
+       "label": "Terraformwertung (TW)",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-other-symbols\"><div class=\"help-icon-card card\"></div></div>",
+       "label": "Projektkarte",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-other-symbols\"><div class=\"tile colony\"></div></div>",
+       "label": "Kolonie",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-other-symbols\"><div class=\"tile trade\"></div></div>",
+       "label": "Handle",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-other-symbols\"><div class=\"tile fleet\"></div></div>",
+       "label": "Handelsflotte",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-other-symbols\"><div class=\"help-icon-delegate\"></div></div>",
+       "label": "Abgesandter",
+       "expansions": []
+      },
+      {
+       "icon": "<div class=\"help-other-symbols\"><div class=\"help-icon-influence influence\"></div></div>",
+       "label": "Einfluss",
+       "expansions": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "projects": [
+  {
+   "title": "Standardprojekte",
+   "cards": [
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-sell-patents card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Patente verkaufen</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-text-size--M card-text-bold\">X</div><!----></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-card\"></div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">x</div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Werfe eine beliebige Anzahl an Karten ab, um dieselbe Anzahl an M€ zu erhalten.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-power-plant:sp card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\" style=\"font-size: 16px;\">Kraftwerk</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">11</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-production-box\"><div class=\"card-production-box-row\"><div class=\"card-production-box-row-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-energy\"></div><!----></div></div></div></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 11 M€, um deine Energie-Produktion um 1 zu erhöhen.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-asteroid:sp card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\" style=\"font-size: 16px;\">Asteroideneinschlag</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">14</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-global-requirement card-temperature-global-requirement\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 14 M€, um die Temperatur um 2 °C zu erhöhen.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-aquifer card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Ozean</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">18</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-global-requirement card-ocean-global-requirement\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 18 M€, um ein Ozeanplättchen zu platzieren.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-greenery card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Grünfläche</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">23</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile greenery-tile-oxygen tile-size--M-square\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 23 M€, um ein Grünflächenplättchen zu platzieren und den Sauerstoffgehalt um 1% zu erhöhen.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-city card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Stadt</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">25</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile city-tile tile-size--M\"></div><!----></div></div><div class=\"card-effect-box-item\"><div class=\"card-production-box\"><div class=\"card-production-box-row\"><div class=\"card-production-box-row-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">1</div><!----></div></div></div></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 25 M€, um ein Stadtplättchen zu platzieren und deine M€-Produktion um 1 zu erhöhen.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>"
+   ]
+  },
+  {
+   "title": "Standardprojekte aus Erweiterungen und Solo-Herausforderung",
+   "cards": [
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-air-scrapping card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Luftaufbereitung</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">15</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-global-requirement card-venus-global-requirement\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 15 M€, um die Venuswertung um 1 zu erhöhen.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon venus-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-build-colony card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Kolonie bauen</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">17</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource-colony\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 17 M€, um eine Kolonie zu platzieren.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon colonies-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-buffer-gas card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Puffergas</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">16</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile card-tr\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 16 M€, um deinen TW um 1 zu erhöhen. Nur für Solo-Herausforderung.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>"
+   ]
+  },
+  {
+   "title": "Standardprojekte aus von Fans erstellten Erweiterungen",
+   "cards": [
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-air-scrapping-(var) card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\" style=\"font-size: 15px;\">Luftaufbereitung (Variante)</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">15</div><!----></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-text-size--M card-text-bold\">(</div><!----></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">-1</div><!----></div><!----></div><div class=\"card-effect-box-item\"><div><div class=\"card-special card-slash\">/</div></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource-tag tag-venus\"></div><!----></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-text-size--M card-text-bold\">)</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-global-requirement card-venus-global-requirement\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 15 M€ abzüglich 1 M€ für jedes Venussymbol, das du besitzt, um die Venuswertung um 1 zu erhöhen.</span>)</div></div></div></div><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-item-container\"><!----><div class=\"card-text-size--S card-text-bold\">(max. -5 M€)</div><!----></div></div></div><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon venus-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-lunar-habitat card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Lunares Habitat</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">22</div><!----></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-titanium\"></div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile card-tile-lunar-habitat-rate tile-size--M-square\"></div><!----></div></div><div class=\"card-effect-box-item\"><div class=\"card-production-box\"><div class=\"card-production-box-row\"><div class=\"card-production-box-row-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">1</div><!----></div></div></div></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 22 M€ und 1 Titan, um eine Kolonie auf dem Mond zu platzieren und deine M€-Produktion um 1 zu erhöhen.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon moon-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-lunar-mine card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Luna-Mine</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">20</div><!----></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-titanium\"></div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile card-tile-lunar-mine-rate tile-size--M-square\"></div><!----></div></div><div class=\"card-effect-box-item\"><div class=\"card-production-box\"><div class=\"card-production-box-row\"><div class=\"card-production-box-row-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-steel\"></div><!----></div></div></div></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 20 M€ und 1 Titan, um eine Mine auf dem Mond zu errichten. Erhöhe die Bergbau-Wertung und die Stahl-Produktion um 1.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon moon-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-road-infrastructure card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Straßen-Infrastruktur</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">18</div><!----></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-steel\"></div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile card-tile-lunar-road-rate tile-size--M-square\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 18 M€ und 1 Stahl, um eine Straße auf dem Mond zu bauen und erhöhe die Logistik-Wertung um 1.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon moon-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-lunar-habitat-(var.-1) card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\" style=\"font-size: 15px;\">Lunares Habitat (Variante 1)</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">23</div><!----></div><!----></div><div class=\"card-effect-box-item\"><div><div class=\"card-special\"><sup>(</sup></div></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-superscript card-resource--superscript card-resource-titanium\"></div><!----></div><!----></div><div class=\"card-effect-box-item\"><div><div class=\"card-special\"><sup>)</sup></div></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-titanium\"></div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile card-tile-lunar-habitat-rate tile-size--M-square\"></div><!----></div></div><div class=\"card-effect-box-item\"><div class=\"card-production-box\"><div class=\"card-production-box-row\"><div class=\"card-production-box-row-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">1</div><!----></div></div></div></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 23 M€ (Titan kann verwendet werden) UND 1 Titan, um eine Kolonie auf dem Mond zu platzieren und deine M€-Produktion um 1 zu erhöhen.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon moon-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-lunar-mine-(var.-1) card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Luna-Mine (Variante 1)</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">21</div><!----></div><!----></div><div class=\"card-effect-box-item\"><div><div class=\"card-special\"><sup>(</sup></div></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-superscript card-resource--superscript card-resource-titanium\"></div><!----></div><!----></div><div class=\"card-effect-box-item\"><div><div class=\"card-special\"><sup>)</sup></div></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-titanium\"></div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile card-tile-lunar-mine-rate tile-size--M-square\"></div><!----></div></div><div class=\"card-effect-box-item\"><div class=\"card-production-box\"><div class=\"card-production-box-row\"><div class=\"card-production-box-row-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-steel\"></div><!----></div></div></div></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 21 M€ (Titan kann verwendet werden) UND 1 Titan, um eine Mine auf dem Mond zu errichten. Erhöhe die Bergbau-Wertung und die Stahl-Produktion um 1.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon moon-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-road-infrastructure-(var.-1) card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\" style=\"font-size: 12px;\">Straßen-Infrastruktur (Variante 1)</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">19</div><!----></div><!----></div><div class=\"card-effect-box-item\"><div><div class=\"card-special\"><sup>(</sup></div></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-superscript card-resource--superscript card-resource-steel\"></div><!----></div><!----></div><div class=\"card-effect-box-item\"><div><div class=\"card-special\"><sup>)</sup></div></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-steel\"></div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile card-tile-lunar-road-rate tile-size--M-square\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 19 M€ (Stahl kann verwendet werden) UND 1 Stahl, um eine Straße auf dem Mond zu bauen und erhöhe die Logistik-Wertung um 1.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon moon-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-lunar-habitat-(var.-2) card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\" style=\"font-size: 15px;\">Lunares Habitat (Variante 2)</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">26</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile card-tile-lunar-habitat-rate tile-size--M-square\"></div><!----></div></div><div class=\"card-effect-box-item\"><div class=\"card-production-box\"><div class=\"card-production-box-row\"><div class=\"card-production-box-row-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">1</div><!----></div></div></div></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 26 M€, um eine Kolonie auf dem Mond zu platzieren und deine M€-Produktion um 1 zu erhöhen.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon moon-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-lunar-mine-(var.-2) card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Luna-Mine (Variante 2)</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">23</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile card-tile-lunar-mine-rate tile-size--M-square\"></div><!----></div></div><div class=\"card-effect-box-item\"><div class=\"card-production-box\"><div class=\"card-production-box-row\"><div class=\"card-production-box-row-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-steel\"></div><!----></div></div></div></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 24 M€, um eine Mine auf dem Mond zu errichten. Erhöhe die Bergbau-Wertung und die Stahl-Produktion um 1.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon moon-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-road-infrastructure-(var.-2) card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\" style=\"font-size: 12px;\">Straßen-Infrastruktur (Variante 2)</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">21</div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-tile card-tile-lunar-road-rate tile-size--M-square\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 21 M€, um eine Straße auf dem Mond zu bauen und erhöhe die Logistik-Wertung um 1.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon moon-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-excavate:sp card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Ausgraben</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-money\">7</div><!----></div><!----></div><div class=\"card-effect-box-item\"><div><div class=\"card-special\"><sup>(</sup></div></div><!----></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-superscript card-resource--superscript card-resource-steel\"></div><!----></div><!----></div><div class=\"card-effect-box-item\"><div><div class=\"card-special\"><sup>)</sup></div></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-excavation\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 7 M€ (Stahl kann verwendet werden), um einen Feld auszugraben.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon underworld-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>",
+    "<div class=\"cardbox\"><div class=\"card-container filterDiv hover-hide-res card-collusion:sp card-standard-project\"><div class=\"card-content-wrapper\" tm-has-i18n=\"true\"><!----><div class=\"card-title card-title-standard-project\"><!----><!----><!----><div class=\"card-title background-color-standard-project\">Absprachen</div></div><div class=\"card-content\"><!----><div class=\"card-rows\"><div class=\"card-row\"><div class=\"card-effect-box\"><div class=\"card-effect-box-row\"><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-resource card-resource-corruption\"></div><!----></div><!----></div></div><div><div class=\"card-special card-red-arrow\"></div></div><div class=\"card-effect-box-content\"><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-text-size--M card-text-bold\">-2</div><!----></div></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-neutral-delegate red-outline\"></div><!----></div></div><div class=\"card-effect-box-item\"><div><div class=\"card-special card-nbsp\"></div></div></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-text-size--M card-text-bold\">+2</div><!----></div></div><div class=\"card-effect-box-item\"><div class=\"card-item-container\"><!----><div class=\"card-delegate\"></div><!----></div></div><div class=\"card-effect-box-item\"><!----></div></div></div><div class=\"card-description\">(<span tm-has-i18n=\"true\">Bezahle 1 Korruption, um 1 oder 2 neutrale Delegierte in Ihre eigenen Delegierten umzuwandeln.</span>)</div></div></div></div><!----><!----><!----><!----></div></div><div class=\"project-icon-expansion-container\"><div class=\"project-icon underworld-icon\"></div></div><!----><!----><div class=\"card-extra-content-container\"><!----><!----><!----></div></div></div>"
+   ]
+  }
+ ],
+ "phases": [
+  {
+   "title": "<span tm-has-i18n=\"true\">Starthand-Draft (optionale Variante)</span>",
+   "children": [
+    {
+     "html": "Ziehe 3 Konzernkarten"
+    },
+    {
+     "html": "<span tm-has-i18n=\"true\">Ziehe 4 Präludium-Karten</span><div class=\"expansion-icon expansion-icon-prelude\"></div>"
+    },
+    {
+     "html": "Ziehe 5 Projektkarten. Drafte. Wähle eine Karte und gebe weiter an den Spieler über dir in der Zugreihenfolge. Wiederhole, bis du 5 Karten besitzt."
+    },
+    {
+     "html": "Ziehe 5 weitere Projektekarten. Drafte und gebe stattdessen weiter an den Spieler unter dir in der Zugreihenfolge."
+    },
+    {
+     "html": "<span tm-has-i18n=\"true\">Drafte die Präludium-Karten. Wähle eine Karte und gebe weiter an den Spieler über dir in der Zugreihenfolge. Wiederhole, bis du 4 Präludium-Karten besitzt.</span><div class=\"expansion-icon expansion-icon-prelude\"></div>"
+    }
+   ]
+  },
+  {
+   "title": "<span tm-has-i18n=\"true\">Jede Generation</span>",
+   "children": [
+    {
+     "title": "<span tm-has-i18n=\"true\">Initiale Forschungsphase (nur 1. Generation)</span>",
+     "children": [
+      {
+       "html": "Wähle, welchen Konzern, welche 2 Präludium- und Projektkarten du behalten möchtest."
+      },
+      {
+       "html": "In der Zugreihenfolge, spiele den Konzern und zahle 3 M€ für jede der gekauften Projektkarten."
+      },
+      {
+       "html": "<span tm-has-i18n=\"true\">In der Zugreihenfolge, spiele beide Präludium-Karten.</span><div class=\"expansion-icon expansion-icon-prelude\"></div>"
+      }
+     ]
+    },
+    {
+     "title": "<span tm-has-i18n=\"true\">Forschungsphase (ab 2. Generation)</span>",
+     "children": [
+      {
+       "html": "Ziehe vier Projektkarten"
+      },
+      {
+       "html": "(Optionale Variante: Ziehen der Karten. Wähle eine Karte aus, die anderen gibst du an den unteren Spieler in geraden Generation und den oberen Spieler in ungeraden Generation weiter. Wiederhole dies, bis du vier Karten hast.)"
+      },
+      {
+       "html": "Entscheide, wie viele Karten du kaufen möchtest"
+      }
+     ]
+    },
+    {
+     "title": "<span tm-has-i18n=\"true\">Aktionsphase</span> (<span tm-has-i18n=\"true\">Aufruhr-Politk aktiv</span><div class=\"expansion-icon expansion-icon-turmoil\"></div> )",
+     "children": [
+      {
+       "html": "<span tm-has-i18n=\"true\">Führe 1 or 2 Aktionen durch (es müssen zwei Aktionen sein, sofern du im Schnellen Modus spielst):</span><ul><li tm-has-i18n=\"true\">spiele Karte</li><li tm-has-i18n=\"true\">Führe aktive Kartenaktion durch</li><li tm-has-i18n=\"true\">Standardprojekt</li><li tm-has-i18n=\"true\">Wandle Pflanzen in eine Grünfläche um</li><li tm-has-i18n=\"true\">Wandle Wärme in Temperatur um</li><li tm-has-i18n=\"true\">Beanspruche Meilenstein</li><li tm-has-i18n=\"true\">Fördere Auszeichnung</li><li><span tm-has-i18n=\"true\">Handle mit 9 M€, 3 Titan or 3 Energie</span><div class=\"expansion-icon expansion-icon-colony\"></div></li><li><span tm-has-i18n=\"true\">Sende Abgesandten: Kostenlos aus der Lobby, 5 M€ aus der Reserve</span><div class=\"expansion-icon expansion-icon-turmoil\"></div></li></ul>"
+      },
+      {
+       "html": "Passe für diese Generation"
+      }
+     ]
+    },
+    {
+     "title": "<span tm-has-i18n=\"true\">Produktionsphase</span>",
+     "children": [
+      {
+       "html": "Energie wird zu Wärme"
+      },
+      {
+       "html": "Produziere Ressourcen"
+      }
+     ]
+    },
+    {
+     "title": "<span tm-has-i18n=\"true\">Solar-Phase</span>",
+     "children": [
+      {
+       "html": "<span tm-has-i18n=\"true\">i. Prüfung des Spielendes</span><ul><li tm-has-i18n=\"true\">Wenn Temperatur, Sauerstoffgehalt und Ozeane die höchste Stufe erreicht haben, überspringe den Rest der Solar-Phase und gehe zur Spielende-Phase.</li><li tm-has-i18n=\"true\">(In der Solo-Herausforderung endet das Spiel nach 14 Generationen.)</li><li tm-has-i18n=\"true\">Anpassungen in der Solo-Herausforderungen aus den Erweiterungen.</li><li tm-has-i18n=\"true\">• Präludium - Das Spiel endet 2 Generationen früher.</li><li tm-has-i18n=\"true\">• Nächster Halt: Venus - Die Venuswertung muss vollständig sein, um die Solo-Herausforderung zu gewinnen</li><li tm-has-i18n=\"true\">• Der Mond (63-TW) - Keine Änderungen.</li><li tm-has-i18n=\"true\">• Der Mond (Terraforming-Bedingung) - Das Spiel endet 2 Generationen später. Obgligatorische Wertungen aus Der Mond müssen vollendet sein, um die Solo-Herausforderung zu gewinnen.</li><li tm-has-i18n=\"true\">• Ares Extrem (Terraforming-Bedingung): Alle ungeschützten Gefahrenplättchen müssen entfernt sein, um die Solo-Herausforderung zu gewinnen.</li></ul>"
+      },
+      {
+       "html": "<span tm-has-i18n=\"true\">ii. Weltregierungs-Terraforming (Startspieler wählt)</span><div class=\"expansion-icon expansion-icon-venus\"></div>"
+      },
+      {
+       "html": "<span tm-has-i18n=\"true\">iii. Kolonie-Produktion</span><ul><li tm-has-i18n=\"true\">Handelsflotten kehren zurück</li><li tm-has-i18n=\"true\">Jeder weißer Marker auf den Kolonieleisten wird um 1 Schritt vorgesetzt, falls möglich.</li></ul>"
+      },
+      {
+       "html": "<span tm-has-i18n=\"true\">iv. Aufruhr</span><div class=\"expansion-icon expansion-icon-turmoil\"></div><ul><li tm-has-i18n=\"true\">1. TW-Revision: Alle Spieler verlieren 1 TW</li><li tm-has-i18n=\"true\">2. Globales Ereignis: Führe das aktuelle globale Ereignis durch</li><li><span tm-has-i18n=\"true\">3. Neue Regierung</span><ul><li tm-has-i18n=\"true\">Politikplättchen aktualisieren</li><li tm-has-i18n=\"true\">Der Regierungsbonus der dominaten Partei wird ausgeführt</li><li tm-has-i18n=\"true\">Der Parteichef der dominaten Partei wird neuer Vorsitzender, sein Spieler erhält ein 1 TW</li><li tm-has-i18n=\"true\">Der vorherige Vorsitzende und alle Delegierten der neuen Regierungspartei kehren in die Reserve zurück.</li><li tm-has-i18n=\"true\">Der Dominanzmarker wird zur neuen dominaten Partei versetzt (bei Gleichstand im Uhrzeigersinn).</li><li tm-has-i18n=\"true\">Lobby wiederherstellen</li></ul></li><li><span tm-has-i18n=\"true\">Die Zeiten ändern sich</span><ul><li tm-has-i18n=\"true\">Das Nächste Globale Ereignis (Mitte) wird zum Aktuellen Globalen Ergeinis (rechts). 1 neutraler Delegierter wird eingesetzt (Mitte rechts)</li><li tm-has-i18n=\"true\">Das zukünftige Globale Eregnis (links) wird zum Nächsten Globalen Ergeinis (Mitte)</li><li tm-has-i18n=\"true\">Ein neues Zukünftiges Globale Ereignis (links) aufdecken. 1 neutraler Delegierter wird eingesetzt (oben links)</li></ul></li></ul>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "<span tm-has-i18n=\"true\">Spielende</span>",
+   "children": [
+    {
+     "html": "In Zugreihenfolge, konvertiere Pflanzen zu Grünflächen"
+    },
+    {
+     "html": "Vergebe Auszeichnungen"
+    },
+    {
+     "html": "<span tm-has-i18n=\"true\">Punktzahl = TW + Plättchen + Karten + Meilensteine + Auszeichnungen + (1 SP pro Vorsitzender und Partei-Anführer)</span><div class=\"expansion-icon expansion-icon-turmoil\"></div>)"
+    }
+   ]
+  }
+ ],
+ "parties": {
+  "intro": "A party bonus is granted once, during the Turmoil phase. Its policy applies ONLY DURING THE ACTION PHASE of the following generation.",
+  "list": [
+   {
+    "name": "MARS ZUERST",
+    "logo": "<div class=\"card-party card-party--mars-first\"></div>",
+    "bonus": [
+     "<div class=\"help-agenda-card\"><div><div><div class=\"resource money party-resource\">1</div> / <div class=\"resource-tag tag-building party-resource-tag\"></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Erhalte 1 M€ für jedes Gebäudesymbol, das du besitzt</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"resource money party-resource\">1</div> / <div class=\"tile empty-tile tile-size--S\"></div>ON MARS </div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Erhalte 1 M€ für jedes Plättchen, das du AUF DEM MARS besitzt</div></div>"
+    ],
+    "policy": [
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><!----><div class=\"tile empty-tile tile-size--S\"></div> : <span class=\"steel resource\"></span></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Wenn du ein Plättchen AUF DEM MARS ablegst, erhalte 1 Stahl</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><div class=\"resource-tag tag-building\"></div> : <div class=\"money resource\">2</div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Wenn du ein Gebäudesymbol spielst, erhalte 2 M€</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><div class=\"resource steel\"></div> : +<div class=\"resource money\">1</div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Deine Stahl-Ressourcen sind jeweils 1 M€ mehr wert</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><span class=\"money resource\">4</span><span class=\"red-arrow-3x\"></span><div class=\"resource card card-with-border policy-card-with-tag\"><div class=\"card-icon tag-building\"></div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Zahle 4 M€, um eine Gebäudekarte zu ziehen</div></div>"
+    ]
+   },
+   {
+    "name": "FORSCHUNG",
+    "logo": "<div class=\"card-party card-party--scientists\"></div>",
+    "bonus": [
+     "<div class=\"help-agenda-card\"><div><div><div class=\"resource money party-resource\">1</div> / <div class=\"resource-tag tag-science party-resource-tag\"></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Erhalte 1 M€ für jedes Wissenschaftssymbol, das du besitzt</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"resource money party-resource\">1</div> / 3 <div class=\"resource card card-small\"></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Erhalte 1 M€ für jede dritte Karte in deiner Hand</div></div>"
+    ],
+    "policy": [
+     "<div class=\"help-agenda-card\"><div><div><!----><span class=\"money resource\">10</span><span class=\"red-arrow\"></span><span class=\"card card-with-border resource party-resource\"></span><span class=\"card card-with-border resource party-resource\"></span><span class=\"card card-with-border resource party-resource\"></span></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Zahle 10 М€, um 3 Karten zu ziehen</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><span><div class=\"tile oxygen-tile req-tile-small\" style=\"margin: 10px -5px;\"></div><div class=\"tile ocean-tile req-tile-small\"></div><div class=\"tile temperature-tile req-tile-small\"></div> : ± 2 </span></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Deine globalen Bedinungen erhöhen/vermindern sich um 2 Stufen</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><span><div class=\"tile oxygen-tile req-tile-small\" style=\"margin: 10px -5px;\"></div><div class=\"tile ocean-tile req-tile-small\"></div><div class=\"tile temperature-tile req-tile-small\"></div> : <div class=\"resource card card-with-border\"></div></span></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Wenn du einen globalen Parameter erhöhst, ziehe eine Karte pro erhöhtem Schritt</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"scientists-requisite\"><div class=\"resource-tag tag-science party-resource-tag\"></div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Karten, die Wissenschaftssymbole erfordern, können mit einem Wissenschaftssymbol weniger gespielt werden</div></div>"
+    ]
+   },
+   {
+    "name": "EINIGKEIT",
+    "logo": "<div class=\"card-party card-party--unity\"></div>",
+    "bonus": [
+     "<div class=\"help-agenda-card\"><div><div><div class=\"resource money party-resource\">1</div> / <div class=\"resource-tag tag-venus party-resource-tag\"></div><div class=\"resource-tag tag-earth party-resource-tag\"></div><div class=\"resource-tag tag-jovian party-resource-tag\"></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Erhalte 1 M€ für jedes Venus-, Erde- und Jupitersymbol, das du besitzt</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"resource money party-resource\">1</div> / <div class=\"resource-tag tag-space party-resource-tag\"></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Erhalte 1 M€ für jedes Weltraumsymbol, das du besitzt</div></div>"
+    ],
+    "policy": [
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><!----><div class=\"resource titanium\"></div> : + <div class=\"resource money\">1</div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Deine Titan-Ressourcen sind jeweils 1 M€ mehr wert</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><span class=\"money resource\">4</span><span class=\"red-arrow-3x\"></span>2<span class=\"titanium resource\"></span> / 2<span class=\"floater resource\"></span></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Zahle 4 M€, um entweder 2 Titan zu erhalten oder 2 Schweber einer beliebigen Karte hinzuzufügen</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><span class=\"money resource\">4</span><span class=\"red-arrow-3x\"></span><div class=\"resource card card-with-border policy-card-with-tag\"><div class=\"card-icon tag-space\"></div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Zahle 4 M€, um eine Weltraum-Karte zu ziehen</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><div class=\"resource-tag tag-space\"></div> : <div class=\"money resource\">-2</div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Karten mit Weltraumsymbol kosten 2 M€ weniger</div></div>"
+    ]
+   },
+   {
+    "name": "KELVINISTEN",
+    "logo": "<div class=\"card-party card-party--kelvinists\"></div>",
+    "bonus": [
+     "<div class=\"help-agenda-card\"><div><div><div class=\"resource money party-resource\">1</div> / <div class=\"production-box party-production-box\"><div class=\"heat production\"></div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Erhalte 1 M€ für jeden Punkt deiner Wärme-Produktion</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"resource heat party-resource\"></div> / <div class=\"production-box party-production-box\"><div class=\"heat production\"></div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Erhalte 1 Wärme für jeden Punkt deiner Wärme-Produktion</div></div>"
+    ],
+    "policy": [
+     "<div class=\"help-agenda-card\"><div><div><!----><span class=\"money resource\">10</span><span class=\"red-arrow-infinity\"></span><div class=\"production-box production-box-size2\"><div class=\"energy production\"></div><div class=\"heat production\"></div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Zahle 10 M€, um deine Energie- und Wärme-Produktion um 1 zu erhöhen</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"tile temperature-tile req-tile-small\" style=\"margin-right: 5px;\"></div> : <span class=\"money resource\">3</span></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Wenn du die Temperatur erhöhst, erhalte 3 M€ pro erhöhtem Schritt</div></div>",
+     "<div class=\"help-agenda-card\"><div><div> 6 <span class=\"heat resource\"></span><span class=\"red-arrow-infinity\"></span><div class=\"tile temperature-tile\"></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Setze 6 Wärme ein, um die Temperatur um 1 zu erhöhen</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><div class=\"tile empty-tile tile-size--S\"></div> : <span class=\"heat resource\"></span><span class=\"heat resource\"></span></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Wenn du ein beliebiges Plättchen platzierst, erhalte 2 Wärme</div></div>"
+    ]
+   },
+   {
+    "name": "DIE ROTEN",
+    "logo": "<div class=\"card-party card-party--reds\"></div>",
+    "bonus": [
+     "<div class=\"help-agenda-card\"><div><div><div class=\"party-inferior-rating tile party-rating party-tile\">&lt;</div> : <div class=\"rating tile party-rating party-tile\"></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Der/die Spieler mit dem niedrigsten Terraformwert erhält/erhalten 1 TW</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"party-inferior-rating tile party-rating party-tile\">&gt;</div> : <div class=\"rating tile party-rating party-tile red-outline\"></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Der/die Spieler mit dem höchsten Terraformwert verliert/verlieren 1 TW</div></div>"
+    ],
+    "policy": [
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><!----><div class=\"rating tile\"></div> : <div class=\"resource money\">-3</div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Wenn du eine Aktion durchführst, die den Terraformwert erhöhen, MUSST du 3 M€ pro erhöhtem TW zahlen</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><div class=\"tile empty-tile tile-size--S\"></div> : <span class=\"money resource\">-3</span></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Wenn du ein beliebiges Plättchen spielst, zahle 3 M€ oder so viel wie möglich</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><span class=\"money resource\">4</span><span class=\"red-arrow-3x\"></span><div class=\"tile oxygen-tile req-tile-small red-outline\" style=\"margin:10px -5px;\"></div> / <div class=\"tile ocean-tile req-tile-small red-outline\"></div> / <div class=\"tile temperature-tile req-tile-small red-outline\"></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Zahle 4 M€, um einen nicht-maximierten globalen Parameter um 1 Schritt zu reduzieren (du erhälst keine Zwischenboni)</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"tile oxygen-tile req-tile-small\" style=\"margin:10px -5px;\"></div><div class=\"tile ocean-tile req-tile-small\"></div><div class=\"tile temperature-tile req-tile-small\"></div> : <div class=\"production-box production-box-size2\" style=\"margin-left:5px;\"><div class=\"production-prefix minus\"></div><div class=\"money production\">1</div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Wenn du einen globalen Parameter erhöhst, vermindere deine M€-Produktion um 1 pro erhöhtem Schritt (wenn möglich)</div></div>"
+    ]
+   },
+   {
+    "name": "DIE GRÜNEN",
+    "logo": "<div class=\"card-party card-party--greens\"></div>",
+    "bonus": [
+     "<div class=\"help-agenda-card\"><div><div><div class=\"resource money party-resource\">1</div> / <div class=\"resource-tag tag-plant party-resource-tag\"></div><div class=\"resource-tag tag-microbe party-resource-tag\"></div><div class=\"resource-tag tag-animal party-resource-tag\"></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Erhalte 1 M€ für jedes Pflanzen-, Mikroben- und Tiersymbol, das du besitzt</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"resource money party-resource\">2</div> / <div class=\"tile greenery-tile-turmoil greenery-tile-small\"></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Erhalte 2 M€ für jedes Grünflächenplättchen, das du besitzt</div></div>"
+    ],
+    "policy": [
+     "<div class=\"help-agenda-card\"><div><div><!----><div class=\"tile greenery-tile-turmoil\"></div> : <div class=\"resource money\">4</div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Wenn du ein Grünflächenplättchen platzierst, erhalte 4 M€</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><div class=\"tile empty-tile tile-size--S\"></div> : <span class=\"plant resource\"></span></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Wenn du ein beliebiges Plättchen platzierst, erhalte 1 Pflanze</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><div class=\"resource-tag tag-plant party-resource-tag\"></div><div class=\"resource-tag tag-microbe party-resource-tag\"></div><div class=\"resource-tag tag-animal party-resource-tag\"></div> : <div class=\"resource money\">2</div></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Wenn du ein Tier-, Pflanzen- oder Mikrobensymbol spielst, erhalte 2 M€</div></div>",
+     "<div class=\"help-agenda-card\"><div><div><div class=\"policy-top-margin\"><span class=\"money resource\">5</span><span class=\"red-arrow-3x\"></span>3<span class=\"plant resource\"></span> / 2<span class=\"microbe resource\"></span></div></div></div><div class=\"help-agenda-description\" tm-has-i18n=\"true\">Zahle 5 M€, um entweder 3 Pflanzen zu erhalten oder 2 Mikroben einer beliebigen Karten hinzuzufügen</div></div>"
+    ]
+   }
+  ]
+ },
+ "solo": [
+  {
+   "title": "Dein Ziel",
+   "html": "<p tm-has-i18n=\"true\">Erziele so viele Siegpunkte wie möglich, aber erfülle die Siegbedingung rechtzeitig, sonst verlierst du.</p>"
+  },
+  {
+   "title": "Spielmodi",
+   "html": "<p tm-has-i18n=\"true\">Wähle beim Erstellen des Spiels einen von zwei Spielmodi. Jeder hat eine andere Siegbedingung.</p><ul><li><span tm-has-i18n=\"true\">Standardmodus</span> (<span class=\"help-solo-mode-icon help-solo-mode-standard\"></span>): <span tm-has-i18n=\"true\">Du gewinnst, wenn alle globalen Parameter vor Ablauf der Zeit ihr Maximum erreicht haben.</span><ul><li><div class=\"expansion-icon expansion-icon-venus\"></div><span tm-has-i18n=\"true\">Dazu gehört auch die Venus, wenn mit „Nächster Halt: Venus“ gespielt wird.</span></li><li><div class=\"expansion-icon expansion-icon-themoon\"></div><span tm-has-i18n=\"true\">Dazu gehören auch die Mondleisten, wenn mit „Der Mond“ und verpflichtender Vervollständigung der Mondleisten gespielt wird.</span></li></ul></li><li><span tm-has-i18n=\"true\">63-TW-Modus</span> (<span class=\"help-solo-mode-icon help-solo-mode-tr\"></span>): <span tm-has-i18n=\"true\">Du gewinnst, wenn dein TW bei Ablauf der Zeit 63 oder höher ist.</span></li></ul>"
+  },
+  {
+   "title": "So funktioniert es",
+   "html": "<p tm-has-i18n=\"true\">Es gelten alle Regeln des Mehrspielerspiels sowie die der gewählten Erweiterungen, soweit sie hier nicht geändert werden.</p><ul><li tm-has-i18n=\"true\">Du spielst eine feste Anzahl an Generationen: 14 im Grundspiel. Du spielst immer alle Generationen, auch wenn du die Siegbedingung früher erfüllst.</li><li tm-has-i18n=\"true\">Der Sieg wird direkt nach der letzten Produktionsphase geprüft.</li><li tm-has-i18n=\"true\">Hast du verloren, ist das Spiel vorbei und du erhältst keine Wertung.</li><li><span tm-has-i18n=\"true\">Hast du gewonnen, folgt die letzte Umwandlung in Grünflächen und die normale Wertung.</span><ul><li><span tm-has-i18n=\"true\">63-TW-Modus</span> (<span class=\"help-solo-mode-icon help-solo-mode-tr\"></span>): <span tm-has-i18n=\"true\">Grünflächen aus der letzten Umwandlung können den Sauerstoff und deinen TW noch erhöhen. Dieser TW zählt für die Wertung, aber nicht für den Sieg.</span></li></ul></li></ul>"
+  },
+  {
+   "title": "Weitere Änderungen",
+   "html": "<ul><li tm-has-i18n=\"true\">Du beginnst mit 14 TW statt 20.</li><li tm-has-i18n=\"true\">Es gibt keine Meilensteine und keine Auszeichnungen.</li><li><span tm-has-i18n=\"true\">Es gibt einen neutralen Gegner. Er macht keine Züge, aber:</span><ul><li tm-has-i18n=\"true\">Er zählt als Spieler oder Gegner für alle Karten, die diese Begriffe verwenden (z. B. Philares, Mons Versicherung, Angriffskarten, Säuberung der Absturzstelle).</li><li tm-has-i18n=\"true\">Er hat unbegrenzt Produktion und Ressourcen jeder Art. Deine Karten können sie immer verringern oder entfernen, und das gilt als tatsächlich geschehen (z. B. für Mons Versicherung, Ameisen, Raubtiere und Karten, die stehlen).</li><li tm-has-i18n=\"true\">Er beginnt mit 2 Städten mit je einer angrenzenden Grünfläche, zufällig auf dem Spielplan platziert. Diese Grünflächen erhöhen den Sauerstoff nicht. Tharsis Republik wird trotzdem für beide Städte ausgelöst.</li></ul></li><li><span tm-has-i18n=\"true\">Nur im 63-TW-Modus</span> (<span class=\"help-solo-mode-icon help-solo-mode-tr\"></span>): <span tm-has-i18n=\"true\">Ein zusätzliches Standardprojekt, Puffergas, ist verfügbar. Bezahle 16 M€, um deinen TW um 1 zu erhöhen.</span></li></ul>"
+  },
+  {
+   "title": "Änderungen durch Erweiterungen",
+   "html": "<ul><li><div class=\"expansion-icon expansion-icon-venus\"></div><span tm-has-i18n=\"true\">Nächster Halt: Venus:</span> <span tm-has-i18n=\"true\">Standardmodus</span> (<span class=\"help-solo-mode-icon help-solo-mode-standard\"></span>) <span tm-has-i18n=\"true\">erfordert zum Sieg zusätzlich, dass die Venus ihr Maximum erreicht.</span></li><li><div class=\"expansion-icon expansion-icon-prelude\"></div><span tm-has-i18n=\"true\">Präludium: Spiele 12 statt 14 Generationen.</span></li><li><div class=\"expansion-icon expansion-icon-colony\"></div><span tm-has-i18n=\"true\">Kolonien: Senke zu Spielbeginn deine M€-Produktion um 2. Ein zusätzliches Kolonieplättchen wird ausgelegt, und du wählst ein Kolonieplättchen, das aus dem Spiel entfernt wird.</span></li><li><div class=\"expansion-icon expansion-icon-turmoil\"></div><span tm-has-i18n=\"true\">Aufruhr: Der Regierungsbonus der Roten gibt dir 1 TW, wenn dein TW 20 oder weniger beträgt. Einige globale Ereignisse haben einen eigenen Solo-Text.</span><ul><li><div class=\"expansion-icon expansion-icon-agendas\"></div><span tm-has-i18n=\"true\">Agenden: Der alternative Regierungsbonus nimmt dir 1 TW, wenn dein TW höher als 20 ist.</span></li></ul></li><li><div class=\"expansion-icon expansion-icon-themoon\"></div><span tm-has-i18n=\"true\">Der Mond:</span><ul><li><span tm-has-i18n=\"true\">Standardmodus</span> (<span class=\"help-solo-mode-icon help-solo-mode-standard\"></span>), <span tm-has-i18n=\"true\">mit verpflichtender Vervollständigung der Mondleisten: Zum Sieg müssen zusätzlich die Mondleisten ihr Maximum erreichen, und du spielst 2 Generationen mehr.</span></li><li><span tm-has-i18n=\"true\">63-TW-Modus</span> (<span class=\"help-solo-mode-icon help-solo-mode-tr\"></span>): <span tm-has-i18n=\"true\">keine Änderungen.</span></li></ul></li><li><div class=\"expansion-icon expansion-icon-ares\"></div><span tm-has-i18n=\"true\">Ares Extrem:</span> <span tm-has-i18n=\"true\">Standardmodus</span> (<span class=\"help-solo-mode-icon help-solo-mode-standard\"></span>) <span tm-has-i18n=\"true\">erfordert zum Sieg zusätzlich, dass du alle ungeschützten Gefahrenplättchen entfernst.</span> <span tm-has-i18n=\"true\">Beim Terraforming der Weltregierung darfst du statt einen globalen Parameter zu erhöhen ein ungeschütztes Gefahrenplättchen entfernen.</span></li></ul><p><span tm-has-i18n=\"true\">Nach</span>&nbsp; <a href=\"https://github.com/MartianZoo/player-resources/blob/main/solo-rules-summary.md\" target=\"_blank\" tm-has-i18n=\"true\">Terraforming Mars: Zusammenfassung der Solo-Regeln</a></p>"
+  }
+ ],
+ "rulebooks": [
+  {
+   "title": "Offizielle Erweiterungen",
+   "rows": [
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-CE\"></div>",
+     "name": "Zeitalter der Konzerne"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-venus\"></div>",
+     "name": "Nächster Halt: Venus"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-prelude\"></div>",
+     "name": "Präludium"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-prelude2\"></div>",
+     "name": "Präludium 2"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-colony\"></div>",
+     "name": "Kolonien"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-turmoil\"></div>",
+     "name": "Aufruhr"
+    }
+   ]
+  },
+  {
+   "title": "Fan-Erweiterungen",
+   "rows": [
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Variants#promo-cards",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-promo\"></div>",
+     "name": "Promos"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Ares",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-ares\"></div>",
+     "name": "Ares"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Community",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-community\"></div>",
+     "name": "Kommunity"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/The-Moon",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-themoon\"></div>",
+     "name": "Der Mond"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Pathfinders",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-pathfinders\"></div>",
+     "name": "Pathfinder"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/CEOs",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-ceo\"></div>",
+     "name": "Geschäftsführer"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/StarWars",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-starwars\"></div>",
+     "name": "Krieg der Sterne"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Underworld",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-underworld\"></div>",
+     "name": "Unterwelt"
+    },
+    {
+     "href": "https://github.com/terraforming-mars/terraforming-mars/wiki/Delta-Project",
+     "icon": "<div class=\"create-game-expansion-icon expansion-icon-deltaProject\"></div>",
+     "name": "Delta Project"
+    }
+   ]
+  }
+ ],
+ "hotkeys": [
+  "Spielbrett",
+  "Spielerübersicht",
+  "Handkarten",
+  "Kolonien"
+ ]
+};

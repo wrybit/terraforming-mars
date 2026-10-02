@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hilfe-Overlay – Mockup</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700&display=swap">
+<!-- Echte App-Styles (Icons, Karten, Agenden); erzeugt von extract.mjs -->
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="mockup.css">
+</head>
+<body class="hx-page">
+  <div class="hx-backdrop">
+    <div class="hx-modal" role="dialog" aria-modal="true" aria-labelledby="hx-title">
+      <header class="hx-head">
+        <div class="hx-toprow">
+          <h1 class="hx-title" id="hx-title">Hilfe</h1>
+          <label class="hx-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input id="hx-search-input" type="search" placeholder="In diesem Tab suchen" autocomplete="off">
+          </label>
+          <button class="hx-close" type="button" aria-label="Schließen">✕</button>
+        </div>
+        <nav class="hx-tabs" id="hx-tabs" role="tablist"></nav>
+      </header>
+      <div class="hx-main">
+        <!-- Unternavigation: Desktop als Seitenbaum links, Handy als Chip-Leiste oben -->
+        <nav class="hx-subnav" id="hx-subnav" aria-label="Abschnitte"></nav>
+        <div class="hx-content" id="hx-content"></div>
+      </div>
+    </div>
+  </div>
+<script src="data.js"></script>
+<script src="mockup.js"></script>
+</body>
+</html>

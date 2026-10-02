@@ -1,0 +1,233 @@
+/* Mockup Hilfe-Overlay. Präfix hx- (nie "ad-": Adblocker blenden das aus).
+   Farben aus der App: Modal (modal_surface.less), Lila = @bg_action */
+:root {
+  --hx-modal-bg: #23242a;
+  --hx-modal-border: #4b4d55;
+  --hx-surface: rgba(255, 255, 255, 0.045);
+  --hx-surface-border: rgba(255, 255, 255, 0.08);
+  --hx-text: #d6d7dc;
+  --hx-muted: #8b8d96;
+  --hx-heading: #fff;
+  --hx-accent: rgb(87, 85, 217);
+  --hx-accent-soft: rgba(87, 85, 217, 0.2);
+  --hx-accent-text: #b3b2ff;
+  --hx-radius: 12px;
+  --hx-card-radius: 10px;
+  /* Abstände nach Gesetz der Nähe: Zeile < Gruppe < Abschnitt */
+  --hx-gap-row: 4px;
+  --hx-gap-group: 20px;
+  --hx-gap-section: 16px;
+}
+
+/* Seite: echte Spielansicht als Hintergrund, abgedunkelt + unscharf wie in der App */
+body.hx-page {
+  margin: 0; padding: 0; height: 100vh; overflow: hidden;
+  background: #0b0c10 url(bg-desktop.jpg) center / cover no-repeat;
+  font-family: "Ubuntu", sans-serif; font-size: 15px; color: var(--hx-text);
+}
+.hx-backdrop {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px;
+  background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(4px);
+}
+
+/* Box: feste Höhe, damit nichts springt; nur der Inhalt scrollt */
+.hx-modal {
+  width: min(1180px, 100%); height: min(85vh, 900px);
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--hx-modal-bg); border: 1px solid var(--hx-modal-border); border-radius: var(--hx-radius);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+}
+
+/* Kopf */
+.hx-head { flex: none; padding: 16px 20px 0; border-bottom: 1px solid var(--hx-surface-border); }
+.hx-toprow { display: flex; align-items: center; gap: 12px; }
+.hx-title { margin: 0 auto 0 0; font-family: "Ubuntu", sans-serif; letter-spacing: 0; font-size: 20px; font-weight: 500; color: var(--hx-heading); }
+.hx-search {
+  display: flex; align-items: center; gap: 8px; width: 280px; height: 34px; padding: 0 12px;
+  border-radius: 8px; background: rgba(255, 255, 255, 0.07); border: 1px solid var(--hx-surface-border); color: var(--hx-muted);
+}
+.hx-search:focus-within { border-color: var(--hx-accent); }
+.hx-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--hx-text); font: inherit; font-size: 14px; }
+.hx-search input::placeholder { color: var(--hx-muted); }
+.hx-close {
+  flex: none; width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--hx-modal-border);
+  background: transparent; color: var(--hx-text); font-size: 16px; cursor: pointer;
+}
+.hx-close:hover { background: #34363e; color: #fff; }
+
+/* Tabs: einzeilig, bei Platzmangel waagerecht scrollbar */
+.hx-tabs { display: flex; gap: 2px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; }
+.hx-tabs::-webkit-scrollbar { display: none; }
+.hx-tab {
+  position: relative; flex: none; padding: 10px 14px 12px; border: 0; background: none; cursor: pointer;
+  font: inherit; font-size: 15px; color: var(--hx-muted); white-space: nowrap;
+}
+.hx-tab:hover { color: var(--hx-text); }
+.hx-tab[aria-selected="true"] { color: #fff; }
+.hx-tab[aria-selected="true"]::after {
+  content: ''; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 3px;
+  border-radius: 3px 3px 0 0; background: var(--hx-accent);
+}
+
+/* Hauptbereich: Seitenbaum links, Inhalt rechts */
+.hx-main { flex: 1; min-height: 0; display: flex; }
+.hx-subnav {
+  flex: none; width: 230px; overflow-y: auto; padding: 16px 8px 16px 12px;
+  border-right: 1px solid var(--hx-surface-border);
+}
+.hx-tree, .hx-tree ul { list-style: none; margin: 0; padding: 0; }
+.hx-tree ul { margin: 2px 0 6px 12px; padding-left: 8px; border-left: 1px solid var(--hx-surface-border); }
+.hx-tree li + li { margin-top: 2px; }
+.hx-tree a {
+  display: block; padding: 6px 10px; border-radius: 6px; color: var(--hx-text); text-decoration: none;
+  font-size: 14px; line-height: 1.3; cursor: pointer;
+}
+.hx-tree ul a { font-size: 13px; color: var(--hx-muted); padding: 5px 10px; }
+.hx-tree a:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+.hx-tree a.is-active { background: var(--hx-accent-soft); color: #fff; }
+.hx-tree .hx-count { float: right; color: var(--hx-muted); font-size: 12px; }
+
+.hx-content { flex: 1; min-width: 0; overflow-y: auto; padding: 20px; scroll-behavior: smooth; }
+
+/* Abschnitte als eigene Flächen */
+.hx-section {
+  scroll-margin-top: 16px; margin-bottom: var(--hx-gap-section); padding: 16px 18px 18px;
+  border-radius: var(--hx-card-radius); background: var(--hx-surface); border: 1px solid var(--hx-surface-border);
+}
+.hx-section-title { margin: 0 0 12px; text-shadow: none; font-family: "Ubuntu", sans-serif; font-size: 18px; font-weight: 500; color: var(--hx-heading); display: flex; align-items: center; gap: 10px; }
+.hx-section-lead { margin: -8px 0 14px; font-size: 13px; color: var(--hx-muted); }
+.hx-group { scroll-margin-top: 16px; }
+.hx-group + .hx-group { margin-top: var(--hx-gap-group); }
+.hx-group-title {
+  margin: 0 0 8px; text-shadow: none; font-family: "Ubuntu", sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--hx-muted);
+}
+
+/* Symbol-Zeilen: Raster füllt die Breite */
+.hx-rows { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: var(--hx-gap-row) 16px; }
+.hx-row { display: flex; align-items: center; gap: 12px; min-height: 36px; }
+.hx-icon { flex: none; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; }
+.hx-icon > * { flex: none; margin: 0 !important; }
+.hx-label { min-width: 0; }
+.hx-exp { display: flex; gap: 4px; margin-left: -4px; opacity: 0.8; }
+.hx-exp .expansion-icon { margin: 0 !important; }
+
+/* Standardprojekte: Karten im Raster */
+.hx-cards { display: flex; flex-wrap: wrap; gap: 16px; }
+.hx-cards .cardbox { margin: 0 !important; zoom: 0.84; }
+
+/* Phasen: Schritte mit Nummer, alles aufgeklappt */
+.hx-step { scroll-margin-top: 16px; position: relative; padding-left: 40px; }
+.hx-step + .hx-step { margin-top: var(--hx-gap-group); }
+.hx-step-no {
+  position: absolute; left: 0; top: -2px; width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500;
+  background: var(--hx-accent-soft); color: var(--hx-accent-text); border: 1px solid rgba(87, 85, 217, 0.5);
+}
+.hx-step-title { margin: 0 0 6px; text-shadow: none; font-family: "Ubuntu", sans-serif; font-size: 15px; font-weight: 500; color: var(--hx-heading); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.hx-prose { line-height: 1.5; }
+.hx-prose ul { margin: 0; padding-left: 18px; }
+.hx-prose li + li { margin-top: 4px; }
+.hx-prose li::marker { color: var(--hx-muted); }
+.hx-prose ul ul { margin-top: 4px; }
+.hx-prose p { margin: 0 0 8px; }
+.hx-prose.help-solo-rules-container { padding: 0; margin: 0; }
+.hx-prose .expansion-icon { display: inline-block; vertical-align: middle; margin: 0 4px !important; }
+.hx-substep { scroll-margin-top: 16px; }
+.hx-substep + .hx-substep { margin-top: 12px; }
+.hx-substep-title { font-weight: 500; color: var(--hx-text); margin-bottom: 4px; }
+
+/* Parteien */
+.hx-party-logo { flex: none; transform: scale(0.8); transform-origin: left center; margin: -6px -8px -6px 0 !important; }
+.hx-agendas { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+
+/* Regelhefte als Link-Kacheln */
+.hx-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.hx-link {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05); border: 1px solid var(--hx-surface-border); color: var(--hx-text); text-decoration: none;
+}
+.hx-link:hover { border-color: var(--hx-accent); background: var(--hx-accent-soft); color: #fff; }
+.hx-link .create-game-expansion-icon { flex: none; margin: 0 !important; }
+.hx-link-name { flex: 1; min-width: 0; }
+.hx-link-arrow { color: var(--hx-muted); font-size: 14px; }
+
+/* Tastatur: Tastenkappen im App-Dunkel, Kürzel-Tasten in Lila */
+.hx-key {
+  flex: none; min-width: 36px; height: 36px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 7px; background: linear-gradient(#3a3c45, #2c2e35); border: 1px solid #4d4f58; box-shadow: 0 3px 0 #17181c;
+  font-size: 15px; font-weight: 500; color: #9a9ca5;
+}
+.hx-key--wide { min-width: 52px; }
+.hx-key.is-hot { background: linear-gradient(#6d6be6, rgb(87, 85, 217)); border-color: #8d8bf0; color: #fff; box-shadow: 0 3px 0 #2f2d8a; }
+.hx-keyrow { display: flex; gap: 6px; margin: 4px 0 20px; flex-wrap: wrap; }
+.hx-shortcuts { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.hx-shortcut { padding: 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--hx-surface-border); }
+.hx-shortcut-text { display: flex; align-items: center; gap: 10px; }
+.hx-shortcut .hx-shortcut-text { margin-top: 10px; }
+.hx-sketch { display: block; width: 100%; height: auto; }
+.hx-sk-frame { fill: #191a1f; stroke: #3a3c44; }
+.hx-sk-area { fill: #2d2f37; stroke: #3d3f48; }
+.hx-sk-area.is-target { fill: rgba(87, 85, 217, 0.45); stroke: #8d8bf0; stroke-width: 1.5; }
+
+.hx-empty { padding: 40px 0; text-align: center; color: var(--hx-muted); }
+.hx-hidden { display: none !important; }
+
+/* Tablet: Seitenbaum schmaler */
+@media (max-width: 1000px) {
+  .hx-subnav { width: 190px; }
+}
+
+/* Handy: Vollbild-Sheet, Unternavigation als Chip-Leiste über dem Inhalt */
+@media (max-width: 700px) {
+  body.hx-page { background-image: url(bg-mobile.jpg); }
+  .hx-backdrop { padding: 24px 0 0; align-items: flex-end; }
+  .hx-modal { width: 100%; height: 100%; border-radius: 16px 16px 0 0; border-bottom: 0; }
+  .hx-head { padding: 14px 16px 0; }
+  .hx-toprow { flex-wrap: wrap; row-gap: 12px; }
+  .hx-title { font-size: 18px; }
+  .hx-search { order: 3; width: 100%; }
+  .hx-tabs { margin: 8px -16px 0; padding: 0 6px; }
+  .hx-tab { padding: 10px 10px 12px; font-size: 14px; }
+  .hx-tab--desktop { display: none; }
+  .hx-main { flex-direction: column; }
+  .hx-subnav { width: auto; padding: 10px 12px; border-right: 0; border-bottom: 1px solid var(--hx-surface-border); overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+  .hx-subnav::-webkit-scrollbar { display: none; }
+  .hx-tree, .hx-tree ul { display: flex; gap: 6px; }
+  .hx-tree ul { margin: 0; padding: 0; border: 0; }
+  .hx-tree li { display: contents; }
+  .hx-tree a, .hx-tree ul a {
+    flex: none; white-space: nowrap; padding: 6px 12px; border-radius: 16px; font-size: 13px;
+    background: rgba(255, 255, 255, 0.06); color: var(--hx-text);
+  }
+  .hx-tree ul a { background: transparent; border: 1px solid var(--hx-surface-border); color: var(--hx-muted); }
+  .hx-tree .hx-count { display: none; }
+  .hx-content { padding: 12px; }
+  .hx-section { padding: 14px; margin-bottom: 12px; }
+  .hx-rows { grid-template-columns: 1fr 1fr; column-gap: 8px; }
+  .hx-row { gap: 8px; font-size: 14px; min-height: 34px; }
+  .hx-icon { width: 30px; height: 30px; }
+  .hx-cards { justify-content: center; gap: 10px; }
+  .hx-cards .cardbox { zoom: 0.56; }
+  .hx-step { padding-left: 34px; }
+  .hx-agendas { grid-template-columns: 1fr 1fr; }
+  .hx-links { grid-template-columns: 1fr; }
+}
+
+/* App-Überschriften haben Schatten und eigene Schrift – im Overlay nicht gewünscht */
+.hx-modal h1, .hx-modal h2, .hx-modal h3 { text-shadow: none !important; font-family: "Ubuntu", sans-serif !important; letter-spacing: 0 !important; }
+/* Globale App-Liste setzt Aufzählungszeichen nach innen – hier außen, damit Folgezeilen bündig sind */
+.hx-prose ul { list-style-position: outside !important; padding-left: 1.2em !important; }
+.hx-prose li { margin: 0 !important; padding-left: 2px; }
+.hx-prose li + li { margin-top: 4px !important; }
+.hx-cards .cardbox { zoom: 0.76; }
+@media (max-width: 700px) { .hx-cards .cardbox { zoom: 0.56; } }
+/* App setzt auf Überschriften einen Schlagschatten per filter */
+.hx-modal h1, .hx-modal h2, .hx-modal h3 { filter: none !important; }
+/* Karten ohne eigenen Außenrand – Abstand regelt nur das Raster */
+.hx-cards { width: 100%; }
+.hx-cards .card-container { margin: 0 !important; }
+.hx-cards .cardbox { zoom: 0.9; }
+@media (max-width: 700px) { .hx-cards .cardbox { zoom: 0.66; } }
+.hx-modal .hx-title { padding: 0 !important; }
+.hx-cards .cardbox { zoom: 0.8; }
+@media (max-width: 700px) { .hx-cards .cardbox { zoom: 0.66; } }
