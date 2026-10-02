@@ -99,5 +99,6 @@
   "Where cities and greeneries end up": "Wo Städte und Grünflächen landen",
   "${0} of ${1} games": "${0} von ${1} Partien",
   "Highest score without winning": "Meiste Punkte ohne Sieg",
-  "No game with a saved board yet.": "Noch keine Partie mit gespeichertem Spielbrett."
+  "No game with a saved board yet.": "Noch keine Partie mit gespeichertem Spielbrett.",
+  "All statistics": "Alle Statistiken"
 }
