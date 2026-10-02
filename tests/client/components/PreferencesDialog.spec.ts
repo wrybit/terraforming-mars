@@ -3,6 +3,7 @@ import {expect} from 'chai';
 import PreferencesDialog from '@/client/components/PreferencesDialog.vue';
 import {Preference, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {globalConfig} from './getLocalVue';
+import {PREFERENCE_GROUPS} from '@/client/components/preferencesGroups';
 
 describe('PreferencesDialog', () => {
   const preferencesManager = PreferencesManager.INSTANCE;
@@ -46,5 +47,18 @@ describe('PreferencesDialog', () => {
     await wrapper.vm.$nextTick();
 
     expect(preferencesManager.values().hide_awards_and_milestones).is.true;
+  });
+
+  it('shows each switch exactly once, grouped', () => {
+    const wrapper = mount(PreferencesDialog, {
+      ...globalConfig,
+      props: {preferencesManager},
+    });
+    const shown = wrapper.findAll('input[data-test]').map((input) => input.attributes('data-test'));
+    const expected = PREFERENCE_GROUPS.flatMap((group) => group.switches.map((item) => item.preference));
+    expect(shown).deep.eq(expected);
+    expect(new Set(shown).size).eq(shown.length);
+    expect(wrapper.findAll('.preferences-group')).has.length(PREFERENCE_GROUPS.length);
+    expect(wrapper.find('.dialog-frame-title').text()).eq('Settings');
   });
 });

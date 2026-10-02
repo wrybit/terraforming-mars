@@ -1,115 +1,39 @@
 <template>
-    <div class="preferences_panel" :data="syncPreferences()">
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.hide_awards_and_milestones" data-test="hide_awards_and_milestones">
-          <i class="form-icon"></i> <span v-i18n>Hide awards and milestones</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.small_cards" data-test="small_cards">
-          <i class="form-icon"></i> <span v-i18n>Smaller cards</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.magnify_cards" data-test="magnify_cards">
-          <i class="form-icon"></i> <span v-i18n>Magnify cards on hover</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.hide_discount_on_cards" data-test="hide_discount_on_cards">
-          <i class="form-icon"></i> <span v-i18n>Hide discount on cards</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.hide_zero_tags" data-test="hide_zero_tags">
-          <i class="form-icon"></i> <span v-i18n>Hide tags with zero count</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.remove_background" data-test="remove_background">
-          <i class="form-icon"></i> <span v-i18n>Remove background image</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.show_alerts" data-test="show_alerts">
-          <i class="form-icon"></i> <span v-i18n>Show in-game alerts</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.enable_sounds" data-test="enable_sounds">
-          <i class="form-icon"></i> <span v-i18n>Enable sounds</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.hide_animated_sidebar" data-test="hide_animated_sidebar">
-          <i class="form-icon"></i> <span v-i18n>Hide sidebar notification</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.hide_tile_confirmation" data-test="hide_tile_confirmation">
-          <i class="form-icon"></i> <span v-i18n>Hide tile confirmation</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.learner_mode" data-test="learner_mode">
-          <i class="form-icon"></i>
-          <span v-i18n>Learner Mode (req. refresh)</span>
-          <span class="tooltip tooltip-left" :data-tooltip="$t('Show information that can be helpful\n to players who are still learning the games')">&#9432;</span>
-        </label>
-      </div>
+  <DialogFrame :title="$t('Settings')" :width="760" class="preferences-dialog" :data="syncPreferences()" @close="okClicked">
+    <template #icon>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2.5l1.6 2.3 2.8-.6.6 2.8 2.3 1.6-1.1 2.6 1.1 2.6-2.3 1.6-.6 2.8-2.8-.6L12 21.5l-1.6-2.3-2.8.6-.6-2.8-2.3-1.6L5.8 12 4.7 9.4 7 7.8l.6-2.8 2.8.6z"/><path d="M12 8.6l2.9 1.7v3.4L12 15.4l-2.9-1.7v-3.4z"/></svg>
+    </template>
 
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.symbol_overlay" data-test="symbol_overlay">
-          <i class="form-icon"></i>
-          <span v-i18n>Symbol Overlay</span>
-          <span class="tooltip tooltip-left" :data-tooltip="$t('Add symbols on top of player colors.')">&#9432;</span>
+    <div class="preferences-groups">
+      <component
+        :is="group.optional ? 'details' : 'section'"
+        v-for="group in groups"
+        :key="group.title"
+        class="preferences-group"
+        :class="{'preferences-group--optional': group.optional}">
+        <component :is="group.optional ? 'summary' : 'div'" class="preferences-group-head">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path v-for="path in group.iconPaths" :key="path" :d="path"/></svg>
+          <h3 class="preferences-group-title" v-i18n>{{ group.title }}</h3>
+          <span v-if="group.optional" class="preferences-group-chevron" aria-hidden="true">›</span>
+        </component>
+        <!-- Ganze Zeile anklickbar; Schalter rechts, Text links, Untertext statt ⓘ-Tooltip -->
+        <label v-for="item in group.switches" :key="item.preference" class="preferences-switch">
+          <span class="preferences-switch-text">
+            <span class="preferences-switch-label" v-i18n>{{ item.label }}</span>
+            <span v-if="item.hint" class="preferences-switch-hint">{{ $t(item.hint) }}</span>
+          </span>
+          <input type="checkbox" class="preferences-switch-input" @change="updatePreferences" v-model="prefs[item.preference]" :data-test="item.preference">
+          <span class="preferences-switch-track" aria-hidden="true"></span>
         </label>
-      </div>
-
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.animated_title" data-test="animated_title">
-          <i class="form-icon"></i>
-          <span v-i18n>Animated Title</span>
-          <span class="tooltip tooltip-left" :data-tooltip="$t('Show spinning circle in window title on your turn.')">&#9432;</span>
-        </label>
-      </div>
-
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.experimental_ui" data-test="experimental_ui">
-          <i class="form-icon"></i>
-          <span v-i18n>Experimental UI</span>
-          <span class="tooltip tooltip-left" :data-tooltip="$t('Test out any possible new experimental UI features for feedback.')">&#9432;</span>
-        </label>
-      </div>
-      <div class="preferences_panel_item">
-        <label class="form-switch">
-          <input type="checkbox" @change="updatePreferences" v-model="prefs.debug_view" data-test="debug_view">
-          <i class="form-icon"></i>
-          <span v-i18n>Debug View</span>
-          <span class="tooltip tooltip-left" :data-tooltip="$t('Add information useful for development and debugging.')">&#9432;</span>
-        </label>
-      </div>
-
-      <div class="preferences_panel_actions">
-        <button class="btn btn-lg btn-primary" @click="okClicked" v-i18n>Ok</button>
-        <button class="btn btn-lg btn-primary" @click="showBugDialog" v-i18n>Report a bug</button>
-      </div>
-      <BugReportDialog ref="bugDialog"/>
+      </component>
     </div>
+
+    <template #footer>
+      <button type="button" class="btn btn-tone-quiet preferences-bug-button" @click="showBugDialog" v-i18n>Report a bug</button>
+      <button type="button" class="btn btn-primary" @click="okClicked" v-i18n>Ok</button>
+    </template>
+    <BugReportDialog ref="bugDialog"/>
+  </DialogFrame>
 </template>
 
 <script lang="ts">
@@ -117,6 +41,8 @@ import {defineComponent} from 'vue';
 
 import {getPreferences, PreferencesManager, Preference} from '@/client/utils/PreferencesManager';
 import BugReportDialog from '@/client/components/BugReportDialog.vue';
+import DialogFrame from '@/client/components/DialogFrame.vue';
+import {PREFERENCE_GROUPS, PreferenceGroup} from '@/client/components/preferencesGroups';
 
 
 type Refs = {
@@ -133,7 +59,9 @@ export default defineComponent({
   },
   components: {
     BugReportDialog,
+    DialogFrame,
   },
+  emits: ['okButtonClicked'],
   data() {
     return {
       prefs: {...this.preferencesManager.values()},
@@ -185,6 +113,9 @@ export default defineComponent({
   computed: {
     typedRefs(): Refs {
       return this.$refs as unknown as Refs;
+    },
+    groups(): ReadonlyArray<PreferenceGroup> {
+      return PREFERENCE_GROUPS;
     },
     getPreferences(): typeof getPreferences {
       return getPreferences;
