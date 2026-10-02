@@ -14,12 +14,15 @@ export type Glyph = {
 };
 
 export type GlyphName = 'mars' | 'hand' | 'players' | 'log' | 'rocket' |
-  'cardActions' | 'playCard' | 'standardProjects' | 'sellPatents' | 'greenery' | 'temperature' | 'milestone' | 'award' | 'colonyTrade' | 'more';
+  'cardActions' | 'playCard' | 'standardProjects' | 'sellPatents' | 'greenery' | 'temperature' | 'milestone' | 'award' | 'colonyTrade' | 'more' |
+  'newGame' | 'rules' | 'statistics' | 'cardsList' | 'boardGame' | 'about' | 'updates' | 'discord';
 
 const circle = (cx: number, cy: number, r: number): SvgShape => ({tag: 'circle', attributes: {cx: String(cx), cy: String(cy), r: String(r)}});
 const path = (d: string): SvgShape => ({tag: 'path', attributes: {d}});
 // Kleiner gefüllter Punkt (Listenpunkte); Inline-Style, weil die Linien-Klasse sonst fill: none setzt
 const dot = (cx: number, cy: number): SvgShape => ({tag: 'circle', attributes: {cx: String(cx), cy: String(cy), r: '1.1', style: 'fill: currentColor'}});
+const rect = (x: number, y: number, width: number, height: number, radius: number): SvgShape =>
+  ({tag: 'rect', attributes: {x: String(x), y: String(y), width: String(width), height: String(height), rx: String(radius)}});
 const HEXAGON = 'M12 2.5l8.2 4.75v9.5L12 21.5l-8.2-4.75v-9.5z';
 const card = (x: number, rotation: string): SvgShape =>
   ({tag: 'rect', attributes: {x: String(x), y: '4.75', width: '10', height: '14.5', rx: '1.8', transform: rotation}});
@@ -50,4 +53,16 @@ export const GLYPHS: Record<GlyphName, Glyph> = {
   award: {layers: [[circle(12, 9, 5.5)]], details: [path('M9 13.8l-1.5 7.7 4.5-2.4 4.5 2.4-1.5-7.7')]},
   colonyTrade: {layers: [[circle(12, 12, 5.2)]], details: [path('M3.5 15.5c-1.2-2 3-5.2 8.5-6.9s10-1.9 11 0-3 5.2-8.5 6.9-9.8 2-11 0z')]},
   more: {layers: [[{tag: 'rect', attributes: {x: '3.5', y: '3.5', width: '17', height: '17', rx: '4'}}]], details: [dot(8, 12), dot(12, 12), dot(16, 12)]},
+  // Startseite (StartScreen.vue): je Menüpunkt ein Symbol, nur einlagig, weil Abdeckungen auf dem Foto-Hintergrund auffielen
+  newGame: {layers: [[circle(12, 12, 8.5)]], details: [path('M12 8v8M8 12h8')]},
+  rules: {layers: [[path('M3.5 5.5c2.8-1.4 5.7-1.4 8.5 0 2.8-1.4 5.7-1.4 8.5 0v13c-2.8-1.4-5.7-1.4-8.5 0-2.8-1.4-5.7-1.4-8.5 0z')]], details: [path('M12 5.5v13')]},
+  statistics: {layers: [[rect(4, 12, 4, 8.5, 1), rect(10, 7, 4, 13.5, 1), rect(16, 3.5, 4, 17, 1)]], details: []},
+  cardsList: {layers: [[rect(3.5, 3.5, 7.5, 7.5, 1.6), rect(13, 3.5, 7.5, 7.5, 1.6), rect(3.5, 13, 7.5, 7.5, 1.6), rect(13, 13, 7.5, 7.5, 1.6)]], details: []},
+  boardGame: {layers: [[rect(3.5, 3.5, 17, 17, 3.5)]], details: [dot(8, 8), dot(16, 8), dot(12, 12), dot(8, 16), dot(16, 16)]},
+  about: {layers: [[circle(12, 12, 8.5)]], details: [path('M12 11v5.5'), dot(12, 7.8)]},
+  updates: {layers: [[path('M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z')]], details: []},
+  discord: {
+    layers: [[path('M6.5 4h11A2.5 2.5 0 0120 6.5v8a2.5 2.5 0 01-2.5 2.5H11l-4.5 3.5V17A2.5 2.5 0 014 14.5v-8A2.5 2.5 0 016.5 4z')]],
+    details: [dot(8.5, 10.5), dot(12, 10.5), dot(15.5, 10.5)],
+  },
 };
