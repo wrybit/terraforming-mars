@@ -7,7 +7,7 @@ const game = {name: 'Remote Plasma Trace', generation: 2, phase: Phase.RESEARCH}
 describe('documentTitle', () => {
   it('shows task, player, generation and name on own turn', () => {
     expect(gameDocumentTitle({game, thisPlayer: {name: 'Daniel'}, waitingFor: {}}))
-      .to.eq('● Buying · Daniel · G2 · Remote Plasma Trace | TM');
+      .to.eq('🛒 Buying · Daniel · G2 · Remote Plasma Trace | TM');
   });
 
   it('omits task when not on turn or input is optional', () => {
