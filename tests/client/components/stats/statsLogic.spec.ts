@@ -10,6 +10,10 @@ import {parseStatsView, statsHref} from '@/client/components/stats/statsNavigati
 import {withFunderWinShare} from '@/client/components/stats/statsColumns';
 import {averageByGeneration, averageCardPoints} from '@/client/components/stats/statsSeries';
 import {pointSourcesByPlayer, pointSourcesOverall} from '@/client/components/stats/statsPointSources';
+import {combinations} from '@/client/components/stats/statsCombinations';
+import {heatmap} from '@/client/components/stats/statsHeatmap';
+import {chooseMinPlays} from '@/client/components/stats/statsMinPlays';
+import {BoardName} from '@/common/boards/BoardName';
 
 describe('stats logic', () => {
   const games = sampleGames();
@@ -95,5 +99,38 @@ describe('stats logic', () => {
     const baseline = pointSourcesOverall(results);
     expect(baseline?.baseline).eq(true);
     expect(baseline?.games).eq(results.filter((result) => result.details?.victoryPoints !== undefined).length);
+  });
+
+  it('combinations count each pair once per player game', () => {
+    const pairs = combinations(results, 'corporation', 'card');
+    for (const pair of pairs) {
+      expect(pair.plays).eq(results.filter((result) =>
+        entityStats([result], 'corporation', pair.first).plays > 0 && entityStats([result], 'card', pair.second).plays > 0).length);
+      expect(pair.winRate).within(0, 1);
+    }
+    // Gleiche Art: kein Paar mit sich selbst, keine doppelte Reihenfolge
+    for (const pair of combinations(results, 'card', 'card')) {
+      expect(pair.first < pair.second).eq(true);
+    }
+  });
+
+  it('heatmap counts tiles per space on the chosen board only', () => {
+    const [first, second] = games;
+    const withTiles = [
+      {...first, details: {...first.details!, boardName: BoardName.THARSIS, tiles: [{spaceId: '20' as const, type: 'city' as const, playerName: 'Jens'}]}},
+      {...second, details: {...second.details!, boardName: BoardName.THARSIS, tiles: [
+        {spaceId: '20' as const, type: 'city' as const, playerName: 'Daniel'},
+        {spaceId: '21' as const, type: 'greenery' as const, playerName: 'Daniel'},
+      ]}},
+    ];
+    const cities = heatmap(withTiles, BoardName.THARSIS, 'city', undefined);
+    expect([cities.games, cities.counts.get('20'), cities.maximum]).deep.eq([2, 2, 2]);
+    expect(heatmap(withTiles, BoardName.THARSIS, 'city', 'Jens').counts.get('20')).eq(1);
+    expect(heatmap(withTiles, BoardName.HELLAS, 'city', undefined).games).eq(0);
+  });
+
+  it('minimum plays keep at least ten rows visible', () => {
+    expect(chooseMinPlays(Array(12).fill(3))).eq(3);
+    expect(chooseMinPlays([5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])).eq(1);
   });
 });

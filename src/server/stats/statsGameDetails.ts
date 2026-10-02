@@ -1,5 +1,5 @@
 import {ViewModel} from '../../common/models/PlayerModel';
-import {StatsFundedAward, StatsGameDetails, StatsGlobals} from '../../common/stats/StatsGame';
+import {StatsFundedAward, StatsGameDetails, StatsGlobals, StatsTile} from '../../common/stats/StatsGame';
 import {CITY_TILES, TileType} from '../../common/TileType';
 import {Color} from '../../common/Color';
 import {Expansion} from '../../common/cards/GameModule';
@@ -40,6 +40,23 @@ function globals(view: ViewModel): StatsGlobals | undefined {
   };
   if (view.game.gameOptions.expansions.venus) {
     result.venus = series(GlobalParameter.VENUS, 0, MAX_VENUS_SCALE);
+  }
+  return result;
+}
+
+/** Städte und Grünflächen mit Besitzer; andere Plättchen (Ozeane, Sonderplättchen) zeigt die Heatmap nicht. */
+function tiles(view: ViewModel, nameByColor: Map<Color, string>): Array<StatsTile> {
+  const result: Array<StatsTile> = [];
+  for (const space of view.game.spaces) {
+    const playerName = space.color === undefined ? undefined : nameByColor.get(space.color);
+    if (playerName === undefined || space.tileType === undefined) {
+      continue;
+    }
+    if (space.tileType === TileType.GREENERY) {
+      result.push({spaceId: space.id, type: 'greenery', playerName});
+    } else if (CITY_TILES.has(space.tileType)) {
+      result.push({spaceId: space.id, type: 'city', playerName});
+    }
   }
   return result;
 }
@@ -99,5 +116,6 @@ export function statsGameDetails(view: ViewModel): StatsGameDetails {
       .map((milestone) => ({name: milestone.name, playerName: milestone.playerName as string})),
     awards,
     globalsByGeneration: globals(view),
+    tiles: tiles(view, nameByColor),
   };
 }

@@ -15,7 +15,8 @@
     </section>
 
     <section v-if="kind === 'board'" class="stats-card">
-      <StatsBoardPreview :boardName="boardName"/>
+      <h2 v-i18n>Where cities and greeneries end up</h2>
+      <StatsBoardHeatmap :boardName="boardName" :games="games"/>
     </section>
 
     <div v-if="detail.results.length > 0" class="stats-columns">
@@ -88,7 +89,7 @@ import StatsWinRate from './StatsWinRate.vue';
 import StatsGameList from './StatsGameList.vue';
 import StatsPointSources from './StatsPointSources.vue';
 import StatsEntityAsset from './StatsEntityAsset.vue';
-import StatsBoardPreview from './StatsBoardPreview.vue';
+import StatsBoardHeatmap from './StatsBoardHeatmap.vue';
 import StatsBarChart from './StatsBarChart.vue';
 import {BoardName} from '@/common/boards/BoardName';
 import {EntityStats, entityStats} from './statsAggregate';
@@ -107,7 +108,7 @@ const share = (wins: number, plays: number) => plays === 0 ? undefined : wins / 
 // Detailseite eines Eintrags: Kennzahlen, je Spieler, je Spielerzahl, Kombinationen und alle Partien
 export default defineComponent({
   name: 'StatsEntityDetail',
-  components: {StatsTable, StatsKpis, StatsEntityName, StatsWinRate, StatsGameList, StatsPointSources, StatsEntityAsset, StatsBoardPreview, StatsBarChart},
+  components: {StatsTable, StatsKpis, StatsEntityName, StatsWinRate, StatsGameList, StatsPointSources, StatsEntityAsset, StatsBoardHeatmap, StatsBarChart},
   props: {
     kind: {type: String as PropType<StatsKind>, required: true},
     name: {type: String, required: true},

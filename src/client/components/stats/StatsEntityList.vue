@@ -25,21 +25,16 @@ import {translateText} from '@/client/directives/i18n';
 import {StatsColumn} from './statsTypes';
 import StatsTable from './StatsTable.vue';
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
-import {SegmentOption} from '@/client/components/create/createGameChoices';
 import StatsEntityName from './StatsEntityName.vue';
 import StatsWinRate from './StatsWinRate.vue';
 import {aggregate} from './statsAggregate';
 import {entityColumns, EntityRow, initialSortOf, withCardPoints, withFunderWinShare} from './statsColumns';
 import {StatsKind, StatsKindDefinition, STATS_KINDS} from './statsKinds';
 import {StatsPlayerResult} from './statsResults';
+import {chooseMinPlays, MIN_PLAYS_OPTIONS} from './statsMinPlays';
 
 // Ab so vielen Einträgen lohnen sich Suchfeld und Mindestanzahl (Projektkarten)
 const SEARCH_THRESHOLD = 15;
-// Bei langen Listen stünden sonst lauter einmal gespielte Karten mit 100 % oben
-const MIN_PLAYS_OPTIONS: ReadonlyArray<SegmentOption> = [1, 2, 3, 5].map((value) => ({value, label: `${value}×`}));
-const DEFAULT_MIN_PLAYS = 3;
-// Mindestanzahl nur so hoch, dass noch genug Einträge übrig bleiben (Präludien gibt es z. B. nur aus wenigen Partien)
-const MIN_VISIBLE_ROWS = 10;
 
 // Liste einer Art (Konzerne, Präludien, Karten, Meilensteine, Auszeichnungen, Spielpläne)
 export default defineComponent({
@@ -50,11 +45,10 @@ export default defineComponent({
     results: {type: Array as PropType<ReadonlyArray<StatsPlayerResult>>, required: true},
   },
   data() {
-    return {search: '', searchThreshold: SEARCH_THRESHOLD, minPlays: DEFAULT_MIN_PLAYS, minPlaysOptions: MIN_PLAYS_OPTIONS};
+    return {search: '', searchThreshold: SEARCH_THRESHOLD, minPlays: 1, minPlaysOptions: MIN_PLAYS_OPTIONS};
   },
   created() {
-    const plays = this.rows.map((row) => row.plays);
-    this.minPlays = [DEFAULT_MIN_PLAYS, 2, 1].find((minimum) => plays.filter((count) => count >= minimum).length >= MIN_VISIBLE_ROWS) ?? 1;
+    this.minPlays = chooseMinPlays(this.rows.map((row) => row.plays));
   },
   computed: {
     definition(): StatsKindDefinition {

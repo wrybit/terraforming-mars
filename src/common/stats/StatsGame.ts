@@ -4,6 +4,7 @@ import {BoardName} from '../boards/BoardName';
 import {Expansion} from '../cards/GameModule';
 import {MilestoneName} from '../ma/MilestoneName';
 import {AwardName} from '../ma/AwardName';
+import {SpaceId} from '../Types';
 
 // Vertrag zwischen Statistik-API (Server) und Statistikseite (Client): beide Seiten lesen und schreiben genau diese Form.
 
@@ -66,6 +67,13 @@ export type StatsGlobals = {
   venus?: Array<number>;
 };
 
+/** Ein Stadt- oder Grünflächenplättchen am Ende der Partie – Grundlage der Heatmap. */
+export type StatsTile = {
+  spaceId: SpaceId;
+  type: 'city' | 'greenery';
+  playerName: string;
+};
+
 export type StatsGameDetails = {
   /** Aus dem Spielstand gelesen oder aus einem Screenshot der Ergebnisseite abgelesen. */
   source: 'game' | 'screenshot';
@@ -77,6 +85,8 @@ export type StatsGameDetails = {
   milestones: Array<StatsClaimedMilestone>;
   awards: Array<StatsFundedAward>;
   globalsByGeneration?: StatsGlobals;
+  /** Nur aus dem Spielstand; ein Screenshot zeigt das Spielbrett nicht. */
+  tiles?: Array<StatsTile>;
 };
 
 /** Eine beendete Partie, wie die Statistik sie sieht. */

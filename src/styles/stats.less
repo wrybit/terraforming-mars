@@ -761,17 +761,23 @@ each(@stats-source-colors, {
 
 // ---------- Übersicht: Spielmaterial nebeneinander ----------
 // Abstand zwischen den Karten größer als zwischen Karte und Beschriftung (Gesetz der Nähe)
+// Waagerechter Scroller: die Box bleibt so hoch wie eine Karte, egal wie schmal sie ist
 .stats-showcase {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
 
   figure {
     display: flex;
+    flex: 0 0 auto;
     flex-direction: column;
     align-items: center;
     gap: 6px;
     margin: 0;
+    scroll-snap-align: start;
   }
 
   figcaption {
@@ -779,11 +785,13 @@ each(@stats-source-colors, {
     flex-direction: column;
     align-items: center;
     gap: 2px;
+    // Lange Namen brechen um statt die Spalte zu verbreitern
+    max-width: 160px;
     font-size: 13px;
     text-align: center;
   }
 
-  // Karten etwas kleiner, damit fünf nebeneinander passen
+  // Karten etwas kleiner, damit mehrere auf einmal sichtbar sind
   .stats-asset--card .card-container {
     zoom: 0.62;
   }
@@ -794,3 +802,45 @@ each(@stats-source-colors, {
   font-size: 12px;
 }
 
+
+// ---------- Heatmap auf dem Spielbrett ----------
+.stats-heatmap-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stats-heatmap-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.stats-combination-types {
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+// Jedes Feld bekommt per CSS-Variable --stats-heat (0–1) eine Farbe; die Zahl sagt, wie oft dort gebaut wurde
+.stats-heatmap {
+  --stats-heat-color: 255, 196, 0;
+
+  .stats-heat-space::after {
+    content: attr(data-heat);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--stats-heat-color), calc(0.25 + 0.7 * var(--stats-heat)));
+    color: #111;
+    font-size: 15px;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 5;
+  }
+}
+
+.stats-heatmap--greenery {
+  --stats-heat-color: 80, 220, 90;
+}

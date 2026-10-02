@@ -6,19 +6,15 @@
       <p v-if="completeGames < games.length" class="stats-note">{{ detailNote }}</p>
     </section>
 
-    <section v-if="topCards.length > 0" class="stats-card">
-      <h2 v-i18n>Most played project cards</h2>
-      <StatsShowcase kind="card" :entries="topCards"/>
-    </section>
-
-    <div class="stats-columns">
-      <section v-if="topCorporations.length > 0" class="stats-card">
+    <!-- Top 5 nebeneinander; die Karten darin scrollen waagerecht, mobil stehen die Boxen untereinander -->
+    <div v-if="topCards.length > 0 || topCorporations.length > 0" class="stats-columns">
+      <section class="stats-card">
+        <h2 v-i18n>Most played project cards</h2>
+        <StatsShowcase kind="card" :entries="topCards"/>
+      </section>
+      <section class="stats-card">
         <h2 v-i18n>Most played corporations</h2>
         <StatsShowcase kind="corporation" :entries="topCorporations"/>
-      </section>
-      <section v-if="topAwards.length > 0" class="stats-card">
-        <h2 v-i18n>Most funded awards</h2>
-        <StatsShowcase kind="award" :entries="topAwards"/>
       </section>
     </div>
 
@@ -83,6 +79,8 @@ import {translateTextWithParams} from '@/client/directives/i18n';
 import {statsHref} from './statsNavigation';
 
 const RECENT_GAMES = 15;
+// Meistgespielte Karten und Konzerne auf der Übersicht
+const SHOWCASE_SIZE = 5;
 
 function sum(results: ReadonlyArray<StatsPlayerResult>, valueOf: (result: StatsPlayerResult) => number | undefined): number {
   return results.reduce((total, result) => total + (valueOf(result) ?? 0), 0);
@@ -154,13 +152,10 @@ export default defineComponent({
       }));
     },
     topCards(): Array<EntityStats> {
-      return this.mostPlayed('card', 5);
+      return this.mostPlayed('card', SHOWCASE_SIZE);
     },
     topCorporations(): Array<EntityStats> {
-      return this.mostPlayed('corporation', 3);
-    },
-    topAwards(): Array<EntityStats> {
-      return this.mostPlayed('award', 3);
+      return this.mostPlayed('corporation', SHOWCASE_SIZE);
     },
     lineups(): Array<LineupWinCounts> {
       return winCountsByLineup(this.games.map((game) => game.summary));
