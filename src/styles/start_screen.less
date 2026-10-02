@@ -20,9 +20,9 @@
   text-align: center;
 }
 
-// Titeltext steht so viel höher als sein Globus-Hintergrund, damit er mehr Abstand zum Menü hat (Text–Menü wie 80px Lücke);
+// Titeltext steht so viel höher als sein Globus-Hintergrund, damit er mehr Abstand zum Menü hat (Text–Menü wie 100px Lücke);
 // der Hintergrund bleibt mit 24px am Menü, als Teil der Globus-Reihe
-@start-screen-title-lift: 56px;
+@start-screen-title-lift: 76px;
 // Dauer der Hover-Animation der Menü-Buttons (Hintergrund und Schriftgröße gemeinsam)
 @start-screen-hover-duration: 0.25s;
 
@@ -150,16 +150,18 @@
   top: -@start-screen-title-lift;
 }
 
+// Titelgrößen gelten für alle Breiten (Wunsch Jens: 22px / 35px)
 .start-screen-title-top {
   transform: scaleX(2);
   text-align: center;
   padding-top: 15px;
+  font-size: 22px;
 }
 
 .start-screen-title-bottom {
   transform: scaleX(2);
   text-align: center;
-  font-size: 30px;
+  font-size: 35px;
 }
 
 // Sprache und Einstellungen oben rechts, wie im Spiel (sidebar_toolbar.less)
@@ -306,14 +308,6 @@
   .start-screen-link {
     height: 104px;
     font-size: 28px;
-  }
-
-  .start-screen-title-top {
-    font-size: 20px;
-  }
-
-  .start-screen-title-bottom {
-    font-size: 38px;
   }
 }
 
