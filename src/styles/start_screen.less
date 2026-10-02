@@ -35,6 +35,9 @@
 @start-screen-link-outline: fade(@bg_action, 30%);
 @start-screen-link-outline-hover: #908fdbab;
 @start-screen-link-glow: @bg_action;
+// Glas der Menü-Buttons neben dem Planeten: so stark wird die Galaxie dahinter weichgezeichnet und abgedunkelt
+@start-screen-glass-blur: 4px;
+@start-screen-glass-tint: 0.1;
 
 .start-screen-links {
   margin: 0 auto;
@@ -147,16 +150,15 @@
     transition: filter @start-screen-hover-duration ease;
   }
 
-  // Glas neben dem Planeten: Galaxie dahinter weichgezeichnet
-  .start-screen-link::before,
-  .start-screen-header::before {
+  // Glas neben dem Planeten: Galaxie dahinter leicht weichgezeichnet
+  .start-screen-link::before {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
     border-radius: inherit;
-    background: rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, @start-screen-glass-tint);
+    backdrop-filter: blur(@start-screen-glass-blur);
   }
 
   .start-screen-link {
@@ -164,23 +166,13 @@
 
     &.start-screen-link--active::before,
     &:focus-visible::before {
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(@start-screen-glass-blur);
     }
 
     &.start-screen-link--active .start-screen-link-planet,
     &:focus-visible .start-screen-link-planet {
       filter: brightness(1.1) saturate(1.35);
     }
-  }
-
-  // Titel wie die Buttons auf Glas statt im schwarzen Kasten; overflow bleibt sichtbar, weil der Titeltext angehoben über dem Kasten steht
-  .start-screen-header {
-    position: relative;
-    isolation: isolate;
-    border-radius: 10px;
-    background: none;
-    box-shadow: none;
-    outline: 1px solid @start-screen-link-outline;
   }
 }
 
@@ -218,8 +210,15 @@
   }
 }
 
+// Titel-Hintergrund: oberste Reihe von planets.jpg, nur der Planet – der schwarze Rest ist per Maske ausgeblendet
+// (Globus-Kreis wie bei den Buttons). Als ::before, damit die Maske nicht den Titeltext darüber abschneidet.
+@start-screen-title-mask: radial-gradient(ellipse 522px 522px at -174.7px 402.5px, #000 calc(100% - 1px), transparent 100%);
+// Bei gestreckter Reihe (schmale Fenster, background-size 100% 900%) derselbe Kreis in Prozent der Box (369 × 90)
+@start-screen-title-mask-stretched: radial-gradient(ellipse 141.46% 580% at -47.34% 447.22%, #000 calc(100% - 1px), transparent 100%);
+
 .start-screen-header {
-  box-shadow: inset 0 0 20px 20px black;
+  position: relative;
+  isolation: isolate;
   font-family: Prototype, sans-serif;
   font-size: 16px;
   width: 369px;
@@ -230,7 +229,16 @@
     0 0 2px black,
     0 2px 2px black;
   letter-spacing: 1px;
-  background: url("assets/buttons-homepage/planets.jpg") no-repeat;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: url("assets/buttons-homepage/planets.jpg") no-repeat;
+    -webkit-mask-image: @start-screen-title-mask;
+    mask-image: @start-screen-title-mask;
+  }
 }
 
 .start-screen-link--title {
@@ -347,6 +355,12 @@
     width: 100%;
     background-repeat: no-repeat;
     background-size: 100% 900%;
+  }
+
+  .start-screen-header::before {
+    background-size: 100% 900%;
+    -webkit-mask-image: @start-screen-title-mask-stretched;
+    mask-image: @start-screen-title-mask-stretched;
   }
 
   .start-screen-title-top,
