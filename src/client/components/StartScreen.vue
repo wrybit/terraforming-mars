@@ -39,14 +39,15 @@ import {UPSTREAM_REPOSITORY_URL} from '@/client/utils/RepositoryLinks';
 
 type StartScreenLink = {label: string, icon: GlyphName, href: string, external: boolean};
 
+// Alles außer "Neues Spiel" öffnet einen neuen Tab (external), damit die Startseite offen bleibt.
 // Reihenfolge = Reihenfolge der Planeten-Hintergründe; ein neuer Eintrag schiebt alle folgenden eine Reihe weiter
 const links: ReadonlyArray<StartScreenLink> = [
   {label: 'New game', icon: 'newGame', href: 'new-game', external: false},
   {label: 'Game rules', icon: 'rules', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true},
-  {label: 'Statistics', icon: 'statistics', href: 'stats', external: false},
+  {label: 'Statistics', icon: 'statistics', href: 'stats', external: true},
   {label: 'Cards list', icon: 'cardsList', href: 'cards', external: true},
   {label: 'Board game', icon: 'boardGame', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true},
-  {label: 'About us', icon: 'about', href: UPSTREAM_REPOSITORY_URL + '#README', external: true},
+  {label: 'About us', icon: 'about', href: UPSTREAM_REPOSITORY_URL + '#-contributors-', external: true},
   {label: 'Whats new?', icon: 'updates', href: WIKI_URLS.changelog, external: true},
   {label: 'Discord', icon: 'discord', href: constants.DISCORD_INVITE, external: true},
 ];
