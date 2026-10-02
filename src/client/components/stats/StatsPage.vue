@@ -1,10 +1,10 @@
 <template>
   <div id="stats" class="card-list stats" @keydown.esc="filtersOpen = false" @click="followStatsLink">
     <header class="card-list-header">
-      <!-- App-Symbol und Name wie die App selbst; mobil bleibt nur Symbol + „Statistik“ -->
+      <!-- Mars aus dem App-Symbol (ohne dunklen Hintergrund) und Name der App; mobil bleibt nur Symbol + „Statistik“ -->
       <h1>
         <a :href="overviewHref" data-stats-link class="stats-title">
-          <img src="assets/pwa/icon-192.png" alt="" class="stats-title-icon">
+          <img src="assets/stats/mars.png" alt="" class="stats-title-icon">
           <span class="stats-title-app">Terraforming Mars –</span>
           <span v-i18n>Statistics</span>
         </a>

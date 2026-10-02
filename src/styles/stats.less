@@ -25,17 +25,19 @@
   text-decoration: none;
 }
 
+// Symbol und Text auf einer Mittelachse: Zeilenhöhe 1, damit die Schrift keinen Leerraum oben/unten mitbringt
 .stats-title {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  line-height: 1;
   white-space: nowrap;
 }
 
 .stats-title-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
+  display: block;
+  width: 28px;
+  height: 28px;
 }
 
 .stats-main {
