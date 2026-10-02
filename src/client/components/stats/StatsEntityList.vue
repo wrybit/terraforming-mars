@@ -29,7 +29,7 @@ import {SegmentOption} from '@/client/components/create/createGameChoices';
 import StatsEntityName from './StatsEntityName.vue';
 import StatsWinRate from './StatsWinRate.vue';
 import {aggregate} from './statsAggregate';
-import {entityColumns, EntityRow, initialSortOf, withFunderWinShare} from './statsColumns';
+import {entityColumns, EntityRow, initialSortOf, withCardPoints, withFunderWinShare} from './statsColumns';
 import {StatsKind, StatsKindDefinition, STATS_KINDS} from './statsKinds';
 import {StatsPlayerResult} from './statsResults';
 
@@ -56,7 +56,10 @@ export default defineComponent({
     },
     rows(): Array<EntityRow> {
       const rows = aggregate(this.results, this.kind);
-      return this.kind === 'award' ? rows.map((row) => withFunderWinShare(row, this.results)) : rows;
+      if (this.kind === 'award') {
+        return rows.map((row) => withFunderWinShare(row, this.results));
+      }
+      return this.kind === 'card' ? rows.map((row) => withCardPoints(row, this.results)) : rows;
     },
     visibleRows(): Array<EntityRow> {
       if (this.rows.length <= SEARCH_THRESHOLD) {
@@ -72,8 +75,8 @@ export default defineComponent({
     },
     note(): string {
       const notes = ['The line in the bar is the win rate by luck alone (1 ÷ number of players); "vs. luck" is the difference in percentage points.'];
-      if (this.definition.needsDetails) {
-        notes.push('Only games with a saved final state count.');
+      if (this.definition.note !== undefined) {
+        notes.push(this.definition.note);
       }
       return notes.map(translateText).join(' ');
     },

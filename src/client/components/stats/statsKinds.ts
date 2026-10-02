@@ -11,8 +11,8 @@ export type StatsKindDefinition = {
   /** Englisch, wird beim Anzeigen übersetzt. */
   label: string;
   singular: string;
-  /** True: nur Partien mit vollständigem Endstand liefern Einträge (nicht die reinen Screenshot-Partien). */
-  needsDetails: boolean;
+  /** Hinweis unter der Liste, woher die Einträge stammen (Englisch, wird übersetzt). */
+  note?: string;
   namesOf(result: StatsPlayerResult): Array<string>;
 };
 
@@ -29,29 +29,30 @@ export const STATS_KINDS: Record<StatsKind, StatsKindDefinition> = {
   corporation: {
     label: 'Corporations',
     singular: 'Corporation',
-    needsDetails: false,
-    // Mit Endstand aus den ausgespielten Karten (Importe kennen den Konzern sonst nicht), ohne aus der
-    // Zusammenfassung – so zählen auch Screenshot-Partien mit; mehrere Konzerne (Merger) getrennt
-    namesOf: (result) => result.details !== undefined ?
+    // Mit vollständigem Spielstand aus den ausgespielten Karten (Importe kennen den Konzern sonst nicht), sonst aus
+    // der Zusammenfassung – so zählen auch Screenshot-Partien mit; mehrere Konzerne (Merger) getrennt
+    namesOf: (result) => result.game.details?.cardsComplete === true ?
       cardsOfType(result, (type) => type === CardType.CORPORATION) :
       result.player.corporation?.split(' / ').filter((name) => name !== '') ?? [],
   },
   prelude: {
     label: 'Prelude cards',
     singular: 'Prelude',
-    needsDetails: true,
-    namesOf: (result) => cardsOfType(result, (type) => type === CardType.PRELUDE),
+    note: 'Only games with the full game state count.',
+    // Screenshots zeigen Präludien nicht (sie geben keine Siegpunkte)
+    namesOf: (result) => result.game.details?.cardsComplete === true ? cardsOfType(result, (type) => type === CardType.PRELUDE) : [],
   },
   card: {
     label: 'Project cards',
     singular: 'Project card',
-    needsDetails: true,
+    // Screenshots listen nur Karten mit Siegpunkten – für diese Karten sind sie vollständig
+    note: 'Cards without victory points only count in games with the full game state; cards with victory points also in screenshots.',
     namesOf: (result) => cardsOfType(result, (type) => PROJECT_TYPES.has(type)),
   },
   milestone: {
     label: 'Milestones',
     singular: 'Milestone',
-    needsDetails: true,
+    note: 'Only games with a known final state count.',
     namesOf: (result) => (result.game.details?.milestones ?? [])
       .filter((milestone) => milestone.playerName === result.player.name)
       .map((milestone) => milestone.name),
@@ -59,7 +60,7 @@ export const STATS_KINDS: Record<StatsKind, StatsKindDefinition> = {
   award: {
     label: 'Awards',
     singular: 'Award',
-    needsDetails: true,
+    note: 'Only games with a known final state count.',
     // Gezählt beim Finanzierer: die Frage ist, ob sich das Finanzieren gelohnt hat
     namesOf: (result) => (result.game.details?.awards ?? [])
       .filter((award) => award.funderName === result.player.name)
@@ -68,13 +69,12 @@ export const STATS_KINDS: Record<StatsKind, StatsKindDefinition> = {
   board: {
     label: 'Boards',
     singular: 'Board',
-    needsDetails: true,
-    namesOf: (result) => result.game.details === undefined ? [] : [result.game.details.boardName],
+    note: 'Only games with a known final state count.',
+    namesOf: (result) => result.game.details?.boardName === undefined ? [] : [result.game.details.boardName],
   },
   player: {
     label: 'Players',
     singular: 'Player',
-    needsDetails: false,
     namesOf: (result) => [result.player.name],
   },
 };

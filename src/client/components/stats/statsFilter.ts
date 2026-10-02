@@ -31,7 +31,7 @@ export function filterGroups(games: ReadonlyArray<StatsGame>): Array<StatsFilter
   const expansions = new Set<string>(games.flatMap((game) => game.details?.expansions ?? []));
   return [
     {key: 'lineup', title: 'Lineup', options: distinct(games.map(lineupOf)).map((lineup) => ({key: lineup, label: lineup}))},
-    {key: 'board', title: 'Board', options: distinct(games.flatMap((game) => game.details === undefined ? [] : [game.details.boardName]))
+    {key: 'board', title: 'Board', options: distinct(games.flatMap((game) => game.details?.boardName === undefined ? [] : [game.details.boardName]))
       .map((board) => ({key: board, label: boardLabel(board)}))},
     {key: 'expansion', title: 'Expansions', options: EXPANSION_OPTIONS.filter((option) => expansions.has(option.key))},
     {key: 'year', title: 'Year', options: distinct(games.map(yearOf)).map((year) => ({key: year, label: year}))},
@@ -58,7 +58,7 @@ export function matchesOption(game: StatsGame, key: StatsFilterKey, marked: Read
     return marked.includes(yearOf(game));
   // Ohne Endstand ist Spielplan/Erweiterung unbekannt: solche Partien fallen bei diesen Filtern heraus
   case 'board':
-    return game.details !== undefined && marked.includes(game.details.boardName);
+    return game.details?.boardName !== undefined && marked.includes(game.details.boardName);
   case 'expansion': {
     const expansions: ReadonlyArray<string> = game.details?.expansions ?? [];
     return game.details !== undefined && marked.every((expansion) => expansions.includes(expansion));

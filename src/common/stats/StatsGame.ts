@@ -7,14 +7,41 @@ import {AwardName} from '../ma/AwardName';
 
 // Vertrag zwischen Statistik-API (Server) und Statistikseite (Client): beide Seiten lesen und schreiben genau diese Form.
 
-/** Was über einen Spieler einer Partie bekannt ist, wenn der vollständige Endstand vorliegt. */
+/** Siegpunkte nach Herkunft, wie in der Aufschlüsselung der Ergebnisseite. */
+export type StatsVictoryPoints = {
+  terraformRating: number;
+  milestones: number;
+  awards: number;
+  greenery: number;
+  city: number;
+  cards: number;
+  /** Alles Übrige (Mond, Fluchtgeschwindigkeit, Pfadfinder-Leisten …). */
+  other: number;
+  total: number;
+};
+
+export type StatsCardPoints = {
+  name: CardName;
+  points: number;
+};
+
+/** Was über einen Spieler einer Partie bekannt ist, wenn der Endstand vorliegt. Fehlende Werte waren nicht ablesbar. */
 export type StatsPlayerDetails = {
   name: string;
-  /** Alle ausgespielten Karten inkl. Konzern und Präludien – welche Art eine Karte ist, entscheidet die Seite. */
+  /** Ausgespielte Karten inkl. Konzern und Präludien; bei Screenshots nur die Karten mit Siegpunkten (cardsComplete). */
   cards: Array<CardName>;
-  terraformRating: number;
-  greeneries: number;
-  cities: number;
+  /** Siegpunkte je Karte (nur Karten, die Punkte geben können). */
+  cardPoints?: Array<StatsCardPoints>;
+  terraformRating?: number;
+  greeneries?: number;
+  cities?: number;
+  victoryPoints?: StatsVictoryPoints;
+  /** Siegpunkte am Ende jeder Generation (Index 0 = Generation 1). */
+  pointsByGeneration?: Array<number>;
+  megaCredits?: number;
+  /** Bedenkzeit über die ganze Partie. */
+  timeSeconds?: number;
+  actions?: number;
 };
 
 export type StatsClaimedMilestone = {
@@ -27,14 +54,29 @@ export type StatsFundedAward = {
   funderName: string;
   /** Alle Spieler auf Platz 1 der Auszeichnung (bei Gleichstand mehrere). */
   winnerNames: Array<string>;
+  /** Spieler auf Platz 2 (nur bei mehr als zwei Spielern punktet er). */
+  secondNames?: Array<string>;
+};
+
+/** Fortschritt der globalen Parameter in Prozent am Ende jeder Generation. */
+export type StatsGlobals = {
+  temperature: Array<number>;
+  oxygen: Array<number>;
+  oceans: Array<number>;
+  venus?: Array<number>;
 };
 
 export type StatsGameDetails = {
-  boardName: BoardName;
+  /** Aus dem Spielstand gelesen oder aus einem Screenshot der Ergebnisseite abgelesen. */
+  source: 'game' | 'screenshot';
+  /** False: in cards stehen nur die Karten mit Siegpunkten (mehr zeigt ein Screenshot nicht). */
+  cardsComplete: boolean;
+  boardName: BoardName | undefined;
   expansions: Array<Expansion>;
   players: Array<StatsPlayerDetails>;
   milestones: Array<StatsClaimedMilestone>;
   awards: Array<StatsFundedAward>;
+  globalsByGeneration?: StatsGlobals;
 };
 
 /** Eine beendete Partie, wie die Statistik sie sieht. */
@@ -43,6 +85,6 @@ export type StatsGame = {
   summary: AdminGameSummary;
   /** Ergebnisseite auf diesem Server oder gespeicherter Screenshot. */
   resultUrl: string | undefined;
-  /** Fehlt, wenn nur das Ergebnis bekannt ist (Partien, die nur als Screenshot vorliegen). */
+  /** Fehlt, wenn vom Ergebnis nichts weiter bekannt ist. */
   details: StatsGameDetails | undefined;
 };

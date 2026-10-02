@@ -3,11 +3,14 @@ import {EntityStats} from './statsAggregate';
 import {StatsKind} from './statsKinds';
 import {formatLift, formatNumber, formatPercent} from './statsLabels';
 import {StatsPlayerResult} from './statsResults';
+import {averageCardPoints} from './statsSeries';
 
 /** Zeile der Listen: Kennzahlen plus Werte, die nur einzelne Arten haben. */
 export type EntityRow = EntityStats & {
   /** Auszeichnungen: Anteil, in dem der Finanzierer sie auch gewonnen hat. */
   funderWinShare?: number;
+  /** Karten: Ø Siegpunkte, die die Karte gebracht hat. */
+  averageCardPoints?: number;
 };
 
 const COLUMNS: Record<string, StatsColumn> = {
@@ -21,6 +24,7 @@ const COLUMNS: Record<string, StatsColumn> = {
   averagePoints: {key: 'averagePoints', label: 'Avg. points', value: (row: EntityRow) => row.averagePoints, format: (row: EntityRow) => formatNumber(row.averagePoints)},
   averagePlace: {key: 'averagePlace', label: 'Avg. place', value: (row: EntityRow) => row.averagePlace, format: (row: EntityRow) => formatNumber(row.averagePlace)},
   averageGeneration: {key: 'averageGeneration', label: 'Avg. generations', value: (row: EntityRow) => row.averageGeneration, format: (row: EntityRow) => formatNumber(row.averageGeneration)},
+  averageCardPoints: {key: 'averageCardPoints', label: 'Avg. VP', value: (row: EntityRow) => row.averageCardPoints, format: (row: EntityRow) => formatNumber(row.averageCardPoints)},
   funderWinShare: {key: 'funderWinShare', label: 'Won by funder', value: (row: EntityRow) => row.funderWinShare, format: (row: EntityRow) => formatPercent(row.funderWinShare)},
   mostPlayedBy: {key: 'mostPlayedBy', label: 'Mostly by', value: (row: EntityRow) => row.mostPlayedBy, text: true},
   mostWinsBy: {key: 'mostWinsBy', label: 'Most wins', value: (row: EntityRow) => row.mostWinsBy, text: true},
@@ -29,7 +33,7 @@ const COLUMNS: Record<string, StatsColumn> = {
 const COLUMNS_BY_KIND: Record<Exclude<StatsKind, 'player'>, ReadonlyArray<string>> = {
   corporation: ['name', 'winRate', 'lift', 'plays', 'averagePoints', 'averagePlace', 'mostPlayedBy'],
   prelude: ['name', 'winRate', 'lift', 'plays', 'averagePoints', 'averagePlace', 'mostPlayedBy'],
-  card: ['name', 'winRate', 'lift', 'plays', 'averagePoints', 'averagePlace', 'mostPlayedBy'],
+  card: ['name', 'winRate', 'lift', 'plays', 'averageCardPoints', 'averagePoints', 'averagePlace', 'mostPlayedBy'],
   milestone: ['name', 'winRate', 'lift', 'claimed', 'averagePoints', 'mostPlayedBy'],
   award: ['name', 'winRate', 'lift', 'funded', 'funderWinShare', 'mostPlayedBy'],
   // Ein Spielplan gehört allen Spielern einer Partie: Siegquote sagt da nichts, wer dort gewinnt schon
@@ -53,4 +57,9 @@ export function withFunderWinShare(row: EntityStats, results: ReadonlyArray<Stat
     .filter((award) => award.name === row.name && award.funderName === result.player.name));
   const won = funded.filter((award) => award.winnerNames.includes(award.funderName)).length;
   return {...row, funderWinShare: funded.length === 0 ? undefined : won / funded.length};
+}
+
+/** Siegpunkte, die eine Karte im Schnitt gebracht hat (Karten ohne Punkte bleiben leer). */
+export function withCardPoints(row: EntityRow, results: ReadonlyArray<StatsPlayerResult>): EntityRow {
+  return {...row, averageCardPoints: averageCardPoints(results, row.name)};
 }
