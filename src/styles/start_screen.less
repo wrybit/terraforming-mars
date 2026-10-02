@@ -129,20 +129,32 @@
   .toolbar-glass-icon-buttons();
 }
 
-// Fußzeile der Startseite (StartScreenFooter.vue): Fakten untereinander, eng (4px), damit sie als eine Gruppe lesen
+// Fußzeile der Startseite (StartScreenFooter.vue): Fakten in einer Zeile, untereinander enger (12px) als zum Hinweis (24px),
+// damit sie als eine Gruppe lesen; bricht nur um, wenn der Platz fehlt
 .start-screen-footer-facts {
   margin: 0;
   padding: 0;
   list-style: none;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 4px 12px;
 
-  // globale Listen-Abstände (Basis-CSS) würden die Zeilen sonst weit auseinanderziehen
+  // globale Listen-Abstände (Basis-CSS) würden die Zeile sonst aufblähen
   li {
     margin: 0;
-    line-height: 1.4;
+    white-space: nowrap;
   }
+}
+
+.start-screen-footer-repository {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.start-screen-footer-github {
+  width: 16px;
+  height: 16px;
 }
 
 // Hinweis "Not affiliated …" (App.vue, alle Seiten außer Spiel, Zuschauer, Ergebnis) als Fußzeile am Seitenende:
@@ -168,10 +180,10 @@
   font-size: @font_size_small;
 }
 
-// Startseite: links Build-Stand und Quellcode, rechts der Hinweis – beide unten bündig
+// Startseite: links Build-Stand und Quellcode, rechts der Hinweis
 .notice--split {
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
 }
 
 @media only screen and (max-width: 1023px) {
@@ -226,7 +238,7 @@
   }
 
   .start-screen-footer-facts {
-    align-items: center;
+    justify-content: center;
   }
 
   .start-screen {
