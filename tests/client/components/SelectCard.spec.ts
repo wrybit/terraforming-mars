@@ -71,7 +71,7 @@ describe('SelectCard', () => {
   });
 
   // Header row: "Select all" on the left, hand sorting on the right
-  function mountSelection(max: number, hand: Array<string>) {
+  function mountSelection(max: number, hand: Array<string>, buttonLabel = 'Sell') {
     const cards = [{name: 'Ants'}, {name: 'Birds'}, {name: 'Cartel'}];
     return shallowMount(SelectCard, {
       ...globalConfig,
@@ -79,7 +79,7 @@ describe('SelectCard', () => {
         playerView: fakePlayerViewModel({cardsInHand: hand.map((name) => ({name})) as any}),
         playerinput: {
           title: 'Sell patents',
-          buttonLabel: 'Sell',
+          buttonLabel,
           type: 'card',
           cards,
           max,
@@ -103,6 +103,11 @@ describe('SelectCard', () => {
     selectAll.vm.$emit('click');
     await wrapper.vm.$nextTick();
     expect((wrapper.vm as any).cards).to.have.length(3);
+  });
+
+  it('never offers select all when buying cards', () => {
+    const wrapper = mountSelection(3, [], 'Buy');
+    expect(wrapper.find('.select-card-toolbar__select-all').exists()).is.false;
   });
 
   it('hides select all when only some cards may be chosen', () => {
