@@ -541,5 +541,10 @@
     "Select space for ocean from temperature increase":"为升温奖励的海洋选择位置",
     "Must select a space":"必须选择一个位置",
     "Reorder Cards":"重新排序卡牌",
-  "Your turn": "轮到你了"
+  "Your turn": "轮到你了",
+  "Draft": "轮抽",
+  "Buying": "购买",
+  "Starting selection": "初始选择",
+  "Solar phase": "太阳阶段",
+  "Production": "生产"
 }

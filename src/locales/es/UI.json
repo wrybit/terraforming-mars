@@ -339,5 +339,10 @@
 
     "Why?": "Por qué?",
     "Reorder Cards": "Reordenar cartas",
-  "Your turn": "Tu turno"
+  "Your turn": "Tu turno",
+  "Draft": "Draft",
+  "Buying": "Comprar",
+  "Starting selection": "Selección inicial",
+  "Solar phase": "Fase solar",
+  "Production": "Producción"
 }

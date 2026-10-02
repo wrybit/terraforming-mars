@@ -374,5 +374,10 @@
   "Select ${0} cards to discard": "Изберете ${0} карти за изхвърляне",
   "Select between ${0} and ${1} cards to discard": "Изберете между ${0} и ${1} карти за изхвърляне",
   "Reorder Cards": "Пренаредете картите",
-  "Your turn": "Ваш ход"
+  "Your turn": "Ваш ход",
+  "Draft": "Драфт",
+  "Buying": "Купуване",
+  "Starting selection": "Начален избор",
+  "Solar phase": "Слънчева фаза",
+  "Production": "Производство"
 }

@@ -1207,5 +1207,10 @@
   "Remove a hazard tile to gain 1 TR": "Видалити небезпечний тайл, щоб отримати 1 РТ",
   "Select hazard tile to remove": "Виберіть небезпечний тайл для видалення",
   "Select space next to no other tile for hazard": "Виберіть простір поруч з жодним іншим тайлом для небезпечного тайлу",
-  "Your turn": "Ваш хід"
+  "Your turn": "Ваш хід",
+  "Draft": "Драфт",
+  "Buying": "Купівля",
+  "Starting selection": "Стартовий вибір",
+  "Solar phase": "Сонячна фаза",
+  "Production": "Виробництво"
 }

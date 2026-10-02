@@ -1009,5 +1009,10 @@
     "Increase energy production 1 step": "電力産出+1",
     "Increase heat production 1 step": "温熱産出+1",
     "Reorder Cards": "カードを並べ替える",
-  "Your turn": "あなたの番"
+  "Your turn": "あなたの番",
+  "Draft": "ドラフト",
+  "Buying": "購入",
+  "Starting selection": "初期選択",
+  "Solar phase": "ソーラーフェイズ",
+  "Production": "生産"
 }

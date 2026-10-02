@@ -1376,5 +1376,10 @@
   "City in space.": "Kaupunki avaruudessa.",
   "Handicap": "Tasoitus",
   "Reorder Cards": "Järjestä kortit uudelleen",
-  "Your turn": "Sinun vuorosi"
+  "Your turn": "Sinun vuorosi",
+  "Draft": "Draft",
+  "Buying": "Osto",
+  "Starting selection": "Aloitusvalinta",
+  "Solar phase": "Aurinkovaihe",
+  "Production": "Tuotanto"
 }

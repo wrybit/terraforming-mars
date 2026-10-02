@@ -124,7 +124,7 @@ export default defineComponent({
       // experimental UI on a desktop browser we show it only in the tab favicon
       // instead; otherwise keep animating the title.
       if (!(experimental && isDesktopBrowser())) {
-        document.title = gameDocumentTitle(this.titleView, turnTitleState(TURN_SEQUENCE[animationFrame]));
+        document.title = gameDocumentTitle(this.titleView, turnTitleState(this.titleView, TURN_SEQUENCE[animationFrame]));
       }
     },
     onsave(out: InputResponse) {
