@@ -23,6 +23,7 @@ import {ApiPlayer} from '../routes/ApiPlayer';
 import {ApiProfile} from '../routes/ApiProfile';
 import {ApiSpectator} from '../routes/ApiSpectator';
 import {ApiStats} from '../routes/ApiStats';
+import {ApiStatsGames} from '../routes/ApiStatsGames';
 import {ApiWaitingFor} from '../routes/ApiWaitingFor';
 import {Autopass} from '../routes/Autopass';
 import {DiscordAuth} from '../routes/DiscordAuth';
@@ -108,6 +109,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_METRICS, ApiMetrics.INSTANCE],
     [paths.API_PLAYER, ApiPlayer.INSTANCE],
     [paths.API_STATS, ApiStats.INSTANCE],
+    [paths.API_STATS_GAMES, ApiStatsGames.INSTANCE],
     [paths.API_SPECTATOR, ApiSpectator.INSTANCE],
     [paths.API_WAITING_FOR, ApiWaitingFor.INSTANCE],
     [paths.AUTOPASS, Autopass.INSTANCE],
@@ -133,6 +135,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_PROFILE, ApiProfile.INSTANCE],
     [paths.RESET, Reset.INSTANCE],
     [paths.SPECTATOR, ServeApp.INSTANCE],
+    [paths.STATS, ServeApp.INSTANCE],
     ['styles.css', ServeAsset.INSTANCE],
     [paths.THE_END, ServeApp.INSTANCE],
   ],

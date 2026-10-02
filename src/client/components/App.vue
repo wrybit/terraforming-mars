@@ -51,6 +51,7 @@
         v-else-if="screen === 'games-overview'"
       />
       <CardList v-else-if="screen === 'cards'"/>
+      <StatsPage v-else-if="screen === 'stats'"/>
       <AdminHome v-else-if="screen === 'admin'"/>
       <LoginHome v-else-if="screen === 'login-home'"/>
       <Help v-else-if="screen === 'help'"/>
@@ -85,6 +86,7 @@ const PlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "playe
 const MobilePlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-player-home" */ '@/client/components/mobile/MobilePlayerHome.vue'));
 const MobileSpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-spectator-home" */ '@/client/components/mobile/MobileSpectatorHome.vue'));
 const SpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "spectator-home" */ '@/client/components/SpectatorHome.vue'));
+const StatsPage = defineAsyncComponent(() => import(/* webpackChunkName: "stats" */ '@/client/components/stats/StatsPage.vue'));
 const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreen.vue'));
 import {$t, setTranslationContext} from '@/client/directives/i18n';
 import {paths} from '@/common/app/paths';
@@ -111,6 +113,7 @@ type Screen = 'admin' |
             'player-home' |
             'spectator-home' |
             'start-screen' |
+            'stats' |
             'the-end';
 export type MainAppData = {
     screen: Screen;
@@ -175,6 +178,7 @@ export default defineComponent({
     GameEnd,
     GamesOverview,
     CardList,
+    StatsPage,
     Help,
     AdminHome,
     LoginHome,
@@ -338,6 +342,8 @@ export default defineComponent({
       app.screen = 'load';
     } else if (currentPathname === paths.CARDS) {
       app.screen = 'cards';
+    } else if (currentPathname === paths.STATS) {
+      app.screen = 'stats';
     } else if (currentPathname === paths.HELP) {
       app.screen = 'help';
     } else if (currentPathname === paths.SPECTATOR) {
