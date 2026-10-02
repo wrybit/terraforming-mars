@@ -3,8 +3,9 @@
 // transform so its board lies exactly over the board in the column, and then runs
 // to the final position. Closing is the same movement in reverse.
 
+import {prefersReducedMotion, supportsWebAnimations, ZOOM_EASING} from '@/client/utils/motion';
+
 const DURATION_MS = 320;
-const EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
 
 // Derive DOM types via animate(): eslint does not know the global keyframe types
 type Keyframes = Parameters<HTMLElement['animate']>[0];
@@ -18,10 +19,6 @@ export type BoardZoomAnimationOptions = {
   // Board in the column; if missing, only fade in/out
   origin: HTMLElement | undefined;
 };
-
-function prefersReducedMotion(): boolean {
-  return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
 
 // transform that puts the stage's board onto the board in the column (transform-origin: 0 0)
 function transformOntoOrigin(stage: HTMLElement, origin: HTMLElement): string | undefined {
@@ -43,8 +40,7 @@ function transformOntoOrigin(stage: HTMLElement, origin: HTMLElement): string | 
 
 export async function animateBoardZoom(options: BoardZoomAnimationOptions): Promise<void> {
   const {direction, backdrop, stage, origin} = options;
-  // jsdom (tests) does not know Web Animations
-  if (typeof stage.animate !== 'function' || prefersReducedMotion()) {
+  if (!supportsWebAnimations(stage) || prefersReducedMotion()) {
     return;
   }
   const collapsed = origin !== undefined ? transformOntoOrigin(stage, origin) : undefined;
@@ -60,7 +56,7 @@ export async function animateBoardZoom(options: BoardZoomAnimationOptions): Prom
   const backdropFrames: Keyframes = [{...transparentBackdrop, offset: opening ? 0 : 1}];
   const timing: AnimationTiming = {
     duration: DURATION_MS,
-    easing: EASING,
+    easing: ZOOM_EASING,
     // When closing, stay in the end state until the modal is removed (otherwise a brief flash)
     fill: opening ? 'none' : 'forwards',
   };

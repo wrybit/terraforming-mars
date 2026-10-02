@@ -35,17 +35,18 @@
       @click="ui.gamesetup_detail_open = !ui.gamesetup_detail_open"
       :title="$t('game setup details')"></i>
     <SidebarModal :open="ui.gamesetup_detail_open" :framed="true" @close="ui.gamesetup_detail_open=false">
-      <InfoPanel v-if="ui.gamesetup_detail_open" :gameOptions="gameOptions" :playerNumber="playerNumber" :lastSoloGeneration="lastSoloGeneration" :deckSize="deckSize" :discardPileSize="discardPileSize" :otherDeckSizes="otherDeckSizes" :spectatorId="spectatorId" :expectedPurgeTimeMs="expectedPurgeTimeMs" @close="ui.gamesetup_detail_open=false" />
+      <InfoPanel :gameOptions="gameOptions" :playerNumber="playerNumber" :lastSoloGeneration="lastSoloGeneration" :deckSize="deckSize" :discardPileSize="discardPileSize" :otherDeckSizes="otherDeckSizes" :spectatorId="spectatorId" :expectedPurgeTimeMs="expectedPurgeTimeMs" @close="ui.gamesetup_detail_open=false" />
     </SidebarModal>
   </div>
 
   <!-- Help as a modal instead of in a new window -->
+  <!-- Modal inside the tile: it grows out of it (SidebarModal anchor). Clicks inside the modal don't reach the tile: teleported to body -->
   <div class="sidebar_item sidebar_item--help" @click="ui.help_open = true">
     <i class="sidebar_icon sidebar_icon--help" :class="{'sidebar_item--is-active': ui.help_open}" :title="$t('player aid')"></i>
+    <SidebarModal :open="ui.help_open" :wide="true" :bare="true" @close="ui.help_open = false">
+      <HelpOverlay :closable="true" @close="ui.help_open = false"/>
+    </SidebarModal>
   </div>
-  <SidebarModal :open="ui.help_open" :wide="true" :bare="true" @close="ui.help_open = false">
-    <HelpOverlay v-if="ui.help_open" :closable="true" @close="ui.help_open = false"/>
-  </SidebarModal>
 
   <PreferencesIcon/>
 </div>

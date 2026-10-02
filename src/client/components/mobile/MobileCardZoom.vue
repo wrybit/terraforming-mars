@@ -29,6 +29,7 @@
 <script setup lang="ts">
 import {computed, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
+import {supportsWebAnimations, ZOOM_EASING} from '@/client/utils/motion';
 
 const props = withDefaults(defineProps<{
   // Number of cards in the carousel; the "slide" slot provides each card's content
@@ -129,15 +130,13 @@ function originTransform(): string {
   return `translate(${x}px, ${y}px) scale(${scale})`;
 }
 
-// Web Animations instead of a CSS transition: the start position applies immediately, without being painted once first
-const EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
-
+// Web Animations instead of a CSS transition: the start position applies immediately, without being painted once first.
 // fill 'forwards' holds the end position until unmount; 'none' hands back to the CSS afterwards
 function animate(element: HTMLElement | undefined, from: string, to: string, duration: number, fill: 'forwards' | 'none' = 'forwards'): Promise<void> {
-  if (element === undefined || typeof element.animate !== 'function') {
+  if (element === undefined || !supportsWebAnimations(element)) {
     return Promise.resolve();
   }
-  const animation = element.animate([{transform: from}, {transform: to}], {duration, easing: EASING, fill});
+  const animation = element.animate([{transform: from}, {transform: to}], {duration, easing: ZOOM_EASING, fill});
   return animation.finished.then(() => undefined, () => undefined);
 }
 
