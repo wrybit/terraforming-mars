@@ -6,6 +6,8 @@
 // die Buttons fluchten mit dem linken und rechten Kartenrand.
 // Sichtbarer Abstand zum Häkchen-Fähnchen bzw. den Preis-Badges der ersten Kartenreihe: Leiste klebt nicht an den Karten
 @select-card-toolbar-space: 18px;
+// Mobil sind die Karten kleiner skaliert, der Abstand wirkt sonst zu groß
+@select-card-toolbar-space-mobile: 10px;
 
 .select-card-toolbar {
   display: flex;
@@ -28,7 +30,8 @@
 
 // Desktop: Block mit Kopfzeile beginnt oben in der Box statt senkrecht mittig – sonst wächst der Abstand nach oben.
 // Die Zeilenlücke (choice_block.less) deckt das Fähnchen ab; dazu kommt der sichtbare Abstand.
-html:not(.tm-mobile) .or-tab-panel .choice-block:has(> .select-card-toolbar) {
+// Doppelte Klasse: muss die Regeln aus choice_block.less (Innenabstand fürs Fähnchen) überstimmen
+html:not(.tm-mobile) .or-tab-panel .choice-block.wf-component--select-card:has(> .select-card-toolbar) {
   margin-top: 0;
   padding-top: 0;
 
@@ -44,10 +47,10 @@ html.tm-mobile {
   .select-card-toolbar {
     width: 0;
     min-width: calc(100% - @mb-choice-gap);
-    margin-bottom: (@selection-tab-offset + @select-card-toolbar-space);
+    margin-bottom: (@selection-tab-offset + @select-card-toolbar-space-mobile);
   }
 
-  .mb-screen--turn .choice-block:has(> .select-card-toolbar) {
+  .mb-screen--turn .choice-block.wf-component--select-card:has(> .select-card-toolbar) {
     margin-top: 0;
     padding-top: 0;
   }
