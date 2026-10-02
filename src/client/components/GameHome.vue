@@ -1,11 +1,11 @@
 <template>
   <div id="game-home" class="game-home">
-    <!-- Kopf wie Kartenliste/Statistik: Bestätigung mit Spiel-ID, Sprache und Einstellungen in einer Leiste -->
+    <!-- Kopf wie Kartenliste/Statistik: Bestätigung mit Spiel-ID, Sprache und Einstellungen in einer Kopf-Karte -->
     <header class="card-list-header card-list-header--plain game-home-head">
       <div class="game-home-check">✓</div>
       <h1>
         <span v-i18n>Game created</span>
-        <span class="game-home-meta">({{ game.name }} | <span class="game-home-id">{{ getGameId() }}</span>)</span>
+        <span class="game-home-meta"><span class="game-home-name">{{ game.name }}</span><span class="game-home-id">{{ getGameId() }}</span></span>
       </h1>
       <PageToolbar/>
     </header>

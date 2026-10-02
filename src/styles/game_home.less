@@ -40,7 +40,7 @@
   background: @or-tabs-view-panel-background;
 }
 
-// Kopfleiste: Grundstil von der Kartenliste (.card-list-header, card_list.less)
+// Kopf-Karte: Grundstil von der Kartenliste (.card-list-header, card_list.less)
 // doppelte Klasse: schlägt die Titel-Regeln der Kartenliste unabhängig von der Ladereihenfolge
 .card-list-header.game-home-head {
   h1 {
@@ -86,6 +86,19 @@
   text-shadow: none;
   min-width: 0;
   overflow-wrap: anywhere;
+}
+
+// Klammern und Trenner als Pseudo-Elemente: mobil stehen Name und ID ohne sie untereinander
+.game-home-meta::before {
+  content: "(";
+}
+
+.game-home-meta::after {
+  content: ")";
+}
+
+.game-home-name::after {
+  content: " | ";
 }
 
 .game-home-id {
@@ -308,8 +321,24 @@
   }
 }
 
-// Handy: Spiel-ID darf unter den Titel rutschen, die Leiste wächst dann in der Höhe
+// Handy: drei Zeilen – Titel, Spielname, ID; die Kopf-Karte wächst dafür in der Höhe
 @media only screen and (max-width: @card-list-phone) {
+  .game-home-meta {
+    &::before,
+    &::after {
+      content: none;
+    }
+  }
+
+  .game-home-name,
+  .game-home-id {
+    display: block;
+  }
+
+  .game-home-name::after {
+    content: none;
+  }
+
   .card-list-header.game-home-head {
     height: auto;
     min-height: var(--card-list-header);
