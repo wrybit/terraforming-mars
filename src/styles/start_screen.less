@@ -126,8 +126,9 @@
   }
 }
 
-// Drehende Planeten (StartScreen.vue, planetGlobeRenderer.ts): sobald WebGL bereit ist, zeichnet die Canvas den
-// Planeten; daneben ist der Button Glas – die Galaxie scheint weichgezeichnet durch. Ohne WebGL bleibt planets.jpg.
+// Drehende Planeten (StartScreen.vue, startScreen/*Renderer.ts): sobald der Zeichner bereit ist, zeigt die Planeten-Fläche
+// den Planeten (WebGL oder flach per CSS); daneben ist der Button Glas – die Galaxie scheint weichgezeichnet durch.
+// Bis dahin (bzw. ohne JavaScript) bleibt planets.jpg.
 .start-screen-link-planet {
   display: none;
 }
