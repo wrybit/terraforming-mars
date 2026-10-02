@@ -1,0 +1,107 @@
+// Intro der Startseite (StartScreen.vue, startScreen/startIntro.ts): solange .start-screen--intro gesetzt ist.
+// Ablauf: schwarz → Galaxie per Iris-Blende → Logo zoomt in der Mitte hinein (ab halber Blende), dabei kommen
+// Fußzeile von unten und Werkzeug-Buttons von rechts oben → Logo wird kleiner und fährt an seinen Platz →
+// Menüpunkte blenden von oben nach unten einzeln ein (Blur-Fade).
+// fill-mode backwards: vor dem Start gilt der Anfangszustand, nach dem Ende wieder das normale Layout.
+
+@intro-iris-delay: 0.2s;
+@intro-iris-duration: 1.6s;
+// Logo startet bei etwa halber Blende
+@intro-logo-delay: 0.9s;
+@intro-logo-duration: 2.3s;
+@intro-chrome-delay: 1s;
+@intro-chrome-duration: 0.9s;
+@intro-buttons-delay: 3s;
+@intro-buttons-stagger: 0.1s;
+@intro-buttons-duration: 0.6s;
+@intro-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+.topmost-start-screen:has(.start-screen--intro) {
+  // Galaxie öffnet sich als Kreis aus der Mitte
+  &::before {
+    animation: start-intro-iris @intro-iris-duration ease-in-out @intro-iris-delay backwards;
+  }
+
+  .notice {
+    animation: start-intro-from-below @intro-chrome-duration @intro-ease @intro-chrome-delay backwards;
+  }
+}
+
+.start-screen--intro {
+  .start-screen-toolbar {
+    animation: start-intro-from-top-right @intro-chrome-duration @intro-ease @intro-chrome-delay backwards;
+  }
+
+  .start-screen-title {
+    animation: start-intro-logo @intro-logo-duration ease-in-out @intro-logo-delay backwards;
+  }
+
+  // Planet hinter dem Titel kommt mit, wenn das Logo an seinem Platz ankommt
+  .start-screen-header::before {
+    animation: start-intro-fade 0.6s ease-out (@intro-buttons-delay - 0.2s) backwards;
+  }
+
+  .start-screen-link {
+    animation: start-intro-blur-in @intro-buttons-duration ease-out backwards;
+    animation-delay: calc(@intro-buttons-delay + var(--sprite-row) * @intro-buttons-stagger);
+  }
+}
+
+@keyframes start-intro-iris {
+  from {
+    clip-path: circle(0% at 50% 50%);
+  }
+
+  to {
+    clip-path: circle(75% at 50% 50%);
+  }
+}
+
+// --intro-logo-x/-y: Versatz zur Bildschirmmitte, setzt StartScreen.vue
+@keyframes start-intro-logo {
+  0% {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translate(var(--intro-logo-x, 0), var(--intro-logo-y, 0)) scale(0.4);
+  }
+
+  35%,
+  60% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate(var(--intro-logo-x, 0), var(--intro-logo-y, 0)) scale(1.5);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes start-intro-from-below {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+@keyframes start-intro-from-top-right {
+  from {
+    opacity: 0;
+    transform: translate(60px, -60px);
+  }
+}
+
+@keyframes start-intro-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes start-intro-blur-in {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-<div class="start-screen">
+<div class="start-screen" :class="{'start-screen--intro': introPlaying}">
   <!-- Sprache und Einstellungen oben rechts als Milchglas-Buttons, wie im Spiel -->
   <div class="start-screen-toolbar">
     <LanguageIcon/>
@@ -7,8 +7,11 @@
   </div>
   <div class="start-screen-links" :class="{'start-screen-links--globe': globeReady}">
     <div class="start-screen-header start-screen-link--title">
-      <div class="start-screen-title-top">TERRAFORMING</div>
-      <div class="start-screen-title-bottom">MARS</div>
+      <!-- Logo: eigener Rahmen, damit das Intro es als Ganzes bewegen kann -->
+      <div class="start-screen-title" :ref="setLogo" :style="logoOffset">
+        <div class="start-screen-title-top">TERRAFORMING</div>
+        <div class="start-screen-title-bottom">MARS</div>
+      </div>
     </div>
     <!-- Reihe im Planeten-Bild (planets.jpg) ergibt sich aus der Position: Reihe 0 ist der Titel -->
     <a v-for="(link, index) in links"
@@ -39,6 +42,7 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import {GlobeLayout, measureGlobeLayout} from '@/client/components/startScreen/globeLayout';
+import {INTRO_DURATION, logoOffsetToCenter, markIntroSeen, shouldPlayIntro} from '@/client/components/startScreen/startIntro';
 import {PlanetGlobeRenderer} from '@/client/components/startScreen/planetGlobeRenderer';
 import {PlanetFlatRenderer} from '@/client/components/startScreen/planetFlatRenderer';
 import {PlanetRotation} from '@/client/components/startScreen/planetRotation';
@@ -194,7 +198,38 @@ async function startGlobe(): Promise<void> {
   relayout();
 }
 
+// Intro beim ersten Besuch der Sitzung; Klick oder Taste überspringt es
+const introPlaying = ref(false);
+const logoOffset = ref<Record<string, string>>({});
+let logo: HTMLElement | undefined;
+let introTimer: number | undefined;
+
+function setLogo(element: unknown): void {
+  logo = element instanceof HTMLElement ? element : undefined;
+}
+
+function endIntro(): void {
+  introPlaying.value = false;
+  window.clearTimeout(introTimer);
+  document.removeEventListener('pointerdown', endIntro, true);
+  document.removeEventListener('keydown', endIntro, true);
+}
+
+function startIntro(): void {
+  if (!shouldPlayIntro() || logo === undefined) {
+    return;
+  }
+  const offset = logoOffsetToCenter(logo);
+  logoOffset.value = {'--intro-logo-x': `${offset.x}px`, '--intro-logo-y': `${offset.y}px`};
+  introPlaying.value = true;
+  markIntroSeen();
+  introTimer = window.setTimeout(endIntro, INTRO_DURATION);
+  document.addEventListener('pointerdown', endIntro, true);
+  document.addEventListener('keydown', endIntro, true);
+}
+
 onMounted(() => {
+  startIntro();
   document.addEventListener('pointerdown', onDocumentPointerDown);
   if (typeof ResizeObserver !== 'undefined') {
     void startGlobe();
@@ -202,6 +237,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  endIntro();
   document.removeEventListener('pointerdown', onDocumentPointerDown);
   if (pendingTap !== undefined) {
     window.clearTimeout(pendingTap.timer);
