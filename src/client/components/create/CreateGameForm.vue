@@ -1,19 +1,19 @@
 <template>
   <div id="create-game" class="create-game">
-    <PageToolbar/>
-    <div class="create-game-layout">
-      <div class="create-game-card create-game-head">
-        <h1 v-i18n>Create New Game</h1>
-        <div class="create-game-head-actions">
-          <label class="create-game-icon-button" :title="$t('Load settings from file')">
-            <i class="icon icon-upload"></i>
-            <input style="display: none" type="file" accept=".json" id="settings-file" ref="file" @change="uploadSettings()">
-          </label>
-          <button type="button" class="create-game-icon-button" :title="$t('Save settings to file')" @click="downloadSettings()"><i class="icon icon-download"></i></button>
-          <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings"/>
-        </div>
+    <!-- Kopf wie Kartenliste/Statistik: Titel, Datei-Knöpfe, Sprache und Einstellungen in einer Leiste -->
+    <header class="card-list-header card-list-header--plain create-game-head">
+      <h1 v-i18n>Create New Game</h1>
+      <div class="create-game-head-actions">
+        <label class="create-game-icon-button" :title="$t('Load settings from file')">
+          <i class="icon icon-upload"></i>
+          <input style="display: none" type="file" accept=".json" id="settings-file" ref="file" @change="uploadSettings()">
+        </label>
+        <button type="button" class="create-game-icon-button" :title="$t('Save settings to file')" @click="downloadSettings()"><i class="icon icon-download"></i></button>
+        <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings"/>
       </div>
-
+      <PageToolbar/>
+    </header>
+    <div class="create-game-layout">
       <main class="create-game-settings">
         <div class="create-game-cards">
           <section class="create-game-card">

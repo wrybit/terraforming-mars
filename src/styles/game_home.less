@@ -15,10 +15,6 @@
 }
 
 .game-home {
-  display: flex;
-  flex-direction: column;
-  gap: @game-home-gap-card;
-  .page-toolbar-content();
   color: #eee;
   font-size: 14px;
 
@@ -44,24 +40,22 @@
   background: @or-tabs-view-panel-background;
 }
 
-.game-home-hero {
-  .page-toolbar-head();
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 18px 20px;
-
+// Kopfleiste: Grundstil von der Kartenliste (.card-list-header, card_list.less)
+// doppelte Klasse: schlägt die Titel-Regeln der Kartenliste unabhängig von der Ladereihenfolge
+.card-list-header.game-home-head {
   h1 {
+    // darf schrumpfen und umbrechen, damit Sprache/Einstellungen rechts im Bild bleiben
+    flex: 0 1 auto;
+    min-width: 0;
+    white-space: normal; // die Kartenliste hält ihren Titel einzeilig
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px 12px;
-    font-size: 24px;
+    gap: 4px 12px;
   }
 
-  p {
-    margin: 4px 0 0;
-    color: @game-home-dim;
+  .page-toolbar {
+    margin-left: auto;
   }
 }
 
@@ -69,23 +63,37 @@
   display: grid;
   place-items: center;
   flex: none;
-  width: 48px;
-  height: 48px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: @game-home-success;
-  box-shadow: 0 0 16px fade(@game-home-success, 50%);
-  font-size: 26px;
+  box-shadow: 0 0 10px fade(@game-home-success, 50%);
+  font-size: 16px;
   font-weight: bold;
 }
 
+// Hinweis unter der Überschrift der Spieler-Links: gehört zur Überschrift, daher enger als zu den Zeilen
+.game-home-hint {
+  margin: -6px 0 10px;
+  color: @game-home-dim;
+}
+
+// Spielname und ID hinter dem Titel: kleiner und gedämpft, ohne Schatten der Überschrift
+.game-home-meta {
+  color: @game-home-dim;
+  font-size: 14px;
+  font-weight: 400;
+  text-shadow: none;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .game-home-id {
-  padding: 2px 10px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.35);
-  font: 500 15px ui-monospace, Menlo, monospace;
+  font-family: ui-monospace, Menlo, monospace;
 }
 
 .game-home-columns {
+  .page-content();
   display: grid;
   grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr);
   gap: @game-home-gap-column;
@@ -293,12 +301,19 @@
 }
 
 @media only screen and (max-width: 480px) {
-  .game-home-hero h1 {
-    font-size: 20px;
-  }
 
   .game-home-link .btn {
     min-width: 0;
     padding: 0 10px;
+  }
+}
+
+// Handy: Spiel-ID darf unter den Titel rutschen, die Leiste wächst dann in der Höhe
+@media only screen and (max-width: @card-list-phone) {
+  .card-list-header.game-home-head {
+    height: auto;
+    min-height: var(--card-list-header);
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 }
