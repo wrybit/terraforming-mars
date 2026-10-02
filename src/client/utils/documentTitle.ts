@@ -1,13 +1,10 @@
 import {APP_NAME} from '@/common/constants';
 import {$t} from '../directives/i18n';
 import {Phase} from '@/common/Phase';
-import {turnTaskLabel} from './turnTaskLabel';
+import {turnTask} from './turnTask';
 
 // Short form in the game tab: status, player and generation should stay visible in the narrow tab.
 const SHORT_APP_NAME = 'TM';
-
-// Static character for "your turn"; when animated it is replaced by the spinning symbols in WaitingFor.
-export const TURN_MARKER = '●';
 
 // Only what the title needs – fits the player, spectator and end views.
 export type TitleView = {
@@ -29,13 +26,15 @@ export function isOwnTurn(view: TitleView): boolean {
   return view.waitingFor !== undefined && view.waitingFor.optional !== true;
 }
 
-// Status part for your own turn: marker plus current task, e.g. "● Buying".
-export function turnTitleState(view: TitleView, marker: string = TURN_MARKER): string {
-  return `${marker} ${$t(turnTaskLabel(view.game))}`;
+// Status part for your own turn: task emoji plus task, e.g. "🛒 Buying".
+// When animated, WaitingFor replaces the emoji with the spinning symbols.
+export function turnTitleState(view: TitleView, marker?: string): string {
+  const task = turnTask(view.game);
+  return `${marker ?? task.icon} ${$t(task.label)}`;
 }
 
 // Title in the game: <task> · <player> · G<generation> · <game name> | TM
-// e.g. "● Buying · Daniel · G2 · Remote Plasma Trace | TM"; empty parts are dropped.
+// e.g. "🛒 Buying · Daniel · G2 · Remote Plasma Trace | TM"; empty parts are dropped.
 export function gameDocumentTitle(view: TitleView, state: string | undefined = isOwnTurn(view) ? turnTitleState(view) : undefined): string {
   return shortDocumentTitle([state, view.thisPlayer?.name, `G${view.game.generation}`, view.game.name]);
 }
