@@ -9,8 +9,9 @@ import {isGameId} from '../../common/Types';
 import {AdminDeleteGameRequest} from '../../common/admin/AdminGameSummary';
 import {ImportedGamesStore} from '../admin/ImportedGamesStore';
 import {ImportedSnapshotsStore} from '../admin/ImportedSnapshotsStore';
+import {isLocalNetworkHost} from '../../common/admin/isLocalNetworkHost';
 
-/** Löscht ein eigenes Spiel endgültig aus Speicher und Datenbank oder entfernt ein importiertes Ergebnis. */
+/** Nur im lokalen Netz: löscht ein eigenes Spiel endgültig aus Speicher und Datenbank oder entfernt ein importiertes Ergebnis. */
 export class ApiAdminDeleteGame extends Handler {
   public static readonly INSTANCE = new ApiAdminDeleteGame();
   constructor(
@@ -20,6 +21,10 @@ export class ApiAdminDeleteGame extends Handler {
   }
 
   public override async post(req: Request, res: Response, ctx: Context): Promise<void> {
+    // Nur über die Heimnetz-Adresse: wer die Seite über DuckDNS öffnet, soll nichts löschen können
+    if (!isLocalNetworkHost(req.headers.host)) {
+      throw RouteError.forbidden();
+    }
     const {id} = JSON.parse(await readBody(req)) as AdminDeleteGameRequest;
     const importedSummary = this.importedGames.get(id);
     if (importedSummary !== undefined) {

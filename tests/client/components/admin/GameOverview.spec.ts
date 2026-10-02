@@ -25,7 +25,7 @@ describe('GameOverview', () => {
     return mount(GameOverview, {
       ...globalConfig,
       attachTo: document.createElement('tbody'),
-      props: {summary, columns: ['Jens', 'Martin', 'Daniel']},
+      props: {summary, columns: ['Jens', 'Martin', 'Daniel'], canDelete: true},
     });
   }
 
@@ -33,6 +33,11 @@ describe('GameOverview', () => {
     const cells = mountRow().findAll('td').map((cell) => cell.text());
     // Status, Spiel, Generation, Zuschauer, Jens, Martin, Daniel, Löschen
     expect(cells.slice(4, 7)).deep.eq(['🏆76', '', '66']);
+  });
+
+  it('no delete button outside the home network', () => {
+    const wrapper = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'), props: {summary, columns: ['Jens']}});
+    expect(wrapper.find('.games-overview-delete').exists()).is.false;
   });
 
   it('corporation and win in the tooltip', () => {

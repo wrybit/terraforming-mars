@@ -27,7 +27,7 @@
         <span v-if="playerByName(name)!.isWinner" class="games-overview-trophy">🏆</span>{{ playerByName(name)!.victoryPoints }}
       </component>
     </td>
-    <td class="games-overview-actions">
+    <td v-if="canDelete" class="games-overview-actions">
       <DeleteGameButton :isDeleting="isDeleting" @delete="$emit('delete', summary.id)"/>
     </td>
   </tr>
@@ -57,6 +57,11 @@ export default defineComponent({
       required: true,
     },
     isDeleting: {
+      type: Boolean,
+      default: false,
+    },
+    // Löschen gibt es nur über die Heimnetz-Adresse (entscheidet die Übersicht, der Server prüft es selbst nochmal)
+    canDelete: {
       type: Boolean,
       default: false,
     },

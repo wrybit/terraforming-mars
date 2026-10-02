@@ -49,6 +49,7 @@ describe('ApiAdmin', () => {
   // Die Routen lesen den Body über 'data'/'end'-Events – erst senden, nachdem post() gestartet ist
   function post(handler: Handler, body: object): Promise<unknown> {
     scaffolding.url = '/api/admin?serverId=1';
+    scaffolding.req.headers.host = '192.168.178.77:17745';
     const response = scaffolding.post(handler, res);
     const emit = Promise.resolve().then(() => {
       scaffolding.req.emitString(JSON.stringify(body));
@@ -76,6 +77,14 @@ describe('ApiAdmin', () => {
   it('deletes a local game', async () => {
     await post(new ApiAdminDeleteGame(store, snapshots), {id: 'game-id'});
     expect(await scaffolding.ctx.gameLoader.getGame('game-id')).is.undefined;
+  });
+
+  it('deleting via the public address is forbidden', async () => {
+    scaffolding.url = '/api/admin?serverId=1';
+    scaffolding.req.headers.host = 'gww20.duckdns.org:17745';
+    await scaffolding.post(new ApiAdminDeleteGame(store, snapshots), res);
+    expect(res.statusCode).eq(statusCode.forbidden);
+    expect(await scaffolding.ctx.gameLoader.getGame('game-id')).is.not.undefined;
   });
 
   it('unknown game cannot be deleted', async () => {
