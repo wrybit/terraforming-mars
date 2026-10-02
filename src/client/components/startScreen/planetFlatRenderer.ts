@@ -1,11 +1,13 @@
 /* Ersatz ohne WebGL: der Streifen liegt flach als CSS-Hintergrund im Globus-Kreis (Maske) und wird verschoben;
    ein radialer Verlauf dunkelt zum Rand ab, damit er trotzdem rund wirkt. */
 import {PlanetDrawRequest, PlanetRenderer} from './planetRenderer';
-import {GLOBE, SPRITE_ROW, STRIPES_TEXTURE_SIZE, STRIPES_TEXTURE_URL} from './planetStripes';
+import {GLOBE, SPRITE_ROW, STRIPES_TEXTURE_SIZE, STRIPES_TEXTURE_URL, trimmedStripe} from './planetStripes';
 
 export class PlanetFlatRenderer implements PlanetRenderer {
   public draw(request: PlanetDrawRequest): void {
-    const {target, placement, stripe, offset, glow} = request;
+    const {target, placement, offset, glow} = request;
+    // ohne die Ränder: sonst blitzen Trennlinie und Nachbarstreifen oben/unten durch
+    const stripe = trimmedStripe(request.stripe);
     const width = target.clientWidth;
     const height = target.clientHeight;
     if (width === 0 || height === 0) {
