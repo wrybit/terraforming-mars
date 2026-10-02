@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-// Rechteckige Flagge (assets/flags/<sprache>.svg) – ersetzt die runden Sprite-Flaggen.
-// Kein Kommentar im Template: ein einzelnes Wurzelelement, damit class/title vom Aufrufer ankommen.
+// Rectangular flag (assets/flags/<lang>.svg) – replaces the round sprite flags.
+// No comment in the template: a single root element, so the caller's class/title are applied.
 import {LANGUAGE} from '@/common/constants';
 
 defineProps<{

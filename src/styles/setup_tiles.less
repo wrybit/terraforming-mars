@@ -1,5 +1,5 @@
-// Kachelraster für Einstellungen und Werte (GameSetupDetail.vue, Kartenstapel in InfoPanel.vue):
-// je Kachel Beschriftung oben, Werte-Chips darunter. Gleiche Kachelbreite, füllt die Breite.
+// Tile grid for settings and values (GameSetupDetail.vue, card piles in InfoPanel.vue):
+// label on top, value chips below. Equal tile width, fills the width.
 @import (reference) "./dialog_frame.less";
 @import (reference) "./variables.less";
 
@@ -78,7 +78,7 @@ a.setup-chip:hover {
   color: @dialog-accent-text;
 }
 
-// Spielbrett in seiner Farbe (Werte aus variables.less)
+// Board in its colour (values from variables.less)
 .board-chip(@color; @text: #fff) {
   background: @color;
   color: @text;
@@ -97,7 +97,7 @@ a.setup-chip:hover {
 .setup-chip--board-terra-cimmeria { .board-chip(@board-terra_cimmeria); }
 .setup-chip--board-hollandia { .board-chip(@board-hollandia; #1b1b1b); }
 
-// Hochformat/Handy: zwei Spalten, Kartenstapel bleiben dreispaltig (kurze Werte)
+// Portrait/phone: two columns, card piles stay at three (short values)
 @media only screen and (max-width: 520px) {
   .setup-tiles {
     grid-template-columns: repeat(2, minmax(0, 1fr));

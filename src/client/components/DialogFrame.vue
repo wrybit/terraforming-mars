@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-// Gemeinsamer Rahmen der Seitenleisten-Dialoge mit Titel: Kopf (Symbol, Titel, ✕),
-// scrollender Inhalt, optionale Fußzeile. Breite per Prop, damit jeder Dialog sein Raster füllt.
-// Kein Kommentar im Template: ein Wurzelelement, damit die Klasse des Aufrufers ankommt.
+// Shared frame of the titled sidebar dialogs: header (icon, title, ✕), scrolling content,
+// optional footer. Width as a prop so every dialog fills its grid.
+// No comment in the template: a single root element, so the caller's class is applied.
 defineProps<{
   title: string;
   width: number;

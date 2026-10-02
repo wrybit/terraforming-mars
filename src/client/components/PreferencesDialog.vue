@@ -16,7 +16,7 @@
           <h3 class="preferences-group-title" v-i18n>{{ group.title }}</h3>
           <span v-if="group.optional" class="preferences-group-chevron" aria-hidden="true">›</span>
         </component>
-        <!-- Ganze Zeile anklickbar; Schalter rechts, Text links, Untertext statt ⓘ-Tooltip -->
+        <!-- Whole row is clickable; switch on the right, text on the left, hint text instead of an ⓘ tooltip -->
         <label v-for="item in group.switches" :key="item.preference" class="preferences-switch">
           <span class="preferences-switch-text">
             <span class="preferences-switch-label" v-i18n>{{ item.label }}</span>

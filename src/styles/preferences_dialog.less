@@ -1,12 +1,12 @@
-// Einstellungen (PreferencesDialog.vue, Gruppen aus preferencesGroups.ts): Gruppen als Karten im Raster,
-// je Einstellung eine Zeile mit Text links und Schalter rechts. "Erweitert" zusammengeklappt und zurückgenommen.
+// Settings (PreferencesDialog.vue, groups from preferencesGroups.ts): groups as cards in a grid,
+// one row per setting with text left and switch right. "Advanced" is collapsed and toned down.
 @import (reference) "./dialog_frame.less";
 @import (reference) "./variables.less";
 
 @preferences-switch-width: 36px;
 @preferences-switch-height: 20px;
-@preferences-switch-inset: 3px; // Abstand des Knopfs zum Rand der Spur
-@preferences-switch-knob: 14px; // = Höhe - 2 × Abstand
+@preferences-switch-inset: 3px; // gap between knob and track edge
+@preferences-switch-knob: 14px; // = height - 2 × inset
 
 .preferences-groups {
   display: grid;
@@ -24,7 +24,7 @@
   background: @dialog-surface;
 }
 
-// Gruppenkopf: Symbol + Titel; trennt die Gruppen auch für schnelles Überfliegen
+// Group header: icon + title; separates the groups for quick scanning
 .preferences-group-head {
   display: flex;
   align-items: center;
@@ -49,7 +49,7 @@
   text-transform: none;
 }
 
-// Zeile: ganze Fläche klickbar, Hover hebt sie leicht hervor
+// Row: whole area clickable, hover highlights it slightly
 .preferences-switch {
   display: flex;
   align-items: center;
@@ -85,7 +85,7 @@
   white-space: pre-line;
 }
 
-// Schalter: Checkbox unsichtbar (bleibt bedienbar und testbar), daneben die gezeichnete Spur mit Knopf
+// Switch: checkbox hidden (still operable and testable), next to it the drawn track with knob
 .preferences-switch-input {
   position: absolute;
   width: 1px;
@@ -130,7 +130,7 @@
   outline-offset: 2px;
 }
 
-// Selten gebraucht: über die volle Breite, gestrichelt und gedämpft, standardmäßig zu
+// Rarely needed: full width, dashed and muted, closed by default
 .preferences-group--optional {
   grid-column: 1 / -1;
   border-style: dashed;
@@ -162,12 +162,12 @@
   }
 }
 
-// Fehler melden als Nebenaktion links, OK rechts
+// Report a bug as secondary action on the left, OK on the right
 .btn.preferences-bug-button {
   margin-right: auto;
 }
 
-// Handy: eine Spalte, Untertexte weg (sonst wird die Liste zu lang)
+// Phone: one column, no hint texts (the list would get too long)
 @media only screen and (max-width: 520px) {
   .preferences-groups {
     grid-template-columns: minmax(0, 1fr);

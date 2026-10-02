@@ -1,7 +1,7 @@
 import {Preference} from '@/client/utils/PreferencesManager';
 
-// Einstellungen als Daten, gruppiert nach Thema (PreferencesDialog.vue rendert sie per v-for).
-// hint = früherer Tooltip (ⓘ), jetzt als Untertext unter dem Schalter.
+// Settings as data, grouped by topic (PreferencesDialog.vue renders them with v-for).
+// hint = former tooltip (ⓘ), now shown as text below the switch.
 
 export type PreferenceSwitch = {
   preference: Preference;
@@ -11,9 +11,9 @@ export type PreferenceSwitch = {
 
 export type PreferenceGroup = {
   title: string;
-  // Symbol im Gruppenkopf (SVG-Pfade, 24er-Raster, nur Kontur)
+  // Icon in the group header (SVG paths, 24px grid, outline only)
   iconPaths: ReadonlyArray<string>;
-  // Selten gebraucht: zusammengeklappt und zurückgenommen dargestellt
+  // Rarely needed: collapsed and visually toned down
   optional?: boolean;
   switches: ReadonlyArray<PreferenceSwitch>;
 };
