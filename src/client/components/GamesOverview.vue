@@ -38,11 +38,11 @@
               <th>Gen</th>
               <th>Spectator</th>
               <th v-for="name in columns" :key="name">{{ name }}</th>
-              <th></th>
+              <th v-if="canDelete"></th>
             </tr>
           </thead>
           <tbody>
-            <GameOverview v-for="summary in summaries" :key="summary.id" :summary="summary" :columns="columns" :isDeleting="deletingIds.includes(summary.id)" @delete="deleteGame"/>
+            <GameOverview v-for="summary in summaries" :key="summary.id" :summary="summary" :columns="columns" :isDeleting="deletingIds.includes(summary.id)" :canDelete="canDelete" @delete="deleteGame"/>
           </tbody>
         </table>
       </div>
@@ -60,6 +60,7 @@ import GameOverview from '@/client/components/admin/GameOverview.vue';
 import ImportGameForm from '@/client/components/admin/ImportGameForm.vue';
 import HomeLink from '@/client/components/common/HomeLink.vue';
 import {playerColumns} from '@/client/components/admin/playerColumns';
+import {isLocalNetworkHost} from '@/common/admin/isLocalNetworkHost';
 import {LineupWinCounts, winCountsByLineup} from '@/client/components/admin/winCounts';
 
 type DataModel = {
@@ -93,6 +94,9 @@ export default defineComponent({
     },
     serverId(): string {
       return (new URL(location.href)).searchParams.get('serverId') || '';
+    },
+    canDelete(): boolean {
+      return isLocalNetworkHost(window.location.host);
     },
     columns(): Array<string> {
       return playerColumns(this.summaries);
