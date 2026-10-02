@@ -103,7 +103,7 @@ import StatsEntityDetail from './StatsEntityDetail.vue';
 import {activeFilterCount, emptyFilters, filterGames, filterGroups, optionCounts, StatsFilterGroup, StatsFilters} from './statsFilter';
 import {parseStatsView, STATS_TABS, statsHref, StatsTab, StatsView, tabOfView} from './statsNavigation';
 import {allPlayerResults, playerColors, playerNames, StatsPlayerResult} from './statsResults';
-import {formatDate} from './statsLabels';
+import {boardLabel, formatDate} from './statsLabels';
 import StatsCardZoom from './StatsCardZoom.vue';
 import {CARD_ZOOM_KEY, StatsCardZoomRequest} from './statsCardZoom';
 
@@ -191,7 +191,8 @@ export default defineComponent({
     pageTitle(): string {
       const view = this.view;
       if (view.type === 'detail') {
-        return translateText(view.name);
+        // Gleicher Anzeigename wie auf der Seite (Spielbretter heißen intern klein, z. B. „tharsis“)
+        return translateText(view.kind === 'board' ? boardLabel(view.name) : view.name);
       }
       if (view.type === 'top') {
         return translateText(SHOWCASE_TITLES[view.kind]);
