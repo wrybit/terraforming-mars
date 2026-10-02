@@ -265,8 +265,8 @@
   margin-bottom: 24px;
 }
 
-.start-screen-title-top,
-.start-screen-title-bottom {
+// Logo als Ganzes angehoben (nicht die Zeilen einzeln), damit sein Rahmen dort liegt, wo man es sieht (Intro misst ihn)
+.start-screen-title {
   position: relative;
   top: -@start-screen-title-lift;
 }
@@ -419,8 +419,7 @@
     container-type: inline-size;
   }
 
-  .start-screen-title-top,
-  .start-screen-title-bottom {
+  .start-screen-title {
     top: -@start-screen-title-lift-phone;
   }
 
