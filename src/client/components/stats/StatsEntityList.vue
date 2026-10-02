@@ -38,6 +38,8 @@ const SEARCH_THRESHOLD = 15;
 // Bei langen Listen stünden sonst lauter einmal gespielte Karten mit 100 % oben
 const MIN_PLAYS_OPTIONS: ReadonlyArray<SegmentOption> = [1, 2, 3, 5].map((value) => ({value, label: `${value}×`}));
 const DEFAULT_MIN_PLAYS = 3;
+// Mindestanzahl nur so hoch, dass noch genug Einträge übrig bleiben (Präludien gibt es z. B. nur aus wenigen Partien)
+const MIN_VISIBLE_ROWS = 10;
 
 // Liste einer Art (Konzerne, Präludien, Karten, Meilensteine, Auszeichnungen, Spielpläne)
 export default defineComponent({
@@ -49,6 +51,10 @@ export default defineComponent({
   },
   data() {
     return {search: '', searchThreshold: SEARCH_THRESHOLD, minPlays: DEFAULT_MIN_PLAYS, minPlaysOptions: MIN_PLAYS_OPTIONS};
+  },
+  created() {
+    const plays = this.rows.map((row) => row.plays);
+    this.minPlays = [DEFAULT_MIN_PLAYS, 2, 1].find((minimum) => plays.filter((count) => count >= minimum).length >= MIN_VISIBLE_ROWS) ?? 1;
   },
   computed: {
     definition(): StatsKindDefinition {

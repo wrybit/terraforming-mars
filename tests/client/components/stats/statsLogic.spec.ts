@@ -4,12 +4,12 @@ import {allPlayerResults, playerColors} from '@/client/components/stats/statsRes
 import {aggregate, entityStats} from '@/client/components/stats/statsAggregate';
 import {emptyFilters, filterGames, filterGroups, optionCounts} from '@/client/components/stats/statsFilter';
 import {toggleOption} from '@/client/components/cardlist/filterSelection';
-import {entityDetail, headToHead} from '@/client/components/stats/statsDetail';
+import {entityDetail, headToHead, histogram} from '@/client/components/stats/statsDetail';
 import {statsRecords} from '@/client/components/stats/statsRecords';
 import {parseStatsView, statsHref} from '@/client/components/stats/statsNavigation';
 import {withFunderWinShare} from '@/client/components/stats/statsColumns';
 import {averageByGeneration, averageCardPoints} from '@/client/components/stats/statsSeries';
-import {pointSourcesByPlayer} from '@/client/components/stats/statsPointSources';
+import {pointSourcesByPlayer, pointSourcesOverall} from '@/client/components/stats/statsPointSources';
 
 describe('stats logic', () => {
   const games = sampleGames();
@@ -79,5 +79,21 @@ describe('stats logic', () => {
     expect(averageByGeneration([[20, 40], [30, 50, 70], [10, 30, 50]])).deep.eq([20, 40]);
     expect(averageCardPoints(results, 'Birds')).eq(4);
     expect(pointSourcesByPlayer(results).find((row) => row.name === 'Jens')?.games).eq(2);
+  });
+
+  it('histograms have no gaps and count wins separately', () => {
+    const own = entityDetail(results, 'corporation', 'Ecoline').results;
+    const bars = histogram(own, (result) => result.player.victoryPoints, 10);
+    expect(bars.reduce((sum, bar) => sum + bar.value, 0)).eq(own.length);
+    expect(bars.reduce((sum, bar) => sum + (bar.highlight ?? 0), 0)).eq(own.filter((result) => result.place === 1).length);
+    // lückenlos: aufeinanderfolgende Zehnerklassen
+    bars.forEach((bar, index) => expect(Number(bar.label)).eq(Number(bars[0].label) + index * 10));
+    expect(histogram([], () => 1, 1)).deep.eq([]);
+  });
+
+  it('point sources have an all-games baseline row', () => {
+    const baseline = pointSourcesOverall(results);
+    expect(baseline?.baseline).eq(true);
+    expect(baseline?.games).eq(results.filter((result) => result.details?.victoryPoints !== undefined).length);
   });
 });

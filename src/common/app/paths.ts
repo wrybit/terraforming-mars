@@ -17,6 +17,7 @@ export const paths = {
   API_PROFILE: 'api/profile',
   API_SPECTATOR: 'api/spectator',
   API_STATS: 'api/stats',
+  API_STATS_BOARD: 'api/stats/board',
   API_STATS_GAMES: 'api/stats/games',
   API_WAITING_FOR: 'api/waitingfor',
   AUTH_DISCORD_CALLBACK: 'auth/discord/callback',

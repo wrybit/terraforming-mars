@@ -21,6 +21,10 @@ export type StatsKpi = {
 export type StatsBar = {
   label: string;
   value: number;
+  /** Anteil der Säule, der hervorgehoben unten gestapelt wird (z. B. davon Siege). */
+  highlight?: number;
+  /** Tooltip; ohne wird „label: value“ gezeigt. */
+  title?: string;
 };
 
 /** Ein Punkt einer Linie; hervorgehobene Punkte (z. B. Siege) werden größer und gelb gezeichnet. */

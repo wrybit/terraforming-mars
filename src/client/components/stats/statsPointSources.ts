@@ -18,7 +18,17 @@ export type PointSourcesRow = {
   name: string;
   games: number;
   averages: Record<PointSource | 'total', number | undefined>;
+  /** Vergleichszeile über alle Partien statt eines Spielers. */
+  baseline?: boolean;
 };
+
+function toRow(name: string, list: ReadonlyArray<StatsVictoryPoints>): PointSourcesRow {
+  const averages = {} as PointSourcesRow['averages'];
+  for (const key of [...POINT_SOURCES.map((source) => source.key), 'total' as const]) {
+    averages[key] = average(list.map((points) => points[key]));
+  }
+  return {name, games: list.length, averages};
+}
 
 /** Ø Siegpunkte je Herkunft, je Spieler – nur Partien mit Punkteaufschlüsselung. */
 export function pointSourcesByPlayer(results: ReadonlyArray<StatsPlayerResult>): Array<PointSourcesRow> {
@@ -29,11 +39,11 @@ export function pointSourcesByPlayer(results: ReadonlyArray<StatsPlayerResult>):
       byPlayer.set(result.player.name, [...(byPlayer.get(result.player.name) ?? []), points]);
     }
   }
-  return Array.from(byPlayer.entries()).map(([name, list]) => {
-    const averages = {} as PointSourcesRow['averages'];
-    for (const key of [...POINT_SOURCES.map((source) => source.key), 'total' as const]) {
-      averages[key] = average(list.map((points) => points[key]));
-    }
-    return {name, games: list.length, averages};
-  });
+  return Array.from(byPlayer.entries()).map(([name, list]) => toRow(name, list));
+}
+
+/** Ø über alle Spieler-Partien mit Aufschlüsselung – die Vergleichszeile; undefined ohne Daten. */
+export function pointSourcesOverall(results: ReadonlyArray<StatsPlayerResult>): PointSourcesRow | undefined {
+  const list = results.flatMap((result) => result.details?.victoryPoints === undefined ? [] : [result.details.victoryPoints]);
+  return list.length === 0 ? undefined : {...toRow('All games', list), baseline: true};
 }

@@ -1,7 +1,10 @@
 <template>
   <div>
     <StatsTable :columns="columns" :rows="rows" :rowKey="rowKey" initialSort="total">
-      <template #name="{row}"><StatsEntityName kind="player" :name="row.name"/></template>
+      <template #name="{row}">
+        <span v-if="row.baseline" class="stats-dim" v-i18n>{{ row.name }}</span>
+        <StatsEntityName v-else kind="player" :name="row.name"/>
+      </template>
       <template #bar="{row}">
         <span class="stats-sources-bar" :title="barTitle(row)">
           <span v-for="source in sources" :key="source.key" :class="`stats-source-${source.key}`" :style="{width: `${share(row, source.key)}%`}"></span>
@@ -22,7 +25,7 @@ import StatsEntityName from './StatsEntityName.vue';
 import {StatsColumn} from './statsTypes';
 import {StatsPlayerResult} from './statsResults';
 import {formatNumber} from './statsLabels';
-import {POINT_SOURCES, PointSource, PointSourcesRow, pointSourcesByPlayer} from './statsPointSources';
+import {POINT_SOURCES, PointSource, PointSourcesRow, pointSourcesByPlayer, pointSourcesOverall} from './statsPointSources';
 
 // Woher die Siegpunkte kommen: Ø je Herkunft und Spieler, mit gestapeltem Balken
 export default defineComponent({
@@ -30,13 +33,17 @@ export default defineComponent({
   components: {StatsTable, StatsEntityName},
   props: {
     results: {type: Array as PropType<ReadonlyArray<StatsPlayerResult>>, required: true},
+    /** Vergleichszeile „Alle Partien“, damit sichtbar wird, was der Eintrag verschiebt. */
+    baseline: {type: Array as PropType<ReadonlyArray<StatsPlayerResult>>, default: undefined},
   },
   data() {
     return {sources: POINT_SOURCES};
   },
   computed: {
     rows(): Array<PointSourcesRow> {
-      return pointSourcesByPlayer(this.results);
+      const rows = pointSourcesByPlayer(this.results);
+      const baseline = this.baseline === undefined ? undefined : pointSourcesOverall(this.baseline);
+      return baseline === undefined ? rows : [...rows, baseline];
     },
     columns(): Array<StatsColumn> {
       const average = (key: PointSource | 'total'): StatsColumn => ({

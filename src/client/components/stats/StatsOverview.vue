@@ -6,6 +6,22 @@
       <p v-if="completeGames < games.length" class="stats-note">{{ detailNote }}</p>
     </section>
 
+    <section v-if="topCards.length > 0" class="stats-card">
+      <h2 v-i18n>Most played project cards</h2>
+      <StatsShowcase kind="card" :entries="topCards"/>
+    </section>
+
+    <div class="stats-columns">
+      <section v-if="topCorporations.length > 0" class="stats-card">
+        <h2 v-i18n>Most played corporations</h2>
+        <StatsShowcase kind="corporation" :entries="topCorporations"/>
+      </section>
+      <section v-if="topAwards.length > 0" class="stats-card">
+        <h2 v-i18n>Most funded awards</h2>
+        <StatsShowcase kind="award" :entries="topAwards"/>
+      </section>
+    </div>
+
     <section v-if="lineups.length > 0" class="stats-card">
       <h2 v-i18n>Wins per lineup</h2>
       <div class="stats-lineups">
@@ -56,6 +72,9 @@ import StatsKpis from './StatsKpis.vue';
 import {StatsBar, StatsChartSeries, StatsKpi} from './statsTypes';
 import StatsLineChart from './StatsLineChart.vue';
 import StatsBarChart from './StatsBarChart.vue';
+import StatsShowcase from './StatsShowcase.vue';
+import {aggregate, EntityStats} from './statsAggregate';
+import {StatsKind} from './statsKinds';
 import {average, playerNames, StatsPlayerResult} from './statsResults';
 import {gamesByGeneration} from './statsRecords';
 import {formatDate, formatNumber} from './statsLabels';
@@ -72,7 +91,7 @@ function sum(results: ReadonlyArray<StatsPlayerResult>, valueOf: (result: StatsP
 // Startansicht: Kennzahlen, Siege je Besetzung (wie in der Admin-Übersicht), Verlauf und Verteilung
 export default defineComponent({
   name: 'StatsOverview',
-  components: {StatsKpis, StatsLineChart, StatsBarChart},
+  components: {StatsKpis, StatsLineChart, StatsBarChart, StatsShowcase},
   inject: {
     playerColors: {default: () => new Map<string, Color>()},
   },
@@ -134,6 +153,15 @@ export default defineComponent({
         points: entry.values.map((value, index) => ({value: value === undefined ? undefined : Math.round(value), title: `${index + 1}: ${formatNumber(value, 0)} %`})),
       }));
     },
+    topCards(): Array<EntityStats> {
+      return this.mostPlayed('card', 5);
+    },
+    topCorporations(): Array<EntityStats> {
+      return this.mostPlayed('corporation', 3);
+    },
+    topAwards(): Array<EntityStats> {
+      return this.mostPlayed('award', 3);
+    },
     lineups(): Array<LineupWinCounts> {
       return winCountsByLineup(this.games.map((game) => game.summary));
     },
@@ -149,6 +177,12 @@ export default defineComponent({
   },
   methods: {
     formatNumber,
+    // Häufigste zuerst, bei Gleichstand die erfolgreichere
+    mostPlayed(kind: StatsKind, count: number): Array<EntityStats> {
+      return aggregate(this.results, kind)
+        .sort((first, second) => second.plays - first.plays || second.winRate - first.winRate)
+        .slice(0, count);
+    },
     generationLabels(series: ReadonlyArray<StatsChartSeries>): Array<string> {
       const length = Math.max(0, ...series.map((line) => line.points.length));
       return Array.from({length}, (_, index) => String(index + 1));

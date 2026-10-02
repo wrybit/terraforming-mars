@@ -23,6 +23,7 @@ import {ApiPlayer} from '../routes/ApiPlayer';
 import {ApiProfile} from '../routes/ApiProfile';
 import {ApiSpectator} from '../routes/ApiSpectator';
 import {ApiStats} from '../routes/ApiStats';
+import {ApiStatsBoard} from '../routes/ApiStatsBoard';
 import {ApiStatsGames} from '../routes/ApiStatsGames';
 import {ApiWaitingFor} from '../routes/ApiWaitingFor';
 import {Autopass} from '../routes/Autopass';
@@ -109,6 +110,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_METRICS, ApiMetrics.INSTANCE],
     [paths.API_PLAYER, ApiPlayer.INSTANCE],
     [paths.API_STATS, ApiStats.INSTANCE],
+    [paths.API_STATS_BOARD, ApiStatsBoard.INSTANCE],
     [paths.API_STATS_GAMES, ApiStatsGames.INSTANCE],
     [paths.API_SPECTATOR, ApiSpectator.INSTANCE],
     [paths.API_WAITING_FOR, ApiWaitingFor.INSTANCE],

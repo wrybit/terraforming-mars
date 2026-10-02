@@ -5,6 +5,8 @@ export type StatsPlayerShare = {
   name: string;
   plays: number;
   wins: number;
+  /** Siegquote bei reinem Zufall, gemittelt über die Partien dieses Spielers. */
+  expectedWinRate: number;
 };
 
 /** Kennzahlen eines Eintrags (Konzern, Karte, Spieler …) über alle Spieler-Partien, in denen er vorkam. */
@@ -33,7 +35,9 @@ function toEntityStats(name: string, results: ReadonlyArray<StatsPlayerResult>):
   const uniqueGames = Array.from(new Set(results.map((result) => result.game)));
   const shares = new Map<string, StatsPlayerShare>();
   for (const result of results) {
-    const share = shares.get(result.player.name) ?? {name: result.player.name, plays: 0, wins: 0};
+    const share = shares.get(result.player.name) ?? {name: result.player.name, plays: 0, wins: 0, expectedWinRate: 0};
+    // Laufender Mittelwert, damit kein zweiter Durchlauf nötig ist
+    share.expectedWinRate += (expectedWinRate(result.game) - share.expectedWinRate) / (share.plays + 1);
     share.plays++;
     if (result.place === 1) {
       share.wins++;
