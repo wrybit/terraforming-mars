@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import {GlobeLayout, measureGlobeLayout} from '@/client/components/startScreen/globeLayout';
-import {INTRO_DURATION, logoOffsetToCenter, markIntroSeen, shouldPlayIntro} from '@/client/components/startScreen/startIntro';
+import {INTRO_DURATION, logoOffsetToCenter, shouldPlayIntro} from '@/client/components/startScreen/startIntro';
 import {PlanetGlobeRenderer} from '@/client/components/startScreen/planetGlobeRenderer';
 import {PlanetFlatRenderer} from '@/client/components/startScreen/planetFlatRenderer';
 import {PlanetRotation} from '@/client/components/startScreen/planetRotation';
@@ -198,7 +198,7 @@ async function startGlobe(): Promise<void> {
   relayout();
 }
 
-// Intro beim ersten Besuch der Sitzung; Klick oder Taste überspringt es
+// Intro bei jedem Laden; Klick oder Taste überspringt es
 const introPlaying = ref(false);
 const logoOffset = ref<Record<string, string>>({});
 let logo: HTMLElement | undefined;
@@ -222,7 +222,6 @@ function startIntro(): void {
   const offset = logoOffsetToCenter(logo);
   logoOffset.value = {'--intro-logo-x': `${offset.x}px`, '--intro-logo-y': `${offset.y}px`};
   introPlaying.value = true;
-  markIntroSeen();
   introTimer = window.setTimeout(endIntro, INTRO_DURATION);
   document.addEventListener('pointerdown', endIntro, true);
   document.addEventListener('keydown', endIntro, true);

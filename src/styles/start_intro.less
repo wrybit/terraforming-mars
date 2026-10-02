@@ -2,18 +2,19 @@
 // Ablauf: schwarz → Galaxie per Iris-Blende → Logo zoomt in der Mitte hinein (ab halber Blende), dabei kommen
 // Fußzeile von unten und Werkzeug-Buttons von rechts oben → Logo wird kleiner und fährt an seinen Platz →
 // Menüpunkte blenden von oben nach unten einzeln ein (Blur-Fade).
+// Gesamtdauer etwa 1,5 s (Wunsch Jens: fix).
 // fill-mode backwards: vor dem Start gilt der Anfangszustand, nach dem Ende wieder das normale Layout.
 
-@intro-iris-delay: 0.2s;
-@intro-iris-duration: 1.6s;
+@intro-iris-delay: 0.05s;
+@intro-iris-duration: 0.6s;
 // Logo startet bei etwa halber Blende
-@intro-logo-delay: 0.9s;
-@intro-logo-duration: 2.3s;
-@intro-chrome-delay: 1s;
-@intro-chrome-duration: 0.9s;
-@intro-buttons-delay: 3s;
-@intro-buttons-stagger: 0.1s;
-@intro-buttons-duration: 0.6s;
+@intro-logo-delay: 0.3s;
+@intro-logo-duration: 0.8s;
+@intro-chrome-delay: 0.35s;
+@intro-chrome-duration: 0.5s;
+@intro-buttons-delay: 0.95s;
+@intro-buttons-stagger: 0.03s;
+@intro-buttons-duration: 0.3s;
 @intro-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
 .topmost-start-screen:has(.start-screen--intro) {
@@ -38,7 +39,7 @@
 
   // Planet hinter dem Titel kommt mit, wenn das Logo an seinem Platz ankommt
   .start-screen-header::before {
-    animation: start-intro-fade 0.6s ease-out (@intro-buttons-delay - 0.2s) backwards;
+    animation: start-intro-fade 0.3s ease-out (@intro-buttons-delay - 0.1s) backwards;
   }
 
   .start-screen-link {
