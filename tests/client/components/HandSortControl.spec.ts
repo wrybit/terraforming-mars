@@ -40,8 +40,8 @@ describe('HandSortControl', () => {
     FakeLocalStorage.deregister(localStorage);
   });
 
-  function mountControl(compact = false) {
-    return mount(HandSortControl, {...globalConfig, props: {playerView: playerView(), compact}});
+  function mountControl(compact = false, allowManual = true) {
+    return mount(HandSortControl, {...globalConfig, props: {playerView: playerView(), compact, allowManual}});
   }
 
   // Opens the sort menu and chooses a sorting: row = Cost, Type, Resource, VP; ↑ ascending, ↓ descending
@@ -96,6 +96,16 @@ describe('HandSortControl', () => {
 
     await wrapper.find('.card-sort__more').trigger('click');
     await wrapper.find('.card-sort-menu__manual').trigger('click');
+    expect(handSortOrder()).is.undefined;
+    expect(handOrder()).to.deep.eq(HAND);
+  });
+
+  it('without drag & drop (play, sell): no manual, choosing the active direction again restores the order', async () => {
+    const wrapper = mountControl(false, false);
+    expect(wrapper.find('.card-sort__manual').exists()).is.false;
+    await choose(wrapper, 0, false);
+    expect(handSortOrder()).to.deep.eq({key: 'cost', reversed: false});
+    await choose(wrapper, 0, false);
     expect(handSortOrder()).is.undefined;
     expect(handOrder()).to.deep.eq(HAND);
   });

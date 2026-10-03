@@ -1,7 +1,7 @@
 <template>
-  <!-- Hand card sorting: "Manual" (drag & drop) or one of the upstream sortings, ascending or descending.
+  <!-- Hand card sorting: one of the upstream sortings, ascending or descending; "Manual" (drag & drop) only in the hand tab.
        Hand tab and selection dialogs (play, sell) share the sorting (handSort.ts). -->
-  <CardSortMenu :modelValue="sortOrder" :compact="compact" @update:modelValue="select"/>
+  <CardSortMenu :modelValue="sortOrder" :compact="compact" :allowManual="allowManual" @update:modelValue="select"/>
 </template>
 
 <script setup lang="ts">
@@ -16,7 +16,9 @@ const props = withDefaults(defineProps<{
   playerView: PlayerViewModel;
   // Narrow row (phone): icon button only
   compact?: boolean;
-}>(), {compact: false});
+  // "Manual" only in the hand tab, where cards can be dragged; play/sell only show the hand order
+  allowManual?: boolean;
+}>(), {compact: false, allowManual: false});
 
 const sortOrder = computed(() => handSortOrder());
 

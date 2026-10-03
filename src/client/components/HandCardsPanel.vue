@@ -18,7 +18,7 @@
           <h3 v-if="activeCards.length > 0" class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ handCards.length }}</small></h3>
         </template>
         <template #sort="{compact}">
-          <HandSortControl :playerView="playerView" :compact="compact"/>
+          <HandSortControl :playerView="playerView" :compact="compact" :allowManual="true"/>
         </template>
       </CardFilterBar>
       <div v-else-if="activeCards.length > 0" class="hand-cards-panel__header">

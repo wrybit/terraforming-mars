@@ -69,8 +69,10 @@
 // Hand tab: the row heads the hand cards and spans the whole box. As the first thing in the box it sits at the
 // top edge; below the active cards it replaces their separator with its own line above.
 .or-tab-panel .hand-cards-panel__section > .card-filter-bar {
-  width: calc(100% + 2 * @card-filter-panel-padding);
-  margin: 0 -@card-filter-panel-padding @card-filter-row-gap-below;
+  // Boxes with cards have no right padding (the cards' own right margin replaces it, or_options_tabs.less):
+  // the row only reaches over the left padding; its own right padding keeps the sorting off the edge
+  width: calc(100% + @card-filter-panel-padding);
+  margin: 0 0 @card-filter-row-gap-below -@card-filter-panel-padding;
 }
 
 .or-tab-panel .hand-cards-panel > .hand-cards-panel__section:first-child > .card-filter-bar {
