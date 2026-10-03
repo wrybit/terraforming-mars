@@ -5,11 +5,14 @@
 @help-page-mobile-gutter: 16px;
 
 .help-solo-rules-container {
+  // Headings come from markdown (h3) since upstream renders the solo rules with markdown
+  h3,
   .help-icons-section-heading {
     padding-bottom: 0;
     margin: @help-page-section-gap 0 @help-page-heading-gap;
   }
 
+  h3:first-child,
   .help-icons-section-heading:first-child {
     margin-top: 8px;
   }

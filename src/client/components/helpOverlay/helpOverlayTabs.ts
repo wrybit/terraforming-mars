@@ -114,10 +114,10 @@ export const HELP_OVERLAY_TABS: ReadonlyArray<HelpOverlayTab> = [
     key: 'solo-rules',
     label: 'Solo Rules',
     component: HelpSoloRules,
-    outline: (root) => all(root, '.help-solo-rules-container > .help-icons-section-heading').map((heading) => ({element: heading, label: plainText(heading)})),
+    outline: (root) => all(root, '.help-solo-rules-container > h3').map((heading) => ({element: heading, label: plainText(heading)})),
     search: {
       items: (root) => all(root, '.help-solo-rules-container > p, .help-solo-rules-container > ul > li'),
-      headings: (root) => all(root, '.help-solo-rules-container > .help-icons-section-heading'),
+      headings: (root) => all(root, '.help-solo-rules-container > h3'),
     },
   },
   {
