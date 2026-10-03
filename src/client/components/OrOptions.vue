@@ -31,11 +31,11 @@
     </div>
 
     <!-- In tab mode this container is the box attached to the active tab (content + save) -->
-    <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption.title)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
+    <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <HandCardsPanel v-if="asTabs && handTabActive" :playerView="playerView"/>
       <!-- Explanation where there would otherwise be just a button (tabIntro.ts): image, what happens, hint -->
-      <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :playerView="playerView" :card="sourceCard"/>
-      <CardIntroBlock v-else-if="asTabs && !handTabActive && sourceCard !== undefined && selectedOption !== undefined" :card="sourceCard" :title="fullTabTitle(selectedOption.title)"/>
+      <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :playerView="playerView" :card="selectedCard"/>
+      <CardIntroBlock v-else-if="asTabs && !handTabActive && selectedCard !== undefined && selectedOption !== undefined" :card="selectedCard" :title="fullTabTitle(selectedOption.title)"/>
       <!-- Pass: explanation of what happens (centered with the button, or-tab-panel--end) -->
       <p v-if="asTabs && !handTabActive && selectedOption !== undefined && endTabHint(selectedOption.title) !== undefined" class="or-tab-end-hint">
         {{ $t(endTabHint(selectedOption.title)!) }}
@@ -113,7 +113,7 @@
 
       <!-- Tab mode: sticky footer at the bottom of the box (tabPanelFooter.ts); payment areas hook in via Teleport -->
       <div v-if="asTabs" v-show="!handTabActive" :id="footerId" class="or-tab-footer">
-        <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabButtonTone(selectedOption.title) ? 'or-tab-save--' + tabButtonTone(selectedOption.title) : '']">
+        <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabToneClass('or-tab-save--', selectedOption)]">
           <!-- Disabled while the selected option has no valid selection yet (e.g. no card chosen) -->
           <AppButton :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid" @click="saveData" />
         </div>
@@ -135,7 +135,7 @@ import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPane
 import {isChoiceMenu} from '@/client/components/choiceMenu';
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
-import {fullTabTitle, shortTabLabel, tabButtonLabel, tabButtonTone, tabButtonCentered, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon} from '@/client/components/orOptionsShortLabels';
+import {fullTabTitle, shortTabLabel, tabButtonLabel, optionTone, tabButtonCentered, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon} from '@/client/components/orOptionsShortLabels';
 import {tabIntro, TabIntro} from '@/client/components/tabIntro';
 import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
@@ -145,7 +145,7 @@ import MilestoneAwardOptions from '@/client/components/MilestoneAwardOptions.vue
 import PlayerOptionTile from '@/client/components/PlayerOptionTile.vue';
 import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
 import ChoiceOptionTile from '@/client/components/ChoiceOptionTile.vue';
-import {inputSourceCard} from '@/client/components/inputSourceCard';
+import {inputSourceCard, optionSourceCard} from '@/client/components/inputSourceCard';
 import {CardName} from '@/common/cards/CardName';
 import {PlayerEffect, playerEffect} from '@/client/components/selectPlayerResource';
 import {optionTargetPlayer} from '@/client/components/playerTargetOption';
@@ -239,6 +239,14 @@ export default defineComponent({
     sourceCard(): CardName | undefined {
       return this.asTabs ? inputSourceCard(this.playerinput) : undefined;
     },
+    // Card shown at the top of the box: the input's card, or for a content-free option (only a button)
+    // the card it triggers (e.g. corporation first action), so it is clear what the button does
+    selectedCard(): CardName | undefined {
+      if (this.sourceCard !== undefined || this.selectedOption === undefined || this.selectedOption.type !== 'option') {
+        return this.sourceCard;
+      }
+      return this.asTabs ? optionSourceCard(this.selectedOption) : undefined;
+    },
     // Explanation at the top of the selected action's box (tabIntro.ts)
     selectedIntro(): TabIntro | undefined {
       return this.selectedOption === undefined ? undefined : tabIntro(this.selectedOption);
@@ -324,14 +332,13 @@ export default defineComponent({
     tabIcon,
     tabDisplayOrder,
     tabButtonLabel,
-    tabButtonTone,
     tabHighlighted,
     isEndTab,
     tabButtonCentered,
     endTabHint,
     // Color class for the tab/box of pass (green) and end (red), otherwise none
     tabToneClass(prefix: string, option: PlayerInputModel | undefined): string {
-      const tone = option === undefined ? undefined : tabButtonTone(option.title);
+      const tone = option === undefined ? undefined : optionTone(option);
       return tone === undefined ? '' : prefix + tone;
     },
     // Shared with WaitingForTabs (inputAvailableCount.ts)
