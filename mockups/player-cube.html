@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spielerwürfel</title>
+<style>
+  :root {
+    --text: #e8e9ee;
+    --muted: #a9abb6;
+    --accent: #7b6cf6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 16px 48px;
+    background: #0d0e13;
+    color: var(--text);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .lead { color: var(--muted); margin: 0 0 28px; max-width: 760px; }
+  .variant { max-width: 980px; margin-bottom: 28px; border: 1px solid #2a2c36; border-radius: 12px; background: #16171d; overflow: hidden; }
+  .variant header { padding: 12px 14px 10px; }
+  .variant h2 { margin: 0; font-size: 15px; }
+  .variant h2 span { color: var(--accent); margin-right: 6px; }
+  .variant p { margin: 4px 0 0; color: var(--muted); font-size: 12.5px; }
+  .stage { background: #050608; padding: 18px; display: grid; gap: 18px; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 22px; }
+  /* Kontext: so sitzt der Würfel in der Info-Zeile unter den Buttons */
+  .context { display: inline-flex; align-items: center; gap: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 12px; text-shadow: 0 1px 3px #000; }
+  .piles { display: flex; flex-direction: column; gap: 1px; line-height: 1.25; }
+  .pile { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; font-style: italic; }
+  .pile svg { width: 11px; height: 11px; opacity: 0.8; }
+
+</style>
+<link rel="stylesheet" href="player-cube.css">
+<style>
+
+  .views { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .view { display: grid; gap: 14px; justify-items: start; }
+  .view h3 { margin: 0; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+  .view .row { gap: 4px; flex-wrap: nowrap; }
+</style>
+</head>
+<body>
+  <h1>Spielerwürfel in CSS</h1>
+  <p class="lead">Ein Würfel-Bauteil, vier Materialien – jedes in denselben drei Blickwinkeln. Licht von oben links. Je Blickwinkel: groß, alle Spielerfarben in Originalgröße und im Kontext der Info-Zeile.</p>
+
+  <section class="variant" data-material="acrylic">
+    <header>
+      <h2><span>A</span>Acryl klar</h2>
+      <p>Durchsichtig wie auf den Fotos: Rückkanten scheinen durch, Glanzstreifen oben, farbiger Schatten.</p>
+    </header>
+    <div class="stage"></div>
+  </section>
+
+  <section class="variant" data-material="acrylic semi">
+    <header>
+      <h2><span>B</span>Acryl halbklar</h2>
+      <p>Zwischen klar und satiniert: noch gut durchsichtig, Reflexe etwas gestreut.</p>
+    </header>
+    <div class="stage"></div>
+  </section>
+
+  <section class="variant" data-material="acrylic frosted">
+    <header>
+      <h2><span>C</span>Acryl satiniert</h2>
+      <p>Milchig wie die matten Würfel: von innen leuchtend, Rückkanten nur angedeutet.</p>
+    </header>
+    <div class="stage"></div>
+  </section>
+
+  <section class="variant" data-material="">
+    <header>
+      <h2><span>D</span>Opak</h2>
+      <p>Der bisherige 3D-Würfel ohne Durchsicht – zum Vergleich.</p>
+    </header>
+    <div class="stage"></div>
+  </section>
+
+<script src="player-cube.js"></script>
+<script>
+  // Nur fürs Mockup: je Material dieselben drei Blickwinkel erzeugen
+  const colors = Object.values(PLAYER_COLORS);
+  const views = [['view-iso', 'Isometrisch'], ['view-slight', 'Leicht von oben'], ['view-top', 'Draufsicht']];
+  const cube = (material, view, color, size) => createPlayerCube({material, view, color, size});
+  const pileHtml = '<span class="piles"><span class="pile"><svg viewBox="0 0 24 24" fill="#fff"><rect x="5" y="3" width="14" height="18" rx="2"/></svg>194</span><span class="pile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/></svg>11</span></span>';
+  for (const section of document.querySelectorAll('.variant')) {
+    const material = section.dataset.material;
+    const stage = section.querySelector('.stage');
+    const grid = document.createElement('div');
+    grid.className = 'views';
+    for (const [view, label] of views) {
+      const column = document.createElement('div');
+      column.className = 'view';
+      column.innerHTML = '<h3>' + label + '</h3>';
+      column.appendChild(cube(material, view, colors[0], 72));
+      const row = document.createElement('div');
+      row.className = 'row';
+      colors.forEach((color) => row.appendChild(cube(material, view, color, 20)));
+      column.appendChild(row);
+      const context = document.createElement('div');
+      context.className = 'context';
+      context.appendChild(cube(material, view, colors[0], 20));
+      context.insertAdjacentHTML('beforeend', pileHtml);
+      column.appendChild(context);
+      grid.appendChild(column);
+    }
+    stage.appendChild(grid);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+/* Spielerwürfel in CSS – gemeinsam für player-cube.html und player-cube-usecases.html.
+   Ein Bauteil: .cube3d + Blickwinkel (view-iso / view-slight / view-top) + Material (acrylic, acrylic semi, acrylic frosted, ohne = opak).
+   Farbe über --cube-color, Größe über --cube-size. Licht von oben links.
+
+   Reflexionen wie bei echtem Acryl: hart und weich zugleich, je nach Stelle –
+   - polierte Kanten fangen das Licht als scharfe, helle Linie (hart)
+   - Spiegelung der Lichtquelle auf der Oberseite: harte Vorderkante, weich auslaufend
+   - kleiner, scharfer Glanzpunkt an der Ecke zum Licht
+   - Licht, das unten rechts wieder austritt, leuchtet weich im Material
+   - Innenreflexion der Oberseite als feine, harte Linie in der Front
+   Die Materialien stellen nur Stärke/Weichheit dieser Reflexionen ein. */
+
+.cube3d {
+  --cube-color: rgb(153, 17, 0);
+  --cube-size: 20px;
+  --cube-tilt: -24deg;
+  --cube-turn: 24deg;
+  /* Reflexionsstärken (Material überschreibt sie) */
+  --edge: 0.55;         /* harte Lichtkanten */
+  --spec: 0.6;          /* Spiegelung der Lichtquelle */
+  --spec-soft: 1%;      /* 0 = messerscharfe Vorderkante, größer = weicher */
+  --glint: 0.85;        /* Glanzpunkt an der Ecke */
+  --inner: 0;           /* weiche Innenreflexion */
+  --inner-line: 0;      /* harte Innenlinie */
+  --exit-glow: 0.25;    /* Leuchten, wo das Licht austritt */
+  --face-alpha: 0%;     /* Durchsichtigkeit der Flächen */
+  --back-edge: 0;       /* durchscheinende Rückkanten */
+  /* In klein wirken harte 1px-Kanten und scharfe Glanzlichter viel zu stark: --detail (0…1, aus der Größe,
+     player-cube.js) dämpft und weicht alle Reflexe ab, je kleiner der Würfel ist. */
+  --detail: 1;
+  --edge-shown: calc(var(--edge) * var(--detail));
+  --spec-shown: calc(var(--spec) * (0.4 + 0.6 * var(--detail)));
+  --spec-soft-shown: calc(var(--spec-soft) + (1 - var(--detail)) * 16%);
+  --glint-shown: calc(var(--glint) * (0.25 + 0.75 * var(--detail)));
+  --inner-line-shown: calc(var(--inner-line) * var(--detail));
+  --back-edge-shown: calc(var(--back-edge) * (0.3 + 0.7 * var(--detail)));
+  position: relative;
+  flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: calc(var(--cube-size) * 1.5); height: calc(var(--cube-size) * 1.5);
+}
+
+/* Schatten auf dem Untergrund, nach unten rechts versetzt (weg vom Licht) */
+.cube3d::after {
+  content: "";
+  position: absolute;
+  left: 28%; right: 2%; bottom: 4%; height: 24%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  filter: blur(calc(var(--cube-size) * 0.06));
+  z-index: 0;
+}
+.cube3d .body {
+  position: relative; z-index: 1;
+  width: var(--cube-size); height: var(--cube-size);
+  transform-style: preserve-3d;
+  /* innen: Würfel drehen (tilt/turn); außen: kleine Neigung im Bildschirmraum, z. B. für die Draufsicht */
+  transform: rotateX(var(--screen-tilt, 0deg)) rotateY(var(--screen-turn, 0deg)) rotateX(var(--cube-tilt)) rotateY(var(--cube-turn));
+}
+.cube3d .face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+}
+
+/* ---------- Oberseite: hellste Fläche ---------- */
+.cube3d .top {
+  transform: rotateX(90deg) translateZ(calc(var(--cube-size) / 2));
+  background:
+    /* Spiegelung: harte Vorderkante, weich auslaufend */
+    linear-gradient(125deg,
+      transparent 20%,
+      rgb(255 255 255 / var(--spec-shown)) calc(20.5% + var(--spec-soft-shown)),
+      rgb(255 255 255 / calc(var(--spec-shown) * 0.3)) 34%,
+      transparent 52%),
+    /* scharfer Glanzpunkt an der vorderen linken Ecke */
+    radial-gradient(circle at var(--glint-at, 7% 93%),
+      rgb(255 255 255 / var(--glint-shown)) 0 2%,
+      transparent calc(4.5% + var(--spec-soft-shown))),
+    linear-gradient(135deg,
+      color-mix(in srgb, color-mix(in srgb, var(--cube-color), white var(--top-light, 45%)), transparent var(--face-alpha)),
+      color-mix(in srgb, color-mix(in srgb, var(--cube-color), white var(--top-dark, 18%)), transparent var(--face-alpha)));
+  box-shadow:
+    inset 0 -1px calc(0.5px + (1 - var(--detail)) * 1px) rgb(255 255 255 / var(--edge-shown)),                   /* Vorderkante */
+    inset 1px 0 calc(0.5px + (1 - var(--detail)) * 1px) rgb(255 255 255 / calc(var(--edge-shown) * 0.8)),        /* linke Kante */
+    inset 0 0 0 1px rgb(255 255 255 / calc(var(--edge-shown) * 0.25)),
+    inset 0 0 calc(var(--cube-size) * 0.25) rgb(255 255 255 / calc(var(--inner) * 0.6));
+}
+
+/* ---------- Linke Seite: zum Licht gewandt ---------- */
+.cube3d .left {
+  transform: rotateY(-90deg) translateZ(calc(var(--cube-size) / 2));
+  background:
+    radial-gradient(circle at 70% 85%, color-mix(in srgb, color-mix(in srgb, var(--cube-color), white 40%), transparent calc(100% - var(--exit-glow) * 100%)) 0%, transparent 60%),
+    linear-gradient(170deg,
+      color-mix(in srgb, color-mix(in srgb, var(--cube-color), white 22%), transparent var(--face-alpha)),
+      color-mix(in srgb, color-mix(in srgb, var(--cube-color), black 8%), transparent var(--face-alpha)));
+  box-shadow:
+    inset -1px 0 calc(0.5px + (1 - var(--detail)) * 1px) rgb(255 255 255 / calc(var(--edge-shown) * 0.9)),       /* vordere senkrechte Kante */
+    inset 0 1px calc(0.5px + (1 - var(--detail)) * 1px) rgb(255 255 255 / calc(var(--edge-shown) * 0.8)),        /* obere Kante */
+    inset 0 0 calc(var(--cube-size) * 0.2) rgb(0 0 0 / calc(0.25 - var(--inner)));
+}
+
+/* ---------- Front: vom Licht weg, dort tritt es wieder aus ---------- */
+.cube3d .front {
+  transform: translateZ(calc(var(--cube-size) / 2));
+  background:
+    /* Innenreflexion der Oberseite: feine, harte Linie knapp unter der Kante */
+    linear-gradient(180deg,
+      transparent 12%,
+      rgb(255 255 255 / var(--inner-line-shown)) 12.5% 14%,
+      transparent 14.5%),
+    /* weiche senkrechte Innenreflexion */
+    linear-gradient(90deg,
+      transparent 8%,
+      rgb(255 255 255 / var(--inner)) 16%,
+      transparent 32%),
+    /* austretendes Licht leuchtet weich unten rechts */
+    radial-gradient(circle at 78% 82%,
+      color-mix(in srgb, color-mix(in srgb, var(--cube-color), white 45%), transparent calc(100% - var(--exit-glow) * 100%)) 0%,
+      transparent 62%),
+    linear-gradient(160deg,
+      color-mix(in srgb, color-mix(in srgb, var(--cube-color), black 4%), transparent var(--face-alpha)),
+      color-mix(in srgb, color-mix(in srgb, var(--cube-color), black 30%), transparent var(--face-alpha)));
+  box-shadow:
+    inset 0 1px calc(0.5px + (1 - var(--detail)) * 1px) rgb(255 255 255 / var(--edge-shown)),                    /* obere Kante */
+    inset 1px 0 calc(0.5px + (1 - var(--detail)) * 1px) rgb(255 255 255 / calc(var(--edge-shown) * 0.7)),        /* linke Kante */
+    inset -1px 0 calc(0.5px + (1 - var(--detail)) * 1px) rgb(255 255 255 / calc(var(--edge-shown) * 0.2)),
+    inset 0 0 calc(var(--cube-size) * 0.2) rgb(0 0 0 / calc(0.3 - var(--inner)));
+}
+
+/* ---------- Abgewandte Flächen: opak unsichtbar (Rückseite), beim Acryl scheinen sie durch ---------- */
+.cube3d .back,
+.cube3d .right,
+.cube3d .bottom {
+  background: linear-gradient(160deg,
+    color-mix(in srgb, var(--cube-color), black 12%),
+    color-mix(in srgb, var(--cube-color), black 38%));
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / calc(var(--edge-shown) * 0.3));
+}
+.cube3d .back { transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2)); }
+.cube3d .right { transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2)); }
+.cube3d .bottom { transform: rotateX(-90deg) translateZ(calc(var(--cube-size) / 2)); }
+.cube3d.acrylic .back,
+.cube3d.acrylic .right,
+.cube3d.acrylic .bottom {
+  background: color-mix(in srgb, var(--cube-color), transparent 78%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / var(--back-edge-shown));
+}
+
+/* ---------- Materialien ---------- */
+/* Acryl klar: durchsichtig, Kanten und Spiegelung messerscharf, Innenlinie sichtbar */
+.cube3d.acrylic {
+  --edge: 0.75;
+  --spec: 0.7;
+  --spec-soft: 0.3%;
+  --glint: 1;
+  --inner: 0.2;
+  --inner-line: 0.35;
+  --exit-glow: 0.55;
+  --face-alpha: 58%;
+  /* klares Acryl bleibt satt in der Farbe, das Licht macht der Glanz – nicht weiß einmischen */
+  --top-light: 14%;
+  --top-dark: 0%;
+  --back-edge: 0.3;
+}
+.cube3d.acrylic .face { backface-visibility: visible; }
+/* farbiger statt schwarzer Schatten: Licht bricht durchs Material */
+.cube3d.acrylic::after {
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--cube-color), transparent 30%), transparent);
+  height: 34%; left: 30%; right: -6%; bottom: 0;
+}
+/* halbklar: zwischen klar und satiniert – noch gut durchsichtig, leuchtet von innen,
+   der Untergrund wirkt durch das Material leicht unscharf */
+.cube3d.acrylic.semi {
+  --edge: 0.6;
+  --spec: 0.58;
+  --spec-soft: 5%;
+  --glint: 0.7;
+  --inner: 0.34;
+  --inner-line: 0.15;
+  --exit-glow: 0.9;
+  --face-alpha: 34%;
+  --back-edge: 0.18;
+  --top-light: 38%;
+  --top-dark: 10%;
+}
+.cube3d.acrylic.semi .back,
+.cube3d.acrylic.semi .right,
+.cube3d.acrylic.semi .bottom { background: color-mix(in srgb, var(--cube-color), transparent 83%); }
+/* Leuchten aus dem Inneren: farbiger Kern auf jeder Fläche, dazu ein satterer farbiger Schatten */
+.cube3d.acrylic.semi .top,
+.cube3d.acrylic.semi .front,
+.cube3d.acrylic.semi .left {
+  filter: drop-shadow(0 0 calc(var(--cube-size) * 0.08) color-mix(in srgb, var(--cube-color), transparent 55%));
+}
+.cube3d.acrylic.semi::after {
+  background: radial-gradient(closest-side, color-mix(in srgb, color-mix(in srgb, var(--cube-color), white 20%), transparent 15%), transparent);
+}
+/* Unschärfe des Untergrunds: flache Ebene unter dem Würfel mit Weichzeichner (3D-Flächen selbst können
+   keinen backdrop-filter). Grundfläche des Würfels in der Draufsicht, mit ihm mitgedreht. */
+.cube3d.acrylic.semi.view-top::before {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  width: var(--cube-size); height: var(--cube-size);
+  transform: translate(-50%, -50%) rotate(var(--cube-turn));
+  border-radius: calc(var(--cube-size) * 0.08);
+  backdrop-filter: blur(calc(var(--cube-size) * 0.07));
+  z-index: 0;
+}
+
+/* satiniert: milchig – Reflexionen weich gestreut, Rückkanten nur angedeutet */
+.cube3d.acrylic.frosted {
+  --edge: 0.45;
+  --spec: 0.45;
+  --spec-soft: 12%;
+  --glint: 0.45;
+  --inner: 0.14;
+  --inner-line: 0;
+  --exit-glow: 0.7;
+  --face-alpha: 10%;
+  --back-edge: 0.08;
+}
+.cube3d.acrylic.frosted .back,
+.cube3d.acrylic.frosted .right,
+.cube3d.acrylic.frosted .bottom { background: color-mix(in srgb, var(--cube-color), transparent 88%); }
+/* Satiniert leuchtet wie von innen beleuchtet: helle Flächen, farbiger Schein um den Würfel und Lichthof
+   auf dem Untergrund. In allen Blickwinkeln, damit er überall gleich wirkt. */
+.cube3d.acrylic.frosted {
+  --inner: 0.3;
+  --exit-glow: 0.95;
+  --top-light: 40%;
+  --top-dark: 16%;
+}
+.cube3d.acrylic.frosted .top,
+.cube3d.acrylic.frosted .front,
+.cube3d.acrylic.frosted .left {
+  filter: drop-shadow(0 0 calc(var(--cube-size) * 0.16) color-mix(in srgb, color-mix(in srgb, var(--cube-color), white 30%), transparent 20%));
+}
+/* Lichthof: weiches farbiges Leuchten rund um den Würfel */
+.cube3d.acrylic.frosted::before {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    color-mix(in srgb, color-mix(in srgb, var(--cube-color), white 30%), transparent 25%),
+    color-mix(in srgb, var(--cube-color), transparent 70%) 60%,
+    transparent);
+  filter: blur(calc(var(--cube-size) * 0.12));
+  z-index: 0;
+}
+.cube3d.acrylic.frosted::after {
+  background: radial-gradient(closest-side, color-mix(in srgb, color-mix(in srgb, var(--cube-color), white 25%), transparent 10%), transparent);
+}
+
+/* ---------- Blickwinkel ---------- */
+/* Draufsicht: Oberseite zeigt zum Betrachter, nur schmale Streifen der Seiten sichtbar.
+   Pflicht überall, wo der Würfel auf einer flach gezeigten Fläche liegt (z. B. auf einer Karte).
+   --cube-turn dreht den Würfel um die senkrechte Achse (im Bild im Uhrzeigersinn). Die Beleuchtung
+   wird dabei echt nachgerechnet statt mitgedreht: Licht bleibt oben links (Bildwinkel 225°). */
+.cube3d.view-top {
+  --cube-tilt: -90deg;
+  --cube-turn: 0deg;
+  --screen-tilt: 9deg; --screen-turn: 9deg;
+  --light-angle: 225deg;
+  /* Glanzpunkt dort, wo die Oberseite zum Licht zeigt – gegen die Drehung zurückgerechnet */
+  --glint-at:
+    calc(50% + cos(var(--light-angle) + var(--cube-turn)) * 40%)
+    calc(50% + sin(var(--light-angle) + var(--cube-turn)) * 40%);
+}
+/* Oberseite: Spiegelung und Verlauf gegen die Drehung zurückdrehen, damit sie zum Licht passen */
+.cube3d.view-top .top {
+  background:
+    linear-gradient(calc(125deg + var(--cube-turn)),
+      transparent 20%,
+      rgb(255 255 255 / var(--spec-shown)) calc(20.5% + var(--spec-soft-shown)),
+      rgb(255 255 255 / calc(var(--spec-shown) * 0.3)) 34%,
+      transparent 52%),
+    radial-gradient(circle at var(--glint-at),
+      rgb(255 255 255 / var(--glint-shown)) 0 2%,
+      transparent calc(4.5% + var(--spec-soft-shown))),
+    linear-gradient(calc(135deg + var(--cube-turn)),
+      color-mix(in srgb, color-mix(in srgb, var(--cube-color), white var(--top-light, 45%)), transparent var(--face-alpha)),
+      color-mix(in srgb, color-mix(in srgb, var(--cube-color), white var(--top-dark, 18%)), transparent var(--face-alpha)));
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / calc(var(--edge-shown) * 0.55)),
+    inset 0 0 calc(var(--cube-size) * 0.25) rgb(255 255 255 / calc(var(--inner) * 0.6));
+}
+/* Seiten: Helligkeit aus dem Winkel zwischen Flächennormale und Licht (Lambert) */
+.cube3d.view-top .front { --face-angle: 90deg; }
+.cube3d.view-top .left { --face-angle: 180deg; }
+.cube3d.view-top .right { --face-angle: 0deg; }
+.cube3d.view-top .back { --face-angle: 270deg; }
+.cube3d.view-top .front,
+.cube3d.view-top .left,
+.cube3d.view-top .right,
+.cube3d.view-top .back {
+  --light: cos(var(--face-angle) + var(--cube-turn) - var(--light-angle));
+  background:
+    color-mix(in srgb,
+      color-mix(in srgb,
+        color-mix(in srgb, var(--cube-color), white calc(max(0, var(--light)) * 35%)),
+        black calc(max(0, -1 * var(--light)) * 42%)),
+      transparent var(--face-alpha));
+  /* Kante zur Oberseite fängt Licht, wenn die Seite zum Licht zeigt */
+  box-shadow:
+    inset 0 1px calc(0.5px + (1 - var(--detail)) * 1px) rgb(255 255 255 / calc(var(--edge-shown) * max(0.15, var(--light)))),
+    inset 0 0 0 1px rgb(255 255 255 / calc(var(--edge-shown) * 0.2));
+}
+.cube3d.view-slight { --cube-tilt: -24deg; --cube-turn: 24deg; }
+.cube3d.view-iso { --cube-tilt: -35.26deg; --cube-turn: 45deg; }

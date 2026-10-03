@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spielerwürfel – Use Cases</title>
+<link rel="stylesheet" href="player-cube.css">
+<style>
+  :root {
+    --text: #e8e9ee;
+    --muted: #a9abb6;
+    --accent: #6c5ce7;
+    --glass: rgba(40, 42, 54, 0.45);
+    --glass-hover: rgba(60, 63, 80, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.16);
+    --surface: rgba(30, 31, 38, 0.82);
+    --btn: 40px;
+    --gap: 6px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 16px 48px;
+    background: #0d0e13;
+    color: var(--text);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .lead { color: var(--muted); margin: 0 0 28px; max-width: 760px; }
+  .case { max-width: 1400px; margin-bottom: 28px; border: 1px solid #2a2c36; border-radius: 12px; background: #16171d; overflow: hidden; }
+  .case > header { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px 20px; padding: 12px 14px 12px; }
+  .case h2 { margin: 0; font-size: 15px; }
+  .case h2 span { color: #7b6cf6; margin-right: 6px; }
+  .case header p { margin: 4px 0 0; color: var(--muted); font-size: 12.5px; max-width: 620px; }
+
+  /* Blickwinkel-Umschalter je Use Case */
+  .angle { display: inline-flex; padding: 3px; border-radius: 8px; background: #0d0e13; border: 1px solid #2a2c36; }
+  .angle button { border: 0; background: none; color: var(--muted); font: inherit; font-size: 12px; padding: 5px 10px; border-radius: 6px; cursor: pointer; }
+  .angle button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+
+  .materials { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); }
+  .material { padding: 12px; border-top: 1px solid #2a2c36; }
+  .material + .material { border-left: 1px solid #2a2c36; }
+  .material h3 { margin: 0 0 12px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+  /* Spielszene: Sternenhimmel */
+  .scene {
+    position: relative;
+    min-height: 230px;
+    padding: 10px;
+    border-radius: 10px;
+    background:
+      radial-gradient(1px 1px at 20% 30%, #fff8 50%, transparent 51%),
+      radial-gradient(1px 1px at 70% 15%, #fff6 50%, transparent 51%),
+      radial-gradient(1px 1px at 40% 80%, #fff5 50%, transparent 51%),
+      radial-gradient(1px 1px at 85% 60%, #fff7 50%, transparent 51%),
+      #050608;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ---------- 1) Setup: Spielerkarte mit neutralem Hintergrund ---------- */
+  .players { display: grid; gap: 10px; width: 100%; }
+  .player-card {
+    padding: 10px 12px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: var(--surface);
+    backdrop-filter: blur(8px);
+    display: grid; gap: 10px;
+  }
+  .player-top { display: flex; align-items: center; gap: 8px; }
+  .player-position { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.1); }
+  .player-name { flex: 1; min-width: 0; height: 30px; padding: 0 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.3); color: var(--text); font: inherit; font-size: 13px; }
+  .player-first { flex: none; color: #f5c84c; font-size: 15px; }
+  /* Farbwahl: alle Würfel in Draufsicht, der gewählte steht in anderem Winkel und ist ausgewählt markiert */
+  .swatches { display: flex; justify-content: space-between; }
+  .swatch {
+    position: relative;
+    width: 30px; height: 30px;
+    padding: 0; border: 0; background: none; cursor: pointer;
+    display: grid; place-items: center;
+    border-radius: 8px;
+    transition: transform 160ms ease, opacity 160ms ease;
+  }
+  .swatch:hover:not(:disabled) { transform: translateY(-2px); }
+  /* Auswahl wie überall in der App (selection_highlight.less): lila Rahmen, leichter Glow, 20 % lila getönt */
+  .swatch[aria-pressed="true"] {
+    background: rgb(87 85 217 / 0.2);
+    box-shadow: 0 0 0 2px rgb(87, 85, 217), 0 0 8px 2px rgb(87 85 217 / 0.55);
+  }
+  .swatch:disabled { opacity: 0.25; cursor: not-allowed; filter: saturate(0.4); }
+
+  /* Spielerfarbe an der Karte sichtbar machen (drei Varianten) */
+  .player-card { position: relative; overflow: hidden; }
+  .player-card.accent-line::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px;
+    background: var(--player-color);
+  }
+  .player-card.accent-line { padding-top: 14px; }
+  .player-card.accent-header .player-top {
+    margin: -10px -12px 0; padding: 8px 12px;
+    background: var(--player-color);
+  }
+  .player-card.accent-header .player-name { background: rgb(0 0 0 / 0.35); border-color: rgb(255 255 255 / 0.2); }
+  .player-card.accent-header .player-position { background: rgb(0 0 0 / 0.3); }
+  .player-card.accent-bar { border-left: 5px solid var(--player-color); }
+
+  /* Umschalter im Kopf eines Use Case */
+  .controls { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: flex-end; }
+  .control { display: inline-flex; align-items: center; gap: 8px; }
+  .control-label { font-size: 11.5px; color: var(--muted); }
+  .player-extra { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+
+  /* ---------- 2) Ecke: Variante E ---------- */
+  .scene--corner { justify-content: flex-end; align-items: flex-start; }
+  .toolbar { display: grid; grid-template-columns: repeat(2, var(--btn)); grid-template-areas: "language info" "help settings" "status status"; gap: var(--gap); }
+  .btn { width: var(--btn); height: var(--btn); display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); border-radius: 8px; background: var(--glass); backdrop-filter: blur(8px) saturate(1.15); cursor: pointer; color: #fff; }
+  .btn:hover { background: var(--glass-hover); }
+  .btn svg { width: 24px; height: 24px; }
+  .flag { width: 24px; height: 16px; border-radius: 2px; background: linear-gradient(#000 0 33%, #dd0000 33% 66%, #ffce00 66%); }
+  .language { grid-area: language; } .info { grid-area: info; } .help { grid-area: help; } .settings { grid-area: settings; }
+  .status {
+    grid-area: status;
+    display: grid; grid-template-columns: repeat(2, var(--btn)); column-gap: var(--gap);
+    align-items: center; justify-items: center;
+    margin-top: 4px; padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 12px; text-shadow: 0 1px 3px #000;
+  }
+  .piles { display: flex; flex-direction: column; gap: 1px; line-height: 1.25; }
+  .pile { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; font-style: italic; }
+  .pile svg { width: 11px; height: 11px; opacity: 0.8; }
+
+  /* ---------- 3) Karte: Marker „diese Runde schon benutzt“ ---------- */
+  .card-pair { display: flex; gap: 12px; align-items: flex-start; }
+  .card { position: relative; width: 150px; }
+  .card img { display: block; width: 100%; border-radius: 9px; }
+  /* oben neben den Kosten, wie im Spiel (Card.vue: card-cost-and-tags) */
+  /* tief genug, dass er auch schräg gedreht nicht über den Kartenrand ragt */
+  .card .cube3d { position: absolute; left: 34%; top: 13%; transform: translate(-50%, -50%); }
+  .card figcaption { margin-top: 6px; font-size: 11.5px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+  <h1>Spielerwürfel in den drei Use Cases</h1>
+  <p class="lead">Derselbe Würfel in allen Fällen. Grundwinkel überall Draufsicht, passend zur flachen Oberfläche; Umschalter im Kopf jedes Falls zum Vergleich. Spalten: Acryl klar, Acryl halbklar, Acryl satiniert, Opak.</p>
+
+  <section class="case" data-case="setup">
+    <header>
+      <div>
+        <h2><span>1</span>Setup: Spielerkarte mit Farbwahl</h2>
+        <p>Neutrale Karte, Farbwahl über die Würfel: alle in Draufsicht, der gewählte in eigenem Winkel mit lila Auswahlrahmen. Die Spielerfarbe zeigt die Karte zusätzlich als Linie, Kopfbereich oder Leiste. Würfel anklicken probiert es aus.</p>
+      </div>
+    </header>
+    <div class="materials"></div>
+  </section>
+
+  <section class="case" data-case="corner">
+    <header>
+      <div>
+        <h2><span>2</span>Ecke: Erinnerung an die eigene Farbe</h2>
+        <p>Variante E: Buttons oben, darunter Würfel und Stapelzahlen im selben Spaltenraster.</p>
+      </div>
+    </header>
+    <div class="materials"></div>
+  </section>
+
+  <section class="case" data-case="card">
+    <header>
+      <div>
+        <h2><span>3</span>Karte: Aktion diese Runde schon benutzt</h2>
+        <p>Wie am Tisch: der eigene Würfel liegt auf der Aktionskarte. Die Karte sieht man von oben, also immer Draufsicht. Oben neben den Kosten wie im Spiel, jedes Mal zufällig gedreht – die Beleuchtung wird dafür echt berechnet. Benutzte Karte anklicken legt den Würfel neu hin.</p>
+      </div>
+    </header>
+    <div class="materials"></div>
+  </section>
+
+<script src="player-cube.js"></script>
+<script>
+  // Nur fürs Mockup: jeden Use Case in drei Materialien rendern, Varianten je Use Case umschaltbar
+  const MATERIALS = [['acrylic', 'Acryl klar'], ['acrylic semi', 'Acryl halbklar'], ['acrylic frosted', 'Acryl satiniert'], ['', 'Opak']];
+  const VIEWS = [['view-iso', 'Isometrisch'], ['view-slight', 'Leicht von oben'], ['view-top', 'Draufsicht']];
+  const CARD_IMAGE = 'data:image/jpeg;base64,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';
+  const ICONS = {
+    info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
+    help: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.6v.6M12 17v.5"/></svg>',
+    settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2.8l1.6 2.3 2.8-.6.6 2.8 2.3 1.6-1.2 2.6 1.2 2.6-2.3 1.6-.6 2.8-2.8-.6L12 21.2l-1.6-2.3-2.8.6-.6-2.8-2.3-1.6 1.2-2.6-1.2-2.6 2.3-1.6.6-2.8 2.8.6z"/><path d="M12 9l2.6 1.5v3L12 15l-2.6-1.5v-3z"/></svg>',
+  };
+  const PILES = '<span class="piles"><span class="pile"><svg viewBox="0 0 24 24" fill="#fff"><rect x="5" y="3" width="14" height="18" rx="2"/></svg>194</span><span class="pile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/></svg>11</span></span>';
+  // Gewählte Farben je Spieler (für den Setup-Fall, gemeinsam für alle Materialspalten)
+  const chosen = ['red', 'blue'];
+
+  // Umschalter je Use Case; der Zustand liegt in state[case]
+  const CONTROLS = {
+    setup: [
+      {key: 'selectedView', label: 'Gewählter Würfel', options: [['view-iso', 'Isometrisch'], ['view-slight', 'Leicht von oben']], initial: 'view-iso'},
+      {key: 'accent', label: 'Spielerfarbe', options: [['header', 'Kopfbereich'], ['line', 'Linie oben'], ['bar', 'Leiste links']], initial: 'header'},
+    ],
+    corner: [{key: 'view', label: 'Blickwinkel', options: VIEWS, initial: 'view-top'}],
+    card: [],
+  };
+  const state = {};
+
+  function renderSetup(scene, material, {selectedView, accent}) {
+    const players = document.createElement('div');
+    players.className = 'players';
+    chosen.forEach((color, index) => {
+      const card = document.createElement('div');
+      card.className = 'player-card accent-' + accent;
+      card.style.setProperty('--player-color', PLAYER_COLORS[color]);
+      card.innerHTML = `<div class="player-top"><span class="player-position">${index + 1}</span><input class="player-name" value="${['Jens', 'Daniel'][index]}"><span class="player-first">${index === 0 ? '★' : '☆'}</span></div><div class="swatches"></div><div class="player-extra"><span>Beginner?</span><span>TR Boost 0</span></div>`;
+      const swatches = card.querySelector('.swatches');
+      for (const [name, value] of Object.entries(PLAYER_COLORS)) {
+        const selected = name === color;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'swatch';
+        button.title = name;
+        button.setAttribute('aria-pressed', String(selected));
+        button.disabled = chosen.some((other, otherIndex) => otherIndex !== index && other === name);
+        // Alle Würfel in Draufsicht, der gewählte steht im zweiten Winkel
+        button.appendChild(createPlayerCube({material, view: selected ? selectedView : 'view-top', color: value, size: selected ? 17 : 16}));
+        button.addEventListener('click', () => { chosen[index] = name; renderCase(document.querySelector('[data-case="setup"]')); });
+        swatches.appendChild(button);
+      }
+      players.appendChild(card);
+    });
+    scene.appendChild(players);
+  }
+
+  function renderCorner(scene, material, {view}) {
+    scene.classList.add('scene--corner');
+    const toolbar = document.createElement('div');
+    toolbar.className = 'toolbar';
+    toolbar.innerHTML = `<button class="btn language"><span class="flag"></span></button><button class="btn info">${ICONS.info}</button><button class="btn help">${ICONS.help}</button><button class="btn settings">${ICONS.settings}</button><div class="status"></div>`;
+    const status = toolbar.querySelector('.status');
+    status.appendChild(createPlayerCube({material, view, color: PLAYER_COLORS.red, size: 20}));
+    status.insertAdjacentHTML('beforeend', PILES);
+    scene.appendChild(toolbar);
+  }
+
+  // Die Karte sieht man von oben: der Würfel darauf immer in Draufsicht
+  function renderCard(scene, material) {
+    const pair = document.createElement('div');
+    pair.className = 'card-pair';
+    for (const used of [true, false]) {
+      const figure = document.createElement('figure');
+      figure.className = 'card';
+      figure.style.margin = '0';
+      figure.innerHTML = `<img src="${CARD_IMAGE}" alt=""><figcaption>${used ? 'benutzt' : 'frei'}</figcaption>`;
+      if (used) {
+        // zufällig hingelegt: Drehung um die senkrechte Achse, Licht wird dafür neu berechnet
+        figure.appendChild(createPlayerCube({material, view: 'view-top', color: PLAYER_COLORS.red, size: 22, spin: Math.round(Math.random() * 360)}));
+        figure.style.cursor = 'pointer';
+        figure.title = 'Anklicken: neu hinlegen';
+        figure.addEventListener('click', () => renderCase(document.querySelector('[data-case="card"]')));
+      }
+      pair.appendChild(figure);
+    }
+    scene.appendChild(pair);
+  }
+
+  const RENDERERS = {setup: renderSetup, corner: renderCorner, card: renderCard};
+
+  function renderCase(section) {
+    const caseName = section.dataset.case;
+    const grid = section.querySelector('.materials');
+    grid.innerHTML = '';
+    for (const [material, label] of MATERIALS) {
+      const column = document.createElement('div');
+      column.className = 'material';
+      column.innerHTML = `<h3>${label}</h3><div class="scene"></div>`;
+      RENDERERS[caseName](column.querySelector('.scene'), material, state[caseName]);
+      grid.appendChild(column);
+    }
+    section.querySelectorAll('.angle button').forEach((button) => {
+      button.setAttribute('aria-pressed', String(state[caseName][button.dataset.key] === button.dataset.value));
+    });
+  }
+
+  for (const section of document.querySelectorAll('.case')) {
+    const caseName = section.dataset.case;
+    state[caseName] = {};
+    const controls = document.createElement('div');
+    controls.className = 'controls';
+    for (const control of CONTROLS[caseName]) {
+      state[caseName][control.key] = control.initial;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'control';
+      wrapper.innerHTML = `<span class="control-label">${control.label}</span>`;
+      const group = document.createElement('div');
+      group.className = 'angle';
+      for (const [value, label] of control.options) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.key = control.key;
+        button.dataset.value = value;
+        button.textContent = label;
+        button.addEventListener('click', () => { state[caseName][control.key] = value; renderCase(section); });
+        group.appendChild(button);
+      }
+      wrapper.appendChild(group);
+      controls.appendChild(wrapper);
+    }
+    if (CONTROLS[caseName].length > 0) {
+      section.querySelector('header').appendChild(controls);
+    }
+    renderCase(section);
+  }
+</script>
+</body>
+</html>
