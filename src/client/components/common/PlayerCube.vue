@@ -6,7 +6,10 @@
       <!-- Shadows on the ground plane, inside the 3D scene so they share the cube's perspective and rotation
            (only shown in the top view, player_cube.less) -->
       <i class="player-cube-shadow player-cube-shadow--rim"></i>
-      <i class="player-cube-shadow player-cube-shadow--cast"></i>
+      <!-- Cast shadow as the cube's base swept away from the light: layered copies that all overlap at the base
+           (dark, hard) and only the last ones reach the tip (light, soft) -->
+      <i v-for="step in CAST_SHADOW_STEPS" :key="'cast' + step" class="player-cube-shadow player-cube-shadow--cast"
+        :style="{'--shadow-step': String((step - 1) / (CAST_SHADOW_STEPS - 1))}"></i>
       <i v-for="face in FACES" :key="face" :class="'player-cube-face player-cube-face--' + face"></i>
     </span>
   </span>
@@ -33,6 +36,7 @@ const props = withDefaults(defineProps<{
 });
 
 const FACES = ['back', 'right', 'bottom', 'top', 'left', 'front'] as const;
+const CAST_SHADOW_STEPS = 6;
 
 // Hard 1px edges and sharp highlights look far too strong on small cubes:
 // 0.2 for small cubes up to 1 from about 64px, all reflections are scaled by it
