@@ -1,7 +1,7 @@
 <template>
   <div id="card-list" class="card-list" :class="getLanguageCssClass()" @keydown.esc="filtersOpen = false">
     <header class="card-list-header">
-      <h1 v-i18n>Cards List</h1>
+      <PageTitle title="Cards List"/>
       <div class="card-list-search">
         <span class="card-list-search-icon" aria-hidden="true"></span>
         <input ref="filter" type="search" class="card-list-search-input" autocomplete="off" :placeholder="searchPlaceholder" :title="$t('Hint: ^ at the start finds titles that begin with the text')" v-model="filterText">
@@ -177,6 +177,7 @@ import {SegmentOption} from '@/client/components/create/createGameChoices';
 import Colony from '@/client/components/colonies/Colony.vue';
 import GlobalEvent from '@/client/components/turmoil/GlobalEvent.vue';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
+import PageTitle from '@/client/components/common/PageTitle.vue';
 import LanguageIcon from '@/client/components/LanguageIcon.vue';
 import Milestone from '@/client/components/Milestone.vue';
 import Award from '@/client/components/Award.vue';
@@ -228,6 +229,7 @@ const HIGHLIGHT_DELAY_MS = 120;
 export default defineComponent({
   name: 'CardList',
   components: {
+    PageTitle,
     CardListCardGrid,
     CardListCostRange,
     GlobalEvent,
