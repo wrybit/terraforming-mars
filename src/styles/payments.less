@@ -59,6 +59,14 @@
     min-width: 0;
   }
 
+  // Cost as a flex row like the remainder: as a block with an inline-flex inside, the line box (baseline +
+  // descender) pushed the number a few pixels below the remainder in the same row
+  .payments_total {
+    display: flex;
+    align-items: center;
+    align-self: center;
+  }
+
   .payments_divider--rest {
     grid-column: 2;
   }
