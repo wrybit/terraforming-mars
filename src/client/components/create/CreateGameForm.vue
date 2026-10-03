@@ -5,13 +5,21 @@
       <h1 v-i18n>Create New Game</h1>
       <div class="create-game-head-actions">
         <label class="create-game-icon-button" :title="$t('Load settings from file')">
-          <i class="icon icon-upload"></i>
+          <!-- Import/export icons: arrow perpendicular to a hex edge, into the tile (import) or out of it (export);
+               the mask cuts the hex where the shaft crosses it. Mask ids only exist once on the page. -->
+          <svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <mask id="create-game-import-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"/><path :d="importArrowPath" stroke="#000" stroke-width="6"/></mask>
+            <polygon mask="url(#create-game-import-cut)" points="11.5,5.2 18.43,9.2 18.43,17.2 11.5,21.2 4.57,17.2 4.57,9.2"/><path :d="importArrowPath"/>
+          </svg>
           <span class="create-game-head-label" v-i18n>Import</span>
           <input style="display: none" type="file" accept=".json" id="settings-file" ref="file" @change="uploadSettings()">
         </label>
-        <button type="button" class="create-game-icon-button" :title="$t('Save settings to file')" @click="downloadSettings()"><i class="icon icon-download"></i><span class="create-game-head-label" v-i18n>Export</span></button>
+        <button type="button" class="create-game-icon-button" :title="$t('Save settings to file')" @click="downloadSettings()"><svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <mask id="create-game-export-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"/><path :d="exportArrowPath" stroke="#000" stroke-width="6"/></mask>
+            <polygon class="create-game-head-icon-filled" mask="url(#create-game-export-cut)" points="12.5,5.2 19.43,9.2 19.43,17.2 12.5,21.2 5.57,17.2 5.57,9.2"/><path :d="exportArrowPath"/>
+          </svg><span class="create-game-head-label" v-i18n>Export</span></button>
         <!-- Share link: the URL already carries the settings anyway, the button just copies it -->
-        <button type="button" class="create-game-icon-button" :title="$t('Copy link with these settings')" @click="copySettingsLink()"><svg class="create-game-link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span class="create-game-head-label">{{ $t(settingsLinkCopied ? 'Link copied' : 'Copy link') }}</span></button>
+        <button type="button" class="create-game-icon-button" :title="$t('Copy link with these settings')" @click="copySettingsLink()"><svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span class="create-game-head-label">{{ $t(settingsLinkCopied ? 'Link copied' : 'Copy link') }}</span></button>
         <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings"/>
       </div>
       <PageToolbar/>
@@ -498,6 +506,13 @@ export default defineComponent({
       ?.setAttribute('content', this.previousViewport);
   },
   computed: {
+    // Arrow paths are used twice (drawn + as mask cut), so they live here once
+    importArrowPath(): string {
+      return 'M5.44 2.7L11.75 13.63M12.33 10.89L11.75 13.63L9.09 12.77';
+    },
+    exportArrowPath(): string {
+      return 'M12.25 13.63L18.56 2.7M15.9 3.56L18.56 2.7L19.15 5.44';
+    },
     wikiUrls(): typeof RULEBOOK_URLS & typeof WIKI_URLS {
       return {...RULEBOOK_URLS, ...WIKI_URLS};
     },
