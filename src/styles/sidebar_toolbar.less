@@ -1,6 +1,6 @@
 // From the two-column layout on, the left sidebar (Sidebar.vue) becomes an icon group at the top right:
 // buttons as a 2×2 block (language, game details, help, settings), colonies below if needed;
-// below, at the same gap, the display-only status: own player cube and pile sizes in the same column grid.
+// below, at a slightly larger gap, the display-only status: own player cube and pile sizes in the same column grid.
 // Temperature, oxygen and oceans are shown at Mars.
 // Icons smaller, each on a frosted-glass button.
 
@@ -89,7 +89,8 @@
     grid-area: status;
     grid-template-columns: repeat(2, @toolbar-button-size);
     column-gap: @toolbar-gap;
-    // No separator line and no extra margin: same gap as between the buttons
+    // No separator line; only slightly more than the button gap, so status and buttons still read as one group
+    margin-top: 2px;
   }
 
   // Spectator without own color: no cube, so the piles keep their place under the right column
