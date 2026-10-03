@@ -81,9 +81,8 @@
     grid-area: status;
     grid-template-columns: repeat(2, @toolbar-button-size);
     column-gap: @toolbar-gap;
-    margin-top: 4px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    // No separator line: the larger gap alone sets the status apart from the buttons (law of proximity)
+    margin-top: 12px;
   }
 
   .sidebar_cont > a:has(.sidebar_icon--colonies) {
