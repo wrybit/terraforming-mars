@@ -157,5 +157,21 @@
   "Adapted from": "Nach",
   "Terraforming Mars: solo rules summary": "Terraforming Mars: Zusammenfassung der Solo-Regeln",
   "• Ares Extreme (Terraforming condition): All unprotected hazards must be removed for solo mode victory.": "• Ares Extrem (Terraforming-Bedingung): Alle ungeschützten Gefahrenplättchen müssen entfernt sein, um die Solo-Herausforderung zu gewinnen.",
-  "Political Parties": "Politische Parteien"
+  "Political Parties": "Politische Parteien",
+  "Standard Mode (:tag:mars:): you win if every global parameter is maxed before time runs out.": "Standardmodus (:tag:mars:): Du gewinnst, wenn alle globalen Parameter vor Ablauf der Zeit ihr Maximum erreicht haben.",
+  ":expansion:venus: This includes Venus if Venus Next is included.": ":expansion:venus: Dazu gehört auch die Venus, wenn mit „Nächster Halt: Venus“ gespielt wird.",
+  ":expansion:themoon: This includes Moon tracks if The Moon is included with Moon track completion required.": ":expansion:themoon: Dazu gehören auch die Mondleisten, wenn mit „Der Mond“ und verpflichtender Vervollständigung der Mondleisten gespielt wird.",
+  "63 TR Mode (:icon:tr:): you win if your TR is 63 or higher when time runs out.": "63-TW-Modus (:icon:tr:): Du gewinnst, wenn dein TW bei Ablauf der Zeit 63 oder höher ist.",
+  "63 TR Mode (:icon:tr:): placing greenery during the final greenery conversion can still raise oxygen and your TR. That TR counts toward your score, but not toward winning.": "63-TW-Modus (:icon:tr:): Grünflächen aus der letzten Umwandlung können den Sauerstoff und deinen TW noch erhöhen. Dieser TW zählt für die Wertung, aber nicht für den Sieg.",
+  "63 TR Mode only (:icon:tr:): an extra standard project, Buffer Gas, is available. Spend 16 M€ to increase your TR 1 step.": "Nur im 63-TW-Modus (:icon:tr:): Ein zusätzliches Standardprojekt, Puffergas, ist verfügbar. Bezahle 16 M€, um deinen TW um 1 zu erhöhen.",
+  ":expansion:venus: Venus Next: Standard Mode (:tag:mars:) also requires Venus to be maxed to win.": ":expansion:venus: Nächster Halt: Venus: Der Standardmodus (:tag:mars:) erfordert zum Sieg zusätzlich, dass die Venus ihr Maximum erreicht.",
+  ":expansion:prelude: Prelude: play 12 generations instead of 14.": ":expansion:prelude: Präludium: Spiele 12 statt 14 Generationen.",
+  ":expansion:colony: Colonies: decrease your M€ production 2 steps at the start of the game. One extra colony tile is dealt, and you choose one colony tile to remove from the game.": ":expansion:colony: Kolonien: Senke zu Spielbeginn deine M€-Produktion um 2. Ein zusätzliches Kolonieplättchen wird ausgelegt, und du wählst ein Kolonieplättchen, das aus dem Spiel entfernt wird.",
+  ":expansion:turmoil: Turmoil: the Reds ruling bonus gives you 1 TR if your TR is 20 or less. Some global events have special solo text.": ":expansion:turmoil: Aufruhr: Der Regierungsbonus der Roten gibt dir 1 TW, wenn dein TW 20 oder weniger beträgt. Einige globale Ereignisse haben einen eigenen Solo-Text.",
+  ":expansion:agendas: Agendas: The alternative ruling bonus takes 1 TR from you if your TR is higher than 20.": ":expansion:agendas: Agenden: Der alternative Regierungsbonus nimmt dir 1 TW, wenn dein TW höher als 20 ist.",
+  ":expansion:themoon: The Moon:": ":expansion:themoon: Der Mond:",
+  "Standard Mode (:tag:mars:), with the option to require Moon track completion, also requires the Moon tracks to be maxed to win, and you play 2 more generations.": "Standardmodus (:tag:mars:) mit verpflichtender Vervollständigung der Mondleisten: Zum Sieg müssen zusätzlich die Mondleisten ihr Maximum erreichen, und du spielst 2 Generationen mehr.",
+  "63 TR Mode (:icon:tr:): no changes.": "63-TW-Modus (:icon:tr:): keine Änderungen.",
+  ":expansion:ares: Ares Extreme: Standard Mode (:tag:mars:) also requires you to remove all unprotected hazards to win. With World Government Terraforming, you may remove an unprotected hazard instead of raising a global parameter.": ":expansion:ares: Ares Extrem: Der Standardmodus (:tag:mars:) erfordert zum Sieg zusätzlich, dass du alle ungeschützten Gefahrenplättchen entfernst. Beim Terraforming der Weltregierung darfst du statt einen globalen Parameter zu erhöhen ein ungeschütztes Gefahrenplättchen entfernen.",
+  "Adapted from [Terraforming Mars: solo rules summary](https://github.com/MartianZoo/player-resources/blob/main/solo-rules-summary.md)": "Nach [Terraforming Mars: Zusammenfassung der Solo-Regeln](https://github.com/MartianZoo/player-resources/blob/main/solo-rules-summary.md)"
 }
