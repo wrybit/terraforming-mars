@@ -12,6 +12,17 @@
 }
 
 .card-container {
+  // Player cube on a used action card (Card.vue): top left next to the cost, low enough to stay inside the
+  // card at any angle; above the content, never catches clicks
+  .card-player-cube {
+    position: absolute;
+    left: 34%;
+    top: 13%;
+    z-index: 4;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
   .project-icon-expansion-container {
     flex-direction: row;
     display: flex;
@@ -2597,10 +2608,6 @@
     margin-top: -10px;
     justify-content: space-between;
     position: relative;
-    // Find a way to move this out.
-    .board-cube {
-      transform: scale(1.5);
-    }
     .card-cost, .card-old-cost {
       float: left;
       font-family: Prototype, sans-serif;

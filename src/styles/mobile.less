@@ -203,7 +203,7 @@ html.tm-mobile {
   }
 
   // ---------- Buttons of the desktop sidebar (Sidebar.vue) as a bar at the top of the Mars screen ----------
-  // Left: what belongs to your own game (color, language, card deck); right, set apart: info, help, settings
+  // Left: display-only status (own cube, pile sizes), no button surface; right, set apart: language, info, help, settings
   .mb-toolbar.sidebar_cont {
     order: 0;
     position: static;
@@ -225,26 +225,17 @@ html.tm-mobile {
       display: none;
     }
 
-    .preferences_player {
+    // Status: cube and pile sizes side by side
+    .sidebar-status {
       order: 1;
-      writing-mode: horizontal-tb;
-      transform: none;
+      column-gap: 10px;
+      padding-left: 2px;
     }
 
-    .sidebar_item--language {
-      order: 2;
-      position: relative;
-      inset: auto;
-    }
+    // Right group set apart: starts with the language (margin in the language rule below)
 
-    > .deck-sizes {
-      order: 3;
-    }
-
-    // Right group set apart (doubled selector, otherwise the general button rule resets the margin)
     .sidebar_item.sidebar_item--info {
       order: 4;
-      margin-left: auto;
     }
 
     .sidebar_item--help {
@@ -281,9 +272,13 @@ html.tm-mobile {
       background-position: center;
     }
 
-    // Language: flag exactly centred in the button
+    // Language: first button of the right group, set apart (doubled selector, otherwise the general button rule
+    // resets the margin); flag exactly centred in the button
     .sidebar_item.sidebar_item--language {
+      order: 3;
+      margin-left: auto;
       position: relative;
+      inset: auto;
     }
 
     .language-flag {
@@ -293,30 +288,6 @@ html.tm-mobile {
       transform: translate(-50%, -50%);
     }
 
-    // Card deck: icon on the left, draw pile and discard pile to its right (tile wider instead of taller)
-    .deck-sizes.sidebar_item {
-      width: auto;
-      padding: 0 8px;
-      gap: 6px;
-    }
-
-    .sidebar_icon--cards {
-      display: flex;
-      align-items: center;
-      width: auto;
-      padding-left: 28px;
-      background-size: 24px;
-      background-position: left center;
-    }
-
-    .deck-size {
-      position: static;
-      width: auto;
-      margin: 0;
-      font-size: 11px;
-      line-height: 1.2;
-      text-align: left;
-    }
   }
 
   // ---------- Turn status (only on the Mars screen, as in the mockup) ----------

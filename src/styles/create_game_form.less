@@ -573,19 +573,25 @@
   padding: 4px 14px 14px;
 }
 
+// Neutral card: the chosen color shows in the header and in the standing cube
 .create-game-player {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 10px;
+  padding: 0 10px 10px;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: @create-game-radius-small;
+  background: rgba(0, 0, 0, 0.22);
 }
 
+// Header in the player color, edge to edge
 .create-game-player-top {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin: 0 -10px;
+  padding: 8px 10px;
 }
 
 .create-game-player-position {
@@ -645,24 +651,35 @@
 .create-game-swatches {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  justify-content: space-between;
+  gap: 2px;
 }
 
+// Swatch = player cube (PlayerCube.vue); the chosen one is marked like every selection (selection_highlight.less)
 .create-game-swatch {
-  width: 22px;
-  height: 22px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
   padding: 0;
-  border: 2px solid rgba(255, 255, 255, 0.25);
-  border-radius: 50%;
+  border: 0;
+  border-radius: 8px;
+  background: none;
   cursor: pointer;
+  transition: transform 160ms ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
 
   &--selected {
-    border-color: #fff;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.45);
+    background: fade(@selection-color, 20%);
+    box-shadow: 0 0 0 2px @selection-color, 0 0 8px 2px fade(@selection-color, 55%);
   }
 
   &:disabled {
     opacity: 0.25;
+    filter: saturate(0.4);
     cursor: not-allowed;
   }
 }

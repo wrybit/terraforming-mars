@@ -1,6 +1,7 @@
 // From the two-column layout on, the left sidebar (Sidebar.vue) becomes an icon group at the top right:
-// own player color top left, below it the cards tile (draw pile/discard pile),
-// stacked on the right: language, game details, help, settings. Temperature, oxygen and oceans are shown at Mars.
+// buttons as a 2×2 block (language, game details, help, settings), colonies below if needed;
+// below a divider the display-only status: own player cube and pile sizes in the same column grid.
+// Temperature, oxygen and oceans are shown at Mars.
 // Icons smaller, each on a frosted-glass button.
 
 @toolbar-button-size: 40px;
@@ -57,12 +58,12 @@
     width: auto;
     height: auto;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: repeat(2, @toolbar-button-size);
     grid-template-areas:
-      "player language"
-      "cards info"
-      "cards help"
-      "colonies settings";
+      "language info"
+      "help settings"
+      "colonies ."
+      "status status";
     gap: @toolbar-gap;
     align-items: start;
     z-index: @column-overlay-z-index - 10; // below the right column's overlays – otherwise the icons poke into them
@@ -75,15 +76,14 @@
     display: none;
   }
 
-  // Own player color at the very top; the old bar showed the cube rotated and vertical
-  .sidebar_cont .preferences_player {
-    grid-area: player;
-    writing-mode: horizontal-tb;
-    transform: none;
-  }
-
-  .sidebar_cont > .deck-sizes {
-    grid-area: cards;
+  // Status below the buttons: same column grid, cube under the left column, piles under the right one
+  .sidebar_cont .sidebar-status {
+    grid-area: status;
+    grid-template-columns: repeat(2, @toolbar-button-size);
+    column-gap: @toolbar-gap;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .sidebar_cont > a:has(.sidebar_icon--colonies) {
@@ -112,39 +112,8 @@
     position: static;
   }
 
-  // Player color and pile sizes are display only: no pointer, no hover highlight
-  .sidebar_cont .sidebar_item.preferences_player,
-  .sidebar_cont .sidebar_item.deck-sizes {
-    cursor: default;
-
-    &:hover {
-      background: @toolbar-glass-background;
-    }
-  }
-
   .sidebar_cont .sidebar_icon {
     .toolbar-glass-icon();
-  }
-
-  // Cards tile: icon plus pile sizes, hence taller
-  .sidebar_cont .sidebar_item_shortcut-long {
-    height: auto;
-    padding: 6px 0;
-  }
-
-  .sidebar_cont .sidebar_icon--cards {
-    height: auto;
-    padding-top: @toolbar-icon-size;
-    background-size: @toolbar-icon-size;
-    background-position: top center;
-  }
-
-  // Pile sizes below the icon in the flow (absolute in the old bar), so the tile grows with them
-  .sidebar_cont .deck-size {
-    position: static;
-    margin: 4px 0 0;
-    text-align: center;
-    line-height: 1.2;
   }
 
   // Language: flag positioned absolutely around the button centre (toolbar-language-flag);
@@ -201,5 +170,37 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+}
+
+// Status of the sidebar (Sidebar.vue): display only, deliberately no button surface
+.sidebar-status {
+  display: grid;
+  grid-template-columns: auto auto;
+  place-items: center;
+  font-size: 12px;
+  color: #fff;
+  text-shadow: 0 1px 3px #000;
+  cursor: default;
+}
+
+.sidebar-status-piles {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1.25;
+}
+
+.sidebar-status-pile {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: Prototype, sans-serif;
+  font-variant-numeric: tabular-nums;
+
+  svg {
+    width: 11px;
+    height: 11px;
+    opacity: 0.8;
   }
 }
