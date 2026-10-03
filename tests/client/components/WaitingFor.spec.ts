@@ -49,6 +49,24 @@ describe('WaitingFor', () => {
     expect(wrapper.text()).to.not.include('Not your turn');
   });
 
+  it('shows no waiting text above the tabs for an optional input (draft)', () => {
+    const wrapper = shallowMount(WaitingFor, {
+      ...globalConfig,
+      global: {
+        ...globalConfig.global,
+        stubs: {'PlayerInputFactory': {template: '<div></div>'}, 'WaitingForTabs': {template: '<div class="stub-tabs"></div>'}},
+      },
+      props: {
+        playerView: playerView as PlayerViewModel,
+        players: [thisPlayer as PublicPlayerModel],
+        waitingfor: {type: 'option', title: 'test', buttonLabel: 'save', optional: true},
+      },
+    });
+    // The status tab inside WaitingForTabs replaces the text
+    expect(wrapper.find('.stub-tabs').exists()).to.be.true;
+    expect(wrapper.text()).to.not.include('Waiting for other players');
+  });
+
   it('renders player-input-factory directly for the action menu (or)', () => {
     const wrapper = shallowMount(WaitingFor, {
       ...globalConfig,

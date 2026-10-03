@@ -1,6 +1,7 @@
 <template>
   <div>
-  <template v-if="waitingfor === undefined || waitingfor.optional">
+  <!-- Inputs in the tab container show whom we are waiting for as a status tab (WaitingForTabs.vue) instead of this text -->
+  <template v-if="waitingfor === undefined || (waitingfor.optional && buildsOwnTabs)">
     <template v-if="waitingfor === undefined">
       {{ $t('Not your turn to take any actions') }}
     </template>
@@ -15,7 +16,7 @@
     <!-- Action menu (OrOptions) and start selection (SelectInitialCards) build their tabs themselves;
          every other input goes into the tab container -->
     <!-- Simple decisions (choiceMenu.ts) are not an action menu: one tab with tiles -->
-    <PlayerInputFactory v-if="(waitingfor.type === 'or' && !isChoiceMenu(waitingfor)) || waitingfor.type === 'initialCards'"
+    <PlayerInputFactory v-if="buildsOwnTabs"
                           :players="playerView.players"
                           :playerView="playerView"
                           :playerinput="waitingfor"
@@ -316,6 +317,11 @@ export default defineComponent({
     documentTitleTimer = undefined;
   },
   computed: {
+    // Action menu (OrOptions) and start selection build their own tabs; everything else goes into WaitingForTabs
+    buildsOwnTabs(): boolean {
+      const input = this.waitingfor;
+      return input !== undefined && ((input.type === 'or' && !isChoiceMenu(input)) || input.type === 'initialCards');
+    },
     // The input comes as its own prop; the spectator passes none.
     titleView(): TitleView {
       return {game: this.playerView.game, thisPlayer: this.playerView.thisPlayer, waitingFor: this.waitingfor};
