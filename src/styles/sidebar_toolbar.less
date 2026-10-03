@@ -1,6 +1,6 @@
 // From the two-column layout on, the left sidebar (Sidebar.vue) becomes an icon group at the top right:
 // buttons as a 2×2 block (language, game details, help, settings), colonies below if needed;
-// below a divider the display-only status: own player cube and pile sizes in the same column grid.
+// below, at the same gap, the display-only status: own player cube and pile sizes in the same column grid.
 // Temperature, oxygen and oceans are shown at Mars.
 // Icons smaller, each on a frosted-glass button.
 
@@ -70,6 +70,14 @@
     background: none; // no bar background anymore (preferences_acting_player / _nonacting_player)
   }
 
+  // Without colonies the empty colonies row would add a second gap above the status
+  .sidebar_cont:not(:has(.sidebar_icon--colonies)) {
+    grid-template-areas:
+      "language info"
+      "help settings"
+      "status status";
+  }
+
   // Global parameters and Turmoil party are shown elsewhere (Mars, Turmoil at the board)
   .sidebar_cont .global_params,
   .sidebar_cont > div:has(.party-name-indicator) {
@@ -81,8 +89,7 @@
     grid-area: status;
     grid-template-columns: repeat(2, @toolbar-button-size);
     column-gap: @toolbar-gap;
-    // No separator line: the larger gap alone sets the status apart from the buttons (law of proximity)
-    margin-top: 12px;
+    // No separator line and no extra margin: same gap as between the buttons
   }
 
   // Spectator without own color: no cube, so the piles keep their place under the right column
