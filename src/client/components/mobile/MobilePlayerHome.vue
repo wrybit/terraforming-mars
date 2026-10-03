@@ -323,7 +323,7 @@ export default defineComponent({
     },
     nextStepLabel(): string {
       const next = this.setupSteps[this.setupStep + 1];
-      return next === undefined ? '' : next.title + ' →';
+      return next === undefined ? '' : next.title;
     },
     // Setup phase: no card played yet (corporation, preludes, initial cards are being chosen)
     isSetupPhase(): boolean {
