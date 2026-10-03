@@ -3,6 +3,7 @@ import {comparing, compound, Comparator, reversed} from '@/common/utils/Ordering
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {CardType} from '@/common/cards/CardType';
 import {CardResource} from '@/common/CardResource';
+import {cardCost} from '@/client/utils/cardFilter';
 
 export type SortKey = 'cost' | 'type' | 'resource' | 'vp';
 
@@ -17,10 +18,6 @@ export const SORT_OPTIONS: ReadonlyArray<{key: SortKey, label: string}> = [
 
 const TYPE_ORDER: ReadonlyArray<CardType> = [CardType.CORPORATION, CardType.PRELUDE, CardType.AUTOMATED, CardType.ACTIVE, CardType.EVENT];
 const RESOURCE_ORDER: ReadonlyArray<CardResource> = Object.values(CardResource);
-
-function cost(card: CardModel): number {
-  return card.calculatedCost ?? getCard(card.name)?.cost ?? 0;
-}
 
 /*
  * Position of the card's type when sorting: corporations, preludes, then green, blue, and red.
@@ -58,10 +55,10 @@ function vp(card: CardModel): number {
 }
 
 const COMPARATORS: Record<SortKey, Comparator<CardModel>> = {
-  cost: comparing(cost),
-  type: compound(comparing(typeIndex), comparing(cost)),
-  resource: compound(comparing(resourceIndex), comparing(cost)),
-  vp: compound(comparing((card) => -vp(card)), comparing(cost)),
+  cost: comparing(cardCost),
+  type: compound(comparing(typeIndex), comparing(cardCost)),
+  resource: compound(comparing(resourceIndex), comparing(cardCost)),
+  vp: compound(comparing((card) => -vp(card)), comparing(cardCost)),
 };
 
 /**

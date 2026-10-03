@@ -6,19 +6,26 @@
     </div>
     <div class="other_player_cont menu">
         <div v-if="player.tableau.length > 0" class="player_home_block">
-            <div>
-                <div v-for="card in getCardsByType(player.tableau, [CardType.CORPORATION])" :key="card.name" class="cardbox">
+            <!-- Own filter and sorting for played cards (cardFilterState.ts), no cost filter -->
+            <CardFilterBar v-if="player.tableau.length > 1" :cards="player.tableau" :filter="playedCardFilter" :context="filterContext" class="other-player-filter">
+              <template #sort="{compact}">
+                <CardSortMenu :modelValue="playedCardsSortOrder" :compact="compact" @update:modelValue="setPlayedSortOrder"/>
+              </template>
+            </CardFilterBar>
+            <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(playedCardFilter)"/>
+            <div class="other-player-cards">
+                <div v-for="card in cardsOf([CardType.CORPORATION])" :key="card.name" class="cardbox" :class="visibilityClass(card)">
                     <Card :card="card" :actionUsed="isCardActivated(card, player)" :cubeColor="player.color"/>
                 </div>
-                <div v-for="card in getCardsByType(player.tableau, [CardType.CEO])" :key="card.name" class="cardbox">
+                <div v-for="card in cardsOf([CardType.CEO])" :key="card.name" class="cardbox" :class="visibilityClass(card)">
                     <Card :card="card" :actionUsed="isCardActivated(card, player)" :cubeColor="player.color"/>
                 </div>
 
-                <div v-for="card in sortActiveCards(getCardsByType(player.tableau, [CardType.ACTIVE]))" :key="card.name" class="cardbox">
+                <div v-for="card in cardsOf([CardType.ACTIVE])" :key="card.name" class="cardbox" :class="visibilityClass(card)">
                     <Card :card="card" :actionUsed="isCardActivated(card, player)" :cubeColor="player.color"/>
                 </div>
-                <StackedCards :cards="getCardsByType(player.tableau, [CardType.AUTOMATED, CardType.PRELUDE])" :player="player"/>
-                <StackedCards :cards="getCardsByType(player.tableau, [CardType.EVENT])" :player="player"/>
+                <StackedCards v-if="cardsOf([CardType.AUTOMATED, CardType.PRELUDE]).length > 0" :cards="cardsOf([CardType.AUTOMATED, CardType.PRELUDE])" :visibility="visibilityOf" :player="player"/>
+                <StackedCards v-if="cardsOf([CardType.EVENT]).length > 0" :cards="cardsOf([CardType.EVENT])" :visibility="visibilityOf" :player="player"/>
             </div>
         </div>
         <div v-if="player.selfReplicatingRobotsCards.length > 0" class="player_home_block">
@@ -47,6 +54,13 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import {CardType} from '@/common/cards/CardType';
 import {getCardsByType, isCardActivated} from '@/client/utils/CardUtils';
 import {sortActiveCards} from '@/client/utils/ActiveCardsSortingOrder';
+import {CardModel} from '@/common/models/CardModel';
+import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
+import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
+import CardSortMenu from '@/client/components/cardfilter/CardSortMenu.vue';
+import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
+import {cardVisibility, CardVisibility, playedCardFilter, playedCardsSortOrder, unmatchedCards} from '@/client/utils/cardFilterState';
+import {SortOrder, sortCards} from '@/client/utils/SortOrder';
 
 // Unregister functions per instance (not reactive, hence outside of data)
 const unregisterByInstance = new WeakMap<object, () => void>();
@@ -67,6 +81,9 @@ export default defineComponent({
     AppButton,
     StackedCards,
     Card,
+    CardFilterBar,
+    CardFilterEmptyHint,
+    CardSortMenu,
   },
   // Escape closes the open card view (a modal in the two-column layout)
   mounted() {
@@ -84,6 +101,26 @@ export default defineComponent({
     unregisterByInstance.delete(this);
   },
   methods: {
+    resetCardFilter,
+    visibilityOf(card: CardModel): CardVisibility {
+      return cardVisibility(card, playedCardFilter, this.filterContext);
+    },
+    visibilityClass(card: CardModel): string | undefined {
+      const visibility = this.visibilityOf(card);
+      return visibility === 'shown' ? undefined : 'card-filter-' + visibility;
+    },
+    // Cards of the given types in their group: sorted when a sorting is chosen, otherwise as before
+    // (active cards in action order, the rest in playing order)
+    cardsOf(types: Array<CardType>): ReadonlyArray<CardModel> {
+      const cards = getCardsByType(this.player.tableau, types);
+      if (playedCardsSortOrder.value !== undefined) {
+        return sortCards(cards, playedCardsSortOrder.value);
+      }
+      return types.includes(CardType.ACTIVE) ? sortActiveCards(cards) : cards;
+    },
+    setPlayedSortOrder(value: SortOrder | undefined): void {
+      playedCardsSortOrder.value = value;
+    },
     closeOnEscape(event: KeyboardEvent) {
       if (event.key === 'Escape' && this.isVisible()) {
         this.hideMe();
@@ -99,6 +136,18 @@ export default defineComponent({
     },
   },
   computed: {
+    playedCardFilter(): typeof playedCardFilter {
+      return playedCardFilter;
+    },
+    playedCardsSortOrder(): SortOrder | undefined {
+      return playedCardsSortOrder.value;
+    },
+    filterContext(): CardFilterContext {
+      return {withCost: false};
+    },
+    nothingShown(): boolean {
+      return this.player.tableau.length > 1 && unmatchedCards.value === 'hide' && this.player.tableau.every((card) => this.visibilityOf(card) !== 'shown');
+    },
     CardType(): typeof CardType {
       return CardType;
     },

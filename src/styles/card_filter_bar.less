@@ -1,0 +1,728 @@
+@import (reference) "./mobile.less";
+@import (reference) "./selection_highlight.less";
+
+// Card filter and sorting in one row above a card list (CardFilterBar.vue, CardSortMenu.vue, CardFilterOptions.vue):
+// hand tab, play, sell and played cards. Law of proximity: chips of one group 4 px apart, groups 12 px,
+// the label sits 5 px above its chips.
+@card-filter-accent: @selection-color;
+@card-filter-accent-fill: fade(@selection-color, 20%);
+@card-filter-chip: rgba(255, 255, 255, 0.06);
+@card-filter-chip-hover: rgba(255, 255, 255, 0.12);
+@card-filter-chip-line: rgba(255, 255, 255, 0.14);
+@card-filter-text: #ece9e2;
+@card-filter-muted: #9aa0b8;
+@card-filter-menu-background: #171a26;
+@card-filter-pill-height: 30px;
+@card-filter-row-height: 34px;
+// Same inner space left and right, so the sorting doesn't stick to the edge
+@card-filter-row-padding: 10px;
+
+// ---------- The row ----------
+.card-filter-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: @card-filter-row-height;
+  margin: 0 0 12px;
+  padding: 0 @card-filter-row-padding;
+  font-size: 13px;
+  line-height: 1;
+
+  // Heading of the hand tab as part of the row
+  .hand-cards-panel__title {
+    flex: none;
+    margin: 0 6px 0 0;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  .btn {
+    flex: none;
+    margin: 0;
+  }
+}
+
+// Inside a choice grid the row and the hint span all columns
+.choice-block > .card-filter-bar,
+.choice-block > .card-filter-empty {
+  grid-column: 1 / -1;
+}
+
+// Card selections: the row replaces the old toolbar (select_card_toolbar.less) – one line, never wrapping
+.card-filter-bar.select-card-toolbar {
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+html.tm-mobile .card-filter-bar.select-card-toolbar {
+  min-width: 100%;
+  height: @card-filter-row-height;
+}
+
+.card-filter-bar__filter {
+  position: relative;
+  display: flex;
+  flex: none;
+}
+
+// Active filters: removable chips; if they don't fit they scroll sideways
+.card-filter-bar__chips {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  height: @card-filter-row-height;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.card-filter-bar__count {
+  flex: none;
+  color: @card-filter-muted;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+
+  b {
+    color: @card-filter-text;
+  }
+
+  // Without a filter the count says nothing new – keeps its space so the row doesn't jump
+  &--idle {
+    visibility: hidden;
+  }
+}
+
+// ---------- Buttons of the row ----------
+.card-bar-pill {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: @card-filter-pill-height;
+  padding: 0 10px;
+  border: 1px solid @card-filter-chip-line;
+  border-radius: (@card-filter-pill-height / 2);
+  background: @card-filter-chip;
+  color: @card-filter-text;
+  font: 600 13px Ubuntu, system-ui, sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    background: @card-filter-chip-hover;
+  }
+
+  &--on {
+    border-color: @card-filter-accent;
+    background: @card-filter-accent-fill;
+  }
+
+  &--open {
+    background: fade(@selection-color, 35%);
+  }
+
+  // Phone: × next to the filter button clears all filters (button and × as one pair)
+  &--clear {
+    margin-left: -1px;
+    padding: 0 9px;
+    border-color: @card-filter-accent;
+    border-radius: 0 (@card-filter-pill-height / 2) (@card-filter-pill-height / 2) 0;
+    background: @card-filter-accent-fill;
+    color: #c9c8ff;
+    font-size: 17px;
+    font-weight: 400;
+  }
+}
+
+.card-bar-pill:has(+ .card-bar-pill--clear) {
+  border-radius: (@card-filter-pill-height / 2) 0 0 (@card-filter-pill-height / 2);
+}
+
+.card-bar-pill__badge {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: @card-filter-accent;
+  color: #fff;
+  font-size: 11px;
+}
+
+.card-bar-caret {
+  width: 10px;
+  height: 10px;
+  opacity: 0.7;
+}
+
+.card-sort-icon {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+// Card type sorting: three bars in the type colors
+.card-sort-icon--types {
+  grid-template-columns: repeat(3, 5px);
+  gap: 1px;
+
+  i {
+    width: 5px;
+    height: 12px;
+    border-radius: 1px;
+  }
+}
+
+// ---------- Drop-down menus over the cards ----------
+.card-bar-menu {
+  position: absolute;
+  top: (@card-filter-pill-height + 10px);
+  left: 0;
+  z-index: 40;
+  display: grid;
+  gap: 12px;
+  width: max-content;
+  max-width: min(560px, calc(100vw - 40px));
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: @card-filter-menu-background;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  animation: card-bar-menu-in 0.14s ease-out;
+  cursor: default;
+}
+
+@keyframes card-bar-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+// Nose of the filter menu pointing at the filter button
+.card-filter-menu::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 22px;
+  width: 12px;
+  height: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2px 0 0;
+  background: @card-filter-menu-background;
+  transform: rotate(45deg);
+}
+
+.card-filter-menu__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: @card-filter-muted;
+  font-size: 12.5px;
+}
+
+.card-filter-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #b3b2ff;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+// Sorting: "Manual" and the menu button as one pair, menu at the right edge
+.card-sort {
+  position: relative;
+  display: flex;
+  flex: none;
+
+  > .card-sort__manual {
+    border-radius: (@card-filter-pill-height / 2) 0 0 (@card-filter-pill-height / 2);
+  }
+
+  > .card-sort__manual + .card-sort__more {
+    margin-left: -1px;
+    border-radius: 0 (@card-filter-pill-height / 2) (@card-filter-pill-height / 2) 0;
+  }
+
+  .card-bar-menu {
+    right: 0;
+    left: auto;
+    gap: 2px;
+    width: 230px;
+    padding: 6px;
+  }
+}
+
+.card-sort-menu__row {
+  display: grid;
+  grid-template-columns: 1fr 32px 32px;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px 2px 10px;
+  border-radius: 8px;
+
+  &--on {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  button {
+    height: 28px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: none;
+    color: @card-filter-muted;
+    font-size: 15px;
+    cursor: pointer;
+
+    &:hover {
+      background: @card-filter-chip-hover;
+      color: @card-filter-text;
+    }
+  }
+
+  .card-sort-menu__direction--on {
+    border-color: @card-filter-accent;
+    background: @card-filter-accent-fill;
+    color: #fff;
+  }
+}
+
+.card-sort-menu__label,
+.card-sort-menu__manual {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: @card-filter-text;
+}
+
+.card-sort-menu__manual {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  font: 13px Ubuntu, system-ui, sans-serif;
+  text-align: left;
+  cursor: pointer;
+
+  &--on {
+    border-color: @card-filter-accent;
+    background: @card-filter-accent-fill;
+  }
+}
+
+// ---------- Filter groups (menu and sheet) ----------
+.card-filter-options {
+  display: grid;
+  gap: 12px;
+}
+
+.card-filter-options__group {
+  display: grid;
+  gap: 5px;
+
+  // Display of non-matching cards: separated from the filters
+  &--display {
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+.card-filter-options__label {
+  color: @card-filter-muted;
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.card-filter-options__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.card-filter-chip {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: @card-filter-pill-height;
+  padding: 0 10px;
+  border: 1px solid @card-filter-chip-line;
+  border-radius: (@card-filter-pill-height / 2);
+  background: @card-filter-chip;
+  color: @card-filter-text;
+  font: 13px Ubuntu, system-ui, sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    background: @card-filter-chip-hover;
+  }
+
+  small {
+    color: @card-filter-muted;
+    font-size: 11px;
+  }
+
+  &--on {
+    border-color: @card-filter-accent;
+    background: @card-filter-accent-fill;
+
+    small {
+      color: #c9c8ff;
+    }
+  }
+
+  // Tags and resources: icon only, count as a small badge
+  &--icon {
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 50%;
+
+    small {
+      position: absolute;
+      right: -4px;
+      bottom: -4px;
+      display: grid;
+      place-items: center;
+      box-sizing: border-box;
+      min-width: 15px;
+      height: 15px;
+      padding: 0 3px;
+      border-radius: 8px;
+      background: #2a2f40;
+      color: @card-filter-text;
+      font-size: 10px;
+    }
+  }
+
+  &--icon&--on small {
+    background: @card-filter-accent;
+    color: #fff;
+  }
+
+  // Active filter in the row: smaller, with ×
+  &--active {
+    height: 28px;
+    gap: 4px;
+    padding: 0 6px 0 8px;
+  }
+
+  &--active&--icon {
+    width: auto;
+    border-radius: 14px;
+    padding: 0 6px 0 3px;
+
+    .card-filter-icon {
+      width: 22px;
+      height: 22px;
+    }
+  }
+}
+
+.card-filter-chip__dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+.card-filter-chip__remove {
+  color: #c9c8ff;
+  font-size: 15px;
+}
+
+.card-filter-icon {
+  display: inline-block;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.card-filter-vp {
+  display: inline-grid;
+  place-items: center;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: linear-gradient(#d9a72a, #9b6c0e);
+  color: #1b1203;
+  font: 700 11px/1 Prototype, Ubuntu, sans-serif;
+}
+
+.card-sort-icon.card-filter-vp {
+  width: auto;
+  height: 15px;
+  padding: 0 2px;
+  font-size: 9px;
+}
+
+.card-filter-check::before {
+  content: "✓";
+}
+
+.card-filter-bar .resource_icon,
+.card-bar-menu .resource_icon,
+.card-filter-sheet .resource_icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  background-size: contain;
+  vertical-align: middle;
+}
+
+// Cost slider: like a chip with the slider inside
+.card-filter-cost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: @card-filter-pill-height;
+  padding: 0 10px 0 6px;
+  border: 1px solid @card-filter-chip-line;
+  border-radius: (@card-filter-pill-height / 2);
+  background: @card-filter-chip;
+
+  &--on {
+    border-color: @card-filter-accent;
+    background: @card-filter-accent-fill;
+  }
+
+  input[type="range"] {
+    width: 140px;
+    margin: 0;
+    accent-color: @card-filter-accent;
+  }
+
+  output {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 62px;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.card-filter-toggle {
+  display: inline-flex;
+  justify-self: start;
+  padding: 2px;
+  border: 1px solid @card-filter-chip-line;
+  border-radius: (@card-filter-pill-height / 2);
+  background: @card-filter-chip;
+
+  button {
+    height: 26px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 13px;
+    background: none;
+    color: @card-filter-muted;
+    font: 13px Ubuntu, system-ui, sans-serif;
+    cursor: pointer;
+  }
+
+  .card-filter-toggle--on {
+    background: @card-filter-accent;
+    color: #fff;
+  }
+}
+
+// ---------- Phone: bottom sheet; background only darkened, not blurred ----------
+.card-filter-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.card-filter-sheet {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 51;
+  display: flex;
+  flex-direction: column;
+  max-height: 78vh;
+  border-radius: 18px 18px 0 0;
+  background: #161925;
+  box-shadow: 0 -6px 22px rgba(0, 0, 0, 0.55);
+  color: @card-filter-text;
+  font: 14px/1.3 Ubuntu, system-ui, sans-serif;
+  animation: card-filter-sheet-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+
+  .card-filter-chip {
+    height: 36px;
+    border-radius: 18px;
+    padding: 0 12px;
+  }
+
+  .card-filter-chip--icon {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 50%;
+
+    .card-filter-icon {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .card-filter-cost {
+    box-sizing: border-box;
+    width: 100%;
+    height: 36px;
+    border-radius: 18px;
+
+    input[type="range"] {
+      flex: 1;
+      width: auto;
+    }
+  }
+}
+
+@keyframes card-filter-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+.card-filter-sheet__grip {
+  width: 40px;
+  height: 4px;
+  margin: 8px auto 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.card-filter-sheet__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 16px 10px;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+}
+
+.card-filter-sheet__body {
+  overflow-y: auto;
+  padding: 0 16px 8px;
+}
+
+.card-filter-sheet__foot {
+  padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  .btn {
+    width: 100%;
+    margin: 0;
+  }
+}
+
+// ---------- Cards ----------
+// Hidden by the filter: must win against the mobile card grid (display with !important on the card slots there)
+.card-filter-hidden.card-filter-hidden,
+html.tm-mobile .mb-screen .card-filter-hidden.card-filter-hidden {
+  display: none !important;
+}
+
+.card-filter-dimmed {
+  opacity: 0.28;
+  filter: grayscale(0.8);
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+// Open filter menu (not the phone sheet): the cards behind it 20 % darker and slightly blurred
+.hand-cards-panel__section:has(.card-filter-bar--open) .sortable-cards-root,
+.choice-block:has(> .card-filter-bar--open) > label,
+.player_home_block:has(> .card-filter-bar--open) .other-player-cards {
+  filter: brightness(0.8) blur(2px);
+}
+
+// Chosen cards the filter hides: note next to the confirm button
+.card-filter-hidden-note {
+  align-self: center;
+  margin-right: 14px;
+  color: #ffd34d;
+  font-size: 13px;
+}
+
+// Nothing left after filtering
+.card-filter-empty {
+  display: grid;
+  flex: 0 0 100%;
+  grid-column: 1 / -1;
+  justify-items: center;
+  gap: 12px;
+  padding: 32px 16px;
+  color: @card-filter-muted;
+  text-align: center;
+
+  svg {
+    width: 44px;
+    height: 44px;
+    opacity: 0.5;
+  }
+}
+
+// Phone: tighter row
+.card-filter-bar--compact {
+  gap: 6px;
+  padding: 0 4px;
+
+  .card-bar-pill {
+    padding: 0 8px;
+  }
+
+  .hand-cards-panel__title {
+    font-size: 13px;
+  }
+}
+
+// Played cards: no left padding in the panel, keep the row aligned with the cards
+.other-player-filter {
+  padding-left: 0;
+}

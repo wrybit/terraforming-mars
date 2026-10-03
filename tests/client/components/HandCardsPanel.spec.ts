@@ -9,6 +9,8 @@ import {CardModel} from '@/common/models/CardModel';
 import {CardName} from '@/common/cards/CardName';
 import {asComplete} from './utils/models';
 import {resetHandSort} from '@/client/utils/handSort';
+import {handCardFilter, resetCardFilterState, setUnmatchedCards} from '@/client/utils/cardFilterState';
+import {Tag} from '@/common/cards/Tag';
 
 function playerView(tableau: Array<CardModel>, hand: Array<CardModel>): PlayerViewModel {
   return asComplete<PlayerViewModel>({
@@ -56,8 +58,10 @@ describe('HandCardsPanel', () => {
       props: {playerView: playerView([], [card(CardName.CARTEL), card(CardName.ASTEROID_MINING)])},
     });
 
-    // Segments: Manual, Cost, Type, Resource, Victory points
-    await wrapper.findComponent(HandSortControl).findAll('button')[4].trigger('click');
+    // Sort menu: Cost, Type, Resource, Victory points – each ascending/descending
+    const sort = wrapper.findComponent(HandSortControl);
+    await sort.find('.card-sort__more').trigger('click');
+    await sort.findAll('.card-sort-menu__row')[3].findAll('button')[0].trigger('click');
 
     const names = wrapper.findComponent(SortableCards).findAllComponents({name: 'Card'}).map((c) => c.props('card').name);
     expect(names).to.deep.eq([CardName.ASTEROID_MINING, CardName.CARTEL]);
@@ -69,5 +73,29 @@ describe('HandCardsPanel', () => {
       props: {playerView: playerView([], [card(CardName.SOLETTA)])},
     });
     expect(wrapper.findComponent(HandSortControl).exists()).is.false;
+  });
+
+  it('the filter hides or dims hand cards but keeps them in the list', async () => {
+    resetCardFilterState();
+    const wrapper = mount(HandCardsPanel, {
+      ...globalConfig,
+      props: {playerView: playerView([], [card(CardName.CARTEL), card(CardName.ANTS)])},
+    });
+    handCardFilter.tags.add(Tag.EARTH);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.findAll('.sortable-slot')).to.have.length(2);
+    expect(wrapper.findAll('.sortable-slot.card-filter-hidden').map((slot) => slot.attributes('data-card-name'))).to.deep.eq([CardName.ANTS]);
+
+    setUnmatchedCards('dim');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.findAll('.sortable-slot.card-filter-dimmed')).to.have.length(1);
+
+    // Nothing left: hint with reset instead of an empty area
+    setUnmatchedCards('hide');
+    handCardFilter.tags.clear();
+    handCardFilter.tags.add(Tag.SPACE);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.card-filter-empty').exists()).is.true;
+    resetCardFilterState();
   });
 });

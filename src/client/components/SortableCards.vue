@@ -6,7 +6,7 @@
       :key="card.name"
       :data-card-name="card.name"
       class="sortable-slot"
-      :class="{'sortable-placeholder': card.name === dragCard}"
+      :class="{'sortable-placeholder': card.name === dragCard, 'card-filter-hidden': visibilityOf(card) === 'hidden', 'card-filter-dimmed': visibilityOf(card) === 'dimmed'}"
       @pointerdown="onPointerDown(card.name, $event)"
       @dragstart.prevent>
       <div class="cardbox">
@@ -24,6 +24,7 @@ import {CardName} from '@/common/cards/CardName';
 import {CardModel} from '@/common/models/CardModel';
 import {CardOrderStorage} from '@/client/utils/CardOrderStorage';
 import {reorderHandManually} from '@/client/utils/handSort';
+import {CardVisibility} from '@/client/utils/cardFilterState';
 
 // From this mouse movement (px) a click becomes a drag – otherwise clicks on cards would turn into mini drags.
 const DRAG_THRESHOLD_PX = 6;
@@ -81,6 +82,11 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    // Card filter: hidden cards stay in the list (their place in the manual order is kept), only not shown
+    visibility: {
+      type: Function as unknown as () => (card: CardModel) => CardVisibility,
+      required: false,
+    },
   },
   // Order comes from CardOrderStorage (reactive): sorting in the hand tab or in a selection dialog
   // (handSort.ts) shows up here immediately; new cards go at the end.
@@ -98,6 +104,9 @@ export default defineComponent({
   methods: {
     internals(): DragInternals {
       return (this as unknown as {drag: DragInternals}).drag;
+    },
+    visibilityOf(card: CardModel): CardVisibility {
+      return this.visibility?.(card) ?? 'shown';
     },
     getSortedCards() {
       return CardOrderStorage.getOrdered(

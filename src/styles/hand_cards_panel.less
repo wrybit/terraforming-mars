@@ -17,10 +17,9 @@
   padding-left: 8px;
 }
 
-// Hand cards header row: heading and sort buttons on one line, close above the cards.
+// Hand cards header row without filter (a single hand card below active cards): heading close above the card.
+// With several cards the filter row (card_filter_bar.less) takes its place.
 .hand-cards-panel__header {
-  // Container for choosing segmented bar/select list for sorting (see below)
-  container: hand-sort-bar / inline-size;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -32,69 +31,6 @@
   .hand-cards-panel__title {
     margin: 0;
     padding-left: 0;
-  }
-}
-
-// Sorting (HandSortControl.vue): right-aligned; label close to the segmented bar.
-// Segmented look comes from .create-game-segmented (SegmentedControl, also in the card list).
-.hand-cards-panel__sort {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.75);
-
-  .create-game-segmented button {
-    flex: 0 0 auto;
-    padding: 4px 10px;
-    font-size: 13px;
-  }
-
-  // Direction of the chosen sort; "Manual" (first segment) has none.
-  .create-game-segmented--selected:not(:first-child)::after {
-    content: ' ▼';
-    font-size: 10px;
-  }
-}
-
-.hand-sort-control--reversed .create-game-segmented--selected:not(:first-child)::after {
-  content: ' ▲';
-}
-
-// Mobile: more space to the cards, whose price badges stick out at the top.
-html.tm-mobile .hand-cards-panel__header {
-  margin-bottom: 18px;
-}
-
-// Segmented bar or select list – depending on the room in the row, not on the device: the hand header row and the
-// header row of a card selection (select_card_toolbar.less) are containers; if their width isn't enough for the
-// full bar (phone), HandSortControl.vue shows the select list.
-// Minimum width: heading or "Select all" plus label and five segments (German texts are the longest)
-@hand-sort-bar-min-width: 600px;
-
-// Look like the other buttons of the mobile view: dark surface, fine border, rounded corners, own arrow
-.hand-sort-control__select {
-  display: none;
-  height: 36px;
-  padding: 0 32px 0 12px;
-  border: 1px solid @mb-line;
-  border-radius: 8px;
-  font-size: 14px;
-  color: @mb-text;
-  background: @mb-surface-raised url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23ece9e2' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat right 12px center;
-  appearance: none;
-}
-
-@container hand-sort-bar (max-width: (@hand-sort-bar-min-width - 1px)) {
-  .hand-cards-panel__sort {
-    .create-game-segmented {
-      display: none;
-    }
-
-    .hand-sort-control__select {
-      display: block;
-    }
   }
 }
 

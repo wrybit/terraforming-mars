@@ -4,11 +4,19 @@
              comment inside, so the caller's v-show hits the root -->
         <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
         <!-- Header row above the cards: "Select all" on the left, on the right the same sorting as in the hand tab -->
-        <div v-if="showSelectAll || isHandSelection" class="select-card-toolbar">
-          <AppButton v-if="showSelectAll" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll"
-            :title="allSelected ? $t('Deselect All') : $t('Select All')" />
-          <HandSortControl v-if="isHandSelection" :playerView="playerView" class="select-card-toolbar__sort hand-cards-panel__sort"/>
+        <!-- Hand cards (e.g. selling): the same filter and sorting as in the hand tab, in one row -->
+        <CardFilterBar v-if="isHandSelection" :cards="playerinput.cards" :filter="handCardFilter" :context="filterContext" class="select-card-toolbar">
+          <template #lead>
+            <AppButton v-if="showSelectAll" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
+          </template>
+          <template #sort="{compact}">
+            <HandSortControl :playerView="playerView" :compact="compact" class="select-card-toolbar__sort"/>
+          </template>
+        </CardFilterBar>
+        <div v-else-if="showSelectAll" class="select-card-toolbar">
+          <AppButton class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
         </div>
+        <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
         <label v-for="card in getOrderedCards()" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
             <template v-if="!card.isDisabled">
               <input v-if="selectOnlyOneCard" type="radio" v-model="cards" :value="card" >
@@ -29,6 +37,8 @@
         <WarningsComponent :warnings="warnings"/>
         <TabPanelFooterSlot>
         <div v-if="showsave === true" class="nofloat select-card-actions">
+            <!-- Chosen cards the filter hides are still sold/discarded: say so next to the button -->
+            <span v-if="hiddenSelectedCount > 0" class="card-filter-hidden-note">{{ hiddenSelectedText }}</span>
             <!-- Disabled while fewer cards are chosen than required: shows that a card must be chosen first.
                  With Skip next to it: Confirm green, Skip red (button_tones.less) -->
             <AppButton :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
@@ -47,6 +57,11 @@ import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import HandSortControl from '@/client/components/HandSortControl.vue';
+import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
+import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
+import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
+import {cardVisibility, CardVisibility, handCardFilter, unmatchedCards} from '@/client/utils/cardFilterState';
+import {translateTextWithParams} from '@/client/directives/i18n';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {Color} from '@/common/Color';
 import {Message} from '@/common/logs/Message';
@@ -115,6 +130,8 @@ export default defineComponent({
     WarningsComponent,
     AppButton,
     HandSortControl,
+    CardFilterBar,
+    CardFilterEmptyHint,
   },
   watch: {
     cards() {
@@ -194,8 +211,16 @@ export default defineComponent({
     saveData() {
       this.onsave({type: 'card', cards: this.getData()});
     },
+    resetCardFilter,
+    visibilityOf(card: CardModel): CardVisibility {
+      return this.isHandSelection ? cardVisibility(card, handCardFilter, this.filterContext) : 'shown';
+    },
     getCardBoxClass(card: CardModel): string {
       const classes = ['cardbox'];
+      const visibility = this.visibilityOf(card);
+      if (visibility !== 'shown') {
+        classes.push('card-filter-' + visibility);
+      }
       if (this.playerinput.showOwner && this.getOwner(card) !== undefined) {
         classes.push('cardbox-with-owner-label');
       }
@@ -245,10 +270,13 @@ export default defineComponent({
       return this.playerView.thisPlayer.selfReplicatingRobotsCards?.find((r) => r.name === card.name);
     },
     toggleSelectAll() {
+      // Only the cards the filter shows; chosen cards outside the filter stay chosen
+      const visible = this.visibleSelectableCards;
+      const chosen = Array.isArray(this.cards) ? this.cards : [];
       if (this.allSelected) {
-        this.cards = [];
+        this.cards = chosen.filter((card) => !visible.includes(card));
       } else {
-        this.cards = this.selectableCards.slice();
+        this.cards = [...chosen.filter((card) => !visible.includes(card)), ...visible];
       }
     },
   },
@@ -274,6 +302,31 @@ export default defineComponent({
       return this.playerinput.max !== undefined &&
              this.playerinput.max > 1 &&
              this.playerinput.min === 0;
+    },
+    handCardFilter(): typeof handCardFilter {
+      return handCardFilter;
+    },
+    filterContext(): CardFilterContext {
+      return {withCost: true};
+    },
+    visibleSelectableCards(): Array<CardModel> {
+      return this.selectableCards.filter((card) => this.visibilityOf(card) !== 'hidden');
+    },
+    nothingShown(): boolean {
+      return this.isHandSelection && unmatchedCards.value === 'hide' && (this.playerinput.cards ?? []).every((card) => this.visibilityOf(card) !== 'shown');
+    },
+    selectAllTitle(): string {
+      if (this.allSelected) {
+        return 'Deselect All';
+      }
+      const visible = this.visibleSelectableCards.length;
+      return visible < this.selectableCards.length ? translateTextWithParams('Select all ${0}', [String(visible)]) : 'Select All';
+    },
+    hiddenSelectedCount(): number {
+      return Array.isArray(this.cards) ? this.cards.filter((card) => this.visibilityOf(card) === 'hidden').length : 0;
+    },
+    hiddenSelectedText(): string {
+      return translateTextWithParams('${0} chosen cards hidden by the filter', [String(this.hiddenSelectedCount)]);
     },
     selectableCards(): Array<CardModel> {
       // ?? []: not every input in the upstream tests provides cards
@@ -303,7 +356,10 @@ export default defineComponent({
       return cards.every((card) => hand.has(card.name));
     },
     allSelected(): boolean {
-      return Array.isArray(this.cards) && this.cards.length === this.selectableCards.length;
+      // All cards the filter shows are chosen
+      const chosen = Array.isArray(this.cards) ? this.cards : [];
+      const visible = this.visibleSelectableCards;
+      return visible.length > 0 && visible.every((card) => chosen.includes(card));
     },
   },
 });

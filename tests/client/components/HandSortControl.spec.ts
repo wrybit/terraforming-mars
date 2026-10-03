@@ -40,35 +40,40 @@ describe('HandSortControl', () => {
     FakeLocalStorage.deregister(localStorage);
   });
 
-  function mountControl() {
-    return mount(HandSortControl, {...globalConfig, props: {playerView: playerView()}});
+  function mountControl(compact = false) {
+    return mount(HandSortControl, {...globalConfig, props: {playerView: playerView(), compact}});
   }
 
-  function selectedLabel(wrapper: ReturnType<typeof mount>): string {
-    return wrapper.find('.create-game-segmented--selected').text();
+  // Opens the sort menu and chooses a sorting: row = Cost, Type, Resource, VP; ↑ ascending, ↓ descending
+  async function choose(wrapper: ReturnType<typeof mount>, row: number, reversed: boolean) {
+    await wrapper.find('.card-sort__more').trigger('click');
+    await wrapper.findAll('.card-sort-menu__row')[row].findAll('button')[reversed ? 1 : 0].trigger('click');
   }
 
   it('shows manual when no sort is chosen', () => {
-    expect(selectedLabel(mountControl())).eq('Manual');
+    const wrapper = mountControl();
+    expect(wrapper.find('.card-sort__manual').classes()).to.include('card-bar-pill--on');
+    expect(wrapper.find('.card-sort__more').text()).eq('Sort');
   });
 
-  it('chooses a sort, sorts the hand and flips it on a second tap', async () => {
+  it('chooses a sort and direction from the menu and sorts the hand', async () => {
     const wrapper = mountControl();
-    await wrapper.findAll('button')[1].trigger('click');
+    await choose(wrapper, 0, false);
     expect(handSortOrder()).to.deep.eq({key: 'cost', reversed: false});
-    expect(selectedLabel(wrapper)).eq('Cost');
+    expect(wrapper.find('.card-sort__more').text()).eq('Cost ↑');
+    expect(wrapper.find('.card-sort-menu').exists()).is.false;
     expect(handOrder()).to.deep.eq([CardName.CARTEL, CardName.ANTS, CardName.BIRDS]);
 
-    await wrapper.findAll('button')[1].trigger('click');
+    await choose(wrapper, 0, true);
     expect(handSortOrder()).to.deep.eq({key: 'cost', reversed: true});
-    expect(wrapper.find('.hand-sort-control--reversed').exists()).is.true;
+    expect(wrapper.find('.card-sort__more').text()).eq('Cost ↓');
     expect(handOrder()).to.deep.eq([CardName.BIRDS, CardName.ANTS, CardName.CARTEL]);
   });
 
   it('manual restores the own order', async () => {
     const wrapper = mountControl();
-    await wrapper.findAll('button')[1].trigger('click');
-    await wrapper.findAll('button')[0].trigger('click');
+    await choose(wrapper, 0, false);
+    await wrapper.find('.card-sort__manual').trigger('click');
     expect(handSortOrder()).is.undefined;
     expect(handOrder()).to.deep.eq(HAND);
   });
@@ -76,17 +81,21 @@ describe('HandSortControl', () => {
   it('shares the sort between several controls (hand tab and selection dialogs)', async () => {
     const first = mountControl();
     const second = mountControl();
-    await first.findAll('button')[4].trigger('click');
-    expect(selectedLabel(second)).eq('VP');
+    await choose(first, 3, false);
+    expect(second.find('.card-sort__more').text()).to.contain('VP ↑');
   });
 
-  it('mobile select list chooses sort and direction', async () => {
-    const wrapper = mountControl();
-    await wrapper.find('select').setValue('cost:reversed');
+  it('narrow row: one icon button, manual inside the menu', async () => {
+    const wrapper = mountControl(true);
+    expect(wrapper.find('.card-sort__manual').exists()).is.false;
+    await choose(wrapper, 0, true);
     expect(handSortOrder()).to.deep.eq({key: 'cost', reversed: true});
-    expect(handOrder()).to.deep.eq([CardName.BIRDS, CardName.ANTS, CardName.CARTEL]);
+    // The button shows what the list is sorted by: icon plus direction
+    expect(wrapper.find('.card-sort__more .resource_icon--megacredits').exists()).is.true;
+    expect(wrapper.find('.card-sort__more').text()).eq('↓');
 
-    await wrapper.find('select').setValue('manual');
+    await wrapper.find('.card-sort__more').trigger('click');
+    await wrapper.find('.card-sort-menu__manual').trigger('click');
     expect(handSortOrder()).is.undefined;
     expect(handOrder()).to.deep.eq(HAND);
   });

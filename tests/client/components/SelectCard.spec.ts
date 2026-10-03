@@ -115,8 +115,8 @@ describe('SelectCard', () => {
     expect(wrapper.find('.select-card-toolbar__select-all').exists()).is.false;
   });
 
-  it('shows the hand sort only for cards from the hand', () => {
-    expect(mountSelection(3, ['Ants', 'Birds', 'Cartel']).findComponent({name: 'HandSortControl'}).exists()).is.true;
-    expect(mountSelection(3, ['Ants']).findComponent({name: 'HandSortControl'}).exists()).is.false;
+  it('shows the filter and sort row only for cards from the hand', () => {
+    expect(mountSelection(3, ['Ants', 'Birds', 'Cartel']).findComponent({name: 'CardFilterBar'}).exists()).is.true;
+    expect(mountSelection(3, ['Ants']).findComponent({name: 'CardFilterBar'}).exists()).is.false;
   });
 });
