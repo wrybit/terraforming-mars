@@ -9,7 +9,9 @@
             :title="allSelected ? $t('Deselect All') : $t('Select All')" />
           <HandSortControl v-if="isHandSelection" :playerView="playerView" class="select-card-toolbar__sort hand-cards-panel__sort"/>
         </div>
-        <label v-for="card in getOrderedCards()" :key="card.name" :class="getCardBoxClass(card)">
+        <label v-for="card in getOrderedCards()" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
+            <!-- Draft: the card picked this round stays in its place, marked as the current choice that can still be changed -->
+            <span v-if="isCurrentPick(card)" class="current-pick-tab">{{ $t(cardsSelected() === 0 ? 'Your pick – can be changed' : 'Previous pick') }}</span>
             <template v-if="!card.isDisabled">
               <input v-if="selectOnlyOneCard" type="radio" v-model="cards" :value="card" >
               <input v-else type="checkbox" v-model="cards" :value="card" :disabled="playerinput.max !== undefined && Array.isArray(cards) && cards.length >= playerinput.max && cards.includes(card) === false" >
@@ -58,6 +60,7 @@ import {sortActiveCards} from '@/client/utils/ActiveCardsSortingOrder';
 import {SelectCardResponse} from '@/common/inputs/InputResponse';
 import {Warning} from '@/common/cards/Warning';
 import {choiceBlockStyle} from '@/client/components/choiceBlock';
+import {currentDraftPicks} from '@/client/utils/draftedCards';
 
 type Owner = {
   name: string;
@@ -188,10 +191,24 @@ export default defineComponent({
       this.onsave({type: 'card', cards: this.getData()});
     },
     getCardBoxClass(card: CardModel): string {
+      const classes = ['cardbox'];
       if (this.playerinput.showOwner && this.getOwner(card) !== undefined) {
-        return 'cardbox cardbox-with-owner-label';
+        classes.push('cardbox-with-owner-label');
       }
-      return 'cardbox';
+      if (this.isCurrentPick(card)) {
+        classes.push(this.cardsSelected() === 0 ? 'cardbox--current-pick' : 'cardbox--current-pick-replaced');
+      }
+      return classes.join(' ');
+    },
+    // Already picked in this draft round: the server disables it, because picking it again changes nothing
+    isCurrentPick(card: CardModel): boolean {
+      return card.isDisabled === true && this.currentPicks.has(card.name);
+    },
+    // A click on the current pick drops a new choice again – the pick stays as it is
+    keepCurrentPick(card: CardModel) {
+      if (this.isCurrentPick(card)) {
+        this.cards = [];
+      }
     },
     findOwner(card: CardModel): Owner | undefined {
       for (const player of this.playerView.players) {
@@ -232,6 +249,9 @@ export default defineComponent({
     },
   },
   computed: {
+    currentPicks(): ReadonlySet<CardName> {
+      return currentDraftPicks(this.playerView, this.playerinput);
+    },
     // Enough cards chosen? Otherwise the button stays disabled instead of showing an error after the click
     hasRequiredSelection(): boolean {
       if (this.isOptionalToManyCards && this.cardsSelected() === 0) {

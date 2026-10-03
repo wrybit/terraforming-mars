@@ -119,6 +119,8 @@ export interface IPlayer {
   draftHand: Array<IProjectCard>;
   /** Cards this player has already chosen during this draft round */
   draftedCards: Array<IProjectCard>;
+  /** Order in which the cards of the current draft round were offered; keeps that order stable while the player may still change the pick */
+  draftOrder: Array<CardName>;
   /** true when this player is drafting, false when player is not, undefined when there is no draft phase. */
   needsToDraft?: boolean;
 
