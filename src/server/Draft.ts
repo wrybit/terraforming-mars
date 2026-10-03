@@ -122,14 +122,21 @@ export abstract class Draft {
     let enabled: Array<boolean> | undefined;
     if (repick) {
       cardsToConsider = [...player.draftHand, ...player.draftedCards.slice(-cardsToKeep)];
+      // Same order as offered first: otherwise the picked card jumps to the end on every change
+      const position = (card: IProjectCard) => {
+        const index = player.draftOrder.indexOf(card.name);
+        return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+      };
+      cardsToConsider.sort((a, b) => position(a) - position(b));
       // Disable the picked card only if we're keeping one card. If we keep more than
       // one card, we need to keep them all enabled since we might repick
       // one of the cards we previously picked plus a new card.
       if (cardsToKeep === 1) {
-        enabled = cardsToConsider.map((_, idx) => idx < player.draftHand.length);
+        enabled = cardsToConsider.map((card) => player.draftHand.includes(card));
       }
     } else {
       cardsToConsider = player.draftHand;
+      player.draftOrder = cardsToConsider.map((card) => card.name);
     }
 
     const messageTitle = repick ?

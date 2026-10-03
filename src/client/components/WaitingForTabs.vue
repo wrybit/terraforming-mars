@@ -24,7 +24,8 @@
       <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(playerinput.title)" :playerView="playerView" :card="sourceCard"/>
       <!-- If a card triggers the input (Sabotage, Comet for Venus …): card, name and text instead of "Select an option" -->
       <CardIntroBlock v-else-if="sourceCard !== undefined" v-show="!handTabActive" :card="sourceCard" :title="fullTabTitle(lead.title)"/>
-      <label v-else v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(lead.title)) }}</div></label>
+      <!-- Draft repick: the explanation is no question, it moves small into the footer next to the button -->
+      <label v-else-if="!draftRepick" v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(lead.title)) }}</div></label>
       <!-- v-show instead of v-if: inputs are kept while looking at the hand -->
       <PlayerInputFactory v-show="!handTabActive"
         :players="playerView.players"
@@ -36,7 +37,9 @@
       <!-- Draft: cards already kept below the new ones, instead of a separate block under the box -->
       <DraftedCardsSection v-if="draftedCards.length > 0" v-show="!handTabActive" :cards="draftedCards"/>
       <!-- Sticky footer at the bottom of the box (tabPanelFooter.ts); payment areas attach via Teleport -->
-      <div v-show="!handTabActive" :id="footerId" class="or-tab-footer"></div>
+      <div v-show="!handTabActive" :id="footerId" class="or-tab-footer">
+        <p v-if="draftRepick" class="or-tab-footer-hint">{{ $t(fullTabTitle(lead.title)) }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -61,7 +64,7 @@ import {inputSourceCard} from '@/client/components/inputSourceCard';
 import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
 import DraftedCardsSection from '@/client/components/DraftedCardsSection.vue';
-import {draftedCardsInInput} from '@/client/utils/draftedCards';
+import {draftedCardsInInput, isDraftRepick} from '@/client/utils/draftedCards';
 import {allCardsInHand} from '@/client/utils/handCards';
 
 const props = defineProps<{
@@ -85,4 +88,5 @@ const tone = computed(() => inputTone(lead.value));
 const intro = computed(() => tabIntro(props.playerinput));
 const sourceCard = computed(() => inputSourceCard(props.playerinput));
 const draftedCards = computed(() => draftedCardsInInput(props.playerView));
+const draftRepick = computed(() => isDraftRepick(props.playerView, props.playerinput));
 </script>

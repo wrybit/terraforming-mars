@@ -139,6 +139,7 @@ export class Player implements IPlayer {
   public playedCards: PlayedCards = new PlayedCards();
   public draftedCards: Array<IProjectCard> = [];
   public draftHand: Array<IProjectCard> = [];
+  public draftOrder: Array<CardName> = [];
   public cardCost: number = constants.CARD_COST;
   public needsToDraft?: boolean;
 
@@ -1868,6 +1869,7 @@ export class Player implements IPlayer {
       underworldData: this.underworldData,
       alliedParty: this._alliedParty,
       draftHand: this.draftHand.map(toName),
+      draftOrder: this.draftOrder,
       autoPass: this.autopass,
       globalParameterSteps: this.globalParameterSteps,
     };
@@ -1963,6 +1965,7 @@ export class Player implements IPlayer {
     }
 
     player.draftHand = cardsFromJSON(d.draftHand);
+    player.draftOrder = d.draftOrder ?? [];
     if (d.globalParameterSteps) {
       player.globalParameterSteps = {...DEFAULT_GLOBAL_PARAMETER_STEPS, ...d.globalParameterSteps};
     }

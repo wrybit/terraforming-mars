@@ -165,13 +165,14 @@ describe('drafting', () => {
     // The previously drafted card should be present but disabled.
     expectReselect(player);
     const selectCardInput = cast(player.getWaitingFor(), SelectCard);
+    // The cards keep the order in which they were offered, so the pick does not jump to the end.
     expect(selectCardInput.cards.map(toName)).deep.eq([
       CardName.ACQUIRED_COMPANY,
+      CardName.BIOFERTILIZER_FACILITY,
       CardName.CAPITAL,
       CardName.DECOMPOSERS,
-      CardName.BIOFERTILIZER_FACILITY,
     ]);
-    expect(selectCardInput.config.enabled).deep.eq([true, true, true, false]);
+    expect(selectCardInput.config.enabled).deep.eq([true, false, true, true]);
 
     // Reselect: player chooses CAPITAL instead
     selectCard(player, CardName.CAPITAL);
@@ -189,11 +190,11 @@ describe('drafting', () => {
     const selectCardInput2 = cast(player.getWaitingFor(), SelectCard);
     expect(selectCardInput2.cards.map(toName)).deep.eq([
       CardName.ACQUIRED_COMPANY,
-      CardName.DECOMPOSERS,
       CardName.BIOFERTILIZER_FACILITY,
       CardName.CAPITAL,
+      CardName.DECOMPOSERS,
     ]);
-    expect(selectCardInput2.config.enabled).deep.eq([true, true, true, false]);
+    expect(selectCardInput2.config.enabled).deep.eq([true, true, false, true]);
 
     // Other player makes their choice
     selectCard(otherPlayer, CardName.GENE_REPAIR);

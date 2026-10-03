@@ -114,6 +114,50 @@ input[type="radio"]:checked+.filterDiv::after {
   .selection-tab();
 }
 
+// Draft: the card picked this round (SelectCard.vue) looks like any selection, not like an unavailable card;
+// its tab says that the choice can still be changed. If another card is chosen, it steps back.
+.cardbox--current-pick,
+.cardbox--current-pick-replaced {
+  .card-unavailable,
+  .card-unavailable:hover {
+    filter: none;
+    cursor: pointer;
+  }
+
+  .card-unavailable * {
+    cursor: pointer;
+  }
+}
+
+.cardbox--current-pick > .filterDiv {
+  .selection-highlight();
+}
+
+.cardbox--current-pick-replaced > .filterDiv {
+  opacity: 0.55;
+}
+
+.current-pick-tab {
+  position: absolute;
+  top: -@selection-tab-offset;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  height: @selection-tab-height;
+  padding: 0 10px;
+  border-radius: 4px 4px 0 0;
+  background: @selection-color;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: @selection-tab-height;
+  white-space: nowrap;
+
+  .cardbox--current-pick-replaced > & {
+    background: #555;
+  }
+}
+
 
 .colony-card {
   color: white;
