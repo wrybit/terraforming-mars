@@ -114,8 +114,12 @@ input[type="radio"]:checked+.filterDiv::after {
   .selection-tab();
 }
 
-// Draft: the card picked this round (SelectCard.vue) looks like any selection, not like an unavailable card;
-// its tab says that the choice can still be changed. If another card is chosen, it steps back.
+// Draft: the card picked this round (SelectCard.vue). Content greyed out like a card that is already handed in,
+// but the purple selection (outline, tint, tab) stays in color – so it reads as "chosen, but different from a fresh choice".
+// The filter therefore sits on the children, not on the card itself (it would grey out tint and tab too).
+// If another card is chosen, the pick steps back without the purple.
+@current-pick-content-filter: grayscale(1) brightness(0.75);
+
 .cardbox--current-pick,
 .cardbox--current-pick-replaced {
   .card-unavailable,
@@ -127,6 +131,10 @@ input[type="radio"]:checked+.filterDiv::after {
   .card-unavailable * {
     cursor: pointer;
   }
+
+  .card-unavailable > :not(.current-pick-tab) {
+    filter: @current-pick-content-filter;
+  }
 }
 
 .cardbox--current-pick > .filterDiv {
@@ -137,6 +145,7 @@ input[type="radio"]:checked+.filterDiv::after {
   opacity: 0.55;
 }
 
+// Same position as the checkmark tab of a selection (.selection-tab()), flush on the border, but as wide as its text
 .current-pick-tab {
   position: absolute;
   top: -@selection-tab-offset;
@@ -150,10 +159,11 @@ input[type="radio"]:checked+.filterDiv::after {
   color: #fff;
   font-size: 13px;
   font-weight: bold;
+  font-family: "Ubuntu", sans-serif;
   line-height: @selection-tab-height;
   white-space: nowrap;
 
-  .cardbox--current-pick-replaced > & {
+  .cardbox--current-pick-replaced & {
     background: #555;
   }
 }

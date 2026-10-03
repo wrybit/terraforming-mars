@@ -10,13 +10,14 @@
           <HandSortControl v-if="isHandSelection" :playerView="playerView" class="select-card-toolbar__sort hand-cards-panel__sort"/>
         </div>
         <label v-for="card in getOrderedCards()" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
-            <!-- Draft: the card picked this round stays in its place, marked as the current choice that can still be changed -->
-            <span v-if="isCurrentPick(card)" class="current-pick-tab">{{ $t(cardsSelected() === 0 ? 'Your pick – can be changed' : 'Previous pick') }}</span>
             <template v-if="!card.isDisabled">
               <input v-if="selectOnlyOneCard" type="radio" v-model="cards" :value="card" >
               <input v-else type="checkbox" v-model="cards" :value="card" :disabled="playerinput.max !== undefined && Array.isArray(cards) && cards.length >= playerinput.max && cards.includes(card) === false" >
             </template>
             <Card :card="card" :actionUsed="isCardActivated(card)" :robotCard="robotCard(card)">
+              <!-- Draft: the card picked this round stays in its place, marked as the current choice that can still be changed;
+                   inside the card so the tab sits flush on its border like the selection tab -->
+              <span v-if="isCurrentPick(card)" class="current-pick-tab">{{ (cardsSelected() === 0 ? '✓ ' : '') + $t(cardsSelected() === 0 ? 'Your pick – can be changed' : 'Previous pick') }}</span>
               <template v-if="playerinput.showOwner">
                 <div :class="'card-owner-label player_translucent_bg_color_'+ getOwner(card).color">
                   {{getOwner(card).name}}
