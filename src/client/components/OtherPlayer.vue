@@ -5,13 +5,13 @@
       <AppButton size="big" type="close" @click="hideMe" :disableOnServerBusy="false" align="right" />
     </div>
     <div class="other_player_cont menu">
+        <!-- Own filter and sorting for played cards (cardFilterState.ts), no cost filter; at the top with a separator line -->
+        <CardFilterBar v-if="player.tableau.length > 1" :cards="player.tableau" :filter="playedCardFilter" :context="filterContext">
+          <template #sort="{compact}">
+            <CardSortMenu :modelValue="playedCardsSortOrder" :compact="compact" @update:modelValue="setPlayedSortOrder"/>
+          </template>
+        </CardFilterBar>
         <div v-if="player.tableau.length > 0" class="player_home_block">
-            <!-- Own filter and sorting for played cards (cardFilterState.ts), no cost filter -->
-            <CardFilterBar v-if="player.tableau.length > 1" :cards="player.tableau" :filter="playedCardFilter" :context="filterContext" class="other-player-filter">
-              <template #sort="{compact}">
-                <CardSortMenu :modelValue="playedCardsSortOrder" :compact="compact" @update:modelValue="setPlayedSortOrder"/>
-              </template>
-            </CardFilterBar>
             <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(playedCardFilter)"/>
             <div class="other-player-cards">
                 <div v-for="card in cardsOf([CardType.CORPORATION])" :key="card.name" class="cardbox" :class="visibilityClass(card)">

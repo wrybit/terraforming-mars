@@ -36,10 +36,12 @@
 }
 
 // Unselectable card (too expensive, requirement not met) or already used action:
-// clearly toned down and stays so on hover; not-allowed cursor shows that clicking does nothing
+// clearly toned down and stays so on hover; not-allowed cursor shows that clicking does nothing.
+// Partly transparent as well, so it recedes into the box and can't be mistaken for a selectable card.
 .card-unavailable,
 .card-unavailable:hover {
   filter: grayscale(0.85) brightness(0.45);
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
@@ -125,6 +127,7 @@ input[type="radio"]:checked+.filterDiv::after {
   .card-unavailable,
   .card-unavailable:hover {
     filter: none;
+    opacity: 1;
     cursor: pointer;
   }
 
