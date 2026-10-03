@@ -174,13 +174,16 @@ each(@players, {
   pointer-events: none;
 }
 
-// Cast shadow: short and fairly hard, to the bottom right, dark with a slight tint of the cube color
+// Cast shadow: the cube lies on the surface, so its shadow starts directly at its base and is the base swept away
+// from the light (bottom right). Each layer is a copy of the base moved a step further (--shadow-step 0…1): at the base
+// all layers overlap – dark and hard –, towards the tip fewer and blurrier ones – lighter and soft. Tinted with the
+// cube color, because light passes through the translucent cube.
 .player-cube-shadow--cast {
-  --shadow-x: calc(var(--cube-size) * 0.14);
-  --shadow-y: calc(var(--cube-size) * 0.18);
+  --shadow-x: calc(var(--cube-size) * 0.32 * var(--shadow-step));
+  --shadow-y: calc(var(--cube-size) * 0.38 * var(--shadow-step));
 
-  background: ~"color-mix(in srgb, color-mix(in srgb, var(--cube-color), black 55%), transparent 55%)";
-  filter: blur(calc(var(--cube-size) * 0.04));
+  background: ~"color-mix(in srgb, color-mix(in srgb, var(--cube-color), black 45%), transparent 80%)";
+  filter: blur(calc(var(--cube-size) * (0.01 + 0.07 * var(--shadow-step))));
 }
 
 // Rim: very short soft shadow slightly to the left – a soft dark outline that separates the cube from a background
