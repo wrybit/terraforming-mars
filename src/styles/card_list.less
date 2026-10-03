@@ -67,6 +67,30 @@
   }
 }
 
+// Page title (PageTitle.vue): logo and text on one center axis, line height 1 so the font adds no space
+.page-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  line-height: 1;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.page-title-home {
+  display: block;
+  flex: none;
+}
+
+.page-title-icon {
+  display: block;
+  width: 28px;
+  height: 28px;
+}
+
 // Language/settings in the header bar as far apart as in .card-list-header-actions
 .card-list-header .page-toolbar {
   gap: 8px;
@@ -684,6 +708,11 @@
       grid-area: title;
       font-size: 18px;
     }
+  }
+
+  // Narrow: only logo + page name, the app name would crowd the actions
+  .page-title-app {
+    display: none;
   }
 
   .card-list-header-actions {
