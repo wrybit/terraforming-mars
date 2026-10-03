@@ -261,9 +261,9 @@
             <SegmentedControl v-model="playersCount" :options="PLAYER_COUNT_OPTIONS"/>
           </div>
           <div class="create-game-player-list">
-            <div v-for="(newPlayer, index) in getPlayers()" :key="index"
-              :class="'create-game-player ' + getPlayerContainerColorClass(newPlayer.color)">
-              <div class="create-game-player-top">
+            <!-- Neutral card; the header shows the chosen player color -->
+            <div v-for="(newPlayer, index) in getPlayers()" :key="index" class="create-game-player">
+              <div :class="['create-game-player-top', getPlayerCubeColorClass(newPlayer.color)]">
                 <span class="create-game-player-position">{{ index + 1 }}</span>
                 <input class="create-game-player-name" :placeholder="getPlayerNamePlaceholder(index)" v-model="newPlayer.name">
                 <button v-if="playersCount > 1 && !randomFirstPlayer" type="button" class="create-game-first"
@@ -274,10 +274,13 @@
                 </button>
               </div>
               <div class="create-game-swatches">
+                <!-- Colors as player cubes: all lying (top view), the chosen one standing (slightly from above) -->
                 <button v-for="color in PLAYER_COLORS" :key="color" type="button"
-                  :class="['create-game-swatch', getPlayerCubeColorClass(color), {'create-game-swatch--selected': newPlayer.color === color}]"
-                  :disabled="isColorTaken(color, index)" :title="$t(color)"
-                  @click="newPlayer.color = color"></button>
+                  :class="['create-game-swatch', {'create-game-swatch--selected': newPlayer.color === color}]"
+                  :disabled="isColorTaken(color, index)" :title="$t(color)" :aria-pressed="newPlayer.color === color"
+                  @click="newPlayer.color = color">
+                  <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16"/>
+                </button>
               </div>
               <div class="create-game-player-extra">
                 <label v-if="isBeginnerToggleEnabled()" class="create-game-player-toggle">
@@ -329,6 +332,7 @@ import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
+import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {playerColorClass} from '@/common/utils/utils';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
@@ -392,6 +396,7 @@ export default defineComponent({
   },
   components: {
     AppButton,
+    PlayerCube,
     CardsFilter,
     CeosFilter,
     ChoiceChip,
@@ -832,9 +837,6 @@ export default defineComponent({
     },
     getPlayerCubeColorClass(color: Color): string {
       return playerColorClass(color, 'bg');
-    },
-    getPlayerContainerColorClass(color: Color): string {
-      return playerColorClass(color, 'bg_transparent');
     },
     boardHref(boardName: BoardName | RandomBoardOption) {
       const options: Record<BoardName | RandomBoardOption, string> = {

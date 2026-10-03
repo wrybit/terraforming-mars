@@ -1,9 +1,11 @@
 <template>
   <div class="card-container filterDiv hover-hide-res" :class="cardClasses">
+      <!-- Action used this generation: the player's cube lies on the card like at the table, seen from above,
+           at a random angle per card -->
+      <span v-if="showPlayerCube" class="card-player-cube"><PlayerCube :color="cubeColor" view="top" :size="22" :spin="cubeSpin"/></span>
       <div class="card-content-wrapper" v-i18n @mouseover="hovering = true" @mouseleave="hovering = false">
           <div v-if="!isStandardProject" class="card-cost-and-tags">
               <CardCost :amount="cost" :newCost="reducedCost" />
-              <div v-if="showPlayerCube" :class="playerCubeClass"></div>
               <CardHelp v-if="hasHelpText" :name="card.name" :hovering="hovering" />
               <CardTags :tags="tags" />
           </div>
@@ -37,6 +39,7 @@ import CardTags from './CardTags.vue';
 import CardVictoryPoints from './CardVictoryPoints.vue';
 import CardContent from './CardContent.vue';
 import CardHelp from './CardHelp.vue';
+import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {CardType} from '@/common/cards/CardType';
 import {CardMetadata} from '@/common/cards/CardMetadata';
 import {Tag} from '@/common/cards/Tag';
@@ -51,6 +54,7 @@ import {GameModule} from '@/common/cards/GameModule';
 export default defineComponent({
   name: 'Card',
   components: {
+    PlayerCube,
     CardTitle,
     CardHelp,
     CardResourceCounter,
@@ -95,6 +99,8 @@ export default defineComponent({
     return {
       cardInstance: card,
       hovering: false,
+      // Fixed per card instance: the cube keeps its angle while the card is shown
+      cubeSpin: Math.round(Math.random() * 360),
     };
   },
   computed: {
@@ -141,7 +147,8 @@ export default defineComponent({
 
       if (this.card.isDisabled) {
         classes.push('card-unavailable');
-      } else if (!getPreferences().experimental_ui && this.actionUsed) {
+      } else if (this.actionUsed && !this.showPlayerCube) {
+        // Without a cube (classic UI or no player color) a used action is shown greyed out
         classes.push('card-unavailable');
       }
 
@@ -200,10 +207,7 @@ export default defineComponent({
       return CARD_HELP_TEXT[this.card.name] !== undefined;
     },
     showPlayerCube(): boolean {
-      return getPreferences().experimental_ui && this.actionUsed;
-    },
-    playerCubeClass(): string {
-      return `board-cube board-cube--${this.cubeColor}`;
+      return getPreferences().experimental_ui && this.actionUsed && this.cubeColor !== 'neutral';
     },
   },
 });

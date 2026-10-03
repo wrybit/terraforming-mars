@@ -1,0 +1,236 @@
+// Player cube in CSS 3D (PlayerCube.vue): translucent ("semi-clear") acrylic like the physical cubes,
+// light from the top left. One component for all places, only the view differs:
+// - iso: standing piece (corner reminder)
+// - slight: seen slightly from above (selected color in the game setup)
+// - top: lying on a flat surface, e.g. on a card (mandatory there: a card is seen from above)
+//
+// Reflections are hard and soft at once, depending on the spot:
+// polished edges catch the light as a fine line, the reflection of the light on the top face has a hard leading
+// edge and fades out softly, a small glint sits at the corner facing the light, light leaving the cube at the bottom
+// right glows softly inside the material. --detail (0…1, set from the size) tones all of it down on small cubes.
+// Complex values are escaped (~"…"): Less would otherwise try to evaluate max(), cos(), rgb(… / …) itself.
+
+.player-cube {
+  --cube-color: @player_red;
+  --cube-size: 20px;
+  --cube-tilt: -24deg;
+  --cube-turn: 0deg;
+  --detail: 1;
+  // Material: translucent acrylic between clear and frosted
+  --edge: 0.6;
+  --spec: 0.58;
+  --spec-soft: 5%;
+  --glint: 0.7;
+  --inner: 0.34;
+  --inner-line: 0.15;
+  --exit-glow: 0.9;
+  --face-alpha: 34%;
+  --back-edge: 0.18;
+  --top-light: 38%;
+  --top-dark: 10%;
+  // Values actually shown, toned down by size
+  --edge-shown: calc(var(--edge) * var(--detail));
+  --spec-shown: calc(var(--spec) * (0.4 + 0.6 * var(--detail)));
+  --spec-soft-shown: calc(var(--spec-soft) + (1 - var(--detail)) * 16%);
+  --glint-shown: calc(var(--glint) * (0.25 + 0.75 * var(--detail)));
+  --inner-line-shown: calc(var(--inner-line) * var(--detail));
+  --back-edge-shown: calc(var(--back-edge) * (0.3 + 0.7 * var(--detail)));
+  --line-blur: calc(0.5px + (1 - var(--detail)) * 1px);
+
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--cube-size) * 1.5);
+  height: calc(var(--cube-size) * 1.5);
+  pointer-events: none;
+
+  // Colored shadow on the surface, offset to the bottom right (away from the light): light refracts through the material
+  &::after {
+    content: "";
+    position: absolute;
+    left: 30%;
+    right: -6%;
+    bottom: 0;
+    height: 34%;
+    border-radius: 50%;
+    background: ~"radial-gradient(closest-side, color-mix(in srgb, color-mix(in srgb, var(--cube-color), white 20%), transparent 15%), transparent)";
+    filter: blur(calc(var(--cube-size) * 0.06));
+    z-index: 0;
+  }
+}
+
+// Each player color sets the cube color (after the base block, which sets red as the default)
+each(@players, {
+  @c: ~"player_@{value}";
+  .player-cube--@{value} {
+    --cube-color: @@c;
+  }
+});
+
+.player-cube--bronze {
+  --cube-color: #b0753d;
+}
+
+.player-cube-body {
+  position: relative;
+  z-index: 1;
+  width: var(--cube-size);
+  height: var(--cube-size);
+  transform-style: preserve-3d;
+  // Inside: rotate the cube (tilt/turn); outside: a small tilt in screen space, e.g. for the top view
+  transform: ~"rotateX(var(--screen-tilt, 0deg)) rotateY(var(--screen-turn, 0deg)) rotateX(var(--cube-tilt)) rotateY(var(--cube-turn))";
+}
+
+.player-cube-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: visible;
+}
+
+// Top face: the brightest one
+.player-cube-face--top {
+  transform: rotateX(90deg) translateZ(calc(var(--cube-size) / 2));
+  background:
+    ~"linear-gradient(125deg, transparent 20%, rgb(255 255 255 / var(--spec-shown)) calc(20.5% + var(--spec-soft-shown)), rgb(255 255 255 / calc(var(--spec-shown) * 0.3)) 34%, transparent 52%)",
+    ~"radial-gradient(circle at var(--glint-at, 7% 93%), rgb(255 255 255 / var(--glint-shown)) 0 2%, transparent calc(4.5% + var(--spec-soft-shown)))",
+    ~"linear-gradient(135deg, color-mix(in srgb, color-mix(in srgb, var(--cube-color), white var(--top-light)), transparent var(--face-alpha)), color-mix(in srgb, color-mix(in srgb, var(--cube-color), white var(--top-dark)), transparent var(--face-alpha)))";
+  box-shadow:
+    ~"inset 0 -1px var(--line-blur) rgb(255 255 255 / var(--edge-shown))",
+    ~"inset 1px 0 var(--line-blur) rgb(255 255 255 / calc(var(--edge-shown) * 0.8))",
+    ~"inset 0 0 0 1px rgb(255 255 255 / calc(var(--edge-shown) * 0.25))",
+    ~"inset 0 0 calc(var(--cube-size) * 0.25) rgb(255 255 255 / calc(var(--inner) * 0.6))";
+}
+
+// Left face: turned towards the light
+.player-cube-face--left {
+  transform: rotateY(-90deg) translateZ(calc(var(--cube-size) / 2));
+  background:
+    ~"radial-gradient(circle at 70% 85%, color-mix(in srgb, color-mix(in srgb, var(--cube-color), white 40%), transparent calc(100% - var(--exit-glow) * 100%)) 0%, transparent 60%)",
+    ~"linear-gradient(170deg, color-mix(in srgb, color-mix(in srgb, var(--cube-color), white 22%), transparent var(--face-alpha)), color-mix(in srgb, color-mix(in srgb, var(--cube-color), black 8%), transparent var(--face-alpha)))";
+  box-shadow:
+    ~"inset -1px 0 var(--line-blur) rgb(255 255 255 / calc(var(--edge-shown) * 0.9))",
+    ~"inset 0 1px var(--line-blur) rgb(255 255 255 / calc(var(--edge-shown) * 0.8))";
+}
+
+// Front face: away from the light, this is where it leaves the cube again.
+// Layers: internal reflection of the top face (fine hard line just below the edge), soft vertical internal reflection,
+// light leaving the cube glowing softly at the bottom right, base color
+.player-cube-face--front {
+  transform: translateZ(calc(var(--cube-size) / 2));
+  background:
+    ~"linear-gradient(180deg, transparent 12%, rgb(255 255 255 / var(--inner-line-shown)) 12.5% 14%, transparent 14.5%)",
+    ~"linear-gradient(90deg, transparent 8%, rgb(255 255 255 / var(--inner)) 16%, transparent 32%)",
+    ~"radial-gradient(circle at 78% 82%, color-mix(in srgb, color-mix(in srgb, var(--cube-color), white 45%), transparent calc(100% - var(--exit-glow) * 100%)) 0%, transparent 62%)",
+    ~"linear-gradient(160deg, color-mix(in srgb, color-mix(in srgb, var(--cube-color), black 4%), transparent var(--face-alpha)), color-mix(in srgb, color-mix(in srgb, var(--cube-color), black 30%), transparent var(--face-alpha)))";
+  box-shadow:
+    ~"inset 0 1px var(--line-blur) rgb(255 255 255 / var(--edge-shown))",
+    ~"inset 1px 0 var(--line-blur) rgb(255 255 255 / calc(var(--edge-shown) * 0.7))",
+    ~"inset -1px 0 var(--line-blur) rgb(255 255 255 / calc(var(--edge-shown) * 0.2))";
+}
+
+// Faces turned away: they shine through the material
+.player-cube-face--back,
+.player-cube-face--right,
+.player-cube-face--bottom {
+  background: ~"color-mix(in srgb, var(--cube-color), transparent 83%)";
+  box-shadow: ~"inset 0 0 0 1px rgb(255 255 255 / var(--back-edge-shown))";
+}
+
+.player-cube-face--back {
+  transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2));
+}
+
+.player-cube-face--right {
+  transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2));
+}
+
+.player-cube-face--bottom {
+  transform: rotateX(-90deg) translateZ(calc(var(--cube-size) / 2));
+}
+
+// Glow from within: a colored halo around the visible faces
+.player-cube-face--top,
+.player-cube-face--front,
+.player-cube-face--left {
+  filter: ~"drop-shadow(0 0 calc(var(--cube-size) * 0.08) color-mix(in srgb, var(--cube-color), transparent 55%))";
+}
+
+// ---------- Views ----------
+.player-cube--iso {
+  --cube-tilt: -35.26deg;
+  --cube-turn: 45deg;
+}
+
+.player-cube--slight {
+  --cube-tilt: -24deg;
+  --cube-turn: 24deg;
+}
+
+// Top view: the top face points at the viewer, only narrow strips of the sides are visible.
+// --cube-turn (spin) turns the cube clockwise in the picture. The lighting is recalculated instead of rotated along:
+// the light stays at the top left (angle 225° in the picture).
+.player-cube--top {
+  --cube-tilt: -90deg;
+  --screen-tilt: 9deg;
+  --screen-turn: 9deg;
+  --light-angle: 225deg;
+  // Glint where the top face points to the light, rotated back against the spin
+  --glint-at: ~"calc(50% + cos(var(--light-angle) + var(--cube-turn)) * 40%) calc(50% + sin(var(--light-angle) + var(--cube-turn)) * 40%)";
+
+  // Blurred surface below the cube: the background looks slightly unsharp through the material.
+  // A flat layer with backdrop-filter, because the 3D faces themselves can't use one; turned along with the cube.
+  &::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--cube-size);
+    height: var(--cube-size);
+    transform: ~"translate(-50%, -50%) rotate(var(--cube-turn))";
+    border-radius: calc(var(--cube-size) * 0.08);
+    backdrop-filter: blur(calc(var(--cube-size) * 0.07));
+    z-index: 0;
+  }
+
+  // Top face: reflection and gradient rotated against the spin so they match the light
+  .player-cube-face--top {
+    background:
+      ~"linear-gradient(calc(125deg + var(--cube-turn)), transparent 20%, rgb(255 255 255 / var(--spec-shown)) calc(20.5% + var(--spec-soft-shown)), rgb(255 255 255 / calc(var(--spec-shown) * 0.3)) 34%, transparent 52%)",
+      ~"radial-gradient(circle at var(--glint-at), rgb(255 255 255 / var(--glint-shown)) 0 2%, transparent calc(4.5% + var(--spec-soft-shown)))",
+      ~"linear-gradient(calc(135deg + var(--cube-turn)), color-mix(in srgb, color-mix(in srgb, var(--cube-color), white var(--top-light)), transparent var(--face-alpha)), color-mix(in srgb, color-mix(in srgb, var(--cube-color), white var(--top-dark)), transparent var(--face-alpha)))";
+    box-shadow:
+      ~"inset 0 0 0 1px rgb(255 255 255 / calc(var(--edge-shown) * 0.55))",
+      ~"inset 0 0 calc(var(--cube-size) * 0.25) rgb(255 255 255 / calc(var(--inner) * 0.6))";
+  }
+
+  // Sides: brightness from the angle between face normal and light (Lambert)
+  .player-cube-face--front {
+    --face-angle: 90deg;
+  }
+
+  .player-cube-face--left {
+    --face-angle: 180deg;
+  }
+
+  .player-cube-face--right {
+    --face-angle: 0deg;
+  }
+
+  .player-cube-face--back {
+    --face-angle: 270deg;
+  }
+
+  .player-cube-face--front,
+  .player-cube-face--left,
+  .player-cube-face--right,
+  .player-cube-face--back {
+    --light: ~"cos(var(--face-angle) + var(--cube-turn) - var(--light-angle))";
+    background: ~"color-mix(in srgb, color-mix(in srgb, color-mix(in srgb, var(--cube-color), white calc(max(0, var(--light)) * 35%)), black calc(max(0, -1 * var(--light)) * 42%)), transparent var(--face-alpha))";
+    // The edge to the top face catches light when the side points towards the light
+    box-shadow:
+      ~"inset 0 1px var(--line-blur) rgb(255 255 255 / calc(var(--edge-shown) * max(0.15, var(--light))))",
+      ~"inset 0 0 0 1px rgb(255 255 255 / calc(var(--edge-shown) * 0.2))";
+  }
+}

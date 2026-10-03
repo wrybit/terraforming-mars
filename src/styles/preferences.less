@@ -139,9 +139,6 @@
 .sidebar_item_shortcut {
   height: 60px;
 }
-.sidebar_item_shortcut-long {
-  height: 74px;
-}
 
 .sidebar_item--language {
   position: absolute;
@@ -172,33 +169,11 @@
   z-index: 110;
 }
 
-.preferences_player {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  padding: 10px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.preferences_player_inner {
-  width: 26px;
-  height: 26px;
-  border-radius: 3px;
-  // On your turn: no spinning, no glow – that is a permanent distraction; the page border shows whose turn it is
-}
-
 .sidebar_icon {
   width: 36px;
   height: 36px;
   cursor: pointer;
   display: inline-block;
-}
-
-// Pile sizes are display only: no pointer
-.sidebar_icon.sidebar_icon--cards {
-  background-image: url(./assets/sidebar/preferences_cards.png);
-  cursor: default;
 }
 
 .sidebar_icon.sidebar_icon--language {

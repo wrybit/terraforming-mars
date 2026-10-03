@@ -10,16 +10,20 @@
     <GlobalParameterValue v-if="gameOptions.expansions.venus" :param="globalParameter.VENUS" :value="venus"/>
     <MoonGlobalParameterValue v-if="moonData" :moonData="moonData"/>
   </div>
-  <!-- Spectators (neutral colour) have no own cube: an empty black square would only be puzzling -->
-  <div v-if="playerColor !== 'neutral'" class="sidebar_item preferences_player" :title="$t('Player Color Cube')">
-    <div :class="getPlayerColorCubeClass()+' player_bg_color_' + playerColor"></div>
-  </div>
-
-  <!-- Display only: the old jump link pointed to the long page of the original, which the tab layout no longer has -->
-  <div class="sidebar_item deck-sizes sidebar_item_shortcut-long" :title="$t('Draw pile') + ' / ' + $t('Discard pile')">
-    <i class="sidebar_icon sidebar_icon--cards">
-      <div class="deck-size">🂠{{ deckSize }}<br>🗑{{ discardPileSize }}</div>
-    </i>
+  <!-- Display only, below the buttons and visibly not a button: own player cube and pile sizes.
+       Spectators (neutral colour) have no own cube. -->
+  <div class="sidebar-status" :title="$t('Draw pile') + ' / ' + $t('Discard pile')">
+    <span v-if="playerColor !== 'neutral'" class="sidebar-status-cube" :title="$t('Player Color Cube')">
+      <PlayerCube :color="playerColor" view="iso" :size="20"/>
+    </span>
+    <span class="sidebar-status-piles">
+      <span class="sidebar-status-pile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="currentColor"/></svg>{{ deckSize }}
+      </span>
+      <span class="sidebar-status-pile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>{{ discardPileSize }}
+      </span>
+    </span>
   </div>
   <a v-if="coloniesCount > 0" href="#colonies" :title="$t('Jump to colonies')">
       <div class="sidebar_item sidebar_item_shortcut">
@@ -56,6 +60,7 @@
 
 import {defineAsyncComponent, defineComponent} from 'vue';
 import SidebarModal from '@/client/components/SidebarModal.vue';
+import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {Color} from '@/common/Color';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {TurmoilModel} from '@/common/models/TurmoilModel';
@@ -147,6 +152,7 @@ export default defineComponent({
     PreferencesIcon,
     LanguageIcon,
     SidebarModal,
+    PlayerCube,
     // Load help only on demand (own chunk like the help page in App.vue)
     HelpOverlay: defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/helpOverlay/HelpOverlay.vue')),
   },
@@ -160,9 +166,6 @@ export default defineComponent({
     };
   },
   methods: {
-    getPlayerColorCubeClass(): string {
-      return this.actingPlayer && (getPreferences().hide_animated_sidebar === false) ? 'preferences_player_inner active' : 'preferences_player_inner';
-    },
     getSideBarClass(): string {
       return this.actingPlayer && (getPreferences().hide_animated_sidebar === false) ? 'preferences_acting_player' : 'preferences_nonacting_player';
     },
