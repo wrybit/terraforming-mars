@@ -191,6 +191,11 @@ each(@players, {
     transform: ~"translate(-50%, -50%) rotate(var(--cube-turn))";
     border-radius: calc(var(--cube-size) * 0.08);
     backdrop-filter: blur(calc(var(--cube-size) * 0.07));
+    // Soft dark outline, slightly to the left: separates the cube from a background of similar color
+    // (e.g. a green cube on a green card title)
+    box-shadow:
+      calc(var(--cube-size) * -0.06) 0 calc(var(--cube-size) * 0.08) rgba(0, 0, 0, 0.45),
+      0 0 calc(var(--cube-size) * 0.06) rgba(0, 0, 0, 0.35);
     z-index: 0;
   }
 
