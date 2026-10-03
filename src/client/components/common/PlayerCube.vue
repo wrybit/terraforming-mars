@@ -1,7 +1,7 @@
 <template>
   <!-- Player cube in CSS 3D (player_cube.less): translucent acrylic, light from the top left.
        All six faces are rendered: depending on the rotation others become visible, and the back ones shine through. -->
-  <span :class="['player-cube', 'player-cube--' + view, 'player-cube--' + color]" :style="cubeStyle" aria-hidden="true">
+  <span :class="['player-cube', 'player-cube--' + view, 'player-cube--' + color, {'player-cube--animated': animated}]" :style="cubeStyle" aria-hidden="true">
     <span class="player-cube-body">
       <!-- Shadows on the ground plane, inside the 3D scene so they share the cube's perspective and rotation
            (only shown in the top view, player_cube.less) -->
@@ -29,10 +29,13 @@ const props = withDefaults(defineProps<{
   size?: number;
   // Rotation around the cube's own vertical axis in degrees; the lighting is recalculated, not rotated along
   spin?: number;
+  // Animate view changes (e.g. top -> slight when the color gets chosen) instead of switching instantly
+  animated?: boolean;
 }>(), {
   view: 'slight',
   size: 20,
   spin: undefined,
+  animated: false,
 });
 
 const FACES = ['back', 'right', 'bottom', 'top', 'left', 'front'] as const;

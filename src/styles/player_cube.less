@@ -282,3 +282,91 @@ each(@players, {
       ~"inset 0 0 0 1px rgb(255 255 255 / calc(var(--edge-shown) * 0.2))";
   }
 }
+
+// ---------- Animated view change (PlayerCube animated prop) ----------
+// Used in the game setup: the chosen cube tilts up from the top view into the slight view, the previous one tilts back.
+// Custom properties are only interpolated when registered, otherwise the browser just switches them.
+@cube-flip-duration: 750ms;
+@cube-flip-hop: 10px;
+// Slight overshoot: the cube springs a little past its end position, like a real piece settling
+@cube-flip-easing: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+@property --cube-tilt {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: -24deg;
+}
+
+@property --cube-turn {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@property --screen-tilt {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@property --screen-turn {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@property --cube-size {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 20px;
+}
+
+// 0 = standing (iso/slight), 1 = lying (top): drives everything that can't be interpolated directly
+@property --lie {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.player-cube {
+  --lie: 0;
+}
+
+.player-cube--top {
+  --lie: 1;
+}
+
+.player-cube--animated {
+  transition-property: --cube-tilt, --cube-turn, --screen-tilt, --screen-turn, --cube-size, --lie;
+  transition-duration: @cube-flip-duration;
+  transition-timing-function: @cube-flip-easing;
+
+  // Hop: an arc over sin(lie · 180°), the cube lifts off briefly while tilting
+  .player-cube-body {
+    translate: ~"0 calc(sin(var(--lie) * 180deg) * @{cube-flip-hop} * -1)";
+  }
+
+  // Ground shadows fade with --lie instead of switching display
+  .player-cube-shadow {
+    display: block;
+    opacity: ~"clamp(0, var(--lie), 1)";
+  }
+
+  &::after {
+    display: block;
+    opacity: ~"clamp(0, 1 - var(--lie), 1)";
+  }
+
+  // The face lighting of both views can't be interpolated: switch it exactly halfway through the turn
+  .player-cube-face {
+    transition: background 0s linear (@cube-flip-duration / 2), box-shadow 0s linear (@cube-flip-duration / 2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    .player-cube-face {
+      transition: none;
+    }
+  }
+}
