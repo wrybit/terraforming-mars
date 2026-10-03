@@ -5,12 +5,12 @@
         <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
         <!-- Header row above the cards: "Select all" on the left, on the right the same sorting as in the hand tab -->
         <!-- Hand cards (e.g. selling): the same filter and sorting as in the hand tab, in one row -->
-        <CardFilterBar v-if="isHandSelection" :cards="playerinput.cards" :filter="handCardFilter" :context="filterContext" class="select-card-toolbar">
+        <CardFilterBar v-if="isHandSelection" :cards="playerinput.cards" :filter="handCardFilter" :context="filterContext">
           <template #lead>
             <AppButton v-if="showSelectAll" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
           </template>
           <template #sort="{compact}">
-            <HandSortControl :playerView="playerView" :compact="compact" class="select-card-toolbar__sort"/>
+            <HandSortControl :playerView="playerView" :compact="compact"/>
           </template>
         </CardFilterBar>
         <div v-else-if="showSelectAll" class="select-card-toolbar">

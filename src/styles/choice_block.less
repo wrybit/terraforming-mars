@@ -32,9 +32,12 @@ html:not(.tm-mobile) {
     }
 
     // Milestones/awards: enlarge the image tile to card width (image and text grow with it)
+    // The tile's corner radius grows with the zoomed image, otherwise the selection frame (box-shadow on the tile)
+    // has smaller corners than the image inside it
     > .ma-option {
       width: auto;
       margin: 0;
+      border-radius: (10px * unit((@choice-tile-width / @ma-tile-width)));
     }
 
     > .ma-option .ma-name {

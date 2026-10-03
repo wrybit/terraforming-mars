@@ -14,21 +14,35 @@
 @card-filter-menu-background: #171a26;
 @card-filter-pill-height: 30px;
 @card-filter-row-height: 34px;
-// Same inner space left and right, so the sorting doesn't stick to the edge
-@card-filter-row-padding: 10px;
+// Padding of the tab box (.or-tab-panel in or_options_tabs.less): the row reaches over it to the box edges,
+// its inner space left and right equals it, so filter and sorting line up with the content below
+@card-filter-panel-padding: 16px;
+@card-filter-row-padding-vertical: 10px;
+@card-filter-row-gap-below: 16px;
+@card-filter-separator: rgba(255, 255, 255, 0.12);
+// Dark frosted glass like the sticky footer, so cards scrolling beneath stay readable behind it
+@card-filter-row-background: rgba(14, 15, 20, 0.72);
+// Above hovered cards (z-index 100) and the selection flags, like the footer
+@card-filter-row-z-index: 110;
 
-// ---------- The row ----------
+// ---------- The row: always at the top of its box, edge to edge, separator line below ----------
+// Like the sticky footer of the tab box (tab_panel_footer.less), just at the top: stays visible while scrolling.
 .card-filter-bar {
-  position: relative;
+  position: sticky;
+  top: -@card-filter-panel-padding;
+  z-index: @card-filter-row-z-index;
   display: flex;
   align-items: center;
   gap: 8px;
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  height: @card-filter-row-height;
-  margin: 0 0 12px;
-  padding: 0 @card-filter-row-padding;
+  height: auto;
+  margin: 0 0 @card-filter-row-gap-below;
+  padding: @card-filter-row-padding-vertical @card-filter-panel-padding;
+  border-bottom: 1px solid @card-filter-separator;
+  background: @card-filter-row-background;
+  backdrop-filter: blur(10px);
   font-size: 13px;
   line-height: 1;
 
@@ -52,15 +66,88 @@
   grid-column: 1 / -1;
 }
 
-// Card selections: the row replaces the old toolbar (select_card_toolbar.less) – one line, never wrapping
-.card-filter-bar.select-card-toolbar {
-  flex-wrap: nowrap;
-  gap: 8px;
+// Hand tab: the row heads the hand cards and spans the whole box. As the first thing in the box it sits at the
+// top edge; below the active cards it replaces their separator with its own line above.
+.or-tab-panel .hand-cards-panel__section > .card-filter-bar {
+  width: calc(100% + 2 * @card-filter-panel-padding);
+  margin: 0 -@card-filter-panel-padding @card-filter-row-gap-below;
 }
 
-html.tm-mobile .card-filter-bar.select-card-toolbar {
-  min-width: 100%;
-  height: @card-filter-row-height;
+.or-tab-panel .hand-cards-panel > .hand-cards-panel__section:first-child > .card-filter-bar {
+  margin-top: -@card-filter-panel-padding;
+  border-radius: 0 7px 0 0;
+}
+
+.hand-cards-panel__section + .hand-cards-panel__section:has(> .card-filter-bar) {
+  padding-top: 0;
+  border-top: 0;
+
+  > .card-filter-bar {
+    border-top: 1px solid @card-filter-separator;
+  }
+}
+
+// Play and sell: the row sits in the centered card block but spans the whole box. The box is a size container,
+// so 100cqi is its content width; the block is centered, half the difference shifts the row to the box edge.
+.or-tab-panel {
+  container-type: inline-size;
+}
+
+html:not(.tm-mobile) .or-tab-panel .choice-block.choice-block:has(> .card-filter-bar) {
+  margin-top: 0;
+  padding-top: 0;
+
+  > .card-filter-bar {
+    // Flex basis instead of width: choice_block.less gives every non-card child "flex: 0 0 100%" (block width)
+    flex: 0 0 calc(100cqi + 2 * @card-filter-panel-padding) !important;
+    width: calc(100cqi + 2 * @card-filter-panel-padding);
+    max-width: none;
+    margin: -@card-filter-panel-padding 0 0 calc((100% - 100cqi) / 2 - @card-filter-panel-padding);
+    border-radius: 0 7px 0 0;
+  }
+}
+
+// Played cards: first thing in the panel, over its padding (other_player.less, player_home_columns.less)
+.other_player_cont > .card-filter-bar {
+  top: -10px;
+  width: calc(100% + 25px);
+  margin: -10px 0 @card-filter-row-gap-below -25px;
+}
+
+.player-home-columns__main .other_player .other_player_cont > .card-filter-bar {
+  width: calc(100% + 20px);
+  margin-left: -20px;
+}
+
+// Mobile view: less padding, the boxes reach the screen edge
+html.tm-mobile {
+  .card-filter-bar {
+    top: 0;
+    padding: 8px 10px;
+  }
+
+  .mb-screen .or-tab-panel .hand-cards-panel__section > .card-filter-bar {
+    width: calc(100% + 16px);
+    margin: 0 -8px 12px;
+  }
+
+  .mb-screen .or-tab-panel .hand-cards-panel > .hand-cards-panel__section:first-child > .card-filter-bar {
+    margin-top: -10px;
+  }
+
+  // Card choice grid (mobile.less): the row takes the grid's width, room for the flags below it
+  .choice-block > .card-filter-bar {
+    flex: 0 0 auto;
+    width: 0;
+    min-width: calc(100% - @mb-choice-gap);
+    margin: 0 0 (@selection-tab-offset + 10px);
+  }
+
+  .mb-screen--players .other_player_panel .other_player_cont > .card-filter-bar {
+    top: -8px;
+    width: calc(100% + 8px);
+    margin: -8px -4px 12px;
+  }
 }
 
 .card-filter-bar__filter {
@@ -676,9 +763,9 @@ html.tm-mobile .mb-screen .card-filter-hidden.card-filter-hidden {
 }
 
 // Open filter menu (not the phone sheet): the cards behind it 20 % darker and slightly blurred
-.hand-cards-panel__section:has(.card-filter-bar--open) .sortable-cards-root,
+.hand-cards-panel__section:has(> .card-filter-bar--open) > .sortable-cards-root,
 .choice-block:has(> .card-filter-bar--open) > label,
-.player_home_block:has(> .card-filter-bar--open) .other-player-cards {
+.other_player_cont:has(> .card-filter-bar--open) > .player_home_block {
   filter: brightness(0.8) blur(2px);
 }
 
@@ -711,7 +798,6 @@ html.tm-mobile .mb-screen .card-filter-hidden.card-filter-hidden {
 // Phone: tighter row
 .card-filter-bar--compact {
   gap: 6px;
-  padding: 0 4px;
 
   .card-bar-pill {
     padding: 0 8px;
@@ -722,7 +808,3 @@ html.tm-mobile .mb-screen .card-filter-hidden.card-filter-hidden {
   }
 }
 
-// Played cards: no left padding in the panel, keep the row aligned with the cards
-.other-player-filter {
-  padding-left: 0;
-}

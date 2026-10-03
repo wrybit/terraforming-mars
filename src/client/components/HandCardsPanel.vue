@@ -11,13 +11,14 @@
       </div>
     </section>
     <section v-if="handCards.length > 0" class="hand-cards-panel__section">
-      <!-- Header row: heading (only with active cards above), filter and sorting on one line -->
+      <!-- Head of the hand cards: heading (only with active cards above), filter and sorting in one row
+           across the whole box, separated by lines from the content above and below -->
       <CardFilterBar v-if="handCards.length > 1" :cards="handCards" :filter="handCardFilter" :context="filterContext">
         <template #lead>
           <h3 v-if="activeCards.length > 0" class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ handCards.length }}</small></h3>
         </template>
         <template #sort="{compact}">
-          <HandSortControl :playerView="playerView" :compact="compact" class="hand-cards-panel__sort"/>
+          <HandSortControl :playerView="playerView" :compact="compact"/>
         </template>
       </CardFilterBar>
       <div v-else-if="activeCards.length > 0" class="hand-cards-panel__header">

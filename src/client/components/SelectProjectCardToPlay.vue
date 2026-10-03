@@ -2,10 +2,10 @@
 <div class="payments_cont choice-block" :style="choiceBlockStyle(cards.length)">
   <!-- Cards as a choice block (choice_block.less) like when buying and for standard projects -->
   <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
-  <!-- Same filter and sorting as in the hand tab, in one row above the cards -->
-  <CardFilterBar v-if="cards.length > 1" :cards="cards" :filter="handCardFilter" :context="filterContext" class="select-card-toolbar">
+  <!-- Same filter and sorting as in the hand tab, at the top of the box – only for hand cards (not standard projects) -->
+  <CardFilterBar v-if="isHandSelection" :cards="cards" :filter="handCardFilter" :context="filterContext">
     <template #sort="{compact}">
-      <HandSortControl :playerView="playerView" :compact="compact" class="select-card-toolbar__sort"/>
+      <HandSortControl :playerView="playerView" :compact="compact"/>
     </template>
   </CardFilterBar>
   <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
@@ -62,6 +62,7 @@ import PaymentForm from '@/client/components/PaymentForm.vue';
 import {Ledger} from '@/client/components/PaymentLedger';
 import {choiceBlockStyle} from '@/client/components/choiceBlock';
 import HandSortControl from '@/client/components/HandSortControl.vue';
+import {allCardsInHand} from '@/client/utils/handCards';
 import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
 import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
 import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
@@ -126,8 +127,16 @@ export default defineComponent({
     filterContext(): CardFilterContext {
       return {withCost: true};
     },
+    // Playing project cards from the hand; standard projects use the same input but get no filter
+    isHandSelection(): boolean {
+      if (this.cards.length < 2) {
+        return false;
+      }
+      const hand = new Set(allCardsInHand(this.playerView).map((card) => card.name));
+      return this.cards.every((card) => hand.has(card.name));
+    },
     nothingShown(): boolean {
-      return this.cards.length > 1 && unmatchedCards.value === 'hide' && this.cards.every((card) => this.visibilityOf(card) !== 'shown');
+      return this.isHandSelection && unmatchedCards.value === 'hide' && this.cards.every((card) => this.visibilityOf(card) !== 'shown');
     },
     // The chosen card disappears behind the filter: choose the first shown card instead
     firstShownCardName(): CardName | undefined {
@@ -199,7 +208,7 @@ export default defineComponent({
   methods: {
     resetCardFilter,
     visibilityOf(card: CardModel): CardVisibility {
-      return cardVisibility(card, handCardFilter, this.filterContext);
+      return this.isHandSelection ? cardVisibility(card, handCardFilter, this.filterContext) : 'shown';
     },
     visibilityClass(card: CardModel): string | undefined {
       const visibility = this.visibilityOf(card);

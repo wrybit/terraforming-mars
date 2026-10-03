@@ -1,13 +1,13 @@
 <template>
   <!-- The one row above a card list: on the left the lead (heading or "Select all"), the filter button and the
        active filters as removable chips; on the right the match count and the sorting (slot).
-       Narrow row (phone, small card choice): icon buttons only, the active filters stay in the filter menu/sheet,
-       × next to the button clears them. -->
+       Narrow row (phone): icon buttons only, the active filters stay in the filter sheet, × next to the button clears them.
+       The row sits at the top of its box with a separator line (card_filter_bar.less). -->
   <div ref="root" class="card-filter-bar" :class="{'card-filter-bar--compact': compact, 'card-filter-bar--open': menuOpen && !useSheet}">
     <slot name="lead"></slot>
     <div class="card-filter-bar__filter">
       <button type="button" class="card-bar-pill" :class="{'card-bar-pill--on': activeCount > 0, 'card-bar-pill--open': menuOpen}"
-        :aria-expanded="menuOpen" :title="$t('Filter')" @click="menuOpen = !menuOpen">
+        :aria-expanded="menuOpen" :title="compact ? $t('Filter') : undefined" @click="menuOpen = !menuOpen">
         <svg class="card-sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
           stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8.5V19l-4 2v-7.5z"/></svg>
         <span v-if="!compact" v-i18n>Filter</span>
@@ -76,7 +76,8 @@ const props = defineProps<{
   context: CardFilterContext;
 }>();
 
-// Below this row width the row switches to icon buttons and a bottom sheet – depending on the room, not on the device
+// Mobile view only: below this row width the row switches to icon buttons and a bottom sheet.
+// Outside the mobile view the labels always stay.
 const COMPACT_BELOW_PX = 560;
 
 const root = ref<HTMLElement>();
@@ -93,14 +94,18 @@ onMounted(() => {
     const width = entry.contentRect.width;
     // Hidden tabs report 0: keep the last layout
     if (width > 0) {
-      compact.value = width < COMPACT_BELOW_PX;
+      compact.value = isMobileView() && width < COMPACT_BELOW_PX;
     }
   });
   resizeObserver.observe(root.value);
 });
 
-// Bottom sheet only in the mobile view; a narrow row on the desktop (small card choice) keeps the drop-down menu
-const useSheet = computed(() => compact.value && document.documentElement.classList.contains('tm-mobile'));
+function isMobileView(): boolean {
+  return document.documentElement.classList.contains('tm-mobile');
+}
+
+// Narrow rows only exist in the mobile view: they open the filters as a bottom sheet
+const useSheet = computed(() => compact.value);
 
 const activeCount = computed(() => activeFilterCount(props.filter, props.context));
 const shownCount = computed(() => props.cards.filter((card) => matchesCardFilter(card, props.filter, props.context)).length);
