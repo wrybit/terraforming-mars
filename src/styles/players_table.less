@@ -490,6 +490,28 @@ each(@players, {
   background: #7a4a1f;
 }
 
+// Tag substitution (PlayerTagSubstitution.vue, e.g. Earth Embassy) as a small round badge at the bottom left
+// of the counter, so it stays next to the number in wide (transposed mobile) cells too
+.players-table-cell .players-table-counter {
+  position: relative;
+}
+
+.players-table-cell .player-tag-substitution {
+  position: absolute;
+  bottom: -5px;
+  left: -12px;
+}
+
+.players-table-cell .player-tag-substitution-icon {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background-color: #fff;
+  background-size: 15px 15px;
+  background-position: -1px -1px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+}
+
 .players-table-played {
   font-family: Prototype, sans-serif;
   font-size: 14px;

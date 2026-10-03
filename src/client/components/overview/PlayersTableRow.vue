@@ -17,7 +17,7 @@
         <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
           <div v-if="groupIndex > 0"></div>
           <div class="players-table-cell" v-for="tag in group" :key="tag" :data-test="'tag-' + tag">
-            <span :class="tagCounterClasses(tag)"><span v-if="protectedTags.includes(tag)" class="players-table-protection shield_icon" :data-test="'protection-' + tag"></span>{{ tagDetail(tag).count || '·' }}</span>
+            <span :class="tagCounterClasses(tag)"><span v-if="protectedTags.includes(tag)" class="players-table-protection shield_icon" :data-test="'protection-' + tag"></span>{{ tagDetail(tag).count || '·' }}<PlayerTagSubstitution v-if="tagDetail(tag).substitution !== undefined" :tag="tagDetail(tag).substitution!" :data-test="'substitution-' + tag"/></span>
             <span v-if="tagDetail(tag).discount > 0" class="players-table-discount" :data-test="'discount-' + tag" :title="$t('Discount')">{{ tagDetail(tag).discount }}</span>
             <PointsPerTag :points="tagDetail(tag)"/>
           </div>
@@ -54,6 +54,7 @@ import {ActionLabel} from '@/client/components/overview/ActionLabel';
 import PlayerIdentity from '@/client/components/overview/PlayerIdentity.vue';
 import PlayersTableGoods from '@/client/components/overview/PlayersTableGoods.vue';
 import PointsPerTag from '@/client/components/overview/PointsPerTag.vue';
+import PlayerTagSubstitution from '@/client/components/overview/PlayerTagSubstitution.vue';
 import {PlayerGood, playerGoods} from '@/client/components/overview/playerGoods';
 import {protectedTagsOf} from '@/client/components/overview/protectedTags';
 import {InterfaceTagsType, TagDetail, TagDetails, isVictoryPointCountHidden} from '@/client/components/overview/playerTagDetails';
@@ -67,6 +68,7 @@ export default defineComponent({
     PlayerIdentity,
     PlayersTableGoods,
     PointsPerTag,
+    PlayerTagSubstitution,
   },
   props: {
     player: {

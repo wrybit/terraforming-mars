@@ -8,7 +8,7 @@ import {CardName} from '@/common/cards/CardName';
 import {Color} from '@/common/Color';
 import {emptyTags, fakeGameModel, fakePublicPlayerModel, fakeViewModel} from '../testHelpers';
 
-function mountRow(options: {showOtherPlayersVP: boolean, setVisibilityState?: (key: string, value: boolean) => void, firstForGen?: boolean, actionLabel?: 'passed' | 'active'}) {
+function mountRow(options: {showOtherPlayersVP: boolean, setVisibilityState?: (key: string, value: boolean) => void, firstForGen?: boolean, actionLabel?: 'passed' | 'active', extraTableau?: Array<CardName>}) {
   const me = fakePublicPlayerModel({color: 'blue' as Color});
   const other = fakePublicPlayerModel({
     color: 'red' as Color,
@@ -16,7 +16,7 @@ function mountRow(options: {showOtherPlayersVP: boolean, setVisibilityState?: (k
     terraformRating: 24,
     cardsInHandNbr: 10,
     tags: {...emptyTags(), [Tag.BUILDING]: 8},
-    tableau: [{name: CardName.SATURN_SYSTEMS}, {name: CardName.ACQUIRED_COMPANY}],
+    tableau: [{name: CardName.SATURN_SYSTEMS}, {name: CardName.ACQUIRED_COMPANY}, ...(options.extraTableau ?? []).map((name) => ({name}))],
   });
   const playerView = fakeViewModel({
     players: [other, me],
@@ -39,7 +39,7 @@ function mountRow(options: {showOtherPlayersVP: boolean, setVisibilityState?: (k
       firstForGen: options.firstForGen ?? false,
       playerIndex: 0,
       visibility: {goods: true, tags: true, score: true},
-      tagColumns: [[Tag.BUILDING]],
+      tagColumns: [[Tag.BUILDING, Tag.SCIENCE, Tag.EARTH]],
       tagDetails: buildTagDetails(other, playerView),
     },
   });
@@ -53,6 +53,13 @@ describe('PlayersTableRow', () => {
     expect(wrapper.find('[data-test="hand"]').text()).to.eq('10');
     expect(wrapper.find('[data-test="tag-building"]').text()).to.eq('8');
     expect(wrapper.find('[data-test="played-cards"]').text()).to.eq('2');
+  });
+
+  it('shows a tag substitution marker (Earth Embassy)', () => {
+    expect(mountRow({showOtherPlayersVP: false}).find('[data-test="substitution-earth"]').exists()).to.eq(false);
+    const wrapper = mountRow({showOtherPlayersVP: false, extraTableau: [CardName.EARTH_EMBASSY]});
+    expect(wrapper.find('[data-test="substitution-earth"]').exists()).to.eq(true);
+    expect(wrapper.find('[data-test="substitution-science"]').exists()).to.eq(false);
   });
 
   it('shows other players victory points when the game allows it', () => {

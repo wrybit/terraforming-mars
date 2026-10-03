@@ -89,7 +89,7 @@ export default defineComponent({
     tagDetailsByColor(): Record<string, TagDetails> {
       return Object.fromEntries(this.rows.map((row) => [row.player.color, buildTagDetails(row.player, this.playerView)]));
     },
-    // Only tags at least one player has (or someone gets a discount on) – otherwise hidden for everyone
+    // Only tags at least one player has (or a discount or substitution on) – otherwise hidden for everyone
     tagColumns(): TagColumnGroups {
       const groups: TagColumnGroups = [[]];
       for (const tag of TAG_ORDER) {
@@ -102,7 +102,7 @@ export default defineComponent({
         }
         const anyoneHasIt = Object.values(this.tagDetailsByColor).some((details) => {
           const detail = details.tagsInOrder.find((entry) => entry.name === tag);
-          return detail !== undefined && (detail.count > 0 || detail.discount > 0);
+          return detail !== undefined && (detail.count > 0 || detail.discount > 0 || detail.substitution !== undefined);
         });
         if (anyoneHasIt) {
           groups[groups.length - 1].push(tag);
