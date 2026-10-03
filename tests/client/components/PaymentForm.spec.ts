@@ -40,7 +40,8 @@ describe('PaymentForm', () => {
 
     expect(wrapper.find('.payments_single').text()).contains('7');
     expect(wrapper.find('[data-test=megacredits] input').exists()).is.false;
-    expect(wrapper.find('.payments_total_value').exists()).is.false;
+    expect(wrapper.find('.payments_divider--total').exists()).is.false;
+    expect(wrapper.find('[data-test=rest-megacredits]').text()).contains('3');
   });
 
   it('renders only resources in spendableResources', async () => {
@@ -151,7 +152,7 @@ describe('PaymentForm', () => {
       },
     });
 
-    await wrapper.find('[data-test=steel] .btn-max').trigger('click');
+    await wrapper.find('[data-test=steel] [data-test=target]').trigger('click');
     await wrapper.vm.$nextTick();
 
     const lp = wrapper.vm.payment;
@@ -170,7 +171,7 @@ describe('PaymentForm', () => {
       },
     });
 
-    await wrapper.find('[data-test=titanium] .btn-max').trigger('click');
+    await wrapper.find('[data-test=titanium] [data-test=target]').trigger('click');
     await wrapper.vm.$nextTick();
 
     const lp = wrapper.vm.payment;
@@ -189,7 +190,7 @@ describe('PaymentForm', () => {
       },
     });
 
-    await wrapper.find('[data-test=heat] .btn-max').trigger('click');
+    await wrapper.find('[data-test=heat] [data-test=target]').trigger('click');
     await wrapper.vm.$nextTick();
 
     const lp = wrapper.vm.payment;
@@ -214,7 +215,7 @@ describe('PaymentForm', () => {
     expect(lp.megacredits).eq(4);
   });
 
-  it('megacredits max caps at cost', async () => {
+  it('megacredits target balances what the other resources leave open', async () => {
     const wrapper = mountPaymentForm({
       cost: 10,
       order: ['megacredits', 'heat'],
@@ -224,17 +225,18 @@ describe('PaymentForm', () => {
         'heat': {available: 1, rate: 1},
       },
     });
-
-    await wrapper.find('[data-test=megacredits] .btn-max').trigger('click');
+    wrapper.vm.payment.megacredits = 3;
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.vm.payment.megacredits).eq(10);
+    await wrapper.find('[data-test=megacredits] [data-test=target]').trigger('click');
+    await wrapper.vm.$nextTick();
+
+    const payment = wrapper.vm.payment;
+    expect(payment.megacredits + payment.heat).eq(10);
   });
 
-  it('megacredits max recalculates other resources to avoid overspend', async () => {
-    // cost=10, MC=8, steel=5 at rate 2
-    // Greedy initial: steel=5 covers all, MC=0
-    // After max MC (MC=8): post-pass reduces steel to 1 (8+2=10 exact)
+  it('megacredits target never overpays', async () => {
+    // cost=10, steel=5 at rate 2 covers everything – M€ have nothing left to balance
     const wrapper = mountPaymentForm({
       cost: 10,
       order: ['steel', 'megacredits'],
@@ -248,11 +250,9 @@ describe('PaymentForm', () => {
     expect(lp.steel).eq(5);
     expect(lp.megacredits).eq(0);
 
-    await wrapper.find('[data-test=megacredits] .btn-max').trigger('click');
-    await wrapper.vm.$nextTick();
-
-    expect(wrapper.vm.payment.megacredits).eq(8);
-    expect(wrapper.vm.payment.steel).eq(1);
+    const target = wrapper.find('[data-test=megacredits] [data-test=target]');
+    expect(target.text()).eq('0');
+    expect(target.attributes('disabled')).to.not.be.undefined;
   });
 
   it('emits change with initial payment on mount', async () => {

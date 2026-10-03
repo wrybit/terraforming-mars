@@ -42,17 +42,18 @@ describe('PaymentUnit', () => {
         unit: 'megacredits',
         description: 'MegaCredits',
         showMax: true,
+        target: 8,
       },
     });
     const buttons = wrapper.findAllComponents({name: 'AppButton'});
-    // Buttons are: minus, plus, max
+    // AppButtons are: minus, plus; the target button is a plain button that shows its value
     const minusBtn = buttons.find((b) => b.props('type') === 'minus');
     const plusBtn = buttons.find((b) => b.props('type') === 'plus');
-    const maxBtn = buttons.find((b) => b.props('type') === 'max');
+    const targetBtn = wrapper.find('[data-test=target]');
 
     expect(minusBtn).to.not.be.undefined;
     expect(plusBtn).to.not.be.undefined;
-    expect(maxBtn).to.not.be.undefined;
+    expect(targetBtn.text()).to.eq('8');
 
     await minusBtn!.vm.$emit('click');
     expect(wrapper.emitted('minus')).to.not.be.undefined;
@@ -60,7 +61,21 @@ describe('PaymentUnit', () => {
     await plusBtn!.vm.$emit('click');
     expect(wrapper.emitted('plus')).to.not.be.undefined;
 
-    await maxBtn!.vm.$emit('click');
+    await targetBtn.trigger('click');
     expect(wrapper.emitted('max')).to.not.be.undefined;
+  });
+
+  it('disables the target button once its value is set', () => {
+    const wrapper = shallowMount(PaymentUnit, {
+      ...globalConfig,
+      props: {
+        modelValue: 8,
+        unit: 'megacredits',
+        description: 'MegaCredits',
+        target: 8,
+        targetReached: true,
+      },
+    });
+    expect(wrapper.find('[data-test=target]').attributes('disabled')).to.not.be.undefined;
   });
 });

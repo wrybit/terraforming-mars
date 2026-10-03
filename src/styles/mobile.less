@@ -1931,94 +1931,71 @@ html.tm-mobile {
       background: @mb-surface-raised;
     }
 
-    // Currencies on the left, the total small to their right
+    // Balance block (payments.less) a little tighter so all columns fit the phone width
     .payments_prices {
       flex-wrap: nowrap;
-      align-items: center;
-      gap: 10px;
     }
 
-    .payments_table {
-      flex: 1 1 auto;
-      border-spacing: 0 6px;
+    .payments_balance {
+      column-gap: 6px;
     }
 
-    // Currency as an icon in the input field instead of a row in front: [−] [icon amount] [+]
     .payments_type {
-      display: grid;
-      grid-template-columns: 40px minmax(0, 1fr) 40px;
-      align-items: center;
-      gap: 6px;
-
-      > .btn:first-of-type {
-        grid-column: 1;
-        grid-row: 1;
-      }
-
-      > .btn:nth-of-type(2) {
-        grid-column: 3;
-        grid-row: 1;
-      }
+      gap: 4px;
 
       .btn {
-        width: 40px !important;
-        height: 40px;
+        width: 32px !important;
+        height: 36px;
         min-width: 0;
         padding: 0;
+        flex-grow: 0;
       }
+    }
+
+    .payments_field .payments_input.form-input {
+      width: 54px !important;
+      padding: 0 7px 0 (@mb-payment-icon + 4px);
+      font-size: 17px;
     }
 
     .payments_type_icon {
-      grid-column: 2;
-      grid-row: 1;
-      z-index: 1;
-      justify-self: start;
-      width: @mb-payment-icon !important;
-      height: @mb-payment-icon !important;
-      margin: 0 0 0 8px;
-      flex-shrink: 0;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      pointer-events: none;
+      left: 4px;
+      width: (@mb-payment-icon - 6px) !important;
+      height: (@mb-payment-icon - 6px) !important;
     }
 
-    .payments_input {
-      grid-column: 2;
-      grid-row: 1;
-      width: 100% !important;
-      max-width: none;
-      height: 40px;
-      box-sizing: border-box;
-      padding: 0 8px 0 (@mb-payment-icon + 14px);
-      font-size: 20px;
-      text-align: center;
+    .payments_target {
+      min-width: 34px;
+      padding: 0 6px;
+      font-size: 14px;
+
+      svg {
+        display: none; // no room for the arrow; the outline already sets it apart from − / +
+      }
     }
 
     .payments_unit_subtotal {
-      padding-left: 8px;
-      font-size: 15px;
+      min-width: 0;
+      font-size: 14px;
+      grid-template-columns: auto 1fr 16px;
+    }
+
+    .payments_rest,
+    .payments_total_value {
+      font-size: 14px;
     }
 
     .payments_total {
-      flex: 0 0 auto;
-      margin: 0;
-      text-align: right;
+      min-width: 76px;
     }
 
-    .payments_total_heading {
-      font-size: 11px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+    .payments_balance--single .payments_total {
+      min-width: 0;
     }
 
-    .payments_total_value {
-      font-size: 18px;
-      white-space: nowrap;
-    }
-
-    .btn-max {
-      display: none;
+    .payments_type_smallicon {
+      width: 16px;
+      height: 16px;
     }
   }
 
