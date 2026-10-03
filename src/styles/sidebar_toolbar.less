@@ -85,6 +85,12 @@
     margin-top: 12px;
   }
 
+  // Spectator without own color: no cube, so the piles keep their place under the right column
+  // (right edge, as with a cube) instead of sliding into the empty left one
+  .sidebar_cont .sidebar-status-piles:only-child {
+    grid-column: 2;
+  }
+
   .sidebar_cont > a:has(.sidebar_icon--colonies) {
     grid-area: colonies;
   }
