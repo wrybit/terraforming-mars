@@ -3,6 +3,10 @@
        All six faces are rendered: depending on the rotation others become visible, and the back ones shine through. -->
   <span :class="['player-cube', 'player-cube--' + view, 'player-cube--' + color]" :style="cubeStyle" aria-hidden="true">
     <span class="player-cube-body">
+      <!-- Shadows on the ground plane, inside the 3D scene so they share the cube's perspective and rotation
+           (only shown in the top view, player_cube.less) -->
+      <i class="player-cube-shadow player-cube-shadow--rim"></i>
+      <i class="player-cube-shadow player-cube-shadow--cast"></i>
       <i v-for="face in FACES" :key="face" :class="'player-cube-face player-cube-face--' + face"></i>
     </span>
   </span>
