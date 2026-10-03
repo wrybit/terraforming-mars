@@ -1467,5 +1467,7 @@
   "Your turn": "Am Zug",
   "Buying": "Kaufen",
   "Opening": "Start",
-  "Solar phase": "Solarphase"
+  "Solar phase": "Solarphase",
+  "Placing next to severe hazards requires losing 2 units of the same production.": "Ein Plättchen neben schweren Gefahrenplättchen kostet je 2 Einheiten derselben Produktion.",
+  "Choose ${0} units of production to lose from ${1} mild and ${2} severe hazards": "Wähle ${0} Produktionseinheiten, die du durch ${1} leichte und ${2} schwere Gefahrenplättchen verlierst"
 }
