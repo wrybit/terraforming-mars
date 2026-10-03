@@ -194,6 +194,20 @@ each(@players, {
     z-index: 0;
   }
 
+  // Shadow lying flat on the surface: the cube's footprint, offset to the bottom right (away from the light),
+  // turned along with the cube. Dark core with a slight tint of the cube color – visible on light cards,
+  // which also raises the contrast of the translucent cube
+  &::after {
+    inset: 50% auto auto 50%;
+    width: var(--cube-size);
+    height: var(--cube-size);
+    border-radius: calc(var(--cube-size) * 0.12);
+    transform: ~"translate(calc(-50% + var(--cube-size) * 0.2), calc(-50% + var(--cube-size) * 0.24)) rotate(var(--cube-turn))";
+    background: ~"color-mix(in srgb, color-mix(in srgb, var(--cube-color), black 55%), transparent 35%)";
+    box-shadow: ~"0 0 calc(var(--cube-size) * 0.18) calc(var(--cube-size) * 0.04) color-mix(in srgb, var(--cube-color), transparent 55%)";
+    filter: blur(calc(var(--cube-size) * 0.1));
+  }
+
   // Top face: reflection and gradient rotated against the spin so they match the light
   .player-cube-face--top {
     background:
