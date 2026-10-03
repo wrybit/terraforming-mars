@@ -2,7 +2,14 @@
 <div class="payments_cont choice-block" :style="choiceBlockStyle(cards.length)">
   <!-- Cards as a choice block (choice_block.less) like when buying and for standard projects -->
   <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
-  <label v-for="availableCard in cards" class="payments_cards" :key="availableCard.name">
+  <!-- Same filter and sorting as in the hand tab, in one row above the cards -->
+  <CardFilterBar v-if="cards.length > 1" :cards="cards" :filter="handCardFilter" :context="filterContext" class="select-card-toolbar">
+    <template #sort="{compact}">
+      <HandSortControl :playerView="playerView" :compact="compact" class="select-card-toolbar__sort"/>
+    </template>
+  </CardFilterBar>
+  <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
+  <label v-for="availableCard in cards" class="payments_cards" :class="visibilityClass(availableCard)" :key="availableCard.name">
     <input v-if="!availableCard.isDisabled" class="hidden" type="radio" v-model="cardName" :value="availableCard.name" >
     <Card class="cardbox" :card="availableCard" />
   </label>
@@ -54,6 +61,11 @@ import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import PaymentForm from '@/client/components/PaymentForm.vue';
 import {Ledger} from '@/client/components/PaymentLedger';
 import {choiceBlockStyle} from '@/client/components/choiceBlock';
+import HandSortControl from '@/client/components/HandSortControl.vue';
+import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
+import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
+import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
+import {cardVisibility, CardVisibility, handCardFilter, unmatchedCards} from '@/client/utils/cardFilterState';
 
 export default defineComponent({
   name: 'SelectProjectCardToPlay',
@@ -107,6 +119,24 @@ export default defineComponent({
     ledger(): Ledger {
       return this.buildLedger(this.order, this.reserveUnits);
     },
+    handCardFilter(): typeof handCardFilter {
+      return handCardFilter;
+    },
+    // Only playable cards are listed here, so no "Playable now"
+    filterContext(): CardFilterContext {
+      return {withCost: true};
+    },
+    nothingShown(): boolean {
+      return this.cards.length > 1 && unmatchedCards.value === 'hide' && this.cards.every((card) => this.visibilityOf(card) !== 'shown');
+    },
+    // The chosen card disappears behind the filter: choose the first shown card instead
+    firstShownCardName(): CardName | undefined {
+      return this.cards.find((card) => this.visibilityOf(card) === 'shown')?.name;
+    },
+    chosenCardHidden(): boolean {
+      const chosen = this.cards.find((card) => card.name === this.cardName);
+      return chosen !== undefined && this.visibilityOf(chosen) === 'hidden';
+    },
     CardName(): typeof CardName {
       return CardName;
     },
@@ -115,6 +145,11 @@ export default defineComponent({
     },
   },
   watch: {
+    chosenCardHidden(hidden: boolean) {
+      if (hidden && this.firstShownCardName !== undefined) {
+        this.cardName = this.firstShownCardName;
+      }
+    },
     // Vue runs watchers before re-rendering the component that owns them, so
     // available units are updated before PaymentForm remounts via :key and reads them.
     cardName(newVal: string | undefined) {
@@ -151,6 +186,9 @@ export default defineComponent({
     Card,
     PaymentForm,
     WarningsComponent,
+    HandSortControl,
+    CardFilterBar,
+    CardFilterEmptyHint,
   },
   created() {
     if (this.cards.length === 0) {
@@ -159,6 +197,14 @@ export default defineComponent({
     this.updateAvailableUnits();
   },
   methods: {
+    resetCardFilter,
+    visibilityOf(card: CardModel): CardVisibility {
+      return cardVisibility(card, handCardFilter, this.filterContext);
+    },
+    visibilityClass(card: CardModel): string | undefined {
+      const visibility = this.visibilityOf(card);
+      return visibility === 'shown' ? undefined : 'card-filter-' + visibility;
+    },
     choiceBlockStyle,
     getCard() {
       const card = this.cards.find((c) => c.name === this.cardName);

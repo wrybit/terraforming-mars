@@ -11,12 +11,20 @@
       </div>
     </section>
     <section v-if="handCards.length > 0" class="hand-cards-panel__section">
-      <!-- Header row: heading on the left, sorting (manual or upstream sortings) on the right; without heading only the buttons -->
-      <div v-if="activeCards.length > 0 || handCards.length > 1" class="hand-cards-panel__header">
-        <h3 v-if="activeCards.length > 0" class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ handCards.length }}</small></h3>
-        <HandSortControl v-if="handCards.length > 1" :playerView="playerView" class="hand-cards-panel__sort"/>
+      <!-- Header row: heading (only with active cards above), filter and sorting on one line -->
+      <CardFilterBar v-if="handCards.length > 1" :cards="handCards" :filter="handCardFilter" :context="filterContext">
+        <template #lead>
+          <h3 v-if="activeCards.length > 0" class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ handCards.length }}</small></h3>
+        </template>
+        <template #sort="{compact}">
+          <HandSortControl :playerView="playerView" :compact="compact" class="hand-cards-panel__sort"/>
+        </template>
+      </CardFilterBar>
+      <div v-else-if="activeCards.length > 0" class="hand-cards-panel__header">
+        <h3 class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ handCards.length }}</small></h3>
       </div>
-      <SortableCards :playerId="playerView.id" :cards="handCards"/>
+      <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
+      <SortableCards :playerId="playerView.id" :cards="handCards" :visibility="visibility"/>
     </section>
   </div>
 </template>
@@ -26,6 +34,12 @@ import {computed} from 'vue';
 import Card from '@/client/components/card/Card.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
 import HandSortControl from '@/client/components/HandSortControl.vue';
+import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
+import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
+import {CardModel} from '@/common/models/CardModel';
+import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
+import {cardVisibility, CardVisibility, handCardFilter, unmatchedCards} from '@/client/utils/cardFilterState';
+import {playableProjectCards} from '@/client/utils/playableCards';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
@@ -38,4 +52,13 @@ const props = defineProps<{
 const thisPlayer = computed(() => props.playerView.thisPlayer);
 const activeCards = computed(() => ownActiveCards(props.playerView));
 const handCards = computed(() => allCardsInHand(props.playerView));
+// "Playable now" only while the player can play a project card
+const filterContext = computed((): CardFilterContext => ({playable: playableProjectCards(props.playerView), withCost: true}));
+
+function visibility(card: CardModel): CardVisibility {
+  return cardVisibility(card, handCardFilter, filterContext.value);
+}
+
+const nothingShown = computed(() => unmatchedCards.value === 'hide' && handCards.value.length > 1 &&
+  handCards.value.every((card) => visibility(card) !== 'shown'));
 </script>

@@ -1477,5 +1477,22 @@
   "missing": "fehlt",
   "too much": "zu viel",
   "Pay as much as useful with this resource": "So viel wie sinnvoll mit dieser Ressource zahlen",
-  "Already paying as much as useful with this resource": "Schon so viel wie sinnvoll mit dieser Ressource"
+  "Already paying as much as useful with this resource": "Schon so viel wie sinnvoll mit dieser Ressource",
+  "with VP": "mit SP",
+  "Playable now": "Jetzt spielbar",
+  "Cost up to": "Kosten bis",
+  "any": "alle",
+  "Collects": "Sammelt",
+  "Non-matching cards": "Nicht passende Karten",
+  "Hidden": "Ausblenden",
+  "Dimmed": "Abdunkeln",
+  "Reset filters": "Filter zurücksetzen",
+  "${0} of ${1} cards": "${0} von ${1} Karten",
+  "Show ${0} cards": "${0} Karten zeigen",
+  "No card matches these filters.": "Keine Karte passt zu diesen Filtern.",
+  "Select all ${0}": "Alle ${0} auswählen",
+  "${0} chosen cards hidden by the filter": "${0} gewählte Karten vom Filter ausgeblendet",
+  "Sort": "Sortieren",
+  "ascending": "aufsteigend",
+  "descending": "absteigend"
 }
