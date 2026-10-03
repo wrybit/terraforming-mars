@@ -14,7 +14,7 @@
         <span v-if="count !== undefined" class="or-tab-count">{{ count }}</span>
       </button>
       <!-- Choice can still be changed (e.g. draft) while others are choosing: same red status tab as without an input -->
-      <WaitingForPlayersTab v-if="playerinput.optional === true" :players="playersToWaitFor(playerView)"/>
+      <WaitingForPlayersTab v-if="playerinput.optional === true" :playerView="playerView"/>
     </div>
 
     <div v-docked-tab :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
@@ -50,7 +50,6 @@ import {InputResponse} from '@/common/inputs/InputResponse';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
-import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
 import {fullTabTitle, inputTabLabel} from '@/client/components/orOptionsShortLabels';

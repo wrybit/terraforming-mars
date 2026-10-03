@@ -29,7 +29,7 @@
     <div v-if="playerView.pickedCorporationCard.length === 1" class="setup-picked">
       <div class="or-tabs" role="tablist">
         <HandCardsTab :count="pickedCards.length" :active="true" label="Your selection"/>
-        <WaitingForPlayersTab :players="playersToWaitFor(playerView)"/>
+        <WaitingForPlayersTab :playerView="playerView"/>
       </div>
       <div v-docked-tab class="or-tab-panel or-tab-panel--view" role="tabpanel">
         <div v-for="card in pickedCards" :key="card.name" class="cardbox">
@@ -60,7 +60,6 @@ import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {CardModel} from '@/common/models/CardModel';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
-import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
 import {showsDraftedCardsBlock} from '@/client/utils/draftedCards';
 
 export default defineComponent({
@@ -93,7 +92,6 @@ export default defineComponent({
   },
   methods: {
     showsDraftedCardsBlock,
-    playersToWaitFor,
   },
   directives: {
     dockedTab: vDockedTab,

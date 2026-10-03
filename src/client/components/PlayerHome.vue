@@ -81,7 +81,7 @@
           <div class="player_home_block player_home_block--hand" v-if="hasHandPanelContent && !isHandInInputTabs(playerView)" id="shortkey-hand">
             <div class="or-tabs" role="tablist">
               <HandCardsTab :count="cardsInHandCount" :active="true"/>
-              <WaitingForPlayersTab :players="playersToWaitFor(playerView)"/>
+              <WaitingForPlayersTab :playerView="playerView"/>
             </div>
             <div v-docked-tab class="or-tab-panel or-tab-panel--view" role="tabpanel">
               <HandCardsPanel :playerView="playerView"/>
@@ -139,7 +139,6 @@ import GameOverNotice from '@/client/components/gameend/GameOverNotice.vue';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
-import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
 import TopBar from '@/client/components/TopBar.vue';
 import UndergroundTokens from '@/client/components/underworld/UndergroundTokens.vue';
 import KeyboardShortcuts from '@/client/components/KeyboardShortcuts.vue';
@@ -218,7 +217,6 @@ export default defineComponent({
   methods: {
     showsDraftedCardsBlock,
     isHandInInputTabs,
-    playersToWaitFor,
     isPlayerActing(playerView: PlayerViewModel) : boolean {
       return playerView.players.length > 1 && playerView.waitingFor !== undefined && !playerView.waitingFor.optional;
     },
