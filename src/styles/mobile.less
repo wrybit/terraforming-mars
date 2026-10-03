@@ -1953,8 +1953,8 @@ html.tm-mobile {
     }
 
     .payments_field .payments_input.form-input {
-      width: 54px !important;
-      padding: 0 7px 0 (@mb-payment-icon + 4px);
+      width: 62px !important; // two digits must fit next to the icon (e.g. 14 M€)
+      padding: 0 6px 0 (@mb-payment-icon + 4px);
       font-size: 17px;
     }
 
@@ -1971,6 +1971,15 @@ html.tm-mobile {
 
       svg {
         display: none; // no room for the arrow; the outline already sets it apart from − / +
+      }
+    }
+
+    // No room for "Max": the check mark alone says the target is set
+    .payments_target--reached {
+      font-size: 16px;
+
+      .payments_target_label {
+        display: none;
       }
     }
 

@@ -22,6 +22,8 @@
               :description="descriptions[unit]"
               :target="targetValue(unit)"
               :targetReached="targetValue(unit) === payment[unit]"
+              :minusDisabled="payment[unit] <= 0"
+              :plusDisabled="payment[unit] >= plusLimit(unit)"
               @plus="addValue(unit)"
               @minus="reduceValue(unit)"
               @max="maxValue(unit)"/>
@@ -232,17 +234,51 @@ export default defineComponent({
     },
     // Payment after a click on the target button of this unit – pure, so the button can show the
     // resulting value beforehand (targetValue) and the click sets exactly that.
-    // M€ balance the payment: exactly what the other resources leave open (never overpaying).
-    // Other resources: as many as are useful for the cost without overpaying, M€ make up the rest.
+    // One rule for every currency: pay as much as useful with this unit, the others cover the rest.
+    // "Useful" means without overpaying; only if the others cannot cover the rest, this unit may overpay.
     paymentAfterMax(unit: SpendableResource): Payment {
-      if (unit === 'megacredits') {
-        return this.withRemainingMCValue(this.payment);
+      const {available, rate} = this.ledger[unit];
+      const fitting = Math.min(available, Math.floor(this.cost / rate));
+      const payment = this.withRestCovered(unit, fitting);
+      if (this.totalSpent(payment) >= this.cost) {
+        return payment;
       }
-      const target = Math.min(this.ledger[unit].available, Math.floor(this.cost / this.ledger[unit].rate));
-      if (this.payment[unit] >= target) {
-        return this.payment;
+      return this.withRestCovered(unit, Math.min(available, Math.ceil(this.cost / rate)));
+    },
+    // Fixes the amount of one unit and covers what is left with the other currencies:
+    // M€ first (exact, no rounding loss), then the others from high to low rate without overpaying,
+    // and only at the end rounded up with the lowest rate, so any overpayment stays as small as possible.
+    withRestCovered(fixedUnit: SpendableResource, amount: number): Payment {
+      const payment: Payment = {...this.payment, [fixedUnit]: amount};
+      const others = this.availableUnits.filter((unit) => unit !== fixedUnit);
+      for (const unit of others) {
+        payment[unit] = 0;
       }
-      return this.withRemainingMCValue({...this.payment, [unit]: target});
+      let open = this.cost - amount * this.ledger[fixedUnit].rate;
+      if (others.includes('megacredits')) {
+        payment.megacredits = Math.min(this.ledger.megacredits.available, Math.max(open, 0));
+        open -= payment.megacredits;
+      }
+      const resources = others.filter((unit) => unit !== 'megacredits')
+        .sort((a, b) => this.ledger[b].rate - this.ledger[a].rate);
+      for (const unit of resources) {
+        const count = Math.min(this.ledger[unit].available, Math.floor(Math.max(open, 0) / this.ledger[unit].rate));
+        payment[unit] = count;
+        open -= count * this.ledger[unit].rate;
+      }
+      for (const unit of resources.toReversed()) {
+        if (open <= 0) {
+          break;
+        }
+        const extra = Math.min(this.ledger[unit].available - payment[unit], Math.ceil(open / this.ledger[unit].rate));
+        payment[unit] += extra;
+        open -= extra * this.ledger[unit].rate;
+      }
+      return payment;
+    },
+    // Highest value the + button can reach; beyond it a click would change nothing
+    plusLimit(unit: SpendableResource): number {
+      return unit === 'megacredits' ? this.getMegaCreditsMax() : this.ledger[unit].available;
     },
     targetValue(unit: SpendableResource): number {
       return this.paymentAfterMax(unit)[unit];

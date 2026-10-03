@@ -39,6 +39,7 @@
 @payments-line: rgba(255, 255, 255, 0.16);
 @payments-target-fill: rgba(91, 79, 224, 0.32);
 @payments-target-border: #8f86ff;
+@payments-done: #6fd36f;
 
 .payments_balance {
   display: grid;
@@ -187,18 +188,21 @@
     height: 15px;
   }
 
-  &:hover:not(:disabled) {
+  // Only the clickable button reacts; the "✓ Max" status stays flat
+  &:hover:not(.payments_target--reached) {
     background: fade(#5b4fe0, 50%);
     border-color: #a59dff;
   }
 }
 
-// Value already set: greyed out
+// Value already set: no button any more, just a plain green status ("✓ Max") without fill or border –
+// a greyed-out button would look like "not possible" instead of "done"
 .payments_target--reached {
-  border-color: rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.06);
+  border-color: transparent;
+  background: none;
   box-shadow: none;
-  color: @payments-dim;
+  color: @payments-done;
+  font-size: 13px;
   cursor: default;
 }
 
