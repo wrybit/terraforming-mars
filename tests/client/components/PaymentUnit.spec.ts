@@ -65,7 +65,7 @@ describe('PaymentUnit', () => {
     expect(wrapper.emitted('max')).to.not.be.undefined;
   });
 
-  it('disables the target button once its value is set', () => {
+  it('shows a status instead of the target button once its value is set', () => {
     const wrapper = shallowMount(PaymentUnit, {
       ...globalConfig,
       props: {
@@ -76,6 +76,23 @@ describe('PaymentUnit', () => {
         targetReached: true,
       },
     });
-    expect(wrapper.find('[data-test=target]').attributes('disabled')).to.not.be.undefined;
+    expect(wrapper.find('[data-test=target]').exists()).is.false;
+    expect(wrapper.find('[data-test=target-reached]').text()).contains('✓');
+  });
+
+  it('passes the disabled state to − and +', () => {
+    const wrapper = shallowMount(PaymentUnit, {
+      ...globalConfig,
+      props: {
+        modelValue: 0,
+        unit: 'titanium',
+        description: 'Titanium',
+        minusDisabled: true,
+        plusDisabled: false,
+      },
+    });
+    const [minus, plus] = wrapper.findAllComponents({name: 'AppButton'});
+    expect(minus.props('disabled')).is.true;
+    expect(plus.props('disabled')).is.false;
   });
 });

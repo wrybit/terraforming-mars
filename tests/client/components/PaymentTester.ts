@@ -10,8 +10,13 @@ export class PaymentTester {
     return `[data-test=${unit}]`;
   }
 
+  // Target already reached: the UI shows "✓ Max" instead of a button, so a click would change nothing
   public async clickMax(type: SpendableResource) {
     const button = this.wrapper.find(PaymentTester.selector(type) + ' [data-test=target]');
+    if (!button.exists()) {
+      expect(this.wrapper.find(PaymentTester.selector(type) + ' [data-test=target-reached]').exists()).is.true;
+      return;
+    }
     await button.trigger('click');
     await this.nextTick();
   }

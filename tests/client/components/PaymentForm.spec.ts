@@ -152,6 +152,9 @@ describe('PaymentForm', () => {
       },
     });
 
+    // The defaults already use the target, so start from 0 to make the button clickable
+    wrapper.vm.payment.steel = 0;
+    await wrapper.vm.$nextTick();
     await wrapper.find('[data-test=steel] [data-test=target]').trigger('click');
     await wrapper.vm.$nextTick();
 
@@ -171,6 +174,9 @@ describe('PaymentForm', () => {
       },
     });
 
+    // The defaults already use the target, so start from 0 to make the button clickable
+    wrapper.vm.payment.titanium = 0;
+    await wrapper.vm.$nextTick();
     await wrapper.find('[data-test=titanium] [data-test=target]').trigger('click');
     await wrapper.vm.$nextTick();
 
@@ -236,7 +242,7 @@ describe('PaymentForm', () => {
   });
 
   it('megacredits target never overpays', async () => {
-    // cost=10, steel=5 at rate 2 covers everything – M€ have nothing left to balance
+    // cost=10, steel=5 at rate 2 covers everything by default; 8 M€ leave 2 to cover with 1 steel
     const wrapper = mountPaymentForm({
       cost: 10,
       order: ['steel', 'megacredits'],
@@ -251,8 +257,76 @@ describe('PaymentForm', () => {
     expect(lp.megacredits).eq(0);
 
     const target = wrapper.find('[data-test=megacredits] [data-test=target]');
-    expect(target.text()).eq('0');
-    expect(target.attributes('disabled')).to.not.be.undefined;
+    expect(target.text()).eq('8');
+    await target.trigger('click');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.vm.payment.steel).eq(1);
+    expect(wrapper.vm.payment.megacredits).eq(8);
+    expect(wrapper.find('[data-test=megacredits] [data-test=target-reached]').exists()).is.true;
+  });
+
+  it('megacredits target pays as much as possible in M€ and frees the other resources', async () => {
+    // cost=14, 4 titanium at rate 3 (12) + 2 M€ – 80 M€ left, so the M€ target still offers 14
+    const wrapper = mountPaymentForm({
+      cost: 14,
+      order: ['titanium', 'megacredits'],
+      ledger: {
+        'titanium': {available: 4, rate: 3},
+        'megacredits': {available: 80, rate: 1},
+      },
+    });
+    expect(wrapper.vm.payment.titanium).eq(4);
+    expect(wrapper.vm.payment.megacredits).eq(2);
+    expect(wrapper.find('[data-test=titanium] [data-test=target-reached]').exists()).is.true;
+
+    const target = wrapper.find('[data-test=megacredits] [data-test=target]');
+    expect(target.text()).eq('14');
+    await target.trigger('click');
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.payment.titanium).eq(0);
+    expect(wrapper.vm.payment.megacredits).eq(14);
+    expect(wrapper.find('[data-test=titanium] [data-test=target]').text()).eq('4');
+  });
+
+  it('titanium target uses as much as fits and M€ cover the rest', async () => {
+    // cost=20, 7 titanium at rate 3, only 4 M€
+    const wrapper = mountPaymentForm({
+      cost: 20,
+      order: ['titanium', 'megacredits'],
+      ledger: {
+        'titanium': {available: 7, rate: 3},
+        'megacredits': {available: 4, rate: 1},
+      },
+    });
+    wrapper.vm.payment.titanium = 0;
+    await wrapper.vm.$nextTick();
+    await wrapper.find('[data-test=titanium] [data-test=target]').trigger('click');
+    await wrapper.vm.$nextTick();
+    // floor(20/3)=6 titanium (18) + 2 M€ fits exactly
+    expect(wrapper.vm.payment.titanium).eq(6);
+    expect(wrapper.vm.payment.megacredits).eq(2);
+  });
+
+  it('disables + at the limit and − at 0', async () => {
+    const wrapper = mountPaymentForm({
+      cost: 14,
+      order: ['titanium', 'megacredits'],
+      ledger: {
+        'titanium': {available: 4, rate: 3},
+        'megacredits': {available: 80, rate: 1},
+      },
+    });
+    const buttons = (unit: string) => wrapper.findAll(`[data-test=${unit}] .btn`);
+    // 4 of 4 titanium: + does nothing any more
+    expect(buttons('titanium')[1].attributes('disabled')).to.not.be.undefined;
+    expect(buttons('titanium')[0].attributes('disabled')).to.be.undefined;
+    wrapper.vm.payment.titanium = 0;
+    wrapper.vm.payment.megacredits = 14;
+    await wrapper.vm.$nextTick();
+    expect(buttons('titanium')[0].attributes('disabled')).to.not.be.undefined;
+    // 14 M€ cover the cost: more M€ would change nothing
+    expect(buttons('megacredits')[1].attributes('disabled')).to.not.be.undefined;
   });
 
   it('emits change with initial payment on mount', async () => {

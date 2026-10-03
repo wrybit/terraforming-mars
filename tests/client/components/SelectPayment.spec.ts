@@ -126,7 +126,7 @@ describe('SelectPayment', () => {
     tester.expectValue('megacredits', 10);
   });
 
-  // The M€ target balances the payment: exactly what the other resources leave open
+  // The M€ target pays as much as useful in M€; the other resources only cover what is left
   it('max megacredits', async () => {
     const wrapper = setupBill(
       9,
@@ -143,7 +143,7 @@ describe('SelectPayment', () => {
 
     await tester.clickMax('megacredits');
     await tester.nextTick();
-    tester.expectPayment({heat: 3, megacredits: 6});
+    tester.expectPayment({heat: 0, megacredits: 9});
   });
 
   it('max megacredits, 2', async () => {
@@ -158,8 +158,8 @@ describe('SelectPayment', () => {
 
     await tester.clickMax('megacredits');
     await tester.nextTick();
-    // Already balanced: the M€ target does not overpay
-    tester.expectPayment({titanium: 2, heat: 0, megacredits: 2});
+    // All 5 M€; the remaining 5 come from titanium (4) and heat (1) without overpaying
+    tester.expectPayment({titanium: 1, heat: 1, megacredits: 5});
   });
 
   it('Stormcraft floaters count for heat', async () => {
