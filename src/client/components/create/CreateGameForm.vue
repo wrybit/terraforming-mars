@@ -282,12 +282,12 @@
                 </button>
               </div>
               <div class="create-game-swatches">
-                <!-- Colors as player cubes: all lying (top view), the chosen one standing (slightly from above) -->
+                <!-- Colors as player cubes: all lying (top view), the chosen one standing (slightly from above); animated tilt in both directions -->
                 <button v-for="color in PLAYER_COLORS" :key="color" type="button"
                   :class="['create-game-swatch', {'create-game-swatch--selected': newPlayer.color === color}]"
                   :disabled="isColorTaken(color, index)" :title="$t(color)" :aria-pressed="newPlayer.color === color"
                   @click="newPlayer.color = color">
-                  <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16"/>
+                  <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16" animated/>
                 </button>
               </div>
               <div class="create-game-player-extra">

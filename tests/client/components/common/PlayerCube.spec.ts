@@ -23,4 +23,11 @@ describe('PlayerCube', () => {
     expect(small.find('.player-cube').attributes('style')).to.contain('--detail: 0.2');
     expect(large.find('.player-cube').attributes('style')).to.contain('--detail: 1');
   });
+
+  it('marks the cube as animated only when asked', () => {
+    const still = shallowMount(PlayerCube, {...globalConfig, props: {color: 'red'}});
+    const animated = shallowMount(PlayerCube, {...globalConfig, props: {color: 'red', animated: true}});
+    expect(still.find('.player-cube').classes()).to.not.include('player-cube--animated');
+    expect(animated.find('.player-cube').classes()).to.include('player-cube--animated');
+  });
 });
