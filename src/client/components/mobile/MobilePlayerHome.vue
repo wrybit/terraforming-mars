@@ -168,6 +168,7 @@ import MobilePlayersPanel from '@/client/components/mobile/MobilePlayersPanel.vu
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
 import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
+import {waitingStatusText} from '@/client/utils/waitingStatusText';
 import {requestPlacementZoom} from '@/client/components/board/placementZoom';
 import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
 import {CarouselState, observeCardCarousel, scrollCarouselTo} from '@/client/components/mobile/cardCarousel';
@@ -361,8 +362,7 @@ export default defineComponent({
       if (this.acting && waitingFor !== undefined) {
         return this.$t(waitingFor.title);
       }
-      const names = playersToWaitFor(this.playerView).map((player) => player.name);
-      return names.length === 0 ? this.$t('Waiting for other players') : names.join(', ') + ' ' + this.$t('is taking their turn');
+      return waitingStatusText(this.playerView, (text) => this.$t(text));
     },
     // The model only knows the actions taken, not the allowed ones; special cases with more actions barely exist
     actionsPerTurn(): number {

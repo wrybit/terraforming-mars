@@ -14,3 +14,10 @@ export function playersToWaitFor(playerView: ViewModel): Array<PublicPlayerModel
   }
   return others.filter((player) => player.isActive);
 }
+
+// Draft and research (also the start selection) run in parallel: nobody "is taking their turn", we only wait
+// for whoever has not chosen yet
+export function waitsInParallel(playerView: ViewModel): boolean {
+  const phase = playerView.game.phase;
+  return phase === Phase.DRAFTING || phase === Phase.RESEARCH || phase === Phase.INITIALDRAFTING;
+}

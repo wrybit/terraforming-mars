@@ -41,7 +41,7 @@ import MobileNav from '@/client/components/mobile/MobileNav.vue';
 import MobilePlayersPanel from '@/client/components/mobile/MobilePlayersPanel.vue';
 import {MobileNavItem, MobileScreen, PlayersSegment, SPECTATOR_NAV} from '@/client/components/mobile/mobileScreens';
 import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
-import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
+import {waitingStatusText} from '@/client/utils/waitingStatusText';
 
 // Selected screen; App.vue rebuilds the view on every server update (key), and it should survive that
 let rememberedScreen: MobileScreen = 'mars';
@@ -81,8 +81,7 @@ export default defineComponent({
       if (this.game.phase === Phase.END) {
         return this.$t('This game is over!');
       }
-      const names = playersToWaitFor(this.spectator).map((player) => player.name);
-      return names.length === 0 ? this.$t('Waiting for other players') : names.join(', ') + ' ' + this.$t('is taking their turn');
+      return waitingStatusText(this.spectator, (text) => this.$t(text));
     },
   },
   methods: {
