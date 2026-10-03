@@ -62,6 +62,7 @@ import {SelectCardResponse} from '@/common/inputs/InputResponse';
 import {Warning} from '@/common/cards/Warning';
 import {choiceBlockStyle} from '@/client/components/choiceBlock';
 import {currentDraftPicks} from '@/client/utils/draftedCards';
+import {keepDraftCardOrder} from '@/client/utils/draftCardOrder';
 
 type Owner = {
   name: string;
@@ -142,6 +143,8 @@ export default defineComponent({
       if (this.playerinput.cards !== undefined) {
         if (this.playerinput.selectBlueCardAction) {
           cards = sortActiveCards(this.playerinput.cards);
+        } else if (this.isDraft) {
+          cards = keepDraftCardOrder(this.playerView.id, this.playerinput.cards);
         } else {
           cards = CardOrderStorage.getOrdered(
             CardOrderStorage.getCardOrder(this.playerView.id),
@@ -250,6 +253,10 @@ export default defineComponent({
     },
   },
   computed: {
+    // Choosing cards in a draft round: their order must stay fixed (draftCardOrder.ts)
+    isDraft(): boolean {
+      return this.playerView.thisPlayer?.needsToDraft !== undefined;
+    },
     currentPicks(): ReadonlySet<CardName> {
       return currentDraftPicks(this.playerView, this.playerinput);
     },

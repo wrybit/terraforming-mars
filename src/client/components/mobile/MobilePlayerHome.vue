@@ -139,6 +139,7 @@
 </template>
 
 <script lang="ts">
+import {isDraftRepick} from '@/client/utils/draftedCards';
 import {defineComponent, markRaw} from 'vue';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
@@ -235,6 +236,9 @@ function cardClassName(name: string): string {
 // Last chosen screen outside a task. After every server update the view is rebuilt
 // (App.vue: key); the screen should be kept across that
 let rememberedScreen: MobileScreen = 'mars';
+// Draft repick opened via "Turn": the view is rebuilt on every refresh while waiting for the others,
+// so the open card selection must survive that (otherwise it jumps back to Mars)
+let draftRepickOpen = false;
 // First mount after page load: don't open the turn drawer automatically.
 // App.vue rebuilds the view on every server update (playerkey) – there it should keep
 // opening, so that after an action the menu for the next one is right there.
@@ -262,7 +266,7 @@ export default defineComponent({
     const openSheet = menu && !pageJustLoaded;
     pageJustLoaded = false;
     return {
-      screen: acting && !menu ? 'turn' : rememberedScreen,
+      screen: (acting && !menu) || (draftRepickOpen && waitingFor !== undefined && isDraftRepick(this.playerView, waitingFor)) ? 'turn' : rememberedScreen,
       placing: false,
       sheetOpen: openSheet,
       turnButtonLifted: openSheet,
@@ -346,6 +350,11 @@ export default defineComponent({
     acting(): boolean {
       return this.playerView.waitingFor !== undefined && !this.playerView.waitingFor.optional;
     },
+    // Draft: the pick can still be changed while the others choose – then "Turn" leads to the cards, not to the waiting sheet
+    draftRepick(): boolean {
+      const waitingFor = this.playerView.waitingFor;
+      return waitingFor !== undefined && isDraftRepick(this.playerView, waitingFor);
+    },
     cardsInHandCount(): number {
       const playerView = this.playerView;
       return playerView.cardsInHand.length + playerView.preludeCardsInHand.length + playerView.ceoCardsInHand.length;
@@ -392,6 +401,7 @@ export default defineComponent({
     },
     go(screen: MobileScreen) {
       this.screen = screen;
+      draftRepickOpen = screen === 'turn' && this.draftRepick;
       if (screen !== 'turn') {
         rememberedScreen = screen;
       }
@@ -401,7 +411,7 @@ export default defineComponent({
     // all others switch the screen. Exception initial selection: after confirming, the turn screen shows
     // the own selection (PlayerSetupView) – the sheet would only have "waiting for …" and the cards would be unreachable
     navigate(screen: MobileScreen) {
-      if (screen === 'turn' && !this.isSetupConfirmed && (this.isActionMenu || !this.acting)) {
+      if (screen === 'turn' && !this.isSetupConfirmed && !this.draftRepick && (this.isActionMenu || !this.acting)) {
         this.openSheet();
       } else {
         this.go(screen);
