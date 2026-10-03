@@ -157,6 +157,42 @@ each(@players, {
   filter: ~"drop-shadow(0 0 calc(var(--cube-size) * 0.08) color-mix(in srgb, var(--cube-color), transparent 55%))";
 }
 
+// ---------- Ground shadows (top view) ----------
+// Planes at the height of the bottom face, i.e. lying on the surface below the cube. Being part of the 3D scene they
+// get exactly the cube's perspective and rotation. The offset is meant in screen space (away from the light),
+// so it is rotated back against the spin: local = R(spin) · screen offset.
+.player-cube-shadow {
+  --shadow-turn: calc(-1 * var(--cube-turn));
+  --shadow-local-x: calc(var(--shadow-x) * cos(var(--shadow-turn)) + var(--shadow-y) * sin(var(--shadow-turn)));
+  --shadow-local-y: calc(var(--shadow-x) * sin(var(--shadow-turn)) - var(--shadow-y) * cos(var(--shadow-turn)));
+
+  display: none;
+  position: absolute;
+  inset: 0;
+  border-radius: 8%;
+  transform: ~"rotateX(-90deg) translateZ(calc(var(--cube-size) / 2 + 0.5px)) translate(var(--shadow-local-x), var(--shadow-local-y))";
+  pointer-events: none;
+}
+
+// Cast shadow: short and fairly hard, to the bottom right, dark with a slight tint of the cube color
+.player-cube-shadow--cast {
+  --shadow-x: calc(var(--cube-size) * 0.14);
+  --shadow-y: calc(var(--cube-size) * 0.18);
+
+  background: ~"color-mix(in srgb, color-mix(in srgb, var(--cube-color), black 55%), transparent 55%)";
+  filter: blur(calc(var(--cube-size) * 0.04));
+}
+
+// Rim: very short soft shadow slightly to the left – a soft dark outline that separates the cube from a background
+// of similar color (e.g. a green cube on a green card title)
+.player-cube-shadow--rim {
+  --shadow-x: calc(var(--cube-size) * -0.05);
+  --shadow-y: calc(var(--cube-size) * 0.02);
+
+  background: rgba(0, 0, 0, 0.4);
+  filter: blur(calc(var(--cube-size) * 0.05));
+}
+
 // ---------- Views ----------
 .player-cube--iso {
   --cube-tilt: -35.26deg;
@@ -191,26 +227,16 @@ each(@players, {
     transform: ~"translate(-50%, -50%) rotate(var(--cube-turn))";
     border-radius: calc(var(--cube-size) * 0.08);
     backdrop-filter: blur(calc(var(--cube-size) * 0.07));
-    // Soft dark outline, slightly to the left: separates the cube from a background of similar color
-    // (e.g. a green cube on a green card title)
-    box-shadow:
-      calc(var(--cube-size) * -0.06) 0 calc(var(--cube-size) * 0.08) rgba(0, 0, 0, 0.45),
-      0 0 calc(var(--cube-size) * 0.06) rgba(0, 0, 0, 0.35);
     z-index: 0;
   }
 
-  // Shadow lying flat on the surface: the cube's footprint, offset to the bottom right (away from the light),
-  // turned along with the cube. Dark core with a slight tint of the cube color – visible on light cards,
-  // which also raises the contrast of the translucent cube
+  // The flat colored shadow of the side views is replaced by the ground shadows below
   &::after {
-    inset: 50% auto auto 50%;
-    width: var(--cube-size);
-    height: var(--cube-size);
-    border-radius: calc(var(--cube-size) * 0.12);
-    transform: ~"translate(calc(-50% + var(--cube-size) * 0.2), calc(-50% + var(--cube-size) * 0.24)) rotate(var(--cube-turn))";
-    background: ~"color-mix(in srgb, color-mix(in srgb, var(--cube-color), black 55%), transparent 35%)";
-    box-shadow: ~"0 0 calc(var(--cube-size) * 0.18) calc(var(--cube-size) * 0.04) color-mix(in srgb, var(--cube-color), transparent 55%)";
-    filter: blur(calc(var(--cube-size) * 0.1));
+    display: none;
+  }
+
+  .player-cube-shadow {
+    display: block;
   }
 
   // Top face: reflection and gradient rotated against the spin so they match the light
