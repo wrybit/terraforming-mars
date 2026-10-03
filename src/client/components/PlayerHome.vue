@@ -68,7 +68,7 @@
             <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
           </div>
 
-          <div class="player_home_block player_home_block--hand" v-if="playerView.draftedCards.length > 0">
+          <div class="player_home_block player_home_block--hand" v-if="showsDraftedCardsBlock(playerView)">
             <DynamicTitle title="Drafted cards" :color="thisPlayer.color" />
             <div v-for="card in playerView.draftedCards" :key="card.name" class="cardbox">
               <Card :card="card"/>
@@ -147,6 +147,7 @@ import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
 import {isHandInInputTabs} from '@/client/utils/handCards';
+import {showsDraftedCardsBlock} from '@/client/utils/draftedCards';
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
 
 export default defineComponent({
@@ -215,6 +216,7 @@ export default defineComponent({
     KeyboardShortcuts,
   },
   methods: {
+    showsDraftedCardsBlock,
     isHandInInputTabs,
     playersToWaitFor,
     isPlayerActing(playerView: PlayerViewModel) : boolean {
