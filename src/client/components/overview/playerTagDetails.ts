@@ -17,6 +17,8 @@ export type TagDetail = {
   halfPoints: number;
   count: number;
   asterisk: boolean;
+  // Another tag that also counts as this one (e.g. Earth Embassy: Moon counts as Earth)
+  substitution?: Tag;
 };
 export type TagDetails = {
   all: TagDetail;
@@ -155,6 +157,16 @@ export function buildTagDetails(player: PublicPlayerModel, playerView: ViewModel
   if (playerView.game.turmoil?.ruling === PartyName.UNITY &&
     playerView.game.turmoil.politicalAgendas?.unity.policyId === 'up04') {
     details[Tag.SPACE].discount += 2;
+  }
+
+  // Tag substitutions
+  for (const card of player.tableau) {
+    if (card.name === CardName.EARTH_EMBASSY) {
+      details[Tag.EARTH].substitution = Tag.MOON;
+    }
+    if (card.name === CardName.HABITAT_MARTE) {
+      details[Tag.SCIENCE].substitution = Tag.MARS;
+    }
   }
 
   return {

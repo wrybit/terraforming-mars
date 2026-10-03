@@ -24,6 +24,7 @@
             <div v-else class="tag-and-discount">
               <PlayerTagDiscount v-if="tagDetail.discount > 0" :color="player.color" :amount="tagDetail.discount" :data-test="'discount-' + tagDetail.name"/>
               <PointsPerTag :points="tagDetail"/>
+              <PlayerTagSubstitution v-if="tagDetail.substitution !== undefined" :tag="tagDetail.substitution" :data-test="'substitution-' + tagDetail.name"/>
               <TagCount :tag="tagDetail.name" :count="tagDetail.count" :size="'big'" :type="'secondary'"/>
             </div>
           </div>
@@ -41,6 +42,7 @@ import PlayerTagDiscount from '@/client/components/overview/PlayerTagDiscount.vu
 import PointsPerTag from '@/client/components/overview/PointsPerTag.vue';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {TagDetail, TagDetails, buildTagDetails, isTagInGame, isVictoryPointCountHidden} from '@/client/components/overview/playerTagDetails';
+import PlayerTagSubstitution from '@/client/components/overview/PlayerTagSubstitution.vue';
 
 export default defineComponent({
   name: 'PlayerTags',
@@ -70,6 +72,7 @@ export default defineComponent({
     TagCount,
     PlayerTagDiscount,
     PointsPerTag,
+    PlayerTagSubstitution,
   },
   computed: {
     cardsInHandCount(): number {
@@ -94,7 +97,7 @@ export default defineComponent({
           return false;
         }
 
-        if (entry.count === 0 && entry.discount === 0) {
+        if (entry.count === 0 && entry.discount === 0 && entry.substitution === undefined) {
           if (this.hideZeroTags || concise) {
             return false;
           }
