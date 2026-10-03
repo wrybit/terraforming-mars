@@ -13,7 +13,9 @@
              explanation as in the desktop tab (image, full title, game state before/after) -->
         <template v-if="confirming !== undefined && confirming.confirmation !== undefined">
           <TabIntroBlock v-if="confirming.confirmation.intro !== undefined && playerView !== undefined" class="mb-sheet-intro"
-            :intro="confirming.confirmation.intro" :title="confirming.confirmation.title" :playerView="playerView"/>
+            :intro="confirming.confirmation.intro" :title="confirming.confirmation.title" :playerView="playerView" :card="confirming.confirmation.card"/>
+          <CardIntroBlock v-else-if="confirming.confirmation.card !== undefined" class="mb-sheet-intro"
+            :card="confirming.confirmation.card" :title="confirming.confirmation.title"/>
           <div v-else class="mb-sheet-head">
             <span class="mb-sheet-title">{{ $t(confirming.label) }}</span>
           </div>
@@ -65,6 +67,7 @@ import {TurnMenu, TurnMenuTile} from '@/client/components/mobile/turnMenu';
 import MobileTurnTile from '@/client/components/mobile/MobileTurnTile.vue';
 import MobileTurnButton from '@/client/components/mobile/MobileTurnButton.vue';
 import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
+import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 
 withDefaults(defineProps<{

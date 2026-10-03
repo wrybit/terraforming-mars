@@ -1,5 +1,6 @@
 import {Message} from '@/common/logs/Message';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
+import {PreviewTile, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
 
 // Short tab labels, icons and order for the action menu, so the tab bar stays on one line.
 // Key = English title key from the server (Player.ts etc.), value = short key (translated in locales/*/ui.json).
@@ -133,14 +134,23 @@ export function tabIcon(title: string | Message): TabIcon | undefined {
   return TAB_ICONS[titleKey(title)];
 }
 
-// Tabs without their own selection, whose button sits centered in the box instead of the footer (tab_panel_footer.less)
-const CENTERED_BUTTON_TABS: ReadonlySet<string> = new Set([
-  'Convert 8 heat into temperature',
-  'Convert 6 heat into temperature',
-]);
+// Tabs without content of their own (SelectOption: only a button, e.g. raise temperature, corporation first action):
+// the button sits large in the middle of the box instead of in the footer (tab_panel_footer.less).
+// Pass/end have their own centered layout (or-tab-panel--end).
+export function tabButtonCentered(option: PlayerInputModel): boolean {
+  return option.type === 'option' && !isEndTab(option.title);
+}
 
-export function tabButtonCentered(title: string | Message): boolean {
-  return CENTERED_BUTTON_TABS.has(titleKey(title));
+// Tab color of an action: fixed tones by title, otherwise for a content-free option the tile its button
+// announces (e.g. Tharsis Republic "Place a city tile" -> gray like the city tab that follows)
+export type OptionTone = TabButtonTone | PreviewTile;
+
+export function optionTone(option: PlayerInputModel): OptionTone | undefined {
+  const tone = tabButtonTone(option.title);
+  if (tone !== undefined || option.type !== 'option') {
+    return tone;
+  }
+  return previewTileForSpaceInput(option.buttonLabel);
 }
 
 // Explanation above the pass-on button (end generation brings its own warning from the server, WarningsComponent.vue)

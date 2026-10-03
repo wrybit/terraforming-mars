@@ -1,3 +1,5 @@
+import {CardName} from '@/common/cards/CardName';
+import {optionSourceCard} from '@/client/components/inputSourceCard';
 import {nextTick} from 'vue';
 import {Message} from '@/common/logs/Message';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
@@ -30,6 +32,8 @@ export type TurnTileGlyphTone = 'cards' | 'megacredits' | 'plants' | 'heat' | 'h
 export type TurnConfirmation = {
   // Image, full title and game state lines; if missing, only short label and hint
   intro: TabIntro | undefined;
+  // Card the action triggers (e.g. corporation first action), shown instead of a bare label (inputSourceCard.ts)
+  card?: CardName;
   title: string | Message;
   hint: string | undefined;
   button: string | Message;
@@ -116,6 +120,7 @@ function quickConfirmation(option: PlayerInputModel): TurnConfirmation | undefin
     const warnings = option.warnings ?? [];
     return {
       intro: drawerIntro,
+      card: optionSourceCard(option),
       title,
       hint: endTabHint(option.title) ?? (warnings.length > 0 ? warningDescription(warnings[0]) : undefined),
       button: tabButtonLabel(option.title, option.buttonLabel),

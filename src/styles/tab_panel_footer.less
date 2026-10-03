@@ -95,12 +95,20 @@
   }
 }
 
-// Tabs without their own selection (e.g. raise temperature, orOptionsShortLabels.ts): intro stays on top,
-// the button floats in the middle of the box – like "Show Mars large" (waiting_for.less)
+// Tabs without content of their own (only a button, e.g. raise temperature, corporation first action;
+// orOptionsShortLabels.ts): intro (card/image) stays on top, the button sits centered in the remaining space.
+// Flex instead of an overlay, so that in a low box the button never covers the intro.
+.or-tab-panel--centered-button {
+  display: flex;
+  flex-direction: column;
+}
+
 .or-tab-panel--centered-button .or-tab-footer {
-  position: absolute;
-  inset: 0;
+  position: static;
+  flex: 1 1 auto;
+  min-height: 120px;
   justify-content: center;
+  align-items: center;
   margin: 0;
   padding: 0;
   border: none;
@@ -108,11 +116,9 @@
   background: none;
   backdrop-filter: none;
   box-shadow: none;
-  pointer-events: none; // intro below stays usable, only the button catches clicks
 
   > * {
     margin: 0;
-    pointer-events: auto;
   }
 
   .btn {
@@ -120,11 +126,10 @@
   }
 }
 
-// Narrow layout: the box is only as tall as its content, a centered floating button would sit on the intro –
-// so there it sits below it, with spacing
+// Narrow layout: the box is only as tall as its content – button directly below the intro, with spacing
 @media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
   .or-tab-panel--centered-button .or-tab-footer {
-    position: static;
+    min-height: 0;
     margin-top: 16px;
   }
 }
