@@ -17,7 +17,7 @@
         <Card :card="card"/>
       </div>
     </template>
-    <div class="player_home_block player_home_block--hand" v-if="playerView.draftedCards.length > 0">
+    <div class="player_home_block player_home_block--hand" v-if="showsDraftedCardsBlock(playerView)">
       <DynamicTitle title="Drafted Cards" :color="thisPlayer.color"/>
       <div v-for="card in playerView.draftedCards" :key="card.name" class="cardbox">
           <Card :card="card"/>
@@ -61,6 +61,7 @@ import {CardModel} from '@/common/models/CardModel';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
 import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
+import {showsDraftedCardsBlock} from '@/client/utils/draftedCards';
 
 export default defineComponent({
   name: 'PlayerSetupView',
@@ -91,6 +92,7 @@ export default defineComponent({
     },
   },
   methods: {
+    showsDraftedCardsBlock,
     playersToWaitFor,
   },
   directives: {

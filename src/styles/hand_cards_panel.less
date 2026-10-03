@@ -97,3 +97,12 @@ html.tm-mobile .hand-cards-panel__header {
     }
   }
 }
+
+// Draft tab (DraftedCardsSection.vue): kept cards as their own section below the selection –
+// same separator and spacing as between the hand cards sections; does not grow, so the selection keeps the space
+.drafted-cards-section {
+  flex: none;
+  margin-top: @hand-cards-panel-section-gap;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}

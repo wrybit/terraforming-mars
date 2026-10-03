@@ -31,6 +31,8 @@
         :onsave="onsave"
         :showsave="true"
         :showtitle="false"/>
+      <!-- Draft: cards already kept below the new ones, instead of a separate block under the box -->
+      <DraftedCardsSection v-if="draftedCards.length > 0" v-show="!handTabActive" :cards="draftedCards"/>
       <!-- Sticky footer at the bottom of the box (tabPanelFooter.ts); payment areas attach via Teleport -->
       <div v-show="!handTabActive" :id="footerId" class="or-tab-footer"></div>
     </div>
@@ -55,6 +57,8 @@ import {choiceMenuLead} from '@/client/components/choiceMenu';
 import {inputSourceCard} from '@/client/components/inputSourceCard';
 import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
+import DraftedCardsSection from '@/client/components/DraftedCardsSection.vue';
+import {draftedCardsInInput} from '@/client/utils/draftedCards';
 import {allCardsInHand} from '@/client/utils/handCards';
 
 const props = defineProps<{
@@ -77,4 +81,5 @@ const lead = computed(() => choiceMenuLead(props.playerinput));
 const tone = computed(() => inputTone(lead.value));
 const intro = computed(() => tabIntro(props.playerinput));
 const sourceCard = computed(() => inputSourceCard(props.playerinput));
+const draftedCards = computed(() => draftedCardsInInput(props.playerView));
 </script>
