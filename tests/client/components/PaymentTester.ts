@@ -11,7 +11,7 @@ export class PaymentTester {
   }
 
   public async clickMax(type: SpendableResource) {
-    const button = this.wrapper.find(PaymentTester.selector(type) + ' .btn-max');
+    const button = this.wrapper.find(PaymentTester.selector(type) + ' [data-test=target]');
     await button.trigger('click');
     await this.nextTick();
   }

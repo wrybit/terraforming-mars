@@ -14,30 +14,12 @@
   background-color: #bdbdbd;
 }
 
-.payments_type {
-  // Small gaps between − / input / + / maximal so the buttons don't merge into one block
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border-spacing: 0 8px;
-}
-
-// input-group (spectre) strips the rounding from inner elements – with a gap between, corners are round again
-.payments_type.input-group > .btn,
-.payments_type.input-group > .payments_input.form-input {
-  border-radius: 6px;
-}
-
-.payments_type_icon {
-  margin: 0px 10px 0 0;
-  cursor: pointer;
-}
-
+// Plain amount field (e.g. SelectProductionToLose.vue); the payment field overrides it below
 .payments_input {
   max-width: 70px;
   font-size: 24px;
   font-weight: bold;
-  color:#4f4f4f;
+  color: #4f4f4f;
   text-align: center;
 }
 
@@ -46,12 +28,196 @@
   color: #666;
 }
 
-// Value per row in M€ ("= 3 M€"); dimmed at 0
-.payments_unit_subtotal {
-  padding-left: 16px;
-  font-size: 20px;
+// ---------- Balance block (PaymentForm.vue) ----------
+// One grid for the whole payment area: what you pay | total | what is left afterwards, groups separated by lines.
+// Columns: unit controls, "= M€" subtotal, line, total, line, remainder. Each currency is one row, so icons,
+// numbers and "=" share an axis per column; all group titles sit in row 1.
+@payments-row-gap: 10px;
+@payments-group-gap: 14px; // between columns: larger than the gaps inside a unit row (law of proximity)
+@payments-title-color: rgba(255, 255, 255, 0.62);
+@payments-dim: rgba(255, 255, 255, 0.35);
+@payments-line: rgba(255, 255, 255, 0.16);
+@payments-target-fill: rgba(91, 79, 224, 0.32);
+@payments-target-border: #8f86ff;
+
+.payments_balance {
+  display: grid;
+  grid-template-columns: auto auto 1px auto 1px auto;
+  gap: @payments-row-gap @payments-group-gap;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+}
+
+// Only one currency: cost | line | remainder
+.payments_balance--single {
+  grid-template-columns: auto 1px auto;
+
+  .payments_group_title--total,
+  .payments_total {
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  .payments_divider--rest {
+    grid-column: 2;
+  }
+
+  .payments_group_title--rest,
+  .payments_rest {
+    grid-column: 3;
+  }
+}
+
+.payments_group_title {
+  grid-row: 1;
+  justify-self: start;
+  margin-bottom: -4px; // a little closer to its own group than the row gap
+  font-size: 13px;
+  line-height: 1;
+  color: @payments-title-color;
   white-space: nowrap;
-  vertical-align: middle;
+
+  &::after {
+    content: ":";
+  }
+}
+
+.payments_group_title--cost {
+  grid-column: 1 / span 2;
+}
+
+.payments_group_title--total {
+  grid-column: 4;
+}
+
+.payments_group_title--rest {
+  grid-column: 6;
+}
+
+.payments_unit {
+  grid-column: 1;
+}
+
+.payments_divider {
+  align-self: stretch;
+  width: 1px;
+  background: @payments-line;
+}
+
+.payments_divider--total {
+  grid-column: 3;
+}
+
+.payments_divider--rest {
+  grid-column: 5;
+}
+
+.payments_total {
+  grid-column: 4;
+  align-self: center;
+  // Fixed minimum width: the remainder column does not jump when the status changes
+  min-width: 96px;
+}
+
+// [−] [icon amount] [+] [→ target]
+.payments_type {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+// input-group (spectre) strips the rounding from inner elements – with a gap between, corners are round again
+.payments_type.input-group > .btn,
+.payments_type.input-group .payments_input.form-input {
+  border-radius: 6px;
+}
+
+// Currency icon inside the field on the left, amount right-aligned
+.payments_field {
+  position: relative;
+  display: flex;
+  align-self: stretch;
+}
+
+.payments_type_icon {
+  position: absolute;
+  top: 50%;
+  left: 7px;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%);
+  z-index: 1; // above the input field it sits in
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+}
+
+.payments_field .payments_input.form-input {
+  width: 76px;
+  height: 100%;
+  padding: 0 10px 0 32px;
+  max-width: none;
+  font-size: 18px;
+  text-align: right;
+}
+
+// Target button: same shape and height as − / +, but a muted fill with an outline so it does not read as
+// another − / +; it names the value it sets
+.payments_target {
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 54px;
+  padding: 0 10px 0 7px;
+  border: 1.5px solid @payments-target-border;
+  border-radius: 6px;
+  background: @payments-target-fill;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font: 600 15px Prototype, sans-serif;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+
+  svg {
+    flex: none;
+    width: 15px;
+    height: 15px;
+  }
+
+  &:hover:not(:disabled) {
+    background: fade(#5b4fe0, 50%);
+    border-color: #a59dff;
+  }
+}
+
+// Value already set: greyed out
+.payments_target--reached {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+  color: @payments-dim;
+  cursor: default;
+}
+
+// Value of a row in M€ ("= 12 M€"): "=" on its own axis, number right-aligned, icon last; dimmed at 0
+.payments_unit_subtotal {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: auto 1fr 20px;
+  column-gap: 4px;
+  align-items: center;
+  min-width: 58px;
+  font-size: 16px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.payments_equals {
+  text-align: left;
+  padding-right: 4px;
 }
 
 .payments_unit_subtotal--zero {
@@ -64,19 +230,37 @@
   vertical-align: middle;
 }
 
-// Total to the right of the currencies: "Total:" above "3 / 3 M€", without a divider
-.payments_total_heading {
-  font-size: 16px;
-  opacity: 0.8;
-}
-
-.payments_total_value {
-  font-size: 24px;
-  font-weight: bold;
+// Remainder after paying: number right-aligned, icon of the currency last; 0 greyed out
+.payments_rest {
+  grid-column: 6;
+  display: grid;
+  grid-template-columns: auto 20px;
+  column-gap: 4px;
+  align-items: center;
+  justify-content: end;
+  font: 600 16px Prototype, sans-serif;
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-// Color shows whether the amount fits – replaces the former bar icons
+.payments_rest--empty {
+  color: @payments-dim;
+
+  .resource_icon {
+    opacity: 0.45;
+    filter: grayscale(1);
+  }
+}
+
+.payments_total_value {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 600 16px Prototype, sans-serif;
+  white-space: nowrap;
+}
+
+// Color shows whether the amount fits
 .payments_total_exact .payments_total_value {
   color: #6fd36f;
 }
@@ -89,7 +273,7 @@
   color: #ffd84d;
 }
 
-// Payment area (PaymentForm.vue): prices left, button right – in the tab box footer (tab_panel_footer.less)
+// Payment area (PaymentForm.vue): balance block left, button right – in the tab box footer (tab_panel_footer.less)
 // as well as in place
 .payments_form {
   display: flex;
@@ -99,27 +283,11 @@
   gap: 16px;
 }
 
-.payments_table {
-  border-collapse: separate;
-}
-
-// Only one currency: just the price, without controls
-.payments_single {
-  font-size: 24px;
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-.payments_single .payments_type_smallicon {
-  width: 24px;
-  height: 24px;
-}
-
 .payments_prices {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 32px; // total clearly set apart from the currency rows
+  gap: 8px 32px;
 }
 
 // Warning (e.g. underpaid) on its own line below
