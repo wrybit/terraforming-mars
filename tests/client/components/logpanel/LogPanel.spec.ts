@@ -97,7 +97,8 @@ describe('LogPanel', () => {
     expect(fetchCalls.map((url) => new URL(url, 'http://localhost').searchParams.get('generation'))).to.have.members(['1', '2', '3']);
     const sections = wrapper.findAll('.log-generation');
     expect(sections.map((section) => section.attributes('data-generation'))).deep.eq(['1', '2', '3']);
-    expect(sections.map((section) => section.find('.log-generation-title').text())).deep.eq(['Generation 1', 'Generation 2', 'Generation 3']);
+    expect(sections.map((section) => section.find('.log-generation-marker').text())).deep.eq(['1', '2', '3']);
+    expect(sections.map((section) => section.find('.log-generation-title').text())).deep.eq(['1Generation 1', '2Generation 2', '3Generation 3']);
     // Only the regular line remains in each generation
     expect(wrapper.findAllComponents(LogMessageComponent)).has.length(3);
   });

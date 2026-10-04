@@ -10,7 +10,9 @@
       <!-- One continuous stream of all generations; the tabs above follow the scroll position -->
       <div id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mouseleave="messageUnhovered">
         <section v-for="section in sections" :key="section.generation" class="log-generation" :data-generation="section.generation">
-          <h3 class="log-generation-title">{{ generationTitle(section.generation) }}</h3>
+          <h3 class="log-generation-title">
+            <span class="log-generation-marker" aria-hidden="true">{{ section.generation }}</span>{{ generationTitle(section.generation) }}
+          </h3>
           <LogMessageComponent v-for="(message, index) in section.messages" :key="index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @mouseenter="messageHovered(message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
         </section>
       </div>
