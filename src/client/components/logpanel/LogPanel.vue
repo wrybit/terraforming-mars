@@ -3,12 +3,23 @@
     <LogGenerationList
       ref="generationList"
       :max="viewModel.game.generation"
-      :selected="selectedGeneration"
+      :selected="showsMilestonesAwards ? -1 : selectedGeneration"
       :lastSoloGeneration="lastSoloGeneration"
-      @selected="selectGeneration"/>
-    <div v-docked-tab class="panel log-panel or-tab-panel or-tab-panel--view" role="tabpanel">
+      @selected="selectGeneration">
+      <!-- Desktop: milestones & awards as the first tab of the same box -->
+      <template v-if="hasMilestonesAwards" #before>
+        <div class="or-tabs log-milestones-tabs" role="tablist">
+          <button type="button" role="tab"
+            :aria-selected="showsMilestonesAwards"
+            :class="['or-tab', 'or-tab--tone-milestones', {'or-tab--active': showsMilestonesAwards}]"
+            data-test="log-milestones-tab"
+            @click.prevent="showMilestonesAwards">{{ milestonesAwardsTitle }}</button>
+        </div>
+      </template>
+    </LogGenerationList>
+    <div v-docked-tab :class="panelClasses" role="tabpanel">
       <!-- One continuous stream of all generations; the tabs above follow the scroll position -->
-      <div id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mouseleave="messageUnhovered">
+      <div v-show="!showsMilestonesAwards" id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mouseleave="messageUnhovered">
         <section v-for="section in sections" :key="section.generation" class="log-generation" :data-generation="section.generation">
           <h3 class="log-generation-title">
             <span class="log-generation-marker" aria-hidden="true">{{ section.generation }}</span>{{ generationTitle(section.generation) }}
@@ -16,8 +27,11 @@
           <LogMessageComponent v-for="(message, index) in section.messages" :key="index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @mouseenter="messageHovered(message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
         </section>
       </div>
+      <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones">
+        <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color"/>
+      </div>
       <button
-        v-show="showScrollToBottomButton"
+        v-show="showScrollToBottomButton && !showsMilestonesAwards"
         type="button"
         class="log-latest-button"
         aria-label="Latest logs"
@@ -51,6 +65,8 @@ import LogMessageComponent from '@/client/components/logpanel/LogMessageComponen
 import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
 import LogCardsZoom from '@/client/components/logpanel/LogCardsZoom.vue';
+import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
+import {milestonesAwardsLabel} from '@/client/components/milestoneAwardTable/milestonesAwardsLabel';
 import {cachedLogStream, fetchLogStream, GenerationLog} from '@/client/utils/fetchLogs';
 
 const BOTTOM_SCROLL_THRESHOLD = 24; // Roughly one line of log text.
@@ -58,9 +74,16 @@ const BOTTOM_SCROLL_THRESHOLD = 24; // Roughly one line of log text.
 // After a tab click the smooth scroll counts as finished once no scroll event came for this long
 const PROGRAMMATIC_SCROLL_SETTLE_MS = 150;
 
+// Content of the box: the log stream or (desktop) the milestones & awards table
+type LogView = 'log' | 'milestones';
+
 type ViewState = {
   // Participant the state belongs to (another game starts at the end of its log)
   id: string,
+  // Whether it was this player's turn: only a change of turn switches the box automatically,
+  // otherwise the reader's own choice survives the remount after every update
+  acting: boolean,
+  view: LogView,
   // True if the reader was at the end of the log, and so should stay at the end
   // of whatever is newest after a remount.
   following: boolean,
@@ -88,6 +111,7 @@ type Internals = {
 
 type LogPanelModel = {
   sections: Array<GenerationLog>,
+  view: LogView,
   // Generation whose tab is highlighted: follows the scroll position, or the tab just clicked
   selectedGeneration: number,
   showScrollToBottomButton: boolean,
@@ -118,6 +142,16 @@ export default defineComponent({
       type: Object as () => ViewModel,
       required: true,
     },
+    // Offers milestones & awards as the first tab (desktop; mobile shows them in the players screen)
+    milestonesAwards: {
+      type: Boolean,
+      default: false,
+    },
+    // It's this player's turn: the box then opens on milestones & awards, otherwise on the current generation
+    acting: {
+      type: Boolean,
+      default: false,
+    },
     // Mobile view: tapping opens the line's cards as a carousel in a modal, no hover preview
     zoomCarousel: {
       type: Boolean,
@@ -127,6 +161,7 @@ export default defineComponent({
   data(): LogPanelModel {
     return {
       sections: [],
+      view: 'log',
       selectedGeneration: -1,
       showScrollToBottomButton: false,
       following: true,
@@ -142,6 +177,7 @@ export default defineComponent({
     LogMessageInspector,
     LogGenerationList,
     LogCardsZoom,
+    MilestoneAwardTable,
   },
   emits: ['spaceClicked'],
   methods: {
@@ -190,9 +226,13 @@ export default defineComponent({
     scrollContainer(): ScrollContainer {
       return findScrollContainer(this.typedRefs.scrollBody);
     },
-    // On mobile the log sits on a hidden screen most of the time: page scrolling there belongs to another screen
+    // On mobile the log sits on a hidden screen most of the time: page scrolling there belongs to another screen.
+    // On desktop the stream is hidden while milestones & awards fill the box.
     isVisible(): boolean {
-      return (this.typedRefs.root?.getClientRects().length ?? 0) > 0;
+      return !this.showsMilestonesAwards && (this.typedRefs.scrollBody?.getClientRects().length ?? 0) > 0;
+    },
+    showMilestonesAwards(): void {
+      this.view = 'milestones';
     },
     sectionElements(): Array<HTMLElement> {
       return Array.from(this.typedRefs.scrollBody?.querySelectorAll<HTMLElement>('.log-generation') ?? []);
@@ -209,6 +249,12 @@ export default defineComponent({
     // end of the log is reached before the header gets to the top.
     selectGeneration(generation: number): void {
       this.selectedGeneration = generation;
+      if (this.showsMilestonesAwards) {
+        // Back from milestones & awards: the stream was hidden, so jump there without animation
+        this.view = 'log';
+        this.$nextTick(() => this.revealGeneration(generation));
+        return;
+      }
       const container = this.scrollContainer();
       const offset = this.offsetToGeneration(generation, container);
       if (offset === undefined) {
@@ -216,6 +262,20 @@ export default defineComponent({
       }
       this.startProgrammaticScroll();
       scrollContainerTo(container, scrollTopOf(container) + offset - HEADER_SCROLL_GAP, 'smooth');
+    },
+    // Current generation: its newest entries (and keep following); older ones: their header
+    revealGeneration(generation: number): void {
+      const container = this.scrollContainer();
+      if (generation === this.generation) {
+        this.following = true;
+        scrollContainerTo(container, Number.MAX_SAFE_INTEGER);
+      } else {
+        const offset = this.offsetToGeneration(generation, container);
+        if (offset !== undefined) {
+          scrollContainerTo(container, scrollTopOf(container) + offset - HEADER_SCROLL_GAP);
+        }
+      }
+      this.updateScrollState();
     },
     showLatestLogs(): void {
       this.selectedGeneration = this.generation;
@@ -323,13 +383,30 @@ export default defineComponent({
     generation(): number {
       return this.viewModel.game.generation;
     },
+    hasMilestonesAwards(): boolean {
+      return this.milestonesAwards && this.viewModel.players.length > 1 && !getPreferences().hide_awards_and_milestones;
+    },
+    showsMilestonesAwards(): boolean {
+      return this.hasMilestonesAwards && this.view === 'milestones';
+    },
+    milestonesAwardsTitle(): string {
+      return milestonesAwardsLabel((text) => this.$t(text));
+    },
+    panelClasses(): Array<string> {
+      const tone = this.showsMilestonesAwards ? ['or-tab-panel--tone-milestones', 'log-panel--milestones'] : ['or-tab-panel--view'];
+      return ['panel', 'log-panel', 'or-tab-panel', ...tone];
+    },
     lastSoloGeneration(): number | undefined {
       return this.viewModel.players.length === 1 ? this.viewModel.game.lastSoloGeneration : undefined;
     },
   },
   mounted() {
-    const restoredState = viewState?.id === this.viewModel.id ? viewState : undefined;
-    // Either this is the first mount, or the reader was at the end, which may have grown since the previous instance unmounted
+    const previousState = viewState?.id === this.viewModel.id ? viewState : undefined;
+    // A change of turn (or the first mount) decides the box anew: own turn → milestones & awards,
+    // otherwise the end of the log. Without a change the reader's view stays as it was.
+    const restoredState = previousState?.acting === this.acting ? previousState : undefined;
+    this.view = restoredState?.view ?? (this.acting ? 'milestones' : 'log');
+    // Either the view starts fresh, or the reader was at the end, which may have grown since the previous instance unmounted
     this.following = restoredState === undefined || restoredState.following;
     this.selectedGeneration = this.generation;
     // The known history renders right away, so the page doesn't shrink and jump while the current generation loads
@@ -346,8 +423,10 @@ export default defineComponent({
     const container = this.scrollContainer();
     viewState = {
       id: this.viewModel.id,
+      acting: this.acting,
+      view: this.view,
       following: this.isVisible() ? this.isNearBottom(container) : this.following,
-      scrollTop: scrollTopOf(container),
+      scrollTop: this.isVisible() ? scrollTopOf(container) : viewState?.scrollTop ?? 0,
     };
     window.removeEventListener('scroll', this.onWindowScroll);
     window.clearTimeout(this.internals.programmaticScrollTimer);

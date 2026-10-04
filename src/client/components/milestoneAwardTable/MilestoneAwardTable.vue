@@ -2,15 +2,16 @@
   <!-- Milestones & awards as a table: icons on top, status below, one row per player.
        Only visible in the two-column layout (milestone_award_table.less) -->
   <!-- --ma-table-cell-count: cells per row without separators; the mobile view uses it to transpose the table (mobile.less) -->
-  <div ref="table" class="ma-table" :style="{'--ma-table-columns': columnTemplate, '--ma-table-cell-count': 1 + milestones.length + awards.length}">
+  <div ref="table" class="ma-table" @scroll.passive="markHorizontalScroll" :style="{'--ma-table-columns': columnTemplate, '--ma-table-cell-count': 1 + milestones.length + awards.length}">
     <div class="ma-table-row ma-table-labels">
       <div></div><div></div>
       <div class="ma-table-section" :style="{gridColumn: `span ${milestones.length}`}">
-        <span v-i18n>Milestones</span> <small>{{ claimedCount }}/{{ maxMilestones }} <span v-i18n>milestones claimed</span></small>
+        <!-- Wrapper: in the scrolling log box the heading stays in view while its columns pass by (milestone_award_table.less) -->
+        <span class="ma-table-section-text"><span v-i18n>Milestones</span> <small>{{ claimedCount }}/{{ maxMilestones }} <span v-i18n>milestones claimed</span></small></span>
       </div>
       <div></div>
       <div class="ma-table-section" :style="{gridColumn: `span ${awards.length}`}">
-        <span v-i18n>Awards</span> <small>{{ fundedCount }}/{{ maxAwards }} <span v-i18n>awards funded</span></small>
+        <span class="ma-table-section-text"><span v-i18n>Awards</span> <small>{{ fundedCount }}/{{ maxAwards }} <span v-i18n>awards funded</span></small></span>
       </div>
     </div>
 
@@ -69,6 +70,7 @@ import {scoreRanks} from '@/client/components/milestoneAwardTable/scoreRanks';
 import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
 import {glassTooltip} from '@/client/directives/GlassTooltip';
 import {observeHeaderFit} from '@/client/components/milestoneAwardTable/headerFit';
+import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
 
 // Cleanup function of the header adjustment per table (not reactive)
 const stopHeaderFit = new WeakMap<object, () => void>();
@@ -114,8 +116,10 @@ export default defineComponent({
     },
     // Name | separator | milestones | separator | awards
     columnTemplate(): string {
-      // Name column overridable via CSS (mobile.less: tablet landscape as wide as in the player list)
-      return `var(--ma-table-name-width, 104px) 12px repeat(${this.milestones.length}, minmax(0, 1fr)) 16px repeat(${this.awards.length}, minmax(0, 1fr))`;
+      // Name column overridable via CSS (mobile.less: tablet landscape as wide as in the player list).
+      // Minimum column width via CSS too: the log box (desktop) squeezes the columns only that far, then scrolls
+      const column = 'minmax(var(--ma-table-min-column, 0px), 1fr)';
+      return `var(--ma-table-name-width, 104px) 12px repeat(${this.milestones.length}, ${column}) 16px repeat(${this.awards.length}, ${column})`;
     },
     claimedCount(): number {
       return this.milestones.filter((milestone) => milestone.color !== undefined).length;
@@ -137,6 +141,7 @@ export default defineComponent({
     },
   },
   methods: {
+    markHorizontalScroll,
     milestoneIcon(milestone: ClaimedMilestoneModel): ReadonlyArray<IconPart> {
       return MILESTONE_ICONS[milestone.name] ?? [];
     },

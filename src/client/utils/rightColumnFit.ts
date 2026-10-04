@@ -11,7 +11,7 @@ export const BOARD_WIDE_ZOOM_VARIABLE = '--board-wide-zoom';
 export const BOARD_FIT_ZOOM_VARIABLE = '--board-fit-zoom';
 
 const STEPS: ReadonlyArray<string> = [
-  MARS_WIDE_CLASS, // 1) Mars as wide as milestones & awards (without them: as the column)
+  MARS_WIDE_CLASS, // 1) Mars as wide as the column (or the milestone block, where shown below Mars)
   LOG_FULL_CLASS, // 2) Log card at 100 % size, log correspondingly taller
 ];
 
@@ -47,8 +47,8 @@ function centerMars(board: HTMLElement, reference: Element): void {
   board.style.translate = scale > 0 ? `${(horizontalCenter(reference) - before) / scale}px 0` : '';
 }
 
-// Width Mars grows to and is centered over: the milestone block. Without it (solo game,
-// or hidden via settings) the board block itself – otherwise Mars would stay small and left, or
+// Width Mars grows to and is centered over: the milestone block, where it is shown below Mars. Without it
+// (desktop: milestones & awards are a tab of the log box; solo game; hidden via settings) the board block itself – otherwise Mars would stay small and left, or
 // a hidden block with width 0 would shrink Mars to zoom 0.
 const MILESTONES_SELECTOR = '.player_home_block--milestones-and-awards';
 const MARS_BLOCK_SELECTOR = '.player-home-columns__mars';

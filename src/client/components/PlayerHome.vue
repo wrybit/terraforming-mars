@@ -44,7 +44,7 @@
           <!-- Log below the board: both stay visible together in the two-column layout -->
           <a class="hotkey-target"></a>
           <div v-if="!isSetupPhase" class="player_home_block nofloat player-home-columns__log">
-            <LogPanel :viewModel="playerView" @spaceClicked="onSpaceClicked"/>
+            <LogPanel :viewModel="playerView" milestonesAwards :acting="isPlayerActing(playerView)" @spaceClicked="onSpaceClicked"/>
           </div>
         </template>
 

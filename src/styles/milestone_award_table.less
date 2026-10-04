@@ -68,6 +68,11 @@
   .section-caption(@ma-table-section-line-height);
 }
 
+// Only a wrapper for the log box (below); elsewhere the texts stay direct items of the heading
+.ma-table-section-text {
+  display: contents;
+}
+
 .ma-table-head,
 .ma-table-status {
   backdrop-filter: blur(@ma-table-blur);
@@ -287,3 +292,103 @@ each(@players, {
   font-size: 11px;
   color: #7ee07e;
 }
+
+// ---------- In the log box (LogPanel.vue, desktop: tab "Milestones & Awards") ----------
+// The columns shrink down to a minimum width; below that the table scrolls horizontally,
+// while the name column with its divider stays in place and the values pass underneath.
+@ma-table-min-column: 32px;
+@ma-table-name-column: 104px; // default of --ma-table-name-width (MilestoneAwardTable.vue)
+@ma-table-name-divider: 12px; // divider column after the names (MilestoneAwardTable.vue)
+@ma-table-sticky-background: rgba(13, 15, 20, 0.92); // dark frosted glass like the sticky columns of the mobile view, a little denser over the icons
+
+.log-panel--milestones.or-tab-panel {
+  padding: 12px 14px;
+}
+
+.log-milestones {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+
+  .ma-table {
+    --ma-table-min-column: @ma-table-min-column;
+    display: grid;
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+
+  // Name and divider of every row stay in front; the rows themselves scroll away underneath
+  .ma-table-row > :nth-child(1),
+  .ma-table-row > :nth-child(2) {
+    position: sticky;
+    z-index: 2;
+    align-self: stretch;
+  }
+
+  .ma-table-row > :nth-child(1) {
+    left: 0;
+    border-radius: @ma-table-radius 0 0 @ma-table-radius;
+  }
+
+  .ma-table-row > :nth-child(2) {
+    left: @ma-table-name-column;
+  }
+
+  // Color bar on the name cell instead of the row: the row's left edge scrolls out of view
+  .ma-table-player::before {
+    display: none;
+  }
+
+  .ma-table-name {
+    line-height: @ma-table-row-height;
+  }
+
+  .ma-table-player--me .ma-table-name {
+    line-height: @ma-table-own-row-height;
+  }
+
+  // Section headings stay readable while their columns pass by (until the section itself leaves).
+  // clip instead of hidden: a hidden section would be the sticky text's own scroll box and push it to its end
+  .ma-table-section {
+    overflow: clip;
+  }
+
+  .ma-table-section-text {
+    position: sticky;
+    left: @ma-table-name-column + @ma-table-name-divider;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 8px;
+    align-items: baseline;
+  }
+
+  // Only once something lies underneath (scrolled horizontally, horizontalScroll.ts): opaque surface
+  .mb-scrolled-x .ma-table-head > :nth-child(-n + 2),
+  .mb-scrolled-x .ma-table-status > :nth-child(-n + 2),
+  .mb-scrolled-x .ma-table-player > :nth-child(-n + 2) {
+    background-color: @ma-table-sticky-background;
+    backdrop-filter: blur(@ma-table-blur);
+  }
+
+  // Edge towards the passing columns
+  .mb-scrolled-x .ma-table-row:not(.ma-table-labels) > :nth-child(2) {
+    box-shadow: 6px 0 8px -6px rgba(0, 0, 0, 0.7);
+  }
+}
+
+each(@players, {
+  @c: ~"player_@{value}";
+  .log-milestones .ma-table-player--@{value} .ma-table-name {
+    box-shadow: inset @ma-table-color-bar-width 0 0 @@c;
+  }
+
+  // Scrolled: the name cell carries the row color itself over the dark surface
+  .log-milestones .mb-scrolled-x .ma-table-player--@{value} > :nth-child(-n + 2) {
+    background-image: linear-gradient(fade(@@c, 28%), fade(@@c, 28%));
+  }
+
+  .log-milestones .mb-scrolled-x .ma-table-player--@{value}.ma-table-player--me > :nth-child(-n + 2) {
+    background-image: linear-gradient(fade(@@c, 50%), fade(@@c, 50%));
+  }
+});

@@ -32,6 +32,18 @@
       flex-shrink: 0;
     }
   }
+  // Desktop: milestones & awards as the first tab, set apart from "GEN:" like a separate group;
+  // never truncated, the generation tabs give way (they scroll)
+  .log-milestones-tabs {
+    flex: none;
+    margin: 0 14px 0 0;
+
+    .or-tab {
+      flex: none;
+      color: @section-caption-gold;
+    }
+  }
+
   // Solo limit ("of 12") as a red mark, smaller than the tab numbers, so it doesn't look like another tab
   .label-additional {
     align-self: center;

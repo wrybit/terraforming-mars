@@ -1,4 +1,5 @@
 import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
+import {MILESTONES_AWARDS_LABELS} from '@/client/components/milestoneAwardTable/milestonesAwardsLabel';
 
 /* Screens of the mobile view; `turn` is the current input (action menu, buying cards, initial selection …). */
 export const MOBILE_SCREENS = ['mars', 'hand', 'turn', 'players', 'log'] as const;
@@ -25,6 +26,6 @@ export const SPECTATOR_NAV: ReadonlyArray<MobileNavItem> = MOBILE_NAV.filter((it
 /* Toggle in the players screen: player table or milestones & awards. */
 export const PLAYER_SEGMENTS = [
   {key: 'players', labels: ['Players']},
-  {key: 'ma', labels: ['Milestones', 'Awards']},
+  {key: 'ma', labels: MILESTONES_AWARDS_LABELS},
 ] as const;
 export type PlayersSegment = typeof PLAYER_SEGMENTS[number]['key'];

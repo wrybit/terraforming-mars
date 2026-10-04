@@ -203,7 +203,7 @@
   }
 
   // Halve the space above Mars and add it below: the board itself already has free space at the top,
-  // at the bottom the O2 gauge and ocean counter would otherwise reach into the milestones (values before zoom)
+  // at the bottom the O2 gauge and ocean counter would otherwise reach into the log tabs (values before zoom)
   .player-home-columns__mars .board-cont {
     margin-top: 0;
     margin-bottom: 28px;
@@ -211,20 +211,13 @@
     zoom: var(--board-fit-zoom, 1);
   }
 
-  // Milestones & awards as a table (milestone_award_table.less) instead of the card rows
+  // Milestones & awards live as a tab in the log box (LogPanel.vue), not below Mars
   .player-home-columns__mars .player_home_block--milestones-and-awards {
-    > .milestones_cont,
-    > .awards_cont {
-      display: none;
-    }
-
-    .ma-table {
-      display: grid;
-    }
+    display: none;
   }
 
   // Levels depending on free height (set by rightColumnFit.ts):
-  // 1) Mars as wide as milestones & awards (solo game without them: as wide as the column)
+  // 1) Mars as wide as the column (milestones & awards sit in the log box)
   .player-home-columns__board--mars-wide .board-cont {
     zoom: var(--board-wide-zoom, 1);
   }

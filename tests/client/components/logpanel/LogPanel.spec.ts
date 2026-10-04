@@ -3,7 +3,7 @@ import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
-import {fakeViewModel} from '../testHelpers';
+import {fakePublicPlayerModel, fakeViewModel} from '../testHelpers';
 import {LogMessage} from '@/common/logs/LogMessage';
 import {LogMessageType} from '@/common/logs/LogMessageType';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
@@ -28,8 +28,18 @@ describe('LogPanel', () => {
     return new LogMessage(type, text, []);
   }
 
-  function mount(viewModel: ReturnType<typeof viewModelAt>): Wrapper {
-    return shallowMount(LogPanel, {...globalConfig, props: {viewModel}});
+  function mount(viewModel: ReturnType<typeof viewModelAt>, props: {milestonesAwards?: boolean, acting?: boolean} = {}): Wrapper {
+    return shallowMount(LogPanel, {...globalConfig, props: {viewModel, ...props}});
+  }
+
+  // Milestones & awards only exist with more than one player
+  function multiplayerViewModelAt(generation: number) {
+    const viewModel = viewModelAt(generation);
+    return {...viewModel, players: [...viewModel.players, fakePublicPlayerModel({color: 'red'})]};
+  }
+
+  function showsMilestonesAwards(wrapper: Wrapper): boolean {
+    return wrapper.find('.log-panel').classes().includes('log-panel--milestones');
   }
 
   // The log's own box as a scroll box with a fixed size (jsdom has no layout)
@@ -219,5 +229,81 @@ describe('LogPanel', () => {
 
     expect((second.vm as any).selectedGeneration).eq(3);
     expect(panel.getScrollTop()).eq(440);
+  });
+
+  it('opens on milestones & awards when it is the player\'s turn', async () => {
+    const wrapper = mount(multiplayerViewModelAt(3), {milestonesAwards: true, acting: true});
+    await flush(wrapper);
+
+    expect(showsMilestonesAwards(wrapper)).is.true;
+    expect(wrapper.find('.log-milestones').exists()).is.true;
+  });
+
+  it('opens on the current generation when it is not the player\'s turn', async () => {
+    const wrapper = mount(multiplayerViewModelAt(3), {milestonesAwards: true, acting: false});
+    await flush(wrapper);
+
+    expect(showsMilestonesAwards(wrapper)).is.false;
+    expect((wrapper.vm as any).selectedGeneration).eq(3);
+  });
+
+  it('offers no milestones & awards in a solo game', async () => {
+    const wrapper = mount(viewModelAt(3), {milestonesAwards: true, acting: true});
+    await flush(wrapper);
+
+    expect(showsMilestonesAwards(wrapper)).is.false;
+    expect(wrapper.find('.log-milestones').exists()).is.false;
+  });
+
+  it('keeps the chosen view across a remount while the turn doesn\'t change', async () => {
+    const viewModel = multiplayerViewModelAt(3);
+    const first = mount(viewModel, {milestonesAwards: true, acting: true});
+    await flush(first);
+    (first.vm as any).selectGeneration(2);
+    await flush(first);
+    expect(showsMilestonesAwards(first)).is.false;
+    first.unmount();
+
+    const second = mount(viewModel, {milestonesAwards: true, acting: true});
+    await flush(second);
+    expect(showsMilestonesAwards(second)).is.false;
+  });
+
+  it('switches automatically when the turn changes', async () => {
+    const viewModel = multiplayerViewModelAt(3);
+    const waiting = mount(viewModel, {milestonesAwards: true, acting: false});
+    await flush(waiting);
+    (waiting.vm as any).showMilestonesAwards();
+    waiting.unmount();
+
+    const acting = mount(viewModel, {milestonesAwards: true, acting: true});
+    await flush(acting);
+    (acting.vm as any).selectGeneration(3);
+    await flush(acting);
+    expect(showsMilestonesAwards(acting)).is.false;
+    acting.unmount();
+
+    // Own turn over: back to the log, even though milestones & awards were open before the turn
+    const waitingAgain = mount(viewModel, {milestonesAwards: true, acting: false});
+    await flush(waitingAgain);
+    expect(showsMilestonesAwards(waitingAgain)).is.false;
+    waitingAgain.unmount();
+
+    const actingAgain = mount(viewModel, {milestonesAwards: true, acting: true});
+    await flush(actingAgain);
+    expect(showsMilestonesAwards(actingAgain)).is.true;
+  });
+
+  it('shows the log again at the chosen generation when leaving milestones & awards', async () => {
+    const wrapper = mount(multiplayerViewModelAt(3), {milestonesAwards: true, acting: true});
+    const panel = makeScrollable(wrapper);
+    await flush(wrapper);
+
+    (wrapper.vm as any).selectGeneration(3);
+    await flush(wrapper);
+
+    expect(showsMilestonesAwards(wrapper)).is.false;
+    expect((wrapper.vm as any).selectedGeneration).eq(3);
+    expect(panel.getScrollTop()).eq(320);
   });
 });

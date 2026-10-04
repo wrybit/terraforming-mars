@@ -41,7 +41,7 @@
         <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="spectator" v-trim-whitespace id="shortkey-playersoverview"/>
         <a class="hotkey-target"></a>
         <div class="player_home_block nofloat player-home-columns__log player_home_block--spectator-log">
-          <LogPanel :viewModel="spectator" @spaceClicked="onSpaceClicked"/>
+          <LogPanel :viewModel="spectator" milestonesAwards @spaceClicked="onSpaceClicked"/>
         </div>
       </template>
     </HomeColumns>

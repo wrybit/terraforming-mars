@@ -19,13 +19,16 @@ type Observed = {
 
 const observedPanels = new WeakMap<HTMLElement, Observed>();
 
+// Class of an element holding several tab bars for the same box (log: milestones tab, "GEN:", generation tabs)
+export const TAB_GROUP_CLASS = 'or-tabs-group';
+
 // Tab bar directly before the box – or embedded in it (log: "GEN:" title and bar in .log-generations)
 function findTabStrip(panel: HTMLElement): Element | undefined {
   const previous = panel.previousElementSibling;
   if (previous === null) {
     return undefined;
   }
-  if (previous.classList.contains('or-tabs')) {
+  if (previous.classList.contains('or-tabs') || previous.classList.contains(TAB_GROUP_CLASS)) {
     return previous;
   }
   return previous.querySelector(':scope > .or-tabs') ?? undefined;
@@ -90,8 +93,9 @@ function observe(panel: HTMLElement): void {
     resizeObserver.observe(panel);
     observers.push(resizeObserver);
   }
-  tabStrip.addEventListener('scroll', update, {passive: true});
-  observers.push({disconnect: () => tabStrip.removeEventListener('scroll', update)});
+  // Capture: in a tab group the scrolling bar is a descendant, and scroll events don't bubble
+  tabStrip.addEventListener('scroll', update, {passive: true, capture: true});
+  observers.push({disconnect: () => tabStrip.removeEventListener('scroll', update, {capture: true})});
   observedPanels.set(panel, {tabStrip, observers});
 }
 

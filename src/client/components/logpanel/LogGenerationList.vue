@@ -1,5 +1,8 @@
 <template>
-  <div class="log-generations">
+  <!-- or-tabs-group: all tabs here (slot and generations) dock to the box below (DockedTab.ts) -->
+  <div class="log-generations or-tabs-group">
+    <!-- Tabs in front of "Gen:" (desktop: milestones & awards) -->
+    <slot name="before"></slot>
     <!-- Generations as tabs ("view only", gray) above the log; the log below is the associated box -->
     <div class="log-gen-title" v-i18n>Gen: </div>
     <!-- More generations than space: only the tabs scroll horizontally, "Gen:" stays put; the selected one stays in view -->
