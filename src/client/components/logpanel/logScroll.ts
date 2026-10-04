@@ -10,7 +10,8 @@ const READING_LINE_TOLERANCE = 4;
 // ancestor that actually scrolls, otherwise the page. Ancestors only count with overflowing content:
 // .mb-screen has a computed overflow-y of auto (because of overflow-x: hidden) without ever scrolling.
 export function findScrollContainer(element: HTMLElement | undefined): ScrollContainer {
-  for (let current = element ?? null; current !== null; current = current.parentElement) {
+  // body and html never count: their overflow belongs to the page (window), even when computed as auto
+  for (let current = element ?? null; current !== null && current !== document.body; current = current.parentElement) {
     const overflowY = getComputedStyle(current).overflowY;
     const scrollable = overflowY === 'auto' || overflowY === 'scroll';
     if (scrollable && (current === element || current.scrollHeight > current.clientHeight + 1)) {
