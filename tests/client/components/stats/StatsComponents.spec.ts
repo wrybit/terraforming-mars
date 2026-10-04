@@ -11,6 +11,7 @@ import StatsOverview from '@/client/components/stats/StatsOverview.vue';
 import StatsPlayersView from '@/client/components/stats/StatsPlayersView.vue';
 import StatsRecordsView from '@/client/components/stats/StatsRecordsView.vue';
 import StatsGameList from '@/client/components/stats/StatsGameList.vue';
+import StatsGamesView from '@/client/components/stats/StatsGamesView.vue';
 import StatsWinRate from '@/client/components/stats/StatsWinRate.vue';
 import StatsKpis from '@/client/components/stats/StatsKpis.vue';
 import StatsLineChart from '@/client/components/stats/StatsLineChart.vue';
@@ -115,5 +116,14 @@ describe('Stats components', () => {
     await flushPromises();
     expect(board.find('.stats-note').exists()).is.false;
     global.fetch = originalFetch;
+  });
+
+  it('StatsGamesView lists every game, newest first', () => {
+    const wrapper = mount(StatsGamesView, {...config, props: {games}});
+    const rows = wrapper.findComponent(StatsGameList).props('games') as typeof games;
+    expect(rows).has.length(games.length);
+    const times = rows.map((game) => game.summary.createdTimeMs);
+    expect(times).deep.eq([...times].sort((first, second) => second - first));
+    expect(wrapper.find('h2').text()).contains(String(games.length));
   });
 });

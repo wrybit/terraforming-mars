@@ -70,6 +70,7 @@
           <StatsTopView v-if="view.type === 'top'" :key="`top:${view.kind}`" :kind="view.kind" :results="results"/>
           <StatsEntityDetail v-else-if="view.type === 'detail'" :key="`${view.kind}:${view.name}`" :kind="view.kind" :name="view.name" :results="results"/>
           <StatsOverview v-else-if="view.tab === 'overview'" :games="filteredGames" :results="results" :chartWidth="chartWidth"/>
+          <StatsGamesView v-else-if="view.tab === 'games'" :games="filteredGames"/>
           <StatsPlayersView v-else-if="view.tab === 'players'" :results="results" :names="names"/>
           <StatsRecordsView v-else-if="view.tab === 'records'" :results="results"/>
           <StatsCombinationsView v-else-if="view.tab === 'combinations'" :results="results"/>
@@ -95,6 +96,7 @@ import PageTitle from '@/client/components/common/PageTitle.vue';
 import LanguageIcon from '@/client/components/LanguageIcon.vue';
 import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
 import StatsOverview from './StatsOverview.vue';
+import StatsGamesView from './StatsGamesView.vue';
 import StatsPlayersView from './StatsPlayersView.vue';
 import StatsRecordsView from './StatsRecordsView.vue';
 import StatsEntityList from './StatsEntityList.vue';
@@ -125,7 +127,7 @@ type DataModel = {
 // Structure, filters and tiles as in the card list, so it feels like part of the app.
 export default defineComponent({
   name: 'StatsPage',
-  components: {CardListFilterGroup, PageTitle, LanguageIcon, PreferencesIcon, StatsOverview, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsTopView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
+  components: {CardListFilterGroup, PageTitle, LanguageIcon, PreferencesIcon, StatsOverview, StatsGamesView, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsTopView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
   provide() {
     // Player color the same everywhere: the color someone played most often
     return {
