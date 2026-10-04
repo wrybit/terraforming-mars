@@ -60,9 +60,16 @@
     color: #fff;
   }
 
+}
+
+// Tabs never get a focus outline, anywhere in the app: the active tab already shows where you are,
+// and a frame around a just-clicked tab looks like a bug (or tabs, ARIA tabs, segmented tab bars)
+.or-tab,
+[role="tab"],
+.create-game-segmented > * {
+  &:focus,
   &:focus-visible {
-    outline: 2px solid @text_action;
-    outline-offset: -2px;
+    outline: none;
   }
 }
 
@@ -228,10 +235,16 @@
 }
 
 // Tab with a large number (generations in the game log)
+@or-tab-number-font-size: 22px;
+@or-tab-number-padding-y: 3px;
+// Total height of a number tab (top border only, tabs have none at the bottom); other tabs in the
+// same bar (log: milestones & awards) take this height so the bar stays even
+@or-tab-number-height: @or-tab-number-font-size + 2 * @or-tab-number-padding-y + 1px;
+
 .or-tab--number {
-  padding: 3px 14px;
+  padding: @or-tab-number-padding-y 14px;
   font-family: Prototype, sans-serif;
-  font-size: 22px;
+  font-size: @or-tab-number-font-size;
   line-height: 1;
 }
 
