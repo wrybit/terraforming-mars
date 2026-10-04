@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {sampleGames} from './statsFixtures';
-import {allPlayerResults, playerColors} from '@/client/components/stats/statsResults';
+import {allPlayerResults, playerColors, totalTimeSeconds} from '@/client/components/stats/statsResults';
 import {aggregate, entityStats} from '@/client/components/stats/statsAggregate';
 import {emptyFilters, filterGames, filterGroups, optionCounts} from '@/client/components/stats/statsFilter';
 import {toggleOption} from '@/client/components/cardlist/filterSelection';
@@ -139,5 +139,13 @@ describe('stats logic', () => {
   it('minimum plays keep at least ten rows visible', () => {
     expect(chooseMinPlays(Array(12).fill(3))).eq(3);
     expect(chooseMinPlays([5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])).eq(1);
+  });
+
+  it('adds up the thinking time of all players, only when known for everyone', () => {
+    const [threePlayers, , screenshotOnly] = sampleGames();
+    expect(totalTimeSeconds(threePlayers)).eq(1800 * threePlayers.details!.players.length);
+    expect(totalTimeSeconds(screenshotOnly)).is.undefined;
+    const partial = {...threePlayers, details: {...threePlayers.details!, players: threePlayers.details!.players.map((player, index) => index === 0 ? {...player, timeSeconds: undefined} : player)}};
+    expect(totalTimeSeconds(partial)).is.undefined;
   });
 });

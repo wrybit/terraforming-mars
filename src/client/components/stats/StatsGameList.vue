@@ -6,6 +6,7 @@
           <th class="stats-table-text" v-i18n>Date</th>
           <th class="stats-table-text" v-i18n>Players</th>
           <th v-i18n>Gen</th>
+          <th v-i18n>Game length</th>
           <th class="stats-table-text" v-i18n>Board</th>
           <th></th>
         </tr>
@@ -21,6 +22,7 @@
             </span>
           </td>
           <td>{{ game.summary.generation || '–' }}</td>
+          <td>{{ formatDuration(totalTimeSeconds(game)) }}</td>
           <td class="stats-table-text">
             <StatsEntityName v-if="game.details?.boardName !== undefined" kind="board" :name="game.details.boardName"/>
             <span v-else class="stats-dim">–</span>
@@ -36,7 +38,8 @@
 import {defineComponent, PropType} from 'vue';
 import {StatsGame} from '@/common/stats/StatsGame';
 import StatsEntityName from './StatsEntityName.vue';
-import {formatDate} from './statsLabels';
+import {formatDate, formatDuration} from './statsLabels';
+import {totalTimeSeconds} from './statsResults';
 
 // Games of a detail page, newest first, with a link to the results page
 export default defineComponent({
@@ -49,6 +52,8 @@ export default defineComponent({
   },
   methods: {
     formatDate,
+    formatDuration,
+    totalTimeSeconds,
     isOther(game: StatsGame, name: string): boolean {
       const names = this.highlighted?.get(game.summary.id);
       return names !== undefined && !names.includes(name);

@@ -82,3 +82,12 @@ export function playerColors(games: ReadonlyArray<StatsGame>): Map<string, Color
 export function average(values: ReadonlyArray<number>): number | undefined {
   return values.length === 0 ? undefined : values.reduce((sum, value) => sum + value, 0) / values.length;
 }
+
+/** Thinking time of all players added up – only when it is known for every player, a partial sum would mislead. */
+export function totalTimeSeconds(game: StatsGame): number | undefined {
+  const players = game.details?.players ?? [];
+  if (players.length === 0 || players.some((player) => player.timeSeconds === undefined)) {
+    return undefined;
+  }
+  return players.reduce((sum, player) => sum + (player.timeSeconds ?? 0), 0);
+}
