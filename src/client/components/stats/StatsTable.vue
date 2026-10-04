@@ -6,7 +6,7 @@
           <th
             v-for="column in columns"
             :key="column.key"
-            :class="{'stats-table-sorted': column.key === sortKey, 'stats-table-ascending': column.key === sortKey && ascending, 'stats-table-text': column.text}"
+            :class="{'stats-table-sorted': column.key === sortKey, 'stats-table-ascending': column.key === sortKey && ascending, 'stats-table-text': column.text, 'stats-table-unsortable': column.sortable === false}"
             :aria-sort="column.key === sortKey ? (ascending ? 'ascending' : 'descending') : undefined"
             @click="sortBy(column)"
             v-i18n>{{ column.label }}</th>
@@ -27,6 +27,11 @@
 import {defineComponent, PropType} from 'vue';
 import {StatsColumn} from './statsTypes';
 
+// Text columns start ascending, numbers descending – unless the column says otherwise
+function firstAscending(column: StatsColumn): boolean {
+  return column.firstAscending ?? column.text === true;
+}
+
 // Sortable table for all statistics lists
 export default defineComponent({
   name: 'StatsTable',
@@ -40,7 +45,7 @@ export default defineComponent({
     const column = this.columns.find((candidate) => candidate.key === this.initialSort);
     return {
       sortKey: this.initialSort,
-      ascending: column?.text === true,
+      ascending: column !== undefined && firstAscending(column),
     };
   },
   computed: {
@@ -64,11 +69,13 @@ export default defineComponent({
   },
   methods: {
     sortBy(column: StatsColumn): void {
-      if (column.key === this.sortKey) {
+      if (column.sortable === false) {
+        return;
+      } else if (column.key === this.sortKey) {
         this.ascending = !this.ascending;
       } else {
         this.sortKey = column.key;
-        this.ascending = column.text === true;
+        this.ascending = firstAscending(column);
       }
     },
   },

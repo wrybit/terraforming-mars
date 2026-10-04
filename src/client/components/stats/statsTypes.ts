@@ -10,6 +10,10 @@ export type StatsColumn = {
   format?: (row: any) => string;
   /** Text left-aligned and sorted ascending; numbers right-aligned and descending. */
   text?: boolean;
+  /** Direction of the first click when it differs from the default above (e.g. a left-aligned date, newest first). */
+  firstAscending?: boolean;
+  /** False for columns without a meaningful order (e.g. a link). */
+  sortable?: boolean;
 };
 
 export type StatsKpi = {

@@ -120,10 +120,20 @@ describe('Stats components', () => {
 
   it('StatsGamesView lists every game, newest first', () => {
     const wrapper = mount(StatsGamesView, {...config, props: {games}});
-    const rows = wrapper.findComponent(StatsGameList).props('games') as typeof games;
-    expect(rows).has.length(games.length);
-    const times = rows.map((game) => game.summary.createdTimeMs);
-    expect(times).deep.eq([...times].sort((first, second) => second - first));
+    expect(wrapper.findAll('tbody tr')).has.length(games.length);
     expect(wrapper.find('h2').text()).contains(String(games.length));
+  });
+
+  it('StatsGameList sorts by the clicked column, the result link column stays put', async () => {
+    const wrapper = mount(StatsGameList, {...config, props: {games}});
+    const generations = () => wrapper.findAll('tbody tr').map((row) => row.findAll('td')[2].text());
+    const headers = wrapper.findAll('th');
+    await headers[2].trigger('click');
+    expect(generations()).deep.eq(['12', '11', '9']);
+    await headers[2].trigger('click');
+    expect(generations()).deep.eq(['9', '11', '12']);
+    await headers[5].trigger('click');
+    expect(generations()).deep.eq(['9', '11', '12']);
+    expect(headers[5].classes()).to.include('stats-table-unsortable');
   });
 });

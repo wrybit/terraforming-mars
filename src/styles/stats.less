@@ -277,6 +277,15 @@
     content: " ▲";
   }
 
+  // Columns without an order (e.g. the result link) don't react to the mouse
+  th.stats-table-unsortable {
+    cursor: default;
+
+    &:hover {
+      color: @create-game-dim;
+    }
+  }
+
   tbody tr:hover td {
     background: rgba(255, 255, 255, 0.04);
   }

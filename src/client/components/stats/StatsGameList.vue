@@ -1,59 +1,59 @@
 <template>
-  <div class="stats-table-scroll">
-    <table class="stats-table stats-games">
-      <thead>
-        <tr>
-          <th class="stats-table-text" v-i18n>Date</th>
-          <th class="stats-table-text" v-i18n>Players</th>
-          <th v-i18n>Gen</th>
-          <th v-i18n>Game length</th>
-          <th class="stats-table-text" v-i18n>Board</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="game in games" :key="game.summary.id">
-          <td class="stats-table-text">{{ formatDate(game.summary.createdTimeMs) }}</td>
-          <td class="stats-table-text">
-            <span class="stats-game-players">
-              <span v-for="player in game.summary.players" :key="player.name" class="stats-game-player" :class="[`player_translucent_bg_color_${player.color}`, {'stats-game-winner': player.isWinner, 'stats-game-other': isOther(game, player.name)}]">
-                {{ player.name }} <strong>{{ player.victoryPoints }}</strong>
-              </span>
-            </span>
-          </td>
-          <td>{{ game.summary.generation || '–' }}</td>
-          <td>{{ formatDuration(totalTimeSeconds(game)) }}</td>
-          <td class="stats-table-text">
-            <StatsEntityName v-if="game.details?.boardName !== undefined" kind="board" :name="game.details.boardName"/>
-            <span v-else class="stats-dim">–</span>
-          </td>
-          <td><a v-if="game.resultUrl !== undefined" :href="game.resultUrl" target="_blank" class="stats-link" v-i18n>Result</a></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <StatsTable class="stats-games" :columns="columns" :rows="games" :rowKey="rowKey" initialSort="date">
+    <template #players="{row}">
+      <span class="stats-game-players">
+        <span v-for="player in row.summary.players" :key="player.name" class="stats-game-player" :class="[`player_translucent_bg_color_${player.color}`, {'stats-game-winner': player.isWinner, 'stats-game-other': isOther(row, player.name)}]">
+          {{ player.name }} <strong>{{ player.victoryPoints }}</strong>
+        </span>
+      </span>
+    </template>
+    <template #board="{row}">
+      <StatsEntityName v-if="row.details?.boardName !== undefined" kind="board" :name="row.details.boardName"/>
+      <span v-else class="stats-dim">–</span>
+    </template>
+    <template #result="{row}">
+      <a v-if="row.resultUrl !== undefined" :href="row.resultUrl" target="_blank" class="stats-link" v-i18n>Result</a>
+    </template>
+  </StatsTable>
 </template>
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {StatsGame} from '@/common/stats/StatsGame';
 import StatsEntityName from './StatsEntityName.vue';
-import {formatDate, formatDuration} from './statsLabels';
-import {totalTimeSeconds} from './statsResults';
+import StatsTable from './StatsTable.vue';
+import {StatsColumn} from './statsTypes';
+import {boardLabel, formatDate, formatDuration} from './statsLabels';
+import {lineupOf, totalTimeSeconds} from './statsResults';
 
-// Games of a detail page, newest first, with a link to the results page
+// Every column sorts on click; the players column groups by lineup (names in alphabetical order)
+const COLUMNS: ReadonlyArray<StatsColumn> = [
+  {key: 'date', label: 'Date', text: true, firstAscending: false, value: (game: StatsGame) => game.summary.createdTimeMs, format: (game: StatsGame) => formatDate(game.summary.createdTimeMs)},
+  {key: 'players', label: 'Players', text: true, value: (game: StatsGame) => lineupOf(game)},
+  {key: 'generation', label: 'Gen', value: (game: StatsGame) => game.summary.generation || undefined, format: (game: StatsGame) => String(game.summary.generation || '–')},
+  {key: 'time', label: 'Game length', value: (game: StatsGame) => totalTimeSeconds(game), format: (game: StatsGame) => formatDuration(totalTimeSeconds(game))},
+  {key: 'board', label: 'Board', text: true, value: (game: StatsGame) => game.details?.boardName === undefined ? undefined : boardLabel(game.details.boardName)},
+  {key: 'result', label: '', sortable: false, value: () => undefined},
+];
+
+// Games of a detail page or the games tab, newest first, with a link to the results page
 export default defineComponent({
   name: 'StatsGameList',
-  components: {StatsEntityName},
+  components: {StatsEntityName, StatsTable},
   props: {
     games: {type: Array as PropType<ReadonlyArray<StatsGame>>, required: true},
     // Game ID → players the detail page is about; the others recede
     highlighted: {type: Map as PropType<Map<string, Array<string>>>, required: false},
   },
+  computed: {
+    columns(): ReadonlyArray<StatsColumn> {
+      return COLUMNS;
+    },
+  },
   methods: {
-    formatDate,
-    formatDuration,
-    totalTimeSeconds,
+    rowKey(game: StatsGame): string {
+      return game.summary.id;
+    },
     isOther(game: StatsGame, name: string): boolean {
       const names = this.highlighted?.get(game.summary.id);
       return names !== undefined && !names.includes(name);
