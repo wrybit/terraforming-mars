@@ -2,55 +2,68 @@
   <!-- Milestones & awards as a table: icons on top, status below, one row per player.
        Only visible in the two-column layout (milestone_award_table.less) -->
   <!-- --ma-table-cell-count: cells per row without separators; the mobile view uses it to transpose the table (mobile.less) -->
-  <div ref="table" class="ma-table" @scroll.passive="markHorizontalScroll" :style="{'--ma-table-columns': columnTemplate, '--ma-table-cell-count': 1 + milestones.length + awards.length}">
-    <div class="ma-table-row ma-table-labels">
-      <div></div><div></div>
-      <div class="ma-table-section" :style="{gridColumn: `span ${milestones.length}`}">
-        <!-- Wrapper: in the scrolling log box the heading stays in view while its columns pass by (milestone_award_table.less) -->
-        <span class="ma-table-section-text"><span v-i18n>Milestones</span> <small>{{ claimedCount }}/{{ maxMilestones }} <span v-i18n>milestones claimed</span></small></span>
+  <div ref="table" :class="['ma-table', {'ma-table--split': scrollable}]" :style="{'--ma-table-cell-count': 1 + milestones.length + awards.length}">
+    <!-- Parts: one ("all", without a box of its own) or, when scrollable, the fixed name column and the scrolling
+         values next to it. Each part renders the same rows, so their heights match (milestone_award_table.less). -->
+    <div v-for="part in parts" :key="part" :class="['ma-table-part', 'ma-table-part--' + part]" :style="{'--ma-table-columns': columnTemplate(part)}" @scroll.passive="markHorizontalScroll">
+      <div class="ma-table-row ma-table-labels">
+        <template v-if="hasNames(part)"><div></div><div></div></template>
+        <template v-if="hasValues(part)">
+          <div class="ma-table-section" :style="{gridColumn: `span ${milestones.length}`}">
+            <span v-i18n>Milestones</span> <small>{{ claimedCount }}/{{ maxMilestones }} <span v-i18n>milestones claimed</span></small>
+          </div>
+          <div></div>
+          <div class="ma-table-section" :style="{gridColumn: `span ${awards.length}`}">
+            <span v-i18n>Awards</span> <small>{{ fundedCount }}/{{ maxAwards }} <span v-i18n>awards funded</span></small>
+          </div>
+        </template>
       </div>
-      <div></div>
-      <div class="ma-table-section" :style="{gridColumn: `span ${awards.length}`}">
-        <span class="ma-table-section-text"><span v-i18n>Awards</span> <small>{{ fundedCount }}/{{ maxAwards }} <span v-i18n>awards funded</span></small></span>
-      </div>
-    </div>
 
-    <div class="ma-table-row ma-table-head">
-      <div></div><div class="ma-table-divider"></div>
-      <div v-for="milestone in milestones" :key="milestone.name" :class="headCellClasses(milestoneClosed(milestone))" v-glass-tooltip="tooltip(milestone.name, milestoneDescription(milestone))" :data-test="'milestone-' + milestone.name">
-        <MilestoneAwardIcon :parts="milestoneIcon(milestone)" :requirement="milestone.threshold"/>
+      <div class="ma-table-row ma-table-head">
+        <template v-if="hasNames(part)"><div></div><div class="ma-table-divider"></div></template>
+        <template v-if="hasValues(part)">
+          <div v-for="milestone in milestones" :key="milestone.name" :class="headCellClasses(milestoneClosed(milestone))" v-glass-tooltip="tooltip(milestone.name, milestoneDescription(milestone))" :data-test="'milestone-' + milestone.name">
+            <MilestoneAwardIcon :parts="milestoneIcon(milestone)" :requirement="milestone.threshold"/>
+          </div>
+          <div class="ma-table-divider"></div>
+          <div v-for="award in awards" :key="award.name" :class="headCellClasses(awardClosed(award))" v-glass-tooltip="tooltip(award.name, awardDescription(award))" :data-test="'award-' + award.name">
+            <MilestoneAwardIcon :parts="awardIcon(award)"/>
+          </div>
+        </template>
       </div>
-      <div class="ma-table-divider"></div>
-      <div v-for="award in awards" :key="award.name" :class="headCellClasses(awardClosed(award))" v-glass-tooltip="tooltip(award.name, awardDescription(award))" :data-test="'award-' + award.name">
-        <MilestoneAwardIcon :parts="awardIcon(award)"/>
-      </div>
-    </div>
 
-    <div class="ma-table-row ma-table-status">
-      <div></div><div class="ma-table-divider"></div>
-      <div v-for="milestone in milestones" :key="milestone.name" class="ma-table-cell">
-        <!-- Claimed: cube only in the player row; awarded or closed: no more costs -->
-        <span v-if="milestone.color === undefined && !milestoneClosed(milestone)" class="ma-table-coin">{{ milestoneCost }}</span>
+      <div class="ma-table-row ma-table-status">
+        <template v-if="hasNames(part)"><div></div><div class="ma-table-divider"></div></template>
+        <template v-if="hasValues(part)">
+          <div v-for="milestone in milestones" :key="milestone.name" class="ma-table-cell">
+            <!-- Claimed: cube only in the player row; awarded or closed: no more costs -->
+            <span v-if="milestone.color === undefined && !milestoneClosed(milestone)" class="ma-table-coin">{{ milestoneCost }}</span>
+          </div>
+          <div class="ma-table-divider"></div>
+          <div v-for="award in awards" :key="award.name" class="ma-table-cell">
+            <!-- Funded: cube only up here (the player rows keep showing the score); closed: no more costs -->
+            <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner"><i :class="cubeClasses(award.color)"></i><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
+            <span v-else-if="!awardClosed(award)" class="ma-table-coin">{{ nextAwardCost }}</span>
+          </div>
+        </template>
       </div>
-      <div class="ma-table-divider"></div>
-      <div v-for="award in awards" :key="award.name" class="ma-table-cell">
-        <!-- Funded: cube only up here (the player rows keep showing the score); closed: no more costs -->
-        <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner"><i :class="cubeClasses(award.color)"></i><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
-        <span v-else-if="!awardClosed(award)" class="ma-table-coin">{{ nextAwardCost }}</span>
-      </div>
-    </div>
 
-    <div v-for="player in orderedPlayers" :key="player.color" :class="rowClasses(player)" :data-test="'row-' + player.color">
-      <!-- Slot "player": the mobile view inserts the same player header here as in the players table -->
-      <div class="ma-table-name"><slot name="player" :player="player">{{ player.name }}</slot></div>
-      <div class="ma-table-divider"></div>
-      <div v-for="milestone in milestones" :key="milestone.name" :class="milestoneCellClasses(milestone, player)">
-        <i v-if="milestone.color === player.color" :class="cubeClasses(player.color)" :title="player.name" data-test="milestone-owner"></i>
-        <span v-else class="ma-table-value">{{ scoreOf(milestone.scores, player) }}</span>
-      </div>
-      <div class="ma-table-divider"></div>
-      <div v-for="award in awards" :key="award.name" :class="awardCellClasses(award, player)">
-        <span class="ma-table-value">{{ scoreOf(award.scores, player) }}</span>
+      <div v-for="player in orderedPlayers" :key="player.color" :class="rowClasses(player)" :data-test="hasNames(part) ? 'row-' + player.color : undefined">
+        <template v-if="hasNames(part)">
+          <!-- Slot "player": the mobile view inserts the same player header here as in the players table -->
+          <div class="ma-table-name"><slot name="player" :player="player">{{ player.name }}</slot></div>
+          <div class="ma-table-divider"></div>
+        </template>
+        <template v-if="hasValues(part)">
+          <div v-for="milestone in milestones" :key="milestone.name" :class="milestoneCellClasses(milestone, player)">
+            <i v-if="milestone.color === player.color" :class="cubeClasses(player.color)" :title="player.name" data-test="milestone-owner"></i>
+            <span v-else class="ma-table-value">{{ scoreOf(milestone.scores, player) }}</span>
+          </div>
+          <div class="ma-table-divider"></div>
+          <div v-for="award in awards" :key="award.name" :class="awardCellClasses(award, player)">
+            <span class="ma-table-value">{{ scoreOf(award.scores, player) }}</span>
+          </div>
+        </template>
       </div>
     </div>
   </div>
@@ -77,6 +90,9 @@ const stopHeaderFit = new WeakMap<object, () => void>();
 
 type Score = {color: Color; score: number};
 
+// Part of the table: everything, or (scrollable) the fixed name column and the scrolling values
+type TablePart = 'all' | 'names' | 'values';
+
 export default defineComponent({
   name: 'MilestoneAwardTable',
   components: {
@@ -98,6 +114,11 @@ export default defineComponent({
       type: Array as () => ReadonlyArray<PublicPlayerModel>,
       required: true,
     },
+    // Names fixed, values scroll horizontally once the columns can't shrink any further (log box, desktop)
+    scrollable: {
+      type: Boolean,
+      default: false,
+    },
     // Own player: comes last and is highlighted (missing for spectators)
     viewerColor: {
       type: String as () => Color | undefined,
@@ -114,12 +135,8 @@ export default defineComponent({
     orderedPlayers(): Array<PublicPlayerModel> {
       return playersInTurnOrder(this.players, this.viewerColor);
     },
-    // Name | separator | milestones | separator | awards
-    columnTemplate(): string {
-      // Name column overridable via CSS (mobile.less: tablet landscape as wide as in the player list).
-      // Minimum column width via CSS too: the log box (desktop) squeezes the columns only that far, then scrolls
-      const column = 'minmax(var(--ma-table-min-column, 0px), 1fr)';
-      return `var(--ma-table-name-width, 104px) 12px repeat(${this.milestones.length}, ${column}) 16px repeat(${this.awards.length}, ${column})`;
+    parts(): ReadonlyArray<TablePart> {
+      return this.scrollable ? ['names', 'values'] : ['all'];
     },
     claimedCount(): number {
       return this.milestones.filter((milestone) => milestone.color !== undefined).length;
@@ -141,6 +158,22 @@ export default defineComponent({
     },
   },
   methods: {
+    hasNames(part: TablePart): boolean {
+      return part !== 'values';
+    },
+    hasValues(part: TablePart): boolean {
+      return part !== 'names';
+    },
+    // Name | separator | milestones | separator | awards. Split (scrollable): the separator after the names
+    // only half as wide – its line is the edge where the values start scrolling (milestone_award_table.less)
+    columnTemplate(part: TablePart): string {
+      // Name column overridable via CSS (mobile.less: tablet landscape as wide as in the player list).
+      // Minimum column width via CSS too: the scrolling part squeezes the columns only that far, then scrolls
+      const names = `var(--ma-table-name-width, 104px) ${part === 'names' ? '6px' : '12px'}`;
+      const column = 'minmax(var(--ma-table-min-column, 0px), 1fr)';
+      const values = `repeat(${this.milestones.length}, ${column}) 16px repeat(${this.awards.length}, ${column})`;
+      return [this.hasNames(part) ? names : '', this.hasValues(part) ? values : ''].join(' ').trim();
+    },
     markHorizontalScroll,
     milestoneIcon(milestone: ClaimedMilestoneModel): ReadonlyArray<IconPart> {
       return MILESTONE_ICONS[milestone.name] ?? [];

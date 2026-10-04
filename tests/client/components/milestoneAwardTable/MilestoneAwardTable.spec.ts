@@ -29,14 +29,31 @@ const awards: Array<FundedAwardModel> = [
   ]},
 ];
 
-function mountTable() {
+function mountTable(scrollable = false) {
   return shallowMount(MilestoneAwardTable, {
     ...globalConfig,
-    props: {milestones, awards, players: [jens, martin, daniel], viewerColor: 'blue' as Color},
+    props: {milestones, awards, players: [jens, martin, daniel], viewerColor: 'blue' as Color, scrollable},
   });
 }
 
 describe('MilestoneAwardTable', () => {
+  it('scrollable: names in a fixed part, values in a part of their own with the same rows', () => {
+    const wrapper = mountTable(true);
+    const names = wrapper.find('.ma-table-part--names');
+    const values = wrapper.find('.ma-table-part--values');
+    expect(names.findAll('.ma-table-name').map((cell) => cell.text())).to.deep.eq(['Martin', 'Daniel', 'Jens']);
+    expect(names.findAll('.ma-table-value')).to.have.length(0);
+    expect(values.findAll('.ma-table-name')).to.have.length(0);
+    expect(values.findAll('.ma-table-row')).to.have.length(names.findAll('.ma-table-row').length);
+    expect(values.find('[data-test="award-Banker"]').exists()).to.be.true;
+  });
+
+  it('not scrollable: one part with names and values', () => {
+    const wrapper = mountTable();
+    expect(wrapper.findAll('.ma-table-part')).to.have.length(1);
+    expect(wrapper.find('.ma-table-part--all [data-test="row-blue"] .ma-table-name').text()).eq('Jens');
+  });
+
   it('lists players in turn order with the viewer last', () => {
     const rows = mountTable().findAll('[data-test^="row-"]').map((row) => row.attributes('data-test'));
     expect(rows).to.deep.eq(['row-green', 'row-red', 'row-blue']);

@@ -68,11 +68,6 @@
   .section-caption(@ma-table-section-line-height);
 }
 
-// Only a wrapper for the log box (below); elsewhere the texts stay direct items of the heading
-.ma-table-section-text {
-  display: contents;
-}
-
 .ma-table-head,
 .ma-table-status {
   backdrop-filter: blur(@ma-table-blur);
@@ -221,9 +216,11 @@
   }
 }
 
+@ma-table-me-outline: rgba(255, 255, 255, 0.55);
+
 .ma-table-player--me {
   height: @ma-table-own-row-height;
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 0 0 2px @ma-table-me-outline;
 }
 
 each(@players, {
@@ -293,14 +290,82 @@ each(@players, {
   color: #7ee07e;
 }
 
-// ---------- In the log box (LogPanel.vue, desktop: tab "Milestones & Awards") ----------
-// The columns shrink down to a minimum width; below that the table scrolls horizontally,
-// while the name column with its divider stays in place and the values pass underneath.
-@ma-table-min-column: 32px;
-@ma-table-name-column: 104px; // default of --ma-table-name-width (MilestoneAwardTable.vue)
-@ma-table-name-divider: 12px; // divider column after the names (MilestoneAwardTable.vue)
-@ma-table-sticky-background: rgba(13, 15, 20, 0.92); // dark frosted glass like the sticky columns of the mobile view, a little denser over the icons
+// One part (default): the part has no box of its own, its rows are the table's grid items
+.ma-table-part {
+  display: contents;
+}
 
+// ---------- Split: names fixed, values scroll (MilestoneAwardTable.vue, prop scrollable) ----------
+// The columns shrink down to a minimum width; below that only the values scroll horizontally – scroll box,
+// scrollbar and headings all end exactly at the divider line after the names.
+@ma-table-min-column: 32px;
+@ma-table-labels-height: @ma-table-section-line-height + 2px; // heading line + its margin
+@ma-table-head-height: @ma-table-icon-height + 9px; // icon + padding of .ma-table-head
+@ma-table-values-inset: 6px; // gap between the divider line and the first value column
+
+.ma-table.ma-table--split {
+  --ma-table-min-column: @ma-table-min-column;
+  display: flex;
+  align-items: flex-start;
+
+  .ma-table-part {
+    display: grid;
+    row-gap: @ma-table-row-gap;
+  }
+
+  .ma-table-part--names {
+    flex: none;
+  }
+
+  .ma-table-part--values {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+
+  // Both parts render the same rows: fixed heights keep them level
+  .ma-table-labels {
+    height: @ma-table-labels-height;
+  }
+
+  .ma-table-head {
+    box-sizing: border-box;
+    height: @ma-table-head-height;
+  }
+
+  // Divider line on the edge of the name part, so the values scroll away exactly there
+  .ma-table-part--names .ma-table-divider::after {
+    left: auto;
+    right: 0;
+  }
+
+  // Each half of a row rounds only its outer corners; the color bar belongs to the names
+  .ma-table-part--names .ma-table-row {
+    border-radius: @ma-table-radius 0 0 @ma-table-radius;
+  }
+
+  .ma-table-part--values .ma-table-row {
+    padding-left: @ma-table-values-inset;
+    border-radius: 0 @ma-table-radius @ma-table-radius 0;
+  }
+
+  .ma-table-part--values .ma-table-player::before {
+    display: none;
+  }
+
+  // Own row: the white outline continues across both halves, without an edge in between
+  .ma-table-part--names .ma-table-player--me {
+    box-shadow: inset 2px 0 0 @ma-table-me-outline, inset 0 2px 0 @ma-table-me-outline, inset 0 -2px 0 @ma-table-me-outline;
+  }
+
+  .ma-table-part--values .ma-table-player--me {
+    box-shadow: inset -2px 0 0 @ma-table-me-outline, inset 0 2px 0 @ma-table-me-outline, inset 0 -2px 0 @ma-table-me-outline;
+  }
+}
+
+// ---------- In the log box (LogPanel.vue, desktop: tab "Milestones & Awards") ----------
 .log-panel--milestones.or-tab-panel {
   padding: 12px 14px;
 }
@@ -309,86 +374,4 @@ each(@players, {
   flex: 1 1 auto;
   min-height: 0;
   overflow: hidden auto;
-
-  .ma-table {
-    --ma-table-min-column: @ma-table-min-column;
-    display: grid;
-    overflow: auto hidden;
-    overscroll-behavior-x: contain;
-    scrollbar-width: thin;
-  }
-
-  // Name and divider of every row stay in front; the rows themselves scroll away underneath
-  .ma-table-row > :nth-child(1),
-  .ma-table-row > :nth-child(2) {
-    position: sticky;
-    z-index: 2;
-    align-self: stretch;
-  }
-
-  .ma-table-row > :nth-child(1) {
-    left: 0;
-    border-radius: @ma-table-radius 0 0 @ma-table-radius;
-  }
-
-  .ma-table-row > :nth-child(2) {
-    left: @ma-table-name-column;
-  }
-
-  // Color bar on the name cell instead of the row: the row's left edge scrolls out of view
-  .ma-table-player::before {
-    display: none;
-  }
-
-  .ma-table-name {
-    line-height: @ma-table-row-height;
-  }
-
-  .ma-table-player--me .ma-table-name {
-    line-height: @ma-table-own-row-height;
-  }
-
-  // Section headings stay readable while their columns pass by (until the section itself leaves).
-  // clip instead of hidden: a hidden section would be the sticky text's own scroll box and push it to its end
-  .ma-table-section {
-    overflow: clip;
-  }
-
-  .ma-table-section-text {
-    position: sticky;
-    left: @ma-table-name-column + @ma-table-name-divider;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 8px;
-    align-items: baseline;
-  }
-
-  // Only once something lies underneath (scrolled horizontally, horizontalScroll.ts): opaque surface
-  .mb-scrolled-x .ma-table-head > :nth-child(-n + 2),
-  .mb-scrolled-x .ma-table-status > :nth-child(-n + 2),
-  .mb-scrolled-x .ma-table-player > :nth-child(-n + 2) {
-    background-color: @ma-table-sticky-background;
-    backdrop-filter: blur(@ma-table-blur);
-  }
-
-  // Edge towards the passing columns
-  .mb-scrolled-x .ma-table-row:not(.ma-table-labels) > :nth-child(2) {
-    box-shadow: 6px 0 8px -6px rgba(0, 0, 0, 0.7);
-  }
 }
-
-each(@players, {
-  @c: ~"player_@{value}";
-  .log-milestones .ma-table-player--@{value} .ma-table-name {
-    box-shadow: inset @ma-table-color-bar-width 0 0 @@c;
-  }
-
-  // Scrolled: the name cell carries the row color itself over the dark surface
-  .log-milestones .mb-scrolled-x .ma-table-player--@{value} > :nth-child(-n + 2) {
-    background-image: linear-gradient(fade(@@c, 28%), fade(@@c, 28%));
-  }
-
-  .log-milestones .mb-scrolled-x .ma-table-player--@{value}.ma-table-player--me > :nth-child(-n + 2) {
-    background-image: linear-gradient(fade(@@c, 50%), fade(@@c, 50%));
-  }
-});

@@ -28,7 +28,7 @@
         </section>
       </div>
       <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones">
-        <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color"/>
+        <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable/>
       </div>
       <button
         v-show="showScrollToBottomButton && !showsMilestonesAwards"
