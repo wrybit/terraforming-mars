@@ -7,149 +7,146 @@ import {fakeViewModel} from '../testHelpers';
 import {LogMessage} from '@/common/logs/LogMessage';
 import {LogMessageType} from '@/common/logs/LogMessageType';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
-import {SpaceId} from '@/common/Types';
+import {ParticipantId, SpaceId} from '@/common/Types';
+
+type Wrapper = ReturnType<typeof shallowMount>;
 
 describe('LogPanel', () => {
   let originalFetch: any;
-  let originalGetElementById: typeof document.getElementById;
+  let originalGetClientRects: typeof HTMLElement.prototype.getClientRects;
+  let originalRequestAnimationFrame: typeof window.requestAnimationFrame;
   let fetchCalls: Array<string>;
+  let idCounter = 0;
 
-  function installScrollablePanel() {
+  // Each test gets its own participant, so the cache of finished generations doesn't leak between tests
+  function viewModelAt(generation: number) {
+    const base = fakeViewModel({id: ('p-log-' + (idCounter++)) as ParticipantId});
+    return {...base, game: {...base.game, generation}};
+  }
+
+  function line(text: string, type = LogMessageType.DEFAULT): LogMessage {
+    return new LogMessage(type, text, []);
+  }
+
+  function mount(viewModel: ReturnType<typeof viewModelAt>): Wrapper {
+    return shallowMount(LogPanel, {...globalConfig, props: {viewModel}});
+  }
+
+  // The log's own box as a scroll box with a fixed size (jsdom has no layout)
+  function makeScrollable(wrapper: Wrapper, scrollHeight = 520, clientHeight = 200) {
+    const element = wrapper.find('#logpanel-scrollable').element as HTMLElement;
     let scrollTop = 0;
-    let scrollHeight = 520;
-    const panel = {
-      get scrollTop() {
-        return scrollTop;
-      },
-      set scrollTop(value: number) {
-        scrollTop = value;
-      },
-      get scrollHeight() {
-        return scrollHeight;
-      },
-      clientHeight: 200,
-    } as HTMLElement;
-    document.getElementById = ((id: string) => id === 'logpanel-scrollable' ? panel : null) as typeof document.getElementById;
+    element.style.overflowY = 'auto';
+    Object.defineProperty(element, 'scrollTop', {configurable: true, get: () => scrollTop, set: (value: number) => {
+      scrollTop = value;
+    }});
+    Object.defineProperty(element, 'scrollHeight', {configurable: true, get: () => scrollHeight});
+    Object.defineProperty(element, 'clientHeight', {configurable: true, get: () => clientHeight});
     return {
+      element,
       getScrollTop: () => scrollTop,
       setScrollTop: (value: number) => {
         scrollTop = value;
       },
-      setScrollHeight: (value: number) => {
-        scrollHeight = value;
-      },
     };
   }
 
-  async function flushLogs(wrapper: ReturnType<typeof shallowMount>) {
-    await Promise.resolve();
-    await Promise.resolve();
+  async function flush(wrapper: Wrapper) {
     await new Promise((resolve) => setTimeout(resolve, 0));
+    await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
   }
 
   beforeEach(() => {
     originalFetch = (global as any).fetch;
-    originalGetElementById = document.getElementById.bind(document);
+    originalGetClientRects = HTMLElement.prototype.getClientRects;
+    originalRequestAnimationFrame = window.requestAnimationFrame;
+    // jsdom renders nothing: the log counts as visible, frames run immediately
+    HTMLElement.prototype.getClientRects = function() {
+      return [{}] as unknown as DOMRectList;
+    };
+    window.requestAnimationFrame = (callback: (time: number) => void) => {
+      callback(0);
+      return 0;
+    };
     fetchCalls = [];
     (global as any).fetch = (url: string) => {
       fetchCalls.push(url);
+      const generation = Number(new URL(url, 'http://localhost').searchParams.get('generation'));
       return Promise.resolve({
         ok: true,
-        json: () => Promise.resolve([]),
+        json: () => Promise.resolve([line('Generation ${0}', LogMessageType.NEW_GENERATION), line('entry of generation ' + generation)]),
       });
     };
   });
 
   afterEach(() => {
     (global as any).fetch = originalFetch;
-    document.getElementById = originalGetElementById;
+    HTMLElement.prototype.getClientRects = originalGetClientRects;
+    window.requestAnimationFrame = originalRequestAnimationFrame;
   });
 
   it('mounts without errors', () => {
-    const wrapper = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {
-        viewModel: fakeViewModel(),
-      },
-    });
-    expect(wrapper.exists()).to.be.true;
+    expect(mount(viewModelAt(1)).exists()).to.be.true;
+  });
+
+  it('shows all generations as one stream with a header each, without the server\'s generation lines', async () => {
+    const wrapper = mount(viewModelAt(3));
+    await flush(wrapper);
+
+    expect(fetchCalls.map((url) => new URL(url, 'http://localhost').searchParams.get('generation'))).to.have.members(['1', '2', '3']);
+    const sections = wrapper.findAll('.log-generation');
+    expect(sections.map((section) => section.attributes('data-generation'))).deep.eq(['1', '2', '3']);
+    expect(sections.map((section) => section.find('.log-generation-title').text())).deep.eq(['Generation 1', 'Generation 2', 'Generation 3']);
+    // Only the regular line remains in each generation
+    expect(wrapper.findAllComponents(LogMessageComponent)).has.length(3);
+  });
+
+  it('loads finished generations only once', async () => {
+    const viewModel = viewModelAt(3);
+    const first = mount(viewModel);
+    await flush(first);
+    first.unmount();
+    fetchCalls.length = 0;
+
+    const second = mount(viewModel);
+    await second.vm.$nextTick();
+    // The history is there before any request returns
+    expect(second.findAll('.log-generation')).has.length(3);
+    await flush(second);
+    expect(fetchCalls).has.length(1);
+    expect(fetchCalls[0]).includes('generation=3');
   });
 
   it('emits spaceClicked when a log message emits spaceClicked', async () => {
-    const wrapper = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {viewModel: fakeViewModel()},
-    });
-    await flushLogs(wrapper);
+    const wrapper = mount(viewModelAt(1));
+    await flush(wrapper);
 
     const message = new LogMessage(LogMessageType.DEFAULT, '${0}', [
       {type: LogMessageDataType.SPACE, value: '05' as SpaceId},
     ]);
-    (wrapper.vm as any).messages.push(message);
+    (wrapper.vm as any).sections[0].messages.push(message);
     await wrapper.vm.$nextTick();
 
-    await wrapper.findComponent(LogMessageComponent).vm.$emit('spaceClicked', '05');
+    await wrapper.findAllComponents(LogMessageComponent).at(-1)!.vm.$emit('spaceClicked', '05');
 
     expect(wrapper.emitted('spaceClicked')).to.deep.eq([['05']]);
   });
 
-  it('restores the selected generation and scroll position after remount', async () => {
-    const panel = installScrollablePanel();
-    const baseViewModel = fakeViewModel({id: 'p-log-reader' as any});
-    const viewModel = {...baseViewModel, game: {...baseViewModel.game, generation: 3}};
-    const first = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {viewModel},
-    });
-    await flushLogs(first);
+  it('starts at the end of the log and selects the current generation', async () => {
+    const wrapper = mount(viewModelAt(3));
+    const panel = makeScrollable(wrapper);
+    await flush(wrapper);
 
-    (first.vm as any).selectGeneration(1);
-    panel.setScrollTop(120);
-    first.unmount();
-
-    const second = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {viewModel},
-    });
-    await flushLogs(second);
-
-    expect((second.vm as any).selectedGeneration).eq(1);
-    expect(fetchCalls[fetchCalls.length - 1]).includes('generation=1');
-    expect(panel.getScrollTop()).eq(120);
-  });
-
-  it('continues following the end after remount when already at the bottom', async () => {
-    const panel = installScrollablePanel();
-    const viewModel = fakeViewModel({id: 'p-log-follower' as any});
-    const first = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {viewModel},
-    });
-    await flushLogs(first);
-
-    panel.setScrollTop(320);
-    first.unmount();
-    panel.setScrollHeight(640);
-
-    const second = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {viewModel},
-    });
-    await flushLogs(second);
-
-    expect(panel.getScrollTop()).eq(640);
+    expect(panel.getScrollTop()).eq(320);
+    expect((wrapper.vm as any).selectedGeneration).eq(3);
+    expect((wrapper.vm as any).showScrollToBottomButton).is.false;
   });
 
   it('shows the scroll button only when away from the bottom', async () => {
-    const panel = installScrollablePanel();
-    const wrapper = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {viewModel: fakeViewModel()},
-    });
-    await flushLogs(wrapper);
-
-    expect((wrapper.vm as any).showScrollToBottomButton).is.false;
+    const wrapper = mount(viewModelAt(1));
+    const panel = makeScrollable(wrapper);
+    await flush(wrapper);
 
     panel.setScrollTop(100);
     await wrapper.find('#logpanel-scrollable').trigger('scroll');
@@ -160,76 +157,66 @@ describe('LogPanel', () => {
     expect((wrapper.vm as any).showScrollToBottomButton).is.false;
   });
 
-  it('returns to the current generation and the end of the log', async () => {
-    const panel = installScrollablePanel();
-    const baseViewModel = fakeViewModel({id: 'p-latest-reader' as any});
-    const viewModel = {...baseViewModel, game: {...baseViewModel.game, generation: 3}};
-    const wrapper = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {viewModel},
+  it('selects the tab of the generation scrolled to', async () => {
+    const wrapper = mount(viewModelAt(3));
+    const panel = makeScrollable(wrapper);
+    await flush(wrapper);
+
+    // Headers of generations 1 and 2 have passed the top of the box, generation 3 is still below
+    const tops = [-300, -40, 150];
+    wrapper.findAll('.log-generation').forEach((section, index) => {
+      (section.element as HTMLElement).getBoundingClientRect = () => ({top: tops[index]}) as DOMRect;
     });
-    await flushLogs(wrapper);
+    panel.setScrollTop(100);
+    await wrapper.find('#logpanel-scrollable').trigger('scroll');
 
-    (wrapper.vm as any).selectedGeneration = 1;
-    panel.setScrollTop(80);
-    await wrapper.find('[data-test="log-latest"]').trigger('click');
-    await flushLogs(wrapper);
+    expect((wrapper.vm as any).selectedGeneration).eq(2);
+  });
 
-    expect((wrapper.vm as any).selectedGeneration).eq(3);
-    expect(fetchCalls[fetchCalls.length - 1]).includes('generation=3');
-    expect(panel.getScrollTop()).eq(520);
+  it('scrolls to a generation when its tab is chosen', async () => {
+    const wrapper = mount(viewModelAt(3));
+    const panel = makeScrollable(wrapper);
+    await flush(wrapper);
+    panel.setScrollTop(300);
+
+    (wrapper.findAll('.log-generation')[1].element as HTMLElement).getBoundingClientRect = () => ({top: -180}) as DOMRect;
+    (wrapper.vm as any).selectGeneration(2);
+
+    expect((wrapper.vm as any).selectedGeneration).eq(2);
+    expect(panel.getScrollTop()).eq(120);
+  });
+
+  it('keeps the reading position across a remount', async () => {
+    const viewModel = viewModelAt(3);
+    const first = mount(viewModel);
+    const firstPanel = makeScrollable(first);
+    await flush(first);
+    firstPanel.setScrollTop(120);
+    first.unmount();
+
+    const second = mount(viewModel);
+    const secondPanel = makeScrollable(second);
+    await flush(second);
+
+    expect(secondPanel.getScrollTop()).eq(120);
+    expect((second.vm as any).following).is.false;
   });
 
   // The real app never patches an existing LogPanel's props in place: App.vue forces a
-  // full unmount/remount (via a `:key` bump) on every game-state refresh. These tests
-  // simulate that by unmounting and mounting a fresh instance, exactly like the app does.
-  it('follows the newest generation across a remount when previously following', async () => {
-    const baseViewModel = fakeViewModel({id: 'p-live-follower' as any});
-    const viewModel = {...baseViewModel, game: {...baseViewModel.game, generation: 2}};
-    const first = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {viewModel},
-    });
-    await flushLogs(first);
-    // Module-level view state can be left behind by earlier tests, so explicitly
-    // establish "following" mode rather than relying on the freshly-mounted default.
-    (first.vm as any).showLatestLogs();
-    await flushLogs(first);
+  // full unmount/remount (via a `:key` bump) on every game-state refresh.
+  it('follows the end of the log across a remount into a new generation', async () => {
+    const viewModel = viewModelAt(2);
+    const first = mount(viewModel);
+    const firstPanel = makeScrollable(first);
+    await flush(first);
+    expect(firstPanel.getScrollTop()).eq(320);
     first.unmount();
 
-    const nextViewModel = {...viewModel, game: {...viewModel.game, generation: 3}};
-    const second = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {viewModel: nextViewModel},
-    });
-    await flushLogs(second);
+    const second = mount({...viewModel, game: {...viewModel.game, generation: 3}});
+    const panel = makeScrollable(second, 640);
+    await flush(second);
 
     expect((second.vm as any).selectedGeneration).eq(3);
-    expect(fetchCalls[fetchCalls.length - 1]).includes('generation=3');
-  });
-
-  it('does not jump generations across a remount after the player navigates away', async () => {
-    const baseViewModel = fakeViewModel({id: 'p-history-reader' as any});
-    const viewModel = {...baseViewModel, game: {...baseViewModel.game, generation: 3}};
-    const first = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {viewModel},
-    });
-    await flushLogs(first);
-
-    (first.vm as any).selectGeneration(1);
-    await flushLogs(first);
-    first.unmount();
-    fetchCalls.length = 0;
-
-    const nextViewModel = {...viewModel, game: {...viewModel.game, generation: 4}};
-    const second = shallowMount(LogPanel, {
-      ...globalConfig,
-      props: {viewModel: nextViewModel},
-    });
-    await flushLogs(second);
-
-    expect((second.vm as any).selectedGeneration).eq(1);
-    expect(fetchCalls[fetchCalls.length - 1]).includes('generation=1');
+    expect(panel.getScrollTop()).eq(440);
   });
 });

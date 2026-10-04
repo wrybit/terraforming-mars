@@ -1,13 +1,18 @@
 <template>
-  <div class="log-container">
+  <div ref="root" class="log-container">
     <LogGenerationList
+      ref="generationList"
       :max="viewModel.game.generation"
       :selected="selectedGeneration"
       :lastSoloGeneration="lastSoloGeneration"
       @selected="selectGeneration"/>
     <div v-docked-tab class="panel log-panel or-tab-panel or-tab-panel--view" role="tabpanel">
-      <div id="logpanel-scrollable" class="panel-body" @scroll="updateScrollState" @mouseleave="messageUnhovered">
-        <LogMessageComponent v-for="(message, index) in messages" :key="index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @mouseenter="messageHovered(message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
+      <!-- One continuous stream of all generations; the tabs above follow the scroll position -->
+      <div id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mouseleave="messageUnhovered">
+        <section v-for="section in sections" :key="section.generation" class="log-generation" :data-generation="section.generation">
+          <h3 class="log-generation-title">{{ generationTitle(section.generation) }}</h3>
+          <LogMessageComponent v-for="(message, index) in section.messages" :key="index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @mouseenter="messageHovered(message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
+        </section>
       </div>
       <button
         v-show="showScrollToBottomButton"
@@ -30,54 +35,79 @@
 
 <script lang="ts">
 
-import {defineComponent} from 'vue';
+import {defineComponent, markRaw} from 'vue';
 import {vDockedTab} from '@/client/directives/DockedTab';
+import {translateTextWithParams} from '@/client/directives/i18n';
 import {LogMessage} from '@/common/logs/LogMessage';
+import {LogMessageType} from '@/common/logs/LogMessageType';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {SoundManager} from '@/client/utils/SoundManager';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {logMessageItemCount, needsModalPreview} from '@/client/components/logpanel/logMessageContent';
+import {activeSectionIndex, findScrollContainer, maxScrollTopOf, readingLineOf, scrollContainerTo, ScrollContainer, scrollTopOf} from '@/client/components/logpanel/logScroll';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
 import LogCardsZoom from '@/client/components/logpanel/LogCardsZoom.vue';
-import {fetchLogs} from '@/client/utils/fetchLogs';
+import {cachedLogStream, fetchLogStream, GenerationLog} from '@/client/utils/fetchLogs';
 
 const BOTTOM_SCROLL_THRESHOLD = 24; // Roughly one line of log text.
 
-type ScrollPosition = number | 'bottom';
+// After a tab click the smooth scroll counts as finished once no scroll event came for this long
+const PROGRAMMATIC_SCROLL_SETTLE_MS = 150;
 
 type ViewState = {
-  // The current generation viewed in the log panel, which might be different
-  // from the current generation in the game.
-  selectedGeneration: number,
-  // True if the player was viewing the newest generation, and so should be moved
-  // forward to whatever generation is newest after a remount.
+  // Participant the state belongs to (another game starts at the end of its log)
+  id: string,
+  // True if the reader was at the end of the log, and so should stay at the end
+  // of whatever is newest after a remount.
   following: boolean,
-  // Either 'bottom' which means continue scrolling as new entries appear,
-  // or a number which is the pixel height from the top of the widget.
-  scrollPosition: ScrollPosition,
+  // Scroll offset of the stream when the reader was somewhere in the history
+  scrollTop: number,
 };
 
+// The game view remounts on every update (App.vue bumps its key): the reading position survives here
 let viewState: ViewState | undefined;
 
 type Refs = {
+  root: HTMLElement | undefined;
+  scrollBody: HTMLElement | undefined;
+  generationList: {$el: HTMLElement} | undefined;
   messageInspector: InstanceType<typeof LogMessageInspector>;
 };
 
+type Internals = {
+  programmaticScrollTimer: number | undefined,
+  scrollFrame: number | undefined,
+  scrollFramePending: boolean,
+  resizeObserver: ResizeObserver | undefined,
+  lastHeight: number,
+};
+
 type LogPanelModel = {
-  messages: Array<LogMessage>,
+  sections: Array<GenerationLog>,
+  // Generation whose tab is highlighted: follows the scroll position, or the tab just clicked
   selectedGeneration: number,
   showScrollToBottomButton: boolean,
-  // True while the panel should keep following the newest generation as it changes.
-  // False once the player manually navigates to an earlier generation.
+  // True while the reader is at the end of the log, which then keeps following new entries
   following: boolean,
   // Log line whose cards are currently shown in the carousel modal (only with zoomCarousel)
   zoomedMessage: LogMessage | undefined,
+  // Timers and observers of this instance; raw, so they don't trigger re-renders
+  internals: Internals,
 };
 
 // Distance of the hover preview from the log's right edge
 const LOG_PREVIEW_INSET = 3;
+
+// The header of each generation replaces the server's "Generation N" line
+function withoutGenerationLines(messages: Array<LogMessage>): Array<LogMessage> {
+  return messages.filter((message) => message.type !== LogMessageType.NEW_GENERATION);
+}
+
+function toSections(stream: Array<GenerationLog>): Array<GenerationLog> {
+  return stream.map((section) => ({generation: section.generation, messages: withoutGenerationLines(section.messages)}));
+}
 
 export default defineComponent({
   name: 'LogPanel',
@@ -94,11 +124,12 @@ export default defineComponent({
   },
   data(): LogPanelModel {
     return {
-      messages: [],
+      sections: [],
       selectedGeneration: -1,
       showScrollToBottomButton: false,
       following: true,
       zoomedMessage: undefined,
+      internals: markRaw({programmaticScrollTimer: undefined, scrollFrame: undefined, scrollFramePending: false, resizeObserver: undefined, lastHeight: 0}),
     };
   },
   directives: {
@@ -112,6 +143,9 @@ export default defineComponent({
   },
   emits: ['spaceClicked'],
   methods: {
+    generationTitle(generation: number): string {
+      return translateTextWithParams('Generation ${0}', [String(generation)]);
+    },
     // With mouse/trackpad, hover opens the preview; click is only for touch devices without hover
     canHover(): boolean {
       return window.matchMedia('(hover: hover)').matches;
@@ -150,61 +184,134 @@ export default defineComponent({
     messageUnhovered() {
       this.typedRefs.messageInspector.hidePreview();
     },
-    selectGeneration(gen: number): void {
-      this.following = gen === this.generation;
-      if (gen !== this.selectedGeneration) {
-        this.getLogsForGeneration(gen, gen === this.generation ? 'bottom' : undefined);
+    // ---------- Scrolling ----------
+    scrollContainer(): ScrollContainer {
+      return findScrollContainer(this.typedRefs.scrollBody);
+    },
+    // On mobile the log sits on a hidden screen most of the time: page scrolling there belongs to another screen
+    isVisible(): boolean {
+      return (this.typedRefs.root?.getClientRects().length ?? 0) > 0;
+    },
+    sectionElements(): Array<HTMLElement> {
+      return Array.from(this.typedRefs.scrollBody?.querySelectorAll<HTMLElement>('.log-generation') ?? []);
+    },
+    // Distance from the reading line to a generation's header, in pixels of the scroll container
+    offsetToGeneration(generation: number, container: ScrollContainer): number | undefined {
+      const section = this.sectionElements().find((element) => element.dataset.generation === String(generation));
+      if (section === undefined) {
+        return undefined;
       }
-      this.selectedGeneration = gen;
+      return section.getBoundingClientRect().top - readingLineOf(container, this.typedRefs.generationList?.$el);
+    },
+    // Tab click: scroll smoothly to that generation's header. The tab stays selected even if the
+    // end of the log is reached before the header gets to the top.
+    selectGeneration(generation: number): void {
+      this.selectedGeneration = generation;
+      const container = this.scrollContainer();
+      const offset = this.offsetToGeneration(generation, container);
+      if (offset === undefined) {
+        return;
+      }
+      this.startProgrammaticScroll();
+      scrollContainerTo(container, scrollTopOf(container) + offset, 'smooth');
     },
     showLatestLogs(): void {
-      this.following = true;
       this.selectedGeneration = this.generation;
-      this.getLogsForGeneration(this.generation, 'bottom');
+      this.following = true;
+      this.startProgrammaticScroll();
+      scrollContainerTo(this.scrollContainer(), Number.MAX_SAFE_INTEGER, 'smooth');
     },
-    getLogsForGeneration(generation: number, scrollPosition?: ScrollPosition): void {
-      const messages = this.messages;
-      fetchLogs(this.viewModel.id, generation)
-        .then((data) => {
-          if (!data) {
-            return;
-          }
-          messages.length = 0;
-          messages.push(...data);
-          if (getPreferences().enable_sounds && window.location.search.includes('experimental=1') ) {
-            SoundManager.newLog();
-          }
-          if (scrollPosition === 'bottom') {
-            this.$nextTick(this.scrollToEnd);
-          } else if (scrollPosition !== undefined) {
-            this.$nextTick(() => this.restoreScrollTop(scrollPosition));
-          }
-        });
+    // While scrolling to a clicked tab, the tabs must not jump through the generations in between
+    startProgrammaticScroll(): void {
+      const internals = this.internals;
+      window.clearTimeout(internals.programmaticScrollTimer);
+      internals.programmaticScrollTimer = window.setTimeout(() => this.endProgrammaticScroll(), PROGRAMMATIC_SCROLL_SETTLE_MS);
     },
-    scrollToEnd() {
-      const scrollablePanel = this.scrollablePanel;
-      if (scrollablePanel !== null) {
-        scrollablePanel.scrollTop = scrollablePanel.scrollHeight;
+    endProgrammaticScroll(): void {
+      this.internals.programmaticScrollTimer = undefined;
+      this.updateScrollState();
+    },
+    onScroll(): void {
+      const internals = this.internals;
+      if (internals.programmaticScrollTimer !== undefined) {
+        // Still moving towards the clicked tab: wait until the movement settles
+        this.startProgrammaticScroll();
+        return;
+      }
+      if (internals.scrollFramePending) {
+        return;
+      }
+      internals.scrollFramePending = true;
+      internals.scrollFrame = window.requestAnimationFrame(() => {
+        internals.scrollFramePending = false;
         this.updateScrollState();
+        this.updateSelectedFromScroll();
+      });
+    },
+    // The page scrolls on mobile: only react while the log is the visible screen and scrolls with the page
+    onWindowScroll(): void {
+      if (this.isVisible() && this.scrollContainer() === window) {
+        this.onScroll();
       }
     },
-    restoreScrollTop(scrollTop: number) {
-      const scrollablePanel = this.scrollablePanel;
-      if (scrollablePanel !== null) {
-        scrollablePanel.scrollTop = scrollTop;
-        this.updateScrollState();
+    updateSelectedFromScroll(): void {
+      if (this.sections.length === 0) {
+        return;
       }
+      const container = this.scrollContainer();
+      if (this.isNearBottom(container)) {
+        this.selectedGeneration = this.sections[this.sections.length - 1].generation;
+        return;
+      }
+      const tops = this.sectionElements().map((element) => element.getBoundingClientRect().top);
+      const index = activeSectionIndex(tops, readingLineOf(container, this.typedRefs.generationList?.$el));
+      this.selectedGeneration = this.sections[index]?.generation ?? this.generation;
     },
     updateScrollState(): void {
-      this.showScrollToBottomButton = !this.isNearBottom();
+      const nearBottom = this.isNearBottom(this.scrollContainer());
+      this.showScrollToBottomButton = !nearBottom;
+      this.following = nearBottom;
     },
-    isNearBottom(): boolean {
-      const scrollablePanel = this.scrollablePanel;
-      if (scrollablePanel === null) {
-        return true;
+    isNearBottom(container: ScrollContainer): boolean {
+      return maxScrollTopOf(container) - scrollTopOf(container) <= BOTTOM_SCROLL_THRESHOLD;
+    },
+    // Puts the reader back where they were: at the end, or at the stored offset in the history
+    restorePosition(): void {
+      if (!this.isVisible()) {
+        return;
       }
-      const remaining = scrollablePanel.scrollHeight - scrollablePanel.clientHeight - scrollablePanel.scrollTop;
-      return remaining <= BOTTOM_SCROLL_THRESHOLD;
+      const container = this.scrollContainer();
+      if (this.following) {
+        scrollContainerTo(container, Number.MAX_SAFE_INTEGER);
+        this.selectedGeneration = this.generation;
+      } else {
+        scrollContainerTo(container, viewState?.scrollTop ?? 0);
+        this.updateSelectedFromScroll();
+      }
+      this.updateScrollState();
+    },
+    // Mobile: the log screen was hidden and is shown again (the page jumps to its top) –
+    // show the end of the log instead of generation 1
+    onResize(): void {
+      const height = this.typedRefs.root?.offsetHeight ?? 0;
+      const becameVisible = this.internals.lastHeight === 0 && height > 0;
+      this.internals.lastHeight = height;
+      if (becameVisible && this.scrollContainer() === window) {
+        this.following = true;
+        this.restorePosition();
+      }
+    },
+    loadStream(): void {
+      fetchLogStream(this.viewModel.id, this.generation).then((stream) => {
+        if (stream === undefined) {
+          return;
+        }
+        this.sections = toSections(stream);
+        if (getPreferences().enable_sounds && window.location.search.includes('experimental=1')) {
+          SoundManager.newLog();
+        }
+        this.$nextTick(() => this.restorePosition());
+      });
     },
   },
   computed: {
@@ -217,30 +324,35 @@ export default defineComponent({
     lastSoloGeneration(): number | undefined {
       return this.viewModel.players.length === 1 ? this.viewModel.game.lastSoloGeneration : undefined;
     },
-    scrollablePanel(): HTMLElement | null {
-      return document.getElementById('logpanel-scrollable');
-    },
   },
   mounted() {
-    const restoredState = viewState;
-    if (restoredState !== undefined && restoredState.following === false) {
-      this.following = false;
-      this.selectedGeneration = restoredState.selectedGeneration;
-      this.getLogsForGeneration(this.selectedGeneration, restoredState.scrollPosition);
-    } else {
-      // Either this is the first mount, or the panel was following the newest
-      // generation, which may have advanced since the previous instance unmounted.
-      this.following = true;
-      this.selectedGeneration = this.generation;
-      this.getLogsForGeneration(this.selectedGeneration, 'bottom');
+    const restoredState = viewState?.id === this.viewModel.id ? viewState : undefined;
+    // Either this is the first mount, or the reader was at the end, which may have grown since the previous instance unmounted
+    this.following = restoredState === undefined || restoredState.following;
+    this.selectedGeneration = this.generation;
+    // The known history renders right away, so the page doesn't shrink and jump while the current generation loads
+    this.sections = toSections(cachedLogStream(this.viewModel.id, this.generation));
+    this.internals.lastHeight = this.typedRefs.root?.offsetHeight ?? 0;
+    window.addEventListener('scroll', this.onWindowScroll, {passive: true});
+    if (typeof ResizeObserver !== 'undefined' && this.typedRefs.root !== undefined) {
+      this.internals.resizeObserver = new ResizeObserver(() => this.onResize());
+      this.internals.resizeObserver.observe(this.typedRefs.root);
     }
+    this.loadStream();
   },
   beforeUnmount() {
+    const container = this.scrollContainer();
     viewState = {
-      selectedGeneration: this.selectedGeneration,
-      following: this.following,
-      scrollPosition: this.isNearBottom() ? 'bottom' : this.scrollablePanel?.scrollTop ?? 'bottom',
+      id: this.viewModel.id,
+      following: this.isVisible() ? this.isNearBottom(container) : this.following,
+      scrollTop: scrollTopOf(container),
     };
+    window.removeEventListener('scroll', this.onWindowScroll);
+    window.clearTimeout(this.internals.programmaticScrollTimer);
+    if (this.internals.scrollFramePending && this.internals.scrollFrame !== undefined) {
+      window.cancelAnimationFrame(this.internals.scrollFrame);
+    }
+    this.internals.resizeObserver?.disconnect();
   },
 });
 

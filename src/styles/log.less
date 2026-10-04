@@ -71,6 +71,24 @@
   }
 }
 
+// One continuous stream: each generation starts with a header; from generation 2 on, a divider and
+// extra space above it, clearly larger than the spacing between lines, so the generations read as groups
+.log-generation + .log-generation {
+  margin-top: 18px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.log-generation-title {
+  margin: 0 0 4px;
+  font-family: Prototype, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #a4a6ae;
+}
+
 .log-latest-button {
   position: absolute;
   right: 28px;

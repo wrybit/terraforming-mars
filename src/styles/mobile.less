@@ -1114,6 +1114,26 @@ html.tm-mobile {
 
   // ---------- Log ----------
   .mb-screen--log {
+    // clip instead of hidden: hidden would make the screen a scroll box and the sticky tabs would stick to it, not to the page
+    overflow-x: clip;
+
+    // The page scrolls the log: the generation tabs stay below the status bar and follow the scroll position
+    .log-generations {
+      position: sticky;
+      top: @mb-top-height;
+      z-index: 5;
+      margin: -10px -8px 0;
+      padding: 10px 8px 0;
+      .mb-bar-surface();
+    }
+
+    // Jump to the end: above the footer bar instead of at the bottom of the (page-long) box
+    .log-latest-button {
+      position: fixed;
+      right: 16px;
+      bottom: calc(@mb-nav-height + 12px + env(safe-area-inset-bottom));
+    }
+
     .log-container,
     .log-panel,
     .panel-body {
