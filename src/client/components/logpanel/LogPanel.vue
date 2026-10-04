@@ -46,7 +46,7 @@ import {ViewModel} from '@/common/models/PlayerModel';
 import {SoundManager} from '@/client/utils/SoundManager';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {logMessageItemCount, needsModalPreview} from '@/client/components/logpanel/logMessageContent';
-import {activeSectionIndex, findScrollContainer, maxScrollTopOf, readingLineOf, scrollContainerTo, ScrollContainer, scrollTopOf} from '@/client/components/logpanel/logScroll';
+import {activeSectionIndex, findScrollContainer, HEADER_SCROLL_GAP, maxScrollTopOf, readingLineOf, scrollContainerTo, ScrollContainer, scrollTopOf} from '@/client/components/logpanel/logScroll';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
@@ -215,7 +215,7 @@ export default defineComponent({
         return;
       }
       this.startProgrammaticScroll();
-      scrollContainerTo(container, scrollTopOf(container) + offset, 'smooth');
+      scrollContainerTo(container, scrollTopOf(container) + offset - HEADER_SCROLL_GAP, 'smooth');
     },
     showLatestLogs(): void {
       this.selectedGeneration = this.generation;

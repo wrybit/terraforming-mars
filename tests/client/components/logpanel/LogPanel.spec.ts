@@ -184,7 +184,7 @@ describe('LogPanel', () => {
     (wrapper.vm as any).selectGeneration(2);
 
     expect((wrapper.vm as any).selectedGeneration).eq(2);
-    expect(panel.getScrollTop()).eq(120);
+    expect(panel.getScrollTop()).eq(112);
   });
 
   it('keeps the reading position across a remount', async () => {

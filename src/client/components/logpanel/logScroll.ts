@@ -3,8 +3,11 @@
 
 export type ScrollContainer = HTMLElement | Window;
 
-// Tolerance so a header sitting exactly on the reading line (after rounding) counts as reached
-const READING_LINE_TOLERANCE = 4;
+// Breathing space between the reading line and a header scrolled to
+export const HEADER_SCROLL_GAP = 8;
+
+// A header counts as reached once it is this close to the reading line (covers the gap above and rounding)
+const READING_LINE_TOLERANCE = HEADER_SCROLL_GAP + 4;
 
 // The log's own box when it is a scroll box (even while its content is still short), otherwise the nearest
 // ancestor that actually scrolls, otherwise the page. Ancestors only count with overflowing content:
