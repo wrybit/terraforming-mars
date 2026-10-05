@@ -123,7 +123,8 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {computed, defineComponent} from 'vue';
+import {GAME_MENU_CONTEXT, GameMenuContext} from '@/client/components/gameMenu/gameMenuContext';
 import {vDockedTab} from '@/client/directives/DockedTab';
 
 import PlayersOverview from '@/client/components/overview/PlayersOverview.vue';
@@ -162,6 +163,27 @@ export default defineComponent({
       type: Object as () => PlayerViewModel,
       required: true,
     },
+  },
+  // Data of the game menu (GameMenu.vue in the players table header and the setup turn order)
+  provide() {
+    return {
+      [GAME_MENU_CONTEXT as symbol]: computed((): GameMenuContext => {
+        const game = this.playerView.game;
+        return {
+          playerName: this.playerView.thisPlayer.name,
+          playerColor: this.playerView.thisPlayer.color,
+          deckSize: game.deckSize,
+          discardPileSize: game.discardPileSize,
+          coloniesCount: game.colonies.length,
+          gameOptions: game.gameOptions,
+          playerNumber: this.playerView.players.length,
+          lastSoloGeneration: game.lastSoloGeneration,
+          otherDeckSizes: game.otherDeckSizes,
+          spectatorId: game.spectatorId,
+          expectedPurgeTimeMs: game.expectedPurgeTimeMs,
+        };
+      }),
+    };
   },
   computed: {
     // Game board collapsed in the start phase (shared state, setupBoardCollapsed.ts)

@@ -1,0 +1,215 @@
+// Game menu (GameMenu.vue): replaces the desktop icon corner (sidebar_toolbar.less) with one button at the
+// top left of the players table (before the section toggles) and of the setup turn order.
+// The dropdown holds the own player, the pile sizes and the four dialogs.
+
+@game-menu-button-height: 26px; // like the section toggles next to it (players_table.less)
+@game-menu-dropdown-width: 300px;
+@game-menu-dropdown-radius: 12px;
+@game-menu-dropdown-padding: 8px;
+@game-menu-item-icon-size: 26px;
+@game-menu-section-gap: 8px; // between player box, piles and items – more than inside them (law of proximity)
+
+.game-menu {
+  display: inline-flex;
+  flex: none;
+}
+
+.game-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  box-sizing: border-box;
+  height: @game-menu-button-height;
+  margin: 0;
+  padding: 0 10px 0 9px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover,
+  &.game-menu-button--open {
+    background: rgba(255, 255, 255, 0.24);
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+.game-menu-burger {
+  display: inline-grid;
+  gap: 3px;
+
+  i {
+    display: block;
+    width: 13px;
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+  }
+}
+
+.game-menu-dropdown {
+  position: fixed;
+  z-index: 3000; // above the columns and their overlays, below the dialogs (sidebar_modal.less)
+  box-sizing: border-box;
+  width: @game-menu-dropdown-width;
+  padding: @game-menu-dropdown-padding;
+  display: flex;
+  flex-direction: column;
+  gap: @game-menu-section-gap;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: @game-menu-dropdown-radius;
+  background: rgba(24, 26, 36, 0.97);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+  color: #fff;
+  transform-origin: top left;
+}
+
+.game-menu-dropdown-enter-active,
+.game-menu-dropdown-leave-active {
+  transition: opacity 0.14s ease, transform 0.14s ease;
+}
+
+.game-menu-dropdown-enter-from,
+.game-menu-dropdown-leave-to {
+  opacity: 0;
+  transform: scale(0.96) translateY(-4px);
+}
+
+// Own player: colour surface with a larger cube and the name
+.game-menu-player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: @game-menu-dropdown-radius - @game-menu-dropdown-padding + 2px;
+}
+
+.game-menu-player-name {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 22px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Display only (no hover): pile sizes, labels left, numbers right-aligned on one axis
+.game-menu-piles {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 2px 12px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  cursor: default;
+}
+
+.game-menu-pile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+
+  dt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  dd {
+    margin: 0;
+    font-family: Prototype, sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    opacity: 0.85;
+  }
+}
+
+.game-menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.game-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 17px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255, 255, 255, 0.1);
+    outline: none;
+  }
+}
+
+.game-menu-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: @game-menu-item-icon-size;
+  height: @game-menu-item-icon-size;
+
+  .sidebar_icon {
+    width: @game-menu-item-icon-size;
+    height: @game-menu-item-icon-size;
+    margin: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .language-flag {
+    width: 26px;
+    height: 17px;
+    border-radius: 2px;
+  }
+}
+
+// Setup phase: menu before the "Turn order" title, at the same place as later in the players table
+.setup-turn-order-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 12px;
+
+  .setup-turn-order-title {
+    margin: 0;
+  }
+}
+
+@media only screen and (min-width: @player-home-columns-min-width) {
+  // The menu replaces the icon corner in the player view (spectators keep it, they have no menu)
+  #player-home > .sidebar_cont {
+    display: none;
+  }
+
+  // Without the icon corner the collapsed setup no longer needs to keep room at the right edge
+  #player-home .player-home-columns.player-home-columns--board-collapsed {
+    padding-right: 0;
+  }
+}

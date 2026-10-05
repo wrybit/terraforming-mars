@@ -1,7 +1,9 @@
 <template>
   <div class="players-table-row players-table-head">
-    <!-- Toggles in front, level with the icons: show and hide goods / tags / scoring -->
+    <!-- Toggles in front, level with the icons: show and hide goods / tags / scoring.
+         Before them the game menu (only in the player view, GameMenu.vue) -->
     <div class="players-table-toggles">
+      <GameMenu/>
       <button v-for="section in sections" :key="section.key" type="button"
         :class="['players-table-toggle', {'players-table-toggle--squeezed': autoHidden.includes(section.key)}]"
         :aria-pressed="visibility[section.key] ? 'true' : 'false'"
@@ -55,6 +57,7 @@
 import {glassTooltip} from '@/client/directives/GlassTooltip';
 import {defineComponent} from 'vue';
 import Tag from '@/client/components/Tag.vue';
+import GameMenu from '@/client/components/gameMenu/GameMenu.vue';
 import {Tag as CardTag} from '@/common/cards/Tag';
 import {ALL_RESOURCES} from '@/common/Resource';
 import {DESKTOP_SECTION_ORDER, SectionVisibility, TableSection, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
@@ -72,6 +75,7 @@ export default defineComponent({
   name: 'PlayersTableHeader',
   components: {
     Tag,
+    GameMenu,
   },
   directives: {
     glassTooltip,
