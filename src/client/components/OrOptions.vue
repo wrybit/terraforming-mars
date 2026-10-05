@@ -129,6 +129,8 @@
 
       <!-- Tab mode: sticky footer at the bottom of the box (tabPanelFooter.ts); payment areas hook in via Teleport -->
       <div v-if="asTabs" v-show="!handTabActive" :id="footerId" class="or-tab-footer">
+        <!-- Cancel an action that is still only a plan: left in the footer (cancelAction.ts) -->
+        <CancelActionButton/>
         <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabToneClass('or-tab-save--', selectedOption)]">
           <!-- Disabled while the selected option has no valid selection yet (e.g. no card chosen) -->
           <AppButton :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid || awaitingCeo" @click="saveData" />
@@ -161,6 +163,7 @@ import MilestoneAwardOptions from '@/client/components/MilestoneAwardOptions.vue
 import PlayerOptionTile from '@/client/components/PlayerOptionTile.vue';
 import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
 import ChoiceOptionTile from '@/client/components/ChoiceOptionTile.vue';
+import CancelActionButton from '@/client/components/CancelActionButton.vue';
 import {inputSourceCard, optionSourceCard} from '@/client/components/inputSourceCard';
 import {CardName} from '@/common/cards/CardName';
 import {PlayerEffect, playerEffect} from '@/client/components/selectPlayerResource';
@@ -216,6 +219,7 @@ export default defineComponent({
     PlayerOptionTile,
     CardIntroBlock,
     ChoiceOptionTile,
+    CancelActionButton,
     CeoActionSection,
   },
   setup() {

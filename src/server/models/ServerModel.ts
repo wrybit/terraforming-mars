@@ -1,3 +1,4 @@
+import {canCancelAction} from '../actionStart';
 import {CardModel} from '../../common/models/CardModel';
 import {Color} from '../../common/Color';
 import {IGame} from '../IGame';
@@ -128,6 +129,7 @@ export class Server {
       waitingFor: this.getWaitingFor(player, player.getWaitingFor()),
       players: players,
       autopass: player.autopass,
+      canCancelAction: canCancelAction(player),
     };
     return rv;
   }

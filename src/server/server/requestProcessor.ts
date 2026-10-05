@@ -34,6 +34,7 @@ import {Context, IHandler} from '../routes/IHandler';
 import {Load} from '../routes/Load';
 import {LoadGame} from '../routes/LoadGame';
 import {Login} from '../routes/Login';
+import {CancelAction} from '../routes/CancelAction';
 import {PlayerInput} from '../routes/PlayerInput';
 import {Reset} from '../routes/Reset';
 import {ServeApp} from '../routes/ServeApp';
@@ -134,6 +135,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.NEW_GAME, ServeApp.INSTANCE],
     [paths.PLAYER, ServeApp.INSTANCE],
     [paths.PLAYER_INPUT, PlayerInput.INSTANCE],
+    [paths.PLAYER_CANCEL_ACTION, CancelAction.INSTANCE],
     [paths.API_PROFILE, ApiProfile.INSTANCE],
     [paths.RESET, Reset.INSTANCE],
     [paths.SPECTATOR, ServeApp.INSTANCE],

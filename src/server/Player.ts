@@ -1,3 +1,4 @@
+import {rememberActionStart} from './actionStart';
 import * as constants from '../common/constants';
 import {PlayerId} from '../common/Types';
 import {MILESTONE_COST, PRODUCTION_MINIMUMS, REDS_RULING_POLICY_COST} from '../common/constants';
@@ -1562,6 +1563,8 @@ export class Player implements IPlayer {
       return;
     }
 
+    // Starting point for "Cancel" (actionStart.ts): kept before the action menu is shown
+    rememberActionStart(this);
     this.setWaitingFor(this.getActions(), this.runWhenEmpty(() => {
       this.incrementActionsTaken();
       this.takeAction();

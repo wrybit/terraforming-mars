@@ -211,6 +211,7 @@
   "${0} funded ${1} award": "${0} hat die Auszeichnung ${1} finanziert",
   "${0} claimed ${1} milestone": "${0} hat den Meilenstein ${1} beansprucht",
   "${0} passed": "${0} hat gepasst",
+  "${0} cancelled the action": "${0} hat die Aktion abgebrochen",
   "${0} ended turn": "${0} hat den Zug beendet",
   "${0} converted ${1} units of energy to heat": "${0} hat ${1} Energieressource(n) in Wärme umgewandelt",
   "${0} converted ${1} units of steel to titanium.": "${0} hat ${1} Stahlressource(n) in Titan umgewandelt",

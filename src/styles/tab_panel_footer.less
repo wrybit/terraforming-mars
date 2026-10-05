@@ -147,3 +147,12 @@ html.tm-mobile .or-tab-footer > .or-tab-footer-hint {
     margin-top: 16px;
   }
 }
+
+// "Cancel" (CancelActionButton.vue): left in the footer, quiet so the confirm button stays the main action
+.or-tab-footer > .cancel-action-button {
+  order: -1;
+  margin-right: auto;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #eceef6;
+}

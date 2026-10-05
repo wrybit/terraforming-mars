@@ -51,6 +51,7 @@ import {Color} from '@/common/Color';
 import {gameDocumentTitle, TitleView, turnTitleState} from '../utils/documentTitle';
 import {setFaviconStatus, setFaviconTurnFrame} from '@/client/utils/favicon';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
+import {CANCEL_ACTION} from '@/client/components/cancelAction';
 import WaitingForTabs from '@/client/components/WaitingForTabs.vue';
 import {isChoiceMenu} from '@/client/components/choiceMenu';
 import {ingestView} from '@/client/utils/changeTracker';
@@ -86,9 +87,16 @@ export default defineComponent({
   components: {
     WaitingForTabs,
   },
-  // Top-level action menu as tabs instead of a radio list (see orOptionsLayout.ts)
-  provide: {
-    [OR_OPTIONS_AS_TABS]: true,
+  // Top-level action menu as tabs instead of a radio list (see orOptionsLayout.ts);
+  // "Cancel" for an action that is still only a plan (cancelAction.ts)
+  provide() {
+    return {
+      [OR_OPTIONS_AS_TABS]: true,
+      [CANCEL_ACTION as symbol]: {
+        available: () => (this.playerView as PlayerViewModel).canCancelAction === true,
+        cancel: () => this.cancelAction(),
+      },
+    };
   },
   props: {
     playerView: {
@@ -137,6 +145,11 @@ export default defineComponent({
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({runId: this.playerView.runId, ...out}),
         });
+    },
+    cancelAction() {
+      this.fetchPlayerInput(
+        paths.PLAYER_CANCEL_ACTION + '?id=' + this.playerView.id,
+        {method: 'POST'});
     },
     reset() {
       this.fetchPlayerInput(

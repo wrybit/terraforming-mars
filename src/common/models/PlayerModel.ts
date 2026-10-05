@@ -88,6 +88,8 @@ export type PublicPlayerModel = {
 /** A player's view of the game, including their secret information. */
 export interface PlayerViewModel extends ViewModel {
   autopass: boolean;
+  // The current action is only a plan so far and can be cancelled (server actionStart.ts)
+  canCancelAction?: boolean;
   cardsInHand: ReadonlyArray<CardModel>;
   dealtCorporationCards: ReadonlyArray<CardModel>;
   dealtPreludeCards: ReadonlyArray<CardModel>;

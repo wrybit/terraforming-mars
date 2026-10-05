@@ -38,6 +38,8 @@
       <DraftedCardsSection v-if="draftedCards.length > 0" v-show="!handTabActive" :cards="draftedCards"/>
       <!-- Sticky footer at the bottom of the box (tabPanelFooter.ts); payment areas attach via Teleport -->
       <div v-show="!handTabActive" :id="footerId" class="or-tab-footer">
+        <!-- Cancel an action that is still only a plan: left in the footer (cancelAction.ts) -->
+        <CancelActionButton/>
         <p v-if="draftRepick" class="or-tab-footer-hint">{{ $t(fullTabTitle(lead.title)) }}</p>
       </div>
     </div>
@@ -51,6 +53,7 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {InputResponse} from '@/common/inputs/InputResponse';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
+import CancelActionButton from '@/client/components/CancelActionButton.vue';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';

@@ -1452,6 +1452,7 @@
   "Escape Velocity values cannot be negative": "Die Werte für Escape Velocity dürfen nicht negativ sein.",
   "Your turn ends here. The other players continue, and you will get another turn this generation.": "Du beendest deinen Zug. Die anderen sind jetzt dran – in dieser Generation kommst du noch einmal an die Reihe.",
   "Stock": "Vorrat",
+  "Cancel": "Abbrechen",
   "On card": "Auf Karte",
   "Production": "Produktion",
   "Active cards": "Aktive Karten",
