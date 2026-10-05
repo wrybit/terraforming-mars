@@ -39,14 +39,17 @@
     flex-direction: column;
   }
 
+  // Flex basis 0 instead of auto: the log only fills the space Mars leaves. With "auto" a long log stream
+  // claimed its full content height and squeezed the Mars card, while the short milestones table didn't –
+  // so Mars and the tab bar jumped when switching between the generation tabs and milestones & awards.
   .player-home--fixed .player-home-columns__log {
-    flex: 1 1 auto;
+    flex: 1 1 0;
     display: flex;
     flex-direction: column;
     min-height: 0;
 
     > .log-container {
-      flex: 1 1 auto;
+      flex: 1 1 0;
       display: flex;
       flex-direction: column;
       min-height: 0;
@@ -54,7 +57,7 @@
 
     // Minimum height as before (card of the hover preview), beyond that the log fills the rest
     .log-panel.or-tab-panel {
-      flex: 1 1 auto;
+      flex: 1 1 0;
       height: auto;
       max-height: none;
       min-height: @player-home-log-height;
