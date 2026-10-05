@@ -18,6 +18,12 @@
   gap: @setup-columns-gap;
   align-items: stretch;
   margin-top: 4px;
+  // With four columns (e.g. CEOs) and the board expanded they don't fit even with the smallest cards –
+  // then the columns scroll horizontally instead of being cut off, so every column stays reachable
+  overflow: auto hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
 }
 
 .setup-column {
