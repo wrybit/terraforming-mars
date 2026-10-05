@@ -4,7 +4,7 @@
     <div :class="boxClasses">
       <!-- Shield before the stock: protected amounts stand out as a white area with a black number -->
       <span class="players-table-goods-stock" data-test="stock" v-flash-count="flashKeys.playerStock(color, good.type)"><span v-if="protectionIcon !== ''" :class="['players-table-protection', protectionIcon]" data-test="protection"></span>{{ good.count }}</span>
-      <span :class="productionClasses" data-test="production" v-flash-count.signed="flashKeys.playerProduction(color, good.type)" :data-tooltip="$t('Production count')">{{ productionText }}</span>
+      <span :class="productionClasses" data-test="production" v-flash="flashKeys.playerProduction(color, good.type)" :data-tooltip="$t('Production count')">{{ productionText }}</span>
       <span v-if="showValue" class="players-table-goods-value" data-test="value">{{ good.value }}</span>
     </div>
   </div>
@@ -14,12 +14,14 @@
 import {defineComponent} from 'vue';
 import {PlayerGood, shouldShowResourceValue} from '@/client/components/overview/playerGoods';
 import {Color} from '@/common/Color';
+import {vFlash} from '@/client/directives/ChangeFlash';
 import {vFlashCount} from '@/client/directives/ChangeFlashCount';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
 
 export default defineComponent({
   name: 'PlayersTableGoods',
   directives: {
+    flash: vFlash,
     flashCount: vFlashCount,
   },
   props: {
