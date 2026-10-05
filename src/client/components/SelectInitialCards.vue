@@ -80,9 +80,9 @@ import {shortTabLabel} from '@/client/components/orOptionsShortLabels';
 
 type DataModel = {
   selectedCards: Array<CardName>,
-  // End result will be a single CEO, but the player may select multiple while deciding what to keep.
+  // Single choice (radio), see ceoCardOption
   selectedCeos: Array<CardName>,
-  // End result will be a single corporation, but the player may select multiple while deciding what to keep.
+  // Single choice (radio), see corpCardOption
   selectedCorporations: Array<CardName>,
   selectedPreludes: Array<CardName>,
   valid: boolean,
@@ -408,13 +408,11 @@ export default defineComponent({
     hasCeo() {
       return hasOption(this.playerinput.options, titles.SELECT_CEO_TITLE);
     },
+    // Corporation and CEO are always single choice (radio): clicking another card replaces the previous one.
+    // The upstream experimental_ui option allowed several at once "while deciding", but no expansion needs
+    // that and the start is blocked until only one is left – confusing, so it is not applied here.
     corpCardOption() {
-      const option = getOption(this.playerinput.options, titles.SELECT_CORPORATION_TITLE);
-      if (getPreferences().experimental_ui) {
-        option.min = 1;
-        option.max = option.cards.length;
-      }
-      return option;
+      return getOption(this.playerinput.options, titles.SELECT_CORPORATION_TITLE);
     },
     preludeCardOption() {
       const option = getOption(this.playerinput.options, titles.SELECT_PRELUDE_TITLE);
@@ -424,11 +422,7 @@ export default defineComponent({
       return option;
     },
     ceoCardOption() {
-      const option = getOption(this.playerinput.options, titles.SELECT_CEO_TITLE);
-      if (getPreferences().experimental_ui) {
-        option.max = option.cards.length;
-      }
-      return option;
+      return getOption(this.playerinput.options, titles.SELECT_CEO_TITLE);
     },
     projectCardOption() {
       return getOption(this.playerinput.options, titles.SELECT_PROJECTS_TITLE);
