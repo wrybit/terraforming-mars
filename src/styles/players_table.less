@@ -420,42 +420,40 @@ each(@players, {
   font-size: 10px;
 }
 
-// Protected (resources, plant tags with Protected Habitats): white surface, black number, shield before it.
-// One style for both places so protection looks the same everywhere
-.players-table-protected {
-  background: #fff;
-
-  &,
-  .players-table-goods-stock {
-    color: #111;
-  }
-}
-
-// Empty production is laid out white on dark; on the white surface the same dimming in black
-.players-table-protected .players-table-goods-production--none {
-  color: rgba(0, 0, 0, 0.35);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
-}
-
+// Protected (resources, plant tags with Protected Habitats): surface stays as it is, only a gold shield
+// before the number. One style for both places so protection looks the same everywhere
 .players-table-counter.players-table-protected {
   display: inline-flex;
-  color: #111; // Counter colour (.players-table-counter) comes further down and would otherwise win
   align-items: center;
   gap: 3px;
-  padding: 3px 6px 2px;
-  border-radius: 5px;
 }
 
-// Shield black on white: the graphic is black, shield_icon (resources.less) inverts it for dark backgrounds
+// Gold shield with gradient (light from the top left like the player cubes): the shield graphic only serves
+// as a mask, the colour comes from the gradient. Overrides shield_icon (resources.less: image + invert)
 .players-table-protection {
   flex: none;
   position: static;
-  width: 13px;
-  height: 13px;
-  background-size: 13px;
-  background-repeat: no-repeat;
-  background-position: center;
-  filter: none;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, #fff4c2 0%, #f3c847 40%, #c58f16 75%, #8a5d08 100%);
+  filter: none; // shield_icon inverts the graphic, here the gradient decides the colour
+  mask: url(./assets/misc/shield-icon.png) center / contain no-repeat;
+  -webkit-mask: url(./assets/misc/shield-icon.png) center / contain no-repeat;
+
+  &.shield_icon_half {
+    mask-image: url(./assets/misc/half-shield-icon.png);
+    -webkit-mask-image: url(./assets/misc/half-shield-icon.png);
+  }
+}
+
+.players-table-counter .players-table-protection {
+  width: 15px;
+  height: 15px;
+}
+
+.players-table-row--me .players-table-protection {
+  width: 20px;
+  height: 20px;
 }
 
 // Counters (tags, score): deliberately small and quieter than the resources
