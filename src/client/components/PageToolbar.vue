@@ -1,13 +1,18 @@
 <template>
-  <!-- Language and settings top right as frosted-glass buttons, as in the game (sidebar_toolbar.less);
-       shared by all pages outside the game so the corner looks the same everywhere -->
+  <!-- Menu at the top left of the pages outside the game, as in the game (GameMenu.vue, game_menu.less):
+       language, help and settings in one dropdown; shared so the corner looks the same everywhere -->
   <div class="page-toolbar">
-    <LanguageIcon/>
-    <PreferencesIcon/>
+    <GameMenu :label="label" :large="true"/>
   </div>
 </template>
 
 <script setup lang="ts">
-import LanguageIcon from '@/client/components/LanguageIcon.vue';
-import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
+import GameMenu from '@/client/components/gameMenu/GameMenu.vue';
+
+withDefaults(defineProps<{
+  // "Menu" by default; the start page calls it "Settings"
+  label?: string;
+}>(), {
+  label: 'Menu',
+});
 </script>

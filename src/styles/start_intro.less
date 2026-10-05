@@ -31,7 +31,7 @@
 
 .start-screen--intro {
   .start-screen-toolbar {
-    animation: start-intro-from-top-right @intro-chrome-duration @intro-ease @intro-chrome-delay backwards;
+    animation: start-intro-from-top-left @intro-chrome-duration @intro-ease @intro-chrome-delay backwards;
   }
 
   .start-screen-title {
@@ -88,10 +88,10 @@
   }
 }
 
-@keyframes start-intro-from-top-right {
+@keyframes start-intro-from-top-left {
   from {
     opacity: 0;
-    transform: translate(60px, -60px);
+    transform: translate(-60px, -60px);
   }
 }
 

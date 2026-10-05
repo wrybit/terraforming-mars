@@ -1,5 +1,6 @@
-// Game menu (GameMenu.vue): replaces the desktop icon corner (sidebar_toolbar.less) with one button at the
-// top left of the players table (before the section toggles) and of the setup turn order.
+// Game menu (GameMenu.vue): replaces the icon corners (sidebar_toolbar.less) with one button at the top left –
+// in the game before the players table toggles and the setup turn order, outside the game in the page header
+// and on the start page (PageToolbar.vue).
 // The dropdown holds the own player, the pile sizes and the four dialogs.
 
 @game-menu-button-height: 26px; // like the section toggles next to it (players_table.less)
@@ -43,6 +44,24 @@
 
   &:focus:not(:focus-visible) {
     outline: none;
+  }
+}
+
+// Page headers and start page: frosted-glass button as tall as the other header buttons (sidebar_toolbar.less)
+.game-menu--large .game-menu-button {
+  .toolbar-glass-button();
+  width: auto;
+  gap: 9px;
+  padding: 0 14px 0 12px;
+  color: #fff;
+  font-size: 15px;
+
+  .game-menu-burger {
+    gap: 4px;
+
+    i {
+      width: 16px;
+    }
   }
 }
 

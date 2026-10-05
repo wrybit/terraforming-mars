@@ -4,8 +4,8 @@
   <div v-if="loading" class="start-screen-preloader" role="progressbar" :aria-valuenow="Math.round(loadProgress * 100)" aria-valuemin="0" aria-valuemax="100">
     <div class="start-screen-preloader-fill" :style="{width: `${loadProgress * 100}%`}"></div>
   </div>
-  <!-- Language and settings at the top right; own class for the intro (start_intro.less) -->
-  <PageToolbar class="start-screen-toolbar"/>
+  <!-- Settings menu (language, help, settings) at the top left; own class for the intro (start_intro.less) -->
+  <PageToolbar class="start-screen-toolbar" label="Settings"/>
   <div class="start-screen-links" :class="{'start-screen-links--globe': globeReady}">
     <div class="start-screen-header start-screen-link--title">
       <!-- Logo: own frame so the intro can move it as a whole -->

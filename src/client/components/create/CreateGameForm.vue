@@ -2,6 +2,8 @@
   <div id="create-game" class="create-game">
     <!-- Header like card list/statistics: title, file buttons, language and settings in one header card -->
     <header class="card-list-header card-list-header--plain create-game-head">
+      <!-- Menu at the top left, as in the game -->
+      <PageToolbar/>
       <h1 v-i18n>Create New Game</h1>
       <div class="create-game-head-actions">
         <label class="create-game-icon-button" :title="$t('Load settings from file')">
@@ -22,7 +24,6 @@
         <button type="button" class="create-game-icon-button" :title="$t('Copy link with these settings')" @click="copySettingsLink()"><svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span class="create-game-head-label">{{ $t(settingsLinkCopied ? 'Link copied' : 'Copy link') }}</span></button>
         <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings"/>
       </div>
-      <PageToolbar/>
     </header>
     <div class="create-game-layout">
       <main class="create-game-settings">

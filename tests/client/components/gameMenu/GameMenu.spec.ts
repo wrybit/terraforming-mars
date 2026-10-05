@@ -33,9 +33,14 @@ describe('GameMenu', () => {
     FakeLocalStorage.deregister(localStorage);
   });
 
-  it('renders nothing without a context (e.g. spectators)', () => {
-    const wrapper = mount(GameMenu, {...globalConfig});
-    expect(wrapper.find('.game-menu-button').exists()).is.false;
+  it('outside the game only offers language, help and settings', async () => {
+    const wrapper = mount(GameMenu, {...globalConfig, props: {label: 'Settings'}, attachTo: document.body});
+    expect(wrapper.find('.game-menu-button').text()).contains('Settings');
+    await wrapper.find('.game-menu-button').trigger('click');
+    const dropdown = document.body.querySelector('.game-menu-dropdown');
+    expect(dropdown?.querySelector('.game-menu-player')).is.null;
+    expect(dropdown?.querySelectorAll('.game-menu-item').length).eq(3);
+    wrapper.unmount();
   });
 
   it('opens the dropdown with player and piles', async () => {
@@ -50,5 +55,6 @@ describe('GameMenu', () => {
     expect(dropdown?.querySelector('.game-menu-player-name')?.textContent).eq('Alice');
     expect(dropdown?.textContent).contains('530');
     expect(dropdown?.textContent).contains('52');
+    wrapper.unmount();
   });
 });

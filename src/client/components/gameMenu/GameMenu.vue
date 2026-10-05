@@ -1,17 +1,18 @@
 <template>
-  <!-- Menu button (game_menu.less) replacing the desktop icon corner: own player, piles and the four dialogs
-       (language, game info, help, settings) in one dropdown. Renders nothing outside PlayerHome (no context). -->
-  <span v-if="context" ref="root" class="game-menu">
+  <!-- Menu button (game_menu.less) at the top left of every page: language, help and settings everywhere;
+       in the game (context from PlayerHome) also the own player, piles, game info and colonies. -->
+  <span ref="root" :class="['game-menu', {'game-menu--large': large}]">
     <button type="button" :class="['game-menu-button', {'game-menu-button--open': menuOpen}]"
       :aria-expanded="menuOpen ? 'true' : 'false'" aria-haspopup="menu" data-test="game-menu-button"
       @click.stop="toggleMenu">
       <span class="game-menu-burger" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="game-menu-button-label" v-i18n>Menu</span>
+      <span class="game-menu-button-label">{{ $t(label) }}</span>
     </button>
 
     <Teleport to="body">
       <Transition name="game-menu-dropdown">
         <div v-if="menuOpen" ref="dropdown" class="game-menu-dropdown" role="menu" :style="dropdownPosition" @click.stop>
+          <template v-if="context">
           <!-- Own player: box in the player colour with cube and name -->
           <div :class="['game-menu-player', playerColorClass(context.playerColor, 'bg_transparent')]">
             <PlayerCube :color="context.playerColor" view="iso" :size="34"/>
@@ -35,13 +36,14 @@
               <dd>{{ context.discardPileSize }}</dd>
             </div>
           </dl>
+          </template>
 
           <div class="game-menu-items">
             <button type="button" role="menuitem" class="game-menu-item" @click="openDialog('language')">
               <span class="game-menu-item-icon"><LanguageFlag :lang="lang"/></span>
               <span v-i18n>Language</span>
             </button>
-            <button type="button" role="menuitem" class="game-menu-item" @click="openDialog('info')">
+            <button v-if="context" type="button" role="menuitem" class="game-menu-item" @click="openDialog('info')">
               <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--info"></i></span>
               <span v-i18n>Game settings</span>
             </button>
@@ -53,7 +55,7 @@
               <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--settings"></i></span>
               <span v-i18n>Player Settings</span>
             </button>
-            <a v-if="context.coloniesCount > 0" href="#colonies" role="menuitem" class="game-menu-item" @click="closeMenu">
+            <a v-if="context && context.coloniesCount > 0" href="#colonies" role="menuitem" class="game-menu-item" @click="closeMenu">
               <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--colonies"></i></span>
               <span v-i18n>Jump to colonies</span>
             </a>
@@ -66,7 +68,7 @@
     <SidebarModal :open="dialog === 'language'" :framed="true" @close="closeDialog">
       <LanguageSelectionDialog :preferencesManager="PreferencesManager.INSTANCE" @close="closeDialog"/>
     </SidebarModal>
-    <SidebarModal :open="dialog === 'info'" :framed="true" @close="closeDialog">
+    <SidebarModal v-if="context" :open="dialog === 'info'" :framed="true" @close="closeDialog">
       <InfoPanel :gameOptions="context.gameOptions" :playerNumber="context.playerNumber" :lastSoloGeneration="context.lastSoloGeneration"
         :deckSize="context.deckSize" :discardPileSize="context.discardPileSize" :otherDeckSizes="context.otherDeckSizes"
         :spectatorId="context.spectatorId" :expectedPurgeTimeMs="context.expectedPurgeTimeMs" @close="closeDialog"/>
@@ -92,6 +94,16 @@ import {PreferencesManager} from '@/client/utils/PreferencesManager';
 import {playerColorClass} from '@/common/utils/utils';
 import {LANGUAGE} from '@/common/constants';
 import {GAME_MENU_CONTEXT} from '@/client/components/gameMenu/gameMenuContext';
+
+withDefaults(defineProps<{
+  // Button text: "Menu" in the game, "Settings" on the start page (only language, help and settings there)
+  label?: string;
+  // Frosted-glass size of the page headers (40px) instead of the small table button
+  large?: boolean;
+}>(), {
+  label: 'Menu',
+  large: false,
+});
 
 // Help only on demand (own chunk, like in the sidebar)
 const HelpOverlay = defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/helpOverlay/HelpOverlay.vue'));

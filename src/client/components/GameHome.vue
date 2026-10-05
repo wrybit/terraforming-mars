@@ -2,12 +2,13 @@
   <div id="game-home" class="game-home">
     <!-- Header like card list/statistics: confirmation with game ID, language and settings in a header card -->
     <header class="card-list-header card-list-header--plain game-home-head">
+      <!-- Menu at the top left, as in the game -->
+      <PageToolbar/>
       <div class="game-home-check">✓</div>
       <h1>
         <span v-i18n>Game created</span>
         <span class="game-home-meta"><span class="game-home-name">{{ game.name }}</span><span class="game-home-id">{{ getGameId() }}</span></span>
       </h1>
-      <PageToolbar/>
     </header>
 
     <div class="game-home-columns">
