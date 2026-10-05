@@ -6,9 +6,7 @@
       :aria-expanded="menuOpen ? 'true' : 'false'" aria-haspopup="menu" data-test="game-menu-button"
       @click.stop="toggleMenu">
       <span class="game-menu-burger" aria-hidden="true"><i></i><i></i><i></i></span>
-      <!-- Same word on every page and in every language (deliberately not translated: the key "Setup"
-           already means the start of the game elsewhere) -->
-      <span class="game-menu-button-label">Setup</span>
+      <span class="game-menu-button-label">{{ buttonLabel }}</span>
     </button>
 
     <Teleport to="body">
@@ -95,6 +93,7 @@ import PreferencesDialog from '@/client/components/PreferencesDialog.vue';
 import {PreferencesManager} from '@/client/utils/PreferencesManager';
 import {playerColorClass} from '@/common/utils/utils';
 import {LANGUAGE} from '@/common/constants';
+import {translateText} from '@/client/directives/i18n';
 import {GAME_MENU_CONTEXT} from '@/client/components/gameMenu/gameMenuContext';
 
 withDefaults(defineProps<{
@@ -108,6 +107,14 @@ withDefaults(defineProps<{
 const HelpOverlay = defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/helpOverlay/HelpOverlay.vue'));
 
 type MenuDialog = 'language' | 'info' | 'help' | 'settings';
+
+// One short word per language (locales/*/game_info.json). Own key "Setup menu", because "Setup" is already
+// translated as the start of the game; English and languages without a translation show "Setup".
+const SETUP_MENU_KEY = 'Setup menu';
+const buttonLabel = computed(() => {
+  const translated = translateText(SETUP_MENU_KEY);
+  return translated === SETUP_MENU_KEY ? 'Setup' : translated;
+});
 
 const injected = inject(GAME_MENU_CONTEXT, undefined);
 const context = computed(() => injected?.value);
