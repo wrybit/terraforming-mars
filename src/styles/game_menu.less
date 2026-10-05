@@ -14,6 +14,11 @@
   flex: none;
 }
 
+// In the players table the menu is its own group: a larger gap to the section toggles than between them
+.players-table-toggles > .game-menu {
+  margin-right: 6px;
+}
+
 .game-menu-button {
   display: inline-flex;
   align-items: center;
@@ -65,7 +70,7 @@
   gap: @game-menu-section-gap;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: @game-menu-dropdown-radius;
-  background: rgba(24, 26, 36, 0.97);
+  background: #181a24; // opaque: cards behind must not shine through the texts
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
   color: #fff;
   transform-origin: top left;
