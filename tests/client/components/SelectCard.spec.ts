@@ -64,10 +64,14 @@ describe('SelectCard', () => {
     expect(saveButton().props('disabled')).to.be.false;
   });
 
-  it('keeps the save button enabled when no card is required', () => {
+  it('offers a separate "none" button instead of "Save 0" when no card is required', async () => {
     const wrapper = mountWithMin(0);
-    const saveButton = wrapper.findAllComponents({name: 'AppButton'})[0];
-    expect(saveButton.props('disabled')).to.be.false;
+    const buttons = () => wrapper.findAllComponents({name: 'AppButton'});
+    expect(buttons()[0].props('disabled')).to.be.true;
+    expect(buttons()[1].props('disabled')).to.be.false;
+    await wrapper.setData({cards: [{name: 'Ants'}]});
+    expect(buttons()[0].props('disabled')).to.be.false;
+    expect(buttons()[1].props('disabled')).to.be.true;
   });
 
   // Header row: "Select all" on the left, hand sorting on the right
@@ -152,5 +156,24 @@ describe('SelectCard', () => {
     expect(buttons[1].props('disabled')).is.not.true;
     (wrapper.vm as any).saveData();
     expect(saved).is.true;
+  });
+
+  it('calls the "none" button Discard when buying', () => {
+    const wrapper = shallowMount(SelectCard, {
+      ...globalConfig,
+      props: {
+        playerView: fakePlayerViewModel(),
+        playerinput: {
+          title: 'Select card(s) to buy', buttonLabel: 'Buy', type: 'card', cards: [{name: 'Greenhouses'}],
+          max: 1, min: 0, showOnlyInLearnerMode: false, selectBlueCardAction: false, showOwner: false, showSelectAll: false,
+        },
+        onsave: () => {},
+        showsave: true,
+        showtitle: true,
+      },
+    } as any);
+    const buttons = wrapper.findAllComponents({name: 'AppButton'});
+    expect(buttons[0].props('disabled')).is.true;
+    expect(buttons[1].props('title')).eq('Discard');
   });
 });

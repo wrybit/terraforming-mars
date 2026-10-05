@@ -6,10 +6,10 @@
     <!-- As a choice block: centered in the tab box like other decisions (choice_block.less) -->
     <div v-if="conversion !== undefined" class="choice-block choice-block--natural">
       <AmountConverter v-model="amount" :conversion="conversion"
-        :min="playerinput.min" :max="playerinput.max" :player="playerView.thisPlayer" :sourceCard="sourceCard"/>
+        :min="minimum" :max="maximum" :player="playerView.thisPlayer" :sourceCard="sourceCard"/>
     </div>
     <div v-else class="amount-slider-plain">
-      <AmountSlider v-model="amount" :min="playerinput.min" :max="playerinput.max"/>
+      <AmountSlider v-model="amount" :min="minimum" :max="maximum"/>
     </div>
     <TabPanelFooterSlot>
       <div v-if="showsave === true" class="amount-select__actions">
@@ -64,10 +64,17 @@ export default defineComponent({
     return {
       // Conversions start at the maximum (most common case), other amounts as the server says
       amount: this.playerinput.maxByDefault || amountConversion(this.playerinput.title, inputSourceCard(this.playerinput)) !== undefined ?
-        this.playerinput.max : this.playerinput.min,
+        (this.playerinput.max ?? this.playerinput.min ?? 0) : (this.playerinput.min ?? 0),
     };
   },
   computed: {
+    // Defensive for incomplete models (only the type set): range 0..0
+    minimum(): number {
+      return this.playerinput.min ?? 0;
+    },
+    maximum(): number {
+      return this.playerinput.max ?? this.minimum;
+    },
     sourceCard(): CardName | undefined {
       return inputSourceCard(this.playerinput);
     },

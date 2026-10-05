@@ -50,7 +50,7 @@
             </template>
             <AppButton v-else :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
               :class="{'btn-tone-success': isOptionalToManyCards}" />
-            <AppButton :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t('Skip this action')"
+            <AppButton :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t(skipLabel)"
               class="btn-tone-danger" />
         </div>
         </TabPanelFooterSlot>
@@ -320,10 +320,16 @@ export default defineComponent({
     selectOnlyOneCard() : boolean {
       return this.playerinput.max === 1 && this.playerinput.min === 1;
     },
+    // Choosing is optional (min 0): the main button is only active with a selection and a second button stands for
+    // "none" – never a button like "Buy 0". Also with max 1 (Inventors' Guild: buy the top card or discard it)
     isOptionalToManyCards(): boolean {
       return this.playerinput.max !== undefined &&
-             this.playerinput.max > 1 &&
+             this.playerinput.max >= 1 &&
              this.playerinput.min === 0;
+    },
+    // Buying: cards not bought are discarded, so the "none" button says what happens
+    skipLabel(): string {
+      return this.playerinput.buttonLabel === 'Buy' ? 'Discard' : 'Skip this action';
     },
     handCardFilter(): typeof handCardFilter {
       return handCardFilter;
