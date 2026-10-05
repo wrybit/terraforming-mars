@@ -53,7 +53,7 @@ function titleCardResource(title: string | Message): {resource: CardResource, am
 function wordAmount(title: string | Message, written: string | undefined, placeholder: string | undefined): number | undefined {
   if (placeholder !== undefined && typeof title !== 'string') {
     const value = title.data[Number(placeholder)]?.value;
-    return value !== undefined && /^\d+$/.test(value) ? Number(value) : undefined;
+    return typeof value === 'string' && /^\d+$/.test(value) ? Number(value) : undefined;
   }
   if (written === undefined) {
     return undefined;
