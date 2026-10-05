@@ -63,17 +63,27 @@ describe('changeTracker', () => {
     expect(isChangePending(megacreditsKey)).is.false;
   });
 
-  it('tells losses from gains', () => {
-    ingestView(view(10, -30), 'remote');
-    ingestView(view(8, -28), 'remote');
-    expect(changeToneOf(megacreditsKey)).to.eq('loss');
-    expect(changeToneOf(temperatureKey)).to.eq('gain');
+  // Two players: red is on turn, green is the potential victim
+  function duel(redMegacredits: number, greenMegacredits: number): ViewModel {
+    const red = fakePublicPlayerModel({color: 'red', megacredits: redMegacredits, isActive: true});
+    const green = fakePublicPlayerModel({color: 'green', megacredits: greenMegacredits, isActive: false});
+    return fakeViewModel({players: [red, green], thisPlayer: red, color: 'red', game: fakeGameModel({generation: 1})});
+  }
+  const greenMegacreditsKey = flashKeys.playerStock('green', Resource.MEGACREDITS);
+
+  it('orange-red only when a player takes something from another player', () => {
+    ingestView(duel(10, 10), 'remote');
+    ingestView(duel(8, 7), 'remote');
+    // red spent own money: white; green lost money through red's move: attack
+    expect(changeToneOf(megacreditsKey)).to.eq('gain');
+    expect(changeToneOf(greenMegacreditsKey)).to.eq('loss');
   });
 
-  it('several unseen changes: tone compares with what the viewer last saw', () => {
-    ingestView(view(10), 'remote');
-    ingestView(view(8), 'remote');
-    ingestView(view(12), 'remote');
-    expect(changeToneOf(megacreditsKey)).to.eq('gain');
+  it('own attack blinks at the victim, own spending does not blink', () => {
+    ingestView(duel(10, 10), 'remote');
+    ingestView(duel(8, 7), 'own');
+    expect(isChangePending(megacreditsKey)).is.false;
+    expect(isChangePending(greenMegacreditsKey)).is.true;
+    expect(changeToneOf(greenMegacreditsKey)).to.eq('loss');
   });
 });

@@ -33,3 +33,8 @@ export const flashKeys = {
 export function flashAreaOf(key: string): FlashArea {
   return key.substring(0, key.indexOf('.')) as FlashArea;
 }
+
+// Owner of a player value (players.<color>.…), undefined for everything else
+export function flashPlayerOf(key: string): string | undefined {
+  return key.startsWith('players.') ? key.split('.')[1] : undefined;
+}

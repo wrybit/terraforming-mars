@@ -65,7 +65,7 @@ function revealVisibleChanges(): void {
 
 function runEffect(element: HTMLElement, from: number, tone: FlashTone, delayMs: number): void {
   const effect = effectOfElement.get(element) ?? 'blink';
-  const counted = effect !== 'blink' && countElement(element, from, effect === 'countSigned', delayMs);
+  const counted = effect !== 'blink' && countElement(element, from, effect === 'countSigned', delayMs, tone);
   if (!counted) {
     flashElement(element, delayMs, tone);
   }

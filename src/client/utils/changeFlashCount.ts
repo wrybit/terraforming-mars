@@ -1,7 +1,7 @@
 // Numbers (resources, TR, points, counters) don't blink: the number counts from the old to the new value, so the
 // viewer sees how much was spent or gained. The number glows while counting.
 import {supportsWebAnimations} from '@/client/utils/motion';
-import {toneColor, toneOf} from '@/client/utils/changeFlashTone';
+import {FlashTone, toneColor} from '@/client/utils/changeFlashTone';
 
 const DURATION_MS = 2000;
 
@@ -41,7 +41,7 @@ export function showPreviousValue(element: HTMLElement, from: number, signed: bo
 }
 
 // false: nothing to count (e.g. "·" for zero), the caller blinks instead
-export function countElement(element: HTMLElement, from: number, signed: boolean, delayMs: number): boolean {
+export function countElement(element: HTMLElement, from: number, signed: boolean, delayMs: number, tone: FlashTone): boolean {
   const textNode = numberTextNode(element);
   const finalText = (textNode !== undefined ? renderedText.get(textNode) : undefined) ?? textNode?.nodeValue ?? '';
   const to = parseInt(finalText.replace('+', ''), 10);
@@ -55,8 +55,7 @@ export function countElement(element: HTMLElement, from: number, signed: boolean
   textNode.nodeValue = format(from);
 
   if (supportsWebAnimations(element)) {
-    // Counting down glows orange-red like every loss
-    const tone = toneOf(`${from}`, `${to}`);
+    // Taken away by another player: glows orange-red like every attack
     const GLOW = `brightness(${tone === 'loss' ? 1.3 : 1.6}) drop-shadow(0 0 8px ${toneColor(tone)})`;
     const NO_GLOW = `brightness(1) drop-shadow(0 0 0 ${toneColor(tone, 0)})`;
     element.animate([{filter: GLOW}, {filter: GLOW, offset: 0.8}, {filter: NO_GLOW}], {duration: DURATION_MS, delay: delayMs, fill: 'backwards'});
