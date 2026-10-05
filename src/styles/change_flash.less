@@ -1,0 +1,9 @@
+// Change blink (changeFlashCount.ts): while a number counts to its new value, the box around it
+// (marked with data-flash-frame) turns darker, so the counting digits stand out from the table
+[data-flash-frame] {
+  transition: background-color 0.3s ease-out;
+}
+
+[data-flash-frame].change-flash-counting {
+  background-color: rgba(0, 0, 0, 0.7);
+}

@@ -23,6 +23,17 @@ function easeOut(progress: number): number {
   return 1 - Math.pow(1 - progress, 3);
 }
 
+// The box around the number (data-flash-frame, change_flash.less) turns darker while counting
+const COUNTING_CLASS = 'change-flash-counting';
+function darkenFrame(element: HTMLElement, delayMs: number): void {
+  const frame = element.closest<HTMLElement>('[data-flash-frame]');
+  if (frame === null) {
+    return;
+  }
+  window.setTimeout(() => frame.classList.add(COUNTING_CLASS), delayMs);
+  window.setTimeout(() => frame.classList.remove(COUNTING_CLASS), delayMs + DURATION_MS);
+}
+
 // signed: production is shown as "+2" (positive values with a plus sign)
 function formatted(value: number, signed: boolean): string {
   return signed && value > 0 ? `+${value}` : `${value}`;
@@ -65,6 +76,7 @@ export function countElement(element: HTMLElement, from: number, signed: boolean
       element.animate([{color}, {color, offset: 0.8}, {}], {duration: DURATION_MS, delay: delayMs, fill: 'backwards'});
     }
   }
+  darkenFrame(element, delayMs);
   let start: number | undefined;
   const step = (now: number) => {
     // Rebuilt view: the node is gone, nothing left to count
