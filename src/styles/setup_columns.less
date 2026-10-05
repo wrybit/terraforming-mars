@@ -3,7 +3,9 @@
 // the other; the cards column takes the rest and wraps to several cards per row. Each column scrolls on its own.
 
 @setup-columns-gap: 20px; // much more between the columns than between the cards (law of proximity)
-@setup-column-padding: 12px 14px;
+@setup-column-padding-block: 12px;
+@setup-column-padding-inline: 14px;
+@setup-column-padding: @setup-column-padding-block @setup-column-padding-inline;
 @setup-column-title-size: 20px;
 @setup-column-accent-height: 3px;
 // Colors like the card headers of the respective card type – so the column is recognizable by its edge too
@@ -39,12 +41,23 @@
   background: @or-tabs-panel-background;
 }
 
-// The cards column fills the rest; with the board collapsed almost all cards fit without scrolling
+// Outer width of a card: 240px plus the 4px bevel on each side (cards.less)
+@setup-card-outer-width: 248px;
+@setup-project-columns-min: 2;
+
+// The cards column fills the rest; with the board collapsed almost all cards fit without scrolling.
+// It stays at least two cards wide, so buying is a comparison and not a long list – if the row then
+// gets too wide, the columns scroll horizontally (see .setup-columns)
 .setup-column--projects {
   flex: 1 1 0;
   width: auto;
-  min-width: min-content; // at least one whole card, never cut off
+  min-width: calc(
+    @setup-project-columns-min * @setup-card-outer-width * var(--setup-project-cards-zoom) +
+    (@setup-project-columns-min - 1) * @setup-card-gap +
+    2 * @setup-column-padding-inline + 2px // column border
+  );
   --setup-column-accent: @setup-column-accent-projects;
+  --setup-project-cards-zoom: @setup-project-cards-zoom;
 }
 
 .setup-column-head {
@@ -128,7 +141,7 @@
 @setup-project-cards-zoom: 0.8;
 
 .setup-column--projects .setup-column-body .cardbox {
-  zoom: @setup-project-cards-zoom;
+  zoom: var(--setup-project-cards-zoom);
 }
 
 // If the width isn't enough for three cards side by side (board expanded at laptop widths), all cards get
@@ -144,11 +157,19 @@
   .setup-columns .setup-column-body .cardbox {
     zoom: @setup-cards-reduced-zoom;
   }
+
+  .setup-columns .setup-column--projects {
+    --setup-project-cards-zoom: @setup-cards-reduced-zoom;
+  }
 }
 
 @container (max-width: (@setup-cards-reduced-min-width - 1px)) {
   .setup-columns .setup-column-body .cardbox {
     zoom: @setup-cards-small-zoom;
+  }
+
+  .setup-columns .setup-column--projects {
+    --setup-project-cards-zoom: @setup-cards-small-zoom;
   }
 }
 
