@@ -2,13 +2,20 @@
   <div id="game-end" class="game_end_cont">
     <!-- Header across both columns, without its own box: winner on the left, navigation on the right -->
     <div class="game-end-hero">
-      <!-- Solo: result as a sentence in the same place as the winner in a multiplayer game, so both views are built the same -->
-      <div v-if="isSoloGame" class="game-end-winer-announcement">
-        <span v-if="game.isSoloModeWin" v-i18n>You win!</span>
-        <span v-else v-i18n>Sorry, you lose.</span>
-      </div>
-      <div v-else class="game-end-winer-announcement">
-        <span v-for="p in winners" :key="p.color"><span :class="'log-player ' + getEndGamePlayerRowColorClass(p.color)">{{ p.name }}</span></span> <span v-i18n>won!</span>
+      <!-- Menu and Mars logo at the top left like on the other pages (card list, statistics); the logo leads to the start screen -->
+      <div class="game-end-hero-lead">
+        <PageToolbar/>
+        <a href="." class="page-title-home" aria-label="Terraforming Mars">
+          <img src="assets/stats/mars.png" alt="" class="page-title-icon">
+        </a>
+        <!-- Solo: result as a sentence in the same place as the winner in a multiplayer game, so both views are built the same -->
+        <div v-if="isSoloGame" class="game-end-winer-announcement">
+          <span v-if="game.isSoloModeWin" v-i18n>You win!</span>
+          <span v-else v-i18n>Sorry, you lose.</span>
+        </div>
+        <div v-else class="game-end-winer-announcement">
+          <span v-for="p in winners" :key="p.color"><span :class="'log-player ' + getEndGamePlayerRowColorClass(p.color)">{{ p.name }}</span></span> <span v-i18n>won!</span>
+        </div>
       </div>
       <!-- Links as buttons: navigation stays a real link (middle click, new tab) -->
       <div class="game_end_navigation">
@@ -215,6 +222,7 @@ import {getPreferences} from '@/client/utils/PreferencesManager';
 import {GameModel} from '@/common/models/GameModel';
 import {PublicPlayerModel, ViewModel} from '@/common/models/PlayerModel';
 import Board from '@/client/components/Board.vue';
+import PageToolbar from '@/client/components/PageToolbar.vue';
 import MoonBoard from '@/client/components/moon/MoonBoard.vue';
 import {nextTileView, TileView} from '@/client/components/board/TileView';
 import PlanetaryTracks from '@/client/components/pathfinders/PlanetaryTracks.vue';
@@ -374,6 +382,7 @@ export default defineComponent({
   },
   components: {
     Board,
+    PageToolbar,
     LogPanel,
     MoonBoard,
     PlanetaryTracks,

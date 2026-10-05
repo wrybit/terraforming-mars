@@ -184,6 +184,18 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
   gap: 8px 24px; // rows tighter than the elements side by side
   margin-bottom: @game-end-block-gap;
 
+  // Menu, logo and winner in one row; gaps as in the page header of card list/statistics
+  .game-end-hero-lead {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .page-toolbar {
+    gap: 8px;
+  }
+
   .game-end-winer-announcement {
     font-size: 32px;
     text-align: left;
