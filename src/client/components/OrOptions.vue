@@ -8,25 +8,26 @@
     <div v-if="asTabs" class="or-tabs" role="tablist">
       <!-- Hand cards always as the first tab (view only); the first real action stays preselected -->
       <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
-      <!-- Display order via tabDisplayOrder (pass/end at the end); idx stays the index in displayedOptions -->
-      <button v-for="idx in tabDisplayOrder(displayedOptions.map((option) => option.title))" :key="idx"
+      <!-- Display order via tabDisplayOrder (pass/end at the end); idx stays the index in displayedOptions.
+           The CEO action has no tab of its own: it is part of the "Actions" tab (ceoActions.ts) -->
+      <button v-for="idx in visibleTabOrder" :key="idx"
         :data-option-index="idx"
         type="button"
         role="tab"
-        :title="$t(fullTabTitle(displayedOptions[idx].title))"
-        :aria-label="$t(shortTabLabel(displayedOptions[idx].title))"
-        :aria-selected="selectedIdx === idx"
+        :title="$t(fullTabTitle(tabTitle(idx)))"
+        :aria-label="$t(shortTabLabel(tabTitle(idx)))"
+        :aria-selected="tabActive(idx)"
         :class="['or-tab', {
-          'or-tab--active': !handTabActive && selectedIdx === idx,
-          'or-tab--empty': availableCount(displayedOptions[idx]) === 0,
-          'or-tab--icon': tabIcon(displayedOptions[idx].title) !== undefined,
-          'or-tab--highlight': tabHighlighted(displayedOptions[idx].title),
-          'or-tab--end': isEndTab(displayedOptions[idx].title),
+          'or-tab--active': !handTabActive && tabActive(idx),
+          'or-tab--empty': tabCount(idx) === 0,
+          'or-tab--icon': tabIcon(tabTitle(idx)) !== undefined,
+          'or-tab--highlight': tabHighlighted(tabTitle(idx)),
+          'or-tab--end': isEndTab(tabTitle(idx)),
         }, tabToneClass('or-tab--tone-', displayedOptions[idx])]"
         @click="selectOptionTab(displayedOptions[idx])">
-        <OrOptionsTabIcon v-if="tabIcon(displayedOptions[idx].title) !== undefined" :icon="tabIcon(displayedOptions[idx].title)!"/>
-        <span v-else class="or-tab-title">{{ $t(shortTabLabel(displayedOptions[idx].title)) }}</span>
-        <span v-if="availableCount(displayedOptions[idx]) !== undefined" class="or-tab-count">{{ availableCount(displayedOptions[idx]) }}</span>
+        <OrOptionsTabIcon v-if="tabIcon(tabTitle(idx)) !== undefined" :icon="tabIcon(tabTitle(idx))!"/>
+        <span v-else class="or-tab-title">{{ $t(shortTabLabel(tabTitle(idx))) }}</span>
+        <span v-if="tabCount(idx) !== undefined" class="or-tab-count">{{ tabCount(idx) }}</span>
       </button>
     </div>
 
@@ -40,8 +41,21 @@
       <p v-if="asTabs && !handTabActive && selectedOption !== undefined && endTabHint(selectedOption.title) !== undefined" class="or-tab-end-hint">
         {{ $t(endTabHint(selectedOption.title)!) }}
       </p>
+      <!-- "Actions" tab with CEO (ceoActions.ts): action cards and below them the own CEO cards as sub-sections,
+           headings like in the hand cards tab (only when both sections exist). One card across both sections:
+           choosing a CEO resets the action cards, choosing an action card drops the CEO -->
+      <div v-if="inActionsGroup" v-show="!handTabActive" class="actions-tab-sections">
+        <section v-if="actionsIdx !== -1" class="hand-cards-panel__section">
+          <h3 class="hand-cards-panel__title">{{ $t('Action cards') }} <small>{{ availableCount(displayedOptions[actionsIdx]) }}</small></h3>
+          <PlayerInputFactory ref="inputfactory" :key="'actions-' + actionsResetKey" @validity="onActionCardsValidity" v-bind="childInputProps(actionsIdx)" />
+        </section>
+        <section class="hand-cards-panel__section">
+          <h3 v-if="actionsIdx !== -1" class="hand-cards-panel__title">{{ $t('CEO') }} <small>{{ ownCeoCards.length }}</small></h3>
+          <CeoActionSection :cards="ownCeoCards" :option="ceoOption" :selected="selectedCeo" :groupName="radioElementName + '-ceo'" @select="selectCeo"/>
+        </section>
+      </div>
       <!-- v-show instead of v-if: inputs of the selected action survive a look at the hand -->
-      <PlayerInputFactory v-if="asTabs && selectedIdx !== -1" v-show="!handTabActive" ref="inputfactory" @validity="childValid = $event" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
+      <PlayerInputFactory v-else-if="asTabs && selectedIdx !== -1" v-show="!handTabActive" ref="inputfactory" @validity="childValid = $event" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
 
       <!-- Choose milestone/award: image tiles as on the board instead of a radio list -->
       <MilestoneAwardOptions v-if="!asTabs && maKind !== undefined"
@@ -115,7 +129,7 @@
       <div v-if="asTabs" v-show="!handTabActive" :id="footerId" class="or-tab-footer">
         <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabToneClass('or-tab-save--', selectedOption)]">
           <!-- Disabled while the selected option has no valid selection yet (e.g. no card chosen) -->
-          <AppButton :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid" @click="saveData" />
+          <AppButton :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid || awaitingCeo" @click="saveData" />
         </div>
       </div>
     </div>
@@ -157,6 +171,10 @@ import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {choiceBlockStyle} from '@/client/components/choiceBlock';
 import {CardModel} from '@/common/models/CardModel';
+import {SelectCardModel} from '@/common/models/PlayerInputModel';
+import {Message} from '@/common/logs/Message';
+import CeoActionSection from '@/client/components/CeoActionSection.vue';
+import {ACTION_CARDS_TITLE, isActionCardsOption, isCeoActionOption, ownCeoCards} from '@/client/utils/ceoActions';
 
 let unique = 0;
 
@@ -196,6 +214,7 @@ export default defineComponent({
     PlayerOptionTile,
     CardIntroBlock,
     ChoiceOptionTile,
+    CeoActionSection,
   },
   setup() {
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
@@ -232,6 +251,10 @@ export default defineComponent({
       childValid: true,
       // Selected player tile when the decision contains a player selection (choiceMenu.ts)
       selectedPlayer: undefined as ColorWithNeutral | undefined,
+      // CEO chosen in the "Actions" tab (CeoActionSection)
+      selectedCeo: undefined as CardName | undefined,
+      // Raised when a CEO is chosen: remounts the action cards input so its selection is cleared
+      actionsResetKey: 0,
     };
   },
   computed: {
@@ -273,10 +296,47 @@ export default defineComponent({
     handCards(): Array<CardModel> {
       return allCardsInHand(this.playerView);
     },
+    // Only the action menu (tabs) groups the CEO; nested menus never need the tableau
+    ownCeoCards(): Array<CardModel> {
+      const player = this.playerView.thisPlayer as PlayerViewModel['thisPlayer'] | undefined;
+      return this.asTabs && player !== undefined ? ownCeoCards(player) : [];
+    },
+    actionsIdx(): number {
+      return this.asTabs ? this.displayedOptions.findIndex((option) => isActionCardsOption(option)) : -1;
+    },
+    ceoIdx(): number {
+      return this.asTabs ? this.displayedOptions.findIndex((option) => isCeoActionOption(option)) : -1;
+    },
+    ceoOption(): SelectCardModel | undefined {
+      const option = this.ceoIdx === -1 ? undefined : this.displayedOptions[this.ceoIdx];
+      return isCeoActionOption(option) ? option : undefined;
+    },
+    // CEO action and action cards share the "Actions" tab – only when the player has a CEO and one of both is offered
+    ceoGrouped(): boolean {
+      return this.ownCeoCards.length > 0 && (this.actionsIdx !== -1 || this.ceoIdx !== -1);
+    },
+    // Tab standing for the group: "Actions", or the CEO action alone when no action card is usable
+    groupTabIdx(): number {
+      return this.actionsIdx !== -1 ? this.actionsIdx : this.ceoIdx;
+    },
+    inActionsGroup(): boolean {
+      return this.ceoGrouped && this.selectedIdx !== -1 && (this.selectedIdx === this.actionsIdx || this.selectedIdx === this.ceoIdx);
+    },
+    visibleTabOrder(): Array<number> {
+      const order = tabDisplayOrder(this.displayedOptions.map((option) => option.title));
+      return this.ceoGrouped && this.actionsIdx !== -1 ? order.filter((idx) => idx !== this.ceoIdx) : order;
+    },
+    // CEO action selected but no CEO card chosen yet: button disabled
+    awaitingCeo(): boolean {
+      return this.inActionsGroup && this.selectedIdx === this.ceoIdx && this.selectedCeo === undefined;
+    },
   },
   watch: {
     selectedOption(newOption: PlayerInputModel) {
       this.selectedIdx = this.displayedOptions.indexOf(newOption);
+      if (this.selectedIdx !== this.ceoIdx) {
+        this.selectedCeo = undefined;
+      }
       // New child input: valid until it reports otherwise
       this.childValid = true;
       // Clicking the option can shift elements on the page.
@@ -324,7 +384,43 @@ export default defineComponent({
     },
     selectOptionTab(option: PlayerInputModel) {
       this.handTabActive = false;
+      // Back to the "Actions" tab with a CEO already chosen: keep that choice
+      if (this.inActionsGroup && this.displayedOptions.indexOf(option) === this.groupTabIdx) {
+        return;
+      }
       this.selectedOption = option;
+    },
+    // Title for label, tooltip and icon of a tab: the CEO action alone stands in for the "Actions" tab
+    tabTitle(idx: number): string | Message {
+      return this.ceoGrouped && idx === this.ceoIdx ? ACTION_CARDS_TITLE : this.displayedOptions[idx].title;
+    },
+    tabActive(idx: number): boolean {
+      return this.ceoGrouped && idx === this.groupTabIdx ? this.inActionsGroup : this.selectedIdx === idx;
+    },
+    // "Actions" tab counts usable action cards plus usable CEOs
+    tabCount(idx: number): number | undefined {
+      if (!(this.ceoGrouped && idx === this.groupTabIdx)) {
+        return this.availableCount(this.displayedOptions[idx]);
+      }
+      const members = [this.actionsIdx, this.ceoIdx].filter((member) => member !== -1);
+      return members.reduce((sum, member) => sum + (this.availableCount(this.displayedOptions[member]) ?? 0), 0);
+    },
+    selectCeo(name: CardName) {
+      this.selectedCeo = name;
+      if (this.ceoIdx !== -1) {
+        this.selectedOption = this.displayedOptions[this.ceoIdx];
+      }
+      this.actionsResetKey++;
+    },
+    // An action card was chosen: it replaces a chosen CEO; validity only counts while the action cards are selected
+    onActionCardsValidity(valid: boolean) {
+      if (valid && this.selectedIdx !== this.actionsIdx) {
+        this.selectedOption = this.displayedOptions[this.actionsIdx];
+        return;
+      }
+      if (this.selectedIdx === this.actionsIdx) {
+        this.childValid = valid;
+      }
     },
     choiceBlockStyle,
     shortTabLabel,
@@ -401,6 +497,13 @@ export default defineComponent({
       return option.type === 'card' && !(option.max === 1 && option.min === 1);
     },
     saveData() {
+      // CEO from the "Actions" tab: answer the CEO action directly with the chosen card
+      if (this.inActionsGroup && this.selectedIdx === this.ceoIdx) {
+        if (this.selectedCeo !== undefined) {
+          this.playerFactorySaved(this.ceoIdx)({type: 'card', cards: [this.selectedCeo]});
+        }
+        return;
+      }
       // Player tile: answer directly, without an invisible SelectPlayer
       if (!this.asTabs && this.isChoice && this.selectedOption?.type === 'player') {
         if (this.selectedPlayer !== undefined) {

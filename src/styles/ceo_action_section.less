@@ -1,0 +1,24 @@
+// "Actions" tab with CEO (OrOptions.vue, CeoActionSection.vue): action cards and the own CEO cards as sub-sections,
+// like the hand cards tab. Sections, headings and separator come from hand_cards_panel.less.
+
+// Unlike a single card choice, the blocks are not centered in the box (choice_block.less): sections stack from the top
+// and the cards start at the left under their heading. Doubled class: beats the centering rules of choice_block.less.
+html:not(.tm-mobile) .or-tab-panel .actions-tab-sections.actions-tab-sections {
+  flex: none;
+
+  :has(.choice-block) {
+    flex: none;
+  }
+
+  .choice-block {
+    margin: 0;
+  }
+}
+
+// Once-per-game action spent: plain grey and half transparent (instead of the darker look of cards
+// that are just not usable right now, cards.less .card-unavailable)
+.ceo-action-card--used .card-unavailable,
+.ceo-action-card--used .card-unavailable:hover {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
