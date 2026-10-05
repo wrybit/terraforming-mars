@@ -2597,8 +2597,15 @@ html.tm-mobile #game-end {
         display: flex;
         flex-direction: column;
 
+        // mobileFit.ts sets margin-bottom inline (shrinks the scaled board), so center with two auto top margins:
+        // the free space is split between above the board and the empty ::after below it
         > .board-cont {
-          margin-block: auto;
+          margin-top: auto;
+        }
+
+        &::after {
+          content: "";
+          margin-top: auto;
         }
       }
     }
