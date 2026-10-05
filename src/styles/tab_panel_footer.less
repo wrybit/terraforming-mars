@@ -153,13 +153,22 @@ html.tm-mobile .or-tab-footer > .or-tab-footer-hint {
 .or-tab-panel .or-tab-footer > .btn.cancel-action-button {
   order: -1;
   margin: 0 auto 0 0;
+  // Same size as the confirm buttons (.btn-submit) – not a submit button itself, scripts click the first .btn-submit
+  min-width: 140px;
+  height: 50px;
+  font-size: 20px;
   background: rgba(255, 255, 255, 0.1) !important;
   border-color: rgba(255, 255, 255, 0.25) !important;
   color: #eceef6 !important;
   box-shadow: none;
 }
 
-// Box with a single centered button (raise temperature …): Cancel right next to it, the pair stays centered
-.or-tab-panel--centered-button .or-tab-footer > .btn.cancel-action-button {
+// Box with a single centered button (raise temperature …): Cancel right next to it, the pair stays centered,
+// same size as the main button (both submit buttons); quiet colours also against the tab tone (or_tab_tones.less)
+.or-tab-panel.or-tab-panel--centered-button .or-tab-footer > .btn.cancel-action-button {
   margin: 0;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #eceef6 !important;
+  box-shadow: none;
 }
