@@ -1,5 +1,5 @@
 <template>
-<div class="payments_cont choice-block" :style="choiceBlockStyle(cards.length)">
+<div class="payments_cont choice-block" :class="choiceBlockClass(cards.length)" :style="choiceBlockStyle(cards.length)">
   <!-- Cards as a choice block (choice_block.less) like when buying and for standard projects -->
   <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
   <!-- Same filter and sorting as in the hand tab, at the top of the box – only for hand cards (not standard projects) -->
@@ -60,7 +60,7 @@ import {SelectProjectCardToPlayResponse} from '@/common/inputs/InputResponse';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import PaymentForm from '@/client/components/PaymentForm.vue';
 import {Ledger} from '@/client/components/PaymentLedger';
-import {choiceBlockStyle} from '@/client/components/choiceBlock';
+import {choiceBlockClass, choiceBlockStyle} from '@/client/components/choiceBlock';
 import HandSortControl from '@/client/components/HandSortControl.vue';
 import {allCardsInHand} from '@/client/utils/handCards';
 import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
@@ -214,6 +214,7 @@ export default defineComponent({
       const visibility = this.visibilityOf(card);
       return visibility === 'shown' ? undefined : 'card-filter-' + visibility;
     },
+    choiceBlockClass,
     choiceBlockStyle,
     getCard() {
       const card = this.cards.find((c) => c.name === this.cardName);

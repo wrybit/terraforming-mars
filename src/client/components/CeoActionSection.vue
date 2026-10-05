@@ -1,5 +1,5 @@
 <template>
-  <div class="wf-component--select-card choice-block ceo-action-section" :style="choiceBlockStyle(cards.length)">
+  <div class="wf-component--select-card choice-block ceo-action-section" :class="choiceBlockClass(cards.length)" :style="choiceBlockStyle(cards.length)">
     <!-- CEO cards of the own tableau inside the "Actions" tab (ceoActions.ts): selectable like the action cards above
          (same card block as SelectCard) while the once-per-game action is offered; spent: grey and half transparent;
          otherwise toned down -->
@@ -21,7 +21,7 @@ import {CardModel} from '@/common/models/CardModel';
 import {CardName} from '@/common/cards/CardName';
 import {SelectCardModel} from '@/common/models/PlayerInputModel';
 import {CeoCardState, ceoCardState} from '@/client/utils/ceoActions';
-import {choiceBlockStyle} from '@/client/components/choiceBlock';
+import {choiceBlockClass, choiceBlockStyle} from '@/client/components/choiceBlock';
 
 export default defineComponent({
   name: 'CeoActionSection',
@@ -51,6 +51,7 @@ export default defineComponent({
   },
   emits: ['select'],
   methods: {
+    choiceBlockClass,
     choiceBlockStyle,
     stateOf(card: CardModel): CeoCardState {
       return ceoCardState(card, this.option);

@@ -1,5 +1,5 @@
 <template>
-    <div class="wf-component wf-component--select-card choice-block" :style="choiceBlockStyle(playerinput.cards?.length ?? 0)">
+    <div class="wf-component wf-component--select-card choice-block" :class="choiceBlockClass(playerinput.cards?.length ?? 0)" :style="choiceBlockStyle(playerinput.cards?.length ?? 0)">
         <!-- Cards as a choice block (choice_block.less): as square as possible and centered in the tab box;
              comment inside, so the caller's v-show hits the root -->
         <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
@@ -75,7 +75,7 @@ import {SelectCardModel} from '@/common/models/PlayerInputModel';
 import {sortActiveCards} from '@/client/utils/ActiveCardsSortingOrder';
 import {SelectCardResponse} from '@/common/inputs/InputResponse';
 import {Warning} from '@/common/cards/Warning';
-import {choiceBlockStyle} from '@/client/components/choiceBlock';
+import {choiceBlockClass, choiceBlockStyle} from '@/client/components/choiceBlock';
 import {currentDraftPicks} from '@/client/utils/draftedCards';
 import {keepDraftCardOrder} from '@/client/utils/draftCardOrder';
 
@@ -146,6 +146,7 @@ export default defineComponent({
     },
   },
   methods: {
+    choiceBlockClass,
     choiceBlockStyle,
     cardsSelected(): number {
       if (Array.isArray(this.cards)) {

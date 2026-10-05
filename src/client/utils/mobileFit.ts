@@ -7,7 +7,7 @@
  */
 
 import {MARS_CROP} from '@/client/components/mobile/mobileBoardZoom';
-import {choiceBlockColumns, choiceBlockColumnsPortrait} from '@/client/components/choiceBlock';
+import {choiceBlockColumns, choiceBlockColumnsPortrait, choiceBlockFillsWidth} from '@/client/components/choiceBlock';
 
 /* Visible area of an element in its own px (before scaling). */
 export type FitCrop = {left: number, top: number, width: number, height: number};
@@ -75,15 +75,15 @@ function choiceGridColumnsFor(listSelector: string) {
 }
 
 /*
- * Card selection (draft, buy, sell …): no square block, but as many cards per row as fit – like the hand cards;
- * with fewer cards than that, only as many columns as cards, so the block stays centered.
+ * Card selection (draft, buy, sell …): few cards as the square block (choiceGridColumns), many cards
+ * (choiceBlockFillsWidth) as many per row as fit – like the hand cards.
  */
-export function cardGridColumns(width: number, count: number): number {
-  return Math.max(1, Math.min(cardColumns(width), count));
+export function cardGridColumns(width: number, count: number, portrait: boolean): number {
+  return choiceBlockFillsWidth(count) ? cardColumns(width) : choiceGridColumns(width, count, portrait);
 }
 
 function cardGridColumnsFor(listSelector: string) {
-  return (listWidth: number, element: HTMLElement): number => cardGridColumns(listWidth, choiceCount(element, listSelector));
+  return (listWidth: number, element: HTMLElement): number => cardGridColumns(listWidth, choiceCount(element, listSelector), isPortrait());
 }
 
 function isPortrait(): boolean {

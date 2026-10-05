@@ -28,12 +28,12 @@ describe('mobileFit', () => {
     expect(choiceGridColumns(1334, 4, false)).to.eq(2);
   });
 
-  it('fills card selection rows like the hand cards, never with more columns than cards', () => {
-    expect(cardGridColumns(374, 9)).to.eq(2);
-    expect(cardGridColumns(788, 9)).to.eq(3);
-    expect(cardGridColumns(1334, 9)).to.eq(4);
-    expect(cardGridColumns(1334, 2)).to.eq(2);
-    expect(cardGridColumns(1334, 0)).to.eq(1);
+  it('keeps few cards as the square block and fills the rows with many cards', () => {
+    expect(cardGridColumns(1334, 4, false)).to.eq(2);
+    expect(cardGridColumns(1334, 6, false)).to.eq(3);
+    expect(cardGridColumns(1334, 9, false)).to.eq(4);
+    expect(cardGridColumns(788, 9, true)).to.eq(3);
+    expect(cardGridColumns(374, 9, true)).to.eq(2);
   });
 
   it('scales items to fit the columns, never enlarging them', () => {
