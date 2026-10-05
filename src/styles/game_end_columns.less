@@ -78,8 +78,9 @@ body:has(#game-end) {
 @game-end-solo-win-ground: #a9562d; // warm beach sand of solo_win.jpg
 @game-end-solo-lose-ground: #3f2820; // burnt mud of solo_lose.jpg
 
-// ID selector so the padding of the mobile game-end-box does not push the picture away from the edges
-#game-end .game-end-solo {
+// Higher specificity than the mobile game-end-box rule (mobile.less), so its padding does not push the picture away from the edges
+#game-end .game-end-solo,
+html.tm-mobile #game-end .game-end-box.game-end-solo {
   --game-end-solo-ground: @game-end-solo-win-ground;
   --game-end-solo-border: rgba(255, 190, 140, 0.22);
   --game-end-solo-text: #fbe6d4;
@@ -134,9 +135,10 @@ body:has(#game-end) {
   color: #fff;
 }
 
-.game-end-solo__list {
+#game-end .game-end-solo__list {
   margin: 0;
   padding-left: 22px;
+  list-style-position: outside;
   font-size: 19px;
   line-height: 1.55;
   color: var(--game-end-solo-text);
@@ -156,7 +158,7 @@ body:has(#game-end) {
     font-size: 19px;
   }
 
-  .game-end-solo__list {
+  #game-end .game-end-solo__list {
     font-size: 16px;
     padding-left: 20px;
 
