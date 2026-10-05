@@ -1,6 +1,8 @@
 <template>
   <div id="card-list" class="card-list" :class="getLanguageCssClass()" @keydown.esc="filtersOpen = false">
     <header class="card-list-header">
+      <!-- Menu at the top left, as in the game and on the other pages -->
+      <PageToolbar/>
       <PageTitle title="Cards List"/>
       <div class="card-list-search">
         <span class="card-list-search-icon" aria-hidden="true"></span>
@@ -14,8 +16,6 @@
           <span>{{ visibleCount }}</span>
           <span v-if="activeFilters.length > 0" class="card-list-filter-toggle-badge">{{ activeFilters.length }}</span>
         </button>
-        <LanguageIcon/>
-        <PreferencesIcon/>
       </div>
     </header>
 
@@ -176,9 +176,8 @@ import {clearSearchHighlight, highlightSearch} from '@/client/components/cardlis
 import {SegmentOption} from '@/client/components/create/createGameChoices';
 import Colony from '@/client/components/colonies/Colony.vue';
 import GlobalEvent from '@/client/components/turmoil/GlobalEvent.vue';
-import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
+import PageToolbar from '@/client/components/PageToolbar.vue';
 import PageTitle from '@/client/components/common/PageTitle.vue';
-import LanguageIcon from '@/client/components/LanguageIcon.vue';
 import Milestone from '@/client/components/Milestone.vue';
 import Award from '@/client/components/Award.vue';
 import TurmoilAgendaContainer from '@/client/components/cardlist/TurmoilAgendaContainer.vue';
@@ -237,8 +236,7 @@ export default defineComponent({
     Milestone,
     Award,
     TurmoilAgendaContainer,
-    PreferencesIcon,
-    LanguageIcon,
+    PageToolbar,
     SegmentedControl,
     CardListFilterGroup,
     CardListSection,

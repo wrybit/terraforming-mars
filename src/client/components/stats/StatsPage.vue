@@ -1,6 +1,8 @@
 <template>
   <div id="stats" class="card-list stats" @keydown.esc="filtersOpen = false" @click="followStatsLink">
     <header class="card-list-header">
+      <!-- Menu at the top left, as in the game and on the other pages -->
+      <PageToolbar/>
       <PageTitle title="Statistics" :titleHref="overviewHref"/>
       <span class="stats-header-info">{{ headerInfo }}</span>
       <div class="card-list-header-actions">
@@ -9,8 +11,6 @@
           <span>{{ filteredGames.length }}</span>
           <span v-if="activeFilters > 0" class="card-list-filter-toggle-badge">{{ activeFilters }}</span>
         </button>
-        <LanguageIcon/>
-        <PreferencesIcon/>
       </div>
     </header>
 
@@ -93,8 +93,7 @@ import CardListFilterGroup from '@/client/components/cardlist/CardListFilterGrou
 import {optionKeys} from '@/client/components/cardlist/cardListOptions';
 import {resetOptions, toggleOption} from '@/client/components/cardlist/filterSelection';
 import PageTitle from '@/client/components/common/PageTitle.vue';
-import LanguageIcon from '@/client/components/LanguageIcon.vue';
-import PreferencesIcon from '@/client/components/PreferencesIcon.vue';
+import PageToolbar from '@/client/components/PageToolbar.vue';
 import StatsOverview from './StatsOverview.vue';
 import StatsGamesView from './StatsGamesView.vue';
 import StatsPlayersView from './StatsPlayersView.vue';
@@ -127,7 +126,7 @@ type DataModel = {
 // Structure, filters and tiles as in the card list, so it feels like part of the app.
 export default defineComponent({
   name: 'StatsPage',
-  components: {CardListFilterGroup, PageTitle, LanguageIcon, PreferencesIcon, StatsOverview, StatsGamesView, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsTopView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
+  components: {CardListFilterGroup, PageTitle, PageToolbar, StatsOverview, StatsGamesView, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsTopView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
   provide() {
     // Player color the same everywhere: the color someone played most often
     return {

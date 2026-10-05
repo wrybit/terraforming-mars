@@ -696,10 +696,10 @@
 
   .card-list-header {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: auto 1fr auto;
     grid-template-areas:
-      "title actions"
-      "search search";
+      "menu title actions"
+      "search search search";
     align-content: center;
     gap: 8px;
     padding: 0 12px;
@@ -717,6 +717,10 @@
 
   .card-list-header-actions {
     grid-area: actions;
+  }
+
+  .card-list-header .page-toolbar {
+    grid-area: menu;
   }
 
   // Without search it stays one row, only the font gets smaller as above
