@@ -31,31 +31,29 @@
     <div class="game_end game-end-columns">
       <div class="game-end-columns__main">
 
-        <div v-if="isSoloGame" class="game-end-box">
-          <div v-if="game.isSoloModeWin" class="game_end_success">
-            <div class="game_end_solo_img">
-              <img src="assets/solo_win.png" >
-            </div>
-            <div class="game_end_notice">
-              <span v-i18n>But it isn't the reason to stop making Mars better.</span>
-            </div>
-            <ul class="game_end_list">
-              <li v-i18n>Try to win with expansions enabled</li>
-              <li v-i18n>Try to win before the last generation</li>
-              <li><span v-i18n>Can you get</span> {{ participant.players[0].victoryPointsBreakdown.total + 10 }}<span v-i18n>+ Victory Points?</span></li>
-            </ul>
+        <!-- Solo: end picture fills the top of the card and fades into the ground colour of the picture, text below it -->
+        <div v-if="isSoloGame" :class="['game-end-box', 'game-end-solo', game.isSoloModeWin ? 'game-end-solo--win' : 'game-end-solo--lose']">
+          <div class="game-end-solo__media">
+            <img class="game-end-solo__image" :src="game.isSoloModeWin ? 'assets/solo_win.jpg' : 'assets/solo_lose.jpg'" alt="">
           </div>
-          <div v-else class="game_end_fail">
-            <div class="game_end_notice">
-              <span v-i18n>Next time you will get more luck!</span><br>
-              <span v-i18n>Also, take into account these small hints to win:</span>
-            </div>
-            <ul class="game_end_list" v-i18n>
-              <li>Concentrate more on Global parameters, not on Victory Points</li>
-              <li>Don't be greedy with card selection</li>
-              <li>Try to increase heat production, not Megacredits</li>
-              <li>Try starting with the Beginner corporation</li>
-            </ul>
+          <div class="game-end-solo__body">
+            <template v-if="game.isSoloModeWin">
+              <p class="game-end-solo__lead" v-i18n>But it isn't the reason to stop making Mars better.</p>
+              <ul class="game-end-solo__list">
+                <li v-i18n>Try to win with expansions enabled</li>
+                <li v-i18n>Try to win before the last generation</li>
+                <li><span v-i18n>Can you get</span> {{ participant.players[0].victoryPointsBreakdown.total + 10 }}<span v-i18n>+ Victory Points?</span></li>
+              </ul>
+            </template>
+            <template v-else>
+              <p class="game-end-solo__lead"><span v-i18n>Next time you will get more luck!</span> <span v-i18n>Also, take into account these small hints to win:</span></p>
+              <ul class="game-end-solo__list" v-i18n>
+                <li>Concentrate more on Global parameters, not on Victory Points</li>
+                <li>Don't be greedy with card selection</li>
+                <li>Try to increase heat production, not Megacredits</li>
+                <li>Try starting with the Beginner corporation</li>
+              </ul>
+            </template>
           </div>
         </div>
 

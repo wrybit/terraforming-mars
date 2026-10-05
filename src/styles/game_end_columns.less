@@ -73,6 +73,99 @@ body:has(#game-end) {
   }
 }
 
+// Solo result: picture over the full card width, fading into the ground colour of the picture.
+// The card surface takes that colour too, so picture and text read as one surface.
+@game-end-solo-win-ground: #a9562d; // warm beach sand of solo_win.jpg
+@game-end-solo-lose-ground: #3f2820; // burnt mud of solo_lose.jpg
+
+// ID selector so the padding of the mobile game-end-box does not push the picture away from the edges
+#game-end .game-end-solo {
+  --game-end-solo-ground: @game-end-solo-win-ground;
+  --game-end-solo-border: rgba(255, 190, 140, 0.22);
+  --game-end-solo-text: #fbe6d4;
+  padding: 0;
+  overflow: hidden;
+  border-color: var(--game-end-solo-border);
+  background: var(--game-end-solo-ground);
+  backdrop-filter: none;
+
+  &.game-end-solo--lose {
+    --game-end-solo-ground: @game-end-solo-lose-ground;
+    --game-end-solo-border: rgba(255, 200, 170, 0.10);
+    --game-end-solo-text: #e6d8cf;
+  }
+}
+
+.game-end-solo__media {
+  position: relative;
+
+  // Fade the lower part of the picture into the ground colour, no hard edge
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 38%;
+    background: linear-gradient(to bottom, transparent 0%, color-mix(in srgb, var(--game-end-solo-ground) 55%, transparent) 45%, var(--game-end-solo-ground) 100%);
+  }
+}
+
+// Always the whole picture, never cropped
+.game-end-solo__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+
+// Text starts slightly inside the fade
+.game-end-solo__body {
+  position: relative;
+  margin-top: -28px;
+  padding: 0 28px 26px;
+}
+
+.game-end-solo__lead {
+  margin: 0 0 14px;
+  font-size: 24px;
+  line-height: 1.35;
+  font-weight: 500;
+  color: #fff;
+}
+
+.game-end-solo__list {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--game-end-solo-text);
+
+  li {
+    margin: 2px 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .game-end-solo__body {
+    margin-top: -18px;
+    padding: 0 16px 18px;
+  }
+
+  .game-end-solo__lead {
+    font-size: 19px;
+  }
+
+  .game-end-solo__list {
+    font-size: 16px;
+    padding-left: 20px;
+
+    li {
+      margin: 6px 0;
+    }
+  }
+}
+
 .game-end-columns__main,
 .game-end-columns__side {
   display: flex;
