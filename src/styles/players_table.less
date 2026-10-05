@@ -420,7 +420,7 @@ each(@players, {
   font-size: 10px;
 }
 
-// Protected (resources, plant tags with Protected Habitats): surface stays as it is, only a gold shield
+// Protected (resources, plant tags with Protected Habitats): surface stays as it is, only a green shield
 // before the number. One style for both places so protection looks the same everywhere
 // Protected stock: slightly lighter surface so the box stands out from its neighbours without shouting
 .players-table-goods.players-table-protected {
@@ -433,14 +433,14 @@ each(@players, {
   gap: 3px;
 }
 
-// Gold shield with gradient (light from the top left like the player cubes): the shield graphic only serves
+// Green shield with gradient (light from the top left like the player cubes): the shield graphic only serves
 // as a mask, the colour comes from the gradient. Overrides shield_icon (resources.less: image + invert)
 .players-table-protection {
   flex: none;
   position: static;
   width: 18px;
   height: 18px;
-  background: linear-gradient(135deg, #fff4c2 0%, #f3c847 40%, #c58f16 75%, #8a5d08 100%);
+  background: linear-gradient(135deg, #d6f7b4 0%, #7ad048 40%, #3c9a24 75%, #1f6512 100%);
   filter: none; // shield_icon inverts the graphic, here the gradient decides the colour
   mask: url(./assets/misc/shield-icon.png) center / contain no-repeat;
   -webkit-mask: url(./assets/misc/shield-icon.png) center / contain no-repeat;
