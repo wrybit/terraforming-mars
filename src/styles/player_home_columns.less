@@ -57,56 +57,15 @@
 
   // Drag handle between the columns: distributes the width (columnResize.ts); double-click resets
   .player-home-columns__resizer {
+    // Line over the full column height with a grip in the middle, fades in near the mouse (resize_handle.less)
+    .resize-handle(vertical);
     grid-area: resizer;
-    display: flex;
-    justify-content: center;
     position: sticky;
     top: @player-home-sticky-top;
     height: calc(100vh - 2 * @player-home-sticky-top);
-    cursor: col-resize;
-    touch-action: none;
-
-    // Visible line with grip in the middle
-    &::before {
-      content: "";
-      width: 2px;
-      height: 100%;
-      border-radius: 1px;
-      background: rgba(255, 255, 255, 0.12);
-      transition: background 0.15s;
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 6px;
-      height: 40px;
-      transform: translate(-50%, -50%);
-      border-radius: 3px;
-      background: rgba(255, 255, 255, 0.35);
-      transition: background 0.15s;
-    }
-
-    &:hover::before,
-    &:focus-visible::before,
-    &.player-home-columns__resizer--dragging::before {
-      background: rgba(255, 255, 255, 0.35);
-    }
-
-    &:hover::after,
-    &:focus-visible::after,
-    &.player-home-columns__resizer--dragging::after {
-      background: rgba(255, 255, 255, 0.8);
-    }
-
-    &:focus-visible {
-      outline: none;
-    }
 
     // sticky forms its own stacking context: raise above the left column while dragging, otherwise it hides the indicator
-    &.player-home-columns__resizer--dragging,
+    &.resize-handle--active,
     &:focus-visible {
       z-index: 200;
     }
@@ -130,7 +89,7 @@
     transition: opacity 0.12s;
   }
 
-  .player-home-columns__resizer--dragging .player-home-columns__resizer-label,
+  .player-home-columns__resizer.resize-handle--active .player-home-columns__resizer-label,
   .player-home-columns__resizer:focus-visible .player-home-columns__resizer-label {
     opacity: 1;
   }

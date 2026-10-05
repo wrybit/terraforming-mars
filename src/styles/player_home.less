@@ -296,8 +296,11 @@ each(@players, {
   border-radius: 4px;
 }
 
+// Gap between the blocks of a column (also centres the drag handles in it, resize_handle.less)
+@player-home-block-gap: 20px;
+
 .player_home_block {
-  margin-bottom: 20px;
+  margin-bottom: @player-home-block-gap;
 
   .accordion-header {
     display: inline-block;

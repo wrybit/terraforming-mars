@@ -7,8 +7,10 @@
       <slot name="board"></slot>
     </div>
 
-    <!-- Drag handle between the columns (only visible in the two-column layout): splits the width, double click = default -->
+    <!-- Drag handle between the columns (only visible in the two-column layout): splits the width, double click = default.
+         Invisible until the mouse approaches (handleProximity.ts) -->
     <div class="player-home-columns__resizer"
+      v-proximity-handle
       role="separator" aria-orientation="vertical" tabindex="0"
       :aria-valuenow="boardShare" :aria-valuemin="minBoardShare" :aria-valuemax="maxBoardShare"
       :aria-label="$t('Column width')" :title="$t('Column width')"
@@ -27,6 +29,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {observeBoardColumn} from '@/client/utils/boardColumnPosition';
+import {vProximityHandle} from '@/client/directives/ProximityHandle';
 import {observeRightColumnFit} from '@/client/utils/rightColumnFit';
 import {
   DEFAULT_BOARD_SHARE, KEYBOARD_STEP, MAX_BOARD_SHARE, MIN_BOARD_SHARE,
@@ -49,6 +52,9 @@ function observeBoardColumnFully(column: HTMLElement): () => void {
 
 export default defineComponent({
   name: 'HomeColumns',
+  directives: {
+    proximityHandle: vProximityHandle,
+  },
   props: {
     // Right column (board) hidden, the left one takes the full width (setup phase, SetupBoardToggle)
     boardCollapsed: {

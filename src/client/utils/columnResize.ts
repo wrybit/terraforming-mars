@@ -1,6 +1,8 @@
 // Split of the player view (game on the left, board + log on the right) via a drag handle.
 // The right column's share ends up as CSS variables on the column container (contract with player_home_columns.less)
 // and in the browser, so it survives a reload.
+import {loadStoredNumber, saveStoredNumber} from '@/client/utils/layoutStorage';
+import {ACTIVE_CLASS} from '@/client/utils/handleProximity';
 
 export const MAIN_SHARE_VARIABLE = '--player-home-main-share';
 export const BOARD_SHARE_VARIABLE = '--player-home-board-share';
@@ -16,24 +18,12 @@ const STORAGE_KEY = 'player_home_board_share';
 export const clampBoardShare = (share: number) => Math.min(MAX_BOARD_SHARE, Math.max(MIN_BOARD_SHARE, share));
 
 export function loadBoardShare(): number {
-  try {
-    const stored = Number(localStorage.getItem(STORAGE_KEY));
-    return stored > 0 ? clampBoardShare(stored) : DEFAULT_BOARD_SHARE;
-  } catch {
-    return DEFAULT_BOARD_SHARE;
-  }
+  const stored = loadStoredNumber(STORAGE_KEY);
+  return stored === undefined ? DEFAULT_BOARD_SHARE : clampBoardShare(stored);
 }
 
 function saveBoardShare(share: number): void {
-  try {
-    if (share === DEFAULT_BOARD_SHARE) {
-      localStorage.removeItem(STORAGE_KEY);
-    } else {
-      localStorage.setItem(STORAGE_KEY, String(share));
-    }
-  } catch {
-    // Without storage the split only lasts until reload
-  }
+  saveStoredNumber(STORAGE_KEY, share === DEFAULT_BOARD_SHARE ? undefined : share);
 }
 
 export function applyBoardShare(container: HTMLElement, share: number): void {
@@ -68,7 +58,7 @@ export function shareFromPointer(containerRect: {left: number; width: number}, p
 export function startColumnResize(event: PointerEvent, container: HTMLElement, onChange: (share: number) => void): void {
   const handle = event.currentTarget as HTMLElement;
   handle.setPointerCapture(event.pointerId);
-  handle.classList.add('player-home-columns__resizer--dragging');
+  handle.classList.add(ACTIVE_CLASS);
   // Don't select text while dragging
   event.preventDefault();
   let share = loadBoardShare();
@@ -84,7 +74,7 @@ export function startColumnResize(event: PointerEvent, container: HTMLElement, o
     handle.removeEventListener('pointermove', move);
     handle.removeEventListener('pointerup', stop);
     handle.removeEventListener('pointercancel', stop);
-    handle.classList.remove('player-home-columns__resizer--dragging');
+    handle.classList.remove(ACTIVE_CLASS);
     saveBoardShare(share);
   };
   handle.addEventListener('pointermove', move);

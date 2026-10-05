@@ -1,0 +1,30 @@
+// Cards around the player table (left) and Mars (right) in the two-column layout, in the look of the tab boxes below
+// them (or_options_tabs.less): players card like the default box, Mars card in the Mars tone (or_tab_tones.less).
+// No frosted blur here: it would need an isolated stacking context, which traps the fixed overlays inside
+// (played cards modal in the players overview, column_overlay.less).
+
+@home-card-padding: 10px;
+
+.home-card(@border; @background) {
+  border: 1px solid @border;
+  border-radius: @or-tabs-radius;
+  background: @background;
+  padding: @home-card-padding;
+}
+
+@media only screen and (min-width: @player-home-columns-min-width) {
+  .player-home-columns__main .players-overview {
+    .home-card(@or-tabs-border; @or-tabs-panel-background);
+    // A height set via the drag handle scales the table down (playersCardFit.ts)
+    overflow: hidden;
+
+    .players-table {
+      zoom: var(--players-table-zoom, 1);
+    }
+  }
+
+  .player-home-columns__mars {
+    .or-tab-tone-panel(@or-tab-tone-mars);
+    .home-card(@or-tab-tone-mars; @or-tab-tone-panel);
+  }
+}

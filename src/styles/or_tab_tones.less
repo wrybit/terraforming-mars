@@ -1,3 +1,6 @@
+// Mars tone on its own: also the frame of the Mars card in the player view (home_cards.less)
+@or-tab-tone-mars: #b86a34;
+
 // Tone of tabs: per input type (inputTone.ts, WaitingForTabs.vue) and for
 // pass/end in the action menu (tabButtonTone in orOptionsShortLabels.ts, OrOptions.vue):
 // colored stripe on top, badge and box border. Name = class suffix, value = color.
@@ -5,7 +8,7 @@
   prelude #e76aae, // pink like prelude cards
   attack #d9443a, // attack on other players
   cards #e8892a, // select a card
-  mars #b86a34, // space on Mars
+  mars @or-tab-tone-mars, // space on Mars
   ocean #2f86d6, // space for an ocean (blue like the ocean tiles)
   city #c3c8d2, // space for a city (light gray like the city tiles)
   greenery #3f9d45, // space for a greenery (green like the greenery tiles)
@@ -20,11 +23,17 @@
 // Dark base tone the color is mixed with for the box and the active tab
 @or-tab-tone-base: #16171d;
 
+// Surface of active tab and box: dark, but recognizably tinted in the color; translucent (frosted_surface.less).
+// Call the mixin, then @or-tab-tone-panel is in scope (also used by home_cards.less)
+.or-tab-tone-panel(@color) {
+  @or-tab-tone-panel: fade(mix(@color, @or-tab-tone-base, 22%), @frosted-surface-opacity);
+}
+
 each(@or-tab-tones, {
   @tone: extract(@value, 1);
   @color: extract(@value, 2);
-  // Surface of active tab and box: dark, but recognizably tinted in the color
-  @panel: fade(mix(@color, @or-tab-tone-base, 22%), @frosted-surface-opacity); // translucent (frosted_surface.less)
+  .or-tab-tone-panel(@color);
+  @panel: @or-tab-tone-panel;
 
   // Inactive: subtle color veil so the input type is recognizable even when not selected
   .or-tab--tone-@{tone} {

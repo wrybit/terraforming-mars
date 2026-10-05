@@ -39,6 +39,8 @@
       <template #main>
         <a class="hotkey-target"></a>
         <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="spectator" v-trim-whitespace id="shortkey-playersoverview"/>
+        <!-- Height of the players card, the log below gets the rest (only in the fixed layout) -->
+        <RowResizeHandle kind="players"/>
         <a class="hotkey-target"></a>
         <div class="player_home_block nofloat player-home-columns__log player_home_block--spectator-log">
           <LogPanel :viewModel="spectator" milestonesAwards @spaceClicked="onSpaceClicked"/>
@@ -75,6 +77,7 @@ import Colony from '@/client/components/colonies/Colony.vue';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
 import GameOverNotice from '@/client/components/gameend/GameOverNotice.vue';
 import HomeColumns from '@/client/components/HomeColumns.vue';
+import RowResizeHandle from '@/client/components/RowResizeHandle.vue';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import Sidebar from '@/client/components/Sidebar.vue';
@@ -108,6 +111,7 @@ export default defineComponent({
     GameBoardView,
     GameOverNotice,
     HomeColumns,
+    RowResizeHandle,
     KeyboardShortcuts,
     LogPanel,
     PlayersOverview,

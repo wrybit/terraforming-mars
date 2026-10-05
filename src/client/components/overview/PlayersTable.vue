@@ -20,6 +20,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
+import {PLAYERS_TABLE_ZOOM_VARIABLE} from '@/client/utils/playersCardFit';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {Color} from '@/common/Color';
 import {Resource} from '@/common/Resource';
@@ -73,7 +74,10 @@ export default defineComponent({
       return;
     }
     this.resizeObserver = new ResizeObserver((entries) => {
-      this.availableWidth = Math.floor(entries[0].contentRect.width);
+      // Scaled down via the drag handle (playersCardFit.ts) the table must keep its columns: measure in unscaled px,
+      // otherwise the zoom would make room for sections that don't fit at full size
+      const zoom = parseFloat(getComputedStyle(this.$el).getPropertyValue(PLAYERS_TABLE_ZOOM_VARIABLE)) || 1;
+      this.availableWidth = Math.floor(entries[0].contentRect.width * zoom);
     });
     this.resizeObserver.observe(this.$el);
   },

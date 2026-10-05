@@ -40,6 +40,8 @@
             <!-- Game end: message above Mars, then automatically to the results page -->
             <GameOverNotice v-if="game.phase === 'end'" :participantId="playerView.id"/>
           </div>
+          <!-- Height of the Mars card, the log below gets the rest (only in the fixed layout) -->
+          <RowResizeHandle v-if="!isSetupPhase" kind="mars"/>
 
           <!-- Log below the board: both stay visible together in the two-column layout -->
           <a class="hotkey-target"></a>
@@ -55,6 +57,8 @@
             <SetupBoardToggle/>
           </SetupTurnOrder>
           <PlayersOverview v-else class="player_home_block player_home_block--players nofloat" :playerView="playerView" v-trim-whitespace id="shortkey-playersoverview"/>
+          <!-- Height of the players card, the tab box below gets the rest (only in the fixed layout) -->
+          <RowResizeHandle v-if="!isSetupPhase" kind="players"/>
 
           <!-- Start phase: starting card selection or draft instead of action menu and hand cards -->
           <PlayerSetupView v-if="isSetupPhase" :playerView="playerView"/>
@@ -131,6 +135,7 @@ import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
 import HomeColumns from '@/client/components/HomeColumns.vue';
+import RowResizeHandle from '@/client/components/RowResizeHandle.vue';
 import SetupTurnOrder from '@/client/components/SetupTurnOrder.vue';
 import SetupBoardToggle from '@/client/components/SetupBoardToggle.vue';
 import {setupBoardCollapsed} from '@/client/components/setupBoardCollapsed';
@@ -208,6 +213,7 @@ export default defineComponent({
     TopBar,
     GameBoardView,
     HomeColumns,
+    RowResizeHandle,
     PlayerSetupView,
     SetupTurnOrder,
     SetupBoardToggle,

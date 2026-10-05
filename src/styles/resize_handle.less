@@ -1,0 +1,102 @@
+// Drag handles between the cards of the player view: one vertical between the columns (player_home_columns.less),
+// one horizontal below the players card and one below the Mars card (RowResizeHandle.vue).
+// Invisible at rest; the closer the mouse, the more visible up to 50 % (--handle-proximity from handleProximity.ts),
+// pressed or with keyboard focus 90 %.
+
+@resize-handle-thickness: 12px; // hit area across the handle
+@resize-handle-line-width: 2px;
+@resize-handle-grip-length: 40px;
+@resize-handle-grip-width: 6px;
+@resize-handle-line-color: rgba(255, 255, 255, 0.5);
+@resize-handle-grip-color: #fff;
+@resize-handle-proximity-opacity: 0.5;
+@resize-handle-active-opacity: 0.9;
+
+// Line along the handle plus a grip in the middle; @direction: vertical (between columns) or horizontal (between cards)
+.resize-handle(@direction) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+
+  &::before,
+  &::after {
+    content: "";
+    opacity: calc(var(--handle-proximity, 0) * @resize-handle-proximity-opacity);
+    transition: opacity 0.1s;
+    pointer-events: none;
+  }
+
+  &::before {
+    background: @resize-handle-line-color;
+    border-radius: (@resize-handle-line-width / 2);
+  }
+
+  &::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: @resize-handle-grip-color;
+    border-radius: (@resize-handle-grip-width / 2);
+  }
+
+  &.resize-handle--active::before,
+  &.resize-handle--active::after,
+  &:focus-visible::before,
+  &:focus-visible::after {
+    opacity: @resize-handle-active-opacity;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  .resize-handle-direction(@direction);
+}
+
+.resize-handle-direction(vertical) {
+  cursor: col-resize;
+
+  &::before {
+    width: @resize-handle-line-width;
+    height: 100%;
+  }
+
+  &::after {
+    width: @resize-handle-grip-width;
+    height: @resize-handle-grip-length;
+  }
+}
+
+.resize-handle-direction(horizontal) {
+  cursor: row-resize;
+
+  &::before {
+    width: 100%;
+    height: @resize-handle-line-width;
+  }
+
+  &::after {
+    width: @resize-handle-grip-length;
+    height: @resize-handle-grip-width;
+  }
+}
+
+// Horizontal handle: only in the fixed layout (window-high columns, player_home_fixed.less) there is a height to distribute
+.row-resize-handle {
+  display: none;
+}
+
+@media only screen and (min-width: @player-home-columns-min-width) {
+  .player-home--fixed .row-resize-handle {
+    .resize-handle(horizontal);
+    position: relative;
+    z-index: 5; // above the raised tab badges below it
+    flex: none;
+    height: @resize-handle-thickness;
+    // Centered in the gap below the card (margin of .player_home_block) without changing the layout:
+    // the negative top margin and the bottom margin add up to minus the handle height
+    margin: (-@player-home-block-gap / 2 - @resize-handle-thickness / 2) 0 (@player-home-block-gap / 2 - @resize-handle-thickness / 2);
+  }
+}
