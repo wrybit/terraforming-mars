@@ -3,7 +3,7 @@
        in the game (context from PlayerHome) also the own player, piles, game info and colonies. -->
   <span ref="root" :class="['game-menu', {'game-menu--large': large}]">
     <button type="button" :class="['game-menu-button', {'game-menu-button--open': menuOpen}]"
-      :aria-expanded="menuOpen ? 'true' : 'false'" aria-haspopup="menu" data-test="game-menu-button"
+      :aria-expanded="menuOpen ? 'true' : 'false'" aria-haspopup="menu" :aria-label="buttonLabel" data-test="game-menu-button"
       @click.stop="toggleMenu">
       <span class="game-menu-burger" aria-hidden="true"><i></i><i></i><i></i></span>
       <span class="game-menu-button-label">{{ buttonLabel }}</span>

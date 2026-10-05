@@ -65,6 +65,17 @@
   }
 }
 
+// Mobile players table: no room for the word, the burger alone is the button (label stays as aria-label)
+html.tm-mobile .game-menu:not(.game-menu--large) {
+  .game-menu-button {
+    padding: 0 8px;
+  }
+
+  .game-menu-button-label {
+    display: none;
+  }
+}
+
 .game-menu-burger {
   display: inline-grid;
   gap: 3px;
