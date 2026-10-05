@@ -606,6 +606,29 @@ each(@players, {
     background: @create-game-surface-strong;
     backdrop-filter: blur(6px);
   }
+
+  // The sticky column takes at most 40 % of the viewport, otherwise the scrolling columns can no longer be read;
+  // longer names are cut off with "…" (padding 2 × 10px is subtracted)
+  .stats-table td:first-child > * {
+    max-width: calc(40vw - 20px);
+    vertical-align: middle;
+  }
+
+  .stats-table td:first-child {
+    .stats-entity {
+      min-width: 0;
+
+      > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .stats-player {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
 // Corporation takes the remaining width and is cut off with "…", so the row never leaves the card
