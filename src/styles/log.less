@@ -32,18 +32,28 @@
       flex-shrink: 0;
     }
   }
+
+  // All tabs of the bar (milestones & awards and the generation numbers) as tall as the action tabs.
+  // Fixed outer height for active and inactive: inactive tabs are 2px shorter and keep the 2px gap to the
+  // box, the active one fills it – so the bar never changes height and nothing jumps when switching
+  .or-tab {
+    box-sizing: border-box;
+    height: @or-tab-height - @or-tab-inactive-gap;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .or-tab.or-tab--active {
+    height: @or-tab-height;
+  }
   // Desktop: milestones & awards as the first tab, set apart from "GEN:" like a separate group;
   // never truncated, the generation tabs give way (they scroll)
   .log-milestones-tabs {
     flex: none;
     margin: 0 14px 0 0;
 
-    // As tall as the generation tabs next to it
     .or-tab {
       flex: none;
-      height: @or-tab-number-height;
-      padding-top: 0;
-      padding-bottom: 0;
       color: @section-caption-gold;
     }
   }

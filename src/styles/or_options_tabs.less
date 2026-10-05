@@ -237,9 +237,10 @@
 // Tab with a large number (generations in the game log)
 @or-tab-number-font-size: 22px;
 @or-tab-number-padding-y: 3px;
-// Total height of a number tab (top border only, tabs have none at the bottom); other tabs in the
-// same bar (log: milestones & awards) take this height so the bar stays even
-@or-tab-number-height: @or-tab-number-font-size + 2 * @or-tab-number-padding-y + 1px;
+// Height of a plain text tab in the action bar (top border, 6px padding, 24px line; no bottom border):
+// the log bar (log.less) uses it so its tabs are exactly as tall as the action tabs
+@or-tab-line-height: 24px;
+@or-tab-height: 1px + 2 * 6px + @or-tab-line-height;
 
 .or-tab--number {
   padding: @or-tab-number-padding-y 14px;
