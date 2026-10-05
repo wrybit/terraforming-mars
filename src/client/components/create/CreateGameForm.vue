@@ -4,7 +4,7 @@
     <header class="card-list-header card-list-header--plain create-game-head">
       <!-- Menu at the top left, as in the game -->
       <PageToolbar/>
-      <h1 v-i18n>Create New Game</h1>
+      <PageTitle title="Create New Game"/>
       <div class="create-game-head-actions">
         <label class="create-game-icon-button" :title="$t('Load settings from file')">
           <!-- Import/export icons: arrow perpendicular to a hex edge, into the tile (import) or out of it (export);
@@ -346,6 +346,7 @@ import {playerColorClass} from '@/common/utils/utils';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
 import PageToolbar from '@/client/components/PageToolbar.vue';
+import PageTitle from '@/client/components/common/PageTitle.vue';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {BoardNameType, NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
 import {vueRoot} from '@/client/components/vueRoot';
@@ -416,6 +417,7 @@ export default defineComponent({
     OptionRow,
     PreludesFilter,
     PageToolbar,
+    PageTitle,
     SegmentedControl,
     SwitchInput,
     ValidationErrorsPopup,

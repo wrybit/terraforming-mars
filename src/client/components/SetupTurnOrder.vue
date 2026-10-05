@@ -5,6 +5,7 @@
     <!-- Game menu before the title: the same place as later in the players table (game_menu.less) -->
     <div class="setup-turn-order-title-row">
       <GameMenu/>
+      <MarsHomeLink/>
       <h2 class="setup-turn-order-title" v-i18n>Turn order</h2>
     </div>
     <ol class="setup-turn-order-list">
@@ -23,6 +24,7 @@
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {playerColorClass} from '@/common/utils/utils';
 import GameMenu from '@/client/components/gameMenu/GameMenu.vue';
+import MarsHomeLink from '@/client/components/common/MarsHomeLink.vue';
 
 defineProps<{
   // In turn order (starting player first), as delivered by the server

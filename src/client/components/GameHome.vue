@@ -4,8 +4,11 @@
     <header class="card-list-header card-list-header--plain game-home-head">
       <!-- Menu at the top left, as in the game -->
       <PageToolbar/>
-      <div class="game-home-check">✓</div>
+      <!-- Logo inside the title like PageTitle.vue, so the narrow header grid keeps its cells. App name like the other page titles (PageTitle.vue), hidden on narrow screens; check mark right before the status -->
       <h1>
+        <MarsHomeLink/>
+        <span class="page-title-app">Terraforming Mars –</span>
+        <span class="game-home-check">✓</span>
         <span v-i18n>Game created</span>
         <span class="game-home-meta"><span class="game-home-name">{{ game.name }}</span><span class="game-home-id">{{ getGameId() }}</span></span>
       </h1>
@@ -55,6 +58,7 @@ import {defineComponent} from 'vue';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import AppButton from '@/client/components/common/AppButton.vue';
 import PageToolbar from '@/client/components/PageToolbar.vue';
+import MarsHomeLink from '@/client/components/common/MarsHomeLink.vue';
 import PurgeWarning from '@/client/components/common/PurgeWarning.vue';
 import {playerColorClass} from '@/common/utils/utils';
 import GameSetupDetail from '@/client/components/GameSetupDetail.vue';
@@ -91,6 +95,7 @@ export default defineComponent({
   components: {
     AppButton,
     PageToolbar,
+    MarsHomeLink,
     GameSetupDetail,
     PurgeWarning,
   },

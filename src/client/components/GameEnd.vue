@@ -5,9 +5,7 @@
       <!-- Menu and Mars logo at the top left like on the other pages (card list, statistics); the logo leads to the start screen -->
       <div class="game-end-hero-lead">
         <PageToolbar/>
-        <a href="." class="page-title-home" aria-label="Terraforming Mars">
-          <img src="assets/stats/mars.png" alt="" class="page-title-icon">
-        </a>
+        <MarsHomeLink/>
         <!-- Solo: result as a sentence in the same place as the winner in a multiplayer game, so both views are built the same -->
         <div v-if="isSoloGame" class="game-end-winer-announcement">
           <span v-if="game.isSoloModeWin" v-i18n>You win!</span>
@@ -223,6 +221,7 @@ import {GameModel} from '@/common/models/GameModel';
 import {PublicPlayerModel, ViewModel} from '@/common/models/PlayerModel';
 import Board from '@/client/components/Board.vue';
 import PageToolbar from '@/client/components/PageToolbar.vue';
+import MarsHomeLink from '@/client/components/common/MarsHomeLink.vue';
 import MoonBoard from '@/client/components/moon/MoonBoard.vue';
 import {nextTileView, TileView} from '@/client/components/board/TileView';
 import PlanetaryTracks from '@/client/components/pathfinders/PlanetaryTracks.vue';
@@ -383,6 +382,7 @@ export default defineComponent({
   components: {
     Board,
     PageToolbar,
+    MarsHomeLink,
     LogPanel,
     MoonBoard,
     PlanetaryTracks,
