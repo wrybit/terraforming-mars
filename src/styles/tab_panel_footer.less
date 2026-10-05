@@ -148,12 +148,18 @@ html.tm-mobile .or-tab-footer > .or-tab-footer-hint {
   }
 }
 
-// "Cancel" (CancelActionButton.vue): left in the footer, quiet so the confirm button stays the main action.
-// Specific enough to win over the footer variants (centered button, tones)
+// "Cancel" (CancelActionButton.vue, action menu tabs with a single button): left in the footer, quiet so the
+// confirm button stays the main action. !important like the base .btn colours (common.less)
 .or-tab-panel .or-tab-footer > .btn.cancel-action-button {
   order: -1;
   margin: 0 auto 0 0;
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: #eceef6;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #eceef6 !important;
+  box-shadow: none;
+}
+
+// Box with a single centered button (raise temperature …): Cancel right next to it, the pair stays centered
+.or-tab-panel--centered-button .or-tab-footer > .btn.cancel-action-button {
+  margin: 0;
 }
