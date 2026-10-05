@@ -33,7 +33,6 @@
               </template>
             </Card>
         </label>
-        <div v-if="cannotAfford" class="select-card-unaffordable" v-i18n="affordNote">Not enough money: a card costs ${0} M€, you only have ${1} M€</div>
         <div v-if="hasCardWarning()" class="card-warning" v-i18n>{{ warning }}</div>
         <WarningsComponent :warnings="warnings"/>
         <TabPanelFooterSlot>
@@ -42,8 +41,10 @@
             <span v-if="hiddenSelectedCount > 0" class="card-filter-hidden-note">{{ hiddenSelectedText }}</span>
             <!-- Disabled while fewer cards are chosen than required: shows that a card must be chosen first.
                  With Skip next to it: Confirm green, Skip red (button_tones.less) -->
-            <!-- Too little money: buying is disabled; discarding remains so the game can go on -->
+            <!-- Too little money: note left of the buttons (footer, also fine on the phone carousel), buying is disabled;
+                 discarding remains so the game can go on -->
             <template v-if="cannotAfford">
+              <span class="select-card-unaffordable" v-i18n="affordNote">Not enough money: a card costs ${0} M€, you only have ${1} M€</span>
               <AppButton :disabled="true" type="submit" :title="$t('Buy')" />
               <AppButton type="submit" @click="saveData" :title="$t('Discard')" class="btn-tone-danger" />
             </template>
@@ -300,7 +301,7 @@ export default defineComponent({
     // Price per card and own money for the note (stock only; Helion heat would also be below the price here)
     affordNote(): [string, string] {
       const player = this.playerView.thisPlayer;
-      return [String(player?.cardCost ?? 3), String(player?.megaCredits ?? 0)];
+      return [String(player?.cardCost ?? 3), String(player?.megacredits ?? 0)];
     },
     // Choosing cards in a draft round: their order must stay fixed (draftCardOrder.ts)
     isDraft(): boolean {
