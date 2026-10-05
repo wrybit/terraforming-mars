@@ -97,6 +97,27 @@
   background-size: contain;
 }
 
+// Card resource (cardResourceEffect.ts): amount with sign directly in front of the icon, like on the cards
+.choice-option-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.choice-option-amount {
+  font-family: Prototype, sans-serif;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.choice-option-amount--gain {
+  color: #9be29b;
+}
+
+.choice-option-amount--loss {
+  color: #ffb4a6;
+}
+
 .choice-option-value {
   // Value always at the bottom, even if the neighbouring tile's text is one line: values of a row sit on one line
   margin-top: auto;

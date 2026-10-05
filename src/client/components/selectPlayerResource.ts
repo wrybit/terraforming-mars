@@ -15,7 +15,7 @@ const RESOURCE_WORDS: ReadonlyArray<[RegExp, Resource]> = [
   [/\bheat\b/i, Resource.HEAT],
 ];
 
-function titleText(title: string | Message): string {
+export function titleText(title: string | Message): string {
   return typeof title === 'string' ? title : title.message;
 }
 
@@ -71,7 +71,7 @@ function titleDirection(text: string): 'gain' | 'loss' | undefined {
 }
 
 // Number in the title: as a parameter (b.number → text parameter "4") or in the key ("up to 4 M€")
-function titleAmount(title: string | Message): number | undefined {
+export function titleAmount(title: string | Message): number | undefined {
   if (typeof title !== 'string') {
     for (const datum of title.data) {
       if (datum.type === LogMessageDataType.RAW_STRING && /^\d+$/.test(datum.value)) {

@@ -1,9 +1,14 @@
 import {expect} from 'chai';
 import {choiceMenuLead, isChoiceMenu} from '@/client/components/choiceMenu';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
+import {CardName} from '@/common/cards/CardName';
 
 function option(title: string): PlayerInputModel {
   return {type: 'option', title, buttonLabel: ''} as unknown as PlayerInputModel;
+}
+
+function card(title: string): PlayerInputModel {
+  return {type: 'card', title, buttonLabel: '', cards: []} as unknown as PlayerInputModel;
 }
 
 function or(...options: Array<PlayerInputModel>): PlayerInputModel {
@@ -17,7 +22,16 @@ describe('choiceMenu', () => {
 
   it('keeps the action menu', () => {
     expect(isChoiceMenu(or(option('End Turn'), option('Pass for this generation')))).is.false;
-    expect(isChoiceMenu(or(option('x'), {type: 'card', title: 'y', buttonLabel: ''} as unknown as PlayerInputModel))).is.false;
+    const actionMenu = {type: 'or', title: 'Take your next action', buttonLabel: '', options: [option('x'), card('y')]} as unknown as PlayerInputModel;
+    expect(isChoiceMenu(actionMenu)).is.false;
+  });
+
+  it('turns a card decision with card selections into tiles too (Imported Hydrogen)', () => {
+    const decision = {
+      type: 'or', title: 'Select an option', sourceCard: CardName.IMPORTED_HYDROGEN, buttonLabel: '',
+      options: [option('Gain 3 plants'), card('Add 2 animals to a card')],
+    } as unknown as PlayerInputModel;
+    expect(isChoiceMenu(decision)).is.true;
   });
 
   it('accepts one player choice beside plain options', () => {

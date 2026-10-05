@@ -2,13 +2,23 @@
   <!-- One option of a simple decision (choiceMenu.ts) as a tile; the selected one pulses like cards.
        If the option names a resource (e.g. Robinson Industries: "Increase steel production 1 step"), the
        tile shows its icon and the player's own amount before → after (selectPlayerResource.ts), so the
-       options can be told apart by image, not just text. Structure like PlayerOptionTile.vue. -->
-  <label :class="['choice-option', {'choice-option--selected': selected, 'choice-option--resource': effect !== undefined}]">
+       options can be told apart by image, not just text. Resources on a card (e.g. Nitrite Reducing Bacteria:
+       "Remove 3 microbes …" / "Add 1 microbe …", cardResourceEffect.ts) show the card resource icon with the
+       amount and the count on the card before → after. Structure like PlayerOptionTile.vue. -->
+  <label :class="['choice-option', {'choice-option--selected': selected, 'choice-option--resource': hasIcon}]">
     <!-- Radio for keyboard and screen readers; the tile is what is visible -->
     <input type="radio" :name="groupName" :checked="selected" class="choice-option-input" @change="$emit('select')">
-    <i v-if="effect !== undefined" :class="'resource_icon choice-option-icon resource_icon--' + effect.resource"></i>
+    <span v-if="cardEffect !== undefined" class="choice-option-icons">
+      <span v-if="cardEffect.amount !== undefined" :class="['choice-option-amount', 'choice-option-amount--' + cardEffect.direction]">{{ signedAmount(cardEffect) }}</span>
+      <i :class="['choice-option-icon', cardResourceCSS[cardEffect.resource]]"></i>
+    </span>
+    <i v-else-if="effect !== undefined" :class="'resource_icon choice-option-icon resource_icon--' + effect.resource"></i>
     <span>{{ $t(title) }}</span>
-    <div v-if="snapshot !== undefined && after !== undefined" class="choice-option-value">
+    <div v-if="cardCount !== undefined" class="choice-option-value">
+      <span class="choice-option-value-label">{{ $t('On card') }}</span>
+      {{ cardCount.before }}<span v-if="cardCount.after !== cardCount.before" :class="['choice-option-after', 'choice-option-after--' + cardEffect?.direction]">→{{ cardCount.after }}</span>
+    </div>
+    <div v-else-if="snapshot !== undefined && after !== undefined" class="choice-option-value">
       <span class="choice-option-value-label">{{ $t(effect?.target === 'production' ? 'Production' : 'Stock') }}</span>
       <template v-if="effect?.target === 'production'">
         {{ signed(snapshot.production) }}<span v-if="after.production !== snapshot.production" :class="['choice-option-after', 'choice-option-after--' + effect?.direction]">→{{ signed(after.production) }}</span>
@@ -23,13 +33,18 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import {Message} from '@/common/logs/Message';
+import {CardName} from '@/common/cards/CardName';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {playerEffect, resourceAfter, resourceSnapshot} from '@/client/components/selectPlayerResource';
+import {cardResourceCount, cardResourceEffect, CardResourceEffect} from '@/client/components/cardResourceEffect';
+import {cardResourceCSS} from '@/client/components/common/cardResources';
 
 const props = defineProps<{
   title: string | Message;
   // Player whose amounts the tile shows (one's own); without a player only icon and text
   player?: PublicPlayerModel;
+  // Card that triggers the decision: "this card" in the option title refers to it
+  sourceCard?: CardName;
   selected: boolean;
   groupName: string;
 }>();
@@ -38,12 +53,25 @@ defineEmits<{
   (event: 'select'): void;
 }>();
 
-const effect = computed(() => playerEffect(props.title));
+// Card resources take precedence: "Remove 2 microbes to gain 3 plants" is first of all about the microbes
+const cardEffect = computed(() => cardResourceEffect(props.title, props.sourceCard));
+const cardCount = computed(() => cardEffect.value === undefined || props.player === undefined ? undefined : cardResourceCount(cardEffect.value, props.player.tableau ?? []));
+const effect = computed(() => cardEffect.value !== undefined ? undefined : playerEffect(props.title));
 const snapshot = computed(() => effect.value === undefined || props.player === undefined ? undefined : resourceSnapshot(props.player, effect.value.resource));
 const after = computed(() => snapshot.value === undefined || effect.value === undefined ? undefined : resourceAfter(snapshot.value, effect.value));
+const hasIcon = computed(() => cardEffect.value !== undefined || effect.value !== undefined);
 
 // Production with sign as in the player bars (+2, 0, -1)
 function signed(value: number): string {
   return value > 0 ? '+' + value : String(value);
+}
+
+// Amount next to the card resource icon: +1 for adding, −3 for removing, plain number if the direction is open
+function signedAmount(cardResource: CardResourceEffect): string {
+  const amount = String(cardResource.amount ?? '');
+  if (cardResource.direction === 'gain') {
+    return '+' + amount;
+  }
+  return cardResource.direction === 'loss' ? '−' + amount : amount;
 }
 </script>

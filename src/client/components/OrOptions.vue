@@ -95,6 +95,7 @@
           <ChoiceOptionTile v-else
             :title="option.title"
             :player="playerView.thisPlayer"
+            :sourceCard="decisionCard"
             :selected="selectedIdx === idx"
             :groupName="radioElementName"
             @select="selectedOption = option"/>
@@ -102,8 +103,9 @@
       </div>
       <!-- Invisible child input of the selected tile running alongside: saveData() queries its answer
            (player tiles answer themselves, see saveData) -->
-      <PlayerInputFactory v-if="!asTabs && (maKind !== undefined || isChoice) && selectedIdx !== -1 && selectedOption.type !== 'player'" v-show="false"
-        ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)"/>
+      <!-- A card selection or amount behind a tile (card decision, choiceMenu.ts) is visible below the tiles -->
+      <PlayerInputFactory v-if="!asTabs && (maKind !== undefined || isChoice) && selectedIdx !== -1 && selectedOption.type !== 'player'" v-show="isInlineInput(selectedOption)"
+        ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" @validity="childValid = $event"/>
 
       <template v-else-if="!asTabs && !isChoice">
         <div v-for="(option, idx) in displayedOptions" :key="idx">
@@ -146,7 +148,7 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
-import {isChoiceMenu} from '@/client/components/choiceMenu';
+import {INLINE_INPUT_TYPES, isChoiceMenu} from '@/client/components/choiceMenu';
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {fullTabTitle, shortTabLabel, tabButtonLabel, optionTone, tabButtonCentered, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon} from '@/client/components/orOptionsShortLabels';
@@ -261,6 +263,10 @@ export default defineComponent({
     // Card whose effect triggers this decision (only with own tabs; otherwise WaitingForTabs shows it)
     sourceCard(): CardName | undefined {
       return this.asTabs ? inputSourceCard(this.playerinput) : undefined;
+    },
+    // Card that triggers this decision, also without own tabs: "this card" in option titles refers to it (ChoiceOptionTile)
+    decisionCard(): CardName | undefined {
+      return inputSourceCard(this.playerinput);
     },
     // Card shown at the top of the box: the input's card, or for a content-free option (only a button)
     // the card it triggers (e.g. corporation first action), so it is clear what the button does
@@ -492,6 +498,10 @@ export default defineComponent({
         return false;
       }
       return !(this.asTabs && (option.type === 'space' || this.availableCount(option) === 0));
+    },
+    // Card decision: card selection/amount visible below the tiles (choiceMenu.ts); plain options stay invisible
+    isInlineInput(option: PlayerInputModel): boolean {
+      return INLINE_INPUT_TYPES.includes(option.type);
     },
     showChildSaveButton(option: PlayerInputModel): boolean {
       return option.type === 'card' && !(option.max === 1 && option.min === 1);
