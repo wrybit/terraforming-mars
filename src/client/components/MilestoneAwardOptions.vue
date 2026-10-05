@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
-import {MilestoneAwardKind, milestoneAwardImageClass} from '@/client/components/milestoneAwardChoice';
+import {MilestoneAwardKind, milestoneAwardImageClass, milestoneAwardOptionName} from '@/client/components/milestoneAwardChoice';
 import {choiceBlockStyle} from '@/client/components/choiceBlock';
 
 defineProps<{
@@ -27,8 +27,5 @@ defineEmits<{
   (event: 'select', option: PlayerInputModel): void;
 }>();
 
-// The sub-options carry the name of the milestone or award as their title
-function optionName(option: PlayerInputModel): string {
-  return typeof option.title === 'string' ? option.title : option.title.message;
-}
+const optionName = milestoneAwardOptionName;
 </script>
