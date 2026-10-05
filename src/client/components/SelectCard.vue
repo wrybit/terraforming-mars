@@ -33,6 +33,7 @@
               </template>
             </Card>
         </label>
+        <div v-if="cannotAfford" class="select-card-unaffordable" v-i18n="affordNote">Not enough money: a card costs ${0} M€, you only have ${1} M€</div>
         <div v-if="hasCardWarning()" class="card-warning" v-i18n>{{ warning }}</div>
         <WarningsComponent :warnings="warnings"/>
         <TabPanelFooterSlot>
@@ -41,7 +42,12 @@
             <span v-if="hiddenSelectedCount > 0" class="card-filter-hidden-note">{{ hiddenSelectedText }}</span>
             <!-- Disabled while fewer cards are chosen than required: shows that a card must be chosen first.
                  With Skip next to it: Confirm green, Skip red (button_tones.less) -->
-            <AppButton :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
+            <!-- Too little money: buying is disabled; discarding remains so the game can go on -->
+            <template v-if="cannotAfford">
+              <AppButton :disabled="true" type="submit" :title="$t('Buy')" />
+              <AppButton type="submit" @click="saveData" :title="$t('Discard')" class="btn-tone-danger" />
+            </template>
+            <AppButton v-else :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
               :class="{'btn-tone-success': isOptionalToManyCards}" />
             <AppButton :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t('Skip this action')"
               class="btn-tone-danger" />
@@ -228,6 +234,9 @@ export default defineComponent({
       if (this.isCurrentPick(card)) {
         classes.push(this.cardsSelected() === 0 ? 'cardbox--current-pick' : 'cardbox--current-pick-replaced');
       }
+      if (this.cannotAfford) {
+        classes.push('cardbox--unaffordable');
+      }
       return classes.join(' ');
     },
     // Already picked in this draft round: the server disables it, because picking it again changes nothing
@@ -282,6 +291,17 @@ export default defineComponent({
     },
   },
   computed: {
+    // Buying with too little money (ChooseCards on the server, e.g. Inventors' Guild with 1 M€): no card can be chosen,
+    // so the cards look inactive and a note below says why – otherwise it looks like a broken selection
+    cannotAfford(): boolean {
+      const title = this.playerinput.title;
+      return this.playerinput.max === 0 && (typeof title === 'string' ? title : title.message) === 'You cannot afford any cards';
+    },
+    // Price per card and own money for the note (stock only; Helion heat would also be below the price here)
+    affordNote(): [string, string] {
+      const player = this.playerView.thisPlayer;
+      return [String(player?.cardCost ?? 3), String(player?.megaCredits ?? 0)];
+    },
     // Choosing cards in a draft round: their order must stay fixed (draftCardOrder.ts)
     isDraft(): boolean {
       return this.playerView.thisPlayer?.needsToDraft !== undefined;

@@ -119,4 +119,38 @@ describe('SelectCard', () => {
     expect(mountSelection(3, ['Ants', 'Birds', 'Cartel']).findComponent({name: 'CardFilterBar'}).exists()).is.true;
     expect(mountSelection(3, ['Ants']).findComponent({name: 'CardFilterBar'}).exists()).is.false;
   });
+
+  it('disables buying and offers discarding when the money is not enough', async () => {
+    let saved = false;
+    const wrapper = shallowMount(SelectCard, {
+      ...globalConfig,
+      props: {
+        playerView: fakePlayerViewModel(),
+        playerinput: {
+          title: 'You cannot afford any cards',
+          buttonLabel: 'Ok',
+          type: 'card',
+          cards: [{name: 'Industrial Center'}],
+          max: 0,
+          min: 0,
+          showOnlyInLearnerMode: false,
+          selectBlueCardAction: false,
+          showOwner: false,
+          showSelectAll: false,
+        },
+        onsave: () => {
+          saved = true;
+        },
+        showsave: true,
+        showtitle: true,
+      },
+    } as any);
+    expect(wrapper.find('.select-card-unaffordable').exists()).is.true;
+    expect(wrapper.find('.cardbox--unaffordable').exists()).is.true;
+    const buttons = wrapper.findAllComponents({name: 'AppButton'});
+    expect(buttons[0].props('disabled')).is.true;
+    expect(buttons[1].props('disabled')).is.not.true;
+    (wrapper.vm as any).saveData();
+    expect(saved).is.true;
+  });
 });

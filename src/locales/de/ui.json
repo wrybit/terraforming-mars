@@ -579,6 +579,7 @@
   "Show timers": "Zeitanzeige",
   "You cannot pay for this card": "Du kannst diese Karte nicht bezahlen",
   "You cannot afford any cards": "Du kannst dir keine Karten leisten",
+  "Not enough money: a card costs ${0} M€, you only have ${1} M€": "Nicht genug Geld: Eine Karte kostet ${0} M€, du hast nur ${1} M€",
   "Select card(s) to buy": "Wähle zu kaufende Karten",
   "Select up to ${0} card(s) to buy": "Wähle bis zu ${0} kaufende Karte",
   "Select up to 2 events to return to your hand": "Wähle bis zu 2 Ereignisse um diese auf die Hand zu nehmen",

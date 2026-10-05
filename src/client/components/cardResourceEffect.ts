@@ -3,7 +3,7 @@ import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {CardResource} from '@/common/CardResource';
 import {CardName} from '@/common/cards/CardName';
 import {CardModel} from '@/common/models/CardModel';
-import {titleText} from '@/client/components/selectPlayerResource';
+import {isNoEffect, titleText} from '@/client/components/selectPlayerResource';
 
 // Card resource words in English title keys ("Add 1 microbe to this card", "Remove 3 microbes to …",
 // "Add ${0} floaters to ${1}"). Only resources that are named in plain words on the server side.
@@ -77,7 +77,7 @@ function titleCard(title: string | Message, sourceCard: CardName | undefined): C
 
 // Effect of an option on resources of a card; undefined if the title names no card resource
 export function cardResourceEffect(title: string | Message, sourceCard?: CardName): CardResourceEffect | undefined {
-  const named = titleCardResource(title);
+  const named = isNoEffect(title) ? undefined : titleCardResource(title);
   if (named === undefined) {
     return undefined;
   }

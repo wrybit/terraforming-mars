@@ -61,6 +61,11 @@ const LOSS_WORDS = /\b(remove|steal|decrease|lose|reduce)\b/i;
 
 const NO_EFFECT = /^(do not|don't|skip)\b/i;
 
+// "Do not remove M€", "Skip removing plants": name a resource but change nothing
+export function isNoEffect(title: string | Message): boolean {
+  return NO_EFFECT.test(titleText(title));
+}
+
 function titleDirection(text: string): 'gain' | 'loss' | undefined {
   const gain = GAIN_WORDS.test(text);
   const loss = LOSS_WORDS.test(text);
@@ -87,8 +92,7 @@ export function titleAmount(title: string | Message): number | undefined {
 // Effect of a selection on the affected player (attack on an opponent, raise own production …);
 // undefined if no resource can be identified
 export function playerEffect(title: string | Message): PlayerEffect | undefined {
-  // "Do not remove M€", "Skip removing plants": name the resource but change nothing
-  if (NO_EFFECT.test(titleText(title))) {
+  if (isNoEffect(title)) {
     return undefined;
   }
   const resource = selectPlayerResource(title);

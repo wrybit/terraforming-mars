@@ -43,6 +43,7 @@ describe('cardResourceEffect', () => {
 
   it('ignores titles without card resources and card names in placeholders', () => {
     expect(cardResourceEffect('Increase steel production 1 step')).is.undefined;
+    expect(cardResourceEffect('Do not add microbes')).is.undefined;
     expect(cardResourceEffect({message: 'Play ${0}', data: [{type: LogMessageDataType.CARD, value: CardName.ASTEROID}]})).is.undefined;
   });
 
