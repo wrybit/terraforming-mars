@@ -1,5 +1,5 @@
 <template>
-  <div :class="mainClass" :data_space_id="space.id">
+  <div :class="mainClass" :data_space_id="space.id" v-flash="flashKeys.moonSpace(space.id)">
     <BoardSpaceTile
       :space="space"
       :aresExtension="false"
@@ -24,6 +24,8 @@ import {TileView} from '../board/TileView';
 import BoardSpaceTile from '@/client/components/board/BoardSpaceTile.vue';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {getSpaceName} from '@/common/boards/spaces';
+import {vFlash} from '@/client/directives/ChangeFlash';
+import {flashKeys} from '@/client/utils/changeFlashKeys';
 
 export default defineComponent({
   name: 'MoonSpace',
@@ -41,11 +43,17 @@ export default defineComponent({
       default: 'show',
     },
   },
+  directives: {
+    flash: vFlash,
+  },
   components: {
     Bonus,
     BoardSpaceTile,
   },
   computed: {
+    flashKeys(): typeof flashKeys {
+      return flashKeys;
+    },
     mainClass(): string {
       let css = 'board-space moon-space-' + this.space.id.toString();
       css += ' board-space-selectable';

@@ -13,6 +13,7 @@
             :aria-selected="showsMilestonesAwards"
             :class="['or-tab', 'or-tab--tone-milestones', {'or-tab--active': showsMilestonesAwards}]"
             data-test="log-milestones-tab"
+            v-flash-tab="{id: 'log-milestones', areas: ['milestonesAwards'], active: showsMilestonesAwards}"
             @click.prevent="showMilestonesAwards">{{ milestonesAwardsTitle }}</button>
         </div>
       </template>
@@ -53,6 +54,7 @@
 
 import {defineComponent, markRaw} from 'vue';
 import {vDockedTab} from '@/client/directives/DockedTab';
+import {vFlashTab} from '@/client/directives/ChangeFlashTab';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import {LogMessage} from '@/common/logs/LogMessage';
 import {LogMessageType} from '@/common/logs/LogMessageType';
@@ -171,6 +173,7 @@ export default defineComponent({
   },
   directives: {
     dockedTab: vDockedTab,
+    flashTab: vFlashTab,
   },
   components: {
     LogMessageComponent,

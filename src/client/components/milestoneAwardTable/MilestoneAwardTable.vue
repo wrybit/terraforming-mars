@@ -42,7 +42,7 @@
           <div class="ma-table-divider"></div>
           <div v-for="award in awards" :key="award.name" class="ma-table-cell">
             <!-- Funded: cube only up here (the player rows keep showing the score); closed: no more costs -->
-            <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner"><i :class="cubeClasses(award.color)"></i><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
+            <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner" v-flash="flashKeys.award(award.name)"><i :class="cubeClasses(award.color)"></i><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
             <span v-else-if="!awardClosed(award)" class="ma-table-coin">{{ nextAwardCost }}</span>
           </div>
         </template>
@@ -56,7 +56,7 @@
         </template>
         <template v-if="hasValues(part)">
           <div v-for="milestone in milestones" :key="milestone.name" :class="milestoneCellClasses(milestone, player)">
-            <i v-if="milestone.color === player.color" :class="cubeClasses(player.color)" :title="player.name" data-test="milestone-owner"></i>
+            <i v-if="milestone.color === player.color" :class="cubeClasses(player.color)" :title="player.name" data-test="milestone-owner" v-flash="flashKeys.milestone(milestone.name)"></i>
             <span v-else class="ma-table-value">{{ scoreOf(milestone.scores, player) }}</span>
           </div>
           <div class="ma-table-divider"></div>
@@ -84,6 +84,8 @@ import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
 import {glassTooltip} from '@/client/directives/GlassTooltip';
 import {observeHeaderFit} from '@/client/components/milestoneAwardTable/headerFit';
 import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
+import {vFlash} from '@/client/directives/ChangeFlash';
+import {flashKeys} from '@/client/utils/changeFlashKeys';
 
 // Cleanup function of the header adjustment per table (not reactive)
 const stopHeaderFit = new WeakMap<object, () => void>();
@@ -99,6 +101,7 @@ export default defineComponent({
     MilestoneAwardIcon,
   },
   directives: {
+    flash: vFlash,
     glassTooltip,
   },
   props: {
@@ -132,6 +135,9 @@ export default defineComponent({
     stopHeaderFit.get(this)?.();
   },
   computed: {
+    flashKeys(): typeof flashKeys {
+      return flashKeys;
+    },
     orderedPlayers(): Array<PublicPlayerModel> {
       return playersInTurnOrder(this.players, this.viewerColor);
     },

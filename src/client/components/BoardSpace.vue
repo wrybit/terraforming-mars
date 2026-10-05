@@ -1,5 +1,5 @@
 <template>
-  <div v-if="space !== undefined" :class="mainClass" :data_space_id="space.id">
+  <div v-if="space !== undefined" :class="mainClass" :data_space_id="space.id" v-flash="flashKeys.marsSpace(space.id)">
     <BoardSpaceTile
       :space="space"
       :aresExtension="aresExtension"
@@ -44,6 +44,8 @@ import {getPreferences} from '../utils/PreferencesManager';
 import {ClaimedToken} from '@/common/underworld/UnderworldPlayerData';
 import {getSpaceName} from '@/common/boards/spaces';
 import {SpaceType} from '@/common/boards/SpaceType';
+import {vFlash} from '@/client/directives/ChangeFlash';
+import {flashKeys} from '@/client/utils/changeFlashKeys';
 export default defineComponent({
   name: 'BoardSpace',
   props: {
@@ -66,6 +68,9 @@ export default defineComponent({
   data() {
     return {};
   },
+  directives: {
+    flash: vFlash,
+  },
   components: {
     Bonus,
     BoardSpaceTile,
@@ -73,6 +78,9 @@ export default defineComponent({
     UndergroundToken,
   },
   computed: {
+    flashKeys(): typeof flashKeys {
+      return flashKeys;
+    },
     mainClass(): string {
       let css = 'board-space board-space-' + this.space?.id.toString();
       css += ' board-space-selectable';

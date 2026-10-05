@@ -22,18 +22,18 @@
 
         <div class="global-numbers">
             <div class="global-numbers-temperature">
-                <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('temperature')" :key="idx">{{ lvl.strValue }}</div>
+                <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('temperature')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('temperature') : undefined">{{ lvl.strValue }}</div>
             </div>
 
             <div class="global-numbers-oxygen">
-                <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('oxygen')" :key="idx">{{ lvl.strValue }}</div>
+                <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('oxygen')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('oxygen') : undefined">{{ lvl.strValue }}</div>
             </div>
 
             <div class="global-numbers-venus" v-if="expansions.venus">
-                <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('venus')" :key="idx">{{ lvl.strValue }}</div>
+                <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('venus')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('venus') : undefined">{{ lvl.strValue }}</div>
             </div>
 
-            <div class="global-numbers-oceans">
+            <div class="global-numbers-oceans" v-flash="flashKeys.globalParameter('oceans')">
               <span v-if="oceans_count === constants.MAX_OCEAN_TILES">
                 <img width="26" src="assets/misc/circle-checkmark.png" class="board-ocean-checkmark" :alt="$t('Completed!')">
               </span>
@@ -363,6 +363,8 @@ import {BoardName} from '@/common/boards/BoardName';
 import {LEGENDS} from '@/client/components/Legends';
 import {Expansion} from '@/common/cards/GameModule';
 import {SpaceName} from '@/common/boards/SpaceName';
+import {vFlash} from '@/client/directives/ChangeFlash';
+import {flashKeys} from '@/client/utils/changeFlashKeys';
 
 class GlobalParamLevel {
   constructor(public value: number, public isActive: boolean, public strValue: string) {
@@ -411,6 +413,9 @@ export default defineComponent({
       type: String as () => TileView,
       default: 'show',
     },
+  },
+  directives: {
+    flash: vFlash,
   },
   components: {
     BoardSpace,
@@ -499,6 +504,9 @@ export default defineComponent({
     },
   },
   computed: {
+    flashKeys(): typeof flashKeys {
+      return flashKeys;
+    },
     BoardName(): typeof BoardName {
       return BoardName;
     },

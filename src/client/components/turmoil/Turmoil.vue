@@ -8,13 +8,13 @@
 
       <div class="turmoil-board">
         <div class="turmoil-header">
-          <div class="turmoil-lobby">
+          <div class="turmoil-lobby" v-flash="flashKeys.turmoil('lobby')">
             <div class="lobby-spot" v-for="n in 5" :key="n">
                 <div v-if="turmoil.lobby.length >= n" :class="'player-token '+turmoil.lobby[n-1]"></div>
             </div>
           </div>
           <div class="dominant-party-name">
-            <div :class="'party-name party-name--'+partyNameToCss(turmoil.ruling)" v-i18n>{{ turmoil.ruling }}</div>
+            <div :class="'party-name party-name--'+partyNameToCss(turmoil.ruling)" v-i18n v-flash="flashKeys.turmoil('ruling')">{{ turmoil.ruling }}</div>
           </div>
           <div class="dominant-party-bonus">
             <TurmoilAgenda v-if="turmoil.ruling" :id="getPolicy(turmoil.ruling)"/>
@@ -25,7 +25,7 @@
               <div v-if="n.politicalAgendasActionUsedCount > 0" :class="'policy-use-marker board-cube--'+n.color">{{n.politicalAgendasActionUsedCount}}</div>
             </template>
           </div>
-          <div class="chairman-spot"><div v-if="turmoil.chairman" :class="'player-token '+turmoil.chairman"></div></div>
+          <div class="chairman-spot" v-flash="flashKeys.turmoil('chairman')"><div v-if="turmoil.chairman" :class="'player-token '+turmoil.chairman"></div></div>
           <div class="turmoil-reserve">
               <div class="lobby-spot" v-for="n in turmoil.reserve.length" :key="n">
                 <div v-if="turmoil.reserve.length >= n" :class="'player-token '+turmoil.reserve[n-1].color">{{ turmoil.reserve[n-1].number }}</div>
@@ -56,7 +56,7 @@
         </div>
 
         <div class="grid-parties">
-          <div v-for="party in turmoil.parties" :key="party.name" :class="'board-party board-party--'+partyNameToCss(party.name)">
+          <div v-for="party in turmoil.parties" :key="party.name" :class="'board-party board-party--'+partyNameToCss(party.name)" v-flash="flashKeys.turmoilParty(party.name)">
             <div class="grid-delegates">
               <div class="delegate-spot" v-for="n in 6" :key="n">
                 <div v-if="party.delegates.length >= n" :class="'player-token '+party.delegates[n-1].color">{{ party.delegates[n-1].number }}</div>
@@ -89,6 +89,8 @@ import {TurmoilModel} from '@/common/models/TurmoilModel';
 import TurmoilAgenda from '@/client/components/turmoil/TurmoilAgenda.vue';
 import GlobalEvent from '@/client/components/turmoil/GlobalEvent.vue';
 import {BonusId, PolicyId} from '@/common/turmoil/Types';
+import {vFlash} from '@/client/directives/ChangeFlash';
+import {flashKeys} from '@/client/utils/changeFlashKeys';
 
 export default defineComponent({
   name: 'Turmoil',
@@ -96,6 +98,11 @@ export default defineComponent({
     turmoil: {
       type: Object as () => TurmoilModel,
       required: true,
+    },
+  },
+  computed: {
+    flashKeys(): typeof flashKeys {
+      return flashKeys;
     },
   },
   methods: {
@@ -155,6 +162,9 @@ export default defineComponent({
     isVisible() {
       return vueRoot(this).getVisibilityState('turmoil_parties');
     },
+  },
+  directives: {
+    flash: vFlash,
   },
   components: {
     GlobalEvent,

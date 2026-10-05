@@ -103,6 +103,7 @@ import dialogPolyfill from 'dialog-polyfill';
 import {initMobileLayout, mobileLayout} from '@/client/utils/mobileLayout';
 import RotateHint from '@/client/components/RotateHint.vue';
 import {setDocumentTitle} from '../utils/documentTitle';
+import {ingestView} from '@/client/utils/changeTracker';
 
 type Screen = 'admin' |
             'create-game-form' |
@@ -247,6 +248,8 @@ export default defineComponent({
           return resp.json();
         })
         .then((model: ViewModel) => {
+          // Polled updates come from other players' moves (own moves arrive via WaitingFor.updatePlayerView)
+          ingestView(model, 'remote');
           if (path === paths.PLAYER) {
             app.playerView = model as PlayerViewModel;
             setTranslationContext(app.playerView);

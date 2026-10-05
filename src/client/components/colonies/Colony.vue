@@ -1,7 +1,7 @@
 <template>
     <!-- <div :class="recedeIfInactive"> -->
     <!-- Show the background, tooltip, and other setup -->
-    <div class="filterDiv colony-card colonies tooltip tooltip-bottom" :class="backgroundClass" :data-tooltip="tooltip" v-i18n>
+    <div class="filterDiv colony-card colonies tooltip tooltip-bottom" :class="backgroundClass" :data-tooltip="tooltip" v-i18n v-flash="flashKeys.colony(colony.name)">
 
     <!-- Show colony ship if somebody is visiting -->
     <div v-if="colony.visitor !== undefined" class="colony-spaceship">
@@ -134,6 +134,8 @@ import {getColonyOrThrow} from '@/client/colonies/ClientColonyManifest';
 import {ColonyBenefit} from '@/common/colonies/ColonyBenefit';
 import {Resource} from '@/common/Resource';
 import {translateText} from '@/client/directives/i18n';
+import {vFlash} from '@/client/directives/ChangeFlash';
+import {flashKeys} from '@/client/utils/changeFlashKeys';
 
 export default defineComponent({
   name: 'Colony',
@@ -147,11 +149,17 @@ export default defineComponent({
       default: true,
     },
   },
+  directives: {
+    flash: vFlash,
+  },
   components: {
     ColonyRow,
     ColonyTradeRow,
   },
   computed: {
+    flashKeys(): typeof flashKeys {
+      return flashKeys;
+    },
     metadata(): ColonyMetadata {
       return getColonyOrThrow(this.colony.name);
     },

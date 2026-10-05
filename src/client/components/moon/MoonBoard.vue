@@ -47,15 +47,15 @@
 
     <div class="global-numbers">
       <div class="global-numbers-habitat">
-        <div :class="getScaleCSS(lvl)" v-for="(lvl, i) in getValuesForParameter('habitat')" :key="i">{{ lvl.strValue }}</div>
+        <div :class="getScaleCSS(lvl)" v-for="(lvl, i) in getValuesForParameter('habitat')" :key="i" v-flash="lvl.isActive ? flashKeys.moonRate('habitat') : undefined">{{ lvl.strValue }}</div>
       </div>
 
       <div class="global-numbers-logistic">
-        <div :class="getScaleCSS(lvl)" v-for="(lvl, i) in getValuesForParameter('logistic')" :key="i">{{ lvl.strValue }}</div>
+        <div :class="getScaleCSS(lvl)" v-for="(lvl, i) in getValuesForParameter('logistic')" :key="i" v-flash="lvl.isActive ? flashKeys.moonRate('logistic') : undefined">{{ lvl.strValue }}</div>
       </div>
 
       <div class="global-numbers-mining">
-        <div :class="getScaleCSS(lvl)" v-for="(lvl, i) in getValuesForParameter('mining')" :key="i">{{ lvl.strValue }}</div>
+        <div :class="getScaleCSS(lvl)" v-for="(lvl, i) in getValuesForParameter('mining')" :key="i" v-flash="lvl.isActive ? flashKeys.moonRate('mining') : undefined">{{ lvl.strValue }}</div>
       </div>
 
     </div>
@@ -82,6 +82,8 @@ import MoonSpace from '@/client/components/moon/MoonSpace.vue';
 import {TileView} from '../board/TileView';
 import {SpaceId} from '@/common/Types';
 import {comparing} from '@/common/utils/Ordering';
+import {vFlash} from '@/client/directives/ChangeFlash';
+import {flashKeys} from '@/client/utils/changeFlashKeys';
 
 type MoonParamLevel = {
   value: number,
@@ -101,8 +103,16 @@ export default defineComponent({
       default: 'show',
     },
   },
+  directives: {
+    flash: vFlash,
+  },
   components: {
     MoonSpace,
+  },
+  computed: {
+    flashKeys(): typeof flashKeys {
+      return flashKeys;
+    },
   },
   methods: {
     getAllNonColonySpaces(): Array<SpaceModel> {

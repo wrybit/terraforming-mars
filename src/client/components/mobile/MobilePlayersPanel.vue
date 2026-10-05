@@ -4,6 +4,7 @@
     <button v-for="entry in PLAYER_SEGMENTS" :key="entry.key" type="button" role="tab"
       :aria-selected="segment === entry.key"
       :class="['mb-segment', {'mb-segment--active': segment === entry.key}]"
+      v-flash-tab="{id: 'mobile-segment-' + entry.key, areas: entry.flashAreas, active: segment === entry.key}"
       @click="emit('update:segment', entry.key)">{{ entry.labels.map((label) => $t(label)).join(' & ') }}</button>
   </div>
   <PlayersOverview v-show="segment === 'players'" :playerView="viewModel" v-trim-whitespace/>
@@ -26,6 +27,7 @@ import PlayerIdentity from '@/client/components/overview/PlayerIdentity.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
 import {playerActionLabel} from '@/client/components/overview/playerActionLabel';
 import {PLAYER_SEGMENTS, PlayersSegment} from '@/client/components/mobile/mobileScreens';
+import {vFlashTab} from '@/client/directives/ChangeFlashTab';
 
 defineProps<{
   viewModel: ViewModel;
