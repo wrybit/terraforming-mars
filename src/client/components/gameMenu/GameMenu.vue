@@ -13,8 +13,8 @@
       <Transition name="game-menu-dropdown">
         <div v-if="menuOpen" ref="dropdown" class="game-menu-dropdown" role="menu" :style="dropdownPosition" @click.stop>
           <template v-if="context">
-          <!-- Own player: box in the player colour with cube and name -->
-          <div :class="['game-menu-player', playerColorClass(context.playerColor, 'bg_transparent')]">
+          <!-- Own player: neutral dark box, the colour comes from the cube alone -->
+          <div class="game-menu-player">
             <PlayerCube :color="context.playerColor" view="iso" :size="34"/>
             <span class="game-menu-player-name">{{ context.playerName }}</span>
           </div>
@@ -91,7 +91,6 @@ import LanguageSelectionDialog from '@/client/components/LanguageSelectionDialog
 import InfoPanel from '@/client/components/InfoPanel.vue';
 import PreferencesDialog from '@/client/components/PreferencesDialog.vue';
 import {PreferencesManager} from '@/client/utils/PreferencesManager';
-import {playerColorClass} from '@/common/utils/utils';
 import {LANGUAGE} from '@/common/constants';
 import {translateText} from '@/client/directives/i18n';
 import {GAME_MENU_CONTEXT} from '@/client/components/gameMenu/gameMenuContext';
