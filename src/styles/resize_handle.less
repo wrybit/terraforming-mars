@@ -95,8 +95,15 @@
     z-index: 5; // above the raised tab badges below it
     flex: none;
     height: @resize-handle-thickness;
-    // Centered in the gap below the card (margin of .player_home_block) without changing the layout:
-    // the negative top margin and the bottom margin add up to minus the handle height
-    margin: (-@player-home-block-gap / 2 - @resize-handle-thickness / 2) 0 (@player-home-block-gap / 2 - @resize-handle-thickness / 2);
+    // Same distance to the cards above and below as the column handle to the cards left and right
+    // (half the column gap): the gap below the card (margin of .player_home_block) grows to the column gap,
+    // the handle sits in its middle
+    margin: (-@player-home-block-gap + @player-home-columns-gap / 2 - @resize-handle-thickness / 2) 0 (@player-home-columns-gap / 2 - @resize-handle-thickness / 2);
+  }
+
+  // Tab bar right below the players handle: no extra room for the raised badges on top, otherwise the gap below
+  // the handle is larger than above it (the handle lies above the badges, z-index). Nested tab bars inside a box keep it.
+  .player-home--fixed .player-home-columns__main > .player_home_block .or-tabs:not(.or-tab-panel .or-tabs) {
+    margin-top: 0;
   }
 }
