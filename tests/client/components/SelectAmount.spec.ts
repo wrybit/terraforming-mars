@@ -25,4 +25,33 @@ describe('SelectAmount', () => {
     });
     expect(wrapper.exists()).to.be.true;
   });
+
+  it('shows source and target of a known conversion and saves the chosen amount', async () => {
+    let saved: unknown;
+    const thisPlayer = {heat: 0, heatProduction: 5, megacredits: 20, megacreditProduction: 3, tableau: []};
+    const wrapper = shallowMount(SelectAmount, {
+      ...globalConfig,
+      props: {
+        playerView: {thisPlayer} as unknown as PlayerViewModel,
+        playerinput: {
+          title: 'Select amount of heat production to decrease',
+          buttonLabel: 'Decrease',
+          type: 'amount',
+          min: 1,
+          max: 5,
+          maxByDefault: false,
+          sourceCard: 'Insulation',
+        } as any,
+        onsave: (out: unknown) => {
+          saved = out;
+        },
+        showsave: true,
+        showtitle: false,
+      },
+    });
+    expect(wrapper.findComponent({name: 'AmountConverter'}).exists()).is.true;
+    // Conversions start at the maximum
+    (wrapper.vm as any).saveData();
+    expect(saved).deep.eq({type: 'amount', amount: 5});
+  });
 });
