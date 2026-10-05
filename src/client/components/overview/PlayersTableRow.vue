@@ -16,8 +16,8 @@
         <div class="players-table-divider"></div>
         <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
           <div v-if="groupIndex > 0"></div>
-          <div class="players-table-cell" v-for="tag in group" :key="tag" :data-test="'tag-' + tag">
-            <span :class="tagCounterClasses(tag)" v-flash="flashKeys.playerTag(player.color, tag)"><span v-if="protectedTags.includes(tag)" class="players-table-protection shield_icon" :data-test="'protection-' + tag"></span>{{ tagDetail(tag).count || '·' }}<PlayerTagSubstitution v-if="tagDetail(tag).substitution !== undefined" :tag="tagDetail(tag).substitution!" :data-test="'substitution-' + tag"/></span>
+          <div class="players-table-cell" v-for="tag in group" :key="tag" :data-test="'tag-' + tag" v-flash="flashKeys.playerTag(player.color, tag)">
+            <span :class="tagCounterClasses(tag)"><span v-if="protectedTags.includes(tag)" class="players-table-protection shield_icon" :data-test="'protection-' + tag"></span>{{ tagDetail(tag).count || '·' }}<PlayerTagSubstitution v-if="tagDetail(tag).substitution !== undefined" :tag="tagDetail(tag).substitution!" :data-test="'substitution-' + tag"/></span>
             <span v-if="tagDetail(tag).discount > 0" class="players-table-discount" :data-test="'discount-' + tag" :title="$t('Discount')">{{ tagDetail(tag).discount }}</span>
             <PointsPerTag :points="tagDetail(tag)"/>
           </div>
@@ -26,10 +26,10 @@
 
       <template v-if="section === 'score' && visibility.score">
         <div class="players-table-divider"></div>
-        <div class="players-table-cell"><span class="players-table-counter" data-test="vp" v-flash="flashKeys.playerCounter(player.color, 'victoryPoints')">{{ victoryPoints }}</span></div>
-        <div class="players-table-cell"><span class="players-table-counter" data-test="tr" v-flash="flashKeys.playerCounter(player.color, 'terraformRating')">{{ player.terraformRating }}</span></div>
-        <div class="players-table-cell">
-          <span class="players-table-counter" data-test="hand" v-flash="flashKeys.playerCounter(player.color, 'cardsInHand')">{{ player.cardsInHandNbr ?? 0 }}</span>
+        <div class="players-table-cell" v-flash="flashKeys.playerCounter(player.color, 'victoryPoints')"><span class="players-table-counter" data-test="vp">{{ victoryPoints }}</span></div>
+        <div class="players-table-cell" v-flash="flashKeys.playerCounter(player.color, 'terraformRating')"><span class="players-table-counter" data-test="tr">{{ player.terraformRating }}</span></div>
+        <div class="players-table-cell" v-flash="flashKeys.playerCounter(player.color, 'cardsInHand')">
+          <span class="players-table-counter" data-test="hand">{{ player.cardsInHandNbr ?? 0 }}</span>
           <span v-if="tagDetails.all.discount > 0" class="players-table-discount" data-test="discount-all" :title="$t('Discount')">{{ tagDetails.all.discount }}</span>
         </div>
         <div class="players-table-cell">
@@ -39,9 +39,9 @@
     </template>
 
     <div class="players-table-divider"></div>
-    <div class="players-table-cell">
+    <div class="players-table-cell" v-flash="flashKeys.playerCounter(player.color, 'playedCards')">
       <!-- No own click handler: the click bubbles up to the row; the button stays for keyboard use -->
-      <button type="button" class="players-table-played" :aria-label="$t('Played cards')" data-test="played-cards" v-flash="flashKeys.playerCounter(player.color, 'playedCards')">{{ player.tableau.length }}</button>
+      <button type="button" class="players-table-played" :aria-label="$t('Played cards')" data-test="played-cards">{{ player.tableau.length }}</button>
     </div>
   </div>
 </template>

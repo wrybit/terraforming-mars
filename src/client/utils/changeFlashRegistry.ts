@@ -5,7 +5,8 @@ import {isChangePending, markChangeSeen} from '@/client/utils/changeTracker';
 import {scheduleFlash} from '@/client/utils/changeFlashScheduler';
 
 const elementsByKey = new Map<string, Set<HTMLElement>>();
-const keyOfElement = new WeakMap<HTMLElement, string>();
+// One element can stand for several values (e.g. a goods cell: stock and production)
+const keysOfElement = new WeakMap<HTMLElement, ReadonlyArray<string>>();
 const visibleElements = new Set<HTMLElement>();
 let observer: IntersectionObserver | undefined;
 
@@ -35,6 +36,7 @@ function revealVisibleChanges(): void {
   if (document.hidden) {
     return;
   }
+  const flashed = new Set<HTMLElement>();
   for (const [key, elements] of elementsByKey) {
     if (!isChangePending(key)) {
       continue;
@@ -42,43 +44,52 @@ function revealVisibleChanges(): void {
     const visible = Array.from(elements).filter((element) => visibleElements.has(element));
     if (visible.length > 0) {
       markChangeSeen(key);
-      scheduleFlash(visible);
+      // An element standing for several changed values (stock and production) blinks only once
+      const fresh = visible.filter((element) => !flashed.has(element));
+      fresh.forEach((element) => flashed.add(element));
+      if (fresh.length > 0) {
+        scheduleFlash(fresh);
+      }
     }
   }
 }
 
-export function registerFlashElement(element: HTMLElement, key: string): void {
+export function registerFlashElement(element: HTMLElement, keys: ReadonlyArray<string>): void {
   const observing = intersectionObserver();
-  if (observing === undefined) {
+  if (observing === undefined || keys.length === 0) {
     return;
   }
-  keyOfElement.set(element, key);
-  let elements = elementsByKey.get(key);
-  if (elements === undefined) {
-    elements = new Set();
-    elementsByKey.set(key, elements);
+  keysOfElement.set(element, keys);
+  for (const key of keys) {
+    let elements = elementsByKey.get(key);
+    if (elements === undefined) {
+      elements = new Set();
+      elementsByKey.set(key, elements);
+    }
+    elements.add(element);
   }
-  elements.add(element);
   observing.observe(element);
 }
 
 export function unregisterFlashElement(element: HTMLElement): void {
-  const key = keyOfElement.get(element);
-  if (key === undefined) {
+  const keys = keysOfElement.get(element);
+  if (keys === undefined) {
     return;
   }
   observer?.unobserve(element);
   visibleElements.delete(element);
-  keyOfElement.delete(element);
-  const elements = elementsByKey.get(key);
-  elements?.delete(element);
-  if (elements?.size === 0) {
-    elementsByKey.delete(key);
+  keysOfElement.delete(element);
+  for (const key of keys) {
+    const elements = elementsByKey.get(key);
+    elements?.delete(element);
+    if (elements?.size === 0) {
+      elementsByKey.delete(key);
+    }
   }
 }
 
-export function flashKeyOf(element: HTMLElement): string | undefined {
-  return keyOfElement.get(element);
+export function flashKeysOf(element: HTMLElement): ReadonlyArray<string> {
+  return keysOfElement.get(element) ?? [];
 }
 
 export function hasFlashElement(key: string): boolean {
