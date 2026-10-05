@@ -6,7 +6,9 @@
       :aria-expanded="menuOpen ? 'true' : 'false'" aria-haspopup="menu" data-test="game-menu-button"
       @click.stop="toggleMenu">
       <span class="game-menu-burger" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="game-menu-button-label">{{ $t(label) }}</span>
+      <!-- Same word on every page and in every language (deliberately not translated: the key "Setup"
+           already means the start of the game elsewhere) -->
+      <span class="game-menu-button-label">Setup</span>
     </button>
 
     <Teleport to="body">
@@ -96,12 +98,9 @@ import {LANGUAGE} from '@/common/constants';
 import {GAME_MENU_CONTEXT} from '@/client/components/gameMenu/gameMenuContext';
 
 withDefaults(defineProps<{
-  // Button text: "Menu" in the game, "Settings" on the start page (only language, help and settings there)
-  label?: string;
   // Frosted-glass size of the page headers (40px) instead of the small table button
   large?: boolean;
 }>(), {
-  label: 'Menu',
   large: false,
 });
 

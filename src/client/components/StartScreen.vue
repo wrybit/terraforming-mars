@@ -5,7 +5,7 @@
     <div class="start-screen-preloader-fill" :style="{width: `${loadProgress * 100}%`}"></div>
   </div>
   <!-- Settings menu (language, help, settings) at the top left; own class for the intro (start_intro.less) -->
-  <PageToolbar class="start-screen-toolbar" label="Settings"/>
+  <PageToolbar class="start-screen-toolbar"/>
   <div class="start-screen-links" :class="{'start-screen-links--globe': globeReady}">
     <div class="start-screen-header start-screen-link--title">
       <!-- Logo: own frame so the intro can move it as a whole -->

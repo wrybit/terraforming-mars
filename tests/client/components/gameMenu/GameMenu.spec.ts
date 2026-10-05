@@ -34,8 +34,8 @@ describe('GameMenu', () => {
   });
 
   it('outside the game only offers language, help and settings', async () => {
-    const wrapper = mount(GameMenu, {...globalConfig, props: {label: 'Settings'}, attachTo: document.body});
-    expect(wrapper.find('.game-menu-button').text()).contains('Settings');
+    const wrapper = mount(GameMenu, {...globalConfig, attachTo: document.body});
+    expect(wrapper.find('.game-menu-button').text()).contains('Setup');
     await wrapper.find('.game-menu-button').trigger('click');
     const dropdown = document.body.querySelector('.game-menu-dropdown');
     expect(dropdown?.querySelector('.game-menu-player')).is.null;
