@@ -1,13 +1,19 @@
 // Elements carrying v-flash, grouped by key, plus whether they are on screen right now.
 // A pending change blinks as soon as one of its elements becomes visible: immediately,
 // after switching to its tab, after scrolling to it, or when the browser tab comes back to front.
-import {isChangePending, markChangeSeen} from '@/client/utils/changeTracker';
-import {scheduleFlash} from '@/client/utils/changeFlashScheduler';
+import {isChangePending, markChangeSeen, previousValueOf} from '@/client/utils/changeTracker';
+import {scheduleEffect} from '@/client/utils/changeFlashScheduler';
+import {flashElement} from '@/client/utils/changeFlashAnimation';
+import {countElement} from '@/client/utils/changeFlashCount';
+
+// blink: light up with ripples; count / countSigned: the number counts from the old value (resources)
+export type FlashEffect = 'blink' | 'count' | 'countSigned';
 
 const elementsByKey = new Map<string, Set<HTMLElement>>();
 // One element can stand for several values (e.g. a goods cell: stock and production)
 const keysOfElement = new WeakMap<HTMLElement, ReadonlyArray<string>>();
 const visibleElements = new Set<HTMLElement>();
+const effectOfElement = new WeakMap<HTMLElement, FlashEffect>();
 let observer: IntersectionObserver | undefined;
 
 function intersectionObserver(): IntersectionObserver | undefined {
@@ -43,23 +49,33 @@ function revealVisibleChanges(): void {
     }
     const visible = Array.from(elements).filter((element) => visibleElements.has(element));
     if (visible.length > 0) {
+      const from = parseFloat(previousValueOf(key) ?? '');
       markChangeSeen(key);
-      // An element standing for several changed values (stock and production) blinks only once
+      // An element standing for several changed values blinks only once
       const fresh = visible.filter((element) => !flashed.has(element));
       fresh.forEach((element) => flashed.add(element));
       if (fresh.length > 0) {
-        scheduleFlash(fresh);
+        scheduleEffect((delayMs) => fresh.forEach((element) => runEffect(element, from, delayMs)));
       }
     }
   }
 }
 
-export function registerFlashElement(element: HTMLElement, keys: ReadonlyArray<string>): void {
+function runEffect(element: HTMLElement, from: number, delayMs: number): void {
+  const effect = effectOfElement.get(element) ?? 'blink';
+  const counted = effect !== 'blink' && countElement(element, from, effect === 'countSigned', delayMs);
+  if (!counted) {
+    flashElement(element, delayMs);
+  }
+}
+
+export function registerFlashElement(element: HTMLElement, keys: ReadonlyArray<string>, effect: FlashEffect = 'blink'): void {
   const observing = intersectionObserver();
   if (observing === undefined || keys.length === 0) {
     return;
   }
   keysOfElement.set(element, keys);
+  effectOfElement.set(element, effect);
   for (const key of keys) {
     let elements = elementsByKey.get(key);
     if (elements === undefined) {

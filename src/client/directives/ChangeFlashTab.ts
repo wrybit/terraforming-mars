@@ -4,7 +4,8 @@ import {Directive} from 'vue';
 import {FlashArea} from '@/client/utils/changeFlashKeys';
 import {markChangeAnnounced, markChangeSeen, unannouncedChanges} from '@/client/utils/changeTracker';
 import {hasFlashElement, isFlashElementVisible} from '@/client/utils/changeFlashRegistry';
-import {scheduleFlash} from '@/client/utils/changeFlashScheduler';
+import {scheduleEffect} from '@/client/utils/changeFlashScheduler';
+import {flashElement} from '@/client/utils/changeFlashAnimation';
 
 export type FlashTabBinding = {
   // Unique per tab: a change can sit behind several tabs, each blinks once for it
@@ -41,7 +42,7 @@ function announceHiddenChanges(tab: HTMLElement): void {
     }
   }
   if (hidden) {
-    scheduleFlash([tab]);
+    scheduleEffect((delayMs) => flashElement(tab, delayMs));
   }
 }
 

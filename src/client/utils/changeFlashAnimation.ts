@@ -26,7 +26,30 @@ function rippleRadius(element: HTMLElement, rect: DOMRect): string {
   return parseFloat(radius) > 0 ? radius : `${Math.min(rect.width, rect.height) / 2}px`;
 }
 
-// Ring as an own layer in the document: the element itself may sit in a container that clips overflow
+// Rotated elements (markers on the curved Mars scales) get the ring as a child: it then turns with
+// them and keeps their shape. All others get it as an own layer in the document, because they may
+// sit in a container that clips overflow.
+function placeRing(element: HTMLElement, ring: HTMLElement, rect: DOMRect): void {
+  const style = getComputedStyle(element);
+  if (style.transform !== 'none') {
+    if (style.position === 'static') {
+      element.style.position = 'relative';
+    }
+    Object.assign(ring.style, {position: 'absolute', inset: '0', borderRadius: 'inherit'});
+    element.appendChild(ring);
+    return;
+  }
+  Object.assign(ring.style, {
+    position: 'absolute',
+    left: `${rect.left + window.scrollX}px`,
+    top: `${rect.top + window.scrollY}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+    borderRadius: rippleRadius(element, rect),
+  });
+  document.body.appendChild(ring);
+}
+
 function ripple(element: HTMLElement, delayMs: number): void {
   const rect = element.getBoundingClientRect();
   if (rect.width === 0 && rect.height === 0) {
@@ -35,17 +58,11 @@ function ripple(element: HTMLElement, delayMs: number): void {
   const ring = document.createElement('div');
   ring.className = 'change-flash-ripple';
   Object.assign(ring.style, {
-    position: 'absolute',
-    left: `${rect.left + window.scrollX}px`,
-    top: `${rect.top + window.scrollY}px`,
-    width: `${rect.width}px`,
-    height: `${rect.height}px`,
-    borderRadius: rippleRadius(element, rect),
     outline: '3px solid rgba(255, 255, 255, 0.9)',
     pointerEvents: 'none',
     zIndex: '10000',
   });
-  document.body.appendChild(ring);
+  placeRing(element, ring, rect);
   const animation = ring.animate([
     {outlineOffset: '0px', outlineColor: 'rgba(255, 255, 255, 0.9)', boxShadow: '0 0 12px 2px rgba(255, 255, 255, 0.6)'},
     {outlineOffset: `${RIPPLE_SPREAD_PX}px`, outlineColor: 'rgba(255, 255, 255, 0)', boxShadow: '0 0 12px 2px rgba(255, 255, 255, 0)'},

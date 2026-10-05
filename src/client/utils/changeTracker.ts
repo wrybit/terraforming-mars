@@ -18,6 +18,8 @@ type Baseline = {
 type PendingChange = {
   // Tabs that already blinked for this change (a change can sit behind several tabs, e.g. screen and segment)
   announcedBy: Set<string>;
+  // Value before the first unseen change: numbers count up/down from here (changeFlashCount.ts)
+  previousValue: string | undefined;
 };
 
 let baseline: Baseline | undefined;
@@ -43,14 +45,21 @@ export function ingestView(view: ViewModel, source: ChangeSource): void {
     return;
   }
   for (const [key, value] of snapshot) {
-    if (previous.snapshot.get(key) !== value) {
-      pending.set(key, {announcedBy: new Set()});
+    const before = previous.snapshot.get(key);
+    if (before !== value) {
+      // Several unseen changes in a row: counting starts at what the viewer last saw
+      const previousValue = pending.get(key)?.previousValue ?? before;
+      pending.set(key, {announcedBy: new Set(), previousValue});
     }
   }
 }
 
 export function isChangePending(key: string): boolean {
   return pending.has(key);
+}
+
+export function previousValueOf(key: string): string | undefined {
+  return pending.get(key)?.previousValue;
 }
 
 export function markChangeSeen(key: string): void {
