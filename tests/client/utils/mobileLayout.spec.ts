@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {resolveMobileLayout} from '@/client/utils/mobileLayout';
-import {boardMaxHeight, cardColumns, choiceGridColumns, fitScale} from '@/client/utils/mobileFit';
+import {boardMaxHeight, cardColumns, cardGridColumns, choiceGridColumns, fitScale} from '@/client/utils/mobileFit';
 import {transposedCopy} from '@/client/utils/transposeTable';
 
 describe('mobileLayout', () => {
@@ -26,6 +26,14 @@ describe('mobileFit', () => {
     expect(choiceGridColumns(788, 10, true)).to.eq(3);
     expect(choiceGridColumns(1334, 5, false)).to.eq(3);
     expect(choiceGridColumns(1334, 4, false)).to.eq(2);
+  });
+
+  it('fills card selection rows like the hand cards, never with more columns than cards', () => {
+    expect(cardGridColumns(374, 9)).to.eq(2);
+    expect(cardGridColumns(788, 9)).to.eq(3);
+    expect(cardGridColumns(1334, 9)).to.eq(4);
+    expect(cardGridColumns(1334, 2)).to.eq(2);
+    expect(cardGridColumns(1334, 0)).to.eq(1);
   });
 
   it('scales items to fit the columns, never enlarging them', () => {

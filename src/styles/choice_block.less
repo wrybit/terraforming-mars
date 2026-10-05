@@ -1,5 +1,5 @@
 // Choice block (choiceBlock.ts): tiles and cards of a decision – milestones, awards,
-// standard projects, player and option tiles, buying cards – as a block as square as possible
+// standard projects, player and option tiles – as a block as square as possible (project cards: rows as wide as the box, see below)
 // (4 → 2×2, 5–6 → 3×2) centered in the tab box: always horizontally, vertically where the box has a fixed height
 // (player_home_fixed.less). Each tile as wide as a project card, gaps as between cards.
 // Mobile (below): tiles keep their size, the block likewise sits centered in the remaining space below the card intro.
@@ -63,6 +63,21 @@ html:not(.tm-mobile) {
     // Title, hints, payment area and buttons of a card selection sit on their own line above or below the block
     &:has(> .cardbox, > .payments_cards) > :not(.cardbox, .payments_cards) {
       flex: 0 0 100%;
+    }
+
+    // Project cards (build, sell, buy, draft, CEO …): no square block, but as many cards per row as fit
+    // into the tab box – like the hand cards. auto-fit + center: few cards stay one centered row,
+    // many cards fill the full width. Standard projects keep the square block (decision tiles).
+    &:has(> .cardbox, > .payments_cards):not(:has(.card-standard-project)) {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, @choice-tile-width);
+      justify-content: center;
+      align-items: start;
+      width: 100%;
+
+      > :not(.cardbox, .payments_cards) {
+        grid-column: 1 / -1;
+      }
     }
   }
 

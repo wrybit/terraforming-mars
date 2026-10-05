@@ -61,11 +61,29 @@ export function choiceGridColumns(width: number, count: number, portrait: boolea
 // Choice grid: standard projects and card selection (draft, buy cards, select card); one label per card in the block
 const STANDARD_PROJECT_LIST = '.payments_cont';
 const CARD_CHOICE_LIST = '.wf-component--select-card.choice-block';
+
+/* Number of choices (one label each) in the list around `element`. */
+function choiceCount(element: HTMLElement, listSelector: string): number {
+  return element.closest(listSelector)?.querySelectorAll(':scope > label').length ?? 1;
+}
+
 function choiceGridColumnsFor(listSelector: string) {
   return (listWidth: number, element: HTMLElement): number => {
-    const count = element.closest(listSelector)?.querySelectorAll(':scope > label').length ?? 1;
+    const count = choiceCount(element, listSelector);
     return choiceGridColumns(listWidth, count, isPortrait());
   };
+}
+
+/*
+ * Card selection (draft, buy, sell …): no square block, but as many cards per row as fit – like the hand cards;
+ * with fewer cards than that, only as many columns as cards, so the block stays centered.
+ */
+export function cardGridColumns(width: number, count: number): number {
+  return Math.max(1, Math.min(cardColumns(width), count));
+}
+
+function cardGridColumnsFor(listSelector: string) {
+  return (listWidth: number, element: HTMLElement): number => cardGridColumns(listWidth, choiceCount(element, listSelector));
 }
 
 function isPortrait(): boolean {
@@ -116,7 +134,7 @@ const RULES: ReadonlyArray<FitRule> = [
     selector: `.mb-screen--turn ${CARD_CHOICE_LIST} > label > .card-container`,
     exclude: '.setup-column-body',
     when: isPortrait,
-    columns: choiceGridColumnsFor(CARD_CHOICE_LIST),
+    columns: cardGridColumnsFor(CARD_CHOICE_LIST),
     choiceGap: CHOICE_GAP,
     grid: CARD_CHOICE_LIST,
   },
@@ -124,7 +142,7 @@ const RULES: ReadonlyArray<FitRule> = [
   {
     selector: `.mb-screen--turn ${CARD_CHOICE_LIST}:has(> .select-card-toolbar) > label > .card-container`,
     exclude: '.setup-column-body',
-    columns: choiceGridColumnsFor(CARD_CHOICE_LIST),
+    columns: cardGridColumnsFor(CARD_CHOICE_LIST),
     choiceGap: CHOICE_GAP,
     grid: CARD_CHOICE_LIST,
   },
