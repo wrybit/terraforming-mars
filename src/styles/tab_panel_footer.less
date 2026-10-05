@@ -117,7 +117,7 @@ html.tm-mobile .or-tab-footer > .or-tab-footer-hint {
   flex-direction: column;
 }
 
-.or-tab-panel--centered-button .or-tab-footer {
+.or-tab-panel--centered-button .or-tab-footer:not(.or-tab-footer--bar) {
   position: static;
   flex: 1 1 auto;
   min-height: 120px;
@@ -142,7 +142,7 @@ html.tm-mobile .or-tab-footer > .or-tab-footer-hint {
 
 // Narrow layout: the box is only as tall as its content – button directly below the intro, with spacing
 @media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
-  .or-tab-panel--centered-button .or-tab-footer {
+  .or-tab-panel--centered-button .or-tab-footer:not(.or-tab-footer--bar) {
     min-height: 0;
     margin-top: 16px;
   }
@@ -163,10 +163,9 @@ html.tm-mobile .or-tab-footer > .or-tab-footer-hint {
   box-shadow: none;
 }
 
-// Box with a single centered button (raise temperature …): Cancel right next to it, the pair stays centered,
-// same size as the main button (both submit buttons); quiet colours also against the tab tone (or_tab_tones.less)
+// Box with a single centered button (raise temperature …): Cancel in its own footer bar at the bottom
+// (.or-tab-footer--bar); quiet colours also against the tab tone (or_tab_tones.less)
 .or-tab-panel.or-tab-panel--centered-button .or-tab-footer > .btn.cancel-action-button {
-  margin: 0;
   background: rgba(255, 255, 255, 0.1) !important;
   border-color: rgba(255, 255, 255, 0.25) !important;
   color: #eceef6 !important;

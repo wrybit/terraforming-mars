@@ -131,13 +131,16 @@
       <div v-if="asTabs" v-show="!handTabActive" :id="footerId" class="or-tab-footer">
         <!-- Cancel an action that is still only a plan: left in the footer (cancelAction.ts) -->
         <CancelActionButton/>
-        <!-- Tab with a single button (raise temperature …): nothing has happened yet, Cancel just leaves the tab -->
-        <AppButton v-if="!handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption) && !isEndTab(selectedOption.title)"
-          class="cancel-action-button" :title="$t('Cancel')" @click="handTabActive = true"/>
         <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabToneClass('or-tab-save--', selectedOption)]">
           <!-- Disabled while the selected option has no valid selection yet (e.g. no card chosen) -->
           <AppButton :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid || awaitingCeo" @click="saveData" />
         </div>
+      </div>
+      <!-- Tab with a single centered button (raise temperature …): nothing has happened yet, Cancel just leaves the tab.
+           Own footer bar at the bottom like everywhere else; the centered button keeps its place above it -->
+      <div v-if="asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption) && !isEndTab(selectedOption.title)"
+        class="or-tab-footer or-tab-footer--bar">
+        <AppButton class="cancel-action-button" :title="$t('Cancel')" @click="handTabActive = true"/>
       </div>
     </div>
   </div>
