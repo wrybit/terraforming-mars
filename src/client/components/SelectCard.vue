@@ -45,7 +45,7 @@
                  discarding remains so the game can go on -->
             <template v-if="cannotAfford">
               <span class="select-card-unaffordable" v-i18n="affordNote">Not enough money: a card costs ${0} M€, you only have ${1} M€</span>
-              <AppButton :disabled="true" type="submit" :title="$t('Buy')" />
+              <AppButton :disabled="true" type="submit" :title="$t('Buy')" class="btn-tone-success" />
               <AppButton type="submit" @click="saveData" :title="$t('Discard')" class="btn-tone-danger" />
             </template>
             <AppButton v-else :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
