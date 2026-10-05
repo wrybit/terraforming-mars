@@ -266,7 +266,8 @@ export default defineComponent({
       return this.playerView.thisPlayer.actionsThisGeneration.includes(card.name);
     },
     buttonLabel(): string | Message {
-      if (this.selectOnlyOneCard) {
+      // Never "Buy 0": without a selection only the action, the number only counts chosen cards
+      if (this.selectOnlyOneCard || this.cardsSelected() === 0) {
         return this.playerinput.buttonLabel;
       }
       return {
