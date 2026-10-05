@@ -3,15 +3,16 @@
 // Brightness plus glow, because most values are white text on dark ground – brightness alone would
 // not change them. drop-shadow follows the element's shape, so hexagon tiles glow as hexagons.
 import {prefersReducedMotion, supportsWebAnimations} from '@/client/utils/motion';
+import {FlashTone, toneColor} from '@/client/utils/changeFlashTone';
 
 const PULSES = 3;
 const PULSE_MS = 420;
-const OFF = 'brightness(1) drop-shadow(0 0 0 rgba(255, 255, 255, 0))';
-const ON = 'brightness(2.2) drop-shadow(0 0 14px rgb(255, 255, 255))';
 // How far the ring travels outwards, independent of the element size (a colony card ripples as far as a number)
 const RIPPLE_SPREAD_PX = 18;
 
-function pulse(element: HTMLElement, delayMs: number): void {
+function pulse(element: HTMLElement, tone: FlashTone, delayMs: number): void {
+  const OFF = `brightness(1) drop-shadow(0 0 0 ${toneColor(tone, 0)})`;
+  const ON = `brightness(${tone === 'loss' ? 1.4 : 2.2}) drop-shadow(0 0 14px ${toneColor(tone)})`;
   element.animate([
     {filter: OFF, offset: 0},
     {filter: ON, offset: 0.35},
@@ -50,7 +51,7 @@ function placeRing(element: HTMLElement, ring: HTMLElement, rect: DOMRect): void
   document.body.appendChild(ring);
 }
 
-function ripple(element: HTMLElement, delayMs: number): void {
+function ripple(element: HTMLElement, tone: FlashTone, delayMs: number): void {
   const rect = element.getBoundingClientRect();
   if (rect.width === 0 && rect.height === 0) {
     return;
@@ -58,26 +59,26 @@ function ripple(element: HTMLElement, delayMs: number): void {
   const ring = document.createElement('div');
   ring.className = 'change-flash-ripple';
   Object.assign(ring.style, {
-    outline: '3px solid rgba(255, 255, 255, 0.9)',
+    outline: `3px solid ${toneColor(tone, 0.9)}`,
     pointerEvents: 'none',
     zIndex: '10000',
   });
   placeRing(element, ring, rect);
   const animation = ring.animate([
-    {outlineOffset: '0px', outlineColor: 'rgba(255, 255, 255, 0.9)', boxShadow: '0 0 12px 2px rgba(255, 255, 255, 0.6)'},
-    {outlineOffset: `${RIPPLE_SPREAD_PX}px`, outlineColor: 'rgba(255, 255, 255, 0)', boxShadow: '0 0 12px 2px rgba(255, 255, 255, 0)'},
+    {outlineOffset: '0px', outlineColor: toneColor(tone, 0.9), boxShadow: `0 0 12px 2px ${toneColor(tone, 0.6)}`},
+    {outlineOffset: `${RIPPLE_SPREAD_PX}px`, outlineColor: toneColor(tone, 0), boxShadow: `0 0 12px 2px ${toneColor(tone, 0)}`},
   ], {duration: PULSE_MS, delay: delayMs, iterations: PULSES, easing: 'ease-out', fill: 'backwards'});
   animation.onfinish = () => ring.remove();
   animation.oncancel = () => ring.remove();
 }
 
-export function flashElement(element: HTMLElement, delayMs: number): void {
+export function flashElement(element: HTMLElement, delayMs: number, tone: FlashTone = 'gain'): void {
   if (!supportsWebAnimations(element)) {
     return;
   }
-  pulse(element, delayMs);
+  pulse(element, tone, delayMs);
   // Reduced motion: lighting up only, no moving ring
   if (!prefersReducedMotion()) {
-    ripple(element, delayMs);
+    ripple(element, tone, delayMs);
   }
 }

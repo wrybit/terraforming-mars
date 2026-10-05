@@ -1,10 +1,9 @@
 // Numbers (resources, TR, points, counters) don't blink: the number counts from the old to the new value, so the
 // viewer sees how much was spent or gained. The number glows while counting.
 import {supportsWebAnimations} from '@/client/utils/motion';
+import {toneColor, toneOf} from '@/client/utils/changeFlashTone';
 
 const DURATION_MS = 2000;
-const GLOW = 'brightness(1.6) drop-shadow(0 0 8px rgb(255, 255, 255))';
-const NO_GLOW = 'brightness(1) drop-shadow(0 0 0 rgba(255, 255, 255, 0))';
 
 // The text node Vue renders the number into. Its value is changed in place, so Vue's
 // reference to the node stays valid; at the end it holds exactly what Vue rendered.
@@ -56,7 +55,16 @@ export function countElement(element: HTMLElement, from: number, signed: boolean
   textNode.nodeValue = format(from);
 
   if (supportsWebAnimations(element)) {
+    // Counting down glows orange-red like every loss
+    const tone = toneOf(`${from}`, `${to}`);
+    const GLOW = `brightness(${tone === 'loss' ? 1.3 : 1.6}) drop-shadow(0 0 8px ${toneColor(tone)})`;
+    const NO_GLOW = `brightness(1) drop-shadow(0 0 0 ${toneColor(tone, 0)})`;
     element.animate([{filter: GLOW}, {filter: GLOW, offset: 0.8}, {filter: NO_GLOW}], {duration: DURATION_MS, delay: delayMs, fill: 'backwards'});
+    if (tone === 'loss') {
+      // The digits themselves turn orange-red while counting down, a glow alone is too subtle on white text
+      const color = toneColor(tone);
+      element.animate([{color}, {color, offset: 0.8}, {}], {duration: DURATION_MS, delay: delayMs, fill: 'backwards'});
+    }
   }
   let start: number | undefined;
   const step = (now: number) => {

@@ -4,6 +4,7 @@
 import {ViewModel} from '@/common/models/PlayerModel';
 import {ChangeSnapshot, changeSnapshot} from '@/client/utils/changeFlashSnapshot';
 import {FlashArea, flashAreaOf} from '@/client/utils/changeFlashKeys';
+import {FlashTone, toneOf} from '@/client/utils/changeFlashTone';
 
 // own: answer to the viewer's own input (their own changes must not blink);
 // remote: update polled because someone else acted
@@ -20,6 +21,8 @@ type PendingChange = {
   announcedBy: Set<string>;
   // Value before the first unseen change: numbers count up/down from here (changeFlashCount.ts)
   previousValue: string | undefined;
+  // Latest value: together with previousValue it tells gain from loss (changeFlashTone.ts)
+  currentValue: string;
 };
 
 let baseline: Baseline | undefined;
@@ -49,13 +52,18 @@ export function ingestView(view: ViewModel, source: ChangeSource): void {
     if (before !== value) {
       // Several unseen changes in a row: counting starts at what the viewer last saw
       const previousValue = pending.get(key)?.previousValue ?? before;
-      pending.set(key, {announcedBy: new Set(), previousValue});
+      pending.set(key, {announcedBy: new Set(), previousValue, currentValue: value});
     }
   }
 }
 
 export function isChangePending(key: string): boolean {
   return pending.has(key);
+}
+
+export function changeToneOf(key: string): FlashTone {
+  const change = pending.get(key);
+  return toneOf(change?.previousValue, change?.currentValue);
 }
 
 export function previousValueOf(key: string): string | undefined {

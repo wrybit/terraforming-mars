@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {Resource} from '@/common/Resource';
 import {flashAreaOf, flashKeys} from '@/client/utils/changeFlashKeys';
-import {ingestView, isChangePending, markChangeAnnounced, markChangeSeen, resetChangeTracker, unannouncedChanges} from '@/client/utils/changeTracker';
+import {changeToneOf, ingestView, isChangePending, markChangeAnnounced, markChangeSeen, resetChangeTracker, unannouncedChanges} from '@/client/utils/changeTracker';
 import {fakeGameModel, fakePublicPlayerModel, fakeViewModel} from '../components/testHelpers';
 
 function view(megacredits: number, temperature = -30, generation = 1): ViewModel {
@@ -61,5 +61,19 @@ describe('changeTracker', () => {
     expect(unannouncedChanges('segment', ['players'])).to.deep.eq([megacreditsKey]);
     markChangeSeen(megacreditsKey);
     expect(isChangePending(megacreditsKey)).is.false;
+  });
+
+  it('tells losses from gains', () => {
+    ingestView(view(10, -30), 'remote');
+    ingestView(view(8, -28), 'remote');
+    expect(changeToneOf(megacreditsKey)).to.eq('loss');
+    expect(changeToneOf(temperatureKey)).to.eq('gain');
+  });
+
+  it('several unseen changes: tone compares with what the viewer last saw', () => {
+    ingestView(view(10), 'remote');
+    ingestView(view(8), 'remote');
+    ingestView(view(12), 'remote');
+    expect(changeToneOf(megacreditsKey)).to.eq('gain');
   });
 });

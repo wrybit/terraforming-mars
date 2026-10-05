@@ -1,7 +1,8 @@
 // Elements carrying v-flash, grouped by key, plus whether they are on screen right now.
 // A pending change blinks as soon as one of its elements becomes visible: immediately,
 // after switching to its tab, after scrolling to it, or when the browser tab comes back to front.
-import {isChangePending, markChangeSeen, previousValueOf} from '@/client/utils/changeTracker';
+import {changeToneOf, isChangePending, markChangeSeen, previousValueOf} from '@/client/utils/changeTracker';
+import {FlashTone} from '@/client/utils/changeFlashTone';
 import {scheduleEffect} from '@/client/utils/changeFlashScheduler';
 import {flashElement} from '@/client/utils/changeFlashAnimation';
 import {countElement} from '@/client/utils/changeFlashCount';
@@ -50,22 +51,23 @@ function revealVisibleChanges(): void {
     const visible = Array.from(elements).filter((element) => visibleElements.has(element));
     if (visible.length > 0) {
       const from = parseFloat(previousValueOf(key) ?? '');
+      const tone = changeToneOf(key);
       markChangeSeen(key);
       // An element standing for several changed values blinks only once
       const fresh = visible.filter((element) => !flashed.has(element));
       fresh.forEach((element) => flashed.add(element));
       if (fresh.length > 0) {
-        scheduleEffect((delayMs) => fresh.forEach((element) => runEffect(element, from, delayMs)));
+        scheduleEffect((delayMs) => fresh.forEach((element) => runEffect(element, from, tone, delayMs)));
       }
     }
   }
 }
 
-function runEffect(element: HTMLElement, from: number, delayMs: number): void {
+function runEffect(element: HTMLElement, from: number, tone: FlashTone, delayMs: number): void {
   const effect = effectOfElement.get(element) ?? 'blink';
   const counted = effect !== 'blink' && countElement(element, from, effect === 'countSigned', delayMs);
   if (!counted) {
-    flashElement(element, delayMs);
+    flashElement(element, delayMs, tone);
   }
 }
 
