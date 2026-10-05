@@ -310,8 +310,8 @@
 
 .stats-entity-icon {
   flex-shrink: 0;
-  transform: scale(0.7);
-  margin: -6px -4px;
+  // Real zoom instead of transform: the layout width shrinks too, so every icon starts flush left
+  --ma-table-icon-zoom: 0.7;
 }
 
 .stats-player {
@@ -606,6 +606,14 @@ each(@players, {
     background: @create-game-surface-strong;
     backdrop-filter: blur(6px);
   }
+}
+
+// Corporation takes the remaining width and is cut off with "…", so the row never leaves the card
+.stats-record-corporations {
+  width: 100%;
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 // Several corporations (Merger) side by side
