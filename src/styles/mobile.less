@@ -2564,4 +2564,43 @@ html.tm-mobile #game-end {
   .board-cont {
     margin: 0;
   }
+
+  // Solo on tablet landscape: end picture (60 %) and Mars (40 %) side by side in the first row,
+  // so the picture does not take the whole width; all other boxes keep the full width below
+  @media @mb-landscape {
+    &:has(.game-end-solo) {
+      .game-end-columns {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+        gap: 12px;
+      }
+
+      .game-end-columns__main,
+      .game-end-columns__side {
+        display: contents;
+      }
+
+      .game-end-columns__main > *,
+      .game-end-columns__side > * {
+        grid-column: 1 / -1;
+      }
+
+      .game-end-columns__main > .game-end-solo {
+        grid-row: 1;
+        grid-column: 1;
+      }
+
+      // Same height as the picture card; Mars sits centered in the space below the heading
+      .game-end-columns__side > .game_end_block--board {
+        grid-row: 1;
+        grid-column: 2;
+        display: flex;
+        flex-direction: column;
+
+        > .board-cont {
+          margin-block: auto;
+        }
+      }
+    }
+  }
 }
