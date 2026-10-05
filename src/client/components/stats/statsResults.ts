@@ -1,6 +1,7 @@
 import {StatsGame, StatsPlayerDetails} from '@/common/stats/StatsGame';
 import {AdminPlayerSummary} from '@/common/admin/AdminGameSummary';
 import {Color} from '@/common/Color';
+import {lineupKey} from '@/client/components/admin/winCounts';
 
 /** A player in a game – the unit by which almost all metrics are counted. */
 export type StatsPlayerResult = {
@@ -90,4 +91,19 @@ export function totalTimeSeconds(game: StatsGame): number | undefined {
     return undefined;
   }
   return players.reduce((sum, player) => sum + (player.timeSeconds ?? 0), 0);
+}
+
+/** Avg. game length per line-up – only finished games whose total time is known. */
+export function averageTimeByLineup(games: ReadonlyArray<StatsGame>): Map<string, number | undefined> {
+  const times = new Map<string, Array<number>>();
+  for (const game of games.filter((candidate) => candidate.summary.isFinished)) {
+    const key = lineupKey(game.summary);
+    const seconds = totalTimeSeconds(game);
+    const list = times.get(key) ?? [];
+    if (seconds !== undefined) {
+      list.push(seconds);
+    }
+    times.set(key, list);
+  }
+  return new Map(Array.from(times.entries()).map(([key, list]) => [key, average(list)]));
 }

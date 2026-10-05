@@ -19,16 +19,20 @@
       <div class="stats-lineups">
         <div v-for="lineup in lineups" :key="lineup.lineup">
           <h3>{{ lineup.lineup }} <span class="stats-dim">· {{ lineup.games }} <span v-i18n>games</span></span></h3>
-          <div class="stats-wins">
-            <a v-for="count in lineup.counts" :key="count.name" :href="playerHref(count.name)" data-stats-link class="stats-win" :class="`player_translucent_bg_color_${colorOf(count.name)}`">
-              <span class="stats-win-number">{{ count.wins }}</span>
-              <span class="stats-win-name">{{ count.name }}</span>
-            </a>
+          <!-- Averages right of the tiles: plenty of room sideways, the cards below should stay in view -->
+          <div class="stats-lineup-body">
+            <div class="stats-wins">
+              <a v-for="count in lineup.counts" :key="count.name" :href="playerHref(count.name)" data-stats-link class="stats-win" :class="`player_translucent_bg_color_${colorOf(count.name)}`">
+                <span class="stats-win-number">{{ count.wins }}</span>
+                <span class="stats-win-name">{{ count.name }}</span>
+              </a>
+            </div>
+            <dl class="stats-averages">
+              <dt v-i18n>Avg. generations</dt><dd>{{ formatNumber(lineup.averageGenerations) }}</dd>
+              <dt v-i18n>Avg. winner points</dt><dd>{{ formatNumber(lineup.averageWinnerPoints, 0) }}</dd>
+              <dt v-i18n>Avg. game length</dt><dd>{{ formatDuration(lineupTimes.get(lineup.lineup)) }}</dd>
+            </dl>
           </div>
-          <p class="stats-averages">
-            <span><span v-i18n>Avg. generations</span> <strong>{{ formatNumber(lineup.averageGenerations) }}</strong></span>
-            <span><span v-i18n>Avg. winner points</span> <strong>{{ formatNumber(lineup.averageWinnerPoints, 0) }}</strong></span>
-          </p>
         </div>
       </div>
     </section>
@@ -65,9 +69,9 @@ import StatsLineChart from './StatsLineChart.vue';
 import StatsBarChart from './StatsBarChart.vue';
 import StatsShowcase from './StatsShowcase.vue';
 import {EntityStats, mostPlayed} from './statsAggregate';
-import {average, playerNames, StatsPlayerResult} from './statsResults';
+import {average, averageTimeByLineup, playerNames, StatsPlayerResult} from './statsResults';
 import {gamesByGeneration} from './statsRecords';
-import {formatDate, formatNumber} from './statsLabels';
+import {formatDate, formatDuration, formatNumber} from './statsLabels';
 import {averageGlobalsByGeneration, averagePointsByGeneration} from './statsSeries';
 import {statsHref, StatsTopKind} from './statsNavigation';
 import {SHOWCASE_SIZE, SHOWCASE_TITLES} from './statsShowcase';
@@ -143,6 +147,9 @@ export default defineComponent({
     lineups(): Array<LineupWinCounts> {
       return winCountsByLineup(this.games.map((game) => game.summary));
     },
+    lineupTimes(): Map<string, number | undefined> {
+      return averageTimeByLineup(this.games);
+    },
     names(): Array<string> {
       return playerNames(this.games);
     },
@@ -155,6 +162,7 @@ export default defineComponent({
   },
   methods: {
     formatNumber,
+    formatDuration,
     // Most frequent first, on a tie the more successful one
     topHref(kind: StatsTopKind): string {
       return statsHref({type: 'top', kind});

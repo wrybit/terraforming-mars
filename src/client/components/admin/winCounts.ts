@@ -18,6 +18,11 @@ export type LineupWinCounts = {
 
 type LineupTotals = LineupWinCounts & {generationSum: number, generationGames: number, winnerPointSum: number, winnerGames: number};
 
+/** Key of a line-up – alphabetical, so the same line-up coincides regardless of turn order. */
+export function lineupKey(summary: Pick<AdminGameSummary, 'players'>): string {
+  return Array.from(new Set(summary.players.map((player) => player.name))).sort((first, second) => first.localeCompare(second)).join(' vs ');
+}
+
 function average(sum: number, count: number): number | undefined {
   return count === 0 ? undefined : sum / count;
 }
@@ -30,9 +35,8 @@ function average(sum: number, count: number): number | undefined {
 export function winCountsByLineup(summaries: ReadonlyArray<AdminGameSummary>): Array<LineupWinCounts> {
   const lineups = new Map<string, LineupTotals>();
   for (const summary of summaries.filter((candidate) => candidate.isFinished)) {
-    // Alphabetical, so the same line-up coincides regardless of turn order
-    const names = Array.from(new Set(summary.players.map((player) => player.name))).sort((first, second) => first.localeCompare(second));
-    const key = names.join(' vs ');
+    const key = lineupKey(summary);
+    const names = key.split(' vs ');
     const lineup = lineups.get(key) ?? {
       lineup: key, games: 0, counts: names.map((name) => ({name, wins: 0})), averageGenerations: undefined, averageWinnerPoints: undefined,
       generationSum: 0, generationGames: 0, winnerPointSum: 0, winnerGames: 0,

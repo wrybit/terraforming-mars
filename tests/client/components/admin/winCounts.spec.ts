@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {winCountsByLineup} from '@/client/components/admin/winCounts';
+import {lineupKey, winCountsByLineup} from '@/client/components/admin/winCounts';
 import {AdminGameSummary} from '@/common/admin/AdminGameSummary';
 
 describe('winCountsByLineup', () => {
@@ -25,5 +25,11 @@ describe('winCountsByLineup', () => {
     const [lineup] = winCountsByLineup([known, unknown]);
     expect(lineup.averageGenerations).eq(12);
     expect(lineup.averageWinnerPoints).eq(80);
+  });
+
+  it('line-up key ignores turn order', () => {
+    const players = (...names: Array<string>) => ({players: names.map((name) => ({name}))}) as AdminGameSummary;
+    expect(lineupKey(players('Martin', 'Daniel', 'Jens'))).eq('Daniel vs Jens vs Martin');
+    expect(lineupKey(players('Jens', 'Daniel'))).eq(lineupKey(players('Daniel', 'Jens')));
   });
 });

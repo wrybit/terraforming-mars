@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {sampleGames} from './statsFixtures';
-import {allPlayerResults, playerColors, totalTimeSeconds} from '@/client/components/stats/statsResults';
+import {allPlayerResults, averageTimeByLineup, playerColors, totalTimeSeconds} from '@/client/components/stats/statsResults';
 import {aggregate, entityStats} from '@/client/components/stats/statsAggregate';
 import {emptyFilters, filterGames, filterGroups, optionCounts} from '@/client/components/stats/statsFilter';
 import {toggleOption} from '@/client/components/cardlist/filterSelection';
@@ -147,5 +147,11 @@ describe('stats logic', () => {
     expect(totalTimeSeconds(screenshotOnly)).is.undefined;
     const partial = {...threePlayers, details: {...threePlayers.details!, players: threePlayers.details!.players.map((player, index) => index === 0 ? {...player, timeSeconds: undefined} : player)}};
     expect(totalTimeSeconds(partial)).is.undefined;
+  });
+
+  it('average game length per line-up', () => {
+    const times = averageTimeByLineup(games);
+    expect(times.get('Daniel vs Jens vs Martin')).eq(5400);
+    expect(times.get('Daniel vs Jens')).eq(3600);
   });
 });

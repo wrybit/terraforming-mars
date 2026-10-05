@@ -188,6 +188,13 @@
   gap: 16px 32px;
 }
 
+.stats-lineup-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
 .stats-wins {
   display: flex;
   flex-wrap: wrap;
@@ -205,8 +212,9 @@
   text-decoration: none;
 }
 
+// White instead of gold: gold stays reserved for best values
 .stats-win-number {
-  color: @stats-winner;
+  color: #fff;
   font-size: 26px;
   font-weight: bold;
   line-height: 1.1;
@@ -217,16 +225,26 @@
   font-weight: 500;
 }
 
+// Label/value pairs as a small table: values on one axis
 .stats-averages {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 12px;
-  margin: 4px 0 0;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2px 8px;
+  margin: 0;
   color: @create-game-dim;
   font-size: 12px;
+  line-height: 1.35;
 
-  strong {
+  dt {
+    white-space: nowrap;
+  }
+
+  dd {
+    margin: 0;
     color: #eee;
+    font-weight: bold;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
   }
 }
 
