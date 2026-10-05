@@ -1,10 +1,10 @@
-// The blink itself: the element lights up five times, and with every flash a ring ripples outwards
+// The blink itself: the element lights up three times, and with every flash a ring ripples outwards
 // like a drop in water, so the change catches the eye even at the edge of the screen.
 // Brightness plus glow, because most values are white text on dark ground – brightness alone would
 // not change them. drop-shadow follows the element's shape, so hexagon tiles glow as hexagons.
 import {prefersReducedMotion, supportsWebAnimations} from '@/client/utils/motion';
 
-const PULSES = 5;
+const PULSES = 3;
 const PULSE_MS = 420;
 const OFF = 'brightness(1) drop-shadow(0 0 0 rgba(255, 255, 255, 0))';
 const ON = 'brightness(2.2) drop-shadow(0 0 14px rgb(255, 255, 255))';
