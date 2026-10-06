@@ -181,8 +181,10 @@
 @board-outer-inset: 14px;
 
 .board-tabs-mars {
+  // !important: the cropped mobile Mars (mobile.less, .mb-mars-cropped) pins the container and the
+  // Phobos/Ganymede spaces with !important for the zoom view
   .board-outer-spaces {
-    position: static;
+    position: static !important;
   }
 
   .board-outer-group {
@@ -192,6 +194,7 @@
     flex-direction: column;
     gap: 4px;
     width: 64px;
+    pointer-events: auto;
   }
 
   .board-outer-group--top-left { left: @board-outer-inset; top: @board-outer-inset; }
@@ -223,8 +226,11 @@
 
   // Space: hex on top, short name below instead of the board positions
   .board-outer-group > .board-space {
-    position: relative;
-    margin: 0;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    margin: 0 !important;
+    pointer-events: auto;
     width: 64px;
     height: auto;
     clip-path: none;
