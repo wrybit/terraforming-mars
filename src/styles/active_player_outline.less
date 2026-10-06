@@ -72,6 +72,24 @@
   }
 }
 
+// Without a timer (e.g. Escape Velocity shows its own time bar): the blinking dot alone marks the active player,
+// an empty status (no label, no timer) disappears instead of leaving an empty frame
+.player-action-status-container.no-timer:has(> .visibility-hidden:only-child) {
+  display: none;
+}
+
+.player-action-status-container--active.no-timer:not(:has(.player-action-status:not(.visibility-hidden)))::before {
+  content: "";
+  display: block;
+  width: @active-player-status-dot-size;
+  height: @active-player-status-dot-size;
+  margin: 4px;
+  border-radius: 50%;
+  background: @active-player-outline-color;
+  box-shadow: 0 0 @active-player-status-dot-glow @active-player-outline-color;
+  animation: active-player-outline-blink @active-player-outline-period ease-in-out infinite;
+}
+
 // Anyone who enabled "reduce motion" in the system gets static markers
 @media (prefers-reduced-motion: reduce) {
   .player-home--acting::after,

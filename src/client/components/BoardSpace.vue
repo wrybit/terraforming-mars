@@ -7,9 +7,7 @@
     />
     <div class="board-space-text" v-if="text" v-i18n>{{ text }}</div>
     <Bonus :bonus="space.bonus" v-if="showBonus"/>
-    <template v-if="tileView === 'coords'">
-      <div class="board-space-coords">{{ getSpaceName(space.id) }}</div>
-    </template>
+    <div v-if="tileView === 'coords' && spaceCoordinate(space.id) !== undefined" class="board-space-coords">{{ spaceCoordinate(space.id) }}</div>
     <template v-if="tileView === 'show'">
       <div :class="playerColorCss" v-if="space.color !== undefined"></div>
       <template v-if="space.gagarin !== undefined">
@@ -42,7 +40,7 @@ import {TileView} from '@/client/components/board/TileView';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import {getPreferences} from '../utils/PreferencesManager';
 import {ClaimedToken} from '@/common/underworld/UnderworldPlayerData';
-import {getSpaceName} from '@/common/boards/spaces';
+import {spaceCoordinate} from '@/client/components/board/spaceCoordinate';
 import {SpaceType} from '@/common/boards/SpaceType';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
@@ -87,6 +85,10 @@ export default defineComponent({
       return css;
     },
     showBonus(): boolean {
+      // Coordinates view: only the coordinate in the middle of the hex
+      if (this.tileView === 'coords') {
+        return false;
+      }
       if (this.tileView === 'hide') {
         return true;
       }
@@ -106,8 +108,8 @@ export default defineComponent({
       return {token: this.space.undergroundResource, shelter: false, active: false};
     },
 
-    getSpaceName(): typeof getSpaceName {
-      return getSpaceName;
+    spaceCoordinate(): typeof spaceCoordinate {
+      return spaceCoordinate;
     },
     SpaceType(): typeof SpaceType {
       return SpaceType;
