@@ -790,9 +790,10 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
     min-height: 0;
   }
 
+  // Leader seat stays centred like in the wide layout; seated delegates follow right of it
   .select-party__leader {
     grid-area: people;
-    justify-self: start;
+    justify-self: center;
   }
 
   .select-party__seats {
@@ -800,7 +801,7 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
     align-self: center;
     justify-content: flex-start;
     max-width: none;
-    margin-left: 40px;
+    padding-left: calc(50% + 22px);
   }
 
   .select-party__rule {
