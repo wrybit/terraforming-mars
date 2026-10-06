@@ -36,13 +36,19 @@ const PLANET_FILE: Record<ColonyName, string> = {
 };
 
 // Where the disc lies in the photo (centre x/y and diameter as shares of the picture width/height), measured once:
-// the photo is enlarged and moved so the disc fills the round frame exactly. Missing = whole picture.
+// the photo is enlarged and moved so the disc fills the round frame exactly. Missing = whole picture (square photos only).
+// Disc cut off by the photo edge (Ganymede, Io): a concentric, smaller circle, so no empty corner shows in the frame.
+// Scenes without a disc (Kuiper, Leavitt): centred square crop, so the photo is not squashed.
 const PLANET_FIT: Partial<Record<string, readonly [number, number, number, number]>> = {
   'callisto.png': [0.502, 0.498, 0.870, 0.870],
   'enceladus.png': [0.490, 0.497, 0.860, 0.860],
   'europa.png': [0.500, 0.500, 0.791, 0.791],
-  'ganymede.jpg': [0.622, 0.497, 0.985, 0.985],
-  'io.jpg': [0.618, 0.463, 0.876, 0.876],
+  'ceres.png': [0.518, 0.488, 0.892, 0.975],
+  'deimos.jpg': [0.485, 0.495, 0.939, 0.989],
+  'ganymede.jpg': [0.622, 0.497, 0.756, 0.756],
+  'io.jpg': [0.618, 0.463, 0.764, 0.764],
+  'kuiper.jpg': [0.5, 0.5, 0.75, 1],
+  'leavitt.jpg': [0.5, 0.5, 0.659, 1],
   'luna.jpg': [0.518, 0.503, 0.830, 0.864],
   'mercury.jpg': [0.502, 0.501, 0.903, 0.932],
   'miranda.jpg': [0.514, 0.515, 0.868, 0.834],
