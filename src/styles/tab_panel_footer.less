@@ -171,3 +171,49 @@ html.tm-mobile .or-tab-footer > .or-tab-footer-hint {
   color: #eceef6 !important;
   box-shadow: none;
 }
+
+// "1st / 2nd action" chips next to the main button (ActionStepChips.vue), right-aligned before it
+// Payment areas teleport into the footer after the chips: order keeps the chips directly before the button
+.action-step-chips {
+  order: 98;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  margin-right: 4px;
+}
+
+.or-tab-footer > .or-tab-save {
+  order: 99;
+}
+
+.action-step-chip {
+  padding: 5px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  color: #a4a9b6;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+
+  &--now {
+    border-color: @bg_action;
+    background: fade(@bg_action, 22%);
+    color: #ece9e2;
+  }
+
+  &--next {
+    opacity: 0.6;
+  }
+
+  &--done {
+    color: #8be28f;
+    border-color: fade(#8be28f, 35%);
+  }
+}
+
+// Phone: the rocket in the navigation already shows "1/2" – no chips in the narrow footer
+html.tm-mobile .action-step-chips {
+  display: none;
+}

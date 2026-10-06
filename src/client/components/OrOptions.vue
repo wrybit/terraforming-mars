@@ -131,6 +131,7 @@
       <div v-if="asTabs" v-show="!handTabActive" :id="footerId" class="or-tab-footer">
         <!-- Cancel an action that is still only a plan: left in the footer (cancelAction.ts) -->
         <CancelActionButton/>
+        <ActionStepChips v-if="turnStep !== undefined" :step="turnStep"/>
         <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabToneClass('or-tab-save--', selectedOption)]">
           <!-- Disabled while the selected option has no valid selection yet (e.g. no card chosen) -->
           <AppButton :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid || awaitingCeo" @click="saveData" />
@@ -141,6 +142,7 @@
       <div v-if="asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption) && !isEndTab(selectedOption.title)"
         class="or-tab-footer or-tab-footer--bar">
         <AppButton class="cancel-action-button" :title="$t('Cancel')" @click="handTabActive = true"/>
+        <ActionStepChips v-if="turnStep !== undefined" :step="turnStep"/>
       </div>
     </div>
   </div>
@@ -158,6 +160,8 @@ import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
 import {INLINE_INPUT_TYPES, isChoiceMenu} from '@/client/components/choiceMenu';
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
+import ActionStepChips from '@/client/components/ActionStepChips.vue';
+import {actionStep} from '@/client/components/actionStep';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {fullTabTitle, shortTabLabel, tabButtonLabel, optionTone, tabButtonCentered, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon} from '@/client/components/orOptionsShortLabels';
 import {tabIntro, TabIntro} from '@/client/components/tabIntro';
@@ -215,6 +219,7 @@ export default defineComponent({
     dockedTab: vDockedTab,
   },
   components: {
+    ActionStepChips,
     TabPanelFooterSlot,
     TabIntroBlock,
     AppButton,
@@ -270,6 +275,10 @@ export default defineComponent({
     };
   },
   computed: {
+    // Action menu of a turn: which of the two actions is up (chips next to the main button)
+    turnStep(): 1 | 2 | undefined {
+      return actionStep(this.playerinput);
+    },
     // Card whose effect triggers this decision (only with own tabs; otherwise WaitingForTabs shows it)
     sourceCard(): CardName | undefined {
       return this.asTabs ? inputSourceCard(this.playerinput) : undefined;
