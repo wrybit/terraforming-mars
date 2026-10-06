@@ -26,7 +26,7 @@
       <PlanetsBoard v-if="game.pathfinders" :model="game.pathfinders" :gameOptions="game.gameOptions"/>
     </template>
     <template #delta>
-      <DeltaProjectBoard :players="players"/>
+      <DeltaBoard :players="players" :viewerColor="viewerColor"/>
     </template>
   </BoardTabs>
 
@@ -61,7 +61,7 @@ import ColoniesBoard from '@/client/components/colonies/ColoniesBoard.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
-import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
+import DeltaBoard from '@/client/components/delta/DeltaBoard.vue';
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
@@ -108,7 +108,7 @@ export default defineComponent({
     BoardTabs,
     ColoniesBoard,
     BoardZoomModal,
-    DeltaProjectBoard,
+    DeltaBoard,
     Milestones,
     Awards,
     MilestoneAwardTable,

@@ -1,4 +1,8 @@
 {
+  "no energy": "pas d'énergie",
+  "tag missing": "symbole manquant",
+  "reachable": "atteignable",
+  "Symbol in the space = what you need · chip below = what you get · 1 energy per step (a wild tag covers one symbol) · only the final space scores: 2 or 5 VP, one player each": "Symbole dans la case = ce qu'il vous faut · jeton dessous = ce que vous gagnez · 1 énergie par pas (un joker remplace un symbole) · seule la dernière case compte : 2 ou 5 PV, un joueur chacune",
   "tags to next reward": "symboles jusqu'à la récompense",
   "Ruling": "Au pouvoir",
   "Reserve": "Réserve",

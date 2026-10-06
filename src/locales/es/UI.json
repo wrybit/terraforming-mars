@@ -1,4 +1,8 @@
 {
+    "no energy": "sin energía",
+    "tag missing": "falta la etiqueta",
+    "reachable": "alcanzable",
+    "Symbol in the space = what you need · chip below = what you get · 1 energy per step (a wild tag covers one symbol) · only the final space scores: 2 or 5 VP, one player each": "Símbolo en la casilla = lo que necesitas · ficha debajo = lo que recibes · 1 energía por paso (un comodín sustituye un símbolo) · solo cuenta la última casilla: 2 o 5 PV, un jugador cada una",
     "tags to next reward": "etiquetas hasta la recompensa",
     "Jupiter": "Júpiter",
     "Ruling": "Gobierna",

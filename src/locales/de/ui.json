@@ -1,4 +1,8 @@
 {
+  "no energy": "keine Energie",
+  "tag missing": "Symbol fehlt",
+  "reachable": "erreichbar",
+  "Symbol in the space = what you need · chip below = what you get · 1 energy per step (a wild tag covers one symbol) · only the final space scores: 2 or 5 VP, one player each": "Symbol im Feld = das brauchst du · Chip darunter = das bekommst du · 1 Energie je Schritt (ein Joker ersetzt ein Symbol) · nur das letzte Feld zählt: 2 oder 5 SP, je Feld nur ein Spieler",
   "tags to next reward": "Symbole bis Belohnung",
   "Ruling": "Regiert",
   "free · 1×/gen.": "gratis · 1×/Gen.",
