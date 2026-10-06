@@ -1,7 +1,7 @@
 <template>
   <!-- Wiki link: opens a short info box at the bottom of its card; other links open in a new tab as before -->
   <button v-if="wikiTarget !== undefined" ref="button" type="button" class="create-game-info"
-    :class="{'create-game-info--open': isOpen}" :aria-expanded="isOpen" :aria-label="$t('Info')" @click.stop="toggle" @keydown.enter.stop @keydown.space.stop>&#9432;</button>
+    :class="{'create-game-info--open': isOpen}" :aria-expanded="isOpen" :aria-label="$t('Info')" :title="$t('Info')" @click.stop="toggle" @keydown.enter.stop @keydown.space.stop>&#9432;</button>
   <a v-else :href="href" class="tooltip create-game-info" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank" @click.stop>&#9432;</a>
   <Teleport v-if="isOpen && container !== undefined" :to="container">
     <InfoBox :href="href" :target="wikiTarget!" :noseX="noseX" @close="openInfoHref = undefined"/>

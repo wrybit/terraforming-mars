@@ -5,16 +5,16 @@
       <template #icon>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v6" stroke-linecap="round"/><circle cx="12" cy="7.5" r="1.1" fill="currentColor" stroke="none"/></svg>
       </template>
-      <div v-if="html !== undefined" ref="content" class="wiki-overlay-content" v-html="html" @click="followAnchor"></div>
-      <p v-else-if="failed" v-i18n>The info could not be loaded.</p>
-      <p v-else>…</p>
-      <template #footer>
+      <!-- Next to the ✕: the original page on GitHub (new tab); the overlay closes only via ✕, Escape or the backdrop -->
+      <template #actions>
         <a class="btn btn-tone-quiet wiki-overlay-github" :href="href" target="_blank" rel="noopener noreferrer">
           <span v-i18n>Open on GitHub</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
         </a>
-        <button type="button" class="btn btn-primary" @click="$emit('close')" v-i18n>Ok</button>
       </template>
+      <div v-if="html !== undefined" ref="content" class="wiki-overlay-content" v-html="html" @click="followAnchor"></div>
+      <p v-else-if="failed" v-i18n>The info could not be loaded.</p>
+      <p v-else>…</p>
     </DialogFrame>
   </SidebarModal>
 </template>

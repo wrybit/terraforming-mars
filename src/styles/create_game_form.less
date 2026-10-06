@@ -439,11 +439,21 @@
   }
 }
 
+// Same height as the ✕ next to it
 .wiki-overlay-github {
   display: inline-flex;
+  flex: none;
   align-items: center;
   gap: 6px;
-  margin-right: auto;
+  height: 34px;
+  margin: 0;
+}
+
+// Phone: only the icon, the title needs the room
+@media only screen and (max-width: @card-list-phone) {
+  .wiki-overlay-github span {
+    display: none;
+  }
 }
 
 .tooltip:hover {
