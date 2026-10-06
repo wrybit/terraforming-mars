@@ -15,7 +15,7 @@
     </section>
 
     <section v-if="kind === 'board'" class="stats-card">
-      <StatsBoardHeatmap :boardName="boardName" :games="games"/>
+      <StatsBoardHeatmap :boardKey="boardKey" :games="games"/>
     </section>
 
     <div v-if="detail.results.length > 0" class="stats-columns">
@@ -88,7 +88,7 @@ import StatsPointSources from './StatsPointSources.vue';
 import StatsEntityAsset from './StatsEntityAsset.vue';
 import StatsBoardHeatmap from './StatsBoardHeatmap.vue';
 import StatsBarChart from './StatsBarChart.vue';
-import {BoardName} from '@/common/boards/BoardName';
+import {StatsBoardKey} from '@/common/stats/statsBoardKey';
 import {EntityStats, entityStats} from './statsAggregate';
 import {COMPANION_COLUMNS} from './statsColumns';
 import {EntityDetail, entityDetail, HeadToHead, headToHead, histogram, PlayerCountStats} from './statsDetail';
@@ -149,8 +149,8 @@ export default defineComponent({
     companions(): EntityDetail['companions'] {
       return this.detail.companions.filter((companion) => companion.entries.length > 0);
     },
-    boardName(): BoardName {
-      return this.name as BoardName;
+    boardKey(): StatsBoardKey {
+      return this.name as StatsBoardKey;
     },
     hasAsset(): boolean {
       return this.kind !== 'board' && this.kind !== 'player';

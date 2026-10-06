@@ -1,6 +1,6 @@
-import {BoardName} from '@/common/boards/BoardName';
 import {StatsGame, StatsTile} from '@/common/stats/StatsGame';
 import {SpaceId} from '@/common/Types';
+import {StatsBoardKey, statsBoardKey} from '@/common/stats/statsBoardKey';
 
 export type HeatmapTileType = StatsTile['type'];
 
@@ -12,12 +12,12 @@ export type Heatmap = {
   maximum: number;
 };
 
-export function heatmap(games: ReadonlyArray<StatsGame>, boardName: BoardName, type: HeatmapTileType, playerName: string | undefined): Heatmap {
+export function heatmap(games: ReadonlyArray<StatsGame>, boardKey: StatsBoardKey, type: HeatmapTileType, playerName: string | undefined): Heatmap {
   const counts = new Map<SpaceId, number>();
   let gameCount = 0;
   for (const game of games) {
     const tiles = game.details?.tiles;
-    if (game.details?.boardName !== boardName || tiles === undefined) {
+    if (statsBoardKey(game.details) !== boardKey || tiles === undefined) {
       continue;
     }
     gameCount++;

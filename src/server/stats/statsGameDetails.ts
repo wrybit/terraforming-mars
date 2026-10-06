@@ -84,6 +84,8 @@ export function statsGameDetails(view: ViewModel): StatsGameDetails {
     source: 'game',
     cardsComplete: true,
     boardName: view.game.gameOptions.boardName,
+    // Older imported final states may lack the option: they were created without shuffling
+    shuffledBoard: view.game.gameOptions.shuffleMapOption === true,
     expansions: (Object.keys(view.game.gameOptions.expansions) as Array<Expansion>)
       .filter((expansion) => view.game.gameOptions.expansions[expansion]),
     players: view.players.map((player) => {

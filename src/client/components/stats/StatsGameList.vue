@@ -8,8 +8,11 @@
       </span>
     </template>
     <template #board="{row}">
-      <StatsEntityName v-if="row.details?.boardName !== undefined" kind="board" :name="row.details.boardName"/>
-      <span v-else class="stats-dim">–</span>
+      <!-- One lookup per row; v-for over one value also narrows the type for the template -->
+      <template v-for="board in [boardOf(row)]" :key="board ?? 'none'">
+        <StatsEntityName v-if="board !== undefined" kind="board" :name="board"/>
+        <span v-else class="stats-dim">–</span>
+      </template>
     </template>
     <template #result="{row}">
       <a v-if="row.resultUrl !== undefined" :href="row.resultUrl" target="_blank" class="stats-link" v-i18n>Result</a>
@@ -25,6 +28,7 @@ import StatsTable from './StatsTable.vue';
 import {StatsColumn} from './statsTypes';
 import {boardLabel, formatDate, formatDuration} from './statsLabels';
 import {lineupOf, totalTimeSeconds} from './statsResults';
+import {StatsBoardKey, statsBoardKey} from '@/common/stats/statsBoardKey';
 
 // Every column sorts on click; the players column groups by lineup (names in alphabetical order)
 const COLUMNS: ReadonlyArray<StatsColumn> = [
@@ -32,7 +36,10 @@ const COLUMNS: ReadonlyArray<StatsColumn> = [
   {key: 'players', label: 'Players', text: true, value: (game: StatsGame) => lineupOf(game)},
   {key: 'generation', label: 'Gen', value: (game: StatsGame) => game.summary.generation || undefined, format: (game: StatsGame) => String(game.summary.generation || '–')},
   {key: 'time', label: 'Game length', value: (game: StatsGame) => totalTimeSeconds(game), format: (game: StatsGame) => formatDuration(totalTimeSeconds(game))},
-  {key: 'board', label: 'Board', text: true, value: (game: StatsGame) => game.details?.boardName === undefined ? undefined : boardLabel(game.details.boardName)},
+  {key: 'board', label: 'Board', text: true, value: (game: StatsGame) => {
+    const board = statsBoardKey(game.details);
+    return board === undefined ? undefined : boardLabel(board);
+  }},
   {key: 'result', label: '', sortable: false, value: () => undefined},
 ];
 
@@ -51,6 +58,9 @@ export default defineComponent({
     },
   },
   methods: {
+    boardOf(game: StatsGame): StatsBoardKey | undefined {
+      return statsBoardKey(game.details);
+    },
     rowKey(game: StatsGame): string {
       return game.summary.id;
     },

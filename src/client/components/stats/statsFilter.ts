@@ -3,6 +3,7 @@ import {EXPANSION_OPTIONS, FilterOption, optionKeys} from '@/client/components/c
 import {markedOptions, Selection} from '@/client/components/cardlist/filterSelection';
 import {lineupOf, yearOf} from './statsResults';
 import {boardLabel} from './statsLabels';
+import {statsBoardKey} from '@/common/stats/statsBoardKey';
 
 // Filters of the statistics. Same selection logic and tiles as in the card list (filterSelection.ts,
 // CardListFilterGroup.vue): nothing selected = everything; the first click narrows down.
@@ -31,7 +32,7 @@ export function filterGroups(games: ReadonlyArray<StatsGame>): Array<StatsFilter
   const expansions = new Set<string>(games.flatMap((game) => game.details?.expansions ?? []));
   return [
     {key: 'lineup', title: 'Lineup', options: distinct(games.map(lineupOf)).map((lineup) => ({key: lineup, label: lineup}))},
-    {key: 'board', title: 'Board', options: distinct(games.flatMap((game) => game.details?.boardName === undefined ? [] : [game.details.boardName]))
+    {key: 'board', title: 'Board', options: distinct(games.flatMap((game) => statsBoardKey(game.details) ?? []))
       .map((board) => ({key: board, label: boardLabel(board)}))},
     {key: 'expansion', title: 'Expansions', options: EXPANSION_OPTIONS.filter((option) => expansions.has(option.key))},
     {key: 'year', title: 'Year', options: distinct(games.map(yearOf)).map((year) => ({key: year, label: year}))},
@@ -57,8 +58,10 @@ export function matchesOption(game: StatsGame, key: StatsFilterKey, marked: Read
   case 'year':
     return marked.includes(yearOf(game));
   // Without a final score, board/expansion is unknown: such games drop out with these filters
-  case 'board':
-    return game.details?.boardName !== undefined && marked.includes(game.details.boardName);
+  case 'board': {
+    const board = statsBoardKey(game.details);
+    return board !== undefined && marked.includes(board);
+  }
   case 'expansion': {
     const expansions: ReadonlyArray<string> = game.details?.expansions ?? [];
     return game.details !== undefined && marked.every((expansion) => expansions.includes(expansion));

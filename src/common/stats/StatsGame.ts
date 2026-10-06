@@ -80,6 +80,8 @@ export type StatsGameDetails = {
   /** False: cards only contains the cards with victory points (a screenshot shows no more). */
   cardsComplete: boolean;
   boardName: BoardName | undefined;
+  /** Board tiles were shuffled ("Randomize board tiles"); unknown for screenshots. */
+  shuffledBoard?: boolean;
   expansions: Array<Expansion>;
   players: Array<StatsPlayerDetails>;
   milestones: Array<StatsClaimedMilestone>;

@@ -2,6 +2,7 @@ import {CardType} from '@/common/cards/CardType';
 import {CardName} from '@/common/cards/CardName';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {StatsPlayerResult} from './statsResults';
+import {statsBoardKey} from '@/common/stats/statsBoardKey';
 
 // Everything the statistics list and can open as a detail page. Each kind only says which entries
 // a player "had" in a game – counting, sorting and displaying is the same code for all kinds.
@@ -63,7 +64,11 @@ export const STATS_KINDS: Record<StatsKind, StatsKindDefinition> = {
   board: {
     label: 'Boards',
     singular: 'Board',
-    namesOf: (result) => result.game.details?.boardName === undefined ? [] : [result.game.details.boardName],
+    // Shuffled boards count together as "random", not as the board they were shuffled from
+    namesOf: (result) => {
+      const board = statsBoardKey(result.game.details);
+      return board === undefined ? [] : [board];
+    },
   },
   player: {
     label: 'Players',

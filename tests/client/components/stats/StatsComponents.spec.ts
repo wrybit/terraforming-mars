@@ -112,7 +112,7 @@ describe('Stats components', () => {
     expect(mount(StatsEntityAsset, {...config, props: {kind: 'award', name: 'Landlord'}}).find('.awards').exists()).is.true;
     const originalFetch = global.fetch;
     global.fetch = () => Promise.resolve({ok: true, json: () => Promise.resolve([])} as unknown as Response);
-    const board = mount(StatsBoardPreview, {...config, props: {boardName: BoardName.THARSIS}});
+    const board = mount(StatsBoardPreview, {...config, props: {boardKey: BoardName.THARSIS}});
     await flushPromises();
     expect(board.find('.stats-note').exists()).is.false;
     global.fetch = originalFetch;

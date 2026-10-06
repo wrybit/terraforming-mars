@@ -14,6 +14,7 @@ import {combinations} from '@/client/components/stats/statsCombinations';
 import {heatmap, heatStep} from '@/client/components/stats/statsHeatmap';
 import {chooseMinPlays} from '@/client/components/stats/statsMinPlays';
 import {BoardName} from '@/common/boards/BoardName';
+import {RANDOM_BOARD} from '@/common/stats/statsBoardKey';
 
 describe('stats logic', () => {
   const games = sampleGames();
@@ -134,6 +135,21 @@ describe('stats logic', () => {
     expect(heatmap(withTiles, BoardName.HELLAS, 'city', undefined).games).eq(0);
     // Colour levels of 10 %: 1–10 % → 1, 11–20 % → 2, 100 % → 10
     expect([heatStep(1), heatStep(10), heatStep(11), heatStep(80), heatStep(100)]).deep.eq([1, 1, 2, 8, 10]);
+  });
+
+  it('counts shuffled boards as "random" instead of the board they were shuffled from', () => {
+    const [first, second] = games;
+    const tiles = [{spaceId: '20' as const, type: 'city' as const, playerName: 'Jens'}];
+    const mixed = [
+      {...first, details: {...first.details!, boardName: BoardName.THARSIS, tiles}},
+      {...second, details: {...second.details!, boardName: BoardName.THARSIS, shuffledBoard: true, tiles}},
+    ];
+    const mixedResults = allPlayerResults(mixed);
+    expect(entityStats(mixedResults, 'board', BoardName.THARSIS).games).eq(1);
+    expect(entityStats(mixedResults, 'board', RANDOM_BOARD).games).eq(1);
+    expect(filterGroups(mixed).find((group) => group.key === 'board')?.options.map((option) => option.key)).deep.eq([RANDOM_BOARD, BoardName.THARSIS]);
+    expect(heatmap(mixed, BoardName.THARSIS, 'city', undefined).games).eq(1);
+    expect(heatmap(mixed, RANDOM_BOARD, 'city', undefined).games).eq(1);
   });
 
   it('minimum plays keep at least ten rows visible', () => {

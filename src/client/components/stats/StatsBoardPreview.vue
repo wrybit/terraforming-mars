@@ -6,7 +6,7 @@
         :spaces="spaces"
         :expansions="expansions"
         :venusScaleLevel="0"
-        :boardName="boardName"/>
+        :boardName="boardForBoardView"/>
     </div>
     <p v-else-if="failed" class="stats-note" v-i18n>The board could not be loaded.</p>
   </div>
@@ -18,6 +18,7 @@ import {paths} from '@/common/app/paths';
 import {BoardName} from '@/common/boards/BoardName';
 import {Expansion} from '@/common/cards/GameModule';
 import {SpaceModel} from '@/common/models/SpaceModel';
+import {StatsBoardKey} from '@/common/stats/statsBoardKey';
 import {Heatmap, heatStep, HeatmapTileType} from './statsHeatmap';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import Board from '@/client/components/Board.vue';
@@ -27,10 +28,19 @@ export default defineComponent({
   name: 'StatsBoardPreview',
   components: {Board},
   props: {
-    boardName: {type: String as PropType<BoardName>, required: true},
+    boardKey: {type: String as PropType<StatsBoardKey>, required: true},
     /** Optional: color the spaces by frequency (cities or greeneries). */
     heatmap: {type: Object as PropType<Heatmap>, default: undefined},
     heatmapType: {type: String as PropType<HeatmapTileType>, default: 'city'},
+  },
+  computed: {
+    /**
+     * Board.vue draws the labels of a known board (volcanoes, Noctis City …). "random" is no board of its own: with the
+     * name it knows nothing about, it draws only the spaces – exactly right, because the labels differ per shuffled game.
+     */
+    boardForBoardView(): BoardName {
+      return this.boardKey as BoardName;
+    },
   },
   watch: {
     heatmap() {
@@ -80,7 +90,7 @@ export default defineComponent({
   },
   async mounted() {
     try {
-      const response = await fetch(`${paths.API_STATS_BOARD}?name=${encodeURIComponent(this.boardName)}`);
+      const response = await fetch(`${paths.API_STATS_BOARD}?name=${encodeURIComponent(this.boardKey)}`);
       if (!response.ok) {
         throw new Error(await response.text());
       }

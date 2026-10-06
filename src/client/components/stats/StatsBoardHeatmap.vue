@@ -12,7 +12,7 @@
       <SegmentedControl :options="typeOptions" v-model="type"/>
       <SegmentedControl v-if="playerOptions.length > 2" :options="playerOptions" v-model="player"/>
     </div>
-    <StatsBoardPreview :boardName="boardName" :heatmap="map" :heatmapType="type"/>
+    <StatsBoardPreview :boardKey="boardKey" :heatmap="map" :heatmapType="type"/>
     <p v-if="map.games === 0" class="stats-note" v-i18n>No game with a saved board yet.</p>
   </div>
 </template>
@@ -21,7 +21,7 @@
 import {defineComponent, PropType} from 'vue';
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
 import {SegmentOption} from '@/client/components/create/createGameChoices';
-import {BoardName} from '@/common/boards/BoardName';
+import {StatsBoardKey} from '@/common/stats/statsBoardKey';
 import {StatsGame} from '@/common/stats/StatsGame';
 import StatsBoardPreview from './StatsBoardPreview.vue';
 import {Heatmap, heatmap, HeatmapTileType, HEAT_STEPS} from './statsHeatmap';
@@ -34,7 +34,7 @@ export default defineComponent({
   name: 'StatsBoardHeatmap',
   components: {SegmentedControl, StatsBoardPreview},
   props: {
-    boardName: {type: String as PropType<BoardName>, required: true},
+    boardKey: {type: String as PropType<StatsBoardKey>, required: true},
     games: {type: Array as PropType<ReadonlyArray<StatsGame>>, required: true},
   },
   data() {
@@ -51,7 +51,7 @@ export default defineComponent({
       return [{value: ALL_PLAYERS, label: 'All'}, ...Array.from(names).sort().map((name) => ({value: name, label: name}))];
     },
     map(): Heatmap {
-      return heatmap(this.games, this.boardName, this.type, this.player === ALL_PLAYERS ? undefined : this.player);
+      return heatmap(this.games, this.boardKey, this.type, this.player === ALL_PLAYERS ? undefined : this.player);
     },
   },
 });
