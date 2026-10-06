@@ -176,12 +176,14 @@
   gap: @create-game-gap-card;
 }
 
-// Masonry: two columns, the first two cards (expansions, board) side by side, the rest fills the column that is
-// free first (masonryGrid.ts sets the row span of each card; 1px rows, the gap is part of the span)
+// Masonry: two columns, the first two cards (expansions, board) side by side, the rest spread so both columns are
+// about equally long (masonryGrid.ts sets row span and column of each card; 1px rows, the gap is part of the span;
+// dense placement fills each column from the top)
 .create-game-cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-auto-rows: 1px;
+  grid-auto-flow: dense;
   column-gap: @create-game-gap-card;
   align-items: start;
   // The span includes the gap below the last card of a column: take it back
