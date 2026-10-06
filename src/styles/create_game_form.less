@@ -1047,6 +1047,7 @@
 
 // ---------- board preview (CreateGameBoardPreview.vue) ----------
 .create-game-board-preview {
+  position: relative;
   margin-top: 10px;
 }
 
@@ -1055,13 +1056,15 @@
   align-items: center;
   gap: 8px;
   min-height: @create-game-control-height;
+  font-weight: 500;
 }
 
-.create-game-board-preview-drawn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
+// Real button with the reload icon, bottom right at the height of the board's footer (ocean counter)
+.create-game-board-preview-reroll {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0;
 }
 
 // A new draw is loading: keep the old board, slightly faded, instead of an empty gap

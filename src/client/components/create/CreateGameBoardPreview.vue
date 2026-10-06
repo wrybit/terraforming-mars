@@ -1,15 +1,17 @@
 <template>
   <div class="create-game-board-preview">
-    <!-- Random draw: which board it became, and a new draw -->
-    <div v-if="preview !== undefined && isRandom" class="create-game-board-preview-head">
-      <span v-if="showBoardName" class="create-game-board-preview-drawn">
-        <span :class="boardColorClass(preview.boardName)"></span>
-        <span class="capitalized" v-i18n>{{ preview.boardName }}</span>
-      </span>
-      <button type="button" class="create-game-link" @click="$emit('reroll')" v-i18n>Draw again</button>
+    <!-- Random board: which board it became -->
+    <div v-if="preview !== undefined && showBoardName" class="create-game-board-preview-head">
+      <span :class="boardColorClass(preview.boardName)"></span>
+      <span class="capitalized" v-i18n>{{ preview.boardName }}</span>
     </div>
     <ScaledBoard v-if="preview !== undefined" :class="{'create-game-board-preview--loading': loading}"
       :spaces="preview.spaces" :boardName="preview.boardName"/>
+    <!-- New draw: bottom right, level with the ocean counter of the board -->
+    <button v-if="preview !== undefined && isRandom" type="button" class="create-game-icon-button create-game-board-preview-reroll"
+      :title="$t('Draw again')" :aria-label="$t('Draw again')" @click="$emit('reroll')">
+      <svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.34 5.66"/><path d="M20 4v7h-7"/></svg>
+    </button>
     <p v-else-if="failed" class="create-game-note" v-i18n>The board could not be loaded.</p>
   </div>
 </template>
