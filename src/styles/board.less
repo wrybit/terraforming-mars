@@ -681,3 +681,13 @@ each(@token_types, {
 .underground-excavator--pink {
   background-color: @player_pink;
 }
+
+// Groups of the special spaces off Mars (outerSpaces.ts): without the corner layout (zoom view) the wrappers
+// disappear, so the spaces keep their original positions on the board
+.board-outer-group {
+  display: contents;
+}
+
+.board-outer-group__title {
+  display: none;
+}

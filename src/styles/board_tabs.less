@@ -174,3 +174,83 @@
   padding-bottom: 36px;
   box-sizing: border-box;
 }
+
+// Special spaces off Mars in the four corners of the box, grouped by origin (outerSpaces.ts):
+// the round planet leaves the corners free. The groups sit inside the zoomed board, so the hexes
+// stay as large as the Mars spaces; they are placed relative to the box (.board-tabs-panel).
+@board-outer-inset: 14px;
+
+.board-tabs-mars {
+  .board-outer-spaces {
+    position: static;
+  }
+
+  .board-outer-group {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 64px;
+  }
+
+  .board-outer-group--top-left { left: @board-outer-inset; top: @board-outer-inset; }
+  .board-outer-group--bottom-left { left: @board-outer-inset; bottom: @board-outer-inset; }
+  .board-outer-group--top-right { right: @board-outer-inset; top: @board-outer-inset; }
+  .board-outer-group--bottom-right { right: @board-outer-inset; bottom: @board-outer-inset; }
+
+  // Left groups flush left, right groups flush right: title and hexes on the outer edge
+  .board-outer-group--top-left,
+  .board-outer-group--bottom-left {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .board-outer-group--top-right,
+  .board-outer-group--bottom-right {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .board-outer-group__title {
+    display: block;
+    font-family: Prototype, sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  // Space: hex on top, short name below instead of the board positions
+  .board-outer-group > .board-space {
+    position: relative;
+    margin: 0;
+    width: 64px;
+    height: auto;
+    clip-path: none;
+    display: flex;
+    flex-direction: column;
+    align-items: inherit;
+
+    > [data-test="tile"] {
+      position: relative;
+      flex: none;
+      margin: 0;
+    }
+
+    .board-space-text {
+      position: static;
+      margin: 2px 0 0;
+      width: 64px;
+      font-size: 10px;
+      line-height: 1.1;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .board-space-bonuses,
+    .board-log-highlight {
+      display: none;
+    }
+  }
+}
