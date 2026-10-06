@@ -38,6 +38,8 @@
     </div>
     <span class="card-filter-bar__count" :class="{'card-filter-bar__count--idle': activeCount === 0}"><b>{{ shownCount }}</b>/{{ cards.length }}</span>
     <slot name="sort" :compact="compact"></slot>
+    <!-- Card size: not on the phone (cards are fitted there) -->
+    <CardZoomSlider v-if="!compact && !isMobile"/>
     <!-- Phone: the filters as a bottom sheet over the screen; background only darkened, not blurred -->
     <Teleport v-if="menuOpen && useSheet" to="body">
       <div class="card-filter-sheet-backdrop" @click="menuOpen = false"></div>
@@ -66,6 +68,8 @@ import {activeFilterCount, CardFilter, CardFilterContext, matchesCardFilter, res
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import CardFilterOptions from '@/client/components/cardfilter/CardFilterOptions.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
+import CardZoomSlider from '@/client/components/cardfilter/CardZoomSlider.vue';
+import {mobileLayout} from '@/client/utils/mobileLayout';
 import {resourceIconClass, tagIconClass, typeColorClass, typeOptionLabel} from '@/client/components/cardfilter/cardFilterLabels';
 
 const props = defineProps<{
@@ -106,6 +110,7 @@ function isMobileView(): boolean {
 
 // Narrow rows only exist in the mobile view: they open the filters as a bottom sheet
 const useSheet = computed(() => compact.value);
+const isMobile = computed(() => mobileLayout.value);
 
 const activeCount = computed(() => activeFilterCount(props.filter, props.context));
 const shownCount = computed(() => props.cards.filter((card) => matchesCardFilter(card, props.filter, props.context)).length);

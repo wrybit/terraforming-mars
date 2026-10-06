@@ -1,0 +1,63 @@
+// Card size slider (CardZoomSlider.vue) and where the size applies: the cards in the action box on desktop.
+// The value is the CSS variable --card-zoom on the page root (cardZoom.ts).
+.card-zoom-slider {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  color: #a4a9b6;
+  font-size: 11px;
+  cursor: pointer;
+
+  input {
+    width: 110px;
+    margin: 0;
+    accent-color: @bg_action;
+  }
+}
+
+.card-zoom-slider__label {
+  font: 600 10px/12px system-ui, sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+// Card outlines: small on the left, large on the right
+.card-zoom-slider__icon {
+  flex: none;
+  width: 12px;
+  height: 16px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  box-sizing: border-box;
+
+  &--small {
+    width: 8px;
+    height: 11px;
+  }
+}
+
+// In the filter row the sorting keeps its place, the slider follows it at the right edge
+.card-filter-bar .card-zoom-slider {
+  margin-left: 4px;
+}
+
+.select-card-toolbar {
+  display: flex;
+  align-items: center;
+}
+
+html:not(.tm-mobile) :is(.player_home_block--actions, .player_home_block--hand) .or-tab-panel {
+  .choice-block > label.cardbox,
+  .choice-block > label.payments_cards,
+  .hand-cards-panel__cards > .cardbox,
+  .hand-cards-panel .sortable-cards .cardbox {
+    zoom: var(--card-zoom, 1);
+  }
+
+  // The block's width is computed from card widths: shrink it along with the cards
+  .choice-block:has(> label.cardbox, > label.payments_cards):not(.choice-block--fill) {
+    width: min(100%, calc(var(--choice-columns) * 248px * var(--card-zoom, 1) + (var(--choice-columns) - 1) * 16px));
+  }
+}

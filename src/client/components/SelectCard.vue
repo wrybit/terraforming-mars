@@ -13,8 +13,10 @@
             <HandSortControl :playerView="playerView" :compact="compact"/>
           </template>
         </CardFilterBar>
-        <div v-else-if="showSelectAll" class="select-card-toolbar">
-          <AppButton class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
+        <!-- Other card lists (buying …): "Select all" on the left where it makes sense, the card size on the right -->
+        <div v-else-if="showSelectAll || !isMobile" class="select-card-toolbar">
+          <AppButton v-if="showSelectAll" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
+          <CardZoomSlider v-if="!isMobile"/>
         </div>
         <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
         <label v-for="card in getOrderedCards()" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
@@ -65,6 +67,8 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import HandSortControl from '@/client/components/HandSortControl.vue';
 import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
+import CardZoomSlider from '@/client/components/cardfilter/CardZoomSlider.vue';
+import {mobileLayout} from '@/client/utils/mobileLayout';
 import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
 import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
 import {cardVisibility, CardVisibility, handCardFilter, unmatchedCards} from '@/client/utils/cardFilterState';
@@ -138,6 +142,7 @@ export default defineComponent({
     AppButton,
     HandSortControl,
     CardFilterBar,
+    CardZoomSlider,
     CardFilterEmptyHint,
   },
   watch: {
@@ -293,6 +298,10 @@ export default defineComponent({
     },
   },
   computed: {
+    // Phone: cards are fitted to the screen, no size slider
+    isMobile(): boolean {
+      return mobileLayout.value;
+    },
     // Buying with too little money (ChooseCards on the server, e.g. Inventors' Guild with 1 M€): no card can be chosen,
     // so the cards look inactive and a note below says why – otherwise it looks like a broken selection
     cannotAfford(): boolean {
