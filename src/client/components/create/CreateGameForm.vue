@@ -55,6 +55,15 @@
 
           <section class="create-game-card">
             <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
+            <!-- Chance first: with a random board the board chips below only show the pool it draws from -->
+            <div class="create-game-subhead" v-i18n>Random</div>
+            <OptionRow label="Random board">
+              <SwitchInput v-model="randomBoard"/>
+            </OptionRow>
+            <SegmentedControl v-if="randomBoard" v-model="randomBoardScope" :options="RANDOM_BOARD_OPTIONS"/>
+            <OptionRow label="Randomize board tiles" :href="wikiUrls.randomizeBoardTiles">
+              <SwitchInput v-model="shuffleMapOption"/>
+            </OptionRow>
             <template v-for="group in boardGroups" :key="group.title">
               <div class="create-game-subhead" v-i18n>{{ group.title }}</div>
               <div class="create-game-chip-grid" :class="{'create-game-chip-grid--muted': randomBoard}">
@@ -66,14 +75,6 @@
                 </ChoiceChip>
               </div>
             </template>
-            <!-- Random board as a switch instead of extra chips: the draw is shown right away in the preview below -->
-            <OptionRow label="Random board">
-              <SwitchInput v-model="randomBoard"/>
-            </OptionRow>
-            <SegmentedControl v-if="randomBoard" v-model="randomBoardScope" :options="RANDOM_BOARD_OPTIONS"/>
-            <OptionRow label="Shuffle board bonuses" :href="wikiUrls.randomizeBoardTiles">
-              <SwitchInput v-model="shuffleMapOption"/>
-            </OptionRow>
             <!-- Exactly the board the game gets (same board seed); a cloned game brings its own board -->
             <CreateGameBoardPreview v-if="!seededGame" :config="boardPreviewConfig" :isRandom="randomBoard || shuffleMapOption" :showBoardName="randomBoard"
               :boardColorClass="getBoardColorClass" @reroll="boardSeed = Math.random()" @drawn="drawnBoard = $event"/>
