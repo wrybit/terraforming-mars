@@ -37,9 +37,9 @@
       </template>
     </div>
     <span class="card-filter-bar__count" :class="{'card-filter-bar__count--idle': activeCount === 0}"><b>{{ shownCount }}</b>/{{ cards.length }}</span>
-    <slot name="sort" :compact="compact"></slot>
-    <!-- Card size: not on the phone (cards are fitted there) -->
+    <!-- Card size left of the sorting: not on the phone (cards are fitted there) -->
     <CardZoomSlider v-if="!compact && !isMobile"/>
+    <slot name="sort" :compact="compact"></slot>
     <!-- Phone: the filters as a bottom sheet over the screen; background only darkened, not blurred -->
     <Teleport v-if="menuOpen && useSheet" to="body">
       <div class="card-filter-sheet-backdrop" @click="menuOpen = false"></div>

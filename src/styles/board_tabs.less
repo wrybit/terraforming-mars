@@ -257,3 +257,21 @@
     }
   }
 }
+
+// Low box: groups as small rows without names and titles (OuterSpaceCorners.vue: short)
+.board-outer-spaces--short {
+  .board-outer-group {
+    flex-direction: row;
+    gap: 3px;
+  }
+
+  .board-outer-group__title,
+  .board-outer-group > .board-space .board-space-text {
+    display: none;
+  }
+
+  .board-outer-group > .board-space > [data-test="tile"] {
+    zoom: 0.45;
+  }
+}
+
