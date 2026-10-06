@@ -8,58 +8,31 @@ import {Resource} from '@/common/Resource';
 import {CardResource} from '@/common/CardResource';
 import {getColonyOrThrow} from '@/client/colonies/ClientColonyManifest';
 
-// Picture file per colony (assets/colonies-planets)
+// Round planet picture per colony (assets/colonies-planets-round, built by scripts/make-colony-planets.py)
 const PLANET_FILE: Record<ColonyName, string> = {
-  [ColonyName.CALLISTO]: 'callisto.png',
-  [ColonyName.CERES]: 'ceres.png',
-  [ColonyName.ENCELADUS]: 'enceladus.png',
-  [ColonyName.EUROPA]: 'europa.png',
-  [ColonyName.GANYMEDE]: 'ganymede.jpg',
-  [ColonyName.IO]: 'io.jpg',
-  [ColonyName.LUNA]: 'luna.jpg',
-  [ColonyName.MIRANDA]: 'miranda.jpg',
-  [ColonyName.PLUTO]: 'pluto.jpg',
-  [ColonyName.TITAN]: 'titan.jpg',
-  [ColonyName.TRITON]: 'triton.jpg',
-  [ColonyName.IAPETUS]: 'iapetus.jpg',
-  [ColonyName.MERCURY]: 'mercury.jpg',
-  [ColonyName.HYGIEA]: 'hygiea.jpg',
-  [ColonyName.TITANIA]: 'titania.jpg',
-  [ColonyName.VENUS]: 'venus.jpg',
-  [ColonyName.LEAVITT]: 'leavitt.jpg',
-  [ColonyName.PALLAS]: 'pallas.jpg',
-  [ColonyName.DEIMOS]: 'deimos.jpg',
-  [ColonyName.TERRA]: 'terra.jpg',
-  [ColonyName.KUIPER]: 'kuiper.jpg',
-  [ColonyName.LEAVITT_II]: 'leavitt.jpg',
-  [ColonyName.IAPETUS_II]: 'iapetus.jpg',
-};
-
-// Where the disc lies in the photo (centre x/y and diameter as shares of the picture width/height), measured once:
-// the photo is enlarged and moved so the disc fills the round frame exactly. Missing = whole picture (square photos only).
-// Ganymede, Io, Deimos, Kuiper, Leavitt and Pallas set by hand in the planet-fit tool (round frame, nothing squashed).
-const PLANET_FIT: Partial<Record<string, readonly [number, number, number, number]>> = {
-  'callisto.png': [0.502, 0.498, 0.870, 0.870],
-  'enceladus.png': [0.490, 0.497, 0.860, 0.860],
-  'europa.png': [0.500, 0.500, 0.791, 0.791],
-  'ceres.png': [0.518, 0.488, 0.892, 0.975],
-  'deimos.jpg': [0.427, 0.535, 0.721, 0.760],
-  'ganymede.jpg': [0.515, 0.487, 0.984, 0.984],
-  'io.jpg': [0.618, 0.463, 0.887, 0.887],
-  'kuiper.jpg': [0.634, 0.521, 0.760, 1.013],
-  'leavitt.jpg': [0.503, 0.521, 1.111, 1.686],
-  'pallas.jpg': [0.500, 0.500, 0.983, 0.983],
-  'luna.jpg': [0.518, 0.503, 0.830, 0.864],
-  'mercury.jpg': [0.502, 0.501, 0.903, 0.932],
-  'miranda.jpg': [0.514, 0.515, 0.868, 0.834],
-  'pluto.jpg': [0.499, 0.489, 0.860, 0.860],
-  'terra.jpg': [0.497, 0.503, 0.971, 0.966],
-  'titan.jpg': [0.517, 0.489, 0.797, 0.857],
-  'triton.jpg': [0.500, 0.506, 0.951, 0.951],
-  'venus.jpg': [0.510, 0.498, 0.870, 0.870],
-  'hygiea.jpg': [0.498, 0.514, 0.918, 0.872],
-  'iapetus.jpg': [0.500, 0.500, 0.613, 0.817],
-  'titania.jpg': [0.505, 0.498, 0.615, 0.819],
+  [ColonyName.CALLISTO]: 'callisto',
+  [ColonyName.CERES]: 'ceres',
+  [ColonyName.ENCELADUS]: 'enceladus',
+  [ColonyName.EUROPA]: 'europa',
+  [ColonyName.GANYMEDE]: 'ganymede',
+  [ColonyName.IO]: 'io',
+  [ColonyName.LUNA]: 'luna',
+  [ColonyName.MIRANDA]: 'miranda',
+  [ColonyName.PLUTO]: 'pluto',
+  [ColonyName.TITAN]: 'titan',
+  [ColonyName.TRITON]: 'triton',
+  [ColonyName.IAPETUS]: 'iapetus',
+  [ColonyName.MERCURY]: 'mercury',
+  [ColonyName.HYGIEA]: 'hygiea',
+  [ColonyName.TITANIA]: 'titania',
+  [ColonyName.VENUS]: 'venus',
+  [ColonyName.LEAVITT]: 'leavitt',
+  [ColonyName.PALLAS]: 'pallas',
+  [ColonyName.DEIMOS]: 'deimos',
+  [ColonyName.TERRA]: 'terra',
+  [ColonyName.KUIPER]: 'kuiper',
+  [ColonyName.LEAVITT_II]: 'leavitt',
+  [ColonyName.IAPETUS_II]: 'iapetus',
 };
 
 // Base colour per tile, like the art on the real colony tiles
@@ -84,19 +57,10 @@ const DEFAULT_TONE = '#2fb0a8';
 export type PlanetImage = {src: string, style: Record<string, string>};
 
 export function planetImage(name: ColonyName): PlanetImage {
-  const file = PLANET_FILE[name] ?? 'luna.jpg';
-  const [cx, cy, dw, dh] = PLANET_FIT[file] ?? [0.5, 0.5, 1, 1];
-  // 3 % zoomed in, so no dark edge of the photo stays inside the circle
-  const width = 100 / (dw * 0.97);
-  const height = 100 / (dh * 0.97);
+  // The pictures are already cropped square around the disc, so they simply fill the round frame
   return {
-    src: 'assets/colonies-planets/' + file,
-    style: {
-      width: width.toFixed(1) + '%',
-      height: height.toFixed(1) + '%',
-      left: (50 - cx * width).toFixed(1) + '%',
-      top: (50 - cy * height).toFixed(1) + '%',
-    },
+    src: 'assets/colonies-planets-round/' + (PLANET_FILE[name] ?? 'luna') + '.webp',
+    style: {width: '100%', height: '100%', left: '0', top: '0'},
   };
 }
 
