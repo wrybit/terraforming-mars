@@ -4,6 +4,8 @@ import {expect} from 'chai';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandSortControl from '@/client/components/HandSortControl.vue';
 import SortableCards from '@/client/components/SortableCards.vue';
+import Card from '@/client/components/card/Card.vue';
+import PlayedCardsGroups from '@/client/components/PlayedCardsGroups.vue';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {CardModel} from '@/common/models/CardModel';
 import {CardName} from '@/common/cards/CardName';
@@ -27,13 +29,17 @@ function card(name: CardName, resources?: number): CardModel {
 }
 
 describe('HandCardsPanel', () => {
-  it('shows active cards above the hand with both titles', () => {
+  it('shows active cards above the hand and the other played cards below, each with a title', () => {
     const wrapper = mount(HandCardsPanel, {
       ...globalConfig,
       props: {playerView: playerView([card(CardName.PETS, 3), card(CardName.ALGAE)], [card(CardName.SOLETTA)])},
     });
     const titles = wrapper.findAll('.hand-cards-panel__title').map((title) => title.text());
-    expect(titles).to.have.length(2);
+    expect(titles).to.have.length(3);
+    // Played cards at the very end, without the active card that already sits on top
+    const played = wrapper.findComponent(PlayedCardsGroups);
+    expect(played.classes()).to.include('hand-cards-panel__cards');
+    expect(played.findAllComponents(Card).map((c) => c.props('card').name)).to.deep.eq([CardName.ALGAE]);
     // Only the blue card (Pets) ends up on top, Algae (green) doesn't
     const active = wrapper.find('.hand-cards-panel__section--active');
     expect(active.findAllComponents({name: 'Card'})).to.have.length(1);

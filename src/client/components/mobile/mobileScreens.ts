@@ -17,7 +17,7 @@ export type MobileNavItem = {
 
 export const MOBILE_NAV: ReadonlyArray<MobileNavItem> = [
   {screen: 'mars', label: 'Mars', icon: 'mars', flashAreas: ['mars', 'moon', 'colonies', 'turmoil']},
-  {screen: 'hand', label: 'Cards In Hand', icon: 'hand', flashAreas: []},
+  {screen: 'hand', label: 'All cards', icon: 'hand', flashAreas: []},
   {screen: 'turn', label: 'Actions', icon: 'rocket', flashAreas: []},
   {screen: 'players', label: 'Players', icon: 'players', flashAreas: ['players', 'milestonesAwards']},
   {screen: 'log', label: 'Game log', icon: 'log', flashAreas: []},

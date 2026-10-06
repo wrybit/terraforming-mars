@@ -17,7 +17,7 @@ withDefaults(defineProps<{
   active: boolean;
   label?: string;
 }>(), {
-  label: 'Cards In Hand',
+  label: 'All cards',
 });
 
 defineEmits<{
