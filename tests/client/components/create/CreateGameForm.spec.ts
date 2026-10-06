@@ -76,6 +76,21 @@ describe('CreateGameForm', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
+  it('random board is a switch: on draws from the official boards, off restores the chosen board', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const vm = wrapper.vm as any;
+    vm.board = BoardName.ELYSIUM;
+    await nextTick();
+    vm.randomBoard = true;
+    expect(vm.board).eq('random official');
+    vm.randomBoardScope = 'random all';
+    expect(vm.board).eq('random all');
+    vm.randomBoard = false;
+    expect(vm.board).eq(BoardName.ELYSIUM);
+  });
+
   it('prefers settings from the link hash over saved settings', async () => {
     new CreateGameSettingsStorage(localStorage).saveSettings(createNewGameConfig());
     const model = defaultCreateGameModel();

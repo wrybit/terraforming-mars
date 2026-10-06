@@ -48,7 +48,6 @@ export const OFFICIAL_BOARDS: ReadonlyArray<BoardNameType> = [
   BoardName.THARSIS,
   BoardName.HELLAS,
   BoardName.ELYSIUM,
-  RandomBoardOption.OFFICIAL,
 ];
 
 export const FAN_BOARDS: ReadonlyArray<BoardNameType> = [
@@ -60,7 +59,12 @@ export const FAN_BOARDS: ReadonlyArray<BoardNameType> = [
   BoardName.TERRA_CIMMERIA,
   BoardName.VASTITAS_BOREALIS,
   BoardName.HOLLANDIA,
-  RandomBoardOption.ALL,
+];
+
+// "Random board" switch: drawn from the official boards or from all
+export const RANDOM_BOARD_OPTIONS: ReadonlyArray<SegmentOption> = [
+  {value: RandomBoardOption.OFFICIAL, label: 'Official'},
+  {value: RandomBoardOption.ALL, label: 'All'},
 ];
 
 export const PLAYER_COUNT_OPTIONS: ReadonlyArray<SegmentOption> = [

@@ -57,16 +57,21 @@
             <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
             <template v-for="group in boardGroups" :key="group.title">
               <div class="create-game-subhead" v-i18n>{{ group.title }}</div>
-              <div class="create-game-chip-grid">
+              <div class="create-game-chip-grid" :class="{'create-game-chip-grid--muted': randomBoard}">
                 <ChoiceChip v-for="boardName in group.boards" :key="boardName"
                   :label="boardName" capitalized :selected="board === boardName"
-                  :href="isRandomBoard(boardName) ? undefined : boardHref(boardName)"
+                  :href="boardHref(boardName)"
                   @select="board = boardName">
                   <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
                 </ChoiceChip>
               </div>
             </template>
-            <OptionRow label="Randomize board tiles" :href="wikiUrls.randomizeBoardTiles">
+            <!-- Random board as a switch instead of extra chips: the board itself is drawn when the game starts -->
+            <OptionRow label="Random board">
+              <SwitchInput v-model="randomBoard"/>
+            </OptionRow>
+            <SegmentedControl v-if="randomBoard" v-model="randomBoardScope" :options="RANDOM_BOARD_OPTIONS"/>
+            <OptionRow label="Shuffle board bonuses" :href="wikiUrls.randomizeBoardTiles">
               <SwitchInput v-model="shuffleMapOption"/>
             </OptionRow>
             <template v-if="playersCount > 1">
@@ -370,7 +375,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, FAN_BOARDS, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS} from './createGameChoices';
+import {AGENDA_OPTIONS, FAN_BOARDS, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS} from './createGameChoices';
 
 const createGameSettingsStorage = new CreateGameSettingsStorage();
 
@@ -388,6 +393,8 @@ type FormModel = {
   /** Only start writing the URL after loading, otherwise the default state overwrites the shared link */
   settingsLinkReady: boolean;
   settingsLinkCopied: boolean;
+  /** Board chosen before switching on "Random board" – comes back when it is switched off */
+  lastFixedBoard: BoardName;
 };
 
 // How long the button shows "Link copied"
@@ -404,6 +411,7 @@ export default defineComponent({
       previousViewport: '',
       settingsLinkReady: false,
       settingsLinkCopied: false,
+      lastFixedBoard: BoardName.THARSIS,
     };
   },
   components: {
@@ -425,6 +433,11 @@ export default defineComponent({
     ValidationErrorsPopup,
   },
   watch: {
+    board(value: BoardNameType) {
+      if (!this.isRandomBoard(value)) {
+        this.lastFixedBoard = value as BoardName;
+      }
+    },
     allOfficialExpansions(value: boolean) {
       this.expansions.corpera = value;
       this.expansions.prelude = value;
@@ -619,6 +632,26 @@ export default defineComponent({
     },
     AGENDA_OPTIONS(): typeof AGENDA_OPTIONS {
       return AGENDA_OPTIONS;
+    },
+    RANDOM_BOARD_OPTIONS(): typeof RANDOM_BOARD_OPTIONS {
+      return RANDOM_BOARD_OPTIONS;
+    },
+    // "Random board" is stored as the board value itself (RandomBoardOption), like before
+    randomBoard: {
+      get(): boolean {
+        return this.isRandomBoard(this.board);
+      },
+      set(value: boolean) {
+        this.board = value ? RandomBoardOption.OFFICIAL : this.lastFixedBoard;
+      },
+    },
+    randomBoardScope: {
+      get(): string {
+        return this.isRandomBoard(this.board) ? this.board : RandomBoardOption.OFFICIAL;
+      },
+      set(value: string) {
+        this.board = value as RandomBoardOption;
+      },
     },
     boardGroups() {
       return [
