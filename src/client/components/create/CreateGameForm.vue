@@ -219,22 +219,13 @@
           </section>
         </div>
 
-        <CorporationsFilter
-            ref="corporationsFilter"
-            v-if="showCorporationList"
-            @corporation-list-changed="updateCustomCorporations"
-            :expansions="expansions"
-            :selected="customCorporations"
-            @close="showCorporationList = false"
-        />
-        <PreludesFilter
-            ref="preludesFilter"
-            v-if="showPreludesList"
-            @prelude-list-changed="updateCustomPreludes"
-            :expansions="expansions"
-            :selected="customPreludes"
-            @close="showPreludesList = false"
-        />
+        <!-- Custom lists as their own cards: show (difference to the default as cards) or edit -->
+        <CustomCardListCard v-if="showCorporationList" kind="corporations" title="Custom Corporation list"
+            :expansions="expansions" :selected="customCorporations" @list-changed="updateCustomCorporations"/>
+        <CustomCardListCard v-if="showPreludesList" kind="preludes" title="Custom Preludes list"
+            :expansions="expansions" :selected="customPreludes" @list-changed="updateCustomPreludes"/>
+        <CustomCardListCard v-if="showCeosList" kind="ceos" title="Custom CEOs list"
+            :expansions="expansions" :selected="customCeos" @list-changed="updateCustomCeos"/>
         <ColoniesFilter
             ref="coloniesFilter"
             v-if="showColoniesList"
@@ -242,14 +233,6 @@
             :expansions="expansions"
             :selected="customColonies"
             @close="showColoniesList = false"
-        />
-        <CeosFilter
-            ref="ceosFilter"
-            v-if="showCeosList"
-            @ceo-list-changed="updateCustomCeos"
-            :expansions="expansions"
-            :selected="customCeos"
-            @close="showCeosList = false"
         />
         <div class="create-game--block" v-if="showBannedCards">
           <CardsFilter
@@ -340,9 +323,7 @@ import {Color, PLAYER_COLORS} from '@/common/Color';
 import {BoardName} from '@/common/boards/BoardName';
 import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
 import {CardName} from '@/common/cards/CardName';
-import CeosFilter from '@/client/components/create/CeosFilter.vue';
-import CorporationsFilter from '@/client/components/create/CorporationsFilter.vue';
-import PreludesFilter from '@/client/components/create/PreludesFilter.vue';
+import CustomCardListCard from '@/client/components/create/CustomCardListCard.vue';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
@@ -418,14 +399,12 @@ export default defineComponent({
     AppButton,
     PlayerCube,
     CardsFilter,
-    CeosFilter,
     ChoiceChip,
     ColoniesFilter,
-    CorporationsFilter,
+    CustomCardListCard,
     InfoLink,
     NumberStepper,
     OptionRow,
-    PreludesFilter,
     PageToolbar,
     PageTitle,
     SegmentedControl,

@@ -4,6 +4,7 @@
     :groups="GROUPS"
     :itemsByGroup="ALL_CARDS_BY_MODULE"
     :selected="initialSelected"
+    :embedded="embedded"
     @update:selected="$emit('prelude-list-changed', $event)"
     @close="$emit('close')"
   >
@@ -19,27 +20,10 @@ import {defineComponent} from 'vue';
 import ModuleItemFilter from './ModuleItemFilter.vue';
 import {CardName} from '@/common/cards/CardName';
 import {Expansion, GameModule, GAME_MODULES, MODULE_NAMES} from '@/common/cards/GameModule';
-import {byModule, byType, getCard, getCards} from '@/client/cards/ClientCardManifest';
-import {CardType} from '@/common/cards/CardType';
-import {toName} from '@/common/utils/utils';
+import {getCard} from '@/client/cards/ClientCardManifest';
+import {customListCardsByModule, defaultCustomList} from './customCardListDefaults';
 
-function preludeCardNames(module: GameModule): Array<CardName> {
-  return getCards(byModule(module))
-    .filter(byType(CardType.PRELUDE))
-    .map(toName);
-}
-
-const interim = GAME_MODULES.map((module) => [module, [] as Array<CardName>]);
-const ALL_CARDS_BY_MODULE: Record<GameModule, Array<CardName>> = Object.fromEntries(interim);
-getCards(byType(CardType.PRELUDE)).forEach((card) => {
-  // Dealt automatically when Delta Project expansion is on; not part of the custom prelude pool.
-  if (card.name === CardName.DELTA_PROJECT) {
-    return;
-  }
-  ALL_CARDS_BY_MODULE[card.module].push(card.name);
-});
-GAME_MODULES.forEach((module) => ALL_CARDS_BY_MODULE[module].sort());
-
+const ALL_CARDS_BY_MODULE = customListCardsByModule('preludes');
 const GROUPS = GAME_MODULES.map((module) => ({key: module, label: MODULE_NAMES[module]}));
 
 export default defineComponent({
@@ -49,18 +33,11 @@ export default defineComponent({
   props: {
     expansions: {type: Object as () => Record<Expansion, boolean>, required: true},
     selected: {type: Array as () => Array<CardName>, required: true},
+    // Inside a card of the form instead of a popup
+    embedded: {type: Boolean, default: false},
   },
   data() {
-    const initialSelected: Array<CardName> = this.selected.length > 0 ? [...this.selected] : [
-      ...preludeCardNames('prelude'),
-      ...this.expansions.promo ? preludeCardNames('promo') : [],
-      ...this.expansions.community ? preludeCardNames('community') : [],
-      ...this.expansions.moon ? preludeCardNames('moon') : [],
-      ...this.expansions.pathfinders ? preludeCardNames('pathfinders') : [],
-      ...this.expansions.ceo ? preludeCardNames('ceo') : [],
-      ...this.expansions.underworld ? preludeCardNames('underworld') : [],
-      ...this.expansions.prelude2 ? preludeCardNames('prelude2') : [],
-    ];
+    const initialSelected: Array<CardName> = this.selected.length > 0 ? [...this.selected] : defaultCustomList('preludes', this.expansions);
     return {initialSelected};
   },
   computed: {

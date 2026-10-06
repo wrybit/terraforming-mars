@@ -1,5 +1,5 @@
 <template>
-  <div class="create-game-option" :class="{'create-game-option--sub': sub}">
+  <div class="create-game-option" :class="{'create-game-option--sub': sub}" @click="toggleSwitch">
     <span class="create-game-option-name">
       <span v-if="iconClass" :class="'create-game-expansion-icon ' + iconClass"></span>
       <span v-i18n>{{ label }}</span>
@@ -34,6 +34,17 @@ export default defineComponent({
     sub: {
       type: Boolean,
       default: false,
+    },
+  },
+  methods: {
+    // Larger target (Fitts): a click anywhere on a row with a switch toggles it;
+    // clicks on the switch itself, links or other controls keep their own behavior
+    toggleSwitch(event: MouseEvent) {
+      const target = event.target as HTMLElement;
+      if (target.closest('input, button, a, select, label') !== null) {
+        return;
+      }
+      (this.$el as HTMLElement).querySelector<HTMLInputElement>('.create-game-switch')?.click();
     },
   },
 });

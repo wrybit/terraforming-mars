@@ -1,44 +1,43 @@
 <!-- Generic popup filter for grouped item selection. -->
 <template>
-  <PopupPanel @close="$emit('close')">
-    <template #header>
-      <div class="corporations-filter-toolbox-cont">
-        <h2 v-i18n>{{ title }}</h2>
-        <div class="corporations-filter-toolbox corporations-filter-toolbox--topmost">
-          <a href="#" v-i18n @click.prevent="selectAll('All')">All*</a> |
-          <a href="#" v-i18n @click.prevent="selectNone('All')">None*</a> |
-          <a href="#" v-i18n @click.prevent="invertSelection('All')">Invert*</a>
-          <input class="filter" :placeholder="$t('filter')" v-model="filterText">
-        </div>
-      </div>
+  <!-- Popup by default; embedded in a card of the form, the card supplies the title -->
+  <component :is="embedded ? 'div' : PopupPanel" :class="{'module-item-filter--embedded': embedded}" @close="$emit('close')">
+    <template v-if="!embedded" #header>
+      <h2 v-i18n>{{ title }}</h2>
     </template>
-    <div>
-      <div class="corporations-filter">
-        <template v-for="group in groups">
-          <div class="corporations-filter-group" v-if="showGroup(group.key)" :key="group.key" >
-            <div class="corporations-filter-toolbox-cont">
-              <div>
-                <span v-i18n>{{ group.label }}</span>&nbsp;
-                <div :class="icon(group.key)"></div>
-              </div>
-              <div class="corporations-filter-toolbox">
-                <a href="#" v-i18n @click.prevent="selectAll(group.key)">All</a> |
-                <a href="#" v-i18n @click.prevent="selectNone(group.key)">None</a> |
-                <a href="#" v-i18n @click.prevent="invertSelection(group.key)">Invert</a>
-              </div>
-            </div>
-            <div v-for="item in itemsByGroup[group.key]" :key="item" v-show="include(item)">
-              <label class="form-checkbox">
-                <input type="checkbox" v-model="localSelected" :value="item">
-                <i class="form-icon"></i>
-                <slot name="item" :itemName="item" :icon="icon"></slot>
-              </label>
-            </div>
-          </div>
-        </template>
+    <div class="corporations-filter-toolbox-cont">
+      <div class="corporations-filter-toolbox corporations-filter-toolbox--topmost">
+        <a href="#" v-i18n @click.prevent="selectAll('All')">All*</a> |
+        <a href="#" v-i18n @click.prevent="selectNone('All')">None*</a> |
+        <a href="#" v-i18n @click.prevent="invertSelection('All')">Invert*</a>
+        <input class="filter" :placeholder="$t('filter')" v-model="filterText">
       </div>
     </div>
-  </PopupPanel>
+    <div class="corporations-filter">
+      <template v-for="group in groups">
+        <div class="corporations-filter-group" v-if="showGroup(group.key)" :key="group.key" >
+          <div class="corporations-filter-toolbox-cont">
+            <div>
+              <span v-i18n>{{ group.label }}</span>&nbsp;
+              <div :class="icon(group.key)"></div>
+            </div>
+            <div class="corporations-filter-toolbox">
+              <a href="#" v-i18n @click.prevent="selectAll(group.key)">All</a> |
+              <a href="#" v-i18n @click.prevent="selectNone(group.key)">None</a> |
+              <a href="#" v-i18n @click.prevent="invertSelection(group.key)">Invert</a>
+            </div>
+          </div>
+          <div v-for="item in itemsByGroup[group.key]" :key="item" v-show="include(item)">
+            <label class="form-checkbox">
+              <input type="checkbox" v-model="localSelected" :value="item">
+              <i class="form-icon"></i>
+              <slot name="item" :itemName="item" :icon="icon"></slot>
+            </label>
+          </div>
+        </div>
+      </template>
+    </div>
+  </component>
 </template>
 
 <script setup lang="ts" generic="T extends string">
@@ -52,6 +51,7 @@ const props = defineProps<{
   groups: Array<Group>;
   itemsByGroup: Record<string, Array<T>>;
   selected: Array<T>;
+  embedded?: boolean;
 }>();
 
 const emit = defineEmits<{

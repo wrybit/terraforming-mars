@@ -1,26 +1,20 @@
 <template>
     <div class="cards-filter">
-        <h2 v-i18n>{{ title }}</h2>
-        <div class="cards-filter-results-cont" v-if="selected.length">
-            <div class="cards-filter-result" v-for="cardName in selected" :key="cardName">
-                <label>{{ cardName }}
-                  <i class="create-game-expansion-icon expansion-icon-prelude" title="This card is a prelude" v-if="isPrelude(cardName)"></i>
-                  <i class="create-game-expansion-icon expansion-icon-ceo" title="This card is a CEO" v-if="isCEO(cardName)"></i>
-                  <template v-for="expansion of expansions(cardName)" :key="expansion">
-                    <i :class="`create-game-expansion-icon expansion-icon-${expansion}`" :title="expansion"></i>
-                  </template>
-                </label>
-                <AppButton size="small" type="close" @click="removeCard(cardName)" />
-            </div>
+        <div class="create-game-card-head">
+            <h2 v-i18n>{{ title }}</h2>
+            <span v-if="selected.length" class="create-game-count">{{ selected.length }}</span>
         </div>
         <div class="cards-filter-input">
-            <div>
-                <input ref="filter" class="form-input" :placeholder="$t(hint)" v-model="searchTerm" >
-            </div>
+            <input ref="filter" class="create-game-text-input" :placeholder="$t(hint)" v-model="searchTerm"
+                @keydown.down.prevent="moveActive(1)" @keydown.up.prevent="moveActive(-1)" @keydown.enter.prevent="addActive">
+            <!-- Matches on the left, the card under the pointer (or keyboard focus) as a preview on the right -->
             <div class="cards-filter-suggest" v-if="searchMatches.length">
-                <div class="cards-filter-suggest-item" v-for="cardName in searchMatches" :key="cardName">
-                    <a href="#" @click.prevent="addCard(cardName)">
-                      {{ cardName }}
+                <div class="cards-filter-suggest-list" role="listbox">
+                    <a href="#" v-for="(cardName, index) in searchMatches" :key="cardName" role="option"
+                        :aria-selected="index === activeIndex"
+                        :class="['cards-filter-suggest-item', {'cards-filter-suggest-item--active': index === activeIndex}]"
+                        @mouseenter="activeIndex = index" @focus="activeIndex = index" @click.prevent="addCard(cardName)">
+                      <span>{{ cardName }}</span>
                       <i class="create-game-expansion-icon expansion-icon-prelude" title="This card is a Prelude" v-if="isPrelude(cardName)"></i>
                       <i class="create-game-expansion-icon expansion-icon-ceo" title="This card is a CEO" v-if="isCEO(cardName)"></i>
                       <template v-for="expansion of expansions(cardName)" :key="expansion">
@@ -28,15 +22,17 @@
                       </template>
                     </a>
                 </div>
+                <CardPreviewGrid v-if="activeCard !== undefined" class="cards-filter-preview" :names="[activeCard]"/>
             </div>
         </div>
+        <CardPreviewGrid v-if="selected.length" class="cards-filter-selected" :names="selected" removable @remove="removeCard"/>
     </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {CardName} from '@/common/cards/CardName';
-import AppButton from '@/client/components/common/AppButton.vue';
+import CardPreviewGrid from './CardPreviewGrid.vue';
 import {byType, getCard, getCards} from '@/client/cards/ClientCardManifest';
 import {CardType} from '@/common/cards/CardType';
 import {inplaceRemove, toName} from '@/common/utils/utils';
@@ -55,6 +51,8 @@ type CardsFilterModel = {
   selected: Array<CardName>;
   searchMatches: Array<CardName>;
   searchTerm: string;
+  // Highlighted match: added with Enter and shown as the preview
+  activeIndex: number;
 }
 
 type Refs = {
@@ -78,14 +76,18 @@ export default defineComponent({
       selected: [],
       searchMatches: [],
       searchTerm: '',
+      activeIndex: 0,
     };
   },
   components: {
-    AppButton,
+    CardPreviewGrid,
   },
   computed: {
     typedRefs(): Refs {
       return this.$refs as unknown as Refs;
+    },
+    activeCard(): CardName | undefined {
+      return this.searchMatches[this.activeIndex];
     },
   },
   methods: {
@@ -97,6 +99,17 @@ export default defineComponent({
     },
     expansions(cardName: CardName): Array<Expansion> {
       return getCard(cardName)?.compatibility ?? [];
+    },
+    moveActive(step: number) {
+      const count = this.searchMatches.length;
+      if (count > 0) {
+        this.activeIndex = (this.activeIndex + step + count) % count;
+      }
+    },
+    addActive() {
+      if (this.activeCard !== undefined) {
+        this.addCard(this.activeCard);
+      }
     },
     removeCard(cardName: CardName) {
       inplaceRemove(this.selected, cardName);
@@ -120,6 +133,7 @@ export default defineComponent({
     },
     searchTerm(value: string) {
       this.searchMatches = [];
+      this.activeIndex = 0;
 
       // Allows multiple simultaneous entries
       // This is case sensitive, as opposed to the standard search
@@ -142,7 +156,7 @@ export default defineComponent({
         if (candidate.toLowerCase().indexOf(searchTermLowercase) >= 0) {
           this.searchMatches.push(candidate);
         }
-        if (this.searchMatches.length === 5) {
+        if (this.searchMatches.length === 8) {
           return;
         }
       }

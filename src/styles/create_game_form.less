@@ -32,7 +32,7 @@
   // Hidden tooltips of the info links stick out on the right; clip instead of hidden, so sticky keeps working
   overflow-x: clip;
   color: #eee;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.35;
 
   h1,
@@ -114,7 +114,7 @@
   min-width: @toolbar-button-size;
   padding: 0 12px;
   color: #eee;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 // Line icons of the header buttons (import, export, copy link); the icon library's CSS icons are hardly recognizable
@@ -170,6 +170,11 @@
 .create-game-settings {
   grid-column: 1;
   min-width: 0;
+  // Column instead of margins: the last card of a masonry column loses its margin-bottom,
+  // the gap keeps the cards below it (filters, custom lists) at the spacing of all other cards
+  display: flex;
+  flex-direction: column;
+  gap: @create-game-gap-card;
 }
 
 // Masonry: cards flow in two columns
@@ -193,10 +198,6 @@
   margin-bottom: @create-game-gap-card;
 }
 
-// Filter lists (corporations, cards …) below the cards
-.create-game--block {
-  margin-bottom: @create-game-gap-card;
-}
 
 .create-game-card-head {
   display: flex;
@@ -205,7 +206,7 @@
   margin-bottom: 10px;
 
   h2 {
-    font-size: 16px;
+    font-size: 18px;
   }
 }
 
@@ -214,7 +215,7 @@
   align-items: center;
   gap: 6px;
   margin: 12px 0 @create-game-gap-inner;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: @create-game-dim;
@@ -231,7 +232,7 @@
   border-radius: 6px;
   background: none;
   color: lighten(@bg_action, 18%);
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
 
   &:hover {
@@ -247,7 +248,7 @@
   display: inline-grid;
   place-items: center;
   flex: none;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1;
   opacity: 0.55;
 
@@ -328,7 +329,7 @@
       border-radius: 0 @create-game-radius-small 0 6px;
       background: lighten(@selection-color, 12%);
       color: #fff;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: bold;
     }
   }
@@ -357,7 +358,7 @@
   padding: 1px 7px;
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.14);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .create-game-alpha {
@@ -379,6 +380,20 @@
   align-items: center;
   gap: 8px;
   min-height: 32px;
+
+  // Row with a switch: the whole row is the target (OptionRow.vue) and lights up on hover;
+  // reaches into the card padding so the text does not move
+  &:has(.create-game-switch) {
+    margin: 0 -8px;
+    padding: 0 8px;
+    border-radius: @create-game-radius-small;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background: @create-game-chip-hover;
+    }
+  }
 
   &--sub {
     padding-left: 16px;
@@ -415,7 +430,7 @@
   align-items: center;
   gap: 6px;
   margin-bottom: 2px;
-  font-size: 12px;
+  font-size: 13px;
   color: @create-game-dim;
 
   .create-game-expansion-icon {
@@ -428,7 +443,7 @@
 
 .create-game-note {
   margin: 2px 0 6px;
-  font-size: 12px;
+  font-size: 13px;
   color: @create-game-dim;
 }
 
@@ -496,7 +511,7 @@
     border: 0;
     background: none;
     color: @create-game-dim;
-    font-size: 16px;
+    font-size: 18px;
     cursor: pointer;
 
     &:hover:not(:disabled) {
@@ -579,7 +594,7 @@
 
   h2 {
     margin-bottom: 10px;
-    font-size: 18px;
+    font-size: 20px;
   }
 }
 
@@ -622,7 +637,7 @@
   height: 26px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.35);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: bold;
 }
 
@@ -635,7 +650,7 @@
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.3);
   color: #fff;
-  font-size: 15px;
+  font-size: 17px;
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.6);
@@ -657,7 +672,7 @@
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.3);
   color: @create-game-dim;
-  font-size: 12px;
+  font-size: 13px;
   white-space: nowrap;
   cursor: pointer;
 
@@ -709,7 +724,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 16px;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .create-game-player-toggle {
@@ -732,7 +747,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4px 12px;
-  font-size: 12px;
+  font-size: 13px;
   color: @create-game-dim;
 }
 
@@ -823,7 +838,7 @@
 
   .create-game-segmented button {
     padding: 6px 4px;
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 
@@ -848,5 +863,97 @@
     order: 1;
     flex-basis: 100%;
     margin-left: 0;
+  }
+}
+
+// ---------- cards as preview (CardPreviewGrid.vue): excluded/included cards, changes of the custom lists ----------
+@create-game-card-zoom: 0.8; // like the buy columns of the start selection
+@create-game-card-zoom-phone: 0.6; // two cards side by side inside the card padding
+
+.create-game-card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+
+  .cardbox {
+    zoom: @create-game-card-zoom;
+  }
+
+  // Space on top for the cost coin and tags sticking out; spacing comes from the gap
+  .card-container {
+    margin: 15px 0 0;
+  }
+}
+
+.create-game-card-grid-item {
+  position: relative;
+
+  // Removed from the default pool: still recognizable, but clearly out
+  &--removed .card-container {
+    opacity: 0.45;
+    filter: grayscale(0.8);
+  }
+}
+
+// Close button centered on the top edge: the corners belong to the cost coin and the tags
+.create-game-card-grid-remove {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+}
+
+// Phone: two cards side by side
+@media only screen and (max-width: @card-list-phone) {
+  .create-game-card-grid {
+    justify-content: center;
+
+    .cardbox {
+      zoom: @create-game-card-zoom-phone;
+    }
+  }
+}
+
+// ---------- custom lists (CustomCardListCard.vue) ----------
+.create-game-custom-list .create-game-card-head {
+  flex-wrap: wrap;
+}
+
+.create-game-custom-list-mode {
+  margin-left: auto;
+}
+
+// Editor inside the card instead of the popup
+.module-item-filter--embedded {
+  .corporations-filter-toolbox-cont .corporations-filter-toolbox {
+    border-radius: @create-game-radius-small;
+    background: @create-game-chip-background;
+
+    input {
+      background: transparent;
+    }
+  }
+
+  .corporations-filter {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: @create-game-gap-card;
+    margin-top: 10px;
+  }
+
+  .corporations-filter-group {
+    width: auto;
+    margin: 0;
+  }
+
+  // Module icons on the text line, so checkbox rows keep the same height
+  .form-checkbox .create-game-expansion-icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin: 0 0 0 4px;
+    background-size: 18px 18px;
+    vertical-align: -3px;
   }
 }
