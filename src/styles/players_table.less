@@ -583,3 +583,23 @@ each(@players, {
   font-weight: 700;
 }
 
+
+// Phone/tablet player columns are narrow: bar across the column, time and penalty below it, without the limit
+html.tm-mobile .escape-velocity-clock {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3px 4px;
+  font-size: 10.5px;
+
+  .escape-velocity-clock__bar {
+    width: 100%;
+  }
+
+  .escape-velocity-clock__text small {
+    display: none;
+  }
+
+  .escape-velocity-clock__penalty {
+    font-size: 10px;
+  }
+}
