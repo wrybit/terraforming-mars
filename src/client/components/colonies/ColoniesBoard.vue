@@ -1,6 +1,6 @@
 <template>
   <div class="colonies-board">
-    <!-- Colonies board tab: each tile close to the board game – planet cut off on the left, the trade track as an orbit
+    <!-- Colonies board tab: each tile close to the board game – the whole planet on the left, the trade track as an orbit
          of steps with the marker, the colony slots on the first three steps, trade fleets as shuttles.
          Below the hangar with all fleets and the trade fee. -->
     <div v-for="colony in views" :key="colony.model.name" :class="tileClasses(colony)"

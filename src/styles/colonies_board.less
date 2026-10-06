@@ -34,7 +34,7 @@
   }
 }
 
-// Tile: planet cut off on the left, its base tone fading out to the right
+// Tile: whole planet on the left, its base tone fading out to the right
 .colonies-board__tile {
   position: relative;
   flex: 1 1 auto;
@@ -62,8 +62,10 @@
   .colony-planet {
     position: absolute;
     top: 50%;
-    right: 4px;
-    height: 128%;
+    right: 2px;
+    // Sized by the strip width, not the tile height: tall tiles (phone, tablet) still show one whole planet like desktop
+    width: calc(100% - 4px);
+    height: auto;
     transform: translateY(-50%);
     box-shadow: 0 0 24px color-mix(in srgb, var(--planet-tone) 55%, transparent), inset -10px -6px 22px rgba(0, 0, 0, 0.55);
   }
