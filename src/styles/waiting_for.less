@@ -21,7 +21,9 @@
 }
 
 .wf-component--select-card {
-  input {
+  // Only the cards' own radio/checkbox – not the card size slider in the toolbar row above them
+  input[type="radio"],
+  input[type="checkbox"] {
     display: none;
   }
 }
