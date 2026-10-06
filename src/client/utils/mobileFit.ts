@@ -104,12 +104,14 @@ export function fitScale(listWidth: number, itemWidth: number, columns: number, 
 const BOARD_HEIGHT_SHARE = 0.62;
 // Tablet landscape (mobile.less, @mb-landscape: Mars left, rest right; player tables horizontal): from this width in landscape
 export const LANDSCAPE_MIN_WIDTH = 900;
-const BARS_HEIGHT = 180;
+// Landscape: everything above and below the board box (header, turn status row, tab bar and box padding,
+// milestone buttons, navigation); the bars sit next to Mars inside the box
+const LANDSCAPE_CHROME_HEIGHT = 330;
 
 /* Maximum board height in px for the current window. */
 export function boardMaxHeight(width: number, height: number): number {
   const landscape = width >= LANDSCAPE_MIN_WIDTH && width > height;
-  return landscape ? height - BARS_HEIGHT : height * BOARD_HEIGHT_SHARE;
+  return landscape ? height - LANDSCAPE_CHROME_HEIGHT : height * BOARD_HEIGHT_SHARE;
 }
 
 const RULES: ReadonlyArray<FitRule> = [

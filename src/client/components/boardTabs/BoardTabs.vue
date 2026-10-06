@@ -17,6 +17,8 @@
       <!-- Mars always keeps its place: it sets the box height (rightColumnFit.ts), the other boards lie on top of it -->
       <div :class="['board-tabs-mars', {'board-tabs-mars--covered': active !== 'mars'}]">
         <slot name="mars"></slot>
+        <!-- Belongs to Mars and is covered with it (mobile: the global parameters as bars) -->
+        <slot name="marsAside"></slot>
       </div>
       <!-- All boards stay mounted (v-show): space selection and log highlights look for their spaces in the DOM -->
       <div v-for="tab in otherTabs" :key="tab" v-show="tab === active" :class="['board-tabs-view', 'board-tabs-view--' + tab]" v-bind="fitSize(tab)">

@@ -16,6 +16,10 @@
       <!-- Desktop: the special spaces off Mars in the corners of the box -->
       <OuterSpaceCorners v-if="!mobileLayout" :spaces="game.spaces" :tileView="tileView"/>
     </template>
+    <!-- Caller's content next to Mars inside the Mars tab (mobile: parameter bars) -->
+    <template #marsAside>
+      <slot name="marsAside"></slot>
+    </template>
     <template #moon>
       <MoonBoard v-if="game.moon" :model="game.moon" :tileView="tileView" ring id="shortkey-moonBoard"/>
     </template>

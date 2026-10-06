@@ -466,9 +466,19 @@ html.tm-mobile {
       align-self: stretch;
     }
 
+    // Mars tab: the planet, below it (landscape: next to it) the global parameters as bars
     .board-tabs-mars {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    // Inside the box the bars need no card of their own
+    .board-tabs-mars > .mb-params {
+      align-self: stretch;
+      padding: 0 4px;
+      background: none;
     }
 
     .board-tabs-mars > .board-cont {
@@ -513,8 +523,7 @@ html.tm-mobile {
       order: 0;
     }
 
-    > .mb-mars-zoom,
-    > .mb-params {
+    > .mb-mars-zoom {
       order: 2;
     }
 
@@ -2383,48 +2392,56 @@ html.tm-mobile {
     color: @mb-muted;
   }
 
-  // Tablet landscape: Mars on the left, to its right bar, turn status, bars and milestone buttons; the bar row takes
-  // the remaining height of Mars, the buttons sit flush with its bottom edge. Colonies etc. follow below in column 2
+  // Tablet landscape: turn status and toolbar in the top row, below them the board box over the full width (Mars tab:
+  // planet left, the bars vertical next to it filling its height; the other boards get the whole box),
+  // milestone buttons at the bottom
   @media @mb-landscape {
     .mb-screen--mars {
       display: grid; // without !important, otherwise hiding via v-show (inline style) would no longer work
-      grid-template-columns: auto minmax(0, 1fr);
-      grid-template-rows: auto auto minmax(0, 1fr) auto;
-      align-items: start;
-      column-gap: 16px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-rows: auto auto auto;
+      align-items: center;
+      gap: 12px 16px;
 
       > * {
-        grid-column: 2;
+        grid-column: 1 / -1;
+      }
+
+      > .mb-banner {
+        grid-row: 1;
+        grid-column: 1;
       }
 
       > .mb-toolbar {
         grid-row: 1;
+        grid-column: 2;
       }
 
-      > .mb-banner {
+      > .board-tabs {
         grid-row: 2;
-      }
-
-      > .mb-params {
-        grid-row: 3;
         align-self: stretch;
       }
 
       > .mb-quick {
-        grid-row: 4;
+        grid-row: 3;
       }
 
-      > .board-tabs {
-        grid-column: 1;
-        grid-row: 1 / span 4;
-      }
-
-      // Zoom button stays bottom right on the planet; in column 2 the negative margin would pull it over the turn status
+      // Zoom button stays bottom left on the planet
       > .mb-mars-zoom {
-        grid-column: 1;
-        grid-row: 1 / span 4;
-        place-self: end;
-        margin: 0 8px 12px 0;
+        grid-row: 2;
+        place-self: end start;
+        margin: 0 0 44px 12px;
+      }
+
+      .board-tabs-mars {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 16px;
+      }
+
+      .board-tabs-mars > .mb-params {
+        flex: 1 1 0;
+        min-width: 0;
       }
 
       > a {

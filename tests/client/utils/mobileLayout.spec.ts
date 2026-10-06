@@ -44,9 +44,9 @@ describe('mobileFit', () => {
 });
 
 describe('boardMaxHeight', () => {
-  it('leaves room for the bars in portrait and uses the full height in landscape', () => {
+  it('leaves room for the bars in portrait and for the rows around the board box in landscape', () => {
     expect(boardMaxHeight(390, 844)).to.be.closeTo(523, 1);
-    expect(boardMaxHeight(1024, 768)).to.eq(588);
+    expect(boardMaxHeight(1024, 768)).to.eq(438);
   });
 });
 
