@@ -2,7 +2,8 @@
   <div :class="['wf-options', {'wf-options--tabs': asTabs}]">
     <!-- A card's decision with its own tabs: instead of the question, the card sits at the top of the box (CardIntroBlock) -->
     <!-- Action menu in tabs: no "Take your first/next action" heading, the 1st/2nd action chips in the footer say it -->
-    <label v-if="showtitle && sourceCard === undefined && !(asTabs && turnStep !== undefined)"><div>{{ $t(playerinput.title) }}</div></label>
+    <!-- Tabs: the question sits inside the box (below), never loose above the tab bar -->
+    <label v-if="showtitle && sourceCard === undefined && !asTabs"><div>{{ $t(playerinput.title) }}</div></label>
     <label v-if="playerinput.warning !== undefined" class="card-warning"><div>({{ $t(playerinput.warning) }})</div></label>
 
     <!-- Action menu: tabs with short label and count of available entries; empty tabs are dimmed but clickable -->
@@ -35,6 +36,9 @@
     <!-- In tab mode this container is the box attached to the active tab (content + save) -->
     <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <HandCardsPanel v-if="asTabs && handTabActive" :playerView="playerView"/>
+      <div v-if="asTabs && !handTabActive && showtitle && sourceCard === undefined && turnStep === undefined" class="or-tab-intro or-tab-question">
+        <div class="or-tab-intro-title">{{ $t(playerinput.title) }}</div>
+      </div>
       <!-- Explanation where there would otherwise be just a button (tabIntro.ts): image, what happens, hint -->
       <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :playerView="playerView" :card="selectedCard"/>
       <CardIntroBlock v-else-if="asTabs && !handTabActive && selectedCard !== undefined && selectedOption !== undefined" :card="selectedCard" :title="fullTabTitle(selectedOption.title)"/>
