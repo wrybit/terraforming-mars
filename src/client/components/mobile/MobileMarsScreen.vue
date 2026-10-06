@@ -44,8 +44,9 @@
           :venus="game.gameOptions.expansions.venus ? game.venusScaleLevel : undefined"/>
       </template>
     </GameBoardView>
-    <!-- Tapping Mars also opens the large view (GameBoardView) -->
-    <button v-if="boardTabState.active === 'mars'" type="button" class="mb-mars-zoom" @click="requestPlacementZoom">
+    <!-- Tapping Mars or the Moon also opens the large view (GameBoardView) -->
+    <button v-if="boardTabState.active === 'mars' || boardTabState.active === 'moon'" type="button" class="mb-mars-zoom"
+      @click="requestPlacementZoom(boardTabState.active)">
       <!-- Icon only: no own texts next to the existing translations -->
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>
     </button>

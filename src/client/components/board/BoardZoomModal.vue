@@ -35,6 +35,8 @@ const props = defineProps<{
   open: boolean;
   // Board in the column: start and end point of the animation, hidden while the modal is open
   origin?: HTMLElement;
+  // Mobile: cut out the Mars planet like on the start screen (MARS_CROP); other boards (Moon) are shown whole
+  marsCrop?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -72,7 +74,7 @@ function fitToViewport() {
 // Window resized: desktop refits the board, mobile keeps the chosen zoom (only 100 % is recomputed)
 function onResize() {
   if (mobileLayout.value) {
-    wholeZoom.value = wholePlanetZoom(window.innerWidth, window.innerHeight);
+    wholeZoom.value = mobileWholeZoom();
   } else {
     fitToViewport();
   }
@@ -85,7 +87,7 @@ const CONTROLS_HEIGHT = 72;
 const wholeZoom = ref(1);
 const zoomPercent = computed(() => Math.round(zoomFactor.value / wholeZoom.value * 100));
 // Mobile: only the start screen's section (planet including colony spaces), the ring around it is dropped (mobile.less)
-const contentStyle = computed(() => mobileLayout.value ? {
+const contentStyle = computed(() => mobileLayout.value && props.marsCrop !== false ? {
   'zoom': zoomFactor.value,
   'width': MARS_CROP.width + 'px',
   'height': MARS_CROP.height + 'px',
@@ -94,14 +96,34 @@ const contentStyle = computed(() => mobileLayout.value ? {
 } : {zoom: zoomFactor.value});
 let stopPinch: (() => void) | undefined;
 
+// Mobile, board without crop (Moon): whole board fits the area above the zoom bar
+function wholeBoardZoom(): number {
+  if (content.value === undefined) {
+    return 1;
+  }
+  naturalSize ??= {width: content.value.offsetWidth, height: content.value.offsetHeight};
+  if (naturalSize.width === 0 || naturalSize.height === 0) {
+    return 1;
+  }
+  return Math.min((window.innerWidth - 2 * VIEWPORT_MARGIN) / naturalSize.width, (window.innerHeight - CONTROLS_HEIGHT - 2 * VIEWPORT_MARGIN) / naturalSize.height);
+}
+
+function mobileWholeZoom(): number {
+  return props.marsCrop === false ? wholeBoardZoom() : wholePlanetZoom(window.innerWidth, window.innerHeight);
+}
+
 function fitMobile() {
-  wholeZoom.value = wholePlanetZoom(window.innerWidth, window.innerHeight);
+  wholeZoom.value = mobileWholeZoom();
   // Start at 200 %: spaces are immediately tappable
   zoomFactor.value = wholeZoom.value * DEFAULT_ZOOM_RATIO;
 }
 
 // Move the planet to the centre of the visible area above the zoom bar
 function centerPlanet() {
+  if (props.marsCrop === false) {
+    centerBoard();
+    return;
+  }
   const element = backdrop.value;
   const board = content.value?.querySelector('.board-cont');
   if (element === undefined || board === null || board === undefined) {
@@ -175,6 +197,8 @@ function runAnimation(direction: 'open' | 'close'): Promise<void> {
 async function show() {
   closeOtherOverlays(overlayKey);
   zoomFactor.value = 1;
+  // Content may have changed (Mars or Moon): measure again
+  naturalSize = undefined;
   visible.value = true;
   await nextTick();
   if (mobileLayout.value) {

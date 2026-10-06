@@ -166,7 +166,7 @@ import MobileHeader from '@/client/components/mobile/MobileHeader.vue';
 import MobileMarsScreen from '@/client/components/mobile/MobileMarsScreen.vue';
 import MobileNav from '@/client/components/mobile/MobileNav.vue';
 import MobilePlayersPanel from '@/client/components/mobile/MobilePlayersPanel.vue';
-import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
+import {isBoardPlacementActive, placementBoard} from '@/client/components/board/boardPlacementActive';
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
 import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
 import {waitingStatusText} from '@/client/utils/waitingStatusText';
@@ -566,7 +566,7 @@ export default defineComponent({
         this.placing = placing;
         // Space selection right in the large, zoomable Mars (BoardZoomModal) like in the mockup
         if (placing) {
-          requestPlacementZoom();
+          requestPlacementZoom(placementBoard());
         }
       }
     },

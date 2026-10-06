@@ -12,10 +12,11 @@
     </div>
     <!-- Transition to the large board deliberately via a button: automatic expanding feels disruptive.
          The top line says what is being placed, below it the next step – so it's clear what happens after the click -->
-    <div v-if="marsPlacement" class="select-space-zoom">
+    <div v-if="zoomBoard !== undefined" class="select-space-zoom">
       <button type="button" class="btn btn-submit btn-rounded select-space-zoom-button" @click="enlargeBoard">
         <span class="select-space-zoom-action">{{ placementAction }}</span>
-        <span class="select-space-zoom-next-step" v-i18n>Show Mars enlarged and choose a space</span>
+        <span v-if="zoomBoard === 'moon'" class="select-space-zoom-next-step" v-i18n>Show the Moon enlarged and choose a space</span>
+        <span v-else class="select-space-zoom-next-step" v-i18n>Show Mars enlarged and choose a space</span>
       </button>
     </div>
     <div v-if="warning" class="nes-container is-rounded">
@@ -35,11 +36,12 @@ import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesMana
 import {SelectSpaceResponse} from '@/common/inputs/InputResponse';
 import SpaceConfirmPopover from '@/client/components/SpaceConfirmPopover.vue';
 import {placementLabel, previewTileClass, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
-import {placementZoom, releasePlacementZoom, releasePlacementZoomAndWait, requestPlacementZoom} from '@/client/components/board/placementZoom';
+import {ZoomBoard, placementZoom, releasePlacementZoom, releasePlacementZoomAndWait, requestPlacementZoom} from '@/client/components/board/placementZoom';
 
 const PREVIEW_CLASS = 'space-tile-preview';
-// Spaces on the Mars board (incl. colony spaces next to it); the board is enlarged only for these, not for the Moon
+// Spaces on the Mars board (incl. colony spaces next to it) and on the Moon: the board they are on gets enlarged
 const MARS_REGION_SELECTOR = '#main_board, #colony_spaces';
+const MOON_REGION_SELECTOR = '#moon_board, #moon_board_outer_spaces';
 import GoToMap from '@/client/components/waitingFor/GoToMap.vue';
 import {SpaceId} from '@/common/Types';
 
@@ -50,8 +52,8 @@ type DataModel = {
   confirmAnchor: HTMLElement | undefined,
   spaceId: SpaceId | undefined;
   warning: string | undefined;
-  // Selectable spaces are on Mars (not only on the Moon): show the enlarge button
-  marsPlacement: boolean;
+  // Board the selectable spaces are on (Mars wins if both): the enlarge button shows this board
+  zoomBoard: ZoomBoard | undefined;
 };
 
 export default defineComponent({
@@ -88,7 +90,7 @@ export default defineComponent({
       confirmAnchor: undefined,
       spaceId: undefined,
       warning: undefined,
-      marsPlacement: false,
+      zoomBoard: undefined,
     };
   },
   computed: {
@@ -232,7 +234,9 @@ export default defineComponent({
       this.onsave({type: 'space', spaceId: this.spaceId});
     },
     enlargeBoard() {
-      requestPlacementZoom();
+      if (this.zoomBoard !== undefined) {
+        requestPlacementZoom(this.zoomBoard);
+      }
     },
     // Mark selectable spaces and make them clickable; returns the bound spaces
     bindSpaces(): Array<HTMLElement> {
@@ -275,7 +279,11 @@ export default defineComponent({
     selectBoardTab([...this.spaces].some((spaceId) => isMoonSpace(spaceId)) ? 'moon' : 'mars');
     const bound = this.bindSpaces();
     // The large board closes by itself after confirmation (confirmPlacement)
-    this.marsPlacement = bound.some((tile) => tile.closest(MARS_REGION_SELECTOR) !== null);
+    if (bound.some((tile) => tile.closest(MARS_REGION_SELECTOR) !== null)) {
+      this.zoomBoard = 'mars';
+    } else if (bound.some((tile) => tile.closest(MOON_REGION_SELECTOR) !== null)) {
+      this.zoomBoard = 'moon';
+    }
   },
 });
 

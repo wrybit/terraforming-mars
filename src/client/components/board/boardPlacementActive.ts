@@ -6,6 +6,13 @@
 export const SELECT_SPACE_SELECTOR = '.select_space_cont';
 export const AVAILABLE_SPACE_SELECTOR = '.board-space--available';
 
+// Board the selectable spaces are on: Moon only if none of them is on Mars
+export function placementBoard(root: Document | HTMLElement = document): 'mars' | 'moon' {
+  const onMoon = root.querySelector(`#moon_board ${AVAILABLE_SPACE_SELECTOR}, #moon_board_outer_spaces ${AVAILABLE_SPACE_SELECTOR}`) !== null;
+  const onMars = root.querySelector(`#main_board ${AVAILABLE_SPACE_SELECTOR}, #colony_spaces ${AVAILABLE_SPACE_SELECTOR}`) !== null;
+  return onMoon && !onMars ? 'moon' : 'mars';
+}
+
 export function isBoardPlacementActive(root: Document | HTMLElement = document): boolean {
   return root.querySelector(SELECT_SPACE_SELECTOR) !== null || root.querySelector(AVAILABLE_SPACE_SELECTOR) !== null;
 }

@@ -94,9 +94,13 @@ describe('SelectSpace', () => {
     expect(placementZoom.requested).to.be.false;
   });
 
-  it('offers no enlarge button for moon spaces', () => {
+  it('enlarges the Moon for moon spaces', async () => {
     addBoard('moon_board', 'm01');
     const wrapper = mountFor(['m01' as SpaceId]);
-    expect(wrapper.find('.select-space-zoom-button').exists()).to.be.false;
+    await wrapper.vm.$nextTick();
+    await wrapper.find('.select-space-zoom-button').trigger('click');
+    expect(placementZoom.requested).to.be.true;
+    expect(placementZoom.board).to.eq('moon');
+    wrapper.unmount();
   });
 });

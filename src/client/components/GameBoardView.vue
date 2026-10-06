@@ -9,7 +9,7 @@
         v-bind="boardProps"
         :outerSpacesInCorners="!mobileLayout"
         @toggleTileView="$emit('toggleTileView')"
-        @click="onBoardClick"
+        @click="onBoardClick($event, 'mars')"
         class="board-cont--zoomable"
         id="shortkey-board"
       />
@@ -21,7 +21,9 @@
       <slot name="marsAside"></slot>
     </template>
     <template #moon>
-      <MoonBoard v-if="game.moon" :model="game.moon" :tileView="tileView" ring id="shortkey-moonBoard"/>
+      <!-- Enlarges on click like Mars (BoardZoomModal) -->
+      <MoonBoard v-if="game.moon" ref="columnMoon" :model="game.moon" :tileView="tileView" ring id="shortkey-moonBoard"
+        class="board-cont--zoomable" @click="onBoardClick($event, 'moon')"/>
     </template>
     <template #colonies>
       <ColoniesBoard :colonies="game.colonies" :players="players" :viewerColor="viewerColor"/>
@@ -39,8 +41,11 @@
 
   <!-- Second board instance for viewing only. The IDs in it (main_board etc.) then exist twice;
        getElementById returns the first occurrence though, and the modal is attached at the end of body -->
-  <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" @close="closeBoardZoom" @rendered="notifyZoomBoardRendered" @hidden="notifyZoomBoardHidden">
+  <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" :marsCrop="zoomBoard === 'mars'"
+    @close="closeBoardZoom" @rendered="notifyZoomBoardRendered" @hidden="notifyZoomBoardHidden">
+    <MoonBoard v-if="zoomBoard === 'moon' && game.moon" :model="game.moon" :tileView="tileView" ring/>
     <Board
+      v-else
       v-bind="boardProps"
       @toggleTileView="$emit('toggleTileView')"
     />
@@ -69,7 +74,7 @@ import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
 import OuterSpaceCorners from '@/client/components/board/OuterSpaceCorners.vue';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
-import {notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
+import {ZoomBoard, notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
 import DeltaBoard from '@/client/components/delta/DeltaBoard.vue';
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
@@ -108,6 +113,8 @@ export default defineComponent({
   data() {
     return {
       boardZoomOpen: false,
+      // Board shown in the enlargement modal (Mars or Moon)
+      zoomBoard: 'mars' as ZoomBoard,
       // Start point of the zoom animation; only known after mounting
       columnBoardElement: undefined as HTMLElement | undefined,
     };
@@ -154,7 +161,7 @@ export default defineComponent({
       immediate: true,
       handler(requested: boolean) {
         if (requested) {
-          this.openBoardZoom();
+          this.openBoardZoom(placementZoom.board);
         } else {
           this.boardZoomOpen = false;
         }
@@ -162,8 +169,10 @@ export default defineComponent({
     },
   },
   methods: {
-    openBoardZoom() {
-      this.columnBoardElement = (this.$refs.columnBoard as {$el?: HTMLElement} | undefined)?.$el;
+    openBoardZoom(board: ZoomBoard) {
+      this.zoomBoard = board;
+      const columnRef = board === 'moon' ? this.$refs.columnMoon : this.$refs.columnBoard;
+      this.columnBoardElement = (columnRef as {$el?: HTMLElement} | undefined)?.$el;
       this.boardZoomOpen = true;
     },
     // Closing via backdrop, ✕ or Escape: an ongoing space selection continues on the small board
@@ -173,9 +182,9 @@ export default defineComponent({
     },
     notifyZoomBoardRendered,
     notifyZoomBoardHidden,
-    // Clicking Mars enlarges it – except during a space selection
+    // Clicking Mars or the Moon enlarges it – except during a space selection
     // and on the board's controls
-    onBoardClick(event: MouseEvent) {
+    onBoardClick(event: MouseEvent, board: ZoomBoard) {
       const target = event.target as HTMLElement | null;
       if (target !== null && target.closest('.hide-tile-button') !== null) {
         return;
@@ -183,7 +192,7 @@ export default defineComponent({
       if (isBoardPlacementActive()) {
         return;
       }
-      this.openBoardZoom();
+      this.openBoardZoom(board);
     },
     highlightSpace(spaceId: SpaceId) {
       scrollToSpace(spaceId);
