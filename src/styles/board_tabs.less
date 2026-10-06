@@ -165,15 +165,15 @@
   }
 }
 
-// Moon tab: the ring board scaled to the box (boardTabFit.ts), centred and shifted down a little:
-// the tile view switch fits into the gap between the lower ring ends, the top needs room below the tabs
+// Moon tab: the ring board scaled to the box (boardTabFit.ts), centred vertically and horizontally;
+// the tile view switch fits into the gap between the lower ring ends
 .board-tabs-view--moon {
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  // The bonus chip above the top band reaches out of the ring drawing: more room on top than below
-  padding: 56px 0 8px;
+  // The bonus chip above the top band reaches out of the ring drawing: the same room below keeps the Moon centred
+  padding: 48px 0;
   box-sizing: border-box;
 }
 
