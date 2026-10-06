@@ -14,9 +14,13 @@
           </template>
         </CardFilterBar>
         <!-- Other card lists (buying …): "Select all" on the left where it makes sense, the card size on the right -->
-        <div v-else-if="showSelectAll || !isMobile" class="select-card-toolbar">
-          <AppButton v-if="showSelectAll" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
-          <CardZoomSlider v-if="!isMobile"/>
+        <CardZoomBar v-else-if="!isMobile">
+          <template #lead>
+            <AppButton v-if="showSelectAll" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
+          </template>
+        </CardZoomBar>
+        <div v-else-if="showSelectAll" class="select-card-toolbar">
+          <AppButton class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
         </div>
         <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
         <label v-for="card in getOrderedCards()" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
@@ -67,7 +71,7 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import HandSortControl from '@/client/components/HandSortControl.vue';
 import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
-import CardZoomSlider from '@/client/components/cardfilter/CardZoomSlider.vue';
+import CardZoomBar from '@/client/components/cardfilter/CardZoomBar.vue';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
 import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
@@ -142,7 +146,7 @@ export default defineComponent({
     AppButton,
     HandSortControl,
     CardFilterBar,
-    CardZoomSlider,
+    CardZoomBar,
     CardFilterEmptyHint,
   },
   watch: {

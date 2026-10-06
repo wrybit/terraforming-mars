@@ -61,3 +61,22 @@ html:not(.tm-mobile) :is(.player_home_block--actions, .player_home_block--hand) 
     width: min(100%, calc(var(--choice-columns) * 248px * var(--card-zoom, 1) + (var(--choice-columns) - 1) * 16px));
   }
 }
+
+// Row without filter and sorting (CardZoomBar.vue): the size slider at the right edge
+.card-filter-bar.card-zoom-bar .card-zoom-slider {
+  margin-left: auto;
+}
+
+// Section labels of the card row (CardFilterBar.vue): Filter · Zoom · Sort, like the zoom label
+.card-filter-bar__label {
+  flex: none;
+  color: #a4a9b6;
+  font: 600 10px/12px system-ui, sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  &--sort {
+    margin-left: 14px;
+  }
+}

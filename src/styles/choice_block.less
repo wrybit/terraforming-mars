@@ -65,13 +65,12 @@ html:not(.tm-mobile) {
       flex: 0 0 100%;
     }
 
-    // Many cards (choiceBlockFillsWidth: build, sell, draft …): no square block, but as many cards per row as fit
-    // into the tab box – like the hand cards. Tracks centered, so the rows sit in the middle of the box.
-    // Standard projects stay the square block (decision tiles), even with many expansions
-    &.choice-block--fill:not(:has(.card-standard-project)) {
+    // Many cards (choiceBlockFillsWidth: build, sell, draft, standard projects …): no square block, but as many
+    // cards per row as fit into the tab box – like the hand cards. Tracks shrink with the card zoom, rows start left
+    &.choice-block--fill {
       display: grid;
-      grid-template-columns: repeat(auto-fill, @choice-tile-width);
-      justify-content: center;
+      grid-template-columns: repeat(auto-fill, calc(@choice-tile-width * var(--card-zoom, 1)));
+      justify-content: start;
       align-items: start;
       width: 100%;
 
@@ -157,3 +156,28 @@ html.tm-mobile {
     }
   }
 }
+
+// Card lists and award tiles start at the top left of the tab box like in the mockup (with-extensions),
+// the toolbar row (CardFilterBar / CardZoomBar) spans the whole width above them
+html:not(.tm-mobile) .or-tab-panel {
+  .choice-block:has(> .cardbox, > .payments_cards, > .ma-option):not(.setup-column-body *) {
+    margin: 0 auto auto 0;
+  }
+
+  .ma-options.choice-block {
+    width: 100%;
+
+    > .card-filter-bar {
+      flex: 0 0 100%;
+    }
+
+    > .ma-option {
+      border-radius: calc(17.7px * var(--card-zoom, 1));
+    }
+
+    > .ma-option .ma-name {
+      zoom: calc(unit((@choice-tile-width / @ma-tile-width)) * var(--card-zoom, 1));
+    }
+  }
+}
+

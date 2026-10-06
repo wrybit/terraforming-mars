@@ -1,6 +1,8 @@
 <template>
   <!-- Milestone/award as image tiles like on the board; the chosen one pulses in the CTA colour -->
   <div :class="['ma-options', 'choice-block', kind]" :style="choiceBlockStyle(options.length)" role="radiogroup">
+    <!-- Tile size via the card zoom like all card lists (desktop) -->
+    <CardZoomBar v-if="!mobileLayout"/>
     <label v-for="option in options" :key="optionName(option)"
       :class="['ma-block', 'ma-option', {'ma-option--selected': option === selected}]">
       <input type="radio" class="ma-option-input" :name="groupName" :checked="option === selected" @change="$emit('select', option)">
@@ -15,6 +17,8 @@
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {MilestoneAwardKind, milestoneAwardImageClass, milestoneAwardOptionName} from '@/client/components/milestoneAwardChoice';
 import {choiceBlockStyle} from '@/client/components/choiceBlock';
+import CardZoomBar from '@/client/components/cardfilter/CardZoomBar.vue';
+import {mobileLayout} from '@/client/utils/mobileLayout';
 
 defineProps<{
   kind: MilestoneAwardKind;

@@ -8,6 +8,8 @@
       <HandSortControl :playerView="playerView" :compact="compact"/>
     </template>
   </CardFilterBar>
+  <!-- Standard projects: card size only (desktop) -->
+  <CardZoomBar v-else-if="!isMobile"/>
   <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
   <label v-for="availableCard in cards" class="payments_cards" :class="visibilityClass(availableCard)" :key="availableCard.name">
     <input v-if="!availableCard.isDisabled" class="hidden" type="radio" v-model="cardName" :value="availableCard.name" >
@@ -64,6 +66,8 @@ import {choiceBlockClass, choiceBlockStyle} from '@/client/components/choiceBloc
 import HandSortControl from '@/client/components/HandSortControl.vue';
 import {allCardsInHand} from '@/client/utils/handCards';
 import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
+import CardZoomBar from '@/client/components/cardfilter/CardZoomBar.vue';
+import {mobileLayout} from '@/client/utils/mobileLayout';
 import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
 import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
 import {cardVisibility, CardVisibility, handCardFilter, unmatchedCards} from '@/client/utils/cardFilterState';
@@ -92,6 +96,10 @@ export default defineComponent({
     },
   },
   computed: {
+    // Card size only on desktop (cards are fitted on the phone)
+    isMobile(): boolean {
+      return mobileLayout.value;
+    },
     // Computed instead of data: the Build tab stays mounted (v-show) while the hand is re-sorted –
     // so the list picks up the new order immediately (CardOrderStorage is reactive).
     cards(): ReadonlyArray<CardModel> {
@@ -192,6 +200,7 @@ export default defineComponent({
     };
   },
   components: {
+    CardZoomBar,
     Card,
     PaymentForm,
     WarningsComponent,

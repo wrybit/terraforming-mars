@@ -22,6 +22,8 @@ export const globalConfig = {
     stubs: {
       TabPanelFooterSlot: false,
       teleport: false,
+      // Card row with slot content (e.g. "Select all")
+      CardZoomBar: false,
     },
     config: {
       warnHandler: failOnVueWarning,

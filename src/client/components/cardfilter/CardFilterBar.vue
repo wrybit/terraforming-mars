@@ -5,6 +5,8 @@
        The row sits at the top of its box with a separator line (card_filter_bar.less). -->
   <div ref="root" class="card-filter-bar" :class="{'card-filter-bar--compact': compact, 'card-filter-bar--open': menuOpen && !useSheet}">
     <slot name="lead"></slot>
+    <!-- Section labels as in the mockup: Filter · Zoom · Sort (not in the narrow row) -->
+    <span v-if="!compact" class="card-filter-bar__label">{{ $t('Filtering') }}</span>
     <div class="card-filter-bar__filter">
       <button type="button" class="card-bar-pill" :class="{'card-bar-pill--on': activeCount > 0, 'card-bar-pill--open': menuOpen}"
         :aria-expanded="menuOpen" :title="compact ? $t('Filter') : undefined" @click="menuOpen = !menuOpen">
@@ -39,6 +41,7 @@
     <span class="card-filter-bar__count" :class="{'card-filter-bar__count--idle': activeCount === 0}"><b>{{ shownCount }}</b>/{{ cards.length }}</span>
     <!-- Card size left of the sorting: not on the phone (cards are fitted there) -->
     <CardZoomSlider v-if="!compact && !isMobile"/>
+    <span v-if="!compact && $slots.sort !== undefined" class="card-filter-bar__label card-filter-bar__label--sort">{{ $t('Sort') }}</span>
     <slot name="sort" :compact="compact"></slot>
     <!-- Phone: the filters as a bottom sheet over the screen; background only darkened, not blurred -->
     <Teleport v-if="menuOpen && useSheet" to="body">
