@@ -112,8 +112,6 @@
 // delegates stand out on them and an empty seat doesn't look like a blank card
 .turmoil-board-tab__leader-seat {
   fill: rgba(10, 18, 24, 0.72);
-  stroke: rgba(255, 255, 255, 0.6);
-  stroke-width: 1.5;
 }
 
 .turmoil-board-tab__party-icon {
@@ -144,8 +142,13 @@
 // The chair as a dark field with light heading (the white neutral chairman stands out on it)
 .turmoil-board-tab__chair {
   fill: #1d2a33;
-  stroke: #12282a;
-  stroke-width: 6;
+}
+
+// Same light outline for the chair area and all seats
+.turmoil-board-tab__leader-seat,
+.turmoil-board-tab__chair {
+  stroke: #ffffff96;
+  stroke-width: 2px;
 }
 
 .turmoil-board-tab__chair-label {
