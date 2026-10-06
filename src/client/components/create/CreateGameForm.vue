@@ -316,14 +316,12 @@
           </div>
           <div class="create-game-create-row">
             <AppButton class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors"/>
-            <span v-if="hasBlockingValidationErrors" class="create-game-custom-preludes-warning create-game-validation-blocker" @click="showValidationErrors = true">&#9888;&#xFE0E;</span>
-            <span v-else-if="hasValidationProblems" class="create-game-validation-warning" @click="showValidationErrors = true">&#9888;&#xFE0F;</span>
           </div>
+          <ValidationProblems v-if="hasValidationProblems" :errors="validationErrors"/>
         </section>
       </aside>
     </div>
 
-    <ValidationErrorsPopup v-if="showValidationErrors" :errors="validationErrors" @close="showValidationErrors = false"/>
   </div>
 </template>
 
@@ -363,7 +361,7 @@ import {RULEBOOK_URLS, WIKI, WIKI_URLS} from '@/client/utils/WikiLinks';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {sanitizeEscapeVelocityOptions} from '@/common/game/escapeVelocity';
 import {validateNewGameConfig, validationDetails, ValidationErrors} from '@/common/game/validateNewGameConfig';
-import ValidationErrorsPopup from './ValidationErrorsPopup.vue';
+import ValidationProblems from './ValidationProblems.vue';
 import ChoiceChip from './ChoiceChip.vue';
 import InfoLink from './InfoLink.vue';
 import NumberStepper from './NumberStepper.vue';
@@ -381,7 +379,6 @@ type Refs = {
 };
 
 type FormModel = {
-  showValidationErrors: boolean;
   preludeToggled: boolean;
   uploading: boolean;
   previousViewport: string;
@@ -410,7 +407,6 @@ export default defineComponent({
   data(): CreateGameModel & FormModel {
     return {
       ...defaultCreateGameModel(),
-      showValidationErrors: false,
       preludeToggled: false,
       uploading: false,
       previousViewport: '',
@@ -438,7 +434,7 @@ export default defineComponent({
     PageTitle,
     SegmentedControl,
     SwitchInput,
-    ValidationErrorsPopup,
+    ValidationProblems,
   },
   watch: {
     board(value: BoardNameType) {

@@ -810,27 +810,67 @@
   opacity: 1;
 }
 
-.create-game-custom-preludes-warning {
-  color: red;
-  cursor: pointer;
+// Errors and warnings of the settings, under the Create button (ValidationProblems.vue)
+.create-game-validation {
+  display: flex;
+  flex-direction: column;
+  gap: @create-game-gap-inner;
+  // Long lists must not push the button out of the sticky card
+  max-height: 40vh;
+  overflow-y: auto;
 }
 
-.create-game-validation-warning {
-  cursor: pointer;
+.create-game-validation-box {
+  padding: 8px 12px;
+  border: 1px solid;
+  border-radius: @create-game-radius-small;
+  font-size: 14px;
+  line-height: 1.35;
+
+  // Blocks creating the game
+  &--error {
+    border-color: fade(#e5484d, 60%);
+    background: fade(#e5484d, 14%);
+
+    .create-game-validation-title {
+      color: #ff8a8d;
+    }
+  }
+
+  // Only a hint, the game can still be created
+  &--warning {
+    border-color: fade(@highlight-gold, 50%);
+    background: fade(@highlight-gold, 10%);
+
+    .create-game-validation-title {
+      color: @highlight-gold;
+    }
+  }
+
+  a {
+    color: lighten(@bg_action, 18%);
+  }
 }
 
-// The warning's text symbol is smaller than the emoji
-.create-game-validation-blocker {
-  font-size: 1.5em;
-  line-height: 1;
-  vertical-align: middle;
+.create-game-validation-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-// Popup as large as its content instead of PopupPanel's fixed 90vw x 90vh
-.popup-outer.create-game-validation-popup .popup-inner {
-  width: min(90vw, 800px);
-  height: auto;
-  max-height: 90vh;
+.create-game-validation-problems {
+  margin: 0;
+  padding-left: 18px;
+
+  ul {
+    margin: 2px 0 0;
+    padding-left: 16px;
+  }
 }
 
 // ---------- narrower ----------

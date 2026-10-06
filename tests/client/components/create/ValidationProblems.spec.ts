@@ -1,7 +1,7 @@
 import {mount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
-import ValidationErrorsPopup from '@/client/components/create/ValidationErrorsPopup.vue';
+import ValidationProblems from '@/client/components/create/ValidationProblems.vue';
 import {ValidationErrors} from '@/common/game/validateNewGameConfig';
 import {CardName} from '@/common/cards/CardName';
 import {WIKI_URLS} from '@/client/utils/WikiLinks';
@@ -21,9 +21,9 @@ const NO_ERRORS: ValidationErrors = {
   notEnoughCorporations: 0,
 };
 
-describe('ValidationErrorsPopup', () => {
+describe('ValidationProblems', () => {
   it('lists errors and warnings', () => {
-    const wrapper = mount(ValidationErrorsPopup, {
+    const wrapper = mount(ValidationProblems, {
       ...globalConfig,
       props: {errors: {...NO_ERRORS, notEnoughCorporations: 4, corporationsMissingExpansions: [CardName.ECOLINE]}},
     });
@@ -36,7 +36,7 @@ describe('ValidationErrorsPopup', () => {
   });
 
   it('links to the wiki for more details', () => {
-    const wrapper = mount(ValidationErrorsPopup, {
+    const wrapper = mount(ValidationProblems, {
       ...globalConfig,
       props: {errors: {...NO_ERRORS, maybeNotEnoughPreludes: [CardName.VALLEY_TRUST]}},
     });

@@ -1,11 +1,9 @@
 <template>
-  <PopupPanel class="create-game-validation-popup" @close="$emit('close')">
-    <template #header>
-      <h2 v-i18n>Game Settings Validation</h2>
-    </template>
-    <template v-for="group in groups" :key="group.title">
-      <template v-if="group.problems.length > 0">
-        <h3 v-i18n>{{ group.title }}</h3>
+  <!-- Directly under the Create button instead of a popup: errors (block creating) and warnings each in their own box -->
+  <div class="create-game-validation">
+    <template v-for="group in groups" :key="group.tone">
+      <section v-if="group.problems.length > 0" :class="['create-game-validation-box', `create-game-validation-box--${group.tone}`]">
+        <h3 class="create-game-validation-title"><span aria-hidden="true">&#9888;&#xFE0E;</span><span v-i18n>{{ group.title }}</span></h3>
         <ul class="create-game-validation-problems">
           <li v-for="problem in group.problems" :key="problem.key">
             <span>{{ problem.text }}</span>
@@ -15,14 +13,13 @@
             </ul>
           </li>
         </ul>
-      </template>
+      </section>
     </template>
-  </PopupPanel>
+  </div>
 </template>
 
 <script setup lang="ts">
 import {computed} from 'vue';
-import PopupPanel from '@/client/components/common/PopupPanel.vue';
 import {validationDetails, ValidationErrors} from '@/common/game/validateNewGameConfig';
 import {translateMessage, translateText} from '@/client/directives/i18n';
 import {WIKI_URLS} from '@/client/utils/WikiLinks';
@@ -42,10 +39,6 @@ const learnMoreUrls: Partial<Record<keyof ValidationErrors, string>> = {
 
 const props = defineProps<{
   errors: ValidationErrors;
-}>();
-
-defineEmits<{
-  'close': [];
 }>();
 
 /*
@@ -76,8 +69,8 @@ const problems = computed((): Array<Problem> => {
 const groups = computed(() => {
   const [errors, warnings] = partition(problems.value, (problem) => validationDetails[problem.key].blocking);
   return [
-    {title: 'Errors', problems: errors},
-    {title: 'Warnings', problems: warnings},
+    {tone: 'error', title: 'Errors', problems: errors},
+    {tone: 'warning', title: 'Warnings', problems: warnings},
   ];
 });
 </script>
