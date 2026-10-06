@@ -330,13 +330,14 @@
 
   .turmoil-board-tab__main {
     min-height: 0;
-    justify-content: space-between;
     gap: 12px;
   }
 
-  // As wide as the column allows, as high as the room above the neutral note allows
+  // As wide as the column allows, as high as the room above the neutral note allows;
+  // centered in the free height, the note stays at the bottom
   .turmoil-board-tab__hemicycle {
     width: min(100%, calc((100cqh - 150px) * 1000 / 495));
+    margin: auto 0;
   }
 
   .turmoil-board-tab__events {
