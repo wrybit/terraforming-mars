@@ -40,8 +40,10 @@ describe('orOptionsShortLabels', () => {
     expect(tabDisplayOrder(titles)).deep.eq([2, 5, 1, 3, 4, 0]);
   });
 
-  it('colors milestone and award tabs gold', () => {
-    expect(optionTone({type: 'or', title: 'Claim a milestone', buttonLabel: 'Claim'} as PlayerInputModel)).eq('milestones');
-    expect(optionTone({type: 'or', title: {message: 'Fund an award (${0} M€)', data: []}, buttonLabel: 'Fund'} as unknown as PlayerInputModel)).eq('milestones');
+  it('colors milestone, award, standard project and sell tabs dark yellow', () => {
+    expect(optionTone({type: 'or', title: 'Claim a milestone', buttonLabel: 'Claim'} as PlayerInputModel)).eq('gold');
+    expect(optionTone({type: 'or', title: {message: 'Fund an award (${0} M€)', data: []}, buttonLabel: 'Fund'} as unknown as PlayerInputModel)).eq('gold');
+    expect(optionTone({type: 'projectCard', title: 'Standard projects', buttonLabel: 'Confirm'} as PlayerInputModel)).eq('gold');
+    expect(optionTone({type: 'card', title: 'Sell patents', buttonLabel: 'Sell'} as PlayerInputModel)).eq('gold');
   });
 });
