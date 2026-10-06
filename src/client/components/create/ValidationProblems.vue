@@ -4,15 +4,14 @@
     <template v-for="group in groups" :key="group.tone">
       <section v-if="group.problems.length > 0" :class="['create-game-validation-box', `create-game-validation-box--${group.tone}`]">
         <h3 class="create-game-validation-title"><span aria-hidden="true">&#9888;&#xFE0E;</span><span v-i18n>{{ group.title }}</span></h3>
-        <ul class="create-game-validation-problems">
-          <li v-for="problem in group.problems" :key="problem.key">
+        <!-- Plain paragraphs, no bullets; affected cards etc. as a comma separated line below -->
+        <div class="create-game-validation-problems">
+          <p v-for="problem in group.problems" :key="problem.key">
             <span>{{ problem.text }}</span>
             <template v-if="problem.learnMore">&nbsp;<a :href="problem.learnMore" target="_blank" v-i18n>Learn more</a></template>
-            <ul v-if="problem.items.length > 0">
-              <li v-for="item in problem.items" :key="item" v-i18n>{{ item }}</li>
-            </ul>
-          </li>
-        </ul>
+            <span v-if="problem.items.length > 0" class="create-game-validation-items">{{ problem.items.map((item) => $t(item)).join(', ') }}</span>
+          </p>
+        </div>
       </section>
     </template>
   </div>

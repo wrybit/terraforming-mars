@@ -276,13 +276,174 @@
   display: inline-grid;
   place-items: center;
   flex: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
   font-size: 16px;
   line-height: 1;
   opacity: 0.55;
+  cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &--open {
     opacity: 1;
   }
+
+  &--open {
+    color: lighten(@bg_action, 22%);
+  }
+}
+
+// ---------- info box (InfoBox.vue): short wiki text at the end of the card, nose points at the ⓘ ----------
+@create-game-info-nose: 14px; // edge of the rotated square
+@create-game-info-border: fade(@bg_action, 60%);
+
+.create-game-info-box {
+  position: relative;
+  margin-top: 16px;
+  padding: 10px 12px;
+  border: 1px solid @create-game-info-border;
+  border-radius: @create-game-radius-small;
+  // Solid, so the nose does not darken the box where they overlap
+  background: mix(@bg_action, #1e2028, 18%);
+  font-size: 14px;
+  line-height: 1.4;
+
+  // Nose: square turned by 45°, half of it above the box, horizontally at the ⓘ
+  // (--nose-x counts from the card's left edge, the box starts after the card padding)
+  &::before {
+    content: "";
+    position: absolute;
+    top: -(@create-game-info-nose / 2) - 1px;
+    left: clamp(10px, calc(var(--nose-x) - 14px - @create-game-info-nose / 2), calc(100% - 24px));
+    width: @create-game-info-nose;
+    height: @create-game-info-nose;
+    border-top: 1px solid @create-game-info-border;
+    border-left: 1px solid @create-game-info-border;
+    border-top-left-radius: 2px;
+    background: inherit;
+    transform: rotate(45deg);
+  }
+}
+
+.create-game-info-box-text {
+  margin: 0 0 8px;
+}
+
+.create-game-info-box-loading {
+  opacity: 0.6;
+}
+
+.create-game-info-box-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  // The small button's auto margin pushes it right in subheads; here it stays on the left
+  .create-game-info-box-more {
+    margin-left: 0;
+  }
+}
+
+.create-game-info-box-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.create-game-info-box-icon {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.create-game-info-box-close {
+  margin-left: auto;
+  padding: 2px 6px;
+  border: 0;
+  background: none;
+  color: @create-game-dim;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    color: #fff;
+  }
+}
+
+// ---------- wiki overlay (WikiOverlay.vue): rendered wiki page ----------
+.wiki-overlay-content {
+  font-size: 15px;
+  line-height: 1.5;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin: 1.2em 0 0.4em;
+    font-weight: 600;
+    scroll-margin-top: 8px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 17px;
+  }
+
+  h4,
+  h5 {
+    font-size: 15px;
+  }
+
+  > :first-child {
+    margin-top: 0;
+  }
+
+  p,
+  ul,
+  ol {
+    margin: 0 0 0.8em;
+  }
+
+  a {
+    color: lighten(@bg_action, 22%);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin-bottom: 0.8em;
+  }
+
+  th,
+  td {
+    padding: 4px 8px;
+    border: 1px solid @create-game-line;
+  }
+}
+
+.wiki-overlay-github {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: auto;
 }
 
 .tooltip:hover {
@@ -894,13 +1055,20 @@
 }
 
 .create-game-validation-problems {
-  margin: 0;
-  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 
-  ul {
-    margin: 2px 0 0;
-    padding-left: 16px;
+  p {
+    margin: 0;
   }
+}
+
+// Affected items (cards, colonies …) on their own line under the sentence
+.create-game-validation-items {
+  display: block;
+  margin-top: 2px;
+  color: @create-game-dim;
 }
 
 // ---------- narrower ----------
