@@ -7,13 +7,15 @@
     <div v-if="turmoil !== undefined" class="select-party__layout">
       <div v-if="source !== undefined" class="select-party__column select-party__column--source">
         <div class="select-party__label">{{ $t('From where?') }}</div>
-        <div class="select-party__source">
-          <b>{{ $t(source === 'lobby' ? 'Lobby' : 'Reserve') }}</b>
+        <!-- Both sources like on the board: the one of this action active, the other one shown dimmed
+             (the server offers lobby and reserve as separate actions) -->
+        <div v-for="kind in SOURCES" :key="kind" :class="['select-party__source', {'select-party__source--on': kind === source, 'select-party__source--off': kind !== source}]">
+          <b>{{ $t(kind === 'lobby' ? 'Lobby' : 'Reserve') }}</b>
           <span class="select-party__figures">
-            <span v-if="source === 'reserve'" class="turmoil-board-tab__cost">5</span>
-            <img :src="figureImage(playerView.thisPlayer.color)" width="30" :height="30 * 1.3" alt="">
+            <span v-if="kind === 'reserve'" class="turmoil-board-tab__cost">5</span>
+            <img v-for="index in figureCount(kind)" :key="index" :src="figureImage(playerView.thisPlayer.color)" :width="kind === 'lobby' ? 30 : 18" :height="(kind === 'lobby' ? 30 : 18) * 1.3" alt="">
           </span>
-          <small>{{ $t(source === 'lobby' ? 'free · 1×/gen.' : '5 M€ per delegate') }}</small>
+          <small>{{ $t(kind === 'lobby' ? 'free · 1×/gen.' : '5 M€ per delegate') }}</small>
         </div>
       </div>
       <div class="select-party__column select-party__column--parties">
@@ -103,6 +105,14 @@ export default defineComponent({
   },
   methods: {
     figureImage,
+    // Own figures shown on a source tile: one in the lobby, up to five from the reserve
+    figureCount(kind: 'lobby' | 'reserve'): number {
+      const color = this.playerView.thisPlayer.color;
+      if (kind === 'lobby') {
+        return this.turmoil?.lobby.includes(color) ? 1 : 0;
+      }
+      return Math.min(5, this.turmoil?.reserve.find((delegate) => delegate.color === color)?.number ?? 0);
+    },
     pick(party: PartyName) {
       this.selectedParty = party;
       turmoilPickState.pick = party;
@@ -118,6 +128,9 @@ export default defineComponent({
     },
   },
   computed: {
+    SOURCES(): ReadonlyArray<'lobby' | 'reserve'> {
+      return ['lobby', 'reserve'];
+    },
     PARTY_COLOR(): typeof PARTY_COLOR {
       return PARTY_COLOR;
     },

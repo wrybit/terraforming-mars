@@ -514,13 +514,13 @@
   }
 }
 
-// ---------- Trade tab (TradeColony.vue): pay → get ----------
+// ---------- Trade tab (TradeColony.vue): pay above, get below (mockup with-extensions) ----------
 .trade-colony {
   container-type: inline-size;
   display: grid;
-  grid-template-columns: 180px auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
-  gap: 0 14px;
+  gap: 10px;
   width: 100%;
   padding: 10px 0;
   box-sizing: border-box;
@@ -528,20 +528,26 @@
 
 .trade-colony__column {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
 }
 
 .trade-colony__label {
-  font: 600 10px/12px system-ui, sans-serif;
+  font: 600 11px/13px system-ui, sans-serif;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: @colony-muted;
 }
 
+.trade-colony__fees {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
 .trade-colony__arrow {
-  align-self: center;
-  margin-top: 18px;
+  justify-self: center;
+  rotate: 90deg;
   font: 26px Prototype, sans-serif;
   color: @colony-muted;
 }
@@ -560,27 +566,33 @@
 .trade-colony__fee {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 5px 8px;
+  gap: 10px;
+  padding: 10px 12px;
   text-align: left;
 
   img {
-    width: 26px;
-    height: 26px;
+    width: 34px;
+    height: 34px;
     object-fit: contain;
+  }
+
+  // Not affordable now: visible so all fees are known, but clearly unavailable
+  &--off {
+    cursor: default;
+    opacity: 0.4;
   }
 }
 
 .trade-colony__fee-text {
   display: grid;
-  line-height: 1.15;
+  line-height: 1.2;
 
   b {
-    font-size: 13px;
+    font-size: 16px;
   }
 
   small {
-    font-size: 11px;
+    font-size: 13px;
     color: @colony-muted;
   }
 }
@@ -617,14 +629,14 @@
   display: grid;
   justify-items: center;
   align-content: start;
-  gap: 4px;
-  padding: 8px 6px;
+  gap: 6px;
+  padding: 14px 8px 12px;
   border-radius: 10px;
   text-align: center;
 
   small {
     min-height: 14px;
-    font-size: 11px;
+    font-size: 13px;
     line-height: 1.2;
     color: @colony-muted;
   }
@@ -644,9 +656,10 @@
 
 .trade-colony__offer-head {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   gap: 6px;
-  font: 13px Prototype, sans-serif;
+  font: 16px Prototype, sans-serif;
 }
 
 .trade-colony__offer-planet {
@@ -654,7 +667,7 @@
   display: inline-flex;
 
   .colony-planet {
-    width: 26px;
+    width: clamp(40px, 7cqi, 72px);
   }
 }
 
@@ -667,13 +680,13 @@
 .trade-colony__gain {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font: 26px/1 Prototype, sans-serif;
+  gap: 6px;
+  font: clamp(26px, 4.5cqi, 40px)/1 Prototype, sans-serif;
   color: #fff;
 
   img {
-    width: 26px;
-    height: 26px;
+    width: clamp(26px, 4.5cqi, 40px);
+    height: clamp(26px, 4.5cqi, 40px);
     object-fit: contain;
   }
 }
@@ -691,14 +704,14 @@
   text-align: left;
 
   small {
-    font-size: 12px;
+    font-size: 14px;
     color: @colony-muted;
   }
 
   &--empty {
     border-left-color: rgba(255, 255, 255, 0.2);
     color: @colony-muted;
-    font-size: 13px;
+    font-size: 15px;
   }
 }
 
@@ -706,7 +719,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font: 18px/1 Prototype, sans-serif;
+  font: 22px/1 Prototype, sans-serif;
 
   i {
     font-style: normal;
@@ -714,8 +727,8 @@
   }
 
   img {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     object-fit: contain;
   }
 }
@@ -740,23 +753,27 @@ html:not(.tm-mobile) .or-tab-panel .trade-colony {
   margin: auto 0;
 }
 
-// Narrow (tablet portrait, phone): paying above getting, offers in rows of three
+// Narrow (tablet portrait, phone): offers in rows of three, fees smaller
 @container (max-width: 640px) {
-  .trade-colony {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
-  }
-
   .trade-colony__arrow {
     display: none;
   }
 
-  .trade-colony__column:first-child {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .trade-colony__fees {
+    gap: 6px;
+  }
 
-    > .trade-colony__label {
-      grid-column: 1 / -1;
+  .trade-colony__fee {
+    padding: 6px 8px;
+
+    img {
+      width: 24px;
+      height: 24px;
     }
+  }
+
+  .trade-colony__fee-text b {
+    font-size: 13px;
   }
 
   .trade-colony__offers {

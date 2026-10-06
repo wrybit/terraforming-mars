@@ -1,21 +1,30 @@
 <template>
   <div class="trade-colony" data-test="trade-colony">
-    <!-- Trade reads like a deal: left what you pay (only what you can afford), right what each colony gives you.
-         Below a receipt: what you pay → what you get, who else gets a colony bonus, where the marker drops back.
-         The board switches to the Colonies tab by itself and previews the pick there. -->
-    <div class="trade-colony__column">
+    <!-- Trade reads like a deal (mockup with-extensions): on top what you pay – all three fees, the ones you can't
+         afford greyed out –, below what each colony gives you, then a receipt: what you pay → what you get, who else
+         gets a colony bonus, where the marker drops back. The board switches to the Colonies tab and previews the pick. -->
+    <div class="trade-colony__column trade-colony__column--fees">
       <div class="trade-colony__label">{{ $t('You pay') }}</div>
-      <button v-for="fee in fees" :key="fee.index" type="button"
-        :class="['trade-colony__fee', {'trade-colony__fee--on': fee.index === feeIndex}]"
-        :data-test="'trade-fee-' + fee.kind"
-        @click="feeIndex = fee.index">
-        <span v-if="fee.index === feeIndex" class="trade-colony__flag">✓</span>
-        <img :src="'assets/' + FEE_ICON[fee.kind]" alt="">
-        <span class="trade-colony__fee-text">
-          <b>{{ feeLabel(fee) }}</b>
-          <small v-if="stock(fee) !== undefined && fee.amount !== undefined">{{ stock(fee) }} → {{ stock(fee)! - fee.amount }}</small>
+      <div class="trade-colony__fees">
+        <button v-for="fee in fees" :key="fee.index" type="button"
+          :class="['trade-colony__fee', {'trade-colony__fee--on': fee.index === feeIndex}]"
+          :data-test="'trade-fee-' + fee.kind"
+          @click="feeIndex = fee.index">
+          <span v-if="fee.index === feeIndex" class="trade-colony__flag">✓</span>
+          <img :src="'assets/' + FEE_ICON[fee.kind]" alt="">
+          <span class="trade-colony__fee-text">
+            <b>{{ feeLabel(fee) }}</b>
+            <small v-if="stock(fee) !== undefined && fee.amount !== undefined">{{ stock(fee) }} → {{ stock(fee)! - fee.amount }}</small>
+          </span>
+        </button>
+        <span v-for="fee in unavailableFees" :key="fee.kind" class="trade-colony__fee trade-colony__fee--off" :data-test="'trade-fee-off-' + fee.kind">
+          <img :src="'assets/' + FEE_ICON[fee.kind]" alt="">
+          <span class="trade-colony__fee-text">
+            <b>{{ fee.amount }} {{ $t(FEE_NAME[fee.kind]) }}</b>
+            <small>{{ haveText(fee.kind) }}</small>
+          </span>
         </span>
-      </button>
+      </div>
     </div>
     <div class="trade-colony__arrow" aria-hidden="true">→</div>
     <div class="trade-colony__column trade-colony__column--wide">
@@ -72,7 +81,9 @@ import ColonyPlanet from './ColonyPlanet.vue';
 import TradeShip from './TradeShip.vue';
 import {ColonyView, colonyView} from './colonyView';
 import {setColonyPreview} from './colonyTradeState';
-import {FEE_ICON, TradeFee, tradeFees, tradeInput} from './tradeInput';
+import {FEE_ICON, MissingFee, TradeFee, missingFees, tradeFees, tradeInput} from './tradeInput';
+
+const FEE_NAME: Record<MissingFee['kind'], string> = {megacredits: 'M€', energy: 'Energy', titanium: 'Titanium'};
 
 type DataModel = {
   feeIndex: number;
@@ -111,6 +122,12 @@ export default defineComponent({
   computed: {
     FEE_ICON(): typeof FEE_ICON {
       return FEE_ICON;
+    },
+    FEE_NAME(): typeof FEE_NAME {
+      return FEE_NAME;
+    },
+    unavailableFees(): Array<MissingFee> {
+      return missingFees(this.fees);
     },
     fees(): Array<TradeFee> {
       const input = tradeInput(this.playerinput);
@@ -157,6 +174,13 @@ export default defineComponent({
   methods: {
     feeLabel(fee: TradeFee): string {
       return typeof fee.title === 'string' ? translateText(fee.title) : translateMessage(fee.title);
+    },
+    haveText(kind: MissingFee['kind']): string {
+      return translateTextWithParams('you have ${0}', [String(this.stockOf(kind))]);
+    },
+    stockOf(kind: MissingFee['kind']): number {
+      const player = this.playerView.thisPlayer;
+      return kind === 'megacredits' ? player.megacredits : kind === 'energy' ? player.energy : player.titanium;
     },
     stock(fee: TradeFee): number | undefined {
       const player = this.playerView.thisPlayer;

@@ -54,3 +54,18 @@ export const FEE_ICON: Record<FeeKind, string> = {
   titanium: 'resources/titanium.png',
   other: 'resources/wild.png',
 };
+
+// Ways to pay the server does not offer right now (too few resources): shown greyed out next to the offered
+// ones, so all three fees are always visible. Amounts follow the offered fees (a trade discount lowers all alike).
+export type MissingFee = {kind: 'megacredits' | 'energy' | 'titanium', amount: number};
+
+const BASE_FEE: Record<MissingFee['kind'], number> = {megacredits: 9, energy: 3, titanium: 3};
+
+export function missingFees(fees: ReadonlyArray<TradeFee>): Array<MissingFee> {
+  const known = fees.find((fee) => fee.kind !== 'other' && fee.amount !== undefined);
+  const discount = known === undefined || known.kind === 'other' ? 0 : BASE_FEE[known.kind] - (known.amount ?? 0);
+  return (Object.keys(BASE_FEE) as Array<MissingFee['kind']>)
+    .filter((kind) => !fees.some((fee) => fee.kind === kind))
+    .map((kind) => ({kind, amount: Math.max(0, BASE_FEE[kind] - discount)}));
+}
+

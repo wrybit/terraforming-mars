@@ -1,7 +1,7 @@
 <template>
   <!-- Party choice the server offers as plain options (partyChoice.ts): the same cards as SelectParty -->
   <div class="select-party select-party--options" role="radiogroup">
-    <div class="select-party__cards" :style="{'--party-columns': Math.min(6, cards.length)}">
+    <div class="select-party__cards" :style="{'--party-columns': Math.min(3, cards.length)}">
       <PartyCard v-for="card in cards" :key="card.index"
         :party="partyModel(card)"
         :turmoil="turmoil"
