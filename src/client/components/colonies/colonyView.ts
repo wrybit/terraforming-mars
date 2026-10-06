@@ -69,6 +69,9 @@ const PLANET_TONE: Partial<Record<ColonyName, string>> = {
   [ColonyName.ENCELADUS]: '#cfe3ef',
   [ColonyName.TRITON]: '#c6b3a8',
   [ColonyName.CERES]: '#9a948c',
+  // Space station on a black photo: dark tile, so the photo's black background blends in
+  [ColonyName.LEAVITT]: '#020306',
+  [ColonyName.LEAVITT_II]: '#020306',
 };
 const DEFAULT_TONE = '#2fb0a8';
 
