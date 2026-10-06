@@ -399,20 +399,26 @@
   background: #2fb0a8;
 }
 
-// Delta (mockup with-extensions): rows sized by their content, centred in the box; one unit derived from the box
-// size (container units) drives cube, spaces, chips and texts, so the rows grow and shrink with the tab box
+// Delta: the player rows always fill the whole box – they share its height (--delta-rows from DeltaBoard.vue),
+// so with more players every row gets thinner. One unit derived from the box size (container units) and the row
+// count drives cube, spaces, chips and texts: as large as the width allows and as the row height (~5.6 units) fits
 .board-tabs-view--delta {
   container: delta-tab / size;
 }
 
+@delta-hint-reserve: 72px; // hint text below the rows plus the gaps
+
 html:not(.tm-mobile) .delta-board {
-  --delta-unit: clamp(20px, min(4.2cqw, 6.2cqh), 44px);
+  --delta-unit: ~"clamp(12px, min(4.2cqw, calc((100cqh - @{delta-hint-reserve}) / (var(--delta-rows, 2) * 5.6))), 56px)";
+  justify-content: flex-start;
+  height: 100%;
   gap: calc(var(--delta-unit) * 0.45);
 
   .board-track-row {
     --track-bonus-chip: calc(var(--delta-unit) * 0.85);
     --track-bonus-link: calc(var(--delta-unit) * 0.4);
-    flex: none;
+    flex: 1 1 0;
+    min-height: 0;
     grid-template-columns: calc(var(--delta-unit) * 2.9) minmax(0, 1fr) minmax(calc(var(--delta-unit) * 5), calc(var(--delta-unit) * 7.5));
     gap: calc(var(--delta-unit) * 0.5);
     padding: calc(var(--delta-unit) * 0.45) calc(var(--delta-unit) * 0.5);
@@ -470,6 +476,7 @@ html:not(.tm-mobile) .delta-board {
   }
 
   .delta-board__hint {
+    flex: none;
     font-size: clamp(11px, calc(var(--delta-unit) * 0.45), 15px);
   }
 }

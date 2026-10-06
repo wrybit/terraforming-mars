@@ -1,5 +1,6 @@
 <template>
-  <div class="delta-board">
+  <div class="delta-board" :style="{'--delta-rows': players.length}">
+    <!-- --delta-rows: the rows share the box height, so more players make every row thinner (track_bonus.less) -->
     <!-- Delta board tab: one row per player in its colour (own row outlined) – position on the shared track,
          the reward of every space as a chip, and whether the next space is reachable now (energy, tag) -->
     <BoardTrackRow v-for="player in players" :key="player.color" :name="player.name" :cells="cells(player)" :bonuses="lane(player)"
