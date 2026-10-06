@@ -152,10 +152,17 @@ export function tabButtonCentered(option: PlayerInputModel): boolean {
 
 // Tab color of an action: fixed tones by title, otherwise for a content-free option the tile its button
 // announces (e.g. Tharsis Republic "Place a city tile" -> gray like the city tab that follows)
-export type OptionTone = TabButtonTone | PreviewTile | 'colonies';
+export type OptionTone = TabButtonTone | PreviewTile | 'colonies' | 'milestones';
+
+// Milestone and award tabs: dark gold like the milestones & awards box (or_tab_tones.less: milestones)
+const GOLD_TAB_TONES: Readonly<Record<string, OptionTone>> = {
+  'Claim a milestone': 'milestones',
+  'Fund an award (${0} M€)': 'milestones',
+};
 
 export function optionTone(option: PlayerInputModel): OptionTone | undefined {
-  const tone = tabButtonTone(option.title) ?? EXPANSION_TAB_TONES[titleKey(option.title)];
+  const key = titleKey(option.title);
+  const tone = tabButtonTone(option.title) ?? EXPANSION_TAB_TONES[key] ?? GOLD_TAB_TONES[key];
   if (tone !== undefined || option.type !== 'option') {
     return tone;
   }

@@ -39,4 +39,9 @@ describe('orOptionsShortLabels', () => {
     const titles = ['Pass for this generation', 'Trade with a colony tile', 'Play project card', 'Send a delegate in an area (5 M€)', 'End Turn', 'Standard projects'];
     expect(tabDisplayOrder(titles)).deep.eq([2, 5, 1, 3, 4, 0]);
   });
+
+  it('colors milestone and award tabs gold', () => {
+    expect(optionTone({type: 'or', title: 'Claim a milestone', buttonLabel: 'Claim'} as PlayerInputModel)).eq('milestones');
+    expect(optionTone({type: 'or', title: {message: 'Fund an award (${0} M€)', data: []}, buttonLabel: 'Fund'} as unknown as PlayerInputModel)).eq('milestones');
+  });
 });
