@@ -529,3 +529,57 @@ each(@players, {
     filter: brightness(120%);
   }
 }
+
+// Several corporations (Merger): gold plus between the names (PlayerIdentity.vue)
+.players-table-corporation__plus {
+  margin: 0 4px;
+  color: #f2c14e;
+  font-weight: 700;
+}
+
+// Escape Velocity: short bar of used against allowed thinking time, time and penalty next to it (EscapeVelocityClock.vue)
+.escape-velocity-clock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+  font-size: 12px;
+  line-height: 1;
+  color: #d9dbe3;
+  white-space: nowrap;
+}
+
+.escape-velocity-clock__bar {
+  flex: none;
+  width: 72px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+
+  i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: #5fd38d;
+  }
+}
+
+.escape-velocity-clock__text small {
+  font-size: inherit;
+  color: @players-table-muted;
+}
+
+.escape-velocity-clock--over .escape-velocity-clock__bar i {
+  background: #ff5a4f;
+}
+
+.escape-velocity-clock__penalty {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #d9322b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+}
+

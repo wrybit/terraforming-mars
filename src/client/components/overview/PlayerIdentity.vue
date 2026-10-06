@@ -4,9 +4,15 @@
          Shared by the player table and milestone table so both views show the same header -->
     <div class="players-table-identity-line">
       <span class="players-table-name">{{ symbol + player.name }}</span>
-      <PlayerStatus :timer="player.timer" :showTimer="playerView.game.gameOptions.showTimers" :liveTimer="playerView.game.phase !== Phase.END" :actionLabel="actionLabel" v-trim-whitespace/>
+      <PlayerStatus :timer="player.timer" :showTimer="playerView.game.gameOptions.showTimers && escapeVelocity === undefined" :liveTimer="playerView.game.phase !== Phase.END" :actionLabel="actionLabel" v-trim-whitespace/>
     </div>
-    <div class="players-table-corporation" :title="corporations">{{ corporations }}</div>
+    <!-- Several corporations (Merger): joined by a gold plus -->
+    <div class="players-table-corporation" :title="corporations">
+      <template v-for="(name, index) in corporationList" :key="name"><span v-if="index > 0" class="players-table-corporation__plus">+</span>{{ name }}</template>
+    </div>
+    <!-- Escape Velocity: used against allowed thinking time, penalty once over -->
+    <EscapeVelocityClock v-if="escapeVelocity !== undefined" :timer="player.timer" :actionsTaken="player.actionsTakenThisGame"
+      :options="escapeVelocity" :live="playerView.game.phase !== Phase.END"/>
   </div>
 </template>
 
@@ -16,6 +22,8 @@ import {ViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Phase} from '@/common/Phase';
 import {ActionLabel} from '@/client/components/overview/ActionLabel';
 import PlayerStatus from '@/client/components/overview/PlayerStatus.vue';
+import EscapeVelocityClock from '@/client/components/overview/EscapeVelocityClock.vue';
+import {EscapeVelocityOptions} from '@/common/game/NewGameConfig';
 import {corporationNames} from '@/client/components/overview/playerCorporations';
 import {playerSymbol} from '@/client/utils/playerSymbol';
 
@@ -23,6 +31,7 @@ export default defineComponent({
   name: 'PlayerIdentity',
   components: {
     PlayerStatus,
+    EscapeVelocityClock,
   },
   props: {
     player: {
@@ -50,8 +59,14 @@ export default defineComponent({
     symbol(): string {
       return playerSymbol(this.player.color, ' ');
     },
+    corporationList(): Array<string> {
+      return corporationNames(this.player).map((name) => this.$t(name));
+    },
     corporations(): string {
-      return corporationNames(this.player).map((name) => this.$t(name)).join(' · ');
+      return this.corporationList.join(' + ');
+    },
+    escapeVelocity(): EscapeVelocityOptions | undefined {
+      return this.playerView.game.gameOptions.escapeVelocity;
     },
   },
 });
