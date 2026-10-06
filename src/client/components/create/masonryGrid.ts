@@ -58,7 +58,8 @@ export function balancedColumns(heights: ReadonlyArray<number>, columnCount: num
   for (let combination = 0; combination < combinations; combination++) {
     const assignment: Array<number> = [];
     let remainder = combination;
-    for (let index = 0; index < rest.length; index++) {
+    // One digit per card in base columnCount
+    while (assignment.length < rest.length) {
       assignment.push(remainder % columnCount);
       remainder = Math.floor(remainder / columnCount);
     }
