@@ -178,13 +178,12 @@
 // Special spaces off Mars in the four corners of the box, grouped by origin (outerSpaces.ts):
 // the round planet leaves the corners free. The groups sit inside the zoomed board, so the hexes
 // stay as large as the Mars spaces; they are placed relative to the box (.board-tabs-panel).
+// Desktop only: the cropped mobile Mars keeps Phobos/Ganymede in its top corners (mobile.less).
 @board-outer-inset: 14px;
 
-.board-tabs-mars {
-  // !important: the cropped mobile Mars (mobile.less, .mb-mars-cropped) pins the container and the
-  // Phobos/Ganymede spaces with !important for the zoom view
+html:not(.tm-mobile) .board-tabs-mars {
   .board-outer-spaces {
-    position: static !important;
+    position: static;
   }
 
   .board-outer-group {
@@ -194,7 +193,6 @@
     flex-direction: column;
     gap: 4px;
     width: 64px;
-    pointer-events: auto;
   }
 
   .board-outer-group--top-left { left: @board-outer-inset; top: @board-outer-inset; }
@@ -226,11 +224,8 @@
 
   // Space: hex on top, short name below instead of the board positions
   .board-outer-group > .board-space {
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
-    margin: 0 !important;
-    pointer-events: auto;
+    position: relative;
+    margin: 0;
     width: 64px;
     height: auto;
     clip-path: none;
