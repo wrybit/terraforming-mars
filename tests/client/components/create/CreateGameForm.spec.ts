@@ -247,14 +247,14 @@ describe('CreateGameForm', () => {
     });
     const createGameButton = () => wrapper.findAllComponents({name: 'AppButton'}).find((button) => button.props('title') === 'Create game');
     expect(createGameButton()?.props('disabled')).is.false;
-    expect(wrapper.find('.create-game-custom-preludes-warning').exists()).is.false;
+    expect(wrapper.findComponent({name: 'ValidationProblems'}).exists()).is.false;
 
     (wrapper.vm as any).playersCount = 2;
     (wrapper.vm as any).customCorporations = cardNames(3);
     await wrapper.vm.$nextTick();
 
     expect(createGameButton()?.props('disabled')).is.true;
-    expect(wrapper.find('.create-game-custom-preludes-warning').exists()).is.true;
+    expect(wrapper.findComponent({name: 'ValidationProblems'}).exists()).is.true;
   });
 
   it('replaces a cleared escape velocity field with its default', async () => {
