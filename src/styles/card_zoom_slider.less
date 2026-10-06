@@ -51,12 +51,12 @@
 html:not(.tm-mobile) :is(.player_home_block--actions, .player_home_block--hand) .or-tab-panel {
   // The size only applies where the slider is (card lists with the filter row); short lists without it
   // (actions, buying, standard projects) always keep the standard size
-  .choice-block:has(> .card-filter-bar) {
+  .choice-block:has(> .card-filter-bar:not(.card-filter-bar--plain)) {
     --choice-zoom: var(--card-zoom, 1);
   }
 
-  .choice-block:has(> .card-filter-bar) > label.cardbox,
-  .choice-block:has(> .card-filter-bar) > label.payments_cards,
+  .choice-block:has(> .card-filter-bar:not(.card-filter-bar--plain)) > label.cardbox,
+  .choice-block:has(> .card-filter-bar:not(.card-filter-bar--plain)) > label.payments_cards,
   .hand-cards-panel__cards > .cardbox,
   .hand-cards-panel .sortable-cards .cardbox {
     zoom: var(--card-zoom, 1);

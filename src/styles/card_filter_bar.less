@@ -40,6 +40,9 @@
   height: auto;
   margin: 0 0 @card-filter-row-gap-below;
   padding: @card-filter-row-padding-vertical @card-filter-panel-padding;
+  // Always the same height, whatever the row holds (filter chips, only "Select all", …): border-box, so
+  // content height + padding + separator line
+  min-height: (@card-filter-row-height + 2 * @card-filter-row-padding-vertical + 1px);
   border-bottom: 1px solid @card-filter-separator;
   background: @card-filter-row-background;
   backdrop-filter: blur(10px);
@@ -124,6 +127,7 @@ html.tm-mobile {
   .card-filter-bar {
     top: 0;
     padding: 8px 10px;
+    min-height: (@card-filter-row-height + 2 * 8px + 1px);
   }
 
   .mb-screen .or-tab-panel .hand-cards-panel > .card-filter-bar {

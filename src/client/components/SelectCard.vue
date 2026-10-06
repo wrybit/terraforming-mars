@@ -15,7 +15,7 @@
         </CardFilterBar>
         <!-- Other card lists (buying, actions …): no card size slider – few cards, the zoom only adds noise there;
              "Select all" only where it makes sense -->
-        <div v-else-if="showSelectAll" class="select-card-toolbar">
+        <div v-else-if="showSelectAll" :class="isMobile ? 'select-card-toolbar' : 'card-filter-bar card-filter-bar--plain'">
           <AppButton class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
         </div>
         <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
