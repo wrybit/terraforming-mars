@@ -159,7 +159,6 @@
               <div class="create-game-chip-grid" :class="{'create-game-chip-grid--muted': randomBoard}">
                 <ChoiceChip v-for="boardName in group.boards" :key="boardName"
                   :label="boardName" capitalized :selected="board === boardName"
-                  :href="boardHref(boardName)"
                   @select="board = boardName">
                   <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
                 </ChoiceChip>
@@ -366,7 +365,7 @@ import {defaultCreateGameModel} from './defaultCreateGameModel';
 import {CreateGameSettingsStorage} from './CreateGameSettingsStorage';
 import {readSettingsFromHash, replaceSettingsHash, settingsHash} from './settingsLink/settingsLinkHash';
 import {getColony} from '@/client/colonies/ClientColonyManifest';
-import {RULEBOOK_URLS, WIKI, WIKI_URLS} from '@/client/utils/WikiLinks';
+import {RULEBOOK_URLS, WIKI_URLS} from '@/client/utils/WikiLinks';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {sanitizeEscapeVelocityOptions} from '@/common/game/escapeVelocity';
 import {validateNewGameConfig, validationDetails, ValidationErrors} from '@/common/game/validateNewGameConfig';
@@ -922,24 +921,6 @@ export default defineComponent({
     },
     getPlayerCubeColorClass(color: Color): string {
       return playerColorClass(color, 'bg');
-    },
-    boardHref(boardName: BoardName | RandomBoardOption) {
-      const options: Record<BoardName | RandomBoardOption, string> = {
-        [BoardName.THARSIS]: 'tharsis',
-        [BoardName.HELLAS]: 'hellas',
-        [BoardName.ELYSIUM]: 'elysium',
-        [BoardName.ARABIA_TERRA]: 'arabia-terra',
-        [BoardName.UTOPIA_PLANITIA]: 'utopia-planitia',
-        [BoardName.VASTITAS_BOREALIS_NOVA]: 'vastitas-borealis-nova',
-        [BoardName.VASTITAS_BOREALIS]: 'vastitas-borealis',
-        [BoardName.AMAZONIS]: 'amazonis-planatia',
-        [BoardName.TERRA_CIMMERIA]: 'terra-cimmeria',
-        [BoardName.TERRA_CIMMERIA_NOVA]: 'terra-cimmeria-nova',
-        [BoardName.HOLLANDIA]: 'hollandia',
-        [RandomBoardOption.OFFICIAL]: '',
-        [RandomBoardOption.ALL]: '',
-      };
-      return `${WIKI}/Maps#${options[boardName]}`;
     },
     async serializeSettings(): Promise<NewGameConfig | undefined> {
       let players = this.players.slice(0, this.playersCount);

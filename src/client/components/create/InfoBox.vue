@@ -1,12 +1,8 @@
 <template>
   <!-- Short info from the wiki below the row of its ⓘ; the nose points at it, a second click on the ⓘ closes it -->
   <div class="create-game-info-box" :style="{'--nose-x': noseX + 'px'}">
-    <p class="create-game-info-box-text">
-      <span v-if="excerpt !== undefined">{{ excerpt }}</span>
-      <span v-else-if="failed" v-i18n>The info could not be loaded.</span>
-      <span v-else class="create-game-info-box-loading">…</span>
-    </p>
-    <div class="create-game-info-box-actions">
+    <!-- Button at the bottom right, the text flows around it (spacer float in create_game_form.less) -->
+    <div class="create-game-info-box-text">
       <span class="create-game-info-box-anchor">
         <button type="button" class="create-game-small-button create-game-info-box-more" @click="overlayOpen = true">
           <span v-i18n>Full info</span>
@@ -15,6 +11,9 @@
         </button>
         <WikiOverlay :open="overlayOpen" :href="href" :target="target" @close="overlayOpen = false"/>
       </span>
+      <span v-if="excerpt !== undefined">{{ excerpt }}</span>
+      <span v-else-if="failed" v-i18n>The info could not be loaded.</span>
+      <span v-else class="create-game-info-box-loading">…</span>
     </div>
   </div>
 </template>

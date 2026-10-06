@@ -344,26 +344,41 @@
   }
 }
 
+// Flex parent makes the text's height definite, so the spacer float below can take "100 % minus the button"
+.create-game-info-box {
+  display: flex;
+}
+
+@create-game-info-button-height: 26px;
+
 .create-game-info-box-text {
-  margin: 0 0 8px;
+  flex: 1;
+  min-width: 0;
+
+  // Invisible float on the right that pushes the button down to the last line
+  &::before {
+    content: "";
+    float: right;
+    width: 0;
+    height: calc(100% - @create-game-info-button-height);
+  }
+}
+
+// Button floats bottom right, the text wraps around it
+.create-game-info-box-anchor {
+  float: right;
+  clear: right;
+  margin: 0 0 0 12px;
+  line-height: 0;
 }
 
 .create-game-info-box-loading {
   opacity: 0.6;
 }
 
-.create-game-info-box-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  // The small button's auto margin pushes it right in subheads; here it stays on the left
-  .create-game-info-box-more {
-    margin-left: 0;
-  }
-}
-
+// The small button's auto margin pushes it right in subheads; here the float places it
 .create-game-info-box-more {
+  margin-left: 0;
   display: inline-flex;
   align-items: center;
   gap: 6px;
