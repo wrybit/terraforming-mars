@@ -4,7 +4,7 @@
     :class="{'create-game-info--open': isOpen}" :aria-expanded="isOpen" :aria-label="$t('Info')" :title="$t('Info')" @click.stop="toggle" @keydown.enter.stop @keydown.space.stop>&#9432;</button>
   <a v-else :href="href" class="tooltip create-game-info" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank" @click.stop>&#9432;</a>
   <Teleport v-if="isOpen && container !== undefined" :to="container">
-    <InfoBox :href="href" :target="wikiTarget!" :anchor="$refs.button as HTMLElement" @close="openInfoHref = undefined"/>
+    <InfoBox :href="href" :target="wikiTarget!" :anchor="$refs.button as HTMLElement"/>
   </Teleport>
 </template>
 

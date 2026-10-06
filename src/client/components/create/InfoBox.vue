@@ -1,5 +1,5 @@
 <template>
-  <!-- Short info from the wiki at the end of the card, its nose points at the ⓘ that opened it -->
+  <!-- Short info from the wiki below the row of its ⓘ; the nose points at it, a second click on the ⓘ closes it -->
   <div class="create-game-info-box" :style="{'--nose-x': noseX + 'px'}">
     <p class="create-game-info-box-text">
       <span v-if="excerpt !== undefined">{{ excerpt }}</span>
@@ -15,7 +15,6 @@
         </button>
         <WikiOverlay :open="overlayOpen" :href="href" :target="target" @close="overlayOpen = false"/>
       </span>
-      <button type="button" class="create-game-info-box-close" :aria-label="$t('Close')" @click="$emit('close')">✕</button>
     </div>
   </div>
 </template>
@@ -28,7 +27,6 @@ import {fetchWikiPage, WikiTarget, wikiExcerpt, wikiSection} from './wikiContent
 export default defineComponent({
   name: 'InfoBox',
   components: {WikiOverlay},
-  emits: ['close'],
   props: {
     href: {type: String, required: true},
     target: {type: Object as PropType<WikiTarget>, required: true},
