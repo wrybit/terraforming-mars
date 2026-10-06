@@ -89,8 +89,9 @@
   }
 }
 
-// Play and sell: the row sits in the centered card block but spans the whole box. The box is a size container,
-// so 100cqi is its content width; the block is centered, half the difference shifts the row to the box edge.
+// Card lists (play, sell, standard projects, awards): the row sits in the card block but spans the whole box.
+// The box is a size container, so 100cqi is its content width; the block starts at the left (choice_block.less),
+// so the row only reaches over the left padding.
 .or-tab-panel {
   container-type: inline-size;
 }
@@ -104,7 +105,7 @@ html:not(.tm-mobile) .or-tab-panel .choice-block.choice-block:has(> .card-filter
     flex: 0 0 calc(100cqi + 2 * @card-filter-panel-padding) !important;
     width: calc(100cqi + 2 * @card-filter-panel-padding);
     max-width: none;
-    margin: -@card-filter-panel-padding 0 0 calc((100% - 100cqi) / 2 - @card-filter-panel-padding);
+    margin: -@card-filter-panel-padding 0 0 -@card-filter-panel-padding;
     border-radius: 0 7px 0 0;
   }
 }
