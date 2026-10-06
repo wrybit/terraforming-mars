@@ -41,9 +41,8 @@
           <rect v-if="party.name === turmoil.dominant" :x="wedges[index].dominance.x - 15" :y="wedges[index].dominance.y - 15" width="30" height="30" rx="6" class="turmoil-board-tab__dominance"/>
         </g>
         <path :d="chairPath" class="turmoil-board-tab__chair"/>
-        <!-- Heading at the top of the chair as a dark label, the chairman below it -->
+        <!-- Heading at the top of the dark chair, the chairman below it -->
         <g class="turmoil-board-tab__chair-label">
-          <rect :x="CHAIR_CENTER.x - 82" :y="CHAIR_CENTER.y + 10" width="164" height="26" rx="13"/>
           <text :x="CHAIR_CENTER.x" :y="CHAIR_CENTER.y + 28">{{ $t('Chairman') }}</text>
         </g>
         <image v-if="turmoil.chairman !== undefined" :href="figureImage(turmoil.chairman)" :x="CHAIR_CENTER.x - 25" :y="CHAIR_CENTER.y + 42" width="50" :height="50 * FIGURE_RATIO"/>
