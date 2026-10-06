@@ -6,7 +6,7 @@
       <!-- The stage only carries the flight animation; zoom sits one level deeper, otherwise it would
            scale the animation's translation too -->
       <div class="board-zoom-stage" ref="stage">
-        <div class="board-zoom-content" ref="content" :style="contentStyle">
+        <div :class="['board-zoom-content', {'board-zoom-content--framed': frame !== undefined}]" ref="content" :style="contentStyle">
           <slot></slot>
         </div>
       </div>
@@ -24,7 +24,7 @@ import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordin
 import {animateBoardZoom} from '@/client/components/board/boardZoomAnimation';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {mobileLayout} from '@/client/utils/mobileLayout';
-import {DEFAULT_ZOOM_RATIO, MARS_CROP, MAX_ZOOM_RATIO, PLANET_CENTER, steppedZoomRatio, wholePlanetZoom} from '@/client/components/mobile/mobileBoardZoom';
+import {DEFAULT_ZOOM_RATIO, MarsFrame, MAX_ZOOM_RATIO, PLANET_CENTER, steppedZoomRatio, wholePlanetZoom} from '@/client/components/mobile/mobileBoardZoom';
 import {attachPinchZoom} from '@/client/components/board/boardPinchZoom';
 import MobileZoomControls from '@/client/components/mobile/MobileZoomControls.vue';
 
@@ -35,8 +35,8 @@ const props = defineProps<{
   open: boolean;
   // Board in the column: start and end point of the animation, hidden while the modal is open
   origin?: HTMLElement;
-  // Mobile: cut out the Mars planet like on the start screen (MARS_CROP); other boards (Moon) are shown whole
-  marsCrop?: boolean;
+  // Mars: show the same section as the tab (marsFrame), so the outer space columns keep their place; other boards (Moon) whole
+  frame?: MarsFrame;
 }>();
 
 const emit = defineEmits<{
@@ -86,13 +86,13 @@ const CONTROLS_HEIGHT = 72;
 // Zoom at which the whole planet is visible (= 100 %)
 const wholeZoom = ref(1);
 const zoomPercent = computed(() => Math.round(zoomFactor.value / wholeZoom.value * 100));
-// Mobile: only the start screen's section (planet including colony spaces), the ring around it is dropped (mobile.less)
-const contentStyle = computed(() => mobileLayout.value && props.marsCrop !== false ? {
+// Mars: only the section of the tab (planet or ring including the outer space columns, board_zoom_modal.less)
+const contentStyle = computed(() => props.frame !== undefined ? {
   'zoom': zoomFactor.value,
-  'width': MARS_CROP.width + 'px',
-  'height': MARS_CROP.height + 'px',
-  '--mb-crop-left': MARS_CROP.left + 'px',
-  '--mb-crop-top': MARS_CROP.top + 'px',
+  'width': props.frame.width + 'px',
+  'height': props.frame.height + 'px',
+  '--board-frame-left': props.frame.left + 'px',
+  '--board-frame-top': props.frame.top + 'px',
 } : {zoom: zoomFactor.value});
 let stopPinch: (() => void) | undefined;
 
@@ -109,7 +109,7 @@ function wholeBoardZoom(): number {
 }
 
 function mobileWholeZoom(): number {
-  return props.marsCrop === false ? wholeBoardZoom() : wholePlanetZoom(window.innerWidth, window.innerHeight);
+  return props.frame === undefined ? wholeBoardZoom() : wholePlanetZoom(window.innerWidth, window.innerHeight, props.frame);
 }
 
 function fitMobile() {
@@ -120,7 +120,7 @@ function fitMobile() {
 
 // Move the planet to the centre of the visible area above the zoom bar
 function centerPlanet() {
-  if (props.marsCrop === false) {
+  if (props.frame === undefined) {
     centerBoard();
     return;
   }

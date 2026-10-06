@@ -539,7 +539,7 @@ html.tm-mobile {
     }
   }
 
-  // Mars without ring (crop in mobileFit.ts): colony spaces into the top corners, "Tiles" button bottom left
+  // Mars without ring (crop in mobileFit.ts); the outer space columns sit in the corners of the section (board.less)
   .board-without-venus.mb-mars-cropped,
   .board-zoom-content .board-without-venus {
     background-image: url(./assets/board/mars-planet.png);
@@ -547,33 +547,6 @@ html.tm-mobile {
     // Scales around the board replace the bars (MobileParameterBars)
     .global-numbers {
       display: none;
-    }
-
-    .board-outer-spaces {
-      left: 0;
-      top: 0;
-      width: 670px;
-      height: 600px;
-      pointer-events: none;
-
-      .board-space {
-        pointer-events: auto;
-      }
-    }
-
-    .board-space-01,
-    .board-space-02 {
-      position: absolute !important;
-      margin: 0 !important;
-      top: 98px;
-    }
-
-    .board-space-01 {
-      left: 66px;
-    }
-
-    .board-space-02 {
-      left: 520px;
     }
 
     .hide-tile-button-container .hide-tile-button {
@@ -2329,18 +2302,13 @@ html.tm-mobile {
     overflow: hidden;
     padding: 0;
 
-    .global-numbers,
+    // Without ring the scales go; with ring they stay like in the tab (same section, marsFrame)
+    .board-without-venus .global-numbers,
     .hide-tile-button-container {
       display: none;
     }
 
-    > .board-cont {
-      margin: calc(-1 * var(--mb-crop-top)) 0 0 calc(-1 * var(--mb-crop-left));
-    }
-
     .board-without-venus {
-      // Reference frame for the colony spaces (board-outer-spaces), otherwise they hang off the window instead of the planet
-      position: relative;
       background-image: url(./assets/board/mars-planet.png);
     }
   }
@@ -2427,11 +2395,11 @@ html.tm-mobile {
         grid-row: 3;
       }
 
-      // Zoom button stays bottom left on the planet
+      // Zoom button bottom left in the row of the tile view switch, below the outer space column (board.less)
       > .mb-mars-zoom {
         grid-row: 2;
         place-self: end start;
-        margin: 0 0 44px 12px;
+        margin: 0 0 6px 12px;
       }
 
       .board-tabs-mars {

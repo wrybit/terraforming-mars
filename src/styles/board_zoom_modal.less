@@ -34,6 +34,21 @@
   }
 }
 
+// Mars: exactly the section of the tab (marsFrame, BoardZoomModal.vue) – the board shifted by the frame offset, the
+// outer space columns inside the section. No overhang padding: the frame already contains everything.
+.board-zoom-content--framed {
+  padding: 0;
+
+  > .board-cont {
+    margin: calc(-1 * var(--board-frame-top)) 0 0 calc(-1 * var(--board-frame-left));
+  }
+
+  // The tile view switch lives in the board box (TileViewToggle.vue); the old hex button would cover the outer spaces
+  .hide-tile-button-container {
+    display: none;
+  }
+}
+
 .board-zoom-close {
   position: fixed;
   z-index: 1101; // above the modal's backdrop (now sits next to it instead of inside it)

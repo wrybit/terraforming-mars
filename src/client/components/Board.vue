@@ -5,9 +5,10 @@
             {{ tileView }} tiles
           </div>
         </div>
-        <!-- Special spaces off Mars at their board positions; in the desktop board box they sit in its
-             corners instead (OuterSpaceCorners.vue), outside the zoomed and shifted board -->
-        <div v-if="!outerSpacesInCorners" class="board-outer-spaces" id="colony_spaces">
+        <!-- Special spaces off Mars as columns in the corners of the visible section (marsFrame), in board px so
+             they zoom with Mars and keep their arrangement; in the desktop board box they sit in the corners of
+             the box instead (OuterSpaceCorners.vue), outside the zoomed and shifted board -->
+        <div v-if="!outerSpacesInCorners" class="board-outer-spaces board-outer-spaces--corners board-outer-spaces--frame" id="colony_spaces" :style="outerFrameStyle">
           <div v-for="group in outerSpaceGroups" :key="group.corner" :class="['board-outer-group', 'board-outer-group--' + group.corner]">
             <span v-if="group.title !== undefined" class="board-outer-group__title" v-i18n>{{ group.title }}</span>
             <BoardSpace v-for="outer in group.spaces" :key="outer.id" :space="getSpace(outer.id)" :text="outer.short" :title="$t(outer.name)" :tileView="tileView"/>
@@ -361,6 +362,8 @@ import {BoardName} from '@/common/boards/BoardName';
 import {LEGENDS} from '@/client/components/Legends';
 import {Expansion} from '@/common/cards/GameModule';
 import {OuterGroup, outerGroups} from '@/client/components/board/outerSpaces';
+import {marsFrame} from '@/client/components/mobile/mobileBoardZoom';
+import {mobileLayout} from '@/client/utils/mobileLayout';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
 
@@ -516,6 +519,16 @@ export default defineComponent({
     },
     LEGENDS(): typeof LEGENDS {
       return LEGENDS;
+    },
+    // Section the outer space columns sit in: the same as the tab and the large Mars show (mobileFit.ts, BoardZoomModal)
+    outerFrameStyle(): Record<string, string> {
+      const frame = marsFrame(mobileLayout.value && !this.expansions.venus);
+      return {
+        '--board-frame-left': frame.left + 'px',
+        '--board-frame-top': frame.top + 'px',
+        '--board-frame-width': frame.width + 'px',
+        '--board-frame-height': frame.height + 'px',
+      };
     },
     outerSpaceGroups(): Array<OuterGroup> {
       return outerGroups((id) => this.hasSpace(id));

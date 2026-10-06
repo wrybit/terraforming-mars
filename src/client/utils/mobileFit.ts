@@ -6,7 +6,7 @@
  * are set, no nodes are moved – otherwise Vue would get confused when updating.
  */
 
-import {MARS_CROP} from '@/client/components/mobile/mobileBoardZoom';
+import {MARS_CROP, RING_FRAME} from '@/client/components/mobile/mobileBoardZoom';
 import {choiceBlockColumns, choiceBlockColumnsPortrait, choiceBlockFillsWidth} from '@/client/components/choiceBlock';
 
 /* Visible area of an element in its own px (before scaling). */
@@ -116,7 +116,8 @@ export function boardMaxHeight(width: number, height: number): number {
 
 const RULES: ReadonlyArray<FitRule> = [
   {selector: '.mb-screen--mars .board-tabs-mars > .board-cont.board-without-venus, #game-end .board-cont.board-without-venus', crop: MARS_CROP},
-  {selector: '.mb-screen--mars .board-tabs-mars > .board-cont, #game-end .board-cont'},
+  // With ring: the section includes the outer space columns beside the board (marsFrame, Board.vue)
+  {selector: '.mb-screen--mars .board-tabs-mars > .board-cont, #game-end .board-cont', crop: RING_FRAME},
   // Rotated results table across the full width
   {selector: '#game-end .game_end_table.mb-transposed', columns: () => 1},
   // Milestones & awards as a table across the full width
@@ -197,7 +198,9 @@ function fit(element: HTMLElement, rule: FitRule): void {
     }
   }
   element.classList.add(FITTED_CLASS);
-  element.classList.toggle(CROPPED_CLASS, rule.crop !== undefined);
+  // Cropped = planet without ring (MARS_CROP); a section larger than the element (RING_FRAME) crops nothing
+  const clips = rule.crop !== undefined && crop.left >= 0 && crop.top >= 0 && crop.left + crop.width <= width && crop.top + crop.height <= height;
+  element.classList.toggle(CROPPED_CLASS, clips);
   setStyles(element, {
     transformOrigin: '0 0',
     transform: `translate(${-crop.left * scale}px, ${-crop.top * scale}px) scale(${scale.toFixed(4)})`,
@@ -205,7 +208,7 @@ function fit(element: HTMLElement, rule: FitRule): void {
     // (rounded down, otherwise the last column no longer fits into the row due to rounding)
     marginRight: Math.floor(crop.width * scale + gap) - width + 'px',
     marginBottom: Math.floor(crop.height * scale + rowGap) - height + 'px',
-    clipPath: rule.crop === undefined ? '' :
+    clipPath: !clips ? '' :
       `inset(${crop.top}px ${width - crop.left - crop.width}px ${height - crop.top - crop.height}px ${crop.left}px)`,
   });
 }

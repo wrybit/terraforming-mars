@@ -41,7 +41,7 @@
 
   <!-- Second board instance for viewing only. The IDs in it (main_board etc.) then exist twice;
        getElementById returns the first occurrence though, and the modal is attached at the end of body -->
-  <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" :marsCrop="zoomBoard === 'mars'"
+  <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" :frame="zoomBoard === 'mars' ? marsZoomFrame : undefined"
     @close="closeBoardZoom" @rendered="notifyZoomBoardRendered" @hidden="notifyZoomBoardHidden">
     <MoonBoard v-if="zoomBoard === 'moon' && game.moon" :model="game.moon" :tileView="tileView" ring/>
     <Board
@@ -73,6 +73,7 @@ import ColoniesBoard from '@/client/components/colonies/ColoniesBoard.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
 import OuterSpaceCorners from '@/client/components/board/OuterSpaceCorners.vue';
 import {mobileLayout} from '@/client/utils/mobileLayout';
+import {MarsFrame, marsFrame} from '@/client/components/mobile/mobileBoardZoom';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {ZoomBoard, notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
 import DeltaBoard from '@/client/components/delta/DeltaBoard.vue';
@@ -134,9 +135,13 @@ export default defineComponent({
     PlanetsBoard,
   },
   computed: {
-    // Phone/tablet layout keeps the special spaces at their board positions (mobile.less)
+    // Phone/tablet layout: the special spaces sit in the board as columns of the visible section (Board.vue)
     mobileLayout(): boolean {
       return mobileLayout.value;
+    },
+    // Large Mars shows the section of the mobile tab (planet without ring when there is no Venus, else ring with columns)
+    marsZoomFrame(): MarsFrame {
+      return marsFrame(this.mobileLayout && !this.game.gameOptions.expansions.venus);
     },
     // Same props for the board in the column and in the enlargement modal
     boardProps() {

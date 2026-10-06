@@ -452,6 +452,9 @@
   position: absolute;
 }
 
+// Distance of the outer space columns from the edge of the visible board section
+@board-frame-inset: 8px;
+
 .board-space {
   width: 46px;
   height: 51px;
@@ -708,12 +711,32 @@ each(@token_types, {
   background-color: @player_pink;
 }
 
-// Groups of the special spaces off Mars (outerSpaces.ts): without the corner layout (zoom view) the wrappers
-// disappear, so the spaces keep their original positions on the board
-.board-outer-group {
-  display: contents;
-}
+// Special spaces off Mars inside the board (Board.vue): the corner columns of the desktop box (board_tabs.less,
+// .board-outer-spaces--corners), but laid over the visible section of the board (marsFrame in mobileBoardZoom.ts) and
+// sized in board px – they zoom with Mars and keep their arrangement in the tab, the large Mars and the game end.
+// Static position = top left of .board-cont (the tile button before it has no size), the frame offsets it from there.
+.board-outer-spaces--corners.board-outer-spaces--frame {
+  inset: auto;
+  margin: var(--board-frame-top, 0) 0 0 var(--board-frame-left, 0);
+  width: var(--board-frame-width, 100%);
+  height: var(--board-frame-height, 100%);
 
-.board-outer-group__title {
-  display: none;
+  .board-outer-group {
+    gap: 8px;
+  }
+
+  .board-outer-group--top-left { left: @board-frame-inset; top: @board-frame-inset; }
+  .board-outer-group--bottom-left { left: @board-frame-inset; bottom: @board-frame-inset; }
+  .board-outer-group--top-right { right: @board-frame-inset; top: @board-frame-inset; }
+  .board-outer-group--bottom-right { right: @board-frame-inset; bottom: @board-frame-inset; }
+
+  // Board px are scaled down on small screens: larger type than in the desktop box
+  .board-outer-group__title {
+    font-size: 13px;
+  }
+
+  .board-outer-group > .board-space .board-space-text {
+    max-width: 84px;
+    font-size: 13px;
+  }
 }
