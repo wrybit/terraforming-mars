@@ -45,7 +45,10 @@
         <g class="turmoil-board-tab__chair-label">
           <text :x="CHAIR_CENTER.x" :y="CHAIR_CENTER.y + 28">{{ $t('Chairman') }}</text>
         </g>
-        <image v-if="turmoil.chairman !== undefined" :href="figureImage(turmoil.chairman)" :x="CHAIR_CENTER.x - 25" :y="CHAIR_CENTER.y + 42" width="50" :height="50 * FIGURE_RATIO"/>
+        <!-- Chairman on a seat like the party leaders (same dark seat with outline, same figure size) -->
+        <rect :x="CHAIR_CENTER.x - 30" :y="CHAIR_CENTER.y + CHAIR_SEAT_OFFSET - 25" width="60" height="50" rx="8" class="turmoil-board-tab__leader-seat"/>
+        <image v-if="turmoil.chairman !== undefined" :href="figureImage(turmoil.chairman)"
+          :x="CHAIR_CENTER.x - 23" :y="CHAIR_CENTER.y + CHAIR_SEAT_OFFSET - 27" width="46" :height="46 * FIGURE_RATIO"/>
         <path v-if="pickWedge !== undefined" :d="pickWedge" class="turmoil-board-tab__pick"/>
       </svg>
       <div class="turmoil-board-tab__corner turmoil-board-tab__corner--left" v-flash="flashKeys.turmoil('lobby')">
@@ -138,6 +141,10 @@ export default defineComponent({
     },
     CHAIR_CENTER(): typeof CHAIR_CENTER {
       return CHAIR_CENTER;
+    },
+    // Centre of the chairman's seat below the heading (the heading sits at +28)
+    CHAIR_SEAT_OFFSET(): number {
+      return 72;
     },
     GRADIENT_RADIUS(): number {
       return GRADIENT_RADIUS;
