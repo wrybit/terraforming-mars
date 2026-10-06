@@ -212,11 +212,18 @@
 }
 
 
+// Card title with a dividing line across the whole card (reaches into the card padding on both sides)
+.create-game-card-title-line() {
+  margin: 0 -14px 12px;
+  padding: 0 14px 10px;
+  border-bottom: 1px solid @create-game-line;
+}
+
 .create-game-card-head {
+  .create-game-card-title-line();
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
 
   h2 {
     font-size: 18px;
@@ -607,15 +614,16 @@
 }
 
 .create-game-players-head {
-  padding: 14px 14px 10px;
+  padding: 12px 14px 10px;
 
   .create-game-players-first {
     margin-top: @create-game-gap-inner;
   }
 
+  // Same title and line as the other cards
   h2 {
-    margin-bottom: 10px;
-    font-size: 20px;
+    .create-game-card-title-line();
+    font-size: 18px;
   }
 }
 
