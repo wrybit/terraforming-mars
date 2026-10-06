@@ -64,6 +64,15 @@ const TAB_ICONS: Readonly<Record<string, TabIcon>> = {
 // These tabs always come last, in this order (end generation at the very end)
 const LAST_TABS: ReadonlyArray<string> = ['End Turn', 'Pass for this generation'];
 
+// Expansion actions (trade, send delegate): tab color of their board tab (boardTabs.ts), placed rightmost
+// among the regular actions, directly before pass/end
+const EXPANSION_TAB_TONES: Readonly<Record<string, OptionTone>> = {
+  'Trade with a colony tile': 'colonies',
+  'Send a delegate in an area (3 M€)': 'colonies',
+  'Send a delegate in an area (5 M€)': 'colonies',
+  'Send a delegate in an area (from lobby)': 'colonies',
+};
+
 // Custom button texts for individual options in the action menu (server delivers e.g. only "Pass");
 // key = title key of the option, value = button key (translated in locales/*/ui.json)
 const BUTTON_LABELS: Readonly<Record<string, string>> = {
@@ -143,10 +152,10 @@ export function tabButtonCentered(option: PlayerInputModel): boolean {
 
 // Tab color of an action: fixed tones by title, otherwise for a content-free option the tile its button
 // announces (e.g. Tharsis Republic "Place a city tile" -> gray like the city tab that follows)
-export type OptionTone = TabButtonTone | PreviewTile;
+export type OptionTone = TabButtonTone | PreviewTile | 'colonies';
 
 export function optionTone(option: PlayerInputModel): OptionTone | undefined {
-  const tone = tabButtonTone(option.title);
+  const tone = tabButtonTone(option.title) ?? EXPANSION_TAB_TONES[titleKey(option.title)];
   if (tone !== undefined || option.type !== 'option') {
     return tone;
   }
@@ -169,6 +178,10 @@ export function isEndTab(title: string | Message): boolean {
 
 // Display order of the tabs as a list of indices; all others keep their server order
 export function tabDisplayOrder(titles: ReadonlyArray<string | Message>): Array<number> {
-  const rank = (index: number) => LAST_TABS.indexOf(titleKey(titles[index]));
+  const rank = (index: number) => {
+    const key = titleKey(titles[index]);
+    const last = LAST_TABS.indexOf(key);
+    return last !== -1 ? 2 + last : EXPANSION_TAB_TONES[key] !== undefined ? 1 : 0;
+  };
   return titles.map((_title, index) => index).sort((a, b) => rank(a) - rank(b) || a - b);
 }

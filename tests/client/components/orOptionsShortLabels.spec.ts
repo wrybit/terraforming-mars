@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {optionTone, tabButtonCentered, tabHighlighted} from '@/client/components/orOptionsShortLabels';
+import {optionTone, tabButtonCentered, tabDisplayOrder, tabHighlighted} from '@/client/components/orOptionsShortLabels';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 
 function option(title: string, buttonLabel: string): PlayerInputModel {
@@ -31,5 +31,12 @@ describe('orOptionsShortLabels', () => {
     expect(optionTone(option('Take first action of ${0} corporation', 'Place an ocean tile'))).eq('ocean');
     expect(optionTone(option('Convert 8 heat into temperature', 'Convert heat'))).eq('heat');
     expect(optionTone(option('Take first action of ${0} corporation', 'Fund an award for free'))).is.undefined;
+  });
+
+  it('colors trade and delegate tabs and puts them right before pass/end', () => {
+    expect(optionTone({type: 'and', title: 'Trade with a colony tile', buttonLabel: 'Trade'} as PlayerInputModel)).eq('colonies');
+    expect(optionTone({type: 'party', title: 'Send a delegate in an area (from lobby)', buttonLabel: 'Send'} as PlayerInputModel)).eq('colonies');
+    const titles = ['Pass for this generation', 'Trade with a colony tile', 'Play project card', 'Send a delegate in an area (5 M€)', 'End Turn', 'Standard projects'];
+    expect(tabDisplayOrder(titles)).deep.eq([2, 5, 1, 3, 4, 0]);
   });
 });
