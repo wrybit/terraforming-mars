@@ -66,7 +66,15 @@
         @select="selectedOption = $event"/>
       <!-- Simple decision (choiceMenu.ts): options as tiles, the selected one pulses like cards;
            a player selection or an option against a player becomes a player tile with the affected resource -->
-      <div v-if="!asTabs && maKind === undefined && isChoice" :class="['choice-options', 'choice-block', {'choice-options--players': hasPlayerChoice}]" :style="choiceBlockStyle(choiceTileCount)" role="radiogroup">
+      <!-- Party choice offered as plain options (partyChoice.ts): the same party cards as SelectParty -->
+      <PartyOptions v-if="!asTabs && partyCards !== undefined && playerView.game.turmoil !== undefined"
+        :cards="partyCards"
+        :options="displayedOptions"
+        :selected="selectedOption"
+        :groupName="radioElementName"
+        :turmoil="playerView.game.turmoil"
+        @select="selectedOption = $event"/>
+      <div v-else-if="!asTabs && maKind === undefined && isChoice" :class="['choice-options', 'choice-block', {'choice-options--players': hasPlayerChoice}]" :style="choiceBlockStyle(choiceTileCount)" role="radiogroup">
         <template v-for="(option, idx) in displayedOptions" :key="idx">
           <!-- Options against a player ("Remove 4 steel from …", playerTargetOption.ts): tiles in that player's color,
                several against the same player as a group with smaller spacing (law of proximity) -->
@@ -107,7 +115,7 @@
       <PlayerInputFactory v-if="!asTabs && (maKind !== undefined || isChoice) && selectedIdx !== -1 && selectedOption.type !== 'player'" v-show="isInlineInput(selectedOption)"
         ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" @validity="childValid = $event"/>
 
-      <template v-else-if="!asTabs && !isChoice">
+      <template v-else-if="!asTabs && !isChoice && partyCards === undefined">
         <div v-for="(option, idx) in displayedOptions" :key="idx">
           <label class="form-radio" ref="optionLabels">
             <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" >
@@ -170,6 +178,8 @@ import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import MilestoneAwardOptions from '@/client/components/MilestoneAwardOptions.vue';
+import PartyOptions from '@/client/components/turmoil/PartyOptions.vue';
+import {PartyChoiceOption, partyChoice} from '@/client/components/turmoil/partyChoice';
 import PlayerOptionTile from '@/client/components/PlayerOptionTile.vue';
 import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
 import ChoiceOptionTile from '@/client/components/ChoiceOptionTile.vue';
@@ -227,6 +237,7 @@ export default defineComponent({
     HandCardsPanel,
     HandCardsTab,
     MilestoneAwardOptions,
+    PartyOptions,
     PlayerOptionTile,
     CardIntroBlock,
     ChoiceOptionTile,
@@ -304,6 +315,10 @@ export default defineComponent({
       return isChoiceMenu(this.playerinput);
     },
     // Milestone or award choice as image tiles (milestoneAwardChoice.ts)
+    // Party choice as party cards (partyChoice.ts)
+    partyCards(): Array<PartyChoiceOption> | undefined {
+      return this.maKind === undefined ? partyChoice(this.displayedOptions) : undefined;
+    },
     maKind(): MilestoneAwardKind | undefined {
       return milestoneAwardKind(this.playerinput);
     },

@@ -394,10 +394,11 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   gap: 2px;
 }
 
-// Parties as tiles: glass in the party colour, hexagon on top
+// Parties as tiles: glass in the party colour, hexagon on top.
+// --party-columns: fewer cards than parties (Mars Frontier Alliance) do not leave empty columns (PartyOptions.vue)
 .select-party__cards {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--party-columns, 6), minmax(0, 1fr));
   gap: 30px 8px;
   padding: 24px 0 2px;
 }

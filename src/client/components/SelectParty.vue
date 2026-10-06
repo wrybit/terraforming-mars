@@ -19,25 +19,12 @@
       <div class="select-party__column select-party__column--parties">
         <div class="select-party__label">{{ $t('To which party?') }}</div>
         <div class="select-party__cards">
-          <label v-for="party in turmoil.parties" :key="party.name"
-            :class="['select-party__card', {'select-party__card--on': party.name === selectedParty, 'select-party__card--off': !partyAvailableToSelect(party.name)}]"
-            :style="{'--party': PARTY_COLOR[party.name]}"
-            :data-test="'party-' + party.name">
-            <input type="radio" class="choice-option-input" v-model="selectedParty" :value="party.name" :disabled="!partyAvailableToSelect(party.name)" @change="preview()">
-            <span class="select-party__badge"><span class="select-party__hex"><img :src="partyImage(party.name)" alt=""></span></span>
-            <span v-if="isDominant(party.name)" class="select-party__dominance" :title="$t('Dominant')"></span>
-            <span class="select-party__name">{{ $t(party.name) }}</span>
-            <span class="select-party__leader" :title="$t('Party leader')">
-              <img v-if="party.partyLeader !== undefined" :src="figureImage(party.partyLeader)" width="26" :height="26 * 1.3" alt="">
-              <span v-else class="select-party__seat" :style="{backgroundImage: 'url(' + figureImage(undefined) + ')'}"></span>
-            </span>
-            <span class="select-party__seats">
-              <img v-for="(color, index) in seated(party)" :key="index" :src="figureImage(color)" width="18" :height="18 * 1.3" alt="">
-            </span>
-            <span class="select-party__rule select-party__rule--policy"><small>{{ $t('While ruling') }}</small>{{ $t(agendaText(agenda(party.name).policy)) }}</span>
-            <span class="select-party__rule select-party__rule--bonus"><small>{{ $t('When taking over') }}</small>{{ $t(agendaText(agenda(party.name).bonus)) }}</span>
-            <span v-if="party.name === turmoil.ruling" class="select-party__ruling">{{ $t('Ruling') }}</span>
-          </label>
+          <PartyCard v-for="party in turmoil.parties" :key="party.name"
+            :party="party"
+            :turmoil="turmoil"
+            :selected="party.name === selectedParty"
+            :disabled="!partyAvailableToSelect(party.name)"
+            @select="pick(party.name)"/>
         </div>
         <div class="select-party__preview" :style="selectedParty !== undefined ? {'--party': PARTY_COLOR[selectedParty]} : {}">
           <template v-if="forecastText !== undefined"><b>{{ $t('Then') }}:</b> {{ forecastText }}</template>
@@ -60,16 +47,16 @@ import {SelectPartyModel} from '@/common/models/PlayerInputModel';
 import {PartyName} from '@/common/turmoil/PartyName';
 import {SelectPartyResponse} from '@/common/inputs/InputResponse';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
-import {PartyModel, TurmoilModel} from '@/common/models/TurmoilModel';
-import {Color} from '@/common/Color';
+import {TurmoilModel} from '@/common/models/TurmoilModel';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
-import {BoardTabId} from '@/client/components/boardTabs/boardTabs';
-import {boardTabState, selectBoardTab} from '@/client/components/boardTabs/boardTabState';
-import {PARTY_COLOR, PartyAgenda, agendaText, delegateForecast, figureImage, partyAgenda, partyImage, seatedDelegates, turmoilPickState} from '@/client/components/turmoil/turmoilView';
+import {PARTY_COLOR, delegateForecast, figureImage, turmoilPickState} from '@/client/components/turmoil/turmoilView';
+import {focusTurmoilBoard} from '@/client/components/turmoil/turmoilFocus';
+import PartyCard from '@/client/components/turmoil/PartyCard.vue';
 
 type DataModel = {
   selectedParty: PartyName | undefined;
-  previousBoard: BoardTabId;
+  // Brings back the board tab shown before the choice (turmoilFocus.ts)
+  restoreBoard: (() => void) | undefined;
 };
 
 export default defineComponent({
@@ -97,45 +84,34 @@ export default defineComponent({
   data(): DataModel {
     return {
       selectedParty: undefined,
-      previousBoard: boardTabState.active,
+      restoreBoard: undefined,
     };
   },
   components: {
     TabPanelFooterSlot,
     AppButton,
+    PartyCard,
   },
   mounted() {
     if (this.turmoil !== undefined) {
-      selectBoardTab('turmoil');
+      this.restoreBoard = focusTurmoilBoard();
     }
   },
   beforeUnmount() {
+    this.restoreBoard?.();
     turmoilPickState.pick = undefined;
-    if (boardTabState.active === 'turmoil') {
-      selectBoardTab(this.previousBoard);
-    }
   },
   methods: {
-    partyImage,
     figureImage,
-    agendaText,
-    agenda(party: PartyName): PartyAgenda {
-      return this.turmoil === undefined ? {policy: undefined, bonus: undefined} : partyAgenda(this.turmoil, party);
-    },
-    seated(party: PartyModel): Array<Color> {
-      return seatedDelegates(party);
-    },
-    preview() {
-      turmoilPickState.pick = this.selectedParty;
+    pick(party: PartyName) {
+      this.selectedParty = party;
+      turmoilPickState.pick = party;
     },
     saveData() {
       if (this.selectedParty === undefined) {
         return;
       }
       this.onsave({type: 'party', partyName: this.selectedParty});
-    },
-    isDominant(partyName: PartyName): boolean {
-      return partyName === this.turmoil?.dominant;
     },
     partyAvailableToSelect(partyName: PartyName): boolean {
       return this.playerinput.parties?.includes(partyName) ?? false;

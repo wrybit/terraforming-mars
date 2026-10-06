@@ -1,4 +1,4 @@
-import {shallowMount} from '@vue/test-utils';
+import {mount, shallowMount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {globalConfig} from './getLocalVue';
 import SelectParty from '@/client/components/SelectParty.vue';
@@ -29,7 +29,7 @@ describe('SelectParty', () => {
     const {fakeTurmoil} = await import('./turmoil/turmoilFixtures');
     const {boardTabState, selectBoardTab} = await import('@/client/components/boardTabs/boardTabState');
     let saved: any;
-    const wrapper = shallowMount(SelectParty, {
+    const wrapper = mount(SelectParty, {
       ...globalConfig,
       props: {
         playerView: fakePlayerViewModel({game: fakeGameModel({turmoil: fakeTurmoil()})}),
