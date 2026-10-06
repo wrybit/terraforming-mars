@@ -20,7 +20,7 @@
     </LogGenerationList>
     <div v-docked-tab :class="panelClasses" role="tabpanel">
       <!-- One continuous stream of all generations; the tabs above follow the scroll position -->
-      <div v-show="!showsMilestonesAwards" id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mouseleave="messageUnhovered">
+      <div v-show="!showsMilestonesAwards" id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mousemove="pointerMoved" @mouseleave="messageUnhovered">
         <section v-for="section in sections" :key="section.generation" class="log-generation" :data-generation="section.generation">
           <h3 class="log-generation-title">
             <span class="log-generation-marker" aria-hidden="true">{{ section.generation }}</span>{{ generationTitle(section.generation) }}
@@ -125,9 +125,6 @@ type LogPanelModel = {
   internals: Internals,
 };
 
-// Distance of the hover preview from the log's right edge
-const LOG_PREVIEW_INSET = 3;
-
 // The header of each generation replaces the server's "Generation N" line
 function withoutGenerationLines(messages: Array<LogMessage>): Array<LogMessage> {
   return messages.filter((message) => message.type !== LogMessageType.NEW_GENERATION);
@@ -207,20 +204,23 @@ export default defineComponent({
     },
     messageHovered(message: LogMessage, event: MouseEvent) {
       // Lines with many cards have no hover preview (it would overflow the window), only click
-      if (this.zoomCarousel || !this.canHover() || needsModalPreview(message)) {
+      if (this.zoomCarousel || !this.canHover()) {
         return;
       }
-      // Preview vertically centered in the log panel, just inside its right edge, in window coordinates
-      // (position: fixed), so it isn't clipped by the column overflow
-      const rowElement = event.currentTarget as HTMLElement;
-      const panel = (rowElement.closest('.log-panel') ?? rowElement).getBoundingClientRect();
-      // Center of the visible part: if the log extends below the window, the card would otherwise be clipped too
-      const visibleTop = Math.max(panel.top, 0);
-      const visibleBottom = Math.min(panel.bottom, window.innerHeight);
-      this.typedRefs.messageInspector.preview(message, {
-        top: (visibleTop + visibleBottom) / 2,
-        right: window.innerWidth - panel.right + LOG_PREVIEW_INSET,
-      });
+      if (needsModalPreview(message)) {
+        // Otherwise the previous row's preview would stay next to this row
+        this.typedRefs.messageInspector.hidePreview();
+        return;
+      }
+      // Preview at the top right of the mouse, in window coordinates (position: fixed), so the column overflow doesn't clip it
+      this.typedRefs.messageInspector.preview(message, {x: event.clientX, y: event.clientY});
+    },
+    // The preview hangs on the pointer and moves with it
+    pointerMoved(event: MouseEvent) {
+      if (this.zoomCarousel) {
+        return;
+      }
+      this.typedRefs.messageInspector.follow({x: event.clientX, y: event.clientY});
     },
     messageUnhovered() {
       this.typedRefs.messageInspector.hidePreview();

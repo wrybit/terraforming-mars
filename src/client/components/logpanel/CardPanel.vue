@@ -2,7 +2,7 @@
   <!-- Attach the modal to body: in the log (own stacking context) it would otherwise lie below the icons at top right -->
   <Teleport to="body" :disabled="!modal">
   <!-- The root is the Teleport, so attributes (e.g. the hover preview's position as style) don't land here on their own -->
-  <div :class="['card-panel', {'card-panel--floating': floating, 'card-panel--modal': modal}]" v-bind="$attrs" v-if="message !== undefined && show">
+  <div ref="panel" :class="['card-panel', {'card-panel--floating': floating, 'card-panel--modal': modal}]" v-bind="$attrs" v-if="message !== undefined && show">
     <!-- Hover preview closes itself when leaving the row, needs no button -->
     <AppButton v-if="!floating" size="big" type="close" :disableOnServerBusy="false" @click="hideMe" align="right"/>
     <div id="log_panel_card" class="cardbox" v-for="name in cards" :key="name">

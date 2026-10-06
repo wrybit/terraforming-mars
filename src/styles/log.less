@@ -186,27 +186,25 @@
 @log-card-preview-height: 308px;
 @log-card-preview-gap: 8px;
 
-// Hover preview just inside the right edge above the log, with a drop shadow. A single card is vertically centered;
-// several (up to 3; more open a modal on click – logMessageContent.ts) stack fully on top of each other and
-// grow upwards: the last one is centered, the others above it.
+// Hover preview hanging at the top right of the mouse pointer, with a drop shadow. Several cards (up to 3; more
+// open a modal on click – logMessageContent.ts) stack on top of each other. LogMessageInspector places it
+// (left/top) and keeps it inside the window.
 // fixed instead of absolute, because the log can sit in a column with overflow (player_home_columns.less)
 .card-panel--floating {
-  // Zoom as a variable: the offset is computed from the same card size (level "log-full" sets 1)
+  // Zoom as a variable (level "log-full" sets 1)
   --log-card-preview-zoom: @log-card-preview-zoom;
-  position: fixed; // top (center) and right are set by LogMessageInspector
+  position: fixed; // left and top are set by LogMessageInspector
   z-index: 100;
-  // Bottom edge half a card below the center: the last card is centered
-  transform: translateY(calc(-100% + @log-card-preview-height * var(--log-card-preview-zoom) / 2));
   // Shadow follows the card shape (rounded corners)
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.7));
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: @log-card-preview-gap;
   // Mouse stays on the log lines; otherwise the preview would catch the hover and flicker
   pointer-events: none;
 
-  // The cards' margin is meant for card rows; here the card should end flush with the log
+  // The cards' margin is meant for card rows; the gap between them comes from the panel
   .card-container {
     margin: 0;
     zoom: var(--log-card-preview-zoom);
