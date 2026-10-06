@@ -22,4 +22,13 @@ describe('ChoiceChip', () => {
     await wrapper.find('a').trigger('click');
     expect(wrapper.emitted('select')).is.undefined;
   });
+
+  it('a locked chip (base game) stays selected and ignores clicks', async () => {
+    const wrapper = mount(ChoiceChip, {...globalConfig, props: {label: 'Base game', selected: true, locked: true}});
+    await wrapper.trigger('click');
+    await wrapper.trigger('keydown', {key: 'Enter'});
+    expect(wrapper.emitted('select')).is.undefined;
+    expect(wrapper.classes()).includes('create-game-chip--locked');
+    expect(wrapper.attributes('aria-disabled')).eq('true');
+  });
 });

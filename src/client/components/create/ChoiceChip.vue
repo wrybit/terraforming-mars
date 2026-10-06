@@ -3,12 +3,13 @@
     role="button"
     tabindex="0"
     class="create-game-chip"
-    :class="{'create-game-chip--selected': selected}"
+    :class="{'create-game-chip--selected': selected, 'create-game-chip--locked': locked}"
     :aria-pressed="selected"
+    :aria-disabled="locked"
     :title="translatedLabel"
-    @click="$emit('select')"
-    @keydown.enter.prevent="$emit('select')"
-    @keydown.space.prevent="$emit('select')">
+    @click="select()"
+    @keydown.enter.prevent="select()"
+    @keydown.space.prevent="select()">
     <slot name="icon"><span v-if="iconClass" :class="'create-game-expansion-icon ' + iconClass"></span></slot>
     <span class="create-game-chip-label" :class="{capitalized}">{{ translatedLabel }}</span>
     <slot></slot>
@@ -43,10 +44,22 @@ export default defineComponent({
       type: String,
       required: false,
     },
+    // Fixed choice (base game): shown, but clicking does nothing
+    locked: {
+      type: Boolean,
+      default: false,
+    },
     // Game board names come lowercase from the enum
     capitalized: {
       type: Boolean,
       default: false,
+    },
+  },
+  methods: {
+    select() {
+      if (!this.locked) {
+        this.$emit('select');
+      }
     },
   },
   computed: {

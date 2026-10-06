@@ -302,6 +302,15 @@
     background-size: 20px 20px;
   }
 
+  // Base game: always on, so no hover and no pointer – it only states what every game contains
+  &--locked {
+    cursor: default;
+
+    &:hover {
+      background: fade(@selection-color, @selection-tint-opacity);
+    }
+  }
+
   &--selected {
     border-color: lighten(@selection-color, 12%);
     background: fade(@selection-color, @selection-tint-opacity);

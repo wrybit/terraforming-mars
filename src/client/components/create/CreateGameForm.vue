@@ -35,6 +35,8 @@
             </div>
             <div class="create-game-subhead" v-i18n>Official</div>
             <div class="create-game-chip-grid">
+              <!-- The base game is always part of the game: shown as a selected chip that cannot be switched off -->
+              <ChoiceChip label="Base game" iconClass="expansion-icon-base" selected locked/>
               <ChoiceChip v-for="choice in OFFICIAL_EXPANSIONS" :key="choice.expansion"
                 :label="choice.label" :iconClass="choice.iconClass" :selected="expansions[choice.expansion]"
                 :href="choice.info ? wikiUrls[choice.expansion] : undefined"
