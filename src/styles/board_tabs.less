@@ -175,24 +175,23 @@
   box-sizing: border-box;
 }
 
-// Special spaces off Mars in the four corners of the box, grouped by origin (outerSpaces.ts):
-// the round planet leaves the corners free. The groups sit inside the zoomed board, so the hexes
-// stay as large as the Mars spaces; they are placed relative to the box (.board-tabs-panel).
-// Desktop only: the cropped mobile Mars keeps Phobos/Ganymede in its top corners (mobile.less).
+// Special spaces off Mars in the four corners of the box (OuterSpaceCorners.vue, outerSpaces.ts):
+// positioned relative to the box (.board-tabs-panel); --outer-hex-scale gives the hexes the rendered
+// size of the Mars spaces. Short name centered below the hex; a wider name grows inwards from the outer edge.
 @board-outer-inset: 14px;
 
-html:not(.tm-mobile) .board-tabs-mars {
-  .board-outer-spaces {
-    position: static;
-  }
+.board-outer-spaces--corners {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
 
   .board-outer-group {
     position: absolute;
-    z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    width: 64px;
+    gap: 6px;
+    pointer-events: auto;
   }
 
   .board-outer-group--top-left { left: @board-outer-inset; top: @board-outer-inset; }
@@ -200,33 +199,30 @@ html:not(.tm-mobile) .board-tabs-mars {
   .board-outer-group--top-right { right: @board-outer-inset; top: @board-outer-inset; }
   .board-outer-group--bottom-right { right: @board-outer-inset; bottom: @board-outer-inset; }
 
-  // Left groups flush left, right groups flush right: title and hexes on the outer edge
+  // Left flush left, right flush right: title and hexes on the outer edge
   .board-outer-group--top-left,
   .board-outer-group--bottom-left {
     align-items: flex-start;
-    text-align: left;
   }
 
   .board-outer-group--top-right,
   .board-outer-group--bottom-right {
     align-items: flex-end;
-    text-align: right;
   }
 
   .board-outer-group__title {
     display: block;
     font-family: Prototype, sans-serif;
-    font-size: 10px;
+    font-size: 9.5px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.55);
   }
 
-  // Space: hex on top, short name below instead of the board positions
   .board-outer-group > .board-space {
     position: relative;
     margin: 0;
-    width: 64px;
+    width: auto;
     height: auto;
     clip-path: none;
     display: flex;
@@ -237,15 +233,19 @@ html:not(.tm-mobile) .board-tabs-mars {
       position: relative;
       flex: none;
       margin: 0;
+      zoom: var(--outer-hex-scale, 1);
     }
 
     .board-space-text {
       position: static;
-      margin: 2px 0 0;
-      width: 64px;
-      font-size: 10px;
+      margin: 3px 0 0;
+      width: auto;
+      min-width: calc(46px * var(--outer-hex-scale, 1));
+      max-width: 64px;
+      font-size: 9.5px;
       line-height: 1.1;
       font-weight: 500;
+      text-align: center;
       color: rgba(255, 255, 255, 0.85);
     }
 

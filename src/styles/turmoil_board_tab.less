@@ -302,6 +302,58 @@
   line-height: 1;
 }
 
+// Committee and events: stacked in a narrow box ...
+.turmoil-board-tab__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.turmoil-board-tab__main {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+// ... side by side in a wide one (TurmoilBoard.vue: wide): the committee fills the left side,
+// the event cards stand as a column on the right, scaled to its height (boardTabFit.ts)
+.turmoil-board-tab--wide {
+  .turmoil-board-tab__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(200px, 34%, 300px);
+    gap: 14px;
+    padding-top: 12px;
+  }
+
+  .turmoil-board-tab__main {
+    min-height: 0;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  // As wide as the column allows, as high as the room above the neutral note allows
+  .turmoil-board-tab__hemicycle {
+    width: min(100%, calc((100cqh - 150px) * 1000 / 495));
+  }
+
+  .turmoil-board-tab__events {
+    height: 100%;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .turmoil-board-tab__events-row {
+    flex-direction: column;
+  }
+
+  .turmoil-board-tab__event-arrow {
+    transform: rotate(90deg);
+  }
+}
+
 // Phone: lobby and reserve below the hemicycle instead of in the (too small) corners
 @container (max-width: 420px) {
   .turmoil-board-tab {

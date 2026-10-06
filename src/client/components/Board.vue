@@ -5,8 +5,9 @@
             {{ tileView }} tiles
           </div>
         </div>
-        <!-- Special spaces off Mars, grouped into the corners of the board box (outerSpaces.ts, board.less) -->
-        <div class="board-outer-spaces" id="colony_spaces">
+        <!-- Special spaces off Mars at their board positions; in the desktop board box they sit in its
+             corners instead (OuterSpaceCorners.vue), outside the zoomed and shifted board -->
+        <div v-if="!outerSpacesInCorners" class="board-outer-spaces" id="colony_spaces">
           <div v-for="group in outerSpaceGroups" :key="group.corner" :class="['board-outer-group', 'board-outer-group--' + group.corner]">
             <span v-if="group.title !== undefined" class="board-outer-group__title" v-i18n>{{ group.title }}</span>
             <BoardSpace v-for="outer in group.spaces" :key="outer.id" :space="getSpace(outer.id)" :text="outer.short" :title="$t(outer.name)" :tileView="tileView"/>
@@ -401,6 +402,11 @@ export default defineComponent({
     aresData: {
       type: Object as () => AresData | undefined,
       default: undefined,
+    },
+    // Desktop board box: the special spaces off Mars are rendered by OuterSpaceCorners.vue
+    outerSpacesInCorners: {
+      type: Boolean,
+      default: false,
     },
     tileView: {
       type: String as () => TileView,

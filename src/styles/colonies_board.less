@@ -763,3 +763,105 @@ html:not(.tm-mobile) .or-tab-panel .trade-colony {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+// Desktop (mockup with-extensions): the planet is a column of its own and shows the whole disc, sized by the
+// tile height; name, track and value grow with the tile (container units), so the tiles fill the box.
+html:not(.tm-mobile) {
+  .colonies-board {
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .colonies-board__tile {
+    --colony-step-size: clamp(22px, min(30cqh, 5cqw), 52px);
+    container: colony-tile / size;
+    flex: 1 0 auto;
+    min-height: 92px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    padding-left: 10px;
+    column-gap: clamp(10px, 2cqw, 24px);
+  }
+
+  .colonies-board__art {
+    position: relative;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    align-self: center;
+    width: min(84cqh, 20cqw);
+    height: 84cqh;
+
+    .colony-planet {
+      top: 50%;
+      right: 0;
+      height: 100%;
+      box-shadow: inset -10px -6px 22px rgba(0, 0, 0, 0.55);
+    }
+
+    &::after {
+      display: none;
+    }
+  }
+
+  .colonies-board__body {
+    gap: clamp(3px, 3cqh, 12px);
+  }
+
+  .colonies-board__name {
+    font-size: clamp(15px, min(14cqh, 2.6cqw), 26px);
+  }
+
+  .colonies-board__meta {
+    font-size: clamp(11px, min(9cqh, 1.6cqw), 15px);
+  }
+
+  .colonies-board__track {
+    max-width: none;
+    min-height: calc(var(--colony-step-size) * 1.45);
+  }
+
+  .colonies-board__step {
+    width: var(--colony-step-size);
+    height: var(--colony-step-size);
+    font-size: calc(var(--colony-step-size) * 0.5);
+
+    &--at {
+      width: calc(var(--colony-step-size) * 1.4);
+      height: calc(var(--colony-step-size) * 1.4);
+
+      b {
+        font-size: calc(var(--colony-step-size) * 0.55);
+      }
+    }
+  }
+
+  .colonies-board__step-icon {
+    width: calc(var(--colony-step-size) * 0.45);
+    height: calc(var(--colony-step-size) * 0.45);
+  }
+
+  .colonies-board__big {
+    font-size: clamp(26px, 26cqh, 44px);
+
+    img {
+      width: clamp(26px, 26cqh, 44px);
+      height: clamp(26px, 26cqh, 44px);
+    }
+  }
+
+  .colonies-board__value small {
+    font-size: clamp(11px, 8cqh, 14px);
+  }
+
+  .colonies-board__hangar {
+    flex-shrink: 0;
+  }
+}
+
+// Short, wide tile: the planet column gets cut off softly on the left instead of squeezing the track
+@container colony-tile (max-aspect-ratio: 42/10) {
+  html:not(.tm-mobile) .colonies-board__art {
+    mask-image: linear-gradient(90deg, transparent 0, #000 40%);
+  }
+}

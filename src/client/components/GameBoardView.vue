@@ -7,11 +7,14 @@
       <Board
         ref="columnBoard"
         v-bind="boardProps"
+        :outerSpacesInCorners="!mobileLayout"
         @toggleTileView="$emit('toggleTileView')"
         @click="onBoardClick"
         class="board-cont--zoomable"
         id="shortkey-board"
       />
+      <!-- Desktop: the special spaces off Mars in the corners of the box -->
+      <OuterSpaceCorners v-if="!mobileLayout" :spaces="game.spaces" :tileView="tileView"/>
     </template>
     <template #moon>
       <MoonBoard v-if="game.moon" :model="game.moon" :tileView="tileView" ring id="shortkey-moonBoard"/>
@@ -59,6 +62,8 @@ import Board from '@/client/components/Board.vue';
 import BoardTabs from '@/client/components/boardTabs/BoardTabs.vue';
 import ColoniesBoard from '@/client/components/colonies/ColoniesBoard.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
+import OuterSpaceCorners from '@/client/components/board/OuterSpaceCorners.vue';
+import {mobileLayout} from '@/client/utils/mobileLayout';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
 import DeltaBoard from '@/client/components/delta/DeltaBoard.vue';
@@ -104,6 +109,7 @@ export default defineComponent({
     };
   },
   components: {
+    OuterSpaceCorners,
     Board,
     BoardTabs,
     ColoniesBoard,
@@ -117,6 +123,10 @@ export default defineComponent({
     PlanetsBoard,
   },
   computed: {
+    // Phone/tablet layout keeps the special spaces at their board positions (mobile.less)
+    mobileLayout(): boolean {
+      return mobileLayout.value;
+    },
     // Same props for the board in the column and in the enlargement modal
     boardProps() {
       return {
