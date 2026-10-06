@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" :class="['turmoil-board-tab', {'turmoil-board-tab--wide': wide}]">
+  <div class="turmoil-board-tab">
     <!-- Turmoil board tab: ruling policy on top, the committee as a hemicycle (parties, seats, leaders, chair, dominance),
          lobby and reserve in the free corners, the neutral delegates explained, the global events in time order -->
     <div v-if="turmoil.ruling !== undefined" class="turmoil-board-tab__policy">
@@ -11,9 +11,6 @@
       <span v-if="viewer !== undefined" class="turmoil-board-tab__influence">{{ $t('Influence') }} <b>{{ viewer.influence }}</b></span>
     </div>
 
-    <!-- Wide box: committee left, the events as a column on the right; narrow: everything stacked -->
-    <div class="turmoil-board-tab__body">
-    <div class="turmoil-board-tab__main">
     <div class="turmoil-board-tab__hemicycle">
       <svg :viewBox="'0 0 ' + HEMICYCLE_WIDTH + ' ' + HEMICYCLE_HEIGHT" class="turmoil-board-tab__svg" role="group">
         <defs>
@@ -69,21 +66,15 @@
     <div class="turmoil-board-tab__neutral">
       <img :src="figureImage('neutral')" alt="">
       <p><b>{{ $t('Neutral delegates') }}</b> {{ $t('belong to no player. The game places them itself – two per generation: one when a new event is revealed and one when an event starts. The event card shows which party.') }}</p>
+      <small>{{ $t('${0} left in supply', [String(neutralLeft)]) }}</small>
     </div>
 
-    </div>
-
-    <div class="turmoil-board-tab__events" :data-fit-width="eventsFit.width" :data-fit-height="eventsFit.height">
-      <div class="turmoil-board-tab__events-row">
-        <template v-for="(slot, index) in eventSlots" :key="slot.type">
-          <span v-if="index > 0" class="turmoil-board-tab__event-arrow" aria-hidden="true">›</span>
-          <div :class="['turmoil-board-tab__event', 'turmoil-board-tab__event--' + slot.type]">
-            <div class="turmoil-board-tab__event-slot"><b>{{ $t('Gen') }} {{ generation + slot.offset }}</b> · {{ $t(slot.label) }}</div>
-            <GlobalEvent :globalEventName="slot.name" :type="slot.type"/>
-          </div>
-        </template>
-      </div>
-    </div>
+    <!-- Events in time order: a row below in a tall box, a column on the right in a wide one (container query) -->
+    <div class="turmoil-board-tab__events">
+      <template v-for="(slot, index) in eventSlots" :key="slot.type">
+        <span v-if="index > 0" class="turmoil-board-tab__event-arrow" aria-hidden="true">›</span>
+        <TurmoilEventCard :name="slot.name" :type="slot.type" :generation="generation + slot.offset" :label="slot.label"/>
+      </template>
     </div>
   </div>
 </template>
@@ -95,29 +86,20 @@ import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {PartyName} from '@/common/turmoil/PartyName';
 import {Color} from '@/common/Color';
 import {GlobalEventName} from '@/common/turmoil/globalEvents/GlobalEventName';
-import GlobalEvent from './GlobalEvent.vue';
+import TurmoilEventCard from './TurmoilEventCard.vue';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
-import {PARTY_COLOR, PartyAgenda, agendaText, figureImage, partyAgenda, partyImage, seatedDelegates, turmoilPickState} from './turmoilView';
+import {PARTY_COLOR, PartyAgenda, agendaText, delegatesOf, figureImage, partyAgenda, partyImage, seatedDelegates, turmoilPickState} from './turmoilView';
 import {CHAIR_CENTER, FIGURE_RATIO, GRADIENT_RADIUS, HEMICYCLE_HEIGHT, HEMICYCLE_WIDTH, Wedge, chairPath, wedge} from './turmoilHemicycle';
 
 type EventSlot = {type: 'current' | 'coming' | 'distant', name: GlobalEventName, offset: number, label: string};
 
-// Global event cards are 332 × 206 (turmoil.less) plus the slot line above; three in a row (narrow box)
-// or stacked in the right column (wide box), with arrows between them
-const EVENT_WIDTH = 332;
-const EVENT_HEIGHT = 206 + 22;
-const EVENT_ARROW = 26;
-const EVENTS_ROW = {width: 3 * EVENT_WIDTH + 2 * EVENT_ARROW, height: EVENT_HEIGHT + 18};
-const EVENTS_COLUMN = {width: EVENT_WIDTH, height: 3 * EVENT_HEIGHT + 2 * EVENT_ARROW};
-// From this width of the board tab the events move into a column beside the committee
-const WIDE_MIN_WIDTH = 600;
-
-let resizeObserver: ResizeObserver | undefined;
+// Neutral delegates in the game (board game supply)
+const NEUTRAL_DELEGATES = 14;
 
 export default defineComponent({
   name: 'TurmoilBoard',
-  components: {GlobalEvent},
+  components: {TurmoilEventCard},
   directives: {flash: vFlash},
   props: {
     turmoil: {
@@ -136,25 +118,6 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-  },
-  data() {
-    return {
-      wide: false,
-    };
-  },
-  mounted() {
-    const root = this.$refs.root as HTMLElement;
-    const update = () => {
-      this.wide = root.getBoundingClientRect().width >= WIDE_MIN_WIDTH;
-    };
-    update();
-    if (typeof ResizeObserver !== 'undefined') {
-      resizeObserver = new ResizeObserver(update);
-      resizeObserver.observe(root);
-    }
-  },
-  beforeUnmount() {
-    resizeObserver?.disconnect();
   },
   computed: {
     flashKeys(): typeof flashKeys {
@@ -178,9 +141,10 @@ export default defineComponent({
     FIGURE_RATIO(): number {
       return FIGURE_RATIO;
     },
-    // Drawing size of the event area for boardTabFit.ts
-    eventsFit(): {width: number, height: number} {
-      return this.wide ? EVENTS_COLUMN : EVENTS_ROW;
+    // Neutral delegates still in the supply: all minus those seated (and the chair)
+    neutralLeft(): number {
+      const seated = this.turmoil.parties.reduce((sum, party) => sum + delegatesOf(party).filter((color) => color === 'neutral').length, 0);
+      return Math.max(0, NEUTRAL_DELEGATES - seated - (this.turmoil.chairman === 'neutral' ? 1 : 0));
     },
     chairPath(): string {
       return chairPath();

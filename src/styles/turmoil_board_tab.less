@@ -1,12 +1,13 @@
 // Turmoil board tab (TurmoilBoard.vue) and the delegate tab (SelectParty.vue).
-// The hemicycle scales with the width, the event row takes the rest of the height (boardTabFit.ts).
+// The layout follows the box size (container queries): see the turmoil-tab container below.
 @turmoil-gold: #f2c14e;
 @turmoil-muted: #a2a8ba;
 @turmoil-text: #eceef3;
 
-// Size container: the hemicycle gets at most about half of the box height, the events the rest
+// The tab adapts to the box size (mockup with-extensions): a size container for the layout switch,
+// the event cards are inline-size containers so their content grows with the card width (cqi)
 .board-tabs-view--turmoil {
-  container-type: size;
+  container: turmoil-tab / size;
 }
 
 .turmoil-board-tab {
@@ -15,6 +16,8 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  overflow-y: auto;
+  scrollbar-width: thin;
   box-sizing: border-box;
 }
 
@@ -77,12 +80,14 @@
   }
 }
 
-// Hemicycle: keeps its aspect ratio
+// Hemicycle: takes the available height, keeps its aspect ratio
 .turmoil-board-tab__hemicycle {
   position: relative;
-  flex: none;
+  flex: 0 1 auto;
   align-self: center;
-  width: min(100%, 80cqh);
+  width: 100%;
+  max-width: 100%;
+  min-height: 120px;
   aspect-ratio: 1000 / 495;
 }
 
@@ -220,7 +225,7 @@
   font: 11px Prototype, sans-serif;
 }
 
-// Who the neutral delegates are
+// Who the neutral delegates are and how many are left
 .turmoil-board-tab__neutral {
   flex: none;
   display: flex;
@@ -239,7 +244,7 @@
   p {
     flex: 1;
     margin: 0;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.3;
     color: #c6cbd8;
 
@@ -247,35 +252,50 @@
       color: #fff;
     }
   }
-}
 
-// Event row: the game's event cards in time order, scaled to the remaining room (boardTabFit.ts)
-.turmoil-board-tab__events {
-  flex: 1 1 120px;
-  min-height: 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  overflow: hidden;
-}
-
-.turmoil-board-tab__events-row {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  zoom: var(--board-tab-fit, 1);
-}
-
-.turmoil-board-tab__event {
-  display: grid;
-  gap: 2px;
-
-  .global-event {
-    margin: 0;
+  small {
+    flex: none;
+    font-size: 11px;
+    color: @turmoil-muted;
+    white-space: nowrap;
   }
+}
 
-  &--current .global-event {
-    box-shadow: 0 0 0 3px #e0473a, 0 0 12px fade(#e0473a, 50%);
+// Events in time order (TurmoilEventCard.vue): a row of three below the committee, the rest of the height
+.turmoil-board-tab__events {
+  flex: 1 0 auto;
+  min-height: 150px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 4px;
+  align-items: stretch;
+}
+
+.turmoil-board-tab__event-arrow {
+  align-self: center;
+  justify-self: center;
+  color: #8fb2d6;
+  font-size: 22px;
+  line-height: 1;
+}
+
+// Event card like the game card; text and icons grow with the card width
+.turmoil-event {
+  container-type: inline-size;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 2px solid #9cc79a;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #d9f0f7, #aed7e8);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  color: #13202c;
+
+  &--current {
+    border-color: #e0473a;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5), 0 0 10px fade(#e0473a, 50%);
   }
 
   &--distant {
@@ -283,86 +303,161 @@
   }
 }
 
-.turmoil-board-tab__event-slot {
-  font-size: 14px;
-  color: @turmoil-muted;
+.turmoil-event__slot {
+  font: clamp(10px, 4.6cqi, 14px) / 1.2 system-ui, sans-serif;
+  color: #3b5568;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   b {
-    color: @turmoil-text;
+    color: #13202c;
   }
 }
 
-.turmoil-board-tab__event--current .turmoil-board-tab__event-slot b {
-  color: #ff8a80;
+.turmoil-event--current .turmoil-event__slot b {
+  color: #b3261e;
 }
 
-.turmoil-board-tab__event-arrow {
-  color: #8fb2d6;
-  font-size: 26px;
-  line-height: 1;
+.turmoil-event__name {
+  margin: 1px 0 4px;
+  font: clamp(12px, 6cqi, 19px) / 1.15 Prototype, sans-serif;
+  text-transform: uppercase;
 }
 
-// Committee and events: stacked in a narrow box ...
-.turmoil-board-tab__body {
-  flex: 1;
+// Effect: white field like on a card, the card's own icon rendering, centred
+.turmoil-event__effect {
+  flex: 1 1 auto;
   min-height: 0;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(4px, 3cqi, 12px) 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+
+  .card-rows {
+    margin: 0;
+  }
 }
 
-.turmoil-board-tab__main {
-  flex: none;
+.turmoil-event__text {
+  margin-top: 4px;
+  font-size: clamp(10px, 4.4cqi, 14px);
+  line-height: 1.25;
+  color: #2b4252;
+
+  .card-description {
+    margin: 0;
+    padding: 0;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    text-align: left;
+  }
+}
+
+// The card's two neutral delegates: when revealed (always done), when it starts – placed ones ticked and faded
+.turmoil-event__neutral {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  margin-top: 5px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(19, 32, 44, 0.15);
 }
 
-// ... side by side in a wide one (TurmoilBoard.vue: wide): the committee fills the left side,
-// the event cards stand as a column on the right, scaled to its height (boardTabFit.ts)
-.turmoil-board-tab--wide {
-  .turmoil-board-tab__body {
+.turmoil-event__step {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: clamp(9.5px, 4cqi, 13px);
+  color: #2b4252;
+
+  i {
+    font-style: normal;
+    color: #5d7486;
+  }
+
+  small {
+    margin-left: 2px;
+    font-size: inherit;
+  }
+
+  &--done {
+    opacity: 0.55;
+  }
+}
+
+.turmoil-event__figure {
+  width: clamp(12px, 6cqi, 20px);
+  height: auto;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.9)) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
+}
+
+.turmoil-event__party {
+  width: clamp(22px, 10cqi, 34px);
+  height: clamp(15px, 7cqi, 23px);
+  padding: 1px 4px;
+  border-radius: 999px;
+  background: #111;
+  object-fit: contain;
+}
+
+// Wide, low box (desktop): committee left as large as the height allows, the events as a column on the right
+@container turmoil-tab (min-aspect-ratio: 5/4) {
+  .turmoil-board-tab {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) clamp(200px, 34%, 300px);
-    gap: 14px;
-    padding-top: 12px;
+    grid-template-columns: minmax(0, 1fr) clamp(230px, 28%, 360px);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 8px 12px;
   }
 
-  .turmoil-board-tab__main {
-    min-height: 0;
-    gap: 12px;
+  .turmoil-board-tab__policy {
+    grid-column: 1 / -1;
   }
 
-  // As wide as the column allows, as high as the room above the neutral note allows;
-  // centered in the free height, the note stays at the bottom
   .turmoil-board-tab__hemicycle {
-    width: min(100%, calc((100cqh - 150px) * 1000 / 495));
-    margin: auto 0;
+    grid-column: 1;
+    grid-row: 2;
+    width: auto;
+    height: 100%;
+    min-height: 0;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .turmoil-board-tab__neutral {
+    grid-column: 1;
+    grid-row: 3;
   }
 
   .turmoil-board-tab__events {
-    height: 100%;
-    justify-content: center;
-    align-items: flex-start;
-  }
-
-  .turmoil-board-tab__events-row {
-    flex-direction: column;
+    grid-column: 2;
+    grid-row: 2 / 4;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 2px;
   }
 
   .turmoil-board-tab__event-arrow {
-    transform: rotate(90deg);
+    rotate: 90deg;
+    font-size: 16px;
   }
 }
 
-// Phone: lobby and reserve below the hemicycle instead of in the (too small) corners
-@container (max-width: 420px) {
+// Phone: lobby and reserve below the hemicycle instead of in the (too small) corners, events below each other
+@container turmoil-tab (max-width: 420px) {
   .turmoil-board-tab {
     height: auto;
+    overflow: visible;
   }
 
   .turmoil-board-tab__hemicycle {
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 6px 12px;
@@ -381,6 +476,20 @@
 
   .turmoil-board-tab__neutral {
     flex-wrap: wrap;
+
+    small {
+      flex-basis: 100%;
+      padding-left: 28px;
+    }
+  }
+
+  .turmoil-board-tab__events {
+    flex: none;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .turmoil-board-tab__event-arrow {
+    display: none;
   }
 }
 

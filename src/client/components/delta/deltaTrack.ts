@@ -8,22 +8,24 @@ export type DeltaSpace = {
   tag?: Tag;
   victoryPoints?: number;
   reward?: TrackBonus;
+  // What the space gives, as text for "Next reward" (translated)
+  label?: string;
 };
 
 // Same order and rewards as the Delta Project board (DeltaProjectBoard.vue); index 0 is the start
 export const DELTA_SPACES: ReadonlyArray<DeltaSpace> = [
   {},
-  {tag: Tag.BUILDING, reward: {icons: [BONUS_ICON.steel, BONUS_ICON.plant], count: 2}},
-  {tag: Tag.POWER, reward: {icons: [BONUS_ICON.energy, BONUS_ICON.heat], production: true}},
-  {tag: Tag.EARTH, reward: {icons: [BONUS_ICON.megacredits], count: 2, production: true}},
-  {tag: Tag.SPACE, reward: {icons: [BONUS_ICON.titanium], production: true}},
-  {tag: Tag.SCIENCE, reward: {icons: [BONUS_ICON.card], count: 2}},
-  {tag: Tag.PLANT, reward: {icons: [BONUS_ICON.plant]}},
-  {tag: Tag.MICROBE, reward: {icons: [], text: '↻'}},
-  {tag: Tag.JOVIAN, reward: {icons: ['tags/jovian.png']}},
-  {tag: Tag.ANIMAL, reward: {icons: [BONUS_ICON.animal], count: 2}},
-  {victoryPoints: 2, reward: {icons: [], victoryPoints: 2}},
-  {victoryPoints: 5, reward: {icons: [], victoryPoints: 5}},
+  {tag: Tag.BUILDING, reward: {icons: [BONUS_ICON.steel, BONUS_ICON.plant], count: 2}, label: '2 steel or 2 plants'},
+  {tag: Tag.POWER, reward: {icons: [BONUS_ICON.energy, BONUS_ICON.heat], production: true}, label: '+1 energy or heat production'},
+  {tag: Tag.EARTH, reward: {icons: [BONUS_ICON.megacredits], count: 2, production: true}, label: '+2 M€ production'},
+  {tag: Tag.SPACE, reward: {icons: [BONUS_ICON.titanium], production: true}, label: '+1 titanium production'},
+  {tag: Tag.SCIENCE, reward: {icons: [BONUS_ICON.card], count: 2}, label: 'Look at 4 cards, keep 2'},
+  {tag: Tag.PLANT, reward: {icons: [BONUS_ICON.plant]}, label: '1 plant per plant tag'},
+  {tag: Tag.MICROBE, reward: {icons: [], text: '↻'}, label: 'Use a used blue action again'},
+  {tag: Tag.JOVIAN, reward: {icons: ['tags/jovian.png']}, label: 'One Jovian tag'},
+  {tag: Tag.ANIMAL, reward: {icons: [BONUS_ICON.animal], count: 2}, label: '2 animals to any card'},
+  {victoryPoints: 2, reward: {icons: [], victoryPoints: 2}, label: '2 VP'},
+  {victoryPoints: 5, reward: {icons: [], victoryPoints: 5}, label: '5 VP'},
 ];
 
 export function deltaPosition(player: PublicPlayerModel): number {

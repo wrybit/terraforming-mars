@@ -398,3 +398,83 @@
 .delta-board__row .board-track-row__cell--at {
   background: #2fb0a8;
 }
+
+// Delta (mockup with-extensions): rows sized by their content, centred in the box; one unit derived from the box
+// size (container units) drives cube, spaces, chips and texts, so the rows grow and shrink with the tab box
+.board-tabs-view--delta {
+  container: delta-tab / size;
+}
+
+html:not(.tm-mobile) .delta-board {
+  --delta-unit: clamp(20px, min(3.3cqw, 5.2cqh), 38px);
+  gap: calc(var(--delta-unit) * 0.45);
+
+  .board-track-row {
+    --track-bonus-chip: calc(var(--delta-unit) * 0.85);
+    --track-bonus-link: calc(var(--delta-unit) * 0.4);
+    flex: none;
+    grid-template-columns: calc(var(--delta-unit) * 2.9) minmax(0, 1fr) minmax(calc(var(--delta-unit) * 5), calc(var(--delta-unit) * 7.5));
+    gap: calc(var(--delta-unit) * 0.5);
+    padding: calc(var(--delta-unit) * 0.45) calc(var(--delta-unit) * 0.5);
+  }
+
+  .board-track-row__picture {
+    width: calc(var(--delta-unit) * 2.4);
+    height: calc(var(--delta-unit) * 2.4);
+
+    .player-cube {
+      --cube-size: calc(var(--delta-unit) * 1.2) !important;
+    }
+  }
+
+  .board-track-row__name {
+    font-size: calc(var(--delta-unit) * 0.5);
+  }
+
+  .board-track-row__cell {
+    height: var(--delta-unit);
+    font-size: calc(var(--delta-unit) * 0.55);
+
+    img {
+      width: calc(var(--delta-unit) * 0.8);
+      height: calc(var(--delta-unit) * 0.8);
+    }
+  }
+
+  .board-track-row__big {
+    font-size: calc(var(--delta-unit) * 1.05);
+
+    img {
+      width: calc(var(--delta-unit) * 1.05);
+      height: calc(var(--delta-unit) * 1.05);
+    }
+  }
+
+  .board-track-row__sub {
+    max-width: none;
+    display: grid;
+    gap: 2px;
+    font-size: calc(var(--delta-unit) * 0.5);
+    line-height: 1.25;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .delta-board__next b {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .delta-board__energy {
+    width: calc(var(--delta-unit) * 0.5);
+    height: calc(var(--delta-unit) * 0.5);
+  }
+
+  .delta-board__hint {
+    font-size: clamp(11px, calc(var(--delta-unit) * 0.45), 15px);
+  }
+}
+
+// Phone: no room for the reward text, the state is enough
+html.tm-mobile .delta-board__next {
+  display: none;
+}

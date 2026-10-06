@@ -1,7 +1,8 @@
 <template>
   <div :class="['wf-options', {'wf-options--tabs': asTabs}]">
     <!-- A card's decision with its own tabs: instead of the question, the card sits at the top of the box (CardIntroBlock) -->
-    <label v-if="showtitle && sourceCard === undefined"><div>{{ $t(playerinput.title) }}</div></label>
+    <!-- Action menu in tabs: no "Take your first/next action" heading, the 1st/2nd action chips in the footer say it -->
+    <label v-if="showtitle && sourceCard === undefined && !(asTabs && turnStep !== undefined)"><div>{{ $t(playerinput.title) }}</div></label>
     <label v-if="playerinput.warning !== undefined" class="card-warning"><div>({{ $t(playerinput.warning) }})</div></label>
 
     <!-- Action menu: tabs with short label and count of available entries; empty tabs are dimmed but clickable -->

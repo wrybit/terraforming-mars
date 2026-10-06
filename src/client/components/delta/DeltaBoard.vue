@@ -14,8 +14,11 @@
       </template>
       <template #sub>
         <template v-if="next(player) !== undefined">
-          <span :class="next(player)!.blocker === undefined ? 'delta-board__ok' : 'delta-board__blocked'">{{ $t(stateText(player)) }}</span>
-          · <img class="delta-board__energy" src="assets/resources/power.png" alt=""> <b>{{ player.energy }}</b>
+          <span class="delta-board__next">{{ $t('Next reward') }}: <b>{{ $t(next(player)!.space.label ?? '') }}</b></span>
+          <span class="delta-board__state">
+            <span :class="next(player)!.blocker === undefined ? 'delta-board__ok' : 'delta-board__blocked'">{{ $t(stateText(player)) }}</span>
+            · <img class="delta-board__energy" src="assets/resources/power.png" alt=""> <b>{{ player.energy }}</b>
+          </span>
         </template>
       </template>
     </BoardTrackRow>
