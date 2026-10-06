@@ -629,6 +629,12 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   .select-party__cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  // Two narrow cards per row: "while ruling" and "when taking over" stacked instead of side by side
+  .select-party__card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "name" "people" "policy" "bonus";
+  }
 }
 
 .turmoil-board-tab__more {
