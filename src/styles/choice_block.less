@@ -78,7 +78,7 @@ html:not(.tm-mobile) {
   // The ::before spacer spans rows 1–4 so the auto-placed cards only start in row 5. No row gap (it would also
   // apply between the empty rows); each card brings its own space above for the check-mark flag instead.
   .or-tab-panel .choice-block:has(> .cardbox, > .payments_cards):not(.setup-column-body *) {
-    --choice-card-track: calc(@choice-tile-width * var(--card-zoom, 1));
+    --choice-card-track: calc(@choice-tile-width * var(--choice-zoom, 1));
     display: grid;
     flex: 1 0 auto;
     grid-template-columns: repeat(var(--choice-columns), var(--choice-card-track));
@@ -210,8 +210,7 @@ html.tm-mobile {
   }
 }
 
-// Award tiles start at the top left of the tab box like in the mockup (with-extensions),
-// the toolbar row (CardZoomBar) spans the whole width above them
+// Award tiles start at the top left of the tab box like in the mockup (with-extensions)
 html:not(.tm-mobile) .or-tab-panel {
   .choice-block:has(> .ma-option):not(.setup-column-body *) {
     margin: 0 auto auto 0;
@@ -220,16 +219,12 @@ html:not(.tm-mobile) .or-tab-panel {
   .ma-options.choice-block {
     width: 100%;
 
-    > .card-filter-bar {
-      flex: 0 0 100%;
-    }
-
     > .ma-option {
-      border-radius: calc(17.7px * var(--card-zoom, 1));
+      border-radius: 17.7px;
     }
 
     > .ma-option .ma-name {
-      zoom: calc(unit((@choice-tile-width / @ma-tile-width)) * var(--card-zoom, 1));
+      zoom: unit((@choice-tile-width / @ma-tile-width));
     }
   }
 }

@@ -13,12 +13,8 @@
             <HandSortControl :playerView="playerView" :compact="compact"/>
           </template>
         </CardFilterBar>
-        <!-- Other card lists (buying …): "Select all" on the left where it makes sense, the card size on the right -->
-        <CardZoomBar v-else-if="!isMobile">
-          <template #lead>
-            <AppButton v-if="showSelectAll" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
-          </template>
-        </CardZoomBar>
+        <!-- Other card lists (buying, actions …): no card size slider – few cards, the zoom only adds noise there;
+             "Select all" only where it makes sense -->
         <div v-else-if="showSelectAll" class="select-card-toolbar">
           <AppButton class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
         </div>
@@ -71,7 +67,6 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import HandSortControl from '@/client/components/HandSortControl.vue';
 import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
-import CardZoomBar from '@/client/components/cardfilter/CardZoomBar.vue';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
 import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
@@ -146,7 +141,6 @@ export default defineComponent({
     AppButton,
     HandSortControl,
     CardFilterBar,
-    CardZoomBar,
     CardFilterEmptyHint,
   },
   watch: {
