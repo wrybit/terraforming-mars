@@ -1,5 +1,5 @@
 <template>
-    <div class="wf-component wf-component--select-card choice-block" :class="choiceBlockClass(playerinput.cards?.length ?? 0)" :style="choiceBlockStyle(playerinput.cards?.length ?? 0)">
+    <div class="wf-component wf-component--select-card choice-block" :class="choiceBlockClass(playerinput.cards?.length ?? 0, isHandSelection)" :style="choiceBlockStyle(playerinput.cards?.length ?? 0)">
         <!-- Cards as a choice block (choice_block.less): as square as possible and centered in the tab box;
              comment inside, so the caller's v-show hits the root -->
         <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>

@@ -90,8 +90,9 @@ html:not(.tm-mobile) {
     margin: 0;
     padding: 0;
 
+    // auto-fit instead of auto-fill: unused tracks collapse, so a short row is centered as a whole
     &.choice-block--fill {
-      grid-template-columns: repeat(auto-fill, var(--choice-card-track));
+      grid-template-columns: repeat(auto-fit, var(--choice-card-track));
     }
 
     &::before,

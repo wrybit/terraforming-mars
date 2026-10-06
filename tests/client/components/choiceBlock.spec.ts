@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {choiceBlockColumns, choiceBlockColumnsPortrait} from '@/client/components/choiceBlock';
+import {choiceBlockClass, choiceBlockColumns, choiceBlockColumnsPortrait} from '@/client/components/choiceBlock';
 import {isSkipOption} from '@/client/components/skipOption';
 import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
@@ -15,6 +15,12 @@ describe('choiceBlock', () => {
 
   it('stands the block upright in portrait: more rows than columns', () => {
     expect([1, 2, 3, 4, 5, 6, 7, 9, 10].map(choiceBlockColumnsPortrait)).deep.eq([1, 1, 2, 2, 2, 2, 3, 3, 3]);
+  });
+
+  it('hand selections always flow, other few cards stay a square block', () => {
+    expect(choiceBlockClass(4)).deep.eq({'choice-block--fill': false});
+    expect(choiceBlockClass(4, true)).deep.eq({'choice-block--fill': true});
+    expect(choiceBlockClass(10)).deep.eq({'choice-block--fill': true});
   });
 
   it('recognises options that change nothing', () => {

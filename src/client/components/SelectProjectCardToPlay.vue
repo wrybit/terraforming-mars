@@ -1,5 +1,5 @@
 <template>
-<div class="payments_cont choice-block" :class="choiceBlockClass(cards.length)" :style="choiceBlockStyle(cards.length)">
+<div class="payments_cont choice-block" :class="choiceBlockClass(cards.length, isHandSelection)" :style="choiceBlockStyle(cards.length)">
   <!-- Cards as a choice block (choice_block.less) like when buying and for standard projects -->
   <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
   <!-- Same filter and sorting as in the hand tab, at the top of the box – only for hand cards (not standard projects) -->

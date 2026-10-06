@@ -33,7 +33,11 @@ export function choiceBlockFillsWidth(count: number): boolean {
   return Math.ceil(count / choiceBlockColumns(count)) > CHOICE_BLOCK_MAX_ROWS;
 }
 
-/* Class for card selections: choice-block--fill when the cards fill the row (choice_block.less). */
-export function choiceBlockClass(count: number): Record<string, boolean> {
-  return {'choice-block--fill': choiceBlockFillsWidth(count)};
+/*
+ * Class for card selections: choice-block--fill when the cards fill the row (choice_block.less).
+ * Selections from the hand (build, sell) always flow like the hand cards, whatever their count –
+ * the square block is only for cards you see for the first time (buying, draft with few cards).
+ */
+export function choiceBlockClass(count: number, flowing = false): Record<string, boolean> {
+  return {'choice-block--fill': flowing || choiceBlockFillsWidth(count)};
 }
