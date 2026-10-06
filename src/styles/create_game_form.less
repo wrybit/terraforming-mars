@@ -247,22 +247,28 @@
   margin-top: 0;
 }
 
-.create-game-link {
+// Small real button, e.g. in a subhead ("Select all"): right aligned, normal type instead of the subhead's capitals
+.create-game-small-button {
   margin-left: auto;
-  padding: 2px 8px;
-  border: 1px solid transparent;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 6px;
-  background: none;
-  color: lighten(@bg_action, 18%);
-  font-size: 14px;
+  background: @create-game-chip-background;
+  color: #eee;
+  font-size: 13px;
+  letter-spacing: normal;
+  text-transform: none;
   cursor: pointer;
+  transition: background-color 0.15s;
 
   &:hover {
-    text-decoration: underline;
+    background: @create-game-chip-hover;
   }
 
-  &--selected {
-    border-color: lighten(@bg_action, 18%);
+  &:focus-visible {
+    outline: 2px solid @highlight-gold;
+    outline-offset: 2px;
   }
 }
 

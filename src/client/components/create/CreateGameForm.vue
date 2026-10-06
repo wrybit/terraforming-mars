@@ -30,11 +30,12 @@
         <!-- Expansions and board side by side on top, the other cards fill the columns below (masonryGrid.ts) -->
         <div ref="settingsCards" class="create-game-cards">
           <section class="create-game-card">
-            <div class="create-game-card-head">
-              <h2 v-i18n>Expansions</h2>
-              <button type="button" class="create-game-link" :class="{'create-game-link--selected': allOfficialExpansions}" @click="allOfficialExpansions = !allOfficialExpansions" v-i18n>All</button>
+            <div class="create-game-card-head"><h2 v-i18n>Expansions</h2></div>
+            <!-- Per group a small button that says what it does: select all, or deselect all once everything is on -->
+            <div class="create-game-subhead">
+              <span v-i18n>Official</span>
+              <button type="button" class="create-game-small-button" @click="setExpansions(OFFICIAL_EXPANSIONS, !allOfficialSelected)" v-i18n>{{ allOfficialSelected ? 'Deselect all' : 'Select all' }}</button>
             </div>
-            <div class="create-game-subhead" v-i18n>Official</div>
             <div class="create-game-chip-grid">
               <!-- The base game is always part of the game: shown as a selected chip that cannot be switched off -->
               <ChoiceChip label="Base game" iconClass="expansion-icon-base" selected locked/>
@@ -43,7 +44,10 @@
                 :href="choice.info ? wikiUrls[choice.expansion] : undefined"
                 @select="expansions[choice.expansion] = !expansions[choice.expansion]"/>
             </div>
-            <div class="create-game-subhead" v-i18n>Fan-made</div>
+            <div class="create-game-subhead">
+              <span v-i18n>Fan-made</span>
+              <button type="button" class="create-game-small-button" @click="setExpansions(FAN_EXPANSIONS, !allFanSelected)" v-i18n>{{ allFanSelected ? 'Deselect all' : 'Select all' }}</button>
+            </div>
             <div class="create-game-chip-grid">
               <ChoiceChip v-for="choice in FAN_EXPANSIONS" :key="choice.expansion"
                 :label="choice.label" :iconClass="choice.iconClass" :selected="expansions[choice.expansion]"
@@ -370,7 +374,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, FAN_BOARDS, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS} from './createGameChoices';
+import {AGENDA_OPTIONS, ExpansionChoice, FAN_BOARDS, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS} from './createGameChoices';
 
 const createGameSettingsStorage = new CreateGameSettingsStorage();
 
@@ -447,16 +451,6 @@ export default defineComponent({
       if (!this.isRandomBoard(value)) {
         this.lastFixedBoard = value as BoardName;
       }
-    },
-    allOfficialExpansions(value: boolean) {
-      this.expansions.corpera = value;
-      this.expansions.prelude = value;
-      this.expansions.venus = value;
-      this.expansions.colonies = value;
-      this.expansions.turmoil = value;
-      this.expansions.prelude2 = value;
-      this.expansions.promo = value;
-      this.solarPhaseOption = value;
     },
     'expansions.venus': function(value: boolean) {
       this.solarPhaseOption = value;
@@ -555,6 +549,12 @@ export default defineComponent({
      *
      * serializeSettings finishes the players and the escape velocity values, and checks the cloned game.
      */
+    allOfficialSelected(): boolean {
+      return OFFICIAL_EXPANSIONS.every((choice) => this.expansions[choice.expansion]);
+    },
+    allFanSelected(): boolean {
+      return FAN_EXPANSIONS.every((choice) => this.expansions[choice.expansion]);
+    },
     // Fixed board: its name; random board: the drawn one as soon as the preview knows it
     summaryBoard(): BoardName | undefined {
       if (!this.isRandomBoard(this.board)) {
@@ -778,6 +778,12 @@ export default defineComponent({
         root.showAlert(title, 'Settings loaded with these warnings: \n' + processor.warnings.join('\n'));
       } else {
         root.showAlert(title, 'Settings loaded.');
+      }
+    },
+    // Switches a whole group of expansions on or off (dependent options follow via the expansion watchers)
+    setExpansions(choices: ReadonlyArray<ExpansionChoice>, value: boolean) {
+      for (const choice of choices) {
+        this.expansions[choice.expansion] = value;
       }
     },
     resetSettings() {
