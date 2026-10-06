@@ -23,7 +23,7 @@
       <TurmoilBoard v-if="game.turmoil" :turmoil="game.turmoil" :players="players" :viewerColor="viewerColor" :generation="game.generation"/>
     </template>
     <template #paths>
-      <PlanetaryTracks :tracks="game.pathfinders" :gameOptions="game.gameOptions"/>
+      <PlanetsBoard v-if="game.pathfinders" :model="game.pathfinders" :gameOptions="game.gameOptions"/>
     </template>
     <template #delta>
       <DeltaProjectBoard :players="players"/>
@@ -67,7 +67,7 @@ import Awards from '@/client/components/Awards.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
 import TurmoilBoard from '@/client/components/turmoil/TurmoilBoard.vue';
 import MoonBoard from '@/client/components/moon/MoonBoard.vue';
-import PlanetaryTracks from '@/client/components/pathfinders/PlanetaryTracks.vue';
+import PlanetsBoard from '@/client/components/pathfinders/PlanetsBoard.vue';
 import {TileView} from './board/TileView';
 import {scrollToSpace} from '@/client/utils/boardScroll';
 
@@ -114,7 +114,7 @@ export default defineComponent({
     MilestoneAwardTable,
     TurmoilBoard,
     MoonBoard,
-    PlanetaryTracks,
+    PlanetsBoard,
   },
   computed: {
     // Same props for the board in the column and in the enlargement modal

@@ -1,8 +1,9 @@
 // Track bonuses (TrackBonusChip.vue): the same chip and connector on every board – Moon rates, planet tracks, Delta.
 // One measure for everything: chip size, connector length and thickness, gap from the connector to the space.
 @track-bonus-gold: #f2c14e;
-@track-bonus-chip: 24px;
-@track-bonus-link: 12px;
+// Chip size and connector length as custom properties: compact boards (track rows, phone) set smaller values
+@track-bonus-chip: var(--track-bonus-chip, 24px);
+@track-bonus-link: var(--track-bonus-link, 12px);
 @track-bonus-line: 2px;
 @track-bonus-gap: 3px;
 @track-bonus-space: 3px;
@@ -25,18 +26,18 @@
   line-height: 1;
 
   img {
-    width: @track-bonus-chip * 0.6;
-    height: @track-bonus-chip * 0.6;
+    width: calc(@track-bonus-chip * 0.6);
+    height: calc(@track-bonus-chip * 0.6);
     object-fit: contain;
   }
 
   b {
-    font: (@track-bonus-chip * 0.45) / 1 Prototype, sans-serif;
+    font: calc((@track-bonus-chip * 0.45)) / 1 Prototype, sans-serif;
     color: #fff;
   }
 
   &--wide {
-    padding: 0 (@track-bonus-chip * 0.2);
+    padding: 0 calc((@track-bonus-chip * 0.2));
   }
 
   // For everyone: dashed outline
@@ -60,17 +61,17 @@
     width: @track-bonus-chip;
     padding: 3px 0;
     gap: 0;
-    border-radius: (@track-bonus-chip / 2);
+    border-radius: calc(@track-bonus-chip / 2);
 
     img {
-      width: @track-bonus-chip * 0.55;
-      height: @track-bonus-chip * 0.55;
+      width: calc(@track-bonus-chip * 0.55);
+      height: calc(@track-bonus-chip * 0.55);
     }
   }
 }
 
 .track-bonus-chip__or {
-  font: 700 (@track-bonus-chip * 0.4) / 0.8 system-ui, sans-serif;
+  font: 700 calc((@track-bonus-chip * 0.4)) / 0.8 system-ui, sans-serif;
   font-style: normal;
   color: @track-bonus-gold;
 }
@@ -83,24 +84,24 @@
   background: #8a5a2b;
 
   img {
-    width: @track-bonus-chip * 0.5;
-    height: @track-bonus-chip * 0.5;
+    width: calc(@track-bonus-chip * 0.5);
+    height: calc(@track-bonus-chip * 0.5);
   }
 }
 
 .track-bonus-chip__vp {
   display: grid;
   place-items: center;
-  width: @track-bonus-chip * 0.66;
-  height: @track-bonus-chip * 0.66;
+  width: calc(@track-bonus-chip * 0.66);
+  height: calc(@track-bonus-chip * 0.66);
   border-radius: 3px;
   background: linear-gradient(#b17a3a, #7c4f20);
   color: #fff;
-  font: (@track-bonus-chip * 0.45) / 1 Prototype, sans-serif;
+  font: calc((@track-bonus-chip * 0.45)) / 1 Prototype, sans-serif;
 }
 
 .track-bonus-chip__text {
-  font: 700 (@track-bonus-chip * 0.5) / 1 system-ui, sans-serif;
+  font: 700 calc((@track-bonus-chip * 0.5)) / 1 system-ui, sans-serif;
   color: #fff;
 }
 
@@ -149,5 +150,195 @@
 
   + .track-bonus-pin__row {
     margin-top: @track-bonus-space;
+  }
+}
+
+// Bonus lane below a horizontal track (TrackLane.vue): same columns as the track, connector from the space down
+.track-lane {
+  display: flex;
+  gap: 2px;
+  margin-top: @track-bonus-gap;
+}
+
+.track-lane__cell {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+}
+
+// ---------- Track rows (BoardTrackRow.vue): planet tracks, Delta Project ----------
+.board-track-row {
+  // Compact chips: five planet tracks have to fit into the Mars-sized box
+  --track-bonus-chip: 17px;
+  --track-bonus-link: 7px;
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 5px 10px 5px 6px;
+  border: 1px solid #3a3f5c;
+  border-radius: 8px;
+  background: rgba(10, 12, 18, 0.6);
+}
+
+.board-track-row__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.board-track-row__picture {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+
+  img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+  }
+}
+
+.board-track-row__name {
+  max-width: 70px;
+  font: 12px/1.3 Prototype, sans-serif;
+  letter-spacing: 0.03em;
+  text-align: center;
+  color: #ece9e2;
+}
+
+.board-track-row__body {
+  min-width: 0;
+}
+
+.board-track-row__track {
+  display: flex;
+  gap: 2px;
+}
+
+.board-track-row__cell {
+  flex: 1 1 0;
+  min-width: 0;
+  display: grid;
+  place-items: center;
+  height: 20px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #a4a9b6;
+  font-size: 12.5px;
+  letter-spacing: -0.02em;
+  opacity: 0.35;
+
+  img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+  }
+
+  // Reward spaces stay readable, the plain steps in between recede
+  &--reward {
+    color: #ece9e2;
+    opacity: 1;
+  }
+
+  &--at {
+    background: #2fb0a8;
+    color: #06201e;
+    font-weight: 700;
+    opacity: 1;
+  }
+
+  &--reachable {
+    box-shadow: inset 0 0 0 1px #8be28f;
+    opacity: 1;
+  }
+
+  &--blocked {
+    box-shadow: inset 0 0 0 1px #ff8a80;
+  }
+}
+
+.board-track-row__value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 70px;
+  text-align: right;
+}
+
+.board-track-row__big {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 22px;
+  font-weight: 700;
+
+  img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+  }
+}
+
+.board-track-row__sub {
+  max-width: 130px;
+  font-size: 11px;
+  color: #a4a9b6;
+}
+
+// Planets and Delta use the free room: rows share the height, content centred (more air instead of squeezed)
+.planets-board,
+.delta-board {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+// Narrow (phone): numbers only on the marker, smaller chips, the value below the name
+.board-tabs-view--paths,
+.board-tabs-view--delta {
+  container-type: inline-size;
+}
+
+@container (max-width: 440px) {
+  .board-track-row {
+    --track-bonus-chip: 13px;
+    --track-bonus-link: 5px;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .board-track-row__track--long .board-track-row__cell:not(.board-track-row__cell--at) {
+    font-size: 0;
+  }
+
+  .board-track-row__value {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  .board-track-row__big {
+    font-size: 15px;
+
+    img {
+      width: 15px;
+      height: 15px;
+    }
   }
 }

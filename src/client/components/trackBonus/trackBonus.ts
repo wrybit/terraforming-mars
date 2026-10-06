@@ -16,6 +16,9 @@ export type TrackBonus = {
   text?: string;
 };
 
+// One chip in a bonus lane below a horizontal track (TrackLane.vue)
+export type LaneEntry = {bonus: TrackBonus, kind: TrackBonusKind};
+
 export const BONUS_ICON = {
   card: 'resources/card.png',
   heat: 'resources/heat.png',
