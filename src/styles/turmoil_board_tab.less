@@ -342,6 +342,19 @@
   }
 }
 
+// The card's own content box has card dimensions: here it just wraps the icons
+.turmoil-event__effect.card-container .turmoil-event__render.card-content {
+  position: static;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  transform: none;
+}
+
 .turmoil-event__text {
   margin-top: 4px;
   font-size: clamp(10px, 4.4cqi, 14px);

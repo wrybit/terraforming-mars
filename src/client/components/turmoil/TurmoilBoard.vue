@@ -66,7 +66,7 @@
     <div class="turmoil-board-tab__neutral">
       <img :src="figureImage('neutral')" alt="">
       <p><b>{{ $t('Neutral delegates') }}</b> {{ $t('belong to no player. The game places them itself – two per generation: one when a new event is revealed and one when an event starts. The event card shows which party.') }}</p>
-      <small>{{ $t('${0} left in supply', [String(neutralLeft)]) }}</small>
+      <small>{{ neutralLeftText }}</small>
     </div>
 
     <!-- Events in time order: a row below in a tall box, a column on the right in a wide one (container query) -->
@@ -87,6 +87,7 @@ import {PartyName} from '@/common/turmoil/PartyName';
 import {Color} from '@/common/Color';
 import {GlobalEventName} from '@/common/turmoil/globalEvents/GlobalEventName';
 import TurmoilEventCard from './TurmoilEventCard.vue';
+import {translateTextWithParams} from '@/client/directives/i18n';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
 import {PARTY_COLOR, PartyAgenda, agendaText, delegatesOf, figureImage, partyAgenda, partyImage, seatedDelegates, turmoilPickState} from './turmoilView';
@@ -140,6 +141,9 @@ export default defineComponent({
     },
     FIGURE_RATIO(): number {
       return FIGURE_RATIO;
+    },
+    neutralLeftText(): string {
+      return translateTextWithParams('${0} left in supply', [String(this.neutralLeft)]);
     },
     // Neutral delegates still in the supply: all minus those seated (and the chair)
     neutralLeft(): number {
