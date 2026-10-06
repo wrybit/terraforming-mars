@@ -56,10 +56,7 @@ html:not(.tm-mobile) :is(.player_home_block--actions, .player_home_block--hand) 
     zoom: var(--card-zoom, 1);
   }
 
-  // The block's width is computed from card widths: shrink it along with the cards
-  .choice-block:has(> label.cardbox, > label.payments_cards):not(.choice-block--fill) {
-    width: min(100%, calc(var(--choice-columns) * 248px * var(--card-zoom, 1) + (var(--choice-columns) - 1) * 16px));
-  }
+  // The card tracks of the block shrink with the card zoom themselves (--choice-card-track in choice_block.less)
 }
 
 // Row without filter and sorting (CardZoomBar.vue): the size slider at the right edge

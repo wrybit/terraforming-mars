@@ -65,18 +65,70 @@ html:not(.tm-mobile) {
       flex: 0 0 100%;
     }
 
-    // Many cards (choiceBlockFillsWidth: build, sell, draft, standard projects …): no square block, but as many
-    // cards per row as fit into the tab box – like the hand cards. Tracks shrink with the card zoom, rows start left
-    &.choice-block--fill {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, calc(@choice-tile-width * var(--card-zoom, 1)));
-      justify-content: start;
-      align-items: start;
-      width: 100%;
+  }
 
-      > :not(.cardbox, .payments_cards) {
-        grid-column: 1 / -1;
-      }
+  // Card selections (build, sell, buy, draft, standard projects …): the cards flow row by row like the hand cards
+  // (few cards: the square block's column count, many: as many as fit). If the box has room left, the cards sit
+  // centered horizontally and vertically – while title and toolbar row stay at the top of the box.
+  // Grid instead of flex because only a grid can center the card rows apart from the toolbar row:
+  //   rows 1–3  title, toolbar row, empty hint (explicitly placed; empty rows are 0 high)
+  //   row 4     spacer above the cards (1fr)
+  //   rows 5–64 the cards and what follows them (auto; unused rows are 0 high)
+  //   row 65    spacer below the cards (1fr)
+  // The ::before spacer spans rows 1–4 so the auto-placed cards only start in row 5. No row gap (it would also
+  // apply between the empty rows); each card brings its own space above for the check-mark flag instead.
+  .or-tab-panel .choice-block:has(> .cardbox, > .payments_cards):not(.setup-column-body *) {
+    --choice-card-track: calc(@choice-tile-width * var(--card-zoom, 1));
+    display: grid;
+    flex: 1 0 auto;
+    grid-template-columns: repeat(var(--choice-columns), var(--choice-card-track));
+    grid-template-rows: repeat(3, auto) 1fr repeat(60, auto) 1fr;
+    justify-content: center;
+    align-items: start;
+    gap: 0 @choice-column-gap;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    &.choice-block--fill {
+      grid-template-columns: repeat(auto-fill, var(--choice-card-track));
+    }
+
+    &::before,
+    &::after {
+      content: "";
+      grid-column: 1 / -1;
+    }
+
+    &::before {
+      grid-row: 1 / 5;
+    }
+
+    &::after {
+      grid-row: 65;
+    }
+
+    > :not(.cardbox, .payments_cards) {
+      grid-column: 1 / -1;
+    }
+
+    > .wf-component-title,
+    > div:first-child:not(.card-filter-bar, .select-card-toolbar, .card-filter-empty) {
+      grid-row: 1;
+    }
+
+    > .card-filter-bar,
+    > .select-card-toolbar {
+      grid-row: 2;
+    }
+
+    > .card-filter-empty {
+      grid-row: 3;
+    }
+
+    > .cardbox,
+    > .payments_cards {
+      margin-top: @choice-row-gap;
     }
   }
 
@@ -157,10 +209,10 @@ html.tm-mobile {
   }
 }
 
-// Card lists and award tiles start at the top left of the tab box like in the mockup (with-extensions),
-// the toolbar row (CardFilterBar / CardZoomBar) spans the whole width above them
+// Award tiles start at the top left of the tab box like in the mockup (with-extensions),
+// the toolbar row (CardZoomBar) spans the whole width above them
 html:not(.tm-mobile) .or-tab-panel {
-  .choice-block:has(> .cardbox, > .payments_cards, > .ma-option):not(.setup-column-body *) {
+  .choice-block:has(> .ma-option):not(.setup-column-body *) {
     margin: 0 auto auto 0;
   }
 

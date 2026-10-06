@@ -100,6 +100,13 @@ html:not(.tm-mobile) .or-tab-panel .choice-block.choice-block:has(> .card-filter
   }
 }
 
+// Card selections are a grid with centered card columns (choice_block.less): the row is centered over the box
+// instead of starting at the first column, which no longer sits at the box edge
+html:not(.tm-mobile) .or-tab-panel .choice-block.choice-block:has(> .cardbox, > .payments_cards) > .card-filter-bar {
+  justify-self: center;
+  margin-left: 0;
+}
+
 // Played cards: first thing in the panel, over its padding (other_player.less, player_home_columns.less)
 .other_player_cont > .card-filter-bar {
   top: -10px;
