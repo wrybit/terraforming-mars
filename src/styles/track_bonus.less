@@ -425,14 +425,7 @@ html:not(.tm-mobile) .delta-board {
     padding: calc(var(--delta-unit) * 0.45) calc(var(--delta-unit) * 0.5);
   }
 
-  // Player cube without the round frame of the planet pictures, a little smaller
   .board-track-row__picture {
-    width: auto;
-    height: auto;
-    overflow: visible;
-    background: none;
-    box-shadow: none;
-
     .player-cube {
       --cube-size: calc(var(--delta-unit) * 0.95) !important;
     }
@@ -499,6 +492,15 @@ html:not(.tm-mobile) .delta-board {
     flex: none;
     font-size: clamp(11px, calc(var(--delta-unit) * 0.45), 15px);
   }
+}
+
+// Delta: player cube without the round frame of the planet pictures (all devices)
+.delta-board .board-track-row__picture {
+  width: auto;
+  height: auto;
+  overflow: visible;
+  background: none;
+  box-shadow: none;
 }
 
 // Phone: no room for the reward text, the state is enough

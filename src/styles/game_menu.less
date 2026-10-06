@@ -239,13 +239,16 @@ html.tm-mobile .game-menu:not(.game-menu--large) {
 }
 
 @media only screen and (min-width: @player-home-columns-min-width) {
-  // The menu replaces the icon corner in the player view (spectators keep it, they have no menu)
-  #player-home > .sidebar_cont {
+  // The menu replaces the icon corner in the player and the spectator view (language, info, help, settings
+  // and the piles are all in the menu)
+  #player-home > .sidebar_cont,
+  #spectator-home > .sidebar_cont {
     display: none;
   }
 
   // Without the icon corner the collapsed setup no longer needs to keep room at the right edge
-  #player-home .player-home-columns.player-home-columns--board-collapsed {
+  #player-home .player-home-columns.player-home-columns--board-collapsed,
+  #spectator-home .player-home-columns.player-home-columns--board-collapsed {
     padding-right: 0;
   }
 }
