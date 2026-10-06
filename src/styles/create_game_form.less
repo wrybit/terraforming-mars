@@ -178,18 +178,19 @@
   gap: @create-game-gap-card;
 }
 
-// Masonry: two columns, the first two cards (expansions, board) side by side, the rest spread so both columns are
-// about equally long (masonryGrid.ts sets row span and column of each card; 1px rows, the gap is part of the span;
-// dense placement fills each column from the top)
+// Two fixed columns (CreateGameForm.vue): every card always in the same place, nothing jumps when a card changes height
 .create-game-cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-auto-rows: 1px;
-  grid-auto-flow: dense;
-  column-gap: @create-game-gap-card;
+  gap: @create-game-gap-card;
   align-items: start;
-  // The span includes the gap below the last card of a column: take it back
-  margin-bottom: -@create-game-gap-card;
+}
+
+.create-game-cards-column {
+  display: flex;
+  flex-direction: column;
+  gap: @create-game-gap-card;
+  min-width: 0;
 
   > .create-game-card {
     margin-bottom: 0;
@@ -310,13 +311,12 @@
   font-size: 14px;
   line-height: 1.4;
 
-  // Nose: square turned by 45°, half of it above the box, horizontally at the ⓘ
-  // (--nose-x counts from the card's left edge, the box starts after the card padding)
+  // Nose: square turned by 45°, half of it above the box, its center exactly under the ⓘ (--nose-x from InfoBox.vue)
   &::before {
     content: "";
     position: absolute;
     top: -(@create-game-info-nose / 2) - 1px;
-    left: clamp(10px, calc(var(--nose-x) - 14px - @create-game-info-nose / 2), calc(100% - 24px));
+    left: calc(var(--nose-x) - @create-game-info-nose / 2);
     width: @create-game-info-nose;
     height: @create-game-info-nose;
     border-top: 1px solid @create-game-info-border;
@@ -1084,9 +1084,15 @@
 }
 
 // ---------- narrower ----------
+// One column: the column wrappers dissolve, the cards follow their order (style="order: …")
 @media only screen and (max-width: @create-game-single-settings) {
   .create-game-cards {
-    grid-template-columns: minmax(0, 1fr);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .create-game-cards-column {
+    display: contents;
   }
 }
 

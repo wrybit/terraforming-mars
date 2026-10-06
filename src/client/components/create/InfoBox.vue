@@ -32,16 +32,38 @@ export default defineComponent({
   props: {
     href: {type: String, required: true},
     target: {type: Object as PropType<WikiTarget>, required: true},
-    noseX: {type: Number, default: 0},
+    // The ⓘ that opened the box: the nose always points at its center
+    anchor: {type: Object as PropType<HTMLElement>, required: true},
   },
   data() {
     return {
       excerpt: undefined as string | undefined,
       failed: false,
       overlayOpen: false,
+      // Center of the ⓘ, measured from the box's left edge
+      noseX: 0,
+      resizeObserver: undefined as ResizeObserver | undefined,
     };
   },
+  beforeUnmount() {
+    this.resizeObserver?.disconnect();
+    window.removeEventListener('resize', this.placeNose);
+  },
+  methods: {
+    // Measured again whenever the box or the page changes size, so the nose never points beside the ⓘ
+    placeNose() {
+      const anchorRect = this.anchor.getBoundingClientRect();
+      this.noseX = anchorRect.left + anchorRect.width / 2 - (this.$el as HTMLElement).getBoundingClientRect().left;
+    },
+  },
   async mounted() {
+    this.placeNose();
+    window.addEventListener('resize', this.placeNose);
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => this.placeNose());
+      this.resizeObserver.observe(this.$el as HTMLElement);
+      this.resizeObserver.observe(this.anchor);
+    }
     try {
       const markdown = await fetchWikiPage(this.target.page);
       this.excerpt = wikiExcerpt(wikiSection(markdown, this.target.anchor));

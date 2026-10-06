@@ -27,9 +27,11 @@
     </header>
     <div class="create-game-layout">
       <main class="create-game-settings">
-        <!-- Expansions and board side by side on top, the other cards fill the columns below (masonryGrid.ts) -->
-        <div ref="settingsCards" class="create-game-cards">
-          <section class="create-game-card">
+        <!-- Fixed columns, so cards never jump: left expansions and everything that grows with them, right the board.
+             One column (narrow): the wrappers dissolve and the cards follow their order value -->
+        <div class="create-game-cards">
+          <div class="create-game-cards-column">
+          <section class="create-game-card" style="order: 1">
             <div class="create-game-card-head"><h2 v-i18n>Expansions</h2></div>
             <!-- Per group a small button that says what it does: select all, or deselect all once everything is on -->
             <div class="create-game-subhead">
@@ -58,7 +60,90 @@
             </div>
           </section>
 
-          <section class="create-game-card">
+          <section class="create-game-card" style="order: 6">
+            <div class="create-game-card-head"><h2 v-i18n>Expansion options</h2></div>
+            <div v-if="!hasExpansionOptions" class="create-game-note" v-i18n>Activate Venus Next, Turmoil, The Moon or Ares to see their options here.</div>
+            <div v-if="expansions.venus" class="create-game-option-group">
+              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-venus"></span><span v-i18n>Venus Next</span></div>
+              <OptionRow label="Alt. Venus Board" :href="wikiUrls.alternativeVenusBoard"><SwitchInput v-model="altVenusBoard"/></OptionRow>
+              <OptionRow v-if="playersCount > 1" label="Mandatory Venus Terraforming" :href="wikiUrls.venusTerraforming">
+                <SwitchInput v-model="requiresVenusTrackCompletion"/>
+              </OptionRow>
+            </div>
+            <div v-if="expansions.turmoil" class="create-game-option-group">
+              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-turmoil"></span><span v-i18n>Turmoil</span></div>
+              <OptionRow label="Agendas" iconClass="expansion-icon-agendas" href="https://www.notion.so/Political-Agendas-8c6b0b018a884692be29b3ef44b340a9">
+                <SwitchInput :modelValue="isPoliticalAgendasExtensionEnabled()" @update:modelValue="politicalAgendasExtensionToggle()"/>
+              </OptionRow>
+              <SegmentedControl v-if="isPoliticalAgendasExtensionEnabled()" class="create-game-segmented--sub" v-model="politicalAgendasExtension" :options="AGENDA_OPTIONS"/>
+              <OptionRow label="Remove negative Global Events" :href="wikiUrls.removeNegativeGlobalEvents">
+                <SwitchInput v-model="removeNegativeGlobalEventsOption"/>
+              </OptionRow>
+            </div>
+            <div v-if="expansions.moon" class="create-game-option-group">
+              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-themoon"></span><span v-i18n>The Moon</span></div>
+              <OptionRow label="Mandatory Moon Terraforming"><SwitchInput v-model="requiresMoonTrackCompletion"/></OptionRow>
+              <OptionRow label="Standard Project Variant #1" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant1"/></OptionRow>
+              <OptionRow label="Standard Project Variant #2" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant"/></OptionRow>
+            </div>
+            <div v-if="expansions.ares" class="create-game-option-group">
+              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-ares"></span><span v-i18n>Ares</span></div>
+              <OptionRow label="Extreme" :href="wikiUrls.aresExtreme"><SwitchInput v-model="aresExtremeVariant"/></OptionRow>
+            </div>
+          </section>
+
+          <section class="create-game-card" style="order: 4">
+            <div class="create-game-card-head"><h2 v-i18n>Setup</h2></div>
+            <OptionRow label="Starting Corporations">
+              <NumberStepper v-model="startingCorporations" :min="1" :max="6"/>
+            </OptionRow>
+            <OptionRow v-if="expansions.prelude" label="Starting Preludes" iconClass="expansion-icon-prelude">
+              <NumberStepper v-model="startingPreludes" :min="4" :max="8"/>
+            </OptionRow>
+            <OptionRow v-if="expansions.ceo" label="Starting CEOs" iconClass="expansion-icon-ceo">
+              <NumberStepper v-model="startingCeos" :min="1" :max="6"/>
+            </OptionRow>
+            <OptionRow v-if="expansions.prelude" label="Merger" iconClass="expansion-icon-prelude" :href="wikiUrls.merger">
+              <SwitchInput v-model="twoCorpsVariant"/>
+            </OptionRow>
+            <template v-if="playersCount > 1">
+              <OptionRow label="Draft variant"><SwitchInput v-model="draftVariant"/></OptionRow>
+              <OptionRow label="Initial Draft variant" :href="wikiUrls.initialDraft"><SwitchInput v-model="initialDraft"/></OptionRow>
+              <template v-if="initialDraft">
+                <OptionRow v-if="expansions.prelude" label="Prelude Draft" sub><SwitchInput v-model="preludeDraftVariant"/></OptionRow>
+                <OptionRow v-if="expansions.ceo" label="CEO Draft" sub><SwitchInput v-model="ceosDraftVariant"/></OptionRow>
+              </template>
+            </template>
+          </section>
+
+          <section class="create-game-card" style="order: 7">
+            <div class="create-game-card-head"><h2 v-i18n>Card pool</h2></div>
+            <div class="create-game-chip-grid create-game-chip-grid--two">
+              <ChoiceChip label="Custom Corporation list" :selected="showCorporationList" @select="showCorporationList = !showCorporationList">
+                <span v-if="customCorporations.length" class="create-game-count">{{ customCorporations.length }}</span>
+              </ChoiceChip>
+              <ChoiceChip v-if="expansions.prelude" label="Custom Preludes list" :selected="showPreludesList" @select="showPreludesList = !showPreludesList">
+                <span v-if="customPreludes.length" class="create-game-count">{{ customPreludes.length }}</span>
+              </ChoiceChip>
+              <ChoiceChip v-if="expansions.ceo" label="Custom CEOs list" :selected="showCeosList" @select="showCeosList = !showCeosList">
+                <span v-if="customCeos.length" class="create-game-count">{{ customCeos.length }}</span>
+              </ChoiceChip>
+              <ChoiceChip v-if="expansions.colonies" label="Custom Colonies list" :selected="showColoniesList" @select="showColoniesList = !showColoniesList">
+                <span v-if="customColonies.length" class="create-game-count">{{ customColonies.length }}</span>
+              </ChoiceChip>
+              <ChoiceChip label="Exclude some cards" :selected="showBannedCards" @select="showBannedCards = !showBannedCards">
+                <span v-if="bannedCards.length" class="create-game-count">{{ bannedCards.length }}</span>
+              </ChoiceChip>
+              <ChoiceChip label="Include some cards" :selected="showIncludedCards" @select="showIncludedCards = !showIncludedCards">
+                <span v-if="includedCards.length" class="create-game-count">{{ includedCards.length }}</span>
+              </ChoiceChip>
+            </div>
+            <OptionRow label="Set Predefined Game" :href="wikiUrls.setPredefinedGame"><SwitchInput v-model="seededGame"/></OptionRow>
+            <input v-if="seededGame" type="text" name="clonedGamedId" class="create-game-text-input" :placeholder="$t('game id:')" v-model="clonedGameId">
+          </section>
+          </div>
+          <div class="create-game-cards-column">
+          <section class="create-game-card" style="order: 2">
             <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
             <!-- Chance first: with a random board the board chips below only show the pool it draws from -->
             <div class="create-game-subhead" v-i18n>Random</div>
@@ -86,7 +171,7 @@
           </section>
 
           <!-- Own card: has nothing to do with the board (only with several players, solo has none) -->
-          <section v-if="playersCount > 1" class="create-game-card">
+          <section v-if="playersCount > 1" class="create-game-card" style="order: 3">
             <div class="create-game-card-head">
               <h2 v-i18n>Milestones &amp; Awards</h2>
               <InfoLink :href="wikiUrls.randomMilestonesAndAwards"/>
@@ -103,31 +188,7 @@
             </template>
           </section>
 
-          <section class="create-game-card">
-            <div class="create-game-card-head"><h2 v-i18n>Setup</h2></div>
-            <OptionRow label="Starting Corporations">
-              <NumberStepper v-model="startingCorporations" :min="1" :max="6"/>
-            </OptionRow>
-            <OptionRow v-if="expansions.prelude" label="Starting Preludes" iconClass="expansion-icon-prelude">
-              <NumberStepper v-model="startingPreludes" :min="4" :max="8"/>
-            </OptionRow>
-            <OptionRow v-if="expansions.ceo" label="Starting CEOs" iconClass="expansion-icon-ceo">
-              <NumberStepper v-model="startingCeos" :min="1" :max="6"/>
-            </OptionRow>
-            <OptionRow v-if="expansions.prelude" label="Merger" iconClass="expansion-icon-prelude" :href="wikiUrls.merger">
-              <SwitchInput v-model="twoCorpsVariant"/>
-            </OptionRow>
-            <template v-if="playersCount > 1">
-              <OptionRow label="Draft variant"><SwitchInput v-model="draftVariant"/></OptionRow>
-              <OptionRow label="Initial Draft variant" :href="wikiUrls.initialDraft"><SwitchInput v-model="initialDraft"/></OptionRow>
-              <template v-if="initialDraft">
-                <OptionRow v-if="expansions.prelude" label="Prelude Draft" sub><SwitchInput v-model="preludeDraftVariant"/></OptionRow>
-                <OptionRow v-if="expansions.ceo" label="CEO Draft" sub><SwitchInput v-model="ceosDraftVariant"/></OptionRow>
-              </template>
-            </template>
-          </section>
-
-          <section class="create-game-card">
+          <section class="create-game-card" style="order: 5">
             <div class="create-game-card-head"><h2 v-i18n>Rules</h2></div>
             <OptionRow label="World Government Terraforming" :href="wikiUrls.worldGovernmentTerraforming">
               <SwitchInput v-model="solarPhaseOption"/>
@@ -169,64 +230,7 @@
               </div>
             </template>
           </section>
-
-          <section class="create-game-card">
-            <div class="create-game-card-head"><h2 v-i18n>Expansion options</h2></div>
-            <div v-if="!hasExpansionOptions" class="create-game-note" v-i18n>Activate Venus Next, Turmoil, The Moon or Ares to see their options here.</div>
-            <div v-if="expansions.venus" class="create-game-option-group">
-              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-venus"></span><span v-i18n>Venus Next</span></div>
-              <OptionRow label="Alt. Venus Board" :href="wikiUrls.alternativeVenusBoard"><SwitchInput v-model="altVenusBoard"/></OptionRow>
-              <OptionRow v-if="playersCount > 1" label="Mandatory Venus Terraforming" :href="wikiUrls.venusTerraforming">
-                <SwitchInput v-model="requiresVenusTrackCompletion"/>
-              </OptionRow>
-            </div>
-            <div v-if="expansions.turmoil" class="create-game-option-group">
-              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-turmoil"></span><span v-i18n>Turmoil</span></div>
-              <OptionRow label="Agendas" iconClass="expansion-icon-agendas" href="https://www.notion.so/Political-Agendas-8c6b0b018a884692be29b3ef44b340a9">
-                <SwitchInput :modelValue="isPoliticalAgendasExtensionEnabled()" @update:modelValue="politicalAgendasExtensionToggle()"/>
-              </OptionRow>
-              <SegmentedControl v-if="isPoliticalAgendasExtensionEnabled()" class="create-game-segmented--sub" v-model="politicalAgendasExtension" :options="AGENDA_OPTIONS"/>
-              <OptionRow label="Remove negative Global Events" :href="wikiUrls.removeNegativeGlobalEvents">
-                <SwitchInput v-model="removeNegativeGlobalEventsOption"/>
-              </OptionRow>
-            </div>
-            <div v-if="expansions.moon" class="create-game-option-group">
-              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-themoon"></span><span v-i18n>The Moon</span></div>
-              <OptionRow label="Mandatory Moon Terraforming"><SwitchInput v-model="requiresMoonTrackCompletion"/></OptionRow>
-              <OptionRow label="Standard Project Variant #1" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant1"/></OptionRow>
-              <OptionRow label="Standard Project Variant #2" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant"/></OptionRow>
-            </div>
-            <div v-if="expansions.ares" class="create-game-option-group">
-              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-ares"></span><span v-i18n>Ares</span></div>
-              <OptionRow label="Extreme" :href="wikiUrls.aresExtreme"><SwitchInput v-model="aresExtremeVariant"/></OptionRow>
-            </div>
-          </section>
-
-          <section class="create-game-card">
-            <div class="create-game-card-head"><h2 v-i18n>Card pool</h2></div>
-            <div class="create-game-chip-grid create-game-chip-grid--two">
-              <ChoiceChip label="Custom Corporation list" :selected="showCorporationList" @select="showCorporationList = !showCorporationList">
-                <span v-if="customCorporations.length" class="create-game-count">{{ customCorporations.length }}</span>
-              </ChoiceChip>
-              <ChoiceChip v-if="expansions.prelude" label="Custom Preludes list" :selected="showPreludesList" @select="showPreludesList = !showPreludesList">
-                <span v-if="customPreludes.length" class="create-game-count">{{ customPreludes.length }}</span>
-              </ChoiceChip>
-              <ChoiceChip v-if="expansions.ceo" label="Custom CEOs list" :selected="showCeosList" @select="showCeosList = !showCeosList">
-                <span v-if="customCeos.length" class="create-game-count">{{ customCeos.length }}</span>
-              </ChoiceChip>
-              <ChoiceChip v-if="expansions.colonies" label="Custom Colonies list" :selected="showColoniesList" @select="showColoniesList = !showColoniesList">
-                <span v-if="customColonies.length" class="create-game-count">{{ customColonies.length }}</span>
-              </ChoiceChip>
-              <ChoiceChip label="Exclude some cards" :selected="showBannedCards" @select="showBannedCards = !showBannedCards">
-                <span v-if="bannedCards.length" class="create-game-count">{{ bannedCards.length }}</span>
-              </ChoiceChip>
-              <ChoiceChip label="Include some cards" :selected="showIncludedCards" @select="showIncludedCards = !showIncludedCards">
-                <span v-if="includedCards.length" class="create-game-count">{{ includedCards.length }}</span>
-              </ChoiceChip>
-            </div>
-            <OptionRow label="Set Predefined Game" :href="wikiUrls.setPredefinedGame"><SwitchInput v-model="seededGame"/></OptionRow>
-            <input v-if="seededGame" type="text" name="clonedGamedId" class="create-game-text-input" :placeholder="$t('game id:')" v-model="clonedGameId">
-          </section>
+          </div>
         </div>
 
         <!-- Custom lists as their own cards: show (difference to the default as cards) or edit -->
@@ -341,7 +345,6 @@ import {CardName} from '@/common/cards/CardName';
 import CustomCardListCard from '@/client/components/create/CustomCardListCard.vue';
 import CreateGameBoardPreview from '@/client/components/create/CreateGameBoardPreview.vue';
 import {observeStickyBottom} from '@/client/components/create/stickyBottomObserver';
-import {startMasonryGrid} from '@/client/components/create/masonryGrid';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
@@ -400,13 +403,10 @@ type FormModel = {
   /** Create card sticks to the bottom edge (stickyBottomObserver.ts) */
   createCardStuck: boolean;
   stopStickyObserver: () => void;
-  stopMasonryGrid: () => void;
 };
 
 // Distance of the sticky Create card to the bottom edge; same value as bottom in create_game_form.less
 const CREATE_CARD_BOTTOM_PX = 12;
-// Gap between the settings cards; same value as @create-game-gap-card in create_game_form.less
-const SETTINGS_CARD_GAP_PX = 16;
 
 // How long the button shows "Link copied"
 const LINK_COPIED_FEEDBACK_MS = 2000;
@@ -426,7 +426,6 @@ export default defineComponent({
       drawnBoard: undefined,
       createCardStuck: false,
       stopStickyObserver: () => {},
-      stopMasonryGrid: () => {},
     };
   },
   components: {
@@ -498,7 +497,6 @@ export default defineComponent({
   },
   mounted() {
     setDocumentTitle('Create New Game');
-    this.stopMasonryGrid = startMasonryGrid(this.$refs.settingsCards as HTMLElement, SETTINGS_CARD_GAP_PX);
     this.stopStickyObserver = observeStickyBottom(this.$refs.createCard as HTMLElement, CREATE_CARD_BOTTOM_PX, (stuck) => {
       this.createCardStuck = stuck;
     });
@@ -528,7 +526,6 @@ export default defineComponent({
   },
   beforeUnmount() {
     this.stopStickyObserver();
-    this.stopMasonryGrid();
     document
       .querySelector('meta[name="viewport"]')
       ?.setAttribute('content', this.previousViewport);

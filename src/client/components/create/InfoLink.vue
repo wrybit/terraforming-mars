@@ -4,7 +4,7 @@
     :class="{'create-game-info--open': isOpen}" :aria-expanded="isOpen" :aria-label="$t('Info')" :title="$t('Info')" @click.stop="toggle" @keydown.enter.stop @keydown.space.stop>&#9432;</button>
   <a v-else :href="href" class="tooltip create-game-info" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank" @click.stop>&#9432;</a>
   <Teleport v-if="isOpen && container !== undefined" :to="container">
-    <InfoBox :href="href" :target="wikiTarget!" :noseX="noseX" @close="openInfoHref = undefined"/>
+    <InfoBox :href="href" :target="wikiTarget!" :anchor="$refs.button as HTMLElement" @close="openInfoHref = undefined"/>
   </Teleport>
 </template>
 
@@ -30,8 +30,6 @@ export default defineComponent({
   data() {
     return {
       container: undefined as HTMLElement | undefined,
-      // Horizontal position of the button inside the card: the box's nose points at it
-      noseX: 0,
     };
   },
   computed: {
@@ -57,12 +55,7 @@ export default defineComponent({
         return;
       }
       const button = this.$refs.button as HTMLElement;
-      const container = button.closest<HTMLElement>(CONTAINER_SELECTOR) ?? undefined;
-      if (container !== undefined) {
-        const buttonRect = button.getBoundingClientRect();
-        this.noseX = buttonRect.left + buttonRect.width / 2 - container.getBoundingClientRect().left;
-      }
-      this.container = container;
+      this.container = button.closest<HTMLElement>(CONTAINER_SELECTOR) ?? undefined;
       this.openInfoHref = this.href;
     },
   },
