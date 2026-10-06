@@ -68,6 +68,29 @@
     min-height: @player-home-card-height;
   }
 
+  // Mars card height set via the drag handle (rightColumnFit.ts): the box reaches down to the handle,
+  // Mars sits centred in it; the log below may get smaller than its usual minimum (handle up to 75 % of the window)
+  .player-home--fixed .player-home-columns__mars {
+    display: flex;
+    flex-direction: column;
+
+    > .board-tabs {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .board-tabs-panel {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+
+  .player-home--fixed .player-home-columns__board[data-mars-height] .player-home-columns__log .log-panel.or-tab-panel {
+    min-height: 120px;
+  }
+
   // Left: player bars fixed, below them the current tab box fills the rest
   .player-home--fixed .player-home-columns__main {
     height: 100%;

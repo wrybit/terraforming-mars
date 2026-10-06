@@ -40,9 +40,10 @@ import {boardTabState, selectBoardTab} from './boardTabState';
 import {observeBoardTabFit} from './boardTabFit';
 import {RING_BOARD_SIZE} from '@/client/components/moon/moonRing';
 
-// Room around the Moon ring for the bonus chips outside the band, plus the shift down (board_tabs.less padding-top)
+// Room around the Moon ring for the bonus chips outside the band, plus the vertical padding of the view
+// (board_tabs.less: more on top, where a chip sticks out of the drawing)
 const MOON_FIT_MARGIN = 16;
-const MOON_FIT_TOGGLE = 24;
+const MOON_FIT_TOGGLE = 64;
 
 let stopFit: (() => void) | undefined;
 

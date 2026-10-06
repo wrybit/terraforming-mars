@@ -19,12 +19,11 @@ const MARS_MIN_HEIGHT_ATTRIBUTE = 'data-mars-min-height';
 const MARS_MAX_HEIGHT_ATTRIBUTE = 'data-mars-max-height';
 // Fired on the column when the requested height changes, so the observer refits
 export const MARS_HEIGHT_EVENT = 'mars-height-change';
-// Smallest Mars relative to its widest size
-const MIN_MARS_SIZE_SHARE = 0.4;
+// The drag handle below the Mars card (and so the card's bottom edge) stays between these shares of the window height
+const SPLIT_MIN_SHARE = 0.25;
+const SPLIT_MAX_SHARE = 0.75;
 // Only the fixed layout (window-high columns, player_home_fixed.less) has a height to distribute
 const FIXED_LAYOUT_SELECTOR = '.player-home--fixed';
-const LOG_SELECTOR = '.player-home-columns__log';
-const LOG_PANEL_SELECTOR = '.log-panel';
 
 const STEPS: ReadonlyArray<string> = [
   MARS_WIDE_CLASS, // 1) Mars as wide as the column (or the milestone block, where shown below Mars)
@@ -114,27 +113,22 @@ function overflowScale(reference: Element, board: HTMLElement): number {
   return scale;
 }
 
-// Mars card height chosen by the user: zoom Mars so it fills exactly that height. Limits: not wider than the column
-// (widenZoom), not smaller than MIN_MARS_SIZE_SHARE of that, and the log below keeps its minimum height.
+// Mars card height chosen by the user: the card reaches exactly down to the drag handle, Mars zooms to fill it
+// but never wider than the column (widenZoom) – beyond that the box just gets taller and Mars sits centred in it.
+// Limits: the handle stays between SPLIT_MIN_SHARE and SPLIT_MAX_SHARE of the window height.
 // Measured with the board at zoom 1 (fit() resets it before).
-function fitMarsHeight(column: HTMLElement, block: HTMLElement, board: HTMLElement, widenZoom: number, available: number): boolean {
+function fitMarsHeight(column: HTMLElement, block: HTMLElement, board: HTMLElement, widenZoom: number): boolean {
   block.style.height = '';
-  const naturalHeight = block.getBoundingClientRect().height;
+  const blockRect = block.getBoundingClientRect();
   const boardStyle = getComputedStyle(board);
   const boardOuter = board.getBoundingClientRect().height + (parseFloat(boardStyle.marginTop) || 0) + (parseFloat(boardStyle.marginBottom) || 0);
   if (boardOuter <= 0) {
     return false;
   }
-  const chrome = naturalHeight - boardOuter;
-  // Free height of the log beyond its minimum (the log grows into the rest of the fixed column)
-  const log = column.querySelector(LOG_SELECTOR);
-  const logPanel = column.querySelector(LOG_PANEL_SELECTOR);
-  const logSlack = log !== null && logPanel !== null ?
-    Math.max(0, logPanel.getBoundingClientRect().height - (parseFloat(getComputedStyle(logPanel).minHeight) || 0)) :
-    Math.max(0, available - column.scrollHeight);
-  const maxZoom = Math.min(widenZoom, (naturalHeight + logSlack - chrome) / boardOuter);
-  const max = Math.floor(chrome + boardOuter * maxZoom);
-  const min = Math.min(max, Math.ceil(chrome + boardOuter * widenZoom * MIN_MARS_SIZE_SHARE));
+  const chrome = blockRect.height - boardOuter;
+  const viewport = window.innerHeight;
+  const max = Math.floor(viewport * SPLIT_MAX_SHARE - blockRect.top);
+  const min = Math.min(max, Math.ceil(Math.max(chrome, viewport * SPLIT_MIN_SHARE - blockRect.top)));
   column.setAttribute(MARS_MIN_HEIGHT_ATTRIBUTE, String(min));
   column.setAttribute(MARS_MAX_HEIGHT_ATTRIBUTE, String(max));
 
@@ -144,7 +138,7 @@ function fitMarsHeight(column: HTMLElement, block: HTMLElement, board: HTMLEleme
   }
   const height = Math.min(max, Math.max(min, requested));
   block.style.height = `${height}px`;
-  column.style.setProperty(BOARD_FIT_ZOOM_VARIABLE, String((height - chrome) / boardOuter));
+  column.style.setProperty(BOARD_FIT_ZOOM_VARIABLE, String(Math.max(0, Math.min(widenZoom, (height - chrome) / boardOuter))));
   return true;
 }
 
@@ -170,7 +164,7 @@ function fit(column: HTMLElement): void {
 
   // User-chosen Mars height (fixed layout only); otherwise the levels decide
   const heightFixed = board !== null && block !== null && column.closest(FIXED_LAYOUT_SELECTOR) !== null &&
-    fitMarsHeight(column, block, board, widenZoom, available);
+    fitMarsHeight(column, block, board, widenZoom);
   if (!heightFixed) {
     // Narrow column: always shrink the board so it doesn't stick out past the edge
     column.style.setProperty(BOARD_FIT_ZOOM_VARIABLE, String(Math.min(1, widenZoom)));
