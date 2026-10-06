@@ -4,6 +4,8 @@
 
 // Proximity: within a card 6–8px, between cards 16px, between the columns 24px
 @create-game-gap-inner: 6px;
+// Between the groups inside a card (subheads, board preview)
+@create-game-gap-group: 20px;
 @create-game-gap-card: 16px;
 @create-game-gap-column: 24px;
 @create-game-page-padding: @page-content-edge; // spacing of the sticky column at top/bottom
@@ -226,7 +228,7 @@
   align-items: center;
   gap: 6px;
   // More room above than below: the subhead belongs to the group under it
-  margin: 20px 0 8px;
+  margin: @create-game-gap-group 0 8px;
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -1062,7 +1064,7 @@
 // ---------- board preview (CreateGameBoardPreview.vue) ----------
 .create-game-board-preview {
   position: relative;
-  margin-top: 10px;
+  margin-top: @create-game-gap-group;
 }
 
 .create-game-board-preview-head {
