@@ -326,15 +326,17 @@
 }
 
 // Effect: white field like on a card, the card's own icon rendering, centred
+// The icon field spans the whole card width (card-container would otherwise keep a card's own width)
 .turmoil-event__effect {
   flex: 1 1 auto;
+  align-self: stretch;
   min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: clamp(4px, 3cqi, 12px) 6px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.5);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
 
   .card-rows {
@@ -343,6 +345,12 @@
 }
 
 // The card's own content box has card dimensions: here it just wraps the icons
+.turmoil-event__effect.card-container {
+  width: auto;
+  max-width: none;
+  margin: 0;
+}
+
 .turmoil-event__effect.card-container .turmoil-event__render.card-content {
   position: static;
   width: auto;
