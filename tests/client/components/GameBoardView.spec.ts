@@ -20,7 +20,8 @@ describe('GameBoardView', () => {
 
   it('opens the zoom modal on board click unless a space selection is running', async () => {
     const wrapper = shallowMount(GameBoardView, {
-      ...globalConfig,
+      // The board sits in the Mars slot of the board tabs: render the tabs so the slot exists
+      global: {...globalConfig.global, stubs: {...globalConfig.global.stubs, BoardTabs: false}},
       props: {
         game: fakeGameModel(),
         tileView: 'show',

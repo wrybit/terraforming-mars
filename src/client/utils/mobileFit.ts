@@ -113,8 +113,8 @@ export function boardMaxHeight(width: number, height: number): number {
 }
 
 const RULES: ReadonlyArray<FitRule> = [
-  {selector: '.mb-screen--mars > .board-cont.board-without-venus, #game-end .board-cont.board-without-venus', crop: MARS_CROP},
-  {selector: '.mb-screen--mars > .board-cont, #game-end .board-cont'},
+  {selector: '.mb-screen--mars .board-tabs-mars > .board-cont.board-without-venus, #game-end .board-cont.board-without-venus', crop: MARS_CROP},
+  {selector: '.mb-screen--mars .board-tabs-mars > .board-cont, #game-end .board-cont'},
   // Rotated results table across the full width
   {selector: '#game-end .game_end_table.mb-transposed', columns: () => 1},
   // Milestones & awards as a table across the full width

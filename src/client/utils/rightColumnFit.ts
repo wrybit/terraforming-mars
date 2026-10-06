@@ -77,12 +77,14 @@ function contentBox(element: Element): {left: number; right: number; width: numb
 
 const MILESTONES_SELECTOR = '.player_home_block--milestones-and-awards';
 const MARS_BLOCK_SELECTOR = '.player-home-columns__mars';
+// The box of the board tabs (BoardTabs.vue) carries the card frame and padding – Mars must fit inside it
+const BOARD_TABS_PANEL_SELECTOR = '.board-tabs-panel';
 function widthReference(column: HTMLElement): Element | undefined {
   const milestones = column.querySelector(MILESTONES_SELECTOR);
   if (milestones !== null && milestones.getBoundingClientRect().width > 0) {
     return milestones;
   }
-  return column.querySelector(MARS_BLOCK_SELECTOR) ?? undefined;
+  return column.querySelector(BOARD_TABS_PANEL_SELECTOR) ?? column.querySelector(MARS_BLOCK_SELECTOR) ?? undefined;
 }
 
 // Outer spaces left of the planet (colony, spaceport) with labels and scales on the right: when a large Mars is centered

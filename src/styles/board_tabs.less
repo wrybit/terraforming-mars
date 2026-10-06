@@ -1,0 +1,176 @@
+// Board tabs above the right column (BoardTabs.vue): Mars and the expansion boards share one box in Mars size.
+// Tabs and box use the tab tones (or_tab_tones.less); the box is the former Mars card (home_cards.less).
+
+@board-tab-padding: 10px; // same as the Mars card before (@home-card-padding)
+
+.board-tabs {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+// No badges on these tabs: no room above them needed
+.or-tabs.board-tabs-bar {
+  margin-top: 0;
+}
+
+// All tabs equally wide; name on top, the tracks as thin lines below
+.or-tab.board-tab {
+  flex: 1 1 0;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 4px 5px;
+  font-family: Prototype, sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.board-tab-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.board-tab-lines {
+  display: grid;
+  gap: 3px;
+  width: 100%;
+  padding: 0 6px;
+  box-sizing: border-box;
+}
+
+.board-tab-line {
+  display: flex;
+  gap: 1px;
+
+  i {
+    position: relative;
+    flex: 1;
+    height: var(--line-height, 4px);
+    border-radius: 1px;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  i.board-tab-line__on {
+    background: var(--line-color);
+  }
+
+  // Notch on top = bonus step, bright notch = the next one
+  i.board-tab-line__bonus::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -3px;
+    width: 2px;
+    height: 3px;
+    margin-left: -1px;
+    background: rgba(255, 255, 255, 0.45);
+  }
+
+  i.board-tab-line__next::after {
+    top: -4px;
+    height: 4px;
+    background: #fff;
+    box-shadow: 0 0 3px #fff;
+  }
+
+  // Long tracks (temperature 19, planets up to 22): one bar with fine separators instead of gaps
+  &--fine {
+    gap: 0;
+
+    i {
+      border-radius: 0;
+      box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.35);
+    }
+
+    i:first-child {
+      border-radius: 1px 0 0 1px;
+    }
+
+    i:last-child {
+      border-radius: 0 1px 1px 0;
+      box-shadow: none;
+    }
+  }
+}
+
+.or-tab-panel.board-tabs-panel {
+  position: relative;
+  padding: @board-tab-padding;
+}
+
+// Without expansion boards there is no tab bar: the box is the plain Mars card with all corners round
+.or-tab-panel.board-tabs-panel--single {
+  border-radius: @or-tabs-radius;
+}
+
+// Mars keeps its place (and so the box height) while another board lies on top
+.board-tabs-mars--covered {
+  visibility: hidden;
+}
+
+.board-tabs-view {
+  position: absolute;
+  inset: @board-tab-padding;
+  overflow: auto;
+}
+
+// Room below Mars for the tile view switch (the ocean counter must stay free)
+.player-home-columns__mars .board-tabs-mars .board-cont {
+  margin-bottom: 38px;
+}
+
+// The tile view is a switch at the bottom of the box (TileViewToggle.vue) instead of the text button in the board
+.board-tabs-panel .hide-tile-button-container {
+  display: none;
+}
+
+.tile-view-toggle {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  z-index: 5;
+  transform: translateX(-50%);
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(12, 14, 20, 0.85);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+.tile-view-toggle__option {
+  height: 22px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: #a4a9b6;
+  font: inherit;
+  font-size: 11.5px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    color: #fff;
+  }
+
+  &--on,
+  &--on:hover {
+    background: @bg_action;
+    color: #fff;
+  }
+}
+
+// Moon tab: the ring board scaled to the box (boardTabFit.ts), centred, room for the tile view switch below
+.board-tabs-view--moon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-bottom: 36px;
+  box-sizing: border-box;
+}

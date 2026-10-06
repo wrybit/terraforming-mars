@@ -103,21 +103,6 @@
       <UndergroundTokens :underworldData="thisPlayer.underworldData"/>
     </div>
 
-    <div v-if="game.colonies.length > 0" class="player_home_block" ref="colonies" id="shortkey-colonies">
-      <a name="colonies" class="player_home_anchor hotkey-target"></a>
-      <DynamicTitle title="Colonies" :color="thisPlayer.color"/>
-      <div class="colonies-fleets-cont">
-        <div class="colonies-player-fleets" v-for="colonyPlayer in playerView.players" :key="colonyPlayer.color">
-          <div :class="'colonies-fleet colonies-fleet-'+ colonyPlayer.color" v-for="idx in getFleetsCountRange(colonyPlayer)" :key="idx"></div>
-        </div>
-      </div>
-      <div class="player_home_colony_cont">
-        <div class="player_home_colony" v-for="colony in game.colonies" :key="colony.name">
-          <Colony :colony="colony" :active="colony.isActive"/>
-        </div>
-      </div>
-    </div>
-
     <KeyboardShortcuts v-show="keyboardShortcutOpened" @close="keyboardShortcutOpened = false"/>
   </div>
 </template>
@@ -131,7 +116,6 @@ import PlayersOverview from '@/client/components/overview/PlayersOverview.vue';
 import WaitingFor from '@/client/components/WaitingFor.vue';
 import Sidebar from '@/client/components/Sidebar.vue';
 import Card from '@/client/components/card/Card.vue';
-import Colony from '@/client/components/colonies/Colony.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
@@ -195,10 +179,9 @@ export default defineComponent({
       return this.thisPlayer.tableau.length === 0;
     },
     // Fixed app layout (player_home_fixed.less): only when nothing is left below the columns,
-    // otherwise colonies, underground markers etc. would no longer be reachable
+    // otherwise underground markers etc. would no longer be reachable (colonies live in the board tabs)
     usesFixedLayout(): boolean {
       return this.game.phase !== 'end' &&
-        this.game.colonies.length === 0 &&
         this.thisPlayer.underworldData.tokens.length === 0;
     },
     thisPlayer(): PublicPlayerModel {
@@ -227,7 +210,6 @@ export default defineComponent({
     PlayersOverview,
     WaitingFor,
     Sidebar,
-    Colony,
     LogPanel,
     HandCardsPanel,
     HandCardsTab,
@@ -247,13 +229,6 @@ export default defineComponent({
     isHandInInputTabs,
     isPlayerActing(playerView: PlayerViewModel) : boolean {
       return playerView.players.length > 1 && playerView.waitingFor !== undefined && !playerView.waitingFor.optional;
-    },
-    getFleetsCountRange(player: PublicPlayerModel): Array<number> {
-      const fleetsRange = [];
-      for (let i = 0; i < player.fleetSize - player.tradesThisGeneration; i++) {
-        fleetsRange.push(i);
-      }
-      return fleetsRange;
     },
   },
 });

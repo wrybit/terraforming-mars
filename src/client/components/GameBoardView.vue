@@ -1,14 +1,43 @@
 <!-- Common widgets between player and spectator views -->
 <template>
   <a name="board" class="player_home_anchor hotkey-target"></a>
-  <Board
-    ref="columnBoard"
-    v-bind="boardProps"
-    @toggleTileView="$emit('toggleTileView')"
-    @click="onBoardClick"
-    class="board-cont--zoomable"
-    id="shortkey-board"
-  />
+  <!-- Board tabs: Mars and the expansion boards of this game share one box (BoardTabs.vue) -->
+  <BoardTabs :game="game" :players="players" :tileView="tileView" @toggleTileView="$emit('toggleTileView')">
+    <template #mars>
+      <Board
+        ref="columnBoard"
+        v-bind="boardProps"
+        @toggleTileView="$emit('toggleTileView')"
+        @click="onBoardClick"
+        class="board-cont--zoomable"
+        id="shortkey-board"
+      />
+    </template>
+    <template #moon>
+      <MoonBoard v-if="game.moon" :model="game.moon" :tileView="tileView" ring id="shortkey-moonBoard"/>
+    </template>
+    <template #colonies>
+      <div class="colonies-fleets-cont">
+        <div class="colonies-player-fleets" v-for="colonyPlayer in players" :key="colonyPlayer.color">
+          <div :class="'colonies-fleet colonies-fleet-'+ colonyPlayer.color" v-for="idx in fleetsCountRange(colonyPlayer)" :key="idx"></div>
+        </div>
+      </div>
+      <div class="player_home_colony_cont">
+        <div class="player_home_colony" v-for="colony in game.colonies" :key="colony.name">
+          <Colony :colony="colony" :active="colony.isActive"/>
+        </div>
+      </div>
+    </template>
+    <template #turmoil>
+      <Turmoil v-if="game.turmoil" :turmoil="game.turmoil"/>
+    </template>
+    <template #paths>
+      <PlanetaryTracks :tracks="game.pathfinders" :gameOptions="game.gameOptions"/>
+    </template>
+    <template #delta>
+      <DeltaProjectBoard :players="players"/>
+    </template>
+  </BoardTabs>
 
   <!-- Second board instance for viewing only. The IDs in it (main_board etc.) then exist twice;
        getElementById returns the first occurrence though, and the modal is attached at the end of body -->
@@ -18,23 +47,6 @@
       @toggleTileView="$emit('toggleTileView')"
     />
   </BoardZoomModal>
-
-  <template v-if="game.turmoil">
-    <a class="hotkey-target"></a>
-    <Turmoil :turmoil="game.turmoil"/>
-  </template>
-
-  <template v-if="game.moon">
-    <a class="hotkey-target"></a>
-    <MoonBoard :model="game.moon" :tileView="tileView" id="shortkey-moonBoard"/>
-  </template>
-
-  <template v-if="game.gameOptions.expansions.pathfinders">
-    <a class="hotkey-target"></a>
-    <PlanetaryTracks :tracks="game.pathfinders" :gameOptions="game.gameOptions"/>
-  </template>
-
-  <DeltaProjectBoard v-if="game.gameOptions.expansions.deltaProject" :players="players"/>
 
   <div v-if="players.length > 1" class="player_home_block--milestones-and-awards">
     <a class="hotkey-target"></a>
@@ -53,6 +65,8 @@ import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {SpaceId} from '@/common/Types';
 import {Color} from '@/common/Color';
 import Board from '@/client/components/Board.vue';
+import BoardTabs from '@/client/components/boardTabs/BoardTabs.vue';
+import Colony from '@/client/components/colonies/Colony.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
@@ -100,6 +114,8 @@ export default defineComponent({
   },
   components: {
     Board,
+    BoardTabs,
+    Colony,
     BoardZoomModal,
     DeltaProjectBoard,
     Milestones,
@@ -141,6 +157,10 @@ export default defineComponent({
     },
   },
   methods: {
+    // Trade fleets still available this generation (one rocket each)
+    fleetsCountRange(player: PublicPlayerModel): Array<number> {
+      return Array.from({length: Math.max(0, player.fleetSize - player.tradesThisGeneration)}, (_, index) => index);
+    },
     openBoardZoom() {
       this.columnBoardElement = (this.$refs.columnBoard as {$el?: HTMLElement} | undefined)?.$el;
       this.boardZoomOpen = true;

@@ -27,6 +27,8 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
+import {selectBoardTab} from '@/client/components/boardTabs/boardTabState';
+import {isMoonSpace} from '@/common/boards/spaces';
 import {SelectSpaceModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
@@ -269,6 +271,8 @@ export default defineComponent({
     releasePlacementZoom();
   },
   mounted() {
+    // Moon spaces are only clickable while the Moon tab is open – open the board the spaces are on
+    selectBoardTab([...this.spaces].some((spaceId) => isMoonSpace(spaceId)) ? 'moon' : 'mars');
     const bound = this.bindSpaces();
     // The large board closes by itself after confirmation (confirmPlacement)
     this.marsPlacement = bound.some((tile) => tile.closest(MARS_REGION_SELECTOR) !== null);

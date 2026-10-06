@@ -1,0 +1,153 @@
+// Track bonuses (TrackBonusChip.vue): the same chip and connector on every board – Moon rates, planet tracks, Delta.
+// One measure for everything: chip size, connector length and thickness, gap from the connector to the space.
+@track-bonus-gold: #f2c14e;
+@track-bonus-chip: 24px;
+@track-bonus-link: 12px;
+@track-bonus-line: 2px;
+@track-bonus-gap: 3px;
+@track-bonus-space: 3px;
+
+.track-bonus-chip {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  flex: none;
+  min-width: @track-bonus-chip;
+  height: @track-bonus-chip;
+  padding: 0 2px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 30%, #5a6474, #2a313c);
+  border: 2px solid @track-bonus-gold;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  line-height: 1;
+
+  img {
+    width: @track-bonus-chip * 0.6;
+    height: @track-bonus-chip * 0.6;
+    object-fit: contain;
+  }
+
+  b {
+    font: (@track-bonus-chip * 0.45) / 1 Prototype, sans-serif;
+    color: #fff;
+  }
+
+  &--wide {
+    padding: 0 (@track-bonus-chip * 0.2);
+  }
+
+  // For everyone: dashed outline
+  &--everyone {
+    border-style: dashed;
+    background: radial-gradient(circle at 35% 30%, #4a5260, #262b34);
+  }
+
+  // Already handed out: grey and half transparent, like all used things in the app
+  &--done {
+    opacity: 0.5;
+    filter: grayscale(1);
+    border-color: #8a8f99;
+  }
+
+  // Choice "A / B": upright capsule so it never gets wider than a space
+  &--choice {
+    flex-direction: column;
+    height: auto;
+    min-height: @track-bonus-chip;
+    width: @track-bonus-chip;
+    padding: 3px 0;
+    gap: 0;
+    border-radius: (@track-bonus-chip / 2);
+
+    img {
+      width: @track-bonus-chip * 0.55;
+      height: @track-bonus-chip * 0.55;
+    }
+  }
+}
+
+.track-bonus-chip__or {
+  font: 700 (@track-bonus-chip * 0.4) / 0.8 system-ui, sans-serif;
+  font-style: normal;
+  color: @track-bonus-gold;
+}
+
+.track-bonus-chip__production {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px;
+  border-radius: 3px;
+  background: #8a5a2b;
+
+  img {
+    width: @track-bonus-chip * 0.5;
+    height: @track-bonus-chip * 0.5;
+  }
+}
+
+.track-bonus-chip__vp {
+  display: grid;
+  place-items: center;
+  width: @track-bonus-chip * 0.66;
+  height: @track-bonus-chip * 0.66;
+  border-radius: 3px;
+  background: linear-gradient(#b17a3a, #7c4f20);
+  color: #fff;
+  font: (@track-bonus-chip * 0.45) / 1 Prototype, sans-serif;
+}
+
+.track-bonus-chip__text {
+  font: 700 (@track-bonus-chip * 0.5) / 1 system-ui, sans-serif;
+  color: #fff;
+}
+
+// Connector: only a line, always the same length and thickness. Base form horizontal (chip on the left, space on the right)
+.track-bonus-link {
+  position: relative;
+  display: block;
+  flex: none;
+  width: @track-bonus-link;
+  height: @track-bonus-line;
+  background: @track-bonus-gold;
+}
+
+// Pin = chips + connector
+.track-bonus-pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+
+  // Connector on top, chips below it (horizontal tracks)
+  &--up {
+    flex-direction: column;
+
+    > .track-bonus-link {
+      width: @track-bonus-line;
+      height: @track-bonus-link;
+    }
+  }
+
+  // All chips handed out: connector greyed out as well
+  &--done > .track-bonus-link {
+    opacity: 0.5;
+    filter: grayscale(1);
+  }
+}
+
+.track-bonus-pin__chips {
+  display: inline-flex;
+  gap: @track-bonus-space;
+}
+
+.track-bonus-pin__row {
+  display: flex;
+  gap: @track-bonus-space;
+  justify-content: center;
+
+  + .track-bonus-pin__row {
+    margin-top: @track-bonus-space;
+  }
+}

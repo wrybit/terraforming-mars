@@ -1,0 +1,109 @@
+// Moon rates as curved tracks around the Moon (MoonBoard.vue with ring, geometry in moonRing.ts).
+// The board is a square; the original space positions (moon.less) stay valid, the content is only moved by the padding.
+@moon-ring-size: 492px;
+@moon-ring-offset-x: 3.5px; // RING_OFFSET in moonRing.ts
+@moon-ring-offset-y: 75.5px;
+@moon-ring-disc: 352px; // 2 × DISC_RADIUS
+@moon-ring-disc-position: 70px; // RING_CENTER − DISC_RADIUS
+
+.board-cont.moon-board.moon-board--ring {
+  position: relative;
+  box-sizing: border-box;
+  flex: none;
+  width: @moon-ring-size;
+  height: @moon-ring-size;
+  margin: 0;
+  padding: @moon-ring-offset-y 0 0 @moon-ring-offset-x;
+  background: url(./assets/moon/moon-disc.png) @moon-ring-disc-position @moon-ring-disc-position / @moon-ring-disc @moon-ring-disc no-repeat;
+  zoom: var(--board-tab-fit, 1);
+
+  // Hex spaces like on Mars: a thin light outline instead of gold; mines keep their brown tint
+  .board-space-type-land,
+  .moon-space-type-mine,
+  .moon-space-type-other {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 50'%3E%3Cpolygon points='23,1 45,13.5 45,36.5 23,49 1,36.5 1,13.5' fill='none' stroke='white' stroke-opacity='.55' stroke-width='1'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  }
+
+  .moon-space-type-mine::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    background: rgba(136, 51, 0, 0.22);
+    pointer-events: none;
+  }
+
+  // The two stations move out of the ring into the top corners (pictures cut out of the old board);
+  // after the hex outline rule and more specific, so the pictures win
+  .board-space.moon-space-m01,
+  .board-space.moon-space-m37 {
+    background: center / contain no-repeat;
+  }
+
+  .board-space.moon-space-m01 {
+    margin: (34px - @moon-ring-offset-y) 0 0 (4px - @moon-ring-offset-x);
+    background-image: url(./assets/moon/station-m01.png);
+  }
+
+  .board-space.moon-space-m37 {
+    margin: (34px - @moon-ring-offset-y) 0 0 (@moon-ring-size - 54px - @moon-ring-offset-x);
+    background-image: url(./assets/moon/station-m37.png);
+  }
+}
+
+.moon-ring__svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: @moon-ring-size;
+  height: @moon-ring-size;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.moon-ring__numbers {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+
+// Numbers stand upright on the band; only the frame of the active value follows the curve (--turn)
+.moon-ring__value {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border-radius: 5px;
+  color: #fff;
+  font: 13px/1 Prototype, sans-serif;
+  text-shadow: 0 0 2px #000, 0 1px 3px rgba(0, 0, 0, 0.9); // contrast on the light end of the bands
+
+  &--active {
+    z-index: 3;
+    box-sizing: border-box;
+    width: 34px;
+    height: 30px;
+    margin: -15px 0 0 -17px;
+    rotate: var(--turn);
+    border: 2px solid #f0d2b4;
+    border-radius: 7px;
+    background: #241a14;
+    box-shadow: 0 0 0 3px #a8703f, 0 3px 8px 2px rgba(0, 0, 0, 0.65);
+    font-size: 17px;
+  }
+}
+
+// Bonus pin radially outside the band, anchored at the connector's tip (moonRing.ts)
+.moon-ring__bonus {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  transform-origin: 100% 50%;
+  // Same chip size as on every other board, however much the Moon is scaled to the box
+  scale: calc(1 / var(--board-tab-fit, 1));
+  pointer-events: none;
+}

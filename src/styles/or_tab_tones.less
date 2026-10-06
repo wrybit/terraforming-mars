@@ -15,6 +15,9 @@
   resources #e2b52c, // resources / amount (M€ yellow)
   player #9b6bd8, // select a player
   colonies #2fb0a8, // colonies / Turmoil
+  moon #7a7e8c, // board tab: the Moon (grey like the moon surface)
+  paths #e2b52c, // board tab: planetary tracks (Pathfinders)
+  delta #f4f5f8, // board tab: Delta Project (almost white)
   success #2e9e4f, // action menu: pass (like the green button)
   heat #e0701f, // action menu: raise temperature (heat)
   danger #c0392b, // action menu: end round (like the red button)
@@ -110,3 +113,8 @@ each(@or-tab-icon-tones, {
     }
   }
 });
+
+// Delta: the almost white tone mixed stronger – otherwise the inactive tab blurs into the grey of the Moon
+.or-tab--tone-delta:not(.or-tab--active) {
+  background: fade(#f4f5f8, 30%);
+}

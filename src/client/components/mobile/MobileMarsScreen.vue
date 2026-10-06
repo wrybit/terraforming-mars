@@ -50,14 +50,6 @@
       <button type="button" @click="emit('showMilestones')">{{ $t('Awards') }} <b>{{ fundedAwards }}/{{ MAX_AWARDS }}</b></button>
     </div>
     <GameOverNotice v-if="game.phase === 'end'" :participantId="participantId"/>
-    <div v-if="game.colonies.length > 0" class="mb-colonies">
-      <h3 class="mb-section-label">{{ $t('Colonies') }}</h3>
-      <div class="player_home_colony_cont">
-        <div class="player_home_colony" v-for="colony in game.colonies" :key="colony.name">
-          <Colony :colony="colony" :active="colony.isActive"/>
-        </div>
-      </div>
-    </div>
     <!-- Further sections from the caller (e.g. own underground tokens) -->
     <slot></slot>
   </section>
@@ -74,7 +66,6 @@ import {TileView} from '@/client/components/board/TileView';
 import {requestPlacementZoom} from '@/client/components/board/placementZoom';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import GameOverNotice from '@/client/components/gameend/GameOverNotice.vue';
-import Colony from '@/client/components/colonies/Colony.vue';
 import Sidebar from '@/client/components/Sidebar.vue';
 import MobileParameterBars from '@/client/components/mobile/MobileParameterBars.vue';
 
