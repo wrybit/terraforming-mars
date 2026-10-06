@@ -1,0 +1,639 @@
+// Turmoil board tab (TurmoilBoard.vue) and the delegate tab (SelectParty.vue).
+// The hemicycle scales with the width, the event row takes the rest of the height (boardTabFit.ts).
+@turmoil-gold: #f2c14e;
+@turmoil-muted: #a2a8ba;
+@turmoil-text: #eceef3;
+
+// Size container: the hemicycle gets at most about half of the box height, the events the rest
+.board-tabs-view--turmoil {
+  container-type: size;
+}
+
+.turmoil-board-tab {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+// Ruling policy
+.turmoil-board-tab__policy {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 10px 0 4px;
+  border: 1px solid fade(@turmoil-gold, 55%);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.turmoil-board-tab__ruling-party {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 10px;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+
+  img {
+    width: 40px;
+    height: 29px;
+    object-fit: contain;
+  }
+
+  small {
+    display: block;
+    font: 600 9px/10px system-ui, sans-serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: @turmoil-gold;
+  }
+
+  b {
+    font: 13px Prototype, sans-serif;
+    white-space: nowrap;
+  }
+}
+
+.turmoil-board-tab__policy-text {
+  flex: 1;
+  font-size: 12.5px;
+  line-height: 1.25;
+  color: #d9dbe3;
+}
+
+.turmoil-board-tab__influence {
+  font-size: 12px;
+  color: @turmoil-muted;
+  white-space: nowrap;
+
+  b {
+    margin-left: 2px;
+    font: 18px Prototype, sans-serif;
+    color: @turmoil-gold;
+  }
+}
+
+// Hemicycle: keeps its aspect ratio
+.turmoil-board-tab__hemicycle {
+  position: relative;
+  flex: none;
+  align-self: center;
+  width: min(100%, 80cqh);
+  aspect-ratio: 1000 / 495;
+}
+
+.turmoil-board-tab__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.turmoil-board-tab__wedge {
+  stroke: #12282a;
+  stroke-width: 6;
+}
+
+.turmoil-board-tab__seat-empty {
+  opacity: 0.18;
+  filter: brightness(0);
+}
+
+.turmoil-board-tab__leader-seat {
+  fill: #f1f1ef;
+  stroke: #b5b5b0;
+  stroke-width: 1.5;
+}
+
+.turmoil-board-tab__party-icon {
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.55));
+}
+
+.turmoil-board-tab__dominance {
+  fill: #fafafa;
+  stroke: #c9c9c9;
+}
+
+.turmoil-board-tab__ruling-badge {
+  rect {
+    fill: @turmoil-gold;
+    stroke: #7a5a00;
+    stroke-width: 1.5;
+  }
+
+  text {
+    font: 700 15px system-ui, sans-serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    fill: #2a1f00;
+    text-anchor: middle;
+  }
+}
+
+.turmoil-board-tab__chair {
+  fill: #ecebe7;
+  stroke: #12282a;
+  stroke-width: 6;
+}
+
+.turmoil-board-tab__chair-label {
+  font: 700 15px system-ui, sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: #4a4a4a;
+  text-anchor: middle;
+}
+
+// Party picked in the delegate tab
+.turmoil-board-tab__pick {
+  fill: fade(@bg_action, 12%);
+  stroke: @bg_action;
+  stroke-width: 9;
+  stroke-linejoin: round;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px fade(@bg_action, 90%));
+}
+
+// Lobby and reserve in the free corners below the hemicycle
+.turmoil-board-tab__corner {
+  position: absolute;
+  bottom: 0;
+  display: grid;
+  gap: 1px;
+  max-width: 22%;
+  font-size: 11px;
+  color: @turmoil-muted;
+
+  b {
+    font: 600 10px/12px system-ui, sans-serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: @turmoil-text;
+  }
+
+  small {
+    font-size: 10.5px;
+    line-height: 1.2;
+  }
+
+  &--left {
+    left: 0;
+  }
+
+  &--right {
+    right: 0;
+    justify-items: end;
+    text-align: right;
+
+    .turmoil-board-tab__figures {
+      justify-content: flex-end;
+    }
+  }
+}
+
+.turmoil-board-tab__figures {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1px;
+  min-height: 20px;
+
+  img {
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
+  }
+}
+
+.turmoil-board-tab__cost {
+  display: inline-grid;
+  place-items: center;
+  align-self: center;
+  width: 18px;
+  height: 18px;
+  margin-right: 3px;
+  border-radius: 4px;
+  background: linear-gradient(#ffe066, #e3a908);
+  color: #3a2a00;
+  font: 11px Prototype, sans-serif;
+}
+
+// Who the neutral delegates are
+.turmoil-board-tab__neutral {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.28);
+
+  img {
+    flex: none;
+    width: 20px;
+  }
+
+  p {
+    flex: 1;
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.3;
+    color: #c6cbd8;
+
+    b {
+      color: #fff;
+    }
+  }
+}
+
+// Event row: the game's event cards in time order, scaled to the remaining room (boardTabFit.ts)
+.turmoil-board-tab__events {
+  flex: 1 1 120px;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.turmoil-board-tab__events-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  zoom: var(--board-tab-fit, 1);
+}
+
+.turmoil-board-tab__event {
+  display: grid;
+  gap: 2px;
+
+  .global-event {
+    margin: 0;
+  }
+
+  &--current .global-event {
+    box-shadow: 0 0 0 3px #e0473a, 0 0 12px fade(#e0473a, 50%);
+  }
+
+  &--distant {
+    opacity: 0.88;
+  }
+}
+
+.turmoil-board-tab__event-slot {
+  font-size: 14px;
+  color: @turmoil-muted;
+
+  b {
+    color: @turmoil-text;
+  }
+}
+
+.turmoil-board-tab__event--current .turmoil-board-tab__event-slot b {
+  color: #ff8a80;
+}
+
+.turmoil-board-tab__event-arrow {
+  color: #8fb2d6;
+  font-size: 26px;
+  line-height: 1;
+}
+
+// Phone: lobby and reserve below the hemicycle instead of in the (too small) corners
+@container (max-width: 420px) {
+  .turmoil-board-tab {
+    height: auto;
+  }
+
+  .turmoil-board-tab__hemicycle {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 12px;
+    aspect-ratio: auto;
+  }
+
+  .turmoil-board-tab__svg {
+    grid-column: 1 / -1;
+    height: auto;
+  }
+
+  .turmoil-board-tab__corner {
+    position: static;
+    max-width: none;
+  }
+
+  .turmoil-board-tab__neutral {
+    flex-wrap: wrap;
+  }
+}
+
+// ---------- Delegate tab (SelectParty.vue) ----------
+.select-party {
+  container-type: inline-size;
+  width: 100%;
+}
+
+html:not(.tm-mobile) .or-tab-panel .select-party {
+  margin: auto 0;
+}
+
+.select-party__layout {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+.select-party__column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+
+  + .select-party__column {
+    padding-left: 24px;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  // Without a source (other inputs sending a delegate) the parties take the whole width
+  &--parties:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+.select-party__label {
+  font-size: 13px;
+  color: @turmoil-muted;
+}
+
+.select-party__source {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid @bg_action;
+  border-radius: 10px;
+  background: color-mix(in srgb, @bg_action 22%, rgba(10, 14, 18, 0.6));
+
+  b {
+    font-size: 15px;
+  }
+
+  small {
+    font-size: 12px;
+    color: @turmoil-muted;
+  }
+}
+
+.select-party__figures {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+// Parties as tiles: glass in the party colour, hexagon on top
+.select-party__cards {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 30px 8px;
+  padding: 24px 0 2px;
+}
+
+.select-party__card {
+  --rim: var(--party);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 28px 6px 16px;
+  border: 2px solid var(--rim);
+  border-radius: 10px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--party) 34%, #101418), color-mix(in srgb, var(--party) 14%, #0b0e12));
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+
+  &--on {
+    --rim: @bg_action;
+    filter: drop-shadow(0 0 6px fade(@bg_action, 85%));
+
+    &::after {
+      content: "✓";
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      z-index: 1;
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 0 8px 0 8px;
+      background: @bg_action;
+      color: #fff;
+      font: 700 13px system-ui, sans-serif;
+    }
+  }
+
+  // Party not selectable: clearly inactive
+  &--off {
+    opacity: 0.35;
+    cursor: default;
+  }
+}
+
+.select-party__badge {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 51px;
+  transform: translateX(-50%);
+  background: var(--rim);
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+}
+
+.select-party__hex {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 45px;
+  background: #f4f4f2;
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+
+  img {
+    width: 42px;
+    height: 30px;
+    object-fit: contain;
+  }
+}
+
+.select-party__dominance {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: #fafafa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.select-party__name {
+  display: grid;
+  place-items: center;
+  min-height: 28px;
+  max-width: 100%;
+  font: 12px/14px Prototype, sans-serif;
+  overflow-wrap: anywhere;
+}
+
+.select-party__leader {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 36px;
+  border-radius: 6px;
+  background: #f1f1ef;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.select-party__seat {
+  width: 22px;
+  height: 28px;
+  opacity: 0.15;
+  filter: brightness(0);
+  background: center / contain no-repeat;
+}
+
+.select-party__seats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1px;
+  min-height: 20px;
+  max-width: 80px;
+}
+
+.select-party__rule {
+  font-size: 10px;
+  line-height: 1.15;
+  color: #d6d9e2;
+
+  small {
+    display: block;
+    font: 600 8.5px/11px system-ui, sans-serif;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: @turmoil-muted;
+  }
+
+  &--policy {
+    margin-top: auto;
+  }
+}
+
+.select-party__ruling {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  z-index: 2;
+  padding: 0 8px;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  background: @turmoil-gold;
+  color: #2a1f00;
+  font: 700 9.5px/18px system-ui, sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.select-party__preview {
+  padding: 6px 10px;
+  border-left: 3px solid var(--party, rgba(255, 255, 255, 0.2));
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  color: @turmoil-muted;
+  font-size: 13px;
+
+  b {
+    color: @turmoil-text;
+  }
+}
+
+// Narrow box (tablet portrait): 3 × 2 with wider tiles – leader and delegates in one row, policy and bonus side by side
+@container (max-width: 700px) {
+  .select-party__cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .select-party__card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "name name" "people people" "policy bonus";
+    align-items: start;
+    gap: 6px 10px;
+    padding: 28px 10px 14px;
+  }
+
+  .select-party__name {
+    grid-area: name;
+    min-height: 0;
+  }
+
+  .select-party__leader {
+    grid-area: people;
+    justify-self: start;
+  }
+
+  .select-party__seats {
+    grid-area: people;
+    align-self: center;
+    justify-content: flex-start;
+    max-width: none;
+    margin-left: 40px;
+  }
+
+  .select-party__rule {
+    font-size: 11px;
+    text-align: left;
+
+    &--policy {
+      grid-area: policy;
+      margin-top: 0;
+    }
+
+    &--bonus {
+      grid-area: bonus;
+    }
+  }
+}
+
+@container (max-width: 520px) {
+  .select-party__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .select-party__column + .select-party__column {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .select-party__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.turmoil-board-tab__more {
+  align-self: center;
+  margin-left: 2px;
+  font: 11px Prototype, sans-serif;
+  color: @turmoil-text;
+}

@@ -20,7 +20,7 @@
       <ColoniesBoard :colonies="game.colonies" :players="players" :viewerColor="viewerColor"/>
     </template>
     <template #turmoil>
-      <Turmoil v-if="game.turmoil" :turmoil="game.turmoil"/>
+      <TurmoilBoard v-if="game.turmoil" :turmoil="game.turmoil" :players="players" :viewerColor="viewerColor" :generation="game.generation"/>
     </template>
     <template #paths>
       <PlanetaryTracks :tracks="game.pathfinders" :gameOptions="game.gameOptions"/>
@@ -65,7 +65,7 @@ import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
-import Turmoil from '@/client/components/turmoil/Turmoil.vue';
+import TurmoilBoard from '@/client/components/turmoil/TurmoilBoard.vue';
 import MoonBoard from '@/client/components/moon/MoonBoard.vue';
 import PlanetaryTracks from '@/client/components/pathfinders/PlanetaryTracks.vue';
 import {TileView} from './board/TileView';
@@ -112,7 +112,7 @@ export default defineComponent({
     Milestones,
     Awards,
     MilestoneAwardTable,
-    Turmoil,
+    TurmoilBoard,
     MoonBoard,
     PlanetaryTracks,
   },
