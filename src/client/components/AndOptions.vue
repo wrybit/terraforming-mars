@@ -1,5 +1,7 @@
 <template>
-  <div class='wf-options'>
+  <!-- Trading with a colony gets its own layout (pay → get), the rest the generic list of sub-inputs -->
+  <TradeColony v-if="isTrade" ref="trade" :playerView="playerView" :playerinput="playerinput" :onsave="onsave" :showsave="showsave"/>
+  <div v-else class='wf-options'>
     <div v-if="showtitle" class="wf-title">{{ $t(playerinput.title) }}</div>
     <PlayerInputFactory v-for="(option, idx) in (playerinput.options || [])"
       :key="idx"
@@ -20,6 +22,8 @@
 <script lang="ts">
 
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
+import TradeColony from '@/client/components/colonies/TradeColony.vue';
+import {tradeInput} from '@/client/components/colonies/tradeInput';
 import {defineComponent} from 'vue';
 import {showAlert} from '@/client/components/showAlert';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
@@ -54,6 +58,7 @@ export default defineComponent({
     },
   },
   components: {
+    TradeColony,
     TabPanelFooterSlot,
     AppButton,
   },
@@ -62,6 +67,11 @@ export default defineComponent({
       responded: this.playerinput.options.map(() => undefined),
     };
   },
+  computed: {
+    isTrade(): boolean {
+      return tradeInput(this.playerinput) !== undefined;
+    },
+  },
   methods: {
     playerFactorySaved(idx: number) {
       return (out: InputResponse) => {
@@ -69,6 +79,9 @@ export default defineComponent({
       };
     },
     canSave(): boolean {
+      if (this.isTrade) {
+        return (this.$refs.trade as {canSave: () => boolean} | undefined)?.canSave() ?? false;
+      }
       const refs = this.$refs.childInputs as Array<{canSave?: () => boolean}> | undefined;
       if (!refs) {
         return true;
@@ -83,6 +96,10 @@ export default defineComponent({
       return true;
     },
     saveData() {
+      if (this.isTrade) {
+        (this.$refs.trade as {saveData: () => void} | undefined)?.saveData();
+        return;
+      }
       if (this.canSave() === false) {
         showAlert(this, 'Error with input', 'Not all options selected');
         return;

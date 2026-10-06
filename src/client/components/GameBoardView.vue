@@ -17,16 +17,7 @@
       <MoonBoard v-if="game.moon" :model="game.moon" :tileView="tileView" ring id="shortkey-moonBoard"/>
     </template>
     <template #colonies>
-      <div class="colonies-fleets-cont">
-        <div class="colonies-player-fleets" v-for="colonyPlayer in players" :key="colonyPlayer.color">
-          <div :class="'colonies-fleet colonies-fleet-'+ colonyPlayer.color" v-for="idx in fleetsCountRange(colonyPlayer)" :key="idx"></div>
-        </div>
-      </div>
-      <div class="player_home_colony_cont">
-        <div class="player_home_colony" v-for="colony in game.colonies" :key="colony.name">
-          <Colony :colony="colony" :active="colony.isActive"/>
-        </div>
-      </div>
+      <ColoniesBoard :colonies="game.colonies" :players="players" :viewerColor="viewerColor"/>
     </template>
     <template #turmoil>
       <Turmoil v-if="game.turmoil" :turmoil="game.turmoil"/>
@@ -66,7 +57,7 @@ import {SpaceId} from '@/common/Types';
 import {Color} from '@/common/Color';
 import Board from '@/client/components/Board.vue';
 import BoardTabs from '@/client/components/boardTabs/BoardTabs.vue';
-import Colony from '@/client/components/colonies/Colony.vue';
+import ColoniesBoard from '@/client/components/colonies/ColoniesBoard.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
@@ -115,7 +106,7 @@ export default defineComponent({
   components: {
     Board,
     BoardTabs,
-    Colony,
+    ColoniesBoard,
     BoardZoomModal,
     DeltaProjectBoard,
     Milestones,
@@ -157,10 +148,6 @@ export default defineComponent({
     },
   },
   methods: {
-    // Trade fleets still available this generation (one rocket each)
-    fleetsCountRange(player: PublicPlayerModel): Array<number> {
-      return Array.from({length: Math.max(0, player.fleetSize - player.tradesThisGeneration)}, (_, index) => index);
-    },
     openBoardZoom() {
       this.columnBoardElement = (this.$refs.columnBoard as {$el?: HTMLElement} | undefined)?.$el;
       this.boardZoomOpen = true;
