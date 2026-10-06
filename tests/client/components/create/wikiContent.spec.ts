@@ -11,6 +11,7 @@ Players draft their cards each generation instead of drawing them directly.
 [Rules](https://example.com) | [Video](https://example.com)
 
 Adds a draft mechanic for starting cards before the game begins.
+
 <script>alert(1)</script>
 `;
 
