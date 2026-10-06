@@ -419,17 +419,22 @@ html:not(.tm-mobile) .delta-board {
     --track-bonus-link: calc(var(--delta-unit) * 0.4);
     flex: 1 1 0;
     min-height: 0;
-    grid-template-columns: calc(var(--delta-unit) * 2.9) minmax(0, 1fr) minmax(calc(var(--delta-unit) * 5), calc(var(--delta-unit) * 7.5));
+    // Value column only as wide as its text needs (max 5.5 units), so the track gets the rest of the row
+    grid-template-columns: calc(var(--delta-unit) * 2.2) minmax(0, 1fr) minmax(0, max-content);
     gap: calc(var(--delta-unit) * 0.5);
     padding: calc(var(--delta-unit) * 0.45) calc(var(--delta-unit) * 0.5);
   }
 
+  // Player cube without the round frame of the planet pictures, a little smaller
   .board-track-row__picture {
-    width: calc(var(--delta-unit) * 2.4);
-    height: calc(var(--delta-unit) * 2.4);
+    width: auto;
+    height: auto;
+    overflow: visible;
+    background: none;
+    box-shadow: none;
 
     .player-cube {
-      --cube-size: calc(var(--delta-unit) * 1.2) !important;
+      --cube-size: calc(var(--delta-unit) * 0.95) !important;
     }
   }
 
@@ -456,9 +461,16 @@ html:not(.tm-mobile) .delta-board {
     }
   }
 
+  .board-track-row__value {
+    min-width: 0;
+    max-width: calc(var(--delta-unit) * 5.5);
+  }
+
+  // Balanced line breaks: "Next reward:" on its own line, the reward and the state as even blocks
   .board-track-row__sub {
     max-width: none;
     display: grid;
+    text-wrap: balance;
     gap: 2px;
     font-size: calc(var(--delta-unit) * 0.5);
     line-height: 1.25;
@@ -468,6 +480,14 @@ html:not(.tm-mobile) .delta-board {
   .delta-board__next b {
     color: #fff;
     font-weight: 600;
+  }
+
+  .delta-board__next-label {
+    display: block;
+  }
+
+  .delta-board__state {
+    white-space: nowrap;
   }
 
   .delta-board__energy {
