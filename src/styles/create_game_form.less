@@ -286,6 +286,12 @@
   opacity: 0.55;
   cursor: pointer;
 
+  // Opens an info box: no focus ring, the open state shows in color
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+
   &:hover,
   &--open {
     opacity: 1;
@@ -300,9 +306,14 @@
 @create-game-info-nose: 14px; // edge of the rotated square
 @create-game-info-border: fade(@bg_action, 60%);
 
+// Between the row with the ⓘ and the next row
+.create-game-info-slot {
+  margin: 4px 0 10px;
+}
+
 .create-game-info-box {
   position: relative;
-  margin-top: 16px;
+  margin-top: 10px;
   padding: 10px 12px;
   border: 1px solid @create-game-info-border;
   border-radius: @create-game-radius-small;

@@ -14,8 +14,8 @@ import InfoBox from './InfoBox.vue';
 import {openInfoHref} from './infoBoxState';
 import {parseWikiUrl, WikiTarget} from './wikiContent';
 
-// Cards the info box is appended to (at their end, below all rows)
-const CONTAINER_SELECTOR = '.create-game-card, .create-game-players, .create-game--block';
+// Row the info box opens below (between this row and the next); for tiles the whole tile grid
+const ROW_SELECTOR = '.create-game-option, .create-game-chip-grid, .create-game-card-head, .create-game-subhead, .create-game-player-extra';
 
 // click.stop so a click on it doesn't toggle the surrounding tile/option
 export default defineComponent({
@@ -29,6 +29,7 @@ export default defineComponent({
   },
   data() {
     return {
+      // Slot inserted right after the row, the box is teleported into it
       container: undefined as HTMLElement | undefined,
     };
   },
@@ -48,14 +49,39 @@ export default defineComponent({
       },
     },
   },
+  watch: {
+    // Closed (also because another ⓘ opened): take the slot out of the row list again
+    isOpen(open: boolean) {
+      if (!open) {
+        this.$nextTick(() => this.removeContainer());
+      }
+    },
+  },
+  beforeUnmount() {
+    if (this.isOpen) {
+      this.openInfoHref = undefined;
+    }
+    this.removeContainer();
+  },
   methods: {
+    removeContainer() {
+      this.container?.remove();
+      this.container = undefined;
+    },
     toggle() {
       if (this.isOpen) {
         this.openInfoHref = undefined;
         return;
       }
       const button = this.$refs.button as HTMLElement;
-      this.container = button.closest<HTMLElement>(CONTAINER_SELECTOR) ?? undefined;
+      const row = button.closest<HTMLElement>(ROW_SELECTOR) ?? button.parentElement;
+      this.removeContainer();
+      if (row !== null) {
+        const container = document.createElement('div');
+        container.className = 'create-game-info-slot';
+        row.insertAdjacentElement('afterend', container);
+        this.container = container;
+      }
       this.openInfoHref = this.href;
     },
   },
