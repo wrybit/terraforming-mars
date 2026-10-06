@@ -15,7 +15,7 @@ import {Tag} from '@/common/cards/Tag';
 function playerView(tableau: Array<CardModel>, hand: Array<CardModel>): PlayerViewModel {
   return asComplete<PlayerViewModel>({
     id: 'p-1',
-    thisPlayer: asComplete<PublicPlayerModel>({color: 'blue', tableau, actionsThisGeneration: []}),
+    thisPlayer: asComplete<PublicPlayerModel>({color: 'blue', tableau, actionsThisGeneration: [], underworldData: {tokens: [], corruption: 0, activeBonus: undefined}}),
     cardsInHand: hand,
     preludeCardsInHand: [],
     ceoCardsInHand: [],

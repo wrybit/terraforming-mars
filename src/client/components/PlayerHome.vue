@@ -98,11 +98,6 @@
       </HomeColumns>
     </div>
 
-    <div v-if="thisPlayer.underworldData.tokens.length > 0">
-      <DynamicTitle title="Claimed Underground Resource Tokens" :color="thisPlayer.color"/>
-      <UndergroundTokens :underworldData="thisPlayer.underworldData"/>
-    </div>
-
     <KeyboardShortcuts v-show="keyboardShortcutOpened" @close="keyboardShortcutOpened = false"/>
   </div>
 </template>
@@ -130,7 +125,6 @@ import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
 import TopBar from '@/client/components/TopBar.vue';
-import UndergroundTokens from '@/client/components/underworld/UndergroundTokens.vue';
 import KeyboardShortcuts from '@/client/components/KeyboardShortcuts.vue';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
@@ -180,9 +174,9 @@ export default defineComponent({
     },
     // Fixed app layout (player_home_fixed.less): only when nothing is left below the columns,
     // otherwise underground markers etc. would no longer be reachable (colonies live in the board tabs)
+    // Claimed underground tokens live in the hand cards tab (HandCardsPanel), so they no longer need the scrolling page
     usesFixedLayout(): boolean {
-      return this.game.phase !== 'end' &&
-        this.thisPlayer.underworldData.tokens.length === 0;
+      return this.game.phase !== 'end';
     },
     thisPlayer(): PublicPlayerModel {
       return this.playerView.thisPlayer;
@@ -196,7 +190,7 @@ export default defineComponent({
     },
     // The hand cards block also shows the own active cards – so it stays visible even without hand cards
     hasHandPanelContent(): boolean {
-      return this.cardsInHandCount > 0 || ownActiveCards(this.playerView).length > 0;
+      return this.cardsInHandCount > 0 || ownActiveCards(this.playerView).length > 0 || this.thisPlayer.underworldData.tokens.length > 0;
     },
   },
 
@@ -221,7 +215,6 @@ export default defineComponent({
     PlayerSetupView,
     SetupTurnOrder,
     SetupBoardToggle,
-    UndergroundTokens,
     KeyboardShortcuts,
   },
   methods: {

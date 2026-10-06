@@ -36,7 +36,7 @@
             </div>
           </div>
         </div>
-        <HandCardsPanel :playerView="playerView"/>
+        <HandCardsPanel :playerView="playerView" hideUndergroundTokens/>
       </section>
 
       <!-- From three players on, the tables scroll horizontally beneath sticky icon columns (mobile.less) -->
