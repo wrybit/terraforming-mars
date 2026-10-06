@@ -19,6 +19,9 @@
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('temperature')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('temperature') : undefined">{{ lvl.strValue }}</div>
             </div>
 
+            <!-- Scale bonuses as chips outside the scales (the board picture has none of its own) -->
+            <MarsScaleBonuses :temperature="temperature" :oxygen="oxygen_level" :venus="expansions.venus ? venusScaleLevel : undefined"/>
+
             <div class="global-numbers-oxygen">
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('oxygen')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('oxygen') : undefined">{{ lvl.strValue }}</div>
             </div>
@@ -348,6 +351,7 @@
 import {defineComponent} from 'vue';
 import * as constants from '@/common/constants';
 import BoardSpace from '@/client/components/BoardSpace.vue';
+import MarsScaleBonuses from '@/client/components/board/MarsScaleBonuses.vue';
 import {AresData} from '@/common/ares/AresData';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import {SpaceType} from '@/common/boards/SpaceType';
@@ -418,6 +422,7 @@ export default defineComponent({
   },
   components: {
     BoardSpace,
+    MarsScaleBonuses,
   },
   data() {
     return {

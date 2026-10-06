@@ -478,3 +478,13 @@ html:not(.tm-mobile) .delta-board {
 html.tm-mobile .delta-board__next {
   display: none;
 }
+
+// Mars scale bonuses (MarsScaleBonuses.vue): placed like the scale cells, turned around the connector tip
+.mars-scale-bonus {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  transform-origin: 100% 50%;
+  pointer-events: none;
+}
+
