@@ -24,14 +24,14 @@ English UI. Desktop at 1920 px width, mobile on a 390 px phone.
 <table>
 <tr><th>View</th><th>Desktop</th><th>Mobile</th></tr>
 <tr>
-<td><b>Create game</b><br>Settings as compact cards, players in their own column on the right. On phones the players come first and the create button sticks to the bottom.</td>
-<td><img src="docs/screenshots/create-desktop.webp" width="560" alt="Create game on desktop"></td>
-<td><img src="docs/screenshots/create-phone.webp" width="180" alt="Create game on a phone"></td>
+<td><b>Start page</b><br>Main menu with planet buttons and a short intro animation.</td>
+<td><img src="docs/screenshots/start-desktop.webp" width="560" alt="Start page on desktop"></td>
+<td><img src="docs/screenshots/start-phone.webp" width="180" alt="Start page on a phone"></td>
 </tr>
 <tr>
-<td><b>Game created</b><br>One link per player in their colour with copy and play buttons, game settings next to them.</td>
-<td><img src="docs/screenshots/game-home-desktop.webp" width="560" alt="Game created on desktop"></td>
-<td><img src="docs/screenshots/game-home-phone.webp" width="180" alt="Game created on a phone"></td>
+<td><b>Card list</b><br>All cards with full-text search, filters and a price range.</td>
+<td><img src="docs/screenshots/cards-desktop.webp" width="560" alt="Card list on desktop"></td>
+<td><img src="docs/screenshots/cards-phone.webp" width="180" alt="Card list on a phone"></td>
 </tr>
 <tr>
 <td><b>Initial selection</b><br>Corporation, preludes and card purchase side by side, with a summary bar and the start button.</td>
@@ -44,34 +44,34 @@ English UI. Desktop at 1920 px width, mobile on a 390 px phone.
 <td><img src="docs/screenshots/mars-phone.webp" width="180" alt="Mars on a phone"></td>
 </tr>
 <tr>
-<td><b>Hand</b><br>Active action cards above the hand. Cards can be sorted by drag and drop.</td>
-<td><img src="docs/screenshots/hand-desktop.webp" width="560" alt="Hand on desktop"></td>
-<td><img src="docs/screenshots/hand-phone.webp" width="180" alt="Hand on a phone"></td>
+<td><b>All cards</b><br>Hand, actions and played cards in one tab, with one row for filter and sorting.</td>
+<td><img src="docs/screenshots/hand-filter-desktop.webp" width="560" alt="All cards on desktop"></td>
+<td><img src="docs/screenshots/hand-filter-phone.webp" width="180" alt="All cards on a phone"></td>
 </tr>
 <tr>
-<td><b>Players</b><br>Player table with stock and production. On phones in its own tab.</td>
-<td><img src="docs/screenshots/players-2-desktop.webp" width="560" alt="Players on desktop"></td>
-<td><img src="docs/screenshots/players-2-phone.webp" width="180" alt="Players on a phone"></td>
+<td><b>Colonies</b><br>Expansion boards as tabs above Mars – here the colonies with their trade fleets.</td>
+<td><img src="docs/screenshots/ext-colonies-desktop.webp" width="560" alt="Colonies on desktop"></td>
+<td><img src="docs/screenshots/ext-colonies-phone.webp" width="180" alt="Colonies on a phone"></td>
 </tr>
 <tr>
-<td><b>Playing a card</b><br>Card chosen, payment with M€, steel and titanium. On phones the cards are a carousel and the payment sits in the footer.</td>
-<td><img src="docs/screenshots/build-1-desktop.webp" width="560" alt="Playing a card on desktop"></td>
-<td><img src="docs/screenshots/build-1-phone.webp" width="180" alt="Playing a card on a phone"></td>
+<td><b>Turmoil</b><br>Parties as a hemicycle with leaders, chairman and the upcoming global events.</td>
+<td><img src="docs/screenshots/ext-turmoil-desktop.webp" width="560" alt="Turmoil on desktop"></td>
+<td><img src="docs/screenshots/ext-turmoil-phone.webp" width="180" alt="Turmoil on a phone"></td>
 </tr>
 <tr>
-<td><b>Placing a tile</b><br>Mars enlarged, a chosen space is confirmed before placing.</td>
-<td><img src="docs/screenshots/place-zoom-desktop.webp" width="560" alt="Placing a tile on desktop"></td>
-<td><img src="docs/screenshots/place-zoom-phone.webp" width="180" alt="Placing a tile on a phone"></td>
-</tr>
-<tr>
-<td><b>Log</b><br>Cards named in the log open in a large view; on phones as a carousel to swipe through.</td>
-<td><img src="docs/screenshots/log-cards-desktop.webp" width="560" alt="Log on desktop"></td>
-<td><img src="docs/screenshots/log-cards-phone.webp" width="180" alt="Log on a phone"></td>
+<td><b>Statistics</b><br>Wins, corporations and boards across all games played on the server.</td>
+<td><img src="docs/screenshots/stats-desktop.webp" width="560" alt="Statistics on desktop"></td>
+<td><img src="docs/screenshots/stats-phone.webp" width="180" alt="Statistics on a phone"></td>
 </tr>
 <tr>
 <td><b>Results</b><br>Victory points, final board and point history.</td>
 <td><img src="docs/screenshots/results-multi-desktop.webp" width="560" alt="Results on desktop"></td>
 <td><img src="docs/screenshots/results-multi-phone.webp" width="180" alt="Results on a phone"></td>
+</tr>
+<tr>
+<td><b>Solo win</b><br>Solo games get their own end screens for victory and defeat.</td>
+<td><img src="docs/screenshots/results-win-desktop.webp" width="560" alt="Solo win on desktop"></td>
+<td><img src="docs/screenshots/results-win-phone.webp" width="180" alt="Solo win on a phone"></td>
 </tr>
 </table>
 
