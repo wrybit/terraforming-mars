@@ -7,23 +7,9 @@
         <div class="cards-filter-input">
             <input ref="filter" class="create-game-text-input" :placeholder="$t(hint)" v-model="searchTerm"
                 @keydown.down.prevent="moveActive(1)" @keydown.up.prevent="moveActive(-1)" @keydown.enter.prevent="addActive">
-            <!-- Matches on the left, the card under the pointer (or keyboard focus) as a preview on the right -->
-            <div class="cards-filter-suggest" v-if="searchMatches.length">
-                <div class="cards-filter-suggest-list" role="listbox">
-                    <a href="#" v-for="(cardName, index) in searchMatches" :key="cardName" role="option"
-                        :aria-selected="index === activeIndex"
-                        :class="['cards-filter-suggest-item', {'cards-filter-suggest-item--active': index === activeIndex}]"
-                        @mouseenter="activeIndex = index" @focus="activeIndex = index" @click.prevent="addCard(cardName)">
-                      <span>{{ cardName }}</span>
-                      <i class="create-game-expansion-icon expansion-icon-prelude" title="This card is a Prelude" v-if="isPrelude(cardName)"></i>
-                      <i class="create-game-expansion-icon expansion-icon-ceo" title="This card is a CEO" v-if="isCEO(cardName)"></i>
-                      <template v-for="expansion of expansions(cardName)" :key="expansion">
-                        <i :class="`create-game-expansion-icon expansion-icon-${expansion}`" :title="expansion"></i>
-                      </template>
-                    </a>
-                </div>
-                <CardPreviewGrid v-if="activeCard !== undefined" class="cards-filter-preview" :names="[activeCard]"/>
-            </div>
+            <!-- Matches as cards in one row; click or Enter adds, arrow keys move the highlight -->
+            <CardPreviewGrid v-if="searchMatches.length" class="cards-filter-suggest" :names="searchMatches" row selectable
+                :activeName="activeCard" @hover="activeIndex = searchMatches.indexOf($event)" @select="addCard"/>
         </div>
         <CardPreviewGrid v-if="selected.length" class="cards-filter-selected" :names="selected" removable @remove="removeCard"/>
     </div>
@@ -33,10 +19,9 @@
 import {defineComponent} from 'vue';
 import {CardName} from '@/common/cards/CardName';
 import CardPreviewGrid from './CardPreviewGrid.vue';
-import {byType, getCard, getCards} from '@/client/cards/ClientCardManifest';
+import {byType, getCards} from '@/client/cards/ClientCardManifest';
 import {CardType} from '@/common/cards/CardType';
 import {inplaceRemove, toName} from '@/common/utils/utils';
-import {Expansion} from '@/common/cards/GameModule';
 
 const ALL_CARDS: Array<CardName> = [
   ...getCards(byType(CardType.AUTOMATED)),
@@ -91,15 +76,6 @@ export default defineComponent({
     },
   },
   methods: {
-    isPrelude(cardName: CardName) {
-      return getCard(cardName)?.type === CardType.PRELUDE;
-    },
-    isCEO(cardName: CardName) {
-      return getCard(cardName)?.type === CardType.CEO;
-    },
-    expansions(cardName: CardName): Array<Expansion> {
-      return getCard(cardName)?.compatibility ?? [];
-    },
     moveActive(step: number) {
       const count = this.searchMatches.length;
       if (count > 0) {

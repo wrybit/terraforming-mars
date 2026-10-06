@@ -885,8 +885,34 @@
   }
 }
 
+// Search matches: one row that scrolls sideways
+.create-game-card-grid--row {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  // Room for the cost coin sticking out on the left, the highlight outline and the scrollbar
+  padding: 0 8px 8px;
+  overscroll-behavior-x: contain;
+
+  .cardbox {
+    flex: none;
+  }
+}
+
 .create-game-card-grid-item {
   position: relative;
+
+  // Pickable card: pointer and, under the pointer or keyboard highlight, an outline in the CTA color
+  &--selectable {
+    cursor: pointer;
+
+    .card-container {
+      transition: box-shadow 0.15s;
+    }
+  }
+
+  &--active .card-container {
+    box-shadow: 0 0 0 3px @selection-color, 0 0 8px 2px fade(@selection-color, 55%);
+  }
 
   // Removed from the default pool: still recognizable, but clearly out
   &--removed .card-container {
