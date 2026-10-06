@@ -29,16 +29,19 @@ import {CardModel} from '@/common/models/CardModel';
 import {CardType} from '@/common/cards/CardType';
 import {getCardsByType, isCardActivated} from '@/client/utils/CardUtils';
 import {sortActiveCards} from '@/client/utils/ActiveCardsSortingOrder';
-import {CardVisibility, playedCardsSortOrder} from '@/client/utils/cardFilterState';
-import {sortCards} from '@/client/utils/SortOrder';
+import {CardVisibility} from '@/client/utils/cardFilterState';
+import {SortOrder, sortCards} from '@/client/utils/SortOrder';
 
 const props = withDefaults(defineProps<{
   player: PublicPlayerModel;
   // Card filter of the played cards; without it every card is shown
   visibility?: (card: CardModel) => CardVisibility;
+  // Chosen sorting; undefined = as played
+  sortOrder?: SortOrder;
   // The "All cards" tab already shows the active cards in their own section
   withoutActiveCards?: boolean;
 }>(), {
+  sortOrder: undefined,
   visibility: (): CardVisibility => 'shown',
   withoutActiveCards: false,
 });
@@ -47,8 +50,8 @@ const props = withDefaults(defineProps<{
 // (active cards in action order, the rest in playing order)
 function cardsOf(types: Array<CardType>): ReadonlyArray<CardModel> {
   const cards = getCardsByType(props.player.tableau, types);
-  if (playedCardsSortOrder.value !== undefined) {
-    return sortCards(cards, playedCardsSortOrder.value);
+  if (props.sortOrder !== undefined) {
+    return sortCards(cards, props.sortOrder);
   }
   return types.includes(CardType.ACTIVE) ? sortActiveCards(cards) : cards;
 }

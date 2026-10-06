@@ -66,27 +66,17 @@
   grid-column: 1 / -1;
 }
 
-// Hand tab: the row heads the hand cards and spans the whole box. As the first thing in the box it sits at the
-// top edge; below the active cards it replaces their separator with its own line above.
-.or-tab-panel .hand-cards-panel__section > .card-filter-bar {
+// "All cards" tab: one row at the top for the whole content, spanning the whole box from its top edge.
+.or-tab-panel .hand-cards-panel > .card-filter-bar {
   // Boxes with cards have no right padding (the cards' own right margin replaces it, or_options_tabs.less):
   // the row only reaches over the left padding; its own right padding keeps the sorting off the edge
   width: calc(100% + @card-filter-panel-padding);
   margin: 0 0 @card-filter-row-gap-below -@card-filter-panel-padding;
 }
 
-.or-tab-panel .hand-cards-panel > .hand-cards-panel__section:first-child > .card-filter-bar {
+.or-tab-panel .hand-cards-panel > .card-filter-bar:first-child {
   margin-top: -@card-filter-panel-padding;
   border-radius: 0 7px 0 0;
-}
-
-.hand-cards-panel__section + .hand-cards-panel__section:has(> .card-filter-bar) {
-  padding-top: 0;
-  border-top: 0;
-
-  > .card-filter-bar {
-    border-top: 1px solid @card-filter-separator;
-  }
 }
 
 // Card lists (play, sell, standard projects, awards): the row sits in the card block but spans the whole box.
@@ -129,13 +119,9 @@ html.tm-mobile {
     padding: 8px 10px;
   }
 
-  .mb-screen .or-tab-panel .hand-cards-panel__section > .card-filter-bar {
+  .mb-screen .or-tab-panel .hand-cards-panel > .card-filter-bar {
     width: calc(100% + 16px);
-    margin: 0 -8px 12px;
-  }
-
-  .mb-screen .or-tab-panel .hand-cards-panel > .hand-cards-panel__section:first-child > .card-filter-bar {
-    margin-top: -10px;
+    margin: -10px -8px 0;
   }
 
   // Card choice grid (mobile.less): the row takes the grid's width, room for the flags below it
@@ -766,7 +752,7 @@ html.tm-mobile .mb-screen .card-filter-hidden.card-filter-hidden {
 }
 
 // Open filter menu (not the phone sheet): the cards behind it 20 % darker and slightly blurred
-.hand-cards-panel__section:has(> .card-filter-bar--open) > .sortable-cards-root,
+.hand-cards-panel:has(> .card-filter-bar--open) > .hand-cards-panel__section,
 .choice-block:has(> .card-filter-bar--open) > label,
 .other_player_cont:has(> .card-filter-bar--open) > .player_home_block {
   filter: brightness(0.8) blur(2px);

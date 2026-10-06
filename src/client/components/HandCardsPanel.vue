@@ -1,52 +1,39 @@
 <template>
-  <!-- Content of the "All cards" tab: at the top the own active (blue) cards with live counters and
-       action cubes, below them the sortable hand cards, then the claimed underground tokens (Underworld; mobile
-       shows those on the Mars screen), at the very end the other played cards (corporation, automated, events …)
-       with the filter and sorting of the played cards. Headings only when more than one section exists. -->
+  <!-- Content of the "All cards" tab: ONE filter and sorting row at the top for the whole content, below it
+       the own active (blue) cards with live counters and action cubes, the sortable hand cards, the claimed
+       underground tokens (Underworld; mobile shows those on the Mars screen) and at the very end the other played
+       cards (corporation, CEO, automated, preludes, events). A section the filter empties completely disappears;
+       headings only when more than one section is shown. -->
   <div class="hand-cards-panel">
-    <section v-if="activeCards.length > 0" class="hand-cards-panel__section hand-cards-panel__section--active">
-      <h3 class="hand-cards-panel__title">{{ $t('Active cards') }} <small>{{ activeCards.length }}</small></h3>
+    <CardFilterBar v-if="allCards.length > 1" :cards="allCards" :filter="handCardFilter" :context="filterContext">
+      <template #sort="{compact}">
+        <HandSortControl :playerView="playerView" :compact="compact" :allowManual="true"/>
+      </template>
+    </CardFilterBar>
+    <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
+    <section v-if="shownActiveCount > 0" class="hand-cards-panel__section hand-cards-panel__section--active">
+      <h3 v-if="hasSeveralSections" class="hand-cards-panel__title">{{ $t('Active cards') }} <small>{{ shownActiveCount }}</small></h3>
       <div class="hand-cards-panel__cards">
-        <div v-for="card in activeCards" :key="card.name" class="cardbox">
+        <div v-for="card in activeCards" :key="card.name" class="cardbox" :class="visibilityClass(card)">
           <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
         </div>
       </div>
     </section>
-    <section v-if="handCards.length > 0" class="hand-cards-panel__section">
-      <!-- Head of the hand cards: heading (only with active cards above), filter and sorting in one row
-           across the whole box, separated by lines from the content above and below -->
-      <CardFilterBar v-if="handCards.length > 1" :cards="handCards" :filter="handCardFilter" :context="filterContext">
-        <template #lead>
-          <h3 v-if="hasOtherSections" class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ handCards.length }}</small></h3>
-        </template>
-        <template #sort="{compact}">
-          <HandSortControl :playerView="playerView" :compact="compact" :allowManual="true"/>
-        </template>
-      </CardFilterBar>
-      <div v-else-if="hasOtherSections" class="hand-cards-panel__header">
-        <h3 class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ handCards.length }}</small></h3>
+    <section v-if="shownHandCount > 0" class="hand-cards-panel__section hand-cards-panel__section--hand">
+      <div v-if="hasSeveralSections" class="hand-cards-panel__header">
+        <h3 class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ shownHandCount }}</small></h3>
       </div>
-      <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
       <SortableCards :playerId="playerView.id" :cards="handCards" :visibility="visibility"/>
     </section>
     <section v-if="undergroundTokens" class="hand-cards-panel__section hand-cards-panel__section--underground">
       <h3 class="hand-cards-panel__title">{{ $t('Claimed Underground Resource Tokens') }} <small>{{ thisPlayer.underworldData.tokens.length }}</small></h3>
       <UndergroundTokens :underworldData="thisPlayer.underworldData"/>
     </section>
-    <section v-if="playedCards.length > 0" class="hand-cards-panel__section hand-cards-panel__section--played">
-      <CardFilterBar v-if="playedCards.length > 1" :cards="playedCards" :filter="playedCardFilter" :context="playedFilterContext">
-        <template #lead>
-          <h3 class="hand-cards-panel__title">{{ $t('Played Cards') }} <small>{{ playedCards.length }}</small></h3>
-        </template>
-        <template #sort="{compact}">
-          <CardSortMenu :modelValue="playedCardsSortOrder" :compact="compact" @update:modelValue="setPlayedSortOrder"/>
-        </template>
-      </CardFilterBar>
-      <div v-else class="hand-cards-panel__header">
-        <h3 class="hand-cards-panel__title">{{ $t('Played Cards') }} <small>{{ playedCards.length }}</small></h3>
+    <section v-if="shownPlayedCount > 0" class="hand-cards-panel__section hand-cards-panel__section--played">
+      <div v-if="hasSeveralSections" class="hand-cards-panel__header">
+        <h3 class="hand-cards-panel__title">{{ $t('Played Cards') }} <small>{{ shownPlayedCount }}</small></h3>
       </div>
-      <CardFilterEmptyHint v-if="nothingPlayedShown" @reset="resetCardFilter(playedCardFilter)"/>
-      <PlayedCardsGroups class="hand-cards-panel__cards" :player="thisPlayer" :visibility="playedVisibility" withoutActiveCards/>
+      <PlayedCardsGroups class="hand-cards-panel__cards" :player="thisPlayer" :visibility="visibility" :sortOrder="handSortOrder()" withoutActiveCards/>
     </section>
   </div>
 </template>
@@ -59,18 +46,17 @@ import SortableCards from '@/client/components/SortableCards.vue';
 import HandSortControl from '@/client/components/HandSortControl.vue';
 import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
 import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
-import CardSortMenu from '@/client/components/cardfilter/CardSortMenu.vue';
 import PlayedCardsGroups from '@/client/components/PlayedCardsGroups.vue';
 import {CardModel} from '@/common/models/CardModel';
-import {SortOrder} from '@/client/utils/SortOrder';
 import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
-import {cardVisibility, CardVisibility, handCardFilter, playedCardFilter, playedCardsSortOrder, unmatchedCards} from '@/client/utils/cardFilterState';
+import {cardVisibility, CardVisibility, handCardFilter} from '@/client/utils/cardFilterState';
 import {playableProjectCards} from '@/client/utils/playableCards';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {allCardsInHand} from '@/client/utils/handCards';
+import {handSortOrder} from '@/client/utils/handSort';
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
-import {isCardActivated} from '@/client/utils/CardUtils';
 import {ownPlayedCardsWithoutActive} from '@/client/utils/ownPlayedCards';
+import {isCardActivated} from '@/client/utils/CardUtils';
 
 const props = defineProps<{
   playerView: PlayerViewModel;
@@ -81,32 +67,34 @@ const props = defineProps<{
 const thisPlayer = computed(() => props.playerView.thisPlayer);
 const activeCards = computed(() => ownActiveCards(props.playerView));
 const handCards = computed(() => allCardsInHand(props.playerView));
-const undergroundTokens = computed(() => !props.hideUndergroundTokens && thisPlayer.value.underworldData.tokens.length > 0);
 // Played cards except the active ones, which have their own section at the top
 const playedCards = computed(() => ownPlayedCardsWithoutActive(props.playerView));
-// The hand cards get their heading as soon as another section shares the box
-const hasOtherSections = computed(() => activeCards.value.length > 0 || undergroundTokens.value || playedCards.value.length > 0);
-// "Playable now" only while the player can play a project card
+// Everything the one filter row works on (option counts in the filter menu)
+const allCards = computed(() => [...activeCards.value, ...handCards.value, ...playedCards.value]);
+const undergroundTokens = computed(() => !props.hideUndergroundTokens && thisPlayer.value.underworldData.tokens.length > 0);
+// "Playable now" only while the player can play a project card (played cards never are)
 const filterContext = computed((): CardFilterContext => ({playable: playableProjectCards(props.playerView), withCost: true}));
 
 function visibility(card: CardModel): CardVisibility {
   return cardVisibility(card, handCardFilter, filterContext.value);
 }
 
-const nothingShown = computed(() => unmatchedCards.value === 'hide' && handCards.value.length > 1 &&
-  handCards.value.every((card) => visibility(card) !== 'shown'));
-
-// Played cards: their own filter without cost (like the players' card view, OtherPlayer.vue)
-const playedFilterContext: CardFilterContext = {withCost: false};
-
-function playedVisibility(card: CardModel): CardVisibility {
-  return cardVisibility(card, playedCardFilter, playedFilterContext);
+function visibilityClass(card: CardModel): string | undefined {
+  const cardState = visibility(card);
+  return cardState === 'shown' ? undefined : 'card-filter-' + cardState;
 }
 
-function setPlayedSortOrder(value: SortOrder | undefined): void {
-  playedCardsSortOrder.value = value;
+// Cards a section still shows (dimmed ones count, hidden ones don't): an emptied section disappears
+function shownCount(cards: ReadonlyArray<CardModel>): number {
+  return cards.filter((card) => visibility(card) !== 'hidden').length;
 }
 
-const nothingPlayedShown = computed(() => unmatchedCards.value === 'hide' && playedCards.value.length > 1 &&
-  playedCards.value.every((card) => playedVisibility(card) !== 'shown'));
+const shownActiveCount = computed(() => shownCount(activeCards.value));
+const shownHandCount = computed(() => shownCount(handCards.value));
+const shownPlayedCount = computed(() => shownCount(playedCards.value));
+// Headings as soon as more than one section shares the box
+const hasSeveralSections = computed(() =>
+  [shownActiveCount.value > 0, shownHandCount.value > 0, undergroundTokens.value, shownPlayedCount.value > 0].filter(Boolean).length > 1);
+
+const nothingShown = computed(() => allCards.value.length > 1 && shownCount(allCards.value) === 0);
 </script>

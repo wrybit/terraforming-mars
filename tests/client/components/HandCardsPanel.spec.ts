@@ -104,4 +104,22 @@ describe('HandCardsPanel', () => {
     expect(wrapper.find('.card-filter-empty').exists()).is.true;
     resetCardFilterState();
   });
+
+  it('one filter row at the top filters every section and drops emptied ones', async () => {
+    resetCardFilterState();
+    const wrapper = mount(HandCardsPanel, {
+      ...globalConfig,
+      props: {playerView: playerView([card(CardName.PETS), card(CardName.ALGAE)], [card(CardName.CARTEL), card(CardName.ANTS)])},
+    });
+    expect(wrapper.findAll('.card-filter-bar')).to.have.length(1);
+    expect(wrapper.find('.hand-cards-panel > .card-filter-bar').exists()).is.true;
+
+    // Plant tag: Algae (played) stays, Pets (active) and both hand cards drop out
+    handCardFilter.tags.add(Tag.PLANT);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.hand-cards-panel__section--active').exists()).is.false;
+    expect(wrapper.find('.hand-cards-panel__section--hand').exists()).is.false;
+    expect(wrapper.findComponent(PlayedCardsGroups).findAllComponents(Card).map((c) => c.props('card').name)).to.deep.eq([CardName.ALGAE]);
+    resetCardFilterState();
+  });
 });

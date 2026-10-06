@@ -13,7 +13,7 @@
         </CardFilterBar>
         <div v-if="player.tableau.length > 0" class="player_home_block">
             <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(playedCardFilter)"/>
-            <PlayedCardsGroups :player="player" :visibility="visibilityOf"/>
+            <PlayedCardsGroups :player="player" :visibility="visibilityOf" :sortOrder="playedCardsSortOrder"/>
         </div>
         <div v-if="player.selfReplicatingRobotsCards.length > 0" class="player_home_block">
             <span v-i18n>Self-replicating Robots cards</span>
