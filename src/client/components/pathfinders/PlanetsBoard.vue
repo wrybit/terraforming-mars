@@ -1,14 +1,14 @@
 <template>
   <div class="planets-board">
     <!-- Planets board tab (Pathfinders): one row per planet track with the marker, every reward as a chip below
-         its space (own / for everyone) and on the right how many tags are missing for the next reward -->
+         its space (own / for everyone) and on the right how many tags are missing for the next reward (count only) -->
     <BoardTrackRow v-for="track in tracks" :key="track.key" :name="$t(track.name)" :cells="track.cells" :bonuses="track.bonuses"
       :data-test="'planet-track-' + track.key">
       <template #image><span class="board-track-row__picture"><img :src="'assets/tags/' + track.tag + '.png'" alt=""></span></template>
+      <!-- No caption below the count: the tracks get the room; the meaning stays in the tooltip -->
       <template #value>
-        <template v-if="track.missing !== undefined">{{ track.missing }}×<img :src="'assets/tags/' + track.tag + '.png'" alt=""></template>
+        <span v-if="track.missing !== undefined" :title="$t('tags to next reward')">{{ track.missing }}×<img :src="'assets/tags/' + track.tag + '.png'" alt=""></span>
       </template>
-      <template #sub>{{ track.missing !== undefined ? $t('tags to next reward') : '' }}</template>
     </BoardTrackRow>
   </div>
 </template>
