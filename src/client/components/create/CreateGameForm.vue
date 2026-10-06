@@ -27,7 +27,8 @@
     </header>
     <div class="create-game-layout">
       <main class="create-game-settings">
-        <div class="create-game-cards">
+        <!-- Expansions and board side by side on top, the other cards fill the columns below (masonryGrid.ts) -->
+        <div ref="settingsCards" class="create-game-cards">
           <section class="create-game-card">
             <div class="create-game-card-head">
               <h2 v-i18n>Expansions</h2>
@@ -336,6 +337,7 @@ import {CardName} from '@/common/cards/CardName';
 import CustomCardListCard from '@/client/components/create/CustomCardListCard.vue';
 import CreateGameBoardPreview from '@/client/components/create/CreateGameBoardPreview.vue';
 import {observeStickyBottom} from '@/client/components/create/stickyBottomObserver';
+import {startMasonryGrid} from '@/client/components/create/masonryGrid';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
@@ -394,10 +396,13 @@ type FormModel = {
   /** Create card sticks to the bottom edge (stickyBottomObserver.ts) */
   createCardStuck: boolean;
   stopStickyObserver: () => void;
+  stopMasonryGrid: () => void;
 };
 
 // Distance of the sticky Create card to the bottom edge; same value as bottom in create_game_form.less
 const CREATE_CARD_BOTTOM_PX = 12;
+// Gap between the settings cards; same value as @create-game-gap-card in create_game_form.less
+const SETTINGS_CARD_GAP_PX = 16;
 
 // How long the button shows "Link copied"
 const LINK_COPIED_FEEDBACK_MS = 2000;
@@ -417,6 +422,7 @@ export default defineComponent({
       drawnBoard: undefined,
       createCardStuck: false,
       stopStickyObserver: () => {},
+      stopMasonryGrid: () => {},
     };
   },
   components: {
@@ -498,6 +504,7 @@ export default defineComponent({
   },
   mounted() {
     setDocumentTitle('Create New Game');
+    this.stopMasonryGrid = startMasonryGrid(this.$refs.settingsCards as HTMLElement, SETTINGS_CARD_GAP_PX);
     this.stopStickyObserver = observeStickyBottom(this.$refs.createCard as HTMLElement, CREATE_CARD_BOTTOM_PX, (stuck) => {
       this.createCardStuck = stuck;
     });
@@ -527,6 +534,7 @@ export default defineComponent({
   },
   beforeUnmount() {
     this.stopStickyObserver();
+    this.stopMasonryGrid();
     document
       .querySelector('meta[name="viewport"]')
       ?.setAttribute('content', this.previousViewport);

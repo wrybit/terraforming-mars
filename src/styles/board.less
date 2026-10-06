@@ -16,6 +16,20 @@
   margin-top: 20px;
 }
 
+// Board preview of the planet alone (ScaledBoard.vue, planetOnly): section of the planet, no scales, no outer spaces
+.scaled-board--planet {
+  .board-cont {
+    margin: calc(-1 * var(--planet-top)) 0 0 calc(-1 * var(--planet-left));
+    background-image: url(./assets/board/mars-planet.png);
+  }
+
+  .global-numbers,
+  .board-outer-spaces,
+  .hide-tile-button-container {
+    display: none;
+  }
+}
+
 .board-with-venus{
   background: url(./assets/board/mars.png) no-repeat;
 }

@@ -2,6 +2,8 @@
    colony spaces in the top corners. Start screen (mobileFit.ts) and large Mars (BoardZoomModal) show
    the same section so proportions and position of the colony spaces match. */
 export const MARS_CROP = {left: 42, top: 62, width: 550, height: 486};
+/* The planet alone (mars-planet.png without transparent edge), px at zoom 1 relative to .board-cont: board previews without scales and outer spaces. */
+export const PLANET_BOUNDS = {left: 93, top: 86, width: 449, height: 449};
 /* Center of the planet relative to the top left corner of the board (.board-cont), px at zoom 1. */
 export const PLANET_CENTER = {x: 316, y: 310};
 // Room for status bar, header and zoom bar of the large Mars

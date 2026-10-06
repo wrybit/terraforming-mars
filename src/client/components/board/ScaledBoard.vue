@@ -1,7 +1,7 @@
 <template>
   <!-- The game board is a fixed ~700 px wide; in narrower containers it shrinks instead of being clipped -->
-  <div class="scaled-board">
-    <div ref="scaled" class="scaled-board-content" :style="{zoom: scale}">
+  <div :class="['scaled-board', {'scaled-board--planet': planetOnly}]">
+    <div ref="scaled" class="scaled-board-content" :style="contentStyle">
       <Board :spaces="spaces" :expansions="expansions" :venusScaleLevel="0" :boardName="boardName"/>
     </div>
   </div>
@@ -13,6 +13,7 @@ import {BoardName} from '@/common/boards/BoardName';
 import {Expansion} from '@/common/cards/GameModule';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import Board from '@/client/components/Board.vue';
+import {PLANET_BOUNDS} from '@/client/components/mobile/mobileBoardZoom';
 
 // Empty game board outside the game (statistics, "Create game"), scaled to the width of its container
 export default defineComponent({
@@ -23,6 +24,8 @@ export default defineComponent({
     boardName: {type: String as PropType<BoardName>, required: true},
     // Without expansions by default: this is about the board itself, not the Venus/Moon tracks
     expansions: {type: Object as PropType<Record<Expansion, boolean>>, default: () => ({})},
+    // Only the planet: without the scales around it and the spaces outside it (board.less)
+    planetOnly: {type: Boolean, default: false},
   },
   data() {
     return {
@@ -31,6 +34,20 @@ export default defineComponent({
       naturalWidth: 0,
       resizeObserver: undefined as ResizeObserver | undefined,
     };
+  },
+  computed: {
+    contentStyle(): Record<string, string | number> {
+      if (!this.planetOnly) {
+        return {zoom: this.scale};
+      }
+      return {
+        'zoom': this.scale,
+        '--planet-left': PLANET_BOUNDS.left + 'px',
+        '--planet-top': PLANET_BOUNDS.top + 'px',
+        'width': PLANET_BOUNDS.width + 'px',
+        'height': PLANET_BOUNDS.height + 'px',
+      };
+    },
   },
   watch: {
     // Another board can be wider or narrower (outer spaces): measure again
@@ -75,5 +92,11 @@ export default defineComponent({
 // The scales extend past the board left and right: include the room so the scaling covers them
 .scaled-board-content {
   padding: 0 24px;
+}
+
+// Planet alone: the section of the planet, nothing sticks out
+.scaled-board--planet .scaled-board-content {
+  overflow: hidden;
+  padding: 0;
 }
 </style>
