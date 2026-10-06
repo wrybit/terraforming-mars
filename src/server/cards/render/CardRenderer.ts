@@ -3,7 +3,8 @@ import {CardRenderSymbol} from './CardRenderSymbol';
 import {Size} from '../../../common/cards/render/Size';
 import {CardRenderItemType} from '../../../common/cards/render/CardRenderItemType';
 import {TileType} from '../../../common/TileType';
-import {ICardRenderCorpBoxAction, ICardRenderCorpBoxEffect, ICardRenderCorpBoxEffectAction, ICardRenderEffect, ICardRenderProductionBox, ICardRenderRoot, ICardRenderTile, ItemType, isICardRenderItem} from '../../../common/cards/render/Types';
+import {ICardRenderCorpBoxAction, ICardRenderCorpBoxEffect, ICardRenderCorpBoxEffectAction, ICardRenderEffect, ICardRenderProductionBox, ICardRenderRoot, ICardRenderTile, ItemType, isICardRenderItem, isICardRenderSymbol} from '../../../common/cards/render/Types';
+import {CardRenderSymbolType} from '../../../common/cards/render/CardRenderSymbolType';
 import {AltSecondaryTag} from '../../../common/cards/render/AltSecondaryTag';
 import {CardResource} from '../../../common/CardResource';
 import {Tag} from '../../../common/cards/Tag';
@@ -155,7 +156,20 @@ abstract class Builder<T> {
     if (this.superscript && isICardRenderItem(thing)) {
       thing.isSuperscript = true;
     }
-    this._currentRow().push(thing);
+    const row = this._currentRow();
+    // A negative amount renders as a minus symbol followed by the absolute value.
+    // Items that show their amount inside (e.g. megacredits) render their own sign.
+    if (isICardRenderItem(thing) && !thing.amountInside && thing.amount !== undefined && thing.amount < 0) {
+      // TODO(kberg): Remove this guard after 2028-10-05. It is here for forks of this repo, whose cards
+      // may still be written as minus().x(-n), which would now render two minus symbols.
+      const previous = row[row.length - 1];
+      if (isICardRenderSymbol(previous) && previous.type === CardRenderSymbolType.MINUS) {
+        throw new Error('Negative amount already has a minus symbol; remove minus() or use a positive amount.');
+      }
+      row.push(CardRenderSymbol.minus(Size.MEDIUM));
+      thing.amount = -thing.amount;
+    }
+    row.push(thing);
     return this;
   }
 
@@ -217,10 +231,10 @@ abstract class Builder<T> {
   }
 
   public trade(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.TRADE, -1, options));
+    return this._appendToRow(new CardRenderItem(CardRenderItemType.TRADE, undefined, options));
   }
   public tradeFleet(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.TRADE_FLEET, -1, options));
+    return this._appendToRow(new CardRenderItem(CardRenderItemType.TRADE_FLEET, undefined, options));
   }
 
   public colonies(amount: number = 1, options?: ItemOptions): this {
@@ -236,7 +250,7 @@ abstract class Builder<T> {
   }
 
   public colonyTile(options?: ItemOptions): this {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.COLONY_TILE, -1, options));
+    return this._appendToRow(new CardRenderItem(CardRenderItemType.COLONY_TILE, undefined, options));
   }
 
   public influence(options?: ItemOptions): this {
@@ -244,7 +258,7 @@ abstract class Builder<T> {
   }
 
   public city(options?: ItemOptions) {
-    const item = new CardRenderItem(CardRenderItemType.CITY, -1, options);
+    const item = new CardRenderItem(CardRenderItemType.CITY, undefined, options);
     item.size = options?.size ?? Size.MEDIUM;
     return this._appendToRow(item);
   }
@@ -272,12 +286,12 @@ abstract class Builder<T> {
     return this._appendToRow(new CardRenderItem(CardRenderItemType.DELEGATES, amount, options));
   }
 
-  public partyLeaders(amount: number = -1) {
+  public partyLeaders(amount?: number) {
     return this._appendToRow(new CardRenderItem(CardRenderItemType.PARTY_LEADERS, amount));
   }
 
   public chairman(options?: ItemOptions) {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.CHAIRMAN, -1, options));
+    return this._appendToRow(new CardRenderItem(CardRenderItemType.CHAIRMAN, undefined, options));
   }
 
   public policy() {
@@ -289,7 +303,7 @@ abstract class Builder<T> {
   }
 
   public noTags() {
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.NO_TAGS, -1));
+    return this._appendToRow(new CardRenderItem(CardRenderItemType.NO_TAGS));
   }
 
   public emptyTag(count: number = 1) {
@@ -323,7 +337,7 @@ abstract class Builder<T> {
       opts = {...options};
     }
     opts.resource = resource;
-    return this._appendToRow(new CardRenderItem(CardRenderItemType.RESOURCE, -1, opts));
+    return this._appendToRow(new CardRenderItem(CardRenderItemType.RESOURCE, undefined, opts));
   }
 
   public selfReplicatingRobots() {
@@ -414,7 +428,7 @@ abstract class Builder<T> {
   }
 
   public cityorSpecialTile(options?: ItemOptions) {
-    const item = new CardRenderItem(CardRenderItemType.CITY_OR_SPECIAL_TILE, -1, options);
+    const item = new CardRenderItem(CardRenderItemType.CITY_OR_SPECIAL_TILE, undefined, options);
     item.size = options?.size ?? Size.MEDIUM;
     return this._appendToRow(item);
   }
@@ -465,11 +479,11 @@ abstract class Builder<T> {
 
   public emptyTile(type: 'normal' | 'golden' = 'normal', options?: ItemOptions) {
     if (type === 'normal') {
-      const normal = new CardRenderItem(CardRenderItemType.EMPTY_TILE, -1, options);
+      const normal = new CardRenderItem(CardRenderItemType.EMPTY_TILE, undefined, options);
       normal.size = options?.size ?? Size.MEDIUM;
       this._appendToRow(normal);
     } else if (type === 'golden') {
-      const golden = new CardRenderItem(CardRenderItemType.EMPTY_TILE_GOLDEN, -1, options);
+      const golden = new CardRenderItem(CardRenderItemType.EMPTY_TILE_GOLDEN, undefined, options);
       golden.size = options?.size ?? Size.MEDIUM;
       this._appendToRow(golden);
     }
