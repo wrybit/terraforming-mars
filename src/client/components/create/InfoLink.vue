@@ -14,8 +14,8 @@ import InfoBox from './InfoBox.vue';
 import {openInfoHref} from './infoBoxState';
 import {parseWikiUrl, WikiTarget} from './wikiContent';
 
-// Row the info box opens below (between this row and the next); for tiles the whole tile grid
-const ROW_SELECTOR = '.create-game-option, .create-game-chip-grid, .create-game-card-head, .create-game-subhead, .create-game-player-extra';
+// Row the info box opens below (between this row and the next)
+const ROW_SELECTOR = '.create-game-option, .create-game-card-head, .create-game-subhead, .create-game-player-extra';
 
 // click.stop so a click on it doesn't toggle the surrounding tile/option
 export default defineComponent({
@@ -74,14 +74,20 @@ export default defineComponent({
         return;
       }
       const button = this.$refs.button as HTMLElement;
-      const row = button.closest<HTMLElement>(ROW_SELECTOR) ?? button.parentElement;
       this.removeContainer();
-      if (row !== null) {
-        const container = document.createElement('div');
-        container.className = 'create-game-info-slot';
-        row.insertAdjacentElement('afterend', container);
-        this.container = container;
+      const container = document.createElement('div');
+      container.className = 'create-game-info-slot';
+      // Tile in a grid: right below the tile's visual row (after its last tile), across the whole grid
+      const chip = button.closest<HTMLElement>('.create-game-chip');
+      if (chip !== null && chip.parentElement?.classList.contains('create-game-chip-grid')) {
+        const sameRow = Array.from(chip.parentElement.children).filter((tile) => (tile as HTMLElement).offsetTop === chip.offsetTop);
+        container.classList.add('create-game-info-slot--grid');
+        sameRow[sameRow.length - 1].insertAdjacentElement('afterend', container);
+      } else {
+        const row = button.closest<HTMLElement>(ROW_SELECTOR) ?? button.parentElement;
+        row?.insertAdjacentElement('afterend', container);
       }
+      this.container = container.isConnected ? container : undefined;
       this.openInfoHref = this.href;
     },
   },
