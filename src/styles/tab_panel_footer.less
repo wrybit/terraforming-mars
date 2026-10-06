@@ -187,6 +187,17 @@ html.tm-mobile .or-tab-footer > .or-tab-footer-hint {
   order: 99;
 }
 
+// Chips and button form one group at the right edge: only the chips push away from the left (margin auto),
+// every button group (own save button or teleported ones like Sell/Trade/Send delegate) follows them directly
+.or-tab-footer > .action-step-chips {
+  margin: 0 4px 0 auto;
+}
+
+.or-tab-footer:has(> .action-step-chips) > :not(.payments_form):not(.action-step-chips):not(.cancel-action-button):not(.or-tab-footer-hint) {
+  order: 99;
+  margin-left: 0;
+}
+
 .action-step-chip {
   padding: 5px 11px;
   border: 1px solid rgba(255, 255, 255, 0.16);
