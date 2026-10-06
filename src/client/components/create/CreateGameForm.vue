@@ -66,7 +66,7 @@
                 </ChoiceChip>
               </div>
             </template>
-            <!-- Random board as a switch instead of extra chips: the board itself is drawn when the game starts -->
+            <!-- Random board as a switch instead of extra chips: the draw is shown right away in the preview below -->
             <OptionRow label="Random board">
               <SwitchInput v-model="randomBoard"/>
             </OptionRow>
@@ -74,21 +74,26 @@
             <OptionRow label="Shuffle board bonuses" :href="wikiUrls.randomizeBoardTiles">
               <SwitchInput v-model="shuffleMapOption"/>
             </OptionRow>
-            <template v-if="playersCount > 1">
-              <div class="create-game-subhead">
-                <span v-i18n>Milestones &amp; Awards</span>
-                <InfoLink :href="wikiUrls.randomMilestonesAndAwards"/>
+            <!-- Exactly the board the game gets (same board seed); a cloned game brings its own board -->
+            <CreateGameBoardPreview v-if="!seededGame" :config="boardPreviewConfig" :isRandom="randomBoard || shuffleMapOption" :showBoardName="randomBoard"
+              :boardColorClass="getBoardColorClass" @reroll="boardSeed = Math.random()" @drawn="drawnBoard = $event"/>
+          </section>
+
+          <!-- Own card: has nothing to do with the board (only with several players, solo has none) -->
+          <section v-if="playersCount > 1" class="create-game-card">
+            <div class="create-game-card-head">
+              <h2 v-i18n>Milestones &amp; Awards</h2>
+              <InfoLink :href="wikiUrls.randomMilestonesAndAwards"/>
+            </div>
+            <SegmentedControl v-model="randomMA" :options="MILESTONE_OPTIONS"/>
+            <template v-if="isRandomMAEnabled()">
+              <OptionRow label="Official Random α" sub><SwitchInput v-model="modularMA"/></OptionRow>
+              <div v-if="modularMA" class="create-game-note">
+                The new Milestones and Awards are still in active development.
+                Please don't report anything unless it breaks the game.
+                These are <b>always fully random</b>.
               </div>
-              <SegmentedControl v-model="randomMA" :options="MILESTONE_OPTIONS"/>
-              <template v-if="isRandomMAEnabled()">
-                <OptionRow label="Official Random α" sub><SwitchInput v-model="modularMA"/></OptionRow>
-                <div v-if="modularMA" class="create-game-note">
-                  The new Milestones and Awards are still in active development.
-                  Please don't report anything unless it breaks the game.
-                  These are <b>always fully random</b>.
-                </div>
-                <OptionRow label="Include fan Milestones/Awards" sub><SwitchInput v-model="includeFanMA"/></OptionRow>
-              </template>
+              <OptionRow label="Include fan Milestones/Awards" sub><SwitchInput v-model="includeFanMA"/></OptionRow>
             </template>
           </section>
 
@@ -113,7 +118,6 @@
                 <OptionRow v-if="expansions.prelude" label="Prelude Draft" sub><SwitchInput v-model="preludeDraftVariant"/></OptionRow>
                 <OptionRow v-if="expansions.ceo" label="CEO Draft" sub><SwitchInput v-model="ceosDraftVariant"/></OptionRow>
               </template>
-              <OptionRow label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
             </template>
           </section>
 
@@ -258,6 +262,8 @@
           <div class="create-game-players-head">
             <h2 v-i18n>Players</h2>
             <SegmentedControl v-model="playersCount" :options="PLAYER_COUNT_OPTIONS"/>
+            <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
+            <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
           </div>
           <div class="create-game-player-list">
             <!-- Neutral card; the header shows the chosen player color -->
@@ -296,11 +302,16 @@
             </div>
           </div>
         </section>
-        <section class="create-game-card create-game-create-card">
+        <!-- Sticks to the bottom edge while the page is too short for it; then with an extra shadow -->
+        <section ref="createCard" class="create-game-card create-game-create-card" :class="{'create-game-create-card--stuck': createCardStuck}">
           <div class="create-game-summary">
-            <span>{{ playersSummary }}</span>
-            <span class="capitalized">{{ $t(board) }}</span>
-            <span>{{ expansionsSummary }}</span>
+            <span class="create-game-summary-chip">{{ playersSummary }}</span>
+            <!-- Random board: the board already drawn for the preview, exactly the one the game gets -->
+            <span class="create-game-summary-chip">
+              <span v-if="summaryBoard !== undefined" :class="getBoardColorClass(summaryBoard)"></span>
+              <span class="capitalized">{{ $t(summaryBoard ?? board) }}</span>
+            </span>
+            <span class="create-game-summary-chip">{{ expansionsSummary }}</span>
           </div>
           <div class="create-game-create-row">
             <AppButton class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors"/>
@@ -324,6 +335,8 @@ import {BoardName} from '@/common/boards/BoardName';
 import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
 import {CardName} from '@/common/cards/CardName';
 import CustomCardListCard from '@/client/components/create/CustomCardListCard.vue';
+import CreateGameBoardPreview from '@/client/components/create/CreateGameBoardPreview.vue';
+import {observeStickyBottom} from '@/client/components/create/stickyBottomObserver';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
@@ -376,7 +389,17 @@ type FormModel = {
   settingsLinkCopied: boolean;
   /** Board chosen before switching on "Random board" – comes back when it is switched off */
   lastFixedBoard: BoardName;
+  /** Seed of the board (random board, shuffled bonuses): preview and created game use the same one; not a setting */
+  boardSeed: number;
+  /** Board the preview drew (random board) */
+  drawnBoard: BoardName | undefined;
+  /** Create card sticks to the bottom edge (stickyBottomObserver.ts) */
+  createCardStuck: boolean;
+  stopStickyObserver: () => void;
 };
+
+// Distance of the sticky Create card to the bottom edge; same value as bottom in create_game_form.less
+const CREATE_CARD_BOTTOM_PX = 12;
 
 // How long the button shows "Link copied"
 const LINK_COPIED_FEEDBACK_MS = 2000;
@@ -393,6 +416,10 @@ export default defineComponent({
       settingsLinkReady: false,
       settingsLinkCopied: false,
       lastFixedBoard: BoardName.THARSIS,
+      boardSeed: Math.random(),
+      drawnBoard: undefined,
+      createCardStuck: false,
+      stopStickyObserver: () => {},
     };
   },
   components: {
@@ -402,6 +429,7 @@ export default defineComponent({
     ChoiceChip,
     ColoniesFilter,
     CustomCardListCard,
+    CreateGameBoardPreview,
     InfoLink,
     NumberStepper,
     OptionRow,
@@ -473,6 +501,9 @@ export default defineComponent({
   },
   mounted() {
     setDocumentTitle('Create New Game');
+    this.stopStickyObserver = observeStickyBottom(this.$refs.createCard as HTMLElement, CREATE_CARD_BOTTOM_PX, (stuck) => {
+      this.createCardStuck = stuck;
+    });
     // A shared link takes precedence over the most recently used settings
     if (!this.restoreSettingsFromLink()) {
       this.restoreLastSettings();
@@ -498,6 +529,7 @@ export default defineComponent({
     }
   },
   beforeUnmount() {
+    this.stopStickyObserver();
     document
       .querySelector('meta[name="viewport"]')
       ?.setAttribute('content', this.previousViewport);
@@ -518,6 +550,17 @@ export default defineComponent({
      *
      * serializeSettings finishes the players and the escape velocity values, and checks the cloned game.
      */
+    // Fixed board: its name; random board: the drawn one as soon as the preview knows it
+    summaryBoard(): BoardName | undefined {
+      if (!this.isRandomBoard(this.board)) {
+        return this.board as BoardName;
+      }
+      return this.seededGame ? undefined : this.drawnBoard;
+    },
+    // Request of the board preview: the full settings like when creating, plus the board seed
+    boardPreviewConfig(): NewGameConfig {
+      return {...this.newGameConfig, boardSeed: this.boardSeed};
+    },
     newGameConfig(): NewGameConfig {
       return {
         players: this.players.slice(0, this.playersCount),
@@ -737,6 +780,8 @@ export default defineComponent({
       Object.assign(this, defaultCreateGameModel(), {
         preludeToggled: false,
         uploading: false,
+        // Fresh draw for random board and shuffled bonuses
+        boardSeed: Math.random(),
       });
       nextTick(() => {
         const refs = this.typedRefs;
@@ -997,7 +1042,7 @@ export default defineComponent({
         }
       };
 
-      fetch(paths.API_CREATEGAME, {'method': 'POST', 'body': JSON.stringify(newGameConfig), 'headers': {'Content-Type': 'application/json'}})
+      fetch(paths.API_CREATEGAME, {'method': 'POST', 'body': JSON.stringify({...newGameConfig, boardSeed: this.boardSeed}), 'headers': {'Content-Type': 'application/json'}})
         .then((response) => response.text())
         .then((text) => {
           try {

@@ -1,13 +1,6 @@
 <template>
   <div class="stats-board-preview" :class="heatmap === undefined ? undefined : `stats-heatmap stats-heatmap--${heatmapType}`">
-    <!-- The board is a fixed ~700 px wide; on narrow screens shrink it instead of clipping -->
-    <div v-if="spaces !== undefined" ref="scaled" class="stats-board-scaled" :style="{zoom: scale}">
-      <Board
-        :spaces="spaces"
-        :expansions="expansions"
-        :venusScaleLevel="0"
-        :boardName="boardForBoardView"/>
-    </div>
+    <ScaledBoard v-if="spaces !== undefined" :spaces="spaces" :boardName="boardForBoardView"/>
     <p v-else-if="failed" class="stats-note" v-i18n>The board could not be loaded.</p>
   </div>
 </template>
@@ -16,17 +9,16 @@
 import {defineComponent, PropType} from 'vue';
 import {paths} from '@/common/app/paths';
 import {BoardName} from '@/common/boards/BoardName';
-import {Expansion} from '@/common/cards/GameModule';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import {StatsBoardKey} from '@/common/stats/statsBoardKey';
 import {Heatmap, heatStep, HeatmapTileType} from './statsHeatmap';
 import {translateTextWithParams} from '@/client/directives/i18n';
-import Board from '@/client/components/Board.vue';
+import ScaledBoard from '@/client/components/board/ScaledBoard.vue';
 
 // Empty game board as it looks in the game (spaces and bonuses from the server)
 export default defineComponent({
   name: 'StatsBoardPreview',
-  components: {Board},
+  components: {ScaledBoard},
   props: {
     boardKey: {type: String as PropType<StatsBoardKey>, required: true},
     /** Optional: color the spaces by frequency (cities or greeneries). */
@@ -47,14 +39,7 @@ export default defineComponent({
       this.$nextTick(() => this.paintHeatmap());
     },
   },
-  beforeUnmount() {
-    this.resizeObserver?.disconnect();
-  },
   methods: {
-    fitToWidth(): void {
-      const available = (this.$el as HTMLElement).clientWidth;
-      this.scale = this.naturalWidth <= 0 ? 1 : Math.min(1, available / this.naturalWidth);
-    },
     /**
      * Colors the spaces of the rendered game board. Board.vue knows no heatmap; instead of rebuilding it for that,
      * each space (data_space_id) gets a CSS variable that the stylesheet overlays as a color.
@@ -80,12 +65,6 @@ export default defineComponent({
     return {
       spaces: undefined as Array<SpaceModel> | undefined,
       failed: false,
-      scale: 1,
-      /** Width of the board at original size, measured once at zoom 1. */
-      naturalWidth: 0,
-      resizeObserver: undefined as ResizeObserver | undefined,
-      // Without expansions: this is about the board itself, not Venus/Moon tracks
-      expansions: {} as Record<Expansion, boolean>,
     };
   },
   async mounted() {
@@ -96,13 +75,6 @@ export default defineComponent({
       }
       this.spaces = await response.json();
       await this.$nextTick();
-      this.naturalWidth = (this.$refs.scaled as HTMLElement | undefined)?.scrollWidth ?? 0;
-      this.fitToWidth();
-      // Older browsers and test environments without ResizeObserver keep the first fit
-      if (typeof ResizeObserver !== 'undefined') {
-        this.resizeObserver = new ResizeObserver(() => this.fitToWidth());
-        this.resizeObserver.observe(this.$el as HTMLElement);
-      }
       this.paintHeatmap();
     } catch (error) {
       console.error(error);

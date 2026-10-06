@@ -37,6 +37,8 @@ export type NewGameConfig = {
   expansions: Record<Expansion, boolean>,
   board: BoardNameType;
   seed: number;
+  /** Seed of the board (draw of a random board, shuffled bonuses); the page shows the same board as a preview. */
+  boardSeed?: number;
   randomFirstPlayer: boolean;
 
   // boardName: BoardName;

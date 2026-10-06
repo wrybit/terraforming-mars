@@ -16,7 +16,6 @@
 @create-game-surface-strong: fade(#22252f, 85%);
 @create-game-chip-background: rgba(255, 255, 255, 0.05);
 @create-game-chip-hover: rgba(255, 255, 255, 0.1);
-@create-game-chip-min-width: 155px;
 @create-game-control-height: 36px;
 // Below this width one column: players on top, Create card sticks to the bottom edge
 @create-game-narrow: 820px;
@@ -264,11 +263,11 @@
 // ---------- selectable tiles ----------
 .create-game-chip-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(@create-game-chip-min-width, 1fr));
+  // At most two columns: with three, the longer names (expansions, fan boards) were mostly cut off
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: @create-game-gap-inner;
 
   &--two {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-bottom: @create-game-gap-inner;
   }
 }
@@ -540,13 +539,15 @@
   background: rgba(0, 0, 0, 0.3);
 
   button {
-    flex: 1;
+    // Width by label; a long label wraps between words instead of sticking out of the card (phone, long languages)
+    flex: 1 1 auto;
+    min-width: 0;
     padding: 6px 8px;
     border: 0;
     border-radius: 6px;
     background: none;
     color: @create-game-dim;
-    white-space: nowrap;
+    line-height: 1.2;
     cursor: pointer;
 
     &:hover {
@@ -592,6 +593,10 @@
 .create-game-players-head {
   padding: 14px 14px 10px;
 
+  .create-game-players-first {
+    margin-top: @create-game-gap-inner;
+  }
+
   h2 {
     margin-bottom: 10px;
     font-size: 20px;
@@ -610,6 +615,8 @@
 
 // Neutral card: the chosen color shows in the header and in the standing cube
 .create-game-player {
+  // Never squeeze the cards when the column is short: the list scrolls instead
+  flex: none;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -734,21 +741,45 @@
   margin: 0;
 }
 
+// Sticks to the bottom edge while the page (or the players column) is too short for it.
+// Same distance as CREATE_CARD_BOTTOM_PX in CreateGameForm.vue, which detects the sticking.
+@create-game-create-bottom: 12px;
+
 .create-game-create-card {
   flex: none;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  position: sticky;
+  bottom: @create-game-create-bottom;
+  z-index: 5;
   margin-bottom: 0;
   background: @create-game-surface-strong;
+  transition: box-shadow 0.2s;
+
+  // Lies over the content: the shadow shows that it sits in front
+  &--stuck {
+    box-shadow: 0 -6px 22px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
 }
 
+// Summary of the game as chips (like the selectable tiles, but plain display)
 .create-game-summary {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 12px;
-  font-size: 13px;
-  color: @create-game-dim;
+  gap: @create-game-gap-inner;
+}
+
+.create-game-summary-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: @create-game-chip-background;
+  font-size: 14px;
+  color: #eee;
 }
 
 .create-game-create-row {
@@ -827,24 +858,14 @@
     overflow: visible;
   }
 
-  // Create card sticks to the bottom edge until it reaches its place at the end of the page
+  // Create card at the end of the page; until it gets there it sticks to the bottom edge (see above)
   .create-game-create-card {
     order: 1;
-    position: sticky;
-    bottom: 12px;
-    z-index: 5;
-    box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.45);
   }
 
   .create-game-segmented button {
     padding: 6px 4px;
     font-size: 14px;
-  }
-}
-
-@media only screen and (max-width: 480px) {
-  .create-game-chip-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -982,4 +1003,34 @@
     background-size: 18px 18px;
     vertical-align: -3px;
   }
+}
+
+// ---------- board preview (CreateGameBoardPreview.vue) ----------
+.create-game-board-preview {
+  margin-top: 10px;
+}
+
+.create-game-board-preview-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: @create-game-control-height;
+}
+
+.create-game-board-preview-drawn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+// A new draw is loading: keep the old board, slightly faded, instead of an empty gap
+.create-game-board-preview--loading {
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+// Nothing to hide on an empty board
+.create-game-board-preview .hide-tile-button-container {
+  display: none;
 }

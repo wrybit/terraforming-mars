@@ -21,6 +21,7 @@ import {readBody} from './readBody';
 import {RouteError} from './RouteError';
 import {CEO_CARDS_DEALT_PER_PLAYER} from '../../common/constants';
 import {hasNegativeEscapeVelocityOption, sanitizeEscapeVelocityOptions} from '../../common/game/escapeVelocity';
+import {boardCandidates, boardRandom, pickBoard} from '../boards/newGameBoard';
 
 function parseQuotaConfig(struct: any): QuotaConfig {
   let {limit} = struct;
@@ -73,19 +74,65 @@ export class ApiCreateGame extends Handler {
   }
 
   public static boardOptions(board: RandomBoardOption | BoardName): Array<BoardName> {
-    const allBoards = Object.values(BoardName);
+    return boardCandidates(board);
+  }
 
-    if (board === RandomBoardOption.ALL) {
-      return allBoards;
-    }
-    if (board === RandomBoardOption.OFFICIAL) {
-      return allBoards.filter((name) => {
-        return name === BoardName.THARSIS ||
-          name === BoardName.HELLAS ||
-          name === BoardName.ELYSIUM;
-      });
-    }
-    return [board];
+  /** Game options of a request whose board is already drawn (also used by the board preview). */
+  public static gameOptions(gameReq: NewGameConfig, boardName: BoardName): GameOptions {
+    return {
+      altVenusBoard: gameReq.altVenusBoard,
+      aresExtension: gameReq.expansions.ares,
+      aresHazards: true, // Not a runtime option.
+      aresExtremeVariant: gameReq.aresExtremeVariant,
+      bannedCards: gameReq.bannedCards,
+      boardName,
+      ceoExtension: gameReq.expansions.ceo,
+      clonedGamedId: gameReq.clonedGamedId,
+      coloniesExtension: gameReq.expansions.colonies,
+      communityCardsOption: gameReq.expansions.community,
+      expansions: gameReq.expansions,
+      ceosDraftVariant: gameReq.ceosDraftVariant,
+      corporateEra: gameReq.expansions.corpera,
+      customCeos: gameReq.customCeos,
+      customColoniesList: gameReq.customColoniesList,
+      customCorporationsList: gameReq.customCorporationsList,
+      customPreludes: gameReq.customPreludes,
+      draftVariant: gameReq.draftVariant,
+      escapeVelocity: gameReq.escapeVelocity === undefined ? undefined : sanitizeEscapeVelocityOptions(gameReq.escapeVelocity),
+      fastModeOption: gameReq.fastModeOption,
+      includedCards: gameReq.includedCards,
+      includeFanMA: gameReq.includeFanMA,
+      initialDraftVariant: gameReq.initialDraft,
+      modularMA: gameReq.modularMA,
+      moonExpansion: gameReq.expansions.moon,
+      moonStandardProjectVariant: gameReq.moonStandardProjectVariant,
+      moonStandardProjectVariant1: gameReq.moonStandardProjectVariant1,
+      pathfindersExpansion: gameReq.expansions.pathfinders,
+      politicalAgendasExtension: gameReq.politicalAgendasExtension,
+      prelude2Expansion: gameReq.expansions.prelude2,
+      preludeDraftVariant: gameReq.preludeDraftVariant,
+      preludeExtension: gameReq.expansions.prelude,
+      promoCardsOption: gameReq.expansions.promo,
+      randomMA: gameReq.randomMA,
+      removeNegativeGlobalEventsOption: gameReq.removeNegativeGlobalEventsOption,
+      requiresMoonTrackCompletion: gameReq.requiresMoonTrackCompletion,
+      requiresVenusTrackCompletion: gameReq.requiresVenusTrackCompletion,
+      showOtherPlayersVP: gameReq.showOtherPlayersVP,
+      showTimers: gameReq.showTimers,
+      shuffleMapOption: gameReq.shuffleMapOption,
+      solarPhaseOption: gameReq.solarPhaseOption,
+      soloTR: gameReq.soloTR,
+      startingCeos: gameReq.startingCeos,
+      startingCorporations: gameReq.startingCorporations,
+      startingPreludes: gameReq.startingPreludes,
+      starWarsExpansion: gameReq.expansions.starwars,
+      turmoilExtension: gameReq.expansions.turmoil,
+      twoCorpsVariant: gameReq.twoCorpsVariant,
+      underworldExpansion: gameReq.expansions.underworld,
+      deltaProjectExpansion: gameReq.expansions.deltaProject,
+      undoOption: gameReq.undoOption,
+      venusNextExtension: gameReq.expansions.venus,
+    };
   }
 
   /**
@@ -146,63 +193,9 @@ export class ApiCreateGame extends Handler {
         }
       }
 
-      const boards = ApiCreateGame.boardOptions(gameReq.board);
-      gameReq.board = boards[Math.floor(Math.random() * boards.length)];
-
-      const gameOptions: GameOptions = {
-        altVenusBoard: gameReq.altVenusBoard,
-        aresExtension: gameReq.expansions.ares,
-        aresHazards: true, // Not a runtime option.
-        aresExtremeVariant: gameReq.aresExtremeVariant,
-        bannedCards: gameReq.bannedCards,
-        boardName: gameReq.board,
-        ceoExtension: gameReq.expansions.ceo,
-        clonedGamedId: gameReq.clonedGamedId,
-        coloniesExtension: gameReq.expansions.colonies,
-        communityCardsOption: gameReq.expansions.community,
-        expansions: gameReq.expansions,
-        ceosDraftVariant: gameReq.ceosDraftVariant,
-        corporateEra: gameReq.expansions.corpera,
-        customCeos: gameReq.customCeos,
-        customColoniesList: gameReq.customColoniesList,
-        customCorporationsList: gameReq.customCorporationsList,
-        customPreludes: gameReq.customPreludes,
-        draftVariant: gameReq.draftVariant,
-        escapeVelocity: gameReq.escapeVelocity === undefined ? undefined : sanitizeEscapeVelocityOptions(gameReq.escapeVelocity),
-        fastModeOption: gameReq.fastModeOption,
-        includedCards: gameReq.includedCards,
-        includeFanMA: gameReq.includeFanMA,
-        initialDraftVariant: gameReq.initialDraft,
-        modularMA: gameReq.modularMA,
-        moonExpansion: gameReq.expansions.moon,
-        moonStandardProjectVariant: gameReq.moonStandardProjectVariant,
-        moonStandardProjectVariant1: gameReq.moonStandardProjectVariant1,
-        pathfindersExpansion: gameReq.expansions.pathfinders,
-        politicalAgendasExtension: gameReq.politicalAgendasExtension,
-        prelude2Expansion: gameReq.expansions.prelude2,
-        preludeDraftVariant: gameReq.preludeDraftVariant,
-        preludeExtension: gameReq.expansions.prelude,
-        promoCardsOption: gameReq.expansions.promo,
-        randomMA: gameReq.randomMA,
-        removeNegativeGlobalEventsOption: gameReq.removeNegativeGlobalEventsOption,
-        requiresMoonTrackCompletion: gameReq.requiresMoonTrackCompletion,
-        requiresVenusTrackCompletion: gameReq.requiresVenusTrackCompletion,
-        showOtherPlayersVP: gameReq.showOtherPlayersVP,
-        showTimers: gameReq.showTimers,
-        shuffleMapOption: gameReq.shuffleMapOption,
-        solarPhaseOption: gameReq.solarPhaseOption,
-        soloTR: gameReq.soloTR,
-        startingCeos: gameReq.startingCeos,
-        startingCorporations: gameReq.startingCorporations,
-        startingPreludes: gameReq.startingPreludes,
-        starWarsExpansion: gameReq.expansions.starwars,
-        turmoilExtension: gameReq.expansions.turmoil,
-        twoCorpsVariant: gameReq.twoCorpsVariant,
-        underworldExpansion: gameReq.expansions.underworld,
-        deltaProjectExpansion: gameReq.expansions.deltaProject,
-        undoOption: gameReq.undoOption,
-        venusNextExtension: gameReq.expansions.venus,
-      };
+      // Board drawn from the board seed of the request: the same board the preview on the page showed
+      const boardRng = boardRandom(gameReq.boardSeed);
+      const gameOptions = ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq.board, boardRng));
 
       let game: IGame;
       if (gameOptions.clonedGamedId !== undefined && !gameOptions.clonedGamedId.startsWith('#')) {
@@ -210,7 +203,7 @@ export class ApiCreateGame extends Handler {
         game = Cloner.clone(gameId, players, firstPlayerIdx, serialized);
       } else {
         const seed = Math.random();
-        game = Game.newInstance(gameId, players, players[firstPlayerIdx], spectatorId, gameOptions, seed);
+        game = Game.newInstance(gameId, players, players[firstPlayerIdx], spectatorId, gameOptions, seed, boardRng);
       }
       ctx.gameLoader.add(game);
       responses.writeJson(res, ctx, Server.getSimpleGameModel(game));

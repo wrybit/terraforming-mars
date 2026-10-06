@@ -48,7 +48,7 @@ import {AresSetup} from './ares/AresSetup';
 import {MoonData} from './moon/MoonData';
 import {MoonExpansion} from './moon/MoonExpansion';
 import {TurmoilHandler} from './turmoil/TurmoilHandler';
-import {SeededRandom, UnseededRandom} from '../common/utils/Random';
+import {Random, SeededRandom, UnseededRandom} from '../common/utils/Random';
 import {chooseMilestonesAndAwards} from './ma/MilestoneAwardSelector';
 import {BoardType} from './boards/BoardType';
 import {MultiSet} from 'mnemonist';
@@ -253,12 +253,8 @@ export class Game implements IGame, Logger {
     this.playersInGenerationOrder = e.slice(idx, idx + this.players.length);
   }
 
-  public static newInstance(id: GameId,
-    players: Array<IPlayer>,
-    firstPlayer: IPlayer,
-    spectatorId: SpectatorId,
-    partialOptions: Partial<GameOptions> = {},
-    seed = 0): Game {
+  /** Complete game options as the game uses them (also used by the board preview of the "Create game" page). */
+  public static resolveOptions(partialOptions: Partial<GameOptions>): GameOptions {
     if (partialOptions.expansions === undefined) {
       partialOptions.expansions = {
         corpera: partialOptions.corporateEra ?? false,
@@ -278,7 +274,18 @@ export class Game implements IGame, Logger {
         deltaProject: partialOptions.deltaProjectExpansion ?? false,
       };
     }
-    const gameOptions = {...DEFAULT_GAME_OPTIONS, ...partialOptions};
+    return {...DEFAULT_GAME_OPTIONS, ...partialOptions};
+  }
+
+  public static newInstance(id: GameId,
+    players: Array<IPlayer>,
+    firstPlayer: IPlayer,
+    spectatorId: SpectatorId,
+    partialOptions: Partial<GameOptions> = {},
+    seed = 0,
+    // Own random source for the board (see newGameBoard.ts); without it the board comes from the game seed as before
+    boardRandom?: Random): Game {
+    const gameOptions = Game.resolveOptions(partialOptions);
 
     if (gameOptions.clonedGamedId !== undefined) {
       throw new Error('Cloning should not come through this execution path.');
@@ -291,7 +298,7 @@ export class Game implements IGame, Logger {
     }
 
     const rng = new SeededRandom(seed);
-    const board = GameSetup.newBoard(gameOptions, rng);
+    const board = GameSetup.newBoard(gameOptions, boardRandom ?? rng);
     const gameCards = new GameCards(gameOptions);
 
     const projectDeck = new ProjectDeck(gameCards.getProjectCards(), [], rng);

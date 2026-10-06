@@ -10,6 +10,8 @@ import {RandomMAOptionType} from '../../src/common/ma/RandomMAOptionType';
 import {SimpleGameModel} from '../../src/common/models/SimpleGameModel';
 import {FakeClock} from '../common/FakeClock';
 import {CardName} from '../../src/common/cards/CardName';
+import {ApiBoardPreview} from '../../src/server/routes/ApiBoardPreview';
+import {boardSpaceModels} from '../../src/server/boards/boardSpaceModels';
 
 // A complete create-game request for a one-player game.
 function newGameConfigForTest(): NewGameConfig {
@@ -133,6 +135,22 @@ describe('ApiCreateGame', () => {
     expect(game).is.not.undefined;
     expect(game!.players[0].name).eq('Robot');
   });
+
+  for (const [board, shuffleMapOption] of [[RandomBoardOption.ALL, true], [RandomBoardOption.OFFICIAL, false], [BoardName.HELLAS, true]] as const) {
+    it(`creates exactly the board of the preview (${board}, shuffled: ${shuffleMapOption})`, async () => {
+      for (const boardSeed of [0.12, 0.5, 0.987]) {
+        req = new MockRequest();
+        res = new MockResponse();
+        scaffolding = new RouteTestScaffolding(req);
+        const config = {...newGameConfigForTest(), board, shuffleMapOption, boardSeed};
+        const preview = ApiBoardPreview.preview(config);
+        await postConfig(config);
+        const game = await scaffolding.ctx.gameLoader.getGame((JSON.parse(res.content) as SimpleGameModel).id);
+        expect(game!.gameOptions.boardName).eq(preview.boardName);
+        expect(boardSpaceModels(game!.board)).deep.eq(preview.spaces);
+      }
+    });
+  }
 
   it('red rover solo game', async () => {
     const post = scaffolding.post(apiCreateGame, res);
