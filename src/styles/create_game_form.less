@@ -1108,6 +1108,8 @@
   .create-game-cards {
     display: flex;
     flex-direction: column;
+    // align-items: start is only meant for the two-column grid; in one column every card fills the width
+    align-items: stretch;
   }
 
   .create-game-cards-column {
