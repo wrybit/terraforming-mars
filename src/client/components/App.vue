@@ -31,7 +31,6 @@
       <PlayerHome
         v-else-if="screen === 'player-home' && playerView !== undefined"
         :player-view="playerView"
-        :key="playerkey"
       />
       <MobileSpectatorHome
         v-else-if="screen === 'spectator-home' && spectator !== undefined && isMobileLayout"
@@ -41,7 +40,6 @@
       <SpectatorHome
         v-else-if="screen === 'spectator-home' && spectator !== undefined"
         :spectator="spectator"
-        :key="'spectator-' + playerkey"
       />
       <GameEnd
         v-else-if="screen === 'the-end' && participant !== undefined"
@@ -129,10 +127,6 @@ export type MainAppData = {
      */
     spectator?: SpectatorModel;
     playerView?: PlayerViewModel;
-    // playerKey might seem to serve no function, but it's basically an arbitrary value used
-    // to force a rerender / refresh.
-    // See https://michaelnthiessen.com/force-re-render/
-    playerkey: number;
     isServerSideRequestInProgress: boolean;
     componentsVisibility: {[x: string]: boolean};
     game: SimpleGameModel | undefined;
@@ -151,7 +145,6 @@ export default defineComponent({
   data(): MainAppData {
     return {
       screen: 'empty',
-      playerkey: 0,
       isServerSideRequestInProgress: false,
       componentsVisibility: {
         'milestones': true,
@@ -256,7 +249,6 @@ export default defineComponent({
           } else if (path === paths.SPECTATOR) {
             app.spectator = model as SpectatorModel;
           }
-          app.playerkey++;
           if (
             model.game.phase === 'end' &&
               !alreadyShowingGame &&

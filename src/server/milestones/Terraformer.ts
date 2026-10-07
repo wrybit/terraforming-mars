@@ -1,6 +1,5 @@
 import {IMilestone} from './IMilestone';
 import {IPlayer} from '../IPlayer';
-import {Turmoil} from '../turmoil/Turmoil';
 import {IGame} from '../IGame';
 
 export class Terraformer implements IMilestone {
@@ -15,7 +14,7 @@ export class Terraformer implements IMilestone {
     return player.terraformRating;
   }
   public thresholdFor(game: IGame): number {
-    return Turmoil.ifTurmoilElse(game, () => this.terraformRatingTurmoil, () => this.terraformRating);
+    return game.turmoil ? this.terraformRatingTurmoil : this.terraformRating;
   }
   public canClaim(player: IPlayer): boolean {
     return this.getScore(player) >= this.thresholdFor(player.game);

@@ -46,6 +46,7 @@ import {Tag} from '@/common/cards/Tag';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {CardResource} from '@/common/CardResource';
 import {getCardOrThrow} from '@/client/cards/ClientCardManifest';
+import {ClientCard} from '@/common/cards/ClientCard';
 import {Color} from '@/common/Color';
 import {CardRequirementDescriptor} from '@/common/cards/CardRequirementDescriptor';
 import {GameModule} from '@/common/cards/GameModule';
@@ -93,17 +94,16 @@ export default defineComponent({
     },
   },
   data() {
-    const cardName = this.card.name;
-    const card = getCardOrThrow(cardName);
-
     return {
-      cardInstance: card,
       hovering: false,
       // Fixed per card instance: the cube keeps its angle while the card is shown
       cubeSpin: Math.round(Math.random() * 360),
     };
   },
   computed: {
+    cardInstance(): ClientCard {
+      return getCardOrThrow(this.card.name);
+    },
     cardExpansion(): GameModule {
       return this.cardInstance.module;
     },

@@ -104,27 +104,6 @@ export class Turmoil {
     return game.turmoil;
   }
 
-  public static ifTurmoil(game: IGame, cb: (turmoil: Turmoil) => void) {
-    if (game.gameOptions.turmoilExtension !== false) {
-      if (game.turmoil === undefined) {
-        console.log(`Assertion failure: game.turmoil not defined for ${game.id}`);
-      } else {
-        return cb(game.turmoil);
-      }
-    }
-  }
-
-  public static ifTurmoilElse<T>(game: IGame, cb: (turmoil: Turmoil) => T, elseCb: () => T): T {
-    if (game.gameOptions.turmoilExtension !== false) {
-      if (game.turmoil === undefined) {
-        console.log(`Assertion failure: game.turmoil not defined for ${game.id}`);
-      } else {
-        return cb(game.turmoil);
-      }
-    }
-    return elseCb();
-  }
-
   public initGlobalEvent(game: IGame) {
     // Draw the first global event to setup the game
     this.comingGlobalEvent = this.globalEventDealer.draw();
@@ -246,8 +225,13 @@ export class Turmoil {
     });
   }
 
-  // Launch the turmoil phase
-  public endGeneration(game: IGame): void {
+  /**
+   * Run the turmoil phase.
+   *
+   * The global event may add deferred actions, which are resolved before the new government
+   * starts. `cb` is called once the new government is in place.
+   */
+  public runTurmoilPhase(game: IGame, cb: () => void = () => {}): void {
     // 1 - All player lose 1 TR
     game.log('All players lose 1 TR.');
     game.players.forEach((player) => {
@@ -258,21 +242,16 @@ export class Turmoil {
     if (this.currentGlobalEvent !== undefined) {
       const currentGlobalEvent: IGlobalEvent = this.currentGlobalEvent;
       game.log('Resolving global event ${0}', (b) => b.globalEvent(currentGlobalEvent));
-      // TODO(kberg): if current global event adds an action, all of the rest of this should wait.
       currentGlobalEvent.resolve(game);
     }
 
-    // WOW THIS BREAKS THINGS
-    //   this.startNewGovernment(game);
-    // }
-    // private startNewGovernment(game: IGame) {
-    //   if (game.deferredActions.length > 0) {
-    //     game.deferredActions.runAll(() => {
-    //       this.startNewGovernment(game);
-    //     });
-    //     return;
-    //   }
+    game.deferredActions.runAll(() => {
+      this.finishTurmoilPhase(game);
+      cb();
+    });
+  }
 
+  private finishTurmoilPhase(game: IGame): void {
     // 3 - New Government
 
     // 3.a - Ruling Policy change
@@ -296,6 +275,9 @@ export class Turmoil {
     // 4.c - Draw the new distant event and add neutral delegate
     this.distantGlobalEvent = this.globalEventDealer.draw();
     this.addNeutralDelegate(this.distantGlobalEvent?.revealedDelegate, game);
+
+    // Behold The Emperor hook
+    game.beholdTheEmperor = false;
   }
 
   private addNeutralDelegate(partyName: PartyName | undefined, game: IGame) {

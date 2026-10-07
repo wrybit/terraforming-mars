@@ -123,8 +123,6 @@ describe('PlayerTags', () => {
         hideZeroTags: false,
       },
     });
-    // For tests.
-    wrapper.vm.$data.conciseView = false;
   });
 
   function elem(tag: Tag | 'all'): DOMWrapper<Element> {
@@ -166,5 +164,16 @@ describe('PlayerTags', () => {
 
   it('tag substitution - none for science', () => {
     expect(wrapper.find('[data-test="substitution-science"]').exists()).to.eq(false);
+  });
+
+  it('updates when the player changes', async () => {
+    const player: PublicPlayerModel = wrapper.props('player');
+    await wrapper.setProps({
+      player: {
+        ...player,
+        tableau: [...player.tableau, {name: CardName.ANTS, discount: [{tag: Tag.MICROBE, amount: 5}]}],
+      },
+    });
+    expect(amount(elem(Tag.MICROBE))).to.eq('8');
   });
 });
