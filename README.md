@@ -2,9 +2,9 @@
 
 A fork of [terraforming-mars/terraforming-mars](https://github.com/terraforming-mars/terraforming-mars) that reworks only the **player view UI**. Game logic and cards are unchanged.
 
-**[Live demo](https://tm.baiz.org/demo/)** – screenshots of every view on desktop, tablet and phone.
+**[Screen viewer](https://tm.baiz.org/demo/)** – screenshots of about 80 views, each on desktop, tablet and phone. See what the fork looks like before you install it.
 
-Changes from the original are merged regularly. Afterwards the affected screenshots on the demo page are updated automatically.
+Changes from the original are merged regularly. Afterwards the affected screenshots in the screen viewer are updated automatically.
 
 ### What changes
 
