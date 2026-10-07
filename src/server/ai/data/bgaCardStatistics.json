@@ -1,0 +1,1613 @@
+{
+ "_source": "RuneDK93/terraforming-mars-dataset (MIT): BGA top-25 players, 3P, seasons 18 (base+CE) and 19 (base+Prelude). winRate in %, baseline 33.3. wap = actual minus Elo-expected placement score (1st=2, 2nd=1, 3rd=0).",
+ "cards": {
+  "AI Central": {
+   "kind": "project",
+   "plays": 1810,
+   "winRate": 43.87,
+   "wap": 0.081
+  },
+  "Acquired Company": {
+   "kind": "project",
+   "plays": 1675,
+   "winRate": 30.8,
+   "wap": -0.004
+  },
+  "Acquired Space Agency": {
+   "kind": "prelude",
+   "plays": 414,
+   "winRate": 32.37,
+   "wap": -0.024
+  },
+  "Adaptation Technology": {
+   "kind": "project",
+   "plays": 796,
+   "winRate": 31.91,
+   "wap": 0.005
+  },
+  "Adapted Lichen": {
+   "kind": "project",
+   "plays": 1133,
+   "winRate": 24.89,
+   "wap": -0.043
+  },
+  "Advanced Alloys": {
+   "kind": "project",
+   "plays": 2170,
+   "winRate": 35.49,
+   "wap": 0.057
+  },
+  "Advanced Ecosystems": {
+   "kind": "project",
+   "plays": 1553,
+   "winRate": 51.58,
+   "wap": 0.134
+  },
+  "Aerobraked Ammonia Asteroid": {
+   "kind": "project",
+   "plays": 456,
+   "winRate": 20.83,
+   "wap": -0.072
+  },
+  "Algae": {
+   "kind": "project",
+   "plays": 1815,
+   "winRate": 43.91,
+   "wap": 0.047
+  },
+  "Allied Bank": {
+   "kind": "prelude",
+   "plays": 466,
+   "winRate": 39.06,
+   "wap": 0.085
+  },
+  "Anti-Gravity Technology": {
+   "kind": "project",
+   "plays": 1650,
+   "winRate": 48.54,
+   "wap": 0.11
+  },
+  "Ants": {
+   "kind": "project",
+   "plays": 552,
+   "winRate": 38.95,
+   "wap": 0.058
+  },
+  "Aquifer Pumping": {
+   "kind": "project",
+   "plays": 317,
+   "winRate": 31.86,
+   "wap": 0.093
+  },
+  "Aquifer Turbines": {
+   "kind": "prelude",
+   "plays": 313,
+   "winRate": 37.38,
+   "wap": -0.003
+  },
+  "ArchaeBacteria": {
+   "kind": "project",
+   "plays": 984,
+   "winRate": 28.35,
+   "wap": -0.038
+  },
+  "Arctic Algae": {
+   "kind": "project",
+   "plays": 1438,
+   "winRate": 44.09,
+   "wap": 0.081
+  },
+  "Artificial Lake": {
+   "kind": "project",
+   "plays": 525,
+   "winRate": 46.1,
+   "wap": 0.115
+  },
+  "Artificial Photosynthesis": {
+   "kind": "project",
+   "plays": 1393,
+   "winRate": 30.22,
+   "wap": -0.01
+  },
+  "Asteroid": {
+   "kind": "project",
+   "plays": 1969,
+   "winRate": 39.1,
+   "wap": 0.039
+  },
+  "Asteroid Mining": {
+   "kind": "project",
+   "plays": 1830,
+   "winRate": 33.17,
+   "wap": 0.0
+  },
+  "Asteroid Mining Consortium": {
+   "kind": "project",
+   "plays": 1900,
+   "winRate": 34.68,
+   "wap": 0.029
+  },
+  "Beam From A Thorium Asteroid": {
+   "kind": "project",
+   "plays": 1047,
+   "winRate": 30.18,
+   "wap": 0.001
+  },
+  "Big Asteroid": {
+   "kind": "project",
+   "plays": 1965,
+   "winRate": 44.38,
+   "wap": 0.078
+  },
+  "Biofuels": {
+   "kind": "prelude",
+   "plays": 164,
+   "winRate": 20.73,
+   "wap": -0.177
+  },
+  "Biolab": {
+   "kind": "prelude",
+   "plays": 305,
+   "winRate": 30.16,
+   "wap": -0.062
+  },
+  "Biomass Combustors": {
+   "kind": "project",
+   "plays": 443,
+   "winRate": 33.64,
+   "wap": -0.04
+  },
+  "Biosphere Support": {
+   "kind": "prelude",
+   "plays": 186,
+   "winRate": 30.65,
+   "wap": -0.024
+  },
+  "Birds": {
+   "kind": "project",
+   "plays": 1520,
+   "winRate": 46.31,
+   "wap": 0.099
+  },
+  "Black Polar Dust": {
+   "kind": "project",
+   "plays": 640,
+   "winRate": 30.16,
+   "wap": -0.02
+  },
+  "Breathing Filters": {
+   "kind": "project",
+   "plays": 1346,
+   "winRate": 34.62,
+   "wap": 0.036
+  },
+  "Bribed Committee": {
+   "kind": "project",
+   "plays": 1312,
+   "winRate": 36.43,
+   "wap": 0.026
+  },
+  "Building Industries": {
+   "kind": "project",
+   "plays": 1633,
+   "winRate": 33.43,
+   "wap": 0.013
+  },
+  "Bushes": {
+   "kind": "project",
+   "plays": 1812,
+   "winRate": 40.84,
+   "wap": 0.022
+  },
+  "Business Contacts": {
+   "kind": "project",
+   "plays": 2174,
+   "winRate": 43.7,
+   "wap": 0.056
+  },
+  "Business Empire": {
+   "kind": "prelude",
+   "plays": 439,
+   "winRate": 36.45,
+   "wap": 0.069
+  },
+  "Business Network": {
+   "kind": "project",
+   "plays": 1631,
+   "winRate": 42.19,
+   "wap": 0.017
+  },
+  "CEO's Favorite Project": {
+   "kind": "project",
+   "plays": 582,
+   "winRate": 44.33,
+   "wap": 0.069
+  },
+  "CEO\\": {
+   "kind": "project",
+   "plays": 577,
+   "winRate": 45.41,
+   "wap": 0.042
+  },
+  "Callisto Penal Mines": {
+   "kind": "project",
+   "plays": 1680,
+   "winRate": 32.26,
+   "wap": -0.005
+  },
+  "Capital": {
+   "kind": "project",
+   "plays": 1569,
+   "winRate": 32.7,
+   "wap": 0.024
+  },
+  "Carbonate Processing": {
+   "kind": "project",
+   "plays": 822,
+   "winRate": 27.01,
+   "wap": -0.075
+  },
+  "Caretaker Contract": {
+   "kind": "project",
+   "plays": 239,
+   "winRate": 36.82,
+   "wap": 0.056
+  },
+  "Cartel": {
+   "kind": "project",
+   "plays": 1468,
+   "winRate": 39.44,
+   "wap": 0.075
+  },
+  "Cheung Shing MARS": {
+   "kind": "corporation",
+   "plays": 322,
+   "winRate": 38.51,
+   "wap": 0.071
+  },
+  "Cloud Seeding": {
+   "kind": "project",
+   "plays": 842,
+   "winRate": 28.74,
+   "wap": 0.009
+  },
+  "Colonizer Training Camp": {
+   "kind": "project",
+   "plays": 1249,
+   "winRate": 30.67,
+   "wap": -0.017
+  },
+  "Comet": {
+   "kind": "project",
+   "plays": 1787,
+   "winRate": 41.58,
+   "wap": 0.045
+  },
+  "Commercial District": {
+   "kind": "project",
+   "plays": 1848,
+   "winRate": 34.3,
+   "wap": 0.039
+  },
+  "Convoy From Europa": {
+   "kind": "project",
+   "plays": 1936,
+   "winRate": 40.29,
+   "wap": 0.051
+  },
+  "Corporate Stronghold": {
+   "kind": "project",
+   "plays": 1141,
+   "winRate": 30.15,
+   "wap": -0.007
+  },
+  "CrediCor": {
+   "kind": "corporation",
+   "plays": 340,
+   "winRate": 40.88,
+   "wap": 0.034
+  },
+  "Cupola City": {
+   "kind": "project",
+   "plays": 1743,
+   "winRate": 30.41,
+   "wap": 0.004
+  },
+  "Decomposers": {
+   "kind": "project",
+   "plays": 1766,
+   "winRate": 45.41,
+   "wap": 0.043
+  },
+  "Deep Well Heating": {
+   "kind": "project",
+   "plays": 1708,
+   "winRate": 30.15,
+   "wap": -0.003
+  },
+  "Deimos Down": {
+   "kind": "project",
+   "plays": 1909,
+   "winRate": 43.48,
+   "wap": 0.078
+  },
+  "Designed Microorganisms": {
+   "kind": "project",
+   "plays": 1222,
+   "winRate": 27.41,
+   "wap": -0.013
+  },
+  "Development Center": {
+   "kind": "project",
+   "plays": 1762,
+   "winRate": 41.09,
+   "wap": 0.032
+  },
+  "Dome Farming": {
+   "kind": "prelude",
+   "plays": 217,
+   "winRate": 31.34,
+   "wap": -0.03
+  },
+  "Domed Crater": {
+   "kind": "project",
+   "plays": 1468,
+   "winRate": 31.07,
+   "wap": 0.028
+  },
+  "Donation": {
+   "kind": "prelude",
+   "plays": 224,
+   "winRate": 28.57,
+   "wap": -0.073
+  },
+  "Dust Seals": {
+   "kind": "project",
+   "plays": 426,
+   "winRate": 24.41,
+   "wap": -0.023
+  },
+  "Early Settlement": {
+   "kind": "prelude",
+   "plays": 315,
+   "winRate": 28.25,
+   "wap": 0.008
+  },
+  "Earth Catapult": {
+   "kind": "project",
+   "plays": 2369,
+   "winRate": 44.78,
+   "wap": 0.12
+  },
+  "Earth Office": {
+   "kind": "project",
+   "plays": 2093,
+   "winRate": 44.24,
+   "wap": 0.052
+  },
+  "Eccentric Sponsor": {
+   "kind": "prelude",
+   "plays": 184,
+   "winRate": 33.15,
+   "wap": 0.006
+  },
+  "Ecoline": {
+   "kind": "corporation",
+   "plays": 290,
+   "winRate": 37.24,
+   "wap": 0.022
+  },
+  "Ecological Zone": {
+   "kind": "project",
+   "plays": 2080,
+   "winRate": 49.66,
+   "wap": 0.067
+  },
+  "Ecology Experts": {
+   "kind": "prelude",
+   "plays": 122,
+   "winRate": 30.33,
+   "wap": -0.144
+  },
+  "Electro Catapult": {
+   "kind": "project",
+   "plays": 1549,
+   "winRate": 36.99,
+   "wap": 0.023
+  },
+  "Energy Saving": {
+   "kind": "project",
+   "plays": 647,
+   "winRate": 29.68,
+   "wap": -0.035
+  },
+  "Energy Tapping": {
+   "kind": "project",
+   "plays": 814,
+   "winRate": 39.93,
+   "wap": 0.04
+  },
+  "Eos Chasma National Park": {
+   "kind": "project",
+   "plays": 1304,
+   "winRate": 42.64,
+   "wap": 0.07
+  },
+  "Equatorial Magnetizer": {
+   "kind": "project",
+   "plays": 482,
+   "winRate": 34.44,
+   "wap": 0.067
+  },
+  "Experimental Forest": {
+   "kind": "prelude",
+   "plays": 273,
+   "winRate": 38.46,
+   "wap": 0.007
+  },
+  "Extreme-Cold Fungus": {
+   "kind": "project",
+   "plays": 665,
+   "winRate": 24.66,
+   "wap": 0.019
+  },
+  "Farming": {
+   "kind": "project",
+   "plays": 1296,
+   "winRate": 42.44,
+   "wap": 0.075
+  },
+  "Fish": {
+   "kind": "project",
+   "plays": 1559,
+   "winRate": 44.71,
+   "wap": 0.061
+  },
+  "Flooding": {
+   "kind": "project",
+   "plays": 1278,
+   "winRate": 46.01,
+   "wap": 0.068
+  },
+  "Food Factory": {
+   "kind": "project",
+   "plays": 722,
+   "winRate": 22.85,
+   "wap": -0.051
+  },
+  "Fuel Factory": {
+   "kind": "project",
+   "plays": 1725,
+   "winRate": 30.78,
+   "wap": -0.014
+  },
+  "Fueled Generators": {
+   "kind": "project",
+   "plays": 1054,
+   "winRate": 34.72,
+   "wap": 0.008
+  },
+  "Fusion Power": {
+   "kind": "project",
+   "plays": 995,
+   "winRate": 22.72,
+   "wap": -0.052
+  },
+  "GHG Factories": {
+   "kind": "project",
+   "plays": 816,
+   "winRate": 29.29,
+   "wap": -0.07
+  },
+  "GHG Producing Bacteria": {
+   "kind": "project",
+   "plays": 588,
+   "winRate": 35.89,
+   "wap": 0.033
+  },
+  "Galilean Mining": {
+   "kind": "prelude",
+   "plays": 414,
+   "winRate": 29.95,
+   "wap": -0.052
+  },
+  "Ganymede Colony": {
+   "kind": "project",
+   "plays": 1579,
+   "winRate": 38.38,
+   "wap": 0.07
+  },
+  "Gene Repair": {
+   "kind": "project",
+   "plays": 1872,
+   "winRate": 35.74,
+   "wap": 0.038
+  },
+  "Geothermal Power": {
+   "kind": "project",
+   "plays": 1287,
+   "winRate": 26.5,
+   "wap": -0.036
+  },
+  "Giant Ice Asteroid": {
+   "kind": "project",
+   "plays": 1789,
+   "winRate": 45.55,
+   "wap": 0.12
+  },
+  "Giant Space Mirror": {
+   "kind": "project",
+   "plays": 1030,
+   "winRate": 25.15,
+   "wap": -0.017
+  },
+  "Grass": {
+   "kind": "project",
+   "plays": 1638,
+   "winRate": 39.5,
+   "wap": 0.016
+  },
+  "Great Aquifer": {
+   "kind": "prelude",
+   "plays": 410,
+   "winRate": 41.22,
+   "wap": 0.077
+  },
+  "Great Dam": {
+   "kind": "project",
+   "plays": 1137,
+   "winRate": 29.9,
+   "wap": 0.01
+  },
+  "Great Escarpment Consortium": {
+   "kind": "project",
+   "plays": 1184,
+   "winRate": 29.39,
+   "wap": -0.005
+  },
+  "Greenhouses": {
+   "kind": "project",
+   "plays": 2330,
+   "winRate": 44.46,
+   "wap": 0.09
+  },
+  "Hackers": {
+   "kind": "project",
+   "plays": 422,
+   "winRate": 30.1,
+   "wap": -0.017
+  },
+  "Heat Trappers": {
+   "kind": "project",
+   "plays": 615,
+   "winRate": 38.37,
+   "wap": 0.005
+  },
+  "Heather": {
+   "kind": "project",
+   "plays": 1650,
+   "winRate": 41.76,
+   "wap": 0.043
+  },
+  "Helion": {
+   "kind": "corporation",
+   "plays": 211,
+   "winRate": 18.48,
+   "wap": -0.174
+  },
+  "Herbivores": {
+   "kind": "project",
+   "plays": 1217,
+   "winRate": 49.14,
+   "wap": 0.086
+  },
+  "Hired Raiders": {
+   "kind": "project",
+   "plays": 2012,
+   "winRate": 45.28,
+   "wap": 0.064
+  },
+  "House Printing": {
+   "kind": "project",
+   "plays": 853,
+   "winRate": 32.0,
+   "wap": 0.039
+  },
+  "Huge Asteroid": {
+   "kind": "prelude",
+   "plays": 245,
+   "winRate": 31.84,
+   "wap": -0.015
+  },
+  "Ice Asteroid": {
+   "kind": "project",
+   "plays": 1686,
+   "winRate": 42.17,
+   "wap": 0.077
+  },
+  "Ice Cap Melting": {
+   "kind": "project",
+   "plays": 298,
+   "winRate": 54.03,
+   "wap": 0.157
+  },
+  "Immigrant City": {
+   "kind": "project",
+   "plays": 2349,
+   "winRate": 29.8,
+   "wap": -0.029
+  },
+  "Immigration Shuttles": {
+   "kind": "project",
+   "plays": 1523,
+   "winRate": 28.89,
+   "wap": 0.013
+  },
+  "Import of Advanced GHG": {
+   "kind": "project",
+   "plays": 1577,
+   "winRate": 31.64,
+   "wap": -0.029
+  },
+  "Imported GHG": {
+   "kind": "project",
+   "plays": 1741,
+   "winRate": 35.38,
+   "wap": 0.005
+  },
+  "Imported Hydrogen": {
+   "kind": "project",
+   "plays": 2084,
+   "winRate": 45.25,
+   "wap": 0.066
+  },
+  "Imported Nitrogen": {
+   "kind": "project",
+   "plays": 1718,
+   "winRate": 49.88,
+   "wap": 0.101
+  },
+  "Indentured Workers": {
+   "kind": "project",
+   "plays": 1688,
+   "winRate": 50.0,
+   "wap": 0.05
+  },
+  "Industrial Center": {
+   "kind": "project",
+   "plays": 1851,
+   "winRate": 36.41,
+   "wap": 0.0
+  },
+  "Industrial Microbes": {
+   "kind": "project",
+   "plays": 1710,
+   "winRate": 28.48,
+   "wap": -0.009
+  },
+  "Insects": {
+   "kind": "project",
+   "plays": 1642,
+   "winRate": 51.46,
+   "wap": 0.083
+  },
+  "Insulation": {
+   "kind": "project",
+   "plays": 314,
+   "winRate": 30.25,
+   "wap": 0.037
+  },
+  "Interplanetary Cinematics": {
+   "kind": "corporation",
+   "plays": 239,
+   "winRate": 40.17,
+   "wap": 0.097
+  },
+  "Interstellar Colony Ship": {
+   "kind": "project",
+   "plays": 1287,
+   "winRate": 44.37,
+   "wap": 0.113
+  },
+  "Invention Contest": {
+   "kind": "project",
+   "plays": 2253,
+   "winRate": 44.52,
+   "wap": 0.065
+  },
+  "Inventors' Guild": {
+   "kind": "project",
+   "plays": 833,
+   "winRate": 39.74,
+   "wap": 0.02
+  },
+  "Inventrix": {
+   "kind": "corporation",
+   "plays": 247,
+   "winRate": 28.34,
+   "wap": -0.104
+  },
+  "Investment Loan": {
+   "kind": "project",
+   "plays": 2176,
+   "winRate": 48.9,
+   "wap": 0.091
+  },
+  "Io Mining Industries": {
+   "kind": "project",
+   "plays": 1639,
+   "winRate": 36.12,
+   "wap": 0.023
+  },
+  "Io Research Outpost": {
+   "kind": "prelude",
+   "plays": 386,
+   "winRate": 29.02,
+   "wap": -0.07
+  },
+  "Ironworks": {
+   "kind": "project",
+   "plays": 227,
+   "winRate": 33.48,
+   "wap": 0.058
+  },
+  "Kelp Farming": {
+   "kind": "project",
+   "plays": 2106,
+   "winRate": 48.15,
+   "wap": 0.109
+  },
+  "Lagrange Observatory": {
+   "kind": "project",
+   "plays": 2273,
+   "winRate": 36.74,
+   "wap": 0.016
+  },
+  "Lake Marineris": {
+   "kind": "project",
+   "plays": 541,
+   "winRate": 49.17,
+   "wap": 0.158
+  },
+  "Land Claim": {
+   "kind": "project",
+   "plays": 809,
+   "winRate": 41.04,
+   "wap": 0.053
+  },
+  "Large Convoy": {
+   "kind": "project",
+   "plays": 1865,
+   "winRate": 46.76,
+   "wap": 0.108
+  },
+  "Lava Flows": {
+   "kind": "project",
+   "plays": 1582,
+   "winRate": 32.49,
+   "wap": 0.019
+  },
+  "Lava Tube Settlement": {
+   "kind": "project",
+   "plays": 748,
+   "winRate": 27.54,
+   "wap": -0.026
+  },
+  "Lichen": {
+   "kind": "project",
+   "plays": 1373,
+   "winRate": 33.58,
+   "wap": -0.02
+  },
+  "Lightning Harvest": {
+   "kind": "project",
+   "plays": 1237,
+   "winRate": 32.34,
+   "wap": 0.001
+  },
+  "Livestock": {
+   "kind": "project",
+   "plays": 1105,
+   "winRate": 40.45,
+   "wap": 0.048
+  },
+  "Loan": {
+   "kind": "prelude",
+   "plays": 113,
+   "winRate": 20.35,
+   "wap": -0.108
+  },
+  "Local Heat Trapping": {
+   "kind": "project",
+   "plays": 1153,
+   "winRate": 44.76,
+   "wap": 0.073
+  },
+  "Lunar Beam": {
+   "kind": "project",
+   "plays": 832,
+   "winRate": 27.04,
+   "wap": -0.041
+  },
+  "Magnetic Field Dome": {
+   "kind": "project",
+   "plays": 670,
+   "winRate": 33.73,
+   "wap": 0.032
+  },
+  "Magnetic Field Generators": {
+   "kind": "project",
+   "plays": 539,
+   "winRate": 33.39,
+   "wap": 0.067
+  },
+  "Mangrove": {
+   "kind": "project",
+   "plays": 1292,
+   "winRate": 50.85,
+   "wap": 0.095
+  },
+  "Mars University": {
+   "kind": "project",
+   "plays": 2354,
+   "winRate": 44.9,
+   "wap": 0.055
+  },
+  "Martian Industries": {
+   "kind": "prelude",
+   "plays": 314,
+   "winRate": 29.62,
+   "wap": -0.018
+  },
+  "Martian Rails": {
+   "kind": "project",
+   "plays": 1053,
+   "winRate": 30.49,
+   "wap": 0.01
+  },
+  "Martian Survey": {
+   "kind": "project",
+   "plays": 564,
+   "winRate": 32.8,
+   "wap": -0.006
+  },
+  "Mass Converter": {
+   "kind": "project",
+   "plays": 1770,
+   "winRate": 45.99,
+   "wap": 0.097
+  },
+  "Media Archives": {
+   "kind": "project",
+   "plays": 1830,
+   "winRate": 47.16,
+   "wap": 0.092
+  },
+  "Media Group": {
+   "kind": "project",
+   "plays": 2162,
+   "winRate": 47.13,
+   "wap": 0.077
+  },
+  "Medical Lab": {
+   "kind": "project",
+   "plays": 2085,
+   "winRate": 34.58,
+   "wap": 0.026
+  },
+  "Metal-Rich Asteroid": {
+   "kind": "prelude",
+   "plays": 334,
+   "winRate": 38.62,
+   "wap": -0.002
+  },
+  "Metals Company": {
+   "kind": "prelude",
+   "plays": 451,
+   "winRate": 37.47,
+   "wap": 0.072
+  },
+  "Methane From Titan": {
+   "kind": "project",
+   "plays": 1518,
+   "winRate": 33.46,
+   "wap": 0.034
+  },
+  "Micro-Mills": {
+   "kind": "project",
+   "plays": 540,
+   "winRate": 20.37,
+   "wap": -0.055
+  },
+  "Mine": {
+   "kind": "project",
+   "plays": 1968,
+   "winRate": 30.74,
+   "wap": 0.01
+  },
+  "Mineral Deposit": {
+   "kind": "project",
+   "plays": 2234,
+   "winRate": 41.31,
+   "wap": 0.055
+  },
+  "Mining Area": {
+   "kind": "project",
+   "plays": 1981,
+   "winRate": 36.5,
+   "wap": 0.05
+  },
+  "Mining Expedition": {
+   "kind": "project",
+   "plays": 1067,
+   "winRate": 33.55,
+   "wap": -0.011
+  },
+  "Mining Guild": {
+   "kind": "corporation",
+   "plays": 301,
+   "winRate": 32.56,
+   "wap": 0.022
+  },
+  "Mining Operations": {
+   "kind": "prelude",
+   "plays": 359,
+   "winRate": 35.1,
+   "wap": 0.077
+  },
+  "Mining Rights": {
+   "kind": "project",
+   "plays": 2221,
+   "winRate": 35.08,
+   "wap": 0.032
+  },
+  "Miranda Resort": {
+   "kind": "project",
+   "plays": 1830,
+   "winRate": 37.92,
+   "wap": 0.061
+  },
+  "Mohole": {
+   "kind": "prelude",
+   "plays": 175,
+   "winRate": 24.0,
+   "wap": -0.044
+  },
+  "Mohole Area": {
+   "kind": "project",
+   "plays": 1226,
+   "winRate": 35.48,
+   "wap": 0.024
+  },
+  "Mohole Excavation": {
+   "kind": "prelude",
+   "plays": 252,
+   "winRate": 24.21,
+   "wap": -0.073
+  },
+  "Moss": {
+   "kind": "project",
+   "plays": 1485,
+   "winRate": 40.61,
+   "wap": 0.047
+  },
+  "Natural Preserve": {
+   "kind": "project",
+   "plays": 1515,
+   "winRate": 37.36,
+   "wap": 0.037
+  },
+  "Nitrite Reducing Bacteria": {
+   "kind": "project",
+   "plays": 786,
+   "winRate": 29.26,
+   "wap": 0.005
+  },
+  "Nitrogen Shipment": {
+   "kind": "prelude",
+   "plays": 148,
+   "winRate": 26.35,
+   "wap": -0.054
+  },
+  "Nitrogen-Rich Asteroid": {
+   "kind": "project",
+   "plays": 1852,
+   "winRate": 50.1,
+   "wap": 0.09
+  },
+  "Nitrophilic Moss": {
+   "kind": "project",
+   "plays": 1547,
+   "winRate": 37.36,
+   "wap": 0.011
+  },
+  "Noctis City": {
+   "kind": "project",
+   "plays": 2104,
+   "winRate": 34.03,
+   "wap": 0.045
+  },
+  "Noctis Farming": {
+   "kind": "project",
+   "plays": 1802,
+   "winRate": 37.84,
+   "wap": 0.044
+  },
+  "Nuclear Power": {
+   "kind": "project",
+   "plays": 816,
+   "winRate": 25.86,
+   "wap": -0.062
+  },
+  "Nuclear Zone": {
+   "kind": "project",
+   "plays": 1958,
+   "winRate": 45.46,
+   "wap": 0.1
+  },
+  "Olympus Conference": {
+   "kind": "project",
+   "plays": 2324,
+   "winRate": 39.85,
+   "wap": 0.037
+  },
+  "Open City": {
+   "kind": "project",
+   "plays": 1202,
+   "winRate": 39.43,
+   "wap": 0.075
+  },
+  "Optimal Aerobraking": {
+   "kind": "project",
+   "plays": 1964,
+   "winRate": 46.79,
+   "wap": 0.064
+  },
+  "Orbital Construction Yard": {
+   "kind": "prelude",
+   "plays": 366,
+   "winRate": 35.79,
+   "wap": 0.01
+  },
+  "Ore Processor": {
+   "kind": "project",
+   "plays": 337,
+   "winRate": 36.2,
+   "wap": 0.054
+  },
+  "Permafrost Extraction": {
+   "kind": "project",
+   "plays": 628,
+   "winRate": 46.34,
+   "wap": 0.091
+  },
+  "Peroxide Power": {
+   "kind": "project",
+   "plays": 1114,
+   "winRate": 32.23,
+   "wap": 0.006
+  },
+  "Pets": {
+   "kind": "project",
+   "plays": 1856,
+   "winRate": 34.32,
+   "wap": 0.044
+  },
+  "PhoboLog": {
+   "kind": "corporation",
+   "plays": 287,
+   "winRate": 26.13,
+   "wap": -0.137
+  },
+  "Phobos Space Haven": {
+   "kind": "project",
+   "plays": 1815,
+   "winRate": 27.71,
+   "wap": -0.043
+  },
+  "Physics Complex": {
+   "kind": "project",
+   "plays": 815,
+   "winRate": 29.45,
+   "wap": 0.006
+  },
+  "Plantation": {
+   "kind": "project",
+   "plays": 1762,
+   "winRate": 39.96,
+   "wap": 0.048
+  },
+  "Point Luna": {
+   "kind": "corporation",
+   "plays": 397,
+   "winRate": 36.27,
+   "wap": 0.005
+  },
+  "Polar Industries": {
+   "kind": "prelude",
+   "plays": 260,
+   "winRate": 35.77,
+   "wap": 0.048
+  },
+  "Power Generation": {
+   "kind": "prelude",
+   "plays": 212,
+   "winRate": 33.96,
+   "wap": 0.008
+  },
+  "Power Grid": {
+   "kind": "project",
+   "plays": 269,
+   "winRate": 18.59,
+   "wap": -0.064
+  },
+  "Power Infrastructure": {
+   "kind": "project",
+   "plays": 442,
+   "winRate": 28.96,
+   "wap": 0.003
+  },
+  "Power Plant": {
+   "kind": "project",
+   "plays": 1566,
+   "winRate": 30.21,
+   "wap": -0.023
+  },
+  "Power Supply Consortium": {
+   "kind": "project",
+   "plays": 854,
+   "winRate": 31.38,
+   "wap": -0.02
+  },
+  "Predators": {
+   "kind": "project",
+   "plays": 836,
+   "winRate": 39.24,
+   "wap": 0.056
+  },
+  "Protected Habitats": {
+   "kind": "project",
+   "plays": 2111,
+   "winRate": 37.47,
+   "wap": 0.012
+  },
+  "Protected Valley": {
+   "kind": "project",
+   "plays": 1705,
+   "winRate": 37.3,
+   "wap": 0.052
+  },
+  "Psychrophiles": {
+   "kind": "project",
+   "plays": 586,
+   "winRate": 41.47,
+   "wap": 0.096
+  },
+  "Quantum Extractor": {
+   "kind": "project",
+   "plays": 1780,
+   "winRate": 41.18,
+   "wap": 0.056
+  },
+  "Rad-Chem Factory": {
+   "kind": "project",
+   "plays": 1685,
+   "winRate": 34.9,
+   "wap": 0.016
+  },
+  "Rad-Suits": {
+   "kind": "project",
+   "plays": 1219,
+   "winRate": 27.4,
+   "wap": 0.007
+  },
+  "Regolith Eaters": {
+   "kind": "project",
+   "plays": 581,
+   "winRate": 24.61,
+   "wap": -0.015
+  },
+  "Release of Inert Gases": {
+   "kind": "project",
+   "plays": 1363,
+   "winRate": 25.16,
+   "wap": -0.006
+  },
+  "Research": {
+   "kind": "project",
+   "plays": 2321,
+   "winRate": 38.13,
+   "wap": 0.046
+  },
+  "Research Coordination": {
+   "kind": "project",
+   "plays": 780,
+   "winRate": 36.41,
+   "wap": 0.007
+  },
+  "Research Network": {
+   "kind": "prelude",
+   "plays": 349,
+   "winRate": 38.11,
+   "wap": 0.049
+  },
+  "Research Outpost": {
+   "kind": "project",
+   "plays": 2432,
+   "winRate": 41.12,
+   "wap": 0.095
+  },
+  "Restricted Area": {
+   "kind": "project",
+   "plays": 2224,
+   "winRate": 42.85,
+   "wap": 0.053
+  },
+  "Robinson Industries": {
+   "kind": "corporation",
+   "plays": 199,
+   "winRate": 22.61,
+   "wap": -0.18
+  },
+  "Robotic Workforce": {
+   "kind": "project",
+   "plays": 1734,
+   "winRate": 35.64,
+   "wap": 0.008
+  },
+  "Rover Construction": {
+   "kind": "project",
+   "plays": 2281,
+   "winRate": 33.98,
+   "wap": 0.054
+  },
+  "SF Memorial": {
+   "kind": "project",
+   "plays": 887,
+   "winRate": 33.03,
+   "wap": 0.004
+  },
+  "Sabotage": {
+   "kind": "project",
+   "plays": 1403,
+   "winRate": 44.55,
+   "wap": 0.053
+  },
+  "Satellites": {
+   "kind": "project",
+   "plays": 1374,
+   "winRate": 33.55,
+   "wap": 0.002
+  },
+  "Saturn Systems": {
+   "kind": "corporation",
+   "plays": 347,
+   "winRate": 36.6,
+   "wap": 0.085
+  },
+  "Search For Life": {
+   "kind": "project",
+   "plays": 1047,
+   "winRate": 35.63,
+   "wap": 0.002
+  },
+  "Security Fleet": {
+   "kind": "project",
+   "plays": 672,
+   "winRate": 16.07,
+   "wap": -0.045
+  },
+  "Self-Sufficient Settlement": {
+   "kind": "prelude",
+   "plays": 343,
+   "winRate": 25.36,
+   "wap": -0.054
+  },
+  "Shuttles": {
+   "kind": "project",
+   "plays": 1664,
+   "winRate": 39.84,
+   "wap": 0.032
+  },
+  "Small Animals": {
+   "kind": "project",
+   "plays": 1227,
+   "winRate": 43.36,
+   "wap": 0.063
+  },
+  "Smelting Plant": {
+   "kind": "prelude",
+   "plays": 228,
+   "winRate": 39.04,
+   "wap": 0.077
+  },
+  "Society Support": {
+   "kind": "prelude",
+   "plays": 97,
+   "winRate": 18.56,
+   "wap": -0.124
+  },
+  "Soil Factory": {
+   "kind": "project",
+   "plays": 743,
+   "winRate": 26.11,
+   "wap": -0.021
+  },
+  "Solar Power": {
+   "kind": "project",
+   "plays": 1254,
+   "winRate": 27.19,
+   "wap": -0.0
+  },
+  "Solar Wind Power": {
+   "kind": "project",
+   "plays": 2236,
+   "winRate": 36.89,
+   "wap": 0.041
+  },
+  "Soletta": {
+   "kind": "project",
+   "plays": 534,
+   "winRate": 23.78,
+   "wap": -0.124
+  },
+  "Space Elevator": {
+   "kind": "project",
+   "plays": 1918,
+   "winRate": 35.4,
+   "wap": 0.032
+  },
+  "Space Hotels": {
+   "kind": "project",
+   "plays": 837,
+   "winRate": 31.54,
+   "wap": 0.016
+  },
+  "Space Mirrors": {
+   "kind": "project",
+   "plays": 515,
+   "winRate": 17.09,
+   "wap": -0.122
+  },
+  "Space Station": {
+   "kind": "project",
+   "plays": 2118,
+   "winRate": 34.09,
+   "wap": 0.017
+  },
+  "Special Design": {
+   "kind": "project",
+   "plays": 383,
+   "winRate": 48.04,
+   "wap": 0.113
+  },
+  "Sponsors": {
+   "kind": "project",
+   "plays": 1846,
+   "winRate": 31.37,
+   "wap": 0.003
+  },
+  "Standard Technology": {
+   "kind": "project",
+   "plays": 1661,
+   "winRate": 35.46,
+   "wap": 0.002
+  },
+  "Steelworks": {
+   "kind": "project",
+   "plays": 403,
+   "winRate": 38.21,
+   "wap": 0.055
+  },
+  "Strip Mine": {
+   "kind": "project",
+   "plays": 1521,
+   "winRate": 29.72,
+   "wap": -0.013
+  },
+  "Subterranean Reservoir": {
+   "kind": "project",
+   "plays": 1434,
+   "winRate": 38.7,
+   "wap": 0.044
+  },
+  "Supplier": {
+   "kind": "prelude",
+   "plays": 279,
+   "winRate": 35.84,
+   "wap": -0.01
+  },
+  "Supply Drop": {
+   "kind": "prelude",
+   "plays": 273,
+   "winRate": 39.93,
+   "wap": 0.014
+  },
+  "Symbiotic Fungus": {
+   "kind": "project",
+   "plays": 572,
+   "winRate": 38.46,
+   "wap": 0.073
+  },
+  "Tardigrades": {
+   "kind": "project",
+   "plays": 529,
+   "winRate": 30.06,
+   "wap": 0.023
+  },
+  "Technology Demonstration": {
+   "kind": "project",
+   "plays": 2414,
+   "winRate": 41.63,
+   "wap": 0.039
+  },
+  "Tectonic Stress Power": {
+   "kind": "project",
+   "plays": 864,
+   "winRate": 23.73,
+   "wap": -0.034
+  },
+  "Teractor": {
+   "kind": "corporation",
+   "plays": 308,
+   "winRate": 31.82,
+   "wap": -0.017
+  },
+  "Terraforming Ganymede": {
+   "kind": "project",
+   "plays": 1325,
+   "winRate": 40.23,
+   "wap": 0.097
+  },
+  "Tharsis Republic": {
+   "kind": "corporation",
+   "plays": 395,
+   "winRate": 40.0,
+   "wap": 0.148
+  },
+  "ThorGate": {
+   "kind": "corporation",
+   "plays": 115,
+   "winRate": 26.96,
+   "wap": -0.087
+  },
+  "Titanium Mine": {
+   "kind": "project",
+   "plays": 1967,
+   "winRate": 30.05,
+   "wap": -0.01
+  },
+  "Toll Station": {
+   "kind": "project",
+   "plays": 1264,
+   "winRate": 33.46,
+   "wap": 0.017
+  },
+  "Towing A Comet": {
+   "kind": "project",
+   "plays": 1785,
+   "winRate": 40.34,
+   "wap": 0.045
+  },
+  "Trans-Neptune Probe": {
+   "kind": "project",
+   "plays": 2051,
+   "winRate": 37.01,
+   "wap": 0.011
+  },
+  "Trees": {
+   "kind": "project",
+   "plays": 1589,
+   "winRate": 42.22,
+   "wap": 0.046
+  },
+  "Tropical Resort": {
+   "kind": "project",
+   "plays": 788,
+   "winRate": 27.67,
+   "wap": -0.002
+  },
+  "Tundra Farming": {
+   "kind": "project",
+   "plays": 1211,
+   "winRate": 37.41,
+   "wap": 0.076
+  },
+  "UNMI Contractor": {
+   "kind": "prelude",
+   "plays": 424,
+   "winRate": 35.85,
+   "wap": 0.033
+  },
+  "Underground City": {
+   "kind": "project",
+   "plays": 1551,
+   "winRate": 26.31,
+   "wap": -0.042
+  },
+  "Underground Detonations": {
+   "kind": "project",
+   "plays": 103,
+   "winRate": 9.71,
+   "wap": -0.171
+  },
+  "United Nations Mars Initiative": {
+   "kind": "corporation",
+   "plays": 160,
+   "winRate": 16.88,
+   "wap": -0.137
+  },
+  "Urbanized Area": {
+   "kind": "project",
+   "plays": 1719,
+   "winRate": 30.48,
+   "wap": 0.005
+  },
+  "Valley Trust": {
+   "kind": "corporation",
+   "plays": 365,
+   "winRate": 32.05,
+   "wap": -0.023
+  },
+  "Vesta Shipyard": {
+   "kind": "project",
+   "plays": 2063,
+   "winRate": 32.23,
+   "wap": -0.007
+  },
+  "Viral Enhancers": {
+   "kind": "project",
+   "plays": 2286,
+   "winRate": 45.54,
+   "wap": 0.061
+  },
+  "Virus": {
+   "kind": "project",
+   "plays": 1416,
+   "winRate": 48.94,
+   "wap": 0.08
+  },
+  "Vitor": {
+   "kind": "corporation",
+   "plays": 325,
+   "winRate": 36.92,
+   "wap": 0.071
+  },
+  "Water Import From Europa": {
+   "kind": "project",
+   "plays": 1305,
+   "winRate": 38.77,
+   "wap": 0.072
+  },
+  "Water Splitting Plant": {
+   "kind": "project",
+   "plays": 206,
+   "winRate": 28.16,
+   "wap": 0.039
+  },
+  "Wave Power": {
+   "kind": "project",
+   "plays": 1087,
+   "winRate": 29.53,
+   "wap": 0.005
+  },
+  "Windmills": {
+   "kind": "project",
+   "plays": 1098,
+   "winRate": 36.34,
+   "wap": 0.021
+  },
+  "Worms": {
+   "kind": "project",
+   "plays": 426,
+   "winRate": 34.74,
+   "wap": 0.018
+  },
+  "Zeppelins": {
+   "kind": "project",
+   "plays": 1111,
+   "winRate": 31.23,
+   "wap": 0.033
+  }
+ }
+}
