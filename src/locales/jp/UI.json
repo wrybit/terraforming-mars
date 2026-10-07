@@ -37,7 +37,7 @@
     "Bonus for ${0}: ${1}": "${0} にボーナス：${1}",
     "${0} marker drops to step ${1}": "${0} のマーカーは ${1} に戻る",
     "Build:": "建設：",
-    "Colony bonus:": "ボーナス：",
+    "Colony bonus:": "コロニー・ボーナス：",
     "taken": "使用中",
     "tradeable": "交易可",
     "inactive": "非アクティブ",

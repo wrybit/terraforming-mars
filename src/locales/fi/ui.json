@@ -35,7 +35,7 @@
   "Bonus for ${0}: ${1}": "Bonus (${0}): ${1}",
   "${0} marker drops to step ${1}": "${0}-merkki putoaa kohtaan ${1}",
   "Build:": "Rakennus:",
-  "Colony bonus:": "Bonus:",
+  "Colony bonus:": "Siirtokuntabonus:",
   "taken": "varattu",
   "tradeable": "kaupattavissa",
   "inactive": "ei aktiivinen",

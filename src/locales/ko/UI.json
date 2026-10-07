@@ -37,7 +37,7 @@
     "Bonus for ${0}: ${1}": "${0} 보너스: ${1}",
     "${0} marker drops to step ${1}": "${0} 표시가 ${1}칸으로 내려감",
     "Build:": "건설:",
-    "Colony bonus:": "보너스:",
+    "Colony bonus:": "개척기지 보너스:",
     "taken": "사용 중",
     "tradeable": "교역 가능",
     "inactive": "비활성",

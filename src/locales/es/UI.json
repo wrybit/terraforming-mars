@@ -36,7 +36,7 @@
     "Bonus for ${0}: ${1}": "Bonificación para ${0}: ${1}",
     "${0} marker drops to step ${1}": "El marcador de ${0} baja a la casilla ${1}",
     "Build:": "Construir:",
-    "Colony bonus:": "Bonificación:",
+    "Colony bonus:": "Bonificación de colonia:",
     "taken": "ocupada",
     "tradeable": "comerciable",
     "inactive": "inactiva",

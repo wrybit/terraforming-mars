@@ -765,6 +765,13 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  // Narrow cards: the checkmark tab only fits right of the party hexagon when it is narrower
+  .select-party__card--on::after {
+    width: 44px;
+    left: auto;
+    right: 8px;
+  }
+
   .select-party__card {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -809,6 +816,13 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
 }
 
 @container (max-width: 520px) {
+  // Two sources side by side on a phone: figures above the text, otherwise the reserve does not fit
+  .select-party__source {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
   .select-party__cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -835,15 +849,15 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
     padding: 34px 0 6px;
   }
 
-  // Leader seat and seated delegates share one row (like the narrow layout), policy and bonus at the bottom:
-  // keeps two rows of cards plus the source step within the box height
+  // Name in the middle with the leader seat left and the seated delegates right of it, policy and bonus at the
+  // bottom: keeps the source step and two rows of cards within the box height
   .select-party__card {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto 1fr auto;
-    grid-template-areas: "name" "people" "policy" "bonus";
-    justify-items: center;
-    gap: 6px;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: "leader name seats" "policy policy policy" "bonus bonus bonus";
+    align-items: center;
+    gap: 6px 12px;
     padding: 34px 14px 16px;
   }
 
@@ -852,17 +866,16 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   }
 
   .select-party__leader {
-    grid-area: people;
+    grid-area: leader;
+    justify-self: end;
   }
 
   .select-party__seats {
-    grid-area: people;
-    align-self: center;
-    justify-self: stretch;
+    grid-area: seats;
+    justify-self: start;
     justify-content: flex-start;
     max-width: none;
     min-height: 0;
-    padding-left: calc(50% + 28px);
   }
 
   .select-party__rule--policy {
