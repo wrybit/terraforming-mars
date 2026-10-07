@@ -58,4 +58,27 @@ describe('MobilePlayerHome', () => {
     expect(wrapper.find('.mb-nav').exists()).to.be.true;
     expect(wrapper.find('.mb-taskbar').exists()).to.be.false;
   });
+
+  // Server updates arrive in place (App.vue no longer remounts the view)
+  it('keeps the chosen screen when the player view updates in place', async () => {
+    const playerView = fakePlayerViewModel();
+    const wrapper = mountHome(playerView);
+    await wrapper.find('.mb-nav-item--log').trigger('click');
+
+    await wrapper.setProps({playerView: {...playerView}});
+
+    expect(wrapper.classes()).to.include('mb-home--log');
+  });
+
+  it('opens the action menu sheet when an update brings the own turn', async () => {
+    const playerView = fakePlayerViewModel();
+    const wrapper = mountHome(playerView);
+    expect((wrapper.vm as unknown as {sheetOpen: boolean}).sheetOpen).to.be.false;
+
+    await wrapper.setProps({playerView: {...playerView, waitingFor: {type: 'or', title: 'Take your first action', buttonLabel: 'Take action', options: [{type: 'option', title: 'Pass for this generation', buttonLabel: 'Pass'}]} as any}});
+
+    expect((wrapper.vm as unknown as {sheetOpen: boolean}).sheetOpen).to.be.true;
+    // The menu opens as a sheet over the current screen, not as the turn screen
+    expect(wrapper.classes()).to.not.include('mb-home--turn');
+  });
 });

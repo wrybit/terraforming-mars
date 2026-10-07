@@ -43,7 +43,7 @@ import {MobileNavItem, MobileScreen, PlayersSegment, SPECTATOR_NAV} from '@/clie
 import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
 import {waitingStatusText} from '@/client/utils/waitingStatusText';
 
-// Selected screen; App.vue rebuilds the view on every server update (key), and it should survive that
+// Selected screen; kept across a remount (e.g. leaving and returning to the game)
 let rememberedScreen: MobileScreen = 'mars';
 
 export default defineComponent({

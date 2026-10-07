@@ -26,7 +26,6 @@
       <MobilePlayerHome
         v-else-if="screen === 'player-home' && playerView !== undefined && isMobileLayout"
         :player-view="playerView"
-        :key="'mobile-' + playerkey"
       />
       <PlayerHome
         v-else-if="screen === 'player-home' && playerView !== undefined"
@@ -35,7 +34,6 @@
       <MobileSpectatorHome
         v-else-if="screen === 'spectator-home' && spectator !== undefined && isMobileLayout"
         :spectator="spectator"
-        :key="'mobile-spectator-' + playerkey"
       />
       <SpectatorHome
         v-else-if="screen === 'spectator-home' && spectator !== undefined"

@@ -233,20 +233,35 @@ function cardClassName(name: string): string {
 }
 
 
-// Last chosen screen outside a task. After every server update the view is rebuilt
-// (App.vue: key); the screen should be kept across that
+// Last chosen screen outside a task. Kept across a remount (e.g. leaving and returning to the game)
 let rememberedScreen: MobileScreen = 'mars';
-// Draft repick opened via "Turn": the view is rebuilt on every refresh while waiting for the others,
-// so the open card selection must survive that (otherwise it jumps back to Mars)
+// Draft repick opened via "Turn": while waiting for the others the open card selection must survive
+// every update (otherwise it jumps back to Mars)
 let draftRepickOpen = false;
 // First mount after page load: don't open the turn drawer automatically.
-// App.vue rebuilds the view on every server update (playerkey) – there it should keep
-// opening, so that after an action the menu for the next one is right there.
+// On every later server update it does open, so that after an action the menu for the next one is right there.
 let pageJustLoaded = true;
 
 /* True if `input` is the turn's action menu (same distinction as WaitingFor). */
 function isActionMenuInput(input: PlayerInputModel | undefined): boolean {
   return input !== undefined && !input.optional && input.type === 'or' && !isChoiceMenu(input);
+}
+
+type TurnState = {screen: MobileScreen, sheetOpen: boolean, turnButtonLifted: boolean};
+
+// Screen and turn sheet for a new player view: on mount and on every server update (in place, App.vue no longer remounts)
+function turnStateFor(playerView: PlayerViewModel): TurnState {
+  const waitingFor = playerView.waitingFor;
+  const menu = isActionMenuInput(waitingFor);
+  // Action menu: sheet over the previous screen; other mandatory inputs directly as a task
+  const acting = waitingFor !== undefined && !waitingFor.optional;
+  const openSheet = menu && !pageJustLoaded;
+  pageJustLoaded = false;
+  return {
+    screen: (acting && !menu) || (draftRepickOpen && waitingFor !== undefined && isDraftRepick(playerView, waitingFor)) ? 'turn' : rememberedScreen,
+    sheetOpen: openSheet,
+    turnButtonLifted: openSheet,
+  };
 }
 
 export default defineComponent({
@@ -259,17 +274,9 @@ export default defineComponent({
     },
   },
   data(): DataModel {
-    const waitingFor = this.playerView.waitingFor;
-    const menu = isActionMenuInput(waitingFor);
-    // Action menu: sheet over the previous screen; other mandatory inputs directly as a task
-    const acting = waitingFor !== undefined && !waitingFor.optional;
-    const openSheet = menu && !pageJustLoaded;
-    pageJustLoaded = false;
     return {
-      screen: (acting && !menu) || (draftRepickOpen && waitingFor !== undefined && isDraftRepick(this.playerView, waitingFor)) ? 'turn' : rememberedScreen,
+      ...turnStateFor(this.playerView),
       placing: false,
-      sheetOpen: openSheet,
-      turnButtonLifted: openSheet,
       task: undefined,
       inputTitle: undefined,
       playersSegment: 'players',
@@ -386,6 +393,17 @@ export default defineComponent({
     },
   },
 
+  watch: {
+    // Server update: the view stays mounted (upstream b669327). The turn starts fresh like on mount;
+    // what the reader is looking at (players segment, card zoom, setup step) stays.
+    playerView(playerView: PlayerViewModel): void {
+      Object.assign(this, turnStateFor(playerView));
+      this.placing = false;
+      this.task = undefined;
+      this.inputTitle = undefined;
+      this.$nextTick(() => this.refreshInputTitle());
+    },
+  },
   mounted() {
     // Read the title of an already rendered input (task header outside the action menu)
     this.$nextTick(() => this.refreshInputTitle());
@@ -539,6 +557,8 @@ export default defineComponent({
       const steps = readSetupSteps(root);
       if (JSON.stringify(steps) !== JSON.stringify(this.setupSteps)) {
         this.setupSteps = steps;
+        // The view is updated in place: a step that no longer exists falls back to the last one
+        this.setupStep = Math.max(0, Math.min(this.setupStep, steps.length - 1));
       }
     },
     scrollCarousel(index: number) {

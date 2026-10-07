@@ -233,8 +233,6 @@ export default defineComponent({
         ingestView(playerView, 'own');
       }
       root.playerView = playerView;
-      // Only the mobile views are still rebuilt on every update (App.vue: playerkey)
-      root.playerkey++;
       root.screen = 'player-home';
       // No reload at game end: the player view then shows the floating message (GameOverNotice),
       // which itself forwards to the results page. A reload jumped there immediately, the message was never seen.
