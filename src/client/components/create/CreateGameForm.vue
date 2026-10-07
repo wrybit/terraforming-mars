@@ -32,32 +32,31 @@
         <div class="create-game-cards">
           <div class="create-game-cards-column">
           <section class="create-game-card" style="order: 1">
-            <div class="create-game-card-head"><h2 v-i18n>Expansions</h2></div>
-            <!-- Per group a small button that says what it does: select all, or deselect all once everything is on -->
-            <div class="create-game-subhead">
-              <span v-i18n>Official</span>
-              <button type="button" class="create-game-small-button" @click="setExpansions(OFFICIAL_EXPANSIONS, !allOfficialSelected)" v-i18n>{{ allOfficialSelected ? 'Deselect all' : 'Select all' }}</button>
-            </div>
-            <div class="create-game-chip-grid">
-              <!-- The base game is always part of the game: shown as a selected chip that cannot be switched off -->
-              <ChoiceChip label="Base game" iconClass="expansion-icon-base" selected locked/>
-              <ChoiceChip v-for="choice in OFFICIAL_EXPANSIONS" :key="choice.expansion"
-                :label="choice.label" :iconClass="choice.iconClass" :selected="expansions[choice.expansion]"
-                :href="choice.info ? wikiUrls[choice.expansion] : undefined"
-                @select="expansions[choice.expansion] = !expansions[choice.expansion]"/>
-            </div>
-            <div class="create-game-subhead">
-              <span v-i18n>Fan-made</span>
-              <button type="button" class="create-game-small-button" @click="setExpansions(FAN_EXPANSIONS, !allFanSelected)" v-i18n>{{ allFanSelected ? 'Deselect all' : 'Select all' }}</button>
-            </div>
-            <div class="create-game-chip-grid">
-              <ChoiceChip v-for="choice in FAN_EXPANSIONS" :key="choice.expansion"
-                :label="choice.label" :iconClass="choice.iconClass" :selected="expansions[choice.expansion]"
-                :href="choice.info ? wikiUrls[choice.expansion] : undefined"
-                @select="expansions[choice.expansion] = !expansions[choice.expansion]">
-                <span v-if="choice.alpha" class="create-game-alpha" title="Alpha — work in progress">α</span>
-              </ChoiceChip>
-            </div>
+            <!-- Grouping of the tiles in the header row: one control, no second row -->
+            <div class="create-game-card-head create-game-expansions-head"><h2 v-i18n>Expansions</h2><ExpansionGroupMenu v-model="expansionGrouping"/></div>
+            <template v-for="group in expansionGroups" :key="expansionGrouping + group.key">
+              <!-- Per group a small button that says what it does: select all, or deselect all once everything is on -->
+              <div class="create-game-subhead">
+                <span>{{ $t(group.title) }}</span>
+                <button v-if="choicesOf(group).length > 0" type="button" class="create-game-small-button"
+                  @click="setExpansions(choicesOf(group), !allSelected(group))">{{ $t(allSelected(group) ? 'Deselect all' : 'Select all') }}</button>
+              </div>
+              <div class="create-game-chip-grid create-game-expansion-grid">
+                <!-- The base game is always part of the game: shown as a selected chip that cannot be switched off -->
+                <ChoiceChip v-for="tile in group.tiles" :key="tile.module"
+                  :label="tile.choice?.label ?? 'Base game'" :iconClass="tile.choice?.iconClass ?? 'expansion-icon-base'"
+                  :selected="tile.choice === undefined || expansions[tile.choice.expansion]" :locked="tile.choice === undefined"
+                  :href="tile.choice?.info ? wikiUrls[tile.choice.expansion] : undefined"
+                  :tooltip="tile.choice === undefined ? undefined : requiredByTooltip(tile.choice.expansion, expansions)"
+                  @select="tile.choice !== undefined && toggleExpansion(tile.choice.expansion)">
+                  <template #detail>
+                    <span v-for="(part, index) in contentLine(tile, group.highlight, expansionGrouping !== 'source')" :key="index"
+                      :class="{'create-game-chip-detail--hit': part.highlighted}">{{ part.text }}</span>
+                  </template>
+                  <span v-if="tile.choice?.alpha" class="create-game-alpha" title="Alpha — work in progress">α</span>
+                </ChoiceChip>
+              </div>
+            </template>
           </section>
 
           <section class="create-game-card" style="order: 6">
@@ -371,12 +370,18 @@ import {sanitizeEscapeVelocityOptions} from '@/common/game/escapeVelocity';
 import {validateNewGameConfig, validationDetails, ValidationErrors} from '@/common/game/validateNewGameConfig';
 import ValidationProblems from './ValidationProblems.vue';
 import ChoiceChip from './ChoiceChip.vue';
+import ExpansionGroupMenu from './ExpansionGroupMenu.vue';
 import InfoLink from './InfoLink.vue';
 import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, ExpansionChoice, FAN_BOARDS, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS} from './createGameChoices';
+import {AGENDA_OPTIONS, ExpansionChoice, FAN_BOARDS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS} from './createGameChoices';
+import {ExpansionGroup, ExpansionGrouping, ExpansionTile, groupExpansions, loadExpansionGrouping, saveExpansionGrouping} from './expansionGrouping';
+import {ContentLinePart, contentLine} from './expansionContentLine';
+import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
+import {requiredByTooltip, requirementsOf} from './expansionDependencies';
+import {Expansion} from '@/common/cards/GameModule';
 
 const createGameSettingsStorage = new CreateGameSettingsStorage();
 
@@ -387,6 +392,8 @@ type Refs = {
 };
 
 type FormModel = {
+  /** Grouping of the expansion tiles; a view choice, not a game setting */
+  expansionGrouping: ExpansionGrouping;
   preludeToggled: boolean;
   uploading: boolean;
   previousViewport: string;
@@ -415,6 +422,7 @@ export default defineComponent({
   data(): CreateGameModel & FormModel {
     return {
       ...defaultCreateGameModel(),
+      expansionGrouping: loadExpansionGrouping(),
       preludeToggled: false,
       uploading: false,
       previousViewport: '',
@@ -433,6 +441,7 @@ export default defineComponent({
     CardsFilter,
     ChoiceChip,
     ColoniesFilter,
+    ExpansionGroupMenu,
     CustomCardListCard,
     CreateGameBoardPreview,
     InfoLink,
@@ -445,6 +454,9 @@ export default defineComponent({
     ValidationProblems,
   },
   watch: {
+    expansionGrouping(value: ExpansionGrouping) {
+      saveExpansionGrouping(value);
+    },
     board(value: BoardNameType) {
       if (!this.isRandomBoard(value)) {
         this.lastFixedBoard = value as BoardName;
@@ -545,11 +557,8 @@ export default defineComponent({
      *
      * serializeSettings finishes the players and the escape velocity values, and checks the cloned game.
      */
-    allOfficialSelected(): boolean {
-      return OFFICIAL_EXPANSIONS.every((choice) => this.expansions[choice.expansion]);
-    },
-    allFanSelected(): boolean {
-      return FAN_EXPANSIONS.every((choice) => this.expansions[choice.expansion]);
+    expansionGroups(): Array<ExpansionGroup> {
+      return groupExpansions(this.expansionGrouping);
     },
     // Fixed board: its name; random board: the drawn one as soon as the preview knows it
     summaryBoard(): BoardName | undefined {
@@ -640,12 +649,6 @@ export default defineComponent({
     },
     PLAYER_COLORS(): typeof PLAYER_COLORS {
       return PLAYER_COLORS;
-    },
-    OFFICIAL_EXPANSIONS(): typeof OFFICIAL_EXPANSIONS {
-      return OFFICIAL_EXPANSIONS;
-    },
-    FAN_EXPANSIONS(): typeof FAN_EXPANSIONS {
-      return FAN_EXPANSIONS;
     },
     PLAYER_COUNT_OPTIONS(): typeof PLAYER_COUNT_OPTIONS {
       return PLAYER_COUNT_OPTIONS;
@@ -779,8 +782,33 @@ export default defineComponent({
     // Switches a whole group of expansions on or off (dependent options follow via the expansion watchers)
     setExpansions(choices: ReadonlyArray<ExpansionChoice>, value: boolean) {
       for (const choice of choices) {
-        this.expansions[choice.expansion] = value;
+        this.setExpansion(choice.expansion, value);
       }
+    },
+    toggleExpansion(expansion: Expansion) {
+      this.setExpansion(expansion, !this.expansions[expansion]);
+    },
+    // Switching an expansion on also switches on what part of it needs (expansionDependencies.ts)
+    setExpansion(expansion: Expansion, value: boolean) {
+      this.expansions[expansion] = value;
+      if (value) {
+        for (const required of requirementsOf(expansion)) {
+          this.expansions[required] = true;
+        }
+      }
+    },
+    // Expansions of a group that can be switched (not the base game)
+    choicesOf(group: ExpansionGroup): Array<ExpansionChoice> {
+      return group.tiles.flatMap((tile) => tile.choice === undefined ? [] : [tile.choice]);
+    },
+    allSelected(group: ExpansionGroup): boolean {
+      return this.choicesOf(group).every((choice) => this.expansions[choice.expansion]);
+    },
+    contentLine(tile: ExpansionTile, highlight: ContentKey | TraitKey | undefined, withSource: boolean): Array<ContentLinePart> {
+      return contentLine(tile, highlight, withSource);
+    },
+    requiredByTooltip(expansion: Expansion, selected: Record<Expansion, boolean>): string | undefined {
+      return requiredByTooltip(expansion, selected);
     },
     resetSettings() {
       createGameSettingsStorage.clearSettings();

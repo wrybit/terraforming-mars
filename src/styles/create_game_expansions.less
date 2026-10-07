@@ -1,0 +1,100 @@
+// "Create game", expansions card: grouping control in the header and a content line per tile
+// (ExpansionGroupMenu.vue, expansionContentLine.ts). Proximity: name and content line 2px apart,
+// tiles 6px (@create-game-gap-inner), groups 20px (@create-game-gap-group).
+
+// Header: title left, grouping right – in the same row as the title, so no second separator line
+.create-game-expansions-head {
+  justify-content: space-between;
+  // The pill is taller than the title: keep the header as high as the other card headers
+  margin-top: -4px;
+  margin-bottom: (12px - 4px);
+}
+
+.expansion-group-menu {
+  font-size: 13px;
+  line-height: 1;
+
+  // Only as wide as the longest entry
+  .card-bar-menu.expansion-group-menu__list {
+    right: 0;
+    left: auto;
+    width: max-content;
+    padding: 6px;
+    gap: 2px;
+  }
+
+  // Nose pointing at the button, like the filter menu
+  .expansion-group-menu__list::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    right: 22px;
+    width: 12px;
+    height: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 2px 0 0;
+    background: #171a26;
+    transform: rotate(45deg);
+  }
+
+  .card-sort-menu__manual {
+    width: 100%;
+    white-space: nowrap;
+  }
+}
+
+.expansion-group-menu__heading {
+  padding: 6px 10px 4px;
+  color: #9aa0b8;
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+// Tiles with a content line
+.create-game-expansion-grid .create-game-chip {
+  min-height: 50px;
+}
+
+.create-game-chip-text {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+}
+
+.create-game-chip-detail {
+  overflow: hidden;
+  color: rgba(238, 238, 238, 0.5);
+  font-size: 12px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  > span + span::before {
+    content: " · ";
+  }
+}
+
+// The content the grouping is about: first in the line and lit
+.create-game-chip-detail--hit {
+  color: lighten(@selection-color, 25%);
+  font-weight: 600;
+}
+
+// Phone: one tile per row, so the content line stays readable
+@media only screen and (max-width: @card-list-phone) {
+  .create-game-chip-grid.create-game-expansion-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .create-game-expansion-grid .create-game-chip {
+    min-height: 46px;
+  }
+
+  // Only the icon in the grouping button: the menu names the grouping anyway
+  .expansion-group-menu__label {
+    display: none;
+  }
+}

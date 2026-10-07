@@ -76,6 +76,33 @@ describe('CreateGameForm', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
+  it('selecting an expansion also selects what part of it needs', () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const vm = wrapper.vm as any;
+    vm.toggleExpansion('community');
+    expect(vm.expansions.community).eq(true);
+    expect(vm.expansions.colonies).eq(true);
+    expect(vm.expansions.turmoil).eq(true);
+    // The needed expansion can still be switched off afterwards
+    vm.toggleExpansion('colonies');
+    expect(vm.expansions.colonies).eq(false);
+    expect(vm.expansions.community).eq(true);
+  });
+
+  it('remembers the grouping of the expansions', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    (wrapper.vm as any).expansionGrouping = 'corporation';
+    await nextTick();
+    const again = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    expect((again.vm as any).expansionGrouping).eq('corporation');
+  });
+
   it('random board is a switch: on draws from the official boards, off restores the chosen board', async () => {
     const wrapper = shallowMount(CreateGameForm, {
       ...globalConfig,

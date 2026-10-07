@@ -6,12 +6,17 @@
     :class="{'create-game-chip--selected': selected, 'create-game-chip--locked': locked}"
     :aria-pressed="selected"
     :aria-disabled="locked"
-    :title="translatedLabel"
+    :title="tooltip ?? translatedLabel"
     @click="select()"
     @keydown.enter.prevent="select()"
     @keydown.space.prevent="select()">
     <slot name="icon"><span v-if="iconClass" :class="'create-game-expansion-icon ' + iconClass"></span></slot>
-    <span class="create-game-chip-label" :class="{capitalized}">{{ translatedLabel }}</span>
+    <!-- With a detail line (expansions: what they add) name and detail stack, tight together -->
+    <span v-if="$slots.detail" class="create-game-chip-text">
+      <span class="create-game-chip-label" :class="{capitalized}">{{ translatedLabel }}</span>
+      <span class="create-game-chip-detail"><slot name="detail"></slot></span>
+    </span>
+    <span v-else class="create-game-chip-label" :class="{capitalized}">{{ translatedLabel }}</span>
     <slot></slot>
     <InfoLink v-if="href" :href="href"/>
   </div>
@@ -48,6 +53,11 @@ export default defineComponent({
     locked: {
       type: Boolean,
       default: false,
+    },
+    // Hover text instead of the label, e.g. why the tile was selected along with another one
+    tooltip: {
+      type: String,
+      required: false,
     },
     // Game board names come lowercase from the enum
     capitalized: {
