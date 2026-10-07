@@ -85,6 +85,10 @@
   > .panel-body {
     padding-right: 64px;
     scrollbar-gutter: stable;
+    // Soft fade at the top and bottom edge; heights come from LogPanel (0 at the start/end of the log)
+    --log-fade-top: 0px;
+    --log-fade-bottom: 0px;
+    mask-image: linear-gradient(to bottom, transparent 0, #000 var(--log-fade-top), #000 calc(100% - var(--log-fade-bottom)), transparent 100%);
   }
 
   li {

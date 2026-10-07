@@ -194,7 +194,8 @@ describe('LogPanel', () => {
     (wrapper.vm as any).selectGeneration(2);
 
     expect((wrapper.vm as any).selectedGeneration).eq(2);
-    expect(panel.getScrollTop()).eq(112);
+    // Header ends up below the top edge fade (24px) plus the gap (8px)
+    expect(panel.getScrollTop()).eq(300 - 180 - 24 - 8);
   });
 
   it('keeps the reading position across a remount', async () => {

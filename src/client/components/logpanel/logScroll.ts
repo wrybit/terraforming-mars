@@ -6,6 +6,9 @@ export type ScrollContainer = HTMLElement | Window;
 // Breathing space between the reading line and a header scrolled to
 export const HEADER_SCROLL_GAP = 8;
 
+// Height of the soft fade at the top and bottom edge of the log box; the top fade is not part of the reading area
+export const LOG_EDGE_FADE = 24;
+
 // A header counts as reached once it is this close to the reading line (covers the gap above and rounding)
 const READING_LINE_TOLERANCE = HEADER_SCROLL_GAP + 4;
 
@@ -51,12 +54,22 @@ export function scrollContainerTo(container: ScrollContainer, top: number, behav
   }
 }
 
-// Viewport y where the reading starts: top of the scrolling box, or – when the page scrolls –
+// Viewport y where the reading starts: top of the scrolling box below its edge fade, or – when the page scrolls –
 // the lower edge of the sticky generation tabs
 export function readingLineOf(container: ScrollContainer, tabBar: HTMLElement | undefined): number {
   const containerTop = isWindow(container) ? 0 : container.getBoundingClientRect().top;
   const tabBarBottom = tabBar?.getBoundingClientRect().bottom ?? 0;
-  return isWindow(container) ? Math.max(containerTop, tabBarBottom) : containerTop;
+  return isWindow(container) ? Math.max(containerTop, tabBarBottom) : containerTop + LOG_EDGE_FADE;
+}
+
+// Fade heights for the top and bottom edge: they grow with the content hidden beyond that edge, so the
+// start and the end of the log stay crisp and the fade only appears once there is something to scroll to
+export function edgeFadesOf(container: HTMLElement): {top: number, bottom: number} {
+  const top = scrollTopOf(container);
+  return {
+    top: Math.min(top, LOG_EDGE_FADE),
+    bottom: Math.min(Math.max(0, maxScrollTopOf(container) - top), LOG_EDGE_FADE),
+  };
 }
 
 // Index of the section the reader is in: the last one whose header has reached the reading line

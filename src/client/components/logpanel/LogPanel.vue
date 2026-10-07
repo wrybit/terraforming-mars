@@ -62,7 +62,7 @@ import {ViewModel} from '@/common/models/PlayerModel';
 import {SoundManager} from '@/client/utils/SoundManager';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {logMessageItemCount, needsModalPreview} from '@/client/components/logpanel/logMessageContent';
-import {activeSectionIndex, findScrollContainer, HEADER_SCROLL_GAP, maxScrollTopOf, readingLineOf, scrollContainerTo, ScrollContainer, scrollTopOf} from '@/client/components/logpanel/logScroll';
+import {activeSectionIndex, edgeFadesOf, findScrollContainer, HEADER_SCROLL_GAP, maxScrollTopOf, readingLineOf, scrollContainerTo, ScrollContainer, scrollTopOf} from '@/client/components/logpanel/logScroll';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
@@ -354,9 +354,23 @@ export default defineComponent({
       this.selectedGeneration = this.sections[index]?.generation ?? this.generation;
     },
     updateScrollState(): void {
-      const nearBottom = this.isNearBottom(this.scrollContainer());
+      const container = this.scrollContainer();
+      const nearBottom = this.isNearBottom(container);
       this.showScrollToBottomButton = !nearBottom;
       this.following = nearBottom;
+      this.updateEdgeFades(container);
+    },
+    // Soft fade at the top/bottom edge of the box. Set as CSS variables directly on the element:
+    // it changes with every scroll frame and must not trigger a re-render.
+    updateEdgeFades(container: ScrollContainer): void {
+      const body = this.typedRefs.scrollBody;
+      if (body === undefined) {
+        return;
+      }
+      // When the page scrolls (mobile) the box has no edges of its own
+      const fades = container === body ? edgeFadesOf(body) : {top: 0, bottom: 0};
+      body.style.setProperty('--log-fade-top', `${fades.top}px`);
+      body.style.setProperty('--log-fade-bottom', `${fades.bottom}px`);
     },
     isNearBottom(container: ScrollContainer): boolean {
       return maxScrollTopOf(container) - scrollTopOf(container) <= BOTTOM_SCROLL_THRESHOLD;
