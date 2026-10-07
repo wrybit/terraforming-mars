@@ -831,13 +831,48 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
 @container (min-width: 701px) {
   .select-party__cards {
     grid-template-columns: repeat(var(--party-columns, 3), minmax(0, 1fr));
-    gap: 46px 14px;
-    padding: 34px 0 14px;
+    gap: 40px 14px;
+    padding: 34px 0 6px;
   }
 
+  // Leader seat and seated delegates share one row (like the narrow layout), policy and bonus at the bottom:
+  // keeps two rows of cards plus the source step within the box height
   .select-party__card {
-    gap: 8px;
-    padding: 40px 14px 24px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas: "name" "people" "policy" "bonus";
+    justify-items: center;
+    gap: 6px;
+    padding: 34px 14px 16px;
+  }
+
+  .select-party__name {
+    grid-area: name;
+  }
+
+  .select-party__leader {
+    grid-area: people;
+  }
+
+  .select-party__seats {
+    grid-area: people;
+    align-self: center;
+    justify-self: stretch;
+    justify-content: flex-start;
+    max-width: none;
+    min-height: 0;
+    padding-left: calc(50% + 28px);
+  }
+
+  .select-party__rule--policy {
+    grid-area: policy;
+    align-self: end;
+    margin-top: 0;
+  }
+
+  .select-party__rule--bonus {
+    grid-area: bonus;
   }
 
   .select-party__badge {
@@ -884,8 +919,8 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   }
 
   .select-party__preview {
-    padding: 12px 16px;
-    font-size: 16px;
+    padding: 8px 14px;
+    font-size: 15px;
   }
 }
 
