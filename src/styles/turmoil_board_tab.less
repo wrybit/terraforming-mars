@@ -595,7 +595,8 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
 .select-party__cards {
   display: grid;
   grid-template-columns: repeat(var(--party-columns, 6), minmax(0, 1fr));
-  gap: 30px 8px;
+  // Row gap: the badge below a card (Ruling) and the hexagon above the next one must not touch
+  gap: 46px 8px;
   padding: 24px 0 2px;
 }
 
@@ -831,7 +832,7 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
 @container (min-width: 701px) {
   .select-party__cards {
     grid-template-columns: repeat(var(--party-columns, 3), minmax(0, 1fr));
-    gap: 40px 14px;
+    gap: 58px 14px;
     padding: 34px 0 6px;
   }
 
