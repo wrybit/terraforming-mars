@@ -122,7 +122,7 @@ describe('Board', () => {
     const updated = spaces.map((s) => s.id === SpaceName.GANYMEDE_COLONY ? {...s, tileType: TileType.CITY} : s);
     await wrapper.setProps({spaces: updated});
 
-    const ganymede = wrapper.findAllComponents(BoardSpace).find((w) => w.props('text') === 'Ganymede Colony');
+    const ganymede = wrapper.findAllComponents(BoardSpace).find((w) => w.props('space')?.id === SpaceName.GANYMEDE_COLONY);
     expect(ganymede?.props('space').tileType).to.eq(TileType.CITY);
   });
 });
