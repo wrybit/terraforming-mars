@@ -38,10 +38,13 @@
             <rect :x="wedges[index].icon.x - 48" :y="wedges[index].icon.y + 30" width="96" height="22" rx="5"/>
             <text :x="wedges[index].icon.x" :y="wedges[index].icon.y + 46">{{ $t('Ruling') }}</text>
           </g>
-          <!-- Dominance marker as a white acrylic cube like the player cubes (the board game uses a white cube) -->
-          <foreignObject v-if="party.name === turmoil.dominant" :x="wedges[index].dominance.x - 22" :y="wedges[index].dominance.y - 22" width="44" height="44" class="turmoil-board-tab__dominance">
-            <span class="turmoil-board-tab__dominance-cube" :title="$t('Dominant party: most delegates – takes over as the ruling party at the end of the generation')"><PlayerCube color="neutral" view="slight" :size="26"/></span>
-          </foreignObject>
+          <!-- Successor (dominant party) as a white badge under the party icon like "Ruling" – below it if the party is both -->
+          <g v-if="party.name === turmoil.dominant" class="turmoil-board-tab__ruling-badge turmoil-board-tab__ruling-badge--successor"
+            :transform="party.name === turmoil.ruling ? 'translate(0 26)' : undefined">
+            <title>{{ $t('Dominant party: most delegates – takes over as the ruling party at the end of the generation') }}</title>
+            <rect :x="wedges[index].icon.x - 70" :y="wedges[index].icon.y + 30" width="140" height="22" rx="5"/>
+            <text :x="wedges[index].icon.x" :y="wedges[index].icon.y + 46">{{ $t('Successor') }}</text>
+          </g>
         </g>
         <path :d="chairPath" class="turmoil-board-tab__chair"/>
         <!-- Heading at the top of the dark chair, the chairman below it -->
@@ -96,7 +99,6 @@ import {PartyName} from '@/common/turmoil/PartyName';
 import {Color} from '@/common/Color';
 import {GlobalEventName} from '@/common/turmoil/globalEvents/GlobalEventName';
 import TurmoilEventCard from './TurmoilEventCard.vue';
-import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
@@ -110,7 +112,7 @@ const NEUTRAL_DELEGATES = 14;
 
 export default defineComponent({
   name: 'TurmoilBoard',
-  components: {TurmoilEventCard, PlayerCube},
+  components: {TurmoilEventCard},
   directives: {flash: vFlash},
   props: {
     turmoil: {
