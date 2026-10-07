@@ -656,17 +656,6 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   }
 }
 
-.select-party__dominance {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
-  background: #fafafa;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-}
-
 .select-party__name {
   display: grid;
   place-items: center;
@@ -723,13 +712,19 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   }
 }
 
-.select-party__ruling {
+// Badges centred on the bottom edge of the card: in office (gold) and successor (white)
+.select-party__marks {
   position: absolute;
   bottom: -10px;
   left: 50%;
   z-index: 2;
-  padding: 0 8px;
+  display: flex;
+  gap: 4px;
   transform: translateX(-50%);
+}
+
+.select-party__ruling {
+  padding: 0 8px;
   border-radius: 4px;
   background: @turmoil-gold;
   color: #2a1f00;
@@ -738,6 +733,13 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   text-transform: uppercase;
   white-space: nowrap;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+// Successor = dominant party: white like the dominance marker, with a help cursor for the tooltip
+.select-party__ruling--successor {
+  background: #f4f4f2;
+  color: #1c2026;
+  cursor: help;
 }
 
 .select-party__preview {
@@ -912,8 +914,11 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
     }
   }
 
-  .select-party__ruling {
+  .select-party__marks {
     bottom: -12px;
+  }
+
+  .select-party__ruling {
     font-size: 12px;
     line-height: 22px;
   }

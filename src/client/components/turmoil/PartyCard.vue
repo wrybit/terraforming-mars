@@ -6,7 +6,6 @@
     :data-test="'party-' + party.name">
     <input type="radio" class="choice-option-input" :name="groupName" :checked="selected" :disabled="disabled" @change="emit('select')">
     <span class="select-party__badge"><span class="select-party__hex"><img :src="partyImage(party.name)" alt=""></span></span>
-    <span v-if="party.name === turmoil.dominant" class="select-party__dominance" :title="$t('Dominant')"></span>
     <span class="select-party__name">{{ $t(party.name) }}</span>
     <span class="select-party__leader" :title="$t('Party leader')">
       <img v-if="party.partyLeader !== undefined" :src="figureImage(party.partyLeader)" width="26" :height="26 * 1.3" alt="">
@@ -17,8 +16,13 @@
     </span>
     <span class="select-party__rule select-party__rule--policy"><small>{{ $t('While ruling') }}</small>{{ policyText ?? $t(agendaText(agenda.policy)) }}</span>
     <span class="select-party__rule select-party__rule--bonus"><small>{{ $t('When taking over') }}</small>{{ bonusText ?? $t(agendaText(agenda.bonus)) }}</span>
-    <span v-if="note !== undefined" class="select-party__ruling">{{ $t(note) }}</span>
-    <span v-else-if="party.name === turmoil.ruling" class="select-party__ruling">{{ $t('Ruling') }}</span>
+    <!-- Badges below the card: the party in office (gold) and its successor, the dominant party (white like the
+         dominance marker of the board game); the rules term "dominant" is explained in the tooltip -->
+    <span class="select-party__marks">
+      <span v-if="note !== undefined" class="select-party__ruling">{{ $t(note) }}</span>
+      <span v-else-if="party.name === turmoil.ruling" class="select-party__ruling">{{ $t('Ruling') }}</span>
+      <span v-if="party.name === turmoil.dominant" class="select-party__ruling select-party__ruling--successor" :title="$t('Dominant party: most delegates – takes over as the ruling party at the end of the generation')">{{ $t('Successor') }}</span>
+    </span>
   </label>
 </template>
 

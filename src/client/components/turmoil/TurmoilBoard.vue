@@ -38,7 +38,7 @@
             <rect :x="wedges[index].icon.x - 48" :y="wedges[index].icon.y + 30" width="96" height="22" rx="5"/>
             <text :x="wedges[index].icon.x" :y="wedges[index].icon.y + 46">{{ $t('Ruling') }}</text>
           </g>
-          <rect v-if="party.name === turmoil.dominant" :x="wedges[index].dominance.x - 15" :y="wedges[index].dominance.y - 15" width="30" height="30" rx="6" class="turmoil-board-tab__dominance"/>
+          <rect v-if="party.name === turmoil.dominant" :x="wedges[index].dominance.x - 15" :y="wedges[index].dominance.y - 15" width="30" height="30" rx="6" class="turmoil-board-tab__dominance"><title>{{ $t('Dominant party: most delegates – takes over as the ruling party at the end of the generation') }}</title></rect>
         </g>
         <path :d="chairPath" class="turmoil-board-tab__chair"/>
         <!-- Heading at the top of the dark chair, the chairman below it -->
