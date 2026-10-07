@@ -1,29 +1,29 @@
-import {PlayerInput} from '../../src/server/PlayerInput';
-import {IPlayer} from '../../src/server/IPlayer';
-import {InputResponse} from '../../src/common/inputs/InputResponse';
-import {OrOptions} from '../../src/server/inputs/OrOptions';
-import {AndOptions} from '../../src/server/inputs/AndOptions';
-import {SelectInitialCards} from '../../src/server/inputs/SelectInitialCards';
-import {SelectOption} from '../../src/server/inputs/SelectOption';
-import {SelectCard} from '../../src/server/inputs/SelectCard';
-import {SelectCardToPlay} from '../../src/server/inputs/SelectCardToPlay';
-import {SelectSpace} from '../../src/server/inputs/SelectSpace';
-import {SelectPlayer} from '../../src/server/inputs/SelectPlayer';
-import {SelectAmount} from '../../src/server/inputs/SelectAmount';
-import {SelectPayment} from '../../src/server/inputs/SelectPayment';
-import {SelectProductionToLose} from '../../src/server/inputs/SelectProductionToLose';
-import {SelectResource} from '../../src/server/inputs/SelectResource';
-import {SelectResources} from '../../src/server/inputs/SelectResources';
-import {SelectColony} from '../../src/server/inputs/SelectColony';
-import {SelectParty} from '../../src/server/inputs/SelectParty';
-import {SelectDelegate} from '../../src/server/inputs/SelectDelegate';
-import {ICard} from '../../src/server/cards/ICard';
-import {isICorporationCard} from '../../src/server/cards/corporation/ICorporationCard';
-import {isIStandardProjectCard} from '../../src/server/cards/IStandardProjectCard';
-import {IProjectCard} from '../../src/server/cards/IProjectCard';
-import {Tag} from '../../src/common/cards/Tag';
-import {Units} from '../../src/common/Units';
-import {PRODUCTION_MINIMUMS} from '../../src/common/constants';
+import {PlayerInput} from '../PlayerInput';
+import {IPlayer} from '../IPlayer';
+import {InputResponse} from '../../common/inputs/InputResponse';
+import {OrOptions} from '../inputs/OrOptions';
+import {AndOptions} from '../inputs/AndOptions';
+import {SelectInitialCards} from '../inputs/SelectInitialCards';
+import {SelectOption} from '../inputs/SelectOption';
+import {SelectCard} from '../inputs/SelectCard';
+import {SelectCardToPlay} from '../inputs/SelectCardToPlay';
+import {SelectSpace} from '../inputs/SelectSpace';
+import {SelectPlayer} from '../inputs/SelectPlayer';
+import {SelectAmount} from '../inputs/SelectAmount';
+import {SelectPayment} from '../inputs/SelectPayment';
+import {SelectProductionToLose} from '../inputs/SelectProductionToLose';
+import {SelectResource} from '../inputs/SelectResource';
+import {SelectResources} from '../inputs/SelectResources';
+import {SelectColony} from '../inputs/SelectColony';
+import {SelectParty} from '../inputs/SelectParty';
+import {SelectDelegate} from '../inputs/SelectDelegate';
+import {ICard} from '../cards/ICard';
+import {isICorporationCard} from '../cards/corporation/ICorporationCard';
+import {isIStandardProjectCard} from '../cards/IStandardProjectCard';
+import {IProjectCard} from '../cards/IProjectCard';
+import {Tag} from '../../common/cards/Tag';
+import {Units} from '../../common/Units';
+import {PRODUCTION_MINIMUMS} from '../../common/constants';
 import {RandomSource, integerBetween, pickOne, pickSome} from './randomChoice';
 import {greedyPayment} from './greedyPayment';
 
@@ -180,7 +180,8 @@ export function randomResponse(input: PlayerInput, player: IPlayer, random: Rand
     return {type: 'party', partyName: pickOne(random, input.parties)};
   }
   if (input instanceof SelectDelegate) {
-    return {type: 'delegate', player: pickOne(random, input.players).color};
+    const delegate = pickOne(random, input.players);
+    return {type: 'delegate', player: typeof delegate === 'string' ? delegate : delegate.color};
   }
   throw new UnsupportedInputError(`Unsupported input type: ${input.type}`);
 }

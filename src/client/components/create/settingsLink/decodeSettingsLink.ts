@@ -5,7 +5,8 @@ import {JSONObject} from '@/common/Types';
 import {base64UrlToBytes} from './base64Url';
 import {ByteReader} from './ByteReader';
 import {codeTableValues, readCodedList, readCodedValue} from './settingsLinkCodes';
-import {BOOLEAN_FIELDS, CARD_LIST_FIELDS, ESCAPE_VELOCITY_FIELDS, NUMBER_FIELDS, PLAYER_BEGINNER_FLAG, SETTINGS_LINK_FORMAT_VERSION} from './settingsLinkFields';
+import {BOOLEAN_FIELDS, CARD_LIST_FIELDS, ESCAPE_VELOCITY_FIELDS, NUMBER_FIELDS, PLAYER_AI_LEVEL_MASK, PLAYER_AI_LEVEL_SHIFT, PLAYER_BEGINNER_FLAG, SETTINGS_LINK_FORMAT_VERSION} from './settingsLinkFields';
+import {AI_LEVELS} from '@/common/ai/AiLevel';
 
 /**
  * Unpacks a share link into the same JSON that the file import produces.
@@ -52,7 +53,8 @@ export function decodeSettingsLink(text: string): JSONObject {
     const playerFlags = reader.readUnsigned();
     const handicap = reader.readUnsigned();
     const name = reader.readText();
-    players.push({name, color, beginner: (playerFlags & PLAYER_BEGINNER_FLAG) !== 0, handicap, first: false});
+    const aiLevel = AI_LEVELS[((playerFlags & PLAYER_AI_LEVEL_MASK) >> PLAYER_AI_LEVEL_SHIFT) - 1];
+    players.push({name, color, beginner: (playerFlags & PLAYER_BEGINNER_FLAG) !== 0, handicap, first: false, ...(aiLevel === undefined ? {} : {aiLevel})});
   }
   json.players = withDistinctColors(players);
 

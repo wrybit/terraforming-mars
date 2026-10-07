@@ -64,3 +64,6 @@ export const CARD_LIST_FIELDS = [
 
 /** Player bits in the link */
 export const PLAYER_BEGINNER_FLAG = 1;
+// Bits 1-2: AI level index + 1 (0 = human), so links without AI players stay unchanged
+export const PLAYER_AI_LEVEL_SHIFT = 1;
+export const PLAYER_AI_LEVEL_MASK = 0b110;

@@ -811,6 +811,42 @@
   background: @create-game-surface-strong;
 }
 
+// Humans and AI: label column plus six equal columns, so both rows line up
+.create-game-seat-rows {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.create-game-seat-label {
+  color: @create-game-dim;
+  font-size: 14px;
+}
+
+.create-game-segmented.create-game-segmented--equal button {
+  flex: 1 1 0;
+}
+
+.create-game-ai-badge {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+}
+
+.create-game-ai-strength {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
 .create-game-players-head {
   padding: 12px 14px 10px;
 

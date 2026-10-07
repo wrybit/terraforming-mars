@@ -1,3 +1,4 @@
+import {AiLevel} from '../common/ai/AiLevel';
 import {PlayerId} from '../common/Types';
 import {CardName} from '../common/cards/CardName';
 import {Color} from '../common/Color';
@@ -44,6 +45,7 @@ export interface SerializedPlayer extends DeprecatedFields{
   fleetSize: number;
   globalParameterSteps: Record<GlobalParameter, number>;
   handicap: number;
+  aiLevel?: AiLevel;
   hasIncreasedTerraformRatingThisGeneration: boolean;
   hasTurmoilScienceTagBonus: boolean;
   heat: number;

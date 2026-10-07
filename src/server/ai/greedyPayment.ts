@@ -1,5 +1,5 @@
-import {IPlayer} from '../../src/server/IPlayer';
-import {Payment} from '../../src/common/inputs/Payment';
+import {IPlayer} from '../IPlayer';
+import {Payment} from '../../common/inputs/Payment';
 
 export type AllowedPaymentResources = {
   steel: boolean,

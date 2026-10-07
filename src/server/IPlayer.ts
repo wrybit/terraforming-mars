@@ -1,3 +1,4 @@
+import {AiLevel} from '../common/ai/AiLevel';
 import {PlayerId, isPlayerId} from '../common/Types';
 import {CardName} from '../common/cards/CardName';
 import {ICorporationCard} from './cards/corporation/ICorporationCard';
@@ -67,6 +68,8 @@ export interface IPlayer {
   color: Color;
   beginner: boolean;
   handicap: number;
+  /** Set for computer-controlled players: their strength. */
+  aiLevel: AiLevel | undefined;
 
   readonly game: IGame;
   tags: Tags;

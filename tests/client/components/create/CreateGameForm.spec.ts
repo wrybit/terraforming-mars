@@ -76,6 +76,25 @@ describe('CreateGameForm', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
+  it('adds AI players after the humans and keeps at most six players', () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const vm = wrapper.vm as any;
+    vm.humanPlayersCount = 2;
+    vm.aiPlayersCount = 2;
+    expect(vm.playersCount).eq(4);
+    expect(vm.getPlayers().map((player: any) => player.aiLevel)).deep.eq([undefined, undefined, 'normal', 'normal']);
+
+    // More humans: the AI row gives way
+    vm.humanPlayersCount = 5;
+    expect(vm.aiPlayersCount).eq(1);
+    expect(vm.playersCount).eq(6);
+
+    vm.aiPlayersCount = 0;
+    expect(vm.getPlayers().every((player: any) => player.aiLevel === undefined)).is.true;
+  });
+
   it('selecting an expansion also selects what part of it needs', () => {
     const wrapper = shallowMount(CreateGameForm, {
       ...globalConfig,

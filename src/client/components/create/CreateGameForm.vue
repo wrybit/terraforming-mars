@@ -269,7 +269,13 @@
         <section class="create-game-players">
           <div class="create-game-players-head">
             <h2 v-i18n>Players</h2>
-            <SegmentedControl v-model="playersCount" :options="PLAYER_COUNT_OPTIONS"/>
+            <!-- Humans and AI players in two aligned rows; together they make up the player count -->
+            <div class="create-game-seat-rows">
+              <span class="create-game-seat-label" v-i18n>Humans</span>
+              <SegmentedControl v-model="humanPlayersCount" :options="humanCountOptions" class="create-game-segmented--equal"/>
+              <span class="create-game-seat-label" v-i18n>AI</span>
+              <SegmentedControl v-model="aiPlayersCount" :options="AI_COUNT_OPTIONS" class="create-game-segmented--equal"/>
+            </div>
             <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
             <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
           </div>
@@ -279,6 +285,7 @@
               <div :class="['create-game-player-top', getPlayerCubeColorClass(newPlayer.color)]">
                 <span class="create-game-player-position">{{ index + 1 }}</span>
                 <input class="create-game-player-name" :placeholder="getPlayerNamePlaceholder(index)" v-model="newPlayer.name">
+                <span v-if="newPlayer.aiLevel !== undefined" class="create-game-ai-badge" v-i18n>AI</span>
                 <button v-if="playersCount > 1 && !randomFirstPlayer" type="button" class="create-game-first"
                   :class="{'create-game-first--selected': firstIndex === index + 1}" :title="$t('Goes First?')"
                   @click="firstIndex = index + 1">
@@ -295,8 +302,13 @@
                   <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16" animated/>
                 </button>
               </div>
+              <div v-if="newPlayer.aiLevel !== undefined" class="create-game-ai-strength">
+                <span v-i18n>Strength</span>
+                <SegmentedControl v-model="newPlayer.aiLevel" :options="AI_LEVEL_OPTIONS" class="create-game-segmented--equal"/>
+              </div>
               <div class="create-game-player-extra">
-                <label v-if="isBeginnerToggleEnabled()" class="create-game-player-toggle">
+                <!-- The beginner corporation is a help for humans; AI players do not need it -->
+                <label v-if="isBeginnerToggleEnabled() && newPlayer.aiLevel === undefined" class="create-game-player-toggle">
                   <SwitchInput v-model="newPlayer.beginner"/>
                   <span v-i18n>Beginner?</span>
                   <InfoLink :href="wikiUrls.beginnerCorporation"/>
@@ -376,7 +388,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, ExpansionChoice, FAN_BOARDS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS} from './createGameChoices';
+import {AGENDA_OPTIONS, AI_COUNT_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_BOARDS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption} from './createGameChoices';
 import {ExpansionGroup, ExpansionGrouping, ExpansionTile, groupExpansions, loadExpansionGrouping, saveExpansionGrouping} from './expansionGrouping';
 import {ContentLinePart, contentLine} from './expansionContentLine';
 import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
@@ -416,6 +428,9 @@ const CREATE_CARD_BOTTOM_PX = 12;
 
 // How long the button shows "Link copied"
 const LINK_COPIED_FEEDBACK_MS = 2000;
+
+// Players per game, humans and AI together
+const MAX_PLAYERS = 6;
 
 export default defineComponent({
   name: 'CreateGameForm',
@@ -653,6 +668,33 @@ export default defineComponent({
     PLAYER_COUNT_OPTIONS(): typeof PLAYER_COUNT_OPTIONS {
       return PLAYER_COUNT_OPTIONS;
     },
+    AI_COUNT_OPTIONS(): typeof AI_COUNT_OPTIONS {
+      return AI_COUNT_OPTIONS;
+    },
+    AI_LEVEL_OPTIONS(): typeof AI_LEVEL_OPTIONS {
+      return AI_LEVEL_OPTIONS;
+    },
+    // "Solo" only describes one human without AI opponents
+    humanCountOptions(): ReadonlyArray<SegmentOption> {
+      return PLAYER_COUNT_OPTIONS.map((option) => option.value === 1 && this.aiPlayersCount > 0 ? {value: 1, label: '1'} : option);
+    },
+    humanPlayersCount: {
+      get(): number {
+        return this.playersCount - this.aiPlayersCount;
+      },
+      set(count: number) {
+        this.setSeatCounts(count, this.aiPlayersCount, 'humans');
+      },
+    },
+    // AI seats are the last seats; a seat is an AI seat when its player has an AI level
+    aiPlayersCount: {
+      get(): number {
+        return this.players.slice(0, this.playersCount).filter((player) => player.aiLevel !== undefined).length;
+      },
+      set(count: number) {
+        this.setSeatCounts(this.humanPlayersCount, count, 'ai');
+      },
+    },
     MILESTONE_OPTIONS(): typeof MILESTONE_OPTIONS {
       return MILESTONE_OPTIONS;
     },
@@ -698,6 +740,16 @@ export default defineComponent({
     },
   },
   methods: {
+    setSeatCounts(humans: number, ai: number, changed: 'humans' | 'ai') {
+      // At most 6 players: the row just changed wins, the other one gives way
+      const humanCount = changed === 'humans' ? humans : Math.max(1, Math.min(humans, MAX_PLAYERS - ai));
+      const aiCount = changed === 'ai' ? Math.min(ai, MAX_PLAYERS - 1) : Math.min(ai, MAX_PLAYERS - humanCount);
+      const total = humanCount + aiCount;
+      this.players.forEach((player, index) => {
+        player.aiLevel = index >= humanCount && index < total ? (player.aiLevel ?? 'normal') : undefined;
+      });
+      this.playersCount = total;
+    },
     restoreSettingsFromLink(): boolean {
       try {
         const settings = readSettingsFromHash(window.location.hash);
@@ -951,7 +1003,9 @@ export default defineComponent({
       return playerColorClass(color, 'bg');
     },
     async serializeSettings(): Promise<NewGameConfig | undefined> {
-      let players = this.players.slice(0, this.playersCount);
+      // Copies: default names below go into the request only, not into the form (an AI seat
+      // that turns human again must not keep "(AI)" in its name)
+      let players = this.players.slice(0, this.playersCount).map((player) => ({...player}));
 
       if (this.randomFirstPlayer) {
         // Shuffle players array to assign each player a random seat around the table
@@ -982,13 +1036,14 @@ export default defineComponent({
       // Set player name automatically if not entered
       const isSoloMode = this.playersCount === 1;
 
-      this.players.forEach((player) => {
+      players.forEach((player) => {
         if (player.name === '') {
           if (isSoloMode) {
             player.name = this.$t('You');
           } else {
             const defaultPlayerName = this.$t(player.color.charAt(0).toUpperCase() + player.color.slice(1));
-            player.name = defaultPlayerName;
+            // AI players carry the marker in their name, so everybody sees it during the game
+            player.name = player.aiLevel !== undefined ? `${defaultPlayerName} (${this.$t('AI')})` : defaultPlayerName;
           }
         }
       });

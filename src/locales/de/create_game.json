@@ -74,5 +74,10 @@
   "Selected along with ${0} – needed for ${1}": "Mit ausgewählt wegen ${0} – nötig für ${1}",
   "colony tiles": "Kolonie-Plättchen",
   "global events": "globale Ereignisse",
-  "the Prelude phase": "die Präludium-Phase"
+  "the Prelude phase": "die Präludium-Phase",
+  "Humans": "Menschen",
+  "AI": "KI",
+  "Strength": "Stärke",
+  "Easy": "Leicht",
+  "Hard": "Schwer"
 }

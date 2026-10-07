@@ -1,3 +1,4 @@
+import {AiLevel} from '../ai/AiLevel';
 import {BoardName} from '../boards/BoardName';
 import {RandomBoardOption} from '../boards/RandomBoardOption';
 import {CardName} from '../cards/CardName';
@@ -16,6 +17,8 @@ export interface NewPlayerModel {
   beginner: boolean;
   handicap: number;
   first: boolean;
+  /** Present for computer-controlled players. */
+  aiLevel?: AiLevel;
 }
 
 export type EscapeVelocityOptions = {

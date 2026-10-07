@@ -1,6 +1,8 @@
 import {rememberActionStart} from './actionStart';
 import * as constants from '../common/constants';
 import {PlayerId} from '../common/Types';
+import {AiLevel, isAiLevel} from '../common/ai/AiLevel';
+import {notifyAiPlayerWaiting} from './ai/aiHook';
 import {MILESTONE_COST, PRODUCTION_MINIMUMS, REDS_RULING_POLICY_COST} from '../common/constants';
 import {cardsFromJSON, ceosFromJSON, corporationCardsFromJSON, newCorporationCard, preludesFromJSON} from './createCard';
 import {CardName} from '../common/cards/CardName';
@@ -94,6 +96,8 @@ const DEFAULT_GLOBAL_PARAMETER_STEPS = {
 
 export class Player implements IPlayer {
   public readonly id: PlayerId;
+  /** Set for computer-controlled players: their strength. */
+  public aiLevel: AiLevel | undefined = undefined;
   protected waitingFor?: PlayerInput;
   protected waitingForCb?: () => void;
   public game: IGame;
@@ -1738,6 +1742,9 @@ export class Player implements IPlayer {
     this.waitingFor = input;
     this.waitingForCb = cb;
     this.game.inputsThisRound++;
+    if (this.aiLevel !== undefined) {
+      notifyAiPlayerWaiting(this);
+    }
   }
 
   /**
@@ -1855,6 +1862,7 @@ export class Player implements IPlayer {
       color: this.color,
       beginner: this.beginner,
       handicap: this.handicap,
+      aiLevel: this.aiLevel,
       timer: this.timer.serialize(),
       // Stats
       actionsTakenThisGame: this.actionsTakenThisGame,
@@ -1877,6 +1885,7 @@ export class Player implements IPlayer {
 
   public static deserialize(d: SerializedPlayer): Player {
     const player = new Player(d.name, d.color, d.beginner, Number(d.handicap), d.id);
+    player.aiLevel = isAiLevel(d.aiLevel) ? d.aiLevel : undefined;
 
     player.actionsTakenThisGame = d.actionsTakenThisGame;
     player.actionsThisGeneration = new Set(d.actionsThisGeneration);

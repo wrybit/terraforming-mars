@@ -23,6 +23,7 @@ function sampleModel(): CreateGameModel {
   model.players[1].beginner = true;
   model.players[2].name = 'Märtin';
   model.players[2].handicap = 4;
+  model.players[2].aiLevel = 'hard';
   model.expansions = {...model.expansions, corpera: true, prelude: true, venus: true, colonies: true, turmoil: true};
   model.board = BoardName.HELLAS;
   model.startingCorporations = 4;

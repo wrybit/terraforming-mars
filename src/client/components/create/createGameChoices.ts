@@ -76,6 +76,15 @@ export const PLAYER_COUNT_OPTIONS: ReadonlyArray<SegmentOption> = [
   {value: 6, label: '6'},
 ];
 
+// Number of AI players next to the humans; same six columns as the player count row
+export const AI_COUNT_OPTIONS: ReadonlyArray<SegmentOption> = [0, 1, 2, 3, 4, 5].map((count) => ({value: count, label: String(count)}));
+
+export const AI_LEVEL_OPTIONS: ReadonlyArray<SegmentOption> = [
+  {value: 'easy', label: 'Easy'},
+  {value: 'normal', label: 'Normal'},
+  {value: 'hard', label: 'Hard'},
+];
+
 export const MILESTONE_OPTIONS: ReadonlyArray<SegmentOption> = [
   {value: RandomMAOptionType.NONE, label: 'Board-defined'},
   {value: RandomMAOptionType.LIMITED, label: 'Random limited'},
