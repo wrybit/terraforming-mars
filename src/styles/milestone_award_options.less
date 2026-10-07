@@ -38,13 +38,7 @@
 }
 
 .ma-options .ma-option--selected {
-  .selection-highlight();
-
-  &::after {
-    .selection-tab();
-    // Sit directly on the selection frame: the tile has no border of its own like the cards
-    top: -(@selection-tab-height + @selection-outline-width);
-  }
+  .selection-tile();
 }
 
 .ma-options .ma-option:focus-within {

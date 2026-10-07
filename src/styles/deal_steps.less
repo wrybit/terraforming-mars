@@ -1,3 +1,5 @@
+@import (reference) "./selection_highlight.less";
+
 // Shared parts of the step-by-step choice tabs (Trade: "You pay" ↓ "You get", Delegate: "From where?" ↓ "To which party?").
 // Both read top to bottom with the same section label, small arrow and selection flag, so they look like one family.
 
@@ -22,18 +24,12 @@
   }
 }
 
-// Check flag in the top right corner of the selected tile
-.deal-step__flag {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 18px;
-  height: 18px;
-  display: grid;
-  place-items: center;
-  border-radius: 0 7px 0 6px;
-  background: @bg_action;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
+// Tile rows: room above for the checkmark tab of the selection (selection_highlight.less)
+.deal-step__tiles {
+  padding-top: @selection-tab-height + @selection-outline-width - 8px;
+}
+
+// Selected tile: the same frame, glow, tint and checkmark tab as every other selection
+.deal-step__tile--on {
+  .selection-tile();
 }

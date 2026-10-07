@@ -75,3 +75,14 @@
   // Above the card contents (which go up to z-index 4)
   z-index: 5;
 }
+
+// Tile without a border of its own (milestones/awards, trade, delegate): highlight plus the checkmark tab
+// sitting directly on the selection frame. The element needs position: relative.
+.selection-tile() {
+  .selection-highlight();
+
+  &::after {
+    .selection-tab();
+    top: -(@selection-tab-height + @selection-outline-width);
+  }
+}

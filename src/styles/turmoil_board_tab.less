@@ -1,3 +1,5 @@
+@import (reference) "./selection_highlight.less";
+
 // Turmoil board tab (TurmoilBoard.vue) and the delegate tab (SelectParty.vue).
 // The layout follows the box size (container queries): see the turmoil-tab container below.
 @turmoil-gold: #f2c14e;
@@ -563,12 +565,6 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   border-radius: 8px;
   background: rgba(10, 12, 18, 0.6);
 
-  &--on {
-    border-color: @bg_action;
-    background: color-mix(in srgb, @bg_action 20%, rgba(10, 12, 18, 0.6));
-    box-shadow: 0 0 6px fade(@bg_action, 60%);
-  }
-
   &--off {
     opacity: 0.4;
   }
@@ -618,24 +614,16 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   text-align: center;
   cursor: pointer;
 
+  // Selected: the same frame, glow, tint and checkmark tab as every other selection; the tab sits top right
+  // because the party hexagon takes the middle. The rim keeps the party colour.
   &--on {
-    --rim: @bg_action;
-    filter: drop-shadow(0 0 6px fade(@bg_action, 85%));
+    .selection-tile();
 
     &::after {
-      content: "✓";
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      z-index: 1;
-      width: 22px;
-      height: 22px;
-      display: grid;
-      place-items: center;
-      border-radius: 0 8px 0 8px;
-      background: @bg_action;
-      color: #fff;
-      font: 700 13px system-ui, sans-serif;
+      // The card has a 2px rim of its own: the tab sits on the frame outside of it
+      top: -(@selection-tab-height + @selection-outline-width + 2px);
+      left: auto;
+      right: 14px;
     }
   }
 
