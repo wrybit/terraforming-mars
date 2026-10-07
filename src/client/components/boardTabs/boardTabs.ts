@@ -50,7 +50,7 @@ export function boardTabs(game: GameModel): Array<BoardTabId> {
 }
 
 // One line in a tab: a segment per track step, filled up to the current step;
-// bonus steps get a notch on top, the next bonus a bright one. Delta: player colours at their positions instead of a fill.
+// only the next bonus is marked (glowing dot), bonuses already passed get a subtle dark dot. Delta: player colours at their positions instead of a fill.
 export type BoardTabTrack = {
   color: string;
   step: number;
@@ -110,12 +110,13 @@ export function boardTabTracks(game: GameModel, players: ReadonlyArray<PublicPla
     if (pathfinders === undefined) {
       return [];
     }
-    // Planet tracks have many reward spaces: only the next notch, otherwise it gets restless
+    // All reward spaces; the lines only show the next one and the ones already passed (BoardTabLines.vue)
     return PLANET_TRACK_KEYS.map((key) => {
       const spaces = PLANETARY_TRACKS[key].spaces;
-      const position = pathfinders[key];
-      const next = spaces.findIndex((space, index) => index > position && (space.everyone.length + space.risingPlayer.length + space.mostTags.length) > 0);
-      return {color: '#d9a83a', step: position, total: spaces.length - 1, bonus: next > 0 ? [next] : []};
+      const bonus = spaces
+        .map((space, index) => ((space.everyone.length + space.risingPlayer.length + space.mostTags.length) > 0 ? index : -1))
+        .filter((index) => index > 0);
+      return {color: '#d9a83a', step: pathfinders[key], total: spaces.length - 1, bonus};
     });
   }
   case 'delta':

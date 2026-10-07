@@ -48,8 +48,9 @@ export default defineComponent({
         if (track.markers === undefined && index < track.step) {
           classes.push('board-tab-line__on');
         }
-        if (track.bonus.includes(number)) {
-          classes.push('board-tab-line__bonus');
+        // Bonus already passed: subtle dark dot in the filled segment
+        if (track.markers === undefined && track.bonus.includes(number) && number <= track.step) {
+          classes.push('board-tab-line__claimed');
         }
         if (number === next) {
           classes.push('board-tab-line__next');

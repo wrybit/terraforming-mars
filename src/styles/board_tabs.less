@@ -58,23 +58,28 @@
     background: var(--line-color);
   }
 
-  // Notch on top = bonus step, bright notch = the next one
-  i.board-tab-line__bonus::after {
+  // Only the next bonus is shown (glowing dot inside the segment);
+  // bonuses already passed keep a subtle dark dot. Later bonuses stay hidden to keep the lines calm.
+  i.board-tab-line__next::after,
+  i.board-tab-line__claimed::after {
     content: "";
     position: absolute;
-    left: 50%;
-    top: -3px;
-    width: 2px;
-    height: 3px;
-    margin-left: -1px;
-    background: rgba(255, 255, 255, 0.45);
+    inset: 0;
+    margin: auto;
+    border-radius: 50%;
   }
 
   i.board-tab-line__next::after {
-    top: -4px;
-    height: 4px;
+    width: 3px;
+    height: 3px;
     background: #fff;
-    box-shadow: 0 0 3px #fff;
+    box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.8);
+  }
+
+  i.board-tab-line__claimed::after {
+    width: 2px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.5);
   }
 
   // Long tracks (temperature 19, planets up to 22): one bar with fine separators instead of gaps
