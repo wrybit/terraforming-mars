@@ -5,6 +5,9 @@
 
 @players-table-row-height: 48px;
 @players-table-own-row-height: 56px;
+// Escape Velocity: third line (clock) under name and corporation
+@players-table-escape-velocity-row-height: 66px;
+@players-table-escape-velocity-own-row-height: 74px;
 @players-table-head-height: 34px;
 @players-table-row-gap: 4px;
 // Own row set slightly apart from the others
@@ -537,12 +540,23 @@ each(@players, {
   font-weight: 700;
 }
 
+// Escape Velocity: taller rows for the clock line (wider name column: playersTableLayout.ts)
+.players-table--escape-velocity {
+  .players-table-row--player {
+    height: @players-table-escape-velocity-row-height;
+  }
+
+  .players-table-row--me {
+    height: @players-table-escape-velocity-own-row-height;
+  }
+}
+
 // Escape Velocity: short bar of used against allowed thinking time, time and penalty next to it (EscapeVelocityClock.vue)
 .escape-velocity-clock {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 3px;
+  margin-top: 4px;
   font-size: 12px;
   line-height: 1;
   color: #d9dbe3;
@@ -551,7 +565,7 @@ each(@players, {
 
 .escape-velocity-clock__bar {
   flex: none;
-  width: 72px;
+  width: 56px;
   height: 4px;
   border-radius: 2px;
   background: rgba(255, 255, 255, 0.16);

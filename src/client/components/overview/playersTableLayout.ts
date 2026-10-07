@@ -72,6 +72,8 @@ export function savePreferredSection(section: TableSection | undefined): void {
 // Widths: name fixed, score fixed, only resources and tags share the free space.
 // Divider columns are wider than the gaps within a section (law of proximity).
 const NAME_WIDTH = 196;
+// Escape Velocity adds a clock line with bar, time and VP penalty below the corporation – it needs more room
+const ESCAPE_VELOCITY_NAME_WIDTH = 252;
 const DIVIDER_WIDTH = 12;
 const TAG_GROUP_GAP = 6;
 const PLAYED_CARDS_WIDTH = 48;
@@ -83,9 +85,13 @@ export const SCORE_COUNT = 4;
 
 const px = (value: number) => `${value}px`;
 
-export function columnTemplate(visibility: SectionVisibility, tagColumns: TagColumnGroups): string {
+export function nameColumnWidth(escapeVelocity: boolean): number {
+  return escapeVelocity ? ESCAPE_VELOCITY_NAME_WIDTH : NAME_WIDTH;
+}
+
+export function columnTemplate(visibility: SectionVisibility, tagColumns: TagColumnGroups, nameWidth: number = NAME_WIDTH): string {
   const divider = px(DIVIDER_WIDTH);
-  const tracks = [px(NAME_WIDTH)];
+  const tracks = [px(nameWidth)];
   if (visibility.goods) {
     tracks.push(divider, `repeat(${GOODS_COUNT}, minmax(${px(GOODS_MIN_WIDTH)}, 1fr))`);
   }
@@ -101,8 +107,8 @@ export function columnTemplate(visibility: SectionVisibility, tagColumns: TagCol
 }
 
 // Minimum width of the grid – same measures as columnTemplate
-export function minimumWidth(visibility: SectionVisibility, tagColumns: TagColumnGroups): number {
-  let width = NAME_WIDTH + DIVIDER_WIDTH + PLAYED_CARDS_WIDTH;
+export function minimumWidth(visibility: SectionVisibility, tagColumns: TagColumnGroups, nameWidth: number = NAME_WIDTH): number {
+  let width = nameWidth + DIVIDER_WIDTH + PLAYED_CARDS_WIDTH;
   if (visibility.goods) {
     width += DIVIDER_WIDTH + GOODS_COUNT * GOODS_MIN_WIDTH;
   }
@@ -127,7 +133,7 @@ export type FittedVisibility = {
 
 // Adapts the desired visibility to the available width; unknown width (0) changes nothing.
 // The preferred (last switched on) section is dropped last.
-export function fitToWidth(wanted: SectionVisibility, tagColumns: TagColumnGroups, availableWidth: number, preferred?: TableSection): FittedVisibility {
+export function fitToWidth(wanted: SectionVisibility, tagColumns: TagColumnGroups, availableWidth: number, preferred?: TableSection, nameWidth: number = NAME_WIDTH): FittedVisibility {
   const visibility = {...wanted};
   const autoHidden: Array<TableSection> = [];
   if (availableWidth <= 0) {
@@ -135,7 +141,7 @@ export function fitToWidth(wanted: SectionVisibility, tagColumns: TagColumnGroup
   }
   const order = [...AUTO_HIDE_ORDER.filter((section) => section !== preferred), ...(preferred ? [preferred] : [])];
   for (const section of order) {
-    if (minimumWidth(visibility, tagColumns) <= availableWidth) {
+    if (minimumWidth(visibility, tagColumns, nameWidth) <= availableWidth) {
       break;
     }
     if (visibility[section]) {

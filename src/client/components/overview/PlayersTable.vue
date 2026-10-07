@@ -1,5 +1,5 @@
 <template>
-  <div class="players-table" :style="{'--players-table-columns': template, '--players-table-cell-count': cellCount}">
+  <div :class="['players-table', {'players-table--escape-velocity': escapeVelocity}]" :style="{'--players-table-columns': template, '--players-table-cell-count': cellCount}">
     <!-- Player list as a table (only visible in the two-column layout, see players_table.less) -->
     <PlayersTableHeader :visibility="effectiveVisibility" :sectionOrder="sectionOrder" :autoHidden="fitted.autoHidden" :tagColumns="tagColumns" @toggle="toggleSection"/>
     <div class="players-table-rows">
@@ -31,7 +31,7 @@ import {playerGoods} from '@/client/components/overview/playerGoods';
 import {mobileLandscape, mobileLayout} from '@/client/utils/mobileLayout';
 import {
   DESKTOP_SECTION_ORDER, GOODS_COUNT, MOBILE_SECTION_ORDER, SCORE_COUNT, PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
-  FittedVisibility, columnTemplate, fitToWidth, loadPreferredSection, loadSectionVisibility, savePreferredSection, saveSectionVisibility,
+  FittedVisibility, columnTemplate, fitToWidth, nameColumnWidth, loadPreferredSection, loadSectionVisibility, savePreferredSection, saveSectionVisibility,
 } from '@/client/components/overview/playersTableLayout';
 
 type DataModel = {
@@ -85,6 +85,13 @@ export default defineComponent({
     this.resizeObserver?.disconnect();
   },
   computed: {
+    // Escape Velocity: rows get a third line (clock) and a wider name column (players_table.less)
+    escapeVelocity(): boolean {
+      return this.playerView.game.gameOptions.escapeVelocity !== undefined;
+    },
+    nameWidth(): number {
+      return nameColumnWidth(this.escapeVelocity);
+    },
     // Mobile view except tablet landscape transposes the table (players as columns, mobile.less @mb-portrait)
     transposed(): boolean {
       return mobileLayout.value && !mobileLandscape.value;
@@ -118,7 +125,7 @@ export default defineComponent({
     fitted(): FittedVisibility {
       const wanted = {...this.visibility, tags: this.visibility.tags && this.tagColumns.length > 0};
       // The transposed table (mobile.less) grows downward, so no section has to give way for lack of space
-      return fitToWidth(wanted, this.tagColumns, this.transposed ? 0 : this.availableWidth, this.preferredSection);
+      return fitToWidth(wanted, this.tagColumns, this.transposed ? 0 : this.availableWidth, this.preferredSection, this.nameWidth);
     },
     effectiveVisibility(): SectionVisibility {
       return this.fitted.visibility;
@@ -134,7 +141,7 @@ export default defineComponent({
       return 1 + (visibility.goods ? GOODS_COUNT : 0) + (visibility.tags ? tagCells : 0) + (visibility.score ? SCORE_COUNT : 0) + 1;
     },
     template(): string {
-      return columnTemplate(this.effectiveVisibility, this.tagColumns);
+      return columnTemplate(this.effectiveVisibility, this.tagColumns, this.nameWidth);
     },
     // Per resource the player with the sole highest production; nobody on a tie
     productionLeadersByColor(): Partial<Record<Color, Array<Resource>>> {
