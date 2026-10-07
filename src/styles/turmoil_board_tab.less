@@ -121,8 +121,16 @@
 }
 
 .turmoil-board-tab__dominance {
-  fill: #fafafa;
-  stroke: #c9c9c9;
+  overflow: visible;
+}
+
+// Cube centred in its slot; help cursor for the tooltip
+.turmoil-board-tab__dominance-cube {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  cursor: help;
 }
 
 .turmoil-board-tab__ruling-badge {
