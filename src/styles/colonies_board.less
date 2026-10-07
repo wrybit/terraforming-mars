@@ -519,24 +519,10 @@
   min-width: 0;
 }
 
-.trade-colony__label {
-  font: 600 11px/13px system-ui, sans-serif;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: @colony-muted;
-}
-
 .trade-colony__fees {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
-}
-
-.trade-colony__arrow {
-  justify-self: center;
-  rotate: 90deg;
-  font: 26px Prototype, sans-serif;
-  color: @colony-muted;
 }
 
 .trade-colony__fee,
@@ -589,21 +575,6 @@
   border-color: @bg_action;
   background: color-mix(in srgb, @bg_action 20%, rgba(10, 12, 18, 0.6));
   box-shadow: 0 0 6px fade(@bg_action, 60%);
-}
-
-.trade-colony__flag {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 18px;
-  height: 18px;
-  display: grid;
-  place-items: center;
-  border-radius: 0 7px 0 6px;
-  background: @bg_action;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
 }
 
 .trade-colony__offers {
@@ -742,10 +713,6 @@ html:not(.tm-mobile) .or-tab-panel .trade-colony {
 
 // Narrow (tablet portrait, phone): offers in rows of three, fees smaller
 @container (max-width: 640px) {
-  .trade-colony__arrow {
-    display: none;
-  }
-
   .trade-colony__fees {
     gap: 6px;
   }

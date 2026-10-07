@@ -530,60 +530,61 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   margin: auto 0;
 }
 
+// Top to bottom like the trade tab (deal_steps.less): source, small arrow, parties
 .select-party__layout {
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: 24px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
   width: 100%;
+  padding: 10px 0;
+  box-sizing: border-box;
 }
 
-.select-party__column {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-
-  + .select-party__column {
-    padding-left: 24px;
-    border-left: 1px solid rgba(255, 255, 255, 0.12);
-  }
-
-  // Without a source (other inputs sending a delegate) the parties take the whole width
-  &--parties:first-child {
-    grid-column: 1 / -1;
-  }
-}
-
-.select-party__label {
-  font-size: 13px;
-  color: @turmoil-muted;
-}
-
-.select-party__source {
+.select-party__step {
   display: grid;
-  gap: 4px;
+  gap: 8px;
+  min-width: 0;
+}
+
+.select-party__sources {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+// Same tile as a fee in the trade tab: figures left, name and price right
+.select-party__source {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 10px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  background: rgba(10, 14, 18, 0.55);
-
-  b {
-    font-size: 15px;
-  }
-
-  small {
-    font-size: 12px;
-    color: @turmoil-muted;
-  }
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(10, 12, 18, 0.6);
 
   &--on {
     border-color: @bg_action;
-    background: color-mix(in srgb, @bg_action 22%, rgba(10, 14, 18, 0.6));
-    box-shadow: 0 0 8px fade(@bg_action, 50%);
+    background: color-mix(in srgb, @bg_action 20%, rgba(10, 12, 18, 0.6));
+    box-shadow: 0 0 6px fade(@bg_action, 60%);
   }
 
   &--off {
     opacity: 0.4;
+  }
+}
+
+.select-party__source-text {
+  display: grid;
+  line-height: 1.2;
+
+  b {
+    font-size: 16px;
+  }
+
+  small {
+    font-size: 13px;
+    color: @turmoil-muted;
   }
 }
 
@@ -820,15 +821,6 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
 }
 
 @container (max-width: 520px) {
-  .select-party__layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .select-party__column + .select-party__column {
-    padding-left: 0;
-    border-left: 0;
-  }
-
   .select-party__cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -847,30 +839,8 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   color: @turmoil-text;
 }
 
-// Large box (desktop, mockup with-extensions): parties as 3 × 2 big cards, wider source column, larger type
+// Large box (desktop, mockup with-extensions): parties as 3 × 2 big cards, larger type
 @container (min-width: 701px) {
-  .select-party__layout {
-    grid-template-columns: 210px minmax(0, 1fr);
-    gap: 28px;
-  }
-
-  .select-party__label {
-    font-size: 16px;
-  }
-
-  .select-party__source {
-    gap: 6px;
-    padding: 14px 16px;
-
-    b {
-      font-size: 19px;
-    }
-
-    small {
-      font-size: 14px;
-    }
-  }
-
   .select-party__cards {
     grid-template-columns: repeat(var(--party-columns, 3), minmax(0, 1fr));
     gap: 46px 14px;
@@ -878,7 +848,6 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   }
 
   .select-party__card {
-    min-height: 250px;
     gap: 8px;
     padding: 40px 14px 24px;
   }

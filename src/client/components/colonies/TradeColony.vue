@@ -4,13 +4,13 @@
          afford greyed out –, below what each colony gives you, then a receipt: what you pay → what you get, who else
          gets a colony bonus, where the marker drops back. The board switches to the Colonies tab and previews the pick. -->
     <div class="trade-colony__column trade-colony__column--fees">
-      <div class="trade-colony__label">{{ $t('You pay') }}</div>
+      <div class="deal-step__label">{{ $t('You pay') }}</div>
       <div class="trade-colony__fees">
         <button v-for="fee in fees" :key="fee.index" type="button"
           :class="['trade-colony__fee', {'trade-colony__fee--on': fee.index === feeIndex}]"
           :data-test="'trade-fee-' + fee.kind"
           @click="feeIndex = fee.index">
-          <span v-if="fee.index === feeIndex" class="trade-colony__flag">✓</span>
+          <span v-if="fee.index === feeIndex" class="deal-step__flag">✓</span>
           <img :src="'assets/' + FEE_ICON[fee.kind]" alt="">
           <span class="trade-colony__fee-text">
             <b>{{ feeLabel(fee) }}</b>
@@ -26,16 +26,16 @@
         </span>
       </div>
     </div>
-    <div class="trade-colony__arrow" aria-hidden="true">→</div>
+    <div class="deal-step__arrow" aria-hidden="true">↓</div>
     <div class="trade-colony__column trade-colony__column--wide">
-      <div class="trade-colony__label">{{ $t('You get') }}</div>
+      <div class="deal-step__label">{{ $t('You get') }}</div>
       <div class="trade-colony__offers">
         <button v-for="colony in colonies" :key="colony.model.name" type="button"
           :class="['trade-colony__offer', {'trade-colony__offer--on': colony.model.name === pick, 'trade-colony__offer--off': !isTradeable(colony)}]"
           :disabled="!isTradeable(colony)"
           :data-test="'trade-offer-' + colony.model.name"
           @click="choose(colony)">
-          <span v-if="colony.model.name === pick" class="trade-colony__flag">✓</span>
+          <span v-if="colony.model.name === pick" class="deal-step__flag">✓</span>
           <span class="trade-colony__offer-head">
             <span class="trade-colony__offer-planet">
               <ColonyPlanet :name="colony.model.name"/>

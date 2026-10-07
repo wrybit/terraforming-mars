@@ -1,25 +1,33 @@
 <template>
   <div class="wf-component wf-component--select-party select-party">
     <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
-    <!-- Sending a delegate: where it comes from (lobby free / reserve 5 M€, as the server offers it),
-         the parties as tiles with policy and bonus, and below what the delegate changes.
-         The board switches to the Turmoil tab and outlines the picked party. -->
+    <!-- Sending a delegate reads top to bottom like the trade tab: where it comes from (lobby free / reserve 5 M€,
+         as the server offers it), a small arrow, the parties as tiles with policy and bonus, and below what the
+         delegate changes. The board switches to the Turmoil tab and outlines the picked party. -->
     <div v-if="turmoil !== undefined" class="select-party__layout">
-      <div v-if="source !== undefined" class="select-party__column select-party__column--source">
-        <div class="select-party__label">{{ $t('From where?') }}</div>
-        <!-- Both sources like on the board: the one of this action active, the other one shown dimmed
-             (the server offers lobby and reserve as separate actions) -->
-        <div v-for="kind in SOURCES" :key="kind" :class="['select-party__source', {'select-party__source--on': kind === source, 'select-party__source--off': kind !== source}]">
-          <b>{{ $t(kind === 'lobby' ? 'Lobby' : 'Reserve') }}</b>
-          <span class="select-party__figures">
-            <span v-if="kind === 'reserve'" class="turmoil-board-tab__cost">5</span>
-            <img v-for="index in figureCount(kind)" :key="index" :src="figureImage(playerView.thisPlayer.color)" :width="kind === 'lobby' ? 30 : 18" :height="(kind === 'lobby' ? 30 : 18) * 1.3" alt="">
-          </span>
-          <small>{{ $t(kind === 'lobby' ? 'free · 1×/gen.' : '5 M€ per delegate') }}</small>
+      <template v-if="source !== undefined">
+        <div class="select-party__step">
+          <div class="deal-step__label">{{ $t('From where?') }}</div>
+          <!-- Both sources like on the board: the one of this action active, the other one shown dimmed
+               (the server offers lobby and reserve as separate actions) -->
+          <div class="select-party__sources">
+            <div v-for="kind in SOURCES" :key="kind" :class="['select-party__source', {'select-party__source--on': kind === source, 'select-party__source--off': kind !== source}]">
+              <span v-if="kind === source" class="deal-step__flag">✓</span>
+              <span class="select-party__figures">
+                <span v-if="kind === 'reserve'" class="turmoil-board-tab__cost">5</span>
+                <img v-for="index in figureCount(kind)" :key="index" :src="figureImage(playerView.thisPlayer.color)" :width="kind === 'lobby' ? 30 : 18" :height="(kind === 'lobby' ? 30 : 18) * 1.3" alt="">
+              </span>
+              <span class="select-party__source-text">
+                <b>{{ $t(kind === 'lobby' ? 'Lobby' : 'Reserve') }}</b>
+                <small>{{ $t(kind === 'lobby' ? 'free · 1×/gen.' : '5 M€ per delegate') }}</small>
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="select-party__column select-party__column--parties">
-        <div class="select-party__label">{{ $t('To which party?') }}</div>
+        <div class="deal-step__arrow" aria-hidden="true">↓</div>
+      </template>
+      <div class="select-party__step">
+        <div class="deal-step__label">{{ $t('To which party?') }}</div>
         <div class="select-party__cards">
           <PartyCard v-for="party in turmoil.parties" :key="party.name"
             :party="party"
