@@ -22,8 +22,12 @@ export function runInSandbox<T>(work: () => T): T {
   const originalGameLoader = GameLoader.getInstance;
   const database = inertStub<ReturnType<typeof Database.getInstance>>();
   const gameLoader = inertStub<ReturnType<typeof GameLoader.getInstance>>();
+  // Tried-out moves may break rules on purpose (cards valued without their requirements);
+  // the engine's "illegal state" warnings about such copies would only flood the server log.
+  const originalWarn = console.warn;
   Database.getInstance = () => database;
   GameLoader.getInstance = () => gameLoader;
+  console.warn = () => {};
   simulationDepth++;
   try {
     return work();
@@ -31,5 +35,6 @@ export function runInSandbox<T>(work: () => T): T {
     simulationDepth--;
     Database.getInstance = originalDatabase;
     GameLoader.getInstance = originalGameLoader;
+    console.warn = originalWarn;
   }
 }
