@@ -16,7 +16,7 @@ describe('TurmoilBoard', () => {
     const wrapper = mount(TurmoilBoard, {...globalConfig, props: {turmoil: fakeTurmoil(), players, viewerColor: 'red', generation: 3}});
     expect(wrapper.find('.turmoil-board-tab__policy').text()).contains('Greens');
     expect(wrapper.findAll('.turmoil-board-tab__wedge')).has.length(6);
-    expect(wrapper.find('.turmoil-board-tab__dominance').exists()).is.true;
+    expect(wrapper.find('.turmoil-board-tab__ruling-badge--successor').exists()).is.true;
     expect(wrapper.findAll('.turmoil-board-tab__corner--left img')).has.length(2);
     // Six own delegates in the reserve
     expect(wrapper.findAll('.turmoil-board-tab__corner--right img')).has.length(4);
