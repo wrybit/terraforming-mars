@@ -401,7 +401,8 @@ export default defineComponent({
         this.restorePosition();
       }
     },
-    loadStream(): void {
+    // keepPosition: update in place (new view model) – a reader in the history stays where they are
+    loadStream(keepPosition = false): void {
       fetchLogStream(this.viewModel.id, this.generation).then((stream) => {
         if (stream === undefined) {
           return;
@@ -410,7 +411,13 @@ export default defineComponent({
         if (getPreferences().enable_sounds && window.location.search.includes('experimental=1')) {
           SoundManager.newLog();
         }
-        this.$nextTick(() => this.restorePosition());
+        this.$nextTick(() => {
+          if (keepPosition && !this.following) {
+            this.updateScrollState();
+          } else {
+            this.restorePosition();
+          }
+        });
       });
     },
   },
@@ -444,6 +451,26 @@ export default defineComponent({
   watch: {
     milestonesAwardsFocused(focused: boolean): void {
       this.applyMilestonesAwardsFocus(focused);
+    },
+    // The game view is no longer remounted on every update (upstream b669327): load the new entries in place
+    viewModel(): void {
+      this.loadStream(true);
+    },
+    // A change of turn decides the box anew, as on mount: own turn → milestones & awards, otherwise the log
+    acting(acting: boolean): void {
+      const view: LogView = acting ? 'milestones' : 'log';
+      if (this.viewBeforeFocus !== undefined) {
+        // An open milestone/award choice keeps the box; closing it returns to the new view
+        this.viewBeforeFocus = view;
+        return;
+      }
+      if (this.view !== view) {
+        this.view = view;
+        if (view === 'log') {
+          this.following = true;
+          this.$nextTick(() => this.restorePosition());
+        }
+      }
     },
   },
   mounted() {

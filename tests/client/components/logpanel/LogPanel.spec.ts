@@ -214,8 +214,7 @@ describe('LogPanel', () => {
     expect((second.vm as any).following).is.false;
   });
 
-  // The real app never patches an existing LogPanel's props in place: App.vue forces a
-  // full unmount/remount (via a `:key` bump) on every game-state refresh.
+  // The mobile view still remounts on every update (App.vue: playerkey); desktop updates in place (below).
   it('follows the end of the log across a remount into a new generation', async () => {
     const viewModel = viewModelAt(2);
     const first = mount(viewModel);
@@ -230,6 +229,49 @@ describe('LogPanel', () => {
 
     expect((second.vm as any).selectedGeneration).eq(3);
     expect(panel.getScrollTop()).eq(440);
+  });
+
+  it('follows the end of the log when the view model updates in place', async () => {
+    const viewModel = viewModelAt(2);
+    const wrapper = mount(viewModel);
+    makeScrollable(wrapper);
+    await flush(wrapper);
+    fetchCalls.length = 0;
+
+    await wrapper.setProps({viewModel: {...viewModel, game: {...viewModel.game, generation: 3}}});
+    const panel = makeScrollable(wrapper, 640);
+    await flush(wrapper);
+
+    expect(fetchCalls.some((url) => url.includes('generation=3'))).is.true;
+    expect((wrapper.vm as any).selectedGeneration).eq(3);
+    expect(panel.getScrollTop()).eq(440);
+  });
+
+  it('keeps the reading position when the view model updates in place', async () => {
+    const viewModel = viewModelAt(3);
+    const wrapper = mount(viewModel);
+    const panel = makeScrollable(wrapper);
+    await flush(wrapper);
+    panel.setScrollTop(120);
+    (wrapper.vm as any).updateScrollState();
+
+    await wrapper.setProps({viewModel: {...viewModel}});
+    await flush(wrapper);
+
+    expect(panel.getScrollTop()).eq(120);
+    expect((wrapper.vm as any).following).is.false;
+  });
+
+  it('switches the box when the turn changes in place', async () => {
+    const wrapper = mount(multiplayerViewModelAt(3), {milestonesAwards: true, acting: false});
+    await flush(wrapper);
+    expect(showsMilestonesAwards(wrapper)).is.false;
+
+    await wrapper.setProps({acting: true});
+    expect(showsMilestonesAwards(wrapper)).is.true;
+
+    await wrapper.setProps({acting: false});
+    expect(showsMilestonesAwards(wrapper)).is.false;
   });
 
   it('opens on milestones & awards when it is the player\'s turn', async () => {
