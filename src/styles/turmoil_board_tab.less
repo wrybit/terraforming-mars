@@ -614,17 +614,10 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   text-align: center;
   cursor: pointer;
 
-  // Selected: the same frame, glow, tint and checkmark tab as every other selection; the tab sits top right
-  // because the party hexagon takes the middle. The rim keeps the party colour.
+  // Selected: corner-flag selection like every choice tile (selection_highlight.less); rim and hexagon turn purple
   &--on {
-    .selection-tile();
-
-    &::after {
-      // The card has a 2px rim of its own: the tab sits on the frame outside of it
-      top: -(@selection-tab-height + @selection-outline-width + 2px);
-      left: auto;
-      right: 14px;
-    }
+    --rim: @selection-color;
+    .selection-corner(2px; 10px);
   }
 
   // Party not selectable: clearly inactive
@@ -763,13 +756,6 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
 @container (max-width: 700px) {
   .select-party__cards {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  // Narrow cards: the checkmark tab only fits right of the party hexagon when it is narrower
-  .select-party__card--on::after {
-    width: 44px;
-    left: auto;
-    right: 8px;
   }
 
   .select-party__card {

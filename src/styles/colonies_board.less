@@ -1,3 +1,5 @@
+@import (reference) "./selection_highlight.less";
+
 // Colonies board tab (ColoniesBoard.vue): tiles close to the board game. The tiles share the height of the box;
 // if it is not enough, the box scrolls (board_tabs.less).
 @colony-gold: #f2c14e;
@@ -306,8 +308,7 @@
 
 // Selection like everywhere: 20 % purple, small glow, flag flush with the border
 .colonies-board__tile--pick {
-  border-color: @bg_action;
-  box-shadow: 0 0 0 1px @bg_action, 0 0 8px fade(@bg_action, 60%);
+  .selection-corner-frame(1px);
 
   &::after {
     content: "";
@@ -318,20 +319,11 @@
   }
 }
 
+// The tile clips its content (overflow hidden), so the flag sits inside the own border
 .colonies-board__flag {
-  position: absolute;
-  z-index: 2;
-  top: 0;
+  .selection-corner-flag(9px);
   right: 0;
-  width: 22px;
-  height: 22px;
-  display: grid;
-  place-items: center;
-  border-radius: 0 0 0 6px;
-  background: @bg_action;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
+  bottom: 0;
 }
 
 // Hangar: all fleets and the trade fee

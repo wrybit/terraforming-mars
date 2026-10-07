@@ -86,3 +86,42 @@
     top: -(@selection-tab-height + @selection-outline-width);
   }
 }
+
+// Corner-flag selection for choice tiles (trade, delegate, colonies board – same in the mockup with-extensions):
+// 3px frame, glow and a check flag in the bottom right corner, flush with the frame.
+// @own-border: border width of the tile itself – the rest of the frame is drawn outside as a shadow, so selecting
+// never moves the content. @radius: border radius of the tile.
+@selection-corner-frame: 3px;
+@selection-corner-flag: 24px;
+
+.selection-corner-frame(@own-border: 1px) {
+  border-color: @selection-color;
+  box-shadow: 0 0 0 (@selection-corner-frame - @own-border) @selection-color;
+  filter: drop-shadow(0 0 6px fade(@selection-color, 85%));
+}
+
+// The flag itself; its outer corner follows the rounding of the frame
+.selection-corner-flag(@outer-radius: 10px) {
+  content: "✓";
+  position: absolute;
+  z-index: 6;
+  width: @selection-corner-flag;
+  height: @selection-corner-flag;
+  display: grid;
+  place-items: center;
+  border-radius: 8px 0 @outer-radius 0;
+  background: @selection-color;
+  color: #fff;
+  font: 700 14px/1 system-ui, sans-serif;
+}
+
+.selection-corner(@own-border: 1px; @radius: 8px) {
+  .selection-corner-frame(@own-border);
+
+  &::after {
+    .selection-corner-flag(@radius + @selection-corner-frame - @own-border);
+    // Offsets count from inside the own border: -3px puts the flag on the outer edge of the frame
+    right: -@selection-corner-frame;
+    bottom: -@selection-corner-frame;
+  }
+}

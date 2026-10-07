@@ -24,12 +24,8 @@
   }
 }
 
-// Tile rows: room above for the checkmark tab of the selection (selection_highlight.less)
-.deal-step__tiles {
-  padding-top: @selection-tab-height + @selection-outline-width - 8px;
-}
-
-// Selected tile: the same frame, glow, tint and checkmark tab as every other selection
+// Selected tile: corner-flag selection (selection_highlight.less) with the 20 % purple tint
 .deal-step__tile--on {
-  .selection-tile();
+  .selection-corner(1px; 8px);
+  background: color-mix(in srgb, @selection-color 20%, rgba(10, 12, 18, 0.6));
 }

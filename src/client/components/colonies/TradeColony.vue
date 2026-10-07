@@ -5,7 +5,7 @@
          gets a colony bonus, where the marker drops back. The board switches to the Colonies tab and previews the pick. -->
     <div class="trade-colony__column trade-colony__column--fees">
       <div class="deal-step__label">{{ $t('You pay') }}</div>
-      <div class="trade-colony__fees deal-step__tiles">
+      <div class="trade-colony__fees">
         <button v-for="fee in fees" :key="fee.index" type="button"
           :class="['trade-colony__fee', {'deal-step__tile--on': fee.index === feeIndex}]"
           :data-test="'trade-fee-' + fee.kind"
@@ -28,7 +28,7 @@
     <div class="deal-step__arrow" aria-hidden="true">↓</div>
     <div class="trade-colony__column trade-colony__column--wide">
       <div class="deal-step__label">{{ $t('You get') }}</div>
-      <div class="trade-colony__offers deal-step__tiles">
+      <div class="trade-colony__offers">
         <button v-for="colony in colonies" :key="colony.model.name" type="button"
           :class="['trade-colony__offer', {'deal-step__tile--on': colony.model.name === pick, 'trade-colony__offer--off': !isTradeable(colony)}]"
           :disabled="!isTradeable(colony)"

@@ -10,7 +10,7 @@
           <div class="deal-step__label">{{ $t('From where?') }}</div>
           <!-- Both sources like on the board: the one of this action active, the other one shown dimmed
                (the server offers lobby and reserve as separate actions) -->
-          <div class="select-party__sources deal-step__tiles">
+          <div class="select-party__sources">
             <div v-for="kind in SOURCES" :key="kind" :class="['select-party__source', {'deal-step__tile--on': kind === source, 'select-party__source--off': kind !== source}]">
               <span class="select-party__figures">
                 <span v-if="kind === 'reserve'" class="turmoil-board-tab__cost">5</span>
