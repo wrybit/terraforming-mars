@@ -63,11 +63,6 @@ export default defineComponent({
       default: false,
     },
   },
-  // The bar shares counting, discounts and points per tag with the table (playerTagDetails.ts)
-  data(): TagDetails {
-    return buildTagDetails(this.player, this.playerView);
-  },
-
   components: {
     TagCount,
     PlayerTagDiscount,
@@ -75,6 +70,17 @@ export default defineComponent({
     PlayerTagSubstitution,
   },
   computed: {
+    // The bar shares counting, discounts and points per tag with the table (playerTagDetails.ts).
+    // Computed, so it follows prop changes (the game view is no longer remounted on every update)
+    tagDetails(): TagDetails {
+      return buildTagDetails(this.player, this.playerView);
+    },
+    all(): TagDetail {
+      return this.tagDetails.all;
+    },
+    tagsInOrder(): Array<TagDetail> {
+      return this.tagDetails.tagsInOrder;
+    },
     cardsInHandCount(): number {
       return this.player.cardsInHandNbr ?? 0;
     },
