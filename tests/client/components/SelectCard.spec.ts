@@ -176,4 +176,34 @@ describe('SelectCard', () => {
     expect(buttons[0].props('disabled')).is.true;
     expect(buttons[1].props('title')).eq('Discard');
   });
+
+  it('offers filter and sorting when choosing an action card, the zoom row otherwise', () => {
+    const actions = mountSelection(1, []);
+    expect(actions.findComponent({name: 'CardZoomBar'}).exists()).is.true;
+    const wrapper = shallowMount(SelectCard, {
+      ...globalConfig,
+      props: {
+        playerView: fakePlayerViewModel(),
+        playerinput: {
+          title: 'Perform an action from a played card',
+          buttonLabel: 'Take action',
+          type: 'card',
+          cards: [{name: 'Ants'}],
+          max: 1,
+          min: 1,
+          showOnlyInLearnerMode: false,
+          selectBlueCardAction: true,
+          showOwner: false,
+          showSelectAll: false,
+        },
+        onsave: () => {},
+        showsave: true,
+        showtitle: false,
+      },
+    } as any);
+    // Filter of the played cards, without the cost filter
+    const bar = wrapper.findComponent({name: 'CardFilterBar'});
+    expect(bar.exists()).is.true;
+    expect(bar.props('context')).deep.eq({withCost: false});
+  });
 });

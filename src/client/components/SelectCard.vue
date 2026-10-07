@@ -13,12 +13,23 @@
             <HandSortControl :playerView="playerView" :compact="compact"/>
           </template>
         </CardFilterBar>
-        <!-- Other card lists (buying, actions …): no card size slider – few cards, the zoom only adds noise there;
-             "Select all" only where it makes sense -->
-        <div v-else-if="showSelectAll" :class="isMobile ? 'select-card-toolbar' : 'card-filter-bar card-filter-bar--plain'">
+        <!-- Action cards: filter and sorting like the played cards (own filter state, no cost filter) -->
+        <CardFilterBar v-else-if="isActionSelection" :cards="playerinput.cards" :filter="playedCardFilter" :context="filterContext">
+          <template #sort="{compact}">
+            <CardSortMenu :modelValue="playedCardsSortOrder" :compact="compact" @update:modelValue="setPlayedSortOrder"/>
+          </template>
+        </CardFilterBar>
+        <!-- Other card lists (buying, draft …): no filter, but the zoom in the same place as in every tab;
+             "Select all" only where it makes sense. Mobile: no zoom, only the "Select all" row -->
+        <div v-else-if="isMobile && showSelectAll" class="select-card-toolbar">
           <AppButton class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
         </div>
-        <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
+        <CardZoomBar v-else>
+          <template v-if="showSelectAll" #lead>
+            <AppButton class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
+          </template>
+        </CardZoomBar>
+        <CardFilterEmptyHint v-if="nothingShown" @reset="resetFilter"/>
         <label v-for="card in getOrderedCards()" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
             <template v-if="!card.isDisabled">
               <input v-if="selectOnlyOneCard" type="radio" v-model="cards" :value="card" >
@@ -69,8 +80,11 @@ import HandSortControl from '@/client/components/HandSortControl.vue';
 import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
-import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
-import {cardVisibility, CardVisibility, handCardFilter, unmatchedCards} from '@/client/utils/cardFilterState';
+import CardSortMenu from '@/client/components/cardfilter/CardSortMenu.vue';
+import CardZoomBar from '@/client/components/cardfilter/CardZoomBar.vue';
+import {CardFilter, CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
+import {cardVisibility, CardVisibility, handCardFilter, playedCardFilter, playedCardsSortOrder, unmatchedCards} from '@/client/utils/cardFilterState';
+import {SortOrder, sortCards} from '@/client/utils/SortOrder';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {Color} from '@/common/Color';
@@ -142,6 +156,8 @@ export default defineComponent({
     HandSortControl,
     CardFilterBar,
     CardFilterEmptyHint,
+    CardSortMenu,
+    CardZoomBar,
   },
   watch: {
     cards() {
@@ -170,7 +186,9 @@ export default defineComponent({
       let cards: ReadonlyArray<CardModel> = [];
       if (this.playerinput.cards !== undefined) {
         if (this.playerinput.selectBlueCardAction) {
-          cards = sortActiveCards(this.playerinput.cards);
+          // Chosen sorting of the played cards, otherwise the usual action order
+          const sortOrder = playedCardsSortOrder.value;
+          cards = sortOrder !== undefined ? sortCards(this.playerinput.cards, sortOrder) : sortActiveCards(this.playerinput.cards);
         } else if (this.isDraft) {
           cards = keepDraftCardOrder(this.playerView.id, this.playerinput.cards);
         } else {
@@ -224,7 +242,16 @@ export default defineComponent({
     },
     resetCardFilter,
     visibilityOf(card: CardModel): CardVisibility {
-      return this.isHandSelection ? cardVisibility(card, handCardFilter, this.filterContext) : 'shown';
+      const filter = this.activeFilter;
+      return filter !== undefined ? cardVisibility(card, filter, this.filterContext) : 'shown';
+    },
+    resetFilter(): void {
+      if (this.activeFilter !== undefined) {
+        resetCardFilter(this.activeFilter);
+      }
+    },
+    setPlayedSortOrder(value: SortOrder | undefined): void {
+      playedCardsSortOrder.value = value;
     },
     getCardBoxClass(card: CardModel): string {
       const classes = ['cardbox'];
@@ -342,14 +369,32 @@ export default defineComponent({
     handCardFilter(): typeof handCardFilter {
       return handCardFilter;
     },
+    playedCardFilter(): typeof playedCardFilter {
+      return playedCardFilter;
+    },
+    playedCardsSortOrder(): SortOrder | undefined {
+      return playedCardsSortOrder.value;
+    },
+    // Action cards are played cards: no cost filter there
     filterContext(): CardFilterContext {
-      return {withCost: true};
+      return {withCost: !this.isActionSelection};
+    },
+    // Filter of this list: hand cards share the hand filter, action cards the one of the played cards
+    activeFilter(): CardFilter | undefined {
+      if (this.isHandSelection) {
+        return handCardFilter;
+      }
+      return this.isActionSelection ? playedCardFilter : undefined;
+    },
+    // Choosing an action card ("Actions" tab): filter and sorting make sense there too
+    isActionSelection(): boolean {
+      return this.playerinput.selectBlueCardAction === true && (this.playerinput.cards ?? []).length > 0;
     },
     visibleSelectableCards(): Array<CardModel> {
       return this.selectableCards.filter((card) => this.visibilityOf(card) !== 'hidden');
     },
     nothingShown(): boolean {
-      return this.isHandSelection && unmatchedCards.value === 'hide' && (this.playerinput.cards ?? []).every((card) => this.visibilityOf(card) !== 'shown');
+      return this.activeFilter !== undefined && unmatchedCards.value === 'hide' && (this.playerinput.cards ?? []).every((card) => this.visibilityOf(card) !== 'shown');
     },
     selectAllTitle(): string {
       if (this.allSelected) {

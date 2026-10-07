@@ -49,20 +49,26 @@
 }
 
 html:not(.tm-mobile) :is(.player_home_block--actions, .player_home_block--hand) .or-tab-panel {
-  // The size only applies where the slider is (card lists with the filter row); short lists without it
-  // (actions, buying, standard projects) always keep the standard size
-  .choice-block:has(> .card-filter-bar:not(.card-filter-bar--plain)) {
+  // Every list in the action box has the header row with the slider (CardFilterBar.vue, CardZoomBar.vue):
+  // cards, standard projects, milestones and awards all follow the card size
+  .choice-block:has(> .card-filter-bar) {
     --choice-zoom: var(--card-zoom, 1);
   }
 
-  .choice-block:has(> .card-filter-bar:not(.card-filter-bar--plain)) > label.cardbox,
-  .choice-block:has(> .card-filter-bar:not(.card-filter-bar--plain)) > label.payments_cards,
+  .choice-block:has(> .card-filter-bar) > label.cardbox,
+  .choice-block:has(> .card-filter-bar) > label.payments_cards,
   .hand-cards-panel__cards > .cardbox,
   .hand-cards-panel .sortable-cards .cardbox {
     zoom: var(--card-zoom, 1);
   }
 
-  // The card tracks of the block shrink with the card zoom themselves (--choice-card-track in choice_block.less)
+  // The card tracks of the block shrink with the card zoom themselves (--choice-card-track in choice_block.less),
+  // the milestone/award tiles likewise (--choice-zoom there)
+}
+
+// Row without filter and sorting: the slider sits at the right edge, where the sorting would be
+.card-filter-bar--zoom-only .card-zoom-slider {
+  margin-left: auto;
 }
 
 // Section labels of the card row (CardFilterBar.vue): Filter · Zoom · Sort, like the zoom label

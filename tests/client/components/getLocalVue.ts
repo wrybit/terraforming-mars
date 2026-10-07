@@ -22,6 +22,8 @@ export const globalConfig = {
     stubs: {
       TabPanelFooterSlot: false,
       teleport: false,
+      // Header row whose lead slot carries the inputs' own buttons ("Select all")
+      CardZoomBar: false,
     },
     config: {
       warnHandler: failOnVueWarning,

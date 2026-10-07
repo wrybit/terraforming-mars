@@ -12,6 +12,7 @@
 @choice-row-gap: (@selection-tab-offset + 6px); // the check-mark flag of the selected tile sits above
 @choice-panel-padding: 16px; // Padding of the tab box (tab_panel_footer.less)
 @ma-tile-width: 140px; // Image size of the milestone/award tiles (player_home.less)
+@ma-tile-zoom: unit((@choice-tile-width / @ma-tile-width)); // milestone/award image enlarged to card width
 
 html:not(.tm-mobile) {
   .or-tab-panel .choice-block:not(.setup-column-body *) {
@@ -37,11 +38,11 @@ html:not(.tm-mobile) {
     > .ma-option {
       width: auto;
       margin: 0;
-      border-radius: (10px * unit((@choice-tile-width / @ma-tile-width)));
+      border-radius: calc(10px * @ma-tile-zoom * var(--choice-zoom, 1));
     }
 
     > .ma-option .ma-name {
-      zoom: unit((@choice-tile-width / @ma-tile-width));
+      zoom: calc(@ma-tile-zoom * var(--choice-zoom, 1));
     }
 
     // Cards (SelectCard: label.cardbox, play card/standard project: label.payments_cards):
@@ -77,7 +78,8 @@ html:not(.tm-mobile) {
   //   row 65    spacer below the cards (1fr)
   // The ::before spacer spans rows 1–4 so the auto-placed cards only start in row 5. No row gap (it would also
   // apply between the empty rows); each card brings its own space above for the check-mark flag instead.
-  .or-tab-panel .choice-block:has(> .cardbox, > .payments_cards):not(.setup-column-body *) {
+  // Milestones/awards with their header row (CardZoomBar.vue) use the same grid: row on top, tiles centered below
+  .or-tab-panel :is(.choice-block:has(> .cardbox, > .payments_cards), .ma-options.choice-block:has(> .card-filter-bar)):not(.setup-column-body *) {
     --choice-card-track: calc(@choice-tile-width * var(--choice-zoom, 1));
     display: grid;
     flex: 1 0 auto;
@@ -109,7 +111,7 @@ html:not(.tm-mobile) {
       grid-row: 65;
     }
 
-    > :not(.cardbox, .payments_cards) {
+    > :not(.cardbox, .payments_cards, .ma-option) {
       grid-column: 1 / -1;
     }
 
@@ -128,7 +130,8 @@ html:not(.tm-mobile) {
     }
 
     > .cardbox,
-    > .payments_cards {
+    > .payments_cards,
+    > .ma-option {
       margin-top: @choice-row-gap;
     }
   }
@@ -214,11 +217,11 @@ html.tm-mobile {
 html:not(.tm-mobile) .or-tab-panel {
   .ma-options.choice-block {
     > .ma-option {
-      border-radius: 17.7px;
+      border-radius: calc(10px * @ma-tile-zoom * var(--choice-zoom, 1));
     }
 
     > .ma-option .ma-name {
-      zoom: unit((@choice-tile-width / @ma-tile-width));
+      zoom: calc(@ma-tile-zoom * var(--choice-zoom, 1));
     }
   }
 }
