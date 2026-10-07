@@ -56,7 +56,8 @@
   top: 0;
   bottom: 0;
   width: @colony-art;
-  overflow: hidden;
+  // Not clipped: the planet glow would otherwise end in a hard vertical edge at the strip border
+  overflow: visible;
   pointer-events: none;
 
   .colony-planet {
@@ -70,12 +71,6 @@
     box-shadow: 0 0 24px color-mix(in srgb, var(--planet-tone) 55%, transparent), inset -10px -6px 22px rgba(0, 0, 0, 0.55);
   }
 
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 30% 50%, transparent 55%, rgba(0, 0, 0, 0.35));
-  }
 }
 
 .colonies-board__body {
@@ -818,9 +813,6 @@ html:not(.tm-mobile) {
       box-shadow: inset -10px -6px 22px rgba(0, 0, 0, 0.55);
     }
 
-    &::after {
-      display: none;
-    }
   }
 
   .colonies-board__body {
