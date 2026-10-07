@@ -12,11 +12,12 @@ describe('ColoniesBoard', () => {
 
   const players = [fakePublicPlayerModel({color: 'red', name: 'Lena', fleetSize: 1})];
 
-  it('shows each tile with track, trade value and the best trade', () => {
+  it('shows each tile with track and trade value', () => {
     const colonies = [fakeColony(ColonyName.LUNA, {trackPosition: 2}), fakeColony(ColonyName.IO), fakeColony(ColonyName.MIRANDA, {isActive: false})];
     const wrapper = mount(ColoniesBoard, {...globalConfig, props: {colonies, players}});
     const luna = wrapper.find('[data-test="colony-tile-Luna"]');
-    expect(luna.classes()).includes('colonies-board__tile--best');
+    // No tile is singled out as the best trade
+    expect(wrapper.find('.colonies-board__tile--best').exists()).is.false;
     // Luna track 1, 2, 4, 7 …: marker on step 3 shows 4 M€
     expect(luna.find('.colonies-board__big').text()).contains('4');
     expect(luna.findAll('.colonies-board__step')).has.length(7);

@@ -147,10 +147,3 @@ export function colonyView(model: ColonyModel): ColonyView {
     full: model.colonies.length >= 3,
   };
 }
-
-// Best trade: free, active tiles; M€ first, then the highest value
-export function bestTrade(colonies: ReadonlyArray<ColonyView>): ColonyView | undefined {
-  return colonies
-    .filter((colony) => colony.model.isActive && colony.model.visitor === undefined)
-    .toSorted((a, b) => Number(b.tradeIcon.src === RESOURCE_ICON.megacredits) - Number(a.tradeIcon.src === RESOURCE_ICON.megacredits) || b.tradeValue - a.tradeValue)[0];
-}

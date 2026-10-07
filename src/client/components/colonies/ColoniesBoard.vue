@@ -59,7 +59,7 @@ import {ColonyName} from '@/common/colonies/ColonyName';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import ColonyPlanet from './ColonyPlanet.vue';
 import TradeShip from './TradeShip.vue';
-import {ColonyView, bestTrade, colonyView} from './colonyView';
+import {ColonyView, colonyView} from './colonyView';
 import {colonyTradeState} from './colonyTradeState';
 
 type Berth = {key: string, color: Color, name: string, away: ColonyName | undefined};
@@ -90,9 +90,6 @@ export default defineComponent({
     views(): Array<ColonyView> {
       return this.colonies.map(colonyView);
     },
-    best(): ColonyView | undefined {
-      return bestTrade(this.views);
-    },
     // One shuttle per fleet: in the hangar, or away at the colony it trades with this generation
     berths(): Array<Berth> {
       return this.players.flatMap((player) => {
@@ -116,8 +113,6 @@ export default defineComponent({
         classes.push('colonies-board__tile--off');
       } else if (this.isPicked(colony)) {
         classes.push('colonies-board__tile--pick');
-      } else if (colony === this.best && colonyTradeState.pick === undefined) {
-        classes.push('colonies-board__tile--best');
       }
       if (colony.model.visitor !== undefined) {
         classes.push('colonies-board__tile--docked');
@@ -172,7 +167,7 @@ export default defineComponent({
       if (colony.model.visitor !== undefined) {
         return 'taken';
       }
-      return colony === this.best ? 'best trade' : 'tradeable';
+      return 'tradeable';
     },
     playerName(color: Color): string {
       return this.players.find((player) => player.color === color)?.name ?? color;
