@@ -12,9 +12,11 @@
 </template>
 
 <script setup lang="ts">
+import {onBeforeUnmount, onMounted} from 'vue';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {MilestoneAwardKind, milestoneAwardImageClass, milestoneAwardOptionName} from '@/client/components/milestoneAwardChoice';
 import {choiceBlockStyle} from '@/client/components/choiceBlock';
+import {focusMilestonesAwards} from '@/client/components/logpanel/milestonesAwardsFocus';
 
 defineProps<{
   kind: MilestoneAwardKind;
@@ -28,4 +30,11 @@ defineEmits<{
 }>();
 
 const optionName = milestoneAwardOptionName;
+
+// The log box shows the milestones & awards table while choosing (milestonesAwardsFocus.ts)
+let releaseFocus: (() => void) | undefined;
+onMounted(() => {
+  releaseFocus = focusMilestonesAwards();
+});
+onBeforeUnmount(() => releaseFocus?.());
 </script>

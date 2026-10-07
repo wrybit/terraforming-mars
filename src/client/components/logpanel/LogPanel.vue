@@ -70,6 +70,7 @@ import LogCardsZoom from '@/client/components/logpanel/LogCardsZoom.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
 import {milestonesAwardsLabel} from '@/client/components/milestoneAwardTable/milestonesAwardsLabel';
 import {cachedLogStream, fetchLogStream, GenerationLog} from '@/client/utils/fetchLogs';
+import {milestonesAwardsFocusState} from '@/client/components/logpanel/milestonesAwardsFocus';
 
 const BOTTOM_SCROLL_THRESHOLD = 24; // Roughly one line of log text.
 
@@ -121,6 +122,8 @@ type LogPanelModel = {
   following: boolean,
   // Log line whose cards are currently shown in the carousel modal (only with zoomCarousel)
   zoomedMessage: LogMessage | undefined,
+  // View before a milestone/award choice switched the box to the table; restored when the choice closes
+  viewBeforeFocus: LogView | undefined,
   // Timers and observers of this instance; raw, so they don't trigger re-renders
   internals: Internals,
 };
@@ -165,6 +168,7 @@ export default defineComponent({
       showScrollToBottomButton: false,
       following: true,
       zoomedMessage: undefined,
+      viewBeforeFocus: undefined,
       internals: markRaw({programmaticScrollTimer: undefined, scrollFrame: undefined, scrollFramePending: false, resizeObserver: undefined, lastHeight: 0}),
     };
   },
@@ -236,6 +240,23 @@ export default defineComponent({
     },
     showMilestonesAwards(): void {
       this.view = 'milestones';
+    },
+    // A milestone/award choice opened or closed in the action tabs (milestonesAwardsFocus.ts)
+    applyMilestonesAwardsFocus(focused: boolean): void {
+      if (focused) {
+        if (this.view !== 'milestones') {
+          this.viewBeforeFocus = this.view;
+          this.view = 'milestones';
+        }
+        return;
+      }
+      const previous = this.viewBeforeFocus;
+      this.viewBeforeFocus = undefined;
+      // Only back if the reader didn't pick another tab in the meantime
+      if (previous === 'log' && this.view === 'milestones') {
+        this.view = 'log';
+        this.$nextTick(() => this.revealGeneration(this.selectedGeneration));
+      }
     },
     sectionElements(): Array<HTMLElement> {
       return Array.from(this.typedRefs.scrollBody?.querySelectorAll<HTMLElement>('.log-generation') ?? []);
@@ -399,8 +420,16 @@ export default defineComponent({
       const tone = this.showsMilestonesAwards ? ['or-tab-panel--tone-milestones', 'log-panel--milestones'] : ['or-tab-panel--view'];
       return ['panel', 'log-panel', 'or-tab-panel', ...tone];
     },
+    milestonesAwardsFocused(): boolean {
+      return milestonesAwardsFocusState.requests > 0;
+    },
     lastSoloGeneration(): number | undefined {
       return this.viewModel.players.length === 1 ? this.viewModel.game.lastSoloGeneration : undefined;
+    },
+  },
+  watch: {
+    milestonesAwardsFocused(focused: boolean): void {
+      this.applyMilestonesAwardsFocus(focused);
     },
   },
   mounted() {
@@ -412,6 +441,9 @@ export default defineComponent({
     // Either the view starts fresh, or the reader was at the end, which may have grown since the previous instance unmounted
     this.following = restoredState === undefined || restoredState.following;
     this.selectedGeneration = this.generation;
+    if (this.milestonesAwardsFocused) {
+      this.applyMilestonesAwardsFocus(true);
+    }
     // The known history renders right away, so the page doesn't shrink and jump while the current generation loads
     this.sections = toSections(cachedLogStream(this.viewModel.id, this.generation));
     this.internals.lastHeight = this.typedRefs.root?.offsetHeight ?? 0;
@@ -427,7 +459,8 @@ export default defineComponent({
     viewState = {
       id: this.viewModel.id,
       acting: this.acting,
-      view: this.view,
+      // An open milestone/award choice re-applies its focus after the remount; the reader's own view is kept
+      view: this.viewBeforeFocus ?? this.view,
       following: this.isVisible() ? this.isNearBottom(container) : this.following,
       scrollTop: this.isVisible() ? scrollTopOf(container) : viewState?.scrollTop ?? 0,
     };
