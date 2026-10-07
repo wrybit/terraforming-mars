@@ -335,6 +335,13 @@ each(@players, {
     height: @ma-table-head-height;
   }
 
+  // Above the names there is nothing to show: no dark surface there, the box background stays visible
+  .ma-table-part--names .ma-table-head,
+  .ma-table-part--names .ma-table-status {
+    background: none;
+    backdrop-filter: none;
+  }
+
   // Divider line on the edge of the name part, so the values scroll away exactly there
   .ma-table-part--names .ma-table-divider::after {
     left: auto;
