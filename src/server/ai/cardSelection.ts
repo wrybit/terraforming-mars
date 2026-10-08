@@ -15,6 +15,7 @@ import {isIProjectCard} from '../cards/IProjectCard';
 import {Tag} from '../../common/cards/Tag';
 import {tuningOf} from './aiTuning';
 import {enablerBonus} from './enablerValue';
+import {receiverValues} from './draftDenial';
 
 // Opening choice (corporation + preludes + cards) and card buying / drafting.
 // docs/ai/bot-heuristics.md §2 and §3a.
@@ -187,10 +188,15 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
   const {valueOf, timingOf} = valuesOf(player, candidates, input.config.min !== input.config.max);
   const sorted = [...candidates].sort((a, b) => valueOf(b.name) - valueOf(a.name));
   if (input.config.min === input.config.max) {
-    // Draft: the count is fixed, take the best.
-    const picked = sorted.slice(0, input.config.min);
+    // Draft: the count is fixed. Own value plus part of what the card would be worth to the
+    // player who gets the rest (aiTuning.ts draftDenial).
+    const denial = tuningOf(player).draftDenial;
+    const opponentValues = denial > 0 ? receiverValues(input, player, candidates) : new Map<CardName, number>();
+    const draftScore = (card: ICard) => valueOf(card.name) + denial * Math.max(0, opponentValues.get(card.name) ?? 0);
+    const picked = [...candidates].sort((a, b) => draftScore(b) - draftScore(a)).slice(0, input.config.min);
     if (isTracingDecision()) {
-      traceOptions('draft', sorted.map((card) => cardOption('', card, valueOf, timingOf, picked.includes(card))));
+      traceOptions('draft', sorted.map((card) => cardOption('', card, valueOf, timingOf, picked.includes(card),
+        opponentValues.has(card.name) ? `für Nächsten ${round(opponentValues.get(card.name) ?? 0)}` : undefined)));
     }
     return {type: 'card', cards: picked.map((card) => card.name)};
   }

@@ -22,6 +22,8 @@ export type AiTuning = {
   enablerWeight: number,
   /** Early in the game, cards only worth playing later are bought at this share of their value. */
   lateBuyFactor: number,
+  /** Draft: share of a card's value for the player who receives the rest (hate draft), 0 = off. */
+  draftDenial: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -41,6 +43,7 @@ export const BASELINE_TUNING: AiTuning = {
   closingWindow: 0,
   enablerWeight: 0,
   lateBuyFactor: 1,
+  draftDenial: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -52,6 +55,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   fewerCards: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4},
   // Card timing as the group plays it: closing windows, enabler cards, late cards bought later.
   cardTiming: {closingWindow: 1, enablerWeight: 0.5, lateBuyFactor: 0.6},
+  // Draft: also take away what the next player would like (standard variant of the group).
+  hateDraft: {draftDenial: 0.5},
 };
 
 export function isTuningVariant(name: string): boolean {
