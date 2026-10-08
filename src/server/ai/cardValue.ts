@@ -1,65 +1,157 @@
 import {IPlayer} from '../IPlayer';
+import {IGame} from '../IGame';
 import {ICard} from '../cards/ICard';
 import {IProjectCard, isIProjectCard} from '../cards/IProjectCard';
 import {isICorporationCard} from '../cards/corporation/ICorporationCard';
-import {CardRequirements} from '../cards/requirements/CardRequirements';
 import {CardName} from '../../common/cards/CardName';
 import {newCard} from '../createCard';
-import {finishMove, snapshotOf, withCopy} from './gameCopy';
-import {relativeValue, valuationContext} from './stateValue';
+import {finishMove, GameSnapshot, snapshotOf, withCopy} from './gameCopy';
+import {relativeValue, ValuationContext, valuationContext} from './stateValue';
 import {cardPriorFactor} from './cardPriors';
-import {remainingProductionPhases} from './gameProgress';
+import {requirementOutlook} from './requirementOutlook';
+import {pickSome} from './randomChoice';
 
-// What a card is worth to a player *before* it can be played: used for the opening, the draft
-// and buying cards. The card is put into play on a copy of the game (ignoring requirements and
-// cost), the position is valued, and the result is corrected by cost, requirement distance and
-// the BGA prior (docs/ai/bot-heuristics.md §2).
+// What a card is worth to a player, played now and played later. The card is put into play on
+// a copy of the game (ignoring requirements and cost) and the position is valued; the result is
+// corrected by cost, requirement outlook and the BGA prior (docs/ai/bot-heuristics.md §2).
+//
+// "Later" looks several generations ahead: before the card is played, the copy gets a sample
+// of random project cards as a stand-in for the cards the player will still play. Cards that
+// grow with the tableau (e.g. Nitrogen-Rich Asteroid with 3 plant tags) are worth more later,
+// production is worth less; holding a card is right when "later" beats "now".
 
-function requirementsMet(card: IProjectCard, player: IPlayer): boolean {
-  if (card.requirements.length === 0) {
-    return true;
+export type CardTiming = {now: number, later: number};
+
+// Holding a card is uncertain (the game may end, money may lack): later value counts 85 %.
+const LATER_DISCOUNT = 0.85;
+const LATER_SAMPLES = 2;
+
+function playCard(copy: IGame, copyPlayer: IPlayer, name: CardName): void {
+  const fresh = newCard(name);
+  if (isICorporationCard(fresh)) {
+    copyPlayer.playCorporationCard(fresh);
+  } else {
+    copyPlayer.playCard(fresh as IProjectCard);
   }
-  try {
-    return CardRequirements.compile([...card.requirements]).satisfies(player, card);
-  } catch {
-    return true;
-  }
+  copy.deferredActions.runAll(() => {});
+  finishMove(copy, copyPlayer);
 }
 
-/** Share of a card's value that survives because its requirements may never be met in time. */
-function requirementFactor(card: ICard, player: IPlayer): number {
-  if (!isIProjectCard(card) || requirementsMet(card, player)) {
-    return 1;
+/** Plays a random sample of the remaining project cards: a guess at the player's future tableau. */
+function playFutureTableau(copy: IGame, copyPlayer: IPlayer, count: number): void {
+  for (const card of pickSome(Math.random, copy.projectDeck.drawPile, count)) {
+    try {
+      playCard(copy, copyPlayer, card.name);
+    } catch {
+      // some cards cannot be forced into play; the sample just gets smaller
+    }
   }
-  return remainingProductionPhases(player.game) >= 4 ? 0.6 : 0.25;
+  copyPlayer.clearWaitingFor();
 }
 
-export function estimateCardValues(player: IPlayer, cards: ReadonlyArray<ICard>): Map<CardName, number> {
+function gainInCopy(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext, futureCards: number): number | undefined {
+  return withCopy(snapshot, (copy) => {
+    const copyPlayer = copy.getPlayerById(player.id);
+    copyPlayer.clearWaitingFor();
+    try {
+      if (futureCards > 0) {
+        playFutureTableau(copy, copyPlayer, futureCards);
+      }
+      const before = relativeValue(copyPlayer, context);
+      playCard(copy, copyPlayer, card.name);
+      return relativeValue(copyPlayer, context) - before;
+    } catch {
+      return undefined;
+    }
+  });
+}
+
+function costOf(card: ICard, player: IPlayer): number {
+  return isIProjectCard(card) && !isICorporationCard(card) ? player.getCardCost(card) : 0;
+}
+
+function outlookOf(card: ICard, player: IPlayer): number {
+  return isIProjectCard(card) ? requirementOutlook(card, player) : 1;
+}
+
+/** Value of playing the card right now (requirements must be met, otherwise their outlook counts). */
+function nowValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext): number {
+  const gain = gainInCopy(snapshot, player, card, context, 0);
+  const raw = gain === undefined ? 0 : gain * cardPriorFactor(card.name) - costOf(card, player);
+  return raw > 0 ? raw * outlookOf(card, player) : raw;
+}
+
+/** Value of holding the card and playing it a few generations later. */
+function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext): number {
+  if (context.remaining <= 1 || !isIProjectCard(card) || isICorporationCard(card)) {
+    return Number.NEGATIVE_INFINITY;
+  }
+  const delay = Math.min(3, Math.floor(context.remaining / 2));
+  const laterContext = {...context, remaining: context.remaining - delay};
+  const futureCards = Math.min(8, Math.round(delay * 2));
+  let total = 0;
+  let samples = 0;
+  for (let sample = 0; sample < LATER_SAMPLES; sample++) {
+    const gain = gainInCopy(snapshot, player, card, laterContext, futureCards);
+    if (gain !== undefined) {
+      total += gain;
+      samples++;
+    }
+  }
+  if (samples === 0) {
+    return Number.NEGATIVE_INFINITY;
+  }
+  const raw = (total / samples) * cardPriorFactor(card.name) - costOf(card, player);
+  return raw * outlookOf(card, player) * LATER_DISCOUNT;
+}
+
+// Later values take several game copies per card; they only change slowly, so they are
+// remembered for the rest of the generation.
+const laterCache = new Map<string, number>();
+
+function cachedLaterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext): number {
+  const key = `${player.game.id}|${player.id}|${player.game.generation}|${card.name}`;
+  let value = laterCache.get(key);
+  if (value === undefined) {
+    if (laterCache.size > 5000) {
+      laterCache.clear();
+    }
+    value = laterValue(snapshot, player, card, context);
+    laterCache.set(key, value);
+  }
+  return value;
+}
+
+export function estimateCardTimings(player: IPlayer, cards: ReadonlyArray<ICard>, includeLater = true): Map<CardName, CardTiming> {
   const snapshot = snapshotOf(player.game);
   const context = valuationContext(player.game);
-  const baseline = withCopy(snapshot, (copy) => relativeValue(copy.getPlayerById(player.id), context));
-  const values = new Map<CardName, number>();
+  const timings = new Map<CardName, CardTiming>();
   for (const card of cards) {
-    const gain = withCopy(snapshot, (copy) => {
-      const copyPlayer = copy.getPlayerById(player.id);
-      copyPlayer.clearWaitingFor();
-      try {
-        const fresh = newCard(card.name);
-        if (isICorporationCard(fresh)) {
-          copyPlayer.playCorporationCard(fresh);
-        } else {
-          copyPlayer.playCard(fresh as IProjectCard);
-        }
-        copy.deferredActions.runAll(() => {});
-        finishMove(copy, copyPlayer);
-      } catch {
-        return undefined;
-      }
-      return relativeValue(copyPlayer, context) - baseline;
-    });
-    const cost = isIProjectCard(card) && !isICorporationCard(card) ? player.getCardCost(card) : 0;
-    const raw = gain === undefined ? 0 : gain * cardPriorFactor(card.name) - cost;
-    values.set(card.name, raw > 0 ? raw * requirementFactor(card, player) : raw);
+    const later = includeLater ? cachedLaterValue(snapshot, player, card, context) : Number.NEGATIVE_INFINITY;
+    timings.set(card.name, {now: nowValue(snapshot, player, card, context), later});
+  }
+  return timings;
+}
+
+/** Best value of a card, whenever it is played: used for buying and drafting. */
+export function estimateCardValues(player: IPlayer, cards: ReadonlyArray<ICard>): Map<CardName, number> {
+  const values = new Map<CardName, number>();
+  for (const [name, timing] of estimateCardTimings(player, cards)) {
+    values.set(name, Math.max(timing.now, timing.later));
+  }
+  return values;
+}
+
+/** What each card in hand is worth when kept for later (feeds the position value). */
+export function handCardValues(player: IPlayer): Map<CardName, number> {
+  const values = new Map<CardName, number>();
+  if (player.cardsInHand.length === 0) {
+    return values;
+  }
+  const snapshot = snapshotOf(player.game);
+  const context = valuationContext(player.game);
+  for (const card of player.cardsInHand) {
+    values.set(card.name, Math.max(0, cachedLaterValue(snapshot, player, card, context)));
   }
   return values;
 }

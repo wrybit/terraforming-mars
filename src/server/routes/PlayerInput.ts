@@ -37,6 +37,10 @@ export class PlayerInput extends Handler {
       console.warn(`unable to find player ${playerId}`, err);
       throw RouteError.notFound();
     }
+    // AI players make their own moves; a viewer of their page must not interfere.
+    if (player.aiLevel !== undefined) {
+      throw RouteError.badRequest('This player is controlled by the AI.');
+    }
     return this.processInput(req, res, ctx, player);
   }
 

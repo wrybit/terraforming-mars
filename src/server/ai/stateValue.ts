@@ -1,5 +1,7 @@
 import {IPlayer} from '../IPlayer';
 import {IGame} from '../IGame';
+import {CardName} from '../../common/cards/CardName';
+import {PlayerId} from '../../common/Types';
 import {CardType} from '../../common/cards/CardType';
 import {isIActionCard} from '../cards/ICard';
 import {isTemperatureMaxed, remainingProductionPhases, terraformingProgress, victoryPointValue} from './gameProgress';
@@ -23,6 +25,8 @@ const ACTION_CARD_VALUE_PER_GENERATION = 1.5;
 const EFFECT_CARD_VALUE_PER_GENERATION = 1;
 // Opponents' gains count against us, but less than our own (we want to win, not to hurt).
 const OPPONENT_WEIGHT = 0.5;
+// Without this, adding a microbe was worth nothing and the AI passed instead.
+const RESOURCE_ON_CARD_VALUE = 0.8;
 
 /**
  * Game-phase numbers frozen at decision time. Copies that run into the next generation must
@@ -35,14 +39,36 @@ export type ValuationContext = {
   temperatureMaxed: boolean,
   /** How much a current award lead is worth as final VP (leads early in the game rarely hold). */
   awardConfidence: number,
+  /** Value of each hand card of `handOwner` when kept for later (others count HAND_CARD_VALUE). */
+  handValues?: ReadonlyMap<CardName, number>,
+  handOwner?: PlayerId,
 };
 
 /**
- * Award VP are only certain at game end. Before half the terraforming is done a lead counts
- * nothing (the AI funded awards in generation 1 and lost them), then confidence grows to 1.
+ * Award VP are only certain at game end. Strong players fund between half and two thirds of
+ * the game: before half the terraforming a lead counts nothing, then it grows to full value
+ * at about 75 % (the AI funded awards in generation 1 and later still too early).
  */
 function awardConfidence(progress: number): number {
-  return Math.max(0, Math.min(1, (progress - 0.5) / 0.4));
+  return Math.max(0, Math.min(1, (progress - 0.5) / 0.25));
+}
+
+/**
+ * Expected VP from funded awards. A lead only counts as far as it is safe: the opponent can
+ * still catch up while the game lasts, so a small lead is worth about a coin flip.
+ */
+function expectedAwardPoints(player: IPlayer, context: ValuationContext): number {
+  let points = 0;
+  for (const {award} of player.game.fundedAwards) {
+    const own = award.getScore(player);
+    const best = Math.max(0, ...player.opponents.map((opponent) => award.getScore(opponent)));
+    const margin = own - best;
+    // How much an opponent can still gain: more early, and more for awards with big numbers.
+    const swing = 2 + Math.max(own, best) * 0.25 * (1 - context.awardConfidence);
+    const firstPlaceChance = Math.max(0, Math.min(1, 0.5 + margin / (2 * swing)));
+    points += 5 * firstPlaceChance * context.awardConfidence;
+  }
+  return points;
 }
 
 export function valuationContext(game: IGame): ValuationContext {
@@ -93,20 +119,33 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
       const perGeneration = isIActionCard(card) ? ACTION_CARD_VALUE_PER_GENERATION : EFFECT_CARD_VALUE_PER_GENERATION;
       value += perGeneration * context.remaining;
     }
+    // Resources on cards (microbes, animals, science …) pay off later: VP, money, actions.
+    value += card.resourceCount * RESOURCE_ON_CARD_VALUE;
   }
   return value;
+}
+
+function handValue(player: IPlayer, context: ValuationContext): number {
+  if (context.remaining === 0) {
+    return 0;
+  }
+  if (context.handOwner !== player.id || context.handValues === undefined) {
+    return player.cardsInHand.length * HAND_CARD_VALUE;
+  }
+  const values = context.handValues;
+  return player.cardsInHand.reduce((sum, card) => sum + (values.get(card.name) ?? HAND_CARD_VALUE), 0);
 }
 
 /** Absolute value of one player's position. */
 export function playerValue(player: IPlayer, frozen: ValuationContext): number {
   const context = contextFor(player.game, frozen);
   const victoryPoints = player.getVictoryPoints();
-  const expectedVictoryPoints = victoryPoints.total - victoryPoints.awards * (1 - context.awardConfidence);
+  const expectedVictoryPoints = victoryPoints.total - victoryPoints.awards + expectedAwardPoints(player, context);
   return expectedVictoryPoints * context.victoryPoint +
     player.terraformRating * context.remaining * PRODUCTION_DISCOUNT + // TR is income every production phase
     productionValue(player, context) +
     resourceValue(player, context) +
-    player.cardsInHand.length * (context.remaining > 0 ? HAND_CARD_VALUE : 0) +
+    handValue(player, context) +
     tableauValue(player, context);
 }
 

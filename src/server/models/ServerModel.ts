@@ -123,7 +123,9 @@ export class Server {
       pickedCorporationCard: player.pickedCorporationCard ? cardsToModel(player, [player.pickedCorporationCard]) : [],
       preludeCardsInHand: cardsToModel(player, player.preludeCardsInHand),
       thisPlayer: thisPlayer,
-      waitingFor: this.getWaitingFor(player, player.getWaitingFor()),
+      // An AI player answers its inputs itself: whoever opens its page only watches it play
+      // (otherwise the page kept showing the opening choice and never refreshed).
+      waitingFor: player.aiLevel !== undefined ? undefined : this.getWaitingFor(player, player.getWaitingFor()),
       players: players,
       autopass: player.autopass,
       canCancelAction: canCancelAction(player),

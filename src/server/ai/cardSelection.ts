@@ -5,7 +5,7 @@ import {SelectCard} from '../inputs/SelectCard';
 import {SelectInitialCards} from '../inputs/SelectInitialCards';
 import {ICorporationCard} from '../cards/corporation/ICorporationCard';
 import {CardName} from '../../common/cards/CardName';
-import {estimateCardValues} from './cardValue';
+import {estimateCardValues, handCardValues} from './cardValue';
 import {quickResponse} from './quickResponse';
 import {remainingProductionPhases} from './gameProgress';
 
@@ -16,7 +16,7 @@ import {remainingProductionPhases} from './gameProgress';
 const OPENING_RESERVE = 10;
 // A card must be clearly worth more than its price: estimates are rough, and a card that is
 // never played is 3 M€ lost (the AI used to buy many cards and sell them again).
-const BUY_MARGIN = 3;
+const BUY_MARGIN = 1.5;
 
 type ValueFunction = (name: CardName) => number;
 
@@ -101,7 +101,10 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
   const remaining = remainingProductionPhases(player.game);
   // A rich player can afford a bigger hand (every 12 M€ above a reserve buys room for one more).
   const handTarget = (remaining >= 4 ? 6 : 3) + Math.floor(Math.max(0, player.megaCredits - 30) / 12);
-  const room = Math.max(0, handTarget - player.cardsInHand.length);
+  // Dead cards (requirements out of reach) do not fill the hand: they blocked buying for
+  // eight generations in a test game.
+  const usefulHandCards = [...handCardValues(player).values()].filter((value) => value > 1).length;
+  const room = Math.max(0, handTarget - usefulHandCards);
   const budget = player.megaCredits - (remaining >= 4 ? 4 : 10);
   const bought = cardsToBuy(sorted, valueOf, budget, Math.min(input.config.max, room), player.cardCost);
   const count = Math.max(input.config.min, bought.length);

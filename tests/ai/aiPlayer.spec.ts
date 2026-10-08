@@ -5,6 +5,8 @@ import {runInSandbox, isSimulating} from '../../src/server/ai/simulationSandbox'
 import {chooseResponse} from '../../src/server/ai/chooseResponse';
 import {playRandomGame} from '../simulation/playRandomGame';
 import {testGame} from '../TestGame';
+import {Server} from '../../src/server/models/ServerModel';
+import {SelectOption} from '../../src/server/inputs/SelectOption';
 
 describe('AI player', () => {
   it('keeps its level through serialization', () => {
@@ -13,6 +15,16 @@ describe('AI player', () => {
     const restored = Player.deserialize(JSON.parse(JSON.stringify(player.serialize())));
     expect(restored.aiLevel).eq('hard');
     expect(game.players[1].aiLevel).is.undefined;
+  });
+
+  it('hides the input of an AI player from its page, so viewers just watch', () => {
+    const [/* game */, human, ai] = testGame(2);
+    ai.aiLevel = 'normal';
+    human.setWaitingFor(new SelectOption('test'));
+    expect(Server.getPlayerModel(human).waitingFor).is.not.undefined;
+    // Assigned directly: setWaitingFor would make the AI answer right away
+    (ai as any).waitingFor = new SelectOption('test');
+    expect(Server.getPlayerModel(ai).waitingFor).is.undefined;
   });
 
   it('sandbox swaps the database and restores it', () => {

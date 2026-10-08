@@ -15,6 +15,7 @@ import {greedyPayment} from './greedyPayment';
 import {quickResponse} from './quickResponse';
 import {GameSnapshot, finishMove, isActionMenu, snapshotOf, withCopy} from './gameCopy';
 import {ValuationContext, relativeValue, valuationContext} from './stateValue';
+import {handCardValues} from './cardValue';
 
 // Decides an action-phase move by playing every candidate move on a copy of the game and
 // valuing the resulting position (one-step lookahead). This captures the effect of any card
@@ -23,6 +24,8 @@ import {ValuationContext, relativeValue, valuationContext} from './stateValue';
 /** Time the AI may spend on one action on the server (AK1: ~10 ms per tried move). */
 const DEFAULT_BUDGET_MILLISECONDS = 2000;
 const MAXIMUM_CANDIDATES = 120;
+/** How many of the best first moves get a second action tried after them. */
+const SECOND_STEP_CANDIDATES = 4;
 
 type Candidate = {response: InputResponse, endsTurn: boolean};
 
@@ -106,21 +109,33 @@ function candidatesFor(menu: OrOptions, player: IPlayer): Array<Candidate> {
   return candidates.slice(0, MAXIMUM_CANDIDATES);
 }
 
-function valueOfCandidate(snapshot: GameSnapshot, player: IPlayer, menuSize: number, candidate: Candidate, context: ValuationContext): number | undefined {
-  return withCopy(snapshot, (copy) => {
+/** Result of a tried move; `next` is set when the player still has an action left this turn. */
+type Outcome = {
+  value: number,
+  next?: {snapshot: GameSnapshot, menuSize: number, candidates: Array<Candidate>},
+};
+
+function tryCandidate(snapshot: GameSnapshot, player: IPlayer, menuSize: number, candidate: Candidate, context: ValuationContext, withNext: boolean): Outcome | undefined {
+  return withCopy(snapshot, (copy): Outcome | undefined => {
     const copyPlayer = copy.getPlayerById(player.id);
     const menu = copyPlayer.getWaitingFor();
     // The copy must offer the same menu, otherwise the option indices would mean something else.
     if (!isActionMenu(menu) || menu.options.length !== menuSize) {
       return undefined;
     }
+    const generation = copy.generation;
     try {
       copyPlayer.process(candidate.response);
     } catch {
       return undefined;
     }
     finishMove(copy, copyPlayer);
-    return relativeValue(copyPlayer, context);
+    const value = relativeValue(copyPlayer, context);
+    const nextMenu = copyPlayer.getWaitingFor();
+    if (!withNext || !isActionMenu(nextMenu) || copy.generation !== generation) {
+      return {value};
+    }
+    return {value, next: {snapshot: snapshotOf(copy), menuSize: nextMenu.options.length, candidates: candidatesFor(nextMenu, copyPlayer)}};
   });
 }
 
@@ -138,23 +153,53 @@ function gaussian(random: () => number): number {
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * random());
 }
 
+/**
+ * Two steps: every move is tried once; the most promising ones are then followed by the best
+ * second action of the same turn (e.g. first take a bonus, then play the card it pays for).
+ */
 export function chooseAction(menu: OrOptions, player: IPlayer, options: LookaheadOptions): InputResponse | undefined {
   const start = performance.now();
   const budget = options.budgetMilliseconds ?? DEFAULT_BUDGET_MILLISECONDS;
   const random = options.random ?? Math.random;
   const snapshot = snapshotOf(player.game);
-  const context = valuationContext(player.game);
-  let best: {response: InputResponse, value: number} | undefined;
+  // Cards kept in hand count with their value when played later, so a card that grows with
+  // the tableau is not wasted now.
+  const context = {...valuationContext(player.game), handValues: handCardValues(player), handOwner: player.id};
+  const outOfTime = () => performance.now() - start > budget;
+
+  const tried: Array<{candidate: Candidate, outcome: Outcome}> = [];
   for (const candidate of candidatesFor(menu, player)) {
-    if (best !== undefined && performance.now() - start > budget) {
+    if (tried.length > 0 && outOfTime()) {
       break;
     }
-    const value = valueOfCandidate(snapshot, player, menu.options.length, candidate, context);
-    if (value === undefined) {
+    const outcome = tryCandidate(snapshot, player, menu.options.length, candidate, context, true);
+    if (outcome !== undefined) {
+      tried.push({candidate, outcome});
+    }
+  }
+
+  // Second step for the best few first moves that leave an action in this turn.
+  const promising = [...tried].sort((a, b) => b.outcome.value - a.outcome.value).slice(0, SECOND_STEP_CANDIDATES);
+  for (const entry of promising) {
+    const next = entry.outcome.next;
+    if (next === undefined) {
       continue;
     }
-    options.onEvaluated?.(candidate.response, value);
-    const judged = value + options.noise * gaussian(random);
+    for (const second of next.candidates) {
+      if (outOfTime()) {
+        break;
+      }
+      const outcome = tryCandidate(next.snapshot, player, next.menuSize, second, context, false);
+      if (outcome !== undefined && outcome.value > entry.outcome.value) {
+        entry.outcome.value = outcome.value;
+      }
+    }
+  }
+
+  let best: {response: InputResponse, value: number} | undefined;
+  for (const {candidate, outcome} of tried) {
+    options.onEvaluated?.(candidate.response, outcome.value);
+    const judged = outcome.value + options.noise * gaussian(random);
     if (best === undefined || judged > best.value) {
       best = {response: candidate.response, value: judged};
     }

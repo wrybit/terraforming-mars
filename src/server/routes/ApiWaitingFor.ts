@@ -17,6 +17,10 @@ export class ApiWaitingFor extends Handler {
   }
 
   private playerHasRequiredInput(player: IPlayer): boolean {
+    // Pages of AI players behave like the spectator page: refresh on every change.
+    if (player.aiLevel !== undefined) {
+      return player.game.phase === Phase.END;
+    }
     const input = player.getWaitingFor();
     if (input !== undefined) {
       return !input.optional;
