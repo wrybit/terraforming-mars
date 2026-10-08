@@ -74,11 +74,28 @@ function outlookOf(card: ICard, player: IPlayer): number {
   return isIProjectCard(card) ? requirementOutlook(card, player) : 1;
 }
 
+// A card whose requirements are met but which still cannot be played now (e.g. Magnetic Field
+// Generators: 4 energy production must be given up) was valued as if it were free, because the
+// copy plays it ignoring that. Played now it first needs other cards or projects.
+const BLOCKED_NOW_FACTOR = 0.2;
+
+function playableNowFactor(card: ICard, player: IPlayer): number {
+  if (!isIProjectCard(card)) {
+    return 1;
+  }
+  try {
+    return card.canPlayPostRequirements(player, {cost: 0, tr: {}}) ? 1 : BLOCKED_NOW_FACTOR;
+  } catch {
+    // Some cards need a full payment context; then no discount.
+    return 1;
+  }
+}
+
 /** Value of playing the card right now (requirements must be met, otherwise their outlook counts). */
 function nowValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext): number {
   const gain = gainInCopy(snapshot, player, card, context, 0);
   const raw = gain === undefined ? 0 : gain * cardPriorFactor(card.name) - costOf(card, player);
-  return raw > 0 ? raw * outlookOf(card, player) : raw;
+  return raw > 0 ? raw * outlookOf(card, player) * playableNowFactor(card, player) : raw;
 }
 
 /** Value of holding the card and playing it a few generations later. */
