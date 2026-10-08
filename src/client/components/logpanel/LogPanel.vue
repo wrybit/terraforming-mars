@@ -20,7 +20,7 @@
     </LogGenerationList>
     <div v-docked-tab :class="panelClasses" role="tabpanel">
       <!-- One continuous stream of all generations; the tabs above follow the scroll position -->
-      <div v-show="!showsMilestonesAwards" id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mousemove="pointerMoved" @mouseleave="messageUnhovered">
+      <div v-show="!showsMilestonesAwards" id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mouseenter="pointerEntered" @mousemove="pointerMoved" @mouseleave="pointerLeft">
         <section v-for="section in sections" :key="section.generation" class="log-generation" :data-generation="section.generation">
           <h3 class="log-generation-title">
             <span class="log-generation-marker" aria-hidden="true">{{ section.generation }}</span>{{ generationTitle(section.generation) }}
@@ -110,6 +110,10 @@ type Internals = {
   scrollFramePending: boolean,
   resizeObserver: ResizeObserver | undefined,
   lastHeight: number,
+  // Mouse over the log: the reader is looking at something, new entries don't move the box
+  pointerOverLog: boolean,
+  // New entries arrived while the mouse was over the log: catch up once it leaves
+  newEntriesWhileHovered: boolean,
 };
 
 type LogPanelModel = {
@@ -129,6 +133,10 @@ type LogPanelModel = {
 };
 
 // The header of each generation replaces the server's "Generation N" line
+function messageCount(sections: ReadonlyArray<GenerationLog>): number {
+  return sections.reduce((sum, section) => sum + section.messages.length, 0);
+}
+
 function withoutGenerationLines(messages: Array<LogMessage>): Array<LogMessage> {
   return messages.filter((message) => message.type !== LogMessageType.NEW_GENERATION);
 }
@@ -169,7 +177,7 @@ export default defineComponent({
       following: true,
       zoomedMessage: undefined,
       viewBeforeFocus: undefined,
-      internals: markRaw({programmaticScrollTimer: undefined, scrollFrame: undefined, scrollFramePending: false, resizeObserver: undefined, lastHeight: 0}),
+      internals: markRaw({programmaticScrollTimer: undefined, scrollFrame: undefined, scrollFramePending: false, resizeObserver: undefined, lastHeight: 0, pointerOverLog: false, newEntriesWhileHovered: false}),
     };
   },
   directives: {
@@ -228,6 +236,18 @@ export default defineComponent({
     },
     messageUnhovered() {
       this.typedRefs.messageInspector.hidePreview();
+    },
+    pointerEntered() {
+      this.internals.pointerOverLog = true;
+    },
+    pointerLeft() {
+      this.messageUnhovered();
+      this.internals.pointerOverLog = false;
+      if (this.internals.newEntriesWhileHovered) {
+        this.internals.newEntriesWhileHovered = false;
+        this.following = true;
+        this.restorePosition();
+      }
     },
     // ---------- Scrolling ----------
     scrollContainer(): ScrollContainer {
@@ -407,7 +427,17 @@ export default defineComponent({
         if (stream === undefined) {
           return;
         }
+        const previousCount = messageCount(this.sections);
         this.sections = toSections(stream);
+        // Something new always brings the end of the log into view, unless the mouse rests on the log
+        const hasNewEntries = messageCount(this.sections) > previousCount;
+        if (hasNewEntries && keepPosition) {
+          if (this.internals.pointerOverLog) {
+            this.internals.newEntriesWhileHovered = true;
+          } else {
+            this.following = true;
+          }
+        }
         if (getPreferences().enable_sounds && window.location.search.includes('experimental=1')) {
           SoundManager.newLog();
         }

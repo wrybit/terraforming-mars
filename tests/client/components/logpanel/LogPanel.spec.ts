@@ -262,6 +262,52 @@ describe('LogPanel', () => {
     expect((wrapper.vm as any).following).is.false;
   });
 
+  // Every further fetch of the current generation brings one more line
+  function growingLog() {
+    let lines = 1;
+    (global as any).fetch = (url: string) => {
+      fetchCalls.push(url);
+      const entries = Array.from({length: lines++}, (_, index) => line('entry ' + index));
+      return Promise.resolve({ok: true, json: () => Promise.resolve([line('Generation ${0}', LogMessageType.NEW_GENERATION), ...entries])});
+    };
+  }
+
+  it('scrolls to the end when new entries arrive, even from the history', async () => {
+    growingLog();
+    const viewModel = viewModelAt(1);
+    const wrapper = mount(viewModel);
+    const panel = makeScrollable(wrapper);
+    await flush(wrapper);
+    panel.setScrollTop(120);
+    (wrapper.vm as any).updateScrollState();
+
+    await wrapper.setProps({viewModel: {...viewModel}});
+    await flush(wrapper);
+
+    expect(panel.getScrollTop()).eq(320);
+    expect((wrapper.vm as any).following).is.true;
+  });
+
+  it('keeps the position while the mouse is over the log and catches up when it leaves', async () => {
+    growingLog();
+    const viewModel = viewModelAt(1);
+    // Leaving the log also hides the card preview: the inspector stub needs that method
+    const inspector = {name: 'LogMessageInspector', template: '<div></div>', methods: {hidePreview() {}}};
+    const wrapper = shallowMount(LogPanel, {...globalConfig, global: {...globalConfig.global, stubs: {...globalConfig.global.stubs, LogMessageInspector: inspector}}, props: {viewModel}});
+    const panel = makeScrollable(wrapper);
+    await flush(wrapper);
+    panel.setScrollTop(120);
+    (wrapper.vm as any).updateScrollState();
+    await wrapper.find('#logpanel-scrollable').trigger('mouseenter');
+
+    await wrapper.setProps({viewModel: {...viewModel}});
+    await flush(wrapper);
+    expect(panel.getScrollTop()).eq(120);
+
+    await wrapper.find('#logpanel-scrollable').trigger('mouseleave');
+    expect(panel.getScrollTop()).eq(320);
+  });
+
   it('switches the box when the turn changes in place', async () => {
     const wrapper = mount(multiplayerViewModelAt(3), {milestonesAwards: true, acting: false});
     await flush(wrapper);
