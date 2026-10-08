@@ -33,8 +33,13 @@ export const BASELINE_TUNING: AiTuning = {
   engineWeight: 0.5,
 };
 
+// Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
+// expected (z ≥ 1.64 in tests/simulation/compareVariants.py); 100 games are often not enough.
 export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
+  // Earlier baselines, to re-check adopted changes with more games:
+  noEngine: {engineWeight: 0},
+  fewerCards: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4},
 };
 
 export function isTuningVariant(name: string): boolean {
