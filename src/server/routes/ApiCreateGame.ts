@@ -1,3 +1,4 @@
+import {aiUnsupportedReasons} from '../../common/ai/aiSupport';
 import {aiPlayerName, isAiLevel} from '../../common/ai/AiLevel';
 import * as responses from '../server/responses';
 import {Handler} from './Handler';
@@ -174,6 +175,11 @@ export class ApiCreateGame extends Handler {
       this.validateCustomLists(gameReq);
       if (gameReq.escapeVelocity !== undefined && hasNegativeEscapeVelocityOption(gameReq.escapeVelocity)) {
         throw RouteError.badRequest('Escape Velocity values cannot be negative.');
+      }
+      // Same rule as the create-game form (common/ai/aiSupport.ts): no AI players with settings it cannot handle
+      const aiBlockers = aiUnsupportedReasons({expansions: gameReq.expansions, twoCorpsVariant: gameReq.twoCorpsVariant});
+      if (aiBlockers.length > 0 && gameReq.players.some((p) => isAiLevel(p.aiLevel))) {
+        throw RouteError.badRequest(`AI players are not available with: ${aiBlockers.join(', ')}`);
       }
       const gameId = safeCast(generateRandomId('g'), isGameId);
       const spectatorId = safeCast(generateRandomId('s'), isSpectatorId);

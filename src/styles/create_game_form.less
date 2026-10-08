@@ -787,6 +787,22 @@
   &.create-game-segmented--sub {
     margin: 2px 0 4px 16px;
   }
+
+  // AI switched off by a setting: the row stays visible but dim; disabled buttons swallow the
+  // hover, so it goes to the row and its tooltip names the reason
+  &.create-game-segmented--blocked {
+    opacity: 0.45;
+    cursor: help;
+
+    button:disabled {
+      pointer-events: none;
+    }
+  }
+}
+
+.create-game-seat-label--off {
+  opacity: 0.45;
+  cursor: help;
 }
 
 // ---------- right column: player card and Create card, sticky together ----------

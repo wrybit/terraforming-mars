@@ -80,5 +80,6 @@
   "Hard": "Schwer",
   "No AI": "Keine AI",
   "Seat taken by AI": "Platz von AI belegt",
-  "Seat taken by a human": "Platz von Spieler belegt"
+  "Seat taken by a human": "Platz von Spieler belegt",
+  "AI not available with: ${0}": "AI nicht verfügbar mit: ${0}"
 }

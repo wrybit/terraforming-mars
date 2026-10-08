@@ -95,6 +95,25 @@ describe('CreateGameForm', () => {
     expect(vm.getPlayers().every((player: any) => player.aiLevel === undefined)).is.true;
   });
 
+  it('switches the AI off for settings it cannot handle and names them', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const vm = wrapper.vm as any;
+    vm.humanPlayersCount = 1;
+    vm.aiPlayersCount = 2;
+    vm.expansions.colonies = true;
+    await wrapper.vm.$nextTick();
+    expect(vm.aiPlayersCount).eq(0);
+    expect(vm.aiBlockers).deep.eq(['Colonies']);
+    expect(vm.aiBlockedTitle).contains('Colonies');
+    expect(vm.aiCountOptions.filter((option: any) => option.value !== 0).every((option: any) => option.disabled)).is.true;
+
+    vm.expansions.colonies = false;
+    await wrapper.vm.$nextTick();
+    expect(vm.aiBlockers).deep.eq([]);
+  });
+
   it('selecting an expansion also selects what part of it needs', () => {
     const wrapper = shallowMount(CreateGameForm, {
       ...globalConfig,

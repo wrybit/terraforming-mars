@@ -273,8 +273,10 @@
             <div class="create-game-seat-rows">
               <span class="create-game-seat-label"><SeatIcon kind="human"/><span v-i18n>Player</span></span>
               <SegmentedControl v-model="humanPlayersCount" :options="humanCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
-              <span class="create-game-seat-label"><SeatIcon kind="ai"/><span v-i18n>AI</span></span>
-              <SegmentedControl v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
+              <!-- Settings the AI cannot handle switch it off; hovering the row names them -->
+              <span class="create-game-seat-label" :class="{'create-game-seat-label--off': aiBlockers.length > 0}" :title="aiBlockedTitle"><SeatIcon kind="ai"/><span v-i18n>AI</span></span>
+              <SegmentedControl v-model="aiPlayersCount" :options="aiCountOptions" :title="aiBlockedTitle"
+                :class="['create-game-segmented--equal', 'create-game-segmented--seats', {'create-game-segmented--blocked': aiBlockers.length > 0}]"/>
             </div>
             <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
             <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
@@ -364,6 +366,7 @@ import CustomCardListCard from '@/client/components/create/CustomCardListCard.vu
 import CreateGameBoardPreview from '@/client/components/create/CreateGameBoardPreview.vue';
 import {observeStickyBottom} from '@/client/components/create/stickyBottomObserver';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
@@ -479,6 +482,12 @@ export default defineComponent({
     ValidationProblems,
   },
   watch: {
+    // A setting the AI cannot handle removes the AI players right away
+    aiBlockers(blockers: Array<string>) {
+      if (blockers.length > 0 && this.aiPlayersCount > 0) {
+        this.setSeatCounts(this.humanPlayersCount, 0, 'ai');
+      }
+    },
     expansionGrouping(value: ExpansionGrouping) {
       saveExpansionGrouping(value);
     },
@@ -700,8 +709,21 @@ export default defineComponent({
         if (count > MAX_PLAYERS - this.humanPlayersCount) {
           return {value: count, label: 'Seat taken by a human', icon: 'human', disabled: true};
         }
+        if (this.aiBlockers.length > 0) {
+          return {value: count, label: String(count), disabled: true};
+        }
         return {value: count, label: String(count)};
       });
+    },
+    // Settings the AI cannot handle (common/ai/aiSupport.ts), e.g. ['Colonies', 'Merger']
+    aiBlockers(): Array<string> {
+      return aiUnsupportedReasons({expansions: this.expansions, twoCorpsVariant: this.twoCorpsVariant});
+    },
+    aiBlockedTitle(): string | undefined {
+      if (this.aiBlockers.length === 0) {
+        return undefined;
+      }
+      return translateTextWithParams('AI not available with: ${0}', [this.aiBlockers.map((reason) => translateText(reason)).join(', ')]);
     },
     humanPlayersCount: {
       get(): number {
