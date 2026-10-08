@@ -29,14 +29,12 @@ export const BASELINE_TUNING: AiTuning = {
   researchReserveEarly: 0,
   sharedSpotShare: 0.4,
   opponentSpotShare: 0.25,
-  engineWeight: 0,
+  // A/B: weight 1 (clipped at 0) lost 45 : 58, weight 0.5 (unclipped) won 58 : 43.
+  engineWeight: 0.5,
 };
 
 export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
-  // Effect cards valued by the cards played after them (human with such an engine: 97 cards).
-  // Weight 1 with the value clipped at 0 lost 45 : 58.
-  engineHalf: {engineWeight: 0.5},
 };
 
 export function isTuningVariant(name: string): boolean {
