@@ -4,7 +4,8 @@ import {CardName} from '../../common/cards/CardName';
 import {PlayerId} from '../../common/Types';
 import {CardType} from '../../common/cards/CardType';
 import {isIActionCard} from '../cards/ICard';
-import {isTemperatureMaxed, remainingProductionPhases, terraformingProgress, victoryPointValue} from './gameProgress';
+import {isTemperatureMaxed, remainingProductionPhases, stepsLeft, terraformingProgress, victoryPointValue} from './gameProgress';
+import {tuningOf} from './aiTuning';
 import {boardPotential} from './boardPotential';
 import {milestoneRacePoints} from './milestoneRace';
 
@@ -44,6 +45,10 @@ export type ValuationContext = {
   /** Value of each hand card of `handOwner` when kept for later (others count HAND_CARD_VALUE). */
   handValues?: ReadonlyMap<CardName, number>,
   handOwner?: PlayerId,
+  /** Global steps left at decision time (for the tempo term). */
+  stepsLeft?: number,
+  /** Tempo: production phases shrink as the copy raises global parameters (aiTuning.ts tempoAware). */
+  tempo?: boolean,
 };
 
 /**
@@ -80,13 +85,23 @@ export function valuationContext(game: IGame): ValuationContext {
     victoryPoint: victoryPointValue(game),
     temperatureMaxed: isTemperatureMaxed(game),
     awardConfidence: awardConfidence(terraformingProgress(game)),
+    stepsLeft: stepsLeft(game),
   };
 }
 
 /** Same context, but production phases that already happened inside a copy no longer count. */
 function contextFor(game: IGame, context: ValuationContext): ValuationContext {
   const elapsed = Math.max(0, game.generation - context.generation);
-  return {...context, remaining: Math.max(0, context.remaining - elapsed)};
+  let remaining = Math.max(0, context.remaining - elapsed);
+  // Every step raised brings the end closer: production of everybody is worth less. Who has the
+  // stronger engine wants a long game, who leads wants to end it (a human kept terraforming slow
+  // and won 198 : 93 with two huge last generations).
+  if (context.tempo === true && context.stepsLeft !== undefined && context.remaining > 0) {
+    const raised = Math.max(0, context.stepsLeft - stepsLeft(game));
+    const stepsPerGeneration = Math.max(1, context.stepsLeft / context.remaining);
+    remaining = Math.max(0, remaining - raised / stepsPerGeneration);
+  }
+  return {...context, remaining};
 }
 
 function productionValue(player: IPlayer, context: ValuationContext): number {
@@ -172,12 +187,16 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
 }
 
 /** Own value minus a share of the opponents' average: the number the AI maximises. */
-export function relativeValue(player: IPlayer, context: ValuationContext): number {
+export function relativeValue(player: IPlayer, frozen: ValuationContext): number {
+  const tuning = tuningOf(player);
+  const context = tuning.tempoAware > 0 ? {...frozen, tempo: true} : frozen;
   const opponents = player.opponents;
   const own = playerValue(player, context);
   if (opponents.length === 0) {
     return own;
   }
   const opponentAverage = opponents.reduce((sum, opponent) => sum + playerValue(opponent, context), 0) / opponents.length;
-  return own - OPPONENT_WEIGHT * opponentAverage;
+  // Two players: every point of the opponent counts as much as an own one (aiTuning.ts).
+  const weight = opponents.length === 1 ? tuning.opponentWeightTwoPlayers : OPPONENT_WEIGHT;
+  return own - weight * opponentAverage;
 }

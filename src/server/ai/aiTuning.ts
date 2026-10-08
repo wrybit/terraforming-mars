@@ -24,6 +24,10 @@ export type AiTuning = {
   lateBuyFactor: number,
   /** Draft: share of a card's value for the player who receives the rest (hate draft), 0 = off. */
   draftDenial: number,
+  /** 1: raising global parameters shortens the game in the valuation (stateValue.ts contextFor). */
+  tempoAware: number,
+  /** Weight of the opponent's position in a two-player game (more players: 0.5). */
+  opponentWeightTwoPlayers: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -44,6 +48,8 @@ export const BASELINE_TUNING: AiTuning = {
   enablerWeight: 0,
   lateBuyFactor: 1,
   draftDenial: 0,
+  tempoAware: 0,
+  opponentWeightTwoPlayers: 0.5,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -57,6 +63,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   cardTiming: {closingWindow: 1, enablerWeight: 0.5, lateBuyFactor: 0.6},
   // Draft: also take away what the next player would like (standard variant of the group).
   hateDraft: {draftDenial: 0.5},
+  // From a human game: the AI led until generation 12 but let the game run on; the human's engine won.
+  tempo: {tempoAware: 1},
+  zeroSumTwoPlayers: {opponentWeightTwoPlayers: 1},
 };
 
 export function isTuningVariant(name: string): boolean {

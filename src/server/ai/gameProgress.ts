@@ -14,6 +14,11 @@ const EXPECTED_GENERATIONS = 12;
 /** How many generations the observed terraforming speed may move the estimate. */
 const MAXIMUM_DEVIATION = 2;
 
+/** Global parameter steps still to raise before the game ends. */
+export function stepsLeft(game: IGame): number {
+  return (1 - terraformingProgress(game)) * (TEMPERATURE_STEPS + MAX_OXYGEN_LEVEL + MAX_OCEAN_TILES);
+}
+
 /** Share of the three global parameters already raised, 0..1. */
 export function terraformingProgress(game: IGame): number {
   const temperatureSteps = (game.getTemperature() - MIN_TEMPERATURE) / 2;
@@ -46,7 +51,17 @@ export function remainingProductionPhases(game: IGame): number {
   const byObservedSpeed = (1 - progress) / progressPerGeneration;
   const blended = (byPriorLength + byObservedSpeed) / 2;
   const clamped = Math.min(byPriorLength + MAXIMUM_DEVIATION, Math.max(byPriorLength - MAXIMUM_DEVIATION, blended));
-  return Math.max(0, Math.round(clamped));
+  // The game cannot end before the global parameters are maxed, however late it is. In a test
+  // game the human kept terraforming slow until generation 13 (a quarter of the steps done); the
+  // prior said "last generation", and the AI sold its 20 hand cards and lost 93 : 198.
+  return Math.max(0, Math.round(clamped), minimumRemaining(game, progress));
+}
+
+/** Production phases at least still to come: the steps left at a fast pace of the table. */
+function minimumRemaining(game: IGame, progress: number): number {
+  const stepsLeft = (1 - progress) * (TEMPERATURE_STEPS + MAX_OXYGEN_LEVEL + MAX_OCEAN_TILES);
+  const fastStepsPerGeneration = 2 + 3 * game.players.length;
+  return Math.floor(stepsLeft / fastStepsPerGeneration);
 }
 
 /**
