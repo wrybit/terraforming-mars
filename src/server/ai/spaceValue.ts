@@ -57,14 +57,26 @@ function openCitySpots(neighbours: ReadonlyArray<Space>, board: IGame['board']):
   ).length;
 }
 
+// Per other own city that touches a free spot next to a new city: a greenery there scores for
+// both. Three cities around one spot ("Triforce" in the group) make one greenery worth 3 VP.
 const SHARED_SPOT_SHARE = 0.4;
+// Per opponent city at such a spot: their greeneries there score for us too, and their
+// Triforce is spoilt.
+const OPPONENT_SPOT_SHARE = 0.25;
 
-/** Free land next to the space that also touches another own city. */
-function sharedGreenerySpots(space: Space, neighbours: ReadonlyArray<Space>, player: IPlayer, board: IGame['board']): number {
-  return neighbours.filter((neighbour) =>
-    neighbour.tile === undefined && neighbour.spaceType === SpaceType.LAND &&
-    board.getAdjacentSpaces(neighbour).some((next) => next !== space && Board.isCitySpace(next) && next.player === player),
-  ).length;
+/** Value of the free spots around a new city for sharing greeneries with other cities, in VP. */
+function sharedSpotPoints(space: Space, neighbours: ReadonlyArray<Space>, player: IPlayer, board: IGame['board']): number {
+  let points = 0;
+  for (const neighbour of neighbours) {
+    if (neighbour.tile !== undefined || neighbour.spaceType !== SpaceType.LAND) {
+      continue;
+    }
+    const cities = board.getAdjacentSpaces(neighbour).filter((next) => next !== space && Board.isCitySpace(next));
+    const own = cities.filter((city) => city.player === player).length;
+    const opponents = cities.filter((city) => city.player !== undefined && city.player !== player).length;
+    points += own * SHARED_SPOT_SHARE + opponents * OPPONENT_SPOT_SHARE;
+  }
+  return points;
 }
 
 export function spaceValue(space: Space, kind: TileKind, player: IPlayer): number {
@@ -104,7 +116,7 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
     value += opponentCities * victoryPoint * 0.5 - ownCities * victoryPoint * 0.8;
     // Two own cities with one row between them share free spots: a greenery there scores for
     // both (tip from the group: place cities in pairs at that distance, then fill greeneries).
-    value += sharedGreenerySpots(space, neighbours, player, board) * victoryPoint * SHARED_SPOT_SHARE;
+    value += sharedSpotPoints(space, neighbours, player, board) * victoryPoint;
     break;
   case 'ocean':
     // Oceans next to own tiles help nobody else; next to free land they feed later rebates.
@@ -112,8 +124,10 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
     break;
   case 'other':
     // Special tiles (Restricted Area, Nuclear Zone, Mining Area …) take a greenery spot away:
-    // next to an opponent's city that costs them, next to an own city it costs us.
-    value += opponentCities * victoryPoint * 0.6 - ownCities * victoryPoint * 0.8;
+    // next to an opponent's city that costs them, next to an own city it costs us. Best between
+    // several opponent cities, e.g. in the middle of their Triforce (3 cities around one spot).
+    value += opponentCities * victoryPoint * 0.6 + Math.max(0, opponentCities - 1) * victoryPoint * 0.4 -
+      ownCities * victoryPoint * 0.8;
     break;
   }
   return value;
