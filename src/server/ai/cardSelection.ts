@@ -7,7 +7,7 @@ import {ICorporationCard} from '../cards/corporation/ICorporationCard';
 import {CardName} from '../../common/cards/CardName';
 import {estimateCardValues, handCardValues} from './cardValue';
 import {quickResponse} from './quickResponse';
-import {remainingProductionPhases} from './gameProgress';
+import {lastGenerationLikelihood, remainingProductionPhases} from './gameProgress';
 import {requirementOutlook} from './requirementOutlook';
 import {isIProjectCard} from '../cards/IProjectCard';
 import {Tag} from '../../common/cards/Tag';
@@ -43,7 +43,9 @@ function lastGenerationCardsToBuy(cards: ReadonlyArray<ICard>, valueOf: ValueFun
   let titanium = player.titanium;
   const bought: Array<ICard> = [];
   for (const card of cards) {
-    if (bought.length >= maximum || !isIProjectCard(card) || requirementOutlook(card, player) < 1) {
+    // canPlay also covers what the requirement list misses, e.g. energy production a city has
+    // to give up (Noctis City, Capital, Rad-Chem Factory stayed in hand in the test games).
+    if (bought.length >= maximum || !isIProjectCard(card) || requirementOutlook(card, player) < 1 || !player.canPlay(card)) {
       continue;
     }
     if (valueOf(card.name) <= player.cardCost + BUY_MARGIN) {
@@ -143,7 +145,8 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
   const usefulHandCards = [...handCardValues(player).values()].filter((value) => value > 1).length;
   const room = Math.max(0, handTarget - usefulHandCards);
   const budget = player.megaCredits - (remaining >= 4 ? 4 : 10);
-  const bought = remaining === 0 ?
+  // Also when the game will probably end in this generation: buying for "later" is mostly lost then.
+  const bought = remaining === 0 || lastGenerationLikelihood(player.game) >= 0.5 ?
     lastGenerationCardsToBuy(sorted, valueOf, player, input.config.max) :
     cardsToBuy(sorted, valueOf, budget, Math.min(input.config.max, room), player.cardCost);
   const count = Math.max(input.config.min, bought.length);
