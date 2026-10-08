@@ -17,6 +17,8 @@ import {StatsGameDetails} from '../../common/stats/StatsGame';
 // Finished games no longer change: once evaluated, they stay in memory.
 // Saves building the complete final states on every statistics request.
 const finishedLocalGames = new Map<string, StatsGame>();
+/** Finished games without a human player; they never count. */
+const aiOnlyGames = new Set<string>();
 
 /** Corporations under their English card name; unknown ones (e.g. "Steam-Version") are dropped. */
 function canonicalCorporations(corporation: string | undefined): string | undefined {
@@ -87,6 +89,9 @@ export async function collectStatsGames(
 ): Promise<Array<StatsGame>> {
   const games: Array<StatsGame> = [];
   for (const {gameId} of await gameLoader.getIds()) {
+    if (aiOnlyGames.has(gameId)) {
+      continue;
+    }
     const cached = finishedLocalGames.get(gameId);
     if (cached !== undefined) {
       games.push(cached);
@@ -95,6 +100,12 @@ export async function collectStatsGames(
     const game = await gameLoader.getGame(gameId);
     // Broken or running games do not count – running ones are checked again on the next request
     if (game === undefined || game.phase !== Phase.END) {
+      continue;
+    }
+    // Games of AI players only (test runs) say nothing about the group: only games with at
+    // least one human count.
+    if (game.players.every((player) => player.aiLevel !== undefined)) {
+      aiOnlyGames.add(gameId);
       continue;
     }
     const statsGame = localStatsGame(game);
@@ -111,4 +122,5 @@ export async function collectStatsGames(
 /** For tests: deleted games drop out anyway because only the current game list is read. */
 export function forgetStatsGamesForTesting(): void {
   finishedLocalGames.clear();
+  aiOnlyGames.clear();
 }

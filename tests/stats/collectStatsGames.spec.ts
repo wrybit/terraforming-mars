@@ -42,6 +42,23 @@ describe('collectStatsGames', () => {
     };
   }
 
+  it('leaves out games without a human player', async () => {
+    const [aiOnly, first, second] = testGame(2, {}, 'ai-only');
+    first.aiLevel = 'normal';
+    second.aiLevel = 'hard';
+    aiOnly.phase = Phase.END;
+    const [mixed, human, ai] = testGame(2, {}, 'mixed');
+    ai.aiLevel = 'normal';
+    mixed.phase = Phase.END;
+    await gameLoader.add(aiOnly);
+    await gameLoader.add(mixed);
+
+    const games = await collectStatsGames(gameLoader, importedGames, snapshots, screenshots);
+
+    expect(games.map((game) => game.summary.id)).deep.eq([mixed.id]);
+    expect(human.aiLevel).is.undefined;
+  });
+
   it('skips running games and reads details of finished ones', async () => {
     const [running] = testGame(2, {}, 'running');
     const [finished, player] = testGame(2, {}, 'finished');

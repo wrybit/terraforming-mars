@@ -63,9 +63,11 @@ function scheduleAiMove(player: IPlayer): void {
   if (input === undefined) {
     return;
   }
+  // The pause only lets humans follow the game; without humans the AI plays at full speed.
+  const hasHuman = player.game.players.some((candidate) => candidate.aiLevel === undefined);
   setTimeout(() => {
     makeMove(player, input).catch((error) => console.error('AI move failed', error));
-  }, MOVE_DELAY_MILLISECONDS);
+  }, hasHuman ? MOVE_DELAY_MILLISECONDS : 0);
 }
 
 export function installAiDriver(): void {
