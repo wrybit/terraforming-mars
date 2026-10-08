@@ -18,7 +18,8 @@ const EXPECTED_GENERATIONS = 12;
  * a human 2-player game lasted 16. With the fixed 12 the AI thought from generation 8 on that only
  * ~4 were left, valued production and engine cards too low and lost 108 : 209 (aiTuning.ts lengthByPlayers).
  */
-const GENERATIONS_BY_PLAYER_COUNT: Record<number, number> = {2: 15, 3: 12};
+// 5 players: 8.9 generations in 100 AI games (7–11); 4 players interpolated.
+const GENERATIONS_BY_PLAYER_COUNT: Record<number, number> = {2: 15, 3: 12, 4: 10, 5: 9};
 
 /** Typical game length for this player's AI variant. */
 export function expectedGenerations(game: IGame, player?: IPlayer): number {
