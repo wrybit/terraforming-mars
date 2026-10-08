@@ -370,8 +370,11 @@ each(@players, {
   align-items: center;
   justify-content: space-between;
   gap: 6px;
-  // Width capped: stock and production stay together even when the column gets wider
+  // Width capped: stock and production stay together even when the column gets wider.
+  // Never narrower than the content: shield + stock + production stay inside the box; the column grows to
+  // fit (PlayersTable: goodsBoxWidths, max-width set per column so all boxes of a column match)
   width: calc(100% - 8px);
+  min-width: max-content;
   max-width: 78px;
   height: 34px;
   padding: 0 6px 0 9px;

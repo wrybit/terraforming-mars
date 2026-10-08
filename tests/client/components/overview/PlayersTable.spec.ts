@@ -5,7 +5,7 @@ import PlayersTable from '@/client/components/overview/PlayersTable.vue';
 import {Tag} from '@/common/cards/Tag';
 import {Color} from '@/common/Color';
 import {Resource} from '@/common/Resource';
-import {fitToWidth} from '@/client/components/overview/playersTableLayout';
+import {columnTemplate, fitToWidth, minimumWidth} from '@/client/components/overview/playersTableLayout';
 import {emptyTags, fakePublicPlayerModel, fakeViewModel} from '../testHelpers';
 
 function mountTable() {
@@ -47,6 +47,14 @@ describe('PlayersTable', () => {
     expect(wrapper.vm.template).not.to.contain('repeat(4, 34px)');
     // Card count always stays
     expect(wrapper.vm.template.endsWith('12px 48px')).to.be.true;
+  });
+
+  it('widens a resource column for a box that needs more room', () => {
+    const all = {goods: true, tags: false, score: false};
+    const template = columnTemplate(all, [], 196, [0, 90, 0, 0, 0, 0]);
+    // 90px box plus 8px inset; the other resource columns keep the standard minimum
+    expect(template).to.contain('minmax(70px, 1fr) minmax(98px, 1fr) minmax(70px, 1fr)');
+    expect(minimumWidth(all, [], 196, [0, 90, 0, 0, 0, 0])).eq(minimumWidth(all, [], 196) + 28);
   });
 
   it('drops tags first, then scoring, when the column is too narrow', () => {

@@ -9,7 +9,7 @@
     <template v-for="section in sectionOrder" :key="section">
       <template v-if="section === 'goods' && visibility.goods">
         <div class="players-table-divider"></div>
-        <PlayersTableGoods v-for="good in goods" :key="good.type" :good="good" :color="player.color" :isProductionLeader="productionLeaders.includes(good.type)"/>
+        <PlayersTableGoods v-for="(good, index) in goods" :key="good.type" :good="good" :color="player.color" :isProductionLeader="productionLeaders.includes(good.type)" :boxWidth="goodsBoxWidths[index] ?? 0"/>
       </template>
 
       <template v-if="section === 'tags' && visibility.tags">
@@ -116,6 +116,11 @@ export default defineComponent({
     // Goods where this player alone has the highest production
     productionLeaders: {
       type: Array as () => Array<Resource>,
+      default: () => [],
+    },
+    // Box width per resource column (PlayersTable: goodsBoxWidths); 0 = standard width
+    goodsBoxWidths: {
+      type: Array as () => ReadonlyArray<number>,
       default: () => [],
     },
   },

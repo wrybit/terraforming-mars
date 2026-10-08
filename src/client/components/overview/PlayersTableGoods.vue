@@ -1,7 +1,7 @@
 <template>
   <div class="players-table-cell">
     <!-- Goods box: stock large (that's what you look at), production as second value, value per unit as a coin at the corner -->
-    <div :class="boxClasses" data-flash-frame>
+    <div :class="boxClasses" :style="boxStyle" data-flash-frame>
       <!-- Shield before the stock: protected amounts stand out as a white area with a black number -->
       <span class="players-table-goods-stock" data-test="stock" v-flash-count="flashKeys.playerStock(color, good.type)"><span v-if="protectionIcon !== ''" :class="['players-table-protection', protectionIcon]" data-test="protection"></span>{{ good.count }}</span>
       <span :class="productionClasses" data-test="production" v-flash="flashKeys.playerProduction(color, good.type)" :data-tooltip="$t('Production count')">{{ productionText }}</span>
@@ -39,10 +39,18 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    // Wider than the standard when a box in this column needs more room: all boxes of the column match
+    boxWidth: {
+      type: Number,
+      default: 0,
+    },
   },
   computed: {
     flashKeys(): typeof flashKeys {
       return flashKeys;
+    },
+    boxStyle(): Record<string, string> {
+      return this.boxWidth > 0 ? {maxWidth: `${this.boxWidth}px`} : {};
     },
     boxClasses(): Array<string> {
       const classes = ['players-table-goods', 'players-table-goods--' + this.good.type];

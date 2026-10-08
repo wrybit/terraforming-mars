@@ -1,6 +1,7 @@
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {ActionLabel} from '@/client/components/overview/ActionLabel';
 import {InterfaceTagsType} from '@/client/components/overview/playerTagDetails';
+import {GOODS_BOX_INSET} from '@/client/components/overview/goodsBoxWidths';
 
 // Player list as a table in the two-column layout: sections, stored toggles and column grid.
 // All rows (header and players) use the same grid so the columns line up.
@@ -89,11 +90,19 @@ export function nameColumnWidth(escapeVelocity: boolean): number {
   return escapeVelocity ? ESCAPE_VELOCITY_NAME_WIDTH : NAME_WIDTH;
 }
 
-export function columnTemplate(visibility: SectionVisibility, tagColumns: TagColumnGroups, nameWidth: number = NAME_WIDTH): string {
+// Minimum per resource column: wider where a box needs more room than the standard (goodsBoxWidths.ts)
+function goodsMinWidths(goodsBoxWidths: ReadonlyArray<number>): Array<number> {
+  return Array.from({length: GOODS_COUNT}, (_, index) => {
+    const boxWidth = goodsBoxWidths[index] ?? 0;
+    return boxWidth > 0 ? Math.max(GOODS_MIN_WIDTH, boxWidth + GOODS_BOX_INSET) : GOODS_MIN_WIDTH;
+  });
+}
+
+export function columnTemplate(visibility: SectionVisibility, tagColumns: TagColumnGroups, nameWidth: number = NAME_WIDTH, goodsBoxWidths: ReadonlyArray<number> = []): string {
   const divider = px(DIVIDER_WIDTH);
   const tracks = [px(nameWidth)];
   if (visibility.goods) {
-    tracks.push(divider, `repeat(${GOODS_COUNT}, minmax(${px(GOODS_MIN_WIDTH)}, 1fr))`);
+    tracks.push(divider, goodsMinWidths(goodsBoxWidths).map((width) => `minmax(${px(width)}, 1fr)`).join(' '));
   }
   if (visibility.tags && tagColumns.length > 0) {
     tracks.push(divider, tagColumns.map((group) => `repeat(${group.length}, minmax(${px(TAG_MIN_WIDTH)}, 1fr))`).join(` ${px(TAG_GROUP_GAP)} `));
@@ -107,10 +116,10 @@ export function columnTemplate(visibility: SectionVisibility, tagColumns: TagCol
 }
 
 // Minimum width of the grid – same measures as columnTemplate
-export function minimumWidth(visibility: SectionVisibility, tagColumns: TagColumnGroups, nameWidth: number = NAME_WIDTH): number {
+export function minimumWidth(visibility: SectionVisibility, tagColumns: TagColumnGroups, nameWidth: number = NAME_WIDTH, goodsBoxWidths: ReadonlyArray<number> = []): number {
   let width = nameWidth + DIVIDER_WIDTH + PLAYED_CARDS_WIDTH;
   if (visibility.goods) {
-    width += DIVIDER_WIDTH + GOODS_COUNT * GOODS_MIN_WIDTH;
+    width += DIVIDER_WIDTH + goodsMinWidths(goodsBoxWidths).reduce((sum, columnWidth) => sum + columnWidth, 0);
   }
   if (visibility.tags && tagColumns.length > 0) {
     const tagCount = tagColumns.reduce((sum, group) => sum + group.length, 0);
@@ -133,7 +142,7 @@ export type FittedVisibility = {
 
 // Adapts the desired visibility to the available width; unknown width (0) changes nothing.
 // The preferred (last switched on) section is dropped last.
-export function fitToWidth(wanted: SectionVisibility, tagColumns: TagColumnGroups, availableWidth: number, preferred?: TableSection, nameWidth: number = NAME_WIDTH): FittedVisibility {
+export function fitToWidth(wanted: SectionVisibility, tagColumns: TagColumnGroups, availableWidth: number, preferred?: TableSection, nameWidth: number = NAME_WIDTH, goodsBoxWidths: ReadonlyArray<number> = []): FittedVisibility {
   const visibility = {...wanted};
   const autoHidden: Array<TableSection> = [];
   if (availableWidth <= 0) {
@@ -141,7 +150,7 @@ export function fitToWidth(wanted: SectionVisibility, tagColumns: TagColumnGroup
   }
   const order = [...AUTO_HIDE_ORDER.filter((section) => section !== preferred), ...(preferred ? [preferred] : [])];
   for (const section of order) {
-    if (minimumWidth(visibility, tagColumns, nameWidth) <= availableWidth) {
+    if (minimumWidth(visibility, tagColumns, nameWidth, goodsBoxWidths) <= availableWidth) {
       break;
     }
     if (visibility[section]) {

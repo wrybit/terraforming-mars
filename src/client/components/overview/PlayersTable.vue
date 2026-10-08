@@ -13,7 +13,8 @@
         :sectionOrder="sectionOrder"
         :tagColumns="tagColumns"
         :tagDetails="tagDetailsByColor[row.player.color]"
-        :productionLeaders="productionLeadersByColor[row.player.color] ?? []"/>
+        :productionLeaders="productionLeadersByColor[row.player.color] ?? []"
+        :goodsBoxWidths="goodsBoxWidths"/>
     </div>
   </div>
 </template>
@@ -28,6 +29,7 @@ import PlayersTableHeader from '@/client/components/overview/PlayersTableHeader.
 import PlayersTableRow from '@/client/components/overview/PlayersTableRow.vue';
 import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/components/overview/playerTagDetails';
 import {playerGoods} from '@/client/components/overview/playerGoods';
+import {measureGoodsBoxWidths} from '@/client/components/overview/goodsBoxWidths';
 import {mobileLandscape, mobileLayout} from '@/client/utils/mobileLayout';
 import {
   DESKTOP_SECTION_ORDER, GOODS_COUNT, MOBILE_SECTION_ORDER, SCORE_COUNT, PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
@@ -41,6 +43,8 @@ type DataModel = {
   // Width of the table; 0 while it is invisible or not yet measured
   availableWidth: number;
   resizeObserver: ResizeObserver | undefined;
+  // Box width per resource column where the standard width is too narrow (goodsBoxWidths.ts); 0 = standard
+  goodsBoxWidths: Array<number>;
 };
 
 export default defineComponent({
@@ -66,6 +70,7 @@ export default defineComponent({
       preferredSection: loadPreferredSection(),
       availableWidth: 0,
       resizeObserver: undefined,
+      goodsBoxWidths: new Array(GOODS_COUNT).fill(0),
     };
   },
   // Watch the column width: in narrow windows sections drop out automatically instead of being clipped
@@ -80,6 +85,11 @@ export default defineComponent({
       this.availableWidth = Math.floor(entries[0].contentRect.width * zoom);
     });
     this.resizeObserver.observe(this.$el);
+    this.updateGoodsBoxWidths();
+  },
+  // New values (e.g. a shield or +10 production) can widen a box: measure again after every render
+  updated() {
+    this.updateGoodsBoxWidths();
   },
   beforeUnmount() {
     this.resizeObserver?.disconnect();
@@ -125,7 +135,7 @@ export default defineComponent({
     fitted(): FittedVisibility {
       const wanted = {...this.visibility, tags: this.visibility.tags && this.tagColumns.length > 0};
       // The transposed table (mobile.less) grows downward, so no section has to give way for lack of space
-      return fitToWidth(wanted, this.tagColumns, this.transposed ? 0 : this.availableWidth, this.preferredSection, this.nameWidth);
+      return fitToWidth(wanted, this.tagColumns, this.transposed ? 0 : this.availableWidth, this.preferredSection, this.nameWidth, this.goodsBoxWidths);
     },
     effectiveVisibility(): SectionVisibility {
       return this.fitted.visibility;
@@ -141,7 +151,7 @@ export default defineComponent({
       return 1 + (visibility.goods ? GOODS_COUNT : 0) + (visibility.tags ? tagCells : 0) + (visibility.score ? SCORE_COUNT : 0) + 1;
     },
     template(): string {
-      return columnTemplate(this.effectiveVisibility, this.tagColumns, this.nameWidth);
+      return columnTemplate(this.effectiveVisibility, this.tagColumns, this.nameWidth, this.goodsBoxWidths);
     },
     // Per resource the player with the sole highest production; nobody on a tie
     productionLeadersByColor(): Partial<Record<Color, Array<Resource>>> {
@@ -162,6 +172,14 @@ export default defineComponent({
     },
   },
   methods: {
+    // Only assigned on a real change, otherwise every render would trigger the next one
+    updateGoodsBoxWidths() {
+      // Transposed (mobile) the players are the columns: the boxes are laid out differently there
+      const widths = this.transposed ? new Array(GOODS_COUNT).fill(0) : measureGoodsBoxWidths(this.$el, GOODS_COUNT);
+      if (widths.some((width, index) => width !== this.goodsBoxWidths[index])) {
+        this.goodsBoxWidths = widths;
+      }
+    },
     // A section hidden only for lack of space gets preferred (another one makes room) instead of being turned off
     toggleSection(section: TableSection) {
       if (this.fitted.autoHidden.includes(section)) {
