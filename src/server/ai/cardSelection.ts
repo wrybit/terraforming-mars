@@ -5,7 +5,8 @@ import {SelectCard} from '../inputs/SelectCard';
 import {SelectInitialCards} from '../inputs/SelectInitialCards';
 import {ICorporationCard} from '../cards/corporation/ICorporationCard';
 import {CardName} from '../../common/cards/CardName';
-import {estimateCardValues, handCardValues} from './cardValue';
+import {CardTiming, estimateCardTimings, handCardValues} from './cardValue';
+import {isTracingDecision, traceOptions, TracedOption} from './decisionTrace';
 import {quickResponse} from './quickResponse';
 import {corporationSelfPlayBonus} from './corporationSelfPlay';
 import {lastGenerationLikelihood, remainingProductionPhases} from './gameProgress';
@@ -23,6 +24,33 @@ const OPENING_RESERVE = 10;
 const BUY_MARGIN = 1.5;
 
 type ValueFunction = (name: CardName) => number;
+
+/** Best value of each card, whenever it is played (same as estimateCardValues), plus its timing. */
+function valuesOf(player: IPlayer, cards: ReadonlyArray<ICard>): {valueOf: ValueFunction, timingOf: (name: CardName) => CardTiming | undefined} {
+  const timings = estimateCardTimings(player, cards);
+  return {
+    valueOf: (name) => {
+      const timing = timings.get(name);
+      return timing === undefined ? 0 : Math.max(timing.now, timing.later);
+    },
+    timingOf: (name) => timings.get(name),
+  };
+}
+
+const round = (value: number) => Math.round(value * 10) / 10;
+
+/** Trace entry of a card with its now/later values. */
+function cardOption(prefix: string, card: ICard, valueOf: ValueFunction, timingOf: (name: CardName) => CardTiming | undefined, chosen: boolean, note?: string): TracedOption {
+  const timing = timingOf(card.name);
+  return {
+    label: `${prefix}${card.name}`,
+    value: round(valueOf(card.name)),
+    now: timing === undefined ? undefined : round(timing.now),
+    later: timing === undefined || !Number.isFinite(timing.later) ? undefined : round(timing.later),
+    chosen,
+    note,
+  };
+}
 
 /** Best cards to buy: worth more than the price, within budget and hand-size targets. */
 function cardsToBuy(cards: ReadonlyArray<ICard>, valueOf: ValueFunction, budget: number, maximum: number, buyPrice: number): Array<ICard> {
@@ -89,8 +117,8 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
   const corporations = player.dealtCorporationCards;
   const preludes = player.dealtPreludeCards;
   const projects = player.dealtProjectCards;
-  const values = estimateCardValues(player, [...corporations, ...preludes, ...projects]);
-  const valueOf: ValueFunction = (name) => values.get(name) ?? 0;
+  const {valueOf, timingOf} = valuesOf(player, [...corporations, ...preludes, ...projects]);
+  const combinations: Array<{label: string, score: number}> = [];
 
   const preludeChoices: Array<ReadonlyArray<ICard>> = preludes.length >= 2 ? pairs(preludes) : [[]];
   let best: {corporation: ICorporationCard, preludes: ReadonlyArray<ICard>, cards: Array<ICard>, score: number} | undefined;
@@ -106,12 +134,23 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
       if (best === undefined || score > best.score) {
         best = {corporation, preludes: preludePair, cards, score};
       }
+      combinations.push({label: `${corporation.name} + ${preludePair.map((card) => card.name).join(' + ')} + ${cards.length} Karten`, score});
     }
   }
   if (best === undefined) {
     return quickResponse(input, player);
   }
   const chosen = best;
+  if (isTracingDecision()) {
+    const ranked = combinations.sort((a, b) => b.score - a.score);
+    traceOptions('initial', [
+      ...corporations.map((card) => cardOption('Konzern: ', card, valueOf, timingOf, card === chosen.corporation,
+        `Korrektur aus Testläufen ${round(corporationSelfPlayBonus(card.name))}`)),
+      ...preludes.map((card) => cardOption('Präludium: ', card, valueOf, timingOf, chosen.preludes.includes(card))),
+      ...projects.map((card) => cardOption('Karte: ', card, valueOf, timingOf, chosen.cards.includes(card))),
+      ...ranked.slice(0, 5).map((combination, index) => ({label: `Kombination: ${combination.label}`, value: round(combination.score), chosen: index === 0})),
+    ], {combinations: ranked.length});
+  }
   const responses = input.options.map((option): InputResponse => {
     if (option === input.inputs.corp) {
       return {type: 'card', cards: [chosen.corporation.name]};
@@ -130,12 +169,15 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
 /** Draft pick or research purchase, depending on the input's limits. */
 export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): InputResponse {
   const candidates = input.cards.filter((_card, index) => input.config.enabled?.[index] !== false);
-  const values = estimateCardValues(player, candidates);
-  const valueOf: ValueFunction = (name) => values.get(name) ?? 0;
+  const {valueOf, timingOf} = valuesOf(player, candidates);
   const sorted = [...candidates].sort((a, b) => valueOf(b.name) - valueOf(a.name));
   if (input.config.min === input.config.max) {
     // Draft: the count is fixed, take the best.
-    return {type: 'card', cards: sorted.slice(0, input.config.min).map((card) => card.name)};
+    const picked = sorted.slice(0, input.config.min);
+    if (isTracingDecision()) {
+      traceOptions('draft', sorted.map((card) => cardOption('', card, valueOf, timingOf, picked.includes(card))));
+    }
+    return {type: 'card', cards: picked.map((card) => card.name)};
   }
   // Research: early a hand of up to 6, late only what can still be played.
   const remaining = remainingProductionPhases(player.game);
@@ -152,5 +194,11 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
     cardsToBuy(sorted, valueOf, budget, Math.min(input.config.max, room), player.cardCost);
   const count = Math.max(input.config.min, bought.length);
   const chosen = count > bought.length ? sorted.slice(0, count) : bought;
+  if (isTracingDecision()) {
+    traceOptions('research', sorted.map((card) => cardOption('', card, valueOf, timingOf, chosen.includes(card))), {
+      price: player.cardCost, budget, handTarget, usefulHandCards, room, remainingGenerations: remaining,
+      lastGenerationLikelihood: lastGenerationLikelihood(player.game),
+    });
+  }
   return {type: 'card', cards: chosen.map((card) => card.name)};
 }

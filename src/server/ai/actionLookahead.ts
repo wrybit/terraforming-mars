@@ -16,6 +16,8 @@ import {quickResponse} from './quickResponse';
 import {GameSnapshot, finishMove, isActionMenu, snapshotOf, withCopy} from './gameCopy';
 import {ValuationContext, relativeValue, valuationContext} from './stateValue';
 import {handCardValues} from './cardValue';
+import {isTracingDecision, traceOptions} from './decisionTrace';
+import {describeResponse} from './decisionLabels';
 
 // Decides an action-phase move by playing every candidate move on a copy of the game and
 // valuing the resulting position (one-step lookahead). This captures the effect of any card
@@ -26,6 +28,8 @@ const DEFAULT_BUDGET_MILLISECONDS = 2000;
 const MAXIMUM_CANDIDATES = 120;
 /** How many of the best first moves get a second action tried after them. */
 const SECOND_STEP_CANDIDATES = 4;
+/** How many of the best moves a decision trace keeps. */
+const TRACED_ACTION_OPTIONS = 25;
 
 type Candidate = {response: InputResponse, endsTurn: boolean};
 
@@ -203,6 +207,16 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     if (best === undefined || judged > best.value) {
       best = {response: candidate.response, value: judged};
     }
+  }
+  if (isTracingDecision()) {
+    // The best moves and the chosen one; the rest would only bloat the trace.
+    const ranked = [...tried].sort((a, b) => b.outcome.value - a.outcome.value);
+    const shown = ranked.filter((entry, index) => index < TRACED_ACTION_OPTIONS || entry.candidate.response === best?.response);
+    traceOptions('action', shown.map((entry) => ({
+      label: describeResponse(menu, entry.candidate.response),
+      value: Math.round(entry.outcome.value * 10) / 10,
+      chosen: entry.candidate.response === best?.response,
+    })), {candidates: candidatesFor(menu, player).length, tried: tried.length, milliseconds: Math.round(performance.now() - start)});
   }
   return best?.response;
 }

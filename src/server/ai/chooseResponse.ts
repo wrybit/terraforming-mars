@@ -10,6 +10,8 @@ import {chooseCardsToKeep, chooseInitialCards} from './cardSelection';
 import {isActionMenu} from './gameCopy';
 import {quickResponse} from './quickResponse';
 import {randomResponse} from './randomResponse';
+import {recordDecision} from './decisionTrace';
+import {describeResponse} from './decisionLabels';
 
 // Entry point of the rule-based AI (stage 1): which answer to give for the current input.
 
@@ -30,6 +32,11 @@ const LEVEL_PROFILES: Record<AiLevel, LevelProfile> = {
 const CARD_CHOICE_PHASES: ReadonlyArray<Phase> = [Phase.RESEARCH, Phase.DRAFTING, Phase.INITIALDRAFTING];
 
 export function chooseResponse(input: PlayerInput, player: IPlayer, level: AiLevel): InputResponse {
+  // In AI test batches every decision is recorded with its options (decisionTrace.ts).
+  return recordDecision(input, player, () => decide(input, player, level), (response) => describeResponse(input, response));
+}
+
+function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputResponse {
   const profile = LEVEL_PROFILES[level];
   if (profile.randomShare > 0 && Math.random() < profile.randomShare) {
     return randomResponse(input, player, Math.random);
