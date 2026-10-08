@@ -13,15 +13,15 @@ import {lastGenerationLikelihood, remainingProductionPhases} from './gameProgres
 import {requirementOutlook} from './requirementOutlook';
 import {isIProjectCard} from '../cards/IProjectCard';
 import {Tag} from '../../common/cards/Tag';
+import {tuningOf} from './aiTuning';
 
 // Opening choice (corporation + preludes + cards) and card buying / drafting.
 // docs/ai/bot-heuristics.md §2 and §3a.
 
 // Money kept after buying, so the bought cards can actually be played.
 const OPENING_RESERVE = 10;
-// A card must be clearly worth more than its price: estimates are rough, and a card that is
-// never played is 3 M€ lost (the AI used to buy many cards and sell them again).
-const BUY_MARGIN = 1.5;
+// A card must be clearly worth more than its price (aiTuning.ts buyMargin): estimates are rough,
+// and a card that is never played is 3 M€ lost (the AI used to buy many cards and sell them again).
 
 type ValueFunction = (name: CardName) => number;
 
@@ -53,9 +53,9 @@ function cardOption(prefix: string, card: ICard, valueOf: ValueFunction, timingO
 }
 
 /** Best cards to buy: worth more than the price, within budget and hand-size targets. */
-function cardsToBuy(cards: ReadonlyArray<ICard>, valueOf: ValueFunction, budget: number, maximum: number, buyPrice: number): Array<ICard> {
+function cardsToBuy(cards: ReadonlyArray<ICard>, valueOf: ValueFunction, budget: number, maximum: number, buyPrice: number, buyMargin: number): Array<ICard> {
   const worthIt = [...cards]
-    .filter((card) => valueOf(card.name) > buyPrice + BUY_MARGIN)
+    .filter((card) => valueOf(card.name) > buyPrice + buyMargin)
     .sort((a, b) => valueOf(b.name) - valueOf(a.name));
   const affordable = Math.max(0, Math.floor(budget / buyPrice));
   return worthIt.slice(0, Math.min(maximum, affordable));
@@ -77,7 +77,7 @@ function lastGenerationCardsToBuy(cards: ReadonlyArray<ICard>, valueOf: ValueFun
     if (bought.length >= maximum || !isIProjectCard(card) || requirementOutlook(card, player) < 1 || !player.canPlay(card)) {
       continue;
     }
-    if (valueOf(card.name) <= player.cardCost + BUY_MARGIN) {
+    if (valueOf(card.name) <= player.cardCost + tuningOf(player).buyMargin) {
       continue;
     }
     // Steel and titanium pay their share first, the rest is money.
@@ -126,7 +126,7 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
     const buyPrice = corporation.cardCost ?? player.cardCost;
     for (const preludePair of preludeChoices) {
       const budget = corporation.startingMegaCredits - OPENING_RESERVE;
-      const cards = cardsToBuy(projects, valueOf, budget, 10, buyPrice);
+      const cards = cardsToBuy(projects, valueOf, budget, 10, buyPrice, tuningOf(player).buyMargin);
       const score = valueOf(corporation.name) + corporationSelfPlayBonus(corporation.name) +
         preludePair.reduce((sum, prelude) => sum + valueOf(prelude.name), 0) +
         cards.reduce((sum, card) => sum + valueOf(card.name) - buyPrice, 0) +
@@ -182,16 +182,17 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
   // Research: early a hand of up to 6, late only what can still be played.
   const remaining = remainingProductionPhases(player.game);
   // A rich player can afford a bigger hand (every 12 M€ above a reserve buys room for one more).
-  const handTarget = (remaining >= 4 ? 6 : 3) + Math.floor(Math.max(0, player.megaCredits - 30) / 12);
+  const tuning = tuningOf(player);
+  const handTarget = (remaining >= 4 ? tuning.handTargetEarly : tuning.handTargetLate) + Math.floor(Math.max(0, player.megaCredits - 30) / 12);
   // Dead cards (requirements out of reach) do not fill the hand: they blocked buying for
   // eight generations in a test game.
   const usefulHandCards = [...handCardValues(player).values()].filter((value) => value > 1).length;
   const room = Math.max(0, handTarget - usefulHandCards);
-  const budget = player.megaCredits - (remaining >= 4 ? 4 : 10);
+  const budget = player.megaCredits - (remaining >= 4 ? tuning.researchReserveEarly : 10);
   // Also when the game will probably end in this generation: buying for "later" is mostly lost then.
   const bought = remaining === 0 || lastGenerationLikelihood(player.game) >= 0.5 ?
     lastGenerationCardsToBuy(sorted, valueOf, player, input.config.max) :
-    cardsToBuy(sorted, valueOf, budget, Math.min(input.config.max, room), player.cardCost);
+    cardsToBuy(sorted, valueOf, budget, Math.min(input.config.max, room), player.cardCost, tuning.buyMargin);
   const count = Math.max(input.config.min, bought.length);
   const chosen = count > bought.length ? sorted.slice(0, count) : bought;
   if (isTracingDecision()) {
