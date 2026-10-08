@@ -49,6 +49,8 @@ export type ValuationContext = {
   stepsLeft?: number,
   /** Tempo: production phases shrink as the copy raises global parameters (aiTuning.ts tempoAware). */
   tempo?: boolean,
+  /** Share of future income counted now (aiTuning.ts productionDiscount); default PRODUCTION_DISCOUNT. */
+  productionDiscount?: number,
   /** Award leads are projected to the game end by each player's pace so far (aiTuning.ts awardTiming). */
   awardTiming?: boolean,
 };
@@ -134,7 +136,7 @@ function productionPerGeneration(player: IPlayer, context: ValuationContext): nu
 }
 
 function productionValue(player: IPlayer, context: ValuationContext): number {
-  return productionPerGeneration(player, context) * context.remaining * PRODUCTION_DISCOUNT;
+  return productionPerGeneration(player, context) * context.remaining * (context.productionDiscount ?? PRODUCTION_DISCOUNT);
 }
 
 /**
@@ -148,7 +150,7 @@ function engineFlow(player: IPlayer, context: ValuationContext): number {
       cards += isIActionCard(card) ? ACTION_CARD_VALUE_PER_GENERATION : EFFECT_CARD_VALUE_PER_GENERATION;
     }
   }
-  return (productionPerGeneration(player, context) + player.terraformRating) * PRODUCTION_DISCOUNT + cards;
+  return (productionPerGeneration(player, context) + player.terraformRating) * (context.productionDiscount ?? PRODUCTION_DISCOUNT) + cards;
 }
 
 /**
@@ -248,7 +250,7 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
   // Board VP still to come count only while there is time to realise them.
   const boardTime = Math.min(1, context.remaining / 3);
   return (expectedVictoryPoints + boardPotential(player) * boardTime) * context.victoryPoint +
-    player.terraformRating * context.remaining * PRODUCTION_DISCOUNT + // TR is income every production phase
+    player.terraformRating * context.remaining * (context.productionDiscount ?? PRODUCTION_DISCOUNT) + // TR is income every production phase
     productionValue(player, context) +
     resourceValue(player, context) +
     handValue(player, context) +
@@ -258,7 +260,8 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
 /** Own value minus a share of the opponents' average: the number the AI maximises. */
 export function relativeValue(player: IPlayer, frozen: ValuationContext): number {
   const tuning = tuningOf(player);
-  const context = {...frozen, tempo: tuning.tempoAware > 0 || frozen.tempo, awardTiming: tuning.awardTiming > 0 || frozen.awardTiming};
+  const context = {...frozen, tempo: tuning.tempoAware > 0 || frozen.tempo, awardTiming: tuning.awardTiming > 0 || frozen.awardTiming,
+    productionDiscount: frozen.productionDiscount ?? tuning.productionDiscount};
   const opponents = player.opponents;
   const own = playerValue(player, context);
   if (opponents.length === 0) {

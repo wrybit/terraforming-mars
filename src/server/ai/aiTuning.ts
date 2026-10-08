@@ -32,6 +32,8 @@ export type AiTuning = {
   terraformBrake: number,
   /** 1: expected game length by player count (2 players 15, 3 players 12) instead of 12 (gameProgress.ts). */
   lengthByPlayers: number,
+  /** Share of future income (production, TR) counted now; 0.55 since the start (stateValue.ts). */
+  productionDiscount: number,
   /** 1: remaining generations from the fitted terraforming curve (gameProgress.ts curvedRemaining). */
   lengthModel: number,
   /** 1: award leads projected to the game end by each player's pace (stateValue.ts projectedAwardScore). */
@@ -71,6 +73,7 @@ export const BASELINE_TUNING: AiTuning = {
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
   lengthByPlayers: 1,
   awardTiming: 0,
+  productionDiscount: 0.55,
   // Fitted terraforming curve (gameProgress.ts curvedRemaining): estimate error 2P 1.86 → 1.25,
   // 3P 1.45 → 0.80, human games 1.96 → 0.75 generations; neutral in AI-vs-AI (z −0.17).
   lengthModel: 1,
@@ -85,6 +88,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
   // Identical copy of the baseline: shows how far two equal AIs drift apart by chance (A/A test).
   control: {},
+  // Night of 2026-10-08: with a correct game length, is income worth more? And more cards.
+  production65: {productionDiscount: 0.65},
+  production75: {productionDiscount: 0.75},
+  moreCards: {buyMargin: -5, handTargetEarly: 16, handTargetLate: 6},
   // Baseline before the hate draft and the zero-sum two-player valuation, to confirm both.
   previous: {draftDenial: 0, opponentWeightTwoPlayers: 0.5},
   // Earlier baselines, to re-check adopted changes with more games:
