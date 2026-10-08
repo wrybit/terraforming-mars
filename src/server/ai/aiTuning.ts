@@ -13,17 +13,19 @@ export type AiTuning = {
   researchReserveEarly: number,
 };
 
+// Before: margin 1.5, hand 6/3, reserve 4 – the AI played ~22 cards per game (a human 54). The
+// variant with these values won 58 of 130 seats against 43 (A/B batch 2026-10-08-1441).
 export const BASELINE_TUNING: AiTuning = {
-  buyMargin: 1.5,
-  handTargetEarly: 6,
-  handTargetLate: 3,
-  researchReserveEarly: 4,
+  buyMargin: -1,
+  handTargetEarly: 9,
+  handTargetLate: 4,
+  researchReserveEarly: 0,
 };
 
 export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
-  // Test game: the AI played 21 cards, the human 54. Buy more freely.
-  moreCards: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, researchReserveEarly: 0},
+  // Does buying even more help further?
+  evenMoreCards: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5},
 };
 
 export function isTuningVariant(name: string): boolean {
