@@ -1,7 +1,6 @@
 import {expect} from 'chai';
 import {testGame} from '../TestGame';
 import {remainingProductionPhases} from '../../src/server/ai/gameProgress';
-import {clearPlayerTunings, setPlayerTuning} from '../../src/server/ai/aiTuning';
 import {setOxygenLevel, setTemperature} from '../TestingUtils';
 
 describe('AI game progress', () => {
@@ -14,15 +13,15 @@ describe('AI game progress', () => {
     expect(remainingProductionPhases(game)).greaterThanOrEqual(2);
   });
 
-  it('expects longer two-player games with the realLength variant', () => {
-    const [game, player] = testGame(2);
-    game.generation = 8;
-    setTemperature(game, -10);
-    setOxygenLevel(game, 7);
-    const fixed = remainingProductionPhases(game, player);
-    setPlayerTuning(player.id, 'realLength');
-    const byPlayers = remainingProductionPhases(game, player);
-    clearPlayerTunings();
-    expect(byPlayers).greaterThan(fixed);
+  it('expects longer two-player than three-player games', () => {
+    const remainingAt = (players: number) => {
+      const [game, player] = testGame(players);
+      game.generation = 8;
+      setTemperature(game, -10);
+      setOxygenLevel(game, 7);
+      return remainingProductionPhases(game, player);
+    };
+    // Measured: 2 players 14.5 generations, 3 players 11.8; with a fixed 12 both said 4 at generation 8.
+    expect(remainingAt(2)).greaterThan(remainingAt(3));
   });
 });
