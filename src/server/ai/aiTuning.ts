@@ -35,8 +35,9 @@ export const BASELINE_TUNING: AiTuning = {
   researchReserveEarly: 0,
   sharedSpotShare: 0.4,
   opponentSpotShare: 0.25,
-  // A/B: weight 1 (clipped at 0) lost 45 : 58, weight 0.5 (unclipped) won 58 : 43.
-  engineWeight: 0.5,
+  // A/B: weight 1 (clipped at 0) lost 45 : 58, weight 0.5 won 58 : 43 in 100 games but 153 : 158
+  // in 300 new games (z +0.3 vs +0.8) – no clear gain, so off again (it costs computing time).
+  engineWeight: 0,
   closingWindow: 0,
   enablerWeight: 0,
   lateBuyFactor: 1,
@@ -47,7 +48,7 @@ export const BASELINE_TUNING: AiTuning = {
 export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
   // Earlier baselines, to re-check adopted changes with more games:
-  noEngine: {engineWeight: 0},
+  engine: {engineWeight: 0.5},
   fewerCards: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4},
   // Card timing as the group plays it: closing windows, enabler cards, late cards bought later.
   cardTiming: {closingWindow: 1, enablerWeight: 0.5, lateBuyFactor: 0.6},
