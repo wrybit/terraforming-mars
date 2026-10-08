@@ -71,7 +71,9 @@ export const BASELINE_TUNING: AiTuning = {
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
   lengthByPlayers: 1,
   awardTiming: 0,
-  lengthModel: 0,
+  // Fitted terraforming curve (gameProgress.ts curvedRemaining): estimate error 2P 1.86 → 1.25,
+  // 3P 1.45 → 0.80, human games 1.96 → 0.75 generations; neutral in AI-vs-AI (z −0.17).
+  lengthModel: 1,
   secondStepCandidates: 4,
   opponentReplies: 0,
   opponentWeightTwoPlayers: 1,
@@ -81,6 +83,8 @@ export const BASELINE_TUNING: AiTuning = {
 // expected (z ≥ 1.64 in tests/simulation/compareVariants.py); 100 games are often not enough.
 export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
+  // Identical copy of the baseline: shows how far two equal AIs drift apart by chance (A/A test).
+  control: {},
   // Baseline before the hate draft and the zero-sum two-player valuation, to confirm both.
   previous: {draftDenial: 0, opponentWeightTwoPlayers: 0.5},
   // Earlier baselines, to re-check adopted changes with more games:
