@@ -109,14 +109,17 @@
   align-items: start;
 }
 
+// Shared columns for all rows (subgrid): the buttons line up even when "Play" and "Watch" differ in width
 .game-home-links {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  gap: 6px 0;
 }
 
 .game-home-link {
-  display: flex;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
   align-items: center;
   gap: 12px;
   padding: 8px 8px 8px 10px;
