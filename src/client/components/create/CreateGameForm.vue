@@ -1123,9 +1123,9 @@ export default defineComponent({
         }
       });
 
-      players.map((player: any) => {
-        player.first = (this.firstIndex === player.index);
-        return player;
+      // firstIndex counts seats from 1 (the star on the player card, or the drawn seat after shuffling)
+      players.forEach((player, index) => {
+        player.first = this.firstIndex === index + 1;
       });
 
       let clonedGamedId: undefined | GameId = undefined;

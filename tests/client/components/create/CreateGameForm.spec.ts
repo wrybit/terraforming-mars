@@ -95,6 +95,18 @@ describe('CreateGameForm', () => {
     expect(vm.getPlayers().every((player: any) => player.aiLevel === undefined)).is.true;
   });
 
+  it('sends the starred player as first player', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const vm = wrapper.vm as any;
+    vm.humanPlayersCount = 3;
+    vm.randomFirstPlayer = false;
+    vm.firstIndex = 2;
+    const config = await vm.serializeSettings();
+    expect(config.players.map((player: any) => player.first)).deep.eq([false, true, false]);
+  });
+
   it('keeps new humans in front of the AI players', () => {
     const wrapper = shallowMount(CreateGameForm, {
       ...globalConfig,
