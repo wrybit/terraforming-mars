@@ -8,6 +8,9 @@ import {CardName} from '../../common/cards/CardName';
 import {estimateCardValues, handCardValues} from './cardValue';
 import {quickResponse} from './quickResponse';
 import {remainingProductionPhases} from './gameProgress';
+import {requirementOutlook} from './requirementOutlook';
+import {isIProjectCard} from '../cards/IProjectCard';
+import {Tag} from '../../common/cards/Tag';
 
 // Opening choice (corporation + preludes + cards) and card buying / drafting.
 // docs/ai/bot-heuristics.md §2 and §3a.
@@ -27,6 +30,40 @@ function cardsToBuy(cards: ReadonlyArray<ICard>, valueOf: ValueFunction, budget:
     .sort((a, b) => valueOf(b.name) - valueOf(a.name));
   const affordable = Math.max(0, Math.floor(budget / buyPrice));
   return worthIt.slice(0, Math.min(maximum, affordable));
+}
+
+/**
+ * Last generation: a card only pays if it is played in this generation, so its requirements must
+ * be met now and price plus play cost must fit the money. In 15 test games every fourth card
+ * bought in the last generation stayed in hand (e.g. Capital, Magnetic Field Dome, Zeppelins).
+ */
+function lastGenerationCardsToBuy(cards: ReadonlyArray<ICard>, valueOf: ValueFunction, player: IPlayer, maximum: number): Array<ICard> {
+  let money = player.spendableMegacredits();
+  let steel = player.steel;
+  let titanium = player.titanium;
+  const bought: Array<ICard> = [];
+  for (const card of cards) {
+    if (bought.length >= maximum || !isIProjectCard(card) || requirementOutlook(card, player) < 1) {
+      continue;
+    }
+    if (valueOf(card.name) <= player.cardCost + BUY_MARGIN) {
+      continue;
+    }
+    // Steel and titanium pay their share first, the rest is money.
+    let cost = player.getCardCost(card);
+    const steelUsed = card.tags.includes(Tag.BUILDING) ? Math.min(steel, Math.floor(cost / player.getSteelValue())) : 0;
+    cost -= steelUsed * player.getSteelValue();
+    const titaniumUsed = card.tags.includes(Tag.SPACE) ? Math.min(titanium, Math.floor(cost / player.getTitaniumValue())) : 0;
+    cost -= titaniumUsed * player.getTitaniumValue();
+    if (cost + player.cardCost > money) {
+      continue;
+    }
+    money -= cost + player.cardCost;
+    steel -= steelUsed;
+    titanium -= titaniumUsed;
+    bought.push(card);
+  }
+  return bought;
 }
 
 /** Synergy bonus: cards sharing tags with the corporation profit from its effects. */
@@ -106,7 +143,9 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
   const usefulHandCards = [...handCardValues(player).values()].filter((value) => value > 1).length;
   const room = Math.max(0, handTarget - usefulHandCards);
   const budget = player.megaCredits - (remaining >= 4 ? 4 : 10);
-  const bought = cardsToBuy(sorted, valueOf, budget, Math.min(input.config.max, room), player.cardCost);
+  const bought = remaining === 0 ?
+    lastGenerationCardsToBuy(sorted, valueOf, player, input.config.max) :
+    cardsToBuy(sorted, valueOf, budget, Math.min(input.config.max, room), player.cardCost);
   const count = Math.max(input.config.min, bought.length);
   const chosen = count > bought.length ? sorted.slice(0, count) : bought;
   return {type: 'card', cards: chosen.map((card) => card.name)};
