@@ -64,15 +64,33 @@ export function remainingProductionPhases(game: IGame, player?: IPlayer): number
   }
   // Blend the prior with the speed the table actually terraforms at, but never stray far from
   // the prior: a slow start once made the AI expect 46 more generations and buy any production.
-  const progressPerGeneration = progress / (game.generation - 1);
-  const byObservedSpeed = (1 - progress) / progressPerGeneration;
-  const blended = (byPriorLength + byObservedSpeed) / 2;
-  const clamped = Math.min(byPriorLength + MAXIMUM_DEVIATION, Math.max(byPriorLength - MAXIMUM_DEVIATION, blended));
+  const curved = player !== undefined && tuningOf(player).lengthModel > 0;
+  const byObservedSpeed = curved ? curvedRemaining(game.generation, progress) : (1 - progress) / (progress / (game.generation - 1));
+  const observedWeight = curved ? Math.min(0.95, CURVE_WEIGHT + CURVE_WEIGHT_PER_GENERATION * (game.generation - 4)) : 0.5;
+  const deviation = curved ? CURVE_DEVIATION : MAXIMUM_DEVIATION;
+  const blended = observedWeight * byObservedSpeed + (1 - observedWeight) * byPriorLength;
+  const clamped = Math.min(byPriorLength + deviation, Math.max(byPriorLength - deviation, blended));
   // The game cannot end before the global parameters are maxed, however late it is. In a test
   // game the human kept terraforming slow until generation 13 (a quarter of the steps done); the
   // prior said "last generation", and the AI sold its 20 hand cards and lost 93 : 198.
   return Math.max(0, Math.round(clamped), minimumRemaining(game, progress));
 }
+
+/**
+ * Terraforming speeds up: tables build engines first and raise most steps at the end. Fitted on
+ * 57 000 generation starts of AI test games and 9 human games: progress grows about with the
+ * square of the generations played, so with progress p after g − 1 generations the game ends
+ * after (g − 1) / √p generations. The straight-line estimate expected far too long games
+ * (a quarter done after 9 generations → 27 more; it was 6).
+ * Mean error in generations (AI 2P / AI 3P / human 2P): straight line with 12: 1.41 / 1.45 / 1.10,
+ * straight line with 15/12: 1.86 / 1.45 / 1.96, curve: 1.24 / 0.80 / 0.75.
+ */
+function curvedRemaining(generation: number, progress: number): number {
+  return (generation - 1) * (1 / Math.sqrt(progress) - 1);
+}
+const CURVE_WEIGHT = 0.3;
+const CURVE_WEIGHT_PER_GENERATION = 0.05;
+const CURVE_DEVIATION = 1;
 
 /** Production phases at least still to come: the steps left at a fast pace of the table. */
 function minimumRemaining(game: IGame, progress: number): number {

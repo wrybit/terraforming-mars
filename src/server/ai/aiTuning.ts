@@ -32,6 +32,8 @@ export type AiTuning = {
   terraformBrake: number,
   /** 1: expected game length by player count (2 players 15, 3 players 12) instead of 12 (gameProgress.ts). */
   lengthByPlayers: number,
+  /** 1: remaining generations from the fitted terraforming curve (gameProgress.ts curvedRemaining). */
+  lengthModel: number,
   /** 1: award leads projected to the game end by each player's pace (stateValue.ts projectedAwardScore). */
   awardTiming: number,
   /** Action phase: how many of the best first moves get a second action tried after them. */
@@ -69,6 +71,7 @@ export const BASELINE_TUNING: AiTuning = {
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
   lengthByPlayers: 1,
   awardTiming: 0,
+  lengthModel: 0,
   secondStepCandidates: 4,
   opponentReplies: 0,
   opponentWeightTwoPlayers: 1,
@@ -97,6 +100,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // and builds a big engine. Not a candidate for the baseline – it shows whether 'closer' punishes it.
   // From a human game (209 : 108, 16 generations): game length by player count, award timing.
   realLength: {lengthByPlayers: 1},
+  curvedLength: {lengthModel: 1},
+  // Before realLength: fixed 12 generations (calibration says it estimated 2P better than 15 on a straight line).
+  fixedLength: {lengthByPlayers: 0},
   awardTiming: {awardTiming: 1},
   // Deeper search: second action after more first moves; the next opponent's best reply.
   widerSearch: {secondStepCandidates: 12},
