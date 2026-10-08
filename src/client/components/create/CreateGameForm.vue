@@ -549,15 +549,19 @@ export default defineComponent({
       }
     },
   },
+  created() {
+    // Restore before the first render: restoring in mounted() painted the default seat (red "Player 1")
+    // first, which then animated out while the saved seats animated in.
+    // A shared link takes precedence over the most recently used settings.
+    if (!this.restoreSettingsFromLink()) {
+      this.restoreLastSettings();
+    }
+  },
   mounted() {
     setDocumentTitle('Create New Game');
     this.stopStickyObserver = observeStickyBottom(this.$refs.createCard as HTMLElement, CREATE_CARD_BOTTOM_PX, (stuck) => {
       this.createCardStuck = stuck;
     });
-    // A shared link takes precedence over the most recently used settings
-    if (!this.restoreSettingsFromLink()) {
-      this.restoreLastSettings();
-    }
     nextTick(() => {
       this.settingsLinkReady = true;
       if (!this.uploading) {

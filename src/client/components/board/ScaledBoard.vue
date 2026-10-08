@@ -1,6 +1,7 @@
 <template>
-  <!-- The game board is a fixed ~700 px wide; in narrower containers it shrinks instead of being clipped -->
-  <div :class="['scaled-board', {'scaled-board--planet': planetOnly}]">
+  <div ref="root" :class="['scaled-board', {'scaled-board--planet': planetOnly}]">
+    <!-- The game board is a fixed ~700 px wide; in narrower containers it shrinks instead of being clipped.
+         Comment inside the root on purpose: above it, dev builds get a fragment root (no class fallthrough, $el not an element) -->
     <div ref="scaled" class="scaled-board-content" :style="contentStyle">
       <Board :spaces="spaces" :expansions="expansions" :venusScaleLevel="0" :boardName="boardName"/>
     </div>
@@ -60,7 +61,8 @@ export default defineComponent({
     // Older browsers and test environments without ResizeObserver keep the first fit
     if (typeof ResizeObserver !== 'undefined') {
       this.resizeObserver = new ResizeObserver(() => this.fitToWidth());
-      this.resizeObserver.observe(this.$el as HTMLElement);
+      // Via ref, not $el: $el is only the element as long as the template has a single root
+      this.resizeObserver.observe(this.$refs.root as HTMLElement);
     }
   },
   beforeUnmount() {
@@ -74,7 +76,7 @@ export default defineComponent({
       this.fitToWidth();
     },
     fitToWidth(): void {
-      const available = (this.$el as HTMLElement).clientWidth;
+      const available = (this.$refs.root as HTMLElement).clientWidth;
       this.scale = this.naturalWidth <= 0 ? 1 : Math.min(1, available / this.naturalWidth);
     },
   },
