@@ -73,5 +73,7 @@ export function engineValue(snapshot: GameSnapshot, player: IPlayer, card: ICard
     return 0;
   }
   const futureCards = context.remaining * CARDS_PER_GENERATION;
-  return Math.max(0, withCard - without) * futureCards / sample.length;
+  // Not clipped at 0: the measurement is noisy, clipping turned noise into extra value for every
+  // effect card (A/B with clipping and full weight: 45 vs 58 seats won).
+  return (withCard - without) * futureCards / sample.length;
 }

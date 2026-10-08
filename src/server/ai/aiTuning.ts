@@ -34,10 +34,9 @@ export const BASELINE_TUNING: AiTuning = {
 
 export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
-  // Triforce test: do cities drift towards opponents because of the opponent share?
-  ownSpotsOnly: {opponentSpotShare: 0, sharedSpotShare: 0.6},
   // Effect cards valued by the cards played after them (human with such an engine: 97 cards).
-  engine: {engineWeight: 1},
+  // Weight 1 with the value clipped at 0 lost 45 : 58.
+  engineHalf: {engineWeight: 0.5},
 };
 
 export function isTuningVariant(name: string): boolean {
