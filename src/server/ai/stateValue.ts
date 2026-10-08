@@ -2,12 +2,21 @@ import {IPlayer} from '../IPlayer';
 import {IGame} from '../IGame';
 import {CardType} from '../../common/cards/CardType';
 import {isIActionCard} from '../cards/ICard';
-import {isTemperatureMaxed, remainingProductionPhases, victoryPointValue} from './gameProgress';
+import {isTemperatureMaxed, remainingProductionPhases, terraformingProgress, victoryPointValue} from './gameProgress';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights: docs/ai/bot-heuristics.md §1.
 
-const PRODUCTION_DISCOUNT = 0.9;
+// Future income is worth about half of money in hand (experts: 1 M€ production ≈ 5 M€ in
+// generation 1, ≈ 2 M€ late). A higher value made the AI buy production far too dearly.
+const PRODUCTION_DISCOUNT = 0.55;
+// In the last generation money only counts for what it can still buy: VP. Kept a little
+// above 0 so the AI does not throw money at worthless moves.
+const MONEY_VALUE_IN_LAST_GENERATION = 0.3;
+// Money beyond a working reserve has no card to go into; it is only worth what standard
+// projects turn it into later. Without this the AI hoarded 200 M€ and passed.
+const MONEY_RESERVE = 30;
+const EXCESS_MONEY_VALUE = 0.7;
 const HAND_CARD_VALUE = 2;
 // An action or effect card keeps paying off every generation it stays in play.
 const ACTION_CARD_VALUE_PER_GENERATION = 1.5;
@@ -24,7 +33,17 @@ export type ValuationContext = {
   remaining: number,
   victoryPoint: number,
   temperatureMaxed: boolean,
+  /** How much a current award lead is worth as final VP (leads early in the game rarely hold). */
+  awardConfidence: number,
 };
+
+/**
+ * Award VP are only certain at game end. Before half the terraforming is done a lead counts
+ * nothing (the AI funded awards in generation 1 and lost them), then confidence grows to 1.
+ */
+function awardConfidence(progress: number): number {
+  return Math.max(0, Math.min(1, (progress - 0.5) / 0.4));
+}
 
 export function valuationContext(game: IGame): ValuationContext {
   return {
@@ -32,6 +51,7 @@ export function valuationContext(game: IGame): ValuationContext {
     remaining: remainingProductionPhases(game),
     victoryPoint: victoryPointValue(game),
     temperatureMaxed: isTemperatureMaxed(game),
+    awardConfidence: awardConfidence(terraformingProgress(game)),
   };
 }
 
@@ -49,16 +69,18 @@ function productionValue(player: IPlayer, context: ValuationContext): number {
     production.steel * 1.6 +
     production.titanium * 2.5 +
     production.plants * 2 +
-    production.energy * 1.5 +
+    production.energy * 1.1 + // energy mostly ends up as heat
     production.heat * heatFactor;
   return perGeneration * context.remaining * PRODUCTION_DISCOUNT;
 }
 
 function resourceValue(player: IPlayer, context: ValuationContext): number {
   const heatValue = context.temperatureMaxed ? 0 : 0.9;
-  return player.megaCredits +
-    player.steel * player.getSteelValue() * 0.8 +
-    player.titanium * player.getTitaniumValue() * 0.8 +
+  const money = context.remaining > 0 ? 1 : MONEY_VALUE_IN_LAST_GENERATION;
+  const megaCredits = Math.min(player.megaCredits, MONEY_RESERVE) + Math.max(0, player.megaCredits - MONEY_RESERVE) * EXCESS_MONEY_VALUE;
+  return megaCredits * money +
+    player.steel * player.getSteelValue() * 0.8 * money +
+    player.titanium * player.getTitaniumValue() * 0.8 * money +
     player.plants * 1.5 +
     player.heat * heatValue +
     player.energy * 0.5;
@@ -78,8 +100,10 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
 /** Absolute value of one player's position. */
 export function playerValue(player: IPlayer, frozen: ValuationContext): number {
   const context = contextFor(player.game, frozen);
-  return player.getVictoryPoints().total * context.victoryPoint +
-    player.terraformRating * context.remaining + // TR is income every production phase
+  const victoryPoints = player.getVictoryPoints();
+  const expectedVictoryPoints = victoryPoints.total - victoryPoints.awards * (1 - context.awardConfidence);
+  return expectedVictoryPoints * context.victoryPoint +
+    player.terraformRating * context.remaining * PRODUCTION_DISCOUNT + // TR is income every production phase
     productionValue(player, context) +
     resourceValue(player, context) +
     player.cardsInHand.length * (context.remaining > 0 ? HAND_CARD_VALUE : 0) +

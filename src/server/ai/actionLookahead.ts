@@ -6,7 +6,9 @@ import {SelectOption} from '../inputs/SelectOption';
 import {SelectCard} from '../inputs/SelectCard';
 import {SelectCardToPlay} from '../inputs/SelectCardToPlay';
 import {UndoActionOption} from '../inputs/UndoActionOption';
-import {IProjectCard} from '../cards/IProjectCard';
+import {IProjectCard, isIProjectCard} from '../cards/IProjectCard';
+import {ICard} from '../cards/ICard';
+import {remainingProductionPhases} from './gameProgress';
 import {isIStandardProjectCard} from '../cards/IStandardProjectCard';
 import {Tag} from '../../common/cards/Tag';
 import {greedyPayment} from './greedyPayment';
@@ -40,6 +42,18 @@ function cardPayment(input: SelectCardToPlay<any>, card: IProjectCard, player: I
   });
 }
 
+/**
+ * Selling a card for 1 M€ only pays off in the last generation, and only for cards that cannot
+ * be played any more. Before, the AI sold cards it had just bought for 3 M€.
+ */
+function sellPatentResponses(input: SelectCard<ICard>, player: IPlayer): Array<InputResponse> {
+  if (remainingProductionPhases(player.game) > 0) {
+    return [];
+  }
+  const unplayable = input.cards.filter((card) => !isIProjectCard(card) || !player.canPlay(card));
+  return unplayable.length === 0 ? [] : [{type: 'card', cards: unplayable.map((card) => card.name)}];
+}
+
 /** All complete answers worth trying for an input (one level of sub-choices expanded). */
 function responsesFor(input: PlayerInput, player: IPlayer): Array<InputResponse> {
   if (input instanceof OrOptions) {
@@ -61,6 +75,9 @@ function responsesFor(input: PlayerInput, player: IPlayer): Array<InputResponse>
     return input.cards
       .filter((_card, index) => input.enabled?.[index] !== false)
       .map((card) => ({type: 'projectCard', card: card.name, payment: cardPayment(input, card, player)}));
+  }
+  if (input instanceof SelectCard && input.title === 'Sell patents') {
+    return sellPatentResponses(input, player);
   }
   if (input instanceof SelectCard && input.config.min === 1 && input.config.max === 1) {
     return input.cards
@@ -112,6 +129,8 @@ export type LookaheadOptions = {
   noise: number,
   budgetMilliseconds?: number,
   random?: () => number,
+  /** Diagnostics: receives every tried move with its value. */
+  onEvaluated?: (response: InputResponse, value: number) => void,
 };
 
 function gaussian(random: () => number): number {
@@ -134,6 +153,7 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     if (value === undefined) {
       continue;
     }
+    options.onEvaluated?.(candidate.response, value);
     const judged = value + options.noise * gaussian(random);
     if (best === undefined || judged > best.value) {
       best = {response: candidate.response, value: judged};

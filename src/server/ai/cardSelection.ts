@@ -14,13 +14,16 @@ import {remainingProductionPhases} from './gameProgress';
 
 // Money kept after buying, so the bought cards can actually be played.
 const OPENING_RESERVE = 10;
+// A card must be clearly worth more than its price: estimates are rough, and a card that is
+// never played is 3 M€ lost (the AI used to buy many cards and sell them again).
+const BUY_MARGIN = 3;
 
 type ValueFunction = (name: CardName) => number;
 
 /** Best cards to buy: worth more than the price, within budget and hand-size targets. */
 function cardsToBuy(cards: ReadonlyArray<ICard>, valueOf: ValueFunction, budget: number, maximum: number, buyPrice: number): Array<ICard> {
   const worthIt = [...cards]
-    .filter((card) => valueOf(card.name) > buyPrice)
+    .filter((card) => valueOf(card.name) > buyPrice + BUY_MARGIN)
     .sort((a, b) => valueOf(b.name) - valueOf(a.name));
   const affordable = Math.max(0, Math.floor(budget / buyPrice));
   return worthIt.slice(0, Math.min(maximum, affordable));
@@ -96,8 +99,9 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
   }
   // Research: early a hand of up to 6, late only what can still be played.
   const remaining = remainingProductionPhases(player.game);
-  const handTarget = remaining >= 4 ? 6 : 3;
-  const room = Math.max(0, handTarget - player.cardsInHand.length + 2);
+  // A rich player can afford a bigger hand (every 12 M€ above a reserve buys room for one more).
+  const handTarget = (remaining >= 4 ? 6 : 3) + Math.floor(Math.max(0, player.megaCredits - 30) / 12);
+  const room = Math.max(0, handTarget - player.cardsInHand.length);
   const budget = player.megaCredits - (remaining >= 4 ? 4 : 10);
   const bought = cardsToBuy(sorted, valueOf, budget, Math.min(input.config.max, room), player.cardCost);
   const count = Math.max(input.config.min, bought.length);

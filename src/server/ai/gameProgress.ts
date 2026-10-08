@@ -8,6 +8,8 @@ const TEMPERATURE_STEPS = (MAX_TEMPERATURE - MIN_TEMPERATURE) / 2;
 
 /** Typical game length by player count, used before the observed terraforming speed is meaningful. */
 const EXPECTED_GENERATIONS: Record<number, number> = {1: 14, 2: 12, 3: 10, 4: 9, 5: 8, 6: 8};
+/** How many generations the observed terraforming speed may move the estimate. */
+const MAXIMUM_DEVIATION = 3;
 
 /** Share of the three global parameters already raised, 0..1. */
 export function terraformingProgress(game: IGame): number {
@@ -32,13 +34,17 @@ export function remainingProductionPhases(game: IGame): number {
   }
   const expected = EXPECTED_GENERATIONS[game.players.length] ?? 9;
   const byPriorLength = Math.max(0, expected - game.generation);
-  if (game.generation <= 2 || progress === 0) {
+  // Early generations say little about the speed (tables build engines first).
+  if (game.generation <= 3 || progress === 0) {
     return byPriorLength;
   }
-  // Blend the prior with the speed the table actually terraforms at.
+  // Blend the prior with the speed the table actually terraforms at, but never stray far from
+  // the prior: a slow start once made the AI expect 46 more generations and buy any production.
   const progressPerGeneration = progress / (game.generation - 1);
   const byObservedSpeed = (1 - progress) / progressPerGeneration;
-  return Math.max(0, Math.round((byPriorLength + byObservedSpeed) / 2));
+  const blended = (byPriorLength + byObservedSpeed) / 2;
+  const clamped = Math.min(byPriorLength + MAXIMUM_DEVIATION, Math.max(byPriorLength - MAXIMUM_DEVIATION, blended));
+  return Math.max(0, Math.round(clamped));
 }
 
 /** M€ value of one VP: cheap early (money still compounds), expensive late. */
