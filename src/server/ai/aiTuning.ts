@@ -26,6 +26,8 @@ export type AiTuning = {
   draftDenial: number,
   /** 1: raising global parameters shortens the game in the valuation (stateValue.ts contextFor). */
   tempoAware: number,
+  /** Weight of the race term: raising steps is good when the strongest rival's engine grows faster (stateValue.ts closerTerm). */
+  closer: number,
   /** Weight of the opponent's position in a two-player game (more players: 0.5). */
   opponentWeightTwoPlayers: number,
 };
@@ -51,6 +53,7 @@ export const BASELINE_TUNING: AiTuning = {
   // full opponent weight in two-player games too (2P: z +2.01 in 400 games).
   draftDenial: 0.5,
   tempoAware: 0,
+  closer: 0,
   opponentWeightTwoPlayers: 1,
 };
 
@@ -71,6 +74,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // A/B: lost clearly (z -1.81) – raising parameters for the shorter game costs too much.
   tempo: {tempoAware: 1},
   zeroSumTwoPlayers: {opponentWeightTwoPlayers: 1},
+  // Tempo done right: end the game when the rival's engine grows faster, drag it out otherwise.
+  closer: {closer: 1},
 };
 
 export function isTuningVariant(name: string): boolean {

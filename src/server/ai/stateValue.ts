@@ -104,17 +104,64 @@ function contextFor(game: IGame, context: ValuationContext): ValuationContext {
   return {...context, remaining};
 }
 
-function productionValue(player: IPlayer, context: ValuationContext): number {
+/** M€ value of one generation of production (before the discount). */
+function productionPerGeneration(player: IPlayer, context: ValuationContext): number {
   const production = player.production;
   const heatFactor = context.temperatureMaxed ? 0.2 : 0.8;
-  const perGeneration =
-    production.megacredits * 1 +
+  return production.megacredits * 1 +
     production.steel * 1.6 +
     production.titanium * 2.5 +
     production.plants * 2 +
     production.energy * 1.1 + // energy mostly ends up as heat
     production.heat * heatFactor;
-  return perGeneration * context.remaining * PRODUCTION_DISCOUNT;
+}
+
+function productionValue(player: IPlayer, context: ValuationContext): number {
+  return productionPerGeneration(player, context) * context.remaining * PRODUCTION_DISCOUNT;
+}
+
+/**
+ * What one more production phase is worth to a player: income (production and TR) plus what
+ * action and effect cards bring per generation. The "engine" in the closer term below.
+ */
+function engineFlow(player: IPlayer, context: ValuationContext): number {
+  let cards = 0;
+  for (const card of player.playedCards) {
+    if (card.type === CardType.ACTIVE) {
+      cards += isIActionCard(card) ? ACTION_CARD_VALUE_PER_GENERATION : EFFECT_CARD_VALUE_PER_GENERATION;
+    }
+  }
+  return (productionPerGeneration(player, context) + player.terraformRating) * PRODUCTION_DISCOUNT + cards;
+}
+
+/**
+ * Closer (aiTuning.ts closer): raising global steps cuts production phases for everybody. The
+ * final margin to the strongest rival then changes by the cut × (own engine − rival engine), with
+ * full weight – it is a race. So the AI pushes the end when the rival's engine grows faster and
+ * slows down when its own does. The old 'tempo' variant shrank every value with the (smaller)
+ * opponent weight, so any raise looked like a loss and the AI terraformed less (z −1.81).
+ */
+function closerTerm(player: IPlayer, frozen: ValuationContext): number {
+  if (frozen.stepsLeft === undefined || frozen.remaining <= 0 || player.opponents.length === 0) {
+    return 0;
+  }
+  const raised = Math.max(0, frozen.stepsLeft - stepsLeft(player.game));
+  if (raised === 0) {
+    return 0;
+  }
+  const generationsCut = Math.min(frozen.remaining, raised / Math.max(1, frozen.stepsLeft / frozen.remaining));
+  const context = contextFor(player.game, frozen);
+  // The rival is the opponent with the best position, not the one with the biggest engine.
+  let rival = player.opponents[0];
+  let rivalValue = playerValue(rival, frozen);
+  for (const opponent of player.opponents.slice(1)) {
+    const value = playerValue(opponent, frozen);
+    if (value > rivalValue) {
+      rival = opponent;
+      rivalValue = value;
+    }
+  }
+  return generationsCut * (engineFlow(rival, context) - engineFlow(player, context));
 }
 
 function resourceValue(player: IPlayer, context: ValuationContext): number {
@@ -198,5 +245,6 @@ export function relativeValue(player: IPlayer, frozen: ValuationContext): number
   const opponentAverage = opponents.reduce((sum, opponent) => sum + playerValue(opponent, context), 0) / opponents.length;
   // Two players: every point of the opponent counts as much as an own one (aiTuning.ts).
   const weight = opponents.length === 1 ? tuning.opponentWeightTwoPlayers : OPPONENT_WEIGHT;
-  return own - weight * opponentAverage;
+  const closer = tuning.closer > 0 ? tuning.closer * closerTerm(player, frozen) : 0;
+  return own - weight * opponentAverage + closer;
 }
