@@ -28,6 +28,8 @@ export type AiTuning = {
   tempoAware: number,
   /** Weight of the race term: raising steps is good when the strongest rival's engine grows faster (stateValue.ts closerTerm). */
   closer: number,
+  /** M€ a global step raised by anybody costs in the valuation: > 0 keeps the game long (engine builder opponent). */
+  terraformBrake: number,
   /** Weight of the opponent's position in a two-player game (more players: 0.5). */
   opponentWeightTwoPlayers: number,
 };
@@ -54,6 +56,7 @@ export const BASELINE_TUNING: AiTuning = {
   draftDenial: 0.5,
   tempoAware: 0,
   closer: 0,
+  terraformBrake: 0,
   opponentWeightTwoPlayers: 1,
 };
 
@@ -76,6 +79,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   zeroSumTwoPlayers: {opponentWeightTwoPlayers: 1},
   // Tempo done right: end the game when the rival's engine grows faster, drag it out otherwise.
   closer: {closer: 1},
+  // Sparring partner modelled on a human who won 198 : 93: buys many cards, keeps terraforming slow
+  // and builds a big engine. Not a candidate for the baseline – it shows whether 'closer' punishes it.
+  engineBuilder: {buyMargin: -6, handTargetEarly: 16, handTargetLate: 6, terraformBrake: 6},
 };
 
 export function isTuningVariant(name: string): boolean {

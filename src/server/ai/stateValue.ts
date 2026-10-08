@@ -141,11 +141,16 @@ function engineFlow(player: IPlayer, context: ValuationContext): number {
  * slows down when its own does. The old 'tempo' variant shrank every value with the (smaller)
  * opponent weight, so any raise looked like a loss and the AI terraformed less (z −1.81).
  */
+/** Global steps raised in a copy since the decision (0 without a frozen step count). */
+function stepsRaised(player: IPlayer, frozen: ValuationContext): number {
+  return frozen.stepsLeft === undefined ? 0 : Math.max(0, frozen.stepsLeft - stepsLeft(player.game));
+}
+
 function closerTerm(player: IPlayer, frozen: ValuationContext): number {
   if (frozen.stepsLeft === undefined || frozen.remaining <= 0 || player.opponents.length === 0) {
     return 0;
   }
-  const raised = Math.max(0, frozen.stepsLeft - stepsLeft(player.game));
+  const raised = stepsRaised(player, frozen);
   if (raised === 0) {
     return 0;
   }
@@ -246,5 +251,5 @@ export function relativeValue(player: IPlayer, frozen: ValuationContext): number
   // Two players: every point of the opponent counts as much as an own one (aiTuning.ts).
   const weight = opponents.length === 1 ? tuning.opponentWeightTwoPlayers : OPPONENT_WEIGHT;
   const closer = tuning.closer > 0 ? tuning.closer * closerTerm(player, frozen) : 0;
-  return own - weight * opponentAverage + closer;
+  return own - weight * opponentAverage + closer - tuning.terraformBrake * stepsRaised(player, frozen);
 }
