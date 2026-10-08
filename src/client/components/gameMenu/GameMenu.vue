@@ -11,7 +11,8 @@
 
     <Teleport to="body">
       <Transition name="game-menu-dropdown">
-        <div v-if="menuOpen" ref="dropdown" class="game-menu-dropdown" role="menu" :style="dropdownPosition" @click.stop>
+        <div v-if="menuOpen" ref="dropdown" class="game-menu-dropdown" :style="dropdownPosition" @click.stop>
+          <div class="game-menu-panel" role="menu">
           <template v-if="context">
           <!-- Own player: neutral dark box, the colour comes from the cube alone -->
           <div class="game-menu-player">
@@ -60,6 +61,17 @@
               <span v-i18n>Jump to colonies</span>
             </a>
           </div>
+          </div>
+
+          <!-- Navigation box: the main pages of the start page (siteLinks.ts), always in a new tab so a running game stays open -->
+          <nav v-if="navigation && navigationLinks.length > 0" class="game-menu-panel game-menu-items" role="menu">
+            <a v-for="link in navigationLinks" :key="link.label" :href="link.href" target="_blank" rel="noopener"
+              role="menuitem" class="game-menu-item" @click="closeMenu">
+              <span class="game-menu-item-icon"><MobileGlyph :name="link.icon" :strokeWidth="2"/></span>
+              <!-- v-i18n on the text span: the translation looks up the exact text content -->
+              <span v-i18n>{{ link.label }}</span>
+            </a>
+          </nav>
         </div>
       </Transition>
     </Teleport>
@@ -86,6 +98,7 @@
 import {computed, defineAsyncComponent, inject, onBeforeUnmount, ref} from 'vue';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
+import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
 import LanguageFlag from '@/client/components/LanguageFlag.vue';
 import LanguageSelectionDialog from '@/client/components/LanguageSelectionDialog.vue';
 import InfoPanel from '@/client/components/InfoPanel.vue';
@@ -93,13 +106,17 @@ import PreferencesDialog from '@/client/components/PreferencesDialog.vue';
 import {PreferencesManager} from '@/client/utils/PreferencesManager';
 import {LANGUAGE} from '@/common/constants';
 import {translateText} from '@/client/directives/i18n';
+import {SITE_LINKS} from '@/client/components/startScreen/siteLinks';
 import {GAME_MENU_CONTEXT} from '@/client/components/gameMenu/gameMenuContext';
 
 withDefaults(defineProps<{
   // Frosted-glass size of the page headers (40px) instead of the small table button
   large?: boolean;
+  // Second box with the main pages (new game, statistics, cards list, rules, board game)
+  navigation?: boolean;
 }>(), {
   large: false,
+  navigation: true,
 });
 
 // Help only on demand (own chunk, like in the sidebar)
@@ -114,6 +131,10 @@ const buttonLabel = computed(() => {
   const translated = translateText(SETUP_MENU_KEY);
   return translated === SETUP_MENU_KEY ? 'Setup' : translated;
 });
+
+// The page the menu is on is not offered again (e.g. "Statistics" on /stats)
+const currentPage = window.location.pathname.split('/').pop() ?? '';
+const navigationLinks = SITE_LINKS.filter((link) => link.inMenu && link.href !== currentPage);
 
 const injected = inject(GAME_MENU_CONTEXT, undefined);
 const context = computed(() => injected?.value);

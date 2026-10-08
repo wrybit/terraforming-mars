@@ -39,7 +39,24 @@ describe('GameMenu', () => {
     await wrapper.find('.game-menu-button').trigger('click');
     const dropdown = document.body.querySelector('.game-menu-dropdown');
     expect(dropdown?.querySelector('.game-menu-player')).is.null;
-    expect(dropdown?.querySelectorAll('.game-menu-item').length).eq(3);
+    expect(dropdown?.querySelectorAll('.game-menu-panel:first-child .game-menu-item').length).eq(3);
+    wrapper.unmount();
+  });
+
+  it('lists the main pages in a second box, each in a new tab', async () => {
+    const wrapper = mount(GameMenu, {...globalConfig, attachTo: document.body});
+    await wrapper.find('.game-menu-button').trigger('click');
+    const links = document.body.querySelectorAll<HTMLAnchorElement>('nav.game-menu-panel a.game-menu-item');
+    expect(Array.from(links).map((link) => link.getAttribute('href'))).deep.eq(['new-game', 'stats', 'cards',
+      'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', 'https://boardgamegeek.com/boardgame/167791/terraforming-mars']);
+    expect(Array.from(links).every((link) => link.target === '_blank')).is.true;
+    wrapper.unmount();
+  });
+
+  it('hides the navigation box when switched off (start page)', async () => {
+    const wrapper = mount(GameMenu, {...globalConfig, props: {navigation: false}, attachTo: document.body});
+    await wrapper.find('.game-menu-button').trigger('click');
+    expect(document.body.querySelector('nav.game-menu-panel')).is.null;
     wrapper.unmount();
   });
 

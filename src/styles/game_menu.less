@@ -1,7 +1,8 @@
 // Game menu (GameMenu.vue): replaces the icon corners (sidebar_toolbar.less) with one button at the top left –
 // in the game before the players table toggles and the setup turn order, outside the game in the page header
 // and on the start page (PageToolbar.vue).
-// The dropdown holds the own player, the pile sizes and the four dialogs.
+// The dropdown holds the own player, the pile sizes and the four dialogs; below it a second box
+// links to the main pages (siteLinks.ts).
 
 @game-menu-button-height: 26px; // like the section toggles next to it (players_table.less)
 @game-menu-dropdown-width: 300px;
@@ -9,6 +10,7 @@
 @game-menu-dropdown-padding: 8px;
 @game-menu-item-icon-size: 26px;
 @game-menu-section-gap: 8px; // between player box, piles and items – more than inside them (law of proximity)
+@game-menu-box-gap: 12px; // between the settings box and the navigation box – more than the sections inside
 
 .game-menu {
   display: inline-flex;
@@ -89,11 +91,22 @@ html.tm-mobile .game-menu:not(.game-menu--large) {
   }
 }
 
+// Dropdown = transparent stack of boxes: settings box on top, navigation box below.
+// Gap between the boxes larger than the sections inside a box (law of proximity).
 .game-menu-dropdown {
   position: fixed;
   z-index: 3000; // above the columns and their overlays, below the dialogs (sidebar_modal.less)
   box-sizing: border-box;
   width: @game-menu-dropdown-width;
+  display: flex;
+  flex-direction: column;
+  gap: @game-menu-box-gap;
+  color: #fff;
+  transform-origin: top left;
+}
+
+.game-menu-panel {
+  box-sizing: border-box;
   padding: @game-menu-dropdown-padding;
   display: flex;
   flex-direction: column;
@@ -102,8 +115,6 @@ html.tm-mobile .game-menu:not(.game-menu--large) {
   border-radius: @game-menu-dropdown-radius;
   background: #181a24; // opaque: cards behind must not shine through the texts
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
-  color: #fff;
-  transform-origin: top left;
 }
 
 .game-menu-dropdown-enter-active,
@@ -217,6 +228,18 @@ html.tm-mobile .game-menu:not(.game-menu--large) {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+  }
+
+  // Same outline icons as the start page buttons (MobileGlyph.vue)
+  .mb-glyph {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+
+  .mb-glyph-line {
+    fill: none;
+    stroke: currentColor;
   }
 
   .language-flag {

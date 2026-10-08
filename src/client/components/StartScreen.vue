@@ -4,8 +4,8 @@
   <div v-if="loading" class="start-screen-preloader" role="progressbar" :aria-valuenow="Math.round(loadProgress * 100)" aria-valuemin="0" aria-valuemax="100">
     <div class="start-screen-preloader-fill" :style="{width: `${loadProgress * 100}%`}"></div>
   </div>
-  <!-- Settings menu (language, help, settings) at the top left; own class for the intro (start_intro.less) -->
-  <PageToolbar class="start-screen-toolbar"/>
+  <!-- Settings menu (language, help, settings) at the top left, without the navigation box (the buttons are right here); own class for the intro (start_intro.less) -->
+  <PageToolbar class="start-screen-toolbar" :navigation="false"/>
   <div class="start-screen-links" :class="{'start-screen-links--globe': globeReady}">
     <div class="start-screen-header start-screen-link--title">
       <!-- Logo: own frame so the intro can move it as a whole -->
@@ -48,29 +48,13 @@ import {preloadStartAssets} from '@/client/components/startScreen/startAssets';
 import {PlanetGlobeRenderer} from '@/client/components/startScreen/planetGlobeRenderer';
 import {PlanetFlatRenderer} from '@/client/components/startScreen/planetFlatRenderer';
 import {PlanetRotation} from '@/client/components/startScreen/planetRotation';
-import {PLANET_STRIPES, PlanetStripeName} from '@/client/components/startScreen/planetStripes';
+import {PLANET_STRIPES} from '@/client/components/startScreen/planetStripes';
+import {SITE_LINKS} from '@/client/components/startScreen/siteLinks';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
-import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
-import * as constants from '@/common/constants';
-import {WIKI_URLS} from '@/client/utils/WikiLinks';
-import {UPSTREAM_REPOSITORY_URL} from '@/client/utils/RepositoryLinks';
 import {prefersReducedMotion} from '@/client/utils/motion';
 
-type StartScreenLink = {label: string, icon: GlyphName, planet: PlanetStripeName, href: string, external: boolean};
-
-// Everything except "New game" opens a new tab (external), so the start page stays open.
-// Order = order of the planet backgrounds (globe row); planet = stripe in planet-stripes.jpg
-const links: ReadonlyArray<StartScreenLink> = [
-  {label: 'New game', icon: 'newGame', planet: 'venus', href: 'new-game', external: false},
-  {label: 'Statistics', icon: 'statistics', planet: 'earth', href: 'stats', external: true},
-  {label: 'Cards list', icon: 'cardsList', planet: 'mars', href: 'cards', external: true},
-  {label: 'Game rules', icon: 'rules', planet: 'jupiter', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true},
-  {label: 'Board game', icon: 'boardGame', planet: 'saturn', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true},
-  {label: 'Updates', icon: 'updates', planet: 'darkBlue', href: WIKI_URLS.changelog, external: true},
-  {label: 'Discord', icon: 'discord', planet: 'neptune', href: constants.DISCORD_INVITE, external: true},
-  {label: 'Team', icon: 'about', planet: 'moon', href: UPSTREAM_REPOSITORY_URL + '#-contributors-', external: true},
-];
+const links = SITE_LINKS;
 
 const previousViewport = ref('');
 
