@@ -6,11 +6,15 @@ import {quickResponse} from './quickResponse';
 import {randomResponse} from './randomResponse';
 import {isSimulating} from './simulationSandbox';
 import {registerAiHook} from './aiHook';
+import {isActionMenu} from './gameCopy';
 
 // Plays the moves of AI players on the server. Player.setWaitingFor reports every new input of
 // an AI player; the move is made a little later so humans can follow the game.
 
+// Follow-up questions (where to place a tile, how to pay) go fast; a new action waits longer so
+// a human can see what the AI just did (1 s was too fast to follow in test games).
 const MOVE_DELAY_MILLISECONDS = Number(process.env.AI_MOVE_DELAY_MS ?? 600);
+const ACTION_DELAY_MILLISECONDS = Number(process.env.AI_ACTION_DELAY_MS ?? 2000);
 const RANDOM_ATTEMPTS = 50;
 
 function processWithFallback(player: IPlayer, input: PlayerInput): void {
@@ -65,9 +69,10 @@ function scheduleAiMove(player: IPlayer): void {
   }
   // The pause only lets humans follow the game; without humans the AI plays at full speed.
   const hasHuman = player.game.players.some((candidate) => candidate.aiLevel === undefined);
+  const delay = !hasHuman ? 0 : isActionMenu(input) ? ACTION_DELAY_MILLISECONDS : MOVE_DELAY_MILLISECONDS;
   setTimeout(() => {
     makeMove(player, input).catch((error) => console.error('AI move failed', error));
-  }, hasHuman ? MOVE_DELAY_MILLISECONDS : 0);
+  }, delay);
 }
 
 export function installAiDriver(): void {

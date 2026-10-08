@@ -98,8 +98,10 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
   case 'city':
     // A city scores 1 VP per adjacent greenery (any owner) at game end; free land can become one.
     value += greeneries * victoryPoint + emptyLand * victoryPoint * 0.35;
-    // Cities next to opponents' cities fight for the same greenery spots.
-    value -= opponentCities * 2;
+    // Normally cities may not touch, only cards like Urbanized Area allow it. Such a city is an
+    // attack: placed between opponent cities it takes their greenery spots, between own cities
+    // it takes our own (the AI used to put it between its own cities).
+    value += opponentCities * victoryPoint * 0.5 - ownCities * victoryPoint * 0.8;
     // Two own cities with one row between them share free spots: a greenery there scores for
     // both (tip from the group: place cities in pairs at that distance, then fill greeneries).
     value += sharedGreenerySpots(space, neighbours, player, board) * victoryPoint * SHARED_SPOT_SHARE;
@@ -109,6 +111,9 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
     value += ownTiles * 0.5;
     break;
   case 'other':
+    // Special tiles (Restricted Area, Nuclear Zone, Mining Area …) take a greenery spot away:
+    // next to an opponent's city that costs them, next to an own city it costs us.
+    value += opponentCities * victoryPoint * 0.6 - ownCities * victoryPoint * 0.8;
     break;
   }
   return value;
