@@ -11,6 +11,9 @@ export type AiTuning = {
   handTargetLate: number,
   /** Money kept back after buying cards while more than 3 generations are left. */
   researchReserveEarly: number,
+  /** City placement: VP per other own / opponent city at a free spot next to the new city (spaceValue.ts). */
+  sharedSpotShare: number,
+  opponentSpotShare: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -22,10 +25,14 @@ export const BASELINE_TUNING: AiTuning = {
   handTargetEarly: 12,
   handTargetLate: 5,
   researchReserveEarly: 0,
+  sharedSpotShare: 0.4,
+  opponentSpotShare: 0.25,
 };
 
 export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
+  // Triforce test: do cities drift towards opponents because of the opponent share?
+  ownSpotsOnly: {opponentSpotShare: 0, sharedSpotShare: 0.6},
 };
 
 export function isTuningVariant(name: string): boolean {

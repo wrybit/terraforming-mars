@@ -6,6 +6,7 @@ import {SelectSpace} from '../inputs/SelectSpace';
 import {SpaceBonus} from '../../common/boards/SpaceBonus';
 import {SpaceType} from '../../common/boards/SpaceType';
 import {victoryPointValue} from './gameProgress';
+import {tuningOf} from './aiTuning';
 
 // Scores a hex for tile placement. Weights: docs/ai/bot-heuristics.md §5.
 
@@ -57,12 +58,10 @@ function openCitySpots(neighbours: ReadonlyArray<Space>, board: IGame['board']):
   ).length;
 }
 
-// Per other own city that touches a free spot next to a new city: a greenery there scores for
-// both. Three cities around one spot ("Triforce" in the group) make one greenery worth 3 VP.
-const SHARED_SPOT_SHARE = 0.4;
-// Per opponent city at such a spot: their greeneries there score for us too, and their
-// Triforce is spoilt.
-const OPPONENT_SPOT_SHARE = 0.25;
+// Per other own city that touches a free spot next to a new city (aiTuning.ts sharedSpotShare):
+// a greenery there scores for both. Three cities around one spot ("Triforce" in the group) make
+// one greenery worth 3 VP. Per opponent city (opponentSpotShare): their greeneries there score
+// for us too, and their Triforce is spoilt.
 
 /** Value of the free spots around a new city for sharing greeneries with other cities, in VP. */
 function sharedSpotPoints(space: Space, neighbours: ReadonlyArray<Space>, player: IPlayer, board: IGame['board']): number {
@@ -74,7 +73,8 @@ function sharedSpotPoints(space: Space, neighbours: ReadonlyArray<Space>, player
     const cities = board.getAdjacentSpaces(neighbour).filter((next) => next !== space && Board.isCitySpace(next));
     const own = cities.filter((city) => city.player === player).length;
     const opponents = cities.filter((city) => city.player !== undefined && city.player !== player).length;
-    points += own * SHARED_SPOT_SHARE + opponents * OPPONENT_SPOT_SHARE;
+    const tuning = tuningOf(player);
+    points += own * tuning.sharedSpotShare + opponents * tuning.opponentSpotShare;
   }
   return points;
 }
