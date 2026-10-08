@@ -1,3 +1,7 @@
+import {ICard} from '../cards/ICard';
+import {CardName} from '../../common/cards/CardName';
+import {TileType} from '../../common/TileType';
+import {newCard} from '../createCard';
 import {IPlayer} from '../IPlayer';
 import {IGame} from '../IGame';
 import {Space} from '../boards/Space';
@@ -10,7 +14,8 @@ import {tuningOf} from './aiTuning';
 
 // Scores a hex for tile placement. Weights: docs/ai/bot-heuristics.md §5.
 
-export type TileKind = 'greenery' | 'city' | 'ocean' | 'other';
+/** cityNeighbour: tiles that score per adjacent city (Commercial District). */
+export type TileKind = 'greenery' | 'city' | 'ocean' | 'cityNeighbour' | 'other';
 
 const BONUS_VALUE: Partial<Record<SpaceBonus, number>> = {
   [SpaceBonus.TITANIUM]: 3,
@@ -32,10 +37,42 @@ function titleText(input: SelectSpace): string {
   return `${title.message} ${data}`.toLowerCase();
 }
 
+/** The card named in a title like "Select space for Commercial District tile", if any. */
+function cardOfTitle(input: SelectSpace): ICard | undefined {
+  const title = input.title;
+  if (typeof title === 'string') {
+    return undefined;
+  }
+  for (const datum of title.data ?? []) {
+    try {
+      return newCard(String(datum.value) as CardName);
+    } catch {
+      // not a card name
+    }
+  }
+  return undefined;
+}
+
+function kindOfCard(card: ICard): TileKind | undefined {
+  const points = card.victoryPoints;
+  if (typeof points === 'object' && points !== null && 'cities' in points && 'nextToThis' in points) {
+    return 'cityNeighbour';
+  }
+  if (card.tilesBuilt.some((tile) => tile === TileType.CITY || tile === TileType.CAPITAL)) {
+    return 'city';
+  }
+  return undefined;
+}
+
 /** Guesses which tile the input places; the engine does not expose it directly. */
 export function tileKindOf(input: SelectSpace): TileKind {
   if (input.spaces.length > 0 && input.spaces.every((space) => space.spaceType === SpaceType.OCEAN)) {
     return 'ocean';
+  }
+  const card = cardOfTitle(input);
+  const byCard = card === undefined ? undefined : kindOfCard(card);
+  if (byCard !== undefined) {
+    return byCard;
   }
   const text = titleText(input);
   if (text.includes('greenery')) {
@@ -121,6 +158,12 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
   case 'ocean':
     // Oceans next to own tiles help nobody else; next to free land they feed later rebates.
     value += ownTiles * 0.5;
+    break;
+  case 'cityNeighbour':
+    // Commercial District: 1 VP per adjacent city of any owner. Needs at least two cities
+    // around it; free spots where a city may still come count as half a chance (a test game
+    // placed it with one city next to it).
+    value += (ownCities + opponentCities) * victoryPoint + openCitySpots(neighbours, board) * victoryPoint * 0.4;
     break;
   case 'other':
     // Special tiles (Restricted Area, Nuclear Zone, Mining Area …) take a greenery spot away:
