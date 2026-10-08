@@ -23,3 +23,14 @@ export function aiPlayerName(name: string, level: AiLevel): string {
 export function aiPlayerMarker(level: AiLevel): string {
   return `[AI${LEVEL_MARKS[level]}]`;
 }
+
+const CURRENT_MARKER_PATTERN = /^(.*?)\s*(\[AI[-+]?\])$/;
+
+/**
+ * Splits a display name into the player's own name and the AI marker, so a narrow name cell can
+ * shorten the name itself while "[AI]" stays readable.
+ */
+export function splitAiMarker(displayName: string): {name: string, marker: string | undefined} {
+  const match = CURRENT_MARKER_PATTERN.exec(displayName);
+  return match === null ? {name: displayName, marker: undefined} : {name: match[1], marker: match[2]};
+}

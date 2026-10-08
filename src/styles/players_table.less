@@ -274,6 +274,7 @@ each(@players, {
   }
 
   .player-action-status-container {
+    flex: none;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -316,13 +317,35 @@ each(@players, {
   }
 }
 
+// Name gives way first when the cell is too narrow (long name + status plaque): it shrinks with an ellipsis,
+// the AI marker and the status plaque keep their full width and never cross the column line
 .players-table-name {
-  flex: none;
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
   font-family: Prototype, sans-serif;
   font-size: 19px;
   line-height: 1; // Prototype brings a lot of line height that would otherwise push the corporation down
   color: #fff;
   white-space: nowrap;
+}
+
+.players-table-name-text {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Too narrow: the time goes first (only next to a visible label such as "passed"; the acting player shows only the time)
+.players-table-identity--compact:not(.players-table-identity--acting) .player-action-status:not(.visibility-hidden) ~ .player-status-timer {
+  display: none;
+}
+
+.players-table-name-marker {
+  flex: none;
+  margin-left: 0.25em;
 }
 
 .players-table-identity--me .players-table-name {
