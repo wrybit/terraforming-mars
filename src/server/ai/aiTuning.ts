@@ -13,19 +13,19 @@ export type AiTuning = {
   researchReserveEarly: number,
 };
 
-// Before: margin 1.5, hand 6/3, reserve 4 – the AI played ~22 cards per game (a human 54). The
-// variant with these values won 58 of 130 seats against 43 (A/B batch 2026-10-08-1441).
+// Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
+// - before: margin 1.5, hand 6/3, reserve 4 – ~23 cards played per game (a human: 54);
+// - margin -1, hand 9/4, reserve 0 won 58 of 130 seats against 43 (+2.8 VP);
+// - margin -3, hand 12/5 won 55 against 50 (+2.2 VP, 35 cards played).
 export const BASELINE_TUNING: AiTuning = {
-  buyMargin: -1,
-  handTargetEarly: 9,
-  handTargetLate: 4,
+  buyMargin: -3,
+  handTargetEarly: 12,
+  handTargetLate: 5,
   researchReserveEarly: 0,
 };
 
 export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
-  // Does buying even more help further?
-  evenMoreCards: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5},
 };
 
 export function isTuningVariant(name: string): boolean {
