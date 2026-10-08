@@ -26,4 +26,24 @@ describe('GameHome', () => {
     });
     expect(wrapper.exists()).to.be.true;
   });
+
+  it('offers only watching for AI players', () => {
+    const wrapper = shallowMount(GameHome, {
+      ...globalConfig,
+      props: {
+        game: asComplete<SimpleGameModel>({
+          activePlayer: 'blue',
+          id: 'game-id-123',
+          phase: Phase.ACTION,
+          players: [{color: 'blue', id: 'p-blue', name: 'Blue'}, {color: 'orange', id: 'p-orange', name: 'Bot', aiLevel: 'normal'}],
+          spectatorId: 'spectator-id-123',
+          gameOptions: fakeGameOptionsModel(),
+          lastSoloGeneration: 14,
+          expectedPurgeTimeMs: 0,
+        }),
+      },
+    });
+    const labels = wrapper.findAll('a.btn-primary').map((link) => link.text());
+    expect(labels).deep.eq(['Play', 'Watch', 'Watch']);
+  });
 });

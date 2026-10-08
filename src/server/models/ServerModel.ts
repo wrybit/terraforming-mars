@@ -41,6 +41,7 @@ export class Server {
         color: player.color,
         id: player.id,
         name: player.name,
+        aiLevel: player.aiLevel,
       })),
       spectatorId: game.spectatorId,
       gameOptions: this.getGameOptionsAsModel(game.gameOptions),

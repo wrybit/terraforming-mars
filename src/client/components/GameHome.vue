@@ -27,7 +27,8 @@
               <code>{{ getUrl(player.id) }}</code>
             </div>
             <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(player.id) ? 'Copied!' : 'Copy'" @click="copyUrl(player.id)"/>
-            <a class="btn btn-primary" :href="getHref(player.id)" v-i18n>Play</a>
+            <!-- The AI plays by itself: its page only lets you watch it (the server refuses input there) -->
+            <a class="btn btn-primary" :href="getHref(player.id)" v-i18n>{{ player.aiLevel !== undefined ? 'Watch' : 'Play' }}</a>
           </div>
           <div class="game-home-link game-home-link--spectator">
             <span class="game-home-order"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
