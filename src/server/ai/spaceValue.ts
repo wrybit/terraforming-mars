@@ -49,11 +49,11 @@ export function tileKindOf(input: SelectSpace): TileKind {
   return 'other';
 }
 
-/** Free land next to the space that is not already next to an opponent's city. */
-function freeCitySpots(neighbours: ReadonlyArray<Space>, board: IGame['board'], player: IPlayer): number {
+/** Free land next to the space where a city may still be placed (no city next to it). */
+function openCitySpots(neighbours: ReadonlyArray<Space>, board: IGame['board']): number {
   return neighbours.filter((neighbour) =>
     neighbour.tile === undefined && neighbour.spaceType === SpaceType.LAND &&
-    !board.getAdjacentSpaces(neighbour).some((next) => Board.isCitySpace(next) && next.player !== undefined && next.player !== player),
+    !board.getAdjacentSpaces(neighbour).some((next) => Board.isCitySpace(next)),
   ).length;
 }
 
@@ -75,9 +75,15 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
   case 'greenery':
     // Each adjacent city scores 1 VP for its owner, so a greenery next to an opponent's city is
     // a full VP for them (the AI used to hand out these points).
-    value += (ownCities - opponentCities) * victoryPoint;
-    // Keep greeneries together and near free land where an own city can follow later.
-    value += ownTiles * 0.5 + freeCitySpots(neighbours, board, player) * 0.4;
+    // Feeding an opponent's city counts extra: it also makes their spot safe.
+    value += ownCities * victoryPoint - opponentCities * victoryPoint * 1.5;
+    // A greenery without an own city is mostly lost points, and every free spot next to it
+    // where a city is still allowed invites the opponent to build there.
+    if (ownCities === 0) {
+      value -= victoryPoint;
+    }
+    value -= openCitySpots(neighbours, board) * victoryPoint * 0.6;
+    value += ownTiles * 0.5;
     break;
   case 'city':
     // A city scores 1 VP per adjacent greenery (any owner) at game end; free land can become one.

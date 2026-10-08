@@ -5,6 +5,7 @@ import {PlayerId} from '../../common/Types';
 import {CardType} from '../../common/cards/CardType';
 import {isIActionCard} from '../cards/ICard';
 import {isTemperatureMaxed, remainingProductionPhases, terraformingProgress, victoryPointValue} from './gameProgress';
+import {boardPotential} from './boardPotential';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights: docs/ai/bot-heuristics.md §1.
@@ -141,7 +142,9 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
   const context = contextFor(player.game, frozen);
   const victoryPoints = player.getVictoryPoints();
   const expectedVictoryPoints = victoryPoints.total - victoryPoints.awards + expectedAwardPoints(player, context);
-  return expectedVictoryPoints * context.victoryPoint +
+  // Board VP still to come count only while there is time to realise them.
+  const boardTime = Math.min(1, context.remaining / 3);
+  return (expectedVictoryPoints + boardPotential(player) * boardTime) * context.victoryPoint +
     player.terraformRating * context.remaining * PRODUCTION_DISCOUNT + // TR is income every production phase
     productionValue(player, context) +
     resourceValue(player, context) +
