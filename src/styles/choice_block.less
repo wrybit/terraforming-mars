@@ -22,7 +22,9 @@ html:not(.tm-mobile) {
     gap: @choice-row-gap @choice-column-gap;
     width: min(100%, calc(var(--choice-columns) * @choice-tile-width + (var(--choice-columns) - 1) * @choice-column-gap));
     margin: auto;
-    padding: @selection-tab-offset 0 0;
+    // Same room below as above (check-mark flag): the tiles themselves sit exactly in the middle between
+    // the card intro (or the top of the box) and the footer, not shifted down by the flag room
+    padding: @selection-tab-offset 0;
 
     // Tiles at card width
     > .choice-option,
@@ -90,7 +92,9 @@ html:not(.tm-mobile) {
     gap: 0 @choice-column-gap;
     width: 100%;
     margin: 0;
-    padding: 0;
+    // Bottom room as large as the flag room above each card row: the cards sit exactly in the middle
+    // between the header row (zoom, filter, sorting) and the footer
+    padding: 0 0 @choice-row-gap;
 
     // auto-fit instead of auto-fill: unused tracks collapse, so a short row is centered as a whole
     &.choice-block--fill {
@@ -160,6 +164,13 @@ html:not(.tm-mobile) {
   }
 }
 
+// Desktop and mobile: the intro's bottom margin would add to the space above a tile block and push it down –
+// the free space counts from the lower edge of the card. Card grids keep it (their header row follows the intro)
+// (no nested :has – browsers drop such a rule, hence the check on the parent)
+:has(> .or-tab-intro):has(.choice-block):not(:has(.choice-block > .cardbox, .choice-block > .payments_cards, .choice-block > .card-filter-bar, .setup-column-body)) > .or-tab-intro {
+  margin-bottom: 0;
+}
+
 // Mobile: choice block centered horizontally and vertically in the space between the card intro (task header,
 // CardIntroBlock) and the footer. For this the turn screen fills the height between status bar and footer
 // (padding of #player-home.mb-home--turn in mobile.less); every wrapper down to the block becomes a column
@@ -183,9 +194,11 @@ html.tm-mobile {
   .mb-screen--turn @{mobile-choice} {
     // safe: elements that are too wide (colonies on a phone) start at the left edge instead of being clipped on the left
     justify-content: safe center;
-    // vertically centered; room at the top for the check-mark flag of the first row
+    // vertically centered; room for the check-mark flag of the first row – the same below, so the tiles
+    // themselves sit exactly in the middle of the free space
     margin: auto 0;
     padding-top: @selection-tab-offset;
+    padding-bottom: @selection-tab-offset;
 
     // Options against the same player (OrOptions.vue) as a group: their tiles centered too
     .player-option-group {
