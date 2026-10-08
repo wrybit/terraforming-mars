@@ -102,6 +102,7 @@
             <OptionRow v-if="expansions.ceo" label="Starting CEOs" iconClass="expansion-icon-ceo">
               <NumberStepper v-model="startingCeos" :min="1" :max="6"/>
             </OptionRow>
+            <div v-if="expansions.prelude || playersCount > 1" class="create-game-divider"></div>
             <OptionRow v-if="expansions.prelude" label="Merger" iconClass="expansion-icon-prelude" :href="wikiUrls.merger">
               <SwitchInput v-model="twoCorpsVariant"/>
             </OptionRow>
