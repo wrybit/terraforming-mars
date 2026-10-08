@@ -7,6 +7,7 @@ import {ICorporationCard} from '../cards/corporation/ICorporationCard';
 import {CardName} from '../../common/cards/CardName';
 import {estimateCardValues, handCardValues} from './cardValue';
 import {quickResponse} from './quickResponse';
+import {corporationSelfPlayBonus} from './corporationSelfPlay';
 import {lastGenerationLikelihood, remainingProductionPhases} from './gameProgress';
 import {requirementOutlook} from './requirementOutlook';
 import {isIProjectCard} from '../cards/IProjectCard';
@@ -98,7 +99,7 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
     for (const preludePair of preludeChoices) {
       const budget = corporation.startingMegaCredits - OPENING_RESERVE;
       const cards = cardsToBuy(projects, valueOf, budget, 10, buyPrice);
-      const score = valueOf(corporation.name) +
+      const score = valueOf(corporation.name) + corporationSelfPlayBonus(corporation.name) +
         preludePair.reduce((sum, prelude) => sum + valueOf(prelude.name), 0) +
         cards.reduce((sum, card) => sum + valueOf(card.name) - buyPrice, 0) +
         tagSynergy(corporation, [...cards, ...preludePair]);
