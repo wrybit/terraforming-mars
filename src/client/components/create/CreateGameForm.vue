@@ -336,13 +336,18 @@
         <!-- Sticks to the bottom edge while the page is too short for it; then with an extra shadow -->
         <section ref="createCard" class="create-game-card create-game-create-card" :class="{'create-game-create-card--stuck': createCardStuck}">
           <div class="create-game-summary">
-            <span class="create-game-summary-chip">{{ playersSummary }}</span>
+            <!-- Humans and AI players as separate chips, with the same icons as the seat rows -->
+            <span v-for="seat in seatSummary" :key="seat.kind" class="create-game-summary-chip"><SeatIcon :kind="seat.kind"/>{{ seat.label }}</span>
+            <span v-if="playersCount > 1 && draftVariant" class="create-game-summary-chip" v-i18n>Draft</span>
             <!-- Random board: the board already drawn for the preview, exactly the one the game gets -->
             <span class="create-game-summary-chip">
               <span v-if="summaryBoard !== undefined" :class="getBoardColorClass(summaryBoard)"></span>
               <span class="capitalized">{{ $t(summaryBoard ?? board) }}</span>
             </span>
-            <span class="create-game-summary-chip">{{ expansionsSummary }}</span>
+            <!-- Every expansion in play by name, the base game included -->
+            <span v-for="choice in activeExpansionChoices" :key="choice.label" class="create-game-summary-chip">
+              <span :class="['create-game-expansion-icon', choice.iconClass]"></span><span v-i18n>{{ choice.label }}</span>
+            </span>
           </div>
           <div class="create-game-create-row">
             <AppButton class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors"/>
@@ -401,7 +406,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_BOARDS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption} from './createGameChoices';
+import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_BOARDS, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SeatIconKind, SegmentOption} from './createGameChoices';
 import {ExpansionGroup, ExpansionGrouping, ExpansionTile, groupExpansions, loadExpansionGrouping, saveExpansionGrouping} from './expansionGrouping';
 import {ContentLinePart, contentLine} from './expansionContentLine';
 import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
@@ -781,12 +786,22 @@ export default defineComponent({
     hasExpansionOptions(): boolean {
       return this.expansions.venus || this.expansions.turmoil || this.expansions.moon || this.expansions.ares;
     },
-    playersSummary(): string {
-      return this.playersCount === 1 ? translateText('Solo') : translateTextWithParams('${0} players', [String(this.playersCount)]);
+    seatSummary(): Array<{kind: SeatIconKind, label: string}> {
+      if (this.playersCount === 1) {
+        return [{kind: 'human', label: translateText('Solo')}];
+      }
+      const seats: Array<{kind: SeatIconKind, label: string}> = [];
+      if (this.humanPlayersCount > 0) {
+        seats.push({kind: 'human', label: this.humanPlayersCount === 1 ? translateText('1 player') : translateTextWithParams('${0} players', [String(this.humanPlayersCount)])});
+      }
+      if (this.aiPlayersCount > 0) {
+        seats.push({kind: 'ai', label: translateTextWithParams('${0} AI', [String(this.aiPlayersCount)])});
+      }
+      return seats;
     },
-    expansionsSummary(): string {
-      const count = Object.values(this.expansions).filter((enabled) => enabled).length;
-      return count === 1 ? translateText('1 expansion') : translateTextWithParams('${0} expansions', [String(count)]);
+    activeExpansionChoices(): Array<Pick<ExpansionChoice, 'label' | 'iconClass'>> {
+      const active = [...OFFICIAL_EXPANSIONS, ...FAN_EXPANSIONS].filter((choice) => this.expansions[choice.expansion]);
+      return [{label: 'Base game', iconClass: 'expansion-icon-base'}, ...active];
     },
   },
   methods: {

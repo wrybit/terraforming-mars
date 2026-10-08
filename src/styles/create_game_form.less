@@ -519,10 +519,7 @@
   }
 
   .create-game-expansion-icon {
-    width: 20px;
-    height: 20px;
-    margin: 0;
-    background-size: 20px 20px;
+    .create-game-icon-size(20px);
   }
 
   // Base game: always on, so no hover and no pointer – it only states what every game contains
@@ -631,10 +628,7 @@
   min-width: 0;
 
   .create-game-expansion-icon {
-    width: 18px;
-    height: 18px;
-    margin: 0;
-    background-size: 18px 18px;
+    .create-game-icon-size(18px);
   }
 }
 
@@ -656,10 +650,7 @@
   color: @create-game-dim;
 
   .create-game-expansion-icon {
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    background-size: 16px 16px;
+    .create-game-icon-size(16px);
   }
 }
 
@@ -1123,6 +1114,14 @@ each(@players, {
   }
 }
 
+// Expansion icon in a fixed square size (chips, rows, summary)
+.create-game-icon-size(@size) {
+  width: @size;
+  height: @size;
+  margin: 0;
+  background-size: @size @size;
+}
+
 // Summary of the game as chips (like the selectable tiles, but plain display)
 .create-game-summary {
   display: flex;
@@ -1140,6 +1139,14 @@ each(@players, {
   background: @create-game-chip-background;
   font-size: 14px;
   color: #eee;
+
+  .create-game-expansion-icon {
+    .create-game-icon-size(16px);
+  }
+
+  .seat-icon {
+    color: @create-game-seat-faint;
+  }
 }
 
 .create-game-create-row {
