@@ -2,7 +2,7 @@ import {shallowMount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import PlayersTableRow from '@/client/components/overview/PlayersTableRow.vue';
-import {buildTagDetails} from '@/client/components/overview/playerTagDetails';
+import {buildTagDetails, handDiscountLabel, TagDetails} from '@/client/components/overview/playerTagDetails';
 import {Tag} from '@/common/cards/Tag';
 import {CardName} from '@/common/cards/CardName';
 import {Color} from '@/common/Color';
@@ -68,6 +68,18 @@ describe('PlayersTableRow', () => {
     const badge = wrapper.find('[data-test="discount-all"]');
     expect(badge.text()).to.eq('*');
     expect(badge.attributes('title')).to.contain('cards with requirements');
+  });
+
+  it('labels the hand discount as -1* (discount for every card plus conditional discounts)', () => {
+    const details = (all: number, conditional: number): TagDetails => ({
+      all: {name: 'all', discount: all, points: 0, halfPoints: 0, count: 0, asterisk: false},
+      tagsInOrder: [],
+      conditionalDiscounts: Array(conditional).fill({source: CardName.CUTTING_EDGE_TECHNOLOGY, amount: 2, appliesTo: 'cards with requirements'}),
+    });
+    expect(handDiscountLabel(details(1, 1))).to.eq('-1*');
+    expect(handDiscountLabel(details(1, 0))).to.eq('-1');
+    expect(handDiscountLabel(details(0, 1))).to.eq('*');
+    expect(handDiscountLabel(details(0, 0))).to.eq('');
   });
 
   it('shows other players victory points when the game allows it', () => {

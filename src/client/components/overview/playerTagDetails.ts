@@ -184,8 +184,8 @@ export function isVictoryPointCountHidden(player: PublicPlayerModel, playerView:
   return !playerView.game.gameOptions.showOtherPlayersVP && player.color !== playerView.thisPlayer?.color;
 }
 
-// Label of the hand discount badge: the discount for every card, '*' when conditional discounts exist
+// Label of the hand discount badge: the discount for every card (e.g. '-1'), '*' when conditional discounts exist
 export function handDiscountLabel(details: TagDetails): string {
   const asterisk = details.conditionalDiscounts.length > 0 ? '*' : '';
-  return details.all.discount > 0 ? `${details.all.discount}${asterisk}` : asterisk;
+  return details.all.discount > 0 ? `-${details.all.discount}${asterisk}` : asterisk;
 }
