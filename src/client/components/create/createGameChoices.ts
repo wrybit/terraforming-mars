@@ -7,10 +7,17 @@ import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 // Choices of the "Create game" form as data: the template renders them via v-for
 // instead of writing out each tile individually.
 
+// Seat symbol (SeatIcon.vue): meeple, robot or "no entry"
+export type SeatIconKind = 'human' | 'ai' | 'none';
+
 // One option in the segmented control (SegmentedControl.vue)
 export type SegmentOption = {
   value: string | number;
   label: string;
+  /** Symbol instead of the label; the label then only names the button for screen readers. */
+  icon?: SeatIconKind;
+  /** Shown but not selectable, e.g. a seat taken by the other kind of player. */
+  disabled?: boolean;
 };
 
 export type ExpansionChoice = {
@@ -77,8 +84,6 @@ export const PLAYER_COUNT_OPTIONS: ReadonlyArray<SegmentOption> = [
 ];
 
 // Number of AI players next to the humans; same six columns as the player count row
-export const AI_COUNT_OPTIONS: ReadonlyArray<SegmentOption> = [0, 1, 2, 3, 4, 5].map((count) => ({value: count, label: String(count)}));
-
 export const AI_LEVEL_OPTIONS: ReadonlyArray<SegmentOption> = [
   {value: 'easy', label: 'Easy'},
   {value: 'normal', label: 'Normal'},

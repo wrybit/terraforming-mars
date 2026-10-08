@@ -10,6 +10,8 @@
 @create-game-gap-column: 24px;
 @create-game-page-padding: @page-content-edge; // spacing of the sticky column at top/bottom
 @create-game-players-width: 380px;
+// Symbols of seats the other kind of player takes (and the "no AI" sign)
+@create-game-seat-faint: rgba(255, 255, 255, 0.14);
 @create-game-radius: 10px;
 @create-game-radius-small: 8px;
 @create-game-line: rgba(255, 255, 255, 0.14);
@@ -820,22 +822,34 @@
 }
 
 .create-game-seat-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: @create-game-dim;
   font-size: 14px;
 }
 
-.create-game-segmented.create-game-segmented--equal button {
-  flex: 1 1 0;
+// Seat rows: a seat the other kind of player takes shows its symbol, very faint and not selectable
+.create-game-segmented--seats button {
+  display: grid;
+  place-items: center;
+
+  // "No AI" sign: as faint as the taken seats until it is chosen
+  .seat-icon {
+    color: @create-game-seat-faint;
+  }
+
+  &.create-game-segmented--selected .seat-icon {
+    color: #fff;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 
-.create-game-ai-badge {
-  flex: none;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.35);
-  font-size: 12px;
-  font-weight: bold;
-  letter-spacing: 0.04em;
+.create-game-segmented.create-game-segmented--equal button {
+  flex: 1 1 0;
 }
 
 .create-game-ai-strength {
@@ -885,6 +899,47 @@
   background: rgba(0, 0, 0, 0.22);
 }
 
+// Player color as a variable: header, outline and glow all derive from it
+each(@players, {
+  @c: ~"player_@{value}";
+  .create-game-player--@{value} {
+    --create-game-player-color: @@c;
+  }
+});
+
+// Humans stand out: full color header plus a glow in their color
+.create-game-player:not(.create-game-player--ai) {
+  border-color: var(--create-game-player-color);
+  box-shadow:
+    0 0 0 1px var(--create-game-player-color),
+    0 0 0 4px color-mix(in srgb, var(--create-game-player-color) 22%, transparent),
+    0 6px 16px color-mix(in srgb, var(--create-game-player-color) 35%, transparent);
+}
+
+// AI players stay quieter: thin outline, header only tinted (still set apart from the card)
+.create-game-player--ai {
+  border-color: color-mix(in srgb, var(--create-game-player-color) 55%, transparent);
+
+  .create-game-player-top {
+    background: color-mix(in srgb, var(--create-game-player-color) 25%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--create-game-player-color) 55%, transparent);
+  }
+
+  .create-game-player-name {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  // Robot chip in full color for contrast to the tinted header
+  .create-game-player-position {
+    background: var(--create-game-player-color);
+  }
+}
+
+// The "black" player color is a light grey: a real black chip keeps the white robot readable
+.create-game-player--ai.create-game-player--black .create-game-player-position {
+  background: #111;
+}
+
 // Header in the player color, edge to edge
 .create-game-player-top {
   display: flex;
@@ -892,23 +947,54 @@
   gap: 8px;
   margin: 0 -10px;
   padding: 8px 10px;
+  background: var(--create-game-player-color);
 }
 
+// Seat pill: meeple or robot plus seat number
 .create-game-player-position {
-  display: grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   flex: none;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
+  height: 30px;
+  padding: 0 10px 0 8px;
+  border-radius: 15px;
   background: rgba(0, 0, 0, 0.35);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
+}
+
+// Input plus the fixed AI marker drawn right behind the typed text
+.create-game-player-name-field {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.create-game-player-name-marker {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 11px;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 17px;
+  white-space: pre;
+  pointer-events: none;
+}
+
+// Invisible copy of the name: pushes the marker exactly behind the text
+.create-game-player-name-ghost {
+  visibility: hidden;
 }
 
 .create-game-player-name {
   flex: 1;
   min-width: 0;
+  width: 100%;
+  font-family: inherit;
   height: 32px;
   padding: 0 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);

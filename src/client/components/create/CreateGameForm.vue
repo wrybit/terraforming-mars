@@ -271,21 +271,29 @@
             <h2 v-i18n>Players</h2>
             <!-- Humans and AI players in two aligned rows; together they make up the player count -->
             <div class="create-game-seat-rows">
-              <span class="create-game-seat-label" v-i18n>Humans</span>
-              <SegmentedControl v-model="humanPlayersCount" :options="humanCountOptions" class="create-game-segmented--equal"/>
-              <span class="create-game-seat-label" v-i18n>AI</span>
-              <SegmentedControl v-model="aiPlayersCount" :options="AI_COUNT_OPTIONS" class="create-game-segmented--equal"/>
+              <span class="create-game-seat-label"><SeatIcon kind="human"/><span v-i18n>Player</span></span>
+              <SegmentedControl v-model="humanPlayersCount" :options="humanCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
+              <span class="create-game-seat-label"><SeatIcon kind="ai"/><span v-i18n>AI</span></span>
+              <SegmentedControl v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
             </div>
             <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
             <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
           </div>
           <div class="create-game-player-list">
             <!-- Neutral card; the header shows the chosen player color -->
-            <div v-for="(newPlayer, index) in getPlayers()" :key="index" class="create-game-player">
-              <div :class="['create-game-player-top', getPlayerCubeColorClass(newPlayer.color)]">
-                <span class="create-game-player-position">{{ index + 1 }}</span>
-                <input class="create-game-player-name" :placeholder="getPlayerNamePlaceholder(index)" v-model="newPlayer.name">
-                <span v-if="newPlayer.aiLevel !== undefined" class="create-game-ai-badge" v-i18n>AI</span>
+            <!-- Humans stand out (full color, glow); AI players stay quieter (tinted header, thin outline) -->
+            <div v-for="(newPlayer, index) in getPlayers()" :key="index"
+              :class="['create-game-player', 'create-game-player--' + newPlayer.color, {'create-game-player--ai': newPlayer.aiLevel !== undefined}]">
+              <div class="create-game-player-top">
+                <!-- Seat: meeple or robot plus seat number -->
+                <span class="create-game-player-position">
+                  <SeatIcon :kind="newPlayer.aiLevel !== undefined ? 'ai' : 'human'"/>{{ index + 1 }}
+                </span>
+                <span class="create-game-player-name-field">
+                  <input class="create-game-player-name" :placeholder="getPlayerNamePlaceholder(index)" v-model="newPlayer.name">
+                  <!-- Fixed AI marker right behind the typed name; not part of the input, so nobody types it twice -->
+                  <span v-if="newPlayer.aiLevel !== undefined" class="create-game-player-name-marker" aria-hidden="true"><span class="create-game-player-name-ghost">{{ newPlayer.name || getPlayerNamePlaceholder(index) }}</span> {{ aiMarker(newPlayer.aiLevel) }}</span>
+                </span>
                 <button v-if="playersCount > 1 && !randomFirstPlayer" type="button" class="create-game-first"
                   :class="{'create-game-first--selected': firstIndex === index + 1}" :title="$t('Goes First?')"
                   @click="firstIndex = index + 1">
@@ -361,7 +369,8 @@ import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
-import {playerColorClass} from '@/common/utils/utils';
+import {AiLevel, aiPlayerMarker} from '@/common/ai/AiLevel';
+import SeatIcon from './SeatIcon.vue';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
 import PageToolbar from '@/client/components/PageToolbar.vue';
@@ -388,7 +397,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, AI_COUNT_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_BOARDS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption} from './createGameChoices';
+import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_BOARDS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption} from './createGameChoices';
 import {ExpansionGroup, ExpansionGrouping, ExpansionTile, groupExpansions, loadExpansionGrouping, saveExpansionGrouping} from './expansionGrouping';
 import {ContentLinePart, contentLine} from './expansionContentLine';
 import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
@@ -452,6 +461,7 @@ export default defineComponent({
   },
   components: {
     AppButton,
+    SeatIcon,
     PlayerCube,
     CardsFilter,
     ChoiceChip,
@@ -668,15 +678,30 @@ export default defineComponent({
     PLAYER_COUNT_OPTIONS(): typeof PLAYER_COUNT_OPTIONS {
       return PLAYER_COUNT_OPTIONS;
     },
-    AI_COUNT_OPTIONS(): typeof AI_COUNT_OPTIONS {
-      return AI_COUNT_OPTIONS;
-    },
     AI_LEVEL_OPTIONS(): typeof AI_LEVEL_OPTIONS {
       return AI_LEVEL_OPTIONS;
     },
-    // "Solo" only describes one human without AI opponents
+    // Seats an AI takes show a greyed robot instead of their number; "Solo" only describes one human without AI opponents
     humanCountOptions(): ReadonlyArray<SegmentOption> {
-      return PLAYER_COUNT_OPTIONS.map((option) => option.value === 1 && this.aiPlayersCount > 0 ? {value: 1, label: '1'} : option);
+      return PLAYER_COUNT_OPTIONS.map((option) => {
+        const count = Number(option.value);
+        if (count > MAX_PLAYERS - this.aiPlayersCount) {
+          return {value: count, label: 'Seat taken by AI', icon: 'ai', disabled: true};
+        }
+        return count === 1 && this.aiPlayersCount > 0 ? {value: 1, label: '1'} : option;
+      });
+    },
+    // Mirror image: seats the humans take show a greyed meeple; "0" is a "no entry" sign
+    aiCountOptions(): ReadonlyArray<SegmentOption> {
+      return [0, 1, 2, 3, 4, 5].map((count): SegmentOption => {
+        if (count === 0) {
+          return {value: 0, label: 'No AI', icon: 'none'};
+        }
+        if (count > MAX_PLAYERS - this.humanPlayersCount) {
+          return {value: count, label: 'Seat taken by a human', icon: 'human', disabled: true};
+        }
+        return {value: count, label: String(count)};
+      });
     },
     humanPlayersCount: {
       get(): number {
@@ -999,8 +1024,8 @@ export default defineComponent({
         return 'create-game-board-hexagon create-game-random';
       }
     },
-    getPlayerCubeColorClass(color: Color): string {
-      return playerColorClass(color, 'bg');
+    aiMarker(level: AiLevel): string {
+      return aiPlayerMarker(level);
     },
     async serializeSettings(): Promise<NewGameConfig | undefined> {
       // Copies: default names below go into the request only, not into the form (an AI seat

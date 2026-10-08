@@ -12,4 +12,14 @@ describe('SegmentedControl', () => {
     await buttons[3].trigger('click');
     expect(wrapper.emitted('update:modelValue')?.[0]).deep.eq([4]);
   });
+
+  it('shows a symbol instead of the label and keeps blocked options unselectable', () => {
+    const options = [{value: 0, label: 'No AI', icon: 'none' as const}, {value: 1, label: '1'}, {value: 2, label: 'Seat taken', icon: 'human' as const, disabled: true}];
+    const wrapper = mount(SegmentedControl, {...globalConfig, props: {options, modelValue: 0}});
+    const buttons = wrapper.findAll('button');
+    expect(buttons[0].find('svg').exists()).is.true;
+    expect(buttons[0].attributes('aria-label')).eq('No AI');
+    expect(buttons[1].text()).eq('1');
+    expect(buttons[2].attributes('disabled')).is.not.undefined;
+  });
 });

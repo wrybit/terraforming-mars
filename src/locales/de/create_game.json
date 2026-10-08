@@ -75,9 +75,10 @@
   "colony tiles": "Kolonie-Plättchen",
   "global events": "globale Ereignisse",
   "the Prelude phase": "die Präludium-Phase",
-  "Humans": "Menschen",
-  "AI": "KI",
   "Strength": "Stärke",
   "Easy": "Leicht",
-  "Hard": "Schwer"
+  "Hard": "Schwer",
+  "No AI": "Keine AI",
+  "Seat taken by AI": "Platz von AI belegt",
+  "Seat taken by a human": "Platz von Spieler belegt"
 }

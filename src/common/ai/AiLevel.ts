@@ -16,5 +16,10 @@ const MARKER_PATTERN = /\s*(\((AI|KI)\)|\[AI[-+]?\])\s*$/;
  * mark for normal. Stays the same in game logs, results and statistics.
  */
 export function aiPlayerName(name: string, level: AiLevel): string {
-  return `${name.replace(MARKER_PATTERN, '')} [AI${LEVEL_MARKS[level]}]`;
+  return `${name.replace(MARKER_PATTERN, '')} ${aiPlayerMarker(level)}`;
+}
+
+/** Marker alone, e.g. "[AI+]" – the create-game form shows it behind the name field. */
+export function aiPlayerMarker(level: AiLevel): string {
+  return `[AI${LEVEL_MARKS[level]}]`;
 }
