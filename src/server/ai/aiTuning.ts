@@ -65,7 +65,9 @@ export const BASELINE_TUNING: AiTuning = {
   tempoAware: 0,
   closer: 0,
   terraformBrake: 0,
-  lengthByPlayers: 0,
+  // Neutral in AI-vs-AI (z +0.36) but measured right (2P 14.5, 3P 11.8 generations); adopted on
+  // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
+  lengthByPlayers: 1,
   awardTiming: 0,
   secondStepCandidates: 4,
   opponentReplies: 0,
