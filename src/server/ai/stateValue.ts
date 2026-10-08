@@ -122,8 +122,25 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
     }
     // Resources on cards (microbes, animals, science …) pay off later: VP, money, actions.
     value += card.resourceCount * RESOURCE_ON_CARD_VALUE;
+    value += partialResourcePoints(card) * context.victoryPoint;
   }
   return value;
+}
+
+/**
+ * VP cards like Tardigrades (1 VP per 4 microbes) only score whole points; the step between
+ * them was invisible, so adding a microbe looked worth 0.8 M€ and a small misjudgement made the
+ * AI pass instead (seen in the decision traces of the test batches).
+ */
+function partialResourcePoints(card: {victoryPoints?: unknown, resourceCount: number}): number {
+  const points = card.victoryPoints;
+  if (typeof points !== 'object' || points === null || !('resourcesHere' in points)) {
+    return 0;
+  }
+  const {each = 1, per = 1} = points as {each?: number, per?: number};
+  const exact = card.resourceCount * each / per;
+  // The whole points are already part of the VP total.
+  return exact - Math.floor(card.resourceCount / per) * each;
 }
 
 function handValue(player: IPlayer, context: ValuationContext): number {

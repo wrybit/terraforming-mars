@@ -78,16 +78,19 @@ function outlookOf(card: ICard, player: IPlayer): number {
 // Generators: 4 energy production must be given up) was valued as if it were free, because the
 // copy plays it ignoring that. Played now it first needs other cards or projects.
 const BLOCKED_NOW_FACTOR = 0.2;
+// Later such a card is often still blocked: in a test batch every 4th bought Capital, Magnetic
+// Field Dome or Magnetic Field Generators stayed in hand at the end.
+const BLOCKED_LATER_FACTOR = 0.6;
 
-function playableNowFactor(card: ICard, player: IPlayer): number {
+function isBlockedNow(card: ICard, player: IPlayer): boolean {
   if (!isIProjectCard(card)) {
-    return 1;
+    return false;
   }
   try {
-    return card.canPlayPostRequirements(player, {cost: 0, tr: {}}) ? 1 : BLOCKED_NOW_FACTOR;
+    return !card.canPlayPostRequirements(player, {cost: 0, tr: {}});
   } catch {
     // Some cards need a full payment context; then no discount.
-    return 1;
+    return false;
   }
 }
 
@@ -95,7 +98,7 @@ function playableNowFactor(card: ICard, player: IPlayer): number {
 function nowValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext): number {
   const gain = gainInCopy(snapshot, player, card, context, 0);
   const raw = gain === undefined ? 0 : gain * cardPriorFactor(card.name) - costOf(card, player);
-  return raw > 0 ? raw * outlookOf(card, player) * playableNowFactor(card, player) : raw;
+  return raw > 0 ? raw * outlookOf(card, player) * (isBlockedNow(card, player) ? BLOCKED_NOW_FACTOR : 1) : raw;
 }
 
 /** Value of holding the card and playing it a few generations later. */
@@ -119,7 +122,7 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
     return Number.NEGATIVE_INFINITY;
   }
   const raw = (total / samples) * cardPriorFactor(card.name) - costOf(card, player);
-  return raw * outlookOf(card, player) * LATER_DISCOUNT;
+  return raw * outlookOf(card, player) * LATER_DISCOUNT * (isBlockedNow(card, player) ? BLOCKED_LATER_FACTOR : 1);
 }
 
 // Later values take several game copies per card; they only change slowly, so they are
