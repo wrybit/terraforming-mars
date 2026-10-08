@@ -25,7 +25,8 @@ type LevelProfile = {
 const LEVEL_PROFILES: Record<AiLevel, LevelProfile> = {
   easy: {noise: 12, randomShare: 0.15},
   // Small noise only: larger noise turned slightly bad moves (selling a card) into favourites.
-  normal: {noise: 1, randomShare: 0},
+  // With 1 M€ the decision traces showed 11 % of all moves were not the best-valued one.
+  normal: {noise: 0.5, randomShare: 0},
   hard: {noise: 0, randomShare: 0},
 };
 

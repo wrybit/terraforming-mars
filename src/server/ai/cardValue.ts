@@ -79,8 +79,9 @@ function outlookOf(card: ICard, player: IPlayer): number {
 // copy plays it ignoring that. Played now it first needs other cards or projects.
 const BLOCKED_NOW_FACTOR = 0.2;
 // Later such a card is often still blocked: in a test batch every 4th bought Capital, Magnetic
-// Field Dome or Magnetic Field Generators stayed in hand at the end.
-const BLOCKED_LATER_FACTOR = 0.6;
+// Field Dome or Magnetic Field Generators stayed in hand at the end; with 0.6 Magnetic Field
+// Generators was still bought 52 times per 100 games and left in hand 12 times.
+const BLOCKED_LATER_FACTOR = 0.35;
 
 function isBlockedNow(card: ICard, player: IPlayer): boolean {
   if (!isIProjectCard(card)) {
