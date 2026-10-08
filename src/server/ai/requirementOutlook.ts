@@ -137,7 +137,7 @@ export function closingWindowFactor(card: IProjectCard, player: IPlayer, delay: 
 }
 
 export function requirementOutlook(card: IProjectCard, player: IPlayer): number {
-  const remaining = remainingProductionPhases(player.game);
+  const remaining = remainingProductionPhases(player.game, player);
   return card.requirements.reduce((product, descriptor) => product * outlookOf(descriptor, player, card, remaining), 1) *
     oceanRaceOutlook(card, player);
 }

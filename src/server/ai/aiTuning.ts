@@ -30,6 +30,14 @@ export type AiTuning = {
   closer: number,
   /** M€ a global step raised by anybody costs in the valuation: > 0 keeps the game long (engine builder opponent). */
   terraformBrake: number,
+  /** 1: expected game length by player count (2 players 15, 3 players 12) instead of 12 (gameProgress.ts). */
+  lengthByPlayers: number,
+  /** 1: award leads projected to the game end by each player's pace (stateValue.ts projectedAwardScore). */
+  awardTiming: number,
+  /** Action phase: how many of the best first moves get a second action tried after them. */
+  secondStepCandidates: number,
+  /** Action phase: how many of the best moves are checked against the next opponent's best reply (0 = off). */
+  opponentReplies: number,
   /** Weight of the opponent's position in a two-player game (more players: 0.5). */
   opponentWeightTwoPlayers: number,
 };
@@ -57,6 +65,10 @@ export const BASELINE_TUNING: AiTuning = {
   tempoAware: 0,
   closer: 0,
   terraformBrake: 0,
+  lengthByPlayers: 0,
+  awardTiming: 0,
+  secondStepCandidates: 4,
+  opponentReplies: 0,
   opponentWeightTwoPlayers: 1,
 };
 
@@ -81,6 +93,12 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   closer: {closer: 1},
   // Sparring partner modelled on a human who won 198 : 93: buys many cards, keeps terraforming slow
   // and builds a big engine. Not a candidate for the baseline – it shows whether 'closer' punishes it.
+  // From a human game (209 : 108, 16 generations): game length by player count, award timing.
+  realLength: {lengthByPlayers: 1},
+  awardTiming: {awardTiming: 1},
+  // Deeper search: second action after more first moves; the next opponent's best reply.
+  widerSearch: {secondStepCandidates: 12},
+  opponentReply: {opponentReplies: 4},
   engineBuilder: {buyMargin: -6, handTargetEarly: 16, handTargetLate: 6, terraformBrake: 6},
 };
 

@@ -18,6 +18,7 @@ import {ValuationContext, relativeValue, valuationContext} from './stateValue';
 import {handCardValues} from './cardValue';
 import {isTracingDecision, traceOptions} from './decisionTrace';
 import {describeResponse} from './decisionLabels';
+import {tuningOf} from './aiTuning';
 
 // Decides an action-phase move by playing every candidate move on a copy of the game and
 // valuing the resulting position (one-step lookahead). This captures the effect of any card
@@ -26,8 +27,8 @@ import {describeResponse} from './decisionLabels';
 /** Time the AI may spend on one action on the server (AK1: ~10 ms per tried move). */
 const DEFAULT_BUDGET_MILLISECONDS = 2000;
 const MAXIMUM_CANDIDATES = 120;
-/** How many of the best first moves get a second action tried after them. */
-const SECOND_STEP_CANDIDATES = 4;
+/** Opponent reply: how many of the opponent's moves are tried (the cheap ones come first in the menu). */
+const REPLY_CANDIDATES = 60;
 /** How many of the best moves a decision trace keeps. */
 const TRACED_ACTION_OPTIONS = 25;
 
@@ -54,7 +55,7 @@ function cardPayment(input: SelectCardToPlay<any>, card: IProjectCard, player: I
  * be played any more. Before, the AI sold cards it had just bought for 3 M€.
  */
 function sellPatentResponses(input: SelectCard<ICard>, player: IPlayer): Array<InputResponse> {
-  if (remainingProductionPhases(player.game) > 0) {
+  if (remainingProductionPhases(player.game, player) > 0) {
     return [];
   }
   const unplayable = input.cards.filter((card) => !isIProjectCard(card) || !player.canPlay(card));
@@ -116,7 +117,11 @@ function candidatesFor(menu: OrOptions, player: IPlayer): Array<Candidate> {
 /** Result of a tried move; `next` is set when the player still has an action left this turn. */
 type Outcome = {
   value: number,
+  /** Position right after the move (for the opponent reply). */
+  snapshot?: GameSnapshot,
   next?: {snapshot: GameSnapshot, menuSize: number, candidates: Array<Candidate>},
+  /** Best second action found for `next`. */
+  bestSecond?: Candidate,
 };
 
 function tryCandidate(snapshot: GameSnapshot, player: IPlayer, menuSize: number, candidate: Candidate, context: ValuationContext, withNext: boolean): Outcome | undefined {
@@ -137,9 +142,10 @@ function tryCandidate(snapshot: GameSnapshot, player: IPlayer, menuSize: number,
     const value = relativeValue(copyPlayer, context);
     const nextMenu = copyPlayer.getWaitingFor();
     if (!withNext || !isActionMenu(nextMenu) || copy.generation !== generation) {
-      return {value};
+      return {value, snapshot: withNext ? snapshotOf(copy) : undefined};
     }
-    return {value, next: {snapshot: snapshotOf(copy), menuSize: nextMenu.options.length, candidates: candidatesFor(nextMenu, copyPlayer)}};
+    const snapshotAfter = snapshotOf(copy);
+    return {value, snapshot: snapshotAfter, next: {snapshot: snapshotAfter, menuSize: nextMenu.options.length, candidates: candidatesFor(nextMenu, copyPlayer)}};
   });
 }
 
@@ -158,6 +164,75 @@ function gaussian(random: () => number): number {
 }
 
 /**
+ * The own value after the next opponent's best reply (best for the opponent by its own valuation).
+ * Races for milestones, awards and spots only show up here: before, the AI saw no difference
+ * between claiming now and next turn. Undefined when no opponent moves before the own next turn.
+ */
+function valueAfterReply(snapshot: GameSnapshot, player: IPlayer, second: Candidate | undefined, context: ValuationContext, outOfTime: () => boolean): number | undefined {
+  return withCopy(snapshot, (copy): number | undefined => {
+    const copyPlayer = copy.getPlayerById(player.id);
+    const generation = copy.generation;
+    if (second !== undefined) {
+      try {
+        copyPlayer.process(second.response);
+      } catch {
+        return undefined;
+      }
+      finishMove(copy, copyPlayer);
+    } else {
+      // One action left but none better than stopping: end the turn as the AI would.
+      const menu = copyPlayer.getWaitingFor();
+      if (isActionMenu(menu)) {
+        // "End Turn", not "Pass": passing would skip the rest of the generation.
+        const index = menu.options.findIndex((option) => option instanceof SelectOption && option.title === 'End Turn');
+        if (index < 0) {
+          return undefined;
+        }
+        try {
+          copyPlayer.process({type: 'or', index, response: {type: 'option'}});
+        } catch {
+          return undefined;
+        }
+      }
+    }
+    if (copy.generation !== generation) {
+      return undefined;
+    }
+    const opponent = copy.players.find((other) => other.id !== player.id && isActionMenu(other.getWaitingFor()));
+    const menu = opponent?.getWaitingFor();
+    if (opponent === undefined || !isActionMenu(menu)) {
+      return undefined;
+    }
+    const replySnapshot = snapshotOf(copy);
+    const opponentContext = valuationContext(copy, opponent);
+    let best: {opponentValue: number, ownValue: number} | undefined;
+    for (const candidate of candidatesFor(menu, opponent).slice(0, REPLY_CANDIDATES)) {
+      if (best !== undefined && outOfTime()) {
+        break;
+      }
+      const result = withCopy(replySnapshot, (replyCopy) => {
+        const replyOpponent = replyCopy.getPlayerById(opponent.id);
+        const replyMenu = replyOpponent.getWaitingFor();
+        if (!isActionMenu(replyMenu) || replyMenu.options.length !== menu.options.length) {
+          return undefined;
+        }
+        try {
+          replyOpponent.process(candidate.response);
+        } catch {
+          return undefined;
+        }
+        finishMove(replyCopy, replyOpponent);
+        return {opponentValue: relativeValue(replyOpponent, opponentContext), ownValue: relativeValue(replyCopy.getPlayerById(player.id), context)};
+      });
+      if (result !== undefined && (best === undefined || result.opponentValue > best.opponentValue)) {
+        best = result;
+      }
+    }
+    return best?.ownValue;
+  });
+}
+
+/**
  * Two steps: every move is tried once; the most promising ones are then followed by the best
  * second action of the same turn (e.g. first take a bonus, then play the card it pays for).
  */
@@ -168,7 +243,7 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
   const snapshot = snapshotOf(player.game);
   // Cards kept in hand count with their value when played later, so a card that grows with
   // the tableau is not wasted now.
-  const context = {...valuationContext(player.game), handValues: handCardValues(player), handOwner: player.id};
+  const context = {...valuationContext(player.game, player), handValues: handCardValues(player), handOwner: player.id};
   const outOfTime = () => performance.now() - start > budget;
 
   const tried: Array<{candidate: Candidate, outcome: Outcome}> = [];
@@ -183,7 +258,8 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
   }
 
   // Second step for the best few first moves that leave an action in this turn.
-  const promising = [...tried].sort((a, b) => b.outcome.value - a.outcome.value).slice(0, SECOND_STEP_CANDIDATES);
+  const tuning = tuningOf(player);
+  const promising = [...tried].sort((a, b) => b.outcome.value - a.outcome.value).slice(0, tuning.secondStepCandidates);
   for (const entry of promising) {
     const next = entry.outcome.next;
     if (next === undefined) {
@@ -196,7 +272,33 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
       const outcome = tryCandidate(next.snapshot, player, next.menuSize, second, context, false);
       if (outcome !== undefined && outcome.value > entry.outcome.value) {
         entry.outcome.value = outcome.value;
+        entry.outcome.bestSecond = second;
       }
+    }
+  }
+
+  // Opponent reply: the best few moves are judged by the position after the next opponent's
+  // best answer. Only the order among them changes, so a missing reply keeps the plain value.
+  if (tuning.opponentReplies > 0) {
+    const finalists = [...tried].sort((a, b) => b.outcome.value - a.outcome.value).slice(0, tuning.opponentReplies);
+    const replied: Array<{entry: typeof finalists[number], value: number}> = [];
+    for (const entry of finalists) {
+      if (outOfTime() || entry.outcome.snapshot === undefined) {
+        break;
+      }
+      const value = valueAfterReply(entry.outcome.snapshot, player, entry.outcome.bestSecond, context, outOfTime);
+      if (value !== undefined) {
+        replied.push({entry, value});
+      }
+    }
+    // All finalists need a reply value, otherwise they are not comparable.
+    if (replied.length === finalists.length && replied.length > 1) {
+      // Keep the finalists' value level, only re-rank them: the best reply-judged move gets the
+      // best plain value, and so on.
+      const plainValues = finalists.map((entry) => entry.outcome.value).sort((a, b) => b - a);
+      replied.sort((a, b) => b.value - a.value).forEach((item, index) => {
+        item.entry.outcome.value = plainValues[index];
+      });
     }
   }
 

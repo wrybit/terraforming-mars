@@ -151,7 +151,7 @@ function cachedLaterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, 
 
 export function estimateCardTimings(player: IPlayer, cards: ReadonlyArray<ICard>, includeLater = true): Map<CardName, CardTiming> {
   const snapshot = snapshotOf(player.game);
-  const context = valuationContext(player.game);
+  const context = valuationContext(player.game, player);
   const timings = new Map<CardName, CardTiming>();
   for (const card of cards) {
     const later = includeLater ? cachedLaterValue(snapshot, player, card, context) : Number.NEGATIVE_INFINITY;
@@ -176,7 +176,7 @@ export function handCardValues(player: IPlayer): Map<CardName, number> {
     return values;
   }
   const snapshot = snapshotOf(player.game);
-  const context = valuationContext(player.game);
+  const context = valuationContext(player.game, player);
   for (const card of player.cardsInHand) {
     values.set(card.name, Math.max(0, cachedLaterValue(snapshot, player, card, context)));
   }

@@ -36,7 +36,7 @@ type ValueFunction = (name: CardName) => number;
 function valuesOf(player: IPlayer, cards: ReadonlyArray<ICard>, buying = false): {valueOf: ValueFunction, timingOf: (name: CardName) => CardTiming | undefined} {
   const timings = estimateCardTimings(player, cards);
   const tuning = tuningOf(player);
-  const remaining = remainingProductionPhases(player.game);
+  const remaining = remainingProductionPhases(player.game, player);
   const handValues = tuning.enablerWeight > 0 ? handCardValues(player) : new Map<CardName, number>();
   const extras = new Map<CardName, number>(cards.map((card) => [card.name,
     tuning.enablerWeight > 0 ? tuning.enablerWeight * enablerBonus(card, player, handValues) : 0]));
@@ -201,7 +201,7 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
     return {type: 'card', cards: picked.map((card) => card.name)};
   }
   // Research: early a hand of up to 6, late only what can still be played.
-  const remaining = remainingProductionPhases(player.game);
+  const remaining = remainingProductionPhases(player.game, player);
   // A rich player can afford a bigger hand (every 12 M€ above a reserve buys room for one more).
   const tuning = tuningOf(player);
   const handTarget = (remaining >= 4 ? tuning.handTargetEarly : tuning.handTargetLate) + Math.floor(Math.max(0, player.megaCredits - 30) / 12);

@@ -1,4 +1,6 @@
 import {IGame} from '../IGame';
+import {IPlayer} from '../IPlayer';
+import {tuningOf} from './aiTuning';
 import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MIN_TEMPERATURE} from '../../common/constants';
 
 // How far the game is and what a victory point is worth right now.
@@ -11,6 +13,21 @@ const TEMPERATURE_STEPS = (MAX_TEMPERATURE - MIN_TEMPERATURE) / 2;
  * sometimes 1-2 more or less, practically never longer. Solo games always last 14 (rules).
  */
 const EXPECTED_GENERATIONS = 12;
+/**
+ * Measured in AI test batches (2026-10-08): 2 players 14.3–15.5 generations, 3 players 11.5–12.7;
+ * a human 2-player game lasted 16. With the fixed 12 the AI thought from generation 8 on that only
+ * ~4 were left, valued production and engine cards too low and lost 108 : 209 (aiTuning.ts lengthByPlayers).
+ */
+const GENERATIONS_BY_PLAYER_COUNT: Record<number, number> = {2: 15, 3: 12};
+
+/** Typical game length for this player's AI variant. */
+export function expectedGenerations(game: IGame, player?: IPlayer): number {
+  if (player === undefined || tuningOf(player).lengthByPlayers <= 0) {
+    return EXPECTED_GENERATIONS;
+  }
+  return GENERATIONS_BY_PLAYER_COUNT[game.players.length] ?? (game.players.length > 3 ? 11 : EXPECTED_GENERATIONS);
+}
+
 /** How many generations the observed terraforming speed may move the estimate. */
 const MAXIMUM_DEVIATION = 2;
 
@@ -32,7 +49,7 @@ export function isTemperatureMaxed(game: IGame): boolean {
 }
 
 /** Estimated production phases still to come (0 in the last generation). */
-export function remainingProductionPhases(game: IGame): number {
+export function remainingProductionPhases(game: IGame, player?: IPlayer): number {
   if (game.isSoloMode()) {
     return Math.max(0, game.lastSoloGeneration() - game.generation);
   }
@@ -40,7 +57,7 @@ export function remainingProductionPhases(game: IGame): number {
   if (progress >= 1) {
     return 0;
   }
-  const byPriorLength = Math.max(0, EXPECTED_GENERATIONS - game.generation);
+  const byPriorLength = Math.max(0, expectedGenerations(game, player) - game.generation);
   // Early generations say little about the speed (tables build engines first).
   if (game.generation <= 3 || progress === 0) {
     return byPriorLength;
@@ -86,8 +103,8 @@ export function lastGenerationLikelihood(game: IGame): number {
 }
 
 /** M€ value of one VP: cheap early (money still compounds), expensive late. */
-export function victoryPointValue(game: IGame): number {
-  const remaining = remainingProductionPhases(game);
+export function victoryPointValue(game: IGame, player?: IPlayer): number {
+  const remaining = remainingProductionPhases(game, player);
   if (remaining === 0) {
     return 12;
   }

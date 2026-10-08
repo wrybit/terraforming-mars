@@ -49,6 +49,8 @@ export type ValuationContext = {
   stepsLeft?: number,
   /** Tempo: production phases shrink as the copy raises global parameters (aiTuning.ts tempoAware). */
   tempo?: boolean,
+  /** Award leads are projected to the game end by each player's pace so far (aiTuning.ts awardTiming). */
+  awardTiming?: boolean,
 };
 
 /**
@@ -67,8 +69,8 @@ function awardConfidence(progress: number): number {
 function expectedAwardPoints(player: IPlayer, context: ValuationContext): number {
   let points = 0;
   for (const {award} of player.game.fundedAwards) {
-    const own = award.getScore(player);
-    const best = Math.max(0, ...player.opponents.map((opponent) => award.getScore(opponent)));
+    const own = projectedAwardScore(award.getScore(player), context);
+    const best = Math.max(0, ...player.opponents.map((opponent) => projectedAwardScore(award.getScore(opponent), context)));
     const margin = own - best;
     // How much an opponent can still gain: more early, and more for awards with big numbers.
     const swing = 2 + Math.max(own, best) * 0.25 * (1 - context.awardConfidence);
@@ -78,11 +80,26 @@ function expectedAwardPoints(player: IPlayer, context: ValuationContext): number
   return points;
 }
 
-export function valuationContext(game: IGame): ValuationContext {
+/** `player`: whose AI variant decides (its expected game length, aiTuning.ts lengthByPlayers). */
+/**
+ * Award score at the game end: the current score grows at the pace of the generations so far.
+ * Without it the AI funded Landlord and Miner in generations 13 and 14 with a small lead that
+ * looked safe ("terraforming almost done"); the game ran 3 more generations and the human, whose
+ * tiles and steel/titanium grew much faster, won both (10 VP for him).
+ */
+function projectedAwardScore(score: number, context: ValuationContext): number {
+  if (context.awardTiming !== true) {
+    return score;
+  }
+  const elapsed = Math.max(1, context.generation - 1);
+  return score * (elapsed + context.remaining) / elapsed;
+}
+
+export function valuationContext(game: IGame, player?: IPlayer): ValuationContext {
   return {
     generation: game.generation,
-    remaining: remainingProductionPhases(game),
-    victoryPoint: victoryPointValue(game),
+    remaining: remainingProductionPhases(game, player),
+    victoryPoint: victoryPointValue(game, player),
     temperatureMaxed: isTemperatureMaxed(game),
     awardConfidence: awardConfidence(terraformingProgress(game)),
     stepsLeft: stepsLeft(game),
@@ -241,7 +258,7 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
 /** Own value minus a share of the opponents' average: the number the AI maximises. */
 export function relativeValue(player: IPlayer, frozen: ValuationContext): number {
   const tuning = tuningOf(player);
-  const context = tuning.tempoAware > 0 ? {...frozen, tempo: true} : frozen;
+  const context = {...frozen, tempo: tuning.tempoAware > 0 || frozen.tempo, awardTiming: tuning.awardTiming > 0 || frozen.awardTiming};
   const opponents = player.opponents;
   const own = playerValue(player, context);
   if (opponents.length === 0) {
