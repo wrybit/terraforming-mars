@@ -6,10 +6,13 @@ import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MIN_TEMPERATURE} fro
 
 const TEMPERATURE_STEPS = (MAX_TEMPERATURE - MIN_TEMPERATURE) / 2;
 
-/** Typical game length by player count, used before the observed terraforming speed is meaningful. */
-const EXPECTED_GENERATIONS: Record<number, number> = {1: 14, 2: 12, 3: 10, 4: 9, 5: 8, 6: 8};
+/**
+ * Typical game length. Experience of the group this fork is played in: about 12 generations,
+ * sometimes 1-2 more or less, practically never longer. Solo games always last 14 (rules).
+ */
+const EXPECTED_GENERATIONS = 12;
 /** How many generations the observed terraforming speed may move the estimate. */
-const MAXIMUM_DEVIATION = 3;
+const MAXIMUM_DEVIATION = 2;
 
 /** Share of the three global parameters already raised, 0..1. */
 export function terraformingProgress(game: IGame): number {
@@ -32,8 +35,7 @@ export function remainingProductionPhases(game: IGame): number {
   if (progress >= 1) {
     return 0;
   }
-  const expected = EXPECTED_GENERATIONS[game.players.length] ?? 9;
-  const byPriorLength = Math.max(0, expected - game.generation);
+  const byPriorLength = Math.max(0, EXPECTED_GENERATIONS - game.generation);
   // Early generations say little about the speed (tables build engines first).
   if (game.generation <= 3 || progress === 0) {
     return byPriorLength;
