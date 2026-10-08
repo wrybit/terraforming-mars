@@ -14,6 +14,8 @@ export type AiTuning = {
   /** City placement: VP per other own / opponent city at a free spot next to the new city (spaceValue.ts). */
   sharedSpotShare: number,
   opponentSpotShare: number,
+  /** Weight of the measured engine value of effect cards (engineValue.ts), 0 = off. */
+  engineWeight: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -27,12 +29,15 @@ export const BASELINE_TUNING: AiTuning = {
   researchReserveEarly: 0,
   sharedSpotShare: 0.4,
   opponentSpotShare: 0.25,
+  engineWeight: 0,
 };
 
 export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
   // Triforce test: do cities drift towards opponents because of the opponent share?
   ownSpotsOnly: {opponentSpotShare: 0, sharedSpotShare: 0.6},
+  // Effect cards valued by the cards played after them (human with such an engine: 97 cards).
+  engine: {engineWeight: 1},
 };
 
 export function isTuningVariant(name: string): boolean {

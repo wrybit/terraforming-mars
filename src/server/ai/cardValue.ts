@@ -10,6 +10,8 @@ import {relativeValue, ValuationContext, valuationContext} from './stateValue';
 import {cardPriorFactor} from './cardPriors';
 import {requirementOutlook} from './requirementOutlook';
 import {pickSome} from './randomChoice';
+import {engineValue} from './engineValue';
+import {tuningOf} from './aiTuning';
 
 // What a card is worth to a player, played now and played later. The card is put into play on
 // a copy of the game (ignoring requirements and cost) and the position is valued; the result is
@@ -97,8 +99,10 @@ function isBlockedNow(card: ICard, player: IPlayer): boolean {
 
 /** Value of playing the card right now (requirements must be met, otherwise their outlook counts). */
 function nowValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext): number {
+  const engineWeight = tuningOf(player).engineWeight;
+  const engine = engineWeight > 0 ? engineWeight * engineValue(snapshot, player, card, context) : 0;
   const gain = gainInCopy(snapshot, player, card, context, 0);
-  const raw = gain === undefined ? 0 : gain * cardPriorFactor(card.name) - costOf(card, player);
+  const raw = gain === undefined ? 0 : (gain + engine) * cardPriorFactor(card.name) - costOf(card, player);
   return raw > 0 ? raw * outlookOf(card, player) * (isBlockedNow(card, player) ? BLOCKED_NOW_FACTOR : 1) : raw;
 }
 
