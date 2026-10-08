@@ -75,7 +75,9 @@ export const BASELINE_TUNING: AiTuning = {
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
   lengthByPlayers: 1,
   awardTiming: 0,
-  productionDiscount: 0.55,
+  // Night runs A+B (3200 games): 0.55 → 0.9 won clearly (A: 0.75 z +4.8; B: 0.9 z +2.7, 1.05 z +3.5,
+  // control −0.8); best VP per generation. Income was undervalued once the game length was right.
+  productionDiscount: 0.9,
   passPenalty: 0,
   // Fitted terraforming curve (gameProgress.ts curvedRemaining): estimate error 2P 1.86 → 1.25,
   // 3P 1.45 → 0.80, human games 1.96 → 0.75 generations; neutral in AI-vs-AI (z −0.17).
@@ -96,6 +98,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   production75: {productionDiscount: 0.75},
   production90: {productionDiscount: 0.9},
   production105: {productionDiscount: 1.05},
+  production55: {productionDiscount: 0.55},
   stayIn: {passPenalty: 0.1},
   stayInStrong: {passPenalty: 0.25},
   moreCards: {buyMargin: -5, handTargetEarly: 16, handTargetLate: 6},
