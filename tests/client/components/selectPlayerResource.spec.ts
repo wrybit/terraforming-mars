@@ -1,6 +1,9 @@
 import {expect} from 'chai';
-import {playerEffect, resourceAfter, selectPlayerResource} from '@/client/components/selectPlayerResource';
+import {playerEffect, playerEffects, resourceAfter, resourceChanges, selectPlayerResource} from '@/client/components/selectPlayerResource';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
+import {PublicPlayerModel} from '@/common/models/PlayerModel';
+import {Message} from '@/common/logs/Message';
+import {CardName} from '@/common/cards/CardName';
 
 describe('selectPlayerResource', () => {
   it('finds the resource in the title parameters', () => {
@@ -58,5 +61,37 @@ describe('selectPlayerResource', () => {
     expect(playerEffect('Increase megacredits production 1 step')).deep.eq({resource: 'megacredits', target: 'production', direction: 'gain', amount: 1});
     expect(playerEffect('Remove microbes to gain M€')?.direction).is.undefined;
     expect(playerEffect('Do not remove M€')).is.undefined;
+  });
+
+  it('splits a payment into cost and result', () => {
+    expect(playerEffects('Spend 1 plant to gain 7 M€.')).deep.eq([
+      {resource: 'plants', target: 'stock', direction: 'loss', amount: 1},
+      {resource: 'megacredits', target: 'stock', direction: 'gain', amount: 7},
+    ]);
+    expect(playerEffects('Decrease energy production 1 step to gain 8 M€')).deep.eq([
+      {resource: 'energy', target: 'production', direction: 'loss', amount: 1},
+      {resource: 'megacredits', target: 'stock', direction: 'gain', amount: 8},
+    ]);
+    // A piece without its own verb takes the verb of its clause
+    expect(playerEffects('Remove 2 floaters from ANY CARD to gain 1 titanium and 2 M€').map((e) => [e.resource, e.direction, e.amount]))
+      .deep.eq([['titanium', 'gain', 1], ['megacredits', 'gain', 2]]);
+    // Amount depending on the game state stays open
+    expect(playerEffects('Spend 1 floater here to gain 1 M€ per city on Mars')[0].amount).is.undefined;
+    expect(playerEffects('Do not remove M€')).deep.eq([]);
+  });
+
+  it('fills text parameters but not card names', () => {
+    const title: Message = {message: 'Spend ${0} ${1} to gain 4 M€', data: [{type: LogMessageDataType.RAW_STRING, value: '3'}, {type: LogMessageDataType.STRING, value: 'heat'}]};
+    expect(playerEffects(title).map((e) => e.resource)).deep.eq(['heat', 'megacredits']);
+    const card: Message = {message: 'Add 1 animal to ${0}', data: [{type: LogMessageDataType.CARD, value: CardName.HEAT_TRAPPERS}]};
+    expect(playerEffects(card)).deep.eq([]);
+  });
+
+  it('lists stock and production before and after per resource', () => {
+    const player = {plants: 6, plantProduction: 2, megacredits: 29, megacreditProduction: 12} as PublicPlayerModel;
+    expect(resourceChanges(player, playerEffects('Spend 1 plant to gain 7 M€.'))).deep.eq([
+      {resource: 'plants', before: {stock: 6, production: 2}, after: {stock: 5, production: 2}, direction: 'loss'},
+      {resource: 'megacredits', before: {stock: 29, production: 12}, after: {stock: 36, production: 12}, direction: 'gain'},
+    ]);
   });
 });

@@ -133,3 +133,75 @@ export function resourceAfter(snapshot: ResourceSnapshot, effect: PlayerEffect):
   }
   return {...snapshot, stock: Math.max(0, snapshot.stock + change)};
 }
+
+// Title text with its text parameters filled in (English key), so resources and amounts given as
+// parameters (e.g. "Spend ${0} ${1} …") are parsed like literal text. Card and player names stay
+// placeholders: "Heat Trappers" must not count as heat
+function filledTitleText(title: string | Message): string {
+  if (typeof title === 'string') {
+    return title;
+  }
+  return title.message.replace(/\$\{(\d+)\}/g, (placeholder, index) => {
+    const datum = title.data[Number(index)];
+    if (datum?.type === LogMessageDataType.STRING || datum?.type === LogMessageDataType.RAW_STRING) {
+      return datum.value;
+    }
+    return placeholder;
+  });
+}
+
+// Verbs that pay something: "Spend 1 plant …", "Pay 6 M€ …"
+const COST_WORDS = /\b(spend|pay)\b/i;
+
+function pieceDirection(text: string): 'gain' | 'loss' | undefined {
+  if (COST_WORDS.test(text)) {
+    return 'loss';
+  }
+  return titleDirection(text);
+}
+
+// All own resources an option changes, in title order: "Spend 1 plant to gain 7 M€" → plants −1, M€ +7.
+// The title is split into the cost clause (before "to") and the result clause (after it); each clause
+// into pieces at "and"/",". A piece without its own verb takes the verb of its clause
+// ("gain 1 titanium and 2 M€"). Pieces without a standard resource (TR, floaters, Venus …) are left out.
+export function playerEffects(title: string | Message): Array<PlayerEffect> {
+  if (isNoEffect(title)) {
+    return [];
+  }
+  const effects: Array<PlayerEffect> = [];
+  for (const clause of filledTitleText(title).split(/\bto\b/i)) {
+    const clauseDirection = pieceDirection(clause);
+    for (const piece of clause.split(/\band\b|,/i)) {
+      const resource = RESOURCE_WORDS.find(([pattern]) => pattern.test(piece))?.[1];
+      if (resource === undefined) {
+        continue;
+      }
+      const amount = /\b(\d+)\b/.exec(piece);
+      effects.push({
+        resource,
+        target: /production/i.test(piece) ? 'production' : 'stock',
+        direction: pieceDirection(piece) ?? clauseDirection,
+        // "1 M€ per city" or "up to X" depend on the game state: no fixed number
+        amount: amount === null || /\bper\b/i.test(piece) ? undefined : Number(amount[1]),
+      });
+    }
+  }
+  return effects;
+}
+
+// One row per resource with its state before and after all effects of the option on it
+export type ResourceChange = {resource: Resource, before: ResourceSnapshot, after: ResourceSnapshot, direction?: 'gain' | 'loss'};
+
+export function resourceChanges(player: PublicPlayerModel, effects: ReadonlyArray<PlayerEffect>): Array<ResourceChange> {
+  const changes: Array<ResourceChange> = [];
+  for (const effect of effects) {
+    let change = changes.find((existing) => existing.resource === effect.resource);
+    if (change === undefined) {
+      const before = resourceSnapshot(player, effect.resource);
+      change = {resource: effect.resource, before, after: before, direction: effect.direction};
+      changes.push(change);
+    }
+    change.after = resourceAfter(change.after, effect);
+  }
+  return changes;
+}

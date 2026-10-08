@@ -35,6 +35,20 @@ describe('ChoiceOptionTile', () => {
     expect(wrapper.find('.choice-option-after--loss').text()).eq('→1');
   });
 
+  it('shows paid and gained resource with stock and production', () => {
+    const own = {...player, plants: 6, plantProduction: 2, megacredits: 29, megacreditProduction: 12} as PublicPlayerModel;
+    const wrapper = mount(ChoiceOptionTile, {
+      ...globalConfig,
+      props: {title: 'Spend 1 plant to gain 7 M€.', player: own, selected: false, groupName: 'g'},
+    });
+    // Icons: plant → M€
+    const icons = wrapper.findAll('.choice-option-icons .resource_icon').map((icon) => icon.classes().find((c) => c.startsWith('resource_icon--')));
+    expect(icons).deep.eq(['resource_icon--plants', 'resource_icon--megacredits']);
+    expect(wrapper.find('.choice-option-arrow').exists()).is.true;
+    const numbers = wrapper.findAll('.choice-option-number').map((cell) => cell.text().replace(/\s+/g, ''));
+    expect(numbers).deep.eq(['6→5', '+2', '29→36', '+12']);
+  });
+
   it('stays plain text without a resource', () => {
     const wrapper = mount(ChoiceOptionTile, {
       ...globalConfig,
