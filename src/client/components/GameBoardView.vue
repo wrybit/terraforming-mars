@@ -43,6 +43,9 @@
        getElementById returns the first occurrence though, and the modal is attached at the end of body -->
   <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" :frame="zoomBoard === 'mars' ? marsZoomFrame : undefined"
     @close="closeBoardZoom" @rendered="notifyZoomBoardRendered" @hidden="notifyZoomBoardHidden">
+    <template #banner>
+      <PlacementBanner v-if="placementDescription !== undefined" :description="placementDescription"/>
+    </template>
     <MoonBoard v-if="zoomBoard === 'moon' && game.moon" :model="game.moon" :tileView="tileView" ring/>
     <Board
       v-else
@@ -71,6 +74,8 @@ import Board from '@/client/components/Board.vue';
 import BoardTabs from '@/client/components/boardTabs/BoardTabs.vue';
 import ColoniesBoard from '@/client/components/colonies/ColoniesBoard.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
+import PlacementBanner from '@/client/components/board/PlacementBanner.vue';
+import {describePlacement, PlacementDescription} from '@/client/components/board/placementDescription';
 import OuterSpaceCorners from '@/client/components/board/OuterSpaceCorners.vue';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import {MarsFrame, marsFrame} from '@/client/components/mobile/mobileBoardZoom';
@@ -126,6 +131,7 @@ export default defineComponent({
     BoardTabs,
     ColoniesBoard,
     BoardZoomModal,
+    PlacementBanner,
     DeltaBoard,
     Milestones,
     Awards,
@@ -135,6 +141,11 @@ export default defineComponent({
     PlanetsBoard,
   },
   computed: {
+    // Only during a space selection on the board shown large (not when Mars is merely enlarged for viewing)
+    placementDescription(): PlacementDescription | undefined {
+      const title = placementZoom.inputTitle;
+      return title === undefined ? undefined : describePlacement(title, this.game);
+    },
     // Phone/tablet layout: the special spaces sit in the board as columns of the visible section (Board.vue)
     mobileLayout(): boolean {
       return mobileLayout.value;

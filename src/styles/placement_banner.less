@@ -1,0 +1,161 @@
+// Banner above the enlarged Mars/Moon during a space selection (PlacementBanner.vue).
+// Tone (border, surface) per tile from or_tab_tones.less, frosted like the tab boxes.
+// Kept compact so as much of the board as possible stays visible.
+
+@placement-banner-gap: 12px; // icon, text block and rules: tight, they form one statement
+
+.placement-banner {
+  .frosted-surface();
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: @placement-banner-gap;
+  max-width: calc(100vw - 32px);
+  padding: 8px 16px 8px 10px;
+  border: 2px solid var(--placement-banner-tone);
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.placement-banner-icon {
+  flex: none;
+  width: 44px;
+  height: 48px;
+  background: center / contain no-repeat;
+}
+
+.placement-banner-icon--greenery { background-image: url(./assets/tiles/greenery.png); }
+.placement-banner-icon--city { background-image: url(./assets/tiles/city.png); }
+.placement-banner-icon--ocean { background-image: url(./assets/tiles/ocean.png); }
+.placement-banner-icon--mine { background-image: url(./assets/moon/minetile.png); }
+.placement-banner-icon--habitat { background-image: url(./assets/moon/habitattile.png); }
+.placement-banner-icon--road { background-image: url(./assets/moon/roadtile.png); }
+
+.placement-banner-main {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.placement-banner-title {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.placement-banner-gains {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.placement-gain {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.placement-gain-label {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.placement-gain-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  background: center / contain no-repeat;
+}
+
+.placement-gain-icon--oxygen { background-image: url(./assets/global-parameters/oxygen.png); }
+.placement-gain-icon--tr { background-image: url(./assets/resources/tr.png); }
+.placement-gain-icon--mining-rate { background-image: url(./assets/moon/card-mining-rate.png); }
+.placement-gain-icon--habitat-rate { background-image: url(./assets/moon/card-habitat-rate.png); }
+.placement-gain-icon--logistic-rate { background-image: url(./assets/moon/card-logistic-rate.png); }
+
+// Rules separated from the title block by a thin line (own group, Gestalt: closure by the line)
+.placement-rules {
+  min-width: 0;
+  margin: 0;
+  padding: 0 0 0 @placement-banner-gap;
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.placement-rule {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.placement-rule-mark {
+  flex: none;
+  width: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.placement-rule--required .placement-rule-mark { color: #ff8a80; }
+.placement-rule--soft .placement-rule-mark { color: #ffd34d; }
+.placement-rule--bonus .placement-rule-mark { color: #6fd36f; }
+
+.placement-rule--card {
+  color: #fff;
+}
+
+.placement-rule-card {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 11px;
+  font-weight: bold;
+}
+
+// Narrow screens: rules below the title block over the full width, everything a little smaller.
+// Wider mobile layouts (tablet, small laptop) keep the row like the desktop
+@media (max-width: 699px) { // same limit in mobile.less (.board-zoom-banner)
+  .placement-banner {
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    padding: 6px 10px 6px 6px;
+  }
+
+  .placement-banner-icon {
+    width: 32px;
+    height: 36px;
+  }
+
+  .placement-banner-title {
+    font-size: 15px;
+  }
+
+  .placement-banner-gains {
+    font-size: 12px;
+  }
+
+  .placement-gain-icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  .placement-rules {
+    flex-basis: 100%;
+    padding: 5px 0 0;
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+}

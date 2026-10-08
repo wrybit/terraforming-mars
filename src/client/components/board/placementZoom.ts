@@ -1,4 +1,5 @@
 import {reactive} from 'vue';
+import {Message} from '@/common/logs/Message';
 
 // Enlarged board (Mars or Moon) during a tile placement.
 // The space selection (SelectSpace.vue) and the board (GameBoardView.vue) live in separate subtrees;
@@ -15,7 +16,13 @@ export const placementZoom = reactive({
   boardRenderCount: 0,
   // Large board is visible (from showing until the end of the return animation)
   boardVisible: false,
+  // Title of the running space selection: the large board shows above it what is being placed (PlacementBanner.vue)
+  inputTitle: undefined as string | Message | undefined,
 });
+
+export function setPlacementInputTitle(title: string | Message | undefined): void {
+  placementZoom.inputTitle = title;
+}
 
 // Upper limit for waiting on the return animation (boardZoomAnimation.ts: 320 ms), in case the modal
 // disappears without completing – the placement must never hang

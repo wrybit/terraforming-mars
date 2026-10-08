@@ -49,6 +49,16 @@
   }
 }
 
+// Banner on top (PlacementBanner.vue): centred above the board; BoardZoomModal fits the board below it
+.board-zoom-banner {
+  position: fixed;
+  z-index: 1101; // above the backdrop like the close button
+  top: 16px; // BANNER_TOP in BoardZoomModal.vue
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none; // only information: clicks go to the board behind
+}
+
 .board-zoom-close {
   position: fixed;
   z-index: 1101; // above the modal's backdrop (now sits next to it instead of inside it)

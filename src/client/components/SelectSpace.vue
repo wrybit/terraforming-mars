@@ -36,7 +36,7 @@ import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesMana
 import {SelectSpaceResponse} from '@/common/inputs/InputResponse';
 import SpaceConfirmPopover from '@/client/components/SpaceConfirmPopover.vue';
 import {placementLabel, previewTileClass, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
-import {ZoomBoard, placementZoom, releasePlacementZoom, releasePlacementZoomAndWait, requestPlacementZoom} from '@/client/components/board/placementZoom';
+import {ZoomBoard, placementZoom, releasePlacementZoom, releasePlacementZoomAndWait, requestPlacementZoom, setPlacementInputTitle} from '@/client/components/board/placementZoom';
 
 const PREVIEW_CLASS = 'space-tile-preview';
 // Spaces on the Mars board (incl. colony spaces next to it) and on the Moon: the board they are on gets enlarged
@@ -273,8 +273,13 @@ export default defineComponent({
       tile.onclick = null;
     });
     releasePlacementZoom();
+    // A newer space selection may already have set its own title
+    if (placementZoom.inputTitle === this.playerinput.title) {
+      setPlacementInputTitle(undefined);
+    }
   },
   mounted() {
+    setPlacementInputTitle(this.playerinput.title);
     // Moon spaces are only clickable while the Moon tab is open – open the board the spaces are on
     selectBoardTab([...this.spaces].some((spaceId) => isMoonSpace(spaceId)) ? 'moon' : 'mars');
     const bound = this.bindSpaces();

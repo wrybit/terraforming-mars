@@ -2294,7 +2294,8 @@ html.tm-mobile {
     width: max-content;
     min-width: 100%;
     min-height: 100%;
-    padding: 56px 0 16px;
+    // Below ✕, with a banner below the banner (BoardZoomModal sets the variable)
+    padding: var(--board-zoom-stage-top, 56px) 0 16px;
     box-sizing: border-box;
   }
 
@@ -2312,6 +2313,21 @@ html.tm-mobile {
 
     .board-without-venus {
       background-image: url(./assets/board/mars-planet.png);
+    }
+  }
+
+  // Banner on the same top edge as ✕; on narrow screens left of it over the remaining width
+  .board-zoom-banner {
+    top: calc(12px + env(safe-area-inset-top));
+
+    @media (max-width: 699px) { // same limit in placement_banner.less
+      left: 12px;
+      right: 64px; // ✕ (44 px) + gap
+      transform: none;
+
+      .placement-banner {
+        max-width: none;
+      }
     }
   }
 

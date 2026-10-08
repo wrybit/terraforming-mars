@@ -65,6 +65,12 @@ each(@or-tab-tones, {
     background: @panel;
   }
 
+  // Banner above the enlarged Mars/Moon (placement_banner.less): same tone as the tab of the space selection
+  .placement-banner--tone-@{tone} {
+    --placement-banner-tone: @color;
+    background: @panel;
+  }
+
   // Button centered in the box (place tile, raise temperature, pass/end) in the tab color;
   // dark text on light tones (city, resources), otherwise white. !important as in button_tones.less
   .or-tab-panel--tone-@{tone} .select-space-zoom-button,

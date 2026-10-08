@@ -2,7 +2,7 @@
   <!-- Mars board fullscreen. Teleport into body so the sticky column, overflow and zoom of the
        right column neither clip nor scale the modal. -->
   <Teleport to="body">
-    <div v-if="visible" class="board-zoom-backdrop" ref="backdrop" role="dialog" aria-modal="true" @click="onBackdropClick">
+    <div v-if="visible" class="board-zoom-backdrop" ref="backdrop" role="dialog" aria-modal="true" :style="backdropStyle" @click="onBackdropClick">
       <!-- The stage only carries the flight animation; zoom sits one level deeper, otherwise it would
            scale the animation's translation too -->
       <div class="board-zoom-stage" ref="stage">
@@ -11,6 +11,8 @@
         </div>
       </div>
     </div>
+    <!-- Optional banner on top (what is being placed, PlacementBanner.vue); the board is fitted below it -->
+    <div v-if="visible" class="board-zoom-banner" ref="banner"><slot name="banner"></slot></div>
     <!-- Outside the scrolling background so close and the zoom bar stay put while panning -->
     <button v-if="visible" type="button" class="board-zoom-close" :aria-label="$t('Close')" @click.stop="$emit('close')">✕</button>
     <!-- Mobile view: zoom bar at the bottom (pinch and double tap work as well) -->
@@ -30,6 +32,11 @@ import MobileZoomControls from '@/client/components/mobile/MobileZoomControls.vu
 
 // Free space around the board so it doesn't stick to the window edge
 const VIEWPORT_MARGIN = 24;
+// Distance of the banner from the window top (board_zoom_modal.less) and down to the board
+const BANNER_TOP = 16;
+const BANNER_GAP = 12;
+// Mobile: room the stage keeps free on top anyway for ✕ (mobile.less .board-zoom-stage padding-top)
+const MOBILE_STAGE_TOP = 56;
 
 const props = defineProps<{
   open: boolean;
@@ -53,6 +60,10 @@ const backdrop = ref<HTMLElement | undefined>(undefined);
 const stage = ref<HTMLElement | undefined>(undefined);
 const content = ref<HTMLElement | undefined>(undefined);
 const zoomFactor = ref(1);
+const banner = ref<HTMLElement | undefined>(undefined);
+// Height of the banner incl. its distances, 0 without banner
+const bannerZone = ref(0);
+let bannerObserver: ResizeObserver | undefined;
 // Unzoomed size of the content; measured once at zoom 1 because zoomed dimensions are browser-dependent
 let naturalSize: {width: number, height: number} | undefined;
 
@@ -67,7 +78,7 @@ function fitToViewport() {
     return;
   }
   const availableWidth = window.innerWidth - 2 * VIEWPORT_MARGIN;
-  const availableHeight = window.innerHeight - 2 * VIEWPORT_MARGIN;
+  const availableHeight = window.innerHeight - 2 * VIEWPORT_MARGIN - bannerZone.value;
   zoomFactor.value = Math.min(availableWidth / naturalSize.width, availableHeight / naturalSize.height);
 }
 
@@ -95,6 +106,35 @@ const contentStyle = computed(() => props.frame !== undefined ? {
   '--board-frame-top': props.frame.top + 'px',
 } : {zoom: zoomFactor.value});
 let stopPinch: (() => void) | undefined;
+// Desktop: the board is centred in the area below the banner; mobile: the stage starts below it
+const backdropStyle = computed(() => {
+  if (bannerZone.value === 0) {
+    return {};
+  }
+  return mobileLayout.value ? {'--board-zoom-stage-top': Math.max(MOBILE_STAGE_TOP, bannerZone.value) + 'px'} : {paddingTop: bannerZone.value + 'px'};
+});
+
+// Banner height decides how much room the board has: measured on every change (rules wrap, language)
+function measureBanner() {
+  const element = banner.value;
+  // Empty slot: the wrapper has no height and the board keeps the whole window
+  const height = element === undefined ? 0 : element.offsetHeight;
+  const zone = height > 0 ? BANNER_TOP + height + BANNER_GAP : 0;
+  if (zone !== bannerZone.value) {
+    bannerZone.value = zone;
+    onResize();
+  }
+}
+
+function observeBanner() {
+  bannerObserver?.disconnect();
+  bannerObserver = undefined;
+  if (banner.value !== undefined && typeof ResizeObserver !== 'undefined') {
+    bannerObserver = new ResizeObserver(() => measureBanner());
+    bannerObserver.observe(banner.value);
+  }
+  measureBanner();
+}
 
 // Mobile, board without crop (Moon): whole board fits the area above the zoom bar
 function wholeBoardZoom(): number {
@@ -105,11 +145,16 @@ function wholeBoardZoom(): number {
   if (naturalSize.width === 0 || naturalSize.height === 0) {
     return 1;
   }
-  return Math.min((window.innerWidth - 2 * VIEWPORT_MARGIN) / naturalSize.width, (window.innerHeight - CONTROLS_HEIGHT - 2 * VIEWPORT_MARGIN) / naturalSize.height);
+  return Math.min((window.innerWidth - 2 * VIEWPORT_MARGIN) / naturalSize.width, (window.innerHeight - CONTROLS_HEIGHT - 2 * VIEWPORT_MARGIN - mobileBannerExtra()) / naturalSize.height);
+}
+
+// Mobile: what the banner covers beyond the room the stage keeps free on top anyway
+function mobileBannerExtra(): number {
+  return Math.max(0, bannerZone.value - MOBILE_STAGE_TOP);
 }
 
 function mobileWholeZoom(): number {
-  return props.frame === undefined ? wholeBoardZoom() : wholePlanetZoom(window.innerWidth, window.innerHeight, props.frame);
+  return props.frame === undefined ? wholeBoardZoom() : wholePlanetZoom(window.innerWidth, window.innerHeight - mobileBannerExtra(), props.frame);
 }
 
 function fitMobile() {
@@ -201,6 +246,7 @@ async function show() {
   naturalSize = undefined;
   visible.value = true;
   await nextTick();
+  observeBanner();
   if (mobileLayout.value) {
     fitMobile();
   } else {
@@ -228,6 +274,9 @@ async function hide() {
   props.origin?.classList.remove('board-zoom-origin--hidden');
   stopPinch?.();
   stopPinch = undefined;
+  bannerObserver?.disconnect();
+  bannerObserver = undefined;
+  bannerZone.value = 0;
   visible.value = false;
   emit('hidden');
 }
@@ -283,6 +332,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('keydown', closeOnEscape);
   window.removeEventListener('resize', onResize);
   stopPinch?.();
+  bannerObserver?.disconnect();
   props.origin?.classList.remove('board-zoom-origin--hidden');
   unregisterOverlay?.();
 });
