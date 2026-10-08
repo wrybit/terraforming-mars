@@ -91,6 +91,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Night of 2026-10-08: with a correct game length, is income worth more? And more cards.
   production65: {productionDiscount: 0.65},
   production75: {productionDiscount: 0.75},
+  production90: {productionDiscount: 0.9},
+  production105: {productionDiscount: 1.05},
   moreCards: {buyMargin: -5, handTargetEarly: 16, handTargetLate: 6},
   // Baseline before the hate draft and the zero-sum two-player valuation, to confirm both.
   previous: {draftDenial: 0, opponentWeightTwoPlayers: 0.5},
