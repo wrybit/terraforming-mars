@@ -16,6 +16,12 @@ export type AiTuning = {
   opponentSpotShare: number,
   /** Weight of the measured engine value of effect cards (engineValue.ts), 0 = off. */
   engineWeight: number,
+  /** 1: cards with a maximum requirement lose value for later when the window is closing. */
+  closingWindow: number,
+  /** Share of a hand card's value a card gets when its tags make that card playable. */
+  enablerWeight: number,
+  /** Early in the game, cards only worth playing later are bought at this share of their value. */
+  lateBuyFactor: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -31,6 +37,9 @@ export const BASELINE_TUNING: AiTuning = {
   opponentSpotShare: 0.25,
   // A/B: weight 1 (clipped at 0) lost 45 : 58, weight 0.5 (unclipped) won 58 : 43.
   engineWeight: 0.5,
+  closingWindow: 0,
+  enablerWeight: 0,
+  lateBuyFactor: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -40,6 +49,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Earlier baselines, to re-check adopted changes with more games:
   noEngine: {engineWeight: 0},
   fewerCards: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4},
+  // Card timing as the group plays it: closing windows, enabler cards, late cards bought later.
+  cardTiming: {closingWindow: 1, enablerWeight: 0.5, lateBuyFactor: 0.6},
 };
 
 export function isTuningVariant(name: string): boolean {

@@ -112,6 +112,30 @@ function oceanRaceOutlook(card: IProjectCard, player: IPlayer): number {
   return Math.max(0.05, Math.min(1, 1 - wait / generationsUntilOceansFull));
 }
 
+/**
+ * Cards with a maximum requirement (e.g. at most 5 % oxygen) that are playable now: how much of
+ * a delay of `delay` generations the window still lasts (1 = open long enough).
+ */
+export function closingWindowFactor(card: IProjectCard, player: IPlayer, delay: number): number {
+  const game = player.game;
+  let factor = 1;
+  for (const descriptor of card.requirements) {
+    if (descriptor.max !== true || !isMet(descriptor, player, card)) {
+      continue;
+    }
+    let generationsOpen = Number.POSITIVE_INFINITY;
+    if (descriptor.oxygen !== undefined) {
+      generationsOpen = generationsUntil(descriptor.oxygen - game.getOxygenLevel() + 1, MAX_OXYGEN_LEVEL);
+    } else if (descriptor.temperature !== undefined) {
+      generationsOpen = generationsUntil((descriptor.temperature - game.getTemperature()) / 2 + 1, (MAX_TEMPERATURE - MIN_TEMPERATURE) / 2);
+    } else if (descriptor.oceans !== undefined) {
+      generationsOpen = generationsUntil(descriptor.oceans - game.board.getOceanSpaces().length + 1, MAX_OCEAN_TILES);
+    }
+    factor = Math.min(factor, Math.min(1, generationsOpen / Math.max(1, delay)));
+  }
+  return factor;
+}
+
 export function requirementOutlook(card: IProjectCard, player: IPlayer): number {
   const remaining = remainingProductionPhases(player.game);
   return card.requirements.reduce((product, descriptor) => product * outlookOf(descriptor, player, card, remaining), 1) *

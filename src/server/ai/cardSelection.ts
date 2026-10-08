@@ -14,6 +14,7 @@ import {requirementOutlook} from './requirementOutlook';
 import {isIProjectCard} from '../cards/IProjectCard';
 import {Tag} from '../../common/cards/Tag';
 import {tuningOf} from './aiTuning';
+import {enablerBonus} from './enablerValue';
 
 // Opening choice (corporation + preludes + cards) and card buying / drafting.
 // docs/ai/bot-heuristics.md §2 and §3a.
@@ -25,13 +26,27 @@ const OPENING_RESERVE = 10;
 
 type ValueFunction = (name: CardName) => number;
 
-/** Best value of each card, whenever it is played (same as estimateCardValues), plus its timing. */
-function valuesOf(player: IPlayer, cards: ReadonlyArray<ICard>): {valueOf: ValueFunction, timingOf: (name: CardName) => CardTiming | undefined} {
+/**
+ * Best value of each card, whenever it is played (same as estimateCardValues), plus its timing.
+ * When buying, a card only worth playing later is bought early at a discount (the money is
+ * missing now, and similar cards come again), and cards that enable strong hand cards get a share
+ * of their value (aiTuning.ts lateBuyFactor, enablerWeight).
+ */
+function valuesOf(player: IPlayer, cards: ReadonlyArray<ICard>, buying = false): {valueOf: ValueFunction, timingOf: (name: CardName) => CardTiming | undefined} {
   const timings = estimateCardTimings(player, cards);
+  const tuning = tuningOf(player);
+  const remaining = remainingProductionPhases(player.game);
+  const handValues = tuning.enablerWeight > 0 ? handCardValues(player) : new Map<CardName, number>();
+  const extras = new Map<CardName, number>(cards.map((card) => [card.name,
+    tuning.enablerWeight > 0 ? tuning.enablerWeight * enablerBonus(card, player, handValues) : 0]));
   return {
     valueOf: (name) => {
       const timing = timings.get(name);
-      return timing === undefined ? 0 : Math.max(timing.now, timing.later);
+      if (timing === undefined) {
+        return 0;
+      }
+      const later = buying && remaining >= 5 && timing.now < 0 ? timing.later * tuning.lateBuyFactor : timing.later;
+      return Math.max(timing.now, later) + (extras.get(name) ?? 0);
     },
     timingOf: (name) => timings.get(name),
   };
@@ -117,7 +132,7 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
   const corporations = player.dealtCorporationCards;
   const preludes = player.dealtPreludeCards;
   const projects = player.dealtProjectCards;
-  const {valueOf, timingOf} = valuesOf(player, [...corporations, ...preludes, ...projects]);
+  const {valueOf, timingOf} = valuesOf(player, [...corporations, ...preludes, ...projects], true);
   const combinations: Array<{label: string, score: number}> = [];
 
   const preludeChoices: Array<ReadonlyArray<ICard>> = preludes.length >= 2 ? pairs(preludes) : [[]];
@@ -169,7 +184,7 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
 /** Draft pick or research purchase, depending on the input's limits. */
 export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): InputResponse {
   const candidates = input.cards.filter((_card, index) => input.config.enabled?.[index] !== false);
-  const {valueOf, timingOf} = valuesOf(player, candidates);
+  const {valueOf, timingOf} = valuesOf(player, candidates, input.config.min !== input.config.max);
   const sorted = [...candidates].sort((a, b) => valueOf(b.name) - valueOf(a.name));
   if (input.config.min === input.config.max) {
     // Draft: the count is fixed, take the best.

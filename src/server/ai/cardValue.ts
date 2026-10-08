@@ -8,7 +8,7 @@ import {newCard} from '../createCard';
 import {finishMove, GameSnapshot, snapshotOf, withCopy} from './gameCopy';
 import {relativeValue, ValuationContext, valuationContext} from './stateValue';
 import {cardPriorFactor} from './cardPriors';
-import {requirementOutlook} from './requirementOutlook';
+import {closingWindowFactor, requirementOutlook} from './requirementOutlook';
 import {pickSome} from './randomChoice';
 import {engineValue} from './engineValue';
 import {tuningOf} from './aiTuning';
@@ -127,7 +127,9 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
     return Number.NEGATIVE_INFINITY;
   }
   const raw = (total / samples) * cardPriorFactor(card.name) - costOf(card, player);
-  return raw * outlookOf(card, player) * LATER_DISCOUNT * (isBlockedNow(card, player) ? BLOCKED_LATER_FACTOR : 1);
+  // A window that closes before the card would be played (at most 5 % oxygen …).
+  const window = tuningOf(player).closingWindow > 0 && raw > 0 && isIProjectCard(card) ? closingWindowFactor(card, player, delay) : 1;
+  return raw * outlookOf(card, player) * LATER_DISCOUNT * window * (isBlockedNow(card, player) ? BLOCKED_LATER_FACTOR : 1);
 }
 
 // Later values take several game copies per card; they only change slowly, so they are
