@@ -302,6 +302,20 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     }
   }
 
+  // Passing gives up the rest of the generation while others still act. With the plain value a
+  // pass was often within 1 M€ of the best move and the noise picked it (2963 passes with ≥ 25 M€
+  // in 1600 night-run games). Money kept is worth less than the moves it could still make now.
+  if (tuning.passPenalty > 0 && remainingProductionPhases(player.game, player) > 0) {
+    const penalty = tuning.passPenalty * Math.min(player.megaCredits, 40);
+    for (const {candidate, outcome} of tried) {
+      const response = candidate.response;
+      const option = response.type === 'or' ? menu.options[response.index] : undefined;
+      if (option instanceof SelectOption && option.title === 'Pass for this generation') {
+        outcome.value -= penalty;
+      }
+    }
+  }
+
   let best: {response: InputResponse, value: number} | undefined;
   for (const {candidate, outcome} of tried) {
     options.onEvaluated?.(candidate.response, outcome.value);
