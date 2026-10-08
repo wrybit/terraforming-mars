@@ -1,4 +1,4 @@
-import {isAiLevel} from '../../common/ai/AiLevel';
+import {aiPlayerName, isAiLevel} from '../../common/ai/AiLevel';
 import * as responses from '../server/responses';
 import {Handler} from './Handler';
 import {Context} from './IHandler';
@@ -178,14 +178,15 @@ export class ApiCreateGame extends Handler {
       const gameId = safeCast(generateRandomId('g'), isGameId);
       const spectatorId = safeCast(generateRandomId('s'), isSpectatorId);
       const players = gameReq.players.map((p) => {
+        const aiLevel = isAiLevel(p.aiLevel) ? p.aiLevel : undefined;
         const player = new Player(
-          p.name,
+          aiLevel === undefined ? p.name : aiPlayerName(p.name, aiLevel),
           p.color,
           p.beginner,
           Number(p.handicap), // For some reason handicap is coming up a string.
           safeCast(generateRandomId('p'), isPlayerId),
         );
-        player.aiLevel = isAiLevel(p.aiLevel) ? p.aiLevel : undefined;
+        player.aiLevel = aiLevel;
         return player;
       });
       let firstPlayerIdx = 0;

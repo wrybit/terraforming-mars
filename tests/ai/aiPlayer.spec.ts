@@ -3,6 +3,7 @@ import {Player} from '../../src/server/Player';
 import {Database} from '../../src/server/database/Database';
 import {runInSandbox, isSimulating} from '../../src/server/ai/simulationSandbox';
 import {chooseResponse} from '../../src/server/ai/chooseResponse';
+import {aiPlayerName} from '../../src/common/ai/AiLevel';
 import {playRandomGame} from '../simulation/playRandomGame';
 import {testGame} from '../TestGame';
 import {Server} from '../../src/server/models/ServerModel';
@@ -25,6 +26,12 @@ describe('AI player', () => {
     // Assigned directly: setWaitingFor would make the AI answer right away
     (ai as any).waitingFor = new SelectOption('test');
     expect(Server.getPlayerModel(ai).waitingFor).is.undefined;
+  });
+
+  it('marks AI names with their level', () => {
+    expect(aiPlayerName('Claude', 'normal')).eq('Claude [AI]');
+    expect(aiPlayerName('Green (AI)', 'easy')).eq('Green [AI-]');
+    expect(aiPlayerName('Rot [AI]', 'hard')).eq('Rot [AI+]');
   });
 
   it('sandbox swaps the database and restores it', () => {

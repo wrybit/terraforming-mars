@@ -1042,8 +1042,8 @@ export default defineComponent({
             player.name = this.$t('You');
           } else {
             const defaultPlayerName = this.$t(player.color.charAt(0).toUpperCase() + player.color.slice(1));
-            // AI players carry the marker in their name, so everybody sees it during the game
-            player.name = player.aiLevel !== undefined ? `${defaultPlayerName} (${this.$t('AI')})` : defaultPlayerName;
+            // The server adds the AI marker ("[AI]", "[AI-]", "[AI+]") to the name
+            player.name = defaultPlayerName;
           }
         }
       });
