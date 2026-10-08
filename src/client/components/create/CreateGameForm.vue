@@ -338,7 +338,6 @@
           <div class="create-game-summary">
             <!-- Humans and AI players as separate chips, with the same icons as the seat rows -->
             <span v-for="seat in seatSummary" :key="seat.kind" class="create-game-summary-chip"><SeatIcon :kind="seat.kind"/>{{ seat.label }}</span>
-            <span v-if="playersCount > 1 && draftVariant" class="create-game-summary-chip" v-i18n>Draft</span>
             <!-- Random board: the board already drawn for the preview, exactly the one the game gets -->
             <span class="create-game-summary-chip">
               <span v-if="summaryBoard !== undefined" :class="getBoardColorClass(summaryBoard)"></span>
@@ -348,6 +347,7 @@
             <span v-for="choice in activeExpansionChoices" :key="choice.label" class="create-game-summary-chip">
               <span :class="['create-game-expansion-icon', choice.iconClass]"></span><span v-i18n>{{ choice.label }}</span>
             </span>
+            <span v-if="playersCount > 1 && draftVariant" class="create-game-summary-chip" v-i18n>Draft</span>
           </div>
           <div class="create-game-create-row">
             <AppButton class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors"/>
