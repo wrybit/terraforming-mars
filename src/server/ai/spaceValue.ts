@@ -57,6 +57,16 @@ function openCitySpots(neighbours: ReadonlyArray<Space>, board: IGame['board']):
   ).length;
 }
 
+const SHARED_SPOT_SHARE = 0.4;
+
+/** Free land next to the space that also touches another own city. */
+function sharedGreenerySpots(space: Space, neighbours: ReadonlyArray<Space>, player: IPlayer, board: IGame['board']): number {
+  return neighbours.filter((neighbour) =>
+    neighbour.tile === undefined && neighbour.spaceType === SpaceType.LAND &&
+    board.getAdjacentSpaces(neighbour).some((next) => next !== space && Board.isCitySpace(next) && next.player === player),
+  ).length;
+}
+
 export function spaceValue(space: Space, kind: TileKind, player: IPlayer): number {
   const game = player.game;
   const board = game.board;
@@ -90,6 +100,9 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
     value += greeneries * victoryPoint + emptyLand * victoryPoint * 0.35;
     // Cities next to opponents' cities fight for the same greenery spots.
     value -= opponentCities * 2;
+    // Two own cities with one row between them share free spots: a greenery there scores for
+    // both (tip from the group: place cities in pairs at that distance, then fill greeneries).
+    value += sharedGreenerySpots(space, neighbours, player, board) * victoryPoint * SHARED_SPOT_SHARE;
     break;
   case 'ocean':
     // Oceans next to own tiles help nobody else; next to free land they feed later rebates.
