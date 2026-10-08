@@ -47,15 +47,19 @@ export const BASELINE_TUNING: AiTuning = {
   closingWindow: 0,
   enablerWeight: 0,
   lateBuyFactor: 1,
-  draftDenial: 0,
+  // A/B 2026-10-08: hate draft won clearly (z +1.83 over 800 games in two batches),
+  // full opponent weight in two-player games too (2P: z +2.01 in 400 games).
+  draftDenial: 0.5,
   tempoAware: 0,
-  opponentWeightTwoPlayers: 0.5,
+  opponentWeightTwoPlayers: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
 // expected (z ≥ 1.64 in tests/simulation/compareVariants.py); 100 games are often not enough.
 export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
+  // Baseline before the hate draft and the zero-sum two-player valuation, to confirm both.
+  previous: {draftDenial: 0, opponentWeightTwoPlayers: 0.5},
   // Earlier baselines, to re-check adopted changes with more games:
   engine: {engineWeight: 0.5},
   fewerCards: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4},
@@ -64,6 +68,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Draft: also take away what the next player would like (standard variant of the group).
   hateDraft: {draftDenial: 0.5},
   // From a human game: the AI led until generation 12 but let the game run on; the human's engine won.
+  // A/B: lost clearly (z -1.81) – raising parameters for the shorter game costs too much.
   tempo: {tempoAware: 1},
   zeroSumTwoPlayers: {opponentWeightTwoPlayers: 1},
 };
