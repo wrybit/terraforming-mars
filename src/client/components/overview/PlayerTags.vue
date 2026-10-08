@@ -8,7 +8,7 @@
             <TagCount tag="tr" :count="player.terraformRating" :size="'big'" :type="'main'"/>
             <TagCount v-if="player.handicap !== undefined" :tag="'handicap'" :count="player.handicap" :size="'big'" :type="'main'" :showWhenZero="true"/>
             <div class="tag-and-discount">
-              <PlayerTagDiscount v-if="all.discount" :amount="all.discount" :color="player.color"  :data-test="'discount-all'"/>
+              <HandDiscount v-if="all.discount || tagDetails.conditionalDiscounts.length > 0" :amount="all.discount" :conditional="tagDetails.conditionalDiscounts" :data-test="'discount-all'"/>
               <TagCount tag="cards" :count="cardsInHandCount" :size="'big'" :type="'main'"/>
             </div>
         </div>
@@ -39,6 +39,7 @@ import TagCount from '@/client/components/TagCount.vue';
 import {ViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {SpecialTags} from '@/client/cards/SpecialTags';
 import PlayerTagDiscount from '@/client/components/overview/PlayerTagDiscount.vue';
+import HandDiscount from '@/client/components/overview/HandDiscount.vue';
 import PointsPerTag from '@/client/components/overview/PointsPerTag.vue';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {TagDetail, TagDetails, buildTagDetails, isTagInGame, isVictoryPointCountHidden} from '@/client/components/overview/playerTagDetails';
@@ -66,6 +67,7 @@ export default defineComponent({
   components: {
     TagCount,
     PlayerTagDiscount,
+    HandDiscount,
     PointsPerTag,
     PlayerTagSubstitution,
   },

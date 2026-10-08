@@ -5,6 +5,7 @@ import {SpecialTags} from '@/client/cards/SpecialTags';
 import {PartyName} from '@/common/turmoil/PartyName';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {CardName} from '@/common/cards/CardName';
+import {DiscountSource, getConditionalDiscounts} from '@/client/components/overview/discounts';
 
 // Tag count of a player including discounts and points per tag.
 // Shared source for the classic tag bar (PlayerTags) and the table in the two-column layout (PlayersTable).
@@ -23,6 +24,8 @@ export type TagDetail = {
 export type TagDetails = {
   all: TagDetail;
   tagsInOrder: Array<TagDetail>;
+  // Discounts that only apply to some cards (e.g. cards with requirements), marked with * on the hand discount
+  conditionalDiscounts: Array<DiscountSource>;
 };
 
 export const TAG_ORDER: Array<InterfaceTagsType> = [
@@ -172,10 +175,17 @@ export function buildTagDetails(player: PublicPlayerModel, playerView: ViewModel
   return {
     all: details['all'],
     tagsInOrder: TAG_ORDER.map((tag) => details[tag]),
+    conditionalDiscounts: getConditionalDiscounts(player),
   };
 }
 
 // Other players' victory points stay hidden if the game option requires it
 export function isVictoryPointCountHidden(player: PublicPlayerModel, playerView: ViewModel): boolean {
   return !playerView.game.gameOptions.showOtherPlayersVP && player.color !== playerView.thisPlayer?.color;
+}
+
+// Label of the hand discount badge: the discount for every card, '*' when conditional discounts exist
+export function handDiscountLabel(details: TagDetails): string {
+  const asterisk = details.conditionalDiscounts.length > 0 ? '*' : '';
+  return details.all.discount > 0 ? `${details.all.discount}${asterisk}` : asterisk;
 }

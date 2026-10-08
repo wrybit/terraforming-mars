@@ -62,6 +62,14 @@ describe('PlayersTableRow', () => {
     expect(wrapper.find('[data-test="substitution-science"]').exists()).to.eq(false);
   });
 
+  it('marks the hand discount when cards give conditional discounts (Cutting Edge Technology)', () => {
+    expect(mountRow({showOtherPlayersVP: false}).find('[data-test="discount-all"]').exists()).to.eq(false);
+    const wrapper = mountRow({showOtherPlayersVP: false, extraTableau: [CardName.CUTTING_EDGE_TECHNOLOGY]});
+    const badge = wrapper.find('[data-test="discount-all"]');
+    expect(badge.text()).to.eq('*');
+    expect(badge.attributes('title')).to.contain('cards with requirements');
+  });
+
   it('shows other players victory points when the game allows it', () => {
     const wrapper = mountRow({showOtherPlayersVP: true});
     expect(wrapper.find('[data-test="vp"]').text()).to.eq('20');

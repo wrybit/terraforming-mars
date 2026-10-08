@@ -30,7 +30,7 @@
         <div class="players-table-cell"><span class="players-table-counter" data-test="tr" v-flash-count="flashKeys.playerCounter(player.color, 'terraformRating')">{{ player.terraformRating }}</span></div>
         <div class="players-table-cell">
           <span class="players-table-counter" data-test="hand" v-flash-count="flashKeys.playerCounter(player.color, 'cardsInHand')">{{ player.cardsInHandNbr ?? 0 }}</span>
-          <span v-if="tagDetails.all.discount > 0" class="players-table-discount" data-test="discount-all" :title="$t('Discount')">{{ tagDetails.all.discount }}</span>
+          <span v-if="handDiscount !== ''" class="players-table-discount" data-test="discount-all" :title="handDiscountTitle">{{ handDiscount }}</span>
         </div>
         <div class="players-table-cell">
           <span :class="['players-table-counter', {'players-table-counter--zero': player.availableBlueCardActionCount === 0}]" data-test="actions">{{ player.availableBlueCardActionCount }}</span>
@@ -57,7 +57,7 @@ import PointsPerTag from '@/client/components/overview/PointsPerTag.vue';
 import PlayerTagSubstitution from '@/client/components/overview/PlayerTagSubstitution.vue';
 import {PlayerGood, playerGoods} from '@/client/components/overview/playerGoods';
 import {protectedTagsOf} from '@/client/components/overview/protectedTags';
-import {InterfaceTagsType, TagDetail, TagDetails, isVictoryPointCountHidden} from '@/client/components/overview/playerTagDetails';
+import {InterfaceTagsType, TagDetail, TagDetails, handDiscountLabel, isVictoryPointCountHidden} from '@/client/components/overview/playerTagDetails';
 import {DESKTOP_SECTION_ORDER, SectionVisibility, TableSection, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
 import {togglePlayerCards} from '@/client/components/overview/playerCardsToggle';
 import {vueRoot} from '@/client/components/vueRoot';
@@ -138,6 +138,20 @@ export default defineComponent({
     },
     protectedTags(): ReadonlyArray<InterfaceTagsType> {
       return protectedTagsOf(this.player);
+    },
+    // Hand discount badge, with * when some cards get an extra discount (e.g. Cutting Edge Technology)
+    handDiscount(): string {
+      return handDiscountLabel(this.tagDetails);
+    },
+    handDiscountTitle(): string {
+      const lines = [this.$t('Discount')];
+      if (this.tagDetails.conditionalDiscounts.length > 0) {
+        lines.push(this.$t('* Additional discounts:'));
+        for (const discount of this.tagDetails.conditionalDiscounts) {
+          lines.push(`-${discount.amount} ${this.$t(discount.appliesTo)} (${this.$t(discount.source)})`);
+        }
+      }
+      return lines.join('\n');
     },
     victoryPoints(): number | string {
       return isVictoryPointCountHidden(this.player, this.playerView) ? '?' : this.player.victoryPointsBreakdown.total;
