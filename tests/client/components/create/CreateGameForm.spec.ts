@@ -95,6 +95,19 @@ describe('CreateGameForm', () => {
     expect(vm.getPlayers().every((player: any) => player.aiLevel === undefined)).is.true;
   });
 
+  it('keeps new humans in front of the AI players', () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const vm = wrapper.vm as any;
+    vm.humanPlayersCount = 1;
+    vm.aiPlayersCount = 1;
+    vm.getPlayers()[1].name = 'Bot';
+    vm.humanPlayersCount = 2;
+    expect(vm.getPlayers().map((player: any) => player.aiLevel)).deep.eq([undefined, undefined, 'normal']);
+    expect(vm.getPlayers()[2].name).eq('Bot');
+  });
+
   it('switches the AI off for settings it cannot handle and names them', async () => {
     const wrapper = shallowMount(CreateGameForm, {
       ...globalConfig,

@@ -281,10 +281,11 @@
             <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
             <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
           </div>
-          <div class="create-game-player-list">
+          <!-- Humans always first, then AI players; seats slide in and out when the counts change -->
+          <TransitionGroup tag="div" name="create-game-seat" class="create-game-player-list" :css="false" @enter="collapseEnter" @leave="collapseLeave">
             <!-- Neutral card; the header shows the chosen player color -->
             <!-- Humans stand out (full color, glow); AI players stay quieter (tinted header, thin outline) -->
-            <div v-for="(newPlayer, index) in getPlayers()" :key="index"
+            <div v-for="(newPlayer, index) in getPlayers()" :key="seatKey(newPlayer)"
               :class="['create-game-player', 'create-game-player--' + newPlayer.color, {'create-game-player--ai': newPlayer.aiLevel !== undefined}]">
               <div class="create-game-player-top">
                 <!-- Seat: meeple or robot plus seat number -->
@@ -330,7 +331,7 @@
                 </span>
               </div>
             </div>
-          </div>
+          </TransitionGroup>
         </section>
         <!-- Sticks to the bottom edge while the page is too short for it; then with an extra shadow -->
         <section ref="createCard" class="create-game-card create-game-create-card" :class="{'create-game-create-card--stuck': createCardStuck}">
@@ -406,6 +407,8 @@ import {ContentLinePart, contentLine} from './expansionContentLine';
 import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
 import {requiredByTooltip, requirementsOf} from './expansionDependencies';
 import {Expansion} from '@/common/cards/GameModule';
+import {arrangeSeats, seatKey} from './seatOrder';
+import {collapseEnter, collapseLeave} from '@/client/utils/collapseAnimation';
 
 const createGameSettingsStorage = new CreateGameSettingsStorage();
 
@@ -792,11 +795,19 @@ export default defineComponent({
       const humanCount = changed === 'humans' ? humans : Math.max(1, Math.min(humans, MAX_PLAYERS - ai));
       const aiCount = changed === 'ai' ? Math.min(ai, MAX_PLAYERS - 1) : Math.min(ai, MAX_PLAYERS - humanCount);
       const total = humanCount + aiCount;
-      this.players.forEach((player, index) => {
-        player.aiLevel = index >= humanCount && index < total ? (player.aiLevel ?? 'normal') : undefined;
-      });
+      // The star stays with its player, even when that seat moves
+      const firstPlayer = this.players[this.firstIndex - 1];
+      const arranged = arrangeSeats(this.players, this.playersCount, humanCount, aiCount);
+      this.players.splice(0, arranged.length, ...arranged);
       this.playersCount = total;
+      const firstPosition = arranged.indexOf(firstPlayer);
+      this.firstIndex = firstPosition >= 0 && firstPosition < total ? firstPosition + 1 : 1;
     },
+    seatKey(player: NewPlayerModel): number {
+      return seatKey(player);
+    },
+    collapseEnter,
+    collapseLeave,
     restoreSettingsFromLink(): boolean {
       try {
         const settings = readSettingsFromHash(window.location.hash);
@@ -848,6 +859,8 @@ export default defineComponent({
       this.uploading = true;
       try {
         processor.applyJSON(json);
+        // Saved games may hold any order (e.g. shuffled seats): humans first, then AI players
+        this.setSeatCounts(this.humanPlayersCount, this.aiPlayersCount, 'humans');
       } catch (e) {
         this.uploading = false;
         throw e;
