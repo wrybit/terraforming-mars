@@ -72,7 +72,48 @@ function outlookOf(descriptor: CardRequirementDescriptor, player: IPlayer, card:
   return 0.35;
 }
 
+/** Generations until the unmet global requirements of a card are reached at the usual pace. */
+function globalWait(card: IProjectCard, player: IPlayer): number {
+  const game = player.game;
+  let wait = 0;
+  for (const descriptor of card.requirements) {
+    if (descriptor.max === true || isMet(descriptor, player, card)) {
+      continue;
+    }
+    if (descriptor.temperature !== undefined) {
+      wait = Math.max(wait, generationsUntil((descriptor.temperature - game.getTemperature()) / 2, (MAX_TEMPERATURE - MIN_TEMPERATURE) / 2));
+    }
+    if (descriptor.oxygen !== undefined) {
+      wait = Math.max(wait, generationsUntil(descriptor.oxygen - game.getOxygenLevel(), MAX_OXYGEN_LEVEL));
+    }
+  }
+  return wait;
+}
+
+/**
+ * Ocean cards that must wait for temperature or oxygen (Permafrost Extraction, Lake Marineris,
+ * Ice Cap Melting) often found all oceans placed when they became playable: in a test batch
+ * about 25 of them per 100 games stayed in hand.
+ */
+function oceanRaceOutlook(card: IProjectCard, player: IPlayer): number {
+  if (card.behavior?.ocean === undefined) {
+    return 1;
+  }
+  const oceansLeft = MAX_OCEAN_TILES - player.game.board.getOceanSpaces().length;
+  if (oceansLeft <= 0) {
+    // Already full: the value measured on the game copy contains no ocean any more.
+    return 1;
+  }
+  const wait = globalWait(card, player);
+  if (wait === 0) {
+    return 1;
+  }
+  const generationsUntilOceansFull = generationsUntil(oceansLeft, MAX_OCEAN_TILES);
+  return Math.max(0.05, Math.min(1, 1 - wait / generationsUntilOceansFull));
+}
+
 export function requirementOutlook(card: IProjectCard, player: IPlayer): number {
   const remaining = remainingProductionPhases(player.game);
-  return card.requirements.reduce((product, descriptor) => product * outlookOf(descriptor, player, card, remaining), 1);
+  return card.requirements.reduce((product, descriptor) => product * outlookOf(descriptor, player, card, remaining), 1) *
+    oceanRaceOutlook(card, player);
 }
