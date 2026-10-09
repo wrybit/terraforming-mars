@@ -42,7 +42,7 @@
     "inactive": "inactiva",
     "Fleets": "Flotas",
     "Becomes active once a card is played that collects these resources": "Se activa cuando se juega una carta que acumula estos recursos",
-    "Random board": "Tablero aleatorio",
+    "Random board": "Elegir el tablero al azar",
     "Shuffle board bonuses": "Barajar las bonificaciones del tablero",
     "Board tiles": "Losetas",
     "Space bonus": "Bonificación",
@@ -327,7 +327,7 @@
 
     "All": "Todas",
     "Corporate Era": "Era corporativa",
-    "Randomize board tiles": "Areas de tablero aleatorias",
+    "Randomize board tiles": "Colocar casillas y bonificaciones al azar",
     "Set Predefined Game": "Juego predeterminado",
     "Ares": "",
     "Fan-made": "Fans",

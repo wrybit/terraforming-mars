@@ -41,7 +41,7 @@
   "tradeable": "dostępna",
   "inactive": "nieaktywna",
   "Fleets": "Floty",
-  "Random board": "Losowa plansza",
+  "Random board": "Losuj planszę",
   "Shuffle board bonuses": "Losuj bonusy na planszy",
   "Board tiles": "Kafelki",
   "Space bonus": "Bonus",
@@ -476,7 +476,7 @@
   "None*": "Żadne*",
 
   "Corporate Era": "Era Korporacyjna",
-  "Randomize board tiles": "Losowe rozłożenie pól na planszy",
+  "Randomize board tiles": "Losowo rozmieść pola i bonusy",
   "Set Predefined Game": "Ustaw predefiniowaną rozgrywkę",
   "Ares": "Ekspansja Terytorialna",
   "Fan-made": "Dodatki fanowskie",

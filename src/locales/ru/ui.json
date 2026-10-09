@@ -43,7 +43,7 @@
     "tradeable": "можно торговать",
     "inactive": "неактивна",
     "Fleets": "Флоты",
-    "Random board": "Случайное поле",
+    "Random board": "Случайный выбор поля",
     "Shuffle board bonuses": "Перемешать бонусы на поле",
     "Board tiles": "Тайлы",
     "Space bonus": "Бонус",
@@ -241,7 +241,7 @@
     "Select card to add microbe or animal": "Выберите карту, чтобы добавить на нее микроб или животное",
     "Alert when Terraforming completed": "Предупреждать о завершении терраформирования",
     "CORPORATION": "Корпорация",
-    "Randomize board tiles": "Случайные места для тайлов",
+    "Randomize board tiles": "Случайно разместить клетки и бонусы",
     "Go to main page": "На стартовую страницу",
 
     "Confirm": "Ok",

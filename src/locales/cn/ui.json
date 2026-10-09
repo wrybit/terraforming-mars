@@ -43,7 +43,7 @@
     "tradeable": "可贸易",
     "inactive": "未激活",
     "Fleets": "舰队",
-    "Random board": "随机版图",
+    "Random board": "随机决定地图",
     "Shuffle board bonuses": "打乱版图奖励",
     "Board tiles": "板块",
     "Space bonus": "奖励",
@@ -536,7 +536,7 @@
 
     "All": "全选",
     "Corporate Era": "公司时代",
-    "Randomize board tiles": "随机打乱版图",
+    "Randomize board tiles": "随机放置地块和奖励",
     "Set Predefined Game": "读取未完成游戏",
     "Ares": "Ares玩家扩",
     "Fan-made": "玩家自制扩展",

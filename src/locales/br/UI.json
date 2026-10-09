@@ -40,7 +40,7 @@
   "tradeable": "negociável",
   "inactive": "inativa",
   "Fleets": "Frotas",
-  "Random board": "Tabuleiro aleatório",
+  "Random board": "Escolher tabuleiro aleatoriamente",
   "Shuffle board bonuses": "Embaralhar bônus do tabuleiro",
   "Board tiles": "Peças",
   "Space bonus": "Bônus",
@@ -313,7 +313,7 @@
 
   "All": "Todas",
   "Corporate Era": "Era corporativa",
-  "Randomize board tiles": "Áreas de tabuleiro aleatórias",
+  "Randomize board tiles": "Posicionar espaços e bônus aleatoriamente",
   "Set Predefined Game": "Jogo predefinido",
   "Ares": "",
   "Fan-made": "Fãs",
