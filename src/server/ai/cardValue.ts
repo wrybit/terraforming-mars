@@ -5,12 +5,13 @@ import {IProjectCard, isIProjectCard} from '../cards/IProjectCard';
 import {isICorporationCard} from '../cards/corporation/ICorporationCard';
 import {CardName} from '../../common/cards/CardName';
 import {newCard} from '../createCard';
-import {finishMove, GameSnapshot, snapshotOf, withCopy} from './gameCopy';
+import {finishMove, GameSnapshot, playerView, withCopy} from './gameCopy';
 import {relativeValue, ValuationContext, valuationContext} from './stateValue';
 import {cardPriorFactor} from './cardPriors';
 import {closingWindowFactor, requirementOutlook} from './requirementOutlook';
 import {pickSome} from './randomChoice';
 import {engineValue} from './engineValue';
+import {isSimulating} from './simulationSandbox';
 import {tuningOf} from './aiTuning';
 
 // What a card is worth to a player, played now and played later. The card is put into play on
@@ -144,19 +145,23 @@ const laterCache = new Map<string, number>();
 
 function cachedLaterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext): number {
   const key = `${player.game.id}|${player.id}|${player.game.generation}|${card.name}`;
-  let value = laterCache.get(key);
+  // Inside a copy (e.g. valuing cards for a draft receiver) the player is only imagined: its
+  // values must not mix with the cached ones of the real player.
+  let value = isSimulating() ? undefined : laterCache.get(key);
   if (value === undefined) {
     if (laterCache.size > 5000) {
       laterCache.clear();
     }
     value = laterValue(snapshot, player, card, context);
-    laterCache.set(key, value);
+    if (!isSimulating()) {
+      laterCache.set(key, value);
+    }
   }
   return value;
 }
 
 export function estimateCardTimings(player: IPlayer, cards: ReadonlyArray<ICard>, includeLater = true): Map<CardName, CardTiming> {
-  const snapshot = snapshotOf(player.game);
+  const snapshot = playerView(player);
   const context = valuationContext(player.game, player);
   const timings = new Map<CardName, CardTiming>();
   for (const card of cards) {
@@ -181,7 +186,7 @@ export function handCardValues(player: IPlayer): Map<CardName, number> {
   if (player.cardsInHand.length === 0) {
     return values;
   }
-  const snapshot = snapshotOf(player.game);
+  const snapshot = playerView(player);
   const context = valuationContext(player.game, player);
   // Expected last generation, Mars not terraformed yet: the game may go on, so a card still worth
   // playing keeps half its value instead of nothing (no selling Terraforming Ganymede for 1 M€).

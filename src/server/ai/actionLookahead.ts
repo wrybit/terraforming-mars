@@ -13,7 +13,7 @@ import {isIStandardProjectCard} from '../cards/IStandardProjectCard';
 import {Tag} from '../../common/cards/Tag';
 import {greedyPayment} from './greedyPayment';
 import {quickResponse} from './quickResponse';
-import {GameSnapshot, finishMove, isActionMenu, snapshotOf, withCopy} from './gameCopy';
+import {GameSnapshot, finishMove, isActionMenu, playerView, snapshotOf, withCopy} from './gameCopy';
 import {ValuationContext, relativeValue, valuationContext} from './stateValue';
 import {handCardValues} from './cardValue';
 import {isTracingDecision, traceOptions} from './decisionTrace';
@@ -240,7 +240,7 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
   const start = performance.now();
   const budget = options.budgetMilliseconds ?? DEFAULT_BUDGET_MILLISECONDS;
   const random = options.random ?? Math.random;
-  const snapshot = snapshotOf(player.game);
+  const snapshot = playerView(player);
   // Cards kept in hand count with their value when played later, so a card that grows with
   // the tableau is not wasted now.
   const context = {...valuationContext(player.game, player), handValues: handCardValues(player), handOwner: player.id};

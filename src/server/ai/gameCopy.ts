@@ -6,6 +6,7 @@ import {OrOptions} from '../inputs/OrOptions';
 import {runInSandbox} from './simulationSandbox';
 import {quickResponse} from './quickResponse';
 import {randomResponse} from './randomResponse';
+import {tuningOf} from './aiTuning';
 
 // Copies of a running game for trying out moves. A copy is rebuilt from the game's serialized
 // form, so it starts at the beginning of the current player's turn (the same point where the
@@ -13,8 +14,54 @@ import {randomResponse} from './randomResponse';
 
 export type GameSnapshot = string;
 
-export function snapshotOf(game: IGame): GameSnapshot {
-  return JSON.stringify(game.serialize());
+/**
+ * Copy of the game as `viewer` may know it: the opponents' hidden cards (hand, drafted cards,
+ * dealt cards) are swapped for random unseen cards and the draw pile is shuffled. Without this
+ * the AI "peeked": an opponent reply was tried with the real hand, and a card draw in a copy
+ * revealed the real next cards. Without `viewer` the copy is exact (copies of copies).
+ */
+export function snapshotOf(game: IGame, viewer?: IPlayer): GameSnapshot {
+  const exact = JSON.stringify(game.serialize());
+  if (viewer === undefined) {
+    return exact;
+  }
+  return withCopy(exact, (copy) => {
+    hideUnknownCards(copy, viewer.id);
+    return JSON.stringify(copy.serialize());
+  });
+}
+
+/** The game as the deciding player may know it (see snapshotOf). */
+export function playerView(player: IPlayer): GameSnapshot {
+  return snapshotOf(player.game, tuningOf(player).peek > 0 ? undefined : player);
+}
+
+function shuffleInPlace<T>(items: Array<T>): void {
+  for (let index = items.length - 1; index > 0; index--) {
+    const other = Math.floor(Math.random() * (index + 1));
+    [items[index], items[other]] = [items[other], items[index]];
+  }
+}
+
+const HIDDEN_CARD_LISTS = ['cardsInHand', 'draftedCards', 'draftHand', 'dealtProjectCards'] as const;
+
+function hideUnknownCards(copy: IGame, viewerId: string): void {
+  const opponents = copy.players.filter((other) => other.id !== viewerId);
+  const drawPile = copy.projectDeck.drawPile;
+  const unseen = [...drawPile];
+  for (const opponent of opponents) {
+    for (const list of HIDDEN_CARD_LISTS) {
+      unseen.push(...opponent[list]);
+    }
+  }
+  shuffleInPlace(unseen);
+  for (const opponent of opponents) {
+    for (const list of HIDDEN_CARD_LISTS) {
+      const count = opponent[list].length;
+      opponent[list].splice(0, count, ...unseen.splice(0, count));
+    }
+  }
+  drawPile.splice(0, drawPile.length, ...unseen);
 }
 
 /** Must be called inside runInSandbox. */

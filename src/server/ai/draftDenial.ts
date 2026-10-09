@@ -3,6 +3,7 @@ import {ICard} from '../cards/ICard';
 import {SelectCard} from '../inputs/SelectCard';
 import {CardName} from '../../common/cards/CardName';
 import {estimateCardValues} from './cardValue';
+import {playerView, withCopy} from './gameCopy';
 
 // Drafting: the cards not kept go to the next player. A card that is strong for them is worth
 // taking away ("hate draft"), above all when the own choice is close anyway.
@@ -28,5 +29,6 @@ export function receiverValues(input: SelectCard<ICard>, player: IPlayer, cards:
   if (receiver === undefined) {
     return new Map();
   }
-  return estimateCardValues(receiver, cards);
+  // Valued on a copy as the drafting player sees it: the receiver's real hand is unknown to them.
+  return withCopy(playerView(player), (copy) => estimateCardValues(copy.getPlayerById(receiver.id), cards));
 }

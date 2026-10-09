@@ -66,6 +66,8 @@ export type AiTuning = {
   endgameMoney: number,
   /** Share of a VP per generation an action card that collects its own VP resource is worth (Birds, Tardigrades), 0 = flat action value. */
   accumulatorValue: number,
+  /** 1: game copies show the opponents' real hands and the real draw pile (old behaviour, test only – the AI must not peek). */
+  peek: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -122,6 +124,7 @@ export const BASELINE_TUNING: AiTuning = {
   keepHandUntilEnd: 1,
   endgameMoney: 1,
   accumulatorValue: 0,
+  peek: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -206,6 +209,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   sellHandEarly: {keepHandUntilEnd: 0},
   // Before: money in the last generation a flat 0.3 per M€.
   flatEndgameMoney: {endgameMoney: 0},
+  // Before 2026-10-09: copies with the opponents' real hands and draw pile (measures what peeking was worth).
+  peek: {peek: 1},
 };
 
 export function isTuningVariant(name: string): boolean {
