@@ -27,6 +27,8 @@ describe('GameMenu', () => {
   beforeEach(() => {
     localStorage = new FakeLocalStorage();
     FakeLocalStorage.register(localStorage);
+    // The menu hides the link to the current page, so start from a neutral URL
+    window.history.replaceState(null, '', '/');
   });
 
   afterEach(() => {

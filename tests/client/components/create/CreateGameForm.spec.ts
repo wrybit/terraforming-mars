@@ -67,6 +67,8 @@ describe('CreateGameForm', () => {
 
   afterEach(() => {
     FakeLocalStorage.deregister(localStorage);
+    // Specs share one environment (isolate: false); leave the URL as other specs expect it
+    window.history.replaceState(null, '', '/');
   });
 
   it('mounts without errors', () => {
