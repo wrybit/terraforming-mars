@@ -105,7 +105,9 @@ export const BASELINE_TUNING: AiTuning = {
   cityDenialShare: 0,
   tagRateModel: 0,
   drawCardModel: 0,
-  boardHorizon: 3,
+  // Round 19: boardHorizon6 neutral in AI-vs-AI (-0.2 VP, z -0.3), adopted for the human case: a city
+  // next to free land in generation 11 instead of a spot with three greeneries (Jens' game).
+  boardHorizon: 6,
   laterPointValue: 0,
   handSynergy: 0,
   // A/B: weight 1 (clipped at 0) lost 45 : 58, weight 0.5 won 58 : 43 in 100 games but 153 : 158
@@ -258,7 +260,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noRollout: {rolloutCandidates: 0},
   // Jens (2026-10-09): in generation 11 the AI built a city next to free land instead of a spot with
   // three greeneries and an ocean; free spots only become greeneries if there is time left.
-  boardHorizon6: {boardHorizon: 6},
+  // Before round 19.
+  boardHorizon3: {boardHorizon: 3},
   // Martin: play a card only if it brings something for the next generation; pure VP cards wait for
   // the last generation, when money is worth less. A VP is worth more M€ later in the game.
   laterPoints: {laterPointValue: 1},
