@@ -4,7 +4,7 @@
 import {Directive} from 'vue';
 import {registerFlashElement, unregisterFlashElement} from '@/client/utils/changeFlashRegistry';
 import {isChangePending, previousValueOf} from '@/client/utils/changeTracker';
-import {showPreviousValue} from '@/client/utils/changeFlashCount';
+import {releaseHeldValue, showPreviousValue} from '@/client/utils/changeFlashCount';
 
 export const vFlashCount: Directive<HTMLElement, string> = {
   mounted(element, binding) {
@@ -14,6 +14,10 @@ export const vFlashCount: Directive<HTMLElement, string> = {
     registerFlashElement(element, [binding.value], binding.modifiers.signed ? 'countSigned' : 'count');
   },
   updated(element, binding) {
+    // Change dropped meanwhile (generation change, seen in another tab): no count follows, show the current value
+    if (!isChangePending(binding.value)) {
+      releaseHeldValue(element);
+    }
     if (binding.value !== binding.oldValue) {
       unregisterFlashElement(element);
       registerFlashElement(element, [binding.value], binding.modifiers.signed ? 'countSigned' : 'count');

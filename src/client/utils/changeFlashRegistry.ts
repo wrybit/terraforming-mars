@@ -5,7 +5,7 @@ import {changeToneOf, isChangePending, markChangeSeen, previousValueOf} from '@/
 import {FlashTone} from '@/client/utils/changeFlashTone';
 import {scheduleEffect} from '@/client/utils/changeFlashScheduler';
 import {flashElement} from '@/client/utils/changeFlashAnimation';
-import {countElement} from '@/client/utils/changeFlashCount';
+import {countElement, releaseHeldValue} from '@/client/utils/changeFlashCount';
 
 // blink: light up with ripples; count / countSigned: the number counts from the old value (resources)
 export type FlashEffect = 'blink' | 'count' | 'countSigned';
@@ -54,6 +54,12 @@ function revealVisibleChanges(): void {
       const tone = changeToneOf(key);
       markChangeSeen(key);
       // An element standing for several changed values blinks only once
+      // Elements of the same key off screen (e.g. the other layout) won't count any more: show the current value
+      elements.forEach((element) => {
+        if (!visibleElements.has(element)) {
+          releaseHeldValue(element);
+        }
+      });
       const fresh = visible.filter((element) => !flashed.has(element));
       fresh.forEach((element) => flashed.add(element));
       if (fresh.length > 0) {

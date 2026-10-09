@@ -40,21 +40,43 @@ function formatted(value: number, signed: boolean): string {
 }
 
 // Right after rendering, before the first paint: the number still shows the old value, otherwise
-// the new one would flash up before counting starts. Remembers the rendered text for the end.
-const renderedText = new WeakMap<Text, string>();
+// the new one would flash up before counting starts. Remembers what Vue rendered and what is shown instead.
+type HeldValue = {rendered: string, shown: string};
+const heldValues = new WeakMap<Text, HeldValue>();
 export function showPreviousValue(element: HTMLElement, from: number, signed: boolean): void {
   const textNode = numberTextNode(element);
   if (textNode === undefined || Number.isNaN(from)) {
     return;
   }
-  renderedText.set(textNode, textNode.nodeValue ?? '');
-  textNode.nodeValue = formatted(from, signed);
+  const shown = formatted(from, signed);
+  heldValues.set(textNode, {rendered: textNode.nodeValue ?? '', shown});
+  textNode.nodeValue = shown;
+}
+
+// The value Vue rendered last; ends the hold. If Vue has rewritten the node in the meantime (newer
+// server state), its text wins – otherwise an outdated value would stay on screen for good.
+function takeRenderedText(textNode: Text): string {
+  const held = heldValues.get(textNode);
+  heldValues.delete(textNode);
+  const current = textNode.nodeValue ?? '';
+  if (held === undefined || current !== held.shown) {
+    return current;
+  }
+  return held.rendered;
+}
+
+// Change dropped without counting (seen elsewhere, generation change …): the number must not keep the old value
+export function releaseHeldValue(element: HTMLElement): void {
+  const textNode = numberTextNode(element);
+  if (textNode !== undefined && heldValues.has(textNode)) {
+    textNode.nodeValue = takeRenderedText(textNode);
+  }
 }
 
 // false: nothing to count (e.g. "·" for zero), the caller blinks instead
 export function countElement(element: HTMLElement, from: number, signed: boolean, delayMs: number, tone: FlashTone): boolean {
   const textNode = numberTextNode(element);
-  const finalText = (textNode !== undefined ? renderedText.get(textNode) : undefined) ?? textNode?.nodeValue ?? '';
+  const finalText = textNode !== undefined ? takeRenderedText(textNode) : '';
   const to = parseInt(finalText.replace('+', ''), 10);
   if (textNode === undefined || Number.isNaN(from) || Number.isNaN(to) || from === to) {
     if (textNode !== undefined) {
