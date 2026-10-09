@@ -35,7 +35,9 @@
               <input v-if="selectOnlyOneCard" type="radio" v-model="cards" :value="card" >
               <input v-else type="checkbox" v-model="cards" :value="card" :disabled="playerinput.max !== undefined && Array.isArray(cards) && cards.length >= playerinput.max && cards.includes(card) === false" >
             </template>
-            <Card :card="card" :actionUsed="isCardActivated(card)" :robotCard="robotCard(card)">
+            <!-- No "action used" look here: a card offered in a selection is either selectable or isDisabled;
+                 greying out a selectable card (e.g. adding microbes to a card whose action was used) misleads -->
+            <Card :card="card" :robotCard="robotCard(card)">
               <!-- Draft: the card picked this round stays in its place, marked as the current choice that can still be changed;
                    inside the card so the tab sits flush on its border like the selection tab -->
               <span v-if="isCurrentPick(card)" class="current-pick-tab">{{ (cardsSelected() === 0 ? '✓ ' : '') + $t(cardsSelected() === 0 ? 'Your pick – can be changed' : 'Previous pick') }}</span>
@@ -290,10 +292,6 @@ export default defineComponent({
     },
     getOwner(card: CardModel): Owner {
       return this.owners.get(card.name) ?? {name: 'unknown', color: 'neutral'};
-    },
-    isCardActivated(card: CardModel): boolean {
-      // Copied from PlayerMixin.
-      return this.playerView.thisPlayer.actionsThisGeneration.includes(card.name);
     },
     buttonLabel(): string | Message {
       // Never "Buy 0": without a selection only the action, the number only counts chosen cards
