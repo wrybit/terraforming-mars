@@ -879,10 +879,23 @@
   @shadow: 0 (@direction * 6px) 22px rgba(0, 0, 0, 0.6);
 }
 
+// Head and cards scroll together, so the cards can pass under the sticky head
+.create-game-players-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border-radius: inherit;
+}
+
 .create-game-players-head {
-  position: relative;
-  z-index: 2; // above the scrolling list, so the shadow falls onto the cards
+  // Stays on top while the cards scroll; frosted glass like the Create card, so they shine through blurred
+  .frosted-surface();
+  position: sticky;
+  top: 0;
+  z-index: 2; // above the cards, so the shadow falls onto them
   padding: 12px 14px 10px;
+  border-radius: @create-game-radius @create-game-radius 0 0;
+  background: @create-game-surface-strong;
   transition: box-shadow 0.2s;
 
   // Cards scroll under the head: same shadow as the stuck Create card, only downwards (clip-path cuts the sides)
@@ -903,12 +916,9 @@
 }
 
 .create-game-player-list {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-height: 0;
-  overflow: auto;
   padding: 4px 14px 14px;
 }
 
@@ -1297,8 +1307,14 @@ each(@players, {
     order: -1;
   }
 
-  .create-game-player-list {
+  // Page scrolls instead of the list: nothing slides under the head, so it stays in place
+  .create-game-players-scroll {
     overflow: visible;
+  }
+
+  .create-game-players-head {
+    position: relative;
+    background: none; // no own surface needed: it is part of the card again
   }
 
   // Create card at the end of the page; until it gets there it sticks to the bottom edge (see above)

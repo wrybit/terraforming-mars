@@ -268,72 +268,74 @@
 
       <aside class="create-game-side">
         <section class="create-game-players">
-          <div class="create-game-players-head" :class="{'create-game-players-head--over-list': playerListScrolled}">
-            <h2 v-i18n>Players</h2>
-            <!-- Humans and AI players in two aligned rows; together they make up the player count -->
-            <div class="create-game-seat-rows">
-              <span class="create-game-seat-label"><SeatIcon kind="human"/><span v-i18n>Player</span></span>
-              <SegmentedControl v-model="humanPlayersCount" :options="humanCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
-              <!-- Settings the AI cannot handle switch it off; hovering the row names them -->
-              <span class="create-game-seat-label" :class="{'create-game-seat-label--off': aiBlockers.length > 0}" :title="aiBlockedTitle"><SeatIcon kind="ai"/><span v-i18n>AI</span></span>
-              <SegmentedControl v-model="aiPlayersCount" :options="aiCountOptions" :title="aiBlockedTitle"
-                :class="['create-game-segmented--equal', 'create-game-segmented--seats', {'create-game-segmented--blocked': aiBlockers.length > 0}]"/>
+          <!-- One scroll area for head and cards: the cards slide under the sticky, frosted head -->
+          <div class="create-game-players-scroll" @scroll="onPlayerListScroll">
+            <div class="create-game-players-head" :class="{'create-game-players-head--over-list': playerListScrolled}">
+              <h2 v-i18n>Players</h2>
+              <!-- Humans and AI players in two aligned rows; together they make up the player count -->
+              <div class="create-game-seat-rows">
+                <span class="create-game-seat-label"><SeatIcon kind="human"/><span v-i18n>Player</span></span>
+                <SegmentedControl v-model="humanPlayersCount" :options="humanCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
+                <!-- Settings the AI cannot handle switch it off; hovering the row names them -->
+                <span class="create-game-seat-label" :class="{'create-game-seat-label--off': aiBlockers.length > 0}" :title="aiBlockedTitle"><SeatIcon kind="ai"/><span v-i18n>AI</span></span>
+                <SegmentedControl v-model="aiPlayersCount" :options="aiCountOptions" :title="aiBlockedTitle"
+                  :class="['create-game-segmented--equal', 'create-game-segmented--seats', {'create-game-segmented--blocked': aiBlockers.length > 0}]"/>
+              </div>
+              <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
+              <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
             </div>
-            <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
-            <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
+            <!-- Humans always first, then AI players; seats slide in and out when the counts change -->
+            <TransitionGroup tag="div" name="create-game-seat" class="create-game-player-list" :css="false" @enter="collapseEnter" @leave="collapseLeave">
+              <!-- Neutral card; the header shows the chosen player color -->
+              <!-- Humans stand out (full color, glow); AI players stay quieter (tinted header, thin outline) -->
+              <div v-for="(newPlayer, index) in getPlayers()" :key="seatKey(newPlayer)"
+                :class="['create-game-player', 'create-game-player--' + newPlayer.color, {'create-game-player--ai': newPlayer.aiLevel !== undefined}]">
+                <div class="create-game-player-top">
+                  <!-- Seat: meeple or robot plus seat number -->
+                  <span class="create-game-player-position">
+                    <SeatIcon :kind="newPlayer.aiLevel !== undefined ? 'ai' : 'human'"/>{{ index + 1 }}
+                  </span>
+                  <span class="create-game-player-name-field">
+                    <input class="create-game-player-name" :placeholder="getPlayerNamePlaceholder(index)" v-model="newPlayer.name">
+                    <!-- Fixed AI marker right behind the typed name; not part of the input, so nobody types it twice -->
+                    <span v-if="newPlayer.aiLevel !== undefined" class="create-game-player-name-marker" aria-hidden="true"><span class="create-game-player-name-ghost">{{ newPlayer.name || getPlayerNamePlaceholder(index) }}</span> {{ aiMarker(newPlayer.aiLevel) }}</span>
+                  </span>
+                  <button v-if="playersCount > 1 && !randomFirstPlayer" type="button" class="create-game-first"
+                    :class="{'create-game-first--selected': firstIndex === index + 1}" :title="$t('Goes First?')"
+                    @click="firstIndex = index + 1">
+                    <span>{{ firstIndex === index + 1 ? '★' : '☆' }}</span>
+                    <span v-if="firstIndex === index + 1" v-i18n>Goes first</span>
+                  </button>
+                </div>
+                <div class="create-game-swatches">
+                  <!-- Colors as player cubes: all lying (top view), the chosen one standing (slightly from above); animated tilt in both directions -->
+                  <button v-for="color in PLAYER_COLORS" :key="color" type="button"
+                    :class="['create-game-swatch', {'create-game-swatch--selected': newPlayer.color === color}]"
+                    :disabled="isColorTaken(color, index)" :title="$t(color)" :aria-pressed="newPlayer.color === color"
+                    @click="newPlayer.color = color">
+                    <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16" animated/>
+                  </button>
+                </div>
+                <div v-if="newPlayer.aiLevel !== undefined" class="create-game-ai-strength">
+                  <span v-i18n>Strength</span>
+                  <SegmentedControl v-model="newPlayer.aiLevel" :options="AI_LEVEL_OPTIONS" class="create-game-segmented--equal"/>
+                </div>
+                <div class="create-game-player-extra">
+                  <!-- The beginner corporation is a help for humans; AI players do not need it -->
+                  <label v-if="isBeginnerToggleEnabled() && newPlayer.aiLevel === undefined" class="create-game-player-toggle">
+                    <SwitchInput v-model="newPlayer.beginner"/>
+                    <span v-i18n>Beginner?</span>
+                    <InfoLink :href="wikiUrls.beginnerCorporation"/>
+                  </label>
+                  <span class="create-game-player-toggle">
+                    <span v-i18n>TR Boost</span>
+                    <InfoLink :href="wikiUrls.trBoost"/>
+                    <NumberStepper v-model="newPlayer.handicap" :min="0" :max="10"/>
+                  </span>
+                </div>
+              </div>
+            </TransitionGroup>
           </div>
-          <!-- Humans always first, then AI players; seats slide in and out when the counts change -->
-          <TransitionGroup tag="div" name="create-game-seat" class="create-game-player-list" :css="false" @enter="collapseEnter" @leave="collapseLeave"
-            @scroll="onPlayerListScroll">
-            <!-- Neutral card; the header shows the chosen player color -->
-            <!-- Humans stand out (full color, glow); AI players stay quieter (tinted header, thin outline) -->
-            <div v-for="(newPlayer, index) in getPlayers()" :key="seatKey(newPlayer)"
-              :class="['create-game-player', 'create-game-player--' + newPlayer.color, {'create-game-player--ai': newPlayer.aiLevel !== undefined}]">
-              <div class="create-game-player-top">
-                <!-- Seat: meeple or robot plus seat number -->
-                <span class="create-game-player-position">
-                  <SeatIcon :kind="newPlayer.aiLevel !== undefined ? 'ai' : 'human'"/>{{ index + 1 }}
-                </span>
-                <span class="create-game-player-name-field">
-                  <input class="create-game-player-name" :placeholder="getPlayerNamePlaceholder(index)" v-model="newPlayer.name">
-                  <!-- Fixed AI marker right behind the typed name; not part of the input, so nobody types it twice -->
-                  <span v-if="newPlayer.aiLevel !== undefined" class="create-game-player-name-marker" aria-hidden="true"><span class="create-game-player-name-ghost">{{ newPlayer.name || getPlayerNamePlaceholder(index) }}</span> {{ aiMarker(newPlayer.aiLevel) }}</span>
-                </span>
-                <button v-if="playersCount > 1 && !randomFirstPlayer" type="button" class="create-game-first"
-                  :class="{'create-game-first--selected': firstIndex === index + 1}" :title="$t('Goes First?')"
-                  @click="firstIndex = index + 1">
-                  <span>{{ firstIndex === index + 1 ? '★' : '☆' }}</span>
-                  <span v-if="firstIndex === index + 1" v-i18n>Goes first</span>
-                </button>
-              </div>
-              <div class="create-game-swatches">
-                <!-- Colors as player cubes: all lying (top view), the chosen one standing (slightly from above); animated tilt in both directions -->
-                <button v-for="color in PLAYER_COLORS" :key="color" type="button"
-                  :class="['create-game-swatch', {'create-game-swatch--selected': newPlayer.color === color}]"
-                  :disabled="isColorTaken(color, index)" :title="$t(color)" :aria-pressed="newPlayer.color === color"
-                  @click="newPlayer.color = color">
-                  <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16" animated/>
-                </button>
-              </div>
-              <div v-if="newPlayer.aiLevel !== undefined" class="create-game-ai-strength">
-                <span v-i18n>Strength</span>
-                <SegmentedControl v-model="newPlayer.aiLevel" :options="AI_LEVEL_OPTIONS" class="create-game-segmented--equal"/>
-              </div>
-              <div class="create-game-player-extra">
-                <!-- The beginner corporation is a help for humans; AI players do not need it -->
-                <label v-if="isBeginnerToggleEnabled() && newPlayer.aiLevel === undefined" class="create-game-player-toggle">
-                  <SwitchInput v-model="newPlayer.beginner"/>
-                  <span v-i18n>Beginner?</span>
-                  <InfoLink :href="wikiUrls.beginnerCorporation"/>
-                </label>
-                <span class="create-game-player-toggle">
-                  <span v-i18n>TR Boost</span>
-                  <InfoLink :href="wikiUrls.trBoost"/>
-                  <NumberStepper v-model="newPlayer.handicap" :min="0" :max="10"/>
-                </span>
-              </div>
-            </div>
-          </TransitionGroup>
         </section>
         <!-- Sticks to the bottom edge while the page is too short for it; then with an extra shadow -->
         <section ref="createCard" class="create-game-card create-game-create-card" :class="{'create-game-create-card--stuck': createCardStuck}">
