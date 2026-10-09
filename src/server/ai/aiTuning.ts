@@ -56,6 +56,8 @@ export type AiTuning = {
   corporationPriorWeight: number,
   /** M€ one plant production is worth per generation (stateValue.ts productionPerGeneration); 2 since the start. */
   plantProductionValue: number,
+  /** Random future tableaus per card for its "later" value (cardValue.ts); 2 since the start. */
+  laterSamples: number,
   /** Share of a VP per generation an action card that collects its own VP resource is worth (Birds, Tardigrades), 0 = flat action value. */
   accumulatorValue: number,
 };
@@ -104,6 +106,7 @@ export const BASELINE_TUNING: AiTuning = {
   draftPriorWeight: 0,
   corporationPriorWeight: 0,
   plantProductionValue: 2,
+  laterSamples: 2,
   accumulatorValue: 0,
 };
 
@@ -172,6 +175,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   plants25: {plantProductionValue: 2.5},
   plants30: {plantProductionValue: 3},
   smallerHand: {handTargetEarly: 7, handTargetLate: 3},
+  // More thinking for the "hard" level against humans (time per move does not matter there).
+  moreSamples: {laterSamples: 5},
+  deepSearch: {secondStepCandidates: 12, opponentReplies: 4},
 };
 
 export function isTuningVariant(name: string): boolean {

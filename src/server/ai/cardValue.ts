@@ -26,7 +26,6 @@ export type CardTiming = {now: number, later: number};
 
 // Holding a card is uncertain (the game may end, money may lack): later value counts 85 %.
 const LATER_DISCOUNT = 0.85;
-const LATER_SAMPLES = 2;
 
 function playCard(copy: IGame, copyPlayer: IPlayer, name: CardName): void {
   const fresh = newCard(name);
@@ -122,7 +121,8 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
   const futureCards = Math.min(8, Math.round(delay * 2));
   let total = 0;
   let samples = 0;
-  for (let sample = 0; sample < LATER_SAMPLES; sample++) {
+  // Random future tableaus: more samples, less noise in the hold-or-play decision (aiTuning.ts laterSamples).
+  for (let sample = 0; sample < tuningOf(player).laterSamples; sample++) {
     const gain = gainInCopy(snapshot, player, card, laterContext, futureCards);
     if (gain !== undefined) {
       total += gain;
