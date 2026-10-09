@@ -54,6 +54,8 @@ export type AiTuning = {
   draftPriorWeight: number,
   /** M€ added to a corporation's value per % point it wins above the Elo expectation on BGA (two players), 0 = off. */
   corporationPriorWeight: number,
+  /** M€ one plant production is worth per generation (stateValue.ts productionPerGeneration); 2 since the start. */
+  plantProductionValue: number,
   /** Share of a VP per generation an action card that collects its own VP resource is worth (Birds, Tardigrades), 0 = flat action value. */
   accumulatorValue: number,
 };
@@ -101,6 +103,7 @@ export const BASELINE_TUNING: AiTuning = {
   cardPriorWeight: 3,
   draftPriorWeight: 0,
   corporationPriorWeight: 0,
+  plantProductionValue: 2,
   accumulatorValue: 0,
 };
 
@@ -164,6 +167,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   draftPriorOnly: {draftPriorWeight: 2, cardPriorWeight: 0},
   // Corporation choice: Ecoline +2.7, UNMI −6.6 % points → with 3 M€ per point +8 / −20 M€.
   bgaCorporations: {corporationPriorWeight: 3},
+  // Economy next to strong BGA winners (analyzeAiEconomy.py): same M€ production, but half the plant
+  // production from generation 9 and 3 more cards in hand.
+  plants25: {plantProductionValue: 2.5},
+  plants30: {plantProductionValue: 3},
+  smallerHand: {handTargetEarly: 7, handTargetLate: 3},
 };
 
 export function isTuningVariant(name: string): boolean {
