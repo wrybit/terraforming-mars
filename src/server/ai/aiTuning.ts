@@ -80,7 +80,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Night runs A+B (3200 games): 0.55 → 0.9 won clearly (A: 0.75 z +4.8; B: 0.9 z +2.7, 1.05 z +3.5,
   // control −0.8); best VP per generation. Income was undervalued once the game length was right.
   productionDiscount: 0.9,
-  passPenalty: 0,
+  // Night runs C+D: pass penalty 0.25 z +2.9 / +1.3, 0.4 z +3.1 (2P +2 VP), 0.1 neutral → 0.3.
+  passPenalty: 0.3,
   victoryPointScale: 1,
   // Fitted terraforming curve (gameProgress.ts curvedRemaining): estimate error 2P 1.86 → 1.25,
   // 3P 1.45 → 0.80, human games 1.96 → 0.75 generations; neutral in AI-vs-AI (z −0.17).
@@ -106,6 +107,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   stayInStrong: {passPenalty: 0.25},
   stayInMax: {passPenalty: 0.4},
   victoryPoints125: {victoryPointScale: 1.25},
+  victoryPoints80: {victoryPointScale: 0.8},
   moreCards: {buyMargin: -5, handTargetEarly: 16, handTargetLate: 6},
   // Baseline before the hate draft and the zero-sum two-player valuation, to confirm both.
   previous: {draftDenial: 0, opponentWeightTwoPlayers: 0.5},
