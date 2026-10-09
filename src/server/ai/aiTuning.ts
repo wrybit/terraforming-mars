@@ -48,6 +48,10 @@ export type AiTuning = {
   opponentReplies: number,
   /** Weight of the opponent's position in a two-player game (more players: 0.5). */
   opponentWeightTwoPlayers: number,
+  /** Card value × (1 + weight × BGA prior) (cardPriors.ts); 0 = no prior. */
+  cardPriorWeight: number,
+  /** Share of a VP per generation an action card that collects its own VP resource is worth (Birds, Tardigrades), 0 = flat action value. */
+  accumulatorValue: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -90,6 +94,8 @@ export const BASELINE_TUNING: AiTuning = {
   secondStepCandidates: 4,
   opponentReplies: 0,
   opponentWeightTwoPlayers: 1,
+  cardPriorWeight: 3,
+  accumulatorValue: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -141,6 +147,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   widerSearch: {secondStepCandidates: 12},
   opponentReply: {opponentReplies: 4},
   engineBuilder: {buyMargin: -6, handTargetEarly: 16, handTargetLate: 6, terraformBrake: 6},
+  // 1v1 rounds (2026-10-09, mirrored deals, compareHeadToHead.py): does the BGA card prior help,
+  // and are VP collectors (Birds, Fish, Tardigrades …) undervalued? Martin scored big with them.
+  noPrior: {cardPriorWeight: 0},
+  strongPrior: {cardPriorWeight: 6},
+  collectors: {accumulatorValue: 0.8},
 };
 
 export function isTuningVariant(name: string): boolean {

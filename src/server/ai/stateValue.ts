@@ -200,12 +200,28 @@ function resourceValue(player: IPlayer, context: ValuationContext): number {
     player.energy * 0.5;
 }
 
+/**
+ * VP a collector card (Birds, Fish, Tardigrades, Ecological Zone …) adds per generation, about
+ * one resource each: its VP per resource. 0 for other cards.
+ */
+function collectedPointsPerGeneration(card: {victoryPoints?: unknown}): number {
+  const points = card.victoryPoints;
+  if (typeof points !== 'object' || points === null || !('resourcesHere' in points)) {
+    return 0;
+  }
+  const {each = 1, per = 1} = points as {each?: number, per?: number};
+  return each / per;
+}
+
 function tableauValue(player: IPlayer, context: ValuationContext): number {
+  const accumulator = tuningOf(player).accumulatorValue;
   let value = 0;
   for (const card of player.playedCards) {
     if (card.type === CardType.ACTIVE) {
-      const perGeneration = isIActionCard(card) ? ACTION_CARD_VALUE_PER_GENERATION : EFFECT_CARD_VALUE_PER_GENERATION;
-      value += perGeneration * context.remaining;
+      const flat = isIActionCard(card) ? ACTION_CARD_VALUE_PER_GENERATION : EFFECT_CARD_VALUE_PER_GENERATION;
+      // Martin's collectors scored 20+ VP in long games; a flat 1.5 M€ per generation missed that.
+      const collected = accumulator > 0 ? accumulator * collectedPointsPerGeneration(card) * context.victoryPoint : 0;
+      value += Math.max(flat, collected) * context.remaining;
     }
     // Resources on cards (microbes, animals, science …) pay off later: VP, money, actions.
     value += card.resourceCount * RESOURCE_ON_CARD_VALUE;

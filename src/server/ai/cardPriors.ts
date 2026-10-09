@@ -19,7 +19,7 @@ export function cardPrior(name: CardName): number {
   return statistic.wap * reliability;
 }
 
-/** Multiplier for a card's estimated value: 1 + 3 × WAP (≈ 0.4 … 1.5). */
-export function cardPriorFactor(name: CardName): number {
-  return 1 + 3 * cardPrior(name);
+/** Multiplier for a card's estimated value: 1 + weight × WAP (weight 3: ≈ 0.4 … 1.5; aiTuning.ts cardPriorWeight). */
+export function cardPriorFactor(name: CardName, weight = 3): number {
+  return Math.max(0.2, 1 + weight * cardPrior(name));
 }
