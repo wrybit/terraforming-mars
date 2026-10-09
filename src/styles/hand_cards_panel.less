@@ -1,14 +1,32 @@
 @import (reference) "./mobile.less";
 // Hand cards tab (HandCardsPanel.vue): active cards on top, hand cards below.
 // Law of proximity: the heading sits close to its cards, between the sections there is clearly more space
-// plus a fine separator line.
+// (about half a card, scaled with the card zoom). The fine separator line always sits directly below a
+// section heading, so it belongs to its section instead of floating between two.
 @hand-cards-panel-title-gap: 4px;
-@hand-cards-panel-section-gap: 28px;
+@hand-cards-panel-section-gap: calc(138px * var(--card-zoom, 1)); // half a card (275px)
+@hand-cards-panel-first-title-gap: 16px; // first heading: off the header row above
+@section-title-line: 1px solid rgba(255, 255, 255, 0.18);
+
+// Heading with the separator line below it, spanning the full width
+.section-title-with-line() {
+  padding-bottom: 6px;
+  border-bottom: @section-title-line;
+}
 
 .hand-cards-panel__section + .hand-cards-panel__section {
   margin-top: @hand-cards-panel-section-gap;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hand-cards-panel__section > .hand-cards-panel__title,
+.hand-cards-panel__section > .hand-cards-panel__header {
+  .section-title-with-line();
+  margin-bottom: 10px;
+}
+
+.hand-cards-panel__section:first-of-type > .hand-cards-panel__title,
+.hand-cards-panel__section:first-of-type > .hand-cards-panel__header {
+  margin-top: @hand-cards-panel-first-title-gap;
 }
 
 .hand-cards-panel__title {
@@ -39,14 +57,34 @@
 .card-list-section {
   flex: none;
   margin-top: @hand-cards-panel-section-gap;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 // Section headings inside a card grid (SelectProjectCardToPlay.vue: "Playable now" / "Not playable"): the grid spans
-// them across all columns (choice_block.less); the second one carries the same separator as between sections
+// them across all columns (choice_block.less); every one carries the separator below, the first keeps a gap
+// to the header row, the following ones half a card to the section above
+.choice-section-title {
+  .section-title-with-line();
+  margin-top: @hand-cards-panel-first-title-gap;
+}
+
 .choice-section-title--separated {
   margin-top: @hand-cards-panel-section-gap;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+// Inside a section below a selection the section itself already keeps the gap
+.card-list-section > .choice-section-title {
+  margin-top: 0;
+}
+
+// "All cards" tab: the cards of every section sit centered in the box (like the choice blocks), the headings
+// stay at the left edge. Inline cards: center the rows, the cards themselves keep their own alignment
+html:not(.tm-mobile) .hand-cards-panel {
+  .hand-cards-panel__cards,
+  .sortable-cards {
+    text-align: center;
+
+    > * {
+      text-align: left;
+    }
+  }
 }
