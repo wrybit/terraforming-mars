@@ -273,11 +273,8 @@ export default defineComponent({
       selectedIdx = initialIdx + 1;
     }
     return {
-      displayedOptions,
-      originalIndices,
       radioElementName: 'selectOption' + unique++,
       selectedOption: displayedOptions[selectedIdx],
-      selectedIdx,
       // Hand cards tab (tab mode only) active – independent of the selected action, which is kept
       handTabActive: false,
       // Whether the child input may save (SelectCard reports this via "validity"); other inputs report nothing
@@ -291,6 +288,16 @@ export default defineComponent({
     };
   },
   computed: {
+    // Computed so a learner mode change shows or hides options without a page refresh
+    originalIndices(): Array<number> {
+      return displayedOptionIndices(this.playerinput);
+    },
+    displayedOptions(): Array<PlayerInputModel> {
+      return this.originalIndices.map((index) => this.playerinput.options[index]);
+    },
+    selectedIdx(): number {
+      return this.displayedOptions.indexOf(this.selectedOption);
+    },
     // Action menu of a turn: which of the two actions is up (chips next to the main button)
     turnStep(): 1 | 2 | undefined {
       return actionStep(this.playerinput);
@@ -377,8 +384,13 @@ export default defineComponent({
     },
   },
   watch: {
-    selectedOption(newOption: PlayerInputModel) {
-      this.selectedIdx = this.displayedOptions.indexOf(newOption);
+    displayedOptions(newOptions: Array<PlayerInputModel>) {
+      // Learner mode can hide the selected option.
+      if (!newOptions.includes(this.selectedOption)) {
+        this.selectedOption = newOptions[0];
+      }
+    },
+    selectedOption() {
       if (this.selectedIdx !== this.ceoIdx) {
         this.selectedCeo = undefined;
       }

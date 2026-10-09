@@ -52,7 +52,7 @@ export const PREFERENCE_GROUPS: ReadonlyArray<PreferenceGroup> = [
     title: 'Game aids',
     iconPaths: ['M9 18h6M10 21h4', 'M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z'],
     switches: [
-      {preference: 'learner_mode', label: 'Learner Mode (req. refresh)', hint: 'Show information that can be helpful\n to players who are still learning the games'},
+      {preference: 'learner_mode', label: 'Learner Mode', hint: 'Show information that can be helpful\n to players who are still learning the games'},
       {preference: 'hide_tile_confirmation', label: 'Hide tile confirmation'},
     ],
   },
