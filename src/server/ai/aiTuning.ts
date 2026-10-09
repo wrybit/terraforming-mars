@@ -111,7 +111,10 @@ export const BASELINE_TUNING: AiTuning = {
   corporationPriorWeight: 0,
   plantProductionValue: 2,
   laterSamples: 2,
-  awardSwing: 0,
+  // Adopted on purpose without a measurable AI-vs-AI gain (round 13: +0.6 VP per deal, z +0.7; funded
+  // awards 829 → 210 per 200 games, funder wins 81 → 87 %): a human overtook three funded awards
+  // (30 VP swing), the AI opponent in batches does not chase awards like that.
+  awardSwing: 0.15,
   accumulatorValue: 0,
 };
 
