@@ -75,7 +75,10 @@ function expectedAwardPoints(player: IPlayer, context: ValuationContext): number
     const best = Math.max(0, ...player.opponents.map((opponent) => projectedAwardScore(award.getScore(opponent), context)));
     const margin = own - best;
     // How much an opponent can still gain: more early, and more for awards with big numbers.
-    const swing = 2 + Math.max(own, best) * 0.25 * (1 - context.awardConfidence);
+    // awardSwing: plus a share of the score per remaining generation – Jens overtook three funded
+    // awards in the last 4 generations (Banker 10 → 33, Miner 5 → 24) while the AI felt safe.
+    const remainingSwing = tuningOf(player).awardSwing * Math.max(own, best) * context.remaining;
+    const swing = 2 + Math.max(own, best) * 0.25 * (1 - context.awardConfidence) + remainingSwing;
     const firstPlaceChance = Math.max(0, Math.min(1, 0.5 + margin / (2 * swing)));
     points += 5 * firstPlaceChance * context.awardConfidence;
   }

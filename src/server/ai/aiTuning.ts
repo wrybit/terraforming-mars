@@ -58,6 +58,8 @@ export type AiTuning = {
   plantProductionValue: number,
   /** Random future tableaus per card for its "later" value (cardValue.ts); 2 since the start. */
   laterSamples: number,
+  /** Award lead uncertainty: share of the award score an opponent may still gain per remaining generation (stateValue.ts). */
+  awardSwing: number,
   /** Share of a VP per generation an action card that collects its own VP resource is worth (Birds, Tardigrades), 0 = flat action value. */
   accumulatorValue: number,
 };
@@ -109,6 +111,7 @@ export const BASELINE_TUNING: AiTuning = {
   corporationPriorWeight: 0,
   plantProductionValue: 2,
   laterSamples: 2,
+  awardSwing: 0,
   accumulatorValue: 0,
 };
 
@@ -186,6 +189,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   search8: {secondStepCandidates: 8},
   search20: {secondStepCandidates: 20},
   deepSearch20: {secondStepCandidates: 20, opponentReplies: 4},
+  // Jens vs. hard (2026-10-09, 129 : 114): the AI funded Banker, Miner and Landlord with a lead and lost
+  // all three. A lead counts less while generations remain → later funding, defending the lead.
+  awardRisk15: {awardSwing: 0.15},
+  awardRisk30: {awardSwing: 0.3},
 };
 
 export function isTuningVariant(name: string): boolean {
