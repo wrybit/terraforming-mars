@@ -1,6 +1,11 @@
 import {CardName} from '@/common/cards/CardName';
+import {CardModel} from '@/common/models/CardModel';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
+import {titleKey} from '@/client/components/orOptionsShortLabels';
+
+// Title key of the action menu's "Play project card" option (Player.ts, SelectCardToPlay.ts)
+export const PLAY_CARD_KEY = 'Play project card';
 
 function findProjectCardInput(input: PlayerInputModel | undefined): PlayerInputModel | undefined {
   if (input === undefined) {
@@ -31,4 +36,23 @@ export function playableProjectCards(playerView: PlayerViewModel): ReadonlySet<C
     return undefined;
   }
   return new Set(input.cards.filter((card) => card.isDisabled !== true).map((card) => card.name));
+}
+
+/**
+ * Project cards in hand the build tab doesn't offer (requirement not met, too expensive …): shown greyed out as their own
+ * section below the playable cards. Only for "Play project card" from the hand – not when the offered cards come
+ * from elsewhere (Odyssey: events from the tableau), then the hand cards have nothing to do with the choice.
+ * Some instead of every: Self-Replicating Robots adds its stored cards to the hand cards.
+ */
+export function unplayableHandCards(playerView: PlayerViewModel, input: PlayerInputModel): ReadonlyArray<CardModel> {
+  if (input.type !== 'projectCard' || titleKey(input.title) !== PLAY_CARD_KEY) {
+    return [];
+  }
+  const hand = playerView.cardsInHand ?? [];
+  const inHand = new Set(hand.map((card) => card.name));
+  if (!input.cards.some((card) => inHand.has(card.name))) {
+    return [];
+  }
+  const offered = new Set(input.cards.map((card) => card.name));
+  return hand.filter((card) => !offered.has(card.name));
 }

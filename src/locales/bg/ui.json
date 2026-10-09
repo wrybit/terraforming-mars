@@ -589,5 +589,8 @@
   "Final greenery": "Финални озеленявания",
   "Mars is terraformed": "Марс е тераформиран",
   "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Последен шанс: превърни останалите си растения в озеленявания – всяко носи 1 победна точка.",
-  "You have ${0} plants": "Имаш ${0} растения"
+  "You have ${0} plants": "Имаш ${0} растения",
+  "Not playable": "Не може да се играят",
+  "Already used": "Вече използвани",
+  "Not usable": "Не могат да се използват"
 }

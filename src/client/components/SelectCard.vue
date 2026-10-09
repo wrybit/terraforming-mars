@@ -1,5 +1,5 @@
 <template>
-    <div class="wf-component wf-component--select-card choice-block" :class="choiceBlockClass(playerinput.cards?.length ?? 0, isHandSelection || playerinput.showOwner)" :style="choiceBlockStyle(playerinput.cards?.length ?? 0)">
+    <div class="wf-component wf-component--select-card choice-block" :class="[choiceBlockClass(choiceCount, isHandSelection || playerinput.showOwner || trailingSections.length > 0), {'choice-block--sections': trailingSections.length > 0}]" :style="choiceBlockStyle(choiceCount)">
         <!-- Cards as a choice block (choice_block.less): as square as possible and centered in the tab box;
              comment inside, so the caller's v-show hits the root -->
         <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
@@ -31,6 +31,10 @@
         </CardZoomBar>
         <TabPanelIntroSlot/>
         <CardFilterEmptyHint v-if="nothingShown" @reset="resetFilter"/>
+        <!-- Several card sections in the tab (cardSections.ts): heading of this one below the header row -->
+        <h3 v-if="cardSections?.title !== undefined" class="hand-cards-panel__title choice-section-title">
+          {{ $t(cardSections.title.text) }} <small>{{ cardSections.title.count }}</small>
+        </h3>
         <!-- Cards of several players: one group per player with the name as heading, opponents first, own last
              (cardOwnerGroups.ts) – instead of a small name label on every card -->
         <template v-for="group in getCardGroups()" :key="group.owner?.color ?? 'none'">
@@ -50,6 +54,16 @@
               <span v-if="isCurrentPick(card)" class="current-pick-tab">{{ (cardsSelected() === 0 ? '✓ ' : '') + $t(cardsSelected() === 0 ? 'Your pick – can be changed' : 'Previous pick') }}</span>
             </Card>
         </label>
+        </template>
+        <!-- View-only sections after the selectable cards (cardSections.ts): heading and cards as items of this grid,
+             so they get the same size, spacing and sticky header row; no input, nothing to choose -->
+        <template v-for="section in trailingSections" :key="section.title">
+          <h3 v-if="shownCount(section.cards) > 0" class="hand-cards-panel__title choice-section-title choice-section-title--separated">
+            {{ $t(section.title) }} <small>{{ shownCount(section.cards) }}</small>
+          </h3>
+          <label v-for="card in section.cards" :key="section.title + card.name" :class="['cardbox', 'cardbox--view-only', visibilityClass(card)]">
+            <Card :card="section.unavailable ? {...card, isDisabled: true} : card" :actionUsed="section.actionUsed" :cubeColor="section.cubeColor"/>
+          </label>
         </template>
         <div v-if="hasCardWarning()" class="card-warning" v-i18n>{{ warning }}</div>
         <WarningsComponent :warnings="warnings"/>
@@ -81,7 +95,7 @@ import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import TabPanelIntroSlot from '@/client/components/TabPanelIntroSlot.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {cardOwnerGroups, CardOwnerGroup} from '@/client/utils/cardOwnerGroups';
-import {defineComponent} from 'vue';
+import {defineComponent, inject} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import HandSortControl from '@/client/components/HandSortControl.vue';
@@ -92,7 +106,7 @@ import CardSortMenu from '@/client/components/cardfilter/CardSortMenu.vue';
 import CardZoomBar from '@/client/components/cardfilter/CardZoomBar.vue';
 import {CardFilter, CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
 import {cardVisibility, CardVisibility, handCardFilter, playedCardFilter, playedCardsSortOrder, unmatchedCards} from '@/client/utils/cardFilterState';
-import {SortOrder, sortCards} from '@/client/utils/SortOrder';
+import {SortOrder} from '@/client/utils/SortOrder';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {Color} from '@/common/Color';
@@ -104,7 +118,8 @@ import Card from '@/client/components/card/Card.vue';
 import {CardModel} from '@/common/models/CardModel';
 import {CardName} from '@/common/cards/CardName';
 import {SelectCardModel} from '@/common/models/PlayerInputModel';
-import {sortActiveCards} from '@/client/utils/ActiveCardsSortingOrder';
+import {CARD_SECTIONS, CardSections, TrailingCardSection} from '@/client/components/cardSections';
+import {orderActionCards} from '@/client/utils/inactiveActionCards';
 import {SelectCardResponse} from '@/common/inputs/InputResponse';
 import {Warning} from '@/common/cards/Warning';
 import {choiceBlockClass, choiceBlockStyle} from '@/client/components/choiceBlock';
@@ -126,6 +141,9 @@ type WidgetDataModel = {
 
 export default defineComponent({
   name: 'SelectCard',
+  setup() {
+    return {cardSectionsFor: inject(CARD_SECTIONS, undefined)};
+  },
   props: {
     playerView: {
       type: Object as () => PlayerViewModel,
@@ -196,9 +214,7 @@ export default defineComponent({
       let cards: ReadonlyArray<CardModel> = [];
       if (this.playerinput.cards !== undefined) {
         if (this.playerinput.selectBlueCardAction) {
-          // Chosen sorting of the played cards, otherwise the usual action order
-          const sortOrder = playedCardsSortOrder.value;
-          cards = sortOrder !== undefined ? sortCards(this.playerinput.cards, sortOrder) : sortActiveCards(this.playerinput.cards);
+          cards = orderActionCards(this.playerinput.cards);
         } else if (this.isDraft) {
           cards = keepDraftCardOrder(this.playerView.id, this.playerinput.cards);
         } else {
@@ -262,6 +278,14 @@ export default defineComponent({
     },
     setPlayedSortOrder(value: SortOrder | undefined): void {
       playedCardsSortOrder.value = value;
+    },
+    // Cards of a view-only section the filter still shows (dimmed count, hidden don't)
+    shownCount(cards: ReadonlyArray<CardModel>): number {
+      return cards.filter((card) => this.visibilityOf(card) !== 'hidden').length;
+    },
+    visibilityClass(card: CardModel): string | undefined {
+      const visibility = this.visibilityOf(card);
+      return visibility === 'shown' ? undefined : 'card-filter-' + visibility;
     },
     getCardBoxClass(card: CardModel): string {
       const classes = ['cardbox'];
@@ -334,6 +358,16 @@ export default defineComponent({
     },
   },
   computed: {
+    cardSections(): CardSections | undefined {
+      return this.cardSectionsFor?.(this.playerinput);
+    },
+    trailingSections(): ReadonlyArray<TrailingCardSection> {
+      return this.cardSections?.trailing ?? [];
+    },
+    // Cards in the grid, view-only sections included: they share its columns and flow like the hand cards
+    choiceCount(): number {
+      return (this.playerinput.cards?.length ?? 0) + this.trailingSections.reduce((sum, section) => sum + section.cards.length, 0);
+    },
     // Phone: cards are fitted to the screen, no size slider
     isMobile(): boolean {
       return mobileLayout.value;

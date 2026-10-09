@@ -1172,5 +1172,8 @@
   "Final greenery": "Siste skogområder",
   "Mars is terraformed": "Mars er terraformet",
   "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Siste sjanse: gjør de gjenværende plantene dine om til skogområder – hvert gir 1 seierspoeng.",
-  "You have ${0} plants": "Du har ${0} planter"
+  "You have ${0} plants": "Du har ${0} planter",
+  "Not playable": "Kan ikke spilles",
+  "Already used": "Allerede brukt",
+  "Not usable": "Kan ikke brukes"
 }

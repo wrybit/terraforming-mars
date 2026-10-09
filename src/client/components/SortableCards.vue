@@ -10,7 +10,7 @@
       @pointerdown="onPointerDown(card.name, $event)"
       @dragstart.prevent>
       <div class="cardbox">
-        <Card :card="card"/>
+        <Card :card="isUnavailable(card) ? {...card, isDisabled: true} : card"/>
       </div>
     </div>
   </TransitionGroup>
@@ -87,6 +87,11 @@ export default defineComponent({
       type: Function as unknown as () => (card: CardModel) => CardVisibility,
       required: false,
     },
+    // Cards that can't be played right now: grey and half transparent (cards.less .card-unavailable)
+    unavailable: {
+      type: Function as unknown as () => (card: CardModel) => boolean,
+      required: false,
+    },
   },
   // Order comes from CardOrderStorage (reactive): sorting in the hand tab or in a selection dialog
   // (handSort.ts) shows up here immediately; new cards go at the end.
@@ -107,6 +112,9 @@ export default defineComponent({
     },
     visibilityOf(card: CardModel): CardVisibility {
       return this.visibility?.(card) ?? 'shown';
+    },
+    isUnavailable(card: CardModel): boolean {
+      return this.unavailable?.(card) ?? false;
     },
     getSortedCards() {
       return CardOrderStorage.getOrdered(

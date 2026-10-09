@@ -1403,5 +1403,8 @@
   "Final greenery": "Utolsó Növényzetlapkák",
   "Mars is terraformed": "A Mars terraformálva",
   "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Utolsó esély: alakítsd át a maradék növényeidet Növényzetlapkákká – mindegyik 1 győzelmi pontot ér.",
-  "You have ${0} plants": "${0} növényed van"
+  "You have ${0} plants": "${0} növényed van",
+  "Not playable": "Nem kijátszható",
+  "Already used": "Már használt",
+  "Not usable": "Nem használható"
 }

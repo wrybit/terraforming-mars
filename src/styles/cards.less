@@ -35,13 +35,12 @@
   }
 }
 
-// Unselectable card (too expensive, requirement not met) or already used action:
-// clearly toned down and stays so on hover; not-allowed cursor shows that clicking does nothing.
-// Partly transparent as well, so it recedes into the box and can't be mistaken for a selectable card.
+// Card that can't be played or used (too expensive, requirement not met, action used, CEO spent): always the same
+// look everywhere – grey and half transparent, also on hover; the not-allowed cursor shows that clicking does nothing.
 .card-unavailable,
 .card-unavailable:hover {
-  filter: grayscale(0.85) brightness(0.45);
-  opacity: 0.45;
+  filter: grayscale(1);
+  opacity: 0.5;
   cursor: not-allowed;
 }
 

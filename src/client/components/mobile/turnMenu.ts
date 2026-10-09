@@ -10,6 +10,7 @@ import {endTabHint, fullTabTitle, isEndTab, shortTabLabel, tabButtonLabel, tabBu
 import {warningDescription} from '@/client/components/warningDescriptions';
 import {tabIntro, TabIntro} from '@/client/components/tabIntro';
 import {placementLabel, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {PLAY_CARD_KEY} from '@/client/utils/playableCards';
 
 /*
  * Turn menu of the mobile view (bottom sheet), built from the same action menu as the desktop tabs.
@@ -176,7 +177,8 @@ export async function submitTurnMenuTile(root: HTMLElement, index: number): Prom
   footer?.querySelector<HTMLButtonElement>('.or-tab-save .btn')?.click();
 }
 
-export const PLAY_CARD_KEY = 'Play project card';
+// Defined in playableCards.ts, shared with the build tab's "Not playable" section
+export {PLAY_CARD_KEY};
 
 /* "Play card" tile, if `cardName` is playable in it. */
 export function playableCardTile(menu: TurnMenu | undefined, input: OrOptionsModel | undefined, cardName: string): TurnMenuTile | undefined {

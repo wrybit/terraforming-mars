@@ -1418,5 +1418,8 @@
   "Final greenery": "최종 녹지",
   "Mars is terraformed": "화성 테라포밍 완료",
   "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "마지막 기회: 남은 식물을 녹지로 바꾸세요 – 녹지마다 승점 1점입니다.",
-  "You have ${0} plants": "식물 ${0}개 보유"
+  "You have ${0} plants": "식물 ${0}개 보유",
+  "Not playable": "플레이 불가",
+  "Already used": "이미 사용함",
+  "Not usable": "사용 불가"
 }

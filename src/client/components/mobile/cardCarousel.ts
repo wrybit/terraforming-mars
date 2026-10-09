@@ -3,8 +3,8 @@
  * swiped through (mobile.less); the card in the middle is the selected one.
  */
 
-/* Carousel state for the dots below it. */
-export type CarouselState = {count: number, index: number};
+/* Carousel state for the dots below it; unavailable: cards without a selection (not playable), dimmed dots. */
+export type CarouselState = {count: number, index: number, unavailable: ReadonlyArray<boolean>};
 
 // Standard projects are laid out as a grid, not in the carousel (mobile.less, mobileFit.ts)
 const LIST_SELECTOR = '.mb-screen--turn .payments_cont:not(:has(.card-standard-project))';
@@ -34,10 +34,20 @@ function centeredIndex(list: HTMLElement): number {
   return best;
 }
 
-// Select the centered card (only playable cards have a selection input)
+function selectionInput(item: HTMLElement): HTMLInputElement | null {
+  return item.querySelector<HTMLInputElement>('input[type="radio"]');
+}
+
+// Select the centered card (only playable cards have a selection input). On a card without one (the "Not playable"
+// section, SelectProjectCardToPlay.vue) the list drops its choice, so nothing out of view gets played
 function selectItem(item: HTMLElement | undefined): void {
-  const input = item?.querySelector<HTMLInputElement>('input[type="radio"]');
-  if (input !== null && input !== undefined && !input.checked) {
+  if (item === undefined) {
+    return;
+  }
+  const input = selectionInput(item);
+  if (input === null) {
+    item.dispatchEvent(new CustomEvent('tm-carousel-unselect', {bubbles: true}));
+  } else if (!input.checked) {
     input.click();
   }
 }
@@ -58,7 +68,8 @@ export function observeCardCarousel(root: HTMLElement, onChange: (state: Carouse
       onChange(undefined);
       return;
     }
-    onChange({count: items(list).length, index: centeredIndex(list)});
+    const all = items(list);
+    onChange({count: all.length, index: centeredIndex(list), unavailable: all.map((item) => selectionInput(item) === null)});
   };
   // After swiping (scrolling comes to rest) select the centered card
   const onScroll = () => {

@@ -551,5 +551,8 @@
   "Final greenery": "Vegetación final",
   "Mars is terraformed": "Marte está terraformado",
   "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Última oportunidad: convierte tus plantas restantes en vegetación; cada una vale 1 punto de victoria.",
-  "You have ${0} plants": "Tienes ${0} plantas"
+  "You have ${0} plants": "Tienes ${0} plantas",
+  "Not playable": "No jugables",
+  "Already used": "Ya usadas",
+  "Not usable": "No disponibles"
 }

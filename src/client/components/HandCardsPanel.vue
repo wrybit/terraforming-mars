@@ -15,7 +15,7 @@
       <h3 v-if="hasSeveralSections" class="hand-cards-panel__title">{{ $t('Active cards') }} <small>{{ shownActiveCount }}</small></h3>
       <div class="hand-cards-panel__cards">
         <div v-for="card in activeCards" :key="card.name" class="cardbox" :class="visibilityClass(card)">
-          <Card :card="card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
+          <Card :card="isUnavailable(card) ? {...card, isDisabled: true} : card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
         </div>
       </div>
     </section>
@@ -23,7 +23,7 @@
       <div v-if="hasSeveralSections" class="hand-cards-panel__header">
         <h3 class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ shownHandCount }}</small></h3>
       </div>
-      <SortableCards :playerId="playerView.id" :cards="handCards" :visibility="visibility"/>
+      <SortableCards :playerId="playerView.id" :cards="handCards" :visibility="visibility" :unavailable="isUnavailable"/>
     </section>
     <section v-if="undergroundTokens" class="hand-cards-panel__section hand-cards-panel__section--underground">
       <h3 class="hand-cards-panel__title">{{ $t('Claimed Underground Resource Tokens') }} <small>{{ thisPlayer.underworldData.tokens.length }}</small></h3>
@@ -57,6 +57,7 @@ import {handSortOrder} from '@/client/utils/handSort';
 import {ownActiveCards} from '@/client/utils/ownActiveCards';
 import {ownPlayedCardsWithoutActive} from '@/client/utils/ownPlayedCards';
 import {isCardActivated} from '@/client/utils/CardUtils';
+import {unavailableOwnCards} from '@/client/utils/unavailableOwnCards';
 
 const props = defineProps<{
   playerView: PlayerViewModel;
@@ -74,6 +75,13 @@ const allCards = computed(() => [...activeCards.value, ...handCards.value, ...pl
 const undergroundTokens = computed(() => !props.hideUndergroundTokens && thisPlayer.value.underworldData.tokens.length > 0);
 // "Playable now" only while the player can play a project card (played cards never are)
 const filterContext = computed((): CardFilterContext => ({playable: playableProjectCards(props.playerView), withCost: true}));
+
+// Cards that can't be played or used right now: grey and half transparent like in the action tabs
+// (unavailableOwnCards.ts, known during the own action menu); a used action stays grey all generation
+const unavailable = computed(() => unavailableOwnCards(props.playerView));
+function isUnavailable(card: CardModel): boolean {
+  return isCardActivated(card, thisPlayer.value) || (unavailable.value?.has(card.name) ?? false);
+}
 
 function visibility(card: CardModel): CardVisibility {
   return cardVisibility(card, handCardFilter, filterContext.value);

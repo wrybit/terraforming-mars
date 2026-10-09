@@ -35,7 +35,7 @@
         :showsave="true"
         :showtitle="false"/>
       <!-- Draft: cards already kept below the new ones, instead of a separate block under the box -->
-      <DraftedCardsSection v-if="draftedCards.length > 0" v-show="!handTabActive" :cards="draftedCards"/>
+      <CardListSection v-if="draftedCards.length > 0" v-show="!handTabActive" title="Drafted cards" :cards="draftedCards"/>
       <!-- Sticky footer at the bottom of the box (tabPanelFooter.ts); payment areas attach via Teleport -->
       <div v-show="!handTabActive" :id="footerId" class="or-tab-footer">
         <!-- Cancel an action that is still only a plan: left in the footer (cancelAction.ts) -->
@@ -69,7 +69,7 @@ import {tabIntro} from '@/client/components/tabIntro';
 import {choiceMenuLead} from '@/client/components/choiceMenu';
 import {inputSourceCard} from '@/client/components/inputSourceCard';
 import InputIntro from '@/client/components/InputIntro.vue';
-import DraftedCardsSection from '@/client/components/DraftedCardsSection.vue';
+import CardListSection from '@/client/components/CardListSection.vue';
 import {draftedCardsInInput, isDraftRepick} from '@/client/utils/draftedCards';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {shownInput, spaceWithSkip} from '@/client/components/spaceWithSkip';

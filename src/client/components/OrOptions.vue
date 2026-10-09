@@ -46,18 +46,23 @@
       <p v-if="asTabs && !handTabActive && selectedOption !== undefined && endTabHint(selectedOption.title) !== undefined" class="or-tab-end-hint">
         {{ $t(endTabHint(selectedOption.title)!) }}
       </p>
-      <!-- "Actions" tab with CEO (ceoActions.ts): action cards and below them the own CEO cards as sub-sections,
-           headings like in the hand cards tab (only when both sections exist). One card across both sections:
-           choosing a CEO resets the action cards, choosing an action card drops the CEO -->
+      <!-- "Actions" tab as sub-sections like the hand cards tab (headings only when there are several): usable action
+           cards, usable CEOs (ceoActions.ts), then greyed out the actions already used this generation and those not
+           usable right now (inactiveActionCards.ts). One card across action cards and CEOs: choosing a CEO resets the
+           action cards, choosing an action card drops the CEO -->
       <div v-if="inActionsGroup" v-show="!handTabActive" class="actions-tab-sections">
         <section v-if="actionsIdx !== -1" class="hand-cards-panel__section">
-          <h3 class="hand-cards-panel__title">{{ $t('Action cards') }} <small>{{ availableCount(displayedOptions[actionsIdx]) }}</small></h3>
+          <!-- Its heading "Action cards" sits inside the selection, below the header row (cardSectionTitle.ts) -->
           <PlayerInputFactory ref="inputfactory" :key="'actions-' + actionsResetKey" @validity="onActionCardsValidity" v-bind="childInputProps(actionsIdx)" />
         </section>
-        <section class="hand-cards-panel__section">
-          <h3 v-if="actionsIdx !== -1" class="hand-cards-panel__title">{{ $t('CEO') }} <small>{{ ownCeoCards.length }}</small></h3>
-          <CeoActionSection :cards="ownCeoCards" :option="ceoOption" :selected="selectedCeo" :groupName="radioElementName + '-ceo'" @select="selectCeo"/>
+        <section v-if="availableCeoCards.length > 0" class="hand-cards-panel__section">
+          <h3 v-if="actionSectionCount > 1" class="hand-cards-panel__title">{{ $t('CEO') }} <small>{{ availableCeoCards.length }}</small></h3>
+          <CeoActionSection :cards="availableCeoCards" :option="ceoOption" :selected="selectedCeo" :groupName="radioElementName + '-ceo'" @select="selectCeo"/>
         </section>
+        <!-- With a usable CEO the greyed sections follow it; otherwise they sit inside the action cards' grid -->
+        <template v-if="!inactiveInActionGrid">
+          <CardListSection v-for="section in inactiveSections" :key="section.title" v-bind="section" :visibility="actionCardVisibility"/>
+        </template>
       </div>
       <!-- v-show instead of v-if: inputs of the selected action survive a look at the hand -->
       <PlayerInputFactory v-else-if="asTabs && selectedIdx !== -1" v-show="!handTabActive" ref="inputfactory" @validity="childValid = $event" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" />
@@ -163,7 +168,8 @@
 
 <script lang="ts">
 
-import {defineComponent, inject, provide} from 'vue';
+import {defineComponent, inject, provide, shallowRef} from 'vue';
+import {CARD_SECTIONS, CardSectionsFor, TrailingCardSection} from '@/client/components/cardSections';
 import {vDockedTab} from '@/client/directives/DockedTab';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {isHTMLElement} from '@/client/utils/vueUtils';
@@ -204,7 +210,9 @@ import {CardModel} from '@/common/models/CardModel';
 import {SelectCardModel} from '@/common/models/PlayerInputModel';
 import {Message} from '@/common/logs/Message';
 import CeoActionSection from '@/client/components/CeoActionSection.vue';
-import {ACTION_CARDS_TITLE, isActionCardsOption, isCeoActionOption, ownCeoCards} from '@/client/utils/ceoActions';
+import CardListSection from '@/client/components/CardListSection.vue';
+import {ACTION_CARDS_TITLE, ceoCardState, isActionCardsOption, isCeoActionOption, ownCeoCards} from '@/client/utils/ceoActions';
+import {actionCardVisibility, inactiveActionCards, InactiveActionCards} from '@/client/utils/inactiveActionCards';
 
 let unique = 0;
 
@@ -248,6 +256,7 @@ export default defineComponent({
     ChoiceOptionTile,
     CancelActionButton,
     CeoActionSection,
+    CardListSection,
   },
   setup() {
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
@@ -258,7 +267,21 @@ export default defineComponent({
     if (asTabs) {
       provide(TAB_PANEL_FOOTER, '#' + footerId);
     }
-    return {asTabs, footerId};
+    // Sections of the "Actions" tab inside the action cards' selection (cardSections.ts); set in created() (needs this)
+    const cardSectionsFor = shallowRef<CardSectionsFor | undefined>(undefined);
+    provide(CARD_SECTIONS, cardSectionsFor);
+    return {asTabs, footerId, cardSectionsFor};
+  },
+  created() {
+    this.cardSectionsFor = (input: PlayerInputModel) => {
+      if (this.actionsIdx === -1 || input !== this.displayedOptions[this.actionsIdx]) {
+        return undefined;
+      }
+      return {
+        title: this.actionSectionCount > 1 ? {text: 'Action cards', count: this.availableCount(input) ?? 0} : undefined,
+        trailing: this.inactiveInActionGrid ? this.inactiveSections : [],
+      };
+    };
   },
   data() {
     const originalIndices = displayedOptionIndices(this.playerinput);
@@ -363,8 +386,43 @@ export default defineComponent({
       const option = this.ceoIdx === -1 ? undefined : this.displayedOptions[this.ceoIdx];
       return isCeoActionOption(option) ? option : undefined;
     },
+    // Own CEO cards whose once-per-game action is offered right now; spent or unusable ones sit in the greyed sections
+    availableCeoCards(): Array<CardModel> {
+      return this.ownCeoCards.filter((card) => ceoCardState(card, this.ceoOption) === 'available');
+    },
+    // Own action cards (and CEOs) the "Actions" tab doesn't offer: already used / not usable (inactiveActionCards.ts)
+    inactiveActions(): InactiveActionCards {
+      const player = this.playerView.thisPlayer as PlayerViewModel['thisPlayer'] | undefined;
+      if (!this.asTabs || player === undefined) {
+        return {used: [], unusable: []};
+      }
+      const actionsOption = this.actionsIdx === -1 ? undefined : this.displayedOptions[this.actionsIdx];
+      return inactiveActionCards(player, actionsOption?.type === 'card' ? actionsOption : undefined, this.ceoOption);
+    },
+    // Sub-sections of the "Actions" tab; headings only when there are several
+    actionSectionCount(): number {
+      return [
+        this.actionsIdx !== -1,
+        this.availableCeoCards.length > 0,
+        this.inactiveActions.used.length > 0,
+        this.inactiveActions.unusable.length > 0,
+      ].filter((present) => present).length;
+    },
+    // Greyed sections of the "Actions" tab: already used, not usable (CardListSection.vue)
+    inactiveSections(): Array<TrailingCardSection> {
+      const sections: Array<TrailingCardSection> = [
+        {title: 'Already used', cards: this.inactiveActions.used, unavailable: true, actionUsed: true, cubeColor: this.playerView.thisPlayer?.color},
+        {title: 'Not usable', cards: this.inactiveActions.unusable, unavailable: true},
+      ];
+      return sections.filter((section) => section.cards.length > 0);
+    },
+    // The greyed sections join the action cards' grid (one sticky header row over all, cardSections.ts) – unless a
+    // usable CEO follows the action cards: the greyed sections then come after it, below everything usable
+    inactiveInActionGrid(): boolean {
+      return this.actionsIdx !== -1 && this.availableCeoCards.length === 0;
+    },
     // CEO action and action cards share the "Actions" tab – only when the player has a CEO and one of both is offered
-    ceoGrouped(): boolean {
+    actionsGrouped(): boolean {
       return this.ownCeoCards.length > 0 && (this.actionsIdx !== -1 || this.ceoIdx !== -1);
     },
     // Tab standing for the group: "Actions", or the CEO action alone when no action card is usable
@@ -372,11 +430,11 @@ export default defineComponent({
       return this.actionsIdx !== -1 ? this.actionsIdx : this.ceoIdx;
     },
     inActionsGroup(): boolean {
-      return this.ceoGrouped && this.selectedIdx !== -1 && (this.selectedIdx === this.actionsIdx || this.selectedIdx === this.ceoIdx);
+      return this.actionsGrouped && this.selectedIdx !== -1 && (this.selectedIdx === this.actionsIdx || this.selectedIdx === this.ceoIdx);
     },
     visibleTabOrder(): Array<number> {
       const order = tabDisplayOrder(this.displayedOptions.map((option) => option.title));
-      return this.ceoGrouped && this.actionsIdx !== -1 ? order.filter((idx) => idx !== this.ceoIdx) : order;
+      return this.actionsGrouped && this.actionsIdx !== -1 ? order.filter((idx) => idx !== this.ceoIdx) : order;
     },
     // CEO action selected but no CEO card chosen yet: button disabled
     awaitingCeo(): boolean {
@@ -449,14 +507,14 @@ export default defineComponent({
     },
     // Title for label, tooltip and icon of a tab: the CEO action alone stands in for the "Actions" tab
     tabTitle(idx: number): string | Message {
-      return this.ceoGrouped && idx === this.ceoIdx ? ACTION_CARDS_TITLE : this.displayedOptions[idx].title;
+      return this.actionsGrouped && idx === this.ceoIdx ? ACTION_CARDS_TITLE : this.displayedOptions[idx].title;
     },
     tabActive(idx: number): boolean {
-      return this.ceoGrouped && idx === this.groupTabIdx ? this.inActionsGroup : this.selectedIdx === idx;
+      return this.actionsGrouped && idx === this.groupTabIdx ? this.inActionsGroup : this.selectedIdx === idx;
     },
     // "Actions" tab counts usable action cards plus usable CEOs
     tabCount(idx: number): number | undefined {
-      if (!(this.ceoGrouped && idx === this.groupTabIdx)) {
+      if (!(this.actionsGrouped && idx === this.groupTabIdx)) {
         return this.availableCount(this.displayedOptions[idx]);
       }
       const members = [this.actionsIdx, this.ceoIdx].filter((member) => member !== -1);
@@ -495,6 +553,7 @@ export default defineComponent({
       return tone === undefined ? '' : prefix + tone;
     },
     // Shared with WaitingForTabs (inputAvailableCount.ts)
+    actionCardVisibility,
     availableCount(option: PlayerInputModel): number | undefined {
       return inputAvailableCount(option);
     },

@@ -1221,5 +1221,8 @@
   "Final greenery": "最終緑地",
   "Mars is terraformed": "火星のテラフォーミング完了",
   "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "最後のチャンス：残りの植物を緑地に変えましょう – 緑地1枚につき1勝利点。",
-  "You have ${0} plants": "植物：${0}"
+  "You have ${0} plants": "植物：${0}",
+  "Not playable": "プレイ不可",
+  "Already used": "使用済み",
+  "Not usable": "使用不可"
 }

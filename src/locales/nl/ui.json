@@ -955,5 +955,8 @@
   "Final greenery": "Laatste groentegels",
   "Mars is terraformed": "Mars is geterraformd",
   "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Laatste kans: zet je resterende planten om in groentegels – elke tegel is 1 overwinningspunt waard.",
-  "You have ${0} plants": "Je hebt ${0} planten"
+  "You have ${0} plants": "Je hebt ${0} planten",
+  "Not playable": "Niet speelbaar",
+  "Already used": "Al gebruikt",
+  "Not usable": "Niet bruikbaar"
 }

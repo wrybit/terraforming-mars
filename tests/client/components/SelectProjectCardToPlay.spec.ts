@@ -76,6 +76,34 @@ describe('SelectProjectCardToPlay', () => {
     expect(cards[1].props().card.name).to.eq(CardName.ANTS);
   });
 
+  it('shows the hand cards that are not playable greyed out in their own section', async () => {
+    const wrapper = mount(SelectProjectCardToPlay, {
+      ...globalConfig,
+      props: {
+        playerView: asComplete<PlayerViewModel>({
+          cardsInHand: [{calculatedCost: 4, name: CardName.ANTS}, {calculatedCost: 3, name: CardName.BIRDS}],
+          id: 'p-unplayable',
+          thisPlayer: {steel: 0, tableau: []},
+        }),
+        playerinput: asComplete<SelectProjectCardToPlayModel>({
+          type: 'projectCard',
+          title: 'Play project card',
+          cards: [{name: CardName.ANTS, reserveUnits: Units.EMPTY}],
+          paymentOptions: {},
+          buttonLabel: 'Save',
+        }),
+        onsave: () => {},
+        showsave: true,
+        showtitle: false,
+      },
+    });
+    const unplayable = wrapper.findAll('.payments_cards--unplayable');
+    expect(unplayable).has.length(1);
+    expect(unplayable[0].find('input').exists()).is.false;
+    expect(unplayable[0].find('.card-unavailable').exists()).is.true;
+    expect(wrapper.findAll('.choice-section-title')).has.length(2);
+  });
+
   it('using heat', async () => {
     // Birds will cost 10. Player has 7M€ and will use 3 of the 4 available heat units.
     const wrapper = setupCardForPurchase(

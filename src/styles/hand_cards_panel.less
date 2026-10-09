@@ -34,10 +34,18 @@
   }
 }
 
-// Draft tab (DraftedCardsSection.vue): kept cards as their own section below the selection –
-// same separator and spacing as between the hand cards sections; does not grow, so the selection keeps the space
-.drafted-cards-section {
+// Section below a tab's selection (CardListSection.vue: kept draft cards, cards not playable, actions used or not
+// usable) – same separator and spacing as between the hand cards sections; does not grow, so the selection keeps the space
+.card-list-section {
   flex: none;
+  margin-top: @hand-cards-panel-section-gap;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+// Section headings inside a card grid (SelectProjectCardToPlay.vue: "Playable now" / "Not playable"): the grid spans
+// them across all columns (choice_block.less); the second one carries the same separator as between sections
+.choice-section-title--separated {
   margin-top: @hand-cards-panel-section-gap;
   padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.18);

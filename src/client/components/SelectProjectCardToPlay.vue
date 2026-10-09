@@ -1,9 +1,10 @@
 <template>
-<div class="payments_cont choice-block" :class="choiceBlockClass(cards.length, isHandSelection)" :style="choiceBlockStyle(cards.length)">
+<div class="payments_cont choice-block" :class="[choiceBlockClass(allCards.length, isHandSelection), {'choice-block--sections': unplayableCards.length > 0}]" :style="choiceBlockStyle(allCards.length)"
+  @tm-carousel-unselect="unselectCard">
   <!-- Cards as a choice block (choice_block.less) like when buying and for standard projects -->
   <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
   <!-- Same filter and sorting as in the hand tab, at the top of the box – only for hand cards (not standard projects) -->
-  <CardFilterBar v-if="isHandSelection" :cards="cards" :filter="handCardFilter" :context="filterContext">
+  <CardFilterBar v-if="isHandSelection" :cards="allCards" :filter="handCardFilter" :context="filterContext">
     <template #sort="{compact}">
       <HandSortControl :playerView="playerView" :compact="compact"/>
     </template>
@@ -12,6 +13,11 @@
   <CardZoomBar v-else/>
   <TabPanelIntroSlot/>
   <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
+  <!-- Hand cards that can't be played have their own section below (unplayableHandCards): then both get a heading,
+       like the sections of the hand cards tab. Same grid, so the one filter row works on both -->
+  <h3 v-if="shownUnplayableCount > 0 && shownPlayableCount > 0" class="hand-cards-panel__title choice-section-title">
+    {{ $t('Playable now') }} <small>{{ shownPlayableCount }}</small>
+  </h3>
   <label v-for="availableCard in cards" class="payments_cards" :class="visibilityClass(availableCard)" :key="availableCard.name">
     <input v-if="!availableCard.isDisabled" class="hidden" type="radio" v-model="cardName" :value="availableCard.name" >
     <Card class="cardbox" :card="availableCard" />
@@ -31,6 +37,15 @@
     </div>
   </template>
   <WarningsComponent v-if="card !== undefined" :warnings="card.warnings"/>
+  <!-- Not playable: view only, grey and half transparent; no radio, so neither a click nor the mobile carousel selects them -->
+  <template v-if="shownUnplayableCount > 0">
+    <h3 class="hand-cards-panel__title choice-section-title choice-section-title--separated">
+      {{ $t('Not playable') }} <small>{{ shownUnplayableCount }}</small>
+    </h3>
+    <label v-for="unplayableCard in unplayableCards" class="payments_cards payments_cards--unplayable" :class="visibilityClass(unplayableCard)" :key="unplayableCard.name">
+      <Card class="cardbox" :card="{...unplayableCard, isDisabled: true}" />
+    </label>
+  </template>
 
   <PaymentForm
     v-if="showPaymentSection"
@@ -73,6 +88,7 @@ import CardZoomBar from '@/client/components/cardfilter/CardZoomBar.vue';
 import TabPanelIntroSlot from '@/client/components/TabPanelIntroSlot.vue';
 import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
 import {cardVisibility, CardVisibility, handCardFilter, unmatchedCards} from '@/client/utils/cardFilterState';
+import {unplayableHandCards} from '@/client/utils/playableCards';
 
 export default defineComponent({
   name: 'SelectProjectCardToPlay',
@@ -127,26 +143,45 @@ export default defineComponent({
         'megacredits',
       ] as const).filter(this.canUse);
     },
+    // Hand cards the build tab doesn't offer (playableCards.ts)
+    unplayableCards(): ReadonlyArray<CardModel> {
+      return CardOrderStorage.getOrdered(
+        CardOrderStorage.getCardOrder(this.playerView.id),
+        unplayableHandCards(this.playerView, this.playerinput),
+      );
+    },
+    allCards(): ReadonlyArray<CardModel> {
+      return [...this.cards, ...this.unplayableCards];
+    },
+    shownPlayableCount(): number {
+      return this.cards.filter((card) => this.visibilityOf(card) !== 'hidden').length;
+    },
+    shownUnplayableCount(): number {
+      return this.unplayableCards.filter((card) => this.visibilityOf(card) !== 'hidden').length;
+    },
     ledger(): Ledger {
       return this.buildLedger(this.order, this.reserveUnits);
     },
     handCardFilter(): typeof handCardFilter {
       return handCardFilter;
     },
-    // Only playable cards are listed here, so no "Playable now"
+    // "Playable now" only when the not playable hand cards are listed too (otherwise every card is playable)
     filterContext(): CardFilterContext {
-      return {withCost: true};
+      if (this.unplayableCards.length === 0) {
+        return {withCost: true};
+      }
+      return {playable: new Set(this.cards.map((card) => card.name)), withCost: true};
     },
     // Playing project cards from the hand; standard projects use the same input but get no filter
     isHandSelection(): boolean {
-      if (this.cards.length < 2) {
+      if (this.allCards.length < 2) {
         return false;
       }
       const hand = new Set(allCardsInHand(this.playerView).map((card) => card.name));
       return this.cards.every((card) => hand.has(card.name));
     },
     nothingShown(): boolean {
-      return this.isHandSelection && unmatchedCards.value === 'hide' && this.cards.every((card) => this.visibilityOf(card) !== 'shown');
+      return this.isHandSelection && unmatchedCards.value === 'hide' && this.allCards.every((card) => this.visibilityOf(card) !== 'shown');
     },
     // The chosen card disappears behind the filter: choose the first shown card instead
     firstShownCardName(): CardName | undefined {
@@ -233,6 +268,12 @@ export default defineComponent({
     },
     choiceBlockClass,
     choiceBlockStyle,
+    // Mobile carousel came to rest on a card without a radio (not playable, cardCarousel.ts): nothing is chosen,
+    // so the payment area and its play button disappear instead of playing a card that is out of view
+    unselectCard() {
+      this.cardName = undefined;
+      this.card = undefined;
+    },
     getCard() {
       const card = this.cards.find((c) => c.name === this.cardName);
       if (card === undefined) {

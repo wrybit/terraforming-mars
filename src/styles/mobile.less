@@ -1355,6 +1355,12 @@ html.tm-mobile {
       flex-basis: 100%;
       flex-shrink: 0;
     }
+
+    // Section headings of the build tab ("Playable now", "Not playable"): in the carousel the not playable cards
+    // simply follow at the end, greyed out (cards.less) – a heading would become a page of its own
+    > .choice-section-title {
+      display: none;
+    }
   }
 
   .mb-dots {
@@ -1379,6 +1385,11 @@ html.tm-mobile {
   .mb-dot--active {
     width: 22px;
     background: @mb-accent;
+  }
+
+  // Card that can't be played (end of the carousel): dot as faint as the card
+  .mb-dot--unavailable {
+    opacity: 0.5;
   }
 
   .mb-dots-count {

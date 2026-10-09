@@ -276,3 +276,35 @@ html:not(.tm-mobile) .or-tab-panel {
 .choice-block > .select-card-owner-title:not(.select-card-owner-title ~ .select-card-owner-title) {
   margin-top: 0;
 }
+
+// Heading of a view-only section inside a card grid ("Not playable", "Already used", "Not usable": cardSections.ts,
+// SelectProjectCardToPlay.vue). Its cards are never selected, so they need no room for the check-mark flag:
+// pull them up close to their heading (law of proximity), the separator above keeps the big gap
+html:not(.tm-mobile) .or-tab-panel .choice-block > .choice-section-title--separated {
+  margin-bottom: -(@choice-row-gap - 8px);
+}
+
+// Card grid with several sections (cardSections.ts, SelectProjectCardToPlay.vue "Not playable"): every section's
+// rows sit centered in the box, also a short one – a grid would leave a short row at the left of the block.
+// So the block becomes a wrapping row across the full box width; headings, header row and hints take a line each.
+// Sections stack from the top (no vertical centering, the list is mostly longer than the box anyway).
+// Headings stay left-aligned at the box edge, only the cards are centered.
+// Repeated class: beats the grid rules above (incl. choice-block--fill with its width and auto margins)
+html:not(.tm-mobile) .or-tab-panel .choice-block.choice-block--sections.choice-block--sections.choice-block--sections.choice-block--sections:not(.setup-column-body *) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+  column-gap: @choice-column-gap;
+  width: 100%;
+  margin-inline: 0;
+
+  &::before,
+  &::after {
+    display: none;
+  }
+
+  > :not(.cardbox, .payments_cards) {
+    flex: 0 0 100%;
+  }
+}
