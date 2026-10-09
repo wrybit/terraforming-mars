@@ -333,6 +333,12 @@
   margin: 0 0 12px;
 }
 
+// Mobile view: the task header above the box already shows the question – don't repeat it in the box
+// (tile and card intros stay, they say more than the question)
+html.tm-mobile .mb-screen--turn:has(> .mb-task-head) .or-tab-panel-title {
+  display: none;
+}
+
 // The same question as a small caption below the header row of a card list (TabPanelIntroSlot.vue):
 // the typography of the section captions in the hand tab; close to the row it belongs to
 .or-tab-panel-caption {
