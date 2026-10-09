@@ -20,6 +20,8 @@ export type AiTuning = {
   tagRateModel: number,
   /** 1: unknown cards in hand worth 2–4 M€ by remaining generations, card-drawing actions by the cards they draw (stateValue.ts). */
   drawCardModel: number,
+  /** Generations it takes to fill free spots around a city: future greeneries count fully only with at least this many left (spaceValue.ts, stateValue.ts). */
+  boardHorizon: number,
   /** Weight of the measured engine value of effect cards (engineValue.ts), 0 = off. */
   engineWeight: number,
   /** 1: cards with a maximum requirement lose value for later when the window is closing. */
@@ -95,6 +97,7 @@ export const BASELINE_TUNING: AiTuning = {
   cityDenialShare: 0,
   tagRateModel: 0,
   drawCardModel: 0,
+  boardHorizon: 3,
   // A/B: weight 1 (clipped at 0) lost 45 : 58, weight 0.5 won 58 : 43 in 100 games but 153 : 158
   // in 300 new games (z +0.3 vs +0.8) – no clear gain, so off again (it costs computing time).
   engineWeight: 0,
@@ -138,8 +141,9 @@ export const BASELINE_TUNING: AiTuning = {
   endgameMoney: 1,
   accumulatorValue: 0,
   peek: 0,
-  rolloutCandidates: 0,
-  rolloutBudget: 3000,
+  // Round 18 (400 mirrored 1v1 games): rollout3 +2.7 VP per deal, z 2.45, 55 % wins.
+  rolloutCandidates: 3,
+  rolloutBudget: 4000,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -238,6 +242,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Humans drew 27–34 extra cards per game in two test games (AI Central, Business Network …), the
   // AI 1–4: a drawn card counted 2 M€ and every action card a flat 1.5 M€ per generation.
   drawCards: {drawCardModel: 1},
+  // Before round 18: no rollouts.
+  noRollout: {rolloutCandidates: 0},
+  // Jens (2026-10-09): in generation 11 the AI built a city next to free land instead of a spot with
+  // three greeneries and an ocean; free spots only become greeneries if there is time left.
+  boardHorizon6: {boardHorizon: 6},
 };
 
 export function isTuningVariant(name: string): boolean {

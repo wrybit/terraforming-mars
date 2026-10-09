@@ -9,7 +9,7 @@ import {Board} from '../boards/Board';
 import {SelectSpace} from '../inputs/SelectSpace';
 import {SpaceBonus} from '../../common/boards/SpaceBonus';
 import {SpaceType} from '../../common/boards/SpaceType';
-import {victoryPointValue} from './gameProgress';
+import {remainingProductionPhases, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
 
 // Scores a hex for tile placement. Weights: docs/ai/bot-heuristics.md §5.
@@ -122,8 +122,29 @@ function sharedSpotPoints(space: Space, neighbours: ReadonlyArray<Space>, player
   return points;
 }
 
+/** Share of future board points (free spots still to fill) that can still be realised. */
+function futureShare(player: IPlayer): number {
+  return Math.min(1, remainingProductionPhases(player.game, player) / tuningOf(player).boardHorizon);
+}
+
 function opponentGreeneries(neighbours: ReadonlyArray<Space>, player: IPlayer): number {
   return neighbours.filter((neighbour) => Board.isGreenerySpace(neighbour) && neighbour.player !== undefined && neighbour.player !== player).length;
+}
+
+/** Opponent greeneries next to the free city spots that a city here closes (counted per spot). */
+function blockedOpponentSpots(neighbours: ReadonlyArray<Space>, player: IPlayer, board: IGame['board']): number {
+  let blocked = 0;
+  for (const neighbour of neighbours) {
+    if (neighbour.tile !== undefined || neighbour.spaceType !== SpaceType.LAND) {
+      continue;
+    }
+    const around = board.getAdjacentSpaces(neighbour);
+    if (around.some((next) => Board.isCitySpace(next))) {
+      continue; // no city allowed there anyway
+    }
+    blocked += opponentGreeneries(around, player);
+  }
+  return blocked;
 }
 
 export function spaceValue(space: Space, kind: TileKind, player: IPlayer): number {
@@ -156,17 +177,21 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
     break;
   case 'city':
     // A city scores 1 VP per adjacent greenery (any owner) at game end; free land can become one.
-    value += greeneries * victoryPoint + emptyLand * victoryPoint * 0.35;
+    // Greeneries already there score for sure; free land only if there is time to fill it.
+    value += greeneries * victoryPoint + emptyLand * victoryPoint * 0.35 * futureShare(player);
     // Normally cities may not touch, only cards like Urbanized Area allow it. Such a city is an
     // attack: placed between opponent cities it takes their greenery spots, between own cities
     // it takes our own (the AI used to put it between its own cities).
     value += opponentCities * victoryPoint * 0.5 - ownCities * victoryPoint * 0.8;
     // Two own cities with one row between them share free spots: a greenery there scores for
     // both (tip from the group: place cities in pairs at that distance, then fill greeneries).
-    value += sharedSpotPoints(space, neighbours, player, board) * victoryPoint;
+    value += sharedSpotPoints(space, neighbours, player, board) * victoryPoint * futureShare(player);
     // A spot next to opponent greeneries is their best city spot: taking it denies them those
     // points (a human remarked the AI could have taken several such spots).
-    value += opponentGreeneries(neighbours, player) * tuningOf(player).cityDenialShare * victoryPoint;
+    // Cities may not touch: the free spots around a new city are closed for the opponent's cities
+    // too. Jens set a city one spot off on purpose so the AI could no longer build next to it.
+    value += (opponentGreeneries(neighbours, player) + blockedOpponentSpots(neighbours, player, board) * 0.5) *
+      tuningOf(player).cityDenialShare * victoryPoint;
     break;
   case 'ocean':
     // Oceans next to own tiles help nobody else; next to free land they feed later rebates.

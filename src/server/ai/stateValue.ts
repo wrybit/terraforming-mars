@@ -328,7 +328,7 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
   const expectedVictoryPoints = victoryPoints.total - victoryPoints.awards + expectedAwardPoints(player, context) +
     milestoneRacePoints(player);
   // Board VP still to come count only while there is time to realise them.
-  const boardTime = Math.min(1, context.remaining / 3);
+  const boardTime = Math.min(1, context.remaining / tuningOf(player).boardHorizon);
   return (expectedVictoryPoints + boardPotential(player) * boardTime) * context.victoryPoint +
     player.terraformRating * context.remaining * (context.productionDiscount ?? PRODUCTION_DISCOUNT) + // TR is income every production phase
     productionValue(player, context) +

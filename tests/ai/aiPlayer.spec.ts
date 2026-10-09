@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import {clearPlayerTunings, setPlayerTuning} from '../../src/server/ai/aiTuning';
 import {Player} from '../../src/server/Player';
 import {Database} from '../../src/server/database/Database';
 import {runInSandbox, isSimulating} from '../../src/server/ai/simulationSandbox';
@@ -52,8 +53,13 @@ describe('AI player', () => {
       maximumDecisions: 20000,
       maximumAttemptsPerDecision: 200,
       random: Math.random,
-      responders: [(input, player) => chooseResponse(input, player, 'normal'), undefined],
+      // Without rollouts: they take seconds per action, the whole game would exceed the timeout.
+      responders: [(input, player) => {
+        setPlayerTuning(player.id, 'noRollout');
+        return chooseResponse(input, player, 'normal');
+      }, undefined],
     });
+    clearPlayerTunings();
     expect(result.finished).is.true;
     expect(result.victoryPoints[0]).greaterThan(result.victoryPoints[1]);
   }).timeout(60000);
