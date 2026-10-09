@@ -1,0 +1,225 @@
+{
+ "source": "BGA archive (tfmstats.com), Tharsis two-player games, 46477 games; tests/simulation/analyzeBgaCitySpots.py",
+ "spots": {
+  "A1": {
+   "cities": 277,
+   "firstShare": 0.69,
+   "meanPoints": 1.04
+  },
+  "A3": {
+   "cities": 364,
+   "firstShare": 0.06,
+   "meanPoints": 1.8
+  },
+  "B1": {
+   "cities": 205,
+   "firstShare": 0.1,
+   "meanPoints": 2.7
+  },
+  "B3": {
+   "cities": 647,
+   "firstShare": 0.29,
+   "meanPoints": 3.01
+  },
+  "B4": {
+   "cities": 528,
+   "firstShare": 0.46,
+   "meanPoints": 3.1
+  },
+  "B5": {
+   "cities": 1075,
+   "firstShare": 0.56,
+   "meanPoints": 1.96
+  },
+  "C2": {
+   "cities": 1286,
+   "firstShare": 1.78,
+   "meanPoints": 3.49
+  },
+  "C3": {
+   "cities": 1353,
+   "firstShare": 1.7,
+   "meanPoints": 3.36
+  },
+  "C4": {
+   "cities": 1715,
+   "firstShare": 3.7,
+   "meanPoints": 3.43
+  },
+  "C5": {
+   "cities": 2790,
+   "firstShare": 5.37,
+   "meanPoints": 3.72
+  },
+  "C6": {
+   "cities": 922,
+   "firstShare": 2.11,
+   "meanPoints": 3.13
+  },
+  "C7": {
+   "cities": 220,
+   "firstShare": 0.28,
+   "meanPoints": 1.57
+  },
+  "D2": {
+   "cities": 530,
+   "firstShare": 1.02,
+   "meanPoints": 2.78
+  },
+  "D3": {
+   "cities": 604,
+   "firstShare": 0.65,
+   "meanPoints": 2.43
+  },
+  "D4": {
+   "cities": 1183,
+   "firstShare": 1.53,
+   "meanPoints": 2.56
+  },
+  "D5": {
+   "cities": 1319,
+   "firstShare": 2.84,
+   "meanPoints": 2.38
+  },
+  "D6": {
+   "cities": 1045,
+   "firstShare": 3.3,
+   "meanPoints": 3.42
+  },
+  "D7": {
+   "cities": 4791,
+   "firstShare": 24.22,
+   "meanPoints": 3.83
+  },
+  "E2": {
+   "cities": 2713,
+   "firstShare": 13.19,
+   "meanPoints": 3.04
+  },
+  "E7": {
+   "cities": 705,
+   "firstShare": 1.17,
+   "meanPoints": 2.45
+  },
+  "E8": {
+   "cities": 588,
+   "firstShare": 0.87,
+   "meanPoints": 2.73
+  },
+  "E9": {
+   "cities": 377,
+   "firstShare": 0.17,
+   "meanPoints": 1.53
+  },
+  "F1": {
+   "cities": 1001,
+   "firstShare": 1.75,
+   "meanPoints": 2.91
+  },
+  "F2": {
+   "cities": 886,
+   "firstShare": 2.21,
+   "meanPoints": 2.72
+  },
+  "F3": {
+   "cities": 609,
+   "firstShare": 0.4,
+   "meanPoints": 2.62
+  },
+  "F4": {
+   "cities": 947,
+   "firstShare": 1.03,
+   "meanPoints": 2.66
+  },
+  "F5": {
+   "cities": 1393,
+   "firstShare": 0.49,
+   "meanPoints": 1.95
+  },
+  "G1": {
+   "cities": 440,
+   "firstShare": 0.25,
+   "meanPoints": 2.73
+  },
+  "G2": {
+   "cities": 1565,
+   "firstShare": 1.61,
+   "meanPoints": 3.33
+  },
+  "G3": {
+   "cities": 1240,
+   "firstShare": 1.23,
+   "meanPoints": 3.47
+  },
+  "G4": {
+   "cities": 2774,
+   "firstShare": 7.35,
+   "meanPoints": 3.98
+  },
+  "G5": {
+   "cities": 896,
+   "firstShare": 1.3,
+   "meanPoints": 3.42
+  },
+  "G6": {
+   "cities": 701,
+   "firstShare": 0.4,
+   "meanPoints": 2.5
+  },
+  "G7": {
+   "cities": 232,
+   "firstShare": 0.04,
+   "meanPoints": 2.0
+  },
+  "H1": {
+   "cities": 850,
+   "firstShare": 2.02,
+   "meanPoints": 1.66
+  },
+  "H2": {
+   "cities": 692,
+   "firstShare": 0.98,
+   "meanPoints": 3.21
+  },
+  "H3": {
+   "cities": 1142,
+   "firstShare": 4.72,
+   "meanPoints": 2.41
+  },
+  "H4": {
+   "cities": 915,
+   "firstShare": 1.75,
+   "meanPoints": 2.93
+  },
+  "H5": {
+   "cities": 1165,
+   "firstShare": 1.45,
+   "meanPoints": 3.51
+  },
+  "H6": {
+   "cities": 208,
+   "firstShare": 0.4,
+   "meanPoints": 1.76
+  },
+  "J1": {
+   "cities": 276,
+   "firstShare": 0.34,
+   "meanPoints": 1.73
+  },
+  "J2": {
+   "cities": 887,
+   "firstShare": 3.99,
+   "meanPoints": 1.74
+  },
+  "J3": {
+   "cities": 459,
+   "firstShare": 0.15,
+   "meanPoints": 2.91
+  },
+  "J4": {
+   "cities": 245,
+   "firstShare": 0.08,
+   "meanPoints": 2.28
+  }
+ }
+}

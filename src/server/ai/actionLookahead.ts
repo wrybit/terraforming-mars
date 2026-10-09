@@ -341,7 +341,11 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
   // reply, only their order changes. They see what a pass gives up, so no pass penalty then.
   let rolledOut = false;
   if (tuning.rolloutCandidates > 0) {
-    const finalists = [...tried].sort((a, b) => b.outcome.value - a.outcome.value).slice(0, tuning.rolloutCandidates);
+    const ranked = [...tried].sort((a, b) => b.outcome.value - a.outcome.value);
+    const bestPlain = ranked[0]?.outcome.value ?? 0;
+    // A clear decision needs no rollouts: they cost seconds per action.
+    const finalists = ranked.slice(0, tuning.rolloutCandidates)
+      .filter((entry) => tuning.rolloutMargin <= 0 || bestPlain - entry.outcome.value <= tuning.rolloutMargin);
     const entries: Array<RolloutEntry> = [];
     for (const entry of finalists) {
       if (entry.outcome.snapshot !== undefined) {

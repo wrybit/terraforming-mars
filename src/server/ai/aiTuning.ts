@@ -84,6 +84,10 @@ export type AiTuning = {
   rolloutCandidates: number,
   /** Time in ms the rollouts of one action may take. */
   rolloutBudget: number,
+  /** Rollouts only for moves within this many M€ of the best plain value (clear decisions skip them; 0 = no limit). */
+  rolloutMargin: number,
+  /** M€ per VP of difference to the average end score of a city on that spot in BGA games (Tharsis, first cities; spaceValue.ts), 0 = off. */
+  citySpotPrior: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -150,6 +154,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 18 (400 mirrored 1v1 games): rollout3 +2.7 VP per deal, z 2.45, 55 % wins.
   rolloutCandidates: 3,
   rolloutBudget: 4000,
+  rolloutMargin: 0,
+  citySpotPrior: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -259,6 +265,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Martin: synergies first (Viral Enhancers with plant/animal/microbe chains): effect cards are
   // measured with the own hand, not only with random future cards.
   handSynergy: {handSynergy: 1},
+  // Rollouts made a 2P test game take ~600 s: clear decisions (best move 5 M€ ahead) skip them.
+  rolloutGate: {rolloutMargin: 5},
+  // Jens: the first city went next to Noctis although better standard spots exist (BGA: D7, G4, C5).
+  citySpots: {citySpotPrior: 1},
 };
 
 export function isTuningVariant(name: string): boolean {

@@ -11,6 +11,7 @@ import {SpaceBonus} from '../../common/boards/SpaceBonus';
 import {SpaceType} from '../../common/boards/SpaceType';
 import {remainingProductionPhases, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
+import {citySpotPoints} from './citySpotPrior';
 
 // Scores a hex for tile placement. Weights: docs/ai/bot-heuristics.md §5.
 
@@ -186,6 +187,8 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
     // Two own cities with one row between them share free spots: a greenery there scores for
     // both (tip from the group: place cities in pairs at that distance, then fill greeneries).
     value += sharedSpotPoints(space, neighbours, player, board) * victoryPoint * futureShare(player);
+    // Opening: standard spots that score well in BGA games (citySpotPrior.ts).
+    value += citySpotPoints(space, player) * tuningOf(player).citySpotPrior * victoryPoint;
     // A spot next to opponent greeneries is their best city spot: taking it denies them those
     // points (a human remarked the AI could have taken several such spots).
     // Cities may not touch: the free spots around a new city are closed for the opponent's cities
