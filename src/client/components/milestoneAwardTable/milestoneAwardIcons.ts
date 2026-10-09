@@ -65,7 +65,7 @@ export const MILESTONE_ICONS: Record<MilestoneName, ReadonlyArray<IconPart>> = {
   'Rim Settler': [{asset: 'tags/jovian'}],
   'Risktaker': [{asset: 'underworld/negative-vp'}],
   'Smith': [{asset: 'resources/steel', production: true}, {asset: 'resources/titanium', production: true}],
-  'Spacefarer': [{asset: 'tags/space'}],
+  'T. Spacefarer': [{asset: 'tags/space'}],
   'Spacefarer4': [{asset: 'tags/space'}],
   'Specialist': [{asset: 'resources/wild', production: true}],
   'Sponsor': [{asset: 'resources/card', outline: true}],

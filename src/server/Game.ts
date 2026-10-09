@@ -692,14 +692,14 @@ export class Game implements IGame, Logger {
   }
 
   private playerHasPickedCorporationCard(player: IPlayer, corporationCard: ICorporationCard): void {
-    // TODO(kberg): I think we can get rid of this weird validation at a later time.
     player.pickedCorporationCard = corporationCard;
-    if (this.players.every((p) => p.pickedCorporationCard !== undefined)) {
-      for (const somePlayer of this.playersInGenerationOrder) {
-        if (somePlayer.pickedCorporationCard === undefined) {
-          throw new Error(`pickedCorporationCard is not defined for ${somePlayer.id}`);
+    const players = this.playersInGenerationOrder;
+    if (players.every((p) => p.pickedCorporationCard !== undefined)) {
+      for (const p of players) {
+        // This if cluase is necessary because `every` above doesn't help.
+        if (p.pickedCorporationCard) {
+          p.playCorporationCard(p.pickedCorporationCard);
         }
-        somePlayer.playCorporationCard(somePlayer.pickedCorporationCard);
       }
     }
   }
@@ -1510,13 +1510,11 @@ export class Game implements IGame, Logger {
     case SpaceBonus.SCIENCE:
       this.defer(new AddResourcesToCard(player, CardResource.SCIENCE, {count: count}));
       break;
-    case SpaceBonus.TEMPERATURE:
     case SpaceBonus.TEMPERATURE_4MC:
       if (this.getTemperature() < constants.MAX_TEMPERATURE) {
-        const cost = spaceBonus === SpaceBonus.TEMPERATURE ? constants.VASTITAS_BOREALIS_BONUS_TEMPERATURE_COST : constants.VASTITAS_BOREALIS_NOVA_BONUS_TEMPERATURE_COST;
         this.defer(new SelectPaymentDeferred(
           player,
-          cost,
+          constants.VASTITAS_BOREALIS_NOVA_BONUS_TEMPERATURE_COST,
           {title: 'Select how to pay for placement bonus temperature'}))
           .andThen(() => this.increaseTemperature(player, 1));
       }

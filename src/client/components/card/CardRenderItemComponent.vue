@@ -16,6 +16,12 @@ import {Tag} from '@/common/cards/Tag';
 import {ICardRenderItem, isICardRenderItem} from '@/common/cards/render/Types';
 import {cardResourceCSS} from '../common/cardResources';
 
+// Secondary icons that are resources, not tags.
+const secondaryResourceClasses: Partial<Record<Tag | AltSecondaryTag, string>> = {
+  [AltSecondaryTag.FLOATER]: 'card-icon-resource--floater',
+  [AltSecondaryTag.WILD_RESOURCE]: 'card-icon-resource--wild',
+};
+
 export default defineComponent({
   name: 'CardRenderItemComponent',
   props: {
@@ -168,7 +174,6 @@ export default defineComponent({
           return ['card-resource-trade'];
         }
       case CardRenderItemType.COLONIES:
-        // TODO (chosta): think about an abstraction for item size
         if (this.item.size === Size.SMALL) {
           return ['card-resource-colony', 'card-resource-colony--S'];
         } else {
@@ -308,7 +313,8 @@ export default defineComponent({
       // Oxygen is handled specially separately.
       const secondaryTag = this.item.secondaryTag;
       if (secondaryTag !== undefined && !previouslyRendered.includes(secondaryTag)) {
-        result += '<div class="card-icon tag-' + secondaryTag + '"></div>';
+        const secondaryClass = secondaryResourceClasses[secondaryTag] ?? 'tag-' + secondaryTag;
+        result += '<div class="card-icon ' + secondaryClass + '"></div>';
       }
       if (this.item.isPlate || this.item.text !== undefined) {
         if (this.item.inParens) {
@@ -357,7 +363,6 @@ export default defineComponent({
       if (this.item.type === CardRenderItemType.MEGACREDITS && this.item.amount === undefined) {
         result = '?';
       }
-      // TODO(chosta): abstract once another case of cancel (X) on top of an item is needed
       if (this.item.cancelled === true) {
         switch (this.item.type) {
         case CardRenderItemType.TR:

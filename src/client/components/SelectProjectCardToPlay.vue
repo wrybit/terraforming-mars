@@ -154,6 +154,12 @@ export default defineComponent({
       const chosen = this.cards.find((card) => card.name === this.cardName);
       return chosen !== undefined && this.visibilityOf(chosen) === 'hidden';
     },
+    tags(): ReadonlyArray<Tag> {
+      return this.card !== undefined ? getCardOrThrow(this.card.name).tags : [];
+    },
+    reserveUnits(): Units {
+      return this.card?.reserveUnits ?? Units.EMPTY;
+    },
     CardName(): typeof CardName {
       return CardName;
     },
@@ -177,11 +183,8 @@ export default defineComponent({
       if (newVal === undefined) {
         return;
       }
-      // TODO(kberg): this stuff is set in data(). Perhaps share the code?
       this.card = this.getCard();
       this.cost = this.card.calculatedCost ?? 0;
-      this.tags = this.getCardTags();
-      this.reserveUnits = this.card.reserveUnits ?? Units.EMPTY;
       this.updateAvailableUnits();
     },
   },
@@ -197,9 +200,7 @@ export default defineComponent({
     return {
       cardName: card?.name,
       card: card,
-      reserveUnits: card?.reserveUnits ?? Units.EMPTY,
       cost: card?.calculatedCost ?? 0,
-      tags: card !== undefined ? getCardOrThrow(card.name).tags : [],
       available: Units.of({}),
     };
   },
@@ -235,14 +236,6 @@ export default defineComponent({
         throw new Error(`card not found ${this.cardName}`);
       }
       return card;
-    },
-    getCardTags() {
-      // By the time getCardTags is called, this.cardName is defined. This is an
-      // unnecessary guard.
-      if (this.cardName === undefined) {
-        return [];
-      }
-      return getCardOrThrow(this.cardName).tags;
     },
     updateAvailableUnits() {
       const thisPlayer = this.playerView.thisPlayer;

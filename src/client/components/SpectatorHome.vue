@@ -57,7 +57,6 @@
 import {defineComponent} from 'vue';
 
 import {GameModel} from '@/common/models/GameModel';
-import {vueRoot} from '@/client/components/vueRoot';
 import {SpectatorModel} from '@/common/models/SpectatorModel';
 import GameOverNotice from '@/client/components/gameend/GameOverNotice.vue';
 import HomeColumns from '@/client/components/HomeColumns.vue';
@@ -98,12 +97,6 @@ export default defineComponent({
     PlayersOverview,
     Sidebar,
     WaitingFor,
-  },
-  methods: {
-    forceRerender() {
-      // TODO(kberg): this is very inefficient. It pulls down the entire state, ignoring the value of 'waitingFor' which only fetches a short state.
-      vueRoot(this).updateSpectator();
-    },
   },
 });
 </script>

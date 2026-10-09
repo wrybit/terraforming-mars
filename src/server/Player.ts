@@ -737,10 +737,7 @@ export class Player implements IPlayer {
       }
     });
 
-    // TODO(kberg): put this in a callback.
-    if (card.tags.includes(Tag.SPACE) && PartyHooks.shouldApplyPolicy(this, PartyName.UNITY, 'up04')) {
-      cost -= 2;
-    }
+    cost -= TurmoilHandler.getCardDiscount(this, card);
 
     return Math.max(cost, 0);
   }
@@ -790,12 +787,23 @@ export class Player implements IPlayer {
       }
     }
 
-    // TODO(kberg): Move this.paymentOptionsForCard to a parameter.
     const totalToPay = this.payingAmount(payment, this.paymentOptionsForCard(selectedCard));
 
     if (totalToPay < cardCost) {
       throw new Error('Did not spend enough to pay for card');
     }
+
+    const deductCardResources = (amt: number | undefined, cardName: CardName) => {
+      if (amt !== undefined && amt > 0) {
+        const card = this.playedCards.get(cardName);
+        if (card) {
+          this.removeResourceFrom(card, amt, {log: true});
+        }
+      }
+    };
+    deductCardResources(selectedCard.additionalProjectCosts?.aeronGenomicsResources, CardName.AERON_GENOMICS);
+    deductCardResources(selectedCard.additionalProjectCosts?.thinkTankResources, CardName.THINK_TANK);
+
     return this.playCard(selectedCard, payment, cardAction);
   }
 
@@ -1378,10 +1386,6 @@ export class Player implements IPlayer {
    * Returns information about whether a player can afford to spend money with other costs and ways to pay taken into account.
    */
   private canAffordInternal(options: CanAffordOptions): {redsCost: number, canAfford: boolean} {
-    // TODO(kberg): These are set both here and in SelectPayment. Consolidate, perhaps.
-    options.heat = this.canUseHeatAsMegaCredits;
-    options.lunaTradeFederationTitanium = this.canUseTitaniumAsMegacredits;
-
     const reserveUnits = options.reserveUnits ?? Units.EMPTY;
     if (reserveUnits.heat > 0) {
       // Special-case heat
@@ -1539,7 +1543,7 @@ export class Player implements IPlayer {
             message('Take first action of ${0} corporation', (b) => b.card(corp)),
             corp.initialActionText)
             .andThen(() => {
-              game.log('${0} took the first action of ${1} corporation', (b) => b.player(this).card(corp)),
+              game.log('${0} took the first action of ${1} corporation', (b) => b.player(this).card(corp));
               this.inCardContext(corp.name, () => this.defer(corp.initialAction?.(this)));
               inplaceRemove(this.pendingInitialActions, corp);
               return undefined;

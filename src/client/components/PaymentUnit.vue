@@ -7,7 +7,7 @@
       <i class="resource_icon payments_type_icon" :class="iconClass" :title="$t('Pay with ' + description)"></i>
       <input
         class="form-input form-inline payments_input"
-        :value="modelValue"
+        :value="count"
         @input="onInput"
       >
     </span>
@@ -42,8 +42,7 @@ import {paymentIconClass} from '@/client/components/paymentIcon';
 export default defineComponent({
   name: 'PaymentUnitComponent',
   props: {
-    // TODO(kberg): Rename to count.
-    modelValue: {
+    count: {
       type: Number,
       required: true,
     },
@@ -91,7 +90,7 @@ export default defineComponent({
   },
   methods: {
     onInput(event: Event) {
-      this.$emit('update:modelValue', (event.target as HTMLInputElement).value);
+      this.$emit('update:count', (event.target as HTMLInputElement).value);
     },
   },
 });
