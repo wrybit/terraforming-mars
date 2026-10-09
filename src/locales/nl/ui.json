@@ -951,5 +951,9 @@
   "${0} chosen cards hidden by the filter": "${0} gekozen kaarten verborgen door het filter",
   "Sort": "Sorteren",
   "ascending": "oplopend",
-  "descending": "aflopend"
+  "descending": "aflopend",
+  "Final greenery": "Laatste groentegels",
+  "Mars is terraformed": "Mars is geterraformd",
+  "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Laatste kans: zet je resterende planten om in groentegels – elke tegel is 1 overwinningspunt waard.",
+  "You have ${0} plants": "Je hebt ${0} planten"
 }

@@ -606,5 +606,9 @@
   "${0} chosen cards hidden by the filter": "Выбранных карт скрыто фильтром: ${0}",
   "Sort": "Сортировать",
   "ascending": "по возрастанию",
-  "descending": "по убыванию"
+  "descending": "по убыванию",
+  "Final greenery": "Последние озеленения",
+  "Mars is terraformed": "Марс терраформирован",
+  "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Последний шанс: преврати оставшиеся растения в озеленения – каждое приносит 1 победное очко.",
+  "You have ${0} plants": "У тебя ${0} растений"
 }

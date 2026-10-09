@@ -547,5 +547,9 @@
   "${0} chosen cards hidden by the filter": "${0} cartas elegidas ocultas por el filtro",
   "Sort": "Ordenar",
   "ascending": "ascendente",
-  "descending": "descendente"
+  "descending": "descendente",
+  "Final greenery": "Vegetación final",
+  "Mars is terraformed": "Marte está terraformado",
+  "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Última oportunidad: convierte tus plantas restantes en vegetación; cada una vale 1 punto de victoria.",
+  "You have ${0} plants": "Tienes ${0} plantas"
 }

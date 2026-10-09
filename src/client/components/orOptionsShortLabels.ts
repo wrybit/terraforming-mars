@@ -34,6 +34,7 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   'Select a card to keep': 'Keep card',
   'Select a card to keep and pass the rest to ${0}': 'Keep card',
   'Select two cards to keep and pass the rest to ${0}': 'Keep cards',
+  'Place any final greenery from plants': 'Final greenery',
 };
 
 // Tab label by input type when the title has no short label (WaitingForTabs);

@@ -752,5 +752,9 @@
   "${0} chosen cards hidden by the filter": "${0} 张已选卡牌被筛选隐藏",
   "Sort": "排序",
   "ascending": "升序",
-  "descending": "降序"
+  "descending": "降序",
+  "Final greenery": "最终森林",
+  "Mars is terraformed": "火星已完成地球化",
+  "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "最后机会：将剩余植物转换为森林——每块森林价值 1 胜利点。",
+  "You have ${0} plants": "你有 ${0} 个植物"
 }

@@ -1415,5 +1415,9 @@
   "${0} chosen cards hidden by the filter": "Вибраних карт приховано фільтром: ${0}",
   "Sort": "Сортувати",
   "ascending": "за зростанням",
-  "descending": "за спаданням"
+  "descending": "за спаданням",
+  "Final greenery": "Останні ліси",
+  "Mars is terraformed": "Марс тераформовано",
+  "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Останній шанс: перетвори решту рослин на ліси – кожен приносить 1 переможне очко.",
+  "You have ${0} plants": "У тебе ${0} рослин"
 }

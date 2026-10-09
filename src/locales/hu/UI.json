@@ -1399,5 +1399,9 @@
   "${0} chosen cards hidden by the filter": "${0} kiválasztott kártyát elrejt a szűrő",
   "Sort": "Rendezés",
   "ascending": "növekvő",
-  "descending": "csökkenő"
+  "descending": "csökkenő",
+  "Final greenery": "Utolsó Növényzetlapkák",
+  "Mars is terraformed": "A Mars terraformálva",
+  "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Utolsó esély: alakítsd át a maradék növényeidet Növényzetlapkákká – mindegyik 1 győzelmi pontot ér.",
+  "You have ${0} plants": "${0} növényed van"
 }

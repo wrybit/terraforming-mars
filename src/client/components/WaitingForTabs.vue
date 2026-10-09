@@ -6,11 +6,11 @@
     <div class="or-tabs" role="tablist">
       <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
       <button type="button" role="tab"
-        :title="$t(fullTabTitle(lead.title))"
+        :title="$t(fullTabTitle(tabSource.title))"
         :aria-selected="!handTabActive"
         :class="['or-tab', {'or-tab--active': !handTabActive}, tone !== undefined ? 'or-tab--tone-' + tone : '']"
         @click="handTabActive = false">
-        <span class="or-tab-title">{{ $t(inputTabLabel(lead)) }}</span>
+        <span class="or-tab-title">{{ $t(inputTabLabel(tabSource)) }}</span>
         <span v-if="count !== undefined" class="or-tab-count">{{ count }}</span>
       </button>
       <!-- Choice can still be changed (e.g. draft) while others are choosing: same red status tab as without an input -->
@@ -21,7 +21,7 @@
       <HandCardsPanel v-if="handTabActive" :playerView="playerView"/>
       <!-- The question belongs to the input and therefore sits in its box, not above the tabs -->
       <!-- Space selection etc.: tile, question and hint (tabIntro.ts); otherwise only the question -->
-      <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(playerinput.title)" :playerView="playerView" :card="sourceCard"/>
+      <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(intro.finale === true ? playerinput.title : shown.title)" :playerView="playerView" :card="sourceCard"/>
       <!-- If a card triggers the input (Sabotage, Comet for Venus …): card, name and text instead of "Select an option" -->
       <CardIntroBlock v-else-if="sourceCard !== undefined" v-show="!handTabActive" :card="sourceCard" :title="fullTabTitle(lead.title)"/>
       <!-- Draft repick: the explanation is no question, it moves small into the footer next to the button -->
@@ -30,8 +30,8 @@
       <PlayerInputFactory v-show="!handTabActive"
         :players="playerView.players"
         :playerView="playerView"
-        :playerinput="playerinput"
-        :onsave="onsave"
+        :playerinput="shown"
+        :onsave="saveShown"
         :showsave="true"
         :showtitle="false"/>
       <!-- Draft: cards already kept below the new ones, instead of a separate block under the box -->
@@ -40,6 +40,9 @@
       <div v-show="!handTabActive" :id="footerId" class="or-tab-footer">
         <!-- Cancel an action that is still only a plan: left in the footer (cancelAction.ts) -->
         <CancelActionButton/>
+        <!-- Declining a space selection (spaceWithSkip.ts): red like Skip next to a card selection (SelectCard.vue) -->
+        <AppButton v-for="index in spaceChoice?.skipIndices ?? []" :key="index" type="submit" class="btn-tone-danger"
+          :title="$t(skipTitle(index))" @click="skip(index)"/>
         <p v-if="draftRepick" class="or-tab-footer-hint">{{ $t(fullTabTitle(lead.title)) }}</p>
       </div>
     </div>
@@ -50,7 +53,7 @@
 import {computed, provide, ref} from 'vue';
 import {vDockedTab} from '@/client/directives/DockedTab';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
-import {PlayerInputModel} from '@/common/models/PlayerInputModel';
+import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {InputResponse} from '@/common/inputs/InputResponse';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import CancelActionButton from '@/client/components/CancelActionButton.vue';
@@ -69,6 +72,9 @@ import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
 import DraftedCardsSection from '@/client/components/DraftedCardsSection.vue';
 import {draftedCardsInInput, isDraftRepick} from '@/client/utils/draftedCards';
 import {allCardsInHand} from '@/client/utils/handCards';
+import {shownInput, spaceWithSkip} from '@/client/components/spaceWithSkip';
+import AppButton from '@/client/components/common/AppButton.vue';
+import {Message} from '@/common/logs/Message';
 
 const props = defineProps<{
   playerView: PlayerViewModel;
@@ -83,13 +89,32 @@ provide(TAB_PANEL_FOOTER, '#' + footerId);
 
 const handTabActive = ref(false);
 const handCards = computed(() => allCardsInHand(props.playerView));
-const count = computed(() => inputAvailableCount(props.playerinput));
+const count = computed(() => inputAvailableCount(shown.value));
 // For a decision with player selection this determines question, label and color (choiceMenu.ts)
-const lead = computed(() => choiceMenuLead(props.playerinput));
+// Space selection with skip: the box shows only the space selection, the skip sits in the footer (spaceWithSkip.ts)
+const spaceChoice = computed(() => spaceWithSkip(props.playerinput));
+const shown = computed(() => shownInput(props.playerinput));
+const lead = computed(() => choiceMenuLead(shown.value));
+// Tab label and tooltip: the input's own title (e.g. "final greenery" instead of the space selection inside it)
+const tabSource = computed(() => spaceChoice.value === undefined ? lead.value : props.playerinput);
 // Tone of the input tab (prelude pink, attack red, cards orange …)
 const tone = computed(() => inputTone(lead.value));
-const intro = computed(() => tabIntro(props.playerinput));
+const intro = computed(() => tabIntro(shown.value, props.playerinput));
 const sourceCard = computed(() => inputSourceCard(props.playerinput));
 const draftedCards = computed(() => draftedCardsInInput(props.playerView));
 const draftRepick = computed(() => isDraftRepick(props.playerView, props.playerinput));
+
+// Answers of the shown space selection go back wrapped as the choice of its option
+function saveShown(response: InputResponse): void {
+  const choice = spaceChoice.value;
+  props.onsave(choice === undefined ? response : {type: 'or', index: choice.spaceIndex, response});
+}
+
+function skipTitle(index: number): string | Message {
+  return (props.playerinput as OrOptionsModel).options[index].title;
+}
+
+function skip(index: number): void {
+  props.onsave({type: 'or', index, response: {type: 'option'}});
+}
 </script>

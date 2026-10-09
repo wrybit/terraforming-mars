@@ -14,13 +14,19 @@ export type TabIntro = {
   resourceIcon?: string; // Resource icon (resources.less: resource_icon--<name>)
   hint?: 'click-space';
   facts?: ReadonlyArray<IntroFact>; // Game-state lines so the consequences of the action are visible without searching
+  finale?: true; // Last step of the game (final greenery): golden "Mars is terraformed" above the title
 };
 
 // One game-state line below the explanation; values come from the game state only when displayed (introFacts)
 export type IntroFact =
   {kind: 'temperature'} |
   {kind: 'heat', cost: number} |
-  {kind: 'oceans'};
+  {kind: 'oceans'} |
+  {kind: 'finalGreenery'} |
+  {kind: 'plants'};
+
+// Input that wraps the final greenery placement (Player.takeActionForFinalGreenery)
+const FINAL_GREENERY = 'Place any final greenery from plants';
 
 function heatConversion(cost: number): TabIntro {
   return {resourceIcon: 'heat', facts: [{kind: 'temperature'}, {kind: 'heat', cost}]};
@@ -35,8 +41,21 @@ const INTROS: Readonly<Record<string, TabIntro>> = {
 // One temperature step is 2 °C (board scale)
 const TEMPERATURE_STEP = 2;
 
-export function tabIntro(option: PlayerInputModel): TabIntro | undefined {
-  const key = typeof option.title === 'string' ? option.title : option.title.message;
+// context: the input around the option (e.g. the final greenery around its space selection)
+export function tabIntro(option: PlayerInputModel, context?: PlayerInputModel): TabIntro | undefined {
+  const intro = optionIntro(option);
+  if (intro !== undefined && context !== undefined && titleKey(context.title) === FINAL_GREENERY) {
+    return {...intro, finale: true, facts: [{kind: 'finalGreenery'}, {kind: 'plants'}, ...(intro.facts ?? [])]};
+  }
+  return intro;
+}
+
+function titleKey(title: string | Message): string {
+  return typeof title === 'string' ? title : title.message;
+}
+
+function optionIntro(option: PlayerInputModel): TabIntro | undefined {
+  const key = titleKey(option.title);
   const intro = INTROS[key];
   if (intro !== undefined) {
     return intro;
@@ -79,6 +98,10 @@ export function introFacts(intro: TabIntro, playerView: PlayerViewModel): Array<
       const heat = playerView.thisPlayer.heat;
       return {message: 'Heat drops from ${0} to ${1}', data: rawValues(heat, Math.max(heat - fact.cost, 0))};
     }
+    case 'finalGreenery':
+      return 'Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.';
+    case 'plants':
+      return {message: 'You have ${0} plants', data: rawValues(playerView.thisPlayer.plants)};
     case 'oceans':
       return {message: '${0} of ${1} oceans are already on Mars', data: rawValues(playerView.game.oceans, MAX_OCEAN_TILES)};
     }

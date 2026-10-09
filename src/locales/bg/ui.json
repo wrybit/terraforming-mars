@@ -585,5 +585,9 @@
   "${0} chosen cards hidden by the filter": "${0} избрани карти са скрити от филтъра",
   "Sort": "Сортирай",
   "ascending": "възходящо",
-  "descending": "низходящо"
+  "descending": "низходящо",
+  "Final greenery": "Финални озеленявания",
+  "Mars is terraformed": "Марс е тераформиран",
+  "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Последен шанс: превърни останалите си растения в озеленявания – всяко носи 1 победна точка.",
+  "You have ${0} plants": "Имаш ${0} растения"
 }

@@ -1414,5 +1414,9 @@
   "${0} chosen cards hidden by the filter": "선택한 카드 ${0}장이 필터로 숨겨짐",
   "Sort": "정렬",
   "ascending": "오름차순",
-  "descending": "내림차순"
+  "descending": "내림차순",
+  "Final greenery": "최종 녹지",
+  "Mars is terraformed": "화성 테라포밍 완료",
+  "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "마지막 기회: 남은 식물을 녹지로 바꾸세요 – 녹지마다 승점 1점입니다.",
+  "You have ${0} plants": "식물 ${0}개 보유"
 }

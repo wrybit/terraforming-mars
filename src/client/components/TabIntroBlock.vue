@@ -11,9 +11,12 @@
     <i v-if="intro.resourceIcon !== undefined" :class="'resource_icon or-tab-intro-resource resource_icon--' + intro.resourceIcon"></i>
     <div>
       <div v-if="card !== undefined" class="or-tab-intro-title card-intro-name">{{ $t(card) }}</div>
+      <!-- Final greenery: make clear that the game is in its last step -->
+      <div v-if="intro.finale === true" class="or-tab-intro-finale" v-i18n>Mars is terraformed</div>
       <div class="or-tab-intro-title">{{ $t(title) }}</div>
-      <div v-if="intro.hint === 'click-space'" class="or-tab-intro-hint" v-i18n>Click a highlighted space on Mars</div>
+      <!-- Game state first, the instruction last: it leads straight into the click -->
       <div v-for="(fact, idx) in introFacts(intro, playerView)" :key="idx" class="or-tab-intro-hint">{{ $t(fact) }}</div>
+      <div v-if="intro.hint === 'click-space'" class="or-tab-intro-hint" v-i18n>Click a highlighted space on Mars</div>
     </div>
   </div>
 </template>

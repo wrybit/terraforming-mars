@@ -1578,5 +1578,9 @@
   "${0} chosen cards hidden by the filter": "${0} valittua korttia piilotettu suodattimella",
   "Sort": "Lajittele",
   "ascending": "nouseva",
-  "descending": "laskeva"
+  "descending": "laskeva",
+  "Final greenery": "Viimeiset viheralueet",
+  "Mars is terraformed": "Mars on terraformoitu",
+  "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Viimeinen tilaisuus: muuta jäljellä olevat kasvisi viheralueiksi – kukin on 1 voittopisteen arvoinen.",
+  "You have ${0} plants": "Sinulla on ${0} kasvia"
 }

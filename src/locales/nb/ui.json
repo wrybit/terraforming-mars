@@ -1168,5 +1168,9 @@
   "${0} chosen cards hidden by the filter": "${0} valgte kort skjult av filteret",
   "Sort": "Sorter",
   "ascending": "stigende",
-  "descending": "synkende"
+  "descending": "synkende",
+  "Final greenery": "Siste skogområder",
+  "Mars is terraformed": "Mars er terraformet",
+  "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Siste sjanse: gjør de gjenværende plantene dine om til skogområder – hvert gir 1 seierspoeng.",
+  "You have ${0} plants": "Du har ${0} planter"
 }

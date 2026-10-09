@@ -55,6 +55,7 @@ import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {CANCEL_ACTION} from '@/client/components/cancelAction';
 import WaitingForTabs from '@/client/components/WaitingForTabs.vue';
 import {isChoiceMenu} from '@/client/components/choiceMenu';
+import {spaceWithSkip} from '@/client/components/spaceWithSkip';
 import {ingestView} from '@/client/utils/changeTracker';
 
 let ui_update_timeout_id: number | undefined;
@@ -351,9 +352,10 @@ export default defineComponent({
   },
   computed: {
     // Action menu (OrOptions) and start selection build their own tabs; everything else goes into WaitingForTabs
+    // (also simple decisions and a space selection with skip, spaceWithSkip.ts)
     buildsOwnTabs(): boolean {
       const input = this.waitingfor;
-      return input !== undefined && ((input.type === 'or' && !isChoiceMenu(input)) || input.type === 'initialCards');
+      return input !== undefined && ((input.type === 'or' && !isChoiceMenu(input) && spaceWithSkip(input) === undefined) || input.type === 'initialCards');
     },
     // The input comes as its own prop; the spectator passes none.
     titleView(): TitleView {
