@@ -307,5 +307,15 @@
     "${0} increased ${1} colony track ${2} step(s)": "${0} verhoogde ${1} koloniespoor ${2} stap(pen)",
     "${0} decreased ${1} colony track 1 step": "${0} verlaagde ${1} koloniespoor ${2} stap(pen)",
     "'${0} kept ${1} project cards": "${0} hield ${1} projectkaarten",
-    "Unable to perform undo operation. Error retrieving game from database. Please try again.": "Kan bewerking ongedaan maken niet uitvoeren. Fout bij het ophalen van het spel uit de database. Probeer het opnieuw."
+    "Unable to perform undo operation. Error retrieving game from database. Please try again.": "Kan bewerking ongedaan maken niet uitvoeren. Fout bij het ophalen van het spel uit de database. Probeer het opnieuw.",
+  "${0} revealed no cards": "${0} heeft geen kaarten onthuld",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0} speelde ${1} om een Turmoil-kaart te vinden, maar er werd geen gevonden.",
+  "animals": "dieren",
+  "Specialized robot": "gespecialiseerde robot",
+  "Supply Chain(s)": "Toeleveringsketen-grondstof(fen)",
+  "${0} cancelled the action": "${0} heeft de actie geannuleerd",
+  "${0} bought ${1}": "${0} heeft ${1} gekocht",
+  "${0} bought no cards": "${0} heeft geen kaarten gekocht",
+  "You bought ${0}": "Je hebt ${0} gekocht",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0} kreeg ${1} M€ door het beleid van ${2}"
 }

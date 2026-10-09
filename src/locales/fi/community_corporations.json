@@ -37,5 +37,6 @@
   "UNITED NATIONS MISSION ONE": "YK TEHTÄVÄ 1",
   "United Nations Mission One": "YK tehtävä 1",
   "You start with 39 M€. Increase your TR 1 step.": "Aloitat 39 M€:llä. Nosta MKL:ääsi 1 askel.",
-  "Effect: When any player takes an action or plays a card that increases TR, including this, gain 1 M€ for each step.": "VAIKUTUS: Kun kuka tahansa pelaaja tekee toiminnon tai pelaa kortin joka lisää TR:ää, sisältäen tämän, saat 1 M€ jokaista askelta kohden."
+  "Effect: When any player takes an action or plays a card that increases TR, including this, gain 1 M€ for each step.": "VAIKUTUS: Kun kuka tahansa pelaaja tekee toiminnon tai pelaa kortin joka lisää TR:ää, sisältäen tämän, saat 1 M€ jokaista askelta kohden.",
+  "Effect: During each round's research phase, gain 1 titanium for each card you do not buy.": "VAIKUTUS: Jokaisen sukupolven tutkimusvaiheessa saat 1 titaanin jokaisesta kortista, jota et osta."
 }

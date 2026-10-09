@@ -152,5 +152,6 @@
 
     "Warp Drive": "워프 드라이브",
     "Effect: When you play a space card, you pay 4 M€ less for it.": "지속 효과: 우주 카드 사용 시, 우주 태그 1개마다 4M€ 할인.",
-    "Requires 5 science tags.": "조건: 보유한 과학 태그 5개 이상."
+    "Requires 5 science tags.": "조건: 보유한 과학 태그 5개 이상.",
+  "Action: Spend 1 titanium to add 2 floaters here.": "행동: 티타늄 자원 1개를 소비하여 이 카드에 부양체 자원 2개 추가."
 }

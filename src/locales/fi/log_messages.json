@@ -458,5 +458,15 @@
   "${0} increased ${1} colony track ${2} step(s)": "${0} nosti ${1} siirtokunnan rataa ${2} askel(ta)",
   "${0} decreased ${1} colony track 1 step": "${0} laski ${1} siirtokunnan rataa 1 askel",
   "${0} kept ${1} project cards": "${0} piti ${1} projektikorttia",
-  "Unable to perform undo operation. Error retrieving game from database. Please try again.": "Peruutustoimintoa ei voitu suorittaa. Virhe haettaessa peliä tietokannasta. Yritä uudelleen."
+  "Unable to perform undo operation. Error retrieving game from database. Please try again.": "Peruutustoimintoa ei voitu suorittaa. Virhe haettaessa peliä tietokannasta. Yritä uudelleen.",
+  "${0} revealed no cards": "${0} ei paljastanut yhtään korttia",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0} pelasi kortin ${1} löytääkseen Myllerrys-kortin, mutta yhtään ei löytynyt.",
+  "animals": "eläimet",
+  "Specialized robot": "erikoistunut robotti",
+  "Supply Chain(s)": "toimitusketju(t)",
+  "${0} cancelled the action": "${0} perui toiminnon",
+  "${0} bought ${1}": "${0} osti ${1}",
+  "${0} bought no cards": "${0} ei ostanut kortteja",
+  "You bought ${0}": "Ostit ${0}",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0} sai ${1} M€ puolueen ${2} politiikasta"
 }

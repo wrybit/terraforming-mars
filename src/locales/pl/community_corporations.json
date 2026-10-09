@@ -28,5 +28,6 @@
 
     "UNITED NATIONS MISSION ONE": "Pierwsza Misja Zjednoczonych Narodów",
     "You start with 39 M€. Increase your TR 1 step.": "Rozpoczynasz grę z 39 M€. Podnieś swój WT o 1 poziom.",
-    "Effect: When any player takes an action or plays a card that increases TR, including this, gain 1 M€ for each step.": "Efekt trwały: Gdy którykolwiek z graczy wykonuje akcję lub zagrywa kartę podnoszącą jego WT (z tą włącznie), otrzymujesz 1 M€ za każdy podniesiony poziom."
+    "Effect: When any player takes an action or plays a card that increases TR, including this, gain 1 M€ for each step.": "Efekt trwały: Gdy którykolwiek z graczy wykonuje akcję lub zagrywa kartę podnoszącą jego WT (z tą włącznie), otrzymujesz 1 M€ za każdy podniesiony poziom.",
+  "Effect: During each round's research phase, gain 1 titanium for each card you do not buy.": "Efekt: W fazie badań każdego pokolenia otrzymujesz 1 tytan za każdą kartę, której nie kupisz."
 }

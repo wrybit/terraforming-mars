@@ -42,5 +42,6 @@
   "real-time vp":"PV en tiempo real",
   "fast mode":"Modo rápido",
   "Banned cards:":"Cartas inhabilitadas：",
-  "Board-defined": "Definido por tablero"
+  "Board-defined": "Definido por tablero",
+  "Reset": "Restablecer"
 }

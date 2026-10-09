@@ -109,5 +109,15 @@
     "venus": "Венера",
     "jovian": "Юпитер",
     "mars": "Марс",
-    "moon": "Луна"
+    "moon": "Луна",
+  "${0} revealed no cards": "${0} не открыл ни одной карты",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0} сыграл ${1}, чтобы найти карту Кризиса, но ни одной не нашлось.",
+  "animals": "животные",
+  "Specialized robot": "специализированного робота",
+  "Supply Chain(s)": "Цепочки поставок",
+  "${0} cancelled the action": "${0} отменил действие",
+  "${0} bought ${1}": "${0} купил ${1}",
+  "${0} bought no cards": "${0} не купил ни одной карты",
+  "You bought ${0}": "Вы купили ${0}",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0} получил ${1} M€ благодаря политике ${2}"
 }

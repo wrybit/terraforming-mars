@@ -1,0 +1,13 @@
+{
+  "Place mine": "Colocar mina",
+  "Place habitat": "Colocar habitat",
+  "Place road": "Colocar estrada",
+  "+2 M€ per adjacent ocean": "+2 M€ por oceano adjacente",
+  "Not on ocean spaces": "Não em áreas de oceano",
+  "Not on mining spaces": "Não em áreas de mineração",
+  "Next to one of your tiles, if possible": "Ao lado de um dos seus tiles, se possível",
+  "Not next to another city": "Não ao lado de outra cidade",
+  "Only on ocean spaces": "Apenas em áreas de oceano",
+  "Only on mining spaces": "Apenas em áreas de mineração",
+  "Oceans ${0} → ${1} of ${2}": "Oceanos ${0} → ${1} de ${2}"
+}

@@ -83,5 +83,15 @@
     "drew":"ha robado",
     "bought":"ha comprado",
     "sold":"ha vendido",
-    "Discarded ${0} cards ${1}": "${0} carta/s han sido descartadas ${1}"
+    "Discarded ${0} cards ${1}": "${0} carta/s han sido descartadas ${1}",
+  "${0} revealed no cards": "${0} no reveló ninguna carta",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0} jugó ${1} para encontrar una carta de Conflictos, pero no se encontró ninguna.",
+  "animals": "animales",
+  "Specialized robot": "robot especializado",
+  "Supply Chain(s)": "cadena(s) de suministro",
+  "${0} cancelled the action": "${0} canceló la acción",
+  "${0} bought ${1}": "${0} compró ${1}",
+  "${0} bought no cards": "${0} no compró ninguna carta",
+  "You bought ${0}": "Compraste ${0}",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0} ganó ${1} M€ por la política de ${2}"
 }

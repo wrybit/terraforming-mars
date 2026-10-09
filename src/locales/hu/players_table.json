@@ -1,0 +1,14 @@
+{
+  "Goods": "Javak",
+  "Tags": "Ikonok",
+  "Scoring": "Pontozás",
+  "Played cards": "Kijátszott kártyák",
+  "Discount": "Kedvezmény",
+  "Terraform Rating": "Terraformálási ráta",
+  "Cards in hand": "Kézben lévő kártyák",
+  "First player": "Kezdőjátékos",
+  "Not enough space": "Kevés a hely – kattints, hogy egy másik terület helyett ez jelenjen meg",
+  "* Additional discounts:": "* További kedvezmények:",
+  "cards with requirements": "feltételes kártyák",
+  "space cards without planetary tags": "űrkártyák bolygóikon nélkül"
+}

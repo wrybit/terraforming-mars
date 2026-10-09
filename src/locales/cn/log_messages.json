@@ -104,5 +104,15 @@
     "${0} drew no cards":"${0}没有摸牌",
     "increased":"增加",
     "decreased":"减少",
-    "Final greenery placement":"终局森林放置"
+    "Final greenery placement":"终局森林放置",
+  "${0} revealed no cards": "${0} 没有翻开任何卡牌",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0} 打出 ${1} 寻找动荡卡牌，但未找到。",
+  "animals": "动物",
+  "Specialized robot": "专用机器人",
+  "Supply Chain(s)": "供应链",
+  "${0} cancelled the action": "${0} 取消了行动",
+  "${0} bought ${1}": "${0} 购买了 ${1}",
+  "${0} bought no cards": "${0} 没有购买卡牌",
+  "You bought ${0}": "你购买了 ${0}",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0} 通过 ${2} 的动荡政策获得 ${1} M€"
 }

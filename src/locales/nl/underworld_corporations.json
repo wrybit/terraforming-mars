@@ -7,7 +7,6 @@
 
     "ANUBIS SECURITIES": "",
     "Anubis Securities": "",
-    "Anubis": "",
     "Securities": "Effecten",
     "Effect: When any player WITH THE LOWEST CORRUPTION increases their TR by 1, they gain 2 M€.": "EFFECT: Wanneer een speler MET DE LAAGSTE CORRUPTIE zijn TN met 1 verhoogt, ontvangt die speler 2 M€.",
     "Action: Discard ALL of your corruption and gain 6 M€ for each unit discarded.": "ACTIE: Leg AL je corruptie af en ontvang 6 M€ per afgelegde eenheid.",
@@ -15,9 +14,6 @@
 
     "ARBORIST COLLECTIVE": "",
     "Arborist Collective": "",
-    "ARBORIST": "",
-    "COLLECTIVE": "",
-    "Arborist": "",
     "Collective": "Collectief",
     "Effect: After you play an event card with a base cost of 14 or less, put an activist resource on this card.": "EFFECT: Nadat je een gebeurteniskaart met basiskost 14 of minder speelt, plaats je 1 activistengrondstof op deze kaart.",
     "Action: Spend 2 activists here to increase your plant production 1 step and gain 2 plants.": "ACTIE: Besteed hier 2 activisten om je plantproductie met 1 te verhogen en ontvang 2 planten.",
@@ -25,7 +21,6 @@
 
     "DEMETRON LABS": "",
     "Demetron Labs": "",
-    "DEMETRON": "",
     "LABS": "",
     "Effect: After you play a science tag, including this, put 2 data on this card.": "EFFECT: Nadat je een wetenschapslabel speelt, inclusief deze kaart, plaats je 2 data op deze kaart.",
     "Action: Spend 3 data here to identify 3 underground resources. Claim 1 of them.": "ACTIE: Besteed hier 3 data om 3 ondergrondse grondstoffen te identificeren. Claim er 1.",
@@ -39,9 +34,6 @@
 
     "HECATE SPEDITIONS": "",
     "Hecate Speditions": "",
-    "HECATE": "",
-    "Speditions": "",
-    "SPEDITIONS": "",
     "Effect: When you play an Earth, Mars, Venus, Moon, or Jovian tag, including this, put 1 supply chain resource on this card.": "EFFECT: Wanneer je een Aarde-, Mars-, Venus-, Maan- of Jupiterlabel speelt, inclusief deze kaart, plaats je 1 toeleveringsketengrondstof op deze kaart.",
     "Effect: Spend 2 supply chain resources to trade. THIS COST CANNOT BE REDUCED BY OTHER EFFECTS.": "EFFECT: Besteed 2 toeleveringsketengrondstoffen om te handelen. DEZE KOST KAN NIET WORDEN VERLAAGD DOOR ANDERE EFFECTEN.",
     "You start with 38 M€, 2 supply chain resources here, and an extra trade fleet.": "Je begint met 38 M€, 2 toeleveringsketengrondstoffen hier en een extra handelsvloot.",
@@ -65,7 +57,6 @@
     "KINGDOM OF TAURARO": "",
     "Kingdom of Tauraro": "Koninkrijk van Tauraro",
     "Kingdom of": "Koninkrijk van",
-    "Tauraro": "",
     "Effect: You may place cities adjacent to other cities. You must always place cities adjacent to your tiles or excavation markers, if possible.": "EFFECT: Je mag steden aangrenzend aan andere steden plaatsen. Je moet, indien mogelijk, altijd steden aangrenzend aan je tegels of opgravingsmarkers plaatsen.",
     "You start with 50 M€ and 6 M€ production. All opponents gain 2 M€ production. As your first action, place a city.": "Je begint met 50 M€ en 6 M€-productie. Alle tegenstanders verhogen hun M€-productie met 2. Plaats als je eerste actie een stad.",
 

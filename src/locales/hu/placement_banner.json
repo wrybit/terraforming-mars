@@ -1,0 +1,13 @@
+{
+  "Place mine": "Bánya lerakása",
+  "Place habitat": "Élőhely lerakása",
+  "Place road": "Út lerakása",
+  "+2 M€ per adjacent ocean": "+2 M€ minden szomszédos óceánért",
+  "Not on ocean spaces": "Nem óceánmezőre",
+  "Not on mining spaces": "Nem bányamezőre",
+  "Next to one of your tiles, if possible": "Lehetőleg a saját lapkád mellé",
+  "Not next to another city": "Nem másik város mellé",
+  "Only on ocean spaces": "Csak óceánmezőre",
+  "Only on mining spaces": "Csak bányamezőre",
+  "Oceans ${0} → ${1} of ${2}": "Óceánok: ${0} → ${1} / ${2}"
+}

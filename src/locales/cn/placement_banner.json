@@ -1,0 +1,13 @@
+{
+  "Place mine": "放置矿场",
+  "Place habitat": "放置居住区",
+  "Place road": "放置道路",
+  "+2 M€ per adjacent ocean": "每相邻 1 个海洋 +2 M€",
+  "Not on ocean spaces": "不能放在海洋地块上",
+  "Not on mining spaces": "不能放在采矿地块上",
+  "Next to one of your tiles, if possible": "尽可能放在你的板块旁边",
+  "Not next to another city": "不能与其他城市相邻",
+  "Only on ocean spaces": "只能放在海洋地块上",
+  "Only on mining spaces": "只能放在采矿地块上",
+  "Oceans ${0} → ${1} of ${2}": "海洋 ${0} → ${1}（共 ${2}）"
+}

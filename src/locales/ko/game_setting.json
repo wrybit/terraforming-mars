@@ -44,5 +44,6 @@
   "real-time vp": "실시간 승점",
   "fast mode": "고속 모드 (행동 1개 수행 후 넘기기 불가)",
   "Banned cards:": "금지 카드: ",
-  "Board-defined": "기본"
+  "Board-defined": "기본",
+  "Reset": "초기화"
 }

@@ -157,5 +157,7 @@
     "Increase your TR 3 steps. Draw a card.": "TR+3段階. 1ドロー.",
 
     "Acquired Space Agency": "宇宙局の私有化",
-    "Gain 6 titanium. Reveal cards until you reveal two cards with Space Tags. Take them into your hand, discard the rest.": "6チタン獲得. 宇宙タグカードを2枚入手."
+    "Gain 6 titanium. Reveal cards until you reveal two cards with Space Tags. Take them into your hand, discard the rest.": "6チタン獲得. 宇宙タグカードを2枚入手.",
+  "Effect: Your titanium is worth 1 M€ less.": "効果：チタンの価値が1 M€下がる。",
+  "Place a city tile on an area with a STEEL OR TITANIUM PLACEMENT BONUS. Increase your titanium production 2 steps.": "建材またはチタンの配置ボーナスがあるエリアに都市タイルを配置する。チタン産出+2段階。"
 }

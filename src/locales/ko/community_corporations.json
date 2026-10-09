@@ -28,5 +28,6 @@
 
     "UNITED NATIONS MISSION ONE": "",
     "You start with 39 M€. Increase your TR 1 step.": "",
-    "Effect: When any player takes an action or plays a card that increases TR, including this, gain 1 M€ for each step.": ""
+    "Effect: When any player takes an action or plays a card that increases TR, including this, gain 1 M€ for each step.": "",
+  "Effect: During each round's research phase, gain 1 titanium for each card you do not buy.": "효과: 매 세대 연구 단계에서, 구매하지 않은 카드 1장마다 티타늄 자원 1개 획득."
 }

@@ -37,5 +37,6 @@
     "Final game log": "Последние действия игроков",
     "${0} place for ${1} award (funded by ${2})": "${0} в борьбе за награду ${1} (учреждена ${2})",
     "% completed": "% завершения",
-    "Claimed ${0} milestone": "Достижение ${0}"
+    "Claimed ${0} milestone": "Достижение ${0}",
+  "Global parameters": "Глобальные параметры"
 }

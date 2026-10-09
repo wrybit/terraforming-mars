@@ -470,5 +470,15 @@
   "${0} gained ${1} TR from ${2}": "${0} a gagné ${1} NT de ${2}",
   "For the rest of this generation, ${0} will gain ${1}, replacing ${2}": "Pour le reste de cette génération, ${0} gagnera ${1} au lieu de ${2}",
   "${0} blackmailed ${1} and took 2 corruption.": "${0} a fait chanté ${1} et récupère 2 corruptions",
-  "${0} sent 1 Neutral delegate in ${1} area": "${0} a envoyé 1 Délégué Neutre sur la zone ${1}"
+  "${0} sent 1 Neutral delegate in ${1} area": "${0} a envoyé 1 Délégué Neutre sur la zone ${1}",
+  "${0} revealed no cards": "${0} n'a révélé aucune carte",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0} a joué ${1} pour trouver une carte Turmoil, mais aucune n'a été trouvée.",
+  "animals": "animaux",
+  "Specialized robot": "robot spécialisé",
+  "Supply Chain(s)": "chaîne(s) d'approvisionnement",
+  "${0} cancelled the action": "${0} a annulé l'action",
+  "${0} bought ${1}": "${0} a acheté ${1}",
+  "${0} bought no cards": "${0} n'a acheté aucune carte",
+  "You bought ${0}": "Vous avez acheté ${0}",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0} a gagné ${1} M€ grâce à la politique des ${2}"
 }

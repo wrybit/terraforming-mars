@@ -1,0 +1,14 @@
+{
+  "Goods": "자원",
+  "Tags": "태그",
+  "Scoring": "점수",
+  "Played cards": "추진한 카드",
+  "Discount": "할인",
+  "Terraform Rating": "테라포밍 등급",
+  "Cards in hand": "손에 있는 카드",
+  "First player": "시작 플레이어",
+  "Not enough space": "공간 부족 – 클릭하면 다른 영역 대신 표시",
+  "* Additional discounts:": "* 추가 할인:",
+  "cards with requirements": "조건이 있는 카드",
+  "space cards without planetary tags": "행성 태그가 없는 우주 카드"
+}

@@ -110,5 +110,15 @@
   "venus": "Венера",
   "jovian": "Юпитер",
   "mars": "Марс",
-  "moon": "Луна"
+  "moon": "Луна",
+  "${0} revealed no cards": "${0} не разкри карти",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0} изигра ${1}, за да намери карта Turmoil, но не беше намерена такава.",
+  "animals": "животни",
+  "Specialized robot": "Специализиран робот",
+  "Supply Chain(s)": "Верига за доставки",
+  "${0} cancelled the action": "${0} отмени действието",
+  "${0} bought ${1}": "${0} купи ${1}",
+  "${0} bought no cards": "${0} не купи карти",
+  "You bought ${0}": "Купихте ${0}",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0} получи ${1} M€ от политиката на ${2} (Turmoil)"
 }

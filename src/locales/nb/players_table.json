@@ -1,0 +1,14 @@
+{
+  "Goods": "Varer",
+  "Tags": "Symboler",
+  "Scoring": "Poeng",
+  "Played cards": "Spilte kort",
+  "Discount": "Rabatt",
+  "Terraform Rating": "Terraform-vurdering",
+  "Cards in hand": "Kort på hånden",
+  "First player": "Startspiller",
+  "Not enough space": "For lite plass – klikk for å vise dem i stedet for et annet område",
+  "* Additional discounts:": "* Ekstra rabatter:",
+  "cards with requirements": "kort med krav",
+  "space cards without planetary tags": "romkort uten planetsymbol"
+}

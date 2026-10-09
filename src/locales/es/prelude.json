@@ -101,5 +101,7 @@
     "Increase your TR 3 steps. Draw a card.": "Incrementa tu valor de terraformación 3 niveles. Roba 1 carta.",
 
     "Acquired Space Agency": "Compra de agencia espacial",
-    "Gain 6 titanium. Reveal cards until you reveal two cards with Space Tags. Take them into your hand, discard the rest.": "Obtén 6 de titanio. Revela cartas del mazo hasta que hayas descubierto 2 cartas tipo espacio. Toma estas dos cartas para tu mano y descarta el resto."
+    "Gain 6 titanium. Reveal cards until you reveal two cards with Space Tags. Take them into your hand, discard the rest.": "Obtén 6 de titanio. Revela cartas del mazo hasta que hayas descubierto 2 cartas tipo espacio. Toma estas dos cartas para tu mano y descarta el resto.",
+  "Effect: Your titanium is worth 1 M€ less.": "EFECTO: Tu titanio vale 1 M€ menos.",
+  "Place a city tile on an area with a STEEL OR TITANIUM PLACEMENT BONUS. Increase your titanium production 2 steps.": "Coloca una loseta de ciudad en un área con BONIFICACIÓN DE ACERO O TITANIO. Aumenta tu producción de titanio 2 niveles."
 }

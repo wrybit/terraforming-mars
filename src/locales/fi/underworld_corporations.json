@@ -20,7 +20,6 @@
 
 "DEMETRON LABS": "DEMETRON-LABORATORIOT",
 "Demetron Labs": "Demetron-laboratoriot",
-"DEMETRON": "",
 "LABS": "LABORATORIOT",
 "Effect: After you play a science tag, including this, put 2 data on this card.": "VAIKUTUS: Kun olet pelannut tiedeympyrän, tämä mukaan lukien, aseta 2 dataa tälle kortille.",
 "Action: Spend 3 data here to identify 3 underground resources. Claim 1 of them.": "TOIMINTO: Käytä 3 dataa täältä tunnistaaksesi 3 maanalaista resurssia. Vaadi 1 niistä.",
@@ -63,5 +62,4 @@
 "Voltagon": "",
 "Effect: After you claim an underground resource, gain 2 energy.": "VAIKUTUS: Kun olet vaatinut maanalaisen resurssin, saat 2 energiaa.",
 "Action: Spend 8 energy to raise oxygen or Venus 1 step.": "TOIMINTO: Käytä 8 energiaa nostaaksesi happea tai Venusta 1 askeleella."
-
 }

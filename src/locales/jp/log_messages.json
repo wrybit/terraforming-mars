@@ -397,5 +397,15 @@
     "${0} increased ${1} colony track ${2} step(s)": "${0}が${1}の交易マーカー+${2}",
     "${0} decreased ${1} colony track 1 step": "${0}が${1}の交易マーカー-1",
     "'${0} kept ${1} project cards": "${0}が{1}枚のカードを保持",
-    "Unable to perform undo operation. Error retrieving game from database. Please try again.": "もう一度undoを試してください"
+    "Unable to perform undo operation. Error retrieving game from database. Please try again.": "もう一度undoを試してください",
+  "${0} revealed no cards": "${0}はカードを公開しませんでした",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0}は動乱カードを探すために${1}をプレイしましたが、見つかりませんでした。",
+  "animals": "動物",
+  "Specialized robot": "特化型ロボット",
+  "Supply Chain(s)": "サプライチェーン",
+  "${0} cancelled the action": "${0}がアクションを取り消しました",
+  "${0} bought ${1}": "${0}が${1}を購入しました",
+  "${0} bought no cards": "${0}はカードを購入しませんでした",
+  "You bought ${0}": "${0}を購入しました",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0}は動乱の${2}の政策で${1} M€を得ました"
 }

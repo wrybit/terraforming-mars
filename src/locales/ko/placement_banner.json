@@ -1,0 +1,13 @@
+{
+  "Place mine": "광산 배치",
+  "Place habitat": "서식지 배치",
+  "Place road": "도로 배치",
+  "+2 M€ per adjacent ocean": "인접한 해양마다 +2 M€",
+  "Not on ocean spaces": "해양 구역 불가",
+  "Not on mining spaces": "채굴 구역 불가",
+  "Next to one of your tiles, if possible": "가능하면 내 타일 옆",
+  "Not next to another city": "다른 도시와 인접 불가",
+  "Only on ocean spaces": "해양 구역에만",
+  "Only on mining spaces": "채굴 구역에만",
+  "Oceans ${0} → ${1} of ${2}": "해양 ${0} → ${1} / ${2}"
+}

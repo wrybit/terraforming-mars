@@ -156,5 +156,7 @@
   "UNMI Contractor": "Sous-Traitant pour l'UNMI",
   "Increase your TR 3 steps. Draw a card.": "Augmentez votre NT de 3. Piochez 1 carte.",
   "Acquired Space Agency": "Rachat d'une Agence Spatiale",
-  "Gain 6 titanium. Reveal cards until you reveal two cards with Space Tags. Take them into your hand, discard the rest.": "Gagnez 6 titanes. Révélez des cartes de la pioche jusqu'à avoir 2 cartes avec un badge Espace : ajoutez ces cartes à votre main et défaussez les autres."
+  "Gain 6 titanium. Reveal cards until you reveal two cards with Space Tags. Take them into your hand, discard the rest.": "Gagnez 6 titanes. Révélez des cartes de la pioche jusqu'à avoir 2 cartes avec un badge Espace : ajoutez ces cartes à votre main et défaussez les autres.",
+  "Effect: Your titanium is worth 1 M€ less.": "EFFET : Votre titane vaut 1 M€ de moins.",
+  "Place a city tile on an area with a STEEL OR TITANIUM PLACEMENT BONUS. Increase your titanium production 2 steps.": "Placez une tuile Cité sur une zone avec un BONUS DE PLACEMENT ACIER OU TITANE. Augmentez votre production de titane de 2 crans."
 }

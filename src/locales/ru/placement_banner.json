@@ -1,0 +1,13 @@
+{
+  "Place mine": "Выложить шахту",
+  "Place habitat": "Выложить поселение",
+  "Place road": "Выложить дорогу",
+  "+2 M€ per adjacent ocean": "+2 M€ за каждый соседний океан",
+  "Not on ocean spaces": "Не на клетках океана",
+  "Not on mining spaces": "Не на клетках добычи",
+  "Next to one of your tiles, if possible": "Рядом с одним из ваших тайлов, если возможно",
+  "Not next to another city": "Не рядом с другим городом",
+  "Only on ocean spaces": "Только на клетках океана",
+  "Only on mining spaces": "Только на клетках добычи",
+  "Oceans ${0} → ${1} of ${2}": "Океаны ${0} → ${1} из ${2}"
+}

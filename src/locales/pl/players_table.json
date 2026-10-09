@@ -1,0 +1,14 @@
+{
+  "Goods": "Towary",
+  "Tags": "Symbole",
+  "Scoring": "Punktacja",
+  "Played cards": "Zagrane karty",
+  "Discount": "Zniżka",
+  "Terraform Rating": "Wskaźnik Terraformacji",
+  "Cards in hand": "Karty w ręce",
+  "First player": "Pierwszy gracz",
+  "Not enough space": "za mało miejsca – kliknij, aby pokazać zamiast innego obszaru",
+  "* Additional discounts:": "* Dodatkowe zniżki:",
+  "cards with requirements": "karty z wymaganiami",
+  "space cards without planetary tags": "karty kosmiczne bez symbolu planety"
+}

@@ -1,0 +1,13 @@
+{
+  "Place mine": "鉱山を配置",
+  "Place habitat": "生息地を配置",
+  "Place road": "道路を配置",
+  "+2 M€ per adjacent ocean": "隣接する海洋1つにつき+2 M€",
+  "Not on ocean spaces": "海洋予定地には不可",
+  "Not on mining spaces": "採掘予定地には不可",
+  "Next to one of your tiles, if possible": "可能なら自分のタイルに隣接",
+  "Not next to another city": "他の都市に隣接不可",
+  "Only on ocean spaces": "海洋予定地のみ",
+  "Only on mining spaces": "採掘予定地のみ",
+  "Oceans ${0} → ${1} of ${2}": "海洋 ${0} → ${1} / ${2}"
+}

@@ -21,5 +21,6 @@
     "Действие. Выберите карту-событие любого игрока, разыграйте её за полную стоимость в M€ и удалите эту карту из игры",
 
     "Midas": "",
-    "You start with 120 M€. Lower your TR 7 steps.": "Вы начинаете со 120 M€. Уменьшите свой РТ на 7"
+    "You start with 120 M€. Lower your TR 7 steps.": "Вы начинаете со 120 M€. Уменьшите свой РТ на 7",
+  "Effect: During each round's research phase, gain 1 titanium for each card you do not buy.": "Эффект: в фазе исследований каждого поколения получите 1 титан за каждую некупленную карту."
 }

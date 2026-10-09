@@ -20,5 +20,6 @@
 
    "Project Workshop": "项目探讨公司",
     "You start with 39 M€, 1 steel and 1 titanium. As your first action, draw a blue card.": "起始获得39 M€，一个铁和一个钛。第一个行动时抽一张蓝色牌。",
-    "Action: Flip and discard a played blue card to convert any VP on it into TR and draw 2 cards, or spend 3 M€ to draw a blue card.": "行动：翻面并弃掉一张蓝色卡牌，将卡牌上的分数转化为改造度并抽2张牌，或者花3 M€抽取一张蓝色卡牌。"
+    "Action: Flip and discard a played blue card to convert any VP on it into TR and draw 2 cards, or spend 3 M€ to draw a blue card.": "行动：翻面并弃掉一张蓝色卡牌，将卡牌上的分数转化为改造度并抽2张牌，或者花3 M€抽取一张蓝色卡牌。",
+  "Effect: During each round's research phase, gain 1 titanium for each card you do not buy.": "效果：每轮研究阶段，你每有 1 张未购买的卡牌，获得 1 钛。"
 }

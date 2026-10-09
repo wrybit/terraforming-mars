@@ -425,5 +425,15 @@
     "${0} increased ${1} colony track ${2} step(s)": "${0} 플레이어가 ${1} 위성 트랙을 ${2}단계 올림",
     "${0} decreased ${1} colony track 1 step": "${0} 플레이어가 ${1} 위성 트랙을 1단계 내림",
     "'${0} kept ${1} project cards": "${0} 플레이어가 프로젝트 카드 ${1}장 보관",
-    "Unable to perform undo operation. Error retrieving game from database. Please try again.": "되돌리기 명령을 수행할 수 없습니다. 데이터베이스로부터 게임 복구에 에러 발생. 다시 시도해 주십시오."
+    "Unable to perform undo operation. Error retrieving game from database. Please try again.": "되돌리기 명령을 수행할 수 없습니다. 데이터베이스로부터 게임 복구에 에러 발생. 다시 시도해 주십시오.",
+  "${0} revealed no cards": "${0}님이 카드를 공개하지 않았습니다",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0}님이 격동 카드를 찾으려고 ${1}을(를) 추진했지만 찾지 못했습니다.",
+  "animals": "동물",
+  "Specialized robot": "특수 로봇",
+  "Supply Chain(s)": "공급망 자원",
+  "${0} cancelled the action": "${0}님이 행동을 취소했습니다",
+  "${0} bought ${1}": "${0}님이 ${1}을(를) 구매했습니다",
+  "${0} bought no cards": "${0}님이 카드를 구매하지 않았습니다",
+  "You bought ${0}": "${0}을(를) 구매했습니다",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0}님이 격동 ${2} 정책으로 ${1} M€를 얻었습니다"
 }

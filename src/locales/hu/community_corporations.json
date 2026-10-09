@@ -27,5 +27,6 @@
   "ACTION: SHUFFLE THE DISCARD PILE, THEN DRAW 3 CARDS FROM IT. KEEP 1 AND DISCARD THE OTHER 2.": "AKCIÓ: KEVERD MEG A DOBÓ PAKLIT, MAJD HÚZZ BELŐLE 3 KÁRTYÁT! TARTS MEG EGYET ÉS DOBD EL A MÁSIK KETTŐT!",
   "UNITED NATIONS MISSION ONE": "",
   "You start with 39 M€. Increase your TR 1 step.": "39 M€-tel kezdesz. Növeld a TR-ed 1 értékkel!",
-  "Effect: When any player takes an action or plays a card that increases TR, including this, gain 1 M€ for each step.": "Hatás: Amikor bármelyik játékos akciót végez vagy kártyát játszik ki, ami növeli a TR-t, ezt is beleértve, kapj 1 M€-tet minden értékért."
+  "Effect: When any player takes an action or plays a card that increases TR, including this, gain 1 M€ for each step.": "Hatás: Amikor bármelyik játékos akciót végez vagy kártyát játszik ki, ami növeli a TR-t, ezt is beleértve, kapj 1 M€-tet minden értékért.",
+  "Effect: During each round's research phase, gain 1 titanium for each card you do not buy.": "HATÁS: Minden generáció kutatási fázisában kapsz 1 titánt minden kártyáért, amit nem veszel meg."
 }

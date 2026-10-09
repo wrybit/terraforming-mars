@@ -1,0 +1,13 @@
+{
+  "Place mine": "Постави мина",
+  "Place habitat": "Постави жилищен модул",
+  "Place road": "Постави път",
+  "+2 M€ per adjacent ocean": "+2 M€ за всеки съседен океан",
+  "Not on ocean spaces": "Не върху океански полета",
+  "Not on mining spaces": "Не върху минни полета",
+  "Next to one of your tiles, if possible": "До една от вашите плочки, ако е възможно",
+  "Not next to another city": "Не до друг град",
+  "Only on ocean spaces": "Само върху океански полета",
+  "Only on mining spaces": "Само върху минни полета",
+  "Oceans ${0} → ${1} of ${2}": "Океани ${0} → ${1} от ${2}"
+}

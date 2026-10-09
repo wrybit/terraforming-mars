@@ -1,0 +1,14 @@
+{
+  "Goods": "資源",
+  "Tags": "タグ",
+  "Scoring": "得点",
+  "Played cards": "プレイ済みカード",
+  "Discount": "割引",
+  "Terraform Rating": "TR（テラフォーミング度）",
+  "Cards in hand": "手札",
+  "First player": "スタートプレイヤー",
+  "Not enough space": "スペース不足 – クリックで他のエリアの代わりに表示",
+  "* Additional discounts:": "* 追加の割引：",
+  "cards with requirements": "制限付きカード",
+  "space cards without planetary tags": "惑星タグのない宇宙カード"
+}

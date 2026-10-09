@@ -223,5 +223,7 @@
   "Increase your TR 3 steps. Draw a card.": "Nosta MKL:ääsi 3 askelta. Nosta kortti.",
 
   "Acquired Space Agency": "Hankittu avaruusvirasto",
-  "Gain 6 titanium. Reveal cards until you reveal two cards with Space Tags. Take them into your hand, discard the rest.": "Saat 6 titaania. Paljasta kortteja kunnes paljastat kaksi korttia, joissa on avaruustagi. Ota ne käteesi ja heitä loput pois."
+  "Gain 6 titanium. Reveal cards until you reveal two cards with Space Tags. Take them into your hand, discard the rest.": "Saat 6 titaania. Paljasta kortteja kunnes paljastat kaksi korttia, joissa on avaruustagi. Ota ne käteesi ja heitä loput pois.",
+  "Effect: Your titanium is worth 1 M€ less.": "VAIKUTUS: Titaanisi on 1 M€ vähemmän arvoinen.",
+  "Place a city tile on an area with a STEEL OR TITANIUM PLACEMENT BONUS. Increase your titanium production 2 steps.": "Aseta kaupunkilaatta ruutuun, jossa on TERÄS- TAI TITAANIBONUS. Nosta titaanituotantoasi 2 askelta."
 }

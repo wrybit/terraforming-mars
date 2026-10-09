@@ -36,5 +36,6 @@
 
   "Eris": "Еріс",
   "You start with 46 M€. As your first action, draw an Ares card.": "Ви починаєте з 46 M€. Як вашу першу дію, витягніть карту Ареса.",
-  "Action: Place a new hazard tile adjacent to NO OTHER TILE, OR remove a hazard tile to gain 1 TR.": "Дія: Розмістіть новий небезпечний тайл, що НЕ ПРИЛЯГАЄ ДО ЖОДНОГО ІНШОГО ТАЙЛУ, АБО видаліть небезпечний тайл, щоб отримати 1 РТ."
+  "Action: Place a new hazard tile adjacent to NO OTHER TILE, OR remove a hazard tile to gain 1 TR.": "Дія: Розмістіть новий небезпечний тайл, що НЕ ПРИЛЯГАЄ ДО ЖОДНОГО ІНШОГО ТАЙЛУ, АБО видаліть небезпечний тайл, щоб отримати 1 РТ.",
+  "Effect: During each round's research phase, gain 1 titanium for each card you do not buy.": "Ефект: під час фази дослідження кожного покоління отримайте 1 титан за кожну карту, яку ви не купуєте."
 }

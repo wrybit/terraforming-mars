@@ -1,0 +1,14 @@
+{
+  "Goods": "Товари",
+  "Tags": "Мітки",
+  "Scoring": "Підрахунок очок",
+  "Played cards": "Зіграні карти",
+  "Discount": "Знижка",
+  "Terraform Rating": "Рейтинг терраформування",
+  "Cards in hand": "Карти в руках",
+  "First player": "Перший гравець",
+  "Not enough space": "замало місця – натисніть, щоб показати замість іншої області",
+  "* Additional discounts:": "* Додаткові знижки:",
+  "cards with requirements": "карти з вимогами",
+  "space cards without planetary tags": "космічні карти без мітки планети"
+}

@@ -27,5 +27,6 @@
 	"timer":"tempo",
 	"real-time vp":"PV in tempo reale",
 	"fast mode":"modalità rapida",
-	"Banned cards:":"Escludi carte："
+	"Banned cards:":"Escludi carte：",
+  "Reset": "Ripristina"
 }

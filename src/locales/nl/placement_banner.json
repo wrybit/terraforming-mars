@@ -1,0 +1,13 @@
+{
+  "Place mine": "Mijn plaatsen",
+  "Place habitat": "Habitat plaatsen",
+  "Place road": "Weg plaatsen",
+  "+2 M€ per adjacent ocean": "+2 M€ per aangrenzende oceaan",
+  "Not on ocean spaces": "Niet op oceaanvelden",
+  "Not on mining spaces": "Niet op mijnvelden",
+  "Next to one of your tiles, if possible": "Naast een van je eigen tegels, indien mogelijk",
+  "Not next to another city": "Niet naast een andere stad",
+  "Only on ocean spaces": "Alleen op oceaanvelden",
+  "Only on mining spaces": "Alleen op mijnvelden",
+  "Oceans ${0} → ${1} of ${2}": "Oceanen ${0} → ${1} van ${2}"
+}

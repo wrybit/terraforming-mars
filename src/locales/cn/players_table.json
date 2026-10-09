@@ -1,0 +1,14 @@
+{
+  "Goods": "物资",
+  "Tags": "标志",
+  "Scoring": "计分",
+  "Played cards": "已打出的卡牌",
+  "Discount": "折扣",
+  "Terraform Rating": "改造度",
+  "Cards in hand": "手牌",
+  "First player": "起始玩家",
+  "Not enough space": "空间不足——点击可替换其他区域显示",
+  "* Additional discounts:": "* 额外折扣：",
+  "cards with requirements": "有条件的卡牌",
+  "space cards without planetary tags": "无行星标志的太空卡"
+}

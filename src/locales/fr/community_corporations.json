@@ -27,5 +27,6 @@
   "ACTION: SHUFFLE THE DISCARD PILE, THEN DRAW 3 CARDS FROM IT. KEEP 1 AND DISCARD THE OTHER 2.": "",
   "UNITED NATIONS MISSION ONE": "",
   "You start with 39 M€. Increase your TR 1 step.": "",
-  "Effect: When any player takes an action or plays a card that increases TR, including this, gain 1 M€ for each step.": ""
+  "Effect: When any player takes an action or plays a card that increases TR, including this, gain 1 M€ for each step.": "",
+  "Effect: During each round's research phase, gain 1 titanium for each card you do not buy.": "EFFET : Pendant la phase de recherche de chaque génération, gagnez 1 titane pour chaque carte que vous n'achetez pas."
 }

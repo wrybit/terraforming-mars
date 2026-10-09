@@ -1,0 +1,14 @@
+{
+  "Goods": "Товары",
+  "Tags": "Символы",
+  "Scoring": "Подсчёт очков",
+  "Played cards": "Сыгранные карты",
+  "Discount": "Скидка",
+  "Terraform Rating": "Рейтинг терраформирования",
+  "Cards in hand": "Карты в руке",
+  "First player": "Первый игрок",
+  "Not enough space": "мало места – нажмите, чтобы показать вместо другой области",
+  "* Additional discounts:": "* Дополнительные скидки:",
+  "cards with requirements": "карты с требованиями",
+  "space cards without planetary tags": "космические карты без символа планеты"
+}

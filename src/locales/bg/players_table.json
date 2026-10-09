@@ -1,0 +1,14 @@
+{
+  "Goods": "Стоки",
+  "Tags": "Символи",
+  "Scoring": "Точкуване",
+  "Played cards": "Изиграни карти",
+  "Discount": "Отстъпка",
+  "Terraform Rating": "Рейтинг на тераформиране",
+  "Cards in hand": "Карти в ръка",
+  "First player": "Пръв играч",
+  "Not enough space": "Няма достатъчно място – щракнете, за да се покаже вместо друга част",
+  "* Additional discounts:": "* Допълнителни отстъпки:",
+  "cards with requirements": "карти с изисквания",
+  "space cards without planetary tags": "космически карти без планетарни символи"
+}

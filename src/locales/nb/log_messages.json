@@ -360,5 +360,15 @@
 	"${0} increased ${1} colony track ${2} step(s)": "${0} økte ${1}-koloniverdien ${2} trinn",
 	"${0} decreased ${1} colony track 1 step": "${0} senket ${1}-koloniverdien 1 trinn",
 	"'${0} kept ${1} project cards": "${0} beholdt ${1} prosjektkort",
-	"Unable to perform undo operation. Error retrieving game from database. Please try again.": "Kan ikke utføre angre-operasjon. Feil ved henting av spill fra databasen. Prøv igjen."
+	"Unable to perform undo operation. Error retrieving game from database. Please try again.": "Kan ikke utføre angre-operasjon. Feil ved henting av spill fra databasen. Prøv igjen.",
+  "${0} revealed no cards": "${0} avslørte ingen kort",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0} spilte ${1} for å finne et omveltningskort, men fant ingen.",
+  "animals": "dyr",
+  "Specialized robot": "spesialisert robot",
+  "Supply Chain(s)": "Forsyningskjede-ressurs(er)",
+  "${0} cancelled the action": "${0} avbrøt handlingen",
+  "${0} bought ${1}": "${0} kjøpte ${1}",
+  "${0} bought no cards": "${0} kjøpte ingen kort",
+  "You bought ${0}": "Du kjøpte ${0}",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0} fikk ${1} M€ fra politikken til ${2}"
 }

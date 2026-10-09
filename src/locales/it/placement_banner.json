@@ -1,0 +1,13 @@
+{
+  "Place mine": "Piazza Miniera",
+  "Place habitat": "Piazza Habitat",
+  "Place road": "Piazza Strada",
+  "+2 M€ per adjacent ocean": "+2 M€ per ogni Oceano adiacente",
+  "Not on ocean spaces": "Non su spazi Oceano",
+  "Not on mining spaces": "Non su spazi Miniera",
+  "Next to one of your tiles, if possible": "Accanto a una tua tessera, se possibile",
+  "Not next to another city": "Non accanto a un'altra Città",
+  "Only on ocean spaces": "Solo su spazi Oceano",
+  "Only on mining spaces": "Solo su spazi Miniera",
+  "Oceans ${0} → ${1} of ${2}": "Oceani ${0} → ${1} di ${2}"
+}

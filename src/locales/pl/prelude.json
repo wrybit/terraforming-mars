@@ -158,5 +158,7 @@
 
   "Floating Refinery": "Podniebna Rafineria",
     "Action: Add 1 floater here, or remove 2 floaters from ANY CARD to gain 1 titanium and 2 M€.": "Akcja: Dodaj 1 dryfowiec na tę kartę lub usuń 2 dryfowce z DOWOLNEJ karty, aby otrzymać 1 tytan i 2 M€.",
-    "Add 1 floater here for each Venus tag you have.": "Dodaj 1 dryfowiec na tę kartę za każdy posiadany symbol Wenus."
+    "Add 1 floater here for each Venus tag you have.": "Dodaj 1 dryfowiec na tę kartę za każdy posiadany symbol Wenus.",
+  "Effect: Your titanium is worth 1 M€ less.": "Efekt: Twój tytan jest wart o 1 M€ mniej.",
+  "Place a city tile on an area with a STEEL OR TITANIUM PLACEMENT BONUS. Increase your titanium production 2 steps.": "Umieść kafelek miasta na obszarze z BONUSEM ZA UMIESZCZENIE STALI LUB TYTANU. Podnieś produkcję tytanu o 2."
 }

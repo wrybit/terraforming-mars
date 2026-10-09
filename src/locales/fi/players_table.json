@@ -1,0 +1,14 @@
+{
+  "Goods": "Tavarat",
+  "Tags": "Symbolit",
+  "Scoring": "Pisteytys",
+  "Played cards": "Pelatut kortit",
+  "Discount": "Alennus",
+  "Terraform Rating": "Maankaltaistusluokitus",
+  "Cards in hand": "Kädessä olevat kortit",
+  "First player": "Aloituspelaaja",
+  "Not enough space": "tila ei riitä – napsauta näyttääksesi sen toisen alueen sijaan",
+  "* Additional discounts:": "* Lisäalennukset:",
+  "cards with requirements": "kortit, joissa on vaatimuksia",
+  "space cards without planetary tags": "avaruuskortit ilman planeettasymbolia"
+}

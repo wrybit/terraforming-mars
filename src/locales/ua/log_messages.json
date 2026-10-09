@@ -505,5 +505,15 @@
   "${0} selected Global Event ${1} for the current global event": "${0} вибрав(ла) глобальну подію ${1} як поточну глобальну подію",
   "Neutral delegate added to ${0}": "Нейтральний делегат доданий до ${0}",
   "${0} sent 1 Neutral delegate in ${1} area": "${0} відправив(ла) 1 нейтрального делегата в область ${1}",
-  "Player spent ${0} steel and gained ${1} heat": "Гравець витратив ${0} сталі та отримав ${1} тепла"
+  "Player spent ${0} steel and gained ${1} heat": "Гравець витратив ${0} сталі та отримав ${1} тепла",
+  "${0} revealed no cards": "${0} не відкрив жодної карти",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0} зіграв ${1}, щоб знайти карту Турбулентності, але жодної не знайшлося.",
+  "animals": "тварини",
+  "Specialized robot": "спеціалізованого робота",
+  "Supply Chain(s)": "Ланцюги постачання",
+  "${0} cancelled the action": "${0} скасував дію",
+  "${0} bought ${1}": "${0} купив ${1}",
+  "${0} bought no cards": "${0} не купив жодної карти",
+  "You bought ${0}": "Ви купили ${0}",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0} отримав ${1} M€ завдяки політиці ${2}"
 }

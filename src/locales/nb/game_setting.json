@@ -34,5 +34,6 @@
   "Board-defined": "Definert av spillebrettet",
   "Require terraforming Venus to end the game": "Krev terraforming av Venus for å fullføre spillet",
   "Require terraforming The Moon to end the game": "Krev terraforming av Månen for å fullføre spillet",
-  "Why?": "Hvorfor?"
+  "Why?": "Hvorfor?",
+  "Reset": "Tilbakestill"
 }

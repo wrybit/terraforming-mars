@@ -169,5 +169,15 @@
   "Select how to pay for milestone": "Escolha como pagar pelo marco",
   "Select how to pay for award": "Escolha como pagar pelo prêmio",
   "Select how to pay for cards": "Escolha como pagar pelas cartas",
-  "Select ${max} card(s) to keep": "Escolha ${max} carta(s) para manter"
+  "Select ${max} card(s) to keep": "Escolha ${max} carta(s) para manter",
+  "${0} revealed no cards": "${0} não revelou cartas",
+  "${0} played ${1} to find a Turmoil card but none were found.": "${0} jogou ${1} para encontrar uma carta de Reviravolta, mas nenhuma foi encontrada.",
+  "animals": "animais",
+  "Specialized robot": "Robô especializado",
+  "Supply Chain(s)": "Cadeia(s) de suprimentos",
+  "${0} cancelled the action": "${0} cancelou a ação",
+  "${0} bought ${1}": "${0} comprou ${1}",
+  "${0} bought no cards": "${0} não comprou cartas",
+  "You bought ${0}": "Você comprou ${0}",
+  "${0} gained ${1} M€ from Turmoil ${2} policy": "${0} ganhou ${1} M€ com a política de ${2} (Reviravolta)"
 }

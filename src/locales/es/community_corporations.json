@@ -16,5 +16,6 @@
     "Action: Replay a played event from any player by paying its cost ONLY in M€ (discounts and rebates apply), then REMOVE IT FROM PLAY.": "Acción: Vuelve a jugar un evento ya jugado por cualquier jugador pagando su coste SÓLO en M€ (descuentos o reembolsos sí cuentan), después QUITA EL EVENTO DE LA PARTIDA.",
 
     "Midas": "",
-    "You start with 120 M€. Lower your TR 7 steps.": "Comienza con 120 M€. Reduce tu VT 7 niveles."
+    "You start with 120 M€. Lower your TR 7 steps.": "Comienza con 120 M€. Reduce tu VT 7 niveles.",
+  "Effect: During each round's research phase, gain 1 titanium for each card you do not buy.": "EFECTO: Durante la fase de investigación de cada generación, ganas 1 de titanio por cada carta que no compres."
 }
