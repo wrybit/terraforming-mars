@@ -613,5 +613,7 @@
   "You have ${0} plants": "У тебя ${0} растений",
   "Not playable": "Нельзя сыграть",
   "Already used": "Уже использованы",
-  "Not usable": "Недоступны"
+  "Not usable": "Недоступны",
+  "Pass turn": "Передать ход",
+  "Finish": "Завершить"
 }

@@ -1175,5 +1175,7 @@
   "You have ${0} plants": "Du har ${0} planter",
   "Not playable": "Kan ikke spilles",
   "Already used": "Allerede brukt",
-  "Not usable": "Kan ikke brukes"
+  "Not usable": "Kan ikke brukes",
+  "Pass turn": "Gi videre",
+  "Finish": "Avslutt"
 }

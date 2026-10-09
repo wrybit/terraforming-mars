@@ -1421,5 +1421,7 @@
   "You have ${0} plants": "식물 ${0}개 보유",
   "Not playable": "플레이 불가",
   "Already used": "이미 사용함",
-  "Not usable": "사용 불가"
+  "Not usable": "사용 불가",
+  "Pass turn": "턴 넘기기",
+  "Finish": "종료"
 }

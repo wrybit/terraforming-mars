@@ -1406,5 +1406,7 @@
   "You have ${0} plants": "${0} növényed van",
   "Not playable": "Nem kijátszható",
   "Already used": "Már használt",
-  "Not usable": "Nem használható"
+  "Not usable": "Nem használható",
+  "Pass turn": "Továbbadás",
+  "Finish": "Befejezés"
 }

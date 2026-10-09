@@ -1585,5 +1585,7 @@
   "You have ${0} plants": "Sinulla on ${0} kasvia",
   "Not playable": "Ei pelattavissa",
   "Already used": "Jo käytetty",
-  "Not usable": "Ei käytettävissä"
+  "Not usable": "Ei käytettävissä",
+  "Pass turn": "Luovuta vuoro",
+  "Finish": "Lopeta"
 }

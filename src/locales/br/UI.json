@@ -582,5 +582,7 @@
   "You have ${0} plants": "Você tem ${0} plantas",
   "Not playable": "Não jogáveis",
   "Already used": "Já usadas",
-  "Not usable": "Indisponíveis"
+  "Not usable": "Indisponíveis",
+  "Pass turn": "Passar a vez",
+  "Finish": "Encerrar"
 }

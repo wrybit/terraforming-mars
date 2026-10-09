@@ -1575,5 +1575,7 @@
   "Note: One of the tiles you co-own will have to be Lunar Mine Urbanization.": "Hinweis: Eines der Felder, die du mitbesitzt, muss die Mondminen-Urbanisierung sein.",
   "Not playable": "Nicht spielbar",
   "Already used": "Bereits ausgeführt",
-  "Not usable": "Nicht ausführbar"
+  "Not usable": "Nicht ausführbar",
+  "Pass turn": "Weitergeben",
+  "Finish": "Beenden"
 }

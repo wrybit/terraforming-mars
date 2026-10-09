@@ -147,6 +147,16 @@
   height: @or-tab-icon-size;
 }
 
+// Label next to the icon (TabIconLabels.ts): bold, in the icon's colour; goes first when space runs short
+.or-tab-icon-label {
+  margin-left: 6px;
+  font-weight: bold;
+}
+
+.or-tabs[data-icon-labels-hidden] .or-tab-icon-label {
+  display: none;
+}
+
 .or-tab-title {
   min-width: 0; // otherwise the label can't shrink below its text width
   overflow: hidden;

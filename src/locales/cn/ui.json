@@ -759,5 +759,7 @@
   "You have ${0} plants": "你有 ${0} 个植物",
   "Not playable": "无法打出",
   "Already used": "已使用",
-  "Not usable": "无法使用"
+  "Not usable": "无法使用",
+  "Pass turn": "交出回合",
+  "Finish": "结束"
 }

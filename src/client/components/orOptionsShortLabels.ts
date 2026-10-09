@@ -62,6 +62,16 @@ const TAB_ICONS: Readonly<Record<string, TabIcon>> = {
   'Pass for this generation': 'end-generation',
 };
 
+// Text next to the icon while the tab bar has room for it (TabIconLabels.ts hides it first when space runs short)
+const TAB_ICON_LABELS: Readonly<Record<TabIcon, string>> = {
+  'pass-on': 'Pass turn',
+  'end-generation': 'Finish',
+};
+
+export function tabIconLabel(icon: TabIcon): string {
+  return TAB_ICON_LABELS[icon];
+}
+
 // These tabs always come last, in this order (end generation at the very end)
 const LAST_TABS: ReadonlyArray<string> = ['End Turn', 'Pass for this generation'];
 

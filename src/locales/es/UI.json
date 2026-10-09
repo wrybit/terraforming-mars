@@ -554,5 +554,7 @@
   "You have ${0} plants": "Tienes ${0} plantas",
   "Not playable": "No jugables",
   "Already used": "Ya usadas",
-  "Not usable": "No disponibles"
+  "Not usable": "No disponibles",
+  "Pass turn": "Ceder turno",
+  "Finish": "Terminar"
 }

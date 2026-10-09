@@ -7,7 +7,7 @@
     <label v-if="playerinput.warning !== undefined" class="card-warning"><div>({{ $t(playerinput.warning) }})</div></label>
 
     <!-- Action menu: tabs with short label and count of available entries; empty tabs are dimmed but clickable -->
-    <div v-if="asTabs" class="or-tabs" role="tablist">
+    <div v-if="asTabs" v-tab-icon-labels class="or-tabs" role="tablist">
       <!-- Hand cards always as the first tab (view only); the first real action stays preselected -->
       <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
       <!-- Display order via tabDisplayOrder (pass/end at the end); idx stays the index in displayedOptions.
@@ -27,7 +27,10 @@
           'or-tab--end': isEndTab(tabTitle(idx)),
         }, tabToneClass('or-tab--tone-', displayedOptions[idx])]"
         @click="selectOptionTab(displayedOptions[idx])">
-        <OrOptionsTabIcon v-if="tabIcon(tabTitle(idx)) !== undefined" :icon="tabIcon(tabTitle(idx))!"/>
+        <template v-if="tabIcon(tabTitle(idx)) !== undefined">
+          <OrOptionsTabIcon :icon="tabIcon(tabTitle(idx))!"/>
+          <span class="or-tab-icon-label">{{ $t(tabIconLabel(tabIcon(tabTitle(idx))!)) }}</span>
+        </template>
         <span v-else class="or-tab-title">{{ $t(shortTabLabel(tabTitle(idx))) }}</span>
         <span v-if="tabCount(idx) !== undefined" class="or-tab-count">{{ tabCount(idx) }}</span>
       </button>
@@ -171,6 +174,7 @@
 import {defineComponent, inject, provide, shallowRef} from 'vue';
 import {CARD_SECTIONS, CardSectionsFor, TrailingCardSection} from '@/client/components/cardSections';
 import {vDockedTab} from '@/client/directives/DockedTab';
+import {vTabIconLabels} from '@/client/directives/TabIconLabels';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {isHTMLElement} from '@/client/utils/vueUtils';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
@@ -182,7 +186,7 @@ import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import ActionStepChips from '@/client/components/ActionStepChips.vue';
 import {actionStep} from '@/client/components/actionStep';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
-import {fullTabTitle, shortTabLabel, tabButtonLabel, optionTone, tabButtonCentered, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon} from '@/client/components/orOptionsShortLabels';
+import {fullTabTitle, shortTabLabel, tabButtonLabel, optionTone, tabButtonCentered, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon, tabIconLabel} from '@/client/components/orOptionsShortLabels';
 import {tabIntro, TabIntro} from '@/client/components/tabIntro';
 import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
@@ -240,6 +244,7 @@ export default defineComponent({
   },
   directives: {
     dockedTab: vDockedTab,
+    tabIconLabels: vTabIconLabels,
   },
   components: {
     ActionStepChips,
@@ -541,6 +546,7 @@ export default defineComponent({
     shortTabLabel,
     fullTabTitle,
     tabIcon,
+    tabIconLabel,
     tabDisplayOrder,
     tabButtonLabel,
     tabHighlighted,

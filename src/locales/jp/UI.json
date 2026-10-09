@@ -1224,5 +1224,7 @@
   "You have ${0} plants": "植物：${0}",
   "Not playable": "プレイ不可",
   "Already used": "使用済み",
-  "Not usable": "使用不可"
+  "Not usable": "使用不可",
+  "Pass turn": "手番を渡す",
+  "Finish": "終了"
 }
