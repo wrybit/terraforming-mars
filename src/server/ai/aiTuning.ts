@@ -62,6 +62,8 @@ export type AiTuning = {
   awardSwing: number,
   /** 1: hand cards keep a small value in the expected last generation until Mars is terraformed (no selling them off). */
   keepHandUntilEnd: number,
+  /** 1: money in the last generation counts in steps of greeneries it can still buy (stateValue.ts). */
+  endgameMoney: number,
   /** Share of a VP per generation an action card that collects its own VP resource is worth (Birds, Tardigrades), 0 = flat action value. */
   accumulatorValue: number,
 };
@@ -118,6 +120,7 @@ export const BASELINE_TUNING: AiTuning = {
   // (30 VP swing), the AI opponent in batches does not chase awards like that.
   awardSwing: 0.15,
   keepHandUntilEnd: 1,
+  endgameMoney: 1,
   accumulatorValue: 0,
 };
 
@@ -201,6 +204,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   awardRisk30: {awardSwing: 0.3},
   // Before the fix: hand cards worth nothing in the expected last generation (sold too early).
   sellHandEarly: {keepHandUntilEnd: 0},
+  // Before: money in the last generation a flat 0.3 per M€.
+  flatEndgameMoney: {endgameMoney: 0},
 };
 
 export function isTuningVariant(name: string): boolean {

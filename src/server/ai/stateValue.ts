@@ -195,11 +195,30 @@ function closerTerm(player: IPlayer, frozen: ValuationContext): number {
   return generationsCut * (engineFlow(rival, context) - engineFlow(player, context));
 }
 
+// Last generation: money is only worth what it still buys. The cheapest VP is a greenery standard
+// project; a greenery not yet bought counts 0.6 VP so that buying it (1 VP + neighbours) stays better.
+const GREENERY_PROJECT_COST = 23;
+const UNBOUGHT_GREENERY_SHARE = 0.6;
+const LEFTOVER_MONEY_VALUE = 0.1;
+
+/**
+ * M€ value of money in the last generation as steps of greeneries it can still buy (Jens: "sell
+ * what does not change the game any more and buy one more greenery from it"). Once Mars is
+ * terraformed the hand counts as 1 M€ per card, as it can be sold.
+ */
+function lastGenerationMoneyValue(player: IPlayer, context: ValuationContext): number {
+  const sellable = player.game.marsIsTerraformed() ? player.cardsInHand.length : 0;
+  const money = player.megaCredits + sellable;
+  const greeneries = Math.floor(money / GREENERY_PROJECT_COST);
+  return greeneries * UNBOUGHT_GREENERY_SHARE * context.victoryPoint + (money - greeneries * GREENERY_PROJECT_COST) * LEFTOVER_MONEY_VALUE;
+}
+
 function resourceValue(player: IPlayer, context: ValuationContext): number {
   const heatValue = context.temperatureMaxed ? 0 : 0.9;
   const money = context.remaining > 0 ? 1 : MONEY_VALUE_IN_LAST_GENERATION;
   const megaCredits = Math.min(player.megaCredits, MONEY_RESERVE) + Math.max(0, player.megaCredits - MONEY_RESERVE) * EXCESS_MONEY_VALUE;
-  return megaCredits * money +
+  const moneyValue = context.remaining === 0 && tuningOf(player).endgameMoney > 0 ? lastGenerationMoneyValue(player, context) : megaCredits * money;
+  return moneyValue +
     player.steel * player.getSteelValue() * 0.8 * money +
     player.titanium * player.getTitaniumValue() * 0.8 * money +
     player.plants * 1.5 +
