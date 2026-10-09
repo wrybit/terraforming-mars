@@ -279,7 +279,7 @@
                 <span class="create-game-seat-label"><SeatIcon kind="ai"/><span v-i18n>AI</span></span>
                 <!-- Blocked: instead of the count a warning that names the expansions/options the AI cannot handle -->
                 <div v-if="aiBlockers.length > 0" class="create-game-validation-box create-game-validation-box--warning create-game-seat-warning" role="status">
-                  <h3 class="create-game-validation-title"><span aria-hidden="true">&#9888;&#xFE0E;</span><span v-i18n>AI not available with:</span></h3>
+                  <h3 class="create-game-validation-title"><span aria-hidden="true">&#9888;&#xFE0E;</span><span v-i18n>AI not compatible with:</span></h3>
                   <!-- Same chips as the summary above the Create button -->
                   <div class="create-game-summary">
                     <span v-for="blocker in aiBlockerChips" :key="blocker.label" class="create-game-summary-chip">
