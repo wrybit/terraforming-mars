@@ -131,7 +131,7 @@ describe('CreateGameForm', () => {
     await wrapper.vm.$nextTick();
     expect(vm.aiPlayersCount).eq(0);
     expect(vm.aiBlockers).deep.eq(['Colonies']);
-    expect(vm.aiBlockedTitle).contains('Colonies');
+    expect(vm.aiBlockerChips.map((chip: any) => chip.label)).deep.eq(['Colonies']);
     // Warning box instead of the AI count
     expect(wrapper.find('.create-game-seat-warning').text()).contains('Colonies');
 

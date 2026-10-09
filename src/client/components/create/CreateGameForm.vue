@@ -278,9 +278,15 @@
                 <SegmentedControl v-model="humanPlayersCount" :options="humanCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
                 <span class="create-game-seat-label"><SeatIcon kind="ai"/><span v-i18n>AI</span></span>
                 <!-- Blocked: instead of the count a warning that names the expansions/options the AI cannot handle -->
-                <p v-if="aiBlockers.length > 0" class="create-game-validation-box create-game-validation-box--warning create-game-seat-warning" role="status">
-                  <span class="create-game-validation-title" aria-hidden="true">&#9888;&#xFE0E;</span>{{ aiBlockedTitle }}
-                </p>
+                <div v-if="aiBlockers.length > 0" class="create-game-validation-box create-game-validation-box--warning create-game-seat-warning" role="status">
+                  <h3 class="create-game-validation-title"><span aria-hidden="true">&#9888;&#xFE0E;</span><span v-i18n>AI not available with:</span></h3>
+                  <!-- Same chips as the summary above the Create button -->
+                  <div class="create-game-summary">
+                    <span v-for="blocker in aiBlockerChips" :key="blocker.label" class="create-game-summary-chip">
+                      <span :class="['create-game-expansion-icon', blocker.iconClass]"></span><span v-i18n>{{ blocker.label }}</span>
+                    </span>
+                  </div>
+                </div>
                 <SegmentedControl v-else v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
               </div>
               <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
@@ -378,7 +384,7 @@ import CustomCardListCard from '@/client/components/create/CustomCardListCard.vu
 import CreateGameBoardPreview from '@/client/components/create/CreateGameBoardPreview.vue';
 import {observeStickyBottom} from '@/client/components/create/stickyBottomObserver';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
-import {aiUnsupportedReasons} from '@/common/ai/aiSupport';
+import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
@@ -737,11 +743,12 @@ export default defineComponent({
     aiBlockers(): Array<string> {
       return aiUnsupportedReasons({expansions: this.expansions, twoCorpsVariant: this.twoCorpsVariant});
     },
-    aiBlockedTitle(): string | undefined {
-      if (this.aiBlockers.length === 0) {
-        return undefined;
-      }
-      return translateTextWithParams('AI not available with: ${0}', [this.aiBlockers.map((reason) => translateText(reason)).join(', ')]);
+    // The blocking settings with their icons: expansions as in the expansion list, Merger with the Prelude icon like its option row
+    aiBlockerChips(): Array<Pick<ExpansionChoice, 'label' | 'iconClass'>> {
+      const expansionChips = [...OFFICIAL_EXPANSIONS, ...FAN_EXPANSIONS]
+        .filter((choice) => this.expansions[choice.expansion] && !AI_SUPPORTED_EXPANSIONS.includes(choice.expansion));
+      const mergerChips = this.twoCorpsVariant ? [{label: 'Merger', iconClass: 'expansion-icon-prelude'}] : [];
+      return [...expansionChips, ...mergerChips];
     },
     humanPlayersCount: {
       get(): number {
