@@ -1,8 +1,9 @@
 <template>
   <!-- Milestones & awards as a table: icons on top, status below, one row per player.
        Only visible in the two-column layout (milestone_award_table.less) -->
-  <!-- --ma-table-cell-count: cells per row without separators; the mobile view uses it to transpose the table (mobile.less) -->
-  <div ref="table" :class="['ma-table', {'ma-table--split': scrollable}]" :style="{'--ma-table-cell-count': 1 + milestones.length + awards.length}">
+  <!-- --ma-table-cell-count: cells per row without separators; the transposed table (mobile view, narrow log box)
+       uses it as its row count (milestone_award_table.less) -->
+  <div ref="table" :class="['ma-table', {'ma-table--split': split, 'ma-table--transposed': transposed}]" :style="{'--ma-table-cell-count': 1 + milestones.length + awards.length}">
     <!-- Parts: one ("all", without a box of its own) or, when scrollable, the fixed name column and the scrolling
          values next to it. Each part renders the same rows, so their heights match (milestone_award_table.less). -->
     <div v-for="part in parts" :key="part" :class="['ma-table-part', 'ma-table-part--' + part]" :style="{'--ma-table-columns': columnTemplate(part)}" @scroll.passive="markHorizontalScroll">
@@ -83,12 +84,14 @@ import {scoreRanks} from '@/client/components/milestoneAwardTable/scoreRanks';
 import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
 import {glassTooltip} from '@/client/directives/GlassTooltip';
 import {observeHeaderFit} from '@/client/components/milestoneAwardTable/headerFit';
+import {observeOrientation} from '@/client/components/milestoneAwardTable/tableOrientation';
 import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
 
-// Cleanup function of the header adjustment per table (not reactive)
+// Cleanup functions of the header adjustment and the orientation watcher per table (not reactive)
 const stopHeaderFit = new WeakMap<object, () => void>();
+const stopOrientation = new WeakMap<object, () => void>();
 
 type Score = {color: Color; score: number};
 
@@ -117,7 +120,8 @@ export default defineComponent({
       type: Array as () => ReadonlyArray<PublicPlayerModel>,
       required: true,
     },
-    // Names fixed, values scroll horizontally once the columns can't shrink any further (log box, desktop)
+    // Log box (desktop): too narrow for comfortable columns → transposed (players as columns);
+    // otherwise names fixed and values scroll horizontally once the columns can't shrink any further
     scrollable: {
       type: Boolean,
       default: false,
@@ -128,11 +132,23 @@ export default defineComponent({
       default: undefined,
     },
   },
+  data() {
+    return {
+      transposed: false,
+    };
+  },
   mounted() {
-    stopHeaderFit.set(this, observeHeaderFit(this.$refs.table as HTMLElement));
+    const table = this.$refs.table as HTMLElement;
+    stopHeaderFit.set(this, observeHeaderFit(table));
+    if (this.scrollable && table.parentElement !== null) {
+      stopOrientation.set(this, observeOrientation(table.parentElement, () => this.milestones.length + this.awards.length, (transposed) => {
+        this.transposed = transposed;
+      }));
+    }
   },
   beforeUnmount() {
     stopHeaderFit.get(this)?.();
+    stopOrientation.get(this)?.();
   },
   computed: {
     flashKeys(): typeof flashKeys {
@@ -141,8 +157,12 @@ export default defineComponent({
     orderedPlayers(): Array<PublicPlayerModel> {
       return playersInTurnOrder(this.players, this.viewerColor);
     },
+    // Split into fixed names and scrolling values only in the horizontal log-box table
+    split(): boolean {
+      return this.scrollable && !this.transposed;
+    },
     parts(): ReadonlyArray<TablePart> {
-      return this.scrollable ? ['names', 'values'] : ['all'];
+      return this.split ? ['names', 'values'] : ['all'];
     },
     claimedCount(): number {
       return this.milestones.filter((milestone) => milestone.color !== undefined).length;

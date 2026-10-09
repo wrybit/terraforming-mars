@@ -280,14 +280,23 @@ each(@players, {
   color: @ma-table-dim;
 }
 
-// Threshold reached, milestone still free
-.ma-table-cell--claimable::after {
-  content: "✓";
-  position: absolute;
-  right: 4px;
-  top: 1px;
-  font-size: 11px;
-  color: #7ee07e;
+// Threshold reached, milestone still free: golden number in a green box, shaped like the M€ coin.
+// Dark green keeps the gold readable; light inner line + dark outer edge set it apart on every player color (green too)
+@ma-table-claimable-size: 22px;
+
+.ma-table .ma-table-cell--claimable .ma-table-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: @ma-table-claimable-size;
+  height: @ma-table-claimable-size;
+  padding: 1px 3px 0;
+  border-radius: 5px;
+  font-size: 15px;
+  color: @ma-table-gold;
+  background: rgba(14, 64, 32, 0.9);
+  box-shadow: inset 0 0 0 1px #6fd28a, 0 0 0 1px rgba(0, 0, 0, 0.6);
 }
 
 // One part (default): the part has no box of its own, its rows are the table's grid items
@@ -369,6 +378,105 @@ each(@players, {
 
   .ma-table-part--values .ma-table-player--me {
     box-shadow: inset -2px 0 0 @ma-table-me-outline, inset 0 2px 0 @ma-table-me-outline, inset 0 -2px 0 @ma-table-me-outline;
+  }
+}
+
+// ---------- Transposed: players as columns, milestones and awards as rows ----------
+// Shared by the mobile view (phone, tablet portrait: mobile.less) and the narrow log box (tableOrientation.ts).
+// The rows dissolve (display: contents); the grid flows column by column, one column per former row.
+// Row count: --ma-table-cell-count from MilestoneAwardTable.vue. Headings and dividers are dropped.
+.ma-table-transposed(@icon-column; @cost-column; @column-gap; @cell-min-height; @radius) {
+  display: grid !important; // otherwise only visible in the two-column layout (see .ma-table)
+  grid-template-rows: repeat(var(--ma-table-cell-count), auto);
+  grid-template-columns: @icon-column @cost-column;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 0 @column-gap;
+
+  .ma-table-row {
+    display: contents;
+  }
+
+  .ma-table-row > * {
+    min-height: @cell-min-height;
+    padding: 4px 2px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // After the cell rule so it wins
+  .ma-table-labels,
+  .ma-table-row > .ma-table-divider,
+  .ma-table-player::before {
+    display: none;
+  }
+
+  // The empty top-left corner (name column of header and status row)
+  .ma-table-head > :first-child,
+  .ma-table-status > :first-child {
+    min-height: 0;
+    height: 100%;
+  }
+
+  .ma-table-name {
+    border-radius: @radius @radius 0 0;
+  }
+
+  .ma-table-player > :last-child {
+    border-radius: 0 0 @radius @radius;
+  }
+
+  // Separation milestones | awards: line above the first award (proximity instead of a heading)
+  .ma-table-divider ~ .ma-table-divider + * {
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  // Player color per column (the dissolved rows no longer carry a background)
+  each(@players, {
+    @c: ~"player_@{value}";
+    .ma-table-player--@{value} > * {
+      background: fade(@@c, 28%);
+    }
+
+    .ma-table-player--@{value}.ma-table-player--me > * {
+      background: fade(@@c, 50%);
+    }
+  });
+}
+
+// Narrow log box (desktop): compact cells; name on top with the color bar as its upper edge
+.ma-table.ma-table--transposed {
+  .ma-table-transposed(52px; 30px; 4px; 30px; @ma-table-radius);
+
+  .ma-table-player > .ma-table-name {
+    display: block;
+    padding: 6px 4px 4px;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  each(@players, {
+    @c: ~"player_@{value}";
+    .ma-table-player--@{value} > .ma-table-name {
+      border-top: 4px solid @@c;
+    }
+  });
+
+  // Own column: the white outline of the own row, now running down the column
+  .ma-table-player--me > * {
+    box-shadow: inset 2px 0 0 @ma-table-me-outline, inset -2px 0 0 @ma-table-me-outline;
+  }
+
+  .ma-table-player--me > .ma-table-name {
+    font-size: 15px;
+    box-shadow: inset 2px 0 0 @ma-table-me-outline, inset -2px 0 0 @ma-table-me-outline, inset 0 2px 0 @ma-table-me-outline;
+  }
+
+  .ma-table-player--me > :last-child {
+    box-shadow: inset 2px 0 0 @ma-table-me-outline, inset -2px 0 0 @ma-table-me-outline, inset 0 -2px 0 @ma-table-me-outline;
   }
 }
 
