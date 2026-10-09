@@ -108,6 +108,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   stayInMax: {passPenalty: 0.4},
   victoryPoints125: {victoryPointScale: 1.25},
   victoryPoints80: {victoryPointScale: 0.8},
+  fewerCardsStayInMax: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, passPenalty: 0.4},
   moreCards: {buyMargin: -5, handTargetEarly: 16, handTargetLate: 6},
   // Baseline before the hate draft and the zero-sum two-player valuation, to confirm both.
   previous: {draftDenial: 0, opponentWeightTwoPlayers: 0.5},
