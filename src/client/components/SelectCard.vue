@@ -29,9 +29,15 @@
             <AppButton class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
           </template>
         </CardZoomBar>
-        <TabPanelCaption/>
+        <TabPanelIntroSlot/>
         <CardFilterEmptyHint v-if="nothingShown" @reset="resetFilter"/>
-        <label v-for="card in getOrderedCards()" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
+        <!-- Cards of several players: one group per player with the name as heading, opponents first, own last
+             (cardOwnerGroups.ts) – instead of a small name label on every card -->
+        <template v-for="group in getCardGroups()" :key="group.owner?.color ?? 'none'">
+        <h3 v-if="group.owner !== undefined" class="hand-cards-panel__title select-card-owner-title">
+          <PlayerCube :color="group.owner.color" view="slight" :size="11"/>{{ group.owner.name }} <small>{{ group.cards.length }}</small>
+        </h3>
+        <label v-for="card in group.cards" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
             <template v-if="!card.isDisabled">
               <input v-if="selectOnlyOneCard" type="radio" v-model="cards" :value="card" >
               <input v-else type="checkbox" v-model="cards" :value="card" :disabled="playerinput.max !== undefined && Array.isArray(cards) && cards.length >= playerinput.max && cards.includes(card) === false" >
@@ -42,13 +48,9 @@
               <!-- Draft: the card picked this round stays in its place, marked as the current choice that can still be changed;
                    inside the card so the tab sits flush on its border like the selection tab -->
               <span v-if="isCurrentPick(card)" class="current-pick-tab">{{ (cardsSelected() === 0 ? '✓ ' : '') + $t(cardsSelected() === 0 ? 'Your pick – can be changed' : 'Previous pick') }}</span>
-              <template v-if="playerinput.showOwner">
-                <div :class="'card-owner-label player_translucent_bg_color_'+ getOwner(card).color">
-                  {{getOwner(card).name}}
-                </div>
-              </template>
             </Card>
         </label>
+        </template>
         <div v-if="hasCardWarning()" class="card-warning" v-i18n>{{ warning }}</div>
         <WarningsComponent :warnings="warnings"/>
         <TabPanelFooterSlot>
@@ -76,7 +78,9 @@
 <script lang="ts">
 
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
-import TabPanelCaption from '@/client/components/TabPanelCaption.vue';
+import TabPanelIntroSlot from '@/client/components/TabPanelIntroSlot.vue';
+import PlayerCube from '@/client/components/common/PlayerCube.vue';
+import {cardOwnerGroups, CardOwnerGroup} from '@/client/utils/cardOwnerGroups';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
@@ -154,7 +158,8 @@ export default defineComponent({
   },
   components: {
     TabPanelFooterSlot,
-    TabPanelCaption,
+    TabPanelIntroSlot,
+    PlayerCube,
     Card,
     WarningsComponent,
     AppButton,
@@ -264,9 +269,6 @@ export default defineComponent({
       if (visibility !== 'shown') {
         classes.push('card-filter-' + visibility);
       }
-      if (this.playerinput.showOwner && this.getOwner(card) !== undefined) {
-        classes.push('cardbox-with-owner-label');
-      }
       if (this.isCurrentPick(card)) {
         classes.push(this.cardsSelected() === 0 ? 'cardbox--current-pick' : 'cardbox--current-pick-replaced');
       }
@@ -295,6 +297,14 @@ export default defineComponent({
     },
     getOwner(card: CardModel): Owner {
       return this.owners.get(card.name) ?? {name: 'unknown', color: 'neutral'};
+    },
+    // One group without heading, or (cards of several players) one group per player
+    getCardGroups(): Array<CardOwnerGroup> {
+      const cards = this.getOrderedCards();
+      if (!this.playerinput.showOwner) {
+        return [{owner: undefined, cards: [...cards]}];
+      }
+      return cardOwnerGroups(cards, (card) => this.owners.get(card.name), this.playerView.players, this.playerView.thisPlayer?.color);
     },
     buttonLabel(): string | Message {
       // Never "Buy 0": without a selection only the action, the number only counts chosen cards

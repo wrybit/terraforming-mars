@@ -333,10 +333,16 @@
   margin: 0 0 12px;
 }
 
-// The same question as a small caption below the header row of a card list (TabPanelCaption.vue):
+// The same question as a small caption below the header row of a card list (TabPanelIntroSlot.vue):
 // the typography of the section captions in the hand tab; close to the row it belongs to
 .or-tab-panel-caption {
+  display: block;
   .section-caption(16px);
+}
+
+// Intro (tile or card) below the header row of a card list: the same gap to the cards as at the top of a box
+.or-tab-panel-intro-slot > .or-tab-intro {
+  margin-bottom: 0;
 }
 
 .or-tab-save {

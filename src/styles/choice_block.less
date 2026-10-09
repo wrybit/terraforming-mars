@@ -74,7 +74,7 @@ html:not(.tm-mobile) {
   // (few cards: the square block's column count, many: as many as fit). If the box has room left, the cards sit
   // centered horizontally and vertically – while title and toolbar row stay at the top of the box.
   // Grid instead of flex because only a grid can center the card rows apart from the toolbar row:
-  //   rows 1–4  title, toolbar row, caption below it (TabPanelCaption.vue), empty hint
+  //   rows 1–4  title, toolbar row, the box's intro below it (TabPanelIntroSlot.vue), empty hint
   //             (explicitly placed; empty rows are 0 high)
   //   row 5     spacer above the cards (1fr)
   //   rows 6–65 the cards and what follows them (auto; unused rows are 0 high)
@@ -136,7 +136,7 @@ html:not(.tm-mobile) {
       grid-row: 2;
     }
 
-    > .or-tab-panel-caption {
+    > .or-tab-panel-intro-slot {
       grid-row: 3;
     }
 
@@ -250,3 +250,26 @@ html:not(.tm-mobile) .or-tab-panel {
   }
 }
 
+
+// Cards of several players grouped per player (SelectCard.vue, cardOwnerGroups.ts): the player's name as a
+// section caption on its own line above its cards (cube in the player color in front). Law of proximity:
+// caption close to its cards, clearly more space up to the previous group
+@choice-owner-group-gap: 28px;
+
+.choice-block > .select-card-owner-title {
+  display: flex;
+  flex: 0 0 100%;
+  align-items: center;
+  gap: 4px;
+  margin: @choice-owner-group-gap 0 0;
+  padding-left: 0;
+
+  .player-cube {
+    margin: -4px 0 -4px -3px;
+  }
+}
+
+// First group directly below the header row (or the intro below it)
+.choice-block > .select-card-owner-title:not(.select-card-owner-title ~ .select-card-owner-title) {
+  margin-top: 0;
+}
