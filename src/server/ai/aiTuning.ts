@@ -55,9 +55,10 @@ export type AiTuning = {
 // - margin -1, hand 9/4, reserve 0 won 58 of 130 seats against 43 (+2.8 VP);
 // - margin -3, hand 12/5 won 55 against 50 (+2.2 VP, 35 cards played).
 export const BASELINE_TUNING: AiTuning = {
-  buyMargin: -3,
-  handTargetEarly: 12,
-  handTargetLate: 5,
+  // Night runs E+F: with production valued at 0.9, fewer cards win (z +4.75, +3.60): -1 and 9/4.
+  buyMargin: -1,
+  handTargetEarly: 9,
+  handTargetLate: 4,
   researchReserveEarly: 0,
   sharedSpotShare: 0.4,
   opponentSpotShare: 0.25,
@@ -109,6 +110,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   victoryPoints125: {victoryPointScale: 1.25},
   victoryPoints80: {victoryPointScale: 0.8},
   fewerCardsStayInMax: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, passPenalty: 0.4},
+  // Previous card buying (margin -3, hand 12/5) and one step further down.
+  moreCardsAgain: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5},
+  fewestCards: {buyMargin: 0, handTargetEarly: 7, handTargetLate: 3},
   moreCards: {buyMargin: -5, handTargetEarly: 16, handTargetLate: 6},
   // Baseline before the hate draft and the zero-sum two-player valuation, to confirm both.
   previous: {draftDenial: 0, opponentWeightTwoPlayers: 0.5},
