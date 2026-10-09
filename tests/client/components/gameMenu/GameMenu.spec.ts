@@ -53,6 +53,21 @@ describe('GameMenu', () => {
     wrapper.unmount();
   });
 
+  it('always shows the fan project notice, also without navigation and in the game', async () => {
+    for (const props of [{navigation: true}, {navigation: false}]) {
+      const wrapper = mount(GameMenu, {...globalConfig, props, attachTo: document.body});
+      await wrapper.find('.game-menu-button').trigger('click');
+      const notice = document.body.querySelector('.game-menu-dropdown .game-menu-notice');
+      expect(notice?.textContent).contains('Unofficial fan project');
+      expect(notice?.textContent).contains('Not affiliated with FryxGames');
+      wrapper.unmount();
+    }
+    const wrapper = mount(GameMenu, {...globalConfig, global: {...globalConfig.global, provide: {[GAME_MENU_CONTEXT as symbol]: computed(context)}}, attachTo: document.body});
+    await wrapper.find('.game-menu-button').trigger('click');
+    expect(document.body.querySelector('.game-menu-dropdown .game-menu-notice')).is.not.null;
+    wrapper.unmount();
+  });
+
   it('hides the navigation box when switched off (start page)', async () => {
     const wrapper = mount(GameMenu, {...globalConfig, props: {navigation: false}, attachTo: document.body});
     await wrapper.find('.game-menu-button').trigger('click');

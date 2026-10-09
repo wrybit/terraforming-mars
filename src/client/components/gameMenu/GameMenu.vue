@@ -72,6 +72,12 @@
               <span v-i18n>{{ link.label }}</span>
             </a>
           </nav>
+
+          <!-- Legal notice: always reachable from every page and during a game, since the menu exists everywhere -->
+          <p class="game-menu-panel game-menu-notice" data-test="game-menu-notice">
+            <strong class="game-menu-notice-title" v-i18n>Unofficial fan project</strong>
+            <span class="game-menu-notice-text" v-i18n>Not affiliated with FryxGames, Asmodee Digital or Steam in any way.</span>
+          </p>
         </div>
       </Transition>
     </Teleport>
