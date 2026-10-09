@@ -101,7 +101,7 @@ export function valuationContext(game: IGame, player?: IPlayer): ValuationContex
   return {
     generation: game.generation,
     remaining: remainingProductionPhases(game, player),
-    victoryPoint: victoryPointValue(game, player),
+    victoryPoint: victoryPointValue(game, player) * (player === undefined ? 1 : tuningOf(player).victoryPointScale),
     temperatureMaxed: isTemperatureMaxed(game),
     awardConfidence: awardConfidence(terraformingProgress(game)),
     stepsLeft: stepsLeft(game),
