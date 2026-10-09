@@ -1,0 +1,16 @@
+// Legal notice (FanProjectNotice.vue): colours come from the surrounding element, the title is only a bit brighter
+.fan-project-notice-title {
+  font-weight: 600;
+}
+
+.fan-project-notice--stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; // title and text belong together
+}
+
+// One line as plain text flow: wraps like a sentence and follows the alignment of the footer
+.fan-project-notice--inline .fan-project-notice-title::after {
+  content: " · ";
+  font-weight: normal;
+}

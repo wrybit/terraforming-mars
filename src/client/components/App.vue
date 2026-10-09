@@ -56,7 +56,7 @@
     <!-- Start page and "Create game" share the same footer (Jens' request): build facts left, notice right -->
     <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': hasStartScreenFooter}">
       <StartScreenFooter v-if="hasStartScreenFooter"/>
-      <span v-i18n>Not affiliated with FryxGames, Asmodee Digital or Steam in any way.</span>
+      <FanProjectNotice/>
     </footer>
   </div>
 </template>
@@ -93,6 +93,7 @@ import {hasShowModal, showModal, windowHasHTMLDialogElement} from './HTMLDialogE
 import dialogPolyfill from 'dialog-polyfill';
 import {initMobileLayout, mobileLayout} from '@/client/utils/mobileLayout';
 import RotateHint from '@/client/components/RotateHint.vue';
+import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
 import {setDocumentTitle} from '../utils/documentTitle';
 import {ingestView} from '@/client/utils/changeTracker';
 
@@ -156,6 +157,7 @@ export default defineComponent({
     };
   },
   components: {
+    FanProjectNotice,
     RotateHint,
     StartScreen,
     StartScreenFooter,

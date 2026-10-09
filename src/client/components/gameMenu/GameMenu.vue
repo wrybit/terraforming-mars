@@ -74,10 +74,9 @@
           </nav>
 
           <!-- Legal notice: always reachable from every page and during a game, since the menu exists everywhere -->
-          <p class="game-menu-panel game-menu-notice" data-test="game-menu-notice">
-            <strong class="game-menu-notice-title" v-i18n>Unofficial fan project</strong>
-            <span class="game-menu-notice-text" v-i18n>Not affiliated with FryxGames, Asmodee Digital or Steam in any way.</span>
-          </p>
+          <div class="game-menu-panel game-menu-notice">
+            <FanProjectNotice layout="stacked"/>
+          </div>
         </div>
       </Transition>
     </Teleport>
@@ -104,6 +103,7 @@
 import {computed, defineAsyncComponent, inject, onBeforeUnmount, ref} from 'vue';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
+import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
 import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
 import LanguageFlag from '@/client/components/LanguageFlag.vue';
 import LanguageSelectionDialog from '@/client/components/LanguageSelectionDialog.vue';

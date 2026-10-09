@@ -348,6 +348,11 @@
 .notice--split {
   justify-content: space-between;
   align-items: center;
+
+  // If the notice wraps into its own line (medium widths), it stays on the right instead of jumping left
+  > .fan-project-notice {
+    margin-left: auto;
+  }
 }
 
 @media only screen and (max-width: 1023px) {
@@ -382,6 +387,10 @@
 }
 
 @media only screen and (max-width: 767px) {
+  .notice--split > .fan-project-notice {
+    margin-left: 0; // centred like the other groups
+  }
+
   .notice {
     justify-content: center;
     // Groups (build info, source code, notice) wrap below each other here: gap larger than within a group

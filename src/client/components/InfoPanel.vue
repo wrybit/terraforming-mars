@@ -48,7 +48,7 @@
     </section>
 
     <template #footer>
-      <span class="info-panel-notice" v-i18n>Not affiliated with FryxGames, Asmodee Digital or Steam in any way.</span>
+      <FanProjectNotice class="info-panel-notice"/>
       <button type="button" class="btn btn-tone-quiet info-panel-options" @click="gameOptionsPopupOpen = true">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
         <span v-i18n>All options</span>
@@ -65,6 +65,7 @@ import DialogFrame from '@/client/components/DialogFrame.vue';
 import GameSetupDetail from '@/client/components/GameSetupDetail.vue';
 import GameOptionsPopup from '@/client/components/GameOptionsPopup.vue';
 import PurgeWarning from '@/client/components/common/PurgeWarning.vue';
+import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
 import {GameOptionsModel} from '@/common/models/GameOptionsModel';
 import {DeckSizeModel, OtherDeckSizesModel} from '@/common/models/GameModel';
 
