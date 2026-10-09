@@ -112,13 +112,22 @@ function nowValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context:
   return raw > 0 ? raw * outlookOf(card, player) * (isBlockedNow(card, player) ? BLOCKED_NOW_FACTOR : 1) : raw;
 }
 
+/** How much more M€ a VP is worth `delay` generations later (gameProgress.ts victoryPointValue). */
+function laterPointScale(generation: number, delay: number): number {
+  const value = (atGeneration: number) => Math.min(10, 4 * Math.pow(1.1, Math.max(0, atGeneration - 1)));
+  return value(generation + delay) / value(generation);
+}
+
 /** Value of holding the card and playing it a few generations later. */
 function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext): number {
   if (context.remaining <= 1 || !isIProjectCard(card) || isICorporationCard(card)) {
     return Number.NEGATIVE_INFINITY;
   }
   const delay = Math.min(3, Math.floor(context.remaining / 2));
-  const laterContext = {...context, remaining: context.remaining - delay};
+  // A VP bought later costs money that is worth less by then (more income, discounts): valued with
+  // the VP value of that generation, pure VP cards wait and engine cards are played now.
+  const pointScale = tuningOf(player).laterPointValue > 0 ? laterPointScale(player.game.generation, delay) : 1;
+  const laterContext = {...context, remaining: context.remaining - delay, victoryPoint: context.victoryPoint * pointScale};
   const futureCards = Math.min(8, Math.round(delay * 2));
   let total = 0;
   let samples = 0;

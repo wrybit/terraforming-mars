@@ -22,6 +22,10 @@ export type AiTuning = {
   drawCardModel: number,
   /** Generations it takes to fill free spots around a city: future greeneries count fully only with at least this many left (spaceValue.ts, stateValue.ts). */
   boardHorizon: number,
+  /** 1: a card held for later is valued with the VP value of that later generation (cardValue.ts laterValue). */
+  laterPointValue: number,
+  /** 1: the cards in hand are part of the future cards an effect card is measured with (engineValue.ts). */
+  handSynergy: number,
   /** Weight of the measured engine value of effect cards (engineValue.ts), 0 = off. */
   engineWeight: number,
   /** 1: cards with a maximum requirement lose value for later when the window is closing. */
@@ -98,6 +102,8 @@ export const BASELINE_TUNING: AiTuning = {
   tagRateModel: 0,
   drawCardModel: 0,
   boardHorizon: 3,
+  laterPointValue: 0,
+  handSynergy: 0,
   // A/B: weight 1 (clipped at 0) lost 45 : 58, weight 0.5 won 58 : 43 in 100 games but 153 : 158
   // in 300 new games (z +0.3 vs +0.8) – no clear gain, so off again (it costs computing time).
   engineWeight: 0,
@@ -247,6 +253,12 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Jens (2026-10-09): in generation 11 the AI built a city next to free land instead of a spot with
   // three greeneries and an ocean; free spots only become greeneries if there is time left.
   boardHorizon6: {boardHorizon: 6},
+  // Martin: play a card only if it brings something for the next generation; pure VP cards wait for
+  // the last generation, when money is worth less. A VP is worth more M€ later in the game.
+  laterPoints: {laterPointValue: 1},
+  // Martin: synergies first (Viral Enhancers with plant/animal/microbe chains): effect cards are
+  // measured with the own hand, not only with random future cards.
+  handSynergy: {handSynergy: 1},
 };
 
 export function isTuningVariant(name: string): boolean {
