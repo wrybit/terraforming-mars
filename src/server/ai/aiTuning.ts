@@ -68,6 +68,10 @@ export type AiTuning = {
   accumulatorValue: number,
   /** 1: game copies show the opponents' real hands and the real draw pile (old behaviour, test only – the AI must not peek). */
   peek: number,
+  /** Rollouts (rolloutSearch.ts): how many of the best moves are played on to the end of the generation, 0 = off. */
+  rolloutCandidates: number,
+  /** Time in ms the rollouts of one action may take. */
+  rolloutBudget: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -125,6 +129,8 @@ export const BASELINE_TUNING: AiTuning = {
   endgameMoney: 1,
   accumulatorValue: 0,
   peek: 0,
+  rolloutCandidates: 0,
+  rolloutBudget: 3000,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -211,6 +217,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   flatEndgameMoney: {endgameMoney: 0},
   // Before 2026-10-09: copies with the opponents' real hands and draw pile (measures what peeking was worth).
   peek: {peek: 1},
+  // Rollouts: the best moves played on to the end of the generation by a fast greedy AI.
+  rollout3: {rolloutCandidates: 3, rolloutBudget: 4000},
+  rollout5: {rolloutCandidates: 5, rolloutBudget: 6000},
 };
 
 export function isTuningVariant(name: string): boolean {

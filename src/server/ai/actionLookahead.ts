@@ -19,6 +19,7 @@ import {handCardValues} from './cardValue';
 import {isTracingDecision, traceOptions} from './decisionTrace';
 import {describeResponse} from './decisionLabels';
 import {tuningOf} from './aiTuning';
+import {RolloutEntry, rolloutMeans} from './rolloutSearch';
 
 // Decides an action-phase move by playing every candidate move on a copy of the game and
 // valuing the resulting position (one-step lookahead). This captures the effect of any card
@@ -29,6 +30,11 @@ const DEFAULT_BUDGET_MILLISECONDS = 2000;
 const MAXIMUM_CANDIDATES = 120;
 /** Opponent reply: how many of the opponent's moves are tried (the cheap ones come first in the menu). */
 const REPLY_CANDIDATES = 60;
+/** Rollout policy: moves tried per decision (turn-ending ones first, then the menu order). */
+const GREEDY_CANDIDATES = 8;
+/** Rollouts per move: fewer are too noisy to re-rank, more rarely fit the budget. */
+const MINIMUM_ROLLOUTS = 1;
+const MAXIMUM_ROLLOUTS = 8;
 /** How many of the best moves a decision trace keeps. */
 const TRACED_ACTION_OPTIONS = 25;
 
@@ -232,6 +238,35 @@ function valueAfterReply(snapshot: GameSnapshot, player: IPlayer, second: Candid
   });
 }
 
+function passPenaltyFor(player: IPlayer): number {
+  const tuning = tuningOf(player);
+  return tuning.passPenalty > 0 && remainingProductionPhases(player.game, player) > 0 ? tuning.passPenalty * Math.min(player.megaCredits, 40) : 0;
+}
+
+function isPass(menu: OrOptions, response: InputResponse): boolean {
+  const option = response.type === 'or' ? menu.options[response.index] : undefined;
+  return option instanceof SelectOption && option.title === 'Pass for this generation';
+}
+
+/** Fast move choice inside rollouts: one step, a few moves, no hand values and no reply. */
+export function greedyAction(menu: OrOptions, player: IPlayer): InputResponse | undefined {
+  const snapshot = snapshotOf(player.game);
+  const context = valuationContext(player.game, player);
+  const penalty = passPenaltyFor(player);
+  let best: {response: InputResponse, value: number} | undefined;
+  for (const candidate of candidatesFor(menu, player).slice(0, GREEDY_CANDIDATES)) {
+    const outcome = tryCandidate(snapshot, player, menu.options.length, candidate, context, false);
+    if (outcome === undefined) {
+      continue;
+    }
+    const value = outcome.value - (isPass(menu, candidate.response) ? penalty : 0);
+    if (best === undefined || value > best.value) {
+      best = {response: candidate.response, value};
+    }
+  }
+  return best?.response;
+}
+
 /**
  * Two steps: every move is tried once; the most promising ones are then followed by the best
  * second action of the same turn (e.g. first take a bonus, then play the card it pays for).
@@ -302,15 +337,38 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     }
   }
 
+  // Rollouts: the best moves are re-ranked by playing on to the end of the generation; like the
+  // reply, only their order changes. They see what a pass gives up, so no pass penalty then.
+  let rolledOut = false;
+  if (tuning.rolloutCandidates > 0) {
+    const finalists = [...tried].sort((a, b) => b.outcome.value - a.outcome.value).slice(0, tuning.rolloutCandidates);
+    const entries: Array<RolloutEntry> = [];
+    for (const entry of finalists) {
+      if (entry.outcome.snapshot !== undefined) {
+        entries.push({snapshot: entry.outcome.snapshot, firstMove: entry.outcome.bestSecond?.response});
+      }
+    }
+    if (finalists.length > 1 && entries.length === finalists.length) {
+      const means = rolloutMeans(entries, player.id, greedyAction, tuning.rolloutBudget, MINIMUM_ROLLOUTS, MAXIMUM_ROLLOUTS);
+      if (means !== undefined) {
+        const plainValues = finalists.map((entry) => entry.outcome.value).sort((a, b) => b - a);
+        finalists.map((entry, index) => ({entry, mean: means[index]}))
+          .sort((a, b) => b.mean - a.mean)
+          .forEach((item, index) => {
+            item.entry.outcome.value = plainValues[index];
+          });
+        rolledOut = true;
+      }
+    }
+  }
+
   // Passing gives up the rest of the generation while others still act. With the plain value a
   // pass was often within 1 M€ of the best move and the noise picked it (2963 passes with ≥ 25 M€
   // in 1600 night-run games). Money kept is worth less than the moves it could still make now.
-  if (tuning.passPenalty > 0 && remainingProductionPhases(player.game, player) > 0) {
-    const penalty = tuning.passPenalty * Math.min(player.megaCredits, 40);
+  const penalty = rolledOut ? 0 : passPenaltyFor(player);
+  if (penalty > 0) {
     for (const {candidate, outcome} of tried) {
-      const response = candidate.response;
-      const option = response.type === 'or' ? menu.options[response.index] : undefined;
-      if (option instanceof SelectOption && option.title === 'Pass for this generation') {
+      if (isPass(menu, candidate.response)) {
         outcome.value -= penalty;
       }
     }

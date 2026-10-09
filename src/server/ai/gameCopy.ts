@@ -36,16 +36,17 @@ export function playerView(player: IPlayer): GameSnapshot {
   return snapshotOf(player.game, tuningOf(player).peek > 0 ? undefined : player);
 }
 
-function shuffleInPlace<T>(items: Array<T>): void {
+function shuffleInPlace<T>(items: Array<T>, random: () => number): void {
   for (let index = items.length - 1; index > 0; index--) {
-    const other = Math.floor(Math.random() * (index + 1));
+    const other = Math.floor(random() * (index + 1));
     [items[index], items[other]] = [items[other], items[index]];
   }
 }
 
 const HIDDEN_CARD_LISTS = ['cardsInHand', 'draftedCards', 'draftHand', 'dealtProjectCards'] as const;
 
-function hideUnknownCards(copy: IGame, viewerId: string): void {
+/** Must be called on a copy (inside runInSandbox): swaps the hidden cards of everyone but the viewer. */
+export function hideUnknownCards(copy: IGame, viewerId: string, random: () => number = Math.random): void {
   const opponents = copy.players.filter((other) => other.id !== viewerId);
   const drawPile = copy.projectDeck.drawPile;
   const unseen = [...drawPile];
@@ -54,7 +55,7 @@ function hideUnknownCards(copy: IGame, viewerId: string): void {
       unseen.push(...opponent[list]);
     }
   }
-  shuffleInPlace(unseen);
+  shuffleInPlace(unseen, random);
   for (const opponent of opponents) {
     for (const list of HIDDEN_CARD_LISTS) {
       const count = opponent[list].length;
