@@ -33,16 +33,19 @@ const props = withDefaults(defineProps<{
   // 'card': head of a whole card; 'subhead': a group inside a card
   variant?: 'card' | 'subhead',
   collapsible?: boolean,
-}>(), {changed: undefined, variant: 'card', collapsible: true});
+  // Open on the first visit (until the viewer closes it once)
+  defaultOpen?: boolean,
+}>(), {changed: undefined, variant: 'card', collapsible: true, defaultOpen: false});
 
 const STORAGE_PREFIX = 'create-game-open-';
 
-// Only a convenience for this browser: without storage (private mode) every area simply starts closed
+// Only a convenience for this browser: without storage (private mode) every area starts in its default state
 function loadOpen(): boolean {
   try {
-    return localStorage.getItem(STORAGE_PREFIX + props.storageKey) === '1';
+    const stored = localStorage.getItem(STORAGE_PREFIX + props.storageKey);
+    return stored === null ? props.defaultOpen : stored === '1';
   } catch {
-    return false;
+    return props.defaultOpen;
   }
 }
 

@@ -324,8 +324,9 @@ describe('CreateGameForm', () => {
     }
   });
   it('validates the form settings', () => {
-    expect(validateTwoPlayerGame((model) => model.customCorporations = cardNames(3)).notEnoughCorporations).eq(4);
-    expect(validateTwoPlayerGame((model) => model.customCorporations = cardNames(4)).notEnoughCorporations).eq(0);
+    // Default: 4 starting corporations per player, so two players need 8
+    expect(validateTwoPlayerGame((model) => model.customCorporations = cardNames(7)).notEnoughCorporations).eq(8);
+    expect(validateTwoPlayerGame((model) => model.customCorporations = cardNames(8)).notEnoughCorporations).eq(0);
   });
 
   it('ignores unknown colony names when validating', () => {

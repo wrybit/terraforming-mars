@@ -42,7 +42,7 @@
             <div class="create-game-card-head create-game-expansions-head"><h2 v-i18n>Expansions</h2><ExpansionGroupMenu v-model="expansionGrouping"/></div>
             <template v-for="group in expansionGroups" :key="expansionGrouping + group.key">
               <!-- Fan-made can be closed; closed, its active expansions stand behind the title -->
-              <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.key === 'fan'" storageKey="fanExpansions"
+              <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.key === 'fan'" storageKey="fanExpansions" defaultOpen
                 :changed="group.key === 'fan' ? activeFanExpansionsNote : undefined">
                 <!-- Per group a small button that says what it does: select all, or deselect all once everything is on -->
                 <template #actions>

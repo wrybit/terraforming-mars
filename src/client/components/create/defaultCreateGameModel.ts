@@ -18,7 +18,8 @@ export function defaultCreateGameModel(): CreateGameModel {
       {name: '', color: 'orange', beginner: false, handicap: 0, first: false},
       {name: '', color: 'pink', beginner: false, handicap: 0, first: false},
     ],
-    expansions: {...DEFAULT_EXPANSIONS},
+    // Default of the form (Jens): base game, Corporate Era and Prelude
+    expansions: {...DEFAULT_EXPANSIONS, prelude: true},
     draftVariant: true,
     initialDraft: false,
     randomMA: RandomMAOptionType.NONE,
@@ -50,7 +51,7 @@ export function defaultCreateGameModel(): CreateGameModel {
     fastModeOption: false,
     removeNegativeGlobalEventsOption: false,
     includeFanMA: false,
-    startingCorporations: 2,
+    startingCorporations: 4,
     soloTR: false,
     clonedGameId: undefined,
     allOfficialExpansions: false,

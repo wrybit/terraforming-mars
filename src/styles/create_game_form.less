@@ -803,16 +803,22 @@
   }
 }
 
+// Number stepper and segmented control share one control height: same frame (padding, radius, background),
+// inner buttons as high as a segmented button (6px padding + 16px text)
+@create-game-control-padding: 3px;
+@create-game-control-button-height: 31px;
+
 .create-game-stepper {
   display: inline-flex;
   flex: none;
   align-items: center;
-  border-radius: 6px;
+  padding: @create-game-control-padding;
+  border-radius: @create-game-radius-small;
   background: rgba(0, 0, 0, 0.3);
 
   button {
-    width: 26px;
-    height: 26px;
+    width: @create-game-control-button-height;
+    height: @create-game-control-button-height;
     padding: 0;
     border: 0;
     background: none;
@@ -834,14 +840,14 @@
 .create-game-stepper-value {
   min-width: 26px;
   text-align: center;
-  font-weight: 500;
+  font-weight: 700;
   color: #eee;
 }
 
 .create-game-segmented {
   display: flex;
   gap: 2px;
-  padding: 3px;
+  padding: @create-game-control-padding;
   border-radius: @create-game-radius-small;
   background: rgba(0, 0, 0, 0.3);
 
@@ -927,6 +933,9 @@
 .create-game-segmented--seats button {
   display: grid;
   place-items: center;
+  // Narrow seat columns: without side padding "Solo" fits and stays centered instead of running out to the right
+  padding-right: 0;
+  padding-left: 0;
 
   // "No AI" sign: as faint as the taken seats until it is chosen
   .seat-icon {
