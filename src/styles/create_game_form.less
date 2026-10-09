@@ -874,8 +874,22 @@
   font-size: 14px;
 }
 
+// Shadow of a part that lies over scrolled content (stuck Create card, players head); @direction 1 = down, -1 = up
+.create-game-float-shadow(@direction) {
+  @shadow: 0 (@direction * 6px) 22px rgba(0, 0, 0, 0.6);
+}
+
 .create-game-players-head {
+  position: relative;
+  z-index: 2; // above the scrolling list, so the shadow falls onto the cards
   padding: 12px 14px 10px;
+  transition: box-shadow 0.2s;
+
+  // Cards scroll under the head: same shadow as the stuck Create card, only downwards (clip-path cuts the sides)
+  &--over-list {
+    box-shadow: .create-game-float-shadow(1)[@shadow];
+    clip-path: inset(0 0 -40px 0);
+  }
 
   .create-game-players-first {
     margin-top: @create-game-gap-inner;
@@ -1116,7 +1130,7 @@ each(@players, {
 
   // Lies over the content: the shadow shows that it sits in front
   &--stuck {
-    box-shadow: 0 -6px 22px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    box-shadow: .create-game-float-shadow(-1)[@shadow], 0 0 0 1px rgba(255, 255, 255, 0.06);
   }
 }
 

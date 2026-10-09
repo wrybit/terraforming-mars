@@ -268,7 +268,7 @@
 
       <aside class="create-game-side">
         <section class="create-game-players">
-          <div class="create-game-players-head">
+          <div class="create-game-players-head" :class="{'create-game-players-head--over-list': playerListScrolled}">
             <h2 v-i18n>Players</h2>
             <!-- Humans and AI players in two aligned rows; together they make up the player count -->
             <div class="create-game-seat-rows">
@@ -283,7 +283,8 @@
             <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
           </div>
           <!-- Humans always first, then AI players; seats slide in and out when the counts change -->
-          <TransitionGroup tag="div" name="create-game-seat" class="create-game-player-list" :css="false" @enter="collapseEnter" @leave="collapseLeave">
+          <TransitionGroup tag="div" name="create-game-seat" class="create-game-player-list" :css="false" @enter="collapseEnter" @leave="collapseLeave"
+            @scroll="onPlayerListScroll">
             <!-- Neutral card; the header shows the chosen player color -->
             <!-- Humans stand out (full color, glow); AI players stay quieter (tinted header, thin outline) -->
             <div v-for="(newPlayer, index) in getPlayers()" :key="seatKey(newPlayer)"
@@ -441,6 +442,8 @@ type FormModel = {
   drawnBoard: BoardName | undefined;
   /** Create card sticks to the bottom edge (stickyBottomObserver.ts) */
   createCardStuck: boolean;
+  /** Player list scrolled: its cards slide under the fixed head, which then casts a shadow */
+  playerListScrolled: boolean;
   stopStickyObserver: () => void;
 };
 
@@ -468,6 +471,7 @@ export default defineComponent({
       boardSeed: Math.random(),
       drawnBoard: undefined,
       createCardStuck: false,
+      playerListScrolled: false,
       stopStickyObserver: () => {},
     };
   },
@@ -1021,6 +1025,9 @@ export default defineComponent({
     },
     isRandomBoard(boardName: BoardNameType): boolean {
       return boardName === RandomBoardOption.OFFICIAL || boardName === RandomBoardOption.ALL;
+    },
+    onPlayerListScroll(event: Event) {
+      this.playerListScrolled = (event.target as HTMLElement).scrollTop > 0;
     },
     getPlayers(): Array<NewPlayerModel> {
       return this.players.slice(0, this.playersCount);
