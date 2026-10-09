@@ -784,22 +784,6 @@
   &.create-game-segmented--sub {
     margin: 2px 0 4px 16px;
   }
-
-  // AI switched off by a setting: the row stays visible but dim; disabled buttons swallow the
-  // hover, so it goes to the row and its tooltip names the reason
-  &.create-game-segmented--blocked {
-    opacity: 0.45;
-    cursor: help;
-
-    button:disabled {
-      pointer-events: none;
-    }
-  }
-}
-
-.create-game-seat-label--off {
-  opacity: 0.45;
-  cursor: help;
 }
 
 // ---------- right column: player card and Create card, sticky together ----------
@@ -824,6 +808,19 @@
   border: 1px solid @create-game-line;
   border-radius: @create-game-radius;
   background: @create-game-surface-strong;
+}
+
+// Replaces the AI count while a setting blocks the AI: same height as a segmented row, icon and text in one line
+.create-game-seat-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 6px 10px;
+
+  .create-game-validation-title {
+    margin: 0;
+  }
 }
 
 // Humans and AI: label column plus six equal columns, so both rows line up

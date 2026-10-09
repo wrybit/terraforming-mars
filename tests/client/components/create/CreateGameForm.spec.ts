@@ -132,11 +132,13 @@ describe('CreateGameForm', () => {
     expect(vm.aiPlayersCount).eq(0);
     expect(vm.aiBlockers).deep.eq(['Colonies']);
     expect(vm.aiBlockedTitle).contains('Colonies');
-    expect(vm.aiCountOptions.filter((option: any) => option.value !== 0).every((option: any) => option.disabled)).is.true;
+    // Warning box instead of the AI count
+    expect(wrapper.find('.create-game-seat-warning').text()).contains('Colonies');
 
     vm.expansions.colonies = false;
     await wrapper.vm.$nextTick();
     expect(vm.aiBlockers).deep.eq([]);
+    expect(wrapper.find('.create-game-seat-warning').exists()).is.false;
   });
 
   it('selecting an expansion also selects what part of it needs', () => {

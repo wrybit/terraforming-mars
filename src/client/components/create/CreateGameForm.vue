@@ -276,10 +276,12 @@
               <div class="create-game-seat-rows">
                 <span class="create-game-seat-label"><SeatIcon kind="human"/><span v-i18n>Player</span></span>
                 <SegmentedControl v-model="humanPlayersCount" :options="humanCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
-                <!-- Settings the AI cannot handle switch it off; hovering the row names them -->
-                <span class="create-game-seat-label" :class="{'create-game-seat-label--off': aiBlockers.length > 0}" :title="aiBlockedTitle"><SeatIcon kind="ai"/><span v-i18n>AI</span></span>
-                <SegmentedControl v-model="aiPlayersCount" :options="aiCountOptions" :title="aiBlockedTitle"
-                  :class="['create-game-segmented--equal', 'create-game-segmented--seats', {'create-game-segmented--blocked': aiBlockers.length > 0}]"/>
+                <span class="create-game-seat-label"><SeatIcon kind="ai"/><span v-i18n>AI</span></span>
+                <!-- Blocked: instead of the count a warning that names the expansions/options the AI cannot handle -->
+                <p v-if="aiBlockers.length > 0" class="create-game-validation-box create-game-validation-box--warning create-game-seat-warning" role="status">
+                  <span class="create-game-validation-title" aria-hidden="true">&#9888;&#xFE0E;</span>{{ aiBlockedTitle }}
+                </p>
+                <SegmentedControl v-else v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
               </div>
               <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
               <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
@@ -727,9 +729,6 @@ export default defineComponent({
         }
         if (count > MAX_PLAYERS - this.humanPlayersCount) {
           return {value: count, label: 'Seat taken by a human', icon: 'human', disabled: true};
-        }
-        if (this.aiBlockers.length > 0) {
-          return {value: count, label: String(count), disabled: true};
         }
         return {value: count, label: String(count)};
       });
