@@ -1,0 +1,1080 @@
+{
+ "_source": "BGA two-player games (tfmstats.com archive 2026-01-10, Corporate Era, draft, no Colonies): Bradley-Terry pick strength from draft options, log strength in SD per phase; tests/simulation/analyzeBgaGames.py + buildBgaDraftPrior.py",
+ "cards": {
+  "AI Central": {
+   "early": 2.33,
+   "middle": 2.62,
+   "late": 1.84
+  },
+  "Acquired Company": {
+   "early": 0.71,
+   "middle": -0.17,
+   "late": -1.07
+  },
+  "Adaptation Technology": {
+   "early": -0.36,
+   "middle": -0.39,
+   "late": -0.2
+  },
+  "Adapted Lichen": {
+   "early": -0.44,
+   "middle": -0.48,
+   "late": -0.64
+  },
+  "Advanced Alloys": {
+   "early": 1.46,
+   "middle": 1.59,
+   "late": 1.11
+  },
+  "Advanced Ecosystems": {
+   "early": 0.23,
+   "middle": 0.64,
+   "late": 1.59
+  },
+  "Aerobraked Ammonia Asteroid": {
+   "early": -1.32,
+   "middle": -1.37,
+   "late": -1.15
+  },
+  "Algae": {
+   "early": 0.58,
+   "middle": 0.86,
+   "late": 0.95
+  },
+  "Anti-Gravity Technology": {
+   "early": 1.18,
+   "middle": 1.29,
+   "late": 1.79
+  },
+  "Ants": {
+   "early": -0.96,
+   "middle": -0.72,
+   "late": -0.34
+  },
+  "Aquifer Pumping": {
+   "early": -1.06,
+   "middle": -1.34,
+   "late": -1.76
+  },
+  "ArchaeBacteria": {
+   "early": 0.17,
+   "middle": -0.42,
+   "late": -2.19
+  },
+  "Arctic Algae": {
+   "early": 1.87,
+   "middle": 1.18,
+   "late": -1.24
+  },
+  "Artificial Lake": {
+   "early": -1.31,
+   "middle": -1.0,
+   "late": -0.24
+  },
+  "Artificial Photosynthesis": {
+   "early": 0.23,
+   "middle": 0.07,
+   "late": -0.24
+  },
+  "Asteroid": {
+   "early": 0.8,
+   "middle": 1.0,
+   "late": 1.05
+  },
+  "Asteroid Mining": {
+   "early": 0.61,
+   "middle": 0.42,
+   "late": 0.42
+  },
+  "Asteroid Mining Consortium": {
+   "early": 0.46,
+   "middle": 0.38,
+   "late": 0.55
+  },
+  "Beam From A Thorium Asteroid": {
+   "early": -0.11,
+   "middle": -0.26,
+   "late": -0.15
+  },
+  "Big Asteroid": {
+   "early": 1.35,
+   "middle": 1.7,
+   "late": 1.43
+  },
+  "Biomass Combustors": {
+   "early": -0.6,
+   "middle": -0.44,
+   "late": -0.41
+  },
+  "Birds": {
+   "early": 0.01,
+   "middle": 0.23,
+   "late": 1.01
+  },
+  "Black Polar Dust": {
+   "early": -0.4,
+   "middle": -0.79,
+   "late": -1.05
+  },
+  "Breathing Filters": {
+   "early": -0.97,
+   "middle": -0.69,
+   "late": 0.3
+  },
+  "Bribed Committee": {
+   "early": -0.06,
+   "middle": -0.47,
+   "late": -1.11
+  },
+  "Building Industries": {
+   "early": 0.35,
+   "middle": -0.01,
+   "late": -0.75
+  },
+  "Bushes": {
+   "early": 0.32,
+   "middle": 0.5,
+   "late": 0.94
+  },
+  "Business Contacts": {
+   "early": 0.84,
+   "middle": 0.94,
+   "late": 1.24
+  },
+  "Business Network": {
+   "early": 1.16,
+   "middle": 1.05,
+   "late": 0.47
+  },
+  "CEO's Favorite Project": {
+   "early": -1.25,
+   "middle": -0.95,
+   "late": -0.03
+  },
+  "Callisto Penal Mines": {
+   "early": -0.17,
+   "middle": -0.19,
+   "late": 0.33
+  },
+  "Capital": {
+   "early": -0.51,
+   "middle": -0.31,
+   "late": 0.54
+  },
+  "Carbonate Processing": {
+   "early": -0.39,
+   "middle": -0.73,
+   "late": -1.04
+  },
+  "Caretaker Contract": {
+   "early": -2.65,
+   "middle": -2.3,
+   "late": -1.18
+  },
+  "Cartel": {
+   "early": 0.38,
+   "middle": 0.27,
+   "late": -0.16
+  },
+  "Cloud Seeding": {
+   "early": -0.64,
+   "middle": -0.57,
+   "late": -0.61
+  },
+  "Colonizer Training Camp": {
+   "early": 0.05,
+   "middle": -0.0,
+   "late": -1.47
+  },
+  "Comet": {
+   "early": 1.25,
+   "middle": 1.26,
+   "late": 1.05
+  },
+  "Commercial District": {
+   "early": -0.05,
+   "middle": 0.06,
+   "late": 0.58
+  },
+  "Convoy From Europa": {
+   "early": 0.64,
+   "middle": 0.58,
+   "late": 0.43
+  },
+  "Corporate Stronghold": {
+   "early": -0.45,
+   "middle": -0.38,
+   "late": -0.3
+  },
+  "Cupola City": {
+   "early": 0.54,
+   "middle": 0.57,
+   "late": -0.41
+  },
+  "Decomposers": {
+   "early": 0.29,
+   "middle": 0.58,
+   "late": 0.8
+  },
+  "Deep Well Heating": {
+   "early": -0.15,
+   "middle": -0.25,
+   "late": -0.33
+  },
+  "Deimos Down": {
+   "early": 1.78,
+   "middle": 1.88,
+   "late": 1.58
+  },
+  "Designed Microorganisms": {
+   "early": 0.58,
+   "middle": 0.21,
+   "late": -1.65
+  },
+  "Development Center": {
+   "early": 1.62,
+   "middle": 1.46,
+   "late": 0.82
+  },
+  "Domed Crater": {
+   "early": 0.43,
+   "middle": 0.58,
+   "late": -0.84
+  },
+  "Dust Seals": {
+   "early": -1.65,
+   "middle": -1.9,
+   "late": -2.62
+  },
+  "Earth Catapult": {
+   "early": 2.56,
+   "middle": 2.74,
+   "late": 1.92
+  },
+  "Earth Office": {
+   "early": 0.76,
+   "middle": 0.68,
+   "late": 0.39
+  },
+  "Ecological Zone": {
+   "early": 1.23,
+   "middle": 1.47,
+   "late": 1.88
+  },
+  "Electro Catapult": {
+   "early": 1.2,
+   "middle": 1.01,
+   "late": -0.77
+  },
+  "Energy Saving": {
+   "early": -1.84,
+   "middle": -1.74,
+   "late": -1.21
+  },
+  "Energy Tapping": {
+   "early": 0.33,
+   "middle": -0.0,
+   "late": -0.76
+  },
+  "Eos Chasma National Park": {
+   "early": -0.52,
+   "middle": -0.26,
+   "late": 0.58
+  },
+  "Equatorial Magnetizer": {
+   "early": -1.83,
+   "middle": -1.54,
+   "late": -0.88
+  },
+  "Extreme-Cold Fungus": {
+   "early": -0.63,
+   "middle": -0.72,
+   "late": -1.52
+  },
+  "Farming": {
+   "early": -0.61,
+   "middle": -0.46,
+   "late": 0.46
+  },
+  "Fish": {
+   "early": -0.21,
+   "middle": 0.02,
+   "late": 0.91
+  },
+  "Flooding": {
+   "early": 0.26,
+   "middle": 0.14,
+   "late": -0.26
+  },
+  "Food Factory": {
+   "early": -1.59,
+   "middle": -1.45,
+   "late": -0.87
+  },
+  "Fuel Factory": {
+   "early": 0.22,
+   "middle": -0.08,
+   "late": -0.89
+  },
+  "Fueled Generators": {
+   "early": -0.16,
+   "middle": -0.47,
+   "late": -0.93
+  },
+  "Fusion Power": {
+   "early": -0.4,
+   "middle": -0.31,
+   "late": -0.31
+  },
+  "GHG Factories": {
+   "early": 0.04,
+   "middle": -0.39,
+   "late": -0.95
+  },
+  "GHG Producing Bacteria": {
+   "early": -0.58,
+   "middle": -0.51,
+   "late": -0.66
+  },
+  "Ganymede Colony": {
+   "early": 0.33,
+   "middle": 0.45,
+   "late": 1.13
+  },
+  "Gene Repair": {
+   "early": 0.04,
+   "middle": 0.23,
+   "late": 0.68
+  },
+  "Geothermal Power": {
+   "early": 0.07,
+   "middle": -0.23,
+   "late": -0.71
+  },
+  "Giant Ice Asteroid": {
+   "early": 2.19,
+   "middle": 2.42,
+   "late": 1.41
+  },
+  "Giant Space Mirror": {
+   "early": -0.13,
+   "middle": -0.35,
+   "late": -0.72
+  },
+  "Grass": {
+   "early": 0.03,
+   "middle": 0.2,
+   "late": 0.71
+  },
+  "Great Dam": {
+   "early": -0.73,
+   "middle": -0.6,
+   "late": -0.27
+  },
+  "Great Escarpment Consortium": {
+   "early": -0.2,
+   "middle": -0.42,
+   "late": -0.93
+  },
+  "Greenhouses": {
+   "early": 0.02,
+   "middle": 0.12,
+   "late": 0.82
+  },
+  "Hackers": {
+   "early": -0.45,
+   "middle": -0.96,
+   "late": -1.56
+  },
+  "Heat Trappers": {
+   "early": 0.47,
+   "middle": 0.28,
+   "late": -0.79
+  },
+  "Heather": {
+   "early": -0.17,
+   "middle": 0.07,
+   "late": 0.42
+  },
+  "Herbivores": {
+   "early": 0.16,
+   "middle": 0.36,
+   "late": 1.06
+  },
+  "Hired Raiders": {
+   "early": 0.48,
+   "middle": 0.41,
+   "late": 0.58
+  },
+  "House Printing": {
+   "early": -0.25,
+   "middle": -0.44,
+   "late": -0.35
+  },
+  "Ice Asteroid": {
+   "early": 1.18,
+   "middle": 1.18,
+   "late": 0.51
+  },
+  "Ice Cap Melting": {
+   "early": -1.55,
+   "middle": -1.35,
+   "late": -0.72
+  },
+  "Immigrant City": {
+   "early": 0.16,
+   "middle": 0.32,
+   "late": 0.83
+  },
+  "Immigration Shuttles": {
+   "early": -0.71,
+   "middle": -0.82,
+   "late": -0.45
+  },
+  "Import of Advanced GHG": {
+   "early": -0.06,
+   "middle": -0.16,
+   "late": -0.34
+  },
+  "Imported GHG": {
+   "early": -0.11,
+   "middle": -0.1,
+   "late": 0.13
+  },
+  "Imported Hydrogen": {
+   "early": 1.11,
+   "middle": 1.3,
+   "late": 1.45
+  },
+  "Imported Nitrogen": {
+   "early": 0.47,
+   "middle": 0.79,
+   "late": 1.5
+  },
+  "Indentured Workers": {
+   "early": 0.19,
+   "middle": 0.21,
+   "late": 0.14
+  },
+  "Industrial Center": {
+   "early": 0.11,
+   "middle": 0.18,
+   "late": 0.46
+  },
+  "Industrial Microbes": {
+   "early": 0.25,
+   "middle": -0.14,
+   "late": -0.78
+  },
+  "Insects": {
+   "early": 1.16,
+   "middle": 1.31,
+   "late": 1.72
+  },
+  "Insulation": {
+   "early": -1.99,
+   "middle": -1.6,
+   "late": -1.09
+  },
+  "Interstellar Colony Ship": {
+   "early": -0.33,
+   "middle": -0.01,
+   "late": 0.98
+  },
+  "Invention Contest": {
+   "early": 0.67,
+   "middle": 0.83,
+   "late": 1.0
+  },
+  "Inventors' Guild": {
+   "early": 1.39,
+   "middle": 1.31,
+   "late": 0.6
+  },
+  "Investment Loan": {
+   "early": 0.18,
+   "middle": 0.27,
+   "late": 0.73
+  },
+  "Io Mining Industries": {
+   "early": 0.68,
+   "middle": 0.49,
+   "late": 0.6
+  },
+  "Ironworks": {
+   "early": -1.07,
+   "middle": -1.24,
+   "late": -1.4
+  },
+  "Kelp Farming": {
+   "early": 1.34,
+   "middle": 1.61,
+   "late": 1.91
+  },
+  "Lagrange Observatory": {
+   "early": 0.5,
+   "middle": 0.49,
+   "late": 0.94
+  },
+  "Lake Marineris": {
+   "early": -0.65,
+   "middle": -0.54,
+   "late": -0.15
+  },
+  "Land Claim": {
+   "early": -1.19,
+   "middle": -0.94,
+   "late": -0.26
+  },
+  "Large Convoy": {
+   "early": 1.01,
+   "middle": 1.16,
+   "late": 1.88
+  },
+  "Lava Flows": {
+   "early": 0.59,
+   "middle": 0.59,
+   "late": 0.26
+  },
+  "Lava Tube Settlement": {
+   "early": -0.27,
+   "middle": -0.19,
+   "late": 0.02
+  },
+  "Lichen": {
+   "early": 0.08,
+   "middle": 0.06,
+   "late": -0.12
+  },
+  "Lightning Harvest": {
+   "early": -0.8,
+   "middle": -0.63,
+   "late": -0.29
+  },
+  "Livestock": {
+   "early": -0.69,
+   "middle": -0.45,
+   "late": 0.28
+  },
+  "Local Heat Trapping": {
+   "early": -0.7,
+   "middle": -0.4,
+   "late": 0.3
+  },
+  "Lunar Beam": {
+   "early": -0.05,
+   "middle": -0.54,
+   "late": -1.03
+  },
+  "Magnetic Field Dome": {
+   "early": -1.76,
+   "middle": -1.62,
+   "late": -0.87
+  },
+  "Magnetic Field Generators": {
+   "early": -1.57,
+   "middle": -1.46,
+   "late": -0.42
+  },
+  "Mangrove": {
+   "early": -0.45,
+   "middle": -0.17,
+   "late": 0.7
+  },
+  "Mars University": {
+   "early": 2.11,
+   "middle": 2.26,
+   "late": 1.91
+  },
+  "Martian Rails": {
+   "early": -1.86,
+   "middle": -1.68,
+   "late": -1.09
+  },
+  "Martian Survey": {
+   "early": 0.2,
+   "middle": -0.1,
+   "late": -1.91
+  },
+  "Mass Converter": {
+   "early": 0.99,
+   "middle": 1.31,
+   "late": 1.11
+  },
+  "Media Archives": {
+   "early": -0.58,
+   "middle": -0.38,
+   "late": 0.47
+  },
+  "Media Group": {
+   "early": 1.61,
+   "middle": 1.51,
+   "late": 1.01
+  },
+  "Medical Lab": {
+   "early": 0.64,
+   "middle": 0.91,
+   "late": 1.07
+  },
+  "Methane From Titan": {
+   "early": 0.36,
+   "middle": 0.33,
+   "late": 0.54
+  },
+  "Micro-Mills": {
+   "early": -1.89,
+   "middle": -2.18,
+   "late": -2.06
+  },
+  "Mine": {
+   "early": 0.53,
+   "middle": -0.09,
+   "late": -0.93
+  },
+  "Mineral Deposit": {
+   "early": 0.19,
+   "middle": 0.13,
+   "late": 0.39
+  },
+  "Mining Area": {
+   "early": 0.88,
+   "middle": 0.64,
+   "late": 0.22
+  },
+  "Mining Expedition": {
+   "early": -0.43,
+   "middle": -0.25,
+   "late": -0.08
+  },
+  "Mining Rights": {
+   "early": 1.45,
+   "middle": 1.05,
+   "late": 0.2
+  },
+  "Miranda Resort": {
+   "early": 0.2,
+   "middle": 0.41,
+   "late": 0.83
+  },
+  "Mohole Area": {
+   "early": 0.82,
+   "middle": 0.01,
+   "late": -0.8
+  },
+  "Moss": {
+   "early": 0.08,
+   "middle": 0.12,
+   "late": -0.06
+  },
+  "Natural Preserve": {
+   "early": 1.18,
+   "middle": 0.71,
+   "late": -1.73
+  },
+  "Nitrite Reducing Bacteria": {
+   "early": -1.13,
+   "middle": -1.29,
+   "late": -1.13
+  },
+  "Nitrogen-Rich Asteroid": {
+   "early": 1.81,
+   "middle": 1.99,
+   "late": 2.19
+  },
+  "Nitrophilic Moss": {
+   "early": 0.46,
+   "middle": 0.54,
+   "late": 0.09
+  },
+  "Noctis City": {
+   "early": 0.49,
+   "middle": 0.6,
+   "late": 1.15
+  },
+  "Noctis Farming": {
+   "early": -0.02,
+   "middle": 0.16,
+   "late": 0.57
+  },
+  "Nuclear Power": {
+   "early": -0.21,
+   "middle": -0.52,
+   "late": -0.87
+  },
+  "Nuclear Zone": {
+   "early": 1.26,
+   "middle": 1.22,
+   "late": 0.71
+  },
+  "Olympus Conference": {
+   "early": 1.77,
+   "middle": 1.89,
+   "late": 1.45
+  },
+  "Open City": {
+   "early": -0.69,
+   "middle": -0.48,
+   "late": 0.5
+  },
+  "Optimal Aerobraking": {
+   "early": 1.44,
+   "middle": 1.37,
+   "late": 0.84
+  },
+  "Ore Processor": {
+   "early": -1.01,
+   "middle": -0.97,
+   "late": -1.28
+  },
+  "Permafrost Extraction": {
+   "early": -1.01,
+   "middle": -0.78,
+   "late": -0.28
+  },
+  "Peroxide Power": {
+   "early": -0.11,
+   "middle": -0.43,
+   "late": -0.77
+  },
+  "Pets": {
+   "early": -0.31,
+   "middle": -0.25,
+   "late": 0.01
+  },
+  "Phobos Space Haven": {
+   "early": -0.22,
+   "middle": -0.16,
+   "late": 0.42
+  },
+  "Physics Complex": {
+   "early": -0.76,
+   "middle": -0.48,
+   "late": -0.11
+  },
+  "Plantation": {
+   "early": 0.22,
+   "middle": 0.57,
+   "late": 1.0
+  },
+  "Power Grid": {
+   "early": -1.87,
+   "middle": -1.7,
+   "late": -1.46
+  },
+  "Power Infrastructure": {
+   "early": -1.55,
+   "middle": -1.45,
+   "late": -1.12
+  },
+  "Power Plant": {
+   "early": 0.1,
+   "middle": -0.14,
+   "late": -0.75
+  },
+  "Power Supply Consortium": {
+   "early": -0.47,
+   "middle": -0.35,
+   "late": -0.47
+  },
+  "Predators": {
+   "early": -0.35,
+   "middle": -0.13,
+   "late": 0.56
+  },
+  "Protected Habitats": {
+   "early": 1.48,
+   "middle": 1.55,
+   "late": 0.88
+  },
+  "Protected Valley": {
+   "early": 0.59,
+   "middle": 0.64,
+   "late": 0.75
+  },
+  "Psychrophiles": {
+   "early": 0.56,
+   "middle": -0.21,
+   "late": -2.64
+  },
+  "Quantum Extractor": {
+   "early": 0.93,
+   "middle": 1.08,
+   "late": 0.73
+  },
+  "Rad-Chem Factory": {
+   "early": -0.55,
+   "middle": -0.4,
+   "late": 0.12
+  },
+  "Rad-Suits": {
+   "early": -1.52,
+   "middle": -1.43,
+   "late": -0.67
+  },
+  "Regolith Eaters": {
+   "early": -0.85,
+   "middle": -1.02,
+   "late": -1.1
+  },
+  "Release of Inert Gases": {
+   "early": -1.02,
+   "middle": -1.14,
+   "late": -0.68
+  },
+  "Research": {
+   "early": 1.29,
+   "middle": 1.47,
+   "late": 1.58
+  },
+  "Research Coordination": {
+   "early": 0.39,
+   "middle": 0.34,
+   "late": -0.08
+  },
+  "Research Outpost": {
+   "early": 2.5,
+   "middle": 2.84,
+   "late": 1.98
+  },
+  "Restricted Area": {
+   "early": 2.02,
+   "middle": 2.05,
+   "late": 1.47
+  },
+  "Robotic Workforce": {
+   "early": 0.75,
+   "middle": 0.75,
+   "late": 0.25
+  },
+  "Rover Construction": {
+   "early": -0.23,
+   "middle": -0.24,
+   "late": 0.02
+  },
+  "SF Memorial": {
+   "early": -0.39,
+   "middle": -0.28,
+   "late": 0.25
+  },
+  "Sabotage": {
+   "early": 0.9,
+   "middle": 0.87,
+   "late": 1.03
+  },
+  "Satellites": {
+   "early": -0.43,
+   "middle": -0.25,
+   "late": -0.17
+  },
+  "Search For Life": {
+   "early": 0.05,
+   "middle": -0.02,
+   "late": -1.34
+  },
+  "Security Fleet": {
+   "early": -2.05,
+   "middle": -1.96,
+   "late": -1.17
+  },
+  "Shuttles": {
+   "early": -0.42,
+   "middle": -0.16,
+   "late": 0.51
+  },
+  "Small Animals": {
+   "early": -0.02,
+   "middle": 0.16,
+   "late": 0.61
+  },
+  "Soil Factory": {
+   "early": -1.58,
+   "middle": -1.52,
+   "late": -0.83
+  },
+  "Solar Power": {
+   "early": -0.72,
+   "middle": -0.91,
+   "late": -0.71
+  },
+  "Solar Wind Power": {
+   "early": 0.86,
+   "middle": 0.82,
+   "late": 0.62
+  },
+  "Soletta": {
+   "early": -0.48,
+   "middle": -1.19,
+   "late": -1.45
+  },
+  "Space Elevator": {
+   "early": 1.14,
+   "middle": 0.93,
+   "late": 0.8
+  },
+  "Space Hotels": {
+   "early": 0.65,
+   "middle": 0.38,
+   "late": -0.38
+  },
+  "Space Mirrors": {
+   "early": -1.22,
+   "middle": -1.65,
+   "late": -1.77
+  },
+  "Space Station": {
+   "early": 0.09,
+   "middle": 0.11,
+   "late": 0.48
+  },
+  "Special Design": {
+   "early": -0.9,
+   "middle": -0.93,
+   "late": -0.71
+  },
+  "Sponsors": {
+   "early": 0.51,
+   "middle": -0.15,
+   "late": -1.01
+  },
+  "Standard Technology": {
+   "early": 0.64,
+   "middle": 0.5,
+   "late": 0.7
+  },
+  "Steelworks": {
+   "early": -0.83,
+   "middle": -0.97,
+   "late": -1.22
+  },
+  "Strip Mine": {
+   "early": 0.75,
+   "middle": 0.59,
+   "late": -0.06
+  },
+  "Subterranean Reservoir": {
+   "early": 0.09,
+   "middle": -0.09,
+   "late": -0.23
+  },
+  "Symbiotic Fungus": {
+   "early": -1.38,
+   "middle": -1.24,
+   "late": -0.76
+  },
+  "Tardigrades": {
+   "early": -1.34,
+   "middle": -1.45,
+   "late": -1.22
+  },
+  "Technology Demonstration": {
+   "early": 0.83,
+   "middle": 0.92,
+   "late": 1.37
+  },
+  "Tectonic Stress Power": {
+   "early": -0.55,
+   "middle": -0.5,
+   "late": -0.61
+  },
+  "Terraforming Ganymede": {
+   "early": 0.39,
+   "middle": 0.44,
+   "late": 1.13
+  },
+  "Titanium Mine": {
+   "early": 0.79,
+   "middle": 0.27,
+   "late": -0.86
+  },
+  "Toll Station": {
+   "early": -1.29,
+   "middle": -1.02,
+   "late": -0.69
+  },
+  "Towing A Comet": {
+   "early": 0.99,
+   "middle": 1.13,
+   "late": 0.66
+  },
+  "Trans-Neptune Probe": {
+   "early": 0.19,
+   "middle": 0.23,
+   "late": 0.67
+  },
+  "Trees": {
+   "early": -0.03,
+   "middle": 0.26,
+   "late": 1.02
+  },
+  "Tropical Resort": {
+   "early": -1.61,
+   "middle": -1.34,
+   "late": -0.53
+  },
+  "Tundra Farming": {
+   "early": -1.18,
+   "middle": -0.92,
+   "late": 0.12
+  },
+  "Underground City": {
+   "early": -0.41,
+   "middle": -0.4,
+   "late": 0.12
+  },
+  "Underground Detonations": {
+   "early": -2.65,
+   "middle": -2.88,
+   "late": -2.47
+  },
+  "Urbanized Area": {
+   "early": -0.8,
+   "middle": -0.6,
+   "late": 0.25
+  },
+  "Vesta Shipyard": {
+   "early": 0.65,
+   "middle": 0.41,
+   "late": 0.53
+  },
+  "Viral Enhancers": {
+   "early": 1.76,
+   "middle": 1.97,
+   "late": 1.7
+  },
+  "Virus": {
+   "early": 0.74,
+   "middle": 0.79,
+   "late": 1.19
+  },
+  "Water Import From Europa": {
+   "early": 0.2,
+   "middle": 0.32,
+   "late": 0.83
+  },
+  "Water Splitting Plant": {
+   "early": -1.2,
+   "middle": -1.31,
+   "late": -1.4
+  },
+  "Wave Power": {
+   "early": -0.96,
+   "middle": -0.85,
+   "late": -0.53
+  },
+  "Windmills": {
+   "early": -1.23,
+   "middle": -1.02,
+   "late": -0.24
+  },
+  "Worms": {
+   "early": -1.54,
+   "middle": -1.24,
+   "late": -0.63
+  },
+  "Zeppelins": {
+   "early": -1.65,
+   "middle": -1.66,
+   "late": -0.77
+  }
+ }
+}

@@ -30,3 +30,6 @@ node_modules/
 # For any local work you don't want caught up in git.
 local/
 /ai-batch/
+
+# Large downloaded datasets (BGA game logs), never committed
+_data/

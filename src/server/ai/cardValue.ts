@@ -68,6 +68,12 @@ function gainInCopy(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
   });
 }
 
+/** BGA priors with this player's weights (aiTuning.ts cardPriorWeight, draftPriorWeight). */
+function priorFactor(card: ICard, player: IPlayer): number {
+  const tuning = tuningOf(player);
+  return cardPriorFactor(card.name, tuning.cardPriorWeight, tuning.draftPriorWeight, player.game.generation);
+}
+
 function costOf(card: ICard, player: IPlayer): number {
   return isIProjectCard(card) && !isICorporationCard(card) ? player.getCardCost(card) : 0;
 }
@@ -102,7 +108,7 @@ function nowValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context:
   const engineWeight = tuningOf(player).engineWeight;
   const engine = engineWeight > 0 ? engineWeight * engineValue(snapshot, player, card, context) : 0;
   const gain = gainInCopy(snapshot, player, card, context, 0);
-  const raw = gain === undefined ? 0 : (gain + engine) * cardPriorFactor(card.name, tuningOf(player).cardPriorWeight) - costOf(card, player);
+  const raw = gain === undefined ? 0 : (gain + engine) * priorFactor(card, player) - costOf(card, player);
   return raw > 0 ? raw * outlookOf(card, player) * (isBlockedNow(card, player) ? BLOCKED_NOW_FACTOR : 1) : raw;
 }
 
@@ -126,7 +132,7 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
   if (samples === 0) {
     return Number.NEGATIVE_INFINITY;
   }
-  const raw = (total / samples) * cardPriorFactor(card.name, tuningOf(player).cardPriorWeight) - costOf(card, player);
+  const raw = (total / samples) * priorFactor(card, player) - costOf(card, player);
   // A window that closes before the card would be played (at most 5 % oxygen …).
   const window = tuningOf(player).closingWindow > 0 && raw > 0 && isIProjectCard(card) ? closingWindowFactor(card, player, delay) : 1;
   return raw * outlookOf(card, player) * LATER_DISCOUNT * window * (isBlockedNow(card, player) ? BLOCKED_LATER_FACTOR : 1);

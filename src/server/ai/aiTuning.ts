@@ -50,6 +50,8 @@ export type AiTuning = {
   opponentWeightTwoPlayers: number,
   /** Card value × (1 + weight × BGA prior) (cardPriors.ts); 0 = no prior. */
   cardPriorWeight: number,
+  /** Card value + weight × 0.1 × two-player BGA draft preference of the game phase (cardPriors.ts draftPrior), 0 = off. */
+  draftPriorWeight: number,
   /** Share of a VP per generation an action card that collects its own VP resource is worth (Birds, Tardigrades), 0 = flat action value. */
   accumulatorValue: number,
 };
@@ -95,6 +97,7 @@ export const BASELINE_TUNING: AiTuning = {
   opponentReplies: 0,
   opponentWeightTwoPlayers: 1,
   cardPriorWeight: 3,
+  draftPriorWeight: 0,
   accumulatorValue: 0,
 };
 
@@ -152,6 +155,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noPrior: {cardPriorWeight: 0},
   strongPrior: {cardPriorWeight: 6},
   collectors: {accumulatorValue: 0.8},
+  // Draft preferences of ~48 000 two-player BGA games (tests/simulation/analyzeBgaGames.py).
+  draftPrior: {draftPriorWeight: 1},
+  draftPriorStrong: {draftPriorWeight: 2},
+  draftPriorOnly: {draftPriorWeight: 2, cardPriorWeight: 0},
 };
 
 export function isTuningVariant(name: string): boolean {
