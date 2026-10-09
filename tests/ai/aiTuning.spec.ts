@@ -5,11 +5,11 @@ import {BASELINE_TUNING, HARD_LEVEL_TUNING, TWO_PLAYER_TUNING, clearPlayerTuning
 describe('AI tuning', () => {
   afterEach(() => clearPlayerTunings());
 
-  it('uses the two-player tuning only with two players', () => {
+  it('uses the baseline plus the two-player tuning with two players', () => {
     const [, twoPlayer] = testGame(2);
     const [, threePlayer] = testGame(3);
-    expect(tuningOf(twoPlayer).secondStepCandidates).eq(TWO_PLAYER_TUNING.secondStepCandidates);
-    expect(tuningOf(threePlayer).secondStepCandidates).eq(BASELINE_TUNING.secondStepCandidates);
+    expect(tuningOf(twoPlayer)).deep.eq({...BASELINE_TUNING, ...TWO_PLAYER_TUNING});
+    expect(tuningOf(threePlayer)).deep.eq(BASELINE_TUNING);
   });
 
   it('searches wider on level hard', () => {
@@ -23,6 +23,6 @@ describe('AI tuning', () => {
     const [, player] = testGame(2);
     setPlayerTuning(player.id, 'noPrior');
     expect(tuningOf(player).cardPriorWeight).eq(0);
-    expect(tuningOf(player).secondStepCandidates).eq(TWO_PLAYER_TUNING.secondStepCandidates);
+    expect(tuningOf(player).secondStepCandidates).eq(BASELINE_TUNING.secondStepCandidates);
   });
 });

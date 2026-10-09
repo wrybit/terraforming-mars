@@ -99,7 +99,9 @@ export const BASELINE_TUNING: AiTuning = {
   // Fitted terraforming curve (gameProgress.ts curvedRemaining): estimate error 2P 1.86 → 1.25,
   // 3P 1.45 → 0.80, human games 1.96 → 0.75 generations; neutral in AI-vs-AI (z −0.17).
   lengthModel: 1,
-  secondStepCandidates: 4,
+  // Second step after 12 instead of 4 first moves: 1v1 rounds 8+9 +2.6 VP per deal (z +2.8);
+  // three players, rounds 11+12 (900 seats): 341 wins for 300 expected (z +2.9).
+  secondStepCandidates: 12,
   opponentReplies: 0,
   opponentWeightTwoPlayers: 1,
   cardPriorWeight: 3,
@@ -192,11 +194,7 @@ export function isTuningVariant(name: string): boolean {
 
 // Two-player games (the main use case) can differ from the baseline of 3–5 players; found with the
 // mirrored 1v1 rounds (docs/ai/bot-heuristics.md). Variants apply on top of it.
-export const TWO_PLAYER_TUNING: Partial<AiTuning> = {
-  // Rounds 8+9 (600 mirrored games each): second step after 12 instead of 4 first moves
-  // +2.6 VP per deal (z +2.8), 20: +2.7; deepSearch (12 + opponent reply) +4.2 (z +4.4).
-  secondStepCandidates: 12,
-};
+export const TWO_PLAYER_TUNING: Partial<AiTuning> = {};
 const BASELINE_TWO_PLAYERS: AiTuning = {...BASELINE_TUNING, ...TWO_PLAYER_TUNING};
 // Level "hard" (server games against humans, where a few seconds per move do not matter): the
 // widest search measured, on top of the baseline. Batches play "normal" with variants.
