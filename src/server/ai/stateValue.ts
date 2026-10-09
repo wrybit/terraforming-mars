@@ -51,6 +51,8 @@ export type ValuationContext = {
   tempo?: boolean,
   /** Share of future income counted now (aiTuning.ts productionDiscount); default PRODUCTION_DISCOUNT. */
   productionDiscount?: number,
+  /** Award lead uncertainty of the deciding player (aiTuning.ts awardSwing), the same for both sides' awards. */
+  awardSwing?: number,
   /** Award leads are projected to the game end by each player's pace so far (aiTuning.ts awardTiming). */
   awardTiming?: boolean,
 };
@@ -77,7 +79,9 @@ function expectedAwardPoints(player: IPlayer, context: ValuationContext): number
     // How much an opponent can still gain: more early, and more for awards with big numbers.
     // awardSwing: plus a share of the score per remaining generation – Jens overtook three funded
     // awards in the last 4 generations (Banker 10 → 33, Miner 5 → 24) while the AI felt safe.
-    const remainingSwing = tuningOf(player).awardSwing * Math.max(own, best) * context.remaining;
+    // The deciding player's view for both sides: own leads and the opponent's leads are equally
+    // uncertain, so catching up in an award the opponent leads is worth as much as defending one.
+    const remainingSwing = (context.awardSwing ?? tuningOf(player).awardSwing) * Math.max(own, best) * context.remaining;
     const swing = 2 + Math.max(own, best) * 0.25 * (1 - context.awardConfidence) + remainingSwing;
     const firstPlaceChance = Math.max(0, Math.min(1, 0.5 + margin / (2 * swing)));
     points += 5 * firstPlaceChance * context.awardConfidence;
@@ -280,7 +284,7 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
 export function relativeValue(player: IPlayer, frozen: ValuationContext): number {
   const tuning = tuningOf(player);
   const context = {...frozen, tempo: tuning.tempoAware > 0 || frozen.tempo, awardTiming: tuning.awardTiming > 0 || frozen.awardTiming,
-    productionDiscount: frozen.productionDiscount ?? tuning.productionDiscount};
+    productionDiscount: frozen.productionDiscount ?? tuning.productionDiscount, awardSwing: frozen.awardSwing ?? tuning.awardSwing};
   const opponents = player.opponents;
   const own = playerValue(player, context);
   if (opponents.length === 0) {
