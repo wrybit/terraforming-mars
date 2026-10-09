@@ -10,6 +10,7 @@
   </CardFilterBar>
   <!-- Standard projects and single cards: no filter, but the zoom in the same place as in every tab -->
   <CardZoomBar v-else/>
+  <TabPanelCaption/>
   <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
   <label v-for="availableCard in cards" class="payments_cards" :class="visibilityClass(availableCard)" :key="availableCard.name">
     <input v-if="!availableCard.isDisabled" class="hidden" type="radio" v-model="cardName" :value="availableCard.name" >
@@ -69,6 +70,7 @@ import CardFilterBar from '@/client/components/cardfilter/CardFilterBar.vue';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import CardFilterEmptyHint from '@/client/components/cardfilter/CardFilterEmptyHint.vue';
 import CardZoomBar from '@/client/components/cardfilter/CardZoomBar.vue';
+import TabPanelCaption from '@/client/components/TabPanelCaption.vue';
 import {CardFilterContext, resetCardFilter} from '@/client/utils/cardFilter';
 import {cardVisibility, CardVisibility, handCardFilter, unmatchedCards} from '@/client/utils/cardFilterState';
 
@@ -205,6 +207,7 @@ export default defineComponent({
     };
   },
   components: {
+    TabPanelCaption,
     Card,
     PaymentForm,
     WarningsComponent,

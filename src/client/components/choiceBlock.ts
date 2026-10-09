@@ -14,9 +14,10 @@ export function choiceBlockColumnsPortrait(count: number): number {
   return Math.max(1, Math.ceil(count / choiceBlockColumns(count)));
 }
 
-/* Inline style for the element with class choice-block (column count landscape/portrait, choice_block.less). */
+/* Inline style for the element with class choice-block (column count landscape/portrait and element count, choice_block.less). */
 export function choiceBlockStyle(count: number): Record<string, string> {
   return {
+    '--choice-count': String(Math.max(1, count)),
     '--choice-columns': String(choiceBlockColumns(count)),
     '--choice-columns-portrait': String(choiceBlockColumnsPortrait(count)),
   };

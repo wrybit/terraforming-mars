@@ -25,7 +25,8 @@
       <!-- If a card triggers the input (Sabotage, Comet for Venus …): card, name and text instead of "Select an option" -->
       <CardIntroBlock v-else-if="sourceCard !== undefined" v-show="!handTabActive" :card="sourceCard" :title="fullTabTitle(lead.title)"/>
       <!-- Draft repick: the explanation is no question, it moves small into the footer next to the button -->
-      <label v-else-if="!draftRepick" v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(lead.title)) }}</div></label>
+      <!-- Card lists with a header row show the question as a small caption below it instead (tabPanelCaption.ts) -->
+      <label v-else-if="!draftRepick && captionConsumers === 0" v-show="!handTabActive" class="or-tab-panel-title"><div>{{ $t(fullTabTitle(lead.title)) }}</div></label>
       <!-- v-show instead of v-if: inputs are kept while looking at the hand -->
       <PlayerInputFactory v-show="!handTabActive"
         :players="playerView.players"
@@ -61,6 +62,7 @@ import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {TAB_PANEL_FOOTER, newTabPanelFooterId} from '@/client/components/tabPanelFooter';
+import {TAB_PANEL_CAPTION} from '@/client/components/tabPanelCaption';
 import {fullTabTitle, inputTabLabel} from '@/client/components/orOptionsShortLabels';
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {inputTone} from '@/client/components/inputTone';
@@ -103,6 +105,12 @@ const intro = computed(() => tabIntro(shown.value, props.playerinput));
 const sourceCard = computed(() => inputSourceCard(props.playerinput));
 const draftedCards = computed(() => draftedCardsInInput(props.playerView));
 const draftRepick = computed(() => isDraftRepick(props.playerView, props.playerinput));
+
+// Plain question (no tile or card intro, no draft repick): card lists with a header row take it over
+// as a caption below that row (tabPanelCaption.ts)
+const captionConsumers = ref(0);
+const captionTitle = computed(() => intro.value === undefined && sourceCard.value === undefined && !draftRepick.value ? fullTabTitle(lead.value.title) : undefined);
+provide(TAB_PANEL_CAPTION, {title: captionTitle, consumers: captionConsumers});
 
 // Answers of the shown space selection go back wrapped as the choice of its option
 function saveShown(response: InputResponse): void {

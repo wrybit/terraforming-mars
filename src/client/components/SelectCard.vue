@@ -29,6 +29,7 @@
             <AppButton class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
           </template>
         </CardZoomBar>
+        <TabPanelCaption/>
         <CardFilterEmptyHint v-if="nothingShown" @reset="resetFilter"/>
         <label v-for="card in getOrderedCards()" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
             <template v-if="!card.isDisabled">
@@ -75,6 +76,7 @@
 <script lang="ts">
 
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
+import TabPanelCaption from '@/client/components/TabPanelCaption.vue';
 import {defineComponent} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
@@ -152,6 +154,7 @@ export default defineComponent({
   },
   components: {
     TabPanelFooterSlot,
+    TabPanelCaption,
     Card,
     WarningsComponent,
     AppButton,
