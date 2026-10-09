@@ -75,7 +75,7 @@ describe('SelectCard', () => {
   });
 
   // Header row: "Select all" on the left, hand sorting on the right
-  function mountSelection(max: number, hand: Array<string>, buttonLabel = 'Sell') {
+  function mountSelection(max: number, hand: Array<string>, buttonLabel = 'Sell', extraProps: Record<string, unknown> = {}) {
     const cards = [{name: 'Ants'}, {name: 'Birds'}, {name: 'Cartel'}];
     return shallowMount(SelectCard, {
       ...globalConfig,
@@ -96,6 +96,7 @@ describe('SelectCard', () => {
         onsave: () => {},
         showsave: true,
         showtitle: false,
+        ...extraProps,
       },
     } as any);
   }
@@ -112,6 +113,12 @@ describe('SelectCard', () => {
   it('never offers select all when buying cards', () => {
     const wrapper = mountSelection(3, [], 'Buy');
     expect(wrapper.find('.select-card-toolbar__select-all').exists()).is.false;
+  });
+
+  // Initial cards: no own confirm button, but still "Select all"
+  it('offers select all for the initial cards even without save button', () => {
+    const wrapper = mountSelection(3, [], 'Buy', {showsave: false, selectAllAllowed: true});
+    expect(wrapper.find('.select-card-toolbar__select-all').exists()).is.true;
   });
 
   it('hides select all when only some cards may be chosen', () => {

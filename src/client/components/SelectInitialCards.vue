@@ -30,7 +30,7 @@
           </template>
           <SelectCard v-else-if="section.key === 'prelude'" :playerView="playerView" :playerinput="preludeCardOption" :onsave="noop" :showtitle="false" @cardschanged="preludesChanged" />
           <SelectCard v-else-if="section.key === 'ceo'" :playerView="playerView" :playerinput="ceoCardOption" :onsave="noop" :showtitle="false" @cardschanged="ceosChanged" />
-          <SelectCard v-else :playerView="playerView" :playerinput="projectCardOption" :onsave="noop" :showtitle="false" @cardschanged="cardsChanged" />
+          <SelectCard v-else :playerView="playerView" :playerinput="projectCardOption" :onsave="noop" :showtitle="false" :selectAllAllowed="true" @cardschanged="cardsChanged" />
         </div>
       </section>
     </div>
