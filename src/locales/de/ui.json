@@ -1571,5 +1571,6 @@
   "Final greenery": "Finale Grünflächen",
   "Mars is terraformed": "Der Mars ist terraformt",
   "Last chance: turn your remaining plants into greeneries – each one is worth 1 victory point.": "Letzte Chance: Wandle deine übrigen Pflanzen in Grünflächen um – jede bringt 1 Siegpunkt.",
-  "You have ${0} plants": "Du hast ${0} Pflanzen"
+  "You have ${0} plants": "Du hast ${0} Pflanzen",
+  "Note: One of the tiles you co-own will have to be Lunar Mine Urbanization.": "Hinweis: Eines der Felder, die du mitbesitzt, muss die Mondminen-Urbanisierung sein."
 }
