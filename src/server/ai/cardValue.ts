@@ -183,8 +183,12 @@ export function handCardValues(player: IPlayer): Map<CardName, number> {
   }
   const snapshot = snapshotOf(player.game);
   const context = valuationContext(player.game, player);
+  // Expected last generation, Mars not terraformed yet: the game may go on, so a card still worth
+  // playing keeps half its value instead of nothing (no selling Terraforming Ganymede for 1 M€).
+  const mayContinue = context.remaining <= 1 && tuningOf(player).keepHandUntilEnd > 0 && !player.game.marsIsTerraformed();
   for (const card of player.cardsInHand) {
-    values.set(card.name, Math.max(0, cachedLaterValue(snapshot, player, card, context)));
+    const later = Math.max(0, cachedLaterValue(snapshot, player, card, context));
+    values.set(card.name, mayContinue ? Math.max(later, 0.5 * nowValue(snapshot, player, card, context)) : later);
   }
   return values;
 }

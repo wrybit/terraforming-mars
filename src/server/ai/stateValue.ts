@@ -255,7 +255,13 @@ function partialResourcePoints(card: {victoryPoints?: unknown, resourceCount: nu
 
 function handValue(player: IPlayer, context: ValuationContext): number {
   if (context.remaining === 0) {
-    return 0;
+    // Expected last generation, but the game only ends for sure once Mars is terraformed. Jens vs.
+    // hard: one ocean was missing, the AI took generation 14 as the last one, sold Terraforming
+    // Ganymede, Giant Ice Asteroid and Io Mining Industries – and nobody placed the ocean.
+    // Then the cards count with their value played now (cardValue.ts handCardValues).
+    if (tuningOf(player).keepHandUntilEnd === 0 || player.game.marsIsTerraformed()) {
+      return 0;
+    }
   }
   if (context.handOwner !== player.id || context.handValues === undefined) {
     return player.cardsInHand.length * HAND_CARD_VALUE;

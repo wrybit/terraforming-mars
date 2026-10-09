@@ -60,6 +60,8 @@ export type AiTuning = {
   laterSamples: number,
   /** Award lead uncertainty: share of the award score an opponent may still gain per remaining generation (stateValue.ts). */
   awardSwing: number,
+  /** 1: hand cards keep a small value in the expected last generation until Mars is terraformed (no selling them off). */
+  keepHandUntilEnd: number,
   /** Share of a VP per generation an action card that collects its own VP resource is worth (Birds, Tardigrades), 0 = flat action value. */
   accumulatorValue: number,
 };
@@ -115,6 +117,7 @@ export const BASELINE_TUNING: AiTuning = {
   // awards 829 → 210 per 200 games, funder wins 81 → 87 %): a human overtook three funded awards
   // (30 VP swing), the AI opponent in batches does not chase awards like that.
   awardSwing: 0.15,
+  keepHandUntilEnd: 1,
   accumulatorValue: 0,
 };
 
@@ -196,6 +199,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // all three. A lead counts less while generations remain → later funding, defending the lead.
   awardRisk15: {awardSwing: 0.15},
   awardRisk30: {awardSwing: 0.3},
+  // Before the fix: hand cards worth nothing in the expected last generation (sold too early).
+  sellHandEarly: {keepHandUntilEnd: 0},
 };
 
 export function isTuningVariant(name: string): boolean {
