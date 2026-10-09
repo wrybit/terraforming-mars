@@ -159,7 +159,7 @@
         </Teleport>
         <Teleport :to="columnTarget('rules')">
           <section class="create-game-card" :style="cardStyle('rules')">
-            <div class="create-game-card-head"><h2 v-i18n>Rules</h2></div>
+            <div class="create-game-card-head"><h2 v-i18n>House-rule variants &amp; pace</h2></div>
             <OptionRow label="World Government Terraforming" :href="wikiUrls.worldGovernmentTerraforming">
               <SwitchInput v-model="solarPhaseOption"/>
             </OptionRow>
