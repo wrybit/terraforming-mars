@@ -27,101 +27,202 @@
     </header>
     <div class="create-game-layout">
       <main class="create-game-settings">
-        <!-- Fixed columns, so cards never jump: left expansions and everything that grows with them, right the board;
-             wide screens add a third column for Setup, Rules, Milestones & Awards and Card pool (createGameColumns.ts).
-             One column (narrow): the wrappers dissolve and the cards follow their order value -->
-        <div class="create-game-cards" :class="{'create-game-cards--three': threeColumns}">
-          <div class="create-game-cards-column">
-          <section class="create-game-card" style="order: 1">
+        <!-- Fixed columns per window width (createGameColumns.ts), so cards never jump while settings change.
+             All three columns always exist (unused ones hidden): a column removed with cards inside would take them along -->
+        <div class="create-game-cards" :class="'create-game-cards--' + columnCount">
+          <div v-for="column in 3" :key="column" :ref="(element) => setColumnElement(column, element)"
+            :class="['create-game-cards-column', {'create-game-cards-column--unused': column > columnCount}]"></div>
+        </div>
+        <!-- The cards move into their columns (elements, not selectors: the form need not be in the document, e.g. in tests);
+             only after mounting, when the columns exist. Order inside a column via CSS order (cardStyle) -->
+        <template v-if="columnsMounted">
+        <Teleport :to="columnTarget('expansions')">
+          <section class="create-game-card" :style="cardStyle('expansions')">
             <!-- Grouping of the tiles in the header row: one control, no second row -->
             <div class="create-game-card-head create-game-expansions-head"><h2 v-i18n>Expansions</h2><ExpansionGroupMenu v-model="expansionGrouping"/></div>
             <template v-for="group in expansionGroups" :key="expansionGrouping + group.key">
-              <!-- Per group a small button that says what it does: select all, or deselect all once everything is on -->
-              <div class="create-game-subhead">
-                <span>{{ $t(group.title) }}</span>
-                <button v-if="choicesOf(group).length > 0" type="button" class="create-game-small-button"
-                  @click="setExpansions(choicesOf(group), !allSelected(group))">{{ $t(allSelected(group) ? 'Deselect all' : 'Select all') }}</button>
+              <!-- Fan-made can be closed; closed, its active expansions stand behind the title -->
+              <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.key === 'fan'" storageKey="fanExpansions"
+                :changed="group.key === 'fan' ? activeFanExpansionsNote : undefined">
+                <!-- Per group a small button that says what it does: select all, or deselect all once everything is on -->
+                <template #actions>
+                  <button v-if="choicesOf(group).length > 0" type="button" class="create-game-small-button"
+                    @click="setExpansions(choicesOf(group), !allSelected(group))">{{ $t(allSelected(group) ? 'Deselect all' : 'Select all') }}</button>
+                </template>
+                <div class="create-game-chip-grid create-game-expansion-grid">
+                  <!-- The base game is always part of the game: shown as a selected chip that cannot be switched off -->
+                  <ChoiceChip v-for="tile in group.tiles" :key="tile.module"
+                    :label="tile.choice?.label ?? 'Base game'" :iconClass="tile.choice?.iconClass ?? 'expansion-icon-base'"
+                    :selected="tile.choice === undefined || expansions[tile.choice.expansion]" :locked="tile.choice === undefined"
+                    :href="tile.choice?.info ? wikiUrls[tile.choice.expansion] : undefined"
+                    :tooltip="tile.choice === undefined ? undefined : requiredByTooltip(tile.choice.expansion, expansions)"
+                    @select="tile.choice !== undefined && toggleExpansion(tile.choice.expansion)">
+                    <template #detail>
+                      <span v-for="(part, index) in contentLine(tile, group.highlight, expansionGrouping !== 'source')" :key="index"
+                        :class="{'create-game-chip-detail--hit': part.highlighted}">{{ part.text }}</span>
+                    </template>
+                    <span v-if="tile.choice?.alpha" class="create-game-alpha" title="Alpha — work in progress">α</span>
+                  </ChoiceChip>
+                </div>
+              </CollapsibleSection>
+            </template>
+          </section>
+        </Teleport>
+        <Teleport :to="columnTarget('expansionOptions')">
+          <section class="create-game-card" :style="cardStyle('expansionOptions')">
+            <CollapsibleSection title="Expansion options" storageKey="expansionOptions" :changed="expansionOptionsNote">
+              <div v-if="!hasExpansionOptions" class="create-game-note" v-i18n>Activate Venus Next, Turmoil, The Moon or Ares to see their options here.</div>
+              <div v-if="expansions.venus" class="create-game-option-group">
+                <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-venus"></span><span v-i18n>Venus Next</span></div>
+                <OptionRow label="Alt. Venus Board" :href="wikiUrls.alternativeVenusBoard"><SwitchInput v-model="altVenusBoard"/></OptionRow>
+                <OptionRow v-if="playersCount > 1" label="Mandatory Venus Terraforming" :href="wikiUrls.venusTerraforming">
+                  <SwitchInput v-model="requiresVenusTrackCompletion"/>
+                </OptionRow>
               </div>
-              <div class="create-game-chip-grid create-game-expansion-grid">
-                <!-- The base game is always part of the game: shown as a selected chip that cannot be switched off -->
-                <ChoiceChip v-for="tile in group.tiles" :key="tile.module"
-                  :label="tile.choice?.label ?? 'Base game'" :iconClass="tile.choice?.iconClass ?? 'expansion-icon-base'"
-                  :selected="tile.choice === undefined || expansions[tile.choice.expansion]" :locked="tile.choice === undefined"
-                  :href="tile.choice?.info ? wikiUrls[tile.choice.expansion] : undefined"
-                  :tooltip="tile.choice === undefined ? undefined : requiredByTooltip(tile.choice.expansion, expansions)"
-                  @select="tile.choice !== undefined && toggleExpansion(tile.choice.expansion)">
-                  <template #detail>
-                    <span v-for="(part, index) in contentLine(tile, group.highlight, expansionGrouping !== 'source')" :key="index"
-                      :class="{'create-game-chip-detail--hit': part.highlighted}">{{ part.text }}</span>
-                  </template>
-                  <span v-if="tile.choice?.alpha" class="create-game-alpha" title="Alpha — work in progress">α</span>
-                </ChoiceChip>
+              <div v-if="expansions.turmoil" class="create-game-option-group">
+                <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-turmoil"></span><span v-i18n>Turmoil</span></div>
+                <OptionRow label="Agendas" iconClass="expansion-icon-agendas" href="https://www.notion.so/Political-Agendas-8c6b0b018a884692be29b3ef44b340a9">
+                  <SwitchInput :modelValue="isPoliticalAgendasExtensionEnabled()" @update:modelValue="politicalAgendasExtensionToggle()"/>
+                </OptionRow>
+                <SegmentedControl v-if="isPoliticalAgendasExtensionEnabled()" class="create-game-segmented--sub" v-model="politicalAgendasExtension" :options="AGENDA_OPTIONS"/>
+                <OptionRow label="Remove negative Global Events" :href="wikiUrls.removeNegativeGlobalEvents">
+                  <SwitchInput v-model="removeNegativeGlobalEventsOption"/>
+                </OptionRow>
+              </div>
+              <div v-if="expansions.moon" class="create-game-option-group">
+                <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-themoon"></span><span v-i18n>The Moon</span></div>
+                <OptionRow label="Mandatory Moon Terraforming"><SwitchInput v-model="requiresMoonTrackCompletion"/></OptionRow>
+                <OptionRow label="Standard Project Variant #1" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant1"/></OptionRow>
+                <OptionRow label="Standard Project Variant #2" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant"/></OptionRow>
+              </div>
+              <div v-if="expansions.ares" class="create-game-option-group">
+                <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-ares"></span><span v-i18n>Ares</span></div>
+                <OptionRow label="Extreme" :href="wikiUrls.aresExtreme"><SwitchInput v-model="aresExtremeVariant"/></OptionRow>
+              </div>
+            </CollapsibleSection>
+          </section>
+        </Teleport>
+        <Teleport :to="columnTarget('board')">
+          <section class="create-game-card" :style="cardStyle('board')">
+            <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
+            <!-- Chance first: with a random board the board chips below only show the pool it draws from -->
+            <div class="create-game-subhead" v-i18n>Random</div>
+            <OptionRow label="Random board">
+              <SwitchInput v-model="randomBoard"/>
+            </OptionRow>
+            <SegmentedControl v-if="randomBoard" v-model="randomBoardScope" :options="RANDOM_BOARD_OPTIONS"/>
+            <OptionRow label="Randomize board tiles" :href="wikiUrls.randomizeBoardTiles">
+              <SwitchInput v-model="shuffleMapOption"/>
+            </OptionRow>
+            <template v-for="group in boardGroups" :key="group.title">
+              <!-- Fan-made can be closed; closed, a chosen fan board stands behind the title -->
+              <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.fan" storageKey="fanBoards" :changed="group.fan ? fanBoardNote : undefined">
+                <div class="create-game-chip-grid" :class="{'create-game-chip-grid--muted': randomBoard}">
+                  <ChoiceChip v-for="boardName in group.boards" :key="boardName"
+                    :label="boardName" capitalized :selected="board === boardName"
+                    @select="board = boardName">
+                    <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
+                  </ChoiceChip>
+                </div>
+              </CollapsibleSection>
+            </template>
+            <!-- Exactly the board the game gets (same board seed); a cloned game brings its own board -->
+            <CreateGameBoardPreview v-if="!seededGame" :config="boardPreviewConfig" :isRandom="randomBoard || shuffleMapOption" :showBoardName="randomBoard"
+              :boardColorClass="getBoardColorClass" @reroll="boardSeed = Math.random()" @drawn="drawnBoard = $event"/>
+          </section>
+        </Teleport>
+        <Teleport :to="columnTarget('setup')">
+          <section class="create-game-card" :style="cardStyle('setup')">
+            <div class="create-game-card-head"><h2 v-i18n>Setup</h2></div>
+            <OptionRow label="Starting Corporations">
+              <NumberStepper v-model="startingCorporations" :min="1" :max="6"/>
+            </OptionRow>
+            <OptionRow v-if="expansions.prelude" label="Starting Preludes" iconClass="expansion-icon-prelude">
+              <NumberStepper v-model="startingPreludes" :min="4" :max="8"/>
+            </OptionRow>
+            <OptionRow v-if="expansions.ceo" label="Starting CEOs" iconClass="expansion-icon-ceo">
+              <NumberStepper v-model="startingCeos" :min="1" :max="6"/>
+            </OptionRow>
+            <div v-if="expansions.prelude || playersCount > 1" class="create-game-divider"></div>
+            <OptionRow v-if="expansions.prelude" label="Merger" iconClass="expansion-icon-prelude" :href="wikiUrls.merger">
+              <SwitchInput v-model="twoCorpsVariant"/>
+            </OptionRow>
+            <template v-if="playersCount > 1">
+              <OptionRow label="Draft variant"><SwitchInput v-model="draftVariant"/></OptionRow>
+              <OptionRow label="Initial Draft variant" :href="wikiUrls.initialDraft"><SwitchInput v-model="initialDraft"/></OptionRow>
+              <template v-if="initialDraft">
+                <OptionRow v-if="expansions.prelude" label="Prelude Draft" sub><SwitchInput v-model="preludeDraftVariant"/></OptionRow>
+                <OptionRow v-if="expansions.ceo" label="CEO Draft" sub><SwitchInput v-model="ceosDraftVariant"/></OptionRow>
+              </template>
+            </template>
+          </section>
+        </Teleport>
+        <Teleport :to="columnTarget('rules')">
+          <section class="create-game-card" :style="cardStyle('rules')">
+            <div class="create-game-card-head"><h2 v-i18n>Rules</h2></div>
+            <OptionRow label="World Government Terraforming" :href="wikiUrls.worldGovernmentTerraforming">
+              <SwitchInput v-model="solarPhaseOption"/>
+            </OptionRow>
+            <OptionRow v-if="playersCount === 1" label="63 TR solo mode" :href="wikiUrls.trSoloMode">
+              <SwitchInput v-model="soloTR"/>
+            </OptionRow>
+            <OptionRow label="Allow undo" :href="wikiUrls.allowUndo"><SwitchInput v-model="undoOption"/></OptionRow>
+            <div v-if="undoOption" class="create-game-note">
+              <span v-i18n>Undo is now in best effort support.</span>
+              <span v-i18n>No effort will be spent to fix it.</span>
+              <InfoLink href="https://github.com/terraforming-mars/terraforming-mars/discussions/7647"/>
+            </div>
+            <OptionRow label="Show timers"><SwitchInput v-model="showTimers"/></OptionRow>
+            <template v-if="playersCount > 1">
+              <OptionRow label="Show real-time VP" :href="wikiUrls.showRealtimeVP"><SwitchInput v-model="showOtherPlayersVP"/></OptionRow>
+              <OptionRow label="Fast mode" :href="wikiUrls.fastMode"><SwitchInput v-model="fastModeOption"/></OptionRow>
+            </template>
+            <OptionRow label="Escape Velocity" iconClass="expansion-icon-escape-velocity" :href="wikiUrls.escapeVelocity">
+              <SwitchInput v-model="escapeVelocityMode"/>
+            </OptionRow>
+            <template v-if="escapeVelocityMode">
+              <div class="create-game-option create-game-option--sub">
+                <span v-i18n>After</span>
+                <NumberStepper v-model="escapeVelocityThreshold" :min="0" :max="180" :step="5"/>
+                <span v-i18n>min</span>
+              </div>
+              <div class="create-game-option create-game-option--sub">
+                <span v-i18n>Plus</span>
+                <NumberStepper v-model="escapeVelocityBonusSeconds" :min="1" :max="10"/>
+                <span v-i18n>seconds per action</span>
+              </div>
+              <div class="create-game-option create-game-option--sub">
+                <span v-i18n>Reduce</span>
+                <NumberStepper v-model="escapeVelocityPenalty" :min="1" :max="10"/>
+                <span v-i18n>VP every</span>
+                <NumberStepper v-model="escapeVelocityPeriod" :min="1" :max="10"/>
+                <span v-i18n>min</span>
               </div>
             </template>
           </section>
-
-          <section class="create-game-card" style="order: 6">
-            <div class="create-game-card-head"><h2 v-i18n>Expansion options</h2></div>
-            <div v-if="!hasExpansionOptions" class="create-game-note" v-i18n>Activate Venus Next, Turmoil, The Moon or Ares to see their options here.</div>
-            <div v-if="expansions.venus" class="create-game-option-group">
-              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-venus"></span><span v-i18n>Venus Next</span></div>
-              <OptionRow label="Alt. Venus Board" :href="wikiUrls.alternativeVenusBoard"><SwitchInput v-model="altVenusBoard"/></OptionRow>
-              <OptionRow v-if="playersCount > 1" label="Mandatory Venus Terraforming" :href="wikiUrls.venusTerraforming">
-                <SwitchInput v-model="requiresVenusTrackCompletion"/>
-              </OptionRow>
-            </div>
-            <div v-if="expansions.turmoil" class="create-game-option-group">
-              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-turmoil"></span><span v-i18n>Turmoil</span></div>
-              <OptionRow label="Agendas" iconClass="expansion-icon-agendas" href="https://www.notion.so/Political-Agendas-8c6b0b018a884692be29b3ef44b340a9">
-                <SwitchInput :modelValue="isPoliticalAgendasExtensionEnabled()" @update:modelValue="politicalAgendasExtensionToggle()"/>
-              </OptionRow>
-              <SegmentedControl v-if="isPoliticalAgendasExtensionEnabled()" class="create-game-segmented--sub" v-model="politicalAgendasExtension" :options="AGENDA_OPTIONS"/>
-              <OptionRow label="Remove negative Global Events" :href="wikiUrls.removeNegativeGlobalEvents">
-                <SwitchInput v-model="removeNegativeGlobalEventsOption"/>
-              </OptionRow>
-            </div>
-            <div v-if="expansions.moon" class="create-game-option-group">
-              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-themoon"></span><span v-i18n>The Moon</span></div>
-              <OptionRow label="Mandatory Moon Terraforming"><SwitchInput v-model="requiresMoonTrackCompletion"/></OptionRow>
-              <OptionRow label="Standard Project Variant #1" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant1"/></OptionRow>
-              <OptionRow label="Standard Project Variant #2" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant"/></OptionRow>
-            </div>
-            <div v-if="expansions.ares" class="create-game-option-group">
-              <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-ares"></span><span v-i18n>Ares</span></div>
-              <OptionRow label="Extreme" :href="wikiUrls.aresExtreme"><SwitchInput v-model="aresExtremeVariant"/></OptionRow>
-            </div>
-          </section>
-
-          <Teleport defer to=".create-game-cards-column--third" :disabled="!threeColumns">
-            <section class="create-game-card" style="order: 4">
-              <div class="create-game-card-head"><h2 v-i18n>Setup</h2></div>
-              <OptionRow label="Starting Corporations">
-                <NumberStepper v-model="startingCorporations" :min="1" :max="6"/>
-              </OptionRow>
-              <OptionRow v-if="expansions.prelude" label="Starting Preludes" iconClass="expansion-icon-prelude">
-                <NumberStepper v-model="startingPreludes" :min="4" :max="8"/>
-              </OptionRow>
-              <OptionRow v-if="expansions.ceo" label="Starting CEOs" iconClass="expansion-icon-ceo">
-                <NumberStepper v-model="startingCeos" :min="1" :max="6"/>
-              </OptionRow>
-              <div v-if="expansions.prelude || playersCount > 1" class="create-game-divider"></div>
-              <OptionRow v-if="expansions.prelude" label="Merger" iconClass="expansion-icon-prelude" :href="wikiUrls.merger">
-                <SwitchInput v-model="twoCorpsVariant"/>
-              </OptionRow>
-              <template v-if="playersCount > 1">
-                <OptionRow label="Draft variant"><SwitchInput v-model="draftVariant"/></OptionRow>
-                <OptionRow label="Initial Draft variant" :href="wikiUrls.initialDraft"><SwitchInput v-model="initialDraft"/></OptionRow>
-                <template v-if="initialDraft">
-                  <OptionRow v-if="expansions.prelude" label="Prelude Draft" sub><SwitchInput v-model="preludeDraftVariant"/></OptionRow>
-                  <OptionRow v-if="expansions.ceo" label="CEO Draft" sub><SwitchInput v-model="ceosDraftVariant"/></OptionRow>
-                </template>
+        </Teleport>
+        <!-- Own card: has nothing to do with the board (only with several players, solo has none).
+             v-if on the Teleport, not on the card: a card switched on later inside a Teleport did not appear -->
+        <Teleport v-if="playersCount > 1" :to="columnTarget('milestones')">
+          <section class="create-game-card" :style="cardStyle('milestones')">
+            <CollapsibleSection title="Milestones & Awards" storageKey="milestones" :changed="milestonesNote">
+              <template #actions><InfoLink :href="wikiUrls.randomMilestonesAndAwards"/></template>
+              <SegmentedControl v-model="randomMA" :options="MILESTONE_OPTIONS"/>
+              <template v-if="isRandomMAEnabled()">
+                <OptionRow label="Official Random α" sub><SwitchInput v-model="modularMA"/></OptionRow>
+                <div v-if="modularMA" class="create-game-note">
+                  The new Milestones and Awards are still in active development.
+                  Please don't report anything unless it breaks the game.
+                  These are <b>always fully random</b>.
+                </div>
+                <OptionRow label="Include fan Milestones/Awards" sub><SwitchInput v-model="includeFanMA"/></OptionRow>
               </template>
-            </section>
-          </Teleport>
-
-          <Teleport defer to=".create-game-cards-column--third" :disabled="!threeColumns">
-            <section class="create-game-card" style="order: 7">
-              <div class="create-game-card-head"><h2 v-i18n>Card pool</h2></div>
+            </CollapsibleSection>
+          </section>
+        </Teleport>
+        <Teleport :to="columnTarget('cardPool')">
+          <section class="create-game-card" :style="cardStyle('cardPool')">
+            <CollapsibleSection title="Card pool" storageKey="cardPool" :changed="cardPoolNote">
               <div class="create-game-chip-grid create-game-chip-grid--two">
                 <ChoiceChip label="Custom Corporation list" :selected="showCorporationList" @select="showCorporationList = !showCorporationList">
                   <span v-if="customCorporations.length" class="create-game-count">{{ customCorporations.length }}</span>
@@ -144,106 +245,10 @@
               </div>
               <OptionRow label="Set Predefined Game" :href="wikiUrls.setPredefinedGame"><SwitchInput v-model="seededGame"/></OptionRow>
               <input v-if="seededGame" type="text" name="clonedGamedId" class="create-game-text-input" :placeholder="$t('game id:')" v-model="clonedGameId">
-            </section>
-          </Teleport>
-          </div>
-          <div class="create-game-cards-column">
-          <section class="create-game-card" style="order: 2">
-            <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
-            <!-- Chance first: with a random board the board chips below only show the pool it draws from -->
-            <div class="create-game-subhead" v-i18n>Random</div>
-            <OptionRow label="Random board">
-              <SwitchInput v-model="randomBoard"/>
-            </OptionRow>
-            <SegmentedControl v-if="randomBoard" v-model="randomBoardScope" :options="RANDOM_BOARD_OPTIONS"/>
-            <OptionRow label="Randomize board tiles" :href="wikiUrls.randomizeBoardTiles">
-              <SwitchInput v-model="shuffleMapOption"/>
-            </OptionRow>
-            <template v-for="group in boardGroups" :key="group.title">
-              <div class="create-game-subhead" v-i18n>{{ group.title }}</div>
-              <div class="create-game-chip-grid" :class="{'create-game-chip-grid--muted': randomBoard}">
-                <ChoiceChip v-for="boardName in group.boards" :key="boardName"
-                  :label="boardName" capitalized :selected="board === boardName"
-                  @select="board = boardName">
-                  <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
-                </ChoiceChip>
-              </div>
-            </template>
-            <!-- Exactly the board the game gets (same board seed); a cloned game brings its own board -->
-            <CreateGameBoardPreview v-if="!seededGame" :config="boardPreviewConfig" :isRandom="randomBoard || shuffleMapOption" :showBoardName="randomBoard"
-              :boardColorClass="getBoardColorClass" @reroll="boardSeed = Math.random()" @drawn="drawnBoard = $event"/>
+            </CollapsibleSection>
           </section>
-
-          <!-- Own card: has nothing to do with the board (only with several players, solo has none) -->
-          <!-- v-if on the Teleport, not on the card: a card switched on later inside a deferred Teleport did not appear -->
-          <Teleport v-if="playersCount > 1" defer to=".create-game-cards-column--third" :disabled="!threeColumns">
-            <!-- In the third column after the Rules, otherwise right after the board -->
-            <section class="create-game-card" :style="{order: threeColumns ? 6 : 3}">
-              <div class="create-game-card-head">
-                <h2 v-i18n>Milestones &amp; Awards</h2>
-                <InfoLink :href="wikiUrls.randomMilestonesAndAwards"/>
-              </div>
-              <SegmentedControl v-model="randomMA" :options="MILESTONE_OPTIONS"/>
-              <template v-if="isRandomMAEnabled()">
-                <OptionRow label="Official Random α" sub><SwitchInput v-model="modularMA"/></OptionRow>
-                <div v-if="modularMA" class="create-game-note">
-                  The new Milestones and Awards are still in active development.
-                  Please don't report anything unless it breaks the game.
-                  These are <b>always fully random</b>.
-                </div>
-                <OptionRow label="Include fan Milestones/Awards" sub><SwitchInput v-model="includeFanMA"/></OptionRow>
-              </template>
-            </section>
-          </Teleport>
-
-          <Teleport defer to=".create-game-cards-column--third" :disabled="!threeColumns">
-            <section class="create-game-card" style="order: 5">
-              <div class="create-game-card-head"><h2 v-i18n>Rules</h2></div>
-              <OptionRow label="World Government Terraforming" :href="wikiUrls.worldGovernmentTerraforming">
-                <SwitchInput v-model="solarPhaseOption"/>
-              </OptionRow>
-              <OptionRow v-if="playersCount === 1" label="63 TR solo mode" :href="wikiUrls.trSoloMode">
-                <SwitchInput v-model="soloTR"/>
-              </OptionRow>
-              <OptionRow label="Allow undo" :href="wikiUrls.allowUndo"><SwitchInput v-model="undoOption"/></OptionRow>
-              <div v-if="undoOption" class="create-game-note">
-                <span v-i18n>Undo is now in best effort support.</span>
-                <span v-i18n>No effort will be spent to fix it.</span>
-                <InfoLink href="https://github.com/terraforming-mars/terraforming-mars/discussions/7647"/>
-              </div>
-              <OptionRow label="Show timers"><SwitchInput v-model="showTimers"/></OptionRow>
-              <template v-if="playersCount > 1">
-                <OptionRow label="Show real-time VP" :href="wikiUrls.showRealtimeVP"><SwitchInput v-model="showOtherPlayersVP"/></OptionRow>
-                <OptionRow label="Fast mode" :href="wikiUrls.fastMode"><SwitchInput v-model="fastModeOption"/></OptionRow>
-              </template>
-              <OptionRow label="Escape Velocity" iconClass="expansion-icon-escape-velocity" :href="wikiUrls.escapeVelocity">
-                <SwitchInput v-model="escapeVelocityMode"/>
-              </OptionRow>
-              <template v-if="escapeVelocityMode">
-                <div class="create-game-option create-game-option--sub">
-                  <span v-i18n>After</span>
-                  <NumberStepper v-model="escapeVelocityThreshold" :min="0" :max="180" :step="5"/>
-                  <span v-i18n>min</span>
-                </div>
-                <div class="create-game-option create-game-option--sub">
-                  <span v-i18n>Plus</span>
-                  <NumberStepper v-model="escapeVelocityBonusSeconds" :min="1" :max="10"/>
-                  <span v-i18n>seconds per action</span>
-                </div>
-                <div class="create-game-option create-game-option--sub">
-                  <span v-i18n>Reduce</span>
-                  <NumberStepper v-model="escapeVelocityPenalty" :min="1" :max="10"/>
-                  <span v-i18n>VP every</span>
-                  <NumberStepper v-model="escapeVelocityPeriod" :min="1" :max="10"/>
-                  <span v-i18n>min</span>
-                </div>
-              </template>
-            </section>
-          </Teleport>
-          </div>
-          <!-- Wide screens only: Setup, Rules, Milestones & Awards and Card pool move here (Teleport), sorted by their order value -->
-          <div v-show="threeColumns" class="create-game-cards-column create-game-cards-column--third"></div>
-        </div>
+        </Teleport>
+        </template>
 
         <!-- Custom lists as their own cards: show (difference to the default as cards) or edit -->
         <CustomCardListCard v-if="showCorporationList" kind="corporations" title="Custom Corporation list"
@@ -396,7 +401,9 @@ import {CardName} from '@/common/cards/CardName';
 import CustomCardListCard from '@/client/components/create/CustomCardListCard.vue';
 import CreateGameBoardPreview from '@/client/components/create/CreateGameBoardPreview.vue';
 import {observeStickyBottom} from '@/client/components/create/stickyBottomObserver';
-import {watchThreeColumns} from '@/client/components/create/createGameColumns';
+import CollapsibleSection from '@/client/components/create/CollapsibleSection.vue';
+import {cardPoolChanged, expansionOptionsChanged, milestonesChanged} from '@/client/components/create/changedFromDefault';
+import {ColumnCount, currentColumnCount, placementOf, SettingsCard, watchColumnCount} from '@/client/components/create/createGameColumns';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
@@ -468,8 +475,10 @@ type FormModel = {
   createCardStuck: boolean;
   /** Player list scrolled: its cards slide under the fixed head, which then casts a shadow */
   playerListScrolled: boolean;
-  /** Wide window: third settings column (createGameColumns.ts) */
-  threeColumns: boolean;
+  /** Settings columns for the window width (createGameColumns.ts) */
+  columnCount: ColumnCount;
+  /** The column elements exist: from now on the cards can move into them */
+  columnsMounted: boolean;
   stopColumnWatch: () => void;
   stopStickyObserver: () => void;
 };
@@ -479,6 +488,9 @@ const CREATE_CARD_BOTTOM_PX = 12;
 
 // How long the button shows "Link copied"
 const LINK_COPIED_FEEDBACK_MS = 2000;
+
+// Column elements of each form (CreateGameForm.vue instance -> column number -> element)
+const columnElements = new WeakMap<object, Record<number, HTMLElement>>();
 
 // Players per game, humans and AI together
 const MAX_PLAYERS = 6;
@@ -499,13 +511,15 @@ export default defineComponent({
       drawnBoard: undefined,
       createCardStuck: false,
       playerListScrolled: false,
-      threeColumns: false,
+      columnCount: currentColumnCount(),
+      columnsMounted: false,
       stopColumnWatch: () => {},
       stopStickyObserver: () => {},
     };
   },
   components: {
     AppButton,
+    CollapsibleSection,
     SeatIcon,
     PlayerCube,
     CardsFilter,
@@ -595,8 +609,9 @@ export default defineComponent({
     this.stopStickyObserver = observeStickyBottom(this.$refs.createCard as HTMLElement, CREATE_CARD_BOTTOM_PX, (stuck) => {
       this.createCardStuck = stuck;
     });
-    this.stopColumnWatch = watchThreeColumns((threeColumns) => {
-      this.threeColumns = threeColumns;
+    this.columnsMounted = true;
+    this.stopColumnWatch = watchColumnCount((columnCount) => {
+      this.columnCount = columnCount;
     });
     nextTick(() => {
       this.settingsLinkReady = true;
@@ -818,9 +833,31 @@ export default defineComponent({
     },
     boardGroups() {
       return [
-        {title: 'Official', boards: OFFICIAL_BOARDS},
-        {title: 'Fan-made', boards: FAN_BOARDS},
+        {title: 'Official', boards: OFFICIAL_BOARDS, fan: false},
+        {title: 'Fan-made', boards: FAN_BOARDS, fan: true},
       ];
+    },
+    // Notes behind the title of a closed collapsible area: something in it differs from the default (changedFromDefault.ts)
+    expansionOptionsNote(): string | undefined {
+      return expansionOptionsChanged(this) ? translateText('Changed') : undefined;
+    },
+    milestonesNote(): string | undefined {
+      return milestonesChanged(this) ? translateText('Changed') : undefined;
+    },
+    cardPoolNote(): string | undefined {
+      return cardPoolChanged(this) ? translateText('Changed') : undefined;
+    },
+    // Fan-made areas: what is chosen there, by name
+    activeFanExpansionsNote(): string | undefined {
+      const active = FAN_EXPANSIONS.filter((choice) => this.expansions[choice.expansion]).map((choice) => translateText(choice.label));
+      return active.length > 0 ? active.join(', ') : undefined;
+    },
+    fanBoardNote(): string | undefined {
+      if (!FAN_BOARDS.includes(this.board)) {
+        return undefined;
+      }
+      // Board names are lower case; the chips capitalize them via CSS, the note the same way here
+      return translateText(this.board).split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     },
     // The "Expansion options" card only has content if one of these expansions is active
     hasExpansionOptions(): boolean {
@@ -1056,6 +1093,19 @@ export default defineComponent({
     },
     isRandomBoard(boardName: BoardNameType): boolean {
       return boardName === RandomBoardOption.OFFICIAL || boardName === RandomBoardOption.ALL;
+    },
+    // Column elements by number (1-based); kept outside the reactive data, Vue only needs them as Teleport targets
+    setColumnElement(column: number, element: unknown) {
+      if (element instanceof HTMLElement) {
+        columnElements.set(this, {...columnElements.get(this), [column]: element});
+      }
+    },
+    // Teleport target of a settings card: its column for the current window width
+    columnTarget(card: SettingsCard): HTMLElement | undefined {
+      return columnElements.get(this)?.[placementOf(card, this.columnCount).column + 1];
+    },
+    cardStyle(card: SettingsCard): Record<string, number> {
+      return {order: placementOf(card, this.columnCount).order};
     },
     onPlayerListScroll(event: Event) {
       this.playerListScrolled = (event.target as HTMLElement).scrollTop > 0;

@@ -24,7 +24,6 @@
 // Below this width one column: players on top, Create card sticks to the bottom edge
 @create-game-narrow: 820px;
 // Below this width the settings cards in a single column
-@create-game-single-settings: 1150px;
 
 // The page has no sidebar: the space reserved for it on the left (common.less) is dropped
 .main-container:has(#create-game) {
@@ -180,17 +179,24 @@
   gap: @create-game-gap-card;
 }
 
-// Two fixed columns (CreateGameForm.vue): every card always in the same place, nothing jumps when a card changes height
+// Fixed columns: every card always in the same place, nothing jumps when a card changes height.
+// Columns per window width: class set by CreateGameForm.vue from createGameColumns.ts
 .create-game-cards {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: @create-game-gap-card;
   align-items: start;
-}
 
-// Wide window (createGameColumns.ts): Setup, Rules, Milestones & Awards and Card pool in a third column
-.create-game-cards--three {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  &--1 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  &--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  &--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .create-game-cards-column {
@@ -198,6 +204,11 @@
   flex-direction: column;
   gap: @create-game-gap-card;
   min-width: 0;
+
+  // Not needed at this width (stays in the DOM, see CreateGameForm.vue)
+  &--unused {
+    display: none;
+  }
 
   > .create-game-card {
     margin-bottom: 0;
@@ -255,6 +266,77 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: @create-game-dim;
+}
+
+// Collapsible areas (CollapsibleSection.vue): the head is the switch, an arrow shows the state
+.create-game-collapsible-head {
+  // The actions (e.g. "Select all") stay right; the note sits right behind the title
+  .create-game-small-button {
+    margin-left: auto;
+  }
+}
+
+.create-game-collapsible-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: left;
+
+  button& {
+    cursor: pointer;
+  }
+}
+
+.create-game-collapsible-arrow {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  opacity: 0.7;
+  transition: transform 0.2s;
+
+  .create-game-collapsible--open > .create-game-collapsible-head & {
+    transform: rotate(90deg);
+  }
+}
+
+// Closed card: only the head, without the dividing line and its spacing
+.create-game-collapsible--card:not(.create-game-collapsible--open) > .create-game-card-head {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom-color: transparent;
+}
+
+// Closed with changed settings: set off as a small gold pill, so it catches the eye
+.create-game-changed {
+  overflow: hidden;
+  min-width: 0;
+  padding: 1px 8px;
+  border: 1px solid fade(@highlight-gold, 45%);
+  border-radius: 999px;
+  background: fade(@highlight-gold, 12%);
+  color: @highlight-gold;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Subheads inside a collapsible area: the first one right under the card head without extra room on top
+.create-game-card-head + .create-game-collapsible--subhead > .create-game-subhead {
+  margin-top: 0;
 }
 
 .create-game-card-head + .create-game-subhead {
@@ -1279,19 +1361,6 @@ each(@players, {
 
 // ---------- narrower ----------
 // One column: the column wrappers dissolve, the cards follow their order (style="order: …")
-@media only screen and (max-width: @create-game-single-settings) {
-  .create-game-cards {
-    display: flex;
-    flex-direction: column;
-    // align-items: start is only meant for the two-column grid; in one column every card fills the width
-    align-items: stretch;
-  }
-
-  .create-game-cards-column {
-    display: contents;
-  }
-}
-
 @media only screen and (max-width: @create-game-narrow) {
   .create-game-layout {
     grid-template-columns: minmax(0, 1fr);
