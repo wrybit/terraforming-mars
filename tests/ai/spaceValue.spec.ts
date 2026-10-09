@@ -14,5 +14,9 @@ describe('AI tile kinds', () => {
     // Urbanized Area asks with its own text.
     expect(tileKindOf(new SelectSpace('Select space next to at least 2 other city tiles', spaces))).eq('city');
     expect(tileKindOf(select(CardName.RESTRICTED_AREA))).eq('other');
+    // Titles that name the neighbour, not the tile (Ecological Zone, Industrial Center, Capital).
+    expect(tileKindOf(new SelectSpace('Select space next to greenery for special tile', spaces))).eq('other');
+    expect(tileKindOf(new SelectSpace('Select space adjacent to a city tile', spaces))).eq('other');
+    expect(tileKindOf(new SelectSpace('Select space for special city tile', spaces))).eq('city');
   });
 });

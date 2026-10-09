@@ -75,6 +75,12 @@ export function tileKindOf(input: SelectSpace): TileKind {
     return byCard;
   }
   const text = titleText(input);
+  // Special tiles whose title names a neighbour, not the tile: Ecological Zone ("next to
+  // greenery for special tile") and Industrial Center ("adjacent to a city tile"). Read as a
+  // greenery, Ecological Zone went next to the own Capital instead of between opponent cities.
+  if (text.includes('special tile') || text.includes('adjacent to a city tile')) {
+    return 'other';
+  }
   if (text.includes('greenery')) {
     return 'greenery';
   }
