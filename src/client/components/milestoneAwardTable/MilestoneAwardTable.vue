@@ -43,7 +43,7 @@
           <div class="ma-table-divider"></div>
           <div v-for="award in awards" :key="award.name" class="ma-table-cell">
             <!-- Funded: cube only up here (the player rows keep showing the score); closed: no more costs -->
-            <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner" v-flash="flashKeys.award(award.name)"><i :class="cubeClasses(award.color)"></i><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
+            <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner" v-flash="flashKeys.award(award.name)"><PlayerCube class="ma-table-cube" :color="award.color" view="slight" :size="13"/><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
             <span v-else-if="!awardClosed(award)" class="ma-table-coin">{{ nextAwardCost }}</span>
           </div>
         </template>
@@ -57,7 +57,7 @@
         </template>
         <template v-if="hasValues(part)">
           <div v-for="milestone in milestones" :key="milestone.name" :class="milestoneCellClasses(milestone, player)">
-            <i v-if="milestone.color === player.color" :class="cubeClasses(player.color)" :title="player.name" data-test="milestone-owner" v-flash="flashKeys.milestone(milestone.name)"></i>
+            <span v-if="milestone.color === player.color" :title="player.name" data-test="milestone-owner" v-flash="flashKeys.milestone(milestone.name)"><PlayerCube class="ma-table-cube" :color="player.color" view="slight" :size="13"/></span>
             <span v-else class="ma-table-value">{{ scoreOf(milestone.scores, player) }}</span>
           </div>
           <div class="ma-table-divider"></div>
@@ -79,6 +79,7 @@ import {FundedAwardModel} from '@/common/models/FundedAwardModel';
 import {AWARD_COSTS, MAX_AWARDS, MAX_MILESTONES, MILESTONE_COST} from '@/common/constants';
 import {getAward, getMilestone} from '@/client/MilestoneAwardManifest';
 import MilestoneAwardIcon from '@/client/components/milestoneAwardTable/MilestoneAwardIcon.vue';
+import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {AWARD_ICONS, IconPart, MILESTONE_ICONS} from '@/client/components/milestoneAwardTable/milestoneAwardIcons';
 import {scoreRanks} from '@/client/components/milestoneAwardTable/scoreRanks';
 import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
@@ -102,6 +103,7 @@ export default defineComponent({
   name: 'MilestoneAwardTable',
   components: {
     MilestoneAwardIcon,
+    PlayerCube,
   },
   directives: {
     flash: vFlash,
@@ -258,9 +260,6 @@ export default defineComponent({
     },
     ownerClasses(color: Color): Array<string> {
       return ['ma-table-owner', 'ma-table-owner--' + color];
-    },
-    cubeClasses(color: Color): Array<string> {
-      return ['board-cube', 'board-cube--' + color, 'ma-table-cube'];
     },
   },
 });

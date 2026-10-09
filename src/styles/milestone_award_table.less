@@ -174,7 +174,7 @@
   align-items: center;
   gap: 4px;
   max-width: 100%;
-  overflow: hidden;
+  // no overflow: hidden – it would clip the 3D cube; the name truncates by itself (.ma-table-owner-name)
   padding: 2px 6px 1px;
   border-radius: 4px;
   font-size: 12px;
@@ -186,18 +186,22 @@
   display: none;
 }
 
+// Only the cube left: no name tag around it – the cube stands alone like a claimed milestone's
+.ma-table .ma-table-owner--cube-only {
+  padding: 0;
+  background: none;
+}
+
 .ma-table-owner-name {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-// Player cube from board.less (sprite, hence shrunk via zoom); positioned absolutely for the board there
+// Acrylic 3D player cube (PlayerCube.vue, player_cube.less) like everywhere else; its box is 1.5 × the edge
+// length (room for the shadow), so the owner tag pulls it a little closer to the name
 .ma-table .ma-table-cube {
-  position: static;
-  flex: none;
-  margin: 0;
-  zoom: 0.6;
+  margin: -3px -2px -3px -3px;
 }
 
 // Player rows like in the player list: muted color surface, bar in the original color, blur
@@ -283,20 +287,35 @@ each(@players, {
 // Threshold reached, milestone still free: golden number in a green box, shaped like the M€ coin.
 // Dark green keeps the gold readable; light inner line + dark outer edge set it apart on every player color (green too)
 @ma-table-claimable-size: 22px;
+@ma-table-check-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1.5 5.2 4 7.6 8.6 2.4' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 
+// A golden check mark in front of the number says "reached" without having to compare with the threshold.
+// Number centered exactly: line-height = box height, no padding – the digits sit on the box's middle
 .ma-table .ma-table-cell--claimable .ma-table-value {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 2px;
   box-sizing: border-box;
   min-width: @ma-table-claimable-size;
   height: @ma-table-claimable-size;
-  padding: 1px 3px 0;
+  padding: 0 5px 0 4px;
   border-radius: 5px;
   font-size: 15px;
+  line-height: @ma-table-claimable-size;
   color: @ma-table-gold;
   background: rgba(14, 64, 32, 0.9);
   box-shadow: inset 0 0 0 1px #6fd28a, 0 0 0 1px rgba(0, 0, 0, 0.6);
+
+  &::before {
+    content: "";
+    flex: none;
+    width: 10px;
+    height: 10px;
+    background: @ma-table-gold;
+    -webkit-mask: @ma-table-check-mark center / contain no-repeat;
+    mask: @ma-table-check-mark center / contain no-repeat;
+  }
 }
 
 // One part (default): the part has no box of its own, its rows are the table's grid items
