@@ -2,7 +2,7 @@ import {mount, shallowMount} from '@vue/test-utils';
 import {globalConfig} from '../getLocalVue';
 import {expect} from 'chai';
 import CreateGameForm from '@/client/components/create/CreateGameForm.vue';
-import {CreateGameSettingsStorage} from '@/client/components/create/CreateGameSettingsStorage';
+import {createGameSettingsStorage} from '@/client/components/create/createGameSettingsStorage';
 import {FakeLocalStorage} from '../FakeLocalStorage';
 import {BoardName} from '@/common/boards/BoardName';
 import {DEFAULT_EXPANSIONS} from '@/common/cards/GameModule';
@@ -184,7 +184,7 @@ describe('CreateGameForm', () => {
   });
 
   it('prefers settings from the link hash over saved settings', async () => {
-    new CreateGameSettingsStorage(localStorage).saveSettings(createNewGameConfig());
+    createGameSettingsStorage.save(createNewGameConfig());
     const model = defaultCreateGameModel();
     model.playersCount = 3;
     model.players[0].name = 'Jens';
@@ -216,7 +216,7 @@ describe('CreateGameForm', () => {
   });
 
   it('restores the last saved game settings on load', async () => {
-    new CreateGameSettingsStorage(localStorage).saveSettings(createNewGameConfig({
+    createGameSettingsStorage.save(createNewGameConfig({
       expansions: {...DEFAULT_EXPANSIONS, venus: true},
     }));
 
@@ -250,7 +250,7 @@ describe('CreateGameForm', () => {
       alerts.push({title, message});
     };
 
-    new CreateGameSettingsStorage(localStorage).saveSettings(createNewGameConfig({
+    createGameSettingsStorage.save(createNewGameConfig({
       customPreludes: ['Bad Prelude Name'],
     }));
 
@@ -264,8 +264,7 @@ describe('CreateGameForm', () => {
   });
 
   it('resets the form and clears saved settings', async () => {
-    const settingsStorage = new CreateGameSettingsStorage(localStorage);
-    settingsStorage.saveSettings(createNewGameConfig());
+    createGameSettingsStorage.save(createNewGameConfig());
 
     const wrapper = shallowMount(CreateGameForm, {
       ...globalConfig,
@@ -279,7 +278,7 @@ describe('CreateGameForm', () => {
 
     expect((wrapper.vm as any).board).eq(BoardName.THARSIS);
     expect((wrapper.vm as any).draftVariant).eq(true);
-    expect(settingsStorage.loadSettings()).eq(undefined);
+    expect(createGameSettingsStorage.load()).eq(undefined);
     expect(wrapper.findAllComponents({name: 'AppButton'}).map((button) => button.props('title'))).includes('Reset');
   });
 
@@ -315,7 +314,7 @@ describe('CreateGameForm', () => {
 
       await (wrapper.vm as any).createGame();
 
-      const savedSettings = new CreateGameSettingsStorage(localStorage).loadSettings();
+      const savedSettings = createGameSettingsStorage.load();
       expect(savedSettings?.board).eq(BoardName.ELYSIUM);
       expect((savedSettings?.players as Array<{name: string}>).map((player) => player.name)).deep.eq(['Alice', 'Bob']);
     } finally {

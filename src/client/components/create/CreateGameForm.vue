@@ -424,7 +424,7 @@ import {CreateGameModel} from './CreateGameModel';
 import {paths} from '@/common/app/paths';
 import {JSONProcessor} from './JSONProcessor';
 import {defaultCreateGameModel} from './defaultCreateGameModel';
-import {CreateGameSettingsStorage} from './CreateGameSettingsStorage';
+import {createGameSettingsStorage} from './createGameSettingsStorage';
 import {readSettingsFromHash, replaceSettingsHash, settingsHash} from './settingsLink/settingsLinkHash';
 import {getColony} from '@/client/colonies/ClientColonyManifest';
 import {RULEBOOK_URLS, WIKI_URLS} from '@/client/utils/WikiLinks';
@@ -447,8 +447,6 @@ import {requiredByTooltip, requirementsOf} from './expansionDependencies';
 import {Expansion} from '@/common/cards/GameModule';
 import {arrangeSeats, seatKey} from './seatOrder';
 import {collapseEnter, collapseLeave} from '@/client/utils/collapseAnimation';
-
-const createGameSettingsStorage = new CreateGameSettingsStorage();
 
 type Refs = {
   file: HTMLInputElement;
@@ -930,7 +928,7 @@ export default defineComponent({
       }
     },
     restoreLastSettings() {
-      const settings = createGameSettingsStorage.loadSettings();
+      const settings = createGameSettingsStorage.load();
       if (settings === undefined) {
         return;
       }
@@ -940,8 +938,7 @@ export default defineComponent({
           this.showSettingsLoadResult('Restore settings', processor);
         }
       } catch (e) {
-        // TODO(rusliksu): show the restore error in the UI instead of logging only to the console.
-        console.warn('Could not restore create game settings:', e);
+        vueRoot(this).showAlert('Restore settings', 'Error restoring settings ' + e);
       }
     },
     applySettings(json: JSONObject): JSONProcessor {
@@ -1015,7 +1012,7 @@ export default defineComponent({
       return requiredByTooltip(expansion, selected);
     },
     resetSettings() {
-      createGameSettingsStorage.clearSettings();
+      createGameSettingsStorage.clear();
       Object.assign(this, defaultCreateGameModel(), {
         preludeToggled: false,
         uploading: false,
@@ -1270,7 +1267,7 @@ export default defineComponent({
       if (newGameConfig === undefined) {
         return;
       }
-      createGameSettingsStorage.saveSettings(newGameConfig);
+      createGameSettingsStorage.save(newGameConfig);
       const onSuccess = (json: any) => {
         if (json.players.length === 1) {
           window.location.href = 'player?id=' + json.players[0].id;

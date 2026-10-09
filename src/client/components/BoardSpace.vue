@@ -63,9 +63,6 @@ export default defineComponent({
       required: true,
     },
   },
-  data() {
-    return {};
-  },
   directives: {
     flash: vFlash,
   },

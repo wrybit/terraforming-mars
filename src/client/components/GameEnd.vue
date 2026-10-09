@@ -80,7 +80,7 @@
                 <th><div class="table-forest-tile"></div></th>
                 <th><div class="table-city-tile"></div></th>
                 <th v-if="game.moon !== undefined"><div class="table-moon-road-tile"></div></th>
-                <th v-if="game.moon !== undefined"><div class="table-moon-colony-tile"></div></th>
+                <th v-if="game.moon !== undefined"><div class="table-moon-habitat-tile"></div></th>
                 <th v-if="game.moon !== undefined"><div class="table-moon-mine-tile"></div></th>
                 <th v-if="game.pathfinders !== undefined"><div class="table-planetary-track"></div></th>
                 <th><div class="vp">VP</div></th>
@@ -90,7 +90,7 @@
                 <th><div class="tile oxygen-tile"></div></th>
                 <th><div class="tile ocean-tile"></div></th>
                 <th v-if="game.gameOptions.expansions.venus"><div class="tile venus-tile"></div></th>
-                <th v-if="game.gameOptions.expansions.moon"><div class="table-moon-colony-tile"></div></th>
+                <th v-if="game.gameOptions.expansions.moon"><div class="table-moon-habitat-tile"></div></th>
                 <th v-if="game.gameOptions.expansions.moon"><div class="table-moon-road-tile"></div></th>
                 <th v-if="game.gameOptions.expansions.moon"><div class="table-moon-mine-tile"></div></th>
                 <th>&Sigma;</th>

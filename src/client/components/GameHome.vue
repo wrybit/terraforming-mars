@@ -10,7 +10,7 @@
         <span class="page-title-app">Terraforming Mars –</span>
         <span class="game-home-check">✓</span>
         <span v-i18n>Game created</span>
-        <span class="game-home-meta"><span class="game-home-name">{{ game.name }}</span><span class="game-home-id">{{ getGameId() }}</span></span>
+        <span class="game-home-meta"><span class="game-home-name">{{ game.name }}</span><span class="game-home-id">{{ gameId }}</span></span>
       </h1>
     </header>
 
@@ -108,10 +108,12 @@ export default defineComponent({
       previousViewport: '',
     };
   },
-  methods: {
-    getGameId(): string {
+  computed: {
+    gameId(): string {
       return this.game !== undefined ? this.game.id.toString() : 'n/a';
     },
+  },
+  methods: {
     getTurnOrder(index: number): string {
       if (index === 0) {
         return '1st';

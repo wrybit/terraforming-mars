@@ -13,12 +13,9 @@
 <script lang="ts">
 
 import {defineComponent} from 'vue';
-import MarkdownIt from 'markdown-it';
 import {CardName} from '@/common/cards/CardName';
-import {CARD_HELP_TEXT} from '@/client/cards/CardHelpText';
 import PopupPanel from '@/client/components/common/PopupPanel.vue';
-
-const md = new MarkdownIt({html: true, linkify: false, breaks: false});
+import {renderMarkdown} from '@/client/markdown/markdown';
 
 export default defineComponent({
   name: 'CardHelp',
@@ -28,6 +25,10 @@ export default defineComponent({
   props: {
     name: {
       type: String as () => CardName,
+      required: true,
+    },
+    helpText: {
+      type: String,
       required: true,
     },
     hovering: {
@@ -43,7 +44,7 @@ export default defineComponent({
   },
   computed: {
     renderedHelpText(): string {
-      return md.render(CARD_HELP_TEXT[this.name] ?? '');
+      return renderMarkdown(this.helpText);
     },
   },
   methods: {

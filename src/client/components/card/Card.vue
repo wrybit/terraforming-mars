@@ -6,7 +6,7 @@
       <div class="card-content-wrapper" v-i18n @mouseover="hovering = true" @mouseleave="hovering = false">
           <div v-if="!isStandardProject" class="card-cost-and-tags">
               <CardCost :amount="cost" :newCost="reducedCost" />
-              <CardHelp v-if="hasHelpText" :name="card.name" :hovering="hovering" />
+              <CardHelp v-if="helpText !== undefined" :name="card.name" :helpText="helpText" :hovering="hovering" />
               <CardTags :tags="tags" />
           </div>
           <CardTitle :title="card.name" :type="cardType"/>
@@ -29,7 +29,6 @@
 import {defineComponent} from 'vue';
 
 import {CardModel} from '@/common/models/CardModel';
-import {CARD_HELP_TEXT} from '@/client/cards/CardHelpText';
 import CardTitle from './CardTitle.vue';
 import CardResourceCounter from './CardResourceCounter.vue';
 import CardCost from './CardCost.vue';
@@ -203,8 +202,8 @@ export default defineComponent({
       }
       return '';
     },
-    hasHelpText(): boolean {
-      return CARD_HELP_TEXT[this.card.name] !== undefined;
+    helpText(): string | undefined {
+      return this.cardInstance.metadata.helpText;
     },
     showPlayerCube(): boolean {
       return getPreferences().experimental_ui && this.actionUsed && this.cubeColor !== 'neutral';

@@ -11,7 +11,7 @@
             <div v-if="showProductionProtectedIcon" class="shield_production_protection"></div>
             <div v-if="showResourceProtectionIcon" class="shield_resource_protection"></div>
           </div>
-          <div v-if="showResourceValue()" class="resource_icon--megacredit-value" data-test="resource-value">{{ value }}</div>
+          <div v-if="showResourceValue" class="resource_icon--megacredit-value" data-test="resource-value">{{ value }}</div>
       </div>
   </div>
 </template>
@@ -52,17 +52,11 @@ export default defineComponent({
       default: 0,
     },
   },
-  data() {
-    return {
-    };
-  },
-  methods: {
+  computed: {
     // Rule shared with the table (playerGoods.ts)
     showResourceValue(): boolean {
       return shouldShowResourceValue(this.type, this.value);
     },
-  },
-  computed: {
     mainCSS(): string {
       return 'resource_item--' + this.type;
     },
