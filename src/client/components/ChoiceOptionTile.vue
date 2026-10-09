@@ -10,18 +10,17 @@
   <label :class="['choice-option', {'choice-option--selected': selected, 'choice-option--resource': hasIcon}]">
     <!-- Radio for keyboard and screen readers; the tile is what is visible -->
     <input type="radio" :name="groupName" :checked="selected" class="choice-option-input" @change="$emit('select')">
-    <!-- Icons in title order: what is paid → what is gained (Electro Catapult: plant → M€, steel → M€),
-         so options with the same result can be told apart at a glance -->
+    <!-- Icons in title order like on the card: what is paid, the red action arrow, what is gained
+         (CO2 bacteria: −2 microbes ➜ +2 °C; Electro Catapult: −1 plant ➜ +7 M€), so options with the
+         same result can be told apart at a glance -->
     <span v-if="hasIcon" class="choice-option-icons">
       <template v-for="(group, groupIndex) in iconGroups" :key="groupIndex">
-        <span v-if="groupIndex > 0" class="choice-option-arrow">→</span>
-        <template v-for="(item, itemIndex) in group" :key="itemIndex">
-          <template v-if="item.card !== undefined">
-            <span v-if="item.card.amount !== undefined" :class="['choice-option-amount', 'choice-option-amount--' + item.card.direction]">{{ signedAmount(item.card) }}</span>
-            <i :class="['choice-option-icon', cardResourceCSS[item.card.resource]]"></i>
-          </template>
-          <i v-else :class="'resource_icon choice-option-icon resource_icon--' + item.resource"></i>
-        </template>
+        <i v-if="groupIndex > 0" class="choice-option-arrow" aria-hidden="true"></i>
+        <span v-for="(item, itemIndex) in group" :key="itemIndex" class="choice-option-item">
+          <span v-if="item.amount !== ''" :class="['choice-option-amount', 'choice-option-amount--' + (item.direction ?? 'neutral')]">{{ item.amount }}</span>
+          <span v-if="item.production" class="choice-option-production"><i :class="item.iconClass"></i></span>
+          <i v-else :class="item.iconClass"></i>
+        </span>
       </template>
     </span>
     <span>{{ $t(title) }}</span>
@@ -55,9 +54,9 @@ import {Message} from '@/common/logs/Message';
 import {CardName} from '@/common/cards/CardName';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {playerEffects, resourceChanges} from '@/client/components/selectPlayerResource';
-import {Resource} from '@/common/Resource';
-import {cardResourceCount, cardResourceEffect, CardResourceEffect} from '@/client/components/cardResourceEffect';
+import {cardResourceCount, cardResourceEffect} from '@/client/components/cardResourceEffect';
 import {cardResourceCSS} from '@/client/components/common/cardResources';
+import {resultGains} from '@/client/components/choiceResultGains';
 
 const props = defineProps<{
   title: string | Message;
@@ -81,17 +80,36 @@ const cardCount = computed(() => cardEffect.value === undefined || props.player 
 const effects = computed(() => playerEffects(props.title));
 const changes = computed(() => props.player === undefined ? [] : resourceChanges(props.player, effects.value));
 
-type IconItem = {card?: CardResourceEffect, resource?: Resource};
-// Paid resources first, then the rest, separated by an arrow; without a cost just one group
+// One icon with its signed amount ("−2", "+7", "+2 °C"); empty amount if the title gives none
+type IconItem = {
+  key: string,
+  iconClass: string,
+  amount: string,
+  direction?: 'gain' | 'loss',
+  production?: boolean,
+};
+
+// Paid resources first, then the rest, separated by the action arrow; without a cost just one group
 const iconGroups = computed(() => {
-  const items: Array<IconItem & {direction?: 'gain' | 'loss'}> = [];
-  if (cardEffect.value !== undefined) {
-    items.push({card: cardEffect.value, direction: cardEffect.value.direction});
+  const items: Array<IconItem> = [];
+  const card = cardEffect.value;
+  if (card !== undefined) {
+    items.push({key: 'card', iconClass: 'choice-option-icon ' + cardResourceCSS[card.resource], amount: signedAmount(card.amount, card.direction), direction: card.direction});
   }
   for (const effect of effects.value) {
-    if (!items.some((item) => item.resource === effect.resource)) {
-      items.push({resource: effect.resource, direction: effect.direction});
+    const key = effect.resource + '-' + effect.target;
+    if (!items.some((item) => item.key === key)) {
+      items.push({
+        key,
+        iconClass: 'resource_icon choice-option-icon resource_icon--' + effect.resource,
+        amount: signedAmount(effect.amount, effect.direction),
+        direction: effect.direction,
+        production: effect.target === 'production',
+      });
     }
+  }
+  for (const gain of resultGains(props.title)) {
+    items.push({key: gain.kind, iconClass: 'choice-option-icon choice-option-gain--' + gain.kind, amount: gain.label, direction: 'gain'});
   }
   const cost = items.filter((item) => item.direction === 'loss');
   const rest = items.filter((item) => item.direction !== 'loss');
@@ -110,12 +128,14 @@ function afterClass(after: number, before: number): Array<string> {
   return ['choice-option-after', after > before ? 'choice-option-after--gain' : 'choice-option-after--loss'];
 }
 
-// Amount next to the card resource icon: +1 for adding, −3 for removing, plain number if the direction is open
-function signedAmount(cardResource: CardResourceEffect): string {
-  const amount = String(cardResource.amount ?? '');
-  if (cardResource.direction === 'gain') {
+// Amount next to an icon: +1 for adding, −3 for removing, plain number if the direction is open
+function signedAmount(amount: number | undefined, direction: 'gain' | 'loss' | undefined): string {
+  if (amount === undefined) {
+    return '';
+  }
+  if (direction === 'gain') {
     return '+' + amount;
   }
-  return cardResource.direction === 'loss' ? '−' + amount : amount;
+  return direction === 'loss' ? '−' + amount : String(amount);
 }
 </script>

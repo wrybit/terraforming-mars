@@ -49,6 +49,17 @@ describe('ChoiceOptionTile', () => {
     expect(numbers).deep.eq(['6→5', '+2', '29→36', '+12']);
   });
 
+  it('shows cost, action arrow and global parameter gain like the card', () => {
+    const wrapper = mount(ChoiceOptionTile, {
+      ...globalConfig,
+      props: {title: 'Remove 2 microbes to raise temperature 1 step', player, selected: false, groupName: 'g'},
+    });
+    const amounts = wrapper.findAll('.choice-option-amount').map((amount) => amount.text());
+    expect(amounts).deep.eq(['−2', '+2 °C']);
+    expect(wrapper.find('.choice-option-arrow').exists()).is.true;
+    expect(wrapper.find('.choice-option-gain--temperature').exists()).is.true;
+  });
+
   it('stays plain text without a resource', () => {
     const wrapper = mount(ChoiceOptionTile, {
       ...globalConfig,

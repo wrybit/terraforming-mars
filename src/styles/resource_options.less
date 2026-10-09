@@ -97,12 +97,45 @@
   background-size: contain;
 }
 
-// Card resource (cardResourceEffect.ts): amount with sign directly in front of the icon, like on the cards
+// Icon row like on the cards: cost, red action arrow, result. Amount and icon belong together (2px),
+// items of one side are further apart (8px), the arrow separates the sides most clearly (Gestalt: proximity)
 .choice-option-icons {
   display: flex;
+  // One row like on the card; cost and result must not break apart
+  flex-wrap: nowrap;
+  justify-content: center;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
+
+.choice-option-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+// Production: icon in the brown production box like on the cards
+.choice-option-production {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 4px;
+  background: url(./assets/misc/production.png) center / cover;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.5);
+
+  .choice-option-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+// Gains without a resource: global parameters, TR, ocean, card (choiceResultGains.ts)
+// The thermometer is slim: a narrow box keeps the row short enough for one line
+.choice-option-gain--temperature { width: 22px; background: url(./assets/global-parameters/temperature.png) center / contain no-repeat; }
+.choice-option-gain--oxygen { background: url(./assets/global-parameters/oxygen.png) center / contain no-repeat; }
+.choice-option-gain--venus { background: url(./assets/global-parameters/venus.png) center / contain no-repeat; }
+.choice-option-gain--tr { background: url(./assets/resources/tr.png) center / contain no-repeat; }
+.choice-option-gain--ocean { background: url(./assets/tiles/ocean.png) center / contain no-repeat; }
+.choice-option-gain--card { background: url(./assets/resources/card.png) center / contain no-repeat; }
 
 .choice-option-amount {
   font-family: Prototype, sans-serif;
@@ -131,12 +164,13 @@
   font-size: 20px;
 }
 
-// Arrow between paid and gained resources in the icon row
+// Red action arrow between paid and gained, the same image as on the cards
 .choice-option-arrow {
-  font-family: Prototype, sans-serif;
-  font-size: 20px;
-  opacity: 0.7;
-  margin: 0 4px;
+  display: inline-block;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  background: url(./assets/misc/arrow.png) center / contain no-repeat;
 }
 
 // Values block with several parts (card count, resource table) stacked
