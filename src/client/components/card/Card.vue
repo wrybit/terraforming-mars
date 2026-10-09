@@ -144,10 +144,11 @@ export default defineComponent({
       const classes = [];
       classes.push('card-' + this.card.name.toLowerCase().replaceAll(' ', '-'));
 
-      if (this.card.isDisabled) {
-        classes.push('card-unavailable');
-      } else if (this.actionUsed && !this.showPlayerCube) {
-        // Without a cube (classic UI or no player color) a used action is shown greyed out
+      // Used action with the player cube: the card stays in color and fully visible – the cube shows the state like at
+      // the table. A grey filter on the card would also grey out the cube (a parent's filter applies to all children).
+      // Without a cube (classic UI or no player color) a used action is shown greyed out.
+      const unavailable = this.card.isDisabled || this.actionUsed;
+      if (unavailable && !this.showPlayerCube) {
         classes.push('card-unavailable');
       }
 
