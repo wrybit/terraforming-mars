@@ -20,16 +20,12 @@
     <div v-docked-tab :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
       <HandCardsPanel v-if="handTabActive" :playerView="playerView"/>
       <!-- The question belongs to the input and therefore sits in its box, not above the tabs.
-           Card lists with a header row: the header row stays at the very top, the intro moves below it (tabPanelIntro.ts) -->
-      <Teleport :to="'#' + introId" :disabled="introConsumers === 0" defer>
-      <!-- Space selection etc.: tile, question and hint (tabIntro.ts); otherwise only the question -->
-      <TabIntroBlock v-if="intro !== undefined" v-show="!handTabActive" :intro="intro" :title="fullTabTitle(intro.finale === true ? playerinput.title : shown.title)" :playerView="playerView" :card="sourceCard"/>
-      <!-- If a card triggers the input (Sabotage, Comet for Venus …): card, name and text instead of "Select an option" -->
-      <CardIntroBlock v-else-if="sourceCard !== undefined" v-show="!handTabActive" :card="sourceCard" :title="fullTabTitle(lead.title)"/>
-      <!-- Draft repick: the explanation is no question, it moves small into the footer next to the button -->
-      <!-- Below a header row: the plain question as a small caption -->
-      <label v-else-if="!draftRepick" v-show="!handTabActive" :class="introConsumers === 0 ? 'or-tab-panel-title' : 'or-tab-panel-caption'"><div>{{ $t(fullTabTitle(lead.title)) }}</div></label>
+           Card lists with a header row: the header row stays at the very top, the intro moves below it (tabPanelIntro.ts).
+           Teleport only while the target exists, instead of toggling `disabled` (Vue fails moving a deferred Teleport) -->
+      <Teleport v-if="introConsumers > 0" :to="'#' + introId">
+        <InputIntro v-show="!handTabActive" v-bind="introProps" belowHeader/>
       </Teleport>
+      <InputIntro v-else v-show="!handTabActive" v-bind="introProps"/>
       <!-- v-show instead of v-if: inputs are kept while looking at the hand -->
       <PlayerInputFactory v-show="!handTabActive"
         :players="playerView.players"
@@ -72,8 +68,7 @@ import {inputTone} from '@/client/components/inputTone';
 import {tabIntro} from '@/client/components/tabIntro';
 import {choiceMenuLead} from '@/client/components/choiceMenu';
 import {inputSourceCard} from '@/client/components/inputSourceCard';
-import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
-import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
+import InputIntro from '@/client/components/InputIntro.vue';
 import DraftedCardsSection from '@/client/components/DraftedCardsSection.vue';
 import {draftedCardsInInput, isDraftRepick} from '@/client/utils/draftedCards';
 import {allCardsInHand} from '@/client/utils/handCards';
@@ -112,6 +107,14 @@ const draftRepick = computed(() => isDraftRepick(props.playerView, props.playeri
 // Card lists with a header row take the intro below that row (tabPanelIntro.ts)
 const introId = newTabPanelIntroId();
 const introConsumers = ref(0);
+const introProps = computed(() => ({
+  intro: intro.value,
+  introTitle: fullTabTitle(intro.value?.finale === true ? props.playerinput.title : shown.value.title),
+  title: fullTabTitle(lead.value.title),
+  playerView: props.playerView,
+  sourceCard: sourceCard.value,
+  draftRepick: draftRepick.value,
+}));
 provide(TAB_PANEL_INTRO, {targetId: introId, consumers: introConsumers});
 
 // Answers of the shown space selection go back wrapped as the choice of its option

@@ -200,8 +200,10 @@
 
 // Acrylic 3D player cube (PlayerCube.vue, player_cube.less) like everywhere else; its box is 1.5 × the edge
 // length (room for the shadow), so the owner tag pulls it a little closer to the name
+// Drop shadow below the cube: more contrast against the player-colored rows
 .ma-table .ma-table-cube {
   margin: -3px -2px -3px -3px;
+  filter: drop-shadow(0 2px 1.5px rgba(0, 0, 0, 0.75));
 }
 
 // Player rows like in the player list: muted color surface, bar in the original color, blur
