@@ -40,6 +40,20 @@
   gap: 2px;
 }
 
+// Unknown tile: no icon and no rules, just the card's own title – it may be long and wraps
+.placement-banner--generic {
+  padding-left: 16px;
+
+  .placement-banner-main {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .placement-banner-title {
+    white-space: normal;
+  }
+}
+
 .placement-banner-title {
   font-size: 18px;
   font-weight: bold;

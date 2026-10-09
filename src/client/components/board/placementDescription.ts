@@ -30,8 +30,10 @@ export type PlacementGain = {
 };
 
 export type PlacementDescription = {
-  tile: PlacementTile,
-  title: string,
+  // undefined: the title doesn't say which tile (e.g. "Select either Tharsis Tholus …", used by several cards)
+  tile: PlacementTile | undefined,
+  // Translation key, or the server's title message when the tile is unknown
+  title: string | Message,
   gains: ReadonlyArray<PlacementGain>,
   rules: ReadonlyArray<PlacementRule>,
 };
@@ -129,10 +131,12 @@ function rulesOf(tile: PlacementTile, title: string | Message): Array<PlacementR
   return [{kind: 'card', text: title}, ...LASTING_RULES[tile]];
 }
 
-export function describePlacement(title: string | Message, game: GameModel): PlacementDescription | undefined {
+// Every space selection gets a banner: without a known tile it shows the server's title, so the
+// enlarged board always says what is being chosen
+export function describePlacement(title: string | Message, game: GameModel): PlacementDescription {
   const tile = placementTileOf(title);
   if (tile === undefined) {
-    return undefined;
+    return {tile: undefined, title, gains: [], rules: []};
   }
   return {tile, title: TITLES[tile], gains: gainsOf(tile, game), rules: rulesOf(tile, title)};
 }

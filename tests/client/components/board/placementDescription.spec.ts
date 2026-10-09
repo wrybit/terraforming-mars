@@ -42,4 +42,12 @@ describe('placementDescription', () => {
     expect(description.rules[0]).deep.eq({kind: 'card', text: 'Select space next to at least 2 other city tiles'});
     expect(description.rules.some((rule) => rule.text === 'Not next to another city')).is.false;
   });
+
+  it('shows the title of a selection without a known tile', () => {
+    const title = 'Select either Tharsis Tholus, Ascraeus Mons, Pavonis Mons or Arsia Mons';
+    const description = describePlacement(title, game());
+    expect(description.tile).is.undefined;
+    expect(description.title).eq(title);
+    expect(description.rules).is.empty;
+  });
 });

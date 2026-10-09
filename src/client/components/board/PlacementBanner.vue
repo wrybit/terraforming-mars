@@ -1,7 +1,7 @@
 <template>
-  <div :class="['placement-banner', 'placement-banner--tone-' + tone]">
+  <div :class="['placement-banner', 'placement-banner--tone-' + tone, {'placement-banner--generic': description.tile === undefined}]">
     <!-- What is being placed, what the tile brings and where it may go – above the enlarged Mars/Moon -->
-    <div :class="['placement-banner-icon', 'placement-banner-icon--' + description.tile]"></div>
+    <div v-if="description.tile !== undefined" :class="['placement-banner-icon', 'placement-banner-icon--' + description.tile]"></div>
     <div class="placement-banner-main">
       <div class="placement-banner-title">{{ $t(description.title) }}</div>
       <div v-if="description.gains.length > 0" class="placement-banner-gains">
@@ -12,7 +12,7 @@
         </span>
       </div>
     </div>
-    <ul class="placement-rules">
+    <ul v-if="description.rules.length > 0" class="placement-rules">
       <li v-for="(rule, index) in description.rules" :key="index" :class="['placement-rule', 'placement-rule--' + rule.kind]">
         <span class="placement-rule-mark" aria-hidden="true">{{ RULE_MARKS[rule.kind] }}</span>
         <span><span v-if="rule.kind === 'card'" class="placement-rule-card">{{ $t('Card') }}</span>{{ $t(rule.text) }}</span>
@@ -33,7 +33,7 @@ const props = defineProps<{
 // Hard rule, "if possible", bonus, card rule – the mark carries the kind, the color repeats it (placement_banner.less)
 const RULE_MARKS: Readonly<Record<PlacementRuleKind, string>> = {required: '✕', soft: '!', bonus: '+', card: '★'};
 
-// Colors like the tabs (or_tab_tones.less): Mars tiles in their own color, Moon tiles grey like the Moon
+// Colors like the tabs (or_tab_tones.less): Mars tiles in their own color, Moon tiles and unknown tiles grey
 const tone = computed(() => {
   const tile = props.description.tile;
   return tile === 'greenery' || tile === 'city' || tile === 'ocean' ? tile : 'moon';

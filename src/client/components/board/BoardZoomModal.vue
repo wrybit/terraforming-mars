@@ -12,7 +12,7 @@
       </div>
     </div>
     <!-- Optional banner on top (what is being placed, PlacementBanner.vue); the board is fitted below it -->
-    <div v-if="visible" class="board-zoom-banner" ref="banner"><slot name="banner"></slot></div>
+    <div v-if="visible && !closing" class="board-zoom-banner" ref="banner"><slot name="banner"></slot></div>
     <!-- Outside the scrolling background so close and the zoom bar stay put while panning -->
     <button v-if="visible" type="button" class="board-zoom-close" :aria-label="$t('Close')" @click.stop="$emit('close')">✕</button>
     <!-- Mobile view: zoom bar at the bottom (pinch and double tap work as well) -->
@@ -56,6 +56,8 @@ const emit = defineEmits<{
 
 // Stays true while closing until the return animation is done
 const visible = ref(false);
+// Return animation running: the banner belongs to the large board only and disappears at once
+const closing = ref(false);
 const backdrop = ref<HTMLElement | undefined>(undefined);
 const stage = ref<HTMLElement | undefined>(undefined);
 const content = ref<HTMLElement | undefined>(undefined);
@@ -244,6 +246,7 @@ async function show() {
   zoomFactor.value = 1;
   // Content may have changed (Mars or Moon): measure again
   naturalSize = undefined;
+  closing.value = false;
   visible.value = true;
   await nextTick();
   observeBanner();
@@ -266,6 +269,10 @@ async function show() {
 }
 
 async function hide() {
+  // Stop measuring first: the vanishing banner must not refit the board during the return flight
+  bannerObserver?.disconnect();
+  bannerObserver = undefined;
+  closing.value = true;
   await runAnimation('close');
   // Reopened in the meantime: keep visible
   if (props.open) {
@@ -274,8 +281,6 @@ async function hide() {
   props.origin?.classList.remove('board-zoom-origin--hidden');
   stopPinch?.();
   stopPinch = undefined;
-  bannerObserver?.disconnect();
-  bannerObserver = undefined;
   bannerZone.value = 0;
   visible.value = false;
   emit('hidden');
