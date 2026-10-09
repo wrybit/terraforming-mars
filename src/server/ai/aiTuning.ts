@@ -180,6 +180,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // More thinking for the "hard" level against humans (time per move does not matter there).
   moreSamples: {laterSamples: 5},
   deepSearch: {secondStepCandidates: 12, opponentReplies: 4},
+  // Round 8: the gain of deepSearch came from the wider second step (opponentReply alone +0.1).
+  search8: {secondStepCandidates: 8},
+  search20: {secondStepCandidates: 20},
 };
 
 export function isTuningVariant(name: string): boolean {
