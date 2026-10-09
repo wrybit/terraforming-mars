@@ -175,6 +175,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   plants25: {plantProductionValue: 2.5},
   plants30: {plantProductionValue: 3},
   smallerHand: {handTargetEarly: 7, handTargetLate: 3},
+  // Two players: more cards than the 3–5 player baseline (smallerHand lost −3.4 VP per deal, moreCardsAgain +0.9 twice).
+  moreCards2: {buyMargin: -5, handTargetEarly: 16, handTargetLate: 6},
   // More thinking for the "hard" level against humans (time per move does not matter there).
   moreSamples: {laterSamples: 5},
   deepSearch: {secondStepCandidates: 12, opponentReplies: 4},
@@ -184,17 +186,36 @@ export function isTuningVariant(name: string): boolean {
   return Object.prototype.hasOwnProperty.call(TUNING_VARIANTS, name);
 }
 
+// Two-player games (the main use case) can differ from the baseline of 3–5 players; found with the
+// mirrored 1v1 rounds (docs/ai/bot-heuristics.md). Variants apply on top of it.
+export const TWO_PLAYER_TUNING: Partial<AiTuning> = {};
+const BASELINE_TWO_PLAYERS: AiTuning = {...BASELINE_TUNING, ...TWO_PLAYER_TUNING};
+
 // By player id: game copies used for valuation have new player objects with the same ids.
-const tuningByPlayer = new Map<string, AiTuning>();
+const variantByPlayer = new Map<string, string>();
+const tuningCache = new Map<string, AiTuning>();
 
 export function setPlayerTuning(playerId: string, variant: string): void {
-  tuningByPlayer.set(playerId, {...BASELINE_TUNING, ...TUNING_VARIANTS[variant]});
+  variantByPlayer.set(playerId, variant);
+  tuningCache.clear();
 }
 
 export function clearPlayerTunings(): void {
-  tuningByPlayer.clear();
+  variantByPlayer.clear();
+  tuningCache.clear();
 }
 
 export function tuningOf(player: IPlayer): AiTuning {
-  return tuningByPlayer.get(player.id) ?? BASELINE_TUNING;
+  const twoPlayers = player.game.players.length === 2;
+  const variant = variantByPlayer.get(player.id);
+  if (variant === undefined) {
+    return twoPlayers ? BASELINE_TWO_PLAYERS : BASELINE_TUNING;
+  }
+  const key = `${variant}|${twoPlayers}`;
+  let tuning = tuningCache.get(key);
+  if (tuning === undefined) {
+    tuning = {...(twoPlayers ? BASELINE_TWO_PLAYERS : BASELINE_TUNING), ...TUNING_VARIANTS[variant]};
+    tuningCache.set(key, tuning);
+  }
+  return tuning;
 }
