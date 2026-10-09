@@ -143,6 +143,58 @@ html.tm-mobile {
     margin: 0 0 (@selection-tab-offset + 10px);
   }
 
+  // Card selection with header row in the task view: the row is the header – at the very top below the task
+  // header, from screen edge to screen edge; the cards sit centered in the space below it (like desktop,
+  // choice_block.less). Grid rows: 1 header row, 2 empty hint, 3 spacer (1fr), 4–63 cards, 64 spacer (1fr).
+  // The block overhangs right by the gap (mobile.less)
+  .mb-screen--turn .wf-component--select-card.choice-block:has(> .card-filter-bar):not(.setup-column-body *) {
+    display: grid !important;
+    flex: 1 0 auto;
+    grid-template-columns: repeat(var(--mb-grid-columns, 2), max-content);
+    grid-template-rows: repeat(2, auto) 1fr repeat(60, auto) 1fr;
+    justify-content: center;
+    margin: 0 -@mb-choice-gap 0 0;
+    padding-top: 0;
+
+    &::before,
+    &::after {
+      content: "";
+      grid-column: 1 / -1;
+    }
+
+    &::before {
+      grid-row: 1 / 4;
+    }
+
+    &::after {
+      grid-row: 64;
+    }
+
+    > :not(label) {
+      grid-column: 1 / -1;
+    }
+
+    // The grid area is only as wide as the centered card columns: the row reaches out to the width of the task
+    // header – the box (.or-tab-panel, size container, 100cqi) plus the 8px the header reaches out on each side.
+    // Negative margins instead of a width: a width would widen the max-content columns (cards drift apart).
+    // % = width of the grid area; the area sits centered in the block, which overhangs right by the gap
+    > .card-filter-bar {
+      grid-row: 1;
+      justify-self: stretch;
+      width: auto;
+      min-width: 0;
+      // Up against the task header: cancels the 12px gap between the children of .mb-screen (mobile.less)
+      margin: -12px 0 (@selection-tab-offset + 10px);
+      margin-left: calc(-8px - (100cqi + @mb-choice-gap - 100%) / 2);
+      margin-right: calc(-8px - (100cqi - @mb-choice-gap - 100%) / 2);
+      border-radius: 0;
+    }
+
+    > .card-filter-empty {
+      grid-row: 2;
+    }
+  }
+
   .mb-screen--players .other_player_panel .other_player_cont > .card-filter-bar {
     top: -8px;
     width: calc(100% + 8px);
