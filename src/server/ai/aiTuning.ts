@@ -52,6 +52,8 @@ export type AiTuning = {
   cardPriorWeight: number,
   /** Card value + weight × 0.1 × two-player BGA draft preference of the game phase (cardPriors.ts draftPrior), 0 = off. */
   draftPriorWeight: number,
+  /** M€ added to a corporation's value per % point it wins above the Elo expectation on BGA (two players), 0 = off. */
+  corporationPriorWeight: number,
   /** Share of a VP per generation an action card that collects its own VP resource is worth (Birds, Tardigrades), 0 = flat action value. */
   accumulatorValue: number,
 };
@@ -98,6 +100,7 @@ export const BASELINE_TUNING: AiTuning = {
   opponentWeightTwoPlayers: 1,
   cardPriorWeight: 3,
   draftPriorWeight: 0,
+  corporationPriorWeight: 0,
   accumulatorValue: 0,
 };
 
@@ -159,6 +162,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   draftPrior: {draftPriorWeight: 1},
   draftPriorStrong: {draftPriorWeight: 2},
   draftPriorOnly: {draftPriorWeight: 2, cardPriorWeight: 0},
+  // Corporation choice: Ecoline +2.7, UNMI −6.6 % points → with 3 M€ per point +8 / −20 M€.
+  bgaCorporations: {corporationPriorWeight: 3},
 };
 
 export function isTuningVariant(name: string): boolean {

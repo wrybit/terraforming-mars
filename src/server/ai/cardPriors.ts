@@ -20,6 +20,13 @@ export function cardPrior(name: CardName): number {
   return statistic.wap * reliability;
 }
 
+const CORPORATIONS = (draftStatistics as {corporations?: Record<string, number>}).corporations ?? {};
+
+/** Wins above the Elo expectation of a corporation in two-player BGA games, in % points (UNMI −6.6, Ecoline +2.7). */
+export function corporationPrior(name: CardName): number {
+  return CORPORATIONS[name] ?? 0;
+}
+
 type DraftStrength = {early?: number, middle?: number, late?: number};
 const DRAFT = draftStatistics.cards as Record<string, DraftStrength>;
 

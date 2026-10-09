@@ -1,5 +1,5 @@
 {
- "_source": "BGA two-player games (tfmstats.com archive 2026-01-10, Corporate Era, draft, no Colonies): Bradley-Terry pick strength from draft options, log strength in SD per phase; tests/simulation/analyzeBgaGames.py + buildBgaDraftPrior.py",
+ "_source": "BGA two-player games (tfmstats.com archive 2026-01-10, Corporate Era, draft, no Colonies): Bradley-Terry pick strength from draft options, log strength in SD per phase; corporations: wins above Elo expectation in % points; tests/simulation/analyzeBgaGames.py + buildBgaDraftPrior.py",
  "cards": {
   "AI Central": {
    "early": 2.33,
@@ -1076,5 +1076,24 @@
    "middle": -1.66,
    "late": -0.77
   }
+ },
+ "corporations": {
+  "Cheung Shing MARS": 1.46,
+  "CrediCor": 1.3,
+  "Ecoline": 2.7,
+  "Helion": -3.82,
+  "Interplanetary Cinematics": 2.57,
+  "Inventrix": -3.8,
+  "Mining Guild": 0.94,
+  "PhoboLog": -3.01,
+  "Point Luna": 1.4,
+  "Robinson Industries": -1.94,
+  "Saturn Systems": 0.78,
+  "Teractor": -0.0,
+  "Tharsis Republic": 0.29,
+  "ThorGate": -6.01,
+  "United Nations Mars Initiative": -6.57,
+  "Valley Trust": 0.89,
+  "Vitor": 0.63
  }
 }
