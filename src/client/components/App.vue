@@ -53,13 +53,9 @@
       <HelpOverlay v-else-if="screen === 'help'"/>
     </div>
     <!-- In game views the notice sits in the sidebar's info window; on the results page it is dropped (Jens' request) -->
-    <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': screen === 'start-screen'}">
-      <!-- On "Create game", changelog and Discord belong in the footer too (the start page has its own buttons for them) -->
-      <template v-if="screen === 'create-game-form'">
-        <a :href="changelogUrl" target="_blank" v-i18n>Read our changelog to get the latest updates.</a>
-        <span>(<span v-i18n>Looking for people to play with</span>? <a :href="discordInvite" target="_blank" v-i18n>Join us on Discord</a>.)</span>
-      </template>
-      <StartScreenFooter v-if="screen === 'start-screen'"/>
+    <!-- Start page and "Create game" share the same footer (Jens' request): build facts left, notice right -->
+    <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': hasStartScreenFooter}">
+      <StartScreenFooter v-if="hasStartScreenFooter"/>
       <span v-i18n>Not affiliated with FryxGames, Asmodee Digital or Steam in any way.</span>
     </footer>
   </div>
@@ -68,7 +64,6 @@
 <script lang="ts">
 import {defineAsyncComponent, defineComponent} from 'vue';
 import * as constants from '@/common/constants';
-import {WIKI_URLS} from '@/client/utils/WikiLinks';
 
 const AdminHome = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminHome.vue'));
 const CardList = defineAsyncComponent(() => import(/* webpackChunkName: "card-list" */ '@/client/components/cardlist/CardList.vue'));
@@ -180,11 +175,8 @@ export default defineComponent({
     LoginHome,
   },
   computed: {
-    changelogUrl(): string {
-      return WIKI_URLS.changelog;
-    },
-    discordInvite(): string {
-      return constants.DISCORD_INVITE;
+    hasStartScreenFooter(): boolean {
+      return this.screen === 'start-screen' || this.screen === 'create-game-form';
     },
     isMobileLayout(): boolean {
       return mobileLayout.value;
