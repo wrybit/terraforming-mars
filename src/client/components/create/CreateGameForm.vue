@@ -68,10 +68,10 @@
             </template>
           </section>
         </Teleport>
-        <Teleport :to="columnTarget('expansionOptions')">
+        <!-- Only once an expansion with options is on (less is more); v-if on the Teleport, see Milestones & Awards -->
+        <Teleport v-if="hasExpansionOptions" :to="columnTarget('expansionOptions')">
           <section class="create-game-card" :style="cardStyle('expansionOptions')">
             <CollapsibleSection title="Expansion options" storageKey="expansionOptions" :changed="expansionOptionsNote">
-              <div v-if="!hasExpansionOptions" class="create-game-note" v-i18n>Activate Venus Next, Turmoil, The Moon or Ares to see their options here.</div>
               <div v-if="expansions.venus" class="create-game-option-group">
                 <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-venus"></span><span v-i18n>Venus Next</span></div>
                 <OptionRow label="Alt. Venus Board" :href="wikiUrls.alternativeVenusBoard"><SwitchInput v-model="altVenusBoard"/></OptionRow>
