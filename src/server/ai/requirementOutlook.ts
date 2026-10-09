@@ -4,6 +4,8 @@ import {CardRequirementDescriptor} from '../../common/cards/CardRequirementDescr
 import {CardRequirements} from '../cards/requirements/CardRequirements';
 import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MIN_TEMPERATURE, MAX_VENUS_SCALE} from '../../common/constants';
 import {remainingProductionPhases} from './gameProgress';
+import {tuningOf} from './aiTuning';
+import {Tag} from '../../common/cards/Tag';
 
 // How likely a card's requirements will be met while it is still useful (0..1).
 // The AI bought cards like Anti-Gravity Technology (7 science tags) with no science at all and
@@ -36,6 +38,27 @@ function globalOutlook(stepsNeeded: number, totalSteps: number, remaining: numbe
   return Math.max(0.1, 0.9 * (1 - wait / Math.max(1, remaining)));
 }
 
+/** Cards a player plays per generation, from the own pace so far (at least 1, at most 4). */
+function cardsPerGeneration(player: IPlayer): number {
+  const generations = Math.max(1, player.game.generation - 1);
+  return Math.min(4, Math.max(1, player.playedCards.length / generations));
+}
+
+/**
+ * Tags of one kind a player may expect per generation: the tag's share of the game's project deck
+ * (public: the deck's make-up) times the own play pace, or the own pace with
+ * that tag so far when higher (a science player finds science faster).
+ */
+function tagsPerGeneration(tag: Tag, player: IPlayer): number {
+  const deck = player.game.projectDeck;
+  // The whole project deck of this game: which cards are still unseen is hidden, the make-up not.
+  const cards = [...deck.drawPile, ...deck.discardPile, ...player.game.players.flatMap((other) => [...other.cardsInHand, ...other.playedCards])];
+  const share = cards.length === 0 ? 0 : cards.filter((card) => card.tags.includes(tag)).length / cards.length;
+  const generations = Math.max(1, player.game.generation - 1);
+  const ownPace = player.tags.count(tag, 'raw') / generations;
+  return Math.max(share * cardsPerGeneration(player), ownPace);
+}
+
 function outlookOf(descriptor: CardRequirementDescriptor, player: IPlayer, card: IProjectCard, remaining: number): number {
   if (isMet(descriptor, player, card)) {
     return 1;
@@ -62,7 +85,8 @@ function outlookOf(descriptor: CardRequirementDescriptor, player: IPlayer, card:
   if (tag !== undefined) {
     const missing = count - player.tags.count(tag);
     const fromHand = player.cardsInHand.filter((handCard) => handCard !== card && handCard.tags.includes(tag)).length;
-    const expected = fromHand * 0.7 + remaining * TAGS_PER_GENERATION;
+    const perGeneration = tuningOf(player).tagRateModel > 0 ? tagsPerGeneration(tag, player) : TAGS_PER_GENERATION;
+    const expected = fromHand * 0.7 + remaining * perGeneration;
     return missing <= expected ? Math.max(0.15, 0.85 - 0.15 * missing) : 0.05;
   }
   if (descriptor.production !== undefined) {

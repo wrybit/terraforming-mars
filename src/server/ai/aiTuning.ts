@@ -14,6 +14,10 @@ export type AiTuning = {
   /** City placement: VP per other own / opponent city at a free spot next to the new city (spaceValue.ts). */
   sharedSpotShare: number,
   opponentSpotShare: number,
+  /** City spot taken from an opponent: share of a VP per adjacent opponent greenery they can no longer score with an own city there (spaceValue.ts), 0 = off. */
+  cityDenialShare: number,
+  /** 1: tag requirements expect tags at the rate of that tag in the deck and the own play pace instead of a flat 0.3 per generation (requirementOutlook.ts). */
+  tagRateModel: number,
   /** Weight of the measured engine value of effect cards (engineValue.ts), 0 = off. */
   engineWeight: number,
   /** 1: cards with a maximum requirement lose value for later when the window is closing. */
@@ -86,6 +90,8 @@ export const BASELINE_TUNING: AiTuning = {
   researchReserveEarly: 0,
   sharedSpotShare: 0.4,
   opponentSpotShare: 0.25,
+  cityDenialShare: 0,
+  tagRateModel: 0,
   // A/B: weight 1 (clipped at 0) lost 45 : 58, weight 0.5 won 58 : 43 in 100 games but 153 : 158
   // in 300 new games (z +0.3 vs +0.8) – no clear gain, so off again (it costs computing time).
   engineWeight: 0,
@@ -220,6 +226,12 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Rollouts: the best moves played on to the end of the generation by a fast greedy AI.
   rollout3: {rolloutCandidates: 3, rolloutBudget: 4000},
   rollout5: {rolloutCandidates: 5, rolloutBudget: 6000},
+  // Jens (2026-10-09): the AI could have taken city spots next to his greeneries.
+  cityDenial50: {cityDenialShare: 0.5},
+  cityDenial100: {cityDenialShare: 1},
+  // Mass Converter (5 science tags) bought in a human game and never played: science is common,
+  // Jovian rare; a flat rate for every tag misjudges both.
+  tagRate: {tagRateModel: 1},
 };
 
 export function isTuningVariant(name: string): boolean {

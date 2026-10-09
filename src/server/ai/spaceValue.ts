@@ -116,6 +116,10 @@ function sharedSpotPoints(space: Space, neighbours: ReadonlyArray<Space>, player
   return points;
 }
 
+function opponentGreeneries(neighbours: ReadonlyArray<Space>, player: IPlayer): number {
+  return neighbours.filter((neighbour) => Board.isGreenerySpace(neighbour) && neighbour.player !== undefined && neighbour.player !== player).length;
+}
+
 export function spaceValue(space: Space, kind: TileKind, player: IPlayer): number {
   const game = player.game;
   const board = game.board;
@@ -154,6 +158,9 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
     // Two own cities with one row between them share free spots: a greenery there scores for
     // both (tip from the group: place cities in pairs at that distance, then fill greeneries).
     value += sharedSpotPoints(space, neighbours, player, board) * victoryPoint;
+    // A spot next to opponent greeneries is their best city spot: taking it denies them those
+    // points (a human remarked the AI could have taken several such spots).
+    value += opponentGreeneries(neighbours, player) * tuningOf(player).cityDenialShare * victoryPoint;
     break;
   case 'ocean':
     // Oceans next to own tiles help nobody else; next to free land they feed later rebates.
