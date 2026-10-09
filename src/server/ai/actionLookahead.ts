@@ -35,6 +35,9 @@ const GREEDY_CANDIDATES = 8;
 /** Rollouts per move: fewer are too noisy to re-rank, more rarely fit the budget. */
 const MINIMUM_ROLLOUTS = 1;
 const MAXIMUM_ROLLOUTS = 8;
+/** Against humans: rollouts only within this many M€ of the best move, and at most this long. */
+const HUMAN_ROLLOUT_MARGIN = 5;
+const HUMAN_ROLLOUT_BUDGET = 2000;
 /** How many of the best moves a decision trace keeps. */
 const TRACED_ACTION_OPTIONS = 25;
 
@@ -340,12 +343,18 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
   // Rollouts: the best moves are re-ranked by playing on to the end of the generation; like the
   // reply, only their order changes. They see what a pass gives up, so no pass penalty then.
   let rolledOut = false;
+  // Against humans the AI must not keep them waiting (Jens: far too slow with 4 s of rollouts per
+  // action): clear decisions skip the rollouts, the rest gets a shorter budget. AI-only test games
+  // are not affected.
+  const humans = player.game.players.some((other) => other.aiLevel === undefined);
+  const rolloutMargin = humans && tuning.rolloutMargin <= 0 ? HUMAN_ROLLOUT_MARGIN : tuning.rolloutMargin;
+  const rolloutBudget = humans ? Math.min(tuning.rolloutBudget, HUMAN_ROLLOUT_BUDGET) : tuning.rolloutBudget;
   if (tuning.rolloutCandidates > 0) {
     const ranked = [...tried].sort((a, b) => b.outcome.value - a.outcome.value);
     const bestPlain = ranked[0]?.outcome.value ?? 0;
     // A clear decision needs no rollouts: they cost seconds per action.
     const finalists = ranked.slice(0, tuning.rolloutCandidates)
-      .filter((entry) => tuning.rolloutMargin <= 0 || bestPlain - entry.outcome.value <= tuning.rolloutMargin);
+      .filter((entry) => rolloutMargin <= 0 || bestPlain - entry.outcome.value <= rolloutMargin);
     const entries: Array<RolloutEntry> = [];
     for (const entry of finalists) {
       if (entry.outcome.snapshot !== undefined) {
@@ -353,7 +362,7 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
       }
     }
     if (finalists.length > 1 && entries.length === finalists.length) {
-      const means = rolloutMeans(entries, player.id, greedyAction, tuning.rolloutBudget, MINIMUM_ROLLOUTS, MAXIMUM_ROLLOUTS);
+      const means = rolloutMeans(entries, player.id, greedyAction, rolloutBudget, MINIMUM_ROLLOUTS, MAXIMUM_ROLLOUTS);
       if (means !== undefined) {
         const plainValues = finalists.map((entry) => entry.outcome.value).sort((a, b) => b - a);
         finalists.map((entry, index) => ({entry, mean: means[index]}))

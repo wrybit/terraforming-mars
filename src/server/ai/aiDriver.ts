@@ -1,5 +1,6 @@
 import {IPlayer} from '../IPlayer';
 import {PlayerInput} from '../PlayerInput';
+import {InputResponse} from '../../common/inputs/InputResponse';
 import {GameLoader} from '../database/GameLoader';
 import {chooseResponse} from './chooseResponse';
 import {quickResponse} from './quickResponse';
@@ -17,10 +18,9 @@ const MOVE_DELAY_MILLISECONDS = Number(process.env.AI_MOVE_DELAY_MS ?? 600);
 const ACTION_DELAY_MILLISECONDS = Number(process.env.AI_ACTION_DELAY_MS ?? 2000);
 const RANDOM_ATTEMPTS = 50;
 
-function processWithFallback(player: IPlayer, input: PlayerInput): void {
-  const level = player.aiLevel ?? 'normal';
+function processWithFallback(player: IPlayer, input: PlayerInput, chosen: InputResponse | undefined): void {
   const attempts: Array<() => void> = [
-    () => player.process(chooseResponse(input, player, level)),
+    ...(chosen !== undefined ? [() => player.process(chosen)] : []),
     () => player.process(quickResponse(input, player)),
   ];
   for (const attempt of attempts) {
@@ -44,8 +44,20 @@ function processWithFallback(player: IPlayer, input: PlayerInput): void {
   console.warn(`AI player ${player.name} could not answer input ${input.type} in game ${player.game.id}`);
 }
 
-async function makeMove(player: IPlayer, input: PlayerInput): Promise<void> {
-  if (player.getWaitingFor() !== input) {
+function choose(player: IPlayer, input: PlayerInput): InputResponse | undefined {
+  try {
+    return chooseResponse(input, player, player.aiLevel ?? 'normal');
+  } catch {
+    return undefined;
+  }
+}
+
+function isCurrent(player: IPlayer, input: PlayerInput): boolean {
+  return player.getWaitingFor() === input;
+}
+
+async function makeMove(player: IPlayer, input: PlayerInput, minimumMilliseconds: number): Promise<void> {
+  if (!isCurrent(player, input)) {
     return;
   }
   // After an undo or a reload the game lives on as a new object; this one is stale then.
@@ -53,10 +65,20 @@ async function makeMove(player: IPlayer, input: PlayerInput): Promise<void> {
   if (current !== undefined && current !== player.game) {
     return;
   }
-  if (player.getWaitingFor() !== input) {
+  if (!isCurrent(player, input)) {
     return;
   }
-  processWithFallback(player, input);
+  // The thinking time counts towards the pause humans need to follow the game: before, the
+  // rollouts (up to 4 s) came on top of the 2 s pause.
+  const start = Date.now();
+  const chosen = choose(player, input);
+  const rest = minimumMilliseconds - (Date.now() - start);
+  if (rest > 0) {
+    await new Promise((resolve) => setTimeout(resolve, rest));
+  }
+  if (isCurrent(player, input)) {
+    processWithFallback(player, input, chosen);
+  }
 }
 
 function scheduleAiMove(player: IPlayer): void {
@@ -69,10 +91,12 @@ function scheduleAiMove(player: IPlayer): void {
   }
   // The pause only lets humans follow the game; without humans the AI plays at full speed.
   const hasHuman = player.game.players.some((candidate) => candidate.aiLevel === undefined);
-  const delay = !hasHuman ? 0 : isActionMenu(input) ? ACTION_DELAY_MILLISECONDS : MOVE_DELAY_MILLISECONDS;
+  const pause = !hasHuman ? 0 : isActionMenu(input) ? ACTION_DELAY_MILLISECONDS : MOVE_DELAY_MILLISECONDS;
+  // A short start delay, the rest of the pause is filled by the thinking time (makeMove).
+  const startDelay = Math.min(pause, MOVE_DELAY_MILLISECONDS);
   setTimeout(() => {
-    makeMove(player, input).catch((error) => console.error('AI move failed', error));
-  }, delay);
+    makeMove(player, input, pause - startDelay).catch((error) => console.error('AI move failed', error));
+  }, startDelay);
 }
 
 export function installAiDriver(): void {
