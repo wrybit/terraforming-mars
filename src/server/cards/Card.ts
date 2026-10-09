@@ -188,6 +188,10 @@ export abstract class Card implements ICard {
   public get behavior() {
     return this.properties.behavior;
   }
+  /** The declarative part of the card's action, if any (read by the AI to value action cards). */
+  public get actionBehavior() {
+    return this.properties.action;
+  }
   public get cardCost() {
     return this.properties.cardCost;
   }

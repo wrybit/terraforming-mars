@@ -18,6 +18,8 @@ export type AiTuning = {
   cityDenialShare: number,
   /** 1: tag requirements expect tags at the rate of that tag in the deck and the own play pace instead of a flat 0.3 per generation (requirementOutlook.ts). */
   tagRateModel: number,
+  /** 1: unknown cards in hand worth 2–4 M€ by remaining generations, card-drawing actions by the cards they draw (stateValue.ts). */
+  drawCardModel: number,
   /** Weight of the measured engine value of effect cards (engineValue.ts), 0 = off. */
   engineWeight: number,
   /** 1: cards with a maximum requirement lose value for later when the window is closing. */
@@ -92,6 +94,7 @@ export const BASELINE_TUNING: AiTuning = {
   opponentSpotShare: 0.25,
   cityDenialShare: 0,
   tagRateModel: 0,
+  drawCardModel: 0,
   // A/B: weight 1 (clipped at 0) lost 45 : 58, weight 0.5 won 58 : 43 in 100 games but 153 : 158
   // in 300 new games (z +0.3 vs +0.8) – no clear gain, so off again (it costs computing time).
   engineWeight: 0,
@@ -232,6 +235,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Mass Converter (5 science tags) bought in a human game and never played: science is common,
   // Jovian rare; a flat rate for every tag misjudges both.
   tagRate: {tagRateModel: 1},
+  // Humans drew 27–34 extra cards per game in two test games (AI Central, Business Network …), the
+  // AI 1–4: a drawn card counted 2 M€ and every action card a flat 1.5 M€ per generation.
+  drawCards: {drawCardModel: 1},
 };
 
 export function isTuningVariant(name: string): boolean {

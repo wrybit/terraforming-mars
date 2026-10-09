@@ -3,7 +3,7 @@ import {IGame} from '../IGame';
 import {CardName} from '../../common/cards/CardName';
 import {PlayerId} from '../../common/Types';
 import {CardType} from '../../common/cards/CardType';
-import {isIActionCard} from '../cards/ICard';
+import {ICard, isIActionCard} from '../cards/ICard';
 import {isTemperatureMaxed, remainingProductionPhases, stepsLeft, terraformingProgress, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
 import {boardPotential} from './boardPotential';
@@ -239,12 +239,43 @@ function collectedPointsPerGeneration(card: {victoryPoints?: unknown}): number {
   return each / per;
 }
 
+/** Value of a card in hand whose own value is unknown (drawn in a copy, opponents' cards). */
+function unknownCardValue(player: IPlayer, context: ValuationContext): number {
+  if (tuningOf(player).drawCardModel === 0) {
+    return HAND_CARD_VALUE;
+  }
+  // Early a card is an option worth more than its 3 M€ price, late only what can still be played
+  // (bot-heuristics.md §1: 3.5 early, 2 late).
+  return Math.min(4, 2 + 0.2 * context.remaining);
+}
+
+/** Cards an action draws per use (AI Central 2, Development Center 1 …), 0 for other actions. */
+function cardsDrawnByAction(card: ICard): number {
+  const drawCard = (card as {actionBehavior?: {drawCard?: number | {count: unknown, pay?: boolean, keep?: number}}}).actionBehavior?.drawCard;
+  if (drawCard === undefined) {
+    return 0;
+  }
+  if (typeof drawCard === 'number') {
+    return drawCard;
+  }
+  const count = typeof drawCard.count === 'number' ? drawCard.count : 1;
+  // Paying for the card (Inventors' Guild) or keeping one of several leaves part of the value.
+  const kept = drawCard.keep ?? count;
+  return drawCard.pay === true ? kept * 0.4 : kept;
+}
+
+/** What an action card brings per generation it stays in play. */
+function actionValuePerGeneration(card: ICard, player: IPlayer, context: ValuationContext): number {
+  const drawn = tuningOf(player).drawCardModel > 0 ? cardsDrawnByAction(card) : 0;
+  return Math.max(ACTION_CARD_VALUE_PER_GENERATION, drawn * unknownCardValue(player, context));
+}
+
 function tableauValue(player: IPlayer, context: ValuationContext): number {
   const accumulator = tuningOf(player).accumulatorValue;
   let value = 0;
   for (const card of player.playedCards) {
     if (card.type === CardType.ACTIVE) {
-      const flat = isIActionCard(card) ? ACTION_CARD_VALUE_PER_GENERATION : EFFECT_CARD_VALUE_PER_GENERATION;
+      const flat = isIActionCard(card) ? actionValuePerGeneration(card, player, context) : EFFECT_CARD_VALUE_PER_GENERATION;
       // Martin's collectors scored 20+ VP in long games; a flat 1.5 M€ per generation missed that.
       const collected = accumulator > 0 ? accumulator * collectedPointsPerGeneration(card) * context.victoryPoint : 0;
       value += Math.max(flat, collected) * context.remaining;
@@ -283,10 +314,11 @@ function handValue(player: IPlayer, context: ValuationContext): number {
     }
   }
   if (context.handOwner !== player.id || context.handValues === undefined) {
-    return player.cardsInHand.length * HAND_CARD_VALUE;
+    return player.cardsInHand.length * unknownCardValue(player, context);
   }
   const values = context.handValues;
-  return player.cardsInHand.reduce((sum, card) => sum + (values.get(card.name) ?? HAND_CARD_VALUE), 0);
+  const unknown = unknownCardValue(player, context);
+  return player.cardsInHand.reduce((sum, card) => sum + (values.get(card.name) ?? unknown), 0);
 }
 
 /** Absolute value of one player's position. */
