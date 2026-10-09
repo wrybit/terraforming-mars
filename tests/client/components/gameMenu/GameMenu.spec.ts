@@ -43,6 +43,14 @@ describe('GameMenu', () => {
     wrapper.unmount();
   });
 
+  it('dims the page while open', async () => {
+    const wrapper = mount(GameMenu, {...globalConfig, attachTo: document.body});
+    expect(document.body.querySelector('.game-menu-backdrop')).is.null;
+    await wrapper.find('.game-menu-button').trigger('click');
+    expect(document.body.querySelector('.game-menu-backdrop')).is.not.null;
+    wrapper.unmount();
+  });
+
   it('lists the main pages in a second box, each in a new tab', async () => {
     const wrapper = mount(GameMenu, {...globalConfig, attachTo: document.body});
     await wrapper.find('.game-menu-button').trigger('click');

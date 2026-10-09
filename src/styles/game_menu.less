@@ -114,7 +114,25 @@ html.tm-mobile .game-menu:not(.game-menu--large) {
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: @game-menu-dropdown-radius;
   background: #181a24; // opaque: cards behind must not shine through the texts
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.4); // every box, the notice too
+}
+
+// Page dimming behind the open menu: only darker, no blur (Jens' decision for the menu)
+.game-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2999; // directly below the dropdown
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.game-menu-backdrop-enter-active,
+.game-menu-backdrop-leave-active {
+  transition: opacity 0.14s ease;
+}
+
+.game-menu-backdrop-enter-from,
+.game-menu-backdrop-leave-to {
+  opacity: 0;
 }
 
 .game-menu-dropdown-enter-active,
@@ -186,7 +204,6 @@ html.tm-mobile .game-menu:not(.game-menu--large) {
 .game-menu-notice {
   padding: 10px 12px;
   background: #13141c;
-  box-shadow: none;
   font-size: 13px;
   line-height: 1.35;
   color: rgba(255, 255, 255, 0.6);

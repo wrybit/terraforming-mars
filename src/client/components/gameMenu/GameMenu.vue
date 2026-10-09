@@ -10,6 +10,10 @@
     </button>
 
     <Teleport to="body">
+      <!-- Dims the page while the menu is open so it comes into focus; a click on it closes the menu (onDocumentPointer) -->
+      <Transition name="game-menu-backdrop">
+        <div v-if="menuOpen" class="game-menu-backdrop" data-test="game-menu-backdrop" aria-hidden="true"></div>
+      </Transition>
       <Transition name="game-menu-dropdown">
         <div v-if="menuOpen" ref="dropdown" class="game-menu-dropdown" :style="dropdownPosition" @click.stop>
           <div class="game-menu-panel" role="menu">
