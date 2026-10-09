@@ -268,7 +268,7 @@
   color: @create-game-dim;
 }
 
-// Collapsible areas (CollapsibleSection.vue): the head is the switch, an arrow shows the state
+// Collapsible areas (CollapsibleSection.vue): the head is the switch, the arrow points where the area moves
 .create-game-collapsible-head {
   // The actions (e.g. "Select all") stay right; the note sits right behind the title
   .create-game-small-button {
@@ -306,7 +306,7 @@
   transition: transform 0.2s;
 
   .create-game-collapsible--open > .create-game-collapsible-head & {
-    transform: rotate(90deg);
+    transform: rotate(180deg);
   }
 }
 

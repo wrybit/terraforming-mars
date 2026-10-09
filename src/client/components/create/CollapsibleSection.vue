@@ -5,7 +5,8 @@
     <div :class="['create-game-collapsible-head', variant === 'card' ? 'create-game-card-head' : 'create-game-subhead']">
       <component :is="collapsible ? 'button' : 'div'" :type="collapsible ? 'button' : undefined" class="create-game-collapsible-toggle"
         :aria-expanded="collapsible ? isOpen : undefined" @click="collapsible && toggle()">
-        <svg v-if="collapsible" class="create-game-collapsible-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <!-- Points where the area moves: closed down (opens downwards), open up (closes upwards) -->
+        <svg v-if="collapsible" class="create-game-collapsible-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
         <h2 v-if="variant === 'card'" v-i18n>{{ title }}</h2>
         <span v-else v-i18n>{{ title }}</span>
       </component>
