@@ -192,8 +192,17 @@ export function isTuningVariant(name: string): boolean {
 
 // Two-player games (the main use case) can differ from the baseline of 3–5 players; found with the
 // mirrored 1v1 rounds (docs/ai/bot-heuristics.md). Variants apply on top of it.
-export const TWO_PLAYER_TUNING: Partial<AiTuning> = {};
+export const TWO_PLAYER_TUNING: Partial<AiTuning> = {
+  // Rounds 8+9 (600 mirrored games each): second step after 12 instead of 4 first moves
+  // +2.6 VP per deal (z +2.8), 20: +2.7; deepSearch (12 + opponent reply) +4.2 (z +4.4).
+  secondStepCandidates: 12,
+};
 const BASELINE_TWO_PLAYERS: AiTuning = {...BASELINE_TUNING, ...TWO_PLAYER_TUNING};
+// Level "hard" (server games against humans, where a few seconds per move do not matter): the
+// widest search measured, on top of the baseline. Batches play "normal" with variants.
+export const HARD_LEVEL_TUNING: Partial<AiTuning> = {secondStepCandidates: 20, opponentReplies: 4};
+const HARD: AiTuning = {...BASELINE_TUNING, ...HARD_LEVEL_TUNING};
+const HARD_TWO_PLAYERS: AiTuning = {...BASELINE_TWO_PLAYERS, ...HARD_LEVEL_TUNING};
 
 // By player id: game copies used for valuation have new player objects with the same ids.
 const variantByPlayer = new Map<string, string>();
@@ -213,6 +222,9 @@ export function tuningOf(player: IPlayer): AiTuning {
   const twoPlayers = player.game.players.length === 2;
   const variant = variantByPlayer.get(player.id);
   if (variant === undefined) {
+    if (player.aiLevel === 'hard') {
+      return twoPlayers ? HARD_TWO_PLAYERS : HARD;
+    }
     return twoPlayers ? BASELINE_TWO_PLAYERS : BASELINE_TUNING;
   }
   const key = `${variant}|${twoPlayers}`;
