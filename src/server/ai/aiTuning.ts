@@ -298,6 +298,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noAwardTrend: {awardTrend: 0},
   // Daniel won twice with a late engine while the AI led on TR: end the game sooner (closer was neutral at 1).
   closer2: {closer: 2},
+  // handSynergy only acts through engineValue, which needs engineWeight > 0 (round 21 measured noise).
+  engine1: {engineWeight: 1},
+  // Rollouts at a price human games can bear: 2 moves, 0.6 s, only close decisions.
+  rolloutCheap: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5},
 };
 
 export function isTuningVariant(name: string): boolean {
