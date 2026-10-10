@@ -11,14 +11,23 @@ import {oneWayDifference} from '../../common/utils/utils';
 import {Tile} from '../Tile';
 import {SpaceBonus} from '../../common/boards/SpaceBonus';
 import * as constants from '../../common/constants';
+import {GlobalParameterMaximums} from '../IGame';
 
 export class MarsBoard extends Board {
   private readonly edges: ReadonlyArray<Space>;
+  public readonly max: GlobalParameterMaximums;
 
   public constructor(
     spaces: ReadonlyArray<Space>,
-    noctisCitySpaceId?: SpaceId | undefined) {
+    noctisCitySpaceId?: SpaceId | undefined,
+    max?: Partial<GlobalParameterMaximums>) {
     super(spaces, noctisCitySpaceId);
+    this.max = {
+      temperature: max?.temperature ?? constants.MAX_TEMPERATURE,
+      oxygen: max?.oxygen ?? constants.MAX_OXYGEN_LEVEL,
+      oceans: max?.oceans ?? constants.MAX_OCEAN_TILES,
+      venus: max?.venus ?? constants.MAX_VENUS_SCALE,
+    };
     this.edges = this.computeEdges();
   }
 
@@ -217,7 +226,7 @@ export class MarsBoard extends Board {
         return false;
       }
     }
-    if (space.bonus.includes(SpaceBonus.TEMPERATURE_4MC) && game.getTemperature() < constants.MAX_TEMPERATURE) {
+    if (space.bonus.includes(SpaceBonus.TEMPERATURE_4MC) && game.getTemperature() < game.max.temperature) {
       if (!player.canAfford({cost: constants.VASTITAS_BOREALIS_NOVA_BONUS_TEMPERATURE_COST, tr: {temperature: 1}})) {
         return false;
       }
@@ -231,17 +240,28 @@ export class MarsBoard extends Board {
   }
 
   private computeEdges(): ReadonlyArray<Space> {
-    return this.spaces.filter((space) => {
-      if (space.y === 0 || space.y === 8 || space.x === 8) {
+    const boardSpaces = this.spaces.filter((s) => s.spaceType !== SpaceType.COLONY);
+    if (boardSpaces.length === 0) {
+      return [];
+    }
+    const maxY = Math.max(...boardSpaces.map((s) => s.y));
+    const maxX = Math.max(...boardSpaces.map((s) => s.x));
+    const halfY = maxY / 2;
+    return boardSpaces.filter((space) => {
+      // top and bottom rows
+      if (space.y === 0 || space.y === maxY) {
         return true;
       }
-      // left side is tricky.
-      // top-left is easy with math. Look at the map.
-      if (space.y + space.x === 4) {
+      // right column
+      if (space.x === maxX) {
         return true;
       }
-      // bottom-left is also easy with math. Look at the map.
-      if (space.y - space.x === 4) {
+      // top-left diagonal: y + x = halfY
+      if (space.y + space.x === halfY) {
+        return true;
+      }
+      // bottom-left diagonal: y - x = halfY
+      if (space.y - space.x === halfY) {
         return true;
       }
       return false;

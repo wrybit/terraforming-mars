@@ -15,14 +15,24 @@
   "Space": "Weltraum",
   "Wild": "Joker",
   "Event": "Ereignis",
+  "Power": "Energie",
+  "Venus": "",
+  "Earth": "Erde",
+  "Jovian": "Jupiter",
   "Moon": "Mond",
   "Mars": "",
   "Clone": "Klon",
+  "Crime": "Kriminalität",
   "MegaCredits (M€)": "Mega Credits (M€)",
   "Floater": "Schweber",
   "Preservation": "Erhaltungsressource",
   "Camp": "Lager",
   "Disease": "Krankheit",
+  "Data": "Daten",
+  "Venusian Habitat": "Venusianischer Lebensraum",
+  "Specialized Robot": "spezialisierter Roboter",
+  "Agenda": "Agenden",
+  "Ware": "Waren",
 
   "Special": "Spezial",
 
@@ -37,6 +47,7 @@
   "Colony": "Kolonie",
   "Trade Fleet": "Handelsflotte",
   "Delegate": "Abgesandter",
+
 
   "Standard Projects from Expansions and Solo Mode": "Standardprojekte aus Erweiterungen und Solo-Herausforderung",
   "Standard Project from Fan-made Expansions": "Standardprojekte aus von Fans erstellten Erweiterungen",
@@ -80,7 +91,7 @@
   "Solo mode adjustments for expansions:": "Anpassungen in der Solo-Herausforderungen aus den Erweiterungen.",
   "• Prelude: The game ends 2 generations earlier.": "• Präludium - Das Spiel endet 2 Generationen früher.",
   "• Venus Next: The Venus track must be completed for solo mode victory.": "• Nächster Halt: Venus - Die Venuswertung muss vollständig sein, um die Solo-Herausforderung zu gewinnen",
-  "• The Moon (63TR condition): No changes.": "• Der Mond (63-TW) - Keine Änderungen.",
+  "• The Moon (63TR condition): No changes.": "• Der Mond (63 TW) - Keine Änderungen.",
   "• The Moon (Terraforming condition): The game ends 2 generations later. The Moon tracks must be completed for solo mode victory.": "• Der Mond (Terraforming-Bedingung) - Das Spiel endet 2 Generationen später. Obgligatorische Wertungen aus Der Mond müssen vollendet sein, um die Solo-Herausforderung zu gewinnen.",
   "ii. World Government Terraforming (start player chooses)": "ii. Weltregierungs-Terraforming (Startspieler wählt)",
   "iii. Colony production": "iii. Kolonie-Produktion",
@@ -101,6 +112,7 @@
   "Move the distant (left) Global Event to coming position (middle)": "Das zukünftige Globale Eregnis (links) wird zum Nächsten Globalen Ergeinis (Mitte)",
   "Reveal a new Global Event in the distant (left) position. Add its top neutral delegate": "Ein neues Zukünftiges Globale Ereignis (links) aufdecken. 1 neutraler Delegierter wird eingesetzt (oben links)",
 
+  
   "End Game": "Spielende",
   "In turn order, convert plants to greeneries.": "In Zugreihenfolge, konvertiere Pflanzen zu Grünflächen",
   "Assign awards": "Vergebe Auszeichnungen",
