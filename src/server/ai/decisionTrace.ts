@@ -26,6 +26,8 @@ export type PlayerSnapshot = {
 };
 
 export type DecisionRecord = {
+  /** Game the decision belongs to, so records of parallel games can be told apart. */
+  gameId: string,
   generation: number,
   phase: string,
   player: string,
@@ -102,6 +104,7 @@ export function recordDecision<T>(input: PlayerInput, player: IPlayer, decide: (
     open = undefined;
   }
   recorder({
+    gameId: game.id,
     generation: game.generation,
     phase: game.phase,
     player: player.name,

@@ -24,6 +24,7 @@ import {timeAsync} from '@/server/utils/timer';
 import {GameLoader} from '@/server/database/GameLoader';
 import {globalInitialize} from '@/server/globalInitialize';
 import {SessionManager} from '@/server/server/auth/SessionManager';
+import {installDecisionLogFile} from '@/server/ai/decisionLogFile';
 
 process.on('uncaughtException', (err: any) => {
   console.error('UNCAUGHT EXCEPTION', err);
@@ -135,6 +136,15 @@ async function start() {
     console.error(err);
   }
   GameLoader.getInstance().maintenance();
+  // Maintenance otherwise runs only at startup. A server with a purge window (MAX_GAME_DAYS, e.g. the
+  // public test server) restarts rarely, so it repeats hourly; without the variable nothing changes.
+  if (process.env.MAX_GAME_DAYS !== undefined) {
+    setInterval(() => GameLoader.getInstance().maintenance(), 60 * 60 * 1000).unref();
+  }
+  const decisionLogDirectory = process.env.AI_DECISION_LOG_DIR;
+  if (decisionLogDirectory) {
+    installDecisionLogFile(decisionLogDirectory);
+  }
 
   console.log(`Starting ${raw_settings.head}, built at ${raw_settings.builtAt}`);
 
