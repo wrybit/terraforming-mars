@@ -118,9 +118,11 @@ export type AiTuning = {
 // - margin -3, hand 12/5 won 55 against 50 (+2.2 VP, 35 cards played).
 export const BASELINE_TUNING: AiTuning = {
   // Night runs E+F: with production valued at 0.9, fewer cards win (z +4.75, +3.60): -1 and 9/4.
-  buyMargin: -1,
-  handTargetEarly: 9,
-  handTargetLate: 4,
+  // Round 30 (bundle1, 600 mirrored deals): margin -3 and hand 12/5 together with productionDiscount
+  // 1.05 and 16 second-step candidates +1.30 VP per deal (z +3.09) – each part alone was only slightly positive.
+  buyMargin: -3,
+  handTargetEarly: 12,
+  handTargetLate: 5,
   researchReserveEarly: 0,
   sharedSpotShare: 0.4,
   opponentSpotShare: 0.25,
@@ -150,7 +152,7 @@ export const BASELINE_TUNING: AiTuning = {
   awardTiming: 0,
   // Night runs A+B (3200 games): 0.55 → 0.9 won clearly (A: 0.75 z +4.8; B: 0.9 z +2.7, 1.05 z +3.5,
   // control −0.8); best VP per generation. Income was undervalued once the game length was right.
-  productionDiscount: 0.9,
+  productionDiscount: 1.05,
   // Night runs C+D: pass penalty 0.25 z +2.9 / +1.3, 0.4 z +3.1 (2P +2 VP), 0.1 neutral → 0.3.
   passPenalty: 0.3,
   victoryPointScale: 1,
@@ -159,7 +161,7 @@ export const BASELINE_TUNING: AiTuning = {
   lengthModel: 1,
   // Second step after 12 instead of 4 first moves: 1v1 rounds 8+9 +2.6 VP per deal (z +2.8);
   // three players, rounds 11+12 (900 seats): 341 wins for 300 expected (z +2.9).
-  secondStepCandidates: 12,
+  secondStepCandidates: 16,
   opponentReplies: 0,
   opponentWeightTwoPlayers: 1,
   cardPriorWeight: 3,
@@ -363,6 +365,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Quantum Extractor …) with few uses for the energy – is energy production overvalued?
   energy07: {energyProductionValue: 0.7},
   energy09: {energyProductionValue: 0.9},
+  // Before round 31: the baseline without bundle1.
+  beforeBundle1: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, productionDiscount: 0.9, secondStepCandidates: 12},
   bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},
   // Round 25: rolloutFast +1.0 VP (z +1.25) at 34 s per test game – re-checked with variations.
   rolloutFastDeep: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 16, rolloutFocus: 1},
