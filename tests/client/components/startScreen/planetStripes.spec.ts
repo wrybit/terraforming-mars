@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {PLANET_STRIPES, rotationLimits, STRIPES_TEXTURE_SIZE} from '@/client/components/startScreen/planetStripes';
+import {PLANET_STRIPES, rotationLimits, STRIPES_TEXTURE_SIZE, TEXTURE_USABLE} from '@/client/components/startScreen/planetStripes';
 
 describe('planetStripes', () => {
   it('keeps every stripe inside the texture', () => {
@@ -15,9 +15,9 @@ describe('planetStripes', () => {
       const limits = rotationLimits(stripe);
       expect(limits.max).to.be.greaterThan(0);
       expect(limits.min).to.be.at.most(0);
-      // left button edge at full rotation stays right of the round stripe ends
+      // left button edge at full rotation stays inside the texture
       const leftEdge = stripe.startX - limits.max * stripe.height / 90;
-      expect(leftEdge).to.be.at.least(300);
+      expect(leftEdge).to.be.at.least(TEXTURE_USABLE.left - 0.001);
     }
   });
 });
