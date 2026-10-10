@@ -25,7 +25,7 @@ import {RolloutEntry, rolloutMeans} from './rolloutSearch';
 // valuing the resulting position (one-step lookahead). This captures the effect of any card
 // without card-specific code.
 
-/** Time the AI may spend on one action on the server (AK1: ~10 ms per tried move). */
+/** Time the AI may spend on one action on the server (~10 ms per tried move). */
 const DEFAULT_BUDGET_MILLISECONDS = 2000;
 const MAXIMUM_CANDIDATES = 120;
 /** Opponent reply: how many of the opponent's moves are tried (the cheap ones come first in the menu). */
@@ -343,7 +343,7 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
   // Rollouts: the best moves are re-ranked by playing on to the end of the generation; like the
   // reply, only their order changes. They see what a pass gives up, so no pass penalty then.
   let rolledOut = false;
-  // Against humans the AI must not keep them waiting (Jens: far too slow with 4 s of rollouts per
+  // Against humans the AI must not keep them waiting (human feedback: far too slow with 4 s of rollouts per
   // action): clear decisions skip the rollouts, the rest gets a shorter budget. AI-only test games
   // are not affected.
   const humans = player.game.players.some((other) => other.aiLevel === undefined);

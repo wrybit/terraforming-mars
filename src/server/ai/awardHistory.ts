@@ -1,6 +1,6 @@
 import {IGame} from '../IGame';
 
-// Award scores per generation, as a human watches them grow: Daniel's Banker score stayed at 3 for
+// Award scores per generation, as a human watches them grow: a human player's Banker score stayed at 3 for
 // eight generations and then rose by 8 every two generations. The average pace since the start
 // (stateValue.ts projectedAwardScore) missed that; the AI funded Banker with 19 : 7 and lost 22 : 33.
 // Kept in memory only (public information; after a restart the history starts again).

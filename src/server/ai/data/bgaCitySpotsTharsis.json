@@ -1,5 +1,5 @@
 {
- "source": "BGA archive (tfmstats.com), Tharsis two-player games, 46477 games; tests/simulation/analyzeBgaCitySpots.py",
+ "source": "BGA archive (tfmstats.com), Tharsis two-player games, 46477 games",
  "spots": {
   "A1": {
    "cities": 277,

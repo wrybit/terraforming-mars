@@ -68,7 +68,7 @@ export function engineValue(snapshot: GameSnapshot, player: IPlayer, card: ICard
   }
   const sample = withCopy(snapshot, (copy) => {
     // The own hand will be played too: Viral Enhancers is gold with a hand of plant, animal and
-    // microbe cards (Martin), measured on random deck cards it looked average.
+    // microbe cards (human feedback), measured on random deck cards it looked average.
     const hand = tuningOf(player).handSynergy > 0 ?
       copy.getPlayerById(player.id).cardsInHand.filter((next) => next.name !== card.name).slice(0, HAND_SAMPLE_CARDS) : [];
     return [...hand, ...pickSome(Math.random, copy.projectDeck.drawPile, SAMPLE_CARDS - hand.length)].map((next) => next.name);

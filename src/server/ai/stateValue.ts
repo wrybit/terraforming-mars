@@ -11,7 +11,7 @@ import {milestoneRacePoints} from './milestoneRace';
 import {recentAwardGrowth} from './awardHistory';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
-// copies of the game in which different moves were made. Weights: docs/ai/bot-heuristics.md §1.
+// copies of the game in which different moves were made. Weights tuned in AI test batches.
 
 // Future income is worth about half of money in hand (experts: 1 M€ production ≈ 5 M€ in
 // generation 1, ≈ 2 M€ late). A higher value made the AI buy production far too dearly.
@@ -80,7 +80,7 @@ function expectedAwardPoints(player: IPlayer, context: ValuationContext): number
       projectedAwardScore(award.getScore(opponent), context, trend ? awardGrowth(opponent, award.name) : undefined)));
     const margin = own - best;
     // How much an opponent can still gain: more early, and more for awards with big numbers.
-    // awardSwing: plus a share of the score per remaining generation – Jens overtook three funded
+    // awardSwing: plus a share of the score per remaining generation – a human player overtook three funded
     // awards in the last 4 generations (Banker 10 → 33, Miner 5 → 24) while the AI felt safe.
     // The deciding player's view for both sides: own leads and the opponent's leads are equally
     // uncertain, so catching up in an award the opponent leads is worth as much as defending one.
@@ -212,7 +212,7 @@ const UNBOUGHT_GREENERY_SHARE = 0.6;
 const LEFTOVER_MONEY_VALUE = 0.1;
 
 /**
- * M€ value of money in the last generation as steps of greeneries it can still buy (Jens: "sell
+ * M€ value of money in the last generation as steps of greeneries it can still buy (a human player: "sell
  * what does not change the game any more and buy one more greenery from it"). Once Mars is
  * terraformed the hand counts as 1 M€ per card, as it can be sold.
  */
@@ -255,7 +255,7 @@ function unknownCardValue(player: IPlayer, context: ValuationContext): number {
     return HAND_CARD_VALUE;
   }
   // Early a card is an option worth more than its 3 M€ price, late only what can still be played
-  // (bot-heuristics.md §1: 3.5 early, 2 late).
+  // (3.5 early, 2 late).
   return Math.min(4, 2 + 0.2 * context.remaining);
 }
 
@@ -286,7 +286,7 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
   for (const card of player.playedCards) {
     if (card.type === CardType.ACTIVE) {
       const flat = isIActionCard(card) ? actionValuePerGeneration(card, player, context) : EFFECT_CARD_VALUE_PER_GENERATION;
-      // Martin's collectors scored 20+ VP in long games; a flat 1.5 M€ per generation missed that.
+      // A human player's collectors scored 20+ VP in long games; a flat 1.5 M€ per generation missed that.
       const collected = accumulator > 0 ? accumulator * collectedPointsPerGeneration(card) * context.victoryPoint : 0;
       value += Math.max(flat, collected) * context.remaining;
     }
@@ -315,7 +315,7 @@ function partialResourcePoints(card: {victoryPoints?: unknown, resourceCount: nu
 
 function handValue(player: IPlayer, context: ValuationContext): number {
   if (context.remaining === 0) {
-    // Expected last generation, but the game only ends for sure once Mars is terraformed. Jens vs.
+    // Expected last generation, but the game only ends for sure once Mars is terraformed. Human vs.
     // hard: one ocean was missing, the AI took generation 14 as the last one, sold Terraforming
     // Ganymede, Giant Ice Asteroid and Io Mining Industries – and nobody placed the ocean.
     // Then the cards count with their value played now (cardValue.ts handCardValues).

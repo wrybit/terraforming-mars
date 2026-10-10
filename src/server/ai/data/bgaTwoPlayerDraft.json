@@ -1,5 +1,5 @@
 {
- "_source": "BGA two-player games (tfmstats.com archive 2026-01-10, Corporate Era, draft, no Colonies): Bradley-Terry pick strength from draft options, log strength in SD per phase; corporations: wins above Elo expectation in % points; tests/simulation/analyzeBgaGames.py + buildBgaDraftPrior.py",
+ "_source": "BGA two-player games (tfmstats.com archive 2026-01-10, Corporate Era, draft, no Colonies): Bradley-Terry pick strength from draft options, log strength in SD per phase; corporations: wins above Elo expectation in % points",
  "cards": {
   "AI Central": {
    "early": 2.33,

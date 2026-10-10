@@ -21,7 +21,6 @@ import {enablerBonus} from './enablerValue';
 import {draftReceiver, receiverValues} from './draftDenial';
 
 // Opening choice (corporation + preludes + cards) and card buying / drafting.
-// docs/ai/bot-heuristics.md §2 and §3a.
 
 // Money kept after buying, so the bought cards can actually be played.
 const OPENING_RESERVE = 10;

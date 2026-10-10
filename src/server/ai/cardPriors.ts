@@ -2,8 +2,7 @@ import {CardName} from '../../common/cards/CardName';
 import statistics from './data/bgaCardStatistics.json';
 import draftStatistics from './data/bgaTwoPlayerDraft.json';
 
-// Prior card strength from Board Game Arena top players (RuneDK93 dataset, see
-// docs/ai/bot-heuristics.md §2). WAP is the placement score above the Elo expectation.
+// Prior card strength from Board Game Arena top players (RuneDK93 dataset). WAP is the placement score above the Elo expectation.
 
 type CardStatistic = {kind: string, plays: number, winRate: number, wap: number};
 const CARDS = statistics.cards as Record<string, CardStatistic>;

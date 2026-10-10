@@ -112,7 +112,7 @@ export const BASELINE_TUNING: AiTuning = {
   tagRateModel: 0,
   drawCardModel: 0,
   // Round 19: boardHorizon6 neutral in AI-vs-AI (-0.2 VP, z -0.3), adopted for the human case: a city
-  // next to free land in generation 11 instead of a spot with three greeneries (Jens' game).
+  // next to free land in generation 11 instead of a spot with three greeneries (human test game).
   boardHorizon: 6,
   laterPointValue: 0,
   handSynergy: 1,
@@ -160,16 +160,16 @@ export const BASELINE_TUNING: AiTuning = {
   accumulatorValue: 0,
   peek: 0,
   // Round 18 (400 mirrored 1v1 games): rollout3 +2.7 VP per deal, z 2.45, 55 % wins – but a test game took
-  // 516 s instead of 69 s and human games felt far too slow (Jens, 2026-10-10): off again until cheaper.
+  // 516 s instead of 69 s and human games felt far too slow (human feedback, 2026-10-10): off again until cheaper.
   rolloutCandidates: 0,
   rolloutBudget: 4000,
   rolloutMargin: 0,
   // Round 20: citySpots neutral in AI-vs-AI (-0.4 VP, z -0.5), adopted for the human case: the first
-  // city went next to Noctis although better standard spots exist (Jens).
+  // city went next to Noctis although better standard spots exist (human test game).
   citySpotPrior: 1,
   // Round 21 (1200 mirrored 1v1 games): draftMemory -0.4 VP (z -0.4), adopted: the AI should know what a
-  // human remembers (Jens); awardTrend +0.9 (z +1.0), adopted for Daniel's late Banker; handSynergy +1.2
-  // (z +1.3, round 20 +0.5), adopted (Martin). playWindow -1.3 and laterPoints -1.4 not adopted.
+  // human remembers; awardTrend +0.9 (z +1.0), adopted for a human's late Banker; handSynergy +1.2
+  // (z +1.3, round 20 +0.5), adopted (human feedback). playWindow -1.3 and laterPoints -1.4 not adopted.
   draftMemory: 1,
   playWindow: 0,
   awardTrend: 1,
@@ -224,8 +224,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   widerSearch: {secondStepCandidates: 12},
   opponentReply: {opponentReplies: 4},
   engineBuilder: {buyMargin: -6, handTargetEarly: 16, handTargetLate: 6, terraformBrake: 6},
-  // 1v1 rounds (2026-10-09, mirrored deals, compareHeadToHead.py): does the BGA card prior help,
-  // and are VP collectors (Birds, Fish, Tardigrades …) undervalued? Martin scored big with them.
+  // 1v1 rounds (2026-10-09, mirrored deals): does the BGA card prior help,
+  // and are VP collectors (Birds, Fish, Tardigrades …) undervalued? Human players scored big with them.
   noPrior: {cardPriorWeight: 0},
   strongPrior: {cardPriorWeight: 6},
   collectors: {accumulatorValue: 0.8},
@@ -235,7 +235,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   draftPriorOnly: {draftPriorWeight: 2, cardPriorWeight: 0},
   // Corporation choice: Ecoline +2.7, UNMI −6.6 % points → with 3 M€ per point +8 / −20 M€.
   bgaCorporations: {corporationPriorWeight: 3},
-  // Economy next to strong BGA winners (analyzeAiEconomy.py): same M€ production, but half the plant
+  // Economy next to strong BGA winners: same M€ production, but half the plant
   // production from generation 9 and 3 more cards in hand.
   plants25: {plantProductionValue: 2.5},
   plants30: {plantProductionValue: 3},
@@ -249,7 +249,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   search8: {secondStepCandidates: 8},
   search20: {secondStepCandidates: 20},
   deepSearch20: {secondStepCandidates: 20, opponentReplies: 4},
-  // Jens vs. hard (2026-10-09, 129 : 114): the AI funded Banker, Miner and Landlord with a lead and lost
+  // Human vs. hard (2026-10-09, 129 : 114): the AI funded Banker, Miner and Landlord with a lead and lost
   // all three. A lead counts less while generations remain → later funding, defending the lead.
   awardRisk15: {awardSwing: 0.15},
   awardRisk30: {awardSwing: 0.3},
@@ -262,7 +262,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Rollouts: the best moves played on to the end of the generation by a fast greedy AI.
   rollout3: {rolloutCandidates: 3, rolloutBudget: 4000},
   rollout5: {rolloutCandidates: 5, rolloutBudget: 6000},
-  // Jens (2026-10-09): the AI could have taken city spots next to his greeneries.
+  // Human test game (2026-10-09): the AI could have taken city spots next to his greeneries.
   cityDenial50: {cityDenialShare: 0.5},
   cityDenial100: {cityDenialShare: 1},
   // Mass Converter (5 science tags) bought in a human game and never played: science is common,
@@ -273,30 +273,30 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   drawCards: {drawCardModel: 1},
   // Before round 18: no rollouts.
   noRollout: {rolloutCandidates: 0},
-  // Jens (2026-10-09): in generation 11 the AI built a city next to free land instead of a spot with
+  // Human test game (2026-10-09): in generation 11 the AI built a city next to free land instead of a spot with
   // three greeneries and an ocean; free spots only become greeneries if there is time left.
   // Before round 19.
   boardHorizon3: {boardHorizon: 3},
-  // Martin: play a card only if it brings something for the next generation; pure VP cards wait for
+  // Human feedback: play a card only if it brings something for the next generation; pure VP cards wait for
   // the last generation, when money is worth less. A VP is worth more M€ later in the game.
   laterPoints: {laterPointValue: 1},
-  // Martin: synergies first (Viral Enhancers with plant/animal/microbe chains): effect cards are
+  // Human feedback: synergies first (Viral Enhancers with plant/animal/microbe chains): effect cards are
   // measured with the own hand, not only with random future cards.
   noHandSynergy: {handSynergy: 0},
   // Rollouts made a 2P test game take ~600 s: clear decisions (best move 5 M€ ahead) skip them.
   rolloutGate: {rolloutMargin: 5},
-  // Jens: the first city went next to Noctis although better standard spots exist (BGA: D7, G4, C5).
+  // Human test game: the first city went next to Noctis although better standard spots exist (BGA: D7, G4, C5).
   // Before round 20: no BGA spot prior.
   noCitySpots: {citySpotPrior: 0},
-  // Jens: remember the cards seen in the draft, like a human player.
+  // Human feedback: remember the cards seen in the draft, like a human player.
   noDraftMemory: {draftMemory: 0},
   // Strategy guides (rusliksu/tm-tierlist): a bought card needs a play window of 1–3 generations,
   // a big hand without money is frozen capital. Three-player human game: in generation 5, 8 of 11
   // hand cards waited for global parameters.
   playWindow: {playWindow: 1},
-  // Daniel (2026-10-10): Banker funded at 19 : 7 in generation 12, lost 22 : 33 – his engine came late.
+  // Human test game (2026-10-10): Banker funded at 19 : 7 in generation 12, lost 22 : 33 – the human's engine came late.
   noAwardTrend: {awardTrend: 0},
-  // Daniel won twice with a late engine while the AI led on TR: end the game sooner (closer was neutral at 1).
+  // A human won twice with a late engine while the AI led on TR: end the game sooner (closer was neutral at 1).
   closer2: {closer: 2},
   // handSynergy only acts through engineValue, which needs engineWeight > 0 (round 21 measured noise).
   engine1: {engineWeight: 1},
@@ -309,7 +309,7 @@ export function isTuningVariant(name: string): boolean {
 }
 
 // Two-player games (the main use case) can differ from the baseline of 3–5 players; found with the
-// mirrored 1v1 rounds (docs/ai/bot-heuristics.md). Variants apply on top of it.
+// mirrored 1v1 rounds (AI test batches). Variants apply on top of it.
 export const TWO_PLAYER_TUNING: Partial<AiTuning> = {};
 const BASELINE_TWO_PLAYERS: AiTuning = {...BASELINE_TUNING, ...TWO_PLAYER_TUNING};
 // Level "hard" (server games against humans, where a few seconds per move do not matter): the

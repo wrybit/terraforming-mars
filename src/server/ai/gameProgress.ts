@@ -4,7 +4,7 @@ import {tuningOf} from './aiTuning';
 import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MIN_TEMPERATURE} from '../../common/constants';
 
 // How far the game is and what a victory point is worth right now.
-// Values follow docs/ai/bot-heuristics.md §1 and §6.
+// Values tuned in AI test batches.
 
 const TEMPERATURE_STEPS = (MAX_TEMPERATURE - MIN_TEMPERATURE) / 2;
 

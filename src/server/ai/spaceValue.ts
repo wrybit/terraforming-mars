@@ -13,7 +13,7 @@ import {remainingProductionPhases, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
 import {citySpotPoints} from './citySpotPrior';
 
-// Scores a hex for tile placement. Weights: docs/ai/bot-heuristics.md §5.
+// Scores a hex for tile placement. Weights tuned in AI test batches.
 
 /** cityNeighbour: tiles that score per adjacent city (Commercial District). */
 export type TileKind = 'greenery' | 'city' | 'ocean' | 'cityNeighbour' | 'other';
@@ -192,7 +192,7 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
     // A spot next to opponent greeneries is their best city spot: taking it denies them those
     // points (a human remarked the AI could have taken several such spots).
     // Cities may not touch: the free spots around a new city are closed for the opponent's cities
-    // too. Jens set a city one spot off on purpose so the AI could no longer build next to it.
+    // too. A human player set a city one spot off on purpose so the AI could no longer build next to it.
     value += (opponentGreeneries(neighbours, player) + blockedOpponentSpots(neighbours, player, board) * 0.5) *
       tuningOf(player).cityDenialShare * victoryPoint;
     break;

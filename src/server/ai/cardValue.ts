@@ -17,7 +17,7 @@ import {tuningOf} from './aiTuning';
 
 // What a card is worth to a player, played now and played later. The card is put into play on
 // a copy of the game (ignoring requirements and cost) and the position is valued; the result is
-// corrected by cost, requirement outlook and the BGA prior (docs/ai/bot-heuristics.md §2).
+// corrected by cost, requirement outlook and the BGA prior.
 //
 // "Later" looks several generations ahead: before the card is played, the copy gets a sample
 // of random project cards as a stand-in for the cards the player will still play. Cards that
@@ -114,7 +114,7 @@ function nowValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context:
 }
 
 /**
- * Martin: cards that only bring VP and have no requirement that could close wait for the last
+ * Human feedback: cards that only bring VP and have no requirement that could close wait for the last
  * generation (round 20 applied the later VP value to every card and lost 1.4 VP per game).
  */
 function isPointsOnly(card: ICard): boolean {
