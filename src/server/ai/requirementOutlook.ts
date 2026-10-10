@@ -97,7 +97,7 @@ function outlookOf(descriptor: CardRequirementDescriptor, player: IPlayer, card:
 }
 
 /** Generations until the unmet global requirements of a card are reached at the usual pace. */
-function globalWait(card: IProjectCard, player: IPlayer): number {
+export function globalWait(card: IProjectCard, player: IPlayer): number {
   const game = player.game;
   let wait = 0;
   for (const descriptor of card.requirements) {

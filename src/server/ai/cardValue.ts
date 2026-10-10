@@ -4,6 +4,7 @@ import {ICard} from '../cards/ICard';
 import {IProjectCard, isIProjectCard} from '../cards/IProjectCard';
 import {isICorporationCard} from '../cards/corporation/ICorporationCard';
 import {CardName} from '../../common/cards/CardName';
+import {CardType} from '../../common/cards/CardType';
 import {newCard} from '../createCard';
 import {finishMove, GameSnapshot, playerView, withCopy} from './gameCopy';
 import {relativeValue, ValuationContext, valuationContext} from './stateValue';
@@ -112,6 +113,15 @@ function nowValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context:
   return raw > 0 ? raw * outlookOf(card, player) * (isBlockedNow(card, player) ? BLOCKED_NOW_FACTOR : 1) : raw;
 }
 
+/**
+ * Martin: cards that only bring VP and have no requirement that could close wait for the last
+ * generation (round 20 applied the later VP value to every card and lost 1.4 VP per game).
+ */
+function isPointsOnly(card: ICard): boolean {
+  return isIProjectCard(card) && card.requirements.length === 0 && card.type !== CardType.ACTIVE &&
+    card.victoryPoints !== undefined && card.behavior?.production === undefined && card.behavior?.stock === undefined;
+}
+
 /** How much more M€ a VP is worth `delay` generations later (gameProgress.ts victoryPointValue). */
 function laterPointScale(generation: number, delay: number): number {
   const value = (atGeneration: number) => Math.min(10, 4 * Math.pow(1.1, Math.max(0, atGeneration - 1)));
@@ -126,7 +136,7 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
   const delay = Math.min(3, Math.floor(context.remaining / 2));
   // A VP bought later costs money that is worth less by then (more income, discounts): valued with
   // the VP value of that generation, pure VP cards wait and engine cards are played now.
-  const pointScale = tuningOf(player).laterPointValue > 0 ? laterPointScale(player.game.generation, delay) : 1;
+  const pointScale = tuningOf(player).laterPointValue > 0 && isPointsOnly(card) ? laterPointScale(player.game.generation, delay) : 1;
   const laterContext = {...context, remaining: context.remaining - delay, victoryPoint: context.victoryPoint * pointScale};
   const futureCards = Math.min(8, Math.round(delay * 2));
   let total = 0;

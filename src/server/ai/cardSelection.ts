@@ -11,12 +11,14 @@ import {quickResponse} from './quickResponse';
 import {corporationSelfPlayBonus} from './corporationSelfPlay';
 import {corporationPrior} from './cardPriors';
 import {lastGenerationLikelihood, remainingProductionPhases} from './gameProgress';
-import {requirementOutlook} from './requirementOutlook';
+import {globalWait, requirementOutlook} from './requirementOutlook';
+import {rememberPassedCards} from './draftMemory';
+import {Resource} from '../../common/Resource';
 import {isIProjectCard} from '../cards/IProjectCard';
 import {Tag} from '../../common/cards/Tag';
 import {tuningOf} from './aiTuning';
 import {enablerBonus} from './enablerValue';
-import {receiverValues} from './draftDenial';
+import {draftReceiver, receiverValues} from './draftDenial';
 
 // Opening choice (corporation + preludes + cards) and card buying / drafting.
 // docs/ai/bot-heuristics.md §2 and §3a.
@@ -48,10 +50,34 @@ function valuesOf(player: IPlayer, cards: ReadonlyArray<ICard>, buying = false):
         return 0;
       }
       const later = buying && remaining >= 5 && timing.now < 0 ? timing.later * tuning.lateBuyFactor : timing.later;
-      return Math.max(timing.now, later) + (extras.get(name) ?? 0);
+      const value = Math.max(timing.now, later) + (extras.get(name) ?? 0);
+      const card = buying && tuning.playWindow > 0 ? cards.find((candidate) => candidate.name === name) : undefined;
+      return card !== undefined && value > 0 ? value * playWindowFactor(card, player) : value;
     },
     timingOf: (name) => timings.get(name),
   };
+}
+
+/**
+ * Strategy guides: a bought card needs a play window of 1–3 generations. Cards that wait longer
+ * for oxygen, temperature or oceans are frozen capital (a human game: in generation 5, 8 of 11
+ * hand cards waited for global parameters).
+ */
+function playWindowFactor(card: ICard, player: IPlayer): number {
+  if (!isIProjectCard(card)) {
+    return 1;
+  }
+  const wait = globalWait(card, player);
+  return wait <= 1 ? 1 : wait <= 3 ? 0.75 : 0.35;
+}
+
+/** Hand cards the player can still pay in the next three generations, minus what the hand already costs. */
+function payableRoom(player: IPlayer): number {
+  const income = player.production.get(Resource.MEGACREDITS) + player.terraformRating;
+  const money = player.megaCredits + 3 * income;
+  const handCost = player.cardsInHand.reduce((sum, card) => sum + player.getCardCost(card), 0);
+  // About 18 M€ per further card: an average card plus its price.
+  return Math.floor((money - handCost) / 18);
 }
 
 const round = (value: number) => Math.round(value * 10) / 10;
@@ -196,6 +222,11 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
     const opponentValues = denial > 0 ? receiverValues(input, player, candidates) : new Map<CardName, number>();
     const draftScore = (card: ICard) => valueOf(card.name) + denial * Math.max(0, opponentValues.get(card.name) ?? 0);
     const picked = [...candidates].sort((a, b) => draftScore(b) - draftScore(a)).slice(0, input.config.min);
+    // Card memory: the rest goes to the next player (draftMemory.ts).
+    const receiver = draftReceiver(input, player);
+    if (receiver !== undefined) {
+      rememberPassedCards(player.game.id, player.id, receiver.id, candidates.filter((card) => !picked.includes(card)).map((card) => card.name));
+    }
     if (isTracingDecision()) {
       traceOptions('draft', sorted.map((card) => cardOption('', card, valueOf, timingOf, picked.includes(card),
         opponentValues.has(card.name) ? `für Nächsten ${round(opponentValues.get(card.name) ?? 0)}` : undefined)));
@@ -210,7 +241,7 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
   // Dead cards (requirements out of reach) do not fill the hand: they blocked buying for
   // eight generations in a test game.
   const usefulHandCards = [...handCardValues(player).values()].filter((value) => value > 1).length;
-  const room = Math.max(0, handTarget - usefulHandCards);
+  const room = Math.max(0, Math.min(handTarget - usefulHandCards, tuning.playWindow > 0 ? payableRoom(player) : Number.POSITIVE_INFINITY));
   const budget = player.megaCredits - (remaining >= 4 ? tuning.researchReserveEarly : 10);
   // Also when the game will probably end in this generation: buying for "later" is mostly lost then.
   const bought = remaining === 0 || lastGenerationLikelihood(player.game) >= 0.5 ?

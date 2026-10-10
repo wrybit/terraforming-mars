@@ -1,6 +1,9 @@
 import {expect} from 'chai';
 import {testGame} from '../TestGame';
-import {snapshotOf} from '../../src/server/ai/gameCopy';
+import {hideUnknownCards, snapshotOf} from '../../src/server/ai/gameCopy';
+import {rememberPassedCards} from '../../src/server/ai/draftMemory';
+import {runInSandbox} from '../../src/server/ai/simulationSandbox';
+import {Game} from '../../src/server/Game';
 
 type SerializedPlayer = {id: string, cardsInHand: Array<string>, [list: string]: unknown};
 const HIDDEN = ['cardsInHand', 'draftedCards', 'draftHand', 'dealtProjectCards'];
@@ -31,5 +34,22 @@ describe('AI game copy', () => {
       }
     }
     expect(changedHands).greaterThan(3);
+  });
+});
+
+describe('AI draft memory', () => {
+  it('puts cards passed in the draft into the imagined opponent hand', () => {
+    const [game, player, opponent] = testGame(2);
+    opponent.cardsInHand.push(...game.projectDeck.drawN(game, 4));
+    const passed = game.projectDeck.drawPile.slice(-2).map((card) => card.name);
+    rememberPassedCards(game.id, player.id, opponent.id, passed);
+    runInSandbox(() => {
+      const copy = Game.deserialize(game.serialize());
+      // random() = 0: every remembered card counts as kept.
+      hideUnknownCards(copy, player.id, () => 0, true);
+      const hand = copy.getPlayerById(opponent.id).cardsInHand.map((card) => card.name);
+      expect(hand).to.include.members(passed);
+      expect(hand).has.length(4);
+    });
   });
 });

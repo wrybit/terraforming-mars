@@ -88,6 +88,10 @@ export type AiTuning = {
   rolloutMargin: number,
   /** M€ per VP of difference to the average end score of a city on that spot in BGA games (Tharsis, first cities; spaceValue.ts), 0 = off. */
   citySpotPrior: number,
+  /** 1: imagined opponent hands prefer the cards passed to them in the draft (draftMemory.ts). */
+  draftMemory: number,
+  /** 1: buying discounts cards that wait long for global parameters and stops when the hand cannot be paid for (cardSelection.ts). */
+  playWindow: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -161,6 +165,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 20: citySpots neutral in AI-vs-AI (-0.4 VP, z -0.5), adopted for the human case: the first
   // city went next to Noctis although better standard spots exist (Jens).
   citySpotPrior: 1,
+  draftMemory: 0,
+  playWindow: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -276,6 +282,12 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Jens: the first city went next to Noctis although better standard spots exist (BGA: D7, G4, C5).
   // Before round 20: no BGA spot prior.
   noCitySpots: {citySpotPrior: 0},
+  // Jens: remember the cards seen in the draft, like a human player.
+  draftMemory: {draftMemory: 1},
+  // Strategy guides (rusliksu/tm-tierlist): a bought card needs a play window of 1–3 generations,
+  // a big hand without money is frozen capital. Three-player human game: in generation 5, 8 of 11
+  // hand cards waited for global parameters.
+  playWindow: {playWindow: 1},
 };
 
 export function isTuningVariant(name: string): boolean {
