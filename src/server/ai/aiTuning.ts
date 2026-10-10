@@ -302,6 +302,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   engine1: {engineWeight: 1},
   // Rollouts at a price human games can bear: 2 moves, 0.6 s, only close decisions.
   rolloutCheap: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5},
+  // Round 23: weights tuned against earlier baselines, re-checked against today's one (no extra computing time).
+  draftDenial75: {draftDenial: 0.75},
+  draftDenial25: {draftDenial: 0.25},
+  prior45: {cardPriorWeight: 4.5},
 };
 
 export function isTuningVariant(name: string): boolean {
