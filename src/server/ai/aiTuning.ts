@@ -306,6 +306,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   draftDenial75: {draftDenial: 0.75},
   draftDenial25: {draftDenial: 0.25},
   prior45: {cardPriorWeight: 4.5},
+  // Round 24: a test game takes ~30 s on the reference machine, 60 s are acceptable – spend the time on search.
+  search16: {secondStepCandidates: 16},
+  rolloutTiny: {rolloutCandidates: 2, rolloutBudget: 300, rolloutMargin: 3},
 };
 
 export function isTuningVariant(name: string): boolean {
