@@ -153,8 +153,9 @@ export const BASELINE_TUNING: AiTuning = {
   endgameMoney: 1,
   accumulatorValue: 0,
   peek: 0,
-  // Round 18 (400 mirrored 1v1 games): rollout3 +2.7 VP per deal, z 2.45, 55 % wins.
-  rolloutCandidates: 3,
+  // Round 18 (400 mirrored 1v1 games): rollout3 +2.7 VP per deal, z 2.45, 55 % wins – but a test game took
+  // 516 s instead of 69 s and human games felt far too slow (Jens, 2026-10-10): off again until cheaper.
+  rolloutCandidates: 0,
   rolloutBudget: 4000,
   rolloutMargin: 0,
   // Round 20: citySpots neutral in AI-vs-AI (-0.4 VP, z -0.5), adopted for the human case: the first
