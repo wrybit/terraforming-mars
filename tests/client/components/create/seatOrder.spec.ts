@@ -29,4 +29,10 @@ describe('seatOrder', () => {
     const again = arrangeSeats(fewer, 2, 2, 1);
     expect(again.slice(0, 3).map((p) => p.name)).deep.eq(['Jens', 'Daniel', 'Claude']);
   });
+
+  it('a seat that becomes an AI player starts on hard', () => {
+    const players = [seat('Jens', 'blue'), seat('', 'red'), seat('', 'green')];
+    const arranged = arrangeSeats(players, 1, 1, 2);
+    expect(arranged.slice(1, 3).map((p) => p.aiLevel)).deep.eq(['hard', 'hard']);
+  });
 });

@@ -2,6 +2,9 @@
 export const AI_LEVELS = ['easy', 'normal', 'hard'] as const;
 export type AiLevel = typeof AI_LEVELS[number];
 
+/** Strength a seat gets as soon as it becomes an AI player in the create form (Jens: always hard). */
+export const DEFAULT_AI_LEVEL: AiLevel = 'hard';
+
 export function isAiLevel(value: unknown): value is AiLevel {
   return typeof value === 'string' && (AI_LEVELS as ReadonlyArray<string>).includes(value);
 }

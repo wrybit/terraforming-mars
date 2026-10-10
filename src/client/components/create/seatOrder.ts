@@ -1,4 +1,5 @@
 import {NewPlayerModel} from '@/common/game/NewGameConfig';
+import {DEFAULT_AI_LEVEL} from '@/common/ai/AiLevel';
 
 // Stable identity per seat object, so list animations follow the player and not the position
 const seatKeys = new WeakMap<NewPlayerModel, number>();
@@ -46,7 +47,7 @@ export function arrangeSeats(
   }
   while (ais.length < aiCount && unused.length > 0) {
     const seat = unused.shift() as NewPlayerModel;
-    seat.aiLevel = seat.aiLevel ?? 'normal';
+    seat.aiLevel = seat.aiLevel ?? DEFAULT_AI_LEVEL;
     ais.push(seat);
   }
   return [...humans, ...ais, ...unused];

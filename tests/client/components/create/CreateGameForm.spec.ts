@@ -86,7 +86,7 @@ describe('CreateGameForm', () => {
     vm.humanPlayersCount = 2;
     vm.aiPlayersCount = 2;
     expect(vm.playersCount).eq(4);
-    expect(vm.getPlayers().map((player: any) => player.aiLevel)).deep.eq([undefined, undefined, 'normal', 'normal']);
+    expect(vm.getPlayers().map((player: any) => player.aiLevel)).deep.eq([undefined, undefined, 'hard', 'hard']);
 
     // More humans: the AI row gives way
     vm.humanPlayersCount = 5;
@@ -118,7 +118,7 @@ describe('CreateGameForm', () => {
     vm.aiPlayersCount = 1;
     vm.getPlayers()[1].name = 'Bot';
     vm.humanPlayersCount = 2;
-    expect(vm.getPlayers().map((player: any) => player.aiLevel)).deep.eq([undefined, undefined, 'normal']);
+    expect(vm.getPlayers().map((player: any) => player.aiLevel)).deep.eq([undefined, undefined, 'hard']);
     expect(vm.getPlayers()[2].name).eq('Bot');
   });
 
