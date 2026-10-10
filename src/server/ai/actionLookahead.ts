@@ -19,7 +19,7 @@ import {handCardValues} from './cardValue';
 import {isTracingDecision, traceOptions} from './decisionTrace';
 import {describeResponse} from './decisionLabels';
 import {tuningOf} from './aiTuning';
-import {RolloutEntry, rolloutMeans} from './rolloutSearch';
+import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
 
 // Decides an action-phase move by playing every candidate move on a copy of the game and
 // valuing the resulting position (one-step lookahead). This captures the effect of any card
@@ -246,18 +246,33 @@ function passPenaltyFor(player: IPlayer): number {
   return tuning.passPenalty > 0 && remainingProductionPhases(player.game, player) > 0 ? tuning.passPenalty * Math.min(player.megaCredits, 40) : 0;
 }
 
+/** Rollout policy of a tuning: greedy over a few moves, or quick rules without copies (undefined). */
+function rolloutPolicy(moves: number): RolloutPolicy {
+  return moves > 0 ? (menu, player) => greedyAction(menu, player, moves) : () => undefined;
+}
+
+/** Decisions where playing on pays off: passing, milestone and award races. */
+function isKeyMove(menu: OrOptions, response: InputResponse): boolean {
+  const option = response.type === 'or' ? menu.options[response.index] : undefined;
+  if (option === undefined) {
+    return false;
+  }
+  const title = typeof option.title === 'string' ? option.title : option.title.message;
+  return title === 'Pass for this generation' || title === 'Claim a milestone' || title.startsWith('Fund an award');
+}
+
 function isPass(menu: OrOptions, response: InputResponse): boolean {
   const option = response.type === 'or' ? menu.options[response.index] : undefined;
   return option instanceof SelectOption && option.title === 'Pass for this generation';
 }
 
 /** Fast move choice inside rollouts: one step, a few moves, no hand values and no reply. */
-export function greedyAction(menu: OrOptions, player: IPlayer): InputResponse | undefined {
+export function greedyAction(menu: OrOptions, player: IPlayer, moves = GREEDY_CANDIDATES): InputResponse | undefined {
   const snapshot = snapshotOf(player.game);
   const context = valuationContext(player.game, player);
   const penalty = passPenaltyFor(player);
   let best: {response: InputResponse, value: number} | undefined;
-  for (const candidate of candidatesFor(menu, player).slice(0, GREEDY_CANDIDATES)) {
+  for (const candidate of candidatesFor(menu, player).slice(0, moves)) {
     const outcome = tryCandidate(snapshot, player, menu.options.length, candidate, context, false);
     if (outcome === undefined) {
       continue;
@@ -361,8 +376,11 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
         entries.push({snapshot: entry.outcome.snapshot, firstMove: entry.outcome.bestSecond?.response});
       }
     }
-    if (finalists.length > 1 && entries.length === finalists.length) {
-      const means = rolloutMeans(entries, player.id, greedyAction, rolloutBudget, MINIMUM_ROLLOUTS, MAXIMUM_ROLLOUTS);
+    // Focus: ordinary moves are judged well enough by the plain value; races and passing are not.
+    const focused = tuning.rolloutFocus <= 0 || remainingProductionPhases(player.game, player) <= 1 ||
+      finalists.some((entry) => isKeyMove(menu, entry.candidate.response));
+    if (focused && finalists.length > 1 && entries.length === finalists.length) {
+      const means = rolloutMeans(entries, player.id, rolloutPolicy(tuning.rolloutPolicyMoves), rolloutBudget, MINIMUM_ROLLOUTS, MAXIMUM_ROLLOUTS, tuning.rolloutHorizon);
       if (means !== undefined) {
         const plainValues = finalists.map((entry) => entry.outcome.value).sort((a, b) => b - a);
         finalists.map((entry, index) => ({entry, mean: means[index]}))

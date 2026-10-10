@@ -51,7 +51,7 @@ function answer(player: IPlayer, policy: RolloutPolicy): boolean {
  * Value for `playerId` after playing the copy to the end of the current generation (or the end
  * of the game). Undefined when the rollout got stuck or ran out of time.
  */
-export function rolloutValue(snapshot: GameSnapshot, playerId: PlayerId, firstMove: InputResponse | undefined, policy: RolloutPolicy, deadline: number, seed: number): number | undefined {
+export function rolloutValue(snapshot: GameSnapshot, playerId: PlayerId, firstMove: InputResponse | undefined, policy: RolloutPolicy, deadline: number, seed: number, horizon = 0): number | undefined {
   return withCopy(snapshot, (copy) => {
     // The same seed for every move of one round: all moves meet the same imagined hands and
     // draw pile (common random numbers), so the comparison is not drowned in card luck.
@@ -65,14 +65,19 @@ export function rolloutValue(snapshot: GameSnapshot, playerId: PlayerId, firstMo
       }
     }
     const generation = copy.generation;
+    let actions = 0;
     for (let step = 0; step < MAXIMUM_ROLLOUT_STEPS; step++) {
-      if (copy.phase === Phase.END || copy.generation !== generation) {
+      // A short horizon still sees the next turns (races, passing order) at a fraction of the cost.
+      if (copy.phase === Phase.END || copy.generation !== generation || (horizon > 0 && actions >= horizon)) {
         return relativeValue(player, valuationContext(copy, player));
       }
       if (performance.now() > deadline) {
         return undefined;
       }
       const waiting = copy.players.find((candidate) => candidate.getWaitingFor() !== undefined);
+      if (waiting !== undefined && isActionMenu(waiting.getWaitingFor())) {
+        actions++;
+      }
       if (waiting === undefined || !answer(waiting, policy)) {
         return undefined;
       }
@@ -87,7 +92,7 @@ export type RolloutEntry = {snapshot: GameSnapshot, firstMove: InputResponse | u
  * Mean rollout value per entry over complete rounds (one rollout per entry with the same seed),
  * as many rounds as fit the time budget. Undefined with fewer than `minimumRounds`.
  */
-export function rolloutMeans(entries: ReadonlyArray<RolloutEntry>, playerId: PlayerId, policy: RolloutPolicy, budgetMilliseconds: number, minimumRounds: number, maximumRounds: number): Array<number> | undefined {
+export function rolloutMeans(entries: ReadonlyArray<RolloutEntry>, playerId: PlayerId, policy: RolloutPolicy, budgetMilliseconds: number, minimumRounds: number, maximumRounds: number, horizon = 0): Array<number> | undefined {
   const deadline = performance.now() + budgetMilliseconds;
   const sums = entries.map(() => 0);
   let rounds = 0;
@@ -95,7 +100,7 @@ export function rolloutMeans(entries: ReadonlyArray<RolloutEntry>, playerId: Pla
     const seed = Math.floor(Math.random() * 4294967296);
     const values: Array<number> = [];
     for (const entry of entries) {
-      const value = rolloutValue(entry.snapshot, playerId, entry.firstMove, policy, deadline, seed);
+      const value = rolloutValue(entry.snapshot, playerId, entry.firstMove, policy, deadline, seed, horizon);
       if (value === undefined) {
         break;
       }

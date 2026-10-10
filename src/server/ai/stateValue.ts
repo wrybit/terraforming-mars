@@ -7,6 +7,7 @@ import {ICard, isIActionCard} from '../cards/ICard';
 import {isTemperatureMaxed, remainingProductionPhases, stepsLeft, terraformingProgress, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
 import {boardPotential} from './boardPotential';
+import {lastGenerationSpotPoints} from './lastGenerationSpots';
 import {milestoneRacePoints} from './milestoneRace';
 import {recentAwardGrowth} from './awardHistory';
 
@@ -219,7 +220,11 @@ const LEFTOVER_MONEY_VALUE = 0.1;
 function lastGenerationMoneyValue(player: IPlayer, context: ValuationContext): number {
   const sellable = player.game.marsIsTerraformed() ? player.cardsInHand.length : 0;
   const money = player.megaCredits + sellable;
-  const greeneries = Math.floor(money / GREENERY_PROJECT_COST);
+  // After passing nothing can be bought any more: the money is lost. Without this a pass kept the
+  // 0.6 VP per greenery the money "could still buy" – a human test game: passed with 47 M€ and
+  // three free spots in the last generation.
+  const passed = tuningOf(player).passedMoneyLost > 0 && player.game.hasPassedThisActionPhase(player);
+  const greeneries = passed ? 0 : Math.floor(money / GREENERY_PROJECT_COST);
   return greeneries * UNBOUGHT_GREENERY_SHARE * context.victoryPoint + (money - greeneries * GREENERY_PROJECT_COST) * LEFTOVER_MONEY_VALUE;
 }
 
@@ -361,5 +366,9 @@ export function relativeValue(player: IPlayer, frozen: ValuationContext): number
   // Two players: every point of the opponent counts as much as an own one (aiTuning.ts).
   const weight = opponents.length === 1 ? tuning.opponentWeightTwoPlayers : OPPONENT_WEIGHT;
   const closer = tuning.closer > 0 ? tuning.closer * closerTerm(player, frozen) : 0;
-  return own - weight * opponentAverage + closer - tuning.terraformBrake * stepsRaised(player, frozen);
+  // Last generation: what the opponents can still build on the free land counts against us, so
+  // taking a spot first is worth more than keeping the money (lastGenerationSpots.ts).
+  const spotThreat = tuning.lastGenerationSpots > 0 && contextFor(player.game, context).remaining === 0 ?
+    opponents.reduce((sum, opponent) => sum + lastGenerationSpotPoints(opponent), 0) / opponents.length * context.victoryPoint : 0;
+  return own - weight * (opponentAverage + spotThreat) + closer - tuning.terraformBrake * stepsRaised(player, frozen);
 }

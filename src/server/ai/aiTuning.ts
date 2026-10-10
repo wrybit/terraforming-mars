@@ -94,6 +94,16 @@ export type AiTuning = {
   playWindow: number,
   /** 1: award scores are projected with their growth over the last two generations (awardHistory.ts). */
   awardTrend: number,
+  /** Rollout policy: moves tried per decision inside a rollout, 0 = quick rules without game copies (actionLookahead.ts). */
+  rolloutPolicyMoves: number,
+  /** Rollouts stop after this many action choices and value the position, 0 = play to the end of the generation. */
+  rolloutHorizon: number,
+  /** 1: rollouts only for key decisions – a pass, a milestone or award among the finalists, or the last two generations. */
+  rolloutFocus: number,
+  /** 1: in the last generation the greeneries the opponents can still afford on the free land count against the AI (lastGenerationSpots.ts). */
+  lastGenerationSpots: number,
+  /** 1: in the last generation money left after passing is worth nothing (stateValue.ts lastGenerationMoneyValue). */
+  passedMoneyLost: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -173,6 +183,12 @@ export const BASELINE_TUNING: AiTuning = {
   draftMemory: 1,
   playWindow: 0,
   awardTrend: 1,
+  rolloutPolicyMoves: 8,
+  rolloutHorizon: 0,
+  rolloutFocus: 0,
+  lastGenerationSpots: 0,
+  // Human test game (2026-10-10): passed in the last generation with 47 M€ while greeneries were affordable.
+  passedMoneyLost: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -309,6 +325,17 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 24: a test game takes ~30 s on the reference machine, 60 s are acceptable – spend the time on search.
   search16: {secondStepCandidates: 16},
   rolloutTiny: {rolloutCandidates: 2, rolloutBudget: 300, rolloutMargin: 3},
+  // rolloutCheap took 62 s per test game instead of 28 s: every move inside a rollout tried 8 moves on
+  // game copies, to the end of the generation, for every close decision. Cheaper: 3 moves, 8 actions
+  // deep, key decisions only – or quick rules without copies at all.
+  rolloutFast: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 8, rolloutFocus: 1},
+  rolloutQuick: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 0, rolloutHorizon: 8, rolloutFocus: 1},
+  // Human test game (2026-10-10): passed in the last generation with 47 M€ next to three free spots,
+  // the human filled them next to his cities.
+  lastSpots: {lastGenerationSpots: 1},
+  // Before 2026-10-10: money after a pass in the last generation kept its greenery value.
+  passedMoneyKept: {passedMoneyLost: 0},
+  rolloutFastWide: {rolloutCandidates: 3, rolloutBudget: 1000, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 8, rolloutFocus: 1},
 };
 
 export function isTuningVariant(name: string): boolean {
