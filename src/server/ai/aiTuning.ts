@@ -157,7 +157,9 @@ export const BASELINE_TUNING: AiTuning = {
   rolloutCandidates: 3,
   rolloutBudget: 4000,
   rolloutMargin: 0,
-  citySpotPrior: 0,
+  // Round 20: citySpots neutral in AI-vs-AI (-0.4 VP, z -0.5), adopted for the human case: the first
+  // city went next to Noctis although better standard spots exist (Jens).
+  citySpotPrior: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -271,7 +273,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Rollouts made a 2P test game take ~600 s: clear decisions (best move 5 M€ ahead) skip them.
   rolloutGate: {rolloutMargin: 5},
   // Jens: the first city went next to Noctis although better standard spots exist (BGA: D7, G4, C5).
-  citySpots: {citySpotPrior: 1},
+  // Before round 20: no BGA spot prior.
+  noCitySpots: {citySpotPrior: 0},
 };
 
 export function isTuningVariant(name: string): boolean {
