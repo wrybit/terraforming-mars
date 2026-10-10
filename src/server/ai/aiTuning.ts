@@ -115,7 +115,7 @@ export const BASELINE_TUNING: AiTuning = {
   // next to free land in generation 11 instead of a spot with three greeneries (Jens' game).
   boardHorizon: 6,
   laterPointValue: 0,
-  handSynergy: 0,
+  handSynergy: 1,
   // A/B: weight 1 (clipped at 0) lost 45 : 58, weight 0.5 won 58 : 43 in 100 games but 153 : 158
   // in 300 new games (z +0.3 vs +0.8) – no clear gain, so off again (it costs computing time).
   engineWeight: 0,
@@ -167,9 +167,12 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 20: citySpots neutral in AI-vs-AI (-0.4 VP, z -0.5), adopted for the human case: the first
   // city went next to Noctis although better standard spots exist (Jens).
   citySpotPrior: 1,
-  draftMemory: 0,
+  // Round 21 (1200 mirrored 1v1 games): draftMemory -0.4 VP (z -0.4), adopted: the AI should know what a
+  // human remembers (Jens); awardTrend +0.9 (z +1.0), adopted for Daniel's late Banker; handSynergy +1.2
+  // (z +1.3, round 20 +0.5), adopted (Martin). playWindow -1.3 and laterPoints -1.4 not adopted.
+  draftMemory: 1,
   playWindow: 0,
-  awardTrend: 0,
+  awardTrend: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -279,20 +282,20 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   laterPoints: {laterPointValue: 1},
   // Martin: synergies first (Viral Enhancers with plant/animal/microbe chains): effect cards are
   // measured with the own hand, not only with random future cards.
-  handSynergy: {handSynergy: 1},
+  noHandSynergy: {handSynergy: 0},
   // Rollouts made a 2P test game take ~600 s: clear decisions (best move 5 M€ ahead) skip them.
   rolloutGate: {rolloutMargin: 5},
   // Jens: the first city went next to Noctis although better standard spots exist (BGA: D7, G4, C5).
   // Before round 20: no BGA spot prior.
   noCitySpots: {citySpotPrior: 0},
   // Jens: remember the cards seen in the draft, like a human player.
-  draftMemory: {draftMemory: 1},
+  noDraftMemory: {draftMemory: 0},
   // Strategy guides (rusliksu/tm-tierlist): a bought card needs a play window of 1–3 generations,
   // a big hand without money is frozen capital. Three-player human game: in generation 5, 8 of 11
   // hand cards waited for global parameters.
   playWindow: {playWindow: 1},
   // Daniel (2026-10-10): Banker funded at 19 : 7 in generation 12, lost 22 : 33 – his engine came late.
-  awardTrend: {awardTrend: 1},
+  noAwardTrend: {awardTrend: 0},
   // Daniel won twice with a late engine while the AI led on TR: end the game sooner (closer was neutral at 1).
   closer2: {closer: 2},
 };
