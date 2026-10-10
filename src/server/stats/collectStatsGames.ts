@@ -46,6 +46,15 @@ function localStatsGame(game: IGame): StatsGame {
   };
 }
 
+// Ares variants share the translated name with the normal card ("Capital:ares" and "Capital" are both "Hauptstadt"),
+// so the screenshot analysis may pick the variant. A screenshot cannot show Ares, so the normal card is meant.
+const ARES_SUFFIX = ':ares';
+
+function screenshotCardName(name: string): string {
+  const base = name.endsWith(ARES_SUFFIX) ? name.slice(0, -ARES_SUFFIX.length) : name;
+  return resolveCardName(base) === base ? base : name;
+}
+
 /** Sanitize card names read from screenshots: unknown ones are dropped instead of skewing the statistics. */
 function knownCards(details: StatsGameDetails): StatsGameDetails {
   const known = (name: string): name is CardName => resolveCardName(name) === name;
@@ -53,8 +62,8 @@ function knownCards(details: StatsGameDetails): StatsGameDetails {
     ...details,
     players: details.players.map((player) => ({
       ...player,
-      cards: player.cards.filter(known),
-      cardPoints: player.cardPoints?.filter((card) => known(card.name)),
+      cards: player.cards.map(screenshotCardName).filter(known),
+      cardPoints: player.cardPoints?.map((card) => ({...card, name: screenshotCardName(card.name) as CardName})).filter((card) => known(card.name)),
     })),
   };
 }

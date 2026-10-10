@@ -113,12 +113,12 @@ describe('collectStatsGames', () => {
     ]);
   });
 
-  it('screenshot games: details read from the screenshot, unknown cards dropped', async () => {
+  it('screenshot games: details read from the screenshot, unknown cards dropped, Ares variants mean the normal card', async () => {
     writeFileSync(path.join(folder, 'screenshot-details', '2.json'), JSON.stringify({
       screenshotId: '2', gameId: undefined,
       details: {
         source: 'screenshot', cardsComplete: false, boardName: 'tharsis', expansions: [], milestones: [{name: 'Mayor', playerName: 'Jens'}], awards: [],
-        players: [{name: 'Jens', cards: ['Birds', 'Not a card'], cardPoints: [{name: 'Birds', points: 4}, {name: 'Not a card', points: 1}], pointsByGeneration: [20, 80]}],
+        players: [{name: 'Jens', cards: ['Birds', 'Not a card', 'Capital:ares'], cardPoints: [{name: 'Birds', points: 4}, {name: 'Not a card', points: 1}, {name: 'Capital:ares', points: 2}], pointsByGeneration: [20, 80]}],
       },
     }));
     importedGames.add(importedSummary('screenshot', undefined, 'imported-screenshot?id=2'));
@@ -126,7 +126,9 @@ describe('collectStatsGames', () => {
     const [game] = await collectStatsGames(gameLoader, importedGames, snapshots, screenshots);
 
     expect(game.details?.source).eq('screenshot');
-    expect(game.details?.players[0].cards).deep.eq(['Birds']);
-    expect(game.details?.players[0].cardPoints).deep.eq([{name: 'Birds', points: 4}]);
+    // A screenshot cannot show Ares: the Ares variant with the same translated name means the normal card
+    expect(game.details?.players[0].cards).deep.eq(['Birds', 'Capital']);
+    expect(game.details?.players[0].cardPoints).deep.eq([{name: 'Birds', points: 4}, {name: 'Capital', points: 2}]);
+    expect(game.details?.expansions).not.include('ares');
   });
 });
