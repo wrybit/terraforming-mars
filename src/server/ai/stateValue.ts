@@ -150,7 +150,7 @@ function productionPerGeneration(player: IPlayer, context: ValuationContext): nu
     production.steel * 1.6 +
     production.titanium * 2.5 +
     production.plants * tuningOf(player).plantProductionValue +
-    production.energy * 1.1 + // energy mostly ends up as heat
+    production.energy * tuningOf(player).energyProductionValue + // energy mostly ends up as heat
     production.heat * heatFactor;
 }
 

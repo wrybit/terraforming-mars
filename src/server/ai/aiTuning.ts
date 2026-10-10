@@ -108,6 +108,8 @@ export type AiTuning = {
   tagPointOutlook: number,
   /** Share of a milestone's 5 VP that full progress towards it is worth before the claim (milestoneRace.ts). */
   milestoneProgressShare: number,
+  /** M€ one energy production is worth per generation (stateValue.ts productionPerGeneration); 1.1 since the start. */
+  energyProductionValue: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -197,6 +199,7 @@ export const BASELINE_TUNING: AiTuning = {
   // a human scored 7–8 VP with each Jovian per-tag card while the AI valued them with today's tags.
   tagPointOutlook: 0.6,
   milestoneProgressShare: 0.5,
+  energyProductionValue: 1.1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -356,6 +359,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   milestoneRace30: {milestoneProgressShare: 0.3},
   // Bundle of small, repeatedly positive changes (rounds 23–28: moreCardsAgain +0.17/+0.44/+0.12, production105
   // +0.38, search16 +0.55): tested together with all games, so a combined gain of ~1 VP becomes measurable.
+  // Human test game (2026-10-10, 84 : 186): the AI bought nine energy cards (Power Infrastructure, Fusion Power,
+  // Quantum Extractor …) with few uses for the energy – is energy production overvalued?
+  energy07: {energyProductionValue: 0.7},
+  energy09: {energyProductionValue: 0.9},
   bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},
   // Round 25: rolloutFast +1.0 VP (z +1.25) at 34 s per test game – re-checked with variations.
   rolloutFastDeep: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 16, rolloutFocus: 1},
