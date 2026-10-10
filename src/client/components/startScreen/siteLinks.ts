@@ -29,3 +29,7 @@ export const SITE_LINKS: ReadonlyArray<SiteLink> = [
   {label: 'Discord', icon: 'discord', planet: 'neptune', href: constants.DISCORD_INVITE, external: true, inMenu: false},
   {label: 'Team', icon: 'about', planet: 'moon', href: UPSTREAM_REPOSITORY_URL + '#-contributors-', external: true, inMenu: false},
 ];
+
+// Only in the game menu, above "New game": the way back to the start page from every other page.
+// Not a globe on the start page itself, where it would lead to the page you are on.
+export const START_PAGE_LINK: Pick<SiteLink, 'label' | 'icon' | 'href'> = {label: 'Start page', icon: 'mars', href: './'};

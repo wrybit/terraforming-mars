@@ -116,7 +116,7 @@ import PreferencesDialog from '@/client/components/PreferencesDialog.vue';
 import {PreferencesManager} from '@/client/utils/PreferencesManager';
 import {LANGUAGE} from '@/common/constants';
 import {translateText} from '@/client/directives/i18n';
-import {SITE_LINKS} from '@/client/components/startScreen/siteLinks';
+import {SITE_LINKS, START_PAGE_LINK} from '@/client/components/startScreen/siteLinks';
 import {GAME_MENU_CONTEXT} from '@/client/components/gameMenu/gameMenuContext';
 
 withDefaults(defineProps<{
@@ -144,7 +144,11 @@ const buttonLabel = computed(() => {
 
 // The page the menu is on is not offered again (e.g. "Statistics" on /stats)
 const currentPage = window.location.pathname.split('/').pop() ?? '';
-const navigationLinks = SITE_LINKS.filter((link) => link.inMenu && link.href !== currentPage);
+// On the start page itself (empty last path segment) the way back to it is missing
+const navigationLinks = [
+  ...(currentPage === '' ? [] : [START_PAGE_LINK]),
+  ...SITE_LINKS.filter((link) => link.inMenu && link.href !== currentPage),
+];
 
 const injected = inject(GAME_MENU_CONTEXT, undefined);
 const context = computed(() => injected?.value);

@@ -63,6 +63,22 @@ describe('GameMenu', () => {
     wrapper.unmount();
   });
 
+  it('offers the start page first on every other page, the current page not again', async () => {
+    window.history.replaceState(null, '', '/stats');
+    try {
+      const wrapper = mount(GameMenu, {...globalConfig, attachTo: document.body});
+      await wrapper.find('.game-menu-button').trigger('click');
+      const links = document.body.querySelectorAll<HTMLAnchorElement>('nav.game-menu-panel a.game-menu-item');
+      const hrefs = Array.from(links).map((link) => link.getAttribute('href'));
+      expect(hrefs.slice(0, 2)).deep.eq(['./', 'new-game']);
+      expect(hrefs).not.include('stats');
+      expect(links[0].textContent).contains('Start page');
+      wrapper.unmount();
+    } finally {
+      window.history.replaceState(null, '', '/');
+    }
+  });
+
   it('always shows the fan project notice, also without navigation and in the game', async () => {
     for (const props of [{navigation: true}, {navigation: false}]) {
       const wrapper = mount(GameMenu, {...globalConfig, props, attachTo: document.body});
