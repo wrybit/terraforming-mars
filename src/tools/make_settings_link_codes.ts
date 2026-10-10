@@ -57,5 +57,5 @@ if (checkOnly) {
   const lines = Object.entries(existing).map(([table, entries]) =>
     `  ${JSON.stringify(table)}: [\n${entries.map((entry) => `    ${JSON.stringify(entry)}`).join(',\n')}\n  ]`);
   fs.writeFileSync(CODES_FILE, `{\n${lines.join(',\n')}\n}\n`);
-  console.log(`settingsLinkCodes.json: ${added} neue Werte`);
+  console.log(`settingsLinkCodes.json: ${added} new values`);
 }
