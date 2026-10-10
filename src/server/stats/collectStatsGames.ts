@@ -11,6 +11,7 @@ import {Server} from '../models/ServerModel';
 import {statsGameDetails} from './statsGameDetails';
 import {resolveCardName} from './cardNameResolver';
 import {ScreenshotDetailsStore} from './ScreenshotDetailsStore';
+import {withScreenshotSetup} from './screenshotSetup';
 import {CardName} from '../../common/cards/CardName';
 import {StatsGameDetails} from '../../common/stats/StatsGame';
 
@@ -69,7 +70,12 @@ function importedDetails(summary: AdminGameSummary, snapshots: ImportedSnapshots
   }
   const screenshotId = screenshotIdOf(summary);
   const fromScreenshot = screenshotId === undefined ? undefined : screenshots.get(screenshotId);
-  return fromScreenshot === undefined ? undefined : knownCards(fromScreenshot.details);
+  if (fromScreenshot === undefined) {
+    return undefined;
+  }
+  const corporations = summary.players.flatMap((player) => (canonicalCorporations(player.corporation) ?? '').split(' / '))
+    .filter((name): name is CardName => name !== '');
+  return withScreenshotSetup(knownCards(fromScreenshot.details), corporations);
 }
 
 function importedStatsGame(summary: AdminGameSummary, snapshots: ImportedSnapshotsStore, screenshots: ScreenshotDetailsStore): StatsGame {

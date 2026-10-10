@@ -108,6 +108,6 @@ function differs(value: number | undefined, defaultValue: number): boolean {
   return value !== undefined && value !== defaultValue;
 }
 
-function countLabel(label: string, count: number): string {
+function countLabel(label: string, count: number | undefined): string {
   return `${translateText(label)}: ${count}`;
 }

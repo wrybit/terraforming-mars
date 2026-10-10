@@ -17,9 +17,10 @@ export type GameSetupOptions = {
   moonStandardProjectVariant: boolean;
   aresExtremeVariant: boolean;
   // Setup
-  startingCorporations: number;
-  startingPreludes: number;
-  startingCeos: number;
+  // Undefined: not known (screenshots, old saved games)
+  startingCorporations: number | undefined;
+  startingPreludes: number | undefined;
+  startingCeos: number | undefined;
   twoCorpsVariant: boolean;
   draftVariant: boolean;
   initialDraftVariant: boolean;
