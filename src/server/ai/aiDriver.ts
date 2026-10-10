@@ -8,6 +8,7 @@ import {randomResponse} from './randomResponse';
 import {isSimulating} from './simulationSandbox';
 import {registerAiHook} from './aiHook';
 import {isActionMenu} from './gameCopy';
+import {Phase} from '../../common/Phase';
 
 // Plays the moves of AI players on the server. Player.setWaitingFor reports every new input of
 // an AI player; the move is made a little later so humans can follow the game.
@@ -87,6 +88,13 @@ function scheduleAiMove(player: IPlayer): void {
   }
   const input = player.getWaitingFor();
   if (input === undefined) {
+    return;
+  }
+  // After its draft pick the AI is offered to change it while the others still choose. Answering
+  // swapped the pick each time (the picked card is disabled in that offer), 253 times in one human
+  // game, and the last swap kept the second-best card. The first pick stands.
+  const drafting = player.game.phase === Phase.DRAFTING || player.game.phase === Phase.INITIALDRAFTING;
+  if (drafting && input.optional === true) {
     return;
   }
   // The pause only lets humans follow the game; without humans the AI plays at full speed.
