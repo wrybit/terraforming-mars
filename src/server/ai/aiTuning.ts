@@ -106,6 +106,8 @@ export type AiTuning = {
   passedMoneyLost: number,
   /** Weight of the VP that per-tag cards (1 VP per Jovian tag …) still gain from tags in hand and the own pace (tagPointOutlook.ts), 0 = off. */
   tagPointOutlook: number,
+  /** Share of a milestone's 5 VP that full progress towards it is worth before the claim (milestoneRace.ts). */
+  milestoneProgressShare: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -194,6 +196,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 27 (1200 mirrored 1v1 games): tagOutlook60 −0.07 VP (z −0.09), adopted for the human case:
   // a human scored 7–8 VP with each Jovian per-tag card while the AI valued them with today's tags.
   tagPointOutlook: 0.6,
+  milestoneProgressShare: 0.5,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -346,6 +349,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   tagOutlook60: {tagPointOutlook: 0.6},
   // Before round 28: per-tag VP cards valued with today's tags only.
   noTagOutlook: {tagPointOutlook: 0},
+  // Human test games (2026-10-10): the human took all three milestones by generation 6 (15 : 0 VP);
+  // progress towards a milestone worth more pushes the AI into the race earlier.
+  milestoneRace75: {milestoneProgressShare: 0.75},
+  milestoneRace90: {milestoneProgressShare: 0.9},
+  milestoneRace30: {milestoneProgressShare: 0.3},
   // Round 25: rolloutFast +1.0 VP (z +1.25) at 34 s per test game – re-checked with variations.
   rolloutFastDeep: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 16, rolloutFocus: 1},
   rolloutFastAll: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 8, rolloutFocus: 0},
