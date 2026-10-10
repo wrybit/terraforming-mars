@@ -1,7 +1,7 @@
 import {IPlayer} from '../IPlayer';
 
 // Adjustable AI parameters, so that two variants can play against each other in the same test
-// game (A/B seats in tests/simulation/runAiBatch.ts). The server always plays the baseline.
+// game (A/B seats in AI test batches). The server always plays the baseline.
 
 export type AiTuning = {
   /** A card is bought when its value exceeds price + margin (M€). */
@@ -176,7 +176,7 @@ export const BASELINE_TUNING: AiTuning = {
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
-// expected (z ≥ 1.64 in tests/simulation/compareVariants.py); 100 games are often not enough.
+// expected (z ≥ 1.64); 100 games are often not enough.
 export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   baseline: {},
   // Identical copy of the baseline: shows how far two equal AIs drift apart by chance (A/A test).
@@ -229,7 +229,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noPrior: {cardPriorWeight: 0},
   strongPrior: {cardPriorWeight: 6},
   collectors: {accumulatorValue: 0.8},
-  // Draft preferences of ~48 000 two-player BGA games (tests/simulation/analyzeBgaGames.py).
+  // Draft preferences of ~48 000 two-player BGA games.
   draftPrior: {draftPriorWeight: 1},
   draftPriorStrong: {draftPriorWeight: 2},
   draftPriorOnly: {draftPriorWeight: 2, cardPriorWeight: 0},

@@ -5,7 +5,7 @@ import {Database} from '../../src/server/database/Database';
 import {runInSandbox, isSimulating} from '../../src/server/ai/simulationSandbox';
 import {chooseResponse} from '../../src/server/ai/chooseResponse';
 import {aiPlayerName} from '../../src/common/ai/AiLevel';
-import {playRandomGame} from '../simulation/playRandomGame';
+import {playRandomGame} from './playRandomGame';
 import {testGame} from '../TestGame';
 import {Server} from '../../src/server/models/ServerModel';
 import {SelectOption} from '../../src/server/inputs/SelectOption';

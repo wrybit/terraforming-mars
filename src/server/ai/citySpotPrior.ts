@@ -5,8 +5,7 @@ import {BoardName} from '../../common/boards/BoardName';
 import {getSpaceName} from '../../common/boards/spaces';
 import citySpots from './data/bgaCitySpotsTharsis.json';
 
-// Opening city spots from 46 477 Tharsis two-player games on BGA (tests/simulation/
-// analyzeBgaCitySpots.py): average end score of a city on each spot. Jens noticed the AI kept
+// Opening city spots from 46 477 Tharsis two-player games on BGA: average end score of a city on each spot. It turned out the AI kept
 // opening next to Noctis City although the common standard spots score more (D7 3.8, G4 4.0,
 // C5 3.7 against E2 3.0). Only for the first cities of a player and only on Tharsis.
 
