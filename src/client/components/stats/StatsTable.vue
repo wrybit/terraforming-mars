@@ -13,7 +13,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in sortedRows" :key="rowKey(row)">
+        <!-- With rowHref the whole row opens its link; links and buttons inside keep their own target -->
+        <tr v-for="row in sortedRows" :key="rowKey(row)" :class="{'stats-table-row--link': linkOf(row) !== undefined}"
+          :tabindex="linkOf(row) !== undefined ? 0 : undefined" @click="openRow(row, $event)" @keydown.enter="openRow(row, $event)">
           <td v-for="column in columns" :key="column.key" :class="{'stats-table-text': column.text}">
             <slot :name="column.key" :row="row" :rows="sortedRows">{{ column.format ? column.format(row) : column.value(row) }}</slot>
           </td>
@@ -40,6 +42,8 @@ export default defineComponent({
     rows: {type: Array as PropType<ReadonlyArray<any>>, required: true},
     rowKey: {type: Function as PropType<(row: any) => string>, required: true},
     initialSort: {type: String, required: true},
+    // Target of a row click (opens in a new tab like the result links); without it rows are not clickable
+    rowHref: {type: Function as PropType<(row: any) => string | undefined>, required: false},
   },
   data() {
     const column = this.columns.find((candidate) => candidate.key === this.initialSort);
@@ -68,6 +72,18 @@ export default defineComponent({
     },
   },
   methods: {
+    linkOf(row: any): string | undefined {
+      return this.rowHref?.(row);
+    },
+    openRow(row: any, event: Event): void {
+      const href = this.linkOf(row);
+      const target = event.target as HTMLElement | null;
+      // Own links (board chip, result button) already did their job
+      if (href === undefined || target?.closest('a, button') !== null) {
+        return;
+      }
+      window.open(href, '_blank', 'noopener');
+    },
     sortBy(column: StatsColumn): void {
       if (column.sortable === false) {
         return;

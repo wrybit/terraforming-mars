@@ -146,4 +146,25 @@ describe('Stats components', () => {
     // The board chip links to the board's statistics page
     expect(wrapper.findAll('tbody tr')[1].find('a.create-game-summary-chip').attributes('href')).contains('hellas');
   });
+
+  it('StatsGameList: the whole row opens the result, own links keep their target', async () => {
+    const opened: Array<string> = [];
+    const original = window.open;
+    window.open = ((url: string) => {
+      opened.push(url);
+      return null;
+    }) as typeof window.open;
+    try {
+      const wrapper = mount(StatsGameList, {...config, props: {games}});
+      const row = wrapper.findAll('tbody tr')[1];
+      expect(row.classes()).to.include('stats-table-row--link');
+      await row.findAll('td')[2].trigger('click');
+      expect(opened).deep.eq([games[1].resultUrl]);
+      // The result button is a real link: the row does not open a second tab
+      await row.find('a.stats-result-button').trigger('click');
+      expect(opened).has.length(1);
+    } finally {
+      window.open = original;
+    }
+  });
 });

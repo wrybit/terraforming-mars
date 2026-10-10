@@ -1,5 +1,5 @@
 <template>
-  <StatsTable class="stats-games" :columns="columns" :rows="games" :rowKey="rowKey" initialSort="date">
+  <StatsTable class="stats-games" :columns="columns" :rows="games" :rowKey="rowKey" :rowHref="resultHref" initialSort="date">
     <template #players="{row}">
       <span class="stats-game-players">
         <span v-for="player in row.summary.players" :key="player.name" class="stats-game-player" :class="[`player_translucent_bg_color_${player.color}`, {'stats-game-winner': player.isWinner, 'stats-game-other': isOther(row, player.name)}]">
@@ -12,7 +12,8 @@
       <GameSetupChips :chips="setupChips(row)" compact/>
     </template>
     <template #result="{row}">
-      <a v-if="row.resultUrl !== undefined" :href="row.resultUrl" target="_blank" class="stats-link" v-i18n>Result</a>
+      <!-- Real link styled as a button: opens in a new tab, middle click works too -->
+      <a v-if="row.resultUrl !== undefined" :href="row.resultUrl" target="_blank" class="btn btn-sm btn-rounded stats-result-button" v-i18n>Result</a>
     </template>
   </StatsTable>
 </template>
@@ -82,6 +83,9 @@ export default defineComponent({
         chips.push(...optionChips(options, isActive, players.length));
       }
       return chips;
+    },
+    resultHref(game: StatsGame): string | undefined {
+      return game.resultUrl;
     },
     rowKey(game: StatsGame): string {
       return game.summary.id;

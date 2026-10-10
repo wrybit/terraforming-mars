@@ -308,6 +308,20 @@
     background: rgba(255, 255, 255, 0.04);
   }
 
+  // Row that opens a link as a whole (game list → result page)
+  tbody tr.stats-table-row--link {
+    cursor: pointer;
+
+    &:hover td {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    &:focus-visible {
+      outline: 2px solid @highlight-gold;
+      outline-offset: -2px;
+    }
+  }
+
   tr:last-child td {
     border-bottom: 0;
   }
@@ -393,6 +407,14 @@
 
 .stats-game-winner {
   border-color: @stats-winner;
+}
+
+// Result link of a game as a button (StatsGameList.vue)
+.stats-result-button {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  text-decoration: none;
 }
 
 // Setup chips (GameSetupChips.vue): on narrow screens the table scrolls sideways anyway; without a minimum width
