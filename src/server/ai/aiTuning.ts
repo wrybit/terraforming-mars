@@ -92,6 +92,8 @@ export type AiTuning = {
   draftMemory: number,
   /** 1: buying discounts cards that wait long for global parameters and stops when the hand cannot be paid for (cardSelection.ts). */
   playWindow: number,
+  /** 1: award scores are projected with their growth over the last two generations (awardHistory.ts). */
+  awardTrend: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -167,6 +169,7 @@ export const BASELINE_TUNING: AiTuning = {
   citySpotPrior: 1,
   draftMemory: 0,
   playWindow: 0,
+  awardTrend: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -288,6 +291,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // a big hand without money is frozen capital. Three-player human game: in generation 5, 8 of 11
   // hand cards waited for global parameters.
   playWindow: {playWindow: 1},
+  // Daniel (2026-10-10): Banker funded at 19 : 7 in generation 12, lost 22 : 33 – his engine came late.
+  awardTrend: {awardTrend: 1},
+  // Daniel won twice with a late engine while the AI led on TR: end the game sooner (closer was neutral at 1).
+  closer2: {closer: 2},
 };
 
 export function isTuningVariant(name: string): boolean {

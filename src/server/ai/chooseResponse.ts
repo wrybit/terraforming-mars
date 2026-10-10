@@ -12,6 +12,8 @@ import {quickResponse} from './quickResponse';
 import {randomResponse} from './randomResponse';
 import {recordDecision} from './decisionTrace';
 import {describeResponse} from './decisionLabels';
+import {recordAwardScores} from './awardHistory';
+import {isSimulating} from './simulationSandbox';
 
 // Entry point of the rule-based AI (stage 1): which answer to give for the current input.
 
@@ -38,6 +40,10 @@ export function chooseResponse(input: PlayerInput, player: IPlayer, level: AiLev
 }
 
 function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputResponse {
+  // Award scores per generation for the trend (awardHistory.ts), only from the real game.
+  if (!isSimulating()) {
+    recordAwardScores(player.game);
+  }
   const profile = LEVEL_PROFILES[level];
   if (profile.randomShare > 0 && Math.random() < profile.randomShare) {
     return randomResponse(input, player, Math.random);

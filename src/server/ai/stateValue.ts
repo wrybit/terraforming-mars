@@ -8,6 +8,7 @@ import {isTemperatureMaxed, remainingProductionPhases, stepsLeft, terraformingPr
 import {tuningOf} from './aiTuning';
 import {boardPotential} from './boardPotential';
 import {milestoneRacePoints} from './milestoneRace';
+import {recentAwardGrowth} from './awardHistory';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights: docs/ai/bot-heuristics.md §1.
@@ -73,8 +74,10 @@ function awardConfidence(progress: number): number {
 function expectedAwardPoints(player: IPlayer, context: ValuationContext): number {
   let points = 0;
   for (const {award} of player.game.fundedAwards) {
-    const own = projectedAwardScore(award.getScore(player), context);
-    const best = Math.max(0, ...player.opponents.map((opponent) => projectedAwardScore(award.getScore(opponent), context)));
+    const trend = tuningOf(player).awardTrend > 0;
+    const own = projectedAwardScore(award.getScore(player), context, trend ? awardGrowth(player, award.name) : undefined);
+    const best = Math.max(0, ...player.opponents.map((opponent) =>
+      projectedAwardScore(award.getScore(opponent), context, trend ? awardGrowth(opponent, award.name) : undefined)));
     const margin = own - best;
     // How much an opponent can still gain: more early, and more for awards with big numbers.
     // awardSwing: plus a share of the score per remaining generation – Jens overtook three funded
@@ -96,12 +99,19 @@ function expectedAwardPoints(player: IPlayer, context: ValuationContext): number
  * looked safe ("terraforming almost done"); the game ran 3 more generations and the human, whose
  * tiles and steel/titanium grew much faster, won both (10 VP for him).
  */
-function projectedAwardScore(score: number, context: ValuationContext): number {
+function projectedAwardScore(score: number, context: ValuationContext, recentGrowth?: number): number {
+  // Recent growth (awardHistory.ts): a score that only now takes off grows faster than its average.
+  const byTrend = recentGrowth === undefined ? score : score + Math.max(0, recentGrowth) * context.remaining;
   if (context.awardTiming !== true) {
-    return score;
+    return byTrend;
   }
   const elapsed = Math.max(1, context.generation - 1);
-  return score * (elapsed + context.remaining) / elapsed;
+  return Math.max(byTrend, score * (elapsed + context.remaining) / elapsed);
+}
+
+function awardGrowth(player: IPlayer, awardName: string): number | undefined {
+  const award = player.game.fundedAwards.find((funded) => funded.award.name === awardName)?.award;
+  return award === undefined ? undefined : recentAwardGrowth(player.game.id, awardName, player.id, player.game.generation, award.getScore(player));
 }
 
 export function valuationContext(game: IGame, player?: IPlayer): ValuationContext {
