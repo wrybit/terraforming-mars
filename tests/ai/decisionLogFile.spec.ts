@@ -17,11 +17,13 @@ function record(gameId: string, chosen: string): DecisionRecord {
       megaCredits: 0, steel: 0, titanium: 0, plants: 0, energy: 0, heat: 0,
       production: {megacredits: 0, steel: 0, titanium: 0, plants: 0, energy: 0, heat: 0},
       terraformRating: 20, victoryPoints: 20, hand: [], tableau: 0,
+      tableauCards: [], draftedCards: [], tags: {},
     },
     globals: {temperature: -30, oxygen: 0, oceans: 0},
     options: [{label: chosen, value: 1, chosen: true}],
     chosen,
     milliseconds: 1,
+    saveId: 0,
   };
 }
 

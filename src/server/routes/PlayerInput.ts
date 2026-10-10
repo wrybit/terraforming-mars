@@ -17,6 +17,7 @@ import {INVALID_RUN_ID, RESPONDING_TOO_QUICKLY} from '../../common/app/AppErrorI
 import {RouteError} from './RouteError';
 import {readBody} from './readBody';
 import {stringToNumber} from '../database/utils';
+import {prepareHumanDecision} from '../ai/humanDecisionTrace';
 
 export const playerInputMetrics = {
   responseInterval: new prometheus.Histogram({
@@ -105,7 +106,10 @@ export class PlayerInput extends Handler {
       if (this.isWaitingForUndo(player, entity)) {
         await this.performUndo(req, res, ctx, player);
       } else {
+        // Snapshot before processing: afterwards hand and offer have already changed
+        const humanDecision = prepareHumanDecision(player, entity, responseInterval);
         player.process(entity);
+        humanDecision?.();
         responses.writeJson(res, ctx, Server.getPlayerModel(player));
       }
     } catch (e) {
