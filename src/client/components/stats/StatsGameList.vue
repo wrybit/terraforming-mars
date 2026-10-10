@@ -21,9 +21,9 @@
 import {defineComponent, PropType} from 'vue';
 import {StatsGame} from '@/common/stats/StatsGame';
 import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
-import {boardChip, draftChips, expansionChips, GameSetupChip, seatChips} from '@/client/components/common/gameSetupChips';
+import {boardChip, expansionChips, GameSetupChip, optionChips, seatChips} from '@/client/components/common/gameSetupChips';
+import {Expansion} from '@/common/cards/GameModule';
 import {splitAiMarker} from '@/common/ai/AiLevel';
-import {translateText} from '@/client/directives/i18n';
 import {statsHref} from './statsNavigation';
 import StatsTable from './StatsTable.vue';
 import {StatsColumn} from './statsTypes';
@@ -71,12 +71,16 @@ export default defineComponent({
       }
       const board = statsBoardKey(details);
       if (details.boardName !== undefined && board !== undefined) {
-        // Shuffled tiles count as their own board in the statistics: the chip says so and links there
-        const label = details.shuffledBoard === true ? `${boardLabel(details.boardName)} · ${translateText('Random')}` : boardLabel(details.boardName);
-        chips.push(boardChip(details.boardName, {label, statsHref: statsHref({type: 'detail', kind: 'board', name: board})}));
+        // Shuffled tiles count as their own board in the statistics: the chip links there
+        chips.push(boardChip(details.boardName, {label: boardLabel(details.boardName), statsHref: statsHref({type: 'detail', kind: 'board', name: board})}));
       }
-      chips.push(...expansionChips((expansion) => details.expansions.includes(expansion)));
-      chips.push(...draftChips(players.length, details.draft));
+      const isActive = (expansion: Expansion) => details.expansions.includes(expansion);
+      chips.push(...expansionChips(isActive));
+      // Screenshots do not know the settings
+      const options = details.options;
+      if (options !== undefined) {
+        chips.push(...optionChips(options, isActive, players.length));
+      }
       return chips;
     },
     rowKey(game: StatsGame): string {

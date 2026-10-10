@@ -5,6 +5,7 @@ import {Expansion} from '../cards/GameModule';
 import {MilestoneName} from '../ma/MilestoneName';
 import {AwardName} from '../ma/AwardName';
 import {SpaceId} from '../Types';
+import {GameSetupOptions} from '../game/GameSetupOptions';
 
 // Contract between the stats API (server) and the stats page (client): both sides read and write exactly this shape.
 
@@ -83,8 +84,8 @@ export type StatsGameDetails = {
   /** Board tiles were shuffled ("Randomize board tiles"); unknown for screenshots. */
   shuffledBoard?: boolean;
   expansions: Array<Expansion>;
-  /** Draft variant was on; unknown for screenshots. */
-  draft?: boolean;
+  /** Settings of the game for the setup chips; unknown for screenshots. */
+  options?: GameSetupOptions;
   players: Array<StatsPlayerDetails>;
   milestones: Array<StatsClaimedMilestone>;
   awards: Array<StatsFundedAward>;

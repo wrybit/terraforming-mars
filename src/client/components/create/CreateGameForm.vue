@@ -402,7 +402,8 @@ import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {AiLevel, aiPlayerMarker} from '@/common/ai/AiLevel';
 import SeatIcon from './SeatIcon.vue';
 import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
-import {boardChip, draftChips, expansionChips, GameSetupChip, seatChips} from '@/client/components/common/gameSetupChips';
+import {boardChip, expansionChips, GameSetupChip, optionChips, seatChips} from '@/client/components/common/gameSetupChips';
+import {setupOptionsFromConfig} from '@/common/game/GameSetupOptions';
 import {boardColorClass} from './boardColorClass';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
@@ -853,13 +854,15 @@ export default defineComponent({
     hasExpansionOptions(): boolean {
       return this.expansions.venus || this.expansions.turmoil || this.expansions.moon || this.expansions.ares;
     },
-    // Chips above "Create game": players, board (random: the one already drawn for the preview), expansions, draft
+    // Chips above "Create game": players, board (random: the one already drawn for the preview), expansions,
+    // then every setting that is on or differs from the default (gameSetupChips.ts)
     summaryChips(): Array<GameSetupChip> {
+      const isActive = (expansion: Expansion) => this.expansions[expansion];
       return [
         ...seatChips(this.humanPlayersCount, this.aiPlayersCount),
         boardChip(this.summaryBoard ?? this.board),
-        ...expansionChips((expansion) => this.expansions[expansion]),
-        ...draftChips(this.playersCount, this.draftVariant),
+        ...expansionChips(isActive),
+        ...optionChips(setupOptionsFromConfig(this.newGameConfig), isActive, this.playersCount),
       ];
     },
   },

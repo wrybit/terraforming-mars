@@ -1,4 +1,5 @@
 import {ViewModel} from '../../common/models/PlayerModel';
+import {setupOptionsFromGame} from '../../common/game/GameSetupOptions';
 import {StatsFundedAward, StatsGameDetails, StatsGlobals, StatsTile} from '../../common/stats/StatsGame';
 import {CITY_TILES, TileType} from '../../common/TileType';
 import {Color} from '../../common/Color';
@@ -88,7 +89,7 @@ export function statsGameDetails(view: ViewModel): StatsGameDetails {
     shuffledBoard: view.game.gameOptions.shuffleMapOption === true,
     expansions: (Object.keys(view.game.gameOptions.expansions) as Array<Expansion>)
       .filter((expansion) => view.game.gameOptions.expansions[expansion]),
-    draft: view.game.gameOptions.draftVariant,
+    options: setupOptionsFromGame(view.game.gameOptions),
     players: view.players.map((player) => {
       const breakdown = player.victoryPointsBreakdown;
       return {
