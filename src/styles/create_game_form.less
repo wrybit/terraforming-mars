@@ -43,48 +43,6 @@
     padding: 0;
     font-weight: 500;
   }
-
-  // Colors of the game board hexagons
-  .create-game-tharsis {
-    color: @board-tharsis;
-  }
-
-  .create-game-hellas {
-    color: @board-hellas;
-  }
-
-  .create-game-elysium {
-    color: @board-elysium;
-  }
-
-  .create-game-amazonis {
-    color: @board-amazonis;
-  }
-
-  .create-game-arabia-terra {
-    color: @board-arabia_terra;
-  }
-
-  .create-game-terra-cimmeria {
-    color: @board-terra_cimmeria;
-  }
-
-  .create-game-vastitas-borealis {
-    color: @board-vastitas_borealis;
-  }
-
-  .create-game-hollandia {
-    color: @board-hollandia;
-  }
-
-  .create-game-utopia-planitia,
-  .create-game-vastitas-borealis-nova {
-    color: #eee;
-  }
-
-  .create-game-random {
-    color: rgb(130, 130, 130);
-  }
 }
 
 .create-game-layout {
@@ -92,6 +50,48 @@
   grid-template-columns: minmax(0, 1fr) @create-game-players-width;
   gap: @create-game-gap-card @create-game-gap-column;
   .page-content();
+}
+
+// Colors of the game board hexagons: global, the setup chips of the statistics use them too
+.create-game-tharsis {
+  color: @board-tharsis;
+}
+
+.create-game-hellas {
+  color: @board-hellas;
+}
+
+.create-game-elysium {
+  color: @board-elysium;
+}
+
+.create-game-amazonis {
+  color: @board-amazonis;
+}
+
+.create-game-arabia-terra {
+  color: @board-arabia_terra;
+}
+
+.create-game-terra-cimmeria {
+  color: @board-terra_cimmeria;
+}
+
+.create-game-vastitas-borealis {
+  color: @board-vastitas_borealis;
+}
+
+.create-game-hollandia {
+  color: @board-hollandia;
+}
+
+.create-game-utopia-planitia,
+.create-game-vastitas-borealis-nova {
+  color: #eee;
+}
+
+.create-game-random {
+  color: rgb(130, 130, 130);
 }
 
 // Header card: base style from the card list (.card-list-header, card_list.less)
@@ -1268,6 +1268,36 @@ each(@players, {
   .seat-icon {
     color: #fff;
   }
+}
+
+// Linked chip (board → its statistics page): looks like the others, a little brighter on hover
+a.create-game-summary-chip {
+  text-decoration: none;
+}
+
+// Table rows (game list of the statistics): smaller chips with less space, so a row stays low
+.create-game-summary--compact {
+  gap: 4px;
+
+  .create-game-summary-chip {
+    gap: 4px;
+    padding: 1px 8px;
+    font-size: 12px;
+
+    .create-game-expansion-icon {
+      .create-game-icon-size(13px);
+    }
+  }
+
+  .create-game-board-hexagon {
+    width: 11px;
+    height: 13px;
+  }
+}
+
+a.create-game-summary-chip:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
 }
 
 .create-game-create-row {

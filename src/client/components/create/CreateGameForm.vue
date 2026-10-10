@@ -365,20 +365,8 @@
         </section>
         <!-- Sticks to the bottom edge while the page is too short for it; then with an extra shadow -->
         <section ref="createCard" class="create-game-card create-game-create-card" :class="{'create-game-create-card--stuck': createCardStuck}">
-          <div class="create-game-summary">
-            <!-- Humans and AI players as separate chips, with the same icons as the seat rows -->
-            <span v-for="seat in seatSummary" :key="seat.kind" class="create-game-summary-chip"><SeatIcon :kind="seat.kind"/>{{ seat.label }}</span>
-            <!-- Random board: the board already drawn for the preview, exactly the one the game gets -->
-            <span class="create-game-summary-chip">
-              <span v-if="summaryBoard !== undefined" :class="getBoardColorClass(summaryBoard)"></span>
-              <span class="capitalized">{{ $t(summaryBoard ?? board) }}</span>
-            </span>
-            <!-- Every expansion in play by name, the base game included -->
-            <span v-for="choice in activeExpansionChoices" :key="choice.label" class="create-game-summary-chip">
-              <span :class="['create-game-expansion-icon', choice.iconClass]"></span><span v-i18n>{{ choice.label }}</span>
-            </span>
-            <span v-if="playersCount > 1 && draftVariant" class="create-game-summary-chip" v-i18n>Draft</span>
-          </div>
+          <!-- Same chips as the game list of the statistics (gameSetupChips.ts) -->
+          <GameSetupChips :chips="summaryChips"/>
           <div class="create-game-create-row">
             <AppButton class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors"/>
           </div>
@@ -413,6 +401,9 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {AiLevel, aiPlayerMarker} from '@/common/ai/AiLevel';
 import SeatIcon from './SeatIcon.vue';
+import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
+import {boardChip, draftChips, expansionChips, GameSetupChip, seatChips} from '@/client/components/common/gameSetupChips';
+import {boardColorClass} from './boardColorClass';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
 import PageToolbar from '@/client/components/PageToolbar.vue';
@@ -439,7 +430,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_BOARDS, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SeatIconKind, SegmentOption} from './createGameChoices';
+import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_BOARDS, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption} from './createGameChoices';
 import {ExpansionGroup, ExpansionGrouping, ExpansionTile, groupExpansions, loadExpansionGrouping, saveExpansionGrouping} from './expansionGrouping';
 import {ContentLinePart, contentLine} from './expansionContentLine';
 import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
@@ -516,6 +507,7 @@ export default defineComponent({
     };
   },
   components: {
+    GameSetupChips,
     AppButton,
     CollapsibleSection,
     SeatIcon,
@@ -781,10 +773,10 @@ export default defineComponent({
     },
     // The blocking settings with their icons: expansions as in the expansion list, Merger with the Prelude icon like its option row
     aiBlockerChips(): Array<Pick<ExpansionChoice, 'label' | 'iconClass'>> {
-      const expansionChips = [...OFFICIAL_EXPANSIONS, ...FAN_EXPANSIONS]
+      const blockingExpansions = [...OFFICIAL_EXPANSIONS, ...FAN_EXPANSIONS]
         .filter((choice) => this.expansions[choice.expansion] && !AI_SUPPORTED_EXPANSIONS.includes(choice.expansion));
       const mergerChips = this.twoCorpsVariant ? [{label: 'Merger', iconClass: 'expansion-icon-prelude'}] : [];
-      return [...expansionChips, ...mergerChips];
+      return [...blockingExpansions, ...mergerChips];
     },
     humanPlayersCount: {
       get(): number {
@@ -861,22 +853,14 @@ export default defineComponent({
     hasExpansionOptions(): boolean {
       return this.expansions.venus || this.expansions.turmoil || this.expansions.moon || this.expansions.ares;
     },
-    seatSummary(): Array<{kind: SeatIconKind, label: string}> {
-      if (this.playersCount === 1) {
-        return [{kind: 'human', label: translateText('Solo')}];
-      }
-      const seats: Array<{kind: SeatIconKind, label: string}> = [];
-      if (this.humanPlayersCount > 0) {
-        seats.push({kind: 'human', label: this.humanPlayersCount === 1 ? translateText('1 player') : translateTextWithParams('${0} players', [String(this.humanPlayersCount)])});
-      }
-      if (this.aiPlayersCount > 0) {
-        seats.push({kind: 'ai', label: translateTextWithParams('${0} AI', [String(this.aiPlayersCount)])});
-      }
-      return seats;
-    },
-    activeExpansionChoices(): Array<Pick<ExpansionChoice, 'label' | 'iconClass'>> {
-      const active = [...OFFICIAL_EXPANSIONS, ...FAN_EXPANSIONS].filter((choice) => this.expansions[choice.expansion]);
-      return [{label: 'Base game', iconClass: 'expansion-icon-base'}, ...active];
+    // Chips above "Create game": players, board (random: the one already drawn for the preview), expansions, draft
+    summaryChips(): Array<GameSetupChip> {
+      return [
+        ...seatChips(this.humanPlayersCount, this.aiPlayersCount),
+        boardChip(this.summaryBoard ?? this.board),
+        ...expansionChips((expansion) => this.expansions[expansion]),
+        ...draftChips(this.playersCount, this.draftVariant),
+      ];
     },
   },
   methods: {
@@ -1139,30 +1123,7 @@ export default defineComponent({
       }
     },
     getBoardColorClass(boardName: BoardName | BoardNameType): string {
-      switch (boardName) {
-      case BoardName.THARSIS:
-        return 'create-game-board-hexagon create-game-tharsis';
-      case BoardName.HELLAS:
-        return 'create-game-board-hexagon create-game-hellas';
-      case BoardName.ELYSIUM:
-        return 'create-game-board-hexagon create-game-elysium';
-      case BoardName.UTOPIA_PLANITIA:
-        return 'create-game-board-hexagon create-game-utopia-planitia';
-      case BoardName.VASTITAS_BOREALIS_NOVA:
-        return 'create-game-board-hexagon create-game-vastitas-borealis-nova';
-      case BoardName.AMAZONIS:
-        return 'create-game-board-hexagon create-game-amazonis';
-      case BoardName.ARABIA_TERRA:
-        return 'create-game-board-hexagon create-game-arabia-terra';
-      case BoardName.TERRA_CIMMERIA:
-        return 'create-game-board-hexagon create-game-terra-cimmeria';
-      case BoardName.VASTITAS_BOREALIS:
-        return 'create-game-board-hexagon create-game-vastitas-borealis';
-      case BoardName.HOLLANDIA:
-        return 'create-game-board-hexagon create-game-hollandia';
-      default:
-        return 'create-game-board-hexagon create-game-random';
-      }
+      return boardColorClass(boardName);
     },
     aiMarker(level: AiLevel): string {
       return aiPlayerMarker(level);

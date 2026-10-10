@@ -88,6 +88,7 @@ export function statsGameDetails(view: ViewModel): StatsGameDetails {
     shuffledBoard: view.game.gameOptions.shuffleMapOption === true,
     expansions: (Object.keys(view.game.gameOptions.expansions) as Array<Expansion>)
       .filter((expansion) => view.game.gameOptions.expansions[expansion]),
+    draft: view.game.gameOptions.draftVariant,
     players: view.players.map((player) => {
       const breakdown = player.victoryPointsBreakdown;
       return {

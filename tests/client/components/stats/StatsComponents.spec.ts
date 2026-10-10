@@ -136,4 +136,14 @@ describe('Stats components', () => {
     expect(generations()).deep.eq(['9', '11', '12']);
     expect(headers[5].classes()).to.include('stats-table-unsortable');
   });
+
+  it('StatsGameList shows the setup of each game as chips', () => {
+    const wrapper = mount(StatsGameList, {...config, props: {games}});
+    const chipTexts = (row: number) => wrapper.findAll('tbody tr')[row].findAll('.create-game-summary-chip').map((chip) => chip.text());
+    // Newest first: the screenshot game without details only knows its players
+    expect(chipTexts(0)).deep.eq(['3 players']);
+    expect(chipTexts(1)).deep.eq(['2 players', 'Hellas', 'Base game', 'Corporate Era', 'Prelude']);
+    // The board chip links to the board's statistics page
+    expect(wrapper.findAll('tbody tr')[1].find('a.create-game-summary-chip').attributes('href')).contains('hellas');
+  });
 });

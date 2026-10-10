@@ -395,6 +395,12 @@
   border-color: @stats-winner;
 }
 
+// Setup chips (GameSetupChips.vue): on narrow screens the table scrolls sideways anyway; without a minimum width
+// the column would shrink to one chip per line and every row would grow very tall
+.stats-games .create-game-summary {
+  min-width: 300px;
+}
+
 // ---------- Player cards ----------
 .stats-players {
   display: grid;

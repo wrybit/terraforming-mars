@@ -7,12 +7,9 @@
         </span>
       </span>
     </template>
-    <template #board="{row}">
-      <!-- One lookup per row; v-for over one value also narrows the type for the template -->
-      <template v-for="board in [boardOf(row)]" :key="board ?? 'none'">
-        <StatsEntityName v-if="board !== undefined" kind="board" :name="board"/>
-        <span v-else class="stats-dim">–</span>
-      </template>
+    <template #setup="{row}">
+      <!-- Same chips as above "Create game" (gameSetupChips.ts) -->
+      <GameSetupChips :chips="setupChips(row)" compact/>
     </template>
     <template #result="{row}">
       <a v-if="row.resultUrl !== undefined" :href="row.resultUrl" target="_blank" class="stats-link" v-i18n>Result</a>
@@ -23,12 +20,16 @@
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {StatsGame} from '@/common/stats/StatsGame';
-import StatsEntityName from './StatsEntityName.vue';
+import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
+import {boardChip, draftChips, expansionChips, GameSetupChip, seatChips} from '@/client/components/common/gameSetupChips';
+import {splitAiMarker} from '@/common/ai/AiLevel';
+import {translateText} from '@/client/directives/i18n';
+import {statsHref} from './statsNavigation';
 import StatsTable from './StatsTable.vue';
 import {StatsColumn} from './statsTypes';
 import {boardLabel, formatDate, formatDuration} from './statsLabels';
 import {lineupOf, totalTimeSeconds} from './statsResults';
-import {StatsBoardKey, statsBoardKey} from '@/common/stats/statsBoardKey';
+import {statsBoardKey} from '@/common/stats/statsBoardKey';
 
 // Every column sorts on click; the players column groups by lineup (names in alphabetical order)
 const COLUMNS: ReadonlyArray<StatsColumn> = [
@@ -36,7 +37,8 @@ const COLUMNS: ReadonlyArray<StatsColumn> = [
   {key: 'players', label: 'Players', text: true, value: (game: StatsGame) => lineupOf(game)},
   {key: 'generation', label: 'Gen', value: (game: StatsGame) => game.summary.generation || undefined, format: (game: StatsGame) => String(game.summary.generation || '–')},
   {key: 'time', label: 'Game length', value: (game: StatsGame) => totalTimeSeconds(game), format: (game: StatsGame) => formatDuration(totalTimeSeconds(game))},
-  {key: 'board', label: 'Board', text: true, value: (game: StatsGame) => {
+  // Players, board, expansions, draft as chips; sorts by board
+  {key: 'setup', label: 'Game setup', text: true, value: (game: StatsGame) => {
     const board = statsBoardKey(game.details);
     return board === undefined ? undefined : boardLabel(board);
   }},
@@ -46,7 +48,7 @@ const COLUMNS: ReadonlyArray<StatsColumn> = [
 // Games of a detail page or the games tab, newest first, with a link to the results page
 export default defineComponent({
   name: 'StatsGameList',
-  components: {StatsEntityName, StatsTable},
+  components: {GameSetupChips, StatsTable},
   props: {
     games: {type: Array as PropType<ReadonlyArray<StatsGame>>, required: true},
     // Game ID → players the detail page is about; the others recede
@@ -58,8 +60,24 @@ export default defineComponent({
     },
   },
   methods: {
-    boardOf(game: StatsGame): StatsBoardKey | undefined {
-      return statsBoardKey(game.details);
+    // Without details (old screenshots) only the players are known
+    setupChips(game: StatsGame): Array<GameSetupChip> {
+      const players = game.summary.players;
+      const aiCount = players.filter((player) => splitAiMarker(player.name).marker !== undefined).length;
+      const chips = seatChips(players.length - aiCount, aiCount);
+      const details = game.details;
+      if (details === undefined) {
+        return chips;
+      }
+      const board = statsBoardKey(details);
+      if (details.boardName !== undefined && board !== undefined) {
+        // Shuffled tiles count as their own board in the statistics: the chip says so and links there
+        const label = details.shuffledBoard === true ? `${boardLabel(details.boardName)} · ${translateText('Random')}` : boardLabel(details.boardName);
+        chips.push(boardChip(details.boardName, {label, statsHref: statsHref({type: 'detail', kind: 'board', name: board})}));
+      }
+      chips.push(...expansionChips((expansion) => details.expansions.includes(expansion)));
+      chips.push(...draftChips(players.length, details.draft));
+      return chips;
     },
     rowKey(game: StatsGame): string {
       return game.summary.id;

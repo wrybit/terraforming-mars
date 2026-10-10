@@ -83,6 +83,8 @@ export type StatsGameDetails = {
   /** Board tiles were shuffled ("Randomize board tiles"); unknown for screenshots. */
   shuffledBoard?: boolean;
   expansions: Array<Expansion>;
+  /** Draft variant was on; unknown for screenshots. */
+  draft?: boolean;
   players: Array<StatsPlayerDetails>;
   milestones: Array<StatsClaimedMilestone>;
   awards: Array<StatsFundedAward>;
