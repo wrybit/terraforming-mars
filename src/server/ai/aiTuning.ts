@@ -354,6 +354,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   milestoneRace75: {milestoneProgressShare: 0.75},
   milestoneRace90: {milestoneProgressShare: 0.9},
   milestoneRace30: {milestoneProgressShare: 0.3},
+  // Bundle of small, repeatedly positive changes (rounds 23–28: moreCardsAgain +0.17/+0.44/+0.12, production105
+  // +0.38, search16 +0.55): tested together with all games, so a combined gain of ~1 VP becomes measurable.
+  bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},
   // Round 25: rolloutFast +1.0 VP (z +1.25) at 34 s per test game – re-checked with variations.
   rolloutFastDeep: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 16, rolloutFocus: 1},
   rolloutFastAll: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 8, rolloutFocus: 0},
