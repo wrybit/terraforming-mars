@@ -336,6 +336,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Before 2026-10-10: money after a pass in the last generation kept its greenery value.
   passedMoneyKept: {passedMoneyLost: 0},
   rolloutFastWide: {rolloutCandidates: 3, rolloutBudget: 1000, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 8, rolloutFocus: 1},
+  // Round 25: rolloutFast +1.0 VP (z +1.25) at 34 s per test game – re-checked with variations.
+  rolloutFastDeep: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 16, rolloutFocus: 1},
+  rolloutFastAll: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 8, rolloutFocus: 0},
+  rolloutFastLong: {rolloutCandidates: 2, rolloutBudget: 1200, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 8, rolloutFocus: 1},
 };
 
 export function isTuningVariant(name: string): boolean {
