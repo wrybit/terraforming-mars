@@ -1,6 +1,12 @@
 <template>
     <div class="card-extra-content-container">
-      <div v-if="lifeFound()" class="little-green-men" ></div>
+      <!-- Search For Life after a find: the found microbe glowing on the greyed card, a check mark above it -->
+      <div v-if="foundLifeImage !== undefined" class="found-life">
+        <img class="found-life__microbe" :src="foundLifeImage" alt="">
+        <span class="found-life__check">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 7"/></svg>
+        </span>
+      </div>
       <div v-if="isMiningTileOnSteel()" class="mined-metal mined-steel" ></div>
       <div v-if="isMiningTileOnTitanium()" class="mined-metal mined-titanium" ></div>
     </div>
@@ -12,6 +18,7 @@ import {defineComponent} from 'vue';
 import {CardModel} from '@/common/models/CardModel';
 import {CardName} from '@/common/cards/CardName';
 import {Resource} from '@/common/Resource';
+import {foundLifeImage} from '@/common/cards/foundLife';
 
 export default defineComponent({
   name: 'CardExtraContent',
@@ -21,15 +28,18 @@ export default defineComponent({
       required: true,
     },
   },
+  computed: {
+    foundLifeImage(): string | undefined {
+      const variant = this.card.foundLifeVariant;
+      return variant === undefined ? undefined : foundLifeImage(variant);
+    },
+  },
   methods: {
     isMiningTileOnSteel() {
       return this.card.name !== CardName.SPECIALIZED_SETTLEMENT && this.card.bonusResource?.includes(Resource.STEEL);
     },
     isMiningTileOnTitanium() {
       return this.card.name !== CardName.SPECIALIZED_SETTLEMENT && this.card.bonusResource?.includes(Resource.TITANIUM);
-    },
-    lifeFound() {
-      return this.card.name === CardName.SEARCH_FOR_LIFE && this.card.resources !== undefined && this.card.resources > 0;
     },
   },
 });

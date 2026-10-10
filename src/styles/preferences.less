@@ -295,11 +295,13 @@
 }
 
 // Don't magnify inactive cards – they should look inactive on hover (cards.less .card-unavailable)
-.preferences_magnify_cards .filterDiv.card-unavailable:hover {
+.preferences_magnify_cards .filterDiv.card-unavailable:hover,
+.preferences_magnify_cards .filterDiv.card-life-found:hover {
   transform: none;
 }
 
-.preferences_small_cards.preferences_magnify_cards .filterDiv.card-unavailable:hover {
+.preferences_small_cards.preferences_magnify_cards .filterDiv.card-unavailable:hover,
+.preferences_magnify_cards .filterDiv.card-life-found:hover {
   transform: scale(0.8);
 }
 

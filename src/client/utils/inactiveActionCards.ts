@@ -56,7 +56,8 @@ export function inactiveActionCards(
     if (!clientCard.hasAction || offered.has(card.name)) {
       continue;
     }
-    if (player.actionsThisGeneration.includes(card.name)) {
+    // A found Search For Life is done for good (foundLife.ts): listed with the used ones, not as "not usable"
+    if (player.actionsThisGeneration.includes(card.name) || card.foundLifeVariant !== undefined) {
       used.push(card);
     } else {
       unusable.push(card);

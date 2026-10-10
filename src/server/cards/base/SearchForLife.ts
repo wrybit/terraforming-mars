@@ -11,6 +11,7 @@ import {CardRenderer} from '../render/CardRenderer';
 import {searchForLife} from '../render/DynamicVictoryPoints';
 import {max} from '../Options';
 import {TITLES} from '../../inputs/titles';
+import {hasFoundLife} from '../../../common/cards/foundLife';
 
 export class SearchForLife extends Card implements IActionCard, IProjectCard {
   constructor() {
@@ -44,7 +45,11 @@ export class SearchForLife extends Card implements IActionCard, IProjectCard {
     }
     return 0;
   }
+  // House rule of this fork: only one successful search – after a find the card is done (foundLife.ts)
   public canAct(player: IPlayer): boolean {
+    if (hasFoundLife(this.name, this.resourceCount)) {
+      return false;
+    }
     return player.canAfford(1) && player.game.projectDeck.canDraw(1);
   }
 

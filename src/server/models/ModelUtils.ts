@@ -12,6 +12,7 @@ import {CardName} from '../../common/cards/CardName';
 import {Tag} from '../../common/cards/Tag';
 import {asArray} from '../../common/utils/utils';
 import {isIStandardProjectCard} from '../cards/IStandardProjectCard';
+import {foundLifeVariant, hasFoundLife} from '../../common/cards/foundLife';
 
 export function cardsToModel(
   player: IPlayer,
@@ -73,6 +74,9 @@ export function cardsToModel(
     if (isSelfReplicatingRobotsCard) {
       model.resources = card.resourceCount;
       model.isSelfReplicatingRobotsCard = true;
+    }
+    if (hasFoundLife(card.name, card.resourceCount)) {
+      model.foundLifeVariant = foundLifeVariant(player.game.id + player.color);
     }
     if (card.warnings.size > 0) {
       model.warnings = Array.from(card.warnings);
