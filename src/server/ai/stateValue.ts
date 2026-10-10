@@ -8,6 +8,7 @@ import {isTemperatureMaxed, remainingProductionPhases, stepsLeft, terraformingPr
 import {tuningOf} from './aiTuning';
 import {boardPotential} from './boardPotential';
 import {lastGenerationSpotPoints} from './lastGenerationSpots';
+import {futureTagPoints} from './tagPointOutlook';
 import {milestoneRacePoints} from './milestoneRace';
 import {recentAwardGrowth} from './awardHistory';
 
@@ -298,6 +299,9 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
     // Resources on cards (microbes, animals, science …) pay off later: VP, money, actions.
     value += card.resourceCount * RESOURCE_ON_CARD_VALUE;
     value += partialResourcePoints(card) * context.victoryPoint;
+  }
+  if (tuningOf(player).tagPointOutlook > 0) {
+    value += tuningOf(player).tagPointOutlook * futureTagPoints(player, context.remaining) * context.victoryPoint;
   }
   return value;
 }

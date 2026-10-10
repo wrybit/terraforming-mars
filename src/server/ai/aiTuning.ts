@@ -104,6 +104,8 @@ export type AiTuning = {
   lastGenerationSpots: number,
   /** 1: in the last generation money left after passing is worth nothing (stateValue.ts lastGenerationMoneyValue). */
   passedMoneyLost: number,
+  /** Weight of the VP that per-tag cards (1 VP per Jovian tag …) still gain from tags in hand and the own pace (tagPointOutlook.ts), 0 = off. */
+  tagPointOutlook: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -189,6 +191,7 @@ export const BASELINE_TUNING: AiTuning = {
   lastGenerationSpots: 0,
   // Human test game (2026-10-10): passed in the last generation with 47 M€ while greeneries were affordable.
   passedMoneyLost: 1,
+  tagPointOutlook: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -336,6 +339,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Before 2026-10-10: money after a pass in the last generation kept its greenery value.
   passedMoneyKept: {passedMoneyLost: 0},
   rolloutFastWide: {rolloutCandidates: 3, rolloutBudget: 1000, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 8, rolloutFocus: 1},
+  // Human test games (2026-10-10): Jovian tag stacking, 7–8 VP per Water Import / Ganymede Colony / Io Mining.
+  tagOutlook: {tagPointOutlook: 1},
+  tagOutlook60: {tagPointOutlook: 0.6},
   // Round 25: rolloutFast +1.0 VP (z +1.25) at 34 s per test game – re-checked with variations.
   rolloutFastDeep: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 16, rolloutFocus: 1},
   rolloutFastAll: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 8, rolloutFocus: 0},
