@@ -244,6 +244,21 @@ html.tm-mobile .game-menu:not(.game-menu--large) {
   }
 }
 
+// Menu entries that are links: the global link states (common.less, spectre) would underline them on hover/click
+// and grey out visited pages – here every entry looks the same, only the background shows hover and focus
+a.game-menu-item {
+  &:link,
+  &:visited,
+  &:hover,
+  &:focus,
+  &:active {
+    color: #fff;
+    text-decoration: none;
+    // Spectre's focus ring around links; the background already marks the entry
+    box-shadow: none;
+  }
+}
+
 .game-menu-item-icon {
   display: flex;
   align-items: center;
