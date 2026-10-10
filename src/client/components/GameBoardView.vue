@@ -79,6 +79,8 @@ import {describePlacement, PlacementDescription} from '@/client/components/board
 import OuterSpaceCorners from '@/client/components/board/OuterSpaceCorners.vue';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import {MarsFrame, marsFrame} from '@/client/components/mobile/mobileBoardZoom';
+import {marsBoardProps} from '@/client/components/board/marsBoardProps';
+import {isBoardControlClick} from '@/client/components/board/boardZoomClick';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {ZoomBoard, notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
 import DeltaBoard from '@/client/components/delta/DeltaBoard.vue';
@@ -156,18 +158,7 @@ export default defineComponent({
     },
     // Same props for the board in the column and in the enlargement modal
     boardProps() {
-      return {
-        spaces: this.game.spaces,
-        expansions: this.game.gameOptions.expansions,
-        venusScaleLevel: this.game.venusScaleLevel,
-        boardName: this.game.gameOptions.boardName,
-        oceans_count: this.game.oceans,
-        oxygen_level: this.game.oxygenLevel,
-        temperature: this.game.temperature,
-        altVenusBoard: this.game.gameOptions.altVenusBoard,
-        aresData: this.game.aresData,
-        tileView: this.tileView,
-      };
+      return marsBoardProps(this.game, this.tileView);
     },
   },
   watch: {
@@ -201,11 +192,7 @@ export default defineComponent({
     // Clicking Mars or the Moon enlarges it – except during a space selection
     // and on the board's controls
     onBoardClick(event: MouseEvent, board: ZoomBoard) {
-      const target = event.target as HTMLElement | null;
-      if (target !== null && target.closest('.hide-tile-button') !== null) {
-        return;
-      }
-      if (isBoardPlacementActive()) {
+      if (isBoardControlClick(event) || isBoardPlacementActive()) {
         return;
       }
       this.openBoardZoom(board);

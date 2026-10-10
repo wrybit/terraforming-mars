@@ -180,18 +180,20 @@
       <div class="game-end-columns__side">
         <div class="game-end-box game_end_block--board">
           <h2 v-i18n>Final situation on the board</h2>
+          <!-- Click enlarges Mars or the Moon like in the game (BoardZoomModal) -->
           <Board
-              :spaces="game.spaces"
-              :expansions="game.gameOptions.expansions"
-              :venusScaleLevel="game.venusScaleLevel"
-              :altVenusBoard="game.gameOptions.altVenusBoard"
-              :boardName ="game.gameOptions.boardName"
-              :oceans_count="game.oceans"
-              :oxygen_level="game.oxygenLevel"
-              :temperature="game.temperature"
-              :tileView="tileView"
-              @toggleTileView="cycleTileView()"/>
-          <MoonBoard v-if="game.moon !== undefined" :model="game.moon" :tileView="tileView"/>
+              ref="columnBoard"
+              v-bind="boardProps"
+              class="board-cont--zoomable"
+              @toggleTileView="cycleTileView()"
+              @click="onBoardClick($event, 'mars')"/>
+          <MoonBoard v-if="game.moon !== undefined" ref="columnMoon" :model="game.moon" :tileView="tileView"
+              class="board-cont--zoomable" @click="onBoardClick($event, 'moon')"/>
+          <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" :frame="zoomBoard === 'mars' ? marsZoomFrame : undefined"
+              @close="boardZoomOpen = false">
+            <MoonBoard v-if="zoomBoard === 'moon' && game.moon !== undefined" :model="game.moon" :tileView="tileView" ring/>
+            <Board v-else v-bind="boardProps" @toggleTileView="cycleTileView()"/>
+          </BoardZoomModal>
           <div v-if="game.gameOptions.expansions.pathfinders">
             <PlanetaryTracks :tracks="game.pathfinders" :gameOptions="game.gameOptions"/>
           </div>
@@ -220,6 +222,12 @@ import {getPreferences} from '@/client/utils/PreferencesManager';
 import {GameModel} from '@/common/models/GameModel';
 import {PublicPlayerModel, ViewModel} from '@/common/models/PlayerModel';
 import Board from '@/client/components/Board.vue';
+import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
+import {marsBoardProps} from '@/client/components/board/marsBoardProps';
+import {isBoardControlClick} from '@/client/components/board/boardZoomClick';
+import {ZoomBoard} from '@/client/components/board/placementZoom';
+import {MarsFrame, marsFrame} from '@/client/components/mobile/mobileBoardZoom';
+import {mobileLayout} from '@/client/utils/mobileLayout';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import MarsHomeLink from '@/client/components/common/MarsHomeLink.vue';
 import MoonBoard from '@/client/components/moon/MoonBoard.vue';
@@ -256,6 +264,13 @@ export default defineComponent({
     },
   },
   computed: {
+    boardProps() {
+      return marsBoardProps(this.game, this.tileView);
+    },
+    // Large Mars shows the same section as in the game (mobileBoardZoom.ts)
+    marsZoomFrame(): MarsFrame {
+      return marsFrame(mobileLayout.value && !this.game.gameOptions.expansions.venus);
+    },
     game(): GameModel {
       return this.participant.game;
     },
@@ -374,13 +389,19 @@ export default defineComponent({
       return new Map(this.playerContributionsData.map((data) => [data.color, data]));
     },
   },
-  data(): {tileView: TileView} {
+  data(): {tileView: TileView, boardZoomOpen: boolean, zoomBoard: ZoomBoard, columnBoardElement: HTMLElement | undefined} {
     return {
       tileView: 'show',
+      boardZoomOpen: false,
+      // Board shown in the enlargement (Mars or Moon)
+      zoomBoard: 'mars',
+      // Start point of the zoom animation; only known after mounting
+      columnBoardElement: undefined,
     };
   },
   components: {
     Board,
+    BoardZoomModal,
     PageToolbar,
     MarsHomeLink,
     LogPanel,
@@ -415,6 +436,16 @@ export default defineComponent({
         return ['game-end-column-row', 'game-end-column-row--negative'];
       }
       return ['game-end-column-row'];
+    },
+    // Clicking Mars or the Moon enlarges it – not on the board's controls
+    onBoardClick(event: MouseEvent, board: ZoomBoard): void {
+      if (isBoardControlClick(event)) {
+        return;
+      }
+      this.zoomBoard = board;
+      const columnRef = board === 'moon' ? this.$refs.columnMoon : this.$refs.columnBoard;
+      this.columnBoardElement = (columnRef as {$el?: HTMLElement} | undefined)?.$el;
+      this.boardZoomOpen = true;
     },
     cycleTileView(): void {
       this.tileView = nextTileView(this.tileView);
