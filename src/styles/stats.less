@@ -850,8 +850,13 @@ each(@stats-source-colors, {
   display: flex;
   gap: 16px;
   overflow-x: auto;
+  // The row reaches to the card's edge (card padding 14px): cards scroll out at the border, not 14px before it.
+  // At rest the first card still lines up with the heading thanks to the same padding inside.
+  margin: 0 -14px;
   // A scroller also clips at the top: room for the cost badge and corporation banner that extend past the card edge
-  padding: 14px 0 6px;
+  padding: 14px 14px 6px;
+  scroll-padding-inline: 14px;
+  .horizontal-edge-fade();
   scroll-snap-type: x proximity;
   overscroll-behavior-x: contain;
 
@@ -975,5 +980,9 @@ each(range(10), {
 .stats-showcase.stats-showcase--grid {
   flex-wrap: wrap;
   overflow-x: visible;
+  // Wrapping grid: nothing scrolls, so neither edge-to-edge nor fade
+  margin: 0;
+  padding-inline: 0;
+  mask-image: none;
   row-gap: 24px;
 }
