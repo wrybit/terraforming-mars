@@ -87,9 +87,12 @@
       </aside>
 
       <main ref="results" class="card-list-results">
+        <!-- First the page itself (header, filters), then the cards: a preloader in the middle until the first ones are built -->
+        <LoadingPlate v-if="!cardsVisible"/>
+        <template v-if="cardsReady">
         <CardListSection v-for="section in cardSections" :key="section.title" v-show="section.names.length > 0"
           :title="section.title" :count="section.names.length" :parts="section.parts">
-          <CardListCardGrid :names="section.names" :tallCards="tallCards"/>
+          <CardListCardGrid :names="section.names" :tallCards="tallCards" :boxSize="section.boxSize" @cardsShown="cardsShown"/>
         </CardListSection>
 
         <CardListSection v-show="visibleGlobalEvents.length > 0" title="Global Events" :count="visibleGlobalEvents.length" :parts="partsFor('globalEvents', visibleGlobalEvents.length)">
@@ -136,7 +139,8 @@
           </div>
         </CardListSection>
 
-        <div v-if="visibleCount === 0" class="card-list-empty">
+        </template>
+        <div v-if="cardsReady && visibleCount === 0" class="card-list-empty">
           <p v-i18n>Nothing matches these filters.</p>
           <button type="button" class="btn btn-tone-quiet" @click="resetAll()" v-i18n>Clear all</button>
         </div>
@@ -170,7 +174,7 @@ import {FundedAwardModel} from '@/common/models/FundedAwardModel';
 import {TypeOption, CardListModel, hashToModel, modelToHash} from '@/client/components/cardlist/CardListModel';
 import {BonusId, BONUS_IDS, PolicyId, POLICY_IDS} from '@/common/turmoil/Types';
 import {buildEntries, CardListEntry, countOptions, FilterGroup, FilterState, hasCostRange, highestCost, passesFilters} from '@/client/components/cardlist/cardListEntries';
-import {EXPANSION_OPTIONS, FilterOption, optionKeys, RESOURCE_OPTIONS, SectionPart, TAG_OPTIONS, TYPE_COLOR_CLASSES, TYPE_OPTIONS, typeLabel} from '@/client/components/cardlist/cardListOptions';
+import {CardBoxSize, EXPANSION_OPTIONS, FilterOption, optionKeys, RESOURCE_OPTIONS, SectionPart, TAG_OPTIONS, TYPE_COLOR_CLASSES, TYPE_OPTIONS, typeLabel} from '@/client/components/cardlist/cardListOptions';
 import {markedOptions, resetOptions, toggleOption} from '@/client/components/cardlist/filterSelection';
 import {clearSearchHighlight, highlightSearch} from '@/client/components/cardlist/searchHighlight';
 import {SegmentOption} from '@/client/components/create/createGameChoices';
@@ -186,6 +190,7 @@ import CardListFilterGroup from '@/client/components/cardlist/CardListFilterGrou
 import CardListSection from '@/client/components/cardlist/CardListSection.vue';
 import CardListCardGrid from '@/client/components/cardlist/CardListCardGrid.vue';
 import CardListCostRange from '@/client/components/cardlist/CardListCostRange.vue';
+import LoadingPlate from '@/client/components/common/LoadingPlate.vue';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {textFitMetrics} from '@/client/utils/textFit';
 import {prefersReducedMotion} from '@/client/utils/motion';
@@ -198,15 +203,16 @@ type Refs = {
 };
 
 // Sections with game cards, in this order
-const CARD_SECTIONS: ReadonlyArray<{title: string, types: ReadonlyArray<CardType>}> = [
-  {title: 'Project Cards', types: [CardType.AUTOMATED, CardType.ACTIVE, CardType.EVENT]},
-  {title: 'Corporations', types: [CardType.CORPORATION]},
-  {title: 'Preludes', types: [CardType.PRELUDE]},
-  {title: 'CEOs', types: [CardType.CEO]},
-  {title: 'Standard Projects', types: [CardType.STANDARD_PROJECT]},
+// boxSize: measured size of a card box (desktop), so cards not yet built keep exactly their place (CardListCardGrid.vue)
+const CARD_SECTIONS: ReadonlyArray<{title: string, types: ReadonlyArray<CardType>, boxSize: CardBoxSize}> = [
+  {title: 'Project Cards', types: [CardType.AUTOMATED, CardType.ACTIVE, CardType.EVENT], boxSize: {width: 248, height: 323}},
+  {title: 'Corporations', types: [CardType.CORPORATION], boxSize: {width: 248, height: 366}},
+  {title: 'Preludes', types: [CardType.PRELUDE], boxSize: {width: 248, height: 323}},
+  {title: 'CEOs', types: [CardType.CEO], boxSize: {width: 248, height: 323}},
+  {title: 'Standard Projects', types: [CardType.STANDARD_PROJECT], boxSize: {width: 243, height: 178}},
 ];
 
-type CardSection = {title: string, names: Array<CardName>, parts: Array<SectionPart>};
+type CardSection = {title: string, names: Array<CardName>, parts: Array<SectionPart>, boxSize: CardBoxSize};
 
 // One active filter as a removable chip in the summary
 type ActiveFilter = FilterOption & {group: FilterGroup | 'vps' | 'cost'};
@@ -221,6 +227,9 @@ const FILTER_GROUP_OPTIONS: Record<FilterGroup, ReadonlyArray<FilterOption>> = {
 const VP_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 0, label: 'all'}, {value: 1, label: '+VPs'}, {value: 2, label: '-VPs'}];
 const SORT_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'a', label: 'A-Z'}, {value: '1', label: '0-9'}];
 const SEARCH_SCOPE_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'name', label: 'Card title'}, {value: 'text', label: 'Full text'}];
+
+// The preloader disappears at the latest after this long, even if no card came into view
+const CARDS_PRELOADER_LIMIT_MS = 1500;
 
 // Highlight search matches only once typing pauses briefly – otherwise the list re-renders on every keystroke
 const HIGHLIGHT_DELAY_MS = 120;
@@ -240,6 +249,7 @@ export default defineComponent({
     SegmentedControl,
     CardListFilterGroup,
     CardListSection,
+    LoadingPlate,
   },
   data() {
     return {
@@ -252,6 +262,10 @@ export default defineComponent({
       // If someone expanded or collapsed "More filters" themselves, that wins over the automatic behavior
       moreFiltersChosen: false,
       highlightTimer: undefined as ReturnType<typeof setTimeout> | undefined,
+      // The cards are built only after the page itself has been drawn (startCards)
+      cardsReady: false,
+      // The first cards are visible: the preloader goes away
+      cardsVisible: false,
     };
   },
   mounted() {
@@ -266,6 +280,7 @@ export default defineComponent({
     window.addEventListener('resize', this.fitMoreFilters);
     this.fitMoreFilters();
     this.scheduleHighlight();
+    this.startCards();
   },
   updated() {
     // Filter chips in the summary change the height of the filter column
@@ -380,6 +395,7 @@ export default defineComponent({
         const entries = this.visibleEntries.filter((entry) => entry.card !== undefined && section.types.includes(entry.card.type));
         return {
           title: section.title,
+          boxSize: section.boxSize,
           names: this.sort(entries.map((entry) => entry.name as CardName)),
           parts: section.types.map((type) => ({
             label: typeLabel(type),
@@ -499,6 +515,24 @@ export default defineComponent({
       if (column.scrollHeight > column.clientHeight + 1) {
         details.open = false;
       }
+    },
+    // Draw header and filters first (two frames: the browser paints in between), then build the cards
+    startCards(): void {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        this.cardsReady = true;
+        // Nothing to show (filters exclude everything) or no card came into view: don't keep the preloader
+        setTimeout(() => this.revealCards(), CARDS_PRELOADER_LIMIT_MS);
+      }));
+    },
+    // Cards near the visible area were built (CardListCardGrid.vue): show them, and mark search hits in them
+    cardsShown(): void {
+      if (!this.cardsVisible) {
+        requestAnimationFrame(() => this.revealCards());
+      }
+      this.scheduleHighlight();
+    },
+    revealCards(): void {
+      this.cardsVisible = true;
     },
     scheduleHighlight(): void {
       clearTimeout(this.highlightTimer);

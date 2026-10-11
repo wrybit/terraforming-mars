@@ -555,11 +555,19 @@
 // ---------- Results ----------
 .card-list-results {
   min-width: 0;
+  // Same inner padding as the filter column (2px): the first section's top edge lines up with the first box there
+  padding-top: 2px;
   // Nothing may widen the page sideways (otherwise the bottom sheet gets wider than the screen)
   overflow-x: clip;
 }
 
-.card-list-section + .card-list-section {
+// The first section starts level with the filter column. .card-list-section is also the class of the sections below
+// a tab's selection (hand_cards_panel.less, with a large top margin) – reset that here.
+.card-list-results > .card-list-section {
+  margin-top: 0;
+}
+
+.card-list-results > .card-list-section + .card-list-section {
   margin-top: 32px;
 }
 
@@ -567,8 +575,8 @@
 .card-list-section-head {
   .frosted-surface();
   position: sticky;
-  // Flush below the page header, otherwise the cards show through in the gap
-  top: var(--card-list-header);
+  // Level with the filter column next to it (its top edge incl. its 2px inner padding), not flush below the header
+  top: calc(var(--card-list-header) + @create-game-gap-card + 2px);
   z-index: 10;
   display: flex;
   align-items: center;
@@ -636,6 +644,13 @@
   .card-container {
     margin: 15px 0 0;
   }
+}
+
+// Card not built yet (CardListCardGrid.vue, LazyMount.vue): an empty card shape in its place, size set inline
+.card-list-placeholder {
+  margin-top: 15px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .card-list-empty {
@@ -870,7 +885,9 @@
     font-size: 18px;
   }
 
+  // No filter column next to it (bottom sheet): a gap below the header like the one to the cards below
   .card-list-section-head {
+    top: calc(var(--card-list-header) + 10px);
     margin-bottom: 10px;
   }
 

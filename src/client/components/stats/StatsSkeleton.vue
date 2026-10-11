@@ -31,23 +31,20 @@
     <section v-else class="stats-card">
       <div class="stats-skeleton-block stats-skeleton-block--tall"></div>
     </section>
-    <div class="stats-skeleton-loader">
-      <span v-i18n>Loading…</span>
-      <LoadingBar/>
-    </div>
+    <LoadingPlate/>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import LoadingBar from '@/client/components/common/LoadingBar.vue';
+import LoadingPlate from '@/client/components/common/LoadingPlate.vue';
 import {OVERVIEW_KPI_COUNT, OVERVIEW_TITLES} from './statsOverviewSections';
 import {SHOWCASE_SIZE, SHOWCASE_TITLES} from './statsShowcase';
 
 // Placeholder of the statistics page while the games load (StatsPage.vue)
 export default defineComponent({
   name: 'StatsSkeleton',
-  components: {LoadingBar},
+  components: {LoadingPlate},
   props: {
     // Overview tab: its boxes; any other view: one empty box
     overview: {type: Boolean, default: false},

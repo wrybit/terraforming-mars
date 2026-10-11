@@ -110,6 +110,9 @@ export const RESOURCE_OPTIONS: ReadonlyArray<FilterOption<ResourceOption>> = VIS
 }));
 
 // Part of a section (CardListSection): a card type with color and count
+// Size of one card box (card incl. the room above it for cost coin and tags), unscaled: the phone's zoom applies to it
+export type CardBoxSize = {width: number, height: number};
+
 export type SectionPart = {
   label: string;
   colorClass: string;
