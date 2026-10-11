@@ -37,7 +37,7 @@ const SECOND_CITY_SHARE = 0.5;
  */
 export type OpeningPlan = {cities: ReadonlyArray<SpaceId>, greeneries: ReadonlyArray<SpaceId>, started: boolean};
 
-// The plan only changes when a tile is placed; remembered per game, player, generation and tile count.
+// The plan only changes when a tile is placed; remembered per game, player and occupied spaces.
 const planCache = new Map<string, OpeningPlan | undefined>();
 
 function placementGain(space: Space, board: IPlayer['game']['board']): number {
@@ -84,8 +84,10 @@ export function openingPlan(player: IPlayer, cityValue: (space: Space) => number
   if (ownCities.length >= 2) {
     return undefined;
   }
-  const tiles = board.spaces.filter((space) => space.tile !== undefined).length;
-  const key = `${player.game.id}|${player.id}|${player.game.generation}|${tiles}`;
+  // Key: the occupied spaces themselves, not just their count – game copies in the search place the
+  // same number of tiles on different spaces and must not share a plan.
+  const occupied = board.spaces.filter((space) => space.tile !== undefined).map((space) => space.id).join(',');
+  const key = `${player.game.id}|${player.id}|${occupied}`;
   if (planCache.has(key)) {
     return planCache.get(key);
   }

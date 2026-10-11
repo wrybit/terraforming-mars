@@ -122,6 +122,8 @@ export type AiTuning = {
   lastGenerationSale: number,
   /** 1: before the first own city the first tiles go into a planned home cluster: one city, two greeneries (openingPlan.ts). */
   openingPlan: number,
+  /** Generations the observed terraforming speed may move the game-length estimate from the prior (gameProgress.ts). */
+  lengthDeviation: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -227,6 +229,7 @@ export const BASELINE_TUNING: AiTuning = {
   // both fix human-game errors (passed with 15 cards; first greenery and city far apart), adopted.
   lastGenerationSale: 1,
   openingPlan: 1,
+  lengthDeviation: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -427,6 +430,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noTriggerOrder: {triggerOrderPenalty: 0, triggerOrderBonus: 0},
   // Before round 40: the baseline without lastSale and openingPlan.
   beforeRound40: {lastGenerationSale: 0, openingPlan: 0},
+  // Round 41: a human rush ended a game in generation 8 – let the observed speed count more.
+  lengthFlex2: {lengthDeviation: 2},
+  lengthFlex3: {lengthDeviation: 3},
+  // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
+  noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
   sellToAfford: {sellToAfford: 2},
   sellForMilestone: {sellToAfford: 1},

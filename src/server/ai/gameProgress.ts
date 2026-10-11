@@ -68,7 +68,9 @@ export function remainingProductionPhases(game: IGame, player?: IPlayer): number
   const curved = player !== undefined && tuningOf(player).lengthModel > 0;
   const byObservedSpeed = curved ? curvedRemaining(game.generation, progress) : (1 - progress) / (progress / (game.generation - 1));
   const observedWeight = curved ? Math.min(0.95, CURVE_WEIGHT + CURVE_WEIGHT_PER_GENERATION * (game.generation - 4)) : 0.5;
-  const deviation = curved ? CURVE_DEVIATION : MAXIMUM_DEVIATION;
+  // How far the observed speed may move the estimate from the prior (aiTuning.ts lengthDeviation): a human
+  // terraforming rush ended a game in generation 8 while the AI still planned for 12.
+  const deviation = curved ? (player === undefined ? CURVE_DEVIATION : tuningOf(player).lengthDeviation) : MAXIMUM_DEVIATION;
   const blended = observedWeight * byObservedSpeed + (1 - observedWeight) * byPriorLength;
   const clamped = Math.min(byPriorLength + deviation, Math.max(byPriorLength - deviation, blended));
   // The game cannot end before the global parameters are maxed, however late it is. In a test
