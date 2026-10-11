@@ -124,6 +124,10 @@ export type AiTuning = {
   openingPlan: number,
   /** Generations the observed terraforming speed may move the game-length estimate from the prior (gameProgress.ts). */
   lengthDeviation: number,
+  /** Share of a city's free neighbours expected to become greeneries (boardPotential.ts); more = more appetite for cities. */
+  cityNeighbourShare: number,
+  /** Chance an opponent builds a city next to a lonely own greenery (boardPotential.ts). */
+  exposedSpotRisk: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -232,6 +236,8 @@ export const BASELINE_TUNING: AiTuning = {
   lastGenerationSale: 1,
   openingPlan: 1,
   lengthDeviation: 1,
+  cityNeighbourShare: 0.6,
+  exposedSpotRisk: 0.5,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -438,6 +444,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 42: further along – how far may the observed speed move the estimate?
   lengthFlex4: {lengthDeviation: 4},
   lengthFlex5: {lengthDeviation: 5},
+  // Round 43: human games – the AI builds 3–6 cities against 8–12 and its lonely greeneries feed the human's cities.
+  cityShare80: {cityNeighbourShare: 0.8},
+  cityShare45: {cityNeighbourShare: 0.45},
+  exposedRisk80: {exposedSpotRisk: 0.8},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.

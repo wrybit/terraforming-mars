@@ -2,6 +2,7 @@ import {IPlayer} from '../IPlayer';
 import {Space} from '../boards/Space';
 import {Board} from '../boards/Board';
 import {SpaceType} from '../../common/boards/SpaceType';
+import {tuningOf} from './aiTuning';
 
 // Future VP on the board that the final scoring does not show yet, in VP.
 //
@@ -10,10 +11,10 @@ import {SpaceType} from '../../common/boards/SpaceType';
 // it), while a greenery without an own city is open to an opponent's city "in the made nest"
 // (test game 3: the AI placed 14 greeneries, the opponent put cities next to them).
 
-// Share of a city's free neighbours that typically become greeneries (1 VP each for the city).
-const CITY_NEIGHBOUR_SHARE = 0.6;
-// Chance that an opponent puts a city on a free spot next to a lonely greenery.
-const EXPOSED_SPOT_RISK = 0.5;
+// Share of a city's free neighbours that typically become greeneries (1 VP each for the city):
+// aiTuning.ts cityNeighbourShare (0.6).
+// Chance that an opponent puts a city on a free spot next to a lonely greenery: aiTuning.ts
+// exposedSpotRisk (0.5). Human games: lonely AI greeneries fed the human's cities up to 16 VP.
 // A greenery without an own city next to it scores its single VP but none for a city:
 // while there is time, build the city first and fill the gaps afterwards.
 const LONELY_GREENERY_PENALTY = 0.6;
@@ -24,6 +25,7 @@ function isFreeLand(space: Space): boolean {
 
 export function boardPotential(player: IPlayer): number {
   const board = player.game.board;
+  const tuning = tuningOf(player);
   let potential = 0;
   for (const space of board.spaces) {
     if (space.player !== player || space.tile === undefined) {
@@ -31,12 +33,12 @@ export function boardPotential(player: IPlayer): number {
     }
     const neighbours = board.getAdjacentSpaces(space);
     if (Board.isCitySpace(space)) {
-      potential += neighbours.filter(isFreeLand).length * CITY_NEIGHBOUR_SHARE;
+      potential += neighbours.filter(isFreeLand).length * tuning.cityNeighbourShare;
     } else if (Board.isGreenerySpace(space)) {
       // Free spots where any player may still put a city (no city next to them yet).
       const exposed = neighbours.filter((neighbour) =>
         isFreeLand(neighbour) && !board.getAdjacentSpaces(neighbour).some((next) => Board.isCitySpace(next)));
-      potential -= exposed.length * EXPOSED_SPOT_RISK;
+      potential -= exposed.length * tuning.exposedSpotRisk;
       if (!neighbours.some((neighbour) => Board.isCitySpace(neighbour) && neighbour.player === player)) {
         potential -= LONELY_GREENERY_PENALTY;
       }
