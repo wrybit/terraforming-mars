@@ -40,8 +40,12 @@ body,
   font-size: 20px;
   margin: 10px 0 30px 0;
 }
+// All buttons share one corner radius (the .btn of spectre has almost square corners); btn-rounded stays for older markup
+@button-radius: 8px;
+
+.btn,
 .btn-rounded {
-  border-radius: 8px;
+  border-radius: @button-radius;
 }
 .flex {
   display: flex;
