@@ -278,11 +278,8 @@ html:not(.tm-mobile) .or-tab-panel {
 }
 
 // Heading of a view-only section inside a card grid ("Not playable", "Already used", "Not usable": cardSections.ts,
-// SelectProjectCardToPlay.vue). Its cards are never selected, so they need no room for the check-mark flag:
-// pull them up close to their heading (law of proximity), the separator above keeps the big gap
-html:not(.tm-mobile) .or-tab-panel .choice-block > .choice-section-title--separated {
-  margin-bottom: -(@choice-row-gap - 8px);
-}
+// SelectProjectCardToPlay.vue): same gap to its cards as every other section heading – the cost badges stick out
+// at the top and would otherwise touch the heading's line
 
 // Card grid with several sections (cardSections.ts, SelectProjectCardToPlay.vue "Not playable"): every section's
 // rows sit centered in the box, also a short one – a grid would leave a short row at the left of the block.
@@ -293,8 +290,7 @@ html:not(.tm-mobile) .or-tab-panel .choice-block > .choice-section-title--separa
 html:not(.tm-mobile) .or-tab-panel .choice-block.choice-block--sections.choice-block--sections.choice-block--sections.choice-block--sections:not(.setup-column-body *) {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-content: flex-start;
+  place-content: flex-start center;
   column-gap: @choice-column-gap;
   width: 100%;
   margin-inline: 0;
