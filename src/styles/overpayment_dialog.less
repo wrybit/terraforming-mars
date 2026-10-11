@@ -201,17 +201,30 @@ each(@overpayment-tones, {
   flex: none;
   align-items: center;
   align-self: stretch;
-  gap: 3px;
   padding-left: @overpayment-accept-gap;
   border-left: 1.5px solid fade(#fff, 75%);
   color: @overpayment-excess;
   font: 600 16px/1 Prototype, sans-serif;
   white-space: nowrap;
+}
+
+// Figure and icon read as one coin on the green: a tight shadow under both (not under the divider)
+.overpayment-dialog__accept-figure {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  filter: drop-shadow(0 1px 1px fade(#000, 60%));
 
   .resource_icon {
     width: 18px;
     height: 18px;
   }
+}
+
+// Black outline like the one around the M€ icon; the stroke sits behind the fill so the digit keeps its weight
+.overpayment-dialog__accept-value {
+  -webkit-text-stroke: 3px #000;
+  paint-order: stroke fill;
 }
 
 // Phone: both answers side by side instead of stacked (one decision, one row);

@@ -56,7 +56,9 @@
       <button type="button" class="btn btn-tone-danger" data-test="dismiss" @click="emit('dismiss')" v-i18n>No, adjust</button>
       <button type="button" class="btn btn-tone-success overpayment-dialog__accept" data-test="accept" @click="emit('accept')">
         <span v-i18n>Yes, pay anyway</span>
-        <span class="overpayment-dialog__accept-excess" data-test="accept-excess">+{{ excess }}<i class="resource_icon resource_icon--megacredits"></i></span>
+        <span class="overpayment-dialog__accept-excess" data-test="accept-excess">
+          <span class="overpayment-dialog__accept-figure"><span class="overpayment-dialog__accept-value">+{{ excess }}</span><i class="resource_icon resource_icon--megacredits"></i></span>
+        </span>
       </button>
     </template>
   </DialogFrame>
