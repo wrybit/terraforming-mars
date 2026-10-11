@@ -9,6 +9,7 @@ import {tuningOf} from './aiTuning';
 import {boardPotential} from './boardPotential';
 import {lastGenerationSpotPoints} from './lastGenerationSpots';
 import {futureTagPoints} from './tagPointOutlook';
+import {effectDrawsPerGeneration} from './cardIncome';
 import {milestoneRacePoints} from './milestoneRace';
 import {recentAwardGrowth} from './awardHistory';
 
@@ -308,12 +309,17 @@ function actionValuePerGeneration(card: ICard, player: IPlayer, context: Valuati
 function tableauValue(player: IPlayer, context: ValuationContext): number {
   const accumulator = tuningOf(player).accumulatorValue;
   let value = 0;
+  // drawCardModel 2: cards drawn by tag effects count like production (cardIncome.ts).
+  const drawIncome = (card: ICard) => tuningOf(player).drawCardModel >= 2 ? effectDrawsPerGeneration(card, player) * unknownCardValue(player, context) : 0;
   for (const card of player.playedCards) {
     if (card.type === CardType.ACTIVE) {
-      const flat = isIActionCard(card) ? actionValuePerGeneration(card, player, context) : EFFECT_CARD_VALUE_PER_GENERATION;
+      const own = isIActionCard(card) ? actionValuePerGeneration(card, player, context) : EFFECT_CARD_VALUE_PER_GENERATION;
+      const flat = Math.max(own, drawIncome(card));
       // A human player's collectors scored 20+ VP in long games; a flat 1.5 M€ per generation missed that.
       const collected = accumulator > 0 ? accumulator * collectedPointsPerGeneration(card) * context.victoryPoint : 0;
       value += Math.max(flat, collected) * context.remaining;
+    } else if (card.type === CardType.CORPORATION) {
+      value += drawIncome(card) * context.remaining;
     }
     // Resources on cards (microbes, animals, science …) pay off later: VP, money, actions.
     value += card.resourceCount * RESOURCE_ON_CARD_VALUE;

@@ -18,7 +18,7 @@ export type AiTuning = {
   cityDenialShare: number,
   /** 1: tag requirements expect tags at the rate of that tag in the deck and the own play pace instead of a flat 0.3 per generation (requirementOutlook.ts). */
   tagRateModel: number,
-  /** 1: unknown cards in hand worth 2–4 M€ by remaining generations, card-drawing actions by the cards they draw (stateValue.ts). */
+  /** 1: unknown cards in hand worth 2–4 M€ by remaining generations, card-drawing actions by the cards they draw (stateValue.ts); 2: also tag-triggered draws as income (cardIncome.ts). */
   drawCardModel: number,
   /** Generations it takes to fill free spots around a city: future greeneries count fully only with at least this many left (spaceValue.ts, stateValue.ts). */
   boardHorizon: number,
@@ -453,6 +453,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   exposedRisk80: {exposedSpotRisk: 0.8},
   // Human game: Edgedancer funded in the last generation at 3 : 1 and lost 3 : 5 – the opponent still had money and actions.
   awardActions: {awardActionSwing: 1},
+  // Human games: humans play ~3× as many card-drawing cards and draw 1.2 cards per generation against 0.3.
+  // drawCards: round 19 variant again on today's baseline; cardIncome: tag-triggered draws as income too.
+  cardIncome: {drawCardModel: 2},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
