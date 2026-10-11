@@ -105,6 +105,13 @@ import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
 import {setDocumentTitle} from '../utils/documentTitle';
 import {ingestView} from '@/client/utils/changeTracker';
 
+// Traegt den HTTP-Status weiter, damit "Partie gibt es nicht" von "Verbindung weg" unterscheidbar ist
+class GameLoadError extends Error {
+  constructor(public readonly status: number) {
+    super(`Error getting game data: HTTP ${status}`);
+  }
+}
+
 type Screen = 'admin' |
             'create-game-form' |
             'cards' |
@@ -214,6 +221,15 @@ export default defineComponent({
     },
   },
   methods: {
+    showGameLoadError(err: unknown): void {
+      console.error(err);
+      // 404: Partie geloescht oder Link unvollstaendig – OK fuehrt zur Startseite statt in eine leere Seite
+      if (err instanceof GameLoadError && err.status === 404) {
+        this.showAlert('Game not found', 'This game does not exist (anymore). It may have been deleted, or the link is incomplete.', () => window.location.assign('./'));
+        return;
+      }
+      this.showAlert('Game could not be loaded', 'Check the connection and reload the page.');
+    },
     showAlert(title: string, message: string, cb: () => void = () => {}): void {
       // During a server update the overlay explains the situation; connection errors are expected then
       if (serverUpdatePhase.value !== 'none') {
@@ -258,7 +274,7 @@ export default defineComponent({
       fetch(url)
         .then((resp) => {
           if (!resp.ok) {
-            throw new Error(`Error getting game data: ${resp.statusText}`);
+            throw new GameLoadError(resp.status);
           }
           return resp.json();
         })
@@ -300,8 +316,7 @@ export default defineComponent({
           }
         })
         .catch((err) => {
-          this.showAlert('Error', 'Error getting game data');
-          console.error(err);
+          this.showGameLoadError(err);
         });
     },
     updatePlayer() {
@@ -341,7 +356,7 @@ export default defineComponent({
       fetch(url)
         .then((resp) => {
           if (!resp.ok) {
-            throw new Error(`Error getting game data: ${resp.statusText}`);
+            throw new GameLoadError(resp.status);
           }
           return resp.json();
         })
@@ -355,8 +370,7 @@ export default defineComponent({
           );
         })
         .catch((err) => {
-          this.showAlert('Error', 'Error getting game data');
-          console.error(err);
+          this.showGameLoadError(err);
         });
     } else if (currentPathname === paths.GAMES_OVERVIEW) {
       app.screen = 'games-overview';
