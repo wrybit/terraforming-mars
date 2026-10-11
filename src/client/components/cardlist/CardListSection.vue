@@ -1,5 +1,5 @@
 <template>
-  <section class="card-list-section">
+  <section class="card-list-section" :data-section="title">
     <div class="card-list-section-head">
       <span class="card-list-section-stripe">
         <span v-for="part in presentParts" :key="part.colorClass" :class="part.colorClass"></span>

@@ -147,6 +147,9 @@
       </main>
     </div>
 
+    <!-- Desktop: ticks at the right edge to jump between the sections, the current one stands out -->
+    <CardListSectionRail v-if="cardsReady && railSections.length > 1" :sections="railSections" :activeIndex="activeSection" @jump="jumpToSection"/>
+
     <button type="button" class="card-list-scroll-top" :class="{'card-list-scroll-top--visible': showScrollTop}" :title="$t('Back to top')" @click="scrollToTop()">
       <span aria-hidden="true">↑</span>
     </button>
@@ -191,6 +194,8 @@ import CardListSection from '@/client/components/cardlist/CardListSection.vue';
 import CardListCardGrid from '@/client/components/cardlist/CardListCardGrid.vue';
 import CardListCostRange from '@/client/components/cardlist/CardListCostRange.vue';
 import LoadingPlate from '@/client/components/common/LoadingPlate.vue';
+import CardListSectionRail, {RailSection} from '@/client/components/cardlist/CardListSectionRail.vue';
+import {activeSectionIndex} from '@/client/components/cardlist/sectionRail';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {textFitMetrics} from '@/client/utils/textFit';
 import {prefersReducedMotion} from '@/client/utils/motion';
@@ -250,6 +255,7 @@ export default defineComponent({
     CardListFilterGroup,
     CardListSection,
     LoadingPlate,
+    CardListSectionRail,
   },
   data() {
     return {
@@ -266,6 +272,9 @@ export default defineComponent({
       cardsReady: false,
       // The first cards are visible: the preloader goes away
       cardsVisible: false,
+      // Index (in railSections) of the section being read, for the section rail
+      activeSection: 0,
+      scrollFrame: undefined as number | undefined,
     };
   },
   mounted() {
@@ -286,8 +295,13 @@ export default defineComponent({
     // Filter chips in the summary change the height of the filter column
     this.fitMoreFilters();
     this.scheduleHighlight();
+    // Filters change which sections exist and where they are
+    this.updateActiveSection();
   },
   beforeUnmount() {
+    if (this.scrollFrame !== undefined) {
+      cancelAnimationFrame(this.scrollFrame);
+    }
     window.removeEventListener('scroll', this.handleScroll);
     window.removeEventListener('resize', this.fitMoreFilters);
     clearTimeout(this.highlightTimer);
@@ -404,6 +418,19 @@ export default defineComponent({
           })),
         };
       });
+    },
+    // Sections with something in them, in page order (section rail)
+    railSections(): Array<RailSection> {
+      const others: Array<[string, number]> = [
+        ['Global Events', this.visibleGlobalEvents.length],
+        ['Colonies', this.visibleColonyNames.length],
+        ['Milestones', this.visibleMilestoneNames.length],
+        ['Awards', this.visibleAwardNames.length],
+        ['Agendas', this.visibleAgendaIds.length],
+      ];
+      return [...this.cardSections.map((section): [string, number] => [section.title, section.names.length]), ...others]
+        .filter(([, count]) => count > 0)
+        .map(([title]) => ({title}));
     },
     visibleGlobalEvents(): Array<GlobalEventName> {
       const names = Array.from(allGlobalEventNames()).filter((name) => this.isVisible('globalEvents', name));
@@ -588,6 +615,33 @@ export default defineComponent({
     // Back-to-top button only after scrolling a good screen height
     handleScroll(): void {
       this.showScrollTop = window.scrollY > window.innerHeight;
+      // Section rail: at most once per frame
+      if (this.scrollFrame === undefined) {
+        this.scrollFrame = requestAnimationFrame(() => {
+          this.scrollFrame = undefined;
+          this.updateActiveSection();
+        });
+      }
+    },
+    // Line where the section heads stick (card_list.less .card-list-section-head top)
+    stickyLine(): number {
+      const head = this.typedRefs.results?.querySelector('.card-list-section-head');
+      return head === null || head === undefined ? 0 : parseFloat(getComputedStyle(head).top) || 0;
+    },
+    sectionElement(title: string): HTMLElement | undefined {
+      return this.typedRefs.results?.querySelector<HTMLElement>(`[data-section="${title}"]`) ?? undefined;
+    },
+    updateActiveSection(): void {
+      const tops = this.railSections.map((section) => this.sectionElement(section.title)?.getBoundingClientRect().top ?? Infinity);
+      this.activeSection = activeSectionIndex(tops, this.stickyLine());
+    },
+    jumpToSection(title: string): void {
+      const element = this.sectionElement(title);
+      if (element === undefined) {
+        return;
+      }
+      const top = element.getBoundingClientRect().top + window.scrollY - this.stickyLine();
+      window.scrollTo({top, behavior: prefersReducedMotion() ? 'auto' : 'smooth'});
     },
   },
 });

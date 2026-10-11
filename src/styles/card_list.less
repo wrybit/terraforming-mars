@@ -666,6 +666,82 @@
 }
 
 // ---------- Back to top: bottom right in the thumb zone, only after scrolling far ----------
+// ---------- Section rail (CardListSectionRail.vue, sectionRail.ts) ----------
+// Desktop: one tick per section, vertically centred at the right edge. Length and label come from the fisheye
+// (--rail-length, --rail-influence 0…1): around the pointer, or slightly around the section being read.
+.card-list-rail {
+  position: fixed;
+  top: 50%;
+  right: 2px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  // Room to the left: the fisheye already reacts when the pointer comes close
+  padding: 8px 0 8px 48px;
+  transform: translateY(-50%);
+}
+
+.card-list-rail-tick {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.card-list-rail-line {
+  width: var(--rail-length);
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+  transition: width 0.12s ease-out, background-color 0.2s;
+}
+
+// The label grows in with the fisheye; on its own dark plate, it lies over the cards
+.card-list-rail-label {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: fade(#16171d, 88%);
+  font-size: calc(12px + 3px * var(--rail-influence));
+  white-space: nowrap;
+  opacity: clamp(0, calc(var(--rail-influence) * 1.8 - 0.2), 1);
+  pointer-events: none;
+  transition: opacity 0.12s;
+}
+
+.card-list-rail-tick--active {
+  .card-list-rail-line {
+    background: @highlight-gold;
+  }
+
+  .card-list-rail-label {
+    color: @highlight-gold;
+    font-weight: bold;
+  }
+}
+
+.card-list-rail-tick:focus-visible {
+  outline: none;
+
+  .card-list-rail-line {
+    outline: 2px solid @highlight-gold;
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-list-rail-line,
+  .card-list-rail-label {
+    transition: none;
+  }
+}
+
 .card-list-scroll-top {
   position: fixed;
   right: 20px;
@@ -707,6 +783,11 @@
 @media only screen and (max-width: @card-list-narrow) {
   .card-list {
     --card-list-header: @card-list-header-height-narrow;
+  }
+
+  // Phone and tablet: no room at the edge, the cards fill the width
+  .card-list-rail {
+    display: none;
   }
 
   .card-list-header {
