@@ -3,7 +3,7 @@
 
 // One card starts every REVEAL_STEP_MS, each fades for three steps: the third card starts while the first two are
 // still fading in
-export const REVEAL_STEP_MS = 60;
+export const REVEAL_STEP_MS = 30;
 export const REVEAL_DURATION_MS = 3 * REVEAL_STEP_MS;
 // Waiting for pictures never blocks longer than this (a missing image must not keep cards hidden)
 export const LOAD_LIMIT_MS = 4000;
