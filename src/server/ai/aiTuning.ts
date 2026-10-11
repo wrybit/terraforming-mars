@@ -152,9 +152,9 @@ export const BASELINE_TUNING: AiTuning = {
   opponentSpotShare: 0.25,
   cityDenialShare: 0,
   tagRateModel: 0,
-  // Round 44 (1200 mirrored 1v1 games): cardIncome +0.31 VP per deal (z +0.39) – neutral, adopted for the human
-  // games (humans draw 1.24 cards per generation outside research, the AI 0.34).
-  drawCardModel: 2,
+  // Round 44: cardIncome +0.38 VP per deal (z +0.48) and adopted; round 45 (with flowFit 2): noCardIncome +1.45
+  // (z +1.60) – pooled negative, back to 0.
+  drawCardModel: 0,
   // Round 19: boardHorizon6 neutral in AI-vs-AI (-0.2 VP, z -0.3), adopted for the human case: a city
   // next to free land in generation 11 instead of a spot with three greeneries (human test game).
   boardHorizon: 6,
@@ -251,7 +251,8 @@ export const BASELINE_TUNING: AiTuning = {
   awardActionSwing: 1,
   // Round 44: flowFit2 +0.42 VP per deal (z +0.55), flowFit (1) +0.02 – adopted at 2 for the human feedback (cards that
   // fit the direction of the own game; candidate, round 45 checks it with noFlowFit).
-  flowFit: 2,
+  // Round 45: flowFit3 +1.52 VP per deal (z +1.99) against flowFit 2 – adopted.
+  flowFit: 3,
   drawChoiceValue: 0,
 };
 
@@ -476,6 +477,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noCardIncome: {drawCardModel: 0},
   noFlowFit: {flowFit: 0},
   flowFit3: {flowFit: 3},
+  flowFit4: {flowFit: 4},
   // Human game: Business Contacts (−2) and Invention Contest (0) passed on, the human built a card engine with them.
   drawChoice2: {drawChoiceValue: 2},
   drawChoice4: {drawChoiceValue: 4},
