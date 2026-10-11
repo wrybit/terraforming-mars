@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {serverIdentity, withServerIdentity} from '../../src/server/server/serverIdentity';
+import {serverIdentity, withManifestIdentity, withServerIdentity} from '../../src/server/server/serverIdentity';
 
 describe('serverIdentity', () => {
   it('falls back to the defaults', () => {
@@ -18,5 +18,13 @@ describe('serverIdentity', () => {
     expect(html).to.contain('<meta name="server-title-short" content="&lt;S&gt;" />');
     expect(html).to.contain('<meta name="server-name" content="" />');
     expect(html.indexOf('<title>')).to.be.lessThan(html.indexOf('</head>'));
+  });
+
+  it('uses the short title as home screen name', () => {
+    const identity = {titleLong: 'TM | Meenzer-Server', titleShort: 'TM MZ', name: ''};
+    expect(withServerIdentity('<head><meta name="apple-mobile-web-app-title" content="TM Mars" /></head>', identity))
+      .to.contain('<meta name="apple-mobile-web-app-title" content="TM MZ" />');
+    const manifest = JSON.parse(withManifestIdentity('{"name": "Terraforming Mars", "short_name": "TM Mars", "scope": "/"}', identity));
+    expect(manifest).to.deep.eq({name: 'TM | Meenzer-Server', short_name: 'TM MZ', scope: '/'});
   });
 });

@@ -23,7 +23,10 @@ function escapeHtml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-/** index.html with <title> and the identity as meta tags (read by the client in serverIdentity.ts). */
+/**
+ * index.html with <title> and the identity as meta tags (read by the client in serverIdentity.ts);
+ * the home screen name on iOS (apple-mobile-web-app-title) is the short title.
+ */
 export function withServerIdentity(html: string, identity: ServerIdentity = serverIdentity()): string {
   const tags = [
     `<title>${escapeHtml(identity.titleLong)}</title>`,
@@ -32,5 +35,12 @@ export function withServerIdentity(html: string, identity: ServerIdentity = serv
     `<meta name="server-name" content="${escapeHtml(identity.name)}" />`,
   ].join('\n        ');
   // index.html indents with four spaces per level
-  return html.replace(/( *)<\/head>/, `        ${tags}\n$1</head>`);
+  return html
+    .replace(/(<meta name="apple-mobile-web-app-title" content=")[^"]*(")/, `$1${escapeHtml(identity.titleShort)}$2`)
+    .replace(/( *)<\/head>/, `        ${tags}\n$1</head>`);
+}
+
+/** PWA manifest with this server's titles: name in install dialogs, short_name under the home screen icon. */
+export function withManifestIdentity(manifest: string, identity: ServerIdentity = serverIdentity()): string {
+  return JSON.stringify({...JSON.parse(manifest), name: identity.titleLong, short_name: identity.titleShort}, null, 2);
 }

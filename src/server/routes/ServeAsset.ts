@@ -10,7 +10,7 @@ import {isProduction} from '../utils/server';
 import {Request} from '../Request';
 import {Response} from '../Response';
 import {RouteError} from './RouteError';
-import {withServerIdentity} from '../server/serverIdentity';
+import {withManifestIdentity, withServerIdentity} from '../server/serverIdentity';
 
 type Encoding = 'gzip' | 'br';
 
@@ -103,8 +103,7 @@ export class ServeAsset extends Handler {
 
     try {
       const raw = await this.fileApi.readFile(file);
-      // The page carries this server's titles and name (TITLE_LONG, TITLE_SHORT, SERVER_NAME)
-      const data = file === 'assets/index.html' ? Buffer.from(withServerIdentity(raw.toString('utf8'))) : raw;
+      const data = this.withIdentity(file, raw);
       if (this.cacheAssets === true) {
         this.cache.set(file, data);
       }
@@ -113,6 +112,18 @@ export class ServeAsset extends Handler {
     } catch (err) {
       console.log(err);
       throw RouteError.internalServerError('Cannot serve ' + path);
+    }
+  }
+
+  // Page and PWA manifest carry this server's titles and name (TITLE_LONG, TITLE_SHORT, SERVER_NAME)
+  private withIdentity(file: string, raw: Buffer): Buffer {
+    switch (file) {
+    case 'assets/index.html':
+      return Buffer.from(withServerIdentity(raw.toString('utf8')));
+    case 'assets/pwa/manifest.webmanifest':
+      return Buffer.from(withManifestIdentity(raw.toString('utf8')));
+    default:
+      return raw;
     }
   }
 
