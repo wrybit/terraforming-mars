@@ -1,6 +1,6 @@
 import {ParticipantId} from '../../common/Types';
 
-// Who has a game page open right now: every page polls the server regularly (status, waiting for).
+// Who is playing right now: game pages of running games poll the server regularly (GET /api/status).
 // The update script of the test server only restarts the server when nobody is playing.
 const ACTIVE_WINDOW_MILLISECONDS = 3 * 60 * 1000;
 const lastSeen = new Map<ParticipantId, number>();

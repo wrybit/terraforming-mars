@@ -8,6 +8,9 @@ import {RouteTestScaffolding} from './RouteTestScaffolding';
 import {clearActiveParticipants} from '../../src/server/server/activeParticipants';
 import {clearServerUpdateFlag, serverStartedAt} from '../../src/server/server/serverUpdate';
 import {ServerStatusModel} from '../../src/common/models/ServerStatusModel';
+import {Game} from '../../src/server/Game';
+import {TestPlayer} from '../TestPlayer';
+import {Phase} from '../../src/common/Phase';
 
 describe('ApiStatus', () => {
   let scaffolding: RouteTestScaffolding;
@@ -48,11 +51,25 @@ describe('ApiStatus', () => {
     expect((await status('/api/status')).updating).is.false;
   });
 
-  it('counts game pages, not other pages', async () => {
-    await status('/api/status?id=pabc123');
+  it('counts players of running games, not spectators or other pages', async () => {
+    const player = TestPlayer.BLUE.newPlayer();
+    const other = TestPlayer.RED.newPlayer();
+    await scaffolding.ctx.gameLoader.add(Game.newInstance('game-id', [player, other], player, 'spectatorid'));
+    await status('/api/status?id=' + player.id);
+    await status('/api/status?id=' + player.id);
+    await status('/api/status?id=' + other.id);
     await status('/api/status?id=sxyz789');
-    await status('/api/status?id=pabc123');
+    await status('/api/status?id=pnot-in-a-game');
     await status('/api/status?id=not-a-participant');
     expect((await status('/api/status')).activeParticipants).eq(2);
+  });
+
+  it('does not count players of a finished game', async () => {
+    const player = TestPlayer.BLUE.newPlayer();
+    const game = Game.newInstance('game-id', [player], player, 'spectatorid');
+    game.phase = Phase.END;
+    await scaffolding.ctx.gameLoader.add(game);
+    await status('/api/status?id=' + player.id);
+    expect((await status('/api/status')).activeParticipants).eq(0);
   });
 });

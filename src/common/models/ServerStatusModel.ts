@@ -4,6 +4,6 @@ export type ServerStatusModel = {
   updating: boolean,
   /** Start time of this server process; changes after every restart, so pages can tell a new version. */
   startedAt: number,
-  /** Players and spectators with a page open in the last minutes (decides whether an update may run now). */
+  /** Players of running games with a page open in the last minutes (decides whether an update may run now). */
   activeParticipants: number,
 }
