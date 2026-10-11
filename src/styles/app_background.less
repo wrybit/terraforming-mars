@@ -28,14 +28,20 @@
 }
 
 // Image credit (licence): small and quiet, at the top right of the page – mirrors the menu button top left:
-// same distance to the edge and vertically centred on its axis (line height = button height)
+// same distance to the edge and vertically centred on its axis (min height = button height)
 .app-background-credit {
   position: absolute;
   top: @toolbar-edge-offset;
   right: @toolbar-edge-offset;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  // Narrow phones: wraps to two lines instead of running into the menu button (stays centred on its axis)
+  max-width: calc(100% - 140px);
+  min-height: @toolbar-button-size;
   font-size: 10px;
-  line-height: @toolbar-button-size;
+  line-height: 1.3;
+  text-align: right;
   color: rgba(255, 255, 255, 0.35);
   text-decoration: none;
 
