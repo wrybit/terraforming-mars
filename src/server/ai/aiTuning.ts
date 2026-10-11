@@ -128,6 +128,8 @@ export type AiTuning = {
   cityNeighbourShare: number,
   /** Chance an opponent builds a city next to a lonely own greenery (boardPotential.ts). */
   exposedSpotRisk: number,
+  /** Award lead uncertainty from actions still open this generation: per 10 M€ of the richest player who has not passed (stateValue.ts). */
+  awardActionSwing: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -238,6 +240,7 @@ export const BASELINE_TUNING: AiTuning = {
   lengthDeviation: 1,
   cityNeighbourShare: 0.6,
   exposedSpotRisk: 0.5,
+  awardActionSwing: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -448,6 +451,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   cityShare80: {cityNeighbourShare: 0.8},
   cityShare45: {cityNeighbourShare: 0.45},
   exposedRisk80: {exposedSpotRisk: 0.8},
+  // Human game: Edgedancer funded in the last generation at 3 : 1 and lost 3 : 5 – the opponent still had money and actions.
+  awardActions: {awardActionSwing: 1},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.

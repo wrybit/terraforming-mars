@@ -56,6 +56,8 @@ export type ValuationContext = {
   productionDiscount?: number,
   /** Award lead uncertainty of the deciding player (aiTuning.ts awardSwing), the same for both sides' awards. */
   awardSwing?: number,
+  /** Award swing from actions still open this generation (aiTuning.ts awardActionSwing), deciding player's view. */
+  awardActionSwing?: number,
   /** Award leads are projected to the game end by each player's pace so far (aiTuning.ts awardTiming). */
   awardTiming?: boolean,
 };
@@ -87,11 +89,28 @@ function expectedAwardPoints(player: IPlayer, context: ValuationContext): number
     // The deciding player's view for both sides: own leads and the opponent's leads are equally
     // uncertain, so catching up in an award the opponent leads is worth as much as defending one.
     const remainingSwing = (context.awardSwing ?? tuningOf(player).awardSwing) * Math.max(own, best) * context.remaining;
-    const swing = 2 + Math.max(own, best) * 0.25 * (1 - context.awardConfidence) + remainingSwing;
+    const swing = 2 + Math.max(own, best) * 0.25 * (1 - context.awardConfidence) + remainingSwing + actionSwing(player, context.awardActionSwing ?? tuningOf(player).awardActionSwing);
     const firstPlaceChance = Math.max(0, Math.min(1, 0.5 + margin / (2 * swing)));
     points += 5 * firstPlaceChance * context.awardConfidence;
   }
   return points;
+}
+
+/**
+ * Award swing from the actions still open in this generation (aiTuning.ts awardActionSwing): the
+ * remaining production phases miss them, so in the last generation a lead of 3 : 1 looked certain while
+ * an opponent with 46 M€ and a full hand still placed four tiles and won the award. Scaled by the money
+ * of the richest player who has not passed yet.
+ */
+function actionSwing(player: IPlayer, weight: number): number {
+  if (weight <= 0) {
+    return 0;
+  }
+  const game = player.game;
+  const money = Math.max(0, ...[player, ...player.opponents]
+    .filter((p) => !game.hasPassedThisActionPhase(p))
+    .map((p) => p.megaCredits));
+  return weight * money / 10;
 }
 
 /** `player`: whose AI variant decides (its expected game length, aiTuning.ts lengthByPlayers). */
@@ -360,7 +379,8 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
 export function relativeValue(player: IPlayer, frozen: ValuationContext): number {
   const tuning = tuningOf(player);
   const context = {...frozen, tempo: tuning.tempoAware > 0 || frozen.tempo, awardTiming: tuning.awardTiming > 0 || frozen.awardTiming,
-    productionDiscount: frozen.productionDiscount ?? tuning.productionDiscount, awardSwing: frozen.awardSwing ?? tuning.awardSwing};
+    productionDiscount: frozen.productionDiscount ?? tuning.productionDiscount, awardSwing: frozen.awardSwing ?? tuning.awardSwing,
+    awardActionSwing: frozen.awardActionSwing ?? tuning.awardActionSwing};
   const opponents = player.opponents;
   const own = playerValue(player, context);
   if (opponents.length === 0) {
