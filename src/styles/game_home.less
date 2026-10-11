@@ -137,8 +137,9 @@
   }
 
   // Play is the only colored button: a white outline keeps it apart from every player color behind it
+  // (as a shadow: a rule elsewhere fixes the border color of every .btn with !important)
   .btn-primary {
-    border-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 0 1.5px #fff;
   }
 
   // Spectator is not part of the turn order: set apart
