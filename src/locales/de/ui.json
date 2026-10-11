@@ -1533,6 +1533,8 @@
   "Show Mars enlarged": "Mars groß anzeigen",
   "Place city": "Stadt platzieren",
   "Place ${0}": "${0} platzieren",
+  "1 player online": "1 Spieler online",
+  "${0} players online": "${0} Spieler online",
   "Sections": "Abschnitte",
   "Place ocean": "Ozean platzieren",
   "Show Mars enlarged and choose a space": "Mars wird groß angezeigt – dann ein Feld wählen",

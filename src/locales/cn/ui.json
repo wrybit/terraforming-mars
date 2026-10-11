@@ -717,6 +717,8 @@
   "Show Mars enlarged": "放大显示火星",
   "Place city": "放置城市",
   "Place ${0}": "放置${0}",
+  "1 player online": "1 名玩家在线",
+  "${0} players online": "${0} 名玩家在线",
   "Sections": "分区",
   "Place ocean": "放置海洋",
   "Show Mars enlarged and choose a space": "放大显示火星——然后选择一个地块",

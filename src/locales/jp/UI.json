@@ -1182,6 +1182,8 @@
   "Show Mars enlarged": "火星を拡大表示",
   "Place city": "都市を配置",
   "Place ${0}": "${0}を配置",
+  "1 player online": "1人がオンライン",
+  "${0} players online": "${0}人がオンライン",
   "Sections": "セクション",
   "Place ocean": "海洋を配置",
   "Show Mars enlarged and choose a space": "火星を拡大表示してマスを選択",

@@ -1404,6 +1404,8 @@
   "Show Mars enlarged": "Afficher Mars en grand",
   "Place city": "Placer une cité",
   "Place ${0}": "Placer ${0}",
+  "1 player online": "1 joueur en ligne",
+  "${0} players online": "${0} joueurs en ligne",
   "Place ocean": "Placer un océan",
   "Show Mars enlarged and choose a space": "Mars s'affiche en grand – puis choisissez une zone",
   "Show the Moon enlarged and choose a space": "La Lune s'affiche en grand – puis choisissez une zone",

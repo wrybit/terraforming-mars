@@ -355,6 +355,58 @@
   }
 }
 
+// Start page: the online count on its own line above the footer row, centred – between build facts and notice it
+// would read as part of one of them
+.notice--online > .online-players {
+  order: -1;
+  flex-basis: 100%;
+  justify-content: center;
+}
+
+// "3 players online" (OnlinePlayers.vue): small text, a green light pulsing in front of it
+.online-players {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+}
+
+.online-players-light {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3ddc6a;
+  box-shadow: 0 0 6px #3ddc6a;
+  animation: online-players-pulse 2s ease-in-out infinite;
+}
+
+// Nobody playing: the light stays grey and still
+.online-players--none .online-players-light {
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: none;
+  animation: none;
+}
+
+@keyframes online-players-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .online-players-light {
+    animation: none;
+  }
+}
+
 @media only screen and (max-width: 1023px) {
   .topmost-start-screen {
     min-height: 100dvh;

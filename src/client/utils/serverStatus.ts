@@ -9,6 +9,9 @@ export type ServerUpdatePhase = 'none' | 'updating' | 'done';
 
 export const serverUpdatePhase = ref<ServerUpdatePhase>('none');
 
+// Players of running games with a page open right now (start page: "3 players online", OnlinePlayers.vue)
+export const activeParticipants = ref<number | undefined>(undefined);
+
 const POLL_MILLISECONDS = 5000;
 let knownStartedAt: number | undefined;
 let timer: ReturnType<typeof setInterval> | undefined;
@@ -21,6 +24,7 @@ export function markServerUpdating(): void {
 }
 
 export function applyServerStatus(status: ServerStatusModel): void {
+  activeParticipants.value = status.activeParticipants;
   if (status.updating) {
     markServerUpdating();
   } else if (knownStartedAt !== undefined && status.startedAt !== knownStartedAt) {
@@ -65,4 +69,5 @@ export function resetServerStatus(): void {
   }
   knownStartedAt = undefined;
   serverUpdatePhase.value = 'none';
+  activeParticipants.value = undefined;
 }

@@ -55,8 +55,10 @@
     </div>
     <!-- In game views the notice sits in the sidebar's info window; on the results page it is dropped (Jens' request) -->
     <!-- Start page and "Create game" share the same footer (Jens' request): build facts left, notice right -->
-    <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': hasStartScreenFooter}">
+    <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': hasStartScreenFooter, 'notice--online': screen === 'start-screen'}">
       <StartScreenFooter v-if="hasStartScreenFooter"/>
+      <!-- Start page: how many are playing right now, in the middle of the footer -->
+      <OnlinePlayers v-if="screen === 'start-screen'"/>
       <FanProjectNotice/>
     </footer>
   </div>
@@ -82,6 +84,7 @@ const MobileSpectatorHome = defineAsyncComponent(() => import(/* webpackChunkNam
 const SpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "spectator-home" */ '@/client/components/SpectatorHome.vue'));
 const StatsPage = defineAsyncComponent(() => import(/* webpackChunkName: "stats" */ '@/client/components/stats/StatsPage.vue'));
 const StartScreenFooter = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreenFooter.vue'));
+const OnlinePlayers = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/OnlinePlayers.vue'));
 const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreen.vue'));
 import {$t, setTranslationContext} from '@/client/directives/i18n';
 import {paths} from '@/common/app/paths';
@@ -165,6 +168,7 @@ export default defineComponent({
     ServerUpdateOverlay,
     StartScreen,
     StartScreenFooter,
+    OnlinePlayers,
     CreateGameForm,
     LoadGameForm,
     GameHome,

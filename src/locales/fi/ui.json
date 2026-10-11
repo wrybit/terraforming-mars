@@ -1543,6 +1543,8 @@
   "Show Mars enlarged": "Näytä Mars suurena",
   "Place city": "Aseta kaupunki",
   "Place ${0}": "Sijoita ${0}",
+  "1 player online": "1 pelaaja paikalla",
+  "${0} players online": "${0} pelaajaa paikalla",
   "Sections": "Osiot",
   "Place ocean": "Aseta valtameri",
   "Show Mars enlarged and choose a space": "Mars näytetään suurena – valitse sitten ruutu",

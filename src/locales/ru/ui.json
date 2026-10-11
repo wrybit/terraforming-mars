@@ -571,6 +571,8 @@
   "Show Mars enlarged": "Показать Марс крупно",
   "Place city": "Выложить город",
   "Place ${0}": "Разместить ${0}",
+  "1 player online": "1 игрок онлайн",
+  "${0} players online": "${0} игроков онлайн",
   "Sections": "Разделы",
   "Place ocean": "Выложить океан",
   "Show Mars enlarged and choose a space": "Марс крупно – затем выберите клетку",

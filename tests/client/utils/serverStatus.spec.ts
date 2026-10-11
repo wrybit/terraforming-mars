@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {applyServerStatus, markServerUpdating, resetServerStatus, serverUpdatePhase} from '@/client/utils/serverStatus';
+import {activeParticipants, applyServerStatus, markServerUpdating, resetServerStatus, serverUpdatePhase} from '@/client/utils/serverStatus';
 
 describe('serverStatus', () => {
   beforeEach(() => resetServerStatus());
@@ -33,5 +33,11 @@ describe('serverStatus', () => {
   it('a refused input freezes the page', () => {
     markServerUpdating();
     expect(serverUpdatePhase.value).eq('updating');
+  });
+
+  it('keeps the number of players online for the start page', () => {
+    expect(activeParticipants.value).is.undefined;
+    applyServerStatus({updating: false, startedAt: 1, activeParticipants: 3});
+    expect(activeParticipants.value).eq(3);
   });
 });
