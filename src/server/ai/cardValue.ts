@@ -10,6 +10,7 @@ import {finishMove, GameSnapshot, playerView, withCopy} from './gameCopy';
 import {relativeValue, ValuationContext, valuationContext} from './stateValue';
 import {cardPriorFactor} from './cardPriors';
 import {flowFit} from './cardFit';
+import {drawChoiceBonus} from './drawChoice';
 import {closingWindowFactor, requirementOutlook} from './requirementOutlook';
 import {pickSome} from './randomChoice';
 import {engineValue} from './engineValue';
@@ -117,7 +118,7 @@ function nowValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context:
   const engineWeight = tuningOf(player).engineWeight;
   const engine = engineWeight > 0 ? engineWeight * engineValue(snapshot, player, card, context) : 0;
   const gain = gainInCopy(snapshot, player, card, context, 0);
-  const raw = gain === undefined ? 0 : (gain + engine) * priorFactor(card, player) - costOf(card, player);
+  const raw = gain === undefined ? 0 : (gain + engine + drawChoiceBonus(card, player)) * priorFactor(card, player) - costOf(card, player);
   return raw > 0 ? raw * outlookOf(card, player) * (isBlockedNow(card, player) ? BLOCKED_NOW_FACTOR : 1) : raw;
 }
 
@@ -160,7 +161,7 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
   if (samples === 0) {
     return Number.NEGATIVE_INFINITY;
   }
-  const raw = (total / samples) * priorFactor(card, player) - costOf(card, player);
+  const raw = (total / samples + drawChoiceBonus(card, player)) * priorFactor(card, player) - costOf(card, player);
   // A window that closes before the card would be played (at most 5 % oxygen …).
   const window = tuningOf(player).closingWindow > 0 && raw > 0 && isIProjectCard(card) ? closingWindowFactor(card, player, delay) : 1;
   return raw * outlookOf(card, player) * LATER_DISCOUNT * window * (isBlockedNow(card, player) ? BLOCKED_LATER_FACTOR : 1);

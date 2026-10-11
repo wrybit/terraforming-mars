@@ -132,6 +132,8 @@ export type AiTuning = {
   awardActionSwing: number,
   /** Card value × (1 + weight × fit to the flow of the own game), fit learned from top players' tableaus (cardFit.ts); 0 = off. */
   flowFit: number,
+  /** M€ per card seen but not kept when choosing from several drawn cards (drawChoice.ts); 0 = off. */
+  drawChoiceValue: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -250,6 +252,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 44: flowFit2 +0.42 VP per deal (z +0.55), flowFit (1) +0.02 – adopted at 2 for the human feedback (cards that
   // fit the direction of the own game; candidate, round 45 checks it with noFlowFit).
   flowFit: 2,
+  drawChoiceValue: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -473,6 +476,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noCardIncome: {drawCardModel: 0},
   noFlowFit: {flowFit: 0},
   flowFit3: {flowFit: 3},
+  // Human game: Business Contacts (−2) and Invention Contest (0) passed on, the human built a card engine with them.
+  drawChoice2: {drawChoiceValue: 2},
+  drawChoice4: {drawChoiceValue: 4},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
