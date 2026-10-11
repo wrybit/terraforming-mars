@@ -3,7 +3,7 @@
   <Teleport to="body">
     <PopupPanel v-if="showPopup" @close="close">
       <template #header>
-        <h2>{{ name }}</h2>
+        <h2>{{ $t(name) }}</h2>
       </template>
       <div class="card-help-text" v-html="renderedHelpText"></div>
     </PopupPanel>
@@ -16,6 +16,7 @@ import {defineComponent} from 'vue';
 import {CardName} from '@/common/cards/CardName';
 import PopupPanel from '@/client/components/common/PopupPanel.vue';
 import {renderMarkdown} from '@/client/markdown/markdown';
+import {translateText} from '@/client/directives/i18n';
 
 export default defineComponent({
   name: 'CardHelp',
@@ -44,7 +45,10 @@ export default defineComponent({
   },
   computed: {
     renderedHelpText(): string {
-      return renderMarkdown(this.helpText);
+      // Help notes are English source texts like card texts. Translated line by line, because the
+      // line breaks carry the Markdown structure (paragraphs, quotes, lists) and the lookup drops them.
+      const lines = this.helpText.split('\n').map((line) => (line.trim() === '' ? line : translateText(line)));
+      return renderMarkdown(lines.join('\n'));
     },
   },
   methods: {

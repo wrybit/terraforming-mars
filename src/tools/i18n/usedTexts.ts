@@ -10,6 +10,10 @@ const GENFILES = ['cards', 'colonies', 'milestones', 'awards', 'agendas', 'event
 function collectStrings(value: unknown, into: Set<string>): void {
   if (typeof value === 'string') {
     into.add(normalizeText(value));
+    // Multi-line texts (card help notes in Markdown) are translated line by line
+    if (value.includes('\n')) {
+      value.split('\n').filter((line) => line.trim() !== '').forEach((line) => into.add(normalizeText(line)));
+    }
   } else if (Array.isArray(value)) {
     value.forEach((item) => collectStrings(item, into));
   } else if (value !== null && typeof value === 'object') {

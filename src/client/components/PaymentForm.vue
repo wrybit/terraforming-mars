@@ -93,6 +93,7 @@ import {computeDefaultPayment} from '@/client/components/PaymentDefaults';
 import {sum} from '@/common/utils/utils';
 import {Message} from '@/common/logs/Message';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
+import {translateTextWithParams} from '@/client/directives/i18n';
 
 const DESCRIPTIONS: Record<SpendableResource, string> = {
   steel: 'Steel',
@@ -328,7 +329,7 @@ export default defineComponent({
           }
         }
         if (getPreferences().show_alerts) {
-          if (!confirm('Warning: You are overpaying by ' + delta + ' M€')) {
+          if (!confirm(translateTextWithParams('Warning: You are overpaying by ${0} M€', [String(delta)]))) {
             this.warning = 'Please adjust payment amount';
             return;
           }

@@ -1,19 +1,28 @@
 {
   "br": [
     "&nbsp;Cheung Shing",
+    "Info",
     "Star Wars",
     "Terraforming Mars",
     "Underworld 2",
     "Venus Next",
     "[ solo"
   ],
+  "cn": [
+    "${0} AI",
+    "Delta Project (2VP)",
+    "Delta Project (5VP)"
+  ],
   "de": [
     "&nbsp;Cheung Shing",
+    "Details:",
     "Generation: ∅",
+    "Info",
     "Terraforming Mars"
   ],
   "es": [
     "&nbsp;Cheung Shing",
+    "Info",
     "Star Wars",
     "Terraforming Mars",
     "Underworld 2",
@@ -21,7 +30,8 @@
   ],
   "fi": [
     "&nbsp;Cheung Shing",
-    "1 data / 2 °C"
+    "1 data / 2 °C",
+    "Info"
   ],
   "fr": [
     "${0} (Turmoil ${1})",
@@ -58,6 +68,7 @@
     "&nbsp;Cheung Shing",
     "(max 3)",
     "Escape Velocity",
+    "Info",
     "Prelude + Prelude",
     "Prelude 2",
     "Terraforming Mars",
@@ -75,12 +86,23 @@
     "vastitas borealis",
     "vastitas borealis nova"
   ],
+  "jp": [
+    "${0} AI",
+    "Delta Project (2VP)",
+    "Delta Project (5VP)"
+  ],
+  "ko": [
+    "${0} AI",
+    "Delta Project (2VP)",
+    "Delta Project (5VP)"
+  ],
   "nb": [
     "&nbsp;Cheung Shing",
     "1 data / 2 °C",
     "2x bonus",
     "Bonus for ${0}",
     "Bonus for ${0}: ${1}",
+    "Info",
     "Star Wars",
     "Terraforming Mars",
     "[ solo",
@@ -94,6 +116,7 @@
   ],
   "nl": [
     "${0} (Turmoil ${1})",
+    "${0} AI",
     "${0} prelude",
     "${0} preludes",
     "&nbsp;Cheung Shing",
@@ -102,6 +125,8 @@
     "1 titanium / 2 °C",
     "2 titanium",
     "2x bonus",
+    "Details:",
+    "Info",
     "Prelude 2",
     "Star Wars",
     "Terraforming Mars",
@@ -117,6 +142,7 @@
   ],
   "pl": [
     "&nbsp;Cheung Shing",
+    "Info",
     "Underworld 2",
     "[ solo",
     "terra cimmeria nova",
