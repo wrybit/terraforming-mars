@@ -1585,8 +1585,10 @@
   "Pass turn": "Weitergeben",
   "Finish": "Beenden",
   "The server is being updated": "Der Server wird aktualisiert",
-  "Please wait a moment. All moves are saved.": "Bitte kurz warten. Alle Züge sind gespeichert.",
+  "Please wait a moment.": "Bitte kurz warten.",
+  "All moves are saved.": "Alle Züge sind gespeichert.",
   "Server updated successfully": "Server erfolgreich aktualisiert",
   "Reload": "Neu laden",
-  "All games are saved – after reloading, play continues seamlessly.": "Alle Spielstände sind gespeichert – nach dem Neuladen geht es nahtlos weiter."
+  "All games are saved.": "Alle Spielstände sind gespeichert.",
+  "After reloading, play continues seamlessly.": "Nach dem Neuladen geht es nahtlos weiter."
 }

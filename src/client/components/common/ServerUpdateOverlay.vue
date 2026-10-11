@@ -5,7 +5,10 @@
       <template v-if="phase === 'updating'">
         <div class="server-update-overlay__title" v-i18n>The server is being updated</div>
         <LoadingBar class="server-update-overlay__progress"/>
-        <div class="server-update-overlay__hint" v-i18n>Please wait a moment. All moves are saved.</div>
+        <div class="server-update-overlay__hint">
+          <span v-i18n>Please wait a moment.</span>
+          <span v-i18n>All moves are saved.</span>
+        </div>
       </template>
       <template v-else>
         <svg class="server-update-overlay__check" width="56" height="56" viewBox="0 0 48 48" aria-hidden="true">
@@ -14,7 +17,10 @@
         </svg>
         <div class="server-update-overlay__title" v-i18n>Server updated successfully</div>
         <button class="btn btn-submit btn-rounded server-update-overlay__reload" @click="reload" v-i18n>Reload</button>
-        <div class="server-update-overlay__hint" v-i18n>All games are saved – after reloading, play continues seamlessly.</div>
+        <div class="server-update-overlay__hint">
+          <span v-i18n>All games are saved.</span>
+          <span v-i18n>After reloading, play continues seamlessly.</span>
+        </div>
       </template>
     </div>
   </div>
