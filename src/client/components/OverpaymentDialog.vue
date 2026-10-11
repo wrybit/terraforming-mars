@@ -52,8 +52,12 @@
     <p class="overpayment-dialog__reason" data-test="reason">{{ reason }}</p>
 
     <template #footer>
-      <button type="button" class="btn btn-tone-quiet" data-test="dismiss" @click="emit('dismiss')" v-i18n>No, adjust</button>
-      <button type="button" class="btn btn-primary" data-test="accept" @click="emit('accept')" v-i18n>Yes, pay anyway</button>
+      <!-- Red = back out, green = go ahead (button_tones.less); the accept button repeats the excess, so the click says what it costs -->
+      <button type="button" class="btn btn-tone-danger" data-test="dismiss" @click="emit('dismiss')" v-i18n>No, adjust</button>
+      <button type="button" class="btn btn-tone-success overpayment-dialog__accept" data-test="accept" @click="emit('accept')">
+        <span v-i18n>Yes, pay anyway</span>
+        <span class="overpayment-dialog__accept-excess" data-test="accept-excess">+{{ excess }}<i class="resource_icon resource_icon--megacredits"></i></span>
+      </button>
     </template>
   </DialogFrame>
 </template>

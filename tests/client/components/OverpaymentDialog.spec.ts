@@ -20,6 +20,7 @@ describe('OverpaymentDialog', () => {
   it('shows the excess, the used currency and the reason', () => {
     const wrapper = mountDialog('Asteroid');
     expect(wrapper.find('[data-test=excess]').text()).to.eq('+2');
+    expect(wrapper.find('[data-test=accept-excess]').text()).to.eq('+2');
     expect(wrapper.find('[data-test=item]').text()).to.eq('Asteroid');
     expect(wrapper.find('[data-test=segment-titanium]').exists()).is.true;
     expect(wrapper.find('[data-test=segment-megacredits]').exists()).is.false;
