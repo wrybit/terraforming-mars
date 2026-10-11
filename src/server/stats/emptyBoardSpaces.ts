@@ -23,5 +23,5 @@ export function emptyBoardSpaces(boardKey: StatsBoardKey): Array<SpaceModel> {
 function neutralSpaces(): Array<SpaceModel> {
   return emptyBoardSpaces(BoardName.THARSIS).map((space) => space.spaceType === SpaceType.COLONY ?
     space :
-    {id: space.id, x: space.x, y: space.y, spaceType: SpaceType.LAND, bonus: []});
+    {id: space.id, spaceType: SpaceType.LAND, bonus: []});
 }

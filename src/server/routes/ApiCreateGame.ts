@@ -21,6 +21,7 @@ import {QuotaConfig, QuotaHandler} from '../server/QuotaHandler';
 import {durationToMilliseconds} from '../utils/durations';
 import {readBody} from './readBody';
 import {RouteError} from './RouteError';
+import {isProduction} from '@/server/utils/server';
 import {CEO_CARDS_DEALT_PER_PLAYER} from '../../common/constants';
 import {hasNegativeEscapeVelocityOption, sanitizeEscapeVelocityOptions} from '../../common/game/escapeVelocity';
 import {boardCandidates, boardRandom, pickBoard} from '../boards/newGameBoard';
@@ -180,6 +181,10 @@ export class ApiCreateGame extends Handler {
       const aiBlockers = aiUnsupportedReasons({expansions: gameReq.expansions, twoCorpsVariant: gameReq.twoCorpsVariant});
       if (aiBlockers.length > 0 && gameReq.players.some((p) => isAiLevel(p.aiLevel))) {
         throw RouteError.badRequest(`AI players are not available with: ${aiBlockers.join(', ')}`);
+      }
+      // TODO(kberg): Remove once Amazonis Planitia is ready to play. Until then, only development servers create it.
+      if (gameReq.board === BoardName.AMAZONIS_PLANITIA && isProduction()) {
+        throw RouteError.badRequest('Amazonis Planitia is not available yet.');
       }
       const gameId = safeCast(generateRandomId('g'), isGameId);
       const spectatorId = safeCast(generateRandomId('s'), isSpectatorId);
