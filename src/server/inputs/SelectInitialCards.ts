@@ -100,7 +100,7 @@ export class SelectInitialCards extends OptionsInput<undefined> {
     if (corporation.name !== CardName.BEGINNER_CORPORATION && player.cardsInHand.length * cardCost > corporation.startingMegaCredits) {
       player.cardsInHand = [];
       player.preludeCardsInHand = [];
-      throw new InputError('Too many cards selected');
+      throw new InputError('The selected cards cost more M€ than the corporation provides at the start. Select fewer cards.');
     }
 
     for (const card of player.dealtProjectCards) {

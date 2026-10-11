@@ -12,12 +12,13 @@
       :title="$t('Draw again')" :aria-label="$t('Draw again')" @click="$emit('reroll')">
       <svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.34 5.66"/><path d="M20 4v7h-7"/></svg>
     </button>
-    <p v-else-if="failed" class="create-game-note" v-i18n>The board could not be loaded.</p>
+    <p v-else-if="failed" class="create-game-note"><span v-i18n>The board could not be loaded.</span> {{ failureText }}</p>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
+import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
 import {paths} from '@/common/app/paths';
 import {NewGameConfig} from '@/common/game/NewGameConfig';
 import {BoardName} from '@/common/boards/BoardName';
@@ -49,6 +50,7 @@ export default defineComponent({
       preview: undefined as BoardPreviewModel | undefined,
       loading: false,
       failed: false,
+      failureText: '',
       timer: undefined as ReturnType<typeof setTimeout> | undefined,
       // Answers can overtake each other: only the latest request counts
       requestNumber: 0,
@@ -78,10 +80,7 @@ export default defineComponent({
       const requestNumber = ++this.requestNumber;
       this.loading = true;
       try {
-        const response = await fetch(paths.API_BOARD_PREVIEW, {method: 'POST', body: JSON.stringify(this.config), headers: {'Content-Type': 'application/json'}});
-        if (!response.ok) {
-          throw new Error(await response.text());
-        }
+        const response = await fetchOrFail(paths.API_BOARD_PREVIEW, {method: 'POST', body: JSON.stringify(this.config), headers: {'Content-Type': 'application/json'}});
         const preview = await response.json() as BoardPreviewModel;
         if (requestNumber === this.requestNumber) {
           this.preview = preview;
@@ -91,6 +90,7 @@ export default defineComponent({
       } catch (error) {
         console.error(error);
         if (requestNumber === this.requestNumber) {
+          this.failureText = describeFailure(failureOf(error));
           this.failed = true;
         }
       } finally {

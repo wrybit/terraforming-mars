@@ -59,6 +59,8 @@ import WaitingForTabs from '@/client/components/WaitingForTabs.vue';
 import {isChoiceMenu} from '@/client/components/choiceMenu';
 import {spaceWithSkip} from '@/client/components/spaceWithSkip';
 import {ingestView} from '@/client/utils/changeTracker';
+import {describeFailure, failureFromResponse, RequestFailedError, RequestFailure} from '@/client/utils/requestFailure';
+import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
 
 let ui_update_timeout_id: number | undefined;
 let otherPlayersTimer: number | undefined;
@@ -86,7 +88,6 @@ type DataModel = {
   inputKey: number,
 }
 
-const CANNOT_CONTACT_SERVER = 'Unable to reach the server. It may be restarting or down for maintenance.';
 
 export default defineComponent({
   name: 'WaitingFor',
@@ -220,19 +221,31 @@ export default defineComponent({
             if (resp.id === INVALID_RUN_ID) {
               cb = () => setTimeout(() => window.location.reload(), 100);
             }
-            showAlert('Error with input', resp.message, cb);
+            showAlert(resp.id === INVALID_RUN_ID ? 'Server restarted' : 'Move not possible', resp.message, cb);
           } else {
-            showAlert('Error processing response', 'Unexpected response from server. Please try again.');
-            console.error(response.statusText);
+            await this.showRequestFailure('The move was not sent.', await failureFromResponse(response));
           }
         })
         .catch((e) => {
-          root.showAlert('Error sending input', CANNOT_CONTACT_SERVER);
           console.error(e);
+          this.showRequestFailure('The move was not sent.', {kind: 'network'});
         })
         .finally(() => {
           root.isServerSideRequestInProgress = false;
         });
+    },
+    /**
+     * Gemeinsame Meldung fuer gescheiterte Server-Aufrufe waehrend der Partie: was nicht ging, warum, was tun.
+     * 404 heisst hier fast immer "Partie geloescht" – dann dieselbe Erklaerung wie beim Laden (ID, Zeit, Grund).
+     */
+    async showRequestFailure(whatFailed: string, failure: RequestFailure, cb?: () => void): Promise<void> {
+      const root = vueRoot(this);
+      if (failure.kind === 'http' && failure.status === statusCode.notFound) {
+        const report = await describeGameLoadFailure(this.playerView.id, new RequestFailedError(failure));
+        root.showAlert(report.title, {text: report.text}, () => window.location.assign('./'));
+        return;
+      }
+      root.showAlert('Connection problem', {text: translateText(whatFailed) + '\n' + describeFailure(failure)}, cb);
     },
     updatePlayerView(playerView: PlayerViewModel | undefined) {
       const root = vueRoot(this);
@@ -252,8 +265,8 @@ export default defineComponent({
       const askForUpdate = () => {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', paths.API_WAITING_FOR + window.location.search + '&gameAge=' + this.playerView.game.gameAge + '&undoCount=' + this.playerView.game.undoCount);
-        xhr.onerror = function() {
-          root.showAlert('Error fetching state', CANNOT_CONTACT_SERVER, () => vueApp.waitForUpdate());
+        xhr.onerror = () => {
+          this.showRequestFailure('The moves of the other players could not be fetched.', {kind: 'network'}, () => vueApp.waitForUpdate());
         };
         xhr.onload = () => {
           if (xhr.status === statusCode.ok) {
@@ -277,7 +290,8 @@ export default defineComponent({
             }
             vueApp.waitForUpdate();
           } else {
-            root.showAlert('Error with input', `Received unexpected response from server (${xhr.status}). This is often due to the server restarting.`, () => vueApp.waitForUpdate());
+            const serverText = typeof xhr.response?.message === 'string' ? xhr.response.message : '';
+            this.showRequestFailure('The moves of the other players could not be fetched.', {kind: 'http', status: xhr.status, serverText}, () => vueApp.waitForUpdate());
           }
         };
         xhr.responseType = 'json';

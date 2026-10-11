@@ -237,7 +237,7 @@ describe('CreateGameForm', () => {
   });
 
   it('shows warnings when restoring saved settings', async () => {
-    const alerts: Array<{title: string, message: string}> = [];
+    const alerts: Array<{title: string, message: string | {text: string}}> = [];
     const Root = defineComponent({
       components: {
         CreateGameForm,
@@ -248,7 +248,7 @@ describe('CreateGameForm', () => {
       ...globalConfig,
     });
     const form = wrapper.findComponent(CreateGameForm);
-    (form.vm.$root as any).showAlert = (title: string, message: string) => {
+    (form.vm.$root as any).showAlert = (title: string, message: string | {text: string}) => {
       alerts.push({title, message});
     };
 
@@ -261,7 +261,7 @@ describe('CreateGameForm', () => {
 
     expect(alerts).deep.eq([{
       title: 'Restore settings',
-      message: "Settings loaded with these warnings:\nUnknown card name 'Bad Prelude Name' in customPreludes",
+      message: {text: "Settings loaded with these warnings:\nUnknown card name 'Bad Prelude Name' in customPreludes"},
     }]);
   });
 

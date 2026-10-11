@@ -28,7 +28,7 @@
     <section class="games-overview-card">
       <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
       <template v-else-if="status === 'error'">
-        <p class="games-overview-note" v-i18n>The server is not answering right now – probably it is just restarting.</p>
+        <p class="games-overview-note"><span v-i18n>The game list could not be loaded.</span> {{ loadFailureText }}</p>
         <button type="button" class="btn btn-tone-quiet" @click="loadGames" v-i18n>Try again</button>
       </template>
       <p v-else-if="summaries.length === 0" class="games-overview-note" v-i18n>No games yet.</p>
@@ -56,9 +56,10 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
+import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
 import * as constants from '@/common/constants';
 import {paths} from '@/common/app/paths';
-import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {translateTextWithParams} from '@/client/directives/i18n';
 import {AdminDeleteGameRequest, AdminGameSummary} from '@/common/admin/AdminGameSummary';
 import GameOverview from '@/client/components/admin/GameOverview.vue';
 import ImportGameForm from '@/client/components/admin/ImportGameForm.vue';
@@ -71,6 +72,7 @@ type DataModel = {
   status: 'loading' | 'error' | 'done';
   deletingIds: Array<string>;
   deleteError: string;
+  loadFailureText: string;
 };
 
 export default defineComponent({
@@ -86,6 +88,7 @@ export default defineComponent({
       status: 'loading',
       deletingIds: [],
       deleteError: '',
+      loadFailureText: '',
     };
   },
   mounted() {
@@ -121,13 +124,11 @@ export default defineComponent({
     },
     async loadGames() {
       try {
-        const response = await fetch(this.adminUrl(paths.API_ADMIN_GAMES));
-        if (!response.ok) {
-          throw new Error(await response.text());
-        }
+        const response = await fetchOrFail(this.adminUrl(paths.API_ADMIN_GAMES));
         this.summaries = await response.json();
         this.status = 'done';
-      } catch {
+      } catch (error) {
+        this.loadFailureText = describeFailure(failureOf(error));
         this.status = 'error';
       }
     },
@@ -136,14 +137,11 @@ export default defineComponent({
       this.deleteError = '';
       try {
         const body: AdminDeleteGameRequest = {id};
-        const response = await fetch(this.adminUrl(paths.API_ADMIN_DELETE_GAME), {method: 'POST', body: JSON.stringify(body)});
-        if (!response.ok) {
-          throw new Error(await response.text());
-        }
+        await fetchOrFail(this.adminUrl(paths.API_ADMIN_DELETE_GAME), {method: 'POST', body: JSON.stringify(body)});
         // Remove locally instead of reloading: the row disappears immediately, the columns adjust
         this.summaries = this.summaries.filter((summary) => summary.id !== id);
       } catch (error) {
-        this.deleteError = `${translateTextWithParams('Could not delete ${0}', [id])}: ${translateText(error instanceof Error ? error.message : String(error))}`;
+        this.deleteError = `${translateTextWithParams('Could not delete ${0}', [id])}: ${describeFailure(failureOf(error))}`;
       } finally {
         this.deletingIds = this.deletingIds.filter((deletingId) => deletingId !== id);
       }

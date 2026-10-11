@@ -1,3 +1,4 @@
+import {fetchOrFail} from '@/client/utils/requestFailure';
 import MarkdownIt from 'markdown-it';
 import {WIKI} from '@/client/utils/WikiLinks';
 
@@ -30,12 +31,7 @@ const pages = new Map<string, Promise<string>>();
 export function fetchWikiPage(page: string): Promise<string> {
   let request = pages.get(page);
   if (request === undefined) {
-    request = fetch(`${RAW_WIKI}/${encodeURIComponent(page)}.md`).then((response) => {
-      if (!response.ok) {
-        throw new Error(`wiki page ${page}: ${response.status}`);
-      }
-      return response.text();
-    });
+    request = fetchOrFail(`${RAW_WIKI}/${encodeURIComponent(page)}.md`).then((response) => response.text());
     // A failed request may be tried again next time
     request.catch(() => pages.delete(page));
     pages.set(page, request);

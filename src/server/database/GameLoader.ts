@@ -11,6 +11,8 @@ import {timeAsync} from '../utils/timer';
 import {durationToMilliseconds} from '../utils/durations';
 import {CacheConfig} from './CacheConfig';
 import {Clock} from '../../common/Timer';
+import {recordDeletedGames, DeletedGameEntry} from './deletedGamesLog';
+import {GameDeletionReason} from '../../common/models/GameDeletionModel';
 
 const metrics = {
   initialize: new prometheus.Gauge({
@@ -278,22 +280,45 @@ export class GameLoader implements IGameLoader {
   }
 
   public async deleteGame(gameId: GameId): Promise<void> {
+    const entry = await this.forgetGame(gameId, 'deleted-in-admin-area');
+    // A still-pending move must not write the deleted game back to the database
+    this.purgedGames.push(gameId);
+    await Database.getInstance().deleteGame(gameId);
+    recordDeletedGames([entry]);
+  }
+
+  /**
+   * Entfernt eine Partie aus dem Cache und liefert den Eintrag fuers Loeschprotokoll
+   * (deletedGamesLog.ts) – damit spaetere Aufrufe alter Links erklaeren koennen, was passiert ist.
+   */
+  private async forgetGame(gameId: GameId, reason: GameDeletionReason): Promise<DeletedGameEntry> {
     const d = await this.cache.getGames();
+    const game = d.games.get(gameId);
     d.games.delete(gameId);
     // Collect participant links first, since deleting during iteration would modify the map
     const participantIds = Array.from(d.participantIds.entries())
       .filter(([, participantGameId]) => participantGameId === gameId)
       .map(([participantId]) => participantId);
     participantIds.forEach((participantId) => d.participantIds.delete(participantId));
-    // A still-pending move must not write the deleted game back to the database
-    this.purgedGames.push(gameId);
-    await Database.getInstance().deleteGame(gameId);
+    return {
+      gameId,
+      participantIds,
+      playerNames: game?.players.map((player) => player.name) ?? [],
+      deletedAt: this.clock.now(),
+      reason,
+      maxGameDays: reason === 'purged-unfinished' ? process.env.MAX_GAME_DAYS : undefined,
+    };
   }
 
   public async maintenance() {
     const database = Database.getInstance();
     const purgedGames = await database.purgeUnfinishedGames();
     this.purgedGames.push(...purgedGames);
+    const entries: Array<DeletedGameEntry> = [];
+    for (const gameId of purgedGames) {
+      entries.push(await this.forgetGame(gameId, 'purged-unfinished'));
+    }
+    recordDeletedGames(entries);
     metrics.gamesPurged.inc(purgedGames.length);
     await database.compressCompletedGames();
     const prunedSessions = await database.deleteExpiredSessions();

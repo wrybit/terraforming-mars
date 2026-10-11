@@ -4,6 +4,9 @@ import {SerializedGame} from '../../src/server/SerializedGame';
 import {IGameLoader} from '../../src/server/database/IGameLoader';
 import {GameLoader} from '../../src/server/database/GameLoader';
 import {globalInitialize} from '../../src/server/globalInitialize';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
 
 const FAKE_DATABASE: IDatabase = {
   markFinished: () => Promise.resolve(),
@@ -48,4 +51,6 @@ export function setTestGameLoader(gameLoader: IGameLoader) {
   gameLoaderUnderTest = gameLoader;
 }
 GameLoader.getInstance = () => gameLoaderUnderTest;
+// Tests loeschen Partien: das Loeschprotokoll soll nicht im db-Ordner des Repos landen
+process.env.DELETED_GAMES_FILE = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'deleted-games-')), 'deleted-games.jsonl');
 globalInitialize();

@@ -12,7 +12,7 @@
         <WikiOverlay :open="overlayOpen" :href="href" :target="target" @close="overlayOpen = false"/>
       </span>
       <span v-if="excerpt !== undefined">{{ excerpt }}</span>
-      <span v-else-if="failed" v-i18n>The info could not be loaded.</span>
+      <span v-else-if="failed"><span v-i18n>The info could not be loaded.</span> {{ failureText }}</span>
       <span v-else class="create-game-info-box-loading">…</span>
     </div>
   </div>
@@ -20,6 +20,7 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
+import {describeFailure, failureOf} from '@/client/utils/requestFailure';
 import WikiOverlay from './WikiOverlay.vue';
 import {fetchWikiPage, WikiTarget, wikiExcerpt, wikiSection} from './wikiContent';
 
@@ -36,6 +37,7 @@ export default defineComponent({
     return {
       excerpt: undefined as string | undefined,
       failed: false,
+      failureText: '',
       overlayOpen: false,
       // Center of the ⓘ, measured from the box's left edge
       noseX: 0,
@@ -66,6 +68,7 @@ export default defineComponent({
       this.excerpt = wikiExcerpt(wikiSection(markdown, this.target.anchor));
     } catch (error) {
       console.error(error);
+      this.failureText = describeFailure(failureOf(error));
       this.failed = true;
     }
   },

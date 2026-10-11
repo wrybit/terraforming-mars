@@ -13,7 +13,7 @@
         </a>
       </template>
       <div v-if="html !== undefined" ref="content" class="wiki-overlay-content" v-html="html" @click="followAnchor"></div>
-      <p v-else-if="failed" v-i18n>The info could not be loaded.</p>
+      <p v-else-if="failed"><span v-i18n>The info could not be loaded.</span> {{ failureText }}</p>
       <p v-else>…</p>
     </DialogFrame>
   </SidebarModal>
@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
+import {describeFailure, failureOf} from '@/client/utils/requestFailure';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
 import {fetchWikiPage, renderWikiPage, WikiTarget} from './wikiContent';
@@ -42,6 +43,7 @@ export default defineComponent({
       html: undefined as string | undefined,
       title: '',
       failed: false,
+      failureText: '',
     };
   },
   watch: {
@@ -57,6 +59,7 @@ export default defineComponent({
         setTimeout(() => this.scrollTo(this.target.anchor), SCROLL_DELAY_MS);
       } catch (error) {
         console.error(error);
+        this.failureText = describeFailure(failureOf(error));
         this.failed = true;
       }
     },

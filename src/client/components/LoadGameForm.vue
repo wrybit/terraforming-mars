@@ -24,9 +24,11 @@ import AdminNav from '@/client/components/admin/AdminNav.vue';
 import {LoadGameFormModel} from '@/common/models/LoadGameFormModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import {vueRoot} from '@/client/components/vueRoot';
+import {showAlert} from '@/client/components/showAlert';
 import {GameId} from '@/common/Types';
 import {paths} from '@/common/app/paths';
-import {translateText} from '@/client/directives/i18n';
+import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 type LoadGameFormDataModel = {
   gameId: GameId | undefined;
@@ -57,17 +59,12 @@ export default defineComponent({
         rollbackCount,
       };
 
-      fetch(paths.LOAD_GAME, {
+      fetchOrFail(paths.LOAD_GAME, {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(loadGameForm),
       })
-        .then((resp) => {
-          if (!resp.ok) {
-            throw new Error(`Error getting game data: ${resp.statusText}`);
-          }
-          return resp.json();
-        })
+        .then((resp) => resp.json())
         .then((response: SimpleGameModel) => {
           if (response.players.length === 1) {
             window.location.href = 'player?id=' + response.players[0].id;
@@ -79,8 +76,8 @@ export default defineComponent({
           }
         })
         .catch((err) => {
-          alert(translateText('Error loading game'));
           console.error(err);
+          showAlert(this, 'Game could not be loaded', {text: translateTextWithParams('Game ${0} could not be loaded (saves to delete first: ${1}).', [gameId, String(rollbackCount)]) + '\n' + describeFailure(failureOf(err))});
         });
     },
   },

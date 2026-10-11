@@ -17,6 +17,7 @@ import {showAlert} from '@/client/components/showAlert';
 import {defineComponent} from 'vue';
 import raw_settings from '@/genfiles/settings.json';
 import {paths} from '@/common/app/paths';
+import {describeFailure, failureOf} from '@/client/utils/requestFailure';
 
 type Data = {
   user: string | undefined;
@@ -52,8 +53,8 @@ export default defineComponent({
         }
       })
       .catch((err) => {
-        showAlert(this, 'Error', 'Error getting session profile data');
         console.error(err);
+        showAlert(this, 'Login status could not be loaded', {text: describeFailure(failureOf(err))});
       });
   },
   computed: {

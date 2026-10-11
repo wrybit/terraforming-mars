@@ -101,7 +101,7 @@ export default defineComponent({
         return;
       }
       if (this.canSave() === false) {
-        showAlert(this, 'Error with input', 'Not all options selected');
+        showAlert(this, 'Selection incomplete', 'Make a selection in every part of this decision, then confirm.');
         return;
       }
       const refs = this.$refs.childInputs as Array<{saveData?: () => void}> | undefined;

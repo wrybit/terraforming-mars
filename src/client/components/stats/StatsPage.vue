@@ -64,7 +64,7 @@
         </nav>
 
         <StatsSkeleton v-if="status === 'loading'" :overview="view.type === 'tab' && view.tab === 'overview'"/>
-        <p v-else-if="status === 'error'" class="stats-card stats-note" v-i18n>Could not load the statistics.</p>
+        <p v-else-if="status === 'error'" class="stats-card stats-note"><span v-i18n>Could not load the statistics.</span> {{ failureText }}</p>
         <p v-else-if="games.length === 0" class="stats-card stats-note" v-i18n>No finished games yet.</p>
         <template v-else>
           <StatsTopView v-if="view.type === 'top'" :key="`top:${view.kind}`" :kind="view.kind" :results="results"/>
@@ -84,6 +84,7 @@
 
 <script lang="ts">
 import {computed, defineComponent} from 'vue';
+import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
 import {paths} from '@/common/app/paths';
 import {Color} from '@/common/Color';
 import {StatsGame} from '@/common/stats/StatsGame';
@@ -117,6 +118,7 @@ const NARROW_WIDTH = 900;
 type DataModel = {
   games: Array<StatsGame>;
   status: 'loading' | 'error' | 'done';
+  failureText: string;
   filters: StatsFilters;
   view: StatsView;
   filtersOpen: boolean;
@@ -141,6 +143,7 @@ export default defineComponent({
     return {
       games: [],
       status: 'loading',
+      failureText: '',
       filters: emptyFilters([]),
       view: parseStatsView(window.location.search),
       filtersOpen: false,
@@ -230,15 +233,13 @@ export default defineComponent({
   methods: {
     async loadGames(): Promise<void> {
       try {
-        const response = await fetch(paths.API_STATS_GAMES);
-        if (!response.ok) {
-          throw new Error(await response.text());
-        }
+        const response = await fetchOrFail(paths.API_STATS_GAMES);
         this.games = await response.json();
         this.filters = emptyFilters(this.groups);
         this.status = 'done';
       } catch (error) {
         console.error(error);
+        this.failureText = describeFailure(failureOf(error));
         this.status = 'error';
       }
     },

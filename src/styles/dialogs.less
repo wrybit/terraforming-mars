@@ -78,3 +78,9 @@ dialog::backdrop,
 dialog + .backdrop {
   .modal-backdrop();
 }
+
+// Meldungen mit Details (ID, Ursache, naechster Schritt) brauchen Zeilenumbrueche; lange IDs duerfen umbrechen
+.alert-dialog-message {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}

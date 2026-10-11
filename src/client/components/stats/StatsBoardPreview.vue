@@ -1,12 +1,13 @@
 <template>
   <div class="stats-board-preview" :class="heatmap === undefined ? undefined : `stats-heatmap stats-heatmap--${heatmapType}`">
     <ScaledBoard v-if="spaces !== undefined" :spaces="spaces" :boardName="boardForBoardView"/>
-    <p v-else-if="failed" class="stats-note" v-i18n>The board could not be loaded.</p>
+    <p v-else-if="failed" class="stats-note"><span v-i18n>The board could not be loaded.</span> {{ failureText }}</p>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
+import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
 import {paths} from '@/common/app/paths';
 import {BoardName} from '@/common/boards/BoardName';
 import {SpaceModel} from '@/common/models/SpaceModel';
@@ -65,19 +66,18 @@ export default defineComponent({
     return {
       spaces: undefined as Array<SpaceModel> | undefined,
       failed: false,
+      failureText: '',
     };
   },
   async mounted() {
     try {
-      const response = await fetch(`${paths.API_STATS_BOARD}?name=${encodeURIComponent(this.boardKey)}`);
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
+      const response = await fetchOrFail(`${paths.API_STATS_BOARD}?name=${encodeURIComponent(this.boardKey)}`);
       this.spaces = await response.json();
       await this.$nextTick();
       this.paintHeatmap();
     } catch (error) {
       console.error(error);
+      this.failureText = describeFailure(failureOf(error));
       this.failed = true;
     }
   },

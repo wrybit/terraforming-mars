@@ -392,6 +392,7 @@ import CollapsibleSection from '@/client/components/create/CollapsibleSection.vu
 import {cardPoolChanged, expansionOptionsChanged, milestonesChanged} from '@/client/components/create/changedFromDefault';
 import {ColumnCount, currentColumnCount, placementOf, SettingsCard, watchColumnCount} from '@/client/components/create/createGameColumns';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {describeFailure, failureFromResponse, failureOf, fetchOrFail, RequestFailedError} from '@/client/utils/requestFailure';
 import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
@@ -411,6 +412,7 @@ import PageTitle from '@/client/components/common/PageTitle.vue';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {BoardNameType, NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
 import {vueRoot} from '@/client/components/vueRoot';
+import {showAlert} from '@/client/components/showAlert';
 import {CreateGameModel} from './CreateGameModel';
 import {paths} from '@/common/app/paths';
 import {JSONProcessor} from './JSONProcessor';
@@ -896,7 +898,7 @@ export default defineComponent({
         }
         return true;
       } catch (e) {
-        vueRoot(this).showAlert('Settings link', translateText('Error loading settings') + ': ' + e);
+        vueRoot(this).showAlert('Settings link', {text: translateText('The settings in this link could not be read. Was the link copied completely?') + '\n' + translateText('Details:') + ' ' + String(e)});
         return false;
       }
     },
@@ -910,7 +912,7 @@ export default defineComponent({
         }, LINK_COPIED_FEEDBACK_MS);
       } catch (e) {
         // Without clipboard permission (e.g. http without TLS) the URL stays in the address bar for copying
-        vueRoot(this).showAlert('Copy link', String(e));
+        vueRoot(this).showAlert('Copy link', 'The browser did not allow copying to the clipboard. The link is in the address bar and can be copied from there.');
       }
     },
     restoreLastSettings() {
@@ -924,7 +926,7 @@ export default defineComponent({
           this.showSettingsLoadResult('Restore settings', processor);
         }
       } catch (e) {
-        vueRoot(this).showAlert('Restore settings', translateText('Error restoring settings') + ': ' + e);
+        vueRoot(this).showAlert('Restore settings', {text: translateText('The last used settings could not be restored; they may come from an older version. The form keeps its default settings.') + '\n' + translateText('Details:') + ' ' + String(e)});
       }
     },
     applySettings(json: JSONObject): JSONProcessor {
@@ -961,7 +963,7 @@ export default defineComponent({
     showSettingsLoadResult(title: string, processor: JSONProcessor) {
       const root = vueRoot(this);
       if (processor.warnings.length > 0) {
-        root.showAlert(title, translateText('Settings loaded with these warnings:') + '\n' + processor.warnings.join('\n'));
+        root.showAlert(title, {text: translateText('Settings loaded with these warnings:') + '\n' + processor.warnings.map((warning) => translateText(warning)).join('\n')});
       } else {
         root.showAlert(title, 'Settings loaded.');
       }
@@ -1040,7 +1042,7 @@ export default defineComponent({
           }
         } catch (e) {
           const root = vueRoot(this);
-          root.showAlert('Upload settings', translateText('Error loading settings') + ': ' + e);
+          root.showAlert('Upload settings', {text: translateText('The settings file could not be read. Use a file that was saved with "Save settings to file" (tm_settings.json).') + '\n' + translateText('Details:') + ' ' + String(e)});
         }
       }, false);
       if (file) {
@@ -1193,19 +1195,19 @@ export default defineComponent({
             if (response.status === 404) {
               return undefined;
             }
-            return response.text().then((res) => new Error(res));
+            return failureFromResponse(response).then((failure) => new RequestFailedError(failure));
           });
         if (gameData === undefined) {
-          alert(translateTextWithParams('Game id ${0} not found', [String(this.clonedGameId)]));
+          showAlert(this, 'Game to copy not found', {text: translateTextWithParams('This server has no game with the ID ${0}. Check the game ID under "Set Predefined Game"; the game may also have been deleted.', [String(this.clonedGameId)])});
           return undefined;
         }
         if (gameData instanceof Error) {
-          alert(translateText('Error looking for predefined game') + ': ' + gameData.message);
+          showAlert(this, 'Game to copy could not be checked', {text: translateTextWithParams('Game ${0} could not be checked.', [String(this.clonedGameId)]) + '\n' + describeFailure(failureOf(gameData))});
           return undefined;
         }
         clonedGamedId = this.clonedGameId;
         if (gameData.playerCount !== players.length) {
-          alert(this.$t('Player count mismatch'));
+          showAlert(this, 'Player count adjusted', {text: translateTextWithParams('Game ${0} was played with ${1} players, the form had ${2}. The player count is now ${1}: check the player names and create the game again.', [String(this.clonedGameId), String(gameData.playerCount), String(players.length)])});
           this.playersCount = gameData.playerCount;
           return undefined;
         }
@@ -1242,18 +1244,12 @@ export default defineComponent({
         }
       };
 
-      fetch(paths.API_CREATEGAME, {'method': 'POST', 'body': JSON.stringify({...newGameConfig, boardSeed: this.boardSeed}), 'headers': {'Content-Type': 'application/json'}})
-        .then((response) => response.text())
-        .then((text) => {
-          try {
-            const json = JSON.parse(text);
-            onSuccess(json);
-          } catch (err) {
-            throw new Error(text);
-          }
-        })
-        .catch((error: Error) => {
-          alert(error.message);
+      fetchOrFail(paths.API_CREATEGAME, {'method': 'POST', 'body': JSON.stringify({...newGameConfig, boardSeed: this.boardSeed}), 'headers': {'Content-Type': 'application/json'}})
+        .then((response) => response.json())
+        .then(onSuccess)
+        .catch((error: unknown) => {
+          console.error(error);
+          showAlert(this, 'Game could not be created', {text: describeFailure(failureOf(error))});
         });
     },
   },

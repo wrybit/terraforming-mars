@@ -7,7 +7,7 @@
       <dialog id="alert-dialog" class="alert-dialog">
         <form method="dialog">
           <p id="alert-dialog-title" class="title" v-i18n>Error with input</p>
-          <p id="alert-dialog-message"></p>
+          <p id="alert-dialog-message" class="alert-dialog-message"></p>
           <menu class="dialog-menu centered-content">
             <button id="alert-dialog-button" class="btn btn-lg btn-primary" v-i18n>OK</button>
           </menu>
@@ -87,7 +87,7 @@ const StatsPage = defineAsyncComponent(() => import(/* webpackChunkName: "stats"
 const StartScreenFooter = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreenFooter.vue'));
 const OnlinePlayers = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/OnlinePlayers.vue'));
 const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreen.vue'));
-import {$t, setTranslationContext} from '@/client/directives/i18n';
+import {$t, setTranslationContext, translateTextWithParams} from '@/client/directives/i18n';
 import {paths} from '@/common/app/paths';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
@@ -104,13 +104,9 @@ import {serverUpdatePhase, startServerStatusPolling} from '@/client/utils/server
 import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
 import {setDocumentTitle} from '../utils/documentTitle';
 import {ingestView} from '@/client/utils/changeTracker';
+import {fetchOrFail} from '@/client/utils/requestFailure';
+import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
 
-// Traegt den HTTP-Status weiter, damit "Partie gibt es nicht" von "Verbindung weg" unterscheidbar ist
-class GameLoadError extends Error {
-  constructor(public readonly status: number) {
-    super(`Error getting game data: HTTP ${status}`);
-  }
-}
 
 type Screen = 'admin' |
             'create-game-form' |
@@ -221,16 +217,15 @@ export default defineComponent({
     },
   },
   methods: {
-    showGameLoadError(err: unknown): void {
+    async showGameLoadError(err: unknown): Promise<void> {
       console.error(err);
-      // 404: Partie geloescht oder Link unvollstaendig – OK fuehrt zur Startseite statt in eine leere Seite
-      if (err instanceof GameLoadError && err.status === 404) {
-        this.showAlert('Game not found', 'This game does not exist (anymore). It may have been deleted, or the link is incomplete.', () => window.location.assign('./'));
-        return;
-      }
-      this.showAlert('Game could not be loaded', 'Check the connection and reload the page.');
+      const id = new URLSearchParams(window.location.search).get('id') ?? '';
+      const report = await describeGameLoadFailure(id, err);
+      this.showAlert(report.title, {text: report.text}, report.leadsToStartPage ? () => window.location.assign('./') : undefined);
     },
-    showAlert(title: string, message: string, cb: () => void = () => {}): void {
+    /** message: englischer Schluessel (wird uebersetzt) oder {text}: fertig uebersetzter Text mit Details */
+    showAlert(title: string, message: string | {text: string}, cb: () => void = () => {}): void {
+      const messageText = typeof message === 'string' ? $t(message) : message.text;
       // During a server update the overlay explains the situation; connection errors are expected then
       if (serverUpdatePhase.value !== 'none') {
         return;
@@ -240,7 +235,8 @@ export default defineComponent({
       const messageElement: HTMLElement | null = document.getElementById('alert-dialog-message');
       const titleElement: HTMLElement | null = document.getElementById('alert-dialog-title');
       if (buttonElement !== null && titleElement !== null && messageElement !== null && dialogElement !== null && hasShowModal(dialogElement)) {
-        messageElement.innerHTML = $t(message);
+        // textContent: Meldungen enthalten IDs aus der Adresse und Server-Texte – nie als HTML auswerten
+        messageElement.textContent = messageText;
         titleElement.textContent = $t(title);
         const handler = () => {
           buttonElement.removeEventListener('click', handler);
@@ -249,7 +245,7 @@ export default defineComponent({
         buttonElement.addEventListener('click', handler);
         showModal(dialogElement);
       } else {
-        alert(message);
+        alert(messageText);
         cb();
       }
     },
@@ -271,13 +267,8 @@ export default defineComponent({
 
       const url = 'api/' + path + window.location.search.replace('&noredirect', '');
 
-      fetch(url)
-        .then((resp) => {
-          if (!resp.ok) {
-            throw new GameLoadError(resp.status);
-          }
-          return resp.json();
-        })
+      fetchOrFail(url)
+        .then((resp) => resp.json())
         .then((model: ViewModel) => {
           // Polled updates come from other players' moves (own moves arrive via WaitingFor.updatePlayerView)
           ingestView(model, 'remote');
@@ -349,17 +340,12 @@ export default defineComponent({
       } else if (isSpectatorId(id)) {
         app.updateSpectator();
       } else {
-        this.showAlert('Error', 'Bad id URL parameter.');
+        this.showAlert('Invalid link', {text: translateTextWithParams('The address contains no valid player or spectator ID ("${0}"). These IDs start with p (player) or s (spectator). Check whether the link was copied completely.', [id])});
       }
     } else if (currentPathname === paths.GAME) {
       const url = paths.API_GAME + window.location.search;
-      fetch(url)
-        .then((resp) => {
-          if (!resp.ok) {
-            throw new GameLoadError(resp.status);
-          }
-          return resp.json();
-        })
+      fetchOrFail(url)
+        .then((resp) => resp.json())
         .then((appGame: SimpleGameModel) => {
           app.screen = 'game-home';
           app.game = appGame;
