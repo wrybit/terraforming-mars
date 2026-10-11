@@ -5,17 +5,23 @@ import AppBackground from '@/client/components/AppBackground.vue';
 import {BACKGROUND_WIDTHS} from '@/client/components/appBackgroundVariants';
 
 describe('AppBackground', () => {
-  it('offers portrait before landscape, each as AVIF and WebP', () => {
+  it('offers portrait before landscape, each as AVIF, WebP and JPEG', () => {
     const wrapper = mount(AppBackground, {...globalConfig});
     const sources = wrapper.findAll('source');
-    expect(sources.map((source) => source.attributes('type'))).deep.eq(['image/avif', 'image/webp', 'image/avif', 'image/webp']);
+    const types = ['image/avif', 'image/webp', 'image/jpeg'];
+    expect(sources.map((source) => source.attributes('type'))).deep.eq([...types, ...types]);
     expect(sources[0].attributes('media')).eq('(orientation: portrait)');
-    expect(sources[2].attributes('media')).is.undefined;
+    expect(sources[3].attributes('media')).is.undefined;
+  });
+
+  it('falls back to JPEG', () => {
+    const wrapper = mount(AppBackground, {...globalConfig});
+    expect(wrapper.find('img').attributes('src')).eq('assets/background/milky-way-landscape-1920.jpg');
   });
 
   it('lists every generated width in the srcset', () => {
     const wrapper = mount(AppBackground, {...globalConfig});
-    const landscape = wrapper.findAll('source')[2].attributes('srcset') ?? '';
+    const landscape = wrapper.findAll('source')[3].attributes('srcset') ?? '';
     for (const width of BACKGROUND_WIDTHS.landscape) {
       expect(landscape).contains(`assets/background/milky-way-landscape-${width}.avif ${width}w`);
     }

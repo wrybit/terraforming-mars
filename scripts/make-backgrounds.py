@@ -32,7 +32,10 @@ WIDTHS = {
 VARIANTS_FILE = 'src/client/components/appBackgroundVariants.ts'
 # High quality on purpose: star fields fall apart into blocky mush quickly at low settings,
 # and the background has to look good, not be as small as possible
-QUALITY = {'avif': 72, 'webp': 88}
+# Order = preference; the last format is the fallback for browsers without AVIF/WebP
+QUALITY = {'avif': 72, 'webp': 88, 'jpg': 88}
+# Extra save options per format (JPEG: progressive, so it appears early on slow connections)
+OPTIONS = {'jpg': {'progressive': True, 'optimize': True}}
 # Only the darkest sensor grain in the black sky becomes pure black (saves bytes, invisible)
 BLACK_POINT = 6
 
@@ -58,7 +61,7 @@ def main() -> None:
             resized = cropped.resize((width, height), Image.LANCZOS)
             for extension, quality in QUALITY.items():
                 target = os.path.join(FOLDER, f'{NAME}-{orientation}-{width}.{extension}')
-                resized.save(target, quality=quality)
+                resized.save(target, quality=quality, **OPTIONS.get(extension, {}))
                 print(f'{target}: {os.path.getsize(target) // 1024} KB')
     write_variants_file()
 

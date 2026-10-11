@@ -32,19 +32,21 @@ export function backgroundFile(orientation: BackgroundOrientation, width: number
   return `${BACKGROUND_PATH}-${orientation}-${width}.${format}`;
 }
 
+// File extension -> MIME type of the <source>; JPEG last, so only browsers without AVIF/WebP take it
+const MIME_TYPES: Record<string, string> = {avif: 'image/avif', webp: 'image/webp', jpg: 'image/jpeg'};
+
 /** All <source> entries of the background <picture>, in the order the browser has to check them. */
 export function backgroundSources(): Array<BackgroundSource> {
   const orientations: Array<BackgroundOrientation> = ['portrait', 'landscape'];
   return orientations.flatMap((orientation) => BACKGROUND_FORMATS.map((format) => ({
     media: MEDIA[orientation],
-    type: `image/${format}`,
+    type: MIME_TYPES[format],
     srcset: BACKGROUND_WIDTHS[orientation].map((width) => `${backgroundFile(orientation, width, format)} ${width}w`).join(', '),
     sizes: SIZES[orientation],
   })));
 }
 
-/** For browsers without <picture>: a medium landscape file in the most widely supported format. */
+/** For browsers without <picture> support: a medium landscape JPEG. */
 export function backgroundFallback(): string {
-  const formats: ReadonlyArray<string> = BACKGROUND_FORMATS;
-  return backgroundFile('landscape', 1920, formats[formats.length - 1]);
+  return backgroundFile('landscape', 1920, 'jpg');
 }
