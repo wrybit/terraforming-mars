@@ -1,27 +1,12 @@
 <template>
   <div class="player_home_block player_home_block--setup nofloat">
-    <template v-if="isInitialDraftingPhase">
-      <div v-for="card in playerView.dealtCorporationCards" :key="card.name" class="cardbox">
-        <Card :card="card"/>
-      </div>
-
-      <div v-for="card in playerView.dealtPreludeCards" :key="card.name" class="cardbox">
-        <Card :card="card"/>
-      </div>
-
-      <div v-for="card in playerView.dealtCeoCards" :key="card.name" class="cardbox">
-        <Card :card="card"/>
-      </div>
-
-      <div v-for="card in playerView.dealtProjectCards" :key="card.name" class="cardbox">
-        <Card :card="card"/>
-      </div>
-    </template>
     <div class="player_home_block player_home_block--hand" v-if="showsDraftedCardsBlock(playerView)">
       <DynamicTitle title="Drafted Cards" :color="thisPlayer.color"/>
       <div v-for="card in playerView.draftedCards" :key="card.name" class="cardbox">
           <Card :card="card"/>
       </div>
+      <!-- Initial draft, waiting for the others: dealt corporations/preludes below (with an own input they sit in the draft tab) -->
+      <CardListSection v-for="section in dealtSections" :key="section.title" :title="section.title" :cards="section.cards"/>
     </div>
 
     <!-- After the initial selection, while opponents are still choosing: own selection like the hand cards in the game
@@ -60,7 +45,8 @@ import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {CardModel} from '@/common/models/CardModel';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
-import {showsDraftedCardsBlock} from '@/client/utils/draftedCards';
+import {initialDraftDealtSections, showsDraftedCardsBlock} from '@/client/utils/draftedCards';
+import CardListSection from '@/client/components/CardListSection.vue';
 
 export default defineComponent({
   name: 'PlayerSetupView',
@@ -86,8 +72,8 @@ export default defineComponent({
     game(): GameModel {
       return this.playerView.game;
     },
-    isInitialDraftingPhase(): boolean {
-      return (this.game.phase === Phase.INITIALDRAFTING) && this.game.gameOptions.initialDraftVariant;
+    dealtSections(): ReturnType<typeof initialDraftDealtSections> {
+      return initialDraftDealtSections(this.playerView);
     },
   },
   methods: {
@@ -100,6 +86,7 @@ export default defineComponent({
     HandCardsTab,
     WaitingForPlayersTab,
     Card,
+    CardListSection,
     DynamicTitle,
     WaitingFor,
   },

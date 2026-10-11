@@ -4,7 +4,7 @@
        The action menu (OrOptions) builds its own tabs, see orOptionsLayout.ts. -->
   <div class="wf-options wf-options--tabs">
     <div class="or-tabs" role="tablist">
-      <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
+      <HandCardsTab :count="handCards.length + dealtCount" :active="handTabActive" @select="handTabActive = true"/>
       <button type="button" role="tab"
         :title="$t(fullTabTitle(tabSource.title))"
         :aria-selected="!handTabActive"
@@ -18,7 +18,12 @@
     </div>
 
     <div v-docked-tab :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
-      <HandCardsPanel v-if="handTabActive" :playerView="playerView"/>
+      <!-- Initial draft with an empty hand: only the dealt cards, without the empty hand area above them -->
+      <HandCardsPanel v-if="handTabActive && (handCards.length > 0 || dealtCount === 0)" :playerView="playerView"/>
+      <!-- Initial draft: the dealt corporations/preludes belong to the own cards -->
+      <template v-if="handTabActive">
+        <CardListSection v-for="section in dealtSections" :key="section.title" :title="section.title" :cards="section.cards"/>
+      </template>
       <!-- The question belongs to the input and therefore sits in its box, not above the tabs.
            Card lists with a header row: the header row stays at the very top, the intro moves below it (tabPanelIntro.ts).
            Teleport only while the target exists, instead of toggling `disabled` (Vue fails moving a deferred Teleport) -->
@@ -70,7 +75,7 @@ import {choiceMenuLead} from '@/client/components/choiceMenu';
 import {inputSourceCard} from '@/client/components/inputSourceCard';
 import InputIntro from '@/client/components/InputIntro.vue';
 import CardListSection from '@/client/components/CardListSection.vue';
-import {draftedCardsInInput, isDraftRepick} from '@/client/utils/draftedCards';
+import {draftedCardsInInput, initialDraftDealtSections, isDraftRepick} from '@/client/utils/draftedCards';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {shownInput, spaceWithSkip} from '@/client/components/spaceWithSkip';
 import AppButton from '@/client/components/common/AppButton.vue';
@@ -102,6 +107,9 @@ const tone = computed(() => inputTone(lead.value));
 const intro = computed(() => tabIntro(shown.value, props.playerinput));
 const sourceCard = computed(() => inputSourceCard(props.playerinput));
 const draftedCards = computed(() => draftedCardsInInput(props.playerView));
+// Initial draft: dealt corporations/preludes in the "All cards" tab to plan with
+const dealtSections = computed(() => initialDraftDealtSections(props.playerView));
+const dealtCount = computed(() => dealtSections.value.reduce((sum, section) => sum + section.cards.length, 0));
 const draftRepick = computed(() => isDraftRepick(props.playerView, props.playerinput));
 
 // Card lists with a header row take the intro below that row (tabPanelIntro.ts)

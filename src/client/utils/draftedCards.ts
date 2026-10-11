@@ -2,6 +2,7 @@ import {CardModel} from '@/common/models/CardModel';
 import {CardName} from '@/common/cards/CardName';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
+import {Phase} from '@/common/Phase';
 
 // Draft cards already kept are shown inside the draft tab (WaitingForTabs.vue) as long as a card is
 // to be chosen there; only while waiting for the others (no own input) do they stay a block of their own.
@@ -32,4 +33,18 @@ export function currentDraftPicks(playerView: PlayerViewModel, input: PlayerInpu
 // Draft repick: the explanation ("You can change your selection …") goes small into the footer next to the button
 export function isDraftRepick(playerView: PlayerViewModel, input: PlayerInputModel): boolean {
   return currentDraftPicks(playerView, input).size > 0;
+}
+
+// Initial draft: the dealt corporations, preludes and CEOs to plan with, as view-only sections in the "All cards" tab
+// (WaitingForTabs.vue) – or below the drafted cards while waiting for the others (PlayerSetupView.vue)
+export function initialDraftDealtSections(playerView: PlayerViewModel): ReadonlyArray<{title: string, cards: ReadonlyArray<CardModel>}> {
+  const game = playerView.game;
+  if (game.phase !== Phase.INITIALDRAFTING || game.gameOptions.initialDraftVariant !== true) {
+    return [];
+  }
+  return [
+    {title: 'Corporations', cards: playerView.dealtCorporationCards},
+    {title: 'Prelude cards', cards: playerView.dealtPreludeCards},
+    {title: 'CEOs', cards: playerView.dealtCeoCards},
+  ].filter((section) => section.cards.length > 0);
 }

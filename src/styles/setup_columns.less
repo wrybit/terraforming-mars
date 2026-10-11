@@ -52,7 +52,7 @@
   flex: 1 1 0;
   width: auto;
   min-width: calc(
-    @setup-project-columns-min * @setup-card-outer-width * var(--setup-project-cards-zoom) +
+    @setup-project-columns-min * @setup-card-outer-width * var(--setup-project-cards-zoom) * var(--setup-user-zoom, 1) +
     (@setup-project-columns-min - 1) * @setup-card-gap +
     2 * @setup-column-padding-inline + 2px // column border
   );
@@ -140,8 +140,18 @@
 // stay large (that's what you decide first)
 @setup-project-cards-zoom: 0.8;
 
+.setup-column-body .cardbox {
+  zoom: calc(var(--setup-cards-zoom, 1) * var(--setup-user-zoom, 1));
+}
+
 .setup-column--projects .setup-column-body .cardbox {
-  zoom: var(--setup-project-cards-zoom);
+  zoom: calc(var(--setup-project-cards-zoom) * var(--setup-user-zoom, 1));
+}
+
+// The zoom slider above each column (CardZoomBar.vue, cardZoom.ts) scales all cards on top of the steps here;
+// only on the desktop, the mobile view fits its cards to the screen itself
+html:not(.tm-mobile) .setup-columns {
+  --setup-user-zoom: var(--card-zoom, 1);
 }
 
 // If the width isn't enough for three cards side by side (board expanded at laptop widths), all cards get
@@ -152,10 +162,10 @@
 @setup-cards-reduced-zoom: 0.8;
 @setup-cards-small-zoom: 0.68;
 
-// Selector as specific as the rule for the buyable cards above, so the steps apply there too
+// Steps as variables on the columns (inside the container, .setup-columns): the rules above multiply them with the zoom slider
 @container (max-width: (@setup-cards-full-min-width - 1px)) {
-  .setup-columns .setup-column-body .cardbox {
-    zoom: @setup-cards-reduced-zoom;
+  .setup-columns > .setup-column {
+    --setup-cards-zoom: @setup-cards-reduced-zoom;
   }
 
   .setup-columns .setup-column--projects {
@@ -164,8 +174,8 @@
 }
 
 @container (max-width: (@setup-cards-reduced-min-width - 1px)) {
-  .setup-columns .setup-column-body .cardbox {
-    zoom: @setup-cards-small-zoom;
+  .setup-columns > .setup-column {
+    --setup-cards-zoom: @setup-cards-small-zoom;
   }
 
   .setup-columns .setup-column--projects {

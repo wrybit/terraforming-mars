@@ -59,6 +59,11 @@
   margin-top: @hand-cards-panel-section-gap;
 }
 
+// Opening a tab without a selection above it (initial draft: dealt cards in "All cards", WaitingForTabs.vue)
+.or-tab-panel > .card-list-section:first-child {
+  margin-top: 0;
+}
+
 // Section headings inside a card grid (SelectProjectCardToPlay.vue: "Playable now" / "Not playable"): the grid spans
 // them across all columns (choice_block.less); every one carries the separator below, the first keeps a gap
 // to the header row, the following ones half a card to the section above

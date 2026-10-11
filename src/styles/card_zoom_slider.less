@@ -48,7 +48,8 @@
   align-items: center;
 }
 
-html:not(.tm-mobile) :is(.player_home_block--actions, .player_home_block--hand) .or-tab-panel {
+// Also during the start selection: an initial draft runs in the setup block (player_home_block--setup)
+html:not(.tm-mobile) :is(.player_home_block--actions, .player_home_block--hand, .player_home_block--setup) .or-tab-panel {
   // Every list in the action box has the header row with the slider (CardFilterBar.vue, CardZoomBar.vue):
   // cards, standard projects, milestones and awards all follow the card size
   .choice-block:has(> .card-filter-bar) {
