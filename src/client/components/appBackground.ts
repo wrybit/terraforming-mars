@@ -24,7 +24,8 @@ const MEDIA: Record<BackgroundOrientation, string | undefined> = {
 };
 
 export const BACKGROUND_CREDIT = {
-  text: 'Background photo: Milky Way · ESO · S. Brunier · CC BY 4.0',
+  // Parts joined with " · "; a line break only ever falls between parts, never inside one ("S. | Brunier")
+  parts: ['Background photo: Milky Way', 'ESO', 'S. Brunier', 'CC BY 4.0'],
   url: 'https://www.eso.org/public/images/eso0932a/',
 };
 

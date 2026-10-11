@@ -30,7 +30,7 @@ describe('AppBackground', () => {
   it('shows the image credit with a link to the source', () => {
     const wrapper = mount(AppBackground, {...globalConfig, props: {showCredit: true}});
     const credit = wrapper.find('.app-background-credit');
-    expect(credit.text()).eq('Background photo: Milky Way · ESO · S. Brunier · CC BY 4.0');
+    expect(credit.text().replace(/\s+/g, ' ')).eq('Background photo: Milky Way · ESO · S. Brunier · CC BY 4.0');
     expect(credit.attributes('href')).eq('https://www.eso.org/public/images/eso0932a/');
   });
 

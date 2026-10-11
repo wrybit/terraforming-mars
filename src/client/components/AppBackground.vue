@@ -17,7 +17,7 @@
       <img class="app-background__image" :src="fallback" alt="" decoding="async" fetchpriority="high">
     </picture>
   </div>
-  <a v-if="showCredit" class="app-background-credit" :class="{'app-background-credit--always': always}" :href="credit.url" target="_blank" rel="noopener">{{ credit.text }}</a>
+  <a v-if="showCredit" class="app-background-credit" :class="{'app-background-credit--always': always}" :href="credit.url" target="_blank" rel="noopener"><span class="app-background-credit__text"><template v-for="(part, index) in credit.parts" :key="part"><span class="app-background-credit__part">{{ part }}</span><template v-if="index < credit.parts.length - 1"> · </template></template></span></a>
 </template>
 
 <script setup lang="ts">

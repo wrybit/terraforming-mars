@@ -27,29 +27,38 @@
   filter: saturate(var(--app-background-saturation)) brightness(var(--app-background-brightness));
 }
 
-// Image credit (licence): small and quiet, at the top right of the page – mirrors the menu button top left:
-// same distance to the edge and vertically centred on its axis (min height = button height)
+// Image credit (licence): meta text like the footer of the start page – same size, colour and distance to the
+// right edge, so both line up; vertically centred on the menu button opposite (min height = button height)
 .app-background-credit {
   position: absolute;
   top: @toolbar-edge-offset;
-  right: @toolbar-edge-offset;
+  right: @page-meta-edge;
   z-index: 1;
   display: flex;
   align-items: center;
-  // Narrow phones: wraps to two lines instead of running into the menu button (stays centred on its axis)
+  // Narrow phones: wraps instead of running into the menu button
   max-width: calc(100% - 140px);
   min-height: @toolbar-button-size;
-  font-size: 10px;
+  font-size: @font_size_small;
   line-height: 1.3;
   text-align: right;
-  color: rgba(255, 255, 255, 0.35);
+  color: inherit;
   text-decoration: none;
 
   &:hover,
   &:focus-visible {
-    color: rgba(255, 255, 255, 0.8);
+    color: #fff;
     text-decoration: underline;
   }
+}
+
+// One flex item for the whole text, so it wraps as normal running text
+.app-background-credit__text {
+  display: block;
+}
+
+.app-background-credit__part {
+  white-space: nowrap;
 }
 
 // Setting "No background image" (the start page keeps its image)
