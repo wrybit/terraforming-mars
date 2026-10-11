@@ -200,7 +200,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 27 (1200 mirrored 1v1 games): tagOutlook60 −0.07 VP (z −0.09), adopted for the human case:
   // a human scored 7–8 VP with each Jovian per-tag card while the AI valued them with today's tags.
   tagPointOutlook: 0.6,
-  milestoneProgressShare: 0.5,
+  // Rounds 29 + 31 (milestoneRace30): +0.81 VP each, pooled z +1.58 – chasing milestones costs the engine.
+  milestoneProgressShare: 0.3,
   energyProductionValue: 1.1,
 };
 
@@ -365,6 +366,12 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Quantum Extractor …) with few uses for the energy – is energy production overvalued?
   energy07: {energyProductionValue: 0.7},
   energy09: {energyProductionValue: 0.9},
+  // Round 31: energy07 −2.4 VP (z −2.9), energy09 −0.1 – maybe energy is worth more, not less.
+  energy13: {energyProductionValue: 1.3},
+  energy15: {energyProductionValue: 1.5},
+  // Before round 32: milestone progress at half of its 5 VP.
+  milestone50: {milestoneProgressShare: 0.5},
+  production115: {productionDiscount: 1.15},
   // Before round 31: the baseline without bundle1.
   beforeBundle1: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, productionDiscount: 0.9, secondStepCandidates: 12},
   bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},
