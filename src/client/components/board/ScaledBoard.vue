@@ -29,6 +29,8 @@ export default defineComponent({
     planetOnly: {type: Boolean, default: false},
     // Largest zoom: 1 only shrinks; above 1 the board also grows on wide containers
     maxScale: {type: Number, default: 1},
+    // Planet alone: largest share of the container width the planet itself may take (1 = full width)
+    maxPlanetShare: {type: Number, default: 1},
   },
   data() {
     return {
@@ -74,13 +76,35 @@ export default defineComponent({
     async measure(): Promise<void> {
       this.scale = 1;
       await this.$nextTick();
+      const scaled = this.$refs.scaled as HTMLElement | undefined;
       // Planet alone: the section has a fixed width; scrollWidth would count the clipped board behind it
-      this.naturalWidth = this.planetOnly ? PLANET_BOUNDS.width : (this.$refs.scaled as HTMLElement | undefined)?.scrollWidth ?? 0;
+      this.naturalWidth = this.planetOnly ? this.planetWidthWithCaptions(scaled) : scaled?.scrollWidth ?? 0;
       this.fitToWidth();
+    },
+    // Width the planet needs so the place names beside it (e.g. Tharsis volcanoes) stay inside the container.
+    // The overhang is added on both sides, so the planet stays centered.
+    planetWidthWithCaptions(scaled: HTMLElement | undefined): number {
+      if (scaled === undefined) {
+        return PLANET_BOUNDS.width;
+      }
+      const section = scaled.getBoundingClientRect();
+      let overhang = 0;
+      scaled.querySelectorAll('.board-caption').forEach((caption) => {
+        const rect = caption.getBoundingClientRect();
+        if (rect.width > 0) {
+          overhang = Math.max(overhang, section.left - rect.left, rect.right - section.right);
+        }
+      });
+      return PLANET_BOUNDS.width + 2 * Math.ceil(overhang);
     },
     fitToWidth(): void {
       const available = (this.$refs.root as HTMLElement).clientWidth;
-      this.scale = this.naturalWidth <= 0 ? 1 : Math.min(this.maxScale, available / this.naturalWidth);
+      if (this.naturalWidth <= 0) {
+        this.scale = 1;
+        return;
+      }
+      const planetLimit = this.planetOnly ? this.maxPlanetShare * available / PLANET_BOUNDS.width : Infinity;
+      this.scale = Math.min(this.maxScale, available / this.naturalWidth, planetLimit);
     },
   },
 });

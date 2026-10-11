@@ -6,7 +6,7 @@
       <span class="capitalized" v-i18n>{{ preview.boardName }}</span>
     </div>
     <ScaledBoard v-if="preview !== undefined" :class="{'create-game-board-preview--loading': loading}"
-      :spaces="preview.spaces" :boardName="preview.boardName" planetOnly :maxScale="MAX_SCALE"/>
+      :spaces="preview.spaces" :boardName="preview.boardName" planetOnly :maxScale="MAX_SCALE" :maxPlanetShare="MAX_PLANET_SHARE"/>
     <!-- New draw: bottom right next to the planet -->
     <button v-if="preview !== undefined && isRandom" type="button" class="create-game-icon-button create-game-board-preview-reroll"
       :title="$t('Draw again')" :aria-label="$t('Draw again')" @click="$emit('reroll')">
@@ -29,6 +29,8 @@ import ScaledBoard from '@/client/components/board/ScaledBoard.vue';
 const DEBOUNCE_MS = 150;
 // The planet may grow beyond its original size, so it fills the column on large screens
 const MAX_SCALE = 2;
+// ...but never wider than 90 % of the card, so it does not crowd the card's edges
+const MAX_PLANET_SHARE = 0.9;
 
 /**
  * Board of the game being created, built by the server from the same settings and board seed as the game itself
@@ -50,6 +52,7 @@ export default defineComponent({
   data() {
     return {
       MAX_SCALE,
+      MAX_PLANET_SHARE,
       preview: undefined as BoardPreviewModel | undefined,
       loading: false,
       failed: false,
