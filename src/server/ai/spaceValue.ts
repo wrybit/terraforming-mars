@@ -12,6 +12,7 @@ import {SpaceType} from '../../common/boards/SpaceType';
 import {remainingProductionPhases, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
 import {citySpotPoints} from './citySpotPrior';
+import {openingPlan} from './openingPlan';
 
 // Scores a hex for tile placement. Weights tuned in AI test batches.
 
@@ -148,7 +149,7 @@ function blockedOpponentSpots(neighbours: ReadonlyArray<Space>, player: IPlayer,
   return blocked;
 }
 
-export function spaceValue(space: Space, kind: TileKind, player: IPlayer): number {
+function baseSpaceValue(space: Space, kind: TileKind, player: IPlayer): number {
   const game = player.game;
   const board = game.board;
   const victoryPoint = victoryPointValue(game);
@@ -215,4 +216,28 @@ export function spaceValue(space: Space, kind: TileKind, player: IPlayer): numbe
     break;
   }
   return value;
+}
+
+/** Opening: the planned home cluster (openingPlan.ts) – city on its spot, greeneries next to it. */
+function planBonus(space: Space, kind: TileKind, player: IPlayer): number {
+  if (kind !== 'greenery' && kind !== 'city') {
+    return 0;
+  }
+  const plan = openingPlan(player, (city) => baseSpaceValue(city, 'city', player));
+  if (plan === undefined) {
+    return 0;
+  }
+  const victoryPoint = victoryPointValue(player.game);
+  if (kind === 'city') {
+    return space.id === plan.city ? 2 * victoryPoint : 0;
+  }
+  // A greenery on the planned city spot would block the own plan.
+  if (space.id === plan.city) {
+    return -2 * victoryPoint;
+  }
+  return plan.greeneries.includes(space.id) ? 2 * victoryPoint : 0;
+}
+
+export function spaceValue(space: Space, kind: TileKind, player: IPlayer): number {
+  return baseSpaceValue(space, kind, player) + planBonus(space, kind, player);
 }

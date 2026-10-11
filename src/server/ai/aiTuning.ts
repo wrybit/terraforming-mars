@@ -120,6 +120,8 @@ export type AiTuning = {
   buyForMilestone: number,
   /** 1: in the last generation the AI may sell all unplayable cards but one that the money then pays for (sellToAfford.ts). */
   lastGenerationSale: number,
+  /** 1: before the first own city the first tiles go into a planned home cluster: one city, two greeneries (openingPlan.ts). */
+  openingPlan: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -220,6 +222,7 @@ export const BASELINE_TUNING: AiTuning = {
   sellToAfford: 0,
   buyForMilestone: 0,
   lastGenerationSale: 0,
+  openingPlan: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -422,6 +425,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   milestoneMoney: {sellToAfford: 1, buyForMilestone: 1},
   // Human feedback: passed in the last generation with 15 cards – selling 14 would have paid for one.
   lastSale: {lastGenerationSale: 1},
+  // Human feedback: first greenery far off at two oceans, first city at the other end – plan the home cluster.
+  openingPlan: {openingPlan: 1},
   // Before round 31: the baseline without bundle1.
   beforeBundle1: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, productionDiscount: 0.9, secondStepCandidates: 12},
   bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},
