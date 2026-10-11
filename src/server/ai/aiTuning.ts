@@ -372,6 +372,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Before round 32: milestone progress at half of its 5 VP.
   milestone50: {milestoneProgressShare: 0.5},
   production115: {productionDiscount: 1.15},
+  // Round 33: further along the adopted directions (less milestone chasing, more cards; pass penalty with the new baseline).
+  milestone15: {milestoneProgressShare: 0.15},
+  milestone0: {milestoneProgressShare: 0},
+  cards14: {buyMargin: -4, handTargetEarly: 14, handTargetLate: 6},
+  pass02: {passPenalty: 0.2},
   // Before round 31: the baseline without bundle1.
   beforeBundle1: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, productionDiscount: 0.9, secondStepCandidates: 12},
   bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},
