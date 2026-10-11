@@ -1593,5 +1593,9 @@
   "Server updated successfully": "Server erfolgreich aktualisiert",
   "Reload": "Neu laden",
   "All games are saved.": "Alle Spielstände sind gespeichert.",
-  "After reloading, play continues seamlessly.": "Nach dem Neuladen geht es nahtlos weiter."
+  "After reloading, play continues seamlessly.": "Nach dem Neuladen geht es nahtlos weiter.",
+  "Have played the most green, blue, and red cards (events included).": "Die meisten ausgespielten grünen, blauen und roten Karten (Ereigniskarten zählen mit).",
+  "Physicist": "Physiker",
+  "Have the most science and space tags in play, combined.": "Die meisten Wissenschafts- und Weltraum-Symbole zusammen im Spiel.",
+  "3 of each standard resource (after paying the claim cost)": "Benötigt 3 von jeder Standard-Ressource nach Zahlung der Antragskosten."
 }
