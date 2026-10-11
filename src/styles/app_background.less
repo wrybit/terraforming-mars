@@ -27,14 +27,15 @@
   filter: saturate(var(--app-background-saturation)) brightness(var(--app-background-brightness));
 }
 
-// Image credit (licence): small and quiet, at the top right of the page
+// Image credit (licence): small and quiet, at the top right of the page – mirrors the menu button top left:
+// same distance to the edge and vertically centred on its axis (line height = button height)
 .app-background-credit {
   position: absolute;
-  top: 4px;
-  right: 8px;
+  top: @toolbar-edge-offset;
+  right: @toolbar-edge-offset;
   z-index: 1;
   font-size: 10px;
-  line-height: 1.4;
+  line-height: @toolbar-button-size;
   color: rgba(255, 255, 255, 0.35);
   text-decoration: none;
 

@@ -125,7 +125,7 @@ const SCREENS_WITH_BACKGROUND: ReadonlyArray<Screen> = [
 ];
 // Image credit only where the top right corner is free; all other views have their own page header there
 const SCREENS_WITH_BACKGROUND_CREDIT: ReadonlyArray<Screen> = [
-  'start-screen', 'create-game-form',
+  'start-screen',
 ];
 
 export type MainAppData = {
