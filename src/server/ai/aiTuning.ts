@@ -382,6 +382,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   milestone30: {milestoneProgressShare: 0.3},
   awardSwing0: {awardSwing: 0},
   plants25b: {plantProductionValue: 2.5},
+  // Round 35: awardSwing0 lost (−1.75 VP) – maybe more award caution helps; VP value and card prior re-checked.
+  vp110: {victoryPointScale: 1.1},
+  vp90: {victoryPointScale: 0.9},
+  prior2: {cardPriorWeight: 2},
   // Before round 31: the baseline without bundle1.
   beforeBundle1: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, productionDiscount: 0.9, secondStepCandidates: 12},
   bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},
