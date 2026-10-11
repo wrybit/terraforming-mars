@@ -217,8 +217,10 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 33: milestone0 +2.36 VP (z +3.06) – progress before the claim counts nothing; claiming stays valued.
   milestoneProgressShare: 0,
   energyProductionValue: 1.1,
-  triggerOrderPenalty: 0,
-  triggerOrderBonus: 0,
+  // Round 38 (1200 mirrored 1v1 games): triggerBoth +1.51 VP per deal (z +1.84) – effect cards before the
+  // cards that trigger them (human feedback: Lichen before Decomposers); penalty or bonus alone neutral.
+  triggerOrderPenalty: 1,
+  triggerOrderBonus: 0.5,
   sellToAfford: 0,
   buyForMilestone: 0,
   lastGenerationSale: 0,
@@ -419,6 +421,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   triggerBonus: {triggerOrderBonus: 0.5},
   triggerBoth: {triggerOrderPenalty: 1, triggerOrderBonus: 0.5},
   // Human feedback: sell a card or two when only that much is missing for a milestone.
+  // Before round 39: the baseline without the trigger order.
+  noTriggerOrder: {triggerOrderPenalty: 0, triggerOrderBonus: 0},
   sellToAfford: {sellToAfford: 1},
   // Human feedback: one card more in the research phase would have made Planner claimable.
   buyForMilestone: {buyForMilestone: 1},
