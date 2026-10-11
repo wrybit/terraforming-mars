@@ -1,7 +1,8 @@
 <template>
   <div class="card-requirement">
       <div class="card-item-container" :class="nextTo">
-        <template v-if="requirement.max">max&nbsp;</template>
+        <!-- Gap via CSS: the card translation trims text nodes, so "max&nbsp;" would lose its space -->
+        <span v-if="requirement.max" class="card-requirement-max-label">max</span>
         <span v-if="!isRepeated">{{amount}}</span>{{suffix}}
         <template v-if="type === RequirementType.REMOVED_PLANTS">
           <div class="card-special card-minus"></div>

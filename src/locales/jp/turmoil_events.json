@@ -139,7 +139,7 @@
 
   "Migration Underground": "地下移住",
   "// Gain 1 M€ production (max 5) for every 2 excavation markers you own. Each point of influence counts as an extra excavation marker.": "地下採掘回数+影響力の数2つ毎に、MC産出+1.(最大5)",
-  "Gain 1 M€ production (max 5) for every 2 underworld tokens you own. Each point of influence counts as an extra underworld token.": "",
+  "Gain 1 M€ production (max 5) for every 2 underworld tokens you own. Each point of influence counts as an extra underworld token.": "所有する地下トークン2つ毎にM€産出+1（最大5）. 影響力1点毎に地下トークン1つとして数える.",
 
   "Seismic Predictions": "地震予知",
   "// Discard all unclaimed underground resources. Lose 2 M€ for each tile on Mars you own WITHOUT excavation markers (max 5) minus influence.": "採掘されていない資源トークンを全て除去する. 地下採掘していない所有するタイル(最大5)-影響力の数分、2MC支払う.",

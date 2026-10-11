@@ -1,7 +1,7 @@
 {
   "SPIRE": "",
   "Spire": "",
-  "Standard Project": "",
+  "Standard Project": "Projet standard",
   "You start with 50 M€. As your first action, draw 4 cards, then discard 3 cards from your hand.": "Vous commencez avec 50 M€. Pour votre première action, piochez 4 cartes, puis défaussez 3 cartes de votre main.",
   "Effect: When you play a card with at least 2 tags. including this, add 1 science resource here.": "Effet : Chaque fois que vous jouez une carte avec AU MOINS 2 badges, y compris celle-ci, ajoutez 1 ressource Science sur cette carte.",
   "Effect: When you pay for a standard project, science resources here may be used as 2 M€ each.": "Effet : Lorsque vous payez le coût d'un projet standard, vous pouvez dépenser les ressources Science de cette carte pour 2M€ chacune.",

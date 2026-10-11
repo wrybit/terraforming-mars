@@ -28,7 +28,7 @@
     "Generation": "세대",
     "Player": "플레이어",
     "Corporation": "기업",
-    "VP": "",
+    "VP": "승점",
     "Total": "총합",
     "Timer": "시간",
     "Colony VP": "개척기지 승점",
@@ -37,7 +37,7 @@
     "Natural Preserve:ares": "자연 보존 (아레스)",
     "Nuclear Zone:ares": "핵무기 기폭지대 (아레스)",
     "Ecological Zone:ares": "자연 생태 형성지 (아레스)",
-    "Underworld Corruption Bribe": "",
+    "Underworld Corruption Bribe": "지하 세계 부패 뇌물",
 
     "Completed!": "완료됨!",
     "% completed": "% 완료됨",

@@ -1,10 +1,10 @@
 {
-  "Place a habitat tile on The Moon": "",
-  "Place a mine tile on The Moon": "",
-  "Place a road tile on The Moon": "",
-  "Select a space on The Moon for a habitat tile.": "",
-  "Select a space on The Moon for a mining tile.": "",
-  "Select a space on The Moon for a road tile.": "",
+  "Place a habitat tile on The Moon": "Placez une tuile Habitat sur la Lune",
+  "Place a mine tile on The Moon": "Placez une tuile Mine sur la Lune",
+  "Place a road tile on The Moon": "Placez une tuile Route sur la Lune",
+  "Select a space on The Moon for a habitat tile.": "Sélectionnez un espace sur la Lune pour une tuile Habitat.",
+  "Select a space on The Moon for a mining tile.": "Sélectionnez un espace sur la Lune pour une tuile Mine.",
+  "Select a space on The Moon for a road tile.": "Sélectionnez un espace sur la Lune pour une tuile Route.",
   "Metropolis": "Métropole",
   "Embassy": "Ambassade"
 }

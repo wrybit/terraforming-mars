@@ -52,7 +52,6 @@
   "Create New Game": "Nowa gra",
   "№ of Players": "Liczba graczy",
 
-  "Solo": "Wariant jednoosobowy",
   "Expansions": "Rozszerzenia",
   "Options": "Ustawienia",
   "Promos": "Karty promo",
@@ -543,7 +542,7 @@
   "14 Gens": "14 pokoleń",
   "TR all": "WT bez limitu",
   "63 TR": "63 WT",
-  "Ok": "",
+  "Ok": "OK",
 
   "Place your tile here?": "Postawić kafel w tym miejscu?",
   "Yes": "Tak",

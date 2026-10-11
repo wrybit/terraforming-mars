@@ -1,0 +1,19 @@
+{
+  "1 VP for each road tile on The Moon": "1 SP je Straßenplättchen auf dem Mond",
+  "Terralabs Research": "Terralabs Forschung",
+  "Draw 2 cards.": "Ziehe 2 Karten.",
+  "Requires that you have 3 Moon tags. Increase your M€ production 1 step per Moon tag in the game (including these.)": "Benötigt 3 Mond-Symbole. Erhöhe deine M€-Produktion um 1 je Mond-Symbol im Spiel (einschließlich dieser).",
+  "habitat rate": "Habitatwertung",
+  "You start with 40 M€, 2 steel, and 2 titanium.": "Du beginnst mit 40 M€, 2 Stahl und 2 Titan.",
+  "(Effect: Whenever ANY PLAYER plays an event, add 1 data to this card.)": "(Effekt: Immer wenn IRGENDEIN SPIELER ein Ereignis spielt, füge dieser Karte 1 Datum hinzu.)",
+  "(Effect: Remove 3 data to draw a card automatically.)": "(Effekt: Entferne 3 Daten, um automatisch 1 Karte zu ziehen.)",
+  "(Effect: Wetlands counts as a greenery tile and an ocean tile, except it can't be covered and is not one of the 9 oceans required to end the game.)": "(Effekt: Feuchtgebiete zählen als Grünflächenplättchen und als Ozeanplättchen, können aber nicht überbaut werden und zählen nicht zu den 9 Ozeanen, die zum Spielende nötig sind.)",
+  "(Effect: Whenever you play a card with a space tag BUT NO PLANETARY TAG (including this) add 1 orbital on this card.)": "(Effekt: Immer wenn du eine Karte mit Weltraum-Symbol, ABER OHNE PLANETEN-SYMBOL spielst (auch diese), füge dieser Karte 1 Orbitale hinzu.)",
+  "(Action: When you play a card with a building tag, add 1 agenda on this card.)": "(Aktion: Wenn du eine Karte mit Gebäude-Symbol spielst, füge dieser Karte 1 Agenda hinzu.)",
+  "(Action: Spend 2 agenda resources to place 1 delegate in any party.)": "(Aktion: Gib 2 Agenden aus, um 1 Delegierten in eine beliebige Partei zu setzen.)",
+  "(Action: Spend 5 agenda resources to place a city tile on Mars.)": "(Aktion: Gib 5 Agenden aus, um ein Stadtplättchen auf dem Mars zu platzieren.)",
+  "(Effect: Your event cards stay face up, and their tags are in use as if those were automated (green) cards.)": "(Effekt: Deine Ereigniskarten bleiben offen liegen und ihre Symbole zählen, als wären es automatische (grüne) Karten.)",
+  "planetary tag": "Planeten-Symbol",
+  "Gain 13 M€": "Erhalte 13 M€",
+  "lose all": "verliere alle"
+}

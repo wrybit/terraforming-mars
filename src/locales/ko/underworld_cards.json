@@ -1,50 +1,50 @@
 {
 
 "Anti-trust Crackdown": "",
-"Requires that you have no more than 0 corruption. ALL players lose 2 corruption each.": "",
+"Requires that you have no more than 0 corruption. ALL players lose 2 corruption each.": "조건: 자신의 부패 0. 모든 플레이어는 부패 2를 잃음.",
 
 "Artesian Aquifer": "",
-"Excavate 1 underground resource on ANY SPACE RESERVED FOR AN OCEAN. Then, place an ocean tile there, if possible.": "",
+"Excavate 1 underground resource on ANY SPACE RESERVED FOR AN OCEAN. Then, place an ocean tile there, if possible.": "해양 전용 구역 아무 곳에서 지하 자원 1개 탐색. 그 후 가능하면 그곳에 해양 타일 배치.",
 
 "Battery Factory": "",
 "Action: Spend 1 energy to gain 1 M€ for each power tag you have.": "",
 
 "Behemoth Excavator": "",
-"Excavate 3 underground resources.": "",
+"Excavate 3 underground resources.": "지하 자원 3개 탐색.",
 
 "Casino": "",
-"Requires that you own 2 city tiles. Gain 1 corruption. Increase your M€ production 4 steps.": "",
+"Requires that you own 2 city tiles. Gain 1 corruption. Increase your M€ production 4 steps.": "조건: 자신의 도시 타일 2장 이상. 부패 1 획득. M€ 생산력 4 증가.",
 
 "Cave City": "",
 "Increase your steel production 1 step. Place a city in a NON-RESERVED SPACE WITH YOUR EXCAVATION MARKER, ignoring other placement restrictions.": "",
 
 "Chemical Factory": "",
 "Action: Spend 1 plant to excavate an underground resource.": "",
-"Gain 2 corruption.": "",
+"Gain 2 corruption.": "부패 2 획득.",
 
 "Concession Rights": "",
 "Requires 1 Earth tag. Until the end of this generation, you can excavate ignoring placement restrictions. Excavate 1 underground resource. Gain 1 corruption.": "",
 
 "Corporate Blackmail": "",
-"PAYS YOU": "",
-"THIS CANNOT BE BLOCKED BY CORRUPTION": "",
+"PAYS YOU": "당신에게 지불",
+"THIS CANNOT BE BLOCKED BY CORRUPTION": "부패로 막을 수 없음",
 "// Requires 1 corruption. Target a player that has at least 2 corruption. Unless that player pays you 10 M€, they lose 2 corruption.": "",
 
 "Crater Survey": "",
-"Identify 4 underground resources. Claim one of them.": "",
+"Identify 4 underground resources. Claim one of them.": "지하 자원 4개 확인. 그중 1개 차지.",
 
 "Cut-throat Budgeting": "",
-"Requires 1 corruption. Increase your M€, steel, and energy production 1 step each.": "",
+"Requires 1 corruption. Increase your M€, steel, and energy production 1 step each.": "조건: 부패 1 이상. M€, 강철, 에너지 생산력 각각 1 증가.",
 
 "Deepmining": "",
 "Excavate an underground resource that depicts steel or titanium ANYWHERE ON THE BOARD. Increase your production of that resource 1 step.": "",
 
 "Deepnuking": "",
-"Excavate 2 underground resources. Remove up to 3 plants from any player.": "",
+"Excavate 2 underground resources. Remove up to 3 plants from any player.": "지하 자원 2개 탐색. 아무 1명의 식물 자원 3개까지 제거.",
 
 "Earthquake Machine": "",
 "Action: // Spend 1 energy to excavate an underground resource on any space on Mars that has no tile on it.": "",
-"Requires 2 science tags. Decrease any plant production 1 step.": "",
+"Requires 2 science tags. Decrease any plant production 1 step.": "조건: 과학 태그 2개 이상. 아무 1명의 식물 생산력 1 감소.",
 
 "Excavator Leasing": "",
 "Effect: The excavate standard project costs 1 M€ less for all players.": "",
@@ -54,17 +54,17 @@
 "Effect: After you place a tile (on Mars or in space) that has no adjacent tiles, draw a card.": "",
 
 "Fabricated Scandal": "",
-"most": "",
-"least": "",
+"most": "최다",
+"least": "최소",
 "Gain 1 corruption. The players with the highest TR lose 1 TR. Then the players with the lowest TR gain 1 TR, if possible.": "",
 
 "Forest Tunnels": "",
-"Gain 1 plant for each underground token you own.": "",
+"Gain 1 plant for each underground token you own.": "소유한 지하 토큰 1개당 식물 자원 1개 획득.",
 
 "Gaia City": "",
 "// Reduce your energy production one step and increase your M€ production 2 steps. Place a city in a space with ANY player's excavation marker. Its placement bonus is doubled (incluing adjacencies.) Regular placement restriction still apply.": "",
 
-"Identify 3 underground resources. Claim 1 of them.": "",
+"Identify 3 underground resources. Claim 1 of them.": "지하 자원 3개 확인. 그중 1개 차지.",
 
 "Geologist Team": "",
 "Action: Identify 1 underground resource.": "",
@@ -74,7 +74,7 @@
 "Pick a space on the board. Identify the underground resource in that space and in all adjacent spaces. Claim one of them.": "",
 
 "Geothermal Network": "",
-"Requires 3 underground tokens. Increase your heat production 3 steps.": "",
+"Requires 3 underground tokens. Increase your heat production 3 steps.": "조건: 지하 토큰 3개 이상. 열 생산력 3 증가.",
 
 "Global Audit": "",
 "// Every player with 0 corruption gains 1 TR, if possible.": "",
@@ -82,9 +82,9 @@
 "Grey Market Exploitation": "",
 "Action: Spend 1 M€ to gain 1 standard resource.": "",
 "Action: Spend 1 corruption to gain 3 of the same standard resource.": "",
-"Requires 2 corruption.": "",
+"Requires 2 corruption.": "조건: 부패 2 이상.",
 
-"Requires 2 corruption. Decrease any M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "",
+"Requires 2 corruption. Decrease any M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "조건: 부패 2 이상. 아무 1명의 M€ 생산력 2 감소. 보유한 부패 1당 M€ 생산력 1 증가.",
 
 "Steal 3 M€, plus 2 extra M€ for each corruption resource you have, from any player.": "",
 
@@ -92,36 +92,36 @@
 "Requires that 3 science tags. Put a fighter resource on a card you own, or gain 1 titanium if you have no suitable card. Put a science resource on a card you own, or gain 1 TR if you have no suitable card.": "",
 
 "Imported Heavy Machinery": "",
-"Excavate 2 underground resources.": "",
+"Excavate 2 underground resources.": "지하 자원 2개 탐색.",
 
 "Induced Tremor": "",
 "// Excavate an underground resource, then pick an adjacent space with an unclaimed resource token. Remove that token. The space can be identified again.": "",
 
 "Infrastructure Overload": "",
-"Gain 1 corruption. Reduce any energy production 2 steps.": "",
+"Gain 1 corruption. Reduce any energy production 2 steps.": "부패 1 획득. 아무 1명의 에너지 생산력 2 감소.",
 
 "Investigative Journalism": "",
 "Action: Spend 5 M€ and remove 1 corruption from ANOTHER player with more corruption than you to add 1 journalism resource on this card.": "",
 "Decrease your M€ production 2 steps. 1 VP per journalism resource on this card.": "",
 
 "Labor Trafficking": "",
-"FIRST": "",
+"FIRST": "첫 번째",
 "Effect: The first standard project action you take each generation, except selling patents, costs 6 M€ less.": "",
 
 "Landfill": "",
 "Increase your M€ production 1 step for each different TYPE of production you have at least 1 step of.": "",
 
 "Lobbying Network": "",
-"Gain 1 corruption.": "",
+"Gain 1 corruption.": "부패 1 획득.",
 
 "Man-made Volcano": "",
-"Increase your energy production 2 steps and your heat production 4 steps.": "",
-"Place this special tile on a NON-RESERVED space that has your excavation marker.": "",
+"Increase your energy production 2 steps and your heat production 4 steps.": "에너지 생산력 2 증가. 열 생산력 4 증가.",
+"Place this special tile on a NON-RESERVED space that has your excavation marker.": "자신의 탐색 마커가 있는 전용 구역이 아닌 칸에 이 특수 타일 배치.",
 
 "Martian Express": "",
 "Action: This card can receive any resource that can be placed on a card. Resources placed here get converted to Wares resources.": "",
 "Action: Remove all wares from here and gain 1 M€ for each ware removed.": "",
-"Requires 1 city in play.": "",
+"Requires 1 city in play.": "조건: 게임 내 도시 1개 이상.",
 
 "Micro-Geodesics": "",
 "Spend 1 microbe from any card to excavate an underground resource and gain 3 plants. Add 1 data resource to ANOTHER card.": "",
@@ -130,7 +130,7 @@
 "// Action: Spend any amount of energy to identify that many underground resources on the board and put the same number of data on this card.": "",
 
 "Microprobing Technology": "",
-"Requires 1 science tag. Gain 3 plants. Identify 2 underground resources. Claim 1 of them.": "",
+"Requires 1 science tag. Gain 3 plants. Identify 2 underground resources. Claim 1 of them.": "조건: 과학 태그 1개 이상. 식물 자원 3개 획득. 지하 자원 2개 확인. 그중 1개 차지.",
 
 "Mining Market Insider": "",
 "Effect: After any player identifies 1 or more underground resources (at once), add 1 data resource to this card.": "",
@@ -143,68 +143,68 @@
 "Requires 2 science tags. Reduce your energy production 5 steps. Draw 1 card for every power tag you have, including this.": "",
 
 "Narrative Spin": "",
-"Requires 1 Earth tag. Gain 2 corruption.": "",
+"Requires 1 Earth tag. Gain 2 corruption.": "조건: 지구 태그 1개 이상. 부패 2 획득.",
 
 "Nightclubs": "",
-"Requires that you own a city in play. Gain 1 corruption and increase your M€ production 2 steps.": "",
+"Requires that you own a city in play. Gain 1 corruption and increase your M€ production 2 steps.": "조건: 자신의 도시 1개 이상. 부패 1 획득. M€ 생산력 2 증가.",
 
 "Off-World Tax Haven": "",
-"Requires 2 corruption. Increase your M€ production 5 steps.": "",
+"Requires 2 corruption. Increase your M€ production 5 steps.": "조건: 부패 2 이상. M€ 생산력 5 증가.",
 
 "Old World Mafia": "",
-"Gain 1 corruption for every 2 Earth tags you have, including this.": "",
+"Gain 1 corruption for every 2 Earth tags you have, including this.": "이 카드를 포함해 보유한 지구 태그 2개당 부패 1 획득.",
 
 "Orbital Laser Drill": "",
-"Requires 2 science tags. Excavate 2 underground resources, IGNORING PLACEMENT RESTRICTIONS.": "",
+"Requires 2 science tags. Excavate 2 underground resources, IGNORING PLACEMENT RESTRICTIONS.": "조건: 과학 태그 2개 이상. 배치 제한을 무시하고 지하 자원 2개 탐색.",
 
 "Patent Manipulation": "",
-"RETURN 1 OF YOUR PLAYED GREEN OR BLUE CARDS TO YOUR HAND. IT MAY NOT BE A CARD THAT PLACES SPECIAL TILES OR RETURNS PLAYED CARDS TO YOUR HAND.": "",
+"RETURN 1 OF YOUR PLAYED GREEN OR BLUE CARDS TO YOUR HAND. IT MAY NOT BE A CARD THAT PLACES SPECIAL TILES OR RETURNS PLAYED CARDS TO YOUR HAND.": "추진한 자신의 녹색 또는 파란색 카드 1장을 손으로 되돌림. 특수 타일을 배치하거나 추진한 카드를 손으로 되돌리는 카드는 선택할 수 없음.",
 
 "Personal Spacecruiser": "",
 "// Put 1 fighter resource on this card. Gain 1 corruption.": "",
 
 "Planetary Rights Buyout": "",
-"Requires 5 corruption. Gain 7 TR": "",
+"Requires 5 corruption. Gain 7 TR": "조건: 부패 5 이상. 테라포밍 등급 7 상승",
 
 "Plant Tax": "",
-"ALL players lose 2 plants. Players can block this with corruption. Gain 1 corruption.": "",
+"ALL players lose 2 plants. Players can block this with corruption. Gain 1 corruption.": "모든 플레이어는 식물 자원 2개를 잃음. 부패로 막을 수 있음. 부패 1 획득.",
 
 "Price Wars": "",
 "Requires 2 corruption. Until the end of this generation, your steel and titanium are worth 1 more M€ each, and steel and titanium for other players is worth 1 M€ less.": "",
 
 "Private Investigator": "",
-"TARGET A PLAYER WITH MORE CORRUPTION THAN YOU.": "",
-"PLACE THIS CARD FACE DOWN IN THAT PLAYER'S PROJECT CARD PILE.": "",
-"Gain 1 TR.": "",
+"TARGET A PLAYER WITH MORE CORRUPTION THAN YOU.": "자신보다 부패가 많은 플레이어 1명을 대상으로 지정.",
+"PLACE THIS CARD FACE DOWN IN THAT PLAYER'S PROJECT CARD PILE.": "이 카드를 그 플레이어의 프로젝트 카드 더미에 뒷면으로 놓음.",
+"Gain 1 TR.": "테라포밍 등급 1 상승.",
 
 "Private Military Contractor": "",
 "Effect: When blocking damage from other players, you can use fighters here as if they were corruption resources. You cannot use them for score bribing or collusion.": "",
-"Add 1 fighter resource to this card.": "",
+"Add 1 fighter resource to this card.": "이 카드에 전투기 자원 1개 추가.",
 
 "Private Resorts": "",
 "// Requires 3 oceans. Reduce your heat production 1 step. At the end of this generation only, during the production phase, gain 12 M€ and 1 corruption.": "",
 
 "Public Spaceline": "",
-"Requires 5 space tags. This card has 2 Earth tags, 2 Jovian tags, 2 Venus tags, and 2 Mars tags.": "",
+"Requires 5 space tags. This card has 2 Earth tags, 2 Jovian tags, 2 Venus tags, and 2 Mars tags.": "조건: 우주 태그 5개 이상. 이 카드는 지구 태그 2개, 목성 태그 2개, 금성 태그 2개, 화성 태그 2개를 가짐.",
 
 "Research & Development Hub": "",
 "Effect: At the end of each production phase, add 1 data here for EACH OTHER PLAYER that has 7 or more cards in their hand.": "",
-"1 VP for every 3 data resources on this card.": "",
+"1 VP for every 3 data resources on this card.": "이 카드의 데이터 자원 3개당 승점 1점.",
 
 "Robot Moles": "",
-"Gain 2 steel. Identify 4 underground resources. Claim 1 of them.": "",
+"Gain 2 steel. Identify 4 underground resources. Claim 1 of them.": "강철 자원 2개 획득. 지하 자원 4개 확인. 그중 1개 차지.",
 
 "Scapegoat": "",
 
 "Search for Life Underground": "",
 "Action: Spend 1 M€ to identify an underground resource. If it depicts at least 1 microbe, add a science resource here.": "",
-"Temperature must -18° C or colder.": "",
+"Temperature must -18° C or colder.": "조건: 기온 -18℃ 이하.",
 
 "Server Sabotage": "",
 "Gain 1 corruption. Remove 2 data from any player. Remove all unclaimed underground resources from the board back into the pile. Their spaces can be identified again.": "",
 
 "Soil Export": "",
-"Excavate an underground resource.": "",
+"Excavate an underground resource.": "지하 자원 1개 탐색.",
 "// At the end of this generation only, during the production phase, gain 12 M€.": "",
 
 "Space Privateers": "",
@@ -219,9 +219,9 @@
 "// Put 1 fighter resource on this card. 1 VP for each Jovian tag you have.": "",
 
 "Staged Protests": "",
-"Requires 1 corruption. Gain 1 corruption. Until the end of this generation, milestones and awards cost +8 M€.": "",
+"Requires 1 corruption. Gain 1 corruption. Until the end of this generation, milestones and awards cost +8 M€.": "조건: 부패 1 이상. 부패 1 획득. 이번 세대가 끝날 때까지 업적과 기업상 비용 +8 M€.",
 
-"REPEAT": "",
+"REPEAT": "반복",
 "(Action: Use a standard project that you've already used this generation, with its cost reduced by 8 M€).": "",
 
 "Stem Field Subsidies": "",
@@ -231,7 +231,7 @@
 "Requires you have 1 corruption and 1 underground token. Steal up to 7 M€ from a player that HAS A TILE NEXT TO AN OCEAN.": "",
 
 "Subterranean Sea": "",
-"Place an ocean tile ON AN AREA NOT RESERVED FOR OCEAN where you have an excavation marker.": "",
+"Place an ocean tile ON AN AREA NOT RESERVED FOR OCEAN where you have an excavation marker.": "자신의 탐색 마커가 있는, 해양 전용 구역이 아닌 칸에 해양 타일 배치.",
 
 "Titan Manufacturing Colony": "",
 "Effect: Whenever you play a Jovian tag, (including this one), add 1 tool resource on this card.": "",
@@ -241,28 +241,28 @@
 "Action: Pay 3 energy to excavate 2 underground resources.": "",
 
 "Tunneling Subcontractor": "",
-"Gain 1 corruption. Excavate an underground resource.": "",
+"Gain 1 corruption. Excavate an underground resource.": "부패 1 획득. 지하 자원 1개 탐색.",
 
 "Underground Amusement Park": "",
-"Requires you have 1 underground token. Increase your M€ production 1 step.": "",
+"Requires you have 1 underground token. Increase your M€ production 1 step.": "조건: 지하 토큰 1개 이상. M€ 생산력 1 증가.",
 
 "Underground Habitat": "",
-"Excavate an underground resource. Increase your plant production 1 step. Add 1 animal on another card.": "",
+"Excavate an underground resource. Increase your plant production 1 step. Add 1 animal on another card.": "지하 자원 1개 탐색. 식물 생산력 1 증가. 다른 카드에 동물 자원 1개 추가.",
 
 "Underground Railway": "",
-"Decrease your energy production 1 step. Gain 1 TR for every 4 underground tokens you have.": "",
+"Decrease your energy production 1 step. Gain 1 TR for every 4 underground tokens you have.": "에너지 생산력 1 감소. 보유한 지하 토큰 4개당 테라포밍 등급 1 상승.",
 
 "Underground Shelters": "",
 "Excavate an underground resource. At the end of the game, your cities score 1 VP per 3 excavation markers YOU have in that city space and adjacent spaces.": "",
 
 "Underground Smuggling Ring": "",
-"Requires you have 1 underground token. Gain 1 corruption and 2 of the same standard resource.": "",
+"Requires you have 1 underground token. Gain 1 corruption and 2 of the same standard resource.": "조건: 지하 토큰 1개 이상. 부패 1과 같은 기본 자원 2개 획득.",
 
 "Voltaic Metallurgy": "",
 "Action: Spend any number of steel to gain the same amount of titanium (max is the number of power tags you have.)": "",
-"Requires 1 science tag.": "",
+"Requires 1 science tag.": "조건: 과학 태그 1개 이상.",
 
 "Volunteer Mining Initiative": "",
-"Excavate 1 underground resource for every 3 cities in play.": ""
+"Excavate 1 underground resource for every 3 cities in play.": "게임 내 도시 3개당 지하 자원 1개 탐색."
 
 }

@@ -108,7 +108,7 @@
   "Official": "Offiziell",
 
   "GEN": "",
-  "Gen:": "",
+  "Gen:": "Gen.:",
   "next": "nächst",
   "passed": "gepasst",
   "Venus scale": "Venusleiste",
@@ -1610,7 +1610,7 @@
   "ON MARS": "AUF DEM MARS",
   "Most tags on the ${0} track": "Die meisten Symbole auf der ${0}-Leiste",
   "Latest logs": "Neueste Einträge",
-  "Moon habitat, logistic, and mining rates": "Habitat-, Logistik- und Bergbaurate des Mondes",
+  "Moon habitat, logistic, and mining rates": "Habitat-, Logistik- und Bergbauwertung des Mondes",
   "Standard Actions": "Standardaktionen",
   "Standard resource": "Standardrohstoff",
   "Energy Production": "Energie-Produktion",

@@ -1,8 +1,8 @@
 {
   "Lose 1 M€ for each card in your hand over 6 (no limit) reduced by 2 M€ per influence (min 0M€). Draw 2 cards if your hand contains 6 cards or less.": "",
   "// Count corruption and ADD influence. Players with the most get 1 corruption and 3 M€ production. Players with 2nd most get 1 corruption and 1 M€ production. Min 1 to place. (SOLO: Place 1st with sum of 5 or more.)": "",
-  "Lose 3 M€ per corruption resource you have (max 5), minus influence. Players with 0 corruption gain 1 TR.": "",
-  "Gain 1 M€ production (max 5) for every 2 underworld tokens you own. Each point of influence counts as an extra underworld token.": "",
+  "Lose 3 M€ per corruption resource you have (max 5), minus influence. Players with 0 corruption gain 1 TR.": "보유한 부패 자원 1개당(최대 5) 3 M€를 잃음, 영향력만큼 차감. 부패가 0인 플레이어는 테라포밍 등급 1 상승.",
+  "Gain 1 M€ production (max 5) for every 2 underworld tokens you own. Each point of influence counts as an extra underworld token.": "소유한 지하 세계 토큰 2개당 M€ 생산력 1 획득(최대 5). 영향력 1은 지하 세계 토큰 1개로 추가 계산.",
   "// Discard all unclaimed underground resources. Lose 2 M€ for each tile on Mars you own WITHOUT excavation markers (max 5) minus influence.": "",
 
   "Discard 2 cards from hand. Gain 2 M€ per influence.": "각자 손에 든 카드 2장 버림. 각자 보유한 영향력 1마다 2M€ 획득.",

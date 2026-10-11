@@ -1,5 +1,5 @@
 {
-    "AERON GENOMICS": "",
+    "AERON GENOMICS": "アーロンゲノミクス",
     "Aeron Genomics": "アーロンゲノミクス",
     "Effect: After you excavate an underground resource, put an animal on this card.": "効果：地下資源を採掘した時、このカード上に1動物追加.",
     "Action: Spend 1 M€ to move an animal from here to another card.": "アクション：1MC支払い、このカード上の動物を他のカードに移動する.",
@@ -25,7 +25,7 @@
     "Action: Spend 3 data here to identify 3 underground resources. Claim 1 of them.": "アクション：このカード上から3データ除去し、地下資源を3回調査する. その内、1つの資源を獲得.",
     "You start with 45 M€ and 2 data on this card.": "初期資源：45MC. このカード上に2データ追加.",
 
-    "HADESPHERE": "",
+    "HADESPHERE": "ハデスフィア",
     "Hadesphere": "ハデスフィア",
     "Action: Excavate an underground resource.": "アクション：地下資源を採掘する.",
     "You start with 36 M€ and 5 steel. As your first action, identify any 3 underground resources on Mars.": "初期資源：36MC. 5建材. 1アクション目：3回地下資源を調査する.",
@@ -47,7 +47,7 @@
     "Action: Pay 1 corruption to gain either 4 steel, 3 titanium, 3 plants or 6 heat.": "アクション：1汚職支払い、4建材 または 3チタン または 3植物 または 6温熱獲得.",
     "You start with 46 M€ and 2 corruption.": "初期資源：46MC. 2汚職.",
 
-    "KEPLERTEC": "",
+    "KEPLERTEC": "ケプラーテック",
     "Keplertec": "ケプラーテック",
     "Action: Spend 1 titanium to put a fighter resource on ANY card.": "アクション：1チタンを支払い、1戦闘機獲得.",
     "Effect: When you place a fighter on this card, identify 4 underground resources FROM THE PILE. Claim 1. Shuffle the remaining tokens back into the pile.": "効果：このカード上に戦闘機が追加された時、地下資源トークンを4枚見る. その内、1枚の資源を獲得し残りを山札に戻す.",

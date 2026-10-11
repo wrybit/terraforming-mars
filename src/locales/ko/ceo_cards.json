@@ -16,120 +16,120 @@
 
 
 	"Co-leadership": "",
-	"Draw 3 CEO cards and take one to your hand, it will be played on your first turn. Discard the other 2.": "",
+	"Draw 3 CEO cards and take one to your hand, it will be played on your first turn. Discard the other 2.": "경영인 카드 3장을 뽑아 1장을 손에 가져옴. 그 카드는 첫 차례에 추진. 나머지 2장은 버림.",
 
 
 	"Apollo": "",
-	"Once per game, gain 3 M€ for each tile on The Moon.": "",
+	"Once per game, gain 3 M€ for each tile on The Moon.": "게임당 1회, 달의 타일 1장당 3 M€ 획득.",
 
 	"Asimov": "",
 	"Effect: You have +2 score for all awards.": "",
-  "Once per game, draw 10-X awards (min. 1), where X is the current generation number. You may put one into the game and fund it for free.": "",
+  "Once per game, draw 10-X awards (min. 1), where X is the current generation number. You may put one into the game and fund it for free.": "게임당 1회, 기업상 10-X장 뽑기(최소 1장, X는 현재 세대). 그중 1개를 게임에 넣고 무료로 제정할 수 있음.",
 
 	"Bjorn": "",
-	"Once per game, steal X+2 M€ from each player that has more M€ than you, where X is the current generation number.": "",
+	"Once per game, steal X+2 M€ from each player that has more M€ than you, where X is the current generation number.": "게임당 1회, 자신보다 M€가 많은 각 플레이어에게서 X+2 M€를 훔침(X는 현재 세대).",
 
 	"Caesar": "",
-	"Once per game, place X hazard tiles where X is the current generation number. Each opponent loses 1 unit of production of their choice, or 2 units if there are 6 or more hazard tiles.": "",
+	"Once per game, place X hazard tiles where X is the current generation number. Each opponent loses 1 unit of production of their choice, or 2 units if there are 6 or more hazard tiles.": "게임당 1회, 위험 타일 X장 배치(X는 현재 세대). 각 상대는 자신이 고른 생산력 1을 잃음. 위험 타일이 6장 이상이면 2를 잃음.",
 
 	"Clarke": "",
-	"Once per game, increase your plant and heat production 1 step each. Gain plants and heat equal to your production +4.": "",
+	"Once per game, increase your plant and heat production 1 step each. Gain plants and heat equal to your production +4.": "게임당 1회, 식물 생산력과 열 생산력 각각 1 증가. 생산력 +4만큼 식물 자원과 열 자원 획득.",
 
 	"Duncan": "",
-	"Once per game, gain 7-X VP and 4X M€, where X is the current generation number.": "",
+	"Once per game, gain 7-X VP and 4X M€, where X is the current generation number.": "게임당 1회, 승점 7-X점과 4X M€ 획득(X는 현재 세대).",
 
 	"Ender": "",
-	"Once per game, discard any number of cards up to twice the current generation number to draw that many cards.": "",
+	"Once per game, discard any number of cards up to twice the current generation number to draw that many cards.": "게임당 1회, 현재 세대의 2배까지 원하는 수의 카드를 버리고 그만큼 카드 뽑기.",
 
 	"Faraday": "",
-	"When you gain a multiple of 5 for any tag type IN PLAY, you may pay 3 M€ to draw a card with that tag. Wild tags do not count for this effect.": "",
+	"When you gain a multiple of 5 for any tag type IN PLAY, you may pay 3 M€ to draw a card with that tag. Wild tags do not count for this effect.": "추진한 카드의 어떤 태그 종류든 5의 배수에 도달하면, 3 M€를 지불해서 그 태그가 있는 카드 1장을 뽑을 수 있음. 만능 태그는 이 효과에 포함되지 않음.",
 
 	"Floyd": "",
-	"Once per game, play a card from hand for 13 + 2X M€ less, where X is the current generation number.": "",
+	"Once per game, play a card from hand for 13 + 2X M€ less, where X is the current generation number.": "게임당 1회, 손에서 카드 1장을 13 + 2X M€ 저렴하게 추진(X는 현재 세대).",
 
 	"Gaia": "",
-	"Once per game, gain the Ares adjacency bonuses of all player-owned tiles on Mars.": "",
+	"Once per game, gain the Ares adjacency bonuses of all player-owned tiles on Mars.": "게임당 1회, 화성에서 플레이어가 소유한 모든 타일의 아레스 인접 보너스 획득.",
 
 	"Gordon": "",
 	"Effect: Ignore placement restrictions for greenery and city tiles on Mars.": "",
   "Effect: Gain 2 M€ when you place a greenery or city tile on Mars.": "",
 
 	"Greta": "",
-	"When you take an action or play a card that increases your TR THIS GENERATION (max 10 times), gain 4 M€.": "",
+	"When you take an action or play a card that increases your TR THIS GENERATION (max 10 times), gain 4 M€.": "이번 세대에 테라포밍 등급을 올리는 행동을 하거나 카드를 추진할 때마다(최대 10회) 4 M€ 획득.",
 
-	"Once per game, decrease each of your productions 1 step to gain 4 of that resource.": "",
+	"Once per game, decrease each of your productions 1 step to gain 4 of that resource.": "게임당 1회, 각 생산력 1 감소. 그 자원을 각각 4개씩 획득.",
 
 	"Ingrid": "",
-	"When you take an action that places a tile on Mars THIS GENERATION, draw a card.": "",
+	"When you take an action that places a tile on Mars THIS GENERATION, draw a card.": "이번 세대에 화성에 타일을 배치하는 행동을 할 때마다 카드 1장 뽑기.",
 
 	"Jansson": "",
-	"Once per game, gain all placement bonuses under your tiles on Mars.": "",
+	"Once per game, gain all placement bonuses under your tiles on Mars.": "게임당 1회, 화성에 있는 자신의 타일 아래 모든 배치 보너스 획득.",
 
 	"Karen": "",
-	"Once per game, draw Prelude cards equal to the current generation number and choose one to play, and discard the rest.": "",
+	"Once per game, draw Prelude cards equal to the current generation number and choose one to play, and discard the rest.": "게임당 1회, 현재 세대 수만큼 서곡 카드를 뽑아 1장을 골라 추진하고 나머지는 버림.",
 
 	"Lowell": "",
-	"Once per game, pay 8 M€ to draw 3 CEO cards and choose one to play. Discard this card.": "",
+	"Once per game, pay 8 M€ to draw 3 CEO cards and choose one to play. Discard this card.": "게임당 1회, 8 M€를 지불해서 경영인 카드 3장을 뽑아 1장을 골라 추진. 이 카드는 버림.",
 
 	"Maria": "",
-	"Once per game, draw colony tiles equal to the current generation number. Put one into play and build a colony on it for free if possible.": "",
+	"Once per game, draw colony tiles equal to the current generation number. Put one into play and build a colony on it for free if possible.": "게임당 1회, 현재 세대 수만큼 위성 타일을 뽑음. 그중 1장을 게임에 넣고, 가능하면 무료로 개척기지 1개 건설.",
 
 	"Musk": "",
-	"Once per game, discard any number of Earth cards to draw that many space cards, and gain that many units of titanium, plus 6.": "",
+	"Once per game, discard any number of Earth cards to draw that many space cards, and gain that many units of titanium, plus 6.": "게임당 1회, 원하는 수의 지구 카드를 버리고 그만큼 우주 카드를 뽑음. 그 수 +6만큼 티타늄 자원 획득.",
 
 	"Naomi": "",
 	"Effect: When you build a colony, gain 2 energy and 3 M€.": "",
-  "Once per game, move each colony tile track marker to its highest or lowest value.": "",
+  "Once per game, move each colony tile track marker to its highest or lowest value.": "게임당 1회, 각 위성 타일 트랙 마커를 최고값 또는 최저값으로 이동.",
 
 	"Neil": "",
 	"Effect: Gain 1 M€ when any player plays a Moon tag.": "",
-  "Once per game, increase your M€ production by the value of the LOWEST Moon rate.": "",
+  "Once per game, increase your M€ production by the value of the LOWEST Moon rate.": "게임당 1회, 가장 낮은 달 등급 값만큼 M€ 생산력 증가.",
 
 	"Oscar": "",
-	"Once per game, replace the Chairman with one of your delegates.": "",
+	"Once per game, replace the Chairman with one of your delegates.": "게임당 1회, 의장을 자신의 의원 1명으로 교체.",
 
 	"Petra": "",
-	"Once per game, replace all Neutral delegates with your delegates. Gain 3 M€ for each delegate replaced this way. Place 3 Neutral delegates.": "",
+	"Once per game, replace all Neutral delegates with your delegates. Gain 3 M€ for each delegate replaced this way. Place 3 Neutral delegates.": "게임당 1회, 모든 중립 의원을 자신의 의원으로 교체. 이렇게 교체한 의원 1명당 3 M€ 획득. 중립 의원 3명 배치.",
 
 	"Quill": "",
-	"Once per game, add 2 floaters to each of your cards that collect floaters, then add 2 floaters to ANY card. Gain 1 M€ for every 2 floaters added this way.": "",
+	"Once per game, add 2 floaters to each of your cards that collect floaters, then add 2 floaters to ANY card. Gain 1 M€ for every 2 floaters added this way.": "게임당 1회, 부양체를 모으는 자신의 각 카드에 부양체 자원 2개 추가. 그 후 아무 카드에 부양체 자원 2개 추가. 이렇게 추가한 부양체 2개당 1 M€ 획득.",
 
 	"Rogers": "",
-	"Ignore global requirements for your Venus cards THIS GENERATION. When you play a Venus tag THIS GENERATION, you pay 3 M€ less for it.": "",
+	"Ignore global requirements for your Venus cards THIS GENERATION. When you play a Venus tag THIS GENERATION, you pay 3 M€ less for it.": "이번 세대에 자신의 금성 카드의 행성 지표 조건 무시. 이번 세대에 금성 태그 카드를 추진할 때 3 M€ 덜 지불.",
 
 	"Ryu": "",
-	"Once per game, swap up to X+2 units of production between two resources, where X is the current generation number.": "",
+	"Once per game, swap up to X+2 units of production between two resources, where X is the current generation number.": "게임당 1회, 두 자원 사이에서 생산력을 최대 X+2만큼 교체(X는 현재 세대).",
 
 	"Shara": "",
-	"Once per game, choose a planet tag. This card counts as having immediately played 2 of that tag. Then gain M€ equal to that tag's planetary influence track.": "",
+	"Once per game, choose a planet tag. This card counts as having immediately played 2 of that tag. Then gain M€ equal to that tag's planetary influence track.": "게임당 1회, 행성 태그 1개를 고름. 이 카드는 그 태그 2개를 즉시 추진한 것으로 취급. 그 후 그 태그의 행성 영향력 트랙 값만큼 M€ 획득.",
 
 	"Stefan": "",
-	"Once per game, sell any number of cards from your hand for 3 M€ each.": "",
+	"Once per game, sell any number of cards from your hand for 3 M€ each.": "게임당 1회, 손에서 원하는 수의 카드를 장당 3 M€에 판매.",
 
 	"Tate": "",
-	"Once per game, name a tag. Reveal cards from the deck until you find 5 cards with that tag. BUY up to 2 cards and discard the rest.": "",
+	"Once per game, name a tag. Reveal cards from the deck until you find 5 cards with that tag. BUY up to 2 cards and discard the rest.": "게임당 1회, 태그 1개를 지정. 그 태그가 있는 카드 5장이 나올 때까지 덱에서 카드를 공개. 최대 2장을 구매하고 나머지는 버림.",
 
 	"Ulrich": "",
-	"Once per game, gain 4 M€ for each ocean placed. If all oceans are already placed, gain only 15 M€.": "",
+	"Once per game, gain 4 M€ for each ocean placed. If all oceans are already placed, gain only 15 M€.": "게임당 1회, 배치된 해양 타일 1장당 4 M€ 획득. 모든 해양 타일이 이미 배치되었다면 15 M€만 획득.",
 
 	"Van Allen": "",
 	"Effect: MILESTONES ALWAYS COST 0 M€ FOR YOU.": "",
 "Effect: When any milestone is claimed, gain 3 M€.": "",
 
 	"Will": "",
-	"Once per game, add the following resources to your cards: 2 animals, 2 microbes, 2 floaters, 2 wild.": "",
+	"Once per game, add the following resources to your cards: 2 animals, 2 microbes, 2 floaters, 2 wild.": "게임당 1회, 자신의 카드에 다음 자원 추가: 동물 2개, 미생물 2개, 부양체 2개, 만능 2개.",
 
 	"Xavier": "",
-	"Once per game, gain 2 wild tags for THIS GENERATION.": "",
+	"Once per game, gain 2 wild tags for THIS GENERATION.": "게임당 1회, 이번 세대 동안 만능 태그 2개 획득.",
 	"Effect: AFTER this action has been used, when playing a card with a requirement, you pay 1 M€ less for it.": "",
 
 	"Xu": "",
-	"Once per game, gain 2 M€ for each Venus tag in play. Gain an additional 8 M€ if you have the most Venus tags in play.": "",
+	"Once per game, gain 2 M€ for each Venus tag in play. Gain an additional 8 M€ if you have the most Venus tags in play.": "게임당 1회, 게임 내 금성 태그 1개당 2 M€ 획득. 금성 태그가 가장 많다면 8 M€ 추가 획득.",
 
 	"Yvonne": "",
-	"Once per game, gain all your colony bonuses twice.": "",
+	"Once per game, gain all your colony bonuses twice.": "게임당 1회, 자신의 모든 개척기지 보너스를 두 번 획득.",
 
 	"Zan": "",
 	"Effect: You are immune to Reds' ruling policy.": "",
-  "Once per game, place all of your available delegates in Reds. Gain 1 M€ for each delegate placed this way.": ""
+  "Once per game, place all of your available delegates in Reds. Gain 1 M€ for each delegate placed this way.": "게임당 1회, 사용 가능한 모든 의원을 적색당에 배치. 이렇게 배치한 의원 1명당 1 M€ 획득."
 }

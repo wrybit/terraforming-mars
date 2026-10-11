@@ -1,33 +1,33 @@
 {
     "Agricola Inc": "",
-    "You start with 1 plant production, 1 M€ production, 1 heat production and 40 M€.": "",
-    "Effect: At game end, score -2 / 0 / 1 / 2 VP PER TAG TYPE for 0 / 1-2 / 3-4 / 5+ tags.": "",
+    "You start with 1 plant production, 1 M€ production, 1 heat production and 40 M€.": "식물 생산력 1, M€ 생산력 1, 열 생산력 1, 40 M€를 가지고 게임 시작.",
+    "Effect: At game end, score -2 / 0 / 1 / 2 VP PER TAG TYPE for 0 / 1-2 / 3-4 / 5+ tags.": "효과: 게임 종료 시, 태그 종류마다 태그 0 / 1-2 / 3-4 / 5개 이상이면 -2 / 0 / 1 / 2점.",
 
     "Project Workshop": "",
-    "You start with 39 M€, 1 steel and 1 titanium. As your first action, draw a blue card.": "",
+    "You start with 39 M€, 1 steel and 1 titanium. As your first action, draw a blue card.": "39 M€, 강철 자원 1개, 티타늄 자원 1개를 가지고 게임 시작. 게임 첫 행동으로서 파란색 카드 1장 뽑기.",
     "Action: Flip and discard a played blue card to convert any VP on it into TR and draw 2 cards, or spend 3 M€ to draw a blue card.": "",
 
-    "Incite": "",
-    "You start with 32 M€. As your first action, place two delegates in one party.": "",
+    "Incite": "선동",
+    "You start with 32 M€. As your first action, place two delegates in one party.": "32 M€를 가지고 게임 시작. 게임 첫 행동으로서 한 정당에 의원 2명 배치.",
     "Effect: You have +1 influence. When you send a delegate using the lobbying action, you pay 2 M€ less for it.": "",
 
     "Playwrights": "",
-    "You start with 38 M€ and 1 energy production.": "",
+    "You start with 38 M€ and 1 energy production.": "38 M€와 에너지 생산력 1을 가지고 게임 시작.",
     "Action: Replay a played event from any player (INCLUDING events that place special tiles) by paying its cost ONLY in M€ (discounts and rebates apply), then REMOVE IT FROM PLAY.": "",
 
     "Midas": "",
-    "You start with 120 M€. Lower your TR 7 steps.": "",
+    "You start with 120 M€. Lower your TR 7 steps.": "120 M€를 가지고 게임 시작. 테라포밍 등급 7단계 감소.",
 
     "Curosity II": "",
-    "You start with 40 M€ and 2 steel production.": "",
+    "You start with 40 M€ and 2 steel production.": "40 M€와 강철 생산력 2를 가지고 게임 시작.",
     "Effect: When you place a tile on an area that has a RESOURCE placement bonus, or on top of another tile, you may pay 2 M€ to draw a card.": "",
 
     "Junk Ventures": "",
-    "You start with 43 M€. As your first action, discard the top 3 cards of the deck.": "",
-    "ACTION: SHUFFLE THE DISCARD PILE, THEN DRAW 3 CARDS FROM IT. KEEP 1 AND DISCARD THE OTHER 2.": "",
+    "You start with 43 M€. As your first action, discard the top 3 cards of the deck.": "43 M€를 가지고 게임 시작. 게임 첫 행동으로서 덱 맨 위 카드 3장 버리기.",
+    "ACTION: SHUFFLE THE DISCARD PILE, THEN DRAW 3 CARDS FROM IT. KEEP 1 AND DISCARD THE OTHER 2.": "행동: 버린 카드 더미를 섞고 그중 카드 3장 뽑기. 1장은 보관하고 나머지 2장은 버림.",
 
     "UNITED NATIONS MISSION ONE": "",
-    "You start with 39 M€. Increase your TR 1 step.": "",
+    "You start with 39 M€. Increase your TR 1 step.": "39 M€를 가지고 게임 시작. 테라포밍 등급 1단계 상승.",
     "Effect: When any player takes an action or plays a card that increases TR, including this, gain 1 M€ for each step.": "",
   "Effect: During each round's research phase, gain 1 titanium for each card you do not buy.": "효과: 매 세대 연구 단계에서, 구매하지 않은 카드 1장마다 티타늄 자원 1개 획득."
 }
