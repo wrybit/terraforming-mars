@@ -762,5 +762,8 @@
   "Already used": "已使用",
   "Not usable": "无法使用",
   "Pass turn": "交出回合",
-  "Finish": "结束"
+  "Finish": "结束",
+
+    "Life found.": "已发现生命。",
+    "No further VP possible!": "无法再获得分数！"
 }

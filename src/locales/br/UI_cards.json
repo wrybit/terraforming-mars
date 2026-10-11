@@ -23,5 +23,8 @@
   "play": "jogar",
   "replay": "jogar novamente",
 
-  "1 VP per 2 animals on this card.": "1 PV para cada 2 animais nesta carta."
+  "1 VP per 2 animals on this card.": "1 PV para cada 2 animais nesta carta.",
+
+  "Life found.": "Vida encontrada.",
+  "No further VP possible!": "Nenhum PV adicional possível!"
 }

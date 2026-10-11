@@ -21,5 +21,8 @@
   "awards": "díjak",
   "play": "Kijátszás",
   "replay": "újrajátszás",
-  "1 VP per 2 animals on this card.": "1 GyP jár minden az ezen a kártyán található 2 állatért."
+  "1 VP per 2 animals on this card.": "1 GyP jár minden az ezen a kártyán található 2 állatért.",
+
+  "Life found.": "Élet megtalálva.",
+  "No further VP possible!": "Több GyP nem szerezhető!"
 }

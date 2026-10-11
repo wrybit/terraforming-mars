@@ -147,7 +147,7 @@ export default defineComponent({
       // Used action with the player cube: the card stays in color and fully visible – the cube shows the state like at
       // the table. A grey filter on the card would also grey out the cube (a parent's filter applies to all children).
       // Without a cube (classic UI or no player color) a used action is shown greyed out.
-      // Search For Life after a find: done for good, greyed with the found microbe on top (cards.less .card-life-found)
+      // Search For Life after a find: greyed with the found microbe on top, the action stays usable (cards.less .card-life-found)
       const unavailable = this.card.isDisabled || this.actionUsed;
       if (this.lifeFound) {
         classes.push('card-life-found');
@@ -212,9 +212,8 @@ export default defineComponent({
     lifeFound(): boolean {
       return this.card.foundLifeVariant !== undefined;
     },
-    // No cube on a found Search For Life: the card is done, not just used this generation
     showPlayerCube(): boolean {
-      return getPreferences().experimental_ui && this.actionUsed && this.cubeColor !== 'neutral' && !this.lifeFound;
+      return getPreferences().experimental_ui && this.actionUsed && this.cubeColor !== 'neutral';
     },
   },
 });

@@ -22,5 +22,8 @@
   "replay": "rejouez",
   "1 VP for each animal on this card.": "1 PV pour chaque animal sur cette carte.",
   "1 VP per animal on this card.": "1 PV par animal sur cette carte.",
-  "1 VP per 2 animals on this card.": "1 PV par groupe de 2 animaux sur cette carte."
+  "1 VP per 2 animals on this card.": "1 PV par groupe de 2 animaux sur cette carte.",
+
+  "Life found.": "Vie trouvée.",
+  "No further VP possible!": "Plus aucun PV possible !"
 }

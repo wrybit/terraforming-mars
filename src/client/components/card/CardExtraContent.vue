@@ -1,11 +1,12 @@
 <template>
     <div class="card-extra-content-container">
-      <!-- Search For Life after a find: the found microbe glowing on the greyed card, a check mark above it -->
+      <!-- Search For Life after a find: the found microbe glowing on the greyed card, below it the two-line hint -->
       <div v-if="foundLifeImage !== undefined" class="found-life">
         <img class="found-life__microbe" :src="foundLifeImage" alt="">
-        <span class="found-life__check">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 7"/></svg>
-        </span>
+        <p class="found-life__hint">
+          <span v-i18n>Life found.</span><span class="found-life__check" aria-hidden="true">✔</span><br>
+          <span class="found-life__warning" v-i18n>No further VP possible!</span>
+        </p>
       </div>
       <div v-if="isMiningTileOnSteel()" class="mined-metal mined-steel" ></div>
       <div v-if="isMiningTileOnTitanium()" class="mined-metal mined-titanium" ></div>

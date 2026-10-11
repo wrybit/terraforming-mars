@@ -20,5 +20,8 @@
     "corporation": "corporación",
 
     "play": "Juega",
-    "replay": "Otra vez"
+    "replay": "Otra vez",
+
+    "Life found.": "Vida hallada.",
+    "No further VP possible!": "¡No es posible más PV!"
 }

@@ -1,5 +1,6 @@
-// Search For Life: once a microbe is found, the card is done for good (house rule of this fork).
-// Server (action, card model) and client (look, "already used" section) share this rule.
+// Search For Life: once a microbe is found, the card shows it (greyed, microbe, hint "no further VP").
+// The action stays usable as in the official rules; further finds just add no VP.
+// Server (card model) and client (look) share this rule.
 import {CardName} from './CardName';
 
 // Number of microbe pictures (assets/search-for-life/microbe-01.webp … microbe-12.webp)

@@ -92,11 +92,13 @@ describe('SearchForLife', () => {
     expect(card.resourceCount).eq(1);
   });
 
-  it('Cannot act again after life was found', () => {
+  it('Can still act after life was found', () => {
     player.megaCredits = 5;
-    expect(card.canAct(player)).is.true;
     player.addResourceTo(card, 1);
-    expect(card.canAct(player)).is.false;
+    expect(card.canAct(player)).is.true;
+    expect(card.getVictoryPoints()).eq(3);
+    player.addResourceTo(card, 1);
+    expect(card.getVictoryPoints()).eq(3);
   });
 
   it('Cannot act when the deck is empty', () => {

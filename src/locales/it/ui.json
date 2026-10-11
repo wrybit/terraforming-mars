@@ -533,5 +533,8 @@
   "Already used": "Già usate",
   "Not usable": "Non utilizzabili",
   "Pass turn": "Passa il turno",
-  "Finish": "Termina"
+  "Finish": "Termina",
+
+    "Life found.": "Vita trovata.",
+    "No further VP possible!": "Nessun altro PV possibile!"
 }

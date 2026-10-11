@@ -34,6 +34,8 @@
     "replay": "リプレイ",
 
     "1 VP per animal on this card.": "このカード上の1動物毎に1VP.",
-    "1 VP per 2 animals on this card.": "このカード上の2動物毎に1VP."
+    "1 VP per 2 animals on this card.": "このカード上の2動物毎に1VP.",
 
+    "Life found.": "生命発見。",
+    "No further VP possible!": "これ以上VPは得られない！"
 }

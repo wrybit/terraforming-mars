@@ -29,7 +29,7 @@ describe('inactiveActionCards', () => {
     expect(result.unusable.map((card) => card.name)).to.have.members([CardName.TARDIGRADES, CardName.FLOYD]);
   });
 
-  it('lists a Search For Life with found life as used, not as not usable', () => {
+  it('treats a Search For Life with found life like any other action card', () => {
     const player = {
       tableau: [
         {name: CardName.SEARCH_FOR_LIFE, resources: 1, foundLifeVariant: 4},
@@ -37,7 +37,7 @@ describe('inactiveActionCards', () => {
       actionsThisGeneration: [],
     } as unknown as PublicPlayerModel;
     const result = inactiveActionCards(player, actionsOption, undefined);
-    expect(result.used.map((card) => card.name)).to.deep.eq([CardName.SEARCH_FOR_LIFE]);
-    expect(result.unusable).to.be.empty;
+    expect(result.used).to.be.empty;
+    expect(result.unusable.map((card) => card.name)).to.deep.eq([CardName.SEARCH_FOR_LIFE]);
   });
 });

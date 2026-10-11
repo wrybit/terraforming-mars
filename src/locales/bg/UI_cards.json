@@ -25,5 +25,8 @@
   "colony": "колония",
   "awards": "награди",
   "1 VP for each animal on this card.": "1 ТП за всяко животно на тази карта.",
-  "1 VP per animal on this card.": "1 ТП за животно на тази карта"
+  "1 VP per animal on this card.": "1 ТП за животно на тази карта",
+
+  "Life found.": "Живот открит.",
+  "No further VP possible!": "Не са възможни още ТП!"
 }
