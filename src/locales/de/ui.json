@@ -1322,7 +1322,7 @@
   "Undo is best effort only. Please do not report any bugs if it is broken.": "Die Rückgängig-Funktion funktioniert nur nach bestem Bemühen. Bitte melden Sie keine Fehler, wenn sie nicht funktioniert.",
   "Unable to reach the server. It may be restarting or down for maintenance.": "Der Server kann nicht erreicht werden. Möglicherweise wird er gerade neu gestartet oder ist wegen Wartungsarbeiten nicht verfügbar.",
   "Unable to restore game ${game_id}": "Das Spiel ${game_id} kann nicht wiederhergestellt werden",
-  "Game not found": "Spiel nicht gefunden",
+  "Game not found": "Partie nicht gefunden",
 
   "Cards List": "Kartenliste",
   "legacy card UI": "Alte Kartenliste",
