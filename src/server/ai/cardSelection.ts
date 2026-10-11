@@ -20,6 +20,7 @@ import {tuningOf} from './aiTuning';
 import {enablerBonus} from './enablerValue';
 import {draftReceiver, receiverValues} from './draftDenial';
 import {cardsForMilestone} from './milestoneBuying';
+import {withOpeningFit} from './cardFit';
 
 // Opening choice (corporation + preludes + cards) and card buying / drafting.
 
@@ -169,11 +170,16 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
     const buyPrice = corporation.cardCost ?? player.cardCost;
     for (const preludePair of preludeChoices) {
       const budget = corporation.startingMegaCredits - OPENING_RESERVE;
-      const cards = cardsToBuy(projects, valueOf, budget, 10, buyPrice, tuningOf(player).buyMargin);
-      const score = valueOf(corporation.name) + corporationSelfPlayBonus(corporation.name) +
+      // flowFit: the opening sets the direction, cards pulling the same way count more (cardFit.ts).
+      const flowWeight = tuningOf(player).flowFit;
+      const value = flowWeight > 0 ?
+        withOpeningFit(valueOf, flowWeight, corporation.name, preludePair.map((card) => card.name), projects.map((card) => card.name)) :
+        valueOf;
+      const cards = cardsToBuy(projects, value, budget, 10, buyPrice, tuningOf(player).buyMargin);
+      const score = value(corporation.name) + corporationSelfPlayBonus(corporation.name) +
         tuningOf(player).corporationPriorWeight * corporationPrior(corporation.name) +
-        preludePair.reduce((sum, prelude) => sum + valueOf(prelude.name), 0) +
-        cards.reduce((sum, card) => sum + valueOf(card.name) - buyPrice, 0) +
+        preludePair.reduce((sum, prelude) => sum + value(prelude.name), 0) +
+        cards.reduce((sum, card) => sum + value(card.name) - buyPrice, 0) +
         tagSynergy(corporation, [...cards, ...preludePair]);
       if (best === undefined || score > best.score) {
         best = {corporation, preludes: preludePair, cards, score};

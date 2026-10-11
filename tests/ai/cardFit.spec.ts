@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {testGame} from '../TestGame';
-import {flowFit} from '../../src/server/ai/cardFit';
+import {flowFit, withOpeningFit} from '../../src/server/ai/cardFit';
 import {CardName} from '../../src/common/cards/CardName';
 import {IoMiningIndustries} from '../../src/server/cards/base/IoMiningIndustries';
 import {GanymedeColony} from '../../src/server/cards/base/GanymedeColony';
@@ -32,5 +32,17 @@ describe('AI card fit to the flow of the game', () => {
     const [, more] = testGame(2);
     more.playedCards.push(new IoMiningIndustries(), new GanymedeColony(), new TerraformingGanymede());
     expect(flowFit(more, CardName.WATER_IMPORT_FROM_EUROPA)).is.greaterThan(flowFit(few, CardName.WATER_IMPORT_FROM_EUROPA));
+  });
+
+  it('sees the direction already in the opening', () => {
+    const flat = () => 10;
+    const plants = [CardName.ADAPTED_LICHEN, CardName.NITROPHILIC_MOSS, CardName.HERBIVORES, CardName.INSECTS];
+    const green = withOpeningFit(flat, 1, CardName.ECOLINE, [], plants);
+    const jovian = withOpeningFit(flat, 1, CardName.SATURN_SYSTEMS, [], plants);
+    // Plant cards fit Ecoline, and Ecoline fits an opening hand full of plants.
+    expect(green(CardName.ADAPTED_LICHEN)).is.greaterThan(jovian(CardName.ADAPTED_LICHEN));
+    expect(green(CardName.ECOLINE)).is.greaterThan(10);
+    // A bad card stays bad.
+    expect(withOpeningFit(() => -5, 1, CardName.ECOLINE, [], plants)(CardName.ADAPTED_LICHEN)).eq(-5);
   });
 });
