@@ -386,6 +386,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   vp110: {victoryPointScale: 1.1},
   vp90: {victoryPointScale: 0.9},
   prior2: {cardPriorWeight: 2},
+  // Round 35 candidates together (awardRisk30 +1.00 z +1.44, prior2 +0.73 z +0.99), tested with all games.
+  bundle2: {awardSwing: 0.3, cardPriorWeight: 2},
   // Before round 31: the baseline without bundle1.
   beforeBundle1: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, productionDiscount: 0.9, secondStepCandidates: 12},
   bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},
