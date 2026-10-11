@@ -26,9 +26,10 @@
               <strong>{{ player.name }}</strong>
               <code>{{ getUrl(player.id) }}</code>
             </div>
-            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(player.id) ? 'Copied!' : 'Copy'" @click="copyUrl(player.id)"/>
+            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(player.id) ? 'Copied!' : 'Copy URL'" @click="copyUrl(player.id)"/>
             <!-- The AI plays by itself: its page only lets you watch it (the server refuses input there) -->
-            <a class="btn btn-primary" :href="getHref(player.id)" v-i18n>{{ player.aiLevel !== undefined ? 'Watch' : 'Play' }}</a>
+            <!-- Watching the AI is secondary: the same quiet button as Copy URL; playing is the main action -->
+            <a class="btn btn-rounded" :class="player.aiLevel !== undefined ? 'btn-tone-quiet' : 'btn-primary'" :href="getHref(player.id)" v-i18n>{{ player.aiLevel !== undefined ? 'Watch' : 'Play' }}</a>
           </div>
           <div class="game-home-link game-home-link--spectator">
             <span class="game-home-order"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
@@ -36,12 +37,9 @@
               <strong v-i18n>Spectator</strong>
               <code>{{ getUrl(game.spectatorId) }}</code>
             </div>
-            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(game.spectatorId) ? 'Copied!' : 'Copy'" @click="copyUrl(game.spectatorId)"/>
-            <a class="btn btn-primary" :href="getHref(game.spectatorId)" v-i18n>Watch</a>
+            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(game.spectatorId) ? 'Copied!' : 'Copy URL'" @click="copyUrl(game.spectatorId)"/>
+            <a class="btn btn-rounded btn-primary" :href="getHref(game.spectatorId)" v-i18n>Watch</a>
           </div>
-        </div>
-        <div class="game-home-purge">
-          <PurgeWarning :expectedPurgeTimeMs="game.expectedPurgeTimeMs"/>
         </div>
       </section>
 
@@ -60,7 +58,6 @@ import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import AppButton from '@/client/components/common/AppButton.vue';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import MarsHomeLink from '@/client/components/common/MarsHomeLink.vue';
-import PurgeWarning from '@/client/components/common/PurgeWarning.vue';
 import {playerColorClass} from '@/common/utils/utils';
 import GameSetupDetail from '@/client/components/GameSetupDetail.vue';
 import {ParticipantId} from '@/common/Types';
@@ -98,7 +95,6 @@ export default defineComponent({
     PageToolbar,
     MarsHomeLink,
     GameSetupDetail,
-    PurgeWarning,
   },
 
   data() {

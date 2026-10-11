@@ -543,6 +543,7 @@
     "Select either Tharsis Tholus, Ascraeus Mons, Pavonis Mons or Arsia Mons": "소화산 또는 화산 구역 중 하나를 선택",
     "Select builder card to copy": "복사할 건설 카드 선택",
     "Copy": "복사",
+    "Copy URL": "URL 복사",
     "Do nothing": "아무 것도 하지 않음",
     "Ok ${0}": "확인 ${0}",
     "Ok 0": "확인 0",
