@@ -1,0 +1,37 @@
+import {expect} from 'chai';
+import {applyServerStatus, markServerUpdating, resetServerStatus, serverUpdatePhase} from '@/client/utils/serverStatus';
+
+describe('serverStatus', () => {
+  beforeEach(() => resetServerStatus());
+
+  it('stays quiet while the same server answers', () => {
+    applyServerStatus({updating: false, startedAt: 1, activeParticipants: 1});
+    applyServerStatus({updating: false, startedAt: 1, activeParticipants: 1});
+    expect(serverUpdatePhase.value).eq('none');
+  });
+
+  it('freezes on an announced update and offers the reload once the new server answers', () => {
+    applyServerStatus({updating: false, startedAt: 1, activeParticipants: 1});
+    applyServerStatus({updating: true, startedAt: 1, activeParticipants: 1});
+    expect(serverUpdatePhase.value).eq('updating');
+    applyServerStatus({updating: false, startedAt: 2, activeParticipants: 0});
+    expect(serverUpdatePhase.value).eq('done');
+  });
+
+  it('notices a restart even when the announcement was missed', () => {
+    applyServerStatus({updating: false, startedAt: 1, activeParticipants: 1});
+    applyServerStatus({updating: false, startedAt: 2, activeParticipants: 1});
+    expect(serverUpdatePhase.value).eq('done');
+  });
+
+  it('unfreezes when the announcement is withdrawn without a restart', () => {
+    applyServerStatus({updating: true, startedAt: 1, activeParticipants: 1});
+    applyServerStatus({updating: false, startedAt: 1, activeParticipants: 1});
+    expect(serverUpdatePhase.value).eq('none');
+  });
+
+  it('a refused input freezes the page', () => {
+    markServerUpdating();
+    expect(serverUpdatePhase.value).eq('updating');
+  });
+});

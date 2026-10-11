@@ -13,7 +13,8 @@ import {runId} from '../utils/server-ids';
 import {AppError} from '../server/AppError';
 import {InputError} from '../inputs/InputError';
 import {isIProjectCard} from '../cards/IProjectCard';
-import {INVALID_RUN_ID, RESPONDING_TOO_QUICKLY} from '../../common/app/AppErrorId';
+import {INVALID_RUN_ID, RESPONDING_TOO_QUICKLY, SERVER_UPDATING} from '../../common/app/AppErrorId';
+import {isServerUpdating} from '../server/serverUpdate';
 import {RouteError} from './RouteError';
 import {readBody} from './readBody';
 import {stringToNumber} from '../database/utils';
@@ -94,6 +95,10 @@ export class PlayerInput extends Handler {
     const body = await readBody(req);
     this.observeResponseInterval(responseInterval);
     try {
+      // The server is about to be replaced: a move accepted now could be lost in the switch
+      if (isServerUpdating()) {
+        throw new AppError(SERVER_UPDATING, 'The server is being updated. Please wait a moment.');
+      }
       if (this.isRespondingTooQuickly(responseInterval)) {
         throw new AppError(RESPONDING_TOO_QUICKLY, "You're responding a little too quickly.");
       }

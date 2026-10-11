@@ -47,7 +47,8 @@ import {paths} from '@/common/app/paths';
 import {statusCode} from '@/common/http/statusCode';
 import {isPlayerId} from '@/common/Types';
 import {InputResponse} from '@/common/inputs/InputResponse';
-import {INVALID_RUN_ID, AppErrorResponse} from '@/common/app/AppErrorId';
+import {INVALID_RUN_ID, SERVER_UPDATING, AppErrorResponse} from '@/common/app/AppErrorId';
+import {markServerUpdating} from '@/client/utils/serverStatus';
 import {Color} from '@/common/Color';
 import {gameDocumentTitle, TitleView, turnTitleState} from '../utils/documentTitle';
 import {setFaviconStatus, setFaviconTurnFrame} from '@/client/utils/favicon';
@@ -210,6 +211,11 @@ export default defineComponent({
           if (response.status === statusCode.badRequest) {
             const resp = await response.json() as AppErrorResponse;
             let cb = () => {};
+            if (resp.id === SERVER_UPDATING) {
+              // The overlay takes over; the move can be repeated after the reload
+              markServerUpdating();
+              return;
+            }
             if (resp.id === INVALID_RUN_ID) {
               cb = () => setTimeout(() => window.location.reload(), 100);
             }

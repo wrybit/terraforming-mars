@@ -27,6 +27,7 @@ import {ApiBoardPreview} from '../routes/ApiBoardPreview';
 import {ApiStatsBoard} from '../routes/ApiStatsBoard';
 import {ApiStatsGames} from '../routes/ApiStatsGames';
 import {ApiWaitingFor} from '../routes/ApiWaitingFor';
+import {ApiStatus} from '../routes/ApiStatus';
 import {Autopass} from '../routes/Autopass';
 import {DiscordAuth} from '../routes/DiscordAuth';
 import {GameHandler} from '../routes/Game';
@@ -115,6 +116,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_STATS_BOARD, ApiStatsBoard.INSTANCE],
     [paths.API_BOARD_PREVIEW, ApiBoardPreview.INSTANCE],
     [paths.API_STATS_GAMES, ApiStatsGames.INSTANCE],
+    [paths.API_STATUS, ApiStatus.INSTANCE],
     [paths.API_SPECTATOR, ApiSpectator.INSTANCE],
     [paths.API_WAITING_FOR, ApiWaitingFor.INSTANCE],
     [paths.AUTOPASS, Autopass.INSTANCE],

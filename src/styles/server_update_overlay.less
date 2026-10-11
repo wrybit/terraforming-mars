@@ -1,0 +1,69 @@
+// Server update notice (ServerUpdateOverlay.vue): dims and blocks the whole page, card like the game-end notice
+@import (reference) "./button_tones.less";
+
+.server-update-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000; // above everything, incl. dialogs and card zoom: no input while the server restarts
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.server-update-overlay__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: min(420px, 100%);
+  padding: 28px 32px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  background: rgba(14, 15, 20, 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: @floating-button-shadow;
+  text-align: center;
+}
+
+.server-update-overlay__title {
+  color: #fff;
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.server-update-overlay__check {
+  width: 56px;
+  height: 56px;
+
+  circle {
+    fill: @button-success;
+  }
+
+  path {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+.server-update-overlay__progress {
+  width: 100%;
+}
+
+.btn.server-update-overlay__reload {
+  margin: 0;
+  line-height: 50px;
+  padding: 0 32px;
+  box-shadow: @floating-button-shadow;
+}
+
+.server-update-overlay__hint {
+  margin-top: -8px; // belongs to the element above, not to the title
+  color: #b8bcc8;
+  font-size: 14px;
+  line-height: 1.4;
+}

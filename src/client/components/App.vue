@@ -1,6 +1,7 @@
 <template>
   <div :class="'topmost-'+screen">
     <RotateHint/>
+    <ServerUpdateOverlay/>
     <section>
       <dialog id="alert-dialog" class="alert-dialog">
         <form method="dialog">
@@ -93,6 +94,8 @@ import {hasShowModal, showModal, windowHasHTMLDialogElement} from './HTMLDialogE
 import dialogPolyfill from 'dialog-polyfill';
 import {initMobileLayout, mobileLayout} from '@/client/utils/mobileLayout';
 import RotateHint from '@/client/components/RotateHint.vue';
+import ServerUpdateOverlay from '@/client/components/common/ServerUpdateOverlay.vue';
+import {serverUpdatePhase, startServerStatusPolling} from '@/client/utils/serverStatus';
 import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
 import {setDocumentTitle} from '../utils/documentTitle';
 import {ingestView} from '@/client/utils/changeTracker';
@@ -159,6 +162,7 @@ export default defineComponent({
   components: {
     FanProjectNotice,
     RotateHint,
+    ServerUpdateOverlay,
     StartScreen,
     StartScreenFooter,
     CreateGameForm,
@@ -189,6 +193,10 @@ export default defineComponent({
   },
   methods: {
     showAlert(title: string, message: string, cb: () => void = () => {}): void {
+      // During a server update the overlay explains the situation; connection errors are expected then
+      if (serverUpdatePhase.value !== 'none') {
+        return;
+      }
       const dialogElement: HTMLElement | null = document.getElementById('alert-dialog');
       const buttonElement: HTMLElement | null = document.getElementById('alert-dialog-button');
       const messageElement: HTMLElement | null = document.getElementById('alert-dialog-message');
@@ -286,6 +294,9 @@ export default defineComponent({
   },
   mounted() {
     setDocumentTitle();
+    // Game pages send their id, so the server knows somebody is playing (no automatic update then)
+    const pageId = new URLSearchParams(window.location.search).get('id') ?? '';
+    startServerStatusPolling(isPlayerId(pageId) || isSpectatorId(pageId) ? pageId : undefined);
     if (!windowHasHTMLDialogElement()) {
       dialogPolyfill.registerDialog(document.getElementById('alert-dialog') as HTMLDialogElement);
     }

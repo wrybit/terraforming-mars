@@ -13,7 +13,11 @@ import {CardName} from '../../src/common/cards/CardName';
 import {Payment} from '../../src/common/inputs/Payment';
 import {statusCode} from '@/common/http/statusCode';
 import {FakeClock} from '../common/FakeClock';
-import {RESPONDING_TOO_QUICKLY} from '@/common/app/AppErrorId';
+import {RESPONDING_TOO_QUICKLY, SERVER_UPDATING} from '@/common/app/AppErrorId';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
+import {clearServerUpdateFlag} from '../../src/server/server/serverUpdate';
 
 describe('PlayerInput', () => {
   let scaffolding: RouteTestScaffolding;
@@ -159,6 +163,20 @@ describe('PlayerInput', () => {
       });
       await Promise.all([emit, post]);
     }
+
+    it('refuses input while a server update is announced', async () => {
+      const flagFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'server-update-')), 'flag');
+      process.env.SERVER_UPDATE_FLAG_FILE = flagFile;
+      try {
+        fs.writeFileSync(flagFile, '');
+        await send(new PlayerInput(0), player.id, '}{');
+        expect(res.statusCode).eq(statusCode.badRequest);
+        expect(JSON.parse(res.content).id).eq(SERVER_UPDATING);
+      } finally {
+        clearServerUpdateFlag();
+        delete process.env.SERVER_UPDATE_FLAG_FILE;
+      }
+    });
 
     it('rejects input sent before the interval elapses', async () => {
       const handler = new PlayerInput(1000);
