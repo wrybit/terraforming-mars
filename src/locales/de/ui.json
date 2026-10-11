@@ -1697,5 +1697,6 @@
   "List of games": "Partienliste",
   "Server metrics": "Server-Kennzahlen",
   "Visitor addresses": "Besucher-Adressen",
-  "Memory snapshot (large download)": "Speicherabbild (große Datei)"
+  "Memory snapshot (large download)": "Speicherabbild (große Datei)",
+  "Player ${0}": "Spieler ${0}"
 }
