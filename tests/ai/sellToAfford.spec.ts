@@ -3,7 +3,7 @@ import {testGame} from '../TestGame';
 import {addCity} from '../TestingUtils';
 import {clearPlayerTunings, setPlayerTuning} from '../../src/server/ai/aiTuning';
 import {chooseAction} from '../../src/server/ai/actionLookahead';
-import {sellToAffordResponses, sellToPlayResponses} from '../../src/server/ai/sellToAfford';
+import {sellToAffordResponses} from '../../src/server/ai/sellToAfford';
 import {OrOptions} from '../../src/server/inputs/OrOptions';
 import {SelectCard} from '../../src/server/inputs/SelectCard';
 import {Phase} from '../../src/common/Phase';
@@ -52,20 +52,6 @@ describe('AI sell to afford', () => {
     expect(response?.type).eq('or');
     const option = response?.type === 'or' ? menu.options[response.index] : undefined;
     expect(option instanceof SelectCard && option.title).eq('Sell patents');
-  });
-
-  it('last generation: sells all other cards to pay for one', () => {
-    const [/* game */, player] = testGame(2);
-    player.megaCredits = 0;
-    const hand = [new PowerPlant(), new PowerPlant(), new PowerPlant(), new PowerPlant(), new PowerPlant()];
-    player.cardsInHand.push(...hand);
-    // Power Plant costs 4 M€: selling the other 4 pays for it.
-    const responses = sellToPlayResponses(player, hand);
-    expect(responses.length).greaterThan(0);
-    expect(responses[0]).deep.eq({type: 'card', cards: [CardName.POWER_PLANT, CardName.POWER_PLANT, CardName.POWER_PLANT, CardName.POWER_PLANT]});
-    // Three cards: selling two gives only 2 M€.
-    expect(sellToPlayResponses(player, hand.slice(0, 3))).is.empty;
-    expect(player.megaCredits).eq(0);
   });
 
   it('without the setting it does not sell before the last generation', () => {

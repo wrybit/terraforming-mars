@@ -118,7 +118,7 @@ export type AiTuning = {
   sellToAfford: number,
   /** 1: in the research phase the AI buys up to 3 extra cards when they make a milestone claimable (milestoneBuying.ts). */
   buyForMilestone: number,
-  /** 1: in the last generation the AI may sell all unplayable cards but one that the money then pays for (sellToAfford.ts). */
+  /** 1: in the last generation the AI keeps the cards that bring the most points with the sale money and sells the rest (lastGenerationSale.ts). */
   lastGenerationSale: number,
   /** 1: before the first own city the first tiles go into a planned home cluster: one city, two greeneries (openingPlan.ts). */
   openingPlan: number,
@@ -423,7 +423,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human feedback: one card more in the research phase would have made Planner claimable.
   buyForMilestone: {buyForMilestone: 1},
   milestoneMoney: {sellToAfford: 1, buyForMilestone: 1},
-  // Human feedback: passed in the last generation with 15 cards – selling 14 would have paid for one.
+  // Human feedback: passed in the last generation with 15 cards – selling most of them would have paid for points.
   lastSale: {lastGenerationSale: 1},
   // Human feedback: first greenery far off at two oceans, first city at the other end – plan the home cluster.
   openingPlan: {openingPlan: 1},

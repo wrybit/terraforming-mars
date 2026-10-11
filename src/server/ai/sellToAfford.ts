@@ -1,7 +1,6 @@
 import {IPlayer} from '../IPlayer';
 import {CardName} from '../../common/cards/CardName';
 import {InputResponse} from '../../common/inputs/InputResponse';
-import {IProjectCard} from '../cards/IProjectCard';
 
 // Selling a few hand cards to afford a milestone or an award this turn. Human feedback: with 1–2 M€
 // missing, selling cards for the 5 VP of a milestone is often the better move. Before, the AI only
@@ -42,40 +41,3 @@ export function sellToAffordResponses(player: IPlayer, handValues: ReadonlyMap<C
   return responses;
 }
 
-/** Requirements met, only the money is missing: checked with plenty of money for the test. */
-function requirementsMet(player: IPlayer, card: IProjectCard): boolean {
-  const money = player.megaCredits;
-  try {
-    player.megaCredits = money + 1000;
-    return player.canPlay(card);
-  } finally {
-    player.megaCredits = money;
-  }
-}
-
-/**
- * Last generation: keep one card that the sale of all other unplayable cards pays for. Human feedback:
- * the AI passed with 15 cards in hand – selling 13 or 14 of them would have paid for one more card.
- * Before, only "sell everything unplayable" was offered, which also sold the card the money was for.
- */
-export function sellToPlayResponses(player: IPlayer, unplayable: ReadonlyArray<IProjectCard>): Array<InputResponse> {
-  const responses: Array<InputResponse> = [];
-  for (const kept of unplayable) {
-    if (!requirementsMet(player, kept)) {
-      continue;
-    }
-    const sold = unplayable.filter((card) => card !== kept);
-    const money = player.megaCredits;
-    let affordable: boolean;
-    try {
-      player.megaCredits = money + sold.length;
-      affordable = player.canPlay(kept);
-    } finally {
-      player.megaCredits = money;
-    }
-    if (affordable) {
-      responses.push({type: 'card', cards: sold.map((card) => card.name)});
-    }
-  }
-  return responses;
-}

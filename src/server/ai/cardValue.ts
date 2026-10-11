@@ -69,6 +69,11 @@ function gainInCopy(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
   });
 }
 
+/** What playing the card now adds to the position (free, without its cost), e.g. for last-generation choices. */
+export function playGain(player: IPlayer, card: ICard): number | undefined {
+  return gainInCopy(playerView(player), player, card, valuationContext(player.game, player), 0);
+}
+
 /** BGA priors with this player's weights (aiTuning.ts cardPriorWeight, draftPriorWeight). */
 function priorFactor(card: ICard, player: IPlayer): number {
   const tuning = tuningOf(player);
