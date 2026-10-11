@@ -15,6 +15,12 @@ export function isServerUpdating(): boolean {
   return fs.existsSync(updateFlagFile());
 }
 
+/** Announces a restart from inside the server (admin page): same notice for open pages as an update script. */
+export function markServerUpdating(): void {
+  fs.mkdirSync(path.dirname(updateFlagFile()), {recursive: true});
+  fs.writeFileSync(updateFlagFile(), '');
+}
+
 export function clearServerUpdateFlag(): void {
   fs.rmSync(updateFlagFile(), {force: true});
 }

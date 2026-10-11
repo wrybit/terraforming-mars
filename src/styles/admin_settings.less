@@ -1,0 +1,165 @@
+// Admin page: links and server settings (AdminHome.vue, ServerSettingsPanel.vue) in the cards of the games overview
+// (games-overview.less). Within a row label and field sit close together, rows are apart (law of proximity).
+
+@server-settings-dim: rgba(238, 238, 238, 0.62);
+@server-settings-line: rgba(255, 255, 255, 0.1);
+@server-settings-row-gap: 14px;
+@server-settings-field-width: 320px;
+
+.main-container:has(.admin-home) {
+  margin-left: 0;
+}
+
+.admin-home-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.games-overview-container .admin-home-heading {
+  margin: 12px 0 0;
+  font-size: 20px;
+}
+
+.server-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.server-settings-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) @server-settings-field-width;
+  gap: 6px 24px;
+  align-items: start;
+  padding: @server-settings-row-gap 0;
+  border-top: 1px solid @server-settings-line;
+
+  &:first-of-type {
+    border-top: none;
+    padding-top: 4px;
+  }
+}
+
+.server-settings-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.server-settings-label {
+  font-weight: 600;
+}
+
+.server-settings-description {
+  color: @server-settings-dim;
+  font-size: 13px;
+}
+
+.server-settings-key {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 0;
+  background: none;
+  color: fade(#eee, 40%);
+  font-size: 11px;
+}
+
+.server-settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.server-settings-input {
+  display: flex;
+  gap: 6px;
+
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #eee;
+    font-size: 14px;
+  }
+
+  input:focus {
+    outline: 2px solid fade(#908fdb, 70%);
+  }
+
+  .btn {
+    margin: 0;
+  }
+}
+
+.server-settings-toggle input {
+  width: 20px;
+  height: 20px;
+}
+
+.server-settings-source {
+  color: @server-settings-dim;
+  font-size: 12px;
+}
+
+.server-settings-reset {
+  padding: 0;
+  border: none;
+  background: none;
+  color: lighten(#5b4fd9, 22%);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.server-settings-pending {
+  margin-left: 6px;
+  color: #f4c20d;
+  font-weight: 600;
+}
+
+// Save and restart at the bottom, sticky so they are always at hand
+.server-settings-actions {
+  position: sticky;
+  bottom: 12px;
+  z-index: 1;
+  // Opaque: the rows scrolling underneath must not shine through
+  background: #1d1e24;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .btn {
+    margin: 0;
+  }
+}
+
+.server-settings-message {
+  flex: 1;
+  margin: 0;
+  color: @server-settings-dim;
+
+  &--error {
+    color: #ff8a80;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .server-settings-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .server-settings-actions {
+    flex-wrap: wrap;
+  }
+
+  .server-settings-message {
+    flex-basis: 100%;
+  }
+}

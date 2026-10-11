@@ -39,7 +39,6 @@ import {vDockedTab} from '@/client/directives/DockedTab';
 import Card from '@/client/components/card/Card.vue';
 import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
 import WaitingFor from '@/client/components/WaitingFor.vue';
-import {Phase} from '@/common/Phase';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {CardModel} from '@/common/models/CardModel';
