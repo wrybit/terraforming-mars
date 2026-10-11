@@ -1,17 +1,44 @@
-import {AdminGameSummary} from '@/common/admin/AdminGameSummary';
+import {AdminGameSummary, AdminPlayerSummary} from '@/common/admin/AdminGameSummary';
+import {splitAiMarker} from '@/common/ai/AiLevel';
+
+// Columns of the admin overview: at most nine, however many names there are – human players by seat
+// (player 1 to 6), AI players by strength (AI-, AI, AI+). The chips name the player themselves.
+
+export const MAX_HUMAN_COLUMNS = 6;
+const AI_MARKERS = ['[AI-]', '[AI]', '[AI+]'] as const;
+
+export type PlayerColumn =
+  {kind: 'human', seat: number} |
+  {kind: 'ai', marker: typeof AI_MARKERS[number]};
+
+// AI marker of a name; older games wrote "(AI)" or "(KI)", those count as the normal strength
+function aiMarker(name: string): string | undefined {
+  return /\s*\((AI|KI)\)$/.test(name) ? '[AI]' : splitAiMarker(name).marker;
+}
+
+function humans(summary: AdminGameSummary): Array<AdminPlayerSummary> {
+  return summary.players.filter((player) => aiMarker(player.name) === undefined);
+}
+
+/** Always the same nine columns: Player 1 … Player 6, [AI-], [AI], [AI+] – the table never changes its shape. */
+export const PLAYER_COLUMNS: ReadonlyArray<PlayerColumn> = [
+  ...Array.from({length: MAX_HUMAN_COLUMNS}, (_, seat): PlayerColumn => ({kind: 'human', seat})),
+  ...AI_MARKERS.map((marker): PlayerColumn => ({kind: 'ai', marker})),
+];
 
 /**
- * Column order of the admin overview: whoever plays in the most games comes first.
- * That way regular players always sit in the same columns; one-off names get their own column at the end.
- * Ties are alphabetical so the columns don't jump when games are added or deleted.
+ * Players of a game in one column: the n-th human in seat order, or all AI players of that strength
+ * (several of the same strength share the cell). More than six humans: the rest join the last column.
  */
-export function playerColumns(summaries: ReadonlyArray<AdminGameSummary>): Array<string> {
-  const counts = new Map<string, number>();
-  for (const summary of summaries) {
-    // A name counts only once per game, even if it appears twice
-    for (const name of new Set(summary.players.map((player) => player.name))) {
-      counts.set(name, (counts.get(name) ?? 0) + 1);
-    }
+export function playersInColumn(summary: AdminGameSummary, column: PlayerColumn): Array<AdminPlayerSummary> {
+  if (column.kind === 'ai') {
+    return summary.players.filter((player) => aiMarker(player.name) === column.marker);
   }
-  return Array.from(counts.keys()).sort((first, second) => (counts.get(second) ?? 0) - (counts.get(first) ?? 0) || first.localeCompare(second));
+  const seated = humans(summary);
+  return column.seat === MAX_HUMAN_COLUMNS - 1 ? seated.slice(column.seat) : seated.slice(column.seat, column.seat + 1);
+}
+
+/** Name on the chip: without the AI marker, the column already says it. */
+export function chipName(player: AdminPlayerSummary): string {
+  return splitAiMarker(player.name.replace(/\s*\((AI|KI)\)$/, '')).name;
 }

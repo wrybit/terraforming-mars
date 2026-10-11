@@ -237,6 +237,36 @@
   text-decoration: none !important; // Link tiles (own player in imports) without underline like all others
 }
 
+// Player cells: name above the points in one chip, so all nine columns fit next to each other;
+// several AI players of the same strength stack in the cell
+.games-overview-table .games-overview-players {
+  width: 80px;
+}
+
+.games-overview-players .games-overview-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 76px;
+  min-width: 0;
+  height: auto;
+  padding: 3px 6px;
+  line-height: 1.2;
+
+  & + .games-overview-chip {
+    margin-top: 4px;
+  }
+}
+
+.games-overview-chip-name {
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
 .games-overview-chip--spectator {
   background: rgba(255, 255, 255, 0.12);
 }

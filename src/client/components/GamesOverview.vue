@@ -40,7 +40,7 @@
               <th v-i18n>Game</th>
               <th v-i18n>Gen</th>
               <th v-i18n>Spectator</th>
-              <th v-for="name in columns" :key="name">{{ name }}</th>
+              <th v-for="(column, index) in columns" :key="index">{{ columnLabel(column) }}</th>
               <th class="games-overview-actions"></th>
             </tr>
           </thead>
@@ -63,7 +63,7 @@ import {AdminDeleteGameRequest, AdminGameSummary} from '@/common/admin/AdminGame
 import GameOverview from '@/client/components/admin/GameOverview.vue';
 import ImportGameForm from '@/client/components/admin/ImportGameForm.vue';
 import AdminNav from '@/client/components/admin/AdminNav.vue';
-import {playerColumns} from '@/client/components/admin/playerColumns';
+import {PLAYER_COLUMNS, PlayerColumn} from '@/client/components/admin/playerColumns';
 import {LineupWinCounts, winCountsByLineup} from '@/client/components/admin/winCounts';
 
 type DataModel = {
@@ -98,14 +98,18 @@ export default defineComponent({
     serverId(): string {
       return (new URL(location.href)).searchParams.get('serverId') || '';
     },
-    columns(): Array<string> {
-      return playerColumns(this.summaries);
+    columns(): ReadonlyArray<PlayerColumn> {
+      return PLAYER_COLUMNS;
     },
     lineups(): Array<LineupWinCounts> {
       return winCountsByLineup(this.summaries);
     },
   },
   methods: {
+    // "Player 1" … "Player 6", "[AI-]", "[AI]", "[AI+]"
+    columnLabel(column: PlayerColumn): string {
+      return column.kind === 'human' ? translateTextWithParams('Player ${0}', [String(column.seat + 1)]) : column.marker;
+    },
     formatAverage(value: number): string {
       return value.toLocaleString(undefined, {maximumFractionDigits: 1});
     },

@@ -1,5 +1,6 @@
 <template>
-  <!-- One game of the admin overview: a fixed column per player name, winner with a trophy -->
+  <!-- One game of the admin overview: nine fixed columns (seats 1–6, AI strengths), chips with name and points,
+       winner with a trophy -->
   <tr class="games-overview-row" :class="{'games-overview-row--imported': summary.source === 'imported'}">
     <td class="games-overview-status">
       <span :class="summary.isFinished ? 'status-finished' : 'status-running'" :title="$t(summary.isFinished ? 'Finished' : 'Running')"></span>
@@ -16,15 +17,17 @@
     <td>
       <a v-if="summary.spectatorUrl !== undefined" :href="summary.spectatorUrl" target="_blank" class="games-overview-chip games-overview-chip--spectator" v-i18n>Watch</a>
     </td>
-    <td v-for="name in columns" :key="name">
-      <component :is="playerByName(name)?.url === undefined ? 'span' : 'a'"
-        v-if="playerByName(name) !== undefined"
-        :href="playerByName(name)?.url"
+    <td v-for="(column, index) in columns" :key="index" class="games-overview-players">
+      <component :is="player.url === undefined ? 'span' : 'a'"
+        v-for="player in playersInColumn(summary, column)"
+        :key="player.name"
+        :href="player.url"
         target="_blank"
         class="games-overview-chip"
-        :class="[playerColorClass(playerByName(name)!.color), {'games-overview-chip--winner': playerByName(name)!.isWinner}]"
-        :title="chipTitle(playerByName(name)!)">
-        <span v-if="playerByName(name)!.isWinner" class="games-overview-trophy">🏆</span>{{ playerByName(name)!.victoryPoints }}
+        :class="[playerColorClass(player.color), {'games-overview-chip--winner': player.isWinner}]"
+        :title="chipTitle(player)">
+        <span class="games-overview-chip-name">{{ chipName(player) }}</span>
+        <strong><span v-if="player.isWinner" class="games-overview-trophy">🏆</span>{{ player.victoryPoints }}</strong>
       </component>
     </td>
     <td class="games-overview-actions">
@@ -36,6 +39,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {AdminGameSummary, AdminPlayerSummary} from '@/common/admin/AdminGameSummary';
+import {chipName, PlayerColumn, playersInColumn} from '@/client/components/admin/playerColumns';
 import {Color} from '@/common/Color';
 import {playerColorClass} from '@/common/utils/utils';
 import {paths} from '@/common/app/paths';
@@ -54,7 +58,7 @@ export default defineComponent({
       required: true,
     },
     columns: {
-      type: Array as () => Array<string>,
+      type: Array as () => ReadonlyArray<PlayerColumn>,
       required: true,
     },
     isDeleting: {
@@ -71,9 +75,8 @@ export default defineComponent({
     },
   },
   methods: {
-    playerByName(name: string): AdminPlayerSummary | undefined {
-      return this.summary.players.find((player) => player.name === name);
-    },
+    playersInColumn,
+    chipName,
     // Corporation and win in the tooltip: the tile itself stays compact (points only)
     chipTitle(player: AdminPlayerSummary): string {
       return [player.corporation, player.isWinner ? translateText('Winner') : undefined].filter((part) => part !== undefined).join(' · ');

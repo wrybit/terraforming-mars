@@ -3,6 +3,7 @@ import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import GameOverview from '@/client/components/admin/GameOverview.vue';
 import {AdminGameSummary} from '@/common/admin/AdminGameSummary';
+import {PLAYER_COLUMNS} from '@/client/components/admin/playerColumns';
 
 describe('GameOverview', () => {
   const summary: AdminGameSummary = {
@@ -25,18 +26,18 @@ describe('GameOverview', () => {
     return mount(GameOverview, {
       ...globalConfig,
       attachTo: document.createElement('tbody'),
-      props: {summary, columns: ['Jens', 'Martin', 'Daniel']},
+      props: {summary, columns: PLAYER_COLUMNS},
     });
   }
 
   it('one cell per column, empty where the player did not play', () => {
     const cells = mountRow().findAll('td').map((cell) => cell.text());
-    // Status, game, generation, spectators, Jens, Martin, Daniel, delete
-    expect(cells.slice(4, 7)).deep.eq(['🏆76', '', '66']);
+    // Status, game, generation, spectators, seats 1–6, AI-, AI, AI+, delete
+    expect(cells.slice(4, 13)).deep.eq(['Jens🏆76', 'Daniel66', '', '', '', '', '', '', '']);
   });
 
   it('always offers the delete button', () => {
-    const wrapper = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'), props: {summary, columns: ['Jens']}});
+    const wrapper = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'), props: {summary, columns: PLAYER_COLUMNS}});
     expect(wrapper.find('.games-overview-delete').exists()).is.true;
   });
 
@@ -46,7 +47,7 @@ describe('GameOverview', () => {
 
   it('an imported game links to the result page saved here, not to the other server', () => {
     const imported = {...summary, source: 'imported' as const, externalUrl: 'https://terraforming-mars.herokuapp.com/the-end?id=p66b9daab6513', importedParticipantId: 'p66b9daab6513'};
-    const wrapper = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'), props: {summary: imported, columns: ['Jens']}});
+    const wrapper = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'), props: {summary: imported, columns: PLAYER_COLUMNS}});
     expect(wrapper.find('.games-overview-source').attributes('href')).eq('the-end?id=p66b9daab6513');
   });
 
