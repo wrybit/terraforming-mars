@@ -113,15 +113,14 @@ export abstract class Handler implements IHandler {
         throw RouteError.forbidden();
       }
 
-      if (this.options.validateStatsId) {
+      // The stats ID first: when a server uses the same value for both, the redirect to the stats ID
+      // would otherwise lead to itself again and again
+      if (this.options.validateStatsId && !this.isStatsIdValid(ctx)) {
         if (this.isServerIdValid(ctx)) {
           responses.downgradeRedirect(req, res, ctx);
           return Promise.resolve();
         }
-
-        if (!this.isStatsIdValid(ctx)) {
-          throw RouteError.forbidden();
-        }
+        throw RouteError.forbidden();
       }
 
       switch (req.method) {
