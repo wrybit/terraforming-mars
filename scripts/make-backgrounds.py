@@ -16,27 +16,25 @@
 #   python3 scripts/make-backgrounds.py
 # and commit the changed files. Never edit the variants by hand.
 import os
-from PIL import Image, ImageFilter
+from PIL import Image
 
 FOLDER = 'assets/background'
 SOURCE = os.path.join(FOLDER, 'eso0932a.jpg')
 NAME = 'milky-way'
 
-# Widths in image pixels. Portrait stops at 1080: on a phone with 3x pixels it is scaled up a bit,
-# which is invisible on the dimmed background and saves more than half of the bytes.
+# Widths in image pixels. Portrait goes up to the full height of the original (1500 = 1:2 of 3000),
+# enough for phones with 3x pixels.
 WIDTHS = {
     'landscape': [960, 1280, 1920, 2560, 3840],
-    'portrait': [540, 810, 1080],
+    'portrait': [540, 810, 1080, 1500],
 }
 # Generated list of the variants for AppBackground.vue – the client never guesses file names
 VARIANTS_FILE = 'src/client/components/appBackgroundVariants.ts'
-# The image only lies dimmed behind the UI, so a lower quality than for photos is enough
-QUALITY = {'avif': 48, 'webp': 70}
-# The black sky is full of sensor grain that costs a lot of bytes but is invisible once dimmed:
-# values up to BLACK_POINT become pure black, and a light blur smooths the rest of the grain
-# (together about 20-35 % smaller files, the stars stay sharp enough)
-BLACK_POINT = 10
-BLUR_RADIUS = 0.5
+# High quality on purpose: star fields fall apart into blocky mush quickly at low settings,
+# and the background has to look good, not be as small as possible
+QUALITY = {'avif': 72, 'webp': 88}
+# Only the darkest sensor grain in the black sky becomes pure black (saves bytes, invisible)
+BLACK_POINT = 6
 
 
 def crop(original: Image.Image, orientation: str) -> Image.Image:
@@ -57,7 +55,7 @@ def main() -> None:
         cropped = crop(original, orientation)
         for width in widths:
             height = round(cropped.height * width / cropped.width)
-            resized = cropped.resize((width, height), Image.LANCZOS).filter(ImageFilter.GaussianBlur(BLUR_RADIUS))
+            resized = cropped.resize((width, height), Image.LANCZOS)
             for extension, quality in QUALITY.items():
                 target = os.path.join(FOLDER, f'{NAME}-{orientation}-{width}.{extension}')
                 resized.save(target, quality=quality)

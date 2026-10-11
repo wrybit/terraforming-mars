@@ -3,5 +3,5 @@ export const BACKGROUND_PATH = 'assets/background/milky-way';
 export const BACKGROUND_FORMATS = ['avif', 'webp'] as const;
 export const BACKGROUND_WIDTHS = {
   landscape: [960, 1280, 1920, 2560, 3840],
-  portrait: [540, 810, 1080],
+  portrait: [540, 810, 1080, 1500],
 } as const;
