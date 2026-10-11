@@ -22,6 +22,8 @@ import {defineComponent, PropType} from 'vue';
 import {paths} from '@/common/app/paths';
 import {APP_NAME} from '@/common/constants';
 import HomeLink from '@/client/components/common/HomeLink.vue';
+import {shortDocumentTitle} from '@/client/utils/documentTitle';
+import {translateText} from '@/client/directives/i18n';
 
 export type AdminPage = 'settings' | 'games' | 'load';
 
@@ -52,6 +54,11 @@ export default defineComponent({
     serverId(): string {
       return new URLSearchParams(window.location.search).get('serverId') || '';
     },
+  },
+  mounted() {
+    // Browser tab: "<page> · Admin | <short server title>", e.g. "Settings · Admin | TM"
+    const page = this.items.find((item) => item.page === this.active);
+    document.title = shortDocumentTitle([page === undefined ? undefined : translateText(page.label), 'Admin']);
   },
   methods: {
     href(path: string): string {
