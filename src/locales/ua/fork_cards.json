@@ -115,5 +115,13 @@
   "(Action: Add one Clone Trooper to this card OR remove one Clone Trooper from this card to steal one standard resource from any player.)": "(Дія: додайте одного клона-солдата на цю карту АБО приберіть одного клона-солдата з цієї карти, щоб вкрасти один стандартний ресурс у будь-якого гравця.)",
   "(You start with 54 M€. Draw a Science card.)": "(Ви починаєте з 54 M€. Витягніть карту науки.)",
   "Requires 4 city tiles ON MARS. Increase your M€ production 3 steps.": "Вимагає 4 тайли міст НА МАРСІ. Збільшити виробництво M€ на 3.",
-  "Power Plant:SP": "Електростанція"
+  "Power Plant:SP": "Електростанція",
+  "Action: Gain 1 M€ for each road tile on The Moon": "Дія: Отримайте 1 M€ за кожен тайл дороги на Місяці",
+  "Action: Remove 1 floater from THIS card to add 1 floater to ANOTHER card": "Дія: Видаліть 1 аеростат з ЦІЄЇ карти, щоб додати 1 аеростат на ІНШУ карту",
+  "Collusion:SP": "Змова",
+  "Count crime tags (INCLUDING EVENTS) and ADD influence. Players with the most get 1 corruption and 9 M€. Players with 2nd most get 1 corruption and 3 M€. Min 1 to place. (SOLO: Place 1st with sum of 5 or more.)": "Порахуйте мітки злочинності (ВКЛЮЧНО З ПОДІЯМИ) і ДОДАЙТЕ вплив. Гравці з найбільшою кількістю отримують 1 корупцію і 9 M€. Гравці з другою за величиною кількістю отримують 1 корупцію і 3 M€. Щоб посісти місце, потрібно щонайменше 1. (СОЛО: 1-ше місце за суми 5 або більше.)",
+  "Discard all unclaimed underground resources. Lose 2 M€ for each building tag (max 7) minus influence and claimed underground resource tokens.": "Відкиньте всі незахоплені підземні ресурси. Втратьте 2 M€ за кожну мітку будівлі (макс. 7) мінус вплив і захоплені жетони підземних ресурсів.",
+  "Effect: When you excavate next to an ocean, gain 2 M€.": "Ефект: Коли ви проводите розкопки поруч з океаном, отримайте 2 M€.",
+  "Great Dam:promo": "Велика дамба",
+  "Valuable Gases:Pathfinders": "Цінні гази"
 }

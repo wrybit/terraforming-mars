@@ -1545,7 +1545,6 @@
   "Game ${0} was played with ${1} players, the form had ${2}. The player count is now ${1}: check the player names and create the game again.": "Die Partie ${0} wurde mit ${1} Spielern gespielt, im Formular standen ${2}. Die Spielerzahl ist jetzt ${1}: Spielernamen prüfen und die Partie erneut erstellen.",
   "Game could not be created": "Partie konnte nicht erstellt werden",
   "The settings in this link could not be read. Was the link copied completely?": "Die Einstellungen in diesem Link konnten nicht gelesen werden. Wurde der Link vollständig kopiert?",
-  "Details:": "Details:",
   "The browser did not allow copying to the clipboard. The link is in the address bar and can be copied from there.": "Der Browser hat das Kopieren in die Zwischenablage nicht erlaubt. Der Link steht in der Adresszeile und kann dort kopiert werden.",
   "The last used settings could not be restored; they may come from an older version. The form keeps its default settings.": "Die zuletzt benutzten Einstellungen konnten nicht wiederhergestellt werden; sie stammen vielleicht aus einer älteren Version. Das Formular behält seine Standardeinstellungen.",
   "The settings file could not be read. Use a file that was saved with \"Save settings to file\" (tm_settings.json).": "Die Einstellungsdatei konnte nicht gelesen werden. Eine Datei verwenden, die mit „Einstellungen als Datei speichern“ (tm_settings.json) gespeichert wurde.",

@@ -344,5 +344,6 @@
   "Spacefarer4": "Raumfahrer4",
   "Terran5": "Terraner5",
   "Tycoon10": "Magnat10",
-  "Updates": "Aktualisierungen"
+  "Updates": "Aktualisierungen",
+  "${0} (Turmoil ${1})": "${0} (Aufruhr ${1})"
 }
