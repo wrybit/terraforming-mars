@@ -25,7 +25,7 @@ describe('GameOverview', () => {
     return mount(GameOverview, {
       ...globalConfig,
       attachTo: document.createElement('tbody'),
-      props: {summary, columns: ['Jens', 'Martin', 'Daniel'], canDelete: true},
+      props: {summary, columns: ['Jens', 'Martin', 'Daniel']},
     });
   }
 
@@ -35,9 +35,9 @@ describe('GameOverview', () => {
     expect(cells.slice(4, 7)).deep.eq(['🏆76', '', '66']);
   });
 
-  it('no delete button outside the home network', () => {
+  it('always offers the delete button', () => {
     const wrapper = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'), props: {summary, columns: ['Jens']}});
-    expect(wrapper.find('.games-overview-delete').exists()).is.false;
+    expect(wrapper.find('.games-overview-delete').exists()).is.true;
   });
 
   it('corporation and win in the tooltip', () => {

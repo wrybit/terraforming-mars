@@ -244,6 +244,17 @@
   font-weight: bold;
 }
 
+// Delete column always at the right edge, also while the table scrolls sideways (many player names):
+// solid background and a soft shadow so the cells scrolling underneath do not show through
+.games-overview-table .games-overview-actions {
+  position: sticky;
+  right: 0;
+  z-index: 1;
+  padding-left: 8px;
+  background: #1d1e24;
+  box-shadow: -10px 0 10px -6px rgba(0, 0, 0, 0.6);
+}
+
 .games-overview-actions .btn {
   display: inline-flex;
   align-items: center;
