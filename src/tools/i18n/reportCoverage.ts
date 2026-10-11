@@ -12,7 +12,9 @@ const WORD = /\p{Ll}{3}/u;
 export type Coverage = {lang: string, name: string, translated: number, total: number, missing: Array<string>};
 
 // Coverage per language: which commonly translated texts this language lacks
-export function coverage(files: ReadonlyArray<LocaleFile>, used: UsedTexts | undefined): {total: number, languages: Array<Coverage>} {
+// sameAsEnglish: per language the texts that are correct in English (names, codes); make_static_json
+// refuses a translation identical to its key, so this list is how a language marks them as done.
+export function coverage(files: ReadonlyArray<LocaleFile>, used: UsedTexts | undefined, sameAsEnglish: Record<string, Array<string>> = {}): {total: number, languages: Array<Coverage>} {
   const keysByLang = new Map<string, Set<string>>();
   for (const localeFile of files) {
     if (localeFile.lang === 'en') {
@@ -37,7 +39,7 @@ export function coverage(files: ReadonlyArray<LocaleFile>, used: UsedTexts | und
     .filter(([key, count]) => WORD.test(key) && (used === undefined || used.texts.has(key)) && (count >= MIN_LANGUAGES || !isName(key)))
     .map(([key]) => key);
   const languages = ALL_LANGUAGES.filter((lang) => lang !== 'en').map((lang) => {
-    const keys = keysByLang.get(lang) ?? new Set<string>();
+    const keys = new Set([...(keysByLang.get(lang) ?? []), ...(sameAsEnglish[lang] ?? []).map(normalizeText)]);
     // Latin-script languages print names and many single words (Draft, Solo, Bank) like English, and an identical translation cannot be stored
     const expectedHere = LATIN_SCRIPT.has(lang) ? expected.filter((key) => !isName(key) && key.includes(' ')) : expected;
     const missing = expectedHere.filter((key) => !keys.has(key)).sort();
@@ -46,9 +48,9 @@ export function coverage(files: ReadonlyArray<LocaleFile>, used: UsedTexts | und
   return {total: expected.length, languages};
 }
 
-// Short console report; never fails the run
-export function reportCoverage(files: ReadonlyArray<LocaleFile>, used: UsedTexts | undefined, verbose: boolean): Array<string> {
-  const {total, languages} = coverage(files, used);
+// Short console report
+export function reportCoverage(files: ReadonlyArray<LocaleFile>, used: UsedTexts | undefined, sameAsEnglish: Record<string, Array<string>>, verbose: boolean): Array<string> {
+  const {total, languages} = coverage(files, used, sameAsEnglish);
   const lines = [`Translation coverage (${total} texts${used === undefined ? ', without generated data: run npm run build first' : ''}):`];
   for (const language of [...languages].sort((a, b) => b.translated / b.total - a.translated / a.total)) {
     const percent = language.total === 0 ? 100 : Math.floor(language.translated / language.total * 1000) / 10;

@@ -124,6 +124,14 @@ Good wiki pages:
 
 Custom i18n via `src/client/directives/i18n.ts` with `v-i18n` directive. Translation files in `src/locales/`. Strings are matched by exact text content. See the wiki's [Translations](https://github.com/terraforming-mars/terraforming-mars/wiki/Translations) page for the contributor workflow.
 
+**Fork rule: translate in the same change.** Every visible text that is added or reworded (Vue templates, `message()`/log texts, card texts, titles, placeholders, alerts) gets its translation in **all 16 languages** in the same commit — no English-only texts, no later translation rounds.
+
+- The English text is the key; there is no English entry (except overrides in `src/locales/en/overrides.json`).
+- Fork texts go into `src/locales/<lang>/fork_ui.json` (UI) or `fork_cards.json` (card texts) of every language: de fr ru cn pl es br it ko nl hu jp bg nb ua fi. When rewording an existing text, move its translations to the new key and remove the old entry.
+- Use each language's existing game terms (grep `src/locales/<lang>/`), keep `${0}` placeholders and HTML tags, keep UI labels short enough for phone width.
+- A translation identical to its key is refused by the build; if a text is correct in English for a language (names, codes), add it to `src/tools/i18n/sameAsEnglish.json` instead.
+- `npm run lint:i18n` must pass: it fails on texts missing in a language (`-- --missing` lists them), placeholder/tag mismatches and template texts without translation. Check long translations on phone and desktop.
+
 ## Style Guide
 
 Read STYLE.md. Adhere to it as best as you can, alling out outliers.

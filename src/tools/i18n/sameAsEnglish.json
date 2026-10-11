@@ -1,0 +1,133 @@
+{
+  "br": [
+    "&nbsp;Cheung Shing",
+    "Star Wars",
+    "Terraforming Mars",
+    "Underworld 2",
+    "Venus Next",
+    "[ solo"
+  ],
+  "de": [
+    "&nbsp;Cheung Shing",
+    "Generation: ∅",
+    "Terraforming Mars"
+  ],
+  "es": [
+    "&nbsp;Cheung Shing",
+    "Star Wars",
+    "Terraforming Mars",
+    "Underworld 2",
+    "Venus Next"
+  ],
+  "fi": [
+    "&nbsp;Cheung Shing",
+    "1 data / 2 °C"
+  ],
+  "fr": [
+    "${0} (Turmoil ${1})",
+    "${0} corruption",
+    "&nbsp;Cheung Shing",
+    "1 corruption",
+    "1 microbe / 2 °C",
+    "2 microbes",
+    "F - Colonies",
+    "Star Wars",
+    "Terraforming Mars",
+    "Underworld 2",
+    "Venus Next",
+    "[ solo",
+    "amazonis p.",
+    "arabia terra",
+    "influence ${0} (+${1})",
+    "iv. Turmoil",
+    "t. cimmeria",
+    "terra cimmeria nova",
+    "utopia planitia",
+    "vastitas borealis",
+    "vastitas borealis nova"
+  ],
+  "hu": [
+    "&nbsp;Cheung Shing",
+    "amazonis p.",
+    "arabia terra",
+    "vastitas borealis",
+    "vastitas borealis nova"
+  ],
+  "it": [
+    "${0} (Turmoil ${1})",
+    "&nbsp;Cheung Shing",
+    "(max 3)",
+    "Escape Velocity",
+    "Prelude + Prelude",
+    "Prelude 2",
+    "Terraforming Mars",
+    "Underworld 2",
+    "Venus Next",
+    "[max 4]",
+    "amazonis p.",
+    "arabia terra",
+    "iv. Turmoil",
+    "max 3",
+    "max 4",
+    "t. cimmeria",
+    "terra cimmeria nova",
+    "utopia planitia",
+    "vastitas borealis",
+    "vastitas borealis nova"
+  ],
+  "nb": [
+    "&nbsp;Cheung Shing",
+    "1 data / 2 °C",
+    "2x bonus",
+    "Bonus for ${0}",
+    "Bonus for ${0}: ${1}",
+    "Star Wars",
+    "Terraforming Mars",
+    "[ solo",
+    "amazonis p.",
+    "arabia terra",
+    "t. cimmeria",
+    "terra cimmeria nova",
+    "utopia planitia",
+    "vastitas borealis",
+    "vastitas borealis nova"
+  ],
+  "nl": [
+    "${0} (Turmoil ${1})",
+    "${0} prelude",
+    "${0} preludes",
+    "&nbsp;Cheung Shing",
+    "1 data / 2 °C",
+    "1 microbe / 2 °C",
+    "1 titanium / 2 °C",
+    "2 titanium",
+    "2x bonus",
+    "Prelude 2",
+    "Star Wars",
+    "Terraforming Mars",
+    "[ solo",
+    "amazonis p.",
+    "arabia terra",
+    "iv. Turmoil",
+    "t. cimmeria",
+    "terra cimmeria nova",
+    "utopia planitia",
+    "vastitas borealis",
+    "vastitas borealis nova"
+  ],
+  "pl": [
+    "&nbsp;Cheung Shing",
+    "Underworld 2",
+    "[ solo",
+    "terra cimmeria nova",
+    "utopia planitia",
+    "vastitas borealis nova"
+  ],
+  "ru": [
+    "&nbsp;Cheung Shing",
+    "PolderTECH"
+  ],
+  "ua": [
+    "PolderTECH"
+  ]
+}
