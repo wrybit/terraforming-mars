@@ -169,7 +169,7 @@
               <div v-for="v in p.victoryPointsBreakdown.detailsPlanetaryTracks" :key="v.tag">
                 <div :class="detailRowClass(v.points)">
                   <div class="game-end-column-vp">{{v.points}}</div>
-                  <div class="game-end-column-text" v-i18n>Most tags on the {{v.tag}} track</div>
+                  <div class="game-end-column-text" v-i18n="[v.tag]">Most tags on the ${0} track</div>
                 </div>
               </div>
             </div>

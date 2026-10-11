@@ -80,5 +80,15 @@
   "Hard": "Vaikea",
   "No AI": "Ei tekoälyä",
   "Seat taken by AI": "Paikka tekoälyllä",
-  "Seat taken by a human": "Paikka pelaajalla"
+  "Seat taken by a human": "Paikka pelaajalla",
+  "Import": "Tuo",
+  "Export": "Vie",
+  "AI": "Tekoäly",
+  "Alpha — work in progress": "Alfa — työn alla",
+  "The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.": "Uudet virstanpylväät ja palkinnot ovat yhä aktiivisessa kehityksessä. Ilmoita vain, jos jokin rikkoo pelin.",
+  "These are always fully random.": "Nämä ovat aina täysin satunnaisia.",
+  "Error loading settings": "Virhe asetusten lataamisessa",
+  "Settings link": "Asetuslinkki",
+  "Upload settings": "Lataa asetukset",
+  "Learn more": "Lue lisää"
 }

@@ -52,7 +52,7 @@
           <td v-for="step in steps" :key="(step.tag ?? 'vp-' + step.vpValue) + '-reward'" class="delta-project-board__reward-cell">
             <div class="delta-project-board__reward">
               <template v-for="(icon, idx) in step.rewardIcons" :key="idx">
-                <span v-if="icon.or" class="delta-project-board__or">or</span>
+                <span v-if="icon.or" class="delta-project-board__or" v-i18n>or</span>
                 <span v-else-if="icon.separator" class="delta-project-board__separator">/</span>
                 <div v-else-if="icon.production" class="delta-project-board__prod-box">
                   <div v-for="n in (icon.count || 1)" :key="n" :class="icon.cssClass">{{ icon.text || '' }}</div>

@@ -100,5 +100,6 @@
   "${0} of ${1} games": "${0} из ${1} партий",
   "Highest score without winning": "Наивысший результат без победы",
   "No game with a saved board yet.": "Пока нет партии с сохранённой картой.",
-  "All statistics": "Вся статистика"
+  "All statistics": "Вся статистика",
+  "Top": "Топ"
 }

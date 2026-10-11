@@ -1,15 +1,15 @@
 <template>
   <div id="games-overview" class="games-overview-container">
     <section class="games-overview-card games-overview-head">
-      <h1><HomeLink>{{ constants.APP_NAME }}</HomeLink> — Games Overview</h1>
+      <h1><HomeLink>{{ constants.APP_NAME }}</HomeLink> — <span v-i18n>Games Overview</span></h1>
       <ImportGameForm :serverId="serverId" @imported="loadGames"/>
     </section>
 
     <section v-if="lineups.length > 0" class="games-overview-card">
-      <h2>Wins</h2>
+      <h2 v-i18n>Wins</h2>
       <div class="games-overview-lineups">
         <div v-for="lineup in lineups" :key="lineup.lineup" class="games-overview-lineup">
-          <h3>{{ lineup.lineup }} <span class="games-overview-lineup-games">{{ lineup.games }} {{ lineup.games === 1 ? 'game' : 'games' }}</span></h3>
+          <h3>{{ lineup.lineup }} <span class="games-overview-lineup-games">{{ lineup.games }} {{ $t(lineup.games === 1 ? 'game' : 'games') }}</span></h3>
           <div class="games-overview-wins">
             <div v-for="count in lineup.counts" :key="count.name" class="games-overview-win">
               <strong>{{ count.name }}</strong>
@@ -18,25 +18,25 @@
             </div>
           </div>
           <p class="games-overview-averages">
-            <span v-if="lineup.averageGenerations !== undefined" title="Average generations">Generation: ∅ <strong>{{ formatAverage(lineup.averageGenerations) }}</strong></span>
-            <span v-if="lineup.averageWinnerPoints !== undefined" title="Average victory points of the winner">Points: ∅ <strong>{{ formatAverage(lineup.averageWinnerPoints) }}</strong></span>
+            <span v-if="lineup.averageGenerations !== undefined" v-i18n :title="$t('Average generations')">Generation: ∅ <strong>{{ formatAverage(lineup.averageGenerations) }}</strong></span>
+            <span v-if="lineup.averageWinnerPoints !== undefined" v-i18n :title="$t('Average victory points of the winner')">Points: ∅ <strong>{{ formatAverage(lineup.averageWinnerPoints) }}</strong></span>
           </p>
         </div>
       </div>
     </section>
 
     <section class="games-overview-card">
-      <p v-if="status === 'loading'" class="games-overview-note">Loading…</p>
-      <p v-else-if="status === 'error'" class="games-overview-note games-overview-note--error">Could not load the games. Is the serverId correct?</p>
-      <p v-else-if="summaries.length === 0" class="games-overview-note">No games yet.</p>
+      <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
+      <p v-else-if="status === 'error'" class="games-overview-note games-overview-note--error" v-i18n>Could not load the games. Is the serverId correct?</p>
+      <p v-else-if="summaries.length === 0" class="games-overview-note" v-i18n>No games yet.</p>
       <div v-else class="games-overview-scroll">
         <table class="games-overview-table">
           <thead>
             <tr>
               <th></th>
-              <th>Game</th>
-              <th>Gen</th>
-              <th>Spectator</th>
+              <th v-i18n>Game</th>
+              <th v-i18n>Gen</th>
+              <th v-i18n>Spectator</th>
               <th v-for="name in columns" :key="name">{{ name }}</th>
               <th v-if="canDelete"></th>
             </tr>
@@ -55,6 +55,7 @@
 import {defineComponent} from 'vue';
 import * as constants from '@/common/constants';
 import {paths} from '@/common/app/paths';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {AdminDeleteGameRequest, AdminGameSummary} from '@/common/admin/AdminGameSummary';
 import GameOverview from '@/client/components/admin/GameOverview.vue';
 import ImportGameForm from '@/client/components/admin/ImportGameForm.vue';
@@ -139,7 +140,7 @@ export default defineComponent({
         // Remove locally instead of reloading: the row disappears immediately, the columns adjust
         this.summaries = this.summaries.filter((summary) => summary.id !== id);
       } catch (error) {
-        this.deleteError = `Could not delete ${id}: ${error instanceof Error ? error.message : String(error)}`;
+        this.deleteError = `${translateTextWithParams('Could not delete ${0}', [id])}: ${translateText(error instanceof Error ? error.message : String(error))}`;
       } finally {
         this.deletingIds = this.deletingIds.filter((deletingId) => deletingId !== id);
       }

@@ -1,5 +1,5 @@
 <template>
-  <div v-i18n title="Moon habitat, logistic, and mining rates">
+  <div v-i18n :title="$t('Moon habitat, logistic, and mining rates')">
     <div class="moon-tile"></div>
     <div>
       <div v-if="isMax" class="global_params_value">

@@ -100,5 +100,6 @@
   "${0} of ${1} games": "${0} av ${1} spill",
   "Highest score without winning": "Høyeste poengsum uten seier",
   "No game with a saved board yet.": "Ingen spill med lagret spillebrett ennå.",
-  "All statistics": "All statistikk"
+  "All statistics": "All statistikk",
+  "Top": "Topp"
 }

@@ -29,8 +29,6 @@
   "decreased": "vermindert",
   "${0}'s ${1} amount ${2} by ${3}": "${0}\u2019s ${1} Menge wurde um ${3} ${2}",
   "${0}'s ${1} production ${2} by ${3}": "${0}\u2019s ${1} Produktion wurde um ${3} ${2}",
-  "${0}'s ${1} amount ${2} by ${3} stolen by ${4}": "${0}\u2019s ${1} Menge wurde um ${3} ${2} gestohlen von ${4}",
-  "${0}'s ${1} production ${2} by ${3} stolen by ${4}": "${0}\u2019s ${1} Produktion wurde um ${3} ${2} gestohlen von ${4}",
   "${0}'s ${1} amount ${2} by ${3} by ${4}": "${0}\u2019s ${1} Menge wurde um ${3} ${2} von ${4}",
   "${0}'s ${1} production ${2} by ${3} by ${4}": "${0}\u2019s ${1} Produktion wurde um ${3} ${2} von ${4}",
   "${0} removed ${1} resource(s) from ${2}\u2019s ${3}": "${0} entfernte ${1} Ressource(n) von ${2}\u2019s ${3}",

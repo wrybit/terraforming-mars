@@ -15,7 +15,7 @@
       </button>
     </div>
     <span class="label-additional" v-if="lastSoloGeneration !== undefined">
-      <span :class="lastGenerationClass" v-i18n>of {{lastSoloGeneration}}</span>
+      <span :class="lastGenerationClass" v-i18n="[String(lastSoloGeneration)]">of ${0}</span>
     </span>
   </div>
 </template>

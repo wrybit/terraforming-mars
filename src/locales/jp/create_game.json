@@ -80,5 +80,14 @@
   "Hard": "難しい",
   "No AI": "AIなし",
   "Seat taken by AI": "AIが使用中の席",
-  "Seat taken by a human": "人間が使用中の席"
+  "Seat taken by a human": "人間が使用中の席",
+  "Import": "インポート",
+  "Export": "エクスポート",
+  "Alpha — work in progress": "アルファ — 開発中",
+  "The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.": "新しいマイルストーンとアワードはまだ開発中です。ゲームが進行不能になる場合以外は報告しないでください。",
+  "These are always fully random.": "これらは常に完全ランダムです。",
+  "Error loading settings": "設定の読み込みエラー",
+  "Settings link": "設定リンク",
+  "Upload settings": "設定をアップロード",
+  "Learn more": "詳しく見る"
 }

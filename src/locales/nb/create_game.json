@@ -80,5 +80,14 @@
   "Hard": "Vanskelig",
   "No AI": "Ingen AI",
   "Seat taken by AI": "Plass tatt av AI",
-  "Seat taken by a human": "Plass tatt av en spiller"
+  "Seat taken by a human": "Plass tatt av en spiller",
+  "Import": "Importer",
+  "Export": "Eksporter",
+  "Alpha — work in progress": "Alfa — under arbeid",
+  "The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.": "De nye milepælene og utmerkelsene er fortsatt under aktiv utvikling. Ikke rapporter noe med mindre det ødelegger spillet.",
+  "These are always fully random.": "Disse er alltid helt tilfeldige.",
+  "Error loading settings": "Feil ved innlasting av innstillinger",
+  "Settings link": "Innstillingslenke",
+  "Upload settings": "Last opp innstillinger",
+  "Learn more": "Les mer"
 }

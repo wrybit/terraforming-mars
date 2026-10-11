@@ -79,5 +79,15 @@
   "Hard": "Difficile",
   "No AI": "Sans IA",
   "Seat taken by AI": "Place occupée par l'IA",
-  "Seat taken by a human": "Place occupée par un joueur"
+  "Seat taken by a human": "Place occupée par un joueur",
+  "Import": "Importer",
+  "Export": "Exporter",
+  "AI": "IA",
+  "Alpha — work in progress": "Alpha — en cours de développement",
+  "The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.": "Les nouveaux Objectifs et Récompenses sont encore en développement actif. Ne signalez rien, sauf si cela casse la partie.",
+  "These are always fully random.": "Ils sont toujours entièrement aléatoires.",
+  "Error loading settings": "Erreur lors du chargement des paramètres",
+  "Settings link": "Lien des paramètres",
+  "Upload settings": "Importer les paramètres",
+  "Learn more": "En savoir plus"
 }

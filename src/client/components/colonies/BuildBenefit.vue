@@ -12,7 +12,7 @@
     </template>
   </div>
   <div v-else-if="metadata.build.type === ColonyBenefit.COPY_TRADE">
-    <div class="copy-trade-box">Copy Trade</div>
+    <div class="copy-trade-box" v-i18n>Copy Trade</div>
   </div>
   <div v-else-if="metadata.build.type === ColonyBenefit.DRAW_CARDS && metadata.build.quantity[idx] === 2">
     <div class="resource card card-with-border" style="margin-top: 0px; margin-left: 7px; transform: scale(0.8);"></div>

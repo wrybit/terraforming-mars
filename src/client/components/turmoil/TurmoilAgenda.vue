@@ -7,7 +7,7 @@
     </template>
     <template v-else-if="id === 'mb02'">
       <div class="resource megacredits party-resource">1</div> /
-      <div class="tile empty-tile tile-size--S"></div>ON MARS
+      <div class="tile empty-tile tile-size--S"></div><span v-i18n>ON MARS</span>
     </template>
     <template v-else-if="id === 'sb01'">
       <div class="resource megacredits party-resource">1</div> /

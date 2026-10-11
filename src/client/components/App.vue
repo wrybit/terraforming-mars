@@ -8,7 +8,7 @@
           <p id="alert-dialog-title" class="title" v-i18n>Error with input</p>
           <p id="alert-dialog-message"></p>
           <menu class="dialog-menu centered-content">
-            <button id="alert-dialog-button" class="btn btn-lg btn-primary">OK</button>
+            <button id="alert-dialog-button" class="btn btn-lg btn-primary" v-i18n>OK</button>
           </menu>
         </form>
       </dialog>

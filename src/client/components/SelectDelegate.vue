@@ -4,7 +4,7 @@
     <label v-for="player in (playerinput.players || [])" :key="player" class="form-radio form-inline">
       <input type="radio" v-model="selectedPlayer" :value="player" >
       <i class="form-icon"></i>
-      <span v-if="player === 'NEUTRAL'" >Neutral</span>
+      <span v-if="player === 'NEUTRAL'" v-i18n>Neutral</span>
       <SelectPlayerRow v-else :player="playerView.players.find((otherPlayer) => otherPlayer.color === player)"/>
     </label>
     <TabPanelFooterSlot>

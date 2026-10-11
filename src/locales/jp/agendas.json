@@ -1,6 +1,6 @@
 {
-   "Select a ${0} bonus": "与党ボーナスを選択",
-   "Select a ${0} policy": "与党政策を選択",
+   "Select a ${0} bonus": "${0}ボーナスを選択",
+   "Select a ${0} policy": "${0}政策を選択",
 
    "Gain 1 M€ for each building tag you have": "土建タグの数分、1MC獲得",
    "Gain 1 M€ for each tile you have ON MARS": "火星上の所有タイルの数分、1MC獲得",

@@ -35,8 +35,8 @@
         v-show="showScrollToBottomButton && !showsMilestonesAwards"
         type="button"
         class="log-latest-button"
-        aria-label="Latest logs"
-        title="Latest logs"
+        :aria-label="$t('Latest logs')"
+        :title="$t('Latest logs')"
         data-test="log-latest"
         @click="showLatestLogs"
       >

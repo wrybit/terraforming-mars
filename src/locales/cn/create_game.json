@@ -80,5 +80,14 @@
   "Hard": "困难",
   "No AI": "无 AI",
   "Seat taken by AI": "座位由 AI 占用",
-  "Seat taken by a human": "座位由真人玩家占用"
+  "Seat taken by a human": "座位由真人玩家占用",
+  "Import": "导入",
+  "Export": "导出",
+  "Alpha — work in progress": "Alpha — 开发中",
+  "The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.": "新的里程碑和奖项仍在积极开发中。除非导致游戏无法进行，否则请勿报告问题。",
+  "These are always fully random.": "它们始终完全随机。",
+  "Error loading settings": "加载设置时出错",
+  "Settings link": "设置链接",
+  "Upload settings": "上传设置",
+  "Learn more": "了解更多"
 }

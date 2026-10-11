@@ -80,5 +80,14 @@
   "Hard": "어려움",
   "No AI": "AI 없음",
   "Seat taken by AI": "AI가 차지한 자리",
-  "Seat taken by a human": "사람이 차지한 자리"
+  "Seat taken by a human": "사람이 차지한 자리",
+  "Import": "가져오기",
+  "Export": "내보내기",
+  "Alpha — work in progress": "알파 — 개발 중",
+  "The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.": "새 마일스톤과 시상은 아직 개발 중입니다. 게임이 망가지는 경우가 아니면 보고하지 마세요.",
+  "These are always fully random.": "항상 완전히 무작위입니다.",
+  "Error loading settings": "설정을 불러오는 중 오류",
+  "Settings link": "설정 링크",
+  "Upload settings": "설정 업로드",
+  "Learn more": "자세히 알아보기"
 }

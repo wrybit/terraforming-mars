@@ -1,7 +1,7 @@
 <template>
   <!-- Two-step instead of a browser dialog: the first click asks, only the second deletes -->
   <button type="button" class="btn games-overview-delete" :class="isConfirming ? 'btn-tone-danger' : 'btn-tone-quiet'" :disabled="isDeleting" @click="onClick">
-    {{ isDeleting ? 'Deleting…' : isConfirming ? 'Really delete?' : 'Delete' }}
+    {{ $t(isDeleting ? 'Deleting…' : isConfirming ? 'Really delete?' : 'Delete') }}
   </button>
 </template>
 

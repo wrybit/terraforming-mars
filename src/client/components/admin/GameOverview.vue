@@ -2,19 +2,19 @@
   <!-- One game of the admin overview: a fixed column per player name, winner with a trophy -->
   <tr class="games-overview-row" :class="{'games-overview-row--imported': summary.source === 'imported'}">
     <td class="games-overview-status">
-      <span :class="summary.isFinished ? 'status-finished' : 'status-running'" :title="summary.isFinished ? 'Finished' : 'Running'"></span>
+      <span :class="summary.isFinished ? 'status-finished' : 'status-running'" :title="$t(summary.isFinished ? 'Finished' : 'Running')"></span>
     </td>
     <td class="games-overview-game">
-      <a v-if="summary.screenshotUrl !== undefined" :href="summary.screenshotUrl" target="_blank" class="games-overview-source" title="Saved screenshot of the result page">Screenshot</a>
+      <a v-if="summary.screenshotUrl !== undefined" :href="summary.screenshotUrl" target="_blank" class="games-overview-source" v-i18n :title="$t('Saved screenshot of the result page')">Screenshot</a>
       <!-- Target is the results page stored here: the external server deletes the game soon -->
-      <a v-else-if="summary.importedParticipantId !== undefined" :href="importedResultUrl" target="_blank" class="games-overview-source" title="Result page saved on this server">imported</a>
+      <a v-else-if="summary.importedParticipantId !== undefined" :href="importedResultUrl" target="_blank" class="games-overview-source" v-i18n :title="$t('Result page saved on this server')">Imported</a>
       <span v-else class="games-overview-id">{{ summary.id }}</span>
       <span class="games-overview-date">{{ dateText }}</span>
     </td>
     <!-- 0 = unknown (e.g. screenshot without generation info) -->
     <td class="games-overview-generation">{{ summary.generation > 0 ? summary.generation : '–' }}</td>
     <td>
-      <a v-if="summary.spectatorUrl !== undefined" :href="summary.spectatorUrl" target="_blank" class="games-overview-chip games-overview-chip--spectator">Watch</a>
+      <a v-if="summary.spectatorUrl !== undefined" :href="summary.spectatorUrl" target="_blank" class="games-overview-chip games-overview-chip--spectator" v-i18n>Watch</a>
     </td>
     <td v-for="name in columns" :key="name">
       <component :is="playerByName(name)?.url === undefined ? 'span' : 'a'"

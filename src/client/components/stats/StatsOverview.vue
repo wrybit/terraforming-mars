@@ -9,7 +9,7 @@
     <!-- Title leads to the top 20 page -->
     <div v-if="showcases.some((showcase) => showcase.entries.length > 0)" class="stats-columns">
       <section v-for="showcase in showcases" :key="showcase.kind" class="stats-card">
-        <h2><a :href="topHref(showcase.kind)" data-stats-link class="stats-heading-link"><span v-i18n>{{ showcase.title }}</span> <span class="stats-dim">→ Top 20</span></a></h2>
+        <h2><a :href="topHref(showcase.kind)" data-stats-link class="stats-heading-link"><span v-i18n>{{ showcase.title }}</span> <span class="stats-dim">→ <span v-i18n>Top</span> 20</span></a></h2>
         <StatsShowcase :kind="showcase.kind" :entries="showcase.entries"/>
       </section>
     </div>

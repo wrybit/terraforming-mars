@@ -1,6 +1,6 @@
 <template>
   <div class="admin-home">
-    <h1><HomeLink>{{ APP_NAME }}</HomeLink> — Admin</h1>
+    <h1><HomeLink>{{ APP_NAME }}</HomeLink> — <span v-i18n>Admin</span></h1>
     <ul>
       <li v-for="path of paths" :key="path">
         <a :href="path + '?serverId=' + serverId">{{path}}</a>

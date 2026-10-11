@@ -80,5 +80,15 @@
   "Hard": "Difficile",
   "No AI": "Nessuna IA",
   "Seat taken by AI": "Posto occupato dall'IA",
-  "Seat taken by a human": "Posto occupato da una persona"
+  "Seat taken by a human": "Posto occupato da una persona",
+  "Import": "Importa",
+  "Export": "Esporta",
+  "AI": "IA",
+  "Alpha — work in progress": "Alpha — in lavorazione",
+  "The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.": "I nuovi traguardi e riconoscimenti sono ancora in fase di sviluppo. Segnala solo ciò che rompe la partita.",
+  "These are always fully random.": "Sono sempre completamente casuali.",
+  "Error loading settings": "Errore durante il caricamento delle impostazioni",
+  "Settings link": "Link delle impostazioni",
+  "Upload settings": "Carica impostazioni",
+  "Learn more": "Scopri di più"
 }

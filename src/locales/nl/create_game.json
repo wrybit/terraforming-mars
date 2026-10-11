@@ -78,5 +78,14 @@
   "Hard": "Moeilijk",
   "No AI": "Geen AI",
   "Seat taken by AI": "Plaats bezet door AI",
-  "Seat taken by a human": "Plaats bezet door een speler"
+  "Seat taken by a human": "Plaats bezet door een speler",
+  "Import": "Importeren",
+  "Export": "Exporteren",
+  "Alpha — work in progress": "Alfa — in ontwikkeling",
+  "The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.": "De nieuwe mijlpalen en prijzen zijn nog volop in ontwikkeling. Meld alleen iets als het het spel breekt.",
+  "These are always fully random.": "Deze zijn altijd volledig willekeurig.",
+  "Error loading settings": "Fout bij het laden van de instellingen",
+  "Settings link": "Instellingenlink",
+  "Upload settings": "Instellingen uploaden",
+  "Learn more": "Meer informatie"
 }

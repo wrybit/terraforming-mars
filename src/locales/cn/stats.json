@@ -100,5 +100,6 @@
   "${0} of ${1} games": "${0} / ${1} 局",
   "Highest score without winning": "未获胜的最高得分",
   "No game with a saved board yet.": "尚无保存了游戏板的对局。",
-  "All statistics": "全部统计"
+  "All statistics": "全部统计",
+  "Top": "前"
 }

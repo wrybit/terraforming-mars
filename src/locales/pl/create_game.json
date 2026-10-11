@@ -80,5 +80,14 @@
   "Hard": "Trudny",
   "No AI": "Bez AI",
   "Seat taken by AI": "Miejsce zajęte przez AI",
-  "Seat taken by a human": "Miejsce zajęte przez gracza"
+  "Seat taken by a human": "Miejsce zajęte przez gracza",
+  "Import": "Importuj",
+  "Export": "Eksportuj",
+  "Alpha — work in progress": "Alfa — w trakcie prac",
+  "The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.": "Nowe kamienie milowe i nagrody są wciąż rozwijane. Zgłaszaj błędy tylko wtedy, gdy psują grę.",
+  "These are always fully random.": "Są one zawsze całkowicie losowe.",
+  "Error loading settings": "Błąd wczytywania ustawień",
+  "Settings link": "Link do ustawień",
+  "Upload settings": "Wgraj ustawienia",
+  "Learn more": "Dowiedz się więcej"
 }

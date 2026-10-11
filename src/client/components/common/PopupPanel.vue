@@ -3,7 +3,7 @@
     <div class="popup-inner">
       <div class="popup-header">
         <slot name="header"></slot>
-        <button class="close-button" @click="onclick">Close</button>
+        <button class="close-button" @click="onclick" v-i18n>Close</button>
       </div>
       <div class="popup-body">
         <slot></slot>

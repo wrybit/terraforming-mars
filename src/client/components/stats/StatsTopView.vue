@@ -1,7 +1,7 @@
 <template>
   <section class="stats-card">
     <a :href="overviewHref" data-stats-link class="stats-link">← <span v-i18n>Overview</span></a>
-    <h2 class="stats-top-title"><span v-i18n>{{ title }}</span> <span class="stats-dim">· Top {{ entries.length }}</span></h2>
+    <h2 class="stats-top-title"><span v-i18n>{{ title }}</span> <span class="stats-dim">· <span v-i18n>Top</span> {{ entries.length }}</span></h2>
     <p v-if="entries.length === 0" class="stats-note" v-i18n>No games for these filters.</p>
     <StatsShowcase v-else class="stats-showcase--grid" :kind="kind" :entries="entries"/>
   </section>

@@ -1,7 +1,7 @@
 <template>
   <div class="card-title" :class="{'card-title-standard-project': isStandardProject, 'is-corporation': isCorporation}">
-    <div v-if="isPrelude" class="prelude-label">prelude</div>
-    <div v-if="isCorporation" class="corporation-label">corporation</div>
+    <div v-if="isPrelude" class="prelude-label" v-i18n>prelude</div>
+    <div v-if="isCorporation" class="corporation-label" v-i18n>corporation</div>
     <div v-if="isCeo" class="ceo-label">CEO</div>
     <CardCorporationLogo v-if="isCorporation" :title="title"/>
     <div v-else ref="title" class="card-title" :class="backgroundColorClass">{{ titleWithoutSuffix }}</div>

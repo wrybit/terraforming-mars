@@ -100,5 +100,6 @@
   "${0} of ${1} games": "${0} / ${1}ゲーム",
   "Highest score without winning": "勝てなかった最高得点",
   "No game with a saved board yet.": "ボードが保存されたゲームはまだありません。",
-  "All statistics": "すべての統計"
+  "All statistics": "すべての統計",
+  "Top": "トップ"
 }

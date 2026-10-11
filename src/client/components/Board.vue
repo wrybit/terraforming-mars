@@ -1,8 +1,8 @@
 <template>
     <div :class="gameBoardClassName">
         <div class="hide-tile-button-container">
-          <div class="hide-tile-button" @click="$emit('toggleTileView')" data-test="hide-tiles-button" v-i18n>
-            {{ tileView }} tiles
+          <div class="hide-tile-button" @click="$emit('toggleTileView')" data-test="hide-tiles-button">
+            {{ $t(tileView + ' tiles') }}
           </div>
         </div>
         <!-- Special spaces off Mars as columns in the corners of the visible section (marsFrame), in board px so

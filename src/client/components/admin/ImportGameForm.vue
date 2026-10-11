@@ -1,14 +1,15 @@
 <template>
   <form class="games-overview-import" @submit.prevent="submit">
-    <input v-model="url" type="text" class="games-overview-import-input" placeholder="Player ID (p…) or link from another server" :disabled="isImporting" required>
-    <button type="submit" class="btn btn-primary" :disabled="isImporting || url.trim() === ''">{{ isImporting ? 'Importing…' : 'Import result' }}</button>
-    <p v-if="message !== ''" class="games-overview-import-message" :class="{'games-overview-import-message--error': isError}">{{ message }}</p>
+    <input v-model="url" type="text" class="games-overview-import-input" :placeholder="$t('Player ID (p…) or link from another server')" :disabled="isImporting" required>
+    <button type="submit" class="btn btn-primary" :disabled="isImporting || url.trim() === ''">{{ $t(isImporting ? 'Importing…' : 'Import result') }}</button>
+    <p v-if="message !== ''" class="games-overview-import-message" :class="{'games-overview-import-message--error': isError}">{{ $t(message) }}</p>
   </form>
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {paths} from '@/common/app/paths';
+import {translateText} from '@/client/directives/i18n';
 import {AdminGameSummary, AdminImportGameRequest} from '@/common/admin/AdminGameSummary';
 
 export default defineComponent({
@@ -42,7 +43,7 @@ export default defineComponent({
         const summary: AdminGameSummary = await response.json();
         this.url = '';
         this.isError = false;
-        this.message = `Imported: ${summary.players.map((player) => player.name).join(', ')}`;
+        this.message = `${translateText('Imported')}: ${summary.players.map((player) => player.name).join(', ')}`;
         this.$emit('imported', summary);
       } catch (error) {
         this.isError = true;

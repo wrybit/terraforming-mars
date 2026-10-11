@@ -61,7 +61,7 @@
                       <span v-for="(part, index) in contentLine(tile, group.highlight, expansionGrouping !== 'source')" :key="index"
                         :class="{'create-game-chip-detail--hit': part.highlighted}">{{ part.text }}</span>
                     </template>
-                    <span v-if="tile.choice?.alpha" class="create-game-alpha" title="Alpha — work in progress">α</span>
+                    <span v-if="tile.choice?.alpha" class="create-game-alpha" :title="$t('Alpha — work in progress')">α</span>
                   </ChoiceChip>
                 </div>
               </CollapsibleSection>
@@ -211,9 +211,8 @@
               <template v-if="isRandomMAEnabled()">
                 <OptionRow label="Official Random α" sub><SwitchInput v-model="modularMA"/></OptionRow>
                 <div v-if="modularMA" class="create-game-note">
-                  The new Milestones and Awards are still in active development.
-                  Please don't report anything unless it breaks the game.
-                  These are <b>always fully random</b>.
+                  <span v-i18n>The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.</span>
+                  <b v-i18n>These are always fully random.</b>
                 </div>
                 <OptionRow label="Include fan Milestones/Awards" sub><SwitchInput v-model="includeFanMA"/></OptionRow>
               </template>
@@ -897,7 +896,7 @@ export default defineComponent({
         }
         return true;
       } catch (e) {
-        vueRoot(this).showAlert('Settings link', 'Error loading settings ' + e);
+        vueRoot(this).showAlert('Settings link', translateText('Error loading settings') + ': ' + e);
         return false;
       }
     },
@@ -1041,7 +1040,7 @@ export default defineComponent({
           }
         } catch (e) {
           const root = vueRoot(this);
-          root.showAlert('Upload settings', 'Error loading settings ' + e);
+          root.showAlert('Upload settings', translateText('Error loading settings') + ': ' + e);
         }
       }, false);
       if (file) {

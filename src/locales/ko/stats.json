@@ -100,5 +100,6 @@
   "${0} of ${1} games": "게임 ${1}판 중 ${0}판",
   "Highest score without winning": "우승 없는 최고 점수",
   "No game with a saved board yet.": "지도가 저장된 게임이 아직 없습니다.",
-  "All statistics": "전체 통계"
+  "All statistics": "전체 통계",
+  "Top": "상위"
 }

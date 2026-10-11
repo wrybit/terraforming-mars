@@ -11,7 +11,7 @@
       </section>
       <div class="stats-columns">
         <section v-for="title in showcaseTitles" :key="title" class="stats-card">
-          <h2><span v-i18n>{{ title }}</span> <span class="stats-dim">→ Top 20</span></h2>
+          <h2><span v-i18n>{{ title }}</span> <span class="stats-dim">→ <span v-i18n>Top</span> 20</span></h2>
           <div class="stats-skeleton-cards">
             <div v-for="index in showcaseSize" :key="index" class="stats-skeleton-card"></div>
           </div>

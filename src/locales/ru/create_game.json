@@ -80,5 +80,15 @@
   "Hard": "Сложный",
   "No AI": "Без ИИ",
   "Seat taken by AI": "Место занято ИИ",
-  "Seat taken by a human": "Место занято игроком"
+  "Seat taken by a human": "Место занято игроком",
+  "Import": "Импорт",
+  "Export": "Экспорт",
+  "AI": "ИИ",
+  "Alpha — work in progress": "Альфа — в разработке",
+  "The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.": "Новые достижения и награды ещё активно разрабатываются. Сообщайте об ошибках, только если они ломают игру.",
+  "These are always fully random.": "Они всегда полностью случайны.",
+  "Error loading settings": "Ошибка загрузки настроек",
+  "Settings link": "Ссылка на настройки",
+  "Upload settings": "Загрузить настройки",
+  "Learn more": "Подробнее"
 }

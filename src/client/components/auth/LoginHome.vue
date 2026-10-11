@@ -1,13 +1,13 @@
 <template>
   <div class="login-home">
     <template v-if="user !== undefined">
-      You are {{  user }}
-      <a :href="logoutURL">Log out</a>
+      <span v-i18n="[user]">You are ${0}</span>
+      <a :href="logoutURL" v-i18n>Log out</a>
     </template>
     <template v-else>
       <a :href="loginUrl">
         <img style="width: 87px; height: 24px;" src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/6257d23c5fb25be7e0b6e220_Open%20Source%20Projects%20_%20Discord-7.svg">
-        Login with Discord</a>
+        <span v-i18n>Login with Discord</span></a>
     </template>
   </div>
 </template>
