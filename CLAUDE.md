@@ -130,7 +130,7 @@ Custom i18n via `src/client/directives/i18n.ts` with `v-i18n` directive. Transla
 - Fork texts go into `src/locales/<lang>/fork_ui.json` (UI) or `fork_cards.json` (card texts) of every language: de fr ru cn pl es br it ko nl hu jp bg nb ua fi. When rewording an existing text, move its translations to the new key and remove the old entry.
 - Use each language's existing game terms (grep `src/locales/<lang>/`), keep `${0}` placeholders and HTML tags, keep UI labels short enough for phone width.
 - A translation identical to its key is refused by the build; if a text is correct in English for a language (names, codes), add it to `src/tools/i18n/sameAsEnglish.json` instead.
-- `npm run lint:i18n` must pass: it fails on texts missing in a language (`-- --missing` lists them), placeholder/tag mismatches and template texts without translation. Check long translations on phone and desktop.
+- `npm run lint:i18n` must pass (about 3 s): it fails on texts missing in a language (`-- --missing` lists them), placeholder/tag mismatches, template texts without translation and texts at translated call sites (`message()`, game log, `title`, `$t()`, `translateText()`, …) that no language translates yet. Check long translations on phone and desktop.
 
 ## Style Guide
 

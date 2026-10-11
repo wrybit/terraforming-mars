@@ -4,12 +4,15 @@ import path from 'path';
 import {readLocaleFiles, translatedKeys} from './i18n/localeFiles';
 import {checkPlaceholders} from './i18n/checkPlaceholders';
 import {checkTemplates} from './i18n/checkTemplates';
+import {checkCallSites} from './i18n/checkCallSites';
 import {coverage, reportCoverage} from './i18n/reportCoverage';
 import {usedTexts} from './i18n/usedTexts';
 
 const rootDir = path.resolve('.');
 const localeFiles = readLocaleFiles(path.resolve('src/locales'));
 const allowlist: Array<string> = JSON.parse(fs.readFileSync(path.resolve('src/tools/i18n/allowlist.json'), 'utf8'));
+
+const sameAsEnglish: Record<string, Array<string>> = JSON.parse(fs.readFileSync(path.resolve('src/tools/i18n/sameAsEnglish.json'), 'utf8'));
 
 const problems = [
   ...checkPlaceholders(localeFiles),
@@ -19,11 +22,17 @@ const problems = [
     knownKeys: translatedKeys(localeFiles),
     allowlist: new Set(allowlist),
   }),
+  ...checkCallSites({
+    srcDir: path.resolve('src'),
+    rootDir,
+    // Texts that stay English for a language count as known, too
+    knownKeys: new Set([...translatedKeys(localeFiles), ...Object.values(sameAsEnglish).flat()]),
+    allowlist: new Set(allowlist),
+  }),
 ];
 
 // Every text the app shows must exist in all languages: a new or changed English text fails here until it is translated.
 // Texts that are correct in English for a language (names, codes) go into src/tools/i18n/sameAsEnglish.json.
-const sameAsEnglish: Record<string, Array<string>> = JSON.parse(fs.readFileSync(path.resolve('src/tools/i18n/sameAsEnglish.json'), 'utf8'));
 const used = usedTexts(path.resolve('src'));
 console.log(reportCoverage(localeFiles, used, sameAsEnglish, process.argv.includes('--missing')).join('\n'));
 const missing = coverage(localeFiles, used, sameAsEnglish).languages.reduce((sum, language) => sum + language.missing.length, 0);
