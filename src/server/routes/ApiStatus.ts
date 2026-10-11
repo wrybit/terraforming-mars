@@ -29,6 +29,7 @@ export class ApiStatus extends Handler {
       updating: isServerUpdating(),
       startedAt: serverStartedAt,
       activeParticipants: activeParticipantCount(),
+      serverName: process.env.SERVER_NAME?.trim() || undefined,
     };
     responses.writeJson(res, ctx, status);
   }

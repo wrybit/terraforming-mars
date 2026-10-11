@@ -12,6 +12,7 @@
       <div class="start-screen-title" :ref="setLogo" :style="logoOffset">
         <div class="start-screen-title-top">TERRAFORMING</div>
         <div class="start-screen-title-bottom">MARS</div>
+        <div v-if="serverName" class="start-screen-server-name">{{ serverName }}</div>
       </div>
     </div>
     <!-- Row in the planet image (planets.jpg) follows from the position: row 0 is the title -->
@@ -53,6 +54,7 @@ import {SITE_LINKS} from '@/client/components/startScreen/siteLinks';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
 import {prefersReducedMotion} from '@/client/utils/motion';
+import {serverName} from '@/client/utils/serverStatus';
 
 const links = SITE_LINKS;
 

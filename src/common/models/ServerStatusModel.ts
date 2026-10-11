@@ -6,4 +6,6 @@ export type ServerStatusModel = {
   startedAt: number,
   /** Players of running games with a page open in the last minutes (decides whether an update may run now). */
   activeParticipants: number,
+  /** Name of this server shown under the start page title (env SERVER_NAME); missing when not set. */
+  serverName?: string,
 }
