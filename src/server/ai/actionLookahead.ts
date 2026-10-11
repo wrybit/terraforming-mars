@@ -21,7 +21,7 @@ import {describeResponse} from './decisionLabels';
 import {tuningOf} from './aiTuning';
 import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
 import {triggerOrderAdjustments} from './triggerOrder';
-import {sellToAffordResponses} from './sellToAfford';
+import {sellToAffordResponses, sellToPlayResponses} from './sellToAfford';
 import {isSimulating} from './simulationSandbox';
 import {CardName} from '../../common/cards/CardName';
 
@@ -74,7 +74,13 @@ function sellPatentResponses(input: SelectCard<ICard>, player: IPlayer): Array<I
     return tuningOf(player).sellToAfford > 0 && !isSimulating() ? sellToAffordResponses(player, handCardValues(player)) : [];
   }
   const unplayable = input.cards.filter((card) => !isIProjectCard(card) || !player.canPlay(card));
-  return unplayable.length === 0 ? [] : [{type: 'card', cards: unplayable.map((card) => card.name)}];
+  if (unplayable.length === 0) {
+    return [];
+  }
+  // Also: sell all but one card that the money then pays for (sellToAfford.ts sellToPlayResponses).
+  const keepOne = tuningOf(player).lastGenerationSale > 0 && !isSimulating() ?
+    sellToPlayResponses(player, unplayable.filter(isIProjectCard)) : [];
+  return [{type: 'card', cards: unplayable.map((card) => card.name)}, ...keepOne];
 }
 
 /** All complete answers worth trying for an input (one level of sub-choices expanded). */
