@@ -8,6 +8,7 @@ import {CardName} from '@/common/cards/CardName';
 import {cast} from '@/common/utils/utils';
 import {CARD_RENAMES} from '@/common/cards/CardRenames';
 import {sanitizeEscapeVelocityOptions} from '@/common/game/escapeVelocity';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 function safeBoolean(val: JSONValue): boolean {
   if (typeof val === 'boolean') {
@@ -38,7 +39,7 @@ export class JSONProcessor {
     }
 
     if (json.corporationsDraft !== undefined) {
-      this.warnings.push('Corporations draft is no longer available. Future versions might just raise an error, so edit your JSON file.');
+      this.warnings.push(translateText('Corporations draft is no longer available. Future versions might just raise an error, so edit your JSON file.'));
     }
 
     // Ensures that outdated array fields are still applied.
@@ -126,7 +127,7 @@ export class JSONProcessor {
         // This is safe because of the in check, above.
         (this.model as any)[k] = json[k];
       } else {
-        this.warnings.push('Unknown property: ' + k);
+        this.warnings.push(translateTextWithParams('Unknown property: ${0}', [k]));
       }
     }
 
@@ -147,9 +148,9 @@ export class JSONProcessor {
       if (!validNames.has(name)) {
         const canonical = CARD_RENAMES.get(name);
         if (canonical !== undefined) {
-          this.warnings.push(`Old card name '${name}' in ${fieldLabel}; use '${canonical}'`);
+          this.warnings.push(translateTextWithParams('Old card name \'${0}\' in ${1}; use \'${2}\'', [name, fieldLabel, canonical]));
         } else {
-          this.warnings.push(`Unknown card name '${name}' in ${fieldLabel}`);
+          this.warnings.push(translateTextWithParams('Unknown card name \'${0}\' in ${1}', [name, fieldLabel]));
         }
       }
     }
@@ -163,11 +164,11 @@ export class JSONProcessor {
     for (const color of colors) {
       // `as any` is OK here since this just validates `color`.
       if (PLAYER_COLORS.indexOf(color as any) === -1) {
-        errors.push(color + ' is not a color');
+        errors.push(translateTextWithParams('${0} is not a color', [color]));
       }
     }
     if (colors.size !== players.length) {
-      errors.push('Colors are duplicated');
+      errors.push(translateText('Colors are duplicated'));
     }
     return errors;
   }

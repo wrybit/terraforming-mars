@@ -17,12 +17,11 @@ declare global {
 async function bootstrap() {
   const lang = getPreferences().lang;
 
-  if (lang !== 'en') {
-    try {
-      window._translations = await fetch(`assets/locales/${lang}.json`).then((res) => res.json());
-    } catch (err) {
-      console.warn(`Cannot load ${lang} translations. See network for details.`);
-    }
+  // Also for English: src/locales/en/ holds optional overrides of single English texts
+  try {
+    window._translations = await fetch(`assets/locales/${lang}.json`).then((res) => res.json());
+  } catch (err) {
+    console.warn(`Cannot load ${lang} translations. See network for details.`);
   }
 
   const app = createApp(App);

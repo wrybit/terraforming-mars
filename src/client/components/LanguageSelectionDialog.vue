@@ -11,12 +11,12 @@
         type="button"
         class="language-selection-tile"
         :class="{'is-selected': lang === currentLanguage}"
-        :title="LANGUAGES[lang][1]"
+        :title="$t(LANGUAGES[lang][1])"
         @click="switchLanguageTo(lang)">
         <LanguageFlag :lang="lang"/>
         <span class="language-selection-text">
           <span class="language-selection-native">{{ LANGUAGES[lang][0] }}</span>
-          <span class="language-selection-english">{{ LANGUAGES[lang][1] }}</span>
+          <span class="language-selection-english">{{ $t(LANGUAGES[lang][1]) }}</span>
         </span>
       </button>
     </div>

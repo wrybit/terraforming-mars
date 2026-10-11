@@ -2,7 +2,7 @@
   <div class="card-item-container">
     <div class="card-res-amount" v-if="item.showDigit">{{ amountAbs }}</div>
     <div :class="componentClasses" v-for="index in itemsToShow" v-html="itemHtmlContent" :key="index"></div>
-    <div class="card-over" v-if="item.over !== undefined">over {{item.over}}</div>
+    <div class="card-over" v-if="item.over !== undefined" v-i18n="[String(item.over)]">over ${0}</div>
   </div>
 </template>
 
@@ -15,6 +15,7 @@ import {Size} from '@/common/cards/render/Size';
 import {Tag} from '@/common/cards/Tag';
 import {ICardRenderItem, isICardRenderItem} from '@/common/cards/render/Types';
 import {cardResourceCSS} from '../common/cardResources';
+import {translateText} from '@/client/directives/i18n';
 
 // Secondary icons that are resources, not tags.
 const secondaryResourceClasses: Partial<Record<Tag | AltSecondaryTag, string>> = {
@@ -320,7 +321,8 @@ export default defineComponent({
         if (this.item.inParens) {
           result += '(';
         }
-        result += this.item.text || 'n/a';
+        // Translated here as well: not every card view (e.g. global events in the Turmoil tab) sits inside v-i18n
+        result += this.item.text ? translateText(this.item.text) : 'n/a';
         if (this.item.inParens) {
           result += ')';
         }

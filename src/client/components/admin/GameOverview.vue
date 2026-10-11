@@ -39,6 +39,7 @@ import {AdminGameSummary, AdminPlayerSummary} from '@/common/admin/AdminGameSumm
 import {Color} from '@/common/Color';
 import {playerColorClass} from '@/common/utils/utils';
 import {paths} from '@/common/app/paths';
+import {translateText} from '@/client/directives/i18n';
 import DeleteGameButton from '@/client/components/admin/DeleteGameButton.vue';
 
 export default defineComponent({
@@ -80,7 +81,7 @@ export default defineComponent({
     },
     // Corporation and win in the tooltip: the tile itself stays compact (points only)
     chipTitle(player: AdminPlayerSummary): string {
-      return [player.corporation, player.isWinner ? 'Winner' : undefined].filter((part) => part !== undefined).join(' · ');
+      return [player.corporation, player.isWinner ? translateText('Winner') : undefined].filter((part) => part !== undefined).join(' · ');
     },
     playerColorClass(color: Color): string {
       return playerColorClass(color, 'bg_transparent');

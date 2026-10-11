@@ -261,7 +261,7 @@ describe('CreateGameForm', () => {
 
     expect(alerts).deep.eq([{
       title: 'Restore settings',
-      message: "Settings loaded with these warnings: \nUnknown card name 'Bad Prelude Name' in customPreludes",
+      message: "Settings loaded with these warnings:\nUnknown card name 'Bad Prelude Name' in customPreludes",
     }]);
   });
 

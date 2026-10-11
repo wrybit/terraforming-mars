@@ -48,8 +48,12 @@ let translated: Set<string> | undefined;
 export function translateText(englishText: string): string {
   const lang = getPreferences().lang;
   const translations: {[key: string]: string} | undefined = (window as any)._translations;
-  if (lang === 'en' || translations === undefined) {
+  if (translations === undefined) {
     return englishText;
+  }
+  // English is the key language; src/locales/en/ may only override single wordings without touching the key
+  if (lang === 'en') {
+    return translations[normalizeText(englishText)] || englishText;
   }
 
   englishText = normalizeText(englishText);

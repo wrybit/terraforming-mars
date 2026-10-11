@@ -36,6 +36,7 @@ import {defineComponent} from 'vue';
 import * as constants from '@/common/constants';
 import raw_settings from '@/genfiles/settings.json';
 import {vueRoot} from '@/client/components/vueRoot';
+import {translateText} from '@/client/directives/i18n';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {playerColorClass} from '@/common/utils/utils';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
@@ -325,7 +326,7 @@ export default defineComponent({
       } else if (Notification.permission === 'granted') {
         const notificationOptions = {
           icon: 'favicon.ico',
-          body: 'It\'s your turn!',
+          body: translateText('It\'s your turn!'),
         };
         const notificationTitle = constants.APP_NAME;
         try {

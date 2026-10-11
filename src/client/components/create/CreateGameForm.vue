@@ -924,7 +924,7 @@ export default defineComponent({
           this.showSettingsLoadResult('Restore settings', processor);
         }
       } catch (e) {
-        vueRoot(this).showAlert('Restore settings', 'Error restoring settings ' + e);
+        vueRoot(this).showAlert('Restore settings', translateText('Error restoring settings') + ': ' + e);
       }
     },
     applySettings(json: JSONObject): JSONProcessor {
@@ -961,7 +961,7 @@ export default defineComponent({
     showSettingsLoadResult(title: string, processor: JSONProcessor) {
       const root = vueRoot(this);
       if (processor.warnings.length > 0) {
-        root.showAlert(title, 'Settings loaded with these warnings: \n' + processor.warnings.join('\n'));
+        root.showAlert(title, translateText('Settings loaded with these warnings:') + '\n' + processor.warnings.join('\n'));
       } else {
         root.showAlert(title, 'Settings loaded.');
       }
@@ -1196,11 +1196,11 @@ export default defineComponent({
             return response.text().then((res) => new Error(res));
           });
         if (gameData === undefined) {
-          alert(this.$t('Game id ' + this.clonedGameId + ' not found'));
+          alert(translateTextWithParams('Game id ${0} not found', [String(this.clonedGameId)]));
           return undefined;
         }
         if (gameData instanceof Error) {
-          alert(this.$t('Error looking for predefined game ' + gameData.message));
+          alert(translateText('Error looking for predefined game') + ': ' + gameData.message);
           return undefined;
         }
         clonedGamedId = this.clonedGameId;

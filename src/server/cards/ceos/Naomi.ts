@@ -9,6 +9,7 @@ import {SelectOption} from '../../inputs/SelectOption';
 import {ColoniesHandler} from '../../colonies/ColoniesHandler';
 import {Resource} from '../../../common/Resource';
 import {ICeoCard} from './ICeoCard';
+import {message} from '../../logs/MessageBuilder';
 
 export class Naomi extends CeoCard implements ICeoCard {
   constructor() {
@@ -40,11 +41,11 @@ export class Naomi extends CeoCard implements ICeoCard {
 
     activeColonies.forEach((colony) => {
       player.defer(() => new OrOptions(
-        new SelectOption('Move the ' + colony.name + ' tile track marker to its HIGHEST value').andThen(() => {
+        new SelectOption(message('Move the ${0} tile track marker to its HIGHEST value', (b) => b.colony(colony))).andThen(() => {
           colony.trackPosition = MAX_COLONY_TRACK_POSITION;
           return undefined;
         }),
-        new SelectOption('Move the ' + colony.name + ' tile track marker to its LOWEST value').andThen(() => {
+        new SelectOption(message('Move the ${0} tile track marker to its LOWEST value', (b) => b.colony(colony))).andThen(() => {
           colony.trackPosition = colony.colonies.length;
           return undefined;
         }),

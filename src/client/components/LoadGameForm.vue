@@ -26,6 +26,7 @@ import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import {vueRoot} from '@/client/components/vueRoot';
 import {GameId} from '@/common/Types';
 import {paths} from '@/common/app/paths';
+import {translateText} from '@/client/directives/i18n';
 
 type LoadGameFormDataModel = {
   gameId: GameId | undefined;
@@ -49,7 +50,7 @@ export default defineComponent({
       const gameId = this.gameId;
       const rollbackCount = this.rollbackCount;
       if (gameId === undefined) {
-        alert('Specify a game id');
+        alert(translateText('Specify a game id'));
         return;
       }
       const loadGameForm: LoadGameFormModel = {
@@ -79,7 +80,7 @@ export default defineComponent({
           }
         })
         .catch((err) => {
-          alert('Error loading game');
+          alert(translateText('Error loading game'));
           console.error(err);
         });
     },
