@@ -37,8 +37,8 @@ describe('AI card income', () => {
     // Science tags played so far and in hand: the conference keeps drawing.
     player.playedCards.push(new OlympusConference(), new Research(), new TechnologyDemonstration(), new MarsUniversity());
     const context = valuationContext(game, player);
-    const flat = playerValue(player, context);
-    setPlayerTuning(player.id, 'cardIncome');
-    expect(playerValue(player, context)).is.greaterThan(flat);
+    const income = playerValue(player, context);
+    setPlayerTuning(player.id, 'noCardIncome');
+    expect(income).is.greaterThan(playerValue(player, context));
   });
 });

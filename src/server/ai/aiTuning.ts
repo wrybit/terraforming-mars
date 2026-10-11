@@ -150,7 +150,9 @@ export const BASELINE_TUNING: AiTuning = {
   opponentSpotShare: 0.25,
   cityDenialShare: 0,
   tagRateModel: 0,
-  drawCardModel: 0,
+  // Round 44 (1200 mirrored 1v1 games): cardIncome +0.31 VP per deal (z +0.39) – neutral, adopted for the human
+  // games (humans draw 1.24 cards per generation outside research, the AI 0.34).
+  drawCardModel: 2,
   // Round 19: boardHorizon6 neutral in AI-vs-AI (-0.2 VP, z -0.3), adopted for the human case: a city
   // next to free land in generation 11 instead of a spot with three greeneries (human test game).
   boardHorizon: 6,
@@ -245,7 +247,9 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 43 (1200 mirrored 1v1 games): awardActions +0.87 VP per deal (z +1.17), fixes a human-game error
   // (Edgedancer funded in the last generation at 3 : 1 while the opponent still had 46 M€) – adopted.
   awardActionSwing: 1,
-  flowFit: 0,
+  // Round 44: flowFit2 +0.42 VP per deal (z +0.55), flowFit (1) +0.02 – adopted at 2 for the human feedback (cards that
+  // fit the direction of the own game; candidate, round 45 checks it with noFlowFit).
+  flowFit: 2,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -465,6 +469,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human feedback: not the best card but the one that fits the direction the own game has taken.
   flowFit: {flowFit: 1},
   flowFit2: {flowFit: 2},
+  // Round 45: controls for the round 44 adoptions and a stronger fit.
+  noCardIncome: {drawCardModel: 0},
+  noFlowFit: {flowFit: 0},
+  flowFit3: {flowFit: 3},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
