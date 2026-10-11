@@ -62,10 +62,33 @@
 }
 
 .btn.server-update-overlay__reload {
+  position: relative;
+  overflow: hidden;
   margin: 0;
   line-height: 50px;
   padding: 0 32px;
   box-shadow: @floating-button-shadow;
+}
+
+// Automatic reload: a lighter layer fills the button from left to right, then the page reloads
+@server-update-reload-seconds: 10s;
+
+.server-update-overlay__reload-progress {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.22);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: server-update-reload-fill @server-update-reload-seconds linear forwards;
+  pointer-events: none;
+}
+
+.server-update-overlay__reload-label {
+  position: relative; // above the fill layer
+}
+
+@keyframes server-update-reload-fill {
+  to { transform: scaleX(1); }
 }
 
 .server-update-overlay__hint {

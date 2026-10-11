@@ -16,7 +16,11 @@
           <path d="M14 25 l7 7 l13 -15"/>
         </svg>
         <div class="server-update-overlay__title" v-i18n>Server updated successfully</div>
-        <button class="btn btn-submit btn-rounded server-update-overlay__reload" @click="reload" v-i18n>Reload</button>
+        <!-- Fills up within 10 s and then reloads by itself; a click reloads at once -->
+        <button class="btn btn-submit btn-rounded server-update-overlay__reload" @click="reload">
+          <span class="server-update-overlay__reload-progress" @animationend="reload"></span>
+          <span class="server-update-overlay__reload-label" v-i18n>Reload</span>
+        </button>
         <div class="server-update-overlay__hint">
           <span v-i18n>All games are saved.</span>
           <span v-i18n>After reloading, play continues seamlessly.</span>
