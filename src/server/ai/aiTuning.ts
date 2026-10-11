@@ -110,6 +110,10 @@ export type AiTuning = {
   milestoneProgressShare: number,
   /** M€ one energy production is worth per generation (stateValue.ts productionPerGeneration); 1.1 since the start. */
   energyProductionValue: number,
+  /** Weight of the trigger gain a card gives up when played before a playable effect card it would trigger (triggerOrder.ts), 0 = off. */
+  triggerOrderPenalty: number,
+  /** Weight of the trigger gain an effect card brings for the cards in hand (triggerOrder.ts), 0 = off. */
+  triggerOrderBonus: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -205,6 +209,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 33: milestone0 +2.36 VP (z +3.06) – progress before the claim counts nothing; claiming stays valued.
   milestoneProgressShare: 0,
   energyProductionValue: 1.1,
+  triggerOrderPenalty: 0,
+  triggerOrderBonus: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -396,6 +402,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   prior1: {cardPriorWeight: 1},
   denial25b: {draftDenial: 0.25},
   denial75b: {draftDenial: 0.75},
+  // Round 38: effect cards before the hand cards that trigger them (human feedback: Lichen before Decomposers).
+  triggerOrder: {triggerOrderPenalty: 1},
+  triggerBonus: {triggerOrderBonus: 0.5},
+  triggerBoth: {triggerOrderPenalty: 1, triggerOrderBonus: 0.5},
   // Before round 31: the baseline without bundle1.
   beforeBundle1: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, productionDiscount: 0.9, secondStepCandidates: 12},
   bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},

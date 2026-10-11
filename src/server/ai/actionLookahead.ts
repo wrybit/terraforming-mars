@@ -20,6 +20,8 @@ import {isTracingDecision, traceOptions} from './decisionTrace';
 import {describeResponse} from './decisionLabels';
 import {tuningOf} from './aiTuning';
 import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
+import {triggerOrderAdjustments} from './triggerOrder';
+import {CardName} from '../../common/cards/CardName';
 
 // Decides an action-phase move by playing every candidate move on a copy of the game and
 // valuing the resulting position (one-step lookahead). This captures the effect of any card
@@ -261,6 +263,15 @@ function isKeyMove(menu: OrOptions, response: InputResponse): boolean {
   return title === 'Pass for this generation' || title === 'Claim a milestone' || title.startsWith('Fund an award');
 }
 
+/** The hand card a move plays, if any. */
+function playedHandCard(response: InputResponse, player: IPlayer): CardName | undefined {
+  const inner = response.type === 'or' ? response.response : undefined;
+  if (inner?.type !== 'projectCard') {
+    return undefined;
+  }
+  return player.cardsInHand.some((card) => card.name === inner.card) ? inner.card as CardName : undefined;
+}
+
 function isPass(menu: OrOptions, response: InputResponse): boolean {
   const option = response.type === 'or' ? menu.options[response.index] : undefined;
   return option instanceof SelectOption && option.title === 'Pass for this generation';
@@ -389,6 +400,25 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
             item.entry.outcome.value = plainValues[index];
           });
         rolledOut = true;
+      }
+    }
+  }
+
+  // Play order: an effect card goes before the hand cards that trigger it (triggerOrder.ts).
+  // Applied after the re-ranking, which would otherwise drop it.
+  if (tuning.triggerOrderPenalty > 0 || tuning.triggerOrderBonus > 0) {
+    const playable = new Set<CardName>();
+    for (const {candidate} of tried) {
+      const name = playedHandCard(candidate.response, player);
+      if (name !== undefined) {
+        playable.add(name);
+      }
+    }
+    const adjustments = triggerOrderAdjustments(snapshot, player, context, playable, tuning.triggerOrderPenalty, tuning.triggerOrderBonus);
+    if (adjustments.size > 0) {
+      for (const {candidate, outcome} of tried) {
+        const name = playedHandCard(candidate.response, player);
+        outcome.value += name === undefined ? 0 : adjustments.get(name) ?? 0;
       }
     }
   }
