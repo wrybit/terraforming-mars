@@ -178,6 +178,8 @@
 }
 
 .games-overview-table {
+  // Full card width, so the delete column sits at the right edge even with few players
+  min-width: 100%;
   border-collapse: separate;
   border-spacing: @games-overview-gap-cell;
   white-space: nowrap;
@@ -251,6 +253,8 @@
   right: 0;
   z-index: 1;
   padding-left: 8px;
+  width: 1%; // as narrow as its button; the spare width goes to the other columns
+  text-align: right !important;
   background: #1d1e24;
   box-shadow: -10px 0 10px -6px rgba(0, 0, 0, 0.6);
 }

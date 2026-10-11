@@ -1,4 +1,4 @@
-// Server settings that can be changed on the admin page instead of editing the .env file by hand.
+// Server settings that can be changed on the admin page instead of editing the .env file by hand (it writes the file).
 // One list for both sides: the server only accepts these keys (serverSettingsFile.ts), the page shows them
 // in this order and grouping (ServerSettingsPanel.vue).
 
@@ -88,13 +88,11 @@ export function serverSettingDefinition(key: string): ServerSettingDefinition | 
   return SERVER_SETTINGS.find((setting) => setting.key === key);
 }
 
-/** One row of the admin page: the value in effect and where it comes from. */
+/** One row of the admin page: the value in the .env file and the one the server runs with. */
 export type ServerSettingState = {
   key: string,
-  /** From the .env file (or the container), before the admin page changed anything */
-  base: string | undefined,
-  /** Set on the admin page; undefined: the base value applies */
-  saved: string | undefined,
+  /** In the .env file; undefined: not set (the default applies) */
+  value: string | undefined,
   /** Value of the running server process (changes take effect after a restart) */
   running: string | undefined,
 };
@@ -103,5 +101,5 @@ export type ServerSettingsModel = {
   settings: ReadonlyArray<ServerSettingState>,
 };
 
-/** POST: key → new value; null removes the value set on the admin page (the .env value applies again). */
+/** POST: key → new value; null or an empty value removes the line from the .env file (the default applies). */
 export type ServerSettingsUpdate = Record<string, string | null>;

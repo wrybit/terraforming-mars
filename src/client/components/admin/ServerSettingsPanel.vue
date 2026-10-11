@@ -1,5 +1,5 @@
 <template>
-  <!-- Server settings instead of editing the .env file by hand: one card per group, save and restart at the bottom -->
+  <!-- The .env file of the server, editable here: one card per group, save and restart at the bottom -->
   <div class="server-settings">
     <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
     <ServerIdPrompt v-else-if="status === 'missingId' || status === 'wrongId'" :wrong="status === 'wrongId'"/>
@@ -29,15 +29,9 @@
                 @input="setValue(setting.key, ($event.target as HTMLInputElement).value)">
               <button v-if="setting.kind === 'secret'" type="button" class="btn btn-sm btn-tone-quiet" @click="toggleReveal(setting.key)" v-i18n>{{ revealed[setting.key] ? 'Hide' : 'Show' }}</button>
             </div>
-            <!-- Where the value comes from: the .env file, or changed here (then it can go back to the .env value) -->
-            <span class="server-settings-source">
-              <template v-if="isOverride(setting.key)">
-                <span v-i18n>Set here</span> ·
-                <button type="button" class="server-settings-reset" @click="resetToBase(setting.key)" v-i18n>Use .env value</button>
-              </template>
-              <span v-else-if="state(setting.key)?.base !== undefined" v-i18n>From .env</span>
-              <span v-else v-i18n>Not set</span>
-              <strong v-if="pendingRestart(setting.key)" class="server-settings-pending" v-i18n>Active after restart</strong>
+            <!-- Saved in the .env file but not yet in effect: the server reads it at its next start -->
+            <span v-if="pendingRestart(setting.key)" class="server-settings-source">
+              <strong class="server-settings-pending" v-i18n>Active after restart</strong>
             </span>
           </div>
         </div>
@@ -66,7 +60,7 @@ import {
 type DataModel = {
   status: 'loading' | 'missingId' | 'wrongId' | 'unreachable' | 'done',
   states: ReadonlyArray<ServerSettingState>,
-  // Values in the form; a key counts as changed when it differs from what is saved (or from the .env value)
+  // Values in the form; a key counts as changed when it differs from the .env file
   values: Record<string, string>,
   revealed: Record<string, boolean>,
   busy: boolean,
@@ -109,17 +103,13 @@ export default defineComponent({
     state(key: string): ServerSettingState | undefined {
       return this.states.find((state) => state.key === key);
     },
-    // Value the next start uses: set here, otherwise from the .env file
+    // Value in the .env file (the next start uses it); empty: not set
     configured(key: string): string {
-      const state = this.state(key);
-      return state?.saved ?? state?.base ?? '';
-    },
-    isOverride(key: string): boolean {
-      return this.state(key)?.saved !== undefined;
+      return this.state(key)?.value ?? '';
     },
     pendingRestart(key: string): boolean {
       const state = this.state(key);
-      return state !== undefined && (state.saved ?? state.base ?? '') !== (state.running ?? '');
+      return state !== undefined && (state.value ?? '') !== (state.running ?? '');
     },
     isOn(value: string | undefined): boolean {
       return isOnValue(value);
@@ -136,9 +126,6 @@ export default defineComponent({
     setValue(key: string, value: string): void {
       this.values = {...this.values, [key]: value};
       this.message = '';
-    },
-    resetToBase(key: string): void {
-      this.setValue(key, this.state(key)?.base ?? '');
     },
     apply(model: ServerSettingsModel): void {
       this.states = model.settings;
@@ -166,11 +153,11 @@ export default defineComponent({
       }
     },
     async save(): Promise<void> {
-      // Only changed keys; a value equal to the .env value is not stored here (the .env stays in charge)
+      // Only changed keys; an empty field removes the line from the .env file (the default applies)
       const update: ServerSettingsUpdate = {};
       for (const {key} of SERVER_SETTINGS) {
         if (this.values[key] !== this.configured(key)) {
-          update[key] = this.values[key] === (this.state(key)?.base ?? '') ? null : this.values[key];
+          update[key] = this.values[key] === '' ? null : this.values[key];
         }
       }
       this.busy = true;
@@ -180,7 +167,7 @@ export default defineComponent({
           throw new Error(await response.text());
         }
         this.apply(await response.json());
-        this.showMessage(translateText('Saved. Restart the server to apply the changes.'), false);
+        this.showMessage(translateText('Saved in the .env file. Restart the server to apply the changes.'), false);
       } catch (error) {
         this.showMessage(translateText('Could not save:') + ' ' + (error instanceof Error ? error.message : ''), true);
       } finally {

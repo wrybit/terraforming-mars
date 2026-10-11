@@ -3,50 +3,27 @@ import * as path from 'path';
 import * as dotenv from 'dotenv';
 import {SERVER_SETTINGS, ServerSettingsModel, ServerSettingsUpdate, serverSettingDefinition} from '../../common/admin/serverSettings';
 
-// Settings changed on the admin page live in their own file in the database folder (it survives updates and
-// is writable inside the container), next to the .env file the server is started with. At start they are laid
-// over the .env values; the admin page shows both, so a value can be reset to what the .env says.
+// The admin page reads and writes the server's .env file itself – one place for all settings. In Docker the
+// file is mounted into the container (SERVER_SETTINGS_FILE, see the update scripts); locally it is the .env in
+// the working directory. The server reads it at every start, so a restart applies the changes.
 
 function settingsFile(): string {
-  return process.env.SERVER_SETTINGS_FILE ?? path.resolve('db', 'server-settings.env');
+  return process.env.SERVER_SETTINGS_FILE ?? path.resolve('.env');
 }
 
-// Values before the admin settings were applied (.env file or container environment), and the values this
-// process actually runs with – a saved change only takes effect after a restart
-const baseValues = new Map<string, string | undefined>();
+// Earlier the admin page saved into its own file in the database folder; its values move into the .env once
+const legacySettingsFile = path.resolve('db', 'server-settings.env');
+
+// Values this process runs with: a saved change only takes effect after a restart
 const runningValues = new Map<string, string | undefined>();
 
-function readSaved(): Record<string, string> {
+function readContent(): string {
   try {
-    return dotenv.parse(fs.readFileSync(settingsFile(), 'utf8'));
+    return fs.readFileSync(settingsFile(), 'utf8');
   } catch {
-    // No file yet: nothing changed on the admin page
-    return {};
+    // No file yet: nothing set
+    return '';
   }
-}
-
-/** Called once at start (init.ts), before any module reads its settings. */
-export function applySavedServerSettings(): void {
-  const saved = readSaved();
-  for (const {key} of SERVER_SETTINGS) {
-    baseValues.set(key, process.env[key]);
-    if (saved[key] !== undefined) {
-      process.env[key] = saved[key];
-    }
-    runningValues.set(key, process.env[key]);
-  }
-}
-
-export function readServerSettings(): ServerSettingsModel {
-  const saved = readSaved();
-  return {
-    settings: SERVER_SETTINGS.map(({key}) => ({
-      key,
-      base: baseValues.get(key),
-      saved: saved[key],
-      running: runningValues.get(key),
-    })),
-  };
 }
 
 // Literal values for dotenv: single quotes take everything as is; values containing one use backticks
@@ -55,24 +32,74 @@ function serialize(key: string, value: string): string {
   return singleLine.includes('\'') ? `${key}=\`${singleLine.replace(/`/g, '')}\`` : `${key}='${singleLine}'`;
 }
 
-/** Merges the update into the saved settings; unknown keys are refused. Returns the new state. */
-export function writeServerSettings(update: ServerSettingsUpdate): ServerSettingsModel {
-  const saved = readSaved();
+function isLineOf(line: string, key: string): boolean {
+  return new RegExp(`^\\s*(export\\s+)?${key}\\s*=`).test(line);
+}
+
+// Changes only the lines of the given keys; comments and all other lines stay as they are
+function writeValues(update: ServerSettingsUpdate): void {
+  let lines = readContent().split('\n');
+  if (lines[lines.length - 1] === '') {
+    lines.pop();
+  }
   for (const [key, value] of Object.entries(update)) {
+    // A key set twice keeps only its first line
+    const first = lines.findIndex((line) => isLineOf(line, key));
+    lines = lines.filter((line, index) => index <= first || !isLineOf(line, key));
+    if (value === null || value === '') {
+      // Empty means not set: the server uses its default
+      if (first >= 0) {
+        lines.splice(first, 1);
+      }
+    } else if (first >= 0) {
+      lines[first] = serialize(key, value);
+    } else {
+      lines.push(serialize(key, value));
+    }
+  }
+  // In place (no new file): in Docker the file is mounted, a replaced file would not reach the host
+  fs.writeFileSync(settingsFile(), lines.join('\n') + '\n');
+}
+
+function migrateLegacySettings(): void {
+  if (!fs.existsSync(legacySettingsFile) || path.resolve(settingsFile()) === legacySettingsFile) {
+    return;
+  }
+  try {
+    const legacy = dotenv.parse(fs.readFileSync(legacySettingsFile, 'utf8'));
+    writeValues(Object.fromEntries(Object.entries(legacy).filter(([key]) => serverSettingDefinition(key) !== undefined)));
+    fs.rmSync(legacySettingsFile);
+    console.log('Moved the admin settings from db/server-settings.env into ' + settingsFile());
+  } catch (error) {
+    console.error('Could not move db/server-settings.env into the settings file', error);
+  }
+}
+
+/** Called once at start (init.ts), before any module reads its settings. */
+export function applyServerSettings(): void {
+  migrateLegacySettings();
+  for (const [key, value] of Object.entries(dotenv.parse(readContent()))) {
+    process.env[key] = value;
+  }
+  for (const {key} of SERVER_SETTINGS) {
+    runningValues.set(key, process.env[key]);
+  }
+}
+
+export function readServerSettings(): ServerSettingsModel {
+  const values = dotenv.parse(readContent());
+  return {
+    settings: SERVER_SETTINGS.map(({key}) => ({key, value: values[key], running: runningValues.get(key)})),
+  };
+}
+
+/** Writes the update into the settings file; unknown keys are refused. Returns the new state. */
+export function writeServerSettings(update: ServerSettingsUpdate): ServerSettingsModel {
+  for (const key of Object.keys(update)) {
     if (serverSettingDefinition(key) === undefined) {
       throw new Error('unknown setting ' + key);
     }
-    if (value === null) {
-      delete saved[key];
-    } else {
-      saved[key] = value;
-    }
   }
-  const lines = [
-    '# Written by the admin page (Server settings). Overrides the .env file; takes effect after a restart.',
-    ...SERVER_SETTINGS.filter(({key}) => saved[key] !== undefined).map(({key}) => serialize(key, saved[key])),
-  ];
-  fs.mkdirSync(path.dirname(settingsFile()), {recursive: true});
-  fs.writeFileSync(settingsFile(), lines.join('\n') + '\n');
+  writeValues(update);
   return readServerSettings();
 }
