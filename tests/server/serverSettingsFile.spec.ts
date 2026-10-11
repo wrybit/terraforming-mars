@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import {readServerSettings, writeServerSettings} from '../../src/server/admin/serverSettingsFile';
+import {applyServerSettings, readServerSettings, writeServerSettings} from '../../src/server/admin/serverSettingsFile';
 
 describe('serverSettingsFile', () => {
   let directory: string;
@@ -49,5 +49,19 @@ describe('serverSettingsFile', () => {
 
   it('refuses unknown keys', () => {
     expect(() => writeServerSettings({PATH: '/tmp'})).to.throw('unknown setting PATH');
+  });
+
+  it('applies the file, but keeps the variables the process was started with', () => {
+    fs.writeFileSync(file, 'TM_TEST_LAUNCH=fromFile\nTM_TEST_FILE=fromFile\n');
+    process.env.TM_TEST_LAUNCH = 'fromLaunch';
+    process.env.TM_TEST_FILE = 'fromDotenv';
+    try {
+      applyServerSettings(new Set(['TM_TEST_LAUNCH']));
+      expect(process.env.TM_TEST_LAUNCH).eq('fromLaunch');
+      expect(process.env.TM_TEST_FILE).eq('fromFile');
+    } finally {
+      delete process.env.TM_TEST_LAUNCH;
+      delete process.env.TM_TEST_FILE;
+    }
   });
 });

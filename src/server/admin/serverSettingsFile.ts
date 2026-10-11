@@ -75,11 +75,17 @@ function migrateLegacySettings(): void {
   }
 }
 
-/** Called once at start (init.ts), before any module reads its settings. */
-export function applyServerSettings(): void {
+/**
+ * Called once at start (init.ts), before any module reads its settings.
+ * The file overrides what dotenv loaded, but not the variables the process was started with
+ * (e.g. PORT=8095 for a second local server): those were set on purpose for this one start.
+ */
+export function applyServerSettings(launchEnvironmentKeys: ReadonlySet<string> = new Set()): void {
   migrateLegacySettings();
   for (const [key, value] of Object.entries(dotenv.parse(readContent()))) {
-    process.env[key] = value;
+    if (!launchEnvironmentKeys.has(key)) {
+      process.env[key] = value;
+    }
   }
   for (const {key} of SERVER_SETTINGS) {
     runningValues.set(key, process.env[key]);
