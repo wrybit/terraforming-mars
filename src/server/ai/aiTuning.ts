@@ -164,7 +164,8 @@ export const BASELINE_TUNING: AiTuning = {
   secondStepCandidates: 16,
   opponentReplies: 0,
   opponentWeightTwoPlayers: 1,
-  cardPriorWeight: 3,
+  // Round 36 (bundle2, 600 mirrored deals): cardPriorWeight 2 with awardSwing 0.3 +1.96 VP (z +4.73).
+  cardPriorWeight: 2,
   draftPriorWeight: 0,
   corporationPriorWeight: 0,
   plantProductionValue: 2,
@@ -172,7 +173,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Adopted on purpose without a measurable AI-vs-AI gain (round 13: +0.6 VP per deal, z +0.7; funded
   // awards 829 → 210 per 200 games, funder wins 81 → 87 %): a human overtook three funded awards
   // (30 VP swing), the AI opponent in batches does not chase awards like that.
-  awardSwing: 0.15,
+  awardSwing: 0.3,
   keepHandUntilEnd: 1,
   endgameMoney: 1,
   accumulatorValue: 0,
@@ -388,6 +389,13 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   prior2: {cardPriorWeight: 2},
   // Round 35 candidates together (awardRisk30 +1.00 z +1.44, prior2 +0.73 z +0.99), tested with all games.
   bundle2: {awardSwing: 0.3, cardPriorWeight: 2},
+  // Before round 37: the baseline without bundle2.
+  beforeBundle2: {awardSwing: 0.15, cardPriorWeight: 3},
+  // Round 37: further along both directions and the hate draft with today's baseline.
+  award45: {awardSwing: 0.45},
+  prior1: {cardPriorWeight: 1},
+  denial25b: {draftDenial: 0.25},
+  denial75b: {draftDenial: 0.75},
   // Before round 31: the baseline without bundle1.
   beforeBundle1: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, productionDiscount: 0.9, secondStepCandidates: 12},
   bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},
