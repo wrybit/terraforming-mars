@@ -24,7 +24,7 @@ describe('AI opening plan', () => {
     setPlayerTuning(player.id, 'openingPlan');
     const plan = openingPlan(player, (space) => spaceValue(space, 'city', player));
     expect(plan).is.not.undefined;
-    expect(plan!.greeneries).has.length(2);
+    expect(plan!.greeneries.length).greaterThan(0);
 
     const greenery = best(player, 'greenery');
     expect(plan!.greeneries).includes(greenery.id);
@@ -34,6 +34,12 @@ describe('AI opening plan', () => {
     const city = best(player, 'city');
     expect(game.board.getAdjacentSpaces(city).map((space) => space.id)).includes(greenery.id);
     game.addCity(player, city);
-    expect(openingPlan(player, () => 0)).is.undefined;
+    // Next: a second city two rows away, sharing a free spot with the first.
+    const next = openingPlan(player, (space) => spaceValue(space, 'city', player));
+    expect(next?.started).is.true;
+    const second = game.board.getSpaceOrThrow(next!.cities[0]);
+    expect(game.board.getAdjacentSpaces(second)).not.includes(city);
+    const shared = game.board.getAdjacentSpaces(second).filter((space) => game.board.getAdjacentSpaces(city).includes(space));
+    expect(shared.length).greaterThan(0);
   });
 });

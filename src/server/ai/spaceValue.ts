@@ -229,13 +229,16 @@ function planBonus(space: Space, kind: TileKind, player: IPlayer): number {
   }
   const victoryPoint = victoryPointValue(player.game);
   if (kind === 'city') {
-    return space.id === plan.city ? 2 * victoryPoint : 0;
+    // The first planned city counts fully, the second half (it may come later or elsewhere).
+    const index = plan.cities.indexOf(space.id);
+    return index < 0 ? 0 : (index === 0 ? 2 : 1) * victoryPoint;
   }
-  // A greenery on the planned city spot would block the own plan.
-  if (space.id === plan.city) {
+  // A greenery on a planned city spot would block the own plan.
+  if (plan.cities.includes(space.id)) {
     return -2 * victoryPoint;
   }
-  return plan.greeneries.includes(space.id) ? 2 * victoryPoint : 0;
+  // Once the first city stands, its neighbours already count; the plan only steers between them.
+  return plan.greeneries.includes(space.id) ? (plan.started ? 1 : 2) * victoryPoint : 0;
 }
 
 export function spaceValue(space: Space, kind: TileKind, player: IPlayer): number {
