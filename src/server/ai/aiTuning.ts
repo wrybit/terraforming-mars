@@ -435,6 +435,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 41: a human rush ended a game in generation 8 – let the observed speed count more.
   lengthFlex2: {lengthDeviation: 2},
   lengthFlex3: {lengthDeviation: 3},
+  // Round 42: further along – how far may the observed speed move the estimate?
+  lengthFlex4: {lengthDeviation: 4},
+  lengthFlex5: {lengthDeviation: 5},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
