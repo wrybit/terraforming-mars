@@ -1,10 +1,7 @@
-import {APP_NAME} from '@/common/constants';
 import {$t} from '../directives/i18n';
 import {Phase} from '@/common/Phase';
 import {turnTask} from './turnTask';
-
-// Short form in the game tab: status, player and generation should stay visible in the narrow tab.
-const SHORT_APP_NAME = 'TM';
+import {titleLong, titleShort} from './serverIdentity';
 
 // Only what the title needs – fits the player, spectator and end views.
 export type TitleView = {
@@ -13,12 +10,10 @@ export type TitleView = {
   waitingFor?: {optional?: boolean};
 };
 
+// Without a title: the long server title (start page); otherwise "<page> | <short server title>", e.g. "Cards List | TM".
+// Short at the end so the page name stays visible in a narrow tab
 export function setDocumentTitle(title?: string): void {
-  if (title === undefined) {
-    document.title = $t(APP_NAME);
-  } else {
-    document.title = `${$t(title)} | ${$t(APP_NAME)}`;
-  }
+  document.title = title === undefined ? titleLong() : `${$t(title)} | ${titleShort()}`;
 }
 
 // "Your turn" only for mandatory input – the same condition as for the title animation.
@@ -39,7 +34,7 @@ export function gameDocumentTitle(view: TitleView, state: string | undefined = i
   return shortDocumentTitle([state, view.thisPlayer?.name, `G${view.game.generation}`, view.game.name]);
 }
 
-// Shared structure of all game titles: parts joined with " · ", empty parts dropped, "| TM" at the end.
+// Shared structure of all game titles: parts joined with " · ", empty parts dropped, "| <short server title>" at the end.
 export function shortDocumentTitle(parts: ReadonlyArray<string | undefined>): string {
-  return `${parts.filter((part) => part !== undefined && part !== '').join(' · ')} | ${SHORT_APP_NAME}`;
+  return `${parts.filter((part) => part !== undefined && part !== '').join(' · ')} | ${titleShort()}`;
 }

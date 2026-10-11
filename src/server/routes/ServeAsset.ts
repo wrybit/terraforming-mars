@@ -10,6 +10,7 @@ import {isProduction} from '../utils/server';
 import {Request} from '../Request';
 import {Response} from '../Response';
 import {RouteError} from './RouteError';
+import {withServerIdentity} from '../server/serverIdentity';
 
 type Encoding = 'gzip' | 'br';
 
@@ -101,7 +102,9 @@ export class ServeAsset extends Handler {
     }
 
     try {
-      const data = await this.fileApi.readFile(file);
+      const raw = await this.fileApi.readFile(file);
+      // The page carries this server's titles and name (TITLE_LONG, TITLE_SHORT, SERVER_NAME)
+      const data = file === 'assets/index.html' ? Buffer.from(withServerIdentity(raw.toString('utf8'))) : raw;
       if (this.cacheAssets === true) {
         this.cache.set(file, data);
       }

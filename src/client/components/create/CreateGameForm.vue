@@ -596,7 +596,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    setDocumentTitle('Create New Game');
+    setDocumentTitle('New game');
     this.stopStickyObserver = observeStickyBottom(this.$refs.createCard as HTMLElement, CREATE_CARD_BOTTOM_PX, (stuck) => {
       this.createCardStuck = stuck;
     });

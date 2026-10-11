@@ -54,7 +54,10 @@ import {SITE_LINKS} from '@/client/components/startScreen/siteLinks';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
 import {prefersReducedMotion} from '@/client/utils/motion';
-import {serverName} from '@/client/utils/serverStatus';
+import {serverName as readServerName} from '@/client/utils/serverIdentity';
+
+// Name under the title, from the server's .env (SERVER_NAME); fixed for the page's lifetime
+const serverName = readServerName();
 
 const links = SITE_LINKS;
 
