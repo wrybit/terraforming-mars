@@ -16,7 +16,7 @@
   "Action: Increase your energy production 1 step IF YOU HAVE NO ENERGY RESOURCES, or spend 3M€ to draw a building card.": "アクション：電力を所持していない場合、電力産出+1. または 3MC支払い、土建タグカードを1枚入手.",
 
   "Cooperative": "協同組合",
-  "Kuiper Cooperative": "カイパー協同組合",
+  "Kuiper Cooperative": "カイパー共同体",
   "You start with 33 M€. Increase titanium production 1 step.": "初期資源：33MC. 初期産出：チタン産出+1.",
   "Action: Add 1 asteroid here for every space tag you have.": "アクション：宇宙タグ1つ毎にこのカード上に1小惑星追加.",
   "Effect: When you use the AQUIFER or ASTEROID standard projects, you can spend asteroids on card as 1M€ each.": "効果：標準プロジェクト「海洋配置」 または 「温度上昇」を実行時、このカード上の小惑星を1MCとして支払ってもよい.",
@@ -40,7 +40,7 @@
   "You start with 38 M€ and 1 steel production.": "初期資源：38MC. 初期産出：建材産出+1.",
   "Effect: When you play a building tag, including this, gain 1 microbe to this card, or remove 2 microbes here and raise your plant production 1 step.": "効果：土建タグをプレイ時、このカード上に1微生物追加 または このカード上から2微生物除去し、植物産出+1.",
 
-  "Tycho Magnetics": "ティコマグネティックス",
+  "Tycho Magnetics": "ティコ・マグネティクス",
   "You start with 42 M€. Increase your energy production 1 step.": "初期資源：42MC. 初期産出：電力産出+1.",
   "Action: Spend any amount of energy to draw the that many cards. Keep 1 and discard the rest.": "アクション：x電力を支払う. デッキの上からx枚を見る.その内、1枚を獲得し残りを捨て札にする.",
 
