@@ -21,6 +21,8 @@ import {describeResponse} from './decisionLabels';
 import {tuningOf} from './aiTuning';
 import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
 import {triggerOrderAdjustments} from './triggerOrder';
+import {sellToAffordResponses} from './sellToAfford';
+import {isSimulating} from './simulationSandbox';
 import {CardName} from '../../common/cards/CardName';
 
 // Decides an action-phase move by playing every candidate move on a copy of the game and
@@ -67,7 +69,9 @@ function cardPayment(input: SelectCardToPlay<any>, card: IProjectCard, player: I
  */
 function sellPatentResponses(input: SelectCard<ICard>, player: IPlayer): Array<InputResponse> {
   if (remainingProductionPhases(player.game, player) > 0) {
-    return [];
+    // Before: a sale that pays for a milestone or award this turn (sellToAfford.ts). Not inside
+    // game copies (rollouts, replies): the hand values cost too much there.
+    return tuningOf(player).sellToAfford > 0 && !isSimulating() ? sellToAffordResponses(player, handCardValues(player)) : [];
   }
   const unplayable = input.cards.filter((card) => !isIProjectCard(card) || !player.canPlay(card));
   return unplayable.length === 0 ? [] : [{type: 'card', cards: unplayable.map((card) => card.name)}];
@@ -272,6 +276,11 @@ function playedHandCard(response: InputResponse, player: IPlayer): CardName | un
   return player.cardsInHand.some((card) => card.name === inner.card) ? inner.card as CardName : undefined;
 }
 
+function isSellPatents(menu: OrOptions, response: InputResponse): boolean {
+  const option = response.type === 'or' ? menu.options[response.index] : undefined;
+  return option instanceof SelectCard && option.title === 'Sell patents';
+}
+
 function isPass(menu: OrOptions, response: InputResponse): boolean {
   const option = response.type === 'or' ? menu.options[response.index] : undefined;
   return option instanceof SelectOption && option.title === 'Pass for this generation';
@@ -323,7 +332,10 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
 
   // Second step for the best few first moves that leave an action in this turn.
   const tuning = tuningOf(player);
-  const promising = [...tried].sort((a, b) => b.outcome.value - a.outcome.value).slice(0, tuning.secondStepCandidates);
+  // A sale alone loses value; it only pays with the claim after it, so it always gets a second step.
+  const ranked = [...tried].sort((a, b) => b.outcome.value - a.outcome.value);
+  const promising = [...ranked.slice(0, tuning.secondStepCandidates),
+    ...ranked.slice(tuning.secondStepCandidates).filter((entry) => isSellPatents(menu, entry.candidate.response))];
   for (const entry of promising) {
     const next = entry.outcome.next;
     if (next === undefined) {
