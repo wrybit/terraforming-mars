@@ -999,3 +999,78 @@ each(range(10), {
   mask-image: none;
   row-gap: 24px;
 }
+
+// ---------- Loading skeleton (StatsSkeleton.vue): the boxes empty, sized like their content ----------
+// Heights measured from the loaded overview, so the page does not jump when the content replaces them
+@stats-skeleton-fill: rgba(255, 255, 255, 0.05);
+
+.stats-skeleton-kpi {
+  height: 61px;
+  box-sizing: border-box;
+}
+
+// Like .stats-showcase: same paddings, cards at the showcase size (zoom 0.62) plus their caption
+.stats-skeleton-cards {
+  display: flex;
+  gap: 16px;
+  overflow: hidden;
+  padding: 14px 0 6px;
+}
+
+.stats-skeleton-card {
+  flex: 0 0 154px;
+  height: 272px;
+  border-radius: 12px;
+  background: @stats-skeleton-fill;
+}
+
+.stats-skeleton-block {
+  border-radius: @create-game-radius-small;
+  background: @stats-skeleton-fill;
+
+  &--chart {
+    height: 273px;
+  }
+
+  &--short {
+    height: 80px;
+  }
+
+  &--tall {
+    height: 320px;
+  }
+}
+
+// Middle of the screen, not of the (long) page; on its own dark plate so it stands out from the boxes behind it
+.stats-skeleton-loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: @create-game-radius-small;
+  background: @create-game-surface-strong;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -50%);
+  color: @create-game-dim;
+  font-size: 13px;
+}
+
+@media only screen and (max-width: @stats-narrow) {
+  .stats-skeleton-kpi {
+    height: 57px;
+  }
+
+  .stats-skeleton-card {
+    height: 253px;
+  }
+
+  .stats-skeleton-block--chart {
+    height: 217px;
+  }
+}

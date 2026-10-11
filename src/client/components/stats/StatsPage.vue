@@ -63,7 +63,7 @@
             v-i18n>{{ entry.label }}</a>
         </nav>
 
-        <p v-if="status === 'loading'" class="stats-card stats-note" v-i18n>Loading…</p>
+        <StatsSkeleton v-if="status === 'loading'" :overview="view.type === 'tab' && view.tab === 'overview'"/>
         <p v-else-if="status === 'error'" class="stats-card stats-note" v-i18n>Could not load the statistics.</p>
         <p v-else-if="games.length === 0" class="stats-card stats-note" v-i18n>No finished games yet.</p>
         <template v-else>
@@ -95,6 +95,7 @@ import {resetOptions, toggleOption} from '@/client/components/cardlist/filterSel
 import PageTitle from '@/client/components/common/PageTitle.vue';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import StatsOverview from './StatsOverview.vue';
+import StatsSkeleton from './StatsSkeleton.vue';
 import StatsGamesView from './StatsGamesView.vue';
 import StatsPlayersView from './StatsPlayersView.vue';
 import StatsRecordsView from './StatsRecordsView.vue';
@@ -126,7 +127,7 @@ type DataModel = {
 // Structure, filters and tiles as in the card list, so it feels like part of the app.
 export default defineComponent({
   name: 'StatsPage',
-  components: {CardListFilterGroup, PageTitle, PageToolbar, StatsOverview, StatsGamesView, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsTopView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
+  components: {CardListFilterGroup, PageTitle, PageToolbar, StatsOverview, StatsSkeleton, StatsGamesView, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsTopView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
   provide() {
     // Player color the same everywhere: the color someone played most often
     return {

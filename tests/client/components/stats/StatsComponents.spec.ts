@@ -8,6 +8,7 @@ import StatsTable from '@/client/components/stats/StatsTable.vue';
 import StatsEntityList from '@/client/components/stats/StatsEntityList.vue';
 import StatsEntityDetail from '@/client/components/stats/StatsEntityDetail.vue';
 import StatsOverview from '@/client/components/stats/StatsOverview.vue';
+import {OVERVIEW_KPI_COUNT} from '@/client/components/stats/statsOverviewSections';
 import StatsPlayersView from '@/client/components/stats/StatsPlayersView.vue';
 import StatsRecordsView from '@/client/components/stats/StatsRecordsView.vue';
 import StatsGameList from '@/client/components/stats/StatsGameList.vue';
@@ -78,6 +79,8 @@ describe('Stats components', () => {
 
   it('overview, players, records and small parts mount', () => {
     expect(mount(StatsOverview, {...config, props: {games, results, chartWidth: 640}}).findAll('.stats-win')).has.length(5);
+    // The loading skeleton shows as many key figure tiles as the overview (statsOverviewSections.ts)
+    expect(mount(StatsOverview, {...config, props: {games, results, chartWidth: 640}}).findAll('.stats-kpi')).has.length(OVERVIEW_KPI_COUNT);
     expect(mount(StatsPlayersView, {...config, props: {results, names: playerNames(games)}}).findAll('.stats-player-card')).has.length(3);
     expect(mount(StatsRecordsView, {...config, props: {results}}).text()).to.include('120');
     expect(mount(StatsGameList, {...config, props: {games}}).findAll('tbody tr')).has.length(3);

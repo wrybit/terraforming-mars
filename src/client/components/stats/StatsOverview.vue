@@ -1,7 +1,7 @@
 <template>
   <div class="stats-stack">
     <section class="stats-card">
-      <h2 v-i18n>At a glance</h2>
+      <h2 v-i18n>{{ titles.glance }}</h2>
       <StatsKpis :tiles="tiles"/>
     </section>
 
@@ -17,7 +17,7 @@
     <!-- Group games 2/3, solo games 1/3 beside them: a solo win means terraforming in time, not beating someone -->
     <div v-if="groupLineups.length > 0 || soloEntries.length > 0" class="stats-lineup-split" :class="{'stats-lineup-split--both': groupLineups.length > 0 && soloEntries.length > 0}">
       <section v-if="groupLineups.length > 0" class="stats-card">
-        <h2 v-i18n>Wins per lineup</h2>
+        <h2 v-i18n>{{ titles.lineups }}</h2>
         <div class="stats-lineups">
           <div v-for="lineup in groupLineups" :key="lineup.lineup">
             <h3>{{ lineup.lineup }} <span class="stats-dim">· {{ lineup.games }} {{ gamesLabel(lineup.games) }}</span></h3>
@@ -63,19 +63,19 @@
 
     <div class="stats-columns">
       <section class="stats-card">
-        <h2 v-i18n>Points in the last games</h2>
+        <h2 v-i18n>{{ titles.recent }}</h2>
         <StatsLineChart :series="recentSeries" :labels="recentLabels" :width="chartWidth" highlightLabel="Win"/>
       </section>
       <section class="stats-card">
-        <h2 v-i18n>Games by generations</h2>
+        <h2 v-i18n>{{ titles.generations }}</h2>
         <StatsBarChart :bars="generationBars" :width="chartWidth"/>
       </section>
       <section class="stats-card">
-        <h2 v-i18n>Avg. points per generation</h2>
+        <h2 v-i18n>{{ titles.points }}</h2>
         <StatsLineChart :series="pointsSeries" :labels="generationLabels(pointsSeries)" :width="chartWidth"/>
       </section>
       <section class="stats-card">
-        <h2 v-i18n>Avg. terraforming per generation</h2>
+        <h2 v-i18n>{{ titles.globals }}</h2>
         <StatsLineChart :series="globalsSeries" :labels="generationLabels(globalsSeries)" :width="chartWidth" :maximumValue="100" :step="20"/>
       </section>
     </div>
@@ -100,6 +100,7 @@ import {averageGlobalsByGeneration, averagePointsByGeneration} from './statsSeri
 import {statsHref, StatsTopKind} from './statsNavigation';
 import {SHOWCASE_SIZE, SHOWCASE_TITLES} from './statsShowcase';
 import {isSoloLineup, soloStats, SoloStats} from './statsSolo';
+import {OVERVIEW_TITLES} from './statsOverviewSections';
 import {translateText} from '@/client/directives/i18n';
 
 const RECENT_GAMES = 15;
@@ -119,6 +120,9 @@ export default defineComponent({
     games: {type: Array as PropType<ReadonlyArray<StatsGame>>, required: true},
     results: {type: Array as PropType<ReadonlyArray<StatsPlayerResult>>, required: true},
     chartWidth: {type: Number, required: true},
+  },
+  data() {
+    return {titles: OVERVIEW_TITLES};
   },
   computed: {
     tiles(): Array<StatsKpi> {

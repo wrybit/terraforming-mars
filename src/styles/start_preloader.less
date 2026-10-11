@@ -6,12 +6,8 @@
   top: 50%;
   left: 50%;
   z-index: 30;
-  width: 160px;
-  height: 2px;
+  .preloader-track();
   margin-left: -80px;
-  border-radius: 1px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.15);
 }
 
 .start-screen-preloader-fill {
@@ -28,5 +24,31 @@
   &::before,
   .notice {
     visibility: hidden;
+  }
+}
+
+// Waiting without a known progress (LoadingBar.vue, e.g. statistics): the same bar, a segment runs through it
+.loading-bar {
+  .preloader-track();
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 40%;
+    background: @bg_action;
+    animation: loading-bar-run 1.1s ease-in-out infinite;
+  }
+}
+
+@keyframes loading-bar-run {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(250%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-bar::after {
+    animation-duration: 3s;
   }
 }
