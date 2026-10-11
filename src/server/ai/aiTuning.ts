@@ -201,7 +201,8 @@ export const BASELINE_TUNING: AiTuning = {
   // a human scored 7–8 VP with each Jovian per-tag card while the AI valued them with today's tags.
   tagPointOutlook: 0.6,
   // Rounds 29 + 31 (milestoneRace30): +0.81 VP each, pooled z +1.58 – chasing milestones costs the engine.
-  milestoneProgressShare: 0.3,
+  // Round 33: milestone0 +2.36 VP (z +3.06) – progress before the claim counts nothing; claiming stays valued.
+  milestoneProgressShare: 0,
   energyProductionValue: 1.1,
 };
 
@@ -377,6 +378,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   milestone0: {milestoneProgressShare: 0},
   cards14: {buyMargin: -4, handTargetEarly: 14, handTargetLate: 6},
   pass02: {passPenalty: 0.2},
+  // Round 34: control of the adoption, award risk and plant production with today's baseline.
+  milestone30: {milestoneProgressShare: 0.3},
+  awardSwing0: {awardSwing: 0},
+  plants25b: {plantProductionValue: 2.5},
   // Before round 31: the baseline without bundle1.
   beforeBundle1: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, productionDiscount: 0.9, secondStepCandidates: 12},
   bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},
