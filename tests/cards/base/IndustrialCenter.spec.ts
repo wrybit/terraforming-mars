@@ -38,6 +38,8 @@ describe('IndustrialCenter', () => {
     cast(card.play(player), undefined);
     runAllActions(game);
     const selectSpace = cast(player.popWaitingFor(), SelectSpace);
+    // The client learns which special tile is placed (label, color and image of the placement)
+    expect(selectSpace.toModel().tile).deep.eq({type: TileType.INDUSTRIAL_CENTER, card: card.name});
     const space = selectSpace.spaces[0];
     selectSpace.cb(space);
 

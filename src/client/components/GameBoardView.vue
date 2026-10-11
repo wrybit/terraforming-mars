@@ -145,8 +145,8 @@ export default defineComponent({
   computed: {
     // Only during a space selection on the board shown large (not when Mars is merely enlarged for viewing)
     placementDescription(): PlacementDescription | undefined {
-      const title = placementZoom.inputTitle;
-      return title === undefined ? undefined : describePlacement(title, this.game);
+      const input = placementZoom.input;
+      return input === undefined ? undefined : describePlacement(input, this.game);
     },
     // Phone/tablet layout: the special spaces sit in the board as columns of the visible section (Board.vue)
     mobileLayout(): boolean {

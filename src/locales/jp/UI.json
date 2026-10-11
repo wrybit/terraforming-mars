@@ -1181,6 +1181,7 @@
   "Action cards": "アクションカード",
   "Show Mars enlarged": "火星を拡大表示",
   "Place city": "都市を配置",
+  "Place ${0}": "${0}を配置",
   "Place ocean": "海洋を配置",
   "Show Mars enlarged and choose a space": "火星を拡大表示してマスを選択",
   "Show the Moon enlarged and choose a space": "月を拡大表示してマスを選択",

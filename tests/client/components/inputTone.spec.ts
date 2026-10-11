@@ -2,6 +2,7 @@ import {expect} from 'chai';
 import {inputTone} from '@/client/components/inputTone';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {CardName} from '@/common/cards/CardName';
+import {TileType} from '@/common/TileType';
 
 // Minimal input model for color detection
 function input(fields: Record<string, unknown>): PlayerInputModel {
@@ -13,6 +14,12 @@ describe('inputTone', () => {
     expect(inputTone(input({type: 'player', title: 'Select player to steal ${0} ${1} from'}))).eq('attack');
     expect(inputTone(input({type: 'player', title: 'Select player to decrease ${0} production by ${1} step(s)'}))).eq('attack');
     expect(inputTone(input({type: 'option', title: {message: 'Remove ${0} plants from ${1}', data: []}}))).eq('attack');
+  });
+
+  it('a card\'s special tile is brown, even if the title mentions a city', () => {
+    const tile = {type: TileType.INDUSTRIAL_CENTER, card: CardName.INDUSTRIAL_CENTER};
+    expect(inputTone(input({type: 'space', title: 'Select space adjacent to a city tile', tile}))).eq('special');
+    expect(inputTone(input({type: 'space', title: 'Select space adjacent to a city tile'}))).eq('city');
   });
 
   it('selecting a player without attack is violet', () => {

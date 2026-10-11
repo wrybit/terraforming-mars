@@ -12,6 +12,7 @@ import {Warning} from '../cards/Warning';
 import {Units} from '../Units';
 import {ClaimedToken} from '../underworld/UnderworldPlayerData';
 import {CardName} from '../cards/CardName';
+import {TileType} from '../TileType';
 
 export type BaseInputModel = {
   title: string | Message;
@@ -95,9 +96,17 @@ export type SelectPlayerModel = BaseInputModel & {
   players: ReadonlyArray<Color>;
 }
 
+// The tile a space selection places, when the server knows it (special tiles of cards). Without it the client
+// derives the tile from the title (city, greenery, ocean).
+export type SelectSpaceTile = {
+  type: TileType;
+  card?: CardName;
+};
+
 export type SelectSpaceModel = BaseInputModel & {
   type: 'space';
   spaces: ReadonlyArray<SpaceId>;
+  tile?: SelectSpaceTile;
 }
 
 export type SelectAmountModel = BaseInputModel & {

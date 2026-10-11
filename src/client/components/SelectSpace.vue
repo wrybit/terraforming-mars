@@ -35,8 +35,8 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {SelectSpaceResponse} from '@/common/inputs/InputResponse';
 import SpaceConfirmPopover from '@/client/components/SpaceConfirmPopover.vue';
-import {placementLabel, previewTileClass, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
-import {ZoomBoard, placementZoom, releasePlacementZoom, releasePlacementZoomAndWait, requestPlacementZoom, setPlacementInputTitle} from '@/client/components/board/placementZoom';
+import {placementActionLabel, previewTileClass, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {ZoomBoard, placementZoom, releasePlacementZoom, releasePlacementZoomAndWait, requestPlacementZoom, setPlacementInput} from '@/client/components/board/placementZoom';
 
 const PREVIEW_CLASS = 'space-tile-preview';
 // Spaces on the Mars board (incl. colony spaces next to it) and on the Moon: the board they are on gets enlarged
@@ -94,10 +94,9 @@ export default defineComponent({
     };
   },
   computed: {
-    // Known tile as a short action ("Place city"), otherwise the title of the space selection itself
+    // Known tile as a short action ("Place city", "Place Industrial Center"), otherwise the title of the space selection
     placementAction(): string {
-      const tile = previewTileForSpaceInput(this.playerinput.title);
-      return tile !== undefined ? this.$t(placementLabel(tile)) : this.$t(this.playerinput.title);
+      return placementActionLabel(this.playerinput) ?? this.$t(this.playerinput.title);
     },
   },
   components: {
@@ -125,7 +124,7 @@ export default defineComponent({
     // as a hexagon (clip-path) and would cut off shadow and glow.
     showTilePreview(tile: HTMLElement) {
       this.removeTilePreview();
-      const previewTile = previewTileForSpaceInput(this.playerinput.title);
+      const previewTile = previewTileForSpaceInput(this.playerinput);
       const board = tile.parentElement;
       if (previewTile === undefined || board === null) {
         return;
@@ -274,12 +273,12 @@ export default defineComponent({
     });
     releasePlacementZoom();
     // A newer space selection may already have set its own title
-    if (placementZoom.inputTitle === this.playerinput.title) {
-      setPlacementInputTitle(undefined);
+    if (placementZoom.input?.title === this.playerinput.title) {
+      setPlacementInput(undefined);
     }
   },
   mounted() {
-    setPlacementInputTitle(this.playerinput.title);
+    setPlacementInput(this.playerinput);
     // Moon spaces are only clickable while the Moon tab is open – open the board the spaces are on
     selectBoardTab([...this.spaces].some((spaceId) => isMoonSpace(spaceId)) ? 'moon' : 'mars');
     const bound = this.bindSpaces();

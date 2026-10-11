@@ -1,5 +1,7 @@
 import {expect} from 'chai';
-import {previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {placementActionLabel, previewTileForSpaceInput, specialTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {TileType} from '@/common/TileType';
+import {CardName} from '@/common/cards/CardName';
 
 describe('previewTileForSpaceInput', () => {
   it('detects greenery, city and ocean by title', () => {
@@ -11,5 +13,15 @@ describe('previewTileForSpaceInput', () => {
 
   it('no preview for an unknown tile', () => {
     expect(previewTileForSpaceInput('Select space to excavate')).is.undefined;
+  });
+
+  it('a tile sent by the server wins over the title', () => {
+    const industrialCenter = {title: 'Select space adjacent to a city tile', tile: {type: TileType.INDUSTRIAL_CENTER, card: CardName.INDUSTRIAL_CENTER}};
+    expect(previewTileForSpaceInput(industrialCenter)).is.undefined;
+    expect(specialTileForSpaceInput(industrialCenter)).deep.eq(industrialCenter.tile);
+    expect(placementActionLabel(industrialCenter)).eq('Place Industrial Center');
+    expect(previewTileForSpaceInput({title: 'Select space', tile: {type: TileType.CITY}})).eq('city');
+    expect(specialTileForSpaceInput({title: 'Select space', tile: {type: TileType.CITY}})).is.undefined;
+    expect(placementActionLabel({title: 'Select space for city tile'})).eq('Place city');
   });
 });

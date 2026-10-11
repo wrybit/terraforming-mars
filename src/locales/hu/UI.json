@@ -1363,6 +1363,7 @@
   "Action cards": "Akciókártyák",
   "Show Mars enlarged": "Mars nagyítása",
   "Place city": "Város lerakása",
+  "Place ${0}": "${0} lehelyezése",
   "Place ocean": "Óceán lerakása",
   "Show Mars enlarged and choose a space": "Mars nagyítása és mező kiválasztása",
   "Show the Moon enlarged and choose a space": "A Hold nagyítása és mező kiválasztása",

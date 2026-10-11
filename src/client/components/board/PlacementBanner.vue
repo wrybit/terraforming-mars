@@ -1,7 +1,9 @@
 <template>
   <div :class="['placement-banner', 'placement-banner--tone-' + tone, {'placement-banner--generic': description.tile === undefined}]">
     <!-- What is being placed, what the tile brings and where it may go – above the enlarged Mars/Moon -->
-    <div v-if="description.tile !== undefined" :class="['placement-banner-icon', 'placement-banner-icon--' + description.tile]"></div>
+    <!-- Special tile: brown hexagon with the card's symbol, layered like on the cards -->
+    <div v-if="description.specialTile !== undefined" class="placement-banner-icon" :style="specialTileStyle"></div>
+    <div v-else-if="description.tile !== undefined" :class="['placement-banner-icon', 'placement-banner-icon--' + description.tile]"></div>
     <div class="placement-banner-main">
       <div class="placement-banner-title">{{ $t(description.title) }}</div>
       <div v-if="description.gains.length > 0" class="placement-banner-gains">
@@ -33,10 +35,21 @@ const props = defineProps<{
 // Hard rule, "if possible", bonus, card rule – the mark carries the kind, the color repeats it (placement_banner.less)
 const RULE_MARKS: Readonly<Record<PlacementRuleKind, string>> = {required: '✕', soft: '!', bonus: '+', card: '★'};
 
-// Colors like the tabs (or_tab_tones.less): Mars tiles in their own color, Moon tiles and unknown tiles grey
+// Colors like the tabs (or_tab_tones.less): Mars tiles in their own color, special tiles brown,
+// Moon tiles and unknown tiles grey
 const tone = computed(() => {
   const tile = props.description.tile;
-  return tile === 'greenery' || tile === 'city' || tile === 'ocean' ? tile : 'moon';
+  return tile === 'greenery' || tile === 'city' || tile === 'ocean' || tile === 'special' ? tile : 'moon';
+});
+
+const specialTileStyle = computed(() => {
+  const image = props.description.specialTile;
+  if (image === undefined) {
+    return {};
+  }
+  const layers = image.symbol === undefined ? [image.base] : [image.symbol, image.base];
+  // Symbol at 90 % of the hexagon like in the tab explanation (or_options_tabs.less)
+  return {backgroundImage: layers.map((url) => `url(${url})`).join(', '), backgroundSize: layers.length === 2 ? '90%, contain' : 'contain'};
 });
 
 function gainLabel(gain: PlacementGain): string {

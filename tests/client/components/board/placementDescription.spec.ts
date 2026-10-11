@@ -3,6 +3,8 @@ import {describePlacement, placementTileOf} from '@/client/components/board/plac
 import {Phase} from '@/common/Phase';
 import {GameModel} from '@/common/models/GameModel';
 import {fakeGameModel} from '../testHelpers';
+import {TileType} from '@/common/TileType';
+import {CardName} from '@/common/cards/CardName';
 
 function game(overrides: Partial<GameModel> = {}): GameModel {
   return {...fakeGameModel(), phase: Phase.ACTION, oxygenLevel: 3, oceans: 3, ...overrides};
@@ -49,5 +51,16 @@ describe('placementDescription', () => {
     expect(description.tile).is.undefined;
     expect(description.title).eq(title);
     expect(description.rules).is.empty;
+  });
+
+  it('names a card\'s special tile after the card, with its image and the card\'s rule', () => {
+    const description = describePlacement({
+      title: 'Select space adjacent to a city tile',
+      tile: {type: TileType.INDUSTRIAL_CENTER, card: CardName.INDUSTRIAL_CENTER},
+    }, game());
+    expect(description.tile).eq('special');
+    expect(description.title).eq('Place Industrial Center');
+    expect(description.specialTile?.symbol).to.include('industrial_center');
+    expect(description.rules).deep.eq([{kind: 'card', text: 'Select space adjacent to a city tile'}]);
   });
 });

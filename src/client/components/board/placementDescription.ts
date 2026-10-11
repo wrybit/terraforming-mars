@@ -2,7 +2,8 @@ import {Message} from '@/common/logs/Message';
 import {GameModel} from '@/common/models/GameModel';
 import {Phase} from '@/common/Phase';
 import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAXIMUM_HABITAT_RATE, MAXIMUM_LOGISTIC_RATE, MAXIMUM_MINING_RATE} from '@/common/constants';
-import {previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {previewTileForSpaceInput, SpaceInput, specialPlacementLabel, specialTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {TileImage, tileImage} from '@/client/components/specialTileImage';
 
 // What the banner above the enlarged Mars/Moon says during a space selection (PlacementBanner.vue).
 // The server only sends the title of the space selection; tile, gains and rules are derived from it here.
@@ -30,8 +31,10 @@ export type PlacementGain = {
 };
 
 export type PlacementDescription = {
-  // undefined: the title doesn't say which tile (e.g. "Select either Tharsis Tholus …", used by several cards)
-  tile: PlacementTile | undefined,
+  // undefined: the title doesn't say which tile (e.g. "Select either Tharsis Tholus …", used by several cards);
+  // special: a card's special tile (image in specialTile)
+  tile: PlacementTile | 'special' | undefined,
+  specialTile?: TileImage,
   // Translation key, or the server's title message when the tile is unknown
   title: string | Message,
   gains: ReadonlyArray<PlacementGain>,
@@ -88,9 +91,10 @@ const LASTING_RULES: Readonly<Record<PlacementTile, ReadonlyArray<PlacementRule>
   road: [],
 };
 
-export function placementTileOf(title: string | Message): PlacementTile | undefined {
+export function placementTileOf(input: SpaceInput | string | Message): PlacementTile | undefined {
+  const title = typeof input !== 'string' && 'title' in input ? input.title : input;
   const key = typeof title === 'string' ? title : title.message;
-  return MOON_TILE_PATTERNS.find(([pattern]) => pattern.test(key))?.[1] ?? previewTileForSpaceInput(title);
+  return MOON_TILE_PATTERNS.find(([pattern]) => pattern.test(key))?.[1] ?? previewTileForSpaceInput(input);
 }
 
 const TR: PlacementGain = {icon: 'tr', value: '+1', label: 'TR'};
@@ -133,8 +137,14 @@ function rulesOf(tile: PlacementTile, title: string | Message): Array<PlacementR
 
 // Every space selection gets a banner: without a known tile it shows the server's title, so the
 // enlarged board always says what is being chosen
-export function describePlacement(title: string | Message, game: GameModel): PlacementDescription {
-  const tile = placementTileOf(title);
+export function describePlacement(input: SpaceInput | string | Message, game: GameModel): PlacementDescription {
+  const title = typeof input !== 'string' && 'title' in input ? input.title : input;
+  // A card's special tile: named after the card, its image, the card's rule (e.g. next to a city)
+  const special = specialTileForSpaceInput(input);
+  if (special !== undefined) {
+    return {tile: 'special', specialTile: tileImage(special.type), title: specialPlacementLabel(special), gains: [], rules: [{kind: 'card', text: title}]};
+  }
+  const tile = placementTileOf(input);
   if (tile === undefined) {
     return {tile: undefined, title, gains: [], rules: []};
   }

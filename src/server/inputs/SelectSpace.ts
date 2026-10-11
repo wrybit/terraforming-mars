@@ -1,12 +1,15 @@
 import {Message} from '../../common/logs/Message';
 import {Space} from '../boards/Space';
 import {InputResponse, isSelectSpaceResponse} from '../../common/inputs/InputResponse';
-import {SelectSpaceModel} from '../../common/models/PlayerInputModel';
+import {SelectSpaceModel, SelectSpaceTile} from '../../common/models/PlayerInputModel';
 import {BasePlayerInput} from '../PlayerInput';
 import {InputError} from './InputError';
 import {toID} from '../../common/utils/utils';
 
 export class SelectSpace extends BasePlayerInput<Space> {
+  // Tile this selection places, sent to the client for label, color and image (special tiles of cards)
+  public tile: SelectSpaceTile | undefined;
+
   constructor(
     title: string | Message,
     public spaces: ReadonlyArray<Space>) {
@@ -16,13 +19,22 @@ export class SelectSpace extends BasePlayerInput<Space> {
     }
   }
 
+  public placing(tile: SelectSpaceTile): this {
+    this.tile = tile;
+    return this;
+  }
+
   public override toModel(): SelectSpaceModel {
-    return {
+    const model: SelectSpaceModel = {
       title: this.title,
       buttonLabel: this.buttonLabel,
       type: 'space',
       spaces: this.spaces.map(toID),
     };
+    if (this.tile !== undefined) {
+      model.tile = this.tile;
+    }
+    return model;
   }
 
   public process(input: InputResponse) {

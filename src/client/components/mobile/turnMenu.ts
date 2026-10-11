@@ -9,7 +9,7 @@ import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
 import {endTabHint, fullTabTitle, isEndTab, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOrder, tabHighlighted, titleKey} from '@/client/components/orOptionsShortLabels';
 import {warningDescription} from '@/client/components/warningDescriptions';
 import {tabIntro, TabIntro} from '@/client/components/tabIntro';
-import {placementLabel, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {placementActionLabel} from '@/client/components/spaceTilePreview';
 import {PLAY_CARD_KEY} from '@/client/utils/playableCards';
 
 /*
@@ -129,8 +129,7 @@ function quickConfirmation(option: PlayerInputModel): TurnConfirmation | undefin
     };
   }
   if (option.type === 'space') {
-    const tile = previewTileForSpaceInput(option.title);
-    return {intro: drawerIntro, title, hint: undefined, button: tile === undefined ? title : placementLabel(tile), action: 'place'};
+    return {intro: drawerIntro, title, hint: undefined, button: placementActionLabel(option) ?? title, action: 'place'};
   }
   return undefined;
 }

@@ -4,7 +4,7 @@ import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {MAX_OCEAN_TILES, MAX_TEMPERATURE} from '@/common/constants';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {TileType} from '@/common/TileType';
-import {PreviewTile, previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {PreviewTile, previewTileForSpaceInput, SpaceInput, specialTileForSpaceInput} from '@/client/components/spaceTilePreview';
 import {specialTileImage, TileImage, tileImage} from '@/client/components/specialTileImage';
 
 // Explanation at the top of an action tab's box (OrOptions), where otherwise there would only be a button:
@@ -65,9 +65,11 @@ function optionIntro(option: PlayerInputModel): TabIntro | undefined {
   if (option.type !== 'space') {
     return undefined;
   }
-  const tile = specialTileImage(option.title) ?? plainTile(option.title);
+  // The tile sent by the server first (special tiles of cards), then what the title tells
+  const special = specialTileForSpaceInput(option);
+  const tile = special !== undefined ? tileImage(special.type) : specialTileImage(option.title) ?? plainTile(option);
   // For oceans what counts is how many are already placed (limit, ocean bonus on adjacent spaces)
-  if (previewTileForSpaceInput(option.title) === 'ocean') {
+  if (previewTileForSpaceInput(option) === 'ocean') {
     return {tile, hint: 'click-space', facts: [{kind: 'oceans'}]};
   }
   return {tile, hint: 'click-space'};
@@ -79,8 +81,8 @@ const PREVIEW_TILES: Readonly<Record<PreviewTile, TileType>> = {
   ocean: TileType.OCEAN,
 };
 
-function plainTile(title: string | Message): TileImage | undefined {
-  const preview = previewTileForSpaceInput(title);
+function plainTile(input: SpaceInput): TileImage | undefined {
+  const preview = previewTileForSpaceInput(input);
   return preview === undefined ? undefined : tileImage(PREVIEW_TILES[preview]);
 }
 

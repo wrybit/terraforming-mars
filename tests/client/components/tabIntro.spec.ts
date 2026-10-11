@@ -1,3 +1,4 @@
+import {TileType} from '@/common/TileType';
 import {expect} from 'chai';
 import {introFacts, tabIntro} from '@/client/components/tabIntro';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
@@ -22,6 +23,11 @@ describe('tabIntro', () => {
     expect(tabIntro(spaceInput('Select space for ocean tile'))?.tile).deep.eq({base: 'assets/tiles/ocean.png'});
     expect(tabIntro(spaceInput('Select space for city tile'))?.tile).deep.eq({base: 'assets/tiles/city.png'});
     expect(tabIntro(spaceInput('Select space for greenery tile'))?.tile).deep.eq({base: 'assets/tiles/greenery.png'});
+  });
+
+  it('shows the special tile sent by the server instead of the city from the title', () => {
+    const option = {type: 'space', title: 'Select space adjacent to a city tile', buttonLabel: '', tile: {type: TileType.INDUSTRIAL_CENTER, card: CardName.INDUSTRIAL_CENTER}} as unknown as PlayerInputModel;
+    expect(tabIntro(option)?.tile).deep.eq({base: 'assets/tiles/special.png', symbol: 'assets/tiles/special_tile_icons/industrial_center.png'});
   });
 
   it('shows the volcano for the volcanic spaces', () => {

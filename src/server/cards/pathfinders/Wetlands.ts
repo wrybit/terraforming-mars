@@ -64,6 +64,7 @@ export class Wetlands extends Card implements IProjectCard {
     return new SelectSpace(
       message('Select space for ${0}', (b) => b.card(this)),
       this.availableSpaces(player))
+      .placing({type: TileType.WETLANDS, card: this.name})
       .andThen((space) => {
         const tile = {
           tileType: TileType.WETLANDS,

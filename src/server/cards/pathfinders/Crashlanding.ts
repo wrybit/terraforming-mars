@@ -57,6 +57,7 @@ export class Crashlanding extends Card implements IProjectCard {
     return new SelectSpace(
       message('Select space for ${0} tile', (b) => b.card(this)),
       this.playableSpaces(player))
+      .placing({type: TileType.CRASHLANDING, card: this.name})
       .andThen((space) => {
         space.adjacency = {bonus: ['callback']};
         const tile: Tile = {

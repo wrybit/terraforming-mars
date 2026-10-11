@@ -2,11 +2,11 @@ import {Message} from '@/common/logs/Message';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {CardType} from '@/common/cards/CardType';
 import {getCard} from '@/client/cards/ClientCardManifest';
-import {previewTileForSpaceInput} from '@/client/components/spaceTilePreview';
+import {previewTileForSpaceInput, specialTileForSpaceInput} from '@/client/components/spaceTilePreview';
 
 // Color tone of the input tab depending on the kind of input (WaitingForTabs); colors in or_tab_tones.less.
 // The action menu (OrOptions) stays neutral blue.
-export type InputTone = 'prelude' | 'attack' | 'cards' | 'mars' | 'ocean' | 'city' | 'greenery' | 'resources' | 'player' | 'colonies';
+export type InputTone = 'prelude' | 'attack' | 'cards' | 'mars' | 'ocean' | 'city' | 'greenery' | 'special' | 'resources' | 'player' | 'colonies';
 
 // Attacks on other players can only be recognized by the server's English title key (no flag of their own);
 // rare phrasings fall back to the color of their input type
@@ -49,10 +49,13 @@ export function inputTone(input: PlayerInputModel): InputTone | undefined {
   if (offersOnlyPreludes(input)) {
     return 'prelude';
   }
-  // Space selection for ocean, city or greenery in the tile's color instead of Mars brown;
-  // same detection as the tile preview (spaceTilePreview.ts)
+  // Space selection for ocean, city or greenery in the tile's color instead of Mars brown, a card's
+  // special tile in the special tiles' brown; same detection as the tile preview (spaceTilePreview.ts)
   if (input.type === 'space') {
-    const tile = previewTileForSpaceInput(input.title);
+    if (specialTileForSpaceInput(input) !== undefined) {
+      return 'special';
+    }
+    const tile = previewTileForSpaceInput(input);
     if (tile !== undefined) {
       return tile;
     }

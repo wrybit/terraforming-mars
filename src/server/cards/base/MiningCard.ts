@@ -64,6 +64,8 @@ export abstract class MiningCard extends Card implements IProjectCard {
 
   public override bespokePlay(player: IPlayer): SelectSpace {
     return new SelectSpace(this.title, this.getAvailableSpaces(player))
+      // The bonus variant (Ares) depends on the space; the client shows the card's tile
+      .placing({type: this.name === CardName.MINING_RIGHTS ? TileType.MINING_RIGHTS : TileType.MINING_AREA, card: this.name})
       .andThen((space) => {
         this.spaceSelected(player, space);
         return undefined;
