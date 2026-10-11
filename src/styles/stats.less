@@ -182,6 +182,18 @@
 
 // ---------- Wins per lineup: like in the admin overview ----------
 // More space between lineups than between the tiles of one lineup (law of proximity)
+// Wins per line-up (group games) 2/3, solo games 1/3; alone, either box takes the full width
+.stats-lineup-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: @create-game-gap-card;
+  align-items: stretch;
+
+  &--both {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+}
+
 .stats-lineups {
   display: flex;
   flex-wrap: wrap;
@@ -631,7 +643,8 @@ each(@players, {
   }
 
   .stats-columns,
-  .stats-records {
+  .stats-records,
+  .stats-lineup-split--both {
     grid-template-columns: minmax(0, 1fr);
   }
 

@@ -14,28 +14,52 @@
       </section>
     </div>
 
-    <section v-if="lineups.length > 0" class="stats-card">
-      <h2 v-i18n>Wins per lineup</h2>
-      <div class="stats-lineups">
-        <div v-for="lineup in lineups" :key="lineup.lineup">
-          <h3>{{ lineup.lineup }} <span class="stats-dim">· {{ lineup.games }} <span v-i18n>games</span></span></h3>
-          <!-- Averages right of the tiles: plenty of room sideways, the cards below should stay in view -->
-          <div class="stats-lineup-body">
-            <div class="stats-wins">
-              <a v-for="count in lineup.counts" :key="count.name" :href="playerHref(count.name)" data-stats-link class="stats-win" :class="`player_translucent_bg_color_${colorOf(count.name)}`">
-                <span class="stats-win-number">{{ count.wins }}</span>
-                <span class="stats-win-name">{{ count.name }}</span>
-              </a>
+    <!-- Group games 2/3, solo games 1/3 beside them: a solo win means terraforming in time, not beating someone -->
+    <div v-if="groupLineups.length > 0 || soloEntries.length > 0" class="stats-lineup-split" :class="{'stats-lineup-split--both': groupLineups.length > 0 && soloEntries.length > 0}">
+      <section v-if="groupLineups.length > 0" class="stats-card">
+        <h2 v-i18n>Wins per lineup</h2>
+        <div class="stats-lineups">
+          <div v-for="lineup in groupLineups" :key="lineup.lineup">
+            <h3>{{ lineup.lineup }} <span class="stats-dim">· {{ lineup.games }} {{ gamesLabel(lineup.games) }}</span></h3>
+            <!-- Averages right of the tiles: plenty of room sideways, the cards below should stay in view -->
+            <div class="stats-lineup-body">
+              <div class="stats-wins">
+                <a v-for="count in lineup.counts" :key="count.name" :href="playerHref(count.name)" data-stats-link class="stats-win" :class="`player_translucent_bg_color_${colorOf(count.name)}`">
+                  <span class="stats-win-number">{{ count.wins }}</span>
+                  <span class="stats-win-name">{{ count.name }}</span>
+                </a>
+              </div>
+              <dl class="stats-averages">
+                <dt v-i18n>Avg. generations</dt><dd>{{ formatNumber(lineup.averageGenerations) }}</dd>
+                <dt v-i18n>Avg. winner points</dt><dd>{{ formatNumber(lineup.averageWinnerPoints, 0) }}</dd>
+                <dt v-i18n>Avg. game length</dt><dd>{{ formatDuration(lineupTimes.get(lineup.lineup)) }}</dd>
+              </dl>
             </div>
-            <dl class="stats-averages">
-              <dt v-i18n>Avg. generations</dt><dd>{{ formatNumber(lineup.averageGenerations) }}</dd>
-              <dt v-i18n>Avg. winner points</dt><dd>{{ formatNumber(lineup.averageWinnerPoints, 0) }}</dd>
-              <dt v-i18n>Avg. game length</dt><dd>{{ formatDuration(lineupTimes.get(lineup.lineup)) }}</dd>
-            </dl>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <section v-if="soloEntries.length > 0" class="stats-card">
+        <h2 v-i18n>Solo games</h2>
+        <div class="stats-lineups">
+          <div v-for="solo in soloEntries" :key="solo.name">
+            <h3>{{ solo.name }} <span class="stats-dim">· {{ solo.games }} {{ gamesLabel(solo.games) }}</span></h3>
+            <div class="stats-lineup-body">
+              <div class="stats-wins">
+                <a :href="playerHref(solo.name)" data-stats-link class="stats-win" :class="`player_translucent_bg_color_${colorOf(solo.name)}`">
+                  <span class="stats-win-number">{{ solo.wins }}</span>
+                  <span class="stats-win-name" v-i18n>Wins</span>
+                </a>
+              </div>
+              <dl class="stats-averages">
+                <dt v-i18n>Avg. generations</dt><dd>{{ formatNumber(solo.averageGenerations) }}</dd>
+                <dt v-i18n>Avg. points</dt><dd>{{ formatNumber(solo.averagePoints, 0) }}</dd>
+                <dt v-i18n>Avg. game length</dt><dd>{{ formatDuration(lineupTimes.get(solo.name)) }}</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
 
     <div class="stats-columns">
       <section class="stats-card">
@@ -75,6 +99,8 @@ import {formatDate, formatDuration, formatNumber} from './statsLabels';
 import {averageGlobalsByGeneration, averagePointsByGeneration} from './statsSeries';
 import {statsHref, StatsTopKind} from './statsNavigation';
 import {SHOWCASE_SIZE, SHOWCASE_TITLES} from './statsShowcase';
+import {isSoloLineup, soloStats, SoloStats} from './statsSolo';
+import {translateText} from '@/client/directives/i18n';
 
 const RECENT_GAMES = 15;
 
@@ -144,8 +170,11 @@ export default defineComponent({
     showcases(): Array<{kind: StatsTopKind, title: string, entries: Array<EntityStats>}> {
       return (['card', 'corporation'] as const).map((kind) => ({kind, title: SHOWCASE_TITLES[kind], entries: mostPlayed(this.results, kind, SHOWCASE_SIZE)}));
     },
-    lineups(): Array<LineupWinCounts> {
-      return winCountsByLineup(this.games.map((game) => game.summary));
+    groupLineups(): Array<LineupWinCounts> {
+      return winCountsByLineup(this.games.map((game) => game.summary)).filter((lineup) => !isSoloLineup(lineup));
+    },
+    soloEntries(): Array<SoloStats> {
+      return soloStats(this.games.map((game) => game.summary));
     },
     lineupTimes(): Map<string, number | undefined> {
       return averageTimeByLineup(this.games);
@@ -173,6 +202,9 @@ export default defineComponent({
     },
     colorOf(name: string): Color {
       return (this.playerColors as Map<string, Color>).get(name) ?? 'neutral';
+    },
+    gamesLabel(games: number): string {
+      return translateText(games === 1 ? 'game' : 'games');
     },
     playerHref(name: string): string {
       return statsHref({type: 'detail', kind: 'player', name});
