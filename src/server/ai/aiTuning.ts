@@ -242,7 +242,9 @@ export const BASELINE_TUNING: AiTuning = {
   lengthDeviation: 1,
   cityNeighbourShare: 0.6,
   exposedSpotRisk: 0.5,
-  awardActionSwing: 0,
+  // Round 43 (1200 mirrored 1v1 games): awardActions +0.87 VP per deal (z +1.17), fixes a human-game error
+  // (Edgedancer funded in the last generation at 3 : 1 while the opponent still had 46 M€) – adopted.
+  awardActionSwing: 1,
   flowFit: 0,
 };
 
@@ -456,6 +458,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   exposedRisk80: {exposedSpotRisk: 0.8},
   // Human game: Edgedancer funded in the last generation at 3 : 1 and lost 3 : 5 – the opponent still had money and actions.
   awardActions: {awardActionSwing: 1},
+  noAwardActions: {awardActionSwing: 0},
   // Human games: humans play ~3× as many card-drawing cards and draw 1.2 cards per generation against 0.3.
   // drawCards: round 19 variant again on today's baseline; cardIncome: tag-triggered draws as income too.
   cardIncome: {drawCardModel: 2},
