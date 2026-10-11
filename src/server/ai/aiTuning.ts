@@ -224,7 +224,9 @@ export const BASELINE_TUNING: AiTuning = {
   triggerOrderPenalty: 1,
   triggerOrderBonus: 0.5,
   sellToAfford: 0,
-  buyForMilestone: 0,
+  // Rounds 39 + 40: buyForMilestone −0.62 and +0.07 VP per deal (pooled ≈ −0.3, z ≈ −0.3) – neutral, adopted for
+  // the human game (one card short of Planner in the research phase).
+  buyForMilestone: 1,
   // Round 39 (1200 mirrored 1v1 games): lastSale +1.76 VP per deal (z +2.53), openingPlan +0.62 (z +0.79) –
   // both fix human-game errors (passed with 15 cards; first greenery and city far apart), adopted.
   lastGenerationSale: 1,
