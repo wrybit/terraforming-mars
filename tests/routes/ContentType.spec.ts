@@ -11,6 +11,7 @@ describe('ContentType', () => {
     ['/path/to/foo.js.zip', undefined],
     ['/path/to/foo.png.ico', 'image/x-icon'],
     ['/path/to/foo.png.ico', 'image/x-icon'],
+    ['/path/to/foo.avif', 'image/avif'],
     ['/path/to/foo.txt', undefined],
 
     // These aren't reasonable inputs but it shows the

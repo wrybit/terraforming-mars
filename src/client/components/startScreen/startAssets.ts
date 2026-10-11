@@ -2,7 +2,6 @@
    is loaded before the intro – otherwise the page visibly builds up during the animation. */
 
 const IMAGES = [
-  'assets/background.jpg',
   'assets/buttons-homepage/planets.jpg',
   'assets/buttons-homepage/planet-stripes.jpg',
   'assets/sidebar/preferences_settings.svg',
@@ -26,6 +25,19 @@ function loadImage(url: string): Promise<void> {
   });
 }
 
+// The background file depends on window and pixel density (AppBackground.vue picks it via srcset),
+// so wait for the image the app actually shows instead of guessing a URL
+function loadBackground(): Promise<void> {
+  const image = document.querySelector<HTMLImageElement>('.app-background__image');
+  if (image === null || image.complete) {
+    return Promise.resolve();
+  }
+  return new Promise((resolve) => {
+    image.addEventListener('load', () => resolve(), {once: true});
+    image.addEventListener('error', () => resolve(), {once: true});
+  });
+}
+
 function loadFont(font: string): Promise<void> {
   if (typeof document.fonts?.load !== 'function') {
     return Promise.resolve();
@@ -35,7 +47,7 @@ function loadFont(font: string): Promise<void> {
 
 /** Loads all parts; onProgress receives the fraction (0–1) after each finished part. */
 export function preloadStartAssets(onProgress: (share: number) => void): Promise<void> {
-  const tasks = [...IMAGES.map(loadImage), ...FONTS.map(loadFont)];
+  const tasks = [loadBackground(), ...IMAGES.map(loadImage), ...FONTS.map(loadFont)];
   let done = 0;
   const tracked = tasks.map((task) => task.then(() => onProgress(++done / tasks.length)));
   const timeout = new Promise<void>((resolve) => window.setTimeout(resolve, PRELOAD_TIMEOUT));

@@ -1,6 +1,7 @@
 <template>
   <div :class="'topmost-'+screen">
     <RotateHint/>
+    <AppBackground v-if="hasBackground" :always="screen === 'start-screen'" :show-credit="hasBackgroundCredit"/>
     <ServerUpdateOverlay/>
     <section>
       <dialog id="alert-dialog" class="alert-dialog">
@@ -97,6 +98,7 @@ import {hasShowModal, showModal, windowHasHTMLDialogElement} from './HTMLDialogE
 import dialogPolyfill from 'dialog-polyfill';
 import {initMobileLayout, mobileLayout} from '@/client/utils/mobileLayout';
 import RotateHint from '@/client/components/RotateHint.vue';
+import AppBackground from '@/client/components/AppBackground.vue';
 import ServerUpdateOverlay from '@/client/components/common/ServerUpdateOverlay.vue';
 import {serverUpdatePhase, startServerStatusPolling} from '@/client/utils/serverStatus';
 import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
@@ -117,6 +119,15 @@ type Screen = 'admin' |
             'start-screen' |
             'stats' |
             'the-end';
+// Screens shown on the Milky Way background (AppBackground.vue); the rest keeps the plain page color
+const SCREENS_WITH_BACKGROUND: ReadonlyArray<Screen> = [
+  'start-screen', 'create-game-form', 'game-home', 'player-home', 'spectator-home', 'the-end', 'games-overview', 'cards', 'stats',
+];
+// Image credit only where the top right corner is free; all other views have their own page header there
+const SCREENS_WITH_BACKGROUND_CREDIT: ReadonlyArray<Screen> = [
+  'start-screen', 'create-game-form',
+];
+
 export type MainAppData = {
     screen: Screen;
     /**
@@ -165,6 +176,7 @@ export default defineComponent({
   components: {
     FanProjectNotice,
     RotateHint,
+    AppBackground,
     ServerUpdateOverlay,
     StartScreen,
     StartScreenFooter,
@@ -185,6 +197,12 @@ export default defineComponent({
     LoginHome,
   },
   computed: {
+    hasBackground(): boolean {
+      return SCREENS_WITH_BACKGROUND.includes(this.screen);
+    },
+    hasBackgroundCredit(): boolean {
+      return SCREENS_WITH_BACKGROUND_CREDIT.includes(this.screen);
+    },
     hasStartScreenFooter(): boolean {
       return this.screen === 'start-screen' || this.screen === 'create-game-form';
     },

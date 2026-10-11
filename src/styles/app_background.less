@@ -2,14 +2,66 @@
 // (DevTools: element <html> → Styles → --app-background-saturation / --app-background-brightness)
 :root {
   --app-background-saturation: 0.8;
-  --app-background-brightness: 0.4;
+  --app-background-brightness: 0.6; // the ESO panorama is darker than the old photo
 }
 
-// App background (Milky Way, assets/background.jpg – photo, additionally dimmed via filter) for game view,
-// spectator view, results page, start page, create game, "game created", card list and stats. As a fixed pseudo-element it always covers exactly the whole window
+// App background (AppBackground.vue): fixed behind everything, always exactly the window
 // (cover: completely filled, proportions kept) – regardless of how long the content is or how it is scrolled.
-// ::after is already taken in the game view ("your turn" frame, active_player_outline.less).
+.app-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: #000;
+  pointer-events: none;
+}
 
+.app-background__picture,
+.app-background__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.app-background__image {
+  object-fit: cover;
+  filter: saturate(var(--app-background-saturation)) brightness(var(--app-background-brightness));
+}
+
+// Image credit (licence): small and quiet, at the top right of the page
+.app-background-credit {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  z-index: 1;
+  font-size: 10px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: underline;
+  }
+}
+
+// Setting "No background image" (the start page keeps its image)
+.preferences_remove_background {
+  .app-background:not(.app-background--always) {
+    background: @grey_900;
+
+    .app-background__picture {
+      display: none;
+    }
+  }
+
+  .app-background-credit:not(.app-background-credit--always) {
+    display: none;
+  }
+}
+
+// Views with the image: transparent, so the fixed image shows through. Own stacking context as before
+// (the "your turn" frame and overlays inside rely on it).
 #player-home,
 #spectator-home,
 #game-end,
@@ -17,34 +69,10 @@
 #game-home,
 #card-list,
 #stats,
-#games-overview,
-.topmost-start-screen {
+#games-overview {
   position: relative;
-  z-index: 0; // own stacking context: the image (z-index -1) lies behind the content but in front of the body gray
+  z-index: 0;
   background: transparent;
-
-  &::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background: url(./assets/background.jpg) center / cover no-repeat;
-    filter: saturate(var(--app-background-saturation)) brightness(var(--app-background-brightness));
-    pointer-events: none;
-  }
-}
-
-// Setting "No background image"
-.preferences_remove_background #player-home::before,
-.preferences_remove_background #spectator-home::before,
-.preferences_remove_background #game-end::before,
-.preferences_remove_background #create-game::before,
-.preferences_remove_background #game-home::before,
-.preferences_remove_background #card-list::before,
-.preferences_remove_background #stats::before,
-.preferences_remove_background #games-overview::before {
-  background: @grey_900;
-  filter: none;
 }
 
 // Page background black instead of gray: the image only covers the window, on long pages the end on black is barely noticeable
