@@ -186,23 +186,26 @@ each(@overpayment-tones, {
   line-height: 1.45;
 }
 
-// Excess inside the accept button as a small chip: same figure as the hero, so the click names its cost
+// Excess inside the accept button, set off by a white divider: same yellow figure as the hero, so the click names its cost
+@overpayment-accept-gap: 12px; // text | divider | figure, the same room on both sides of the divider
+
 .overpayment-dialog__accept {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: @overpayment-accept-gap;
 }
 
 .overpayment-dialog__accept-excess {
   display: inline-flex;
   flex: none;
   align-items: center;
+  align-self: stretch;
   gap: 3px;
-  padding: 1px 6px 1px 7px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.25);
-  font: 600 15px/1.3 Prototype, sans-serif;
+  padding-left: @overpayment-accept-gap;
+  border-left: 1.5px solid fade(#fff, 75%);
+  color: @overpayment-excess;
+  font: 600 16px/1 Prototype, sans-serif;
   white-space: nowrap;
 
   .resource_icon {
