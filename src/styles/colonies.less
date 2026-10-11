@@ -317,6 +317,9 @@
   width: 50px;
   margin-left: 1px;
   white-space: normal;
+  // Translations like "Handel kopieren" are longer than "Copy Trade": break long words instead of spilling out
+  hyphens: auto;
+  overflow-wrap: anywhere;
 }
 
 .Ceres-background {

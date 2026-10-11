@@ -1510,10 +1510,14 @@ html.tm-mobile {
   .mb-task-title {
     font-size: 18px;
     font-weight: bold;
+    line-height: 1.2;
     min-width: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    // Translated prompts are often longer than the English ones: two lines before cutting off
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   .mb-task-sub {

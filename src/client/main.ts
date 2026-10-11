@@ -16,6 +16,9 @@ declare global {
 
 async function bootstrap() {
   const lang = getPreferences().lang;
+  // Real language tag, so the browser hyphenates long words (CSS hyphens: auto) and reads text correctly
+  const htmlLang: Record<string, string> = {cn: 'zh-Hans', br: 'pt-BR', jp: 'ja', ua: 'uk', ko: 'ko'};
+  document.documentElement.lang = htmlLang[lang] ?? lang;
 
   // Also for English: src/locales/en/ holds optional overrides of single English texts
   try {
