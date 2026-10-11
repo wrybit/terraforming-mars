@@ -1196,7 +1196,6 @@
   "${0} has ${1}, which is played before any other Prelude and makes them first player.": "${0} heeft ${1}, die vóór alle andere preludes wordt gespeeld en deze speler startspeler maakt.",
   "Advance": "Vooruit",
   "Back": "Terug",
-  "Warning: You are overpaying by ${0} M€": "Let op: je betaalt ${0} M€ te veel",
   "No connection to the server": "Geen verbinding met de server",
   "Background photo: Milky Way": "Achtergrondfoto: Melkweg",
   "Pay with Seeds": "Betaal met Zaden",
@@ -1240,5 +1239,10 @@
   "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Sommige gekozen CEO's hebben uitbreidingen nodig die niet aan staan. Dat kan het spel breken.",
   "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "Met ThorGate, Standaardtechnologie, Geschikte infrastructuur en Verbeterde supergeleiders kan een speler oneindige energieproductie krijgen.",
   "Build date": "Versiedatum",
-  "Original": "Origineel"
+  "Original": "Origineel",
+  "Pay too much?": "Te veel betalen?",
+  "No, adjust": "Nee, aanpassen",
+  "Yes, pay anyway": "Ja, toch betalen",
+  "The excess is not refunded.": "Het teveel krijg je niet terug.",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} is ${1} M€ per stuk waard, dus de kosten zijn niet precies te betalen. Het teveel krijg je niet terug."
 }

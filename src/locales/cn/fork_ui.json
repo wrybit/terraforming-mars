@@ -1496,7 +1496,6 @@
   "Back": "返回",
   "Info": "信息",
   "Details:": "详情：",
-  "Warning: You are overpaying by ${0} M€": "警告：你多支付了 ${0} M€",
   "No connection to the server": "无法连接到服务器",
   "Background photo: Milky Way": "背景图片：银河",
   "Pay with Seeds": "用种子支付",
@@ -1542,5 +1541,10 @@
   "Build date": "构建日期",
   "Original": "原版",
   "Fork": "分支",
-  "Commit": "提交"
+  "Commit": "提交",
+  "Pay too much?": "要多付吗？",
+  "No, adjust": "不，调整",
+  "Yes, pay anyway": "是，仍然支付",
+  "The excess is not refunded.": "多付的部分不会退还。",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}每个价值${1} M€，因此无法正好凑足费用。多付的部分不会退还。"
 }

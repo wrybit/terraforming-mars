@@ -56,6 +56,7 @@
     :ledger="ledger"
     :showsave="showsave"
     :buttonLabel="playerinput.buttonLabel"
+    :itemName="cardName"
     @change="(p) => payment = p"
     @save="doSave"/>
 </div>

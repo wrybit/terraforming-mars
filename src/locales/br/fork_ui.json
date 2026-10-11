@@ -1689,7 +1689,6 @@
   "Back": "Voltar",
   "Details:": "Detalhes:",
   "${0} AI": "${0} IA",
-  "Warning: You are overpaying by ${0} M€": "Atenção: você está pagando ${0} M€ a mais",
   "No connection to the server": "Sem conexão com o servidor",
   "Background photo: Milky Way": "Foto de fundo: Via Láctea",
   "Pay with Steel": "Pagar com aço",
@@ -1736,5 +1735,10 @@
   "Some of the Preludes you selected need expansions you have not enabled. Using them might break your game.": "Alguns prelúdios escolhidos precisam de expansões não ativadas. Isso pode quebrar a partida.",
   "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Alguns CEOs escolhidos precisam de expansões não ativadas. Isso pode quebrar a partida.",
   "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "Com ThorGate, Tecnologia Padrão, Suitable Infrastructure e High Temp. Superconductors um jogador pode obter produção de energia infinita.",
-  "Build date": "Data da versão"
+  "Build date": "Data da versão",
+  "Pay too much?": "Pagar a mais?",
+  "No, adjust": "Não, ajustar",
+  "Yes, pay anyway": "Sim, pagar mesmo assim",
+  "The excess is not refunded.": "O excedente não é devolvido.",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} vale ${1} M€ cada, então não dá para pagar o custo exato. O excedente não é devolvido."
 }

@@ -805,7 +805,6 @@
   "Back": "뒤로",
   "Info": "정보",
   "Details:": "세부 사항:",
-  "Warning: You are overpaying by ${0} M€": "경고: ${0} M€를 초과 지불하고 있습니다",
   "No connection to the server": "서버에 연결할 수 없습니다",
   "Background photo: Milky Way": "배경 사진: 은하수",
   "Pay with Seeds": "씨앗으로 지불",
@@ -851,5 +850,10 @@
   "Build date": "빌드 날짜",
   "Original": "원본",
   "Fork": "포크",
-  "Commit": "커밋"
+  "Commit": "커밋",
+  "Pay too much?": "초과 지불할까요?",
+  "No, adjust": "아니요, 조정",
+  "Yes, pay anyway": "네, 그래도 지불",
+  "The excess is not refunded.": "초과분은 돌려받지 못합니다.",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}은(는) 개당 ${1} M€라서 비용을 정확히 맞출 수 없습니다. 초과분은 돌려받지 못합니다."
 }

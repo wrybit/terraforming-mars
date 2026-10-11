@@ -751,7 +751,6 @@
   "Info": "Infó",
   "Details:": "Részletek:",
   "${0} AI": "${0} MI",
-  "Warning: You are overpaying by ${0} M€": "Figyelem: ${0} M€-vel túlfizetsz",
   "No connection to the server": "Nincs kapcsolat a szerverrel",
   "Background photo: Milky Way": "Háttérkép: Tejút",
   "Pay with Seeds": "Fizetés magvakkal",
@@ -795,5 +794,10 @@
   "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Néhány kiválasztott vezérigazgatóhoz nem engedélyezett kiegészítő kell. Ez elronthatja a játékot.",
   "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "A ThorGate, a Szabványos technológia, a Megfelelő infrastruktúra és a Magas hőmérsékletű szupravezetők együtt végtelen energiatermelést adhatnak egy játékosnak.",
   "Build date": "Verzió dátuma",
-  "Original": "Eredeti"
+  "Original": "Eredeti",
+  "Pay too much?": "Túlfizetsz?",
+  "No, adjust": "Nem, módosítom",
+  "Yes, pay anyway": "Igen, mégis fizetek",
+  "The excess is not refunded.": "A többletet nem kapod vissza.",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "A(z) ${0} darabja ${1} M€-t ér, így a költség nem fizethető ki pontosan. A többletet nem kapod vissza."
 }

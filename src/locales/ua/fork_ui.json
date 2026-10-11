@@ -731,7 +731,6 @@
   "Info": "Інфо",
   "Details:": "Деталі:",
   "${0} AI": "${0} (ШІ)",
-  "Warning: You are overpaying by ${0} M€": "Увага: ви переплачуєте ${0} M€",
   "No connection to the server": "Немає з'єднання з сервером",
   "Background photo: Milky Way": "Фонове фото: Чумацький Шлях",
   "Pay with Seeds": "Заплатити Насінням",
@@ -777,5 +776,10 @@
   "Build date": "Дата збірки",
   "Original": "Оригінал",
   "Fork": "Форк",
-  "Commit": "Коміт"
+  "Commit": "Коміт",
+  "Pay too much?": "Переплатити?",
+  "No, adjust": "Ні, змінити",
+  "Yes, pay anyway": "Так, усе одно оплатити",
+  "The excess is not refunded.": "Надлишок не повертається.",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}: ${1} M€ за одиницю, тому точно сплатити вартість не можна. Надлишок не повертається."
 }

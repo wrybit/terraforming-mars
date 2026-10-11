@@ -941,7 +941,6 @@
   "Back": "Tilbake",
   "Details:": "Detaljer:",
   "${0} AI": "${0} (KI)",
-  "Warning: You are overpaying by ${0} M€": "Advarsel: Du betaler ${0} M€ for mye",
   "No connection to the server": "Ingen tilkobling til serveren",
   "Background photo: Milky Way": "Bakgrunnsbilde: Melkeveien",
   "Pay with Seeds": "Betal med Frø",
@@ -984,5 +983,10 @@
   "Some of the Preludes you selected need expansions you have not enabled. Using them might break your game.": "Noen valgte preludium-kort krever utvidelser som ikke er slått på. Det kan ødelegge spillet.",
   "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Noen valgte adm. direktører krever utvidelser som ikke er slått på. Det kan ødelegge spillet.",
   "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "Med ThorGate, Standardteknologi, Suitable Infrastructure og Høytemperatur-superledere kan en spiller få uendelig energiproduksjon.",
-  "Build date": "Versjonsdato"
+  "Build date": "Versjonsdato",
+  "Pay too much?": "Betale for mye?",
+  "No, adjust": "Nei, juster",
+  "Yes, pay anyway": "Ja, betal likevel",
+  "The excess is not refunded.": "Overskuddet får du ikke tilbake.",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} er verdt ${1} M€ per stk., så kostnaden kan ikke betales nøyaktig. Overskuddet får du ikke tilbake."
 }

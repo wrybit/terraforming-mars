@@ -1787,7 +1787,6 @@
   "Back": "Indietro",
   "Details:": "Dettagli:",
   "${0} AI": "${0} IA",
-  "Warning: You are overpaying by ${0} M€": "Attenzione: stai pagando ${0} M€ in più",
   "No connection to the server": "Nessuna connessione al server",
   "Background photo: Milky Way": "Foto di sfondo: Via Lattea",
   "Pay with Steel": "Paga con Acciaio",
@@ -1835,5 +1834,10 @@
   "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Alcuni CEO scelti richiedono espansioni non attive. Possono rompere la partita.",
   "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "Con ThorGate, Tecnologia Standard, Suitable Infrastructure e High Temp. Superconductors un giocatore può ottenere una produzione di energia infinita.",
   "Build date": "Data della versione",
-  "Original": "Originale"
+  "Original": "Originale",
+  "Pay too much?": "Pagare troppo?",
+  "No, adjust": "No, modifica",
+  "Yes, pay anyway": "Sì, paga comunque",
+  "The excess is not refunded.": "L’eccedenza non viene rimborsata.",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} vale ${1} M€ l’uno, quindi il costo non si può pagare esattamente. L’eccedenza non viene rimborsata."
 }

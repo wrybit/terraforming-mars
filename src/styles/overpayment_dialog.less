@@ -1,0 +1,204 @@
+// Overpayment confirmation (OverpaymentDialog.vue in a framed SidebarModal):
+// key figure, bar of the payment with cost marker and hatched excess, legend, reason.
+@import (reference) "./modal_surface.less";
+
+@overpayment-excess: #ffd84d; // same yellow as "too much" in the payment form (payments.less)
+@overpayment-muted: #8b8d96;
+@overpayment-bar-height: 34px;
+@overpayment-bar-radius: 8px;
+@overpayment-segment-gap: 2px;
+@overpayment-icon: 22px;
+// Law of proximity: label to bar < bar to legend < between blocks (dialog-frame-body gap)
+@overpayment-gap-label: 4px;
+@overpayment-gap-block: 12px;
+
+// Tone per currency, so the segments can be told apart without reading the icons
+@overpayment-tone-default: #4a4c56;
+@overpayment-tones: {
+  megacredits: #b8902c;
+  steel: #8a5a2b;
+  titanium: #5b5d7a;
+  heat: #b5432a;
+  plants: #3f8a3a;
+  microbes: #3d7f6e;
+  floaters: #4f7fa8;
+  seeds: #6d8a2c;
+}
+
+.overpayment-dialog__title-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.overpayment-dialog__hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.overpayment-dialog__excess {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: @overpayment-excess;
+  font: 600 40px/1 Prototype, sans-serif;
+
+  .resource_icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.overpayment-dialog__hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.overpayment-dialog__hero-label {
+  color: @overpayment-excess;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.overpayment-dialog__item {
+  color: @modal-heading;
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+
+.overpayment-dialog__chart {
+  display: flex;
+  flex-direction: column;
+  gap: @overpayment-gap-label;
+}
+
+// Cost label above the bar, ending at its marker; sum label below, at the end
+.overpayment-dialog__scale {
+  position: relative;
+  height: 18px;
+  color: @overpayment-muted;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.overpayment-dialog__scale--below .overpayment-dialog__mark {
+  top: 0;
+  bottom: auto;
+}
+
+.overpayment-dialog__mark {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-100%);
+  padding-right: 4px;
+  color: @modal-text;
+}
+
+.overpayment-dialog__mark--end {
+  right: 0;
+  transform: none;
+  padding-right: 0;
+  color: @overpayment-excess;
+}
+
+.overpayment-dialog__bar {
+  position: relative;
+  display: flex;
+  gap: @overpayment-segment-gap;
+  height: @overpayment-bar-height;
+  border-radius: @overpayment-bar-radius;
+  overflow: hidden;
+}
+
+.overpayment-dialog__segment {
+  display: flex;
+  flex-basis: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  background: @overpayment-tone-default;
+
+  .resource_icon {
+    flex: none;
+    width: @overpayment-icon;
+    height: @overpayment-icon;
+  }
+}
+
+each(@overpayment-tones, {
+  .overpayment-dialog__segment--@{key} {
+    background: @value;
+  }
+});
+
+// Everything right of the cost is lost: hatched in the warning yellow over the segments
+.overpayment-dialog__lost {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(-45deg, fade(@overpayment-excess, 85%) 0 5px, fade(#000, 45%) 5px 10px);
+}
+
+.overpayment-dialog__cost-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: #fff;
+}
+
+.overpayment-dialog__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: (@overpayment-gap-block - @overpayment-gap-label) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.overpayment-dialog__legend-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font: 15px Prototype, sans-serif;
+  white-space: nowrap;
+}
+
+.overpayment-dialog__legend-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.overpayment-dialog__legend-calc {
+  color: @overpayment-muted;
+}
+
+.overpayment-dialog .overpayment-dialog__reason {
+  margin: 0;
+  color: @modal-text;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+// Phone: both answers side by side instead of stacked (one decision, one row);
+// sized by their text, long translations wrap inside the button instead of overflowing it
+@media only screen and (max-width: 520px) {
+  .overpayment-dialog .dialog-frame-foot {
+    flex-wrap: nowrap;
+
+    .btn {
+      flex: 1 1 auto;
+      min-width: 0;
+      height: auto;
+      padding: 8px 10px;
+      line-height: 1.25;
+      white-space: normal;
+    }
+  }
+}

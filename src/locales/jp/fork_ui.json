@@ -928,7 +928,6 @@
   "Back": "戻る",
   "Info": "情報",
   "Details:": "詳細：",
-  "Warning: You are overpaying by ${0} M€": "警告：${0} MC多く支払っています",
   "No connection to the server": "サーバーに接続できません",
   "Background photo: Milky Way": "背景写真：天の川",
   "Pay with Seeds": "種子で支払い",
@@ -973,5 +972,10 @@
   "Build date": "ビルド日時",
   "Original": "オリジナル",
   "Fork": "フォーク",
-  "Commit": "コミット"
+  "Commit": "コミット",
+  "Pay too much?": "払いすぎますか？",
+  "No, adjust": "いいえ、調整する",
+  "Yes, pay anyway": "はい、このまま支払う",
+  "The excess is not refunded.": "払いすぎた分は戻りません。",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}は1つ${1} M€なので、コストをぴったり支払えません。払いすぎた分は戻りません。"
 }

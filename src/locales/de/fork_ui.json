@@ -375,7 +375,6 @@
   "Advance": "Vorrücken",
   "Back": "Zurück",
   "${0} AI": "${0} KI",
-  "Warning: You are overpaying by ${0} M€": "Achtung: Du zahlst ${0} M€ zu viel",
   "No connection to the server": "Keine Verbindung zum Server",
   "Background photo: Milky Way": "Hintergrundfoto: Milchstraße",
   "Pay with Seeds": "Zahle durch Samen",
@@ -417,5 +416,10 @@
   "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "Mit ThorGate, Standardtechnologie, Geeignete Infrastruktur und Hochtemperatur-Supraleiter kann ein Spieler unendliche Energie-Produktion erreichen.",
   "Science & Clone Tags": "Wissenschafts- & Klonsymbole",
   "World Government": "Weltregierung",
-  "Build date": "Stand"
+  "Build date": "Stand",
+  "Pay too much?": "Zu viel zahlen?",
+  "No, adjust": "Nein, anpassen",
+  "Yes, pay anyway": "Ja, trotzdem zahlen",
+  "The excess is not refunded.": "Den Überschuss bekommst du nicht zurück.",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} ist je ${1} M€ wert, damit lassen sich die Kosten nicht genau treffen. Den Überschuss bekommst du nicht zurück."
 }

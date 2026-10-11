@@ -75,6 +75,12 @@
   <div v-if="showsave" class="payments_save">
     <AppButton size="big" @click="handleSave()" :title="$t(buttonLabel)" data-test="save"/>
   </div>
+
+  <!-- Confirmation before overpaying; grows out of the payment area (the save button may sit outside, SelectPayment.vue) -->
+  <SidebarModal :open="overpaymentOpen" :framed="true" @close="dismissOverpayment()">
+    <OverpaymentDialog :cost="cost" :payment="payment" :order="order" :ledger="ledger" :descriptions="descriptions" :itemName="itemName"
+      @accept="acceptOverpayment()" @dismiss="dismissOverpayment()"/>
+  </SidebarModal>
 </section>
 </TabPanelFooterSlot>
 </template>
@@ -93,7 +99,8 @@ import {computeDefaultPayment} from '@/client/components/PaymentDefaults';
 import {sum} from '@/common/utils/utils';
 import {Message} from '@/common/logs/Message';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
-import {translateTextWithParams} from '@/client/directives/i18n';
+import SidebarModal from '@/client/components/SidebarModal.vue';
+import OverpaymentDialog from '@/client/components/OverpaymentDialog.vue';
 
 const DESCRIPTIONS: Record<SpendableResource, string> = {
   steel: 'Steel',
@@ -125,6 +132,7 @@ const IN_SENTENCE_DESCRIPTIONS: Record<SpendableResource, string> = {
 type DataModel = {
   payment: Payment;
   warning: string | Message | undefined;
+  overpaymentOpen: boolean;
 };
 
 export default defineComponent({
@@ -133,6 +141,8 @@ export default defineComponent({
     TabPanelFooterSlot,
     AppButton,
     PaymentUnitComponent,
+    SidebarModal,
+    OverpaymentDialog,
   },
   props: {
     cost: {
@@ -157,12 +167,18 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    // What is being paid for (card name), shown in the overpayment confirmation
+    itemName: {
+      type: String,
+      required: false,
+    },
   },
   emits: ['save', 'change'],
   data(): DataModel {
     return {
       payment: computeDefaultPayment(this.cost, this.order, this.ledger, /* reserveMegacredits=*/ false),
       warning: undefined,
+      overpaymentOpen: false,
     };
   },
   computed: {
@@ -329,13 +345,20 @@ export default defineComponent({
           }
         }
         if (getPreferences().show_alerts) {
-          if (!confirm(translateTextWithParams('Warning: You are overpaying by ${0} M€', [String(delta)]))) {
-            this.warning = 'Please adjust payment amount';
-            return;
-          }
+          // Saved only after the confirmation (acceptOverpayment)
+          this.overpaymentOpen = true;
+          return;
         }
       }
       this.$emit('save', this.payment);
+    },
+    acceptOverpayment(): void {
+      this.overpaymentOpen = false;
+      this.$emit('save', this.payment);
+    },
+    dismissOverpayment(): void {
+      this.overpaymentOpen = false;
+      this.warning = 'Please adjust payment amount';
     },
     totalSpentClass(): string {
       const total = this.totalSpent();

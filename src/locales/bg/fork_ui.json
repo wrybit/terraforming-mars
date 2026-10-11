@@ -1459,7 +1459,6 @@
   "Info": "Инфо",
   "Details:": "Подробности:",
   "${0} AI": "${0} (ИИ)",
-  "Warning: You are overpaying by ${0} M€": "Внимание: надплащате с ${0} M€",
   "No connection to the server": "Няма връзка със сървъра",
   "Background photo: Milky Way": "Фонова снимка: Млечният път",
   "Pay with Seeds": "Плати със семена",
@@ -1505,5 +1504,10 @@
   "Build date": "Дата на версията",
   "Original": "Оригинал",
   "Fork": "Форк",
-  "Commit": "Комит"
+  "Commit": "Комит",
+  "Pay too much?": "Да надплатиш?",
+  "No, adjust": "Не, промени",
+  "Yes, pay anyway": "Да, плати въпреки това",
+  "The excess is not refunded.": "Излишъкът не се връща.",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}: ${1} M€ за брой, затова цената не може да се плати точно. Излишъкът не се връща."
 }

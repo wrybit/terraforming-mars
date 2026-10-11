@@ -588,7 +588,6 @@
   "Back": "Takaisin",
   "Details:": "Lisätiedot:",
   "${0} AI": "${0} (tekoäly)",
-  "Warning: You are overpaying by ${0} M€": "Varoitus: maksat ${0} M€ liikaa",
   "No connection to the server": "Ei yhteyttä palvelimeen",
   "Background photo: Milky Way": "Taustakuva: Linnunrata",
   "Pay with Seeds": "Maksa siemenillä",
@@ -631,5 +630,10 @@
   "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Osa valituista TJ:istä vaatii laajennuksia, joita ei ole otettu käyttöön. Se voi rikkoa pelin.",
   "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "ThorGate, Standarditeknologia, Sopiva infrastruktuuri ja Korkean lämpötilan suprajohtimet yhdessä voivat antaa pelaajalle loputtoman energiantuotannon.",
   "Build date": "Version päiväys",
-  "Original": "Alkuperäinen"
+  "Original": "Alkuperäinen",
+  "Pay too much?": "Maksetaanko liikaa?",
+  "No, adjust": "Ei, säädä",
+  "Yes, pay anyway": "Kyllä, maksa silti",
+  "The excess is not refunded.": "Ylimäärää ei palauteta.",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} on arvoltaan ${1} M€ kappaleelta, joten kustannusta ei voi maksaa tarkalleen. Ylimäärää ei palauteta."
 }

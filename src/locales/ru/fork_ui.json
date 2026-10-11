@@ -1380,7 +1380,6 @@
   "Info": "Инфо",
   "Details:": "Подробности:",
   "${0} AI": "${0} (ИИ)",
-  "Warning: You are overpaying by ${0} M€": "Внимание: вы переплачиваете ${0} M€",
   "No connection to the server": "Нет соединения с сервером",
   "Background photo: Milky Way": "Фоновое фото: Млечный Путь",
   "Pay with Seeds": "Оплатить семенами",
@@ -1426,5 +1425,10 @@
   "Build date": "Дата сборки",
   "Original": "Оригинал",
   "Fork": "Форк",
-  "Commit": "Коммит"
+  "Commit": "Коммит",
+  "Pay too much?": "Переплатить?",
+  "No, adjust": "Нет, изменить",
+  "Yes, pay anyway": "Да, всё равно оплатить",
+  "The excess is not refunded.": "Излишек не возвращается.",
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}: ${1} M€ за единицу, поэтому точно оплатить стоимость нельзя. Излишек не возвращается."
 }
