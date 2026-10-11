@@ -1,7 +1,7 @@
 <template>
   <div class="card-list-cards">
     <!-- Only cards near the visible area are built (LazyMount.vue); the others keep their place as an empty card shape -->
-    <LazyMount class="cardbox" v-for="card in names" :key="card" v-memo="[card, tallCards]" @shown="$emit('cardsShown')">
+    <LazyMount class="cardbox" v-for="card in names" :key="card" v-memo="[card, tallCards]" reveal @shown="$emit('cardsShown')">
       <Card :card="{'name': card}" :autoTall="tallCards"/>
       <template #placeholder>
         <div class="card-list-placeholder" :style="placeholderStyle"></div>

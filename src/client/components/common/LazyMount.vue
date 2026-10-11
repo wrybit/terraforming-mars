@@ -9,11 +9,16 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {observeNearViewport, unobserveNearViewport} from '@/client/utils/nearViewport';
+import {revealWhenLoaded} from '@/client/components/cardlist/cardReveal';
 
 // Renders its content only once it comes near the visible area (nearViewport.ts): long lists (card list)
 // then only build what can be seen, plus a margin above and below
 export default defineComponent({
   name: 'LazyMount',
+  props: {
+    // Content stays hidden until its pictures are loaded, then fades in with its neighbours (cardReveal.ts)
+    reveal: {type: Boolean, default: false},
+  },
   emits: ['shown'],
   data() {
     return {near: false};
@@ -21,7 +26,12 @@ export default defineComponent({
   mounted() {
     observeNearViewport(this.$refs.root as Element, () => {
       this.near = true;
-      this.$nextTick(() => this.$emit('shown'));
+      this.$nextTick(async () => {
+        if (this.reveal) {
+          await revealWhenLoaded(this.$refs.root as HTMLElement);
+        }
+        this.$emit('shown');
+      });
     });
   },
   beforeUnmount() {

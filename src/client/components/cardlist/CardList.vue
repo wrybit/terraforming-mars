@@ -158,6 +158,7 @@
 
 <script lang="ts">
 
+import {LOAD_LIMIT_MS} from '@/client/components/cardlist/cardReveal';
 import {defineComponent, markRaw} from 'vue';
 import {CardType} from '@/common/cards/CardType';
 import {CardName} from '@/common/cards/CardName';
@@ -234,7 +235,7 @@ const SORT_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'a', label: 'A-Z'}, 
 const SEARCH_SCOPE_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'name', label: 'Card title'}, {value: 'text', label: 'Full text'}];
 
 // The preloader disappears at the latest after this long, even if no card came into view
-const CARDS_PRELOADER_LIMIT_MS = 1500;
+const CARDS_PRELOADER_LIMIT_MS = LOAD_LIMIT_MS + 500;
 
 // Highlight search matches only once typing pauses briefly – otherwise the list re-renders on every keystroke
 const HIGHLIGHT_DELAY_MS = 120;

@@ -653,6 +653,23 @@
   background: rgba(255, 255, 255, 0.05);
 }
 
+// Card built but its pictures still loading (cardReveal.ts): hidden, its place kept
+.card-reveal-pending {
+  visibility: hidden;
+}
+
+// Then the cards on screen fade in one after the other; delay and duration are set inline
+.card-reveal-in {
+  animation: card-reveal var(--reveal-duration) ease-out var(--reveal-delay) both;
+}
+
+@keyframes card-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+}
+
 .card-list-empty {
   padding: 48px 0;
   text-align: center;
