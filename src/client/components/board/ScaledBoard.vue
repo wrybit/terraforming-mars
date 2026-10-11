@@ -27,6 +27,8 @@ export default defineComponent({
     expansions: {type: Object as PropType<Record<Expansion, boolean>>, default: () => ({})},
     // Only the planet: without the scales around it and the spaces outside it (board.less)
     planetOnly: {type: Boolean, default: false},
+    // Largest zoom: 1 only shrinks; above 1 the board also grows on wide containers
+    maxScale: {type: Number, default: 1},
   },
   data() {
     return {
@@ -72,12 +74,13 @@ export default defineComponent({
     async measure(): Promise<void> {
       this.scale = 1;
       await this.$nextTick();
-      this.naturalWidth = (this.$refs.scaled as HTMLElement | undefined)?.scrollWidth ?? 0;
+      // Planet alone: the section has a fixed width; scrollWidth would count the clipped board behind it
+      this.naturalWidth = this.planetOnly ? PLANET_BOUNDS.width : (this.$refs.scaled as HTMLElement | undefined)?.scrollWidth ?? 0;
       this.fitToWidth();
     },
     fitToWidth(): void {
       const available = (this.$refs.root as HTMLElement).clientWidth;
-      this.scale = this.naturalWidth <= 0 ? 1 : Math.min(1, available / this.naturalWidth);
+      this.scale = this.naturalWidth <= 0 ? 1 : Math.min(this.maxScale, available / this.naturalWidth);
     },
   },
 });

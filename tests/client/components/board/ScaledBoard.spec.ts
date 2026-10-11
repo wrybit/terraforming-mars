@@ -10,4 +10,22 @@ describe('ScaledBoard', () => {
     expect(wrapper.findComponent({name: 'Board'}).exists()).to.be.true;
     expect((wrapper.vm as any).scale).eq(1);
   });
+
+  it('grows up to maxScale on a wide container', () => {
+    const wrapper = shallowMount(ScaledBoard, {...globalConfig, props: {spaces: [], boardName: BoardName.THARSIS, maxScale: 2}});
+    const vm = wrapper.vm as any;
+    vm.naturalWidth = 400;
+    Object.defineProperty(vm.$refs.root, 'clientWidth', {value: 1000});
+    vm.fitToWidth();
+    expect(vm.scale).eq(2);
+  });
+
+  it('never grows beyond 1 by default', () => {
+    const wrapper = shallowMount(ScaledBoard, {...globalConfig, props: {spaces: [], boardName: BoardName.THARSIS}});
+    const vm = wrapper.vm as any;
+    vm.naturalWidth = 400;
+    Object.defineProperty(vm.$refs.root, 'clientWidth', {value: 1000});
+    vm.fitToWidth();
+    expect(vm.scale).eq(1);
+  });
 });
