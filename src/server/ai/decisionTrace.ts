@@ -40,6 +40,8 @@ export type DecisionRecord = {
   generation: number,
   phase: string,
   player: string,
+  /** Player colour: tells players with the same name apart (several AIs are all called the same). */
+  color?: string,
   kind: DecisionKind,
   title: string,
   state: PlayerSnapshot,
@@ -144,6 +146,7 @@ export function recordDecision<T>(input: PlayerInput, player: IPlayer, decide: (
     generation: game.generation,
     phase: game.phase,
     player: player.name,
+    color: player.color,
     kind: decision.kind ?? 'other',
     title: titleText(input),
     state,

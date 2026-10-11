@@ -23,6 +23,7 @@ export function prepareHumanDecision(player: IPlayer, response: InputResponse, t
     generation: game.generation,
     phase: game.phase,
     player: player.name,
+    color: player.color,
     title: titleText(waitingFor),
     state: snapshot(player),
     globals: globalsOf(player),
