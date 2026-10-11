@@ -38,7 +38,7 @@
               <code>{{ getUrl(game.spectatorId) }}</code>
             </div>
             <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(game.spectatorId) ? 'Copied!' : 'Copy URL'" @click="copyUrl(game.spectatorId)"/>
-            <a class="btn btn-rounded btn-primary" :href="getHref(game.spectatorId)" v-i18n>Watch</a>
+            <a class="btn btn-rounded btn-tone-quiet" :href="getHref(game.spectatorId)" v-i18n>Watch</a>
           </div>
         </div>
       </section>
