@@ -116,6 +116,8 @@ export type AiTuning = {
   triggerOrderBonus: number,
   /** 1: before the last generation the AI may sell its cheapest cards to afford a milestone or award (sellToAfford.ts). */
   sellToAfford: number,
+  /** 1: in the research phase the AI buys up to 3 extra cards when they make a milestone claimable (milestoneBuying.ts). */
+  buyForMilestone: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -214,6 +216,7 @@ export const BASELINE_TUNING: AiTuning = {
   triggerOrderPenalty: 0,
   triggerOrderBonus: 0,
   sellToAfford: 0,
+  buyForMilestone: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -411,6 +414,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   triggerBoth: {triggerOrderPenalty: 1, triggerOrderBonus: 0.5},
   // Human feedback: sell a card or two when only that much is missing for a milestone.
   sellToAfford: {sellToAfford: 1},
+  // Human feedback: one card more in the research phase would have made Planner claimable.
+  buyForMilestone: {buyForMilestone: 1},
+  milestoneMoney: {sellToAfford: 1, buyForMilestone: 1},
   // Before round 31: the baseline without bundle1.
   beforeBundle1: {buyMargin: -1, handTargetEarly: 9, handTargetLate: 4, productionDiscount: 0.9, secondStepCandidates: 12},
   bundle1: {buyMargin: -3, handTargetEarly: 12, handTargetLate: 5, productionDiscount: 1.05, secondStepCandidates: 16},

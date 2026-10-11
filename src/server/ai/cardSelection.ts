@@ -19,6 +19,7 @@ import {Tag} from '../../common/cards/Tag';
 import {tuningOf} from './aiTuning';
 import {enablerBonus} from './enablerValue';
 import {draftReceiver, receiverValues} from './draftDenial';
+import {cardsForMilestone} from './milestoneBuying';
 
 // Opening choice (corporation + preludes + cards) and card buying / drafting.
 
@@ -247,7 +248,11 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
     lastGenerationCardsToBuy(sorted, valueOf, player, input.config.max) :
     cardsToBuy(sorted, valueOf, budget, Math.min(input.config.max, room), player.cardCost, tuning.buyMargin);
   const count = Math.max(input.config.min, bought.length);
-  const chosen = count > bought.length ? sorted.slice(0, count) : bought;
+  const kept = count > bought.length ? sorted.slice(0, count) : bought;
+  // One or two cards more when they make a milestone claimable (milestoneBuying.ts).
+  const forMilestone = tuning.buyForMilestone > 0 ?
+    cardsForMilestone(player, kept, sorted.filter((card) => !kept.includes(card)), player.cardCost).slice(0, Math.max(0, input.config.max - kept.length)) : [];
+  const chosen = [...kept, ...forMilestone];
   if (isTracingDecision()) {
     traceOptions('research', sorted.map((card) => cardOption('', card, valueOf, timingOf, chosen.includes(card))), {
       price: player.cardCost, budget, handTarget, usefulHandCards, room, remainingGenerations: remaining,
