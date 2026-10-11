@@ -1,15 +1,15 @@
-.load-game-form {
-  margin-bottom: 25px;
-  max-width: 1002px;
-  padding-top: 5px;
-}
+// Load a game (LoadGameForm.vue) in the admin area: one narrow card, label right above its field
+.load-game-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 560px;
 
-.load-game--block {
-  background: #202020;
-  padding: 25px;
-}
+  .server-settings-input + .server-settings-label {
+    margin-top: 10px;
+  }
 
-.load-game-id {
-  color: @text_dark;
-  max-width: 230px
+  .btn {
+    margin: 12px 0 0;
+  }
 }

@@ -10,18 +10,88 @@
   margin-left: 0;
 }
 
-.admin-home-links {
+// Admin navigation (AdminNav.vue): stays at the top of every admin page while scrolling
+.admin-nav {
+  position: sticky;
+  top: 12px;
+  z-index: 2;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 18px;
-  margin: 10px 0 0;
-  padding: 0;
-  list-style: none;
+  align-items: center;
+  gap: 10px 24px;
+  background: #1d1e24;
 }
 
-.games-overview-container .admin-home-heading {
-  margin: 12px 0 0;
-  font-size: 20px;
+.admin-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.games-overview-container .admin-nav-link {
+  display: block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: rgba(238, 238, 238, 0.8);
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+  }
+
+  &--active {
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    font-weight: 600;
+  }
+}
+
+.admin-nav-more {
+  position: relative;
+
+  summary {
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: ' ▾';
+  }
+
+  &[open] summary::after {
+    content: ' ▴';
+  }
+}
+
+.admin-nav-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  padding: 6px;
+  border: 1px solid @server-settings-line;
+  border-radius: 10px;
+  background: #1d1e24;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  a {
+    padding: 8px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+  }
+
+  a:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
 }
 
 .server-settings {
@@ -161,5 +231,45 @@
 
   .server-settings-message {
     flex-basis: 100%;
+  }
+}
+
+// Asking for the serverId (ServerIdPrompt.vue): a friendly sentence, the field right below it
+.server-id-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 560px;
+}
+
+.server-id-prompt-text {
+  margin: 0;
+  font-size: 15px;
+}
+
+.server-id-prompt-hint {
+  margin: 0;
+  color: @server-settings-dim;
+  font-size: 13px;
+}
+
+.server-id-prompt-row {
+  margin-top: 6px;
+}
+
+// Phone: navigation smaller, so it takes less of the screen while it stays at the top
+@media only screen and (max-width: 700px) {
+  .admin-nav {
+    gap: 6px;
+    padding: 10px 12px;
+
+    h1 {
+      font-size: 18px;
+    }
+  }
+
+  .games-overview-container .admin-nav-link {
+    padding: 5px 9px;
+    font-size: 14px;
   }
 }

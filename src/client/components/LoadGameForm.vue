@@ -1,26 +1,26 @@
 <template>
-  <div id="load-game">
-      <h1><HomeLink>{{ APP_NAME }}</HomeLink> — <span v-i18n>Load Game</span></h1>
+  <div id="load-game" class="games-overview-container admin-home">
+      <AdminNav active="load"/>
 
-      <div class="load-game-form load-game--block">
-          <div class="container load-game-options">
-              <div >
-                  <label for="gameId" v-i18n>Game, player, or spectator ID to reload:</label><br>
-                  <input class="form-input form-inline load-game-id" :placeholder="$t('Game Id')" v-model="gameId" ><br>
-                  <label for="rollbackCount" v-i18n>Number of saves to delete before loading:</label><br>
-                  <input class="form-input form-inline load-game-id" value="0" v-model="rollbackCount" ><br>
-                  <AppButton title="Load Game" size="big" type="success" @click="loadGame" />
-              </div>
+      <!-- Same card and fields as the other admin pages (admin_settings.less) -->
+      <form class="games-overview-card load-game-card" @submit.prevent="loadGame">
+          <label class="server-settings-label" for="gameId" v-i18n>Game, player, or spectator ID to reload:</label>
+          <div class="server-settings-input">
+              <input id="gameId" :placeholder="$t('Game Id')" v-model="gameId">
           </div>
-      </div>
+          <label class="server-settings-label" for="rollbackCount" v-i18n>Number of saves to delete before loading:</label>
+          <div class="server-settings-input">
+              <input id="rollbackCount" type="number" min="0" v-model="rollbackCount">
+          </div>
+          <div><button type="submit" class="btn btn-primary" v-i18n>Load Game</button></div>
+      </form>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
 import * as constants from '@/common/constants';
-import AppButton from '@/client/components/common/AppButton.vue';
-import HomeLink from '@/client/components/common/HomeLink.vue';
+import AdminNav from '@/client/components/admin/AdminNav.vue';
 import {LoadGameFormModel} from '@/common/models/LoadGameFormModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import {vueRoot} from '@/client/components/vueRoot';
@@ -36,8 +36,7 @@ type LoadGameFormDataModel = {
 export default defineComponent({
   name: 'LoadGameForm',
   components: {
-    HomeLink,
-    AppButton,
+    AdminNav,
   },
   data(): LoadGameFormDataModel {
     return {

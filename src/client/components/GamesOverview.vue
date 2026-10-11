@@ -1,7 +1,7 @@
 <template>
   <div id="games-overview" class="games-overview-container">
+    <AdminNav active="games"/>
     <section class="games-overview-card games-overview-head">
-      <h1><HomeLink>{{ constants.APP_NAME }}</HomeLink> — <span v-i18n>Games Overview</span></h1>
       <ImportGameForm :serverId="serverId" @imported="loadGames"/>
     </section>
 
@@ -27,7 +27,10 @@
 
     <section class="games-overview-card">
       <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
-      <p v-else-if="status === 'error'" class="games-overview-note games-overview-note--error" v-i18n>Could not load the games. Is the serverId correct?</p>
+      <template v-else-if="status === 'error'">
+        <p class="games-overview-note" v-i18n>The server is not answering right now – probably it is just restarting.</p>
+        <button type="button" class="btn btn-tone-quiet" @click="loadGames" v-i18n>Try again</button>
+      </template>
       <p v-else-if="summaries.length === 0" class="games-overview-note" v-i18n>No games yet.</p>
       <div v-else class="games-overview-scroll">
         <table class="games-overview-table">
@@ -59,7 +62,7 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {AdminDeleteGameRequest, AdminGameSummary} from '@/common/admin/AdminGameSummary';
 import GameOverview from '@/client/components/admin/GameOverview.vue';
 import ImportGameForm from '@/client/components/admin/ImportGameForm.vue';
-import HomeLink from '@/client/components/common/HomeLink.vue';
+import AdminNav from '@/client/components/admin/AdminNav.vue';
 import {playerColumns} from '@/client/components/admin/playerColumns';
 import {isLocalNetworkHost} from '@/common/admin/isLocalNetworkHost';
 import {LineupWinCounts, winCountsByLineup} from '@/client/components/admin/winCounts';
@@ -74,7 +77,7 @@ type DataModel = {
 export default defineComponent({
   name: 'GamesOverview',
   components: {
-    HomeLink,
+    AdminNav,
     GameOverview,
     ImportGameForm,
   },

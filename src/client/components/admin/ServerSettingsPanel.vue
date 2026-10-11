@@ -2,7 +2,11 @@
   <!-- Server settings instead of editing the .env file by hand: one card per group, save and restart at the bottom -->
   <div class="server-settings">
     <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
-    <p v-else-if="status === 'error'" class="games-overview-note games-overview-note--error" v-i18n>Could not load the settings. Is the serverId correct?</p>
+    <ServerIdPrompt v-else-if="status === 'missingId' || status === 'wrongId'" :wrong="status === 'wrongId'"/>
+    <div v-else-if="status === 'unreachable'" class="games-overview-card server-id-prompt">
+      <p class="server-id-prompt-text" v-i18n>The server is not answering right now – probably it is just restarting.</p>
+      <div><button type="button" class="btn btn-tone-quiet" @click="load" v-i18n>Try again</button></div>
+    </div>
     <template v-else>
       <section v-for="group in groups" :key="group.name" class="games-overview-card server-settings-group">
         <h2 v-i18n>{{ group.name }}</h2>
@@ -52,13 +56,15 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {paths} from '@/common/app/paths';
+import {statusCode} from '@/common/http/statusCode';
+import ServerIdPrompt from '@/client/components/admin/ServerIdPrompt.vue';
 import {translateText} from '@/client/directives/i18n';
 import {
   SERVER_SETTING_GROUPS, SERVER_SETTINGS, ServerSettingDefinition, ServerSettingState, ServerSettingsModel, ServerSettingsUpdate,
 } from '@/common/admin/serverSettings';
 
 type DataModel = {
-  status: 'loading' | 'error' | 'done',
+  status: 'loading' | 'missingId' | 'wrongId' | 'unreachable' | 'done',
   states: ReadonlyArray<ServerSettingState>,
   // Values in the form; a key counts as changed when it differs from what is saved (or from the .env value)
   values: Record<string, string>,
@@ -75,6 +81,7 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
+  components: {ServerIdPrompt},
   props: {
     serverId: {type: String, required: true},
   },
@@ -138,15 +145,24 @@ export default defineComponent({
       this.values = Object.fromEntries(SERVER_SETTINGS.map(({key}) => [key, this.configured(key)]));
     },
     async load(): Promise<void> {
+      if (this.serverId === '') {
+        this.status = 'missingId';
+        return;
+      }
+      this.status = 'loading';
       try {
         const response = await fetch(this.url(paths.API_ADMIN_SETTINGS));
+        if (response.status === statusCode.forbidden) {
+          this.status = 'wrongId';
+          return;
+        }
         if (!response.ok) {
           throw new Error(await response.text());
         }
         this.apply(await response.json());
         this.status = 'done';
       } catch {
-        this.status = 'error';
+        this.status = 'unreachable';
       }
     },
     async save(): Promise<void> {
