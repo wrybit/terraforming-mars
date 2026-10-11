@@ -16,6 +16,31 @@
   margin: 0 auto 40px;
 }
 
+// Menu vertically centred in the space between window top and footer, but optically a little higher:
+// the free space is split top : bottom = above : below. Grows with the window height; on short windows
+// (phone) there is no free space and the menu simply starts at the top as before.
+@start-screen-space-above: 3;
+@start-screen-space-below: 4;
+
+.topmost-start-screen > .main-container {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+
+  &::before,
+  &::after {
+    content: "";
+  }
+
+  &::before {
+    flex: @start-screen-space-above 0 0;
+  }
+
+  &::after {
+    flex: @start-screen-space-below 0 0;
+  }
+}
+
 .start-screen-game-title {
   color: #daab63;
   padding: 40px 0 10px 0;
