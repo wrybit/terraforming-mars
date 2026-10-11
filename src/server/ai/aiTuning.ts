@@ -130,6 +130,8 @@ export type AiTuning = {
   exposedSpotRisk: number,
   /** Award lead uncertainty from actions still open this generation: per 10 M€ of the richest player who has not passed (stateValue.ts). */
   awardActionSwing: number,
+  /** Card value × (1 + weight × fit to the flow of the own game), fit learned from top players' tableaus (cardFit.ts); 0 = off. */
+  flowFit: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -241,6 +243,7 @@ export const BASELINE_TUNING: AiTuning = {
   cityNeighbourShare: 0.6,
   exposedSpotRisk: 0.5,
   awardActionSwing: 0,
+  flowFit: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -456,6 +459,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human games: humans play ~3× as many card-drawing cards and draw 1.2 cards per generation against 0.3.
   // drawCards: round 19 variant again on today's baseline; cardIncome: tag-triggered draws as income too.
   cardIncome: {drawCardModel: 2},
+  // Human feedback: not the best card but the one that fits the direction the own game has taken.
+  flowFit: {flowFit: 1},
+  flowFit2: {flowFit: 2},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.

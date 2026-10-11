@@ -9,6 +9,7 @@ import {newCard} from '../createCard';
 import {finishMove, GameSnapshot, playerView, withCopy} from './gameCopy';
 import {relativeValue, ValuationContext, valuationContext} from './stateValue';
 import {cardPriorFactor} from './cardPriors';
+import {flowFit} from './cardFit';
 import {closingWindowFactor, requirementOutlook} from './requirementOutlook';
 import {pickSome} from './randomChoice';
 import {engineValue} from './engineValue';
@@ -77,7 +78,9 @@ export function playGain(player: IPlayer, card: ICard): number | undefined {
 /** BGA priors with this player's weights (aiTuning.ts cardPriorWeight, draftPriorWeight). */
 function priorFactor(card: ICard, player: IPlayer): number {
   const tuning = tuningOf(player);
-  return cardPriorFactor(card.name, tuning.cardPriorWeight, tuning.draftPriorWeight, player.game.generation);
+  const prior = cardPriorFactor(card.name, tuning.cardPriorWeight, tuning.draftPriorWeight, player.game.generation);
+  // How well the card fits the flow of the own game (cardFit.ts), 0 = off.
+  return tuning.flowFit > 0 ? prior * Math.max(0.5, 1 + tuning.flowFit * flowFit(player, card.name)) : prior;
 }
 
 function costOf(card: ICard, player: IPlayer): number {
