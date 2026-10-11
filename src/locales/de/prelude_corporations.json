@@ -1,6 +1,4 @@
 {
-  "SPIRE": "",
-  "Spire": "",
   "Standard Project": "Standard Projekt",
   "You start with 50 M€. As your first action, draw 4 cards, then discard 3 cards from your hand.": "Du beginnst mit 50 M€. Als erste Aktion ziehe 4 Karten und wirf dann 3 Karten von deiner Hand ab.",
   "Effect: When you play a card with at least 2 tags. including this, add 1 science resource here.": "EFFEKT: Wenn du eine Karte mit mindestens 2 Symbolen ausspielst, einschließlich dieser, füge dieser Karte 1 Wissenschaft hinzu.",
@@ -29,34 +27,19 @@
   "You start with 30 M€. Increase your energy, plant, and steel production 1 step each.": "Du beginnst mit 30 M€. Erhöhe deine Energie-, Pflanzen- und Stahl-Produktion von 1.",
   "Effect: AWARDS AND MILESTONES ALWAYS COST 0 M€ FOR YOU.": "EFFEKT: Auszeichnungen und Meilensteine kosten dich immer 0 M€.",
 
-  "Cheung Shing": "",
-  "■■MARS■■": "",
   "Cheung Sing Mars": "Cheung Shing Mars",
-  "Cheung Shing Mars": "",
-  "Cheung Shing MARS": "",
   "You start with 3 M€ production and 44 M€.": "Du beginnst mit 44 M€ und einer M€-Produktion von 3.",
   "Effect: When you play a building tag, you pay 2 M€ less for it.": "EFFEKT: Wenn du ein Gebäudesymbol spielst, zahlst du 2 M€ weniger.",
 
-  "POINT LUNA": "",
-  "Point Luna": "",
   "You start with 1 titanium production and 38 M€.": "Du beginnst mit 38 M€ und einer Titan-Produktion von 1.",
   "Effect: When you play an Earth tag, including this, draw a card.": "EFFEKT: Wenn du ein Erdsymbol spielst (inklusive diesem), ziehe eine Karte.",
 
-  "ROBINSON": "",
-  "Robinson Industries": "",
   "You start with 47 M€.": "Du beginnst mit 47 M€.",
   "Action: Spend 4 M€ to increase (one of) your LOWEST production 1 step.": "AKTION: Bezahle 4 M€, um eine deiner NIEDRIGSTEN Produktionen um 1 zu erhöhen.",
 
-  "VALLEY": "",
-  "TRUST": "",
-  "Valley Trust": "",
   "You start with 37 M€. As your first action, draw 3 Prelude cards, and play one of them. Discard the other two.": "Du beginnst mit 37 M€. Als deine erste Aktion, ziehe 3 Präludium-Karten und spiele eine davon. Wirf die anderen beiden ab.",
   "Effect: When you play a science tag, you pay 2M€ less for it.": "EFFEKT: Wenn du ein Wissenschaftssymbol spielst, zahlst du 2 M€ weniger.",
 
-  "VIT": "",
-  "O": "",
-  "R": "",
-  "Vitor": "",
   "award": "Auszeichnungen",
   "You start with 45 M€. As your first action, fund an award for free.": "Du beginnst mit 45 M€. Als deine erste Aktion, fördere eine Auszeichnung gratis.",
   "Effect: When you play a card with a NON-NEGATIVE VP icon, including this, gain 3 M€.": "EFFEKT: Wenn du eine Karte mit einem NICHT-NEGATIVEN SP-Symbol spielst (inklusive dieser), erhalte 3 M€."

@@ -1,6 +1,4 @@
 {
-  "SPIRE": "",
-  "Spire": "",
   "Standard Project": "Standardiprojekti",
   "You start with 50 M€. As your first action, draw 4 cards, then discard 3 cards from your hand.": "Aloitat 50 M€:llä. Ensimmäisenä toimintona nosta 4 korttia, sitten hylkää 3 korttia kädestäsi.",
   "Effect: When you play a card with at least 2 tags. including this, add 1 science resource here.": "VAIKUTUS: Kun pelaat kortin jossa vähintään 2 tunnistetta, sisältäen tämän, lisää 1 tiede-resurssi tähän.",
@@ -30,20 +28,12 @@
   "You start with 30 M€. Increase your energy, plant, and steel production 1 step each.": "Aloitat 30 M€:llä. Lisää energia-, kasvi- ja terästuotantoasi 1 askel kukin.",
   "Effect: AWARDS AND MILESTONES ALWAYS COST 0 M€ FOR YOU.": "VAIKUTUS: Palkinnot ja saavutukset maksavat sinulle aina 0 M€.",
 
-  "Cheung Shing": "",
-  "■■MARS■■": "",
-  "Cheung Sing Mars": "",
-  "Cheung Shing Mars": "",
-  "Cheung Shing MARS": "",
   "You start with 3 M€ production and 44 M€.": "Aloitat 3 M€-tuotannolla ja 44 M€:llä.",
   "Effect: When you play a building tag, you pay 2 M€ less for it.": "VAIKUTUS: Kun pelaat rakennus-tunnisteen, maksat siitä 2 M€ vähemmän.",
 
-  "POINT LUNA": "",
-  "Point Luna": "",
   "You start with 1 titanium production and 38 M€.": "Aloitat 1 titaanituotannolla ja 38 M€:llä.",
   "Effect: When you play an Earth tag, including this, draw a card.": "VAIKUTUS: Kun pelaat Maa-tunnisteen, sisältäen tämän, nosta kortti.",
 
-  "ROBINSON": "",
   "INDUSTRIES": "TEOLLISUUS",
   "Robinson Industries": "Robinson Teollisuus",
   "You start with 47 M€.": "Aloitat 47 M€:llä.",
@@ -55,12 +45,7 @@
   "You start with 37 M€. As your first action, draw 3 Prelude cards, and play one of them. Discard the other two.": "Aloitat 37 M€:llä. Ensimmäisenä toimintona nosta 3 alkusoitto-korttia ja pelaa yksi niistä. Hylkää kaksi muuta.",
   "Effect: When you play a science tag, you pay 2M€ less for it.": "VAIKUTUS: Kun pelaat tiede-tunnisteen, maksat siitä 2 M€ vähemmän.",
 
-  "VIT": "",
-  "O": "",
-  "R": "",
-  "Vitor": "",
   "You start with 45 M€. As your first action, fund an award for free.": "Aloitat 45 M€:llä. Ensimmäisenä toimintona rahoita palkinto ilmaiseksi.",
-  "Effect: When you play a card with a NON-NEGATIVE VP icon, including this, gain 3 M€.": "VAIKUTUS: Kun pelaat kortin jossa on EI-NEGATIIVINEN VP-kuvake, sisältäen tämän, saat 3 M€.",
+  "Effect: When you play a card with a NON-NEGATIVE VP icon, including this, gain 3 M€.": "VAIKUTUS: Kun pelaat kortin jossa on EI-NEGATIIVINEN VP-kuvake, sisältäen tämän, saat 3 M€."
 
-  "Curiosity II": ""
 }

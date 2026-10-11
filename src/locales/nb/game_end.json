@@ -47,14 +47,11 @@
     "1st place for ${0} award (funded by ${1})": "1. plass for ${0} utmerkelse (finansiert av ${1})",
     "2nd place for ${0} award (funded by ${1})": "2. plass for ${0} utmerkelse (finansiert av ${1})",
 
-    "M": "",
-    "U": "",
     "Milestones points": "Poeng for Milepæler",
     "Awards points": "Poeng for utmerkelser",
 
     "Download game log": "Last ned spillelogg",
     "Completed!": "Fullført!",
-    "Gen:": "",
     "Generation": "Generasjon",
   "Global parameters": "Globale parametere"
 }

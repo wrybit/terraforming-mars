@@ -44,11 +44,10 @@
     "${0} place for ${1} award (funded by ${2})": "褒賞${0}：${1}（${2}が設立）",
     "Claimed ${0} milestone": "称号：${0}",
 
-    "M": "",
-    "A": "",
+    "M": "称",
+    "A": "褒",
     "Milestones points": "称号",
     "Awards points": "褒賞",
 
-    "Download game log": "",
   "Global parameters": "グローバルパラメーター"
 }

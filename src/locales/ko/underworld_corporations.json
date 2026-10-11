@@ -1,65 +1,20 @@
 {
 
-"AERON GENOMICS": "",
-"Aeron Genomics": "",
-"Effect: After you excavate an underground resource, put an animal on this card.": "",
-"Action: Spend 1 M€ to move an animal from here to another card.": "",
-"// You start with 35 M€, 5 steel, and 1 animal resource on this card. 1 VP per 3 animals on this card.": "",
 
-"ANUBIS SECURITIES": "",
-"Anubis Securities": "",
-"// Effect: When any player increases their TR by 1, they gain 2 M€.": "",
-"// At the end of the production phase, discard all your corruption and gain 6 M€ for each unit discarded. Then, each player must pay you 1 M€ per unit of corruption they have. If no one has any, gain 1 TR instead.": "",
 "You start with 42 M€. As your first action, play a card ignoring global requirements.": "42 M€를 가지고 게임 시작. 게임 첫 행동으로서 행성 지표 조건을 무시하고 카드 1장 추진.",
 
-"ARBORIST COLLECTIVE": "",
-"Arborist Collective": "",
-"Effect: After you play an event card with a base cost of 14 or less, put an activist resource on this card.": "",
-"Action: Spend 2 activists here to increase your plant production 1 step and gain 2 plants.": "",
-"You start with 36 M€, 3 plants and 1 plant production.": "",
 
-"DEMETRON LABS": "",
-"Demetron Labs": "",
-"After you play a science tag, including this, put 2 data on this card.": "",
-"Action: Spend 3 data here to identify 3 underground resources. Claim 1 of them.": "",
+"After you play a science tag, including this, put 2 data on this card.": "과학 태그를 추진한 후(이 카드 포함) 이 카드에 데이터 자원 2개 추가.",
 "You start with 45 M€ and 2 data on this card.": "45 M€와 이 카드 위의 데이터 자원 2개를 가지고 게임 시작.",
 
-"HADESPHERE": "",
-"Hadesphere": "",
-"Action: Excavate an underground resource.": "",
-"You start with 36 M€ and 5 steel. As your first action, identify any 3 underground resources on Mars.": "",
 
-"HECATE SPEDITIONS": "",
-"Hecate Speditions": "",
 "planetary tag": "행성 태그",
-"Effect: When you play an Earth, Mars, Venus, Moon, or Jovian tag, including this, put 1 supply chain resource on this card.": "",
-"Effect: Spend 2 supply chain resources (min. 1) to trade.": "",
-"Action: Spend 5 supply chain resources to gain a trade fleet.": "",
-"You start with 38 M€. As your first action, place a colony.": "",
 
-"HENKEI GENETICS": "",
-"Henkei Genetics": "",
-"// Action: Pay 1 corruption to draw a card with a microbe tag.": "",
-"// You start with 47 M€ and 1 corruption.": "",
 
-"JENSON-BOYLE & CO": "",
-"Jenson-Boyle & Co": "",
-"Action: Pay 1 corruption to gain either 4 steel, 3 titanium, 3 plants or 6 heat.": "",
 "You start with 46 M€ and 2 corruption.": "46 M€와 부패 2를 가지고 게임 시작.",
 
-"KEPLERTEC": "",
-"Keplertec": "",
-"Action: Spend 1 titanium to put a fighter resource on ANY card.": "",
-"Effect: When you place a fighter on this card, identify 4 underground resources FROM THE PILE. Claim 1. Shuffle the remaining tokens back into the pile.": "",
 "You start with 33 M€, 3 titanium, and 1 titanium production.": "33 M€, 티타늄 자원 3개, 티타늄 생산력 1을 가지고 게임 시작.",
 
-"KINGDOM OF TAURARO": "",
-"Kingdom of Tauraro": "",
-"// Effect: You may place cities adjacent to other cities. You must always place cities adjacent to tiles you already own, if possible.": "",
-"You start with 50 M€ and 6 M€ production. All opponents gain 2 M€ production. As your first action, place a city.": "50 M€와 M€ 생산력 6을 가지고 게임 시작. 모든 상대는 M€ 생산력 2 획득. 게임 첫 행동으로서 도시 1개 배치.",
+"You start with 50 M€ and 6 M€ production. All opponents gain 2 M€ production. As your first action, place a city.": "50 M€와 M€ 생산력 6을 가지고 게임 시작. 모든 상대는 M€ 생산력 2 획득. 게임 첫 행동으로서 도시 1개 배치."
 
-"VOLTAGON": "",
-"Voltagon": "",
-"Effect: After you claim an underground resource, gain 2 energy.": "",
-"Action: Spend 8 energy to raise oxygen or Venus 1 step.": ""
 }

@@ -1,5 +1,4 @@
 {
-  "% Venus":"",
 
   "Stratospheric Birds":"Aves Estratosféricas",
   "Requires Venus 12% and that you spend 1 floater from any card.":"Requiere 12% en la escala de Venus. Gasta 1 flotador de cualquier carta. 1 PV por cada animal en esta carta.",
@@ -63,7 +62,6 @@
   "Spin-Inducing Asteroid":"Asteroide Inductor de Giro",
   "Venus must be 10% or lower. Raise Venus 2 steps.":"La escala de Venus debe estar al 10% o inferior. Aumenta la escala de Venus 2 niveles.",
 
-  "Dirigibles":"",
   "Action: Add 1 floater to ANY card":"Acción: añade 1 flotador a CUALQUIER carta.",
   "Effect: When playing a Venus tag, Floaters here may be used as payment, and are worth 3M€ each.":"Efecto: al jugar una carta tipo Venus, los flotadores de esta carta pueden usarse para pagar el coste, con un valor de 3 M€ cada uno.",
 
@@ -136,7 +134,6 @@
   "Requires Venus 12%. Decrease your energy production 1 step. Place a city tile ON THE RESERVED AREA.":"Requiere 2 símbolos tipo ciencia. Aumenta tu producción de M€ 2 niveles. Coloca una loseta de ciudad en el ÁREA RESERVADA. 1 PV por cada 3 flotadores en esta carta.",
 
   "Sister Planet Support":"Planeta Hermano",
-  "Venus Earth":"",
   "Requires Venus and Earth tags. Increase your M€ production 3 steps.":"Requiere un símbolo tipo Venus y uno tipo Tierra. Aumenta tu producción de M€ 3 niveles.",
 
   "Stratopolis":"Estratópolis",
@@ -164,7 +161,5 @@
   "Orbital Reflectors":"Reflectores Orbitales",
   "Raise Venus 2 steps. Increase your heat production 2 steps.":"Aumenta la escala de Venus 2 niveles. Incrementa tu producción de calor 2 niveles.",
 
-  "Saturn Surfing":"",
-  "Action: Spend 1 floater from here to gain 1 M€ from each floater here, INCLUDING THE PAID FLOATER. Max 5.":"",
   "Add 1 floater here for every Earth tag you have, including this.": "Añade 1 flotador aquí por cada símbolo de Tierra que tengas, incluido este."
 }

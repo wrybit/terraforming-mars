@@ -1,47 +1,35 @@
 {
 
-    "Applied Science": "",
     "Action: Remove 1 resource here to either add 1 resource to ANY CARD WITH A RESOURCE or gain 1 standard resource.": "행동: 이 카드 위의 과학 자원 1개를 제거하고, 기본 자원 1개 획득하거나 자원이 놓여 있는 아무 카드 위에 그 자원 1개 추가",
     "Add 6 science resources here.": "이 카드 위에 과학 자원 6개 추가.",
 
-    "Atmospheric Enhancers": "",
     "Raise temperature 2 steps, or raise oxygen 2 steps, or raise Venus 2 steps. Draw 2 cards with floater icons.": "기온, 산소 농도, 금성 지표 중 하나를 골라 2단계 상승. 부양체 자원이 그려진 카드 2장이 공개될 때까지 더미에서 카드를 공개. 손으로 그 카드 2장을 가져오고 나머지는 버림.",
 
-    "Board of Directors": "",
     "ACTION:": "행동:",
     "DRAW 1 PRELUDE CARD: EITHER DISCARD IT, OR PAY 12 M€ AND REMOVE 1 DIRECTOR RESOURCE HERE TO PLAY IT.": "서곡 카드 1장 획득. 그 카드를 버리거나 12 M€을 지불하고 이 카드에서 director 자원 1개를 제거하여 그 카드를 추진.",
     "This is not the director icon yet.": "아직 director 아이콘이 없음.",
     "Add 4 director resources here.": "이 카드에 director 자원 4개 추가.",
 
-    "Colony Trade Hub": "",
     "Increase your energy production 1 step. Gain 2 titanium": "에너지 생산력 1 증가. 티타늄 자원 3개 획득.",
     "Effect: When any colony is placed, gain 2 M€.": "지속 효과: 아무 개척기지가 배치될 때마다, 자신은 2 M€ 획득.",
 
-    "Corridors of Power": "",
     "Effect: Each time you become party leader, draw 1 card.": "지속 효과: 자신의 의원이 의장이 될 때마다 카드를 1장 뽑음.",
     "Raise your TR 1 step and gain 4 M€": "테라포밍 등급 1 TR 상승. 4 M€ 획득.",
 
-    "Focused Organization": "",
     "Action: Discard 1 card and spend 1 standard resource to draw 1 card and gain 1 standard resource": "행동: 카드 1장을 버리고 기본 자원 1개를 제거해서, 카드 1장과 기본 자원 1개 획득.",
     "Draw 1 card and gain 1 standard resource.": "카드 1장 획득. 기본 자원 1개 획득.",
 
-    "Nobel Prize": "",
     "Gain 5 M€. Draw 2 cards with requirements.": "5 M€ 획득. 추진 조건이 있는 카드 2장 획득.",
 
-    "Planetary Alliance": "",
     "Raise your TR 2 steps. Draw 1 Jovian card and 1 Venus card.": "테라포밍 등급 2 TR 상승. 목성 카드 1장과 금성 카드 1장 획득.",
 
-    "Space Lanes": "",
     "Effect: When you play a Jovian, Earth, or Venus tag, you pay 2 M€ less for it.": "지속 효과: 금성, 지구, 목성 카드 사용 시, 2 M€ 할인.",
 
-    "Old Mining Colony": "",
     "Increase your titanium production 1 step. Place 1 colony. Discard 1 card.": "티타늄 생산력 1 증가. 개척기지 1개 배치. 카드 1장 버림.",
 
 
-    "Strategic Base Planning": "",
     "Pay 3M€. Place a city. Place a colony.": "3 M€ 지불. 도시 1개 배치. 개척지기 1개 배치.",
 
-    "Anti-desertification Techniques": "",
     "Gain 3 M€. Increase your plant production 1 step and your steel production 1 step.": "3 M€ 획득. 식물 생산력 1 증가. 강철 생산력 1 증가.",
 
     "Corporate Archives": "기업 아카이브",
@@ -53,7 +41,6 @@
     "Double Down": "재집행",
     "Copy your other prelude's direct effect.": "자신의 다른 서곡 카드의 즉발 효과를 복사.",
 
-    "Giant Solar Collector": "",
     "Increase your energy production 2 steps. Raise Venus 1 step.": "에너지 생산력 2 증가. 금성 개척률 1단계 상승.",
 
     "Head Start": "유리한 출발",

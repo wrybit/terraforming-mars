@@ -35,7 +35,7 @@
   "Gain 8 M€.": "Hanki 8 M€.",
 
   "Trade Advance": "Kauppaetulyönti",
-  "[ solo": "",
+  "[ solo": "[ yksinpeli",
   "Trade all colonies with": "Käy kauppaa kaikkien siirtokuntien kanssa",
   "Gain 2 M€ [SOLO: Gain 10 M€]. Immediately trade with all active colonies. You may increase the Colony Tile track 1 step before each of these trades.": "Hanki 2 M€ [YKSINPELI: Hanki 10 M€]. Käy välittömästi kauppaa kaikkien aktiivisten siirtokuntien kanssa. Voit lisätä siirtokuntalaatojen uraa 1 askel ennen jokaista kauppaa.",
 
@@ -184,7 +184,6 @@
   "Action: Add 1 microbe to this card.": "TOIMINTO: Lisää 1 mikrobi tälle kortille.",
   "1 VP per 4 Microbes on this card.": "1 VP jokaista 4 mikrobia kohden tällä kortilla.",
 
-  "Virus": "",
   "Remove up to 2 animals or 5 plants from any player.": "Poista enintään 2 eläintä TAI 5 kasvia keneltä tahansa pelaajalta.",
 
   "Miranda Resort": "Miranda-lomakeskus",
@@ -657,7 +656,6 @@
   "Underground Detonations": "Maanalaiset räjäytykset",
   "Action: Spend 10M€ to increase your heat production 2 steps.": "TOIMINTO: Maksa 10 M€ lisätäksesi lämpötuotantoasi 2 askelta.",
 
-  "Soletta": "",
   "Increase your heat production 7 steps.": "Lisää lämpötuotantoasi 7 askelta.",
 
   "Technology Demonstration": "Teknologian esittely",

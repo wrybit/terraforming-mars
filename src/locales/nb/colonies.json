@@ -1,21 +1,8 @@
 {
 	"Callisto": "Kallisto",
-	"Ceres": "",
-	"Enceladus": "",
-	"Europa": "",
-	"Ganymede": "",
-	"Io": "",
-	"Luna": "",
-	"Miranda": "",
-	"Pluto": "",
-	"Titan": "",
-	"Triton": "",
-	"Leavitt": "",
-	"Titania": "",
-	"Hygiea": "",
-	"Iapetus": "",
+	"Ganymede": "Ganymedes",
+	"Luna": "Månen",
 	"Mercury": "Merkur",
-	"Pallas": "",
 
 	"Colony Bonus": "Kolonibonus",
 	"Trade Income": "Inntekt",
@@ -43,10 +30,8 @@
 	"Triton - (Titanium)": "Triton - (Titan)",
 	"Leavitt - (Science)": "Leavitt - (Vitenskap)",
 	"Titania - (VP)": "Titania - (SP)",
-	"Venus - (Venus)": "",
 	"Hygiea - (Attack)": "Hygiea - (Angrip)",
 	"Iapetus - (TR)": "Iapetus - (TV)",
 	"Mercury - (Production)": "Merkur - (Produksjon)",
-	"Pallas - (Politics)": "Pallas - (Politikk)",
-	"Iapetus II - (Data)": ""
+	"Pallas - (Politics)": "Pallas - (Politikk)"
 }

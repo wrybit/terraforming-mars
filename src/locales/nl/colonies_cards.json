@@ -26,7 +26,7 @@
     "Ecology Research": "Ecologisch Onderzoek",
     "Increase your plant production 1 step for each colony you own. Add 1 animal to ANOTHER card and 2 microbes to ANOTHER card.": "Verhoog je plantenproductie met 1 voor elke kolonie die je bezit. Voeg een dier toe aan EEN ANDERE kaart en voeg 2 microben toe aan EEN ANDERE kaart.",
 
-    "Floater Leasing": "",
+    "Floater Leasing": "Zweverleasing",
     "Increase your M€ production 1 step PER 3 floaters you have.": "Verhoog je M€-productie met 1 voor elke 3 floaters die je bezit.",
 
     "Floater Prototypes": "Floater-Prototypes",
@@ -54,7 +54,7 @@
     "1 VP per 2 floaters here.": "1 OP per 2 floaters op deze kaart.",
     "Requires 1 Jovian tag. Increase your TR 1 step. Add 2 floaters to ANY card.": "Vereist 1 Jupiter-label. Verhoog je TN met 1. Voeg 2 floaters toe aan een WILLEKEURIGE kaart.",
 
-    "Jupiter Floating Station": "",
+    "Jupiter Floating Station": "Zwevend station Jupiter",
     "Action: Add 1 floater to a JOVIAN CARD, or gain 1 M€ for every floater here [MAX 4].": "ACTIE: Voeg een floater toe aan een JUPITERKAART of ontvang 1 M€ voor elke floater op deze kaart [max. 4].",
     "Requires 3 science tags.": "Vereist 3 wetenschaps-labels.",
 
@@ -130,7 +130,6 @@
 
     "Sub-zero Salt Fish": "IJs Zoutwatervissen",
     "Action: Add 1 animal to this card.": "ACTIE: Voeg 1 dier toe aan deze kaart.",
-    "1 VP per 2 animals on this card. ***already defined***": "",
     "Requires -6 C. Decrease any plant production 1 step.": "Vereist -6°C. Verlaag een willekeurige plant-productie met 1.",
 
     "Titan Air-scrapping": "Titan Luchtrecycling",

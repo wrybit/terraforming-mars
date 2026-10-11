@@ -1,30 +1,18 @@
 {
-    "Desperate Measures": "",
     "Place a bronze cube on a dust storm tile and raise oxygen 1 step, or place a bronze cube on an erosion tile and raise the temperature 1 step. The hazard tile with the bronze cube cannot be removed.": "먼지 폭풍 타일에 청동 큐브를 놓고 산소 농도 1% 상승, 또는 침식 타일에 청동 큐브를 놓고 기온 1단계 상승. 청동 큐브가 놓인 위험 타일은 제거할 수 없음.",
 
     "Place one of these tiles on an area with a steel or titanium placement bonus, ADJACENT TO ANOTHER OF YOUR TILES. This tile provides an ADJACENCY BONUS of the same resource as the area. Increase your production of that resource 1 step.": "강철 또는 티타늄 배치 보너스가 있는 칸 중 자신의 다른 타일에 인접한 곳에 이 타일 중 하나를 배치. 이 타일은 그 칸과 같은 자원의 인접 보너스를 제공. 그 자원의 생산력 1 증가.",
 
     "Place this tile adjacent to a city tile. This tile grants an ADJACENCY BONUS of 1 steel.": "도시 타일에 인접하게 이 타일 배치. 이 타일은 강철 자원 1개의 인접 보너스를 제공.",
 
-    "Marketing Experts": "",
-    "Effect: When an ADJACENCY BONUS is collected from a tile you own, you gain 1 M€.": "",
 
-    "Bioengineering Enclosure": "",
-    "Action: Remove 1 animal from THIS card to add 1 animal to ANOTHER card.": "",
     "Requires 1 science tag to play. Add 2 animals to this card. OTHERS MAY NOT REMOVE ANIMALS FROM THIS CARD.": "조건: 과학 태그 1개 이상. 이 카드에 동물 자원 2개 추가. 다른 플레이어는 이 카드의 동물 자원을 제거할 수 없음.",
 
-    "Butterfly Effect": "",
     "Gain 1 TR. Move each hazard marker up to 1 step up or down along its terraforming track.": "테라포밍 등급 1 상승. 각 위험 마커를 해당 테라포밍 트랙에서 최대 1단계 위나 아래로 이동.",
     "All hazard markers": "모든 위험 마커",
 
-    "Geological Survey": "",
-    "Any max 5 Greeneries": "",
-    "Effect: When placing a tile ON MARS grants you any steel, titanium, or heat, you gain one additional of each of those resources that you gain.": "",
     "Requires 5 or fewer greeneries on Mars.": "조건: 화성에 녹지 5장 이하.",
 
-    "Ecological Survey": "",
-    "Any 3 Greeneries": "",
-    "Effect: When placing a tile grants you any plants, animals or microbes, you gain one additional of each of those resources that you gain.": "",
     "Requires 3 greeneries on Mars.": "조건: 화성에 녹지 3장 이상.",
 
     "Decrease your energy production 4 steps and increase your plant production 2 steps. Raise your TR 3 steps. Place this tile, which provides an ADJACENCY BONUS of 1 plant and 1 microbe.": "에너지 생산력 4 감소. 식물 생산력 2 증가. 테라포밍 등급 3단계 상승. 식물 자원 1개와 미생물 자원 1개의 인접 보너스를 제공하는 이 타일 배치.",
@@ -47,8 +35,6 @@
 
     "The tile grants an ADJACENCY BONUS of 1 animal. 1 VP per 2 animals on this card.": "이 타일은 동물 자원 1개의 인접 보너스를 제공. 이 카드의 동물 자원 2개당 승점 1점.",
 
-    "Bio-Fertilizer Facility": "",
-    "Requires 1 science tag. Increase your plant production 1 step. Add up to 2 microbes to ANY card. Place this tile which grants an ADJACENCY BONUS of 1 plant and 1 microbe.": "",
 
     "Raise temperature 1 step and gain 1 titanium. Remove up to 4 plants from any player. Place this tile which grants an ADJACENCY BONUS of 1 titanium.": "기온 1단계 상승. 티타늄 자원 1개 획득. 아무 1명의 식물 자원 4개까지 제거. 티타늄 자원 1개의 인접 보너스를 제공하는 이 타일 배치.",
 
@@ -56,7 +42,6 @@
 
     "Place this tile which grants an ADJACENCY BONUS of 2 M€. Decrease your energy production 1 step and increase your M€ production 4 steps.": "2 M€의 인접 보너스를 제공하는 이 타일 배치. 에너지 생산력 1 감소. M€ 생산력 4 증가.",
 
-    "Ocean City": "",
     "Requires 6 ocean tiles. Decrease your energy production 1 step and increase your M€ production 3 steps. Place this tile on top of an existing ocean tile, IGNORING NORMAL PLACEMENT RESTRICTIONS FOR CITIES. The tile counts as a city as well as an ocean.": "조건: 해양 타일 6장 이상. 에너지 생산력 1 감소. M€ 생산력 3 증가. 도시의 일반 배치 제한을 무시하고 기존 해양 타일 위에 이 타일 배치. 이 타일은 도시이자 해양으로 취급.",
 
     "Raise temperature 2 steps and place this tile ON EITHER THARSIS THOLUS, ASCRAEUS MONS, PAVONIS MONS OR ARSIA MONS. This tile grants an ADJACENCY BONUS of 2 heat.": "기온 2단계 상승. 타르시스 소화산, 아스크라이우스 화산, 파보니스 화산, 아르시아 화산 중 하나에 이 타일 배치. 이 타일은 열 자원 2개의 인접 보너스를 제공.",

@@ -1,5 +1,4 @@
 {
-  "% Venus": "",
 
   "Stratospheric Birds": "Stratosferische Vogels",
   "Requires Venus 12% and that you spend 1 floater from any card.": "Vereist Venus 12% en dat je 1 zwever van een willekeurige kaart besteedt.",
@@ -44,7 +43,7 @@
   "Terraforming Contract": "Terraformingcontract",
   "Requires that you have at least 25 TR. Increase your M€ production 4 steps.": "Vereist dat je ten minste 25 TN hebt. Verhoog je M€-productie met 4.",
 
-  "Solarnet": "",
+  "Solarnet": "Zonnenet",
   "Requires Venus, Earth and Jovian tags. Draw 2 cards.": "Vereist Venus-, Aarde- en Jupiterlabels. Trek 2 kaarten.",
 
   "Atalanta Planitia Lab": "Atalanta Planitia-lab",
@@ -53,7 +52,7 @@
   "Action: Spend 6 M€ to add an asteroid resource to this card [TITANIUM MAY BE USED], or spend 1 resource from this card to increase Venus 1 step.": "ACTIE: Besteed 6 M€ om een asteroidegrondstof op deze kaart te leggen [TITANIUM MAG WORDEN GEBRUIKT], of besteed 1 grondstof van deze kaart om Venus met 1 stap te verhogen.",
   "Venus must be 14% or lower": "Venus moet 14% of lager zijn",
 
-  "Omnicourt": "",
+  "Omnicourt": "Omnihof",
   "Requires Venus, Earth and Jovian tags. Increase your TR 2 steps.": "Vereist Venus-, Aarde- en Jupiterlabels. Verhoog je TN met 2.",
 
   "Jet Stream Microscrappers": "Jetstream Microschrapers",
@@ -89,7 +88,7 @@
   "Air-Scrapping Expedition": "Luchtschraapexpeditie",
   "Raise Venus 1 step. Add 3 floaters to ANY Venus CARD.": "Verhoog Venus met 1 stap. Voeg 3 zwevers toe aan EEN WILLEKEURIGE Venuskaart.",
 
-  "Atmoscoop": "",
+  "Atmoscoop": "Atmosfeerschep",
   "Requires 3 science tags. Either raise the temperature 2 steps, or raise Venus 2 steps. Add 2 floaters to ANY card.": "Vereist 3 wetenschapslabels. Verhoog ofwel de temperatuur met 2 stappen, of Venus met 2 stappen. Voeg 2 zwevers toe aan EEN WILLEKEURIGE kaart.",
 
   "Comet for Venus": "Komeet Voor Venus",
@@ -109,23 +108,20 @@
   "Forced Precipitation": "Geforceerde Neerslag",
   "Action: Spend 2 M€ to add 1 floater to THIS card, or spend 2 floaters here to increase Venus 1 step.": "ACTIE: Besteed 2 M€ om 1 zwever toe te voegen aan DEZE kaart, of besteed hier 2 zwevers om Venus met 1 stap te verhogen.",
 
-  "Freyja Biodomes": "",
-  "10% Venus": "",
+  "Freyja Biodomes": "Freyja-biokoepels",
   "Requires 10% on the Venus track. Add 2 microbes or 2 animals to another Venus card. Production: energy -1, M€ +2.": "Vereist 10% op het Venusspoor. Voeg 2 microben of 2 dieren toe aan een andere Venuskaart. Productie: energie -1, M€ +2.",
 
   "Giant Solar Shade": "Reusachtig Zonnescherm",
 
-  "Gyropolis": "",
   "Decrease your energy production 2 steps. Increase your M€ production 1 step for each Venus and Earth tag you have. Place a city tile.": "Verlaag je energieproductie met 2. Verhoog je M€-productie met 1 voor elk Venus- en Aardelabel dat je hebt. Plaats een stadstegel.",
 
   "Io Sulphur Research": "Io Zwavelonderzoek",
   "Draw 1 card, or draw 3 if you have at least 3 Venus tags.": "Trek 1 kaart, of trek 3 kaarten als je ten minste 3 Venuslabels hebt.",
 
-  "Ishtar Mining": "",
-  "8% Venus": "",
+  "Ishtar Mining": "Mijnbouw op Ishtar",
   "Requires Venus 8%. Increase your titanium production 1 step.": "Vereist Venus 8%. Verhoog je titaniumproductie met 1.",
 
-  "Luna Metropolis": "",
+  "Luna Metropolis": "Luna-metropool",
   "Increase your M€ production 1 step for each Earth tag you have, including this. Place a city tile on the RESERVED AREA.": "Verhoog je M€-productie met 1 voor elk Aardelabel dat je hebt, inclusief deze kaart. Plaats een stadstegel op HET GERESERVEERDE GEBIED.",
 
   "Local Shading": "Lokale Schaduwvorming",
@@ -139,7 +135,6 @@
   "Venus Earth": "Venus Aarde",
   "Requires Venus and Earth tags. Increase your M€ production 3 steps.": "Vereist Venus- en Aardelabels. Verhoog je M€-productie met 3.",
 
-  "Stratopolis": "",
   "Action: Add 2 floaters to ANY VENUS CARD.": "ACTIE: Voeg 2 zwevers toe aan EEN WILLEKEURIGE VENUSKAART.",
   "1 VP for every 3rd Floater on this card.": "1 OP per 3e zwever op deze kaart.",
   "Requires 2 science tags. Increase your M€ production 2 steps. Place a city tile ON THE RESERVED AREA": "Vereist 2 wetenschapslabels. Verhoog je M€-productie met 2. Plaats een stadstegel OP HET GERESERVEERDE GEBIED",
@@ -148,7 +143,6 @@
   "Requires 2 Venus tags. Increase your M€ production 2 steps.": "Vereist 2 Venuslabels. Verhoog je M€-productie met 2.",
 
   "Venusian Animals": "Venusiaanse Dieren",
-  "18% Venus": "",
   "Effect: When you play a science tag, including this, add 1 animal to this card.": "EFFECT: Wanneer je een wetenschapslabel speelt, inclusief deze kaart, voeg je 1 dier toe aan deze kaart.",
   "Requires Venus 18%": "Vereist Venus 18%",
 

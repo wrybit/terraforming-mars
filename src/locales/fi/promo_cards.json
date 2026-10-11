@@ -65,7 +65,6 @@
   "Action: MOVE THE NOMADS to an adjacent, non-reserved empty area and collect THE PLACEMENT BONUS as if placing a special tile there. No tiles may be placed on the Nomad area.": "TOIMINTO: SIIRRÄ PAIMENTOLAISET viereiseen, ei-varattuun tyhjään alueeseen ja kerää SIJOITUSBONUS ikään kuin asettaisit erikoislaatan sinne. Paimentolaisten alueelle ei saa asettaa laattoja.",
   "PLACE THE NOMADS on a non-reserved, empty area on the game board.": "ASETA PAIMENTOLAISET ei-varatulle, tyhjälle alueelle pelilaudalla.",
 
-  "Kaguya Tech": "",
   "Increase M€ production 2 steps. Draw 1 card. Remove 1 of your greenery tiles (does not affect oxygen.) Place a city tile there, regardless of placement rules. Gain placement bonuses as usual.": "Lisää M€-tuotantoa 2 askelta. Nosta 1 kortti. Poista 1 viheralueesi (ei vaikuta happeen.) Aseta kaupunki samaan paikkaan sijoitussäännöistä välittämättä. Saat sijoitusbonukset tavalliseen tapaan.",
 
   "Homeostasis Bureau": "Homeostaasitoimisto",
@@ -78,14 +77,12 @@
   "Action: Pay 5 M€ (STEEL MAY BE USED) to build 1 Cathedral in a city. Max 1 per city. City owner can pay 2 M€ to draw 1 card.": "TOIMINTO: Maksa 5 M€ (TERÄSTÄ VOI KÄYTTÄÄ) rakentaaksesi 1 katedraalin kaupunkiin. Maksimissaan 1 per kaupunki. Kaupungin omistaja voi maksaa 2 M€ nostaakseen 1 kortin.",
   "1 VP per City with a Cathedral in it.": "1 VP jokaista kaupunkia kohti jossa on katedraali.",
 
-  "Cyberia Systems": "",
   "Increase your steel production 1 step. Copy the PRODUCTION BOXES of 2 of your cards with building tags.": "Lisää terästuotantoasi 1 askel. Kopioi 2 rakennusympyrän omaavan korttisi TUOTANTOLAATIKOT.",
 
   "Carbon Nanosystems": "Hiili-nanosysteemit",
   "Effect: When you play a science tag, including this, add a graphene resource here.": "VAIKUTUS: Kun pelaat tiedeympyrän, tämä mukaan lukien, lisää grafeeniresurssi tähän.",
   "Effect: When playing a space or city tag, graphenes may be used as 4 M€ each.": "VAIKUTUS: Kun pelaat avaruus- tai kaupunkiympyrän, grafeenejä voi käyttää 4 M€ kutakin.",
 
-  "Astra Mechanica": "",
   "RETURN UP TO 2 OF YOUR PLAYED EVENT CARDS TO YOUR HAND. THEY MAY NOT BE CARDS THAT PLACE SPECIAL TILES.": "PALAUTA ENINTÄÄN 2 PELAAMAASI TAPAHTUMAKORTIA KÄTEESI. NE EIVÄT SAA OLLA KORTTEJA JOTKA ASETTAVAT ERIKOISLAATTOJA.",
 
   "Aqueduct Systems": "Akvaduktijärjestelmät",

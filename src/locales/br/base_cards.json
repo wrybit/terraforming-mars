@@ -30,7 +30,6 @@
   "Gain 8 M€.": "Ganhe 8 M€",
 
   "Trade Advance": "Comércio Avançado",
-  "[ solo": "",
   "Trade all colonies with": "Comercie com todas as colônias com",
   "Gain 2 M€ [SOLO: Gain 10 M€]. Immediately trade with all active colonies. You may increase the Colony Tile track 1 step before each of these trades.": "Ganhe 2 M€ (10 M€ modo solo). Comercia com todas as colônias ativas imediatamente. Você pode aumentar 1 nível do tile de colônia em cada negociação.",
 
@@ -46,7 +45,6 @@
   "Martian Rails": "Trilhos Marcianos",
   "Action: Spend 1 energy to gain 1 M€ for each city tile ON MARS.": "Ação: gaste 1 de energia para ganhar 1 M€ por cada tile de cidade EM MARTE.",
 
-  "Capital": "",
   "Requires 4 ocean tiles. Place this tile. Decrease your energy production 2 steps and increase your M€ production 5 steps.": "Requer 4 tiles de oceano. Coloque este tile. Diminua sua produção de energia em 2 e aumente sua produção de M€ em 5.",
   "1 additional VP for each ocean tile adjacent to this city tile.": "1 PV ADICIONAL POR CADA TILE DE OCEANO ADJACENTE A ESTE TILE DE CIDADE.",
 
@@ -75,7 +73,7 @@
   "Domed Crater": "Domo em Cratera",
   "Oxygen must be 7% or less. Gain 3 plants. Place a city tile. Decrease your energy production 1 step and increase your M€ production 3 steps.": "O nível de oxigênio deve estar em 7% ou menos. Ganhe 3 plantas e coloque um tile de cidade. Diminua sua produção de energia em 1 nível e aumente sua produção de M€ em 3.",
 
-  "Noctis City": "",
+  "Noctis City": "Cidade de Noctis",
   "Decrease your energy production 1 step and increase your M€ production 3 steps. Place a city tile ON THE RESERVED AREA, disregarding normal placement restrictions.": "Diminua sua produção de energia em 1 nível e aumente sua produção de M€ 3 níveis. Coloque um tile de cidade NA ÁREA RESERVADA, ignorando as restrições normais de colocação.",
 
   "Methane From Titan": "Metano de Titã",
@@ -116,7 +114,7 @@
   "Action: Spend 1 titanium to add 1 fighter resource to this card.": "Ação: gaste 1 de titânio para adicionar 1 caça a esta carta.",
   "1 VP for each fighter resource on this card.": "1 PV por cada recurso de nave de caça nesta carta.",
 
-  "Cupola City": "",
+  "Cupola City": "Cidade Cúpula",
   "Oxygen must be 9% or less. Place a city tile. Decrease your energy production 1 step and increase your M€ production 3 steps.": "O nível de oxigênio deve estar em 9% ou menos. Coloque um tile de cidade. Diminua sua produção de energia em 1 nível e aumente sua produção de M€ 3 níveis.",
 
   "Lunar Beam": "Raio Lunar",
@@ -157,7 +155,7 @@
   "Food Factory": "Fábrica de Comida",
   "Decrease your plant production 1 step and increase your M€ production 4 steps": "Diminua sua produção de plantas em 1 nível e aumente sua produção de M€ 4 níveis.",
 
-  "ArchaeBacteria": "",
+  "ArchaeBacteria": "Arqueobactérias",
   "It must be -18 C or colder. Increase your plant production 1 step.": "A temperatura deve estar a -18°C ou menos. Aumente sua produção de plantas 1 nível.",
 
   "Carbonate Processing": "Processamento de Carbonato",
@@ -185,7 +183,7 @@
   "Virus": "Vírus",
   "Remove up to 2 animals or 5 plants from any player.": "Remova até 2 animais ou até 5 plantas de qualquer jogador.",
 
-  "Miranda Resort": "",
+  "Miranda Resort": "Resort em Miranda",
   "Increase your M€ production 1 step for each Earth tag you have.": "Aumente sua produção de M€ 1 nível por cada ícone de Terra que você tenha.",
 
   "Fish": "Peixes",
@@ -412,7 +410,6 @@
   "Hired Raiders": "Mercenários Sobre Rodas",
   "Steal up to 2 steel, or 3 M€ from any player.": "Roube até 2 de aço ou 3 M€ de qualquer jogador.",
 
-  "Hackers": "",
   "Decrease your energy production 1 step and any M€ production 2 steps. Increase your M€ production 2 steps.": "Diminua sua produção de energia 1 nível e a produção de M€ de qualquer jogador 2 níveis. Aumente sua produção de M€ 2 níveis.",
 
   "GHG Factories": "Fábricas de GEE",
@@ -454,7 +451,6 @@
   "Great Dam": "Grande Barragem",
   "Requires 4 ocean tiles. Increase your energy production 2 steps.": "Requer 4 tiles de oceano. Aumente sua produção de energia 2 níveis.",
 
-  "Cartel": "",
   "Increase your M€ production 1 step for each Earth tag you have, including this.": "Para cada ícone de Terra que você tiver, incluindo este aumente sua produção de M€ em 1 nível.",
 
   "Strip Mine": "Mina de Superfície",
@@ -558,7 +554,7 @@
   "Magnetic Field Dome": "Domo de Campo Magnético",
   "Decrease your energy production 2 steps and increase your plant production 1 step. Raise your TR 1 step.": "Diminua sua produção de energia 2 níveis e aumente sua produção de plantas em 1 nível. Aumente seu IT 1 nível.",
 
-  "Pets": "",
+  "Pets": "Animais de Estimação",
   "Animals may not be removed from this card": "ANIMAIS NÃO PODEM SER REMOVIDOS DESTA CARTA",
   "Effect: When any city tile is placed, add an animal to this card.": "Efeito: quando qualquer tile de cidade for colocado, adicione um animal a esta carta.",
   "Add 1 animal to this card.": "Adicione 1 animal a esta carta.",
@@ -659,7 +655,6 @@
   "Underground Detonations": "Explosões Subterrâneas",
   "Action: Spend 10 M€ to increase your heat production 2 steps.": "Ação: gaste 10 M€ para aumentar sua produção de calor 2 níveis.",
 
-  "Soletta": "",
   "Increase your heat production 7 steps.": "Aumente sua produção de calor 7 níveis.",
 
   "Technology Demonstration": "Demonstração Tecnológica",
