@@ -21,6 +21,11 @@ defineProps<{
   viewModel: ViewModel;
 }>();
 
+const emit = defineEmits<{
+  // The preview opened by itself (pinPreview) was closed by a click anywhere
+  (event: 'pinnedClosed'): void;
+}>();
+
 const selectedMessage = ref<LogMessage | undefined>(undefined);
 // Mouse position in window coordinates; the hover preview sits at the top right of it and follows it
 type CursorPosition = {x: number, y: number};
@@ -95,9 +100,38 @@ function showModal(message: LogMessage) {
   modal.value = true;
 }
 
+// Preview opened by itself (newly drawn cards, drawnCards.ts): looks like the hover preview, but stays
+// where it is until the next click anywhere – hovering other rows or leaving the log doesn't close it
+const pinned = ref(false);
+
+function closePinned() {
+  window.removeEventListener('pointerdown', closePinned, true);
+  if (!pinned.value) {
+    return;
+  }
+  pinned.value = false;
+  selectedMessage.value = undefined;
+  previewPosition.value = undefined;
+  modal.value = false;
+  emit('pinnedClosed');
+}
+
+function pinPreview(message: LogMessage, position: CursorPosition | undefined) {
+  if (position === undefined) {
+    showModal(message);
+  } else {
+    selectedMessage.value = message;
+    previewPosition.value = position;
+    modal.value = false;
+  }
+  pinned.value = true;
+  window.removeEventListener('pointerdown', closePinned, true);
+  window.addEventListener('pointerdown', closePinned, true);
+}
+
 function preview(message: LogMessage, position: CursorPosition) {
-  // Don't replace an open modal by hovering over other rows
-  if (modal.value) {
+  // Don't replace an open modal or a pinned preview by hovering over other rows
+  if (modal.value || pinned.value) {
     return;
   }
   selectedMessage.value = message;
@@ -106,14 +140,14 @@ function preview(message: LogMessage, position: CursorPosition) {
 
 // Mouse moved within the log: the open hover preview follows it
 function follow(position: CursorPosition) {
-  if (previewPosition.value !== undefined) {
+  if (previewPosition.value !== undefined && !pinned.value) {
     previewPosition.value = position;
   }
 }
 
 // Only close the hover preview; a panel pinned by click stays
 function hidePreview() {
-  if (previewPosition.value !== undefined) {
+  if (previewPosition.value !== undefined && !pinned.value) {
     selectedMessage.value = undefined;
     previewPosition.value = undefined;
   }
@@ -129,7 +163,10 @@ onMounted(() => {
     }
   });
 });
-onBeforeUnmount(() => unregisterOverlay?.());
+onBeforeUnmount(() => {
+  unregisterOverlay?.();
+  window.removeEventListener('pointerdown', closePinned, true);
+});
 
-defineExpose({show, showModal, preview, follow, hidePreview});
+defineExpose({show, showModal, preview, pinPreview, follow, hidePreview});
 </script>

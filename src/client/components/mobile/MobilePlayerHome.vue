@@ -47,7 +47,7 @@
       </section>
 
       <section v-show="screen === 'log'" class="mb-screen mb-screen--log">
-        <LogPanel v-if="!isSetupPhase" :viewModel="playerView" zoomCarousel @spaceClicked="showSpace"/>
+        <LogPanel v-if="!isSetupPhase" :viewModel="playerView" zoomCarousel @spaceClicked="showSpace" @drawnCards="showDrawnCards" @drawnCardsClosed="drawnCardsClosed"/>
       </section>
 
       <!-- The input always stays mounted: WaitingFor asks the server about the own turn.
@@ -247,6 +247,9 @@ function isActionMenuInput(input: PlayerInputModel | undefined): boolean {
   return input !== undefined && !input.optional && input.type === 'or' && !isChoiceMenu(input);
 }
 
+// Screen before newly drawn cards switched to the log (showDrawnCards); module-level like the other screen memory
+let screenBeforeDrawnCards: MobileScreen | undefined;
+
 type TurnState = {screen: MobileScreen, sheetOpen: boolean, turnButtonLifted: boolean};
 
 // Screen and turn sheet for a new player view: on mount and on every server update (in place, App.vue no longer remounts)
@@ -416,6 +419,20 @@ export default defineComponent({
     markHorizontalScroll,
     signed(value: number): string {
       return value >= 0 ? '+' + value : String(value);
+    },
+    // Newly drawn cards open in the log (LogPanel.vue): switch there, and back once they are closed
+    showDrawnCards() {
+      if (this.screen !== 'log') {
+        screenBeforeDrawnCards = this.screen;
+        this.go('log');
+      }
+    },
+    drawnCardsClosed() {
+      const previous = screenBeforeDrawnCards;
+      screenBeforeDrawnCards = undefined;
+      if (previous !== undefined && this.screen === 'log') {
+        this.go(previous);
+      }
     },
     go(screen: MobileScreen) {
       this.screen = screen;

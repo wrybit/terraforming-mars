@@ -25,7 +25,7 @@
           <h3 class="log-generation-title">
             <span class="log-generation-marker" aria-hidden="true">{{ section.generation }}</span>{{ generationTitle(section.generation) }}
           </h3>
-          <LogMessageComponent v-for="(message, index) in section.messages" :key="index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @mouseenter="messageHovered(message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
+          <LogMessageComponent v-for="(message, index) in section.messages" :key="index" :data-log-row="section.generation + '-' + index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @mouseenter="messageHovered(message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
         </section>
       </div>
       <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones">
@@ -45,8 +45,8 @@
         </svg>
       </button>
     </div>
-    <LogMessageInspector ref="messageInspector" :viewModel="viewModel"/>
-    <LogCardsZoom v-if="zoomedMessage !== undefined" :message="zoomedMessage" :players="viewModel.players" @close="zoomedMessage = undefined"/>
+    <LogMessageInspector ref="messageInspector" :viewModel="viewModel" @pinnedClosed="drawnCardsClosed"/>
+    <LogCardsZoom v-if="zoomedMessage !== undefined" :message="zoomedMessage" :players="viewModel.players" @close="closeZoom"/>
   </div>
 </template>
 
@@ -71,6 +71,7 @@ import MilestoneAwardTable from '@/client/components/milestoneAwardTable/Milesto
 import {milestonesAwardsLabel} from '@/client/components/milestoneAwardTable/milestonesAwardsLabel';
 import {cachedLogStream, fetchLogStream, GenerationLog} from '@/client/utils/fetchLogs';
 import {milestonesAwardsFocusState} from '@/client/components/logpanel/milestonesAwardsFocus';
+import {latestDrawnCards} from '@/client/components/logpanel/drawnCards';
 
 const BOTTOM_SCROLL_THRESHOLD = 24; // Roughly one line of log text.
 
@@ -128,6 +129,10 @@ type LogPanelModel = {
   zoomedMessage: LogMessage | undefined,
   // View before a milestone/award choice switched the box to the table; restored when the choice closes
   viewBeforeFocus: LogView | undefined,
+  // Newly drawn cards are shown by themselves (drawnCards.ts): the view before, restored once they close
+  viewBeforeDrawnCards: LogView | undefined,
+  // The carousel (mobile) shows newly drawn cards, not a line the reader tapped
+  zoomShowsDrawnCards: boolean,
   // Timers and observers of this instance; raw, so they don't trigger re-renders
   internals: Internals,
 };
@@ -177,6 +182,8 @@ export default defineComponent({
       following: true,
       zoomedMessage: undefined,
       viewBeforeFocus: undefined,
+      viewBeforeDrawnCards: undefined,
+      zoomShowsDrawnCards: false,
       internals: markRaw({programmaticScrollTimer: undefined, scrollFrame: undefined, scrollFramePending: false, resizeObserver: undefined, lastHeight: 0, pointerOverLog: false, newEntriesWhileHovered: false}),
     };
   },
@@ -191,7 +198,8 @@ export default defineComponent({
     LogCardsZoom,
     MilestoneAwardTable,
   },
-  emits: ['spaceClicked'],
+  // drawnCards / drawnCardsClosed: newly drawn cards open by themselves and closed again (mobile switches to the log and back)
+  emits: ['spaceClicked', 'drawnCards', 'drawnCardsClosed'],
   methods: {
     generationTitle(generation: number): string {
       return translateTextWithParams('Generation ${0}', [String(generation)]);
@@ -212,6 +220,56 @@ export default defineComponent({
         this.typedRefs.messageInspector.showModal(message);
       } else if (!this.canHover()) {
         this.typedRefs.messageInspector.show(message);
+      }
+    },
+    // ---------- Newly drawn cards ----------
+    // Jump to the end of the log and show the line's cards as if hovered, until the next click anywhere
+    showDrawnCards(message: LogMessage): void {
+      this.$emit('drawnCards');
+      if (this.zoomCarousel) {
+        this.zoomShowsDrawnCards = true;
+        this.zoomedMessage = message;
+        return;
+      }
+      if (this.view !== 'log') {
+        this.viewBeforeDrawnCards = this.view;
+        this.view = 'log';
+      }
+      this.following = true;
+      this.$nextTick(() => {
+        this.restorePosition();
+        // After the scroll to the end: the line's place decides where the cards appear
+        requestAnimationFrame(() => {
+          const row = this.drawnCardsRow(message);
+          row?.scrollIntoView({block: 'nearest'});
+          const rect = row?.getBoundingClientRect();
+          // Many cards don't fit next to the line: as a modal over the column, like a click on such a line
+          const position = rect === undefined || needsModalPreview(message) ? undefined : {x: rect.left + rect.width / 2, y: rect.top + rect.height / 2};
+          this.typedRefs.messageInspector.pinPreview(message, position);
+        });
+      });
+    },
+    drawnCardsRow(message: LogMessage): HTMLElement | undefined {
+      for (const section of this.sections) {
+        const index = section.messages.indexOf(message);
+        if (index !== -1) {
+          return this.typedRefs.scrollBody?.querySelector<HTMLElement>(`[data-log-row="${section.generation}-${index}"]`) ?? undefined;
+        }
+      }
+      return undefined;
+    },
+    drawnCardsClosed(): void {
+      if (this.viewBeforeDrawnCards !== undefined) {
+        this.view = this.viewBeforeDrawnCards;
+        this.viewBeforeDrawnCards = undefined;
+      }
+      this.$emit('drawnCardsClosed');
+    },
+    closeZoom(): void {
+      this.zoomedMessage = undefined;
+      if (this.zoomShowsDrawnCards) {
+        this.zoomShowsDrawnCards = false;
+        this.$emit('drawnCardsClosed');
       }
     },
     messageHovered(message: LogMessage, event: MouseEvent) {
@@ -431,6 +489,14 @@ export default defineComponent({
         this.sections = toSections(stream);
         // Something new always brings the end of the log into view, unless the mouse rests on the log
         const hasNewEntries = messageCount(this.sections) > previousCount;
+        // Cards just drawn: show them by themselves (only for live updates, not when the page loads)
+        const drawn = hasNewEntries && keepPosition ?
+          latestDrawnCards(this.sections.flatMap((section) => section.messages).slice(previousCount), this.viewModel.thisPlayer?.color) :
+          undefined;
+        if (drawn !== undefined) {
+          this.showDrawnCards(drawn);
+          return;
+        }
         if (hasNewEntries && keepPosition) {
           if (this.internals.pointerOverLog) {
             this.internals.newEntriesWhileHovered = true;
