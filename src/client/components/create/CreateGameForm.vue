@@ -431,7 +431,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_BOARDS, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption} from './createGameChoices';
+import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption, fanBoards} from './createGameChoices';
 import {ExpansionGroup, ExpansionGrouping, ExpansionTile, groupExpansions, loadExpansionGrouping, saveExpansionGrouping} from './expansionGrouping';
 import {ContentLinePart, contentLine} from './expansionContentLine';
 import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
@@ -825,7 +825,7 @@ export default defineComponent({
     boardGroups() {
       return [
         {title: 'Official', boards: OFFICIAL_BOARDS, fan: false},
-        {title: 'Fan-made', boards: FAN_BOARDS, fan: true},
+        {title: 'Fan-made', boards: fanBoards(), fan: true},
       ];
     },
     // Notes behind the title of a closed collapsible area: something in it differs from the default (changedFromDefault.ts)
@@ -844,7 +844,7 @@ export default defineComponent({
       return active.length > 0 ? active.join(', ') : undefined;
     },
     fanBoardNote(): string | undefined {
-      if (!FAN_BOARDS.includes(this.board)) {
+      if (!fanBoards().includes(this.board)) {
         return undefined;
       }
       // Board names are lower case; the chips capitalize them via CSS, the note the same way here

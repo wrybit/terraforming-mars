@@ -68,6 +68,19 @@ export const FAN_BOARDS: ReadonlyArray<BoardNameType> = [
   BoardName.HOLLANDIA,
 ];
 
+/**
+ * Fan-made boards offered in the form. Amazonis Planitia is still in development upstream:
+ * only development builds offer it (production servers reject it, see ApiCreateGame).
+ */
+export function fanBoards(): ReadonlyArray<BoardNameType> {
+  if (process.env.NODE_ENV !== 'development') {
+    return FAN_BOARDS;
+  }
+  const boards = [...FAN_BOARDS];
+  boards.splice(boards.indexOf(BoardName.AMAZONIS) + 1, 0, BoardName.AMAZONIS_PLANITIA);
+  return boards;
+}
+
 // "Random board" switch: drawn from the official boards or from all
 export const RANDOM_BOARD_OPTIONS: ReadonlyArray<SegmentOption> = [
   {value: RandomBoardOption.OFFICIAL, label: 'Official'},

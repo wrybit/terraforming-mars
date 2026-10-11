@@ -16,6 +16,7 @@ export function boardColorClass(boardName: string): string {
   case BoardName.VASTITAS_BOREALIS_NOVA:
     return 'create-game-board-hexagon create-game-vastitas-borealis-nova';
   case BoardName.AMAZONIS:
+  case BoardName.AMAZONIS_PLANITIA:
     return 'create-game-board-hexagon create-game-amazonis';
   case BoardName.ARABIA_TERRA:
     return 'create-game-board-hexagon create-game-arabia-terra';

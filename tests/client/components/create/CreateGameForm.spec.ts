@@ -369,4 +369,23 @@ describe('CreateGameForm', () => {
       penaltyVPPerPeriod: 1,
     });
   });
+
+  for (const run of [
+    {nodeEnv: 'development', offered: true},
+    {nodeEnv: 'production', offered: false},
+  ]) {
+    it(`offers Amazonis Planitia only in development builds (${run.nodeEnv})`, () => {
+      const nodeEnv = process.env.NODE_ENV;
+      process.env.NODE_ENV = run.nodeEnv;
+      try {
+        const wrapper = shallowMount(CreateGameForm, {
+          ...globalConfig,
+        });
+        const boards = (wrapper.vm as any).boardGroups.flatMap((group: any) => group.boards);
+        expect(boards.includes(BoardName.AMAZONIS_PLANITIA)).eq(run.offered);
+      } finally {
+        process.env.NODE_ENV = nodeEnv;
+      }
+    });
+  }
 });
