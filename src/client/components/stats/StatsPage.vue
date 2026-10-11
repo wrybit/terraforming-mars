@@ -87,11 +87,12 @@ import {computed, defineComponent} from 'vue';
 import {paths} from '@/common/app/paths';
 import {Color} from '@/common/Color';
 import {StatsGame} from '@/common/stats/StatsGame';
-import {translateTextWithParams} from '@/client/directives/i18n';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {SHOWCASE_TITLES} from './statsShowcase';
 import CardListFilterGroup from '@/client/components/cardlist/CardListFilterGroup.vue';
 import {optionKeys} from '@/client/components/cardlist/cardListOptions';
 import {resetOptions, toggleOption} from '@/client/components/cardlist/filterSelection';
-import {setDocumentTitle} from '@/client/utils/documentTitle';
+import {shortDocumentTitle} from '@/client/utils/documentTitle';
 import PageTitle from '@/client/components/common/PageTitle.vue';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import StatsOverview from './StatsOverview.vue';
@@ -106,7 +107,7 @@ import StatsEntityDetail from './StatsEntityDetail.vue';
 import {activeFilterCount, emptyFilters, filterGames, filterGroups, optionCounts, StatsFilterGroup, StatsFilters} from './statsFilter';
 import {parseStatsView, STATS_TABS, statsHref, StatsTab, StatsView, tabOfView} from './statsNavigation';
 import {allPlayerResults, playerColors, playerNames, StatsPlayerResult} from './statsResults';
-import {formatDate} from './statsLabels';
+import {boardLabel, formatDate} from './statsLabels';
 import StatsCardZoom from './StatsCardZoom.vue';
 import {CARD_ZOOM_KEY, StatsCardZoomRequest} from './statsCardZoom';
 
@@ -148,8 +149,6 @@ export default defineComponent({
     };
   },
   mounted() {
-    // Tab: "Statistics | TM", the same for all views of the page
-    setDocumentTitle('Statistics');
     window.addEventListener('popstate', this.readLocation);
     window.addEventListener('resize', this.updateChartWidth);
     this.loadGames();
@@ -158,6 +157,13 @@ export default defineComponent({
   watch: {
     activeTab(): void {
       this.revealActiveTab();
+    },
+    // Browser tab names the view, e.g. "Statistics · Overview | TM" or "Statistics · Tharsis | TM"
+    pageTitle: {
+      immediate: true,
+      handler(title: string): void {
+        document.title = shortDocumentTitle([translateText('Statistics'), title]);
+      },
     },
   },
   beforeUnmount() {
@@ -185,6 +191,17 @@ export default defineComponent({
     },
     activeTab(): StatsTab {
       return tabOfView(this.view);
+    },
+    pageTitle(): string {
+      const view = this.view;
+      if (view.type === 'detail') {
+        // Same display name as on the page (boards are named in lowercase internally, e.g. "tharsis")
+        return translateText(view.kind === 'board' ? boardLabel(view.name) : view.name);
+      }
+      if (view.type === 'top') {
+        return translateText(SHOWCASE_TITLES[view.kind]);
+      }
+      return translateText(STATS_TABS.find((entry) => entry.tab === view.tab)?.label ?? 'Overview');
     },
     tabs(): typeof STATS_TABS {
       return STATS_TABS;
