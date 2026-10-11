@@ -114,7 +114,7 @@ export type AiTuning = {
   triggerOrderPenalty: number,
   /** Weight of the trigger gain an effect card brings for the cards in hand (triggerOrder.ts), 0 = off. */
   triggerOrderBonus: number,
-  /** 1: before the last generation the AI may sell its cheapest cards to afford a milestone or award (sellToAfford.ts). */
+  /** Before the last generation the AI may sell its cheapest cards for a claim (sellToAfford.ts): 1 milestones, 2 also awards. */
   sellToAfford: number,
   /** 1: in the research phase the AI buys up to 3 extra cards when they make a milestone claimable (milestoneBuying.ts). */
   buyForMilestone: number,
@@ -223,8 +223,10 @@ export const BASELINE_TUNING: AiTuning = {
   triggerOrderBonus: 0.5,
   sellToAfford: 0,
   buyForMilestone: 0,
-  lastGenerationSale: 0,
-  openingPlan: 0,
+  // Round 39 (1200 mirrored 1v1 games): lastSale +1.76 VP per deal (z +2.53), openingPlan +0.62 (z +0.79) –
+  // both fix human-game errors (passed with 15 cards; first greenery and city far apart), adopted.
+  lastGenerationSale: 1,
+  openingPlan: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -423,7 +425,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human feedback: sell a card or two when only that much is missing for a milestone.
   // Before round 39: the baseline without the trigger order.
   noTriggerOrder: {triggerOrderPenalty: 0, triggerOrderBonus: 0},
-  sellToAfford: {sellToAfford: 1},
+  // Before round 40: the baseline without lastSale and openingPlan.
+  beforeRound40: {lastGenerationSale: 0, openingPlan: 0},
+  // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
+  sellToAfford: {sellToAfford: 2},
+  sellForMilestone: {sellToAfford: 1},
   // Human feedback: one card more in the research phase would have made Planner claimable.
   buyForMilestone: {buyForMilestone: 1},
   milestoneMoney: {sellToAfford: 1, buyForMilestone: 1},

@@ -1,6 +1,7 @@
 import {IPlayer} from '../IPlayer';
 import {CardName} from '../../common/cards/CardName';
 import {InputResponse} from '../../common/inputs/InputResponse';
+import {tuningOf} from './aiTuning';
 
 // Selling a few hand cards to afford a milestone or an award this turn. Human feedback: with 1–2 M€
 // missing, selling cards for the 5 VP of a milestone is often the better move. Before, the AI only
@@ -18,7 +19,8 @@ function claimCosts(player: IPlayer): Array<number> {
     game.milestones.some((milestone) => !game.milestoneClaimed(milestone) && milestone.canClaim(player))) {
     costs.push(player.milestoneCost());
   }
-  if (!game.allAwardsFunded() && game.getAwardFundingCost() > 0) {
+  // Awards only on request: selling for them lost 7 VP per game in test batches (awards are often lost later).
+  if (tuningOf(player).sellToAfford >= 2 && !game.allAwardsFunded() && game.getAwardFundingCost() > 0) {
     costs.push(game.getAwardFundingCost());
   }
   return costs;

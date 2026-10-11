@@ -14,8 +14,9 @@ function best(player: IPlayer, kind: 'greenery' | 'city') {
 describe('AI opening plan', () => {
   afterEach(() => clearPlayerTunings());
 
-  it('is off in the baseline', () => {
+  it('can be switched off', () => {
     const [/* game */, player] = testGame(2);
+    setPlayerTuning(player.id, 'beforeRound40');
     expect(openingPlan(player, () => 0)).is.undefined;
   });
 
