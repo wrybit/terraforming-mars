@@ -35,7 +35,8 @@ function sourceFiles(dir: string, into: Array<string>): Array<string> {
   return into;
 }
 
-const LITERAL = /'((?:[^'\\\n]|\\.)*)'|"((?:[^"\\\n]|\\.)*)"|`((?:[^`\\]|\\.)*)`|>([^<>{}]+)</g;
+// Each quote type on its own pass: a Vue attribute like :title="'Text'" nests one literal in another
+const LITERALS = [/'((?:[^'\\\n]|\\.)*)'/g, /"((?:[^"\\\n]|\\.)*)"/g, /`((?:[^`\\]|\\.)*)`/g, />([^<>{}]+)</g];
 
 // undefined when the generated data is missing (run `npm run build` first)
 export function usedTexts(srcDir: string): UsedTexts | undefined {
@@ -55,10 +56,13 @@ export function usedTexts(srcDir: string): UsedTexts | undefined {
     }
   }
   for (const file of sourceFiles(srcDir, [])) {
-    for (const match of fs.readFileSync(file, 'utf8').matchAll(LITERAL)) {
-      const text = match[1] ?? match[2] ?? match[3] ?? match[4];
-      if (text !== undefined && text.trim() !== '') {
-        texts.add(normalizeText(text.replace(/\\(['"`])/g, '$1')));
+    const content = fs.readFileSync(file, 'utf8');
+    for (const literal of LITERALS) {
+      for (const match of content.matchAll(literal)) {
+        const text = match[1];
+        if (text !== undefined && text.trim() !== '') {
+          texts.add(normalizeText(text.replace(/\\(['"`])/g, '$1')));
+        }
       }
     }
   }

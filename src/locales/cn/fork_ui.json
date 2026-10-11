@@ -1529,5 +1529,18 @@
   "2. The event does half of its damage.": "2. 该事件只造成一半的损失。",
   "The decision is to go with 2 - the effect is reduced by half.": "最终决定采用第 2 种：效果减半。",
   "Price Wars cannot be replayed by Odyssey or Playwrights. Once it is discarded, the ongoing effect is also removed from play. It is strange for an event to have a generational effect.": "Price Wars 不能被奥德赛或剧作家再次打出。它被弃掉后，其持续效果也随之移除。一张事件卡具有持续一个时代的效果本身就很少见。",
-  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "这使得本卡与奥德赛和剧作家的互动不同于合同工和征兵等卡，后者在弃掉后还有额外效果。目前为避免产生错误效果，将其视为不可打出。"
+  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "这使得本卡与奥德赛和剧作家的互动不同于合同工和征兵等卡，后者在弃掉后还有额外效果。目前为避免产生错误效果，将其视为不可打出。",
+  "Brazilian Portuguese": "巴西葡萄牙语",
+  "Server ID": "服务器 ID",
+  "Science & Clone Tags": "科学与克隆标志",
+  "World Government": "世界政府",
+  "Some of the colonies you selected need expansions you have not enabled. Using them might break your game.": "部分所选殖民地需要未启用的扩展，可能导致对局出错。",
+  "Some of the corps you selected need expansions you have not enabled. Using them might break your game.": "部分所选公司需要未启用的扩展，可能导致对局出错。",
+  "Some of the Preludes you selected need expansions you have not enabled. Using them might break your game.": "部分所选前序需要未启用的扩展，可能导致对局出错。",
+  "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "部分所选 CEO 需要未启用的扩展，可能导致对局出错。",
+  "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "同时拥有雷神之门、标准技术、适宜的基础设施和超导体改进时，玩家可以获得无限能源产量。",
+  "Build date": "构建日期",
+  "Original": "原版",
+  "Fork": "分支",
+  "Commit": "提交"
 }

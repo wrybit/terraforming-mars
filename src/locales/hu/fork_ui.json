@@ -784,5 +784,16 @@
   "2. The event does half of its damage.": "2. Az esemény csak a fele kárt okozza.",
   "The decision is to go with 2 - the effect is reduced by half.": "A döntés a 2. lehetőség lett: a hatás a felére csökken.",
   "Price Wars cannot be replayed by Odyssey or Playwrights. Once it is discarded, the ongoing effect is also removed from play. It is strange for an event to have a generational effect.": "Az Árháborúk nem játszható ki újra az Odüsszeia vagy a Playwrights segítségével. Eldobása után a folyamatos hatása is kikerül a játékból. Furcsa, hogy egy eseménynek egy egész generációra szóló hatása van.",
-  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "Emiatt ennek a kártyának az Odüsszeiával és a Playwrightsszal való kölcsönhatása eltér az olyan kártyákétól, mint az Önkéntes munkaerő és a Sorozás, amelyeknek eldobás után is van további hatásuk. Egyelőre a hibás hatások helyett a kártya nem kijátszhatónak számít."
+  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "Emiatt ennek a kártyának az Odüsszeiával és a Playwrightsszal való kölcsönhatása eltér az olyan kártyákétól, mint az Önkéntes munkaerő és a Sorozás, amelyeknek eldobás után is van további hatásuk. Egyelőre a hibás hatások helyett a kártya nem kijátszhatónak számít.",
+  "Brazilian Portuguese": "Brazíliai portugál",
+  "Server ID": "Szerverazonosító",
+  "Science & Clone Tags": "Tudomány- és klónikonok",
+  "World Government": "Világkormány",
+  "Some of the colonies you selected need expansions you have not enabled. Using them might break your game.": "Néhány kiválasztott gyarmathoz nem engedélyezett kiegészítő kell. Ez elronthatja a játékot.",
+  "Some of the corps you selected need expansions you have not enabled. Using them might break your game.": "Néhány kiválasztott cégbirodalomhoz nem engedélyezett kiegészítő kell. Ez elronthatja a játékot.",
+  "Some of the Preludes you selected need expansions you have not enabled. Using them might break your game.": "Néhány kiválasztott kezdetek kártyához nem engedélyezett kiegészítő kell. Ez elronthatja a játékot.",
+  "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Néhány kiválasztott vezérigazgatóhoz nem engedélyezett kiegészítő kell. Ez elronthatja a játékot.",
+  "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "A ThorGate, a Szabványos technológia, a Megfelelő infrastruktúra és a Magas hőmérsékletű szupravezetők együtt végtelen energiatermelést adhatnak egy játékosnak.",
+  "Build date": "Verzió dátuma",
+  "Original": "Eredeti"
 }

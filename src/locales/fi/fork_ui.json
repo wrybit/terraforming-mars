@@ -620,5 +620,16 @@
   "2. The event does half of its damage.": "2. Tapahtuma tekee puolet vahingostaan.",
   "The decision is to go with 2 - the effect is reduced by half.": "Päätös on vaihtoehto 2 – vaikutus puolittuu.",
   "Price Wars cannot be replayed by Odyssey or Playwrights. Once it is discarded, the ongoing effect is also removed from play. It is strange for an event to have a generational effect.": "Hintasotia ei voi pelata uudelleen Odysseian tai Näytelmäkirjailijoiden avulla. Kun kortti hylätään, myös sen jatkuva vaikutus poistuu pelistä. On outoa, että tapahtumalla on koko sukupolven kestävä vaikutus.",
-  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "Siksi tämän kortin vuorovaikutus Odysseian ja Näytelmäkirjailijoiden kanssa eroaa korteista kuten Velkatyöläiset ja Asevelvollisuus, joilla on lisävaikutus hylkäämisen jälkeen. Toistaiseksi sitä pidetään pelikelvottomana, jotta vältetään virheelliset vaikutukset."
+  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "Siksi tämän kortin vuorovaikutus Odysseian ja Näytelmäkirjailijoiden kanssa eroaa korteista kuten Velkatyöläiset ja Asevelvollisuus, joilla on lisävaikutus hylkäämisen jälkeen. Toistaiseksi sitä pidetään pelikelvottomana, jotta vältetään virheelliset vaikutukset.",
+  "Brazilian Portuguese": "Brasilianportugali",
+  "Server ID": "Palvelimen tunnus",
+  "Science & Clone Tags": "Tiede- ja kloonisymbolit",
+  "World Government": "Maailmanhallitus",
+  "Some of the colonies you selected need expansions you have not enabled. Using them might break your game.": "Osa valituista siirtokunnista vaatii laajennuksia, joita ei ole otettu käyttöön. Se voi rikkoa pelin.",
+  "Some of the corps you selected need expansions you have not enabled. Using them might break your game.": "Osa valituista yhtiöistä vaatii laajennuksia, joita ei ole otettu käyttöön. Se voi rikkoa pelin.",
+  "Some of the Preludes you selected need expansions you have not enabled. Using them might break your game.": "Osa valituista alkusoitoista vaatii laajennuksia, joita ei ole otettu käyttöön. Se voi rikkoa pelin.",
+  "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Osa valituista TJ:istä vaatii laajennuksia, joita ei ole otettu käyttöön. Se voi rikkoa pelin.",
+  "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "ThorGate, Standarditeknologia, Sopiva infrastruktuuri ja Korkean lämpötilan suprajohtimet yhdessä voivat antaa pelaajalle loputtoman energiantuotannon.",
+  "Build date": "Version päiväys",
+  "Original": "Alkuperäinen"
 }

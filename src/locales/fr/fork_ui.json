@@ -680,5 +680,15 @@
   "2. The event does half of its damage.": "2. L'évènement inflige la moitié de ses dégâts.",
   "The decision is to go with 2 - the effect is reduced by half.": "Le choix retenu est le 2 : l'effet est réduit de moitié.",
   "Price Wars cannot be replayed by Odyssey or Playwrights. Once it is discarded, the ongoing effect is also removed from play. It is strange for an event to have a generational effect.": "Price Wars ne peut pas être rejouée par Odyssée ou Dramaturges. Une fois la carte défaussée, son effet continu est également retiré du jeu. Il est étrange qu'un évènement ait un effet sur toute une génération.",
-  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "L'interaction de cette carte avec Odyssée et Dramaturges diffère donc de celle de cartes comme Ouvriers en Contrat d'Apprentissage et Conscription, qui ont un effet supplémentaire après avoir été défaussées. Pour l'instant, plutôt que de produire de mauvais effets, elle est considérée comme non jouable."
+  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "L'interaction de cette carte avec Odyssée et Dramaturges diffère donc de celle de cartes comme Ouvriers en Contrat d'Apprentissage et Conscription, qui ont un effet supplémentaire après avoir été défaussées. Pour l'instant, plutôt que de produire de mauvais effets, elle est considérée comme non jouable.",
+  "Brazilian Portuguese": "Portugais brésilien",
+  "Server ID": "ID du serveur",
+  "Science & Clone Tags": "Badges Science et Clone",
+  "World Government": "Gouvernement mondial",
+  "Some of the colonies you selected need expansions you have not enabled. Using them might break your game.": "Certaines colonies choisies nécessitent des extensions non activées. Cela peut casser la partie.",
+  "Some of the corps you selected need expansions you have not enabled. Using them might break your game.": "Certaines corporations choisies nécessitent des extensions non activées. Cela peut casser la partie.",
+  "Some of the Preludes you selected need expansions you have not enabled. Using them might break your game.": "Certains préludes choisis nécessitent des extensions non activées. Cela peut casser la partie.",
+  "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Certains PDG choisis nécessitent des extensions non activées. Cela peut casser la partie.",
+  "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "Avec ThorGate, Technologie Standard, Infrastructures adaptées et Supraconducteurs Haute Temp., un joueur peut obtenir une production d’énergie infinie.",
+  "Build date": "Date de version"
 }

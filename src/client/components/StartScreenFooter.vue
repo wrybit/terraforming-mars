@@ -2,11 +2,11 @@
   <!-- Left half of the footer on the start page, in one row: build state, commit and both source code addresses (fork and original).
        Labels stay untranslated: technical terms, and "Build" is already taken as a verb ("Baue") in the dictionary -->
   <ul class="start-screen-footer-facts">
-    <li>Build: {{ builtAt }}</li>
-    <li>Commit: <a :href="commitUrl" target="_blank">#{{ shortCommit }}</a></li>
+    <li>{{ $t('Build date') }}: {{ builtAt }}</li>
+    <li>{{ $t('Commit') }}: <a :href="commitUrl" target="_blank">#{{ shortCommit }}</a></li>
     <li v-for="repository in repositories" :key="repository.url" class="start-screen-footer-repository">
       <img src="assets/misc/github.png" alt="" class="start-screen-footer-github">
-      {{ repository.label }}: <a :href="repository.url" target="_blank">{{ repository.name }}</a>
+      {{ $t(repository.label) }}: <a :href="repository.url" target="_blank">{{ repository.name }}</a>
     </li>
   </ul>
 </template>

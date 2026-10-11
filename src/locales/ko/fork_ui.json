@@ -838,5 +838,18 @@
   "2. The event does half of its damage.": "2. 사건의 피해가 절반이 된다.",
   "The decision is to go with 2 - the effect is reduced by half.": "2번으로 결정했습니다. 효과가 절반으로 줄어듭니다.",
   "Price Wars cannot be replayed by Odyssey or Playwrights. Once it is discarded, the ongoing effect is also removed from play. It is strange for an event to have a generational effect.": "가격 전쟁은 오디세이나 극작가로 다시 사용할 수 없습니다. 버려지면 지속 효과도 함께 사라집니다. 이벤트 카드가 세대 동안 지속되는 효과를 갖는 것은 특이한 경우입니다.",
-  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "따라서 이 카드와 오디세이 및 극작가의 상호작용은, 버려진 후에도 추가 효과가 있는 무급계약노동자나 강제 징용 같은 카드와 다릅니다. 당분간은 잘못된 효과가 생기지 않도록 사용할 수 없는 카드로 취급합니다."
+  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "따라서 이 카드와 오디세이 및 극작가의 상호작용은, 버려진 후에도 추가 효과가 있는 무급계약노동자나 강제 징용 같은 카드와 다릅니다. 당분간은 잘못된 효과가 생기지 않도록 사용할 수 없는 카드로 취급합니다.",
+  "Brazilian Portuguese": "브라질 포르투갈어",
+  "Server ID": "서버 ID",
+  "Science & Clone Tags": "과학 및 복제 태그",
+  "World Government": "세계 정부",
+  "Some of the colonies you selected need expansions you have not enabled. Using them might break your game.": "선택한 개척기지 중 일부는 활성화하지 않은 확장이 필요합니다. 게임이 망가질 수 있습니다.",
+  "Some of the corps you selected need expansions you have not enabled. Using them might break your game.": "선택한 기업 중 일부는 활성화하지 않은 확장이 필요합니다. 게임이 망가질 수 있습니다.",
+  "Some of the Preludes you selected need expansions you have not enabled. Using them might break your game.": "선택한 서곡 중 일부는 활성화하지 않은 확장이 필요합니다. 게임이 망가질 수 있습니다.",
+  "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "선택한 경영인 중 일부는 활성화하지 않은 확장이 필요합니다. 게임이 망가질 수 있습니다.",
+  "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "토르게이트, 표준 기술, 적절한 기반 시설 확충, 고온 초전도체를 함께 가지면 에너지 생산량이 무한해질 수 있습니다.",
+  "Build date": "빌드 날짜",
+  "Original": "원본",
+  "Fork": "포크",
+  "Commit": "커밋"
 }

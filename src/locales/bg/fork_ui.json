@@ -1492,5 +1492,18 @@
   "2. The event does half of its damage.": "2. Събитието нанася половината от щетите си.",
   "The decision is to go with 2 - the effect is reduced by half.": "Решението е вариант 2 – ефектът се намалява наполовина.",
   "Price Wars cannot be replayed by Odyssey or Playwrights. Once it is discarded, the ongoing effect is also removed from play. It is strange for an event to have a generational effect.": "Price Wars не може да се изиграе повторно чрез Odyssey или „Драматурзи“. След като бъде изхвърлена, продължителният ѝ ефект също се премахва от игра. Странно е събитие да има ефект за цяло поколение.",
-  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "Затова взаимодействието на тази карта с Odyssey и „Драматурзи“ се различава от карти като „Задължени работници“ и „Консолидация“, които имат допълнителен ефект след изхвърлянето им. Засега, вместо да има грешни ефекти, тя се смята за неизиграваема."
+  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "Затова взаимодействието на тази карта с Odyssey и „Драматурзи“ се различава от карти като „Задължени работници“ и „Консолидация“, които имат допълнителен ефект след изхвърлянето им. Засега, вместо да има грешни ефекти, тя се смята за неизиграваема.",
+  "Brazilian Portuguese": "Бразилски португалски",
+  "Server ID": "ID на сървъра",
+  "Science & Clone Tags": "Символи наука и клонинг",
+  "World Government": "Световно правителство",
+  "Some of the colonies you selected need expansions you have not enabled. Using them might break your game.": "Някои избрани колонии изискват неактивирани разширения. Това може да развали играта.",
+  "Some of the corps you selected need expansions you have not enabled. Using them might break your game.": "Някои избрани корпорации изискват неактивирани разширения. Това може да развали играта.",
+  "Some of the Preludes you selected need expansions you have not enabled. Using them might break your game.": "Някои избрани прелюдии изискват неактивирани разширения. Това може да развали играта.",
+  "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Някои избрани директори изискват неактивирани разширения. Това може да развали играта.",
+  "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "С Торгейт, Стандартна технология, Подходяща инфраструктура и Високотемп. свръхпроводници играч може да има безкрайно производство на енергия.",
+  "Build date": "Дата на версията",
+  "Original": "Оригинал",
+  "Fork": "Форк",
+  "Commit": "Комит"
 }

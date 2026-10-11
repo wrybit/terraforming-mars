@@ -974,5 +974,15 @@
   "2. The event does half of its damage.": "2. Hendelsen gjør halvparten av skaden.",
   "The decision is to go with 2 - the effect is reduced by half.": "Avgjørelsen er alternativ 2 – effekten halveres.",
   "Price Wars cannot be replayed by Odyssey or Playwrights. Once it is discarded, the ongoing effect is also removed from play. It is strange for an event to have a generational effect.": "Price Wars kan ikke spilles på nytt med Odyssey eller Dramatikere. Når kortet er kastet, fjernes også den vedvarende effekten fra spillet. Det er merkelig at en hendelse har en effekt som varer en hel generasjon.",
-  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "Det gjør at dette kortet samspiller annerledes med Odyssey og Dramatikere enn kort som Kontraktsarbeidere og Verneplikt, som har en ekstra effekt etter at de er kastet. Inntil videre regnes det som ikke spillbart, i stedet for å gi feil effekter."
+  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "Det gjør at dette kortet samspiller annerledes med Odyssey og Dramatikere enn kort som Kontraktsarbeidere og Verneplikt, som har en ekstra effekt etter at de er kastet. Inntil videre regnes det som ikke spillbart, i stedet for å gi feil effekter.",
+  "Brazilian Portuguese": "Brasiliansk portugisisk",
+  "Server ID": "Server-ID",
+  "Science & Clone Tags": "Vitenskaps- og klonesymboler",
+  "World Government": "Verdensregjering",
+  "Some of the colonies you selected need expansions you have not enabled. Using them might break your game.": "Noen valgte kolonier krever utvidelser som ikke er slått på. Det kan ødelegge spillet.",
+  "Some of the corps you selected need expansions you have not enabled. Using them might break your game.": "Noen valgte konsern krever utvidelser som ikke er slått på. Det kan ødelegge spillet.",
+  "Some of the Preludes you selected need expansions you have not enabled. Using them might break your game.": "Noen valgte preludium-kort krever utvidelser som ikke er slått på. Det kan ødelegge spillet.",
+  "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Noen valgte adm. direktører krever utvidelser som ikke er slått på. Det kan ødelegge spillet.",
+  "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "Med ThorGate, Standardteknologi, Suitable Infrastructure og Høytemperatur-superledere kan en spiller få uendelig energiproduksjon.",
+  "Build date": "Versjonsdato"
 }

@@ -960,5 +960,18 @@
   "2. The event does half of its damage.": "2. イベントの被害が半分になる。",
   "The decision is to go with 2 - the effect is reduced by half.": "2を採用しました。効果が半分になります。",
   "Price Wars cannot be replayed by Odyssey or Playwrights. Once it is discarded, the ongoing effect is also removed from play. It is strange for an event to have a generational effect.": "価格競争はオデッセイやプレイライトで再プレイできません。捨てられると、継続効果も場から取り除かれます。イベントが世代を通じた効果を持つのは珍しいことです。",
-  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "そのため、このカードとオデッセイやプレイライトとの相互作用は、捨てられた後に追加効果がある契約労働者や徴募制のようなカードとは異なります。当面は、不具合のある効果になるよりも、プレイ不可として扱っています。"
+  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "そのため、このカードとオデッセイやプレイライトとの相互作用は、捨てられた後に追加効果がある契約労働者や徴募制のようなカードとは異なります。当面は、不具合のある効果になるよりも、プレイ不可として扱っています。",
+  "Brazilian Portuguese": "ブラジルポルトガル語",
+  "Server ID": "サーバーID",
+  "Science & Clone Tags": "科学・クローンタグ",
+  "World Government": "世界政府",
+  "Some of the colonies you selected need expansions you have not enabled. Using them might break your game.": "選んだコロニーの一部には有効でない拡張が必要です。ゲームが壊れる可能性があります。",
+  "Some of the corps you selected need expansions you have not enabled. Using them might break your game.": "選んだ企業の一部には有効でない拡張が必要です。ゲームが壊れる可能性があります。",
+  "Some of the Preludes you selected need expansions you have not enabled. Using them might break your game.": "選んだプレリュードの一部には有効でない拡張が必要です。ゲームが壊れる可能性があります。",
+  "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "選んだCEOの一部には有効でない拡張が必要です。ゲームが壊れる可能性があります。",
+  "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "トールゲート、標準テクノロジー、適切なインフラ、高温超伝導体がそろうと、エネルギー産出を無限にできます。",
+  "Build date": "ビルド日時",
+  "Original": "オリジナル",
+  "Fork": "フォーク",
+  "Commit": "コミット"
 }

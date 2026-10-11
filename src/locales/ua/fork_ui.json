@@ -764,5 +764,18 @@
   "2. The event does half of its damage.": "2. Подія завдає половину шкоди.",
   "The decision is to go with 2 - the effect is reduced by half.": "Рішення — варіант 2: ефект зменшується вдвічі.",
   "Price Wars cannot be replayed by Odyssey or Playwrights. Once it is discarded, the ongoing effect is also removed from play. It is strange for an event to have a generational effect.": "«Війни цін» не можна повторно зіграти через «Одіссея» або «Драматурги». Щойно карту скинуто, її тривалий ефект теж прибирається з гри. Дивно, коли подія має ефект на ціле покоління.",
-  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "Тому ця карта взаємодіє з «Одіссея» і «Драматурги» інакше, ніж карти на кшталт «Наймані робітники» і «Мобілізація», які мають додатковий ефект після скидання. Поки що, щоб уникнути хибних ефектів, вона вважається такою, яку не можна зіграти."
+  "That makes this card's interaction with Odyssey and Playwrights different from cards like Indentured Workers and Conscription, which have an additional effect after it is discarded. For the moment, rather than have bad effects, it's being considered not playable.": "Тому ця карта взаємодіє з «Одіссея» і «Драматурги» інакше, ніж карти на кшталт «Наймані робітники» і «Мобілізація», які мають додатковий ефект після скидання. Поки що, щоб уникнути хибних ефектів, вона вважається такою, яку не можна зіграти.",
+  "Brazilian Portuguese": "Бразильська португальська",
+  "Server ID": "ID сервера",
+  "Science & Clone Tags": "Символи науки та клонів",
+  "World Government": "Світовий уряд",
+  "Some of the colonies you selected need expansions you have not enabled. Using them might break your game.": "Деякі вибрані колонії потребують неувімкнених доповнень. Це може зламати партію.",
+  "Some of the corps you selected need expansions you have not enabled. Using them might break your game.": "Деякі вибрані корпорації потребують неувімкнених доповнень. Це може зламати партію.",
+  "Some of the Preludes you selected need expansions you have not enabled. Using them might break your game.": "Деякі вибрані прелюдії потребують неувімкнених доповнень. Це може зламати партію.",
+  "Some of the CEOs you selected need expansions you have not enabled. Using them might break your game.": "Деякі вибрані генеральні директори потребують неувімкнених доповнень. Це може зламати партію.",
+  "It is possible with ThorGate, Standard Technology, Suitable Infrastructure, and High Temp. Superconductors for a player to have infinite energy production.": "З Торгейт, «Стандартною технологією», «Відповідною інфраструктурою» та «Високотемпературними суперпровідниками» гравець може мати нескінченне виробництво енергії.",
+  "Build date": "Дата збірки",
+  "Original": "Оригінал",
+  "Fork": "Форк",
+  "Commit": "Коміт"
 }

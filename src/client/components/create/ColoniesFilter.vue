@@ -8,7 +8,8 @@
     @close="$emit('close')"
   >
     <template #item="{ itemName, icon }">
-      <span v-i18n>{{ itemName }} - ({{ COLONY_DESCRIPTIONS[itemName] }})</span>
+      <!-- Name and description translated on their own: a combined "Name - (Description)" key per colony and language goes missing too easily -->
+      <span>{{ $t(itemName) }} - ({{ $t(COLONY_DESCRIPTIONS[itemName]) }})</span>
       <div v-if="compatibility(itemName)" :class="icon(compatibility(itemName))"></div>
     </template>
   </ModuleItemFilter>
