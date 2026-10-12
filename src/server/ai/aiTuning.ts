@@ -142,6 +142,8 @@ export type AiTuning = {
   greeneryRing: number,
   /** Share of the money-driven award swing for awards that count a resource stock (stockAward.ts); 1 = as for all awards. */
   stockAwardSwing: number,
+  /** Fixed value a pass gives up against any other move (actionLookahead.ts passPenaltyFor); 0 = off. */
+  passLastResort: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -274,6 +276,7 @@ export const BASELINE_TUNING: AiTuning = {
   // far from the city, more than two before it) – adopted at 1.
   greeneryRing: 1,
   stockAwardSwing: 1,
+  passLastResort: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -526,6 +529,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human game: kept 6 titanium for a safe Miner lead instead of playing Space Elevator (2 VP).
   stockAwardSwing03: {stockAwardSwing: 0.3},
   stockAwardSwing0: {stockAwardSwing: 0},
+  // Human feedback "passing is the last option": 26 % of AI passes had another move, often a near-tie.
+  passLastResort2: {passLastResort: 2},
+  passLastResort5: {passLastResort: 5},
   noEnergySupply: {energySupply: 0},
   noDrawChoice: {drawChoiceValue: 0},
   // Round 48: animal and other collector cards (human card-VP engines, 5 games) with today's flow fit.

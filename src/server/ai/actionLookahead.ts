@@ -255,7 +255,11 @@ function valueAfterReply(snapshot: GameSnapshot, player: IPlayer, second: Candid
 
 function passPenaltyFor(player: IPlayer): number {
   const tuning = tuningOf(player);
-  return tuning.passPenalty > 0 && remainingProductionPhases(player.game, player) > 0 ? tuning.passPenalty * Math.min(player.megaCredits, 40) : 0;
+  const keptMoney = tuning.passPenalty > 0 && remainingProductionPhases(player.game, player) > 0 ? tuning.passPenalty * Math.min(player.megaCredits, 40) : 0;
+  // Human advice: passing is the last option – first sell, play or use whatever is left. A fixed
+  // amount (aiTuning.ts passLastResort) so that near-ties and noise no longer end the turn, in every
+  // generation including the last one.
+  return keptMoney + tuning.passLastResort;
 }
 
 /** Rollout policy of a tuning: greedy over a few moves, or quick rules without copies (undefined). */
