@@ -644,6 +644,8 @@ html.tm-mobile {
 // Cost slider: like a chip with the slider inside
 .card-filter-cost {
   display: inline-flex;
+  // Hug the content; the grid group would stretch it to full width otherwise
+  justify-self: start;
   align-items: center;
   gap: 8px;
   height: @card-filter-pill-height;
@@ -741,6 +743,7 @@ html.tm-mobile {
 
   .card-filter-cost {
     box-sizing: border-box;
+    justify-self: stretch;
     width: 100%;
     height: 36px;
     border-radius: 18px;
