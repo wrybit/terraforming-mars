@@ -2,7 +2,7 @@
   <div>
     <BuildBenefit v-if="idx <= 2" :metadata="metadata" :idx="idx"/>
     <div v-if="player !== undefined" class="occupied-colony-space">
-      <BoardCube class="board-cube colony-cube" :color="player" :size="26" :spinSeed="metadata.name + idx"/>
+      <BoardCube class="board-cube colony-cube" :color="player" :size="21" :spinSeed="metadata.name + idx"/>
     </div>
     <div v-if="marker" class="colony-track-marker" :class="{'colony-track-marker--fading': fadeMarker && idx <= 2}"></div>
   </div>

@@ -18,14 +18,14 @@ const props = withDefaults(defineProps<{
   color: Color;
   // top: lying on a board (default); slight: next to text in lists and tables
   view?: 'top' | 'slight';
-  // Edge length in px
+  // Edge length in px; 14 matches the footprint of the old flat board sprite
   size?: number;
   // Stable rotation per spot (e.g. the space id): a real piece never lies perfectly straight,
   // but the same cube must not turn on every redraw
   spinSeed?: string;
 }>(), {
   view: 'top',
-  size: 17,
+  size: 14,
   spinSeed: undefined,
 });
 

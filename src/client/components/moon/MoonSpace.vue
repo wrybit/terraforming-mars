@@ -9,7 +9,7 @@
     <Bonus v-if="tileView !== 'coords' && (space.tileType === undefined || tileView === 'hide')" :bonus="space.bonus" />
     <div v-if="tileView === 'coords' && spaceCoordinate(space.id) !== undefined" class="board-space-coords">{{ spaceCoordinate(space.id) }}</div>
     <BoardCube v-if="space.color !== undefined && tileView === 'show'" class="board-cube" :color="space.color" :spinSeed="space.id"/>
-    <BoardCube v-if="space.coOwner !== undefined && tileView === 'show'" class="board-cube-coOwner" :color="space.coOwner" :size="14" :spinSeed="space.id + '-co'"/>
+    <BoardCube v-if="space.coOwner !== undefined && tileView === 'show'" class="board-cube-coOwner" :color="space.coOwner" :size="11" :spinSeed="space.id + '-co'"/>
     <div class="board-log-highlight" :data_log_highlight_id="space.id"></div>
   </div>
 </template>
