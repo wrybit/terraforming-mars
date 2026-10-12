@@ -14,6 +14,7 @@
 import {defineComponent} from 'vue';
 import {PlayerGood, shouldShowResourceValue} from '@/client/components/overview/playerGoods';
 import {Color} from '@/common/Color';
+import {GOODS_BOX_WIDTH} from '@/client/components/overview/goodsBoxWidths';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {vFlashCount} from '@/client/directives/ChangeFlashCount';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
@@ -39,8 +40,13 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    // Wider than the standard when a box in this column needs more room: all boxes of the column match
+    // Content width of the widest box in this column (goodsBoxWidths.ts): all boxes of the column match
     boxWidth: {
+      type: Number,
+      default: 0,
+    },
+    // Width of the widest production plaque of the column: the stock numbers of all rows end on one line
+    productionWidth: {
       type: Number,
       default: 0,
     },
@@ -50,7 +56,20 @@ export default defineComponent({
       return flashKeys;
     },
     boxStyle(): Record<string, string> {
-      return this.boxWidth > 0 ? {maxWidth: `${this.boxWidth}px`} : {};
+      // Every box of the column is exactly as wide, also the own row with its larger font: the measured
+      // content width is the floor for all rows, and above the standard width it is the fixed width
+      const style: Record<string, string> = {};
+      if (this.boxWidth > 0) {
+        style.minWidth = `${this.boxWidth}px`;
+      }
+      if (this.boxWidth > GOODS_BOX_WIDTH) {
+        style.width = `${this.boxWidth}px`;
+        style.maxWidth = `${this.boxWidth}px`;
+      }
+      if (this.productionWidth > 0) {
+        style['--players-table-production-width'] = `${this.productionWidth}px`;
+      }
+      return style;
     },
     boxClasses(): Array<string> {
       const classes = ['players-table-goods', 'players-table-goods--' + this.good.type];

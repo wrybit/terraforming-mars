@@ -363,12 +363,15 @@ each(@players, {
   text-overflow: ellipsis;
 }
 
-// Resource box: stock large, production small in the brown box, value per unit as a coin at the corner
+// Resource box: stock large, production small in the brown box, value per unit as a coin at the corner.
+// Two right-aligned slots: the production slot is as wide as the widest plaque of the column
+// (goodsBoxWidths.ts), so stock numbers and production plaques each end on one line across all rows
 .players-table-goods {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--players-table-production-width, auto);
   align-items: center;
-  justify-content: space-between;
+  justify-items: end;
   gap: 6px;
   // Width capped: stock and production stay together even when the column gets wider.
   // Never narrower than the content: shield + stock + production stay inside the box; the column grows to

@@ -9,7 +9,7 @@
     <template v-for="section in sectionOrder" :key="section">
       <template v-if="section === 'goods' && visibility.goods">
         <div class="players-table-divider"></div>
-        <PlayersTableGoods v-for="(good, index) in goods" :key="good.type" :good="good" :color="player.color" :isProductionLeader="productionLeaders.includes(good.type)" :boxWidth="goodsBoxWidths[index] ?? 0"/>
+        <PlayersTableGoods v-for="(good, index) in goods" :key="good.type" :good="good" :color="player.color" :isProductionLeader="productionLeaders.includes(good.type)" :boxWidth="goodsBoxWidths[index] ?? 0" :productionWidth="goodsProductionWidths[index] ?? 0"/>
       </template>
 
       <template v-if="section === 'tags' && visibility.tags">
@@ -118,8 +118,13 @@ export default defineComponent({
       type: Array as () => Array<Resource>,
       default: () => [],
     },
-    // Box width per resource column (PlayersTable: goodsBoxWidths); 0 = standard width
+    // Content width per resource column (PlayersTable: goodsWidths); 0 = not measured
     goodsBoxWidths: {
+      type: Array as () => ReadonlyArray<number>,
+      default: () => [],
+    },
+    // Production slot width per resource column (PlayersTable: goodsWidths); 0 = as wide as the plaque
+    goodsProductionWidths: {
       type: Array as () => ReadonlyArray<number>,
       default: () => [],
     },

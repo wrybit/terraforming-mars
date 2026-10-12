@@ -14,7 +14,8 @@
         :tagColumns="tagColumns"
         :tagDetails="tagDetailsByColor[row.player.color]"
         :productionLeaders="productionLeadersByColor[row.player.color] ?? []"
-        :goodsBoxWidths="goodsBoxWidths"/>
+        :goodsBoxWidths="goodsWidths.box"
+        :goodsProductionWidths="goodsWidths.production"/>
     </div>
   </div>
 </template>
@@ -29,7 +30,7 @@ import PlayersTableHeader from '@/client/components/overview/PlayersTableHeader.
 import PlayersTableRow from '@/client/components/overview/PlayersTableRow.vue';
 import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/components/overview/playerTagDetails';
 import {playerGoods} from '@/client/components/overview/playerGoods';
-import {measureGoodsBoxWidths} from '@/client/components/overview/goodsBoxWidths';
+import {GoodsColumnWidths, emptyGoodsColumnWidths, measureGoodsColumnWidths, sameGoodsColumnWidths} from '@/client/components/overview/goodsBoxWidths';
 import {mobileLandscape, mobileLayout} from '@/client/utils/mobileLayout';
 import {
   DESKTOP_SECTION_ORDER, GOODS_COUNT, MOBILE_SECTION_ORDER, SCORE_COUNT, PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
@@ -43,8 +44,8 @@ type DataModel = {
   // Width of the table; 0 while it is invisible or not yet measured
   availableWidth: number;
   resizeObserver: ResizeObserver | undefined;
-  // Box width per resource column where the standard width is too narrow (goodsBoxWidths.ts); 0 = standard
-  goodsBoxWidths: Array<number>;
+  // Content and production slot width per resource column (goodsBoxWidths.ts); 0 = not measured
+  goodsWidths: GoodsColumnWidths;
 };
 
 export default defineComponent({
@@ -70,7 +71,7 @@ export default defineComponent({
       preferredSection: loadPreferredSection(),
       availableWidth: 0,
       resizeObserver: undefined,
-      goodsBoxWidths: new Array(GOODS_COUNT).fill(0),
+      goodsWidths: emptyGoodsColumnWidths(GOODS_COUNT),
     };
   },
   // Watch the column width: in narrow windows sections drop out automatically instead of being clipped
@@ -83,6 +84,8 @@ export default defineComponent({
       // otherwise the zoom would make room for sections that don't fit at full size
       const zoom = parseFloat(getComputedStyle(this.$el).getPropertyValue(PLAYERS_TABLE_ZOOM_VARIABLE)) || 1;
       this.availableWidth = Math.floor(entries[0].contentRect.width * zoom);
+      // A table that was hidden (mobile tab) has measured zero widths: measure again once it shows
+      this.updateGoodsBoxWidths();
     });
     this.resizeObserver.observe(this.$el);
     this.updateGoodsBoxWidths();
@@ -135,7 +138,7 @@ export default defineComponent({
     fitted(): FittedVisibility {
       const wanted = {...this.visibility, tags: this.visibility.tags && this.tagColumns.length > 0};
       // The transposed table (mobile.less) grows downward, so no section has to give way for lack of space
-      return fitToWidth(wanted, this.tagColumns, this.transposed ? 0 : this.availableWidth, this.preferredSection, this.nameWidth, this.goodsBoxWidths);
+      return fitToWidth(wanted, this.tagColumns, this.transposed ? 0 : this.availableWidth, this.preferredSection, this.nameWidth, this.goodsWidths.box);
     },
     effectiveVisibility(): SectionVisibility {
       return this.fitted.visibility;
@@ -151,7 +154,7 @@ export default defineComponent({
       return 1 + (visibility.goods ? GOODS_COUNT : 0) + (visibility.tags ? tagCells : 0) + (visibility.score ? SCORE_COUNT : 0) + 1;
     },
     template(): string {
-      return columnTemplate(this.effectiveVisibility, this.tagColumns, this.nameWidth, this.goodsBoxWidths);
+      return columnTemplate(this.effectiveVisibility, this.tagColumns, this.nameWidth, this.goodsWidths.box);
     },
     // Per resource the player with the sole highest production; nobody on a tie
     productionLeadersByColor(): Partial<Record<Color, Array<Resource>>> {
@@ -175,9 +178,9 @@ export default defineComponent({
     // Only assigned on a real change, otherwise every render would trigger the next one
     updateGoodsBoxWidths() {
       // Transposed (mobile) the players are the columns: the boxes are laid out differently there
-      const widths = this.transposed ? new Array(GOODS_COUNT).fill(0) : measureGoodsBoxWidths(this.$el, GOODS_COUNT);
-      if (widths.some((width, index) => width !== this.goodsBoxWidths[index])) {
-        this.goodsBoxWidths = widths;
+      const widths = measureGoodsColumnWidths(this.$el, GOODS_COUNT, this.transposed);
+      if (!sameGoodsColumnWidths(widths, this.goodsWidths)) {
+        this.goodsWidths = widths;
       }
     },
     // A section hidden only for lack of space gets preferred (another one makes room) instead of being turned off
