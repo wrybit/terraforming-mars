@@ -10,17 +10,33 @@
   margin-left: 0;
 }
 
-// Admin navigation (AdminNav.vue): stays at the top of every admin page while scrolling
-.admin-nav {
+// Admin area after the login: the full width like the other pages of the app (card list, statistics),
+// instead of the narrow 1200px column of the login
+.games-overview-container:has(.admin-nav) {
+  max-width: none;
+  padding: 0 @page-content-edge @page-content-edge;
+
+  @media only screen and (max-width: @page-content-narrow) {
+    padding: 0 @page-content-edge-narrow @page-content-edge-narrow;
+  }
+}
+
+// Admin head (AdminNav.vue): the plain page head of create game, sticky at the top; the page links wrap
+// below the title when space is short. The container gap gives the distance to the first card.
+.games-overview-container .admin-nav {
   position: sticky;
   top: 0;
-  z-index: 2;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
-  display: flex;
+  z-index: 20;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 24px;
-  background: #1d1e24;
+  height: auto;
+  min-height: var(--card-list-header);
+  margin: @page-content-edge 0 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  @media only screen and (max-width: @page-content-narrow) {
+    margin-top: @page-content-edge-narrow;
+  }
 }
 
 .admin-nav-links {
@@ -270,8 +286,9 @@
   text-align: center;
   transition: background 0.3s, border-color 0.2s;
 
+  // The placeholder is a word, not an ID: in the normal font of the app
   &::placeholder {
-    font-family: inherit;
+    font-family: Ubuntu, sans-serif;
   }
 
   &:focus {
@@ -342,15 +359,6 @@
 
 // Phone: navigation smaller, so it takes less of the screen while it stays at the top
 @media only screen and (max-width: 700px) {
-  .admin-nav {
-    gap: 6px;
-    padding: 10px 12px;
-
-    h1 {
-      font-size: 18px;
-    }
-  }
-
   .games-overview-container .admin-nav-link {
     padding: 5px 9px;
     font-size: 14px;

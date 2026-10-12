@@ -1,9 +1,9 @@
 <template>
-  <!-- Navigation of the admin area (only after the login): on every admin page at the top, in words instead of endpoint paths -->
-  <header class="games-overview-card admin-nav">
-    <!-- The app's own menu (language, start page, new game …): switch between the game and the admin area -->
-    <GameMenu :large="true"/>
-    <h1><HomeLink>{{ APP_NAME }}</HomeLink> — <span v-i18n>Administration</span></h1>
+  <!-- Head of the admin area (only after the login), built like the heads of the other pages (card list, create game):
+       app menu, Mars logo back to the start page, page title; then the admin pages in words and the logout -->
+  <header class="card-list-header card-list-header--plain admin-nav">
+    <PageToolbar/>
+    <PageTitle title="Administration"/>
     <nav class="admin-nav-links">
       <a v-for="item in items" :key="item.page" :href="item.path"
         class="admin-nav-link" :class="{'admin-nav-link--active': item.page === active}"
@@ -16,9 +16,8 @@
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {paths} from '@/common/app/paths';
-import {APP_NAME} from '@/common/constants';
-import HomeLink from '@/client/components/common/HomeLink.vue';
-import GameMenu from '@/client/components/gameMenu/GameMenu.vue';
+import PageToolbar from '@/client/components/PageToolbar.vue';
+import PageTitle from '@/client/components/common/PageTitle.vue';
 import {shortDocumentTitle} from '@/client/utils/documentTitle';
 import {translateText} from '@/client/directives/i18n';
 
@@ -26,14 +25,13 @@ export type AdminPage = 'games' | 'settings' | 'raw';
 
 export default defineComponent({
   name: 'AdminNav',
-  components: {HomeLink, GameMenu},
+  components: {PageToolbar, PageTitle},
   props: {
     active: {type: String as PropType<AdminPage>, required: true},
   },
   emits: ['logout'],
   data() {
     return {
-      APP_NAME,
       items: [
         {page: 'games', label: 'Games', path: paths.GAMES_OVERVIEW},
         {page: 'settings', label: 'Settings', path: paths.ADMIN},

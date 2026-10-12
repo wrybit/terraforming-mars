@@ -24,8 +24,8 @@
 import {defineComponent} from 'vue';
 
 const MASK = '•';
-// Time per character: fast enough to feel like one smooth crossfade, slow enough to be seen
-const STEP_MS = 42;
+// Whole crossfade, however long the password: quick, but still visible as a movement
+export const REVEAL_DURATION_MS = 300;
 
 /** The first |count| characters readable, the rest masked */
 export function partlyRevealed(text: string, count: number): string {
@@ -36,7 +36,7 @@ type DataModel = {
   shown: boolean,
   animating: boolean,
   displayed: string,
-  timer: number | undefined,
+  frame: number | undefined,
 };
 
 export default defineComponent({
@@ -50,7 +50,7 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   data(): DataModel {
-    return {shown: false, animating: false, displayed: this.modelValue, timer: undefined};
+    return {shown: false, animating: false, displayed: this.modelValue, frame: undefined};
   },
   computed: {
     // At rest the browser's own field (hidden or plain text), so typing and password managers work as usual;
@@ -67,7 +67,7 @@ export default defineComponent({
     },
   },
   beforeUnmount() {
-    window.clearInterval(this.timer);
+    window.cancelAnimationFrame(this.frame ?? 0);
   },
   methods: {
     onInput(event: Event): void {
@@ -86,21 +86,25 @@ export default defineComponent({
         this.settle();
         return;
       }
-      // One more character revealed (or masked again) per step
+      // Characters revealed (or masked again) in proportion to the elapsed time, one frame at a time
       this.animating = true;
-      let count = show ? 0 : text.length;
-      this.displayed = partlyRevealed(text, count);
-      this.timer = window.setInterval(() => {
-        count += show ? 1 : -1;
+      const start = performance.now();
+      const step = (now: number) => {
+        const progress = Math.min(1, (now - start) / REVEAL_DURATION_MS);
+        const count = Math.round((show ? progress : 1 - progress) * text.length);
         this.displayed = partlyRevealed(text, count);
-        if ((show && count >= text.length) || (!show && count <= 0)) {
+        if (progress < 1) {
+          this.frame = window.requestAnimationFrame(step);
+        } else {
           this.settle();
         }
-      }, STEP_MS);
+      };
+      this.displayed = partlyRevealed(text, show ? 0 : text.length);
+      this.frame = window.requestAnimationFrame(step);
     },
     settle(): void {
-      window.clearInterval(this.timer);
-      this.timer = undefined;
+      window.cancelAnimationFrame(this.frame ?? 0);
+      this.frame = undefined;
       this.animating = false;
       this.displayed = this.modelValue;
       (this.$refs.input as HTMLInputElement | undefined)?.focus();

@@ -2,7 +2,7 @@ import {mount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {vi} from 'vitest';
 import {globalConfig} from '../getLocalVue';
-import RevealablePasswordInput, {partlyRevealed} from '@/client/components/common/RevealablePasswordInput.vue';
+import RevealablePasswordInput, {partlyRevealed, REVEAL_DURATION_MS} from '@/client/components/common/RevealablePasswordInput.vue';
 
 describe('RevealablePasswordInput', () => {
   afterEach(() => {
@@ -15,19 +15,19 @@ describe('RevealablePasswordInput', () => {
     expect(partlyRevealed('abcd', 4)).eq('abcd');
   });
 
-  it('reveals character by character and ends as a plain text field', async () => {
-    vi.useFakeTimers();
-    const wrapper = mount(RevealablePasswordInput, {...globalConfig, props: {modelValue: 'abc'}});
+  it('reveals character by character within 300 ms and ends as a plain text field', async () => {
+    vi.useFakeTimers({toFake: ['requestAnimationFrame', 'cancelAnimationFrame', 'performance']});
+    const wrapper = mount(RevealablePasswordInput, {...globalConfig, props: {modelValue: 'abcd'}});
     const input = () => wrapper.find('input').element as HTMLInputElement;
     expect(input().type).eq('password');
     await wrapper.find('button').trigger('click');
-    expect(input().value).eq('•••');
-    vi.advanceTimersByTime(42);
+    expect(input().value).eq('••••');
+    vi.advanceTimersByTime(REVEAL_DURATION_MS / 2);
     await wrapper.vm.$nextTick();
-    expect(input().value).eq('a••');
-    vi.advanceTimersByTime(42 * 2);
+    expect(input().value).eq('ab••');
+    vi.advanceTimersByTime(REVEAL_DURATION_MS / 2 + 20);
     await wrapper.vm.$nextTick();
-    expect(input().value).eq('abc');
+    expect(input().value).eq('abcd');
     expect(input().type).eq('text');
     expect(wrapper.find('button').attributes('aria-pressed')).eq('true');
   });
