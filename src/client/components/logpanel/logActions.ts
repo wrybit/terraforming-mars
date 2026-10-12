@@ -56,6 +56,13 @@ const STARTERS: Record<string, LogActionKind> = {
 // Silent bookkeeping lines: the row layout already shows them
 const HIDDEN = new Set(['${0} ended turn']);
 
+// Card effects that trigger during an action and draw a card: the draw follows as its own message ("drew 1 card(s)"),
+// so the trigger line only joins the action row
+const TRIGGERS = new Set([
+  '${0} removed a resource from ${1} to draw a card',
+  '${0} automatically removed 3 data from ${1} to draw a card.',
+]);
+
 // Resource words of the log (lower case, without a plural "(s)") -> image in assets/resources
 const RESOURCES: Record<string, string> = {
   'm€': 'megacredit', 'plant': 'plant', 'plants': 'plant', 'steel': 'steel', 'titanium': 'titanium', 'energy': 'power', 'heat': 'heat',
@@ -122,6 +129,10 @@ export function effectOf(message: LogMessage): {player: Color, effect: LogEffect
     break;
   case '${0} ${1} ${2} card(s)':
     effect = {resource: 'card', amount: amount(message, 2)};
+    break;
+  case '${0} is using their ${1} effect to draw a card by discarding a card.':
+    // Discard one, draw one (the draw follows as "drew 1 card(s)")
+    effect = {resource: 'card', amount: -1};
     break;
   case '${0} sold ${1} patents':
     // Follows the "Sell patents" standard project: the cards given away
@@ -210,6 +221,10 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>): Array<Log
       rows.push(current);
       return;
     }
+    if (current !== undefined && TRIGGERS.has(template)) {
+      current.indexes.push(index);
+      return;
+    }
     const effect = current === undefined ? undefined : effectOf(message);
     if (current !== undefined && effect !== undefined) {
       const action = current.action;
@@ -226,8 +241,11 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>): Array<Log
       current.indexes.push(index);
       return;
     }
-    // Not recognised: a plain line; it also ends the current action, so later effects don't attach to the wrong row
-    current = undefined;
+    // Not recognised: a plain line. It ends the current action, so later effects don't attach to the wrong row –
+    // except private notes ("You drew …"), which come between an action and its effects
+    if (!message.data.some((datum) => datum.type === LogMessageDataType.CARDS)) {
+      current = undefined;
+    }
     rows.push({type: 'message', message, indexes: [index]});
   });
 

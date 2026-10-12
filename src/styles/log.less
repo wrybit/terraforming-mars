@@ -83,7 +83,9 @@
   position: relative;
 
   > .panel-body {
-    padding-right: 64px;
+    // Rows use the full width of the box; the "latest" button floats over the bottom right corner
+    // (it only shows while scrolled back in the history)
+    padding-right: 8px;
     scrollbar-gutter: stable;
     // Soft fade at the top and bottom edge; heights come from LogPanel (0 at the start/end of the log)
     --log-fade-top: 0px;
@@ -511,5 +513,55 @@ each(@log-effect-resources, {
 each(@log-effect-tiles, {
   .log-effect-tile--@{value} {
     background-image: url("./assets/tiles/@{value}.png");
+  }
+});
+
+// ---------- Text lines in the style of the action rows ----------
+// Messages the row model doesn't group (private notes, rare card effects, end of game) look like the rows:
+// same size and spacing, player as coloured name, cards as names with a type stripe, rest of the text muted
+.log-panel li {
+  min-height: 30px;
+  padding: 3px 4px;
+  font-size: 16px;
+  line-height: 24px;
+  color: #8a90a0;
+
+  // Clock/bubble icon in front of the line
+  > span[title]:first-child {
+    display: none;
+  }
+
+  .log-player {
+    padding: 0;
+    margin-right: 0;
+    background: none;
+    text-shadow: none;
+    font-weight: bold;
+  }
+
+  // Coloured chip → thin stripe of the card type in front of the name (the gradient only fills the stripe)
+  .log-card {
+    display: inline-block;
+    padding: 0 0 0 9px;
+    background-size: 4px 14px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    color: #eee;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: normal;
+    text-transform: none;
+  }
+}
+
+each(@players, {
+  @c: ~"player_@{value}";
+
+  .log-panel li.log-line--@{value} {
+    color: #8a90a0;
+  }
+
+  .log-panel li .log-player.player_bg_color_@{value} {
+    color: mix(@@c, #fff, 65%);
   }
 });

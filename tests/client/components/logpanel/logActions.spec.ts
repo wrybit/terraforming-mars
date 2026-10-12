@@ -78,6 +78,21 @@ describe('logActions', () => {
     expect(row.action.others).deep.eq([{player: 'blue', effects: [{resource: 'megacredit', amount: 1, production: true}]}]);
   });
 
+  it('keeps card effects that draw a card inside the action, also after a private note', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
+      message('You drew ${0}', {type: LogMessageDataType.CARDS, value: [CardName.ANTS]}),
+      message('${0} removed a resource from ${1} to draw a card', player('red'), card(CardName.OLYMPUS_CONFERENCE)),
+      message('${0} ${1} ${2} card(s)', player('red'), text('drew'), raw('1')),
+    ]);
+    expect(rows.map((row) => row.type)).deep.eq(['action', 'message']);
+    const row = rows[0];
+    if (row.type !== 'action') {
+      throw new Error('expected an action row');
+    }
+    expect(row.action.effects).deep.eq([{resource: 'card', amount: 1}]);
+  });
+
   it('shows sold patents as cards given away by the standard project', () => {
     const rows = groupLogMessages([
       message('${0} used ${1} standard project', player('red'), card(CardName.SELL_PATENTS_STANDARD_PROJECT)),
