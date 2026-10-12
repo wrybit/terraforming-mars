@@ -175,8 +175,9 @@ export const BASELINE_TUNING: AiTuning = {
   draftDenial: 0.5,
   tempoAware: 0,
   // Round 49 (1200 mirrored 1v1 games): closer +1.37 VP per deal (z +1.69) – end the game sooner when the rival's
-  // engine is stronger (human economy players kept terraforming slow) – adopted.
-  closer: 1,
+  // engine is stronger (human economy players kept terraforming slow) – adopted. Round 51: closer 0.5 +1.45 (z +1.86)
+  // against 1 – lowered.
+  closer: 0.5,
   terraformBrake: 0,
   // Neutral in AI-vs-AI (z +0.36) but measured right (2P 14.5, 3P 11.8 generations); adopted on
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
@@ -392,6 +393,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 50: around the adopted closer 1.
   noCloser: {closer: 0},
   closer05: {closer: 0.5},
+  closer1: {closer: 1},
   closer15: {closer: 1.5},
   // handSynergy only acts through engineValue, which needs engineWeight > 0 (round 21 measured noise).
   engine1: {engineWeight: 1},
