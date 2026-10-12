@@ -2,6 +2,7 @@
   <CardPanel
     v-if="selectedMessage !== undefined"
     :message="selectedMessage"
+    :action="selectedAction"
     :players="viewModel.players"
     :floating="previewPosition !== undefined"
     :modal="modal"
@@ -16,6 +17,7 @@ import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordin
 import {LogMessage} from '@/common/logs/LogMessage';
 import {ViewModel} from '@/common/models/PlayerModel';
 import CardPanel from '@/client/components/logpanel/CardPanel.vue';
+import {LogAction} from '@/client/components/logpanel/logActions';
 
 defineProps<{
   viewModel: ViewModel;
@@ -27,6 +29,8 @@ const emit = defineEmits<{
 }>();
 
 const selectedMessage = ref<LogMessage | undefined>(undefined);
+// Grouped action row of the message, if any: its effects show under the card
+const selectedAction = ref<LogAction | undefined>(undefined);
 // Mouse position in window coordinates; the hover preview sits at the top right of it and follows it
 type CursorPosition = {x: number, y: number};
 type PanelSize = {width: number, height: number};
@@ -85,8 +89,9 @@ watch([selectedMessage, () => previewPosition.value !== undefined], async () => 
 // Modal over the right column for rows with many cards
 const modal = ref(false);
 
-function show(message: LogMessage) {
+function show(message: LogMessage, action?: LogAction) {
   selectedMessage.value = message;
+  selectedAction.value = action;
   previewPosition.value = undefined;
   modal.value = false;
 }
@@ -96,6 +101,7 @@ const LOG_CARDS_OVERLAY = 'log-cards';
 function showModal(message: LogMessage) {
   closeOtherOverlays(LOG_CARDS_OVERLAY);
   selectedMessage.value = message;
+  selectedAction.value = undefined;
   previewPosition.value = undefined;
   modal.value = true;
 }
@@ -121,6 +127,7 @@ function pinPreview(message: LogMessage, position: CursorPosition | undefined) {
     showModal(message);
   } else {
     selectedMessage.value = message;
+    selectedAction.value = undefined;
     previewPosition.value = position;
     modal.value = false;
   }
@@ -129,12 +136,13 @@ function pinPreview(message: LogMessage, position: CursorPosition | undefined) {
   window.addEventListener('pointerdown', closePinned, true);
 }
 
-function preview(message: LogMessage, position: CursorPosition) {
+function preview(message: LogMessage, position: CursorPosition, action?: LogAction) {
   // Don't replace an open modal or a pinned preview by hovering over other rows
   if (modal.value || pinned.value) {
     return;
   }
   selectedMessage.value = message;
+  selectedAction.value = action;
   previewPosition.value = position;
 }
 

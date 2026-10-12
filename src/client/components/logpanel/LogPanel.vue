@@ -29,7 +29,7 @@
           <template v-for="(row, rowIndex) in rowsOf(section)" :key="rowIndex">
             <div v-if="row.type === 'phase'" class="log-phase-line" aria-hidden="true"></div>
             <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel" @click="messageClicked(row.message)" @mouseenter="messageHovered(row.message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
-            <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel" @click="messageClicked(row.action.lead)" @mouseenter="messageHovered(row.action.lead, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
+            <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel" @click="messageClicked(row.action.lead, row.action)" @mouseenter="messageHovered(row.action.lead, $event, row.action)" @spaceClicked="$emit('spaceClicked', $event)"/>
             <LogActionRow v-else :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"/>
           </template>
         </section>
@@ -71,7 +71,7 @@ import {logMessageItemCount, needsModalPreview} from '@/client/components/logpan
 import {activeSectionIndex, edgeFadesOf, findScrollContainer, HEADER_SCROLL_GAP, maxScrollTopOf, readingLineOf, scrollContainerTo, ScrollContainer, scrollTopOf} from '@/client/components/logpanel/logScroll';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogActionRow from '@/client/components/logpanel/LogActionRow.vue';
-import {groupLogMessages, LogRow} from '@/client/components/logpanel/logActions';
+import {groupLogMessages, LogAction, LogRow} from '@/client/components/logpanel/logActions';
 import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
 import LogCardsZoom from '@/client/components/logpanel/LogCardsZoom.vue';
@@ -220,7 +220,7 @@ export default defineComponent({
     canHover(): boolean {
       return window.matchMedia('(hover: hover)').matches;
     },
-    messageClicked(message: LogMessage) {
+    messageClicked(message: LogMessage, action?: LogAction) {
       if (this.zoomCarousel) {
         if (logMessageItemCount(message) > 0) {
           this.zoomedMessage = message;
@@ -231,7 +231,7 @@ export default defineComponent({
       if (needsModalPreview(message)) {
         this.typedRefs.messageInspector.showModal(message);
       } else if (!this.canHover()) {
-        this.typedRefs.messageInspector.show(message);
+        this.typedRefs.messageInspector.show(message, action);
       }
     },
     // ---------- Newly drawn cards ----------
@@ -298,7 +298,7 @@ export default defineComponent({
         this.$emit('drawnCardsClosed');
       }
     },
-    messageHovered(message: LogMessage, event: MouseEvent) {
+    messageHovered(message: LogMessage, event: MouseEvent, action?: LogAction) {
       // Lines with many cards have no hover preview (it would overflow the window), only click
       if (this.zoomCarousel || !this.canHover()) {
         return;
@@ -309,7 +309,7 @@ export default defineComponent({
         return;
       }
       // Preview at the top right of the mouse, in window coordinates (position: fixed), so the column overflow doesn't clip it
-      this.typedRefs.messageInspector.preview(message, {x: event.clientX, y: event.clientY});
+      this.typedRefs.messageInspector.preview(message, {x: event.clientX, y: event.clientY}, action);
     },
     // The preview hangs on the pointer and moves with it
     pointerMoved(event: MouseEvent) {

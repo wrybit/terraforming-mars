@@ -75,7 +75,7 @@ describe('logActions', () => {
     if (row.type !== 'action') {
       throw new Error('expected an action row');
     }
-    expect(row.action.others).deep.eq([{player: 'blue', effects: [{resource: 'megacredit', amount: 1, production: true}]}]);
+    expect(row.action.others).deep.eq([{player: 'blue', effects: [{resource: 'megacredit', amount: 1, production: true, cause: CardName.SATURN_SYSTEMS}]}]);
   });
 
   it('keeps card effects that draw a card inside the action, also after a private note', () => {

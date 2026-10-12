@@ -704,5 +704,8 @@
   "Show password": "Afficher le mot de passe",
   "Hide password": "Masquer le mot de passe",
   "Card action": "Action de carte",
-  "kept ${0} cards": "a gardé ${0} cartes"
+  "kept ${0} cards": "a gardé ${0} cartes",
+  "Effects": "Effets",
+  "on ${0}": "sur ${0}",
+  "because of ${0}": "grâce à ${0}"
 }

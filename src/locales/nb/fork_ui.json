@@ -998,5 +998,8 @@
   "Show password": "Vis passord",
   "Hide password": "Skjul passord",
   "Card action": "Korthandling",
-  "kept ${0} cards": "beholdt ${0} kort"
+  "kept ${0} cards": "beholdt ${0} kort",
+  "Effects": "Virkninger",
+  "on ${0}": "på ${0}",
+  "because of ${0}": "på grunn av ${0}"
 }

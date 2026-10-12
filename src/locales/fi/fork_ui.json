@@ -645,5 +645,8 @@
   "Show password": "Näytä salasana",
   "Hide password": "Piilota salasana",
   "Card action": "Korttitoiminto",
-  "kept ${0} cards": "piti ${0} korttia"
+  "kept ${0} cards": "piti ${0} korttia",
+  "Effects": "Vaikutukset",
+  "on ${0}": "kortille ${0}",
+  "because of ${0}": "kortin ${0} ansiosta"
 }

@@ -430,5 +430,8 @@
   "Show password": "Passwort anzeigen",
   "Hide password": "Passwort verbergen",
   "Card action": "Kartenaktion",
-  "kept ${0} cards": "behielt ${0} Karten"
+  "kept ${0} cards": "behielt ${0} Karten",
+  "Effects": "Auswirkungen",
+  "on ${0}": "auf ${0}",
+  "because of ${0}": "durch ${0}"
 }

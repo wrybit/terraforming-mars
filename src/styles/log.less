@@ -565,3 +565,48 @@ each(@players, {
     color: mix(@@c, #fff, 65%);
   }
 });
+
+// ---------- Effects summary under the hover preview (LogActionEffects.vue) ----------
+.log-action-effects {
+  display: grid;
+  gap: 6px;
+  max-width: 320px;
+  padding: 8px 10px;
+  border: 1px solid #3a3f5c;
+  border-radius: 8px;
+  background: rgba(20, 23, 34, 0.96);
+  color: #ddd;
+  font-size: 16px;
+}
+
+.log-action-effects-title {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9aa0b0;
+}
+
+.log-action-effects-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+
+.log-action-effects-player {
+  padding: 0 6px;
+  border-radius: 3px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.log-action-effects-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.log-action-effects-note {
+  color: #9aa0b0;
+  font-size: 14px;
+}

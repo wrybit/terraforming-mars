@@ -1754,5 +1754,9 @@
   "${0} lost ${1} ${2} production": "${0} perdeu ${1} de produção de ${2}",
   "${0} gained ${1} ${2} because of ${3}": "${0} ganhou ${1} ${2} por causa de ${3}",
   "${0} lost ${1} ${2} because of ${3}": "${0} perdeu ${1} ${2} por causa de ${3}",
-  "${0} lost ${1} ${2} production because of ${3}": "${0} perdeu ${1} de produção de ${2} por causa de ${3}"
+  "${0} lost ${1} ${2} production because of ${3}": "${0} perdeu ${1} de produção de ${2} por causa de ${3}",
+  "Effects": "Efeitos",
+  "on ${0}": "em ${0}",
+  "because of ${0}": "por causa de ${0}",
+  "${0} gained ${1} ${2} production because of ${3}": "${0} ganhou ${1} de produção de ${2} por causa de ${3}"
 }

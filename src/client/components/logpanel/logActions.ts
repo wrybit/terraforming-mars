@@ -18,6 +18,10 @@ export type LogEffect = {
   // Tile image name in assets/tiles (city, greenery, ocean, special)
   tile?: string,
   space?: SpaceId,
+  // Resource placed on this card (not into the stock), e.g. science on Olympus Conference
+  card?: CardName,
+  // Card whose effect caused this ("because of ..."), e.g. Mars Rover Development
+  cause?: CardName,
 };
 
 export type LogActionKind = 'card' | 'action' | 'standardProject' | 'milestone' | 'award' | 'pass' | 'kept';
@@ -88,8 +92,19 @@ function resource(word: string | undefined): string | undefined {
   return word === undefined ? undefined : RESOURCES[word.toLowerCase().replace(/\(s\)$/, '')];
 }
 
+// Card at a message position, if the server put a card there ("because of ${3}" may also name a player)
+function cardAt(message: LogMessage, index: number): CardName | undefined {
+  const datum = message.data[index];
+  return datum?.type === LogMessageDataType.CARD ? datum.value : undefined;
+}
+
 function withResource(name: string | undefined, effect: Omit<LogEffect, 'resource'>): LogEffect | undefined {
-  return name === undefined ? undefined : {...effect, resource: name};
+  if (name === undefined) {
+    return undefined;
+  }
+  // Leave out empty card/cause fields: the effect stays a plain object that compares equal in tests and merging
+  const defined = Object.fromEntries(Object.entries(effect).filter(([, field]) => field !== undefined)) as Omit<LogEffect, 'resource'>;
+  return {...defined, resource: name};
 }
 
 // One follow-up message as an effect, together with the player it affects. Undefined: not recognised.
@@ -99,12 +114,16 @@ export function effectOf(message: LogMessage): {player: Color, effect: LogEffect
   let effect: LogEffect | undefined;
   switch (template) {
   case '${0} gained ${1} ${2} production':
-  case '${0} gained ${1} ${2} production because of ${3}':
     effect = withResource(resource(value(message, 2)), {amount: amount(message, 1), production: true});
     break;
+  case '${0} gained ${1} ${2} production because of ${3}':
+    effect = withResource(resource(value(message, 2)), {amount: amount(message, 1), production: true, cause: cardAt(message, 3)});
+    break;
   case '${0} lost ${1} ${2} production':
-  case '${0} lost ${1} ${2} production because of ${3}':
     effect = withResource(resource(value(message, 2)), {amount: -amount(message, 1), production: true});
+    break;
+  case '${0} lost ${1} ${2} production because of ${3}':
+    effect = withResource(resource(value(message, 2)), {amount: -amount(message, 1), production: true, cause: cardAt(message, 3)});
     break;
   case '${3} stole ${1} ${2} production from ${0}':
     // The victim is ${0}; the thief's gain follows as its own message
@@ -112,11 +131,13 @@ export function effectOf(message: LogMessage): {player: Color, effect: LogEffect
     effect = withResource(resource(value(message, 2)), {amount: -amount(message, 1), production: true});
     break;
   case '${0} gained ${1} ${2}':
-  case '${0} gained ${1} ${2} because of ${3}':
     effect = withResource(resource(value(message, 2)), {amount: amount(message, 1)});
     break;
+  case '${0} gained ${1} ${2} because of ${3}':
+    effect = withResource(resource(value(message, 2)), {amount: amount(message, 1), cause: cardAt(message, 3)});
+    break;
   case '${0} lost ${1} ${2} because of ${3}':
-    effect = withResource(resource(value(message, 2)), {amount: -amount(message, 1)});
+    effect = withResource(resource(value(message, 2)), {amount: -amount(message, 1), cause: cardAt(message, 3)});
     break;
   case '${0} gained ${1} M€ from ${2} ocean(s)':
     effect = {resource: 'megacredit', amount: amount(message, 1)};
@@ -125,7 +146,7 @@ export function effectOf(message: LogMessage): {player: Color, effect: LogEffect
     effect = {tile: TILES[value(message, 2) ?? ''] ?? 'special', space: value(message, 3) as SpaceId, amount: 0};
     break;
   case '${0} added ${1} ${2} to ${3}':
-    effect = withResource(resource(value(message, 2)), {amount: amount(message, 1)});
+    effect = withResource(resource(value(message, 2)), {amount: amount(message, 1), card: cardAt(message, 3)});
     break;
   case '${0} ${1} ${2} card(s)':
     effect = {resource: 'card', amount: amount(message, 2)};
@@ -149,7 +170,9 @@ export function effectOf(message: LogMessage): {player: Color, effect: LogEffect
 export function mergeEffects(effects: ReadonlyArray<LogEffect>): Array<LogEffect> {
   const merged: Array<LogEffect> = [];
   for (const effect of effects) {
-    const same = effect.resource !== undefined && merged.find((other) => other.resource === effect.resource && Boolean(other.production) === Boolean(effect.production));
+    // Only the same thing adds up: same resource, kind, card it lies on and cause
+    const same = effect.resource !== undefined && merged.find((other) => other.resource === effect.resource &&
+      Boolean(other.production) === Boolean(effect.production) && other.card === effect.card && other.cause === effect.cause);
     if (same) {
       same.amount += effect.amount;
     } else {

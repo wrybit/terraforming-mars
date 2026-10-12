@@ -14,6 +14,8 @@
     <div id="log_panel_card" class="cardbox" v-for="name in colonies" :key="name">
       <Colony :colony="getColony(name)"/>
     </div>
+    <!-- Action rows: what the action changed, compactly under the card -->
+    <LogActionEffects v-if="hasEffects" :action="action!" :players="players"/>
   </div>
   </Teleport>
 </template>
@@ -33,6 +35,8 @@ import Colony from '@/client/components/colonies/Colony.vue';
 import {GlobalEventName} from '@/common/turmoil/globalEvents/GlobalEventName';
 import {CardModel} from '@/common/models/CardModel';
 import {logCardModel} from '@/client/components/logpanel/logCardModel';
+import {LogAction} from '@/client/components/logpanel/logActions';
+import LogActionEffects from '@/client/components/logpanel/LogActionEffects.vue';
 import {logMessageCards, logMessageColonies, logMessageGlobalEvents} from '@/client/components/logpanel/logMessageContent';
 
 export default defineComponent({
@@ -53,6 +57,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    // Grouped action row (logActions.ts): its effects are summarised under the card
+    action: {
+      type: Object as () => LogAction | undefined,
+      default: undefined,
+    },
     // As a scrollable modal over the right column (rows with many cards, needsModalPreview)
     modal: {
       type: Boolean,
@@ -64,10 +73,14 @@ export default defineComponent({
     Card,
     Colony,
     GlobalEvent,
+    LogActionEffects,
   },
   computed: {
     show(): boolean {
-      return this.cards.length + this.globalEvents.length + this.colonies.length > 0;
+      return this.cards.length + this.globalEvents.length + this.colonies.length > 0 || this.hasEffects;
+    },
+    hasEffects(): boolean {
+      return this.action !== undefined && (this.action.effects.length > 0 || this.action.others.length > 0);
     },
     cards(): ReadonlyArray<CardName> {
       return logMessageCards(this.message);
