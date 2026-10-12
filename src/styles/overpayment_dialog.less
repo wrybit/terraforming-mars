@@ -115,18 +115,20 @@
 }
 
 .overpayment-dialog__segment {
-  display: flex;
+  position: relative;
   flex-basis: 0;
-  align-items: center;
-  justify-content: center;
   min-width: 0;
   background: @overpayment-tone-default;
+}
 
-  .resource_icon {
-    flex: none;
-    width: @overpayment-icon;
-    height: @overpayment-icon;
-  }
+// Placed by OverpaymentDialog.vue iconLeft(): centre of the paid part, above the hatching
+.overpayment-dialog__segment-icon {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  width: @overpayment-icon;
+  height: @overpayment-icon;
+  transform: translate(-50%, -50%);
 }
 
 each(@overpayment-tones, {
@@ -146,6 +148,7 @@ each(@overpayment-tones, {
 
 .overpayment-dialog__cost-line {
   position: absolute;
+  z-index: 2;
   top: 0;
   bottom: 0;
   width: 2px;

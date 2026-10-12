@@ -25,7 +25,7 @@
       <div class="overpayment-dialog__bar">
         <span v-for="part of parts" :key="part.unit" class="overpayment-dialog__segment"
           :class="'overpayment-dialog__segment--' + part.unit" :style="{flexGrow: part.value}" :data-test="'segment-' + part.unit">
-          <i class="resource_icon" :class="iconClass(part.unit)"></i>
+          <i class="resource_icon overpayment-dialog__segment-icon" :class="iconClass(part.unit)" :style="{left: iconLeft(part) + '%'}"></i>
         </span>
         <span class="overpayment-dialog__lost" :style="{left: costPercent + '%'}"></span>
         <span class="overpayment-dialog__cost-line" :style="{left: costPercent + '%'}"></span>
@@ -115,6 +115,16 @@ const reason = computed(() => {
   return translateTextWithParams('${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.',
     [translateText(props.descriptions[coarsest.unit]), String(coarsest.rate)]);
 });
+
+// Icon centred in the paid (unhatched) part of its segment, so it never sits on the cost line;
+// a segment lying completely in the excess keeps its icon in the middle
+function iconLeft(part: Part): number {
+  const start = parts.value.slice(0, parts.value.indexOf(part)).reduce((sum, previous) => sum + previous.value, 0);
+  const end = start + part.value;
+  const visibleEnd = Math.min(end, props.cost);
+  const centre = visibleEnd > start ? (start + visibleEnd) / 2 : (start + end) / 2;
+  return part.value === 0 ? 50 : (centre - start) / part.value * 100;
+}
 
 function iconClass(unit: SpendableResource): string {
   return paymentIconClass(unit);

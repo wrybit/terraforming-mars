@@ -27,6 +27,12 @@ describe('OverpaymentDialog', () => {
     expect(wrapper.find('[data-test=reason]').text()).to.contain('Titanium');
   });
 
+  it('centres the segment icon in the paid part, not across the excess', () => {
+    // 5 titanium = 15 M€, cost 13: paid part 0..13, centre 6.5 of 15
+    const icon = mountDialog().find('[data-test=segment-titanium] .resource_icon');
+    expect(icon.attributes('style')).to.contain('left: 43.33');
+  });
+
   it('omits the item without a name', () => {
     expect(mountDialog().find('[data-test=item]').exists()).is.false;
   });
