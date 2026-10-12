@@ -72,6 +72,8 @@ export function copyExtensionAssets(assetsDir: string = path.resolve('assets/ext
 
 export function writeExtensionRegistries(genfilesDir: string = path.resolve('src/genfiles')): void {
   const names = extensionNames();
+  // A fresh checkout has no genfiles folder yet (make_static_json.ts creates it later)
+  fs.mkdirSync(genfilesDir, {recursive: true});
   for (const part of PARTS) {
     const file = path.join(genfilesDir, part.output);
     const content = registry(part, names);

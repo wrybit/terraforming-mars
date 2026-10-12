@@ -6,7 +6,8 @@ import {extensionNames, localeDirectories, writeExtensionRegistries} from '../..
 
 describe('make_extensions', () => {
   it('writes one registry per part, listing the extensions present', () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'extensions-'));
+    // A folder that does not exist yet, like src/genfiles in a fresh checkout
+    const dir = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'extensions-')), 'genfiles');
     writeExtensionRegistries(dir);
     for (const [file, constant] of [['extensionsCommon.ts', 'COMMON_EXTENSIONS'], ['extensionsServer.ts', 'SERVER_EXTENSIONS'], ['extensionsClient.ts', 'CLIENT_EXTENSIONS']]) {
       const content = fs.readFileSync(path.join(dir, file), 'utf8');
