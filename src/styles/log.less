@@ -641,6 +641,13 @@ each(@log-parties, {
     text-transform: none;
   }
 
+  // Tags and cost after a card name: the original negative margins (tags overlap) must not eat the space
+  // before the following text, so the last one of the card keeps no negative margin
+  .log-card > .log-tag:last-child,
+  .log-resource-megacredits {
+    margin-right: 0;
+  }
+
   // Global events have a plain light colour instead of a gradient: draw it as the same stripe
   .log-card.background-color-global-event {
     background: linear-gradient(#d8d8d8, #d8d8d8) left center / 4px 14px no-repeat;
