@@ -101,11 +101,7 @@
 // ---------- Tabs: segmented control like in "create game", horizontally scrollable when space is short ----------
 .stats-tabs.create-game-segmented {
   overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  .scrollbar-hidden();
 
   a {
     flex: 1 0 auto;

@@ -40,10 +40,7 @@
   overflow: auto hidden;
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  .scrollbar-hidden();
   // Spacers at start and end, so the first and last card also snap to the center
   &::before,
   &::after {

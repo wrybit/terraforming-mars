@@ -139,11 +139,7 @@
   gap: 2px;
   margin-top: 12px;
   overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  .scrollbar-hidden();
 }
 
 .help-overlay-tab {
@@ -815,11 +811,7 @@
     overflow: auto hidden;
     border-right: 0;
     border-bottom: 1px solid @help-surface-border;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    .scrollbar-hidden();
   }
 
   .help-outline-list,

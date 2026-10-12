@@ -217,11 +217,7 @@ html.tm-mobile {
   min-width: 0;
   height: @card-filter-row-height;
   overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  .scrollbar-hidden();
 }
 
 .card-filter-bar__count {

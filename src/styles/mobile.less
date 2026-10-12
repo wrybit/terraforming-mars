@@ -1026,11 +1026,7 @@ html.tm-mobile {
         overflow-x: auto;
         overscroll-behavior-x: contain;
         scroll-snap-type: x mandatory;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar {
-          display: none;
-        }
+        .scrollbar-hidden();
       }
 
       // .players-overview: beats the base rule of the rotated player table.
@@ -1340,11 +1336,7 @@ html.tm-mobile {
     padding: @mb-carousel-room-top calc(50% - @mb-carousel-card-half) @mb-carousel-room-bottom;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    .scrollbar-hidden();
 
     > label.payments_cards {
       flex-shrink: 0;

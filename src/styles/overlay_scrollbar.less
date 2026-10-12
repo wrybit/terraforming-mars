@@ -1,0 +1,84 @@
+// Overlay scrollbars like Safari (src/client/utils/overlayScrollbars.ts): with a mouse the native bars are
+// hidden everywhere, a thin bar lies on top of the content while scrolling. Black with a white outline,
+// so it reads on every surface – dark tab boxes in any tone as well as light cards.
+
+// Opacity of the black surface; the white outline gets half of it
+@overlay-scrollbar-opacity: 0.5;
+// While dragged a bit stronger, so the grip is felt
+@overlay-scrollbar-opacity-dragging: 0.65;
+
+.overlay-scrollbar-colors(@opacity) {
+  background: fade(#000, @opacity * 100%);
+  box-shadow: inset 0 0 0 1px fade(#fff, @opacity * 50%);
+}
+
+// !important: many areas set scrollbar-width / ::-webkit-scrollbar themselves (fallback for touch devices)
+html.overlay-scrollbars,
+html.overlay-scrollbars * {
+  scrollbar-width: none !important;
+}
+
+html.overlay-scrollbars *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.overlay-scrollbar {
+  // Popover in the top layer (also above modal dialogs): undo the popover defaults
+  position: fixed;
+  inset: auto;
+  z-index: 10000;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+
+  // Invisible hit area around the thin bar
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+  }
+
+  &--visible {
+    opacity: 1;
+    transition-duration: 0.12s;
+  }
+
+  // Under the pointer: same size and place (nothing jumps), only grabbable
+  &--hovered {
+    pointer-events: auto;
+  }
+}
+
+.overlay-scrollbar__thumb {
+  position: absolute;
+  border-radius: 999px;
+  .overlay-scrollbar-colors(@overlay-scrollbar-opacity);
+
+  .overlay-scrollbar--vertical & {
+    left: 0;
+    right: 0;
+  }
+
+  .overlay-scrollbar--horizontal & {
+    top: 0;
+    bottom: 0;
+  }
+
+  .overlay-scrollbar--dragging & {
+    .overlay-scrollbar-colors(@overlay-scrollbar-opacity-dragging);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay-scrollbar {
+    transition: none;
+  }
+}

@@ -67,3 +67,14 @@
   overflow: hidden;
   background: rgba(255, 255, 255, 0.15);
 }
+
+// Scrolls without any visible bar (tab strips, carousels): hides the native bar and tells the overlay
+// scrollbars (overlay_scrollbar.less, overlayScrollbarArea.ts) to stay away as well
+.scrollbar-hidden() {
+  --overlay-scrollbar: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
