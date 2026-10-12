@@ -18,7 +18,7 @@
       </button>
       <button v-if="compact && activeCount > 0" type="button" class="card-bar-pill card-bar-pill--clear"
         :title="$t('Reset filters')" :aria-label="$t('Reset filters')" @click="reset">×</button>
-      <div v-if="menuOpen && !useSheet" class="card-bar-menu card-filter-menu">
+      <div v-if="menuOpen && !useSheet" ref="menu" class="card-bar-menu card-filter-menu">
         <CardFilterOptions :cards="cards" :filter="filter" :context="context"/>
         <div class="card-filter-menu__foot">
           <span>{{ shownText }}</span>
@@ -73,6 +73,7 @@ import CardFilterOptions from '@/client/components/cardfilter/CardFilterOptions.
 import AppButton from '@/client/components/common/AppButton.vue';
 import CardZoomSlider from '@/client/components/cardfilter/CardZoomSlider.vue';
 import {mobileLayout} from '@/client/utils/mobileLayout';
+import {useShrinkToWrappedContent} from '@/client/utils/shrinkToWrappedContent';
 import {resourceIconClass, tagIconClass, typeColorClass, typeOptionLabel} from '@/client/components/cardfilter/cardFilterLabels';
 
 const props = defineProps<{
@@ -89,6 +90,7 @@ const COMPACT_BELOW_PX = 560;
 
 const root = ref<HTMLElement>();
 const sheet = ref<HTMLElement>();
+const menu = ref<HTMLElement>();
 const menuOpen = ref(false);
 const compact = ref(false);
 let resizeObserver: ResizeObserver | undefined;
@@ -157,6 +159,9 @@ function closeOutside(event: PointerEvent): void {
   }
   menuOpen.value = false;
 }
+
+// The menu is only as wide as its wrapped chip rows; counts and chips change with the filter
+useShrinkToWrappedContent(menu, [() => props.filter, () => props.cards]);
 
 watch(menuOpen, (isOpen) => {
   if (isOpen) {
