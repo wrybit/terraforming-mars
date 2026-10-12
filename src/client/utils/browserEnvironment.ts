@@ -12,7 +12,7 @@ export function browserName(userAgent: string = navigator.userAgent): string {
     return `Firefox ${firefox[1]}`;
   }
   // iOS browsers are all Safari underneath; CriOS/FxiOS name the shell
-  const chrome = /\b(Chrome|CriOS)\/(\d+)/.exec(userAgent);
+  const chrome = /\b(HeadlessChrome|Chrome|CriOS)\/(\d+)/.exec(userAgent);
   if (chrome) {
     return `Chrome ${chrome[2]}`;
   }
