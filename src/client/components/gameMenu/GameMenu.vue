@@ -72,8 +72,9 @@
           </div>
           </div>
 
-          <!-- Navigation box: the main pages of the start page (siteLinks.ts), always in a new tab so a running game stays open -->
-          <nav v-if="navigation && navigationLinks.length > 0" class="game-menu-panel game-menu-items" role="menu">
+          <!-- Navigation box: the main pages of the start page (siteLinks.ts), always in a new tab so a running game stays open;
+               after the admin login also the admin area -->
+          <nav v-if="navigationLinks.length > 0" class="game-menu-panel game-menu-items" role="menu">
             <a v-for="link in navigationLinks" :key="link.label" :href="link.href" target="_blank" rel="noopener"
               role="menuitem" class="game-menu-item" @click="closeMenu">
               <span class="game-menu-item-icon"><MobileGlyph :name="link.icon" :strokeWidth="2"/></span>
@@ -109,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineAsyncComponent, inject, onBeforeUnmount, ref} from 'vue';
+import {computed, defineAsyncComponent, inject, onBeforeUnmount, onMounted, ref} from 'vue';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
@@ -121,12 +122,13 @@ import PreferencesDialog from '@/client/components/PreferencesDialog.vue';
 import {PreferencesManager} from '@/client/utils/PreferencesManager';
 import {LANGUAGE} from '@/common/constants';
 import {translateText} from '@/client/directives/i18n';
-import {SITE_LINKS, START_PAGE_LINK} from '@/client/components/startScreen/siteLinks';
+import {ADMIN_LINK, ADMIN_PAGES, SITE_LINKS, START_PAGE_LINK} from '@/client/components/startScreen/siteLinks';
+import {checkAdminLoginOnce, isAdmin} from '@/client/components/admin/adminSession';
 import {GAME_MENU_CONTEXT} from '@/client/components/gameMenu/gameMenuContext';
 import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
 import {ExtensionMenuItem} from '@/client/extensions/ClientExtension';
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   // Frosted-glass size of the page headers (40px) instead of the small table button
   large?: boolean;
   // Second box with the main pages (new game, statistics, cards list, rules, board game)
@@ -152,10 +154,16 @@ const buttonLabel = computed(() => {
 // The page the menu is on is not offered again (e.g. "Statistics" on /stats)
 const currentPage = window.location.pathname.split('/').pop() ?? '';
 // On the start page itself (empty last path segment) the way back to it is missing
-const navigationLinks = [
+const mainLinks = [
   ...(currentPage === '' ? [] : [START_PAGE_LINK]),
   ...SITE_LINKS.filter((link) => link.inMenu && link.href !== currentPage),
 ];
+// The admin entry also on the start page (which has no navigation box otherwise), but not inside the admin area
+const navigationLinks = computed(() => [
+  ...(props.navigation ? mainLinks : []),
+  ...(isAdmin.value && !ADMIN_PAGES.includes(currentPage) ? [ADMIN_LINK] : []),
+]);
+onMounted(() => void checkAdminLoginOnce());
 
 const injected = inject(GAME_MENU_CONTEXT, undefined);
 const context = computed(() => injected?.value);

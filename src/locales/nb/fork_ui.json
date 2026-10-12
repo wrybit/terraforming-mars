@@ -994,5 +994,7 @@
   "Open games with players online": "Åpne spill med spillere pålogget",
   "Open games": "Åpne spill",
   "Finished games": "Ferdige spill",
-  "Online": "Pålogget"
+  "Online": "Pålogget",
+  "Show password": "Vis passord",
+  "Hide password": "Skjul passord"
 }

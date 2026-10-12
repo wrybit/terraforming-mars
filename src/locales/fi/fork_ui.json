@@ -641,5 +641,7 @@
   "Open games with players online": "Avoimet pelit, joissa pelaajia paikalla",
   "Open games": "Avoimet pelit",
   "Finished games": "Päättyneet pelit",
-  "Online": "Paikalla"
+  "Online": "Paikalla",
+  "Show password": "Näytä salasana",
+  "Hide password": "Piilota salasana"
 }

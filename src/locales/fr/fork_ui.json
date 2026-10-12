@@ -700,5 +700,7 @@
   "Open games with players online": "Parties en cours avec joueurs en ligne",
   "Open games": "Parties en cours",
   "Finished games": "Parties terminées",
-  "Online": "En ligne"
+  "Online": "En ligne",
+  "Show password": "Afficher le mot de passe",
+  "Hide password": "Masquer le mot de passe"
 }

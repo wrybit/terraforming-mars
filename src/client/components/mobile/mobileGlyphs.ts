@@ -15,7 +15,7 @@ export type Glyph = {
 
 export type GlyphName = 'mars' | 'hand' | 'players' | 'log' | 'rocket' |
   'cardActions' | 'playCard' | 'standardProjects' | 'sellPatents' | 'greenery' | 'temperature' | 'milestone' | 'award' | 'colonyTrade' | 'more' |
-  'newGame' | 'rules' | 'statistics' | 'cardsList' | 'boardGame' | 'about' | 'updates' | 'discord';
+  'newGame' | 'rules' | 'statistics' | 'cardsList' | 'boardGame' | 'about' | 'updates' | 'discord' | 'admin';
 
 const circle = (cx: number, cy: number, r: number): SvgShape => ({tag: 'circle', attributes: {cx: String(cx), cy: String(cy), r: String(r)}});
 const path = (d: string): SvgShape => ({tag: 'path', attributes: {d}});
@@ -60,6 +60,8 @@ export const GLYPHS: Record<GlyphName, Glyph> = {
   cardsList: {layers: [[rect(3.5, 3.5, 7.5, 7.5, 1.6), rect(13, 3.5, 7.5, 7.5, 1.6), rect(3.5, 13, 7.5, 7.5, 1.6), rect(13, 13, 7.5, 7.5, 1.6)]], details: []},
   boardGame: {layers: [[rect(3.5, 3.5, 17, 17, 3.5)]], details: [dot(8, 8), dot(16, 8), dot(12, 12), dot(8, 16), dot(16, 16)]},
   about: {layers: [[circle(12, 12, 8.5)]], details: [path('M12 11v5.5'), dot(12, 7.8)]},
+  // Shield with a check mark: the protected admin area
+  admin: {layers: [[path('M12 2.8l7.5 3.1v5.3c0 4.7-3.2 8.4-7.5 10-4.3-1.6-7.5-5.3-7.5-10V5.9z')]], details: [path('M8.6 12.2l2.4 2.4 4.4-4.6')]},
   updates: {layers: [[path('M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z')]], details: []},
   discord: {
     layers: [[path('M6.5 4h11A2.5 2.5 0 0120 6.5v8a2.5 2.5 0 01-2.5 2.5H11l-4.5 3.5V17A2.5 2.5 0 014 14.5v-8A2.5 2.5 0 016.5 4z')]],

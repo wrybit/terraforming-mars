@@ -1552,5 +1552,7 @@
   "Open games with players online": "有玩家在线的进行中对局",
   "Open games": "进行中的对局",
   "Finished games": "已结束的对局",
-  "Online": "在线"
+  "Online": "在线",
+  "Show password": "显示密码",
+  "Hide password": "隐藏密码"
 }

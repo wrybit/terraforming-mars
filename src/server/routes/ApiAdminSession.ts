@@ -5,14 +5,15 @@ import {Request} from '../Request';
 import {Response} from '../Response';
 import {RouteError} from './RouteError';
 import {readBody} from './readBody';
-import {AdminLoginRequest} from '../../common/admin/adminLogin';
+import {AdminLoginRequest, AdminSessionStatus} from '../../common/admin/adminLogin';
 import {adminCookieLifetimeSeconds, adminCookieName, adminToken, isSecureRequest} from '../server/auth/adminCookie';
 
 // Slows down guessing the passphrase: every wrong attempt costs this long
 const FAILED_LOGIN_DELAY_MS = 1000;
 
 /**
- * Admin login. GET: is this browser logged in (200) or not (403)?
+ * Admin login. GET: is this browser logged in? Always 200 with {admin}, since the menu of every page
+ * asks (an error status would show up in every visitor's console).
  * POST: checks the passphrase from the body and sets the login cookie.
  */
 export class ApiAdminSession extends Handler {
@@ -22,10 +23,8 @@ export class ApiAdminSession extends Handler {
   }
 
   public override get(_req: Request, res: Response, ctx: Context): Promise<void> {
-    if (!this.isServerIdValid(ctx)) {
-      throw RouteError.forbidden();
-    }
-    responses.writeJson(res, ctx, {admin: true});
+    const status: AdminSessionStatus = {admin: this.isServerIdValid(ctx)};
+    responses.writeJson(res, ctx, status);
     return Promise.resolve();
   }
 

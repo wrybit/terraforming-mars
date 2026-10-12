@@ -11,8 +11,8 @@
       <p class="admin-login-hint" v-i18n>It is the value of SERVER_ID in the .env file of the server.</p>
     </div>
     <div class="admin-login-fields">
-      <input v-model.trim="serverId" class="admin-login-input" type="password" autocomplete="current-password" autofocus :aria-label="$t('Server ID')" :placeholder="$t('Server ID')">
-      <button type="submit" class="btn btn-primary admin-login-button" :disabled="serverId === '' || busy" v-i18n>Open</button>
+      <RevealablePasswordInput v-model="serverId" inputClass="admin-login-input" autofocus :ariaLabel="$t('Server ID')" :placeholder="$t('Server ID')"/>
+      <button type="submit" class="btn btn-primary admin-login-button" :disabled="serverId.trim() === '' || busy" v-i18n>Open</button>
     </div>
   </form>
 </template>
@@ -21,9 +21,11 @@
 import {defineComponent} from 'vue';
 import {logIn} from '@/client/components/admin/adminSession';
 import {APP_NAME} from '@/common/constants';
+import RevealablePasswordInput from '@/client/components/common/RevealablePasswordInput.vue';
 
 export default defineComponent({
   name: 'ServerIdPrompt',
+  components: {RevealablePasswordInput},
   emits: ['opened'],
   data() {
     return {APP_NAME, serverId: '', wrong: false, busy: false};
@@ -32,7 +34,7 @@ export default defineComponent({
     async open(): Promise<void> {
       this.busy = true;
       try {
-        if (await logIn(this.serverId)) {
+        if (await logIn(this.serverId.trim())) {
           this.$emit('opened');
           return;
         }

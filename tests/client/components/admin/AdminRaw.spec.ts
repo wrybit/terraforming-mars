@@ -9,7 +9,13 @@ describe('AdminRaw', () => {
 
   beforeEach(() => {
     originalFetch = global.fetch;
-    global.fetch = (url) => Promise.resolve({ok: true, status: 200, text: () => Promise.resolve(String(url) === 'api/metrics' ? 'metric 1' : '{"a":1}')} as Response);
+    // Logged in (api/admin/session), then the raw data
+    global.fetch = (url) => Promise.resolve({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({admin: true}),
+      text: () => Promise.resolve(String(url) === 'api/metrics' ? 'metric 1' : '{"a":1}'),
+    } as Response);
   });
 
   afterEach(() => {

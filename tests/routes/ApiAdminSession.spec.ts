@@ -45,12 +45,13 @@ describe('ApiAdminSession', () => {
 
   it('reports whether the browser is logged in', async () => {
     await scaffolding.get(new ApiAdminSession(0), res);
-    expect(res.statusCode).eq(statusCode.forbidden);
+    expect(res.statusCode).eq(statusCode.ok);
+    expect(JSON.parse(res.content)).deep.eq({admin: false});
 
     res = new MockResponse();
     scaffolding.loginAsAdmin();
     await scaffolding.get(new ApiAdminSession(0), res);
-    expect(res.statusCode).eq(statusCode.ok);
+    expect(JSON.parse(res.content)).deep.eq({admin: true});
   });
 
   it('admin routes accept the cookie but no passphrase in the address', async () => {

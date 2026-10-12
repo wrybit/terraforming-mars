@@ -983,5 +983,7 @@
   "Open games with players online": "プレイヤーがオンラインの進行中ゲーム",
   "Open games": "進行中のゲーム",
   "Finished games": "終了したゲーム",
-  "Online": "オンライン"
+  "Online": "オンライン",
+  "Show password": "パスワードを表示",
+  "Hide password": "パスワードを隠す"
 }

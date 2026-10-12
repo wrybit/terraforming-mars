@@ -33,3 +33,8 @@ export const SITE_LINKS: ReadonlyArray<SiteLink> = [
 // Only in the game menu, above "New game": the way back to the start page from every other page.
 // Not a globe on the start page itself, where it would lead to the page you are on.
 export const START_PAGE_LINK: Pick<SiteLink, 'label' | 'icon' | 'href'> = {label: 'Start page', icon: 'mars', href: './'};
+
+// Only in the game menu and only after the admin login (adminSession.ts): the way into the admin area.
+// Its pages do not offer it again (they have their own navigation).
+export const ADMIN_LINK: Pick<SiteLink, 'label' | 'icon' | 'href'> = {label: 'Administration', icon: 'admin', href: 'games-overview'};
+export const ADMIN_PAGES: ReadonlyArray<string> = ['games-overview', 'admin', 'admin-raw', 'load'];

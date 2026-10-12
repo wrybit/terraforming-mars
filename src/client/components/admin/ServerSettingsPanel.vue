@@ -1,5 +1,5 @@
 <template>
-  <!-- The .env file of the server, editable here: one card per group, save and restart at the bottom -->
+  <!-- The .env file of the server, editable here: one tab per group, save and restart at the bottom -->
   <div class="server-settings">
     <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
     <div v-else-if="status === 'unreachable'" class="games-overview-card server-settings-group">
@@ -7,34 +7,46 @@
       <div><button type="button" class="btn btn-tone-quiet" @click="load" v-i18n>Try again</button></div>
     </div>
     <template v-else>
-      <section v-for="group in groups" :key="group.name" class="games-overview-card server-settings-group">
-        <h2 v-i18n>{{ group.name }}</h2>
-        <div v-for="setting in group.settings" :key="setting.key" class="server-settings-row">
-          <div class="server-settings-text">
-            <label :for="'server-setting-' + setting.key" class="server-settings-label" v-i18n>{{ setting.label }}</label>
-            <span class="server-settings-description" v-i18n>{{ setting.description }}</span>
-            <code class="server-settings-key">{{ setting.key }}</code>
-          </div>
-          <div class="server-settings-field">
-            <label v-if="setting.kind === 'toggle'" class="server-settings-toggle">
-              <input :id="'server-setting-' + setting.key" type="checkbox" :checked="isOn(values[setting.key])" @change="setValue(setting.key, ($event.target as HTMLInputElement).checked ? 'true' : '')">
-            </label>
-            <div v-else class="server-settings-input">
-              <input :id="'server-setting-' + setting.key"
-                :type="inputType(setting)"
-                :inputmode="setting.kind === 'number' ? 'numeric' : undefined"
-                :value="values[setting.key]"
-                autocomplete="off"
-                @input="setValue(setting.key, ($event.target as HTMLInputElement).value)">
-              <button v-if="setting.kind === 'secret'" type="button" class="btn btn-sm btn-tone-quiet" @click="toggleReveal(setting.key)" v-i18n>{{ revealed[setting.key] ? 'Hide' : 'Show' }}</button>
+      <!-- One tab per group, like the tabs in the game (or_options_tabs.less): no long scrolling -->
+      <div>
+        <div class="or-tabs server-settings-tabs" role="tablist">
+          <button v-for="group in groups" :key="group.name" type="button" role="tab"
+            :aria-selected="group.name === selectedGroup"
+            :class="['or-tab', 'or-tab--view', {'or-tab--active': group.name === selectedGroup}]"
+            @click.prevent="selectedGroup = group.name">
+            <span class="or-tab-title" v-i18n>{{ group.name }}</span>
+            <!-- Unsaved or not yet active changes in this group -->
+            <span v-if="groupMarker(group.settings) !== undefined" class="server-settings-tab-marker" :class="'server-settings-tab-marker--' + groupMarker(group.settings)" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div v-docked-tab class="or-tab-panel or-tab-panel--view server-settings-group" role="tabpanel">
+          <div v-for="setting in selectedSettings" :key="setting.key" class="server-settings-row">
+            <div class="server-settings-text">
+              <label :for="'server-setting-' + setting.key" class="server-settings-label" v-i18n>{{ setting.label }}</label>
+              <span class="server-settings-description" v-i18n>{{ setting.description }}</span>
+              <code class="server-settings-key">{{ setting.key }}</code>
             </div>
-            <!-- Saved in the .env file but not yet in effect: the server reads it at its next start -->
-            <span v-if="pendingRestart(setting.key)" class="server-settings-source">
-              <strong class="server-settings-pending" v-i18n>Active after restart</strong>
-            </span>
+            <div class="server-settings-field">
+              <label v-if="setting.kind === 'toggle'" class="server-settings-toggle">
+                <input :id="'server-setting-' + setting.key" type="checkbox" :checked="isOn(values[setting.key])" @change="setValue(setting.key, ($event.target as HTMLInputElement).checked ? 'true' : '')">
+              </label>
+              <div v-else class="server-settings-input">
+                <input :id="'server-setting-' + setting.key"
+                  :type="inputType(setting)"
+                  :inputmode="setting.kind === 'number' ? 'numeric' : undefined"
+                  :value="values[setting.key]"
+                  autocomplete="off"
+                  @input="setValue(setting.key, ($event.target as HTMLInputElement).value)">
+                <button v-if="setting.kind === 'secret'" type="button" class="btn btn-sm btn-tone-quiet" @click="toggleReveal(setting.key)" v-i18n>{{ revealed[setting.key] ? 'Hide' : 'Show' }}</button>
+              </div>
+              <!-- Saved in the .env file but not yet in effect: the server reads it at its next start -->
+              <span v-if="pendingRestart(setting.key)" class="server-settings-source">
+                <strong class="server-settings-pending" v-i18n>Active after restart</strong>
+              </span>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <!-- Save, then restart: changes only take effect in a new server process -->
       <section class="games-overview-card server-settings-actions">
@@ -51,6 +63,7 @@ import {defineComponent} from 'vue';
 import {paths} from '@/common/app/paths';
 import {statusCode} from '@/common/http/statusCode';
 import {logIn} from '@/client/components/admin/adminSession';
+import {vDockedTab} from '@/client/directives/DockedTab';
 import {translateText} from '@/client/directives/i18n';
 import {
   SERVER_SETTING_GROUPS, SERVER_SETTINGS, ServerSettingDefinition, ServerSettingState, ServerSettingsModel, ServerSettingsUpdate,
@@ -65,6 +78,7 @@ type DataModel = {
   busy: boolean,
   message: string,
   messageIsError: boolean,
+  selectedGroup: string,
 };
 
 // Boolean settings: the server reads any of these as "on" (stringToBoolean, Boolean())
@@ -74,12 +88,16 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
+  directives: {dockedTab: vDockedTab},
   data(): DataModel {
-    return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false};
+    return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false, selectedGroup: SERVER_SETTING_GROUPS[0]};
   },
   computed: {
     groups(): Array<{name: string, settings: Array<ServerSettingDefinition>}> {
       return SERVER_SETTING_GROUPS.map((name) => ({name, settings: SERVER_SETTINGS.filter((setting) => setting.group === name)}));
+    },
+    selectedSettings(): Array<ServerSettingDefinition> {
+      return SERVER_SETTINGS.filter((setting) => setting.group === this.selectedGroup);
     },
     dirty(): boolean {
       return SERVER_SETTINGS.some(({key}) => this.values[key] !== this.configured(key));
@@ -92,6 +110,13 @@ export default defineComponent({
     void this.load();
   },
   methods: {
+    // 'changed': edited here but not saved; 'pending': saved, active after the restart
+    groupMarker(settings: ReadonlyArray<ServerSettingDefinition>): 'changed' | 'pending' | undefined {
+      if (settings.some(({key}) => this.values[key] !== this.configured(key))) {
+        return 'changed';
+      }
+      return settings.some(({key}) => this.pendingRestart(key)) ? 'pending' : undefined;
+    },
     state(key: string): ServerSettingState | undefined {
       return this.states.find((state) => state.key === key);
     },

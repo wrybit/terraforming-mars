@@ -861,5 +861,7 @@
   "Open games with players online": "플레이어가 접속 중인 진행 중 게임",
   "Open games": "진행 중인 게임",
   "Finished games": "끝난 게임",
-  "Online": "접속 중"
+  "Online": "접속 중",
+  "Show password": "비밀번호 표시",
+  "Hide password": "비밀번호 숨기기"
 }

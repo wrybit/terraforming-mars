@@ -197,7 +197,8 @@
   flex-direction: column;
   gap: 24px;
   width: 100%;
-  max-width: 420px;
+  // Wide enough for a whole 64-digit hash as passphrase
+  max-width: 860px;
   padding: 32px;
   text-align: center;
 }
@@ -248,23 +249,34 @@
   gap: 10px;
 }
 
-.admin-login-input {
-  height: 52px;
-  padding: 0 16px;
+.games-overview-container .admin-login-input {
+  width: 100%;
+  height: 56px;
+  // Room for the eye on the right, the same on the left so the text stays centered
+  padding: 0 48px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.35);
   color: #eee;
-  font-size: 20px;
+  // Monospace: hashes and IDs read character by character
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 16px;
   text-align: center;
+  transition: background 0.3s, border-color 0.2s;
 
   &::placeholder {
-    font-size: 17px;
+    font-family: inherit;
   }
 
   &:focus {
     outline: 2px solid fade(#908fdb, 70%);
   }
+}
+
+// Revealed: the field turns a shade lighter, so it is clear at a glance that the passphrase is readable
+.revealable-password--shown .admin-login-input {
+  border-color: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .games-overview-container .admin-login-button {
@@ -336,5 +348,34 @@
   .games-overview-container .admin-nav-link {
     padding: 5px 9px;
     font-size: 14px;
+  }
+}
+
+// Settings tabs (ServerSettingsPanel.vue): a dot behind the group name when something in it is
+// changed but not saved (white) or saved but only active after the restart (yellow, like "Active after restart")
+.server-settings-tab-marker {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 6px;
+  border-radius: 50%;
+  vertical-align: 2px;
+
+  &--changed {
+    background: #fff;
+  }
+
+  &--pending {
+    background: #f4c20d;
+  }
+}
+
+// Phone: the tab bar scrolls sideways instead of truncating the group names to "Appe…"
+.server-settings-tabs {
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  .or-tab {
+    flex: 0 0 auto;
   }
 }

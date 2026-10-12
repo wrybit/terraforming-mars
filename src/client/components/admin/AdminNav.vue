@@ -1,6 +1,8 @@
 <template>
   <!-- Navigation of the admin area (only after the login): on every admin page at the top, in words instead of endpoint paths -->
   <header class="games-overview-card admin-nav">
+    <!-- The app's own menu (language, start page, new game …): switch between the game and the admin area -->
+    <GameMenu :large="true"/>
     <h1><HomeLink>{{ APP_NAME }}</HomeLink> — <span v-i18n>Administration</span></h1>
     <nav class="admin-nav-links">
       <a v-for="item in items" :key="item.page" :href="item.path"
@@ -16,6 +18,7 @@ import {defineComponent, PropType} from 'vue';
 import {paths} from '@/common/app/paths';
 import {APP_NAME} from '@/common/constants';
 import HomeLink from '@/client/components/common/HomeLink.vue';
+import GameMenu from '@/client/components/gameMenu/GameMenu.vue';
 import {shortDocumentTitle} from '@/client/utils/documentTitle';
 import {translateText} from '@/client/directives/i18n';
 
@@ -23,7 +26,7 @@ export type AdminPage = 'games' | 'settings' | 'raw';
 
 export default defineComponent({
   name: 'AdminNav',
-  components: {HomeLink},
+  components: {HomeLink, GameMenu},
   props: {
     active: {type: String as PropType<AdminPage>, required: true},
   },
