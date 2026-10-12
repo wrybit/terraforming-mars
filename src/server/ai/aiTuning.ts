@@ -268,7 +268,9 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 52 (1200 mirrored 1v1 games): energySupply +2.11 VP per deal (z +2.45) – adopted (player feedback).
   energySupply: 1,
   milestoneNear: 0,
-  greeneryRing: 0,
+  // Round 53 (1148 mirrored 1v1 games): greeneryRing1 +0.48 (z +0.68), fixes the human-game observation (greeneries
+  // far from the city, more than two before it) – adopted at 1.
+  greeneryRing: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -515,6 +517,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   greeneryRing1: {greeneryRing: 1},
   greeneryRing2: {greeneryRing: 2},
   greeneryRing05: {greeneryRing: 0.5},
+  greeneryRing15: {greeneryRing: 1.5},
+  noGreeneryRing: {greeneryRing: 0},
+  closer075: {closer: 0.75},
   noEnergySupply: {energySupply: 0},
   noDrawChoice: {drawChoiceValue: 0},
   // Round 48: animal and other collector cards (human card-VP engines, 5 games) with today's flow fit.

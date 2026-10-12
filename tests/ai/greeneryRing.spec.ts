@@ -41,6 +41,7 @@ describe('AI greenery ring', () => {
     const [first, second, third, candidate] = spreadLand(game, 4);
     greenery(game, player, first);
     greenery(game, player, second);
+    setPlayerTuning(player.id, 'noGreeneryRing');
     expect(lonelyGreeneryPoints(candidate, player, game.board)).eq(0);
     setPlayerTuning(player.id, 'greeneryRing1');
     const withTwo = lonelyGreeneryPoints(candidate, player, game.board);
