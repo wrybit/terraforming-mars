@@ -274,8 +274,10 @@ export const BASELINE_TUNING: AiTuning = {
   milestoneNear: 0,
   // Round 53 (1148 mirrored 1v1 games): greeneryRing1 +0.48 (z +0.68), fixes the human-game observation (greeneries
   // far from the city, more than two before it) – adopted at 1.
-  greeneryRing: 1,
-  stockAwardSwing: 1,
+  // Round 55: greeneryRing15 +1.20 (pooled with round 54 +0.92, z ≈ 1.8) – raised to 1.5.
+  greeneryRing: 1.5,
+  // Round 55: stockAwardSwing03 +0.03 – neutral, fixes the human-game error (Space Elevator not played) – adopted.
+  stockAwardSwing: 0.3,
   passLastResort: 0,
 };
 
@@ -529,6 +531,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human game: kept 6 titanium for a safe Miner lead instead of playing Space Elevator (2 VP).
   stockAwardSwing03: {stockAwardSwing: 0.3},
   stockAwardSwing0: {stockAwardSwing: 0},
+  stockAwardSwing1: {stockAwardSwing: 1},
   // Human feedback "passing is the last option": 26 % of AI passes had another move, often a near-tie.
   passLastResort2: {passLastResort: 2},
   passLastResort5: {passLastResort: 5},
