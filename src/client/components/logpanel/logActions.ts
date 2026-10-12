@@ -92,6 +92,7 @@ export function effectOf(message: LogMessage): {player: Color, effect: LogEffect
   let effect: LogEffect | undefined;
   switch (template) {
   case '${0} gained ${1} ${2} production':
+  case '${0} gained ${1} ${2} production because of ${3}':
     effect = withResource(resource(value(message, 2)), {amount: amount(message, 1), production: true});
     break;
   case '${0} lost ${1} ${2} production':

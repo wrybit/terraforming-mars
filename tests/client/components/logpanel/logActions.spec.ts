@@ -65,6 +65,19 @@ describe('logActions', () => {
     expect(research.entries).deep.eq([{player: 'red', amount: 2}, {player: 'blue', amount: 1}]);
   });
 
+  it('attaches production gained because of another card to the action', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
+      message('${0} gained ${1} ${2} production because of ${3}', player('blue'), raw('1'), text('M€'), card(CardName.SATURN_SYSTEMS)),
+    ]);
+    expect(rows).has.length(1);
+    const row = rows[0];
+    if (row.type !== 'action') {
+      throw new Error('expected an action row');
+    }
+    expect(row.action.others).deep.eq([{player: 'blue', effects: [{resource: 'megacredit', amount: 1, production: true}]}]);
+  });
+
   it('shows sold patents as cards given away by the standard project', () => {
     const rows = groupLogMessages([
       message('${0} used ${1} standard project', player('red'), card(CardName.SELL_PATENTS_STANDARD_PROJECT)),
