@@ -119,6 +119,11 @@ const TILE_TYPES: Partial<Record<TileType, string>> = {
   [TileType.GREENERY]: 'greenery', [TileType.OCEAN]: 'ocean', [TileType.CITY]: 'city',
   [TileType.MOON_MINE]: 'moon-mine', [TileType.MOON_HABITAT]: 'moon-habitat', [TileType.MOON_ROAD]: 'moon-road',
 };
+// Production of standard projects that older servers did not log: added when the log has none
+const STANDARD_PROJECT_PRODUCTION: Partial<Record<CardName, LogEffect>> = {
+  [CardName.POWER_PLANT_STANDARD_PROJECT]: {resource: 'power', amount: 1, production: true},
+  [CardName.CITY_STANDARD_PROJECT]: {resource: 'megacredit', amount: 1, production: true},
+};
 // Planetary tracks (Pathfinders) with a tag icon
 const TRACKS = new Set(['venus', 'earth', 'mars', 'jovian', 'moon']);
 
@@ -472,6 +477,10 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>): Array<Log
 
   for (const row of rows) {
     if (row.type === 'action') {
+      const known = row.action.kind === 'standardProject' && row.action.card !== undefined ? STANDARD_PROJECT_PRODUCTION[row.action.card] : undefined;
+      if (known !== undefined && !row.action.effects.some((entry) => entry.production && entry.resource === known.resource)) {
+        row.action.effects.push({...known});
+      }
       row.action.effects = mergeEffects(row.action.effects);
       row.action.others = row.action.others.map((entry) => ({player: entry.player, effects: mergeEffects(entry.effects)}));
     }

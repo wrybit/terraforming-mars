@@ -216,4 +216,11 @@ describe('logActions', () => {
     expect(rows.map((row) => row.type === 'action' ? [row.action.player, row.action.name, row.action.count] : [])).deep.eq([
       ['blue', 'Reds', 2], ['red', 'Reds', 1], ['red', 'Greens', 1]]);
   });
+
+  it('shows the production of the power plant standard project also when the log does not name it', () => {
+    const used = message('${0} used ${1} standard project', player('red'), card(CardName.POWER_PLANT_STANDARD_PROJECT));
+    const logged = message('${0} gained ${1} ${2} production', player('red'), raw('1'), text('energy'));
+    expect(actionAt(groupLogMessages([used]), 0).effects).deep.eq([{resource: 'power', amount: 1, production: true}]);
+    expect(actionAt(groupLogMessages([used, logged]), 0).effects).deep.eq([{resource: 'power', amount: 1, production: true}]);
+  });
 });
