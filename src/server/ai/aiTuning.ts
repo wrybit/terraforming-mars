@@ -170,7 +170,9 @@ export const BASELINE_TUNING: AiTuning = {
   // full opponent weight in two-player games too (2P: z +2.01 in 400 games).
   draftDenial: 0.5,
   tempoAware: 0,
-  closer: 0,
+  // Round 49 (1200 mirrored 1v1 games): closer +1.37 VP per deal (z +1.69) – end the game sooner when the rival's
+  // engine is stronger (human economy players kept terraforming slow) – adopted.
+  closer: 1,
   terraformBrake: 0,
   // Neutral in AI-vs-AI (z +0.36) but measured right (2P 14.5, 3P 11.8 generations); adopted on
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
@@ -381,6 +383,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noAwardTrend: {awardTrend: 0},
   // A human won twice with a late engine while the AI led on TR: end the game sooner (closer was neutral at 1).
   closer2: {closer: 2},
+  // Round 50: around the adopted closer 1.
+  noCloser: {closer: 0},
+  closer05: {closer: 0.5},
+  closer15: {closer: 1.5},
   // handSynergy only acts through engineValue, which needs engineWeight > 0 (round 21 measured noise).
   engine1: {engineWeight: 1},
   // Rollouts at a price human games can bear: 2 moves, 0.6 s, only close decisions.
