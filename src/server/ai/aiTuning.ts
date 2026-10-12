@@ -253,7 +253,9 @@ export const BASELINE_TUNING: AiTuning = {
   // fit the direction of the own game; candidate, round 45 checks it with noFlowFit).
   // Round 45: flowFit3 +1.52 VP per deal (z +1.99) against flowFit 2 – adopted.
   flowFit: 3,
-  drawChoiceValue: 0,
+  // Rounds 46 + 47: drawChoice4 +0.69 and +0.72 VP per deal (pooled z ≈ 1.3), drawChoice6 +1.04 (z +1.36) – adopted at 4,
+  // it fixes a human-game error (Business Contacts and Invention Contest passed on).
+  drawChoiceValue: 4,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -485,6 +487,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   drawChoice4: {drawChoiceValue: 4},
   // Round 46: drawChoice2 −1.25, drawChoice4 +0.69 – noisy; round 47 repeats 4 and tries 6.
   drawChoice6: {drawChoiceValue: 6},
+  drawChoice8: {drawChoiceValue: 8},
+  noDrawChoice: {drawChoiceValue: 0},
+  // Round 48: animal and other collector cards (human card-VP engines, 5 games) with today's flow fit.
+  collectors04: {accumulatorValue: 0.4},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.

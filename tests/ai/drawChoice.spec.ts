@@ -19,8 +19,9 @@ describe('AI draw choice', () => {
     expect(drawChoiceBonus(new Research(), player)).eq(0);
   });
 
-  it('is off in the baseline', () => {
+  it('can be switched off', () => {
     const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'noDrawChoice');
     expect(drawChoiceBonus(new BusinessContacts(), player)).eq(0);
   });
 });
