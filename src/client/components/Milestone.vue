@@ -1,7 +1,7 @@
 <template>
   <div class="ma-block">
     <div class="ma-player" v-if="milestone.playerName">
-      <i :title="milestone.playerName" class="board-cube" :class="`board-cube--${milestone.color}`" ></i>
+      <BoardCube v-if="milestone.color !== undefined" :title="milestone.playerName" class="board-cube" :color="milestone.color" view="slight"/>
     </div>
     <div class="ma-name--milestones" :class="nameCss">
       <span ref="name" v-i18n>{{name}}</span>
@@ -35,6 +35,7 @@ import {defineComponent} from 'vue';
 import {ClaimedMilestoneModel, MilestoneScore} from '@/common/models/ClaimedMilestoneModel';
 import {getMilestone} from '@/client/MilestoneAwardManifest';
 import {playerSymbol} from '@/client/utils/playerSymbol';
+import BoardCube from '@/client/components/common/BoardCube.vue';
 import {Color} from '@/common/Color';
 import {fitTextWhenReady} from '@/client/utils/textFit';
 import {comparing, reversed} from '@/common/utils/Ordering';
@@ -45,6 +46,7 @@ type Refs = {
 
 export default defineComponent({
   name: 'Milestone',
+  components: {BoardCube},
   props: {
     milestone: {
       type: Object as () => ClaimedMilestoneModel,

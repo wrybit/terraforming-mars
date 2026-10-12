@@ -2,7 +2,7 @@
   <div>
     <BuildBenefit v-if="idx <= 2" :metadata="metadata" :idx="idx"/>
     <div v-if="player !== undefined" class="occupied-colony-space">
-      <div :class="`board-cube colony-cube board-cube--${player}`"></div>
+      <BoardCube class="board-cube colony-cube" :color="player" :size="26" :spinSeed="metadata.name + idx"/>
     </div>
     <div v-if="marker" class="colony-track-marker" :class="{'colony-track-marker--fading': fadeMarker && idx <= 2}"></div>
   </div>
@@ -14,10 +14,11 @@ import {defineComponent} from 'vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import {ColonyMetadata} from '@/common/colonies/ColonyMetadata';
 import BuildBenefit from './BuildBenefit.vue';
+import BoardCube from '@/client/components/common/BoardCube.vue';
 import {Color} from '@/common/Color';
 
 export default defineComponent({
-  components: {BuildBenefit},
+  components: {BuildBenefit, BoardCube},
   name: 'ColonyRow',
   props: {
     idx: {

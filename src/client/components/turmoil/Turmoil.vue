@@ -21,8 +21,8 @@
           </div>
           <div class="policy-user-cubes">
             <template v-for="n in turmoil.policyActionUsers" :key="n.color">
-              <div v-if="n.turmoilPolicyActionUsed" :class="'policy-use-marker board-cube--'+n.color"></div>
-              <div v-if="n.politicalAgendasActionUsedCount > 0" :class="'policy-use-marker board-cube--'+n.color">{{n.politicalAgendasActionUsedCount}}</div>
+              <BoardCube v-if="n.turmoilPolicyActionUsed" class="policy-use-marker" :color="n.color" view="slight"/>
+              <BoardCube v-if="n.politicalAgendasActionUsedCount > 0" class="policy-use-marker" :color="n.color" view="slight">{{n.politicalAgendasActionUsedCount}}</BoardCube>
             </template>
           </div>
           <div class="chairman-spot" v-flash="flashKeys.turmoil('chairman')"><div v-if="turmoil.chairman" :class="'player-token '+turmoil.chairman"></div></div>
@@ -88,6 +88,7 @@ import {PartyName} from '@/common/turmoil/PartyName';
 import {TurmoilModel} from '@/common/models/TurmoilModel';
 import TurmoilAgenda from '@/client/components/turmoil/TurmoilAgenda.vue';
 import GlobalEvent from '@/client/components/turmoil/GlobalEvent.vue';
+import BoardCube from '@/client/components/common/BoardCube.vue';
 import {BonusId, PolicyId} from '@/common/turmoil/Types';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
@@ -169,6 +170,7 @@ export default defineComponent({
   components: {
     GlobalEvent,
     TurmoilAgenda,
+    BoardCube,
   },
 });
 

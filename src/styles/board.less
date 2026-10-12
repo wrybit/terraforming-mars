@@ -282,7 +282,6 @@
   height: 21px;
   z-index: 3;
   margin: 25px 0 0 15px;
-  filter: drop-shadow(2px 2px 3px black);
 }
 
 // for The Moon
@@ -291,8 +290,8 @@
   width: 21px;
   height: 21px;
   z-index: 3;
-  margin: 8px 0 0 4px;
-  filter: drop-shadow(2px 2px 3px black);
+  // Further into the corner than the old flat sprite: the 3D cube is wider and would touch the owner's cube
+  margin: 3px 0 0 -1px;
 }
 
 .occupied-colony-space {
@@ -303,127 +302,43 @@
   z-index: 1;
 }
 
-.board-cube--red {
-  background: url(./assets/board_icons.png) -24px -91px no-repeat;
+// Player markers (BoardCube.vue): the acrylic PlayerCube centered in the 21px box the position classes expect.
+// Flex centering lets the larger cube scene overflow evenly on all sides.
+.board-cube-acrylic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  overflow: visible;
 }
 
-.board-cube--blue {
-  background: url(./assets/board_icons.png) -94px -91px no-repeat;
+// Zero specificity: position classes like .board-cube (absolute) always win
+:where(.board-cube-acrylic) {
+  position: relative;
 }
 
-.board-cube--black {
-  background: url(./assets/board_icons.png) -48px -91px no-repeat;
-}
-
-.board-cube--yellow {
-  background: url(./assets/board_icons.png) -72px -91px no-repeat;
-}
-
-.board-cube--green {
-  background: url(./assets/board_icons.png) -1px -91px no-repeat;
-}
-
-.board-cube--purple {
-  background: url(./assets/board_icons.png) -118px -91px no-repeat;
-}
-
-.board-cube--orange {
-  background: url(./assets/board_icons.png) -1px -117px no-repeat;
-}
-
-.board-cube--pink {
-  background: url(./assets/board_icons.png) -24px -117px no-repeat;
-}
-
-.board-cube--bronze {
-  background: url(./assets/board_icons.png) -142px -91px no-repeat;
-}
-
-// TODO(kberg): this only works at the moment because I've made the neutral cube bronze.
-.board-cube--neutral {
-  background: url(./assets/board_icons.png) -142px -91px no-repeat;
-}
-
-.overlay_base {
+// Colorblind symbol and counters sit on top of the cube
+.board-cube-acrylic__symbol,
+.board-cube-acrylic__label {
   position: absolute;
-  font-size: 15px;
-}
-
-.board-cube--red.overlay::after {
-  .overlay_base();
-  content: "▲";
-  margin-left: 3px;
-  margin-top: -2px;
-}
-
-.board-cube--blue.overlay::after {
-  .overlay_base();
-  content: "+";
-  margin-left: 7px;
-  margin-top: -2px;
-  font-size: 16px;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
   font-weight: bold;
+  line-height: 1;
+  color: white;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  pointer-events: none;
 }
 
-.board-cube--black.overlay::after {
-  .overlay_base();
-  content: "∇";
-  margin-left: 5px;
-  margin-top: 1px;
-}
-
-.board-cube--yellow.overlay::after {
-  .overlay_base();
-  content: "∗";
-  margin-left: 4px;
-  margin-top: -1px;
-  font-weight: bold;
-}
-
-.board-cube--green.overlay::after {
-  .overlay_base();
-  content: "◆";
-  margin-left: 5px;
-  margin-top: -2px;
-}
-
-.board-cube--purple.overlay::after {
-  .overlay_base();
-  content: "◉";
-  margin-left: 5px;
-  margin-top: 0px;
-  font-size: 13px;
-}
-
-.board-cube--orange.overlay::after {
-  .overlay_base();
-  content: "▢";
-  margin-left: 5px;
-  margin-top: 0px;
-  font-size: 13px;
-}
-
-.board-cube--pink.overlay::after {
-  .overlay_base();
-  content: "◈";
-  margin-left: 5px;
-  margin-top: -2px;
-}
-
-.board-cube--bronze.overlay::after {
-  .overlay_base();
-  content: "▦";
-  margin-left: 5px;
-  margin-top: 3px;
-  font-size: 9px;
-}
-
-.board-cube--neutral.overlay::after {
-  .overlay_base();
-  font-size: 13px;
-  content: "★";
-  margin-left: 4px;
-  margin-top: 1px;
+// With both shown, the counter moves to the bottom right corner
+.board-cube-acrylic__symbol + .board-cube-acrylic__label {
+  inset: auto -4px -4px auto;
+  font-size: 11px;
 }
 
 .board-outer-spaces {

@@ -16,12 +16,13 @@
         <tr>
           <td class="delta-project-board__slots-cell delta-project-board__slots-cell--start">
             <div class="delta-project-board__slots">
-              <i
+              <BoardCube
                 v-for="color in playersAtPosition(0)"
                 :key="color"
-                :class="cubeCss(color)"
+                :color="color"
+                :spinSeed="'delta-' + color"
                 class="delta-project-board__cube"
-              ></i>
+              />
               <div
                 v-for="n in emptySlotsStart"
                 :key="'empty-start-' + n"
@@ -31,12 +32,13 @@
           </td>
           <td v-for="(step, idx) in steps" :key="(step.tag ?? 'vp-' + step.vpValue) + '-slots'" class="delta-project-board__slots-cell">
             <div class="delta-project-board__slots">
-              <i
+              <BoardCube
                 v-for="color in playersAtPosition(idx + 1)"
                 :key="color"
-                :class="cubeCss(color)"
+                :color="color"
+                :spinSeed="'delta-' + color"
                 class="delta-project-board__cube"
-              ></i>
+              />
               <div
                 v-for="n in emptySlots(idx + 1, step)"
                 :key="'empty-' + idx + '-' + n"
@@ -73,7 +75,7 @@ import {defineComponent, PropType} from 'vue';
 import {Color} from '@/common/Color';
 import {Tag} from '@/common/cards/Tag';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
-import {getPreferences} from '@/client/utils/PreferencesManager';
+import BoardCube from '@/client/components/common/BoardCube.vue';
 import {DeltaBoardStep} from '@/client/components/delta/DeltaBoardStep';
 
 const STEPS: ReadonlyArray<DeltaBoardStep> = [
@@ -161,6 +163,7 @@ const STEPS: ReadonlyArray<DeltaBoardStep> = [
 
 export default defineComponent({
   name: 'DeltaProjectBoard',
+  components: {BoardCube},
   props: {
     players: {
       type: Array as PropType<ReadonlyArray<PublicPlayerModel>>,
@@ -179,10 +182,6 @@ export default defineComponent({
     },
   },
   methods: {
-    cubeCss(color: Color): string {
-      const css = 'board-cube board-cube--' + color;
-      return getPreferences().symbol_overlay ? css + ' overlay' : css;
-    },
     playersAtPosition(position: number): Array<Color> {
       const result: Array<Color> = [];
       for (const player of this.players) {
@@ -293,23 +292,7 @@ export default defineComponent({
 }
 
 .delta-project-board__cube {
-  position: relative;
-  width: 21px;
-  height: 21px;
   margin: 0;
-  filter: drop-shadow(2px 2px 3px black);
-}
-
-.delta-project-board__cube::after {
-  margin-left: 0 !important;
-  margin-top: 0 !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .delta-project-board__slot {

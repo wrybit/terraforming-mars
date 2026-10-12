@@ -69,7 +69,9 @@ each(@players, {
   }
 });
 
-.player-cube--bronze {
+// Neutral markers (e.g. the solo opponent) share the bronze look, as the old board sprite did
+.player-cube--bronze,
+.player-cube--neutral {
   --cube-color: #b0753d;
 }
 

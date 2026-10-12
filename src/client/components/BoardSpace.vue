@@ -9,7 +9,7 @@
     <Bonus :bonus="space.bonus" v-if="showBonus"/>
     <div v-if="tileView === 'coords' && spaceCoordinate(space.id) !== undefined" class="board-space-coords">{{ spaceCoordinate(space.id) }}</div>
     <template v-if="tileView === 'show'">
-      <div :class="playerColorCss" v-if="space.color !== undefined"></div>
+      <BoardCube v-if="space.color !== undefined" class="board-cube" :color="space.color" :spinSeed="space.id"/>
       <template v-if="space.gagarin !== undefined">
         <div v-if="space.gagarin === 0" class='gagarin'></div>
         <div v-else class='gagarin visited'></div>
@@ -33,12 +33,12 @@
 
 import {defineComponent} from 'vue';
 import Bonus from '@/client/components/Bonus.vue';
+import BoardCube from '@/client/components/common/BoardCube.vue';
 import BoardSpaceTile from '@/client/components/board/BoardSpaceTile.vue';
 import BoardSpaceCube from '@/client/components/board/BoardSpaceCube.vue';
 import UndergroundToken from '@/client/components/underworld/UndergroundToken.vue';
 import {TileView} from '@/client/components/board/TileView';
 import {SpaceModel} from '@/common/models/SpaceModel';
-import {getPreferences} from '../utils/PreferencesManager';
 import {ClaimedToken} from '@/common/underworld/UnderworldPlayerData';
 import {spaceCoordinate} from '@/client/components/board/spaceCoordinate';
 import {SpaceType} from '@/common/boards/SpaceType';
@@ -70,6 +70,7 @@ export default defineComponent({
     Bonus,
     BoardSpaceTile,
     BoardSpaceCube,
+    BoardCube,
     UndergroundToken,
   },
   computed: {
@@ -90,13 +91,6 @@ export default defineComponent({
         return true;
       }
       return this.space.tileType === undefined && this.space.cube === undefined;
-    },
-    playerColorCss(): string {
-      if (this.space.color === undefined) {
-        return '';
-      }
-      const css = 'board-cube board-cube--' + this.space.color;
-      return getPreferences().symbol_overlay ? css + ' overlay' : css;
     },
     claimedToken(): ClaimedToken | undefined {
       if (this.space.undergroundResource === undefined) {

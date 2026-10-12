@@ -12,11 +12,7 @@
         >
           <span v-i18n>{{ award.name }}</span>
           <span class="ma-player-cube">
-            <i
-              class="board-cube"
-              :class="`board-cube--${award.color}`"
-              :data-test-player-cube="award.color"
-            ></i>
+            <BoardCube v-if="award.color !== undefined" class="board-cube" :color="award.color" view="slight" :data-test-player-cube="award.color"/>
           </span>
         </span>
 
@@ -47,13 +43,14 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import Award from '@/client/components/Award.vue';
+import BoardCube from '@/client/components/common/BoardCube.vue';
 import {AWARD_COSTS} from '@/common/constants';
 import {FundedAwardModel} from '@/common/models/FundedAwardModel';
 import {Preferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 
 export default defineComponent({
   name: 'Awards',
-  components: {Award},
+  components: {Award, BoardCube},
   props: {
     awards: {
       type: Array as () => ReadonlyArray<FundedAwardModel>,
