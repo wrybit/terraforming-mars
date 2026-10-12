@@ -223,4 +223,9 @@ describe('logActions', () => {
     expect(actionAt(groupLogMessages([used]), 0).effects).deep.eq([{resource: 'power', amount: 1, production: true}]);
     expect(actionAt(groupLogMessages([used, logged]), 0).effects).deep.eq([{resource: 'power', amount: 1, production: true}]);
   });
+
+  it('puts a divider above the game id at the end of the game', () => {
+    const rows = groupLogMessages([message('Final greenery placement'), message('This game id was ${0}', raw('g1'))]);
+    expect(rows.map((row) => row.type)).deep.eq(['message', 'phase', 'message']);
+  });
 });

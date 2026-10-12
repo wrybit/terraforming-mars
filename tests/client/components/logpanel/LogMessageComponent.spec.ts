@@ -131,4 +131,13 @@ describe('LogMessageComponent', () => {
       PreferencesManager.resetForTest();
     }
   });
+
+  it('links the game id of a finished game to the results page of the viewer', () => {
+    const viewModel = fakeViewModel();
+    const message = new LogMessage(LogMessageType.DEFAULT, 'This game id was ${0}', [{type: LogMessageDataType.RAW_STRING, value: 'g123'}]);
+    const wrapper = shallowMount(LogMessageComponent, {...globalConfig, props: {message, viewModel}});
+    const link = wrapper.find('a.log-results-link');
+    expect(link.text()).eq('g123');
+    expect(link.attributes('href')).eq('the-end?id=' + viewModel.id);
+  });
 });

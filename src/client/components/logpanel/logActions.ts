@@ -467,6 +467,10 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>): Array<Log
       current.indexes.push(index);
       return;
     }
+    // End of the game: the game id stands apart below a divider
+    if (template === 'This game id was ${0}') {
+      rows.push({type: 'phase', indexes: []});
+    }
     // Not recognised: a plain line. It ends the current action, so later effects don't attach to the wrong row –
     // except private notes ("You drew …"), which come between an action and its effects
     if (!message.data.some((datum) => datum.type === LogMessageDataType.CARDS)) {

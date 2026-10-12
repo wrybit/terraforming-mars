@@ -33,6 +33,8 @@
         </span>
         <span v-else-if="data.type === LogMessageDataType.CARDS" v-html="cardsToHtml(data)"></span>
 
+        <!-- Game id at the end of the game: link to the results page -->
+        <a v-else-if="data.type === LogMessageDataType.RAW_STRING && resultsLink !== undefined" :href="resultsLink" class="log-results-link" @click.stop>{{ data.value }}</a>
         <span v-else-if="data.type === LogMessageDataType.RAW_STRING">{{ data.value }}</span>
         <span v-else v-i18n>{{ data.value }}</span>
       </span>
@@ -154,6 +156,10 @@ export default defineComponent({
         data: this.message.data,
       };
       return Log.parse(e);
+    },
+    // Results page of the viewer (player or spectator id), shown for the last line of a finished game
+    resultsLink(): string | undefined {
+      return this.message.message === 'This game id was ${0}' && this.viewModel.id !== undefined ? 'the-end?id=' + this.viewModel.id : undefined;
     },
     when() {
       return new Date(this.message.timestamp).toLocaleString();
