@@ -2,6 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 import {readLocaleFiles, translatedKeys} from './i18n/localeFiles';
+import {extensionNames, localeDirectories} from './make_extensions';
 import {checkPlaceholders} from './i18n/checkPlaceholders';
 import {checkTemplates} from './i18n/checkTemplates';
 import {checkCallSites} from './i18n/checkCallSites';
@@ -9,15 +10,32 @@ import {coverage, reportCoverage} from './i18n/reportCoverage';
 import {usedTexts} from './i18n/usedTexts';
 
 const rootDir = path.resolve('.');
-const localeFiles = readLocaleFiles(path.resolve('src/locales'));
+// The game's locales and those of the extensions present (src/extensions/*/locales)
+const localeFiles = localeDirectories().flatMap((dir) => readLocaleFiles(dir));
+// The game's list plus src/extensions/<name>/allowlist.json of the extensions present
 const allowlist: Array<string> = JSON.parse(fs.readFileSync(path.resolve('src/tools/i18n/allowlist.json'), 'utf8'));
+for (const name of extensionNames()) {
+  const file = path.resolve('src/extensions', name, 'allowlist.json');
+  if (fs.existsSync(file)) {
+    allowlist.push(...JSON.parse(fs.readFileSync(file, 'utf8')) as Array<string>);
+  }
+}
 
+// The game's list plus src/extensions/<name>/sameAsEnglish.json of the extensions present
 const sameAsEnglish: Record<string, Array<string>> = JSON.parse(fs.readFileSync(path.resolve('src/tools/i18n/sameAsEnglish.json'), 'utf8'));
+for (const name of extensionNames()) {
+  const file = path.resolve('src/extensions', name, 'sameAsEnglish.json');
+  if (fs.existsSync(file)) {
+    for (const [lang, texts] of Object.entries(JSON.parse(fs.readFileSync(file, 'utf8')) as Record<string, Array<string>>)) {
+      sameAsEnglish[lang] = [...(sameAsEnglish[lang] ?? []), ...texts];
+    }
+  }
+}
 
 const problems = [
   ...checkPlaceholders(localeFiles),
   ...checkTemplates({
-    clientDir: path.resolve('src/client'),
+    clientDirs: [path.resolve('src/client'), ...(fs.existsSync(path.resolve('src/extensions')) ? [path.resolve('src/extensions')] : [])],
     rootDir,
     knownKeys: translatedKeys(localeFiles),
     allowlist: new Set(allowlist),

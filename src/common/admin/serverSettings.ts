@@ -2,9 +2,12 @@
 // One list for both sides: the server only accepts these keys (serverSettingsFile.ts), the page shows them
 // in this order and grouping (ServerSettingsPanel.vue).
 
+import {COMMON_EXTENSIONS} from '../../genfiles/extensionsCommon';
+
 export type ServerSettingKind = 'text' | 'number' | 'secret' | 'toggle';
 
-export type ServerSettingGroup = 'Appearance' | 'Games' | 'Limits' | 'AI opponents' | 'Access' | 'Technical';
+// Appearance, Games, Limits, AI opponents, Access, Technical – and the groups of the extensions
+export type ServerSettingGroup = string;
 
 export type ServerSettingDefinition = {
   key: string,
@@ -14,9 +17,9 @@ export type ServerSettingDefinition = {
   description: string,
 };
 
-export const SERVER_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'Access', 'Technical'];
+const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'Access', 'Technical'];
 
-export const SERVER_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
+const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'SERVER_NAME', group: 'Appearance', kind: 'text', label: 'Server name',
     description: 'Shown in white under the title on the start page. Empty: nothing is shown.'},
   {key: 'TITLE_LONG', group: 'Appearance', kind: 'text', label: 'Long tab title',
@@ -83,6 +86,13 @@ export const SERVER_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'THROW_STATE_ERRORS', group: 'Technical', kind: 'toggle', label: 'Stop on state errors',
     description: 'For development: inconsistent game states raise an error instead of a log line.'},
 ];
+
+// Optional extensions (src/extensions/) add their own rows; a new group gets its own section before "Technical"
+const EXTENSION_SETTINGS = COMMON_EXTENSIONS.flatMap((extension) => extension.serverSettings ?? []);
+const EXTENSION_GROUPS = [...new Set(EXTENSION_SETTINGS.map((setting) => setting.group))].filter((group) => !BASE_SETTING_GROUPS.includes(group));
+
+export const SERVER_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = [...BASE_SETTING_GROUPS.slice(0, -1), ...EXTENSION_GROUPS, 'Technical'];
+export const SERVER_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [...BASE_SETTINGS, ...EXTENSION_SETTINGS];
 
 export function serverSettingDefinition(key: string): ServerSettingDefinition | undefined {
   return SERVER_SETTINGS.find((setting) => setting.key === key);

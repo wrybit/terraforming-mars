@@ -9,6 +9,10 @@
         "genfiles/*.json",
     ],
     "exclude": [
-      "client/**/*.ts"
+      "client/**/*.ts",
+      // Client parts of the optional extensions are bundled by webpack only
+      "genfiles/extensionsClient.ts",
+      "extensions/*/client/**/*.ts",
+      "extensions/*/extension.client.ts"
     ]
 }

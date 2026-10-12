@@ -15,7 +15,7 @@ const SKIPPED_TAGS = new Set(['svg', 'style', 'script', 'code', 'pre']);
 const HAS_WORD = /[A-Za-zÀ-ÿ]{2,}/;
 
 export type TemplateCheckInput = {
-  clientDir: string;
+  clientDirs: ReadonlyArray<string>;
   rootDir: string;
   // English keys with a translation in at least one language
   knownKeys: ReadonlySet<string>;
@@ -43,7 +43,7 @@ function hasAttribute(element: ElementNode, name: string): boolean {
 
 export function checkTemplates(input: TemplateCheckInput): Array<string> {
   const problems: Array<string> = [];
-  for (const file of vueFiles(input.clientDir)) {
+  for (const file of input.clientDirs.flatMap((dir) => vueFiles(dir))) {
     const relativePath = path.relative(input.rootDir, file);
     const ast = parse(fs.readFileSync(file, 'utf8'), {filename: file}).descriptor.template?.ast;
     if (ast === undefined) {

@@ -5,6 +5,7 @@ import {globalConfig} from '../getLocalVue';
 import GameMenu from '@/client/components/gameMenu/GameMenu.vue';
 import {GAME_MENU_CONTEXT, GameMenuContext} from '@/client/components/gameMenu/gameMenuContext';
 import {fakeGameOptionsModel} from '../testHelpers';
+import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
 import {FakeLocalStorage} from '../FakeLocalStorage';
 
 function context(): GameMenuContext {
@@ -35,13 +36,14 @@ describe('GameMenu', () => {
     FakeLocalStorage.deregister(localStorage);
   });
 
-  it('outside the game only offers language, help and settings', async () => {
+  it('outside the game only offers language, help, settings and the entries of the extensions present', async () => {
     const wrapper = mount(GameMenu, {...globalConfig, attachTo: document.body});
     expect(wrapper.find('.game-menu-button').text()).contains('Setup');
     await wrapper.find('.game-menu-button').trigger('click');
     const dropdown = document.body.querySelector('.game-menu-dropdown');
     expect(dropdown?.querySelector('.game-menu-player')).is.null;
-    expect(dropdown?.querySelectorAll('.game-menu-panel:first-child .game-menu-item').length).eq(3);
+    const extensionItems = CLIENT_EXTENSIONS.flatMap((extension) => extension.menuItems ?? []).length;
+    expect(dropdown?.querySelectorAll('.game-menu-panel:first-child .game-menu-item').length).eq(3 + extensionItems);
     wrapper.unmount();
   });
 

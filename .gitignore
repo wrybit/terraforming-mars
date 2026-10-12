@@ -33,3 +33,5 @@ local/
 
 # Large downloaded datasets (BGA game logs), never committed
 _data/
+# Pictures of the optional extensions, copied by npm run make:extensions
+/assets/extensions/

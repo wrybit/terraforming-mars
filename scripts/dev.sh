@@ -16,6 +16,9 @@ cleanup() {
 }
 trap cleanup INT TERM
 
+# Lists the optional extensions present (src/extensions/) before the watchers import them
+npm run make:extensions
+
 npm run dev:server & pids+=($!)
 npm run dev:client & pids+=($!)
 npm run watch:less & pids+=($!)

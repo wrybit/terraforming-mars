@@ -32,12 +32,19 @@
           <span class="help-key help-key--hot help-key--wide">Esc</span>
           <span v-i18n>Close help and other windows</span>
         </div>
+        <!-- Keys of the optional extensions (src/extensions/) -->
+        <div v-for="shortcut in EXTENSION_SHORTCUTS" :key="shortcut.key" class="help-shortcut help-shortcut-text">
+          <span class="help-key help-key--hot">{{ shortcut.key }}</span>
+          <span v-i18n>{{ shortcut.label }}</span>
+        </div>
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
+import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
+
 // Target areas of the sketch; order and keys as in KeyboardShortcuts.vue
 type SketchTarget = 'board' | 'players' | 'hand' | 'colonies';
 type Shortcut = {key: string; label: string; target: SketchTarget};
@@ -46,11 +53,13 @@ const SHORTCUTS: ReadonlyArray<Shortcut> = [
   {key: 'A', label: 'Main Board', target: 'board'},
   {key: 'S', label: 'Players Overview Table', target: 'players'},
   {key: 'D', label: 'Cards in Hand', target: 'hand'},
-  {key: 'F', label: 'Colonies', target: 'colonies'},
+  {key: 'G', label: 'Colonies', target: 'colonies'},
 ];
 
 // Home row of the keyboard, so you find the shortcuts under your fingers at a glance
 const HOME_ROW: ReadonlyArray<string> = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
+
+const EXTENSION_SHORTCUTS = CLIENT_EXTENSIONS.flatMap((extension) => extension.shortcuts ?? []);
 
 function isShortcutKey(key: string): boolean {
   return SHORTCUTS.some((shortcut) => shortcut.key === key);

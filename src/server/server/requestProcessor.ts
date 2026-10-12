@@ -7,6 +7,7 @@ import {SessionId} from '../auth/Session';
 import {GameLoader} from '../database/GameLoader';
 import {ApiCloneableGame} from '../routes/ApiCloneableGame';
 import {ApiCreateGame} from '../routes/ApiCreateGame';
+import {SERVER_EXTENSIONS} from '../../genfiles/extensionsServer';
 import {ApiGame} from '../routes/ApiGame';
 import {ApiGameDeletion} from '../routes/ApiGameDeletion';
 import {ApiGameHistory} from '../routes/ApiGameHistory';
@@ -154,6 +155,12 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.THE_END, ServeApp.INSTANCE],
   ],
 );
+// Routes of the optional extensions present (src/extensions/, see make_extensions.ts)
+for (const extension of SERVER_EXTENSIONS) {
+  for (const [route, handler] of extension.routes ?? []) {
+    handlers.set(route, handler);
+  }
+}
 
 function getIPAddress(req: Request): string {
   const herokuIpAddress = getHerokuIpAddress(req);

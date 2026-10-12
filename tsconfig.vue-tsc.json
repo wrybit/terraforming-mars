@@ -7,6 +7,8 @@
     "src/client/**/*.ts",
     "src/client/**/*.vue",
     "src/common/**/*.ts",
+    "src/extensions/**/*.ts",
+    "src/extensions/**/*.vue",
     "tests/client/**/*.ts",
   ]
 }

@@ -5,6 +5,7 @@ import fs from 'fs';
 import child_process from 'child_process';
 import path from 'path';
 import * as constants from '../common/constants';
+import {localeDirectories} from './make_extensions';
 
 function mkdirQuietly(path: string) {
   if (!fs.existsSync(path)) {
@@ -20,7 +21,7 @@ function readdir(path: string, predicate: (dirent: string) => boolean) {
 type Translation = {[lang: string]: string}
 
 /**
- * Reads all the translations in src/locales, and returns a data structure of this
+ * Reads all the translations in src/locales (and the locales of the extensions), and returns a data structure of this
  * structure:
  *
  * {
@@ -32,46 +33,47 @@ type Translation = {[lang: string]: string}
  */
 
 function getAllTranslations(): {[phrase: string]: Translation} {
-  const translationsPath = path.resolve('src/locales');
   const translations: {[phrase: string]: Translation} = {};
   const duplicates: Array<{lang: string, phrase: string}> = [];
 
-  const languageDirectories = readdir(
-    translationsPath,
-    (dirent) => dirent.length === 2 && fs.statSync(path.join(translationsPath, dirent)).isDirectory(),
-  );
-
-  for (const lang of languageDirectories) {
-    const translationDir = path.resolve(path.join(translationsPath, lang));
-    const languageFiles = readdir(
-      translationDir,
-      (dirent) => dirent.endsWith('.json'),
+  for (const translationsPath of localeDirectories()) {
+    const languageDirectories = readdir(
+      translationsPath,
+      (dirent) => dirent.length === 2 && fs.statSync(path.join(translationsPath, dirent)).isDirectory(),
     );
 
-    for (const file of languageFiles) {
-      const filename = path.join(translationDir, file);
-      try {
-        const content = fs.readFileSync(filename, 'utf8');
-        const json = JSON.parse(content);
+    for (const lang of languageDirectories) {
+      const translationDir = path.resolve(path.join(translationsPath, lang));
+      const languageFiles = readdir(
+        translationDir,
+        (dirent) => dirent.endsWith('.json'),
+      );
 
-        for (const phrase of Object.keys(json)) {
-          if (translations[phrase] === undefined) {
-            translations[phrase] = {};
+      for (const file of languageFiles) {
+        const filename = path.join(translationDir, file);
+        try {
+          const content = fs.readFileSync(filename, 'utf8');
+          const json = JSON.parse(content);
+
+          for (const phrase of Object.keys(json)) {
+            if (translations[phrase] === undefined) {
+              translations[phrase] = {};
+            }
+            if (translations[phrase][lang] !== undefined) {
+              duplicates.push({lang, phrase});
+              continue;
+            }
+            const translated = json[phrase];
+            if (translated.trim() === phrase.trim()) {
+              throw new Error('Do not repeat a translation with its own text: ' + phrase);
+            }
+            if (translated.trim().length !== 0) {
+              translations[phrase][lang] = translated;
+            }
           }
-          if (translations[phrase][lang] !== undefined) {
-            duplicates.push({lang, phrase});
-            continue;
-          }
-          const translated = json[phrase];
-          if (translated.trim() === phrase.trim()) {
-            throw new Error('Do not repeat a translation with its own text: ' + phrase);
-          }
-          if (translated.trim().length !== 0) {
-            translations[phrase][lang] = translated;
-          }
+        } catch (e) {
+          throw new Error(`While parsing ${filename}`, {cause: e});
         }
-      } catch (e) {
-        throw new Error(`While parsing ${filename}`, {cause: e});
       }
     }
   }
@@ -129,7 +131,7 @@ function writeBuildMetadata() {
  * Generate translation files in `/assets/locales/*.json` to load them async by the client
  */
 function generateTranslations() {
-  const localesDir = path.join(process.cwd(), 'src/locales');
+  const [localesDir, ...extensionLocalesDirs] = localeDirectories();
   const destinationPath = path.join(process.cwd(), 'assets/locales');
 
   mkdirQuietly(destinationPath);
@@ -138,12 +140,14 @@ function generateTranslations() {
     (entry) => fs.statSync(path.join(localesDir, entry)).isDirectory(),
   );
   localesCodes.forEach((localeCode) => {
-    const localeDir = path.join(localesDir, localeCode);
-    const localeFiles = fs.readdirSync(localeDir).filter((dirent) => dirent.endsWith('.json'));
-
-    const localeObject = localeFiles.reduce((localeObject, localeFile) => {
-      const filePath = path.join(localeDir, localeFile);
-      Object.assign(localeObject, require(filePath));
+    // The game's own files first, then those of the extensions for the same language
+    const localeDirs = [localesDir, ...extensionLocalesDirs]
+      .map((dir) => path.join(dir, localeCode))
+      .filter((dir) => fs.existsSync(dir));
+    const localeObject = localeDirs.reduce((localeObject, localeDir) => {
+      for (const localeFile of fs.readdirSync(localeDir).filter((dirent) => dirent.endsWith('.json'))) {
+        Object.assign(localeObject, require(path.join(localeDir, localeFile)));
+      }
       return localeObject;
     }, {});
 

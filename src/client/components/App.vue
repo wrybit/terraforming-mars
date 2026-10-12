@@ -3,6 +3,8 @@
     <RotateHint/>
     <AppBackground v-if="hasBackground" :always="screen === 'start-screen'" :show-credit="hasBackgroundCredit"/>
     <ServerUpdateOverlay/>
+    <!-- Optional extensions (src/extensions/): each may bring one root component -->
+    <component :is="extension.component" v-for="extension in componentExtensions" :key="extension.name" :view="participant"/>
     <section>
       <dialog id="alert-dialog" class="alert-dialog">
         <form method="dialog">
@@ -100,6 +102,8 @@ import {initMobileLayout, mobileLayout} from '@/client/utils/mobileLayout';
 import RotateHint from '@/client/components/RotateHint.vue';
 import AppBackground from '@/client/components/AppBackground.vue';
 import ServerUpdateOverlay from '@/client/components/common/ServerUpdateOverlay.vue';
+import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
+import {ClientExtension} from '@/client/extensions/ClientExtension';
 import {serverUpdatePhase, startServerStatusPolling} from '@/client/utils/serverStatus';
 import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
 import {setDocumentTitle} from '../utils/documentTitle';
@@ -214,6 +218,9 @@ export default defineComponent({
     },
     participant(): ViewModel | undefined {
       return this.playerView ?? this.spectator;
+    },
+    componentExtensions(): ReadonlyArray<ClientExtension> {
+      return CLIENT_EXTENSIONS.filter((extension) => extension.component !== undefined);
     },
   },
   methods: {

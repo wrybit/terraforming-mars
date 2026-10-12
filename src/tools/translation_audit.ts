@@ -2,6 +2,7 @@ import '@/server/init';
 import fs from 'fs';
 import path from 'path';
 
+import {localeDirectories} from './make_extensions';
 import {MultiMap} from 'mnemonist';
 
 function removeTrailingComma(str: string) {
@@ -50,28 +51,29 @@ function parseJson(input: string): MultiMap<string, string> {
   return map;
 }
 
-const pathToTranslationsDir = path.resolve('src/locales');
-
 let errors = 0;
-const dirs = fs.readdirSync(pathToTranslationsDir);
-for (const lang of dirs) {
-  const localeDir = path.join(pathToTranslationsDir, lang);
-  if (lang.length === 2 && fs.statSync(localeDir).isDirectory()) {
-    const translationDir = path.resolve(path.join(pathToTranslationsDir, lang));
-    const files = fs.readdirSync(translationDir);
-    for (const file of files) {
-      if (!file.endsWith('.json')) {
-        continue;
-      }
-      const filename = path.join(translationDir, file);
-      // console.log('processing ' + filename);
-      const content = fs.readFileSync(filename, 'utf8');
-      const results = parseJson(content);
-      for (const key of results.keys()) {
-        if ((results.get(key) ?? []).length > 1) {
-          const uniqueCount = new Set(results.get(key)).size;
-          console.log(filename, '[', uniqueCount, '] [', key, ']');
-          errors++;
+// The game's locales and those of the extensions present
+for (const pathToTranslationsDir of localeDirectories()) {
+  const dirs = fs.readdirSync(pathToTranslationsDir);
+  for (const lang of dirs) {
+    const localeDir = path.join(pathToTranslationsDir, lang);
+    if (lang.length === 2 && fs.statSync(localeDir).isDirectory()) {
+      const translationDir = path.resolve(path.join(pathToTranslationsDir, lang));
+      const files = fs.readdirSync(translationDir);
+      for (const file of files) {
+        if (!file.endsWith('.json')) {
+          continue;
+        }
+        const filename = path.join(translationDir, file);
+        // console.log('processing ' + filename);
+        const content = fs.readFileSync(filename, 'utf8');
+        const results = parseJson(content);
+        for (const key of results.keys()) {
+          if ((results.get(key) ?? []).length > 1) {
+            const uniqueCount = new Set(results.get(key)).size;
+            console.log(filename, '[', uniqueCount, '] [', key, ']');
+            errors++;
+          }
         }
       }
     }

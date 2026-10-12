@@ -60,6 +60,11 @@
               <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--settings"></i></span>
               <span v-i18n>Player Settings</span>
             </button>
+            <!-- Entries of the optional extensions (src/extensions/) -->
+            <button v-for="item in extensionMenuItems" :key="item.label" type="button" role="menuitem" class="game-menu-item" @click="selectExtensionItem(item)">
+              <span class="game-menu-item-icon"><component :is="item.icon"/></span>
+              <span v-i18n>{{ item.label }}</span>
+            </button>
             <a v-if="context && context.coloniesCount > 0" href="#colonies" role="menuitem" class="game-menu-item" @click="closeMenu">
               <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--colonies"></i></span>
               <span v-i18n>Jump to colonies</span>
@@ -118,6 +123,8 @@ import {LANGUAGE} from '@/common/constants';
 import {translateText} from '@/client/directives/i18n';
 import {SITE_LINKS, START_PAGE_LINK} from '@/client/components/startScreen/siteLinks';
 import {GAME_MENU_CONTEXT} from '@/client/components/gameMenu/gameMenuContext';
+import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
+import {ExtensionMenuItem} from '@/client/extensions/ClientExtension';
 
 withDefaults(defineProps<{
   // Frosted-glass size of the page headers (40px) instead of the small table button
@@ -231,6 +238,13 @@ function openDialog(which: MenuDialog) {
 
 function closeDialog() {
   dialog.value = undefined;
+}
+
+const extensionMenuItems: ReadonlyArray<ExtensionMenuItem> = CLIENT_EXTENSIONS.flatMap((extension) => extension.menuItems ?? []);
+
+function selectExtensionItem(item: ExtensionMenuItem) {
+  closeMenu();
+  item.select();
 }
 
 onBeforeUnmount(() => listen(false));

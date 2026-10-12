@@ -7,6 +7,7 @@ import {SpaceId} from '@/common/Types';
 import {KeyboardNavigation} from '@/client/components/KeyboardNavigation';
 import {nextTileView, TileView} from '@/client/components/board/TileView';
 import {gameDocumentTitle, TitleView} from '@/client/utils/documentTitle';
+import {isTypingTarget} from '@/client/utils/typingTarget';
 
 type DataModel = {
   tileView: TileView;
@@ -32,6 +33,10 @@ export const HomeMixin = defineComponent({
   },
   methods: {
     navigatePage(event: KeyboardEvent) {
+      // Typing in a field ("?" or "a" in a text) must not trigger shortcuts
+      if (isTypingTarget(event.target)) {
+        return;
+      }
       // Most '?' are shifted, so process this before the action that exits early with modifiers
       if (event.key === '?') {
         this.keyboardShortcutOpened = !this.keyboardShortcutOpened;
@@ -46,23 +51,20 @@ export const HomeMixin = defineComponent({
         [KeyboardNavigation.HAND]: 'shortkey-hand',
         [KeyboardNavigation.COLONIES]: 'shortkey-colonies',
       };
-      const inputSource = event.target as Node;
-      if (inputSource.nodeName.toLowerCase() !== 'input') {
-        const id = ids[event.code];
-        if (id) {
-          const el = document.getElementById(id);
+      const id = ids[event.code];
+      if (id) {
+        const el = document.getElementById(id);
+        if (el) {
+          event.preventDefault();
+          el.scrollIntoView({block: 'center', inline: 'center', behavior: 'smooth'});
+        }
+      } else if (event.code.startsWith('Digit')) {
+        const ASCII_ONE = '1'.charCodeAt(0);
+        const index = event.code.charCodeAt(5) - ASCII_ONE;
+        if (index >= 0 && index < this.hotkeyTargets.length) {
+          const el = this.hotkeyTargets[index];
           if (el) {
-            event.preventDefault();
-            el.scrollIntoView({block: 'center', inline: 'center', behavior: 'smooth'});
-          }
-        } else if (event.code.startsWith('Digit')) {
-          const ASCII_ONE = '1'.charCodeAt(0);
-          const index = event.code.charCodeAt(5) - ASCII_ONE;
-          if (index >= 0 && index < this.hotkeyTargets.length) {
-            const el = this.hotkeyTargets[index];
-            if (el) {
-              el.scrollIntoView({block: 'start', inline: 'center', behavior: 'smooth'});
-            }
+            el.scrollIntoView({block: 'start', inline: 'center', behavior: 'smooth'});
           }
         }
       }

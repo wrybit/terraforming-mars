@@ -6,7 +6,7 @@
     <span v-i18n>A - Main Board</span><br>
     <span v-i18n>S - Players Overview Table</span><br>
     <span v-i18n>D - Cards in Hand</span><br>
-    <span v-i18n>F - Colonies</span><br>
+    <span v-i18n>G - Colonies</span><br>
     <template v-if="preferences().experimental_ui">
       <br>
       <span v-i18n>1-9 - Scroll through the player board.</span>
