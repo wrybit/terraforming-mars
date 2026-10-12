@@ -1,15 +1,27 @@
-// Load a game (LoadGameForm.vue) in the admin area: one narrow card, label right above its field
-.load-game-card {
+// Load a game (LoadGameForm.vue) in the head of the games overview: input row like the import,
+// the rarely needed rollback count small below it
+.load-game-form {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  max-width: 560px;
+  gap: 8px;
+}
 
-  .server-settings-input + .server-settings-label {
-    margin-top: 10px;
-  }
+.load-game-rollback {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: rgba(238, 238, 238, 0.62);
+  font-size: 13px;
+  font-weight: normal;
 
-  .btn {
-    margin: 12px 0 0;
+  input {
+    width: 64px;
+    height: 30px;
+    padding: 0 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.35);
+    color: #eee;
   }
 }

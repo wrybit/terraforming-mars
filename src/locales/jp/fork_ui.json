@@ -979,5 +979,9 @@
   "The excess is not refunded.": "払いすぎた分は戻りません。",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}は1つ${1} M€なので、コストをぴったり支払えません。払いすぎた分は戻りません。",
   "Not shown here because the file is very large.": "ファイルが非常に大きいため、ここには表示されません.",
-  "Download": "ダウンロード"
+  "Download": "ダウンロード",
+  "Open games with players online": "プレイヤーがオンラインの進行中ゲーム",
+  "Open games": "進行中のゲーム",
+  "Finished games": "終了したゲーム",
+  "Online": "オンライン"
 }

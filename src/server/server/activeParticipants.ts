@@ -18,6 +18,12 @@ export function activeParticipantCount(now: number = Date.now()): number {
   return lastSeen.size;
 }
 
+/** Whether this participant had a game page open within the last minutes (admin overview: live games). */
+export function isActiveParticipant(id: ParticipantId, now: number = Date.now()): boolean {
+  const seen = lastSeen.get(id);
+  return seen !== undefined && now - seen <= ACTIVE_WINDOW_MILLISECONDS;
+}
+
 /** Only for tests. */
 export function clearActiveParticipants(): void {
   lastSeen.clear();

@@ -3,6 +3,7 @@ import {Phase} from '../../common/Phase';
 import {AdminGameSummary} from '../../common/admin/AdminGameSummary';
 import {toAdminPlayerSummaries} from '../../common/admin/adminPlayerSummaries';
 import {paths} from '../../common/app/paths';
+import {isActiveParticipant} from '../server/activeParticipants';
 
 /** Summarizes a game played on this server for the admin overview. */
 export function localGameSummary(game: IGame): AdminGameSummary {
@@ -14,6 +15,7 @@ export function localGameSummary(game: IGame): AdminGameSummary {
     victoryPoints: player.getVictoryPoints().total,
     megaCredits: player.megaCredits,
     corporation: player.playedCards.corporations().map((card) => card.name).join(' / ') || undefined,
+    isOnline: !isFinished && isActiveParticipant(player.id),
   }));
   return {
     id: game.id,

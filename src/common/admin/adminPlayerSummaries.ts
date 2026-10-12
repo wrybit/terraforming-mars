@@ -9,6 +9,7 @@ export type AdminPlayerScore = {
   victoryPoints: number;
   megaCredits: number;
   corporation: string | undefined;
+  isOnline?: boolean;
 };
 
 /**

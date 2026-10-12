@@ -17,6 +17,7 @@ import {statusCode} from '@/common/http/statusCode';
 import {AdminGameSummary} from '@/common/admin/AdminGameSummary';
 import {Phase} from '@/common/Phase';
 import {Handler} from '../../src/server/routes/Handler';
+import {clearActiveParticipants, noteActiveParticipant} from '../../src/server/server/activeParticipants';
 
 describe('ApiAdmin', () => {
   let res: MockResponse;
@@ -73,6 +74,22 @@ describe('ApiAdmin', () => {
     await new ApiAdminGames(store).processRequest(scaffolding.req, res, scaffolding.ctx);
     const summaries: Array<AdminGameSummary> = JSON.parse(res.content);
     expect(summaries.map((s) => [s.id, s.source, s.players[0].name])).deep.eq([['game-id', 'local', 'Jens']]);
+  });
+
+  it('marks players with an open game page as online', async () => {
+    const game = await scaffolding.ctx.gameLoader.getGame('game-id');
+    const online = async () => {
+      res = new MockResponse();
+      scaffolding.loginAsAdmin();
+      scaffolding.url = '/api/admin/games';
+      await new ApiAdminGames(store).processRequest(scaffolding.req, res, scaffolding.ctx);
+      return (JSON.parse(res.content) as Array<AdminGameSummary>)[0].players[0].isOnline;
+    };
+    clearActiveParticipants();
+    expect(await online()).is.false;
+    noteActiveParticipant(game!.players[0].id);
+    expect(await online()).is.true;
+    clearActiveParticipants();
   });
 
   it('deletes a local game', async () => {

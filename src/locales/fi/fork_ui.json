@@ -637,5 +637,9 @@
   "The excess is not refunded.": "Ylimäärää ei palauteta.",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} on arvoltaan ${1} M€ kappaleelta, joten kustannusta ei voi maksaa tarkalleen. Ylimäärää ei palauteta.",
   "Not shown here because the file is very large.": "Ei näytetä tässä, koska tiedosto on hyvin suuri.",
-  "Download": "Lataa"
+  "Download": "Lataa",
+  "Open games with players online": "Avoimet pelit, joissa pelaajia paikalla",
+  "Open games": "Avoimet pelit",
+  "Finished games": "Päättyneet pelit",
+  "Online": "Paikalla"
 }

@@ -1246,5 +1246,8 @@
   "The excess is not refunded.": "Het teveel krijg je niet terug.",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} is ${1} M€ per stuk waard, dus de kosten zijn niet precies te betalen. Het teveel krijg je niet terug.",
   "Not shown here because the file is very large.": "Hier niet getoond omdat het bestand erg groot is.",
-  "Download": "Downloaden"
+  "Download": "Downloaden",
+  "Open games with players online": "Open spellen met spelers online",
+  "Open games": "Open spellen",
+  "Finished games": "Afgeronde spellen"
 }

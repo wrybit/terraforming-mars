@@ -1742,5 +1742,8 @@
   "The excess is not refunded.": "O excedente não é devolvido.",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} vale ${1} M€ cada, então não dá para pagar o custo exato. O excedente não é devolvido.",
   "Not shown here because the file is very large.": "Não exibido aqui porque o arquivo é muito grande.",
-  "Download": "Baixar"
+  "Download": "Baixar",
+  "Open games with players online": "Partidas abertas com jogadores online",
+  "Open games": "Partidas abertas",
+  "Finished games": "Partidas encerradas"
 }

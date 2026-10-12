@@ -857,5 +857,9 @@
   "The excess is not refunded.": "초과분은 돌려받지 못합니다.",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}은(는) 개당 ${1} M€라서 비용을 정확히 맞출 수 없습니다. 초과분은 돌려받지 못합니다.",
   "Not shown here because the file is very large.": "파일이 너무 커서 여기에는 표시하지 않습니다.",
-  "Download": "다운로드"
+  "Download": "다운로드",
+  "Open games with players online": "플레이어가 접속 중인 진행 중 게임",
+  "Open games": "진행 중인 게임",
+  "Finished games": "끝난 게임",
+  "Online": "접속 중"
 }

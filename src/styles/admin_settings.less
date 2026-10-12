@@ -183,27 +183,94 @@
   }
 }
 
-// Asking for the serverId (ServerIdPrompt.vue): a friendly sentence, the field right below it
-.server-id-prompt {
+// Admin login (AdminGate.vue, ServerIdPrompt.vue): one card in the middle of the screen, no navigation.
+// Within a group 6px, between the groups 24px (law of proximity)
+.admin-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+}
+
+.games-overview-container .admin-login-card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  max-width: 560px;
+  gap: 24px;
+  width: 100%;
+  max-width: 420px;
+  padding: 32px;
+  text-align: center;
 }
 
-.server-id-prompt-text {
+.admin-login-title {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 500;
+  }
+
+  span {
+    color: @server-settings-dim;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+.admin-login-explanation {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-login-text {
   margin: 0;
   font-size: 15px;
+
+  &--error {
+    color: #ff8a80;
+  }
 }
 
-.server-id-prompt-hint {
+.admin-login-hint {
   margin: 0;
   color: @server-settings-dim;
   font-size: 13px;
 }
 
-.server-id-prompt-row {
-  margin-top: 6px;
+.admin-login-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-login-input {
+  height: 52px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #eee;
+  font-size: 20px;
+  text-align: center;
+
+  &::placeholder {
+    font-size: 17px;
+  }
+
+  &:focus {
+    outline: 2px solid fade(#908fdb, 70%);
+  }
+}
+
+.games-overview-container .admin-login-button {
+  height: 48px;
+  margin: 0;
+  font-size: 17px;
 }
 
 // Logout at the far right, away from the page links: a different kind of action

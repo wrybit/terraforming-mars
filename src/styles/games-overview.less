@@ -127,10 +127,11 @@
   font-size: 12px;
 }
 
-.games-overview-head {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+// Import and load side by side, each in a card of its own; below each other on narrow screens
+.games-overview-tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: @games-overview-gap-card;
 }
 
 .games-overview-import {
@@ -239,6 +240,35 @@
 
 // Player cells: name above the points in one chip, so all nine columns fit next to each other;
 // several AI players of the same strength stack in the cell
+// Group of games with players online: the same green light in front of its heading
+.games-overview-group--live h2::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: #3ddc6a;
+  vertical-align: 1px;
+}
+
+// Player with the game page open right now: green light in the corner of the chip (same green as on the start page)
+.games-overview-chip--online {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 11px;
+    height: 11px;
+    border: 2px solid #1d1e24;
+    border-radius: 50%;
+    background: #3ddc6a;
+  }
+}
+
 .games-overview-table .games-overview-players {
   width: 80px;
 }

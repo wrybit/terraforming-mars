@@ -783,5 +783,9 @@
   "The excess is not refunded.": "Надлишок не повертається.",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}: ${1} M€ за одиницю, тому точно сплатити вартість не можна. Надлишок не повертається.",
   "Not shown here because the file is very large.": "Не показано тут, бо файл дуже великий.",
-  "Download": "Завантажити"
+  "Download": "Завантажити",
+  "Open games with players online": "Відкриті партії з гравцями онлайн",
+  "Open games": "Відкриті партії",
+  "Finished games": "Завершені партії",
+  "Online": "Онлайн"
 }

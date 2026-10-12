@@ -1,9 +1,17 @@
 <template>
   <div id="games-overview" class="games-overview-container">
     <AdminGate active="games" @ready="loadGames">
-      <section class="games-overview-card games-overview-head">
-        <ImportGameForm @imported="loadGames"/>
-      </section>
+      <!-- Tools on top: import a result from another server, load a game here again -->
+      <div class="games-overview-tools">
+        <section class="games-overview-card">
+          <h2 v-i18n>Import result</h2>
+          <ImportGameForm @imported="loadGames"/>
+        </section>
+        <section class="games-overview-card">
+          <h2 v-i18n>Load a game</h2>
+          <LoadGameForm/>
+        </section>
+      </div>
 
       <section v-if="lineups.length > 0" class="games-overview-card">
         <h2 v-i18n>Wins</h2>
@@ -25,32 +33,20 @@
         </div>
       </section>
 
-      <section class="games-overview-card">
+      <section v-if="status !== 'done' || summaries.length === 0" class="games-overview-card">
         <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
         <template v-else-if="status === 'error'">
           <p class="games-overview-note"><span v-i18n>The game list could not be loaded.</span> {{ loadFailureText }}</p>
           <button type="button" class="btn btn-tone-quiet" @click="loadGames" v-i18n>Try again</button>
         </template>
-        <p v-else-if="summaries.length === 0" class="games-overview-note" v-i18n>No games yet.</p>
-        <div v-else class="games-overview-scroll">
-          <table class="games-overview-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th v-i18n>Game</th>
-                <th v-i18n>Gen</th>
-                <th v-i18n>Spectator</th>
-                <th v-for="(column, index) in columns" :key="index">{{ columnLabel(column) }}</th>
-                <th class="games-overview-actions"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <GameOverview v-for="summary in summaries" :key="summary.id" :summary="summary" :columns="columns" :isDeleting="deletingIds.includes(summary.id)" @delete="deleteGame"/>
-            </tbody>
-          </table>
-        </div>
-        <p v-if="deleteError !== ''" class="games-overview-note games-overview-note--error">{{ deleteError }}</p>
+        <p v-else class="games-overview-note" v-i18n>No games yet.</p>
       </section>
+      <p v-if="deleteError !== ''" class="games-overview-card games-overview-note games-overview-note--error">{{ deleteError }}</p>
+      <!-- Live, open and finished games each in a card of their own (gameGroups.ts) -->
+      <template v-if="status === 'done'">
+        <GamesTableCard v-for="group in groups" :key="group.key" :groupKey="group.key" :title="group.title" :games="group.games"
+          :columns="columns" :deletingIds="deletingIds" @delete="deleteGame"/>
+      </template>
     </AdminGate>
   </div>
 </template>
@@ -62,7 +58,9 @@ import * as constants from '@/common/constants';
 import {paths} from '@/common/app/paths';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import {AdminDeleteGameRequest, AdminGameSummary} from '@/common/admin/AdminGameSummary';
-import GameOverview from '@/client/components/admin/GameOverview.vue';
+import GamesTableCard from '@/client/components/admin/GamesTableCard.vue';
+import LoadGameForm from '@/client/components/LoadGameForm.vue';
+import {GameGroup, groupGames} from '@/client/components/admin/gameGroups';
 import ImportGameForm from '@/client/components/admin/ImportGameForm.vue';
 import AdminGate from '@/client/components/admin/AdminGate.vue';
 import {PLAYER_COLUMNS, PlayerColumn} from '@/client/components/admin/playerColumns';
@@ -80,7 +78,8 @@ export default defineComponent({
   name: 'GamesOverview',
   components: {
     AdminGate,
-    GameOverview,
+    GamesTableCard,
+    LoadGameForm,
     ImportGameForm,
   },
   data(): DataModel {
@@ -99,15 +98,14 @@ export default defineComponent({
     columns(): ReadonlyArray<PlayerColumn> {
       return PLAYER_COLUMNS;
     },
+    groups(): Array<GameGroup> {
+      return groupGames(this.summaries);
+    },
     lineups(): Array<LineupWinCounts> {
       return winCountsByLineup(this.summaries);
     },
   },
   methods: {
-    // "Player 1" … "Player 6", "[AI-]", "[AI]", "[AI+]"
-    columnLabel(column: PlayerColumn): string {
-      return column.kind === 'human' ? translateTextWithParams('Player ${0}', [String(column.seat + 1)]) : column.marker;
-    },
     formatAverage(value: number): string {
       return value.toLocaleString(undefined, {maximumFractionDigits: 1});
     },

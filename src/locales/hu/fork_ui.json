@@ -801,5 +801,8 @@
   "The excess is not refunded.": "A többletet nem kapod vissza.",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "A(z) ${0} darabja ${1} M€-t ér, így a költség nem fizethető ki pontosan. A többletet nem kapod vissza.",
   "Not shown here because the file is very large.": "Itt nem jelenik meg, mert a fájl nagyon nagy.",
-  "Download": "Letöltés"
+  "Download": "Letöltés",
+  "Open games with players online": "Nyitott játékok online játékosokkal",
+  "Open games": "Nyitott játékok",
+  "Finished games": "Befejezett játékok"
 }

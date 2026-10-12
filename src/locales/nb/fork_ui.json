@@ -990,5 +990,9 @@
   "The excess is not refunded.": "Overskuddet får du ikke tilbake.",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} er verdt ${1} M€ per stk., så kostnaden kan ikke betales nøyaktig. Overskuddet får du ikke tilbake.",
   "Not shown here because the file is very large.": "Vises ikke her fordi filen er svært stor.",
-  "Download": "Last ned"
+  "Download": "Last ned",
+  "Open games with players online": "Åpne spill med spillere pålogget",
+  "Open games": "Åpne spill",
+  "Finished games": "Ferdige spill",
+  "Online": "Pålogget"
 }

@@ -21,7 +21,6 @@
       <CreateGameForm
         v-else-if="screen === 'create-game-form'"
       />
-      <LoadGameForm v-else-if="screen === 'load'"/>
       <GameHome
         v-else-if="screen === 'game-home' && game !== undefined"
         :game="game"
@@ -82,7 +81,6 @@ const GamesOverview = defineAsyncComponent(() => import(/* webpackChunkName: "ga
 // Fork: new help with page tree and search; the upstream content lives inside it
 const HelpOverlay = defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/helpOverlay/HelpOverlay.vue'));
 const LoginHome = defineAsyncComponent(() => import(/* webpackChunkName: "login" */ '@/client/components/auth/LoginHome.vue'));
-const LoadGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "load-game" */ '@/client/components/LoadGameForm.vue'));
 const PlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "player-home" */ '@/client/components/PlayerHome.vue'));
 const MobilePlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-player-home" */ '@/client/components/mobile/MobilePlayerHome.vue'));
 const MobileSpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-spectator-home" */ '@/client/components/mobile/MobileSpectatorHome.vue'));
@@ -122,7 +120,6 @@ type Screen = 'admin' |
             'game-home' |
             'games-overview' |
             'help' |
-            'load' |
             'login-home' |
             'player-home' |
             'spectator-home' |
@@ -192,7 +189,6 @@ export default defineComponent({
     StartScreenFooter,
     OnlinePlayers,
     CreateGameForm,
-    LoadGameForm,
     GameHome,
     PlayerHome,
     MobilePlayerHome,
@@ -369,12 +365,11 @@ export default defineComponent({
         .catch((err) => {
           this.showGameLoadError(err);
         });
-    } else if (currentPathname === paths.GAMES_OVERVIEW) {
+    } else if (currentPathname === paths.GAMES_OVERVIEW || currentPathname === paths.LOAD) {
+      // Loading a game lives in the games overview now; the old address still leads there
       app.screen = 'games-overview';
     } else if (currentPathname === paths.NEW_GAME) {
       app.screen = 'create-game-form';
-    } else if (currentPathname === paths.LOAD) {
-      app.screen = 'load';
     } else if (currentPathname === paths.CARDS) {
       app.screen = 'cards';
     } else if (currentPathname === paths.STATS) {

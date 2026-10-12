@@ -1548,5 +1548,9 @@
   "The excess is not refunded.": "多付的部分不会退还。",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}每个价值${1} M€，因此无法正好凑足费用。多付的部分不会退还。",
   "Not shown here because the file is very large.": "文件太大，此处不显示。",
-  "Download": "下载"
+  "Download": "下载",
+  "Open games with players online": "有玩家在线的进行中对局",
+  "Open games": "进行中的对局",
+  "Finished games": "已结束的对局",
+  "Online": "在线"
 }

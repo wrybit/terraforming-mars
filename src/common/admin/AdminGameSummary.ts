@@ -15,6 +15,8 @@ export type AdminPlayerSummary = {
   isWinner: boolean;
   /** Corporation(s) played, separated by " / " if several. */
   corporation: string | undefined;
+  /** Has the game page open right now (running local games only; missing in older stored imports). */
+  isOnline?: boolean;
 };
 
 export type AdminGameSummary = {

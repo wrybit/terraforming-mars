@@ -1,27 +1,20 @@
 <template>
-  <div id="load-game" class="games-overview-container admin-home">
-    <AdminGate active="load">
-
-      <!-- Same card and fields as the other admin pages (admin_settings.less) -->
-      <form class="games-overview-card load-game-card" @submit.prevent="loadGame">
-          <label class="server-settings-label" for="gameId" v-i18n>Game, player, or spectator ID to reload:</label>
-          <div class="server-settings-input">
-              <input id="gameId" :placeholder="$t('Game Id')" v-model="gameId">
-          </div>
-          <label class="server-settings-label" for="rollbackCount" v-i18n>Number of saves to delete before loading:</label>
-          <div class="server-settings-input">
-              <input id="rollbackCount" type="number" min="0" v-model="rollbackCount">
-          </div>
-          <div><button type="submit" class="btn btn-primary" v-i18n>Load Game</button></div>
-      </form>
-    </AdminGate>
-  </div>
+  <!-- Load a game again (admin, top of the games overview): same input row as the import next to it -->
+  <form class="load-game-form" @submit.prevent="loadGame">
+    <div class="games-overview-import">
+      <input id="gameId" v-model="gameId" type="text" class="games-overview-import-input" :aria-label="$t('Game, player, or spectator ID to reload:')" :placeholder="$t('Game Id')">
+      <button type="submit" class="btn btn-primary" :disabled="(gameId ?? '').trim() === ''" v-i18n>Load Game</button>
+    </div>
+    <label class="load-game-rollback" for="rollbackCount">
+      <span v-i18n>Number of saves to delete before loading:</span>
+      <input id="rollbackCount" v-model="rollbackCount" type="number" min="0">
+    </label>
+  </form>
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
 import * as constants from '@/common/constants';
-import AdminGate from '@/client/components/admin/AdminGate.vue';
 import {LoadGameFormModel} from '@/common/models/LoadGameFormModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import {vueRoot} from '@/client/components/vueRoot';
@@ -38,9 +31,6 @@ type LoadGameFormDataModel = {
 
 export default defineComponent({
   name: 'LoadGameForm',
-  components: {
-    AdminGate,
-  },
   data(): LoadGameFormDataModel {
     return {
       gameId: undefined,

@@ -696,5 +696,9 @@
   "The excess is not refunded.": "Le surplus n’est pas remboursé.",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} vaut ${1} M€ l’unité, le coût ne peut donc pas être atteint exactement. Le surplus n’est pas remboursé.",
   "Not shown here because the file is very large.": "Non affiché ici car le fichier est très volumineux.",
-  "Download": "Télécharger"
+  "Download": "Télécharger",
+  "Open games with players online": "Parties en cours avec joueurs en ligne",
+  "Open games": "Parties en cours",
+  "Finished games": "Parties terminées",
+  "Online": "En ligne"
 }

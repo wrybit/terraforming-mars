@@ -1402,5 +1402,8 @@
   "The excess is not refunded.": "Nadwyżka nie jest zwracana.",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} jest wart(a) ${1} M€ za sztukę, więc nie da się trafić dokładnie w koszt. Nadwyżka nie jest zwracana.",
   "Not shown here because the file is very large.": "Nie wyświetlono tutaj, ponieważ plik jest bardzo duży.",
-  "Download": "Pobierz"
+  "Download": "Pobierz",
+  "Open games with players online": "Otwarte gry z graczami online",
+  "Open games": "Otwarte gry",
+  "Finished games": "Zakończone gry"
 }

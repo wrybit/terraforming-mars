@@ -1511,5 +1511,9 @@
   "The excess is not refunded.": "Излишъкът не се връща.",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}: ${1} M€ за брой, затова цената не може да се плати точно. Излишъкът не се връща.",
   "Not shown here because the file is very large.": "Не се показва тук, защото файлът е много голям.",
-  "Download": "Изтегли"
+  "Download": "Изтегли",
+  "Open games with players online": "Отворени игри с играчи онлайн",
+  "Open games": "Отворени игри",
+  "Finished games": "Завършени игри",
+  "Online": "Онлайн"
 }

@@ -2,8 +2,8 @@
   <!-- The .env file of the server, editable here: one card per group, save and restart at the bottom -->
   <div class="server-settings">
     <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
-    <div v-else-if="status === 'unreachable'" class="games-overview-card server-id-prompt">
-      <p class="server-id-prompt-text" v-i18n>The server is not answering right now – probably it is just restarting.</p>
+    <div v-else-if="status === 'unreachable'" class="games-overview-card server-settings-group">
+      <p class="games-overview-note" v-i18n>The server is not answering right now – probably it is just restarting.</p>
       <div><button type="button" class="btn btn-tone-quiet" @click="load" v-i18n>Try again</button></div>
     </div>
     <template v-else>

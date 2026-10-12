@@ -24,7 +24,7 @@
         :href="player.url"
         target="_blank"
         class="games-overview-chip"
-        :class="[playerColorClass(player.color), {'games-overview-chip--winner': player.isWinner}]"
+        :class="[playerColorClass(player.color), {'games-overview-chip--winner': player.isWinner, 'games-overview-chip--online': player.isOnline === true}]"
         :title="chipTitle(player)">
         <span class="games-overview-chip-name">{{ chipName(player) }}</span>
         <strong><span v-if="player.isWinner" class="games-overview-trophy">🏆</span>{{ player.victoryPoints }}</strong>
@@ -79,7 +79,7 @@ export default defineComponent({
     chipName,
     // Corporation and win in the tooltip: the tile itself stays compact (points only)
     chipTitle(player: AdminPlayerSummary): string {
-      return [player.corporation, player.isWinner ? translateText('Winner') : undefined].filter((part) => part !== undefined).join(' · ');
+      return [player.corporation, player.isWinner ? translateText('Winner') : undefined, player.isOnline === true ? translateText('Online') : undefined].filter((part) => part !== undefined).join(' · ');
     },
     playerColorClass(color: Color): string {
       return playerColorClass(color, 'bg_transparent');

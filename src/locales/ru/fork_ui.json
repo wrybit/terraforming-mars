@@ -1432,5 +1432,9 @@
   "The excess is not refunded.": "Излишек не возвращается.",
   "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}: ${1} M€ за единицу, поэтому точно оплатить стоимость нельзя. Излишек не возвращается.",
   "Not shown here because the file is very large.": "Не показано здесь, так как файл очень большой.",
-  "Download": "Скачать"
+  "Download": "Скачать",
+  "Open games with players online": "Открытые партии с игроками онлайн",
+  "Open games": "Открытые партии",
+  "Finished games": "Завершённые партии",
+  "Online": "В сети"
 }
