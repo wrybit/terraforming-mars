@@ -1,7 +1,9 @@
 <template>
+  <!-- Small cubes: pre-rendered picture from the sprite sheet (playerCubeSprite.ts), same look, a fraction of the GPU cost -->
+  <span v-if="spriteCell !== undefined" :class="['player-cube', 'player-cube--sprite']" :style="spriteStyle" aria-hidden="true"></span>
   <!-- Player cube in CSS 3D (player_cube.less): translucent acrylic, light from the top left.
        All six faces are rendered: depending on the rotation others become visible, and the back ones shine through. -->
-  <span :class="['player-cube', 'player-cube--' + view, 'player-cube--' + color, {'player-cube--animated': animated}]" :style="cubeStyle" aria-hidden="true">
+  <span v-else :class="['player-cube', 'player-cube--' + view, 'player-cube--' + color, {'player-cube--animated': animated}]" :style="cubeStyle" aria-hidden="true">
     <span class="player-cube-body">
       <!-- Shadows on the ground plane, inside the 3D scene so they share the cube's perspective and rotation
            (only shown in the top view, player_cube.less) -->
@@ -18,6 +20,9 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import {Color} from '@/common/Color';
+import {
+  detailForSize, PLAYER_CUBE_SPRITE_URL, SPRITE_CELL_FACTOR, SPRITE_COLUMNS, SPRITE_ROWS, spriteCellOf,
+} from '@/client/components/common/playerCubeSprite';
 
 export type PlayerCubeView = 'iso' | 'slight' | 'top';
 
@@ -41,11 +46,18 @@ const props = withDefaults(defineProps<{
 const FACES = ['back', 'right', 'bottom', 'top', 'left', 'front'] as const;
 const CAST_SHADOW_STEPS = 6;
 
-// Hard 1px edges and sharp highlights look far too strong on small cubes:
-// 0.2 for small cubes up to 1 from about 64px, all reflections are scaled by it
-function detailForSize(size: number): number {
-  return Math.min(1, Math.max(0.2, (size - 14) / 50));
-}
+// Animated view changes need the live 3D cube; everything else small comes from the sheet
+const spriteCell = computed(() => props.animated ? undefined : spriteCellOf(props.color, props.view, props.size, props.spin));
+
+const spriteStyle = computed(() => ({
+  '--cube-size': props.size + 'px',
+  '--sprite-image': `url(${PLAYER_CUBE_SPRITE_URL})`,
+  '--sprite-cell-factor': String(SPRITE_CELL_FACTOR),
+  '--sprite-columns': String(SPRITE_COLUMNS),
+  '--sprite-rows': String(SPRITE_ROWS.length),
+  '--sprite-column': String(spriteCell.value?.column ?? 0),
+  '--sprite-row': String(spriteCell.value?.row ?? 0),
+}));
 
 const cubeStyle = computed(() => {
   const style: Record<string, string> = {

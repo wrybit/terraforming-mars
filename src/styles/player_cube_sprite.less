@@ -1,0 +1,25 @@
+// Small player cubes as a picture from the pre-rendered sheet (PlayerCube.vue, playerCubeSprite.ts).
+// The box keeps the size of the 3D cube (player_cube.less), so every position class works unchanged.
+// The cell is larger than the box (soft shadows) and centered on it; all numbers come from the component.
+.player-cube--sprite {
+  // The colored shadow is already in the picture
+  &::after {
+    display: none;
+  }
+
+  &::before {
+    --sprite-cell: calc(var(--cube-size) * var(--sprite-cell-factor));
+
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--sprite-cell);
+    height: var(--sprite-cell);
+    transform: translate(-50%, -50%);
+    background-image: var(--sprite-image);
+    background-repeat: no-repeat;
+    background-size: calc(var(--sprite-cell) * var(--sprite-columns)) calc(var(--sprite-cell) * var(--sprite-rows));
+    background-position: calc(var(--sprite-cell) * var(--sprite-column) * -1) calc(var(--sprite-cell) * var(--sprite-row) * -1);
+  }
+}
