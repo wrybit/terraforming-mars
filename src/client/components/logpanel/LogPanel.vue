@@ -72,6 +72,8 @@ import {activeSectionIndex, edgeFadesOf, findScrollContainer, HEADER_SCROLL_GAP,
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogActionRow from '@/client/components/logpanel/LogActionRow.vue';
 import {groupLogMessages, LogAction, LogRow} from '@/client/components/logpanel/logActions';
+import {Color} from '@/common/Color';
+import {CardName} from '@/common/cards/CardName';
 import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
 import LogCardsZoom from '@/client/components/logpanel/LogCardsZoom.vue';
@@ -275,7 +277,7 @@ export default defineComponent({
     rowsOf(section: GenerationLog): Array<LogRow> {
       let rows = groupedRows.get(section.messages);
       if (rows === undefined) {
-        rows = groupLogMessages(section.messages);
+        rows = groupLogMessages(section.messages, {tableau: this.tableauByPlayer});
         groupedRows.set(section.messages, rows);
       }
       return rows;
@@ -546,6 +548,10 @@ export default defineComponent({
     },
   },
   computed: {
+    // Cards in play per player: older logs explain corporation effects with it (logActions addLegacyCauses)
+    tableauByPlayer(): Partial<Record<Color, ReadonlyArray<CardName>>> {
+      return Object.fromEntries(this.viewModel.players.map((player) => [player.color, player.tableau.map((card) => card.name)]));
+    },
     typedRefs(): Refs {
       return this.$refs as unknown as Refs;
     },

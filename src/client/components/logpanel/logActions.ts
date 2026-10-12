@@ -377,6 +377,31 @@ function startAction(kind: LogActionKind, message: LogMessage): LogAction | unde
   return action;
 }
 
+// Base cost of what the action paid for (card or standard project), undefined when unknown
+function paidCost(action: LogAction): number | undefined {
+  if ((action.kind !== 'card' && action.kind !== 'standardProject') || action.card === undefined) {
+    return undefined;
+  }
+  return getCard(action.card)?.cost;
+}
+
+// Older logs name no cause for corporation effects: attach it where the rule is unambiguous.
+// CrediCor: +4 M€ after paying a card or standard project with a base cost of 20 M€ or more.
+function addLegacyCauses(action: LogAction, context: LogContext): void {
+  const player = action.player;
+  const tableau = player === undefined ? undefined : context.tableau?.[player];
+  if (tableau === undefined || !tableau.includes(CardName.CREDICOR) || (paidCost(action) ?? 0) < 20) {
+    return;
+  }
+  if (action.effects.some((entry) => entry.cause === CardName.CREDICOR)) {
+    return;
+  }
+  const refund = action.effects.find((entry) => entry.resource === 'megacredit' && entry.amount === 4 && !entry.production && entry.cause === undefined && entry.card === undefined);
+  if (refund !== undefined) {
+    refund.cause = CardName.CREDICOR;
+  }
+}
+
 function withoutCause(entry: LogEffect): LogEffect {
   const copy = {...entry};
   delete copy.cause;
@@ -397,7 +422,10 @@ function addEffect(action: LogAction, entry: PlayerEffect): void {
 }
 
 // Messages of one generation (without the generation line) -> rows
-export function groupLogMessages(messages: ReadonlyArray<LogMessage>): Array<LogRow> {
+// Cards each player has in play: lets older logs (before the server named the cause) still explain corporation effects
+export type LogContext = {tableau?: Partial<Record<Color, ReadonlyArray<CardName>>>};
+
+export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: LogContext = {}): Array<LogRow> {
   const rows: Array<LogRow> = [];
   let current: (LogRow & {type: 'action'}) | undefined;
   let research: (LogRow & {type: 'research'}) | undefined;
@@ -488,6 +516,7 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>): Array<Log
 
   for (const row of rows) {
     if (row.type === 'action') {
+      addLegacyCauses(row.action, context);
       const known = row.action.kind === 'standardProject' && row.action.card !== undefined ? STANDARD_PROJECT_PRODUCTION[row.action.card] : undefined;
       if (known !== undefined && !row.action.effects.some((entry) => entry.production && entry.resource === known.resource)) {
         row.action.effects.push({...known});

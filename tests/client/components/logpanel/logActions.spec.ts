@@ -237,4 +237,13 @@ describe('logActions', () => {
     ]);
     expect(actionAt(rows, 0).effects).deep.eq([{resource: 'plant', amount: 2, production: true}, {resource: 'megacredit', amount: 4, cause: CardName.CREDICOR}]);
   });
+
+  it('explains the CrediCor refund in older logs from the tableau', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('red'), card(CardName.AI_CENTRAL)),
+      message('${0} lost ${1} ${2} production', player('red'), raw('1'), text('energy')),
+      message('${0} gained ${1} ${2}', player('red'), raw('4'), text('M€')),
+    ], {tableau: {red: [CardName.CREDICOR]}});
+    expect(actionAt(rows, 0).effects).deep.eq([{resource: 'power', amount: -1, production: true}, {resource: 'megacredit', amount: 4, cause: CardName.CREDICOR}]);
+  });
 });
