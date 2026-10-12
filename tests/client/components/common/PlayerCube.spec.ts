@@ -28,7 +28,7 @@ describe('PlayerCube', () => {
   });
 
   it('softens reflections on small live cubes', () => {
-    const small = shallowMount(PlayerCube, {...globalConfig, props: {color: 'blue', view: 'iso', size: 16}});
+    const small = shallowMount(PlayerCube, {...globalConfig, props: {color: 'blue', view: 'iso', size: 16, spin: 10}});
     const large = shallowMount(PlayerCube, {...globalConfig, props: {color: 'blue', size: 80}});
     expect(small.find('.player-cube').attributes('style')).to.contain('--detail: 0.2');
     expect(large.find('.player-cube').attributes('style')).to.contain('--detail: 1');

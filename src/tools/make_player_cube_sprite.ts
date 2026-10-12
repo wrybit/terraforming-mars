@@ -10,7 +10,7 @@ import {tmpdir} from 'os';
 import {dirname, join} from 'path';
 import {
   detailForSize, PLAYER_CUBE_SPRITE_MANIFEST, PLAYER_CUBE_SPRITE_URL, SPRITE_CELL_FACTOR, SPRITE_COLUMNS,
-  SPRITE_PIXEL_RATIO, SPRITE_RENDER_SIZE, SPRITE_ROWS, SPRITE_SLIGHT_COLUMN, SPRITE_TOP_TURN_STEP,
+  SPRITE_ISO_COLUMN, SPRITE_PIXEL_RATIO, SPRITE_RENDER_SIZE, SPRITE_ROWS, SPRITE_SLIGHT_COLUMN, SPRITE_TOP_TURN_STEP,
 } from '../client/components/common/playerCubeSprite';
 import {playerCubeSpriteHash} from './playerCubeSpriteHash';
 
@@ -25,7 +25,7 @@ const WEBP_ARGUMENTS = ['-q', '85', '-alpha_q', '60', '-m', '6'];
 const BORDER_ALPHA_LIMIT = 8;
 
 function cubeMarkup(color: string, column: number): string {
-  const view = column === SPRITE_SLIGHT_COLUMN ? 'slight' : 'top';
+  const view = column === SPRITE_SLIGHT_COLUMN ? 'slight' : column === SPRITE_ISO_COLUMN ? 'iso' : 'top';
   const style = [`--cube-size: ${SPRITE_RENDER_SIZE}px`, `--detail: ${detailForSize(SPRITE_RENDER_SIZE)}`];
   if (view === 'top') {
     style.push(`--cube-turn: ${column * SPRITE_TOP_TURN_STEP}deg`);
