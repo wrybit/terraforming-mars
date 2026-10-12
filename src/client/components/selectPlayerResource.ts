@@ -160,6 +160,19 @@ function pieceDirection(text: string): 'gain' | 'loss' | undefined {
   return titleDirection(text);
 }
 
+// Amount of one piece: the number written in it; without a number "a plant" / "Gain plant" (Viral Enhancers)
+// is one. "1 M€ per city" or "any number" depend on the game state: no fixed number
+function pieceAmount(piece: string): number | undefined {
+  if (/\b(per|any)\b/i.test(piece)) {
+    return undefined;
+  }
+  const amount = /\b(\d+)\b/.exec(piece);
+  if (amount !== null) {
+    return Number(amount[1]);
+  }
+  return /\b(an?|one|plant|megacredit)\b/i.test(piece) ? 1 : undefined;
+}
+
 // All own resources an option changes, in title order: "Spend 1 plant to gain 7 M€" → plants −1, M€ +7.
 // The title is split into the cost clause (before "to") and the result clause (after it); each clause
 // into pieces at "and"/",". A piece without its own verb takes the verb of its clause
@@ -176,13 +189,11 @@ export function playerEffects(title: string | Message): Array<PlayerEffect> {
       if (resource === undefined) {
         continue;
       }
-      const amount = /\b(\d+)\b/.exec(piece);
       effects.push({
         resource,
         target: /production/i.test(piece) ? 'production' : 'stock',
         direction: pieceDirection(piece) ?? clauseDirection,
-        // "1 M€ per city" or "up to X" depend on the game state: no fixed number
-        amount: amount === null || /\bper\b/i.test(piece) ? undefined : Number(amount[1]),
+        amount: pieceAmount(piece),
       });
     }
   }

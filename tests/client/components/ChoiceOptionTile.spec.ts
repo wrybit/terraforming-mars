@@ -5,6 +5,8 @@ import ChoiceOptionTile from '@/client/components/ChoiceOptionTile.vue';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {CardModel} from '@/common/models/CardModel';
 import {CardName} from '@/common/cards/CardName';
+import {Message} from '@/common/logs/Message';
+import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 
 describe('ChoiceOptionTile', () => {
   const player = {name: 'alpha', color: 'blue', steel: 2, steelProduction: 1} as PublicPlayerModel;
@@ -72,5 +74,17 @@ describe('ChoiceOptionTile', () => {
     const wrapper = mount(ChoiceOptionTile, {...globalConfig, props: {title: 'x', selected: false, groupName: 'g'}});
     await wrapper.find('input').trigger('change');
     expect(wrapper.emitted('select')).has.length(1);
+  });
+
+  it('names the resource of a scoring card and its victory points (Viral Enhancers on Fish)', () => {
+    const tableau = [{name: CardName.FISH, resources: 2} as CardModel];
+    const title: Message = {message: 'Add resource to card ${0}', data: [{type: LogMessageDataType.CARD, value: CardName.FISH}]};
+    const wrapper = mount(ChoiceOptionTile, {
+      ...globalConfig,
+      props: {title, player: {...player, tableau}, sourceCard: CardName.VIRAL_ENHANCERS, selected: false, groupName: 'g'},
+    });
+    expect(wrapper.find('.choice-option-icons .card-resource-animal').exists()).is.true;
+    expect(wrapper.find('.choice-option-vp').exists()).is.true;
+    expect(wrapper.findAll('.choice-option-after--gain').map((after) => after.text())).deep.eq(['→3', '→3']);
   });
 });

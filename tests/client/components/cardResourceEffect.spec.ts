@@ -53,4 +53,17 @@ describe('cardResourceEffect', () => {
     expect(cardResourceCount({resource: CardResource.MICROBE, direction: 'loss', amount: 3, card: source}, tableau)).deep.eq({before: 2, after: 0});
     expect(cardResourceCount({resource: CardResource.MICROBE, card: CardName.DIRIGIBLES}, tableau)).is.undefined;
   });
+
+  it('reads the generic word "resource" as the resource of the named card', () => {
+    // Viral Enhancers: "Add resource to card ${0}" with Fish → one animal on Fish
+    const title: Message = {message: 'Add resource to card ${0}', data: [{type: LogMessageDataType.CARD, value: CardName.FISH}]};
+    expect(cardResourceEffect(title, CardName.VIRAL_ENHANCERS)).deep.eq({resource: CardResource.ANIMAL, direction: 'gain', amount: 1, card: CardName.FISH});
+    expect(cardResourceEffect('Gain a standard resource')).is.undefined;
+    expect(cardResourceEffect('Gain 2 resource(s) for your Venus track bonus.', CardName.FISH)).is.undefined;
+  });
+
+  it('counts a singular word without a number as one', () => {
+    const title: Message = {message: 'Add microbe to ${0}', data: [{type: LogMessageDataType.CARD, value: CardName.TARDIGRADES}]};
+    expect(cardResourceEffect(title)?.amount).eq(1);
+  });
 });

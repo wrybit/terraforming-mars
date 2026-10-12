@@ -94,4 +94,11 @@ describe('selectPlayerResource', () => {
       {resource: 'megacredits', before: {stock: 29, production: 12}, after: {stock: 36, production: 12}, direction: 'gain'},
     ]);
   });
+
+  it('counts a resource without a number as one', () => {
+    // Viral Enhancers: "Gain plant"
+    expect(playerEffects('Gain plant')).deep.eq([{resource: 'plants', target: 'stock', direction: 'gain', amount: 1}]);
+    expect(playerEffects('Gain a plant')[0].amount).eq(1);
+    expect(playerEffects('Remove any number of plants')[0].amount).is.undefined;
+  });
 });

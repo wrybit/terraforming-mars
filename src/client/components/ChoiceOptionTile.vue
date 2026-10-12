@@ -19,6 +19,7 @@
         <span v-for="(item, itemIndex) in group" :key="itemIndex" class="choice-option-item">
           <span v-if="item.amount !== ''" :class="['choice-option-amount', 'choice-option-amount--' + (item.direction ?? 'neutral')]">{{ item.amount }}</span>
           <span v-if="item.production" class="choice-option-production"><i :class="item.iconClass"></i></span>
+          <span v-else-if="item.text !== undefined" :class="item.iconClass">{{ $t(item.text) }}</span>
           <i v-else :class="item.iconClass"></i>
         </span>
       </template>
@@ -26,9 +27,21 @@
     <span>{{ $t(title) }}</span>
     <!-- Own values of every affected resource: stock and production, the changed one before → after -->
     <div v-if="cardCount !== undefined || changes.length > 0" class="choice-option-value">
-      <div v-if="cardCount !== undefined" class="choice-option-card-count">
+      <!-- Same table as for standard resources: icon | on card | victory points of the card, so a
+           resource on a scoring card (Fish) reads as at least as valuable as a plant next to it -->
+      <div v-if="cardCount !== undefined" :class="['choice-option-table', {'choice-option-table--single': cardPoints === undefined}]">
+        <span></span>
         <span class="choice-option-value-label">{{ $t('On card') }}</span>
-        {{ cardCount.before }}<span v-if="cardCount.after !== cardCount.before" :class="['choice-option-after', 'choice-option-after--' + cardEffect?.direction]">→{{ cardCount.after }}</span>
+        <span v-if="cardPoints !== undefined" class="choice-option-value-label">{{ $t('VP') }}</span>
+        <i :class="'choice-option-row-icon ' + cardIconClass"></i>
+        <span class="choice-option-number">
+          {{ cardCount.before }}<span v-if="cardCount.after !== cardCount.before" :class="afterClass(cardCount.after, cardCount.before)">→{{ cardCount.after }}</span>
+        </span>
+        <span v-if="cardPoints !== undefined" class="choice-option-number">
+          {{ cardPoints.before }}<span v-if="cardPoints.after !== cardPoints.before" :class="afterClass(cardPoints.after, cardPoints.before)">→{{ cardPoints.after }}</span>
+          <!-- Cards scoring per several resources (Tardigrades: per 4) show the way to the next point -->
+          <span v-if="cardPoints.per > 1" class="choice-option-progress">{{ cardPoints.progress }}/{{ cardPoints.per }}</span>
+        </span>
       </div>
       <div v-if="changes.length > 0" class="choice-option-table">
         <span></span>
@@ -57,6 +70,7 @@ import {playerEffects, resourceChanges} from '@/client/components/selectPlayerRe
 import {cardResourceCount, cardResourceEffect} from '@/client/components/cardResourceEffect';
 import {cardResourceCSS} from '@/client/components/common/cardResources';
 import {resultGains} from '@/client/components/choiceResultGains';
+import {cardResourcePoints} from '@/client/components/cardResourcePoints';
 
 const props = defineProps<{
   title: string | Message;
@@ -75,6 +89,8 @@ defineEmits<{
 // Card resources take precedence: "Remove 2 microbes to gain 3 plants" is first of all about the microbes
 const cardEffect = computed(() => cardResourceEffect(props.title, props.sourceCard));
 const cardCount = computed(() => cardEffect.value === undefined || props.player === undefined ? undefined : cardResourceCount(cardEffect.value, props.player.tableau ?? []));
+const cardPoints = computed(() => cardCount.value === undefined ? undefined : cardResourcePoints(cardEffect.value?.card, cardCount.value));
+const cardIconClass = computed(() => cardEffect.value === undefined ? '' : cardResourceCSS[cardEffect.value.resource]);
 // Own standard resources the option changes (cost and result); left out if the card resource already
 // carries the cost, e.g. "Remove 2 microbes to gain 3 plants" still shows the plants
 const effects = computed(() => playerEffects(props.title));
@@ -87,6 +103,8 @@ type IconItem = {
   amount: string,
   direction?: 'gain' | 'loss',
   production?: boolean,
+  // Badge with text instead of an image icon (victory points)
+  text?: string,
 };
 
 // Paid resources first, then the rest, separated by the action arrow; without a cost just one group
@@ -95,6 +113,12 @@ const iconGroups = computed(() => {
   const card = cardEffect.value;
   if (card !== undefined) {
     items.push({key: 'card', iconClass: 'choice-option-icon ' + cardResourceCSS[card.resource], amount: signedAmount(card.amount, card.direction), direction: card.direction});
+    // Points the card gains or loses by it (Fish: +1 VP), right next to the resource
+    const pointsChange = cardPoints.value === undefined ? 0 : cardPoints.value.after - cardPoints.value.before;
+    if (pointsChange !== 0) {
+      const direction = pointsChange > 0 ? 'gain' : 'loss';
+      items.push({key: 'vp', iconClass: 'card-filter-vp choice-option-vp', amount: signedAmount(Math.abs(pointsChange), direction), direction, text: 'VP'});
+    }
   }
   for (const effect of effects.value) {
     const key = effect.resource + '-' + effect.target;

@@ -180,13 +180,6 @@
   padding: 6px 12px 8px;
 }
 
-.choice-option-card-count {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 8px;
-}
-
 // One row per affected resource: icon | stock | production; labels once on top.
 // Rows sit closer together than the block to the text above (law of proximity)
 .choice-option-table {
@@ -227,4 +220,24 @@
 
 .choice-option-after--loss {
   color: #ffb4a6;
+}
+
+// Card count without victory points: icon | on card
+.choice-option-table--single {
+  grid-template-columns: auto 1fr;
+}
+
+// Victory point badge in the icon row (same gold badge as in the card filter), as tall as the icons
+.choice-option-vp {
+  height: 36px;
+  padding: 0 7px;
+  border-radius: 5px;
+  font-size: 19px;
+}
+
+// Way to the next point (Tardigrades: 3/4), quieter than the value itself
+.choice-option-progress {
+  margin-left: 4px;
+  font-size: 13px;
+  opacity: 0.6;
 }

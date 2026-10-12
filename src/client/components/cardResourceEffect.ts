@@ -4,6 +4,7 @@ import {CardResource} from '@/common/CardResource';
 import {CardName} from '@/common/cards/CardName';
 import {CardModel} from '@/common/models/CardModel';
 import {isNoEffect, titleText} from '@/client/components/selectPlayerResource';
+import {getCard} from '@/client/cards/ClientCardManifest';
 
 // Card resource words in English title keys ("Add 1 microbe to this card", "Remove 3 microbes to …",
 // "Add ${0} floaters to ${1}"). Only resources that are named in plain words on the server side.
@@ -36,16 +37,30 @@ export type CardResourceEffect = {
   card?: CardName,
 };
 
+// Generic word for "the resource of that card" ("Add resource to card ${0}", Viral Enhancers): which resource
+// it is follows from the named card. "standard resource" means M€, steel … and is no card resource;
+// "resource(s)" (bonus counts) is left out as well.
+const GENERIC_RESOURCE_WORD = '(?<!standard )resources?(?!\\()';
+
 // Card resource named in the title key (placeholders count as words, so card names like "Asteroid" in a
 // parameter do not match) with the amount written directly before it: "3 microbes", "${0} floaters",
-// "a microbe" → 1; "any number of microbes" or "microbes" alone → no amount
-function titleCardResource(title: string | Message): {resource: CardResource, amount?: number} | undefined {
+// "a microbe" → 1; a countable word in singular without a number ("Add microbe to …") → 1;
+// "any number of microbes" or "microbes" alone → no amount
+function titleCardResource(title: string | Message, card: CardName | undefined): {resource: CardResource, amount?: number} | undefined {
   const text = titleText(title);
-  for (const [word, resource] of CARD_RESOURCE_WORDS) {
-    const match = new RegExp(`(?:\\b(\\d+|an?|one)|\\$\\{(\\d+)\\})?\\s*\\b${word}\\b`, 'i').exec(text);
-    if (match !== null) {
-      return {resource, amount: wordAmount(title, match[1], match[2])};
+  const cardResource = card === undefined ? undefined : getCard(card)?.resourceType;
+  const words: ReadonlyArray<[string, CardResource | undefined]> = [...CARD_RESOURCE_WORDS, [GENERIC_RESOURCE_WORD, cardResource]];
+  for (const [word, resource] of words) {
+    const match = new RegExp(`(?:\\b(\\d+|an?|one)|\\$\\{(\\d+)\\})?\\s*\\b(${word})\\b`, 'i').exec(text);
+    if (match === null) {
+      continue;
     }
+    // Generic word without a known card resource (card still to be chosen, card without resources)
+    if (resource === undefined) {
+      return undefined;
+    }
+    const singular = word.includes('s?') && !/s$/i.test(match[3]);
+    return {resource, amount: wordAmount(title, match[1], match[2]) ?? (singular ? 1 : undefined)};
   }
   return undefined;
 }
@@ -77,7 +92,11 @@ function titleCard(title: string | Message, sourceCard: CardName | undefined): C
 
 // Effect of an option on resources of a card; undefined if the title names no card resource
 export function cardResourceEffect(title: string | Message, sourceCard?: CardName): CardResourceEffect | undefined {
-  const named = isNoEffect(title) ? undefined : titleCardResource(title);
+  if (isNoEffect(title)) {
+    return undefined;
+  }
+  const card = titleCard(title, sourceCard);
+  const named = titleCardResource(title, card);
   if (named === undefined) {
     return undefined;
   }
@@ -86,7 +105,7 @@ export function cardResourceEffect(title: string | Message, sourceCard?: CardNam
     resource: named.resource,
     direction: verb === undefined ? undefined : (GAIN_VERBS.test(verb) ? 'gain' : 'loss'),
     amount: named.amount,
-    card: titleCard(title, sourceCard),
+    card,
   };
 }
 
