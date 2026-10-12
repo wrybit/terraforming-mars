@@ -789,5 +789,7 @@
   "Finished games": "Завершені партії",
   "Online": "Онлайн",
   "Show password": "Показати пароль",
-  "Hide password": "Сховати пароль"
+  "Hide password": "Сховати пароль",
+  "Card action": "Дія карти",
+  "kept ${0} cards": "зберіг(ла) ${0} карт"
 }

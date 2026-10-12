@@ -1407,5 +1407,12 @@
   "Open games": "Otwarte gry",
   "Finished games": "Zakończone gry",
   "Show password": "Pokaż hasło",
-  "Hide password": "Ukryj hasło"
+  "Hide password": "Ukryj hasło",
+  "Card action": "Akcja karty",
+  "kept ${0} cards": "zatrzymuje ${0} kart",
+  "${0} gained ${1} ${2} production": "${0} zwiększa produkcję ${2} o ${1}",
+  "${0} lost ${1} ${2} production": "${0} zmniejsza produkcję ${2} o ${1}",
+  "${0} gained ${1} ${2} because of ${3}": "${0} otrzymuje ${1} ${2} dzięki ${3}",
+  "${0} lost ${1} ${2} because of ${3}": "${0} traci ${1} ${2} przez ${3}",
+  "${0} lost ${1} ${2} production because of ${3}": "${0} traci ${1} produkcji ${2} przez ${3}"
 }

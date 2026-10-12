@@ -1854,5 +1854,12 @@
   "Finished games": "Partidas terminadas",
   "Online": "En línea",
   "Show password": "Mostrar contraseña",
-  "Hide password": "Ocultar contraseña"
+  "Hide password": "Ocultar contraseña",
+  "Card action": "Acción de carta",
+  "kept ${0} cards": "ha conservado ${0} cartas",
+  "${0} gained ${1} ${2} production": "${0} ha ganado ${1} de producción de ${2}",
+  "${0} lost ${1} ${2} production": "${0} ha perdido ${1} de producción de ${2}",
+  "${0} gained ${1} ${2} because of ${3}": "${0} ha ganado ${1} ${2} por ${3}",
+  "${0} lost ${1} ${2} because of ${3}": "${0} ha perdido ${1} ${2} por ${3}",
+  "${0} lost ${1} ${2} production because of ${3}": "${0} ha perdido ${1} de producción de ${2} por ${3}"
 }

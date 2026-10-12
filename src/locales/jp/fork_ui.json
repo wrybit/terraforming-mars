@@ -985,5 +985,12 @@
   "Finished games": "終了したゲーム",
   "Online": "オンライン",
   "Show password": "パスワードを表示",
-  "Hide password": "パスワードを隠す"
+  "Hide password": "パスワードを隠す",
+  "Card action": "カードのアクション",
+  "kept ${0} cards": "カード${0}枚をキープ",
+  "${0} gained ${1} ${2} production": "${0}の${2}産出が${1}増加",
+  "${0} lost ${1} ${2} production": "${0}の${2}産出が${1}減少",
+  "${0} gained ${1} ${2} because of ${3}": "${3}により${0}が${1}${2}獲得",
+  "${0} lost ${1} ${2} because of ${3}": "${3}により${0}が${1}${2}を失った",
+  "${0} lost ${1} ${2} production because of ${3}": "${3}により${0}の${2}産出が${1}減少"
 }

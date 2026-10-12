@@ -1251,5 +1251,12 @@
   "Open games": "Open spellen",
   "Finished games": "Afgeronde spellen",
   "Show password": "Wachtwoord tonen",
-  "Hide password": "Wachtwoord verbergen"
+  "Hide password": "Wachtwoord verbergen",
+  "Card action": "Kaartactie",
+  "kept ${0} cards": "heeft ${0} kaarten gehouden",
+  "${0} gained ${1} ${2} production": "${0} ontving ${1} ${2}-productie",
+  "${0} lost ${1} ${2} production": "${0} verloor ${1} ${2}-productie",
+  "${0} gained ${1} ${2} because of ${3}": "${0} ontving ${1} ${2} door ${3}",
+  "${0} lost ${1} ${2} because of ${3}": "${0} verloor ${1} ${2} door ${3}",
+  "${0} lost ${1} ${2} production because of ${3}": "${0} verloor ${1} ${2}-productie door ${3}"
 }

@@ -806,5 +806,12 @@
   "Open games": "Nyitott játékok",
   "Finished games": "Befejezett játékok",
   "Show password": "Jelszó megjelenítése",
-  "Hide password": "Jelszó elrejtése"
+  "Hide password": "Jelszó elrejtése",
+  "Card action": "Kártyaakció",
+  "kept ${0} cards": "megtartott ${0} kártyát",
+  "${0} gained ${1} ${2} production": "${0} kapott ${1} ${2}-termelést.",
+  "${0} lost ${1} ${2} production": "${0} elvesztett ${1} ${2}-termelést.",
+  "${0} gained ${1} ${2} because of ${3}": "${0} kapott ${1} ${2}-t (${3} miatt).",
+  "${0} lost ${1} ${2} because of ${3}": "${0} elvesztett ${1} ${2}-t (${3} miatt).",
+  "${0} lost ${1} ${2} production because of ${3}": "${0} elvesztett ${1} ${2}-termelést (${3} miatt)."
 }

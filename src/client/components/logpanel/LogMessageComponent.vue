@@ -42,7 +42,6 @@
 import {defineComponent} from 'vue';
 import {Color} from '@/common/Color';
 import {CardName} from '@/common/cards/CardName';
-import {CardType} from '@/common/cards/CardType';
 import {LogMessage} from '@/common/logs/LogMessage';
 import {LogMessageType} from '@/common/logs/LogMessageType';
 import {LogMessageData, LogMessageDataAttrs} from '@/common/logs/LogMessageData';
@@ -58,18 +57,8 @@ import {getPreferences} from '@/client/utils/PreferencesManager';
 import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {range} from '@/common/utils/utils';
 import {needsModalPreview} from '@/client/components/logpanel/logMessageContent';
+import {cardTypeToCss} from '@/client/components/logpanel/logCardType';
 
-const cardTypeToCss: Record<CardType, string | undefined> = {
-  event: 'background-color-events',
-  corporation: 'background-color-corporation',
-  active: 'background-color-active',
-  automated: 'background-color-automated',
-  prelude: 'background-color-prelude',
-  ceo: 'background-color-ceo',
-  standard_project: 'background-color-standard-project',
-  standard_action: 'background-color-standard-project',
-  proxy: undefined,
-};
 
 export default defineComponent({
   name: 'LogMessageComponent',

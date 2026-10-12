@@ -863,5 +863,12 @@
   "Finished games": "끝난 게임",
   "Online": "접속 중",
   "Show password": "비밀번호 표시",
-  "Hide password": "비밀번호 숨기기"
+  "Hide password": "비밀번호 숨기기",
+  "Card action": "카드 행동",
+  "kept ${0} cards": "카드 ${0}장 보관",
+  "${0} gained ${1} ${2} production": "${0} 플레이어의 ${2} 생산이 ${1} 증가",
+  "${0} lost ${1} ${2} production": "${0} 플레이어의 ${2} 생산이 ${1} 감소",
+  "${0} gained ${1} ${2} because of ${3}": "${0} 플레이어가 ${3} 때문에 ${2} ${1}개 획득",
+  "${0} lost ${1} ${2} because of ${3}": "${0} 플레이어가 ${3} 때문에 ${2} ${1}개 상실",
+  "${0} lost ${1} ${2} production because of ${3}": "${3} 때문에 ${0} 플레이어의 ${2} 생산이 ${1} 감소"
 }

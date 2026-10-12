@@ -330,3 +330,186 @@ each(@players, {
   margin-right: -5px; // Offsets the margin-right for .li .span, above.
 }
 
+
+// ---------- Action rows (logActions.ts, LogActionRow.vue) ----------
+// One line per action: player name and card stay together; effects form a right-aligned column and wrap below if needed
+.log-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 2px;
+  min-height: 30px;
+  padding: 3px 4px;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 20px;
+  color: #eee;
+  cursor: default;
+}
+
+@media (hover: hover) {
+  .log-panel .log-row:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.log-row-what {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  column-gap: 6px;
+  white-space: nowrap;
+}
+
+.log-row-name {
+  font-weight: bold;
+}
+
+.log-row-muted {
+  color: #8a90a0;
+}
+
+.log-row-ma {
+  color: #e3c06a;
+}
+
+// Card name in normal case; a thin stripe in the card type's colour replaces the coloured chip
+.log-row-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.log-row-card-type {
+  flex: none;
+  width: 4px;
+  height: 14px;
+  border-radius: 2px;
+}
+
+// Same arrow shape as the action arrow on the cards, brighter and bolder for the dark log
+.log-row-action {
+  display: inline-block;
+  flex: none;
+  width: 22px;
+  height: 14px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 14'%3E%3Cpath d='M1.5 4.5h10V1l9 6-9 6V9.5h-10z' fill='%23ff5a3c' stroke='%23000' stroke-opacity='.45' stroke-width='1' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.log-row-effects {
+  margin-left: auto;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+}
+
+// Other players affected by the action: red = something was taken, green = they got something
+.log-row-other {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 1px 0 1px 6px;
+  border-radius: 3px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.log-row-other--loss {
+  background: rgba(214, 48, 34, 0.8);
+}
+
+.log-row-other--gain {
+  background: rgba(34, 150, 64, 0.8);
+}
+
+.log-row-other .log-effect--loss b {
+  color: #fff;
+}
+
+// Card purchase and phase changes (generation 1: corporations, preludes) are separated by a line
+.log-row--research {
+  column-gap: 12px;
+  color: #8a90a0;
+}
+
+.log-phase-line {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 6px 0;
+}
+
+// Player names in a lightened player colour, readable on the dark log
+each(@players, {
+  @c: ~"player_@{value}";
+
+  .log-row-name--@{value} {
+    color: mix(@@c, #fff, 65%);
+  }
+});
+
+// Effects: number, then symbol, all the same height. Only production has an area (brown);
+// effects without an area have no invisible padding, so the visible gaps are equal everywhere
+.log-effect {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #eee;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 20px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.log-effect--production {
+  min-width: 40px;
+  justify-content: flex-end;
+  padding: 0 3px;
+  border-radius: 3px;
+  background: #7a4f2c;
+
+  b {
+    min-width: 20px;
+    text-align: right;
+  }
+}
+
+.log-effect--loss b {
+  color: #ff9a8a;
+}
+
+.log-effect--tile {
+  cursor: pointer;
+}
+
+.log-effect-icon {
+  display: inline-block;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+@log-effect-resources: megacredit, plant, steel, titanium, power, heat, animal, microbe, floater, science, asteroid, fighter, data, camp, card;
+each(@log-effect-resources, {
+  .log-effect-resource--@{value} {
+    background-image: url("./assets/resources/@{value}.png");
+  }
+});
+
+@log-effect-tiles: city, greenery, ocean, special;
+each(@log-effect-tiles, {
+  .log-effect-tile--@{value} {
+    background-image: url("./assets/tiles/@{value}.png");
+  }
+});

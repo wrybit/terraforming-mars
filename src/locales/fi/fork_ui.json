@@ -643,5 +643,7 @@
   "Finished games": "Päättyneet pelit",
   "Online": "Paikalla",
   "Show password": "Näytä salasana",
-  "Hide password": "Piilota salasana"
+  "Hide password": "Piilota salasana",
+  "Card action": "Korttitoiminto",
+  "kept ${0} cards": "piti ${0} korttia"
 }

@@ -25,7 +25,13 @@
           <h3 class="log-generation-title">
             <span class="log-generation-marker" aria-hidden="true">{{ section.generation }}</span>{{ generationTitle(section.generation) }}
           </h3>
-          <LogMessageComponent v-for="(message, index) in section.messages" :key="index" :data-log-row="section.generation + '-' + index" :message="message" :viewModel="viewModel" @click="messageClicked(message)" @mouseenter="messageHovered(message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
+          <!-- One row per action (card, action, standard project ...) with its effects; unrecognised messages stay text lines -->
+          <template v-for="(row, rowIndex) in rowsOf(section)" :key="rowIndex">
+            <div v-if="row.type === 'phase'" class="log-phase-line" aria-hidden="true"></div>
+            <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel" @click="messageClicked(row.message)" @mouseenter="messageHovered(row.message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
+            <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel" @click="messageClicked(row.action.lead)" @mouseenter="messageHovered(row.action.lead, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
+            <LogActionRow v-else :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"/>
+          </template>
         </section>
       </div>
       <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones">
@@ -64,6 +70,8 @@ import {getPreferences} from '@/client/utils/PreferencesManager';
 import {logMessageItemCount, needsModalPreview} from '@/client/components/logpanel/logMessageContent';
 import {activeSectionIndex, edgeFadesOf, findScrollContainer, HEADER_SCROLL_GAP, maxScrollTopOf, readingLineOf, scrollContainerTo, ScrollContainer, scrollTopOf} from '@/client/components/logpanel/logScroll';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
+import LogActionRow from '@/client/components/logpanel/LogActionRow.vue';
+import {groupLogMessages, LogRow} from '@/client/components/logpanel/logActions';
 import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
 import LogCardsZoom from '@/client/components/logpanel/LogCardsZoom.vue';
@@ -137,6 +145,9 @@ type LogPanelModel = {
   internals: Internals,
 };
 
+// Grouped rows per message list (sections are replaced, not changed, when new entries arrive)
+const groupedRows = new WeakMap<Array<LogMessage>, Array<LogRow>>();
+
 // The header of each generation replaces the server's "Generation N" line
 function messageCount(sections: ReadonlyArray<GenerationLog>): number {
   return sections.reduce((sum, section) => sum + section.messages.length, 0);
@@ -193,6 +204,7 @@ export default defineComponent({
   },
   components: {
     LogMessageComponent,
+    LogActionRow,
     LogMessageInspector,
     LogGenerationList,
     LogCardsZoom,
@@ -253,10 +265,24 @@ export default defineComponent({
       for (const section of this.sections) {
         const index = section.messages.indexOf(message);
         if (index !== -1) {
-          return this.typedRefs.scrollBody?.querySelector<HTMLElement>(`[data-log-row="${section.generation}-${index}"]`) ?? undefined;
+          // A row lists all messages it shows (rowKey), so the message is found inside a grouped row too
+          return this.typedRefs.scrollBody?.querySelector<HTMLElement>(`[data-log-row~="${section.generation}-${index}"]`) ?? undefined;
         }
       }
       return undefined;
+    },
+    // Rows are derived from the messages; cached per message list so scrolling doesn't regroup
+    rowsOf(section: GenerationLog): Array<LogRow> {
+      let rows = groupedRows.get(section.messages);
+      if (rows === undefined) {
+        rows = groupLogMessages(section.messages);
+        groupedRows.set(section.messages, rows);
+      }
+      return rows;
+    },
+    // All message indexes of a row, space separated: data-log-row~="gen-index" finds any of them
+    rowKey(section: GenerationLog, row: LogRow): string {
+      return row.indexes.map((index) => section.generation + '-' + index).join(' ');
     },
     drawnCardsClosed(): void {
       if (this.viewBeforeDrawnCards !== undefined) {

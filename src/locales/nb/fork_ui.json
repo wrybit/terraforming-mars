@@ -996,5 +996,7 @@
   "Finished games": "Ferdige spill",
   "Online": "Pålogget",
   "Show password": "Vis passord",
-  "Hide password": "Skjul passord"
+  "Hide password": "Skjul passord",
+  "Card action": "Korthandling",
+  "kept ${0} cards": "beholdt ${0} kort"
 }

@@ -702,5 +702,7 @@
   "Finished games": "Parties terminées",
   "Online": "En ligne",
   "Show password": "Afficher le mot de passe",
-  "Hide password": "Masquer le mot de passe"
+  "Hide password": "Masquer le mot de passe",
+  "Card action": "Action de carte",
+  "kept ${0} cards": "a gardé ${0} cartes"
 }
