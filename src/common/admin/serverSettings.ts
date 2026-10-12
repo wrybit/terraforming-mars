@@ -59,7 +59,7 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'DISCORD_ADMIN_USER_IDS', group: 'Access', kind: 'text', label: 'Discord admins',
     description: 'Discord IDs separated by semicolons that may use the admin pages without the passphrase.'},
   {key: 'SESSION_DURATION', group: 'Access', kind: 'text', label: 'Login duration',
-    description: 'How long a login stays valid, e.g. 30m or 12h. Empty: 30m.'},
+    description: 'How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.'},
   {key: 'URL_ROOT', group: 'Access', kind: 'text', label: 'Public address',
     description: 'Root address of this server, used for login redirects.'},
 

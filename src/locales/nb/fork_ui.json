@@ -820,7 +820,7 @@
   "Folder for decision logs": "Mappe for beslutningslogger",
   "For development: inconsistent game states raise an error instead of a log line.": "For utvikling: inkonsistente spilltilstander gir en feil i stedet for en loggrad.",
   "Game memory": "Spill i minnet",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "Hvor lenge en innlogging gjelder, f.eks. 30m eller 12h. Tom: 30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "Hvor lenge en innlogging (admin og Discord) gjelder, f.eks. 30d eller 12h. Tom: 30d.",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Hvor mange spill én adresse kan opprette, f.eks. {\"limit\":3,\"per\":\"10m\"} eller en liste med slike grenser. Tom: ubegrenset.",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "Hvor ofte en ventende spiller spør om det er hans tur igjen. Tom: 5000.",
   "IP addresses separated by spaces that get no answer.": "IP-adresser, skilt med mellomrom, som ikke får svar.",

@@ -1,19 +1,19 @@
 // Expected format
 //
 // `{number}{suffix}`...
-// Suffix is h or H for hour, m or M for minute, s or S for second.
+// Suffix is d or D for day, h or H for hour, m or M for minute, s or S for second.
 //
 export function durationToMilliseconds(input: string): number {
-  const re = /^([0-9]+[Hh])?([0-9]+[Mm])?([0-9]+[Ss])?$/;
+  const re = /^([0-9]+[Dd])?([0-9]+[Hh])?([0-9]+[Mm])?([0-9]+[Ss])?$/;
   const parsed = re.exec(input);
   if (parsed === null) {
     return NaN;
   }
   let total = 0;
-  const [hours, minutes, seconds] = parsed.slice(1, 4);
+  const [days, hours, minutes, seconds] = parsed.slice(1, 5);
 
   let valid = false;
-  for (const entry of [hours, minutes, seconds]) {
+  for (const entry of [days, hours, minutes, seconds]) {
     if (entry === undefined) {
       continue;
     }
@@ -23,6 +23,10 @@ export function durationToMilliseconds(input: string): number {
     }
 
     switch (unit) {
+    case 'd':
+    case 'D':
+      total += value * 24 * 60 * 60 * 1000;
+      break;
     case 'h':
     case 'H':
       total += value * 60 * 60 * 1000;

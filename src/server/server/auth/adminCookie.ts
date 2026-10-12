@@ -1,12 +1,14 @@
 import {createHmac, timingSafeEqual} from 'crypto';
 import {Request} from '../../Request';
+import {SESSION_DURATION_MILLISECONDS} from './sessionDuration';
 
 /*
  * Login to the admin pages. The passphrase (SERVER_ID) is sent once in a POST body and never
  * appears in an address again: addresses end up in access logs, the browser history and Referer headers.
  */
 export const adminCookieName = 'tmAdmin';
-export const adminCookieLifetimeSeconds = 30 * 24 * 60 * 60;
+// Same duration as every login (SESSION_DURATION, default 30 days)
+export const adminCookieLifetimeSeconds = Math.round(SESSION_DURATION_MILLISECONDS / 1000);
 
 /**
  * The cookie holds a keyed hash of the passphrase, not the passphrase itself: a leaked cookie does not

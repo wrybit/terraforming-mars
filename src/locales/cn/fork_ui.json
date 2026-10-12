@@ -1371,7 +1371,7 @@
   "Game memory": "对局内存",
   "Head Start": "先发优势",
   "Hollandia": "荷兰迪亚",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "登录的有效时长，例如 30m 或 12h。留空：30m。",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "登录（管理员和 Discord）的有效期，例如 30d 或 12h。留空：30d。",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "每个地址可创建的对局数，例如 {\"limit\":3,\"per\":\"10m\"} 或此类限制的列表。留空：不限。",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "等待中的玩家多久询问一次是否又轮到自己。留空：5000。",
   "IP addresses separated by spaces that get no answer.": "以空格分隔、不予响应的 IP 地址。",

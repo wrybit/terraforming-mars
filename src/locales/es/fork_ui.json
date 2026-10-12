@@ -1673,7 +1673,7 @@
   "For development: inconsistent game states raise an error instead of a log line.": "Para desarrollo: los estados de partida incoherentes provocan un error en lugar de una línea de registro.",
   "Game memory": "Partidas en memoria",
   "Head Start": "Ventaja inicial",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "Cuánto dura una sesión, p. ej. 30m o 12h. Vacío: 30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "Cuánto dura un inicio de sesión (admin y Discord), p. ej. 30d o 12h. Vacío: 30d.",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Cuántas partidas puede crear una dirección, p. ej. {\"limit\":3,\"per\":\"10m\"} o una lista de tales límites. Vacío: sin límite.",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "Con qué frecuencia un jugador en espera pregunta si ya le toca. Vacío: 5000.",
   "IP addresses separated by spaces that get no answer.": "Direcciones IP separadas por espacios que no reciben respuesta.",

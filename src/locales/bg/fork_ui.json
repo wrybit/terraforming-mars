@@ -1324,7 +1324,7 @@
   "Game memory": "Игри в паметта",
   "Head Start": "Преднина",
   "Hollandia": "Холандия",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "Колко дълго е валиден един вход, напр. 30m или 12h. Празно: 30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "Колко дълго важи влизането (админ и Discord), напр. 30d или 12h. Празно: 30d.",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Колко игри може да създаде един адрес, напр. {\"limit\":3,\"per\":\"10m\"} или списък с такива ограничения. Празно: без ограничение.",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "Колко често чакащ играч проверява дали отново е негов ред. Празно: 5000.",
   "IP addresses separated by spaces that get no answer.": "IP адреси, разделени с интервали, които не получават отговор.",

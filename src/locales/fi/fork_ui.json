@@ -468,7 +468,7 @@
   "Folder for decision logs": "Päätöslokien kansio",
   "For development: inconsistent game states raise an error instead of a log line.": "Kehitykseen: epäjohdonmukaiset pelitilat aiheuttavat virheen lokirivin sijaan.",
   "Game memory": "Pelit muistissa",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "Kuinka kauan kirjautuminen on voimassa, esim. 30m tai 12h. Tyhjä: 30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "Kuinka kauan kirjautuminen (ylläpito ja Discord) on voimassa, esim. 30d tai 12h. Tyhjä: 30d.",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Kuinka monta peliä yksi osoite saa luoda, esim. {\"limit\":3,\"per\":\"10m\"} tai luettelo tällaisista rajoista. Tyhjä: rajoittamaton.",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "Kuinka usein odottava pelaaja kysyy, onko taas hänen vuoronsa. Tyhjä: 5000.",
   "IP addresses separated by spaces that get no answer.": "Välilyönnein erotetut IP-osoitteet, jotka eivät saa vastausta.",

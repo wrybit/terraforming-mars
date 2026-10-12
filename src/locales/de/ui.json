@@ -1699,7 +1699,7 @@
   "Discord admins": "Discord-Admins",
   "Discord IDs separated by semicolons that may use the admin pages without the passphrase.": "Discord-IDs, durch Semikolon getrennt, die die Admin-Seiten ohne Passwort nutzen dürfen.",
   "Login duration": "Dauer der Anmeldung",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "Wie lange eine Anmeldung gilt, z. B. 30m oder 12h. Leer: 30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "Wie lange eine Anmeldung (Admin und Discord) gilt, z. B. 30d oder 12h. Leer: 30d.",
   "Public address": "Öffentliche Adresse",
   "Root address of this server, used for login redirects.": "Stammadresse dieses Servers, für Weiterleitungen beim Anmelden.",
   "Port the server listens on. In Docker it must stay 8080.": "Port, auf dem der Server lauscht. In Docker muss er 8080 bleiben.",

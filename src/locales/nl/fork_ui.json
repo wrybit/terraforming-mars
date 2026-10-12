@@ -1076,7 +1076,7 @@
   "Folder for decision logs": "Map voor beslissingslogs",
   "For development: inconsistent game states raise an error instead of a log line.": "Voor ontwikkeling: inconsistente spelstanden geven een fout in plaats van een logregel.",
   "Game memory": "Spellen in geheugen",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "Hoe lang een aanmelding geldig blijft, bijv. 30m of 12h. Leeg: 30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "Hoe lang een login (beheer en Discord) geldig blijft, bijv. 30d of 12h. Leeg: 30d.",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Hoeveel spellen één adres mag aanmaken, bijv. {\"limit\":3,\"per\":\"10m\"} of een lijst van zulke limieten. Leeg: onbeperkt.",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "Hoe vaak een wachtende speler vraagt of hij weer aan de beurt is. Leeg: 5000.",
   "IP addresses separated by spaces that get no answer.": "IP-adressen, gescheiden door spaties, die geen antwoord krijgen.",

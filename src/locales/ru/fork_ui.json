@@ -1242,7 +1242,7 @@
   "Game memory": "Память партий",
   "Head Start": "Фора",
   "Hollandia": "Голландия",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "Сколько действует вход, напр. 30m или 12h. Пусто: 30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "Как долго действует вход (админ и Discord), напр. 30d или 12h. Пусто: 30d.",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Сколько партий может создать один адрес, напр. {\"limit\":3,\"per\":\"10m\"} или список таких ограничений. Пусто: без ограничений.",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "Как часто ожидающий игрок проверяет, не настал ли его ход. Пусто: 5000.",
   "IP addresses separated by spaces that get no answer.": "IP-адреса через пробел, которым сервер не отвечает.",

@@ -627,7 +627,7 @@
   "Folder for decision logs": "Mappa a döntésnaplókhoz",
   "For development: inconsistent game states raise an error instead of a log line.": "Fejlesztéshez: inkonzisztens játékállapot naplósor helyett hibát vált ki.",
   "Game memory": "Játszmák a memóriában",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "Meddig érvényes egy bejelentkezés, pl. 30m vagy 12h. Üres: 30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "Meddig érvényes egy bejelentkezés (admin és Discord), pl. 30d vagy 12h. Üres: 30d.",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Hány játszmát hozhat létre egy cím, pl. {\"limit\":3,\"per\":\"10m\"} vagy ilyen korlátok listája. Üres: korlátlan.",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "Milyen gyakran kérdezi a várakozó játékos, hogy ő következik-e. Üres: 5000.",
   "IP addresses separated by spaces that get no answer.": "Szóközzel elválasztott IP-címek, amelyek nem kapnak választ.",

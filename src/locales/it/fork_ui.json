@@ -1665,7 +1665,7 @@
   "Folder for decision logs": "Cartella per i log delle decisioni",
   "For development: inconsistent game states raise an error instead of a log line.": "Per lo sviluppo: gli stati di gioco incoerenti generano un errore invece di una riga di log.",
   "Game memory": "Partite in memoria",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "Per quanto resta valido un accesso, ad es. 30m o 12h. Vuoto: 30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "Per quanto vale un accesso (admin e Discord), ad es. 30d o 12h. Vuoto: 30d.",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Quante partite può creare un indirizzo, ad es. {\"limit\":3,\"per\":\"10m\"} o un elenco di tali limiti. Vuoto: illimitato.",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "Ogni quanto un giocatore in attesa chiede se è di nuovo il suo turno. Vuoto: 5000.",
   "IP addresses separated by spaces that get no answer.": "Indirizzi IP separati da spazi che non ricevono risposta.",

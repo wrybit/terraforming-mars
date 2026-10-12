@@ -606,7 +606,7 @@
   "For development: inconsistent game states raise an error instead of a log line.": "Для розробки: неузгоджені стани гри викликають помилку замість рядка в журналі.",
   "Game memory": "Партії в пам'яті",
   "Hollandia": "Голландія",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "Скільки діє вхід, напр. 30m або 12h. Порожньо: 30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "Як довго діє вхід (адмін і Discord), напр. 30d або 12h. Порожньо: 30d.",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Скільки партій може створити одна адреса, напр. {\"limit\":3,\"per\":\"10m\"} або список таких обмежень. Порожньо: без обмежень.",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "Як часто гравець, що чекає, перевіряє, чи знову його хід. Порожньо: 5000.",
   "IP addresses separated by spaces that get no answer.": "IP-адреси через пробіл, які не отримують відповіді.",

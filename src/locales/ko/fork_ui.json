@@ -679,7 +679,7 @@
   "For development: inconsistent game states raise an error instead of a log line.": "개발용: 게임 상태가 맞지 않으면 로그 대신 오류를 발생시킵니다.",
   "Game memory": "게임 메모리",
   "Hollandia": "홀란디아",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "로그인 유지 시간. 예: 30m 또는 12h. 비우면: 30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "로그인(관리자 및 Discord) 유효 기간, 예: 30d 또는 12h. 비워 두면 30d.",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "한 주소에서 만들 수 있는 게임 수. 예: {\"limit\":3,\"per\":\"10m\"} 또는 이런 제한의 목록. 비우면: 무제한.",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "대기 중인 플레이어가 자기 차례인지 다시 확인하는 간격. 비우면: 5000.",
   "IP addresses separated by spaces that get no answer.": "응답하지 않을 IP 주소, 공백으로 구분.",

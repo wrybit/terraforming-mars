@@ -803,7 +803,7 @@
   "For development: inconsistent game states raise an error instead of a log line.": "開発用：ゲーム状態の不整合時にログ出力ではなくエラーを発生させる.",
   "Game memory": "ゲームのメモリ保持",
   "Hollandia": "ホランディア",
-  "How long a login stays valid, e.g. 30m or 12h. Empty: 30m.": "ログインの有効期間 (例：30m、12h). 空欄：30m.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.": "ログイン（管理と Discord）の有効期間. 例：30d や 12h. 空欄：30d.",
   "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "1つのアドレスが作成できるゲーム数 (例：{\"limit\":3,\"per\":\"10m\"}、またはその一覧). 空欄：無制限.",
   "How often a waiting player asks whether it is their turn again. Empty: 5000.": "待機中のプレイヤーが自分の手番か確認する間隔. 空欄：5000.",
   "IP addresses separated by spaces that get no answer.": "応答しないIPアドレス (スペース区切り).",

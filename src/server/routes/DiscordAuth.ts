@@ -6,6 +6,7 @@ import {Response} from '../Response';
 import {getDiscordUser} from '../server/auth/discord';
 import {paths} from '../../common/app/paths';
 import {sessionIdCookieName} from '../server/auth/authcookies';
+import {SESSION_DURATION_MILLISECONDS} from '../server/auth/sessionDuration';
 
 /** Receives the authentication response from Discord. */
 export class DiscordAuth extends Handler {
@@ -21,7 +22,7 @@ export class DiscordAuth extends Handler {
     // if (!user) {
     //   user = await db.createUser({discordId: discordUser.id, username: discordUser.username /* ...other data */});
 
-    responses.setCookie(res, sessionIdCookieName, sessionId, 86400);
+    responses.setCookie(res, sessionIdCookieName, sessionId, Math.round(SESSION_DURATION_MILLISECONDS / 1000));
     responses.redirect(res, '/' + paths.LOGIN);
   }
 }
