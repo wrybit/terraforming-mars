@@ -39,9 +39,9 @@ describe('AI energy supply', () => {
     player.production.add(Resource.ENERGY, 1);
     player.megaCredits = 40;
     const card = new PhysicsComplex();
-    const before = estimateCardValues(player, [card]).get(card.name) ?? 0;
-    setPlayerTuning(player.id, 'energySupply');
     const after = estimateCardValues(player, [card]).get(card.name) ?? 0;
+    setPlayerTuning(player.id, 'noEnergySupply');
+    const before = estimateCardValues(player, [card]).get(card.name) ?? 0;
     clearPlayerTunings();
     expect(after).is.lessThan(before);
   });

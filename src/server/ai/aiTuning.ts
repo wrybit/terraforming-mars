@@ -265,7 +265,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Rounds 46 + 47: drawChoice4 +0.69 and +0.72 VP per deal (pooled z ≈ 1.3), drawChoice6 +1.04 (z +1.36) – adopted at 4,
   // it fixes a human-game error (Business Contacts and Invention Contest passed on).
   drawChoiceValue: 4,
-  energySupply: 0,
+  // Round 52 (1200 mirrored 1v1 games): energySupply +2.11 VP per deal (z +2.45) – adopted (player feedback).
+  energySupply: 1,
   milestoneNear: 0,
   greeneryRing: 0,
 };
@@ -513,6 +514,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human feedback: greeneries far from the own city, on spots no city can reach, up to four before the city.
   greeneryRing1: {greeneryRing: 1},
   greeneryRing2: {greeneryRing: 2},
+  greeneryRing05: {greeneryRing: 0.5},
+  noEnergySupply: {energySupply: 0},
   noDrawChoice: {drawChoiceValue: 0},
   // Round 48: animal and other collector cards (human card-VP engines, 5 games) with today's flow fit.
   collectors04: {accumulatorValue: 0.4},
