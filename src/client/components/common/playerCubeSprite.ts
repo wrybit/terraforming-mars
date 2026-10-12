@@ -20,9 +20,9 @@ export const SPRITE_COLUMNS = SPRITE_TOP_FRAMES + 1;
 
 /** Reflections are toned down by size and reach their minimum at this edge length: one bake fits all smaller sizes. */
 export const SPRITE_MAX_SIZE = 24;
-/** Edge length the sheet is rendered at, and its pixel density (sharp on 2x screens up to SPRITE_MAX_SIZE). */
+/** Edge length the sheet is rendered at, and its pixel density (sharp on 2x screens even on a board zoomed by 1.5). */
 export const SPRITE_RENDER_SIZE = SPRITE_MAX_SIZE;
-export const SPRITE_PIXEL_RATIO = 2;
+export const SPRITE_PIXEL_RATIO = 3;
 /** A cell is larger than the cube's box (1.5 × edge): the soft shadows reach beyond it. */
 export const SPRITE_CELL_FACTOR = 2.5;
 
