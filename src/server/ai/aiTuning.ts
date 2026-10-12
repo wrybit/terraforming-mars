@@ -278,7 +278,8 @@ export const BASELINE_TUNING: AiTuning = {
   greeneryRing: 1.5,
   // Round 55: stockAwardSwing03 +0.03 – neutral, fixes the human-game error (Space Elevator not played) – adopted.
   stockAwardSwing: 0.3,
-  passLastResort: 0,
+  // Round 56: passLastResort2 −0.17 (neutral), fixes the human observation "passing is the last option" – adopted.
+  passLastResort: 2,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -535,6 +536,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human feedback "passing is the last option": 26 % of AI passes had another move, often a near-tie.
   passLastResort2: {passLastResort: 2},
   passLastResort5: {passLastResort: 5},
+  passLastResort1: {passLastResort: 1},
+  noPassLastResort: {passLastResort: 0},
+  greeneryRing3: {greeneryRing: 3},
   noEnergySupply: {energySupply: 0},
   noDrawChoice: {drawChoiceValue: 0},
   // Round 48: animal and other collector cards (human card-VP engines, 5 games) with today's flow fit.
