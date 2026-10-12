@@ -15,6 +15,7 @@ describe('LoadGame', () => {
     req = new MockRequest();
     res = new MockResponse();
     scaffolding = new RouteTestScaffolding(req);
+    scaffolding.loginAsAdmin();
   });
 
   // gameId is a raw string here: the wire carries whatever the client sent, which is

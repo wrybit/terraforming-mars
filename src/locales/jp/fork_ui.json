@@ -796,7 +796,7 @@
   "Discord client secret": "Discordクライアントシークレット",
   "Empty: 0.": "空欄：0.",
   "End of all other tab titles, e.g. \"Cards List | TM\". Empty: TM.": "他の全タブ名の末尾 (例：「カード一覧 | TM」). 空欄：TM.",
-  "Enter the server ID to see and change the settings of this server.": "サーバーIDを入力すると、このサーバーの設定を表示・変更できます.",
+  "Enter the server ID to open the administration of this server.": "サーバーIDを入力すると、このサーバーの管理画面を開けます.",
   "Faster inputs of a player are refused (against bots). Empty or 0: no limit.": "これより速いプレイヤーの入力は拒否されます (ボット対策). 空欄または0：制限なし.",
   "Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.": "完了したゲームは、この日数が過ぎると最終状態のみ保持します (約18 MB → 0.1 MB). 各手番の状態は失われます. 空欄：しない.",
   "Folder for decision logs": "判断ログのフォルダー",
@@ -822,7 +822,7 @@
   "Only with PostgreSQL.": "PostgreSQLのみ.",
   "Only with PostgreSQL. Empty: 10.": "PostgreSQLのみ. 空欄：10.",
   "Open": "開く",
-  "Opens the admin pages. Changing it changes the address of this page. Empty: a new random one at every start.": "管理ページを開くためのもの. 変更するとこのページのアドレスも変わります. 空欄：起動ごとに新しいランダム値.",
+  "Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.": "管理ページへのログインに使います. 変更するとすべての管理ログインが終了します. 空欄：起動のたびに新しいランダムな値.",
   "Opens the statistics endpoint without the admin passphrase. Empty: random.": "管理パスフレーズなしで統計エンドポイントを開くためのもの. 空欄：ランダム.",
   "Path of the certificate (fullchain.pem). Empty: plain HTTP.": "証明書のパス (fullchain.pem). 空欄：暗号化なしのHTTP.",
   "Path of the private key (privkey.pem).": "秘密鍵のパス (privkey.pem).",
@@ -977,5 +977,7 @@
   "No, adjust": "いいえ、調整する",
   "Yes, pay anyway": "はい、このまま支払う",
   "The excess is not refunded.": "払いすぎた分は戻りません。",
-  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}は1つ${1} M€なので、コストをぴったり支払えません。払いすぎた分は戻りません。"
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}は1つ${1} M€なので、コストをぴったり支払えません。払いすぎた分は戻りません。",
+  "Not shown here because the file is very large.": "ファイルが非常に大きいため、ここには表示されません.",
+  "Download": "ダウンロード"
 }

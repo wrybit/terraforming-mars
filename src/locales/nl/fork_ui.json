@@ -1070,7 +1070,7 @@
   "Discord client secret": "Discord-clientgeheim",
   "Empty: 0.": "Leeg: 0.",
   "End of all other tab titles, e.g. \"Cards List | TM\". Empty: TM.": "Einde van alle andere tabbladtitels, bijv. “Kaartenlijst | TM”. Leeg: TM.",
-  "Enter the server ID to see and change the settings of this server.": "Voer de server-ID in om de instellingen van deze server te bekijken en te wijzigen.",
+  "Enter the server ID to open the administration of this server.": "Voer de server-ID in om het beheer van deze server te openen.",
   "Faster inputs of a player are refused (against bots). Empty or 0: no limit.": "Snellere invoer van een speler wordt geweigerd (tegen bots). Leeg of 0: geen limiet.",
   "Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.": "Afgelopen spellen bewaren na zoveel dagen alleen hun eindstand (ca. 18 MB → 0,1 MB); de standen van de afzonderlijke zetten gaan verloren. Leeg: nooit.",
   "Folder for decision logs": "Map voor beslissingslogs",
@@ -1092,7 +1092,7 @@
   "New games per address": "Nieuwe spellen per adres",
   "Only with PostgreSQL.": "Alleen met PostgreSQL.",
   "Only with PostgreSQL. Empty: 10.": "Alleen met PostgreSQL. Leeg: 10.",
-  "Opens the admin pages. Changing it changes the address of this page. Empty: a new random one at every start.": "Opent de beheerpagina's. Een wijziging verandert het adres van deze pagina. Leeg: bij elke start een nieuw willekeurig wachtwoord.",
+  "Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.": "Hiermee log je in op de beheerpagina's. Een wijziging beëindigt elke beheerderslogin. Leeg: bij elke start een nieuwe willekeurige.",
   "Opens the statistics endpoint without the admin passphrase. Empty: random.": "Opent het statistiek-endpoint zonder beheerwachtwoord. Leeg: willekeurig.",
   "Path of the certificate (fullchain.pem). Empty: plain HTTP.": "Pad naar het certificaat (fullchain.pem). Leeg: onversleuteld HTTP.",
   "Path of the private key (privkey.pem).": "Pad naar de privésleutel (privkey.pem).",
@@ -1244,5 +1244,7 @@
   "No, adjust": "Nee, aanpassen",
   "Yes, pay anyway": "Ja, toch betalen",
   "The excess is not refunded.": "Het teveel krijg je niet terug.",
-  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} is ${1} M€ per stuk waard, dus de kosten zijn niet precies te betalen. Het teveel krijg je niet terug."
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} is ${1} M€ per stuk waard, dus de kosten zijn niet precies te betalen. Het teveel krijg je niet terug.",
+  "Not shown here because the file is very large.": "Hier niet getoond omdat het bestand erg groot is.",
+  "Download": "Downloaden"
 }

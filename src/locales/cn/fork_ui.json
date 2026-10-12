@@ -1363,7 +1363,7 @@
   "EcoLine": "生态路线",
   "Empty: 0.": "留空：0。",
   "End of all other tab titles, e.g. \"Cards List | TM\". Empty: TM.": "其他所有标签页标题的结尾，例如“卡牌列表 | TM”。留空：TM。",
-  "Enter the server ID to see and change the settings of this server.": "输入服务器 ID 即可查看并更改此服务器的设置。",
+  "Enter the server ID to open the administration of this server.": "输入服务器 ID 以打开此服务器的管理页面。",
   "Faster inputs of a player are refused (against bots). Empty or 0: no limit.": "拒绝玩家过快的输入（防机器人）。留空或 0：不限制。",
   "Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.": "已完成的对局在这么多天后只保留最终状态（约 18 MB → 0.1 MB）；每一步的状态将丢失。留空：永不。",
   "Folder for decision logs": "决策日志文件夹",
@@ -1389,7 +1389,7 @@
   "Only with PostgreSQL.": "仅限 PostgreSQL。",
   "Only with PostgreSQL. Empty: 10.": "仅限 PostgreSQL。留空：10。",
   "Open": "打开",
-  "Opens the admin pages. Changing it changes the address of this page. Empty: a new random one at every start.": "打开管理页面。更改它会改变此页面的地址。留空：每次启动时随机生成新的。",
+  "Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.": "用于登录管理页面。更改它会结束所有管理员登录。留空：每次启动时随机生成新的。",
   "Opens the statistics endpoint without the admin passphrase. Empty: random.": "无需管理员口令即可打开统计接口。留空：随机。",
   "Path of the certificate (fullchain.pem). Empty: plain HTTP.": "证书路径（fullchain.pem）。留空：普通 HTTP。",
   "Path of the private key (privkey.pem).": "私钥路径（privkey.pem）。",
@@ -1546,5 +1546,7 @@
   "No, adjust": "不，调整",
   "Yes, pay anyway": "是，仍然支付",
   "The excess is not refunded.": "多付的部分不会退还。",
-  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}每个价值${1} M€，因此无法正好凑足费用。多付的部分不会退还。"
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}每个价值${1} M€，因此无法正好凑足费用。多付的部分不会退还。",
+  "Not shown here because the file is very large.": "文件太大，此处不显示。",
+  "Download": "下载"
 }

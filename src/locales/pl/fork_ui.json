@@ -1219,7 +1219,7 @@
   "Discord client secret": "Sekret klienta Discord",
   "Empty: 0.": "Puste: 0.",
   "End of all other tab titles, e.g. \"Cards List | TM\". Empty: TM.": "Końcówka tytułów pozostałych zakładek, np. „Lista kart | TM”. Puste: TM.",
-  "Enter the server ID to see and change the settings of this server.": "Wpisz ID serwera, aby zobaczyć i zmienić ustawienia tego serwera.",
+  "Enter the server ID to open the administration of this server.": "Wpisz ID serwera, aby otworzyć administrację tego serwera.",
   "Faster inputs of a player are refused (against bots). Empty or 0: no limit.": "Szybsze ruchy gracza są odrzucane (przeciw botom). Puste lub 0: bez limitu.",
   "Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.": "Zakończone partie po tylu dniach zachowują tylko stan końcowy (ok. 18 MB → 0,1 MB); stany poszczególnych ruchów zostają utracone. Puste: nigdy.",
   "Folder for decision logs": "Folder dzienników decyzji",
@@ -1243,7 +1243,7 @@
   "New games per address": "Nowe partie na adres",
   "Only with PostgreSQL.": "Tylko z PostgreSQL.",
   "Only with PostgreSQL. Empty: 10.": "Tylko z PostgreSQL. Puste: 10.",
-  "Opens the admin pages. Changing it changes the address of this page. Empty: a new random one at every start.": "Otwiera strony administracyjne. Zmiana zmienia adres tej strony. Puste: nowe losowe przy każdym starcie.",
+  "Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.": "Służy do logowania na strony administracyjne. Zmiana kończy wszystkie logowania administratora. Puste: nowe losowe przy każdym starcie.",
   "Opens the statistics endpoint without the admin passphrase. Empty: random.": "Otwiera punkt statystyk bez hasła administratora. Puste: losowe.",
   "Path of the certificate (fullchain.pem). Empty: plain HTTP.": "Ścieżka certyfikatu (fullchain.pem). Puste: zwykłe HTTP.",
   "Path of the private key (privkey.pem).": "Ścieżka klucza prywatnego (privkey.pem).",
@@ -1400,5 +1400,7 @@
   "No, adjust": "Nie, popraw",
   "Yes, pay anyway": "Tak, zapłać mimo to",
   "The excess is not refunded.": "Nadwyżka nie jest zwracana.",
-  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} jest wart(a) ${1} M€ za sztukę, więc nie da się trafić dokładnie w koszt. Nadwyżka nie jest zwracana."
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} jest wart(a) ${1} M€ za sztukę, więc nie da się trafić dokładnie w koszt. Nadwyżka nie jest zwracana.",
+  "Not shown here because the file is very large.": "Nie wyświetlono tutaj, ponieważ plik jest bardzo duży.",
+  "Download": "Pobierz"
 }

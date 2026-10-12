@@ -22,7 +22,6 @@ describe('QuotaHandler', () => {
       sessionManager: {} as ISessionManager,
       ids: {
         serverId: '1',
-        statsId: '2',
       },
       clock: fakeClock,
       urlParams: new UrlParams(url.searchParams),

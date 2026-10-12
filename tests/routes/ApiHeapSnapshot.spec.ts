@@ -55,7 +55,8 @@ describe('ApiHeapSnapshot', () => {
       () => Readable.from([fakeSnapshot.slice(0, 10), fakeSnapshot.slice(10)]));
 
     const res = new StreamingResponse();
-    scaffolding.url = '/api/heapsnapshot?serverId=1';
+    scaffolding.loginAsAdmin();
+    scaffolding.url = '/api/heapsnapshot';
     await handler.get(scaffolding.req, res as unknown as Response, scaffolding.ctx);
 
     expect(res.headers.get('Content-Type')).eq('application/octet-stream');

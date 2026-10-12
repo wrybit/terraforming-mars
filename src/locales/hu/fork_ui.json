@@ -621,7 +621,7 @@
   "Discord client secret": "Discord kliens titkos kulcs",
   "Empty: 0.": "Üres: 0.",
   "End of all other tab titles, e.g. \"Cards List | TM\". Empty: TM.": "Az összes többi lapcím vége, pl. „Kártyalista | TM”. Üres: TM.",
-  "Enter the server ID to see and change the settings of this server.": "Add meg a szerverazonosítót, hogy lásd és módosítsd a szerver beállításait.",
+  "Enter the server ID to open the administration of this server.": "Add meg a szerverazonosítót a szerver adminisztrációjának megnyitásához.",
   "Faster inputs of a player are refused (against bots). Empty or 0: no limit.": "Egy játékos ennél gyorsabb bevitelét elutasítja (botok ellen). Üres vagy 0: nincs korlát.",
   "Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.": "A befejezett játszmák ennyi nap után csak a végállapotukat őrzik meg (kb. 18 MB → 0,1 MB); az egyes lépések állapotai elvesznek. Üres: soha.",
   "Folder for decision logs": "Mappa a döntésnaplókhoz",
@@ -644,7 +644,7 @@
   "New games per address": "Új játszmák címenként",
   "Only with PostgreSQL.": "Csak PostgreSQL-lel.",
   "Only with PostgreSQL. Empty: 10.": "Csak PostgreSQL-lel. Üres: 10.",
-  "Opens the admin pages. Changing it changes the address of this page. Empty: a new random one at every start.": "Megnyitja az admin oldalakat. Módosítása megváltoztatja ennek az oldalnak a címét. Üres: minden indításkor új, véletlen.",
+  "Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.": "Ezzel lehet belépni az admin oldalakra. Módosítása minden admin bejelentkezést megszüntet. Üres: minden indításkor új véletlen érték.",
   "Opens the statistics endpoint without the admin passphrase. Empty: random.": "Admin jelszó nélkül nyitja meg a statisztikai végpontot. Üres: véletlen.",
   "Path of the certificate (fullchain.pem). Empty: plain HTTP.": "A tanúsítvány elérési útja (fullchain.pem). Üres: titkosítatlan HTTP.",
   "Path of the private key (privkey.pem).": "A privát kulcs elérési útja (privkey.pem).",
@@ -799,5 +799,7 @@
   "No, adjust": "Nem, módosítom",
   "Yes, pay anyway": "Igen, mégis fizetek",
   "The excess is not refunded.": "A többletet nem kapod vissza.",
-  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "A(z) ${0} darabja ${1} M€-t ér, így a költség nem fizethető ki pontosan. A többletet nem kapod vissza."
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "A(z) ${0} darabja ${1} M€-t ér, így a költség nem fizethető ki pontosan. A többletet nem kapod vissza.",
+  "Not shown here because the file is very large.": "Itt nem jelenik meg, mert a fájl nagyon nagy.",
+  "Download": "Letöltés"
 }

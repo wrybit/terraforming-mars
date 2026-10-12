@@ -53,6 +53,7 @@
       <CardList v-else-if="screen === 'cards'"/>
       <StatsPage v-else-if="screen === 'stats'"/>
       <AdminHome v-else-if="screen === 'admin'"/>
+      <AdminRaw v-else-if="screen === 'admin-raw'"/>
       <LoginHome v-else-if="screen === 'login-home'"/>
       <HelpOverlay v-else-if="screen === 'help'"/>
     </div>
@@ -72,6 +73,7 @@ import {defineAsyncComponent, defineComponent} from 'vue';
 import * as constants from '@/common/constants';
 
 const AdminHome = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminHome.vue'));
+const AdminRaw = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminRaw.vue'));
 const CardList = defineAsyncComponent(() => import(/* webpackChunkName: "card-list" */ '@/client/components/cardlist/CardList.vue'));
 const CreateGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "create-game" */ '@/client/components/create/CreateGameForm.vue'));
 const GameEnd = defineAsyncComponent(() => import(/* webpackChunkName: "game-end" */ '@/client/components/GameEnd.vue'));
@@ -113,6 +115,7 @@ import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
 
 
 type Screen = 'admin' |
+            'admin-raw' |
             'create-game-form' |
             'cards' |
             'empty' |
@@ -201,6 +204,7 @@ export default defineComponent({
     StatsPage,
     HelpOverlay,
     AdminHome,
+    AdminRaw,
     LoginHome,
   },
   computed: {
@@ -381,6 +385,8 @@ export default defineComponent({
       app.updateSpectator();
     } else if (currentPathname === paths.ADMIN) {
       app.screen = 'admin';
+    } else if (currentPathname === paths.ADMIN_RAW) {
+      app.screen = 'admin-raw';
     } else if (currentPathname === paths.LOGIN) {
       app.screen = 'login-home';
     } else {

@@ -814,7 +814,7 @@
   "Discord client secret": "Discord-klienthemmelighet",
   "Empty: 0.": "Tom: 0.",
   "End of all other tab titles, e.g. \"Cards List | TM\". Empty: TM.": "Slutten på alle andre fanetitler, f.eks. «Kortliste | TM». Tom: TM.",
-  "Enter the server ID to see and change the settings of this server.": "Skriv inn server-ID-en for å se og endre innstillingene for denne serveren.",
+  "Enter the server ID to open the administration of this server.": "Skriv inn server-ID-en for å åpne administrasjonen av denne serveren.",
   "Faster inputs of a player are refused (against bots). Empty or 0: no limit.": "Raskere inndata fra en spiller avvises (mot boter). Tom eller 0: ingen grense.",
   "Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.": "Ferdige spill beholder bare sluttstillingen etter så mange dager (ca. 18 MB → 0,1 MB); stillingene etter hvert trekk går tapt. Tom: aldri.",
   "Folder for decision logs": "Mappe for beslutningslogger",
@@ -836,7 +836,7 @@
   "New games per address": "Nye spill per adresse",
   "Only with PostgreSQL.": "Bare med PostgreSQL.",
   "Only with PostgreSQL. Empty: 10.": "Bare med PostgreSQL. Tom: 10.",
-  "Opens the admin pages. Changing it changes the address of this page. Empty: a new random one at every start.": "Åpner admin-sidene. Endres den, endres adressen til denne siden. Tom: en ny tilfeldig ved hver oppstart.",
+  "Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.": "Brukes til å logge inn på admin-sidene. Endres den, avsluttes alle admin-innlogginger. Tom: en ny tilfeldig ved hver oppstart.",
   "Opens the statistics endpoint without the admin passphrase. Empty: random.": "Åpner statistikk-endepunktet uten admin-passordet. Tom: tilfeldig.",
   "Path of the certificate (fullchain.pem). Empty: plain HTTP.": "Sti til sertifikatet (fullchain.pem). Tom: ukryptert HTTP.",
   "Path of the private key (privkey.pem).": "Sti til den private nøkkelen (privkey.pem).",
@@ -988,5 +988,7 @@
   "No, adjust": "Nei, juster",
   "Yes, pay anyway": "Ja, betal likevel",
   "The excess is not refunded.": "Overskuddet får du ikke tilbake.",
-  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} er verdt ${1} M€ per stk., så kostnaden kan ikke betales nøyaktig. Overskuddet får du ikke tilbake."
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} er verdt ${1} M€ per stk., så kostnaden kan ikke betales nøyaktig. Overskuddet får du ikke tilbake.",
+  "Not shown here because the file is very large.": "Vises ikke her fordi filen er svært stor.",
+  "Download": "Last ned"
 }

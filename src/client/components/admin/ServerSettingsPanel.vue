@@ -2,7 +2,6 @@
   <!-- The .env file of the server, editable here: one card per group, save and restart at the bottom -->
   <div class="server-settings">
     <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
-    <ServerIdPrompt v-else-if="status === 'missingId' || status === 'wrongId'" :wrong="status === 'wrongId'"/>
     <div v-else-if="status === 'unreachable'" class="games-overview-card server-id-prompt">
       <p class="server-id-prompt-text" v-i18n>The server is not answering right now – probably it is just restarting.</p>
       <div><button type="button" class="btn btn-tone-quiet" @click="load" v-i18n>Try again</button></div>
@@ -51,14 +50,14 @@
 import {defineComponent} from 'vue';
 import {paths} from '@/common/app/paths';
 import {statusCode} from '@/common/http/statusCode';
-import ServerIdPrompt from '@/client/components/admin/ServerIdPrompt.vue';
+import {logIn} from '@/client/components/admin/adminSession';
 import {translateText} from '@/client/directives/i18n';
 import {
   SERVER_SETTING_GROUPS, SERVER_SETTINGS, ServerSettingDefinition, ServerSettingState, ServerSettingsModel, ServerSettingsUpdate,
 } from '@/common/admin/serverSettings';
 
 type DataModel = {
-  status: 'loading' | 'missingId' | 'wrongId' | 'unreachable' | 'done',
+  status: 'loading' | 'unreachable' | 'done',
   states: ReadonlyArray<ServerSettingState>,
   // Values in the form; a key counts as changed when it differs from the .env file
   values: Record<string, string>,
@@ -75,10 +74,6 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
-  components: {ServerIdPrompt},
-  props: {
-    serverId: {type: String, required: true},
-  },
   data(): DataModel {
     return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false};
   },
@@ -97,9 +92,6 @@ export default defineComponent({
     void this.load();
   },
   methods: {
-    url(path: string): string {
-      return `${path}?serverId=${encodeURIComponent(this.serverId)}`;
-    },
     state(key: string): ServerSettingState | undefined {
       return this.states.find((state) => state.key === key);
     },
@@ -132,15 +124,12 @@ export default defineComponent({
       this.values = Object.fromEntries(SERVER_SETTINGS.map(({key}) => [key, this.configured(key)]));
     },
     async load(): Promise<void> {
-      if (this.serverId === '') {
-        this.status = 'missingId';
-        return;
-      }
       this.status = 'loading';
       try {
-        const response = await fetch(this.url(paths.API_ADMIN_SETTINGS));
+        const response = await fetch(paths.API_ADMIN_SETTINGS);
         if (response.status === statusCode.forbidden) {
-          this.status = 'wrongId';
+          // Login ended meanwhile (e.g. passphrase changed): the page asks for it again
+          window.location.reload();
           return;
         }
         if (!response.ok) {
@@ -162,7 +151,7 @@ export default defineComponent({
       }
       this.busy = true;
       try {
-        const response = await fetch(this.url(paths.API_ADMIN_SETTINGS), {method: 'POST', body: JSON.stringify(update)});
+        const response = await fetch(paths.API_ADMIN_SETTINGS, {method: 'POST', body: JSON.stringify(update)});
         if (!response.ok) {
           throw new Error(await response.text());
         }
@@ -177,14 +166,14 @@ export default defineComponent({
     async restart(): Promise<void> {
       this.busy = true;
       try {
-        const response = await fetch(this.url(paths.API_ADMIN_RESTART), {method: 'POST'});
+        const response = await fetch(paths.API_ADMIN_RESTART, {method: 'POST'});
         if (!response.ok) {
           throw new Error(await response.text());
         }
-        // A changed passphrase changes the address of this page: open it with the new one once the server is back
-        const newServerId = this.values.SERVER_ID;
+        // A changed passphrase ends the login: log in with the new one once the server is back
+        const serverId = this.values.SERVER_ID;
         this.showMessage(translateText('The server restarts and is back in a few seconds.'), false);
-        window.setTimeout(() => this.waitForServer(newServerId !== '' ? newServerId : this.serverId), 10000);
+        window.setTimeout(() => this.waitForServer(serverId), 10000);
       } catch (error) {
         this.busy = false;
         this.showMessage(translateText('Could not restart:') + ' ' + (error instanceof Error ? error.message : ''), true);
@@ -194,7 +183,11 @@ export default defineComponent({
       try {
         const response = await fetch(paths.API_STATUS, {cache: 'no-store'});
         if (response.ok && (await response.json()).updating === false) {
-          window.location.href = `${paths.ADMIN}?serverId=${encodeURIComponent(serverId)}`;
+          // Without a fixed passphrase (random at every start) the page asks for the new one
+          if (serverId !== '') {
+            await logIn(serverId);
+          }
+          window.location.reload();
           return;
         }
       } catch {

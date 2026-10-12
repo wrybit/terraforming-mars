@@ -51,9 +51,7 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'The AI writes every decision there (for training). Empty: no logs.'},
 
   {key: 'SERVER_ID', group: 'Access', kind: 'secret', label: 'Admin passphrase (serverId)',
-    description: 'Opens the admin pages. Changing it changes the address of this page. Empty: a new random one at every start.'},
-  {key: 'STATS_ID', group: 'Access', kind: 'secret', label: 'Statistics passphrase',
-    description: 'Opens the statistics endpoint without the admin passphrase. Empty: random.'},
+    description: 'Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.'},
   {key: 'DISCORD_CLIENT_ID', group: 'Access', kind: 'text', label: 'Discord client ID',
     description: 'Login with Discord (experimental).'},
   {key: 'DISCORD_CLIENT_SECRET', group: 'Access', kind: 'secret', label: 'Discord client secret',

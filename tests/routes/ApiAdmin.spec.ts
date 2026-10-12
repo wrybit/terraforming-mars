@@ -48,7 +48,8 @@ describe('ApiAdmin', () => {
 
   // The routes read the body via 'data'/'end' events – only send after post() has started
   function post(handler: Handler, body: object): Promise<unknown> {
-    scaffolding.url = '/api/admin?serverId=1';
+    scaffolding.loginAsAdmin();
+    scaffolding.url = '/api/admin';
     const response = scaffolding.post(handler, res);
     const emit = Promise.resolve().then(() => {
       scaffolding.req.emitString(JSON.stringify(body));
@@ -67,7 +68,8 @@ describe('ApiAdmin', () => {
   });
 
   it('lists local games', async () => {
-    scaffolding.url = '/api/admin/games?serverId=1';
+    scaffolding.loginAsAdmin();
+    scaffolding.url = '/api/admin/games';
     await new ApiAdminGames(store).processRequest(scaffolding.req, res, scaffolding.ctx);
     const summaries: Array<AdminGameSummary> = JSON.parse(res.content);
     expect(summaries.map((s) => [s.id, s.source, s.players[0].name])).deep.eq([['game-id', 'local', 'Jens']]);

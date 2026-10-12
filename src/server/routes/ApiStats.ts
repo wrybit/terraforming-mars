@@ -9,7 +9,7 @@ import {RouteError} from './RouteError';
 export class ApiStats extends Handler {
   public static readonly INSTANCE = new ApiStats();
   private constructor() {
-    super({validateStatsId: true});
+    super({validateServerId: true});
   }
 
   public override async get(_req: Request, res: Response, ctx: Context): Promise<void> {

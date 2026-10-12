@@ -21,11 +21,11 @@ describe('ImportGameForm', () => {
   });
 
   it('sends the link and reports the import', async () => {
-    const wrapper = mount(ImportGameForm, {...globalConfig, props: {serverId: 'secret'}});
+    const wrapper = mount(ImportGameForm, {...globalConfig});
     await wrapper.find('input').setValue('https://terraforming-mars.herokuapp.com/the-end?id=p66b9daab6513');
     await wrapper.find('form').trigger('submit');
     await new Promise((resolve) => setTimeout(resolve, 0));
-    expect(requests).deep.eq([{url: 'api/admin/import-game?serverId=secret', body: '{"url":"https://terraforming-mars.herokuapp.com/the-end?id=p66b9daab6513"}'}]);
+    expect(requests).deep.eq([{url: 'api/admin/import-game', body: '{"url":"https://terraforming-mars.herokuapp.com/the-end?id=p66b9daab6513"}'}]);
     expect(wrapper.emitted('imported')).has.length(1);
     expect(wrapper.text()).contains('Imported: Jens');
   });

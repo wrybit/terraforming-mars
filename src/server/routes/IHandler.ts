@@ -32,12 +32,13 @@ export type Context = {
   ipTracker: IPTracker,
   ids: {
     serverId: string,
-    statsId: string,
   },
   clock: Clock;
   // The session id from the inbound cookie
   sessionid?: SessionId;
   // The user associated with the session ID, if any.
   user?: DiscordUser;
+  // The admin login cookie (adminCookie.ts), if any
+  adminToken?: string;
   urlParams: UrlParams,
 }

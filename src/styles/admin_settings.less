@@ -51,49 +51,6 @@
   }
 }
 
-.admin-nav-more {
-  position: relative;
-
-  summary {
-    list-style: none;
-  }
-
-  summary::-webkit-details-marker {
-    display: none;
-  }
-
-  summary::after {
-    content: ' ▾';
-  }
-
-  &[open] summary::after {
-    content: ' ▴';
-  }
-}
-
-.admin-nav-menu {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  min-width: 260px;
-  padding: 6px;
-  border: 1px solid @server-settings-line;
-  border-radius: 10px;
-  background: #1d1e24;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-
-  a {
-    padding: 8px 10px;
-    border-radius: 6px;
-    text-decoration: none;
-  }
-
-  a:hover {
-    background: rgba(255, 255, 255, 0.08);
-  }
-}
 
 .server-settings {
   display: flex;
@@ -247,6 +204,55 @@
 
 .server-id-prompt-row {
   margin-top: 6px;
+}
+
+// Logout at the far right, away from the page links: a different kind of action
+.admin-nav-logout {
+  margin: 0 0 0 auto;
+}
+
+// Raw data page (AdminRaw.vue, RawDataCard.vue): title, address and actions in one row, the content close below
+.raw-data-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-bottom: 8px;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.raw-data-path {
+  padding: 0;
+  background: none;
+  color: fade(#eee, 40%);
+  font-size: 12px;
+}
+
+.raw-data-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+
+  .btn {
+    margin: 0;
+  }
+}
+
+// Long data scrolls inside the card, so every card stays reachable on the page
+.raw-data-content {
+  max-height: 420px;
+  margin: 0;
+  padding: 10px 12px;
+  overflow: auto;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #ddd;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: pre;
 }
 
 // Phone: navigation smaller, so it takes less of the screen while it stays at the top

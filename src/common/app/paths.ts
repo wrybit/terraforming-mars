@@ -1,9 +1,12 @@
 export const paths = {
   ADMIN: 'admin',
+  ADMIN_RAW: 'admin-raw',
   API_ADMIN_DELETE_GAME: 'api/admin/delete-game',
   API_ADMIN_GAMES: 'api/admin/games',
   API_ADMIN_IMPORT_GAME: 'api/admin/import-game',
+  API_ADMIN_LOGOUT: 'api/admin/logout',
   API_ADMIN_RESTART: 'api/admin/restart',
+  API_ADMIN_SESSION: 'api/admin/session',
   API_ADMIN_SETTINGS: 'api/admin/settings',
   API_BOARD_PREVIEW: 'api/boardpreview',
   API_CLONEABLEGAME: 'api/cloneablegame',

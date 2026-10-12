@@ -13,7 +13,7 @@ import {readBody} from './readBody';
 export class LoadGame extends Handler {
   public static readonly INSTANCE = new LoadGame();
   private constructor() {
-    super();
+    super({validateServerId: true});
   }
 
   private async getGameId(id: string): Promise<GameId | undefined> {

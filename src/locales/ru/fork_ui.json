@@ -1234,7 +1234,7 @@
   "Dutch": "Голландия",
   "Empty: 0.": "Пусто: 0.",
   "End of all other tab titles, e.g. \"Cards List | TM\". Empty: TM.": "Окончание заголовков остальных вкладок, напр. \"Cards List | TM\". Пусто: TM.",
-  "Enter the server ID to see and change the settings of this server.": "Введите ID сервера, чтобы просматривать и изменять настройки этого сервера.",
+  "Enter the server ID to open the administration of this server.": "Введите ID сервера, чтобы открыть администрирование этого сервера.",
   "Faster inputs of a player are refused (against bots). Empty or 0: no limit.": "Более частые вводы игрока отклоняются (защита от ботов). Пусто или 0: без ограничения.",
   "Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.": "Через столько дней у законченных партий остаётся только итоговое состояние (около 18 МБ → 0,1 МБ); состояния отдельных ходов теряются. Пусто: никогда.",
   "Folder for decision logs": "Папка для журналов решений",
@@ -1262,7 +1262,7 @@
   "Only with PostgreSQL.": "Только с PostgreSQL.",
   "Only with PostgreSQL. Empty: 10.": "Только с PostgreSQL. Пусто: 10.",
   "Open": "Открыть",
-  "Opens the admin pages. Changing it changes the address of this page. Empty: a new random one at every start.": "Открывает страницы администратора. Его изменение меняет адрес этой страницы. Пусто: новый случайный при каждом запуске.",
+  "Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.": "С ним выполняется вход на страницы администратора. Его изменение завершает все входы администратора. Пусто: новый случайный при каждом запуске.",
   "Opens the statistics endpoint without the admin passphrase. Empty: random.": "Открывает доступ к статистике без пароля администратора. Пусто: случайный.",
   "Path of the certificate (fullchain.pem). Empty: plain HTTP.": "Путь к сертификату (fullchain.pem). Пусто: обычный HTTP.",
   "Path of the private key (privkey.pem).": "Путь к закрытому ключу (privkey.pem).",
@@ -1430,5 +1430,7 @@
   "No, adjust": "Нет, изменить",
   "Yes, pay anyway": "Да, всё равно оплатить",
   "The excess is not refunded.": "Излишек не возвращается.",
-  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}: ${1} M€ за единицу, поэтому точно оплатить стоимость нельзя. Излишек не возвращается."
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}: ${1} M€ за единицу, поэтому точно оплатить стоимость нельзя. Излишек не возвращается.",
+  "Not shown here because the file is very large.": "Не показано здесь, так как файл очень большой.",
+  "Download": "Скачать"
 }

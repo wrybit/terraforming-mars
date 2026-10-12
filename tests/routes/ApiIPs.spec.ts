@@ -23,7 +23,8 @@ describe('ApiIPs', () => {
   });
 
   it('simple', async () => {
-    scaffolding.url = '/api/ips?serverId=1';
+    scaffolding.loginAsAdmin();
+    scaffolding.url = '/api/ips';
     scaffolding.req.method = 'GET';
     await ApiIPs.INSTANCE.processRequest(scaffolding.req, res, scaffolding.ctx);
     expect(res.content).eq('{}');

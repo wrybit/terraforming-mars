@@ -15,12 +15,6 @@ import {AdminGameSummary, AdminImportGameRequest} from '@/common/admin/AdminGame
 export default defineComponent({
   name: 'ImportGameForm',
   emits: ['imported'],
-  props: {
-    serverId: {
-      type: String,
-      required: true,
-    },
-  },
   data() {
     return {
       url: '',
@@ -35,7 +29,7 @@ export default defineComponent({
       this.message = '';
       try {
         const body: AdminImportGameRequest = {url: this.url};
-        const response = await fetch(`${paths.API_ADMIN_IMPORT_GAME}?serverId=${encodeURIComponent(this.serverId)}`, {method: 'POST', body: JSON.stringify(body)});
+        const response = await fetch(paths.API_ADMIN_IMPORT_GAME, {method: 'POST', body: JSON.stringify(body)});
         if (!response.ok) {
           // On errors the server returns a readable reason (e.g. "already imported")
           throw new Error(await response.text());

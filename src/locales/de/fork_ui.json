@@ -421,5 +421,7 @@
   "No, adjust": "Nein, anpassen",
   "Yes, pay anyway": "Ja, trotzdem zahlen",
   "The excess is not refunded.": "Den Überschuss bekommst du nicht zurück.",
-  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} ist je ${1} M€ wert, damit lassen sich die Kosten nicht genau treffen. Den Überschuss bekommst du nicht zurück."
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} ist je ${1} M€ wert, damit lassen sich die Kosten nicht genau treffen. Den Überschuss bekommst du nicht zurück.",
+  "Not shown here because the file is very large.": "Hier nicht angezeigt, weil die Datei sehr groß ist.",
+  "Download": "Herunterladen"
 }

@@ -1316,7 +1316,7 @@
   "Dutch": "Нидерландия",
   "Empty: 0.": "Празно: 0.",
   "End of all other tab titles, e.g. \"Cards List | TM\". Empty: TM.": "Край на всички други заглавия на раздели, напр. \"Списък с карти | TM\". Празно: TM.",
-  "Enter the server ID to see and change the settings of this server.": "Въведете ID на сървъра, за да видите и промените настройките му.",
+  "Enter the server ID to open the administration of this server.": "Въведете ID на сървъра, за да отворите администрацията му.",
   "Faster inputs of a player are refused (against bots). Empty or 0: no limit.": "По-бързите действия на играч се отхвърлят (срещу ботове). Празно или 0: без ограничение.",
   "Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.": "След толкова дни завършените игри пазят само крайното си състояние (около 18 MB → 0,1 MB); състоянията на отделните ходове се губят. Празно: никога.",
   "Folder for decision logs": "Папка за логовете на решенията",
@@ -1344,7 +1344,7 @@
   "Only with PostgreSQL.": "Само с PostgreSQL.",
   "Only with PostgreSQL. Empty: 10.": "Само с PostgreSQL. Празно: 10.",
   "Open": "Отвори",
-  "Opens the admin pages. Changing it changes the address of this page. Empty: a new random one at every start.": "Отваря админ страниците. Промяната му променя адреса на тази страница. Празно: нов случаен при всяко стартиране.",
+  "Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.": "С него се влиза в админ страниците. Промяната му прекратява всички админ влизания. Празно: ново случайно при всяко стартиране.",
   "Opens the statistics endpoint without the admin passphrase. Empty: random.": "Отваря крайната точка за статистика без админ паролата. Празно: случайна.",
   "Path of the certificate (fullchain.pem). Empty: plain HTTP.": "Път до сертификата (fullchain.pem). Празно: обикновен HTTP.",
   "Path of the private key (privkey.pem).": "Път до частния ключ (privkey.pem).",
@@ -1509,5 +1509,7 @@
   "No, adjust": "Не, промени",
   "Yes, pay anyway": "Да, плати въпреки това",
   "The excess is not refunded.": "Излишъкът не се връща.",
-  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}: ${1} M€ за брой, затова цената не може да се плати точно. Излишъкът не се връща."
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0}: ${1} M€ за брой, затова цената не може да се плати точно. Излишъкът не се връща.",
+  "Not shown here because the file is very large.": "Не се показва тук, защото файлът е много голям.",
+  "Download": "Изтегли"
 }

@@ -462,7 +462,7 @@
   "Discord client secret": "Discordin client secret",
   "Empty: 0.": "Tyhjä: 0.",
   "End of all other tab titles, e.g. \"Cards List | TM\". Empty: TM.": "Kaikkien muiden välilehtiotsikoiden loppu, esim. \"Korttiluettelo | TM\". Tyhjä: TM.",
-  "Enter the server ID to see and change the settings of this server.": "Anna palvelintunnus nähdäksesi ja muuttaaksesi tämän palvelimen asetuksia.",
+  "Enter the server ID to open the administration of this server.": "Anna palvelintunnus avataksesi tämän palvelimen ylläpidon.",
   "Faster inputs of a player are refused (against bots). Empty or 0: no limit.": "Pelaajan nopeammat syötteet hylätään (botteja vastaan). Tyhjä tai 0: ei rajaa.",
   "Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.": "Päättyneistä peleistä säilyy näin monen päivän jälkeen vain lopputilanne (noin 18 MB → 0,1 MB); yksittäisten siirtojen tilat menetetään. Tyhjä: ei koskaan.",
   "Folder for decision logs": "Päätöslokien kansio",
@@ -484,7 +484,7 @@
   "New games per address": "Uusia pelejä per osoite",
   "Only with PostgreSQL.": "Vain PostgreSQL:n kanssa.",
   "Only with PostgreSQL. Empty: 10.": "Vain PostgreSQL:n kanssa. Tyhjä: 10.",
-  "Opens the admin pages. Changing it changes the address of this page. Empty: a new random one at every start.": "Avaa ylläpitosivut. Sen muuttaminen muuttaa tämän sivun osoitetta. Tyhjä: uusi satunnainen jokaisella käynnistyksellä.",
+  "Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.": "Sillä kirjaudutaan ylläpitosivuille. Sen muuttaminen päättää kaikki ylläpitokirjautumiset. Tyhjä: uusi satunnainen jokaisella käynnistyksellä.",
   "Opens the statistics endpoint without the admin passphrase. Empty: random.": "Avaa tilastorajapinnan ilman ylläpidon salasanaa. Tyhjä: satunnainen.",
   "Path of the certificate (fullchain.pem). Empty: plain HTTP.": "Varmenteen polku (fullchain.pem). Tyhjä: salaamaton HTTP.",
   "Path of the private key (privkey.pem).": "Yksityisen avaimen polku (privkey.pem).",
@@ -635,5 +635,7 @@
   "No, adjust": "Ei, säädä",
   "Yes, pay anyway": "Kyllä, maksa silti",
   "The excess is not refunded.": "Ylimäärää ei palauteta.",
-  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} on arvoltaan ${1} M€ kappaleelta, joten kustannusta ei voi maksaa tarkalleen. Ylimäärää ei palauteta."
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} on arvoltaan ${1} M€ kappaleelta, joten kustannusta ei voi maksaa tarkalleen. Ylimäärää ei palauteta.",
+  "Not shown here because the file is very large.": "Ei näytetä tässä, koska tiedosto on hyvin suuri.",
+  "Download": "Lataa"
 }

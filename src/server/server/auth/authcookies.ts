@@ -1,16 +1,22 @@
 import {Request} from '../../Request';
 
 export const sessionIdCookieName = 'sessionId';
-export function extract(req: Request) {
+
+/** Value of the cookie |name| of the request, or undefined when the request does not carry it. */
+export function readCookie(req: Request, name: string): string | undefined {
   const cookieHeader = req.headers.cookie;
 
   if (cookieHeader) {
     for (const cookie of cookieHeader.split(';')) {
-      const [name, value] = cookie.trim().split('=');
-      if (name === sessionIdCookieName) {
+      const [key, value] = cookie.trim().split('=');
+      if (key === name) {
         return value;
       }
     }
   }
   return undefined;
+}
+
+export function extract(req: Request) {
+  return readCookie(req, sessionIdCookieName);
 }

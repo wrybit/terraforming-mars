@@ -24,7 +24,8 @@ describe('ApiGames', () => {
   });
 
   it('simple', async () => {
-    scaffolding.url = '/api/games?serverId=1';
+    scaffolding.loginAsAdmin();
+    scaffolding.url = '/api/games';
     scaffolding.req.method = 'GET';
     await ApiGames.INSTANCE.processRequest(scaffolding.req, res, scaffolding.ctx);
     expect(res.content).eq('[]');

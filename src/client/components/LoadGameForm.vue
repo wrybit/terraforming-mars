@@ -1,6 +1,6 @@
 <template>
   <div id="load-game" class="games-overview-container admin-home">
-      <AdminNav active="load"/>
+    <AdminGate active="load">
 
       <!-- Same card and fields as the other admin pages (admin_settings.less) -->
       <form class="games-overview-card load-game-card" @submit.prevent="loadGame">
@@ -14,13 +14,14 @@
           </div>
           <div><button type="submit" class="btn btn-primary" v-i18n>Load Game</button></div>
       </form>
+    </AdminGate>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
 import * as constants from '@/common/constants';
-import AdminNav from '@/client/components/admin/AdminNav.vue';
+import AdminGate from '@/client/components/admin/AdminGate.vue';
 import {LoadGameFormModel} from '@/common/models/LoadGameFormModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import {vueRoot} from '@/client/components/vueRoot';
@@ -38,7 +39,7 @@ type LoadGameFormDataModel = {
 export default defineComponent({
   name: 'LoadGameForm',
   components: {
-    AdminNav,
+    AdminGate,
   },
   data(): LoadGameFormDataModel {
     return {

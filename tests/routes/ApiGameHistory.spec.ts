@@ -21,14 +21,16 @@ describe('ApiGameHistory', () => {
   });
 
   it('fails when id not provided', async () => {
-    scaffolding.url = '/api/game/history?serverId=1';
+    scaffolding.loginAsAdmin();
+    scaffolding.url = '/api/game/history';
     await scaffolding.get(ApiGameHistory.INSTANCE, res);
     expect(res.statusCode).eq(statusCode.badRequest);
     expect(res.content).eq('Bad request: missing id parameter');
   });
 
   it('fails with invalid id', async () => {
-    scaffolding.url = '/api/game/history?serverId=1&id=not-a-game-id';
+    scaffolding.loginAsAdmin();
+    scaffolding.url = '/api/game/history?id=not-a-game-id';
     await scaffolding.get(ApiGameHistory.INSTANCE, res);
     expect(res.statusCode).eq(statusCode.badRequest);
     expect(res.content).eq('Bad request: invalid game id');
@@ -42,7 +44,8 @@ describe('ApiGameHistory', () => {
       getSaveIds: (_gameId: GameId) => Promise.resolve([10, 2, 0, 11, 1, 3]),
     } as Partial<IDatabase> as IDatabase);
 
-    scaffolding.url = '/api/game/history?serverId=1&id=game-id';
+    scaffolding.loginAsAdmin();
+    scaffolding.url = '/api/game/history?id=game-id';
     await scaffolding.get(ApiGameHistory.INSTANCE, res);
 
     expect(JSON.parse(res.content)).deep.eq([0, 1, 2, 3, 10, 11]);

@@ -5,10 +5,11 @@ import {Response} from '../Response';
 import {DiscordId} from '../server/auth/discord';
 import {RouteError} from './RouteError';
 import {assertNever} from '../../common/utils/utils';
+import {isAdminToken} from '../server/auth/adminCookie';
 
 export type Options = {
+  /** Admin route: needs the admin login cookie (or a Discord admin) */
   validateServerId: boolean;
-  validateStatsId: boolean;
   auth: boolean;
 }
 
@@ -42,7 +43,6 @@ export abstract class Handler implements IHandler {
   constructor(options?: Partial<Options>) {
     this.options = {
       validateServerId: options?.validateServerId === true,
-      validateStatsId: options?.validateStatsId === true,
       auth: options?.auth === true,
     };
   }
@@ -67,17 +67,11 @@ export abstract class Handler implements IHandler {
     return false;
   }
 
-  private isServerIdValid(ctx: Context): boolean {
+  protected isServerIdValid(ctx: Context): boolean {
     if (ctx.user?.id && DISCORD_ADMIN_USER_IDS.includes(ctx.user?.id)) {
       return true;
     }
-    const serverId = ctx.urlParams.stringOrUndefined('serverId');
-    return serverId === ctx.ids.serverId;
-  }
-
-  private isStatsIdValid(ctx: Context): boolean {
-    const serverId = ctx.urlParams.stringOrUndefined('serverId');
-    return serverId !== null && serverId === ctx.ids.statsId;
+    return isAdminToken(ctx.adminToken, ctx.ids.serverId);
   }
 
   /* Routes are async, so a thrown RouteError surfaces as a rejection, not a synchronous throw. */
@@ -110,16 +104,6 @@ export abstract class Handler implements IHandler {
   public async processRequest(req: Request, res: Response, ctx: Context): Promise<void> {
     try {
       if (this.options.validateServerId && !this.isServerIdValid(ctx)) {
-        throw RouteError.forbidden();
-      }
-
-      // The stats ID first: when a server uses the same value for both, the redirect to the stats ID
-      // would otherwise lead to itself again and again
-      if (this.options.validateStatsId && !this.isStatsIdValid(ctx)) {
-        if (this.isServerIdValid(ctx)) {
-          responses.downgradeRedirect(req, res, ctx);
-          return Promise.resolve();
-        }
         throw RouteError.forbidden();
       }
 

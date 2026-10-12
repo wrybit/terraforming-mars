@@ -22,6 +22,8 @@ import {ApiGames} from '../routes/ApiGames';
 import {ApiHeapSnapshot} from '../routes/ApiHeapSnapshot';
 import {ApiIPs} from '../routes/ApiIPs';
 import {ApiLogout} from '../routes/ApiLogout';
+import {ApiAdminLogout} from '../routes/ApiAdminLogout';
+import {ApiAdminSession} from '../routes/ApiAdminSession';
 import {ApiMetrics} from '../routes/ApiMetrics';
 import {ApiPlayer} from '../routes/ApiPlayer';
 import {ApiProfile} from '../routes/ApiProfile';
@@ -35,9 +37,7 @@ import {ApiStatus} from '../routes/ApiStatus';
 import {Autopass} from '../routes/Autopass';
 import {DiscordAuth} from '../routes/DiscordAuth';
 import {GameHandler} from '../routes/Game';
-import {GamesOverview} from '../routes/GamesOverview';
 import {Context, IHandler} from '../routes/IHandler';
-import {Load} from '../routes/Load';
 import {LoadGame} from '../routes/LoadGame';
 import {Login} from '../routes/Login';
 import {CancelAction} from '../routes/CancelAction';
@@ -45,7 +45,8 @@ import {PlayerInput} from '../routes/PlayerInput';
 import {Reset} from '../routes/Reset';
 import {ServeApp} from '../routes/ServeApp';
 import {ServeAsset} from '../routes/ServeAsset';
-import {serverId, statsId} from '../utils/server-ids';
+import {serverId} from '../utils/server-ids';
+import {adminCookieName} from './auth/adminCookie';
 import {newIpBlocklist} from './IPBlocklist';
 import {newIpTracker} from './IPTracker';
 import {SessionManager} from './auth/SessionManager';
@@ -103,10 +104,13 @@ const handlers: Map<string, IHandler> = new Map(
   [
     ['', ServeApp.INSTANCE],
     [paths.ADMIN, ServeApp.INSTANCE],
+    [paths.ADMIN_RAW, ServeApp.INSTANCE],
     [paths.API_ADMIN_DELETE_GAME, ApiAdminDeleteGame.INSTANCE],
     [paths.API_ADMIN_GAMES, ApiAdminGames.INSTANCE],
     [paths.API_ADMIN_IMPORT_GAME, ApiAdminImportGame.INSTANCE],
+    [paths.API_ADMIN_LOGOUT, ApiAdminLogout.INSTANCE],
     [paths.API_ADMIN_RESTART, ApiAdminRestart.INSTANCE],
+    [paths.API_ADMIN_SESSION, ApiAdminSession.INSTANCE],
     [paths.API_ADMIN_SETTINGS, ApiAdminSettings.INSTANCE],
     [paths.API_CLONEABLEGAME, ApiCloneableGame.INSTANCE],
     [paths.API_CREATEGAME, ApiCreateGame.INSTANCE],
@@ -131,10 +135,10 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.END_GAME_LOG, EndGameLog.INSTANCE],
     ['favicon.ico', ServeAsset.INSTANCE],
     [paths.GAME, GameHandler.INSTANCE],
-    [paths.GAMES_OVERVIEW, GamesOverview.INSTANCE],
+    [paths.GAMES_OVERVIEW, ServeApp.INSTANCE],
     [paths.HELP, ServeApp.INSTANCE],
     [paths.IMPORTED_SCREENSHOT, ImportedScreenshot.INSTANCE],
-    [paths.LOAD, Load.INSTANCE],
+    [paths.LOAD, ServeApp.INSTANCE],
     [paths.LOAD_GAME, LoadGame.INSTANCE],
     [paths.LOGIN, Login.INSTANCE],
     [paths.API_LOGOUT, ApiLogout.INSTANCE],
@@ -243,8 +247,8 @@ export async function processRequest(req: Request, res: Response): Promise<void>
         ipTracker: ipTracker,
         ids: {
           serverId,
-          statsId,
         },
+        adminToken: authcookies.readCookie(req, adminCookieName),
         sessionid: sessionid,
         user: user,
         urlParams: new UrlParams(url.searchParams),

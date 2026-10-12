@@ -41,8 +41,8 @@ export function notFound(req: Request, res: Response, err?: string): void {
   res.end();
 }
 
-export function setCookie(res: Response, key: string, value: string, lifetimeSeconds: number) {
-  res.setHeader('Set-Cookie', `${key}=${value}; HttpOnly; Secure; SameSite=Strict; Max-Age=${lifetimeSeconds}; Path=/`);
+export function setCookie(res: Response, key: string, value: string, lifetimeSeconds: number, secure: boolean = true) {
+  res.setHeader('Set-Cookie', `${key}=${value}; HttpOnly;${secure ? ' Secure;' : ''} SameSite=Strict; Max-Age=${lifetimeSeconds}; Path=/`);
 }
 
 export function clearCookie(res: Response, key: string) {
@@ -93,12 +93,6 @@ export function unprocessableEntity(req: Request, res: Response, msg: string = '
   res.end();
 }
 
-export function downgradeRedirect(_req: Request, res: Response, ctx: Context): void {
-  const url = new URL(ctx.url); // defensive copty
-  url.searchParams.set('serverId', ctx.ids.statsId);
-  res.writeHead(statusCode.movedPermanently, {Location: url.pathname + url.search});
-  res.end();
-}
 
 export function writeJson(res: Response, ctx: Context, json: any, space?: string | number | undefined) {
   res.setHeader('Content-Type', 'application/json');

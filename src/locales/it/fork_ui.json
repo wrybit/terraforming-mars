@@ -1659,7 +1659,7 @@
   "Discord client secret": "Client secret Discord",
   "Empty: 0.": "Vuoto: 0.",
   "End of all other tab titles, e.g. \"Cards List | TM\". Empty: TM.": "Fine di tutti gli altri titoli delle schede, ad es. \"Lista Carte | TM\". Vuoto: TM.",
-  "Enter the server ID to see and change the settings of this server.": "Inserisci l'ID del server per vedere e modificare le impostazioni di questo server.",
+  "Enter the server ID to open the administration of this server.": "Inserisci l'ID del server per aprire l'amministrazione di questo server.",
   "Faster inputs of a player are refused (against bots). Empty or 0: no limit.": "Gli input più rapidi di un giocatore vengono rifiutati (contro i bot). Vuoto o 0: nessun limite.",
   "Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.": "Dopo questo numero di giorni le partite finite conservano solo lo stato finale (circa 18 MB → 0,1 MB); gli stati delle singole mosse vanno persi. Vuoto: mai.",
   "Folder for decision logs": "Cartella per i log delle decisioni",
@@ -1681,7 +1681,7 @@
   "New games per address": "Nuove partite per indirizzo",
   "Only with PostgreSQL.": "Solo con PostgreSQL.",
   "Only with PostgreSQL. Empty: 10.": "Solo con PostgreSQL. Vuoto: 10.",
-  "Opens the admin pages. Changing it changes the address of this page. Empty: a new random one at every start.": "Apre le pagine di amministrazione. Modificarlo cambia l'indirizzo di questa pagina. Vuoto: uno nuovo casuale a ogni avvio.",
+  "Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.": "Serve per accedere alle pagine di amministrazione. Modificarlo chiude tutti gli accessi admin. Vuoto: uno nuovo casuale a ogni avvio.",
   "Opens the statistics endpoint without the admin passphrase. Empty: random.": "Apre l'endpoint delle statistiche senza la passphrase di amministrazione. Vuoto: casuale.",
   "Path of the certificate (fullchain.pem). Empty: plain HTTP.": "Percorso del certificato (fullchain.pem). Vuoto: HTTP semplice.",
   "Path of the private key (privkey.pem).": "Percorso della chiave privata (privkey.pem).",
@@ -1839,5 +1839,7 @@
   "No, adjust": "No, modifica",
   "Yes, pay anyway": "Sì, paga comunque",
   "The excess is not refunded.": "L’eccedenza non viene rimborsata.",
-  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} vale ${1} M€ l’uno, quindi il costo non si può pagare esattamente. L’eccedenza non viene rimborsata."
+  "${0} is worth ${1} M€ each, so the cost cannot be met exactly. The excess is not refunded.": "${0} vale ${1} M€ l’uno, quindi il costo non si può pagare esattamente. L’eccedenza non viene rimborsata.",
+  "Not shown here because the file is very large.": "Non mostrato qui perché il file è molto grande.",
+  "Download": "Scarica"
 }

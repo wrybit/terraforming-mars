@@ -6,6 +6,7 @@ import {MockRequest, MockResponse} from './HttpMocks';
 import {newIpTracker} from '../../src/server/server/IPTracker';
 import {FakeClock} from '../common/FakeClock';
 import {UrlParams} from '@/server/routes/UrlParams';
+import {adminToken} from '@/server/server/auth/adminCookie';
 
 export type Header = 'accept-encoding';
 
@@ -23,7 +24,6 @@ export class RouteTestScaffolding {
       sessionManager: new FakeSessionManager(),
       ids: {
         serverId: '1',
-        statsId: '2',
       },
       clock: new FakeClock(),
       urlParams: new UrlParams(url.searchParams),
@@ -31,6 +31,11 @@ export class RouteTestScaffolding {
     if (!this.req.headers) {
       this.req.headers = {};
     }
+  }
+
+  // Sends the admin login cookie with the following requests
+  public loginAsAdmin(): void {
+    this.ctx.adminToken = adminToken(this.ctx.ids.serverId);
   }
 
   // Strictly speaking |url| can also accept a fragment.

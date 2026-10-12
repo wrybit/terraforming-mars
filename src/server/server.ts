@@ -163,7 +163,7 @@ async function start() {
 
   if (!process.env.SERVER_ID) {
     console.log(`The secret serverId for this server is ${ansi.style.bold}${serverId}${ansi.style.reset}.`);
-    console.log(`Administrative routes can be found at admin?serverId=${serverId}`);
+    console.log('Log in to the administrative pages at /admin with it.');
   }
   console.log(`The public run ID is ${runId}`);
   console.log('Server is ready.');
