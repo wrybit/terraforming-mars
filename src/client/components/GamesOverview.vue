@@ -37,7 +37,7 @@
         <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
         <template v-else-if="status === 'error'">
           <p class="games-overview-note"><span v-i18n>The game list could not be loaded.</span> {{ loadFailureText }}</p>
-          <button type="button" class="btn btn-tone-quiet" @click="loadGames" v-i18n>Try again</button>
+          <div class="server-settings-retry"><button type="button" class="btn btn-tone-quiet" @click="loadGames" v-i18n>Try again</button></div>
         </template>
         <p v-else class="games-overview-note" v-i18n>No games yet.</p>
       </section>

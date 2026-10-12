@@ -174,12 +174,18 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  // Buttons stay on the right like everywhere; the message takes its own line above them
   .server-settings-actions {
     flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .server-settings-message {
     flex-basis: 100%;
+
+    &:empty {
+      display: none;
+    }
   }
 }
 
@@ -378,4 +384,9 @@
   .or-tab {
     flex: 0 0 auto;
   }
+}
+
+.server-settings-retry {
+  display: flex;
+  justify-content: flex-end;
 }

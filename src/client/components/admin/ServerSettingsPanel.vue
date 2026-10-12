@@ -4,7 +4,7 @@
     <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
     <div v-else-if="status === 'unreachable'" class="games-overview-card server-settings-group">
       <p class="games-overview-note" v-i18n>The server is not answering right now – probably it is just restarting.</p>
-      <div><button type="button" class="btn btn-tone-quiet" @click="load" v-i18n>Try again</button></div>
+      <div class="server-settings-retry"><button type="button" class="btn btn-tone-quiet" @click="load" v-i18n>Try again</button></div>
     </div>
     <template v-else>
       <!-- One tab per group, like the tabs in the game (or_options_tabs.less): no long scrolling -->
