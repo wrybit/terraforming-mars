@@ -11,6 +11,7 @@ import {relativeValue, ValuationContext, valuationContext} from './stateValue';
 import {cardPriorFactor} from './cardPriors';
 import {flowFit} from './cardFit';
 import {drawChoiceBonus} from './drawChoice';
+import {energySupplyRatio} from './energySupply';
 import {closingWindowFactor, requirementOutlook} from './requirementOutlook';
 import {pickSome} from './randomChoice';
 import {engineValue} from './engineValue';
@@ -84,6 +85,18 @@ function priorFactor(card: ICard, player: IPlayer): number {
   return tuning.flowFit > 0 ? prior * Math.max(0.5, 1 + tuning.flowFit * flowFit(player, card.name)) : prior;
 }
 
+const ENERGYLESS_SHARE = 0.25;
+
+/**
+ * energySupply: a card whose action spends energy keeps a quarter of its value without any energy
+ * production to feed it (energySupply.ts) – the AI played Physics Complex with 1 energy production.
+ */
+function energyFactor(card: ICard, player: IPlayer, context: ValuationContext): number {
+  if (tuningOf(player).energySupply <= 0 || player.playedCards.has(card.name)) {
+    return 1;
+  }
+  return ENERGYLESS_SHARE + (1 - ENERGYLESS_SHARE) * energySupplyRatio(player, card, context.remaining);
+}
 function costOf(card: ICard, player: IPlayer): number {
   return isIProjectCard(card) && !isICorporationCard(card) ? player.getCardCost(card) : 0;
 }
@@ -119,7 +132,7 @@ function nowValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context:
   const engine = engineWeight > 0 ? engineWeight * engineValue(snapshot, player, card, context) : 0;
   const gain = gainInCopy(snapshot, player, card, context, 0);
   const raw = gain === undefined ? 0 : (gain + engine + drawChoiceBonus(card, player)) * priorFactor(card, player) - costOf(card, player);
-  return raw > 0 ? raw * outlookOf(card, player) * (isBlockedNow(card, player) ? BLOCKED_NOW_FACTOR : 1) : raw;
+  return raw > 0 ? raw * outlookOf(card, player) * energyFactor(card, player, context) * (isBlockedNow(card, player) ? BLOCKED_NOW_FACTOR : 1) : raw;
 }
 
 /**
@@ -164,7 +177,7 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
   const raw = (total / samples + drawChoiceBonus(card, player)) * priorFactor(card, player) - costOf(card, player);
   // A window that closes before the card would be played (at most 5 % oxygen …).
   const window = tuningOf(player).closingWindow > 0 && raw > 0 && isIProjectCard(card) ? closingWindowFactor(card, player, delay) : 1;
-  return raw * outlookOf(card, player) * LATER_DISCOUNT * window * (isBlockedNow(card, player) ? BLOCKED_LATER_FACTOR : 1);
+  return raw * outlookOf(card, player) * LATER_DISCOUNT * window * energyFactor(card, player, context) * (isBlockedNow(card, player) ? BLOCKED_LATER_FACTOR : 1);
 }
 
 // Later values take several game copies per card; they only change slowly, so they are

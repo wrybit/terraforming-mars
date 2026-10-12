@@ -10,6 +10,7 @@ import {boardPotential} from './boardPotential';
 import {lastGenerationSpotPoints} from './lastGenerationSpots';
 import {futureTagPoints} from './tagPointOutlook';
 import {effectDrawsPerGeneration} from './cardIncome';
+import {energySupplyRatio} from './energySupply';
 import {milestoneRacePoints} from './milestoneRace';
 import {recentAwardGrowth} from './awardHistory';
 
@@ -303,7 +304,9 @@ function cardsDrawnByAction(card: ICard): number {
 /** What an action card brings per generation it stays in play. */
 function actionValuePerGeneration(card: ICard, player: IPlayer, context: ValuationContext): number {
   const drawn = tuningOf(player).drawCardModel > 0 ? cardsDrawnByAction(card) : 0;
-  return Math.max(ACTION_CARD_VALUE_PER_GENERATION, drawn * unknownCardValue(player, context));
+  const value = Math.max(ACTION_CARD_VALUE_PER_GENERATION, drawn * unknownCardValue(player, context));
+  // energySupply: an action that spends energy is only worth what the energy production can feed (energySupply.ts).
+  return tuningOf(player).energySupply > 0 ? value * energySupplyRatio(player, card, context.remaining) : value;
 }
 
 function tableauValue(player: IPlayer, context: ValuationContext): number {

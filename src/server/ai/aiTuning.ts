@@ -134,6 +134,8 @@ export type AiTuning = {
   flowFit: number,
   /** M€ per card seen but not kept when choosing from several drawn cards (drawChoice.ts); 0 = off. */
   drawChoiceValue: number,
+  /** 1: cards whose action spends energy are valued by how much of it the energy production can supply (energySupply.ts). */
+  energySupply: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -258,6 +260,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Rounds 46 + 47: drawChoice4 +0.69 and +0.72 VP per deal (pooled z ≈ 1.3), drawChoice6 +1.04 (z +1.36) – adopted at 4,
   // it fixes a human-game error (Business Contacts and Invention Contest passed on).
   drawChoiceValue: 4,
+  energySupply: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -494,6 +497,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 46: drawChoice2 −1.25, drawChoice4 +0.69 – noisy; round 47 repeats 4 and tries 6.
   drawChoice6: {drawChoiceValue: 6},
   drawChoice8: {drawChoiceValue: 8},
+  // Player feedback (public server): the AI plays energy-spending action cards without energy production.
+  energySupply: {energySupply: 1},
   noDrawChoice: {drawChoiceValue: 0},
   // Round 48: animal and other collector cards (human card-VP engines, 5 games) with today's flow fit.
   collectors04: {accumulatorValue: 0.4},
