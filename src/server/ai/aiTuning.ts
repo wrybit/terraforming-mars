@@ -136,6 +136,8 @@ export type AiTuning = {
   drawChoiceValue: number,
   /** 1: cards whose action spends energy are valued by how much of it the energy production can supply (energySupply.ts). */
   energySupply: number,
+  /** Steps before a milestone within which its claim already counts (milestoneRace.ts nearClaimPoints); 0 = off. */
+  milestoneNear: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -261,6 +263,7 @@ export const BASELINE_TUNING: AiTuning = {
   // it fixes a human-game error (Business Contacts and Invention Contest passed on).
   drawChoiceValue: 4,
   energySupply: 0,
+  milestoneNear: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -499,6 +502,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   drawChoice8: {drawChoiceValue: 8},
   // Player feedback (public server): the AI plays energy-spending action cards without energy production.
   energySupply: {energySupply: 1},
+  // Human games (public server): the human claimed all three milestones in four of twelve games.
+  milestoneNear2: {milestoneNear: 2},
+  milestoneNear3: {milestoneNear: 3},
   noDrawChoice: {drawChoiceValue: 0},
   // Round 48: animal and other collector cards (human card-VP engines, 5 games) with today's flow fit.
   collectors04: {accumulatorValue: 0.4},

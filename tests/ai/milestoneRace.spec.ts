@@ -3,6 +3,7 @@ import {testGame} from '../TestGame';
 import {addGreenery} from '../TestingUtils';
 import {milestoneRacePoints} from '../../src/server/ai/milestoneRace';
 import {relativeValue, valuationContext} from '../../src/server/ai/stateValue';
+import {clearPlayerTunings, setPlayerTuning} from '../../src/server/ai/aiTuning';
 
 describe('AI milestone race', () => {
   it('claiming the last free milestone is worth more than keeping all races open', () => {
@@ -26,5 +27,17 @@ describe('AI milestone race', () => {
     const after = relativeValue(player, context);
     // In the test game a VP is worth more than 2 M€, so the claim (8 M€) must gain over 8.
     expect(after - before).greaterThan(8);
+  });
+
+  it('milestoneNear counts a milestone a step or two away, not one far off', () => {
+    const [, player] = testGame(2);
+    const base = milestoneRacePoints(player);
+    setPlayerTuning(player.id, 'milestoneNear2');
+    // Gardener needs 3 greeneries: none yet is too far.
+    expect(milestoneRacePoints(player)).eq(base);
+    addGreenery(player);
+    addGreenery(player);
+    expect(milestoneRacePoints(player)).is.greaterThan(base);
+    clearPlayerTunings();
   });
 });
