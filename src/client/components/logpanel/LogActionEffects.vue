@@ -8,14 +8,12 @@
       <span class="log-action-effects-note">{{ $t('Neutral delegates') }}</span>
       <span v-for="(party, index) in parties" :key="index" class="log-row-party"><i :class="['log-row-party-icon', 'log-row-party-icon--' + slug(party)]"></i>{{ $t(party) }}</span>
     </div>
-    <!-- One line per effect: player, value, reason – as a grid so the columns line up.
-         The player column only appears when more than one player is affected -->
-    <div v-if="items.length > 0" :class="['log-action-effects-grid', {'log-action-effects-grid--players': showPlayers}]">
-      <template v-for="(item, index) in items" :key="index">
-        <span v-if="showPlayers" :class="['log-action-effects-player', item.player !== undefined ? 'player_bg_color_' + item.player : 'log-action-effects-player--all']">{{ item.player !== undefined ? playerName(item.player) : $t('All players') }}</span>
-        <LogEffectIcon :effect="item.effect"/>
-        <span class="log-action-effects-note">{{ reason(item.effect) }}</span>
-      </template>
+    <!-- One line per effect: value and reason. The acting player is implied by the log row,
+         only other players (or "All players") get their name in front -->
+    <div v-for="(item, index) in items" :key="'effect' + index" class="log-action-effects-line">
+      <span v-if="!isActing(item.player)" :class="['log-action-effects-player', item.player !== undefined ? 'player_bg_color_' + item.player : 'log-action-effects-player--all']">{{ item.player !== undefined ? playerName(item.player) : $t('All players') }}</span>
+      <LogEffectIcon :effect="item.effect"/>
+      <span v-if="reason(item.effect) !== ''" class="log-action-effects-note">{{ reason(item.effect) }}</span>
     </div>
   </div>
 </template>
@@ -56,12 +54,9 @@ export default defineComponent({
       const everyone = (this.action.everyone ?? []).length > 0 ? [{player: undefined, effects: this.action.everyone ?? []}] : [];
       return [...own, ...everyone, ...this.action.others];
     },
-    // Flat list for the grid: every effect with its player
+    // Flat list, one line per effect with its player
     items(): Array<{player?: Color, effect: LogEffect}> {
       return this.lines.flatMap((line) => line.effects.map((effect) => ({player: line.player, effect})));
-    },
-    showPlayers(): boolean {
-      return new Set(this.items.map((item) => item.player ?? 'all')).size > 1;
     },
     parties(): ReadonlyArray<string> {
       return this.action.parties ?? [];
@@ -91,6 +86,9 @@ export default defineComponent({
         return translateText(effect.label);
       }
       return effect.cost ? translateText('for the trade') : '';
+    },
+    isActing(player: Color | undefined): boolean {
+      return player !== undefined && player === this.action.player;
     },
     slug(party: string): string {
       return partySlug(party);

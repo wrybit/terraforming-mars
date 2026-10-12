@@ -16,9 +16,9 @@ describe('LogActionEffects', () => {
       others: [{player: 'blue', effects: [{resource: 'megacredit', amount: 2, cause: CardName.MARS_UNIVERSITY}]}],
     };
     const wrapper = mount(LogActionEffects, {...globalConfig, props: {action, players: fakeViewModel().players}});
-    // One grid line (player, value, reason) per effect
-    expect(wrapper.findAll('.log-action-effects-player').map((chip) => chip.text())).has.length(2);
-    const notes = wrapper.findAll('.log-action-effects-grid .log-action-effects-note').map((note) => note.text());
+    // One grid line per effect; only the other player gets a name, the acting player is implied by the row
+    expect(wrapper.findAll('.log-action-effects-player').map((chip) => chip.text())).has.length(1);
+    const notes = wrapper.findAll('.log-action-effects-line .log-action-effects-note').map((note) => note.text());
     expect(notes).deep.eq(['on Olympus Conference', 'because of Mars University']);
   });
 
@@ -39,6 +39,7 @@ describe('LogActionEffects', () => {
     };
     const wrapper = mount(LogActionEffects, {...globalConfig, props: {action, players: fakeViewModel().players}});
     expect(wrapper.find('.log-action-effects-player').exists()).to.be.false;
-    expect(wrapper.findAll('.log-action-effects-grid .log-action-effects-note').map((note) => note.text())).deep.eq(['', 'because of CrediCor']);
+    expect(wrapper.findAll('.log-action-effects-line')).has.length(2);
+    expect(wrapper.findAll('.log-action-effects-line .log-action-effects-note').map((note) => note.text())).deep.eq(['because of CrediCor']);
   });
 });
