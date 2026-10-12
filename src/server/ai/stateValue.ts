@@ -13,6 +13,7 @@ import {effectDrawsPerGeneration} from './cardIncome';
 import {energySupplyRatio} from './energySupply';
 import {milestoneRacePoints} from './milestoneRace';
 import {recentAwardGrowth} from './awardHistory';
+import {moneySwingShare} from './stockAward';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -91,7 +92,8 @@ function expectedAwardPoints(player: IPlayer, context: ValuationContext): number
     // The deciding player's view for both sides: own leads and the opponent's leads are equally
     // uncertain, so catching up in an award the opponent leads is worth as much as defending one.
     const remainingSwing = (context.awardSwing ?? tuningOf(player).awardSwing) * Math.max(own, best) * context.remaining;
-    const swing = 2 + Math.max(own, best) * 0.25 * (1 - context.awardConfidence) + remainingSwing + actionSwing(player, context.awardActionSwing ?? tuningOf(player).awardActionSwing);
+    const swing = 2 + Math.max(own, best) * 0.25 * (1 - context.awardConfidence) + remainingSwing +
+      actionSwing(player, context.awardActionSwing ?? tuningOf(player).awardActionSwing) * moneySwingShare(award, player);
     const firstPlaceChance = Math.max(0, Math.min(1, 0.5 + margin / (2 * swing)));
     points += 5 * firstPlaceChance * context.awardConfidence;
   }

@@ -140,6 +140,8 @@ export type AiTuning = {
   milestoneNear: number,
   /** Weight for keeping greeneries in a ring around an own city (greeneryRing.ts), in VP; 0 = off. */
   greeneryRing: number,
+  /** Share of the money-driven award swing for awards that count a resource stock (stockAward.ts); 1 = as for all awards. */
+  stockAwardSwing: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -271,6 +273,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 53 (1148 mirrored 1v1 games): greeneryRing1 +0.48 (z +0.68), fixes the human-game observation (greeneries
   // far from the city, more than two before it) – adopted at 1.
   greeneryRing: 1,
+  stockAwardSwing: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -520,6 +523,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   greeneryRing15: {greeneryRing: 1.5},
   noGreeneryRing: {greeneryRing: 0},
   closer075: {closer: 0.75},
+  // Human game: kept 6 titanium for a safe Miner lead instead of playing Space Elevator (2 VP).
+  stockAwardSwing03: {stockAwardSwing: 0.3},
+  stockAwardSwing0: {stockAwardSwing: 0},
   noEnergySupply: {energySupply: 0},
   noDrawChoice: {drawChoiceValue: 0},
   // Round 48: animal and other collector cards (human card-VP engines, 5 games) with today's flow fit.
