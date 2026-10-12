@@ -43,7 +43,10 @@ describe('GameHome', () => {
         }),
       },
     });
-    const labels = wrapper.findAll('a.btn-primary').map((link) => link.text());
-    expect(labels).deep.eq(['Play', 'Watch', 'Watch']);
+    // Playing is the main action; watching (AI player, spectator) is the quiet secondary button
+    const links = wrapper.findAll('a.btn');
+    expect(links.map((link) => link.text())).deep.eq(['Play', 'Watch', 'Watch']);
+    expect(links.map((link) => link.classes('btn-primary'))).deep.eq([true, false, false]);
+    expect(links.map((link) => link.classes('btn-tone-quiet'))).deep.eq([false, true, true]);
   });
 });
