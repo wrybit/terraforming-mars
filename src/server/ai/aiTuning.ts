@@ -138,6 +138,8 @@ export type AiTuning = {
   energySupply: number,
   /** Steps before a milestone within which its claim already counts (milestoneRace.ts nearClaimPoints); 0 = off. */
   milestoneNear: number,
+  /** Weight for keeping greeneries in a ring around an own city (greeneryRing.ts), in VP; 0 = off. */
+  greeneryRing: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -265,6 +267,7 @@ export const BASELINE_TUNING: AiTuning = {
   drawChoiceValue: 4,
   energySupply: 0,
   milestoneNear: 0,
+  greeneryRing: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -507,6 +510,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human games (public server): the human claimed all three milestones in four of twelve games.
   milestoneNear2: {milestoneNear: 2},
   milestoneNear3: {milestoneNear: 3},
+  // Human feedback: greeneries far from the own city, on spots no city can reach, up to four before the city.
+  greeneryRing1: {greeneryRing: 1},
+  greeneryRing2: {greeneryRing: 2},
   noDrawChoice: {drawChoiceValue: 0},
   // Round 48: animal and other collector cards (human card-VP engines, 5 games) with today's flow fit.
   collectors04: {accumulatorValue: 0.4},

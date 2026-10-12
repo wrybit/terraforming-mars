@@ -13,6 +13,7 @@ import {remainingProductionPhases, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
 import {citySpotPoints} from './citySpotPrior';
 import {openingPlan} from './openingPlan';
+import {adoptedOrphanPoints, lonelyGreeneryPoints} from './greeneryRing';
 
 // Scores a hex for tile placement. Weights tuned in AI test batches.
 
@@ -173,6 +174,7 @@ function baseSpaceValue(space: Space, kind: TileKind, player: IPlayer): number {
     // where a city is still allowed invites the opponent to build there.
     if (ownCities === 0) {
       value -= victoryPoint;
+      value += lonelyGreeneryPoints(space, player, board) * victoryPoint;
     }
     value -= openCitySpots(neighbours, board) * victoryPoint * 0.6;
     value += ownTiles * 0.5;
@@ -185,6 +187,7 @@ function baseSpaceValue(space: Space, kind: TileKind, player: IPlayer): number {
     // attack: placed between opponent cities it takes their greenery spots, between own cities
     // it takes our own (the AI used to put it between its own cities).
     value += opponentCities * victoryPoint * 0.5 - ownCities * victoryPoint * 0.8;
+    value += adoptedOrphanPoints(space, player, board) * victoryPoint;
     // Two own cities with one row between them share free spots: a greenery there scores for
     // both (tip from the group: place cities in pairs at that distance, then fill greeneries).
     value += sharedSpotPoints(space, neighbours, player, board) * victoryPoint * futureShare(player);

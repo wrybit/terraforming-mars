@@ -3,6 +3,7 @@ import {Space} from '../boards/Space';
 import {Board} from '../boards/Board';
 import {SpaceType} from '../../common/boards/SpaceType';
 import {tuningOf} from './aiTuning';
+import {orphanPotential} from './greeneryRing';
 
 // Future VP on the board that the final scoring does not show yet, in VP.
 //
@@ -44,5 +45,5 @@ export function boardPotential(player: IPlayer): number {
       }
     }
   }
-  return potential;
+  return potential + orphanPotential(player, board);
 }
