@@ -29,14 +29,20 @@ const props = withDefaults(defineProps<{
   spinSeed: undefined,
 });
 
-// Simple string hash (FNV-1a) mapped to 0…359 degrees
+// String hash (FNV-1a) with a final bit mix: plain FNV-1a gives neighboring space ids ("10", "11", "12")
+// almost the same angle. A cube looks the same every 90°, so 0…89 already covers every distinct turn.
 function spinFromSeed(seed: string): number {
   let hash = 2166136261;
   for (let i = 0; i < seed.length; i++) {
     hash ^= seed.charCodeAt(i);
     hash = Math.imul(hash, 16777619);
   }
-  return (hash >>> 0) % 360;
+  hash ^= hash >>> 16;
+  hash = Math.imul(hash, 0x85ebca6b);
+  hash ^= hash >>> 13;
+  hash = Math.imul(hash, 0xc2b2ae35);
+  hash ^= hash >>> 16;
+  return (hash >>> 0) % 90;
 }
 
 const spin = computed(() => props.spinSeed === undefined ? undefined : spinFromSeed(props.spinSeed));
