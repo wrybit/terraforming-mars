@@ -36,7 +36,7 @@ const CARD_CHOICE_PHASES: ReadonlyArray<Phase> = [Phase.RESEARCH, Phase.DRAFTING
 
 export function chooseResponse(input: PlayerInput, player: IPlayer, level: AiLevel): InputResponse {
   // In AI test batches every decision is recorded with its options (decisionTrace.ts).
-  return recordDecision(input, player, () => decide(input, player, level), (response) => describeResponse(input, response));
+  return recordDecision(input, player, () => decide(input, player, level), (response) => describeResponse(input, response, player.game));
 }
 
 function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputResponse {

@@ -7,7 +7,7 @@
     />
     <div class="board-space-text" v-if="text" v-i18n>{{ text }}</div>
     <Bonus :bonus="space.bonus" v-if="showBonus"/>
-    <div v-if="tileView === 'coords' && spaceCoordinate(space.id) !== undefined" class="board-space-coords">{{ spaceCoordinate(space.id) }}</div>
+    <div v-if="tileView === 'coords' && space.a9 !== undefined" class="board-space-coords">{{ space.a9 }}</div>
     <template v-if="tileView === 'show'">
       <BoardCube v-if="space.color !== undefined" class="board-cube" :color="space.color" :spinSeed="space.id"/>
       <template v-if="space.gagarin !== undefined">
@@ -40,7 +40,6 @@ import UndergroundToken from '@/client/components/underworld/UndergroundToken.vu
 import {TileView} from '@/client/components/board/TileView';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import {ClaimedToken} from '@/common/underworld/UnderworldPlayerData';
-import {spaceCoordinate} from '@/client/components/board/spaceCoordinate';
 import {SpaceType} from '@/common/boards/SpaceType';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
@@ -99,9 +98,6 @@ export default defineComponent({
       return {token: this.space.undergroundResource, shelter: false, active: false};
     },
 
-    spaceCoordinate(): typeof spaceCoordinate {
-      return spaceCoordinate;
-    },
     SpaceType(): typeof SpaceType {
       return SpaceType;
     },

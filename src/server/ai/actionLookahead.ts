@@ -466,7 +466,7 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     const ranked = [...tried].sort((a, b) => b.outcome.value - a.outcome.value);
     const shown = ranked.filter((entry, index) => index < TRACED_ACTION_OPTIONS || entry.candidate.response === best?.response);
     traceOptions('action', shown.map((entry) => ({
-      label: describeResponse(menu, entry.candidate.response),
+      label: describeResponse(menu, entry.candidate.response, player.game),
       value: Math.round(entry.outcome.value * 10) / 10,
       chosen: entry.candidate.response === best?.response,
     })), {candidates: candidatesFor(menu, player).length, tried: tried.length, milliseconds: Math.round(performance.now() - start)});

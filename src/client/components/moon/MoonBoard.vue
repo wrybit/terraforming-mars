@@ -113,6 +113,7 @@ import {SpaceId} from '@/common/Types';
 import {comparing} from '@/common/utils/Ordering';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
+import {spacesById} from '@/client/utils/spacesById';
 
 type RingBonusPin = {
   key: string,
@@ -188,10 +189,9 @@ export default defineComponent({
   },
   methods: {
     getSpaceById(spaceId: SpaceId) {
-      for (const space of this.model.spaces) {
-        if (space.id === spaceId) {
-          return space;
-        }
+      const space = spacesById(this.model.spaces).get(spaceId);
+      if (space !== undefined) {
+        return space;
       }
       throw new Error('Board space not found by id \'' + spaceId + '\'');
     },

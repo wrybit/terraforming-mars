@@ -2,7 +2,8 @@ import {PlayerInput} from '../PlayerInput';
 import {OrOptions} from '../inputs/OrOptions';
 import {AndOptions} from '../inputs/AndOptions';
 import {InputResponse} from '../../common/inputs/InputResponse';
-import {getSpaceName} from '../../common/boards/spaces';
+import {IGame} from '../IGame';
+import {spaceName} from './spaceName';
 import {Units} from '../../common/Units';
 
 // Readable labels for AI answers, e.g. "Play project card: Comet" or "Standard projects: City"
@@ -24,16 +25,16 @@ function units(value: Partial<Units>): string {
   return Object.entries(value).filter(([, amount]) => amount !== 0 && amount !== undefined).map(([key, amount]) => `${amount} ${key}`).join(', ');
 }
 
-export function describeResponse(input: PlayerInput | undefined, response: InputResponse): string {
+export function describeResponse(input: PlayerInput | undefined, response: InputResponse, game: IGame): string {
   switch (response.type) {
   case 'or': {
     const option = input instanceof OrOptions ? input.options[response.index] : undefined;
-    const inner = describeResponse(option, response.response);
+    const inner = describeResponse(option, response.response, game);
     return inner === '' ? titleOf(option) : `${titleOf(option)}: ${inner}`;
   }
   case 'and': {
     const options = input instanceof AndOptions ? input.options : [];
-    return response.responses.map((inner, index) => describeResponse(options[index], inner)).filter((text) => text !== '').join(' + ');
+    return response.responses.map((inner, index) => describeResponse(options[index], inner, game)).filter((text) => text !== '').join(' + ');
   }
   case 'option':
     return '';
@@ -42,7 +43,7 @@ export function describeResponse(input: PlayerInput | undefined, response: Input
   case 'card':
     return response.cards.length === 0 ? '(keine)' : response.cards.join(', ');
   case 'space':
-    return getSpaceName(response.spaceId);
+    return spaceName(game, response.spaceId);
   case 'player':
     return response.player;
   case 'amount':
@@ -56,7 +57,7 @@ export function describeResponse(input: PlayerInput | undefined, response: Input
   case 'resources':
     return units(response.units);
   case 'initialCards':
-    return response.responses.map((inner) => describeResponse(undefined, inner)).join(' | ');
+    return response.responses.map((inner) => describeResponse(undefined, inner, game)).join(' | ');
   default:
     return response.type;
   }

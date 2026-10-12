@@ -2,7 +2,7 @@ import {IPlayer} from '../IPlayer';
 import {Space} from '../boards/Space';
 import {Board} from '../boards/Board';
 import {BoardName} from '../../common/boards/BoardName';
-import {getSpaceName} from '../../common/boards/spaces';
+import {spaceName} from './spaceName';
 import citySpots from './data/bgaCitySpotsTharsis.json';
 
 // Opening city spots from 46 477 Tharsis two-player games on BGA: average end score of a city on each spot. It turned out the AI kept
@@ -28,7 +28,7 @@ export function citySpotPoints(space: Space, player: IPlayer): number {
   if (ownCities >= OPENING_CITIES) {
     return 0;
   }
-  const spot = spots[getSpaceName(space.id)];
+  const spot = spots[spaceName(player.game, space.id)];
   if (spot === undefined || spot.cities < MINIMUM_CITIES) {
     return 0;
   }

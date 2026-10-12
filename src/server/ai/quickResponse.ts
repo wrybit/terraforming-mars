@@ -22,7 +22,7 @@ import {greedyPayment} from './greedyPayment';
 import {spaceValue, tileKindOf} from './spaceValue';
 import {cardPrior} from './cardPriors';
 import {isTracingDecision, traceOptions} from './decisionTrace';
-import {getSpaceName} from '../../common/boards/spaces';
+import {spaceName} from './spaceName';
 
 // Fast, rule-based answers for inputs the AI cannot try out on a game copy: follow-up questions
 // in the middle of an action (where to place a tile, whom to target, ...). Also used to finish
@@ -94,7 +94,7 @@ export function quickResponse(input: PlayerInput, player: IPlayer): InputRespons
     const best = ranked[0].space;
     if (isTracingDecision()) {
       traceOptions('space', ranked.slice(0, 10).map((entry) => ({
-        label: getSpaceName(entry.space.id), value: Math.round(entry.value * 10) / 10, chosen: entry.space === best,
+        label: spaceName(player.game, entry.space.id), value: Math.round(entry.value * 10) / 10, chosen: entry.space === best,
       })), {tile: kind, spaces: input.spaces.length});
     }
     return {type: 'space', spaceId: best.id};
