@@ -478,9 +478,13 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noFlowFit: {flowFit: 0},
   flowFit3: {flowFit: 3},
   flowFit4: {flowFit: 4},
+  // Round 47: flowFit4 +0.52 (z +0.53) in round 46 – again, and a step further.
+  flowFit5: {flowFit: 5},
   // Human game: Business Contacts (−2) and Invention Contest (0) passed on, the human built a card engine with them.
   drawChoice2: {drawChoiceValue: 2},
   drawChoice4: {drawChoiceValue: 4},
+  // Round 46: drawChoice2 −1.25, drawChoice4 +0.69 – noisy; round 47 repeats 4 and tries 6.
+  drawChoice6: {drawChoiceValue: 6},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
