@@ -797,5 +797,9 @@
   "because of ${0}": "через ${0}",
   "fizzled": "не спрацювала",
   "${0} delegate(s)": "${0} делегат(ів)",
-  "All players": "Усі"
+  "All players": "Усі",
+  "placement bonus": "бонус розміщення",
+  "adjacency bonus": "бонус сусідства",
+  "adjacent oceans": "сусідні океани",
+  "for the trade": "за торгівлю"
 }

@@ -1265,5 +1265,9 @@
   "${0} gained ${1} ${2} production because of ${3}": "${0} ontving ${1} ${2}-productie door ${3}",
   "fizzled": "mislukt",
   "${0} delegate(s)": "${0} afgevaardigde(n)",
-  "All players": "Iedereen"
+  "All players": "Iedereen",
+  "placement bonus": "plaatsingsbonus",
+  "adjacency bonus": "nabijheidsbonus",
+  "adjacent oceans": "aangrenzende oceanen",
+  "for the trade": "voor de handel"
 }

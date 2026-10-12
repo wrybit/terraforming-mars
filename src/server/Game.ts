@@ -1,3 +1,4 @@
+import {From} from './logs/From';
 import * as constants from '../common/constants';
 import {venusScaleLevelForDisplay} from './venusNext/venusScale';
 import {BeginnerCorporation} from './cards/corporation/BeginnerCorporation';
@@ -1472,22 +1473,22 @@ export class Game implements IGame, Logger {
     });
   }
 
-  public grantSpaceBonus(player: IPlayer, spaceBonus: SpaceBonus, count: number = 1) {
+  public grantSpaceBonus(player: IPlayer, spaceBonus: SpaceBonus, count: number = 1, from: From = {text: 'placement bonus'}) {
     switch (spaceBonus) {
     case SpaceBonus.DRAW_CARD:
       player.drawCard(count);
       break;
     case SpaceBonus.PLANT:
-      player.stock.add(Resource.PLANTS, count, {log: true});
+      player.stock.add(Resource.PLANTS, count, {log: true, from});
       break;
     case SpaceBonus.STEEL:
-      player.stock.add(Resource.STEEL, count, {log: true});
+      player.stock.add(Resource.STEEL, count, {log: true, from});
       break;
     case SpaceBonus.TITANIUM:
-      player.stock.add(Resource.TITANIUM, count, {log: true});
+      player.stock.add(Resource.TITANIUM, count, {log: true, from});
       break;
     case SpaceBonus.HEAT:
-      player.stock.add(Resource.HEAT, count, {log: true});
+      player.stock.add(Resource.HEAT, count, {log: true, from});
       break;
     case SpaceBonus.OCEAN:
       // Hellas special requirements ocean tile

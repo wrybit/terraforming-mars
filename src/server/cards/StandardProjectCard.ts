@@ -48,8 +48,9 @@ export abstract class StandardProjectCard extends Card implements IStandardProje
   protected abstract actionEssence(player: IPlayer): void
 
   public onStandardProject(player: IPlayer): void {
+    // In the context of the reacting card: the log names it as the cause of what it gives (e.g. CrediCor)
     for (const playedCard of player.tableau) {
-      playedCard.onStandardProject?.(player, this);
+      player.game.deferredActions.withSourceCard(playedCard.name, () => playedCard.onStandardProject?.(player, this));
     }
   }
 

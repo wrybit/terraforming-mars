@@ -16,7 +16,9 @@ export type From =
   | {globalEvent: IGlobalEvent}
   | {globalEvent: GlobalEventName}
   | {party: IParty}
-  | {partyName: PartyName};
+  | {partyName: PartyName}
+  // A rule of the game instead of a card (placement bonus, adjacency bonus): logged as translatable text
+  | {text: string};
 
 export function isFromPlayer(from: From | undefined): from is {player: IPlayer} {
   return from !== undefined && 'player' in from;

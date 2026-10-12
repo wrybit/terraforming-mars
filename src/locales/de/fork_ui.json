@@ -436,5 +436,9 @@
   "because of ${0}": "durch ${0}",
   "fizzled": "verpufft",
   "${0} delegate(s)": "${0} Delegierte(r)",
-  "All players": "Alle"
+  "All players": "Alle",
+  "placement bonus": "Platzierungsbonus",
+  "adjacency bonus": "Nachbarschaftsbonus",
+  "adjacent oceans": "angrenzende Ozeane",
+  "for the trade": "für den Handel"
 }

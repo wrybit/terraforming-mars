@@ -651,5 +651,9 @@
   "because of ${0}": "kortin ${0} ansiosta",
   "fizzled": "raukesi",
   "${0} delegate(s)": "${0} edustaja(a)",
-  "All players": "Kaikki"
+  "All players": "Kaikki",
+  "placement bonus": "sijoitusbonus",
+  "adjacency bonus": "vierekkäisyysbonus",
+  "adjacent oceans": "viereiset meret",
+  "for the trade": "kaupankäyntiin"
 }

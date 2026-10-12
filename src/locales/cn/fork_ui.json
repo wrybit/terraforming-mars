@@ -1571,5 +1571,9 @@
   "All players": "所有玩家",
   "${0} raised the habitat rate ${1} step(s)": "${0} 将栖息地等级提升了 ${1} 级",
   "${0} raised the mining rate ${1} step(s)": "${0} 将采矿等级提升了 ${1} 级",
-  "${0} raised the logistic rate ${1} step(s)": "${0} 将物流等级提升了 ${1} 级"
+  "${0} raised the logistic rate ${1} step(s)": "${0} 将物流等级提升了 ${1} 级",
+  "placement bonus": "放置奖励",
+  "adjacency bonus": "相邻奖励",
+  "adjacent oceans": "相邻海洋",
+  "for the trade": "用于贸易"
 }

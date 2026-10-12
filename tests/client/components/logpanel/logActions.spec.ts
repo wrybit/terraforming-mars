@@ -228,4 +228,13 @@ describe('logActions', () => {
     const rows = groupLogMessages([message('Final greenery placement'), message('This game id was ${0}', raw('g1'))]);
     expect(rows.map((row) => row.type)).deep.eq(['message', 'phase', 'message']);
   });
+
+  it('names a reacting card as cause, but not the card of the row itself', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
+      message('${0} gained ${1} ${2} production because of ${3}', player('red'), raw('2'), text('plant'), card(CardName.ALGAE)),
+      message('${0} gained ${1} ${2} because of ${3}', player('red'), raw('4'), text('M€'), card(CardName.CREDICOR)),
+    ]);
+    expect(actionAt(rows, 0).effects).deep.eq([{resource: 'plant', amount: 2, production: true}, {resource: 'megacredit', amount: 4, cause: CardName.CREDICOR}]);
+  });
 });

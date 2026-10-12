@@ -1,3 +1,4 @@
+import {CardName} from '../../common/cards/CardName';
 import {Resource} from '../../common/Resource';
 import {Units} from '../../common/Units';
 import {IPlayer} from '../IPlayer';
@@ -120,6 +121,12 @@ export abstract class BaseStock {
     from: From | undefined,
     stealing = false,
   ) {
+    // Without an explicit source the card whose effect is running is the cause (e.g. CrediCor's 4 M€):
+    // the log then explains every gain and loss. Players without a game (some tests) have no context.
+    const contextCard: CardName | undefined = from === undefined ? this.player.game?.deferredActions?.sourceCard : undefined;
+    if (contextCard !== undefined) {
+      from = {card: contextCard};
+    }
     if (amount === 0) {
       // Logging zero units doesn't seem to happen
       return;

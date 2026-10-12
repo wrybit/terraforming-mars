@@ -880,5 +880,9 @@
   "All players": "모든 플레이어",
   "${0} raised the habitat rate ${1} step(s)": "${0}이(가) 거주지 등급을 ${1}단계 올렸습니다",
   "${0} raised the mining rate ${1} step(s)": "${0}이(가) 채굴 등급을 ${1}단계 올렸습니다",
-  "${0} raised the logistic rate ${1} step(s)": "${0}이(가) 물류 등급을 ${1}단계 올렸습니다"
+  "${0} raised the logistic rate ${1} step(s)": "${0}이(가) 물류 등급을 ${1}단계 올렸습니다",
+  "placement bonus": "배치 보너스",
+  "adjacency bonus": "인접 보너스",
+  "adjacent oceans": "인접한 바다",
+  "for the trade": "무역 비용"
 }

@@ -43,6 +43,8 @@ export class LogMessageBuilder extends MessageBuilder {
       return this.party(from.party);
     } else if ('partyName' in from) {
       return this.partyName(from.partyName);
+    } else if ('text' in from) {
+      return this.string(from.text);
     } else {
       throw new Error(`Unknown From type: ${JSON.stringify(from)}`);
     }

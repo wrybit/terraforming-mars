@@ -15,6 +15,7 @@
         <span v-if="effect.card !== undefined" class="log-action-effects-note">{{ note('on ${0}', effect.card) }}</span>
         <span v-else-if="effect.cause !== undefined" class="log-action-effects-note">{{ note('because of ${0}', effect.cause) }}</span>
         <span v-else-if="effect.label !== undefined" class="log-action-effects-note">{{ $t(effect.label) }}</span>
+        <span v-else-if="effect.cost" class="log-action-effects-note">{{ $t('for the trade') }}</span>
       </span>
     </div>
   </div>

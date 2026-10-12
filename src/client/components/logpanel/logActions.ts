@@ -163,7 +163,8 @@ function cardAt(message: LogMessage, index: number): CardName | undefined {
 // Cause at a message position: a card, a global event or a party ("because of ${3}" may also name a player – no cause then)
 function causeAt(message: LogMessage, index: number): string | undefined {
   const datum = message.data[index];
-  const causes = [LogMessageDataType.CARD, LogMessageDataType.GLOBAL_EVENT, LogMessageDataType.PARTY];
+  // STRING: a rule of the game (placement bonus, adjacency bonus)
+  const causes = [LogMessageDataType.CARD, LogMessageDataType.GLOBAL_EVENT, LogMessageDataType.PARTY, LogMessageDataType.STRING];
   return datum !== undefined && causes.includes(datum.type) ? String(datum.value) : undefined;
 }
 
@@ -211,7 +212,7 @@ export function effectsOf(message: LogMessage): Array<PlayerEffect> {
   case '${0} gained 2 ${1} from ${2}':
     return one(withResource(resource(value(message, 1)), {amount: 2, cause: causeAt(message, 2)}));
   case '${0} gained ${1} M€ from ${2} ocean(s)':
-    return one(effect({resource: 'megacredit', amount: n}));
+    return one(effect({resource: 'megacredit', amount: n, cause: 'adjacent oceans'}));
   case '${0} received ${1} M€ from ${2} owner (${3})':
     return one(effect({resource: 'megacredit', amount: n, cause: causeAt(message, 2)}));
   case '${0} gained 4 M€ for playing ${1}, which has no tags.':
@@ -376,6 +377,12 @@ function startAction(kind: LogActionKind, message: LogMessage): LogAction | unde
   return action;
 }
 
+function withoutCause(entry: LogEffect): LogEffect {
+  const copy = {...entry};
+  delete copy.cause;
+  return copy;
+}
+
 function addEffect(action: LogAction, entry: PlayerEffect): void {
   if (action.player !== undefined && entry.player === action.player) {
     action.effects.push(entry.effect);
@@ -485,8 +492,11 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>): Array<Log
       if (known !== undefined && !row.action.effects.some((entry) => entry.production && entry.resource === known.resource)) {
         row.action.effects.push({...known});
       }
-      row.action.effects = mergeEffects(row.action.effects);
-      row.action.others = row.action.others.map((entry) => ({player: entry.player, effects: mergeEffects(entry.effects)}));
+      // The server names the running card as cause; the row's own card needs no "because of" itself
+      const ownCard = row.action.card;
+      const withoutOwnCause = (effects: Array<LogEffect>) => effects.map((entry) => entry.cause !== undefined && entry.cause === ownCard ? withoutCause(entry) : entry);
+      row.action.effects = mergeEffects(withoutOwnCause(row.action.effects));
+      row.action.others = row.action.others.map((entry) => ({player: entry.player, effects: mergeEffects(withoutOwnCause(entry.effects))}));
     }
   }
   return withPhaseLines(rows);

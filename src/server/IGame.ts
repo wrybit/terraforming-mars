@@ -1,3 +1,4 @@
+import {From} from './logs/From';
 import {MarsBoard} from './boards/MarsBoard';
 import {CardName} from '../common/cards/CardName';
 import {ClaimedMilestone} from './milestones/ClaimedMilestone';
@@ -234,7 +235,7 @@ export interface IGame extends Logger {
    * Gives all the bonuses from a space on the map.
    */
   grantSpaceBonuses(player: IPlayer, space: Space): void;
-  grantSpaceBonus(player: IPlayer, spaceBonus: SpaceBonus, count?: number): void;
+  grantSpaceBonus(player: IPlayer, spaceBonus: SpaceBonus, count?: number, from?: From): void;
   addGreenery(player: IPlayer, space: Space, shouldRaiseOxygen?: boolean): void;
   addCity(player: IPlayer, space: Space, cardName?: CardName | undefined): void;
   canAddOcean(): boolean;

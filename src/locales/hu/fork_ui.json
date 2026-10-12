@@ -820,5 +820,9 @@
   "${0} gained ${1} ${2} production because of ${3}": "${0} kapott ${1} ${2}-termelést (${3} miatt).",
   "fizzled": "elmaradt",
   "${0} delegate(s)": "${0} küldött",
-  "All players": "Mindenki"
+  "All players": "Mindenki",
+  "placement bonus": "lerakási bónusz",
+  "adjacency bonus": "szomszédsági bónusz",
+  "adjacent oceans": "szomszédos óceánok",
+  "for the trade": "a kereskedésért"
 }

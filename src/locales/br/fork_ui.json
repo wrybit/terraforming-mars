@@ -1764,5 +1764,9 @@
   "All players": "Todos",
   "${0} raised the habitat rate ${1} step(s)": "${0} aumentou a taxa de habitat em ${1} passo(s)",
   "${0} raised the mining rate ${1} step(s)": "${0} aumentou a taxa de mineração em ${1} passo(s)",
-  "${0} raised the logistic rate ${1} step(s)": "${0} aumentou a taxa de logística em ${1} passo(s)"
+  "${0} raised the logistic rate ${1} step(s)": "${0} aumentou a taxa de logística em ${1} passo(s)",
+  "placement bonus": "bônus de colocação",
+  "adjacency bonus": "bônus de adjacência",
+  "adjacent oceans": "oceanos adjacentes",
+  "for the trade": "pelo comércio"
 }

@@ -1455,5 +1455,9 @@
   "All players": "Все",
   "${0} raised the habitat rate ${1} step(s)": "${0} повысил жилищный уровень на ${1} шаг(а)",
   "${0} raised the mining rate ${1} step(s)": "${0} повысил добывающий уровень на ${1} шаг(а)",
-  "${0} raised the logistic rate ${1} step(s)": "${0} повысил логистический уровень на ${1} шаг(а)"
+  "${0} raised the logistic rate ${1} step(s)": "${0} повысил логистический уровень на ${1} шаг(а)",
+  "placement bonus": "бонус размещения",
+  "adjacency bonus": "бонус соседства",
+  "adjacent oceans": "соседние океаны",
+  "for the trade": "за торговлю"
 }

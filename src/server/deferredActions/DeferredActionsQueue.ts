@@ -11,6 +11,11 @@ export class DeferredActionsQueue {
   // to the client (PlayerInput.sourceCard), so card name and text appear there instead of "Select one option".
   private currentSourceCard: CardName | undefined = undefined;
 
+  // Card whose effect is running right now (undefined outside a card): the log names it as the cause of gains and losses
+  get sourceCard(): CardName | undefined {
+    return this.currentSourceCard;
+  }
+
   get length(): number {
     return this.queue.length;
   }

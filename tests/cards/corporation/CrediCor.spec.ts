@@ -35,4 +35,11 @@ describe('CrediCor', () => {
     player.playCard(new Bushes());
     expect(player.megaCredits).to.eq(4);
   });
+
+  it('names itself as the cause of the 4 M€ in the log', () => {
+    player.playedCards.push(card);
+    player.playCard(new GiantIceAsteroid());
+    const gain = player.game.gameLog.find((message) => message.message === '${0} gained ${1} ${2} because of ${3}');
+    expect(gain?.data.map((datum) => datum.value)).deep.eq([player.color, '4', 'M€', card.name]);
+  });
 });

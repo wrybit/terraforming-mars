@@ -710,5 +710,9 @@
   "because of ${0}": "grâce à ${0}",
   "fizzled": "sans effet",
   "${0} delegate(s)": "${0} délégué(s)",
-  "All players": "Tous"
+  "All players": "Tous",
+  "placement bonus": "bonus de placement",
+  "adjacency bonus": "bonus d'adjacence",
+  "adjacent oceans": "océans adjacents",
+  "for the trade": "pour le commerce"
 }

@@ -106,7 +106,7 @@ export class AresHandler {
           break;
 
         default:
-          player.game.grantSpaceBonus(player, bonus);
+          player.game.grantSpaceBonus(player, bonus, 1, {text: 'adjacency bonus'});
           break;
         }
       }

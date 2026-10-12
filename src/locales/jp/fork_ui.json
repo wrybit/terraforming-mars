@@ -999,5 +999,9 @@
   "${0} gained ${1} ${2} production because of ${3}": "${3}により${0}の${2}産出が${1}増加",
   "fizzled": "不発",
   "${0} delegate(s)": "代表 ${0}人",
-  "All players": "全員"
+  "All players": "全員",
+  "placement bonus": "配置ボーナス",
+  "adjacency bonus": "隣接ボーナス",
+  "adjacent oceans": "隣接する海洋",
+  "for the trade": "交易のため"
 }

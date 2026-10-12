@@ -1004,5 +1004,9 @@
   "because of ${0}": "på grunn av ${0}",
   "fizzled": "mislyktes",
   "${0} delegate(s)": "${0} delegat(er)",
-  "All players": "Alle"
+  "All players": "Alle",
+  "placement bonus": "plasseringsbonus",
+  "adjacency bonus": "naboskapsbonus",
+  "adjacent oceans": "tilstøtende hav",
+  "for the trade": "for handelen"
 }

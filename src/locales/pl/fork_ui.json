@@ -1421,5 +1421,9 @@
   "${0} gained ${1} ${2} production because of ${3}": "${0} zwiększa produkcję ${2} o ${1} dzięki ${3}",
   "fizzled": "nie zadziałała",
   "${0} delegate(s)": "${0} delegat(ów)",
-  "All players": "Wszyscy"
+  "All players": "Wszyscy",
+  "placement bonus": "bonus za położenie",
+  "adjacency bonus": "bonus za sąsiedztwo",
+  "adjacent oceans": "sąsiednie oceany",
+  "for the trade": "za handel"
 }
