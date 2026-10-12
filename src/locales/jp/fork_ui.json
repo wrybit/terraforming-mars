@@ -996,5 +996,8 @@
   "Effects": "影響",
   "on ${0}": "${0}の上",
   "because of ${0}": "${0}による",
-  "${0} gained ${1} ${2} production because of ${3}": "${3}により${0}の${2}産出が${1}増加"
+  "${0} gained ${1} ${2} production because of ${3}": "${3}により${0}の${2}産出が${1}増加",
+  "fizzled": "不発",
+  "${0} delegate(s)": "代表 ${0}人",
+  "All players": "全員"
 }

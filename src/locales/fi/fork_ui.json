@@ -648,5 +648,8 @@
   "kept ${0} cards": "piti ${0} korttia",
   "Effects": "Vaikutukset",
   "on ${0}": "kortille ${0}",
-  "because of ${0}": "kortin ${0} ansiosta"
+  "because of ${0}": "kortin ${0} ansiosta",
+  "fizzled": "raukesi",
+  "${0} delegate(s)": "${0} edustaja(a)",
+  "All players": "Kaikki"
 }

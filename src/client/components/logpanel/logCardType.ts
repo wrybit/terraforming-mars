@@ -12,3 +12,8 @@ export const cardTypeToCss: Record<CardType, string | undefined> = {
   standard_action: 'background-color-standard-project',
   proxy: undefined,
 };
+
+// Party name -> image name in assets/parties ('Mars First' -> 'mars-first')
+export function partySlug(party: string | undefined): string {
+  return (party ?? '').toLowerCase().replace(/\s+/g, '-');
+}

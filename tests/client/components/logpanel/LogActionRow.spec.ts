@@ -45,4 +45,21 @@ describe('LogActionRow', () => {
     const wrapper = mount(LogActionRow, {...globalConfig, props: {row, viewModel: fakeViewModel()}});
     expect(wrapper.findAll('.log-row-research-entry')).has.length(2);
   });
+
+  it('shows a turmoil row without player: neutral delegates as party icons, all players as one area', () => {
+    const row: LogRow = {type: 'action', indexes: [0], action: {kind: 'turmoil', lead, effects: [], others: [],
+      everyone: [{resource: 'tr', amount: -1}], parties: ['Mars First', 'Reds']}};
+    const wrapper = mount(LogActionRow, {...globalConfig, props: {row, viewModel: fakeViewModel()}});
+    expect(wrapper.find('.log-row-name').exists()).to.be.false;
+    expect(wrapper.findAll('.log-row-party-icon').map((icon) => icon.classes())).deep.eq([
+      ['log-row-party-icon', 'log-row-party-icon--mars-first'], ['log-row-party-icon', 'log-row-party-icon--reds']]);
+    expect(wrapper.find('.log-row-other--loss').text()).contains('All players');
+  });
+
+  it('shows a trade with the colony name', () => {
+    const row: LogRow = {type: 'action', indexes: [0], action: {kind: 'trade', player: 'red', name: 'Io', lead, effects: [{resource: 'power', amount: -3}], others: []}};
+    const wrapper = mount(LogActionRow, {...globalConfig, props: {row, viewModel: fakeViewModel()}});
+    expect(wrapper.find('.log-row-card').text()).eq('Io');
+    expect(wrapper.find('.log-row-trade').attributes('title')).eq('Trade');
+  });
 });

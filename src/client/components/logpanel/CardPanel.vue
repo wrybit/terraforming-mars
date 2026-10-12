@@ -36,7 +36,7 @@ import {GlobalEventName} from '@/common/turmoil/globalEvents/GlobalEventName';
 import {CardModel} from '@/common/models/CardModel';
 import {logCardModel} from '@/client/components/logpanel/logCardModel';
 import {LogAction} from '@/client/components/logpanel/logActions';
-import LogActionEffects from '@/client/components/logpanel/LogActionEffects.vue';
+import LogActionEffects, {hasActionSummary} from '@/client/components/logpanel/LogActionEffects.vue';
 import {logMessageCards, logMessageColonies, logMessageGlobalEvents} from '@/client/components/logpanel/logMessageContent';
 
 export default defineComponent({
@@ -80,7 +80,7 @@ export default defineComponent({
       return this.cards.length + this.globalEvents.length + this.colonies.length > 0 || this.hasEffects;
     },
     hasEffects(): boolean {
-      return this.action !== undefined && (this.action.effects.length > 0 || this.action.others.length > 0);
+      return hasActionSummary(this.action);
     },
     cards(): ReadonlyArray<CardName> {
       return logMessageCards(this.message);

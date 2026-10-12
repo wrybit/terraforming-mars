@@ -1001,5 +1001,8 @@
   "kept ${0} cards": "beholdt ${0} kort",
   "Effects": "Virkninger",
   "on ${0}": "på ${0}",
-  "because of ${0}": "på grunn av ${0}"
+  "because of ${0}": "på grunn av ${0}",
+  "fizzled": "mislyktes",
+  "${0} delegate(s)": "${0} delegat(er)",
+  "All players": "Alle"
 }

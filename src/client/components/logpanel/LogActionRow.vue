@@ -1,20 +1,47 @@
 <template>
-  <div v-if="row.type === 'action'" class="log-row" :class="'log-line--' + row.action.player" data-test="log-action-row">
+  <div v-if="row.type === 'action'" class="log-row" :class="'log-line--' + (row.action.player ?? 'neutral')" data-test="log-action-row">
     <!-- One action of the log: who, which card, and what it changed (effects right-aligned as a column) -->
     <span class="log-row-what">
-      <span :class="['log-row-name', 'log-row-name--' + row.action.player]">{{ playerName(row.action.player) }}</span>
+      <span v-if="row.action.player !== undefined" :class="['log-row-name', 'log-row-name--' + row.action.player]">{{ playerName(row.action.player) }}</span>
       <!-- Action of a card already in play: the red arrow printed on the cards -->
-      <i v-if="row.action.kind === 'action'" class="log-row-action" :title="$t('Card action')"></i>
-      <span v-if="cardName !== undefined" class="log-row-card"><i :class="cardStripe"></i>{{ cardName }}</span>
-      <template v-else-if="row.action.kind === 'milestone' || row.action.kind === 'award'">
+      <i v-if="row.action.kind === 'action' || row.action.kind === 'partyAction'" class="log-row-action" :title="$t('Card action')"></i>
+      <span v-if="cardName !== undefined" :class="['log-row-card', {'log-row-card--fizzled': row.action.kind === 'fizzled'}]"><i :class="cardStripe"></i>{{ cardName }}</span>
+      <template v-if="row.action.kind === 'milestone' || row.action.kind === 'award'">
         <span class="log-row-muted">{{ $t(row.action.kind === 'milestone' ? 'Milestone' : 'Award') }}</span>
         <span class="log-row-ma">{{ $t(row.action.name ?? '') }}</span>
       </template>
       <span v-else-if="row.action.kind === 'pass'" class="log-row-muted">{{ $t('passed') }}</span>
       <span v-else-if="row.action.kind === 'kept'" class="log-row-muted">{{ keptText }}</span>
+      <span v-else-if="row.action.kind === 'fizzled'" class="log-row-muted">{{ $t('fizzled') }}</span>
+      <template v-else-if="row.action.kind === 'trade'">
+        <!-- Trade fleet symbol of the colony board, language-neutral -->
+        <i class="log-row-trade" :title="$t('Trade')"></i>
+        <span class="log-row-card"><i class="log-row-card-type background-color-colony"></i>{{ $t(row.action.name ?? '') }}</span>
+      </template>
+      <template v-else-if="row.action.kind === 'delegate' || row.action.kind === 'partyAction'">
+        <span v-if="row.action.kind === 'delegate'" class="log-row-muted">{{ delegateText }}</span>
+        <span class="log-row-party"><i :class="partyIcon(row.action.name)"></i>{{ $t(row.action.name ?? '') }}</span>
+      </template>
+      <template v-else-if="row.action.kind === 'globalEvent'">
+        <span class="log-row-muted">{{ $t('Global event') }}</span>
+        <span class="log-row-card"><i class="log-row-card-type log-row-card-type--global-event"></i>{{ $t(row.action.name ?? '') }}</span>
+      </template>
+      <template v-else-if="row.action.kind === 'turmoil'">
+        <span class="log-row-muted">{{ $t('Turmoil') }}</span>
+        <!-- Neutral delegates added to these parties -->
+        <span v-if="(row.action.parties ?? []).length > 0" class="log-row-parties" :title="$t('Neutral delegates')">
+          <i class="log-row-neutral-delegate"></i>
+          <i v-for="(party, index) in row.action.parties" :key="index" :class="partyIcon(party)" :title="$t(party)"></i>
+        </span>
+      </template>
     </span>
     <span class="log-row-effects">
       <LogEffectIcon v-for="(effect, index) in row.action.effects" :key="'own' + index" :effect="effect" @spaceClicked="$emit('spaceClicked', $event)"/>
+      <!-- All players at once (turmoil phase): same area as for other players -->
+      <span v-if="(row.action.everyone ?? []).length > 0" :class="['log-row-other', isLoss(row.action.everyone ?? []) ? 'log-row-other--loss' : 'log-row-other--gain']">
+        <span class="log-row-other-name">{{ $t('All players') }}</span>
+        <LogEffectIcon v-for="(effect, index) in row.action.everyone" :key="index" :effect="effect"/>
+      </span>
       <!-- Other players: red area = something was taken from them, green area = they got something -->
       <span v-for="other in row.action.others" :key="other.player"
         :class="['log-row-other', isLoss(other.effects) ? 'log-row-other--loss' : 'log-row-other--gain']">
@@ -41,6 +68,7 @@ import {translateTextWithParams} from '@/client/directives/i18n';
 import {LogEffect, LogRow} from '@/client/components/logpanel/logActions';
 import {cardTypeToCss} from '@/client/components/logpanel/logCardType';
 import LogEffectIcon from '@/client/components/logpanel/LogEffectIcon.vue';
+import {partySlug} from '@/client/components/logpanel/logCardType';
 
 export default defineComponent({
   name: 'LogActionRow',
@@ -63,6 +91,9 @@ export default defineComponent({
     isLoss(effects: ReadonlyArray<LogEffect>): boolean {
       return effects.some((effect) => effect.amount < 0);
     },
+    partyIcon(party: string | undefined): Array<string> {
+      return ['log-row-party-icon', 'log-row-party-icon--' + partySlug(party)];
+    },
   },
   computed: {
     card() {
@@ -74,6 +105,9 @@ export default defineComponent({
     cardStripe(): Array<string> {
       const css = this.card === undefined ? undefined : cardTypeToCss[this.card.type];
       return ['log-row-card-type', css ?? 'background-color-standard-project'];
+    },
+    delegateText(): string {
+      return this.row.type === 'action' ? translateTextWithParams('${0} delegate(s)', [String(this.row.action.count ?? 1)]) : '';
     },
     keptText(): string {
       return this.row.type === 'action' ? translateTextWithParams('kept ${0} cards', [this.row.action.name ?? '0']) : '';

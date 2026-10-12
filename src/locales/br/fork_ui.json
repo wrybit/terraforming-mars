@@ -1758,5 +1758,11 @@
   "Effects": "Efeitos",
   "on ${0}": "em ${0}",
   "because of ${0}": "por causa de ${0}",
-  "${0} gained ${1} ${2} production because of ${3}": "${0} ganhou ${1} de produção de ${2} por causa de ${3}"
+  "${0} gained ${1} ${2} production because of ${3}": "${0} ganhou ${1} de produção de ${2} por causa de ${3}",
+  "fizzled": "falhou",
+  "${0} delegate(s)": "${0} delegado(s)",
+  "All players": "Todos",
+  "${0} raised the habitat rate ${1} step(s)": "${0} aumentou a taxa de habitat em ${1} passo(s)",
+  "${0} raised the mining rate ${1} step(s)": "${0} aumentou a taxa de mineração em ${1} passo(s)",
+  "${0} raised the logistic rate ${1} step(s)": "${0} aumentou a taxa de logística em ${1} passo(s)"
 }

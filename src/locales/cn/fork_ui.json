@@ -1565,5 +1565,11 @@
   "Effects": "影响",
   "on ${0}": "放在 ${0} 上",
   "because of ${0}": "因 ${0}",
-  "${0} gained ${1} ${2} production because of ${3}": "因 ${3}，${0} 的 ${2} 产量增加了 ${1}"
+  "${0} gained ${1} ${2} production because of ${3}": "因 ${3}，${0} 的 ${2} 产量增加了 ${1}",
+  "fizzled": "失效",
+  "${0} delegate(s)": "${0} 名代表",
+  "All players": "所有玩家",
+  "${0} raised the habitat rate ${1} step(s)": "${0} 将栖息地等级提升了 ${1} 级",
+  "${0} raised the mining rate ${1} step(s)": "${0} 将采矿等级提升了 ${1} 级",
+  "${0} raised the logistic rate ${1} step(s)": "${0} 将物流等级提升了 ${1} 级"
 }

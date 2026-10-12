@@ -1418,5 +1418,8 @@
   "Effects": "Skutki",
   "on ${0}": "na ${0}",
   "because of ${0}": "dzięki ${0}",
-  "${0} gained ${1} ${2} production because of ${3}": "${0} zwiększa produkcję ${2} o ${1} dzięki ${3}"
+  "${0} gained ${1} ${2} production because of ${3}": "${0} zwiększa produkcję ${2} o ${1} dzięki ${3}",
+  "fizzled": "nie zadziałała",
+  "${0} delegate(s)": "${0} delegat(ów)",
+  "All players": "Wszyscy"
 }

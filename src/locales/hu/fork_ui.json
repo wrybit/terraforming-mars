@@ -817,5 +817,8 @@
   "Effects": "Hatások",
   "on ${0}": "a(z) ${0} kártyán",
   "because of ${0}": "${0} miatt",
-  "${0} gained ${1} ${2} production because of ${3}": "${0} kapott ${1} ${2}-termelést (${3} miatt)."
+  "${0} gained ${1} ${2} production because of ${3}": "${0} kapott ${1} ${2}-termelést (${3} miatt).",
+  "fizzled": "elmaradt",
+  "${0} delegate(s)": "${0} küldött",
+  "All players": "Mindenki"
 }

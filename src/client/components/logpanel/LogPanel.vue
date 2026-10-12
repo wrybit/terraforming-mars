@@ -454,7 +454,9 @@ export default defineComponent({
         return;
       }
       const tops = this.sectionElements().map((element) => element.getBoundingClientRect().top);
-      const index = activeSectionIndex(tops, readingLineOf(container, this.typedRefs.generationList?.$el));
+      // The tab list renders nothing (comment node as $el) while hidden: then there is no tab bar to measure
+      const tabBar = this.typedRefs.generationList?.$el;
+      const index = activeSectionIndex(tops, readingLineOf(container, tabBar instanceof HTMLElement ? tabBar : undefined));
       this.selectedGeneration = this.sections[index]?.generation ?? this.generation;
     },
     updateScrollState(): void {

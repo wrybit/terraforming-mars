@@ -1262,5 +1262,8 @@
   "Effects": "Gevolgen",
   "on ${0}": "op ${0}",
   "because of ${0}": "door ${0}",
-  "${0} gained ${1} ${2} production because of ${3}": "${0} ontving ${1} ${2}-productie door ${3}"
+  "${0} gained ${1} ${2} production because of ${3}": "${0} ontving ${1} ${2}-productie door ${3}",
+  "fizzled": "mislukt",
+  "${0} delegate(s)": "${0} afgevaardigde(n)",
+  "All players": "Iedereen"
 }

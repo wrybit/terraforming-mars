@@ -20,4 +20,14 @@ describe('LogActionEffects', () => {
     const notes = wrapper.findAll('.log-action-effects-note').map((note) => note.text());
     expect(notes).deep.eq(['on Olympus Conference', 'because of Mars University']);
   });
+
+  it('shows the text lines of a turmoil row and its neutral delegates', () => {
+    const action: LogAction = {
+      kind: 'turmoil', lead: new LogMessage(LogMessageType.DEFAULT, '', []), effects: [], others: [], parties: ['Greens'],
+      notes: [new LogMessage(LogMessageType.DEFAULT, 'A neutral delegate is the new chairman.', [])],
+    };
+    const wrapper = mount(LogActionEffects, {...globalConfig, props: {action, players: fakeViewModel().players}});
+    expect(wrapper.find('.log-action-effects-text').text()).eq('A neutral delegate is the new chairman.');
+    expect(wrapper.find('.log-row-party-icon--greens').exists()).to.be.true;
+  });
 });

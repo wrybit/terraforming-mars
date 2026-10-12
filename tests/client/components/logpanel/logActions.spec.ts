@@ -10,6 +10,14 @@ const player = (value: string): LogMessageData => ({type: LogMessageDataType.PLA
 const card = (value: CardName): LogMessageData => ({type: LogMessageDataType.CARD, value});
 const text = (value: string): LogMessageData => ({type: LogMessageDataType.STRING, value});
 const raw = (value: string): LogMessageData => ({type: LogMessageDataType.RAW_STRING, value});
+const typed = (type: LogMessageDataType, value: string): LogMessageData => ({type, value} as LogMessageData);
+const actionAt = (rows: ReturnType<typeof groupLogMessages>, index: number) => {
+  const row = rows[index];
+  if (row?.type !== 'action') {
+    throw new Error('expected an action row at ' + index);
+  }
+  return row.action;
+};
 const message = (template: string, ...data: Array<LogMessageData>) => new LogMessage(LogMessageType.DEFAULT, template, data);
 
 describe('logActions', () => {
@@ -45,7 +53,7 @@ describe('logActions', () => {
   it('keeps unknown messages as text lines and does not attach later effects to the previous action', () => {
     const rows = groupLogMessages([
       message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
-      message('${0} traded with ${1}', player('red'), text('Europa')),
+      message('${0} found life!', player('red')),
       message('${0} gained ${1} ${2}', player('red'), raw('1'), text('plant')),
     ]);
     expect(rows.map((row) => row.type)).deep.eq(['action', 'message', 'message']);
@@ -117,5 +125,95 @@ describe('logActions', () => {
       {resource: 'megacredit', amount: 7},
       {tile: 'city', amount: 0},
     ]);
+  });
+
+  it('groups the turmoil phase: all players lose TR, global event with its effects, new government with notes', () => {
+    const rows = groupLogMessages([
+      message('All players lose 1 TR.'),
+      message('Resolving global event ${0}', typed(LogMessageDataType.GLOBAL_EVENT, 'Successful Organisms')),
+      message('${0} gained ${1} ${2} because of ${3}', player('red'), raw('2'), text('plants'), typed(LogMessageDataType.GLOBAL_EVENT, 'Successful Organisms')),
+      message('A neutral delegate is the new chairman.'),
+      message('The ruling bonus is: ${0}', text('Gain 1 M€ for each plant tag')),
+      message('${0} gained ${1} ${2} because of ${3}', player('blue'), raw('1'), text('M€'), typed(LogMessageDataType.PARTY, 'Greens')),
+      message('The ruling policy is: ${0}', text('When you place a greenery tile, gain 4 M€')),
+      message('A neutral delegate was added to the ${0} party', typed(LogMessageDataType.PARTY, 'Scientists')),
+      message('A neutral delegate was added to the ${0} party', typed(LogMessageDataType.PARTY, 'Reds')),
+    ]);
+    expect(rows.map((row) => row.type)).deep.eq(['action', 'action', 'action']);
+    expect(actionAt(rows, 0)).include({kind: 'turmoil'});
+    expect(actionAt(rows, 0).everyone).deep.eq([{resource: 'tr', amount: -1}]);
+    const event = actionAt(rows, 1);
+    expect(event).include({kind: 'globalEvent', name: 'Successful Organisms', player: undefined});
+    expect(event.others).deep.eq([{player: 'red', effects: [{resource: 'plant', amount: 2, cause: 'Successful Organisms'}]}]);
+    const government = actionAt(rows, 2);
+    expect(government.kind).eq('turmoil');
+    expect(government.parties).deep.eq(['Scientists', 'Reds']);
+    expect(government.notes?.map((note) => note.message)).deep.eq(['A neutral delegate is the new chairman.', 'The ruling bonus is: ${0}', 'The ruling policy is: ${0}']);
+    expect(government.others).deep.eq([{player: 'blue', effects: [{resource: 'megacredit', amount: 1, cause: 'Greens'}]}]);
+  });
+
+  it('groups a trade with its fuel, income and colony bonuses of other players', () => {
+    const rows = groupLogMessages([
+      message('${0} spent ${1} M€ to trade with ${2}', player('red'), raw('9'), typed(LogMessageDataType.COLONY, 'Io')),
+      message('${0} gained ${1} trade bonus', player('red'), typed(LogMessageDataType.COLONY, 'Io')),
+      message('${0} gained ${1} ${2}', player('red'), raw('3'), text('heat')),
+      message('${0} gained ${1} ${2}', player('red'), raw('2'), text('M€')),
+      message('${0} gained ${1} ${2}', player('blue'), raw('2'), text('heat')),
+    ]);
+    expect(rows).has.length(1);
+    const trade = actionAt(rows, 0);
+    expect(trade).include({kind: 'trade', name: 'Io', player: 'red'});
+    expect(trade.effects).deep.eq([{resource: 'megacredit', amount: -9, cost: true}, {resource: 'heat', amount: 3}, {resource: 'megacredit', amount: 2}]);
+    expect(trade.others).deep.eq([{player: 'blue', effects: [{resource: 'heat', amount: 2}]}]);
+  });
+
+  it('shows a steal as a loss for the victim and a gain for the thief', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
+      message('${3} stole ${1} ${2} from ${0}', player('green'), raw('3'), text('M€'), player('red')),
+    ]);
+    const action = actionAt(rows, 0);
+    expect(action.effects).deep.eq([{resource: 'megacredit', amount: 3}]);
+    expect(action.others).deep.eq([{player: 'green', effects: [{resource: 'megacredit', amount: -3}]}]);
+  });
+
+  it('recognises expansion effects: colony, TR, moon tile and rate, planetary track, underground token once', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
+      message('${0} built a colony on ${1}', player('red'), typed(LogMessageDataType.COLONY, 'Luna')),
+      message('${0} gained ${1} TR', player('red'), raw('2')),
+      message('${0} placed a ${1} tile at ${2}', player('red'), typed(LogMessageDataType.TILE_TYPE, '30'), typed(LogMessageDataType.SPACE, 'm02')),
+      message('${0} raised the habitat rate ${1} step(s)', player('red'), raw('1')),
+      message('${0} raised the ${1} planetary track ${2} step(s)', player('red'), text('venus'), raw('1')),
+      message('${0} excavated ${1} at ${2}', player('red'), typed(LogMessageDataType.UNDERGROUND_TOKEN, 'plant2'), typed(LogMessageDataType.SPACE, '03')),
+      message('${0} claimed ${1} at ${2}', player('red'), typed(LogMessageDataType.UNDERGROUND_TOKEN, 'plant2'), typed(LogMessageDataType.SPACE, '03')),
+    ]);
+    expect(rows).has.length(1);
+    expect(actionAt(rows, 0).effects).deep.eq([
+      {resource: 'colony', amount: 1, label: 'Luna'},
+      {resource: 'tr', amount: 2},
+      {resource: 'habitat-rate', amount: 1},
+      {resource: 'track-venus', amount: 1},
+      {tile: 'moon-habitat', space: 'm02', amount: 0},
+      {token: 'plant2', space: '03', amount: 0},
+    ]);
+  });
+
+  it('starts rows for delegates and fizzled preludes', () => {
+    const rows = groupLogMessages([
+      message('${0} sent ${1} delegate(s) in ${2} area', player('blue'), raw('2'), typed(LogMessageDataType.PARTY, 'Mars First')),
+      message('${0} fizzled. ${1} gains 15 M€.', card(CardName.ECOLOGY_EXPERTS), player('green')),
+    ]);
+    expect(actionAt(rows, 0)).include({kind: 'delegate', name: 'Mars First', count: 2, player: 'blue'});
+    expect(rows[1].type).eq('phase');
+    expect(actionAt(rows, 2)).include({kind: 'fizzled', card: CardName.ECOLOGY_EXPERTS, player: 'green'});
+    expect(actionAt(rows, 2).effects).deep.eq([{resource: 'megacredit', amount: 15}]);
+  });
+
+  it('adds up delegates the same player sends into the same party in a row', () => {
+    const sent = (who: string, party: string) => message('${0} sent ${1} delegate(s) in ${2} area', player(who), raw('1'), typed(LogMessageDataType.PARTY, party));
+    const rows = groupLogMessages([sent('blue', 'Reds'), sent('blue', 'Reds'), sent('red', 'Reds'), sent('red', 'Greens')]);
+    expect(rows.map((row) => row.type === 'action' ? [row.action.player, row.action.name, row.action.count] : [])).deep.eq([
+      ['blue', 'Reds', 2], ['red', 'Reds', 1], ['red', 'Greens', 1]]);
   });
 });

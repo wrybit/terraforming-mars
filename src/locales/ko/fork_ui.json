@@ -874,5 +874,11 @@
   "Effects": "효과",
   "on ${0}": "${0}에",
   "because of ${0}": "${0} 때문에",
-  "${0} gained ${1} ${2} production because of ${3}": "${3} 때문에 ${0} 플레이어의 ${2} 생산이 ${1} 증가"
+  "${0} gained ${1} ${2} production because of ${3}": "${3} 때문에 ${0} 플레이어의 ${2} 생산이 ${1} 증가",
+  "fizzled": "무산됨",
+  "${0} delegate(s)": "대표 ${0}명",
+  "All players": "모든 플레이어",
+  "${0} raised the habitat rate ${1} step(s)": "${0}이(가) 거주지 등급을 ${1}단계 올렸습니다",
+  "${0} raised the mining rate ${1} step(s)": "${0}이(가) 채굴 등급을 ${1}단계 올렸습니다",
+  "${0} raised the logistic rate ${1} step(s)": "${0}이(가) 물류 등급을 ${1}단계 올렸습니다"
 }

@@ -335,8 +335,7 @@ each(@players, {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  column-gap: 10px;
-  row-gap: 2px;
+  gap: 2px 10px;
   min-height: 30px;
   padding: 3px 4px;
   border-radius: 4px;
@@ -505,10 +504,93 @@ each(@log-effect-resources, {
   }
 });
 
+// Expansion icons that don't live in assets/resources
+.log-effect-resource--tr { background-image: url("./assets/resources/tr.png"); }
+.log-effect-resource--corruption { background-image: url("./assets/underworld/corruption.png"); }
+.log-effect-resource--venus { background-image: url("./assets/global-parameters/venus.png"); }
+.log-effect-resource--colony { background-image: url("./assets/tiles/colony.png"); }
+
+@log-effect-moon-rates: habitat, mining, logistic;
+each(@log-effect-moon-rates, {
+  .log-effect-resource--@{value}-rate {
+    background-image: url("./assets/moon/card-@{value}-rate.png");
+  }
+});
+
+// Planetary tracks (Pathfinders): the planet's tag
+@log-effect-tracks: venus, earth, mars, jovian, moon;
+each(@log-effect-tracks, {
+  .log-effect-resource--track-@{value} {
+    background-image: url("./assets/tags/@{value}.png");
+  }
+});
+
 @log-effect-tiles: city, greenery, ocean, special;
 each(@log-effect-tiles, {
   .log-effect-tile--@{value} {
     background-image: url("./assets/tiles/@{value}.png");
+  }
+});
+
+.log-effect-tile--moon-mine { background-image: url("./assets/moon/minetile.png"); }
+.log-effect-tile--moon-habitat { background-image: url("./assets/moon/habitattile.png"); }
+.log-effect-tile--moon-road { background-image: url("./assets/moon/roadtile.png"); }
+
+// Underground token (the image comes from .underground-token--<token> in board.less)
+.log-effect-token {
+  border-radius: 50%;
+}
+
+// Prelude that could not be played (15 M€ instead)
+.log-row-card--fizzled {
+  text-decoration: line-through;
+  text-decoration-color: #8a90a0;
+}
+
+.log-row-trade {
+  display: inline-block;
+  flex: none;
+  width: 20px;
+  height: 16px;
+  background: url("./assets/tiles/trade.png") center / contain no-repeat;
+}
+
+.log-row-card-type--global-event {
+  background: #d8d8d8;
+}
+
+// Party: small party logo in front of the name (rows, text lines, hover summary)
+.log-row-party {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #eee;
+}
+
+.log-row-parties {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.log-row-party-icon,
+.log-row-neutral-delegate {
+  display: inline-block;
+  flex: none;
+  width: 22px;
+  height: 16px;
+  background: center / contain no-repeat;
+}
+
+.log-row-neutral-delegate {
+  width: 16px;
+  background-image: url("./assets/underworld/neutral-delegate.png");
+}
+
+@log-parties: greens, kelvinists, mars-first, reds, scientists, unity, bureacrats, centrists, empower, populists, spome, transhumanists;
+each(@log-parties, {
+  .log-row-party-icon--@{value} {
+    background-image: url("./assets/parties/@{value}.png");
   }
 });
 
@@ -547,6 +629,11 @@ each(@log-effect-tiles, {
     font-size: 16px;
     font-weight: normal;
     text-transform: none;
+  }
+
+  // Global events have a plain light colour instead of a gradient: draw it as the same stripe
+  .log-card.background-color-global-event {
+    background: linear-gradient(#d8d8d8, #d8d8d8) left center / 4px 14px no-repeat;
   }
 }
 
@@ -605,4 +692,14 @@ each(@players, {
 .log-action-effects-note {
   color: #9aa0b0;
   font-size: 14px;
+}
+
+.log-action-effects-text {
+  color: #ccc;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.log-action-effects-player--all {
+  background: #555b70;
 }

@@ -16,6 +16,9 @@
         <span v-else-if="data.type === LogMessageDataType.TILE_TYPE" v-i18n>
           {{tileTypeToString[data.value]}}
         </span>
+        <span v-else-if="data.type === LogMessageDataType.PARTY" class="log-row-party">
+          <i :class="['log-row-party-icon', 'log-row-party-icon--' + partySlug(data.value)]"></i>{{ $t(data.value) }}
+        </span>
         <span v-else-if="data.type === LogMessageDataType.COLONY" class="log-card background-color-colony" v-i18n>
           {{data.value}}
         </span>
@@ -57,7 +60,7 @@ import {getPreferences} from '@/client/utils/PreferencesManager';
 import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {range} from '@/common/utils/utils';
 import {needsModalPreview} from '@/client/components/logpanel/logMessageContent';
-import {cardTypeToCss} from '@/client/components/logpanel/logCardType';
+import {cardTypeToCss, partySlug} from '@/client/components/logpanel/logCardType';
 
 
 export default defineComponent({
@@ -73,6 +76,7 @@ export default defineComponent({
     },
   },
   methods: {
+    partySlug,
     spaceName(id: SpaceId): string {
       const game = this.viewModel.game;
       const spaces = id.startsWith('m') ? game.moon?.spaces : game.spaces;

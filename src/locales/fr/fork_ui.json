@@ -707,5 +707,8 @@
   "kept ${0} cards": "a gardé ${0} cartes",
   "Effects": "Effets",
   "on ${0}": "sur ${0}",
-  "because of ${0}": "grâce à ${0}"
+  "because of ${0}": "grâce à ${0}",
+  "fizzled": "sans effet",
+  "${0} delegate(s)": "${0} délégué(s)",
+  "All players": "Tous"
 }
