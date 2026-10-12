@@ -8,15 +8,14 @@
       <span class="log-action-effects-note">{{ $t('Neutral delegates') }}</span>
       <span v-for="(party, index) in parties" :key="index" class="log-row-party"><i :class="['log-row-party-icon', 'log-row-party-icon--' + slug(party)]"></i>{{ $t(party) }}</span>
     </div>
-    <div v-for="line in lines" :key="line.player ?? 'all'" class="log-action-effects-line">
-      <span :class="['log-action-effects-player', line.player !== undefined ? 'player_bg_color_' + line.player : 'log-action-effects-player--all']">{{ line.player !== undefined ? playerName(line.player) : $t('All players') }}</span>
-      <span v-for="(effect, index) in line.effects" :key="index" class="log-action-effects-item">
-        <LogEffectIcon :effect="effect"/>
-        <span v-if="effect.card !== undefined" class="log-action-effects-note">{{ note('on ${0}', effect.card) }}</span>
-        <span v-else-if="effect.cause !== undefined" class="log-action-effects-note">{{ note('because of ${0}', effect.cause) }}</span>
-        <span v-else-if="effect.label !== undefined" class="log-action-effects-note">{{ $t(effect.label) }}</span>
-        <span v-else-if="effect.cost" class="log-action-effects-note">{{ $t('for the trade') }}</span>
-      </span>
+    <!-- One line per effect: player, value, reason – as a grid so the columns line up.
+         The player column only appears when more than one player is affected -->
+    <div v-if="items.length > 0" :class="['log-action-effects-grid', {'log-action-effects-grid--players': showPlayers}]">
+      <template v-for="(item, index) in items" :key="index">
+        <span v-if="showPlayers" :class="['log-action-effects-player', item.player !== undefined ? 'player_bg_color_' + item.player : 'log-action-effects-player--all']">{{ item.player !== undefined ? playerName(item.player) : $t('All players') }}</span>
+        <LogEffectIcon :effect="item.effect"/>
+        <span class="log-action-effects-note">{{ reason(item.effect) }}</span>
+      </template>
     </div>
   </div>
 </template>
@@ -57,6 +56,13 @@ export default defineComponent({
       const everyone = (this.action.everyone ?? []).length > 0 ? [{player: undefined, effects: this.action.everyone ?? []}] : [];
       return [...own, ...everyone, ...this.action.others];
     },
+    // Flat list for the grid: every effect with its player
+    items(): Array<{player?: Color, effect: LogEffect}> {
+      return this.lines.flatMap((line) => line.effects.map((effect) => ({player: line.player, effect})));
+    },
+    showPlayers(): boolean {
+      return new Set(this.items.map((item) => item.player ?? 'all')).size > 1;
+    },
     parties(): ReadonlyArray<string> {
       return this.action.parties ?? [];
     },
@@ -72,6 +78,19 @@ export default defineComponent({
     },
     note(template: string, name: string): string {
       return translateTextWithParams(template, [translateText(name.split(':')[0])]);
+    },
+    // Why the value changed: the card it lies on, the card or rule that caused it, or what the icon stands for
+    reason(effect: LogEffect): string {
+      if (effect.card !== undefined) {
+        return this.note('on ${0}', effect.card);
+      }
+      if (effect.cause !== undefined) {
+        return this.note('because of ${0}', effect.cause);
+      }
+      if (effect.label !== undefined) {
+        return translateText(effect.label);
+      }
+      return effect.cost ? translateText('for the trade') : '';
     },
     slug(party: string): string {
       return partySlug(party);

@@ -16,8 +16,9 @@ describe('LogActionEffects', () => {
       others: [{player: 'blue', effects: [{resource: 'megacredit', amount: 2, cause: CardName.MARS_UNIVERSITY}]}],
     };
     const wrapper = mount(LogActionEffects, {...globalConfig, props: {action, players: fakeViewModel().players}});
-    expect(wrapper.findAll('.log-action-effects-line')).has.length(2);
-    const notes = wrapper.findAll('.log-action-effects-note').map((note) => note.text());
+    // One grid line (player, value, reason) per effect
+    expect(wrapper.findAll('.log-action-effects-player').map((chip) => chip.text())).has.length(2);
+    const notes = wrapper.findAll('.log-action-effects-grid .log-action-effects-note').map((note) => note.text());
     expect(notes).deep.eq(['on Olympus Conference', 'because of Mars University']);
   });
 
@@ -29,5 +30,15 @@ describe('LogActionEffects', () => {
     const wrapper = mount(LogActionEffects, {...globalConfig, props: {action, players: fakeViewModel().players}});
     expect(wrapper.find('.log-action-effects-text').text()).eq('A neutral delegate is the new chairman.');
     expect(wrapper.find('.log-row-party-icon--greens').exists()).to.be.true;
+  });
+
+  it('leaves out the player name when only the acting player is affected', () => {
+    const action: LogAction = {
+      kind: 'card', player: 'red', card: CardName.AI_CENTRAL, lead: new LogMessage(LogMessageType.DEFAULT, '', []),
+      effects: [{resource: 'power', amount: -1, production: true}, {resource: 'megacredit', amount: 4, cause: CardName.CREDICOR}], others: [],
+    };
+    const wrapper = mount(LogActionEffects, {...globalConfig, props: {action, players: fakeViewModel().players}});
+    expect(wrapper.find('.log-action-effects-player').exists()).to.be.false;
+    expect(wrapper.findAll('.log-action-effects-grid .log-action-effects-note').map((note) => note.text())).deep.eq(['', 'because of CrediCor']);
   });
 });
