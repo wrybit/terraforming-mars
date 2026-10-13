@@ -181,14 +181,19 @@
 }
 
 .games-overview-table {
-  // Full card width, so the delete column sits at the right edge even with few players
-  min-width: 100%;
+  // Full card width, so the delete column sits at the right edge even with few players.
+  // Fixed layout: status, game, generation and delete get set widths, all other columns
+  // (spectator/result, players, AI) share the rest equally; narrower screens scroll inside the card.
+  width: 100%;
+  min-width: 1240px;
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: @games-overview-gap-cell;
   white-space: nowrap;
 
+  // No side padding: a left-aligned label starts exactly where its cell content starts
   th {
-    padding: 0 6px 4px;
+    padding: 0 0 4px;
     color: @games-overview-dim;
     font-weight: 500;
     text-align: center;
@@ -207,7 +212,16 @@
   border-top: 1px solid @games-overview-line;
 }
 
+.games-overview-table .games-overview-status {
+  width: 28px;
+}
+
+.games-overview-table .games-overview-generation {
+  width: 48px;
+}
+
 .games-overview-game {
+  width: 150px;
   text-align: left !important;
 
   .games-overview-id,
@@ -271,10 +285,6 @@
   }
 }
 
-.games-overview-table .games-overview-players {
-  width: 80px;
-}
-
 .games-overview-players .games-overview-chip {
   display: flex;
   flex-direction: column;
@@ -282,6 +292,7 @@
   width: 76px;
   min-width: 0;
   height: auto;
+  margin-inline: auto; // centered under the column label, however wide the column gets
   padding: 3px 6px;
   line-height: 1.2;
 
@@ -370,7 +381,7 @@
   right: 0;
   z-index: 1;
   padding-left: 8px;
-  width: 1%; // as narrow as its button; the spare width goes to the other columns
+  width: 136px; // button plus shadow gap; fixed so the spare width goes to the other columns
   text-align: right !important;
   background: #1d1e24;
   box-shadow: -10px 0 10px -6px rgba(0, 0, 0, 0.6);

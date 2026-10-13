@@ -8,9 +8,10 @@
       <table class="games-overview-table">
         <thead>
           <tr>
-            <th></th>
-            <th v-i18n>Game</th>
-            <th v-i18n>Gen</th>
+            <!-- Classes as on the cells: same width and alignment, the label stays above its content -->
+            <th class="games-overview-status"></th>
+            <th class="games-overview-game" v-i18n>Game</th>
+            <th class="games-overview-generation" v-i18n>Gen</th>
             <!-- Finished games can no longer be watched, only their result shown -->
             <th>{{ $t(groupKey === 'finished' ? 'Result' : 'Spectator') }}</th>
             <th v-for="(column, index) in columns" :key="index">{{ columnLabel(column) }}</th>
