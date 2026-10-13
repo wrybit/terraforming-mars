@@ -523,7 +523,7 @@
   "Update to latest": "Auf neuesten Stand",
   "Up to date": "Aktuell",
   "${0} commits behind": "${0} Commits zurück",
-  "Update requested – starts within a minute": "Update angefordert – startet in einer Minute",
+  "Update requested – starting now": "Update angefordert – startet jetzt",
   "Yes, update": "Ja, updaten",
   "Yes, restart": "Ja, neu starten",
   "Could not request the update:": "Update konnte nicht angefordert werden:",

@@ -1851,7 +1851,7 @@
   "Update to latest": "Atualizar para a mais recente",
   "Up to date": "Atualizado",
   "${0} commits behind": "${0} commits atrás",
-  "Update requested – starts within a minute": "Atualização solicitada – começa em um minuto",
+  "Update requested – starting now": "Atualização solicitada – começando agora",
   "Yes, update": "Sim, atualizar",
   "Yes, restart": "Sim, reiniciar",
   "Could not request the update:": "Não foi possível solicitar a atualização:",

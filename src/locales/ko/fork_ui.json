@@ -969,7 +969,7 @@
   "Update to latest": "최신으로 업데이트",
   "Up to date": "최신 상태",
   "${0} commits behind": "${0}개 커밋 뒤처짐",
-  "Update requested – starts within a minute": "업데이트 요청됨 – 1분 안에 시작",
+  "Update requested – starting now": "업데이트 요청됨 – 곧 시작",
   "Yes, update": "예, 업데이트",
   "Yes, restart": "예, 재시작",
   "Could not request the update:": "업데이트를 요청할 수 없음:",

@@ -63,7 +63,7 @@ export default defineComponent({
     },
     statusText(): string {
       if (this.dashboard.updateRequest !== undefined) {
-        return translateText('Update requested – starts within a minute');
+        return translateText('Update requested – starting now');
       }
       const behind = this.state.behind;
       if (behind === undefined) {

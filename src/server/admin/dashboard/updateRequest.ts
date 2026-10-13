@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {UPDATE_REQUEST_FILE, UpdateRequest} from '../../../common/admin/ServerDashboard';
 
-// The script of the server operator looks for the file every minute and removes it when it starts the update.
+// The watcher script of the server operator looks for the file every few seconds and removes it when it starts the update.
 // An older request means no script is watching: showing it as waiting would mislead.
 const WATCHED_MILLISECONDS = 10 * 60 * 1000;
 

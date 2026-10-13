@@ -795,7 +795,7 @@
   "Update to latest": "Mettre à jour",
   "Up to date": "À jour",
   "${0} commits behind": "${0} commits de retard",
-  "Update requested – starts within a minute": "Mise à jour demandée – démarre dans une minute",
+  "Update requested – starting now": "Mise à jour demandée – démarre maintenant",
   "Yes, update": "Oui, mettre à jour",
   "Yes, restart": "Oui, redémarrer",
   "Could not request the update:": "Impossible de demander la mise à jour :",

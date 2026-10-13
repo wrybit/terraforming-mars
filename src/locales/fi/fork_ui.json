@@ -739,7 +739,7 @@
   "Update to latest": "Päivitä uusimpaan",
   "Up to date": "Ajan tasalla",
   "${0} commits behind": "${0} committia jäljessä",
-  "Update requested – starts within a minute": "Päivitys pyydetty – alkaa minuutin sisällä",
+  "Update requested – starting now": "Päivitys pyydetty – alkaa nyt",
   "Yes, update": "Kyllä, päivitä",
   "Yes, restart": "Kyllä, käynnistä uudelleen",
   "Could not request the update:": "Päivitystä ei voitu pyytää:",

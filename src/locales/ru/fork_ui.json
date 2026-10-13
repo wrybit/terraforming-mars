@@ -1545,7 +1545,7 @@
   "Update to latest": "Обновить до последней",
   "Up to date": "Актуально",
   "${0} commits behind": "Отстаёт на ${0} коммитов",
-  "Update requested – starts within a minute": "Обновление запрошено – начнётся в течение минуты",
+  "Update requested – starting now": "Обновление запрошено – начинается",
   "Yes, update": "Да, обновить",
   "Yes, restart": "Да, перезапустить",
   "Could not request the update:": "Не удалось запросить обновление:",

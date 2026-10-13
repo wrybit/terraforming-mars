@@ -1950,7 +1950,7 @@
   "Update to latest": "Aggiorna all'ultima",
   "Up to date": "Aggiornato",
   "${0} commits behind": "Indietro di ${0} commit",
-  "Update requested – starts within a minute": "Aggiornamento richiesto – parte entro un minuto",
+  "Update requested – starting now": "Aggiornamento richiesto – parte ora",
   "Yes, update": "Sì, aggiorna",
   "Yes, restart": "Sì, riavvia",
   "Could not request the update:": "Impossibile richiedere l'aggiornamento:",

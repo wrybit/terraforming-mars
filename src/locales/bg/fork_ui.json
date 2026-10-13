@@ -1624,7 +1624,7 @@
   "Update to latest": "Обнови до най-новата",
   "Up to date": "Актуално",
   "${0} commits behind": "Изостава с ${0} комита",
-  "Update requested – starts within a minute": "Заявено обновяване – започва до минута",
+  "Update requested – starting now": "Заявено обновяване – започва сега",
   "Yes, update": "Да, обнови",
   "Yes, restart": "Да, рестартирай",
   "Could not request the update:": "Обновяването не можа да бъде заявено:",

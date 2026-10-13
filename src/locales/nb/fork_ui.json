@@ -1091,7 +1091,7 @@
   "Update to latest": "Oppdater til nyeste",
   "Up to date": "Oppdatert",
   "${0} commits behind": "${0} commits bak",
-  "Update requested – starts within a minute": "Oppdatering bestilt – starter innen ett minutt",
+  "Update requested – starting now": "Oppdatering bestilt – starter nå",
   "Yes, update": "Ja, oppdater",
   "Yes, restart": "Ja, start på nytt",
   "Could not request the update:": "Kunne ikke bestille oppdateringen:",

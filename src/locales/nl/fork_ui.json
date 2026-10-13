@@ -1349,7 +1349,7 @@
   "Update to latest": "Bijwerken naar nieuwste",
   "Up to date": "Actueel",
   "${0} commits behind": "${0} commits achter",
-  "Update requested – starts within a minute": "Update aangevraagd – start binnen een minuut",
+  "Update requested – starting now": "Update aangevraagd – start nu",
   "Yes, update": "Ja, bijwerken",
   "Yes, restart": "Ja, herstarten",
   "Could not request the update:": "Update kon niet worden aangevraagd:",
