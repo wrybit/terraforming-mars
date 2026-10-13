@@ -848,7 +848,6 @@
   "Players per day": "Játékosok naponta",
   "Players per week": "Játékosok hetente",
   "Distinct human players with a move that day": "Különböző emberi játékosok, akik aznap léptek",
-  "Week starting on": "Hét kezdőnapja",
   "Availability": "Rendelkezésre állás",
   "Share of the day the server was running (%)": "A nap azon része, amikor a szerver futott (%)",
   "Last server starts": "Legutóbbi szerverindítások",
@@ -914,5 +913,17 @@
   "Update requested – starts within a minute": "Frissítés kérve – egy percen belül indul",
   "Yes, update": "Igen, frissítés",
   "Yes, restart": "Igen, újraindítás",
-  "Could not request the update:": "Nem sikerült frissítést kérni:"
+  "Could not request the update:": "Nem sikerült frissítést kérni:",
+  "CW ${0}": "${0}. hét",
+  "Distinct human players with a move in that calendar week": "Különböző emberi játékosok, akik azon a héten léptek",
+  "Graphics load": "Grafikus terhelés",
+  "Video memory": "Videomemória",
+  "Display adapter of the virtual machine: it does not compute graphics.": "A virtuális gép kijelzőadaptere: nem számol grafikát.",
+  "Integrated in the processor": "Processzorba integrált",
+  "Own graphics card": "Saját videokártya",
+  "Virtual": "Virtuális",
+  "Graphics memory": "Grafikus memória",
+  "Clock (now / max)": "Órajel (most / max.)",
+  "Driver": "Illesztőprogram",
+  "${0} (shared with RAM)": "${0} (a fő memóriával közös)"
 }

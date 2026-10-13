@@ -35,11 +35,27 @@ export function formatDateTime(time: string | number): string {
   return Number.isNaN(date.getTime()) ? String(time) : date.toLocaleString(undefined, {dateStyle: 'short', timeStyle: 'short'});
 }
 
-/** Bars of a day or week chart: the label is day and month of the period start ("13.10."). */
-export function periodBars(periods: ReadonlyArray<DashboardPeriodCount>): Array<StatsBar> {
+/** ISO calendar week (Monday start, week 1 holds the first Thursday of the year). */
+export function calendarWeek(date: Date): number {
+  // Thursday of the same week decides the year the week belongs to
+  const thursday = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 3 - (date.getDay() + 6) % 7);
+  const firstThursday = new Date(thursday.getFullYear(), 0, 4);
+  return 1 + Math.round(((thursday.getTime() - firstThursday.getTime()) / 86400000 - 3 + (firstThursday.getDay() + 6) % 7) / 7);
+}
+
+/**
+ * Bars of a day or week chart: a day shows day and month ("13.10."), a week its calendar week ("CW 42"),
+ * with the start date in the tooltip.
+ */
+export function periodBars(periods: ReadonlyArray<DashboardPeriodCount>, unit: 'day' | 'week' = 'day'): Array<StatsBar> {
   return periods.map((period) => {
     const [year, month, day] = period.start.split('-').map(Number);
-    const label = new Date(year, month - 1, day).toLocaleDateString(undefined, {day: 'numeric', month: 'numeric'});
-    return {label, value: period.value};
+    const start = new Date(year, month - 1, day);
+    const date = start.toLocaleDateString(undefined, {day: 'numeric', month: 'numeric'});
+    if (unit === 'day') {
+      return {label: date, value: period.value};
+    }
+    const label = translateTextWithParams('CW ${0}', [String(calendarWeek(start))]);
+    return {label, value: period.value, title: `${label} (${date}): ${period.value}`};
   });
 }

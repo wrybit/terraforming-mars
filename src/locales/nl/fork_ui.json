@@ -1290,7 +1290,6 @@
   "Players per day": "Spelers per dag",
   "Players per week": "Spelers per week",
   "Distinct human players with a move that day": "Verschillende menselijke spelers met een zet die dag",
-  "Week starting on": "Week vanaf",
   "Availability": "Beschikbaarheid",
   "Share of the day the server was running (%)": "Deel van de dag dat de server draaide (%)",
   "Last server starts": "Laatste serverstarts",
@@ -1353,5 +1352,17 @@
   "Update requested – starts within a minute": "Update aangevraagd – start binnen een minuut",
   "Yes, update": "Ja, bijwerken",
   "Yes, restart": "Ja, herstarten",
-  "Could not request the update:": "Update kon niet worden aangevraagd:"
+  "Could not request the update:": "Update kon niet worden aangevraagd:",
+  "CW ${0}": "Wk ${0}",
+  "Distinct human players with a move in that calendar week": "Verschillende menselijke spelers met een zet in die week",
+  "Graphics load": "Grafische belasting",
+  "Video memory": "Videogeheugen",
+  "Display adapter of the virtual machine: it does not compute graphics.": "Beeldadapter van de virtuele machine: rekent geen graphics.",
+  "Integrated in the processor": "Geïntegreerd in de processor",
+  "Own graphics card": "Eigen grafische kaart",
+  "Virtual": "Virtueel",
+  "Graphics memory": "Grafisch geheugen",
+  "Clock (now / max)": "Kloksnelheid (nu / max.)",
+  "Driver": "Stuurprogramma",
+  "${0} (shared with RAM)": "${0} (gedeeld met werkgeheugen)"
 }

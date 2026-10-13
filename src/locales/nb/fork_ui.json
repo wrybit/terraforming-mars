@@ -1030,7 +1030,6 @@
   "Players per day": "Spillere per dag",
   "Players per week": "Spillere per uke",
   "Distinct human players with a move that day": "Ulike menneskelige spillere med et trekk den dagen",
-  "Week starting on": "Uke fra",
   "Availability": "Tilgjengelighet",
   "Share of the day the server was running (%)": "Andel av dagen serveren kjørte (%)",
   "Last server starts": "Siste serverstarter",
@@ -1095,5 +1094,16 @@
   "Update requested – starts within a minute": "Oppdatering bestilt – starter innen ett minutt",
   "Yes, update": "Ja, oppdater",
   "Yes, restart": "Ja, start på nytt",
-  "Could not request the update:": "Kunne ikke bestille oppdateringen:"
+  "Could not request the update:": "Kunne ikke bestille oppdateringen:",
+  "CW ${0}": "Uke ${0}",
+  "Distinct human players with a move in that calendar week": "Ulike menneskelige spillere med et trekk den uken",
+  "Graphics load": "Grafikkbelastning",
+  "Video memory": "Videominne",
+  "Display adapter of the virtual machine: it does not compute graphics.": "Skjermadapter for den virtuelle maskinen: beregner ikke grafikk.",
+  "Integrated in the processor": "Integrert i prosessoren",
+  "Own graphics card": "Eget grafikkort",
+  "Virtual": "Virtuell",
+  "Graphics memory": "Grafikkminne",
+  "Clock (now / max)": "Klokkefrekvens (nå / maks.)",
+  "${0} (shared with RAM)": "${0} (delt med hovedminnet)"
 }

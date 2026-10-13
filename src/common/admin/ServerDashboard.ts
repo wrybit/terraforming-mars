@@ -87,6 +87,20 @@ export type DashboardMachineUsage = {
 
 export const MACHINE_USAGE_FILE = 'machine-usage.json';
 
+/** One graphics adapter of the machine (from /sys/class/drm, readable without special rights). */
+export type DashboardGpu = {
+  name: string,
+  /** Kernel driver, e.g. i915, amdgpu, virtio-pci */
+  driver?: string,
+  /** integrated: shares the main memory; virtual: display adapter of a VM, computes nothing */
+  kind: 'integrated' | 'dedicated' | 'virtual',
+  /** Busy share over a short moment; undefined where the driver does not tell */
+  busyPercent?: number,
+  clockMhz?: {current: number, max: number},
+  /** Own memory of a dedicated card */
+  videoMemory?: {totalBytes: number, usedBytes: number},
+};
+
 /** Result of fetching this server's own public address from the inside (DNS, proxy, certificate). */
 export type DashboardReachability = {
   url: string,
@@ -138,7 +152,7 @@ export type ServerDashboard = {
   /** Areas of processor and memory; missing where no operator script measures them */
   machineUsage?: DashboardMachineUsage,
   /** Graphics adapters found on the machine; empty if none */
-  gpus: Array<string>,
+  gpus: Array<DashboardGpu>,
   games: {
     running: number,
     finished: number,

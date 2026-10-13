@@ -93,16 +93,17 @@ function getAllTranslations(): {[phrase: string]: Translation} {
   return translations;
 }
 
+// Hashes always 9 characters: git would shorten by repository size, so two servers showed the same commit differently
 function getBuildMetadata(): {head: string, date: string} {
   // assumes SOURCE_VERSION is git hash
   if (process.env.SOURCE_VERSION) {
     return {
-      head: process.env.SOURCE_VERSION.substring(0, 7),
+      head: process.env.SOURCE_VERSION.substring(0, 9),
       date: new Date().toUTCString().replace(/ \(.+\)/, ''),
     };
   }
   try {
-    const output = child_process.execSync(`git log -1 --pretty=format:"%h %cD"`).toString();
+    const output = child_process.execSync(`git log -1 --abbrev=9 --pretty=format:"%h %cD"`).toString();
     const [head, ...rest] = output.split(' ');
     return {head, date: rest.join(' ')};
   } catch (error) {
@@ -116,7 +117,7 @@ function getBuildMetadata(): {head: string, date: string} {
 function writeRecentCommits() {
   let commits: Array<{hash: string, time: string, title: string}> = [];
   try {
-    const output = child_process.execSync('git log -25 --pretty=format:"%h%x09%cI%x09%s"').toString();
+    const output = child_process.execSync('git log -25 --abbrev=9 --pretty=format:"%h%x09%cI%x09%s"').toString();
     commits = output.split('\n').filter((line) => line !== '').map((line) => {
       const [hash, time, ...title] = line.split('\t');
       return {hash, time, title: title.join('\t')};

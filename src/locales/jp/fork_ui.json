@@ -1027,7 +1027,6 @@
   "Players per day": "1日あたりのプレイヤー",
   "Players per week": "1週間あたりのプレイヤー",
   "Distinct human players with a move that day": "その日に手番を行った人間プレイヤーの数",
-  "Week starting on": "週の開始日",
   "Availability": "稼働率",
   "Share of the day the server was running (%)": "サーバーが稼働していた1日の割合（%）",
   "Last server starts": "最近のサーバー起動",
@@ -1092,5 +1091,17 @@
   "Update requested – starts within a minute": "更新を要求しました – 1分以内に開始",
   "Yes, update": "はい、更新",
   "Yes, restart": "はい、再起動",
-  "Could not request the update:": "更新を要求できませんでした:"
+  "Could not request the update:": "更新を要求できませんでした:",
+  "CW ${0}": "第${0}週",
+  "Distinct human players with a move in that calendar week": "その週に手番を行った人間プレイヤーの数",
+  "Graphics load": "GPU負荷",
+  "Video memory": "ビデオメモリ",
+  "Display adapter of the virtual machine: it does not compute graphics.": "仮想マシンの表示アダプター：グラフィックは計算しません。",
+  "Integrated in the processor": "プロセッサー内蔵",
+  "Own graphics card": "専用グラフィックカード",
+  "Virtual": "仮想",
+  "Graphics memory": "グラフィックメモリ",
+  "Clock (now / max)": "クロック（現在 / 最大）",
+  "Driver": "ドライバー",
+  "${0} (shared with RAM)": "${0}（メインメモリと共有）"
 }

@@ -26,14 +26,12 @@
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Games</h2>
+        <DashboardOnlineCount :count="dashboard.games.playersOnline"/>
         <DashboardFacts :facts="gameFacts"/>
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Graphics</h2>
-        <ul v-if="dashboard.gpus.length > 0" class="server-dashboard-list">
-          <li v-for="(gpu, index) in dashboard.gpus" :key="index">{{ gpu }}</li>
-        </ul>
-        <p v-else class="games-overview-note" v-i18n>No graphics adapter found</p>
+        <DashboardGraphics :gpus="dashboard.gpus" :mainMemoryBytes="dashboard.memory.totalBytes"/>
       </section>
     </div>
 
@@ -44,7 +42,7 @@
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Players per week</h2>
-        <StatsBarChart :bars="weekBars" axisLabel="Week starting on"/>
+        <StatsBarChart :bars="weekBars" axisLabel="Distinct human players with a move in that calendar week"/>
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Availability</h2>
@@ -77,6 +75,8 @@ import DashboardFacts from '@/client/components/admin/dashboard/DashboardFacts.v
 import DashboardServerLogo from '@/client/components/admin/dashboard/DashboardServerLogo.vue';
 import DashboardMeter from '@/client/components/admin/dashboard/DashboardMeter.vue';
 import DashboardCommits from '@/client/components/admin/dashboard/DashboardCommits.vue';
+import DashboardGraphics from '@/client/components/admin/dashboard/DashboardGraphics.vue';
+import DashboardOnlineCount from '@/client/components/admin/dashboard/DashboardOnlineCount.vue';
 import DashboardDayOverlay from '@/client/components/admin/dashboard/DashboardDayOverlay.vue';
 import DashboardSplitBar from '@/client/components/admin/dashboard/DashboardSplitBar.vue';
 import {cpuSegments, diskSegments, memorySegments, UsageSegment} from '@/client/components/admin/dashboard/usageSegments';
@@ -85,7 +85,7 @@ import {formatDateTime, formatDuration, periodBars} from '@/client/components/ad
 
 export default defineComponent({
   name: 'ServerDashboardView',
-  components: {DashboardCommits, DashboardDayOverlay, DashboardFacts, DashboardMeter, DashboardServerLogo, DashboardSplitBar, StatsBarChart},
+  components: {DashboardCommits, DashboardDayOverlay, DashboardFacts, DashboardGraphics, DashboardOnlineCount, DashboardMeter, DashboardServerLogo, DashboardSplitBar, StatsBarChart},
   props: {
     dashboard: {type: Object as PropType<ServerDashboard>, required: true},
   },
@@ -131,14 +131,13 @@ export default defineComponent({
       return [
         {label: 'Running games', value: String(games.running)},
         {label: 'Finished games', value: String(games.finished)},
-        {label: 'Players online now', value: String(games.playersOnline), tone: games.playersOnline > 0 ? 'good' : undefined},
       ];
     },
     dayBars(): Array<StatsBar> {
       return periodBars(this.dashboard.activity.days);
     },
     weekBars(): Array<StatsBar> {
-      return periodBars(this.dashboard.activity.weeks);
+      return periodBars(this.dashboard.activity.weeks, 'week');
     },
     availabilityBars(): Array<StatsBar> {
       return periodBars(this.dashboard.availability);

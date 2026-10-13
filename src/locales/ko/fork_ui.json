@@ -908,7 +908,6 @@
   "Players per day": "일별 플레이어",
   "Players per week": "주별 플레이어",
   "Distinct human players with a move that day": "그날 수를 둔 서로 다른 인간 플레이어",
-  "Week starting on": "주 시작일",
   "Availability": "가용성",
   "Share of the day the server was running (%)": "서버가 실행된 하루 비율(%)",
   "Last server starts": "최근 서버 시작",
@@ -973,5 +972,17 @@
   "Update requested – starts within a minute": "업데이트 요청됨 – 1분 안에 시작",
   "Yes, update": "예, 업데이트",
   "Yes, restart": "예, 재시작",
-  "Could not request the update:": "업데이트를 요청할 수 없음:"
+  "Could not request the update:": "업데이트를 요청할 수 없음:",
+  "CW ${0}": "${0}주차",
+  "Distinct human players with a move in that calendar week": "그 주에 수를 둔 서로 다른 인간 플레이어",
+  "Graphics load": "그래픽 부하",
+  "Video memory": "비디오 메모리",
+  "Display adapter of the virtual machine: it does not compute graphics.": "가상 머신의 디스플레이 어댑터: 그래픽을 계산하지 않습니다.",
+  "Integrated in the processor": "프로세서 내장",
+  "Own graphics card": "별도 그래픽 카드",
+  "Virtual": "가상",
+  "Graphics memory": "그래픽 메모리",
+  "Clock (now / max)": "클럭 (현재 / 최대)",
+  "Driver": "드라이버",
+  "${0} (shared with RAM)": "${0} (주 메모리와 공유)"
 }

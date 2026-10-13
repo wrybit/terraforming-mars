@@ -462,7 +462,6 @@
   "Players per day": "Spieler pro Tag",
   "Players per week": "Spieler pro Woche",
   "Distinct human players with a move that day": "Verschiedene menschliche Spieler mit einem Zug an diesem Tag",
-  "Week starting on": "Woche ab",
   "Availability": "Verfügbarkeit",
   "Share of the day the server was running (%)": "Anteil des Tages, an dem der Server lief (%)",
   "Last server starts": "Letzte Serverstarts",
@@ -527,5 +526,17 @@
   "Update requested – starts within a minute": "Update angefordert – startet in einer Minute",
   "Yes, update": "Ja, updaten",
   "Yes, restart": "Ja, neu starten",
-  "Could not request the update:": "Update konnte nicht angefordert werden:"
+  "Could not request the update:": "Update konnte nicht angefordert werden:",
+  "CW ${0}": "KW ${0}",
+  "Distinct human players with a move in that calendar week": "Verschiedene menschliche Spieler mit einem Zug in dieser Kalenderwoche",
+  "Graphics load": "Grafiklast",
+  "Video memory": "Grafikspeicher (eigen)",
+  "Display adapter of the virtual machine: it does not compute graphics.": "Anzeige-Adapter der virtuellen Maschine: berechnet keine Grafik.",
+  "Integrated in the processor": "Im Prozessor integriert",
+  "Own graphics card": "Eigene Grafikkarte",
+  "Virtual": "Virtuell",
+  "Graphics memory": "Grafikspeicher",
+  "Clock (now / max)": "Takt (jetzt / max.)",
+  "Driver": "Treiber",
+  "${0} (shared with RAM)": "${0} (mit RAM geteilt)"
 }

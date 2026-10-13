@@ -679,7 +679,6 @@
   "Players per day": "Pelaajia päivässä",
   "Players per week": "Pelaajia viikossa",
   "Distinct human players with a move that day": "Eri ihmispelaajat, jotka tekivät siirron sinä päivänä",
-  "Week starting on": "Viikko alkaen",
   "Availability": "Saatavuus",
   "Share of the day the server was running (%)": "Osuus päivästä, jolloin palvelin oli käynnissä (%)",
   "Last server starts": "Viimeisimmät palvelimen käynnistykset",
@@ -743,5 +742,17 @@
   "Update requested – starts within a minute": "Päivitys pyydetty – alkaa minuutin sisällä",
   "Yes, update": "Kyllä, päivitä",
   "Yes, restart": "Kyllä, käynnistä uudelleen",
-  "Could not request the update:": "Päivitystä ei voitu pyytää:"
+  "Could not request the update:": "Päivitystä ei voitu pyytää:",
+  "CW ${0}": "Vk ${0}",
+  "Distinct human players with a move in that calendar week": "Eri ihmispelaajat, jotka tekivät siirron sillä viikolla",
+  "Graphics load": "Grafiikan kuorma",
+  "Video memory": "Näyttömuisti",
+  "Display adapter of the virtual machine: it does not compute graphics.": "Virtuaalikoneen näyttösovitin: ei laske grafiikkaa.",
+  "Integrated in the processor": "Integroitu suorittimeen",
+  "Own graphics card": "Erillinen näytönohjain",
+  "Virtual": "Virtuaalinen",
+  "Graphics memory": "Grafiikkamuisti",
+  "Clock (now / max)": "Kellotaajuus (nyt / maks.)",
+  "Driver": "Ajuri",
+  "${0} (shared with RAM)": "${0} (jaettu keskusmuistin kanssa)"
 }

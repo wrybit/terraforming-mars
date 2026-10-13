@@ -825,7 +825,6 @@
   "Players per day": "Гравців на день",
   "Players per week": "Гравців на тиждень",
   "Distinct human players with a move that day": "Різні гравці-люди, що зробили хід цього дня",
-  "Week starting on": "Тиждень від",
   "Availability": "Доступність",
   "Share of the day the server was running (%)": "Частка дня, коли сервер працював (%)",
   "Last server starts": "Останні запуски сервера",
@@ -891,5 +890,17 @@
   "Update requested – starts within a minute": "Оновлення запитано – почнеться протягом хвилини",
   "Yes, update": "Так, оновити",
   "Yes, restart": "Так, перезапустити",
-  "Could not request the update:": "Не вдалося запитати оновлення:"
+  "Could not request the update:": "Не вдалося запитати оновлення:",
+  "CW ${0}": "Тиж. ${0}",
+  "Distinct human players with a move in that calendar week": "Різні гравці-люди, що зробили хід цього тижня",
+  "Graphics load": "Навантаження графіки",
+  "Video memory": "Відеопам'ять",
+  "Display adapter of the virtual machine: it does not compute graphics.": "Відеоадаптер віртуальної машини: графіку не обчислює.",
+  "Integrated in the processor": "Вбудована в процесор",
+  "Own graphics card": "Окрема відеокарта",
+  "Virtual": "Віртуальний",
+  "Graphics memory": "Графічна пам'ять",
+  "Clock (now / max)": "Частота (зараз / макс.)",
+  "Driver": "Драйвер",
+  "${0} (shared with RAM)": "${0} (спільна з ОЗП)"
 }

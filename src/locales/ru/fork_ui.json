@@ -1483,7 +1483,6 @@
   "Players per day": "Игроков в день",
   "Players per week": "Игроков в неделю",
   "Distinct human players with a move that day": "Разные игроки-люди, сделавшие ход в этот день",
-  "Week starting on": "Неделя, начиная с",
   "Availability": "Доступность",
   "Share of the day the server was running (%)": "Доля дня, когда сервер работал (%)",
   "Last server starts": "Последние запуски сервера",
@@ -1549,5 +1548,17 @@
   "Update requested – starts within a minute": "Обновление запрошено – начнётся в течение минуты",
   "Yes, update": "Да, обновить",
   "Yes, restart": "Да, перезапустить",
-  "Could not request the update:": "Не удалось запросить обновление:"
+  "Could not request the update:": "Не удалось запросить обновление:",
+  "CW ${0}": "Нед. ${0}",
+  "Distinct human players with a move in that calendar week": "Разные игроки-люди, сделавшие ход на этой неделе",
+  "Graphics load": "Нагрузка графики",
+  "Video memory": "Видеопамять",
+  "Display adapter of the virtual machine: it does not compute graphics.": "Видеоадаптер виртуальной машины: графику не вычисляет.",
+  "Integrated in the processor": "Встроена в процессор",
+  "Own graphics card": "Отдельная видеокарта",
+  "Virtual": "Виртуальный",
+  "Graphics memory": "Графическая память",
+  "Clock (now / max)": "Частота (сейчас / макс.)",
+  "Driver": "Драйвер",
+  "${0} (shared with RAM)": "${0} (общая с ОЗУ)"
 }

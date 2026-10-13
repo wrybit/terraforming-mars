@@ -2,20 +2,14 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import {ServerDashboard} from '../../../common/admin/ServerDashboard';
+import {readTextFile} from './readTextFile';
+import {graphicsAdapters} from './graphicsAdapters';
 
 /*
  * Machine values for the admin dashboard. Linux exposes more (/proc, /sys) than os.* does; everything
  * Linux-only falls back quietly, so the dashboard also works on a developer's Mac or Windows machine.
  * Inside Docker /proc and /sys show the host, so the values describe the machine, not the container.
  */
-
-function readText(file: string): string | undefined {
-  try {
-    return fs.readFileSync(file, 'utf8');
-  } catch {
-    return undefined;
-  }
-}
 
 /** Value in bytes of a /proc/meminfo line ("MemAvailable:  123 kB"). */
 export function memInfoBytes(memInfo: string | undefined, key: string): number | undefined {
@@ -49,34 +43,9 @@ function temperatureCelsius(): number | undefined {
     return undefined;
   }
   const values = zones
-    .map((zone) => Number(readText(path.join(base, zone, 'temp'))))
+    .map((zone) => Number(readTextFile(path.join(base, zone, 'temp'))))
     .filter((value) => Number.isFinite(value) && value > 0);
   return values.length === 0 ? undefined : Math.round(Math.max(...values) / 100) / 10;
-}
-
-const GPU_VENDORS: Record<string, string> = {
-  '0x8086': 'Intel',
-  '0x10de': 'NVIDIA',
-  '0x1002': 'AMD',
-  '0x1af4': 'Virtio (virtual)',
-  '0x1234': 'QEMU (virtual)',
-  '0x15ad': 'VMware (virtual)',
-};
-
-/** Graphics adapters from /sys/class/drm (card0, card1 …); vendor name and PCI device id. */
-function gpus(): Array<string> {
-  const base = '/sys/class/drm';
-  let cards: Array<string>;
-  try {
-    cards = fs.readdirSync(base).filter((name) => /^card\d+$/.test(name));
-  } catch {
-    return [];
-  }
-  return cards.map((card) => {
-    const vendor = readText(path.join(base, card, 'device', 'vendor'))?.trim() ?? '';
-    const device = readText(path.join(base, card, 'device', 'device'))?.trim() ?? '';
-    return `${GPU_VENDORS[vendor] ?? (vendor || 'Unknown')} ${device}`.trim();
-  });
 }
 
 /** Free and total bytes of the disk holding `folder`; undefined where statfs is missing. */
@@ -94,7 +63,7 @@ function disk(folder: string): ServerDashboard['disk'] {
  * /etc/os-release names the image (Alpine), not the machine: then the kernel of the machine comes first.
  */
 function operatingSystem(): string {
-  const release = readText('/etc/os-release');
+  const release = readTextFile('/etc/os-release');
   const pretty = release === undefined ? null : /^PRETTY_NAME="?([^"\n]+)"?/m.exec(release);
   if (pretty === null) {
     return `${os.type()} ${os.release()}`;
@@ -116,9 +85,11 @@ export function sizeOnDisk(target: string): number | undefined {
 }
 
 export async function systemMetrics(dataFolder: string): Promise<Pick<ServerDashboard, 'host' | 'cpu' | 'memory' | 'disk' | 'gpus'>> {
-  const memInfo = readText('/proc/meminfo');
+  const memInfo = readTextFile('/proc/meminfo');
   const [load1, load5, load15] = os.loadavg();
   const processors = os.cpus();
+  // Both sample a short moment: side by side the dashboard waits only once
+  const [usagePercent, gpus] = await Promise.all([cpuUsagePercent(), graphicsAdapters()]);
   return {
     host: {
       hostname: os.hostname(),
@@ -132,7 +103,7 @@ export async function systemMetrics(dataFolder: string): Promise<Pick<ServerDash
       model: processors[0]?.model.trim() || os.arch(),
       cores: processors.length,
       loadAverage: [load1, load5, load15],
-      usagePercent: await cpuUsagePercent(),
+      usagePercent,
       temperatureCelsius: temperatureCelsius(),
     },
     memory: {
@@ -145,6 +116,6 @@ export async function systemMetrics(dataFolder: string): Promise<Pick<ServerDash
       serverProcessBytes: process.memoryUsage().rss,
     },
     disk: disk(dataFolder),
-    gpus: gpus(),
+    gpus,
   };
 }

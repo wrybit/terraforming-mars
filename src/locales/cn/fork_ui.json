@@ -1599,7 +1599,6 @@
   "Players per day": "每日玩家",
   "Players per week": "每周玩家",
   "Distinct human players with a move that day": "当天有行动的不同人类玩家",
-  "Week starting on": "周起始日",
   "Availability": "可用性",
   "Share of the day the server was running (%)": "服务器当天运行时间占比（%）",
   "Last server starts": "最近的服务器启动",
@@ -1664,5 +1663,17 @@
   "Update requested – starts within a minute": "已请求更新 – 一分钟内开始",
   "Yes, update": "是，更新",
   "Yes, restart": "是，重启",
-  "Could not request the update:": "无法请求更新："
+  "Could not request the update:": "无法请求更新：",
+  "CW ${0}": "第${0}周",
+  "Distinct human players with a move in that calendar week": "该周有行动的不同人类玩家",
+  "Graphics load": "图形负载",
+  "Video memory": "显存",
+  "Display adapter of the virtual machine: it does not compute graphics.": "虚拟机的显示适配器：不进行图形计算。",
+  "Integrated in the processor": "集成于处理器",
+  "Own graphics card": "独立显卡",
+  "Virtual": "虚拟",
+  "Graphics memory": "图形内存",
+  "Clock (now / max)": "频率（当前 / 最大）",
+  "Driver": "驱动",
+  "${0} (shared with RAM)": "${0}（与内存共享）"
 }

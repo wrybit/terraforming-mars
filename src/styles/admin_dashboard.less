@@ -373,3 +373,48 @@
     display: none;
   }
 }
+
+// ---------- Games: players online now ----------
+// Large and green while someone plays (the light blinks like on the start page), small and quiet at zero
+.dashboard-online {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+  color: @dashboard-dim;
+
+  &-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &--active {
+    color: #fff;
+
+    .dashboard-online-count {
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 1;
+      color: @dashboard-good;
+    }
+  }
+}
+
+.dashboard-online-count {
+  font-variant-numeric: tabular-nums;
+}
+
+// ---------- Graphics ----------
+.server-dashboard-gpus,
+.server-dashboard-gpu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// Between adapters more space than inside one (law of proximity)
+.server-dashboard-gpus {
+  gap: 20px;
+}
