@@ -154,6 +154,8 @@ export type AiTuning = {
   exposure: number,
   /** Draft denial grows with game progress: factor 1 + lateDenial × (progress − 0.5); 0 = constant. */
   lateDenial: number,
+  /** 1: collector cards gain their measured resources per generation (collectorRate.ts) instead of one. */
+  collectorRates: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -298,6 +300,7 @@ export const BASELINE_TUNING: AiTuning = {
   turnTempo: 1,
   exposure: 0,
   lateDenial: 0,
+  collectorRates: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -582,6 +585,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   exposure: {exposure: 1},
   // Strategy guides: hate-draft harder near the end.
   lateDenial: {lateDenial: 1},
+  // Collectors by their measured feeding rate (flat collectors lost in round 63).
+  collectorRate06: {accumulatorValue: 0.6, collectorRates: 1},
+  collectorRate1: {accumulatorValue: 1, collectorRates: 1},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.

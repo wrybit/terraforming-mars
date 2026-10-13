@@ -16,6 +16,7 @@ import {recentAwardGrowth} from './awardHistory';
 import {moneySwingShare} from './stockAward';
 import {openBonusValue} from './bonusRace';
 import {expectedAttackLoss} from './attackExposure';
+import {collectorRate} from './collectorRate';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -323,7 +324,9 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
       const own = isIActionCard(card) ? actionValuePerGeneration(card, player, context) : EFFECT_CARD_VALUE_PER_GENERATION;
       const flat = Math.max(own, drawIncome(card));
       // A human player's collectors scored 20+ VP in long games; a flat 1.5 M€ per generation missed that.
-      const collected = accumulator > 0 ? accumulator * collectedPointsPerGeneration(card) * context.victoryPoint : 0;
+      // collectorRates: the measured resources per generation of this card instead of one (collectorRate.ts).
+      const rate = tuningOf(player).collectorRates > 0 ? collectorRate(card.name) : 1;
+      const collected = accumulator > 0 ? accumulator * rate * collectedPointsPerGeneration(card) * context.victoryPoint : 0;
       value += Math.max(flat, collected) * context.remaining;
     } else if (card.type === CardType.CORPORATION) {
       value += drawIncome(card) * context.remaining;

@@ -7,6 +7,7 @@ import {expectedAttackLoss} from '../../src/server/ai/attackExposure';
 import {Birds} from '../../src/server/cards/base/Birds';
 import {Predators} from '../../src/server/cards/base/Predators';
 import {ProtectedHabitats} from '../../src/server/cards/base/ProtectedHabitats';
+import {collectorRate} from '../../src/server/ai/collectorRate';
 
 describe('AI strategy-guide gaps', () => {
   it('sees the ocean bonus one temperature step away for an opponent with heat', () => {
@@ -53,5 +54,10 @@ describe('AI strategy-guide gaps', () => {
     player.playedCards.push(new ProtectedHabitats());
     player.plants = 0;
     expect(expectedAttackLoss(player, 0, 5)).eq(0);
+  });
+
+  it('knows the measured feeding rate of collector cards', () => {
+    expect(collectorRate('Herbivores')).greaterThan(collectorRate('Tardigrades'));
+    expect(collectorRate('Unknown Card')).eq(1);
   });
 });

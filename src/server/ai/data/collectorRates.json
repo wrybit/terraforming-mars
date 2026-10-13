@@ -1,0 +1,24 @@
+{
+  "source": "AI self-play, 600 two-player games (13.10.2026): resources gained per generation after the card was played",
+  "rates": {
+    "Herbivores": 2.15,
+    "Decomposers": 1.51,
+    "Ecological Zone": 1.41,
+    "Pets": 1.29,
+    "Tardigrades": 1.23,
+    "Predators": 1.22,
+    "Livestock": 1.19,
+    "Fish": 1.16,
+    "Psychrophiles": 1.13,
+    "Birds": 1.1,
+    "Small Animals": 1.08,
+    "Ants": 0.71,
+    "Physics Complex": 0.6,
+    "Security Fleet": 0.53,
+    "GHG Producing Bacteria": 0.3,
+    "Regolith Eaters": 0.29,
+    "Nitrite Reducing Bacteria": 0.16,
+    "Olympus Conference": 0.09,
+    "Search For Life": 0.07
+  }
+}
