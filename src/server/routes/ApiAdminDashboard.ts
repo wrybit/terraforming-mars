@@ -9,10 +9,12 @@ import {Phase} from '../../common/Phase';
 import {IGame} from '../IGame';
 import {activeParticipantCount} from '../server/activeParticipants';
 import {isSecureRequest} from '../server/auth/adminCookie';
-import {sizeOnDisk, systemMetrics} from '../admin/dashboard/systemMetrics';
+import {systemMetrics} from '../admin/dashboard/systemMetrics';
+import {diskUsage} from '../admin/dashboard/diskUsage';
 import {playerActivity} from '../admin/dashboard/playerActivity';
 import {gameActivity} from '../admin/dashboard/playerActivityOfGames';
 import {UptimeRecord} from '../admin/dashboard/uptimeRecord';
+import {presenceRecord} from '../admin/dashboard/presenceRecord';
 import {checkReachability, publicStatusUrl} from '../admin/dashboard/reachability';
 import raw_settings from '../../genfiles/settings.json';
 import recentCommits from '../../genfiles/recentCommits.json';
@@ -44,17 +46,14 @@ export class ApiAdminDashboard extends Handler {
     const dashboard: ServerDashboard = {
       generatedAtMs: nowMs,
       ...metrics,
-      storage: {
-        // The whole data folder: works for SQLite (game.db) and the file database (one file per save)
-        databaseBytes: sizeOnDisk(dataFolder),
-        decisionLogBytes: decisionLogFolder ? sizeOnDisk(decisionLogFolder) : undefined,
-      },
+      disk: metrics.disk === undefined ? undefined : {...metrics.disk, usage: diskUsage(dataFolder, decisionLogFolder)},
       games: {
         running: games.filter((game) => game.phase !== Phase.END).length,
         finished: games.filter((game) => game.phase === Phase.END).length,
         playersOnline: activeParticipantCount(),
       },
       activity: playerActivity(games.map(gameActivity), nowMs),
+      presence: presenceRecord.profiles(nowMs),
       availability: this.uptimeRecord.availability(nowMs),
       serverStarts: this.uptimeRecord.read().starts,
       reachability,

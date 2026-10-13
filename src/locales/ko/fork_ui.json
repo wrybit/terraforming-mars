@@ -928,7 +928,6 @@
   "Load (1 / 5 / 15 min)": "부하 (1 / 5 / 15분)",
   "No sensor": "센서 없음",
   "Game server process": "게임 서버 프로세스",
-  "Game database": "게임 데이터베이스",
   "AI decision logs": "AI 결정 로그",
   "Running games": "진행 중인 게임",
   "Players online now": "현재 온라인 플레이어",
@@ -938,8 +937,15 @@
   "${0} of ${1} (${2} %)": "${1} 중 ${0} (${2}%)",
   "First values after one minute of running": "실행 1분 후 첫 값이 표시됩니다",
   "Time of day": "시간대",
-  "Last 7 days": "최근 7일",
-  "Weeks before": "이전 주",
   "Average": "평균",
-  "Distinct human players with a move per hour of the day": "시간대별로 수를 둔 서로 다른 인간 플레이어"
+  "Docker and Node.js": "Docker 및 Node.js",
+  "Game (code and build)": "게임 (코드 및 빌드)",
+  "Logs": "로그",
+  "System and other": "시스템 및 기타",
+  "Free": "여유 공간",
+  "Parts measured at ${0}": "항목별 측정 시각: ${0}",
+  "Today": "오늘",
+  "One line per day (${0} days)": "하루에 한 선 (${0}일)",
+  "Players with an open game page, in 5-minute steps": "게임 페이지를 연 플레이어, 5분 단위",
+  "Saved games": "저장된 게임"
 }

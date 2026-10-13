@@ -845,7 +845,6 @@
   "Load (1 / 5 / 15 min)": "Навантаження (1 / 5 / 15 хв)",
   "No sensor": "Немає датчика",
   "Game server process": "Процес ігрового сервера",
-  "Game database": "База даних ігор",
   "AI decision logs": "Журнали рішень ШІ",
   "Running games": "Поточні ігри",
   "Players online now": "Гравців онлайн зараз",
@@ -855,8 +854,15 @@
   "${0} of ${1} (${2} %)": "${0} з ${1} (${2} %)",
   "First values after one minute of running": "Перші дані — після хвилини роботи",
   "Time of day": "Час доби",
-  "Last 7 days": "Останні 7 днів",
-  "Weeks before": "Попередні тижні",
   "Average": "Середнє",
-  "Distinct human players with a move per hour of the day": "Різні гравці-люди з ходом за годинами доби"
+  "Docker and Node.js": "Docker і Node.js",
+  "Game (code and build)": "Гра (код і збірка)",
+  "Logs": "Журнали",
+  "System and other": "Система та інше",
+  "Free": "Вільно",
+  "Parts measured at ${0}": "Розподіл виміряно о ${0}",
+  "Today": "Сьогодні",
+  "One line per day (${0} days)": "Одна лінія на день (${0} дн.)",
+  "Players with an open game page, in 5-minute steps": "Гравці з відкритою сторінкою гри, крок 5 хвилин",
+  "Saved games": "Збережені ігри"
 }

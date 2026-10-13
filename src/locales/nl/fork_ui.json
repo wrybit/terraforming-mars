@@ -1309,7 +1309,6 @@
   "Load (1 / 5 / 15 min)": "Belasting (1 / 5 / 15 min)",
   "No sensor": "Geen sensor",
   "Game server process": "Spelserverproces",
-  "Game database": "Speldatabase",
   "AI decision logs": "AI-beslissingslogs",
   "Running games": "Lopende spellen",
   "Players online now": "Spelers nu online",
@@ -1318,8 +1317,15 @@
   "${0} of ${1} (${2} %)": "${0} van ${1} (${2} %)",
   "First values after one minute of running": "Eerste waarden na een minuut draaien",
   "Time of day": "Tijdstip",
-  "Last 7 days": "Laatste 7 dagen",
-  "Weeks before": "Weken daarvoor",
   "Average": "Gemiddelde",
-  "Distinct human players with a move per hour of the day": "Verschillende menselijke spelers met een zet per uur van de dag"
+  "Docker and Node.js": "Docker en Node.js",
+  "Game (code and build)": "Spel (code en build)",
+  "Logs": "Logbestanden",
+  "System and other": "Systeem en overig",
+  "Free": "Vrij",
+  "Parts measured at ${0}": "Verdeling gemeten om ${0}",
+  "Today": "Vandaag",
+  "One line per day (${0} days)": "Eén lijn per dag (${0} dagen)",
+  "Players with an open game page, in 5-minute steps": "Spelers met een open spelpagina, in stappen van 5 minuten",
+  "Saved games": "Opgeslagen spellen"
 }

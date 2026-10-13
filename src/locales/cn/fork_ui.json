@@ -1619,7 +1619,6 @@
   "Load (1 / 5 / 15 min)": "负载（1 / 5 / 15 分钟）",
   "No sensor": "无传感器",
   "Game server process": "游戏服务器进程",
-  "Game database": "游戏数据库",
   "AI decision logs": "AI 决策日志",
   "Running games": "进行中的游戏",
   "Players online now": "当前在线玩家",
@@ -1629,8 +1628,15 @@
   "${0} of ${1} (${2} %)": "${1} 中的 ${0}（${2} %）",
   "First values after one minute of running": "运行一分钟后显示首批数据",
   "Time of day": "一天中的时段",
-  "Last 7 days": "最近 7 天",
-  "Weeks before": "之前几周",
   "Average": "平均",
-  "Distinct human players with a move per hour of the day": "每小时有行动的不同人类玩家"
+  "Docker and Node.js": "Docker 和 Node.js",
+  "Game (code and build)": "游戏（代码和构建）",
+  "Logs": "日志",
+  "System and other": "系统及其他",
+  "Free": "可用",
+  "Parts measured at ${0}": "分项测量于 ${0}",
+  "Today": "今天",
+  "One line per day (${0} days)": "每天一条线（${0} 天）",
+  "Players with an open game page, in 5-minute steps": "打开游戏页面的玩家，每 5 分钟一档",
+  "Saved games": "已保存的游戏"
 }

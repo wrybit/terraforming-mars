@@ -1047,7 +1047,6 @@
   "Load (1 / 5 / 15 min)": "負荷（1 / 5 / 15 分）",
   "No sensor": "センサーなし",
   "Game server process": "ゲームサーバープロセス",
-  "Game database": "ゲームデータベース",
   "AI decision logs": "AIの判断ログ",
   "Running games": "進行中のゲーム",
   "Players online now": "現在オンラインのプレイヤー",
@@ -1057,8 +1056,15 @@
   "${0} of ${1} (${2} %)": "${1} 中 ${0}（${2} %）",
   "First values after one minute of running": "稼働1分後に最初の値が表示されます",
   "Time of day": "時間帯",
-  "Last 7 days": "直近7日間",
-  "Weeks before": "それ以前の週",
   "Average": "平均",
-  "Distinct human players with a move per hour of the day": "時間帯ごとに手番を行った人間プレイヤーの数"
+  "Docker and Node.js": "Docker と Node.js",
+  "Game (code and build)": "ゲーム（コードとビルド）",
+  "Logs": "ログ",
+  "System and other": "システムとその他",
+  "Free": "空き",
+  "Parts measured at ${0}": "内訳の測定: ${0}",
+  "Today": "今日",
+  "One line per day (${0} days)": "1日1本の線（${0}日分）",
+  "Players with an open game page, in 5-minute steps": "ゲームページを開いているプレイヤー（5分刻み）",
+  "Saved games": "保存されたゲーム"
 }

@@ -125,14 +125,15 @@
 }
 
 // ---------- Time of day: all days on top of each other ----------
-// Old days faint, the last week stronger, the average bold in the accent color: the eye finds the
+// All days faint, today in the bar color, the average bold in the accent color: the eye finds the
 // average first and reads the spread of the days around it
 .dashboard-day-overlay-day {
-  stroke: rgba(255, 255, 255, 0.12);
+  stroke: rgba(255, 255, 255, 0.14);
   stroke-width: 1;
+  stroke-linejoin: round;
 
-  &--recent {
-    stroke: rgba(255, 255, 255, 0.35);
+  &--today {
+    stroke: @bg_action;
     stroke-width: 1.5;
   }
 }
@@ -151,13 +152,68 @@
   vertical-align: middle;
   background: rgba(255, 255, 255, 0.2);
 
-  &--recent {
-    background: rgba(255, 255, 255, 0.5);
+  &--today {
+    background: @bg_action;
   }
 
   &--average {
     background: @dashboard-warning;
   }
+}
+
+// ---------- Disk split by purpose ----------
+.dashboard-disk {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .dashboard-meter-head {
+    margin-bottom: 0;
+  }
+}
+
+.dashboard-disk-bar {
+  display: flex;
+  height: 12px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: @dashboard-line;
+}
+
+.dashboard-disk-segment {
+  height: 100%;
+
+  // Small gap between the parts, so neighbours with similar colors stay apart
+  & + & {
+    border-left: 1px solid #1d1e24;
+  }
+
+  &--system { background: #8a8f98; }
+  &--docker { background: #4f9cf9; }
+  &--game { background: #b07cf2; }
+  &--gameData { background: #7bd88f; }
+  &--logs { background: #f4a259; }
+  &--aiLogs { background: #f25f8a; }
+  &--free { background: transparent; }
+}
+
+.dashboard-disk-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 2px;
+  vertical-align: -1px;
+
+  &.dashboard-disk-segment--free {
+    border: 1px solid rgba(255, 255, 255, 0.35);
+  }
+}
+
+.dashboard-disk-note {
+  margin: 0;
+  color: @dashboard-dim;
+  font-size: 12px;
 }
 
 // ---------- Lists (restarts, graphics adapters) ----------

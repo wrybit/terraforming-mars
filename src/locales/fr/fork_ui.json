@@ -755,7 +755,6 @@
   "Load (1 / 5 / 15 min)": "Charge (1 / 5 / 15 min)",
   "No sensor": "Aucun capteur",
   "Game server process": "Processus du serveur de jeu",
-  "Game database": "Base de données des parties",
   "AI decision logs": "Journaux de décisions de l’IA",
   "Running games": "Parties en cours",
   "Players online now": "Joueurs en ligne",
@@ -763,8 +762,15 @@
   "${0} of ${1} (${2} %)": "${0} sur ${1} (${2} %)",
   "First values after one minute of running": "Premières valeurs après une minute de fonctionnement",
   "Time of day": "Heure de la journée",
-  "Last 7 days": "7 derniers jours",
-  "Weeks before": "Semaines précédentes",
   "Average": "Moyenne",
-  "Distinct human players with a move per hour of the day": "Joueurs humains distincts ayant joué, par heure de la journée"
+  "Docker and Node.js": "Docker et Node.js",
+  "Game (code and build)": "Jeu (code et build)",
+  "Logs": "Journaux",
+  "System and other": "Système et autres",
+  "Free": "Libre",
+  "Parts measured at ${0}": "Répartition mesurée à ${0}",
+  "Today": "Aujourd’hui",
+  "One line per day (${0} days)": "Une ligne par jour (${0} jours)",
+  "Players with an open game page, in 5-minute steps": "Joueurs avec une page de partie ouverte, par pas de 5 minutes",
+  "Saved games": "Parties enregistrées"
 }

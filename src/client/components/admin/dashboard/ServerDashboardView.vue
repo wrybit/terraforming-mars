@@ -19,8 +19,7 @@
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Disk</h2>
-        <DashboardMeter v-if="dashboard.disk !== undefined" label="Disk" :used="dashboard.disk.totalBytes - dashboard.disk.freeBytes" :total="dashboard.disk.totalBytes"/>
-        <DashboardFacts :facts="diskFacts"/>
+        <DashboardDiskBar v-if="dashboard.disk !== undefined" :disk="dashboard.disk"/>
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Games</h2>
@@ -45,10 +44,6 @@
         <StatsBarChart :bars="weekBars" axisLabel="Week starting on"/>
       </section>
       <section class="games-overview-card">
-        <h2 v-i18n>Time of day</h2>
-        <DashboardDayOverlay :profiles="dashboard.activity.dayProfiles"/>
-      </section>
-      <section class="games-overview-card">
         <h2 v-i18n>Availability</h2>
         <StatsBarChart v-if="availabilityBars.length > 0" :bars="availabilityBars" axisLabel="Share of the day the server was running (%)"/>
         <p v-else class="games-overview-note" v-i18n>First values after one minute of running</p>
@@ -58,6 +53,12 @@
         </ul>
       </section>
     </div>
+
+    <section class="games-overview-card">
+      <h2 v-i18n>Time of day</h2>
+      <DashboardDayOverlay v-if="dashboard.presence.length > 0" :profiles="dashboard.presence"/>
+      <p v-else class="games-overview-note" v-i18n>First values after one minute of running</p>
+    </section>
 
     <section class="games-overview-card">
       <h2 v-i18n>Recent commits</h2>
@@ -82,12 +83,13 @@ import {StatsBar} from '@/client/components/stats/statsTypes';
 import DashboardFacts from '@/client/components/admin/dashboard/DashboardFacts.vue';
 import DashboardMeter from '@/client/components/admin/dashboard/DashboardMeter.vue';
 import DashboardDayOverlay from '@/client/components/admin/dashboard/DashboardDayOverlay.vue';
+import DashboardDiskBar from '@/client/components/admin/dashboard/DashboardDiskBar.vue';
 import {DashboardFact} from '@/client/components/admin/dashboard/dashboardTypes';
 import {formatBytes, formatDateTime, formatDuration, periodBars} from '@/client/components/admin/dashboard/dashboardFormat';
 
 export default defineComponent({
   name: 'ServerDashboardView',
-  components: {DashboardDayOverlay, DashboardFacts, DashboardMeter, StatsBarChart},
+  components: {DashboardDayOverlay, DashboardDiskBar, DashboardFacts, DashboardMeter, StatsBarChart},
   props: {
     dashboard: {type: Object as PropType<ServerDashboard>, required: true},
   },
@@ -120,17 +122,6 @@ export default defineComponent({
     },
     memoryFacts(): Array<DashboardFact> {
       return [{label: 'Game server process', value: formatBytes(this.dashboard.memory.serverProcessBytes)}];
-    },
-    diskFacts(): Array<DashboardFact> {
-      const storage = this.dashboard.storage;
-      const facts: Array<DashboardFact> = [];
-      if (storage.databaseBytes !== undefined) {
-        facts.push({label: 'Game database', value: formatBytes(storage.databaseBytes)});
-      }
-      if (storage.decisionLogBytes !== undefined) {
-        facts.push({label: 'AI decision logs', value: formatBytes(storage.decisionLogBytes)});
-      }
-      return facts;
     },
     gameFacts(): Array<DashboardFact> {
       const games = this.dashboard.games;

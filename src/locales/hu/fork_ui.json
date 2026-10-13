@@ -868,7 +868,6 @@
   "Load (1 / 5 / 15 min)": "Terhelés (1 / 5 / 15 perc)",
   "No sensor": "Nincs érzékelő",
   "Game server process": "Játékszerver-folyamat",
-  "Game database": "Játékadatbázis",
   "AI decision logs": "MI-döntési naplók",
   "Running games": "Folyamatban lévő játszmák",
   "Players online now": "Most online játékosok",
@@ -878,8 +877,15 @@
   "${0} of ${1} (${2} %)": "${0} / ${1} (${2} %)",
   "First values after one minute of running": "Az első értékek egy perc futás után",
   "Time of day": "Napszak",
-  "Last 7 days": "Utolsó 7 nap",
-  "Weeks before": "Korábbi hetek",
   "Average": "Átlag",
-  "Distinct human players with a move per hour of the day": "Különböző emberi játékosok, akik léptek, a nap óráira bontva"
+  "Docker and Node.js": "Docker és Node.js",
+  "Game (code and build)": "Játék (kód és build)",
+  "Logs": "Naplók",
+  "System and other": "Rendszer és egyéb",
+  "Free": "Szabad",
+  "Parts measured at ${0}": "Felosztás mérve: ${0}",
+  "Today": "Ma",
+  "One line per day (${0} days)": "Naponta egy vonal (${0} nap)",
+  "Players with an open game page, in 5-minute steps": "Nyitott játékoldallal rendelkező játékosok, 5 perces lépésekben",
+  "Saved games": "Mentett játszmák"
 }

@@ -1582,7 +1582,6 @@
   "Load (1 / 5 / 15 min)": "Натоварване (1 / 5 / 15 мин)",
   "No sensor": "Няма сензор",
   "Game server process": "Процес на сървъра на играта",
-  "Game database": "База данни на игрите",
   "AI decision logs": "Дневници с решенията на ИИ",
   "Running games": "Текущи игри",
   "Players online now": "Играчи онлайн сега",
@@ -1592,8 +1591,15 @@
   "${0} of ${1} (${2} %)": "${0} от ${1} (${2} %)",
   "First values after one minute of running": "Първи стойности след една минута работа",
   "Time of day": "Час от деня",
-  "Last 7 days": "Последните 7 дни",
-  "Weeks before": "Предишни седмици",
   "Average": "Средно",
-  "Distinct human players with a move per hour of the day": "Различни човешки играчи с ход за всеки час от деня"
+  "Docker and Node.js": "Docker и Node.js",
+  "Game (code and build)": "Игра (код и билд)",
+  "Logs": "Дневници",
+  "System and other": "Система и други",
+  "Free": "Свободно",
+  "Parts measured at ${0}": "Разпределение, измерено в ${0}",
+  "Today": "Днес",
+  "One line per day (${0} days)": "По една линия на ден (${0} дни)",
+  "Players with an open game page, in 5-minute steps": "Играчи с отворена страница на играта, на стъпки от 5 минути",
+  "Saved games": "Запазени игри"
 }

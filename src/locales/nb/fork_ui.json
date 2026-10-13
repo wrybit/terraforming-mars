@@ -1050,7 +1050,6 @@
   "Load (1 / 5 / 15 min)": "Last (1 / 5 / 15 min)",
   "No sensor": "Ingen sensor",
   "Game server process": "Spillserverprosess",
-  "Game database": "Spilldatabase",
   "AI decision logs": "KI-beslutningslogger",
   "Running games": "Pågående spill",
   "Players online now": "Spillere pålogget nå",
@@ -1059,8 +1058,15 @@
   "${0} of ${1} (${2} %)": "${0} av ${1} (${2} %)",
   "First values after one minute of running": "Første verdier etter ett minutts drift",
   "Time of day": "Tid på døgnet",
-  "Last 7 days": "Siste 7 dager",
-  "Weeks before": "Ukene før",
   "Average": "Gjennomsnitt",
-  "Distinct human players with a move per hour of the day": "Ulike menneskelige spillere med et trekk per time i døgnet"
+  "Docker and Node.js": "Docker og Node.js",
+  "Game (code and build)": "Spill (kode og bygg)",
+  "Logs": "Logger",
+  "System and other": "System og annet",
+  "Free": "Ledig",
+  "Parts measured at ${0}": "Fordeling målt ${0}",
+  "Today": "I dag",
+  "One line per day (${0} days)": "Én linje per dag (${0} dager)",
+  "Players with an open game page, in 5-minute steps": "Spillere med åpen spillside, i trinn på 5 minutter",
+  "Saved games": "Lagrede spill"
 }

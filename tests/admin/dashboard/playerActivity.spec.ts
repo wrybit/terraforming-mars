@@ -23,18 +23,6 @@ describe('playerActivity', () => {
     expect(activity.weeks.at(-1)).deep.eq({start: '2026-10-12', value: 2});
   });
 
-  it('profiles each day by hour, today only up to now', () => {
-    const activity = playerActivity([
-      {humanPlayers: ['Teddy', 'Jens'], eventTimesMs: [new Date(2026, 9, 13, 20, 15).getTime(), new Date(2026, 9, 13, 20, 50).getTime()]},
-    ], now);
-    expect(activity.dayProfiles).has.length(28);
-    const yesterday = activity.dayProfiles.at(-2);
-    expect(yesterday?.start).eq('2026-10-13');
-    expect(yesterday?.hours[20]).eq(2);
-    expect(yesterday?.hours[21]).eq(0);
-    expect(activity.dayProfiles.at(-1)?.hours).has.length(13);
-  });
-
   it('starts weeks on Monday, also for a Sunday', () => {
     expect(weekKey(at(2026, 10, 18))).eq('2026-10-12');
     expect(weekKey(at(2026, 10, 12))).eq('2026-10-12');

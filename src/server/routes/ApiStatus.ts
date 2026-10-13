@@ -6,6 +6,7 @@ import {Response} from '../Response';
 import {ServerStatusModel} from '../../common/models/ServerStatusModel';
 import {isServerUpdating, serverStartedAt} from '../server/serverUpdate';
 import {activeParticipantCount, noteActiveParticipant} from '../server/activeParticipants';
+import {presenceRecord} from '../admin/dashboard/presenceRecord';
 import {isPlayerId} from '../../common/Types';
 import {Phase} from '../../common/Phase';
 
@@ -23,6 +24,7 @@ export class ApiStatus extends Handler {
       const game = await ctx.gameLoader.getGame(id);
       if (game !== undefined && game.phase !== Phase.END) {
         noteActiveParticipant(id);
+        presenceRecord.notePlayer(id);
       }
     }
     const status: ServerStatusModel = {

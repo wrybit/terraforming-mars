@@ -1503,7 +1503,6 @@
   "Load (1 / 5 / 15 min)": "Нагрузка (1 / 5 / 15 мин)",
   "No sensor": "Нет датчика",
   "Game server process": "Процесс игрового сервера",
-  "Game database": "База данных игр",
   "AI decision logs": "Журналы решений ИИ",
   "Running games": "Текущие партии",
   "Players online now": "Игроков онлайн сейчас",
@@ -1513,8 +1512,15 @@
   "${0} of ${1} (${2} %)": "${0} из ${1} (${2} %)",
   "First values after one minute of running": "Первые данные — через минуту работы",
   "Time of day": "Время суток",
-  "Last 7 days": "Последние 7 дней",
-  "Weeks before": "Предыдущие недели",
   "Average": "Среднее",
-  "Distinct human players with a move per hour of the day": "Разные игроки-люди с ходом, по часам суток"
+  "Docker and Node.js": "Docker и Node.js",
+  "Game (code and build)": "Игра (код и сборка)",
+  "Logs": "Журналы",
+  "System and other": "Система и прочее",
+  "Free": "Свободно",
+  "Parts measured at ${0}": "Разбивка измерена в ${0}",
+  "Today": "Сегодня",
+  "One line per day (${0} days)": "Одна линия на день (${0} дн.)",
+  "Players with an open game page, in 5-minute steps": "Игроки с открытой страницей игры, шаг 5 минут",
+  "Saved games": "Сохранённые партии"
 }

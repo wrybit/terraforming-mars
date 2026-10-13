@@ -699,7 +699,6 @@
   "Load (1 / 5 / 15 min)": "Kuorma (1 / 5 / 15 min)",
   "No sensor": "Ei anturia",
   "Game server process": "Pelipalvelimen prosessi",
-  "Game database": "Pelitietokanta",
   "AI decision logs": "Tekoälyn päätöslokit",
   "Running games": "Käynnissä olevat pelit",
   "Players online now": "Pelaajia nyt paikalla",
@@ -707,8 +706,15 @@
   "${0} of ${1} (${2} %)": "${0} / ${1} (${2} %)",
   "First values after one minute of running": "Ensimmäiset arvot minuutin käynnin jälkeen",
   "Time of day": "Vuorokaudenaika",
-  "Last 7 days": "Viimeiset 7 päivää",
-  "Weeks before": "Aiemmat viikot",
   "Average": "Keskiarvo",
-  "Distinct human players with a move per hour of the day": "Eri ihmispelaajat, jotka tekivät siirron, vuorokauden tunneittain"
+  "Docker and Node.js": "Docker ja Node.js",
+  "Game (code and build)": "Peli (koodi ja käännös)",
+  "Logs": "Lokit",
+  "System and other": "Järjestelmä ja muut",
+  "Free": "Vapaana",
+  "Parts measured at ${0}": "Jakauma mitattu ${0}",
+  "Today": "Tänään",
+  "One line per day (${0} days)": "Yksi viiva päivää kohden (${0} päivää)",
+  "Players with an open game page, in 5-minute steps": "Pelaajat, joilla on pelisivu auki, 5 minuutin välein",
+  "Saved games": "Tallennetut pelit"
 }
