@@ -4,10 +4,10 @@
     <div :class="'party-name party-name-indicator party-name--'+rulingPartyToCss()"> <span v-i18n>{{ getRulingParty() }}</span></div>
   </div>
   <div class="global_params">
-    <GlobalParameterValue :param="globalParameter.TEMPERATURE" :value="temperature"/>
-    <GlobalParameterValue :param="globalParameter.OXYGEN" :value="oxygen"/>
-    <GlobalParameterValue :param="globalParameter.OCEANS" :value="oceans"/>
-    <GlobalParameterValue v-if="gameOptions.expansions.venus" :param="globalParameter.VENUS" :value="venus"/>
+    <GlobalParameterValue :param="globalParameter.TEMPERATURE" :value="temperature" :boardName="gameOptions.boardName"/>
+    <GlobalParameterValue :param="globalParameter.OXYGEN" :value="oxygen" :boardName="gameOptions.boardName"/>
+    <GlobalParameterValue :param="globalParameter.OCEANS" :value="oceans" :boardName="gameOptions.boardName"/>
+    <GlobalParameterValue v-if="gameOptions.expansions.venus" :param="globalParameter.VENUS" :value="venus" :boardName="gameOptions.boardName"/>
     <MoonGlobalParameterValue v-if="moonData" :moonData="moonData"/>
   </div>
   <!-- Display only, below the buttons and visibly not a button: own player cube and pile sizes.

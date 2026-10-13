@@ -16,7 +16,12 @@ export function boardCandidates(board: BoardNameType): Array<BoardName> {
     return allBoards;
   }
   if (board === RandomBoardOption.OFFICIAL) {
-    return allBoards.filter((name) => name === BoardName.THARSIS || name === BoardName.HELLAS || name === BoardName.ELYSIUM);
+    return allBoards.filter((name) => name === BoardName.THARSIS ||
+      name === BoardName.HELLAS ||
+      name === BoardName.ELYSIUM ||
+      name === BoardName.UTOPIA_PLANITIA ||
+      name === BoardName.VASTITAS_BOREALIS_NOVA ||
+      name === BoardName.TERRA_CIMMERIA_NOVA);
   }
   return [board];
 }
