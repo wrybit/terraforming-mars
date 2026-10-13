@@ -516,6 +516,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   drawChoice4: {drawChoiceValue: 4},
   // Round 46: drawChoice2 −1.25, drawChoice4 +0.69 – noisy; round 47 repeats 4 and tries 6.
   drawChoice6: {drawChoiceValue: 6},
+  drawChoice5: {drawChoiceValue: 5},
   drawChoice8: {drawChoiceValue: 8},
   // Player feedback (public server): the AI plays energy-spending action cards without energy production.
   energySupply: {energySupply: 1},
