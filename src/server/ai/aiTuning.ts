@@ -540,6 +540,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   passLastResort3: {passLastResort: 3},
   passPenalty05: {passPenalty: 0.5},
   passPenalty0: {passPenalty: 0},
+  passPenalty1: {passPenalty: 1},
   noPassLastResort: {passLastResort: 0},
   greeneryRing3: {greeneryRing: 3},
   noEnergySupply: {energySupply: 0},
