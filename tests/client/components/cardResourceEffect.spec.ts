@@ -15,10 +15,15 @@ describe('cardResourceEffect', () => {
     });
   });
 
-  it('takes the first verb: removing to gain something else is a loss on the card', () => {
+  it('takes the verb in front of the resource: removing to gain something else is a loss on the card', () => {
     const effect = cardResourceEffect('Remove 3 microbes to increase your terraform rating 1 step', source);
     expect(effect?.direction).eq('loss');
     expect(effect?.amount).eq(3);
+  });
+
+  it('ignores verbs of other resources in front of it: spending energy to add an animal is a gain', () => {
+    const effect = cardResourceEffect('Spend 2 energy to add 1 animal to another card', CardName.BIO_PRINTING_FACILITY);
+    expect(effect).deep.eq({resource: CardResource.ANIMAL, direction: 'gain', amount: 1, card: undefined});
   });
 
   it('takes the card from the title parameter', () => {

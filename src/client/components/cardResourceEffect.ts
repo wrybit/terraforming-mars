@@ -23,9 +23,11 @@ const CARD_RESOURCE_WORDS: ReadonlyArray<[string, CardResource]> = [
   ['graphene', CardResource.GRAPHENE],
 ];
 
-// Verb that decides the direction: the FIRST verb of the title, because the rest names what the
-// resources are spent for ("Remove 3 microbes to increase your terraform rating" is a loss on the card)
-const DIRECTION_VERB = /\b(add|gain|put|remove|spend|use|lose)\b/i;
+// Verb that decides the direction: the LAST verb in front of the card resource, because it governs it.
+// Verbs after it name what the resources are spent for ("Remove 3 microbes to increase your terraform
+// rating" is a loss on the card); verbs before it belong to another resource ("Spend 2 energy to add
+// 1 animal to another card", Bio Printing Facility, is a gain for the card)
+const DIRECTION_VERB = /\b(add|gain|put|remove|spend|use|lose)\b/gi;
 const GAIN_VERBS = /^(add|gain|put)$/i;
 
 // What a decision does with resources on a card: which resource, gain or loss, how many and on which card.
@@ -46,7 +48,7 @@ const GENERIC_RESOURCE_WORD = '(?<!standard )resources?(?!\\()';
 // parameter do not match) with the amount written directly before it: "3 microbes", "${0} floaters",
 // "a microbe" → 1; a countable word in singular without a number ("Add microbe to …") → 1;
 // "any number of microbes" or "microbes" alone → no amount
-function titleCardResource(title: string | Message, card: CardName | undefined): {resource: CardResource, amount?: number} | undefined {
+function titleCardResource(title: string | Message, card: CardName | undefined): {resource: CardResource, amount?: number, index: number} | undefined {
   const text = titleText(title);
   const cardResource = card === undefined ? undefined : getCard(card)?.resourceType;
   const words: ReadonlyArray<[string, CardResource | undefined]> = [...CARD_RESOURCE_WORDS, [GENERIC_RESOURCE_WORD, cardResource]];
@@ -60,7 +62,7 @@ function titleCardResource(title: string | Message, card: CardName | undefined):
       return undefined;
     }
     const singular = word.includes('s?') && !/s$/i.test(match[3]);
-    return {resource, amount: wordAmount(title, match[1], match[2]) ?? (singular ? 1 : undefined)};
+    return {resource, amount: wordAmount(title, match[1], match[2]) ?? (singular ? 1 : undefined), index: match.index};
   }
   return undefined;
 }
@@ -100,13 +102,20 @@ export function cardResourceEffect(title: string | Message, sourceCard?: CardNam
   if (named === undefined) {
     return undefined;
   }
-  const verb = DIRECTION_VERB.exec(titleText(title))?.[1];
+  const verb = directionVerb(titleText(title), named.index);
   return {
     resource: named.resource,
     direction: verb === undefined ? undefined : (GAIN_VERBS.test(verb) ? 'gain' : 'loss'),
     amount: named.amount,
     card,
   };
+}
+
+// Last direction verb in front of the resource word; without one the first verb of the title
+function directionVerb(text: string, resourceIndex: number): string | undefined {
+  const verbs = [...text.matchAll(DIRECTION_VERB)];
+  const before = verbs.filter((match) => match.index < resourceIndex);
+  return (before.at(-1) ?? verbs[0])?.[1];
 }
 
 // Resources on the affected card before and after the option; undefined if the card is not in the tableau
