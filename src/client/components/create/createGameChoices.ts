@@ -51,16 +51,17 @@ export const FAN_EXPANSIONS: ReadonlyArray<ExpansionChoice> = [
   {expansion: 'deltaProject', label: 'Delta Project', iconClass: 'expansion-icon-deltaProject', info: true, alpha: true},
 ];
 
+// Base game boards and the Kickstarter boards; "Random: Official" draws from the same list (newGameBoard.ts)
 export const OFFICIAL_BOARDS: ReadonlyArray<BoardNameType> = [
   BoardName.THARSIS,
   BoardName.HELLAS,
   BoardName.ELYSIUM,
-];
-
-export const FAN_BOARDS: ReadonlyArray<BoardNameType> = [
   BoardName.UTOPIA_PLANITIA,
   BoardName.VASTITAS_BOREALIS_NOVA,
   BoardName.TERRA_CIMMERIA_NOVA,
+];
+
+export const FAN_BOARDS: ReadonlyArray<BoardNameType> = [
   BoardName.ARABIA_TERRA,
   BoardName.AMAZONIS,
   BoardName.TERRA_CIMMERIA,
