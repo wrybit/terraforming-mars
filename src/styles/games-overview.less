@@ -184,9 +184,10 @@
   // Full card width, so the delete column sits at the right edge even with few players.
   // Fixed layout: status, game, generation and delete get set widths, all other columns
   // (spectator/result, players, AI) share the rest equally; narrower screens scroll inside the card.
-  // The minimum grows with the delete column (long languages), so the other columns keep their width
+  // Minimum width measured from the content of the columns shown (GamesTableCard.vue, columnFit.ts);
+  // the fallback until then grows with the delete column (long languages)
   width: 100%;
-  min-width: calc(1112px + var(--games-overview-actions-width, 128px));
+  min-width: var(--games-overview-min-width, calc(1112px + var(--games-overview-actions-width, 128px)));
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: @games-overview-gap-cell;
