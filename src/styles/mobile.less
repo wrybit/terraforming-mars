@@ -1106,11 +1106,18 @@ html.tm-mobile {
 
     .log-container,
     .log-panel,
+    .log-scroll-frame,
     .panel-body {
       width: auto !important;
       max-width: none !important;
       height: auto !important;
       max-height: none !important;
+    }
+
+    // The page scrolls here, the box has no edges to fade
+    .log-scroll-frame {
+      display: block;
+      mask-image: none;
     }
 
     .panel-body {

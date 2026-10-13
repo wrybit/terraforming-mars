@@ -78,15 +78,25 @@
   max-width: 860px;
   position: relative;
 
-  > .panel-body {
-    // Rows use the full width of the box; the "latest" button floats over the bottom right corner
-    // (it only shows while scrolled back in the history)
-    padding-right: 8px;
-    scrollbar-gutter: stable;
-    // Soft fade at the top and bottom edge; heights come from LogPanel (0 at the start/end of the log)
+  // Soft fade at the top and bottom edge; heights come from LogPanel (0 at the start/end of the log).
+  // On the frame around the scrolling box: a mask on the scroll box itself makes Chrome on Windows paint stale rows
+  > .log-scroll-frame {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
     --log-fade-top: 0px;
     --log-fade-bottom: 0px;
     mask-image: linear-gradient(to bottom, transparent 0, #000 var(--log-fade-top), #000 calc(100% - var(--log-fade-bottom)), transparent 100%);
+  }
+
+  > .log-scroll-frame > .panel-body {
+    // Rows use the full width of the box; the "latest" button floats over the bottom right corner
+    // (it only shows while scrolled back in the history)
+    flex: 1 1 auto;
+    min-height: 0;
+    padding-right: 8px;
+    scrollbar-gutter: stable;
   }
 
   li {

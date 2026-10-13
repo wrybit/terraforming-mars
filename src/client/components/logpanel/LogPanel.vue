@@ -22,7 +22,10 @@
       <!-- Filter line above the stream: search field with the active filters as chips, options to fold out -->
       <LogFilterBar v-show="!showsMilestonesAwards" v-model="logFilter" :players="viewModel.players" :me="viewModel.thisPlayer?.color"/>
       <!-- One continuous stream of all generations; the tabs above follow the scroll position -->
-      <div v-show="!showsMilestonesAwards" id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mouseenter="pointerEntered" @mousemove="pointerMoved" @mouseleave="pointerLeft">
+      <!-- The edge fade sits on this frame, not on the scrolling box: a mask on the scroll box itself leaves stale,
+           overlapping rows in Chrome on Windows while scrolling -->
+      <div v-show="!showsMilestonesAwards" ref="scrollFrame" class="log-scroll-frame">
+        <div id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mouseenter="pointerEntered" @mousemove="pointerMoved" @mouseleave="pointerLeft">
         <!-- With an active filter, generations without a matching row are hidden -->
         <section v-for="section in sections" v-show="!filterActive || visibleRows(section).length > 0" :key="section.generation" class="log-generation" :data-generation="section.generation">
           <h3 class="log-generation-title">
@@ -36,6 +39,7 @@
             <LogActionRow v-else :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"/>
           </template>
         </section>
+      </div>
       </div>
       <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones">
         <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable/>
@@ -522,8 +526,9 @@ export default defineComponent({
       }
       // When the page scrolls (mobile) the box has no edges of its own
       const fades = container === body ? edgeFadesOf(body) : {top: 0, bottom: 0};
-      body.style.setProperty('--log-fade-top', `${fades.top}px`);
-      body.style.setProperty('--log-fade-bottom', `${fades.bottom}px`);
+      const frame = this.$refs.scrollFrame as HTMLElement | undefined;
+      frame?.style.setProperty('--log-fade-top', `${fades.top}px`);
+      frame?.style.setProperty('--log-fade-bottom', `${fades.bottom}px`);
     },
     isNearBottom(container: ScrollContainer): boolean {
       return maxScrollTopOf(container) - scrollTopOf(container) <= BOTTOM_SCROLL_THRESHOLD;
