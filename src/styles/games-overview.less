@@ -290,13 +290,68 @@
   }
 }
 
+// Name and AI marker side by side: only the own name gets shortened, "[AI+]" always stays readable
 .games-overview-chip-name {
-  overflow: hidden;
+  display: flex;
+  gap: 3px;
   max-width: 100%;
-  text-overflow: ellipsis;
   font-size: 11px;
   font-weight: 400;
+  white-space: nowrap;
   opacity: 0.85;
+}
+
+.games-overview-chip-own-name {
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+}
+
+// Bulk delete of the open games: between heading and table, tighter to each other than to the table
+.games-overview-bulk {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  .btn {
+    height: 32px;
+  }
+}
+
+// Wins as an accordion (closed by default): the heading row toggles, chevron like the settings groups
+.games-overview-accordion {
+  > summary {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::after {
+      content: '›';
+      margin-left: auto;
+      font-size: 20px;
+      line-height: 1;
+      transform: rotate(90deg);
+      transition: transform 0.15s;
+    }
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  &[open] > summary {
+    margin-bottom: 10px;
+
+    &::after {
+      transform: rotate(-90deg);
+    }
+  }
 }
 
 .games-overview-chip--spectator {

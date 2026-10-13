@@ -1,5 +1,5 @@
 <template>
-  <!-- One game of the admin overview: nine fixed columns (seats 1–6, AI strengths), chips with name and points,
+  <!-- One game of the admin overview: eleven fixed columns (players 1–6, AI 1–5), chips with name and points,
        winner with a trophy -->
   <tr class="games-overview-row" :class="{'games-overview-row--imported': summary.source === 'imported'}">
     <td class="games-overview-status">
@@ -15,7 +15,9 @@
     <!-- 0 = unknown (e.g. screenshot without generation info) -->
     <td class="games-overview-generation">{{ summary.generation > 0 ? summary.generation : '–' }}</td>
     <td>
-      <a v-if="summary.spectatorUrl !== undefined" :href="summary.spectatorUrl" target="_blank" class="games-overview-chip games-overview-chip--spectator" v-i18n>Watch</a>
+      <!-- Finished: only the result is left to look at; running: watch as a spectator -->
+      <a v-if="summary.isFinished && resultUrl !== undefined" :href="resultUrl" target="_blank" class="games-overview-chip games-overview-chip--spectator" v-i18n>Show</a>
+      <a v-else-if="!summary.isFinished && summary.spectatorUrl !== undefined" :href="summary.spectatorUrl" target="_blank" class="games-overview-chip games-overview-chip--spectator" v-i18n>Watch</a>
     </td>
     <td v-for="(column, index) in columns" :key="index" class="games-overview-players">
       <component :is="player.url === undefined ? 'span' : 'a'"
@@ -26,7 +28,7 @@
         class="games-overview-chip"
         :class="[playerColorClass(player.color), {'games-overview-chip--winner': player.isWinner, 'games-overview-chip--online': player.isOnline === true}]"
         :title="chipTitle(player)">
-        <span class="games-overview-chip-name">{{ chipName(player) }}</span>
+        <span class="games-overview-chip-name"><span class="games-overview-chip-own-name">{{ chipNameParts(player).name }}</span><span v-if="chipNameParts(player).marker !== undefined">{{ chipNameParts(player).marker }}</span></span>
         <strong><span v-if="player.isWinner" class="games-overview-trophy">🏆</span>{{ player.victoryPoints }}</strong>
       </component>
     </td>
@@ -39,7 +41,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {AdminGameSummary, AdminPlayerSummary} from '@/common/admin/AdminGameSummary';
-import {chipName, PlayerColumn, playersInColumn} from '@/client/components/admin/playerColumns';
+import {chipNameParts, PlayerColumn, playersInColumn} from '@/client/components/admin/playerColumns';
 import {Color} from '@/common/Color';
 import {playerColorClass} from '@/common/utils/utils';
 import {paths} from '@/common/app/paths';
@@ -70,13 +72,17 @@ export default defineComponent({
     importedResultUrl(): string {
       return `${paths.THE_END}?id=${this.summary.importedParticipantId}`;
     },
+    resultUrl(): string | undefined {
+      return this.summary.resultUrl ?? this.summary.screenshotUrl ??
+        (this.summary.importedParticipantId === undefined ? undefined : this.importedResultUrl);
+    },
     dateText(): string {
       return new Date(this.summary.createdTimeMs).toLocaleString(undefined, {dateStyle: 'short', timeStyle: 'short'});
     },
   },
   methods: {
     playersInColumn,
-    chipName,
+    chipNameParts,
     // Corporation and win in the tooltip: the tile itself stays compact (points only)
     chipTitle(player: AdminPlayerSummary): string {
       return [player.corporation, player.isWinner ? translateText('Winner') : undefined, player.isOnline === true ? translateText('Online') : undefined].filter((part) => part !== undefined).join(' · ');

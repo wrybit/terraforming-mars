@@ -1934,5 +1934,9 @@
   "Other programs": "Altri programmi",
   "System (kernel and services)": "Sistema (kernel e servizi)",
   "Cache (freed on demand)": "Cache (liberata su richiesta)",
-  "Idle": "Inattivo"
+  "Idle": "Inattivo",
+  "AI ${0}": "IA ${0}",
+  "Delete all open": "Elimina tutte le aperte",
+  "Delete open older than 12 h": "Elimina aperte più vecchie di 12 h",
+  "Delete unplayed": "Elimina non giocate"
 }

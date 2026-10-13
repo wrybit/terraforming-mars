@@ -2,6 +2,8 @@
   <!-- One group of the games overview (gameGroups.ts): heading with the number of games, the table right below -->
   <section class="games-overview-card" :class="'games-overview-group--' + groupKey">
     <h2><span v-i18n>{{ title }}</span> <span class="games-overview-lineup-games">{{ games.length }} {{ $t(games.length === 1 ? 'game' : 'games') }}</span></h2>
+    <!-- Group-wide actions (e.g. bulk delete of open games) between heading and table -->
+    <div v-if="$slots.actions !== undefined" class="games-overview-bulk"><slot name="actions"></slot></div>
     <div class="games-overview-scroll">
       <table class="games-overview-table">
         <thead>
@@ -9,7 +11,8 @@
             <th></th>
             <th v-i18n>Game</th>
             <th v-i18n>Gen</th>
-            <th v-i18n>Spectator</th>
+            <!-- Finished games can no longer be watched, only their result shown -->
+            <th>{{ $t(groupKey === 'finished' ? 'Result' : 'Spectator') }}</th>
             <th v-for="(column, index) in columns" :key="index">{{ columnLabel(column) }}</th>
             <th class="games-overview-actions"></th>
           </tr>
@@ -42,9 +45,9 @@ export default defineComponent({
   },
   emits: ['delete'],
   methods: {
-    // "Player 1" … "Player 6", "[AI-]", "[AI]", "[AI+]"
+    // "Player 1" … "Player 6", "AI 1" … "AI 5"
     columnLabel(column: PlayerColumn): string {
-      return column.kind === 'human' ? translateTextWithParams('Player ${0}', [String(column.seat + 1)]) : column.marker;
+      return translateTextWithParams(column.kind === 'human' ? 'Player ${0}' : 'AI ${0}', [String(column.seat + 1)]);
     },
   },
 });

@@ -33,6 +33,10 @@ export type AdminGameSummary = {
   importedParticipantId: string | undefined;
   /** Screenshot of the results page stored here when the game itself no longer exists (taken over from Discord). */
   screenshotUrl: string | undefined;
+  /** Results page of a finished local game (the-end?id=…); imports use importedParticipantId / screenshotUrl. */
+  resultUrl?: string;
+  /** Project cards played by all players together (local games only) – tells barely started games apart. */
+  playedCardCount?: number;
   players: Array<AdminPlayerSummary>;
 };
 

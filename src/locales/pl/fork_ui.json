@@ -1493,5 +1493,9 @@
   "Other programs": "Inne programy",
   "System (kernel and services)": "System (jądro i usługi)",
   "Cache (freed on demand)": "Pamięć podręczna (zwalniana w razie potrzeby)",
-  "Idle": "Bezczynny"
+  "Idle": "Bezczynny",
+  "AI ${0}": "SI ${0}",
+  "Delete all open": "Usuń wszystkie otwarte",
+  "Delete open older than 12 h": "Usuń otwarte starsze niż 12 h",
+  "Delete unplayed": "Usuń nierozegrane"
 }

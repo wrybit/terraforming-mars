@@ -507,5 +507,9 @@
   "Other programs": "Andere Programme",
   "System (kernel and services)": "System (Kernel und Dienste)",
   "Cache (freed on demand)": "Cache (wird bei Bedarf frei)",
-  "Idle": "Leerlauf"
+  "Idle": "Leerlauf",
+  "AI ${0}": "KI ${0}",
+  "Delete all open": "Alle offenen löschen",
+  "Delete open older than 12 h": "Offene älter als 12 h löschen",
+  "Delete unplayed": "Unbespielte löschen"
 }

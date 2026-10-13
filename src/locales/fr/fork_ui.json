@@ -779,5 +779,9 @@
   "Other programs": "Autres programmes",
   "System (kernel and services)": "Système (noyau et services)",
   "Cache (freed on demand)": "Cache (libéré à la demande)",
-  "Idle": "Inactif"
+  "Idle": "Inactif",
+  "AI ${0}": "IA ${0}",
+  "Delete all open": "Supprimer toutes les parties en cours",
+  "Delete open older than 12 h": "Supprimer celles de plus de 12 h",
+  "Delete unplayed": "Supprimer les non jouées"
 }

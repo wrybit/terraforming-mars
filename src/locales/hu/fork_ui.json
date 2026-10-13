@@ -894,5 +894,9 @@
   "Other programs": "Egyéb programok",
   "System (kernel and services)": "Rendszer (kernel és szolgáltatások)",
   "Cache (freed on demand)": "Gyorsítótár (szükség esetén felszabadul)",
-  "Idle": "Üresjárat"
+  "Idle": "Üresjárat",
+  "AI ${0}": "MI ${0}",
+  "Delete all open": "Összes nyitott törlése",
+  "Delete open older than 12 h": "12 óránál régebbi nyitottak törlése",
+  "Delete unplayed": "Lejátszatlanok törlése"
 }

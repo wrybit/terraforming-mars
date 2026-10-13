@@ -1075,5 +1075,9 @@
   "Other programs": "Andre programmer",
   "System (kernel and services)": "System (kjerne og tjenester)",
   "Cache (freed on demand)": "Hurtigbuffer (frigjøres ved behov)",
-  "Idle": "Ledig kapasitet"
+  "Idle": "Ledig kapasitet",
+  "AI ${0}": "KI ${0}",
+  "Delete all open": "Slett alle åpne",
+  "Delete open older than 12 h": "Slett åpne eldre enn 12 t",
+  "Delete unplayed": "Slett uspilte"
 }

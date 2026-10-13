@@ -1645,5 +1645,9 @@
   "Other programs": "其他程序",
   "System (kernel and services)": "系统（内核和服务）",
   "Cache (freed on demand)": "缓存（按需释放）",
-  "Idle": "空闲"
+  "Idle": "空闲",
+  "AI ${0}": "AI ${0}",
+  "Delete all open": "删除所有进行中",
+  "Delete open older than 12 h": "删除超过12小时的进行中",
+  "Delete unplayed": "删除未进行的"
 }

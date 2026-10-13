@@ -32,8 +32,15 @@ describe('GameOverview', () => {
 
   it('one cell per column, empty where the player did not play', () => {
     const cells = mountRow().findAll('td').map((cell) => cell.text());
-    // Status, game, generation, spectators, seats 1–6, AI-, AI, AI+, delete
-    expect(cells.slice(4, 13)).deep.eq(['Jens🏆76', 'Daniel66', '', '', '', '', '', '', '']);
+    // Status, game, generation, spectators/result, players 1–6, AI 1–5, delete
+    expect(cells.slice(4, 15)).deep.eq(['Jens🏆76', 'Daniel66', '', '', '', '', '', '', '', '', '']);
+  });
+
+  it('finished: shows the result instead of watching; running: watch as spectator', () => {
+    const finished = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'), props: {summary: {...summary, resultUrl: 'the-end?id=p1'}, columns: PLAYER_COLUMNS}});
+    expect(finished.find('.games-overview-chip--spectator').attributes('href')).eq('the-end?id=p1');
+    const running = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'), props: {summary: {...summary, isFinished: false}, columns: PLAYER_COLUMNS}});
+    expect(running.find('.games-overview-chip--spectator').attributes('href')).eq('spectator?id=s1');
   });
 
   it('always offers the delete button', () => {

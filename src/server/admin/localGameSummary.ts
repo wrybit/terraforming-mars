@@ -4,6 +4,7 @@ import {AdminGameSummary} from '../../common/admin/AdminGameSummary';
 import {toAdminPlayerSummaries} from '../../common/admin/adminPlayerSummaries';
 import {paths} from '../../common/app/paths';
 import {isActiveParticipant} from '../server/activeParticipants';
+import {isIProjectCard} from '../cards/IProjectCard';
 
 /** Summarizes a game played on this server for the admin overview. */
 export function localGameSummary(game: IGame): AdminGameSummary {
@@ -27,6 +28,8 @@ export function localGameSummary(game: IGame): AdminGameSummary {
     externalUrl: undefined,
     importedParticipantId: undefined,
     screenshotUrl: undefined,
+    resultUrl: isFinished ? `${paths.THE_END}?id=${game.playersInGenerationOrder[0].id}` : undefined,
+    playedCardCount: game.players.reduce((sum, player) => sum + player.playedCards.asArray().filter(isIProjectCard).length, 0),
     players: toAdminPlayerSummaries(scores, isFinished, game.isSoloModeWin()),
   };
 }

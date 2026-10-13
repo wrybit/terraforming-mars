@@ -1608,5 +1608,9 @@
   "Other programs": "Други програми",
   "System (kernel and services)": "Система (ядро и услуги)",
   "Cache (freed on demand)": "Кеш (освобождава се при нужда)",
-  "Idle": "Неактивен"
+  "Idle": "Неактивен",
+  "AI ${0}": "ИИ ${0}",
+  "Delete all open": "Изтрий всички отворени",
+  "Delete open older than 12 h": "Изтрий отворени по-стари от 12 ч",
+  "Delete unplayed": "Изтрий неизиграни"
 }

@@ -723,5 +723,9 @@
   "Other programs": "Muut ohjelmat",
   "System (kernel and services)": "Järjestelmä (ydin ja palvelut)",
   "Cache (freed on demand)": "Välimuisti (vapautuu tarvittaessa)",
-  "Idle": "Joutokäynti"
+  "Idle": "Joutokäynti",
+  "AI ${0}": "Tekoäly ${0}",
+  "Delete all open": "Poista kaikki avoimet",
+  "Delete open older than 12 h": "Poista yli 12 h vanhat avoimet",
+  "Delete unplayed": "Poista pelaamattomat"
 }

@@ -13,8 +13,9 @@
         </section>
       </div>
 
-      <section v-if="lineups.length > 0" class="games-overview-card">
-        <h2 v-i18n>Wins</h2>
+      <!-- Accordion, closed by default: the games tables are what the page is mostly opened for -->
+      <details v-if="lineups.length > 0" class="games-overview-card games-overview-accordion">
+        <summary><h2><span v-i18n>Wins</span> <span class="games-overview-lineup-games">{{ countedGames }} {{ $t(countedGames === 1 ? 'game' : 'games') }}</span></h2></summary>
         <div class="games-overview-lineups">
           <div v-for="lineup in lineups" :key="lineup.lineup" class="games-overview-lineup">
             <h3>{{ lineup.lineup }} <span class="games-overview-lineup-games">{{ lineup.games }} {{ $t(lineup.games === 1 ? 'game' : 'games') }}</span></h3>
@@ -31,7 +32,7 @@
             </p>
           </div>
         </div>
-      </section>
+      </details>
 
       <section v-if="status !== 'done' || summaries.length === 0" class="games-overview-card">
         <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
@@ -45,7 +46,14 @@
       <!-- Live, open and finished games each in a card of their own (gameGroups.ts) -->
       <template v-if="status === 'done'">
         <GamesTableCard v-for="group in groups" :key="group.key" :groupKey="group.key" :title="group.title" :games="group.games"
-          :columns="columns" :deletingIds="deletingIds" @delete="deleteGame"/>
+          :columns="columns" :deletingIds="deletingIds" @delete="deleteGame">
+          <!-- Bulk delete only where no one is online (bulkDelete.ts) -->
+          <template v-if="group.key === 'open'" #actions>
+            <DeleteGameButton v-for="key in bulkDeleteKeys" :key="key" :label="bulkDeleteLabels[key]"
+              :count="bulkDeleteIds(group.games, key).length" :isDeleting="bulkDeleting === key"
+              @delete="deleteGames(key, bulkDeleteIds(group.games, key))"/>
+          </template>
+        </GamesTableCard>
       </template>
     </AdminGate>
   </div>
@@ -65,11 +73,14 @@ import ImportGameForm from '@/client/components/admin/ImportGameForm.vue';
 import AdminGate from '@/client/components/admin/AdminGate.vue';
 import {PLAYER_COLUMNS, PlayerColumn} from '@/client/components/admin/playerColumns';
 import {LineupWinCounts, winCountsByLineup} from '@/client/components/admin/winCounts';
+import DeleteGameButton from '@/client/components/admin/DeleteGameButton.vue';
+import {BULK_DELETE_LABELS, BulkDeleteKey, bulkDeleteIds} from '@/client/components/admin/bulkDelete';
 
 type DataModel = {
   summaries: Array<AdminGameSummary>;
   status: 'loading' | 'error' | 'done';
   deletingIds: Array<string>;
+  bulkDeleting: BulkDeleteKey | undefined;
   deleteError: string;
   loadFailureText: string;
 };
@@ -79,6 +90,7 @@ export default defineComponent({
   components: {
     AdminGate,
     GamesTableCard,
+    DeleteGameButton,
     LoadGameForm,
     ImportGameForm,
   },
@@ -87,6 +99,7 @@ export default defineComponent({
       summaries: [],
       status: 'loading',
       deletingIds: [],
+      bulkDeleting: undefined,
       deleteError: '',
       loadFailureText: '',
     };
@@ -104,8 +117,27 @@ export default defineComponent({
     lineups(): Array<LineupWinCounts> {
       return winCountsByLineup(this.summaries);
     },
+    // Shown on the closed accordion: how many finished games the wins are based on
+    countedGames(): number {
+      return this.lineups.reduce((sum, lineup) => sum + lineup.games, 0);
+    },
+    bulkDeleteKeys(): ReadonlyArray<BulkDeleteKey> {
+      return Object.keys(BULK_DELETE_LABELS) as Array<BulkDeleteKey>;
+    },
+    bulkDeleteLabels(): Record<BulkDeleteKey, string> {
+      return BULK_DELETE_LABELS;
+    },
   },
   methods: {
+    bulkDeleteIds,
+    // One after the other through the single delete: same server check, rows vanish one by one
+    async deleteGames(key: BulkDeleteKey, ids: ReadonlyArray<string>) {
+      this.bulkDeleting = key;
+      for (const id of ids) {
+        await this.deleteGame(id);
+      }
+      this.bulkDeleting = undefined;
+    },
     formatAverage(value: number): string {
       return value.toLocaleString(undefined, {maximumFractionDigits: 1});
     },

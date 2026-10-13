@@ -1942,5 +1942,9 @@
   "Other programs": "Otros programas",
   "System (kernel and services)": "Sistema (núcleo y servicios)",
   "Cache (freed on demand)": "Caché (se libera cuando hace falta)",
-  "Idle": "Inactivo"
+  "Idle": "Inactivo",
+  "AI ${0}": "IA ${0}",
+  "Delete all open": "Borrar todas las abiertas",
+  "Delete open older than 12 h": "Borrar abiertas de más de 12 h",
+  "Delete unplayed": "Borrar sin jugar"
 }

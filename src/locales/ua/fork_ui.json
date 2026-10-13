@@ -871,5 +871,9 @@
   "Other programs": "Інші програми",
   "System (kernel and services)": "Система (ядро та служби)",
   "Cache (freed on demand)": "Кеш (звільняється за потреби)",
-  "Idle": "Простій"
+  "Idle": "Простій",
+  "AI ${0}": "ШІ ${0}",
+  "Delete all open": "Видалити всі відкриті",
+  "Delete open older than 12 h": "Видалити відкриті старші за 12 год",
+  "Delete unplayed": "Видалити незіграні"
 }
