@@ -23,13 +23,14 @@
         <span class="start-updates-sheet-month">{{ day.month }}</span>
         <span class="start-updates-sheet-day">{{ day.dayOfMonth }}</span>
         <span class="start-updates-sheet-weekday">{{ day.weekday }}</span>
-        <span v-if="day.commits > 0" class="start-updates-sheet-commits"><b>{{ day.commits }}</b>{{ day.commitsLabel }}</span>
       </div>
       <!-- Extra wrapper: the grid row animates from 0fr to 1fr, the list keeps its own spacing -->
       <div class="start-updates-body" :ref="index === 0 ? setNewestBody : undefined">
         <div>
           <ul class="start-updates-items">
             <li v-for="item in day.items" :key="item" :title="item">{{ item }}</li>
+            <!-- Commits of the day as the last line of the list (not on the sheet, where it was too small to read) -->
+            <li v-if="day.commits > 0" class="start-updates-commits">{{ day.commits }} {{ day.commitsLabel }}</li>
           </ul>
         </div>
       </div>

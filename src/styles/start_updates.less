@@ -16,13 +16,12 @@
   --updates-rule: rgba(232, 236, 244, calc(0.13 * var(--updates-fade)));
   --updates-reading-glass: rgba(5, 7, 13, 0.35);
   --updates-glass-edge: rgba(232, 236, 244, 0.1);
-  --updates-sheet: rgba(255, 255, 255, 0.62);
-  --updates-sheet-band: rgba(255, 255, 255, 0.55);
-  --updates-sheet-edge: rgba(255, 255, 255, 0.5);
-  --updates-sheet-ink: #0d1220;
-  --updates-sheet-ink-soft: rgba(13, 18, 32, 0.65);
-  --updates-sheet-rule: rgba(13, 18, 32, 0.15);
-  --updates-sunday: #d8261b;
+  --updates-sheet: rgba(20, 25, 38, 0.75);
+  --updates-sheet-band: rgba(255, 255, 255, 0.88);
+  --updates-sheet-band-ink: #11151f;
+  --updates-sheet-edge: rgba(255, 255, 255, 0.18);
+  --updates-sunday: #ff4d40;
+  --updates-sunday-band: #d8261b;
 
   position: relative;
   z-index: 1;
@@ -168,7 +167,13 @@
   }
 }
 
-// Calendar sheet: white frosted glass, about as wide as the closed date
+.start-updates-items .start-updates-commits {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 9.5px;
+  color: var(--updates-ink-faint);
+}
+
+// Calendar sheet: dark glass with a light month band, about as wide as the closed date. Sunday: red band, red number.
 .start-updates-sheet {
   display: none;
   grid-row: 1 / 3;
@@ -180,54 +185,47 @@
   margin: 6px 0 10px;
   overflow: hidden;
   border: 1px solid var(--updates-sheet-edge);
-  border-radius: 4px;
+  border-radius: 5px;
   background: var(--updates-sheet);
-  -webkit-backdrop-filter: blur(10px) saturate(1.3);
-  backdrop-filter: blur(10px) saturate(1.3);
-  color: var(--updates-sheet-ink);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   text-align: center;
 }
 
 .start-updates-sheet-month {
   width: 100%;
-  padding: 2px 0;
   background: var(--updates-sheet-band);
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--updates-sheet-ink-soft);
+  line-height: 13px;
+  letter-spacing: 0.1em;
+  color: var(--updates-sheet-band-ink);
 }
 
 .start-updates-sheet-day {
-  padding-top: 2px;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.05;
+  padding-top: 1px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 22px;
+  color: var(--updates-ink);
 }
 
 .start-updates-sheet-weekday {
-  font-size: 8px;
+  padding-bottom: 4px;
+  font-size: 8.5px;
+  font-weight: 500;
+  line-height: 12px;
+  color: var(--updates-ink-soft);
 }
 
 .start-updates-sheet--sunday {
-  .start-updates-sheet-day,
-  .start-updates-sheet-weekday {
-    color: var(--updates-sunday);
+  .start-updates-sheet-month {
+    background: var(--updates-sunday-band);
+    color: #fff;
   }
-}
 
-.start-updates-sheet-commits {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-top: 3px;
-  padding: 2px 0;
-  border-top: 1px solid var(--updates-sheet-rule);
-  font: 7.5px/1.2 ui-monospace, Menlo, monospace;
-  color: var(--updates-sheet-ink-soft);
-
-  b {
-    font-size: 8px;
+  .start-updates-sheet-day {
+    color: var(--updates-sunday);
   }
 }
 

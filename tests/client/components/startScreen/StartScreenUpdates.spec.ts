@@ -26,7 +26,10 @@ describe('StartScreenUpdates', () => {
     expect(rows).has.length(14);
     expect(rows[0].classes()).contains('start-updates-day--newest');
     expect(rows[1].classes()).not.contains('start-updates-day--newest');
-    expect(rows[0].findAll('li')).has.length(2);
+    expect(rows[0].findAll('li:not(.start-updates-commits)')).has.length(2);
+    // Commits close the list instead of sitting on the calendar sheet
+    expect(rows[0].find('li:last-child').text()).eq('12 commits');
+    expect(rows[0].find('.start-updates-sheet').text()).not.contains('commits');
   });
 
   it('uses German only for German, English for every other language', () => {
