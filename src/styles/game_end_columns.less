@@ -3,10 +3,11 @@
 // The sections are distributed so that both columns end up roughly the same length.
 
 @game-end-page-padding: 24px;
-// Law of proximity: tighter within a box than between boxes, widest between the columns
+// Law of proximity: tighter within a box than between boxes
 @game-end-box-padding: 14px;
 @game-end-block-gap: 16px;
-@game-end-columns-gap: 32px;
+// Compact and even: every gap between two cards is the same, in a column as between the columns (drag handles sit in it)
+@game-end-card-gap: @game-end-block-gap;
 @game-end-box-radius: 10px;
 @game-end-box-border: rgba(255, 255, 255, 0.07); // very subtle
 
@@ -423,6 +424,11 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
   max-width: none;
 }
 
+// The chart tab bar keeps no extra room above it for raised badges (it has none), otherwise the gap above it is larger
+#game-end .game-end-charts > .or-tabs {
+  margin-top: 0;
+}
+
 .game-end-charts .victory-point-chart-container {
   width: 100%;
   min-width: 0;
@@ -438,7 +444,7 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
       minmax(0, var(--game-end-main-share, @game-end-main-share))
       @resize-handle-thickness
       minmax(0, var(--game-end-side-share, @game-end-side-share));
-    column-gap: ((@game-end-columns-gap - @resize-handle-thickness) / 2);
+    column-gap: ((@game-end-card-gap - @resize-handle-thickness) / 2);
     // Both columns equally tall so the last box on the left ends flush with the log on the right
     align-items: stretch;
   }
@@ -461,7 +467,7 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
       position: relative;
       flex: none;
       height: @resize-handle-thickness;
-      margin: ((@game-end-columns-gap - 2 * @game-end-block-gap - @resize-handle-thickness) / 2) 0;
+      margin: ((@game-end-card-gap - 2 * @game-end-block-gap - @resize-handle-thickness) / 2) 0;
     }
 
     // Victory point table scales down to the height chosen with its handle (gameEndResize.ts)
