@@ -10,13 +10,15 @@
     <h2 class="start-updates-heading">{{ texts.heading }}</h2>
     <a class="start-updates-all" :href="featureLogUrl" target="_blank" rel="noopener">{{ texts.all }} →</a>
   </div>
-  <div class="start-updates-days" @mouseleave="shift = 0">
+  <div class="start-updates-days" @pointerleave="hoveredIndex = undefined">
     <div v-for="(day, index) in days"
       :key="day.date"
       class="start-updates-day"
-      :class="{'start-updates-day--newest': index === 0}"
+      :class="{'start-updates-day--newest': index === 0, 'start-updates-day--open': index === openIndex}"
       tabindex="0"
-      @mouseenter="onDayEnter(index)">
+      @pointerenter="onDayPointerEnter($event, index)"
+      @focusin="focusedIndex = index"
+      @focusout="focusedIndex = undefined">
       <span class="start-updates-date">{{ day.shortDate }}</span>
       <span class="start-updates-title">{{ day.title }}<span class="start-updates-count">{{ day.items.length }}</span></span>
       <div class="start-updates-sheet" :class="{'start-updates-sheet--sunday': day.sunday}" aria-hidden="true">
@@ -85,14 +87,25 @@ function onMouseOut(event: MouseEvent): void {
   }
 }
 
-// The newest day is open at rest. Hovering another day closes it, which would pull every row below up by its
-// height – the row under the mouse would change. The column moves down by exactly that height at the same time,
-// so the rows stay where they are and only the header and the newest day move.
-const shift = ref(0);
-let newestBodyHeight = 0;
-function onDayEnter(index: number): void {
-  shift.value = index === 0 ? 0 : newestBodyHeight;
+// Immer genau ein Tag offen: der unter der Maus, sonst der fokussierte/angetippte, sonst der neueste.
+// Ein einziger Zustand statt CSS-:hover/:focus-Kombinationen – sonst konnten Klick und Hover zwei Tage öffnen.
+const hoveredIndex = ref<number | undefined>(undefined);
+const focusedIndex = ref<number | undefined>(undefined);
+const openIndex = computed(() => hoveredIndex.value ?? focusedIndex.value ?? 0);
+
+// Nur echte Maus: Touch feuert ebenfalls Pointer-Events, sein „Hover“ bliebe nach dem Tap kleben
+// und träfe nach dem Zuklappen des neuesten Tags den hochgerutschten Nachbarn
+function onDayPointerEnter(event: PointerEvent, index: number): void {
+  if (event.pointerType === 'mouse') {
+    hoveredIndex.value = index;
+  }
 }
+
+// Schließt ein anderer Tag den neuesten, rutschen alle Zeilen darunter um dessen Höhe hoch – die Zeile unter der Maus
+// wechselte. Die Spalte rückt gleichzeitig um genau diese Höhe nach unten, so bleiben die Zeilen stehen
+// (nur in der festen Spalte auf breiten Fenstern, siehe start_updates.less).
+let newestBodyHeight = 0;
+const shift = computed(() => openIndex.value === 0 ? 0 : newestBodyHeight);
 
 // Vertically centred at rest (newest day open); opening another day then only grows downwards.
 // Only for the fixed column on wide windows, below the menu it is part of the page flow.

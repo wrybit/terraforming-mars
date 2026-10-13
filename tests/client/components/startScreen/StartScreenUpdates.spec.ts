@@ -32,6 +32,30 @@ describe('StartScreenUpdates', () => {
     expect(rows[0].find('.start-updates-sheet').text()).not.contains('commits');
   });
 
+  it('keeps exactly one day open: mouse before tap/focus before the newest', async () => {
+    const days = Array.from({length: 4}, (_, index) => day(`2026-09-0${index + 1}`));
+    const wrapper = mount(StartScreenUpdates, {...globalConfig, props: {initialDays: days}});
+    const rows = wrapper.findAll('.start-updates-day');
+    const open = () => rows.map((row) => row.classes().includes('start-updates-day--open'));
+    expect(open()).deep.eq([true, false, false, false]);
+
+    // Tap/Fokus auf einen anderen Tag schließt den neuesten
+    await rows[2].trigger('focusin');
+    expect(open()).deep.eq([false, false, true, false]);
+
+    // Maus auf einem dritten Tag schließt auch den angetippten
+    await rows[3].trigger('pointerenter', {pointerType: 'mouse'});
+    expect(open()).deep.eq([false, false, false, true]);
+
+    // Touch-Pointer öffnet nichts (sein Hover bliebe kleben)
+    await wrapper.find('.start-updates-days').trigger('pointerleave');
+    await rows[1].trigger('pointerenter', {pointerType: 'touch'});
+    expect(open()).deep.eq([false, false, true, false]);
+
+    await rows[2].trigger('focusout');
+    expect(open()).deep.eq([true, false, false, false]);
+  });
+
   it('uses German only for German, English for every other language', () => {
     expect(featureLogLanguage('de')).eq('de');
     expect(featureLogLanguage('fr')).eq('en');

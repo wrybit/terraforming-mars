@@ -229,10 +229,8 @@
   }
 }
 
-// Open: newest day at rest, any day under the mouse or keyboard focus
-.start-updates-day--newest,
-.start-updates-day:hover,
-.start-updates-day:focus-within {
+// Offen ist immer genau ein Tag (openIndex in StartScreenUpdates.vue): Maus darüber, sonst Fokus/Tap, sonst der neueste
+.start-updates-day--open {
   .start-updates-body {
     grid-template-rows: 1fr;
   }
@@ -261,25 +259,6 @@
     --updates-fade: calc(0.35 + 0.65 * var(--near, 0));
     transform: translateY(var(--shift, 0px));
     transition: transform 0.25s ease;
-  }
-
-  // Hovering another day closes the newest; opening it again when the mouse leaves the list
-  .start-updates-days:has(.start-updates-day:hover) .start-updates-day--newest:not(:hover) {
-    .start-updates-body {
-      grid-template-rows: 0fr;
-    }
-
-    .start-updates-date {
-      display: block;
-    }
-
-    .start-updates-title {
-      white-space: nowrap;
-    }
-
-    .start-updates-sheet {
-      display: none;
-    }
   }
 }
 
