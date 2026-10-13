@@ -296,6 +296,11 @@ function isPass(menu: OrOptions, response: InputResponse): boolean {
   return option instanceof SelectOption && option.title === 'Pass for this generation';
 }
 
+function isEndTurn(menu: OrOptions, response: InputResponse): boolean {
+  const option = response.type === 'or' ? menu.options[response.index] : undefined;
+  return option instanceof SelectOption && option.title === 'End Turn';
+}
+
 /** Fast move choice inside rollouts: one step, a few moves, no hand values and no reply. */
 export function greedyAction(menu: OrOptions, player: IPlayer, moves = GREEDY_CANDIDATES): InputResponse | undefined {
   const snapshot = snapshotOf(player.game);
@@ -453,6 +458,17 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     for (const {candidate, outcome} of tried) {
       if (isPass(menu, candidate.response)) {
         outcome.value -= penalty;
+      }
+    }
+  }
+
+  // turnTempo (strategy guides): after one action, ending the turn keeps the other moves for later,
+  // when the opponent's reply is known; only a clear gain (races, plant conversion) is worth acting now.
+  // Not in the last generation: there every move left undone may be lost.
+  if (tuning.turnTempo > 0 && remainingProductionPhases(player.game, player) > 0) {
+    for (const {candidate, outcome} of tried) {
+      if (isEndTurn(menu, candidate.response)) {
+        outcome.value += tuning.turnTempo;
       }
     }
   }

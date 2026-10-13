@@ -144,6 +144,16 @@ export type AiTuning = {
   stockAwardSwing: number,
   /** Fixed value a pass gives up against any other move (actionLookahead.ts passPenaltyFor); 0 = off. */
   passLastResort: number,
+  /** Weight of global-parameter bonus steps a move leaves open for an opponent (bonusRace.ts); 0 = off. */
+  bonusRace: number,
+  /** Exponent of the income ratio to the rival that scales the research hand target (handPlan.ts); 0 = off. */
+  planHand: number,
+  /** M€ a turn ended after one action is worth: the rest can still be done later, after seeing the reply (0 = off). */
+  turnTempo: number,
+  /** Share of plants and animals counted as lost to opponents' attack cards (attackExposure.ts); 0 = off. */
+  exposure: number,
+  /** Draft denial grows with game progress: factor 1 + lateDenial × (progress − 0.5); 0 = constant. */
+  lateDenial: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -280,6 +290,12 @@ export const BASELINE_TUNING: AiTuning = {
   stockAwardSwing: 0.3,
   // Round 56: passLastResort2 −0.17 (neutral), fixes the human observation "passing is the last option" – adopted.
   passLastResort: 2,
+  // Strategy-guide gaps (13.10.2026), off until tested.
+  bonusRace: 0,
+  planHand: 0,
+  turnTempo: 0,
+  exposure: 0,
+  lateDenial: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -551,6 +567,18 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // 31 public-server games (12./13.10.): card VP human 44.5 vs AI 17.9; humans take animal/VP collectors far more often.
   collectors06: {accumulatorValue: 0.6},
   collectors1: {accumulatorValue: 1},
+  // Strategy guides: snatch bonus steps, never open one for the rival.
+  bonusRace: {bonusRace: 1},
+  bonusRace05: {bonusRace: 0.5},
+  // Strategy guides: bigger hand with the stronger engine, fewer cards (VP pivot) when behind on income.
+  planHand: {planHand: 1},
+  // Strategy guides: one action, then wait and react; two only for races.
+  turnTempo: {turnTempo: 1},
+  turnTempo3: {turnTempo: 3},
+  // Strategy guides: plants and animals can be taken by the rival's attack cards.
+  exposure: {exposure: 1},
+  // Strategy guides: hate-draft harder near the end.
+  lateDenial: {lateDenial: 1},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.

@@ -14,6 +14,8 @@ import {energySupplyRatio} from './energySupply';
 import {milestoneRacePoints} from './milestoneRace';
 import {recentAwardGrowth} from './awardHistory';
 import {moneySwingShare} from './stockAward';
+import {openBonusValue} from './bonusRace';
+import {expectedAttackLoss} from './attackExposure';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -383,7 +385,9 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
     productionValue(player, context) +
     resourceValue(player, context) +
     handValue(player, context) +
-    tableauValue(player, context);
+    tableauValue(player, context) -
+    // Plants and animals an opponent's attack can still take (attackExposure.ts).
+    (tuningOf(player).exposure > 0 ? tuningOf(player).exposure * expectedAttackLoss(player, context.remaining, context.victoryPoint) : 0);
 }
 
 /** Own value minus a share of the opponents' average: the number the AI maximises. */
@@ -405,5 +409,17 @@ export function relativeValue(player: IPlayer, frozen: ValuationContext): number
   // taking a spot first is worth more than keeping the money (lastGenerationSpots.ts).
   const spotThreat = tuning.lastGenerationSpots > 0 && contextFor(player.game, context).remaining === 0 ?
     opponents.reduce((sum, opponent) => sum + lastGenerationSpotPoints(opponent), 0) / opponents.length * context.victoryPoint : 0;
-  return own - weight * (opponentAverage + spotThreat) + closer - tuning.terraformBrake * stepsRaised(player, frozen);
+  // Bonus steps left one step away for an opponent (bonusRace.ts).
+  const bonusThreat = tuning.bonusRace > 0 ? openBonusThreat(player, context) : 0;
+  return own - weight * (opponentAverage + spotThreat + tuning.bonusRace * bonusThreat) + closer - tuning.terraformBrake * stepsRaised(player, frozen);
+}
+
+/** M€ the opponents can take on average from bonus steps the position leaves open (bonusRace.ts). */
+function openBonusThreat(player: IPlayer, frozen: ValuationContext): number {
+  const context = contextFor(player.game, frozen);
+  const discount = context.productionDiscount ?? PRODUCTION_DISCOUNT;
+  const trValue = context.victoryPoint + context.remaining * discount;
+  const heatProductionValue = (context.temperatureMaxed ? 0.2 : 0.8) * context.remaining * discount;
+  const opponents = player.opponents;
+  return opponents.reduce((sum, opponent) => sum + openBonusValue(opponent, trValue, heatProductionValue), 0) / opponents.length;
 }

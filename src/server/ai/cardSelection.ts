@@ -10,7 +10,8 @@ import {isTracingDecision, traceOptions, TracedOption} from './decisionTrace';
 import {quickResponse} from './quickResponse';
 import {corporationSelfPlayBonus} from './corporationSelfPlay';
 import {corporationPrior} from './cardPriors';
-import {lastGenerationLikelihood, remainingProductionPhases} from './gameProgress';
+import {lastGenerationLikelihood, remainingProductionPhases, terraformingProgress} from './gameProgress';
+import {handTargetFactor} from './handPlan';
 import {globalWait, requirementOutlook} from './requirementOutlook';
 import {rememberPassedCards} from './draftMemory';
 import {Resource} from '../../common/Resource';
@@ -224,7 +225,8 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
   if (input.config.min === input.config.max) {
     // Draft: the count is fixed. Own value plus part of what the card would be worth to the
     // player who gets the rest (aiTuning.ts draftDenial).
-    const denial = tuningOf(player).draftDenial;
+    // lateDenial: block strong cards harder as the game nears its end (strategy guides).
+    const denial = tuningOf(player).draftDenial * Math.max(0, 1 + tuningOf(player).lateDenial * (terraformingProgress(player.game) - 0.5));
     const opponentValues = denial > 0 ? receiverValues(input, player, candidates) : new Map<CardName, number>();
     const draftScore = (card: ICard) => valueOf(card.name) + denial * Math.max(0, opponentValues.get(card.name) ?? 0);
     const picked = [...candidates].sort((a, b) => draftScore(b) - draftScore(a)).slice(0, input.config.min);
@@ -243,7 +245,9 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
   const remaining = remainingProductionPhases(player.game, player);
   // A rich player can afford a bigger hand (every 12 M€ above a reserve buys room for one more).
   const tuning = tuningOf(player);
-  const handTarget = (remaining >= 4 ? tuning.handTargetEarly : tuning.handTargetLate) + Math.floor(Math.max(0, player.megaCredits - 30) / 12);
+  // planHand: bigger with the stronger engine, smaller when behind on income (handPlan.ts).
+  const handTarget = Math.round((remaining >= 4 ? tuning.handTargetEarly : tuning.handTargetLate) * handTargetFactor(player, tuning.planHand)) +
+    Math.floor(Math.max(0, player.megaCredits - 30) / 12);
   // Dead cards (requirements out of reach) do not fill the hand: they blocked buying for
   // eight generations in a test game.
   const usefulHandCards = [...handCardValues(player).values()].filter((value) => value > 1).length;
