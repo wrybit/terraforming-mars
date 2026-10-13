@@ -736,5 +736,12 @@
   "No image": "Ei kuvaa",
   "Upload": "Lataa",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} on liian suuri (${1} kt). Käytä enintään 700 kt:n kuvaa, esim. 512 px leveää WebP- tai PNG-kuvaa.",
-  "Could not upload the image:": "Kuvan lataaminen epäonnistui:"
+  "Could not upload the image:": "Kuvan lataaminen epäonnistui:",
+  "Update to latest": "Päivitä uusimpaan",
+  "Up to date": "Ajan tasalla",
+  "${0} commits behind": "${0} committia jäljessä",
+  "Update requested – starts within a minute": "Päivitys pyydetty – alkaa minuutin sisällä",
+  "Yes, update": "Kyllä, päivitä",
+  "Yes, restart": "Kyllä, käynnistä uudelleen",
+  "Could not request the update:": "Päivitystä ei voitu pyytää:"
 }

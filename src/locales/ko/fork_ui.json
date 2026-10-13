@@ -966,5 +966,12 @@
   "No image": "이미지 없음",
   "Upload": "업로드",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} 파일이 너무 큽니다(${1} KB). 700 KB 이하의 이미지를 사용하세요(예: 너비 512 px의 WebP 또는 PNG).",
-  "Could not upload the image:": "이미지를 업로드할 수 없습니다:"
+  "Could not upload the image:": "이미지를 업로드할 수 없습니다:",
+  "Update to latest": "최신으로 업데이트",
+  "Up to date": "최신 상태",
+  "${0} commits behind": "${0}개 커밋 뒤처짐",
+  "Update requested – starts within a minute": "업데이트 요청됨 – 1분 안에 시작",
+  "Yes, update": "예, 업데이트",
+  "Yes, restart": "예, 재시작",
+  "Could not request the update:": "업데이트를 요청할 수 없음:"
 }

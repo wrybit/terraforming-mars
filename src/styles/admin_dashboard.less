@@ -275,6 +275,59 @@
 }
 
 // ---------- Commits ----------
+// Title, deploy status and the buttons in one line; on narrow cards the buttons wrap and stay right
+.server-dashboard-commits-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: @dashboard-row-gap 12px;
+  margin-bottom: 8px;
+
+  h2 {
+    margin: 0;
+  }
+
+  .server-dashboard-actions {
+    margin-left: auto;
+  }
+}
+
+.server-dashboard-deploy-status {
+  color: @dashboard-good;
+  font-size: 13px;
+
+  &-behind {
+    color: @dashboard-warning;
+  }
+}
+
+.server-dashboard-message {
+  margin: 0 0 8px;
+  color: @dashboard-dim;
+
+  &--error {
+    color: @dashboard-critical;
+  }
+}
+
+// The commit this server runs: whole row purple, so a glance shows whether the server is current
+.server-dashboard-commit-live td {
+  background: fade(@player_purple, 55%);
+  color: #fff;
+
+  &:first-child {
+    border-radius: 6px 0 0 6px;
+  }
+
+  &:last-child {
+    border-radius: 0 6px 6px 0;
+  }
+}
+
+.server-dashboard-commit-live .server-dashboard-commit-time,
+.server-dashboard-commit-live .server-dashboard-commit-hash code {
+  color: #fff;
+}
 .server-dashboard-commits {
   width: 100%;
   border-collapse: collapse;
@@ -287,6 +340,15 @@
 
   tr:first-child td {
     border-top: none;
+  }
+
+  // Inset on both sides: the highlighted row needs room around its text
+  td:first-child {
+    padding-left: 8px;
+  }
+
+  td:last-child {
+    padding-right: 8px;
   }
 }
 

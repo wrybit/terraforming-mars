@@ -4,7 +4,7 @@ import {Handler} from './Handler';
 import {Context} from './IHandler';
 import {Request} from '../Request';
 import {Response} from '../Response';
-import {DashboardMachineUsage, MACHINE_USAGE_FILE, ServerDashboard} from '../../common/admin/ServerDashboard';
+import {DashboardMachineUsage, DashboardUpstream, MACHINE_USAGE_FILE, ServerDashboard, UPSTREAM_COMMITS_FILE} from '../../common/admin/ServerDashboard';
 import {Phase} from '../../common/Phase';
 import {IGame} from '../IGame';
 import {activeParticipantCount} from '../server/activeParticipants';
@@ -16,6 +16,7 @@ import {playerActivity} from '../admin/dashboard/playerActivity';
 import {gameActivity} from '../admin/dashboard/playerActivityOfGames';
 import {UptimeRecord} from '../admin/dashboard/uptimeRecord';
 import {presenceRecord} from '../admin/dashboard/presenceRecord';
+import {pendingUpdateRequest} from '../admin/dashboard/updateRequest';
 import {checkReachability, publicStatusUrl} from '../admin/dashboard/reachability';
 import raw_settings from '../../genfiles/settings.json';
 import recentCommits from '../../genfiles/recentCommits.json';
@@ -70,6 +71,9 @@ export class ApiAdminDashboard extends Handler {
       reachability,
       build: {head: raw_settings.head, builtAt: raw_settings.builtAt},
       commits: recentCommits,
+      // Written at every update check (every 5 minutes): older than half an hour means the script stopped
+      upstream: readOperatorFile<DashboardUpstream>(dataFolder, UPSTREAM_COMMITS_FILE, 30 * 60 * 1000, nowMs),
+      updateRequest: pendingUpdateRequest(dataFolder, nowMs),
     };
     responses.writeJson(res, ctx, dashboard);
   }

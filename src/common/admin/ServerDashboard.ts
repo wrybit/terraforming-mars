@@ -6,6 +6,30 @@ export type DashboardCommit = {
   title: string,
 };
 
+/**
+ * Newest commits of the branch the server deploys from (newest first), written by the update script of the server
+ * operator after every fetch (file name: UPSTREAM_COMMITS_FILE in the data folder). Compared with the running
+ * build it shows whether the server is behind.
+ */
+export type DashboardUpstream = {
+  measuredAtMs: number,
+  branch: string,
+  commits: Array<DashboardCommit>,
+  /** Newest commits of the deploy branch; missing where no update script reports them */
+  upstream?: DashboardUpstream,
+  /** Set while an update asked for on the admin page waits for the update script */
+  updateRequest?: UpdateRequest,
+};
+
+export const UPSTREAM_COMMITS_FILE = 'upstream-commits.json';
+
+/** The admin page asks the update script of the server operator to deploy the newest commit now (POST API_ADMIN_UPDATE). */
+export const UPDATE_REQUEST_FILE = 'update-request.json';
+
+export type UpdateRequest = {
+  requestedAtMs: number,
+};
+
 /** The disk holding the game data, with its use by purpose. */
 export type DashboardDisk = {
   totalBytes: number,
@@ -137,4 +161,8 @@ export type ServerDashboard = {
     builtAt: string,
   },
   commits: Array<DashboardCommit>,
+  /** Newest commits of the deploy branch; missing where no update script reports them */
+  upstream?: DashboardUpstream,
+  /** Set while an update asked for on the admin page waits for the update script */
+  updateRequest?: UpdateRequest,
 };

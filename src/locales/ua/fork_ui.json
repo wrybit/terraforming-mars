@@ -884,5 +884,12 @@
   "No image": "Немає зображення",
   "Upload": "Завантажити",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} завеликий (${1} КБ). Використайте зображення до 700 КБ, напр. шириною 512 px у WebP або PNG.",
-  "Could not upload the image:": "Не вдалося завантажити зображення:"
+  "Could not upload the image:": "Не вдалося завантажити зображення:",
+  "Update to latest": "Оновити до останньої",
+  "Up to date": "Актуально",
+  "${0} commits behind": "Відстає на ${0} комітів",
+  "Update requested – starts within a minute": "Оновлення запитано – почнеться протягом хвилини",
+  "Yes, update": "Так, оновити",
+  "Yes, restart": "Так, перезапустити",
+  "Could not request the update:": "Не вдалося запитати оновлення:"
 }

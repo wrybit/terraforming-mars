@@ -1621,5 +1621,12 @@
   "No image": "Няма изображение",
   "Upload": "Качване",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} е твърде голям (${1} KB). Използвайте изображение до 700 KB, напр. 512 px широко във WebP или PNG.",
-  "Could not upload the image:": "Изображението не можа да се качи:"
+  "Could not upload the image:": "Изображението не можа да се качи:",
+  "Update to latest": "Обнови до най-новата",
+  "Up to date": "Актуално",
+  "${0} commits behind": "Изостава с ${0} комита",
+  "Update requested – starts within a minute": "Заявено обновяване – започва до минута",
+  "Yes, update": "Да, обнови",
+  "Yes, restart": "Да, рестартирай",
+  "Could not request the update:": "Обновяването не можа да бъде заявено:"
 }

@@ -1085,5 +1085,12 @@
   "No image": "画像なし",
   "Upload": "アップロード",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} は大きすぎます（${1} KB）. 700 KB以下の画像を使ってください（例：幅512 pxのWebPまたはPNG）.",
-  "Could not upload the image:": "画像をアップロードできませんでした："
+  "Could not upload the image:": "画像をアップロードできませんでした：",
+  "Update to latest": "最新に更新",
+  "Up to date": "最新です",
+  "${0} commits behind": "${0} コミット遅れ",
+  "Update requested – starts within a minute": "更新を要求しました – 1分以内に開始",
+  "Yes, update": "はい、更新",
+  "Yes, restart": "はい、再起動",
+  "Could not request the update:": "更新を要求できませんでした:"
 }

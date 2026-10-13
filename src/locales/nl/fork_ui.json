@@ -1346,5 +1346,12 @@
   "No image": "Geen afbeelding",
   "Upload": "Uploaden",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} is te groot (${1} KB). Gebruik een afbeelding van maximaal 700 KB, bijv. 512 px breed als WebP of PNG.",
-  "Could not upload the image:": "Afbeelding kon niet worden geüpload:"
+  "Could not upload the image:": "Afbeelding kon niet worden geüpload:",
+  "Update to latest": "Bijwerken naar nieuwste",
+  "Up to date": "Actueel",
+  "${0} commits behind": "${0} commits achter",
+  "Update requested – starts within a minute": "Update aangevraagd – start binnen een minuut",
+  "Yes, update": "Ja, bijwerken",
+  "Yes, restart": "Ja, herstarten",
+  "Could not request the update:": "Update kon niet worden aangevraagd:"
 }

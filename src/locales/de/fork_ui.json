@@ -520,5 +520,12 @@
   "No image": "Kein Bild",
   "Upload": "Hochladen",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} ist zu groß (${1} KB). Nimm ein Bild mit höchstens 700 KB, z. B. 512 px breit als WebP oder PNG.",
-  "Could not upload the image:": "Bild konnte nicht hochgeladen werden:"
+  "Could not upload the image:": "Bild konnte nicht hochgeladen werden:",
+  "Update to latest": "Auf neuesten Stand",
+  "Up to date": "Aktuell",
+  "${0} commits behind": "${0} Commits zurück",
+  "Update requested – starts within a minute": "Update angefordert – startet in einer Minute",
+  "Yes, update": "Ja, updaten",
+  "Yes, restart": "Ja, neu starten",
+  "Could not request the update:": "Update konnte nicht angefordert werden:"
 }

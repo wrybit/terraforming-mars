@@ -12,7 +12,7 @@
         <button type="button" class="btn btn-sm btn-tone-quiet" :disabled="status === 'loading'" @click="load" v-i18n>Refresh</button>
       </div>
 
-      <ServerDashboardView :dashboard="dashboard"/>
+      <ServerDashboardView :dashboard="dashboard" @changed="load"/>
     </template>
   </div>
 </template>

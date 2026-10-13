@@ -792,5 +792,12 @@
   "No image": "Aucune image",
   "Upload": "Téléverser",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} est trop lourd (${1} Ko). Utilisez une image de 700 Ko maximum, p. ex. 512 px de large en WebP ou PNG.",
-  "Could not upload the image:": "Impossible de téléverser l'image :"
+  "Could not upload the image:": "Impossible de téléverser l'image :",
+  "Update to latest": "Mettre à jour",
+  "Up to date": "À jour",
+  "${0} commits behind": "${0} commits de retard",
+  "Update requested – starts within a minute": "Mise à jour demandée – démarre dans une minute",
+  "Yes, update": "Oui, mettre à jour",
+  "Yes, restart": "Oui, redémarrer",
+  "Could not request the update:": "Impossible de demander la mise à jour :"
 }

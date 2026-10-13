@@ -1542,5 +1542,12 @@
   "No image": "Нет изображения",
   "Upload": "Загрузить",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} слишком большой (${1} КБ). Используйте изображение не более 700 КБ, напр. шириной 512 px в WebP или PNG.",
-  "Could not upload the image:": "Не удалось загрузить изображение:"
+  "Could not upload the image:": "Не удалось загрузить изображение:",
+  "Update to latest": "Обновить до последней",
+  "Up to date": "Актуально",
+  "${0} commits behind": "Отстаёт на ${0} коммитов",
+  "Update requested – starts within a minute": "Обновление запрошено – начнётся в течение минуты",
+  "Yes, update": "Да, обновить",
+  "Yes, restart": "Да, перезапустить",
+  "Could not request the update:": "Не удалось запросить обновление:"
 }

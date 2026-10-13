@@ -12,6 +12,7 @@ export const paths = {
   API_ADMIN_SERVER_LOGO: 'api/admin/server-logo',
   API_ADMIN_SESSION: 'api/admin/session',
   API_ADMIN_SETTINGS: 'api/admin/settings',
+  API_ADMIN_UPDATE: 'api/admin/update',
   API_BOARD_PREVIEW: 'api/boardpreview',
   API_CLONEABLEGAME: 'api/cloneablegame',
   API_CREATEGAME: 'api/creategame',

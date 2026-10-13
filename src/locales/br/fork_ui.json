@@ -1848,5 +1848,12 @@
   "No image": "Sem imagem",
   "Upload": "Enviar",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} é grande demais (${1} KB). Use uma imagem de no máximo 700 KB, p. ex. 512 px de largura em WebP ou PNG.",
-  "Could not upload the image:": "Não foi possível enviar a imagem:"
+  "Could not upload the image:": "Não foi possível enviar a imagem:",
+  "Update to latest": "Atualizar para a mais recente",
+  "Up to date": "Atualizado",
+  "${0} commits behind": "${0} commits atrás",
+  "Update requested – starts within a minute": "Atualização solicitada – começa em um minuto",
+  "Yes, update": "Sim, atualizar",
+  "Yes, restart": "Sim, reiniciar",
+  "Could not request the update:": "Não foi possível solicitar a atualização:"
 }

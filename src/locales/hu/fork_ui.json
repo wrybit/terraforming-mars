@@ -907,5 +907,12 @@
   "No image": "Nincs kép",
   "Upload": "Feltöltés",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} túl nagy (${1} KB). Legfeljebb 700 KB-os képet használj, pl. 512 px széles WebP-t vagy PNG-t.",
-  "Could not upload the image:": "Nem sikerült feltölteni a képet:"
+  "Could not upload the image:": "Nem sikerült feltölteni a képet:",
+  "Update to latest": "Frissítés a legújabbra",
+  "Up to date": "Naprakész",
+  "${0} commits behind": "${0} committal lemaradva",
+  "Update requested – starts within a minute": "Frissítés kérve – egy percen belül indul",
+  "Yes, update": "Igen, frissítés",
+  "Yes, restart": "Igen, újraindítás",
+  "Could not request the update:": "Nem sikerült frissítést kérni:"
 }

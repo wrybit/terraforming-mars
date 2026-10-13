@@ -1506,5 +1506,12 @@
   "No image": "Brak obrazu",
   "Upload": "Prześlij",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} jest za duży (${1} KB). Użyj obrazu o rozmiarze maks. 700 KB, np. 512 px szerokości jako WebP lub PNG.",
-  "Could not upload the image:": "Nie udało się przesłać obrazu:"
+  "Could not upload the image:": "Nie udało się przesłać obrazu:",
+  "Update to latest": "Aktualizuj do najnowszej",
+  "Up to date": "Aktualny",
+  "${0} commits behind": "${0} commitów w tyle",
+  "Update requested – starts within a minute": "Zlecono aktualizację – start w ciągu minuty",
+  "Yes, update": "Tak, aktualizuj",
+  "Yes, restart": "Tak, uruchom ponownie",
+  "Could not request the update:": "Nie udało się zlecić aktualizacji:"
 }

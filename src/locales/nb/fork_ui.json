@@ -1088,5 +1088,12 @@
   "No image": "Ikke noe bilde",
   "Upload": "Last opp",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} er for stort (${1} KB). Bruk et bilde på høyst 700 KB, f.eks. 512 px bredt som WebP eller PNG.",
-  "Could not upload the image:": "Kunne ikke laste opp bildet:"
+  "Could not upload the image:": "Kunne ikke laste opp bildet:",
+  "Update to latest": "Oppdater til nyeste",
+  "Up to date": "Oppdatert",
+  "${0} commits behind": "${0} commits bak",
+  "Update requested – starts within a minute": "Oppdatering bestilt – starter innen ett minutt",
+  "Yes, update": "Ja, oppdater",
+  "Yes, restart": "Ja, start på nytt",
+  "Could not request the update:": "Kunne ikke bestille oppdateringen:"
 }

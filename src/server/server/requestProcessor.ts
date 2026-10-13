@@ -16,6 +16,7 @@ import {ApiAdminDeleteGame} from '../routes/ApiAdminDeleteGame';
 import {ApiAdminGames} from '../routes/ApiAdminGames';
 import {ApiAdminDashboard} from '../routes/ApiAdminDashboard';
 import {ApiAdminRestart} from '../routes/ApiAdminRestart';
+import {ApiAdminUpdate} from '../routes/ApiAdminUpdate';
 import {ApiAdminServerLogo} from '../routes/ApiAdminServerLogo';
 import {ApiAdminSettings} from '../routes/ApiAdminSettings';
 import {ApiAdminImportGame} from '../routes/ApiAdminImportGame';
@@ -118,6 +119,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_ADMIN_SERVER_LOGO, ApiAdminServerLogo.INSTANCE],
     [paths.API_ADMIN_SESSION, ApiAdminSession.INSTANCE],
     [paths.API_ADMIN_SETTINGS, ApiAdminSettings.INSTANCE],
+    [paths.API_ADMIN_UPDATE, ApiAdminUpdate.INSTANCE],
     [paths.API_CLONEABLEGAME, ApiCloneableGame.INSTANCE],
     [paths.API_CREATEGAME, ApiCreateGame.INSTANCE],
     [paths.API_GAME, ApiGame.INSTANCE],

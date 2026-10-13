@@ -65,6 +65,7 @@ import {defineComponent} from 'vue';
 import {paths} from '@/common/app/paths';
 import {statusCode} from '@/common/http/statusCode';
 import {logIn} from '@/client/components/admin/adminSession';
+import {restartServer} from '@/client/components/admin/adminActions';
 import {vDockedTab} from '@/client/directives/DockedTab';
 import ServerSettingImageField from '@/client/components/admin/ServerSettingImageField.vue';
 import {translateText} from '@/client/directives/i18n';
@@ -195,10 +196,7 @@ export default defineComponent({
     async restart(): Promise<void> {
       this.busy = true;
       try {
-        const response = await fetch(paths.API_ADMIN_RESTART, {method: 'POST'});
-        if (!response.ok) {
-          throw new Error(await response.text());
-        }
+        await restartServer();
         // A changed passphrase ends the login: log in with the new one once the server is back
         const serverId = this.values.SERVER_ID;
         this.showMessage(translateText('The server restarts and is back in a few seconds.'), false);

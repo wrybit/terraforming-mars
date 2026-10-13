@@ -63,17 +63,7 @@
       <p v-else class="games-overview-note" v-i18n>First values after one minute of running</p>
     </section>
 
-    <section class="games-overview-card">
-      <h2 v-i18n>Recent commits</h2>
-      <p v-if="dashboard.commits.length === 0" class="games-overview-note" v-i18n>No commit history in this build</p>
-      <table v-else class="server-dashboard-commits">
-        <tr v-for="commit in dashboard.commits" :key="commit.hash">
-          <td class="server-dashboard-commit-time">{{ formatDateTime(commit.time) }}</td>
-          <td class="server-dashboard-commit-hash"><code>{{ commit.hash }}</code></td>
-          <td>{{ commit.title }}</td>
-        </tr>
-      </table>
-    </section>
+    <DashboardCommits :dashboard="dashboard" @changed="$emit('changed')"/>
   </div>
 </template>
 
@@ -86,6 +76,7 @@ import {StatsBar} from '@/client/components/stats/statsTypes';
 import DashboardFacts from '@/client/components/admin/dashboard/DashboardFacts.vue';
 import DashboardServerLogo from '@/client/components/admin/dashboard/DashboardServerLogo.vue';
 import DashboardMeter from '@/client/components/admin/dashboard/DashboardMeter.vue';
+import DashboardCommits from '@/client/components/admin/dashboard/DashboardCommits.vue';
 import DashboardDayOverlay from '@/client/components/admin/dashboard/DashboardDayOverlay.vue';
 import DashboardSplitBar from '@/client/components/admin/dashboard/DashboardSplitBar.vue';
 import {cpuSegments, diskSegments, memorySegments, UsageSegment} from '@/client/components/admin/dashboard/usageSegments';
@@ -94,10 +85,11 @@ import {formatDateTime, formatDuration, periodBars} from '@/client/components/ad
 
 export default defineComponent({
   name: 'ServerDashboardView',
-  components: {DashboardDayOverlay, DashboardFacts, DashboardMeter, DashboardServerLogo, DashboardSplitBar, StatsBarChart},
+  components: {DashboardCommits, DashboardDayOverlay, DashboardFacts, DashboardMeter, DashboardServerLogo, DashboardSplitBar, StatsBarChart},
   props: {
     dashboard: {type: Object as PropType<ServerDashboard>, required: true},
   },
+  emits: ['changed'],
   computed: {
     serverFacts(): Array<DashboardFact> {
       const dashboard = this.dashboard;

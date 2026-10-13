@@ -1657,5 +1657,12 @@
   "No image": "无图片",
   "Upload": "上传",
   "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} 过大（${1} KB）。请使用不超过 700 KB 的图片，例如宽 512 px 的 WebP 或 PNG。",
-  "Could not upload the image:": "无法上传图片："
+  "Could not upload the image:": "无法上传图片：",
+  "Update to latest": "更新到最新版本",
+  "Up to date": "已是最新",
+  "${0} commits behind": "落后 ${0} 个提交",
+  "Update requested – starts within a minute": "已请求更新 – 一分钟内开始",
+  "Yes, update": "是，更新",
+  "Yes, restart": "是，重启",
+  "Could not request the update:": "无法请求更新："
 }
