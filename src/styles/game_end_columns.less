@@ -19,6 +19,7 @@
 @game-end-side-share: 54fr;
 @game-end-chart-height: 300px; // default, the drag handle below the charts changes it (gameEndResize.ts)
 @game-end-sticky-top: 10px; // column handle stays in view while scrolling
+@game-end-log-min-height: 280px; // generation tabs + the former fixed log height (240px, log.less)
 // Total points: largest number on the page, on its own dark surface
 @game-end-total-font-size: 38px;
 @game-end-total-background: rgba(0, 0, 0, 0.38);
@@ -466,6 +467,32 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
     // Victory point table scales down to the height chosen with its handle (gameEndResize.ts)
     .game_end_table {
       zoom: var(--game-end-table-zoom, 1);
+    }
+
+    // Log takes all the room left down to the bottom of the right column (the left column is usually longer).
+    // contain: size – its own content (a long log) must not make the column taller; the row height decides,
+    // the minimum keeps it usable when the right column is the longer one. Same flex chain as the game view
+    // (player_home_fixed.less)
+    .game_end_block--log {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      min-height: @game-end-log-min-height;
+      contain: size;
+
+      > .log-container {
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .log-panel.or-tab-panel {
+        flex: 1 1 0;
+        height: auto;
+        max-height: none;
+        min-height: 0; // otherwise the panel grows to its full content and runs out of the column
+      }
     }
 
     // Board fills the column width; its handle can make it smaller (gameEndResize.ts)
