@@ -548,6 +548,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noDrawChoice: {drawChoiceValue: 0},
   // Round 48: animal and other collector cards (human card-VP engines, 5 games) with today's flow fit.
   collectors04: {accumulatorValue: 0.4},
+  // 31 public-server games (12./13.10.): card VP human 44.5 vs AI 17.9; humans take animal/VP collectors far more often.
+  collectors06: {accumulatorValue: 0.6},
+  collectors1: {accumulatorValue: 1},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
