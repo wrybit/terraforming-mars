@@ -504,6 +504,11 @@ each(@log-effect-resources, {
   }
 });
 
+// The card icon is black: a thin light outline keeps it visible on the dark log (rows and hover summary)
+.log-effect-resource--card {
+  filter: drop-shadow(0 0 0.6px rgba(255, 255, 255, 0.75));
+}
+
 // Expansion icons that don't live in assets/resources
 .log-effect-resource--tr { background-image: url("./assets/resources/tr.png"); }
 .log-effect-resource--corruption { background-image: url("./assets/underworld/corruption.png"); }
