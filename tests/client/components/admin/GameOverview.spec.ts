@@ -63,8 +63,14 @@ describe('GameOverview', () => {
     const button = wrapper.find('.games-overview-delete');
     await button.trigger('click');
     expect(wrapper.emitted('delete')).is.undefined;
-    expect(button.text()).eq('Really delete?');
+    expect(button.find('.games-overview-delete-label--active').text()).eq('Really delete?');
     await button.trigger('click');
     expect(wrapper.emitted('delete')).deep.eq([['g123']]);
+  });
+
+  it('the delete button carries every text from the start, so asking does not resize it', () => {
+    const labels = mountRow().findAll('.games-overview-delete-label');
+    expect(labels.map((label) => label.text())).deep.eq(['Delete', 'Really delete?', 'Deleting…']);
+    expect(labels.filter((label) => label.classes('games-overview-delete-label--active')).map((label) => label.text())).deep.eq(['Delete']);
   });
 });

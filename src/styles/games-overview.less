@@ -184,8 +184,9 @@
   // Full card width, so the delete column sits at the right edge even with few players.
   // Fixed layout: status, game, generation and delete get set widths, all other columns
   // (spectator/result, players, AI) share the rest equally; narrower screens scroll inside the card.
+  // The minimum grows with the delete column (long languages), so the other columns keep their width
   width: 100%;
-  min-width: 1240px;
+  min-width: calc(1112px + var(--games-overview-actions-width, 128px));
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: @games-overview-gap-cell;
@@ -374,25 +375,47 @@
   font-weight: bold;
 }
 
-// Delete column always at the right edge, also while the table scrolls sideways (many player names):
-// solid background and a soft shadow so the cells scrolling underneath do not show through
+// Delete column always at the right edge, also while the table scrolls sideways (many player names).
+// Solid background (cells underneath must not show through) and shadow only while something actually
+// passes underneath (GamesTableCard.vue sets --covered); otherwise both would only be a dark block.
+// Width = delete button (measured, its longest text) plus the gap for the shadow.
+@games-overview-actions-gap: 8px;
+
 .games-overview-table .games-overview-actions {
   position: sticky;
   right: 0;
   z-index: 1;
-  padding-left: 8px;
-  width: 136px; // button plus shadow gap; fixed so the spare width goes to the other columns
+  padding-left: @games-overview-actions-gap;
+  width: calc(var(--games-overview-actions-width, 128px) + @games-overview-actions-gap);
   text-align: right !important;
+  transition: box-shadow 0.15s ease;
+}
+
+.games-overview-scroll--covered .games-overview-actions {
   background: #1d1e24;
   box-shadow: -10px 0 10px -6px rgba(0, 0, 0, 0.6);
 }
 
 .games-overview-actions .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   height: 32px;
   min-width: 120px;
+}
+
+// Delete button (row and bulk): all texts stacked in one grid cell, the widest sets the width,
+// so asking "Really delete?" does not resize the button
+.games-overview-delete {
+  display: inline-grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.games-overview-delete-label {
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+
+.games-overview-delete-label--active {
+  visibility: visible;
 }
 
 // Phone: standard page margin instead of the wide desktop margin
