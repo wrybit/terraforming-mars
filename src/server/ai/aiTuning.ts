@@ -227,7 +227,8 @@ export const BASELINE_TUNING: AiTuning = {
   awardSwing: 0.3,
   keepHandUntilEnd: 1,
   endgameMoney: 1,
-  accumulatorValue: 0,
+  // Round 66: 0.6 together with the measured collector rates (collectorRates).
+  accumulatorValue: 0.6,
   peek: 0,
   // Round 18 (400 mirrored 1v1 games): rollout3 +2.7 VP per deal, z 2.45, 55 % wins – but a test game took
   // 516 s instead of 69 s and human games felt far too slow (human feedback, 2026-10-10): off again until cheaper.
@@ -300,7 +301,8 @@ export const BASELINE_TUNING: AiTuning = {
   turnTempo: 1,
   exposure: 0,
   lateDenial: 0,
-  collectorRates: 0,
+  // Round 66: collectorRate06 −0.23 (z −0.29) – neutral, fixes the human card-VP gap (collectors) – adopted with accumulatorValue 0.6.
+  collectorRates: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -588,6 +590,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Collectors by their measured feeding rate (flat collectors lost in round 63).
   collectorRate06: {accumulatorValue: 0.6, collectorRates: 1},
   collectorRate1: {accumulatorValue: 1, collectorRates: 1},
+  collectorRate04: {accumulatorValue: 0.4, collectorRates: 1},
+  collectorRate08: {accumulatorValue: 0.8, collectorRates: 1},
+  noCollectors: {accumulatorValue: 0, collectorRates: 0},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
