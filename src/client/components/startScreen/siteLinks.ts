@@ -36,5 +36,5 @@ export const START_PAGE_LINK: Pick<SiteLink, 'label' | 'icon' | 'href'> = {label
 
 // Only in the game menu and only after the admin login (adminSession.ts): the way into the admin area.
 // Its pages do not offer it again (they have their own navigation).
-export const ADMIN_LINK: Pick<SiteLink, 'label' | 'icon' | 'href'> = {label: 'Administration', icon: 'admin', href: 'games-overview'};
-export const ADMIN_PAGES: ReadonlyArray<string> = ['games-overview', 'admin', 'admin-raw', 'load'];
+export const ADMIN_LINK: Pick<SiteLink, 'label' | 'icon' | 'href'> = {label: 'Administration', icon: 'admin', href: 'admin'};
+export const ADMIN_PAGES: ReadonlyArray<string> = ['games-overview', 'admin', 'admin-dashboard', 'admin-settings', 'admin-raw', 'load'];

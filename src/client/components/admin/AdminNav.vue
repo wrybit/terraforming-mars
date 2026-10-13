@@ -33,9 +33,9 @@ export default defineComponent({
   data() {
     return {
       items: [
-        {page: 'dashboard', label: 'Dashboard', path: paths.ADMIN_DASHBOARD},
+        {page: 'dashboard', label: 'Dashboard', path: paths.ADMIN},
         {page: 'games', label: 'Games', path: paths.GAMES_OVERVIEW},
-        {page: 'settings', label: 'Settings', path: paths.ADMIN},
+        {page: 'settings', label: 'Settings', path: paths.ADMIN_SETTINGS},
         {page: 'raw', label: 'Raw data', path: paths.ADMIN_RAW},
       ],
     };

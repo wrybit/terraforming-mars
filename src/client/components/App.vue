@@ -51,7 +51,7 @@
       />
       <CardList v-else-if="screen === 'cards'"/>
       <StatsPage v-else-if="screen === 'stats'"/>
-      <AdminHome v-else-if="screen === 'admin'"/>
+      <AdminHome v-else-if="screen === 'admin-settings'"/>
       <AdminRaw v-else-if="screen === 'admin-raw'"/>
       <AdminDashboard v-else-if="screen === 'admin-dashboard'"/>
       <LoginHome v-else-if="screen === 'login-home'"/>
@@ -114,7 +114,7 @@ import {fetchOrFail} from '@/client/utils/requestFailure';
 import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
 
 
-type Screen = 'admin' |
+type Screen = 'admin-settings' |
             'admin-raw' |
             'admin-dashboard' |
             'create-game-form' |
@@ -382,11 +382,12 @@ export default defineComponent({
       app.screen = 'help';
     } else if (currentPathname === paths.SPECTATOR) {
       app.updateSpectator();
-    } else if (currentPathname === paths.ADMIN) {
-      app.screen = 'admin';
+    } else if (currentPathname === paths.ADMIN_SETTINGS) {
+      app.screen = 'admin-settings';
     } else if (currentPathname === paths.ADMIN_RAW) {
       app.screen = 'admin-raw';
-    } else if (currentPathname === paths.ADMIN_DASHBOARD) {
+    } else if (currentPathname === paths.ADMIN || currentPathname === paths.ADMIN_DASHBOARD) {
+      // The admin always opens on the dashboard (/admin and the menu entry)
       app.screen = 'admin-dashboard';
     } else if (currentPathname === paths.LOGIN) {
       app.screen = 'login-home';
