@@ -11,7 +11,7 @@ const dashboard: ServerDashboard = {
   generatedAtMs: 0,
   host: {hostname: 'tm-server', operatingSystem: 'Ubuntu 24.04', architecture: 'arm64', nodeVersion: 'v22.0.0', systemUptimeSeconds: 90000, serverUptimeSeconds: 600},
   cpu: {model: 'Neoverse-N1', cores: 4, loadAverage: [0.5, 0.4, 0.3], usagePercent: 12.5},
-  memory: {totalBytes: 24 * GB, availableBytes: 20 * GB, swapTotalBytes: 0, swapFreeBytes: 0, serverProcessBytes: GB / 4},
+  memory: {totalBytes: 24 * GB, availableBytes: 20 * GB, freeBytes: 18 * GB, swapTotalBytes: 0, swapFreeBytes: 0, serverProcessBytes: GB / 4},
   disk: {totalBytes: 96 * GB, freeBytes: 6 * GB, usage: {measuredAtMs: 0, docker: 20 * GB, game: 2 * GB, gameData: GB, logs: GB / 10, aiLogs: GB / 10}},
   gpus: [],
   games: {running: 3, finished: 67, playersOnline: 2},
@@ -47,8 +47,8 @@ describe('AdminDashboard', () => {
     }
     expect(wrapper.text()).contains('tm-server');
     expect(wrapper.text()).contains('Not reachable');
-    expect(wrapper.find('.dashboard-disk .dashboard-tone--critical').exists()).is.true;
-    expect(wrapper.findAll('.dashboard-disk-segment')).has.length(7);
+    expect(wrapper.findAll('.dashboard-split .dashboard-tone--critical')).has.length(1);
+    expect(wrapper.findAll('.dashboard-split-bar .dashboard-split-segment--gameData')).has.length(1);
     expect(wrapper.find('.server-dashboard-commits').text()).contains('Fix sign of card resource');
     expect(wrapper.text()).contains('No graphics adapter found');
   });

@@ -1,7 +1,7 @@
-import * as fs from 'fs';
 import * as path from 'path';
 import {DashboardDiskUsage, DISK_USAGE_FILE} from '../../../common/admin/ServerDashboard';
 import {sizeOnDisk} from './systemMetrics';
+import {readOperatorFile} from './operatorFile';
 
 /**
  * Disk usage by purpose. The machine-wide parts (Docker, logs, system) are only visible outside the container:
@@ -9,13 +9,10 @@ import {sizeOnDisk} from './systemMetrics';
  * server measures what it can see itself, its game data and AI logs.
  */
 export function diskUsage(dataFolder: string, decisionLogFolder: string | undefined): DashboardDiskUsage {
-  try {
-    const measured: DashboardDiskUsage = JSON.parse(fs.readFileSync(path.join(dataFolder, DISK_USAGE_FILE), 'utf8'));
-    if (typeof measured.measuredAtMs === 'number') {
-      return measured;
-    }
-  } catch {
-    // No file (development, other hosting): measure below
+  // Measured every 15 minutes: an hour gives room for a slow or skipped run
+  const measured = readOperatorFile<DashboardDiskUsage>(dataFolder, DISK_USAGE_FILE, 60 * 60 * 1000);
+  if (measured !== undefined) {
+    return measured;
   }
   const aiLogs = decisionLogFolder ? sizeOnDisk(decisionLogFolder) : undefined;
   const dataBytes = sizeOnDisk(dataFolder);

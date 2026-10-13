@@ -161,8 +161,8 @@
   }
 }
 
-// ---------- Disk split by purpose ----------
-.dashboard-disk {
+// ---------- Split bars (processor, memory, disk) ----------
+.dashboard-split {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -172,7 +172,7 @@
   }
 }
 
-.dashboard-disk-bar {
+.dashboard-split-bar {
   display: flex;
   height: 12px;
   border-radius: 4px;
@@ -180,7 +180,8 @@
   background: @dashboard-line;
 }
 
-.dashboard-disk-segment {
+// One color per kind, the same in every bar: the game is always purple, the AI always pink …
+.dashboard-split-segment {
   height: 100%;
 
   // Small gap between the parts, so neighbours with similar colors stay apart
@@ -190,14 +191,19 @@
 
   &--system { background: #8a8f98; }
   &--docker { background: #4f9cf9; }
+  &--containers { background: #3fc1c9; }
   &--game { background: #b07cf2; }
   &--gameData { background: #7bd88f; }
-  &--logs { background: #f4a259; }
+  &--ai { background: #f25f8a; }
   &--aiLogs { background: #f25f8a; }
+  &--reserve { background: #c9a227; }
+  &--programs { background: #e9e3d0; }
+  &--logs { background: #f4a259; }
+  &--cache { background: rgba(255, 255, 255, 0.22); }
   &--free { background: transparent; }
 }
 
-.dashboard-disk-swatch {
+.dashboard-split-swatch {
   display: inline-block;
   width: 10px;
   height: 10px;
@@ -205,12 +211,12 @@
   border-radius: 2px;
   vertical-align: -1px;
 
-  &.dashboard-disk-segment--free {
+  &.dashboard-split-segment--free {
     border: 1px solid rgba(255, 255, 255, 0.35);
   }
 }
 
-.dashboard-disk-note {
+.dashboard-split-note {
   margin: 0;
   color: @dashboard-dim;
   font-size: 12px;

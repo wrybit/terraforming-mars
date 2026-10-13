@@ -1049,7 +1049,6 @@
   "Cores": "Kjerner",
   "Load (1 / 5 / 15 min)": "Last (1 / 5 / 15 min)",
   "No sensor": "Ingen sensor",
-  "Game server process": "Spillserverprosess",
   "AI decision logs": "KI-beslutningslogger",
   "Running games": "Pågående spill",
   "Players online now": "Spillere pålogget nå",
@@ -1068,5 +1067,13 @@
   "Today": "I dag",
   "One line per day (${0} days)": "Én linje per dag (${0} dager)",
   "Players with an open game page, in 5-minute steps": "Spillere med åpen spillside, i trinn på 5 minutter",
-  "Saved games": "Lagrede spill"
+  "Saved games": "Lagrede spill",
+  "Game server": "Spillserver",
+  "Other containers": "Andre containere",
+  "Docker engine": "Docker-motor",
+  "Reserve (memory ballast)": "Reserve (minneballast)",
+  "Other programs": "Andre programmer",
+  "System (kernel and services)": "System (kjerne og tjenester)",
+  "Cache (freed on demand)": "Hurtigbuffer (frigjøres ved behov)",
+  "Idle": "Ledig kapasitet"
 }

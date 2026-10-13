@@ -8,18 +8,20 @@
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Processor</h2>
-        <DashboardMeter label="Processor load" :used="dashboard.cpu.usagePercent" :total="100" unit="percent"/>
+        <DashboardSplitBar v-if="dashboard.machineUsage !== undefined" label="Processor load" :segments="cpuParts" :total="100" unit="percent"
+          :measuredAtMs="dashboard.machineUsage.measuredAtMs"/>
+        <DashboardMeter v-else label="Processor load" :used="dashboard.cpu.usagePercent" :total="100" unit="percent"/>
         <DashboardFacts :facts="processorFacts"/>
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Memory</h2>
-        <DashboardMeter label="Memory" :used="dashboard.memory.totalBytes - dashboard.memory.availableBytes" :total="dashboard.memory.totalBytes"/>
+        <DashboardSplitBar label="Memory" :segments="memoryParts" :total="dashboard.memory.totalBytes" :measuredAtMs="dashboard.machineUsage?.measuredAtMs"/>
         <DashboardMeter v-if="dashboard.memory.swapTotalBytes > 0" label="Swap" :used="dashboard.memory.swapTotalBytes - dashboard.memory.swapFreeBytes" :total="dashboard.memory.swapTotalBytes"/>
-        <DashboardFacts :facts="memoryFacts"/>
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Disk</h2>
-        <DashboardDiskBar v-if="dashboard.disk !== undefined" :disk="dashboard.disk"/>
+        <DashboardSplitBar v-if="dashboard.disk !== undefined" label="Disk" :segments="diskParts" :total="dashboard.disk.totalBytes"
+          :measuredAtMs="dashboard.disk.usage?.docker === undefined ? undefined : dashboard.disk.usage.measuredAtMs"/>
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Games</h2>
@@ -83,13 +85,14 @@ import {StatsBar} from '@/client/components/stats/statsTypes';
 import DashboardFacts from '@/client/components/admin/dashboard/DashboardFacts.vue';
 import DashboardMeter from '@/client/components/admin/dashboard/DashboardMeter.vue';
 import DashboardDayOverlay from '@/client/components/admin/dashboard/DashboardDayOverlay.vue';
-import DashboardDiskBar from '@/client/components/admin/dashboard/DashboardDiskBar.vue';
+import DashboardSplitBar from '@/client/components/admin/dashboard/DashboardSplitBar.vue';
+import {cpuSegments, diskSegments, memorySegments, UsageSegment} from '@/client/components/admin/dashboard/usageSegments';
 import {DashboardFact} from '@/client/components/admin/dashboard/dashboardTypes';
-import {formatBytes, formatDateTime, formatDuration, periodBars} from '@/client/components/admin/dashboard/dashboardFormat';
+import {formatDateTime, formatDuration, periodBars} from '@/client/components/admin/dashboard/dashboardFormat';
 
 export default defineComponent({
   name: 'ServerDashboardView',
-  components: {DashboardDayOverlay, DashboardDiskBar, DashboardFacts, DashboardMeter, StatsBarChart},
+  components: {DashboardDayOverlay, DashboardFacts, DashboardMeter, DashboardSplitBar, StatsBarChart},
   props: {
     dashboard: {type: Object as PropType<ServerDashboard>, required: true},
   },
@@ -120,8 +123,14 @@ export default defineComponent({
         {label: 'Temperature', value: cpu.temperatureCelsius === undefined ? translateText('No sensor') : `${cpu.temperatureCelsius.toFixed(1)} °C`},
       ];
     },
-    memoryFacts(): Array<DashboardFact> {
-      return [{label: 'Game server process', value: formatBytes(this.dashboard.memory.serverProcessBytes)}];
+    cpuParts(): Array<UsageSegment> {
+      return this.dashboard.machineUsage === undefined ? [] : cpuSegments(this.dashboard.machineUsage);
+    },
+    memoryParts(): Array<UsageSegment> {
+      return memorySegments(this.dashboard.memory, this.dashboard.machineUsage);
+    },
+    diskParts(): Array<UsageSegment> {
+      return this.dashboard.disk === undefined ? [] : diskSegments(this.dashboard.disk);
     },
     gameFacts(): Array<DashboardFact> {
       const games = this.dashboard.games;

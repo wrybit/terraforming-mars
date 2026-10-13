@@ -1581,7 +1581,6 @@
   "Cores": "Ядра",
   "Load (1 / 5 / 15 min)": "Натоварване (1 / 5 / 15 мин)",
   "No sensor": "Няма сензор",
-  "Game server process": "Процес на сървъра на играта",
   "AI decision logs": "Дневници с решенията на ИИ",
   "Running games": "Текущи игри",
   "Players online now": "Играчи онлайн сега",
@@ -1601,5 +1600,13 @@
   "Today": "Днес",
   "One line per day (${0} days)": "По една линия на ден (${0} дни)",
   "Players with an open game page, in 5-minute steps": "Играчи с отворена страница на играта, на стъпки от 5 минути",
-  "Saved games": "Запазени игри"
+  "Saved games": "Запазени игри",
+  "Game server": "Сървър на играта",
+  "Other containers": "Други контейнери",
+  "Docker engine": "Docker двигател",
+  "Reserve (memory ballast)": "Резерв (баласт на паметта)",
+  "Other programs": "Други програми",
+  "System (kernel and services)": "Система (ядро и услуги)",
+  "Cache (freed on demand)": "Кеш (освобождава се при нужда)",
+  "Idle": "Неактивен"
 }

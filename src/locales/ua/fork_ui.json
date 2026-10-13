@@ -844,7 +844,6 @@
   "Cores": "Ядра",
   "Load (1 / 5 / 15 min)": "Навантаження (1 / 5 / 15 хв)",
   "No sensor": "Немає датчика",
-  "Game server process": "Процес ігрового сервера",
   "AI decision logs": "Журнали рішень ШІ",
   "Running games": "Поточні ігри",
   "Players online now": "Гравців онлайн зараз",
@@ -864,5 +863,13 @@
   "Today": "Сьогодні",
   "One line per day (${0} days)": "Одна лінія на день (${0} дн.)",
   "Players with an open game page, in 5-minute steps": "Гравці з відкритою сторінкою гри, крок 5 хвилин",
-  "Saved games": "Збережені ігри"
+  "Saved games": "Збережені ігри",
+  "Game server": "Ігровий сервер",
+  "Other containers": "Інші контейнери",
+  "Docker engine": "Рушій Docker",
+  "Reserve (memory ballast)": "Резерв (баласт пам’яті)",
+  "Other programs": "Інші програми",
+  "System (kernel and services)": "Система (ядро та служби)",
+  "Cache (freed on demand)": "Кеш (звільняється за потреби)",
+  "Idle": "Простій"
 }

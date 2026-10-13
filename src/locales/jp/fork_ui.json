@@ -1046,7 +1046,6 @@
   "Cores": "コア数",
   "Load (1 / 5 / 15 min)": "負荷（1 / 5 / 15 分）",
   "No sensor": "センサーなし",
-  "Game server process": "ゲームサーバープロセス",
   "AI decision logs": "AIの判断ログ",
   "Running games": "進行中のゲーム",
   "Players online now": "現在オンラインのプレイヤー",
@@ -1066,5 +1065,13 @@
   "Today": "今日",
   "One line per day (${0} days)": "1日1本の線（${0}日分）",
   "Players with an open game page, in 5-minute steps": "ゲームページを開いているプレイヤー（5分刻み）",
-  "Saved games": "保存されたゲーム"
+  "Saved games": "保存されたゲーム",
+  "Game server": "ゲームサーバー",
+  "Other containers": "その他のコンテナ",
+  "Docker engine": "Docker エンジン",
+  "Reserve (memory ballast)": "予備（メモリバラスト）",
+  "Other programs": "その他のプログラム",
+  "System (kernel and services)": "システム（カーネルとサービス）",
+  "Cache (freed on demand)": "キャッシュ（必要に応じて解放）",
+  "Idle": "アイドル"
 }

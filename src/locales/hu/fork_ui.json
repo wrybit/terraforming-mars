@@ -867,7 +867,6 @@
   "Cores": "Magok",
   "Load (1 / 5 / 15 min)": "Terhelés (1 / 5 / 15 perc)",
   "No sensor": "Nincs érzékelő",
-  "Game server process": "Játékszerver-folyamat",
   "AI decision logs": "MI-döntési naplók",
   "Running games": "Folyamatban lévő játszmák",
   "Players online now": "Most online játékosok",
@@ -887,5 +886,13 @@
   "Today": "Ma",
   "One line per day (${0} days)": "Naponta egy vonal (${0} nap)",
   "Players with an open game page, in 5-minute steps": "Nyitott játékoldallal rendelkező játékosok, 5 perces lépésekben",
-  "Saved games": "Mentett játszmák"
+  "Saved games": "Mentett játszmák",
+  "Game server": "Játékszerver",
+  "Other containers": "Egyéb konténerek",
+  "Docker engine": "Docker-motor",
+  "Reserve (memory ballast)": "Tartalék (memóriaballaszt)",
+  "Other programs": "Egyéb programok",
+  "System (kernel and services)": "Rendszer (kernel és szolgáltatások)",
+  "Cache (freed on demand)": "Gyorsítótár (szükség esetén felszabadul)",
+  "Idle": "Üresjárat"
 }

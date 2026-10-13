@@ -4,13 +4,14 @@ import {Handler} from './Handler';
 import {Context} from './IHandler';
 import {Request} from '../Request';
 import {Response} from '../Response';
-import {ServerDashboard} from '../../common/admin/ServerDashboard';
+import {DashboardMachineUsage, MACHINE_USAGE_FILE, ServerDashboard} from '../../common/admin/ServerDashboard';
 import {Phase} from '../../common/Phase';
 import {IGame} from '../IGame';
 import {activeParticipantCount} from '../server/activeParticipants';
 import {isSecureRequest} from '../server/auth/adminCookie';
 import {systemMetrics} from '../admin/dashboard/systemMetrics';
 import {diskUsage} from '../admin/dashboard/diskUsage';
+import {readOperatorFile} from '../admin/dashboard/operatorFile';
 import {playerActivity} from '../admin/dashboard/playerActivity';
 import {gameActivity} from '../admin/dashboard/playerActivityOfGames';
 import {UptimeRecord} from '../admin/dashboard/uptimeRecord';
@@ -47,6 +48,8 @@ export class ApiAdminDashboard extends Handler {
       generatedAtMs: nowMs,
       ...metrics,
       disk: metrics.disk === undefined ? undefined : {...metrics.disk, usage: diskUsage(dataFolder, decisionLogFolder)},
+      // Measured every minute: older than five minutes means the script stopped
+      machineUsage: readOperatorFile<DashboardMachineUsage>(dataFolder, MACHINE_USAGE_FILE, 5 * 60 * 1000, nowMs),
       games: {
         running: games.filter((game) => game.phase !== Phase.END).length,
         finished: games.filter((game) => game.phase === Phase.END).length,

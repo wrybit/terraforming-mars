@@ -698,7 +698,6 @@
   "Cores": "Ytimet",
   "Load (1 / 5 / 15 min)": "Kuorma (1 / 5 / 15 min)",
   "No sensor": "Ei anturia",
-  "Game server process": "Pelipalvelimen prosessi",
   "AI decision logs": "Tekoälyn päätöslokit",
   "Running games": "Käynnissä olevat pelit",
   "Players online now": "Pelaajia nyt paikalla",
@@ -716,5 +715,13 @@
   "Today": "Tänään",
   "One line per day (${0} days)": "Yksi viiva päivää kohden (${0} päivää)",
   "Players with an open game page, in 5-minute steps": "Pelaajat, joilla on pelisivu auki, 5 minuutin välein",
-  "Saved games": "Tallennetut pelit"
+  "Saved games": "Tallennetut pelit",
+  "Game server": "Pelipalvelin",
+  "Other containers": "Muut kontit",
+  "Docker engine": "Docker-moottori",
+  "Reserve (memory ballast)": "Varaus (muistipainolasti)",
+  "Other programs": "Muut ohjelmat",
+  "System (kernel and services)": "Järjestelmä (ydin ja palvelut)",
+  "Cache (freed on demand)": "Välimuisti (vapautuu tarvittaessa)",
+  "Idle": "Joutokäynti"
 }

@@ -56,8 +56,14 @@ describe('diskUsage', () => {
   });
 
   it('takes the measurement of the machine when the operator script left one', () => {
-    writeFileSync(path.join(folder, 'disk-usage.json'), JSON.stringify({measuredAtMs: 5, docker: 7, game: 1, gameData: 2, logs: 3, aiLogs: 4}));
-    expect(diskUsage(folder, undefined)).deep.eq({measuredAtMs: 5, docker: 7, game: 1, gameData: 2, logs: 3, aiLogs: 4});
+    const measured = {measuredAtMs: Date.now(), docker: 7, game: 1, gameData: 2, logs: 3, aiLogs: 4};
+    writeFileSync(path.join(folder, 'disk-usage.json'), JSON.stringify(measured));
+    expect(diskUsage(folder, undefined)).deep.eq(measured);
+  });
+
+  it('ignores a measurement the script stopped updating', () => {
+    writeFileSync(path.join(folder, 'disk-usage.json'), JSON.stringify({measuredAtMs: 5, docker: 7}));
+    expect(diskUsage(folder, undefined).docker).is.undefined;
   });
 
   it('otherwise measures game data without the AI logs inside the data folder', () => {

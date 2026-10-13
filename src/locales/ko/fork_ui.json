@@ -927,7 +927,6 @@
   "Cores": "코어",
   "Load (1 / 5 / 15 min)": "부하 (1 / 5 / 15분)",
   "No sensor": "센서 없음",
-  "Game server process": "게임 서버 프로세스",
   "AI decision logs": "AI 결정 로그",
   "Running games": "진행 중인 게임",
   "Players online now": "현재 온라인 플레이어",
@@ -947,5 +946,13 @@
   "Today": "오늘",
   "One line per day (${0} days)": "하루에 한 선 (${0}일)",
   "Players with an open game page, in 5-minute steps": "게임 페이지를 연 플레이어, 5분 단위",
-  "Saved games": "저장된 게임"
+  "Saved games": "저장된 게임",
+  "Game server": "게임 서버",
+  "Other containers": "기타 컨테이너",
+  "Docker engine": "Docker 엔진",
+  "Reserve (memory ballast)": "예비 (메모리 밸러스트)",
+  "Other programs": "기타 프로그램",
+  "System (kernel and services)": "시스템 (커널 및 서비스)",
+  "Cache (freed on demand)": "캐시 (필요 시 해제)",
+  "Idle": "유휴"
 }

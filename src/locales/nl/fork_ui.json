@@ -1308,7 +1308,6 @@
   "Cores": "Kernen",
   "Load (1 / 5 / 15 min)": "Belasting (1 / 5 / 15 min)",
   "No sensor": "Geen sensor",
-  "Game server process": "Spelserverproces",
   "AI decision logs": "AI-beslissingslogs",
   "Running games": "Lopende spellen",
   "Players online now": "Spelers nu online",
@@ -1327,5 +1326,13 @@
   "Today": "Vandaag",
   "One line per day (${0} days)": "Eén lijn per dag (${0} dagen)",
   "Players with an open game page, in 5-minute steps": "Spelers met een open spelpagina, in stappen van 5 minuten",
-  "Saved games": "Opgeslagen spellen"
+  "Saved games": "Opgeslagen spellen",
+  "Game server": "Spelserver",
+  "Other containers": "Andere containers",
+  "Docker engine": "Docker-engine",
+  "Reserve (memory ballast)": "Reserve (geheugenballast)",
+  "Other programs": "Andere programma’s",
+  "System (kernel and services)": "Systeem (kernel en diensten)",
+  "Cache (freed on demand)": "Cache (vrijgegeven indien nodig)",
+  "Idle": "Inactief"
 }

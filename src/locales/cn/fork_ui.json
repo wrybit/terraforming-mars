@@ -1618,7 +1618,6 @@
   "Cores": "核心",
   "Load (1 / 5 / 15 min)": "负载（1 / 5 / 15 分钟）",
   "No sensor": "无传感器",
-  "Game server process": "游戏服务器进程",
   "AI decision logs": "AI 决策日志",
   "Running games": "进行中的游戏",
   "Players online now": "当前在线玩家",
@@ -1638,5 +1637,13 @@
   "Today": "今天",
   "One line per day (${0} days)": "每天一条线（${0} 天）",
   "Players with an open game page, in 5-minute steps": "打开游戏页面的玩家，每 5 分钟一档",
-  "Saved games": "已保存的游戏"
+  "Saved games": "已保存的游戏",
+  "Game server": "游戏服务器",
+  "Other containers": "其他容器",
+  "Docker engine": "Docker 引擎",
+  "Reserve (memory ballast)": "预留（内存压舱）",
+  "Other programs": "其他程序",
+  "System (kernel and services)": "系统（内核和服务）",
+  "Cache (freed on demand)": "缓存（按需释放）",
+  "Idle": "空闲"
 }

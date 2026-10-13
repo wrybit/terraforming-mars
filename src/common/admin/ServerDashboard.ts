@@ -46,6 +46,23 @@ export type DashboardDiskUsage = {
 
 export const DISK_USAGE_FILE = 'disk-usage.json';
 
+/** Areas of the machine for processor and memory: who uses them. */
+export type UsageArea = 'game' | 'ai' | 'containers' | 'docker' | 'reserve' | 'programs' | 'system';
+
+/**
+ * Processor and memory use by area, measured from the cgroups of the machine every minute by a script of the
+ * server operator (file name: MACHINE_USAGE_FILE in the data folder). Memory is what the programs use
+ * themselves, without the file cache. What no area covers counts as system.
+ */
+export type DashboardMachineUsage = {
+  measuredAtMs: number,
+  /** Share of the whole machine (all cores together = 100) */
+  cpuPercent: Partial<Record<UsageArea, number>>,
+  memoryBytes: Partial<Record<UsageArea, number>>,
+};
+
+export const MACHINE_USAGE_FILE = 'machine-usage.json';
+
 /** Result of fetching this server's own public address from the inside (DNS, proxy, certificate). */
 export type DashboardReachability = {
   url: string,
@@ -81,11 +98,15 @@ export type ServerDashboard = {
   memory: {
     totalBytes: number,
     availableBytes: number,
+    /** Not even used as cache; availableBytes minus this is cache the system frees on demand */
+    freeBytes: number,
     swapTotalBytes: number,
     swapFreeBytes: number,
     serverProcessBytes: number,
   },
   disk?: DashboardDisk,
+  /** Areas of processor and memory; missing where no operator script measures them */
+  machineUsage?: DashboardMachineUsage,
   /** Graphics adapters found on the machine; empty if none */
   gpus: Array<string>,
   games: {

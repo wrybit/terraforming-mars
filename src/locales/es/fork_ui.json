@@ -1918,7 +1918,6 @@
   "Cores": "Núcleos",
   "Load (1 / 5 / 15 min)": "Carga (1 / 5 / 15 min)",
   "No sensor": "Sin sensor",
-  "Game server process": "Proceso del servidor de juego",
   "AI decision logs": "Registros de decisiones de la IA",
   "Running games": "Partidas en curso",
   "Players online now": "Jugadores en línea ahora",
@@ -1935,5 +1934,13 @@
   "Today": "Hoy",
   "One line per day (${0} days)": "Una línea por día (${0} días)",
   "Players with an open game page, in 5-minute steps": "Jugadores con la página de partida abierta, en pasos de 5 minutos",
-  "Saved games": "Partidas guardadas"
+  "Saved games": "Partidas guardadas",
+  "Game server": "Servidor de juego",
+  "Other containers": "Otros contenedores",
+  "Docker engine": "Motor de Docker",
+  "Reserve (memory ballast)": "Reserva (lastre de memoria)",
+  "Other programs": "Otros programas",
+  "System (kernel and services)": "Sistema (núcleo y servicios)",
+  "Cache (freed on demand)": "Caché (se libera cuando hace falta)",
+  "Idle": "Inactivo"
 }

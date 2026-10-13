@@ -139,6 +139,7 @@ export async function systemMetrics(dataFolder: string): Promise<Pick<ServerDash
       totalBytes: os.totalmem(),
       // MemAvailable counts reclaimable cache as free; os.freemem() would make a healthy Linux look full
       availableBytes: memInfoBytes(memInfo, 'MemAvailable') ?? os.freemem(),
+      freeBytes: memInfoBytes(memInfo, 'MemFree') ?? os.freemem(),
       swapTotalBytes: memInfoBytes(memInfo, 'SwapTotal') ?? 0,
       swapFreeBytes: memInfoBytes(memInfo, 'SwapFree') ?? 0,
       serverProcessBytes: process.memoryUsage().rss,
