@@ -2454,10 +2454,9 @@ html.tm-mobile #game-end {
     overflow: hidden;
   }
 
-  // Heading of the board box: the desktop pulls it left by the board's overhang (game_end_columns.less),
-  // that padding is missing here – otherwise the beginning gets cut off
-  .game_end_block--board h2 {
-    margin-left: 0;
+  // No room beside the board for its overhang as on the desktop (game_end_columns.less): mobileFit scales it
+  .game-end-board-zoom {
+    padding: 0;
   }
 
   // Header as in the mockup: winner large, navigation below as two equally wide buttons

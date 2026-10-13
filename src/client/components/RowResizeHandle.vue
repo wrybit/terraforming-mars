@@ -5,8 +5,8 @@
     v-proximity-handle
     @pointerdown="startResize" @dblclick="resetResize"
     @keydown.up.prevent="nudgeResize(-1)" @keydown.down.prevent="nudgeResize(1)">
-    <!-- Horizontal drag handle below a card of the player view (resize_handle.less): sets the height of the card directly
-         above it (previous sibling). Invisible until the mouse approaches; double click = default height.
+    <!-- Horizontal drag handle below a card (resize_handle.less): sets the height of the card directly above it
+         (previous sibling). Invisible until the mouse approaches; double click = default height.
          Comment inside so the root stays a single element -->
   </div>
 </template>
@@ -18,15 +18,67 @@ import {KEYBOARD_ROW_STEP, RowResizeTarget, clampHeight, startRowResize} from '@
 import {loadStoredNumber, saveStoredNumber} from '@/client/utils/layoutStorage';
 import {playersCardTarget} from '@/client/utils/playersCardFit';
 import {marsCardTarget} from '@/client/utils/rightColumnFit';
+import {boardTarget, chartTarget, observeBoardFit, tableTarget} from '@/client/utils/gameEndResize';
 
-// Which card the handle resizes: the player table (left) or Mars (right)
-export type RowResizeKind = 'players' | 'mars';
+// Which card the handle resizes: game view – player table (left), Mars (right);
+// results page – victory point table, board, charts
+export type RowResizeKind = 'players' | 'mars' | 'game-end-table' | 'game-end-board' | 'game-end-chart';
 
-const STORAGE_KEYS: Record<RowResizeKind, string> = {
-  players: 'player_home_players_height',
-  mars: 'player_home_mars_height',
+type KindSetup = {
+  storageKey: string;
+  // undefined if the card has nothing to resize (e.g. no players)
+  target(card: HTMLElement, handle: HTMLElement): RowResizeTarget | undefined;
+  // Optional: watches something that changes the limits (column width) and calls onChange; returns a cleanup function
+  observe?(card: HTMLElement, onChange: () => void): () => void;
 };
-const BOARD_COLUMN_SELECTOR = '.player-home-columns__board';
+
+// Element inside the card, or undefined
+const inside = (card: HTMLElement, selector: string) => card.querySelector<HTMLElement>(selector) ?? undefined;
+
+const BOARD_ZOOM_SELECTOR = '.game-end-board-zoom';
+
+const KINDS: Record<RowResizeKind, KindSetup> = {
+  'players': {
+    storageKey: 'player_home_players_height',
+    // Without players PlayersOverview renders nothing; then there is no card to resize
+    target(card) {
+      const table = inside(card, '.players-table');
+      return table === undefined ? undefined : playersCardTarget(card, table);
+    },
+  },
+  'mars': {
+    storageKey: 'player_home_mars_height',
+    target(card, handle) {
+      const column = handle.closest<HTMLElement>('.player-home-columns__board');
+      return column === null ? undefined : marsCardTarget(column, card);
+    },
+  },
+  'game-end-table': {
+    storageKey: 'game_end_table_height',
+    target(card) {
+      const table = inside(card, '.game_end_table');
+      return table === undefined ? undefined : tableTarget(card, table);
+    },
+  },
+  'game-end-board': {
+    storageKey: 'game_end_board_height',
+    target(card) {
+      const content = inside(card, BOARD_ZOOM_SELECTOR);
+      return content === undefined ? undefined : boardTarget(card, content);
+    },
+    observe(card, onChange) {
+      const content = inside(card, BOARD_ZOOM_SELECTOR);
+      return content === undefined ? () => {} : observeBoardFit(card, content, onChange);
+    },
+  },
+  'game-end-chart': {
+    storageKey: 'game_end_chart_height',
+    target(card) {
+      const chart = inside(card, '.victory-point-chart-container');
+      return chart === undefined ? undefined : chartTarget(card, chart);
+    },
+  },
+};
 
 export default defineComponent({
   name: 'RowResizeHandle',
@@ -39,30 +91,45 @@ export default defineComponent({
       required: true,
     },
   },
+  data() {
+    return {
+      stopObserving: undefined as (() => void) | undefined,
+    };
+  },
   mounted() {
-    // Restore the saved height – only where the handle is shown (fixed layout, player_home_fixed.less),
-    // otherwise it could not be reset
-    const stored = loadStoredNumber(STORAGE_KEYS[this.kind]);
-    if (stored !== undefined && getComputedStyle(this.$el).display !== 'none') {
-      this.target()?.apply(stored);
+    this.restore();
+    // Also while hidden: the window can grow into the two-column layout later
+    const card = this.card();
+    const observe = KINDS[this.kind].observe;
+    if (card !== undefined && observe !== undefined) {
+      this.stopObserving = observe(card, () => this.restore());
     }
   },
+  beforeUnmount() {
+    this.stopObserving?.();
+  },
   methods: {
+    card(): HTMLElement | undefined {
+      const card = (this.$el as HTMLElement).previousElementSibling;
+      return card instanceof HTMLElement ? card : undefined;
+    },
     target(): RowResizeTarget | undefined {
-      const handle = this.$el as HTMLElement;
-      const card = handle.previousElementSibling;
-      if (!(card instanceof HTMLElement)) {
-        return undefined;
+      const card = this.card();
+      return card === undefined ? undefined : KINDS[this.kind].target(card, this.$el as HTMLElement);
+    },
+    // Apply the saved height (clamped to the current limits) – only where the handle is shown
+    // (player_home_fixed.less, game_end_columns.less), otherwise it could not be reset
+    restore() {
+      if (getComputedStyle(this.$el).display === 'none') {
+        return;
       }
-      if (this.kind === 'players') {
-        // Without players PlayersOverview renders nothing; then there is no card to resize
-        return card.querySelector('.players-table') === null ? undefined : playersCardTarget(card);
+      const stored = loadStoredNumber(KINDS[this.kind].storageKey);
+      if (stored !== undefined) {
+        this.target()?.apply(stored);
       }
-      const column = handle.closest<HTMLElement>(BOARD_COLUMN_SELECTOR);
-      return column === null ? undefined : marsCardTarget(column, card);
     },
     save(height: number | undefined) {
-      saveStoredNumber(STORAGE_KEYS[this.kind], height);
+      saveStoredNumber(KINDS[this.kind].storageKey, height);
     },
     startResize(event: PointerEvent) {
       const target = this.target();

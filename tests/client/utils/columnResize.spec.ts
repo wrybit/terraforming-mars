@@ -1,31 +1,45 @@
 import {expect} from 'chai';
-import {labelOffsetY, shareLabel, DEFAULT_BOARD_SHARE, MAX_BOARD_SHARE, MIN_BOARD_SHARE, applyBoardShare, loadBoardShare, setBoardShare, shareFromPointer} from '@/client/utils/columnResize';
+import {
+  GAME_END_SPLIT, PLAYER_HOME_SPLIT, labelOffsetY, shareLabel, applyShare, loadShare, setShare, shareFromPointer,
+} from '@/client/utils/columnResize';
 
 describe('columnResize', () => {
-  beforeEach(() => localStorage.removeItem('player_home_board_share'));
+  const split = PLAYER_HOME_SPLIT;
+  beforeEach(() => {
+    localStorage.removeItem(PLAYER_HOME_SPLIT.storageKey);
+    localStorage.removeItem(GAME_END_SPLIT.storageKey);
+  });
 
-  it('computes the board share from the pointer position and keeps it within bounds', () => {
+  it('computes the right share from the pointer position and keeps it within bounds', () => {
     const container = {left: 0, width: 2000};
-    expect(shareFromPointer(container, 1200)).to.eq(40);
-    expect(shareFromPointer(container, 1900)).to.eq(MIN_BOARD_SHARE);
-    expect(shareFromPointer(container, 100)).to.eq(MAX_BOARD_SHARE);
+    expect(shareFromPointer(split, container, 1200)).to.eq(40);
+    expect(shareFromPointer(split, container, 1900)).to.eq(split.minShare);
+    expect(shareFromPointer(split, container, 100)).to.eq(split.maxShare);
   });
 
   it('defaults to 40 % and remembers a chosen share', () => {
-    expect(loadBoardShare()).to.eq(DEFAULT_BOARD_SHARE);
+    expect(loadShare(split)).to.eq(40);
     const container = document.createElement('div');
-    setBoardShare(container, 42);
-    expect(loadBoardShare()).to.eq(42);
+    setShare(container, split, 42);
+    expect(loadShare(split)).to.eq(42);
     expect(container.style.getPropertyValue('--player-home-board-share')).to.eq('42fr');
     expect(container.style.getPropertyValue('--player-home-main-share')).to.eq('58fr');
   });
 
   it('forgets the share when reset to the default', () => {
     const container = document.createElement('div');
-    setBoardShare(container, 50);
-    setBoardShare(container, DEFAULT_BOARD_SHARE);
-    applyBoardShare(container, loadBoardShare());
-    expect(localStorage.getItem('player_home_board_share')).to.be.null;
+    setShare(container, split, 50);
+    setShare(container, split, split.defaultShare);
+    applyShare(container, split, loadShare(split));
+    expect(localStorage.getItem(split.storageKey)).to.be.null;
+  });
+
+  it('keeps the splits of the game view and the results page apart', () => {
+    const container = document.createElement('div');
+    setShare(container, GAME_END_SPLIT, 60);
+    expect(loadShare(GAME_END_SPLIT)).to.eq(60);
+    expect(loadShare(PLAYER_HOME_SPLIT)).to.eq(PLAYER_HOME_SPLIT.defaultShare);
+    expect(container.style.getPropertyValue('--game-end-side-share')).to.eq('60fr');
   });
 
   it('shows the share label below the pointer, or above it near the bottom', () => {

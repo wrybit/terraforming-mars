@@ -55,43 +55,10 @@
     }
   }
 
-  // Drag handle between the columns: distributes the width (columnResize.ts); double-click resets
+  // Drag handle between the columns: distributes the width (ColumnResizeHandle.vue); double-click resets
   .player-home-columns__resizer {
-    // Line over the full column height with a grip in the middle, fades in near the mouse (resize_handle.less)
-    .resize-handle(vertical);
+    .column-resize-handle-shown(@player-home-sticky-top);
     grid-area: resizer;
-    position: sticky;
-    top: @player-home-sticky-top;
-    height: calc(100vh - 2 * @player-home-sticky-top);
-
-    // sticky forms its own stacking context: raise above the left column while dragging, otherwise it hides the indicator
-    &.resize-handle--active,
-    &:focus-visible {
-      z-index: 200;
-    }
-  }
-
-  // Split in percent just below/above the pointer while dragging (height: columnResize.ts),
-  // with keyboard focus at the middle of the grip
-  .player-home-columns__resizer-label {
-    .glass-surface();
-    position: absolute;
-    left: 50%;
-    top: var(--resizer-label-y, 50%);
-    z-index: 120;
-    transform: translate(-50%, -50%);
-    padding: 4px 10px;
-    font: 600 14px system-ui, sans-serif;
-    color: #fff;
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.12s;
-  }
-
-  .player-home-columns__resizer.resize-handle--active .player-home-columns__resizer-label,
-  .player-home-columns__resizer:focus-visible .player-home-columns__resizer-label {
-    opacity: 1;
   }
 
   .player-home-columns__main {

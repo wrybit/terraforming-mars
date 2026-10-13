@@ -1,5 +1,5 @@
-// Drag handles between the cards of the player view: one vertical between the columns (player_home_columns.less),
-// one horizontal below the players card and one below the Mars card (RowResizeHandle.vue).
+// Drag handles between the cards of the player view and the results page: one vertical between the columns
+// (ColumnResizeHandle.vue), horizontal ones below single cards (RowResizeHandle.vue).
 // Invisible at rest; the closer the mouse, the more visible up to 50 % (--handle-proximity from handleProximity.ts),
 // pressed or with keyboard focus 90 %.
 
@@ -81,6 +81,50 @@
     width: @resize-handle-grip-length;
     height: @resize-handle-grip-width;
   }
+}
+
+// Vertical handle between two columns (ColumnResizeHandle.vue): hidden until a page shows it from its two-column
+// breakpoint via .column-resize-handle-shown() (player_home_columns.less, game_end_columns.less).
+// :where() so any page rule wins regardless of the import order
+:where(.column-resize-handle) {
+  display: none;
+}
+
+// Line over the window height with a grip in the middle, stays in view while the page scrolls
+.column-resize-handle-shown(@sticky-top) {
+  .resize-handle(vertical);
+  position: sticky;
+  top: @sticky-top;
+  height: calc(100vh - 2 * @sticky-top);
+
+  // sticky forms its own stacking context: raise above the left column while dragging, otherwise it hides the indicator
+  &.resize-handle--active,
+  &:focus-visible {
+    z-index: 200;
+  }
+}
+
+// Split in percent just below/above the pointer while dragging (height: columnResize.ts),
+// with keyboard focus at the middle of the grip
+.column-resize-handle__label {
+  .glass-surface();
+  position: absolute;
+  left: 50%;
+  top: var(--resizer-label-y, 50%);
+  z-index: 120;
+  transform: translate(-50%, -50%);
+  padding: 4px 10px;
+  font: 600 14px system-ui, sans-serif;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.column-resize-handle.resize-handle--active .column-resize-handle__label,
+.column-resize-handle:focus-visible .column-resize-handle__label {
+  opacity: 1;
 }
 
 // Horizontal handle: only in the fixed layout (window-high columns, player_home_fixed.less) there is a height to distribute

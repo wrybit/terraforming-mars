@@ -10,12 +10,15 @@
 @game-end-box-radius: 10px;
 @game-end-box-border: rgba(255, 255, 255, 0.07); // very subtle
 
-// Right column: board (~670px) plus overhang of the colony/spaceport spaces on the left and the scales on the right
+// Board (~670px) plus overhang of the colony/spaceport spaces on the left and the scales on the right
 // Overhang of the outer space columns beside .board-cont: RING_FRAME in mobileBoardZoom.ts
 @game-end-board-overhang-left: 36px;
 @game-end-board-overhang-right: 34px;
-@game-end-side-width: 740px;
-@game-end-chart-height: 300px;
+// Default split of the columns: GAME_END_SPLIT in columnResize.ts (54 % right ≈ the board at natural size at 1440px)
+@game-end-main-share: 46fr;
+@game-end-side-share: 54fr;
+@game-end-chart-height: 300px; // default, the drag handle below the charts changes it (gameEndResize.ts)
+@game-end-sticky-top: 10px; // column handle stays in view while scrolling
 // Total points: largest number on the page, on its own dark surface
 @game-end-total-font-size: 38px;
 @game-end-total-background: rgba(0, 0, 0, 0.38);
@@ -407,28 +410,34 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
   }
 }
 
-.game_end_block--board {
-  // Colony/spaceport spaces and scales extend beyond .board-cont
-  padding-left: @game-end-board-overhang-left;
-  padding-right: @game-end-board-overhang-right;
+// Colony/spaceport spaces and scales extend beyond .board-cont: room for them inside the scaled part, so it scales along
+.game-end-board-zoom {
+  padding-left: @game-end-board-overhang-left - @game-end-box-padding;
+  padding-right: @game-end-board-overhang-right - @game-end-box-padding;
+}
 
-  h2 {
-    margin-left: -(@game-end-board-overhang-left - @game-end-box-padding);
-  }
+// Log as wide as the column (its default caps the width, log.less): with a wide right column (column handle)
+// it would otherwise end before the boxes above it
+#game-end .game_end_block--log .log-panel.or-tab-panel {
+  max-width: none;
 }
 
 .game-end-charts .victory-point-chart-container {
   width: 100%;
   min-width: 0;
-  height: @game-end-chart-height;
+  height: var(--game-end-chart-height, @game-end-chart-height);
   margin: 0;
 }
 
 @media only screen and (min-width: @player-home-columns-min-width) {
   .game-end-columns {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) @game-end-side-width;
-    column-gap: @game-end-columns-gap;
+    // Middle track: drag handle between the columns, centered in the column gap (ColumnResizeHandle.vue)
+    grid-template-columns:
+      minmax(0, var(--game-end-main-share, @game-end-main-share))
+      @resize-handle-thickness
+      minmax(0, var(--game-end-side-share, @game-end-side-share));
+    column-gap: ((@game-end-columns-gap - @resize-handle-thickness) / 2);
     // Both columns equally tall so the last box on the left ends flush with the log on the right
     align-items: stretch;
   }
@@ -436,6 +445,41 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
   // Last box of the left column (victory point details) fills the rest down to the bottom of the right column
   .game-end-box--fill {
     flex-grow: 1;
+  }
+
+  // Drag handles like in the game view (resize_handle.less); not in the touch layout (mobile.less has its own column flow)
+  html:not(.tm-mobile) #game-end {
+    .game-end-columns__resizer {
+      .column-resize-handle-shown(@game-end-sticky-top);
+    }
+
+    // Between two boxes of a column: together with the flex gaps above and below exactly the column gap,
+    // the handle sits in its middle – the same distance as the column handle to the boxes beside it
+    .row-resize-handle {
+      .resize-handle(horizontal);
+      position: relative;
+      flex: none;
+      height: @resize-handle-thickness;
+      margin: ((@game-end-columns-gap - 2 * @game-end-block-gap - @resize-handle-thickness) / 2) 0;
+    }
+
+    // Victory point table scales down to the height chosen with its handle (gameEndResize.ts)
+    .game_end_table {
+      zoom: var(--game-end-table-zoom, 1);
+    }
+
+    // Board fills the column width; its handle can make it smaller (gameEndResize.ts)
+    .game-end-board-zoom {
+      zoom: var(--game-end-board-zoom, var(--game-end-board-fit-zoom, 1));
+
+      // Made smaller than the column: centered instead of sticking to the left edge. The boards are inline blocks
+      // (as block elements their layout breaks), so center them like text; inside, the text alignment stays as it was
+      text-align: center;
+
+      > * {
+        text-align: start;
+      }
+    }
   }
 }
 

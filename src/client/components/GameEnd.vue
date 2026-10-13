@@ -137,6 +137,9 @@
           </table>
         </div>
 
+        <!-- Drag handles between the boxes (from the two-column layout on, like in the game view, resize_handle.less) -->
+        <RowResizeHandle kind="game-end-table"/>
+
         <div class="game-end-box game-end-box--fill">
           <h2 v-i18n>Victory points details</h2>
           <div class="game-end-flexrow game-end-details">
@@ -177,33 +180,41 @@
         </div>
       </div>
 
+      <ColumnResizeHandle class="game-end-columns__resizer" :split="columnSplit"/>
+
       <div class="game-end-columns__side">
         <div class="game-end-box game_end_block--board">
           <h2 v-i18n>Final situation on the board</h2>
-          <!-- Click enlarges Mars or the Moon like in the game (BoardZoomModal) -->
-          <Board
-              ref="columnBoard"
-              v-bind="boardProps"
-              class="board-cont--zoomable"
-              @toggleTileView="cycleTileView()"
-              @click="onBoardClick($event, 'mars')"/>
-          <MoonBoard v-if="game.moon !== undefined" ref="columnMoon" :model="game.moon" :tileView="tileView"
-              class="board-cont--zoomable" @click="onBoardClick($event, 'moon')"/>
+          <!-- Scales as a whole: fills the column width by default, the handle below makes it smaller (gameEndResize.ts) -->
+          <div class="game-end-board-zoom">
+            <!-- Click enlarges Mars or the Moon like in the game (BoardZoomModal) -->
+            <Board
+                ref="columnBoard"
+                v-bind="boardProps"
+                class="board-cont--zoomable"
+                @toggleTileView="cycleTileView()"
+                @click="onBoardClick($event, 'mars')"/>
+            <MoonBoard v-if="game.moon !== undefined" ref="columnMoon" :model="game.moon" :tileView="tileView"
+                class="board-cont--zoomable" @click="onBoardClick($event, 'moon')"/>
+            <div v-if="game.gameOptions.expansions.pathfinders">
+              <PlanetaryTracks :tracks="game.pathfinders" :gameOptions="game.gameOptions"/>
+            </div>
+            <DeltaProjectBoard v-if="game.gameOptions.expansions.deltaProject" :players="participant.players"/>
+          </div>
+          <!-- Outside the scaled part: the zoom would also scale the full-screen view -->
           <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" :frame="zoomBoard === 'mars' ? marsZoomFrame : undefined"
               @close="boardZoomOpen = false">
             <MoonBoard v-if="zoomBoard === 'moon' && game.moon !== undefined" :model="game.moon" :tileView="tileView" ring/>
             <Board v-else v-bind="boardProps" @toggleTileView="cycleTileView()"/>
           </BoardZoomModal>
-          <div v-if="game.gameOptions.expansions.pathfinders">
-            <PlanetaryTracks :tracks="game.pathfinders" :gameOptions="game.gameOptions"/>
-          </div>
-          <DeltaProjectBoard v-if="game.gameOptions.expansions.deltaProject" :players="participant.players"/>
         </div>
+        <RowResizeHandle kind="game-end-board"/>
 
         <GameEndChartTabs
           :victoryPointDatasets="vpDataset"
           :globalParameterDatasets="globalsDataset"
           :generation="game.generation"/>
+        <RowResizeHandle kind="game-end-chart"/>
 
         <div class="game_end_block--log">
           <LogPanel :viewModel="participant"/>
@@ -237,6 +248,9 @@ import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import {DataSet} from '@/client/components/gameend/VictoryPointChart.vue';
 import GameEndChartTabs from '@/client/components/gameend/GameEndChartTabs.vue';
+import ColumnResizeHandle from '@/client/components/ColumnResizeHandle.vue';
+import RowResizeHandle from '@/client/components/RowResizeHandle.vue';
+import {ColumnSplit, GAME_END_SPLIT} from '@/client/utils/columnResize';
 import {PLAYER_CHART_COLORS, GLOBAL_PARAMETER_CHART_STYLES} from '@/client/components/gameend/chartStyles';
 import {playerColorClass} from '@/common/utils/utils';
 import {Timer} from '@/common/Timer';
@@ -264,6 +278,9 @@ export default defineComponent({
     },
   },
   computed: {
+    columnSplit(): ColumnSplit {
+      return GAME_END_SPLIT;
+    },
     boardProps() {
       return marsBoardProps(this.game, this.tileView);
     },
@@ -409,6 +426,8 @@ export default defineComponent({
     PlanetaryTracks,
     DeltaProjectBoard,
     GameEndChartTabs,
+    ColumnResizeHandle,
+    RowResizeHandle,
   },
   mounted() {
     document.title = gameDocumentTitle({game: this.game, thisPlayer: this.participant.thisPlayer}, '🏁');
