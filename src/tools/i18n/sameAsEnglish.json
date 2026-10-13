@@ -1,7 +1,14 @@
 {
+  "bg": [
+    "Node.js"
+  ],
   "br": [
+    "${0} d ${1} h",
+    "${0} h ${1} min",
+    "${0} min",
     "&nbsp;Cheung Shing",
     "Info",
+    "Node.js",
     "Online",
     "Star Wars",
     "Terraforming Mars",
@@ -12,46 +19,64 @@
   "cn": [
     "${0} AI",
     "Delta Project (2VP)",
-    "Delta Project (5VP)"
+    "Delta Project (5VP)",
+    "Node.js"
   ],
   "de": [
     "&nbsp;Cheung Shing",
     "Commit",
+    "Dashboard",
     "Details:",
     "Fork",
     "Generation: ∅",
     "Host",
     "Info",
+    "Node.js",
     "Online",
     "Original",
     "Port",
-    "Terraforming Mars"
+    "Server",
+    "Terraforming Mars",
+    "Version"
   ],
   "es": [
+    "${0} d ${1} h",
+    "${0} h ${1} min",
+    "${0} min",
     "&nbsp;Cheung Shing",
     "Info",
+    "Node.js",
     "Star Wars",
     "Terraforming Mars",
     "Underworld 2",
     "Venus Next"
   ],
   "fi": [
+    "${0} h ${1} min",
+    "${0} min",
     "&nbsp;Cheung Shing",
     "1 data / 2 °C",
-    "Info"
+    "Info",
+    "Node.js"
   ],
   "fr": [
     "${0} (Turmoil ${1})",
     "${0} corruption",
+    "${0} h ${1} min",
+    "${0} min",
     "&nbsp;Cheung Shing",
     "1 corruption",
     "1 microbe / 2 °C",
     "2 microbes",
+    "Architecture",
     "G - Colonies",
+    "Gains",
+    "Node.js",
     "Star Wars",
     "Terraforming Mars",
     "Underworld 2",
     "Venus Next",
+    "Version",
     "[ solo",
     "amazonis p.",
     "arabia terra",
@@ -61,11 +86,11 @@
     "terra cimmeria nova",
     "utopia planitia",
     "vastitas borealis",
-    "vastitas borealis nova",
-    "Gains"
+    "vastitas borealis nova"
   ],
   "hu": [
     "&nbsp;Cheung Shing",
+    "Node.js",
     "Online",
     "amazonis p.",
     "arabia terra",
@@ -73,15 +98,19 @@
     "vastitas borealis nova"
   ],
   "it": [
-    "Milestone",
     "${0} (Turmoil ${1})",
+    "${0} h ${1} min",
+    "${0} min",
     "&nbsp;Cheung Shing",
     "(max 3)",
     "Escape Velocity",
     "Info",
+    "Milestone",
+    "Node.js",
     "Online",
     "Prelude + Prelude",
     "Prelude 2",
+    "Server",
     "Terraforming Mars",
     "Underworld 2",
     "Venus Next",
@@ -100,20 +129,26 @@
   "jp": [
     "${0} AI",
     "Delta Project (2VP)",
-    "Delta Project (5VP)"
+    "Delta Project (5VP)",
+    "Node.js"
   ],
   "ko": [
     "${0} AI",
     "Delta Project (2VP)",
-    "Delta Project (5VP)"
+    "Delta Project (5VP)",
+    "Node.js"
   ],
   "nb": [
+    "${0} min",
     "&nbsp;Cheung Shing",
     "1 data / 2 °C",
     "2x bonus",
     "Bonus for ${0}",
     "Bonus for ${0}: ${1}",
+    "Disk",
     "Info",
+    "Node.js",
+    "Server",
     "Star Wars",
     "Terraforming Mars",
     "[ solo",
@@ -128,6 +163,7 @@
   "nl": [
     "${0} (Turmoil ${1})",
     "${0} AI",
+    "${0} min",
     "${0} prelude",
     "${0} preludes",
     "&nbsp;Cheung Shing",
@@ -136,10 +172,15 @@
     "1 titanium / 2 °C",
     "2 titanium",
     "2x bonus",
+    "Dashboard",
     "Details:",
     "Info",
+    "Model",
+    "Node.js",
     "Online",
     "Prelude 2",
+    "Processor",
+    "Server",
     "Star Wars",
     "Terraforming Mars",
     "[ solo",
@@ -153,8 +194,11 @@
     "vastitas borealis nova"
   ],
   "pl": [
+    "${0} min",
     "&nbsp;Cheung Shing",
     "Info",
+    "Model",
+    "Node.js",
     "Online",
     "Underworld 2",
     "[ solo",
@@ -164,9 +208,11 @@
   ],
   "ru": [
     "&nbsp;Cheung Shing",
+    "Node.js",
     "PolderTECH"
   ],
   "ua": [
+    "Node.js",
     "PolderTECH"
   ]
 }

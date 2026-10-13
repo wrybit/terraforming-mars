@@ -21,7 +21,7 @@ import PageTitle from '@/client/components/common/PageTitle.vue';
 import {shortDocumentTitle} from '@/client/utils/documentTitle';
 import {translateText} from '@/client/directives/i18n';
 
-export type AdminPage = 'games' | 'settings' | 'raw';
+export type AdminPage = 'dashboard' | 'games' | 'settings' | 'raw';
 
 export default defineComponent({
   name: 'AdminNav',
@@ -33,6 +33,7 @@ export default defineComponent({
   data() {
     return {
       items: [
+        {page: 'dashboard', label: 'Dashboard', path: paths.ADMIN_DASHBOARD},
         {page: 'games', label: 'Games', path: paths.GAMES_OVERVIEW},
         {page: 'settings', label: 'Settings', path: paths.ADMIN},
         {page: 'raw', label: 'Raw data', path: paths.ADMIN_RAW},

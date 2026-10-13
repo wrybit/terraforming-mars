@@ -1,0 +1,221 @@
+// Admin dashboard (ServerDashboardPanel.vue): cards of the games overview (games-overview.less) in a grid.
+// Within a card rows sit close together, between the cards there is more space (law of proximity).
+
+@dashboard-dim: rgba(238, 238, 238, 0.62);
+@dashboard-line: rgba(255, 255, 255, 0.1);
+@dashboard-card-gap: 16px;
+@dashboard-row-gap: 6px;
+@dashboard-good: #7bd88f;
+@dashboard-warning: #f4c20d;
+@dashboard-critical: #ff8a80;
+
+.server-dashboard,
+.server-dashboard-view {
+  display: flex;
+  flex-direction: column;
+  gap: @dashboard-card-gap;
+}
+
+// Time of the values and the refresh button on the right (buttons always right)
+.server-dashboard-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+
+  .btn {
+    margin: 0;
+  }
+}
+
+.server-dashboard-updated {
+  color: @dashboard-dim;
+  font-size: 12px;
+}
+
+.server-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: @dashboard-card-gap;
+
+  &--wide {
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  }
+
+  // Every card a column of its own blocks, evenly spaced
+  .games-overview-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  h2 {
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .server-dashboard-grid--wide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+// ---------- Label/value rows ----------
+.dashboard-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: @dashboard-row-gap 16px;
+  margin: 0;
+
+  dt {
+    color: @dashboard-dim;
+  }
+
+  dd {
+    margin: 0;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+}
+
+.dashboard-tone--good {
+  color: @dashboard-good;
+}
+
+.dashboard-tone--critical {
+  color: @dashboard-critical;
+}
+
+// ---------- Meter ----------
+.dashboard-meter-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.dashboard-meter-label {
+  color: @dashboard-dim;
+}
+
+.dashboard-meter-numbers {
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard-meter-track {
+  height: 8px;
+  border-radius: 4px;
+  background: @dashboard-line;
+  overflow: hidden;
+}
+
+.dashboard-meter-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: @dashboard-good;
+
+  &--warning {
+    background: @dashboard-warning;
+  }
+
+  &--critical {
+    background: @dashboard-critical;
+  }
+}
+
+// ---------- Time of day: all days on top of each other ----------
+// Old days faint, the last week stronger, the average bold in the accent color: the eye finds the
+// average first and reads the spread of the days around it
+.dashboard-day-overlay-day {
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 1;
+
+  &--recent {
+    stroke: rgba(255, 255, 255, 0.35);
+    stroke-width: 1.5;
+  }
+}
+
+.dashboard-day-overlay-average {
+  stroke: @dashboard-warning;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.dashboard-day-overlay-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: rgba(255, 255, 255, 0.2);
+
+  &--recent {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  &--average {
+    background: @dashboard-warning;
+  }
+}
+
+// ---------- Lists (restarts, graphics adapters) ----------
+.server-dashboard-subheading {
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.server-dashboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: @dashboard-row-gap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: @dashboard-dim;
+
+  li {
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+// ---------- Commits ----------
+.server-dashboard-commits {
+  width: 100%;
+  border-collapse: collapse;
+
+  td {
+    padding: 5px 12px 5px 0;
+    border-top: 1px solid @dashboard-line;
+    vertical-align: top;
+  }
+
+  tr:first-child td {
+    border-top: none;
+  }
+}
+
+.server-dashboard-commit-hash code {
+  // Not the red of code samples: a hash is a quiet reference, not a warning
+  color: @dashboard-dim;
+  background: none;
+  padding: 0;
+}
+
+.server-dashboard-commit-time,
+.server-dashboard-commit-hash {
+  width: 1%;
+  white-space: nowrap;
+  color: @dashboard-dim;
+  font-variant-numeric: tabular-nums;
+}
+
+// Phone: the hash is the least useful column, time and title stay
+@media only screen and (max-width: 520px) {
+  .server-dashboard-commit-hash {
+    display: none;
+  }
+}

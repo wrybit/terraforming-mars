@@ -1,6 +1,8 @@
 export const paths = {
   ADMIN: 'admin',
+  ADMIN_DASHBOARD: 'admin-dashboard',
   ADMIN_RAW: 'admin-raw',
+  API_ADMIN_DASHBOARD: 'api/admin/dashboard',
   API_ADMIN_DELETE_GAME: 'api/admin/delete-game',
   API_ADMIN_GAMES: 'api/admin/games',
   API_ADMIN_IMPORT_GAME: 'api/admin/import-game',

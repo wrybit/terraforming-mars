@@ -111,6 +111,22 @@ function getBuildMetadata(): {head: string, date: string} {
   }
 }
 
+// Last commits of the built code for the admin dashboard (server only, so the client bundle stays small).
+// Tab-separated, since commit titles may contain any other character. Without git the list stays empty.
+function writeRecentCommits() {
+  let commits: Array<{hash: string, time: string, title: string}> = [];
+  try {
+    const output = child_process.execSync('git log -25 --pretty=format:"%h%x09%cI%x09%s"').toString();
+    commits = output.split('\n').filter((line) => line !== '').map((line) => {
+      const [hash, time, ...title] = line.split('\t');
+      return {hash, time, title: title.join('\t')};
+    });
+  } catch (error) {
+    console.error('unable to list recent commits', error);
+  }
+  fs.writeFileSync('src/genfiles/recentCommits.json', JSON.stringify(commits));
+}
+
 function writeBuildMetadata() {
   function getEnv(ev: string, dv: number) {
     return process.env[ev] ? Number(process.env[ev]): dv;
@@ -164,5 +180,6 @@ function writeTranslations() {
 mkdirQuietly('src/genfiles');
 
 writeBuildMetadata();
+writeRecentCommits();
 generateTranslations();
 writeTranslations();

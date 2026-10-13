@@ -26,6 +26,7 @@ import {globalInitialize} from '@/server/globalInitialize';
 import {SessionManager} from '@/server/server/auth/SessionManager';
 import {installDecisionLogFile} from '@/server/ai/decisionLogFile';
 import {clearServerUpdateFlag} from '@/server/server/serverUpdate';
+import {startUptimeRecording} from '@/server/admin/dashboard/uptimeRecord';
 
 process.on('uncaughtException', (err: any) => {
   console.error('UNCAUGHT EXCEPTION', err);
@@ -139,6 +140,8 @@ async function start() {
   GameLoader.getInstance().maintenance();
   // A flag left by the update script belongs to the server this one replaces
   clearServerUpdateFlag();
+  // Counts running minutes per day for the availability chart of the admin dashboard
+  startUptimeRecording();
   // Maintenance otherwise runs only at startup. A server with a purge window (MAX_GAME_DAYS, e.g. the
   // public test server) restarts rarely, so it repeats hourly; without the variable nothing changes.
   if (process.env.MAX_GAME_DAYS !== undefined) {
