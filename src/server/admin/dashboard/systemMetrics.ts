@@ -89,11 +89,17 @@ function disk(folder: string): ServerDashboard['disk'] {
   }
 }
 
-/** Pretty name of the operating system ("Ubuntu 24.04.1 LTS"), else kernel name and version. */
+/**
+ * Pretty name of the operating system ("Ubuntu 24.04.1 LTS"), else kernel name and version. Inside Docker
+ * /etc/os-release names the image (Alpine), not the machine: then the kernel of the machine comes first.
+ */
 function operatingSystem(): string {
   const release = readText('/etc/os-release');
   const pretty = release === undefined ? null : /^PRETTY_NAME="?([^"\n]+)"?/m.exec(release);
-  return pretty === null ? `${os.type()} ${os.release()}` : `${pretty[1]} (kernel ${os.release()})`;
+  if (pretty === null) {
+    return `${os.type()} ${os.release()}`;
+  }
+  return fs.existsSync('/.dockerenv') ? `${os.type()} ${os.release()} (Docker: ${pretty[1]})` : `${pretty[1]} (kernel ${os.release()})`;
 }
 
 /** Size of a file or of all files below a folder; undefined if it does not exist. */
