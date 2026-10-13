@@ -1056,7 +1056,7 @@
   "${0} h ${1} min": "${0} t ${1} min",
   "${0} of ${1} (${2} %)": "${0} av ${1} (${2} %)",
   "First values after one minute of running": "Første verdier etter ett minutts drift",
-  "Time of day": "Tid på døgnet",
+  "Players online by time of day": "Spillere pålogget per tid på døgnet",
   "Average": "Gjennomsnitt",
   "Docker and Node.js": "Docker og Node.js",
   "Game (code and build)": "Spill (kode og bygg)",

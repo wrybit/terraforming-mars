@@ -704,7 +704,7 @@
   "${0} d ${1} h": "${0} pv ${1} h",
   "${0} of ${1} (${2} %)": "${0} / ${1} (${2} %)",
   "First values after one minute of running": "Ensimmäiset arvot minuutin käynnin jälkeen",
-  "Time of day": "Vuorokaudenaika",
+  "Players online by time of day": "Pelaajia verkossa vuorokaudenajoittain",
   "Average": "Keskiarvo",
   "Docker and Node.js": "Docker ja Node.js",
   "Game (code and build)": "Peli (koodi ja käännös)",

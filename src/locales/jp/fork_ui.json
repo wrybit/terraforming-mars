@@ -1054,7 +1054,7 @@
   "${0} min": "${0}分",
   "${0} of ${1} (${2} %)": "${1} 中 ${0}（${2} %）",
   "First values after one minute of running": "稼働1分後に最初の値が表示されます",
-  "Time of day": "時間帯",
+  "Players online by time of day": "時間帯別オンラインプレイヤー",
   "Average": "平均",
   "Docker and Node.js": "Docker と Node.js",
   "Game (code and build)": "ゲーム（コードとビルド）",

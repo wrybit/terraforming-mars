@@ -1315,7 +1315,7 @@
   "${0} h ${1} min": "${0} u ${1} min",
   "${0} of ${1} (${2} %)": "${0} van ${1} (${2} %)",
   "First values after one minute of running": "Eerste waarden na een minuut draaien",
-  "Time of day": "Tijdstip",
+  "Players online by time of day": "Spelers online per tijdstip",
   "Average": "Gemiddelde",
   "Docker and Node.js": "Docker en Node.js",
   "Game (code and build)": "Spel (code en build)",

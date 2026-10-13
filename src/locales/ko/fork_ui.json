@@ -935,7 +935,7 @@
   "${0} min": "${0}분",
   "${0} of ${1} (${2} %)": "${1} 중 ${0} (${2}%)",
   "First values after one minute of running": "실행 1분 후 첫 값이 표시됩니다",
-  "Time of day": "시간대",
+  "Players online by time of day": "시간대별 접속 플레이어",
   "Average": "평균",
   "Docker and Node.js": "Docker 및 Node.js",
   "Game (code and build)": "게임 (코드 및 빌드)",

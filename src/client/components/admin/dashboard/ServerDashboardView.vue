@@ -58,7 +58,7 @@
     </div>
 
     <section class="games-overview-card">
-      <h2 v-i18n>Time of day</h2>
+      <h2 v-i18n>Players online by time of day</h2>
       <DashboardDayOverlay v-if="dashboard.presence.length > 0" :profiles="dashboard.presence"/>
       <p v-else class="games-overview-note" v-i18n>First values after one minute of running</p>
     </section>

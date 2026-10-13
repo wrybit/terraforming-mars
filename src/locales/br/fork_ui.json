@@ -1816,7 +1816,7 @@
   "Players online now": "Jogadores online agora",
   "${0} of ${1} (${2} %)": "${0} de ${1} (${2} %)",
   "First values after one minute of running": "Primeiros valores após um minuto de execução",
-  "Time of day": "Hora do dia",
+  "Players online by time of day": "Jogadores online por hora do dia",
   "Average": "Média",
   "Docker and Node.js": "Docker e Node.js",
   "Game (code and build)": "Jogo (código e build)",

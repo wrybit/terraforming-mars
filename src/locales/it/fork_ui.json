@@ -1915,7 +1915,7 @@
   "${0} d ${1} h": "${0} g ${1} h",
   "${0} of ${1} (${2} %)": "${0} di ${1} (${2} %)",
   "First values after one minute of running": "Primi valori dopo un minuto di attività",
-  "Time of day": "Ora del giorno",
+  "Players online by time of day": "Giocatori online per ora del giorno",
   "Average": "Media",
   "Docker and Node.js": "Docker e Node.js",
   "Game (code and build)": "Gioco (codice e build)",

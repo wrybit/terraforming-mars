@@ -875,7 +875,7 @@
   "${0} min": "${0} perc",
   "${0} of ${1} (${2} %)": "${0} / ${1} (${2} %)",
   "First values after one minute of running": "Az első értékek egy perc futás után",
-  "Time of day": "Napszak",
+  "Players online by time of day": "Online játékosok napszakonként",
   "Average": "Átlag",
   "Docker and Node.js": "Docker és Node.js",
   "Game (code and build)": "Játék (kód és build)",

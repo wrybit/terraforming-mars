@@ -1626,7 +1626,7 @@
   "${0} min": "${0} 分钟",
   "${0} of ${1} (${2} %)": "${1} 中的 ${0}（${2} %）",
   "First values after one minute of running": "运行一分钟后显示首批数据",
-  "Time of day": "一天中的时段",
+  "Players online by time of day": "各时段在线玩家",
   "Average": "平均",
   "Docker and Node.js": "Docker 和 Node.js",
   "Game (code and build)": "游戏（代码和构建）",

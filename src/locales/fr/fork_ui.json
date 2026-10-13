@@ -760,7 +760,7 @@
   "${0} d ${1} h": "${0} j ${1} h",
   "${0} of ${1} (${2} %)": "${0} sur ${1} (${2} %)",
   "First values after one minute of running": "Premières valeurs après une minute de fonctionnement",
-  "Time of day": "Heure de la journée",
+  "Players online by time of day": "Joueurs en ligne selon l'heure",
   "Average": "Moyenne",
   "Docker and Node.js": "Docker et Node.js",
   "Game (code and build)": "Jeu (code et build)",

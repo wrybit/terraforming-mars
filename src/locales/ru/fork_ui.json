@@ -1510,7 +1510,7 @@
   "${0} min": "${0} мин",
   "${0} of ${1} (${2} %)": "${0} из ${1} (${2} %)",
   "First values after one minute of running": "Первые данные — через минуту работы",
-  "Time of day": "Время суток",
+  "Players online by time of day": "Игроки онлайн по времени суток",
   "Average": "Среднее",
   "Docker and Node.js": "Docker и Node.js",
   "Game (code and build)": "Игра (код и сборка)",

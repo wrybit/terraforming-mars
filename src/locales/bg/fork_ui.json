@@ -1589,7 +1589,7 @@
   "${0} min": "${0} мин",
   "${0} of ${1} (${2} %)": "${0} от ${1} (${2} %)",
   "First values after one minute of running": "Първи стойности след една минута работа",
-  "Time of day": "Час от деня",
+  "Players online by time of day": "Играчи онлайн по час от деня",
   "Average": "Средно",
   "Docker and Node.js": "Docker и Node.js",
   "Game (code and build)": "Игра (код и билд)",

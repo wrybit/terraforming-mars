@@ -488,7 +488,7 @@
   "${0} min": "${0} Min.",
   "${0} of ${1} (${2} %)": "${0} von ${1} (${2} %)",
   "First values after one minute of running": "Erste Werte nach einer Minute Laufzeit",
-  "Time of day": "Tageszeit",
+  "Players online by time of day": "Spieler online pro Tageszeit",
   "Average": "Durchschnitt",
   "Docker and Node.js": "Docker und Node.js",
   "Game (code and build)": "Spiel (Code und Build)",

@@ -852,7 +852,7 @@
   "${0} min": "${0} хв",
   "${0} of ${1} (${2} %)": "${0} з ${1} (${2} %)",
   "First values after one minute of running": "Перші дані — після хвилини роботи",
-  "Time of day": "Час доби",
+  "Players online by time of day": "Гравці онлайн за часом доби",
   "Average": "Середнє",
   "Docker and Node.js": "Docker і Node.js",
   "Game (code and build)": "Гра (код і збірка)",
