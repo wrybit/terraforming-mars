@@ -1,0 +1,304 @@
+// Start page update column (startScreen/StartScreenUpdates.vue): latest days of the feature log.
+// No colours of its own: white text in steps of transparency on the starry sky; only Sundays are red.
+
+// Below this width the column has no room next to the menu and moves below it
+@start-updates-side-min: 1100px;
+@start-updates-row: 26px;
+@start-updates-date-width: 38px;
+
+.start-updates {
+  --updates-ink: #e8ecf4;
+  --updates-ink-soft: rgba(232, 236, 244, 0.68);
+  --updates-ink-faint: rgba(232, 236, 244, 0.42);
+  // Resting opacity: set for the side column below; content fades, not the column itself – opacity on the column
+  // would cut the blur layers off from the sky behind it
+  --updates-fade: 1;
+  --updates-rule: rgba(232, 236, 244, calc(0.13 * var(--updates-fade)));
+  --updates-reading-glass: rgba(5, 7, 13, 0.35);
+  --updates-glass-edge: rgba(232, 236, 244, 0.1);
+  --updates-sheet: rgba(255, 255, 255, 0.62);
+  --updates-sheet-band: rgba(255, 255, 255, 0.55);
+  --updates-sheet-edge: rgba(255, 255, 255, 0.5);
+  --updates-sheet-ink: #0d1220;
+  --updates-sheet-ink-soft: rgba(13, 18, 32, 0.65);
+  --updates-sheet-rule: rgba(13, 18, 32, 0.15);
+  --updates-sunday: #d8261b;
+
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--updates-ink);
+  text-align: left;
+
+  // Reading glass behind the whole column (rounded as one object, not per day): blurs the sky so the stars
+  // do not get in the way of reading
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -12px -14px;
+    border: 1px solid var(--updates-glass-edge);
+    border-radius: 12px;
+    background: var(--updates-reading-glass);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    opacity: var(--updates-fade);
+  }
+}
+
+.start-updates-head {
+  opacity: var(--updates-fade);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.start-updates-heading {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--updates-ink-soft);
+}
+
+.start-updates-all {
+  font-size: 11px;
+  color: var(--updates-ink-soft);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--updates-ink);
+  }
+}
+
+// Closed day: date | title + number of points. Open day: calendar sheet over both rows, points below the title.
+.start-updates-day {
+  display: grid;
+  grid-template-columns: @start-updates-date-width minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  border-top: 1px solid var(--updates-rule);
+  cursor: default;
+  outline: none;
+
+  &:last-child {
+    border-bottom: 1px solid var(--updates-rule);
+  }
+
+  > * {
+    opacity: var(--updates-fade);
+  }
+}
+
+.start-updates-date {
+  grid-row: 1;
+  grid-column: 1;
+  font: 500 9px/@start-updates-row ui-monospace, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  color: var(--updates-ink-faint);
+  white-space: nowrap;
+}
+
+.start-updates-title {
+  grid-row: 1;
+  grid-column: 2;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.start-updates-count {
+  margin-left: 5px;
+  font: 10px ui-monospace, Menlo, monospace;
+  color: var(--updates-ink-faint);
+}
+
+.start-updates-body {
+  grid-row: 2;
+  grid-column: 2;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+
+  > div {
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+.start-updates-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 1px 0 10px;
+  list-style: none;
+
+  // Small circle, flush with the title; one line, cut with … (the full text is in the tooltip)
+  // Explicit margin and line height: the game's global list styles would otherwise space the points far apart
+  li {
+    position: relative;
+    margin: 0;
+    padding: 0 0 0 9px;
+    font-size: 10.5px;
+    line-height: 14px;
+    color: var(--updates-ink-soft);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--updates-ink-faint);
+    }
+  }
+}
+
+// Calendar sheet: white frosted glass, about as wide as the closed date
+.start-updates-sheet {
+  display: none;
+  grid-row: 1 / 3;
+  grid-column: 1;
+  align-self: start;
+  flex-direction: column;
+  align-items: center;
+  width: 34px;
+  margin: 6px 0 10px;
+  overflow: hidden;
+  border: 1px solid var(--updates-sheet-edge);
+  border-radius: 4px;
+  background: var(--updates-sheet);
+  -webkit-backdrop-filter: blur(10px) saturate(1.3);
+  backdrop-filter: blur(10px) saturate(1.3);
+  color: var(--updates-sheet-ink);
+  text-align: center;
+}
+
+.start-updates-sheet-month {
+  width: 100%;
+  padding: 2px 0;
+  background: var(--updates-sheet-band);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--updates-sheet-ink-soft);
+}
+
+.start-updates-sheet-day {
+  padding-top: 2px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.start-updates-sheet-weekday {
+  font-size: 8px;
+}
+
+.start-updates-sheet--sunday {
+  .start-updates-sheet-day,
+  .start-updates-sheet-weekday {
+    color: var(--updates-sunday);
+  }
+}
+
+.start-updates-sheet-commits {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 3px;
+  padding: 2px 0;
+  border-top: 1px solid var(--updates-sheet-rule);
+  font: 7.5px/1.2 ui-monospace, Menlo, monospace;
+  color: var(--updates-sheet-ink-soft);
+
+  b {
+    font-size: 8px;
+  }
+}
+
+// Open: newest day at rest, any day under the mouse or keyboard focus
+.start-updates-day--newest,
+.start-updates-day:hover,
+.start-updates-day:focus-within {
+  .start-updates-body {
+    grid-template-rows: 1fr;
+  }
+
+  .start-updates-date {
+    display: none;
+  }
+
+  .start-updates-title {
+    white-space: normal;
+  }
+
+  .start-updates-sheet {
+    display: flex;
+  }
+}
+
+@media only screen and (min-width: @start-updates-side-min) {
+  // Right edge, vertically centred (top from StartScreenUpdates.vue); the menu lies above it if they ever meet
+  .start-updates {
+    position: fixed;
+    z-index: 1;
+    top: 50%;
+    right: 40px;
+    width: 290px;
+    --updates-fade: calc(0.35 + 0.65 * var(--near, 0));
+    transform: translateY(var(--shift, 0px));
+    transition: transform 0.25s ease;
+  }
+
+  // Hovering another day closes the newest; opening it again when the mouse leaves the list
+  .start-updates-days:has(.start-updates-day:hover) .start-updates-day--newest:not(:hover) {
+    .start-updates-body {
+      grid-template-rows: 0fr;
+    }
+
+    .start-updates-date {
+      display: block;
+    }
+
+    .start-updates-title {
+      white-space: nowrap;
+    }
+
+    .start-updates-sheet {
+      display: none;
+    }
+  }
+}
+
+// Narrow windows: below the menu, fully visible (no mouse nearness on touch); longer points may wrap
+@media only screen and (max-width: (@start-updates-side-min - 1px)) {
+  .start-updates {
+    margin-top: 32px;
+  }
+
+  .start-updates-items li {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-updates,
+  .start-updates-body {
+    transition: none;
+  }
+}

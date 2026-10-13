@@ -65,6 +65,9 @@
 @start-screen-glass-tint: 0.1;
 
 .start-screen-links {
+  // Above the update column (start_updates.less) if the two ever meet
+  position: relative;
+  z-index: 2;
   margin: 0 auto;
   // Room for the lifted title text
   padding-top: 50px + @start-screen-title-lift;
