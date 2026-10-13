@@ -275,7 +275,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 44: flowFit2 +0.42 VP per deal (z +0.55), flowFit (1) +0.02 – adopted at 2 for the human feedback (cards that
   // fit the direction of the own game; candidate, round 45 checks it with noFlowFit).
   // Round 45: flowFit3 +1.52 VP per deal (z +1.99) against flowFit 2 – adopted.
-  flowFit: 3,
+  // Round 63: flowFit4 +1.70 VP per deal (z +2.37; rounds 60/61 +0.74 each) – raised to 4.
+  flowFit: 4,
   // Rounds 46 + 47: drawChoice4 +0.69 and +0.72 VP per deal (pooled z ≈ 1.3), drawChoice6 +1.04 (z +1.36) – adopted at 4,
   // it fixes a human-game error (Business Contacts and Invention Contest passed on).
   drawChoiceValue: 4,
