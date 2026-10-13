@@ -294,7 +294,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Strategy-guide gaps (13.10.2026), off until tested.
   bonusRace: 0,
   planHand: 0,
-  turnTempo: 0,
+  // Round 64: turnTempo +1.59 VP per deal (z +2.26) – adopted (strategy guides: one action, then react).
+  turnTempo: 1,
   exposure: 0,
   lateDenial: 0,
 };
@@ -576,6 +577,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Strategy guides: one action, then wait and react; two only for races.
   turnTempo: {turnTempo: 1},
   turnTempo3: {turnTempo: 3},
+  noTurnTempo: {turnTempo: 0},
   // Strategy guides: plants and animals can be taken by the rival's attack cards.
   exposure: {exposure: 1},
   // Strategy guides: hate-draft harder near the end.
