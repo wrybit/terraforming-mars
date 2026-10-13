@@ -85,7 +85,9 @@ export function quickResponse(input: PlayerInput, player: IPlayer): InputRespons
     const candidates = input.cards.filter((_card, index) => input.config.enabled?.[index] !== false);
     const sorted = [...candidates].sort((a, b) =>
       (Number(b.victoryPoints !== undefined) - Number(a.victoryPoints !== undefined)) || (cardPrior(b.name) - cardPrior(a.name)));
-    const count = Math.min(Math.max(input.config.min, 0), sorted.length);
+    // Aufdecken (Public Plans) bringt 1 M€ je Karte und kostet nichts – also alles zeigen statt des Minimums 0.
+    const wanted = titleOf(input).includes('reveal') ? input.config.max : input.config.min;
+    const count = Math.min(Math.max(wanted, 0), sorted.length);
     return {type: 'card', cards: sorted.slice(0, count).map((card) => card.name)};
   }
   if (input instanceof SelectSpace) {
