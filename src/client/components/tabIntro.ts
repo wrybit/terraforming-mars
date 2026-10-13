@@ -1,7 +1,7 @@
 import {Message} from '@/common/logs/Message';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
-import {MAX_OCEAN_TILES, MAX_TEMPERATURE} from '@/common/constants';
+import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {TileType} from '@/common/TileType';
 import {PreviewTile, previewTileForSpaceInput, SpaceInput, specialTileForSpaceInput} from '@/client/components/spaceTilePreview';
@@ -95,7 +95,7 @@ export function introFacts(intro: TabIntro, playerView: PlayerViewModel): Array<
   return (intro.facts ?? []).map((fact) => {
     switch (fact.kind) {
     case 'temperature':
-      return temperatureHint(playerView.game.temperature);
+      return temperatureHint(playerView.game.temperature, getGlobalParameterMaximums(playerView.game.gameOptions.boardName).temperature);
     case 'heat': {
       const heat = playerView.thisPlayer.heat;
       return {message: 'Heat drops from ${0} to ${1}', data: rawValues(heat, Math.max(heat - fact.cost, 0))};
@@ -105,17 +105,17 @@ export function introFacts(intro: TabIntro, playerView: PlayerViewModel): Array<
     case 'plants':
       return {message: 'You have ${0} plants', data: rawValues(playerView.thisPlayer.plants)};
     case 'oceans':
-      return {message: '${0} of ${1} oceans are already on Mars', data: rawValues(playerView.game.oceans, MAX_OCEAN_TILES)};
+      return {message: '${0} of ${1} oceans are already on Mars', data: rawValues(playerView.game.oceans, getGlobalParameterMaximums(playerView.game.gameOptions.boardName).oceans)};
     }
   });
 }
 
 // "Temperature rises from -28 °C to -26 °C" or a hint that it is already at the maximum
-function temperatureHint(currentTemperature: number): string | Message {
-  if (currentTemperature >= MAX_TEMPERATURE) {
+function temperatureHint(currentTemperature: number, maxTemperature: number): string | Message {
+  if (currentTemperature >= maxTemperature) {
     return 'Temperature is already at maximum';
   }
-  const next = Math.min(currentTemperature + TEMPERATURE_STEP, MAX_TEMPERATURE);
+  const next = Math.min(currentTemperature + TEMPERATURE_STEP, maxTemperature);
   return {
     message: 'Temperature rises from ${0} °C to ${1} °C',
     data: rawValues(currentTemperature, next),

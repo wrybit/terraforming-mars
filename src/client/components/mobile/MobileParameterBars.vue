@@ -25,12 +25,14 @@ import {computed} from 'vue';
 import {parameterBars} from '@/client/components/mobile/parameterBars';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
+import {BoardName} from '@/common/boards/BoardName';
 
 const props = defineProps<{
   temperature: number;
   oxygen: number;
   oceans: number;
   venus: number | undefined;
+  boardName?: BoardName;
 }>();
 
 const bars = computed(() => parameterBars(props));

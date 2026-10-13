@@ -3,7 +3,8 @@
 import {GameModel} from '@/common/models/GameModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {PartyName} from '@/common/turmoil/PartyName';
-import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MAX_VENUS_SCALE, MIN_TEMPERATURE} from '@/common/constants';
+import {MAX_VENUS_SCALE, MIN_TEMPERATURE} from '@/common/constants';
+import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
 import {PLANETARY_TRACKS} from '@/common/pathfinders/PlanetaryTracks';
 import {PathfindersModel} from '@/common/models/PathfindersModel';
 import {Color} from '@/common/Color';
@@ -70,14 +71,17 @@ const PARTY_COLOR: Record<PartyName, string> = {
 };
 
 function marsTracks(game: GameModel): Array<BoardTabTrack> {
+  const max = getGlobalParameterMaximums(game.gameOptions.boardName);
   const temperatureStep = (value: number) => (value - MIN_TEMPERATURE) / 2;
+  // Venus moves 2 % per step up to 30 %, above that 1 % per step (Amazonis Planitia goes to 33 %)
+  const venusStep = (value: number) => value <= MAX_VENUS_SCALE ? value / 2 : MAX_VENUS_SCALE / 2 + value - MAX_VENUS_SCALE;
   const tracks: Array<BoardTabTrack> = [
-    {color: '#e5533d', step: temperatureStep(game.temperature), total: temperatureStep(MAX_TEMPERATURE), bonus: [temperatureStep(-24), temperatureStep(-20), temperatureStep(0)]},
-    {color: '#5cb85c', step: game.oxygenLevel, total: MAX_OXYGEN_LEVEL, bonus: [8]},
-    {color: '#3f8ed8', step: game.oceans, total: MAX_OCEAN_TILES, bonus: []},
+    {color: '#e5533d', step: temperatureStep(game.temperature), total: temperatureStep(max.temperature), bonus: [temperatureStep(-24), temperatureStep(-20), temperatureStep(0)]},
+    {color: '#5cb85c', step: game.oxygenLevel, total: max.oxygen, bonus: [8]},
+    {color: '#3f8ed8', step: game.oceans, total: max.oceans, bonus: []},
   ];
   if (game.gameOptions.expansions.venus) {
-    tracks.push({color: '#d9a83a', step: game.venusScaleLevel / 2, total: MAX_VENUS_SCALE / 2, bonus: [4, 8]});
+    tracks.push({color: '#d9a83a', step: venusStep(game.venusScaleLevel), total: venusStep(max.venus), bonus: [4, 8]});
   }
   return tracks;
 }

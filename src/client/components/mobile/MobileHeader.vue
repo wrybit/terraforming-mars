@@ -6,7 +6,7 @@
     <span class="mb-top-globals">
       <span class="mb-top-global"><img src="assets/global-parameters/oxygen.png" alt="">{{ game.oxygenLevel }} %</span>
       <span class="mb-top-global"><img src="assets/global-parameters/temperature.png" alt="">{{ game.temperature }} °C</span>
-      <span class="mb-top-global"><img src="assets/tiles/ocean.png" alt="">{{ game.oceans }}/{{ MAX_OCEAN_TILES }}</span>
+      <span class="mb-top-global"><img src="assets/tiles/ocean.png" alt="">{{ game.oceans }}/{{ getGlobalParameterMaximums(game.gameOptions.boardName).oceans }}</span>
       <span v-if="game.gameOptions.expansions.venus" class="mb-top-global"><img src="assets/global-parameters/venus.png" alt="">{{ game.venusScaleLevel }} %</span>
     </span>
     <slot></slot>
@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import {MAX_OCEAN_TILES} from '@/common/constants';
+import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
 import {GameModel} from '@/common/models/GameModel';
 
 defineProps<{

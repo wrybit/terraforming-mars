@@ -41,7 +41,8 @@
           :temperature="game.temperature"
           :oxygen="game.oxygenLevel"
           :oceans="game.oceans"
-          :venus="game.gameOptions.expansions.venus ? game.venusScaleLevel : undefined"/>
+          :venus="game.gameOptions.expansions.venus ? game.venusScaleLevel : undefined"
+          :boardName="game.gameOptions.boardName"/>
       </template>
     </GameBoardView>
     <!-- Tapping Mars or the Moon also opens the large view (GameBoardView) -->

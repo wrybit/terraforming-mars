@@ -1,7 +1,8 @@
 import {Message} from '@/common/logs/Message';
 import {GameModel} from '@/common/models/GameModel';
 import {Phase} from '@/common/Phase';
-import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAXIMUM_HABITAT_RATE, MAXIMUM_LOGISTIC_RATE, MAXIMUM_MINING_RATE} from '@/common/constants';
+import {MAXIMUM_HABITAT_RATE, MAXIMUM_LOGISTIC_RATE, MAXIMUM_MINING_RATE} from '@/common/constants';
+import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
 import {previewTileForSpaceInput, SpaceInput, specialPlacementLabel, specialTileForSpaceInput} from '@/client/components/spaceTilePreview';
 import {TileImage, tileImage} from '@/client/components/specialTileImage';
 
@@ -105,16 +106,17 @@ function moonRateGain(rate: number | undefined, maximum: number, icon: Placement
 
 // What the tile itself brings (card effects have been applied before the placement)
 function gainsOf(tile: PlacementTile, game: GameModel): Array<PlacementGain> {
+  const max = getGlobalParameterMaximums(game.gameOptions.boardName);
   switch (tile) {
   case 'greenery':
     // Final greeneries after the last generation raise nothing any more
-    return game.oxygenLevel < MAX_OXYGEN_LEVEL && game.phase !== Phase.PRODUCTION && game.phase !== Phase.END ?
+    return game.oxygenLevel < max.oxygen && game.phase !== Phase.PRODUCTION && game.phase !== Phase.END ?
       [{icon: 'oxygen', value: '+1', label: 'Oxygen'}, TR] : [];
   case 'ocean':
-    if (game.oceans >= MAX_OCEAN_TILES) {
+    if (game.oceans >= max.oceans) {
       return [];
     }
-    return [TR, {icon: undefined, value: '', label: 'Oceans ${0} → ${1} of ${2}', labelParams: [String(game.oceans), String(game.oceans + 1), String(MAX_OCEAN_TILES)]}];
+    return [TR, {icon: undefined, value: '', label: 'Oceans ${0} → ${1} of ${2}', labelParams: [String(game.oceans), String(game.oceans + 1), String(max.oceans)]}];
   case 'mine':
     return moonRateGain(game.moon?.miningRate, MAXIMUM_MINING_RATE, 'mining-rate', 'Mining rate');
   case 'habitat':

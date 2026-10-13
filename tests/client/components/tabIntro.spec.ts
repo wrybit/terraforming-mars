@@ -5,9 +5,10 @@ import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {CardName} from '@/common/cards/CardName';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
+import {BoardName} from '@/common/boards/BoardName';
 
 function playerView(temperature: number, oceans: number, heat: number): PlayerViewModel {
-  return {game: {temperature, oceans}, thisPlayer: {heat}} as unknown as PlayerViewModel;
+  return {game: {temperature, oceans, gameOptions: {boardName: BoardName.THARSIS}}, thisPlayer: {heat}} as unknown as PlayerViewModel;
 }
 
 function optionInput(title: string): PlayerInputModel {

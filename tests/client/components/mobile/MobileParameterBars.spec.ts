@@ -3,6 +3,7 @@ import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import MobileParameterBars from '@/client/components/mobile/MobileParameterBars.vue';
 import {parameterBars} from '@/client/components/mobile/parameterBars';
+import {BoardName} from '@/common/boards/BoardName';
 
 describe('MobileParameterBars', () => {
   it('renders three bars without Venus', () => {
@@ -26,5 +27,14 @@ describe('MobileParameterBars', () => {
     // 0 °C liegt bei 30 von 38 Grad
     expect(temperature.bonuses.find((bonus) => bonus.kind === 'ocean')?.percent).to.eq(78.9);
     expect(temperature.percent).to.eq(0);
+  });
+
+  it('uses the maximums of the map', () => {
+    const bars = parameterBars({temperature: 8, oxygen: 14, oceans: 9, venus: 30, boardName: BoardName.AMAZONIS_PLANITIA});
+    expect(bars.map((bar) => bar.max)).to.deep.eq([14, 18, 11, 33]);
+    expect(bars.some((bar) => bar.done)).to.be.false;
+    expect(bars[2].text).to.eq('9/11');
+    // Venus: 15 steps of 2 % up to 30 %, then 3 steps of 1 %
+    expect(bars[3].steps).to.eq(18);
   });
 });
