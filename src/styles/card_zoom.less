@@ -85,6 +85,20 @@
   }
 }
 
+// Extra content below the card (log effects): above the backdrop, fades in with the buttons
+.mb-card-zoom-footer {
+  position: relative;
+  width: min(100%, 360px);
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity @mb-card-zoom-duration ease;
+}
+
+.mb-card-zoom--open .mb-card-zoom-footer {
+  opacity: 1;
+}
+
 // Arrows outside, Play/Close in the middle; fixed width so the arrows stay in the same place with and without "Play card"
 .mb-card-zoom-actions {
   position: relative;

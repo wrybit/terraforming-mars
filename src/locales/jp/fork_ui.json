@@ -1003,5 +1003,15 @@
   "placement bonus": "配置ボーナス",
   "adjacency bonus": "隣接ボーナス",
   "adjacent oceans": "隣接する海洋",
-  "for the trade": "交易のため"
+  "for the trade": "交易のため",
+  "Affects me": "自分に関係",
+  "Search or filter …": "検索またはフィルター …",
+  "Me": "自分",
+  "Gains": "獲得",
+  "Losses": "損失",
+  "Card actions": "カードアクション",
+  "Event cards": "イベントカード",
+  "Automated cards": "自動カード",
+  "Animals": "動物",
+  "Special tile": "特殊タイル"
 }

@@ -440,5 +440,15 @@
   "placement bonus": "Platzierungsbonus",
   "adjacency bonus": "Nachbarschaftsbonus",
   "adjacent oceans": "angrenzende Ozeane",
-  "for the trade": "für den Handel"
+  "for the trade": "für den Handel",
+  "Affects me": "Betrifft mich",
+  "Search or filter …": "Suchen oder filtern …",
+  "Me": "Ich",
+  "Gains": "Gewinne",
+  "Losses": "Verluste",
+  "Card actions": "Kartenaktionen",
+  "Event cards": "Ereigniskarten",
+  "Automated cards": "Automatische Karten",
+  "Animals": "Tiere",
+  "Special tile": "Sonderplättchen"
 }

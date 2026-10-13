@@ -12,6 +12,10 @@
         </div>
       </div>
     </div>
+    <!-- Optional extra content below the card (log: what the action changed) -->
+    <div v-if="$slots.footer" class="mb-card-zoom-footer">
+      <slot name="footer"></slot>
+    </div>
     <!-- Previous/next at the edges, Play and Close in between; if a neighbor is missing, its slot stays empty -->
     <div class="mb-card-zoom-actions">
       <button type="button" class="mb-card-zoom-step" :class="{'mb-card-zoom-step--hidden': !hasPrevious}" :disabled="!hasPrevious"

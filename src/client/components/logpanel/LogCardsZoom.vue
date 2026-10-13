@@ -7,6 +7,10 @@
         <GlobalEvent v-else-if="items[slide].kind === 'globalEvent'" :globalEventName="items[slide].name as GlobalEventName" type="prior" :showIcons="false"/>
         <Colony v-else :colony="simpleColonyModel(items[slide].name as ColonyName)"/>
       </template>
+      <!-- What the action changed, like the box under the hover preview on desktop -->
+      <template v-if="hasActionSummary(action)" #footer>
+        <LogActionEffects :action="action!" :players="players"/>
+      </template>
     </MobileCardZoom>
   </Teleport>
 </template>
@@ -24,6 +28,8 @@ import GlobalEvent from '@/client/components/turmoil/GlobalEvent.vue';
 import Colony from '@/client/components/colonies/Colony.vue';
 import MobileCardZoom from '@/client/components/mobile/MobileCardZoom.vue';
 import {logCardModel} from '@/client/components/logpanel/logCardModel';
+import {LogAction} from '@/client/components/logpanel/logActions';
+import LogActionEffects, {hasActionSummary} from '@/client/components/logpanel/LogActionEffects.vue';
 import {logMessageCards, logMessageColonies, logMessageGlobalEvents} from '@/client/components/logpanel/logMessageContent';
 
 // Mobile view: cards, global events and colonies of a log line as a carousel in the modal
@@ -31,6 +37,8 @@ import {logMessageCards, logMessageColonies, logMessageGlobalEvents} from '@/cli
 const props = defineProps<{
   message: LogMessage;
   players: ReadonlyArray<PublicPlayerModel>;
+  // Grouped action row of the message: its effects show below the cards
+  action?: LogAction;
 }>();
 
 defineEmits<{

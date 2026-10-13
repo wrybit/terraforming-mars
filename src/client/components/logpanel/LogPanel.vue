@@ -19,14 +19,17 @@
       </template>
     </LogGenerationList>
     <div v-docked-tab :class="panelClasses" role="tabpanel">
+      <!-- Filter line above the stream: search field with the active filters as chips, options to fold out -->
+      <LogFilterBar v-show="!showsMilestonesAwards" v-model="logFilter" :players="viewModel.players" :me="viewModel.thisPlayer?.color"/>
       <!-- One continuous stream of all generations; the tabs above follow the scroll position -->
       <div v-show="!showsMilestonesAwards" id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mouseenter="pointerEntered" @mousemove="pointerMoved" @mouseleave="pointerLeft">
-        <section v-for="section in sections" :key="section.generation" class="log-generation" :data-generation="section.generation">
+        <!-- With an active filter, generations without a matching row are hidden -->
+        <section v-for="section in sections" v-show="!filterActive || visibleRows(section).length > 0" :key="section.generation" class="log-generation" :data-generation="section.generation">
           <h3 class="log-generation-title">
             <span class="log-generation-marker" aria-hidden="true">{{ section.generation }}</span>{{ generationTitle(section.generation) }}
           </h3>
           <!-- One row per action (card, action, standard project ...) with its effects; unrecognised messages stay text lines -->
-          <template v-for="(row, rowIndex) in rowsOf(section)" :key="rowIndex">
+          <template v-for="(row, rowIndex) in visibleRows(section)" :key="rowIndex">
             <div v-if="row.type === 'phase'" class="log-phase-line" aria-hidden="true"></div>
             <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel" @click="messageClicked(row.message)" @mouseenter="messageHovered(row.message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
             <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel" @click="messageClicked(row.action.lead, row.action)" @mouseenter="messageHovered(row.action.lead, $event, row.action)" @spaceClicked="$emit('spaceClicked', $event)"/>
@@ -52,7 +55,7 @@
       </button>
     </div>
     <LogMessageInspector ref="messageInspector" :viewModel="viewModel" @pinnedClosed="drawnCardsClosed"/>
-    <LogCardsZoom v-if="zoomedMessage !== undefined" :message="zoomedMessage" :players="viewModel.players" @close="closeZoom"/>
+    <LogCardsZoom v-if="zoomedMessage !== undefined" :message="zoomedMessage" :action="zoomedAction" :players="viewModel.players" @close="closeZoom"/>
   </div>
 </template>
 
@@ -61,7 +64,8 @@
 import {defineComponent, markRaw} from 'vue';
 import {vDockedTab} from '@/client/directives/DockedTab';
 import {vFlashTab} from '@/client/directives/ChangeFlashTab';
-import {translateTextWithParams} from '@/client/directives/i18n';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {LogMessage} from '@/common/logs/LogMessage';
 import {LogMessageType} from '@/common/logs/LogMessageType';
 import {ViewModel} from '@/common/models/PlayerModel';
@@ -72,9 +76,12 @@ import {activeSectionIndex, edgeFadesOf, findScrollContainer, HEADER_SCROLL_GAP,
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogActionRow from '@/client/components/logpanel/LogActionRow.vue';
 import {groupLogMessages, LogAction, LogRow} from '@/client/components/logpanel/logActions';
+import {hasActionSummary} from '@/client/components/logpanel/LogActionEffects.vue';
 import {Color} from '@/common/Color';
 import {CardName} from '@/common/cards/CardName';
 import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
+import LogFilterBar from '@/client/components/logpanel/LogFilterBar.vue';
+import {isFilterActive, LogFilter, rowMatches} from '@/client/components/logpanel/logFilter';
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
 import LogCardsZoom from '@/client/components/logpanel/LogCardsZoom.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
@@ -108,6 +115,10 @@ type ViewState = {
 // The game view remounts on every update (App.vue bumps its key): the reading position survives here
 let viewState: ViewState | undefined;
 
+// The filter survives the remounts too (per participant)
+let savedFilter: {id: string, filter: LogFilter} | undefined;
+const NO_FILTER: LogFilter = {options: [], text: ''};
+
 type Refs = {
   root: HTMLElement | undefined;
   scrollBody: HTMLElement | undefined;
@@ -137,12 +148,16 @@ type LogPanelModel = {
   following: boolean,
   // Log line whose cards are currently shown in the carousel modal (only with zoomCarousel)
   zoomedMessage: LogMessage | undefined,
+  // Grouped action row of the zoomed message (effects below the cards)
+  zoomedAction: LogAction | undefined,
   // View before a milestone/award choice switched the box to the table; restored when the choice closes
   viewBeforeFocus: LogView | undefined,
   // Newly drawn cards are shown by themselves (drawnCards.ts): the view before, restored once they close
   viewBeforeDrawnCards: LogView | undefined,
   // The carousel (mobile) shows newly drawn cards, not a line the reader tapped
   zoomShowsDrawnCards: boolean,
+  // Filter of the stream (LogFilterBar.vue)
+  logFilter: LogFilter,
   // Timers and observers of this instance; raw, so they don't trigger re-renders
   internals: Internals,
 };
@@ -194,9 +209,11 @@ export default defineComponent({
       showScrollToBottomButton: false,
       following: true,
       zoomedMessage: undefined,
+      zoomedAction: undefined,
       viewBeforeFocus: undefined,
       viewBeforeDrawnCards: undefined,
       zoomShowsDrawnCards: false,
+      logFilter: savedFilter !== undefined && savedFilter.id === this.viewModel.id ? savedFilter.filter : NO_FILTER,
       internals: markRaw({programmaticScrollTimer: undefined, scrollFrame: undefined, scrollFramePending: false, resizeObserver: undefined, lastHeight: 0, pointerOverLog: false, newEntriesWhileHovered: false}),
     };
   },
@@ -205,6 +222,7 @@ export default defineComponent({
     flashTab: vFlashTab,
   },
   components: {
+    LogFilterBar,
     LogMessageComponent,
     LogActionRow,
     LogMessageInspector,
@@ -224,8 +242,10 @@ export default defineComponent({
     },
     messageClicked(message: LogMessage, action?: LogAction) {
       if (this.zoomCarousel) {
-        if (logMessageItemCount(message) > 0) {
+        // Cards of the row as a carousel, with what the action changed below them
+        if (logMessageItemCount(message) > 0 || hasActionSummary(action)) {
           this.zoomedMessage = message;
+          this.zoomedAction = action;
         }
         return;
       }
@@ -282,6 +302,30 @@ export default defineComponent({
       }
       return rows;
     },
+    // Rows of a generation that pass the filter
+    visibleRows(section: GenerationLog): Array<LogRow> {
+      const rows = this.rowsOf(section);
+      if (!this.filterActive) {
+        return rows;
+      }
+      const me = this.viewModel.thisPlayer?.color;
+      return rows.filter((row) => rowMatches(row, this.logFilter, me, this.rowSearchText));
+    },
+    // Text the free-text search looks in: player, card, milestone/colony/party names and text lines as shown
+    rowSearchText(row: LogRow): string {
+      const playerName = (color: string | undefined) => this.viewModel.players.find((player) => player.color === color)?.name ?? '';
+      if (row.type === 'action') {
+        const action = row.action;
+        const names = [action.card, action.name, ...action.others.map((other) => playerName(other.player))].filter((name) => name !== undefined);
+        return [playerName(action.player), ...names.map((name) => translateText(String(name).split(':')[0]))].join(' ');
+      }
+      if (row.type === 'message') {
+        const data = row.message.data.map((datum) => datum.type === LogMessageDataType.PLAYER ? playerName(String(datum.value)) :
+          Array.isArray(datum.value) ? datum.value.map((value) => translateText(String(value))).join(' ') : translateText(String(datum.value)));
+        return [translateText(row.message.message), ...data].join(' ');
+      }
+      return '';
+    },
     // All message indexes of a row, space separated: data-log-row~="gen-index" finds any of them
     rowKey(section: GenerationLog, row: LogRow): string {
       return row.indexes.map((index) => section.generation + '-' + index).join(' ');
@@ -295,6 +339,7 @@ export default defineComponent({
     },
     closeZoom(): void {
       this.zoomedMessage = undefined;
+      this.zoomedAction = undefined;
       if (this.zoomShowsDrawnCards) {
         this.zoomShowsDrawnCards = false;
         this.$emit('drawnCardsClosed');
@@ -567,6 +612,9 @@ export default defineComponent({
     milestonesAwardsTitle(): string {
       return milestonesAwardsLabel((text) => this.$t(text));
     },
+    filterActive(): boolean {
+      return isFilterActive(this.logFilter);
+    },
     panelClasses(): Array<string> {
       const tone = this.showsMilestonesAwards ? ['or-tab-panel--tone-milestones', 'log-panel--milestones'] : ['or-tab-panel--view'];
       return ['panel', 'log-panel', 'or-tab-panel', ...tone];
@@ -579,6 +627,16 @@ export default defineComponent({
     },
   },
   watch: {
+    // Keep the filter for the next remount; changing it starts at the newest matching entries
+    logFilter(filter: LogFilter) {
+      savedFilter = {id: this.viewModel.id, filter};
+      // In the box (desktop) jump to the newest match; on mobile the page scrolls, it stays where the reader is
+      this.$nextTick(() => {
+        if (this.scrollContainer() !== window) {
+          this.showLatestLogs();
+        }
+      });
+    },
     milestonesAwardsFocused(focused: boolean): void {
       this.applyMilestonesAwardsFocus(focused);
     },

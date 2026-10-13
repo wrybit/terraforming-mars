@@ -1008,5 +1008,15 @@
   "placement bonus": "plasseringsbonus",
   "adjacency bonus": "naboskapsbonus",
   "adjacent oceans": "tilstøtende hav",
-  "for the trade": "for handelen"
+  "for the trade": "for handelen",
+  "Affects me": "Gjelder meg",
+  "Search or filter …": "Søk eller filtrer …",
+  "Me": "Meg",
+  "Gains": "Gevinster",
+  "Losses": "Tap",
+  "Card actions": "Korthandlinger",
+  "Event cards": "Hendelseskort",
+  "Automated cards": "Automatiske kort",
+  "Animals": "Dyr",
+  "Special tile": "Spesialbrikke"
 }

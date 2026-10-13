@@ -1575,5 +1575,15 @@
   "placement bonus": "放置奖励",
   "adjacency bonus": "相邻奖励",
   "adjacent oceans": "相邻海洋",
-  "for the trade": "用于贸易"
+  "for the trade": "用于贸易",
+  "Affects me": "与我相关",
+  "Search or filter …": "搜索或筛选 …",
+  "Me": "我",
+  "Gains": "获得",
+  "Losses": "损失",
+  "Card actions": "卡牌行动",
+  "Event cards": "事件卡",
+  "Automated cards": "自动卡",
+  "Animals": "动物",
+  "Special tile": "特殊板块"
 }

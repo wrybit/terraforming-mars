@@ -43,7 +43,7 @@ export default defineComponent({
       required: true,
     },
     players: {
-      type: Array as PropType<Array<PublicPlayerModel>>,
+      type: Array as PropType<ReadonlyArray<PublicPlayerModel>>,
       required: true,
     },
   },

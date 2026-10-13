@@ -720,3 +720,318 @@ each(@players, {
 .log-action-effects-player--all {
   background: #555b70;
 }
+
+// ---------- Filter line above the stream (LogFilterBar.vue) ----------
+// One line: search field with the active filters as chips, button to fold out the options.
+// Within a group the gaps are small, between groups larger (proximity), so the groups read as units
+.log-filter {
+  flex: none;
+  padding: 2px 4px 6px;
+}
+
+.log-filter-bar {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+// Chips wrap inside the field when narrow (the field grows), so no active filter disappears
+.log-filter-field {
+  flex: 1;
+  min-width: 0;
+  min-height: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px 3px 28px;
+  border: 1px solid #3a3f55;
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.25) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='%238a90a0' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E") no-repeat 8px 8px;
+  cursor: text;
+
+  &:focus-within {
+    border-color: #5a6080;
+  }
+}
+
+.log-filter-input {
+  flex: 1;
+  min-width: 90px;
+  height: 24px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #eee;
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
+}
+
+.log-filter-chip {
+  flex: none;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 2px 0 7px;
+  border-radius: 12px;
+  background: #2c3146;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.log-filter-chip--me {
+  background: #2f7cf6;
+}
+
+.log-filter-chip--gain {
+  background: rgba(34, 150, 64, 0.85);
+}
+
+.log-filter-chip--loss {
+  background: rgba(214, 48, 34, 0.85);
+}
+
+.log-filter-chip-remove {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+  }
+}
+
+.log-filter-toggle {
+  flex: none;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border: 1px solid #3a3f55;
+  border-radius: 7px;
+  background: transparent;
+  color: #c8ccd8;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.log-filter-toggle--open {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #5a6080;
+}
+
+.log-filter-toggle-icon {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.log-filter-toggle-caret {
+  transition: transform 0.15s;
+}
+
+.log-filter-toggle--open .log-filter-toggle-caret {
+  transform: rotate(180deg);
+}
+
+// Narrow: only the funnel, so the field keeps its room
+@media (max-width: 520px) {
+  .log-filter-toggle-text {
+    display: none;
+  }
+}
+
+// Folded out: all options in one line; when narrow it wraps in whole groups
+.log-filter-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 0;
+  padding-top: 6px;
+}
+
+.log-filter-group {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  margin-right: 9px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.log-filter-option {
+  flex: none;
+  height: 26px;
+  min-width: 19px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #c8ccd8;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .log-effect-icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.log-filter-option--on {
+  background: rgba(47, 124, 246, 0.22);
+  border-color: rgba(47, 124, 246, 0.75);
+}
+
+// Players as coloured circles with their initial; not selected = dimmed
+.log-filter-option--player {
+  width: 23px;
+  min-width: 23px;
+  height: 23px;
+  margin-right: 1px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  opacity: 0.45;
+
+  &.log-filter-option--on {
+    opacity: 1;
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #fff;
+  }
+}
+
+.log-filter-option--me {
+  padding: 0 6px;
+  border-color: #3a3f55;
+  border-radius: 13px;
+  font-size: 13px;
+}
+
+.log-filter-sign {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.log-filter-chip .log-filter-sign {
+  font-size: 15px;
+}
+
+.log-filter-arrow.log-row-action {
+  width: 18px;
+  height: 12px;
+}
+
+.log-filter-trophy {
+  width: 15px;
+  height: 15px;
+  fill: #e3c06a;
+}
+
+// Card type: small card in its type colour with a sign; standard projects lie across like in the game
+.log-filter-card {
+  flex: none;
+  position: relative;
+  display: inline-block;
+  width: 13px;
+  height: 17px;
+  border-radius: 2.5px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+
+  i {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    display: block;
+  }
+}
+
+.log-filter-card--active {
+  background: #208cdf;
+
+  // Red action arrow as on the cards, with a fine light hairline for contrast on the blue
+  i {
+    width: 11px;
+    height: 8px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 14'%3E%3Cpath d='M1.5 4.5h10V1l9 6-9 6V9.5h-10z' fill='%23ff3b1f' stroke='%23fff' stroke-opacity='.5' stroke-width='1' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+}
+
+.log-filter-card--event {
+  background: #ec6a13;
+
+  i {
+    width: 9px;
+    height: 9px;
+    background: url("./assets/tags/event.png") center / contain no-repeat;
+  }
+}
+
+.log-filter-card--automated {
+  background: #089108;
+
+  i {
+    width: 7px;
+    height: 7px;
+    border: 1.5px solid #fff;
+    border-radius: 50%;
+  }
+}
+
+.log-filter-card--project {
+  width: 18px;
+  height: 12px;
+  background: #8f95a3;
+
+  i {
+    width: 8px;
+    height: 8px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 21h18v-2H3zm2-4h3V9H5zm5.5 0h3V4h-3zM16 17h3v-6h-3z' fill='%23fff'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+}
+
+// Player colour for the name circles and chips (the option/chip base sets its own background)
+each(@players, {
+  @c: ~"player_@{value}";
+
+  .log-filter-option--player.player_bg_color_@{value},
+  .log-filter-chip.player_bg_color_@{value} {
+    background: @@c;
+  }
+});

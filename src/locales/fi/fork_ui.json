@@ -655,5 +655,15 @@
   "placement bonus": "sijoitusbonus",
   "adjacency bonus": "vierekkäisyysbonus",
   "adjacent oceans": "viereiset meret",
-  "for the trade": "kaupankäyntiin"
+  "for the trade": "kaupankäyntiin",
+  "Affects me": "Koskee minua",
+  "Search or filter …": "Hae tai suodata …",
+  "Me": "Minä",
+  "Gains": "Saadut",
+  "Losses": "Menetykset",
+  "Card actions": "Korttien toiminnot",
+  "Event cards": "Tapahtumakortit",
+  "Automated cards": "Automaattiset kortit",
+  "Animals": "Eläimet",
+  "Special tile": "Erikoislaatta"
 }

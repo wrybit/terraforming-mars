@@ -801,5 +801,15 @@
   "placement bonus": "бонус розміщення",
   "adjacency bonus": "бонус сусідства",
   "adjacent oceans": "сусідні океани",
-  "for the trade": "за торгівлю"
+  "for the trade": "за торгівлю",
+  "Affects me": "Стосується мене",
+  "Search or filter …": "Пошук або фільтр …",
+  "Me": "Я",
+  "Gains": "Отримано",
+  "Losses": "Втрати",
+  "Card actions": "Дії карт",
+  "Event cards": "Карти подій",
+  "Automated cards": "Автоматичні карти",
+  "Animals": "Тварини",
+  "Special tile": "Особлива плитка"
 }

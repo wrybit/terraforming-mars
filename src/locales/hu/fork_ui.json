@@ -824,5 +824,15 @@
   "placement bonus": "lerakási bónusz",
   "adjacency bonus": "szomszédsági bónusz",
   "adjacent oceans": "szomszédos óceánok",
-  "for the trade": "a kereskedésért"
+  "for the trade": "a kereskedésért",
+  "Affects me": "Engem érint",
+  "Search or filter …": "Keresés vagy szűrés …",
+  "Me": "Én",
+  "Gains": "Nyereség",
+  "Losses": "Veszteség",
+  "Card actions": "Kártyaakciók",
+  "Event cards": "Eseménykártyák",
+  "Automated cards": "Automatikus kártyák",
+  "Animals": "Állatok",
+  "Special tile": "Különleges lapka"
 }

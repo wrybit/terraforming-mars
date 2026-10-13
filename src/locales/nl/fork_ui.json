@@ -1269,5 +1269,15 @@
   "placement bonus": "plaatsingsbonus",
   "adjacency bonus": "nabijheidsbonus",
   "adjacent oceans": "aangrenzende oceanen",
-  "for the trade": "voor de handel"
+  "for the trade": "voor de handel",
+  "Affects me": "Betreft mij",
+  "Search or filter …": "Zoeken of filteren …",
+  "Me": "Ik",
+  "Gains": "Winst",
+  "Losses": "Verlies",
+  "Card actions": "Kaartacties",
+  "Event cards": "Gebeurteniskaarten",
+  "Automated cards": "Automatische kaarten",
+  "Animals": "Dieren",
+  "Special tile": "Speciale tegel"
 }

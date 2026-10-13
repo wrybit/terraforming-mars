@@ -1459,5 +1459,15 @@
   "placement bonus": "бонус размещения",
   "adjacency bonus": "бонус соседства",
   "adjacent oceans": "соседние океаны",
-  "for the trade": "за торговлю"
+  "for the trade": "за торговлю",
+  "Affects me": "Касается меня",
+  "Search or filter …": "Поиск или фильтр …",
+  "Me": "Я",
+  "Gains": "Получено",
+  "Losses": "Потери",
+  "Card actions": "Действия карт",
+  "Event cards": "Карты событий",
+  "Automated cards": "Автоматические карты",
+  "Animals": "Животные",
+  "Special tile": "Особый тайл"
 }

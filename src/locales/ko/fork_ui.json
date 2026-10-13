@@ -884,5 +884,15 @@
   "placement bonus": "배치 보너스",
   "adjacency bonus": "인접 보너스",
   "adjacent oceans": "인접한 바다",
-  "for the trade": "무역 비용"
+  "for the trade": "무역 비용",
+  "Affects me": "나와 관련",
+  "Search or filter …": "검색 또는 필터 …",
+  "Me": "나",
+  "Gains": "획득",
+  "Losses": "손실",
+  "Card actions": "카드 행동",
+  "Event cards": "이벤트 카드",
+  "Automated cards": "자동 카드",
+  "Animals": "동물",
+  "Special tile": "특수 타일"
 }
