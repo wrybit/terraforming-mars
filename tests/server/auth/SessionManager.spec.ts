@@ -69,6 +69,20 @@ describe('SessionManager', () => {
     expect(sessionManager.get(sessionId)).is.undefined;
   });
 
+  it('expire ignores unknown session ids', async () => {
+    const sessionManager = new SessionManager(fakeClock, database, /* expiration_time_millis= */1_000);
+    await sessionManager.initialize();
+    const deleted: Array<string> = [];
+    database.deleteSession = (sessionId) => {
+      deleted.push(sessionId);
+      return Promise.resolve();
+    };
+
+    // The id comes from a cookie: only ids this server issued may reach the database
+    await sessionManager.expire('../g123');
+    expect(deleted).is.empty;
+  });
+
   it('expire-by-clock', async () => {
     const sessionManager = new SessionManager(
       fakeClock,

@@ -10,6 +10,17 @@ import {toID} from '../../common/utils/utils';
 const path = require('path');
 const defaultDbFolder = path.resolve(process.cwd(), './db/files');
 
+/**
+ * Ids become file names here, and some arrive from outside (cookies, request bodies).
+ * Letters, digits, "-" and "_" only, so an id can never point into another folder.
+ */
+function fileNamePart(id: string): string {
+  if (!/^[A-Za-z0-9_-]+$/.test(id)) {
+    throw new Error('Invalid id ' + JSON.stringify(id));
+  }
+  return id;
+}
+
 export class LocalFilesystem implements IDatabase {
   protected readonly dbFolder: string;
   private readonly historyFolder: string;
@@ -36,20 +47,20 @@ export class LocalFilesystem implements IDatabase {
   }
 
   private filename(gameId: GameId): string {
-    return path.resolve(this.dbFolder, `${gameId}.json`);
+    return path.resolve(this.dbFolder, `${fileNamePart(gameId)}.json`);
   }
 
   private historyFilename(gameId: GameId, saveId: number) {
     const saveIdString = saveId.toString().padStart(5, '0');
-    return path.resolve(this.historyFolder, `${gameId}-${saveIdString}.json`);
+    return path.resolve(this.historyFolder, `${fileNamePart(gameId)}-${saveIdString}.json`);
   }
 
   private completedFilename(gameId: GameId) {
-    return path.resolve(this.completedFolder, `${gameId}.json`);
+    return path.resolve(this.completedFolder, `${fileNamePart(gameId)}.json`);
   }
 
   private sessionFilename(sessionId: SessionId) {
-    return path.resolve(this.sessionsFolder, `${sessionId}.json`);
+    return path.resolve(this.sessionsFolder, `${fileNamePart(sessionId)}.json`);
   }
 
   saveGame(game: IGame): Promise<void> {

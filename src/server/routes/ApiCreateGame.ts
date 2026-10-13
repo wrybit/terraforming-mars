@@ -182,6 +182,11 @@ export class ApiCreateGame extends Handler {
       if (aiBlockers.length > 0 && gameReq.players.some((p) => isAiLevel(p.aiLevel))) {
         throw RouteError.badRequest(`AI players are not available with: ${aiBlockers.join(', ')}`);
       }
+      // A game of AI players only plays itself without pause and keeps the server busy for everyone.
+      // The create form always has at least one human; only an admin may start such a game (e.g. for tests).
+      if (gameReq.players.every((p) => isAiLevel(p.aiLevel)) && !this.isServerIdValid(ctx)) {
+        throw RouteError.badRequest('A game needs at least one human player');
+      }
       // TODO(kberg): Remove once Amazonis Planitia is ready to play. Until then, only development servers create it.
       if (gameReq.board === BoardName.AMAZONIS_PLANITIA && isProduction()) {
         throw RouteError.badRequest('Amazonis Planitia is not available yet.');

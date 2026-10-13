@@ -25,4 +25,15 @@ describe('requestProcessor', () => {
     expect(res.content.length).greaterThan(0);
     expect(res.getHeader('Content-Length')).eq(res.content.length);
   });
+
+  it('sends the security headers with every response', async () => {
+    const req = new MockRequest();
+    const res = new MockResponse();
+    req.url = '/';
+    await processRequest(req, res);
+
+    expect(res.getHeader('X-Content-Type-Options')).eq('nosniff');
+    expect(res.getHeader('X-Frame-Options')).eq('SAMEORIGIN');
+    expect(res.getHeader('Referrer-Policy')).eq('same-origin');
+  });
 });

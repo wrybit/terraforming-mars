@@ -90,7 +90,11 @@ export class SessionManager implements ISessionManager {
   }
 
   async expire(sessionid: SessionId): Promise<void> {
-    this.sessions.delete(sessionid);
+    // Only sessions this server knows: the id comes straight from a cookie, and with the file database
+    // an invented one like "../g123" would otherwise name another file to delete
+    if (!this.sessions.delete(sessionid)) {
+      return;
+    }
     await this.database.deleteSession(sessionid);
   }
 

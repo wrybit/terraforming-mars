@@ -55,7 +55,8 @@ import {newIpTracker} from './IPTracker';
 import {SessionManager} from './auth/SessionManager';
 import * as authcookies from './auth/authcookies';
 import {DiscordUser} from './auth/discord';
-import {getHerokuIpAddress} from './heroku';
+import {clientAddress} from './clientAddress';
+import {setSecurityHeaders} from './securityHeaders';
 import * as responses from './responses';
 import {EndGameLog} from '../routes/EndGameLog';
 import {UrlParams} from '../routes/UrlParams';
@@ -175,18 +176,7 @@ for (const extension of SERVER_EXTENSIONS) {
 }
 
 function getIPAddress(req: Request): string {
-  const herokuIpAddress = getHerokuIpAddress(req);
-  if (herokuIpAddress !== undefined) {
-    return herokuIpAddress;
-  }
-  const socketIpAddress = req.socket.address();
-  if (typeof socketIpAddress === 'object' && 'address' in socketIpAddress) {
-    return '!' + socketIpAddress.address + '!';
-  }
-  if (typeof socketIpAddress === 'string') {
-    return socketIpAddress;
-  }
-  return '';
+  return clientAddress(req);
 }
 
 function getHandler(pathname: string): IHandler | undefined {
@@ -222,6 +212,7 @@ export async function processRequest(req: Request, res: Response): Promise<void>
   const start = process.hrtime.bigint();
   let metricsPathname = '_unknown_';
   try {
+    setSecurityHeaders(res);
     const ipAddress = getIPAddress(req);
     ipTracker.add(ipAddress);
     if (ipBlocklist.isBlocked(ipAddress)) {

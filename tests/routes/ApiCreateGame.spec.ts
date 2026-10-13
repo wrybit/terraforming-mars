@@ -266,6 +266,16 @@ describe('ApiCreateGame', () => {
     expect(res.content).contains('Escape Velocity values cannot be negative');
   });
 
+  it('rejects a game of AI players only', async () => {
+    // Such a game plays itself without pause and would keep the server busy for everyone
+    await postConfig({...newGameConfigForTest(), players: [
+      {name: 'a', color: 'red', aiLevel: 'easy'},
+      {name: 'b', color: 'blue', aiLevel: 'hard'},
+    ]});
+    expect(res.statusCode).eq(statusCode.badRequest);
+    expect(res.content).contains('at least one human player');
+  });
+
   it('rejects Amazonis Planitia on a production server', async () => {
     const nodeEnv = process.env.NODE_ENV;
     process.env.NODE_ENV = 'production';

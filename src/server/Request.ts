@@ -34,6 +34,8 @@ export type Request = Pick<http.IncomingMessage, 'headers' | 'method' | 'url'> &
    */
   socket: {
     address(): string | {} | net.AddressInfo;
+    /** The address of the other end: the client, or the proxy in front of the server. */
+    remoteAddress?: string;
   }
 };
 

@@ -10,6 +10,7 @@ export class MockRequest implements Request {
   public emitter = new EventEmitter();
   public socket = {
     address: () => '127.0.0.1',
+    remoteAddress: '127.0.0.1',
   };
   public once(type: 'end' | 'error' | 'close', cb: (err?: Error) => void): void {
     this.emitter.once(type, cb);
