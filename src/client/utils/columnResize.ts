@@ -24,12 +24,12 @@ export const PLAYER_HOME_SPLIT: ColumnSplit = {
   maxShare: 60,
 };
 
-// Default: the board at about its natural size (≈ 740px of a 1440px window), as before the handle existed
+// Default (and double click): both columns equally wide
 export const GAME_END_SPLIT: ColumnSplit = {
   storageKey: 'game_end_side_share',
   mainVariable: '--game-end-main-share',
   sideVariable: '--game-end-side-share',
-  defaultShare: 54,
+  defaultShare: 50,
   minShare: 30,
   maxShare: 70,
 };

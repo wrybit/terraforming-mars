@@ -17,6 +17,7 @@
 import {defineComponent, PropType} from 'vue';
 import {vProximityHandle} from '@/client/directives/ProximityHandle';
 import {ColumnSplit, KEYBOARD_STEP, applyShare, loadShare, setShare, shareLabel, startColumnResize} from '@/client/utils/columnResize';
+import {tween} from '@/client/utils/tween';
 
 export default defineComponent({
   name: 'ColumnResizeHandle',
@@ -33,6 +34,8 @@ export default defineComponent({
     return {
       // Share of the right column in percent
       share: loadShare(this.split),
+      // Stops a running double-click animation (dragging or keys take over)
+      stopAnimation: undefined as (() => void) | undefined,
     };
   },
   computed: {
@@ -47,12 +50,16 @@ export default defineComponent({
       applyShare(container, this.split, this.share);
     }
   },
+  beforeUnmount() {
+    this.stopAnimation?.();
+  },
   methods: {
     // The column grid is the parent of the handle
     container(): HTMLElement | undefined {
       return (this.$el as HTMLElement).parentElement ?? undefined;
     },
     startResize(event: PointerEvent) {
+      this.stopAnimation?.();
       const container = this.container();
       if (container !== undefined) {
         startColumnResize(event, container, this.split, (share) => {
@@ -60,14 +67,28 @@ export default defineComponent({
         });
       }
     },
+    // Glides back to the default split instead of jumping; saved at the end
     resetResize() {
-      this.setTo(this.split.defaultShare);
+      const container = this.container();
+      if (container === undefined) {
+        return;
+      }
+      this.stopAnimation?.();
+      const target = this.split.defaultShare;
+      this.stopAnimation = tween(this.share, target, (share) => {
+        applyShare(container, this.split, share);
+        this.share = share;
+      }, () => {
+        this.stopAnimation = undefined;
+        this.setTo(target);
+      });
     },
     // Left arrow key moves the handle left, the right column gets wider
     nudgeResize(direction: number) {
       this.setTo(this.share + direction * KEYBOARD_STEP);
     },
     setTo(share: number) {
+      this.stopAnimation?.();
       const container = this.container();
       if (container !== undefined) {
         this.share = setShare(container, this.split, share);

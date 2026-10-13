@@ -15,12 +15,17 @@
 // Overhang of the outer space columns beside .board-cont: RING_FRAME in mobileBoardZoom.ts
 @game-end-board-overhang-left: 36px;
 @game-end-board-overhang-right: 34px;
-// Default split of the columns: GAME_END_SPLIT in columnResize.ts (54 % right ≈ the board at natural size at 1440px)
-@game-end-main-share: 46fr;
-@game-end-side-share: 54fr;
+// Default split of the columns: GAME_END_SPLIT in columnResize.ts
+@game-end-main-share: 50fr;
+@game-end-side-share: 50fr;
 @game-end-chart-height: 300px; // default, the drag handle below the charts changes it (gameEndResize.ts)
 @game-end-sticky-top: 10px; // column handle stays in view while scrolling
-@game-end-log-min-height: 280px; // generation tabs + the former fixed log height (240px, log.less)
+@game-end-log-min-height: 220px; // generation tabs, search and a few log lines; the log takes all room above that
+@game-end-fixed-chart-height: 160px; // window-high layout: lower charts by default, so the board keeps room
+@game-end-solo-image-max-height: 34vh;
+@game-end-details-min-height: 140px; // victory point details stay usable in low windows
+@game-end-header-height: 40px; // height of the menu button (PageToolbar), the other header elements follow it
+@game-end-winner-font-size: 26px;
 // Total points: largest number on the page, on its own dark surface
 @game-end-total-font-size: 38px;
 @game-end-total-background: rgba(0, 0, 0, 0.38);
@@ -456,8 +461,80 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
 
   // Drag handles like in the game view (resize_handle.less); not in the touch layout (mobile.less has its own column flow)
   html:not(.tm-mobile) #game-end {
+    // Page as high as the window, like the game view (player_home_fixed.less): the page does not scroll,
+    // the victory point details and the log scroll inside their cards. If the window is too low for the
+    // minimum heights, the content runs over and the page scrolls as before.
+    box-sizing: border-box;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .game-end-hero {
+      flex: none;
+    }
+
+    .game-end-columns {
+      flex: 1 1 0;
+      min-height: 0;
+      grid-template-rows: minmax(0, 1fr);
+    }
+
+    .game-end-columns__main,
+    .game-end-columns__side {
+      min-height: 0;
+
+      // Cards keep their size; only the victory point details and the log give way (flex basis 0 below)
+      > * {
+        flex-shrink: 0;
+      }
+    }
+
+    .game-end-charts .victory-point-chart-container {
+      height: var(--game-end-chart-height, @game-end-fixed-chart-height);
+    }
+
+    // Solo picture at most a third of the window high (whole picture, centered on the card's ground colour),
+    // so the table and the details still fit beside the board
+    .game-end-solo__image {
+      width: auto;
+      max-width: 100%;
+      max-height: @game-end-solo-image-max-height;
+      margin: 0 auto;
+      // Narrower than the card: soft side edges into the ground colour, like the fade at the bottom
+      mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+    }
+
+    // Header compact, the room goes to the cards: buttons as high as the menu button, winner line smaller
+    .game-end-winer-announcement {
+      font-size: @game-end-winner-font-size;
+      line-height: @game-end-header-height;
+    }
+
+    .btn.btn-lg.game-end-nav-button {
+      min-height: @game-end-header-height;
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    // Victory point details: fill the rest of the left column and scroll inside the card
+    .game-end-box--fill {
+      flex: 1 1 0;
+      min-height: @game-end-details-min-height;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-end-details {
+      flex: 1 1 0;
+      min-height: 0;
+      overflow-y: auto;
+      align-content: start;
+    }
+
+    // As high as the columns instead of the window (the page no longer scrolls)
     .game-end-columns__resizer {
       .column-resize-handle-shown(@game-end-sticky-top);
+      height: auto;
     }
 
     // Between two boxes of a column: together with the flex gaps above and below exactly the column gap,

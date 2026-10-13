@@ -19,6 +19,7 @@ import {loadStoredNumber, saveStoredNumber} from '@/client/utils/layoutStorage';
 import {playersCardTarget} from '@/client/utils/playersCardFit';
 import {marsCardTarget} from '@/client/utils/rightColumnFit';
 import {boardTarget, chartTarget, observeBoardFit, tableTarget} from '@/client/utils/gameEndResize';
+import {tween} from '@/client/utils/tween';
 
 // Which card the handle resizes: game view – player table (left), Mars (right);
 // results page – victory point table, board, charts
@@ -94,6 +95,8 @@ export default defineComponent({
   data() {
     return {
       stopObserving: undefined as (() => void) | undefined,
+      // Stops a running double-click animation (dragging or keys take over)
+      stopAnimation: undefined as (() => void) | undefined,
     };
   },
   mounted() {
@@ -107,6 +110,7 @@ export default defineComponent({
   },
   beforeUnmount() {
     this.stopObserving?.();
+    this.stopAnimation?.();
   },
   methods: {
     card(): HTMLElement | undefined {
@@ -132,17 +136,32 @@ export default defineComponent({
       saveStoredNumber(KINDS[this.kind].storageKey, height);
     },
     startResize(event: PointerEvent) {
+      this.stopAnimation?.();
       const target = this.target();
       if (target !== undefined) {
         startRowResize(event, target, (height) => this.save(height));
       }
     },
+    // Glides to the default height instead of jumping: measure the default once, then animate towards it
     resetResize() {
-      this.target()?.apply(undefined);
+      const target = this.target();
+      if (target === undefined) {
+        return;
+      }
+      this.stopAnimation?.();
       this.save(undefined);
+      const start = target.current();
+      target.apply(undefined);
+      const end = target.current();
+      target.apply(start);
+      this.stopAnimation = tween(start, end, (height) => target.apply(height), () => {
+        this.stopAnimation = undefined;
+        target.apply(undefined);
+      });
     },
     // Up arrow moves the handle up, the card gets smaller
     nudgeResize(direction: number) {
+      this.stopAnimation?.();
       const target = this.target();
       if (target !== undefined) {
         const height = clampHeight(target.current() + direction * KEYBOARD_ROW_STEP, target.limits());

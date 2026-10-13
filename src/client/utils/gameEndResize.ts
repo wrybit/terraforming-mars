@@ -15,9 +15,12 @@ export const MIN_BOARD_ZOOM = 0.5;
 export const MAX_BOARD_ZOOM = 1.6;
 
 export const CHART_HEIGHT_VARIABLE = '--game-end-chart-height';
-export const CHART_HEIGHT_LIMITS = {min: 180, max: 700};
+export const CHART_HEIGHT_LIMITS = {min: 120, max: 700};
 
 const BOARD_SELECTOR = '.board-cont';
+const LOG_SELECTOR = '.game_end_block--log';
+// Below this the fit does not shrink the board further; the column runs over instead (page scrolls)
+const MIN_FIT_ZOOM = 0.3;
 
 export function tableTarget(card: HTMLElement, table: HTMLElement): RowResizeTarget {
   return contentZoomTarget(card, {content: table, zoomVariable: TABLE_ZOOM_VARIABLE, minZoom: MIN_TABLE_ZOOM});
@@ -27,7 +30,8 @@ export function chartTarget(card: HTMLElement, chart: HTMLElement): RowResizeTar
   return contentHeightTarget(card, {content: chart, heightVariable: CHART_HEIGHT_VARIABLE, limits: CHART_HEIGHT_LIMITS});
 }
 
-// Zoom at which the board fills the width of its card
+// Zoom at which the board fills its card: as wide as the column and – in the window-high layout – only as high as
+// the room the charts and the log (at its minimum height) leave
 export function boardFitZoom(card: HTMLElement): number {
   return parseFloat(card.style.getPropertyValue(BOARD_FIT_ZOOM_VARIABLE)) || 1;
 }
@@ -39,31 +43,60 @@ function measureBoardFit(card: HTMLElement, content: HTMLElement): number {
   }
   const cardStyle = getComputedStyle(card);
   const available = card.clientWidth - parseFloat(cardStyle.paddingLeft) - parseFloat(cardStyle.paddingRight);
-  // Natural width: board at zoom 1 (whatever the handle or the fit currently set) plus the room the content keeps
+  // Natural size: board at zoom 1 (whatever the handle or the fit currently set) plus the room the content keeps
   // beside it for the colony spaces and scales (its padding, scaled along)
   const saved = card.style.getPropertyValue(BOARD_ZOOM_VARIABLE);
   card.style.setProperty(BOARD_ZOOM_VARIABLE, '1');
   const contentStyle = getComputedStyle(content);
-  const natural = board.getBoundingClientRect().width + parseFloat(contentStyle.paddingLeft) + parseFloat(contentStyle.paddingRight);
+  const naturalWidth = board.getBoundingClientRect().width + parseFloat(contentStyle.paddingLeft) + parseFloat(contentStyle.paddingRight);
+  const heightRoom = roomForContentHeight(card, content);
+  const naturalHeight = content.getBoundingClientRect().height;
   card.style.setProperty(BOARD_ZOOM_VARIABLE, saved);
-  return natural > 0 ? Math.min(MAX_BOARD_ZOOM, available / natural) : 1;
+  if (naturalWidth <= 0) {
+    return 1;
+  }
+  const widthFit = available / naturalWidth;
+  const heightFit = heightRoom === undefined || naturalHeight <= 0 ? Infinity : Math.max(MIN_FIT_ZOOM, heightRoom / naturalHeight);
+  return Math.min(MAX_BOARD_ZOOM, widthFit, heightFit);
+}
+
+// Height left for the board content in the window-high layout (game_end_columns.less): the column ends at the window,
+// below the card come the charts and the log at its minimum height. undefined in the scrolling layouts
+// (no minimum height on the log there), where the height does not limit the board.
+function roomForContentHeight(card: HTMLElement, content: HTMLElement): number | undefined {
+  const column = card.parentElement;
+  const log = column?.querySelector<HTMLElement>(LOG_SELECTOR);
+  if (column === null || column === undefined || log === null || log === undefined) {
+    return undefined;
+  }
+  const logMinHeight = parseFloat(getComputedStyle(log).minHeight);
+  if (!(logMinHeight > 0)) {
+    return undefined;
+  }
+  const cardRect = card.getBoundingClientRect();
+  // Everything between the card and the log (handles, charts, gaps) keeps its size whatever the board does
+  const between = log.getBoundingClientRect().top - cardRect.bottom;
+  const cardRoom = column.getBoundingClientRect().bottom - logMinHeight - between - cardRect.top;
+  const chrome = cardRect.height - content.getBoundingClientRect().height;
+  return cardRoom - chrome;
 }
 
 export function boardTarget(card: HTMLElement, content: HTMLElement): RowResizeTarget {
   return contentZoomTarget(card, {content, zoomVariable: BOARD_ZOOM_VARIABLE, minZoom: MIN_BOARD_ZOOM, maxZoom: () => boardFitZoom(card)});
 }
 
-// Keeps the fit zoom up to date when the column width changes (window, column handle); onChange lets the handle
-// clamp a chosen zoom to the new width. Returns a cleanup function.
+// Keeps the fit zoom up to date when the room changes (window, column handle, charts handle); onChange lets the
+// handle clamp a chosen zoom to the new room. Returns a cleanup function.
 export function observeBoardFit(card: HTMLElement, content: HTMLElement, onChange: () => void): () => void {
-  let lastWidth = -1;
+  let lastFit = -1;
   const update = () => {
-    const width = card.clientWidth;
-    if (width === lastWidth) {
+    const fit = measureBoardFit(card, content);
+    // Its own resize (new zoom) triggers the observer again: only react to a real change, otherwise it would loop
+    if (Math.abs(fit - lastFit) < 0.001) {
       return;
     }
-    lastWidth = width;
-    card.style.setProperty(BOARD_FIT_ZOOM_VARIABLE, String(measureBoardFit(card, content)));
+    lastFit = fit;
+    card.style.setProperty(BOARD_FIT_ZOOM_VARIABLE, String(fit));
     onChange();
   };
   update();
@@ -72,6 +105,16 @@ export function observeBoardFit(card: HTMLElement, content: HTMLElement, onChang
     return () => {};
   }
   const observer = new ResizeObserver(update);
+  // The card (width), the column (window height) and its other cards (charts height)
   observer.observe(card);
+  const column = card.parentElement;
+  if (column !== null) {
+    observer.observe(column);
+    for (const sibling of Array.from(column.children)) {
+      if (sibling !== card) {
+        observer.observe(sibling);
+      }
+    }
+  }
   return () => observer.disconnect();
 }

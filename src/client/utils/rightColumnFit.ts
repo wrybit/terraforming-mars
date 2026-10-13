@@ -17,8 +17,6 @@ export const BOARD_FIT_ZOOM_VARIABLE = '--board-fit-zoom';
 export const MARS_HEIGHT_ATTRIBUTE = 'data-mars-height';
 const MARS_MIN_HEIGHT_ATTRIBUTE = 'data-mars-min-height';
 const MARS_MAX_HEIGHT_ATTRIBUTE = 'data-mars-max-height';
-// Fired on the column when the requested height changes, so the observer refits
-export const MARS_HEIGHT_EVENT = 'mars-height-change';
 // The drag handle below the Mars card (and so the card's bottom edge) stays between these shares of the window height
 const SPLIT_MIN_SHARE = 0.25;
 const SPLIT_MAX_SHARE = 0.75;
@@ -195,7 +193,8 @@ function fit(column: HTMLElement): void {
   }
 }
 
-// Drag handle target for the Mars card (RowResizeHandle.vue); the column refits on every change
+// Drag handle target for the Mars card (RowResizeHandle.vue); the column refits right away on every change,
+// so the new height can be measured at once (animated reset of the handle)
 export function marsCardTarget(column: HTMLElement, block: HTMLElement): RowResizeTarget {
   return {
     current: () => block.getBoundingClientRect().height,
@@ -211,7 +210,7 @@ export function marsCardTarget(column: HTMLElement, block: HTMLElement): RowResi
       } else {
         column.setAttribute(MARS_HEIGHT_ATTRIBUTE, String(height));
       }
-      column.dispatchEvent(new Event(MARS_HEIGHT_EVENT));
+      fit(column);
     },
   };
 }
@@ -229,7 +228,6 @@ export function observeRightColumnFit(column: HTMLElement): () => void {
     }
   };
   window.addEventListener('resize', schedule);
-  column.addEventListener(MARS_HEIGHT_EVENT, schedule);
   // Width also changes without a window resize (drag handle between the columns); ignore height,
   // fit() changes that itself. Without ResizeObserver (test environment) only observe the window
   let lastWidth = column.getBoundingClientRect().width;
@@ -245,7 +243,6 @@ export function observeRightColumnFit(column: HTMLElement): () => void {
 
   return () => {
     window.removeEventListener('resize', schedule);
-    column.removeEventListener(MARS_HEIGHT_EVENT, schedule);
     resizeObserver?.disconnect();
     if (frame !== undefined) {
       cancelAnimationFrame(frame);
