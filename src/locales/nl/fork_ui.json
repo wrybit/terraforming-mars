@@ -1337,5 +1337,14 @@
   "Idle": "Inactief",
   "Delete all open": "Alle open verwijderen",
   "Delete open older than 12 h": "Open ouder dan 12 u verwijderen",
-  "Delete unplayed": "Ongespeelde verwijderen"
+  "Delete unplayed": "Ongespeelde verwijderen",
+  "Logo name": "Logonaam",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Groot naast het logo op het beheerdashboard. Leeg: de servernaam, anders de hostnaam.",
+  "Logo image": "Logoafbeelding",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Upload een afbeelding of voer het webadres in (PNG, JPEG, WebP; liefst met transparante achtergrond). Leeg: geen afbeelding.",
+  "Image not found": "Afbeelding niet gevonden",
+  "No image": "Geen afbeelding",
+  "Upload": "Uploaden",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} is te groot (${1} KB). Gebruik een afbeelding van maximaal 700 KB, bijv. 512 px breed als WebP of PNG.",
+  "Could not upload the image:": "Afbeelding kon niet worden geüpload:"
 }

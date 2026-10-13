@@ -4,6 +4,7 @@
     <div class="server-dashboard-grid">
       <section class="games-overview-card">
         <h2 v-i18n>Server</h2>
+        <DashboardServerLogo :identity="dashboard.identity"/>
         <DashboardFacts :facts="serverFacts"/>
       </section>
       <section class="games-overview-card">
@@ -83,6 +84,7 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import StatsBarChart from '@/client/components/stats/StatsBarChart.vue';
 import {StatsBar} from '@/client/components/stats/statsTypes';
 import DashboardFacts from '@/client/components/admin/dashboard/DashboardFacts.vue';
+import DashboardServerLogo from '@/client/components/admin/dashboard/DashboardServerLogo.vue';
 import DashboardMeter from '@/client/components/admin/dashboard/DashboardMeter.vue';
 import DashboardDayOverlay from '@/client/components/admin/dashboard/DashboardDayOverlay.vue';
 import DashboardSplitBar from '@/client/components/admin/dashboard/DashboardSplitBar.vue';
@@ -92,7 +94,7 @@ import {formatDateTime, formatDuration, periodBars} from '@/client/components/ad
 
 export default defineComponent({
   name: 'ServerDashboardView',
-  components: {DashboardDayOverlay, DashboardFacts, DashboardMeter, DashboardSplitBar, StatsBarChart},
+  components: {DashboardDayOverlay, DashboardFacts, DashboardMeter, DashboardServerLogo, DashboardSplitBar, StatsBarChart},
   props: {
     dashboard: {type: Object as PropType<ServerDashboard>, required: true},
   },

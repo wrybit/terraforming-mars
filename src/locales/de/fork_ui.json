@@ -511,5 +511,14 @@
   "AI ${0}": "KI ${0}",
   "Delete all open": "Alle offenen löschen",
   "Delete open older than 12 h": "Offene älter als 12 h löschen",
-  "Delete unplayed": "Unbespielte löschen"
+  "Delete unplayed": "Unbespielte löschen",
+  "Logo name": "Logo-Name",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Groß neben dem Logo im Admin-Dashboard. Leer: der Servername, sonst der Hostname.",
+  "Logo image": "Logo-Bild",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Bild hochladen oder seine Webadresse eingeben (PNG, JPEG, WebP; am besten mit transparentem Hintergrund). Leer: kein Bild.",
+  "Image not found": "Bild nicht gefunden",
+  "No image": "Kein Bild",
+  "Upload": "Hochladen",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} ist zu groß (${1} KB). Nimm ein Bild mit höchstens 700 KB, z. B. 512 px breit als WebP oder PNG.",
+  "Could not upload the image:": "Bild konnte nicht hochgeladen werden:"
 }

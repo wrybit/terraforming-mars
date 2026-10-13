@@ -1648,5 +1648,14 @@
   "Idle": "空闲",
   "Delete all open": "删除所有进行中",
   "Delete open older than 12 h": "删除超过12小时的进行中",
-  "Delete unplayed": "删除未进行的"
+  "Delete unplayed": "删除未进行的",
+  "Logo name": "标志名称",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "在管理仪表板上以大字显示在标志旁。留空：服务器名称，否则为主机名。",
+  "Logo image": "标志图片",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "上传图片或输入其网址（PNG、JPEG、WebP；最好使用透明背景）。留空：无图片。",
+  "Image not found": "找不到图片",
+  "No image": "无图片",
+  "Upload": "上传",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} 过大（${1} KB）。请使用不超过 700 KB 的图片，例如宽 512 px 的 WebP 或 PNG。",
+  "Could not upload the image:": "无法上传图片："
 }

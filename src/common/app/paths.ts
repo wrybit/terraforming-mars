@@ -8,6 +8,7 @@ export const paths = {
   API_ADMIN_IMPORT_GAME: 'api/admin/import-game',
   API_ADMIN_LOGOUT: 'api/admin/logout',
   API_ADMIN_RESTART: 'api/admin/restart',
+  API_ADMIN_SERVER_LOGO: 'api/admin/server-logo',
   API_ADMIN_SESSION: 'api/admin/session',
   API_ADMIN_SETTINGS: 'api/admin/settings',
   API_BOARD_PREVIEW: 'api/boardpreview',

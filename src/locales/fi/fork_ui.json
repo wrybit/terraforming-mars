@@ -727,5 +727,14 @@
   "AI ${0}": "Tekoäly ${0}",
   "Delete all open": "Poista kaikki avoimet",
   "Delete open older than 12 h": "Poista yli 12 h vanhat avoimet",
-  "Delete unplayed": "Poista pelaamattomat"
+  "Delete unplayed": "Poista pelaamattomat",
+  "Logo name": "Logon nimi",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Näytetään suurena logon vieressä ylläpidon koontinäytössä. Tyhjä: palvelimen nimi, muuten isäntänimi.",
+  "Logo image": "Logokuva",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Lataa kuva tai anna sen verkko-osoite (PNG, JPEG, WebP; mieluiten läpinäkyvällä taustalla). Tyhjä: ei kuvaa.",
+  "Image not found": "Kuvaa ei löytynyt",
+  "No image": "Ei kuvaa",
+  "Upload": "Lataa",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} on liian suuri (${1} kt). Käytä enintään 700 kt:n kuvaa, esim. 512 px leveää WebP- tai PNG-kuvaa.",
+  "Could not upload the image:": "Kuvan lataaminen epäonnistui:"
 }

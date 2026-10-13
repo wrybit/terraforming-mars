@@ -1612,5 +1612,14 @@
   "AI ${0}": "ИИ ${0}",
   "Delete all open": "Изтрий всички отворени",
   "Delete open older than 12 h": "Изтрий отворени по-стари от 12 ч",
-  "Delete unplayed": "Изтрий неизиграни"
+  "Delete unplayed": "Изтрий неизиграни",
+  "Logo name": "Име на логото",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Показва се едро до логото в администраторското табло. Празно: името на сървъра, иначе името на хоста.",
+  "Logo image": "Изображение на логото",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Качете изображение или въведете уеб адреса му (PNG, JPEG, WebP; за предпочитане с прозрачен фон). Празно: без изображение.",
+  "Image not found": "Изображението не е намерено",
+  "No image": "Няма изображение",
+  "Upload": "Качване",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} е твърде голям (${1} KB). Използвайте изображение до 700 KB, напр. 512 px широко във WebP или PNG.",
+  "Could not upload the image:": "Изображението не можа да се качи:"
 }

@@ -1839,5 +1839,14 @@
   "AI ${0}": "IA ${0}",
   "Delete all open": "Excluir todas as abertas",
   "Delete open older than 12 h": "Excluir abertas com mais de 12 h",
-  "Delete unplayed": "Excluir não jogadas"
+  "Delete unplayed": "Excluir não jogadas",
+  "Logo name": "Nome do logo",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Exibido em destaque ao lado do logo no painel de administração. Vazio: o nome do servidor; caso contrário, o nome do host.",
+  "Logo image": "Imagem do logo",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Envie uma imagem ou informe seu endereço web (PNG, JPEG, WebP; de preferência com fundo transparente). Vazio: sem imagem.",
+  "Image not found": "Imagem não encontrada",
+  "No image": "Sem imagem",
+  "Upload": "Enviar",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} é grande demais (${1} KB). Use uma imagem de no máximo 700 KB, p. ex. 512 px de largura em WebP ou PNG.",
+  "Could not upload the image:": "Não foi possível enviar a imagem:"
 }

@@ -20,6 +20,13 @@ import {checkReachability, publicStatusUrl} from '../admin/dashboard/reachabilit
 import raw_settings from '../../genfiles/settings.json';
 import recentCommits from '../../genfiles/recentCommits.json';
 
+// Values the server runs with (like every setting: a change applies after the restart)
+function serverLogo(hostname: string): ServerDashboard['identity'] {
+  const name = process.env.SERVER_LOGO_NAME?.trim() || process.env.SERVER_NAME?.trim() || hostname;
+  const imageUrl = process.env.SERVER_LOGO_IMAGE?.trim() || undefined;
+  return {name, imageUrl};
+}
+
 /** Machine, game and deployment values for the admin dashboard (like a small phpSysInfo for this server). */
 export class ApiAdminDashboard extends Handler {
   public static readonly INSTANCE = new ApiAdminDashboard();
@@ -47,6 +54,7 @@ export class ApiAdminDashboard extends Handler {
     const dashboard: ServerDashboard = {
       generatedAtMs: nowMs,
       ...metrics,
+      identity: serverLogo(metrics.host.hostname),
       disk: metrics.disk === undefined ? undefined : {...metrics.disk, usage: diskUsage(dataFolder, decisionLogFolder)},
       // Measured every minute: older than five minutes means the script stopped
       machineUsage: readOperatorFile<DashboardMachineUsage>(dataFolder, MACHINE_USAGE_FILE, 5 * 60 * 1000, nowMs),

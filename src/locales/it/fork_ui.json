@@ -1938,5 +1938,14 @@
   "AI ${0}": "IA ${0}",
   "Delete all open": "Elimina tutte le aperte",
   "Delete open older than 12 h": "Elimina aperte più vecchie di 12 h",
-  "Delete unplayed": "Elimina non giocate"
+  "Delete unplayed": "Elimina non giocate",
+  "Logo name": "Nome del logo",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Mostrato in grande accanto al logo nella dashboard di amministrazione. Vuoto: il nome del server, altrimenti il nome host.",
+  "Logo image": "Immagine del logo",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Carica un'immagine o inserisci il suo indirizzo web (PNG, JPEG, WebP; meglio con sfondo trasparente). Vuoto: nessuna immagine.",
+  "Image not found": "Immagine non trovata",
+  "No image": "Nessuna immagine",
+  "Upload": "Carica",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} è troppo grande (${1} KB). Usa un'immagine di massimo 700 KB, ad es. larga 512 px in WebP o PNG.",
+  "Could not upload the image:": "Impossibile caricare l'immagine:"
 }

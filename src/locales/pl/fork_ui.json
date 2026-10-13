@@ -1497,5 +1497,14 @@
   "AI ${0}": "SI ${0}",
   "Delete all open": "Usuń wszystkie otwarte",
   "Delete open older than 12 h": "Usuń otwarte starsze niż 12 h",
-  "Delete unplayed": "Usuń nierozegrane"
+  "Delete unplayed": "Usuń nierozegrane",
+  "Logo name": "Nazwa logo",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Wyświetlana dużo obok logo w panelu administratora. Puste: nazwa serwera, w przeciwnym razie nazwa hosta.",
+  "Logo image": "Obraz logo",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Prześlij obraz lub wpisz jego adres internetowy (PNG, JPEG, WebP; najlepiej z przezroczystym tłem). Puste: brak obrazu.",
+  "Image not found": "Nie znaleziono obrazu",
+  "No image": "Brak obrazu",
+  "Upload": "Prześlij",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} jest za duży (${1} KB). Użyj obrazu o rozmiarze maks. 700 KB, np. 512 px szerokości jako WebP lub PNG.",
+  "Could not upload the image:": "Nie udało się przesłać obrazu:"
 }

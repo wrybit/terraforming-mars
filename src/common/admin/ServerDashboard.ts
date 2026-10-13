@@ -75,6 +75,12 @@ export type DashboardReachability = {
 /** Answer of GET api/admin/dashboard: everything the admin dashboard shows. */
 export type ServerDashboard = {
   generatedAtMs: number,
+  /** Name and logo shown large on the server card (SERVER_LOGO_NAME, SERVER_LOGO_IMAGE) */
+  identity: {
+    name: string,
+    /** Address of the image; undefined: none set */
+    imageUrl?: string,
+  },
   host: {
     hostname: string,
     operatingSystem: string,

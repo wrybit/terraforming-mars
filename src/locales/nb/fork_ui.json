@@ -1079,5 +1079,14 @@
   "AI ${0}": "KI ${0}",
   "Delete all open": "Slett alle åpne",
   "Delete open older than 12 h": "Slett åpne eldre enn 12 t",
-  "Delete unplayed": "Slett uspilte"
+  "Delete unplayed": "Slett uspilte",
+  "Logo name": "Logonavn",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Vises stort ved siden av logoen på admin-dashbordet. Tom: servernavnet, ellers vertsnavnet.",
+  "Logo image": "Logobilde",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Last opp et bilde eller skriv inn nettadressen (PNG, JPEG, WebP; helst med gjennomsiktig bakgrunn). Tom: ikke noe bilde.",
+  "Image not found": "Fant ikke bildet",
+  "No image": "Ikke noe bilde",
+  "Upload": "Last opp",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} er for stort (${1} KB). Bruk et bilde på høyst 700 KB, f.eks. 512 px bredt som WebP eller PNG.",
+  "Could not upload the image:": "Kunne ikke laste opp bildet:"
 }

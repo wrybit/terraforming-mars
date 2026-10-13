@@ -1533,5 +1533,14 @@
   "AI ${0}": "ИИ ${0}",
   "Delete all open": "Удалить все открытые",
   "Delete open older than 12 h": "Удалить открытые старше 12 ч",
-  "Delete unplayed": "Удалить несыгранные"
+  "Delete unplayed": "Удалить несыгранные",
+  "Logo name": "Название логотипа",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Крупно рядом с логотипом на панели администратора. Пусто: название сервера, иначе имя хоста.",
+  "Logo image": "Изображение логотипа",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Загрузите изображение или введите его веб-адрес (PNG, JPEG, WebP; лучше с прозрачным фоном). Пусто: без изображения.",
+  "Image not found": "Изображение не найдено",
+  "No image": "Нет изображения",
+  "Upload": "Загрузить",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} слишком большой (${1} КБ). Используйте изображение не более 700 КБ, напр. шириной 512 px в WebP или PNG.",
+  "Could not upload the image:": "Не удалось загрузить изображение:"
 }

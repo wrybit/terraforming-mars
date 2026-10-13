@@ -9,6 +9,7 @@ const GB = 1024 ** 3;
 
 const dashboard: ServerDashboard = {
   generatedAtMs: 0,
+  identity: {name: 'tm-server'},
   host: {hostname: 'tm-server', operatingSystem: 'Ubuntu 24.04', architecture: 'arm64', nodeVersion: 'v22.0.0', systemUptimeSeconds: 90000, serverUptimeSeconds: 600},
   cpu: {model: 'Neoverse-N1', cores: 4, loadAverage: [0.5, 0.4, 0.3], usagePercent: 12.5},
   memory: {totalBytes: 24 * GB, availableBytes: 20 * GB, freeBytes: 18 * GB, swapTotalBytes: 0, swapFreeBytes: 0, serverProcessBytes: GB / 4},

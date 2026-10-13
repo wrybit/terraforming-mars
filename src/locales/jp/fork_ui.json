@@ -1076,5 +1076,14 @@
   "Idle": "アイドル",
   "Delete all open": "進行中をすべて削除",
   "Delete open older than 12 h": "12時間以上前の進行中を削除",
-  "Delete unplayed": "未プレイを削除"
+  "Delete unplayed": "未プレイを削除",
+  "Logo name": "ロゴ名",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "管理ダッシュボードでロゴの横に大きく表示. 空欄：サーバー名、なければホスト名.",
+  "Logo image": "ロゴ画像",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "画像をアップロードするか、そのWebアドレスを入力（PNG、JPEG、WebP；背景透過推奨）. 空欄：画像なし.",
+  "Image not found": "画像が見つかりません",
+  "No image": "画像なし",
+  "Upload": "アップロード",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} は大きすぎます（${1} KB）. 700 KB以下の画像を使ってください（例：幅512 pxのWebPまたはPNG）.",
+  "Could not upload the image:": "画像をアップロードできませんでした："
 }

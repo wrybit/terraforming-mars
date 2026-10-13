@@ -875,5 +875,14 @@
   "AI ${0}": "ШІ ${0}",
   "Delete all open": "Видалити всі відкриті",
   "Delete open older than 12 h": "Видалити відкриті старші за 12 год",
-  "Delete unplayed": "Видалити незіграні"
+  "Delete unplayed": "Видалити незіграні",
+  "Logo name": "Назва логотипа",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Великими літерами поруч із логотипом на панелі адміністратора. Порожньо: назва сервера, інакше ім'я хоста.",
+  "Logo image": "Зображення логотипа",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Завантажте зображення або введіть його веб-адресу (PNG, JPEG, WebP; краще з прозорим тлом). Порожньо: без зображення.",
+  "Image not found": "Зображення не знайдено",
+  "No image": "Немає зображення",
+  "Upload": "Завантажити",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} завеликий (${1} КБ). Використайте зображення до 700 КБ, напр. шириною 512 px у WebP або PNG.",
+  "Could not upload the image:": "Не вдалося завантажити зображення:"
 }

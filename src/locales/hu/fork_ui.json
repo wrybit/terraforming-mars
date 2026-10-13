@@ -898,5 +898,14 @@
   "AI ${0}": "MI ${0}",
   "Delete all open": "Összes nyitott törlése",
   "Delete open older than 12 h": "12 óránál régebbi nyitottak törlése",
-  "Delete unplayed": "Lejátszatlanok törlése"
+  "Delete unplayed": "Lejátszatlanok törlése",
+  "Logo name": "Logó neve",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Nagy méretben a logó mellett az admin irányítópulton. Üres: a szerver neve, különben a gépnév.",
+  "Logo image": "Logó képe",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Tölts fel egy képet, vagy add meg a webcímét (PNG, JPEG, WebP; lehetőleg átlátszó háttérrel). Üres: nincs kép.",
+  "Image not found": "A kép nem található",
+  "No image": "Nincs kép",
+  "Upload": "Feltöltés",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} túl nagy (${1} KB). Legfeljebb 700 KB-os képet használj, pl. 512 px széles WebP-t vagy PNG-t.",
+  "Could not upload the image:": "Nem sikerült feltölteni a képet:"
 }

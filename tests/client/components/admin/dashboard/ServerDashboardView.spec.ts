@@ -8,6 +8,7 @@ describe('ServerDashboardView', () => {
   it('lists graphics adapters and swap when the machine has them', () => {
     const dashboard = {
       generatedAtMs: 0,
+      identity: {name: 'AK1', imageUrl: 'api/admin/server-logo?file=logo-0123456789abcdef.webp'},
       host: {hostname: 'mc-pc', operatingSystem: 'Linux Mint 22.3', architecture: 'x64', nodeVersion: 'v22.0.0', systemUptimeSeconds: 60, serverUptimeSeconds: 60},
       cpu: {model: 'Celeron N5105', cores: 4, loadAverage: [1, 1, 1], usagePercent: 50, temperatureCelsius: 48.5},
       memory: {totalBytes: 16, availableBytes: 8, freeBytes: 4, swapTotalBytes: 2, swapFreeBytes: 1, serverProcessBytes: 1},
@@ -28,5 +29,8 @@ describe('ServerDashboardView', () => {
     // Processor without area measurement and swap as meters, memory as a split bar
     expect(wrapper.findAll('.dashboard-meter')).has.length(2);
     expect(wrapper.findAll('.dashboard-split')).has.length(1);
+    // Name and logo large at the top of the server card
+    expect(wrapper.find('.server-dashboard-logo-name').text()).eq('AK1');
+    expect(wrapper.find('.server-dashboard-logo-image').attributes('src')).eq('api/admin/server-logo?file=logo-0123456789abcdef.webp');
   });
 });

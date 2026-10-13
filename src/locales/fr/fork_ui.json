@@ -783,5 +783,14 @@
   "AI ${0}": "IA ${0}",
   "Delete all open": "Supprimer toutes les parties en cours",
   "Delete open older than 12 h": "Supprimer celles de plus de 12 h",
-  "Delete unplayed": "Supprimer les non jouées"
+  "Delete unplayed": "Supprimer les non jouées",
+  "Logo name": "Nom du logo",
+  "Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.": "Affiché en grand à côté du logo sur le tableau de bord admin. Vide : le nom du serveur, sinon le nom d'hôte.",
+  "Logo image": "Image du logo",
+  "Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.": "Téléversez une image ou saisissez son adresse web (PNG, JPEG, WebP ; idéalement avec fond transparent). Vide : aucune image.",
+  "Image not found": "Image introuvable",
+  "No image": "Aucune image",
+  "Upload": "Téléverser",
+  "${0} is too large (${1} KB). Use an image of at most 700 KB, e.g. 512 px wide as WebP or PNG.": "${0} est trop lourd (${1} Ko). Utilisez une image de 700 Ko maximum, p. ex. 512 px de large en WebP ou PNG.",
+  "Could not upload the image:": "Impossible de téléverser l'image :"
 }

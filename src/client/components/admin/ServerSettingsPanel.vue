@@ -30,6 +30,8 @@
               <label v-if="setting.kind === 'toggle'" class="server-settings-toggle">
                 <input :id="'server-setting-' + setting.key" type="checkbox" :checked="isOn(values[setting.key])" @change="setValue(setting.key, ($event.target as HTMLInputElement).checked ? 'true' : '')">
               </label>
+              <ServerSettingImageField v-else-if="setting.kind === 'image'" :inputId="'server-setting-' + setting.key"
+                :value="values[setting.key] ?? ''" @update="setValue(setting.key, $event)"/>
               <div v-else class="server-settings-input">
                 <input :id="'server-setting-' + setting.key"
                   :type="inputType(setting)"
@@ -64,6 +66,7 @@ import {paths} from '@/common/app/paths';
 import {statusCode} from '@/common/http/statusCode';
 import {logIn} from '@/client/components/admin/adminSession';
 import {vDockedTab} from '@/client/directives/DockedTab';
+import ServerSettingImageField from '@/client/components/admin/ServerSettingImageField.vue';
 import {translateText} from '@/client/directives/i18n';
 import {
   SERVER_SETTING_GROUPS, SERVER_SETTINGS, ServerSettingDefinition, ServerSettingState, ServerSettingsModel, ServerSettingsUpdate,
@@ -88,6 +91,7 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
+  components: {ServerSettingImageField},
   directives: {dockedTab: vDockedTab},
   data(): DataModel {
     return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false, selectedGroup: SERVER_SETTING_GROUPS[0]};

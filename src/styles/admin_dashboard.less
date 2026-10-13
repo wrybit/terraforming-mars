@@ -60,6 +60,31 @@
   }
 }
 
+// ---------- Server logo: name and image large at the top of the server card ----------
+.server-dashboard-logo {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  // Separated from the facts below: the logo is the card's identity, the rows are its values
+  padding: 6px 0 16px;
+  border-bottom: 1px solid @dashboard-line;
+}
+
+.server-dashboard-logo-image {
+  flex: none;
+  height: 80px;
+  max-width: 45%;
+  object-fit: contain;
+}
+
+.server-dashboard-logo-name {
+  min-width: 0;
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
 // ---------- Label/value rows ----------
 .dashboard-facts {
   display: grid;

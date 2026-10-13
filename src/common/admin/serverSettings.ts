@@ -4,7 +4,8 @@
 
 import {COMMON_EXTENSIONS} from '../../genfiles/extensionsCommon';
 
-export type ServerSettingKind = 'text' | 'number' | 'secret' | 'toggle';
+// image: an address (http… or an uploaded file, see ApiAdminServerLogo) with upload button and preview
+export type ServerSettingKind = 'text' | 'number' | 'secret' | 'toggle' | 'image';
 
 // Appearance, Games, Limits, AI opponents, Access, Technical – and the groups of the extensions
 export type ServerSettingGroup = string;
@@ -22,6 +23,10 @@ const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'G
 const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'SERVER_NAME', group: 'Appearance', kind: 'text', label: 'Server name',
     description: 'Shown in white under the title on the start page. Empty: nothing is shown.'},
+  {key: 'SERVER_LOGO_NAME', group: 'Appearance', kind: 'text', label: 'Logo name',
+    description: 'Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.'},
+  {key: 'SERVER_LOGO_IMAGE', group: 'Appearance', kind: 'image', label: 'Logo image',
+    description: 'Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.'},
   {key: 'TITLE_LONG', group: 'Appearance', kind: 'text', label: 'Long tab title',
     description: 'Browser tab of the start page. Empty: Terraforming Mars.'},
   {key: 'TITLE_SHORT', group: 'Appearance', kind: 'text', label: 'Short tab title',
