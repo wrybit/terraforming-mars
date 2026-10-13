@@ -754,5 +754,6 @@
   "Graphics memory": "Grafiikkamuisti",
   "Clock (now / max)": "Kellotaajuus (nyt / maks.)",
   "Driver": "Ajuri",
-  "${0} (shared with RAM)": "${0} (jaettu keskusmuistin kanssa)"
+  "${0} (shared with RAM)": "${0} (jaettu keskusmuistin kanssa)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Liian monta väärää yritystä. Odota, kunnes lähtölaskenta on päättynyt."
 }

@@ -6,6 +6,7 @@ import {adminToken, isAdminToken, isSecureRequest} from '../../src/server/server
 import {MockRequest, MockResponse} from './HttpMocks';
 import {RouteTestScaffolding} from './RouteTestScaffolding';
 import {statusCode} from '@/common/http/statusCode';
+import {FakeClock} from '../common/FakeClock';
 
 describe('ApiAdminSession', () => {
   let scaffolding: RouteTestScaffolding;
@@ -17,9 +18,9 @@ describe('ApiAdminSession', () => {
   });
 
   // The route reads the body via 'data'/'end' events – only send after post() has started
-  function login(serverId: string): Promise<unknown> {
+  function login(serverId: string, route: ApiAdminSession = new ApiAdminSession()): Promise<unknown> {
     scaffolding.url = '/api/admin/session';
-    const response = new ApiAdminSession(0).processRequest(Object.assign(scaffolding.req, {method: 'POST'}), res, scaffolding.ctx);
+    const response = route.processRequest(Object.assign(scaffolding.req, {method: 'POST'}), res, scaffolding.ctx);
     const emit = Promise.resolve().then(() => {
       scaffolding.req.emitString(JSON.stringify({serverId}));
       scaffolding.req.emitter.emit('end');
@@ -43,14 +44,91 @@ describe('ApiAdminSession', () => {
     expect(res.getHeader('Set-Cookie')).is.undefined;
   });
 
+  describe('failed logins', () => {
+    let route: ApiAdminSession;
+    let clock: FakeClock;
+
+    beforeEach(() => {
+      route = new ApiAdminSession();
+      clock = new FakeClock();
+    });
+
+    // Each attempt is a fresh request from the same address, sharing the route's counters and the clock
+    async function attempt(serverId: string, ip: string = '1.2.3.4'): Promise<MockResponse> {
+      scaffolding = new RouteTestScaffolding();
+      scaffolding.ctx.clock = clock;
+      scaffolding.ctx.ip = ip;
+      res = new MockResponse();
+      await login(serverId, route);
+      return res;
+    }
+
+    it('lock doubles with every wrong passphrase', async () => {
+      const waits: Array<string | undefined> = [];
+      for (let i = 0; i < 4; i++) {
+        const response = await attempt('wrong');
+        expect(response.statusCode).eq(statusCode.forbidden);
+        waits.push(String(response.getHeader('Retry-After')));
+        clock.millis += 60 * 60 * 1000;
+      }
+      expect(waits).deep.eq(['1', '2', '4', '8']);
+    });
+
+    it('refuses even the right passphrase while locked, without extending the lock', async () => {
+      await attempt('wrong');
+      clock.millis += 1000;
+      await attempt('wrong');
+      clock.millis += 500;
+      const locked = await attempt('1');
+      expect(locked.statusCode).eq(statusCode.tooManyRequests);
+      expect(locked.getHeader('Retry-After')).eq('2');
+      expect(locked.getHeader('Set-Cookie')).is.undefined;
+
+      clock.millis += 1500;
+      const open = await attempt('1');
+      expect(open.statusCode).eq(statusCode.ok);
+    });
+
+    it('a successful login starts from zero', async () => {
+      await attempt('wrong');
+      clock.millis += 1000;
+      await attempt('1');
+      const response = await attempt('wrong');
+      expect(response.getHeader('Retry-After')).eq('1');
+    });
+
+    it('locks each address on its own', async () => {
+      await attempt('wrong', '1.1.1.1');
+      const other = await attempt('1', '2.2.2.2');
+      expect(other.statusCode).eq(statusCode.ok);
+    });
+
+    it('locks everyone after many failures from many addresses', async () => {
+      for (let i = 0; i < 51; i++) {
+        await attempt('wrong', `10.0.0.${i}`);
+      }
+      const fresh = await attempt('1', '9.9.9.9');
+      expect(fresh.statusCode).eq(statusCode.tooManyRequests);
+    });
+
+    it('caps the lock at 15 minutes', async () => {
+      let response = res;
+      for (let i = 0; i < 20; i++) {
+        response = await attempt('wrong');
+        clock.millis += 60 * 60 * 1000;
+      }
+      expect(response.getHeader('Retry-After')).eq(String(15 * 60));
+    });
+  });
+
   it('reports whether the browser is logged in', async () => {
-    await scaffolding.get(new ApiAdminSession(0), res);
+    await scaffolding.get(new ApiAdminSession(), res);
     expect(res.statusCode).eq(statusCode.ok);
     expect(JSON.parse(res.content)).deep.eq({admin: false});
 
     res = new MockResponse();
     scaffolding.loginAsAdmin();
-    await scaffolding.get(new ApiAdminSession(0), res);
+    await scaffolding.get(new ApiAdminSession(), res);
     expect(JSON.parse(res.content)).deep.eq({admin: true});
   });
 

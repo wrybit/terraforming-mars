@@ -538,5 +538,6 @@
   "Graphics memory": "Grafikspeicher",
   "Clock (now / max)": "Takt (jetzt / max.)",
   "Driver": "Treiber",
-  "${0} (shared with RAM)": "${0} (mit RAM geteilt)"
+  "${0} (shared with RAM)": "${0} (mit RAM geteilt)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Zu viele falsche Versuche. Bitte warte, bis der Countdown abgelaufen ist."
 }

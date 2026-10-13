@@ -1,5 +1,6 @@
 import {ref} from 'vue';
 import {paths} from '@/common/app/paths';
+import {statusCode} from '@/common/http/statusCode';
 import {AdminLoginRequest, AdminSessionStatus} from '@/common/admin/adminLogin';
 
 /*
@@ -32,12 +33,23 @@ export function checkAdminLoginOnce(): Promise<AdminLoginState> {
   return firstCheck;
 }
 
-/** True when the server accepted the passphrase and set the login cookie. */
-export async function logIn(serverId: string): Promise<boolean> {
+/** Answer to a login attempt: logged in, wrong passphrase, or refused unchecked because of too many failures. */
+export type LoginResult = {
+  outcome: 'admin' | 'wrong' | 'locked',
+  /** Seconds until the server accepts the next attempt (0 = right away) */
+  retryAfterSeconds: number,
+};
+
+/** Sends the passphrase; on success the server has set the login cookie. */
+export async function logIn(serverId: string): Promise<LoginResult> {
   const body: AdminLoginRequest = {serverId};
   const response = await fetch(paths.API_ADMIN_SESSION, {method: 'POST', body: JSON.stringify(body)});
   isAdmin.value = response.ok;
-  return response.ok;
+  if (response.ok) {
+    return {outcome: 'admin', retryAfterSeconds: 0};
+  }
+  const retryAfterSeconds = Number(response.headers.get('Retry-After') ?? 0) || 0;
+  return {outcome: response.status === statusCode.tooManyRequests ? 'locked' : 'wrong', retryAfterSeconds};
 }
 
 export async function logOut(): Promise<void> {

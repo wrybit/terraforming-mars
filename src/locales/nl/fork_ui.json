@@ -1364,5 +1364,6 @@
   "Graphics memory": "Grafisch geheugen",
   "Clock (now / max)": "Kloksnelheid (nu / max.)",
   "Driver": "Stuurprogramma",
-  "${0} (shared with RAM)": "${0} (gedeeld met werkgeheugen)"
+  "${0} (shared with RAM)": "${0} (gedeeld met werkgeheugen)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Te veel foute pogingen. Wacht tot het aftellen voorbij is."
 }

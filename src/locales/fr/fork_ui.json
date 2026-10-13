@@ -810,5 +810,6 @@
   "Graphics memory": "Mémoire graphique",
   "Clock (now / max)": "Fréquence (actuelle / max.)",
   "Driver": "Pilote",
-  "${0} (shared with RAM)": "${0} (partagée avec la RAM)"
+  "${0} (shared with RAM)": "${0} (partagée avec la RAM)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Trop de tentatives erronées. Veuillez attendre la fin du compte à rebours."
 }

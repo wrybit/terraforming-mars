@@ -1972,5 +1972,6 @@
   "Graphics memory": "Memoria gráfica",
   "Clock (now / max)": "Frecuencia (actual / máx.)",
   "Driver": "Controlador",
-  "${0} (shared with RAM)": "${0} (compartida con la RAM)"
+  "${0} (shared with RAM)": "${0} (compartida con la RAM)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Demasiados intentos fallidos. Espera a que termine la cuenta atrás."
 }

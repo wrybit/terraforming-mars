@@ -1639,5 +1639,6 @@
   "Graphics memory": "Графична памет",
   "Clock (now / max)": "Честота (сега / макс.)",
   "Driver": "Драйвер",
-  "${0} (shared with RAM)": "${0} (обща с RAM)"
+  "${0} (shared with RAM)": "${0} (обща с RAM)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Твърде много грешни опити. Моля, изчакайте обратното броене да приключи."
 }

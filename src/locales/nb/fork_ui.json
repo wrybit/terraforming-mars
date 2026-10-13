@@ -1105,5 +1105,6 @@
   "Virtual": "Virtuell",
   "Graphics memory": "Grafikkminne",
   "Clock (now / max)": "Klokkefrekvens (nå / maks.)",
-  "${0} (shared with RAM)": "${0} (delt med hovedminnet)"
+  "${0} (shared with RAM)": "${0} (delt med hovedminnet)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "For mange feil forsøk. Vent til nedtellingen er ferdig."
 }

@@ -902,5 +902,6 @@
   "Graphics memory": "Графічна пам'ять",
   "Clock (now / max)": "Частота (зараз / макс.)",
   "Driver": "Драйвер",
-  "${0} (shared with RAM)": "${0} (спільна з ОЗП)"
+  "${0} (shared with RAM)": "${0} (спільна з ОЗП)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Забагато невдалих спроб. Зачекайте, доки закінчиться зворотний відлік."
 }

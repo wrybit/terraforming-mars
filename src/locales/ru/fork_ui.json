@@ -1560,5 +1560,6 @@
   "Graphics memory": "Графическая память",
   "Clock (now / max)": "Частота (сейчас / макс.)",
   "Driver": "Драйвер",
-  "${0} (shared with RAM)": "${0} (общая с ОЗУ)"
+  "${0} (shared with RAM)": "${0} (общая с ОЗУ)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Слишком много неверных попыток. Подождите, пока закончится обратный отсчёт."
 }

@@ -93,6 +93,9 @@ export abstract class Handler implements IHandler {
       case 'notFound':
         responses.notFound(req, res, e.detail);
         break;
+      case 'tooManyRequests':
+        responses.quotaExceeded(req, res);
+        break;
       default:
         assertNever(e.kind);
       }

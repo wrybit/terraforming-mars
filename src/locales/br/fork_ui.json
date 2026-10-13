@@ -1864,5 +1864,6 @@
   "Own graphics card": "Placa de vídeo dedicada",
   "Graphics memory": "Memória gráfica",
   "Clock (now / max)": "Frequência (atual / máx.)",
-  "${0} (shared with RAM)": "${0} (compartilhada com a RAM)"
+  "${0} (shared with RAM)": "${0} (compartilhada com a RAM)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Tentativas erradas demais. Aguarde até a contagem regressiva terminar."
 }

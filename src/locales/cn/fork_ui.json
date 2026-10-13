@@ -1675,5 +1675,6 @@
   "Graphics memory": "图形内存",
   "Clock (now / max)": "频率（当前 / 最大）",
   "Driver": "驱动",
-  "${0} (shared with RAM)": "${0}（与内存共享）"
+  "${0} (shared with RAM)": "${0}（与内存共享）",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "错误尝试次数过多。请等待倒计时结束。"
 }

@@ -1964,5 +1964,6 @@
   "Virtual": "Virtuale",
   "Graphics memory": "Memoria grafica",
   "Clock (now / max)": "Frequenza (attuale / max)",
-  "${0} (shared with RAM)": "${0} (condivisa con la RAM)"
+  "${0} (shared with RAM)": "${0} (condivisa con la RAM)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Troppi tentativi errati. Attendi la fine del conto alla rovescia."
 }

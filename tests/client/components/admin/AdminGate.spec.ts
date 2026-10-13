@@ -3,14 +3,16 @@ import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import AdminGate from '@/client/components/admin/AdminGate.vue';
 
-// Answers of the fake server per request, in order: logged in or not (GET), passphrase accepted or refused (POST)
-type Answer = 'admin' | 'guest' | 'accepted' | 'refused';
+// Answers of the fake server per request, in order: logged in or not (GET), passphrase accepted, refused or locked (POST)
+type Answer = 'admin' | 'guest' | 'accepted' | 'refused' | 'locked';
+const STATUS: Record<Answer, number> = {admin: 200, guest: 200, accepted: 200, refused: 403, locked: 429};
 function fakeFetch(answers: Array<Answer>, requests: Array<{url: string, method: string, body: string}>): typeof global.fetch {
   return (url, init) => {
     requests.push({url: String(url), method: init?.method ?? 'GET', body: String(init?.body)});
     const answer = answers.shift() ?? 'accepted';
-    const status = answer === 'refused' ? 403 : 200;
-    return Promise.resolve({ok: status === 200, status, json: () => Promise.resolve({admin: answer !== 'guest' && answer !== 'refused'})} as Response);
+    const status = STATUS[answer];
+    const headers = new Headers(status === 200 ? {} : {'Retry-After': '75'});
+    return Promise.resolve({ok: status === 200, status, headers, json: () => Promise.resolve({admin: answer === 'admin' || answer === 'accepted'})} as Response);
   };
 }
 
@@ -59,5 +61,22 @@ describe('AdminGate', () => {
     await wrapper.find('form').trigger('submit');
     await flush();
     expect(wrapper.text()).contains('does not seem to fit');
+  });
+
+  it('counts down until the next attempt and says when there were too many', async () => {
+    global.fetch = fakeFetch(['guest', 'refused', 'locked'], requests);
+    const wrapper = mount(AdminGate, {...globalConfig, props: {active: 'raw'}});
+    await flush();
+    await wrapper.find('input').setValue('wrong');
+    await wrapper.find('form').trigger('submit');
+    await flush();
+    const button = wrapper.find('button[type="submit"]');
+    expect(button.text()).eq('1:15');
+    expect(button.attributes('disabled')).is.not.undefined;
+
+    // Reached anyway (e.g. a second tab): the server refuses unchecked
+    await (wrapper.findComponent({name: 'ServerIdPrompt'}).vm as unknown as {open(): Promise<void>}).open();
+    await flush();
+    expect(wrapper.text()).contains('Too many wrong attempts');
   });
 });

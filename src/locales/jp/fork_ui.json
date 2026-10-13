@@ -1103,5 +1103,6 @@
   "Graphics memory": "グラフィックメモリ",
   "Clock (now / max)": "クロック（現在 / 最大）",
   "Driver": "ドライバー",
-  "${0} (shared with RAM)": "${0}（メインメモリと共有）"
+  "${0} (shared with RAM)": "${0}（メインメモリと共有）",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "誤った試行が多すぎます. カウントダウンが終わるまでお待ちください."
 }

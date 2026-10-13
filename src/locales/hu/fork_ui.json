@@ -925,5 +925,6 @@
   "Graphics memory": "Grafikus memória",
   "Clock (now / max)": "Órajel (most / max.)",
   "Driver": "Illesztőprogram",
-  "${0} (shared with RAM)": "${0} (a fő memóriával közös)"
+  "${0} (shared with RAM)": "${0} (a fő memóriával közös)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Túl sok hibás próbálkozás. Várj, amíg a visszaszámlálás véget ér."
 }

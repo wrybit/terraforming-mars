@@ -984,5 +984,6 @@
   "Graphics memory": "그래픽 메모리",
   "Clock (now / max)": "클럭 (현재 / 최대)",
   "Driver": "드라이버",
-  "${0} (shared with RAM)": "${0} (주 메모리와 공유)"
+  "${0} (shared with RAM)": "${0} (주 메모리와 공유)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "잘못된 시도가 너무 많습니다. 카운트다운이 끝날 때까지 기다리세요."
 }

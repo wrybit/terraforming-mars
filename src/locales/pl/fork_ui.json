@@ -1524,5 +1524,6 @@
   "Graphics memory": "Pamięć grafiki",
   "Clock (now / max)": "Taktowanie (teraz / maks.)",
   "Driver": "Sterownik",
-  "${0} (shared with RAM)": "${0} (wspólna z RAM)"
+  "${0} (shared with RAM)": "${0} (wspólna z RAM)",
+  "Too many wrong attempts. Please wait until the countdown has run out.": "Zbyt wiele błędnych prób. Poczekaj, aż odliczanie się skończy."
 }
