@@ -1074,7 +1074,6 @@
   "System (kernel and services)": "システム（カーネルとサービス）",
   "Cache (freed on demand)": "キャッシュ（必要に応じて解放）",
   "Idle": "アイドル",
-  "AI ${0}": "AI ${0}",
   "Delete all open": "進行中をすべて削除",
   "Delete open older than 12 h": "12時間以上前の進行中を削除",
   "Delete unplayed": "未プレイを削除"

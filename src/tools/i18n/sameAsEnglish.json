@@ -18,6 +18,7 @@
   ],
   "cn": [
     "${0} AI",
+    "AI ${0}",
     "Delta Project (2VP)",
     "Delta Project (5VP)",
     "Node.js"
@@ -128,12 +129,14 @@
   ],
   "jp": [
     "${0} AI",
+    "AI ${0}",
     "Delta Project (2VP)",
     "Delta Project (5VP)",
     "Node.js"
   ],
   "ko": [
     "${0} AI",
+    "AI ${0}",
     "Delta Project (2VP)",
     "Delta Project (5VP)",
     "Node.js"
@@ -172,6 +175,7 @@
     "1 titanium / 2 °C",
     "2 titanium",
     "2x bonus",
+    "AI ${0}",
     "Dashboard",
     "Details:",
     "Info",

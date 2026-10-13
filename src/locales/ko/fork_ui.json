@@ -955,7 +955,6 @@
   "System (kernel and services)": "시스템 (커널 및 서비스)",
   "Cache (freed on demand)": "캐시 (필요 시 해제)",
   "Idle": "유휴",
-  "AI ${0}": "AI ${0}",
   "Delete all open": "진행 중 모두 삭제",
   "Delete open older than 12 h": "12시간 지난 진행 중 삭제",
   "Delete unplayed": "미진행 삭제"

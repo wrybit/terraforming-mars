@@ -1335,7 +1335,6 @@
   "System (kernel and services)": "Systeem (kernel en diensten)",
   "Cache (freed on demand)": "Cache (vrijgegeven indien nodig)",
   "Idle": "Inactief",
-  "AI ${0}": "AI ${0}",
   "Delete all open": "Alle open verwijderen",
   "Delete open older than 12 h": "Open ouder dan 12 u verwijderen",
   "Delete unplayed": "Ongespeelde verwijderen"
