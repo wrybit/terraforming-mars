@@ -316,7 +316,13 @@ each(@players, {
   text-transform: uppercase;
 }
 
+// Same size in running text and in the flex rows of the action log: own box, fixed line height
 .log-space-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  line-height: 16px;
+  vertical-align: middle;
   color: black;
   background: linear-gradient(-60deg, #a0a0a7 10%, #c0c0c0, #a0a0a7 90%);
   cursor: pointer;
