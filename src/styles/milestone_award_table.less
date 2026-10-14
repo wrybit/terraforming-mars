@@ -349,16 +349,17 @@ each(@players, {
     position: relative;
   }
 
-  // Free corner above the names (slot "corner"): over the heading, icon and cost rows, as wide as the names
+  // Free corner above the names (slot "corner"): beside the icon and cost rows, as wide as the names.
+  // Starts flush with the top edge of the icon row, not with the headings above it
   .ma-table-corner {
     position: absolute;
     z-index: 1;
-    top: 0;
+    top: @ma-table-labels-height + @ma-table-row-gap;
     left: 0;
     width: var(--ma-table-name-width, 104px);
-    height: @ma-table-labels-height + @ma-table-head-height + @ma-table-status-height + 2 * @ma-table-row-gap;
+    height: @ma-table-head-height + @ma-table-status-height + @ma-table-row-gap;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
   }
 
   .ma-table-part--values {
@@ -548,7 +549,7 @@ each(@players, {
   min-width: 0;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
   margin: 0;
   padding-left: 8px;
