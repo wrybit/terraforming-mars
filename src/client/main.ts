@@ -1,4 +1,5 @@
 import {createApp, defineAsyncComponent} from 'vue';
+import {handleRenderError} from '@/client/utils/renderErrors';
 
 import {trimEmptyTextNodes} from '@/client/directives/TrimWhitespace';
 import App from '@/client/components/App.vue';
@@ -29,6 +30,7 @@ async function bootstrap() {
   }
 
   const app = createApp(App);
+  app.config.errorHandler = handleRenderError;
 
   app.use(i18nPlugin);
 

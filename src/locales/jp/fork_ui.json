@@ -1145,5 +1145,6 @@
   "AI hand cards": "AI の手札",
   "Visible once you have bought your cards": "自分のカードを購入すると表示されます",
   "No cards in hand": "手札がありません",
-  "passed on": "手番を回した"
+  "passed on": "手番を回した",
+  "The page ran into a display error.": "表示エラーが発生しました。"
 }

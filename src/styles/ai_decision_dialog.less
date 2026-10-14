@@ -389,16 +389,15 @@
 // stands in for it (frosted glass). Scrolling down to it grows it back with a short transition.
 @ai-dialog-compact-height: 52px;
 
+// Only opacity: a transform would change the visible share the IntersectionObserver measures,
+// and the switch would flip back and forth at the threshold
 .ai-decision-dialog__rating-full {
   opacity: 0.4;
-  transform: translateY(10px) scale(0.98);
-  transform-origin: bottom center;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity 0.25s ease;
 }
 
 .ai-decision-dialog__rating-full--shown {
   opacity: 1;
-  transform: none;
 }
 
 // No height in the flow (and no section gap of the body): showing and hiding never moves the content

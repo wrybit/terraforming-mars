@@ -45,6 +45,9 @@ export function translateMessage(message: Message): string {
 }
 
 let translated: Set<string> | undefined;
+// Missing translations already reported: each one only once, otherwise every redraw (e.g. the
+// players' update every 3 s during the research phase) fills the console with the same lines
+const reportedMissing = new Set<string>();
 export function translateText(englishText: string): string {
   const lang = getPreferences().lang;
   const translations: {[key: string]: string} | undefined = (window as any)._translations;
@@ -91,7 +94,8 @@ export function translateText(englishText: string): string {
         }
       }
     }
-    if (!translated.has(englishText)) {
+    if (!translated.has(englishText) && !reportedMissing.has(englishText)) {
+      reportedMissing.add(englishText);
       console.log(`${lang} - please translate: "${englishText}"`);
     }
   }

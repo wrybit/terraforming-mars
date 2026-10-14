@@ -170,10 +170,14 @@ function observeFullRating(element: HTMLElement | undefined): void {
   if (element === undefined || !(body instanceof HTMLElement) || typeof IntersectionObserver === 'undefined') {
     return;
   }
-  // Compact while less than 60 % of the full rating is visible
+  // Compact below 40 % visible, full again from 80 %: the gap keeps it from flipping back and forth
   ratingObserver = new IntersectionObserver(([entry]) => {
-    compact.value = entry.intersectionRatio < 0.6;
-  }, {root: body, threshold: [0, 0.6, 1]});
+    if (entry.intersectionRatio < 0.4) {
+      compact.value = true;
+    } else if (entry.intersectionRatio >= 0.8) {
+      compact.value = false;
+    }
+  }, {root: body, threshold: [0, 0.4, 0.8, 1]});
   ratingObserver.observe(element);
 }
 watch(fullRating, (element) => observeFullRating(element));

@@ -1,5 +1,5 @@
 <template>
-  <!-- Cards of a draft pick, purchase or start selection as real cards (70 %), in one row to scroll sideways -->
+  <!-- Cards of a draft pick, purchase or start selection as real cards (50 %), in one row to scroll sideways -->
   <div class="ai-decision-cards" data-test="ai-decision-cards">
     <div v-for="option in cardOptions" :key="option.index ?? option.label"
       :class="['ai-decision-cards__item', {'ai-decision-cards__item--chosen': option.chosen === true}]">

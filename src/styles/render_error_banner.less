@@ -1,0 +1,27 @@
+// Notice after a display error (RenderErrorBanner.vue): small bar at the top, above dialogs,
+// does not block the page – what still works stays usable
+.render-error-banner {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  padding: 10px 12px 10px 18px;
+  transform: translateX(-50%);
+  border: 1px solid rgba(255, 138, 128, 0.6);
+  border-radius: 12px;
+  background: rgba(40, 20, 22, 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 15px;
+}
+
+.render-error-banner__reload {
+  flex: none;
+  margin: 0;
+}

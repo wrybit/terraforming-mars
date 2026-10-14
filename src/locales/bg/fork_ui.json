@@ -1679,5 +1679,6 @@
   "AI hand cards": "Карти в ръката на AI",
   "Visible once you have bought your cards": "Видимо, щом купиш своите карти",
   "No cards in hand": "Няма карти в ръката",
-  "passed on": "предаде хода"
+  "passed on": "предаде хода",
+  "The page ran into a display error.": "Възникна грешка при показването."
 }
