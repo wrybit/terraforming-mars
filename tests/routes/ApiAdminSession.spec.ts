@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {ApiAdminSession} from '../../src/server/routes/ApiAdminSession';
 import {ApiAdminLogout} from '../../src/server/routes/ApiAdminLogout';
 import {ApiGames} from '../../src/server/routes/ApiGames';
-import {adminToken, isAdminToken, isSecureRequest} from '../../src/server/server/auth/adminCookie';
+import {adminCookieLifetimeSeconds, adminToken, isAdminToken, isSecureRequest} from '../../src/server/server/auth/adminCookie';
 import {MockRequest, MockResponse} from './HttpMocks';
 import {RouteTestScaffolding} from './RouteTestScaffolding';
 import {statusCode} from '@/common/http/statusCode';
@@ -32,7 +32,7 @@ describe('ApiAdminSession', () => {
     await login('1');
     expect(res.statusCode).eq(statusCode.ok);
     const cookie = String(res.getHeader('Set-Cookie'));
-    expect(cookie).contains(`tmAdmin=${adminToken('1')};`);
+    expect(cookie).contains(`tmAdmin=${adminToken('1', scaffolding.ctx.clock.now())};`);
     expect(cookie).contains('HttpOnly');
     expect(cookie).contains('SameSite=Strict');
     expect(cookie).not.contains('tmAdmin=1;');
@@ -144,9 +144,19 @@ describe('ApiAdminSession', () => {
   });
 
   it('a changed passphrase ends the login', () => {
-    expect(isAdminToken(adminToken('old'), 'old')).is.true;
-    expect(isAdminToken(adminToken('old'), 'new')).is.false;
-    expect(isAdminToken(undefined, 'old')).is.false;
+    expect(isAdminToken(adminToken('old', 1000), 'old', 1000)).is.true;
+    expect(isAdminToken(adminToken('old', 1000), 'new', 1000)).is.false;
+    expect(isAdminToken(undefined, 'old', 1000)).is.false;
+  });
+
+  it('a login ends after the login duration', () => {
+    const issued = 1_000_000;
+    const lifetimeMs = adminCookieLifetimeSeconds * 1000;
+    expect(isAdminToken(adminToken('id', issued), 'id', issued + lifetimeMs)).is.true;
+    expect(isAdminToken(adminToken('id', issued), 'id', issued + lifetimeMs + 1)).is.false;
+    // A forged time with the old hash does not pass either
+    const forged = String(issued + lifetimeMs) + adminToken('id', issued).slice(String(issued).length);
+    expect(isAdminToken(forged, 'id', issued + lifetimeMs)).is.false;
   });
 
   it('marks the cookie Secure only behind https', () => {

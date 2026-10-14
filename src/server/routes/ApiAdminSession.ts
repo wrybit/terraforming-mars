@@ -6,7 +6,7 @@ import {Response} from '../Response';
 import {RouteError} from './RouteError';
 import {readBody} from './readBody';
 import {AdminLoginRequest, AdminSessionStatus} from '../../common/admin/adminLogin';
-import {adminCookieLifetimeSeconds, adminCookieName, adminToken, isSecureRequest} from '../server/auth/adminCookie';
+import {adminCookieLifetimeSeconds, adminCookieName, adminToken, isSecureRequest, isServerIdGuess} from '../server/auth/adminCookie';
 import {LoginThrottle} from '../server/auth/LoginThrottle';
 
 const SECOND = 1000;
@@ -64,7 +64,7 @@ export class ApiAdminSession extends Handler {
       setRetryAfter(res, lockMs);
       throw RouteError.tooManyRequests();
     }
-    if (request.serverId !== ctx.ids.serverId) {
+    if (!isServerIdGuess(request.serverId, ctx.ids.serverId)) {
       setRetryAfter(res, Math.max(
         this.throttles.perAddress.recordFailure(ctx.ip, now),
         this.throttles.everyone.recordFailure(EVERYONE, now)));
@@ -72,7 +72,7 @@ export class ApiAdminSession extends Handler {
     }
     this.throttles.perAddress.recordSuccess(ctx.ip);
     this.throttles.everyone.recordSuccess(EVERYONE);
-    responses.setCookie(res, adminCookieName, adminToken(ctx.ids.serverId), adminCookieLifetimeSeconds, isSecureRequest(req));
+    responses.setCookie(res, adminCookieName, adminToken(ctx.ids.serverId, now), adminCookieLifetimeSeconds, isSecureRequest(req));
     responses.writeJson(res, ctx, {admin: true});
   }
 }

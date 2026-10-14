@@ -35,7 +35,7 @@ export class RouteTestScaffolding {
 
   // Sends the admin login cookie with the following requests
   public loginAsAdmin(): void {
-    this.ctx.adminToken = adminToken(this.ctx.ids.serverId);
+    this.ctx.adminToken = adminToken(this.ctx.ids.serverId, this.ctx.clock.now());
   }
 
   // Strictly speaking |url| can also accept a fragment.
