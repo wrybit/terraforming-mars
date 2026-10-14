@@ -61,6 +61,11 @@ export const OFFICIAL_BOARDS: ReadonlyArray<BoardNameType> = [
   BoardName.TERRA_CIMMERIA_NOVA,
 ];
 
+// Boards still in development upstream: small α after the name (upstream 36ac4f082)
+export const ALPHA_BOARDS: ReadonlyArray<BoardNameType> = [
+  BoardName.AMAZONIS_PLANITIA,
+];
+
 export const FAN_BOARDS: ReadonlyArray<BoardNameType> = [
   BoardName.ARABIA_TERRA,
   BoardName.AMAZONIS,

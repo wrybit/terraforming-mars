@@ -122,6 +122,7 @@
                     :label="boardName" capitalized :selected="board === boardName"
                     @select="board = boardName">
                     <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
+                    <span v-if="ALPHA_BOARDS.includes(boardName)" class="create-game-alpha" :title="$t('Alpha — work in progress')">α</span>
                   </ChoiceChip>
                 </div>
               </CollapsibleSection>
@@ -437,7 +438,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption, fanBoards} from './createGameChoices';
+import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, ALPHA_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption, fanBoards} from './createGameChoices';
 import {ExpansionGroup, ExpansionGrouping, ExpansionTile, groupExpansions, loadExpansionGrouping, saveExpansionGrouping} from './expansionGrouping';
 import {ContentLinePart, contentLine} from './expansionContentLine';
 import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
@@ -808,6 +809,9 @@ export default defineComponent({
     },
     AGENDA_OPTIONS(): typeof AGENDA_OPTIONS {
       return AGENDA_OPTIONS;
+    },
+    ALPHA_BOARDS(): typeof ALPHA_BOARDS {
+      return ALPHA_BOARDS;
     },
     RANDOM_BOARD_OPTIONS(): typeof RANDOM_BOARD_OPTIONS {
       return RANDOM_BOARD_OPTIONS;
