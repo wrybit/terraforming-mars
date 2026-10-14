@@ -16,17 +16,15 @@ function dashboardWith(head: string, upstream?: Array<string>): ServerDashboard 
 }
 
 describe('DashboardCommits', () => {
-  it('highlights the running commit and offers the update when the server is behind', () => {
+  it('highlights the running commit and shows how far the server is behind', () => {
     const wrapper = mount(DashboardCommits, {...globalConfig, props: {dashboard: dashboardWith('bbbbbbb', ['aaaaaaaaa', 'bbbbbbbbb'])}});
     expect(wrapper.find('.server-dashboard-commit-live').text()).contains('Commit bbbbbbbbb');
     expect(wrapper.find('.server-dashboard-deploy-status').text()).eq('1 commits behind');
-    expect(wrapper.text()).contains('Update to latest');
   });
 
-  it('shows no update button when the server runs the newest commit', () => {
+  it('shows up to date when the server runs the newest commit', () => {
     const wrapper = mount(DashboardCommits, {...globalConfig, props: {dashboard: dashboardWith('aaaaaaaaa', ['aaaaaaaaa', 'bbbbbbbbb'])}});
     expect(wrapper.find('.server-dashboard-deploy-status').text()).eq('Up to date');
-    expect(wrapper.text()).not.contains('Update to latest');
     expect(wrapper.text()).contains('Restart server');
   });
 

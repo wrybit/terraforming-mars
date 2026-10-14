@@ -30,3 +30,8 @@ export function deployState(dashboard: ServerDashboard): DeployState {
   const liveIndex = rows.findIndex((row) => row.live);
   return {rows, behind: liveIndex === -1 ? rows.length : liveIndex};
 }
+
+/** An update can be asked for: the server is behind the deploy branch and no request waits yet. */
+export function canRequestUpdate(dashboard: ServerDashboard): boolean {
+  return (deployState(dashboard).behind ?? 0) > 0 && dashboard.updateRequest === undefined;
+}

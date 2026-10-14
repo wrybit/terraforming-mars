@@ -28,6 +28,7 @@
         <h2 v-i18n>Games</h2>
         <DashboardOnlineCount :count="dashboard.games.playersOnline"/>
         <DashboardFacts :facts="gameFacts"/>
+        <DashboardUpdateButton :dashboard="dashboard" @changed="$emit('changed')"/>
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Graphics</h2>
@@ -76,6 +77,7 @@ import DashboardServerLogo from '@/client/components/admin/dashboard/DashboardSe
 import DashboardMeter from '@/client/components/admin/dashboard/DashboardMeter.vue';
 import DashboardCommits from '@/client/components/admin/dashboard/DashboardCommits.vue';
 import DashboardGraphics from '@/client/components/admin/dashboard/DashboardGraphics.vue';
+import DashboardUpdateButton from '@/client/components/admin/dashboard/DashboardUpdateButton.vue';
 import DashboardOnlineCount from '@/client/components/admin/dashboard/DashboardOnlineCount.vue';
 import DashboardDayOverlay from '@/client/components/admin/dashboard/DashboardDayOverlay.vue';
 import DashboardSplitBar from '@/client/components/admin/dashboard/DashboardSplitBar.vue';
@@ -85,7 +87,7 @@ import {formatDateTime, formatDuration, periodBars} from '@/client/components/ad
 
 export default defineComponent({
   name: 'ServerDashboardView',
-  components: {DashboardCommits, DashboardDayOverlay, DashboardFacts, DashboardGraphics, DashboardOnlineCount, DashboardMeter, DashboardServerLogo, DashboardSplitBar, StatsBarChart},
+  components: {DashboardCommits, DashboardDayOverlay, DashboardFacts, DashboardGraphics, DashboardOnlineCount, DashboardMeter, DashboardServerLogo, DashboardSplitBar, DashboardUpdateButton, StatsBarChart},
   props: {
     dashboard: {type: Object as PropType<ServerDashboard>, required: true},
   },
