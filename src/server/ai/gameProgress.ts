@@ -1,6 +1,7 @@
 import {IGame} from '../IGame';
 import {IPlayer} from '../IPlayer';
 import {tuningOf} from './aiTuning';
+import {remainingAtRecentPace} from './recentPace';
 import {MAX_OCEAN_TILES, MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MIN_TEMPERATURE} from '../../common/constants';
 
 // How far the game is and what a victory point is worth right now.
@@ -76,7 +77,11 @@ export function remainingProductionPhases(game: IGame, player?: IPlayer): number
   // The game cannot end before the global parameters are maxed, however late it is. In a test
   // game the human kept terraforming slow until generation 13 (a quarter of the steps done); the
   // prior said "last generation", and the AI sold its 20 hand cards and lost 93 : 198.
-  return Math.max(0, Math.round(clamped), minimumRemaining(game, progress));
+  // recentPace: a rush in the last generation may shorten the estimate beyond the deviation (recentPace.ts).
+  const recentLimit = player === undefined ? 0 : tuningOf(player).recentPace;
+  const byRecentPace = recentLimit > 0 ? remainingAtRecentPace(game, stepsLeft(game)) : undefined;
+  const estimate = byRecentPace === undefined ? clamped : Math.min(clamped, Math.max(clamped - recentLimit, byRecentPace));
+  return Math.max(0, Math.round(estimate), minimumRemaining(game, progress));
 }
 
 /**

@@ -8,6 +8,7 @@ import {Birds} from '../../src/server/cards/base/Birds';
 import {Predators} from '../../src/server/cards/base/Predators';
 import {ProtectedHabitats} from '../../src/server/cards/base/ProtectedHabitats';
 import {collectorRate} from '../../src/server/ai/collectorRate';
+import {remainingAtRecentPace} from '../../src/server/ai/recentPace';
 
 describe('AI strategy-guide gaps', () => {
   it('sees the ocean bonus one temperature step away for an opponent with heat', () => {
@@ -59,5 +60,14 @@ describe('AI strategy-guide gaps', () => {
   it('knows the measured feeding rate of collector cards', () => {
     expect(collectorRate('Herbivores')).greaterThan(collectorRate('Tardigrades'));
     expect(collectorRate('Unknown Card')).eq(1);
+  });
+
+  it('estimates the remaining generations from the pace of the last generation', () => {
+    const [game] = testGame(2);
+    game.globalsPerGeneration = [{temperature: -20, oxygen: 4, oceans: 3}, {temperature: -10, oxygen: 8, oceans: 5}];
+    // 5 + 4 + 2 = 11 steps in the last generation: 22 steps left are two more generations, the next ends it.
+    expect(remainingAtRecentPace(game, 22)).eq(1);
+    game.globalsPerGeneration = [{temperature: -20}];
+    expect(remainingAtRecentPace(game, 22)).is.undefined;
   });
 });

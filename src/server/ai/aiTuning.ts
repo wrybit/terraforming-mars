@@ -156,6 +156,8 @@ export type AiTuning = {
   lateDenial: number,
   /** 1: collector cards gain their measured resources per generation (collectorRate.ts) instead of one. */
   collectorRates: number,
+  /** Generations by which the pace of the last generation may shorten the expected game length (recentPace.ts); 0 = off. */
+  recentPace: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -303,6 +305,7 @@ export const BASELINE_TUNING: AiTuning = {
   lateDenial: 0,
   // Round 66: collectorRate06 −0.23 (z −0.29) – neutral, fixes the human card-VP gap (collectors) – adopted with accumulatorValue 0.6.
   collectorRates: 1,
+  recentPace: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -593,6 +596,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   collectorRate04: {accumulatorValue: 0.4, collectorRates: 1},
   collectorRate08: {accumulatorValue: 0.8, collectorRates: 1},
   noCollectors: {accumulatorValue: 0, collectorRates: 0},
+  // Human rush ended a game in generation 8: shorten the estimate by the last generation's pace.
+  recentPace1: {recentPace: 1},
+  recentPace2: {recentPace: 2},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
