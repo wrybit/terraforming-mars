@@ -94,13 +94,29 @@ export function translateText(englishText: string): string {
         }
       }
     }
-    if (!translated.has(englishText) && !reportedMissing.has(englishText)) {
+    if (reportsMissingTranslations() && !translated.has(englishText) && !reportedMissing.has(englishText)) {
       reportedMissing.add(englishText);
       console.log(`${lang} - please translate: "${englishText}"`);
     }
   }
 
   return translatedText || englishText;
+}
+
+// Fehlende Übersetzungen findet `npm run lint:i18n` zuverlässig. Die Konsolenmeldung meldet dagegen
+// meist Namen und Symbole (Kartennamen, "M", "°C"), die keine Übersetzung brauchen – darum nur auf Wunsch:
+// localStorage.setItem('reportMissingTranslations', '1')
+let reportsMissing: boolean | undefined;
+function reportsMissingTranslations(): boolean {
+  if (reportsMissing === undefined) {
+    try {
+      reportsMissing = localStorage.getItem('reportMissingTranslations') === '1';
+    } catch {
+      // Private Fenster oder gesperrter Speicher: dann eben keine Meldungen
+      reportsMissing = false;
+    }
+  }
+  return reportsMissing;
 }
 
 export function translateTextWithParams(englishText: string, params: Array<string>): string {

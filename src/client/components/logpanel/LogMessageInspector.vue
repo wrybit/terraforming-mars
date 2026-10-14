@@ -79,8 +79,9 @@ watch([selectedMessage, () => previewPosition.value !== undefined], async () => 
     return;
   }
   await nextTick();
-  const element = cardPanel.value?.$refs.panel as HTMLElement | undefined;
-  if (element !== undefined) {
+  // Vue setzt den Ref auf null, wenn CardPanel nichts rendert (Zeile ohne Karten) – nicht auf undefined
+  const element = cardPanel.value?.$refs.panel as HTMLElement | null | undefined;
+  if (element instanceof HTMLElement) {
     const rect = element.getBoundingClientRect();
     panelSize.value = {width: rect.width, height: rect.height};
   }
