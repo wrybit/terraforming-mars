@@ -1413,5 +1413,6 @@
   "${0} drew and discarded ${1}": "${0} trok en legde af: ${1}",
   "AI info (spoilers)": "AI-info (spoilers)",
   "AI info (spoilers) hidden": "AI-info (spoilers) verborgen",
-  "Show AI info (spoilers)": "AI-info (spoilers) tonen"
+  "Show AI info (spoilers)": "AI-info (spoilers) tonen",
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Ongedaan maken niet mogelijk: sindsdien zijn kaarten of andere verborgen informatie onthuld."
 }

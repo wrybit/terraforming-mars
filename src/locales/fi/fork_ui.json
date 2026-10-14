@@ -800,5 +800,6 @@
   "${0} drew and discarded ${1}": "${0} nosti ja poisti ${1}",
   "AI info (spoilers)": "AI-tiedot (spoilerit)",
   "AI info (spoilers) hidden": "AI-tiedot (spoilerit) piilotettu",
-  "Show AI info (spoilers)": "Näytä AI-tiedot (spoilerit)"
+  "Show AI info (spoilers)": "Näytä AI-tiedot (spoilerit)",
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Kumoaminen ei ole mahdollista: sen jälkeen on paljastettu kortteja tai muuta piilotettua tietoa."
 }

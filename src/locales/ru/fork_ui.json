@@ -1606,5 +1606,6 @@
   "${0} drew and discarded ${1}": "${0} взял и сбросил ${1}",
   "AI info (spoilers)": "Сведения AI (спойлеры)",
   "AI info (spoilers) hidden": "Сведения AI (спойлеры) скрыты",
-  "Show AI info (spoilers)": "Показать сведения AI (спойлеры)"
+  "Show AI info (spoilers)": "Показать сведения AI (спойлеры)",
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Отмена невозможна: с тех пор были открыты карты или другая скрытая информация."
 }

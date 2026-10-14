@@ -971,5 +971,6 @@
   "${0} drew and discarded ${1}": "${0} húzta és eldobta: ${1}",
   "AI info (spoilers)": "AI-infók (spoilerek)",
   "AI info (spoilers) hidden": "AI-infók (spoilerek) elrejtve",
-  "Show AI info (spoilers)": "AI-infók (spoilerek) megjelenítése"
+  "Show AI info (spoilers)": "AI-infók (spoilerek) megjelenítése",
+  "Undo is not possible: cards or other hidden information were revealed since then.": "A visszavonás nem lehetséges: azóta kártyák vagy más rejtett információk derültek ki."
 }

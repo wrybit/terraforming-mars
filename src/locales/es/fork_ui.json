@@ -2018,5 +2018,6 @@
   "${0} drew and discarded ${1}": "${0} robó y descartó ${1}",
   "AI info (spoilers)": "Info de la AI (spoilers)",
   "AI info (spoilers) hidden": "Info de la AI (spoilers) oculta",
-  "Show AI info (spoilers)": "Mostrar info de la AI (spoilers)"
+  "Show AI info (spoilers)": "Mostrar info de la AI (spoilers)",
+  "Undo is not possible: cards or other hidden information were revealed since then.": "No se puede deshacer: desde entonces se han revelado cartas u otra información oculta."
 }

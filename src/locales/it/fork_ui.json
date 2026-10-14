@@ -2010,5 +2010,6 @@
   "${0} drew and discarded ${1}": "${0} ha pescato e scartato ${1}",
   "AI info (spoilers)": "Info AI (spoiler)",
   "AI info (spoilers) hidden": "Info AI (spoiler) nascoste",
-  "Show AI info (spoilers)": "Mostra info AI (spoiler)"
+  "Show AI info (spoilers)": "Mostra info AI (spoiler)",
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Impossibile annullare: da allora sono state rivelate carte o altre informazioni nascoste."
 }

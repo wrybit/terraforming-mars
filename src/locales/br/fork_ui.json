@@ -1910,5 +1910,6 @@
   "${0} drew and discarded ${1}": "${0} comprou e descartou ${1}",
   "AI info (spoilers)": "Infos da AI (spoilers)",
   "AI info (spoilers) hidden": "Infos da AI (spoilers) ocultas",
-  "Show AI info (spoilers)": "Mostrar infos da AI (spoilers)"
+  "Show AI info (spoilers)": "Mostrar infos da AI (spoilers)",
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Não é possível desfazer: desde então foram reveladas cartas ou outras informações ocultas."
 }

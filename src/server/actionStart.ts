@@ -42,15 +42,28 @@ function otherPlayers(game: SerializedGame, playerId: PlayerId): string {
     .map((player) => ({...player, timer: undefined} as Partial<SerializedPlayer>)));
 }
 
-// Everything that would show hidden information or affect someone else when rolled back
-function hiddenOrShared(game: SerializedGame, playerId: PlayerId): string {
-  return JSON.stringify([
+// Everything hidden from the players that a roll back would let them see again: decks, random seed, tokens
+function hiddenInformation(game: SerializedGame): Array<unknown> {
+  return [
     game.projectDeck, game.corporationDeck, game.preludeDeck, game.ceoDeck,
     game.currentSeed,
     game.underworldData?.tokens,
     game.turmoil?.globalEventDealer,
-    otherPlayers(game, playerId),
-  ]);
+  ];
+}
+
+// Everything that would show hidden information or affect someone else when rolled back
+function hiddenOrShared(game: SerializedGame, playerId: PlayerId): string {
+  return JSON.stringify([...hiddenInformation(game), otherPlayers(game, playerId)]);
+}
+
+/**
+ * Whether going back to an earlier save would let the player see hidden information again (cards drawn
+ * in between, random draws). Undo must not allow it: after rolling back, the player would know the next
+ * cards of the deck and could choose differently.
+ */
+export function revealsHiddenInformation(earlier: SerializedGame, current: SerializedGame): boolean {
+  return JSON.stringify(hiddenInformation(earlier)) !== JSON.stringify(hiddenInformation(current));
 }
 
 /* State to return to, if the player's current action can still be cancelled. */

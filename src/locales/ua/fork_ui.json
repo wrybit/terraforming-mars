@@ -948,5 +948,6 @@
   "${0} drew and discarded ${1}": "${0} витяг(ла) і скинув(ла) ${1}",
   "AI info (spoilers)": "Відомості AI (спойлери)",
   "AI info (spoilers) hidden": "Відомості AI (спойлери) приховано",
-  "Show AI info (spoilers)": "Показати відомості AI (спойлери)"
+  "Show AI info (spoilers)": "Показати відомості AI (спойлери)",
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Скасування неможливе: відтоді було відкрито карти або іншу приховану інформацію."
 }

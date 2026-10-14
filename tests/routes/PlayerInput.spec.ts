@@ -24,10 +24,16 @@ describe('PlayerInput', () => {
   let req: MockRequest;
   let res: MockResponse;
 
+  const originalLoadSave = PlayerInput.INSTANCE.loadSave;
+
   beforeEach(() => {
     req = new MockRequest();
     res = new MockResponse();
     scaffolding = new RouteTestScaffolding(req);
+  });
+
+  afterEach(() => {
+    PlayerInput.INSTANCE.loadSave = originalLoadSave;
   });
 
   it('fails when id not provided', async () => {
@@ -51,6 +57,7 @@ describe('PlayerInput', () => {
     const options = cast(player.getWaitingFor(), OrOptions);
     options.options.push(new UndoActionOption());
     scaffolding.ctx.gameLoader.restoreGameAt = (_gameId: string, _lastSaveId: number) => Promise.resolve(undo);
+    PlayerInput.INSTANCE.loadSave = () => Promise.resolve(game.serialize());
 
     const post = scaffolding.post(PlayerInput.INSTANCE, res);
     const emit = Promise.resolve().then(() => {
@@ -79,6 +86,7 @@ describe('PlayerInput', () => {
     const options = cast(player.getWaitingFor(), OrOptions);
     options.options.push(new UndoActionOption());
     scaffolding.ctx.gameLoader.restoreGameAt = (_gameId: string, _lastSaveId: number) => Promise.reject(new Error('error'));
+    PlayerInput.INSTANCE.loadSave = () => Promise.resolve(game.serialize());
 
     const post = scaffolding.post(PlayerInput.INSTANCE, res);
     const emit = Promise.resolve().then(() => {
@@ -91,6 +99,37 @@ describe('PlayerInput', () => {
     const model = JSON.parse(res.content);
     expect(game.gameAge).not.eq(undo.gameAge);
     expect(model.game.gameAge).eq(model.game.gameAge);
+  });
+
+  it('refuses undo across a move that revealed hidden cards', async () => {
+    const player = TestPlayer.BLUE.newPlayer({beginner: true});
+    scaffolding.url = '/player/input?id=' + player.id;
+    const game = Game.newInstance('gameid-foo', [player], player, 'spectatorid');
+    await scaffolding.ctx.gameLoader.add(game);
+
+    // The save to return to still had the card on the deck that has been drawn since
+    const earlier = game.serialize();
+    player.drawCard();
+    const options = cast(player.getWaitingFor(), OrOptions);
+    options.options.push(new UndoActionOption());
+    let restored = false;
+    scaffolding.ctx.gameLoader.restoreGameAt = () => {
+      restored = true;
+      return Promise.reject(new Error('must not restore'));
+    };
+    PlayerInput.INSTANCE.loadSave = () => Promise.resolve(earlier);
+
+    const post = scaffolding.post(PlayerInput.INSTANCE, res);
+    const emit = Promise.resolve().then(() => {
+      const orOptionsResponse: OrOptionsResponse = {type: 'or', index: options.options.length - 1, response: {type: 'option'}};
+      req.emitString(JSON.stringify(orOptionsResponse));
+      req.emitter.emit('end');
+    });
+    await Promise.all(([emit, post]));
+
+    expect(restored).is.false;
+    expect(res.statusCode).eq(statusCode.ok);
+    expect(game.gameLog.at(-1)?.message).contains('Undo is not possible');
   });
 
   it('sends 400 when input processing throws a plain Error', async () => {

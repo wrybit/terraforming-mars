@@ -583,5 +583,6 @@
   "${0} drew and discarded ${1}": "${0} zog und verwarf ${1}",
   "AI info (spoilers)": "AI-Infos (Spoiler)",
   "AI info (spoilers) hidden": "AI-Infos (Spoiler) ausgeblendet",
-  "Show AI info (spoilers)": "AI-Infos (Spoiler) einblenden"
+  "Show AI info (spoilers)": "AI-Infos (Spoiler) einblenden",
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Rückgängig nicht möglich: Seitdem wurden Karten oder andere verdeckte Informationen aufgedeckt."
 }

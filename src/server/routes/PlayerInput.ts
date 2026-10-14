@@ -19,6 +19,10 @@ import {RouteError} from './RouteError';
 import {readBody} from './readBody';
 import {stringToNumber} from '../database/utils';
 import {prepareHumanDecision} from '../ai/humanDecisionTrace';
+import {GameId} from '../../common/Types';
+import {SerializedGame} from '../SerializedGame';
+import {Database} from '../database/Database';
+import {revealsHiddenInformation} from '../actionStart';
 
 export const playerInputMetrics = {
   responseInterval: new prometheus.Histogram({
@@ -64,6 +68,10 @@ export class PlayerInput extends Handler {
     return this.processInput(req, res, ctx, player);
   }
 
+  // Replaceable in tests (they keep no saves)
+  public loadSave: (gameId: GameId, saveId: number) => Promise<SerializedGame> =
+    (gameId, saveId) => Database.getInstance().getGameVersion(gameId, saveId);
+
   private isWaitingForUndo(player: IPlayer, entity: InputResponse): boolean {
     const waitingFor = player.getWaitingFor();
     if (entity.type === 'or' && waitingFor instanceof OrOptions) {
@@ -81,6 +89,13 @@ export class PlayerInput extends Handler {
      */
     const lastSaveId = player.game.lastSaveId - 2;
     try {
+      // Not across a move that revealed hidden cards: the player would then know what comes next
+      const earlier = await this.loadSave(player.game.id, lastSaveId);
+      if (revealsHiddenInformation(earlier, player.game.serialize())) {
+        player.game.log('Undo is not possible: cards or other hidden information were revealed since then.', () => {}, {reservedFor: player});
+        responses.writeJson(res, ctx, Server.getPlayerModel(player));
+        return;
+      }
       const game = await ctx.gameLoader.restoreGameAt(player.game.id, lastSaveId);
       if (game === undefined) {
         player.game.log('Unable to perform undo operation. Error retrieving game from database. Please try again.', () => {}, {reservedFor: player});

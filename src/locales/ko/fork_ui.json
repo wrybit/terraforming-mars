@@ -1032,5 +1032,6 @@
   "${0} drew and discarded ${1}": "${0} 플레이어가 ${1} 카드를 뽑고 버림",
   "AI info (spoilers)": "AI 정보 (스포일러)",
   "AI info (spoilers) hidden": "AI 정보 (스포일러) 숨김",
-  "Show AI info (spoilers)": "AI 정보 (스포일러) 표시"
+  "Show AI info (spoilers)": "AI 정보 (스포일러) 표시",
+  "Undo is not possible: cards or other hidden information were revealed since then.": "되돌릴 수 없습니다: 그 이후 카드나 다른 숨겨진 정보가 공개되었습니다."
 }
