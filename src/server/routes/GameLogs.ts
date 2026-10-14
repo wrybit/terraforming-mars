@@ -6,7 +6,7 @@ import {Phase} from '../../common/Phase';
 import {Log} from '../../common/logs/Log';
 import {LogMessageData} from '../../common/logs/LogMessageData';
 import {LogMessageDataType} from '../../common/logs/LogMessageDataType';
-import {aiPlayerOfLine, isSharedAiLine} from '../aiFeedback/aiLogLines';
+import {aiPlayerOfLine, isSharedAiLine, spoilsOpenChoice} from '../aiFeedback/aiLogLines';
 import {AiFeedbackStore} from '../aiFeedback/AiFeedbackStore';
 import {AI_FEEDBACK_EMOJI} from '../../common/ai/AiFeedback';
 
@@ -37,7 +37,8 @@ export class GameLogs {
           return false;
         }
         // Analysis game: the AI players' private lines are open to everyone – never those of humans
-        return message.playerId === undefined || message.playerId === playerId || isSharedAiLine(game, message);
+        return message.playerId === undefined || message.playerId === playerId ||
+          (isSharedAiLine(game, message) && !spoilsOpenChoice(game, message, playerId));
       } catch (e) {
         console.error('Error checking message for player', e);
         return false;

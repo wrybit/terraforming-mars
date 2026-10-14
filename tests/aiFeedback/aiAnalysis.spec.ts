@@ -21,6 +21,7 @@ import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {possibleActionsOf} from '../../src/server/ai/possibleActions';
 import {Algae} from '../../src/server/cards/base/Algae';
 import {Ants} from '../../src/server/cards/base/Ants';
+import {Phase} from '../../src/common/Phase';
 
 function analysisGame(): [IGame, TestPlayer, TestPlayer] {
   const [game, human, ai] = testGame(2, {aiAnalysis: true});
@@ -148,5 +149,20 @@ describe('AI analysis games', () => {
       {title: 'Play project card', cards: ['Algae']},
       {title: 'Pass for this generation'},
     ]);
+  });
+
+  it('shows what the AI bought or drafted only once the reader has chosen too', () => {
+    const [game, human, ai] = analysisGame();
+    LogHelper.logPrivately(ai, 'You bought no cards', '${0} bought no cards', () => {});
+    LogHelper.logPrivately(ai, 'You drafted ${0}', '${0} drafted ${1}', (b) => b.card(new Algae()));
+    const shown = (message: string) => new GameLogs().getLogsForGameView(human.id, game, undefined).some((line) => line.message === message);
+    game.phase = Phase.DRAFTING;
+    expect(shown('${0} drafted ${1}')).is.false;
+    expect(shown('${0} bought no cards')).is.false;
+    game.phase = Phase.RESEARCH;
+    expect(shown('${0} drafted ${1}')).is.true;
+    expect(shown('${0} bought no cards')).is.false;
+    game.playerIsFinishedWithResearchPhase(human);
+    expect(shown('${0} bought no cards')).is.true;
   });
 });
