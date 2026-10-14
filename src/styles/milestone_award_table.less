@@ -5,6 +5,7 @@
 @ma-table-row-height: 28px;
 @ma-table-own-row-height: 32px;
 @ma-table-row-gap: 4px;
+@ma-table-status-height: 26px;
 @ma-table-radius: 6px;
 @ma-table-color-bar-width: 6px;
 @ma-table-gold: @section-caption-gold;
@@ -79,7 +80,7 @@
 }
 
 .ma-table-status {
-  height: 26px;
+  height: @ma-table-status-height;
   background: rgba(0, 0, 0, 0.35);
 }
 
@@ -345,6 +346,19 @@ each(@players, {
 
   .ma-table-part--names {
     flex: none;
+    position: relative;
+  }
+
+  // Free corner above the names (slot "corner"): over the heading, icon and cost rows, as wide as the names
+  .ma-table-corner {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: var(--ma-table-name-width, 104px);
+    height: @ma-table-labels-height + @ma-table-head-height + @ma-table-status-height + 2 * @ma-table-row-gap;
+    display: flex;
+    align-items: center;
   }
 
   .ma-table-part--values {
@@ -525,6 +539,35 @@ each(@players, {
   // Same gap to the right edge as to the bottom, so the radii of track and box corner run together
   margin-right: 1px;
   transition: opacity 0.15s ease;
+}
+
+// In the corner above the names: stacked, switch in front of the label, labels may wrap (long languages)
+.log-milestones-toggles.log-milestones-toggles--corner {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  padding-left: 8px;
+
+  .toggle-switch {
+    max-width: 100%;
+    align-items: flex-start;
+  }
+
+  .toggle-switch-track {
+    order: -1;
+  }
+
+  .toggle-switch-label {
+    min-width: 0;
+    line-height: 16px; // as tall as the track: a one-line label sits level with it
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
 }
 
 // Only while the pointer is over the box; without hover (touch) they stay visible

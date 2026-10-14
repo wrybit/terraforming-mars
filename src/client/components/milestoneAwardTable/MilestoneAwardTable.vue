@@ -7,6 +7,8 @@
     <!-- Parts: one ("all", without a box of its own) or, when scrollable, the fixed name column and the scrolling
          values next to it. Each part renders the same rows, so their heights match (milestone_award_table.less). -->
     <div v-for="part in parts" :key="part" :class="['ma-table-part', 'ma-table-part--' + part]" :style="{'--ma-table-columns': columnTemplate(part)}" @scroll.passive="markHorizontalScroll">
+      <!-- Slot "corner": the free space above the names (split only; LogPanel puts its switches there) -->
+      <div v-if="part === 'names' && $slots.corner" class="ma-table-corner"><slot name="corner"></slot></div>
       <div class="ma-table-row ma-table-labels">
         <template v-if="hasNames(part)"><div></div><div></div></template>
         <template v-if="hasValues(part)">
@@ -109,6 +111,8 @@ export default defineComponent({
     flash: vFlash,
     glassTooltip,
   },
+  // "split": whether the free corner above the names exists (slot "corner"), so the parent can place things elsewhere otherwise
+  emits: ['split'],
   props: {
     milestones: {
       type: Array as () => ReadonlyArray<ClaimedMilestoneModel>,
@@ -147,6 +151,14 @@ export default defineComponent({
         this.transposed = transposed;
       }));
     }
+  },
+  watch: {
+    split: {
+      handler(split: boolean): void {
+        this.$emit('split', split);
+      },
+      immediate: true,
+    },
   },
   beforeUnmount() {
     stopHeaderFit.get(this)?.();

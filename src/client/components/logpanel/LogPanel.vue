@@ -4,11 +4,14 @@
     <template v-if="separatesMilestonesAwards">
       <div class="panel or-tab-panel or-tab-panel--tone-milestones log-panel--milestones log-milestones-box" role="region" :aria-label="milestonesAwardsTitle">
         <div class="log-milestones">
-          <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable/>
+          <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable @split="tableSplit = $event">
+            <template v-if="tableSplit" #corner>
+              <LogMilestonesSwitches corner separateOnly :separate="true" @separate="setSeparateMilestonesLog"/>
+            </template>
+          </MilestoneAwardTable>
         </div>
-        <div class="log-milestones-toggles">
-          <ToggleSwitch data-test="log-milestones-separate" :modelValue="separatesMilestonesAwards" :label="$t('Separate log')" @update:modelValue="setSeparateMilestonesLog"/>
-        </div>
+        <!-- Transposed table (narrow box): no free corner, the switch goes below the table -->
+        <LogMilestonesSwitches v-if="!tableSplit" separateOnly :separate="true" @separate="setSeparateMilestonesLog"/>
       </div>
     </template>
     <LogGenerationList
@@ -61,18 +64,17 @@
       </div>
       </div>
       <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones">
-        <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable/>
+        <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable @split="tableSplit = $event">
+          <!-- Switches in the free corner above the names, only while hovering the box -->
+          <template v-if="tableSplit" #corner>
+            <LogMilestonesSwitches corner :autoOpen="autoMilestonesTab" :separate="separatesMilestonesAwards"
+              @autoOpen="setAutoMilestonesTab" @separate="setSeparateMilestonesLog"/>
+          </template>
+        </MilestoneAwardTable>
       </div>
-      <!-- Below the table, outside its scroll area, only while hovering the box: whether the box switches here
-           by itself on one's own turn, and (rightmost) whether milestones & awards get their own box above the log -->
-      <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones-toggles">
-        <ToggleSwitch data-test="log-milestones-auto"
-          :modelValue="autoMilestonesTab" :label="$t('Open on my turn')" @update:modelValue="setAutoMilestonesTab"/>
-        <!-- Bound to the preference, not a constant: this row only hides (v-show), and a constant value would
-             never reset the checkbox the click left switched on -->
-        <ToggleSwitch data-test="log-milestones-separate"
-          :modelValue="separatesMilestonesAwards" :label="$t('Separate log')" @update:modelValue="setSeparateMilestonesLog"/>
-      </div>
+      <!-- Transposed table (narrow box): no free corner, the switches go below the table -->
+      <LogMilestonesSwitches v-if="hasMilestonesAwards && !tableSplit" v-show="showsMilestonesAwards"
+        :autoOpen="autoMilestonesTab" :separate="separatesMilestonesAwards" @autoOpen="setAutoMilestonesTab" @separate="setSeparateMilestonesLog"/>
       <button
         v-show="showScrollToBottomButton && !showsMilestonesAwards"
         type="button"
@@ -120,7 +122,7 @@ import {isFilterActive, LogFilter, rowMatches} from '@/client/components/logpane
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
 import LogCardsZoom from '@/client/components/logpanel/LogCardsZoom.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
-import ToggleSwitch from '@/client/components/common/ToggleSwitch.vue';
+import LogMilestonesSwitches from '@/client/components/logpanel/LogMilestonesSwitches.vue';
 import {milestonesAwardsLabel} from '@/client/components/milestoneAwardTable/milestonesAwardsLabel';
 import {cachedLogStream, fetchLogStream, GenerationLog} from '@/client/utils/fetchLogs';
 import {milestonesAwardsFocusState} from '@/client/components/logpanel/milestonesAwardsFocus';
@@ -154,6 +156,8 @@ type ViewState = {
   // otherwise the reader's own choice survives the remount after every update
   acting: boolean,
   view: LogView,
+  // Whether the table has its free corner above the names (not when transposed in a narrow box)
+  tableSplit: boolean,
   // True if the reader was at the end of the log, and so should stay at the end
   // of whatever is newest after a remount.
   following: boolean,
@@ -261,6 +265,7 @@ export default defineComponent({
     return {
       sections: [],
       view: 'log',
+      tableSplit: true,
       selectedGeneration: -1,
       showScrollToBottomButton: false,
       following: true,
@@ -286,7 +291,7 @@ export default defineComponent({
     LogGenerationList,
     LogCardsZoom,
     MilestoneAwardTable,
-    ToggleSwitch,
+    LogMilestonesSwitches,
     LogAiRatings,
     LogAiRateBar,
   },
