@@ -154,9 +154,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.LOGIN, Login.INSTANCE],
     [paths.API_LOGOUT, ApiLogout.INSTANCE],
     ['main.js', ServeAsset.INSTANCE],
-    ['main.js.map', ServeAsset.INSTANCE],
     ['vendors.js', ServeAsset.INSTANCE],
-    ['vendors.js.map', ServeAsset.INSTANCE],
     [paths.AUTH_DISCORD_CALLBACK, DiscordAuth.INSTANCE],
     [paths.NEW_GAME, ServeApp.INSTANCE],
     [paths.PLAYER, ServeApp.INSTANCE],
@@ -237,7 +235,8 @@ export async function processRequest(req: Request, res: Response): Promise<void>
     const handler = getHandler(pathname);
     if (handler !== undefined) {
       // No need to report every asset. Summarize.
-      metricsPathname = pathname.startsWith('assets/') ? 'assets/' : pathname;
+      // Summarized: every invented "chunks/…" path would otherwise be a new metrics series kept forever
+      metricsPathname = pathname.startsWith('assets/') ? 'assets/' : pathname.startsWith('chunks/') ? 'chunks/' : pathname;
       const {user, sessionid} = getAuthenticatedUser(req);
       const ctx: Context = {
         url: url,

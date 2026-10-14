@@ -170,10 +170,10 @@ export class ServeAsset extends Handler {
       }
       return {file: 'build/styles.css'};
 
+    // Source maps are not served: they would publish the full source with comments, including optional
+    // extensions that are not part of the public repository
     case 'main.js':
-    case 'main.js.map':
     case 'vendors.js':
-    case 'vendors.js.map':
       return this.toMainFile(urlPath, encodings);
 
     // sw.js is empty. Although not confirmed, it seems sw.js is necessary
@@ -191,19 +191,19 @@ export class ServeAsset extends Handler {
       if (urlPath.startsWith('chunks/')) {
         const chunksRoot = path.resolve('./build/chunks');
         const resolvedFile = path.resolve(path.normalize('build/' + urlPath));
-        if (resolvedFile.startsWith(chunksRoot)) {
-          if (urlPath.endsWith('.js') || urlPath.endsWith('.js.map')) {
+        if (resolvedFile.startsWith(chunksRoot + path.sep)) {
+          if (urlPath.endsWith('.js')) {
             return this.toMainFile(urlPath, encodings);
           }
         }
       }
 
-      if (urlPath.endsWith('.png') || urlPath.endsWith('.jpg') || urlPath.endsWith('.webp') || urlPath.endsWith('.avif') || urlPath.endsWith('.json') || urlPath.endsWith('.svg')) {
+      if (urlPath.endsWith('.png') || urlPath.endsWith('.jpg') || urlPath.endsWith('.webp') || urlPath.endsWith('.avif') || urlPath.endsWith('.json') || urlPath.endsWith('.svg') || urlPath.endsWith('.woff2')) {
         const assetsRoot = path.resolve('./assets');
         const resolvedFile = path.resolve(path.normalize(urlPath));
 
-        // Only allow assets inside of assets directory
-        if (resolvedFile.startsWith(assetsRoot)) {
+        // Only allow assets inside of assets directory (with separator: "assets-other/" is not inside)
+        if (resolvedFile.startsWith(assetsRoot + path.sep)) {
           return {file: resolvedFile};
         }
       }

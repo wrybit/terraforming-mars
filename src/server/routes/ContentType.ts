@@ -5,6 +5,7 @@ const CONTENT_TYPES: Map<string /* file extension */, string /* content type*/> 
   ['js', 'text/javascript'],
   ['map', 'text/javascript'],
   ['ttf', 'font/ttf'],
+  ['woff2', 'font/woff2'],
   ['jpg', 'image/jpeg'],
   ['jpeg', 'image/jpeg'],
   ['png', 'image/png'],

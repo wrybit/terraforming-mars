@@ -60,7 +60,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 module.exports = {
-  devtool: 'source-map',
+  // Production: maps are written for local debugging but not referenced from the bundles (the server does not serve them)
+  devtool: process.env.NODE_ENV === 'production' ? 'hidden-source-map' : 'source-map',
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   entry: {
     main: './src/client/main.ts',

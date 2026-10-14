@@ -169,12 +169,22 @@ describe('ServeAsset', () => {
     expect(res.content).eq('data: build/chunks/player-home.js');
   });
 
-  it('chunk js.map file', async () => {
+  it('does not serve source maps', async () => {
+    // They would publish the full source with comments, including private extensions
     instance = new ServeAsset(undefined, false, fileApi);
     scaffolding.url = '/chunks/player-home.js.map';
     scaffolding.req.headers['accept-encoding'] = '';
     await scaffolding.get(instance, res);
-    expect(res.content).eq('data: build/chunks/player-home.js.map');
+    expect(res.statusCode).eq(statusCode.notFound);
+  });
+
+  it('serves the self-hosted fonts', async () => {
+    instance = new ServeAsset(undefined, false, fileApi);
+    scaffolding.url = '/assets/fonts/ubuntu/ubuntu-latin-400-normal.woff2';
+    scaffolding.req.headers['accept-encoding'] = '';
+    await scaffolding.get(instance, res);
+    expect(res.statusCode).eq(statusCode.ok);
+    expect(res.getHeader('Content-Type')).eq('font/woff2');
   });
 
   it('rejects path traversal in chunks', async () => {
