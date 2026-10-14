@@ -3,6 +3,8 @@
     :title="effect.token !== undefined ? tokenText : undefined" @click.stop="$emit('spaceClicked', effect.space)">
     <!-- A tile (or underground token) links to its space on the board, like the space chips of the text lines -->
     <i :class="['log-effect-icon', effect.tile !== undefined ? 'log-effect-tile--' + effect.tile : 'log-effect-token underground-token--' + effect.token]"></i>
+    <!-- Board coordinate as in the classic log, so the place is readable without clicking -->
+    <span v-if="spaceLabel !== undefined" class="log-effect-space">{{ spaceLabel }}</span>
   </button>
   <span v-else :title="effect.label !== undefined ? $t(effect.label) : undefined" :class="['log-effect', {'log-effect--production': effect.production, 'log-effect--loss': effect.amount < 0}]">
     <!-- Number, then symbol – the same for every resource, production on a brown area -->
@@ -23,6 +25,11 @@ export default defineComponent({
     effect: {
       type: Object as PropType<LogEffect>,
       required: true,
+    },
+    // Coordinate of the effect's space; omitted where no game is at hand (hover summary)
+    spaceLabel: {
+      type: String,
+      required: false,
     },
   },
   emits: ['spaceClicked'],

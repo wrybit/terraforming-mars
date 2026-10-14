@@ -59,7 +59,7 @@ import {Log} from '@/common/logs/Log';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {undergroundResourceTokenDescription} from '@/common/underworld/UndergroundResourceToken';
 import {SpaceId} from '@/common/Types';
-import {spacesById} from '@/client/utils/spacesById';
+import {spaceLabel} from '@/client/utils/spaceLabel';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {range} from '@/common/utils/utils';
@@ -93,12 +93,7 @@ export default defineComponent({
   methods: {
     partySlug,
     spaceName(id: SpaceId): string {
-      const game = this.viewModel.game;
-      const spaces = id.startsWith('m') ? game.moon?.spaces : game.spaces;
-      if (spaces === undefined) {
-        return 'n/a';
-      }
-      return spacesById(spaces).get(id)?.a9 ?? 'n/a';
+      return spaceLabel(this.viewModel.game, id);
     },
     cardToHtml(data: LogMessageData & {type: LogMessageDataType.CARD, value: CardName}) {
       return this.innerCardToHtml(data.value, data.attrs);

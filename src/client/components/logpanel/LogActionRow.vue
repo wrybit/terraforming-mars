@@ -37,7 +37,7 @@
       </template>
     </span>
     <span class="log-row-effects">
-      <LogEffectIcon v-for="(effect, index) in row.action.effects" :key="'own' + index" :effect="effect" @spaceClicked="$emit('spaceClicked', $event)"/>
+      <LogEffectIcon v-for="(effect, index) in row.action.effects" :key="'own' + index" :effect="effect" :spaceLabel="spaceName(effect)" @spaceClicked="$emit('spaceClicked', $event)"/>
       <!-- All players at once (turmoil phase): same area as for other players -->
       <span v-if="(row.action.everyone ?? []).length > 0" :class="['log-row-other', isLoss(row.action.everyone ?? []) ? 'log-row-other--loss' : 'log-row-other--gain']">
         <span class="log-row-other-name">{{ $t('All players') }}</span>
@@ -47,7 +47,7 @@
       <span v-for="other in row.action.others" :key="other.player"
         :class="['log-row-other', isLoss(other.effects) ? 'log-row-other--loss' : 'log-row-other--gain']">
         <span class="log-row-other-name">{{ playerName(other.player) }}</span>
-        <LogEffectIcon v-for="(effect, index) in other.effects" :key="index" :effect="effect" @spaceClicked="$emit('spaceClicked', $event)"/>
+        <LogEffectIcon v-for="(effect, index) in other.effects" :key="index" :effect="effect" :spaceLabel="spaceName(effect)" @spaceClicked="$emit('spaceClicked', $event)"/>
       </span>
     </span>
   </div>
@@ -69,6 +69,7 @@ import {translateTextWithParams} from '@/client/directives/i18n';
 import {LogEffect, LogRow} from '@/client/components/logpanel/logActions';
 import {cardTypeToCss} from '@/client/components/logpanel/logCardType';
 import LogEffectIcon from '@/client/components/logpanel/LogEffectIcon.vue';
+import {spaceLabel} from '@/client/utils/spaceLabel';
 import {partySlug} from '@/client/components/logpanel/logCardType';
 
 export default defineComponent({
@@ -88,6 +89,9 @@ export default defineComponent({
   methods: {
     playerName(color: Color): string {
       return this.viewModel.players.find((player) => player.color === color)?.name ?? color;
+    },
+    spaceName(effect: LogEffect): string | undefined {
+      return effect.space === undefined ? undefined : spaceLabel(this.viewModel.game, effect.space);
     },
     isLoss(effects: ReadonlyArray<LogEffect>): boolean {
       return effects.some((effect) => effect.amount < 0);
