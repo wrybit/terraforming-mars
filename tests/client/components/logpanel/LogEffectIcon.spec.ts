@@ -16,9 +16,4 @@ describe('LogEffectIcon', () => {
     await wrapper.trigger('click');
     expect(wrapper.emitted('spaceClicked')?.[0]).deep.eq(['05']);
   });
-
-  it('shows the board coordinate of a placed tile', () => {
-    const wrapper = mount(LogEffectIcon, {...globalConfig, props: {effect: {tile: 'city', amount: 0, space: '05'}, spaceLabel: 'E5'}});
-    expect(wrapper.find('.log-effect-space').text()).eq('E5');
-  });
 });

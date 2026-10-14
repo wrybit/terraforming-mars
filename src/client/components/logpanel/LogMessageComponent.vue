@@ -27,12 +27,7 @@
         <span v-else-if="data.type === LogMessageDataType.UNDERGROUND_TOKEN" class="log-excavation-token" v-i18n>
           {{undergroundResourceTokenDescription[data.value]}}
         </span>
-        <span v-else-if="data.type === LogMessageDataType.SPACE" class="log-space-id" @click.prevent="$emit('spaceClicked', data.value)">
-            <svg width="20" height="14" viewBox="0 0 28 38">
-              <circle cx="14" cy="19" r="16" stroke="black" stroke-width="1" transform="translate(0, 2)" :fill="data.value.startsWith('m') ? 'gray' : '#b7410e'" />
-            </svg>
-            {{ spaceName(data.value) }}
-        </span>
+        <LogSpaceChip v-else-if="data.type === LogMessageDataType.SPACE" :space="data.value" :game="viewModel.game" @spaceClicked="$emit('spaceClicked', $event)"/>
         <span v-else-if="data.type === LogMessageDataType.CARDS" v-html="cardsToHtml(data)"></span>
 
         <!-- Game id at the end of the game: link to the results page -->
@@ -58,14 +53,13 @@ import {tileTypeToString} from '@/common/TileType';
 import {Log} from '@/common/logs/Log';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {undergroundResourceTokenDescription} from '@/common/underworld/UndergroundResourceToken';
-import {SpaceId} from '@/common/Types';
-import {spaceLabel} from '@/client/utils/spaceLabel';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {range} from '@/common/utils/utils';
 import {needsModalPreview} from '@/client/components/logpanel/logMessageContent';
 import {cardTypeToCss, partySlug} from '@/client/components/logpanel/logCardType';
 import SeatIcon from '@/client/components/create/SeatIcon.vue';
+import LogSpaceChip from '@/client/components/logpanel/LogSpaceChip.vue';
 
 const DISCARD_MESSAGES = new Set([
   '${0} discarded ${1}',
@@ -79,6 +73,7 @@ export default defineComponent({
   name: 'LogMessageComponent',
   components: {
     SeatIcon,
+    LogSpaceChip,
   },
   props: {
     message: {
@@ -92,9 +87,6 @@ export default defineComponent({
   },
   methods: {
     partySlug,
-    spaceName(id: SpaceId): string {
-      return spaceLabel(this.viewModel.game, id);
-    },
     cardToHtml(data: LogMessageData & {type: LogMessageDataType.CARD, value: CardName}) {
       return this.innerCardToHtml(data.value, data.attrs);
     },

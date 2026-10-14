@@ -35,9 +35,11 @@
           <i v-for="(party, index) in row.action.parties" :key="index" :class="partyIcon(party)" :title="$t(party)"></i>
         </span>
       </template>
+      <!-- Where the action placed tiles, right after the text as in the classic log -->
+      <LogSpaceChip v-for="space in placedSpaces" :key="space" :space="space" :game="viewModel.game" @spaceClicked="$emit('spaceClicked', $event)"/>
     </span>
     <span class="log-row-effects">
-      <LogEffectIcon v-for="(effect, index) in row.action.effects" :key="'own' + index" :effect="effect" :spaceLabel="spaceName(effect)" @spaceClicked="$emit('spaceClicked', $event)"/>
+      <LogEffectIcon v-for="(effect, index) in row.action.effects" :key="'own' + index" :effect="effect" @spaceClicked="$emit('spaceClicked', $event)"/>
       <!-- All players at once (turmoil phase): same area as for other players -->
       <span v-if="(row.action.everyone ?? []).length > 0" :class="['log-row-other', isLoss(row.action.everyone ?? []) ? 'log-row-other--loss' : 'log-row-other--gain']">
         <span class="log-row-other-name">{{ $t('All players') }}</span>
@@ -47,7 +49,7 @@
       <span v-for="other in row.action.others" :key="other.player"
         :class="['log-row-other', isLoss(other.effects) ? 'log-row-other--loss' : 'log-row-other--gain']">
         <span class="log-row-other-name">{{ playerName(other.player) }}</span>
-        <LogEffectIcon v-for="(effect, index) in other.effects" :key="index" :effect="effect" :spaceLabel="spaceName(effect)" @spaceClicked="$emit('spaceClicked', $event)"/>
+        <LogEffectIcon v-for="(effect, index) in other.effects" :key="index" :effect="effect" @spaceClicked="$emit('spaceClicked', $event)"/>
       </span>
     </span>
   </div>
@@ -69,12 +71,13 @@ import {translateTextWithParams} from '@/client/directives/i18n';
 import {LogEffect, LogRow} from '@/client/components/logpanel/logActions';
 import {cardTypeToCss} from '@/client/components/logpanel/logCardType';
 import LogEffectIcon from '@/client/components/logpanel/LogEffectIcon.vue';
-import {spaceLabel} from '@/client/utils/spaceLabel';
+import {SpaceId} from '@/common/Types';
+import LogSpaceChip from '@/client/components/logpanel/LogSpaceChip.vue';
 import {partySlug} from '@/client/components/logpanel/logCardType';
 
 export default defineComponent({
   name: 'LogActionRow',
-  components: {LogEffectIcon},
+  components: {LogEffectIcon, LogSpaceChip},
   props: {
     row: {
       type: Object as PropType<LogRow>,
@@ -90,9 +93,6 @@ export default defineComponent({
     playerName(color: Color): string {
       return this.viewModel.players.find((player) => player.color === color)?.name ?? color;
     },
-    spaceName(effect: LogEffect): string | undefined {
-      return effect.space === undefined ? undefined : spaceLabel(this.viewModel.game, effect.space);
-    },
     isLoss(effects: ReadonlyArray<LogEffect>): boolean {
       return effects.some((effect) => effect.amount < 0);
     },
@@ -101,6 +101,13 @@ export default defineComponent({
     },
   },
   computed: {
+    placedSpaces(): Array<SpaceId> {
+      if (this.row.type !== 'action') {
+        return [];
+      }
+      const spaces = this.row.action.effects.map((effect) => effect.space).filter((space): space is SpaceId => space !== undefined);
+      return [...new Set(spaces)];
+    },
     card() {
       return this.row.type === 'action' && this.row.action.card !== undefined ? getCard(this.row.action.card) : undefined;
     },
