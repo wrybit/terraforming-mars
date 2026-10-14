@@ -32,28 +32,26 @@ describe('StartScreenUpdates', () => {
     expect(rows[0].find('.start-updates-sheet').text()).not.contains('commits');
   });
 
-  it('keeps exactly one day open: mouse before tap/focus before the newest', async () => {
+  it('works as an accordion: a click opens one day and closes the other', async () => {
     const days = Array.from({length: 4}, (_, index) => day(`2026-09-0${index + 1}`));
     const wrapper = mount(StartScreenUpdates, {...globalConfig, props: {initialDays: days}});
     const rows = wrapper.findAll('.start-updates-day');
     const open = () => rows.map((row) => row.classes().includes('start-updates-day--open'));
     expect(open()).deep.eq([true, false, false, false]);
 
-    // Tap/Fokus auf einen anderen Tag schließt den neuesten
-    await rows[2].trigger('focusin');
+    await rows[2].find('.start-updates-title').trigger('click');
     expect(open()).deep.eq([false, false, true, false]);
+    expect(rows[2].attributes('aria-expanded')).eq('true');
 
-    // Maus auf einem dritten Tag schließt auch den angetippten
-    await rows[3].trigger('pointerenter', {pointerType: 'mouse'});
-    expect(open()).deep.eq([false, false, false, true]);
-
-    // Touch-Pointer öffnet nichts (sein Hover bliebe kleben)
-    await wrapper.find('.start-updates-days').trigger('pointerleave');
-    await rows[1].trigger('pointerenter', {pointerType: 'touch'});
+    // Klick in die Punkte schaltet nicht um, erneuter Klick auf den Kopf schließt
+    await rows[2].find('.start-updates-items li').trigger('click');
     expect(open()).deep.eq([false, false, true, false]);
+    await rows[2].find('.start-updates-title').trigger('click');
+    expect(open()).deep.eq([false, false, false, false]);
 
-    await rows[2].trigger('focusout');
-    expect(open()).deep.eq([true, false, false, false]);
+    // Tastatur
+    await rows[1].trigger('keydown', {key: 'Enter'});
+    expect(open()).deep.eq([false, true, false, false]);
   });
 
   it('uses German only for German, English for every other language', () => {

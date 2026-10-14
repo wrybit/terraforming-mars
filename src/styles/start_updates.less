@@ -13,6 +13,8 @@
   // Resting opacity: set for the side column below; content fades, not the column itself – opacity on the column
   // would cut the blur layers off from the sky behind it
   --updates-fade: 1;
+  // Unschärfe des Inhalts, solange die Maus fern ist (nur Seitenspalte mit Maus, siehe unten)
+  --updates-blur: 0px;
   --updates-rule: rgba(232, 236, 244, calc(0.13 * var(--updates-fade)));
   --updates-reading-glass: rgba(5, 7, 13, 0.35);
   --updates-glass-edge: rgba(232, 236, 244, 0.1);
@@ -49,6 +51,7 @@
 
 .start-updates-head {
   opacity: var(--updates-fade);
+  filter: blur(var(--updates-blur));
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -75,15 +78,19 @@
   }
 }
 
-// Closed day: date | title + number of points. Open day: calendar sheet over both rows, points below the title.
+// Closed day: date | title + number of points | chevron. Open day: calendar sheet over both rows, points below.
 .start-updates-day {
   display: grid;
-  grid-template-columns: @start-updates-date-width minmax(0, 1fr);
+  grid-template-columns: @start-updates-date-width minmax(0, 1fr) auto;
   grid-template-rows: auto auto;
   column-gap: 8px;
   border-top: 1px solid var(--updates-rule);
-  cursor: default;
+  cursor: pointer;
   outline: none;
+
+  &:focus-visible .start-updates-title {
+    text-decoration: underline;
+  }
 
   &:last-child {
     border-bottom: 1px solid var(--updates-rule);
@@ -91,6 +98,7 @@
 
   > * {
     opacity: var(--updates-fade);
+    filter: blur(var(--updates-blur));
   }
 }
 
@@ -120,9 +128,30 @@
   color: var(--updates-ink-faint);
 }
 
+// Wie die Akkordeons im Einstellungsdialog: zu zeigt nach unten (öffnet nach unten), offen nach oben
+.start-updates-chevron {
+  grid-row: 1;
+  grid-column: 3;
+  align-self: center;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--updates-ink-faint);
+  transform: rotate(90deg);
+  transition: transform 0.15s;
+
+  .start-updates-day:hover & {
+    color: var(--updates-ink);
+  }
+
+  .start-updates-day--open & {
+    transform: rotate(-90deg);
+  }
+}
+
 .start-updates-body {
   grid-row: 2;
-  grid-column: 2;
+  grid-column: 2 / 4;
+  cursor: auto;
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.25s ease;
@@ -229,7 +258,7 @@
   }
 }
 
-// Offen ist immer genau ein Tag (openIndex in StartScreenUpdates.vue): Maus darüber, sonst Fokus/Tap, sonst der neueste
+// Höchstens ein Tag offen (openIndex in StartScreenUpdates.vue), per Klick/Tap umgeschaltet
 .start-updates-day--open {
   .start-updates-body {
     grid-template-rows: 1fr;
@@ -256,9 +285,21 @@
     top: 50%;
     right: 40px;
     width: 290px;
-    --updates-fade: calc(0.35 + 0.65 * var(--near, 0));
-    transform: translateY(var(--shift, 0px));
     transition: transform 0.25s ease;
+  }
+}
+
+// Mit Maus: in Ruhe halb aus dem Bild geschoben, blass und unscharf; je näher die Maus (--near 0…1 aus
+// StartScreenUpdates.vue), desto weiter fährt die Spalte herein, wird deutlich, scharf und bis 20 % größer.
+// Ohne Maus (Tablet quer) bliebe sie sonst für immer halb verdeckt – dort steht sie voll da.
+@media only screen and (min-width: @start-updates-side-min) and (hover: hover) {
+  .start-updates {
+    --updates-scale: calc(1 + 0.2 * var(--near, 0));
+    --updates-fade: calc(0.25 + 0.75 * var(--near, 0));
+    --updates-blur: calc((1 - var(--near, 0)) * 4px);
+    // Wächst nach links und um die Mitte: der rechte Rand bleibt stehen
+    transform-origin: right center;
+    transform: translateX(calc((1 - var(--near, 0)) * (50% + 40px))) scale(var(--updates-scale));
   }
 }
 

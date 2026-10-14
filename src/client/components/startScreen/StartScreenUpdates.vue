@@ -4,30 +4,33 @@
 <aside v-if="days.length > 0"
   ref="panel"
   class="start-updates"
-  :style="{'--near': near, '--shift': `${shift}px`, 'top': top}"
+  :style="{'--near': near, 'top': top}"
   :aria-label="texts.heading">
   <div class="start-updates-head">
     <h2 class="start-updates-heading">{{ texts.heading }}</h2>
     <a class="start-updates-all" :href="featureLogUrl" target="_blank" rel="noopener">{{ texts.all }} →</a>
   </div>
-  <div class="start-updates-days" @pointerleave="hoveredIndex = undefined">
+  <div class="start-updates-days">
     <div v-for="(day, index) in days"
       :key="day.date"
       class="start-updates-day"
       :class="{'start-updates-day--newest': index === 0, 'start-updates-day--open': index === openIndex}"
       tabindex="0"
-      @pointerenter="onDayPointerEnter($event, index)"
-      @focusin="focusedIndex = index"
-      @focusout="focusedIndex = undefined">
+      role="button"
+      :aria-expanded="index === openIndex"
+      @click="onDayClick($event, index)"
+      @keydown.enter.prevent="toggleDay(index)"
+      @keydown.space.prevent="toggleDay(index)">
       <span class="start-updates-date">{{ day.shortDate }}</span>
       <span class="start-updates-title">{{ day.title }}<span class="start-updates-count">{{ day.items.length }}</span></span>
+      <span class="start-updates-chevron" aria-hidden="true">›</span>
       <div class="start-updates-sheet" :class="{'start-updates-sheet--sunday': day.sunday}" aria-hidden="true">
         <span class="start-updates-sheet-month">{{ day.month }}</span>
         <span class="start-updates-sheet-day">{{ day.dayOfMonth }}</span>
         <span class="start-updates-sheet-weekday">{{ day.weekday }}</span>
       </div>
       <!-- Extra wrapper: the grid row animates from 0fr to 1fr, the list keeps its own spacing -->
-      <div class="start-updates-body" :ref="index === 0 ? setNewestBody : undefined">
+      <div class="start-updates-body">
         <div>
           <ul class="start-updates-items">
             <li v-for="item in day.items" :key="item" :title="item">{{ item }}</li>
@@ -54,8 +57,10 @@ const props = withDefaults(defineProps<{
 
 // Two weeks; older days are on the feature log page ("All")
 const DAYS_SHOWN = 14;
-// From this distance (px) to the column on, it stays at its resting opacity
+// From this distance (px) to the column on, it stays at its resting state (half off screen, faint, blurred)
 const NEAR_RANGE = 220;
+// Größe bei voller Nähe – muss zu --updates-scale in start_updates.less passen
+const NEAR_SCALE = 1.2;
 
 const language = featureLogLanguage(getPreferences().lang);
 const texts = FEATURE_LOG_TEXTS[language];
@@ -65,20 +70,22 @@ const loadedDays = ref<ReadonlyArray<FeatureLogDay>>(props.initialDays ?? []);
 const days = computed(() => loadedDays.value.slice(0, DAYS_SHOWN).map((day) => presentDay(day, language)));
 
 const panel = ref<HTMLElement | undefined>(undefined);
-let newestBody: HTMLElement | undefined;
-function setNewestBody(element: unknown): void {
-  newestBody = element instanceof HTMLElement ? element : undefined;
-}
 
 // 0 = mouse far away, 1 = mouse at or over the column
 const near = ref(0);
 function onMouseMove(event: MouseEvent): void {
-  const rect = panel.value?.getBoundingClientRect();
-  if (rect === undefined) {
+  const element = panel.value;
+  if (element === undefined) {
     return;
   }
-  const dx = Math.max(rect.left - event.clientX, 0, event.clientX - rect.right);
-  const dy = Math.max(rect.top - event.clientY, 0, event.clientY - rect.bottom);
+  // Abstand zur voll eingeblendeten Lage, nicht zur sichtbaren: die Spalte fährt der Maus entgegen, sonst
+  // schaukelte sich die Nähe selbst hoch. offset* misst ohne Transform; vergrößert wird um den rechten Rand.
+  const width = element.offsetWidth * NEAR_SCALE;
+  const height = element.offsetHeight * NEAR_SCALE;
+  const right = element.offsetLeft + element.offsetWidth;
+  const top = element.offsetTop + (element.offsetHeight - height) / 2;
+  const dx = Math.max(right - width - event.clientX, 0, event.clientX - right);
+  const dy = Math.max(top - event.clientY, 0, event.clientY - top - height);
   near.value = Math.round(Math.max(0, 1 - Math.hypot(dx, dy) / NEAR_RANGE) * 100) / 100;
 }
 function onMouseOut(event: MouseEvent): void {
@@ -87,27 +94,22 @@ function onMouseOut(event: MouseEvent): void {
   }
 }
 
-// Immer genau ein Tag offen: der unter der Maus, sonst der fokussierte/angetippte, sonst der neueste.
-// Ein einziger Zustand statt CSS-:hover/:focus-Kombinationen – sonst konnten Klick und Hover zwei Tage öffnen.
-const hoveredIndex = ref<number | undefined>(undefined);
-const focusedIndex = ref<number | undefined>(undefined);
-const openIndex = computed(() => hoveredIndex.value ?? focusedIndex.value ?? 0);
-
-// Nur echte Maus: Touch feuert ebenfalls Pointer-Events, sein „Hover“ bliebe nach dem Tap kleben
-// und träfe nach dem Zuklappen des neuesten Tags den hochgerutschten Nachbarn
-function onDayPointerEnter(event: PointerEvent, index: number): void {
-  if (event.pointerType === 'mouse') {
-    hoveredIndex.value = index;
+// Akkordeon: höchstens ein Tag offen, anfangs der neueste. Öffnen per Klick/Tap statt Hover – Hover wechselte
+// den Eintrag schon beim Drüberfahren, das wirkte unruhig. Erneuter Klick schließt den offenen Tag.
+const openIndex = ref<number | undefined>(0);
+function toggleDay(index: number): void {
+  openIndex.value = openIndex.value === index ? undefined : index;
+}
+// Klicks in die Liste der Punkte schalten nicht um: wer Text markiert oder liest, soll ihn nicht zuklappen
+function onDayClick(event: MouseEvent, index: number): void {
+  if (event.target instanceof Element && event.target.closest('.start-updates-body') !== null) {
+    return;
   }
+  toggleDay(index);
 }
 
-// Schließt ein anderer Tag den neuesten, rutschen alle Zeilen darunter um dessen Höhe hoch – die Zeile unter der Maus
-// wechselte. Die Spalte rückt gleichzeitig um genau diese Höhe nach unten, so bleiben die Zeilen stehen
-// (nur in der festen Spalte auf breiten Fenstern, siehe start_updates.less).
-let newestBodyHeight = 0;
-const shift = computed(() => openIndex.value === 0 ? 0 : newestBodyHeight);
-
-// Vertically centred at rest (newest day open); opening another day then only grows downwards.
+// Vertically centred at rest (newest day open); opening another day changes the height only by the difference
+// of the two days. Voll eingeblendet wächst die Spalte um die Mitte – dafür oben Platz lassen.
 // Only for the fixed column on wide windows, below the menu it is part of the page flow.
 const top = ref<string | undefined>(undefined);
 function measure(): void {
@@ -116,11 +118,8 @@ function measure(): void {
     top.value = undefined;
     return;
   }
-  if (shift.value !== 0) {
-    return;
-  }
-  newestBodyHeight = newestBody?.offsetHeight ?? 0;
-  top.value = `${Math.max(16, (window.innerHeight - element.offsetHeight) / 2)}px`;
+  const growth = (NEAR_SCALE - 1) / 2 * element.offsetHeight;
+  top.value = `${Math.max(16 + growth, (window.innerHeight - element.offsetHeight) / 2)}px`;
 }
 
 onMounted(async () => {
