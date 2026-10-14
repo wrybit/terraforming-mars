@@ -1,4 +1,5 @@
 import {DashboardCommit, ServerDashboard} from '@/common/admin/ServerDashboard';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 export type CommitRow = {
   commit: DashboardCommit,
@@ -34,4 +35,28 @@ export function deployState(dashboard: ServerDashboard): DeployState {
 /** An update can be asked for: the server is behind the deploy branch and no request waits yet. */
 export function canRequestUpdate(dashboard: ServerDashboard): boolean {
   return (deployState(dashboard).behind ?? 0) > 0 && dashboard.updateRequest === undefined;
+}
+
+/** How far the server is behind, as shown on the games and the commits card; empty if unknown. */
+export function deployStatusText(dashboard: ServerDashboard): string {
+  if (dashboard.updateRequest !== undefined) {
+    return translateText('Update requested – starting now');
+  }
+  const state = deployState(dashboard);
+  if (state.behind === undefined) {
+    return '';
+  }
+  if (state.behind === 0) {
+    return translateText('Up to date');
+  }
+  // Running build older than the whole list: at least that many
+  const count = state.rows.some((row) => row.live) ? String(state.behind) : `${state.behind}+`;
+  return translateTextWithParams('${0} commits behind', [count]);
+}
+
+/** Commit time of the running build; undefined if neither the deploy branch nor the build lists it. */
+export function liveCommitTime(dashboard: ServerDashboard): string | undefined {
+  // Build list as fallback: an old build has dropped out of the deploy branch list
+  const commits = [...(dashboard.upstream?.commits ?? []), ...dashboard.commits];
+  return commits.find((commit) => sameCommit(commit.hash, dashboard.build.head))?.time;
 }

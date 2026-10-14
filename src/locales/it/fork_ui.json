@@ -1948,6 +1948,7 @@
   "Update to latest": "Aggiorna all'ultima",
   "Up to date": "Aggiornato",
   "${0} commits behind": "Indietro di ${0} commit",
+  "Running commit from ${0}": "Commit attivo del ${0}",
   "Update requested – starting now": "Aggiornamento richiesto – parte ora",
   "Yes, update": "Sì, aggiorna",
   "Yes, restart": "Sì, riavvia",

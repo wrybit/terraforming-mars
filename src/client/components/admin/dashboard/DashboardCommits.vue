@@ -29,9 +29,9 @@
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {ServerDashboard} from '@/common/admin/ServerDashboard';
-import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {translateText} from '@/client/directives/i18n';
 import {formatDateTime} from '@/client/components/admin/dashboard/dashboardFormat';
-import {deployState, DeployState} from '@/client/components/admin/dashboard/deployState';
+import {deployState, DeployState, deployStatusText} from '@/client/components/admin/dashboard/deployState';
 import {restartServer} from '@/client/components/admin/adminActions';
 
 // After this the restarted server answers again: then the dashboard loads anew
@@ -58,19 +58,7 @@ export default defineComponent({
       return deployState(this.dashboard);
     },
     statusText(): string {
-      if (this.dashboard.updateRequest !== undefined) {
-        return translateText('Update requested – starting now');
-      }
-      const behind = this.state.behind;
-      if (behind === undefined) {
-        return '';
-      }
-      if (behind === 0) {
-        return translateText('Up to date');
-      }
-      // Running build older than the whole list: at least that many
-      const count = this.state.rows.some((row) => row.live) ? String(behind) : `${behind}+`;
-      return translateTextWithParams('${0} commits behind', [count]);
+      return deployStatusText(this.dashboard);
     },
     playersOnlineText(): string {
       return `${translateText('Players online now')}: ${this.dashboard.games.playersOnline}`;

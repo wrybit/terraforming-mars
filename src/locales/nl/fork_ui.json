@@ -1349,6 +1349,7 @@
   "Update to latest": "Bijwerken naar nieuwste",
   "Up to date": "Actueel",
   "${0} commits behind": "${0} commits achter",
+  "Running commit from ${0}": "Actieve commit van ${0}",
   "Update requested – starting now": "Update aangevraagd – start nu",
   "Yes, update": "Ja, bijwerken",
   "Yes, restart": "Ja, herstarten",

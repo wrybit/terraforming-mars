@@ -1622,6 +1622,7 @@
   "Update to latest": "Обнови до най-новата",
   "Up to date": "Актуално",
   "${0} commits behind": "Изостава с ${0} комита",
+  "Running commit from ${0}": "Текущ комит от ${0}",
   "Update requested – starting now": "Заявено обновяване – започва сега",
   "Yes, update": "Да, обнови",
   "Yes, restart": "Да, рестартирай",

@@ -969,6 +969,7 @@
   "Update to latest": "최신으로 업데이트",
   "Up to date": "최신 상태",
   "${0} commits behind": "${0}개 커밋 뒤처짐",
+  "Running commit from ${0}": "실행 중인 커밋: ${0}",
   "Update requested – starting now": "업데이트 요청됨 – 곧 시작",
   "Yes, update": "예, 업데이트",
   "Yes, restart": "예, 재시작",

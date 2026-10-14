@@ -793,6 +793,7 @@
   "Update to latest": "Mettre à jour",
   "Up to date": "À jour",
   "${0} commits behind": "${0} commits de retard",
+  "Running commit from ${0}": "Commit actif du ${0}",
   "Update requested – starting now": "Mise à jour demandée – démarre maintenant",
   "Yes, update": "Oui, mettre à jour",
   "Yes, restart": "Oui, redémarrer",

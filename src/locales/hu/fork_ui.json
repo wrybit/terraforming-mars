@@ -908,6 +908,7 @@
   "Update to latest": "Frissítés a legújabbra",
   "Up to date": "Naprakész",
   "${0} commits behind": "${0} committal lemaradva",
+  "Running commit from ${0}": "Futó commit: ${0}",
   "Update requested – starting now": "Frissítés kérve – most indul",
   "Yes, update": "Igen, frissítés",
   "Yes, restart": "Igen, újraindítás",

@@ -1088,6 +1088,7 @@
   "Update to latest": "Oppdater til nyeste",
   "Up to date": "Oppdatert",
   "${0} commits behind": "${0} commits bak",
+  "Running commit from ${0}": "Kjørende commit fra ${0}",
   "Update requested – starting now": "Oppdatering bestilt – starter nå",
   "Yes, update": "Ja, oppdater",
   "Yes, restart": "Ja, start på nytt",

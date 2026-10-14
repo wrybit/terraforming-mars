@@ -737,6 +737,7 @@
   "Update to latest": "Päivitä uusimpaan",
   "Up to date": "Ajan tasalla",
   "${0} commits behind": "${0} committia jäljessä",
+  "Running commit from ${0}": "Käynnissä oleva commit ${0}",
   "Update requested – starting now": "Päivitys pyydetty – alkaa nyt",
   "Yes, update": "Kyllä, päivitä",
   "Yes, restart": "Kyllä, käynnistä uudelleen",

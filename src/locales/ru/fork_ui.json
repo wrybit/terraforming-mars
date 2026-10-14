@@ -1543,6 +1543,7 @@
   "Update to latest": "Обновить до последней",
   "Up to date": "Актуально",
   "${0} commits behind": "Отстаёт на ${0} коммитов",
+  "Running commit from ${0}": "Текущий коммит от ${0}",
   "Update requested – starting now": "Обновление запрошено – начинается",
   "Yes, update": "Да, обновить",
   "Yes, restart": "Да, перезапустить",

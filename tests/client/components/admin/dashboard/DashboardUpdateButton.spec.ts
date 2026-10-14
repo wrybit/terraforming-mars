@@ -29,6 +29,12 @@ describe('DashboardUpdateButton', () => {
     expect(wrapper.text()).contains('Yes, update');
   });
 
+  it('names how far behind and when the running commit was made', () => {
+    const wrapper = mount(DashboardUpdateButton, {...globalConfig, props: {dashboard: dashboardWith('bbbbbbbbb')}});
+    expect(wrapper.text()).contains('1 commits behind');
+    expect(wrapper.text()).contains('Running commit from');
+  });
+
   it('shows the waiting request instead of the button', () => {
     const wrapper = mount(DashboardUpdateButton, {...globalConfig, props: {dashboard: dashboardWith('bbbbbbbbb', true)}});
     expect(wrapper.find('button').exists()).is.false;

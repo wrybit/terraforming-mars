@@ -1088,6 +1088,7 @@
   "Update to latest": "最新に更新",
   "Up to date": "最新です",
   "${0} commits behind": "${0} コミット遅れ",
+  "Running commit from ${0}": "稼働中のコミット：${0}",
   "Update requested – starting now": "更新を要求しました – まもなく開始",
   "Yes, update": "はい、更新",
   "Yes, restart": "はい、再起動",

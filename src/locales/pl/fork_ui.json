@@ -1506,6 +1506,7 @@
   "Update to latest": "Aktualizuj do najnowszej",
   "Up to date": "Aktualny",
   "${0} commits behind": "${0} commitów w tyle",
+  "Running commit from ${0}": "Bieżący commit z ${0}",
   "Update requested – starting now": "Zlecono aktualizację – start teraz",
   "Yes, update": "Tak, aktualizuj",
   "Yes, restart": "Tak, uruchom ponownie",

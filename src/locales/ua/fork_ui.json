@@ -885,6 +885,7 @@
   "Update to latest": "Оновити до останньої",
   "Up to date": "Актуально",
   "${0} commits behind": "Відстає на ${0} комітів",
+  "Running commit from ${0}": "Поточний коміт від ${0}",
   "Update requested – starting now": "Оновлення запитано – починається",
   "Yes, update": "Так, оновити",
   "Yes, restart": "Так, перезапустити",

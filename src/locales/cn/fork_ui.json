@@ -1660,6 +1660,7 @@
   "Update to latest": "更新到最新版本",
   "Up to date": "已是最新",
   "${0} commits behind": "落后 ${0} 个提交",
+  "Running commit from ${0}": "当前提交：${0}",
   "Update requested – starting now": "已请求更新 – 即将开始",
   "Yes, update": "是，更新",
   "Yes, restart": "是，重启",

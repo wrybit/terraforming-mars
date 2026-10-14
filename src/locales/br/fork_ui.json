@@ -1849,6 +1849,7 @@
   "Update to latest": "Atualizar para a mais recente",
   "Up to date": "Atualizado",
   "${0} commits behind": "${0} commits atrás",
+  "Running commit from ${0}": "Commit atual de ${0}",
   "Update requested – starting now": "Atualização solicitada – começando agora",
   "Yes, update": "Sim, atualizar",
   "Yes, restart": "Sim, reiniciar",
