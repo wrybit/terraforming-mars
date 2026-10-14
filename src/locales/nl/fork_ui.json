@@ -1367,7 +1367,7 @@
   "${0} (shared with RAM)": "${0} (gedeeld met werkgeheugen)",
   "Too many wrong attempts. Please wait until the countdown has run out.": "Te veel foute pogingen. Wacht tot het aftellen voorbij is.",
   "Analysis game": "Analysepartij",
-  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "Het logboek toont de kaarten en beslissingen van de AI. Ga met de muis over een AI-regel en klik op 👍 👎 🚩 om hem te beoordelen (touch: twee keer tikken, toetsenbord: I).",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 ⚠️ to rate it (touch: double-tap, keyboard: I).": "Het logboek toont de kaarten en beslissingen van de AI. Ga met de muis over een AI-regel en klik op 👍 👎 ⚠️ om hem te beoordelen (touch: twee keer tikken, toetsenbord: I).",
   "Visible because this is an analysis game": "Zichtbaar omdat dit een analysepartij is",
   "Rate AI decision": "AI-beslissing beoordelen",
   "Options weighed by the AI": "Door de AI afgewogen opties",

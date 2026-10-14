@@ -1105,7 +1105,7 @@
   "${0} (shared with RAM)": "${0} (delt med hovedminnet)",
   "Too many wrong attempts. Please wait until the countdown has run out.": "For mange feil forsøk. Vent til nedtellingen er ferdig.",
   "Analysis game": "Analyseparti",
-  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "Loggen viser kortene og beslutningene til AI. Hold musen over en AI-oppføring og klikk 👍 👎 🚩 for å vurdere den (berøring: trykk to ganger, tastatur: I).",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 ⚠️ to rate it (touch: double-tap, keyboard: I).": "Loggen viser kortene og beslutningene til AI. Hold musen over en AI-oppføring og klikk 👍 👎 ⚠️ for å vurdere den (berøring: trykk to ganger, tastatur: I).",
   "Visible because this is an analysis game": "Synlig fordi dette er et analyseparti",
   "Rate AI decision": "Vurder AI-beslutning",
   "Options weighed by the AI": "Alternativer AI veide",

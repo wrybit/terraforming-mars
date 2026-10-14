@@ -311,7 +311,7 @@
               <!-- Analysis game: only with AI players; the log then shows the AI's cards and decisions, which humans can rate -->
               <template v-if="aiPlayersCount > 0 && aiBlockers.length === 0">
                 <OptionRow class="create-game-players-first" label="Analysis game"><SwitchInput v-model="aiAnalysis"/></OptionRow>
-                <div v-if="aiAnalysis" class="create-game-note create-game-analysis-note" v-i18n>The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).</div>
+                <div v-if="aiAnalysis" class="create-game-note create-game-analysis-note" v-i18n>The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 ⚠️ to rate it (touch: double-tap, keyboard: I).</div>
               </template>
             </div>
             <!-- Humans always first, then AI players; seats slide in and out when the counts change -->

@@ -1865,7 +1865,7 @@
   "${0} (shared with RAM)": "${0} (compartilhada com a RAM)",
   "Too many wrong attempts. Please wait until the countdown has run out.": "Tentativas erradas demais. Aguarde até a contagem regressiva terminar.",
   "Analysis game": "Partida de análise",
-  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "O registro mostra as cartas e decisões da AI. Passe o mouse sobre uma entrada da AI e clique em 👍 👎 🚩 para avaliá-la (toque: toque duas vezes, teclado: I).",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 ⚠️ to rate it (touch: double-tap, keyboard: I).": "O registro mostra as cartas e decisões da AI. Passe o mouse sobre uma entrada da AI e clique em 👍 👎 ⚠️ para avaliá-la (toque: toque duas vezes, teclado: I).",
   "Visible because this is an analysis game": "Visível porque esta é uma partida de análise",
   "Rate AI decision": "Avaliar decisão da AI",
   "Options weighed by the AI": "Opções ponderadas pela AI",

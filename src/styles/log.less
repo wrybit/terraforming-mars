@@ -1088,18 +1088,29 @@ each(@players, {
   overflow-wrap: anywhere;
 }
 
-// Rating buttons of the hovered AI row (LogAiRateBar.vue): right behind the row's text, in window coordinates
+// Rating buttons of the hovered AI row (LogAiRateBar.vue): over the player name, in window coordinates.
+// Frosted glass: the row below stays visible
 .log-ai-rate-bar {
   position: fixed;
   z-index: 40;
   display: flex;
+  align-items: center;
   gap: 2px;
-  padding: 2px;
+  padding: 2px 3px 2px 10px;
   transform: translateY(-50%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
-  background: rgba(24, 26, 34, 0.94);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  background: rgba(28, 30, 40, 0.5);
+  backdrop-filter: blur(8px) saturate(1.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+// Label and buttons belong together: smaller gap to the buttons than the padding to the edge
+.log-ai-rate-bar__label {
+  margin-right: 4px;
+  color: #b3b2ff;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .log-ai-rate-bar__button {
@@ -1116,7 +1127,7 @@ each(@players, {
 
   &:hover,
   &:focus-visible {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.14);
     transform: scale(1.12);
   }
 }

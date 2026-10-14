@@ -1106,7 +1106,7 @@
   "${0} (shared with RAM)": "${0}（メインメモリと共有）",
   "Too many wrong attempts. Please wait until the countdown has run out.": "誤った試行が多すぎます. カウントダウンが終わるまでお待ちください.",
   "Analysis game": "分析ゲーム",
-  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "ログにAIのカードと判断が表示されます。AIの項目にマウスを合わせて 👍 👎 🚩 をクリックすると評価できます（タッチ: 2回タップ、キーボード: I）。",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 ⚠️ to rate it (touch: double-tap, keyboard: I).": "ログにAIのカードと判断が表示されます。AIの項目にマウスを合わせて 👍 👎 ⚠️ をクリックすると評価できます（タッチ: 2回タップ、キーボード: I）。",
   "Visible because this is an analysis game": "分析ゲームのため表示されています",
   "Rate AI decision": "AIの判断を評価",
   "Options weighed by the AI": "AIが比較した選択肢",

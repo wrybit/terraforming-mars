@@ -1561,7 +1561,7 @@
   "${0} (shared with RAM)": "${0} (общая с ОЗУ)",
   "Too many wrong attempts. Please wait until the countdown has run out.": "Слишком много неверных попыток. Подождите, пока закончится обратный отсчёт.",
   "Analysis game": "Аналитическая партия",
-  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "Журнал показывает карты и решения AI. Наведите курсор на запись AI и нажмите 👍 👎 🚩, чтобы её оценить (сенсорный экран: дважды коснитесь, клавиатура: I).",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 ⚠️ to rate it (touch: double-tap, keyboard: I).": "Журнал показывает карты и решения AI. Наведите курсор на запись AI и нажмите 👍 👎 ⚠️, чтобы её оценить (сенсорный экран: дважды коснитесь, клавиатура: I).",
   "Visible because this is an analysis game": "Видно, потому что это аналитическая партия",
   "Rate AI decision": "Оценить решение AI",
   "Options weighed by the AI": "Варианты, которые взвешивал AI",

@@ -1678,7 +1678,7 @@
   "${0} (shared with RAM)": "${0}（与内存共享）",
   "Too many wrong attempts. Please wait until the countdown has run out.": "错误尝试次数过多。请等待倒计时结束。",
   "Analysis game": "分析对局",
-  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "日志会显示 AI 的卡牌与决策。将鼠标悬停在 AI 条目上并点击 👍 👎 🚩 进行评价（触屏：连点两下，键盘：I）。",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 ⚠️ to rate it (touch: double-tap, keyboard: I).": "日志会显示 AI 的卡牌与决策。将鼠标悬停在 AI 条目上并点击 👍 👎 ⚠️ 进行评价（触屏：连点两下，键盘：I）。",
   "Visible because this is an analysis game": "因为这是分析对局而可见",
   "Rate AI decision": "评价 AI 决策",
   "Options weighed by the AI": "AI 权衡过的选项",

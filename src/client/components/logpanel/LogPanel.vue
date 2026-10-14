@@ -107,10 +107,8 @@ import LogAiRatings from '@/client/components/logpanel/aiAnalysis/LogAiRatings.v
 import LogAiRateBar from '@/client/components/logpanel/aiAnalysis/LogAiRateBar.vue';
 import {AiFeedbackRating} from '@/common/ai/AiFeedback';
 
-// Width of the hover bar (3 buttons): it never sticks out of its row
-const RATE_BAR_WIDTH = 108;
-// Gap between the row's text and the bar
-const RATE_BAR_GAP = 10;
+// How much of the player name stays visible in front of the hover bar (the bar covers the rest)
+const RATE_BAR_NAME_VISIBLE = 20;
 import {aiColorsOf, AiLogTarget, aiTargetOfRow, decisionSummaries} from '@/client/components/logpanel/aiAnalysis/aiLogTarget';
 import {aiFeedbackState, loadAiFeedback, openAiDecision, ratingsOf} from '@/client/components/logpanel/aiAnalysis/aiFeedbackState';
 import {AiFeedbackEntry} from '@/common/ai/AiFeedback';
@@ -414,17 +412,11 @@ export default defineComponent({
       this.internals.hoveredAiRow = target === undefined ? undefined : element;
       this.rateBar = target === undefined || element === undefined || !this.canHover() ? undefined : this.rateBarPosition(element);
     },
-    // Right behind the end of the row's text (card name of an action row), centred on that line;
-    // never beyond the row's right edge
+    // Over the player name, its first 20 px still visible: the same place in every row, whatever follows the name
     rateBarPosition(row: HTMLElement): {left: number, top: number} {
-      const anchor = row.querySelector('.log-row-what') ?? row;
-      const range = document.createRange();
-      range.selectNodeContents(anchor);
-      const lines = range.getClientRects();
-      const rowBox = row.getBoundingClientRect();
-      const last = lines.length > 0 ? lines[lines.length - 1] : rowBox;
-      const left = Math.min(last.right + RATE_BAR_GAP, rowBox.right - RATE_BAR_WIDTH);
-      return {left: Math.max(rowBox.left, left), top: last.top + last.height / 2};
+      const name = row.querySelector('.log-row-name, .log-player') ?? row;
+      const box = name.getBoundingClientRect();
+      return {left: box.left + RATE_BAR_NAME_VISIBLE, top: box.top + box.height / 2};
     },
     rowLeft(event: MouseEvent): void {
       // Moving onto the bar keeps it (it belongs to the row)
