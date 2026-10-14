@@ -1,0 +1,35 @@
+// Setup of a game in the create form's groups (GameSetupGroups.vue).
+// Law of proximity: chips of a group sit tight (chip gap), the groups stand clearly apart and are divided by a line.
+@game-setup-group-gap: 18px; // horizontal room on each side of the divider
+@game-setup-group-row-gap: 12px; // wrapped rows of groups
+@game-setup-title-gap: 5px; // title to its chips: tighter than between the groups
+@game-setup-divider: rgba(255, 255, 255, 0.12);
+
+.game-setup-groups {
+  // Clips the divider of the first group in every row (the row reaches out to the left by gap + line)
+  overflow: hidden;
+}
+
+.game-setup-groups__row {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: @game-setup-group-row-gap;
+  margin-left: -(@game-setup-group-gap + 1px);
+}
+
+.game-setup-group {
+  min-width: 0;
+  padding: 0 @game-setup-group-gap;
+  border-left: 1px solid @game-setup-divider;
+}
+
+// Same look as the subheads of the create form (create_game_form.less), just smaller
+.game-setup-group__title {
+  margin: 0 0 @game-setup-title-gap;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: @create-game-dim;
+}

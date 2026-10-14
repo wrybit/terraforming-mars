@@ -32,6 +32,11 @@
         </a>
       </div>
     </div>
+    <!-- Basis of the game across both columns: its settings in the groups of the create form -->
+    <section class="game-end-box game-end-setup">
+      <h2 v-i18n>Game settings</h2>
+      <GameSetupGroups :chips="setupChips"/>
+    </section>
     <!-- From @player-home-columns-min-width two columns as in the game view: result on the left, board, charts, log on the right -->
     <div class="game_end game-end-columns">
       <div class="game-end-columns__main">
@@ -246,6 +251,9 @@ import {nextTileView, TileView} from '@/client/components/board/TileView';
 import PlanetaryTracks from '@/client/components/pathfinders/PlanetaryTracks.vue';
 import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
+import GameSetupGroups from '@/client/components/common/GameSetupGroups.vue';
+import {GameSetupChip} from '@/client/components/common/gameSetupChips';
+import {viewSetupChips} from '@/client/components/common/viewSetupChips';
 import {DataSet} from '@/client/components/gameend/VictoryPointChart.vue';
 import GameEndChartTabs from '@/client/components/gameend/GameEndChartTabs.vue';
 import ColumnResizeHandle from '@/client/components/ColumnResizeHandle.vue';
@@ -290,6 +298,9 @@ export default defineComponent({
     },
     game(): GameModel {
       return this.participant.game;
+    },
+    setupChips(): Array<GameSetupChip> {
+      return viewSetupChips(this.participant);
     },
     playersInPlace(): Array<PublicPlayerModel> {
       const sorted = this.participant.players.toSorted(function(a:PublicPlayerModel, b:PublicPlayerModel) {
@@ -422,6 +433,7 @@ export default defineComponent({
     PageToolbar,
     MarsHomeLink,
     LogPanel,
+    GameSetupGroups,
     MoonBoard,
     PlanetaryTracks,
     DeltaProjectBoard,
