@@ -33,7 +33,7 @@ describe('GameOverview', () => {
   it('one cell per column, empty where the player did not play', () => {
     const cells = mountRow().findAll('td').map((cell) => cell.text());
     // Status, game, generation, spectators/result, players 1–6, AI 1–5, delete
-    expect(cells.slice(4, 15)).deep.eq(['Jens🏆76', 'Daniel66', '', '', '', '', '', '', '', '', '']);
+    expect(cells.slice(4, 15)).deep.eq(['Jens🏆76 VP', 'Daniel66 VP', '', '', '', '', '', '', '', '', '']);
   });
 
   it('finished: shows the result instead of watching; running: watch as spectator', () => {

@@ -29,7 +29,7 @@
         :class="[playerColorClass(player.color), {'games-overview-chip--winner': player.isWinner, 'games-overview-chip--online': player.isOnline === true}]"
         :title="chipTitle(player)">
         <span class="games-overview-chip-name"><LanguageFlag v-if="player.language !== undefined" :lang="player.language" class="language-flag--round"/><span class="games-overview-chip-own-name">{{ chipNameParts(player).name }}</span><span v-if="chipNameParts(player).marker !== undefined">{{ chipNameParts(player).marker }}</span></span>
-        <strong><span v-if="player.isWinner" class="games-overview-trophy">🏆</span>{{ player.victoryPoints }}</strong>
+        <strong><span v-if="player.isWinner" class="games-overview-trophy">🏆</span>{{ player.victoryPoints }} <span class="games-overview-chip-unit" v-i18n>VP</span></strong>
       </component>
     </td>
     <td class="games-overview-actions">
