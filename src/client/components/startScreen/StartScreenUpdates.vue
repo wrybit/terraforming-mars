@@ -84,7 +84,9 @@ function onMouseMove(event: MouseEvent): void {
   const height = element.offsetHeight * NEAR_SCALE;
   const right = element.offsetLeft + element.offsetWidth;
   const top = element.offsetTop + (element.offsetHeight - height) / 2;
-  const dx = Math.max(right - width - event.clientX, 0, event.clientX - right);
+  // Rechts neben der Spalte (zwischen ihr und dem Fensterrand) zählt als „über der Spalte“: wer die Maus
+  // dort hinausschiebt, will weiterlesen – die Spalte soll dann nicht wieder wegfahren und unscharf werden
+  const dx = Math.max(right - width - event.clientX, 0);
   const dy = Math.max(top - event.clientY, 0, event.clientY - top - height);
   near.value = Math.round(Math.max(0, 1 - Math.hypot(dx, dy) / NEAR_RANGE) * 100) / 100;
 }
