@@ -3,7 +3,7 @@
   <label class="card-zoom-slider" :title="$t('Card size')">
     <span class="card-zoom-slider__label">{{ $t('Zoom') }}</span>
     <span class="card-zoom-slider__icon card-zoom-slider__icon--small" aria-hidden="true"></span>
-    <input type="range" :min="CARD_ZOOM_MIN" :max="CARD_ZOOM_MAX" step="0.02" :value="zoom" :aria-label="$t('Card size')" @input="onInput">
+    <input type="range" name="card-zoom" :min="CARD_ZOOM_MIN" :max="CARD_ZOOM_MAX" step="0.02" :value="zoom" :aria-label="$t('Card size')" @input="onInput">
     <span class="card-zoom-slider__icon" aria-hidden="true"></span>
   </label>
 </template>

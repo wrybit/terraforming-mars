@@ -43,8 +43,8 @@
         </h3>
         <label v-for="card in group.cards" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
             <template v-if="!card.isDisabled">
-              <input v-if="selectOnlyOneCard" type="radio" v-model="cards" :value="card" >
-              <input v-else type="checkbox" v-model="cards" :value="card" :disabled="playerinput.max !== undefined && Array.isArray(cards) && cards.length >= playerinput.max && cards.includes(card) === false" >
+              <input v-if="selectOnlyOneCard" type="radio" name="selected-cards" v-model="cards" :value="card" >
+              <input v-else type="checkbox" name="selected-cards" v-model="cards" :value="card" :disabled="playerinput.max !== undefined && Array.isArray(cards) && cards.length >= playerinput.max && cards.includes(card) === false" >
             </template>
             <!-- No "action used" look here: a card offered in a selection is either selectable or isDisabled;
                  greying out a selectable card (e.g. adding microbes to a card whose action was used) misleads -->

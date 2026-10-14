@@ -4,6 +4,7 @@
 // gap is only known to the DOM – the directive measures the tab and passes it to the box as CSS variables.
 // Usage: v-docked-tab on the box; the tab bar (.or-tabs) sits directly before it or in the element before it.
 import {Directive} from 'vue';
+import {cancelLayoutJob, scheduleLayoutJob} from '@/client/utils/layoutBatch';
 
 // Attribute instead of class: Vue resets bound classes on every render and would remove a class of our own
 export const DOCKED_TAB_ATTRIBUTE = 'data-docked-tab';
@@ -34,12 +35,15 @@ function findTabStrip(panel: HTMLElement): Element | undefined {
   return previous.querySelector(':scope > .or-tabs') ?? undefined;
 }
 
-export function updateDockedTab(panel: HTMLElement): void {
+// Lage der Lücke relativ zur Box; undefined = keine Lücke (volle Kante)
+type DockedTabGap = {start: number, end: number, atRightEdge: boolean} | undefined;
+
+// Liest nur: läuft gebündelt mit den Messungen anderer Komponenten (layoutBatch.ts)
+function measureDockedTab(panel: HTMLElement): DockedTabGap {
   const activeTab = findTabStrip(panel)?.querySelector<HTMLElement>('.or-tab--active');
   if (activeTab === null || activeTab === undefined) {
     // No active tab (e.g. action menu as a list): full border
-    panel.removeAttribute(DOCKED_TAB_ATTRIBUTE);
-    return;
+    return undefined;
   }
   const panelRect = panel.getBoundingClientRect();
   const panelLeft = panelRect.left;
@@ -49,19 +53,37 @@ export function updateDockedTab(panel: HTMLElement): void {
   const visibleLeft = Math.max(tabRect.left, stripRect.left);
   const visibleRight = Math.min(tabRect.right, stripRect.right);
   if (visibleRight - visibleLeft < 1) {
-    panel.removeAttribute(DOCKED_TAB_ATTRIBUTE);
-    return;
+    return undefined;
   }
   // The box border stays under the tab's side borders, so the corners join without gaps;
   // a clipped side has no tab border
   const tabBorder = parseFloat(getComputedStyle(activeTab).borderLeftWidth) || 0;
   const startBorder = visibleLeft === tabRect.left ? tabBorder : 0;
   const endBorder = visibleRight === tabRect.right ? tabBorder : 0;
-  panel.style.setProperty(DOCKED_TAB_START, `${Math.round(visibleLeft - panelLeft + startBorder)}px`);
-  panel.style.setProperty(DOCKED_TAB_END, `${Math.round(visibleRight - panelLeft - endBorder)}px`);
-  // Tab flush with the right edge (e.g. End): the box's rounding is dropped there, like on the left for the first tab
-  const atRightEdge = Math.round(panelRect.right - visibleRight) <= 0;
-  panel.setAttribute(DOCKED_TAB_ATTRIBUTE, atRightEdge ? DOCKED_TAB_RIGHT_EDGE : '');
+  return {
+    start: Math.round(visibleLeft - panelLeft + startBorder),
+    end: Math.round(visibleRight - panelLeft - endBorder),
+    // Tab flush with the right edge (e.g. End): the box's rounding is dropped there, like on the left for the first tab
+    atRightEdge: Math.round(panelRect.right - visibleRight) <= 0,
+  };
+}
+
+// Schreibt nur
+function applyDockedTab(panel: HTMLElement, gap: DockedTabGap): void {
+  if (gap === undefined) {
+    panel.removeAttribute(DOCKED_TAB_ATTRIBUTE);
+    return;
+  }
+  panel.style.setProperty(DOCKED_TAB_START, `${gap.start}px`);
+  panel.style.setProperty(DOCKED_TAB_END, `${gap.end}px`);
+  panel.setAttribute(DOCKED_TAB_ATTRIBUTE, gap.atRightEdge ? DOCKED_TAB_RIGHT_EDGE : '');
+}
+
+export function updateDockedTab(panel: HTMLElement): void {
+  scheduleLayoutJob(panel, {
+    measure: () => measureDockedTab(panel),
+    apply: (gap) => applyDockedTab(panel, gap),
+  });
 }
 
 function stopObserving(panel: HTMLElement): void {
@@ -110,5 +132,6 @@ export const vDockedTab: Directive<HTMLElement> = {
   },
   beforeUnmount(panel) {
     stopObserving(panel);
+    cancelLayoutJob(panel);
   },
 };

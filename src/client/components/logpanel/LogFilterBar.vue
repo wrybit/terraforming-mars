@@ -3,16 +3,18 @@
     <!-- Filter of the log: one line with a search field that holds the active filters as chips;
          the button opens all options as a second line (they wrap in whole groups when narrow) -->
     <div class="log-filter-bar">
-      <div class="log-filter-field" @click="focusInput">
+      <!-- label mit for statt div: verknüpft das Feld mit dem Suchfeld (Barrierefreiheit), ein Klick ins Feld fokussiert es.
+           for ist nötig, sonst wäre der erste Entfernen-Knopf der Chips das verknüpfte Element -->
+      <label class="log-filter-field" for="log-filter-input">
         <span v-for="(option, index) in modelValue.options" :key="optionKey(option)" :class="chipClasses(option)" :title="optionTitle(option)">
           <template v-if="option.group === 'player'">{{ playerName(option.value) }}</template>
           <template v-else-if="option.group === 'me'">{{ $t('Affects me') }}</template>
           <LogFilterSymbol v-else :option="option"/>
           <button type="button" class="log-filter-chip-remove" :aria-label="$t('Remove')" @click.stop="removeAt(index)">×</button>
         </span>
-        <input ref="input" class="log-filter-input" type="search" :value="text" :placeholder="$t('Search or filter …')" :aria-label="$t('Search or filter …')"
+        <input id="log-filter-input" ref="input" class="log-filter-input" type="search" name="log-filter" :value="text" :placeholder="$t('Search or filter …')" :aria-label="$t('Search or filter …')"
           @input="textChanged" @keydown="keyDown">
-      </div>
+      </label>
       <button type="button" :class="['log-filter-toggle', {'log-filter-toggle--open': open}]" :aria-expanded="open" :title="$t('Filter')" @click="open = !open">
         <svg class="log-filter-toggle-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>
         <span class="log-filter-toggle-text">{{ $t('Filter') }}</span>
@@ -147,9 +149,6 @@ export default defineComponent({
       if (event.key === 'Backspace' && this.text === '' && this.modelValue.options.length > 0) {
         this.removeAt(this.modelValue.options.length - 1);
       }
-    },
-    focusInput(): void {
-      (this.$refs.input as HTMLInputElement | undefined)?.focus();
     },
   },
 });

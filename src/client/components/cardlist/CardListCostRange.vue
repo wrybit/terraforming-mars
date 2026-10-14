@@ -2,8 +2,8 @@
   <div class="card-list-cost-range">
     <div class="card-list-cost-range-track">
       <span class="card-list-cost-range-fill" :style="fillStyle"></span>
-      <input type="range" :min="0" :max="highest" :value="low" :aria-label="$t('Minimum cost')" @input="changeLow">
-      <input type="range" :min="0" :max="highest" :value="high" :aria-label="$t('Maximum cost')" @input="changeHigh">
+      <input type="range" name="min-cost" :min="0" :max="highest" :value="low" :aria-label="$t('Minimum cost')" @input="changeLow">
+      <input type="range" name="max-cost" :min="0" :max="highest" :value="high" :aria-label="$t('Maximum cost')" @input="changeHigh">
     </div>
     <div class="card-list-cost-range-values">
       <span class="card-list-cost-range-coin">{{ low }}</span>

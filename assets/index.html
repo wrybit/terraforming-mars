@@ -2,11 +2,15 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" media="all" href="styles.css" />
+        <!-- Schriften früh anfordern, nicht erst wenn styles.css geparst ist (sonst Chrome-Hinweis "Slow network") -->
+        <link rel="preload" href="assets/fonts/prototype/prototype.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href="assets/fonts/ubuntu/ubuntu-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
         <!-- PWA: Mars icon from the mobile prototype; without start_url the installed app starts on the page it was installed from (e.g. the running game) -->
         <link rel="manifest" href="assets/pwa/manifest.webmanifest" />
         <link rel="apple-touch-icon" href="assets/pwa/apple-touch-icon.png" />
         <meta name="theme-color" content="#0d0f14" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content="TM Mars" />
         <meta name="viewport" content='width=1260, user-scalable=1' />

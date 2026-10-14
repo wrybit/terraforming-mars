@@ -370,8 +370,7 @@ each(@players, {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--players-table-production-width, auto);
-  align-items: center;
-  justify-items: end;
+  place-items: center end;
   gap: 6px;
   // Width capped: stock and production stay together even when the column gets wider.
   // Never narrower than the content: shield + stock + production stay inside the box; the column grows to

@@ -199,6 +199,8 @@ type Internals = {
 type LogPanelModel = {
   sections: Array<GenerationLog>,
   view: LogView,
+  // Ob die Tabelle ihre freie Ecke über den Namen hat (MilestoneAwardTable meldet es per @split)
+  tableSplit: boolean,
   // Generation whose tab is highlighted: follows the scroll position, or the tab just clicked
   selectedGeneration: number,
   showScrollToBottomButton: boolean,
@@ -763,8 +765,9 @@ export default defineComponent({
     },
     // Mobile: the log screen was hidden and is shown again (the page jumps to its top) –
     // show the end of the log instead of generation 1
-    onResize(): void {
-      const height = this.typedRefs.root?.offsetHeight ?? 0;
+    // Höhe aus dem ResizeObserver-Eintrag: offsetHeight würde ein zusätzliches Layout erzwingen
+    onResize(entry: ResizeObserverEntry): void {
+      const height = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height;
       const becameVisible = this.internals.lastHeight === 0 && height > 0;
       this.internals.lastHeight = height;
       if (becameVisible && this.scrollContainer() === window) {
@@ -902,6 +905,8 @@ export default defineComponent({
     // otherwise the end of the log. Without a change the reader's view stays as it was.
     const restoredState = previousState?.acting === this.acting ? previousState : undefined;
     this.view = restoredState?.view ?? this.turnView(this.acting);
+    // Hängt nur von der Breite ab, nicht vom Zug: übernehmen, damit die Schalter nach dem Remount nicht springen
+    this.tableSplit = previousState?.tableSplit ?? true;
     // Either the view starts fresh, or the reader was at the end, which may have grown since the previous instance unmounted
     this.following = restoredState === undefined || restoredState.following;
     this.selectedGeneration = this.generation;
@@ -913,7 +918,7 @@ export default defineComponent({
     this.internals.lastHeight = this.typedRefs.root?.offsetHeight ?? 0;
     window.addEventListener('scroll', this.onWindowScroll, {passive: true});
     if (typeof ResizeObserver !== 'undefined' && this.typedRefs.root !== undefined) {
-      this.internals.resizeObserver = new ResizeObserver(() => this.onResize());
+      this.internals.resizeObserver = new ResizeObserver((entries) => this.onResize(entries[entries.length - 1]));
       this.internals.resizeObserver.observe(this.typedRefs.root);
     }
     this.loadStream();
@@ -928,6 +933,7 @@ export default defineComponent({
       acting: this.acting,
       // An open milestone/award choice re-applies its focus after the remount; the reader's own view is kept
       view: this.viewBeforeFocus ?? this.view,
+      tableSplit: this.tableSplit,
       following: this.isVisible() ? this.isNearBottom(container) : this.following,
       scrollTop: this.isVisible() ? scrollTopOf(container) : viewState?.scrollTop ?? 0,
     };

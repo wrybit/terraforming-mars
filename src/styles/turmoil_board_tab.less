@@ -851,9 +851,7 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
   // bottom: keeps the source step and two rows of cards within the box height
   .select-party__card {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas: "leader name seats" "policy policy policy" "bonus bonus bonus";
+    grid-template: "leader name seats" auto "policy policy policy" 1fr "bonus bonus bonus" auto / minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
     gap: 6px 12px;
     padding: 34px 14px 16px;
@@ -861,11 +859,16 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
 
   .select-party__name {
     grid-area: name;
+    min-height: 22px;
+    font-size: 17px;
+    line-height: 20px;
   }
 
   .select-party__leader {
     grid-area: leader;
     justify-self: end;
+    width: 42px;
+    height: 44px;
   }
 
   .select-party__seats {
@@ -900,17 +903,6 @@ html:not(.tm-mobile) .or-tab-panel .select-party {
       width: 52px;
       height: 38px;
     }
-  }
-
-  .select-party__name {
-    min-height: 22px;
-    font-size: 17px;
-    line-height: 20px;
-  }
-
-  .select-party__leader {
-    width: 42px;
-    height: 44px;
   }
 
   .select-party__rule {

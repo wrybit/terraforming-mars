@@ -39,7 +39,7 @@
     <div v-if="options.highestCost !== undefined" class="card-filter-options__group">
       <span class="card-filter-options__label" v-i18n>Cost up to</span>
       <label class="card-filter-cost" :class="{'card-filter-cost--on': filter.maxCost !== undefined}">
-        <input type="range" min="0" :max="options.highestCost" :value="filter.maxCost ?? options.highestCost"
+        <input type="range" name="max-cost" min="0" :max="options.highestCost" :value="filter.maxCost ?? options.highestCost"
           :aria-label="$t('Cost up to')" @input="changeMaxCost">
         <output>
           <template v-if="filter.maxCost === undefined">{{ $t('any') }}</template>

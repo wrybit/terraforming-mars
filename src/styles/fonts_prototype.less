@@ -1,0 +1,20 @@
+// Prototype (Überschriften, Zahlen) als WOFF2 statt TTF: halb so groß, lädt bei langsamer Leitung schneller.
+// swap zeigt sofort die Ersatzschrift statt unsichtbaren Text; die Latin-Datei wird in index.html vorgeladen.
+@font-face {
+  font-family: Prototype;
+  font-display: swap;
+  src: url(./assets/fonts/prototype/prototype.woff2) format('woff2');
+  unicode-range: U+000-5FF; /* Latin glyphs */
+}
+@font-face {
+  font-family: Prototype;
+  font-display: swap;
+  src: url(./assets/fonts/prototype/prototype-ru.woff2) format('woff2');
+  unicode-range: U+0410-044F; /* Russian glyphs */
+}
+@font-face {
+  font-family: Prototype;
+  font-display: swap;
+  src: url(./assets/fonts/prototype/prototype-pl.woff2) format('woff2');
+  unicode-range: U+0104-0107, U+0118-0119, U+0141-0144, U+00D3, U+00F3, U+015A, U+015B, U+0179, U+017A-017C; /* Polish glyphs */
+}

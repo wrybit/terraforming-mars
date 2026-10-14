@@ -43,7 +43,7 @@
           </header>
           <label class="stats-range">
             <span v-i18n>up to</span>
-            <input type="range" :min="generationRange.min" :max="generationRange.max" :value="filters.maxGeneration ?? generationRange.max" @input="changeMaxGeneration">
+            <input type="range" name="max-generation" :min="generationRange.min" :max="generationRange.max" :value="filters.maxGeneration ?? generationRange.max" @input="changeMaxGeneration">
             <strong>{{ filters.maxGeneration ?? generationRange.max }}</strong>
           </label>
         </section>

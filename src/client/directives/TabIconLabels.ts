@@ -4,6 +4,7 @@
 // the directive shows the labels, checks whether a tab title got truncated and hides them again if so.
 // Usage: v-tab-icon-labels on the tab bar (.or-tabs); style in or_options_tabs.less.
 import {Directive} from 'vue';
+import {cancelLayoutJob, scheduleLayoutJob} from '@/client/utils/layoutBatch';
 
 // Attribute instead of class: Vue resets bound classes on every render and would remove a class of our own
 export const ICON_LABELS_HIDDEN_ATTRIBUTE = 'data-icon-labels-hidden';
@@ -15,16 +16,22 @@ function isTruncated(element: Element): boolean {
 }
 
 export function updateTabIconLabels(tabStrip: HTMLElement): void {
-  // Measure with labels shown; reading scrollWidth forces the layout synchronously, so nothing flickers
-  tabStrip.removeAttribute(ICON_LABELS_HIDDEN_ATTRIBUTE);
-  if (tabStrip.querySelector('.or-tab-icon-label') === null) {
-    return;
-  }
-  const titles = tabStrip.querySelectorAll('.or-tab-title, .or-tab-icon-label');
-  const tooNarrow = isTruncated(tabStrip) || Array.from(titles).some(isTruncated);
-  if (tooNarrow) {
-    tabStrip.setAttribute(ICON_LABELS_HIDDEN_ATTRIBUTE, '');
-  }
+  scheduleLayoutJob(tabStrip, {
+    // Measure with labels shown; runs before painting (layoutBatch.ts), so nothing flickers
+    prepare: () => tabStrip.removeAttribute(ICON_LABELS_HIDDEN_ATTRIBUTE),
+    measure: () => {
+      if (tabStrip.querySelector('.or-tab-icon-label') === null) {
+        return false;
+      }
+      const titles = tabStrip.querySelectorAll('.or-tab-title, .or-tab-icon-label');
+      return isTruncated(tabStrip) || Array.from(titles).some(isTruncated);
+    },
+    apply: (tooNarrow) => {
+      if (tooNarrow) {
+        tabStrip.setAttribute(ICON_LABELS_HIDDEN_ATTRIBUTE, '');
+      }
+    },
+  });
 }
 
 export const vTabIconLabels: Directive<HTMLElement> = {
@@ -42,6 +49,7 @@ export const vTabIconLabels: Directive<HTMLElement> = {
     updateTabIconLabels(tabStrip);
   },
   unmounted(tabStrip) {
+    cancelLayoutJob(tabStrip);
     observers.get(tabStrip)?.disconnect();
     observers.delete(tabStrip);
   },

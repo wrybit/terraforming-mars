@@ -230,10 +230,15 @@ export function observeRightColumnFit(column: HTMLElement): () => void {
   window.addEventListener('resize', schedule);
   // Width also changes without a window resize (drag handle between the columns); ignore height,
   // fit() changes that itself. Without ResizeObserver (test environment) only observe the window
-  let lastWidth = column.getBoundingClientRect().width;
-  const resizeObserver = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(() => {
-    const width = column.getBoundingClientRect().width;
-    if (width !== lastWidth) {
+  // Breite aus dem Observer-Eintrag statt getBoundingClientRect: erzwingt kein zusätzliches Layout
+  let lastWidth: number | undefined;
+  const resizeObserver = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver((entries) => {
+    const entry = entries[entries.length - 1];
+    const width = entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
+    // Erster Aufruf kommt direkt nach observe(): nur Ausgangsbreite merken, schedule() läuft unten ohnehin
+    if (lastWidth === undefined) {
+      lastWidth = width;
+    } else if (width !== lastWidth) {
       lastWidth = width;
       schedule();
     }
