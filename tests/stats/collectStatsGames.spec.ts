@@ -55,7 +55,7 @@ describe('collectStatsGames', () => {
 
     const games = await collectStatsGames(gameLoader, importedGames, snapshots, screenshots);
 
-    expect(games.map((game) => game.summary.id)).deep.eq([mixed.id]);
+    expect(games.map((game) => game.summary.id)).deep.eq([mixed.spectatorId]);
     expect(human.aiLevel).is.undefined;
   });
 
@@ -73,8 +73,9 @@ describe('collectStatsGames', () => {
 
     expect(games).has.length(1);
     const [game] = games;
-    expect(game.summary.id).eq(finished.id);
-    expect(game.resultUrl).eq(`the-end?id=${finished.playersInGenerationOrder[0].id}`);
+    // Only the spectator id is public: game and player ids would open every seat
+    expect(game.summary.id).eq(finished.spectatorId);
+    expect(game.resultUrl).eq(`the-end?id=${finished.spectatorId}`);
     const details = game.details!;
     const playerDetails = details.players.find((entry) => entry.name === player.name)!;
     expect(playerDetails.cards).includes(CardName.ECOLINE);

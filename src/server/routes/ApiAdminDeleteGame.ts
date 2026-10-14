@@ -9,6 +9,7 @@ import {isGameId} from '../../common/Types';
 import {AdminDeleteGameRequest} from '../../common/admin/AdminGameSummary';
 import {ImportedGamesStore} from '../admin/ImportedGamesStore';
 import {ImportedSnapshotsStore} from '../admin/ImportedSnapshotsStore';
+import {forgetCachedStatsGames} from '../stats/statsGamesCache';
 
 /** Permanently deletes an own game from memory and database, or removes an imported result. */
 export class ApiAdminDeleteGame extends Handler {
@@ -27,6 +28,7 @@ export class ApiAdminDeleteGame extends Handler {
         this.snapshots.remove(importedSummary.importedParticipantId);
       }
       this.importedGames.remove(id);
+      forgetCachedStatsGames();
       responses.writeJson(res, ctx, {deleted: id});
       return;
     }
@@ -34,6 +36,7 @@ export class ApiAdminDeleteGame extends Handler {
       throw RouteError.notFound('game not found');
     }
     await ctx.gameLoader.deleteGame(id);
+    forgetCachedStatsGames();
     responses.writeJson(res, ctx, {deleted: id});
   }
 }

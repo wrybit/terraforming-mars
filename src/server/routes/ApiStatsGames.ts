@@ -3,7 +3,7 @@ import {Handler} from './Handler';
 import {Context} from './IHandler';
 import {Request} from '../Request';
 import {Response} from '../Response';
-import {collectStatsGames} from '../stats/collectStatsGames';
+import {cachedStatsGames} from '../stats/statsGamesCache';
 
 /** Finished games for the public statistics page (/stats); evaluation happens in the browser. */
 export class ApiStatsGames extends Handler {
@@ -13,6 +13,6 @@ export class ApiStatsGames extends Handler {
   }
 
   public override async get(_req: Request, res: Response, ctx: Context): Promise<void> {
-    responses.writeJson(res, ctx, await collectStatsGames(ctx.gameLoader));
+    responses.writeJson(res, ctx, await cachedStatsGames(ctx.gameLoader));
   }
 }

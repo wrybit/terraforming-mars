@@ -40,8 +40,9 @@ function publicSummary(summary: AdminGameSummary): AdminGameSummary {
 
 function localStatsGame(game: IGame): StatsGame {
   return {
-    summary: publicSummary(localGameSummary(game)),
-    resultUrl: `${paths.THE_END}?id=${game.playersInGenerationOrder[0].id}`,
+    // The spectator id instead of game and player ids: those open every seat of the game, the spectator id only watches
+    summary: {...publicSummary(localGameSummary(game)), id: game.spectatorId},
+    resultUrl: `${paths.THE_END}?id=${game.spectatorId}`,
     details: statsGameDetails(Server.getSpectatorModel(game)),
   };
 }

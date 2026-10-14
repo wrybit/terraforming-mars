@@ -9,6 +9,7 @@ import {AdminImportGameRequest} from '../../common/admin/AdminGameSummary';
 import {ImportedGamesStore} from '../admin/ImportedGamesStore';
 import {ImportedSnapshotsStore} from '../admin/ImportedSnapshotsStore';
 import {ImportedGame, importExternalGame, JsonFetcher, fetchJson} from '../admin/importExternalGame';
+import {forgetCachedStatsGames} from '../stats/statsGamesCache';
 
 /** Fetches a finished game from a foreign server (e.g. herokuapp) and stores it here permanently. */
 export class ApiAdminImportGame extends Handler {
@@ -34,6 +35,7 @@ export class ApiAdminImportGame extends Handler {
     // First the final state, then the overview: an entry without a final state would link to nothing
     this.snapshots.save(imported.snapshot);
     this.importedGames.add(imported.summary);
+    forgetCachedStatsGames();
     responses.writeJson(res, ctx, imported.summary);
   }
 }
