@@ -1,4 +1,5 @@
 import {Color} from '../Color';
+import {LANGUAGE} from '../constants';
 
 // Contract between admin API (server) and admin overview (client): both sides read and write exactly this shape.
 
@@ -17,6 +18,8 @@ export type AdminPlayerSummary = {
   corporation: string | undefined;
   /** Has the game page open right now (running local games only; missing in older stored imports). */
   isOnline?: boolean;
+  /** Language chosen in the player's settings, sent by the open game page (unknown until the player was online once). */
+  language?: LANGUAGE;
 };
 
 export type AdminGameSummary = {

@@ -7,6 +7,7 @@ import {ServerStatusModel} from '../../common/models/ServerStatusModel';
 import {isServerUpdating, serverStartedAt, serverUpdateCommits} from '../server/serverUpdate';
 import {activeParticipantCount, noteActiveParticipant} from '../server/activeParticipants';
 import {presenceRecord} from '../admin/dashboard/presenceRecord';
+import {isLanguage, noteParticipantLanguage} from '../server/participantLanguages';
 import {isPlayerId} from '../../common/Types';
 import {Phase} from '../../common/Phase';
 
@@ -25,6 +26,11 @@ export class ApiStatus extends Handler {
       if (game !== undefined && game.phase !== Phase.END) {
         noteActiveParticipant(id);
         presenceRecord.notePlayer(id);
+        // Language from the player's settings: flag in the admin overview
+        const lang = ctx.urlParams.stringOrUndefined('lang');
+        if (isLanguage(lang)) {
+          noteParticipantLanguage(id, lang);
+        }
       }
     }
     const status: ServerStatusModel = {

@@ -1,4 +1,5 @@
 import {Color} from '../Color';
+import {LANGUAGE} from '../constants';
 import {AdminPlayerSummary} from './AdminGameSummary';
 import {findWinnerIndexes} from './findWinners';
 
@@ -10,6 +11,7 @@ export type AdminPlayerScore = {
   megaCredits: number;
   corporation: string | undefined;
   isOnline?: boolean;
+  language?: LANGUAGE;
 };
 
 /**

@@ -11,6 +11,7 @@ import {ServerStatusModel} from '../../src/common/models/ServerStatusModel';
 import {Game} from '../../src/server/Game';
 import {TestPlayer} from '../TestPlayer';
 import {Phase} from '../../src/common/Phase';
+import {clearParticipantLanguages, participantLanguage} from '../../src/server/server/participantLanguages';
 
 describe('ApiStatus', () => {
   let scaffolding: RouteTestScaffolding;
@@ -20,10 +21,13 @@ describe('ApiStatus', () => {
   before(() => {
     flagFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'server-update-')), 'flag');
     process.env.SERVER_UPDATE_FLAG_FILE = flagFile;
+    process.env.PARTICIPANT_LANGUAGES_FILE = path.join(path.dirname(flagFile), 'languages.json');
   });
 
   after(() => {
     delete process.env.SERVER_UPDATE_FLAG_FILE;
+    delete process.env.PARTICIPANT_LANGUAGES_FILE;
+    clearParticipantLanguages();
   });
 
   beforeEach(() => {
@@ -87,5 +91,15 @@ describe('ApiStatus', () => {
     await scaffolding.ctx.gameLoader.add(game);
     await status('/api/status?id=' + player.id);
     expect((await status('/api/status')).activeParticipants).eq(0);
+  });
+
+  it('remembers the language of players of running games, also after a restart', async () => {
+    const player = TestPlayer.BLUE.newPlayer();
+    await scaffolding.ctx.gameLoader.add(Game.newInstance('game-id', [player], player, 'spectatorid'));
+    await status('/api/status?id=' + player.id + '&lang=nonsense');
+    expect(participantLanguage(player.id)).is.undefined;
+    await status('/api/status?id=' + player.id + '&lang=ua');
+    clearParticipantLanguages();
+    expect(participantLanguage(player.id)).eq('ua');
   });
 });

@@ -34,7 +34,8 @@ function publicSummary(summary: AdminGameSummary): AdminGameSummary {
   return {
     ...summary,
     spectatorUrl: undefined,
-    players: summary.players.map((player) => ({...player, url: undefined, corporation: canonicalCorporations(player.corporation)})),
+    // The language stays admin-only: no flags on the public stats page
+    players: summary.players.map((player) => ({...player, url: undefined, corporation: canonicalCorporations(player.corporation), language: undefined})),
   };
 }
 

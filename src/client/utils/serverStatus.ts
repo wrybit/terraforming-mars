@@ -1,6 +1,7 @@
 import {ref} from 'vue';
 import {paths} from '@/common/app/paths';
 import {ServerStatusModel, ServerUpdateCommit} from '@/common/models/ServerStatusModel';
+import {getPreferences} from '@/client/utils/PreferencesManager';
 
 // Every open page asks the server regularly whether an update is coming (GET /api/status).
 // 'updating': the server is about to restart, inputs are frozen (ServerUpdateOverlay.vue).
@@ -50,7 +51,9 @@ export function applyServerStatus(status: ServerStatusModel): void {
 }
 
 async function poll(participantId: string | undefined): Promise<void> {
-  const query = participantId === undefined ? '' : '?id=' + encodeURIComponent(participantId);
+  // The language from the settings goes along, so the admin overview can show it as a flag
+  const query = participantId === undefined ? '' :
+    '?id=' + encodeURIComponent(participantId) + '&lang=' + encodeURIComponent(getPreferences().lang);
   try {
     const response = await fetch(paths.API_STATUS + query, {cache: 'no-store'});
     // During the switch the proxy answers with an error: keep the current state until the new server answers

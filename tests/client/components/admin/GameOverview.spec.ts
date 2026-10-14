@@ -73,4 +73,13 @@ describe('GameOverview', () => {
     expect(labels.map((label) => label.text())).deep.eq(['Delete', 'Really delete?', 'Deleting…']);
     expect(labels.filter((label) => label.classes('games-overview-delete-label--active')).map((label) => label.text())).deep.eq(['Delete']);
   });
+
+  it('round flag of the chosen language in front of the name, language in the tooltip', () => {
+    const withLanguage: AdminGameSummary = {...summary, players: [{...summary.players[0], language: 'ua'}, summary.players[1]]};
+    const row = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'), props: {summary: withLanguage, columns: PLAYER_COLUMNS}});
+    const flags = row.findAll('.language-flag--round');
+    expect(flags).has.length(1);
+    expect(flags[0].attributes('src')).eq('assets/flags/ua.svg');
+    expect(row.find('.games-overview-players .games-overview-chip').attributes('title')).contains('Українська');
+  });
 });

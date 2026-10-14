@@ -28,7 +28,7 @@
         class="games-overview-chip"
         :class="[playerColorClass(player.color), {'games-overview-chip--winner': player.isWinner, 'games-overview-chip--online': player.isOnline === true}]"
         :title="chipTitle(player)">
-        <span class="games-overview-chip-name"><span class="games-overview-chip-own-name">{{ chipNameParts(player).name }}</span><span v-if="chipNameParts(player).marker !== undefined">{{ chipNameParts(player).marker }}</span></span>
+        <span class="games-overview-chip-name"><LanguageFlag v-if="player.language !== undefined" :lang="player.language" class="language-flag--round"/><span class="games-overview-chip-own-name">{{ chipNameParts(player).name }}</span><span v-if="chipNameParts(player).marker !== undefined">{{ chipNameParts(player).marker }}</span></span>
         <strong><span v-if="player.isWinner" class="games-overview-trophy">🏆</span>{{ player.victoryPoints }}</strong>
       </component>
     </td>
@@ -45,13 +45,16 @@ import {chipNameParts, PlayerColumn, playersInColumn} from '@/client/components/
 import {Color} from '@/common/Color';
 import {playerColorClass} from '@/common/utils/utils';
 import {paths} from '@/common/app/paths';
+import {LANGUAGES} from '@/common/constants';
 import {translateText} from '@/client/directives/i18n';
 import DeleteGameButton from '@/client/components/admin/DeleteGameButton.vue';
+import LanguageFlag from '@/client/components/LanguageFlag.vue';
 
 export default defineComponent({
   name: 'GameOverview',
   components: {
     DeleteGameButton,
+    LanguageFlag,
   },
   emits: ['delete'],
   props: {
@@ -83,9 +86,9 @@ export default defineComponent({
   methods: {
     playersInColumn,
     chipNameParts,
-    // Corporation and win in the tooltip: the tile itself stays compact (points only)
+    // Corporation, win and language (own name of the language) in the tooltip: the tile itself stays compact (points only)
     chipTitle(player: AdminPlayerSummary): string {
-      return [player.corporation, player.isWinner ? translateText('Winner') : undefined, player.isOnline === true ? translateText('Online') : undefined].filter((part) => part !== undefined).join(' · ');
+      return [player.corporation, player.isWinner ? translateText('Winner') : undefined, player.isOnline === true ? translateText('Online') : undefined, player.language === undefined ? undefined : LANGUAGES[player.language][0]].filter((part) => part !== undefined).join(' · ');
     },
     playerColorClass(color: Color): string {
       return playerColorClass(color, 'bg_transparent');
