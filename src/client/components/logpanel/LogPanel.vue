@@ -1,5 +1,16 @@
 <template>
-  <div ref="root" class="log-container">
+  <div ref="root" :class="['log-container', {'log-container--separated': separatesMilestonesAwards}]">
+    <!-- Separated: milestones & awards as their own box above the log, always visible; no tab – the box has its own headings -->
+    <template v-if="separatesMilestonesAwards">
+      <div class="panel or-tab-panel or-tab-panel--tone-milestones log-panel--milestones log-milestones-box" role="region" :aria-label="milestonesAwardsTitle">
+        <div class="log-milestones">
+          <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable/>
+        </div>
+        <div class="log-milestones-toggles">
+          <ToggleSwitch data-test="log-milestones-separate" :modelValue="true" :label="$t('Separate log')" @update:modelValue="setSeparateMilestonesLog"/>
+        </div>
+      </div>
+    </template>
     <LogGenerationList
       ref="generationList"
       :max="viewModel.game.generation"
@@ -7,7 +18,7 @@
       :lastSoloGeneration="lastSoloGeneration"
       @selected="selectGeneration">
       <!-- Desktop: milestones & awards as the first tab of the same box -->
-      <template v-if="hasMilestonesAwards" #before>
+      <template v-if="hasMilestonesAwards && !separatesMilestonesAwards" #before>
         <div class="or-tabs log-milestones-tabs" role="tablist">
           <button type="button" role="tab"
             :aria-selected="showsMilestonesAwards"
@@ -52,9 +63,14 @@
       <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones">
         <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable/>
       </div>
-      <!-- Below the table, outside its scroll area: whether the box switches here by itself on one's own turn -->
-      <ToggleSwitch v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones-auto" data-test="log-milestones-auto"
-        :modelValue="autoMilestonesTab" :label="$t('Open on my turn')" @update:modelValue="setAutoMilestonesTab"/>
+      <!-- Below the table, outside its scroll area, only while hovering the box: whether the box switches here
+           by itself on one's own turn, and (rightmost) whether milestones & awards get their own box above the log -->
+      <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones-toggles">
+        <ToggleSwitch data-test="log-milestones-auto"
+          :modelValue="autoMilestonesTab" :label="$t('Open on my turn')" @update:modelValue="setAutoMilestonesTab"/>
+        <ToggleSwitch data-test="log-milestones-separate"
+          :modelValue="false" :label="$t('Separate log')" @update:modelValue="setSeparateMilestonesLog"/>
+      </div>
       <button
         v-show="showScrollToBottomButton && !showsMilestonesAwards"
         type="button"
@@ -561,6 +577,18 @@ export default defineComponent({
     setAutoMilestonesTab(on: boolean): void {
       PreferencesManager.INSTANCE.set('auto_milestones_tab', on);
     },
+    // Separating shows the log next to the always visible table; joining again keeps the log in front
+    setSeparateMilestonesLog(on: boolean): void {
+      PreferencesManager.INSTANCE.set('separate_milestones_log', on);
+      this.view = 'log';
+      this.selectedGeneration = this.generation;
+      this.following = true;
+      this.$nextTick(() => {
+        this.restorePosition();
+        // The right column changed its height distribution: let it refit Mars and the log (rightColumnFit.ts)
+        window.dispatchEvent(new Event('resize'));
+      });
+    },
     // The view a change of turn leads to: own turn → milestones & awards (if wanted), otherwise the log
     turnView(acting: boolean): LogView {
       return acting && this.autoMilestonesTab ? 'milestones' : 'log';
@@ -792,8 +820,12 @@ export default defineComponent({
     hasMilestonesAwards(): boolean {
       return this.milestonesAwards && this.viewModel.players.length > 1 && !getPreferences().hide_awards_and_milestones;
     },
+    // Milestones & awards in their own box above the log: the log box then only holds the log
+    separatesMilestonesAwards(): boolean {
+      return this.hasMilestonesAwards && getPreferences().separate_milestones_log;
+    },
     showsMilestonesAwards(): boolean {
-      return this.hasMilestonesAwards && this.view === 'milestones';
+      return this.hasMilestonesAwards && !this.separatesMilestonesAwards && this.view === 'milestones';
     },
     milestonesAwardsTitle(): string {
       return milestonesAwardsLabel((text) => this.$t(text));

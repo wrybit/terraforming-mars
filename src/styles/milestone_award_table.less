@@ -512,11 +512,47 @@ each(@players, {
   overflow: hidden auto;
 }
 
-// Auto-switch toggle at the bottom right of the box, always visible below the scrolling table
-.log-milestones-auto {
+// Toggles at the bottom right of the box, below the scrolling table: "open on my turn", rightmost "separate log".
+// Their row keeps its space, so nothing jumps when they appear
+.log-milestones-toggles {
   flex: none;
-  align-self: flex-end;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  // Clearly wider than label-to-track inside a toggle: two separate switches, not one group
+  gap: 20px;
   margin-top: 10px;
   // Same gap to the right edge as to the bottom, so the radii of track and box corner run together
   margin-right: 1px;
+  transition: opacity 0.15s ease;
 }
+
+// Only while the pointer is over the box; without hover (touch) they stay visible
+@media (hover: hover) {
+  .log-panel--milestones .log-milestones-toggles {
+    opacity: 0;
+  }
+
+  .log-panel--milestones:hover .log-milestones-toggles,
+  .log-panel--milestones:focus-within .log-milestones-toggles {
+    opacity: 1;
+  }
+}
+
+// Separated: its own box above the log, as tall as the table; the log box below takes the rest
+.log-milestones-box.or-tab-panel {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  max-width: 860px;
+  // Gap between the two boxes larger than inside them
+  margin-bottom: 16px;
+  position: relative;
+  // Without a tab on top: all four corners rounded
+  border-radius: @or-tabs-radius;
+
+  > .log-milestones {
+    flex: none;
+  }
+}
+

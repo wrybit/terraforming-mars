@@ -62,6 +62,11 @@
       max-height: none;
       min-height: @player-home-log-height;
     }
+
+    // Milestones & awards in their own box above: the log gives way instead of pushing the column past the window
+    > .log-container--separated .log-panel.or-tab-panel {
+      min-height: 120px;
+    }
   }
 
   .player-home--fixed .player-home-columns__board--log-full .player-home-columns__log .log-panel.or-tab-panel {

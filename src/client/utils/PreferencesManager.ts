@@ -9,6 +9,7 @@ export type Preferences = {
   hide_hand: boolean,
   hide_awards_and_milestones: boolean,
   auto_milestones_tab: boolean,
+  separate_milestones_log: boolean,
   show_milestone_details: boolean,
   show_award_details: boolean,
   hide_top_bar: boolean,
@@ -42,6 +43,8 @@ const defaults: Preferences = {
   hide_awards_and_milestones: false,
   // On one's own turn the log box switches to milestones & awards (toggle in that tab)
   auto_milestones_tab: true,
+  // Milestones & awards as their own box above the log instead of a tab of the log box (toggle in that box)
+  separate_milestones_log: false,
   show_milestone_details: true,
   show_award_details: true,
   hide_top_bar: false,
