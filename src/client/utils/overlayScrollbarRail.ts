@@ -1,6 +1,6 @@
 // One overlay scrollbar (one direction of one scroll area): the bar element, its placement and the
 // mouse interaction (drag the thumb, click the track to page). Visibility timing: overlayScrollbars.ts.
-import {innerBox, frameOf, isScrollable, scrollMetrics} from '@/client/utils/overlayScrollbarArea';
+import {endInset, innerBox, frameOf, isScrollable, scrollMetrics} from '@/client/utils/overlayScrollbarArea';
 import {Box, railBox, ScrollAxis, scrollDeltaForDrag, snapToFrame, thumbGeometry} from '@/client/utils/overlayScrollbarGeometry';
 
 // Share of a page the track click scrolls, so a bit of the previous view stays for orientation
@@ -9,6 +9,10 @@ const PAGE_SHARE = 0.9;
 /** Where the bar of this area lies (also its hover zone), whether it is shown or not. */
 export function railBoxOf(scrollArea: Element, axis: ScrollAxis): Box {
   const edges = snapToFrame(innerBox(scrollArea), innerBox(frameOf(scrollArea)));
+  // Free space at the lower end only after snapping, otherwise the edge would snap back to the frame
+  if (axis === 'vertical') {
+    edges.bottom -= endInset(scrollArea);
+  }
   const other: ScrollAxis = axis === 'vertical' ? 'horizontal' : 'vertical';
   return railBox(edges, axis, isScrollable(scrollArea, other));
 }

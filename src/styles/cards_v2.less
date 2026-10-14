@@ -1339,6 +1339,8 @@
     // Adding scrolling for cards with huge description
     &:not(.global-event-card-content) {
       overflow-x: hidden;
+      // Overlay bar ends above the points badge in the lower right corner (badge 46px + gap)
+      --overlay-scrollbar-end-inset: 52px;
     }
 
     &::-webkit-scrollbar-track {

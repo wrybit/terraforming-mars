@@ -7,6 +7,14 @@
 // While dragged a bit stronger, so the grip is felt
 @overlay-scrollbar-opacity-dragging: 0.65;
 
+// Space kept free at the lower end of a vertical bar (overlayScrollbarArea.ts, endInset); not inherited,
+// so scroll areas nested inside get their full length
+@property --overlay-scrollbar-end-inset {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
 .overlay-scrollbar-colors(@opacity) {
   background: fade(#000, @opacity * 100%);
   box-shadow: inset 0 0 0 1px fade(#fff, @opacity * 50%);
