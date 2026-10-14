@@ -52,3 +52,8 @@ export function recentAwardGrowth(gameId: string, awardName: string, playerId: s
   }
   return undefined;
 }
+
+/** Forgets every history. Test batches reuse the game id "game-id" for every game in a worker process. */
+export function clearAwardHistory(): void {
+  historyByGame.clear();
+}

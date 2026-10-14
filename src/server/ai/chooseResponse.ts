@@ -14,6 +14,9 @@ import {recordDecision} from './decisionTrace';
 import {describeResponse} from './decisionLabels';
 import {recordAwardScores} from './awardHistory';
 import {isSimulating} from './simulationSandbox';
+import {OrOptions} from '../inputs/OrOptions';
+import {WORLD_GOVERNMENT_TITLE, chooseWorldGovernment} from './worldGovernmentChoice';
+import {tuningOf} from './aiTuning';
 
 // Entry point of the rule-based AI (stage 1): which answer to give for the current input.
 
@@ -53,6 +56,13 @@ function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputRespo
   }
   if (isActionMenu(input)) {
     const response = chooseAction(input, player, {noise: profile.noise});
+    if (response !== undefined) {
+      return response;
+    }
+  }
+  // World Government terraforming (Venus Next): each option tried on a game copy (worldGovernmentChoice.ts).
+  if (input instanceof OrOptions && input.title === WORLD_GOVERNMENT_TITLE && tuningOf(player).worldGovernment > 0 && !isSimulating()) {
+    const response = chooseWorldGovernment(input, player);
     if (response !== undefined) {
       return response;
     }

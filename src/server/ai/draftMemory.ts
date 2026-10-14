@@ -33,3 +33,8 @@ export function rememberPassedCards(gameId: string, viewerId: string, receiverId
 export function passedCards(gameId: string, viewerId: string, receiverId: string): ReadonlySet<CardName> {
   return passedByGame.get(gameId)?.get(`${viewerId}|${receiverId}`) ?? new Set();
 }
+
+/** Forgets every game. Test batches reuse the game id "game-id" for every game in a worker process. */
+export function clearDraftMemory(): void {
+  passedByGame.clear();
+}

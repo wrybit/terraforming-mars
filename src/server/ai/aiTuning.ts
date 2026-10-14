@@ -158,6 +158,8 @@ export type AiTuning = {
   collectorRates: number,
   /** Generations by which the pace of the last generation may shorten the expected game length (recentPace.ts); 0 = off. */
   recentPace: number,
+  /** 1: World Government terraforming options are tried on game copies (worldGovernmentChoice.ts); 0 = first option. */
+  worldGovernment: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -307,6 +309,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 66: collectorRate06 −0.23 (z −0.29) – neutral, fixes the human card-VP gap (collectors) – adopted with accumulatorValue 0.6.
   collectorRates: 1,
   recentPace: 0,
+  worldGovernment: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -601,6 +604,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human rush ended a game in generation 8: shorten the estimate by the last generation's pace.
   recentPace1: {recentPace: 1},
   recentPace2: {recentPace: 2},
+  // Venus games: World Government chose temperature every time (first option).
+  worldGovernment: {worldGovernment: 1},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
