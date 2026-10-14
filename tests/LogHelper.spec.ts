@@ -65,7 +65,7 @@ describe('LogHelper', () => {
     expect(msg).deep.eq({
       message: '${0} drew ${1}',
       data: [
-        {type: LogMessageDataType.STRING, value: 'You'},
+        {type: LogMessageDataType.PLAYER, value: 'blue'},
         {type: LogMessageDataType.CARDS, value: ['Algae']},
       ],
       timestamp: 0,

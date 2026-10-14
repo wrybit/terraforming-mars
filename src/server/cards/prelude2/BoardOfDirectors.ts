@@ -44,7 +44,7 @@ export class BoardOfDirectors extends PreludeCard implements IActionCard {
   private discard(player: IPlayer, prelude: IPreludeCard) {
     const game = player.game;
     game.log('${0} drew and discarded a prelude', (b) => b.player(player));
-    game.log('You drew and discarded ${0}', (b) => b.card(prelude), {reservedFor: player});
+    game.log('${0} drew and discarded ${1}', (b) => b.player(player).card(prelude), {reservedFor: player});
     game.preludeDeck.discard(prelude);
   }
 

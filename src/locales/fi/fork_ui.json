@@ -795,5 +795,9 @@
   "Visible once you have bought your cards": "Näkyy, kun olet ostanut korttisi",
   "No cards in hand": "Ei kortteja kädessä",
   "passed on": "antoi vuoron",
-  "The page ran into a display error.": "Näytössä tapahtui virhe."
+  "The page ran into a display error.": "Näytössä tapahtui virhe.",
+  "${0} drew and discarded ${1}": "${0} nosti ja poisti ${1}",
+  "AI info (spoilers)": "AI-tiedot (spoilerit)",
+  "AI info (spoilers) hidden": "AI-tiedot (spoilerit) piilotettu",
+  "Show AI info (spoilers)": "Näytä AI-tiedot (spoilerit)"
 }

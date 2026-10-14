@@ -177,10 +177,10 @@ export abstract class Draft {
     const picked = player.draftedCards.slice(-this.cardsToKeep(player));
     const passed = player.draftHand;
     if (passed.length > 0) {
-      LogHelper.logPrivately(player, 'You drafted ${0}, passing ${1} to ${2}', '${0} drafted ${1}, passing ${2} to ${3}',
+      LogHelper.logPrivately(player, '${0} drafted ${1}, passing ${2} to ${3}',
         (b) => b.cards(picked).cards(passed).player(this.givingTo(player)));
     } else {
-      LogHelper.logPrivately(player, 'You drafted ${0}', '${0} drafted ${1}', (b) => b.cards(picked));
+      LogHelper.logPrivately(player, '${0} drafted ${1}', (b) => b.cards(picked));
     }
   }
 

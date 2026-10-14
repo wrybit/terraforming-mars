@@ -34,7 +34,7 @@
     </LogGenerationList>
     <div v-docked-tab :class="panelClasses" role="tabpanel">
       <!-- Filter line above the stream: search field with the active filters as chips, options to fold out -->
-      <LogFilterBar v-show="!showsMilestonesAwards" v-model="logFilter" :players="viewModel.players" :me="viewModel.thisPlayer?.color"/>
+      <LogFilterBar v-show="!showsMilestonesAwards" v-model="logFilter" :players="viewModel.players" :me="viewModel.thisPlayer?.color" :aiInsights="analysisGame"/>
       <!-- One continuous stream of all generations; the tabs above follow the scroll position -->
       <!-- The edge fade sits on this frame, not on the scrolling box: a mask on the scroll box itself leaves stale,
            overlapping rows in Chrome on Windows while scrolling -->
@@ -50,7 +50,7 @@
             <div v-if="row.type === 'phase'" class="log-phase-line" aria-hidden="true"></div>
             <!-- Analysis game: hovering an AI row shows rating buttons behind its text (touch: double-tap; key I) -->
             <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel"
-              :class="{'log-row--ai-rateable': isRateable(section, row)}"
+              :follows="row.follows === true" :class="{'log-row--ai-rateable': isRateable(section, row)}"
               @click="messageClicked(row.message, undefined, section, row)"
               @mouseenter="messageHovered(row.message, $event); rowHovered(section, row, $event)" @mouseleave="rowLeft($event)" @spaceClicked="$emit('spaceClicked', $event)"/>
             <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"
@@ -135,6 +135,8 @@ import {AiFeedbackRating} from '@/common/ai/AiFeedback';
 const RATE_BAR_NAME_VISIBLE = 20;
 import {aiColorsOf, AiLogTarget, aiTargetOfRow, decisionSummaries} from '@/client/components/logpanel/aiAnalysis/aiLogTarget';
 import {aiFeedbackState, loadAiFeedback, openAiDecision, ratingsOf} from '@/client/components/logpanel/aiAnalysis/aiFeedbackState';
+import {aiInsightsShown} from '@/client/components/logpanel/aiAnalysis/aiInsightVisibility';
+import {withViewerNamed} from '@/client/components/logpanel/logViewerName';
 import {AiFeedbackEntry} from '@/common/ai/AiFeedback';
 import {isTypingTarget} from '@/client/utils/typingTarget';
 
@@ -388,14 +390,20 @@ export default defineComponent({
     rowsOf(section: GenerationLog): Array<LogRow> {
       let rows = groupedRows.get(section.messages);
       if (rows === undefined) {
-        rows = groupLogMessages(section.messages, {tableau: this.tableauByPlayer});
+        // Own private lines saved with "You" get the viewer's name (logViewerName.ts)
+        const viewer = this.viewModel.thisPlayer?.color;
+        rows = groupLogMessages(section.messages.map((message) => withViewerNamed(message, viewer)), {tableau: this.tableauByPlayer});
         groupedRows.set(section.messages, rows);
       }
       return rows;
     },
     // Rows of a generation that pass the filter
     visibleRows(section: GenerationLog): Array<LogRow> {
-      const rows = this.rowsOf(section);
+      let rows = this.rowsOf(section);
+      // AI info switched off (filter bar): its lines are hidden like in a normal game
+      if (this.analysisGame && !aiInsightsShown.value) {
+        rows = rows.filter((row) => row.type !== 'message' || row.message.aiInsight === undefined);
+      }
       if (!this.filterActive) {
         return rows;
       }

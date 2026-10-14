@@ -966,5 +966,9 @@
   "Visible once you have bought your cards": "Látható, amint megvetted a lapjaidat",
   "No cards in hand": "Nincs lap a kézben",
   "passed on": "továbbadta",
-  "The page ran into a display error.": "Megjelenítési hiba történt."
+  "The page ran into a display error.": "Megjelenítési hiba történt.",
+  "${0} drew and discarded ${1}": "${0} húzta és eldobta: ${1}",
+  "AI info (spoilers)": "AI-infók (spoilerek)",
+  "AI info (spoilers) hidden": "AI-infók (spoilerek) elrejtve",
+  "Show AI info (spoilers)": "AI-infók (spoilerek) megjelenítése"
 }

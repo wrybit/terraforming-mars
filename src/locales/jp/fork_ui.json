@@ -1146,5 +1146,9 @@
   "Visible once you have bought your cards": "自分のカードを購入すると表示されます",
   "No cards in hand": "手札がありません",
   "passed on": "手番を回した",
-  "The page ran into a display error.": "表示エラーが発生しました。"
+  "The page ran into a display error.": "表示エラーが発生しました。",
+  "${0} drew and discarded ${1}": "${0}が${1}をドローして捨てた",
+  "AI info (spoilers)": "AI 情報（ネタバレ）",
+  "AI info (spoilers) hidden": "AI 情報（ネタバレ）非表示",
+  "Show AI info (spoilers)": "AI 情報（ネタバレ）を表示"
 }

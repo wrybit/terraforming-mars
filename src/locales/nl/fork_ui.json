@@ -1408,5 +1408,9 @@
   "Visible once you have bought your cards": "Zichtbaar zodra je je kaarten hebt gekocht",
   "No cards in hand": "Geen kaarten in de hand",
   "passed on": "doorgegeven",
-  "The page ran into a display error.": "Er is een weergavefout opgetreden."
+  "The page ran into a display error.": "Er is een weergavefout opgetreden.",
+  "${0} drew and discarded ${1}": "${0} trok en legde af: ${1}",
+  "AI info (spoilers)": "AI-info (spoilers)",
+  "AI info (spoilers) hidden": "AI-info (spoilers) verborgen",
+  "Show AI info (spoilers)": "AI-info (spoilers) tonen"
 }

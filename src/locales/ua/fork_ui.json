@@ -943,5 +943,9 @@
   "Visible once you have bought your cards": "Видно, щойно ти купиш свої карти",
   "No cards in hand": "Немає карт у руці",
   "passed on": "передав хід",
-  "The page ran into a display error.": "Сталася помилка відображення."
+  "The page ran into a display error.": "Сталася помилка відображення.",
+  "${0} drew and discarded ${1}": "${0} витяг(ла) і скинув(ла) ${1}",
+  "AI info (spoilers)": "Відомості AI (спойлери)",
+  "AI info (spoilers) hidden": "Відомості AI (спойлери) приховано",
+  "Show AI info (spoilers)": "Показати відомості AI (спойлери)"
 }

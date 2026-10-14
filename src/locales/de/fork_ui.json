@@ -579,5 +579,9 @@
   "Visible once you have bought your cards": "Sichtbar, sobald du deine Karten gekauft hast",
   "No cards in hand": "Keine Karten auf der Hand",
   "passed on": "weitergegeben",
-  "The page ran into a display error.": "Bei der Anzeige ist ein Fehler aufgetreten."
+  "The page ran into a display error.": "Bei der Anzeige ist ein Fehler aufgetreten.",
+  "${0} drew and discarded ${1}": "${0} zog und verwarf ${1}",
+  "AI info (spoilers)": "AI-Infos (Spoiler)",
+  "AI info (spoilers) hidden": "AI-Infos (Spoiler) ausgeblendet",
+  "Show AI info (spoilers)": "AI-Infos (Spoiler) einblenden"
 }

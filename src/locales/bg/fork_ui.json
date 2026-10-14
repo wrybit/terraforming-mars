@@ -1680,5 +1680,9 @@
   "Visible once you have bought your cards": "Видимо, щом купиш своите карти",
   "No cards in hand": "Няма карти в ръката",
   "passed on": "предаде хода",
-  "The page ran into a display error.": "Възникна грешка при показването."
+  "The page ran into a display error.": "Възникна грешка при показването.",
+  "${0} drew and discarded ${1}": "${0} взе и изхвърли ${1}",
+  "AI info (spoilers)": "Информация за AI (спойлери)",
+  "AI info (spoilers) hidden": "Информацията за AI (спойлери) е скрита",
+  "Show AI info (spoilers)": "Покажи информацията за AI (спойлери)"
 }

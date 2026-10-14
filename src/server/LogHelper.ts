@@ -20,19 +20,15 @@ function resourceString(resource: CardResource | undefined, qty: number): string
 
 export class LogHelper {
   /**
-   * Private line about the player's own cards, e.g. "You bought …". AI players get it with their
-   * name instead ("Yellow bought …"): in an analysis game the other players read their lines.
-   * `ownMessage` has one placeholder less than `namedMessage` (no player in front).
+   * Private line about the player's own cards ("Yellow bought …"). Always with the player's name, never
+   * "You": the log reads the same for everyone, and in an analysis game the others read the AI's lines.
+   * `message` starts with the player (${0}); `f` adds the rest.
    */
-  static logPrivately(player: IPlayer, ownMessage: string, namedMessage: string, f: (builder: LogMessageBuilder) => void): void {
-    if (player.aiLevel !== undefined) {
-      player.game.log(namedMessage, (b) => {
-        b.player(player);
-        f(b);
-      }, {reservedFor: player});
-    } else {
-      player.game.log(ownMessage, f, {reservedFor: player});
-    }
+  static logPrivately(player: IPlayer, message: string, f: (builder: LogMessageBuilder) => void): void {
+    player.game.log(message, (b) => {
+      b.player(player);
+      f(b);
+    }, {reservedFor: player});
   }
 
   static logAddResource(player: IPlayer, card: ICard, qty: number = 1, from?: From): void {
@@ -91,12 +87,8 @@ export class LogHelper {
     const options = privateMessage ? {reservedFor: player} : {};
 
     player.game.log(message, (b) => {
-      // AI players are named: in an analysis game the other players read their private lines
-      if (privateMessage === false || player.aiLevel !== undefined) {
-        b.player(player);
-      } else {
-        b.string('You');
-      }
+      // Always the name, also in private lines (see logPrivately)
+      b.player(player);
 
       if (cards.length > 0) {
         b.cards(cards);

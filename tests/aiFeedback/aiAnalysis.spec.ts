@@ -43,12 +43,13 @@ describe('AI analysis games', () => {
     expect(game.gameLog[game.gameLog.length - 1].id).is.a('string');
   });
 
-  it('names AI players in their private lines, humans read "You"', () => {
+  it('names every player in private lines, never "You"', () => {
     const [game, human, ai] = analysisGame();
-    LogHelper.logPrivately(human, 'You bought no cards', '${0} bought no cards', () => {});
-    LogHelper.logPrivately(ai, 'You bought no cards', '${0} bought no cards', () => {});
+    LogHelper.logPrivately(human, '${0} bought no cards', () => {});
+    LogHelper.logPrivately(ai, '${0} bought no cards', () => {});
     const [humanLine, aiLine] = game.gameLog.slice(-2);
-    expect(humanLine.message).eq('You bought no cards');
+    expect(humanLine.message).eq('${0} bought no cards');
+    expect(humanLine.data[0].value).eq(human.color);
     expect(humanLine.playerId).eq(human.id);
     expect(aiLine.message).eq('${0} bought no cards');
     expect(aiLine.data[0].value).eq(ai.color);
@@ -58,7 +59,7 @@ describe('AI analysis games', () => {
   it('shares private lines of AI players, never those of humans or the AI id', () => {
     const [game, human, ai] = analysisGame();
     const other = new TestPlayer('blue');
-    LogHelper.logPrivately(ai, 'You bought no cards', '${0} bought no cards', () => {});
+    LogHelper.logPrivately(ai, '${0} bought no cards', () => {});
     game.log('secret of the human', () => {}, {reservedFor: human});
     const lines = new GameLogs().getLogsForGameView(other.id, game, undefined);
     const aiLine = lines.find((line) => line.message === '${0} bought no cards');
@@ -71,7 +72,7 @@ describe('AI analysis games', () => {
   it('keeps AI lines private outside analysis games', () => {
     const [game, human, ai] = testGame(2);
     ai.aiLevel = 'hard';
-    LogHelper.logPrivately(ai, 'You bought no cards', '${0} bought no cards', () => {});
+    LogHelper.logPrivately(ai, '${0} bought no cards', () => {});
     const lines = new GameLogs().getLogsForGameView(human.id, game, undefined);
     expect(lines.some((line) => line.message === '${0} bought no cards')).is.false;
   });
@@ -93,7 +94,7 @@ describe('AI analysis games', () => {
   it('keeps a draft decision until the pick is logged', () => {
     const [game, , ai] = analysisGame();
     runWithAiDecision(ai, {...summary, kind: 'draft'}, () => {});
-    LogHelper.logPrivately(ai, 'You drafted ${0}', '${0} drafted ${1}', (b) => b.string('Algae'));
+    LogHelper.logPrivately(ai, '${0} drafted ${1}', (b) => b.string('Algae'));
     expect(game.gameLog[game.gameLog.length - 1].aiDecision?.kind).eq('draft');
   });
 
@@ -136,9 +137,9 @@ describe('AI analysis games', () => {
       const input = cast(drafter.popWaitingFor(), SelectCard<IProjectCard>);
       input.process({type: 'card', cards: [input.cards[0].name]});
     }
-    const picks = game.gameLog.filter((line) => line.message === 'You drafted ${0}, passing ${1} to ${2}');
+    const picks = game.gameLog.filter((line) => line.message === '${0} drafted ${1}, passing ${2} to ${3}');
     expect(picks.map((line) => line.playerId)).has.members([player.id, otherPlayer.id]);
-    expect(picks[0].data[1].value).has.length(3);
+    expect(picks[0].data[2].value).has.length(3);
   });
 
   it('lists what the action menu offered, with the selectable cards', () => {
@@ -154,8 +155,8 @@ describe('AI analysis games', () => {
 
   it('shows what the AI bought or drafted only once the reader has chosen too', () => {
     const [game, human, ai] = analysisGame();
-    LogHelper.logPrivately(ai, 'You bought no cards', '${0} bought no cards', () => {});
-    LogHelper.logPrivately(ai, 'You drafted ${0}', '${0} drafted ${1}', (b) => b.card(new Algae()));
+    LogHelper.logPrivately(ai, '${0} bought no cards', () => {});
+    LogHelper.logPrivately(ai, '${0} drafted ${1}', (b) => b.card(new Algae()));
     const shown = (message: string) => new GameLogs().getLogsForGameView(human.id, game, undefined).some((line) => line.message === message);
     game.phase = Phase.DRAFTING;
     expect(shown('${0} drafted ${1}')).is.false;

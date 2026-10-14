@@ -1,9 +1,11 @@
 <template>
    <!-- log-line--<colour>: text and hover in the colour of the player the line is about (log.less) -->
    <li v-if="message !== undefined && message.data !== undefined && message.message !== undefined"
-     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--expandable': expandable, 'log-line--ai-insight': message.aiInsight !== undefined, 'log-line--discard': isDiscard}]"
+     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--expandable': expandable, 'log-line--ai-insight': message.aiInsight !== undefined, 'log-line--discard': isDiscard, 'log-line--follows': follows}]"
      @click.prevent="$emit('click')">
     <span v-if="(message.type ?? LogMessageType.DEFAULT) === LogMessageType.DEFAULT" :title="when" v-html="icon"></span>
+    <!-- Consequence of the row above (same player): indented, the arrow points back to it -->
+    <span v-if="follows" class="log-follows-arrow" aria-hidden="true">↳</span>
     <!-- Analysis game: a private line of an AI player, normally hidden from the others (after the time icon, which the log hides) -->
     <span v-if="message.aiInsight !== undefined" class="log-ai-insight" :title="$t('Visible because this is an analysis game')"><SeatIcon kind="ai" :size="14"/></span>
     <template v-for="(data, idx) of entries" :key="idx">
@@ -83,6 +85,11 @@ export default defineComponent({
     viewModel: {
       type: Object as () => ViewModel,
       required: true,
+    },
+    // Consequence of the action row above it (LogPanel.vue, logActions.ts)
+    follows: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

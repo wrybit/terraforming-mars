@@ -107,10 +107,10 @@ export function keep(player: IPlayer, cards: ReadonlyArray<IProjectCard>, discar
     player.game.log('${0} ${1} ${2} card(s)', (b) => b.player(player).string(logType).number(cards.length));
     if (logType === LogType.BOUGHT) {
       if (cards.length > 0) {
-        LogHelper.logPrivately(player, 'You bought ${0}', '${0} bought ${1}', (b) => b.cards(cards));
+        LogHelper.logPrivately(player, '${0} bought ${1}', (b) => b.cards(cards));
       }
       if (discards.length > 0) {
-        LogHelper.logPrivately(player, 'You discarded ${0}', '${0} discarded ${1}', (b) => b.cards(discards));
+        LogHelper.logPrivately(player, '${0} discarded ${1}', (b) => b.cards(discards));
       }
     } else {
       LogHelper.logDrawnCards(player, cards, /* privateMessage */ true);

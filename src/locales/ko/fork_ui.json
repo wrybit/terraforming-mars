@@ -1027,5 +1027,9 @@
   "Visible once you have bought your cards": "네 카드를 구매하면 보입니다",
   "No cards in hand": "손에 카드가 없습니다",
   "passed on": "턴 넘김",
-  "The page ran into a display error.": "화면 표시 중 오류가 발생했습니다."
+  "The page ran into a display error.": "화면 표시 중 오류가 발생했습니다.",
+  "${0} drew and discarded ${1}": "${0} 플레이어가 ${1} 카드를 뽑고 버림",
+  "AI info (spoilers)": "AI 정보 (스포일러)",
+  "AI info (spoilers) hidden": "AI 정보 (스포일러) 숨김",
+  "Show AI info (spoilers)": "AI 정보 (스포일러) 표시"
 }

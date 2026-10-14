@@ -143,17 +143,17 @@ export class SelectInitialCards extends OptionsInput<undefined> {
     ];
     const bought = player.cardsInHand;
     const discardedProjects = player.dealtProjectCards.filter((card) => !bought.includes(card));
-    LogHelper.logPrivately(player, 'You kept ${0}', '${0} kept ${1}', (b) => b.cards(kept));
+    LogHelper.logPrivately(player, '${0} kept ${1}', (b) => b.cards(kept));
     if (bought.length === 0) {
-      LogHelper.logPrivately(player, 'You bought no cards', '${0} bought no cards', () => {});
+      LogHelper.logPrivately(player, '${0} bought no cards', () => {});
     } else {
-      LogHelper.logPrivately(player, 'You bought ${0}', '${0} bought ${1}', (b) => b.cards(bought));
+      LogHelper.logPrivately(player, '${0} bought ${1}', (b) => b.cards(bought));
     }
     if (discardedStart.length > 0) {
-      LogHelper.logPrivately(player, 'You discarded ${0}', '${0} discarded ${1}', (b) => b.cards(discardedStart));
+      LogHelper.logPrivately(player, '${0} discarded ${1}', (b) => b.cards(discardedStart));
     }
     if (discardedProjects.length > 0) {
-      LogHelper.logPrivately(player, 'You discarded ${0}', '${0} discarded ${1}', (b) => b.cards(discardedProjects));
+      LogHelper.logPrivately(player, '${0} discarded ${1}', (b) => b.cards(discardedProjects));
     }
   }
 

@@ -12,6 +12,11 @@
           <LogFilterSymbol v-else :option="option"/>
           <button type="button" class="log-filter-chip-remove" :aria-label="$t('Remove')" @click.stop="removeAt(index)">×</button>
         </span>
+        <!-- AI info switched off: visible as a chip, × shows it again -->
+        <span v-if="aiInsights && !aiInsightsShown" class="log-filter-chip log-filter-chip--ai-off" :title="$t('AI info (spoilers) hidden')" data-test="log-filter-ai-off">
+          <SeatIcon kind="ai" :size="14"/><span class="log-filter-chip-strike" aria-hidden="true"></span>
+          <button type="button" class="log-filter-chip-remove" :aria-label="$t('Show AI info (spoilers)')" @click.stop="setAiInsightsShown(true)">×</button>
+        </span>
         <input id="log-filter-input" ref="input" class="log-filter-input" type="search" name="log-filter" :value="text" :placeholder="$t('Search or filter …')" :aria-label="$t('Search or filter …')"
           @input="textChanged" @keydown="keyDown">
       </label>
@@ -30,6 +35,13 @@
           <LogFilterSymbol v-else :option="option"/>
         </button>
       </span>
+      <!-- Analysis game: show or hide what the AI drafted, kept and bought (on by default) -->
+      <span v-if="aiInsights" class="log-filter-group">
+        <button type="button" :class="['log-filter-option', 'log-filter-option--ai', {'log-filter-option--on': aiInsightsShown}]"
+          :title="$t('AI info (spoilers)')" :aria-pressed="aiInsightsShown" data-test="log-filter-ai" @click="setAiInsightsShown(!aiInsightsShown)">
+          <SeatIcon kind="ai" :size="20"/>
+        </button>
+      </span>
     </div>
   </div>
 </template>
@@ -40,6 +52,8 @@ import {Color} from '@/common/Color';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {LOG_FILTER_ICONS, LOG_FILTER_KINDS, LOG_FILTER_TYPES, LogFilter, LogFilterOption} from '@/client/components/logpanel/logFilter';
 import LogFilterSymbol from '@/client/components/logpanel/LogFilterSymbol.vue';
+import SeatIcon from '@/client/components/create/SeatIcon.vue';
+import {aiInsightsShown, setAiInsightsShown} from '@/client/components/logpanel/aiAnalysis/aiInsightVisibility';
 
 // Tooltip texts of the options (translated keys)
 const TITLES: Record<string, string> = {
@@ -53,7 +67,7 @@ const TITLES: Record<string, string> = {
 
 export default defineComponent({
   name: 'LogFilterBar',
-  components: {LogFilterSymbol},
+  components: {LogFilterSymbol, SeatIcon},
   props: {
     modelValue: {
       type: Object as PropType<LogFilter>,
@@ -62,6 +76,11 @@ export default defineComponent({
     players: {
       type: Array as PropType<ReadonlyArray<PublicPlayerModel>>,
       required: true,
+    },
+    // Analysis game: offer the switch for the AI info lines
+    aiInsights: {
+      type: Boolean,
+      default: false,
     },
     // Viewing player; spectators have no "me" option
     me: {
@@ -78,6 +97,9 @@ export default defineComponent({
     };
   },
   computed: {
+    aiInsightsShown(): boolean {
+      return aiInsightsShown.value;
+    },
     optionGroups(): Array<Array<LogFilterOption>> {
       const names: Array<LogFilterOption> = this.players.map((player) => ({group: 'player', value: player.color}));
       if (this.me !== undefined) {
@@ -92,6 +114,7 @@ export default defineComponent({
     },
   },
   methods: {
+    setAiInsightsShown,
     optionKey(option: LogFilterOption): string {
       return option.group + ':' + option.value;
     },

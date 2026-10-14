@@ -1718,5 +1718,9 @@
   "Visible once you have bought your cards": "在你买完自己的卡牌后可见",
   "No cards in hand": "手中没有卡牌",
   "passed on": "让出回合",
-  "The page ran into a display error.": "页面显示出错。"
+  "The page ran into a display error.": "页面显示出错。",
+  "${0} drew and discarded ${1}": "${0} 摸了并弃掉 ${1}",
+  "AI info (spoilers)": "AI 信息（剧透）",
+  "AI info (spoilers) hidden": "AI 信息（剧透）已隐藏",
+  "Show AI info (spoilers)": "显示 AI 信息（剧透）"
 }

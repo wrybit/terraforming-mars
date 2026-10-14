@@ -1145,5 +1145,9 @@
   "Visible once you have bought your cards": "Synlig når du har kjøpt kortene dine",
   "No cards in hand": "Ingen kort på hånden",
   "passed on": "sendte videre",
-  "The page ran into a display error.": "Det oppstod en visningsfeil."
+  "The page ran into a display error.": "Det oppstod en visningsfeil.",
+  "${0} drew and discarded ${1}": "${0} trakk og kastet ${1}",
+  "AI info (spoilers)": "AI-info (spoilere)",
+  "AI info (spoilers) hidden": "AI-info (spoilere) skjult",
+  "Show AI info (spoilers)": "Vis AI-info (spoilere)"
 }

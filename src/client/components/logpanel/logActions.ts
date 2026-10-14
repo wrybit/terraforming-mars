@@ -59,7 +59,8 @@ export type LogAction = {
 export type LogRow =
   | {type: 'action', action: LogAction, indexes: Array<number>}
   | {type: 'research', entries: Array<{player: Color, amount: number}>, indexes: Array<number>}
-  | {type: 'message', message: LogMessage, indexes: Array<number>}
+  // follows: a consequence of the action row above (same player, e.g. the cards a card let them draw) – indented with ↳
+  | {type: 'message', message: LogMessage, indexes: Array<number>, follows?: boolean}
   | {type: 'phase', indexes: Array<number>};
 
 const STARTERS: Record<string, LogActionKind> = {
@@ -502,11 +503,12 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
       rows.push({type: 'phase', indexes: []});
     }
     // Not recognised: a plain line. It ends the current action, so later effects don't attach to the wrong row –
-    // except private notes ("You drew …"), which come between an action and its effects
+    // except private notes ("Jens drew …"), which come between an action and its effects
+    const follows = current !== undefined && current.action.player !== undefined && firstPlayer(message) === current.action.player;
     if (!message.data.some((datum) => datum.type === LogMessageDataType.CARDS)) {
       current = undefined;
     }
-    rows.push({type: 'message', message, indexes: [index]});
+    rows.push(follows ? {type: 'message', message, indexes: [index], follows: true} : {type: 'message', message, indexes: [index]});
   });
 
   for (const row of rows) {
