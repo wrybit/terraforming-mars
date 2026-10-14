@@ -7,7 +7,7 @@
           <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable/>
         </div>
         <div class="log-milestones-toggles">
-          <ToggleSwitch data-test="log-milestones-separate" :modelValue="true" :label="$t('Separate log')" @update:modelValue="setSeparateMilestonesLog"/>
+          <ToggleSwitch data-test="log-milestones-separate" :modelValue="separatesMilestonesAwards" :label="$t('Separate log')" @update:modelValue="setSeparateMilestonesLog"/>
         </div>
       </div>
     </template>
@@ -68,8 +68,10 @@
       <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones-toggles">
         <ToggleSwitch data-test="log-milestones-auto"
           :modelValue="autoMilestonesTab" :label="$t('Open on my turn')" @update:modelValue="setAutoMilestonesTab"/>
+        <!-- Bound to the preference, not a constant: this row only hides (v-show), and a constant value would
+             never reset the checkbox the click left switched on -->
         <ToggleSwitch data-test="log-milestones-separate"
-          :modelValue="false" :label="$t('Separate log')" @update:modelValue="setSeparateMilestonesLog"/>
+          :modelValue="separatesMilestonesAwards" :label="$t('Separate log')" @update:modelValue="setSeparateMilestonesLog"/>
       </div>
       <button
         v-show="showScrollToBottomButton && !showsMilestonesAwards"
