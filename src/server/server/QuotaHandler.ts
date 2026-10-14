@@ -1,5 +1,8 @@
 import {Context} from '../routes/IHandler';
 
+// Beyond this many addresses, the ones whose window has passed are removed
+const PRUNE_THRESHOLD = 1000;
+
 export type QuotaConfig = {
   limit: number;
   perMs: number;
@@ -20,6 +23,7 @@ export class QuotaHandler {
   measure(ctx: Context): boolean {
     const ip = ctx.ip;
     const now = ctx.clock.now();
+    this.pruneIfLarge(now);
 
     const times = this.times.get(ip) || [];
     times.unshift(now);
@@ -33,5 +37,18 @@ export class QuotaHandler {
     }
 
     return true;
+  }
+
+  // Every address that ever created a game stays in the map otherwise: memory would grow without bound
+  private pruneIfLarge(now: number): void {
+    if (this.times.size < PRUNE_THRESHOLD) {
+      return;
+    }
+    const earliest = now - this.perMs;
+    for (const [ip, times] of this.times) {
+      if (times.every((time) => time === undefined || time <= earliest)) {
+        this.times.delete(ip);
+      }
+    }
   }
 }

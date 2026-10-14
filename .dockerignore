@@ -10,3 +10,14 @@ tests
 .env.sample
 .eslintrc.js
 docker-compose.yml
+# Never in the build context: secrets, local data, the private lab repository and its files,
+# and the host's node_modules (the image installs its own for Linux). .git stays: the build reads the commit.
+.env
+.env.*
+db
+local
+node_modules
+.lab.git
+Claude outputs
+ops
+mockups

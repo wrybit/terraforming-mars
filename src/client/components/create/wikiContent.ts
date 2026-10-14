@@ -120,9 +120,24 @@ const ALLOWED_ELEMENTS = new Set(['A', 'B', 'BLOCKQUOTE', 'BR', 'CODE', 'DEL', '
 const REMOVED_ELEMENTS = new Set(['SCRIPT', 'STYLE', 'IFRAME', 'OBJECT', 'EMBED', 'FORM', 'INPUT', 'BUTTON', 'TEXTAREA', 'SELECT', 'LINK', 'META', 'SVG', 'MATH']);
 const ALLOWED_ATTRIBUTES = new Set(['href', 'src', 'alt', 'title', 'width', 'height', 'colspan', 'rowspan', 'align', 'valign', 'open']);
 
+// Images load as soon as the overlay opens: only from GitHub, where the wiki keeps its pictures, so a wiki edit
+// cannot add a tracking image on another server that learns every visitor's address
+const IMAGE_HOSTS = new Set(['github.com', 'raw.githubusercontent.com', 'user-images.githubusercontent.com',
+  'private-user-images.githubusercontent.com', 'camo.githubusercontent.com', 'avatars.githubusercontent.com']);
+
+function isAllowedImageSource(source: string): boolean {
+  try {
+    return IMAGE_HOSTS.has(new URL(source).host);
+  } catch {
+    // Relative addresses stay on this server
+    return !source.startsWith('//');
+  }
+}
+
 function sanitize(root: DocumentFragment): void {
   for (const element of Array.from(root.querySelectorAll('*'))) {
-    if (REMOVED_ELEMENTS.has(element.tagName)) {
+    // SVG and MathML elements report lowercase tag names
+    if (REMOVED_ELEMENTS.has(element.tagName.toUpperCase())) {
       element.remove();
       continue;
     }
@@ -132,7 +147,8 @@ function sanitize(root: DocumentFragment): void {
     }
     for (const attribute of Array.from(element.attributes)) {
       const unsafeUrl = (attribute.name === 'href' || attribute.name === 'src') && !/^(https?:|#|\/|[^:]*$)/i.test(attribute.value.trim());
-      if (!ALLOWED_ATTRIBUTES.has(attribute.name) || unsafeUrl) {
+      const foreignImage = element.tagName === 'IMG' && attribute.name === 'src' && !isAllowedImageSource(attribute.value.trim());
+      if (!ALLOWED_ATTRIBUTES.has(attribute.name) || unsafeUrl || foreignImage) {
         element.removeAttribute(attribute.name);
       }
     }

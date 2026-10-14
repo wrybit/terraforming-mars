@@ -17,8 +17,21 @@ export interface IPTracker {
   toJSON(): Record<string, IpStats>;
 }
 
+// The admin's address list keeps at most this many addresses; the oldest entries make room for new ones
+const MAX_ADDRESSES = 10_000;
+
 class IPTrackerImpl implements IPTracker {
   private map = new Map<string, Value>();
+
+  private set(k: string, value: Value): void {
+    if (!this.map.has(k) && this.map.size >= MAX_ADDRESSES) {
+      const oldest = this.map.keys().next().value;
+      if (oldest !== undefined) {
+        this.map.delete(oldest);
+      }
+    }
+    this.map.set(k, value);
+  }
 
   private get(k: string): Value {
     const v = this.map.get(k);
@@ -31,13 +44,13 @@ class IPTrackerImpl implements IPTracker {
   public add(ip: string): void {
     const value = this.get(ip);
     value.count++;
-    this.map.set(ip, value);
+    this.set(ip, value);
   }
 
   public addParticipant(participantId: ParticipantId, ip: string): void {
     const value = this.get(ip);
     value.participantIds.add(participantId);
-    this.map.set(ip, value);
+    this.set(ip, value);
   }
 
   public toJSON(): Record<string, IpStats> {

@@ -28,6 +28,13 @@ export class CancelAction extends Handler {
     if (player === undefined) {
       throw RouteError.notFound();
     }
+    // Same rules as moves (PlayerInput): only the bound login, never for AI players
+    if (!this.isUser(player.user, ctx)) {
+      throw RouteError.forbidden();
+    }
+    if (player.aiLevel !== undefined) {
+      throw RouteError.badRequest('This player is controlled by the AI.');
+    }
     const start = cancellableActionStart(player);
     if (start === undefined) {
       throw RouteError.badRequest('This action can no longer be cancelled');

@@ -53,6 +53,10 @@ export class PlayerInput extends Handler {
       console.warn(`unable to find player ${playerId}`, err);
       throw RouteError.notFound();
     }
+    // A seat bound to a Discord login only takes moves from that login (same rule as viewing it in ApiPlayer)
+    if (!this.isUser(player.user, ctx)) {
+      throw RouteError.forbidden();
+    }
     // AI players make their own moves; a viewer of their page must not interfere.
     if (player.aiLevel !== undefined) {
       throw RouteError.badRequest('This player is controlled by the AI.');

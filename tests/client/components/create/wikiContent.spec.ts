@@ -32,4 +32,16 @@ describe('wikiContent', () => {
     expect(page.html).not.contains('<script');
     expect(page.html).contains('id="wiki-initial-draft"');
   });
+
+  it('keeps images from GitHub only', () => {
+    const page = renderWikiPage('# T\n\n<img src="https://user-images.githubusercontent.com/1/a.png"> <img src="https://tracker.example/p.gif"> <img src="//tracker.example/q.gif">');
+    expect(page.html).contains('user-images.githubusercontent.com');
+    expect(page.html).not.contains('tracker.example');
+  });
+
+  it('removes svg elements despite their lowercase tag name', () => {
+    const page = renderWikiPage('# T\n\n<svg><text>inside</text></svg> after');
+    expect(page.html).not.contains('<svg');
+    expect(page.html).not.contains('inside');
+  });
 });

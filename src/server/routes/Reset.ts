@@ -34,7 +34,7 @@ export class Reset extends Handler {
 
     // While prototyping, this is only available for solo games
     if (game.players.length > 1) {
-      throw new Error('Reset is only available for solo games at the moment.');
+      throw RouteError.badRequest('Reset is only available for solo games at the moment.');
     }
 
     let player: IPlayer | undefined;
@@ -45,6 +45,9 @@ export class Reset extends Handler {
     }
     if (player === undefined) {
       throw RouteError.notFound();
+    }
+    if (!this.isUser(player.user, ctx)) {
+      throw RouteError.forbidden();
     }
     if (player.game.activePlayer.id !== player.id) {
       throw RouteError.badRequest('Not the active player');

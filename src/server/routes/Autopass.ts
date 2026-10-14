@@ -11,7 +11,7 @@ import {RouteError} from './RouteError';
 export class Autopass extends Handler {
   public static readonly INSTANCE = new Autopass();
 
-  public override async get(_req: Request, _res: Response, ctx: Context): Promise<void> {
+  public override async get(_req: Request, res: Response, ctx: Context): Promise<void> {
     const playerId = ctx.urlParams.playerId('id');
     ctx.ipTracker.addParticipant(playerId, ctx.ip);
     const autopass = ctx.urlParams.stringOrUndefined('autopass') === 'true';
@@ -27,7 +27,12 @@ export class Autopass extends Handler {
       throw RouteError.notFound('player not found');
     }
 
+    if (!this.isUser(player.user, ctx)) {
+      throw RouteError.forbidden();
+    }
     // This doesn't get saved.
     player.autopass = autopass;
+    // Answer (empty), otherwise the connection stays open until it times out
+    res.end();
   }
 }
