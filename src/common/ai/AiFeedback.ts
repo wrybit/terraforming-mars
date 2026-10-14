@@ -11,7 +11,7 @@ export function isAiFeedbackRating(value: unknown): value is AiFeedbackRating {
 
 /** Emoji of each rating: the same everywhere (buttons, log, plain-text log). */
 export const AI_FEEDBACK_EMOJI: Record<AiFeedbackRating, string> = {
-  flag: '⚠️',
+  flag: '🚩',
   up: '👍',
   down: '👎',
 };

@@ -1640,7 +1640,7 @@
   "${0} (shared with RAM)": "${0} (обща с RAM)",
   "Too many wrong attempts. Please wait until the countdown has run out.": "Твърде много грешни опити. Моля, изчакайте обратното броене да приключи.",
   "Analysis game": "Аналитична игра",
-  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 ⚠️ to rate it (touch: double-tap, keyboard: I).": "Дневникът показва картите и решенията на AI. Посочете запис на AI и щракнете 👍 👎 ⚠️, за да го оцените (сензорен екран: докоснете два пъти, клавиатура: I).",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "Дневникът показва картите и решенията на AI. Посочете запис на AI и щракнете 👍 👎 🚩, за да го оцените (сензорен екран: докоснете два пъти, клавиатура: I).",
   "Visible because this is an analysis game": "Видимо, защото това е аналитична игра",
   "Rate AI decision": "Оценете решението на AI",
   "Options weighed by the AI": "Варианти, претеглени от AI",
