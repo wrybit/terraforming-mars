@@ -15,7 +15,7 @@
       <!-- Draft, purchase, start: the offered cards themselves, the chosen ones marked -->
       <AiDecisionCards v-if="showsCards && dialog.decision !== undefined" :decision="dialog.decision" :players="dialog.viewModel.players"/>
 
-      <AiDecisionStateFacts v-if="dialog.decision?.state !== undefined" :state="dialog.decision.state" :passed="isPass"/>
+      <AiDecisionStateFacts v-if="dialog.decision?.state !== undefined" :state="dialog.decision.state" :passed="isPass" :effects="rowEffects"/>
 
       <!-- What the AI weighed: options with the value it gave them, the chosen ones marked -->
       <section v-if="groups.length > 0" class="ai-decision-dialog__section" data-test="ai-decision-options">
@@ -26,7 +26,7 @@
             <li v-for="(option, index) in group.options" :key="index"
               :class="['ai-decision-dialog__option', {'ai-decision-dialog__option--chosen': option.chosen === true}]">
               <span class="ai-decision-dialog__check" aria-hidden="true">{{ option.chosen === true ? '✓' : '' }}</span>
-              <span class="ai-decision-dialog__label">{{ label(option) }}</span>
+              <AiCardHover :card="optionCard(option)" class="ai-decision-dialog__label">{{ label(option) }}</AiCardHover>
               <span class="ai-decision-dialog__value">{{ value(option.value) }}</span>
             </li>
           </ul>
@@ -48,7 +48,7 @@
       </section>
 
       <!-- Own rating: emoji first, then an optional comment -->
-      <section v-if="canRate" class="ai-decision-dialog__section">
+      <section v-if="canRate" ref="fullRating" :class="['ai-decision-dialog__section', 'ai-decision-dialog__rating-full', {'ai-decision-dialog__rating-full--shown': !compact}]">
         <h3 class="ai-decision-dialog__heading" v-i18n>Your rating</h3>
         <div class="ai-decision-dialog__choices" role="radiogroup">
           <button v-for="choice in choices" :key="choice.rating" type="button" role="radio"
@@ -71,6 +71,21 @@
           :maxlength="MAX_AI_FEEDBACK_TEXT" rows="3" :placeholder="$t('Comment (optional)')" @keydown="keepKeysInField"></textarea>
         <p v-if="error !== undefined" class="ai-decision-dialog__error" role="alert">{{ error }}</p>
       </section>
+
+      <!-- As long as the full rating is out of view: the same rating as one sticky line at the bottom (frosted glass).
+           Height 0 in the flow, so showing and hiding it never moves the content (no jumping at the end of the scroll). -->
+      <div v-if="canRate" class="ai-decision-dialog__compact-anchor">
+        <div :class="['ai-decision-dialog__compact', {'ai-decision-dialog__compact--shown': compact}]" data-test="ai-rating-compact" :aria-hidden="!compact">
+          <div class="ai-decision-dialog__compact-choices" role="radiogroup">
+            <button v-for="choice in choices" :key="choice.rating" type="button" role="radio" :tabindex="compact ? 0 : -1"
+              :aria-checked="rating === choice.rating" :title="$t(choice.label)" :aria-label="$t(choice.label)"
+              :class="['ai-decision-dialog__compact-choice', {'ai-decision-dialog__choice--selected': rating === choice.rating}]"
+              @click="choose(choice.rating, 'compact')">{{ emoji[choice.rating] }}</button>
+          </div>
+          <input ref="compactComment" v-model="text" type="text" class="ai-decision-dialog__compact-text" data-test="ai-rating-compact-text"
+            :tabindex="compact ? 0 : -1" :maxlength="MAX_AI_FEEDBACK_TEXT" :placeholder="$t('Comment (optional)')" @keydown="keepKeysInField">
+        </div>
+      </div>
 
       <template #footer>
         <!-- Step through the AI rows of the log (also arrow keys up/down), bottom left -->
@@ -96,12 +111,13 @@ import LogMessageComponent from '@/client/components/logpanel/LogMessageComponen
 import LogActionRow from '@/client/components/logpanel/LogActionRow.vue';
 import AiDecisionStateFacts from './AiDecisionStateFacts.vue';
 import AiDecisionCards from './AiDecisionCards.vue';
+import AiCardHover from './AiCardHover.vue';
 import {AI_FEEDBACK_EMOJI, AiFeedbackRating, canNameBetterOption, MAX_AI_FEEDBACK_TEXT} from '@/common/ai/AiFeedback';
 import {AiDecisionOption} from '@/common/ai/AiDecisionSummary';
 import {isPlayerId} from '@/common/Types';
 import {translateText} from '@/client/directives/i18n';
 import {aiFeedbackState, closeAiDecision, openAiDecisionIndex, ratingsOf, saveAiFeedback, stepAiDecision} from './aiFeedbackState';
-import {DECISION_KIND_TITLES, formatValue, optionGroups, optionLabel} from './aiDecisionOptions';
+import {DECISION_KIND_TITLES, formatValue, optionCard, optionGroups, optionLabel} from './aiDecisionOptions';
 import {AI_RATING_CHOICES} from './aiRatingChoices';
 
 // Rating of one AI decision in an analysis game: the row, the options the AI weighed with their
@@ -140,6 +156,34 @@ const betterChoices = computed(() => groups.value.flatMap((group) => group.optio
 const text = ref('');
 const saving = ref(false);
 const comment = ref<HTMLTextAreaElement>();
+const compactComment = ref<HTMLInputElement>();
+const fullRating = ref<HTMLElement>();
+// The full rating is (largely) out of view: the compact line stands in for it
+const compact = ref(false);
+let ratingObserver: IntersectionObserver | undefined;
+
+function observeFullRating(element: HTMLElement | undefined): void {
+  ratingObserver?.disconnect();
+  ratingObserver = undefined;
+  compact.value = false;
+  const body = element?.closest('.dialog-frame-body');
+  if (element === undefined || !(body instanceof HTMLElement) || typeof IntersectionObserver === 'undefined') {
+    return;
+  }
+  // Compact while less than 60 % of the full rating is visible
+  ratingObserver = new IntersectionObserver(([entry]) => {
+    compact.value = entry.intersectionRatio < 0.6;
+  }, {root: body, threshold: [0, 0.6, 1]});
+  ratingObserver.observe(element);
+}
+watch(fullRating, (element) => observeFullRating(element));
+onBeforeUnmount(() => ratingObserver?.disconnect());
+
+// Own effects of the row (production changes …) – the situation shows what the decision changed
+const rowEffects = computed(() => {
+  const row = dialog.value?.target.row;
+  return row?.type === 'action' ? row.action.effects : [];
+});
 
 // Each opened row starts from the choice clicked in the hover bar, otherwise from the own saved rating
 watch(dialog, (open) => {
@@ -163,16 +207,17 @@ function value(amount: number | undefined): string {
   return formatValue(amount);
 }
 
-function choose(choice: AiFeedbackRating): void {
+function choose(choice: AiFeedbackRating, from: 'full' | 'compact' = 'full'): void {
   rating.value = choice;
-  nextTick(() => comment.value?.focus());
+  nextTick(() => (from === 'compact' ? compactComment.value : comment.value)?.focus({preventScroll: from === 'compact'}));
 }
 
 // Typing must not trigger game shortcuts (I, F, A/S/D …); Escape still closes the dialog
 function keepKeysInField(event: KeyboardEvent): void {
-  const field = event.target instanceof HTMLTextAreaElement ? event.target : undefined;
+  const field = event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement ? event.target : undefined;
   const steps = (event.key === 'ArrowUp' || event.key === 'ArrowDown') && field?.value === '';
-  const saves = event.key === 'Enter' && (event.ctrlKey || event.metaKey);
+  // The one-line field saves with Enter alone
+  const saves = event.key === 'Enter' && (event.ctrlKey || event.metaKey || event.target instanceof HTMLInputElement);
   if (event.key !== 'Escape' && !steps && !saves) {
     event.stopPropagation();
   }
@@ -191,7 +236,8 @@ function onKeydown(event: KeyboardEvent): void {
     return;
   }
   // Ctrl/Cmd + Enter saves, also from the comment field
-  if (event.key === 'Enter' && (event.ctrlKey || event.metaKey) && canRate.value && rating.value !== undefined && !saving.value) {
+  const compactField = event.target instanceof HTMLInputElement && event.target.type === 'text';
+  if (event.key === 'Enter' && (event.ctrlKey || event.metaKey || compactField) && canRate.value && rating.value !== undefined && !saving.value) {
     event.preventDefault();
     void save(rating.value);
     return;
@@ -201,8 +247,8 @@ function onKeydown(event: KeyboardEvent): void {
   }
   // In the comment field the arrows move the cursor once something is typed; an empty field lets them step
   const target = event.target;
-  if (target instanceof HTMLSelectElement || target instanceof HTMLInputElement ||
-    (target instanceof HTMLTextAreaElement && target.value !== '')) {
+  if (target instanceof HTMLSelectElement || (target instanceof HTMLInputElement && !compactField) ||
+    ((target instanceof HTMLTextAreaElement || compactField) && (target as HTMLInputElement).value !== '')) {
     return;
   }
   event.preventDefault();

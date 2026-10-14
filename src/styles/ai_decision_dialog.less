@@ -206,7 +206,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   padding: 6px 4px;
   border-radius: 8px;
   background: @dialog-surface;
@@ -219,6 +219,13 @@
 
 .ai-decision-state__stock {
   font-size: 17px;
+}
+
+// Stock right next to its icon (one unit), production below
+.ai-decision-state__stock-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .ai-decision-state__production {
@@ -354,7 +361,7 @@
 }
 
 .ai-decision-cards__card {
-  zoom: 0.7;
+  zoom: 0.5;
 
   .card-container {
     margin: 0;
@@ -370,4 +377,145 @@
 .ai-decision-cards__item--chosen .ai-decision-cards__value {
   color: #fff;
   font-weight: bold;
+}
+
+// Production after the decision next to the value before (AiDecisionStateFacts.vue)
+.ai-decision-state__after {
+  margin-left: 4px;
+  color: @ai-dialog-chosen;
+}
+
+// Own rating: full size where it stands in the flow; while it is out of view a compact line at the bottom
+// stands in for it (frosted glass). Scrolling down to it grows it back with a short transition.
+@ai-dialog-compact-height: 52px;
+
+.ai-decision-dialog__rating-full {
+  opacity: 0.4;
+  transform: translateY(10px) scale(0.98);
+  transform-origin: bottom center;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.ai-decision-dialog__rating-full--shown {
+  opacity: 1;
+  transform: none;
+}
+
+// No height in the flow (and no section gap of the body): showing and hiding never moves the content
+// Sticky counts from the body's content edge: the negative offset (= body padding) puts the line onto the footer
+.ai-decision-dialog__compact-anchor {
+  position: sticky;
+  bottom: -20px;
+  z-index: 2;
+  height: 0;
+  margin: calc(-1 * @dialog-gap-section) -20px 0;
+}
+
+.ai-decision-dialog__compact {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: @ai-dialog-compact-height;
+  padding: 0 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(28, 30, 40, 0.62);
+  backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.3);
+  // Hidden by clipping from the top instead of moving it down: a moved box would make the body scrollable
+  // below the end (empty space under the full rating)
+  opacity: 0;
+  clip-path: inset(100% 0 0 0);
+  pointer-events: none;
+  transition: opacity 0.25s ease, clip-path 0.25s ease;
+}
+
+.ai-decision-dialog__compact--shown {
+  opacity: 1;
+  clip-path: inset(0);
+  pointer-events: auto;
+}
+
+// Emoji buttons close together (one group), clearly apart from the text field
+.ai-decision-dialog__compact-choices {
+  display: flex;
+  flex: none;
+  gap: 4px;
+}
+
+.ai-decision-dialog__compact-choice {
+  width: 40px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid @dialog-surface-border;
+  border-radius: 8px;
+  background: @dialog-surface;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.ai-decision-dialog__compact-text {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border: 1px solid @dialog-surface-border;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #eee;
+  font: inherit;
+  font-size: 15px;
+}
+
+@media only screen and (max-width: 520px) {
+  .ai-decision-dialog__compact-anchor {
+    bottom: -16px;
+    margin-right: -16px;
+    margin-left: -16px;
+  }
+
+  .ai-decision-dialog__compact {
+    padding: 0 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-decision-dialog__rating-full,
+  .ai-decision-dialog__compact {
+    transition: none;
+  }
+}
+
+// Card names with a card behind them (AiCardHover.vue): hovering shows the card
+.ai-card-hover--card {
+  cursor: help;
+  text-decoration: underline dotted rgba(255, 255, 255, 0.35);
+  text-underline-offset: 3px;
+}
+
+// The card preview, above the dialog; it follows the pointer and never catches it
+.ai-card-hover__preview {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+// Zoom on the inside: on the fixed element itself it would scale its position too
+.ai-card-hover__card {
+  zoom: 0.6;
+
+  .card-container {
+    margin: 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  }
 }

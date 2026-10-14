@@ -1,13 +1,19 @@
 <template>
   <!-- Key facts of the AI at the decision: stock and production per resource, TR, VP, hand -->
   <section class="ai-decision-dialog__section" data-test="ai-decision-state">
-    <h3 class="ai-decision-dialog__heading" v-i18n>Situation of the AI</h3>
+    <!-- Values before the decision; the production the row changed is shown with an arrow (otherwise the +1
+         production of the row and the +0 here look like a contradiction). Stock changes stay out: the row
+         does not list the paid costs, an arrow there would be wrong. -->
+    <h3 class="ai-decision-dialog__heading" v-i18n>Situation of the AI before the decision</h3>
     <div class="ai-decision-state">
       <div v-for="resource in resources" :key="resource.icon" class="ai-decision-state__resource" :title="$t(resource.label)">
-        <i :class="['log-effect-icon', 'log-effect-resource--' + resource.icon]"></i>
-        <b class="ai-decision-state__stock">{{ resource.stock }}</b>
+        <!-- Stock next to its icon, production below -->
+        <span class="ai-decision-state__stock-line">
+          <i :class="['log-effect-icon', 'log-effect-resource--' + resource.icon]"></i>
+          <b class="ai-decision-state__stock">{{ resource.stock }}</b>
+        </span>
         <!-- Production on the brown area, as in the log -->
-        <span class="log-effect log-effect--production ai-decision-state__production"><b>{{ signed(resource.production) }}</b></span>
+        <span class="log-effect log-effect--production ai-decision-state__production"><b>{{ signed(resource.production) }}</b><b v-if="resource.productionChange !== 0" class="ai-decision-state__after">→ {{ signed(resource.production + resource.productionChange) }}</b></span>
       </div>
     </div>
     <div class="ai-decision-state__totals">
@@ -16,7 +22,7 @@
       <span class="ai-decision-state__total"><i class="log-effect-icon log-effect-resource--card"></i><span v-i18n>Cards in hand</span> <b>{{ state.hand.length }}</b></span>
     </div>
     <ul v-if="state.hand.length > 0" class="ai-decision-state__hand">
-      <li v-for="(card, index) in state.hand" :key="index" class="ai-decision-state__card">{{ cardName(card) }}</li>
+      <li v-for="(card, index) in state.hand" :key="index" class="ai-decision-state__card"><AiCardHover :card="card">{{ cardName(card) }}</AiCardHover></li>
     </ul>
     <!-- After a pass: what the action menu still offered (playable cards, standard projects, card actions …) -->
     <template v-if="passed && state.possibleActions !== undefined">
@@ -24,7 +30,7 @@
       <ul v-if="leftOut.length > 0" class="ai-decision-state__possible" data-test="ai-decision-possible">
         <li v-for="(action, index) in leftOut" :key="index" class="ai-decision-state__action">
           <span class="ai-decision-state__action-title">{{ actionTitle(action) }}</span>
-          <span v-for="(card, cardIndex) in action.cards ?? []" :key="cardIndex" class="ai-decision-state__card">{{ cardName(card) }}</span>
+          <span v-for="(card, cardIndex) in action.cards ?? []" :key="cardIndex" class="ai-decision-state__card"><AiCardHover :card="card">{{ cardName(card) }}</AiCardHover></span>
         </li>
       </ul>
       <p v-else class="ai-decision-dialog__hint" v-i18n>Nothing else was possible.</p>
@@ -36,13 +42,24 @@
 import {computed} from 'vue';
 import {AiDecisionState, AiPossibleAction} from '@/common/ai/AiDecisionSummary';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {LogEffect} from '@/client/components/logpanel/logActions';
+import AiCardHover from './AiCardHover.vue';
 
 // Situation of the AI when it decided (analysis games): next to a pass it shows what the AI still had
 const props = defineProps<{
   state: AiDecisionState;
   // The decision was a pass: list what the menu still offered
   passed?: boolean;
+  // Own effects of the decision's log row (stock and production changes)
+  effects?: ReadonlyArray<LogEffect>;
 }>();
+
+// Sum of the row's production changes of one resource
+function productionChangeOf(icon: string): number {
+  return (props.effects ?? [])
+    .filter((effect) => effect.resource === icon && effect.card === undefined && effect.production === true)
+    .reduce((sum, effect) => sum + effect.amount, 0);
+}
 
 // Ending the turn is no alternative to passing
 const TURN_ENDINGS = ['Pass for this generation', 'End Turn'];
@@ -59,12 +76,12 @@ const resources = computed(() => {
   const state = props.state;
   const production = state.production;
   return [
-    {icon: 'megacredit', label: 'Megacredits', stock: state.megaCredits, production: production.megacredits},
-    {icon: 'steel', label: 'Steel', stock: state.steel, production: production.steel},
-    {icon: 'titanium', label: 'Titanium', stock: state.titanium, production: production.titanium},
-    {icon: 'plant', label: 'Plants', stock: state.plants, production: production.plants},
-    {icon: 'power', label: 'Energy', stock: state.energy, production: production.energy},
-    {icon: 'heat', label: 'Heat', stock: state.heat, production: production.heat},
+    {icon: 'megacredit', label: 'Megacredits', stock: state.megaCredits, production: production.megacredits, productionChange: productionChangeOf('megacredit')},
+    {icon: 'steel', label: 'Steel', stock: state.steel, production: production.steel, productionChange: productionChangeOf('steel')},
+    {icon: 'titanium', label: 'Titanium', stock: state.titanium, production: production.titanium, productionChange: productionChangeOf('titanium')},
+    {icon: 'plant', label: 'Plants', stock: state.plants, production: production.plants, productionChange: productionChangeOf('plant')},
+    {icon: 'power', label: 'Energy', stock: state.energy, production: production.energy, productionChange: productionChangeOf('power')},
+    {icon: 'heat', label: 'Heat', stock: state.heat, production: production.heat, productionChange: productionChangeOf('heat')},
   ];
 });
 

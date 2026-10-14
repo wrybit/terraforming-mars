@@ -1592,7 +1592,7 @@
   "Invalid number:": "Недопустимое число:",
   "Open on my turn": "Открывать в свой ход",
   "Separate log": "Журнал отдельно",
-  "Situation of the AI": "Положение AI",
+  "Situation of the AI before the decision": "Положение AI до решения",
   "Still possible, but not done": "Ещё было возможно, но не сделано",
   "Nothing else was possible.": "Больше ничего не было возможно.",
   "Previous AI decision": "Предыдущее решение AI",

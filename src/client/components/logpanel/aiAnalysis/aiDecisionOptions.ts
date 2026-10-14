@@ -1,5 +1,5 @@
 import {AiDecisionOption, AiDecisionSummary} from '@/common/ai/AiDecisionSummary';
-import {translateText} from '@/client/directives/i18n';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 // Readable options of an AI decision for the rating dialog (labels come from the AI's decision trace).
 
@@ -38,7 +38,32 @@ export function optionLabel(option: AiDecisionOption): string {
   if (separator === -1) {
     return cardText(option.label);
   }
-  return `${translateText(option.label.slice(0, separator))}: ${cardText(option.label.slice(separator + 2))}`;
+  return `${titleText(option.label.slice(0, separator))}: ${cardText(option.label.slice(separator + 2))}`;
+}
+
+/**
+ * Menu titles come filled in ("Fund an award (8 M€)"), the translation key has a placeholder:
+ * the first number becomes ${0}.
+ */
+function titleText(title: string): string {
+  const number = title.match(/\d+/)?.[0];
+  if (number === undefined) {
+    return translateText(title);
+  }
+  return translateTextWithParams(title.replace(number, '${0}'), [number]);
+}
+
+/** Card behind an option: its own, otherwise the name after "Play project card: …" etc. (not awards and milestones). */
+export function optionCard(option: AiDecisionOption): string | undefined {
+  if (option.card !== undefined) {
+    return option.card;
+  }
+  const separator = option.label.indexOf(': ');
+  const title = option.label.slice(0, separator);
+  if (separator === -1 || /award|milestone/i.test(title)) {
+    return undefined;
+  }
+  return option.label.slice(separator + 2);
 }
 
 /** Start selection grouped by corporation, preludes and project cards, each by value; otherwise one list. */

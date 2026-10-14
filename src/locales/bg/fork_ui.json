@@ -1671,7 +1671,7 @@
   "Invalid number:": "Невалидно число:",
   "Open on my turn": "Отваряй на моя ход",
   "Separate log": "Отделен дневник",
-  "Situation of the AI": "Положението на AI",
+  "Situation of the AI before the decision": "Положението на AI преди решението",
   "Still possible, but not done": "Все още възможно, но не направено",
   "Nothing else was possible.": "Нищо друго не беше възможно.",
   "Previous AI decision": "Предишно решение на AI",

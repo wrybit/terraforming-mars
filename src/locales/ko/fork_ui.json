@@ -1018,7 +1018,7 @@
   "Invalid number:": "잘못된 숫자:",
   "Open on my turn": "내 차례에 열기",
   "Separate log": "로그 분리",
-  "Situation of the AI": "AI의 상황",
+  "Situation of the AI before the decision": "결정 전 AI의 상황",
   "Still possible, but not done": "가능했지만 하지 않은 것",
   "Nothing else was possible.": "다른 선택지는 없었습니다.",
   "Previous AI decision": "이전 AI 결정",
