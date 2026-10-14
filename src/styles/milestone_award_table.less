@@ -553,9 +553,10 @@ each(@players, {
   margin: 0;
   padding-left: 8px;
 
+  // Switch vertically centred on its (possibly two-line) label
   .toggle-switch {
     max-width: 100%;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .toggle-switch-track {
@@ -564,7 +565,7 @@ each(@players, {
 
   .toggle-switch-label {
     min-width: 0;
-    line-height: 16px; // as tall as the track: a one-line label sits level with it
+    line-height: 16px;
     white-space: normal;
     overflow-wrap: break-word;
   }
