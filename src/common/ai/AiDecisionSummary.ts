@@ -30,6 +30,8 @@ export type AiDecisionState = {
   victoryPoints: number,
   /** Card names on hand (analysis games open the AI's hand anyway). */
   hand: Array<string>,
+  /** Tags the AI had (only those with a count); older records lack them. */
+  tags?: Record<string, number>,
   /** Action decisions: everything the menu offered (shows what a pass left out). */
   possibleActions?: Array<AiPossibleAction>,
 };

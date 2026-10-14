@@ -16,6 +16,12 @@
         <span class="log-effect log-effect--production ai-decision-state__production"><b>{{ signed(resource.production) }}</b><b v-if="resource.productionChange !== 0" class="ai-decision-state__after">→ {{ signed(resource.production + resource.productionChange) }}</b></span>
       </div>
     </div>
+    <!-- Tags the AI had at the decision, in the order of the player board -->
+    <div v-if="tags.length > 0" class="ai-decision-state__tags" data-test="ai-decision-tags">
+      <span v-for="entry in tags" :key="entry.tag" class="ai-decision-state__tag">
+        <TagIcon :tag="entry.tag" size="small"/><b class="ai-decision-state__tag-count">{{ entry.count }}</b>
+      </span>
+    </div>
     <div class="ai-decision-state__totals">
       <span class="ai-decision-state__total"><i class="log-effect-icon log-effect-resource--tr"></i><span v-i18n>Terraform Rating</span> <b>{{ state.terraformRating }}</b></span>
       <span class="ai-decision-state__total"><span v-i18n>Victory Points</span> <b>{{ state.victoryPoints }}</b></span>
@@ -44,6 +50,8 @@ import {AiDecisionState, AiPossibleAction} from '@/common/ai/AiDecisionSummary';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {LogEffect} from '@/client/components/logpanel/logActions';
 import AiCardHover from './AiCardHover.vue';
+import TagIcon from '@/client/components/Tag.vue';
+import {Tag} from '@/common/cards/Tag';
 
 // Situation of the AI when it decided (analysis games): next to a pass it shows what the AI still had
 const props = defineProps<{
@@ -60,6 +68,13 @@ function productionChangeOf(icon: string): number {
     .filter((effect) => effect.resource === icon && effect.card === undefined && effect.production === true)
     .reduce((sum, effect) => sum + effect.amount, 0);
 }
+
+const tags = computed(() => {
+  const counts = props.state.tags ?? {};
+  return Object.values(Tag)
+    .filter((tag) => (counts[tag] ?? 0) > 0)
+    .map((tag) => ({tag, count: counts[tag]}));
+});
 
 // Ending the turn is no alternative to passing
 const TURN_ENDINGS = ['Pass for this generation', 'End Turn'];

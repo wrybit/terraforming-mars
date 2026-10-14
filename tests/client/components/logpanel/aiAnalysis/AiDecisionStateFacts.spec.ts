@@ -39,4 +39,14 @@ describe('AiDecisionStateFacts', () => {
     const after = wrapper.findAll('.ai-decision-state__after').map((element) => element.text());
     expect(after).deep.eq(['→ +11', '→ +1']);
   });
+
+  it('shows the tags the AI had', () => {
+    const wrapper = mount(AiDecisionStateFacts, {...globalConfig, props: {state: {
+      megaCredits: 0, steel: 0, titanium: 0, plants: 0, energy: 0, heat: 0,
+      production: {megacredits: 0, steel: 0, titanium: 0, plants: 0, energy: 0, heat: 0},
+      terraformRating: 20, victoryPoints: 20, hand: [], tags: {science: 3, building: 2},
+    }}});
+    const counts = wrapper.findAll('[data-test="ai-decision-tags"] .ai-decision-state__tag-count').map((element) => element.text());
+    expect(counts).deep.eq(['2', '3']);
+  });
 });

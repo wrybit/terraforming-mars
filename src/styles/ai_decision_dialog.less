@@ -232,6 +232,31 @@
   font-size: 13px;
 }
 
+// Tags of the AI: one row, each icon with its count right next to it (closer than to the next tag)
+.ai-decision-state__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+
+.ai-decision-state__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  .tag-count {
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    background-size: 26px;
+    background-position: -1px;
+  }
+}
+
+.ai-decision-state__tag-count {
+  font-size: 15px;
+}
+
 .ai-decision-state__totals {
   display: flex;
   flex-wrap: wrap;
@@ -460,6 +485,13 @@
   &:hover {
     background: rgba(255, 255, 255, 0.08);
   }
+}
+
+// Chosen rating in the compact line, like the full buttons (the compact style comes later and would hide it)
+.ai-decision-dialog__compact-choice.ai-decision-dialog__choice--selected {
+  border-color: @ai-dialog-chosen;
+  background: @ai-dialog-chosen-surface;
+  box-shadow: 0 0 0 1px @ai-dialog-chosen inset;
 }
 
 .ai-decision-dialog__compact-text {

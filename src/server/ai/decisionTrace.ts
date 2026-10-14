@@ -139,6 +139,7 @@ function stateOf(snapshot: PlayerSnapshot): AiDecisionState {
     terraformRating: snapshot.terraformRating,
     victoryPoints: snapshot.victoryPoints,
     hand: [...snapshot.hand],
+    tags: {...snapshot.tags},
   };
 }
 
