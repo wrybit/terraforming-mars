@@ -36,4 +36,14 @@ describe('requestProcessor', () => {
     expect(res.getHeader('X-Frame-Options')).eq('SAMEORIGIN');
     expect(res.getHeader('Referrer-Policy')).eq('same-origin');
   });
+
+  it('forwards an address with a trailing slash to the one without', async () => {
+    const req = new MockRequest();
+    const res = new MockResponse();
+    req.url = '/admin/?tab=games';
+    await processRequest(req, res);
+
+    expect(res.statusCode).eq(302);
+    expect(res.getHeader('Location')).eq('/admin?tab=games');
+  });
 });

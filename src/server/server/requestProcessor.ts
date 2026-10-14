@@ -232,6 +232,13 @@ export async function processRequest(req: Request, res: Response): Promise<void>
     const url = new URL(req.url, `http://${req.headers.host}`);
 
     const pathname = url.pathname.substring(1); // Remove leading '/'
+    // "/admin/" and the like: forward to the address without the slash. Served directly, the page would
+    // load its styles and scripts relative to the wrong folder.
+    const withoutSlash = pathname.replace(/\/+$/, '');
+    if (withoutSlash !== pathname && withoutSlash !== '' && getHandler(pathname) === undefined && getHandler(withoutSlash) !== undefined) {
+      responses.redirect(res, '/' + withoutSlash + url.search);
+      return;
+    }
     const handler = getHandler(pathname);
     if (handler !== undefined) {
       // No need to report every asset. Summarize.

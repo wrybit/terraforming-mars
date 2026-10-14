@@ -64,13 +64,20 @@ export class MockResponse implements Response {
     this.headersSent = true;
     this.ended = true;
   }
-  public writeHead(statusCode: number): http.ServerResponse {
+  public writeHead(statusCode: number, ...rest: Array<unknown>): http.ServerResponse {
     this.assertOpen('write headers');
     if (this.headersSent) {
       throw new Error('Cannot write headers after they are sent to the client');
     }
     this.headersSent = true;
     this.statusCode = statusCode;
+    // Headers come last (writeHead(code, headers) or writeHead(code, message, headers)), e.g. Location of a redirect
+    const headers = rest[rest.length - 1];
+    if (typeof headers === 'object' && headers !== null && !Array.isArray(headers)) {
+      for (const [key, value] of Object.entries(headers)) {
+        this.headers.set(key, String(value));
+      }
+    }
     return this as unknown as http.ServerResponse;
   }
   public getHeader(name: string): number | string | string[] | undefined {
