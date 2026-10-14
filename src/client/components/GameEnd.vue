@@ -32,11 +32,6 @@
         </a>
       </div>
     </div>
-    <!-- Basis of the game across both columns: its settings in the groups of the create form -->
-    <section class="game-end-box game-end-setup">
-      <h2 v-i18n>Game settings</h2>
-      <GameSetupGroups :chips="setupChips"/>
-    </section>
     <!-- From @player-home-columns-min-width two columns as in the game view: result on the left, board, charts, log on the right -->
     <div class="game_end game-end-columns">
       <div class="game-end-columns__main">
@@ -66,6 +61,12 @@
             </template>
           </div>
         </div>
+
+        <!-- Basis of the game above the players: its settings in the groups of the create form -->
+        <section class="game-end-box game-end-setup">
+          <h2 v-i18n>Game settings</h2>
+          <GameSetupGroups :chips="setupChips"/>
+        </section>
 
         <div class="game-end-box game_end_victory_points">
           <h2><span v-i18n>Victory point breakdown after</span> {{game.generation}} <span v-i18n>generations</span></h2>

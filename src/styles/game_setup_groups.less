@@ -18,6 +18,10 @@
 }
 
 .game-setup-group {
+  // Wraps as a whole: a group moves to the next row instead of splitting its chips;
+  // only a group wider than the row on its own wraps its chips
+  flex: 0 1 auto;
+  max-width: 100%;
   min-width: 0;
   padding: 0 @game-setup-group-gap;
   border-left: 1px solid @game-setup-divider;

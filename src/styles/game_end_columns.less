@@ -223,11 +223,6 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
   }
 }
 
-// Game settings across both columns between header and columns, same gap as between all cards
-.game-end-setup {
-  margin-bottom: @game-end-card-gap;
-}
-
 // Icon left of the text; fixed height of .btn-lg removed (hence three classes) so wrapped text stays inside the button
 // (on mobile both sit side by side in the grid and grow taller together, mobile.less)
 .btn.btn-lg.game-end-nav-button {
@@ -474,8 +469,7 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
     display: flex;
     flex-direction: column;
 
-    .game-end-hero,
-    .game-end-setup {
+    .game-end-hero {
       flex: none;
     }
 
