@@ -6,6 +6,7 @@ import {DiscordId} from '../server/auth/discord';
 import {RouteError} from './RouteError';
 import {assertNever} from '../../common/utils/utils';
 import {isAdminToken} from '../server/auth/adminCookie';
+import {isCrossSiteRequest} from './isCrossSiteRequest';
 
 export type Options = {
   /** Admin route: needs the admin login cookie (or a Discord admin) */
@@ -71,7 +72,7 @@ export abstract class Handler implements IHandler {
     if (ctx.user?.id && DISCORD_ADMIN_USER_IDS.includes(ctx.user?.id)) {
       return true;
     }
-    return isAdminToken(ctx.adminToken, ctx.ids.serverId);
+    return isAdminToken(ctx.adminToken, ctx.ids.serverId, ctx.clock.now());
   }
 
   /* Routes are async, so a thrown RouteError surfaces as a rejection, not a synchronous throw. */
@@ -107,6 +108,10 @@ export abstract class Handler implements IHandler {
   public async processRequest(req: Request, res: Response, ctx: Context): Promise<void> {
     try {
       if (this.options.validateServerId && !this.isServerIdValid(ctx)) {
+        throw RouteError.forbidden();
+      }
+      // Changes only from our own pages: another site must not use the visitor's login cookies
+      if ((req.method === 'POST' || req.method === 'PUT') && isCrossSiteRequest(req)) {
         throw RouteError.forbidden();
       }
 
