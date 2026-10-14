@@ -790,5 +790,8 @@
   "Still possible, but not done": "Vielä mahdollista, mutta tekemättä",
   "Nothing else was possible.": "Mikään muu ei ollut mahdollista.",
   "Previous AI decision": "Edellinen AI:n päätös",
-  "Next AI decision": "Seuraava AI:n päätös"
+  "Next AI decision": "Seuraava AI:n päätös",
+  "AI hand cards": "AI:n käsikortit",
+  "Visible once you have bought your cards": "Näkyy, kun olet ostanut korttisi",
+  "No cards in hand": "Ei kortteja kädessä"
 }

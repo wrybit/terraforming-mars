@@ -2008,5 +2008,8 @@
   "Still possible, but not done": "Aún posible, pero no hecho",
   "Nothing else was possible.": "No era posible nada más.",
   "Previous AI decision": "Decisión anterior de la AI",
-  "Next AI decision": "Siguiente decisión de la AI"
+  "Next AI decision": "Siguiente decisión de la AI",
+  "AI hand cards": "Cartas en mano de la AI",
+  "Visible once you have bought your cards": "Visible en cuanto hayas comprado tus cartas",
+  "No cards in hand": "Sin cartas en mano"
 }

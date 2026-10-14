@@ -1140,5 +1140,8 @@
   "Still possible, but not done": "Fortsatt mulig, men ikke gjort",
   "Nothing else was possible.": "Ingenting annet var mulig.",
   "Previous AI decision": "Forrige AI-beslutning",
-  "Next AI decision": "Neste AI-beslutning"
+  "Next AI decision": "Neste AI-beslutning",
+  "AI hand cards": "AI-ens håndkort",
+  "Visible once you have bought your cards": "Synlig når du har kjøpt kortene dine",
+  "No cards in hand": "Ingen kort på hånden"
 }

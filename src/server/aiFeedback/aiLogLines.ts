@@ -43,7 +43,12 @@ export function spoilsOpenChoice(game: IGame, message: LogMessage, readerId: Par
   }
   if (SELECTION_LINES.has(message.message)) {
     // Purchase (and the start selection, which is a research phase too) still open, or the draft before it
-    return DRAFT_PHASES.includes(game.phase) || (game.phase === Phase.RESEARCH && !game.hasResearched(reader));
+    return DRAFT_PHASES.includes(game.phase) || purchaseStillOpen(game, reader);
   }
   return false;
+}
+
+/** True while the reader has not yet bought this generation's cards (the start selection is a research phase too). */
+export function purchaseStillOpen(game: IGame, reader: IPlayer): boolean {
+  return game.phase === Phase.RESEARCH && !game.hasResearched(reader);
 }

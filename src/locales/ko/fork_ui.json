@@ -1022,5 +1022,8 @@
   "Still possible, but not done": "가능했지만 하지 않은 것",
   "Nothing else was possible.": "다른 선택지는 없었습니다.",
   "Previous AI decision": "이전 AI 결정",
-  "Next AI decision": "다음 AI 결정"
+  "Next AI decision": "다음 AI 결정",
+  "AI hand cards": "AI의 손패",
+  "Visible once you have bought your cards": "네 카드를 구매하면 보입니다",
+  "No cards in hand": "손에 카드가 없습니다"
 }

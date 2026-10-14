@@ -22,6 +22,7 @@ import {possibleActionsOf} from '../../src/server/ai/possibleActions';
 import {Algae} from '../../src/server/cards/base/Algae';
 import {Ants} from '../../src/server/cards/base/Ants';
 import {Phase} from '../../src/common/Phase';
+import {Server} from '../../src/server/models/ServerModel';
 
 function analysisGame(): [IGame, TestPlayer, TestPlayer] {
   const [game, human, ai] = testGame(2, {aiAnalysis: true});
@@ -164,5 +165,24 @@ describe('AI analysis games', () => {
     expect(shown('${0} bought no cards')).is.false;
     game.playerIsFinishedWithResearchPhase(human);
     expect(shown('${0} bought no cards')).is.true;
+  });
+
+  it('shows the AI hand to everyone, during the purchase only after the reader has bought', () => {
+    const [game, human, ai] = analysisGame();
+    game.phase = Phase.ACTION;
+    ai.cardsInHand.push(new Ants());
+    const handFor = (reader: TestPlayer) => Server.getPlayerModel(reader).players.find((p) => p.color === ai.color)?.aiHand;
+    expect(handFor(human)?.cards.map((card) => card.name)).deep.eq([new Ants().name]);
+    expect(Server.getPlayerModel(human).players.find((p) => p.color === human.color)?.aiHand).is.undefined;
+    game.phase = Phase.RESEARCH;
+    expect(handFor(human)).deep.eq({cards: [], hidden: true});
+    game.playerIsFinishedWithResearchPhase(human);
+    expect(handFor(human)?.hidden).is.false;
+  });
+
+  it('keeps the AI hand secret outside analysis games', () => {
+    const [, human, ai] = testGame(2);
+    ai.aiLevel = 'hard';
+    expect(Server.getPlayerModel(human).players.find((p) => p.color === ai.color)?.aiHand).is.undefined;
   });
 });

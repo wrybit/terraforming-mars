@@ -27,6 +27,7 @@ import {AwardScorer} from '../awards/AwardScorer';
 import {SpaceId} from '../../common/Types';
 import {cardsToModel, coloniesToModel} from './ModelUtils';
 import {runId} from '../utils/server-ids';
+import {aiHandOf} from '../aiFeedback/aiHandView';
 import {toName} from '../../common/utils/utils';
 import {MAX_AWARDS, MAX_MILESTONES} from '../../common/constants';
 import {venusScaleLevelForDisplay} from '../venusNext/venusScale';
@@ -105,7 +106,7 @@ export class Server {
   public static getPlayerModel(player: IPlayer): PlayerViewModel {
     const game = player.game;
 
-    const players: Array<PublicPlayerModel> = game.playersInGenerationOrder.map((p) => this.getPlayer(p, p.color === player.color));
+    const players: Array<PublicPlayerModel> = game.playersInGenerationOrder.map((p) => this.getPlayer(p, p.color === player.color, player));
 
     const thisPlayerIndex = players.findIndex((p) => p.color === player.color);
     const thisPlayer: PublicPlayerModel = players[thisPlayerIndex];
@@ -233,7 +234,7 @@ export class Server {
   }
 
   /** When the model is for this player, show the VP. Players like seeing their own VP even if the feature is off. */
-  public static getPlayer(player: IPlayer, modelIsForThisPlayer: boolean): PublicPlayerModel {
+  public static getPlayer(player: IPlayer, modelIsForThisPlayer: boolean, reader?: IPlayer): PublicPlayerModel {
     const game = player.game;
     const useHandicap = game.players.some((p) => p.handicap !== 0);
     const model: PublicPlayerModel = {
@@ -312,6 +313,7 @@ export class Server {
     }
 
     model.deltaProject = player.deltaProjectData;
+    model.aiHand = aiHandOf(player, reader);
 
     return model;
   }

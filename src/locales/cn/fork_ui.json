@@ -1713,5 +1713,8 @@
   "Still possible, but not done": "仍可执行但未执行",
   "Nothing else was possible.": "没有其他可执行的操作。",
   "Previous AI decision": "上一个 AI 决策",
-  "Next AI decision": "下一个 AI 决策"
+  "Next AI decision": "下一个 AI 决策",
+  "AI hand cards": "AI 的手牌",
+  "Visible once you have bought your cards": "在你买完自己的卡牌后可见",
+  "No cards in hand": "手中没有卡牌"
 }

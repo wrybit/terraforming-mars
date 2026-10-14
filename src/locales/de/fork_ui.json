@@ -574,5 +574,8 @@
   "Still possible, but not done": "Noch möglich, aber nicht gemacht",
   "Nothing else was possible.": "Sonst war nichts möglich.",
   "Previous AI decision": "Vorherige AI-Entscheidung",
-  "Next AI decision": "Nächste AI-Entscheidung"
+  "Next AI decision": "Nächste AI-Entscheidung",
+  "AI hand cards": "Handkarten der AI",
+  "Visible once you have bought your cards": "Sichtbar, sobald du deine Karten gekauft hast",
+  "No cards in hand": "Keine Karten auf der Hand"
 }

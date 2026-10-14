@@ -938,5 +938,8 @@
   "Still possible, but not done": "Ще можливо, але не зроблено",
   "Nothing else was possible.": "Нічого іншого не було можливо.",
   "Previous AI decision": "Попереднє рішення AI",
-  "Next AI decision": "Наступне рішення AI"
+  "Next AI decision": "Наступне рішення AI",
+  "AI hand cards": "Карти в руці AI",
+  "Visible once you have bought your cards": "Видно, щойно ти купиш свої карти",
+  "No cards in hand": "Немає карт у руці"
 }

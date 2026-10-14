@@ -23,6 +23,12 @@ export interface ViewModel {
   runId: string;
 }
 
+/** Hand of an AI player in an analysis game; `hidden` while the reader still buys his own cards. */
+export type AiHandModel = {
+  cards: ReadonlyArray<CardModel>;
+  hidden: boolean;
+};
+
 type AlliedPartyModel = {
   partyName: PartyName;
   agenda: Agenda;
@@ -83,6 +89,8 @@ export type PublicPlayerModel = {
   victoryPointsBreakdown: VictoryPointsBreakdown;
   victoryPointsByGeneration: ReadonlyArray<number>;
   globalParameterSteps: Partial<Record<GlobalParameter, number>>;
+  // Only AI players in an analysis game (aiHandView.ts)
+  aiHand?: AiHandModel;
 }
 
 /** A player's view of the game, including their secret information. */

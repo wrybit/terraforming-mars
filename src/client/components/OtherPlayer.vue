@@ -5,6 +5,11 @@
       <AppButton size="big" type="close" @click="hideMe" :disableOnServerBusy="false" align="right" />
     </div>
     <div class="other_player_cont menu">
+        <!-- Analysis game: hand cards of an AI player above its played cards – could it have played a better one? -->
+        <AiHandSection v-if="player.aiHand !== undefined" :hand="player.aiHand"/>
+        <h3 v-if="player.aiHand !== undefined" class="hand-cards-panel__title ai-hand-section__played-title">
+          <span v-i18n>Played cards</span> <small>{{ player.tableau.length }}</small>
+        </h3>
         <!-- Own filter and sorting for played cards (cardFilterState.ts), no cost filter; at the top with a separator line -->
         <CardFilterBar v-if="player.tableau.length > 1" :cards="player.tableau" :filter="playedCardFilter" :context="filterContext">
           <template #sort="{compact}">
@@ -34,6 +39,7 @@ import {PLAYER_CARDS_OVERLAY} from '@/client/components/overview/ownPlayerIndex'
 import {defineComponent} from 'vue';
 
 import PlayedCardsGroups from '@/client/components/PlayedCardsGroups.vue';
+import AiHandSection from '@/client/components/logpanel/aiAnalysis/AiHandSection.vue';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {vueRoot} from '@/client/components/vueRoot';
 import Card from '@/client/components/card/Card.vue';
@@ -63,6 +69,7 @@ export default defineComponent({
   },
   components: {
     AppButton,
+    AiHandSection,
     PlayedCardsGroups,
     Card,
     CardFilterBar,

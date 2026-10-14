@@ -1675,5 +1675,8 @@
   "Still possible, but not done": "Все още възможно, но не направено",
   "Nothing else was possible.": "Нищо друго не беше възможно.",
   "Previous AI decision": "Предишно решение на AI",
-  "Next AI decision": "Следващо решение на AI"
+  "Next AI decision": "Следващо решение на AI",
+  "AI hand cards": "Карти в ръката на AI",
+  "Visible once you have bought your cards": "Видимо, щом купиш своите карти",
+  "No cards in hand": "Няма карти в ръката"
 }

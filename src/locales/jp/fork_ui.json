@@ -1141,5 +1141,8 @@
   "Still possible, but not done": "まだ可能だったが実行しなかったもの",
   "Nothing else was possible.": "他に可能な行動はありませんでした。",
   "Previous AI decision": "前のAIの判断",
-  "Next AI decision": "次のAIの判断"
+  "Next AI decision": "次のAIの判断",
+  "AI hand cards": "AI の手札",
+  "Visible once you have bought your cards": "自分のカードを購入すると表示されます",
+  "No cards in hand": "手札がありません"
 }

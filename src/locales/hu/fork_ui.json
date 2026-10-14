@@ -961,5 +961,8 @@
   "Still possible, but not done": "Még lehetséges lett volna, de nem tette",
   "Nothing else was possible.": "Semmi más nem volt lehetséges.",
   "Previous AI decision": "Előző AI-döntés",
-  "Next AI decision": "Következő AI-döntés"
+  "Next AI decision": "Következő AI-döntés",
+  "AI hand cards": "Az AI kézben lévő lapjai",
+  "Visible once you have bought your cards": "Látható, amint megvetted a lapjaidat",
+  "No cards in hand": "Nincs lap a kézben"
 }

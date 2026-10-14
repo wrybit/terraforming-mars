@@ -1,0 +1,26 @@
+@import (reference) "./hand_cards_panel.less";
+// Analysis game: hand cards of an AI player above its played cards (AiHandSection.vue in OtherPlayer.vue).
+// Law of proximity: heading close to its cards, between hand and played cards clearly more space.
+
+.ai-hand-section {
+  margin: @hand-cards-panel-first-title-gap 0 0;
+
+  > .hand-cards-panel__title {
+    .section-title-with-line();
+    margin-bottom: 10px;
+  }
+}
+
+.ai-hand-section__hint {
+  margin: 0;
+  padding-left: 8px;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+// Heading of the played cards below the hand: half a card off the hand cards
+.ai-hand-section__played-title {
+  .section-title-with-line();
+  margin-top: 48px;
+  margin-bottom: 10px;
+}
