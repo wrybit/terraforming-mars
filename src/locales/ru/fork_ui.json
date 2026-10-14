@@ -1588,5 +1588,8 @@
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} выбрал в драфте ${1} и передал ${2} игроку ${3}",
   "Better would have been:": "Лучше было бы:",
   "(no suggestion)": "(без предложения)",
-  "Invalid number:": "Недопустимое число:"
+  "Invalid number:": "Недопустимое число:",
+  "Open on my turn": "Открывать в мой ход",
+  "Situation of the AI": "Положение AI",
+  "Still possible, but not done": "Ещё было возможно, но не сделано"
 }

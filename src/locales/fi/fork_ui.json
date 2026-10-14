@@ -782,5 +782,8 @@
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} draftasi ${1} ja antoi ${2} pelaajalle ${3}",
   "Better would have been:": "Parempi olisi ollut:",
   "(no suggestion)": "(ei ehdotusta)",
-  "Invalid number:": "Virheellinen luku:"
+  "Invalid number:": "Virheellinen luku:",
+  "Open on my turn": "Avaa omalla vuorollani",
+  "Situation of the AI": "AI:n tilanne",
+  "Still possible, but not done": "Vielä mahdollista, mutta tekemättä"
 }

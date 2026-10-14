@@ -953,5 +953,8 @@
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} draftolta: ${1}, és továbbadta ${2} lapot ${3} játékosnak",
   "Better would have been:": "Jobb lett volna:",
   "(no suggestion)": "(nincs javaslat)",
-  "Invalid number:": "Érvénytelen szám:"
+  "Invalid number:": "Érvénytelen szám:",
+  "Open on my turn": "Megnyitás a körömben",
+  "Situation of the AI": "Az AI helyzete",
+  "Still possible, but not done": "Még lehetséges lett volna, de nem tette"
 }

@@ -566,5 +566,8 @@
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} hat ${1} gedraftet und ${2} an ${3} weitergegeben",
   "Better would have been:": "Besser wäre gewesen:",
   "(no suggestion)": "(kein Vorschlag)",
-  "Invalid number:": "Ungültige Zahl:"
+  "Invalid number:": "Ungültige Zahl:",
+  "Open on my turn": "Bei meinem Zug öffnen",
+  "Situation of the AI": "Lage der AI",
+  "Still possible, but not done": "Noch möglich, aber nicht gemacht"
 }

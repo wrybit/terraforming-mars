@@ -2000,5 +2000,8 @@
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} eligió ${1} en el draft y pasó ${2} a ${3}",
   "Better would have been:": "Habría sido mejor:",
   "(no suggestion)": "(sin sugerencia)",
-  "Invalid number:": "Número no válido:"
+  "Invalid number:": "Número no válido:",
+  "Open on my turn": "Abrir en mi turno",
+  "Situation of the AI": "Situación de la AI",
+  "Still possible, but not done": "Aún posible, pero no hecho"
 }

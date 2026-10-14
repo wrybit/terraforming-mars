@@ -52,6 +52,9 @@
       <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones">
         <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable/>
       </div>
+      <!-- Below the table, outside its scroll area: whether the box switches here by itself on one's own turn -->
+      <ToggleSwitch v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones-auto" data-test="log-milestones-auto"
+        :modelValue="autoMilestonesTab" :label="$t('Open on my turn')" @update:modelValue="setAutoMilestonesTab"/>
       <button
         v-show="showScrollToBottomButton && !showsMilestonesAwards"
         type="button"
@@ -84,7 +87,7 @@ import {LogMessage} from '@/common/logs/LogMessage';
 import {LogMessageType} from '@/common/logs/LogMessageType';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {SoundManager} from '@/client/utils/SoundManager';
-import {getPreferences} from '@/client/utils/PreferencesManager';
+import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {logMessageItemCount, needsModalPreview} from '@/client/components/logpanel/logMessageContent';
 import {activeSectionIndex, edgeFadesOf, findScrollContainer, HEADER_SCROLL_GAP, maxScrollTopOf, readingLineOf, scrollContainerTo, ScrollContainer, scrollTopOf} from '@/client/components/logpanel/logScroll';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
@@ -99,6 +102,7 @@ import {isFilterActive, LogFilter, rowMatches} from '@/client/components/logpane
 import LogGenerationList from '@/client/components/logpanel/LogGenerationList.vue';
 import LogCardsZoom from '@/client/components/logpanel/LogCardsZoom.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
+import ToggleSwitch from '@/client/components/common/ToggleSwitch.vue';
 import {milestonesAwardsLabel} from '@/client/components/milestoneAwardTable/milestonesAwardsLabel';
 import {cachedLogStream, fetchLogStream, GenerationLog} from '@/client/utils/fetchLogs';
 import {milestonesAwardsFocusState} from '@/client/components/logpanel/milestonesAwardsFocus';
@@ -264,6 +268,7 @@ export default defineComponent({
     LogGenerationList,
     LogCardsZoom,
     MilestoneAwardTable,
+    ToggleSwitch,
     LogAiRatings,
     LogAiRateBar,
   },
@@ -544,6 +549,13 @@ export default defineComponent({
     showMilestonesAwards(): void {
       this.view = 'milestones';
     },
+    setAutoMilestonesTab(on: boolean): void {
+      PreferencesManager.INSTANCE.set('auto_milestones_tab', on);
+    },
+    // The view a change of turn leads to: own turn → milestones & awards (if wanted), otherwise the log
+    turnView(acting: boolean): LogView {
+      return acting && this.autoMilestonesTab ? 'milestones' : 'log';
+    },
     // A milestone/award choice opened or closed in the action tabs (milestonesAwardsFocus.ts)
     applyMilestonesAwardsFocus(focused: boolean): void {
       if (focused) {
@@ -782,6 +794,9 @@ export default defineComponent({
     milestonesAwardsFocused(): boolean {
       return milestonesAwardsFocusState.requests > 0;
     },
+    autoMilestonesTab(): boolean {
+      return getPreferences().auto_milestones_tab;
+    },
     // Analysis game (create option): AI rows show the AI's cards and decisions and can be rated
     analysisGame(): boolean {
       return this.viewModel.game.gameOptions.aiAnalysis === true;
@@ -811,9 +826,9 @@ export default defineComponent({
     viewModel(): void {
       this.loadStream(true);
     },
-    // A change of turn decides the box anew, as on mount: own turn → milestones & awards, otherwise the log
+    // A change of turn decides the box anew, as on mount: own turn → milestones & awards (toggle on), otherwise the log
     acting(acting: boolean): void {
-      const view: LogView = acting ? 'milestones' : 'log';
+      const view = this.turnView(acting);
       if (this.viewBeforeFocus !== undefined) {
         // An open milestone/award choice keeps the box; closing it returns to the new view
         this.viewBeforeFocus = view;
@@ -833,7 +848,7 @@ export default defineComponent({
     // A change of turn (or the first mount) decides the box anew: own turn → milestones & awards,
     // otherwise the end of the log. Without a change the reader's view stays as it was.
     const restoredState = previousState?.acting === this.acting ? previousState : undefined;
-    this.view = restoredState?.view ?? (this.acting ? 'milestones' : 'log');
+    this.view = restoredState?.view ?? this.turnView(this.acting);
     // Either the view starts fresh, or the reader was at the end, which may have grown since the previous instance unmounted
     this.following = restoredState === undefined || restoredState.following;
     this.selectedGeneration = this.generation;

@@ -1132,5 +1132,8 @@
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} draftet ${1} og ga ${2} videre til ${3}",
   "Better would have been:": "Bedre hadde vært:",
   "(no suggestion)": "(ingen forslag)",
-  "Invalid number:": "Ugyldig tall:"
+  "Invalid number:": "Ugyldig tall:",
+  "Open on my turn": "Åpne når det er min tur",
+  "Situation of the AI": "Situasjonen til AI",
+  "Still possible, but not done": "Fortsatt mulig, men ikke gjort"
 }

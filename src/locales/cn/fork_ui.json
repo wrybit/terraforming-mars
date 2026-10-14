@@ -1705,5 +1705,8 @@
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} 轮抽了 ${1}，并将 ${2} 传给 ${3}",
   "Better would have been:": "更好的选择：",
   "(no suggestion)": "（无建议）",
-  "Invalid number:": "无效数字："
+  "Invalid number:": "无效数字：",
+  "Open on my turn": "轮到我时打开",
+  "Situation of the AI": "AI 当时的局面",
+  "Still possible, but not done": "仍可执行但未执行"
 }

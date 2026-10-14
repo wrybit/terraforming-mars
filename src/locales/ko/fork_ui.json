@@ -1014,5 +1014,8 @@
   "${0} drafted ${1}, passing ${2} to ${3}": "${0}이(가) ${1}을(를) 드래프트하고 ${2}을(를) ${3}에게 넘겼습니다",
   "Better would have been:": "더 나았을 선택:",
   "(no suggestion)": "(제안 없음)",
-  "Invalid number:": "잘못된 숫자:"
+  "Invalid number:": "잘못된 숫자:",
+  "Open on my turn": "내 차례에 열기",
+  "Situation of the AI": "AI의 상황",
+  "Still possible, but not done": "가능했지만 하지 않은 것"
 }

@@ -1394,5 +1394,9 @@
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} heeft ${1} gedraft en ${2} doorgegeven aan ${3}",
   "Better would have been:": "Beter was geweest:",
   "(no suggestion)": "(geen suggestie)",
-  "Invalid number:": "Ongeldig getal:"
+  "Invalid number:": "Ongeldig getal:",
+  "Open on my turn": "Openen als ik aan de beurt ben",
+  "Situation of the AI": "Situatie van de AI",
+  "Still possible, but not done": "Nog mogelijk, maar niet gedaan",
+  "Titanium": "Titaan"
 }
