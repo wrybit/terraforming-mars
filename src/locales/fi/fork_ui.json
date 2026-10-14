@@ -779,5 +779,7 @@
   "You drafted ${0}": "Draftasit ${0}",
   "${0} drafted ${1}": "${0} draftasi ${1}",
   "You drafted ${0}, passing ${1} to ${2}": "Draftasit ${0} ja annoit ${1} pelaajalle ${2}",
-  "${0} drafted ${1}, passing ${2} to ${3}": "${0} draftasi ${1} ja antoi ${2} pelaajalle ${3}"
+  "${0} drafted ${1}, passing ${2} to ${3}": "${0} draftasi ${1} ja antoi ${2} pelaajalle ${3}",
+  "Better would have been:": "Parempi olisi ollut:",
+  "(no suggestion)": "(ei ehdotusta)"
 }

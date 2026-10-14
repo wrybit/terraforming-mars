@@ -1,6 +1,6 @@
 import {IPlayer} from '../IPlayer';
 import {InputResponse} from '../../common/inputs/InputResponse';
-import {emitDecision, globalsOf, isRecordingDecisions, snapshot, titleText} from './decisionTrace';
+import {emitDecision, globalsOf, isRecordingDecisions, SERVER_VERSION, snapshot, titleText} from './decisionTrace';
 
 // Records what a human was asked and what they answered, in the same format as AI decisions.
 // The game log only shows the outcome; for training we need the offer too (cards on hand,
@@ -23,6 +23,8 @@ export function prepareHumanDecision(player: IPlayer, response: InputResponse, t
     generation: game.generation,
     phase: game.phase,
     player: player.name,
+    playerId: player.id,
+    serverVersion: SERVER_VERSION,
     color: player.color,
     title: titleText(waitingFor),
     state: snapshot(player),

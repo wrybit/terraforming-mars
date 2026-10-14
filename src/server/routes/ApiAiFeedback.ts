@@ -9,7 +9,8 @@ import {IGame} from '../IGame';
 import {IPlayer} from '../IPlayer';
 import {AiFeedbackStore} from '../aiFeedback/AiFeedbackStore';
 import {aiPlayerOfLine} from '../aiFeedback/aiLogLines';
-import {AiFeedbackRequest, isAiFeedbackRating, MAX_AI_FEEDBACK_TEXT} from '../../common/ai/AiFeedback';
+import {AiFeedbackRequest, canNameBetterOption, isAiFeedbackRating, MAX_AI_FEEDBACK_TEXT} from '../../common/ai/AiFeedback';
+import {AiDecisionSummary} from '../../common/ai/AiDecisionSummary';
 
 /**
  * Ratings of AI decisions in analysis games.
@@ -26,13 +27,21 @@ export class ApiAiFeedback extends Handler {
     return RouteError.badRequest(`Game ${game.id} is no analysis game: AI decisions can only be rated when "Analysis game" was switched on when creating it.`);
   }
 
+  /** The options of an AI decision travel with its first log line. */
+  private static decisionOf(game: IGame, decisionId: string | undefined): AiDecisionSummary | undefined {
+    if (decisionId === undefined) {
+      return undefined;
+    }
+    return game.gameLog.find((line) => line.aiDecision?.id === decisionId)?.aiDecision;
+  }
+
   public override async get(_req: Request, res: Response, ctx: Context): Promise<void> {
     const id = ctx.urlParams.participantId('id');
     const game = await ctx.gameLoader.getGame(id);
     if (game === undefined) {
       throw RouteError.notFound(`No game found for participant ${id}: it was deleted or never existed.`);
     }
-    responses.writeJson(res, ctx, game.gameOptions.aiAnalysis === true ? this.store().get(game.id) : []);
+    responses.writeJson(res, ctx, game.gameOptions.aiAnalysis === true ? this.store().entries(game.id) : []);
   }
 
   public override async post(req: Request, res: Response, ctx: Context): Promise<void> {
@@ -72,15 +81,30 @@ export class ApiAiFeedback extends Handler {
       throw RouteError.badRequest(`Unknown rating ${String(request.rating)}: use flag, up or down.`);
     }
     const text = typeof request.text === 'string' ? request.text.trim().slice(0, MAX_AI_FEEDBACK_TEXT) : '';
-    this.store().set(game.id, message.id ?? '', player.color, request.rating === undefined ? undefined : {
-      messageId: message.id ?? '',
+    const decision = ApiAiFeedback.decisionOf(game, message.aiDecisionId);
+    // "Better would be" only with thumbs down or flag, and only an option the decision really had
+    let betterOption: {index: number, label: string, card?: string} | undefined;
+    if (request.betterOptionIndex !== undefined && request.betterOptionIndex !== null && canNameBetterOption(request.rating)) {
+      const option = decision?.options.find((candidate) => candidate.index === request.betterOptionIndex);
+      if (option === undefined || option.index === undefined) {
+        throw RouteError.badRequest(`Option ${String(request.betterOptionIndex)} is not one of the options of decision ${message.aiDecisionId ?? '(none)'}.`);
+      }
+      betterOption = {index: option.index, label: option.label, card: option.card};
+    }
+    this.store().append({
+      gameId: game.id,
       decisionId: message.aiDecisionId,
-      color: player.color,
-      name: player.name,
-      rating: request.rating,
+      messageId: message.id ?? '',
+      saveId: decision?.saveId ?? game.lastSaveId,
+      generation: decision?.generation ?? game.generation,
+      rater: {playerId: player.id, color: player.color, name: player.name, role: 'opponent'},
+      ...(request.rating === undefined ? {retracted: true as const} : {rating: request.rating}),
       text,
+      betterOptionIndex: betterOption?.index,
+      betterOptionLabel: betterOption?.label,
+      betterOptionCard: betterOption?.card,
       at: Date.now(),
     });
-    responses.writeJson(res, ctx, this.store().get(game.id));
+    responses.writeJson(res, ctx, this.store().entries(game.id));
   }
 }

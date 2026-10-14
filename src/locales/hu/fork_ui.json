@@ -950,5 +950,7 @@
   "You drafted ${0}": "Draftoltad: ${0}",
   "${0} drafted ${1}": "${0} draftolta: ${1}",
   "You drafted ${0}, passing ${1} to ${2}": "Draftoltad: ${0}, és továbbadtad ${1} lapot ${2} játékosnak",
-  "${0} drafted ${1}, passing ${2} to ${3}": "${0} draftolta: ${1}, és továbbadta ${2} lapot ${3} játékosnak"
+  "${0} drafted ${1}, passing ${2} to ${3}": "${0} draftolta: ${1}, és továbbadta ${2} lapot ${3} játékosnak",
+  "Better would have been:": "Jobb lett volna:",
+  "(no suggestion)": "(nincs javaslat)"
 }

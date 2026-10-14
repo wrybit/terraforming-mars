@@ -30,12 +30,12 @@ describe('aiLogTarget', () => {
 
   it('collects the decision summaries', () => {
     const first = line('blue', '1.a');
-    first.aiDecision = {id: 'd1', kind: 'action', title: 't', options: []};
+    first.aiDecision = {id: 'd1', kind: 'action', title: 't', saveId: 1, generation: 1, options: []};
     expect(decisionSummaries([first, line('blue', '2.a')]).get('d1')?.kind).eq('action');
   });
 
   it('groups the start selection and labels options', () => {
-    const groups = optionGroups({id: 'd', kind: 'initial', title: '', options: [
+    const groups = optionGroups({id: 'd', kind: 'initial', title: '', saveId: 1, generation: 1, options: [
       {label: 'Karte: Ants', card: 'Ants', group: 'project', value: 1},
       {label: 'Konzern: Helion', card: 'Helion', group: 'corporation', value: 5},
     ]});

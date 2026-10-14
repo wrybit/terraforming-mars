@@ -40,6 +40,7 @@ export type SerializedGame = {
     fundedAwards: Array<SerializedFundedAward>;
     gagarinBase: Array<SpaceId>;
     gameAge: number;
+    aiDecisionCount?: number;
     gameLog: Array<LogMessage>;
     gameOptions: GameOptions;
     generation: number;

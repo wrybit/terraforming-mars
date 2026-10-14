@@ -5,12 +5,14 @@
       <span class="log-ai-rating-emoji" aria-hidden="true">{{ emoji[entry.rating] }}</span>
       <span :class="'log-row-name log-row-name--' + entry.color">{{ entry.name }}</span>
       <span v-if="entry.text !== ''" class="log-ai-rating-text">{{ entry.text }}</span>
+      <span v-if="entry.betterOptionLabel !== undefined" class="log-ai-rating-better">→ {{ optionLabel({label: entry.betterOptionLabel, card: entry.betterOptionCard}) }}</span>
     </li>
   </ul>
 </template>
 
 <script setup lang="ts">
 import {AI_FEEDBACK_EMOJI, AiFeedbackEntry} from '@/common/ai/AiFeedback';
+import {optionLabel} from './aiDecisionOptions';
 
 // Ratings of one AI row in the log of an analysis game (everyone sees everyone's ratings)
 defineProps<{

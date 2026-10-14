@@ -72,10 +72,11 @@ export class GameLogs {
     }
 
     // Analysis game: the ratings of a line follow it, so the evaluation reads them in place
-    const ratings = game.gameOptions.aiAnalysis === true ? AiFeedbackStore.getInstance().get(game.id) : [];
+    const ratings = game.gameOptions.aiAnalysis === true ? AiFeedbackStore.getInstance().entries(game.id) : [];
     const ratingLines = (message: LogMessage): Array<string> => ratings
       .filter((entry) => entry.messageId === message.id)
-      .map((entry) => `    ${AI_FEEDBACK_EMOJI[entry.rating]} ${entry.name}${entry.text === '' ? '' : ': ' + entry.text}`);
+      .map((entry) => `    ${AI_FEEDBACK_EMOJI[entry.rating]} ${entry.name}${entry.text === '' ? '' : ': ' + entry.text}` +
+        (entry.betterOptionLabel === undefined ? '' : ` → ${entry.betterOptionLabel}`));
     return game.gameLog.flatMap((message) => [Log.applyData(message, (datum: LogMessageData) => {
       if (datum.type === undefined || datum.value === undefined) {
         return '';

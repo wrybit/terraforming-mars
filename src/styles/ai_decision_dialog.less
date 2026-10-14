@@ -30,13 +30,6 @@
   list-style: none;
   border-radius: @dialog-tile-radius;
   background: @dialog-surface;
-  font-size: 15px;
-  line-height: 24px;
-
-  // Time icon in front of the line: noise here, as in the log
-  > li > span[title]:first-child {
-    display: none;
-  }
 }
 
 .ai-decision-dialog__group + .ai-decision-dialog__group {
@@ -168,4 +161,36 @@
 .ai-decision-dialog__error {
   margin: 0;
   color: #ff8a80;
+}
+
+// "Better would have been": label and choice in one line, closer to the rating buttons than to the next section
+.ai-decision-dialog__better {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin: 0;
+  font-weight: normal;
+}
+
+.ai-decision-dialog__better-label {
+  color: @dialog-muted;
+  font-size: 14px;
+}
+
+.ai-decision-dialog__select {
+  flex: 1 1 260px;
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid @dialog-surface-border;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #eee;
+  font: inherit;
+  font-size: 15px;
+}
+
+.ai-decision-dialog__rating-better {
+  color: @ai-dialog-chosen;
 }

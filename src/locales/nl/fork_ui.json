@@ -1391,5 +1391,7 @@
   "You drafted ${0}": "Je hebt ${0} gedraft",
   "${0} drafted ${1}": "${0} heeft ${1} gedraft",
   "You drafted ${0}, passing ${1} to ${2}": "Je hebt ${0} gedraft en ${1} doorgegeven aan ${2}",
-  "${0} drafted ${1}, passing ${2} to ${3}": "${0} heeft ${1} gedraft en ${2} doorgegeven aan ${3}"
+  "${0} drafted ${1}, passing ${2} to ${3}": "${0} heeft ${1} gedraft en ${2} doorgegeven aan ${3}",
+  "Better would have been:": "Beter was geweest:",
+  "(no suggestion)": "(geen suggestie)"
 }

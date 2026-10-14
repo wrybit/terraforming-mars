@@ -61,6 +61,8 @@ export interface IGame extends Logger {
   drainQueue(cb: () => void): void;
   createdTime: Date;
   gameAge: number; // Each log event increases it
+  /** Number of AI decisions so far: running part of the decision id ("<gameId>:<n>"). */
+  aiDecisionCount: number;
   gameLog: Array<LogMessage>;
   undoCount: number; // Each undo increases it
   inputsThisRound: number;

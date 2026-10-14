@@ -14,8 +14,10 @@ export type AiLogTarget = {
   decisionId?: string,
   /** AI player of the row. */
   color: Color,
-  /** All lines of the row (text of the row in the dialog). */
+  /** All lines of the row (row text in the end-of-game log, decision lookup). */
   messages: Array<LogMessage>,
+  /** The row as the log shows it: the dialog repeats it in the same look. */
+  row: LogRow,
 };
 
 /** Colours of the AI players: their names carry the [AI] marker (common/ai/AiLevel.ts). */
@@ -45,7 +47,7 @@ export function aiTargetOfRow(row: LogRow, messages: ReadonlyArray<LogMessage>, 
   }
   const lines = row.indexes.map((index) => messages[index]).filter((message) => message !== undefined);
   const decisionId = [lead, ...lines].find((message) => message.aiDecisionId !== undefined)?.aiDecisionId;
-  return {messageId: lead.id, decisionId, color, messages: lines.length > 0 ? lines : [lead]};
+  return {messageId: lead.id, decisionId, color, messages: lines.length > 0 ? lines : [lead], row};
 }
 
 /** Decision summaries by id: only the first line of a decision carries the options. */

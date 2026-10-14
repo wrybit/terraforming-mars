@@ -1129,5 +1129,7 @@
   "You drafted ${0}": "Du draftet ${0}",
   "${0} drafted ${1}": "${0} draftet ${1}",
   "You drafted ${0}, passing ${1} to ${2}": "Du draftet ${0} og ga ${1} videre til ${2}",
-  "${0} drafted ${1}, passing ${2} to ${3}": "${0} draftet ${1} og ga ${2} videre til ${3}"
+  "${0} drafted ${1}, passing ${2} to ${3}": "${0} draftet ${1} og ga ${2} videre til ${3}",
+  "Better would have been:": "Bedre hadde vært:",
+  "(no suggestion)": "(ingen forslag)"
 }

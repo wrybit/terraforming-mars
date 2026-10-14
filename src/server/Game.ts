@@ -115,6 +115,8 @@ export class Game implements IGame, Logger {
   public deferredActions: DeferredActionsQueue = new DeferredActionsQueue();
   public createdTime: Date = new Date(0);
   public gameAge: number = 0; // Each log event increases it
+  // Number of AI decisions so far: running part of the decision id ("<gameId>:<n>"), kept with the game
+  public aiDecisionCount: number = 0;
   public gameLog: Array<LogMessage> = createGameLog();
   public undoCount: number = 0; // Each undo increases it
   public inputsThisRound = 0;
@@ -505,6 +507,7 @@ export class Game implements IGame, Logger {
       stJosephCathedrals: this.stJosephCathedrals,
       nomadSpace: this.nomadSpace,
       gameAge: this.gameAge,
+      aiDecisionCount: this.aiDecisionCount,
       gameLog: this.gameLog,
       gameOptions: this.gameOptions,
       generation: this.generation,
@@ -1818,6 +1821,7 @@ export class Game implements IGame, Logger {
     game.lastSaveId = d.lastSaveId;
     game.clonedGamedId = d.clonedGamedId;
     game.gameAge = d.gameAge;
+    game.aiDecisionCount = d.aiDecisionCount ?? 0;
     game.gameLog = d.gameLog;
     game.generation = d.generation;
     game.phase = d.phase;

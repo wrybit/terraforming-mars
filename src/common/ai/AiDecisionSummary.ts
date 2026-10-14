@@ -2,6 +2,8 @@
 // their values and the choice. A compact copy of the decision trace (server/ai/decisionTrace.ts).
 
 export type AiDecisionOption = {
+  /** Position in the AI's traced options (decision log file); a rating's "better would be" refers to it. */
+  index?: number,
   /** Readable option, e.g. a card name or "Standard projects: City". */
   label: string,
   /** Set when the option is a single card: the client shows its translated name. */
@@ -14,8 +16,11 @@ export type AiDecisionOption = {
 };
 
 export type AiDecisionSummary = {
-  /** Same id as in the decision log file (<gameId>.jsonl) and in ratings. */
+  /** "<gameId>:<n>", the same id as in the decision log file (<gameId>.jsonl) and in ratings. */
   id: string,
+  /** Save before the decision: the game state it was made in (game.db / exported saves). */
+  saveId: number,
+  generation: number,
   /** initial, draft, research, action, space or other. */
   kind: string,
   /** Question the AI answered (player input title, English key). */
@@ -24,4 +29,4 @@ export type AiDecisionSummary = {
 };
 
 /** Most options a log line carries; the decision log file keeps all of them. */
-export const MAX_SUMMARY_OPTIONS = 8;
+export const MAX_SUMMARY_OPTIONS = 10;

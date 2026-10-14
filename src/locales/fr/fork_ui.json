@@ -834,5 +834,7 @@
   "You drafted ${0}": "Vous avez drafté ${0}",
   "${0} drafted ${1}": "${0} a drafté ${1}",
   "You drafted ${0}, passing ${1} to ${2}": "Vous avez drafté ${0} et passé ${1} à ${2}",
-  "${0} drafted ${1}, passing ${2} to ${3}": "${0} a drafté ${1} et passé ${2} à ${3}"
+  "${0} drafted ${1}, passing ${2} to ${3}": "${0} a drafté ${1} et passé ${2} à ${3}",
+  "Better would have been:": "Il aurait mieux valu :",
+  "(no suggestion)": "(aucune suggestion)"
 }

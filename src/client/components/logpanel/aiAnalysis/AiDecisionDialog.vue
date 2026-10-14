@@ -1,14 +1,15 @@
 <template>
   <SidebarModal :open="dialog !== undefined" :framed="true" @close="close()">
-    <DialogFrame v-if="dialog !== undefined" :title="$t('Rate AI decision')" :width="520" class="ai-decision-dialog" data-test="ai-decision-dialog" @close="close()">
+    <DialogFrame v-if="dialog !== undefined" :title="$t('Rate AI decision')" :width="700" class="ai-decision-dialog" data-test="ai-decision-dialog" @close="close()">
       <template #icon><SeatIcon kind="ai" :size="22"/></template>
 
-      <!-- The row as in the log -->
+      <!-- The row exactly as the log shows it (log-panel: same row styles as in the log box) -->
       <section class="ai-decision-dialog__section">
         <h3 class="ai-decision-dialog__heading">{{ $t(kindTitle) }}</h3>
-        <ul class="ai-decision-dialog__lines">
-          <LogMessageComponent v-for="(message, index) in dialog.target.messages" :key="index" :message="message" :viewModel="dialog.viewModel"/>
-        </ul>
+        <div class="log-panel ai-decision-dialog__lines">
+          <LogActionRow v-if="dialog.target.row.type === 'action'" :row="dialog.target.row" :viewModel="dialog.viewModel"/>
+          <LogMessageComponent v-else-if="dialog.target.row.type === 'message'" :message="dialog.target.row.message" :viewModel="dialog.viewModel"/>
+        </div>
       </section>
 
       <!-- What the AI weighed: options with the value it gave them, the chosen ones marked -->
@@ -36,6 +37,7 @@
             <span aria-hidden="true">{{ emoji[entry.rating] }}</span>
             <span :class="'log-row-name log-row-name--' + entry.color">{{ entry.name }}</span>
             <span v-if="entry.text !== ''" class="ai-decision-dialog__rating-text">{{ entry.text }}</span>
+            <span v-if="entry.betterOptionLabel !== undefined" class="ai-decision-dialog__rating-better">→ {{ betterLabel(entry.betterOptionLabel, entry.betterOptionCard) }}</span>
           </li>
         </ul>
       </section>
@@ -52,6 +54,14 @@
             <span v-i18n>{{ choice.label }}</span>
           </button>
         </div>
+        <!-- Thumbs down / flag: which option would have been better (turns the rating into a training example) -->
+        <label v-if="canNameBetterOption(rating) && betterChoices.length > 0" class="ai-decision-dialog__better">
+          <span class="ai-decision-dialog__better-label" v-i18n>Better would have been:</span>
+          <select v-model="betterIndex" class="ai-decision-dialog__select" data-test="ai-rating-better">
+            <option :value="undefined">{{ $t('(no suggestion)') }}</option>
+            <option v-for="option in betterChoices" :key="option.index" :value="option.index">{{ label(option) }} ({{ value(option.value) }})</option>
+          </select>
+        </label>
         <textarea v-if="rating !== undefined" ref="comment" v-model="text" class="ai-decision-dialog__comment" data-test="ai-rating-text"
           :maxlength="MAX_AI_FEEDBACK_TEXT" rows="3" :placeholder="$t('Comment (optional)')" @keydown.stop></textarea>
         <p v-if="error !== undefined" class="ai-decision-dialog__error" role="alert">{{ error }}</p>
@@ -71,7 +81,8 @@ import SidebarModal from '@/client/components/SidebarModal.vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
 import SeatIcon from '@/client/components/create/SeatIcon.vue';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
-import {AI_FEEDBACK_EMOJI, AiFeedbackRating, MAX_AI_FEEDBACK_TEXT} from '@/common/ai/AiFeedback';
+import LogActionRow from '@/client/components/logpanel/LogActionRow.vue';
+import {AI_FEEDBACK_EMOJI, AiFeedbackRating, canNameBetterOption, MAX_AI_FEEDBACK_TEXT} from '@/common/ai/AiFeedback';
 import {AiDecisionOption} from '@/common/ai/AiDecisionSummary';
 import {isPlayerId} from '@/common/Types';
 import {translateText} from '@/client/directives/i18n';
@@ -98,6 +109,9 @@ const kindTitle = computed(() => DECISION_KIND_TITLES[dialog.value?.decision?.ki
 const error = computed(() => aiFeedbackState.error);
 
 const rating = ref<AiFeedbackRating | undefined>();
+const betterIndex = ref<number | undefined>();
+// Options the AI did not take, best first (as in the list above)
+const betterChoices = computed(() => groups.value.flatMap((group) => group.options).filter((option) => option.index !== undefined && option.chosen !== true));
 const text = ref('');
 const saving = ref(false);
 const comment = ref<HTMLTextAreaElement>();
@@ -106,6 +120,7 @@ const comment = ref<HTMLTextAreaElement>();
 watch(dialog, (open) => {
   rating.value = open?.rating ?? ownRating.value?.rating;
   text.value = ownRating.value?.text ?? '';
+  betterIndex.value = ownRating.value?.betterOptionIndex;
   if (open?.rating !== undefined) {
     nextTick(() => comment.value?.focus());
   }
@@ -113,6 +128,10 @@ watch(dialog, (open) => {
 
 function label(option: AiDecisionOption): string {
   return optionLabel(option);
+}
+
+function betterLabel(rawLabel: string, card: string | undefined): string {
+  return optionLabel({label: rawLabel, card});
 }
 
 function value(amount: number | undefined): string {
@@ -135,7 +154,8 @@ async function save(choice: AiFeedbackRating | undefined): Promise<void> {
   }
   saving.value = true;
   try {
-    await saveAiFeedback(open.viewModel.id, {messageId: open.target.messageId, rating: choice, text: text.value});
+    const betterOptionIndex = canNameBetterOption(choice) ? betterIndex.value : undefined;
+    await saveAiFeedback(open.viewModel.id, {messageId: open.target.messageId, rating: choice, text: text.value, betterOptionIndex});
     closeAiDecision();
   } catch (failure) {
     aiFeedbackState.error = translateText('The rating could not be saved:') + ' ' + (failure instanceof Error ? failure.message : String(failure));

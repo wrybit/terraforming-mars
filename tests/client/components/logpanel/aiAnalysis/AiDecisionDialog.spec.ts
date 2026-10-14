@@ -30,13 +30,15 @@ describe('AiDecisionDialog', () => {
 
   it('shows the options of the decision and the rating choices', async () => {
     const wrapper = mountDialog();
+    const line = new LogMessage(LogMessageType.DEFAULT, 'Test line', []);
     openAiDecision({
       messageId: '3.x',
       decisionId: 'd1',
       color: 'red',
-      messages: [new LogMessage(LogMessageType.DEFAULT, 'Test line', [])],
+      messages: [line],
+      row: {type: 'message', message: line, indexes: [0]},
     }, {
-      id: 'd1', kind: 'draft', title: 'Select a card',
+      id: 'g1:1', kind: 'draft', title: 'Select a card', saveId: 2, generation: 1,
       options: [{label: 'Algae', card: 'Algae', value: 2.5}, {label: 'Ants', card: 'Ants', value: 7, chosen: true}],
     }, fakeViewModel());
     await wrapper.vm.$nextTick();
@@ -52,7 +54,8 @@ describe('AiDecisionDialog', () => {
 
   it('preselects the rating clicked in the hover bar', async () => {
     const wrapper = mountDialog();
-    openAiDecision({messageId: '4.x', color: 'red', messages: [new LogMessage(LogMessageType.DEFAULT, 'Test line', [])]},
+    const line = new LogMessage(LogMessageType.DEFAULT, 'Test line', []);
+    openAiDecision({messageId: '4.x', color: 'red', messages: [line], row: {type: 'message', message: line, indexes: [0]}},
       undefined, fakeViewModel(), 'flag');
     await wrapper.vm.$nextTick();
     expect(wrapper.find('[data-test="ai-rating-flag"]').attributes('aria-checked')).eq('true');

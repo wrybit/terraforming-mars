@@ -4,6 +4,9 @@ import {isSimulating} from './simulationSandbox';
 import {PlayerInputModel} from '../../common/models/PlayerInputModel';
 import {InputResponse} from '../../common/inputs/InputResponse';
 import {AiDecisionOption, AiDecisionSummary, MAX_SUMMARY_OPTIONS} from '../../common/ai/AiDecisionSummary';
+import {AiLevel} from '../../common/ai/AiLevel';
+import {IGame} from '../IGame';
+import rawSettings from '../../genfiles/settings.json';
 
 // Records what the AI could choose, how it valued every option and what it took. The game log
 // only says what happened; to judge a decision one needs the alternatives and their values.
@@ -22,6 +25,8 @@ export type TracedOption = {
   later?: number,
   chosen?: boolean,
   note?: string,
+  /** Position in the order the AI traced the options; stays the reference for ratings ("better would be"). */
+  index?: number,
   /** Set when the option is a single card (analysis log shows its translated name). */
   card?: string,
   /** Initial selection: which part of the start the card belongs to. */
@@ -41,8 +46,14 @@ export type PlayerSnapshot = {
 };
 
 export type DecisionRecord = {
-  /** Same id as the log lines and ratings of an analysis game refer to. */
+  /** "<gameId>:<n>": the same id in this file, in the ratings (ai-feedback/<gameId>.jsonl) and on the log lines. */
   decisionId?: string,
+  /** Player id of the decider: tells seats apart for good (names and colours may repeat across games). */
+  playerId?: string,
+  /** Strength of the deciding AI. */
+  aiLevel?: AiLevel,
+  /** Commit of the server code that decided. */
+  serverVersion?: string,
   /** Game the decision belongs to, so records of parallel games can be told apart. */
   gameId: string,
   generation: number,
@@ -75,11 +86,19 @@ let recorder: ((record: DecisionRecord) => void) | undefined;
 let open: OpenDecision | undefined;
 // Summary of the last decision of an analysis game, picked up by the AI driver (takeAiDecisionSummary)
 let lastSummary: AiDecisionSummary | undefined;
-let decisionCounter = 0;
+// Highest number handed out per game in this process: after an undo the game's counter goes back,
+// the ids must not (they would point to two different decisions)
+const issuedDecisionNumbers = new Map<string, number>();
 
-function newDecisionId(): string {
-  decisionCounter = (decisionCounter + 1) % 1_000_000;
-  return 'd' + Date.now().toString(36) + decisionCounter.toString(36);
+/** Commit of the running server (build metadata); 'n/a' in development builds. */
+export const SERVER_VERSION: string = rawSettings.head;
+
+/** Globally unique, stable id "<gameId>:<running number>"; the number is saved with the game. */
+export function nextDecisionId(game: IGame): string {
+  const number = Math.max(game.aiDecisionCount, issuedDecisionNumbers.get(game.id) ?? 0) + 1;
+  game.aiDecisionCount = number;
+  issuedDecisionNumbers.set(game.id, number);
+  return `${game.id}:${number}`;
 }
 
 /** The summary of the decision just made in an analysis game; cleared by reading. */
@@ -90,14 +109,14 @@ export function takeAiDecisionSummary(): AiDecisionSummary | undefined {
 }
 
 function summaryOption(option: TracedOption): AiDecisionOption {
-  return {label: option.label, card: option.card, group: option.group, value: option.value, chosen: option.chosen};
+  return {index: option.index, label: option.label, card: option.card, group: option.group, value: option.value, chosen: option.chosen};
 }
 
 /**
  * What the analysis log shows: the start selection with all its cards (grouped by the client),
  * otherwise the best options plus every chosen one. The decision log file keeps all of them.
  */
-export function summaryOf(decisionId: string, kind: DecisionKind, title: string, options: ReadonlyArray<TracedOption>): AiDecisionSummary {
+export function summaryOf(decisionId: string, kind: DecisionKind, title: string, options: ReadonlyArray<TracedOption>, saveId: number, generation: number): AiDecisionSummary {
   let shown: Array<TracedOption>;
   if (kind === 'initial') {
     shown = options.filter((option) => option.card !== undefined);
@@ -105,7 +124,7 @@ export function summaryOf(decisionId: string, kind: DecisionKind, title: string,
     const ranked = [...options].sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity));
     shown = ranked.filter((option, index) => index < MAX_SUMMARY_OPTIONS || option.chosen === true);
   }
-  return {id: decisionId, kind, title, options: shown.map(summaryOption)};
+  return {id: decisionId, kind, title, saveId, generation, options: shown.map(summaryOption)};
 }
 
 export function setDecisionRecorder(next: ((record: DecisionRecord) => void) | undefined): void {
@@ -133,7 +152,8 @@ export function traceOptions(kind: DecisionKind, options: Array<TracedOption>, d
     return;
   }
   open.kind = kind;
-  open.options = options;
+  // The traced order is the reference: ratings name a better option by this index
+  open.options = options.map((option, index) => ({...option, index}));
   open.details = details;
 }
 
@@ -184,14 +204,17 @@ export function recordDecision<T>(input: PlayerInput, player: IPlayer, decide: (
   } finally {
     open = undefined;
   }
-  const decisionId = newDecisionId();
+  const decisionId = nextDecisionId(game);
   const kind = decision.kind ?? 'other';
   const title = titleText(input);
   if (analysisGame) {
-    lastSummary = summaryOf(decisionId, kind, title, decision.options);
+    lastSummary = summaryOf(decisionId, kind, title, decision.options, saveId, game.generation);
   }
   recorder?.({
     decisionId,
+    playerId: player.id,
+    aiLevel: player.aiLevel,
+    serverVersion: SERVER_VERSION,
     gameId: game.id,
     generation: game.generation,
     phase: game.phase,

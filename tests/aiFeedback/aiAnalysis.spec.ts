@@ -23,7 +23,7 @@ function analysisGame(): [IGame, TestPlayer, TestPlayer] {
   return [game, human, ai];
 }
 
-const summary: AiDecisionSummary = {id: 'd1', kind: 'action', title: 'Take your next action', options: [{label: 'Algae', card: 'Algae', value: 3, chosen: true}]};
+const summary: AiDecisionSummary = {id: 'g1:1', kind: 'action', title: 'Take your next action', saveId: 3, generation: 1, options: [{index: 0, label: 'Algae', card: 'Algae', value: 3, chosen: true}]};
 
 describe('AI analysis games', () => {
   it('gives every line an id only in analysis games', () => {
@@ -77,9 +77,9 @@ describe('AI analysis games', () => {
       game.log('${0} gained ${1}', (b) => b.player(ai).number(2));
     });
     const [played, other, gained] = game.gameLog.slice(-3);
-    expect(played.aiDecision?.id).eq('d1');
+    expect(played.aiDecision?.id).eq('g1:1');
     expect(other.aiDecisionId).is.undefined;
-    expect(gained.aiDecisionId).eq('d1');
+    expect(gained.aiDecisionId).eq('g1:1');
     expect(gained.aiDecision).is.undefined;
   });
 
@@ -100,20 +100,24 @@ describe('AI analysis games', () => {
 
   it('summarises the best options plus every chosen one', () => {
     const options = Array.from({length: 12}, (_, index) => ({label: 'o' + index, value: 12 - index, chosen: index === 11}));
-    const shown = summaryOf('d2', 'action', 'title', options).options;
-    expect(shown.length).eq(9);
+    const shown = summaryOf('g1:2', 'action', 'title', options, 0, 1).options;
+    expect(shown.length).eq(11);
     expect(shown[shown.length - 1].label).eq('o11');
   });
 
-  it('stores one rating per player and line, on disk', () => {
+  it('appends ratings; per decision and rater the last line counts, retracted ones vanish', () => {
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'ai-feedback-'));
     const store = new AiFeedbackStore(directory);
-    const entry = {messageId: '1.a', color: 'red' as const, name: 'Red', rating: 'up' as const, text: '', at: 1};
-    store.set('g1', '1.a', 'red', entry);
-    store.set('g1', '1.a', 'red', {...entry, rating: 'down', text: 'too greedy'});
-    expect(new AiFeedbackStore(directory).get('g1')).deep.eq([{...entry, rating: 'down', text: 'too greedy'}]);
-    store.set('g1', '1.a', 'red', undefined);
-    expect(new AiFeedbackStore(directory).get('g1')).deep.eq([]);
+    const base = {gameId: 'g1', decisionId: 'g1:4', messageId: '7.a', saveId: 12, generation: 2,
+      rater: {playerId: 'p-red', color: 'red' as const, name: 'Red', role: 'opponent' as const}, text: '', at: 1};
+    store.append({...base, rating: 'up'});
+    store.append({...base, rating: 'down', text: 'too greedy', at: 2});
+    const reloaded = new AiFeedbackStore(directory);
+    expect(reloaded.records('g1')).has.length(2);
+    expect(reloaded.entries('g1').map((entry) => entry.rating)).deep.eq(['down']);
+    expect(JSON.stringify(reloaded.entries('g1'))).not.include('p-red');
+    store.append({...base, retracted: true, at: 3});
+    expect(new AiFeedbackStore(directory).entries('g1')).deep.eq([]);
     fs.rmSync(directory, {recursive: true, force: true});
   });
 

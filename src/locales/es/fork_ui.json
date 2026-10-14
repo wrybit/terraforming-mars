@@ -1997,5 +1997,7 @@
   "You drafted ${0}": "Elegiste ${0} en el draft",
   "${0} drafted ${1}": "${0} eligió ${1} en el draft",
   "You drafted ${0}, passing ${1} to ${2}": "Elegiste ${0} en el draft y pasaste ${1} a ${2}",
-  "${0} drafted ${1}, passing ${2} to ${3}": "${0} eligió ${1} en el draft y pasó ${2} a ${3}"
+  "${0} drafted ${1}, passing ${2} to ${3}": "${0} eligió ${1} en el draft y pasó ${2} a ${3}",
+  "Better would have been:": "Habría sido mejor:",
+  "(no suggestion)": "(sin sugerencia)"
 }
