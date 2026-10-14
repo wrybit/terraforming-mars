@@ -313,7 +313,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 66: collectorRate06 −0.23 (z −0.29) – neutral, fixes the human card-VP gap (collectors) – adopted with accumulatorValue 0.6.
   collectorRates: 1,
   recentPace: 0,
-  worldGovernment: 0,
+  // Round 73 (1200 mirrored 1v1 Venus games): worldGovernment +1.15 VP per deal (z +3.14) – adopted.
+  worldGovernment: 1,
   followUpChoice: 0,
 };
 
@@ -612,6 +613,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   recentPace2: {recentPace: 2},
   // Venus games: World Government chose temperature every time (first option).
   worldGovernment: {worldGovernment: 1},
+  noWorldGovernment: {worldGovernment: 0},
   followUpChoice: {followUpChoice: 1},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
