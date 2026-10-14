@@ -51,6 +51,22 @@ describe('ApiStatus', () => {
     expect((await status('/api/status')).updating).is.false;
   });
 
+  it('lists the commits of an announced update and keeps them after the restart', async () => {
+    fs.writeFileSync(flagFile, 'abc1234\tNewest change\n\nbad line\ndef5678\tOlder change\n');
+    const commits = [{hash: 'abc1234', subject: 'Newest change'}, {hash: 'def5678', subject: 'Older change'}];
+    expect((await status('/api/status')).updateCommits).deep.eq(commits);
+    // The new server reads the flag at startup
+    clearServerUpdateFlag();
+    const after = await status('/api/status');
+    expect(after.updating).is.false;
+    expect(after.updateCommits).deep.eq(commits);
+  });
+
+  it('sends no list for an empty flag (admin restart)', async () => {
+    fs.writeFileSync(flagFile, '');
+    expect((await status('/api/status')).updateCommits).is.undefined;
+  });
+
   it('counts players of running games, not spectators or other pages', async () => {
     const player = TestPlayer.BLUE.newPlayer();
     const other = TestPlayer.RED.newPlayer();

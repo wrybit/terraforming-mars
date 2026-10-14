@@ -1,6 +1,6 @@
 import {ref} from 'vue';
 import {paths} from '@/common/app/paths';
-import {ServerStatusModel} from '@/common/models/ServerStatusModel';
+import {ServerStatusModel, ServerUpdateCommit} from '@/common/models/ServerStatusModel';
 
 // Every open page asks the server regularly whether an update is coming (GET /api/status).
 // 'updating': the server is about to restart, inputs are frozen (ServerUpdateOverlay.vue).
@@ -8,6 +8,9 @@ import {ServerStatusModel} from '@/common/models/ServerStatusModel';
 export type ServerUpdatePhase = 'none' | 'updating' | 'done';
 
 export const serverUpdatePhase = ref<ServerUpdatePhase>('none');
+
+// Commits of the running update for the notice; empty when the server sends none (e.g. admin restart)
+export const serverUpdateCommits = ref<ReadonlyArray<ServerUpdateCommit>>([]);
 
 // Players of running games with a page open right now (start page: "3 players online", OnlinePlayers.vue)
 export const activeParticipants = ref<number | undefined>(undefined);
@@ -36,6 +39,13 @@ export function applyServerStatus(status: ServerStatusModel): void {
   }
   if (knownStartedAt === undefined) {
     knownStartedAt = status.startedAt;
+  }
+  // Only for the notice: the list of an earlier update must not show up at the next restart.
+  // The new server may answer without a list (older script): then the announced one stays.
+  if (serverUpdatePhase.value === 'none') {
+    serverUpdateCommits.value = [];
+  } else if (status.updateCommits !== undefined && status.updateCommits.length > 0) {
+    serverUpdateCommits.value = status.updateCommits;
   }
 }
 
@@ -69,5 +79,6 @@ export function resetServerStatus(): void {
   }
   knownStartedAt = undefined;
   serverUpdatePhase.value = 'none';
+  serverUpdateCommits.value = [];
   activeParticipants.value = undefined;
 }

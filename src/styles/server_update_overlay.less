@@ -23,7 +23,8 @@
   flex-direction: column;
   align-items: center;
   gap: 40px; // between the blocks; the hint sits closer to its block (see __hint)
-  width: min(560px, 100%);
+  box-sizing: border-box; // padding inside the width: otherwise the card runs over the screen edge on phones
+  width: min(648px, 100%);
   padding: 48px 44px 44px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 12px;
@@ -101,4 +102,55 @@
   span {
     display: block;
   }
+}
+
+// Commits of the update below the hint: a box 3.5 lines high, the half line shows that it scrolls
+@server-update-commit-line: 22px;
+
+.server-update-overlay__commits {
+  width: 100%;
+  text-align: left;
+}
+
+.server-update-overlay__commits-label {
+  margin-bottom: 8px; // closer to its box than the block gap above
+  color: #8a8f9c;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.server-update-overlay__commit-list {
+  box-sizing: border-box; // the height below includes padding and border
+  max-height: @server-update-commit-line * 3.5 + 12px + 2px; // + padding + border: up to three commits without scrolling
+  overflow-y: auto;
+  margin: 0;
+  padding: 6px 12px;
+  list-style: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.server-update-overlay__commit {
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+  color: #d4d7df;
+  font-size: 14px;
+  line-height: @server-update-commit-line;
+  white-space: nowrap;
+}
+
+.server-update-overlay__commit-hash {
+  flex: none;
+  color: #8a8f9c;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+
+.server-update-overlay__commit-subject {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

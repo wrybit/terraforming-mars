@@ -4,7 +4,7 @@ import {Context} from './IHandler';
 import {Request} from '../Request';
 import {Response} from '../Response';
 import {ServerStatusModel} from '../../common/models/ServerStatusModel';
-import {isServerUpdating, serverStartedAt} from '../server/serverUpdate';
+import {isServerUpdating, serverStartedAt, serverUpdateCommits} from '../server/serverUpdate';
 import {activeParticipantCount, noteActiveParticipant} from '../server/activeParticipants';
 import {presenceRecord} from '../admin/dashboard/presenceRecord';
 import {isPlayerId} from '../../common/Types';
@@ -32,6 +32,10 @@ export class ApiStatus extends Handler {
       startedAt: serverStartedAt,
       activeParticipants: activeParticipantCount(),
     };
+    const commits = serverUpdateCommits();
+    if (commits.length > 0) {
+      status.updateCommits = commits;
+    }
     responses.writeJson(res, ctx, status);
   }
 }

@@ -26,6 +26,16 @@
           <span v-i18n>After reloading, play continues seamlessly.</span>
         </div>
       </template>
+      <!-- What the update brings: one line per commit, cut with "…"; more than three scroll inside the box -->
+      <div v-if="commits.length > 0" class="server-update-overlay__commits">
+        <div class="server-update-overlay__commits-label" v-i18n>Changes in this update</div>
+        <ul class="server-update-overlay__commit-list">
+          <li v-for="commit in commits" :key="commit.hash" class="server-update-overlay__commit" :title="commit.subject">
+            <span class="server-update-overlay__commit-hash">{{ commit.hash }}</span>
+            <span class="server-update-overlay__commit-subject">{{ commit.subject }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -33,9 +43,10 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import LoadingBar from '@/client/components/common/LoadingBar.vue';
-import {serverUpdatePhase} from '@/client/utils/serverStatus';
+import {serverUpdateCommits, serverUpdatePhase} from '@/client/utils/serverStatus';
 
 const phase = computed(() => serverUpdatePhase.value);
+const commits = computed(() => serverUpdateCommits.value);
 
 function reload(): void {
   window.location.reload();

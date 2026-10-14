@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {activeParticipants, applyServerStatus, markServerUpdating, resetServerStatus, serverUpdatePhase} from '@/client/utils/serverStatus';
+import {activeParticipants, applyServerStatus, markServerUpdating, resetServerStatus, serverUpdateCommits, serverUpdatePhase} from '@/client/utils/serverStatus';
 
 describe('serverStatus', () => {
   beforeEach(() => resetServerStatus());
@@ -39,5 +39,18 @@ describe('serverStatus', () => {
     expect(activeParticipants.value).is.undefined;
     applyServerStatus({updating: false, startedAt: 1, activeParticipants: 3});
     expect(activeParticipants.value).eq(3);
+  });
+
+  it('keeps the commits of the update for the notice, not afterwards', () => {
+    const commits = [{hash: 'abc1234', subject: 'Change'}];
+    // A list from an earlier update is ignored while nothing happens
+    applyServerStatus({updating: false, startedAt: 1, activeParticipants: 1, updateCommits: commits});
+    expect(serverUpdateCommits.value).deep.eq([]);
+    applyServerStatus({updating: true, startedAt: 1, activeParticipants: 1, updateCommits: commits});
+    expect(serverUpdateCommits.value).deep.eq(commits);
+    // New server without list (older script): the announced list stays
+    applyServerStatus({updating: false, startedAt: 2, activeParticipants: 0});
+    expect(serverUpdatePhase.value).eq('done');
+    expect(serverUpdateCommits.value).deep.eq(commits);
   });
 });
