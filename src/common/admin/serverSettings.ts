@@ -16,6 +16,8 @@ export type ServerSettingDefinition = {
   kind: ServerSettingKind,
   label: string,
   description: string,
+  /** kind 'number': the smallest allowed value (default 0) */
+  minimum?: number,
 };
 
 const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'Access', 'Technical'];
@@ -32,9 +34,9 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'TITLE_SHORT', group: 'Appearance', kind: 'text', label: 'Short tab title',
     description: 'End of all other tab titles, e.g. "Cards List | TM". Empty: TM.'},
 
-  {key: 'MAX_GAME_DAYS', group: 'Games', kind: 'number', label: 'Delete unfinished games after (days)',
+  {key: 'MAX_GAME_DAYS', group: 'Games', kind: 'number', minimum: 1, label: 'Delete unfinished games after (days)',
     description: 'Unfinished games created more than this many days ago are deleted (checked every hour). Finished games are never deleted. Empty: never (with PostgreSQL: 10 days).'},
-  {key: 'COMPRESS_COMPLETED_GAMES_DAYS', group: 'Games', kind: 'number', label: 'Shrink finished games after (days)',
+  {key: 'COMPRESS_COMPLETED_GAMES_DAYS', group: 'Games', kind: 'number', minimum: 1, label: 'Shrink finished games after (days)',
     description: 'Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.'},
   {key: 'WAITING_FOR_TIMEOUT', group: 'Games', kind: 'number', label: 'Waiting check interval (ms)',
     description: 'How often a waiting player asks whether it is their turn again. Empty: 5000.'},

@@ -1,3 +1,5 @@
+import {serverSettingDefinition} from '../../common/admin/serverSettings';
+import {isValidSettingValue} from '../../common/admin/isValidSettingValue';
 /**
  * Adds `days` days to `date`. `days can be negative.
  * @param date a valid date
@@ -40,4 +42,23 @@ export function daysAgoToSeconds(dayString: string | undefined, defaultValue: nu
   const days = stringToNumber(dayString, defaultValue);
   const date = addDays(new Date(), -days);
   return dateToSeconds(date);
+}
+
+/**
+ * Whether the clean-up may use a number of days from the .env (deleting or shrinking games).
+ * Not set: yes, the database applies its default. Otherwise the same rule as the admin page (whole number,
+ * at least 1 day) – anything else
+ * (a typo like "ten", 0, a fraction) used to become 0 days = "everything is old enough", so it is skipped.
+ */
+export function isUsableDaysSetting(name: string, environment: Record<string, string | undefined> = process.env): boolean {
+  const value = environment[name];
+  if (value === undefined) {
+    return true;
+  }
+  const definition = serverSettingDefinition(name);
+  if (definition !== undefined && isValidSettingValue(definition, value)) {
+    return true;
+  }
+  console.warn(`${name}=${value} is not a whole number of at least 1: this clean-up is skipped`);
+  return false;
 }

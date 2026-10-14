@@ -13,6 +13,7 @@ import {CacheConfig} from './CacheConfig';
 import {Clock} from '../../common/Timer';
 import {recordDeletedGames, DeletedGameEntry} from './deletedGamesLog';
 import {GameDeletionReason} from '../../common/models/GameDeletionModel';
+import {isUsableDaysSetting} from './utils';
 
 const metrics = {
   initialize: new prometheus.Gauge({
@@ -312,7 +313,7 @@ export class GameLoader implements IGameLoader {
 
   public async maintenance() {
     const database = Database.getInstance();
-    const purgedGames = await database.purgeUnfinishedGames();
+    const purgedGames = isUsableDaysSetting('MAX_GAME_DAYS') ? await database.purgeUnfinishedGames() : [];
     this.purgedGames.push(...purgedGames);
     const entries: Array<DeletedGameEntry> = [];
     for (const gameId of purgedGames) {
@@ -320,7 +321,9 @@ export class GameLoader implements IGameLoader {
     }
     recordDeletedGames(entries);
     metrics.gamesPurged.inc(purgedGames.length);
-    await database.compressCompletedGames();
+    if (isUsableDaysSetting('COMPRESS_COMPLETED_GAMES_DAYS')) {
+      await database.compressCompletedGames();
+    }
     const prunedSessions = await database.deleteExpiredSessions();
     metrics.expiredSessionsDeleted.inc(prunedSessions);
   }

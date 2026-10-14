@@ -1704,5 +1704,6 @@
   "You drafted ${0}, passing ${1} to ${2}": "你轮抽了 ${0}，并将 ${1} 传给 ${2}",
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} 轮抽了 ${1}，并将 ${2} 传给 ${3}",
   "Better would have been:": "更好的选择：",
-  "(no suggestion)": "（无建议）"
+  "(no suggestion)": "（无建议）",
+  "Invalid number:": "无效数字："
 }

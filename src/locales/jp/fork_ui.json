@@ -1132,5 +1132,6 @@
   "You drafted ${0}, passing ${1} to ${2}": "${0}をドラフトし、${1}を${2}に渡しました",
   "${0} drafted ${1}, passing ${2} to ${3}": "${0}が${1}をドラフトし、${2}を${3}に渡しました",
   "Better would have been:": "より良かった選択:",
-  "(no suggestion)": "（提案なし）"
+  "(no suggestion)": "（提案なし）",
+  "Invalid number:": "無効な数値："
 }

@@ -1891,5 +1891,6 @@
   "You drafted ${0}, passing ${1} to ${2}": "Você escolheu ${0} no draft e passou ${1} para ${2}",
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} escolheu ${1} no draft e passou ${2} para ${3}",
   "Better would have been:": "Teria sido melhor:",
-  "(no suggestion)": "(sem sugestão)"
+  "(no suggestion)": "(sem sugestão)",
+  "Invalid number:": "Número inválido:"
 }

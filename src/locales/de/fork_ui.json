@@ -565,5 +565,6 @@
   "You drafted ${0}, passing ${1} to ${2}": "Du hast ${0} gedraftet und ${1} an ${2} weitergegeben",
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} hat ${1} gedraftet und ${2} an ${3} weitergegeben",
   "Better would have been:": "Besser wäre gewesen:",
-  "(no suggestion)": "(kein Vorschlag)"
+  "(no suggestion)": "(kein Vorschlag)",
+  "Invalid number:": "Ungültige Zahl:"
 }

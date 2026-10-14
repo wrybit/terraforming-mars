@@ -51,6 +51,11 @@ describe('serverSettingsFile', () => {
     expect(() => writeServerSettings({PATH: '/tmp'})).to.throw('unknown setting PATH');
   });
 
+  it('refuses invalid numbers', () => {
+    expect(() => writeServerSettings({MAX_GAME_DAYS: 'ten'})).to.throw('MAX_GAME_DAYS needs a whole number of at least 1');
+    expect(() => writeServerSettings({MAX_GAME_DAYS: '0'})).to.throw('at least 1');
+  });
+
   it('applies the file, but keeps the variables the process was started with', () => {
     fs.writeFileSync(file, 'TM_TEST_LAUNCH=fromFile\nTM_TEST_FILE=fromFile\n');
     process.env.TM_TEST_LAUNCH = 'fromLaunch';

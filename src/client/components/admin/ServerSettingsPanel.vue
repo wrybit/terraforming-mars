@@ -62,6 +62,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
+import {isValidSettingValue} from '@/common/admin/isValidSettingValue';
 import {paths} from '@/common/app/paths';
 import {statusCode} from '@/common/http/statusCode';
 import {logIn} from '@/client/components/admin/adminSession';
@@ -178,6 +179,12 @@ export default defineComponent({
         if (this.values[key] !== this.configured(key)) {
           update[key] = this.values[key] === '' ? null : this.values[key];
         }
+      }
+      // Same check as the server: name the fields right away instead of a technical error after saving
+      const invalid = SERVER_SETTINGS.filter((definition) => definition.key in update && !isValidSettingValue(definition, update[definition.key]));
+      if (invalid.length > 0) {
+        this.showMessage(translateText('Invalid number:') + ' ' + invalid.map((definition) => translateText(definition.label)).join(', '), true);
+        return;
       }
       this.busy = true;
       try {

@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 import {SERVER_SETTINGS, ServerSettingsModel, ServerSettingsUpdate, serverSettingDefinition} from '../../common/admin/serverSettings';
+import {isValidSettingValue} from '../../common/admin/isValidSettingValue';
 
 // The admin page reads and writes the server's .env file itself – one place for all settings. In Docker the
 // file is mounted into the container (SERVER_SETTINGS_FILE, see the update scripts); locally it is the .env in
@@ -28,7 +29,8 @@ function readContent(): string {
 
 // Literal values for dotenv: single quotes take everything as is; values containing one use backticks
 function serialize(key: string, value: string): string {
-  const singleLine = value.replace(/\r?\n/g, ' ');
+  // Every line break (also a lone \r) becomes a space: a value must never start a new line in the .env file
+  const singleLine = value.replace(/[\r\n]+/g, ' ');
   return singleLine.includes('\'') ? `${key}=\`${singleLine.replace(/`/g, '')}\`` : `${key}='${singleLine}'`;
 }
 
@@ -101,9 +103,13 @@ export function readServerSettings(): ServerSettingsModel {
 
 /** Writes the update into the settings file; unknown keys are refused. Returns the new state. */
 export function writeServerSettings(update: ServerSettingsUpdate): ServerSettingsModel {
-  for (const key of Object.keys(update)) {
-    if (serverSettingDefinition(key) === undefined) {
+  for (const [key, value] of Object.entries(update)) {
+    const definition = serverSettingDefinition(key);
+    if (definition === undefined) {
       throw new Error('unknown setting ' + key);
+    }
+    if (!isValidSettingValue(definition, value)) {
+      throw new Error(`${key} needs a whole number of at least ${definition.minimum ?? 0}`);
     }
   }
   writeValues(update);

@@ -1550,5 +1550,6 @@
   "You drafted ${0}, passing ${1} to ${2}": "Wybrałeś w drafcie ${0} i przekazałeś ${1} graczowi ${2}",
   "${0} drafted ${1}, passing ${2} to ${3}": "${0} wybrał w drafcie ${1} i przekazał ${2} graczowi ${3}",
   "Better would have been:": "Lepiej byłoby:",
-  "(no suggestion)": "(brak propozycji)"
+  "(no suggestion)": "(brak propozycji)",
+  "Invalid number:": "Nieprawidłowa liczba:"
 }
