@@ -3,6 +3,8 @@
     <RotateHint/>
     <AppBackground v-if="hasBackground" :always="screen === 'start-screen'" :show-credit="hasBackgroundCredit"/>
     <ServerUpdateOverlay/>
+    <!-- Rating of AI decisions (analysis games): outside the game view, so updates never close it -->
+    <AiDecisionDialog/>
     <!-- Optional extensions (src/extensions/): each may bring one root component -->
     <component :is="extension.component" v-for="extension in componentExtensions" :key="extension.name" :view="participant"/>
     <section>
@@ -104,6 +106,7 @@ import {initMobileLayout, mobileLayout} from '@/client/utils/mobileLayout';
 import RotateHint from '@/client/components/RotateHint.vue';
 import AppBackground from '@/client/components/AppBackground.vue';
 import ServerUpdateOverlay from '@/client/components/common/ServerUpdateOverlay.vue';
+import AiDecisionDialog from '@/client/components/logpanel/aiAnalysis/AiDecisionDialog.vue';
 import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
 import {ClientExtension} from '@/client/extensions/ClientExtension';
 import {serverUpdatePhase, startServerStatusPolling} from '@/client/utils/serverStatus';
@@ -188,6 +191,7 @@ export default defineComponent({
     RotateHint,
     AppBackground,
     ServerUpdateOverlay,
+    AiDecisionDialog,
     StartScreen,
     StartScreenFooter,
     OnlinePlayers,

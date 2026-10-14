@@ -6,6 +6,9 @@ import {Phase} from '../../common/Phase';
 import {Log} from '../../common/logs/Log';
 import {LogMessageData} from '../../common/logs/LogMessageData';
 import {LogMessageDataType} from '../../common/logs/LogMessageDataType';
+import {aiPlayerOfLine, isSharedAiLine} from '../aiFeedback/aiLogLines';
+import {AiFeedbackStore} from '../aiFeedback/AiFeedbackStore';
+import {AI_FEEDBACK_EMOJI} from '../../common/ai/AiFeedback';
 
 export class GameLogs {
   private getLogsForGeneration(messages: Array<LogMessage>, generation: number): Array<LogMessage> {
@@ -33,7 +36,8 @@ export class GameLogs {
         if (message === undefined || message === null) {
           return false;
         }
-        return message.playerId === undefined || message.playerId === playerId;
+        // Analysis game: the AI players' private lines are open to everyone – never those of humans
+        return message.playerId === undefined || message.playerId === playerId || isSharedAiLine(game, message);
       } catch (e) {
         console.error('Error checking message for player', e);
         return false;
@@ -43,9 +47,23 @@ export class GameLogs {
     // Default view keeps the payload small. An explicit generation request should
     // always return the full generation, including the current one.
     if (generation === undefined) {
-      return game.gameLog.filter(messagesForPlayer).slice(-50);
+      return game.gameLog.filter(messagesForPlayer).slice(-50).map((message) => this.forReader(game, message, playerId));
     }
-    return this.getLogsForGeneration(game.gameLog, generation).filter(messagesForPlayer);
+    return this.getLogsForGeneration(game.gameLog, generation).filter(messagesForPlayer).map((message) => this.forReader(game, message, playerId));
+  }
+
+  /**
+   * Another player's (AI) private line goes out as a copy naming the AI by colour: its player id
+   * would let the reader play the AI's seat.
+   */
+  private forReader(game: IGame, message: LogMessage, playerId: ParticipantId): LogMessage {
+    if (message.playerId === undefined || message.playerId === playerId) {
+      return message;
+    }
+    const owner = aiPlayerOfLine(game, message);
+    const copy: LogMessage = {...message, aiInsight: owner?.color};
+    delete copy.playerId;
+    return copy;
   }
 
   public getLogsForGameEnd(game: IGame): Array<string> {
@@ -53,7 +71,12 @@ export class GameLogs {
       throw new Error('Game is not over');
     }
 
-    return game.gameLog.map((message) => Log.applyData(message, (datum: LogMessageData) => {
+    // Analysis game: the ratings of a line follow it, so the evaluation reads them in place
+    const ratings = game.gameOptions.aiAnalysis === true ? AiFeedbackStore.getInstance().get(game.id) : [];
+    const ratingLines = (message: LogMessage): Array<string> => ratings
+      .filter((entry) => entry.messageId === message.id)
+      .map((entry) => `    ${AI_FEEDBACK_EMOJI[entry.rating]} ${entry.name}${entry.text === '' ? '' : ': ' + entry.text}`);
+    return game.gameLog.flatMap((message) => [Log.applyData(message, (datum: LogMessageData) => {
       if (datum.type === undefined || datum.value === undefined) {
         return '';
       }
@@ -75,6 +98,6 @@ export class GameLogs {
       default:
         return datum.value.toString();
       }
-    }));
+    }), ...ratingLines(message)]);
   }
 }

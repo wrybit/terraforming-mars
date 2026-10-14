@@ -1,12 +1,18 @@
 {
   "bg": [
+    "${0} AI",
+    "AI",
+    "AI ${0}",
     "Node.js"
   ],
   "br": [
+    "${0} AI",
     "${0} d ${1} h",
     "${0} h ${1} min",
     "${0} min",
     "&nbsp;Cheung Shing",
+    "AI",
+    "AI ${0}",
     "Driver",
     "Info",
     "Node.js",
@@ -26,7 +32,9 @@
     "Node.js"
   ],
   "de": [
+    "${0} AI",
     "&nbsp;Cheung Shing",
+    "AI ${0}",
     "Commit",
     "Dashboard",
     "Details:",
@@ -43,10 +51,13 @@
     "Version"
   ],
   "es": [
+    "${0} AI",
     "${0} d ${1} h",
     "${0} h ${1} min",
     "${0} min",
     "&nbsp;Cheung Shing",
+    "AI",
+    "AI ${0}",
     "Info",
     "Node.js",
     "Star Wars",
@@ -56,15 +67,19 @@
     "Virtual"
   ],
   "fi": [
+    "${0} AI",
     "${0} h ${1} min",
     "${0} min",
     "&nbsp;Cheung Shing",
     "1 data / 2 °C",
+    "AI",
+    "AI ${0}",
     "Info",
     "Node.js"
   ],
   "fr": [
     "${0} (Turmoil ${1})",
+    "${0} AI",
     "${0} corruption",
     "${0} h ${1} min",
     "${0} min",
@@ -72,7 +87,11 @@
     "1 corruption",
     "1 microbe / 2 °C",
     "2 microbes",
+    "AI",
+    "AI ${0}",
+    "Action",
     "Architecture",
+    "Corporations",
     "G - Colonies",
     "Gains",
     "Node.js",
@@ -93,7 +112,10 @@
     "vastitas borealis nova"
   ],
   "hu": [
+    "${0} AI",
     "&nbsp;Cheung Shing",
+    "AI",
+    "AI ${0}",
     "Node.js",
     "Online",
     "amazonis p.",
@@ -103,10 +125,13 @@
   ],
   "it": [
     "${0} (Turmoil ${1})",
+    "${0} AI",
     "${0} h ${1} min",
     "${0} min",
     "&nbsp;Cheung Shing",
     "(max 3)",
+    "AI",
+    "AI ${0}",
     "Driver",
     "Escape Velocity",
     "Info",
@@ -146,10 +171,13 @@
     "Node.js"
   ],
   "nb": [
+    "${0} AI",
     "${0} min",
     "&nbsp;Cheung Shing",
     "1 data / 2 °C",
     "2x bonus",
+    "AI",
+    "AI ${0}",
     "Bonus for ${0}",
     "Bonus for ${0}: ${1}",
     "Disk",
@@ -188,6 +216,7 @@
     "Node.js",
     "Online",
     "Prelude 2",
+    "Preludes",
     "Processor",
     "Server",
     "Star Wars",
@@ -203,8 +232,11 @@
     "vastitas borealis nova"
   ],
   "pl": [
+    "${0} AI",
     "${0} min",
     "&nbsp;Cheung Shing",
+    "AI",
+    "AI ${0}",
     "Info",
     "Model",
     "Node.js",
@@ -216,11 +248,17 @@
     "vastitas borealis nova"
   ],
   "ru": [
+    "${0} AI",
     "&nbsp;Cheung Shing",
+    "AI",
+    "AI ${0}",
     "Node.js",
     "PolderTECH"
   ],
   "ua": [
+    "${0} AI",
+    "AI",
+    "AI ${0}",
     "Node.js",
     "PolderTECH"
   ]

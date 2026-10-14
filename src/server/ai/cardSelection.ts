@@ -85,10 +85,15 @@ function payableRoom(player: IPlayer): number {
 const round = (value: number) => Math.round(value * 10) / 10;
 
 /** Trace entry of a card with its now/later values. */
+// Groups of the start selection, by the label prefix the decision log has always used
+const INITIAL_GROUPS: Record<string, TracedOption['group']> = {'Konzern: ': 'corporation', 'Präludium: ': 'prelude', 'Karte: ': 'project'};
+
 function cardOption(prefix: string, card: ICard, valueOf: ValueFunction, timingOf: (name: CardName) => CardTiming | undefined, chosen: boolean, note?: string): TracedOption {
   const timing = timingOf(card.name);
   return {
     label: `${prefix}${card.name}`,
+    card: card.name,
+    group: INITIAL_GROUPS[prefix],
     value: round(valueOf(card.name)),
     now: timing === undefined ? undefined : round(timing.now),
     later: timing === undefined || !Number.isFinite(timing.later) ? undefined : round(timing.later),

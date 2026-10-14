@@ -115,6 +115,7 @@ const configValues = computed((): Array<SetupValue> => {
   const switches: Array<[boolean, string]> = [
     [options.fastModeOption, 'fast mode'],
     [options.showTimers, 'timer'],
+    [options.aiAnalysis === true, 'Analysis game'],
     [options.showOtherPlayersVP, 'real-time vp'],
     [options.undoOption, 'undo'],
     [options.twoCorpsVariant, 'Merger'],

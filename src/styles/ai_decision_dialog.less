@@ -1,0 +1,171 @@
+// Rating of an AI decision (AiDecisionDialog.vue in a framed SidebarModal): the row, the options
+// the AI weighed with their values, the others' ratings and the own rating.
+@import (reference) "./dialog_frame.less";
+
+@ai-dialog-chosen: #b3b2ff;
+@ai-dialog-chosen-surface: rgba(126, 124, 255, 0.14);
+// Law of proximity: inside a list < heading to list < between sections (dialog-frame-body gap)
+@ai-dialog-gap-row: 2px;
+@ai-dialog-gap-heading: 8px;
+@ai-dialog-gap-group: 14px;
+
+.ai-decision-dialog__section {
+  display: flex;
+  flex-direction: column;
+  gap: @ai-dialog-gap-heading;
+}
+
+.ai-decision-dialog__heading {
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: @dialog-muted;
+}
+
+.ai-decision-dialog__lines {
+  margin: 0;
+  padding: 8px 10px;
+  list-style: none;
+  border-radius: @dialog-tile-radius;
+  background: @dialog-surface;
+  font-size: 15px;
+  line-height: 24px;
+
+  // Time icon in front of the line: noise here, as in the log
+  > li > span[title]:first-child {
+    display: none;
+  }
+}
+
+.ai-decision-dialog__group + .ai-decision-dialog__group {
+  margin-top: @ai-dialog-gap-group - @ai-dialog-gap-heading;
+}
+
+.ai-decision-dialog__group-title {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: normal;
+  color: @dialog-muted;
+}
+
+.ai-decision-dialog__options {
+  display: flex;
+  flex-direction: column;
+  gap: @ai-dialog-gap-row;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-decision-dialog__option {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 6px;
+  background: @dialog-surface;
+  font-size: 15px;
+}
+
+.ai-decision-dialog__option--chosen {
+  background: @ai-dialog-chosen-surface;
+  color: #fff;
+  font-weight: bold;
+}
+
+.ai-decision-dialog__check {
+  color: @ai-dialog-chosen;
+  text-align: center;
+}
+
+.ai-decision-dialog__label {
+  overflow-wrap: anywhere;
+}
+
+.ai-decision-dialog__value {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.ai-decision-dialog__hint {
+  margin: 0;
+  font-size: 13px;
+  color: @dialog-muted;
+}
+
+.ai-decision-dialog__ratings {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-decision-dialog__rating {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.ai-decision-dialog__rating-text {
+  color: #c4c6d0;
+  overflow-wrap: anywhere;
+}
+
+.ai-decision-dialog__choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: @dialog-gap-tile;
+}
+
+.ai-decision-dialog__choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 6px;
+  border: 1px solid @dialog-surface-border;
+  border-radius: @dialog-tile-radius;
+  background: @dialog-surface;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.ai-decision-dialog__choice-emoji {
+  font-size: 26px;
+  line-height: 32px;
+}
+
+.ai-decision-dialog__choice--selected {
+  border-color: @ai-dialog-chosen;
+  background: @ai-dialog-chosen-surface;
+}
+
+.ai-decision-dialog__comment {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 72px;
+  padding: 8px 10px;
+  border: 1px solid @dialog-surface-border;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #eee;
+  font: inherit;
+  font-size: 15px;
+  resize: vertical;
+}
+
+.ai-decision-dialog__error {
+  margin: 0;
+  color: #ff8a80;
+}

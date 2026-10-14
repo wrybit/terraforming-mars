@@ -3,11 +3,13 @@ import {PlayerInput} from '../PlayerInput';
 import {isSimulating} from './simulationSandbox';
 import {PlayerInputModel} from '../../common/models/PlayerInputModel';
 import {InputResponse} from '../../common/inputs/InputResponse';
+import {AiDecisionOption, AiDecisionSummary, MAX_SUMMARY_OPTIONS} from '../../common/ai/AiDecisionSummary';
 
 // Records what the AI could choose, how it valued every option and what it took. The game log
 // only says what happened; to judge a decision one needs the alternatives and their values.
 // Human inputs are recorded the same way (humanDecisionTrace.ts), so both can be used for training.
-// Only active while a recorder is installed (AI test batches, server with AI_DECISION_LOG_DIR).
+// Only active while a recorder is installed (AI test batches, server with AI_DECISION_LOG_DIR)
+// or in analysis games, whose log shows every AI decision with its options.
 
 export type DecisionKind = 'initial' | 'draft' | 'research' | 'action' | 'space' | 'human' | 'other';
 
@@ -20,6 +22,10 @@ export type TracedOption = {
   later?: number,
   chosen?: boolean,
   note?: string,
+  /** Set when the option is a single card (analysis log shows its translated name). */
+  card?: string,
+  /** Initial selection: which part of the start the card belongs to. */
+  group?: 'corporation' | 'prelude' | 'project',
 };
 
 export type PlayerSnapshot = {
@@ -35,6 +41,8 @@ export type PlayerSnapshot = {
 };
 
 export type DecisionRecord = {
+  /** Same id as the log lines and ratings of an analysis game refer to. */
+  decisionId?: string,
   /** Game the decision belongs to, so records of parallel games can be told apart. */
   gameId: string,
   generation: number,
@@ -65,6 +73,40 @@ type OpenDecision = {kind?: DecisionKind, options: Array<TracedOption>, details?
 
 let recorder: ((record: DecisionRecord) => void) | undefined;
 let open: OpenDecision | undefined;
+// Summary of the last decision of an analysis game, picked up by the AI driver (takeAiDecisionSummary)
+let lastSummary: AiDecisionSummary | undefined;
+let decisionCounter = 0;
+
+function newDecisionId(): string {
+  decisionCounter = (decisionCounter + 1) % 1_000_000;
+  return 'd' + Date.now().toString(36) + decisionCounter.toString(36);
+}
+
+/** The summary of the decision just made in an analysis game; cleared by reading. */
+export function takeAiDecisionSummary(): AiDecisionSummary | undefined {
+  const summary = lastSummary;
+  lastSummary = undefined;
+  return summary;
+}
+
+function summaryOption(option: TracedOption): AiDecisionOption {
+  return {label: option.label, card: option.card, group: option.group, value: option.value, chosen: option.chosen};
+}
+
+/**
+ * What the analysis log shows: the start selection with all its cards (grouped by the client),
+ * otherwise the best options plus every chosen one. The decision log file keeps all of them.
+ */
+export function summaryOf(decisionId: string, kind: DecisionKind, title: string, options: ReadonlyArray<TracedOption>): AiDecisionSummary {
+  let shown: Array<TracedOption>;
+  if (kind === 'initial') {
+    shown = options.filter((option) => option.card !== undefined);
+  } else {
+    const ranked = [...options].sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity));
+    shown = ranked.filter((option, index) => index < MAX_SUMMARY_OPTIONS || option.chosen === true);
+  }
+  return {id: decisionId, kind, title, options: shown.map(summaryOption)};
+}
 
 export function setDecisionRecorder(next: ((record: DecisionRecord) => void) | undefined): void {
   recorder = next;
@@ -126,7 +168,8 @@ export function globalsOf(player: IPlayer): DecisionRecord['globals'] {
 
 /** Wraps one top-level AI decision; `describe` turns the answer into a readable label. */
 export function recordDecision<T>(input: PlayerInput, player: IPlayer, decide: () => T, describe: (response: T) => string): T {
-  if (recorder === undefined || open !== undefined || isSimulating()) {
+  const analysisGame = player.game.gameOptions.aiAnalysis === true;
+  if ((recorder === undefined && !analysisGame) || open !== undefined || isSimulating()) {
     return decide();
   }
   const start = performance.now();
@@ -141,14 +184,21 @@ export function recordDecision<T>(input: PlayerInput, player: IPlayer, decide: (
   } finally {
     open = undefined;
   }
-  recorder({
+  const decisionId = newDecisionId();
+  const kind = decision.kind ?? 'other';
+  const title = titleText(input);
+  if (analysisGame) {
+    lastSummary = summaryOf(decisionId, kind, title, decision.options);
+  }
+  recorder?.({
+    decisionId,
     gameId: game.id,
     generation: game.generation,
     phase: game.phase,
     player: player.name,
     color: player.color,
-    kind: decision.kind ?? 'other',
-    title: titleText(input),
+    kind,
+    title,
     state,
     globals: globalsOf(player),
     options: decision.options,

@@ -137,6 +137,7 @@ const TEMPLATE_EXPECTED: CreateGameModel = {
   politicalAgendasExtension: 'Standard',
   undoOption: false,
   showTimers: true,
+  aiAnalysis: false,
   fastModeOption: false,
   removeNegativeGlobalEventsOption: false,
   includeFanMA: false,

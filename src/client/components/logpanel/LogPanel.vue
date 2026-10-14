@@ -34,9 +34,17 @@
           <!-- One row per action (card, action, standard project ...) with its effects; unrecognised messages stay text lines -->
           <template v-for="(row, rowIndex) in visibleRows(section)" :key="rowIndex">
             <div v-if="row.type === 'phase'" class="log-phase-line" aria-hidden="true"></div>
-            <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel" @click="messageClicked(row.message)" @mouseenter="messageHovered(row.message, $event)" @spaceClicked="$emit('spaceClicked', $event)"/>
-            <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel" @click="messageClicked(row.action.lead, row.action)" @mouseenter="messageHovered(row.action.lead, $event, row.action)" @spaceClicked="$emit('spaceClicked', $event)"/>
+            <!-- Analysis game: AI rows are rated with a double-click (touch: double-tap) or the I key while hovered -->
+            <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel"
+              :class="{'log-row--ai-rateable': isRateable(section, row)}"
+              @click="messageClicked(row.message, undefined, section, row)" @dblclick="rateRow(section, row)"
+              @mouseenter="messageHovered(row.message, $event); rowHovered(section, row)" @mouseleave="rowLeft(section, row)" @spaceClicked="$emit('spaceClicked', $event)"/>
+            <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"
+              :class="{'log-row--ai-rateable': isRateable(section, row)}"
+              @click="messageClicked(row.action.lead, row.action, section, row)" @dblclick="rateRow(section, row)"
+              @mouseenter="messageHovered(row.action.lead, $event, row.action); rowHovered(section, row)" @mouseleave="rowLeft(section, row)" @spaceClicked="$emit('spaceClicked', $event)"/>
             <LogActionRow v-else :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"/>
+            <LogAiRatings v-if="analysisGame && row.type !== 'phase'" :entries="rowRatings(section, row)"/>
           </template>
         </section>
       </div>
@@ -93,6 +101,14 @@ import {milestonesAwardsLabel} from '@/client/components/milestoneAwardTable/mil
 import {cachedLogStream, fetchLogStream, GenerationLog} from '@/client/utils/fetchLogs';
 import {milestonesAwardsFocusState} from '@/client/components/logpanel/milestonesAwardsFocus';
 import {latestDrawnCards} from '@/client/components/logpanel/drawnCards';
+import LogAiRatings from '@/client/components/logpanel/aiAnalysis/LogAiRatings.vue';
+import {aiColorsOf, AiLogTarget, aiTargetOfRow, decisionSummaries} from '@/client/components/logpanel/aiAnalysis/aiLogTarget';
+import {aiFeedbackState, loadAiFeedback, openAiDecision, ratingsOf} from '@/client/components/logpanel/aiAnalysis/aiFeedbackState';
+import {AiFeedbackEntry} from '@/common/ai/AiFeedback';
+import {isTypingTarget} from '@/client/utils/typingTarget';
+
+// Touch: a second tap on the same AI row within this time opens the rating instead of the cards
+const DOUBLE_TAP_MS = 350;
 
 const BOTTOM_SCROLL_THRESHOLD = 24; // Roughly one line of log text.
 
@@ -140,6 +156,9 @@ type Internals = {
   pointerOverLog: boolean,
   // New entries arrived while the mouse was over the log: catch up once it leaves
   newEntriesWhileHovered: boolean,
+  // Analysis game: AI row under the mouse (I key rates it) and the last tap (double-tap on touch)
+  hoveredAiTarget: AiLogTarget | undefined,
+  lastTap: {messageId: string, time: number, timer: number} | undefined,
 };
 
 type LogPanelModel = {
@@ -218,7 +237,7 @@ export default defineComponent({
       viewBeforeDrawnCards: undefined,
       zoomShowsDrawnCards: false,
       logFilter: savedFilter !== undefined && savedFilter.id === this.viewModel.id ? savedFilter.filter : NO_FILTER,
-      internals: markRaw({programmaticScrollTimer: undefined, scrollFrame: undefined, scrollFramePending: false, resizeObserver: undefined, lastHeight: 0, pointerOverLog: false, newEntriesWhileHovered: false}),
+      internals: markRaw({programmaticScrollTimer: undefined, scrollFrame: undefined, scrollFramePending: false, resizeObserver: undefined, lastHeight: 0, pointerOverLog: false, newEntriesWhileHovered: false, hoveredAiTarget: undefined, lastTap: undefined}),
     };
   },
   directives: {
@@ -233,6 +252,7 @@ export default defineComponent({
     LogGenerationList,
     LogCardsZoom,
     MilestoneAwardTable,
+    LogAiRatings,
   },
   // drawnCards / drawnCardsClosed: newly drawn cards open by themselves and closed again (mobile switches to the log and back)
   emits: ['spaceClicked', 'drawnCards', 'drawnCardsClosed'],
@@ -244,7 +264,31 @@ export default defineComponent({
     canHover(): boolean {
       return window.matchMedia('(hover: hover)').matches;
     },
-    messageClicked(message: LogMessage, action?: LogAction) {
+    messageClicked(message: LogMessage, action?: LogAction, section?: GenerationLog, row?: LogRow) {
+      // Touch in an analysis game: an AI row waits a moment for a second tap (rating) before opening its cards
+      const target = section === undefined || row === undefined || this.canHover() ? undefined : this.aiTargetOf(section, row);
+      if (target !== undefined) {
+        const lastTap = this.internals.lastTap;
+        const now = Date.now();
+        if (lastTap !== undefined && lastTap.messageId === target.messageId && now - lastTap.time < DOUBLE_TAP_MS) {
+          window.clearTimeout(lastTap.timer);
+          this.internals.lastTap = undefined;
+          this.openRating(target);
+          return;
+        }
+        if (lastTap !== undefined) {
+          window.clearTimeout(lastTap.timer);
+        }
+        const timer = window.setTimeout(() => {
+          this.internals.lastTap = undefined;
+          this.showMessage(message, action);
+        }, DOUBLE_TAP_MS);
+        this.internals.lastTap = {messageId: target.messageId, time: now, timer};
+        return;
+      }
+      this.showMessage(message, action);
+    },
+    showMessage(message: LogMessage, action?: LogAction) {
       if (this.zoomCarousel) {
         // Cards of the row as a carousel, with what the action changed below them
         if (logMessageItemCount(message) > 0 || hasActionSummary(action)) {
@@ -329,6 +373,70 @@ export default defineComponent({
         return [translateText(row.message.message), ...data].join(' ');
       }
       return '';
+    },
+    // ---------- Analysis game: rating AI rows ----------
+    aiTargetOf(section: GenerationLog, row: LogRow): AiLogTarget | undefined {
+      if (!this.analysisGame) {
+        return undefined;
+      }
+      return aiTargetOfRow(row, section.messages, this.aiColors);
+    },
+    isRateable(section: GenerationLog, row: LogRow): boolean {
+      return this.analysisGame && this.aiTargetOf(section, row) !== undefined;
+    },
+    rowRatings(section: GenerationLog, row: LogRow): Array<AiFeedbackEntry> {
+      // Read here so new ratings re-render the rows
+      if (aiFeedbackState.ratings.length === 0) {
+        return [];
+      }
+      const target = this.aiTargetOf(section, row);
+      return target === undefined ? [] : ratingsOf(target.messageId);
+    },
+    rowHovered(section: GenerationLog, row: LogRow): void {
+      this.internals.hoveredAiTarget = this.aiTargetOf(section, row);
+    },
+    rowLeft(section: GenerationLog, row: LogRow): void {
+      if (this.internals.hoveredAiTarget?.messageId === this.aiTargetOf(section, row)?.messageId) {
+        this.internals.hoveredAiTarget = undefined;
+      }
+    },
+    rateRow(section: GenerationLog, row: LogRow): void {
+      const target = this.aiTargetOf(section, row);
+      if (target !== undefined) {
+        // A double-click also selects a word of the row: not wanted here
+        window.getSelection()?.removeAllRanges();
+        this.openRating(target);
+      }
+    },
+    openRating(target: AiLogTarget): void {
+      this.typedRefs.messageInspector?.hidePreview();
+      const summaries = decisionSummaries(this.sections.flatMap((section) => section.messages));
+      openAiDecision(target, target.decisionId === undefined ? undefined : summaries.get(target.decisionId), this.viewModel);
+    },
+    // I key: the AI row under the mouse, otherwise the newest AI row of the log
+    onAnalysisKey(event: KeyboardEvent): void {
+      if (event.code !== 'KeyI' || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || isTypingTarget(event.target)) {
+        return;
+      }
+      if (aiFeedbackState.dialog !== undefined) {
+        return;
+      }
+      const target = this.internals.hoveredAiTarget ?? this.newestAiTarget();
+      if (target !== undefined) {
+        event.preventDefault();
+        this.openRating(target);
+      }
+    },
+    newestAiTarget(): AiLogTarget | undefined {
+      for (const section of [...this.sections].reverse()) {
+        for (const row of [...this.visibleRows(section)].reverse()) {
+          const target = this.aiTargetOf(section, row);
+          if (target !== undefined) {
+            return target;
+          }
+        }
+      }
+      return undefined;
     },
     // All message indexes of a row, space separated: data-log-row~="gen-index" finds any of them
     rowKey(section: GenerationLog, row: LogRow): string {
@@ -561,6 +669,9 @@ export default defineComponent({
     },
     // keepPosition: update in place (new view model) – a reader in the history stays where they are
     loadStream(keepPosition = false): void {
+      if (this.analysisGame) {
+        void loadAiFeedback(this.viewModel.id);
+      }
       fetchLogStream(this.viewModel.id, this.generation).then((stream) => {
         if (stream === undefined) {
           return;
@@ -627,6 +738,13 @@ export default defineComponent({
     milestonesAwardsFocused(): boolean {
       return milestonesAwardsFocusState.requests > 0;
     },
+    // Analysis game (create option): AI rows show the AI's cards and decisions and can be rated
+    analysisGame(): boolean {
+      return this.viewModel.game.gameOptions.aiAnalysis === true;
+    },
+    aiColors(): ReadonlySet<Color> {
+      return aiColorsOf(this.viewModel.players);
+    },
     lastSoloGeneration(): number | undefined {
       return this.viewModel.players.length === 1 ? this.viewModel.game.lastSoloGeneration : undefined;
     },
@@ -687,6 +805,9 @@ export default defineComponent({
       this.internals.resizeObserver.observe(this.typedRefs.root);
     }
     this.loadStream();
+    if (this.analysisGame) {
+      window.addEventListener('keydown', this.onAnalysisKey);
+    }
   },
   beforeUnmount() {
     const container = this.scrollContainer();
@@ -699,6 +820,10 @@ export default defineComponent({
       scrollTop: this.isVisible() ? scrollTopOf(container) : viewState?.scrollTop ?? 0,
     };
     window.removeEventListener('scroll', this.onWindowScroll);
+    window.removeEventListener('keydown', this.onAnalysisKey);
+    if (this.internals.lastTap !== undefined) {
+      window.clearTimeout(this.internals.lastTap.timer);
+    }
     window.clearTimeout(this.internals.programmaticScrollTimer);
     if (this.internals.scrollFramePending && this.internals.scrollFrame !== undefined) {
       window.cancelAnimationFrame(this.internals.scrollFrame);

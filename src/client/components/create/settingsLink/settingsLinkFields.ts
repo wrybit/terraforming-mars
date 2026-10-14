@@ -37,6 +37,7 @@ export const BOOLEAN_FIELDS: ReadonlyArray<BooleanModelField> = [
   'altVenusBoard',
   'twoCorpsVariant',
   'escapeVelocityMode',
+  'aiAnalysis',
 ];
 
 export const NUMBER_FIELDS: ReadonlyArray<NumberModelField> = [

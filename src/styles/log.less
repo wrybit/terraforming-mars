@@ -1045,3 +1045,45 @@ each(@players, {
     background: @@c;
   }
 });
+
+// ---------- Analysis game (AI rows can be rated) ----------
+// Private line of an AI player, open to everyone in an analysis game: robot in front, text a bit quieter
+.log-line--ai-insight {
+  color: #c9c9d6;
+}
+
+.log-ai-insight {
+  display: inline-flex;
+  vertical-align: -2px;
+  margin-right: 4px;
+  color: #b3b2ff;
+}
+
+// Ratings right below their row: closer to it than the next row is (law of proximity)
+.log-ai-ratings {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: -1px 0 4px;
+  padding: 0 4px 0 28px;
+  list-style: none;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.log-ai-rating {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.log-ai-rating-emoji {
+  flex: none;
+}
+
+.log-ai-rating-text {
+  min-width: 0;
+  color: #b8bac4;
+  overflow-wrap: anywhere;
+}

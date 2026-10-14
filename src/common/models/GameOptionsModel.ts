@@ -25,6 +25,8 @@ export type GameOptionsModel = {
   removeNegativeGlobalEvents: boolean,
   showOtherPlayersVP: boolean,
   showTimers: boolean,
+  // Analysis game: the log also shows the AI players' cards and decisions, which humans can rate
+  aiAnalysis?: boolean,
   shuffleMapOption: boolean,
   solarPhaseOption: boolean,
   soloTR: boolean,

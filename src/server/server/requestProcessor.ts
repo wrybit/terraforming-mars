@@ -11,6 +11,7 @@ import {SERVER_EXTENSIONS} from '../../genfiles/extensionsServer';
 import {ApiGame} from '../routes/ApiGame';
 import {ApiGameDeletion} from '../routes/ApiGameDeletion';
 import {ApiGameHistory} from '../routes/ApiGameHistory';
+import {ApiAiFeedback} from '../routes/ApiAiFeedback';
 import {ApiGameLogs} from '../routes/ApiGameLogs';
 import {ApiAdminDeleteGame} from '../routes/ApiAdminDeleteGame';
 import {ApiAdminGames} from '../routes/ApiAdminGames';
@@ -127,6 +128,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_GAME_DELETION, ApiGameDeletion.INSTANCE],
     [paths.API_GAME_HISTORY, ApiGameHistory.INSTANCE],
     [paths.API_GAME_LOGS, ApiGameLogs.INSTANCE],
+    [paths.API_AI_FEEDBACK, ApiAiFeedback.INSTANCE],
     [paths.API_GAMES, ApiGames.INSTANCE],
     [paths.API_HEAP_SNAPSHOT, ApiHeapSnapshot.INSTANCE],
     [paths.API_IPS, ApiIPs.INSTANCE],

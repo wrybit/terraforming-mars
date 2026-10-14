@@ -9,6 +9,8 @@ import {InputError} from './InputError';
 import {OptionsInput} from './OptionsPlayerInput';
 import {InputResponse, isSelectInitialCardsResponse} from '../../common/inputs/InputResponse';
 import {PlayerInput} from '../PlayerInput';
+import {ICard} from '../cards/ICard';
+import {LogHelper} from '../LogHelper';
 
 type Inputs = {
   corp: PlayerInput | undefined,
@@ -103,6 +105,8 @@ export class SelectInitialCards extends OptionsInput<undefined> {
       throw new InputError('The selected cards cost more M€ than the corporation provides at the start. Select fewer cards.');
     }
 
+    this.logSelection(corporation);
+
     for (const card of player.dealtProjectCards) {
       if (player.cardsInHand.includes(card) === false) {
         game.projectDeck.discard(card);
@@ -125,6 +129,31 @@ export class SelectInitialCards extends OptionsInput<undefined> {
       if (player.ceoCardsInHand.has(card) === false) {
         game.ceoDeck.discard(card);
       }
+    }
+  }
+
+  /** Private lines of the start: kept start cards, bought and discarded cards. */
+  private logSelection(corporation: ICorporationCard): void {
+    const player = this.player;
+    const kept: Array<ICard> = [corporation, ...player.preludeCardsInHand, ...player.ceoCardsInHand];
+    const discardedStart: Array<ICard> = [
+      ...player.dealtCorporationCards.filter((card) => card.name !== corporation.name),
+      ...player.dealtPreludeCards.filter((card) => !player.preludeCardsInHand.includes(card)),
+      ...player.dealtCeoCards.filter((card) => !player.ceoCardsInHand.has(card)),
+    ];
+    const bought = player.cardsInHand;
+    const discardedProjects = player.dealtProjectCards.filter((card) => !bought.includes(card));
+    LogHelper.logPrivately(player, 'You kept ${0}', '${0} kept ${1}', (b) => b.cards(kept));
+    if (bought.length === 0) {
+      LogHelper.logPrivately(player, 'You bought no cards', '${0} bought no cards', () => {});
+    } else {
+      LogHelper.logPrivately(player, 'You bought ${0}', '${0} bought ${1}', (b) => b.cards(bought));
+    }
+    if (discardedStart.length > 0) {
+      LogHelper.logPrivately(player, 'You discarded ${0}', '${0} discarded ${1}', (b) => b.cards(discardedStart));
+    }
+    if (discardedProjects.length > 0) {
+      LogHelper.logPrivately(player, 'You discarded ${0}', '${0} discarded ${1}', (b) => b.cards(discardedProjects));
     }
   }
 

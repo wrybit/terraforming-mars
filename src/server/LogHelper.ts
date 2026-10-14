@@ -7,6 +7,7 @@ import {IColony} from './colonies/IColony';
 import {CardResource} from '../common/CardResource';
 import {From} from './logs/From';
 import {SpaceType} from '@/common/boards/SpaceType';
+import {LogMessageBuilder} from './logs/LogMessageBuilder';
 
 function resourceString(resource: CardResource | undefined, qty: number): string {
   const result = resource ?? 'resource';
@@ -18,6 +19,22 @@ function resourceString(resource: CardResource | undefined, qty: number): string
 }
 
 export class LogHelper {
+  /**
+   * Private line about the player's own cards, e.g. "You bought …". AI players get it with their
+   * name instead ("Yellow bought …"): in an analysis game the other players read their lines.
+   * `ownMessage` has one placeholder less than `namedMessage` (no player in front).
+   */
+  static logPrivately(player: IPlayer, ownMessage: string, namedMessage: string, f: (builder: LogMessageBuilder) => void): void {
+    if (player.aiLevel !== undefined) {
+      player.game.log(namedMessage, (b) => {
+        b.player(player);
+        f(b);
+      }, {reservedFor: player});
+    } else {
+      player.game.log(ownMessage, f, {reservedFor: player});
+    }
+  }
+
   static logAddResource(player: IPlayer, card: ICard, qty: number = 1, from?: From): void {
     if (from === undefined) {
       player.game.log('${0} added ${1} ${2} to ${3}', (b) =>
@@ -74,7 +91,8 @@ export class LogHelper {
     const options = privateMessage ? {reservedFor: player} : {};
 
     player.game.log(message, (b) => {
-      if (privateMessage === false) {
+      // AI players are named: in an analysis game the other players read their private lines
+      if (privateMessage === false || player.aiLevel !== undefined) {
         b.player(player);
       } else {
         b.string('You');

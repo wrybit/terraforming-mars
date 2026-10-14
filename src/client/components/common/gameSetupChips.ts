@@ -86,6 +86,7 @@ export function optionChips(options: GameSetupOptions, isActive: (expansion: Exp
     [!multiplayer && options.soloTR, translateText('63 TR solo mode')],
     [options.undoOption, translateText('Allow undo')],
     [options.showTimers, translateText('Show timers')],
+    [options.aiAnalysis, translateText('Analysis game')],
     [options.showOtherPlayersVP, translateText('Show real-time VP')],
     [options.fastModeOption, translateText('Fast mode')],
     [options.escapeVelocity, translateText('Escape Velocity'), 'expansion-icon-escape-velocity'],

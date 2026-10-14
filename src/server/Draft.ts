@@ -6,6 +6,7 @@ import {IProjectCard} from './cards/IProjectCard';
 import {LunaProjectOffice} from './cards/moon/LunaProjectOffice';
 import {SelectCard} from './inputs/SelectCard';
 import {message} from './logs/MessageBuilder';
+import {LogHelper} from './LogHelper';
 import {IPreludeCard} from './cards/prelude/IPreludeCard';
 import {ICeoCard} from './cards/ceos/ICeoCard';
 
@@ -171,6 +172,18 @@ export abstract class Draft {
     );
   }
 
+  /** Private line "You drafted X, passing Y to Z" (as on the community server). */
+  private logPick(player: IPlayer): void {
+    const picked = player.draftedCards.slice(-this.cardsToKeep(player));
+    const passed = player.draftHand;
+    if (passed.length > 0) {
+      LogHelper.logPrivately(player, 'You drafted ${0}, passing ${1} to ${2}', '${0} drafted ${1}, passing ${2} to ${3}',
+        (b) => b.cards(picked).cards(passed).player(this.givingTo(player)));
+    } else {
+      LogHelper.logPrivately(player, 'You drafted ${0}', '${0} drafted ${1}', (b) => b.cards(picked));
+    }
+  }
+
   /** Called when a player has chosen a card to draft. */
   private onCardDrafted(player: IPlayer): void {
     player.needsToDraft = false;
@@ -180,6 +193,11 @@ export abstract class Draft {
       this.askPlayerToDraft(player, true);
       this.game.save();
       return;
+    }
+
+    // Picks are final now: each player reads what they took and what they passed on
+    for (const p of this.game.players) {
+      this.logPick(p);
     }
 
     // Clear all pending Repick waitingFor.

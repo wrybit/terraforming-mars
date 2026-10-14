@@ -15,6 +15,8 @@ export type GameOptions = {
   // Configuration
   undoOption: boolean;
   showTimers: boolean;
+  // Analysis game: private log lines of AI players are visible to everybody and can be rated
+  aiAnalysis: boolean;
   fastModeOption: boolean;
   showOtherPlayersVP: boolean;
 
@@ -132,6 +134,7 @@ export const DEFAULT_GAME_OPTIONS: GameOptions = {
   requiresVenusTrackCompletion: false,
   showOtherPlayersVP: false,
   showTimers: true,
+  aiAnalysis: false,
   shuffleMapOption: false,
   solarPhaseOption: false,
   soloTR: false,

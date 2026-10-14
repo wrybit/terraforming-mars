@@ -50,6 +50,8 @@ export type NewGameConfig = {
   // Configuration
   undoOption: boolean;
   showTimers: boolean;
+  // Analysis game (only with AI players): the log shows the AI's cards and decisions for everyone
+  aiAnalysis?: boolean;
   fastModeOption: boolean;
   showOtherPlayersVP: boolean;
 

@@ -293,7 +293,7 @@
               <div class="create-game-seat-rows">
                 <span class="create-game-seat-label"><SeatIcon kind="human"/><span v-i18n>Player</span></span>
                 <SegmentedControl v-model="humanPlayersCount" :options="humanCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
-                <span class="create-game-seat-label"><SeatIcon kind="ai"/><span v-i18n>AI</span></span>
+                <span class="create-game-seat-label"><SeatIcon kind="ai"/><!-- "AI" in every language (no translation) --><span>AI</span></span>
                 <!-- Blocked: instead of the count a warning that names the expansions/options the AI cannot handle -->
                 <div v-if="aiBlockers.length > 0" class="create-game-validation-box create-game-validation-box--warning create-game-seat-warning" role="status">
                   <h3 class="create-game-validation-title"><span aria-hidden="true">&#9888;&#xFE0E;</span><span v-i18n>AI not yet compatible with:</span></h3>
@@ -308,6 +308,11 @@
               </div>
               <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
               <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
+              <!-- Analysis game: only with AI players; the log then shows the AI's cards and decisions, which humans can rate -->
+              <template v-if="aiPlayersCount > 0 && aiBlockers.length === 0">
+                <OptionRow class="create-game-players-first" label="Analysis game"><SwitchInput v-model="aiAnalysis"/></OptionRow>
+                <div v-if="aiAnalysis" class="create-game-note create-game-analysis-note" v-i18n>The log shows the AI's cards and decisions. Double-click (touch: double-tap) an AI entry or press I to rate it.</div>
+              </template>
             </div>
             <!-- Humans always first, then AI players; seats slide in and out when the counts change -->
             <TransitionGroup tag="div" name="create-game-seat" class="create-game-player-list" :css="false" @enter="collapseEnter" @leave="collapseLeave">
@@ -681,6 +686,7 @@ export default defineComponent({
         politicalAgendasExtension: this.politicalAgendasExtension,
         undoOption: this.undoOption,
         showTimers: this.showTimers,
+        aiAnalysis: this.aiAnalysis && this.aiPlayersCount > 0,
         fastModeOption: this.fastModeOption,
         removeNegativeGlobalEventsOption: this.removeNegativeGlobalEventsOption,
         includeFanMA: this.includeFanMA,

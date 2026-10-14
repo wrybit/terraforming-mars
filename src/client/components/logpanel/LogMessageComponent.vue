@@ -1,9 +1,11 @@
 <template>
    <!-- log-line--<colour>: text and hover in the colour of the player the line is about (log.less) -->
    <li v-if="message !== undefined && message.data !== undefined && message.message !== undefined"
-     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--expandable': expandable}]"
+     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--expandable': expandable, 'log-line--ai-insight': message.aiInsight !== undefined}]"
      @click.prevent="$emit('click')">
     <span v-if="(message.type ?? LogMessageType.DEFAULT) === LogMessageType.DEFAULT" :title="when" v-html="icon"></span>
+    <!-- Analysis game: a private line of an AI player, normally hidden from the others (after the time icon, which the log hides) -->
+    <span v-if="message.aiInsight !== undefined" class="log-ai-insight" :title="$t('Visible because this is an analysis game')"><SeatIcon kind="ai" :size="14"/></span>
     <template v-for="(data, idx) of entries" :key="idx">
       <span class="log-plain-text" v-if="typeof(data) === 'string'">{{ data }}</span>
       <span v-else>
@@ -63,10 +65,14 @@ import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {range} from '@/common/utils/utils';
 import {needsModalPreview} from '@/client/components/logpanel/logMessageContent';
 import {cardTypeToCss, partySlug} from '@/client/components/logpanel/logCardType';
+import SeatIcon from '@/client/components/create/SeatIcon.vue';
 
 
 export default defineComponent({
   name: 'LogMessageComponent',
+  components: {
+    SeatIcon,
+  },
   props: {
     message: {
       type: Object as () => LogMessage,
@@ -165,7 +171,7 @@ export default defineComponent({
       return new Date(this.message.timestamp).toLocaleString();
     },
     icon() {
-      return this.message.playerId === undefined ? '&#x1f551;' : '&#x1f4ac;';
+      return this.message.playerId === undefined && this.message.aiInsight === undefined ? '&#x1f551;' : '&#x1f4ac;';
     },
     LogMessageType(): typeof LogMessageType {
       return LogMessageType;

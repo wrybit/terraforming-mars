@@ -66,6 +66,7 @@ export function withScreenshotSetup(details: StatsGameDetails, corporations: Rea
     soloTR: false,
     undoOption: false,
     showTimers: details.players.length > 0 && details.players.every((player) => player.timeSeconds !== undefined && player.timeSeconds !== null),
+    aiAnalysis: false,
     showOtherPlayersVP: false,
     fastModeOption: false,
     escapeVelocity: false,

@@ -1,6 +1,6 @@
 {
   "House-rule variants & pace": "Variantes maison et rythme",
-  "AI not yet compatible with:": "IA pas encore compatible avec\u00a0:",
+  "AI not yet compatible with:": "IA pas encore compatible avec :",
   "Changed": "Modifié",
   "Load settings from file": "Charger les paramètres depuis un fichier",
   "Save settings to file": "Enregistrer les paramètres dans un fichier",
@@ -82,7 +82,6 @@
   "Seat taken by a human": "Place occupée par un joueur",
   "Import": "Importer",
   "Export": "Exporter",
-  "AI": "IA",
   "Alpha — work in progress": "Alpha — en cours de développement",
   "The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.": "Les nouveaux Objectifs et Récompenses sont encore en développement actif. Ne signalez rien, sauf si cela casse la partie.",
   "These are always fully random.": "Ils sont toujours entièrement aléatoires.",

@@ -31,6 +31,7 @@ export type GameSetupOptions = {
   soloTR: boolean;
   undoOption: boolean;
   showTimers: boolean;
+  aiAnalysis: boolean;
   showOtherPlayersVP: boolean;
   fastModeOption: boolean;
   escapeVelocity: boolean;
@@ -80,6 +81,7 @@ export function setupOptionsFromConfig(config: NewGameConfig): GameSetupOptions 
     soloTR: config.soloTR,
     undoOption: config.undoOption,
     showTimers: config.showTimers,
+    aiAnalysis: config.aiAnalysis === true,
     showOtherPlayersVP: config.showOtherPlayersVP,
     fastModeOption: config.fastModeOption,
     escapeVelocity: config.escapeVelocity !== undefined,
@@ -114,6 +116,7 @@ export function setupOptionsFromGame(options: GameOptionsModel): GameSetupOption
     soloTR: options.soloTR === true,
     undoOption: options.undoOption === true,
     showTimers: options.showTimers === true,
+    aiAnalysis: options.aiAnalysis === true,
     showOtherPlayersVP: options.showOtherPlayersVP === true,
     fastModeOption: options.fastModeOption === true,
     escapeVelocity: options.escapeVelocity !== undefined,

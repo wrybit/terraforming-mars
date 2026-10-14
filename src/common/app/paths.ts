@@ -20,6 +20,7 @@ export const paths = {
   API_GAME_DELETION: 'api/game/deletion',
   API_GAME_HISTORY: 'api/game/history',
   API_GAME_LOGS: 'api/game/logs',
+  API_AI_FEEDBACK: 'api/ai-feedback',
   API_GAMES: 'api/games',
   API_HEAP_SNAPSHOT: 'api/heapsnapshot',
   API_IPS: 'api/ips',

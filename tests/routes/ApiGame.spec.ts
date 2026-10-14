@@ -57,6 +57,7 @@ describe('ApiGame', () => {
         ],
         'spectatorId': 'spectatorid',
         'gameOptions': {
+          'aiAnalysis': false,
           'altVenusBoard': false,
           'aresExtremeVariant': false,
           'bannedCards': [],

@@ -9,6 +9,8 @@ import {isSimulating} from './simulationSandbox';
 import {registerAiHook} from './aiHook';
 import {isActionMenu} from './gameCopy';
 import {Phase} from '../../common/Phase';
+import {takeAiDecisionSummary} from './decisionTrace';
+import {runWithAiDecision} from '../logs/aiDecisionContext';
 
 // Plays the moves of AI players on the server. Player.setWaitingFor reports every new input of
 // an AI player; the move is made a little later so humans can follow the game.
@@ -73,12 +75,14 @@ async function makeMove(player: IPlayer, input: PlayerInput, minimumMilliseconds
   // rollouts (up to 4 s) came on top of the 2 s pause.
   const start = Date.now();
   const chosen = choose(player, input);
+  // Analysis game: the lines this move logs point to the decision (options and values)
+  const summary = takeAiDecisionSummary();
   const rest = minimumMilliseconds - (Date.now() - start);
   if (rest > 0) {
     await new Promise((resolve) => setTimeout(resolve, rest));
   }
   if (isCurrent(player, input)) {
-    processWithFallback(player, input, chosen);
+    runWithAiDecision(player, summary, () => processWithFallback(player, input, chosen));
   }
 }
 

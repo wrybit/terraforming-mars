@@ -90,6 +90,7 @@ import {generateGameName} from './GameName';
 import {byKey} from '@/common/utils/Ordering';
 import {sanitizeEscapeVelocityOptions} from '@/common/game/escapeVelocity';
 import {ColoniesHandler} from './colonies/ColoniesHandler';
+import {annotateLogMessage} from './logs/aiDecisionContext';
 
 // Can be overridden by tests
 let createGameLog: () => Array<LogMessage> = () => [];
@@ -455,7 +456,9 @@ export class Game implements IGame, Logger {
     }
 
     players.forEach((player) => {
-      game.log('Good luck ${0}!', (b) => b.player(player), {reservedFor: player});
+      if (player.aiLevel === undefined) {
+        game.log('Good luck ${0}!', (b) => b.player(player), {reservedFor: player});
+      }
     });
 
     game.log('Generation ${0}', (b) => b.forNewGeneration().number(game.generation));
@@ -1690,6 +1693,7 @@ export class Game implements IGame, Logger {
     f?.(builder);
     const logMessage = builder.build();
     logMessage.playerId = options?.reservedFor?.id;
+    annotateLogMessage(this, logMessage);
     this.gameLog.push(logMessage);
     this.gameAge++;
   }

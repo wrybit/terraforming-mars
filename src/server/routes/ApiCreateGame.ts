@@ -122,6 +122,8 @@ export class ApiCreateGame extends Handler {
       requiresVenusTrackCompletion: gameReq.requiresVenusTrackCompletion,
       showOtherPlayersVP: gameReq.showOtherPlayersVP,
       showTimers: gameReq.showTimers,
+      // Only meaningful with an AI player; never opens up the private log of humans
+      aiAnalysis: gameReq.aiAnalysis === true && gameReq.players.some((p) => isAiLevel(p.aiLevel)),
       shuffleMapOption: gameReq.shuffleMapOption,
       solarPhaseOption: gameReq.solarPhaseOption,
       soloTR: gameReq.soloTR,
