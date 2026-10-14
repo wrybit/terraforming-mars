@@ -1,7 +1,7 @@
 // Generic on/off switch (ToggleSwitch.vue): deliberately plain – outlined track, the knob carries the state
 @toggle-switch-on: #3fa75a;
 @toggle-switch-off: #d9534f;
-@toggle-switch-outline: rgba(255, 255, 255, 0.45);
+@toggle-switch-outline: rgba(255, 255, 255, 0.6);
 
 .toggle-switch {
   display: inline-flex;
@@ -29,19 +29,18 @@
   flex: none;
   width: 28px;
   height: 16px;
-  border: 1px solid @toggle-switch-outline;
+  border: 1.5px solid @toggle-switch-outline;
   border-radius: 8px;
   background: transparent;
 }
 
-// Knob: red when off, green when on, with its own thin outline
+// Knob: plain disc, red when off, green when on
 .toggle-switch-thumb {
   position: absolute;
-  top: 2px;
-  left: 2px;
+  top: 1.5px;
+  left: 1.5px;
   width: 10px;
   height: 10px;
-  border: 1px solid @toggle-switch-outline;
   border-radius: 50%;
   background: @toggle-switch-off;
   transition: transform 0.15s ease, background 0.15s ease;
