@@ -230,7 +230,8 @@ export const BASELINE_TUNING: AiTuning = {
   keepHandUntilEnd: 1,
   endgameMoney: 1,
   // Round 66: 0.6 together with the measured collector rates (collectorRates).
-  accumulatorValue: 0.6,
+  // Rounds 67–69: collectorRate04 +0.43/+0.91/+0.37 (pooled z ≈ 1.33) – lowered to 0.4.
+  accumulatorValue: 0.4,
   peek: 0,
   // Round 18 (400 mirrored 1v1 games): rollout3 +2.7 VP per deal, z 2.45, 55 % wins – but a test game took
   // 516 s instead of 69 s and human games felt far too slow (human feedback, 2026-10-10): off again until cheaper.
@@ -594,6 +595,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   collectorRate06: {accumulatorValue: 0.6, collectorRates: 1},
   collectorRate1: {accumulatorValue: 1, collectorRates: 1},
   collectorRate04: {accumulatorValue: 0.4, collectorRates: 1},
+  collectorRate02: {accumulatorValue: 0.2, collectorRates: 1},
   collectorRate08: {accumulatorValue: 0.8, collectorRates: 1},
   noCollectors: {accumulatorValue: 0, collectorRates: 0},
   // Human rush ended a game in generation 8: shorten the estimate by the last generation's pace.
