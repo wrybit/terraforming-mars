@@ -926,7 +926,7 @@
   "${0} (shared with RAM)": "${0} (a fő memóriával közös)",
   "Too many wrong attempts. Please wait until the countdown has run out.": "Túl sok hibás próbálkozás. Várj, amíg a visszaszámlálás véget ér.",
   "Analysis game": "Elemző játszma",
-  "The log shows the AI's cards and decisions. Double-click (touch: double-tap) an AI entry or press I to rate it.": "A napló mutatja az AI kártyáit és döntéseit. Kattints duplán (érintőképernyőn: koppints kétszer) egy AI-bejegyzésre, vagy nyomd meg az I gombot az értékeléshez.",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "A napló mutatja az AI kártyáit és döntéseit. Vidd az egeret egy AI-bejegyzés fölé, és kattints a 👍 👎 🚩 egyikére az értékeléshez (érintőképernyő: koppints kétszer, billentyűzet: I).",
   "Visible because this is an analysis game": "Látható, mert ez egy elemző játszma",
   "Rate AI decision": "AI-döntés értékelése",
   "Options weighed by the AI": "Az AI által mérlegelt lehetőségek",

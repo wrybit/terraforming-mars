@@ -755,7 +755,7 @@
   "${0} (shared with RAM)": "${0} (jaettu keskusmuistin kanssa)",
   "Too many wrong attempts. Please wait until the countdown has run out.": "Liian monta väärää yritystä. Odota, kunnes lähtölaskenta on päättynyt.",
   "Analysis game": "Analyysipeli",
-  "The log shows the AI's cards and decisions. Double-click (touch: double-tap) an AI entry or press I to rate it.": "Loki näyttää AI:n kortit ja päätökset. Kaksoisnapsauta (kosketus: napauta kahdesti) AI:n merkintää tai paina I arvioidaksesi sen.",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "Loki näyttää AI:n kortit ja päätökset. Vie hiiri AI:n merkinnän päälle ja napsauta 👍 👎 🚩 arvioidaksesi sen (kosketus: napauta kahdesti, näppäimistö: I).",
   "Visible because this is an analysis game": "Näkyvissä, koska tämä on analyysipeli",
   "Rate AI decision": "Arvioi AI:n päätös",
   "Options weighed by the AI": "AI:n punnitsemat vaihtoehdot",

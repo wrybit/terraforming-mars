@@ -1087,3 +1087,36 @@ each(@players, {
   color: #b8bac4;
   overflow-wrap: anywhere;
 }
+
+// Rating buttons of the hovered AI row (LogAiRateBar.vue): right behind the row's text, in window coordinates
+.log-ai-rate-bar {
+  position: fixed;
+  z-index: 40;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  transform: translateY(-50%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(24, 26, 34, 0.94);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+.log-ai-rate-bar__button {
+  width: 32px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 17px;
+  line-height: 28px;
+  cursor: pointer;
+  transition: background-color 0.12s, transform 0.12s;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+    transform: scale(1.12);
+  }
+}

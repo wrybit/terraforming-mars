@@ -903,7 +903,7 @@
   "${0} (shared with RAM)": "${0} (спільна з ОЗП)",
   "Too many wrong attempts. Please wait until the countdown has run out.": "Забагато невдалих спроб. Зачекайте, доки закінчиться зворотний відлік.",
   "Analysis game": "Аналітична партія",
-  "The log shows the AI's cards and decisions. Double-click (touch: double-tap) an AI entry or press I to rate it.": "Журнал показує карти й рішення AI. Двічі клацніть (сенсорний екран: двічі торкніться) запис AI або натисніть I, щоб його оцінити.",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "Журнал показує карти й рішення AI. Наведіть курсор на запис AI і натисніть 👍 👎 🚩, щоб його оцінити (сенсорний екран: двічі торкніться, клавіатура: I).",
   "Visible because this is an analysis game": "Видно, бо це аналітична партія",
   "Rate AI decision": "Оцінити рішення AI",
   "Options weighed by the AI": "Варіанти, які зважував AI",

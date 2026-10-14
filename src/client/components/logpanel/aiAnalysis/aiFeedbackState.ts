@@ -1,7 +1,7 @@
 import {markRaw, reactive} from 'vue';
 import {paths} from '@/common/app/paths';
 import {ParticipantId} from '@/common/Types';
-import {AiFeedbackEntry, AiFeedbackRequest} from '@/common/ai/AiFeedback';
+import {AiFeedbackEntry, AiFeedbackRating, AiFeedbackRequest} from '@/common/ai/AiFeedback';
 import {AiDecisionSummary} from '@/common/ai/AiDecisionSummary';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {AiLogTarget} from './aiLogTarget';
@@ -14,6 +14,8 @@ type OpenDialog = {
   decision: AiDecisionSummary | undefined,
   // Snapshot of the view the row was opened in (player names, own colour, participant id)
   viewModel: ViewModel,
+  // Rating clicked in the hover bar: preselected in the dialog
+  rating: AiFeedbackRating | undefined,
 };
 
 type State = {
@@ -60,9 +62,9 @@ export function ratingsOf(messageId: string): Array<AiFeedbackEntry> {
   return aiFeedbackState.ratings.filter((entry) => entry.messageId === messageId);
 }
 
-export function openAiDecision(target: AiLogTarget, decision: AiDecisionSummary | undefined, viewModel: ViewModel): void {
+export function openAiDecision(target: AiLogTarget, decision: AiDecisionSummary | undefined, viewModel: ViewModel, rating?: AiFeedbackRating): void {
   aiFeedbackState.error = undefined;
-  aiFeedbackState.dialog = markRaw({target, decision, viewModel});
+  aiFeedbackState.dialog = markRaw({target, decision, viewModel, rating});
 }
 
 export function closeAiDecision(): void {

@@ -77,17 +77,14 @@ import {isPlayerId} from '@/common/Types';
 import {translateText} from '@/client/directives/i18n';
 import {aiFeedbackState, closeAiDecision, ratingsOf, saveAiFeedback} from './aiFeedbackState';
 import {DECISION_KIND_TITLES, formatValue, optionGroups, optionLabel} from './aiDecisionOptions';
+import {AI_RATING_CHOICES} from './aiRatingChoices';
 
 // Rating of one AI decision in an analysis game: the row, the options the AI weighed with their
 // values, the ratings of the others and the own rating (flag / good / bad plus optional comment).
 // Lives in App.vue: the game view remounts on every AI move and would close it while typing.
 
 const emoji = AI_FEEDBACK_EMOJI;
-const choices: ReadonlyArray<{rating: AiFeedbackRating, label: string}> = [
-  {rating: 'flag', label: 'Check'},
-  {rating: 'up', label: 'Good'},
-  {rating: 'down', label: 'Bad'},
-];
+const choices = AI_RATING_CHOICES;
 
 const dialog = computed(() => aiFeedbackState.dialog);
 const ownColor = computed(() => dialog.value?.viewModel.thisPlayer?.color);
@@ -105,10 +102,13 @@ const text = ref('');
 const saving = ref(false);
 const comment = ref<HTMLTextAreaElement>();
 
-// Each opened row starts from the own saved rating
-watch(dialog, () => {
-  rating.value = ownRating.value?.rating;
+// Each opened row starts from the choice clicked in the hover bar, otherwise from the own saved rating
+watch(dialog, (open) => {
+  rating.value = open?.rating ?? ownRating.value?.rating;
   text.value = ownRating.value?.text ?? '';
+  if (open?.rating !== undefined) {
+    nextTick(() => comment.value?.focus());
+  }
 }, {immediate: true});
 
 function label(option: AiDecisionOption): string {

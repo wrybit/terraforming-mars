@@ -987,7 +987,7 @@
   "${0} (shared with RAM)": "${0} (주 메모리와 공유)",
   "Too many wrong attempts. Please wait until the countdown has run out.": "잘못된 시도가 너무 많습니다. 카운트다운이 끝날 때까지 기다리세요.",
   "Analysis game": "분석 게임",
-  "The log shows the AI's cards and decisions. Double-click (touch: double-tap) an AI entry or press I to rate it.": "로그에 AI의 카드와 결정이 표시됩니다. AI 항목을 더블클릭(터치: 두 번 탭)하거나 I 키를 눌러 평가하세요.",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "로그에 AI의 카드와 결정이 표시됩니다. AI 항목에 마우스를 올리고 👍 👎 🚩를 클릭해 평가하세요(터치: 두 번 탭, 키보드: I).",
   "Visible because this is an analysis game": "분석 게임이라서 표시됨",
   "Rate AI decision": "AI 결정 평가",
   "Options weighed by the AI": "AI가 검토한 선택지",

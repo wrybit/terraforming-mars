@@ -1965,7 +1965,7 @@
   "${0} (shared with RAM)": "${0} (condivisa con la RAM)",
   "Too many wrong attempts. Please wait until the countdown has run out.": "Troppi tentativi errati. Attendi la fine del conto alla rovescia.",
   "Analysis game": "Partita di analisi",
-  "The log shows the AI's cards and decisions. Double-click (touch: double-tap) an AI entry or press I to rate it.": "Il log mostra carte e decisioni dell’AI. Fai doppio clic (touch: tocca due volte) su una voce dell’AI o premi I per valutarla.",
+  "The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).": "Il log mostra carte e decisioni dell’AI. Passa il mouse su una voce dell’AI e clicca 👍 👎 🚩 per valutarla (touch: tocca due volte, tastiera: I).",
   "Visible because this is an analysis game": "Visibile perché è una partita di analisi",
   "Rate AI decision": "Valuta decisione dell’AI",
   "Options weighed by the AI": "Opzioni valutate dall’AI",

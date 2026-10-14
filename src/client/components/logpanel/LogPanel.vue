@@ -34,15 +34,15 @@
           <!-- One row per action (card, action, standard project ...) with its effects; unrecognised messages stay text lines -->
           <template v-for="(row, rowIndex) in visibleRows(section)" :key="rowIndex">
             <div v-if="row.type === 'phase'" class="log-phase-line" aria-hidden="true"></div>
-            <!-- Analysis game: AI rows are rated with a double-click (touch: double-tap) or the I key while hovered -->
+            <!-- Analysis game: hovering an AI row shows rating buttons behind its text (touch: double-tap; key I) -->
             <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel"
               :class="{'log-row--ai-rateable': isRateable(section, row)}"
-              @click="messageClicked(row.message, undefined, section, row)" @dblclick="rateRow(section, row)"
-              @mouseenter="messageHovered(row.message, $event); rowHovered(section, row)" @mouseleave="rowLeft(section, row)" @spaceClicked="$emit('spaceClicked', $event)"/>
+              @click="messageClicked(row.message, undefined, section, row)"
+              @mouseenter="messageHovered(row.message, $event); rowHovered(section, row, $event)" @mouseleave="rowLeft($event)" @spaceClicked="$emit('spaceClicked', $event)"/>
             <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"
               :class="{'log-row--ai-rateable': isRateable(section, row)}"
-              @click="messageClicked(row.action.lead, row.action, section, row)" @dblclick="rateRow(section, row)"
-              @mouseenter="messageHovered(row.action.lead, $event, row.action); rowHovered(section, row)" @mouseleave="rowLeft(section, row)" @spaceClicked="$emit('spaceClicked', $event)"/>
+              @click="messageClicked(row.action.lead, row.action, section, row)"
+              @mouseenter="messageHovered(row.action.lead, $event, row.action); rowHovered(section, row, $event)" @mouseleave="rowLeft($event)" @spaceClicked="$emit('spaceClicked', $event)"/>
             <LogActionRow v-else :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"/>
             <LogAiRatings v-if="analysisGame && row.type !== 'phase'" :entries="rowRatings(section, row)"/>
           </template>
@@ -66,6 +66,8 @@
         </svg>
       </button>
     </div>
+    <LogAiRateBar v-if="rateBar !== undefined" ref="rateBar" :left="rateBar.left" :top="rateBar.top"
+      @rate="rateFromBar" @mouseenter="messageUnhovered()" @mouseleave="rateBarLeft"/>
     <LogMessageInspector ref="messageInspector" :viewModel="viewModel" @pinnedClosed="drawnCardsClosed"/>
     <LogCardsZoom v-if="zoomedMessage !== undefined" :message="zoomedMessage" :action="zoomedAction" :players="viewModel.players" @close="closeZoom"/>
   </div>
@@ -102,6 +104,13 @@ import {cachedLogStream, fetchLogStream, GenerationLog} from '@/client/utils/fet
 import {milestonesAwardsFocusState} from '@/client/components/logpanel/milestonesAwardsFocus';
 import {latestDrawnCards} from '@/client/components/logpanel/drawnCards';
 import LogAiRatings from '@/client/components/logpanel/aiAnalysis/LogAiRatings.vue';
+import LogAiRateBar from '@/client/components/logpanel/aiAnalysis/LogAiRateBar.vue';
+import {AiFeedbackRating} from '@/common/ai/AiFeedback';
+
+// Width of the hover bar (3 buttons): it never sticks out of its row
+const RATE_BAR_WIDTH = 108;
+// Gap between the row's text and the bar
+const RATE_BAR_GAP = 10;
 import {aiColorsOf, AiLogTarget, aiTargetOfRow, decisionSummaries} from '@/client/components/logpanel/aiAnalysis/aiLogTarget';
 import {aiFeedbackState, loadAiFeedback, openAiDecision, ratingsOf} from '@/client/components/logpanel/aiAnalysis/aiFeedbackState';
 import {AiFeedbackEntry} from '@/common/ai/AiFeedback';
@@ -158,6 +167,8 @@ type Internals = {
   newEntriesWhileHovered: boolean,
   // Analysis game: AI row under the mouse (I key rates it) and the last tap (double-tap on touch)
   hoveredAiTarget: AiLogTarget | undefined,
+  // Row element the hover bar belongs to (leaving the row onto the bar keeps it)
+  hoveredAiRow: HTMLElement | undefined,
   lastTap: {messageId: string, time: number, timer: number} | undefined,
 };
 
@@ -181,6 +192,8 @@ type LogPanelModel = {
   zoomShowsDrawnCards: boolean,
   // Filter of the stream (LogFilterBar.vue)
   logFilter: LogFilter,
+  // Analysis game: rating buttons of the hovered AI row, in window coordinates
+  rateBar: {left: number, top: number} | undefined,
   // Timers and observers of this instance; raw, so they don't trigger re-renders
   internals: Internals,
 };
@@ -236,8 +249,9 @@ export default defineComponent({
       viewBeforeFocus: undefined,
       viewBeforeDrawnCards: undefined,
       zoomShowsDrawnCards: false,
+      rateBar: undefined,
       logFilter: savedFilter !== undefined && savedFilter.id === this.viewModel.id ? savedFilter.filter : NO_FILTER,
-      internals: markRaw({programmaticScrollTimer: undefined, scrollFrame: undefined, scrollFramePending: false, resizeObserver: undefined, lastHeight: 0, pointerOverLog: false, newEntriesWhileHovered: false, hoveredAiTarget: undefined, lastTap: undefined}),
+      internals: markRaw({programmaticScrollTimer: undefined, scrollFrame: undefined, scrollFramePending: false, resizeObserver: undefined, lastHeight: 0, pointerOverLog: false, newEntriesWhileHovered: false, hoveredAiTarget: undefined, hoveredAiRow: undefined, lastTap: undefined}),
     };
   },
   directives: {
@@ -253,6 +267,7 @@ export default defineComponent({
     LogCardsZoom,
     MilestoneAwardTable,
     LogAiRatings,
+    LogAiRateBar,
   },
   // drawnCards / drawnCardsClosed: newly drawn cards open by themselves and closed again (mobile switches to the log and back)
   emits: ['spaceClicked', 'drawnCards', 'drawnCardsClosed'],
@@ -392,26 +407,59 @@ export default defineComponent({
       const target = this.aiTargetOf(section, row);
       return target === undefined ? [] : ratingsOf(target.messageId);
     },
-    rowHovered(section: GenerationLog, row: LogRow): void {
-      this.internals.hoveredAiTarget = this.aiTargetOf(section, row);
-    },
-    rowLeft(section: GenerationLog, row: LogRow): void {
-      if (this.internals.hoveredAiTarget?.messageId === this.aiTargetOf(section, row)?.messageId) {
-        this.internals.hoveredAiTarget = undefined;
-      }
-    },
-    rateRow(section: GenerationLog, row: LogRow): void {
+    rowHovered(section: GenerationLog, row: LogRow, event: MouseEvent): void {
       const target = this.aiTargetOf(section, row);
+      const element = event.currentTarget instanceof HTMLElement ? event.currentTarget : undefined;
+      this.internals.hoveredAiTarget = target;
+      this.internals.hoveredAiRow = target === undefined ? undefined : element;
+      this.rateBar = target === undefined || element === undefined || !this.canHover() ? undefined : this.rateBarPosition(element);
+    },
+    // Right behind the end of the row's text (card name of an action row), centred on that line;
+    // never beyond the row's right edge
+    rateBarPosition(row: HTMLElement): {left: number, top: number} {
+      const anchor = row.querySelector('.log-row-what') ?? row;
+      const range = document.createRange();
+      range.selectNodeContents(anchor);
+      const lines = range.getClientRects();
+      const rowBox = row.getBoundingClientRect();
+      const last = lines.length > 0 ? lines[lines.length - 1] : rowBox;
+      const left = Math.min(last.right + RATE_BAR_GAP, rowBox.right - RATE_BAR_WIDTH);
+      return {left: Math.max(rowBox.left, left), top: last.top + last.height / 2};
+    },
+    rowLeft(event: MouseEvent): void {
+      // Moving onto the bar keeps it (it belongs to the row)
+      if (this.isInRateBar(event.relatedTarget)) {
+        return;
+      }
+      this.hideRateBar();
+    },
+    rateBarLeft(event: MouseEvent): void {
+      const next = event.relatedTarget;
+      if (next instanceof Node && this.internals.hoveredAiRow?.contains(next)) {
+        return;
+      }
+      this.hideRateBar();
+    },
+    isInRateBar(element: EventTarget | null): boolean {
+      const bar = (this.$refs.rateBar as {$el?: HTMLElement} | undefined)?.$el;
+      return element instanceof Node && bar !== undefined && bar.contains(element);
+    },
+    hideRateBar(): void {
+      this.rateBar = undefined;
+      this.internals.hoveredAiTarget = undefined;
+      this.internals.hoveredAiRow = undefined;
+    },
+    rateFromBar(rating: AiFeedbackRating): void {
+      const target = this.internals.hoveredAiTarget;
+      this.hideRateBar();
       if (target !== undefined) {
-        // A double-click also selects a word of the row: not wanted here
-        window.getSelection()?.removeAllRanges();
-        this.openRating(target);
+        this.openRating(target, rating);
       }
     },
-    openRating(target: AiLogTarget): void {
+    openRating(target: AiLogTarget, rating?: AiFeedbackRating): void {
       this.typedRefs.messageInspector?.hidePreview();
       const summaries = decisionSummaries(this.sections.flatMap((section) => section.messages));
-      openAiDecision(target, target.decisionId === undefined ? undefined : summaries.get(target.decisionId), this.viewModel);
+      openAiDecision(target, target.decisionId === undefined ? undefined : summaries.get(target.decisionId), this.viewModel, rating);
     },
     // I key: the AI row under the mouse, otherwise the newest AI row of the log
     onAnalysisKey(event: KeyboardEvent): void {
@@ -581,6 +629,10 @@ export default defineComponent({
       this.updateScrollState();
     },
     onScroll(): void {
+      // The bar sits in window coordinates: it would stay behind while its row scrolls away
+      if (this.rateBar !== undefined) {
+        this.hideRateBar();
+      }
       const internals = this.internals;
       if (internals.programmaticScrollTimer !== undefined) {
         // Still moving towards the clicked tab: wait until the movement settles

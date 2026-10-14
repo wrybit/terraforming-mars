@@ -49,4 +49,13 @@ describe('AiDecisionDialog', () => {
     await wrapper.find('[data-test="ai-rating-down"]').trigger('click');
     expect(wrapper.find('[data-test="ai-rating-text"]').exists()).is.true;
   });
+
+  it('preselects the rating clicked in the hover bar', async () => {
+    const wrapper = mountDialog();
+    openAiDecision({messageId: '4.x', color: 'red', messages: [new LogMessage(LogMessageType.DEFAULT, 'Test line', [])]},
+      undefined, fakeViewModel(), 'flag');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[data-test="ai-rating-flag"]').attributes('aria-checked')).eq('true');
+    expect(wrapper.find('[data-test="ai-rating-text"]').exists()).is.true;
+  });
 });
