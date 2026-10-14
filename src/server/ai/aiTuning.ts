@@ -302,7 +302,9 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 56: passLastResort2 −0.17 (neutral), fixes the human observation "passing is the last option" – adopted.
   passLastResort: 2,
   // Strategy-guide gaps (13.10.2026), off until tested.
-  bonusRace: 0,
+  // Rounds 64/65: bonusRace +0.52/+0.19 (neutral to positive); a rated human game showed the AI raising the
+  // temperature next to a bonus step the opponent then took – adopted as a human-game fix.
+  bonusRace: 1,
   planHand: 0,
   // Round 64: turnTempo +1.59 VP per deal (z +2.26) – adopted (strategy guides: one action, then react).
   turnTempo: 1,
@@ -587,6 +589,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Strategy guides: snatch bonus steps, never open one for the rival.
   bonusRace: {bonusRace: 1},
   bonusRace05: {bonusRace: 0.5},
+  noBonusRace: {bonusRace: 0},
   // Strategy guides: bigger hand with the stronger engine, fewer cards (VP pivot) when behind on income.
   planHand: {planHand: 1},
   // Strategy guides: one action, then wait and react; two only for races.
