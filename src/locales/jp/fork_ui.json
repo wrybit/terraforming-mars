@@ -1136,5 +1136,8 @@
   "Invalid number:": "無効な数値：",
   "Open on my turn": "自分の手番で開く",
   "Situation of the AI": "AIの状況",
-  "Still possible, but not done": "まだ可能だったが実行しなかったもの"
+  "Still possible, but not done": "まだ可能だったが実行しなかったもの",
+  "Nothing else was possible.": "他に可能な行動はありませんでした。",
+  "Previous AI decision": "前のAIの判断",
+  "Next AI decision": "次のAIの判断"
 }

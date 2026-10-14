@@ -31,16 +31,12 @@ describe('AiDecisionDialog', () => {
   it('shows the options of the decision and the rating choices', async () => {
     const wrapper = mountDialog();
     const line = new LogMessage(LogMessageType.DEFAULT, 'Test line', []);
-    openAiDecision({
-      messageId: '3.x',
-      decisionId: 'd1',
-      color: 'red',
-      messages: [line],
-      row: {type: 'message', message: line, indexes: [0]},
-    }, {
+    const target = {messageId: '3.x', decisionId: 'g1:1', color: 'red' as const, messages: [line], row: {type: 'message' as const, message: line, indexes: [0]}};
+    const summary = {
       id: 'g1:1', kind: 'draft', title: 'Select a card', saveId: 2, generation: 1,
       options: [{label: 'Algae', card: 'Algae', value: 2.5}, {label: 'Ants', card: 'Ants', value: 7, chosen: true}],
-    }, fakeViewModel());
+    };
+    openAiDecision(target, [target], new Map([['g1:1', summary]]), fakeViewModel());
     await wrapper.vm.$nextTick();
     const options = wrapper.findAll('.ai-decision-dialog__option');
     expect(options.map((option) => option.find('.ai-decision-dialog__label').text())).deep.eq(['Ants', 'Algae']);
@@ -55,10 +51,24 @@ describe('AiDecisionDialog', () => {
   it('preselects the rating clicked in the hover bar', async () => {
     const wrapper = mountDialog();
     const line = new LogMessage(LogMessageType.DEFAULT, 'Test line', []);
-    openAiDecision({messageId: '4.x', color: 'red', messages: [line], row: {type: 'message', message: line, indexes: [0]}},
-      undefined, fakeViewModel(), 'flag');
+    const target = {messageId: '4.x', color: 'red' as const, messages: [line], row: {type: 'message' as const, message: line, indexes: [0]}};
+    openAiDecision(target, [target], new Map(), fakeViewModel(), 'flag');
     await wrapper.vm.$nextTick();
     expect(wrapper.find('[data-test="ai-rating-flag"]').attributes('aria-checked')).eq('true');
     expect(wrapper.find('[data-test="ai-rating-text"]').exists()).is.true;
+  });
+
+  it('steps to the next AI row with the arrow key', async () => {
+    const wrapper = mountDialog();
+    const first = new LogMessage(LogMessageType.DEFAULT, 'First line', []);
+    const second = new LogMessage(LogMessageType.DEFAULT, 'Second line', []);
+    const targets = [first, second].map((message, index) => ({messageId: index + '.x', color: 'red' as const, messages: [message], row: {type: 'message' as const, message, indexes: [index]}}));
+    openAiDecision(targets[0], targets, new Map(), fakeViewModel());
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[data-test="ai-decision-previous"]').attributes('disabled')).is.not.undefined;
+    window.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown'}));
+    await wrapper.vm.$nextTick();
+    expect(wrapper.text()).contains('Second line');
+    expect(wrapper.find('[data-test="ai-decision-next"]').attributes('disabled')).is.not.undefined;
   });
 });

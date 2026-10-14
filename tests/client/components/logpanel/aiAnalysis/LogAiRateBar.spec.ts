@@ -6,8 +6,14 @@ import LogAiRateBar from '@/client/components/logpanel/aiAnalysis/LogAiRateBar.v
 describe('LogAiRateBar', () => {
   it('offers thumbs up, thumbs down and flag, in this order', async () => {
     const wrapper = mount(LogAiRateBar, {...globalConfig, props: {left: 10, top: 20}});
-    expect(wrapper.findAll('button').map((button) => button.text())).deep.eq(['👍', '👎', '🚩']);
+    expect(wrapper.findAll('.log-ai-rate-bar__button').map((button) => button.text())).deep.eq(['👍', '👎', '🚩']);
     await wrapper.find('[data-test="log-ai-rate-down"]').trigger('click');
     expect(wrapper.emitted('rate')).deep.eq([['down']]);
+  });
+
+  it('opens the dialog without a rating from the label', async () => {
+    const wrapper = mount(LogAiRateBar, {...globalConfig, props: {left: 10, top: 20}});
+    await wrapper.find('[data-test="log-ai-rate-open"]').trigger('click');
+    expect(wrapper.emitted('rate')).deep.eq([[undefined]]);
   });
 });

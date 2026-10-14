@@ -2,8 +2,9 @@
   <!-- Rating buttons of the AI row under the mouse (analysis game); a click opens the rating dialog with that choice -->
   <div class="log-ai-rate-bar" role="group" :aria-label="$t('Rate AI decision')" data-test="log-ai-rate-bar"
     :style="{left: left + 'px', top: top + 'px'}">
-    <!-- "AI" in every language (no translation) -->
-    <span class="log-ai-rate-bar__label">AI:</span>
+    <!-- "AI" in every language (no translation); a click opens the dialog without a rating -->
+    <button type="button" class="log-ai-rate-bar__label" :title="$t('Rate AI decision')" data-test="log-ai-rate-open"
+      @click.stop="emit('rate', undefined)">AI:</button>
     <button v-for="choice in choices" :key="choice.rating" type="button" class="log-ai-rate-bar__button"
       :title="$t(choice.label)" :aria-label="$t(choice.label)" :data-test="'log-ai-rate-' + choice.rating"
       @click.stop="emit('rate', choice.rating)">{{ emoji[choice.rating] }}</button>
@@ -21,7 +22,7 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (event: 'rate', rating: AiFeedbackRating): void;
+  (event: 'rate', rating: AiFeedbackRating | undefined): void;
 }>();
 
 const emoji = AI_FEEDBACK_EMOJI;

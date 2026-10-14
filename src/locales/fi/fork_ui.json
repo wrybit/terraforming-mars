@@ -785,5 +785,8 @@
   "Invalid number:": "Virheellinen luku:",
   "Open on my turn": "Avaa omalla vuorollani",
   "Situation of the AI": "AI:n tilanne",
-  "Still possible, but not done": "Vielä mahdollista, mutta tekemättä"
+  "Still possible, but not done": "Vielä mahdollista, mutta tekemättä",
+  "Nothing else was possible.": "Mikään muu ei ollut mahdollista.",
+  "Previous AI decision": "Edellinen AI:n päätös",
+  "Next AI decision": "Seuraava AI:n päätös"
 }

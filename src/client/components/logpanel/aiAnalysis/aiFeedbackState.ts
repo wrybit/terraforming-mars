@@ -12,6 +12,9 @@ import {AiLogTarget} from './aiLogTarget';
 type OpenDialog = {
   target: AiLogTarget,
   decision: AiDecisionSummary | undefined,
+  // All AI rows of the log in order and the decisions by id: the dialog steps to the previous/next one
+  targets: ReadonlyArray<AiLogTarget>,
+  summaries: ReadonlyMap<string, AiDecisionSummary>,
   // Snapshot of the view the row was opened in (player names, own colour, participant id)
   viewModel: ViewModel,
   // Rating clicked in the hover bar: preselected in the dialog
@@ -62,9 +65,26 @@ export function ratingsOf(messageId: string): Array<AiFeedbackEntry> {
   return aiFeedbackState.ratings.filter((entry) => entry.messageId === messageId);
 }
 
-export function openAiDecision(target: AiLogTarget, decision: AiDecisionSummary | undefined, viewModel: ViewModel, rating?: AiFeedbackRating): void {
+export function openAiDecision(target: AiLogTarget, targets: ReadonlyArray<AiLogTarget>, summaries: ReadonlyMap<string, AiDecisionSummary>,
+  viewModel: ViewModel, rating?: AiFeedbackRating): void {
   aiFeedbackState.error = undefined;
-  aiFeedbackState.dialog = markRaw({target, decision, viewModel, rating});
+  const decision = target.decisionId === undefined ? undefined : summaries.get(target.decisionId);
+  aiFeedbackState.dialog = markRaw({target, decision, targets, summaries, viewModel, rating});
+}
+
+/** Position of the open row among all AI rows, or -1. */
+export function openAiDecisionIndex(): number {
+  const dialog = aiFeedbackState.dialog;
+  return dialog === undefined ? -1 : dialog.targets.findIndex((target) => target.messageId === dialog.target.messageId);
+}
+
+/** Opens the previous (-1) or next (+1) AI row; at the ends nothing happens. */
+export function stepAiDecision(step: -1 | 1): void {
+  const dialog = aiFeedbackState.dialog;
+  const next = dialog?.targets[openAiDecisionIndex() + step];
+  if (dialog !== undefined && next !== undefined) {
+    openAiDecision(next, dialog.targets, dialog.summaries, dialog.viewModel);
+  }
 }
 
 export function closeAiDecision(): void {

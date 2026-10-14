@@ -446,7 +446,7 @@ export default defineComponent({
       this.internals.hoveredAiTarget = undefined;
       this.internals.hoveredAiRow = undefined;
     },
-    rateFromBar(rating: AiFeedbackRating): void {
+    rateFromBar(rating: AiFeedbackRating | undefined): void {
       const target = this.internals.hoveredAiTarget;
       this.hideRateBar();
       if (target !== undefined) {
@@ -456,7 +456,11 @@ export default defineComponent({
     openRating(target: AiLogTarget, rating?: AiFeedbackRating): void {
       this.typedRefs.messageInspector?.hidePreview();
       const summaries = decisionSummaries(this.sections.flatMap((section) => section.messages));
-      openAiDecision(target, target.decisionId === undefined ? undefined : summaries.get(target.decisionId), this.viewModel, rating);
+      openAiDecision(target, this.allAiTargets(), summaries, this.viewModel, rating);
+    },
+    // Every AI row of the log in order: the dialog steps through them (up/down)
+    allAiTargets(): Array<AiLogTarget> {
+      return this.sections.flatMap((section) => this.visibleRows(section).flatMap((row) => this.aiTargetOf(section, row) ?? []));
     },
     // I key: the AI row under the mouse, otherwise the newest AI row of the log
     onAnalysisKey(event: KeyboardEvent): void {
@@ -528,7 +532,12 @@ export default defineComponent({
     pointerEntered() {
       this.internals.pointerOverLog = true;
     },
-    pointerLeft() {
+    pointerLeft(event?: MouseEvent) {
+      // Onto the rating bar of a row (it sits outside the scroll box): still reading the log
+      if (event !== undefined && this.isInRateBar(event.relatedTarget)) {
+        this.messageUnhovered();
+        return;
+      }
       this.messageUnhovered();
       this.internals.pointerOverLog = false;
       if (this.internals.newEntriesWhileHovered) {
@@ -633,9 +642,14 @@ export default defineComponent({
       this.updateScrollState();
     },
     onScroll(): void {
-      // The bar sits in window coordinates: it would stay behind while its row scrolls away
+      // The bar sits in window coordinates: it moves along with its row (or goes when the row is gone)
+      const row = this.internals.hoveredAiRow;
       if (this.rateBar !== undefined) {
-        this.hideRateBar();
+        if (row !== undefined && row.isConnected) {
+          this.rateBar = this.rateBarPosition(row);
+        } else {
+          this.hideRateBar();
+        }
       }
       const internals = this.internals;
       if (internals.programmaticScrollTimer !== undefined) {

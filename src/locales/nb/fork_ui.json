@@ -1135,5 +1135,8 @@
   "Invalid number:": "Ugyldig tall:",
   "Open on my turn": "Åpne når det er min tur",
   "Situation of the AI": "Situasjonen til AI",
-  "Still possible, but not done": "Fortsatt mulig, men ikke gjort"
+  "Still possible, but not done": "Fortsatt mulig, men ikke gjort",
+  "Nothing else was possible.": "Ingenting annet var mulig.",
+  "Previous AI decision": "Forrige AI-beslutning",
+  "Next AI decision": "Neste AI-beslutning"
 }

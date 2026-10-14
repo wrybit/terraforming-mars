@@ -16,6 +16,11 @@ import {finishGeneration} from '../TestingUtils';
 import {cast} from '../../src/common/utils/utils';
 import {SelectCard} from '../../src/server/inputs/SelectCard';
 import {IProjectCard} from '../../src/server/cards/IProjectCard';
+import {OrOptions} from '../../src/server/inputs/OrOptions';
+import {SelectOption} from '../../src/server/inputs/SelectOption';
+import {possibleActionsOf} from '../../src/server/ai/possibleActions';
+import {Algae} from '../../src/server/cards/base/Algae';
+import {Ants} from '../../src/server/cards/base/Ants';
 
 function analysisGame(): [IGame, TestPlayer, TestPlayer] {
   const [game, human, ai] = testGame(2, {aiAnalysis: true});
@@ -100,7 +105,7 @@ describe('AI analysis games', () => {
 
   it('summarises the best options plus every chosen one', () => {
     const options = Array.from({length: 12}, (_, index) => ({label: 'o' + index, value: 12 - index, chosen: index === 11}));
-    const shown = summaryOf('g1:2', 'action', 'title', options, 0, 1).options;
+    const shown = summaryOf('g1:2', 'space', 'title', options, 0, 1).options;
     expect(shown.length).eq(11);
     expect(shown[shown.length - 1].label).eq('o11');
   });
@@ -132,5 +137,16 @@ describe('AI analysis games', () => {
     const picks = game.gameLog.filter((line) => line.message === 'You drafted ${0}, passing ${1} to ${2}');
     expect(picks.map((line) => line.playerId)).has.members([player.id, otherPlayer.id]);
     expect(picks[0].data[1].value).has.length(3);
+  });
+
+  it('lists what the action menu offered, with the selectable cards', () => {
+    const menu = new OrOptions(
+      new SelectCard('Play project card', 'Play', [new Algae(), new Ants()], {enabled: [true, false]}),
+      new SelectOption('Pass for this generation'),
+    );
+    expect(possibleActionsOf(menu)).deep.eq([
+      {title: 'Play project card', cards: ['Algae']},
+      {title: 'Pass for this generation'},
+    ]);
   });
 });

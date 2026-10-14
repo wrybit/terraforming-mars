@@ -194,3 +194,180 @@
 .ai-decision-dialog__rating-better {
   color: @ai-dialog-chosen;
 }
+
+// Situation of the AI (AiDecisionStateFacts.vue): six resource tiles, then totals, then the hand
+.ai-decision-state {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: @dialog-gap-tile;
+}
+
+.ai-decision-state__resource {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 4px;
+  border-radius: 8px;
+  background: @dialog-surface;
+
+  .log-effect-icon {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.ai-decision-state__stock {
+  font-size: 17px;
+}
+
+.ai-decision-state__production {
+  font-size: 13px;
+}
+
+.ai-decision-state__totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  font-size: 15px;
+  color: #c4c6d0;
+
+  b {
+    color: #fff;
+  }
+}
+
+.ai-decision-state__total {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  .log-effect-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.ai-decision-state__hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-decision-state__card {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: @dialog-surface;
+  font-size: 14px;
+}
+
+@media only screen and (max-width: 520px) {
+  .ai-decision-state {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+// After a pass: each action the menu still offered, with its cards
+.ai-decision-state__possible {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-decision-state__action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 6px;
+}
+
+.ai-decision-state__action-title {
+  margin-right: 4px;
+  color: #c4c6d0;
+  font-size: 15px;
+}
+
+// Own group: further from the hand above than from its list below (law of proximity)
+.ai-decision-state__possible-title {
+  margin-top: 10px;
+}
+
+// Previous / next AI row: bottom left of the footer, the rating buttons stay on the right
+.ai-decision-dialog__steps {
+  display: flex;
+  gap: 6px;
+  margin-right: auto;
+}
+
+.ai-decision-dialog__step {
+  width: 34px;
+  height: 34px;
+  border: 1px solid @dialog-surface-border;
+  border-radius: 8px;
+  background: transparent;
+  color: #ddd;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+}
+
+// Offered cards (AiDecisionCards.vue): real cards at 70 %, one row, scrolls sideways
+.ai-decision-cards {
+  // The dialog body is a shrinking flex column: the row keeps its full card height
+  flex: none;
+  display: flex;
+  gap: 10px;
+  padding: 4px 2px 10px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.ai-decision-cards__item {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+}
+
+.ai-decision-cards__item--chosen {
+  border-color: @ai-dialog-chosen;
+  background: @ai-dialog-chosen-surface;
+}
+
+.ai-decision-cards__card {
+  zoom: 0.7;
+
+  .card-container {
+    margin: 0;
+  }
+}
+
+.ai-decision-cards__value {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: #c4c6d0;
+}
+
+.ai-decision-cards__item--chosen .ai-decision-cards__value {
+  color: #fff;
+  font-weight: bold;
+}

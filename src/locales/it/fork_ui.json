@@ -1995,5 +1995,8 @@
   "Invalid number:": "Numero non valido:",
   "Open on my turn": "Apri al mio turno",
   "Situation of the AI": "Situazione dell’AI",
-  "Still possible, but not done": "Ancora possibile, ma non fatto"
+  "Still possible, but not done": "Ancora possibile, ma non fatto",
+  "Nothing else was possible.": "Non era possibile nient’altro.",
+  "Previous AI decision": "Decisione precedente dell’AI",
+  "Next AI decision": "Decisione successiva dell’AI"
 }

@@ -12,6 +12,11 @@
         </div>
       </section>
 
+      <!-- Draft, purchase, start: the offered cards themselves, the chosen ones marked -->
+      <AiDecisionCards v-if="showsCards && dialog.decision !== undefined" :decision="dialog.decision" :players="dialog.viewModel.players"/>
+
+      <AiDecisionStateFacts v-if="dialog.decision?.state !== undefined" :state="dialog.decision.state" :passed="isPass"/>
+
       <!-- What the AI weighed: options with the value it gave them, the chosen ones marked -->
       <section v-if="groups.length > 0" class="ai-decision-dialog__section" data-test="ai-decision-options">
         <h3 class="ai-decision-dialog__heading" v-i18n>Options weighed by the AI</h3>
@@ -63,30 +68,39 @@
           </select>
         </label>
         <textarea v-if="rating !== undefined" ref="comment" v-model="text" class="ai-decision-dialog__comment" data-test="ai-rating-text"
-          :maxlength="MAX_AI_FEEDBACK_TEXT" rows="3" :placeholder="$t('Comment (optional)')" @keydown.stop></textarea>
+          :maxlength="MAX_AI_FEEDBACK_TEXT" rows="3" :placeholder="$t('Comment (optional)')" @keydown="keepKeysInField"></textarea>
         <p v-if="error !== undefined" class="ai-decision-dialog__error" role="alert">{{ error }}</p>
       </section>
 
-      <template v-if="canRate" #footer>
-        <button v-if="ownRating !== undefined" type="button" class="btn btn-tone-danger" data-test="ai-rating-remove" :disabled="saving" @click="save(undefined)" v-i18n>Remove rating</button>
-        <button type="button" class="btn btn-tone-success" data-test="ai-rating-save" :disabled="rating === undefined || saving" @click="save(rating)" v-i18n>Save</button>
+      <template #footer>
+        <!-- Step through the AI rows of the log (also arrow keys up/down), bottom left -->
+        <div class="ai-decision-dialog__steps">
+          <button type="button" class="ai-decision-dialog__step" data-test="ai-decision-previous" :disabled="position <= 0"
+            :title="$t('Previous AI decision') + ' (↑)'" :aria-label="$t('Previous AI decision')" @click="step(-1)">↑</button>
+          <button type="button" class="ai-decision-dialog__step" data-test="ai-decision-next" :disabled="position < 0 || position >= count - 1"
+            :title="$t('Next AI decision') + ' (↓)'" :aria-label="$t('Next AI decision')" @click="step(1)">↓</button>
+        </div>
+        <button v-if="canRate && ownRating !== undefined" type="button" class="btn btn-tone-danger" data-test="ai-rating-remove" :disabled="saving" @click="save(undefined)" v-i18n>Remove rating</button>
+        <button v-if="canRate" type="button" class="btn btn-tone-success" data-test="ai-rating-save" :disabled="rating === undefined || saving" :title="$t('Save') + ' (Ctrl/⌘ + Enter)'" @click="save(rating)" v-i18n>Save</button>
       </template>
     </DialogFrame>
   </SidebarModal>
 </template>
 
 <script setup lang="ts">
-import {computed, nextTick, ref, watch} from 'vue';
+import {computed, nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
 import SeatIcon from '@/client/components/create/SeatIcon.vue';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogActionRow from '@/client/components/logpanel/LogActionRow.vue';
+import AiDecisionStateFacts from './AiDecisionStateFacts.vue';
+import AiDecisionCards from './AiDecisionCards.vue';
 import {AI_FEEDBACK_EMOJI, AiFeedbackRating, canNameBetterOption, MAX_AI_FEEDBACK_TEXT} from '@/common/ai/AiFeedback';
 import {AiDecisionOption} from '@/common/ai/AiDecisionSummary';
 import {isPlayerId} from '@/common/Types';
 import {translateText} from '@/client/directives/i18n';
-import {aiFeedbackState, closeAiDecision, ratingsOf, saveAiFeedback} from './aiFeedbackState';
+import {aiFeedbackState, closeAiDecision, openAiDecisionIndex, ratingsOf, saveAiFeedback, stepAiDecision} from './aiFeedbackState';
 import {DECISION_KIND_TITLES, formatValue, optionGroups, optionLabel} from './aiDecisionOptions';
 import {AI_RATING_CHOICES} from './aiRatingChoices';
 
@@ -104,6 +118,17 @@ const canRate = computed(() => dialog.value !== undefined && isPlayerId(dialog.v
 const ratings = computed(() => dialog.value === undefined ? [] : ratingsOf(dialog.value.target.messageId));
 const ownRating = computed(() => ratings.value.find((entry) => entry.color === ownColor.value));
 const otherRatings = computed(() => ratings.value.filter((entry) => entry.color !== ownColor.value));
+// The row is the AI passing: the situation then lists what it could still have done
+const isPass = computed(() => {
+  const row = dialog.value?.target.row;
+  return row?.type === 'action' && row.action.kind === 'pass';
+});
+// Card decisions show the cards as cards (draft, purchase, start selection)
+const CARD_KINDS = ['draft', 'research', 'initial'];
+const showsCards = computed(() => {
+  const decision = dialog.value?.decision;
+  return decision !== undefined && CARD_KINDS.includes(decision.kind) && decision.options.some((option) => option.card !== undefined);
+});
 const groups = computed(() => dialog.value?.decision === undefined ? [] : optionGroups(dialog.value.decision));
 const kindTitle = computed(() => DECISION_KIND_TITLES[dialog.value?.decision?.kind ?? ''] ?? 'AI decision');
 const error = computed(() => aiFeedbackState.error);
@@ -142,6 +167,50 @@ function choose(choice: AiFeedbackRating): void {
   rating.value = choice;
   nextTick(() => comment.value?.focus());
 }
+
+// Typing must not trigger game shortcuts (I, F, A/S/D …); Escape still closes the dialog
+function keepKeysInField(event: KeyboardEvent): void {
+  const field = event.target instanceof HTMLTextAreaElement ? event.target : undefined;
+  const steps = (event.key === 'ArrowUp' || event.key === 'ArrowDown') && field?.value === '';
+  const saves = event.key === 'Enter' && (event.ctrlKey || event.metaKey);
+  if (event.key !== 'Escape' && !steps && !saves) {
+    event.stopPropagation();
+  }
+}
+
+const position = computed(() => dialog.value === undefined ? -1 : openAiDecisionIndex());
+const count = computed(() => dialog.value?.targets.length ?? 0);
+
+function step(direction: -1 | 1): void {
+  stepAiDecision(direction);
+}
+
+// Arrow keys step through the AI rows, unless a field (comment, better option) has the focus
+function onKeydown(event: KeyboardEvent): void {
+  if (dialog.value === undefined) {
+    return;
+  }
+  // Ctrl/Cmd + Enter saves, also from the comment field
+  if (event.key === 'Enter' && (event.ctrlKey || event.metaKey) && canRate.value && rating.value !== undefined && !saving.value) {
+    event.preventDefault();
+    void save(rating.value);
+    return;
+  }
+  if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
+    return;
+  }
+  // In the comment field the arrows move the cursor once something is typed; an empty field lets them step
+  const target = event.target;
+  if (target instanceof HTMLSelectElement || target instanceof HTMLInputElement ||
+    (target instanceof HTMLTextAreaElement && target.value !== '')) {
+    return;
+  }
+  event.preventDefault();
+  step(event.key === 'ArrowUp' ? -1 : 1);
+}
+
+onMounted(() => window.addEventListener('keydown', onKeydown));
+onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown));
 
 function close(): void {
   closeAiDecision();

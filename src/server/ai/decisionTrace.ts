@@ -3,10 +3,11 @@ import {PlayerInput} from '../PlayerInput';
 import {isSimulating} from './simulationSandbox';
 import {PlayerInputModel} from '../../common/models/PlayerInputModel';
 import {InputResponse} from '../../common/inputs/InputResponse';
-import {AiDecisionOption, AiDecisionSummary, MAX_SUMMARY_OPTIONS} from '../../common/ai/AiDecisionSummary';
+import {AiDecisionOption, AiDecisionState, AiDecisionSummary, MAX_SUMMARY_OPTIONS} from '../../common/ai/AiDecisionSummary';
 import {AiLevel} from '../../common/ai/AiLevel';
 import {IGame} from '../IGame';
 import rawSettings from '../../genfiles/settings.json';
+import {possibleActionsOf} from './possibleActions';
 
 // Records what the AI could choose, how it valued every option and what it took. The game log
 // only says what happened; to judge a decision one needs the alternatives and their values.
@@ -116,15 +117,29 @@ function summaryOption(option: TracedOption): AiDecisionOption {
  * What the analysis log shows: the start selection with all its cards (grouped by the client),
  * otherwise the best options plus every chosen one. The decision log file keeps all of them.
  */
-export function summaryOf(decisionId: string, kind: DecisionKind, title: string, options: ReadonlyArray<TracedOption>, saveId: number, generation: number): AiDecisionSummary {
+export function summaryOf(decisionId: string, kind: DecisionKind, title: string, options: ReadonlyArray<TracedOption>, saveId: number, generation: number, state?: PlayerSnapshot): AiDecisionSummary {
   let shown: Array<TracedOption>;
   if (kind === 'initial') {
     shown = options.filter((option) => option.card !== undefined);
+  } else if (kind === 'action') {
+    // All actions the AI tried: next to a pass they are what it could still have done
+    shown = [...options].sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity));
   } else {
     const ranked = [...options].sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity));
     shown = ranked.filter((option, index) => index < MAX_SUMMARY_OPTIONS || option.chosen === true);
   }
-  return {id: decisionId, kind, title, saveId, generation, options: shown.map(summaryOption)};
+  return {id: decisionId, kind, title, saveId, generation, options: shown.map(summaryOption), state: state === undefined ? undefined : stateOf(state)};
+}
+
+function stateOf(snapshot: PlayerSnapshot): AiDecisionState {
+  return {
+    megaCredits: snapshot.megaCredits, steel: snapshot.steel, titanium: snapshot.titanium,
+    plants: snapshot.plants, energy: snapshot.energy, heat: snapshot.heat,
+    production: {...snapshot.production},
+    terraformRating: snapshot.terraformRating,
+    victoryPoints: snapshot.victoryPoints,
+    hand: [...snapshot.hand],
+  };
 }
 
 export function setDecisionRecorder(next: ((record: DecisionRecord) => void) | undefined): void {
@@ -208,7 +223,10 @@ export function recordDecision<T>(input: PlayerInput, player: IPlayer, decide: (
   const kind = decision.kind ?? 'other';
   const title = titleText(input);
   if (analysisGame) {
-    lastSummary = summaryOf(decisionId, kind, title, decision.options, saveId, game.generation);
+    lastSummary = summaryOf(decisionId, kind, title, decision.options, saveId, game.generation, state);
+    if (lastSummary.state !== undefined && kind === 'action') {
+      lastSummary.state.possibleActions = possibleActionsOf(input);
+    }
   }
   recorder?.({
     decisionId,

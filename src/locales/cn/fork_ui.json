@@ -1708,5 +1708,8 @@
   "Invalid number:": "无效数字：",
   "Open on my turn": "轮到我时打开",
   "Situation of the AI": "AI 当时的局面",
-  "Still possible, but not done": "仍可执行但未执行"
+  "Still possible, but not done": "仍可执行但未执行",
+  "Nothing else was possible.": "没有其他可执行的操作。",
+  "Previous AI decision": "上一个 AI 决策",
+  "Next AI decision": "下一个 AI 决策"
 }

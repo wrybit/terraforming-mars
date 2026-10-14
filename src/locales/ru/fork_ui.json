@@ -1591,5 +1591,8 @@
   "Invalid number:": "Недопустимое число:",
   "Open on my turn": "Открывать в мой ход",
   "Situation of the AI": "Положение AI",
-  "Still possible, but not done": "Ещё было возможно, но не сделано"
+  "Still possible, but not done": "Ещё было возможно, но не сделано",
+  "Nothing else was possible.": "Больше ничего не было возможно.",
+  "Previous AI decision": "Предыдущее решение AI",
+  "Next AI decision": "Следующее решение AI"
 }

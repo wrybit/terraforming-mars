@@ -1096,7 +1096,7 @@ each(@players, {
   display: flex;
   align-items: center;
   gap: 2px;
-  padding: 2px 3px 2px 10px;
+  padding: 2px 3px 2px 6px;
   transform: translateY(-50%);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
@@ -1105,12 +1105,24 @@ each(@players, {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
-// Label and buttons belong together: smaller gap to the buttons than the padding to the edge
+// Label and buttons belong together: smaller gap to the buttons than the padding to the edge.
+// The label is a button too: it opens the dialog without choosing a rating
 .log-ai-rate-bar__label {
+  height: 28px;
   margin-right: 4px;
+  padding: 0 4px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
   color: #b3b2ff;
   font-size: 14px;
   font-weight: bold;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255, 255, 255, 0.14);
+  }
 }
 
 .log-ai-rate-bar__button {
@@ -1134,4 +1146,9 @@ each(@players, {
 
 .log-ai-rating-better {
   color: #b3b2ff;
+}
+
+// Discarded cards: the card names in red (the card is gone, not played)
+.log-panel li.log-line--discard .log-card {
+  color: #ff7a72;
 }

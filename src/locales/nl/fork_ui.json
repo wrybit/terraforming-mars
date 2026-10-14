@@ -1398,5 +1398,8 @@
   "Open on my turn": "Openen als ik aan de beurt ben",
   "Situation of the AI": "Situatie van de AI",
   "Still possible, but not done": "Nog mogelijk, maar niet gedaan",
-  "Titanium": "Titaan"
+  "Titanium": "Titaan",
+  "Nothing else was possible.": "Niets anders was mogelijk.",
+  "Previous AI decision": "Vorige AI-beslissing",
+  "Next AI decision": "Volgende AI-beslissing"
 }

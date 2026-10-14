@@ -1,7 +1,7 @@
 <template>
    <!-- log-line--<colour>: text and hover in the colour of the player the line is about (log.less) -->
    <li v-if="message !== undefined && message.data !== undefined && message.message !== undefined"
-     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--expandable': expandable, 'log-line--ai-insight': message.aiInsight !== undefined}]"
+     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--expandable': expandable, 'log-line--ai-insight': message.aiInsight !== undefined, 'log-line--discard': isDiscard}]"
      @click.prevent="$emit('click')">
     <span v-if="(message.type ?? LogMessageType.DEFAULT) === LogMessageType.DEFAULT" :title="when" v-html="icon"></span>
     <!-- Analysis game: a private line of an AI player, normally hidden from the others (after the time icon, which the log hides) -->
@@ -66,6 +66,13 @@ import {range} from '@/common/utils/utils';
 import {needsModalPreview} from '@/client/components/logpanel/logMessageContent';
 import {cardTypeToCss, partySlug} from '@/client/components/logpanel/logCardType';
 import SeatIcon from '@/client/components/create/SeatIcon.vue';
+
+const DISCARD_MESSAGES = new Set([
+  '${0} discarded ${1}',
+  'You discarded ${0}',
+  'You drew and discarded ${0}',
+  'Discarding ${0} as you could not play it.',
+]);
 
 
 export default defineComponent({
@@ -148,6 +155,10 @@ export default defineComponent({
     // Many cards: opens a modal on click (see logMessageContent.ts)
     expandable(): boolean {
       return needsModalPreview(this.message);
+    },
+    // Lines about discarded cards: their card names show in red (log.less)
+    isDiscard(): boolean {
+      return DISCARD_MESSAGES.has(this.message.message);
     },
     lineColor(): Color | undefined {
       const player = this.message.data?.find((datum) => datum.type === LogMessageDataType.PLAYER);

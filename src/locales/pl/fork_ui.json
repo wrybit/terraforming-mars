@@ -1554,5 +1554,8 @@
   "Invalid number:": "Nieprawidłowa liczba:",
   "Open on my turn": "Otwieraj w mojej turze",
   "Situation of the AI": "Sytuacja AI",
-  "Still possible, but not done": "Jeszcze możliwe, ale niezrobione"
+  "Still possible, but not done": "Jeszcze możliwe, ale niezrobione",
+  "Nothing else was possible.": "Nic innego nie było możliwe.",
+  "Previous AI decision": "Poprzednia decyzja AI",
+  "Next AI decision": "Następna decyzja AI"
 }
