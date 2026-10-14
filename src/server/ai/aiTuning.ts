@@ -160,6 +160,8 @@ export type AiTuning = {
   recentPace: number,
   /** 1: World Government terraforming options are tried on game copies (worldGovernmentChoice.ts); 0 = first option. */
   worldGovernment: number,
+  /** 1: OR questions right after a move are tried once per option on game copies (followUpPlan.ts); 0 = first option. */
+  followUpChoice: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -310,6 +312,7 @@ export const BASELINE_TUNING: AiTuning = {
   collectorRates: 1,
   recentPace: 0,
   worldGovernment: 0,
+  followUpChoice: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -606,6 +609,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   recentPace2: {recentPace: 2},
   // Venus games: World Government chose temperature every time (first option).
   worldGovernment: {worldGovernment: 1},
+  followUpChoice: {followUpChoice: 1},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.

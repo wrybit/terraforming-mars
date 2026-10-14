@@ -17,6 +17,7 @@ import {isSimulating} from './simulationSandbox';
 import {OrOptions} from '../inputs/OrOptions';
 import {WORLD_GOVERNMENT_TITLE, chooseWorldGovernment} from './worldGovernmentChoice';
 import {tuningOf} from './aiTuning';
+import {clearFollowUpPlan, plannedFollowUp} from './followUpPlan';
 
 // Entry point of the rule-based AI (stage 1): which answer to give for the current input.
 
@@ -46,6 +47,17 @@ function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputRespo
   // Award scores per generation for the trend (awardHistory.ts), only from the real game.
   if (!isSimulating()) {
     recordAwardScores(player.game);
+  }
+  // A follow-up plan belongs to one move: a new action menu drops it (chooseAction sets a new one).
+  if (!isSimulating()) {
+    if (isActionMenu(input)) {
+      clearFollowUpPlan(player);
+    } else if (input instanceof OrOptions) {
+      const planned = plannedFollowUp(input, player);
+      if (planned !== undefined) {
+        return planned;
+      }
+    }
   }
   const profile = LEVEL_PROFILES[level];
   if (profile.randomShare > 0 && Math.random() < profile.randomShare) {

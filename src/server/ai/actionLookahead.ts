@@ -25,6 +25,7 @@ import {sellToAffordResponses} from './sellToAfford';
 import {lastGenerationSaleResponses} from './lastGenerationSale';
 import {isSimulating} from './simulationSandbox';
 import {CardName} from '../../common/cards/CardName';
+import {clearFollowUpPlan, setFollowUpPlan} from './followUpPlan';
 
 // Decides an action-phase move by playing every candidate move on a copy of the game and
 // valuing the resulting position (one-step lookahead). This captures the effect of any card
@@ -46,7 +47,8 @@ const HUMAN_ROLLOUT_BUDGET = 2000;
 /** How many of the best moves a decision trace keeps. */
 const TRACED_ACTION_OPTIONS = 25;
 
-type Candidate = {response: InputResponse, endsTurn: boolean};
+/** `followUps`: planned option indices for OR questions right after the move (followUpPlan.ts). */
+type Candidate = {response: InputResponse, endsTurn: boolean, followUps?: ReadonlyArray<number>};
 
 function isTurnEnding(option: PlayerInput): boolean {
   return option instanceof SelectOption && typeof option.title === 'string' &&
@@ -143,7 +145,24 @@ type Outcome = {
   next?: {snapshot: GameSnapshot, menuSize: number, candidates: Array<Candidate>},
   /** Best second action found for `next`. */
   bestSecond?: Candidate,
+  /** Titles of the options of an OR question asked right after the move (only when no plan was given). */
+  followUpTitles?: Array<string>,
 };
+
+/** OR questions with more options than this are left to the quick rules (time budget). */
+const MAXIMUM_FOLLOW_UP_OPTIONS = 6;
+
+function followUpTitles(input: PlayerInput | undefined): Array<string> | undefined {
+  if (!(input instanceof OrOptions)) {
+    return undefined;
+  }
+  // Read before isActionMenu: its type guard narrows the rejected branch to never.
+  const options = input.options;
+  if (isActionMenu(input) || options.length < 2 || options.length > MAXIMUM_FOLLOW_UP_OPTIONS) {
+    return undefined;
+  }
+  return options.map((option) => typeof option.title === 'string' ? option.title : option.title.message);
+}
 
 function tryCandidate(snapshot: GameSnapshot, player: IPlayer, menuSize: number, candidate: Candidate, context: ValuationContext, withNext: boolean): Outcome | undefined {
   return withCopy(snapshot, (copy): Outcome | undefined => {
@@ -159,14 +178,15 @@ function tryCandidate(snapshot: GameSnapshot, player: IPlayer, menuSize: number,
     } catch {
       return undefined;
     }
-    finishMove(copy, copyPlayer);
+    const titles = candidate.followUps === undefined ? followUpTitles(copyPlayer.getWaitingFor()) : undefined;
+    finishMove(copy, copyPlayer, candidate.followUps);
     const value = relativeValue(copyPlayer, context);
     const nextMenu = copyPlayer.getWaitingFor();
     if (!withNext || !isActionMenu(nextMenu) || copy.generation !== generation) {
-      return {value, snapshot: withNext ? snapshotOf(copy) : undefined};
+      return {value, snapshot: withNext ? snapshotOf(copy) : undefined, followUpTitles: titles};
     }
     const snapshotAfter = snapshotOf(copy);
-    return {value, snapshot: snapshotAfter, next: {snapshot: snapshotAfter, menuSize: nextMenu.options.length, candidates: candidatesFor(nextMenu, copyPlayer)}};
+    return {value, snapshot: snapshotAfter, next: {snapshot: snapshotAfter, menuSize: nextMenu.options.length, candidates: candidatesFor(nextMenu, copyPlayer)}, followUpTitles: titles};
   });
 }
 
@@ -345,8 +365,27 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     }
   }
 
-  // Second step for the best few first moves that leave an action in this turn.
   const tuning = tuningOf(player);
+  // Follow-up choice: a move that asks an OR question right away (e.g. which resource to gain) is
+  // tried once per option instead of only with the quick rule's first option.
+  if (tuning.followUpChoice > 0) {
+    for (const entry of [...tried]) {
+      const titles = entry.outcome.followUpTitles;
+      if (titles === undefined) {
+        continue;
+      }
+      for (let index = 0; index < titles.length && !outOfTime(); index++) {
+        const candidate: Candidate = {...entry.candidate, followUps: [index]};
+        const outcome = tryCandidate(snapshot, player, menu.options.length, candidate, context, true);
+        if (outcome !== undefined) {
+          outcome.followUpTitles = [titles[index]];
+          tried.push({candidate, outcome});
+        }
+      }
+    }
+  }
+
+  // Second step for the best few first moves that leave an action in this turn.
   // A sale alone loses value; it only pays with the claim after it, so it always gets a second step.
   const ranked = [...tried].sort((a, b) => b.outcome.value - a.outcome.value);
   const promising = [...ranked.slice(0, tuning.secondStepCandidates),
@@ -473,23 +512,33 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     }
   }
 
-  let best: {response: InputResponse, value: number} | undefined;
+  let best: {candidate: Candidate, value: number} | undefined;
   for (const {candidate, outcome} of tried) {
     options.onEvaluated?.(candidate.response, outcome.value);
     const judged = outcome.value + options.noise * gaussian(random);
     if (best === undefined || judged > best.value) {
-      best = {response: candidate.response, value: judged};
+      best = {candidate, value: judged};
+    }
+  }
+  // The real game asks the follow-up question after this move: answer it as planned (chooseResponse.ts).
+  // Copies share the player ids, so only the real game keeps a plan.
+  if (!isSimulating()) {
+    if (best?.candidate.followUps !== undefined) {
+      setFollowUpPlan(player, best.candidate.followUps);
+    } else {
+      clearFollowUpPlan(player);
     }
   }
   if (isTracingDecision()) {
     // The best moves and the chosen one; the rest would only bloat the trace.
     const ranked = [...tried].sort((a, b) => b.outcome.value - a.outcome.value);
-    const shown = ranked.filter((entry, index) => index < TRACED_ACTION_OPTIONS || entry.candidate.response === best?.response);
+    const shown = ranked.filter((entry, index) => index < TRACED_ACTION_OPTIONS || entry.candidate === best?.candidate);
     traceOptions('action', shown.map((entry) => ({
-      label: describeResponse(menu, entry.candidate.response, player.game),
+      label: describeResponse(menu, entry.candidate.response, player.game) +
+        (entry.candidate.followUps !== undefined && entry.outcome.followUpTitles !== undefined ? ` → ${entry.outcome.followUpTitles[0]}` : ''),
       value: Math.round(entry.outcome.value * 10) / 10,
-      chosen: entry.candidate.response === best?.response,
+      chosen: entry.candidate === best?.candidate,
     })), {candidates: candidatesFor(menu, player).length, tried: tried.length, milliseconds: Math.round(performance.now() - start)});
   }
-  return best?.response;
+  return best?.candidate.response;
 }

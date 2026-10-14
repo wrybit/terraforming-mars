@@ -104,16 +104,20 @@ const MAXIMUM_FOLLOW_UPS = 30;
  * Answers the player's follow-up questions inside a copy with quick rules until the move is
  * complete: the player is back at the action menu, waits for nothing, or the phase changed.
  */
-export function finishMove(copy: IGame, player: IPlayer): void {
+export function finishMove(copy: IGame, player: IPlayer, followUps: ReadonlyArray<number> = []): void {
   const phase = copy.phase;
   const generation = copy.generation;
+  // Planned answers for OR follow-ups (actionLookahead.ts tries each option); the rest by quick rules.
+  const plan = [...followUps];
   for (let step = 0; step < MAXIMUM_FOLLOW_UPS; step++) {
     const waitingFor = player.getWaitingFor();
     if (waitingFor === undefined || isActionMenu(waitingFor) || copy.phase !== phase || copy.generation !== generation) {
       return;
     }
     try {
-      player.process(quickResponse(waitingFor, player));
+      const planned = waitingFor instanceof OrOptions && plan.length > 0 ? plan.shift() : undefined;
+      const option = planned === undefined ? undefined : (waitingFor as OrOptions).options[planned];
+      player.process(option !== undefined ? {type: 'or', index: planned as number, response: quickResponse(option, player)} : quickResponse(waitingFor, player));
     } catch {
       try {
         player.process(randomResponse(waitingFor, player, Math.random));
