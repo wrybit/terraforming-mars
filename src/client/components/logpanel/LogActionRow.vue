@@ -11,6 +11,7 @@
         <span class="log-row-ma">{{ $t(row.action.name ?? '') }}</span>
       </template>
       <span v-else-if="row.action.kind === 'pass'" class="log-row-muted">{{ $t('passed') }}</span>
+      <span v-else-if="row.action.kind === 'endTurn'" class="log-row-muted">{{ $t('passed on') }}</span>
       <span v-else-if="row.action.kind === 'kept'" class="log-row-muted">{{ keptText }}</span>
       <span v-else-if="row.action.kind === 'fizzled'" class="log-row-muted">{{ $t('fizzled') }}</span>
       <template v-else-if="row.action.kind === 'trade'">

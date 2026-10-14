@@ -1144,5 +1144,6 @@
   "Next AI decision": "次のAIの判断",
   "AI hand cards": "AI の手札",
   "Visible once you have bought your cards": "自分のカードを購入すると表示されます",
-  "No cards in hand": "手札がありません"
+  "No cards in hand": "手札がありません",
+  "passed on": "手番を回した"
 }

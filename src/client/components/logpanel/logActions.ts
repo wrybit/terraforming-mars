@@ -31,7 +31,7 @@ export type LogEffect = {
   cost?: boolean,
 };
 
-export type LogActionKind = 'card' | 'action' | 'standardProject' | 'milestone' | 'award' | 'pass' | 'kept' |
+export type LogActionKind = 'card' | 'action' | 'standardProject' | 'milestone' | 'award' | 'pass' | 'endTurn' | 'kept' |
   'fizzled' | 'trade' | 'delegate' | 'partyAction' | 'globalEvent' | 'turmoil';
 
 export type LogAction = {
@@ -71,6 +71,8 @@ const STARTERS: Record<string, LogActionKind> = {
   '${0} claimed ${1} milestone': 'milestone',
   '${0} funded ${1} award': 'award',
   '${0} passed': 'pass',
+  // Turn handed on after one action: a row of its own, otherwise a single-action turn looks like a missing move
+  '${0} ended turn': 'endTurn',
   '${0} kept ${1} project cards': 'kept',
   '${0} fizzled. ${1} gains 15 M€.': 'fizzled',
   '${0} spent ${1} energy to trade with ${2}': 'trade',
@@ -97,9 +99,6 @@ const TURMOIL = new Set([
   'The ruling policy is: ${0}',
   'A neutral delegate was added to the ${0} party',
 ]);
-
-// Silent bookkeeping lines: the row layout already shows them
-const HIDDEN = new Set(['${0} ended turn']);
 
 // Lines that only announce what follows as its own message ("drew 1 card(s)", "gained 3 heat"): they join the action row
 const TRIGGERS = new Set([
@@ -438,10 +437,6 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
 
   messages.forEach((message, index) => {
     const template = message.message;
-    if (HIDDEN.has(template)) {
-      (current ?? rows[rows.length - 1])?.indexes.push(index);
-      return;
-    }
     // Card purchase at the start of a generation: one summary row
     if (!actionsStarted && template === '${0} ${1} ${2} card(s)' && value(message, 1) === 'bought') {
       const player = firstPlayer(message);

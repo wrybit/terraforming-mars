@@ -73,6 +73,14 @@ describe('logActions', () => {
     expect(research.entries).deep.eq([{player: 'red', amount: 2}, {player: 'blue', amount: 1}]);
   });
 
+  it('shows a turn handed on after one action as its own row', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
+      message('${0} ended turn', player('red')),
+    ]);
+    expect(rows.map((row) => row.type === 'action' ? row.action.kind : row.type)).deep.eq(['card', 'endTurn']);
+  });
+
   it('attaches production gained because of another card to the action', () => {
     const rows = groupLogMessages([
       message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
