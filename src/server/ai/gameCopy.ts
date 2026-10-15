@@ -5,7 +5,7 @@ import {PlayerInput} from '../PlayerInput';
 import {OrOptions} from '../inputs/OrOptions';
 import {runInSandbox} from './simulationSandbox';
 import {quickResponse} from './quickResponse';
-import {isSingleCardChoice, plannedResponse} from './followUpPlan';
+import {followUpChoices, plannedResponse} from './followUpPlan';
 import {randomResponse} from './randomResponse';
 import {tuningOf} from './aiTuning';
 import {passedCards} from './draftMemory';
@@ -117,7 +117,7 @@ export function finishMove(copy: IGame, player: IPlayer, followUps: ReadonlyArra
       return;
     }
     try {
-      const planned = (waitingFor instanceof OrOptions || isSingleCardChoice(waitingFor)) && plan.length > 0 ? plan.shift() : undefined;
+      const planned = plan.length > 0 && followUpChoices(waitingFor, player) !== undefined ? plan.shift() : undefined;
       const response = planned === undefined ? undefined : plannedResponse(waitingFor, planned, player);
       player.process(response ?? quickResponse(waitingFor, player));
     } catch {

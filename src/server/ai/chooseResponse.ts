@@ -17,7 +17,7 @@ import {isSimulating} from './simulationSandbox';
 import {OrOptions} from '../inputs/OrOptions';
 import {WORLD_GOVERNMENT_TITLE, chooseWorldGovernment} from './worldGovernmentChoice';
 import {tuningOf} from './aiTuning';
-import {clearFollowUpPlan, isSingleCardChoice, plannedFollowUp} from './followUpPlan';
+import {clearFollowUpPlan, plannedFollowUp} from './followUpPlan';
 
 // Entry point of the rule-based AI (stage 1): which answer to give for the current input.
 
@@ -52,7 +52,7 @@ function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputRespo
   if (!isSimulating()) {
     if (isActionMenu(input)) {
       clearFollowUpPlan(player);
-    } else if ((input instanceof OrOptions || isSingleCardChoice(input)) && player.game.phase === Phase.ACTION) {
+    } else if (player.game.phase === Phase.ACTION) {
       const planned = plannedFollowUp(input, player);
       if (planned !== undefined) {
         return planned;

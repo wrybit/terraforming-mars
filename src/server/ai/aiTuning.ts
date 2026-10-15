@@ -166,6 +166,12 @@ export type AiTuning = {
   followUpCards: number,
   /** 1: energy production counts as energy only up to what actions and hand cards use, the rest as heat (energyPlan.ts). */
   energyPlan: number,
+  /** 1: "choose X" follow-ups (also inside OR questions) are tried with the smallest, middle and largest X (followUpPlan.ts). */
+  followUpAmounts: number,
+  /** 1: leftover energy is worth nothing once the temperature is maxed or no production phase is left (stateValue.ts). */
+  energyAsHeat: number,
+  /** > 0: award funding only with a lead of at least this share of the best opponent score (awardFunding.ts). */
+  awardFundingLead: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -323,6 +329,9 @@ export const BASELINE_TUNING: AiTuning = {
   followUpChoice: 1,
   followUpCards: 0,
   energyPlan: 0,
+  followUpAmounts: 0,
+  energyAsHeat: 0,
+  awardFundingLead: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -625,6 +634,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noFollowUpChoice: {followUpChoice: 0},
   followUpCards: {followUpCards: 1},
   energyPlan: {energyPlan: 1},
+  followUpAmounts: {followUpAmounts: 1},
+  energyAsHeat: {energyAsHeat: 1},
+  awardLead: {awardFundingLead: 0.1},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.

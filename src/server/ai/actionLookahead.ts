@@ -10,6 +10,7 @@ import {isIProjectCard} from '../cards/IProjectCard';
 import {ICard} from '../cards/ICard';
 import {remainingProductionPhases} from './gameProgress';
 import {cardPayment} from './greedyPayment';
+import {fundingAllowed} from './awardFunding';
 import {quickResponse} from './quickResponse';
 import {GameSnapshot, finishMove, isActionMenu, playerView, snapshotOf, withCopy} from './gameCopy';
 import {ValuationContext, relativeValue, valuationContext} from './stateValue';
@@ -23,7 +24,7 @@ import {sellToAffordResponses} from './sellToAfford';
 import {lastGenerationSaleResponses} from './lastGenerationSale';
 import {isSimulating} from './simulationSandbox';
 import {CardName} from '../../common/cards/CardName';
-import {clearFollowUpPlan, isSingleCardChoice, setFollowUpPlan} from './followUpPlan';
+import {clearFollowUpPlan, followUpChoices, setFollowUpPlan} from './followUpPlan';
 
 // Decides an action-phase move by playing every candidate move on a copy of the game and
 // valuing the resulting position (one-step lookahead). This captures the effect of any card
@@ -115,7 +116,8 @@ function candidatesFor(menu: OrOptions, player: IPlayer): Array<Candidate> {
     if (option instanceof UndoActionOption) {
       return;
     }
-    for (const response of responsesFor(option, player)) {
+    // awardFundingLead: no funding of awards the player does not lead (awardFunding.ts).
+    for (const response of responsesFor(option, player).filter((inner) => fundingAllowed(option, inner, player))) {
       candidates.push({response: {type: 'or', index, response}, endsTurn: isTurnEnding(option)});
     }
   });
@@ -136,26 +138,6 @@ type Outcome = {
   followUpTitles?: Array<string>,
 };
 
-/** OR questions with more options than this are left to the quick rules (time budget). */
-const MAXIMUM_FOLLOW_UP_OPTIONS = 6;
-
-function followUpTitles(input: PlayerInput | undefined, withCards: boolean): Array<string> | undefined {
-  // followUpCards: single-card choices inside a move (e.g. the card Robotic Workforce copies).
-  if (withCards && isSingleCardChoice(input)) {
-    const cards = input.cards;
-    return cards.length < 2 || cards.length > MAXIMUM_FOLLOW_UP_OPTIONS ? undefined : cards.map((card) => card.name);
-  }
-  if (!(input instanceof OrOptions)) {
-    return undefined;
-  }
-  // Read before isActionMenu: its type guard narrows the rejected branch to never.
-  const options = input.options;
-  if (isActionMenu(input) || options.length < 2 || options.length > MAXIMUM_FOLLOW_UP_OPTIONS) {
-    return undefined;
-  }
-  return options.map((option) => typeof option.title === 'string' ? option.title : option.title.message);
-}
-
 function tryCandidate(snapshot: GameSnapshot, player: IPlayer, menuSize: number, candidate: Candidate, context: ValuationContext, withNext: boolean): Outcome | undefined {
   return withCopy(snapshot, (copy): Outcome | undefined => {
     const copyPlayer = copy.getPlayerById(player.id);
@@ -170,7 +152,7 @@ function tryCandidate(snapshot: GameSnapshot, player: IPlayer, menuSize: number,
     } catch {
       return undefined;
     }
-    const titles = candidate.followUps === undefined ? followUpTitles(copyPlayer.getWaitingFor(), tuningOf(player).followUpCards > 0) : undefined;
+    const titles = candidate.followUps === undefined ? followUpChoices(copyPlayer.getWaitingFor(), copyPlayer)?.map((choice) => choice.title) : undefined;
     finishMove(copy, copyPlayer, candidate.followUps);
     const value = relativeValue(copyPlayer, context);
     const nextMenu = copyPlayer.getWaitingFor();

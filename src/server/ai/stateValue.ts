@@ -262,6 +262,15 @@ function lastGenerationMoneyValue(player: IPlayer, context: ValuationContext): n
   return greeneries * UNBOUGHT_GREENERY_SHARE * context.victoryPoint + (money - greeneries * GREENERY_PROJECT_COST) * LEFTOVER_MONEY_VALUE;
 }
 
+/**
+ * Energy left over turns into heat in the production phase. energyAsHeat: once the temperature is
+ * maxed or no production phase is left, that heat raises nothing – a test game spent 58 M€ on 29 energy
+ * in the last generation (award effects are valued separately).
+ */
+function energyResourceValue(player: IPlayer, context: ValuationContext): number {
+  return tuningOf(player).energyAsHeat > 0 && (context.temperatureMaxed || context.remaining === 0) ? 0 : 0.5;
+}
+
 function resourceValue(player: IPlayer, context: ValuationContext): number {
   const heatValue = context.temperatureMaxed ? 0 : 0.9;
   const money = context.remaining > 0 ? 1 : MONEY_VALUE_IN_LAST_GENERATION;
@@ -272,7 +281,7 @@ function resourceValue(player: IPlayer, context: ValuationContext): number {
     player.titanium * player.getTitaniumValue() * 0.8 * money +
     player.plants * 1.5 +
     player.heat * heatValue +
-    player.energy * 0.5;
+    player.energy * energyResourceValue(player, context);
 }
 
 /**
