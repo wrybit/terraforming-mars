@@ -38,12 +38,21 @@ export abstract class Board {
 
   // stores adjacent spaces in clockwise order starting from the top left
   private readonly adjacentSpaces = new Map<SpaceId, ReadonlyArray<Space>>();
+  // Board spaces by "x,y" (colonies excluded): neighbour lookup without scanning all spaces, which
+  // made every board construction (also each loaded game copy of the AI) quadratic in the space count.
+  private readonly boardSpacesByCoordinate = new Map<string, Space>();
 
   public constructor(
     public readonly spaces: ReadonlyArray<Space>,
     public readonly noctisCitySpaceId?: SpaceId | undefined) {
     this.maxX = Math.max(...spaces.map((s) => s.x));
     this.maxY = Math.max(...spaces.map((s) => s.y));
+    for (const space of spaces) {
+      const key = `${space.x},${space.y}`;
+      if (space.spaceType !== SpaceType.COLONY && !this.boardSpacesByCoordinate.has(key)) {
+        this.boardSpacesByCoordinate.set(key, space);
+      }
+    }
     spaces.forEach((space) => {
       const adjacentSpaces = this.computeAdjacentSpaces(space);
       const filtered = adjacentSpaces.filter((space) => space !== undefined);
@@ -102,11 +111,10 @@ export abstract class Board {
         bottomLeftSpace,
         leftSpace,
       ];
-      const spaces = coords.map(([x, y]) =>
-        this.spaces.find((adj) =>
-          adj.x === x && adj.y === y &&
-          space !== adj && adj.spaceType !== SpaceType.COLONY,
-        ));
+      const spaces = coords.map(([x, y]) => {
+        const adjacent = this.boardSpacesByCoordinate.get(`${x},${y}`);
+        return adjacent === space ? undefined : adjacent;
+      });
       return spaces;
     }
     return [];
