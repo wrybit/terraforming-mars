@@ -81,7 +81,8 @@ describe('Stats components', () => {
     expect(mount(StatsOverview, {...config, props: {games, results, chartWidth: 640}}).findAll('.stats-win')).has.length(5);
     // The loading skeleton shows as many key figure tiles as the overview (statsOverviewSections.ts)
     expect(mount(StatsOverview, {...config, props: {games, results, chartWidth: 640}}).findAll('.stats-kpi')).has.length(OVERVIEW_KPI_COUNT);
-    expect(mount(StatsPlayersView, {...config, props: {results, names: playerNames(games)}}).findAll('.stats-player-card')).has.length(3);
+    // Player cards only from 3 games on: the sample has one player with fewer games
+    expect(mount(StatsPlayersView, {...config, props: {results, names: playerNames(games)}}).findAll('.stats-player-card')).has.length(2);
     expect(mount(StatsRecordsView, {...config, props: {results}}).text()).to.include('120');
     expect(mount(StatsGameList, {...config, props: {games}}).findAll('tbody tr')).has.length(3);
     expect(mount(StatsWinRate, {...config, props: {winRate: 0.5, expected: 0.33}}).text()).to.include('50 %');

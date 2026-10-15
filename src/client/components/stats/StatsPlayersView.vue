@@ -39,6 +39,7 @@ import {average, StatsPlayerResult} from './statsResults';
 import {formatDuration, formatNumber, formatPercent} from './statsLabels';
 import StatsPointSources from './StatsPointSources.vue';
 import {statsHref} from './statsNavigation';
+import {DEFAULT_MIN_PLAYS} from './statsMinPlays';
 
 // Most successful corporation only from two games on – a single win says nothing
 const MIN_PLAYS_FOR_BEST = 2;
@@ -90,7 +91,7 @@ export default defineComponent({
           favorite: [...corporations].sort((first, second) => second.plays - first.plays)[0],
           best: corporations.filter((entry) => entry.plays >= MIN_PLAYS_FOR_BEST).sort((first, second) => second.winRate - first.winRate)[0],
         };
-      }).filter((player) => player.plays > 0);
+      }).filter((player) => player.plays >= DEFAULT_MIN_PLAYS);
     },
   },
   methods: {
