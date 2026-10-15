@@ -15,9 +15,7 @@ docker-compose.yml
 .env
 .env.*
 db
-local
+_*
 node_modules
 .lab.git
-Claude outputs
 ops
-mockups

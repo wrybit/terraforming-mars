@@ -28,8 +28,8 @@ node_modules/
 ./logs/
 
 # For any local work you don't want caught up in git.
-local/
-/ai-batch/
+/_tmp/
+/_ai-batch/
 
 # Large downloaded datasets (BGA game logs), never committed
 _data/

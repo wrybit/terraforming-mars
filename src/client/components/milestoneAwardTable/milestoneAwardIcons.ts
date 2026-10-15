@@ -1,8 +1,8 @@
 import {MilestoneName} from '@/common/ma/MilestoneName';
 import {AwardName} from '@/common/ma/AwardName';
 
-// Icon per milestone/award from the existing images under assets/ (mapping agreed in
-// "Claude outputs/meilensteine-icons.html"). Multiple parts = sum (e.g. steel + titanium);
+// Icon per milestone/award from the existing images under assets/ (mapping agreed in an
+// icon mockup). Multiple parts = sum (e.g. steel + titanium);
 // production = inside the brown production box like on the cards.
 // Record over all names: if a new milestone/award is missing, the type checker reports it.
 export type IconPart = {
