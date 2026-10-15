@@ -255,6 +255,8 @@ export const BASELINE_TUNING: AiTuning = {
   // 516 s instead of 69 s and human games felt far too slow (human feedback, 2026-10-10): off again until cheaper.
   // Round 79 (faster engine, at most 3 rounds per rollout): rollout3Rounds +1.52 VP (z +2.28) for +20 s per
   // test game – above the bar of 1 VP per 15 s, adopted.
+  // Round 80: rollout3Lean (quick rules for the opponents) −0.31 VP (z −0.45) but ~18 s less per AI player and
+  // game – the full opponent policy does not pay for its time (1 VP per 15 s), lean adopted.
   rolloutCandidates: 3,
   rolloutBudget: 2000,
   rolloutMargin: 0,
@@ -271,7 +273,7 @@ export const BASELINE_TUNING: AiTuning = {
   rolloutHorizon: 0,
   rolloutFocus: 0,
   rolloutMaximumRounds: 3,
-  rolloutOpponentPolicyMoves: -1,
+  rolloutOpponentPolicyMoves: 0,
   lastGenerationSpots: 0,
   // Human test game (2026-10-10): passed in the last generation with 47 M€ while greeneries were affordable.
   passedMoneyLost: 1,
@@ -674,6 +676,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   rollout3Lean: {rolloutCandidates: 3, rolloutBudget: 2000, rolloutMaximumRounds: 3, rolloutOpponentPolicyMoves: 0},
   rollout3Rounds: {rolloutCandidates: 3, rolloutBudget: 2000, rolloutMaximumRounds: 3},
   rollout4Rounds: {rolloutCandidates: 4},
+  // Round 81: the time saved by the lean rollouts spent elsewhere, plus the old full opponent policy as control.
+  rolloutFull: {rolloutOpponentPolicyMoves: -1},
+  lean4: {rolloutCandidates: 4},
+  leanRounds5: {rolloutMaximumRounds: 5},
 };
 
 export function isTuningVariant(name: string): boolean {
