@@ -363,9 +363,13 @@
 // Distance of the outer space columns from the edge of the visible board section
 @board-frame-inset: 8px;
 
+// Size of one hex space – shared with overlays drawn on top of it (stats heatmap)
+@board-space-width: 46px;
+@board-space-height: 51px;
+
 .board-space {
-  width: 46px;
-  height: 51px;
+  width: @board-space-width;
+  height: @board-space-height;
   position: absolute;
 
   .board-space-text {

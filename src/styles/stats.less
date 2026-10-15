@@ -931,11 +931,15 @@ each(@stats-source-colors, {
   color: if((@step >= 5) and (@step <= 8), #111, #fff);
 }
 
-// Number = share of games; the spaces next to the board (Phobos, Ganymede) as hexagons too
+// Number = share of games. Sized to the hex itself, not the space box: next to the board (Phobos, Ganymede)
+// the box also holds the name below and is wider, which used to stretch the overlay over the label.
 .stats-heatmap .stats-heat-space::after {
   content: attr(data-heat);
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: @board-space-width;
+  height: @board-space-height;
   display: flex;
   align-items: center;
   justify-content: center;

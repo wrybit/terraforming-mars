@@ -25,6 +25,7 @@ import {StatsBoardKey} from '@/common/stats/statsBoardKey';
 import {StatsGame} from '@/common/stats/StatsGame';
 import StatsBoardPreview from './StatsBoardPreview.vue';
 import {Heatmap, heatmap, HeatmapTileType, HEAT_STEPS} from './statsHeatmap';
+import {playerNames, statsPlayerName} from './statsResults';
 
 // Empty value of the player selection: all players combined
 const ALL_PLAYERS = '';
@@ -47,8 +48,9 @@ export default defineComponent({
   },
   computed: {
     playerOptions(): Array<SegmentOption> {
-      const names = new Set(this.games.flatMap((game) => (game.details?.tiles ?? []).map((tile) => tile.playerName)));
-      return [{value: ALL_PLAYERS, label: 'All'}, ...Array.from(names).sort().map((name) => ({value: name, label: name}))];
+      // Same order and AI merging as everywhere in the statistics: humans first, then one entry per AI strength
+      const names = new Set(this.games.flatMap((game) => (game.details?.tiles ?? []).map((tile) => statsPlayerName(tile.playerName))));
+      return [{value: ALL_PLAYERS, label: 'All'}, ...playerNames(this.games).filter((name) => names.has(name)).map((name) => ({value: name, label: name}))];
     },
     map(): Heatmap {
       return heatmap(this.games, this.boardKey, this.type, this.player === ALL_PLAYERS ? undefined : this.player);

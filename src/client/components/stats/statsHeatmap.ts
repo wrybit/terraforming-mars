@@ -1,6 +1,7 @@
 import {StatsGame, StatsTile} from '@/common/stats/StatsGame';
 import {SpaceId} from '@/common/Types';
 import {StatsBoardKey, statsBoardKey} from '@/common/stats/statsBoardKey';
+import {statsPlayerName} from './statsResults';
 
 export type HeatmapTileType = StatsTile['type'];
 
@@ -22,7 +23,7 @@ export function heatmap(games: ReadonlyArray<StatsGame>, boardKey: StatsBoardKey
     }
     gameCount++;
     for (const tile of tiles) {
-      if (tile.type === type && (playerName === undefined || tile.playerName === playerName)) {
+      if (tile.type === type && (playerName === undefined || statsPlayerName(tile.playerName) === playerName)) {
         counts.set(tile.spaceId, (counts.get(tile.spaceId) ?? 0) + 1);
       }
     }
