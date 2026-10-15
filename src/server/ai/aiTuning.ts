@@ -683,6 +683,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 82: human game (2026-10-15): 3 cities against 9, own greeneries fed the opponent's cities with 9 VP –
   // city appetite and the risk of lonely greeneries re-checked now that rollouts are on.
   cityExposed80: {cityNeighbourShare: 0.8, exposedSpotRisk: 0.8},
+  // Round 83: cheaper rollouts (skip clear decisions, fewer own moves per step) – time for later spending.
+  rolloutMargin5: {rolloutMargin: 5},
+  rolloutPolicy4: {rolloutPolicyMoves: 4},
 };
 
 export function isTuningVariant(name: string): boolean {
