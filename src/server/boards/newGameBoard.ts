@@ -9,9 +9,7 @@ import {Random, SeededRandom} from '../../common/utils/Random';
 
 /** Boards the board option draws from: one fixed board, or the pool of a random option. */
 export function boardCandidates(board: BoardNameType): Array<BoardName> {
-  const allBoards = Object.values(BoardName)
-    // TODO(kberg): Re-enable Amazonis Planitia once it's offered in the create-game form.
-    .filter((name) => name !== BoardName.AMAZONIS_PLANITIA);
+  const allBoards = Object.values(BoardName);
   if (board === RandomBoardOption.ALL) {
     return allBoards;
   }

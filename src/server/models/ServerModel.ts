@@ -30,7 +30,6 @@ import {runId} from '../utils/server-ids';
 import {aiHandOf} from '../aiFeedback/aiHandView';
 import {toName} from '../../common/utils/utils';
 import {MAX_AWARDS, MAX_MILESTONES} from '../../common/constants';
-import {venusScaleLevelForDisplay} from '../venusNext/venusScale';
 
 export class Server {
   public static getSimpleGameModel(game: IGame): SimpleGameModel {
@@ -99,7 +98,7 @@ export class Server {
       tags: game.tags,
       turmoil: getTurmoilModel(game),
       undoCount: game.undoCount,
-      venusScaleLevel: venusScaleLevelForDisplay(game.getVenusScaleLevel()),
+      venusScaleLevel: game.getVenusScaleLevel(),
     };
   }
 

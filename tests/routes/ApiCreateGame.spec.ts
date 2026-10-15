@@ -111,6 +111,7 @@ describe('ApiCreateGame', () => {
       BoardName.AMAZONIS,
       BoardName.TERRA_CIMMERIA,
       BoardName.HOLLANDIA,
+      BoardName.AMAZONIS_PLANITIA,
     ]);
   });
 
@@ -274,27 +275,6 @@ describe('ApiCreateGame', () => {
     ]});
     expect(res.statusCode).eq(statusCode.badRequest);
     expect(res.content).contains('at least one human player');
-  });
-
-  it('rejects Amazonis Planitia on a production server', async () => {
-    const nodeEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'production';
-    try {
-      await postConfig({...newGameConfigForTest(), board: BoardName.AMAZONIS_PLANITIA});
-    } finally {
-      if (nodeEnv === undefined) {
-        delete process.env.NODE_ENV;
-      } else {
-        process.env.NODE_ENV = nodeEnv;
-      }
-    }
-    expect(res.statusCode).eq(statusCode.badRequest);
-    expect(res.content).contains('Amazonis Planitia is not available yet');
-  });
-
-  it('creates Amazonis Planitia on a development server', async () => {
-    await postConfig({...newGameConfigForTest(), board: BoardName.AMAZONIS_PLANITIA});
-    expect(res.statusCode).eq(statusCode.ok);
   });
 
   // Issues one create-game POST against `handler`, using fresh request/response objects,

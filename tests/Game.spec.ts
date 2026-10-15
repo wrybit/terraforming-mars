@@ -7,7 +7,7 @@ import {Thermalist} from '../src/server/awards/Thermalist';
 import {Birds} from '../src/server/cards/base/Birds';
 import {WaterImportFromEuropa} from '../src/server/cards/base/WaterImportFromEuropa';
 import {Phase} from '../src/common/Phase';
-import {addCity, addGreenery, addOcean, forceGenerationEnd, maxOutOceans, runAllActions, setOxygenLevel, setTemperature, setVenusScaleLevel} from './TestingUtils';
+import {addCity, addGreenery, addOcean, forceGenerationEnd, maxOutOceans, runAllActions, setOxygenLevel, setTemperature, setVenusScaleLevel, testGame} from './TestingUtils';
 import {cast, toName} from '../src/common/utils/utils';
 import {TestPlayer} from './TestPlayer';
 import {SaturnSystems} from '../src/server/cards/corporation/SaturnSystems';
@@ -36,6 +36,7 @@ import {Tag} from '../src/common/cards/Tag';
 import {restoreTestDatabase, setTestDatabase} from './testing/setup';
 import {InMemoryDatabase} from './testing/InMemoryDatabase';
 import {Spacefarer} from '../src/server/milestones/terraCimmeria/Spacefarer';
+import {Suburbian} from '../src/server/awards/modular/Suburbian';
 import {SpaceName} from '../src/common/boards/SpaceName';
 import {SpaceType} from '../src/common/boards/SpaceType';
 
@@ -154,6 +155,31 @@ describe('Game', () => {
 
     expect(game.getOxygenLevel()).to.eq(constants.MAX_OXYGEN_LEVEL);
     expect(player.terraformRating).to.eq(initialTR + 1);
+  });
+
+  it('Venus moves 1% per step above 30% on Amazonis Planitia', () => {
+    const [game, player] = testGame(2, {venusNextExtension: true, boardName: BoardName.AMAZONIS_PLANITIA});
+    setVenusScaleLevel(game, 28);
+
+    expect(game.increaseVenusScaleLevel(player, 2)).eq(2);
+    expect(game.getVenusScaleLevel()).eq(31);
+
+    expect(game.increaseVenusScaleLevel(player, 3)).eq(2);
+    expect(game.getVenusScaleLevel()).eq(33);
+
+    expect(game.increaseVenusScaleLevel(player, 1)).eq(0);
+    expect(game.getVenusScaleLevel()).eq(33);
+  });
+
+  it('Venus decreases 1% per step above 30% on Amazonis Planitia', () => {
+    const [game, player] = testGame(2, {venusNextExtension: true, boardName: BoardName.AMAZONIS_PLANITIA});
+    setVenusScaleLevel(game, 31);
+
+    game.increaseVenusScaleLevel(player, -1);
+    expect(game.getVenusScaleLevel()).eq(30);
+
+    game.increaseVenusScaleLevel(player, -1);
+    expect(game.getVenusScaleLevel()).eq(28);
   });
 
   it('Draft round for 2 players', () => {
@@ -1023,6 +1049,33 @@ describe('Game', () => {
     expect(deserialized.claimedMilestones).has.length(1);
     expect(deserialized.claimedMilestones[0].milestone.name).eq('T. Spacefarer');
     expect(deserialized.claimedMilestones[0].player.id).eq('p-blue-id');
+  });
+
+  it('deserializing a game with renamed awards', () => {
+    const player = TestPlayer.BLUE.newPlayer();
+    const player2 = TestPlayer.RED.newPlayer();
+    const game = Game.newInstance('gameid', [player, player2], player, 'spectatorid');
+    const suburbian = new Suburbian();
+
+    game.awards.unshift(suburbian);
+
+    game.fundedAwards.push({
+      award: suburbian,
+      player: player,
+    });
+
+    const serialized = game.serialize();
+    expect(serialized.awards[0]).eq('Suburbian');
+    expect(serialized.fundedAwards[0].name).eq('Suburbian');
+
+    serialized.awards[0] = 'Edgedancer' as any;
+    serialized.fundedAwards[0].name = 'Edgedancer' as any;
+
+    const deserialized = Game.deserialize(serialized);
+    expect(deserialized.awards[0]).deep.eq(suburbian);
+    expect(deserialized.fundedAwards).has.length(1);
+    expect(deserialized.fundedAwards[0].award.name).eq('Suburbian');
+    expect(deserialized.fundedAwards[0].player.id).eq('p-blue-id');
   });
 
   // https://github.com/terraforming-mars/terraforming-mars/issues/5572
