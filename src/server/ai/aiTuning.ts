@@ -174,6 +174,8 @@ export type AiTuning = {
   followUpAmounts: number,
   /** 1: leftover energy is worth nothing once the temperature is maxed or no production phase is left (stateValue.ts). */
   energyAsHeat: number,
+  /** 1: in the likely last generation steel and titanium a close funded stock award counts are paid last (awardStockPayment.ts). */
+  keepAwardStock: number,
   /** > 0: award funding only with a lead of at least this share of the best opponent score (awardFunding.ts). */
   awardFundingLead: number,
 };
@@ -274,6 +276,7 @@ export const BASELINE_TUNING: AiTuning = {
   rolloutFocus: 0,
   rolloutMaximumRounds: 3,
   rolloutOpponentPolicyMoves: 0,
+  keepAwardStock: 0,
   lastGenerationSpots: 0,
   // Human test game (2026-10-10): passed in the last generation with 47 M€ while greeneries were affordable.
   passedMoneyLost: 1,
@@ -692,6 +695,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human game (2026-10-15): M€ production stayed at 6–7 until generation 10 (human 7 → 48), the AI went for TR.
   // Income re-checked now that rollouts end every look-ahead at the generation's end.
   production125: {productionDiscount: 1.25},
+  // Human game (2026-10-15): Miner lost 9 : 10 after paying with steel in the last generation (game lost by 2 VP).
+  keepAwardStock: {keepAwardStock: 1},
 };
 
 export function isTuningVariant(name: string): boolean {

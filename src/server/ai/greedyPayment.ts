@@ -4,6 +4,7 @@ import {SPENDABLE_CARD_RESOURCES} from '../../common/inputs/Spendable';
 import {IProjectCard} from '../cards/IProjectCard';
 import {isIStandardProjectCard} from '../cards/IStandardProjectCard';
 import {CardName} from '../../common/cards/CardName';
+import {stockToKeepForAwards} from './awardStockPayment';
 
 export type AllowedPaymentResources = Partial<PaymentOptions>;
 
@@ -13,6 +14,7 @@ export type AllowedPaymentResources = Partial<PaymentOptions>;
  *    Psychrophiles microbes, …) – they have no other use, so spending them is free.
  * 2. Steel and titanium – worth more than 1 M€ and otherwise often wasted.
  * 3. M€, then heat.
+ * Steel and titanium a close stock award needs (awardStockPayment.ts) are only spent after M€ and heat.
  * If the cost is still not covered, overpay with one extra unit (card resource, steel, titanium).
  * The engine validates the result; an invalid payment makes the caller try another choice.
  */
@@ -35,15 +37,25 @@ export function greedyPayment(player: IPlayer, cost: number, allowed: AllowedPay
       spendUnits(key, player.getSpendable(key) - (keep[key] ?? 0), DEFAULT_PAYMENT_VALUES[key]);
     }
   }
+  const awardStock = (allowed.titanium === true || allowed.steel === true) ? stockToKeepForAwards(player) : {};
+  const keptTitanium = Math.min(player.titanium, awardStock.titanium ?? 0);
+  const keptSteel = Math.min(player.steel, awardStock.steel ?? 0);
   if (allowed.titanium === true) {
-    spendUnits('titanium', player.titanium, player.getTitaniumValue());
+    spendUnits('titanium', player.titanium - keptTitanium, player.getTitaniumValue());
   }
   if (allowed.steel === true) {
-    spendUnits('steel', player.steel, player.getSteelValue());
+    spendUnits('steel', player.steel - keptSteel, player.getSteelValue());
   }
   spendUnits('megacredits', player.megaCredits, 1);
   if (allowed.heat === true || player.canUseHeatAsMegaCredits) {
     spendUnits('heat', player.heat, 1);
+  }
+  // Ohne genug M€ doch mit dem zurückgehaltenen Vorrat zahlen – lieber die Auszeichnung riskieren als den Zug verlieren.
+  if (remaining > 0 && allowed.titanium === true && keptTitanium > 0) {
+    spendUnits('titanium', keptTitanium, player.getTitaniumValue());
+  }
+  if (remaining > 0 && allowed.steel === true && keptSteel > 0) {
+    spendUnits('steel', keptSteel, player.getSteelValue());
   }
 
   // Rest offen: eine Einheit mehr von der günstigsten Quelle überzahlen.
