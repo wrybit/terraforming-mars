@@ -7,7 +7,8 @@ import {tuningOf} from './aiTuning';
 // Funding fixes an award for the rest of the game. Early in the game the valuation counts award leads as
 // nothing (stateValue.ts awardConfidence), so a free funding (Nirgal Enterprises) looked as good as any
 // other move: a test game funded all three awards in generation 1 at 0 : 0 and the human won all three
-// (15 VP). awardFundingLead: only fund with a real lead.
+// (15 VP). awardFundingLead: only fund a free award with a real lead. For paid funding the gate cost
+// 0.98 VP per game in round 77 (control noAwardLead), so it applies to free funding only.
 
 function titleOf(input: PlayerInput): string {
   return typeof input.title === 'string' ? input.title : input.title.message;
@@ -25,9 +26,16 @@ export function leadsAward(player: IPlayer, awardName: string): boolean {
   return own - best >= Math.max(1, share * best);
 }
 
-/** False for a move of the action menu that funds an award the player does not lead. */
+/** Funding cost from the menu title "Fund an award (${0} M€)", undefined if unknown. */
+function fundingCost(option: PlayerInput): number | undefined {
+  const value = typeof option.title === 'string' ? undefined : option.title.data[0]?.value;
+  const cost = Number(value);
+  return Number.isFinite(cost) ? cost : undefined;
+}
+
+/** False for a move of the action menu that funds a free award the player does not lead. */
 export function fundingAllowed(option: PlayerInput, response: InputResponse, player: IPlayer): boolean {
-  if (!(option instanceof OrOptions) || !titleOf(option).startsWith('Fund an award') || response.type !== 'or') {
+  if (!(option instanceof OrOptions) || !titleOf(option).startsWith('Fund an award') || response.type !== 'or' || fundingCost(option) !== 0) {
     return true;
   }
   const award = option.options[response.index];
