@@ -51,7 +51,7 @@ export const FAN_EXPANSIONS: ReadonlyArray<ExpansionChoice> = [
   {expansion: 'deltaProject', label: 'Delta Project', iconClass: 'expansion-icon-deltaProject', info: true, alpha: true},
 ];
 
-// Base game boards and the Kickstarter boards; "Random: Official" draws from the same list (newGameBoard.ts)
+// Base game boards and the Kickstarter boards; "Random: Official" draws from these without the alpha boards (newGameBoard.ts)
 export const OFFICIAL_BOARDS: ReadonlyArray<BoardNameType> = [
   BoardName.THARSIS,
   BoardName.HELLAS,
@@ -59,6 +59,8 @@ export const OFFICIAL_BOARDS: ReadonlyArray<BoardNameType> = [
   BoardName.UTOPIA_PLANITIA,
   BoardName.VASTITAS_BOREALIS_NOVA,
   BoardName.TERRA_CIMMERIA_NOVA,
+  // Official board in alpha, offered in every build (upstream 2576d51d9)
+  BoardName.AMAZONIS_PLANITIA,
 ];
 
 // Boards still in development upstream: small α after the name (upstream 36ac4f082)
@@ -73,19 +75,6 @@ export const FAN_BOARDS: ReadonlyArray<BoardNameType> = [
   BoardName.VASTITAS_BOREALIS,
   BoardName.HOLLANDIA,
 ];
-
-/**
- * Fan-made boards offered in the form. Amazonis Planitia is still in development upstream:
- * only development builds offer it (production servers reject it, see ApiCreateGame).
- */
-export function fanBoards(): ReadonlyArray<BoardNameType> {
-  if (process.env.NODE_ENV !== 'development') {
-    return FAN_BOARDS;
-  }
-  const boards = [...FAN_BOARDS];
-  boards.splice(boards.indexOf(BoardName.AMAZONIS) + 1, 0, BoardName.AMAZONIS_PLANITIA);
-  return boards;
-}
 
 // "Random board" switch: drawn from the official boards or from all
 export const RANDOM_BOARD_OPTIONS: ReadonlyArray<SegmentOption> = [
