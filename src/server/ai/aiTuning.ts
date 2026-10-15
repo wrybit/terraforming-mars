@@ -695,6 +695,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human game (2026-10-15): M€ production stayed at 6–7 until generation 10 (human 7 → 48), the AI went for TR.
   // Income re-checked now that rollouts end every look-ahead at the generation's end.
   production125: {productionDiscount: 1.25},
+  production140: {productionDiscount: 1.4},
   // Human game (2026-10-15): Miner lost 9 : 10 after paying with steel in the last generation (game lost by 2 VP).
   keepAwardStock: {keepAwardStock: 1},
 };
