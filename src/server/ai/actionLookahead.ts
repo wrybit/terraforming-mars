@@ -37,9 +37,8 @@ const MAXIMUM_CANDIDATES = 120;
 const REPLY_CANDIDATES = 60;
 /** Rollout policy: moves tried per decision (turn-ending ones first, then the menu order). */
 const GREEDY_CANDIDATES = 8;
-/** Rollouts per move: fewer are too noisy to re-rank, more rarely fit the budget. */
+/** Rollouts per move at least (the most: tuning rolloutMaximumRounds). */
 const MINIMUM_ROLLOUTS = 1;
-const MAXIMUM_ROLLOUTS = 8;
 /** Against humans: rollouts only within this many M€ of the best move, and at most this long. */
 const HUMAN_ROLLOUT_MARGIN = 5;
 const HUMAN_ROLLOUT_BUDGET = 2000;
@@ -257,8 +256,13 @@ function passPenaltyFor(player: IPlayer): number {
 }
 
 /** Rollout policy of a tuning: greedy over a few moves, or quick rules without copies (undefined). */
-function rolloutPolicy(moves: number): RolloutPolicy {
-  return moves > 0 ? (menu, player) => greedyAction(menu, player, moves) : () => undefined;
+function rolloutPolicy(moves: number, opponentMoves: number, deciderId: string): RolloutPolicy {
+  // Opponents may play by cheaper rules than the deciding player: their moves matter less for the ranking.
+  const movesFor = (player: IPlayer) => player.id === deciderId || opponentMoves < 0 ? moves : opponentMoves;
+  return (menu, player) => {
+    const count = movesFor(player);
+    return count > 0 ? greedyAction(menu, player, count) : undefined;
+  };
 }
 
 /** Decisions where playing on pays off: passing, milestone and award races. */
@@ -431,7 +435,7 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     const focused = tuning.rolloutFocus <= 0 || remainingProductionPhases(player.game, player) <= 1 ||
       finalists.some((entry) => isKeyMove(menu, entry.candidate.response));
     if (focused && finalists.length > 1 && entries.length === finalists.length) {
-      const means = rolloutMeans(entries, player.id, rolloutPolicy(tuning.rolloutPolicyMoves), rolloutBudget, MINIMUM_ROLLOUTS, MAXIMUM_ROLLOUTS, tuning.rolloutHorizon);
+      const means = rolloutMeans(entries, player.id, rolloutPolicy(tuning.rolloutPolicyMoves, tuning.rolloutOpponentPolicyMoves, player.id), rolloutBudget, MINIMUM_ROLLOUTS, tuning.rolloutMaximumRounds, tuning.rolloutHorizon);
       if (means !== undefined) {
         const plainValues = finalists.map((entry) => entry.outcome.value).sort((a, b) => b - a);
         finalists.map((entry, index) => ({entry, mean: means[index]}))

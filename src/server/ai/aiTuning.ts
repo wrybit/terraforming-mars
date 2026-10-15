@@ -100,6 +100,10 @@ export type AiTuning = {
   rolloutHorizon: number,
   /** 1: rollouts only for key decisions – a pass, a milestone or award among the finalists, or the last two generations. */
   rolloutFocus: number,
+  /** Rounds of rollouts per decision at most (one rollout per finalist and round, common random numbers). */
+  rolloutMaximumRounds: number,
+  /** Rollout policy for the opponents, -1 = same as rolloutPolicyMoves (0 = quick rules, much cheaper). */
+  rolloutOpponentPolicyMoves: number,
   /** 1: in the last generation the greeneries the opponents can still afford on the free land count against the AI (lastGenerationSpots.ts). */
   lastGenerationSpots: number,
   /** 1: in the last generation money left after passing is worth nothing (stateValue.ts lastGenerationMoneyValue). */
@@ -264,6 +268,8 @@ export const BASELINE_TUNING: AiTuning = {
   rolloutPolicyMoves: 8,
   rolloutHorizon: 0,
   rolloutFocus: 0,
+  rolloutMaximumRounds: 8,
+  rolloutOpponentPolicyMoves: -1,
   lastGenerationSpots: 0,
   // Human test game (2026-10-10): passed in the last generation with 47 M€ while greeneries were affordable.
   passedMoneyLost: 1,
@@ -661,6 +667,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   rolloutFastDeep: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 16, rolloutFocus: 1},
   rolloutFastAll: {rolloutCandidates: 2, rolloutBudget: 600, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 8, rolloutFocus: 0},
   rolloutFastLong: {rolloutCandidates: 2, rolloutBudget: 1200, rolloutMargin: 5, rolloutPolicyMoves: 3, rolloutHorizon: 8, rolloutFocus: 1},
+  // 2026-10-15: rollout3 (+2.7 VP in round 18) re-run affordably – each policy step with 8 moves cost ~87 ms per
+  // rollout, so 3 finalists × 8 rounds hit the 2 s limit. Fewer rounds and quick rules for the opponents cut that ~5×.
+  rollout3Lean: {rolloutCandidates: 3, rolloutBudget: 2000, rolloutMaximumRounds: 3, rolloutOpponentPolicyMoves: 0},
+  rollout3Rounds: {rolloutCandidates: 3, rolloutBudget: 2000, rolloutMaximumRounds: 3},
 };
 
 export function isTuningVariant(name: string): boolean {
