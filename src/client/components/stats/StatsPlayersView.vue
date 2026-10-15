@@ -44,8 +44,9 @@ import {formatDuration, formatNumber, formatPercent} from './statsLabels';
 import StatsPointSources from './StatsPointSources.vue';
 import {statsHref} from './statsNavigation';
 import {DEFAULT_MIN_PLAYS} from './statsMinPlays';
-import {AI_STATS_NAMES} from './statsResults';
-import {translateTextWithParams} from '@/client/directives/i18n';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {AI_LEVEL_OPTIONS} from '@/client/components/create/createGameChoices';
+import {AiLevel, aiPlayerMarker} from '@/common/ai/AiLevel';
 
 // Most successful corporation only from two games on – a single win says nothing
 const MIN_PLAYS_FOR_BEST = 2;
@@ -75,7 +76,8 @@ export default defineComponent({
   computed: {
     listingNote(): string {
       return translateTextWithParams('Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.',
-        [String(DEFAULT_MIN_PLAYS), AI_STATS_NAMES.join(', ')]);
+        // Strength spelled out with the same labels as the create-game form, e.g. "Easy [AI-]"
+        [String(DEFAULT_MIN_PLAYS), AI_LEVEL_OPTIONS.map((option) => `${translateText(option.label)} ${aiPlayerMarker(option.value as AiLevel)}`).join(', ')]);
     },
     players(): Array<PlayerCard> {
       return this.names.map((name) => {
