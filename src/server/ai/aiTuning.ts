@@ -686,6 +686,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 83: cheaper rollouts (skip clear decisions, fewer own moves per step) – time for later spending.
   rolloutMargin5: {rolloutMargin: 5},
   rolloutPolicy4: {rolloutPolicyMoves: 4},
+  // Round 84: rolloutPolicy4 lost 1.5 VP – do more own moves per step help? Opponents with a few moves instead of quick rules.
+  rolloutPolicy12: {rolloutPolicyMoves: 12},
+  opponentPolicy2: {rolloutOpponentPolicyMoves: 2},
 };
 
 export function isTuningVariant(name: string): boolean {
