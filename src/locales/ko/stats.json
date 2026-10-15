@@ -101,5 +101,6 @@
   "Highest score without winning": "우승 없는 최고 점수",
   "No game with a saved board yet.": "지도가 저장된 게임이 아직 없습니다.",
   "All statistics": "전체 통계",
-  "Top": "상위"
+  "Top": "상위",
+  "Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.": "${0}판 이상 플레이한 플레이어만 표시됩니다. AI 플레이어는 강도별로 하나의 항목으로 표시됩니다: ${1}."
 }

@@ -31,7 +31,7 @@ export function statsPlayerName(displayName: string): string {
 }
 
 // AI players after all human players, weakest first
-const AI_ORDER: ReadonlyArray<string> = AI_LEVELS.map(aiPlayerMarker);
+export const AI_STATS_NAMES: ReadonlyArray<string> = AI_LEVELS.map(aiPlayerMarker);
 
 export function playerResults(game: StatsGame): Array<StatsPlayerResult> {
   return game.summary.players.map((player) => ({
@@ -73,7 +73,7 @@ export function playerNames(games: ReadonlyArray<StatsGame>): Array<string> {
   for (const result of allPlayerResults(games)) {
     counts.set(result.name, (counts.get(result.name) ?? 0) + 1);
   }
-  const aiRank = (name: string) => AI_ORDER.indexOf(name);
+  const aiRank = (name: string) => AI_STATS_NAMES.indexOf(name);
   return Array.from(counts.keys()).sort((first, second) => aiRank(first) - aiRank(second) ||
     (counts.get(second) ?? 0) - (counts.get(first) ?? 0) || first.localeCompare(second));
 }

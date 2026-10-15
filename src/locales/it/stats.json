@@ -98,5 +98,6 @@
   "${0} of ${1} games": "${0} di ${1} partite",
   "Highest score without winning": "Punteggio più alto senza vittoria",
   "No game with a saved board yet.": "Ancora nessuna partita con plancia salvata.",
-  "All statistics": "Tutte le statistiche"
+  "All statistics": "Tutte le statistiche",
+  "Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.": "Sono elencati solo i giocatori con almeno ${0} partite. I giocatori IA compaiono come una voce per livello di forza: ${1}."
 }

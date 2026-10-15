@@ -101,5 +101,6 @@
   "Highest score without winning": "Høyeste poengsum uten seier",
   "No game with a saved board yet.": "Ingen spill med lagret spillebrett ennå.",
   "All statistics": "All statistikk",
-  "Top": "Topp"
+  "Top": "Topp",
+  "Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.": "Bare spillere med minst ${0} spill vises. AI-spillere vises som én oppføring per styrke: ${1}."
 }

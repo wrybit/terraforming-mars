@@ -100,5 +100,6 @@
   "${0} of ${1} games": "${0} / ${1} peliä",
   "Highest score without winning": "Eniten pisteitä ilman voittoa",
   "No game with a saved board yet.": "Ei vielä peliä tallennetulla pelilaudalla.",
-  "All statistics": "Kaikki tilastot"
+  "All statistics": "Kaikki tilastot",
+  "Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.": "Listalla ovat vain pelaajat, joilla on vähintään ${0} peliä. AI-pelaajat näkyvät yhtenä rivinä tasoa kohden: ${1}."
 }

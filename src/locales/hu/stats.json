@@ -100,5 +100,6 @@
   "${0} of ${1} games": "${0} / ${1} játszma",
   "Highest score without winning": "Legmagasabb pontszám győzelem nélkül",
   "No game with a saved board yet.": "Még nincs mentett táblájú játszma.",
-  "All statistics": "Összes statisztika"
+  "All statistics": "Összes statisztika",
+  "Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.": "Csak a legalább ${0} játszmát játszott játékosok szerepelnek. Az AI-játékosok erősségenként egy bejegyzésként jelennek meg: ${1}."
 }

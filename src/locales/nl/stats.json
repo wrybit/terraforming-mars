@@ -99,5 +99,6 @@
   "${0} of ${1} games": "${0} van ${1} spellen",
   "Highest score without winning": "Hoogste score zonder overwinning",
   "No game with a saved board yet.": "Nog geen spel met opgeslagen bord.",
-  "All statistics": "Alle statistieken"
+  "All statistics": "Alle statistieken",
+  "Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.": "Alleen spelers met minstens ${0} spellen worden getoond. AI-spelers verschijnen als één regel per sterkte: ${1}."
 }

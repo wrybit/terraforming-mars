@@ -101,5 +101,6 @@
   "Highest score without winning": "Найвищий результат без перемоги",
   "No game with a saved board yet.": "Поки немає партії зі збереженим полем.",
   "All statistics": "Уся статистика",
-  "Top": "Топ"
+  "Top": "Топ",
+  "Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.": "Показано лише гравців, які зіграли щонайменше ${0} партії. ШІ-гравці об'єднані в один запис для кожного рівня сили: ${1}."
 }

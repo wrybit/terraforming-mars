@@ -98,5 +98,6 @@
   "${0} of ${1} games": "${0} sur ${1} parties",
   "Highest score without winning": "Meilleur score sans victoire",
   "No game with a saved board yet.": "Aucune partie avec plateau enregistré pour l'instant.",
-  "All statistics": "Toutes les statistiques"
+  "All statistics": "Toutes les statistiques",
+  "Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.": "Seuls les joueurs ayant au moins ${0} parties sont listés. Les IA apparaissent en une entrée par niveau : ${1}."
 }

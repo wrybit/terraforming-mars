@@ -101,5 +101,6 @@
   "Highest score without winning": "未获胜的最高得分",
   "No game with a saved board yet.": "尚无保存了游戏板的对局。",
   "All statistics": "全部统计",
-  "Top": "前"
+  "Top": "前",
+  "Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.": "仅列出至少玩过 ${0} 局的玩家。AI 玩家按强度各合并为一项：${1}。"
 }

@@ -1,28 +1,32 @@
 <template>
   <div class="stats-stack">
-    <div class="stats-players">
-      <a v-for="player in players" :key="player.name" :href="player.href" data-stats-link class="stats-card stats-player-card">
-        <div class="stats-player-card-head" :class="`player_translucent_bg_color_${player.color}`">
-          <strong>{{ player.name }}</strong>
-          <span>{{ player.wins }} / {{ player.plays }}</span>
-        </div>
-        <dl class="stats-player-card-values">
-          <div v-for="value in player.values" :key="value.label">
-            <dt v-i18n>{{ value.label }}</dt>
-            <dd>{{ value.value }}</dd>
+    <!-- Note sits right below the cards it explains (law of proximity) -->
+    <div>
+      <div class="stats-players">
+        <a v-for="player in players" :key="player.name" :href="player.href" data-stats-link class="stats-card stats-player-card">
+          <div class="stats-player-card-head" :class="`player_translucent_bg_color_${player.color}`">
+            <strong>{{ player.name }}</strong>
+            <span>{{ player.wins }} / {{ player.plays }}</span>
           </div>
-        </dl>
-        <dl v-if="player.favorite !== undefined" class="stats-player-card-corporations">
-          <div>
-            <dt v-i18n>Most played</dt>
-            <dd><span v-i18n>{{ player.favorite.name }}</span> ({{ player.favorite.plays }}×)</dd>
-          </div>
-          <div v-if="player.best !== undefined">
-            <dt v-i18n>Most successful</dt>
-            <dd><span v-i18n>{{ player.best.name }}</span> ({{ formatPercent(player.best.winRate) }})</dd>
-          </div>
-        </dl>
-      </a>
+          <dl class="stats-player-card-values">
+            <div v-for="value in player.values" :key="value.label">
+              <dt v-i18n>{{ value.label }}</dt>
+              <dd>{{ value.value }}</dd>
+            </div>
+          </dl>
+          <dl v-if="player.favorite !== undefined" class="stats-player-card-corporations">
+            <div>
+              <dt v-i18n>Most played</dt>
+              <dd><span v-i18n>{{ player.favorite.name }}</span> ({{ player.favorite.plays }}×)</dd>
+            </div>
+            <div v-if="player.best !== undefined">
+              <dt v-i18n>Most successful</dt>
+              <dd><span v-i18n>{{ player.best.name }}</span> ({{ formatPercent(player.best.winRate) }})</dd>
+            </div>
+          </dl>
+        </a>
+      </div>
+      <p class="stats-note">{{ listingNote }}</p>
     </div>
     <section class="stats-card">
       <h2 v-i18n>Where the points come from</h2>
@@ -40,6 +44,8 @@ import {formatDuration, formatNumber, formatPercent} from './statsLabels';
 import StatsPointSources from './StatsPointSources.vue';
 import {statsHref} from './statsNavigation';
 import {DEFAULT_MIN_PLAYS} from './statsMinPlays';
+import {AI_STATS_NAMES} from './statsResults';
+import {translateTextWithParams} from '@/client/directives/i18n';
 
 // Most successful corporation only from two games on – a single win says nothing
 const MIN_PLAYS_FOR_BEST = 2;
@@ -67,6 +73,10 @@ export default defineComponent({
     names: {type: Array as PropType<ReadonlyArray<string>>, required: true},
   },
   computed: {
+    listingNote(): string {
+      return translateTextWithParams('Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.',
+        [String(DEFAULT_MIN_PLAYS), AI_STATS_NAMES.join(', ')]);
+    },
     players(): Array<PlayerCard> {
       return this.names.map((name) => {
         const own = this.results.filter((result) => result.name === name);

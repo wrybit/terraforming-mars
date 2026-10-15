@@ -101,5 +101,6 @@
   "Highest score without winning": "勝てなかった最高得点",
   "No game with a saved board yet.": "ボードが保存されたゲームはまだありません。",
   "All statistics": "すべての統計",
-  "Top": "トップ"
+  "Top": "トップ",
+  "Only players with at least ${0} games are listed. AI players appear as one entry per strength: ${1}.": "${0}ゲーム以上プレイしたプレイヤーのみ表示します。AIプレイヤーは強さごとに1件にまとめて表示します：${1}。"
 }
