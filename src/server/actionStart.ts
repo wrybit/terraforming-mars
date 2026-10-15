@@ -4,6 +4,7 @@ import {Phase} from '../common/Phase';
 import {PlayerId} from '../common/Types';
 import {SerializedGame} from './SerializedGame';
 import {SerializedPlayer} from './SerializedPlayer';
+import {isSimulating} from './ai/simulationSandbox';
 
 /*
  * Cancel an action that is still only a plan (e.g. city placement after paying for the standard project):
@@ -24,7 +25,8 @@ const actionStarts = new WeakMap<IGame, ActionStart>();
 /* Called right before the player gets the action menu (Player.takeAction). */
 export function rememberActionStart(player: IPlayer): void {
   const game = player.game;
-  if (game.phase !== Phase.ACTION) {
+  // AI copies are never cancelled by a human; serializing them here cost most of a rollout's time
+  if (game.phase !== Phase.ACTION || isSimulating()) {
     actionStarts.delete(game);
     return;
   }

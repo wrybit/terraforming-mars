@@ -1,6 +1,7 @@
 import {ICard} from './cards/ICard';
 import {IProjectCard} from './cards/IProjectCard';
 import {CardManifest, ModuleManifest} from './cards/ModuleManifest';
+import {CardFactorySpec} from './cards/CardFactorySpec';
 import {CardName} from '../common/cards/CardName';
 import {ICorporationCard} from './cards/corporation/ICorporationCard';
 import {IPreludeCard} from './cards/prelude/IPreludeCard';
@@ -8,19 +9,80 @@ import {ICeoCard} from './cards/ceos/ICeoCard';
 import {ALL_MODULE_MANIFESTS} from './cards/AllManifests';
 import {resolveCardName} from '../common/cards/CardRenames';
 
-function _createCard<T extends ICard>(cardName: CardName, cardManifestNames: Array<keyof ModuleManifest>): T | undefined {
-  const standardizedCardName = resolveCardName(cardName);
+type CardFactory = CardFactorySpec<ICard>;
 
+// Loading a game creates every card of the decks anew; for AI copies that happens thousands of
+// times per decision. Two caches keep it cheap: the manifest lookup, and a pristine template per
+// card that is copied instead of running the constructor (which rebuilds the card's render data).
+const factories = new Map<string, CardFactory | null>();
+
+function findFactory(cardName: CardName, cardManifestNames: Array<keyof ModuleManifest>): CardFactory | undefined {
+  const key = cardManifestNames.join(',') + '|' + cardName;
+  const cached = factories.get(key);
+  if (cached !== undefined) {
+    return cached ?? undefined;
+  }
   for (const moduleManifest of ALL_MODULE_MANIFESTS) {
     for (const manifestName of cardManifestNames) {
-      const cardManifest = <CardManifest<T>> moduleManifest[manifestName];
-      const factory = cardManifest[standardizedCardName];
+      const cardManifest = <CardManifest<ICard>> moduleManifest[manifestName];
+      const factory = cardManifest[cardName];
       if (factory !== undefined) {
-        return new factory.Factory();
+        factories.set(key, factory);
+        return factory;
       }
     }
   }
+  factories.set(key, null);
   return undefined;
+}
+
+type Template = {card: ICard, emptySets: Array<string>, emptyArrays: Array<string>};
+const templates = new Map<CardName, Template | null>();
+
+/**
+ * A template can be copied when its own fields are plain values, the shared static properties,
+ * or empty sets/arrays (e.g. `warnings`), which every copy gets fresh. Anything else: constructor.
+ */
+function templateOf(card: ICard): Template | null {
+  const template: Template = {card, emptySets: [], emptyArrays: []};
+  for (const [key, value] of Object.entries(card)) {
+    if (value === null || typeof value !== 'object' && typeof value !== 'function' || value === (card as unknown as {properties: unknown}).properties) {
+      continue;
+    }
+    if (value instanceof Set && value.size === 0) {
+      template.emptySets.push(key);
+    } else if (Array.isArray(value) && value.length === 0) {
+      template.emptyArrays.push(key);
+    } else {
+      return null;
+    }
+  }
+  return template;
+}
+
+function instantiate(cardName: CardName, factory: CardFactory): ICard {
+  let template = templates.get(cardName);
+  if (template === undefined) {
+    template = templateOf(new factory.Factory());
+    templates.set(cardName, template);
+  }
+  if (template === null) {
+    return new factory.Factory();
+  }
+  const copy = Object.assign(Object.create(Object.getPrototypeOf(template.card)), template.card);
+  for (const key of template.emptySets) {
+    copy[key] = new Set();
+  }
+  for (const key of template.emptyArrays) {
+    copy[key] = [];
+  }
+  return copy;
+}
+
+function _createCard<T extends ICard>(cardName: CardName, cardManifestNames: Array<keyof ModuleManifest>): T | undefined {
+  const standardizedCardName = resolveCardName(cardName);
+  const factory = findFactory(standardizedCardName, cardManifestNames);
+  return factory === undefined ? undefined : <T> instantiate(standardizedCardName, factory);
 }
 
 export function newCard(cardName: CardName): ICard {

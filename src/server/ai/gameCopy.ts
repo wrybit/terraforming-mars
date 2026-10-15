@@ -23,7 +23,8 @@ export type GameSnapshot = string;
  * revealed the real next cards. Without `viewer` the copy is exact (copies of copies).
  */
 export function snapshotOf(game: IGame, viewer?: IPlayer): GameSnapshot {
-  const exact = JSON.stringify(game.serialize());
+  // The game log is most of the serialized game and no copy needs it: dropped to keep copies cheap
+  const exact = JSON.stringify({...game.serialize(), gameLog: []});
   if (viewer === undefined) {
     return exact;
   }
