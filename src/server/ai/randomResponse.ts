@@ -19,13 +19,11 @@ import {SelectParty} from '../inputs/SelectParty';
 import {SelectDelegate} from '../inputs/SelectDelegate';
 import {ICard} from '../cards/ICard';
 import {isICorporationCard} from '../cards/corporation/ICorporationCard';
-import {isIStandardProjectCard} from '../cards/IStandardProjectCard';
 import {IProjectCard} from '../cards/IProjectCard';
-import {Tag} from '../../common/cards/Tag';
 import {Units} from '../../common/Units';
 import {PRODUCTION_MINIMUMS} from '../../common/constants';
 import {RandomSource, integerBetween, pickOne, pickSome} from './randomChoice';
-import {greedyPayment} from './greedyPayment';
+import {cardPayment, greedyPayment} from './greedyPayment';
 
 /** Thrown for input types the random player cannot answer yet (mostly fan expansions). */
 export class UnsupportedInputError extends Error {}
@@ -66,13 +64,6 @@ function chooseOrOptionIndex(input: OrOptions, random: RandomSource): number {
     return pickOne(random, indices);
   }
   return pickOne(random, regular);
-}
-
-function cardToPlayCost(input: SelectCardToPlay<any>, card: IProjectCard, player: IPlayer): number {
-  if (isIStandardProjectCard(card)) {
-    return input.extras.get(card.name)?.overriddenCost ?? card.cost;
-  }
-  return player.getCardCost(card);
 }
 
 function initialCardsResponse(input: SelectInitialCards, player: IPlayer, random: RandomSource): InputResponse {
@@ -134,12 +125,7 @@ export function randomResponse(input: PlayerInput, player: IPlayer, random: Rand
   }
   if (input instanceof SelectCardToPlay) {
     const card = pickOne(random, enabledItems(input.cards, input.enabled)) as IProjectCard;
-    const tags = card.tags ?? [];
-    const payment = greedyPayment(player, cardToPlayCost(input, card, player), {
-      steel: tags.includes(Tag.BUILDING),
-      titanium: tags.includes(Tag.SPACE),
-      heat: player.canUseHeatAsMegaCredits,
-    });
+    const payment = cardPayment(player, card, input.extras.get(card.name)?.overriddenCost);
     return {type: 'projectCard', card: card.name, payment};
   }
   if (input instanceof SelectCard) {
@@ -157,11 +143,7 @@ export function randomResponse(input: PlayerInput, player: IPlayer, random: Rand
     return {type: 'amount', amount: integerBetween(random, input.min, input.max)};
   }
   if (input instanceof SelectPayment) {
-    const payment = greedyPayment(player, input.amount, {
-      steel: input.paymentOptions.steel === true,
-      titanium: input.paymentOptions.titanium === true,
-      heat: player.canUseHeatAsMegaCredits || input.paymentOptions.heat === true,
-    });
+    const payment = greedyPayment(player, input.amount, input.paymentOptions);
     return {type: 'payment', payment};
   }
   if (input instanceof SelectProductionToLose) {

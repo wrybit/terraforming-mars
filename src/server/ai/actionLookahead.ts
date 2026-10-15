@@ -6,12 +6,10 @@ import {SelectOption} from '../inputs/SelectOption';
 import {SelectCard} from '../inputs/SelectCard';
 import {SelectCardToPlay} from '../inputs/SelectCardToPlay';
 import {UndoActionOption} from '../inputs/UndoActionOption';
-import {IProjectCard, isIProjectCard} from '../cards/IProjectCard';
+import {isIProjectCard} from '../cards/IProjectCard';
 import {ICard} from '../cards/ICard';
 import {remainingProductionPhases} from './gameProgress';
-import {isIStandardProjectCard} from '../cards/IStandardProjectCard';
-import {Tag} from '../../common/cards/Tag';
-import {greedyPayment} from './greedyPayment';
+import {cardPayment} from './greedyPayment';
 import {quickResponse} from './quickResponse';
 import {GameSnapshot, finishMove, isActionMenu, playerView, snapshotOf, withCopy} from './gameCopy';
 import {ValuationContext, relativeValue, valuationContext} from './stateValue';
@@ -55,17 +53,6 @@ function isTurnEnding(option: PlayerInput): boolean {
     (option.title === 'Pass for this generation' || option.title === 'End Turn');
 }
 
-function cardPayment(input: SelectCardToPlay<any>, card: IProjectCard, player: IPlayer) {
-  const cost = isIStandardProjectCard(card) ?
-    input.extras.get(card.name)?.overriddenCost ?? card.cost :
-    player.getCardCost(card);
-  return greedyPayment(player, cost, {
-    steel: card.tags.includes(Tag.BUILDING),
-    titanium: card.tags.includes(Tag.SPACE),
-    heat: player.canUseHeatAsMegaCredits,
-  });
-}
-
 /**
  * Selling a card for 1 M€ only pays off in the last generation, and only for cards that cannot
  * be played any more. Before, the AI sold cards it had just bought for 3 M€.
@@ -105,7 +92,7 @@ function responsesFor(input: PlayerInput, player: IPlayer): Array<InputResponse>
   if (input instanceof SelectCardToPlay) {
     return input.cards
       .filter((_card, index) => input.enabled?.[index] !== false)
-      .map((card) => ({type: 'projectCard', card: card.name, payment: cardPayment(input, card, player)}));
+      .map((card) => ({type: 'projectCard', card: card.name, payment: cardPayment(player, card, input.extras.get(card.name)?.overriddenCost)}));
   }
   if (input instanceof SelectCard && input.title === 'Sell patents') {
     return sellPatentResponses(input, player);

@@ -15,10 +15,9 @@ import {SelectResource} from '../inputs/SelectResource';
 import {SelectResources} from '../inputs/SelectResources';
 import {UndoActionOption} from '../inputs/UndoActionOption';
 import {Units} from '../../common/Units';
-import {Tag} from '../../common/cards/Tag';
 import {PRODUCTION_MINIMUMS} from '../../common/constants';
 import {randomResponse} from './randomResponse';
-import {greedyPayment} from './greedyPayment';
+import {cardPayment, greedyPayment} from './greedyPayment';
 import {spaceValue, tileKindOf} from './spaceValue';
 import {cardPrior} from './cardPriors';
 import {isTracingDecision, traceOptions} from './decisionTrace';
@@ -76,9 +75,7 @@ export function quickResponse(input: PlayerInput, player: IPlayer): InputRespons
   if (input instanceof SelectCardToPlay) {
     const cards = input.cards.filter((_card, index) => input.enabled?.[index] !== false);
     const card = [...cards].sort((a, b) => cardPrior(b.name) - cardPrior(a.name))[0];
-    return {type: 'projectCard', card: card.name, payment: greedyPayment(player, player.getCardCost(card), {
-      steel: card.tags.includes(Tag.BUILDING), titanium: card.tags.includes(Tag.SPACE), heat: player.canUseHeatAsMegaCredits,
-    })};
+    return {type: 'projectCard', card: card.name, payment: cardPayment(player, card, input.extras.get(card.name)?.overriddenCost)};
   }
   if (input instanceof SelectCard) {
     // Cards that score VP (e.g. resource targets) first, then the statistically strongest.
@@ -112,11 +109,7 @@ export function quickResponse(input: PlayerInput, player: IPlayer): InputRespons
     return {type: 'amount', amount: input.max};
   }
   if (input instanceof SelectPayment) {
-    return {type: 'payment', payment: greedyPayment(player, input.amount, {
-      steel: input.paymentOptions.steel === true,
-      titanium: input.paymentOptions.titanium === true,
-      heat: player.canUseHeatAsMegaCredits || input.paymentOptions.heat === true,
-    })};
+    return {type: 'payment', payment: greedyPayment(player, input.amount, input.paymentOptions)};
   }
   if (input instanceof SelectProductionToLose) {
     return productionToLose(input, player);
