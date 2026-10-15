@@ -37,7 +37,7 @@
           </div>
         </div>
         <div class="ai-analysis-welcome__actions">
-          <button ref="go" type="button" class="btn btn-primary ai-analysis-welcome__go" v-i18n @click="close">Let's go</button>
+          <button ref="go" type="button" class="btn btn-primary ai-analysis-welcome__go" v-i18n @click="close">Let's go!</button>
         </div>
       </div>
     </div>
