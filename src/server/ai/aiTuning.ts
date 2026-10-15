@@ -162,6 +162,10 @@ export type AiTuning = {
   worldGovernment: number,
   /** 1: OR questions right after a move are tried once per option on game copies (followUpPlan.ts); 0 = first option. */
   followUpChoice: number,
+  /** 1: OR questions also with single-card choices (copy targets, card to take) are tried on copies; 0 = quick rule. */
+  followUpCards: number,
+  /** 1: energy production counts as energy only up to what actions and hand cards use, the rest as heat (energyPlan.ts). */
+  energyPlan: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -315,7 +319,10 @@ export const BASELINE_TUNING: AiTuning = {
   recentPace: 0,
   // Round 73 (1200 mirrored 1v1 Venus games): worldGovernment +1.15 VP per deal (z +3.14) – adopted.
   worldGovernment: 1,
-  followUpChoice: 0,
+  // Round 74 (1200 mirrored 1v1 games, base and Venus): followUpChoice +0.38 (z +0.58) – adopted (fixes first-option follow-ups).
+  followUpChoice: 1,
+  followUpCards: 0,
+  energyPlan: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -615,6 +622,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   worldGovernment: {worldGovernment: 1},
   noWorldGovernment: {worldGovernment: 0},
   followUpChoice: {followUpChoice: 1},
+  noFollowUpChoice: {followUpChoice: 0},
+  followUpCards: {followUpCards: 1},
+  energyPlan: {energyPlan: 1},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.

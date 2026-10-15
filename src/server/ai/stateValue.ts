@@ -11,6 +11,7 @@ import {lastGenerationSpotPoints} from './lastGenerationSpots';
 import {futureTagPoints} from './tagPointOutlook';
 import {effectDrawsPerGeneration} from './cardIncome';
 import {energySupplyRatio} from './energySupply';
+import {energyUse} from './energyPlan';
 import {milestoneRacePoints} from './milestoneRace';
 import {recentAwardGrowth} from './awardHistory';
 import {moneySwingShare} from './stockAward';
@@ -172,11 +173,17 @@ function contextFor(game: IGame, context: ValuationContext): ValuationContext {
 function productionPerGeneration(player: IPlayer, context: ValuationContext): number {
   const production = player.production;
   const heatFactor = context.temperatureMaxed ? 0.2 : 0.8;
+  const tuning = tuningOf(player);
+  // energyPlan: only the energy something uses counts as energy, the surplus as heat (energyPlan.ts).
+  const energy = tuning.energyPlan > 0 ?
+    energyUse(player) :
+    {used: production.energy, surplus: 0};
   return production.megacredits * 1 +
     production.steel * 1.6 +
     production.titanium * 2.5 +
-    production.plants * tuningOf(player).plantProductionValue +
-    production.energy * tuningOf(player).energyProductionValue + // energy mostly ends up as heat
+    production.plants * tuning.plantProductionValue +
+    energy.used * tuning.energyProductionValue + // energy mostly ends up as heat
+    energy.surplus * heatFactor +
     production.heat * heatFactor;
 }
 

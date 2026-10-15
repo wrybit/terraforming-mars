@@ -25,7 +25,7 @@ import {sellToAffordResponses} from './sellToAfford';
 import {lastGenerationSaleResponses} from './lastGenerationSale';
 import {isSimulating} from './simulationSandbox';
 import {CardName} from '../../common/cards/CardName';
-import {clearFollowUpPlan, setFollowUpPlan} from './followUpPlan';
+import {clearFollowUpPlan, isSingleCardChoice, setFollowUpPlan} from './followUpPlan';
 
 // Decides an action-phase move by playing every candidate move on a copy of the game and
 // valuing the resulting position (one-step lookahead). This captures the effect of any card
@@ -152,7 +152,12 @@ type Outcome = {
 /** OR questions with more options than this are left to the quick rules (time budget). */
 const MAXIMUM_FOLLOW_UP_OPTIONS = 6;
 
-function followUpTitles(input: PlayerInput | undefined): Array<string> | undefined {
+function followUpTitles(input: PlayerInput | undefined, withCards: boolean): Array<string> | undefined {
+  // followUpCards: single-card choices inside a move (e.g. the card Robotic Workforce copies).
+  if (withCards && isSingleCardChoice(input)) {
+    const cards = input.cards;
+    return cards.length < 2 || cards.length > MAXIMUM_FOLLOW_UP_OPTIONS ? undefined : cards.map((card) => card.name);
+  }
   if (!(input instanceof OrOptions)) {
     return undefined;
   }
@@ -178,7 +183,7 @@ function tryCandidate(snapshot: GameSnapshot, player: IPlayer, menuSize: number,
     } catch {
       return undefined;
     }
-    const titles = candidate.followUps === undefined ? followUpTitles(copyPlayer.getWaitingFor()) : undefined;
+    const titles = candidate.followUps === undefined ? followUpTitles(copyPlayer.getWaitingFor(), tuningOf(player).followUpCards > 0) : undefined;
     finishMove(copy, copyPlayer, candidate.followUps);
     const value = relativeValue(copyPlayer, context);
     const nextMenu = copyPlayer.getWaitingFor();
