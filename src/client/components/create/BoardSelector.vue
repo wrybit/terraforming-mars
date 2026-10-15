@@ -5,7 +5,7 @@
     <label for="boardSelector-checkbox">
       <span v-i18n>Board</span>&nbsp;&nbsp;<span v-if="!isRandomBoard(board)" class="create-game-board-hexagon" :class="boardColorClass(board)">&#x2B22;</span>
       <span class="capitalized" v-i18n>{{ board }}</span>
-      <span v-if="shuffleMap" class="create-game-board-shuffled" title="Randomize board tiles">&nbsp;(&#x1F3B2;)</span>
+      <span v-if="shuffleMap" class="create-game-board-shuffled" :title="$t('Randomize board tiles')">&nbsp;(&#x1F3B2;)</span>
     </label>
     <BoardPopup
       v-if="showPopup"

@@ -13,7 +13,7 @@
           <label :for="boardName+'-checkbox'" class="expansion-button">
             <span v-if="!isRandomBoard(boardName)" class="create-game-board-hexagon" :class="boardColorClass(boardName)">&#x2B22;</span>
             <span class="capitalized" v-i18n>{{ boardName }}</span>
-            <template v-if="boardName === BoardName.AMAZONIS_PLANITIA">&nbsp;<span title="In development">(α)</span></template>
+            <template v-if="boardName === BoardName.AMAZONIS_PLANITIA">&nbsp;<span :title="$t('In development')">(α)</span></template>
             <template v-if="!isRandomBoard(boardName)">
               &nbsp;<a :href="boardHref(boardName)" class="tooltip" v-i18n data-tooltip="Link opens in a new tab/window" target="_blank">&#9432;</a>
             </template>

@@ -596,5 +596,6 @@
   "A color per server tells several servers apart at a glance. Empty: orange.": "Eine Farbe pro Server – so unterscheidet man mehrere Server auf einen Blick. Leer: Orange.",
   "City tile": "Stadt-Plättchen",
   "Science tag": "Wissenschafts-Symbol",
-  "Space shuttle": "Raumfähre"
+  "Space shuttle": "Raumfähre",
+  "In development": "In Entwicklung"
 }
