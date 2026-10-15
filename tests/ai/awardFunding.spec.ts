@@ -18,6 +18,7 @@ describe('AI award funding', () => {
 
   it('keeps every award open without the variant', () => {
     const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'noAwardLead');
     expect(leadsAward(player, 'Thermalist')).is.true;
   });
 });

@@ -50,6 +50,7 @@ describe('AI follow-up plan', () => {
 
   it('leaves X to the quick rule without the variant', () => {
     const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'noFollowUpAmounts');
     expect(followUpChoices(new SelectAmount('X', 'Spend', 1, 29), player)).is.undefined;
   });
 });
