@@ -26,7 +26,7 @@ export type ExpansionFacts = {
 /** Facts per module; modules without entry add cards only. */
 export const EXPANSION_FACTS: Readonly<Partial<Record<GameModule, ExpansionFacts>>> = {
   venus: {milestone: 2, award: 1, traits: ['ownBoard', 'newParameters']},
-  colonies: {colonyTile: 11, milestone: 3, award: 1, traits: ['ownBoard', 'newTiles'], tiles: 'Colony tiles'},
+  colonies: {colonyTile: 11, milestone: 1, award: 1, traits: ['ownBoard', 'newTiles'], tiles: 'Colony tiles'},
   turmoil: {globalEvent: 36, milestone: 1, award: 2, traits: ['ownBoard']},
   community: {globalEvent: 1, colonyTile: 10, traits: ['newTiles'], tiles: 'Colony tiles'},
   ares: {milestone: 2, award: 2, traits: ['changesMars', 'newTiles'], tiles: 'Hazard tiles'},
