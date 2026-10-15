@@ -801,5 +801,18 @@
   "AI info (spoilers)": "AI-tiedot (spoilerit)",
   "AI info (spoilers) hidden": "AI-tiedot (spoilerit) piilotettu",
   "Show AI info (spoilers)": "Näytä AI-tiedot (spoilerit)",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "Kumoaminen ei ole mahdollista: sen jälkeen on paljastettu kortteja tai muuta piilotettua tietoa."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Kumoaminen ei ole mahdollista: sen jälkeen on paljastettu kortteja tai muuta piilotettua tietoa.",
+  "Tab icon": "Välilehden kuvake",
+  "Violet": "Violetti",
+  "Ice": "Jää",
+  "Teal": "Sinivihreä",
+  "Gold": "Kulta",
+  "Silver": "Hopea",
+  "Picture in the browser tab. Empty: Mars.": "Kuva selaimen välilehdellä. Tyhjä: Mars.",
+  "Tab icon color": "Välilehden kuvakkeen väri",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Oma väri kullekin palvelimelle – erottaa ne yhdellä silmäyksellä. Tyhjä: oranssi.",
+  "City tile": "Kaupunkilaatta",
+  "Science tag": "Tiedemerkki",
+  "Space shuttle": "Avaruussukkula",
+  "Astronaut": "Astronautti"
 }

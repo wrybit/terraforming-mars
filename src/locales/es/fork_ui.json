@@ -2019,5 +2019,18 @@
   "AI info (spoilers)": "Info de la AI (spoilers)",
   "AI info (spoilers) hidden": "Info de la AI (spoilers) oculta",
   "Show AI info (spoilers)": "Mostrar info de la AI (spoilers)",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "No se puede deshacer: desde entonces se han revelado cartas u otra información oculta."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "No se puede deshacer: desde entonces se han revelado cartas u otra información oculta.",
+  "Tab icon": "Icono de pestaña",
+  "Violet": "Violeta",
+  "Ice": "Hielo",
+  "Teal": "Verde azulado",
+  "Gold": "Dorado",
+  "Silver": "Plateado",
+  "Picture in the browser tab. Empty: Mars.": "Imagen en la pestaña del navegador. Vacío: Marte.",
+  "Tab icon color": "Color del icono de pestaña",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Un color por servidor para distinguirlos de un vistazo. Vacío: naranja.",
+  "City tile": "Loseta de ciudad",
+  "Science tag": "Etiqueta de ciencia",
+  "Space shuttle": "Transbordador espacial",
+  "Astronaut": "Astronauta"
 }

@@ -972,5 +972,20 @@
   "AI info (spoilers)": "AI-infók (spoilerek)",
   "AI info (spoilers) hidden": "AI-infók (spoilerek) elrejtve",
   "Show AI info (spoilers)": "AI-infók (spoilerek) megjelenítése",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "A visszavonás nem lehetséges: azóta kártyák vagy más rejtett információk derültek ki."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "A visszavonás nem lehetséges: azóta kártyák vagy más rejtett információk derültek ki.",
+  "Tab icon": "Lap ikonja",
+  "Pink": "Rózsaszín",
+  "Violet": "Lila",
+  "Ice": "Jég",
+  "Teal": "Kékeszöld",
+  "Gold": "Arany",
+  "Silver": "Ezüst",
+  "Picture in the browser tab. Empty: Mars.": "Kép a böngészőlapon. Üres: Mars.",
+  "Tab icon color": "A lap ikonjának színe",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Szerverenként egy szín – így egy pillantással megkülönböztethetők. Üres: narancs.",
+  "City tile": "Városlapka",
+  "Science tag": "Tudomány jelző",
+  "Space shuttle": "Űrsikló",
+  "Astronaut": "Űrhajós",
+  "Orange": "Narancs"
 }

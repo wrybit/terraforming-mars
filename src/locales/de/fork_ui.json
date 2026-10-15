@@ -584,5 +584,17 @@
   "AI info (spoilers)": "AI-Infos (Spoiler)",
   "AI info (spoilers) hidden": "AI-Infos (Spoiler) ausgeblendet",
   "Show AI info (spoilers)": "AI-Infos (Spoiler) einblenden",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "Rückgängig nicht möglich: Seitdem wurden Karten oder andere verdeckte Informationen aufgedeckt."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Rückgängig nicht möglich: Seitdem wurden Karten oder andere verdeckte Informationen aufgedeckt.",
+  "Tab icon": "Tab-Symbol",
+  "Pink": "Rosa",
+  "Violet": "Violett",
+  "Ice": "Eis",
+  "Teal": "Petrol",
+  "Silver": "Silber",
+  "Picture in the browser tab. Empty: Mars.": "Bild im Browser-Tab. Leer: Mars.",
+  "Tab icon color": "Farbe des Tab-Symbols",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Eine Farbe pro Server – so unterscheidet man mehrere Server auf einen Blick. Leer: Orange.",
+  "City tile": "Stadt-Plättchen",
+  "Science tag": "Wissenschafts-Symbol",
+  "Space shuttle": "Raumfähre"
 }

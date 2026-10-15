@@ -187,6 +187,36 @@ describe('ServeAsset', () => {
     expect(res.getHeader('Content-Type')).eq('font/woff2');
   });
 
+  it('serves the favicon chosen in FAVICON_ICON and FAVICON_COLOR', async () => {
+    const stored = {icon: process.env.FAVICON_ICON, color: process.env.FAVICON_COLOR};
+    const restore = (key: string, value: string | undefined) => {
+      if (value === undefined) {
+        delete process.env[key];
+      } else {
+        process.env[key] = value;
+      }
+    };
+    try {
+      instance = new ServeAsset(undefined, false, fileApi);
+      scaffolding.url = '/favicon.ico';
+      scaffolding.req.headers['accept-encoding'] = '';
+      process.env.FAVICON_ICON = 'city';
+      process.env.FAVICON_COLOR = 'blue';
+      await scaffolding.get(instance, res);
+      expect(res.content).eq('data: assets/favicon/city-blue.png');
+      expect(res.getHeader('Content-Type')).eq('image/png');
+
+      res = new MockResponse();
+      delete process.env.FAVICON_ICON;
+      delete process.env.FAVICON_COLOR;
+      await scaffolding.get(instance, res);
+      expect(res.content).eq('data: assets/favicon.ico');
+    } finally {
+      restore('FAVICON_ICON', stored.icon);
+      restore('FAVICON_COLOR', stored.color);
+    }
+  });
+
   it('rejects path traversal in chunks', async () => {
     instance = new ServeAsset(undefined, false, fileApi);
     scaffolding.url = '/chunks/../main.js';

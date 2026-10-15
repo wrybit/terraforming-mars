@@ -32,6 +32,9 @@
               </label>
               <ServerSettingImageField v-else-if="setting.kind === 'image'" :inputId="'server-setting-' + setting.key"
                 :value="values[setting.key] ?? ''" @update="setValue(setting.key, $event)"/>
+              <ServerSettingChoiceField v-else-if="setting.kind === 'choice'" :inputId="'server-setting-' + setting.key"
+                :value="values[setting.key] ?? ''" :choices="setting.choices ?? []"
+                :image="(choice: string) => setting.choiceImage?.(choice, values) ?? ''" @update="setValue(setting.key, $event)"/>
               <div v-else class="server-settings-input">
                 <input :id="'server-setting-' + setting.key"
                   :type="inputType(setting)"
@@ -69,6 +72,7 @@ import {logIn} from '@/client/components/admin/adminSession';
 import {restartServer} from '@/client/components/admin/adminActions';
 import {vDockedTab} from '@/client/directives/DockedTab';
 import ServerSettingImageField from '@/client/components/admin/ServerSettingImageField.vue';
+import ServerSettingChoiceField from '@/client/components/admin/ServerSettingChoiceField.vue';
 import {translateText} from '@/client/directives/i18n';
 import {
   SERVER_SETTING_GROUPS, SERVER_SETTINGS, ServerSettingDefinition, ServerSettingState, ServerSettingsModel, ServerSettingsUpdate,
@@ -93,7 +97,7 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
-  components: {ServerSettingImageField},
+  components: {ServerSettingImageField, ServerSettingChoiceField},
   directives: {dockedTab: vDockedTab},
   data(): DataModel {
     return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false, selectedGroup: SERVER_SETTING_GROUPS[0]};

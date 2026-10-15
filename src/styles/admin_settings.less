@@ -177,6 +177,114 @@
   font-size: 12px;
 }
 
+// Choice setting (tab icon and color, ServerSettingChoiceField.vue): looks like the text fields, opens a
+// list with a picture per value; the chosen value is marked in the purple of the focus ring
+.server-setting-choice {
+  position: relative;
+}
+
+// The open list lies above the sticky save bar, which otherwise covers it
+.server-settings-group:has(.server-setting-choice--open) {
+  position: relative;
+  z-index: 2;
+}
+
+.server-setting-choice-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 40px;
+  padding: 0 12px 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #eee;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+
+  span {
+    flex: 1;
+  }
+
+  // Arrow like a native select, turned upwards while open
+  &::after {
+    content: "";
+    width: 7px;
+    height: 7px;
+    margin-top: -4px;
+    border-right: 2px solid @server-settings-dim;
+    border-bottom: 2px solid @server-settings-dim;
+    transform: rotate(45deg);
+    transition: transform 0.15s, margin 0.15s;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  &:focus-visible {
+    outline: 2px solid fade(#908fdb, 70%);
+  }
+
+  .server-setting-choice--open &::after {
+    margin-top: 4px;
+    transform: rotate(225deg);
+  }
+}
+
+.server-setting-choice-list {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 320px;
+  margin: 0;
+  padding: 4px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: #25262e;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  list-style: none;
+
+  .server-setting-choice--up & {
+    top: auto;
+    bottom: calc(100% + 4px);
+  }
+}
+
+.server-setting-choice-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  &--selected,
+  &--selected:hover,
+  &--selected:focus {
+    background: fade(#908fdb, 22%);
+  }
+}
+
+.server-setting-choice-button img,
+.server-setting-choice-option img {
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+
 .server-settings-toggle input {
   width: 20px;
   height: 20px;

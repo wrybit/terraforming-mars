@@ -11,6 +11,7 @@ import {Request} from '../Request';
 import {Response} from '../Response';
 import {RouteError} from './RouteError';
 import {withManifestIdentity, withServerIdentity} from '../server/serverIdentity';
+import {faviconFile} from '../../common/admin/favicons';
 
 type Encoding = 'gzip' | 'br';
 
@@ -183,8 +184,9 @@ export class ServeAsset extends Handler {
     case '/sw.js':
       return this.toServiceWorkerFile(urlPath);
 
+    // Icon and color chosen on the admin page (FAVICON_ICON, FAVICON_COLOR), the original otherwise
     case 'favicon.ico':
-      return {file: 'assets/favicon.ico'};
+      return {file: faviconFile(process.env.FAVICON_ICON, process.env.FAVICON_COLOR)};
 
     default:
       // Serve JS chunks produced by webpack code splitting.

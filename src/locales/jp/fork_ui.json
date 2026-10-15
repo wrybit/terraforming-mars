@@ -1152,5 +1152,20 @@
   "AI info (spoilers)": "AI 情報（ネタバレ）",
   "AI info (spoilers) hidden": "AI 情報（ネタバレ）非表示",
   "Show AI info (spoilers)": "AI 情報（ネタバレ）を表示",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "元に戻せません：その後、カードやその他の非公開情報が公開されました。"
+  "Undo is not possible: cards or other hidden information were revealed since then.": "元に戻せません：その後、カードやその他の非公開情報が公開されました。",
+  "Tab icon": "タブアイコン",
+  "Pink": "ピンク",
+  "Violet": "紫",
+  "Ice": "氷",
+  "Teal": "ティール",
+  "Gold": "金",
+  "Silver": "銀",
+  "Picture in the browser tab. Empty: Mars.": "ブラウザのタブに表示する画像。空欄：火星。",
+  "Tab icon color": "タブアイコンの色",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "サーバーごとに色を変えると、ひと目で見分けられます。空欄：オレンジ。",
+  "City tile": "都市タイル",
+  "Science tag": "科学タグ",
+  "Space shuttle": "スペースシャトル",
+  "Astronaut": "宇宙飛行士",
+  "Orange": "オレンジ"
 }

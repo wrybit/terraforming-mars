@@ -3,9 +3,18 @@
 // in this order and grouping (ServerSettingsPanel.vue).
 
 import {COMMON_EXTENSIONS} from '../../genfiles/extensionsCommon';
+import {DEFAULT_FAVICON_COLOR, DEFAULT_FAVICON_ICON, FAVICON_COLORS, FAVICON_ICONS, FaviconOption, faviconImage} from './favicons';
 
 // image: an address (http… or an uploaded file, see ApiAdminServerLogo) with upload button and preview
-export type ServerSettingKind = 'text' | 'number' | 'secret' | 'toggle' | 'image';
+// choice: one of fixed values, a drop-down with a picture per value (choices, choiceImage)
+export type ServerSettingKind = 'text' | 'number' | 'secret' | 'toggle' | 'image' | 'choice';
+
+export type ServerSettingChoice = {
+  /** Value in the .env file; '' = the default (the line is removed) */
+  value: string,
+  /** Name of the choice (translated), e.g. a color */
+  label: string,
+};
 
 // Appearance, Games, Limits, AI opponents, Access, Technical – and the groups of the extensions
 export type ServerSettingGroup = string;
@@ -18,7 +27,19 @@ export type ServerSettingDefinition = {
   description: string,
   /** kind 'number': the smallest allowed value (default 0) */
   minimum?: number,
+  /** kind 'choice': the allowed values */
+  choices?: ReadonlyArray<ServerSettingChoice>,
+  /**
+   * kind 'choice': picture of a value; gets the values of all fields, so a choice can show itself
+   * together with another one (the icon in the chosen color and the other way round)
+   */
+  choiceImage?: (value: string, values: Readonly<Record<string, string>>) => string,
 };
+
+// Favicon choices: the default is stored as '' (no line in the .env)
+function faviconChoices(options: ReadonlyArray<FaviconOption>, defaultId: string): Array<ServerSettingChoice> {
+  return options.map(({id, label}) => ({value: id === defaultId ? '' : id, label}));
+}
 
 const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'Access', 'Technical'];
 
@@ -33,6 +54,14 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'Browser tab of the start page. Empty: Terraforming Mars.'},
   {key: 'TITLE_SHORT', group: 'Appearance', kind: 'text', label: 'Short tab title',
     description: 'End of all other tab titles, e.g. "Cards List | TM". Empty: TM.'},
+  {key: 'FAVICON_ICON', group: 'Appearance', kind: 'choice', label: 'Tab icon',
+    description: 'Picture in the browser tab. Empty: Mars.',
+    choices: faviconChoices(FAVICON_ICONS, DEFAULT_FAVICON_ICON),
+    choiceImage: (value, values) => faviconImage(value || undefined, values.FAVICON_COLOR || undefined)},
+  {key: 'FAVICON_COLOR', group: 'Appearance', kind: 'choice', label: 'Tab icon color',
+    description: 'A color per server tells several servers apart at a glance. Empty: orange.',
+    choices: faviconChoices(FAVICON_COLORS, DEFAULT_FAVICON_COLOR),
+    choiceImage: (value, values) => faviconImage(values.FAVICON_ICON || undefined, value || undefined)},
 
   {key: 'MAX_GAME_DAYS', group: 'Games', kind: 'number', minimum: 1, label: 'Delete unfinished games after (days)',
     description: 'Unfinished games created more than this many days ago are deleted (checked every hour). Finished games are never deleted. Empty: never (with PostgreSQL: 10 days).'},

@@ -23,6 +23,15 @@ describe('isValidSettingValue', () => {
     }
   });
 
+  it('takes only the listed values of a choice setting', () => {
+    const faviconColor = serverSettingDefinition('FAVICON_COLOR')!;
+    expect(isValidSettingValue(faviconColor, 'blue')).is.true;
+    expect(isValidSettingValue(faviconColor, '')).is.true;
+    // The default is stored as an empty value
+    expect(isValidSettingValue(faviconColor, 'orange')).is.false;
+    expect(isValidSettingValue(faviconColor, 'purple-ish')).is.false;
+  });
+
   it('does not check settings that are not numbers', () => {
     expect(isValidSettingValue(serverName, 'ten')).is.true;
   });

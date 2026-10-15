@@ -2011,5 +2011,20 @@
   "AI info (spoilers)": "Info AI (spoiler)",
   "AI info (spoilers) hidden": "Info AI (spoiler) nascoste",
   "Show AI info (spoilers)": "Mostra info AI (spoiler)",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "Impossibile annullare: da allora sono state rivelate carte o altre informazioni nascoste."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Impossibile annullare: da allora sono state rivelate carte o altre informazioni nascoste.",
+  "Tab icon": "Icona della scheda",
+  "Pink": "Rosa",
+  "Violet": "Viola",
+  "Ice": "Ghiaccio",
+  "Teal": "Verde acqua",
+  "Gold": "Oro",
+  "Silver": "Argento",
+  "Picture in the browser tab. Empty: Mars.": "Immagine nella scheda del browser. Vuoto: Marte.",
+  "Tab icon color": "Colore dell'icona della scheda",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Un colore per server per distinguerli a colpo d'occhio. Vuoto: arancione.",
+  "City tile": "Tessera città",
+  "Science tag": "Simbolo scienza",
+  "Space shuttle": "Navetta spaziale",
+  "Astronaut": "Astronauta",
+  "Orange": "Arancione"
 }

@@ -1570,5 +1570,18 @@
   "AI info (spoilers)": "Informacje AI (spoilery)",
   "AI info (spoilers) hidden": "Informacje AI (spoilery) ukryte",
   "Show AI info (spoilers)": "Pokaż informacje AI (spoilery)",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "Cofnięcie niemożliwe: od tego czasu odkryto karty lub inne ukryte informacje."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Cofnięcie niemożliwe: od tego czasu odkryto karty lub inne ukryte informacje.",
+  "Tab icon": "Ikona karty",
+  "Violet": "Fioletowy",
+  "Ice": "Lód",
+  "Teal": "Morski",
+  "Gold": "Złoty",
+  "Silver": "Srebrny",
+  "Picture in the browser tab. Empty: Mars.": "Obrazek w karcie przeglądarki. Puste: Mars.",
+  "Tab icon color": "Kolor ikony karty",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Każdy serwer w innym kolorze – od razu widać, który to. Puste: pomarańczowy.",
+  "City tile": "Płytka miasta",
+  "Science tag": "Symbol nauki",
+  "Space shuttle": "Prom kosmiczny",
+  "Astronaut": "Astronauta"
 }

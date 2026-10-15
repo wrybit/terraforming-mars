@@ -1911,5 +1911,20 @@
   "AI info (spoilers)": "Infos da AI (spoilers)",
   "AI info (spoilers) hidden": "Infos da AI (spoilers) ocultas",
   "Show AI info (spoilers)": "Mostrar infos da AI (spoilers)",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "Não é possível desfazer: desde então foram reveladas cartas ou outras informações ocultas."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Não é possível desfazer: desde então foram reveladas cartas ou outras informações ocultas.",
+  "Tab icon": "Ícone da aba",
+  "Pink": "Rosa",
+  "Violet": "Violeta",
+  "Ice": "Gelo",
+  "Teal": "Verde-azulado",
+  "Gold": "Dourado",
+  "Silver": "Prateado",
+  "Picture in the browser tab. Empty: Mars.": "Imagem na aba do navegador. Vazio: Marte.",
+  "Tab icon color": "Cor do ícone da aba",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Uma cor por servidor para distingui-los num relance. Vazio: laranja.",
+  "City tile": "Peça de cidade",
+  "Science tag": "Símbolo de ciência",
+  "Space shuttle": "Ônibus espacial",
+  "Astronaut": "Astronauta",
+  "Orange": "Laranja"
 }

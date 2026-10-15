@@ -1724,5 +1724,20 @@
   "AI info (spoilers)": "AI 信息（剧透）",
   "AI info (spoilers) hidden": "AI 信息（剧透）已隐藏",
   "Show AI info (spoilers)": "显示 AI 信息（剧透）",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "无法撤销：此后已翻开卡牌或其他隐藏信息。"
+  "Undo is not possible: cards or other hidden information were revealed since then.": "无法撤销：此后已翻开卡牌或其他隐藏信息。",
+  "Tab icon": "标签页图标",
+  "Pink": "粉色",
+  "Violet": "紫色",
+  "Ice": "冰蓝",
+  "Teal": "青绿",
+  "Gold": "金色",
+  "Silver": "银色",
+  "Picture in the browser tab. Empty: Mars.": "浏览器标签页中的图片。留空：火星。",
+  "Tab icon color": "标签页图标颜色",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "每个服务器一种颜色——一眼区分多个服务器。留空：橙色。",
+  "City tile": "城市板块",
+  "Science tag": "科学标志",
+  "Space shuttle": "航天飞机",
+  "Astronaut": "宇航员",
+  "Orange": "橙色"
 }

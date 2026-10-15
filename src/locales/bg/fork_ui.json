@@ -1686,5 +1686,20 @@
   "AI info (spoilers)": "Информация за AI (спойлери)",
   "AI info (spoilers) hidden": "Информацията за AI (спойлери) е скрита",
   "Show AI info (spoilers)": "Покажи информацията за AI (спойлери)",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "Отмяната не е възможна: оттогава бяха разкрити карти или друга скрита информация."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Отмяната не е възможна: оттогава бяха разкрити карти или друга скрита информация.",
+  "Tab icon": "Икона на раздела",
+  "Pink": "Розов",
+  "Violet": "Виолетов",
+  "Ice": "Лед",
+  "Teal": "Синьозелен",
+  "Gold": "Златен",
+  "Silver": "Сребърен",
+  "Picture in the browser tab. Empty: Mars.": "Изображение в раздела на браузъра. Празно: Марс.",
+  "Tab icon color": "Цвят на иконата на раздела",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Различен цвят за всеки сървър – разпознавате ги с един поглед. Празно: оранжево.",
+  "City tile": "Плочка град",
+  "Science tag": "Символ наука",
+  "Space shuttle": "Космическа совалка",
+  "Astronaut": "Астронавт",
+  "Orange": "Оранжево"
 }

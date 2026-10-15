@@ -949,5 +949,20 @@
   "AI info (spoilers)": "Відомості AI (спойлери)",
   "AI info (spoilers) hidden": "Відомості AI (спойлери) приховано",
   "Show AI info (spoilers)": "Показати відомості AI (спойлери)",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "Скасування неможливе: відтоді було відкрито карти або іншу приховану інформацію."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Скасування неможливе: відтоді було відкрито карти або іншу приховану інформацію.",
+  "Tab icon": "Значок вкладки",
+  "Pink": "Рожевий",
+  "Violet": "Фіолетовий",
+  "Ice": "Лід",
+  "Teal": "Бірюзовий",
+  "Gold": "Золотий",
+  "Silver": "Срібний",
+  "Picture in the browser tab. Empty: Mars.": "Зображення у вкладці браузера. Порожньо: Марс.",
+  "Tab icon color": "Колір значка вкладки",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Свій колір для кожного сервера – щоб з першого погляду розрізняти кілька серверів. Порожньо: помаранчевий.",
+  "City tile": "Тайл міста",
+  "Science tag": "Мітка науки",
+  "Space shuttle": "Космічний човник",
+  "Astronaut": "Астронавт",
+  "Orange": "Помаранчевий"
 }

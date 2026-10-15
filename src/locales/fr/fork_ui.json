@@ -856,5 +856,18 @@
   "AI info (spoilers)": "Infos AI (spoilers)",
   "AI info (spoilers) hidden": "Infos AI (spoilers) masquées",
   "Show AI info (spoilers)": "Afficher les infos AI (spoilers)",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "Annulation impossible : des cartes ou d'autres informations cachées ont été révélées depuis."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Annulation impossible : des cartes ou d'autres informations cachées ont été révélées depuis.",
+  "Tab icon": "Icône d'onglet",
+  "Pink": "Rose",
+  "Ice": "Glace",
+  "Teal": "Sarcelle",
+  "Gold": "Or",
+  "Silver": "Argent",
+  "Picture in the browser tab. Empty: Mars.": "Image dans l'onglet du navigateur. Vide : Mars.",
+  "Tab icon color": "Couleur de l'icône d'onglet",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Une couleur par serveur pour les distinguer d'un coup d'œil. Vide : orange.",
+  "City tile": "Tuile cité",
+  "Science tag": "Badge science",
+  "Space shuttle": "Navette spatiale",
+  "Astronaut": "Astronaute"
 }

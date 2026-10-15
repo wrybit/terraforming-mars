@@ -1607,5 +1607,20 @@
   "AI info (spoilers)": "Сведения AI (спойлеры)",
   "AI info (spoilers) hidden": "Сведения AI (спойлеры) скрыты",
   "Show AI info (spoilers)": "Показать сведения AI (спойлеры)",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "Отмена невозможна: с тех пор были открыты карты или другая скрытая информация."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Отмена невозможна: с тех пор были открыты карты или другая скрытая информация.",
+  "Tab icon": "Значок вкладки",
+  "Pink": "Розовый",
+  "Violet": "Фиолетовый",
+  "Ice": "Лёд",
+  "Teal": "Бирюзовый",
+  "Gold": "Золотой",
+  "Silver": "Серебряный",
+  "Picture in the browser tab. Empty: Mars.": "Картинка во вкладке браузера. Пусто: Марс.",
+  "Tab icon color": "Цвет значка вкладки",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Свой цвет для каждого сервера – чтобы с первого взгляда различать несколько серверов. Пусто: оранжевый.",
+  "City tile": "Тайл города",
+  "Science tag": "Метка науки",
+  "Space shuttle": "Космический челнок",
+  "Astronaut": "Астронавт",
+  "Orange": "Оранжевый"
 }

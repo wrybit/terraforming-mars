@@ -1033,5 +1033,20 @@
   "AI info (spoilers)": "AI 정보 (스포일러)",
   "AI info (spoilers) hidden": "AI 정보 (스포일러) 숨김",
   "Show AI info (spoilers)": "AI 정보 (스포일러) 표시",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "되돌릴 수 없습니다: 그 이후 카드나 다른 숨겨진 정보가 공개되었습니다."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "되돌릴 수 없습니다: 그 이후 카드나 다른 숨겨진 정보가 공개되었습니다.",
+  "Tab icon": "탭 아이콘",
+  "Pink": "분홍",
+  "Violet": "보라",
+  "Ice": "얼음",
+  "Teal": "청록",
+  "Gold": "금색",
+  "Silver": "은색",
+  "Picture in the browser tab. Empty: Mars.": "브라우저 탭에 표시되는 그림. 비워 두면: 화성.",
+  "Tab icon color": "탭 아이콘 색",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "서버마다 색을 달리하면 한눈에 구별됩니다. 비워 두면: 주황.",
+  "City tile": "도시 타일",
+  "Science tag": "과학 태그",
+  "Space shuttle": "우주왕복선",
+  "Astronaut": "우주비행사",
+  "Orange": "주황"
 }

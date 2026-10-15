@@ -1414,5 +1414,18 @@
   "AI info (spoilers)": "AI-info (spoilers)",
   "AI info (spoilers) hidden": "AI-info (spoilers) verborgen",
   "Show AI info (spoilers)": "AI-info (spoilers) tonen",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "Ongedaan maken niet mogelijk: sindsdien zijn kaarten of andere verborgen informatie onthuld."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Ongedaan maken niet mogelijk: sindsdien zijn kaarten of andere verborgen informatie onthuld.",
+  "Tab icon": "Tabbladpictogram",
+  "Pink": "Roze",
+  "Ice": "IJs",
+  "Teal": "Blauwgroen",
+  "Gold": "Goud",
+  "Silver": "Zilver",
+  "Picture in the browser tab. Empty: Mars.": "Afbeelding in het browsertabblad. Leeg: Mars.",
+  "Tab icon color": "Kleur van het tabbladpictogram",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Een kleur per server – zo onderscheid je ze in één oogopslag. Leeg: oranje.",
+  "City tile": "Stadstegel",
+  "Science tag": "Wetenschapssymbool",
+  "Space shuttle": "Spaceshuttle",
+  "Orange": "Oranje"
 }

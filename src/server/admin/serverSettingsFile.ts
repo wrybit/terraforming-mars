@@ -109,7 +109,9 @@ export function writeServerSettings(update: ServerSettingsUpdate): ServerSetting
       throw new Error('unknown setting ' + key);
     }
     if (!isValidSettingValue(definition, value)) {
-      throw new Error(`${key} needs a whole number of at least ${definition.minimum ?? 0}`);
+      throw new Error(definition.kind === 'choice' ?
+        `${key} needs one of ${(definition.choices ?? []).map((choice) => choice.value).filter((choiceValue) => choiceValue !== '').join(', ')}` :
+        `${key} needs a whole number of at least ${definition.minimum ?? 0}`);
     }
   }
   writeValues(update);

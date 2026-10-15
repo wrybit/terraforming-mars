@@ -1,0 +1,21 @@
+{
+  "icons": [
+    {"id": "mars", "label": "Mars", "source": "assets/favicon.ico", "mode": "turn"},
+    {"id": "city", "label": "City tile", "source": "assets/tiles/city.png", "mode": "tint"},
+    {"id": "science", "label": "Science tag", "source": "assets/tags/science.png", "mode": "tint"},
+    {"id": "shuttle", "label": "Space shuttle", "source": "assets/acrylic/shuttle-neutral.png", "mode": "tint", "withoutShadow": true},
+    {"id": "astronaut", "label": "Astronaut", "source": "assets/acrylic/astronaut-neutral.png", "mode": "tint", "withoutShadow": true}
+  ],
+  "colors": [
+    {"id": "orange", "label": "Orange", "hue": 22, "saturation": 1, "brightness": 1},
+    {"id": "red", "label": "Red", "hue": 4, "saturation": 1.15, "brightness": 1},
+    {"id": "pink", "label": "Pink", "hue": 330, "saturation": 0.95, "brightness": 1.1},
+    {"id": "violet", "label": "Violet", "hue": 275, "saturation": 0.9, "brightness": 1.2},
+    {"id": "blue", "label": "Blue", "hue": 218, "saturation": 1, "brightness": 1.2},
+    {"id": "ice", "label": "Ice", "hue": 200, "saturation": 0.65, "brightness": 1.25},
+    {"id": "teal", "label": "Teal", "hue": 168, "saturation": 0.8, "brightness": 1.05},
+    {"id": "green", "label": "Green", "hue": 115, "saturation": 0.85, "brightness": 1.05},
+    {"id": "gold", "label": "Gold", "hue": 46, "saturation": 1.05, "brightness": 1.15},
+    {"id": "silver", "label": "Silver", "hue": 0, "saturation": 0, "brightness": 1.05}
+  ]
+}

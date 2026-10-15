@@ -1151,5 +1151,19 @@
   "AI info (spoilers)": "AI-info (spoilere)",
   "AI info (spoilers) hidden": "AI-info (spoilere) skjult",
   "Show AI info (spoilers)": "Vis AI-info (spoilere)",
-  "Undo is not possible: cards or other hidden information were revealed since then.": "Kan ikke angre: kort eller annen skjult informasjon er avslørt siden da."
+  "Undo is not possible: cards or other hidden information were revealed since then.": "Kan ikke angre: kort eller annen skjult informasjon er avslørt siden da.",
+  "Tab icon": "Faneikon",
+  "Pink": "Rosa",
+  "Violet": "Fiolett",
+  "Ice": "Is",
+  "Teal": "Blågrønn",
+  "Gold": "Gull",
+  "Silver": "Sølv",
+  "Picture in the browser tab. Empty: Mars.": "Bilde i nettleserfanen. Tomt: Mars.",
+  "Tab icon color": "Farge på faneikonet",
+  "A color per server tells several servers apart at a glance. Empty: orange.": "Én farge per server – skiller dem fra hverandre med et blikk. Tomt: oransje.",
+  "City tile": "Byflis",
+  "Science tag": "Vitenskapsmerke",
+  "Space shuttle": "Romferge",
+  "Orange": "Oransje"
 }
