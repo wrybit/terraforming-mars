@@ -35,14 +35,14 @@ function toEntityStats(name: string, results: ReadonlyArray<StatsPlayerResult>):
   const uniqueGames = Array.from(new Set(results.map((result) => result.game)));
   const shares = new Map<string, StatsPlayerShare>();
   for (const result of results) {
-    const share = shares.get(result.player.name) ?? {name: result.player.name, plays: 0, wins: 0, expectedWinRate: 0};
+    const share = shares.get(result.name) ?? {name: result.name, plays: 0, wins: 0, expectedWinRate: 0};
     // Running average, so no second pass is needed
     share.expectedWinRate += (expectedWinRate(result.game) - share.expectedWinRate) / (share.plays + 1);
     share.plays++;
     if (result.place === 1) {
       share.wins++;
     }
-    shares.set(result.player.name, share);
+    shares.set(result.name, share);
   }
   const players = Array.from(shares.values()).sort((first, second) => second.plays - first.plays || second.wins - first.wins);
   const byWins = [...players].sort((first, second) => second.wins - first.wins);

@@ -1,6 +1,6 @@
 import {expect} from 'chai';
-import {sampleGames} from './statsFixtures';
-import {allPlayerResults, averageTimeByLineup, playerColors, totalTimeSeconds} from '@/client/components/stats/statsResults';
+import {sampleGames, statsGame} from './statsFixtures';
+import {allPlayerResults, averageTimeByLineup, playerColors, playerNames, totalTimeSeconds} from '@/client/components/stats/statsResults';
 import {aggregate, entityStats} from '@/client/components/stats/statsAggregate';
 import {emptyFilters, filterGames, filterGroups, optionCounts} from '@/client/components/stats/statsFilter';
 import {toggleOption} from '@/client/components/cardlist/filterSelection';
@@ -66,6 +66,27 @@ describe('stats logic', () => {
   it('head to head counts shared games', () => {
     const jens = headToHead(results, 'Jens');
     expect(jens.find((entry) => entry.opponent === 'Daniel')).deep.eq({opponent: 'Daniel', ahead: 2, behind: 1});
+  });
+
+  it('AI players count per strength, after all human players', () => {
+    const aiGames = [
+      statsGame([
+        {name: 'Teddy [AI+]', color: 'red', points: 90, corporation: 'Helion'},
+        {name: 'Rosa [AI+]', color: 'green', points: 80, corporation: 'Helion'},
+        {name: 'Jens', color: 'blue', points: 70, corporation: 'Ecoline'},
+      ]),
+      statsGame([
+        {name: 'Old (AI)', color: 'red', points: 90, corporation: 'Helion'},
+        {name: 'Kim [AI-]', color: 'green', points: 50, corporation: 'Helion'},
+        {name: 'Daniel', color: 'yellow', points: 60, corporation: 'Ecoline'},
+      ]),
+    ];
+    expect(playerNames(aiGames)).deep.eq(['Daniel', 'Jens', '[AI-]', '[AI]', '[AI+]']);
+    const aiResults = allPlayerResults(aiGames);
+    // Both hard AIs of the first game count separately against Jens
+    expect(headToHead(aiResults, 'Jens').find((entry) => entry.opponent === '[AI+]')).deep.eq({opponent: '[AI+]', ahead: 0, behind: 2});
+    // Details stay with their own player although the counted name is shared
+    expect(aiResults.filter((result) => result.name === '[AI+]').map((result) => result.details?.name)).deep.eq(['Teddy [AI+]', 'Rosa [AI+]']);
   });
 
   it('records and colors', () => {

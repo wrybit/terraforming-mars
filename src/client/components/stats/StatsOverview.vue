@@ -93,7 +93,7 @@ import StatsLineChart from './StatsLineChart.vue';
 import StatsBarChart from './StatsBarChart.vue';
 import StatsShowcase from './StatsShowcase.vue';
 import {EntityStats, mostPlayed} from './statsAggregate';
-import {average, averageTimeByLineup, playerNames, StatsPlayerResult} from './statsResults';
+import {average, averageTimeByLineup, playerNames, StatsPlayerResult, statsPlayerName} from './statsResults';
 import {gamesByGeneration} from './statsRecords';
 import {formatDate, formatDuration, formatNumber} from './statsLabels';
 import {averageGlobalsByGeneration, averagePointsByGeneration} from './statsSeries';
@@ -145,7 +145,7 @@ export default defineComponent({
         name,
         color: this.colorOf(name),
         points: this.recentGames.map((game) => {
-          const player = game.summary.players.find((candidate) => candidate.name === name);
+          const player = game.summary.players.find((candidate) => statsPlayerName(candidate.name) === name);
           return {
             value: player?.victoryPoints,
             highlight: player?.isWinner,
@@ -204,14 +204,15 @@ export default defineComponent({
       const length = Math.max(0, ...series.map((line) => line.points.length));
       return Array.from({length}, (_, index) => String(index + 1));
     },
+    // Lineups and solo games keep the full names; colors and links belong to the counted player
     colorOf(name: string): Color {
-      return (this.playerColors as Map<string, Color>).get(name) ?? 'neutral';
+      return (this.playerColors as Map<string, Color>).get(statsPlayerName(name)) ?? 'neutral';
     },
     gamesLabel(games: number): string {
       return translateText(games === 1 ? 'game' : 'games');
     },
     playerHref(name: string): string {
-      return statsHref({type: 'detail', kind: 'player', name});
+      return statsHref({type: 'detail', kind: 'player', name: statsPlayerName(name)});
     },
   },
 });

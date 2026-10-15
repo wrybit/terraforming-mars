@@ -73,7 +73,7 @@ export const STATS_KINDS: Record<StatsKind, StatsKindDefinition> = {
   player: {
     label: 'Players',
     singular: 'Player',
-    namesOf: (result) => [result.player.name],
+    namesOf: (result) => [result.name],
   },
 };
 

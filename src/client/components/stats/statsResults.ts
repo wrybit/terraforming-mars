@@ -2,10 +2,13 @@ import {StatsGame, StatsPlayerDetails} from '@/common/stats/StatsGame';
 import {AdminPlayerSummary} from '@/common/admin/AdminGameSummary';
 import {Color} from '@/common/Color';
 import {lineupKey} from '@/client/components/admin/winCounts';
+import {AI_LEVELS, aiMarkerOf, aiPlayerMarker} from '@/common/ai/AiLevel';
 
 /** A player in a game – the unit by which almost all metrics are counted. */
 export type StatsPlayerResult = {
   game: StatsGame;
+  /** Name the statistics count under: the player's name, for AI players only the strength marker (see statsPlayerName). */
+  name: string;
   player: AdminPlayerSummary;
   /** 1 = winner; on a tie players share the place. */
   place: number;
@@ -22,9 +25,18 @@ function placeOf(player: AdminPlayerSummary, players: ReadonlyArray<AdminPlayerS
   return ahead.length + 1;
 }
 
+// AI names are random – every AI of one strength counts as one player ("[AI-]", "[AI]", "[AI+]")
+export function statsPlayerName(displayName: string): string {
+  return aiMarkerOf(displayName) ?? displayName;
+}
+
+// AI players after all human players, weakest first
+const AI_ORDER: ReadonlyArray<string> = AI_LEVELS.map(aiPlayerMarker);
+
 export function playerResults(game: StatsGame): Array<StatsPlayerResult> {
   return game.summary.players.map((player) => ({
     game,
+    name: statsPlayerName(player.name),
     player,
     place: placeOf(player, game.summary.players),
     details: game.details?.players.find((details) => details.name === player.name),
@@ -55,22 +67,24 @@ export function winnerOf(game: StatsGame): AdminPlayerSummary | undefined {
   return game.summary.players.find((player) => player.isWinner);
 }
 
-/** Player names, most frequently participating first. */
+/** Player names: humans most frequently participating first, then the AI strengths. */
 export function playerNames(games: ReadonlyArray<StatsGame>): Array<string> {
   const counts = new Map<string, number>();
   for (const result of allPlayerResults(games)) {
-    counts.set(result.player.name, (counts.get(result.player.name) ?? 0) + 1);
+    counts.set(result.name, (counts.get(result.name) ?? 0) + 1);
   }
-  return Array.from(counts.keys()).sort((first, second) => (counts.get(second) ?? 0) - (counts.get(first) ?? 0) || first.localeCompare(second));
+  const aiRank = (name: string) => AI_ORDER.indexOf(name);
+  return Array.from(counts.keys()).sort((first, second) => aiRank(first) - aiRank(second) ||
+    (counts.get(second) ?? 0) - (counts.get(first) ?? 0) || first.localeCompare(second));
 }
 
 /** Color a player played most often – so you recognize them everywhere in the statistics. */
 export function playerColors(games: ReadonlyArray<StatsGame>): Map<string, Color> {
   const counts = new Map<string, Map<Color, number>>();
-  for (const {player} of allPlayerResults(games)) {
-    const byColor = counts.get(player.name) ?? new Map<Color, number>();
+  for (const {name, player} of allPlayerResults(games)) {
+    const byColor = counts.get(name) ?? new Map<Color, number>();
     byColor.set(player.color, (byColor.get(player.color) ?? 0) + 1);
-    counts.set(player.name, byColor);
+    counts.set(name, byColor);
   }
   const colors = new Map<string, Color>();
   counts.forEach((byColor, name) => {

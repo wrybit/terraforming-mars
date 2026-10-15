@@ -1,5 +1,5 @@
 import {AdminGameSummary, AdminPlayerSummary} from '@/common/admin/AdminGameSummary';
-import {splitAiMarker} from '@/common/ai/AiLevel';
+import {aiMarkerOf, currentAiName, splitAiMarker} from '@/common/ai/AiLevel';
 
 // Columns of the admin overview: always eleven, however many names there are – human players by seat
 // (player 1 to 6), AI players by seat among the AI players (AI 1 to 5). AI chips keep their strength marker.
@@ -9,11 +9,8 @@ export const MAX_AI_COLUMNS = 5;
 
 export type PlayerColumn = {kind: 'human' | 'ai', seat: number};
 
-// Older games wrote "(AI)" or "(KI)"; those count as the normal strength
-const LEGACY_AI_PATTERN = /\s*\((AI|KI)\)$/;
-
 function isAi(player: AdminPlayerSummary): boolean {
-  return LEGACY_AI_PATTERN.test(player.name) || splitAiMarker(player.name).marker !== undefined;
+  return aiMarkerOf(player.name) !== undefined;
 }
 
 /** Always the same eleven columns: Player 1 … Player 6, AI 1 … AI 5 – the table never changes its shape. */
@@ -34,7 +31,7 @@ export function playersInColumn(summary: AdminGameSummary, column: PlayerColumn)
 
 /** Name on the chip: AI players keep their strength marker ("Teddy [AI+]"), old "(AI)" becomes "[AI]". */
 export function chipName(player: AdminPlayerSummary): string {
-  return player.name.replace(LEGACY_AI_PATTERN, ' [AI]');
+  return currentAiName(player.name);
 }
 
 /** Name and marker apart: in the narrow chip only the name gets shortened, the strength stays readable. */

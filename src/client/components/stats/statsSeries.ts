@@ -21,7 +21,7 @@ export function averagePointsByGeneration(results: ReadonlyArray<StatsPlayerResu
   return names.map((name) => ({
     name,
     values: averageByGeneration(results
-      .filter((result) => result.player.name === name)
+      .filter((result) => result.name === name)
       .flatMap((result) => result.details?.pointsByGeneration === undefined ? [] : [result.details.pointsByGeneration])),
   })).filter((entry) => entry.values.length > 0);
 }

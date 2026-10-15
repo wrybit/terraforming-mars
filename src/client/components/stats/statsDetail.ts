@@ -1,4 +1,3 @@
-import {StatsGame} from '@/common/stats/StatsGame';
 import {aggregate, EntityStats, resultsWith} from './statsAggregate';
 import {COMPANION_KINDS, StatsKind} from './statsKinds';
 import {expectedWinRate, StatsPlayerResult} from './statsResults';
@@ -49,21 +48,17 @@ export function entityDetail(allResults: ReadonlyArray<StatsPlayerResult>, kind:
   };
 }
 
-function placeIn(game: StatsGame, results: ReadonlyArray<StatsPlayerResult>, name: string): number | undefined {
-  return results.find((result) => result.game === game && result.player.name === name)?.place;
-}
-
 /** Head-to-head: in shared games, how often the player finished ahead of or behind each other player. */
 export function headToHead(allResults: ReadonlyArray<StatsPlayerResult>, name: string): Array<HeadToHead> {
-  const own = allResults.filter((result) => result.player.name === name);
+  const own = allResults.filter((result) => result.name === name);
   const opponents = new Map<string, HeadToHead>();
   for (const result of own) {
-    for (const other of result.game.summary.players.filter((player) => player.name !== name)) {
+    // Results instead of names: two AI players of the same strength in one game count separately
+    for (const other of allResults.filter((candidate) => candidate.game === result.game && candidate.name !== name)) {
       const entry = opponents.get(other.name) ?? {opponent: other.name, ahead: 0, behind: 0};
-      const otherPlace = placeIn(result.game, allResults, other.name);
-      if (otherPlace !== undefined && result.place < otherPlace) {
+      if (result.place < other.place) {
         entry.ahead++;
-      } else if (otherPlace !== undefined && result.place > otherPlace) {
+      } else if (result.place > other.place) {
         entry.behind++;
       }
       opponents.set(other.name, entry);

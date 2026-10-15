@@ -36,7 +36,7 @@ export function pointSourcesByPlayer(results: ReadonlyArray<StatsPlayerResult>):
   for (const result of results) {
     const points = result.details?.victoryPoints;
     if (points !== undefined) {
-      byPlayer.set(result.player.name, [...(byPlayer.get(result.player.name) ?? []), points]);
+      byPlayer.set(result.name, [...(byPlayer.get(result.name) ?? []), points]);
     }
   }
   return Array.from(byPlayer.entries()).map(([name, list]) => toRow(name, list));

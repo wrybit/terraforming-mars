@@ -69,7 +69,7 @@ export default defineComponent({
   computed: {
     players(): Array<PlayerCard> {
       return this.names.map((name) => {
-        const own = this.results.filter((result) => result.player.name === name);
+        const own = this.results.filter((result) => result.name === name);
         const wins = own.filter((result) => result.place === 1).length;
         const corporations = aggregate(own, 'corporation');
         return {

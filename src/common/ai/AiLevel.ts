@@ -29,6 +29,19 @@ export function aiPlayerMarker(level: AiLevel): string {
 
 const CURRENT_MARKER_PATTERN = /^(.*?)\s*(\[AI[-+]?\])$/;
 
+// Older games wrote "(AI)" or "(KI)"; those count as the normal strength
+const LEGACY_MARKER_PATTERN = /\s*\((AI|KI)\)$/;
+
+/** Display name with the current marker: an old "(AI)" or "(KI)" becomes "[AI]". */
+export function currentAiName(displayName: string): string {
+  return displayName.replace(LEGACY_MARKER_PATTERN, ' [AI]');
+}
+
+/** Strength marker of an AI player ("[AI+]"), undefined for human players. Old markers count as "[AI]". */
+export function aiMarkerOf(displayName: string): string | undefined {
+  return splitAiMarker(currentAiName(displayName)).marker;
+}
+
 /**
  * Splits a display name into the player's own name and the AI marker, so a narrow name cell can
  * shorten the name itself while "[AI]" stays readable.
