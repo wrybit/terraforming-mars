@@ -1413,5 +1413,17 @@
   "Science tag": "Wetenschapssymbool",
   "Space shuttle": "Spaceshuttle",
   "Orange": "Oranje",
-  "In development": "In ontwikkeling"
+  "In development": "In ontwikkeling",
+  "Help the AI get better": "Help de AI beter te worden",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "Dit is een analysepartij: in het logboek kun je de zetten van de AI beoordelen. Zie je een goede of slechte zet, beoordeel hem dan – dat kost seconden en gaat direct naar haar training.",
+  "Double-tap": "Dubbeltikken",
+  "an AI entry in the log below": "een AI-regel in het logboek hieronder",
+  "Rate": "Beoordelen",
+  "Hover an AI entry in the log below": "Beweeg de muis over een AI-regel in het logboek hieronder",
+  "Good, bad or check": "Goed, slecht of controleren",
+  "Comment": "Opmerking",
+  "optional: what you would have done instead": "optioneel: wat jij anders had gedaan",
+  "Key I": "Toets I",
+  "opens the rating of the newest AI move": "opent de beoordeling van de nieuwste AI-zet",
+  "Let's go": "Aan de slag"
 }

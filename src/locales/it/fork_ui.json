@@ -2026,5 +2026,17 @@
   "Space shuttle": "Navetta spaziale",
   "Astronaut": "Astronauta",
   "Orange": "Arancione",
-  "In development": "In sviluppo"
+  "In development": "In sviluppo",
+  "Help the AI get better": "Aiuta l’AI a migliorare",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "Questa è una partita di analisi: nel registro puoi valutare le mosse dell’AI. Se noti una mossa buona o cattiva, valutala: richiede pochi secondi e va direttamente nel suo addestramento.",
+  "Double-tap": "Tocca due volte",
+  "an AI entry in the log below": "una voce dell’AI nel registro qui sotto",
+  "Rate": "Valuta",
+  "Hover an AI entry in the log below": "Passa il mouse su una voce dell’AI nel registro qui sotto",
+  "Good, bad or check": "Buona, cattiva o da verificare",
+  "Comment": "Commenta",
+  "optional: what you would have done instead": "facoltativo: cosa avresti fatto tu",
+  "Key I": "Tasto I",
+  "opens the rating of the newest AI move": "apre la valutazione dell’ultima mossa dell’AI",
+  "Let's go": "Si parte"
 }

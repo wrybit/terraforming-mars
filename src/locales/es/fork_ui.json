@@ -2032,5 +2032,17 @@
   "Science tag": "Etiqueta de ciencia",
   "Space shuttle": "Transbordador espacial",
   "Astronaut": "Astronauta",
-  "In development": "En desarrollo"
+  "In development": "En desarrollo",
+  "Help the AI get better": "Ayuda a la AI a mejorar",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "Esta es una partida de análisis: en el registro puedes valorar las jugadas de la AI. Si ves una jugada buena o mala, valórala: lleva segundos y va directo a su entrenamiento.",
+  "Double-tap": "Toca dos veces",
+  "an AI entry in the log below": "una entrada de la AI en el registro",
+  "Rate": "Valorar",
+  "Hover an AI entry in the log below": "Pasa el ratón por una entrada de la AI en el registro",
+  "Good, bad or check": "Buena, mala o revisar",
+  "Comment": "Comentar",
+  "optional: what you would have done instead": "opcional: qué habrías hecho tú",
+  "Key I": "Tecla I",
+  "opens the rating of the newest AI move": "abre la valoración de la última jugada de la AI",
+  "Let's go": "¡Vamos!"
 }

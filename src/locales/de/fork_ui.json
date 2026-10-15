@@ -597,5 +597,17 @@
   "City tile": "Stadt-Plättchen",
   "Science tag": "Wissenschafts-Symbol",
   "Space shuttle": "Raumfähre",
-  "In development": "In Entwicklung"
+  "In development": "In Entwicklung",
+  "Help the AI get better": "Hilf der AI, besser zu werden",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "Dies ist eine Analysepartie: Im Log kannst Du die Züge der AI bewerten. Fällt Dir ein guter oder ein schlechter Zug auf, bewerte ihn – das dauert Sekunden und fließt direkt in ihr Training.",
+  "Double-tap": "Doppelt antippen",
+  "an AI entry in the log below": "einen AI-Eintrag im Log unten",
+  "Rate": "Bewerten",
+  "Hover an AI entry in the log below": "Maus auf einen AI-Eintrag im Log unten",
+  "Good, bad or check": "Gut, schlecht oder prüfen",
+  "Comment": "Kommentieren",
+  "optional: what you would have done instead": "optional: was Du anders gemacht hättest",
+  "Key I": "Taste I",
+  "opens the rating of the newest AI move": "öffnet die Bewertung des neuesten AI-Zugs",
+  "Let's go": "Los geht’s"
 }

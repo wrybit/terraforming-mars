@@ -1738,5 +1738,17 @@
   "Astronaut": "宇航员",
   "Orange": "橙色",
   "In development": "开发中",
-  "Edgedancer": "边缘舞者"
+  "Edgedancer": "边缘舞者",
+  "Help the AI get better": "帮助 AI 变得更强",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "这是一局分析对局：你可以在日志中评价 AI 的每一步。发现好棋或坏棋就评价一下——只需几秒，并会直接用于它的训练。",
+  "Double-tap": "双击",
+  "an AI entry in the log below": "日志中的一条 AI 记录",
+  "Rate": "评价",
+  "Hover an AI entry in the log below": "将鼠标悬停在下方日志中的 AI 记录上",
+  "Good, bad or check": "好、坏或待检查",
+  "Comment": "评论",
+  "optional: what you would have done instead": "可选：你会怎么做",
+  "Key I": "I 键",
+  "opens the rating of the newest AI move": "打开 AI 最新一步的评价",
+  "Let's go": "开始吧"
 }

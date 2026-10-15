@@ -1,0 +1,332 @@
+// Analysis game welcome (AiAnalysisWelcome.vue): same look as the feedback welcome – drawn log on top,
+// title, three ways to rate as tiles, one button
+@import (reference) "./modal_surface.less";
+@import (reference) "./variables.less";
+
+@ai-welcome-surface: rgba(255, 255, 255, 0.045);
+@ai-welcome-surface-border: rgba(255, 255, 255, 0.08);
+@ai-welcome-muted: #8b8d96;
+@ai-welcome-stage: #15161a;
+// Law of proximity: inside a tile < between tiles < between sections
+@ai-welcome-gap-inner: 8px;
+@ai-welcome-gap-tile: 10px;
+@ai-welcome-gap-section: 20px;
+
+.ai-analysis-welcome {
+  .modal-backdrop();
+  position: fixed;
+  inset: 0;
+  // Above the game, below the feedback overlay (1200)
+  z-index: 1100;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  padding: 24px;
+  font-family: @font_family_main;
+  font-size: 15px;
+  line-height: 1.5;
+  color: @modal-text;
+
+  &__dialog {
+    width: min(560px, 100%);
+    overflow: hidden;
+    background: @modal-background;
+    border: 1px solid @modal-border;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    animation: ai-analysis-welcome-pop 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  }
+
+  // Drawn log, fading into the dialog at the bottom
+  &__preview {
+    position: relative;
+    padding: 22px 22px 34px;
+    background: @ai-welcome-stage;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, @modal-background);
+      pointer-events: none;
+    }
+  }
+
+  &__log {
+    overflow: hidden;
+    border: 1px solid @ai-welcome-surface-border;
+    border-radius: 10px;
+    background: #1b1c21;
+    font-size: 13px;
+  }
+
+  &__row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 36px;
+    padding: 6px 12px;
+
+    & + & {
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    &--hover {
+      background: fade(@bg_action, 14%);
+    }
+  }
+
+  &__dot {
+    flex: none;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #ff9f55;
+
+    &--human {
+      background: #59b4ff;
+    }
+  }
+
+  &__ai {
+    color: #ff9f55;
+    font-weight: 500;
+  }
+
+  &__human {
+    color: #59b4ff;
+    font-weight: 500;
+  }
+
+  &__card {
+    color: #e7d9a8;
+  }
+
+  &__rated {
+    margin-left: auto;
+  }
+
+  // Copy of the rating bar in the log (log.less .log-ai-rate-bar)
+  &__bar {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 3px 2px 6px;
+    transform: translateY(-50%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    background: rgba(28, 30, 40, 0.85);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  }
+
+  &__bar-label {
+    margin-right: 4px;
+    color: #b3b2ff;
+    font-weight: bold;
+  }
+
+  &__bar-button {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 26px;
+    border-radius: 6px;
+
+    &--picked {
+      background: fade(@bg_action, 35%);
+    }
+  }
+
+  &__content {
+    display: grid;
+    gap: @ai-welcome-gap-section;
+    padding: 4px 28px 24px;
+  }
+
+  &__intro {
+    display: grid;
+    gap: 8px;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  // Like the feedback welcome and the logo of the start page
+  &__title {
+    margin: 0;
+    padding: 0;
+    font: 400 24px/1.2 Prototype, @font_family_main;
+    color: #daab63;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 2px #000, 0 2px 2px #000;
+    text-wrap: balance;
+  }
+
+  &__ways {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: @ai-welcome-gap-tile;
+  }
+
+  &__way {
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: @ai-welcome-gap-inner;
+    padding: 16px 12px;
+    background: @ai-welcome-surface;
+    border: 1px solid @ai-welcome-surface-border;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 13px;
+
+    b {
+      display: block;
+      color: @modal-heading;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+
+  &__icon {
+    display: grid;
+    place-items: center;
+    height: 46px;
+  }
+
+  &__chips {
+    display: flex;
+    gap: 4px;
+
+    span {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      background: #2c2d36;
+      font-size: 17px;
+    }
+  }
+
+  &__pen {
+    width: 44px;
+    height: 38px;
+    margin: 4px 0;
+    border: 1px solid @ai-welcome-surface-border;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.25);
+    color: #b9b8ff;
+    font-size: 20px;
+  }
+
+  &__tap {
+    color: #f4f4ff;
+    font-size: 28px;
+    filter: drop-shadow(0 0 8px fade(@bg_action, 70%));
+  }
+
+  // Same key as the feedback welcome (feedbackOverlay.less .feedback-keycap)
+  &__keycap {
+    width: 48px;
+    margin-bottom: 3px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 7px;
+    background: linear-gradient(180deg, #2b2c33, #1f2026);
+    box-shadow:
+      0 2px 0 #0d0e11,
+      0 0 0 1px rgba(0, 0, 0, 0.35),
+      0 0 18px fade(@bg_action, 45%),
+      inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    color: #f4f4ff;
+    font: 500 19px/1 @font_family_main;
+    text-shadow: 0 0 6px fade(@bg_action, 90%), 0 0 14px fade(@bg_action, 60%);
+  }
+
+  &__way--touch,
+  &__touch-text {
+    display: none;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  .ai-analysis-welcome__go {
+    height: 44px;
+    padding: 0 26px;
+    font-size: 15px;
+  }
+}
+
+@keyframes ai-analysis-welcome-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+}
+
+// Without a keyboard and mouse (phones, tablets): double tap instead of hovering and the key I
+@media (hover: none) and (pointer: coarse) {
+  .ai-analysis-welcome {
+    &__way--pointer,
+    &__pointer-text {
+      display: none;
+    }
+
+    &__way--touch {
+      display: grid;
+    }
+
+    &__touch-text {
+      display: inline;
+    }
+  }
+}
+
+// Narrow: dialog from below, tiles stacked with the icon on the left
+@media (max-width: 600px) {
+  .ai-analysis-welcome {
+    align-items: end;
+    padding: 12px;
+
+    &__preview {
+      padding: 16px 14px 28px;
+    }
+
+    &__content {
+      gap: 16px;
+      padding: 0 18px 18px;
+    }
+
+    &__title {
+      font-size: 20px;
+    }
+
+    &__ways {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    &__way {
+      grid-template-columns: 112px 1fr;
+      place-items: center start;
+      gap: 12px;
+      padding: 12px;
+      text-align: left;
+    }
+
+    &__icon {
+      justify-self: center;
+    }
+  }
+}

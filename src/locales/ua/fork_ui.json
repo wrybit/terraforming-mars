@@ -966,5 +966,17 @@
   "Astronaut": "Астронавт",
   "Orange": "Помаранчевий",
   "In development": "У розробці",
-  "Edgedancer": "Танцюрист на межі"
+  "Edgedancer": "Танцюрист на межі",
+  "Help the AI get better": "Допоможіть AI стати кращим",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "Це аналітична партія: у журналі можна оцінювати ходи AI. Помітили добрий чи поганий хід — оцініть його: це займе секунди й одразу піде в її навчання.",
+  "Double-tap": "Подвійний дотик",
+  "an AI entry in the log below": "запис AI в журналі нижче",
+  "Rate": "Оцінити",
+  "Hover an AI entry in the log below": "Наведіть курсор на запис AI в журналі нижче",
+  "Good, bad or check": "Добре, погано чи перевірити",
+  "Comment": "Коментар",
+  "optional: what you would have done instead": "необов’язково: що б ви зробили інакше",
+  "Key I": "Клавіша I",
+  "opens the rating of the newest AI move": "відкриває оцінку останнього ходу AI",
+  "Let's go": "Почнімо"
 }

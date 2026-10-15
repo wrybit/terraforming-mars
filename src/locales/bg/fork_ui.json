@@ -1701,5 +1701,17 @@
   "Astronaut": "Астронавт",
   "Orange": "Оранжево",
   "In development": "В разработка",
-  "Edgedancer": "Гранетанцор"
+  "Edgedancer": "Гранетанцор",
+  "Help the AI get better": "Помогнете на AI да стане по-добър",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "Това е аналитична игра: в дневника можете да оценявате ходовете на AI. Ако забележите добър или лош ход, оценете го – отнема секунди и отива направо в обучението му.",
+  "Double-tap": "Двойно докосване",
+  "an AI entry in the log below": "запис на AI в дневника по-долу",
+  "Rate": "Оценка",
+  "Hover an AI entry in the log below": "Посочете с мишката запис на AI в дневника по-долу",
+  "Good, bad or check": "Добър, лош или за проверка",
+  "Comment": "Коментар",
+  "optional: what you would have done instead": "по избор: какво бихте направили вие",
+  "Key I": "Клавиш I",
+  "opens the rating of the newest AI move": "отваря оценката на последния ход на AI",
+  "Let's go": "Да започваме"
 }

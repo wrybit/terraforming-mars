@@ -986,5 +986,17 @@
   "Space shuttle": "Űrsikló",
   "Astronaut": "Űrhajós",
   "Orange": "Narancs",
-  "In development": "Fejlesztés alatt"
+  "In development": "Fejlesztés alatt",
+  "Help the AI get better": "Segíts az AI-nak fejlődni",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "Ez egy elemző játék: a naplóban értékelheted az AI lépéseit. Ha jó vagy rossz lépést látsz, értékeld – néhány másodperc, és egyenesen a tanításába kerül.",
+  "Double-tap": "Dupla koppintás",
+  "an AI entry in the log below": "egy AI-bejegyzés a lenti naplóban",
+  "Rate": "Értékelés",
+  "Hover an AI entry in the log below": "Vidd az egeret egy AI-bejegyzés fölé a lenti naplóban",
+  "Good, bad or check": "Jó, rossz vagy ellenőrizendő",
+  "Comment": "Megjegyzés",
+  "optional: what you would have done instead": "nem kötelező: te mit csináltál volna",
+  "Key I": "I billentyű",
+  "opens the rating of the newest AI move": "megnyitja a legutóbbi AI-lépés értékelését",
+  "Let's go": "Kezdjük"
 }

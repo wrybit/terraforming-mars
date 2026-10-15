@@ -1163,5 +1163,17 @@
   "Science tag": "Vitenskapsmerke",
   "Space shuttle": "Romferge",
   "Orange": "Oransje",
-  "In development": "Under utvikling"
+  "In development": "Under utvikling",
+  "Help the AI get better": "Hjelp AI-en å bli bedre",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "Dette er et analyseparti: i loggen kan du vurdere trekkene til AI-en. Ser du et godt eller dårlig trekk, vurder det – det tar sekunder og går rett inn i treningen.",
+  "Double-tap": "Dobbelttrykk",
+  "an AI entry in the log below": "en AI-oppføring i loggen nedenfor",
+  "Rate": "Vurder",
+  "Hover an AI entry in the log below": "Hold musen over en AI-oppføring i loggen nedenfor",
+  "Good, bad or check": "Bra, dårlig eller sjekk",
+  "Comment": "Kommenter",
+  "optional: what you would have done instead": "valgfritt: hva du ville gjort i stedet",
+  "Key I": "Tasten I",
+  "opens the rating of the newest AI move": "åpner vurderingen av det nyeste AI-trekket",
+  "Let's go": "Sett i gang"
 }

@@ -869,5 +869,17 @@
   "Science tag": "Badge science",
   "Space shuttle": "Navette spatiale",
   "Astronaut": "Astronaute",
-  "In development": "En développement"
+  "In development": "En développement",
+  "Help the AI get better": "Aidez l’AI à progresser",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "Ceci est une partie d’analyse : dans le journal, vous pouvez évaluer les coups de l’AI. Si vous remarquez un bon ou un mauvais coup, évaluez-le – cela prend quelques secondes et alimente directement son entraînement.",
+  "Double-tap": "Toucher deux fois",
+  "an AI entry in the log below": "une entrée de l’AI dans le journal ci-dessous",
+  "Rate": "Évaluer",
+  "Hover an AI entry in the log below": "Survolez une entrée de l’AI dans le journal ci-dessous",
+  "Good, bad or check": "Bon, mauvais ou à vérifier",
+  "Comment": "Commenter",
+  "optional: what you would have done instead": "facultatif : ce que vous auriez fait",
+  "Key I": "Touche I",
+  "opens the rating of the newest AI move": "ouvre l’évaluation du dernier coup de l’AI",
+  "Let's go": "C'est parti"
 }

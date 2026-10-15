@@ -5,7 +5,9 @@ import LogFilterBar from '@/client/components/logpanel/LogFilterBar.vue';
 import {aiInsightsShown, setAiInsightsShown} from '@/client/components/logpanel/aiAnalysis/aiInsightVisibility';
 
 describe('AI info switch in the log filter', () => {
-  afterEach(() => setAiInsightsShown(true));
+  // Off by default since analysis games are the default; the tests start from "on"
+  beforeEach(() => setAiInsightsShown(true));
+  afterEach(() => setAiInsightsShown(false));
 
   it('switches the AI info off and shows that as a chip', async () => {
     const wrapper = mount(LogFilterBar, {...globalConfig, props: {modelValue: {options: [], text: ''}, players: [], aiInsights: true}});

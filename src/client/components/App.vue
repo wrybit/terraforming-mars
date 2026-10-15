@@ -6,6 +6,8 @@
     <RenderErrorBanner/>
     <!-- Rating of AI decisions (analysis games): outside the game view, so updates never close it -->
     <AiDecisionDialog/>
+    <!-- Analysis game: introduction to rating, once per browser at the end of the first generation -->
+    <AiAnalysisWelcome v-if="screen === 'player-home'" :player-view="playerView"/>
     <!-- Optional extensions (src/extensions/): each may bring one root component -->
     <component :is="extension.component" v-for="extension in componentExtensions" :key="extension.name" :view="participant"/>
     <section>
@@ -109,6 +111,7 @@ import AppBackground from '@/client/components/AppBackground.vue';
 import ServerUpdateOverlay from '@/client/components/common/ServerUpdateOverlay.vue';
 import RenderErrorBanner from '@/client/components/common/RenderErrorBanner.vue';
 import AiDecisionDialog from '@/client/components/logpanel/aiAnalysis/AiDecisionDialog.vue';
+import AiAnalysisWelcome from '@/client/components/logpanel/aiAnalysis/AiAnalysisWelcome.vue';
 import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
 import {ClientExtension} from '@/client/extensions/ClientExtension';
 import {serverUpdatePhase, startServerStatusPolling} from '@/client/utils/serverStatus';
@@ -195,6 +198,7 @@ export default defineComponent({
     ServerUpdateOverlay,
     RenderErrorBanner,
     AiDecisionDialog,
+    AiAnalysisWelcome,
     StartScreen,
     StartScreenFooter,
     OnlinePlayers,

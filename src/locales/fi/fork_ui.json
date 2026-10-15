@@ -813,5 +813,17 @@
   "Science tag": "Tiedemerkki",
   "Space shuttle": "Avaruussukkula",
   "Astronaut": "Astronautti",
-  "In development": "Kehitteillä"
+  "In development": "Kehitteillä",
+  "Help the AI get better": "Auta AI:ta kehittymään",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "Tämä on analyysipeli: lokissa voit arvioida AI:n siirtoja. Jos huomaat hyvän tai huonon siirron, arvioi se – se vie sekunteja ja menee suoraan sen koulutukseen.",
+  "Double-tap": "Kaksoisnapautus",
+  "an AI entry in the log below": "AI:n merkintä alla olevassa lokissa",
+  "Rate": "Arvioi",
+  "Hover an AI entry in the log below": "Vie hiiri AI:n merkinnän päälle alla olevassa lokissa",
+  "Good, bad or check": "Hyvä, huono tai tarkistettava",
+  "Comment": "Kommentoi",
+  "optional: what you would have done instead": "valinnainen: mitä olisit tehnyt toisin",
+  "Key I": "I-näppäin",
+  "opens the rating of the newest AI move": "avaa uusimman AI-siirron arvioinnin",
+  "Let's go": "Aloitetaan"
 }

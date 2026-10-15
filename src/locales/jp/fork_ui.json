@@ -1167,5 +1167,17 @@
   "Astronaut": "宇宙飛行士",
   "Orange": "オレンジ",
   "In development": "開発中",
-  "Edgedancer": "末端王"
+  "Edgedancer": "末端王",
+  "Help the AI get better": "AIの上達に協力してください",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "これは分析ゲームです：ログでAIの手を評価できます。良い手や悪い手に気づいたら評価してください。数秒で済み、そのままAIの学習に使われます。",
+  "Double-tap": "ダブルタップ",
+  "an AI entry in the log below": "下のログにあるAIの項目",
+  "Rate": "評価",
+  "Hover an AI entry in the log below": "下のログにあるAIの項目にマウスを合わせる",
+  "Good, bad or check": "良い・悪い・要確認",
+  "Comment": "コメント",
+  "optional: what you would have done instead": "任意：あなたならどうしたか",
+  "Key I": "Iキー",
+  "opens the rating of the newest AI move": "最新のAIの手の評価を開く",
+  "Let's go": "はじめる"
 }

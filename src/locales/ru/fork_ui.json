@@ -1624,5 +1624,17 @@
   "Astronaut": "Астронавт",
   "Orange": "Оранжевый",
   "In development": "В разработке",
-  "Edgedancer": "Гранетанцор"
+  "Edgedancer": "Гранетанцор",
+  "Help the AI get better": "Помогите AI стать лучше",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "Это аналитическая партия: в журнале можно оценивать ходы AI. Заметили хороший или плохой ход — оцените его: это займёт секунды и сразу пойдёт в её обучение.",
+  "Double-tap": "Двойное касание",
+  "an AI entry in the log below": "запись AI в журнале ниже",
+  "Rate": "Оценить",
+  "Hover an AI entry in the log below": "Наведите курсор на запись AI в журнале ниже",
+  "Good, bad or check": "Хорошо, плохо или проверить",
+  "Comment": "Комментарий",
+  "optional: what you would have done instead": "необязательно: что бы вы сделали иначе",
+  "Key I": "Клавиша I",
+  "opens the rating of the newest AI move": "открывает оценку последнего хода AI",
+  "Let's go": "Поехали"
 }

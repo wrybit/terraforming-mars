@@ -1581,5 +1581,17 @@
   "Science tag": "Symbol nauki",
   "Space shuttle": "Prom kosmiczny",
   "Astronaut": "Astronauta",
-  "In development": "W trakcie rozwoju"
+  "In development": "W trakcie rozwoju",
+  "Help the AI get better": "Pomóż AI być lepszą",
+  "This is an analysis game: you can rate the AI's moves in the log. If you notice a good or a bad move, rate it – it takes seconds and goes straight into its training.": "To partia analityczna: w dzienniku możesz oceniać ruchy AI. Jeśli zauważysz dobry lub zły ruch, oceń go – to zajmie kilka sekund i trafi prosto do jej treningu.",
+  "Double-tap": "Dotknij dwukrotnie",
+  "an AI entry in the log below": "wpis AI w dzienniku poniżej",
+  "Rate": "Oceń",
+  "Hover an AI entry in the log below": "Najedź myszą na wpis AI w dzienniku poniżej",
+  "Good, bad or check": "Dobry, zły lub do sprawdzenia",
+  "Comment": "Komentarz",
+  "optional: what you would have done instead": "opcjonalnie: co zrobiłbyś inaczej",
+  "Key I": "Klawisz I",
+  "opens the rating of the newest AI move": "otwiera ocenę najnowszego ruchu AI",
+  "Let's go": "Zaczynamy"
 }

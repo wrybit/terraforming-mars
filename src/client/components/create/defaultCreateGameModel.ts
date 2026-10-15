@@ -48,7 +48,8 @@ export function defaultCreateGameModel(): CreateGameModel {
     politicalAgendasExtension: 'Standard',
     undoOption: false,
     showTimers: true,
-    aiAnalysis: false,
+    // On by default with AI players: ratings of real games are the best training data; players switch it off
+    aiAnalysis: true,
     fastModeOption: false,
     removeNegativeGlobalEventsOption: false,
     includeFanMA: false,
