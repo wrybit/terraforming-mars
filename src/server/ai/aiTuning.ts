@@ -689,6 +689,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 84: rolloutPolicy4 lost 1.5 VP – do more own moves per step help? Opponents with a few moves instead of quick rules.
   rolloutPolicy12: {rolloutPolicyMoves: 12},
   opponentPolicy2: {rolloutOpponentPolicyMoves: 2},
+  // Human game (2026-10-15): M€ production stayed at 6–7 until generation 10 (human 7 → 48), the AI went for TR.
+  // Income re-checked now that rollouts end every look-ahead at the generation's end.
+  production125: {productionDiscount: 1.25},
 };
 
 export function isTuningVariant(name: string): boolean {
