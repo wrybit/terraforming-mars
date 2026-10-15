@@ -1,4 +1,5 @@
 import {rememberActionStart} from './actionStart';
+import {PlayabilityCheck, cachedPlayability, recordPlayability} from './ai/copyLoadCache';
 import * as constants from '../common/constants';
 import {PlayerId} from '../common/Types';
 import {AiLevel, isAiLevel} from '../common/ai/AiLevel';
@@ -1240,14 +1241,36 @@ export class Player implements IPlayer {
       candidateCards.push(...card.targetCards);
     }
 
+    // AI game copies: the same snapshot is loaded once per candidate move; replay the first check.
+    const cached = cachedPlayability(this.id);
+    if (cached !== undefined && cached.length === candidateCards.length && cached.every((check, index) => check.name === candidateCards[index].name)) {
+      const playableCards: Array<IProjectCard> = [];
+      candidateCards.forEach((card, index) => {
+        const check = cached[index];
+        card.clearWarnings();
+        check.warnings.forEach((warning) => card.addWarning(warning));
+        card.additionalProjectCosts = check.additionalProjectCosts === undefined ? undefined : {...check.additionalProjectCosts};
+        if (check.playable) {
+          playableCards.push(card);
+        }
+      });
+      return playableCards;
+    }
+
     const playableCards: Array<IProjectCard> = [];
+    const checks: Array<PlayabilityCheck> = [];
     for (const card of candidateCards) {
       card.clearWarnings();
       card.additionalProjectCosts = undefined;
-      if (this.canPlay(card)) {
+      const playable = this.canPlay(card);
+      if (playable) {
         playableCards.push(card);
       }
+      // canPlay may have set the costs; read through a cast, the assignment above narrowed the field to undefined
+      const costs = (card as IProjectCard).additionalProjectCosts;
+      checks.push({name: card.name, playable, warnings: [...card.warnings], additionalProjectCosts: costs === undefined ? undefined : {...costs}});
     }
+    recordPlayability(this.id, checks);
     return playableCards;
   }
 

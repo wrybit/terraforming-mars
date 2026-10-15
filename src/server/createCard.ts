@@ -40,13 +40,15 @@ type Template = {card: ICard, emptySets: Array<string>, emptyArrays: Array<strin
 const templates = new Map<CardName, Template | null>();
 
 /**
- * A template can be copied when its own fields are plain values, the shared static properties,
- * or empty sets/arrays (e.g. `warnings`), which every copy gets fresh. Anything else: constructor.
+ * A template can be copied when each own field is a plain value, an object every instance shares
+ * (same reference in two fresh instances: the static properties, the shared empty warning set), or
+ * an empty set/array of its own, which every copy gets fresh. Anything else: the constructor runs.
  */
-function templateOf(card: ICard): Template | null {
+function templateOf(card: ICard, second: ICard): Template | null {
   const template: Template = {card, emptySets: [], emptyArrays: []};
+  const other = second as unknown as Record<string, unknown>;
   for (const [key, value] of Object.entries(card)) {
-    if (value === null || typeof value !== 'object' && typeof value !== 'function' || value === (card as unknown as {properties: unknown}).properties) {
+    if (value === null || typeof value !== 'object' && typeof value !== 'function' || value === other[key]) {
       continue;
     }
     if (value instanceof Set && value.size === 0) {
@@ -63,7 +65,7 @@ function templateOf(card: ICard): Template | null {
 function instantiate(cardName: CardName, factory: CardFactory): ICard {
   let template = templates.get(cardName);
   if (template === undefined) {
-    template = templateOf(new factory.Factory());
+    template = templateOf(new factory.Factory(), new factory.Factory());
     templates.set(cardName, template);
   }
   if (template === null) {

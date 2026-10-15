@@ -9,6 +9,7 @@ import {followUpChoices, plannedResponse} from './followUpPlan';
 import {randomResponse} from './randomResponse';
 import {tuningOf} from './aiTuning';
 import {passedCards} from './draftMemory';
+import {whileLoadingSnapshot} from './copyLoadCache';
 
 // Copies of a running game for trying out moves. A copy is rebuilt from the game's serialized
 // form, so it starts at the beginning of the current player's turn (the same point where the
@@ -86,7 +87,7 @@ export function hideUnknownCards(copy: IGame, viewerId: string, random: () => nu
 
 /** Must be called inside runInSandbox. */
 export function restoreCopy(snapshot: GameSnapshot): IGame {
-  return Game.deserialize(JSON.parse(snapshot));
+  return whileLoadingSnapshot(snapshot, () => Game.deserialize(JSON.parse(snapshot)));
 }
 
 export function withCopy<T>(snapshot: GameSnapshot, work: (copy: IGame) => T): T {
