@@ -253,8 +253,10 @@ export const BASELINE_TUNING: AiTuning = {
   peek: 0,
   // Round 18 (400 mirrored 1v1 games): rollout3 +2.7 VP per deal, z 2.45, 55 % wins – but a test game took
   // 516 s instead of 69 s and human games felt far too slow (human feedback, 2026-10-10): off again until cheaper.
-  rolloutCandidates: 0,
-  rolloutBudget: 4000,
+  // Round 79 (faster engine, at most 3 rounds per rollout): rollout3Rounds +1.52 VP (z +2.28) for +20 s per
+  // test game – above the bar of 1 VP per 15 s, adopted.
+  rolloutCandidates: 3,
+  rolloutBudget: 2000,
   rolloutMargin: 0,
   // Round 20: citySpots neutral in AI-vs-AI (-0.4 VP, z -0.5), adopted for the human case: the first
   // city went next to Noctis although better standard spots exist (human test game).
@@ -268,7 +270,7 @@ export const BASELINE_TUNING: AiTuning = {
   rolloutPolicyMoves: 8,
   rolloutHorizon: 0,
   rolloutFocus: 0,
-  rolloutMaximumRounds: 8,
+  rolloutMaximumRounds: 3,
   rolloutOpponentPolicyMoves: -1,
   lastGenerationSpots: 0,
   // Human test game (2026-10-10): passed in the last generation with 47 M€ while greeneries were affordable.
@@ -671,6 +673,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // rollout, so 3 finalists × 8 rounds hit the 2 s limit. Fewer rounds and quick rules for the opponents cut that ~5×.
   rollout3Lean: {rolloutCandidates: 3, rolloutBudget: 2000, rolloutMaximumRounds: 3, rolloutOpponentPolicyMoves: 0},
   rollout3Rounds: {rolloutCandidates: 3, rolloutBudget: 2000, rolloutMaximumRounds: 3},
+  rollout4Rounds: {rolloutCandidates: 4},
 };
 
 export function isTuningVariant(name: string): boolean {
