@@ -4,16 +4,14 @@ import {Resource} from '../../common/Resource';
 import modelData from './data/bgaValueModel.json';
 
 // Learned position value for two-player games: a gradient-boosted tree model (LightGBM) trained on about
-// 43,000 two-player games from Board Game Arena predicts from a position who wins. Features are what both
-// players have (resources, production, hand, cards in play, tags, VP by source) plus the global parameters;
-// trees and feature order come from data/bgaValueModel.json (exported by the private test system).
+// 43,000 two-player games from Board Game Arena estimates the final VP margin from a position. VP that are already
+// certain (TR, VP on cards, tiles, milestones, awards) count one to one; the trees add what usually follows
+// (production, resources, hand, cards in play, tags, global parameters), with more own production or resources
+// never worse. Trees and feature order come from data/bgaValueModel.json (exported by the private test system).
 
 type Tree = {f: Array<number>, t: Array<number>, l: Array<number>, r: Array<number>, v: Array<number>};
-type ModelData = {features: Array<string>, pointsPerLogit: number, trees: Array<Tree>};
+type ModelData = {features: Array<string>, surePoints: Array<number>, trees: Array<Tree>};
 const MODEL = modelData as unknown as ModelData;
-
-/** Final VP margin that one logit unit of the predicted win chance stands for (fitted on BGA games). */
-export const POINTS_PER_LOGIT = MODEL.pointsPerLogit;
 
 type PlayerFeature = (player: IPlayer, points: ReturnType<IPlayer['getVictoryPoints']>) => number;
 const TAGS: Record<string, Tag> = {
@@ -75,7 +73,7 @@ export function bgaFeatures(player: IPlayer, opponent: IPlayer): Array<number> {
   });
 }
 
-/** Raw model score (logit of the win chance) for a feature vector. */
+/** Raw model score for a feature vector: VP the final margin is expected to differ from the certain VP margin. */
 export function bgaScore(features: ReadonlyArray<number>): number {
   let total = 0;
   for (const tree of MODEL.trees) {
@@ -88,15 +86,20 @@ export function bgaScore(features: ReadonlyArray<number>): number {
   return total;
 }
 
+/** Expected final VP margin for a feature vector: certain VP margin plus the trees' estimate of what follows. */
+export function bgaMargin(features: ReadonlyArray<number>): number {
+  return MODEL.surePoints.reduce((sum, index) => sum + features[index], 0) + bgaScore(features);
+}
+
 /**
- * Logit of `player`'s win chance against the single opponent, made symmetric: the model sees each side once
+ * Expected final VP margin of `player` over the single opponent, made symmetric: the model sees each side once
  * (as own and as opponent), so swapping the players exactly flips the sign. Undefined outside two-player games.
  */
-export function bgaWinLogit(player: IPlayer): number | undefined {
+export function bgaExpectedMargin(player: IPlayer): number | undefined {
   const opponents = player.opponents;
   if (opponents.length !== 1) {
     return undefined;
   }
   const opponent = opponents[0];
-  return (bgaScore(bgaFeatures(player, opponent)) - bgaScore(bgaFeatures(opponent, player))) / 2;
+  return (bgaMargin(bgaFeatures(player, opponent)) - bgaMargin(bgaFeatures(opponent, player))) / 2;
 }

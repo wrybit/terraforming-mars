@@ -1,13 +1,23 @@
 import {expect} from 'chai';
 import {testGame} from '../TestGame';
-import {bgaFeatures, bgaScore, bgaWinLogit} from '../../src/server/ai/bgaValueModel';
+import {bgaExpectedMargin, bgaFeatures, bgaMargin, bgaScore} from '../../src/server/ai/bgaValueModel';
 import modelData from '../../src/server/ai/data/bgaValueModel.json';
 
 describe('Learned position value (BGA model)', () => {
+  it('counts certain VP at least one to one (a claimed milestone: 5 VP)', () => {
+    const [game, player, opponent] = testGame(2);
+    game.generation = 3;
+    const features = bgaFeatures(player, opponent);
+    const claimed = [...features];
+    for (const name of ['own_milestones', 'diff_milestones']) {
+      claimed[modelData.features.indexOf(name)] += 5;
+    }
+    expect(bgaMargin(claimed) - bgaMargin(features)).to.be.at.least(5 - 1e-9);
+  });
+
   it('scores the exported samples like the training system', () => {
-    for (const sample of (modelData as unknown as {samples: Array<{features: Array<number>, probability: number}>}).samples) {
-      const probability = 1 / (1 + Math.exp(-bgaScore(sample.features)));
-      expect(probability).to.be.closeTo(sample.probability, 1e-6);
+    for (const sample of (modelData as unknown as {samples: Array<{features: Array<number>, raw: number}>}).samples) {
+      expect(bgaScore(sample.features)).to.be.closeTo(sample.raw, 1e-6);
     }
   });
 
@@ -24,13 +34,14 @@ describe('Learned position value (BGA model)', () => {
     player.setTerraformRating(35);
     opponent.setTerraformRating(28);
     player.production.override({megacredits: 8});
-    const logit = bgaWinLogit(player)!;
-    expect(logit).to.be.greaterThan(0);
-    expect(bgaWinLogit(opponent)).to.be.closeTo(-logit, 1e-9);
+    const margin = bgaExpectedMargin(player)!;
+    // 7 TR more are 7 certain VP; the income on top is worth more
+    expect(margin).to.be.greaterThan(7);
+    expect(bgaExpectedMargin(opponent)).to.be.closeTo(-margin, 1e-9);
   });
 
   it('gives no value outside two-player games', () => {
     const [, player] = testGame(3);
-    expect(bgaWinLogit(player)).to.be.undefined;
+    expect(bgaExpectedMargin(player)).to.be.undefined;
   });
 });

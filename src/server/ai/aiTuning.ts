@@ -180,7 +180,7 @@ export type AiTuning = {
   awardFundingLead: number,
   /**
    * Share of the learned position value (bgaValueModel.ts, two-player games only) in the valuation: 0 = hand-made
-   * valuation only, 1 = model only. The model's win chance is turned into M€ via its VP margin per logit (stateValue.ts).
+   * valuation only, 1 = model only. The model's expected final VP margin is priced like VP now (stateValue.ts).
    */
   valueModel: number,
   /** 1: drawn cards kept for free in the action phase (Business Contacts …) chosen by the full card valuation (cardSelection.ts). */
@@ -718,7 +718,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   buyStrict: {buyMargin: -1},
   buyStricter: {buyMargin: 1},
   buyStrictest: {buyMargin: 3},
-  // ML stage 2 (learned value from about 43,000 BGA two-player games, AUC 0.80 vs 0.63 for points + income):
+  // ML stage 2 (learned final VP margin from about 43,000 BGA two-player games, certain VP 1 : 1, AUC 0.80):
   // blend the model's win chance into the hand-made valuation.
   valueModel25: {valueModel: 0.25},
   valueModel50: {valueModel: 0.5},
