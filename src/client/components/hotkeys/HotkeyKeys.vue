@@ -35,6 +35,8 @@ const ICONS: Readonly<Record<string, ReadonlyArray<string>>> = {
   '⌘': ['M6 6h4v4H6z', 'M6 6V4.5A1.5 1.5 0 1 0 4.5 6H6M10 6V4.5A1.5 1.5 0 1 1 11.5 6H10M6 10v1.5A1.5 1.5 0 1 1 4.5 10H6M10 10v1.5a1.5 1.5 0 1 0 1.5-1.5H10'],
   '←': ['M13 8H3', 'M7 4L3 8l4 4'],
   '→': ['M3 8h10', 'M9 4l4 4-4 4'],
+  '↑': ['M8 13V3', 'M4 7l4-4 4 4'],
+  '↓': ['M8 3v10', 'M4 9l4 4 4-4'],
 };
 
 function iconOf(key: string): ReadonlyArray<string> | undefined {

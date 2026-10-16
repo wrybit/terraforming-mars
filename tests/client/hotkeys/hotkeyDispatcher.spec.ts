@@ -48,6 +48,24 @@ describe('hotkeyDispatcher', () => {
     expect(binding.element.classList.contains('hotkey-wrong-key')).is.true;
   });
 
+  it('scrolls the main box of the active group with arrow up / down', () => {
+    const group = document.createElement('div');
+    group.setAttribute('data-hotkey-group', '');
+    const list = document.createElement('div');
+    list.style.overflowY = 'auto';
+    Object.defineProperty(list, 'scrollHeight', {value: 1000});
+    Object.defineProperty(list, 'clientHeight', {value: 300});
+    const steps: Array<number> = [];
+    list.scrollBy = ((options: ScrollToOptions) => steps.push(options.top ?? 0)) as typeof list.scrollBy;
+    group.appendChild(list);
+    document.body.appendChild(group);
+    expect(press('ArrowDown').defaultPrevented).is.true;
+    press('ArrowUp');
+    expect(steps).has.length(2);
+    expect(steps[0]).to.be.greaterThan(0);
+    expect(steps[1]).to.be.lessThan(0);
+  });
+
   it('knows which steps are binding', () => {
     expect(tabConfirmHotkey('tab-pass')).to.equal('confirm');
     expect(tabConfirmHotkey('tab-actions')).to.equal('proceed');

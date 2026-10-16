@@ -39,6 +39,7 @@ export const HOTKEY_ACTIONS: ReadonlyArray<HotkeyAction> = [
   {id: 'pick', group: 'selection', label: 'Choose card / option', short: 'Choose', keys: ['1', '…', '0'], locked: true},
   {id: 'select-all', group: 'selection', label: 'Select all', short: 'All', keys: ['Mod', 'A']},
   {id: 'amount', group: 'selection', label: 'Change amount', short: 'Amount', keys: ['ArrowLeft', 'ArrowRight'], locked: true},
+  {id: 'scroll', group: 'selection', label: 'Scroll through the cards', short: 'Scroll', keys: ['ArrowUp', 'ArrowDown'], locked: true},
   {id: 'confirm', group: 'selection', label: 'Binding – costs or ends', short: 'Binding', keys: ['Enter'], locked: true},
   {id: 'proceed', group: 'selection', label: 'Continue – everything else', short: 'Continue', keys: ['Space'], locked: true},
   {id: 'cancel', group: 'selection', label: 'Cancel / discard / no', short: 'Cancel', keys: ['Escape'], locked: true},

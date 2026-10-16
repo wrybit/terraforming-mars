@@ -73,7 +73,7 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 const IMPORT_ARROW = 'M5.44 2.7L11.75 13.63M12.33 10.89L11.75 13.63L9.09 12.77';
 const EXPORT_ARROW = 'M12.25 13.63L18.56 2.7M15.9 3.56L18.56 2.7L19.15 5.44';
 // Keys that keep their fixed meaning and cannot be given to another action
-const RESERVED_KEYS = ['Enter', 'Space', 'Escape', 'Tab', 'ArrowLeft', 'ArrowRight', ...PICK_CODES];
+const RESERVED_KEYS = ['Enter', 'Space', 'Escape', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ...PICK_CODES];
 const NOTE_DURATION = 2500;
 const PRESS_DURATION = 160;
 

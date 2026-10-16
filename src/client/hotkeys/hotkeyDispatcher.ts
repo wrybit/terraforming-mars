@@ -85,6 +85,42 @@ function handlesKeyItself(target: EventTarget | null): boolean {
 
 // Only the tabs of the action menu (OrOptions.vue marks its tab list); the board tabs use the same look.
 // While "All cards" is open, the chosen action tab stays marked as well: the hand tab counts as the current one.
+function scrolls(element: Element): boolean {
+  if (!(element instanceof HTMLElement) || element.scrollHeight <= element.clientHeight + 1) {
+    return false;
+  }
+  const overflow = window.getComputedStyle(element).overflowY;
+  return overflow === 'auto' || overflow === 'scroll';
+}
+
+// Arrow up / down: one row of items (cards) further in the main box, or a good part of it without items. The box is
+// the scrolling area inside the active group (the card list of a tab); without one, the column around the group.
+function scrollingArea(group: Element): HTMLElement | undefined {
+  const inside = [group, ...Array.from(group.querySelectorAll('*'))].filter(scrolls) as Array<HTMLElement>;
+  if (inside.length > 0) {
+    // The largest scrolling area is the main list (not a small text box inside a card)
+    return inside.sort((first, second) => second.clientHeight - first.clientHeight)[0];
+  }
+  for (let element: HTMLElement | null = group.parentElement; element !== null; element = element.parentElement) {
+    if (scrolls(element)) {
+      return element;
+    }
+  }
+  return undefined;
+}
+
+function scrollMainBox(direction: 1 | -1): boolean {
+  const group = activeHotkeyGroup();
+  const area = group !== undefined ? scrollingArea(group) : undefined;
+  if (area === undefined) {
+    return false;
+  }
+  const item = hotkeyItems(group)[0];
+  const step = item !== undefined ? item.getBoundingClientRect().height + 16 : area.clientHeight * 0.6;
+  area.scrollBy({top: direction * step, behavior: 'smooth'});
+  return true;
+}
+
 function cycleTab(direction: 1 | -1): boolean {
   const list = Array.from(document.querySelectorAll('[data-hotkey-tabs]')).find(isVisible);
   const tabs = list === undefined ? [] : Array.from(list.querySelectorAll<HTMLElement>('[role="tab"]')).filter(isVisible);
@@ -154,6 +190,8 @@ export function onHotkey(event: KeyboardEvent): void {
   } else if (overlay !== undefined) {
     // Esc and everything else belongs to the dialog
     return;
+  } else if (plain && (key === 'ArrowUp' || key === 'ArrowDown')) {
+    handled = scrollMainBox(key === 'ArrowDown' ? 1 : -1);
   } else if (plain && key === 'Escape') {
     const button = confirmTarget(document, 'cancel');
     button?.click();

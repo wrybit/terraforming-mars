@@ -1107,5 +1107,7 @@
   "Delta Project requires the Prelude expansion.": "Delta Project에는 프렐류드 확장이 필요합니다.",
   "Changes by board": "보드별 변경 사항",
   "Standard Mode (:tag:mars:): play 1 more generation.": "표준 모드 (:tag:mars:): 1세대를 더 플레이합니다.",
-  "for": "총"
+  "for": "총",
+  "Scroll through the cards": "카드 넘기기",
+  "Scroll": "스크롤"
 }

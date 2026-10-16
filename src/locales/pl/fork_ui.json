@@ -1639,5 +1639,7 @@
   "Delta Project requires the Prelude expansion.": "Delta Project wymaga rozszerzenia Prelude.",
   "Changes by board": "Zmiany według plansz",
   "Standard Mode (:tag:mars:): play 1 more generation.": "Tryb standardowy (:tag:mars:): grasz o 1 pokolenie więcej.",
-  "for": "za"
+  "for": "za",
+  "Scroll through the cards": "Przewijaj karty",
+  "Scroll": "Przewiń"
 }

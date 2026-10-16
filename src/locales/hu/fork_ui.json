@@ -1044,5 +1044,7 @@
   "Delta Project requires the Prelude expansion.": "A Delta Project a Prelude kiegészítőt igényli.",
   "Changes by board": "Változások táblánként",
   "Standard Mode (:tag:mars:): play 1 more generation.": "Normál mód (:tag:mars:): játssz 1 generációval többet.",
-  "for": "összesen"
+  "for": "összesen",
+  "Scroll through the cards": "Kártyák görgetése",
+  "Scroll": "Görgetés"
 }

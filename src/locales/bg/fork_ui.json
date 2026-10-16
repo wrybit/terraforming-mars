@@ -1760,5 +1760,7 @@
   "Delta Project requires the Prelude expansion.": "Delta Project изисква разширението Прелюдия.",
   "Changes by board": "Промени според картата",
   "Standard Mode (:tag:mars:): play 1 more generation.": "Стандартен режим (:tag:mars:): играете 1 поколение повече.",
-  "for": "за"
+  "for": "за",
+  "Scroll through the cards": "Превъртане на картите",
+  "Scroll": "Превърти"
 }

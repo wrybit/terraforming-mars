@@ -1220,5 +1220,7 @@
   "Prelude 2 without Prelude will only include its project cards, not its preludes.": "Prelude 2 uten Prelude inkluderer bare prosjektkortene, ikke preludene.",
   "Delta Project requires the Prelude expansion.": "Delta Project krever Prelude-utvidelsen.",
   "Changes by board": "Endringer per brett",
-  "Standard Mode (:tag:mars:): play 1 more generation.": "Standardmodus (:tag:mars:): spill 1 generasjon til."
+  "Standard Mode (:tag:mars:): play 1 more generation.": "Standardmodus (:tag:mars:): spill 1 generasjon til.",
+  "Scroll through the cards": "Bla gjennom kortene",
+  "Scroll": "Bla"
 }
