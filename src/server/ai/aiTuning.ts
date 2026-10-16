@@ -295,7 +295,8 @@ export const BASELINE_TUNING: AiTuning = {
   // ML stage 2: learned position value from Board Game Arena games, tested as a share of the valuation first.
   valueModel: 0,
   keepValuation: 0,
-  discardValuation: 0,
+  // Rated human game (2026-10-16): Mars University discarded Birds; Jens' discard order is a rule (discardPriority.ts).
+  discardValuation: 1,
   awardHandOutlook: 0,
   // Jens (2026-10-16): Greenhouses is always taken and played as late as possible – a rule, no test round needed.
   lateBoardCards: 1,
@@ -737,6 +738,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   keepValued: {keepValuation: 1},
   // Rated human game (2026-10-16): Mars University discarded Birds in generation 13 (quick rule keeps VP cards first).
   discardValued: {discardValuation: 1},
+  noDiscardValued: {discardValuation: 0},
   // Rated human game (2026-10-16): heat converted to −26 °C and later a city before the 0 °C step – both bonus
   // steps went to the human (bonusRace 1 left them open). Twice the weight for open bonus steps.
   bonusRace2: {bonusRace: 2},

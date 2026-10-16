@@ -8,6 +8,7 @@ import {CardName} from '../../common/cards/CardName';
 import {CardTiming, estimateCardTimings, handCardValues} from './cardValue';
 import {isTracingDecision, traceOptions, TracedOption} from './decisionTrace';
 import {quickResponse} from './quickResponse';
+import {discardOrder} from './discardPriority';
 import {corporationSelfPlayBonus} from './corporationSelfPlay';
 import {corporationPrior} from './cardPriors';
 import {lastGenerationLikelihood, remainingProductionPhases, terraformingProgress} from './gameProgress';
@@ -246,7 +247,8 @@ export function chooseFreeCardsToKeep(input: SelectCard<ICard>, player: IPlayer)
 export function chooseCardsToDiscard(input: SelectCard<ICard>, player: IPlayer): InputResponse {
   const candidates = input.cards.filter((_card, index) => input.config.enabled?.[index] !== false);
   const {valueOf, timingOf} = valuesOf(player, candidates);
-  const sorted = [...candidates].sort((a, b) => valueOf(a.name) - valueOf(b.name));
+  // Jens' order (discardPriority.ts): dead cards, weak negative-VP cards, low impact, … VP cards last
+  const sorted = discardOrder(candidates, player, (card) => valueOf(card.name));
   const discarded = sorted.slice(0, Math.min(Math.max(input.config.min, 0), sorted.length));
   if (isTracingDecision()) {
     traceOptions('keep', [...sorted].reverse().map((card) => cardOption('', card, valueOf, timingOf, !discarded.includes(card))));

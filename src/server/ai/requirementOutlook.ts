@@ -165,3 +165,8 @@ export function requirementOutlook(card: IProjectCard, player: IPlayer): number 
   return card.requirements.reduce((product, descriptor) => product * outlookOf(descriptor, player, card, remaining), 1) *
     oceanRaceOutlook(card, player);
 }
+
+/** A maximum requirement that is already exceeded (at most 5 % oxygen at 8 %): the card can never be played again. */
+export function maximumExceeded(card: IProjectCard, player: IPlayer): boolean {
+  return card.requirements.some((descriptor) => descriptor.max === true && !isMet(descriptor, player, card));
+}
