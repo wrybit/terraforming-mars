@@ -1,0 +1,42 @@
+<template>
+  <!-- One shortcut: key caps, then the label. Editable rows are buttons in edit mode; fixed ones are dimmed there -->
+  <button v-if="editing && row.locked !== true" type="button"
+    :class="['hotkey-row', 'hotkey-row--editable', {'hotkey-row--capturing': capturing, 'hotkey-row--duplicate': duplicate}]"
+    @click="$emit('capture')">
+    <span class="hotkey-row__keys">
+      <kbd v-if="capturing" class="hotkey-key">…</kbd>
+      <HotkeyKeys v-else-if="hasKeys" :action="row.id" always/>
+      <kbd v-else class="hotkey-key hotkey-key--empty">–</kbd>
+    </span>
+    <span :class="labelClass">{{ capturing ? $t('Press a key …') : $t(row.label) }}</span>
+  </button>
+  <div v-else :class="['hotkey-row', {'hotkey-row--locked': editing && row.locked === true}]">
+    <span class="hotkey-row__keys">
+      <HotkeyKeys v-if="row.locked === true" :fixed="row.keys" always/>
+      <HotkeyKeys v-else-if="hasKeys" :action="row.id" always/>
+      <kbd v-else class="hotkey-key hotkey-key--empty">–</kbd>
+    </span>
+    <span :class="labelClass">{{ $t(row.label) }}</span>
+  </div>
+</template>
+
+<script setup lang="ts">
+import {computed} from 'vue';
+import {HotkeyAction} from '@/client/hotkeys/hotkeyActions';
+import {keysOf} from '@/client/hotkeys/hotkeyStore';
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
+
+const props = defineProps<{
+  row: HotkeyAction;
+  editing: boolean;
+  capturing: boolean;
+  duplicate: boolean;
+}>();
+
+defineEmits<{
+  (event: 'capture'): void;
+}>();
+
+const hasKeys = computed(() => keysOf(props.row.id).length > 0);
+const labelClass = computed(() => ['hotkey-row__label', props.row.tone !== undefined ? 'hotkey-row__label--' + props.row.tone : '']);
+</script>

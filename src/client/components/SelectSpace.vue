@@ -13,10 +13,11 @@
     <!-- Transition to the large board deliberately via a button: automatic expanding feels disruptive.
          The top line says what is being placed, below it the next step – so it's clear what happens after the click -->
     <div v-if="zoomBoard !== undefined" class="select-space-zoom">
-      <button type="button" class="btn btn-submit btn-rounded select-space-zoom-button" @click="enlargeBoard">
+      <button type="button" class="btn btn-submit btn-rounded select-space-zoom-button" data-hotkey="confirm" @click="enlargeBoard">
         <span class="select-space-zoom-action">{{ placementAction }}</span>
         <span v-if="zoomBoard === 'moon'" class="select-space-zoom-next-step" v-i18n>Show the Moon enlarged and choose a space</span>
         <span v-else class="select-space-zoom-next-step" v-i18n>Show Mars enlarged and choose a space</span>
+        <HotkeyKeys action="confirm"/>
       </button>
     </div>
     <div v-if="warning" class="nes-container is-rounded">
@@ -27,6 +28,7 @@
 </template>
 
 <script lang="ts">
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {defineComponent} from 'vue';
 import {selectBoardTab} from '@/client/components/boardTabs/boardTabState';
 import {SelectSpaceModel} from '@/common/models/PlayerInputModel';
@@ -99,6 +101,7 @@ export default defineComponent({
     },
   },
   components: {
+    HotkeyKeys,
     SpaceConfirmPopover,
     GoToMap,
   },

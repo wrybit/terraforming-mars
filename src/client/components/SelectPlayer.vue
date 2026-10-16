@@ -12,7 +12,7 @@
         @select="selectedPlayer = $event"/>
     </div>
     <TabPanelFooterSlot>
-    <AppButton v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
+    <AppButton hotkey="confirm" v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
     </TabPanelFooterSlot>
   </div>
 </template>

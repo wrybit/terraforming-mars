@@ -19,6 +19,7 @@
         :title="$t(fullTabTitle(tabTitle(idx)))"
         :aria-label="$t(shortTabLabel(tabTitle(idx)))"
         :aria-selected="tabActive(idx)"
+        :data-hotkey="tabHotkey(tabTitle(idx), displayedOptions[idx])"
         :class="['or-tab', {
           'or-tab--active': !handTabActive && tabActive(idx),
           'or-tab--empty': tabCount(idx) === 0,
@@ -32,12 +33,13 @@
           <span class="or-tab-icon-label">{{ $t(tabIconLabel(tabIcon(tabTitle(idx))!)) }}</span>
         </template>
         <span v-else class="or-tab-title">{{ $t(shortTabLabel(tabTitle(idx))) }}</span>
+        <HotkeyKeys v-if="tabHotkey(tabTitle(idx), displayedOptions[idx]) !== undefined" :action="tabHotkey(tabTitle(idx), displayedOptions[idx])"/>
         <span v-if="tabCount(idx) !== undefined" class="or-tab-count">{{ tabCount(idx) }}</span>
       </button>
     </div>
 
     <!-- In tab mode this container is the box attached to the active tab (content + save) -->
-    <div v-docked-tab :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
+    <div v-docked-tab :data-hotkey-group="asTabs ? '' : undefined" :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
       <HandCardsPanel v-if="asTabs && handTabActive" :playerView="playerView"/>
       <div v-if="asTabs && !handTabActive && showtitle && sourceCard === undefined && turnStep === undefined" class="or-tab-intro or-tab-question">
         <div class="or-tab-intro-title">{{ $t(playerinput.title) }}</div>
@@ -144,7 +146,7 @@
       <!-- In a tab box (e.g. simple decision in WaitingForTabs) the button sits in the footer -->
       <TabPanelFooterSlot v-if="!asTabs && showOwnSaveButton()">
         <div class="wf-action or-options-save">
-          <AppButton :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid || awaitingPlayer" @click="saveData" />
+          <AppButton hotkey="confirm" :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid || awaitingPlayer" @click="saveData" />
         </div>
       </TabPanelFooterSlot>
 
@@ -155,14 +157,14 @@
         <ActionStepChips v-if="turnStep !== undefined" :step="turnStep"/>
         <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabToneClass('or-tab-save--', selectedOption)]">
           <!-- Disabled while the selected option has no valid selection yet (e.g. no card chosen) -->
-          <AppButton :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid || awaitingCeo" @click="saveData" />
+          <AppButton hotkey="confirm" :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid || awaitingCeo" @click="saveData" />
         </div>
       </div>
       <!-- Tab with a single centered button (raise temperature …): nothing has happened yet, Cancel just leaves the tab.
            Own footer bar at the bottom like everywhere else; the centered button keeps its place above it -->
       <div v-if="asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption) && !isEndTab(selectedOption.title)"
         class="or-tab-footer or-tab-footer--bar">
-        <AppButton class="cancel-action-button" :title="$t('Cancel')" @click="handTabActive = true"/>
+        <AppButton hotkey="cancel" class="cancel-action-button" :title="$t('Cancel')" @click="handTabActive = true"/>
         <ActionStepChips v-if="turnStep !== undefined" :step="turnStep"/>
       </div>
     </div>
@@ -198,6 +200,8 @@ import {PartyChoiceOption, partyChoice} from '@/client/components/turmoil/partyC
 import PlayerOptionTile from '@/client/components/PlayerOptionTile.vue';
 import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
 import ChoiceOptionTile from '@/client/components/ChoiceOptionTile.vue';
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
+import {tabHotkey} from '@/client/hotkeys/tabHotkeys';
 import CancelActionButton from '@/client/components/CancelActionButton.vue';
 import {inputSourceCard, optionSourceCard} from '@/client/components/inputSourceCard';
 import {CardName} from '@/common/cards/CardName';
@@ -259,6 +263,7 @@ export default defineComponent({
     PlayerOptionTile,
     CardIntroBlock,
     ChoiceOptionTile,
+    HotkeyKeys,
     CancelActionButton,
     CeoActionSection,
     CardListSection,
@@ -511,6 +516,9 @@ export default defineComponent({
       this.selectedOption = option;
     },
     // Title for label, tooltip and icon of a tab: the CEO action alone stands in for the "Actions" tab
+    tabHotkey(title: string | Message, input: PlayerInputModel | undefined): string | undefined {
+      return tabHotkey(title, input);
+    },
     tabTitle(idx: number): string | Message {
       return this.actionsGrouped && idx === this.ceoIdx ? ACTION_CARDS_TITLE : this.displayedOptions[idx].title;
     },

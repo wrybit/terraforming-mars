@@ -43,7 +43,7 @@
     </div>
     <TabPanelFooterSlot>
     <div v-if="showsave === true" class="nofloat">
-        <AppButton @click="saveData" :title="playerinput.buttonLabel" type="submit" size="normal" :disabled="selectedParty === undefined"/>
+        <AppButton hotkey="confirm" @click="saveData" :title="playerinput.buttonLabel" type="submit" size="normal" :disabled="selectedParty === undefined"/>
     </div>
     </TabPanelFooterSlot>
   </div>

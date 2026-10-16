@@ -1,10 +1,10 @@
 // Common code shared between PlayerHome and SpectatorHome:
-// hotkey navigation, the keyboard shortcuts dialog, tile view cycling,
+// the keyboard shortcuts dialog ('?'), tile view cycling,
 // and setting the document title on mount.
 import {defineComponent} from 'vue';
 import {GameModel} from '@/common/models/GameModel';
 import {SpaceId} from '@/common/Types';
-import {KeyboardNavigation} from '@/client/components/KeyboardNavigation';
+import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
 import {nextTileView, TileView} from '@/client/components/board/TileView';
 import {gameDocumentTitle, TitleView} from '@/client/utils/documentTitle';
 import {isTypingTarget} from '@/client/utils/typingTarget';
@@ -12,7 +12,6 @@ import {isTypingTarget} from '@/client/utils/typingTarget';
 type DataModel = {
   tileView: TileView;
   keyboardShortcutOpened: boolean;
-  hotkeyTargets: Array<Element>;
 }
 
 export const HomeMixin = defineComponent({
@@ -21,7 +20,6 @@ export const HomeMixin = defineComponent({
     return {
       tileView: 'show',
       keyboardShortcutOpened: false,
-      hotkeyTargets: [],
     };
   },
   computed: {
@@ -33,40 +31,14 @@ export const HomeMixin = defineComponent({
   },
   methods: {
     navigatePage(event: KeyboardEvent) {
-      // Typing in a field ("?" or "a" in a text) must not trigger shortcuts
-      if (isTypingTarget(event.target)) {
+      // Typing in a field ("?" in a text) must not open the help; no shortcuts without a keyboard (mobile view)
+      if (isTypingTarget(event.target) || !hotkeysAvailable.value) {
         return;
       }
-      // Most '?' are shifted, so process this before the action that exits early with modifiers
+      // Most '?' are shifted, so the key is compared, not the modifiers. All other shortcuts: hotkeyDispatcher.ts
       if (event.key === '?') {
+        event.preventDefault();
         this.keyboardShortcutOpened = !this.keyboardShortcutOpened;
-        return;
-      }
-      if (event.shiftKey || event.ctrlKey || event.metaKey || event.altKey) {
-        return;
-      }
-      const ids: Partial<Record<string, string>> = {
-        [KeyboardNavigation.GAMEBOARD]: 'shortkey-board',
-        [KeyboardNavigation.PLAYERSOVERVIEW]: 'shortkey-playersoverview',
-        [KeyboardNavigation.HAND]: 'shortkey-hand',
-        [KeyboardNavigation.COLONIES]: 'shortkey-colonies',
-      };
-      const id = ids[event.code];
-      if (id) {
-        const el = document.getElementById(id);
-        if (el) {
-          event.preventDefault();
-          el.scrollIntoView({block: 'center', inline: 'center', behavior: 'smooth'});
-        }
-      } else if (event.code.startsWith('Digit')) {
-        const ASCII_ONE = '1'.charCodeAt(0);
-        const index = event.code.charCodeAt(5) - ASCII_ONE;
-        if (index >= 0 && index < this.hotkeyTargets.length) {
-          const el = this.hotkeyTargets[index];
-          if (el) {
-            el.scrollIntoView({block: 'start', inline: 'center', behavior: 'smooth'});
-          }
-        }
       }
     },
     cycleTileView(): void {
@@ -83,13 +55,6 @@ export const HomeMixin = defineComponent({
     const props = this.$props as {playerView?: TitleView, spectator?: TitleView};
     document.title = gameDocumentTitle(props.playerView ?? props.spectator ?? {game: this.game});
     window.addEventListener('keydown', this.navigatePage);
-    const targets = this.$el.getElementsByClassName('hotkey-target');
-    for (let i = 0; i < targets.length; i++) {
-      const element = targets.item(i);
-      if (element) {
-        this.hotkeyTargets.push(element);
-      }
-    }
   },
   unmounted() {
     window.removeEventListener('keydown', this.navigatePage);

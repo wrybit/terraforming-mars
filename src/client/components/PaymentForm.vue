@@ -73,7 +73,7 @@
   </div>
 
   <div v-if="showsave" class="payments_save">
-    <AppButton size="big" @click="handleSave()" :title="$t(buttonLabel)" data-test="save"/>
+    <AppButton hotkey="confirm" size="big" @click="handleSave()" :title="$t(buttonLabel)" data-test="save"/>
   </div>
 
   <!-- Confirmation before overpaying; grows out of the payment area (the save button may sit outside, SelectPayment.vue) -->

@@ -97,7 +97,6 @@
   "src/client/components/common/PageTitle.vue: Terraforming Mars –",
   "src/client/components/create/CreateGameForm.vue: AI",
   "src/client/components/logpanel/aiAnalysis/LogAiRateBar.vue: AI:",
-  "src/client/components/helpOverlay/HelpKeyboardShortcuts.vue: Esc",
   "src/client/components/turmoil/TurmoilAgenda.vue: Unknown agenda ID",
   "Discord"
 ]

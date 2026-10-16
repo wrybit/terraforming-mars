@@ -1,7 +1,8 @@
 <template>
-  <button @click="$emit('click')" class="btn" :class="outerClass" :disabled="isDisabled" v-i18n>
+  <button @click="$emit('click')" class="btn" :class="outerClass" :disabled="isDisabled" :data-hotkey="hotkey" v-i18n>
     <span v-if="hasIcon" class="icon" :class="iconClass" data-test="icon"></span>
     <span v-else>{{ buttonText }}</span>
+    <HotkeyKeys v-if="hotkey !== undefined" :action="hotkey"/>
   </button>
 </template>
 
@@ -11,11 +12,18 @@ import {ComponentPublicInstance} from 'vue';
 import {vueRoot} from '@/client/components/vueRoot';
 import {Message} from '@/common/logs/Message';
 import {translateText, translateMessage} from '@/client/directives/i18n';
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 
 export default defineComponent({
   name: 'AppButton',
+  components: {HotkeyKeys},
   emits: ['click'],
   props: {
+    // Action id of a keyboard shortcut (hotkeyActions.ts): shows its key cap and lets the key press the button
+    hotkey: {
+      type: String,
+      required: false,
+    },
     title: {
       type: [String, Object as () => Message],
       required: false,

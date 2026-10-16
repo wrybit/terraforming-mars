@@ -44,14 +44,12 @@
           <RowResizeHandle v-if="!isSetupPhase" kind="mars"/>
 
           <!-- Log below the board: both stay visible together in the two-column layout -->
-          <a class="hotkey-target"></a>
           <div v-if="!isSetupPhase" class="player_home_block nofloat player-home-columns__log">
             <LogPanel :viewModel="playerView" milestonesAwards :acting="isPlayerActing(playerView)" @spaceClicked="onSpaceClicked"/>
           </div>
         </template>
 
         <template #main>
-          <a class="hotkey-target"></a>
           <!-- Start phase: only the turn order – the player bars show nothing but zeros there yet -->
           <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players">
             <SetupBoardToggle/>
@@ -64,7 +62,6 @@
           <PlayerSetupView v-if="isSetupPhase" :playerView="playerView"/>
 
           <template v-else>
-          <a class="hotkey-target"></a>
           <!-- Invisible without an own input (the note on whose turn it is then appears as a red tab by the hand cards);
                WaitingFor stays mounted though, because it polls the server after the own turn -->
           <div class="player_home_block player_home_block--actions nofloat" v-show="playerView.waitingFor !== undefined">
@@ -98,7 +95,7 @@
       </HomeColumns>
     </div>
 
-    <KeyboardShortcuts v-show="keyboardShortcutOpened" @close="keyboardShortcutOpened = false"/>
+    <HotkeyHelpDialog :open="keyboardShortcutOpened" @close="keyboardShortcutOpened = false"/>
   </div>
 </template>
 
@@ -125,7 +122,7 @@ import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
 import TopBar from '@/client/components/TopBar.vue';
-import KeyboardShortcuts from '@/client/components/KeyboardShortcuts.vue';
+import HotkeyHelpDialog from '@/client/components/hotkeys/HotkeyHelpDialog.vue';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
@@ -215,7 +212,7 @@ export default defineComponent({
     PlayerSetupView,
     SetupTurnOrder,
     SetupBoardToggle,
-    KeyboardShortcuts,
+    HotkeyHelpDialog,
   },
   methods: {
     showsDraftedCardsBlock,

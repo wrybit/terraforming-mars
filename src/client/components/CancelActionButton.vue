@@ -1,7 +1,7 @@
 <template>
   <!-- Cancel the current action and return to the action menu, as long as it is only a plan
        (nothing hidden revealed, no other player affected – server actionStart.ts). Left in the footer -->
-  <AppButton v-if="cancelAction !== undefined && cancelAction.available()" class="cancel-action-button" :title="$t('Cancel')" @click="cancelAction.cancel()"/>
+  <AppButton hotkey="cancel" v-if="cancelAction !== undefined && cancelAction.available()" class="cancel-action-button" :title="$t('Cancel')" @click="cancelAction.cancel()"/>
 </template>
 
 <script setup lang="ts">

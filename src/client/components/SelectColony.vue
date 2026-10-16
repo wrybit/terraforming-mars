@@ -20,7 +20,7 @@
     </label>
     <TabPanelFooterSlot>
     <div v-if="showsave === true" class="nofloat">
-      <AppButton @click="saveData" :title="playerinput.buttonLabel" type="submit" size="normal" :disabled="!canSave()"/>
+      <AppButton hotkey="confirm" @click="saveData" :title="playerinput.buttonLabel" type="submit" size="normal" :disabled="!canSave()"/>
     </div>
     </TabPanelFooterSlot>
   </div>

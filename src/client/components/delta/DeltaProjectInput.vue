@@ -12,7 +12,7 @@
       &nbsp;
       <AppButton size="big" type="max" @click="setMaxValue" title="MAX" />
       &nbsp;
-      <AppButton size="big" @click="saveData" :title="playerinput.buttonLabel" />
+      <AppButton hotkey="confirm" size="big" @click="saveData" :title="playerinput.buttonLabel" />
     </div>
   </div>
 </template>

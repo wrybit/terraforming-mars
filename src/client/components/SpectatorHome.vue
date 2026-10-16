@@ -37,11 +37,9 @@
 
       <!-- On the left the log instead of hand cards: it fills the space below the player table -->
       <template #main>
-        <a class="hotkey-target"></a>
         <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="spectator" v-trim-whitespace id="shortkey-playersoverview"/>
         <!-- Height of the players card, the log below gets the rest (only in the fixed layout) -->
         <RowResizeHandle kind="players"/>
-        <a class="hotkey-target"></a>
         <div class="player_home_block nofloat player-home-columns__log player_home_block--spectator-log">
           <LogPanel :viewModel="spectator" milestonesAwards @spaceClicked="onSpaceClicked"/>
         </div>
@@ -49,7 +47,7 @@
     </HomeColumns>
 
     <WaitingFor v-show="false" v-if="game.phase !== 'end'" :playerView="spectator" :waitingfor="undefined"/>
-    <KeyboardShortcuts v-show="keyboardShortcutOpened" @close="keyboardShortcutOpened = false"/>
+    <HotkeyHelpDialog :open="keyboardShortcutOpened" @close="keyboardShortcutOpened = false"/>
   </div>
 </template>
 
@@ -66,7 +64,7 @@ import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import Sidebar from '@/client/components/Sidebar.vue';
 import WaitingFor from '@/client/components/WaitingFor.vue';
 import PlayersOverview from '@/client/components/overview/PlayersOverview.vue';
-import KeyboardShortcuts from '@/client/components/KeyboardShortcuts.vue';
+import HotkeyHelpDialog from '@/client/components/hotkeys/HotkeyHelpDialog.vue';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
 
 export default defineComponent({
@@ -92,7 +90,7 @@ export default defineComponent({
     GameOverNotice,
     HomeColumns,
     RowResizeHandle,
-    KeyboardShortcuts,
+    HotkeyHelpDialog,
     LogPanel,
     PlayersOverview,
     Sidebar,

@@ -1,0 +1,301 @@
+// Keyboard shortcuts: key caps "set into" the surface (tone on tone, darker lower edge), the shortcut dialog and the
+// digits at selectable items. Caps in the game only show while <html> has tm-hotkeys (hotkeyAvailability.ts):
+// keyboard available, no mobile view, the player has not switched them off.
+@import (reference) "./variables.less";
+
+@hotkey-cap-size: 20px;
+@hotkey-cap-font: "Ubuntu Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+.hotkey-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: @hotkey-cap-size;
+  height: @hotkey-cap-size;
+  padding: 0 5px;
+  box-sizing: border-box;
+  border: 0;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.26);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  color: inherit;
+  font: 700 11px/1 @hotkey-cap-font;
+  white-space: nowrap;
+}
+
+.hotkey-key--empty {
+  opacity: 0.4;
+}
+
+.hotkey-keys {
+  display: none;
+  flex: none;
+  gap: 3px;
+  align-items: center;
+}
+
+html.tm-hotkeys .hotkey-keys,
+.hotkey-keys.hotkey-keys--always {
+  display: inline-flex;
+}
+
+// Buttons: caps right of the text; the button keeps its height, text and caps centered as a group
+html.tm-hotkeys .btn:has(> .hotkey-keys) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+html.tm-hotkeys .btn-sm:has(> .hotkey-keys) .hotkey-key {
+  min-width: 18px;
+  height: 18px;
+  font-size: 10px;
+}
+
+// Two-line place button (SelectSpace.vue): the caps sit at the right, centered on both lines
+.select-space-zoom-button:has(> .hotkey-keys) {
+  position: relative;
+}
+
+html.tm-hotkeys .select-space-zoom-button:has(> .hotkey-keys) {
+  padding-right: 56px;
+}
+
+.select-space-zoom-button > .hotkey-keys {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+}
+
+// Tabs: smaller caps between title and count
+.or-tab > .hotkey-keys {
+  margin-left: 6px;
+
+  .hotkey-key {
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    font-size: 10px;
+  }
+}
+
+// Setup menu button: cap after "Setup"
+.game-menu-button > .hotkey-keys {
+  margin-left: 6px;
+}
+
+// Yes/no of the space confirmation: text and cap side by side
+.space-confirm-button:has(> .hotkey-keys) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+// Digits 1 … 9 at the selectable items of the active group (hotkeyItems.ts), centered on the lower edge of the item
+label:has(> .hotkey-item-number) {
+  position: relative;
+}
+
+.hotkey-item-number {
+  position: absolute;
+  left: 50%;
+  bottom: -11px;
+  z-index: 7;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  box-sizing: border-box;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  background: #2a2c36;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 1px 4px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font: 700 12px/1 @hotkey-cap-font;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+html.tm-hotkeys .hotkey-item-number {
+  display: flex;
+}
+
+// ---- Shortcut dialog (HotkeyHelpDialog.vue) ----
+// Law of proximity: rows of a group 2 px apart < group title to rows < between groups < between the columns
+.hotkey-dialog {
+  width: min(680px, 92vw);
+}
+
+.hotkey-dialog__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: auto;
+}
+
+.btn.hotkey-dialog__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  margin: 0;
+  padding: 0 10px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+// Call to action: purple (close in the information view, "Done" while editing); red and locked while keys collide
+.btn.hotkey-dialog__button--cta {
+  border-color: @border_action !important;
+  background: @bg_action !important;
+  color: #fff !important;
+}
+
+.btn.hotkey-dialog__button--blocked,
+.btn.hotkey-dialog__button--blocked:disabled {
+  border-color: #c0392b !important;
+  background: #c0392b !important;
+  color: #fff !important;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.hotkey-dialog__icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hotkey-dialog__icon-filled {
+  fill: currentColor;
+  stroke: none;
+}
+
+.hotkey-dialog__foot {
+  min-height: 58px;
+  box-sizing: border-box;
+}
+
+.hotkey-dialog__message {
+  flex: 1;
+  min-width: 180px;
+  color: #9aa0b4;
+  font-size: 13px;
+}
+
+.hotkey-dialog__message--end {
+  text-align: right;
+}
+
+.hotkey-dialog__message--warning {
+  color: #f0a060;
+}
+
+.hotkey-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: 28px;
+}
+
+.hotkey-list__column {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.hotkey-list__group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hotkey-list .hotkey-list__title {
+  margin: 0 0 6px;
+  color: #d9b45a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hotkey-list__tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px 16px;
+}
+
+.hotkey-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 26px;
+  margin: 0;
+  padding: 2px 6px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  color: #c9ccd8;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+}
+
+.hotkey-row__keys {
+  display: inline-flex;
+  flex: none;
+  min-width: 56px;
+}
+
+.hotkey-row__label--success {
+  color: #3dff6e;
+}
+
+.hotkey-row__label--danger {
+  color: #ff6a45;
+}
+
+.hotkey-row--editable {
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #d9b45a;
+    outline-offset: 1px;
+  }
+}
+
+.hotkey-row--capturing {
+  border: 1px solid #d9b45a;
+  background: rgba(217, 180, 90, 0.12);
+}
+
+.hotkey-row--duplicate {
+  border: 1px solid #e0701f;
+  background: rgba(224, 112, 31, 0.16);
+}
+
+.hotkey-row--locked {
+  opacity: 0.5;
+}
+
+// Tabs: single keys, so a narrow key column leaves room for longer names ("Corporation action")
+.hotkey-list__tabs .hotkey-row__keys {
+  min-width: 26px;
+}

@@ -13,7 +13,7 @@
       :showtitle="true" />
     <TabPanelFooterSlot>
     <div v-if="showsave" class="wf-action">
-      <AppButton :title="playerinput.buttonLabel" type="submit" size="normal" @click="saveData" :disabled="!canSave()"/>
+      <AppButton hotkey="confirm" :title="playerinput.buttonLabel" type="submit" size="normal" @click="saveData" :disabled="!canSave()"/>
     </div>
     </TabPanelFooterSlot>
   </div>

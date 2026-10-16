@@ -3,7 +3,7 @@
     <div v-if="showtitle === true" class="wf-component-title">{{ $t(playerinput.title) }}</div>
     <WarningsComponent :warnings="playerinput.warnings"/>
     <TabPanelFooterSlot>
-    <AppButton v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
+    <AppButton hotkey="confirm" v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
     </TabPanelFooterSlot>
   </div>
 </template>

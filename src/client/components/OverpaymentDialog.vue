@@ -53,12 +53,13 @@
 
     <template #footer>
       <!-- Red = back out, green = go ahead (button_tones.less); the accept button repeats the excess, so the click says what it costs -->
-      <button type="button" class="btn btn-tone-danger" data-test="dismiss" @click="emit('dismiss')" v-i18n>No, adjust</button>
-      <button type="button" class="btn btn-tone-success overpayment-dialog__accept" data-test="accept" @click="emit('accept')">
+      <button type="button" class="btn btn-tone-danger" data-test="dismiss" @click="emit('dismiss')"><span v-i18n>No, adjust</span><HotkeyKeys action="cancel"/></button>
+      <button type="button" class="btn btn-tone-success overpayment-dialog__accept" data-test="accept" data-hotkey="confirm" @click="emit('accept')">
         <span v-i18n>Yes, pay anyway</span>
         <span class="overpayment-dialog__accept-excess" data-test="accept-excess">
           <span class="overpayment-dialog__accept-figure"><span class="overpayment-dialog__accept-value">+{{ excess }}</span><i class="resource_icon resource_icon--megacredits"></i></span>
         </span>
+        <HotkeyKeys action="confirm"/>
       </button>
     </template>
   </DialogFrame>
@@ -67,6 +68,7 @@
 <script setup lang="ts">
 // Confirmation before overpaying (PaymentForm.vue): replaces the browser confirm() and shows
 // which resources make up the payment, where the cost ends and how much of it is lost.
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {computed} from 'vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
 import {Payment} from '@/common/inputs/Payment';

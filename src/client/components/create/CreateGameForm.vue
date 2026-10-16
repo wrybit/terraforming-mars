@@ -373,7 +373,7 @@
           <!-- Same chips as the game list of the statistics (gameSetupChips.ts) -->
           <GameSetupChips :chips="summaryChips"/>
           <div class="create-game-create-row">
-            <AppButton class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors"/>
+            <AppButton hotkey="create-game" class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors"/>
           </div>
           <ValidationProblems v-if="hasValidationProblems" :errors="validationErrors"/>
         </section>

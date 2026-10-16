@@ -17,7 +17,7 @@
       <WaitingForPlayersTab v-if="playerinput.optional === true" :playerView="playerView"/>
     </div>
 
-    <div v-docked-tab :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
+    <div v-docked-tab data-hotkey-group :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
       <!-- Initial draft with an empty hand: only the dealt cards, without the empty hand area above them -->
       <HandCardsPanel v-if="handTabActive && (handCards.length > 0 || dealtCount === 0)" :playerView="playerView"/>
       <!-- Initial draft: the dealt corporations/preludes belong to the own cards -->
@@ -46,7 +46,7 @@
         <!-- Cancel an action that is still only a plan: left in the footer (cancelAction.ts) -->
         <CancelActionButton/>
         <!-- Declining a space selection (spaceWithSkip.ts): red like Skip next to a card selection (SelectCard.vue) -->
-        <AppButton v-for="index in spaceChoice?.skipIndices ?? []" :key="index" type="submit" class="btn-tone-danger"
+        <AppButton hotkey="cancel" v-for="index in spaceChoice?.skipIndices ?? []" :key="index" type="submit" class="btn-tone-danger"
           :title="$t(skipTitle(index))" @click="skip(index)"/>
         <p v-if="draftRepick" class="or-tab-footer-hint">{{ $t(fullTabTitle(lead.title)) }}</p>
       </div>

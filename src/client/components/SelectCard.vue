@@ -7,7 +7,7 @@
         <!-- Hand cards (e.g. selling): the same filter and sorting as in the hand tab, in one row -->
         <CardFilterBar v-if="isHandSelection" :cards="playerinput.cards" :filter="handCardFilter" :context="filterContext">
           <template #lead>
-            <AppButton v-if="showSelectAll" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
+            <AppButton v-if="showSelectAll" hotkey="select-all" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
           </template>
           <template #sort="{compact}">
             <HandSortControl :playerView="playerView" :compact="compact"/>
@@ -22,11 +22,11 @@
         <!-- Other card lists (buying, draft …): no filter, but the zoom in the same place as in every tab;
              "Select all" only where it makes sense. Mobile: no zoom, only the "Select all" row -->
         <div v-else-if="isMobile && showSelectAll" class="select-card-toolbar">
-          <AppButton class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
+          <AppButton hotkey="select-all" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
         </div>
         <CardZoomBar v-else>
           <template v-if="showSelectAll" #lead>
-            <AppButton class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
+            <AppButton hotkey="select-all" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
           </template>
         </CardZoomBar>
         <TabPanelIntroSlot/>
@@ -77,12 +77,12 @@
                  discarding remains so the game can go on -->
             <template v-if="cannotAfford">
               <span class="select-card-unaffordable" v-i18n="affordNote">Not enough money: a card costs ${0} M€, you only have ${1} M€</span>
-              <AppButton :disabled="true" type="submit" :title="$t('Buy')" class="btn-tone-success" />
-              <AppButton type="submit" @click="saveData" :title="$t('Discard')" class="btn-tone-danger" />
+              <AppButton hotkey="confirm" :disabled="true" type="submit" :title="$t('Buy')" class="btn-tone-success" />
+              <AppButton hotkey="cancel" type="submit" @click="saveData" :title="$t('Discard')" class="btn-tone-danger" />
             </template>
-            <AppButton v-else :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
+            <AppButton hotkey="confirm" v-else :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
               :class="{'btn-tone-success': isOptionalToManyCards}" />
-            <AppButton :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t(skipLabel)"
+            <AppButton hotkey="cancel" :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t(skipLabel)"
               class="btn-tone-danger" />
         </div>
         </TabPanelFooterSlot>

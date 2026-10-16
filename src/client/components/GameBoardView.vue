@@ -1,6 +1,6 @@
 <!-- Common widgets between player and spectator views -->
 <template>
-  <a name="board" class="player_home_anchor hotkey-target"></a>
+  <a name="board" class="player_home_anchor"></a>
   <!-- Board tabs: Mars and the expansion boards of this game share one box (BoardTabs.vue) -->
   <BoardTabs :game="game" :players="players" :tileView="tileView" @toggleTileView="$emit('toggleTileView')">
     <template #mars>
@@ -55,7 +55,6 @@
   </BoardZoomModal>
 
   <div v-if="players.length > 1" class="player_home_block--milestones-and-awards">
-    <a class="hotkey-target"></a>
     <Milestones :milestones="game.milestones" />
     <Awards :awards="game.awards" />
     <!-- The same data as a table; only visible in the two-column layout (milestone_award_table.less) -->

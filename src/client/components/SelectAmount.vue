@@ -13,7 +13,7 @@
     </div>
     <TabPanelFooterSlot>
       <div v-if="showsave === true" class="amount-select__actions">
-        <AppButton type="submit" @click="saveData" :title="buttonTitle" />
+        <AppButton hotkey="confirm" type="submit" @click="saveData" :title="buttonTitle" />
       </div>
     </TabPanelFooterSlot>
   </div>

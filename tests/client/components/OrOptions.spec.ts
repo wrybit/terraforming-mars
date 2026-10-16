@@ -380,6 +380,6 @@ describe('OrOptions', () => {
       },
     });
     // Without a selection no count ("Sell", not "Sell 0"); the count appears once cards are chosen
-    expect(component.findComponent({name: 'AppButton'}).text()).to.eq('Sell');
+    expect(component.findComponent({name: 'AppButton'}).find('span').text()).to.eq('Sell');
   });
 });

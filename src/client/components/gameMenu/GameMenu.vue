@@ -4,9 +4,12 @@
   <span ref="root" :class="['game-menu', {'game-menu--large': large}]">
     <button type="button" :class="['game-menu-button', {'game-menu-button--open': menuOpen}]"
       :aria-expanded="menuOpen ? 'true' : 'false'" aria-haspopup="menu" :aria-label="buttonLabel" data-test="game-menu-button"
+      :data-hotkey="context ? 'setup-menu' : undefined"
       @click.stop="toggleMenu">
       <span class="game-menu-burger" aria-hidden="true"><i></i><i></i><i></i></span>
       <span class="game-menu-button-label">{{ buttonLabel }}</span>
+      <!-- Shortcut only in the game: the start page has none -->
+      <HotkeyKeys v-if="context" action="setup-menu"/>
     </button>
 
     <Teleport to="body">
@@ -110,6 +113,7 @@
 </template>
 
 <script setup lang="ts">
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {computed, defineAsyncComponent, inject, onBeforeUnmount, onMounted, ref} from 'vue';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';

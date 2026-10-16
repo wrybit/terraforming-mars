@@ -13,7 +13,7 @@
     </template>
     <TabPanelFooterSlot>
     <div v-if="showsave === true" class="nofloat">
-        <AppButton @click="saveData" :title="playerinput.buttonLabel" />
+        <AppButton hotkey="confirm" @click="saveData" :title="playerinput.buttonLabel" />
     </div>
     </TabPanelFooterSlot>
   </div>

@@ -98,6 +98,7 @@
 
 <script lang="ts">
 
+import {matchesHotkey} from '@/client/hotkeys/hotkeyEvents';
 import {defineComponent, markRaw} from 'vue';
 import {vDockedTab} from '@/client/directives/DockedTab';
 import {vFlashTab} from '@/client/directives/ChangeFlashTab';
@@ -497,7 +498,8 @@ export default defineComponent({
     },
     // I key: the AI row under the mouse, otherwise the newest AI row of the log
     onAnalysisKey(event: KeyboardEvent): void {
-      if (event.code !== 'KeyI' || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || isTypingTarget(event.target)) {
+      // Key from the player's shortcuts (help dialog, default I)
+      if (!matchesHotkey(event, 'rate-ai') || isTypingTarget(event.target)) {
         return;
       }
       if (aiFeedbackState.dialog !== undefined) {

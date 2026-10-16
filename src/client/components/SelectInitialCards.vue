@@ -8,7 +8,10 @@
          compared directly. Each column scrolls on its own; header with short title, full prompt and counter
          selected/required (green once done). -->
     <div class="setup-columns">
-      <section v-for="section in sections" :key="section.key" :class="['setup-column', 'setup-column--' + section.key]">
+      <!-- Keyboard: digits choose in one column at a time (hotkeyItems.ts) – the first unfinished one, or the one clicked last -->
+      <section v-for="section in sections" :key="section.key" :class="['setup-column', 'setup-column--' + section.key]"
+        data-hotkey-group :data-hotkey-group-active="section.key === hotkeySection ? 'true' : 'false'"
+        @pointerdown="chosenHotkeySection = section.key">
         <header class="setup-column-head">
           <div class="setup-column-title-row">
             <h2 class="setup-column-title">{{ $t(shortTabLabel(section.title)) }}</h2>
@@ -46,7 +49,7 @@
         :status="warning ?? 'Ready to start'"
         :statusReady="valid && warning === undefined">
         <!-- :key=warning is a way of validing that the state of the button should change. If the warning changes, or disappears, that's a signal that the button might change. -->
-        <AppButton :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel" class="select-initial-cards-start"/>
+        <AppButton hotkey="confirm" :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel" class="select-initial-cards-start"/>
       </SetupSummary>
     </div>
   </div>
@@ -86,6 +89,8 @@ type DataModel = {
   selectedCorporations: Array<CardName>,
   selectedPreludes: Array<CardName>,
   valid: boolean,
+  // Column the player clicked into last; undefined = the first unfinished column gets the digits
+  chosenHotkeySection: InitialCardsSection | undefined,
   warning: string | undefined,
 }
 
@@ -145,6 +150,7 @@ export default defineComponent({
       selectedPreludes: [],
       valid: false,
       warning: undefined,
+      chosenHotkeySection: undefined,
     };
   },
   methods: {
@@ -385,6 +391,15 @@ export default defineComponent({
   },
   computed: {
     // Columns of the initial selection in game order; preludes and CEO only if the expansion is active
+    hotkeySection(): InitialCardsSection | undefined {
+      const sections = this.sections;
+      const chosen = sections.find((section) => section.key === this.chosenHotkeySection);
+      // A finished column hands the digits on to the next unfinished one
+      if (chosen !== undefined && !chosen.done) {
+        return chosen.key;
+      }
+      return (sections.find((section) => !section.done) ?? chosen ?? sections[sections.length - 1])?.key;
+    },
     sections(): Array<SectionColumn> {
       const columns = [this.sectionColumn('corporation', this.corpCardOption, this.selectedCorporations.length)];
       if (this.hasPrelude) {

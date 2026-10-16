@@ -8,8 +8,9 @@
       <div class="space-confirm-message" v-i18n>Place your tile here?</div>
       <div class="space-confirm-actions">
         <!-- Yes green, no red (colors from button_tones.less) -->
-        <button type="button" class="space-confirm-button space-confirm-button--yes" @click="$emit('accept')" v-i18n>Yes</button>
-        <button type="button" class="space-confirm-button space-confirm-button--no" @click="$emit('dismiss')" v-i18n>No</button>
+        <!-- Enter = yes (hotkeyDispatcher.ts), Esc = no (closeOnEscape below) -->
+        <button type="button" class="space-confirm-button space-confirm-button--yes" data-hotkey="confirm" @click="$emit('accept')"><span v-i18n>Yes</span><HotkeyKeys action="confirm"/></button>
+        <button type="button" class="space-confirm-button space-confirm-button--no" @click="$emit('dismiss')"><span v-i18n>No</span><HotkeyKeys action="cancel"/></button>
       </div>
       <label class="space-confirm-skip">
         <input type="checkbox" :checked="false" @change="$emit('hide', ($event.target as HTMLInputElement).checked)">
@@ -20,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {nextTick, onBeforeUnmount, ref, watch} from 'vue';
 import {PopoverPlacement, spaceConfirmPosition} from '@/client/components/spaceConfirmPosition';
 

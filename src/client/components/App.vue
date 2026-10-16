@@ -74,6 +74,9 @@
 </template>
 
 <script lang="ts">
+import {loadHotkeys} from '@/client/hotkeys/hotkeyStore';
+import {startHotkeyAvailability} from '@/client/hotkeys/hotkeyAvailability';
+import {installHotkeys} from '@/client/hotkeys/hotkeyDispatcher';
 import {defineAsyncComponent, defineComponent} from 'vue';
 import * as constants from '@/common/constants';
 
@@ -341,6 +344,10 @@ export default defineComponent({
   },
   created() {
     initMobileLayout();
+    // Keyboard shortcuts: own keys from this device, then the listener and the key caps (hotkeyDispatcher.ts)
+    loadHotkeys();
+    startHotkeyAvailability();
+    installHotkeys();
   },
   mounted() {
     setDocumentTitle();
