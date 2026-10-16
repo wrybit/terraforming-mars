@@ -34,6 +34,7 @@ describe('AI keeps steel for a close stock award', () => {
 
   it('spends the steel without the rule', () => {
     const {player} = closeMinerRace();
+    setPlayerTuning(player.id, 'noKeepAwardStock');
     const payment = cardPayment(player, new ImmigrantCity());
     expect(payment.steel).eq(2);
   });

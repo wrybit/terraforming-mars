@@ -276,7 +276,9 @@ export const BASELINE_TUNING: AiTuning = {
   rolloutFocus: 0,
   rolloutMaximumRounds: 3,
   rolloutOpponentPolicyMoves: 0,
-  keepAwardStock: 0,
+  // Round 88: keepAwardStock (only a lead, only the units that would lose it) +0.47 VP (z +0.74), fixes a
+  // human-game error (Miner lost 9 : 10 by paying with steel, game lost 103 : 105) – adopted.
+  keepAwardStock: 1,
   lastGenerationSpots: 0,
   // Human test game (2026-10-10): passed in the last generation with 47 M€ while greeneries were affordable.
   passedMoneyLost: 1,
@@ -698,6 +700,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   production140: {productionDiscount: 1.4},
   // Human game (2026-10-15): Miner lost 9 : 10 after paying with steel in the last generation (game lost by 2 VP).
   keepAwardStock: {keepAwardStock: 1},
+  noKeepAwardStock: {keepAwardStock: 0},
   // Human games (2026-10-15): hand 14–24 cards, 13 sold at the end – buy only cards worth clearly more than 3 M€.
   buyStrict: {buyMargin: -1},
   buyStricter: {buyMargin: 1},
