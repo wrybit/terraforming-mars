@@ -292,9 +292,11 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 88: keepAwardStock (only a lead, only the units that would lose it) +0.47 VP (z +0.74), fixes a
   // human-game error (Miner lost 9 : 10 by paying with steel, game lost 103 : 105) – adopted.
   keepAwardStock: 1,
-  // ML stage 2: learned position value from Board Game Arena games, tested as a share of the valuation first.
-  valueModel: 0,
-  keepValuation: 0,
+  // Round 91 (1200 mirrored 1v1 games): valueModel25 +3.48 VP (z +4.81; base +2.80, venus +4.16), Mac 85 s vs 70 s
+  // (+15 s for +3.5 VP) – adopted; valueModel50 −3.58 (z −3.81): more model than that hurts.
+  valueModel: 0.25,
+  // Round 91: keepValued +1.06 VP (z +1.63) – adopted, fixes the analysis-log error (Business Contacts by statistics).
+  keepValuation: 1,
   // Rated human game (2026-10-16): Mars University discarded Birds; Jens' discard order is a rule (discardPriority.ts).
   discardValuation: 1,
   awardHandOutlook: 0,
@@ -734,6 +736,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   valueModel25: {valueModel: 0.25},
   valueModel50: {valueModel: 0.5},
   valueModel75: {valueModel: 0.75},
+  valueModel15: {valueModel: 0.15},
+  valueModel35: {valueModel: 0.35},
+  noValueModel: {valueModel: 0},
   // Analysis log (2026-10-16): Business Contacts in generation 10 kept two cards by statistics only.
   keepValued: {keepValuation: 1},
   // Rated human game (2026-10-16): Mars University discarded Birds in generation 13 (quick rule keeps VP cards first).

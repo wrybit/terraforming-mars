@@ -1,5 +1,6 @@
 import {expect} from 'chai';
 import {testGame} from '../TestGame';
+import {clearPlayerTunings, setPlayerTuning} from '../../src/server/ai/aiTuning';
 import {lastGenerationSaleResponses} from '../../src/server/ai/lastGenerationSale';
 import {CardName} from '../../src/common/cards/CardName';
 import {DustSeals} from '../../src/server/cards/base/DustSeals';
@@ -12,6 +13,8 @@ import {Fish} from '../../src/server/cards/base/Fish';
 
 function lastGeneration(money: number) {
   const [game, player] = testGame(2);
+  // Hand-made valuation only: these cases test a rule, not the learned value (valueModel)
+  setPlayerTuning(player.id, 'noValueModel');
   game.generation = 14;
   player.megaCredits = money;
   // Two VP cards (2 and 6 M€), five cards that only bring their sale.
@@ -20,6 +23,8 @@ function lastGeneration(money: number) {
 }
 
 describe('AI last generation sale', () => {
+  afterEach(() => clearPlayerTunings());
+
   it('keeps both small VP cards when the sale pays for both', () => {
     const player = lastGeneration(3);
     const [best] = lastGenerationSaleResponses(player);
