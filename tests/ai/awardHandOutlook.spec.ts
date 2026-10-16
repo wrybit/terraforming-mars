@@ -34,12 +34,13 @@ describe('AI counts science cards in hand for Scientist', () => {
     const {game, player} = scienceHand();
     game.fundAward(player, new Scientist());
     const context = {...valuationContext(game, player), handOwner: player.id};
+    setPlayerTuning(player.id, 'noAwardHand');
     const plain = relativeValue(player, context);
     setPlayerTuning(player.id, 'awardHand');
     expect(relativeValue(player, context)).to.be.greaterThan(plain);
     // Without the hand owner (e.g. valuing the opponent's view) the hand does not count
     const blind = relativeValue(player, {...context, handOwner: undefined});
-    clearPlayerTunings();
+    setPlayerTuning(player.id, 'noAwardHand');
     expect(relativeValue(player, {...context, handOwner: undefined})).to.be.closeTo(blind, 1e-9);
   });
 });

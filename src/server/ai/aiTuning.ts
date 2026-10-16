@@ -299,7 +299,8 @@ export const BASELINE_TUNING: AiTuning = {
   keepValuation: 1,
   // Rated human game (2026-10-16): Mars University discarded Birds; Jens' discard order is a rule (discardPriority.ts).
   discardValuation: 1,
-  awardHandOutlook: 0,
+  // Round 92: awardHand −0.25 VP (z −0.32) – adopted as human-game fix (Scientist funded early with science cards in hand).
+  awardHandOutlook: 0.7,
   // Jens (2026-10-16): Greenhouses is always taken and played as late as possible – a rule, no test round needed.
   lateBoardCards: 1,
   lastGenerationSpots: 0,
@@ -749,6 +750,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   bonusRace2: {bonusRace: 2},
   // Human player (2026-10-16): funded Scientist early because his hand held about ten science tags.
   awardHand: {awardHandOutlook: 0.7},
+  noAwardHand: {awardHandOutlook: 0},
   noLateBoardCards: {lateBoardCards: 0},
 };
 
