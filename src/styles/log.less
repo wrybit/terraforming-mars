@@ -383,8 +383,22 @@ each(@players, {
   color: #8a90a0;
 }
 
+// Claimed milestone / funded award as an inverted gold badge: it is a reward, so it should stand out
+// like a medal – light gold in the middle, darker towards the edges, black text for contrast
 .log-row-ma {
-  color: #e3c06a;
+  display: inline-flex;
+  align-items: center;
+  line-height: 16px;
+  vertical-align: middle;
+  padding: 2px 7px;
+  border-radius: 3px;
+  color: #1a1408;
+  font-weight: bold;
+  background:
+    radial-gradient(ellipse 70% 120% at 50% 40%, #fff1b8 0%, #f2cf6b 35%, #d9a93c 70%, #a8781f 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 55%),
+    inset 0 -1px 0 rgb(90 60 10 / 45%);
 }
 
 // Card name in normal case; a thin stripe in the card type's colour replaces the coloured chip
