@@ -2,10 +2,14 @@
   <!-- Key caps of a shortcut, "set into" the surface (hotkeys.less). Only visible while shortcuts are available and
        shown (class tm-hotkeys on <html>), unless always is set (help dialog). Screen readers skip them. -->
   <span v-if="keys.length > 0" :class="['hotkey-keys', {'hotkey-keys--always': always}]" aria-hidden="true">
-    <kbd v-for="(key, index) in keys" :key="index" :class="['hotkey-key', {'hotkey-key--icon': iconOf(key) !== undefined}]">
-      <svg v-if="iconOf(key) !== undefined" class="hotkey-key__icon" viewBox="0 0 16 16"><path v-for="path in iconOf(key)" :key="path" :d="path"/></svg>
-      <template v-else>{{ capLabel(key) }}</template>
-    </kbd>
+    <template v-for="(key, index) in keys" :key="index">
+      <!-- "1 … 0": the dots stand for the keys in between, they are no key themselves -->
+      <span v-if="key === '…'" class="hotkey-keys__range">…</span>
+      <kbd v-else :class="['hotkey-key', {'hotkey-key--icon': iconOf(key) !== undefined}]">
+        <svg v-if="iconOf(key) !== undefined" class="hotkey-key__icon" viewBox="0 0 16 16"><path v-for="path in iconOf(key)" :key="path" :d="path"/></svg>
+        <template v-else>{{ capLabel(key) }}</template>
+      </kbd>
+    </template>
   </span>
 </template>
 
