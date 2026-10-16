@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {onHotkey} from '@/client/hotkeys/hotkeyDispatcher';
+import {onHotkey, stopHoldScroll} from '@/client/hotkeys/hotkeyDispatcher';
 import {labelConfirmHotkey, tabConfirmHotkey} from '@/client/hotkeys/confirmHotkeys';
 
 // jsdom lays nothing out: every element counts as visible for the dispatcher
@@ -28,6 +28,7 @@ describe('hotkeyDispatcher', () => {
 
   afterEach(() => {
     HTMLElement.prototype.getClientRects = originalRects;
+    stopHoldScroll();
     document.body.innerHTML = '';
   });
 

@@ -118,7 +118,45 @@ function scrollMainBox(direction: 1 | -1): boolean {
   const item = hotkeyItems(group)[0];
   const step = item !== undefined ? item.getBoundingClientRect().height + 16 : area.clientHeight * 0.6;
   area.scrollBy({top: direction * step, behavior: 'smooth'});
+  startHoldScroll(area, direction);
   return true;
+}
+
+// Holding arrow up / down: after the first row step the box keeps gliding at an even speed until the key is released
+const HOLD_DELAY_MS = 320;
+const HOLD_SPEED_PX_PER_SECOND = 900;
+let holdTimer: number | undefined;
+let holdFrame: number | undefined;
+let holdDirection: 1 | -1 | undefined;
+
+function startHoldScroll(area: HTMLElement, direction: 1 | -1): void {
+  stopHoldScroll();
+  holdDirection = direction;
+  holdTimer = window.setTimeout(() => {
+    let last = performance.now();
+    const glide = (now: number) => {
+      area.scrollTop += direction * HOLD_SPEED_PX_PER_SECOND * (now - last) / 1000;
+      last = now;
+      holdFrame = window.requestAnimationFrame(glide);
+    };
+    holdFrame = window.requestAnimationFrame(glide);
+  }, HOLD_DELAY_MS);
+}
+
+export function stopHoldScroll(): void {
+  window.clearTimeout(holdTimer);
+  if (holdFrame !== undefined) {
+    window.cancelAnimationFrame(holdFrame);
+  }
+  holdTimer = undefined;
+  holdFrame = undefined;
+  holdDirection = undefined;
+}
+
+function onHotkeyRelease(event: KeyboardEvent): void {
+  if (holdDirection !== undefined && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
+    stopHoldScroll();
+  }
 }
 
 // N / M: the view of the board below Mars / Moon one step back or on (tiles, bonus, coordinates)
@@ -187,6 +225,11 @@ function runAction(id: string): boolean {
 }
 
 export function onHotkey(event: KeyboardEvent): void {
+  // Repeats of a held arrow key belong to the gliding scroll (startHoldScroll), the page must not scroll as well
+  if (event.repeat && holdDirection !== undefined && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
+    event.preventDefault();
+    return;
+  }
   if (!hotkeysAvailable.value || event.defaultPrevented || event.repeat || isTypingTarget(event.target)) {
     return;
   }
@@ -246,6 +289,8 @@ export function installHotkeys(): void {
   }
   installed = true;
   window.addEventListener('keydown', onHotkey);
+  window.addEventListener('keyup', onHotkeyRelease);
+  window.addEventListener('blur', stopHoldScroll);
   // Digits follow every change of the page (tab switched, cards filtered …); adding our own caps triggers one more
   // pass that changes nothing
   new MutationObserver(scheduleNumbers).observe(document.body, {
