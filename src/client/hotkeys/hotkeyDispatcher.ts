@@ -121,6 +121,18 @@ function scrollMainBox(direction: 1 | -1): boolean {
   return true;
 }
 
+// N / M: the view of the board below Mars / Moon one step back or on (tiles, bonus, coordinates)
+function stepBoardView(direction: 1 | -1): boolean {
+  const toggle = Array.from(document.querySelectorAll('.tile-view-toggle')).find(isVisible);
+  const options = toggle === undefined ? [] : Array.from(toggle.querySelectorAll<HTMLElement>('[role="radio"]'));
+  if (options.length === 0) {
+    return false;
+  }
+  const current = options.findIndex((option) => option.getAttribute('aria-checked') === 'true');
+  options[(current + direction + options.length) % options.length].click();
+  return true;
+}
+
 function cycleTab(direction: 1 | -1): boolean {
   const list = Array.from(document.querySelectorAll('[data-hotkey-tabs]')).find(isVisible);
   const tabs = list === undefined ? [] : Array.from(list.querySelectorAll<HTMLElement>('[role="tab"]')).filter(isVisible);
@@ -160,6 +172,10 @@ function runAction(id: string): boolean {
     return cycleTab(-1);
   case 'next-tab':
     return cycleTab(1);
+  case 'board-view-previous':
+    return stepBoardView(-1);
+  case 'board-view-next':
+    return stepBoardView(1);
   case 'log-search':
     return focusLogSearch();
   default: {

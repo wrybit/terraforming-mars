@@ -1003,7 +1003,6 @@
   "Search the log": "Keresés a naplóban",
   "Choose card / option": "Kártya / opció választása",
   "Change amount": "Mennyiség módosítása",
-  "Cancel / discard / no": "Mégse / eldobás / nem",
   "Previous tab": "Előző fül",
   "Next tab": "Következő fül",
   "Place": "Lerakás",
@@ -1029,8 +1028,6 @@
   "Checking the new commits…": "Új commitok ellenőrzése…",
   "Building the new version…": "Új verzió készítése…",
   "Approve on the Mac:": "Jóváhagyás a Macen:",
-  "Binding – costs or ends": "Kötelező – költ vagy befejez",
-  "Continue – everything else": "Tovább – minden más",
   "Binding": "Kötelező",
   "Continue": "Tovább",
   "Menu": "Menü",
@@ -1048,5 +1045,12 @@
   "Scroll through the cards": "Kártyák görgetése",
   "Scroll": "Görgetés",
   "Action tabs": "Akciófülek",
-  "${0} commits": "${0} commit"
+  "${0} commits": "${0} commit",
+  "Previous board view": "Előző táblanézet",
+  "Next board view": "Következő táblanézet",
+  "Board view": "Nézet",
+  "(costs / ends)": "(költ / befejez)",
+  "(normal steps)": "(szokásos lépések)",
+  "Cancel / discard": "Mégse / Eldob",
+  "Close / no": "Bezár / Nem"
 }

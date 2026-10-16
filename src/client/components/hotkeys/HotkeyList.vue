@@ -72,6 +72,7 @@ const columns = computed<Array<Array<ListGroup>>>(() => [
   [
     {title: 'Depending on the situation', color: 'tabs-context', rows: rowsOf('tabs-context')},
     {title: 'Expansions', color: 'tabs-expansion', rows: rowsOf('tabs-expansion')},
+    {title: 'Board', color: 'board', rows: rowsOf('board')},
   ],
 ].map((column) => column.filter((group) => group.rows.length > 0)));
 </script>

@@ -1430,7 +1430,6 @@
   "Search the log": "Logboek doorzoeken",
   "Choose card / option": "Kaart / optie kiezen",
   "Change amount": "Aantal wijzigen",
-  "Cancel / discard / no": "Annuleren / afleggen / nee",
   "Previous tab": "Vorig tabblad",
   "Next tab": "Volgend tabblad",
   "Standard": "Standaard",
@@ -1457,8 +1456,6 @@
   "Checking the new commits…": "Nieuwe commits controleren…",
   "Building the new version…": "Nieuwe versie bouwen…",
   "Approve on the Mac:": "Goedkeuren op de Mac:",
-  "Binding – costs or ends": "Bindend – kost of beëindigt",
-  "Continue – everything else": "Doorgaan – al het andere",
   "Binding": "Bindend",
   "Continue": "Doorgaan",
   "Log": "Logboek",
@@ -1474,5 +1471,12 @@
   "for": "voor",
   "Scroll through the cards": "Door de kaarten bladeren",
   "Scroll": "Scrollen",
-  "Action tabs": "Actietabbladen"
+  "Action tabs": "Actietabbladen",
+  "Previous board view": "Vorige bordweergave",
+  "Next board view": "Volgende bordweergave",
+  "Board view": "Weergave",
+  "(costs / ends)": "(kost / beëindigt)",
+  "(normal steps)": "(gewone stappen)",
+  "Cancel / discard": "Annuleren / Afleggen",
+  "Close / no": "Sluiten / Nee"
 }

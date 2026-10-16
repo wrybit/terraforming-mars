@@ -886,7 +886,6 @@
   "Search the log": "Rechercher dans le journal",
   "Choose card / option": "Choisir carte / option",
   "Change amount": "Modifier la quantité",
-  "Cancel / discard / no": "Annuler / défausser / non",
   "Previous tab": "Onglet précédent",
   "Next tab": "Onglet suivant",
   "Place": "Placer",
@@ -912,8 +911,6 @@
   "Checking the new commits…": "Vérification des nouveaux commits…",
   "Building the new version…": "Construction de la nouvelle version…",
   "Approve on the Mac:": "Approuver sur le Mac :",
-  "Binding – costs or ends": "Engageant – coûte ou termine",
-  "Continue – everything else": "Continuer – tout le reste",
   "Binding": "Engageant",
   "Continue": "Continuer",
   "Log": "Journal",
@@ -929,5 +926,12 @@
   "for": "pour",
   "Scroll through the cards": "Parcourir les cartes",
   "Scroll": "Défiler",
-  "Action tabs": "Onglets d'action"
+  "Action tabs": "Onglets d'action",
+  "Previous board view": "Vue précédente du plateau",
+  "Next board view": "Vue suivante du plateau",
+  "Board view": "Vue",
+  "(costs / ends)": "(coûte / termine)",
+  "(normal steps)": "(étapes normales)",
+  "Cancel / discard": "Annuler / Défausser",
+  "Close / no": "Fermer / Non"
 }

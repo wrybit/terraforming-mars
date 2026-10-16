@@ -1598,7 +1598,6 @@
   "Search the log": "Szukaj w dzienniku",
   "Choose card / option": "Wybierz kartę / opcję",
   "Change amount": "Zmień ilość",
-  "Cancel / discard / no": "Anuluj / odrzuć / nie",
   "Previous tab": "Poprzednia karta",
   "Next tab": "Następna karta",
   "Standard": "Standardowe",
@@ -1625,8 +1624,6 @@
   "Checking the new commits…": "Sprawdzanie nowych commitów…",
   "Building the new version…": "Budowanie nowej wersji…",
   "Approve on the Mac:": "Zatwierdź na Macu:",
-  "Binding – costs or ends": "Wiążące – kosztuje lub kończy",
-  "Continue – everything else": "Dalej – wszystko inne",
   "Binding": "Wiążące",
   "Continue": "Dalej",
   "Log": "Dziennik",
@@ -1643,5 +1640,12 @@
   "Scroll through the cards": "Przewijaj karty",
   "Scroll": "Przewiń",
   "Action tabs": "Karty akcji",
-  "${0} commits": "Commity: ${0}"
+  "${0} commits": "Commity: ${0}",
+  "Previous board view": "Poprzedni widok planszy",
+  "Next board view": "Następny widok planszy",
+  "Board view": "Widok",
+  "(costs / ends)": "(kosztuje / kończy)",
+  "(normal steps)": "(zwykłe kroki)",
+  "Cancel / discard": "Anuluj / Odrzuć",
+  "Close / no": "Zamknij / Nie"
 }

@@ -1,16 +1,20 @@
 <template>
   <!-- Tiles / bonus / coordinates as a segmented switch at the bottom of the Mars and Moon box -->
   <div class="tile-view-toggle" role="radiogroup" data-test="tile-view-toggle">
+    <!-- N / M step through the views (hotkeyDispatcher.ts); the caps sit at both ends -->
+    <HotkeyKeys action="board-view-previous" class="tile-view-toggle__keys"/>
     <button v-for="option in OPTIONS" :key="option.view" type="button" role="radio"
       :class="['tile-view-toggle__option', {'tile-view-toggle__option--on': option.view === tileView}]"
       :aria-checked="option.view === tileView"
       @click="choose(option.view)">{{ $t(option.label) }}</button>
+    <HotkeyKeys action="board-view-next" class="tile-view-toggle__keys"/>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {TileView, nextTileView} from '@/client/components/board/TileView';
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 
 const OPTIONS: ReadonlyArray<{view: TileView, label: string}> = [
   {view: 'show', label: 'Board tiles'},
@@ -20,6 +24,7 @@ const OPTIONS: ReadonlyArray<{view: TileView, label: string}> = [
 
 export default defineComponent({
   name: 'TileViewToggle',
+  components: {HotkeyKeys},
   props: {
     tileView: {
       type: String as PropType<TileView>,

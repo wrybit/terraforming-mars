@@ -294,6 +294,13 @@ html.tm-hotkeys .hotkey-item-number {
   min-width: 56px;
 }
 
+// Second line of a label: always its own line, a little quieter than the label
+.hotkey-row__detail {
+  display: block;
+  color: #9aa0b4;
+  font-size: 13px;
+}
+
 .hotkey-row__label--success {
   color: #3dff6e;
 }
@@ -346,6 +353,7 @@ html.tm-hotkeys .hotkey-item-number {
 @hotkey-group-success: #3dff6e;
 @hotkey-group-danger: #ff6a45;
 @hotkey-group-turn-end: #c9ccd8;
+@hotkey-group-board: #e58bc2;
 
 .hotkey-dialog__body {
   display: flex;
@@ -482,6 +490,12 @@ html.tm-hotkeys .hotkey-item-number {
   color: #fff;
 }
 
+.hotkey-keyboard__key--board {
+  background: mix(@hotkey-group-board, #2a2c36, 35%);
+  border-bottom-color: mix(@hotkey-group-board, #111218, 20%);
+  color: #fff;
+}
+
 .hotkey-keyboard__key--success {
   background: mix(@hotkey-group-success, #2a2c36, 25%);
   border-bottom-color: mix(@hotkey-group-success, #111218, 20%);
@@ -560,6 +574,14 @@ html.tm-hotkeys .hotkey-item-number {
   }
 }
 
+.hotkey-list .hotkey-list__title--board {
+  color: @hotkey-group-board;
+
+  .hotkey-list__swatch {
+    background: mix(@hotkey-group-board, #2a2c36, 35%);
+  }
+}
+
 .hotkey-list .hotkey-list__title--tabs-turn-end {
   color: @hotkey-group-turn-end;
 
@@ -619,4 +641,10 @@ html.tm-hotkeys .hotkey-item-number {
   display: flex;
   flex-direction: column;
   gap: 18px;
+}
+
+// N / M at both ends of the tiles / bonus / coordinates switch below Mars and the Moon (TileViewToggle.vue)
+.tile-view-toggle > .tile-view-toggle__keys {
+  align-self: center;
+  margin: 0 4px;
 }

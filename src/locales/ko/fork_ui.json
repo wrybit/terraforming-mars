@@ -1065,7 +1065,6 @@
   "Search the log": "로그 검색",
   "Choose card / option": "카드 / 옵션 선택",
   "Change amount": "수량 변경",
-  "Cancel / discard / no": "취소 / 버리기 / 아니요",
   "Previous tab": "이전 탭",
   "Next tab": "다음 탭",
   "Standard": "표준",
@@ -1092,8 +1091,6 @@
   "Checking the new commits…": "새 커밋 확인 중…",
   "Building the new version…": "새 버전 빌드 중…",
   "Approve on the Mac:": "Mac에서 승인:",
-  "Binding – costs or ends": "확정 – 비용 또는 종료",
-  "Continue – everything else": "계속 – 그 밖의 모든 것",
   "Binding": "확정",
   "Continue": "계속",
   "Menu": "메뉴",
@@ -1112,5 +1109,12 @@
   "Scroll": "스크롤",
   "Action tabs": "행동 탭",
   "1 commit": "커밋 1개",
-  "${0} commits": "커밋 ${0}개"
+  "${0} commits": "커밋 ${0}개",
+  "Previous board view": "이전 보드 보기",
+  "Next board view": "다음 보드 보기",
+  "Board view": "보기",
+  "(costs / ends)": "(비용 / 종료)",
+  "(normal steps)": "(일반 단계)",
+  "Cancel / discard": "취소 / 버리기",
+  "Close / no": "닫기 / 아니요"
 }

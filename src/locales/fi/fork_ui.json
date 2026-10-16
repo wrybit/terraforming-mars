@@ -830,7 +830,6 @@
   "Search the log": "Hae lokista",
   "Choose card / option": "Valitse kortti / vaihtoehto",
   "Change amount": "Muuta määrää",
-  "Cancel / discard / no": "Peru / hylkää / ei",
   "Previous tab": "Edellinen välilehti",
   "Next tab": "Seuraava välilehti",
   "Standard": "Vakio",
@@ -857,8 +856,6 @@
   "Checking the new commits…": "Tarkistetaan uusia committeja…",
   "Building the new version…": "Kootaan uutta versiota…",
   "Approve on the Mac:": "Hyväksy Macilla:",
-  "Binding – costs or ends": "Sitova – maksaa tai päättää",
-  "Continue – everything else": "Jatka – kaikki muu",
   "Binding": "Sitova",
   "Continue": "Jatka",
   "Menu": "Valikko",
@@ -876,5 +873,12 @@
   "Scroll through the cards": "Selaa kortteja",
   "Scroll": "Selaa",
   "Action tabs": "Toimintovälilehdet",
-  "${0} commits": "${0} committia"
+  "${0} commits": "${0} committia",
+  "Previous board view": "Edellinen pelilautanäkymä",
+  "Next board view": "Seuraava pelilautanäkymä",
+  "Board view": "Näkymä",
+  "(costs / ends)": "(maksaa / päättää)",
+  "(normal steps)": "(tavalliset vaiheet)",
+  "Cancel / discard": "Peruuta / Hylkää",
+  "Close / no": "Sulje / Ei"
 }

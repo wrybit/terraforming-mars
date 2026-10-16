@@ -1184,7 +1184,6 @@
   "Search the log": "ログを検索",
   "Choose card / option": "カード / 選択肢を選ぶ",
   "Change amount": "数量を変更",
-  "Cancel / discard / no": "キャンセル / 捨てる / いいえ",
   "Previous tab": "前のタブ",
   "Next tab": "次のタブ",
   "Standard": "標準",
@@ -1211,8 +1210,6 @@
   "Checking the new commits…": "新しいコミットを確認中…",
   "Building the new version…": "新しいバージョンをビルド中…",
   "Approve on the Mac:": "Mac で承認：",
-  "Binding – costs or ends": "確定 – 支払い・終了",
-  "Continue – everything else": "続行 – その他すべて",
   "Binding": "確定",
   "Continue": "続行",
   "Menu": "メニュー",
@@ -1231,5 +1228,12 @@
   "Scroll": "スクロール",
   "Action tabs": "アクションタブ",
   "1 commit": "1件のコミット",
-  "${0} commits": "${0}件のコミット"
+  "${0} commits": "${0}件のコミット",
+  "Previous board view": "前のボード表示",
+  "Next board view": "次のボード表示",
+  "Board view": "表示",
+  "(costs / ends)": "（支払い / 終了）",
+  "(normal steps)": "（通常の手順）",
+  "Cancel / discard": "キャンセル / 捨てる",
+  "Close / no": "閉じる / いいえ"
 }

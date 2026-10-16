@@ -1718,7 +1718,6 @@
   "Search the log": "Търсене в дневника",
   "Choose card / option": "Избор на карта / опция",
   "Change amount": "Промяна на количеството",
-  "Cancel / discard / no": "Отказ / изхвърляне / не",
   "Previous tab": "Предишен раздел",
   "Next tab": "Следващ раздел",
   "Standard": "Стандартни",
@@ -1745,8 +1744,6 @@
   "Checking the new commits…": "Проверка на новите къмити…",
   "Building the new version…": "Компилиране на новата версия…",
   "Approve on the Mac:": "Одобрете на Mac:",
-  "Binding – costs or ends": "Окончателно – струва или приключва",
-  "Continue – everything else": "Напред – всичко друго",
   "Binding": "Окончателно",
   "Continue": "Напред",
   "Menu": "Меню",
@@ -1765,5 +1762,12 @@
   "Scroll": "Превърти",
   "Action tabs": "Раздели с действия",
   "1 commit": "1 комит",
-  "${0} commits": "Комити: ${0}"
+  "${0} commits": "Комити: ${0}",
+  "Previous board view": "Предишен изглед на дъската",
+  "Next board view": "Следващ изглед на дъската",
+  "Board view": "Изглед",
+  "(costs / ends)": "(струва / приключва)",
+  "(normal steps)": "(обичайни стъпки)",
+  "Cancel / discard": "Отказ / Изхвърли",
+  "Close / no": "Затвори / Не"
 }

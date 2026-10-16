@@ -7,8 +7,10 @@
         :class="['or-tab', 'board-tab', 'board-tab--' + tab, 'or-tab--tone-' + tone(tab), {'or-tab--active': tab === active}]"
         :aria-selected="tab === active"
         :data-test="'board-tab-' + tab"
+        :data-hotkey="'board-' + tab"
         @click="select(tab)">
         <span class="board-tab-name">{{ $t(label(tab)) }}</span>
+        <HotkeyKeys :action="'board-' + tab"/>
         <!-- The active tab drops its short info: the board itself shows it, the others get the room -->
         <BoardTabLines v-if="tab !== active" :tracks="tracks(tab)"/>
       </button>
@@ -37,6 +39,7 @@ import {vDockedTab} from '@/client/directives/DockedTab';
 import {TileView} from '@/client/components/board/TileView';
 import BoardTabLines from './BoardTabLines.vue';
 import TileViewToggle from './TileViewToggle.vue';
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {BOARD_TAB_LABEL, BOARD_TAB_TONE, BoardTabId, BoardTabTrack, boardTabTracks, boardTabs} from './boardTabs';
 import {boardTabState, selectBoardTab} from './boardTabState';
 import {observeBoardTabFit} from './boardTabFit';
@@ -51,7 +54,7 @@ let stopFit: (() => void) | undefined;
 
 export default defineComponent({
   name: 'BoardTabs',
-  components: {BoardTabLines, TileViewToggle},
+  components: {BoardTabLines, TileViewToggle, HotkeyKeys},
   directives: {dockedTab: vDockedTab},
   props: {
     game: {

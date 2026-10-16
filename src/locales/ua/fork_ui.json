@@ -983,7 +983,6 @@
   "Search the log": "Пошук у журналі",
   "Choose card / option": "Вибрати карту / варіант",
   "Change amount": "Змінити кількість",
-  "Cancel / discard / no": "Скасувати / скинути / ні",
   "Previous tab": "Попередня вкладка",
   "Next tab": "Наступна вкладка",
   "Standard": "Стандартні",
@@ -1010,8 +1009,6 @@
   "Checking the new commits…": "Перевірка нових комітів…",
   "Building the new version…": "Збирання нової версії…",
   "Approve on the Mac:": "Схвалити на Mac:",
-  "Binding – costs or ends": "Остаточно – витрачає або завершує",
-  "Continue – everything else": "Далі – усе інше",
   "Binding": "Остаточно",
   "Continue": "Далі",
   "Menu": "Меню",
@@ -1030,5 +1027,12 @@
   "Scroll": "Гортати",
   "Action tabs": "Вкладки дій",
   "1 commit": "1 коміт",
-  "${0} commits": "Комітів: ${0}"
+  "${0} commits": "Комітів: ${0}",
+  "Previous board view": "Попередній вигляд поля",
+  "Next board view": "Наступний вигляд поля",
+  "Board view": "Вигляд",
+  "(costs / ends)": "(витрачає / завершує)",
+  "(normal steps)": "(звичайні кроки)",
+  "Cancel / discard": "Скасувати / Скинути",
+  "Close / no": "Закрити / Ні"
 }

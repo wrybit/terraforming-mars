@@ -614,7 +614,6 @@
   "Search the log": "Log durchsuchen",
   "Choose card / option": "Karte / Option wählen",
   "Change amount": "Menge ändern",
-  "Cancel / discard / no": "Abbrechen / Abwerfen / Nein",
   "Previous tab": "Voriger Tab",
   "Next tab": "Nächster Tab",
   "Place": "Platzieren",
@@ -640,8 +639,6 @@
   "Checking the new commits…": "Prüfe die neuen Commits…",
   "Building the new version…": "Baue die neue Version…",
   "Approve on the Mac:": "Auf dem Mac freigeben:",
-  "Binding – costs or ends": "Verbindlich – kostet / beendet",
-  "Continue – everything else": "Weiter – alles andere",
   "Binding": "Verbindlich",
   "Continue": "Weiter",
   "Menu": "Menü",
@@ -658,5 +655,12 @@
   "Scroll": "Blättern",
   "Action tabs": "Aktions-Tabs",
   "1 commit": "1 Commit",
-  "${0} commits": "${0} Commits"
+  "${0} commits": "${0} Commits",
+  "Previous board view": "Vorige Spielbrett-Ansicht",
+  "Next board view": "Nächste Spielbrett-Ansicht",
+  "Board view": "Ansicht",
+  "(costs / ends)": "(kostet / beendet)",
+  "(normal steps)": "(normale Schritte)",
+  "Cancel / discard": "Abbrechen / Abwerfen",
+  "Close / no": "Schließen / Nein"
 }

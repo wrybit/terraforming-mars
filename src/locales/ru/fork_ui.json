@@ -1641,7 +1641,6 @@
   "Search the log": "Поиск в журнале",
   "Choose card / option": "Выбрать карту / вариант",
   "Change amount": "Изменить количество",
-  "Cancel / discard / no": "Отмена / сбросить / нет",
   "Previous tab": "Предыдущая вкладка",
   "Next tab": "Следующая вкладка",
   "Standard": "Стандарт",
@@ -1668,8 +1667,6 @@
   "Checking the new commits…": "Проверка новых коммитов…",
   "Building the new version…": "Сборка новой версии…",
   "Approve on the Mac:": "Одобрить на Mac:",
-  "Binding – costs or ends": "Окончательно – тратит или завершает",
-  "Continue – everything else": "Далее – всё остальное",
   "Binding": "Окончательно",
   "Continue": "Далее",
   "Menu": "Меню",
@@ -1688,5 +1685,12 @@
   "Scroll": "Листать",
   "Action tabs": "Вкладки действий",
   "1 commit": "1 коммит",
-  "${0} commits": "Коммитов: ${0}"
+  "${0} commits": "Коммитов: ${0}",
+  "Previous board view": "Предыдущий вид поля",
+  "Next board view": "Следующий вид поля",
+  "Board view": "Вид",
+  "(costs / ends)": "(тратит / завершает)",
+  "(normal steps)": "(обычные шаги)",
+  "Cancel / discard": "Отмена / Сбросить",
+  "Close / no": "Закрыть / Нет"
 }

@@ -1943,7 +1943,6 @@
   "Search the log": "Pesquisar no registro",
   "Choose card / option": "Escolher carta / opção",
   "Change amount": "Alterar quantidade",
-  "Cancel / discard / no": "Cancelar / descartar / não",
   "Previous tab": "Aba anterior",
   "Next tab": "Próxima aba",
   "Standard": "Padrão",
@@ -1970,8 +1969,6 @@
   "Checking the new commits…": "Verificando os novos commits…",
   "Building the new version…": "Gerando a nova versão…",
   "Approve on the Mac:": "Aprovar no Mac:",
-  "Binding – costs or ends": "Definitivo – custa ou encerra",
-  "Continue – everything else": "Continuar – todo o resto",
   "Binding": "Definitivo",
   "Continue": "Continuar",
   "Log": "Registro",
@@ -1987,5 +1984,12 @@
   "for": "por",
   "Scroll through the cards": "Percorrer as cartas",
   "Scroll": "Rolar",
-  "Action tabs": "Abas de ação"
+  "Action tabs": "Abas de ação",
+  "Previous board view": "Visão anterior do tabuleiro",
+  "Next board view": "Próxima visão do tabuleiro",
+  "Board view": "Visão",
+  "(costs / ends)": "(custa / encerra)",
+  "(normal steps)": "(passos normais)",
+  "Cancel / discard": "Cancelar / Descartar",
+  "Close / no": "Fechar / Não"
 }

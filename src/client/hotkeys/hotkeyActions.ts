@@ -11,15 +11,17 @@ export type HotkeyKeys = ReadonlyArray<string>;
  * Groups of the help dialog in their order; the tab groups follow the tab bar: always there, ending the turn,
  * depending on the situation, expansions
  */
-export type HotkeyGroup = 'general' | 'selection' | 'tabs' | 'tabs-default' | 'tabs-turn-end' | 'tabs-context' | 'tabs-expansion';
+export type HotkeyGroup = 'general' | 'selection' | 'tabs' | 'tabs-default' | 'tabs-turn-end' | 'tabs-context' | 'tabs-expansion' | 'board';
 
 /** Expansion a tab only exists with; its shortcut is only listed in games with it */
-export type HotkeyExpansion = 'turmoil' | 'colonies';
+export type HotkeyExpansion = 'turmoil' | 'colonies' | 'moon' | 'pathfinders' | 'deltaProject';
 
 export type HotkeyAction = {
   id: string;
   group: HotkeyGroup;
   label: string;
+  /** Second line of the label in the list, set apart on purpose instead of a random wrap */
+  detail?: string;
   /** Short label on the drawn keyboard, when the label is too long for a key */
   short?: string;
   /** Default keys; single keys by position, so the tab keys lie side by side on every layout */
@@ -40,9 +42,9 @@ export const HOTKEY_ACTIONS: ReadonlyArray<HotkeyAction> = [
   {id: 'select-all', group: 'selection', label: 'Select all', short: 'All', keys: ['Mod', 'A']},
   {id: 'amount', group: 'selection', label: 'Change amount', short: 'Amount', keys: ['ArrowLeft', 'ArrowRight'], locked: true},
   {id: 'scroll', group: 'selection', label: 'Scroll through the cards', short: 'Scroll', keys: ['ArrowUp', 'ArrowDown'], locked: true},
-  {id: 'confirm', group: 'selection', label: 'Binding – costs or ends', short: 'Binding', keys: ['Enter'], locked: true},
-  {id: 'proceed', group: 'selection', label: 'Continue – everything else', short: 'Continue', keys: ['Space'], locked: true},
-  {id: 'cancel', group: 'selection', label: 'Cancel / discard / no', short: 'Cancel', keys: ['Escape'], locked: true},
+  {id: 'confirm', group: 'selection', label: 'Binding', detail: '(costs / ends)', keys: ['Enter'], locked: true},
+  {id: 'proceed', group: 'selection', label: 'Continue', detail: '(normal steps)', keys: ['Space'], locked: true},
+  {id: 'cancel', group: 'selection', label: 'Cancel / discard', detail: 'Close / no', short: 'Cancel', keys: ['Escape'], locked: true},
   {id: 'previous-tab', group: 'tabs', label: 'Previous tab', short: 'Tab', keys: ['Comma']},
   {id: 'next-tab', group: 'tabs', label: 'Next tab', short: 'Tab', keys: ['Period']},
   {id: 'tab-hand', group: 'tabs-default', label: 'All cards', short: 'Cards', keys: ['KeyQ']},
@@ -59,6 +61,15 @@ export const HOTKEY_ACTIONS: ReadonlyArray<HotkeyAction> = [
   {id: 'tab-temperature', group: 'tabs-context', label: 'Temperature', keys: ['KeyF']},
   {id: 'tab-delegate', group: 'tabs-expansion', label: 'Delegate', keys: ['KeyG'], expansion: 'turmoil'},
   {id: 'tab-trade', group: 'tabs-expansion', label: 'Trade', keys: ['KeyH'], expansion: 'colonies'},
+  // Board tabs above the right column, in their order on the right-hand home row; the view of Mars / Moon below
+  {id: 'board-mars', group: 'board', label: 'Mars', keys: ['KeyJ']},
+  {id: 'board-moon', group: 'board', label: 'Moon', keys: ['KeyK'], expansion: 'moon'},
+  {id: 'board-colonies', group: 'board', label: 'Colonies', keys: ['KeyL'], expansion: 'colonies'},
+  {id: 'board-turmoil', group: 'board', label: 'Turmoil', keys: ['Semicolon'], expansion: 'turmoil'},
+  {id: 'board-paths', group: 'board', label: 'Planets', keys: ['Quote'], expansion: 'pathfinders'},
+  {id: 'board-delta', group: 'board', label: 'Delta', keys: ['Backslash'], expansion: 'deltaProject'},
+  {id: 'board-view-previous', group: 'board', label: 'Previous board view', short: 'Board view', keys: ['KeyN']},
+  {id: 'board-view-next', group: 'board', label: 'Next board view', short: 'Board view', keys: ['KeyM']},
 ];
 
 /** Shortcuts outside the game view, fixed and not listed in the help dialog */

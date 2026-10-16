@@ -1180,7 +1180,6 @@
   "Search the log": "Søk i loggen",
   "Choose card / option": "Velg kort / valg",
   "Change amount": "Endre antall",
-  "Cancel / discard / no": "Avbryt / kast / nei",
   "Previous tab": "Forrige fane",
   "Next tab": "Neste fane",
   "Place": "Plasser",
@@ -1206,8 +1205,6 @@
   "Checking the new commits…": "Sjekker de nye commitene…",
   "Building the new version…": "Bygger den nye versjonen…",
   "Approve on the Mac:": "Godkjenn på Mac-en:",
-  "Binding – costs or ends": "Bindende – koster eller avslutter",
-  "Continue – everything else": "Fortsett – alt annet",
   "Binding": "Bindende",
   "Continue": "Fortsett",
   "Menu": "Meny",
@@ -1224,5 +1221,12 @@
   "Scroll through the cards": "Bla gjennom kortene",
   "Scroll": "Bla",
   "Action tabs": "Handlingsfaner",
-  "${0} commits": "${0} commiter"
+  "${0} commits": "${0} commiter",
+  "Previous board view": "Forrige brettvisning",
+  "Next board view": "Neste brettvisning",
+  "Board view": "Visning",
+  "(costs / ends)": "(koster / avslutter)",
+  "(normal steps)": "(vanlige steg)",
+  "Cancel / discard": "Avbryt / Kast",
+  "Close / no": "Lukk / Nei"
 }

@@ -2043,7 +2043,6 @@
   "Search the log": "Cerca nel registro",
   "Choose card / option": "Scegli carta / opzione",
   "Change amount": "Cambia quantità",
-  "Cancel / discard / no": "Annulla / scarta / no",
   "Previous tab": "Scheda precedente",
   "Next tab": "Scheda successiva",
   "Place": "Piazza",
@@ -2069,8 +2068,6 @@
   "Checking the new commits…": "Verifica dei nuovi commit…",
   "Building the new version…": "Creazione della nuova versione…",
   "Approve on the Mac:": "Approva sul Mac:",
-  "Binding – costs or ends": "Vincolante – costa o termina",
-  "Continue – everything else": "Continua – tutto il resto",
   "Binding": "Vincolante",
   "Continue": "Continua",
   "Log": "Registro",
@@ -2087,5 +2084,12 @@
   "Scroll through the cards": "Scorrere le carte",
   "Scroll": "Scorri",
   "Action tabs": "Schede azione",
-  "${0} commits": "${0} commit"
+  "${0} commits": "${0} commit",
+  "Previous board view": "Vista precedente del tabellone",
+  "Next board view": "Vista successiva del tabellone",
+  "Board view": "Vista",
+  "(costs / ends)": "(costa / termina)",
+  "(normal steps)": "(passi normali)",
+  "Cancel / discard": "Annulla / Scarta",
+  "Close / no": "Chiudi / No"
 }
