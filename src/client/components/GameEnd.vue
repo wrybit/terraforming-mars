@@ -7,11 +7,11 @@
         <PageToolbar/>
         <MarsHomeLink/>
         <!-- Solo: result as a sentence in the same place as the winner in a multiplayer game, so both views are built the same -->
-        <div v-if="isSoloGame" class="game-end-winer-announcement">
+        <div v-if="isSoloGame" class="game-end-winner-announcement">
           <span v-if="game.isSoloModeWin" v-i18n>You win!</span>
           <span v-else v-i18n>Sorry, you lose.</span>
         </div>
-        <div v-else class="game-end-winer-announcement">
+        <div v-else class="game-end-winner-announcement">
           <span v-for="p in winners" :key="p.color"><span :class="'log-player ' + getEndGamePlayerRowColorClass(p.color)">{{ p.name }}</span></span> <span v-i18n>won!</span>
         </div>
       </div>
@@ -150,7 +150,7 @@
           <h2 v-i18n>Victory points details</h2>
           <div class="game-end-flexrow game-end-details">
             <div v-for="p in playersInPlace" :key="p.color" class="game-end-column">
-              <div class="game-end-winer-scorebreak-player-title">
+              <div class="game-end-winner-scorebreak-player-title">
                 <div :class="'game-end-player ' + getEndGamePlayerRowColorClass(p.color)"><a :href="'player?id='+p.id+'&noredirect'">{{p.name}}</a></div>
               </div>
               <div v-for="v in p.victoryPointsBreakdown.detailsCards" :key="v.cardName">

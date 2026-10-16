@@ -16,7 +16,7 @@ const SYMBOL_DIRECTORY = 'assets/tiles/special_tile_icons/';
 
 const SYMBOLS: Readonly<Partial<Record<TileType, string>>> = {
   [TileType.BIOFERTILIZER_FACILITY]: 'biofertilizer_facility.png',
-  [TileType.COMMERCIAL_DISTRICT]: 'commerical_district.png',
+  [TileType.COMMERCIAL_DISTRICT]: 'commercial_district.png',
   [TileType.DEIMOS_DOWN]: 'deimos.png',
   [TileType.ECOLOGICAL_ZONE]: 'ecological_zone.png',
   [TileType.GREAT_DAM]: 'great_dam.png',
