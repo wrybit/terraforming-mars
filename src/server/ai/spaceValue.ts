@@ -13,6 +13,7 @@ import {remainingProductionPhases, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
 import {citySpotPoints} from './citySpotPrior';
 import {openingPlan} from './openingPlan';
+import {blockingShare} from './phasePlan';
 import {adoptedOrphanPoints, lonelyGreeneryPoints} from './greeneryRing';
 
 // Scores a hex for tile placement. Weights tuned in AI test batches.
@@ -198,7 +199,7 @@ function baseSpaceValue(space: Space, kind: TileKind, player: IPlayer): number {
     // Cities may not touch: the free spots around a new city are closed for the opponent's cities
     // too. A human player set a city one spot off on purpose so the AI could no longer build next to it.
     value += (opponentGreeneries(neighbours, player) + blockedOpponentSpots(neighbours, player, board) * 0.5) *
-      tuningOf(player).cityDenialShare * victoryPoint;
+      (tuningOf(player).cityDenialShare + blockingShare(player)) * victoryPoint;
     break;
   case 'ocean':
     // Oceans next to own tiles help nobody else; next to free land they feed later rebates.

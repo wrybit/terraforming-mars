@@ -3,10 +3,11 @@ import {testGame} from '../TestGame';
 import {clearPlayerTunings, setPlayerTuning} from '../../src/server/ai/aiTuning';
 import {relativeValue, valuationContext} from '../../src/server/ai/stateValue';
 import {Resource} from '../../src/common/Resource';
+import {gamePhase} from '../../src/server/ai/phasePlan';
 
 // Games vs a strong human (2026-10-16, 129 : 197 and 120 : 186): the AI terraformed fast with M€ production 1–5
-// until generation 5–10, the human built income and cards first. incomeWeight values production higher early.
-describe('AI income weight', () => {
+// until generation 5–10, the human built income and cards first. phasePlan values production higher in the first third.
+describe('AI three-phase plan (income first)', () => {
   afterEach(() => clearPlayerTunings());
 
   function gain(generation: number, tuning: string): number {
@@ -20,10 +21,16 @@ describe('AI income weight', () => {
   }
 
   it('values M€ production higher in the opening', () => {
-    expect(gain(3, 'engine20')).to.be.greaterThan(gain(3, 'baseline') * 1.3);
+    expect(gain(3, 'phase1')).to.be.greaterThan(gain(3, 'baseline') * 1.3);
   });
 
   it('values it as before late in the game', () => {
-    expect(gain(11, 'engine20')).to.be.closeTo(gain(11, 'baseline'), 1e-6);
+    expect(gain(13, 'phase1')).to.be.closeTo(gain(13, 'baseline'), 1e-6);
+  });
+
+  it('splits the game into thirds', () => {
+    expect(gamePhase(2, 12)).to.equal(1);
+    expect(gamePhase(7, 7)).to.equal(2);
+    expect(gamePhase(12, 2)).to.equal(3);
   });
 });

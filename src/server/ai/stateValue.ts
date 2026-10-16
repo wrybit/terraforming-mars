@@ -18,6 +18,7 @@ import {moneySwingShare} from './stockAward';
 import {openBonusValue} from './bonusRace';
 import {expectedAttackLoss} from './attackExposure';
 import {collectorRate} from './collectorRate';
+import {firstMilestoneBonus, incomeFactor, openingTerraformBrake} from './phasePlan';
 import {bgaExpectedMargin} from './bgaValueModel';
 import {awardScoreWithHand} from './awardHandOutlook';
 
@@ -44,9 +45,6 @@ const OPPONENT_WEIGHT = 0.5;
 const RESOURCE_ON_CARD_VALUE = 0.8;
 // Generations counted as the opening for valueModelOpening (aiTuning.ts).
 const OPENING_GENERATIONS = 4;
-// incomeWeight applies in full up to this generation and fades out by INCOME_FADE_END (aiTuning.ts).
-const INCOME_FULL_UNTIL = 6;
-const INCOME_FADE_END = 10;
 
 /**
  * Game-phase numbers frozen at decision time. Copies that run into the next generation must
@@ -207,17 +205,9 @@ function productionPerGeneration(player: IPlayer, context: ValuationContext): nu
 
 function productionValue(player: IPlayer, context: ValuationContext): number {
   const value = productionPerGeneration(player, context) * context.remaining * (context.productionDiscount ?? PRODUCTION_DISCOUNT);
-  return value * incomeFactor(tuningOf(player).incomeWeight, context.generation);
+  return value * incomeFactor(player, context.generation, context.remaining);
 }
 
-/** incomeWeight (aiTuning.ts) in full up to INCOME_FULL_UNTIL, fading to 1 by INCOME_FADE_END. */
-function incomeFactor(weight: number, generation: number): number {
-  if (weight === 1 || generation >= INCOME_FADE_END) {
-    return 1;
-  }
-  const share = generation <= INCOME_FULL_UNTIL ? 1 : (INCOME_FADE_END - generation) / (INCOME_FADE_END - INCOME_FULL_UNTIL);
-  return 1 + (weight - 1) * share;
-}
 
 /**
  * What one more production phase is worth to a player: income (production and TR) plus what
@@ -424,7 +414,7 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
   const context = contextFor(player.game, frozen);
   const victoryPoints = player.getVictoryPoints();
   const expectedVictoryPoints = victoryPoints.total - victoryPoints.awards + expectedAwardPoints(player, context) +
-    milestoneRacePoints(player);
+    milestoneRacePoints(player) + firstMilestoneBonus(player, frozen.generation, frozen.remaining);
   // Board VP still to come count only while there is time to realise them.
   const boardTime = Math.min(1, context.remaining / tuningOf(player).boardHorizon);
   return (expectedVictoryPoints + boardPotential(player) * boardTime) * context.victoryPoint +
@@ -458,7 +448,8 @@ export function relativeValue(player: IPlayer, frozen: ValuationContext): number
     opponents.reduce((sum, opponent) => sum + lastGenerationSpotPoints(opponent), 0) / opponents.length * context.victoryPoint : 0;
   // Bonus steps left one step away for an opponent (bonusRace.ts).
   const bonusThreat = tuning.bonusRace > 0 ? openBonusThreat(player, context) : 0;
-  const handMade = own - weight * (opponentAverage + spotThreat + tuning.bonusRace * bonusThreat) + closer - tuning.terraformBrake * stepsRaised(player, frozen);
+  const handMade = own - weight * (opponentAverage + spotThreat + tuning.bonusRace * bonusThreat) + closer -
+    (tuning.terraformBrake + openingTerraformBrake(player, frozen.generation, frozen.remaining)) * stepsRaised(player, frozen);
   // Opening: the learned model underprices M€ production, so its share can be lower there (aiTuning.ts).
   const share = context.generation <= OPENING_GENERATIONS ? tuning.valueModel * tuning.valueModelOpening : tuning.valueModel;
   return share > 0 ? blendLearnedValue(player, handMade, share, context.victoryPoint) : handMade;
