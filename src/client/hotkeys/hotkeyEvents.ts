@@ -3,7 +3,7 @@
 // AZERTY; combinations with ⌘ / Ctrl use the character like the system does (⌘Z is undo wherever Z lies).
 import {HotkeyKeys} from '@/client/hotkeys/hotkeyActions';
 import {combo, keysOf} from '@/client/hotkeys/hotkeyStore';
-import {codeLabel} from '@/client/hotkeys/hotkeyKeyLabels';
+import {codeLabel, physicalCode} from '@/client/hotkeys/hotkeyKeyLabels';
 
 const MODIFIER_KEYS = ['Meta', 'Control', 'Shift', 'Alt', 'AltGraph', 'CapsLock'];
 
@@ -30,7 +30,7 @@ function codeFromKey(key: string): string | undefined {
 /** Position of the pressed key as KeyboardEvent.code */
 export function codeOfEvent(event: KeyboardEvent): string | undefined {
   const code = event.code !== '' && event.code !== undefined ? event.code : codeFromKey(event.key);
-  return code !== undefined ? NUMPAD_CODES[code] ?? code : undefined;
+  return code !== undefined ? NUMPAD_CODES[code] ?? physicalCode(code) : undefined;
 }
 
 /**
