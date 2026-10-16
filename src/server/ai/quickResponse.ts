@@ -30,9 +30,9 @@ import {spaceName} from './spaceName';
 const SKIP_WORDS = ['skip', 'do nothing', 'don\'t', 'do not', 'none'];
 
 // Title of ChooseCards when drawn cards are kept without paying (lower case, as titleOf returns it)
-const KEEP_TITLE = 'select ${0} card(s) to keep';
+export const KEEP_TITLE = 'select ${0} card(s) to keep';
 
-function titleOf(input: PlayerInput): string {
+export function titleOf(input: PlayerInput): string {
   const title = input.title;
   return (typeof title === 'string' ? title : title.message).toLowerCase();
 }

@@ -183,6 +183,8 @@ export type AiTuning = {
    * valuation only, 1 = model only. The model's win chance is turned into M€ via its VP margin per logit (stateValue.ts).
    */
   valueModel: number,
+  /** 1: drawn cards kept for free in the action phase (Business Contacts …) chosen by the full card valuation (cardSelection.ts). */
+  keepValuation: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -286,6 +288,7 @@ export const BASELINE_TUNING: AiTuning = {
   keepAwardStock: 1,
   // ML stage 2: learned position value from Board Game Arena games, tested as a share of the valuation first.
   valueModel: 0,
+  keepValuation: 0,
   lastGenerationSpots: 0,
   // Human test game (2026-10-10): passed in the last generation with 47 M€ while greeneries were affordable.
   passedMoneyLost: 1,
@@ -720,6 +723,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   valueModel25: {valueModel: 0.25},
   valueModel50: {valueModel: 0.5},
   valueModel75: {valueModel: 0.75},
+  // Analysis log (2026-10-16): Business Contacts in generation 10 kept two cards by statistics only.
+  keepValued: {keepValuation: 1},
 };
 
 export function isTuningVariant(name: string): boolean {

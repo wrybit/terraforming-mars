@@ -6,9 +6,9 @@ import {SelectCard} from '../inputs/SelectCard';
 import {Phase} from '../../common/Phase';
 import {AiLevel} from '../../common/ai/AiLevel';
 import {chooseAction} from './actionLookahead';
-import {chooseCardsToKeep, chooseInitialCards} from './cardSelection';
+import {chooseCardsToKeep, chooseFreeCardsToKeep, chooseInitialCards} from './cardSelection';
 import {isActionMenu} from './gameCopy';
-import {quickResponse} from './quickResponse';
+import {KEEP_TITLE, quickResponse, titleOf} from './quickResponse';
 import {randomResponse} from './randomResponse';
 import {recordDecision} from './decisionTrace';
 import {describeResponse} from './decisionLabels';
@@ -81,6 +81,11 @@ function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputRespo
   }
   if (input instanceof SelectCard && CARD_CHOICE_PHASES.includes(player.game.phase)) {
     return chooseCardsToKeep(input, player);
+  }
+  // Drawn cards to keep in the action phase (Business Contacts, Invention Contest …): the full card valuation
+  // instead of the quick statistics order. Not inside simulations (rare choice, timing estimate is costly there).
+  if (input instanceof SelectCard && titleOf(input) === KEEP_TITLE && tuningOf(player).keepValuation > 0 && !isSimulating()) {
+    return chooseFreeCardsToKeep(input, player);
   }
   return quickResponse(input, player);
 }

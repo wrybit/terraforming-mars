@@ -223,6 +223,21 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
 }
 
 /** Draft pick or research purchase, depending on the input's limits. */
+/**
+ * Drawn cards of which some are kept for free (Business Contacts: keep 2 of 4, Invention Contest: 1 of 3):
+ * the best by the full card valuation (timing, cost, synergies), not by statistics alone.
+ */
+export function chooseFreeCardsToKeep(input: SelectCard<ICard>, player: IPlayer): InputResponse {
+  const candidates = input.cards.filter((_card, index) => input.config.enabled?.[index] !== false);
+  const {valueOf, timingOf} = valuesOf(player, candidates);
+  const sorted = [...candidates].sort((a, b) => valueOf(b.name) - valueOf(a.name));
+  const chosen = sorted.slice(0, Math.min(Math.max(input.config.min, 0), sorted.length));
+  if (isTracingDecision()) {
+    traceOptions('keep', sorted.map((card) => cardOption('', card, valueOf, timingOf, chosen.includes(card))));
+  }
+  return {type: 'card', cards: chosen.map((card) => card.name)};
+}
+
 export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): InputResponse {
   const candidates = input.cards.filter((_card, index) => input.config.enabled?.[index] !== false);
   const {valueOf, timingOf} = valuesOf(player, candidates, input.config.min !== input.config.max);
