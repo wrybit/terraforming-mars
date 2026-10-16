@@ -643,10 +643,20 @@ html.tm-hotkeys .hotkey-item-number {
   gap: 18px;
 }
 
-// N / M at both ends of the tiles / bonus / coordinates switch below Mars and the Moon (TileViewToggle.vue)
+// N / M beside the tiles / bonus / coordinates switch below Mars and the Moon (TileViewToggle.vue): outside its dark
+// pill, only the options sit inside
 .tile-view-toggle > .tile-view-toggle__keys {
-  align-self: center;
-  margin: 0 10px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tile-view-toggle > .tile-view-toggle__keys:first-child {
+  right: calc(100% + 10px);
+}
+
+.tile-view-toggle > .tile-view-toggle__keys:last-child {
+  left: calc(100% + 10px);
 }
 
 // Board tabs (BoardTabs.vue): the cap beside the name, the track lines below keep their room
