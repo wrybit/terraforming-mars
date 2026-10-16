@@ -24,7 +24,7 @@ export const HOTKEY_ACTIONS: ReadonlyArray<HotkeyAction> = [
   {id: 'rate-ai', group: 'general', label: 'Rate AI decision', keys: ['I']},
   {id: 'pick', group: 'selection', label: 'Choose card / option', keys: ['1', '…', '9'], locked: true},
   {id: 'select-all', group: 'selection', label: 'Select all', keys: ['Mod', 'A']},
-  {id: 'amount', group: 'selection', label: 'Change amount', keys: ['←', '→'], locked: true},
+  {id: 'amount', group: 'selection', label: 'Change amount', keys: ['ArrowLeft', 'ArrowRight'], locked: true},
   {id: 'confirm', group: 'selection', label: 'Confirm', keys: ['Enter'], locked: true},
   {id: 'cancel', group: 'selection', label: 'Cancel / discard / no', keys: ['Escape'], locked: true},
   {id: 'previous-tab', group: 'tabs', label: 'Previous tab', keys: [',']},

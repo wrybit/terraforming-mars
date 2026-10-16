@@ -1198,7 +1198,7 @@
   "The keys are also shown at buttons, tabs and cards.": "キーはボタン、タブ、カードにも表示されます。",
   "Keys hidden in the game – the shortcuts still work.": "ゲーム内のキー表示はオフ – ショートカットは使えます。",
   "Assigned twice: ${0}. Resolve this first, then Done.": "重複: ${0}。解消してから完了してください。",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "項目をクリックして新しいキーを押します。⌫ で削除、Esc で取消。灰色は固定です。",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "項目をクリックして新しいキーを押します（手元のキーボードでも上の図でも可）。⌫ で削除、Esc で取消。灰色は固定です。",
   "Default keys restored.": "既定のキーに戻しました。",
   "${0} shortcuts imported.": "${0} 件のショートカットを読み込みました。",
   "This file is not an export of the keyboard shortcuts.": "このファイルはショートカットのエクスポートではありません。",

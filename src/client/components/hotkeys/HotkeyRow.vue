@@ -1,8 +1,8 @@
 <template>
   <!-- One shortcut: key caps, then the label. Editable rows are buttons in edit mode; fixed ones are dimmed there -->
   <button v-if="editing && row.locked !== true" type="button"
-    :class="['hotkey-row', 'hotkey-row--editable', {'hotkey-row--capturing': capturing, 'hotkey-row--duplicate': duplicate}]"
-    @click="$emit('capture')">
+    :class="['hotkey-row', 'hotkey-row--editable', {'hotkey-row--capturing': capturing, 'hotkey-row--duplicate': duplicate, 'hotkey-row--highlighted': highlighted}]"
+    @click="$emit('capture')" @mouseenter="$emit('hover', true)" @mouseleave="$emit('hover', false)">
     <span class="hotkey-row__keys">
       <kbd v-if="capturing" class="hotkey-key">…</kbd>
       <HotkeyKeys v-else-if="hasKeys" :action="row.id" always/>
@@ -10,7 +10,8 @@
     </span>
     <span :class="labelClass">{{ capturing ? $t('Press a key …') : $t(row.label) }}</span>
   </button>
-  <div v-else :class="['hotkey-row', {'hotkey-row--locked': editing && row.locked === true}]">
+  <div v-else :class="['hotkey-row', {'hotkey-row--locked': editing && row.locked === true, 'hotkey-row--highlighted': highlighted}]"
+    @mouseenter="$emit('hover', true)" @mouseleave="$emit('hover', false)">
     <span class="hotkey-row__keys">
       <HotkeyKeys v-if="row.locked === true" :fixed="row.keys" always/>
       <HotkeyKeys v-else-if="hasKeys" :action="row.id" always/>
@@ -31,10 +32,12 @@ const props = defineProps<{
   editing: boolean;
   capturing: boolean;
   duplicate: boolean;
+  highlighted?: boolean;
 }>();
 
 defineEmits<{
   (event: 'capture'): void;
+  (event: 'hover', inside: boolean): void;
 }>();
 
 const hasKeys = computed(() => keysOf(props.row.id).length > 0);

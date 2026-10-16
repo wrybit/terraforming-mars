@@ -6,14 +6,16 @@
       <section v-for="group in leftGroups" :key="group.title" class="hotkey-list__group">
         <h3 class="hotkey-list__title" v-i18n>{{ group.title }}</h3>
         <HotkeyRow v-for="row in group.rows" :key="row.id" :row="row" :editing="editing" :capturing="capturing === row.id"
-          :duplicate="duplicates.has(row.id)" @capture="$emit('capture', row.id)"/>
+          :duplicate="duplicates.has(row.id)" :highlighted="highlighted.has(row.id)"
+          @capture="$emit('capture', row.id)" @hover="$emit('hover', $event ? row.id : undefined)"/>
       </section>
     </div>
     <section class="hotkey-list__group">
       <h3 class="hotkey-list__title" v-i18n>Tabs</h3>
       <div class="hotkey-list__tabs">
         <HotkeyRow v-for="row in tabRows" :key="row.id" :row="row" :editing="editing" :capturing="capturing === row.id"
-          :duplicate="duplicates.has(row.id)" @capture="$emit('capture', row.id)"/>
+          :duplicate="duplicates.has(row.id)" :highlighted="highlighted.has(row.id)"
+          @capture="$emit('capture', row.id)" @hover="$emit('hover', $event ? row.id : undefined)"/>
       </div>
     </section>
   </div>
@@ -29,14 +31,17 @@ withDefaults(defineProps<{
   editing?: boolean;
   capturing?: string;
   duplicates?: Set<string>;
+  highlighted?: ReadonlySet<string>;
 }>(), {
   editing: false,
   capturing: undefined,
   duplicates: () => new Set<string>(),
+  highlighted: () => new Set<string>(),
 });
 
 defineEmits<{
   (event: 'capture', id: string): void;
+  (event: 'hover', id: string | undefined): void;
 }>();
 
 // Keys of installed extensions (e.g. F for feedback) are listed as fixed general shortcuts

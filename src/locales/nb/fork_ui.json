@@ -1193,7 +1193,7 @@
   "The keys are also shown at buttons, tabs and cards.": "Tastene vises også på knapper, faner og kort.",
   "Keys hidden in the game – the shortcuts still work.": "Taster skjult i spillet – snarveiene virker fortsatt.",
   "Assigned twice: ${0}. Resolve this first, then Done.": "Tildelt to ganger: ${0}. Løs først, så Ferdig.",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Klikk en rad og trykk den nye tasten. ⌫ fjerner, Esc avbryter. Grå = faste.",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Klikk en rad og trykk den nye tasten – på tastaturet ditt eller det over. ⌫ fjerner, Esc avbryter. Grå = faste.",
   "Default keys restored.": "Standardtaster gjenopprettet.",
   "${0} shortcuts imported.": "${0} snarveier importert.",
   "This file is not an export of the keyboard shortcuts.": "Denne filen er ikke en eksport av hurtigtastene.",

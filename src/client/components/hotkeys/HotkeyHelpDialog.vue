@@ -18,8 +18,11 @@
           <span aria-hidden="true">✕</span><HotkeyKeys action="cancel" always/>
         </button>
       </div>
-      <div class="dialog-frame-body">
-        <HotkeyList :editing="editing" :capturing="capturing" :duplicates="duplicates" @capture="capturing = $event"/>
+      <div class="dialog-frame-body hotkey-dialog__body">
+        <HotkeyKeyboard :language="language" :editing="editing" :highlighted="highlighted" :pressed="pressed" :modArmed="modArmed"
+          @hover="hoveredKey = $event" @press="pressVirtualKey"/>
+        <HotkeyList :editing="editing" :capturing="capturing" :duplicates="duplicates" :highlighted="highlighted"
+          @capture="capturing = $event" @hover="hoveredRow = $event"/>
       </div>
       <div class="dialog-frame-foot hotkey-dialog__foot">
         <template v-if="editing">
@@ -56,9 +59,14 @@ import SidebarModal from '@/client/components/SidebarModal.vue';
 import ToggleSwitch from '@/client/components/common/ToggleSwitch.vue';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import HotkeyList from '@/client/components/hotkeys/HotkeyList.vue';
+import HotkeyKeyboard from '@/client/components/hotkeys/HotkeyKeyboard.vue';
+import {HotkeyKeys as KeyList} from '@/client/hotkeys/hotkeyActions';
+import {KeyboardKey, isStack, keyboardLayout} from '@/client/hotkeys/hotkeyKeyboardLayouts';
+import {keyUses} from '@/client/hotkeys/hotkeyKeyUses';
+import {getPreferences} from '@/client/utils/PreferencesManager';
 import {findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
 import {duplicateBindings, exportHotkeys, hotkeyState, importHotkeys, resetBindings, setBinding, setShowHints} from '@/client/hotkeys/hotkeyStore';
-import {keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
+import {isMac, keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 // Arrows of the import/export icons, the same as on the "Create game" page (CreateGameForm.vue)
@@ -67,6 +75,7 @@ const EXPORT_ARROW = 'M12.25 13.63L18.56 2.7M15.9 3.56L18.56 2.7L19.15 5.44';
 // Keys that keep their fixed meaning and cannot be given to another action
 const RESERVED_KEYS = ['Enter', 'Escape', 'Tab', '?', 'ArrowLeft', 'ArrowRight', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 const NOTE_DURATION = 2500;
+const PRESS_DURATION = 160;
 
 const props = defineProps<{
   open: boolean;
@@ -82,6 +91,50 @@ const note = ref<{text: string, warning: boolean} | undefined>(undefined);
 let noteTimer: number | undefined;
 
 const duplicates = computed(() => duplicateBindings());
+
+// Keyboard drawing: the layout of the chosen language, hover links keys and rows, pressed keys sink in
+const language = computed(() => getPreferences().lang);
+const keyboardKeys = computed(() => keyboardLayout(language.value, isMac()).flatMap((row) => row.flatMap((slot) => isStack(slot) ? slot.stack : [slot])));
+const hoveredRow = ref<string | undefined>(undefined);
+const hoveredKey = ref<KeyboardKey | undefined>(undefined);
+const pressed = ref(new Set<string>());
+const modArmed = ref(false);
+const highlighted = computed(() => {
+  const ids = new Set<string>();
+  if (hoveredRow.value !== undefined) {
+    ids.add(hoveredRow.value);
+  }
+  if (capturing.value !== undefined) {
+    ids.add(capturing.value);
+  }
+  if (hoveredKey.value !== undefined) {
+    keyUses(hoveredKey.value).forEach((use) => ids.add(use.id));
+  }
+  return ids;
+});
+
+function flashKeys(ids: ReadonlyArray<string>): void {
+  if (ids.length === 0) {
+    return;
+  }
+  pressed.value = new Set([...pressed.value, ...ids]);
+  window.setTimeout(() => {
+    const next = new Set(pressed.value);
+    ids.forEach((id) => next.delete(id));
+    pressed.value = next;
+  }, PRESS_DURATION);
+}
+
+// Drawn keys of a real key press: the key itself (also via its Shift symbol) and ⌘ / Ctrl
+function keyIdsOfEvent(event: KeyboardEvent): Array<string> {
+  const keys = keysOfEvent(event);
+  const value = keys?.[keys.length - 1] ?? (event.key.length === 1 ? event.key.toUpperCase() : event.key);
+  const ids = keyboardKeys.value.filter((key) => key.value === value || key.shiftValue === value).map((key) => key.id);
+  if (event.metaKey || event.ctrlKey || event.key === 'Meta' || event.key === 'Control') {
+    ids.push(...keyboardKeys.value.filter((key) => key.mod === true).map((key) => key.id));
+  }
+  return ids;
+}
 const blocked = computed(() => editing.value && duplicates.value.size > 0);
 
 const message = computed(() => {
@@ -95,7 +148,7 @@ const message = computed(() => {
     const names = Array.from(duplicates.value).map((id) => translateText(findHotkeyAction(id)?.label ?? id)).join(', ');
     return translateTextWithParams('Assigned twice: ${0}. Resolve this first, then Done.', [names]);
   }
-  return translateText('Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.');
+  return translateText('Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.');
 });
 const warning = computed(() => note.value?.warning ?? blocked.value);
 
@@ -118,6 +171,7 @@ function finishEditing(): void {
   }
   editing.value = false;
   capturing.value = undefined;
+  modArmed.value = false;
 }
 
 function requestClose(): void {
@@ -164,7 +218,11 @@ function importFile(event: Event): void {
 // While waiting for a new key, the key belongs to this dialog alone: listening in the capture phase and stopping
 // the event keeps Esc from closing the dialog and every other shortcut from firing
 function onCaptureKey(event: KeyboardEvent): void {
-  if (!props.open || !editing.value) {
+  if (!props.open) {
+    return;
+  }
+  flashKeys(keyIdsOfEvent(event));
+  if (!editing.value) {
     return;
   }
   if (capturing.value === undefined) {
@@ -191,14 +249,44 @@ function onCaptureKey(event: KeyboardEvent): void {
     capturing.value = undefined;
     return;
   }
-  if (keys.length === 1 && RESERVED_KEYS.includes(event.key)) {
-    showNote(translateTextWithParams('"${0}" is a fixed key.', [event.key]), true);
+  assign(id, keys, event.key);
+}
+
+/** Gives the keys to the action being edited, unless they are fixed ones */
+function assign(id: string, keys: KeyList, plainKey: string): void {
+  if (keys.length === 1 && RESERVED_KEYS.includes(plainKey)) {
+    showNote(translateTextWithParams('"${0}" is a fixed key.', [plainKey]), true);
     return;
   }
   setBinding(id, keys);
   capturing.value = undefined;
+  modArmed.value = false;
   // The row button keeps the focus after the click; Enter would start capturing again instead of "Done"
   (document.activeElement as HTMLElement | null)?.blur();
+}
+
+// A click on the drawn keyboard: in edit mode it assigns the key (⌘ / Ctrl first switches the modifier on), a click
+// on a key that already has an editable shortcut starts editing that shortcut
+function pressVirtualKey(key: KeyboardKey): void {
+  flashKeys([key.id]);
+  if (!editing.value) {
+    return;
+  }
+  if (key.mod === true) {
+    modArmed.value = !modArmed.value;
+    return;
+  }
+  if (key.value === undefined) {
+    return;
+  }
+  if (capturing.value !== undefined) {
+    assign(capturing.value, modArmed.value ? ['Mod', key.value] : [key.value], key.value);
+    return;
+  }
+  const editable = keyUses(key).find((use) => findHotkeyAction(use.id)?.locked !== true && findHotkeyAction(use.id) !== undefined);
+  if (editable !== undefined) {
+    capturing.value = editable.id;
+  }
 }
 
 window.addEventListener('keydown', onCaptureKey, true);
@@ -212,6 +300,7 @@ watch(() => props.open, (open) => {
     editing.value = false;
     capturing.value = undefined;
     note.value = undefined;
+    modArmed.value = false;
   }
 });
 </script>

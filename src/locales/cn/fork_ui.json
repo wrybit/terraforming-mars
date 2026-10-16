@@ -1769,7 +1769,7 @@
   "The keys are also shown at buttons, tabs and cards.": "按键也会显示在按钮、标签和卡牌上。",
   "Keys hidden in the game – the shortcuts still work.": "游戏中已隐藏按键——快捷键仍然有效。",
   "Assigned twice: ${0}. Resolve this first, then Done.": "重复分配：${0}。请先解决，再点完成。",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "点击条目，然后按下新按键。⌫ 删除，Esc 取消。灰色为固定按键。",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "点击条目，然后按下新按键——在你的键盘或上方的键盘上。⌫ 删除，Esc 取消。灰色为固定按键。",
   "Default keys restored.": "已恢复默认按键。",
   "${0} shortcuts imported.": "已导入 ${0} 个快捷键。",
   "This file is not an export of the keyboard shortcuts.": "此文件不是快捷键的导出文件。",

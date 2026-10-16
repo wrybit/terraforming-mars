@@ -1016,7 +1016,7 @@
   "The keys are also shown at buttons, tabs and cards.": "A billentyűk a gombokon, füleken és kártyákon is láthatók.",
   "Keys hidden in the game – the shortcuts still work.": "A billentyűk rejtve – a gyorsbillentyűk továbbra is működnek.",
   "Assigned twice: ${0}. Resolve this first, then Done.": "Kétszer kiosztva: ${0}. Előbb oldd fel, aztán Kész.",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Kattints egy sorra, majd nyomd meg az új billentyűt. ⌫ töröl, Esc mégse. Szürke = rögzített.",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Kattints egy sorra, majd nyomd meg az új billentyűt – a sajátodon vagy a fenti billentyűzeten. ⌫ töröl, Esc mégse. Szürke = rögzített.",
   "Default keys restored.": "Alapértelmezett billentyűk visszaállítva.",
   "${0} shortcuts imported.": "${0} gyorsbillentyű importálva.",
   "This file is not an export of the keyboard shortcuts.": "Ez a fájl nem a gyorsbillentyűk exportja.",

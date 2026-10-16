@@ -626,7 +626,7 @@
   "The keys are also shown at buttons, tabs and cards.": "Die Tasten stehen auch an Buttons, Tabs und Karten.",
   "Keys hidden in the game – the shortcuts still work.": "Tasten im Spiel ausgeblendet – die Kürzel funktionieren weiter.",
   "Assigned twice: ${0}. Resolve this first, then Done.": "Doppelt belegt: ${0}. Erst auflösen, dann Fertig.",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Eintrag anklicken, dann neue Taste drücken. ⌫ entfernt, Esc bricht ab. Grau = fest.",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Eintrag anklicken, dann neue Taste drücken – auf deiner Tastatur oder der oben. ⌫ entfernt, Esc bricht ab. Grau = fest.",
   "Default keys restored.": "Standardbelegung wiederhergestellt.",
   "${0} shortcuts imported.": "${0} Kürzel importiert.",
   "This file is not an export of the keyboard shortcuts.": "Diese Datei ist kein Export der Tastenkürzel.",

@@ -899,7 +899,7 @@
   "The keys are also shown at buttons, tabs and cards.": "Les touches figurent aussi sur les boutons, onglets et cartes.",
   "Keys hidden in the game – the shortcuts still work.": "Touches masquées en jeu – les raccourcis fonctionnent toujours.",
   "Assigned twice: ${0}. Resolve this first, then Done.": "Attribué deux fois : ${0}. Corrigez, puis Terminé.",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Cliquez une entrée, puis appuyez sur la nouvelle touche. ⌫ supprime, Échap annule. Grisé = fixe.",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Cliquez une entrée, puis appuyez sur la nouvelle touche – sur votre clavier ou celui du haut. ⌫ supprime, Échap annule. Grisé = fixe.",
   "Default keys restored.": "Touches par défaut rétablies.",
   "${0} shortcuts imported.": "${0} raccourcis importés.",
   "This file is not an export of the keyboard shortcuts.": "Ce fichier n'est pas un export des raccourcis clavier.",

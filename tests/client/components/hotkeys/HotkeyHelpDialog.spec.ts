@@ -37,6 +37,15 @@ describe('HotkeyHelpDialog', () => {
     expect(wrapper.find('button.hotkey-row').text()).to.include('X');
   });
 
+  it('takes a key clicked on the drawn keyboard', async () => {
+    const wrapper = mountDialog();
+    await wrapper.find('[data-test="hotkey-edit"]').trigger('click');
+    await wrapper.findAll('button.hotkey-row')[0].trigger('click');
+    const key = wrapper.findAll('.hotkey-keyboard__key').find((element) => element.text() === 'G');
+    await key!.trigger('click');
+    expect(wrapper.find('button.hotkey-row').text()).to.include('G');
+  });
+
   it('cannot finish editing while a key is assigned twice', async () => {
     const wrapper = mountDialog();
     await wrapper.find('[data-test="hotkey-edit"]').trigger('click');

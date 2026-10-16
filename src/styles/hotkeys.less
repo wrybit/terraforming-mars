@@ -299,3 +299,141 @@ html.tm-hotkeys .hotkey-item-number {
 .hotkey-list__tabs .hotkey-row__keys {
   min-width: 26px;
 }
+
+// ---- Drawn laptop keyboard (HotkeyKeyboard.vue) ----
+// Keys with a shortcut take the color of their group, like the group titles of the list
+@hotkey-group-general: #d9b45a;
+@hotkey-group-selection: #4fc39a;
+@hotkey-group-tabs: #9b98ff;
+
+.hotkey-dialog__body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.hotkey-keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: #14151b;
+  user-select: none;
+}
+
+.hotkey-keyboard__row {
+  display: flex;
+  gap: 4px;
+}
+
+.hotkey-keyboard__key {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-bottom: 2px solid #111218;
+  border-radius: 5px;
+  background: #2a2c36;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  color: #7c8193;
+  font: 500 10px/1.05 @hotkey-cap-font;
+  transition: transform 0.08s, box-shadow 0.12s, background 0.12s;
+
+  small {
+    font-size: 8px;
+    opacity: 0.85;
+  }
+}
+
+.hotkey-keyboard__row--function .hotkey-keyboard__key,
+.hotkey-keyboard__key--half {
+  height: 14px;
+  font-size: 8px;
+}
+
+// Arrow up over arrow down: two half keys in the height of one
+.hotkey-keyboard__stack {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hotkey-keyboard__stack .hotkey-keyboard__key {
+  flex: none;
+}
+
+.hotkey-keyboard__key--general {
+  background: mix(@hotkey-group-general, #2a2c36, 35%);
+  border-bottom-color: mix(@hotkey-group-general, #111218, 20%);
+  color: #fff;
+}
+
+.hotkey-keyboard__key--selection {
+  background: mix(@hotkey-group-selection, #2a2c36, 32%);
+  border-bottom-color: mix(@hotkey-group-selection, #111218, 20%);
+  color: #fff;
+}
+
+.hotkey-keyboard__key--tabs {
+  background: mix(@hotkey-group-tabs, #2a2c36, 40%);
+  border-bottom-color: mix(@hotkey-group-tabs, #111218, 20%);
+  color: #fff;
+}
+
+.hotkey-keyboard__key--mod {
+  background: #3a3c48;
+  color: #d6d8e0;
+}
+
+.hotkey-keyboard__key--lit {
+  z-index: 1;
+  box-shadow: 0 0 0 2px #fff, 0 0 12px rgba(255, 255, 255, 0.45);
+  color: #fff;
+}
+
+.hotkey-keyboard__key--pressed {
+  transform: translateY(2px);
+  border-bottom-width: 0;
+  filter: brightness(1.25);
+}
+
+.hotkey-keyboard--editing .hotkey-keyboard__key--clickable {
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(1.3);
+  }
+}
+
+// Group titles of the list in the key colors, so key and row belong together visibly
+.hotkey-list__group:nth-child(1) > .hotkey-list__title {
+  color: @hotkey-group-general;
+}
+
+.hotkey-list__column > .hotkey-list__group:nth-child(2) > .hotkey-list__title {
+  color: @hotkey-group-selection;
+}
+
+.hotkey-list > .hotkey-list__group > .hotkey-list__title {
+  color: @hotkey-group-tabs;
+}
+
+.hotkey-row--highlighted {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotkey-keyboard__key {
+    transition: none;
+  }
+}

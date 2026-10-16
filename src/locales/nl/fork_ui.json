@@ -1444,7 +1444,7 @@
   "The keys are also shown at buttons, tabs and cards.": "De toetsen staan ook bij knoppen, tabbladen en kaarten.",
   "Keys hidden in the game – the shortcuts still work.": "Toetsen verborgen in het spel – de sneltoetsen werken nog.",
   "Assigned twice: ${0}. Resolve this first, then Done.": "Dubbel toegewezen: ${0}. Eerst oplossen, dan Klaar.",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Klik een regel en druk de nieuwe toets. ⌫ wist, Esc annuleert. Grijs = vast.",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Klik een regel en druk de nieuwe toets – op je toetsenbord of het bovenstaande. ⌫ wist, Esc annuleert. Grijs = vast.",
   "Default keys restored.": "Standaardtoetsen hersteld.",
   "${0} shortcuts imported.": "${0} sneltoetsen geïmporteerd.",
   "This file is not an export of the keyboard shortcuts.": "Dit bestand is geen export van de sneltoetsen.",

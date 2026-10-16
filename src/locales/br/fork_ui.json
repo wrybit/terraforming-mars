@@ -1957,7 +1957,7 @@
   "The keys are also shown at buttons, tabs and cards.": "As teclas também aparecem em botões, abas e cartas.",
   "Keys hidden in the game – the shortcuts still work.": "Teclas ocultas no jogo – os atalhos continuam funcionando.",
   "Assigned twice: ${0}. Resolve this first, then Done.": "Atribuído duas vezes: ${0}. Resolva e depois Concluído.",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Clique numa entrada e pressione a nova tecla. ⌫ remove, Esc cancela. Cinza = fixas.",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Clique numa entrada e pressione a nova tecla – no seu teclado ou no de cima. ⌫ remove, Esc cancela. Cinza = fixas.",
   "Default keys restored.": "Teclas padrão restauradas.",
   "${0} shortcuts imported.": "${0} atalhos importados.",
   "This file is not an export of the keyboard shortcuts.": "Este arquivo não é uma exportação dos atalhos de teclado.",

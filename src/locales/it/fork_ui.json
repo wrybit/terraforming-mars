@@ -2056,7 +2056,7 @@
   "The keys are also shown at buttons, tabs and cards.": "I tasti compaiono anche su pulsanti, schede e carte.",
   "Keys hidden in the game – the shortcuts still work.": "Tasti nascosti nel gioco: le scorciatoie funzionano comunque.",
   "Assigned twice: ${0}. Resolve this first, then Done.": "Assegnato due volte: ${0}. Risolvi, poi Fatto.",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Clicca una voce, poi premi il nuovo tasto. ⌫ rimuove, Esc annulla. Grigio = fisso.",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Clicca una voce, poi premi il nuovo tasto, sulla tua tastiera o su quella sopra. ⌫ rimuove, Esc annulla. Grigio = fisso.",
   "Default keys restored.": "Tasti predefiniti ripristinati.",
   "${0} shortcuts imported.": "${0} scorciatoie importate.",
   "This file is not an export of the keyboard shortcuts.": "Questo file non è un'esportazione delle scorciatoie.",

@@ -1655,7 +1655,7 @@
   "The keys are also shown at buttons, tabs and cards.": "Клавиши также показаны на кнопках, вкладках и картах.",
   "Keys hidden in the game – the shortcuts still work.": "Клавиши скрыты в игре – сочетания по-прежнему работают.",
   "Assigned twice: ${0}. Resolve this first, then Done.": "Назначено дважды: ${0}. Исправьте, затем «Готово».",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Щёлкните строку и нажмите новую клавишу. ⌫ удаляет, Esc отменяет. Серые – фиксированы.",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Щёлкните строку и нажмите новую клавишу – на своей клавиатуре или на той, что выше. ⌫ удаляет, Esc отменяет. Серые – фиксированы.",
   "Default keys restored.": "Стандартные клавиши восстановлены.",
   "${0} shortcuts imported.": "Импортировано сочетаний: ${0}.",
   "This file is not an export of the keyboard shortcuts.": "Этот файл не является экспортом сочетаний клавиш.",

@@ -1612,7 +1612,7 @@
   "The keys are also shown at buttons, tabs and cards.": "Klawisze widać też na przyciskach, kartach i kartach gry.",
   "Keys hidden in the game – the shortcuts still work.": "Klawisze ukryte w grze – skróty nadal działają.",
   "Assigned twice: ${0}. Resolve this first, then Done.": "Przypisane dwa razy: ${0}. Najpierw popraw, potem Gotowe.",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Kliknij wpis i naciśnij nowy klawisz. ⌫ usuwa, Esc anuluje. Szare = stałe.",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Kliknij wpis i naciśnij nowy klawisz – na swojej klawiaturze lub tej powyżej. ⌫ usuwa, Esc anuluje. Szare = stałe.",
   "Default keys restored.": "Przywrócono domyślne klawisze.",
   "${0} shortcuts imported.": "Zaimportowano skróty: ${0}.",
   "This file is not an export of the keyboard shortcuts.": "Ten plik nie jest eksportem skrótów klawiszowych.",

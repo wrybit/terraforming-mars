@@ -844,7 +844,7 @@
   "The keys are also shown at buttons, tabs and cards.": "Näppäimet näkyvät myös painikkeissa, välilehdissä ja korteissa.",
   "Keys hidden in the game – the shortcuts still work.": "Näppäimet piilotettu – pikanäppäimet toimivat silti.",
   "Assigned twice: ${0}. Resolve this first, then Done.": "Varattu kahdesti: ${0}. Korjaa ensin, sitten Valmis.",
-  "Click an entry, then press the new key. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Napsauta riviä ja paina uutta näppäintä. ⌫ poistaa, Esc peruu. Harmaa = kiinteä.",
+  "Click an entry, then press the new key – on your keyboard or the one above. ⌫ removes it, Esc cancels. Dimmed keys are fixed.": "Napsauta riviä ja paina uutta näppäintä – omalla näppäimistölläsi tai yllä olevalla. ⌫ poistaa, Esc peruu. Harmaa = kiinteä.",
   "Default keys restored.": "Oletusnäppäimet palautettu.",
   "${0} shortcuts imported.": "${0} pikanäppäintä tuotu.",
   "This file is not an export of the keyboard shortcuts.": "Tämä tiedosto ei ole pikanäppäinten vienti.",
