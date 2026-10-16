@@ -10,4 +10,12 @@ describe('HelpKeyboardShortcuts', () => {
     expect(wrapper.findAll('.hotkey-row').length).to.be.at.least(HOTKEY_ACTIONS.length);
     expect(wrapper.findAll('button.hotkey-row')).has.length(0);
   });
+
+  it('draws the keyboard and links a hovered row to its key', async () => {
+    const wrapper = mount(HelpKeyboardShortcuts, {...globalConfig});
+    expect(wrapper.find('.hotkey-keyboard').exists()).to.equal(true);
+    const projects = wrapper.findAll('.hotkey-row').find((row) => row.text().includes('Projects'));
+    await projects!.trigger('mouseenter');
+    expect(wrapper.find('[data-key="E"]').classes()).to.include('hotkey-keyboard__key--lit');
+  });
 });

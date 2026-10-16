@@ -24,6 +24,8 @@ export type HelpOverlayTab = {
   component: Component;
   // Only useful with a keyboard – hidden on touch devices
   desktopOnly?: boolean;
+  // One page without sections (hot keys): no page tree, the content gets the full width
+  noOutline?: boolean;
   outline: (root: HTMLElement) => Array<HelpOutlineEntry>;
   search: HelpSearchConfig;
 };
@@ -135,9 +137,10 @@ export const HELP_OVERLAY_TABS: ReadonlyArray<HelpOverlayTab> = [
     label: 'Hot Keys',
     component: HelpKeyboardShortcuts,
     desktopOnly: true,
-    outline: (root) => all(root, '.help-overlay-section').map((section) => ({element: section, label: plainText(section.querySelector('.help-overlay-section-title'))})),
+    noOutline: true,
+    outline: () => [],
     search: {
-      items: (root) => all(root, '.help-shortcut'),
+      items: (root) => all(root, '.hotkey-row'),
       scopes: (root) => all(root, '.help-overlay-section'),
     },
   },

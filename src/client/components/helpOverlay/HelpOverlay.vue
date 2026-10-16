@@ -30,7 +30,7 @@
     </header>
 
     <div class="help-overlay-main">
-      <nav ref="outlineNav" class="help-overlay-outline">
+      <nav v-show="currentTab.noOutline !== true" ref="outlineNav" class="help-overlay-outline">
         <HelpOutlineNav :nodes="outline" :active-id="activeId" @select="scrollToSection"/>
       </nav>
       <div ref="content" class="help-overlay-content" @scroll.passive="scheduleActiveUpdate">
