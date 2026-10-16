@@ -9,8 +9,8 @@
         :data-test="'board-tab-' + tab"
         :data-hotkey="'board-' + tab"
         @click="select(tab)">
-        <span class="board-tab-name">{{ $t(label(tab)) }}</span>
-        <HotkeyKeys :action="'board-' + tab"/>
+        <!-- Name and key cap side by side: below the name only the track lines have room -->
+        <span class="board-tab-head"><span class="board-tab-name">{{ $t(label(tab)) }}</span><HotkeyKeys :action="'board-' + tab"/></span>
         <!-- The active tab drops its short info: the board itself shows it, the others get the room -->
         <BoardTabLines v-if="tab !== active" :tracks="tracks(tab)"/>
       </button>
