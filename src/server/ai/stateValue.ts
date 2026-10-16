@@ -19,6 +19,7 @@ import {openBonusValue} from './bonusRace';
 import {expectedAttackLoss} from './attackExposure';
 import {collectorRate} from './collectorRate';
 import {bgaExpectedMargin} from './bgaValueModel';
+import {awardScoreWithHand} from './awardHandOutlook';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -70,6 +71,11 @@ export type ValuationContext = {
   awardTiming?: boolean,
 };
 
+// Hand outlook (aiTuning.ts awardHandOutlook): a lead of this many points from own hand cards lets an award count
+// from earlier in the game (players fund Scientist early with many science cards in hand).
+const HAND_LEAD_FOR_EARLY_AWARD = 3;
+const HAND_LEAD_CONFIDENCE = 0.6;
+
 /**
  * Award VP are only certain at game end. Strong players fund between half and two thirds of
  * the game: before half the terraforming a lead counts nothing, then it grows to full value
@@ -87,7 +93,10 @@ function expectedAwardPoints(player: IPlayer, context: ValuationContext): number
   let points = 0;
   for (const {award} of player.game.fundedAwards) {
     const trend = tuningOf(player).awardTrend > 0;
-    const own = projectedAwardScore(award.getScore(player), context, trend ? awardGrowth(player, award.name) : undefined);
+    // Own hand (awardHandOutlook.ts): only for the deciding player, who sees these cards
+    const handShare = context.handOwner === player.id ? tuningOf(player).awardHandOutlook : 0;
+    const ownScore = handShare > 0 ? awardScoreWithHand(award, player, handShare) : award.getScore(player);
+    const own = projectedAwardScore(ownScore, context, trend ? awardGrowth(player, award.name) : undefined);
     const best = Math.max(0, ...player.opponents.map((opponent) =>
       projectedAwardScore(award.getScore(opponent), context, trend ? awardGrowth(opponent, award.name) : undefined)));
     const margin = own - best;
@@ -97,10 +106,13 @@ function expectedAwardPoints(player: IPlayer, context: ValuationContext): number
     // The deciding player's view for both sides: own leads and the opponent's leads are equally
     // uncertain, so catching up in an award the opponent leads is worth as much as defending one.
     const remainingSwing = (context.awardSwing ?? tuningOf(player).awardSwing) * Math.max(own, best) * context.remaining;
-    const swing = 2 + Math.max(own, best) * 0.25 * (1 - context.awardConfidence) + remainingSwing +
+    // A lead the own hand already holds is less of a guess than one on the board: counts from earlier in the game
+    const confidence = handShare > 0 && ownScore > award.getScore(player) && margin >= HAND_LEAD_FOR_EARLY_AWARD ?
+      Math.max(context.awardConfidence, HAND_LEAD_CONFIDENCE) : context.awardConfidence;
+    const swing = 2 + Math.max(own, best) * 0.25 * (1 - confidence) + remainingSwing +
       actionSwing(player, context.awardActionSwing ?? tuningOf(player).awardActionSwing) * moneySwingShare(award, player);
     const firstPlaceChance = Math.max(0, Math.min(1, 0.5 + margin / (2 * swing)));
-    points += 5 * firstPlaceChance * context.awardConfidence;
+    points += 5 * firstPlaceChance * confidence;
   }
   return points;
 }
