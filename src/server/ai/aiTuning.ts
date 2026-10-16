@@ -698,6 +698,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   production140: {productionDiscount: 1.4},
   // Human game (2026-10-15): Miner lost 9 : 10 after paying with steel in the last generation (game lost by 2 VP).
   keepAwardStock: {keepAwardStock: 1},
+  // Human games (2026-10-15): hand 14–24 cards, 13 sold at the end – buy only cards worth clearly more than 3 M€.
+  buyStrict: {buyMargin: -1},
+  buyStricter: {buyMargin: 1},
 };
 
 export function isTuningVariant(name: string): boolean {
