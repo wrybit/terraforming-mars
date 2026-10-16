@@ -122,16 +122,14 @@
 
 .server-update-overlay__commit-list {
   box-sizing: border-box; // the height below includes padding and border
-  max-height: @server-update-commit-line * 3.5 + 12px + 2px; // + padding + border: up to three commits without scrolling
+  // Feste Höhe (+ padding + border): bis zu drei Commits ohne Scrollen, die Box springt nicht je nach Anzahl
+  height: @server-update-commit-line * 3.5 + 12px + 2px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 6px 12px;
   list-style: none;
-  // Eine Spalte so breit wie der längste Commit, mittig in der Box: wenige kurze Commits sitzen zentriert,
-  // Hashes bleiben trotzdem untereinander; lange Zeilen füllen die Breite und kürzen mit "…"
-  display: grid;
-  grid-template-columns: minmax(0, max-content);
-  justify-content: center;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.04);
@@ -139,6 +137,16 @@
 
 .server-update-overlay__commit {
   display: flex;
+  flex: none;
+
+  // Wenige Commits sitzen senkrecht mittig; auto-Ränder statt justify-content: center,
+  // damit beim Scrollen der obere Teil nicht unerreichbar abgeschnitten wird
+  &:first-child {
+    margin-top: auto;
+  }
+  &:last-child {
+    margin-bottom: auto;
+  }
   gap: 10px;
   min-width: 0;
   color: #d4d7df;
@@ -152,6 +160,16 @@
   color: #8a8f9c;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 13px;
+  // Dezent gepunktet unterstrichen: als Link erkennbar, ohne die Liste unruhig zu machen
+  text-decoration: underline dotted rgba(138, 143, 156, 0.6);
+  text-underline-offset: 3px;
+
+  &:hover,
+  &:focus-visible {
+    color: #d4d7df;
+    text-decoration-style: solid;
+    text-decoration-color: currentColor;
+  }
 }
 
 .server-update-overlay__commit-subject {

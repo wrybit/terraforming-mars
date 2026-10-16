@@ -37,7 +37,8 @@
         </div>
         <ul class="server-update-overlay__commit-list">
           <li v-for="commit in commits" :key="commit.hash" class="server-update-overlay__commit" :title="commit.subject">
-            <span class="server-update-overlay__commit-hash">{{ commit.hash }}</span>
+            <!-- Hash führt zum Commit auf GitHub; neues Fenster, damit die Hinweisseite offen bleibt -->
+            <a class="server-update-overlay__commit-hash" :href="commitUrl(commit.hash)" target="_blank" rel="noopener noreferrer">{{ commit.hash }}</a>
             <span class="server-update-overlay__commit-subject">{{ commit.subject }}</span>
           </li>
         </ul>
@@ -50,9 +51,14 @@
 import {computed} from 'vue';
 import LoadingBar from '@/client/components/common/LoadingBar.vue';
 import {serverUpdateCommits, serverUpdatePhase} from '@/client/utils/serverStatus';
+import {FORK_REPOSITORY_URL} from '@/client/utils/RepositoryLinks';
 
 const phase = computed(() => serverUpdatePhase.value);
 const commits = computed(() => serverUpdateCommits.value);
+
+function commitUrl(hash: string): string {
+  return `${FORK_REPOSITORY_URL}/commit/${hash}`;
+}
 
 function reload(): void {
   window.location.reload();
