@@ -58,11 +58,16 @@ export function observeHeaderFit(table: HTMLElement): () => void {
   // Table width changes with window and drag handle; images only have their width after loading
   const resizeObserver = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(schedule);
   resizeObserver?.observe(table);
+  // A newly funded award adds its owner tag without any resize: fit again whenever elements come or go
+  // (only childList – fitOwners changes classes, so this can't loop)
+  const mutationObserver = typeof MutationObserver === 'undefined' ? undefined : new MutationObserver(schedule);
+  mutationObserver?.observe(table, {childList: true, subtree: true});
   table.addEventListener('load', schedule, true);
   schedule();
 
   return () => {
     resizeObserver?.disconnect();
+    mutationObserver?.disconnect();
     table.removeEventListener('load', schedule, true);
     if (frame !== undefined) {
       cancelAnimationFrame(frame);
