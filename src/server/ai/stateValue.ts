@@ -18,6 +18,7 @@ import {moneySwingShare} from './stockAward';
 import {openBonusValue} from './bonusRace';
 import {expectedAttackLoss} from './attackExposure';
 import {collectorRate} from './collectorRate';
+import {POINTS_PER_LOGIT, bgaWinLogit} from './bgaValueModel';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -430,7 +431,20 @@ export function relativeValue(player: IPlayer, frozen: ValuationContext): number
     opponents.reduce((sum, opponent) => sum + lastGenerationSpotPoints(opponent), 0) / opponents.length * context.victoryPoint : 0;
   // Bonus steps left one step away for an opponent (bonusRace.ts).
   const bonusThreat = tuning.bonusRace > 0 ? openBonusThreat(player, context) : 0;
-  return own - weight * (opponentAverage + spotThreat + tuning.bonusRace * bonusThreat) + closer - tuning.terraformBrake * stepsRaised(player, frozen);
+  const handMade = own - weight * (opponentAverage + spotThreat + tuning.bonusRace * bonusThreat) + closer - tuning.terraformBrake * stepsRaised(player, frozen);
+  return tuning.valueModel > 0 ? blendLearnedValue(player, handMade, tuning.valueModel, context.victoryPoint) : handMade;
+}
+
+/**
+ * Mixes the learned win chance (bgaValueModel.ts) into the hand-made valuation: the logit is turned into the VP
+ * margin it stands for and priced like any VP now. Two-player games only; otherwise the hand-made value stays.
+ */
+function blendLearnedValue(player: IPlayer, handMade: number, share: number, victoryPoint: number): number {
+  const logit = bgaWinLogit(player);
+  if (logit === undefined) {
+    return handMade;
+  }
+  return (1 - share) * handMade + share * logit * POINTS_PER_LOGIT * victoryPoint;
 }
 
 /** M€ the opponents can take on average from bonus steps the position leaves open (bonusRace.ts). */

@@ -178,6 +178,11 @@ export type AiTuning = {
   keepAwardStock: number,
   /** > 0: award funding only with a lead of at least this share of the best opponent score (awardFunding.ts). */
   awardFundingLead: number,
+  /**
+   * Share of the learned position value (bgaValueModel.ts, two-player games only) in the valuation: 0 = hand-made
+   * valuation only, 1 = model only. The model's win chance is turned into M€ via its VP margin per logit (stateValue.ts).
+   */
+  valueModel: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -279,6 +284,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 88: keepAwardStock (only a lead, only the units that would lose it) +0.47 VP (z +0.74), fixes a
   // human-game error (Miner lost 9 : 10 by paying with steel, game lost 103 : 105) – adopted.
   keepAwardStock: 1,
+  // ML stage 2: learned position value from Board Game Arena games, tested as a share of the valuation first.
+  valueModel: 0,
   lastGenerationSpots: 0,
   // Human test game (2026-10-10): passed in the last generation with 47 M€ while greeneries were affordable.
   passedMoneyLost: 1,
@@ -708,6 +715,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   buyStrict: {buyMargin: -1},
   buyStricter: {buyMargin: 1},
   buyStrictest: {buyMargin: 3},
+  // ML stage 2 (learned value from about 43,000 BGA two-player games, AUC 0.80 vs 0.63 for points + income):
+  // blend the model's win chance into the hand-made valuation.
+  valueModel25: {valueModel: 0.25},
+  valueModel50: {valueModel: 0.5},
 };
 
 export function isTuningVariant(name: string): boolean {
