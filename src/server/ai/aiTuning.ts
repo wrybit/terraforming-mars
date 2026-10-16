@@ -719,6 +719,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // blend the model's win chance into the hand-made valuation.
   valueModel25: {valueModel: 0.25},
   valueModel50: {valueModel: 0.5},
+  valueModel75: {valueModel: 0.75},
 };
 
 export function isTuningVariant(name: string): boolean {
