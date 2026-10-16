@@ -367,7 +367,7 @@ html.tm-hotkeys .hotkey-item-number {
   position: relative;
   flex: 1 1 0;
   min-width: 0;
-  height: 36px;
+  height: 48px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -381,11 +381,11 @@ html.tm-hotkeys .hotkey-item-number {
   background: linear-gradient(#3a3d4b, #31333f);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
   color: #a3a8ba;
-  font: 500 10px/1.05 @hotkey-cap-font;
+  font: 500 12px/1.05 @hotkey-cap-font;
   transition: transform 0.08s, box-shadow 0.12s, background 0.12s;
 
   small {
-    font-size: 8px;
+    font-size: 9px;
     opacity: 0.85;
   }
 }
@@ -396,7 +396,7 @@ html.tm-hotkeys .hotkey-item-number {
   margin-top: 3px;
   padding: 0 1px;
   overflow: hidden;
-  font: 500 7.5px/1 Ubuntu, sans-serif;
+  font: 500 9px/1 Ubuntu, sans-serif;
   font-style: normal;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -406,7 +406,7 @@ html.tm-hotkeys .hotkey-item-number {
 // German Enter over two rows: the upper part reaches down over the row gap, the lower part has no edge on top, so
 // both read as one key (not as a second key beside Ä / #)
 .hotkey-keyboard__key--enter-top {
-  height: 40px;
+  height: 52px;
   margin-bottom: -4px;
   border-bottom: 0;
   border-radius: 5px 5px 0 0;
@@ -420,8 +420,8 @@ html.tm-hotkeys .hotkey-item-number {
 
 .hotkey-keyboard__row--function .hotkey-keyboard__key,
 .hotkey-keyboard__key--half {
-  height: 14px;
-  font-size: 8px;
+  height: 20px;
+  font-size: 9px;
 }
 
 // Arrow up over arrow down: two half keys in the height of one
