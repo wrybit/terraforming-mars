@@ -83,6 +83,9 @@ export function updateDockedTab(panel: HTMLElement): void {
   scheduleLayoutJob(panel, {
     measure: () => measureDockedTab(panel),
     apply: (gap) => applyDockedTab(panel, gap),
+    // Erst messen, wenn TabIconLabels.ts die Beschriftungen endgültig gezeigt oder ausgeblendet hat:
+    // sonst misst es die Tabs mit eingeblendeten Beschriftungen und die Lücke sitzt daneben
+    afterOthers: true,
   });
 }
 

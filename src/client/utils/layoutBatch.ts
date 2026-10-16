@@ -10,6 +10,9 @@ export type LayoutJob<Measurement> = {
   measure: () => Measurement,
   // Schreibt das Ergebnis; liest nichts
   apply: (measurement: Measurement) => void,
+  // Misst erst, nachdem alle anderen Aufträge des Frames ihr Ergebnis geschrieben haben – für Messungen,
+  // die vom Ergebnis anderer abhängen (z. B. Tab-Lücke nach dem Ausblenden der Icon-Beschriftungen)
+  afterOthers?: boolean,
 };
 
 // Je Schlüssel (meist das Element) zählt nur der letzte Auftrag: mehrere Auslöser im selben Frame
@@ -17,13 +20,20 @@ export type LayoutJob<Measurement> = {
 const pendingJobs = new Map<object, LayoutJob<unknown>>();
 let frame: number | undefined;
 
+// Eine Runde: alle Vorbereitungen, alle Messungen, alle Ergebnisse
+function runPass(jobs: Array<LayoutJob<unknown>>): void {
+  jobs.forEach((job) => job.prepare?.());
+  const measurements = jobs.map((job) => job.measure());
+  jobs.forEach((job, index) => job.apply(measurements[index]));
+}
+
 function flush(): void {
   frame = undefined;
   const jobs = [...pendingJobs.values()];
   pendingJobs.clear();
-  jobs.forEach((job) => job.prepare?.());
-  const measurements = jobs.map((job) => job.measure());
-  jobs.forEach((job, index) => job.apply(measurements[index]));
+  // Zwei Runden: die zweite Messung kostet nur dann ein weiteres Layout, wenn es späte Aufträge gibt
+  runPass(jobs.filter((job) => !job.afterOthers));
+  runPass(jobs.filter((job) => job.afterOthers));
 }
 
 export function scheduleLayoutJob<Measurement>(key: object, job: LayoutJob<Measurement>): void {
