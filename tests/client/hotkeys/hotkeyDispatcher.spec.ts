@@ -56,7 +56,7 @@ describe('hotkeyDispatcher', () => {
     Object.defineProperty(list, 'scrollHeight', {value: 1000});
     Object.defineProperty(list, 'clientHeight', {value: 300});
     const steps: Array<number> = [];
-    list.scrollBy = ((options: ScrollToOptions) => steps.push(options.top ?? 0)) as typeof list.scrollBy;
+    list.scrollBy = ((options: {top?: number}) => steps.push(options.top ?? 0)) as typeof list.scrollBy;
     group.appendChild(list);
     document.body.appendChild(group);
     expect(press('ArrowDown').defaultPrevented).is.true;
