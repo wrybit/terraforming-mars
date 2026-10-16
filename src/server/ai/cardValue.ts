@@ -55,13 +55,40 @@ function playFutureTableau(copy: IGame, copyPlayer: IPlayer, count: number): voi
   copyPlayer.clearWaitingFor();
 }
 
-function gainInCopy(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext, futureCards: number): number | undefined {
+/** Cards whose effect counts city tiles (Greenhouses: 1 plant per city in play) – worth most at the very end. */
+function countsCities(card: ICard): boolean {
+  return JSON.stringify(card.behavior ?? {}).includes('"cities"');
+}
+
+/**
+ * Cities every player will have built `generations` from now, at each player's pace so far – placed in the copy,
+ * so a card counting cities sees the late board, not today's (Greenhouses with 1 city in generation 5 looked worthless).
+ */
+function projectCities(copy: IGame, generations: number): void {
+  const elapsed = Math.max(1, copy.generation - 1);
+  for (const copyPlayer of copy.players) {
+    const more = Math.round(copy.board.getCities(copyPlayer).length / elapsed * generations);
+    for (let i = 0; i < more; i++) {
+      const spaces = copy.board.getAvailableSpacesForCity(copyPlayer);
+      if (spaces.length === 0) {
+        return;
+      }
+      copy.addCity(copyPlayer, spaces[0]);
+    }
+  }
+  copy.players.forEach((copyPlayer) => copyPlayer.clearWaitingFor());
+}
+
+function gainInCopy(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext, futureCards: number, futureGenerations = 0): number | undefined {
   return withCopy(snapshot, (copy) => {
     const copyPlayer = copy.getPlayerById(player.id);
     copyPlayer.clearWaitingFor();
     try {
       if (futureCards > 0) {
         playFutureTableau(copy, copyPlayer, futureCards);
+      }
+      if (futureGenerations > 0) {
+        projectCities(copy, futureGenerations);
       }
       const before = relativeValue(copyPlayer, context);
       playCard(copy, copyPlayer, card.name);
@@ -155,7 +182,10 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
   if (context.remaining <= 1 || !isIProjectCard(card) || isICorporationCard(card)) {
     return Number.NEGATIVE_INFINITY;
   }
-  const delay = Math.min(3, Math.floor(context.remaining / 2));
+  // City-counting cards (Greenhouses) are played as late as possible – last generation or after terraforming
+  // (strong players: always take it, play it at the end). Their later value looks at the board then.
+  const lateBoard = tuningOf(player).lateBoardCards > 0 && countsCities(card);
+  const delay = lateBoard ? Math.max(1, context.remaining - 1) : Math.min(3, Math.floor(context.remaining / 2));
   // A VP bought later costs money that is worth less by then (more income, discounts): valued with
   // the VP value of that generation, pure VP cards wait and engine cards are played now.
   const pointScale = tuningOf(player).laterPointValue > 0 && isPointsOnly(card) ? laterPointScale(player.game.generation, delay) : 1;
@@ -165,7 +195,7 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
   let samples = 0;
   // Random future tableaus: more samples, less noise in the hold-or-play decision (aiTuning.ts laterSamples).
   for (let sample = 0; sample < tuningOf(player).laterSamples; sample++) {
-    const gain = gainInCopy(snapshot, player, card, laterContext, futureCards);
+    const gain = gainInCopy(snapshot, player, card, laterContext, futureCards, lateBoard ? delay : 0);
     if (gain !== undefined) {
       total += gain;
       samples++;
@@ -185,7 +215,8 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
 const laterCache = new Map<string, number>();
 
 function cachedLaterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext): number {
-  const key = `${player.game.id}|${player.id}|${player.game.generation}|${card.name}`;
+  // lateBoardCards in the key: the same seat with another tuning (tests, variants) must not reuse the value
+  const key = `${player.game.id}|${player.id}|${player.game.generation}|${card.name}|${tuningOf(player).lateBoardCards}`;
   // Inside a copy (e.g. valuing cards for a draft receiver) the player is only imagined: its
   // values must not mix with the cached ones of the real player.
   let value = isSimulating() ? undefined : laterCache.get(key);

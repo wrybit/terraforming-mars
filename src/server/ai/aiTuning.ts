@@ -189,6 +189,8 @@ export type AiTuning = {
   discardValuation: number,
   /** > 0: this share of the tags of own hand cards counts for tag awards (Scientist …), see awardHandOutlook.ts. */
   awardHandOutlook: number,
+  /** 1: cards counting city tiles (Greenhouses) are valued at the end of the game with the cities built by then (cardValue.ts). */
+  lateBoardCards: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -295,6 +297,8 @@ export const BASELINE_TUNING: AiTuning = {
   keepValuation: 0,
   discardValuation: 0,
   awardHandOutlook: 0,
+  // Jens (2026-10-16): Greenhouses is always taken and played as late as possible – a rule, no test round needed.
+  lateBoardCards: 1,
   lastGenerationSpots: 0,
   // Human test game (2026-10-10): passed in the last generation with 47 M€ while greeneries were affordable.
   passedMoneyLost: 1,
@@ -738,6 +742,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   bonusRace2: {bonusRace: 2},
   // Human player (2026-10-16): funded Scientist early because his hand held about ten science tags.
   awardHand: {awardHandOutlook: 0.7},
+  noLateBoardCards: {lateBoardCards: 0},
 };
 
 export function isTuningVariant(name: string): boolean {
