@@ -29,6 +29,9 @@ import {spaceName} from './spaceName';
 
 const SKIP_WORDS = ['skip', 'do nothing', 'don\'t', 'do not', 'none'];
 
+// Title of ChooseCards when drawn cards are kept without paying (lower case, as titleOf returns it)
+const KEEP_TITLE = 'select ${0} card(s) to keep';
+
 function titleOf(input: PlayerInput): string {
   const title = input.title;
   return (typeof title === 'string' ? title : title.message).toLowerCase();
@@ -85,7 +88,12 @@ export function quickResponse(input: PlayerInput, player: IPlayer): InputRespons
     // Aufdecken (Public Plans) bringt 1 M€ je Karte und kostet nichts – also alles zeigen statt des Minimums 0.
     const wanted = titleOf(input).includes('reveal') ? input.config.max : input.config.min;
     const count = Math.min(Math.max(wanted, 0), sorted.length);
-    return {type: 'card', cards: sorted.slice(0, count).map((card) => card.name)};
+    const chosen = sorted.slice(0, count);
+    // Keeping some of the drawn cards (Business Contacts, Invention Contest …): the analysis log shows all of them
+    if (isTracingDecision() && titleOf(input) === KEEP_TITLE) {
+      traceOptions('keep', sorted.map((card) => ({label: card.name, card: card.name, value: Math.round(cardPrior(card.name) * 10) / 10, chosen: chosen.includes(card)})));
+    }
+    return {type: 'card', cards: chosen.map((card) => card.name)};
   }
   if (input instanceof SelectSpace) {
     const kind = tileKindOf(input);

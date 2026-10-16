@@ -63,4 +63,18 @@ describe('ChooseCards', () => {
     expect(bought.data[1].type).eq(LogMessageDataType.CARDS);
     expect(bought.data[1].value).to.have.members([aquiferPumping].map(toName));
   });
+
+  it('names the kept and the discarded cards privately when keeping without paying', () => {
+    const game = player.game;
+    game.gameLog = [];
+    const selectCard = cast(new ChooseCards(player, [aquiferPumping, ioMiningIndustries], {keepMax: 1}).execute(), SelectCard<IProjectCard>);
+
+    selectCard.cb([aquiferPumping]);
+    runAllActions(game);
+
+    const privateMessages = game.gameLog.filter((entry) => entry.playerId === player.id);
+    expect(privateMessages.map((entry) => entry.message)).deep.eq(['${0} drew ${1}', '${0} discarded ${1}']);
+    expect(privateMessages[0].data[1].value).deep.eq([CardName.AQUIFER_PUMPING]);
+    expect(privateMessages[1].data[1].value).deep.eq([CardName.IO_MINING_INDUSTRIES]);
+  });
 });

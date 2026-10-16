@@ -139,8 +139,8 @@ const isPass = computed(() => {
   const row = dialog.value?.target.row;
   return row?.type === 'action' && row.action.kind === 'pass';
 });
-// Card decisions show the cards as cards (draft, purchase, start selection)
-const CARD_KINDS = ['draft', 'research', 'initial'];
+// Card decisions show the cards as cards (draft, purchase, kept drawn cards, start selection)
+const CARD_KINDS = ['draft', 'research', 'keep', 'initial'];
 const showsCards = computed(() => {
   const decision = dialog.value?.decision;
   return decision !== undefined && CARD_KINDS.includes(decision.kind) && decision.options.some((option) => option.card !== undefined);

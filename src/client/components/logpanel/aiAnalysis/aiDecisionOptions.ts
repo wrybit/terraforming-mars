@@ -20,6 +20,7 @@ export const DECISION_KIND_TITLES: Record<string, string> = {
   initial: 'Starting selection',
   draft: 'Draft pick',
   research: 'Card purchase',
+  keep: 'Cards kept',
   action: 'Action',
   space: 'Tile placement',
 };

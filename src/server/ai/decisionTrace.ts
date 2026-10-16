@@ -15,7 +15,7 @@ import {possibleActionsOf} from './possibleActions';
 // Only active while a recorder is installed (AI test batches, server with AI_DECISION_LOG_DIR)
 // or in analysis games, whose log shows every AI decision with its options.
 
-export type DecisionKind = 'initial' | 'draft' | 'research' | 'action' | 'space' | 'human' | 'other';
+export type DecisionKind = 'initial' | 'draft' | 'research' | 'keep' | 'action' | 'space' | 'human' | 'other';
 
 export type TracedOption = {
   label: string,

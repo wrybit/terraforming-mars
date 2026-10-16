@@ -114,6 +114,10 @@ export function keep(player: IPlayer, cards: ReadonlyArray<IProjectCard>, discar
       }
     } else {
       LogHelper.logDrawnCards(player, cards, /* privateMessage */ true);
+      // Kept some of the drawn cards: the rest is named too, so the player (and an analysis game) sees the choice
+      if (discards.length > 0) {
+        LogHelper.logPrivately(player, '${0} discarded ${1}', (b) => b.cards(discards));
+      }
     }
     break;
   }
