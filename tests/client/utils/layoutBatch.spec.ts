@@ -1,16 +1,11 @@
 import {expect} from 'chai';
 import {afterEach, beforeEach, vi} from 'vitest';
-import type {scheduleLayoutJob as ScheduleLayoutJob} from '@/client/utils/layoutBatch';
+import {scheduleLayoutJob} from '@/client/utils/layoutBatch';
 
 describe('layoutBatch', () => {
   let frameCallback: ((time: number) => void) | undefined;
-  let scheduleLayoutJob: typeof ScheduleLayoutJob;
 
-  beforeEach(async () => {
-    // Tests share one module registry (isolate: false): other components may have left a pending
-    // frame in layoutBatch's module state. Load a fresh copy so this test controls the frame.
-    vi.resetModules();
-    ({scheduleLayoutJob} = await import('@/client/utils/layoutBatch'));
+  beforeEach(() => {
     frameCallback = undefined;
     vi.stubGlobal('requestAnimationFrame', (callback: (time: number) => void) => {
       frameCallback = callback;
@@ -37,5 +32,16 @@ describe('layoutBatch', () => {
     });
     frameCallback?.(0);
     expect(steps).deep.eq(['early prepare', 'early measure', 'early apply', 'late measure', 'late apply']);
+  });
+
+  it('keeps batching when requestAnimationFrame runs the callback synchronously', () => {
+    vi.stubGlobal('requestAnimationFrame', (callback: (time: number) => void) => {
+      callback(0);
+      return 0;
+    });
+    const steps: Array<string> = [];
+    scheduleLayoutJob({}, {measure: () => steps.push('first'), apply: () => {}});
+    scheduleLayoutJob({}, {measure: () => steps.push('second'), apply: () => {}});
+    expect(steps).deep.eq(['first', 'second']);
   });
 });

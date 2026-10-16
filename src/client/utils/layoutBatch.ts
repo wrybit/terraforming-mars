@@ -18,7 +18,9 @@ export type LayoutJob<Measurement> = {
 // Je Schlüssel (meist das Element) zählt nur der letzte Auftrag: mehrere Auslöser im selben Frame
 // (updated, MutationObserver, ResizeObserver) messen nur einmal
 const pendingJobs = new Map<object, LayoutJob<unknown>>();
-let frame: number | undefined;
+// Vor dem Aufruf von requestAnimationFrame gesetzt: ruft es flush sofort auf (Test-Stubs), setzt flush
+// die Markierung zurück, statt dass die Rückgabe sie danach wieder überschreibt und das Batching hängen bleibt
+let framePending = false;
 
 // Eine Runde: alle Vorbereitungen, alle Messungen, alle Ergebnisse
 function runPass(jobs: Array<LayoutJob<unknown>>): void {
@@ -28,7 +30,7 @@ function runPass(jobs: Array<LayoutJob<unknown>>): void {
 }
 
 function flush(): void {
-  frame = undefined;
+  framePending = false;
   const jobs = [...pendingJobs.values()];
   pendingJobs.clear();
   // Zwei Runden: die zweite Messung kostet nur dann ein weiteres Layout, wenn es späte Aufträge gibt
@@ -43,8 +45,9 @@ export function scheduleLayoutJob<Measurement>(key: object, job: LayoutJob<Measu
     flush();
     return;
   }
-  if (frame === undefined) {
-    frame = requestAnimationFrame(flush);
+  if (!framePending) {
+    framePending = true;
+    requestAnimationFrame(flush);
   }
 }
 
