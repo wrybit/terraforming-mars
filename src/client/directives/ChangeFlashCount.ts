@@ -2,9 +2,9 @@
 // new value once another player changed it and it is visible (changeFlashCount.ts).
 // Modifier .signed for production ("+2").
 import {Directive} from 'vue';
-import {registerFlashElement, unregisterFlashElement} from '@/client/utils/changeFlashRegistry';
+import {registerFlashElement, revealVisibleChanges, unregisterFlashElement} from '@/client/utils/changeFlashRegistry';
 import {isChangePending, previousValueOf} from '@/client/utils/changeTracker';
-import {releaseHeldValue, showPreviousValue} from '@/client/utils/changeFlashCount';
+import {isHoldingValue, releaseHeldValue, showPreviousValue} from '@/client/utils/changeFlashCount';
 
 export const vFlashCount: Directive<HTMLElement, string> = {
   mounted(element, binding) {
@@ -21,6 +21,13 @@ export const vFlashCount: Directive<HTMLElement, string> = {
     if (binding.value !== binding.oldValue) {
       unregisterFlashElement(element);
       registerFlashElement(element, [binding.value], binding.modifiers.signed ? 'countSigned' : 'count');
+      return;
+    }
+    // New change of a number that stays on screen (no remount, so no intersection event): hold the old
+    // value and count now – otherwise the change waits unseen and a count still running would keep its end value
+    if (isChangePending(binding.value) && !isHoldingValue(element)) {
+      showPreviousValue(element, parseFloat(previousValueOf(binding.value) ?? ''), binding.modifiers.signed === true);
+      revealVisibleChanges();
     }
   },
   beforeUnmount(element) {

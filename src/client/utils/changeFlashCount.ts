@@ -43,14 +43,38 @@ function formatted(value: number, signed: boolean): string {
 // the new one would flash up before counting starts. Remembers what Vue rendered and what is shown instead.
 type HeldValue = {rendered: string, shown: string};
 const heldValues = new WeakMap<Text, HeldValue>();
+
+// A count in progress per text node: what it writes each frame and the value it ends on.
+// A newer count replaces it; if Vue writes the node meanwhile (newer server state), the count stops,
+// otherwise its last frame would put back the value it started with and keep it on screen for good.
+type RunningCount = {lastWritten: string, finalText: string};
+const runningCounts = new WeakMap<Text, RunningCount>();
+
+// What Vue rendered last, as far as the node tells: the end value of a count still running unless Vue wrote since
+function renderedText(textNode: Text): string {
+  const current = textNode.nodeValue ?? '';
+  const running = runningCounts.get(textNode);
+  return running !== undefined && current === running.lastWritten ? running.finalText : current;
+}
+
 export function showPreviousValue(element: HTMLElement, from: number, signed: boolean): void {
   const textNode = numberTextNode(element);
   if (textNode === undefined || Number.isNaN(from)) {
     return;
   }
   const shown = formatted(from, signed);
-  heldValues.set(textNode, {rendered: textNode.nodeValue ?? '', shown});
+  // Held already and untouched by Vue: keep what Vue rendered, not the value shown instead
+  const held = heldValues.get(textNode);
+  const rendered = held !== undefined && textNode.nodeValue === held.shown ? held.rendered : renderedText(textNode);
+  runningCounts.delete(textNode);
+  heldValues.set(textNode, {rendered, shown});
   textNode.nodeValue = shown;
+}
+
+/** True while the number shows an older value than Vue rendered (before its count starts). */
+export function isHoldingValue(element: HTMLElement): boolean {
+  const textNode = numberTextNode(element);
+  return textNode !== undefined && heldValues.has(textNode);
 }
 
 // The value Vue rendered last; ends the hold. If Vue has rewritten the node in the meantime (newer
@@ -58,9 +82,8 @@ export function showPreviousValue(element: HTMLElement, from: number, signed: bo
 function takeRenderedText(textNode: Text): string {
   const held = heldValues.get(textNode);
   heldValues.delete(textNode);
-  const current = textNode.nodeValue ?? '';
-  if (held === undefined || current !== held.shown) {
-    return current;
+  if (held === undefined || textNode.nodeValue !== held.shown) {
+    return renderedText(textNode);
   }
   return held.rendered;
 }
@@ -80,12 +103,15 @@ export function countElement(element: HTMLElement, from: number, signed: boolean
   const to = parseInt(finalText.replace('+', ''), 10);
   if (textNode === undefined || Number.isNaN(from) || Number.isNaN(to) || from === to) {
     if (textNode !== undefined) {
+      runningCounts.delete(textNode);
       textNode.nodeValue = finalText;
     }
     return false;
   }
   const format = (value: number) => formatted(value, signed);
-  textNode.nodeValue = format(from);
+  const running: RunningCount = {lastWritten: format(from), finalText};
+  runningCounts.set(textNode, running);
+  textNode.nodeValue = running.lastWritten;
 
   if (supportsWebAnimations(element)) {
     // Taken away by another player: glows orange-red like every attack
@@ -105,11 +131,22 @@ export function countElement(element: HTMLElement, from: number, signed: boolean
     if (!textNode.isConnected) {
       return;
     }
+    // Replaced by a newer count or hold, or Vue wrote a newer value: that one stays
+    if (runningCounts.get(textNode) !== running) {
+      return;
+    }
+    if (textNode.nodeValue !== running.lastWritten) {
+      runningCounts.delete(textNode);
+      return;
+    }
     start ??= now + delayMs;
     const progress = Math.min(1, Math.max(0, (now - start) / DURATION_MS));
-    textNode.nodeValue = progress >= 1 ? finalText : format(Math.round(from + (to - from) * easeOut(progress)));
+    running.lastWritten = progress >= 1 ? finalText : format(Math.round(from + (to - from) * easeOut(progress)));
+    textNode.nodeValue = running.lastWritten;
     if (progress < 1) {
       requestAnimationFrame(step);
+    } else {
+      runningCounts.delete(textNode);
     }
   };
   requestAnimationFrame(step);

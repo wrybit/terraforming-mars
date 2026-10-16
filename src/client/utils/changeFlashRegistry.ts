@@ -38,8 +38,9 @@ function onIntersection(entries: Array<IntersectionObserverEntry>): void {
   revealVisibleChanges();
 }
 
-// Browser tab in the background: wait, the viewer should see the blink
-function revealVisibleChanges(): void {
+// Browser tab in the background: wait, the viewer should see the blink.
+// Also called when a number already on screen got a new pending change (v-flash-count updated()).
+export function revealVisibleChanges(): void {
   if (document.hidden) {
     return;
   }
