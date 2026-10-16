@@ -14,16 +14,42 @@
   height: @hotkey-cap-size;
   padding: 0 5px;
   box-sizing: border-box;
-  // A raised cap that reads as a key on every surface (dark tabs, purple and green buttons): light face, light rim,
-  // dark lower edge
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-bottom: 3px solid rgba(0, 0, 0, 0.5);
+  // Light cap at half opacity with dark text: reads as a key on every surface (dark tabs, purple, green and red
+  // buttons) and still takes on a little of the surface's color
+  border: 0;
+  border-bottom: 2px solid rgba(154, 160, 180, 0.5);
   border-radius: 4px;
-  background: linear-gradient(rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.12));
+  background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(223, 226, 234, 0.5));
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
-  color: #fff;
+  color: #1b1d24;
   font: 700 11px/1 @hotkey-cap-font;
   white-space: nowrap;
+}
+
+.hotkey-key--icon {
+  min-width: 22px;
+  padding: 0 4px;
+}
+
+.hotkey-key__icon {
+  display: block;
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+// Tabs: smaller caps, the tab name stays the main thing
+.or-tab .hotkey-key {
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-bottom-width: 1.5px;
+  border-radius: 3px;
+  font-size: 9px;
 }
 
 .hotkey-key--empty {
@@ -114,11 +140,13 @@ label:has(> .hotkey-item-number) {
   height: 22px;
   padding: 0 5px;
   box-sizing: border-box;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.6);
+  // Half on the card, half on the dark ground: an opaque light grey that matches the half-transparent caps, with a
+  // dark rim against both
+  border-bottom: 2px solid #5c5f6c;
   border-radius: 4px;
-  background: #2a2c36;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 1px 4px rgba(0, 0, 0, 0.5);
-  color: #fff;
+  background: linear-gradient(#a7aab6, #8e919e);
+  box-shadow: 0 0 0 2px #15161d, 0 1px 3px rgba(0, 0, 0, 0.5);
+  color: #15161d;
   font: 700 12px/1 @hotkey-cap-font;
   pointer-events: none;
   transform: translateX(-50%);
