@@ -1450,5 +1450,11 @@
   "This file is not an export of the keyboard shortcuts.": "Dit bestand is geen export van de sneltoetsen.",
   "\"${0}\" is a fixed key.": "‘${0}’ is een vaste toets.",
   "Press a key …": "Druk op een toets …",
-  "Press ? in the game to see these keys and change them.": "Druk in het spel op ? om deze toetsen te zien en te wijzigen."
+  "Press ? in the game to see these keys and change them.": "Druk in het spel op ? om deze toetsen te zien en te wijzigen.",
+  "Update blocked: commit ${0} is not signed": "Update geblokkeerd: commit ${0} is niet ondertekend",
+  "Build failed – the old version keeps running": "Build mislukt – oude versie blijft draaien",
+  "Starts by itself once nobody plays": "Start vanzelf zodra niemand speelt",
+  "Checking the new commits…": "Nieuwe commits controleren…",
+  "Building the new version…": "Nieuwe versie bouwen…",
+  "Approve on the Mac:": "Goedkeuren op de Mac:"
 }

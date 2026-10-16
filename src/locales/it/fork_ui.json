@@ -2062,5 +2062,11 @@
   "This file is not an export of the keyboard shortcuts.": "Questo file non è un'esportazione delle scorciatoie.",
   "\"${0}\" is a fixed key.": "«${0}» è un tasto fisso.",
   "Press a key …": "Premi un tasto …",
-  "Press ? in the game to see these keys and change them.": "Premi ? nel gioco per vedere e cambiare questi tasti."
+  "Press ? in the game to see these keys and change them.": "Premi ? nel gioco per vedere e cambiare questi tasti.",
+  "Update blocked: commit ${0} is not signed": "Aggiornamento bloccato: il commit ${0} non è firmato",
+  "Build failed – the old version keeps running": "Build non riuscita – resta attiva la versione precedente",
+  "Starts by itself once nobody plays": "Parte da sola quando nessuno gioca",
+  "Checking the new commits…": "Verifica dei nuovi commit…",
+  "Building the new version…": "Creazione della nuova versione…",
+  "Approve on the Mac:": "Approva sul Mac:"
 }

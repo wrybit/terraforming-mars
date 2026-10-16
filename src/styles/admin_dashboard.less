@@ -320,6 +320,22 @@
   margin-right: auto;
 }
 
+// Running bar under the status while the update script works (LoadingBar, as in the players' update notice)
+.server-dashboard-update-progress {
+  width: 160px;
+  margin: 4px 0 2px;
+}
+
+// Why the server is still behind; red when only a step by hand helps
+.server-dashboard-deploy-problem {
+  color: @dashboard-dim;
+  font-size: 13px;
+
+  &--blocking {
+    color: @dashboard-critical;
+  }
+}
+
 .server-dashboard-message {
   margin: 0 0 8px;
   color: @dashboard-dim;

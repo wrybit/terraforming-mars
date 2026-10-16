@@ -850,5 +850,11 @@
   "This file is not an export of the keyboard shortcuts.": "Tämä tiedosto ei ole pikanäppäinten vienti.",
   "\"${0}\" is a fixed key.": "”${0}” on kiinteä näppäin.",
   "Press a key …": "Paina näppäintä …",
-  "Press ? in the game to see these keys and change them.": "Paina pelissä ?, niin näet ja voit muuttaa näitä näppäimiä."
+  "Press ? in the game to see these keys and change them.": "Paina pelissä ?, niin näet ja voit muuttaa näitä näppäimiä.",
+  "Update blocked: commit ${0} is not signed": "Päivitys estetty: commit ${0} ei ole allekirjoitettu",
+  "Build failed – the old version keeps running": "Koonti epäonnistui – vanha versio jatkaa",
+  "Starts by itself once nobody plays": "Alkaa itsestään, kun kukaan ei pelaa",
+  "Checking the new commits…": "Tarkistetaan uusia committeja…",
+  "Building the new version…": "Kootaan uutta versiota…",
+  "Approve on the Mac:": "Hyväksy Macilla:"
 }

@@ -4,7 +4,7 @@ import {Handler} from './Handler';
 import {Context} from './IHandler';
 import {Request} from '../Request';
 import {Response} from '../Response';
-import {DashboardMachineUsage, DashboardUpstream, MACHINE_USAGE_FILE, ServerDashboard, UPSTREAM_COMMITS_FILE} from '../../common/admin/ServerDashboard';
+import {DashboardDeployRun, DashboardMachineUsage, DashboardUpstream, DEPLOY_STATE_FILE, MACHINE_USAGE_FILE, ServerDashboard, UPSTREAM_COMMITS_FILE} from '../../common/admin/ServerDashboard';
 import {Phase} from '../../common/Phase';
 import {IGame} from '../IGame';
 import {activeParticipantCount} from '../server/activeParticipants';
@@ -74,6 +74,8 @@ export class ApiAdminDashboard extends Handler {
       // Written at every update check (every 5 minutes): older than half an hour means the script stopped
       upstream: readOperatorFile<DashboardUpstream>(dataFolder, UPSTREAM_COMMITS_FILE, 30 * 60 * 1000, nowMs),
       updateRequest: pendingUpdateRequest(dataFolder, nowMs),
+      // Also written every 5 minutes; a build takes a few minutes, so half an hour old means the script died
+      deployRun: readOperatorFile<DashboardDeployRun>(dataFolder, DEPLOY_STATE_FILE, 30 * 60 * 1000, nowMs),
     };
     responses.writeJson(res, ctx, dashboard);
   }

@@ -2069,5 +2069,11 @@
   "\"${0}\" is a fixed key.": "«${0}» es una tecla fija.",
   "Press a key …": "Pulsa una tecla …",
   "Press ? in the game to see these keys and change them.": "Pulsa ? en el juego para ver y cambiar estas teclas.",
-  "General shortcuts": "General"
+  "General shortcuts": "General",
+  "Update blocked: commit ${0} is not signed": "Actualización bloqueada: el commit ${0} no está firmado",
+  "Build failed – the old version keeps running": "Falló la compilación – sigue la versión anterior",
+  "Starts by itself once nobody plays": "Empieza sola cuando nadie juegue",
+  "Checking the new commits…": "Comprobando los nuevos commits…",
+  "Building the new version…": "Compilando la nueva versión…",
+  "Approve on the Mac:": "Aprobar en el Mac:"
 }

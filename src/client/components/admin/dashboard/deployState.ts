@@ -32,15 +32,60 @@ export function deployState(dashboard: ServerDashboard): DeployState {
   return {rows, behind: liveIndex === -1 ? rows.length : liveIndex};
 }
 
-/** An update can be asked for: the server is behind the deploy branch and no request waits yet. */
+/** The update script works right now: a request waits for it, it checks the new commits or it builds. */
+export function updateInProgress(dashboard: ServerDashboard): boolean {
+  const outcome = dashboard.deployRun?.outcome;
+  return dashboard.updateRequest !== undefined || outcome === 'checking' || outcome === 'building';
+}
+
+/** An update can be asked for: the server is behind the deploy branch and the script is not busy with one. */
 export function canRequestUpdate(dashboard: ServerDashboard): boolean {
-  return (deployState(dashboard).behind ?? 0) > 0 && dashboard.updateRequest === undefined;
+  return (deployState(dashboard).behind ?? 0) > 0 && !updateInProgress(dashboard);
+}
+
+export type DeployProblem = {
+  text: string,
+  /** Shell command that resolves it (shown as code, not translated) */
+  command?: string,
+  /** Blocks the update for good (red); otherwise only a note (dim) */
+  blocking: boolean,
+};
+
+/**
+ * Why the server is still behind after the last run of the update script; undefined if it is current, busy or no
+ * script reports. Before, a refused update just fell back to "behind" and looked like a click that did nothing.
+ */
+export function deployProblem(dashboard: ServerDashboard): DeployProblem | undefined {
+  const run = dashboard.deployRun;
+  if (run === undefined || updateInProgress(dashboard) || (deployState(dashboard).behind ?? 0) === 0) {
+    return undefined;
+  }
+  switch (run.outcome) {
+  case 'refused':
+    return {
+      text: translateTextWithParams('Update blocked: commit ${0} is not signed', [run.blockedCommit ?? '?']),
+      command: run.blockedRepository === 'lab' ? 'ops/shared/approve-deploy.sh lab' : 'ops/shared/approve-deploy.sh',
+      blocking: true,
+    };
+  case 'buildFailed':
+    return {text: translateText('Build failed – the old version keeps running'), blocking: true};
+  case 'postponed':
+    return {text: translateText('Starts by itself once nobody plays'), blocking: false};
+  default:
+    return undefined;
+  }
 }
 
 /** How far the server is behind, as shown on the games and the commits card; empty if unknown. */
 export function deployStatusText(dashboard: ServerDashboard): string {
   if (dashboard.updateRequest !== undefined) {
     return translateText('Update requested – starting now');
+  }
+  if (dashboard.deployRun?.outcome === 'checking') {
+    return translateText('Checking the new commits…');
+  }
+  if (dashboard.deployRun?.outcome === 'building') {
+    return translateText('Building the new version…');
   }
   const state = deployState(dashboard);
   if (state.behind === undefined) {

@@ -633,5 +633,11 @@
   "\"${0}\" is a fixed key.": "„${0}“ ist fest vergeben.",
   "Press a key …": "Taste drücken …",
   "Ctrl": "Strg",
-  "Press ? in the game to see these keys and change them.": "Im Spiel ? drücken, um diese Tasten zu sehen und zu ändern."
+  "Press ? in the game to see these keys and change them.": "Im Spiel ? drücken, um diese Tasten zu sehen und zu ändern.",
+  "Update blocked: commit ${0} is not signed": "Update blockiert: Commit ${0} ist nicht signiert",
+  "Build failed – the old version keeps running": "Build fehlgeschlagen – alte Version läuft weiter",
+  "Starts by itself once nobody plays": "Startet von selbst, sobald niemand spielt",
+  "Checking the new commits…": "Prüfe die neuen Commits…",
+  "Building the new version…": "Baue die neue Version…",
+  "Approve on the Mac:": "Auf dem Mac freigeben:"
 }

@@ -1199,5 +1199,11 @@
   "This file is not an export of the keyboard shortcuts.": "Denne filen er ikke en eksport av hurtigtastene.",
   "\"${0}\" is a fixed key.": "«${0}» er en fast tast.",
   "Press a key …": "Trykk en tast …",
-  "Press ? in the game to see these keys and change them.": "Trykk ? i spillet for å se og endre disse tastene."
+  "Press ? in the game to see these keys and change them.": "Trykk ? i spillet for å se og endre disse tastene.",
+  "Update blocked: commit ${0} is not signed": "Oppdatering blokkert: commit ${0} er ikke signert",
+  "Build failed – the old version keeps running": "Bygg feilet – gammel versjon kjører videre",
+  "Starts by itself once nobody plays": "Starter av seg selv når ingen spiller",
+  "Checking the new commits…": "Sjekker de nye commitene…",
+  "Building the new version…": "Bygger den nye versjonen…",
+  "Approve on the Mac:": "Godkjenn på Mac-en:"
 }

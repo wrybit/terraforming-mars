@@ -15,10 +15,6 @@ export type DashboardUpstream = {
   measuredAtMs: number,
   branch: string,
   commits: Array<DashboardCommit>,
-  /** Newest commits of the deploy branch; missing where no update script reports them */
-  upstream?: DashboardUpstream,
-  /** Set while an update asked for on the admin page waits for the update script */
-  updateRequest?: UpdateRequest,
 };
 
 export const UPSTREAM_COMMITS_FILE = 'upstream-commits.json';
@@ -29,6 +25,31 @@ export const UPDATE_REQUEST_FILE = 'update-request.json';
 export type UpdateRequest = {
   requestedAtMs: number,
 };
+
+/**
+ * What the last run of the update script did: checking (request picked up), building, current (runs the newest
+ * commit), refused (a commit is not signed by Jens), buildFailed (old version keeps running), postponed (waits until
+ * nobody plays). Without it a click on "Update to latest" ended silently whenever the script refused.
+ */
+export type DeployOutcome = 'checking' | 'building' | 'current' | 'refused' | 'buildFailed' | 'postponed';
+
+/**
+ * Written by ops/shared/report-deploy-state.sh (lab repository) at every run of the update script (file name:
+ * DEPLOY_STATE_FILE in the data folder). The keys are the contract of both sides.
+ */
+export type DashboardDeployRun = {
+  measuredAtMs: number,
+  outcome: DeployOutcome,
+  /** Newest commit of the deploy branch the run looked at */
+  commit?: string,
+  /** refused: first commit not signed by Jens and the repository holding it (game = public fork, lab = extensions) */
+  blockedCommit?: string,
+  blockedRepository?: 'game' | 'lab',
+  /** postponed: players in running games */
+  players?: number,
+};
+
+export const DEPLOY_STATE_FILE = 'deploy-state.json';
 
 /** The disk holding the game data, with its use by purpose. */
 export type DashboardDisk = {
@@ -179,4 +200,6 @@ export type ServerDashboard = {
   upstream?: DashboardUpstream,
   /** Set while an update asked for on the admin page waits for the update script */
   updateRequest?: UpdateRequest,
+  /** Last run of the update script; missing where no script reports it */
+  deployRun?: DashboardDeployRun,
 };

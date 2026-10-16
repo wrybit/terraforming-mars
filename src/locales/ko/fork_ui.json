@@ -1085,5 +1085,11 @@
   "This file is not an export of the keyboard shortcuts.": "이 파일은 단축키 내보내기 파일이 아닙니다.",
   "\"${0}\" is a fixed key.": "‘${0}’은(는) 고정 키입니다.",
   "Press a key …": "키를 누르세요 …",
-  "Press ? in the game to see these keys and change them.": "게임에서 ?를 눌러 키를 보고 변경하세요."
+  "Press ? in the game to see these keys and change them.": "게임에서 ?를 눌러 키를 보고 변경하세요.",
+  "Update blocked: commit ${0} is not signed": "업데이트 차단됨: 커밋 ${0}에 서명이 없음",
+  "Build failed – the old version keeps running": "빌드 실패 – 이전 버전이 계속 실행됨",
+  "Starts by itself once nobody plays": "아무도 플레이하지 않으면 자동 시작",
+  "Checking the new commits…": "새 커밋 확인 중…",
+  "Building the new version…": "새 버전 빌드 중…",
+  "Approve on the Mac:": "Mac에서 승인:"
 }

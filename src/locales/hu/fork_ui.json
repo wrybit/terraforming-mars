@@ -1022,5 +1022,11 @@
   "This file is not an export of the keyboard shortcuts.": "Ez a fájl nem a gyorsbillentyűk exportja.",
   "\"${0}\" is a fixed key.": "„${0}” rögzített billentyű.",
   "Press a key …": "Nyomj meg egy billentyűt …",
-  "Press ? in the game to see these keys and change them.": "A játékban nyomd meg a ? gombot a billentyűk megtekintéséhez és módosításához."
+  "Press ? in the game to see these keys and change them.": "A játékban nyomd meg a ? gombot a billentyűk megtekintéséhez és módosításához.",
+  "Update blocked: commit ${0} is not signed": "Frissítés blokkolva: a(z) ${0} commit nincs aláírva",
+  "Build failed – the old version keeps running": "Sikertelen build – a régi verzió fut tovább",
+  "Starts by itself once nobody plays": "Magától indul, ha senki sem játszik",
+  "Checking the new commits…": "Új commitok ellenőrzése…",
+  "Building the new version…": "Új verzió készítése…",
+  "Approve on the Mac:": "Jóváhagyás a Macen:"
 }

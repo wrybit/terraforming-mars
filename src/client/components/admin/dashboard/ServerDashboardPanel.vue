@@ -23,9 +23,12 @@ import {paths} from '@/common/app/paths';
 import {ServerDashboard} from '@/common/admin/ServerDashboard';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import ServerDashboardView from '@/client/components/admin/dashboard/ServerDashboardView.vue';
+import {updateInProgress} from '@/client/components/admin/dashboard/deployState';
 
 // Live values (load, memory, players online) change quickly; every 30 s keeps them fresh without load on the server
 const REFRESH_MILLISECONDS = 30 * 1000;
+// While an update runs every step (picked up, building, refused) should show within a few seconds
+const UPDATE_REFRESH_MILLISECONDS = 5 * 1000;
 
 type DataModel = {
   dashboard: ServerDashboard | undefined,
@@ -41,10 +44,9 @@ export default defineComponent({
   },
   mounted() {
     void this.load();
-    this.timer = window.setInterval(() => void this.load(), REFRESH_MILLISECONDS);
   },
   beforeUnmount() {
-    window.clearInterval(this.timer);
+    window.clearTimeout(this.timer);
   },
   computed: {
     updatedText(): string {
@@ -65,6 +67,13 @@ export default defineComponent({
         // Keep the last values on screen: a short restart should not blank the dashboard
         this.status = 'unreachable';
       }
+      this.scheduleNextLoad();
+    },
+    // One timer only: a click on "Refresh" restarts the wait instead of adding a second refresh cycle
+    scheduleNextLoad(): void {
+      window.clearTimeout(this.timer);
+      const busy = this.dashboard !== undefined && updateInProgress(this.dashboard);
+      this.timer = window.setTimeout(() => void this.load(), busy ? UPDATE_REFRESH_MILLISECONDS : REFRESH_MILLISECONDS);
     },
   },
 });

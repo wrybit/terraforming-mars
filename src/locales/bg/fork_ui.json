@@ -1738,5 +1738,11 @@
   "This file is not an export of the keyboard shortcuts.": "Този файл не е експорт на клавишните комбинации.",
   "\"${0}\" is a fixed key.": "„${0}“ е фиксиран клавиш.",
   "Press a key …": "Натиснете клавиш …",
-  "Press ? in the game to see these keys and change them.": "Натиснете ? в играта, за да видите и промените клавишите."
+  "Press ? in the game to see these keys and change them.": "Натиснете ? в играта, за да видите и промените клавишите.",
+  "Update blocked: commit ${0} is not signed": "Обновяването е блокирано: къмит ${0} не е подписан",
+  "Build failed – the old version keeps running": "Неуспешна компилация – старата версия продължава",
+  "Starts by itself once nobody plays": "Започва само, щом никой не играе",
+  "Checking the new commits…": "Проверка на новите къмити…",
+  "Building the new version…": "Компилиране на новата версия…",
+  "Approve on the Mac:": "Одобрете на Mac:"
 }

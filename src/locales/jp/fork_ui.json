@@ -1204,5 +1204,11 @@
   "This file is not an export of the keyboard shortcuts.": "このファイルはショートカットのエクスポートではありません。",
   "\"${0}\" is a fixed key.": "「${0}」は固定キーです。",
   "Press a key …": "キーを押してください …",
-  "Press ? in the game to see these keys and change them.": "ゲーム中に ? を押すと、これらのキーを確認・変更できます。"
+  "Press ? in the game to see these keys and change them.": "ゲーム中に ? を押すと、これらのキーを確認・変更できます。",
+  "Update blocked: commit ${0} is not signed": "更新がブロックされました：コミット ${0} は未署名です",
+  "Build failed – the old version keeps running": "ビルド失敗 – 旧バージョンが稼働中",
+  "Starts by itself once nobody plays": "誰もプレイしていないときに自動で開始",
+  "Checking the new commits…": "新しいコミットを確認中…",
+  "Building the new version…": "新しいバージョンをビルド中…",
+  "Approve on the Mac:": "Mac で承認："
 }

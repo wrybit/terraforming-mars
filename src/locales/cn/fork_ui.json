@@ -1775,5 +1775,11 @@
   "This file is not an export of the keyboard shortcuts.": "此文件不是快捷键的导出文件。",
   "\"${0}\" is a fixed key.": "“${0}” 是固定按键。",
   "Press a key …": "请按一个键 …",
-  "Press ? in the game to see these keys and change them.": "在游戏中按 ? 查看并修改这些按键。"
+  "Press ? in the game to see these keys and change them.": "在游戏中按 ? 查看并修改这些按键。",
+  "Update blocked: commit ${0} is not signed": "更新被阻止：提交 ${0} 未签名",
+  "Build failed – the old version keeps running": "构建失败 – 旧版本继续运行",
+  "Starts by itself once nobody plays": "无人游戏时自动开始",
+  "Checking the new commits…": "正在检查新提交…",
+  "Building the new version…": "正在构建新版本…",
+  "Approve on the Mac:": "在 Mac 上批准："
 }

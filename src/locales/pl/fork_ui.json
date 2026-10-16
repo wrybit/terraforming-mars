@@ -1618,5 +1618,11 @@
   "This file is not an export of the keyboard shortcuts.": "Ten plik nie jest eksportem skrótów klawiszowych.",
   "\"${0}\" is a fixed key.": "„${0}” to stały klawisz.",
   "Press a key …": "Naciśnij klawisz …",
-  "Press ? in the game to see these keys and change them.": "Naciśnij ? w grze, aby zobaczyć i zmienić te klawisze."
+  "Press ? in the game to see these keys and change them.": "Naciśnij ? w grze, aby zobaczyć i zmienić te klawisze.",
+  "Update blocked: commit ${0} is not signed": "Aktualizacja zablokowana: commit ${0} nie jest podpisany",
+  "Build failed – the old version keeps running": "Budowanie nieudane – działa stara wersja",
+  "Starts by itself once nobody plays": "Ruszy sama, gdy nikt nie gra",
+  "Checking the new commits…": "Sprawdzanie nowych commitów…",
+  "Building the new version…": "Budowanie nowej wersji…",
+  "Approve on the Mac:": "Zatwierdź na Macu:"
 }
