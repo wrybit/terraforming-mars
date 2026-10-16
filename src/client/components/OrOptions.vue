@@ -7,7 +7,7 @@
     <label v-if="playerinput.warning !== undefined" class="card-warning"><div>({{ $t(playerinput.warning) }})</div></label>
 
     <!-- Action menu: tabs with short label and count of available entries; empty tabs are dimmed but clickable -->
-    <div v-if="asTabs" v-tab-icon-labels class="or-tabs" role="tablist">
+    <div v-if="asTabs" v-tab-icon-labels class="or-tabs" role="tablist" data-hotkey-tabs>
       <!-- Hand cards always as the first tab (view only); the first real action stays preselected -->
       <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
       <!-- Display order via tabDisplayOrder (pass/end at the end); idx stays the index in displayedOptions.

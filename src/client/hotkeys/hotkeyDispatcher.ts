@@ -83,12 +83,17 @@ function handlesKeyItself(target: EventTarget | null): boolean {
   return toggle || target instanceof HTMLButtonElement || target instanceof HTMLAnchorElement;
 }
 
+// Only the tabs of the action menu (OrOptions.vue marks its tab list); the board tabs use the same look.
+// While "All cards" is open, the chosen action tab stays marked as well: the hand tab counts as the current one.
 function cycleTab(direction: 1 | -1): boolean {
-  const tabs = Array.from(document.querySelectorAll('.or-tabs [role="tab"]')).filter(isVisible) as Array<HTMLElement>;
+  const list = Array.from(document.querySelectorAll('[data-hotkey-tabs]')).find(isVisible);
+  const tabs = list === undefined ? [] : Array.from(list.querySelectorAll<HTMLElement>('[role="tab"]')).filter(isVisible);
   if (tabs.length === 0) {
     return false;
   }
-  const current = tabs.findIndex((tab) => tab.getAttribute('aria-selected') === 'true');
+  const selected = tabs.filter((tab) => tab.getAttribute('aria-selected') === 'true');
+  const hand = selected.find((tab) => tab.classList.contains('or-tab--hand'));
+  const current = tabs.indexOf(hand ?? selected[0]);
   const next = tabs[(current + direction + tabs.length) % tabs.length];
   next.click();
   next.focus({preventScroll: true});
