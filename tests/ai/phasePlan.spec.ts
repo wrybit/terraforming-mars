@@ -34,7 +34,7 @@ describe('AI three-phase plan (income first)', () => {
     expect(gamePhase(12, 2)).to.equal(3);
   });
 
-  // A milestone in the first third needs 3 greeneries (Gardener): their oxygen steps are not braked, more are.
+  // With a greenery already down (prelude), Gardener is a goal: up to 3 greeneries are not braked, more are.
   it('does not brake the first three greeneries', () => {
     const [game, player] = testGame(2);
     game.generation = 2;
@@ -47,5 +47,14 @@ describe('AI three-phase plan (income first)', () => {
     expect(openingBrakeCost(player, frozen, 1)).to.equal(0);
     greenery();
     expect(openingBrakeCost(player, frozen, 2)).to.be.greaterThan(0);
+  });
+
+  it('brakes greeneries without one already on the board', () => {
+    const [game, player] = testGame(2);
+    game.generation = 2;
+    setPlayerTuning(player.id, 'phase1');
+    const frozen = valuationContext(game, player);
+    game.addGreenery(player, game.board.getAvailableSpacesForGreenery(player)[0]);
+    expect(openingBrakeCost(player, frozen, 1)).to.be.greaterThan(0);
   });
 });

@@ -44,14 +44,15 @@ export function incomeFactor(player: IPlayer, generation: number, remaining: num
 
 /**
  * M€ the steps raised cost in phase 1 (terraform later, income first). Oxygen from the first FREE_GREENERIES own
- * greeneries is exempt: Gardener needs them, and with them a milestone in the first third.
+ * greeneries is exempt once the player already owns one (e.g. from a prelude): then Gardener is a realistic
+ * milestone for the first third; from scratch three greeneries that early are rarely a good goal.
  */
 export function openingBrakeCost(player: IPlayer, frozen: OpeningContext, raised: number): number {
   const strength = tuningOf(player).phasePlan;
   if (strength <= 0 || raised <= 0 || gamePhase(frozen.generation, frozen.remaining) !== 1) {
     return 0;
   }
-  const exempt = frozen.ownGreeneries === undefined || frozen.oxygen === undefined ? 0 : Math.min(
+  const exempt = frozen.ownGreeneries === undefined || frozen.ownGreeneries < 1 || frozen.oxygen === undefined ? 0 : Math.min(
     Math.max(0, player.game.getOxygenLevel() - frozen.oxygen),
     Math.max(0, Math.min(FREE_GREENERIES, player.game.board.getGreeneries(player).length) - Math.min(FREE_GREENERIES, frozen.ownGreeneries)));
   return OPENING_BRAKE_PER_STRENGTH * strength * Math.max(0, raised - exempt);

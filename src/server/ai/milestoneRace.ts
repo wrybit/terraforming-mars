@@ -17,6 +17,9 @@ const BEHIND_FACTOR = 0.5;
 // player is not behind in that race.
 const NEAR_SHARE = 0.6;
 
+// phasePlan milestone target: at least a third of the way there.
+const TARGET_MINIMUM = 1 / 3;
+
 function nearClaimPoints(player: IPlayer, score: number, threshold: number, notBehind: boolean): number {
   const steps = tuningOf(player).milestoneNear;
   const missing = threshold - score;
@@ -33,8 +36,7 @@ export function milestoneRacePoints(player: IPlayer): number {
     return 0;
   }
   const potentials: Array<number> = [];
-  // phasePlan: aim for one milestone in the first third (cities, greeneries, building tags count towards it).
-  const progressShare = tuningOf(player).milestoneProgressShare + milestoneProgressBonus(player);
+  let target: {index: number, own: number} | undefined;
   for (const milestone of game.milestones) {
     if (game.claimedMilestones.some((claimed) => claimed.milestone.name === milestone.name)) {
       continue;
@@ -47,7 +49,16 @@ export function milestoneRacePoints(player: IPlayer): number {
     const own = progress(player);
     const bestOpponent = Math.max(0, ...player.opponents.map(progress));
     const lead = own >= bestOpponent ? 1 : BEHIND_FACTOR;
-    potentials.push(5 * progressShare * own * own * lead + nearClaimPoints(player, milestone.getScore(player), threshold, own >= bestOpponent));
+    potentials.push(5 * tuningOf(player).milestoneProgressShare * own * own * lead + nearClaimPoints(player, milestone.getScore(player), threshold, own >= bestOpponent));
+    if (own >= TARGET_MINIMUM && (target === undefined || own > target.own)) {
+      target = {index: potentials.length - 1, own};
+    }
+  }
+  // phasePlan: aim for one milestone in the first two thirds – only the one already furthest along (e.g. Gardener
+  // after a prelude greenery), not every milestone at once.
+  const bonus = milestoneProgressBonus(player);
+  if (target !== undefined && bonus > 0) {
+    potentials[target.index] += 5 * bonus * target.own * target.own;
   }
   // Only as many milestones as slots are left can still be won. Summing all of them made
   // claiming the last slot look like a loss: in a test game the AI had Gardener ready for three
