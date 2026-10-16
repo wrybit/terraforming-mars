@@ -29,6 +29,7 @@ type Problem = {
   text: string,
   items: ReadonlyArray<string>,
   learnMore: string | undefined,
+  blocking: boolean,
 };
 
 // Wiki pages that explain a validation problem in more detail.
@@ -59,14 +60,14 @@ const problems = computed((): Array<Problem> => {
     const {message} = validationDetails[key];
     const text = typeof message === 'string' ? translateText(message) : translateMessage(message(props.errors));
     const items = Array.isArray(value) ? value : [];
-    result.push({key, text, items, learnMore: learnMoreUrls[key]});
+    result.push({key, text, items, learnMore: learnMoreUrls[key], blocking: validationDetails[key].blocking});
   }
   return result;
 });
 
 /** Groups the validation results by warning or error. */
 const groups = computed(() => {
-  const [errors, warnings] = partition(problems.value, (problem) => validationDetails[problem.key].blocking);
+  const [errors, warnings] = partition(problems.value, (problem) => problem.blocking);
   return [
     {tone: 'error', title: 'Errors', problems: errors},
     {tone: 'warning', title: 'Warnings', problems: warnings},

@@ -66,7 +66,8 @@ import {CorporationDeck, PreludeDeck, ProjectDeck, CeoDeck} from './cards/Deck';
 import {Logger} from './logs/Logger';
 import {addDays, stringToNumber} from './database/utils';
 import {Tag} from '../common/cards/Tag';
-import {GlobalParameterMaximums, IGame, Score} from './IGame';
+import {IGame, Score} from './IGame';
+import {GlobalParameterMaximums} from '../common/boards/GlobalParameterMaximums';
 import {MarsBoard} from './boards/MarsBoard';
 import {UnderworldData} from './underworld/UnderworldData';
 import {UnderworldExpansion} from './underworld/UnderworldExpansion';
@@ -371,7 +372,7 @@ export class Game implements IGame, Logger {
 
     // Must configure this before solo placement.
     if (gameOptions.underworldExpansion) {
-      game.underworldData = UnderworldExpansion.initialize(rng);
+      game.underworldData = UnderworldExpansion.initialize(rng, gameOptions.boardName === BoardName.AMAZONIS_PLANITIA);
     }
 
     // and 2 neutral cities and forests on board
@@ -424,7 +425,7 @@ export class Game implements IGame, Logger {
       }
 
       if (!player.beginner ||
-        // Bypass beginner choice if any extension is choosen
+        // Bypass beginner choice if any extension is chosen
         gameOptions.ceoExtension ||
         gameOptions.preludeExtension ||
         gameOptions.prelude2Expansion ||
@@ -623,12 +624,13 @@ export class Game implements IGame, Logger {
 
     // Only add 2 more generations when using the track completion option
     // and not the solo TR option.
-    //
-    // isSoloModeWin backs this up.
     if (options.moonExpansion) {
       if (!options.soloTR && options.requiresMoonTrackCompletion) {
         lastGeneration += 2;
       }
+    }
+    if (!options.soloTR && options.boardName === BoardName.AMAZONIS_PLANITIA) {
+      lastGeneration += 1;
     }
     return lastGeneration;
   }
@@ -639,7 +641,7 @@ export class Game implements IGame, Logger {
       return this.players[0].terraformRating >= 63;
     }
 
-    // Complete terraforing victory condition.
+    // Complete terraforming victory condition.
     if (!this.marsIsTerraformed()) {
       return false;
     }
@@ -707,7 +709,7 @@ export class Game implements IGame, Logger {
     const players = this.playersInGenerationOrder;
     if (players.every((p) => p.pickedCorporationCard !== undefined)) {
       for (const p of players) {
-        // This if cluase is necessary because `every` above doesn't help.
+        // This if clause is necessary because `every` above doesn't help.
         if (p.pickedCorporationCard) {
           p.playCorporationCard(p.pickedCorporationCard);
         }
@@ -1569,7 +1571,7 @@ export class Game implements IGame, Logger {
       break;
     case SpaceBonus.DELEGATE:
       if (this.turmoil) {
-        this.defer(new SendDelegateToArea(player));
+        this.defer(new SendDelegateToArea(player, undefined, {count}));
       }
       break;
     case SpaceBonus.COLONY:

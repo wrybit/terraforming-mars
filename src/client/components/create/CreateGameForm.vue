@@ -577,6 +577,12 @@ export default defineComponent({
         this.preludeToggled = true;
       }
     },
+    'expansions.deltaProject': function(value: boolean) {
+      if (value === true && this.preludeToggled === false && this.uploading === false) {
+        this.expansions.prelude = true;
+        this.preludeToggled = true;
+      }
+    },
     currentSettingsHash(hash: string) {
       if (this.settingsLinkReady && !this.uploading) {
         replaceSettingsHash(hash);
