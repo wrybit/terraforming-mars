@@ -59,6 +59,17 @@
               <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--help"></i></span>
               <span v-i18n>Player help</span>
             </button>
+            <!-- Shortcut dialog, only where shortcuts exist (keyboard, no mobile view) -->
+            <button v-if="context && hotkeysAvailable" type="button" role="menuitem" class="game-menu-item" @click="openHotkeyHelp">
+              <span class="game-menu-item-icon">
+                <svg class="game-menu-keyboard-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="2.5" y="6" width="19" height="12" rx="2"/>
+                  <path d="M6 9.5h1M9.5 9.5h1M13 9.5h1M16.5 9.5h1M6 12h1M9.5 12h1M13 12h1M16.5 12h1M8 14.75h8"/>
+                </svg>
+              </span>
+              <span v-i18n>Keyboard Shortcuts</span>
+              <HotkeyKeys :fixed="['?']"/>
+            </button>
             <button type="button" role="menuitem" class="game-menu-item" @click="openDialog('settings')">
               <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--settings"></i></span>
               <span v-i18n>Player Settings</span>
@@ -114,6 +125,8 @@
 
 <script setup lang="ts">
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
+import {hotkeyHelpOpen} from '@/client/hotkeys/hotkeyHelpState';
+import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
 import {computed, defineAsyncComponent, inject, onBeforeUnmount, onMounted, ref} from 'vue';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
@@ -241,6 +254,11 @@ function toggleMenu() {
   } else {
     openMenu();
   }
+}
+
+function openHotkeyHelp() {
+  closeMenu();
+  hotkeyHelpOpen.value = true;
 }
 
 function openDialog(which: MenuDialog) {

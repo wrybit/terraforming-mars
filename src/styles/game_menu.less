@@ -295,6 +295,22 @@ a.game-menu-item {
   }
 }
 
+// Keyboard outline of the shortcut entry, drawn like the outline icons above
+.game-menu-keyboard-icon {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+// The "?" cap of the shortcut entry sits at the right edge
+.game-menu-item > .hotkey-keys {
+  margin-left: auto;
+}
+
 // Setup phase: menu before the "Turn order" title, at the same place as later in the players table
 .setup-turn-order-title-row {
   display: flex;

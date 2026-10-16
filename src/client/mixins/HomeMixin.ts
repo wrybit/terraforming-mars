@@ -5,13 +5,13 @@ import {defineComponent} from 'vue';
 import {GameModel} from '@/common/models/GameModel';
 import {SpaceId} from '@/common/Types';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
+import {hotkeyHelpOpen} from '@/client/hotkeys/hotkeyHelpState';
 import {nextTileView, TileView} from '@/client/components/board/TileView';
 import {gameDocumentTitle, TitleView} from '@/client/utils/documentTitle';
 import {isTypingTarget} from '@/client/utils/typingTarget';
 
 type DataModel = {
   tileView: TileView;
-  keyboardShortcutOpened: boolean;
 }
 
 export const HomeMixin = defineComponent({
@@ -19,10 +19,18 @@ export const HomeMixin = defineComponent({
   data(): DataModel {
     return {
       tileView: 'show',
-      keyboardShortcutOpened: false,
     };
   },
   computed: {
+    // Shared with the game menu entry (hotkeyHelpState.ts)
+    keyboardShortcutOpened: {
+      get(): boolean {
+        return hotkeyHelpOpen.value;
+      },
+      set(open: boolean): void {
+        hotkeyHelpOpen.value = open;
+      },
+    },
     // Consumers must define `game`.
     // eslint-disable-next-line vue/return-in-computed-property
     game(): GameModel {
