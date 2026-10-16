@@ -179,7 +179,7 @@ export default defineComponent({
     updateGoodsBoxWidths() {
       // Transposed (mobile) the players are the columns: the boxes are laid out differently there
       const widths = measureGoodsColumnWidths(this.$el, GOODS_COUNT, this.transposed);
-      if (!sameGoodsColumnWidths(widths, this.goodsWidths)) {
+      if (widths !== undefined && !sameGoodsColumnWidths(widths, this.goodsWidths)) {
         this.goodsWidths = widths;
       }
     },

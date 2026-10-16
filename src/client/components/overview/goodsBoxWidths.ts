@@ -34,8 +34,15 @@ function childWidth(box: HTMLElement, selector: string): number {
   return box.querySelector<HTMLElement>(selector)?.offsetWidth ?? 0;
 }
 
-/** Box and production slot width per resource column (index as in the rows). */
-export function measureGoodsColumnWidths(table: Element, columnCount: number, transposed: boolean = false): GoodsColumnWidths {
+/**
+ * Box and production slot width per resource column (index as in the rows).
+ * Undefined while no resource box is rendered (goods section hidden): the caller keeps its last widths. Zeros would
+ * mean "standard width", the section would fit again, show, measure wider, hide … an endless update loop.
+ */
+export function measureGoodsColumnWidths(table: Element, columnCount: number, transposed: boolean = false): GoodsColumnWidths | undefined {
+  if (table.querySelector('.players-table-row .players-table-goods') === null) {
+    return undefined;
+  }
   const frame: Array<number> = new Array(columnCount).fill(0);
   const stock: Array<number> = new Array(columnCount).fill(0);
   const production: Array<number> = new Array(columnCount).fill(0);
