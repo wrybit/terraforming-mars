@@ -238,6 +238,22 @@ export function chooseFreeCardsToKeep(input: SelectCard<ICard>, player: IPlayer)
   return {type: 'card', cards: chosen.map((card) => card.name)};
 }
 
+/**
+ * Cards to discard from hand (Mars University, Sponsored Academies …): the least valuable by the full card
+ * valuation – the quick rule kept VP cards first and so discarded them (Birds in the last third of a game).
+ * The analysis log shows it as a keep choice: chosen = kept.
+ */
+export function chooseCardsToDiscard(input: SelectCard<ICard>, player: IPlayer): InputResponse {
+  const candidates = input.cards.filter((_card, index) => input.config.enabled?.[index] !== false);
+  const {valueOf, timingOf} = valuesOf(player, candidates);
+  const sorted = [...candidates].sort((a, b) => valueOf(a.name) - valueOf(b.name));
+  const discarded = sorted.slice(0, Math.min(Math.max(input.config.min, 0), sorted.length));
+  if (isTracingDecision()) {
+    traceOptions('keep', [...sorted].reverse().map((card) => cardOption('', card, valueOf, timingOf, !discarded.includes(card))));
+  }
+  return {type: 'card', cards: discarded.map((card) => card.name)};
+}
+
 export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): InputResponse {
   const candidates = input.cards.filter((_card, index) => input.config.enabled?.[index] !== false);
   const {valueOf, timingOf} = valuesOf(player, candidates, input.config.min !== input.config.max);

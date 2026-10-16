@@ -6,7 +6,7 @@ import {SelectCard} from '../inputs/SelectCard';
 import {Phase} from '../../common/Phase';
 import {AiLevel} from '../../common/ai/AiLevel';
 import {chooseAction} from './actionLookahead';
-import {chooseCardsToKeep, chooseFreeCardsToKeep, chooseInitialCards} from './cardSelection';
+import {chooseCardsToDiscard, chooseCardsToKeep, chooseFreeCardsToKeep, chooseInitialCards} from './cardSelection';
 import {isActionMenu} from './gameCopy';
 import {KEEP_TITLE, quickResponse, titleOf} from './quickResponse';
 import {randomResponse} from './randomResponse';
@@ -86,6 +86,10 @@ function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputRespo
   // instead of the quick statistics order. Not inside simulations (rare choice, timing estimate is costly there).
   if (input instanceof SelectCard && titleOf(input) === KEEP_TITLE && tuningOf(player).keepValuation > 0 && !isSimulating()) {
     return chooseFreeCardsToKeep(input, player);
+  }
+  // Cards to discard (Mars University …): the least valuable, not the quick rule's order (which keeps VP cards first).
+  if (input instanceof SelectCard && titleOf(input).includes('discard') && tuningOf(player).discardValuation > 0 && !isSimulating()) {
+    return chooseCardsToDiscard(input, player);
   }
   return quickResponse(input, player);
 }

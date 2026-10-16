@@ -185,6 +185,8 @@ export type AiTuning = {
   valueModel: number,
   /** 1: drawn cards kept for free in the action phase (Business Contacts …) chosen by the full card valuation (cardSelection.ts). */
   keepValuation: number,
+  /** 1: cards to discard from hand chosen as the least valuable by the full card valuation (cardSelection.ts). */
+  discardValuation: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -289,6 +291,7 @@ export const BASELINE_TUNING: AiTuning = {
   // ML stage 2: learned position value from Board Game Arena games, tested as a share of the valuation first.
   valueModel: 0,
   keepValuation: 0,
+  discardValuation: 0,
   lastGenerationSpots: 0,
   // Human test game (2026-10-10): passed in the last generation with 47 M€ while greeneries were affordable.
   passedMoneyLost: 1,
@@ -725,6 +728,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   valueModel75: {valueModel: 0.75},
   // Analysis log (2026-10-16): Business Contacts in generation 10 kept two cards by statistics only.
   keepValued: {keepValuation: 1},
+  // Rated human game (2026-10-16): Mars University discarded Birds in generation 13 (quick rule keeps VP cards first).
+  discardValued: {discardValuation: 1},
+  // Rated human game (2026-10-16): heat converted to −26 °C and later a city before the 0 °C step – both bonus
+  // steps went to the human (bonusRace 1 left them open). Twice the weight for open bonus steps.
+  bonusRace2: {bonusRace: 2},
 };
 
 export function isTuningVariant(name: string): boolean {

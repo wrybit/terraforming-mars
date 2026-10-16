@@ -22,6 +22,7 @@ import {spaceValue, tileKindOf} from './spaceValue';
 import {cardPrior} from './cardPriors';
 import {isTracingDecision, traceOptions} from './decisionTrace';
 import {spaceName} from './spaceName';
+import {tuningOf} from './aiTuning';
 
 // Fast, rule-based answers for inputs the AI cannot try out on a game copy: follow-up questions
 // in the middle of an action (where to place a tile, whom to target, ...). Also used to finish
@@ -88,7 +89,9 @@ export function quickResponse(input: PlayerInput, player: IPlayer): InputRespons
     // Aufdecken (Public Plans) bringt 1 M€ je Karte und kostet nichts – also alles zeigen statt des Minimums 0.
     const wanted = titleOf(input).includes('reveal') ? input.config.max : input.config.min;
     const count = Math.min(Math.max(wanted, 0), sorted.length);
-    const chosen = sorted.slice(0, count);
+    // Discarding: the weakest cards, not the strongest (inside simulations; the real choice uses chooseCardsToDiscard)
+    const discarding = titleOf(input).includes('discard') && tuningOf(player).discardValuation > 0;
+    const chosen = discarding ? [...sorted].reverse().slice(0, count) : sorted.slice(0, count);
     // Keeping some of the drawn cards (Business Contacts, Invention Contest …): the analysis log shows all of them
     if (isTracingDecision() && titleOf(input) === KEEP_TITLE) {
       traceOptions('keep', sorted.map((card) => ({label: card.name, card: card.name, value: Math.round(cardPrior(card.name) * 10) / 10, chosen: chosen.includes(card)})));
