@@ -288,7 +288,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Rounds 29 + 31 (milestoneRace30): +0.81 VP each, pooled z +1.58 – chasing milestones costs the engine.
   // Round 33: milestone0 +2.36 VP (z +3.06) – progress before the claim counts nothing; claiming stays valued.
   milestoneProgressShare: 0,
-  energyProductionValue: 1.1,
+  // Round 89 (with rollouts): energy09 +1.29 VP (z +1.78) – adopted; human game: Space Mirrors bought at M€ production 0.
+  energyProductionValue: 0.9,
   // Round 38 (1200 mirrored 1v1 games): triggerBoth +1.51 VP per deal (z +1.84) – effect cards before the
   // cards that trigger them (human feedback: Lichen before Decomposers); penalty or bonus alone neutral.
   triggerOrderPenalty: 1,
@@ -517,6 +518,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Quantum Extractor …) with few uses for the energy – is energy production overvalued?
   energy07: {energyProductionValue: 0.7},
   energy09: {energyProductionValue: 0.9},
+  energy08: {energyProductionValue: 0.8},
+  energy11: {energyProductionValue: 1.1},
   // Round 31: energy07 −2.4 VP (z −2.9), energy09 −0.1 – maybe energy is worth more, not less.
   energy13: {energyProductionValue: 1.3},
   energy15: {energyProductionValue: 1.5},
