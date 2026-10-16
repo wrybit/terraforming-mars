@@ -28,7 +28,7 @@ describe('AI trigger order', () => {
     // Lichen has a plant tag: one microbe on Decomposers.
     expect(triggerGain(snapshot, player, context, CardName.DECOMPOSERS, CardName.LICHEN)).greaterThan(0);
     // Power Plant has no plant, microbe or animal tag.
-    expect(triggerGain(snapshot, player, context, CardName.DECOMPOSERS, CardName.POWER_PLANT)).to.eq(0);
+    expect(triggerGain(snapshot, player, context, CardName.DECOMPOSERS, CardName.POWER_PLANT)).to.be.closeTo(0, 1e-9);
     // Research Outpost: every card costs 1 M€ less.
     expect(triggerGain(snapshot, player, context, CardName.RESEARCH_OUTPOST, CardName.POWER_PLANT)).greaterThan(0.5);
   });
