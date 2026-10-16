@@ -115,6 +115,7 @@ const highlighted = computed(() => {
   return ids;
 });
 
+// A click on the drawn keyboard: the key sinks in briefly
 function flashKeys(ids: ReadonlyArray<string>): void {
   if (ids.length === 0) {
     return;
@@ -125,6 +126,34 @@ function flashKeys(ids: ReadonlyArray<string>): void {
     ids.forEach((id) => next.delete(id));
     pressed.value = next;
   }, PRESS_DURATION);
+}
+
+// Real keys stay down on the drawn keyboard from keydown to keyup (repeats while held change nothing, so nothing
+// flickers). macOS sends no keyup for keys released while ⌘ is held: releasing ⌘ or leaving the window lifts all.
+function holdKeys(event: KeyboardEvent): void {
+  if (event.repeat) {
+    return;
+  }
+  const ids = keyIdsOfEvent(event);
+  if (ids.length > 0) {
+    pressed.value = new Set([...pressed.value, ...ids]);
+  }
+}
+
+function releaseKeys(event: KeyboardEvent): void {
+  if (event.key === 'Meta' || event.key === 'Control') {
+    pressed.value = new Set();
+    return;
+  }
+  const code = codeOfEvent(event);
+  const ids = keyboardKeys.value.filter((key) => key.code !== undefined && key.code === code).map((key) => key.id);
+  const next = new Set(pressed.value);
+  ids.forEach((id) => next.delete(id));
+  pressed.value = next;
+}
+
+function releaseAllKeys(): void {
+  pressed.value = new Set();
 }
 
 // Drawn keys of a real key press: the key at that position and ⌘ / Ctrl
@@ -225,7 +254,7 @@ function onCaptureKey(event: KeyboardEvent): void {
   if (!props.open) {
     return;
   }
-  flashKeys(keyIdsOfEvent(event));
+  holdKeys(event);
   if (!editing.value) {
     return;
   }
@@ -299,13 +328,18 @@ function pressVirtualKey(key: KeyboardKey): void {
 }
 
 window.addEventListener('keydown', onCaptureKey, true);
+window.addEventListener('keyup', releaseKeys, true);
+window.addEventListener('blur', releaseAllKeys);
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onCaptureKey, true);
+  window.removeEventListener('keyup', releaseKeys, true);
+  window.removeEventListener('blur', releaseAllKeys);
   window.clearTimeout(noteTimer);
 });
 
 watch(() => props.open, (open) => {
   if (!open) {
+    pressed.value = new Set();
     editing.value = false;
     capturing.value = undefined;
     note.value = undefined;

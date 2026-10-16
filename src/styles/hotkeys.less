@@ -159,7 +159,8 @@ html.tm-hotkeys .hotkey-item-number {
 // ---- Shortcut dialog (HotkeyHelpDialog.vue) ----
 // Law of proximity: rows of a group 2 px apart < group title to rows < between groups < between the columns
 .hotkey-dialog {
-  width: min(680px, 92vw);
+  // Landscape screens: wide rather than tall – keyboard and four list columns side by side
+  width: min(1040px, 94vw);
 }
 
 .hotkey-dialog__title {
@@ -234,7 +235,8 @@ html.tm-hotkeys .hotkey-item-number {
 
 .hotkey-list {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  // General + tab switching | selection | tabs always there + ending the turn | tabs depending on the situation
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 28px;
 }
 
@@ -250,8 +252,7 @@ html.tm-hotkeys .hotkey-item-number {
   gap: 2px;
 }
 
-.hotkey-list .hotkey-list__title,
-.hotkey-list .hotkey-list__subtitle {
+.hotkey-list .hotkey-list__title {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -261,24 +262,6 @@ html.tm-hotkeys .hotkey-item-number {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-.hotkey-list .hotkey-list__subtitle {
-  margin: 12px 0 4px;
-  font-size: 10px;
-  letter-spacing: 0.06em;
-}
-
-.hotkey-list__tabs {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 16px;
-}
-
-.hotkey-list__tab-column {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
 }
 
 .hotkey-row {
@@ -341,8 +324,8 @@ html.tm-hotkeys .hotkey-item-number {
   opacity: 0.5;
 }
 
-// Tabs: single keys, so a narrow key column leaves room for longer names ("Corporation action")
-.hotkey-list__tabs .hotkey-row__keys {
+// The two tab columns: single keys, so a narrow key column leaves room for longer names ("Corporation action")
+.hotkey-list__column:nth-child(n + 3) .hotkey-row__keys {
   min-width: 26px;
 }
 
