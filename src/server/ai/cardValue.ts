@@ -32,7 +32,7 @@ export type CardTiming = {now: number, later: number};
 // Holding a card is uncertain (the game may end, money may lack): later value counts 85 %.
 const LATER_DISCOUNT = 0.85;
 
-function playCard(copy: IGame, copyPlayer: IPlayer, name: CardName): void {
+export function playCard(copy: IGame, copyPlayer: IPlayer, name: CardName): void {
   const fresh = newCard(name);
   if (isICorporationCard(fresh)) {
     copyPlayer.playCorporationCard(fresh);

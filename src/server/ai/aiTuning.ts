@@ -193,6 +193,8 @@ export type AiTuning = {
    * then strong cards. 0 = off; production counts 1 + strength in the first third, steps cost 2 × strength M€ there.
    */
   phasePlan: number,
+  /** > 0: corporation and prelude pair are also played together; this share of the extra value counts (openingSynergy.ts). */
+  openingSynergy: number,
   /** 1: drawn cards kept for free in the action phase (Business Contacts …) chosen by the full card valuation (cardSelection.ts). */
   keepValuation: number,
   /** 1: cards to discard from hand chosen as the least valuable by the full card valuation (cardSelection.ts). */
@@ -307,6 +309,7 @@ export const BASELINE_TUNING: AiTuning = {
   valueModel: 0.25,
   valueModelOpening: 1,
   phasePlan: 0,
+  openingSynergy: 0,
   // Round 91: keepValued +1.06 VP (z +1.63) – adopted, fixes the analysis-log error (Business Contacts by statistics).
   keepValuation: 1,
   // Rated human game (2026-10-16): Mars University discarded Birds; Jens' discard order is a rule (discardPriority.ts).
@@ -757,6 +760,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   phase05: {phasePlan: 0.5},
   phase1: {phasePlan: 1},
   phase2: {phasePlan: 2},
+  openingSynergy: {openingSynergy: 1},
   // Analysis log (2026-10-16): Business Contacts in generation 10 kept two cards by statistics only.
   keepValued: {keepValuation: 1},
   // Rated human game (2026-10-16): Mars University discarded Birds in generation 13 (quick rule keeps VP cards first).

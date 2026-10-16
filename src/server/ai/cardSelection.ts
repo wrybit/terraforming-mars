@@ -22,6 +22,7 @@ import {tuningOf} from './aiTuning';
 import {enablerBonus} from './enablerValue';
 import {draftReceiver, receiverValues} from './draftDenial';
 import {cardsForMilestone} from './milestoneBuying';
+import {openingSynergy} from './openingSynergy';
 import {withOpeningFit} from './cardFit';
 
 // Opening choice (corporation + preludes + cards) and card buying / drafting.
@@ -187,7 +188,8 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
         tuningOf(player).corporationPriorWeight * corporationPrior(corporation.name) +
         preludePair.reduce((sum, prelude) => sum + value(prelude.name), 0) +
         cards.reduce((sum, card) => sum + value(card.name) - buyPrice, 0) +
-        tagSynergy(corporation, [...cards, ...preludePair]);
+        tagSynergy(corporation, [...cards, ...preludePair]) +
+        openingSynergy(player, corporation.name, preludePair.map((card) => card.name));
       if (best === undefined || score > best.score) {
         best = {corporation, preludes: preludePair, cards, score};
       }
