@@ -11,7 +11,7 @@
         </span>
         <span v-else :data-key="slot.id" :class="keyClass(slot)" :style="{flexGrow: slot.width ?? 1}"
           @mouseenter="$emit('hover', slot)" @mouseleave="$emit('hover', undefined)" @click="$emit('press', slot)">
-          <small v-if="slot.shiftLabel !== undefined">{{ slot.shiftLabel }}</small>{{ keyLabel(slot) }}
+          <small v-if="shiftLabel(slot) !== undefined">{{ shiftLabel(slot) }}</small>{{ keyLabel(slot) }}
           <em v-if="useLabel(slot) !== ''" class="hotkey-keyboard__use">{{ useLabel(slot) }}</em>
         </span>
       </template>
@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import {KeyboardKey, isStack, keyboardLayout} from '@/client/hotkeys/hotkeyKeyboardLayouts';
-import {KeyUse, allKeyUses, keyUses} from '@/client/hotkeys/hotkeyKeyUses';
+import {KeyUse, allKeyUses, drawnCharacter, keyUses} from '@/client/hotkeys/hotkeyKeyUses';
 import {isMac} from '@/client/hotkeys/hotkeyEvents';
 import {hotkeyState} from '@/client/hotkeys/hotkeyStore';
 import {translateText} from '@/client/directives/i18n';
@@ -55,8 +55,17 @@ const highlightedUsesMod = computed(() => {
 });
 
 // Windows keyboards in German say "Strg" instead of "Ctrl" – the same word as in the key caps of the list
+// Character keys show the real layout of the device where the browser tells it (AZERTY, Nordic …)
 function keyLabel(key: KeyboardKey): string {
-  return key.label === 'Ctrl' ? translateText('Ctrl') : key.label;
+  if (key.label === 'Ctrl') {
+    return translateText('Ctrl');
+  }
+  return key.value !== undefined && key.value.length === 1 ? drawnCharacter(key) ?? key.label : key.label;
+}
+
+// The Shift character is only known for the drawn layout: left out where the real keyboard differs
+function shiftLabel(key: KeyboardKey): string | undefined {
+  return key.value === undefined || drawnCharacter(key) === key.value ? key.shiftLabel : undefined;
 }
 
 // Shortcuts that name and color a key: the key alone before ⌘ / Ctrl combinations (Z is "sell", ⌘Z only undo), the

@@ -62,18 +62,18 @@ import HotkeyList from '@/client/components/hotkeys/HotkeyList.vue';
 import HotkeyKeyboard from '@/client/components/hotkeys/HotkeyKeyboard.vue';
 import {HotkeyKeys as KeyList} from '@/client/hotkeys/hotkeyActions';
 import {KeyboardKey, isStack, keyboardLayout} from '@/client/hotkeys/hotkeyKeyboardLayouts';
-import {keyUses} from '@/client/hotkeys/hotkeyKeyUses';
+import {drawnCharacter, keyUses} from '@/client/hotkeys/hotkeyKeyUses';
 import {getPreferences} from '@/client/utils/PreferencesManager';
-import {PICK_DIGITS, findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
+import {PICK_CODES, findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
 import {duplicateBindings, exportHotkeys, hotkeyState, importHotkeys, resetBindings, setBinding, setShowHints} from '@/client/hotkeys/hotkeyStore';
-import {isMac, keyCapLabel, keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
+import {codeOfEvent, isMac, keyCapLabel, keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 // Arrows of the import/export icons, the same as on the "Create game" page (CreateGameForm.vue)
 const IMPORT_ARROW = 'M5.44 2.7L11.75 13.63M12.33 10.89L11.75 13.63L9.09 12.77';
 const EXPORT_ARROW = 'M12.25 13.63L18.56 2.7M15.9 3.56L18.56 2.7L19.15 5.44';
 // Keys that keep their fixed meaning and cannot be given to another action
-const RESERVED_KEYS = ['Enter', ' ', 'Escape', 'Tab', '?', 'ArrowLeft', 'ArrowRight', ...PICK_DIGITS];
+const RESERVED_KEYS = ['Enter', 'Space', 'Escape', 'Tab', 'ArrowLeft', 'ArrowRight', ...PICK_CODES];
 const NOTE_DURATION = 2500;
 const PRESS_DURATION = 160;
 
@@ -127,16 +127,18 @@ function flashKeys(ids: ReadonlyArray<string>): void {
   }, PRESS_DURATION);
 }
 
-// Drawn keys of a real key press: the key itself (also via its Shift symbol) and ⌘ / Ctrl
+// Drawn keys of a real key press: the key at that position and ⌘ / Ctrl
 function keyIdsOfEvent(event: KeyboardEvent): Array<string> {
-  const keys = keysOfEvent(event);
-  const value = keys?.[keys.length - 1] ?? (event.key.length === 1 ? event.key.toUpperCase() : event.key);
-  const ids = keyboardKeys.value.filter((key) => key.value === value || key.shiftValue === value).map((key) => key.id);
+  const code = codeOfEvent(event);
+  const ids = keyboardKeys.value.filter((key) => key.code !== undefined && key.code === code).map((key) => key.id);
   if (event.metaKey || event.ctrlKey || event.key === 'Meta' || event.key === 'Control') {
     ids.push(...keyboardKeys.value.filter((key) => key.mod === true).map((key) => key.id));
   }
   return ids;
 }
+// The key that types "?" (help) stays fixed, like Enter or Esc
+const helpCode = computed(() => keyboardKeys.value.find((key) => key.shiftValue === '?')?.code);
+
 const blocked = computed(() => editing.value && duplicates.value.size > 0);
 
 const message = computed(() => {
@@ -251,12 +253,12 @@ function onCaptureKey(event: KeyboardEvent): void {
     capturing.value = undefined;
     return;
   }
-  assign(id, keys, event.key);
+  assign(id, keys, keys[keys.length - 1]);
 }
 
 /** Gives the keys to the action being edited, unless they are fixed ones */
 function assign(id: string, keys: KeyList, plainKey: string): void {
-  if (keys.length === 1 && RESERVED_KEYS.includes(plainKey)) {
+  if (keys.length === 1 && (RESERVED_KEYS.includes(plainKey) || plainKey === helpCode.value)) {
     showNote(translateTextWithParams('"${0}" is a fixed key.', [keyCapLabel(plainKey)]), true);
     return;
   }
@@ -278,11 +280,16 @@ function pressVirtualKey(key: KeyboardKey): void {
     modArmed.value = !modArmed.value;
     return;
   }
-  if (key.value === undefined) {
+  if (key.code === undefined) {
     return;
   }
   if (capturing.value !== undefined) {
-    assign(capturing.value, modArmed.value ? ['Mod', key.value] : [key.value], key.value);
+    const character = drawnCharacter(key);
+    if (modArmed.value && character !== undefined) {
+      assign(capturing.value, ['Mod', character], character);
+    } else {
+      assign(capturing.value, [key.code], key.code);
+    }
     return;
   }
   const editable = keyUses(key, props.expansions).find((use) => findHotkeyAction(use.id)?.locked !== true && findHotkeyAction(use.id) !== undefined);

@@ -42,7 +42,7 @@ const FUNCTION_ROW: KeyboardRow = [
 const DIGITS = '1234567890'.split('');
 
 function numberRow(shifted: ReadonlyArray<string>, first: KeyboardKey, last: ReadonlyArray<KeyboardKey>): KeyboardRow {
-  return [first, ...DIGITS.map((digit, index) => symbol(digit, 'Digit' + digit, digit, shifted[index])), ...last, {id: 'Backspace', label: '⌫', value: 'Backspace', width: 1.5}];
+  return [first, ...DIGITS.map((digit, index) => symbol(digit, 'Digit' + digit, digit, shifted[index])), ...last, {id: 'Backspace', code: 'Backspace', label: '⌫', value: 'Backspace', width: 1.5}];
 }
 
 function arrows(): KeyboardRow {
@@ -74,8 +74,8 @@ function qwertz(mac: boolean): ReadonlyArray<KeyboardRow> {
   return [
     FUNCTION_ROW,
     numberRow(['!', '"', '§', '$', '%', '&', '/', '(', ')', '='], symbol('Circumflex', 'Backquote', '^', '°'), [symbol('ß', 'Minus', 'ß', '?'), symbol('Acute', 'Equal', '´', '`')]),
-    [{id: 'Tab', label: '⇥', value: 'Tab', width: 1.5}, ...letters('QWERTZUIOP', true), symbol('Ü', 'BracketLeft', 'Ü'), symbol('Plus', 'BracketRight', '+', '*'), {id: 'Enter', code: 'Enter', label: '↵', value: 'Enter', width: 1.5}],
-    [{id: 'CapsLock', label: '⇪', width: 1.8}, ...letters('ASDFGHJKL'), symbol('Ö', 'Semicolon', 'Ö'), symbol('Ä', 'Quote', 'Ä'), symbol('Hash', 'Backslash', '#', '\''), {id: 'EnterLower', label: '', value: 'Enter', width: 1.2}],
+    [{id: 'Tab', code: 'Tab', label: '⇥', value: 'Tab', width: 1.5}, ...letters('QWERTZUIOP', true), symbol('Ü', 'BracketLeft', 'Ü'), symbol('Plus', 'BracketRight', '+', '*'), {id: 'Enter', code: 'Enter', label: '↵', value: 'Enter', width: 1.5}],
+    [{id: 'CapsLock', label: '⇪', width: 1.8}, ...letters('ASDFGHJKL'), symbol('Ö', 'Semicolon', 'Ö'), symbol('Ä', 'Quote', 'Ä'), symbol('Hash', 'Backslash', '#', '\''), {id: 'EnterLower', code: 'Enter', label: '', value: 'Enter', width: 1.2}],
     [{id: 'Shift', label: '⇧', width: 1.3}, symbol('Less', 'IntlBackslash', '<', '>'), ...letters('YXCVBNM', true), symbol(',', 'Comma', ',', ';'), symbol('.', 'Period', '.', ':'), symbol('Minus', 'Slash', '-', '_'), {id: 'ShiftRight', label: '⇧', width: 2.3}],
     bottomRow(mac),
   ];
@@ -86,7 +86,7 @@ function qwerty(mac: boolean): ReadonlyArray<KeyboardRow> {
   return [
     FUNCTION_ROW,
     numberRow(['!', '@', '#', '$', '%', '^', '&', '*', '(', ')'], symbol('Backquote', 'Backquote', '`', '~'), [symbol('Minus', 'Minus', '-', '_'), symbol('Equal', 'Equal', '=', '+')]),
-    [{id: 'Tab', label: '⇥', value: 'Tab', width: 1.5}, ...letters('QWERTYUIOP'), symbol('BracketLeft', 'BracketLeft', '[', '{'), symbol('BracketRight', 'BracketRight', ']', '}'), symbol('Backslash', 'Backslash', '\\', '|', 1.5)],
+    [{id: 'Tab', code: 'Tab', label: '⇥', value: 'Tab', width: 1.5}, ...letters('QWERTYUIOP'), symbol('BracketLeft', 'BracketLeft', '[', '{'), symbol('BracketRight', 'BracketRight', ']', '}'), symbol('Backslash', 'Backslash', '\\', '|', 1.5)],
     [{id: 'CapsLock', label: '⇪', width: 1.8}, ...letters('ASDFGHJKL'), symbol('Semicolon', 'Semicolon', ';', ':'), symbol('Quote', 'Quote', '\'', '"'), {id: 'Enter', code: 'Enter', label: '↵', value: 'Enter', width: 2.2}],
     [{id: 'Shift', label: '⇧', width: 2.3}, ...letters('ZXCVBNM'), symbol(',', 'Comma', ',', '<'), symbol('.', 'Period', '.', '>'), symbol('Slash', 'Slash', '/', '?'), {id: 'ShiftRight', label: '⇧', width: 2.7}],
     bottomRow(mac),

@@ -11,6 +11,7 @@ export type ExtensionMenuItem = {
 };
 
 export type ExtensionShortcut = {
+  /** Position of the key (KeyboardEvent.code, e.g. 'KeyB'), like the shortcuts of the game */
   key: string,
   /** English text for the help page */
   label: string,

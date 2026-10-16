@@ -7,7 +7,7 @@ import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
 import {hotkeyState, actionForKeys} from '@/client/hotkeys/hotkeyStore';
 import {keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
 import {activeHotkeyGroup, hotkeyItems, isVisible, refreshItemNumbers} from '@/client/hotkeys/hotkeyItems';
-import {PICK_DIGITS} from '@/client/hotkeys/hotkeyActions';
+import {PICK_CODES} from '@/client/hotkeys/hotkeyActions';
 import {ConfirmHotkey} from '@/client/hotkeys/confirmHotkeys';
 
 // Open dialogs and overlays handle their own keys (Esc closes them); shortcuts of the page behind must not fire
@@ -140,20 +140,21 @@ export function onHotkey(event: KeyboardEvent): void {
   const overlay = openOverlay();
   const plain = keys.length === 1;
   let handled = false;
-  if (plain && (event.key === 'Enter' || event.key === ' ')) {
+  const key = keys[keys.length - 1];
+  if (plain && (key === 'Enter' || key === 'Space')) {
     if (handlesKeyItself(event.target)) {
       return;
     }
-    handled = submit(overlay ?? document, event.key === 'Enter' ? 'confirm' : 'proceed');
+    handled = submit(overlay ?? document, key === 'Enter' ? 'confirm' : 'proceed');
   } else if (overlay !== undefined) {
     // Esc and everything else belongs to the dialog
     return;
-  } else if (plain && event.key === 'Escape') {
+  } else if (plain && key === 'Escape') {
     const button = confirmTarget(document, 'cancel');
     button?.click();
     handled = button !== undefined;
-  } else if (plain && PICK_DIGITS.includes(event.key)) {
-    handled = pickItem(PICK_DIGITS.indexOf(event.key));
+  } else if (plain && PICK_CODES.includes(key)) {
+    handled = pickItem(PICK_CODES.indexOf(key));
   } else {
     const id = actionForKeys(keys);
     if (id !== undefined && !HANDLED_ELSEWHERE.includes(id)) {

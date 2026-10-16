@@ -76,6 +76,7 @@
 <script lang="ts">
 import {loadHotkeys} from '@/client/hotkeys/hotkeyStore';
 import {startHotkeyAvailability} from '@/client/hotkeys/hotkeyAvailability';
+import {startKeyLabelDetection} from '@/client/hotkeys/hotkeyKeyLabels';
 import {installHotkeys} from '@/client/hotkeys/hotkeyDispatcher';
 import {defineAsyncComponent, defineComponent} from 'vue';
 import * as constants from '@/common/constants';
@@ -347,6 +348,7 @@ export default defineComponent({
     // Keyboard shortcuts: own keys from this device, then the listener and the key caps (hotkeyDispatcher.ts)
     loadHotkeys();
     startHotkeyAvailability();
+    startKeyLabelDetection();
     installHotkeys();
   },
   mounted() {

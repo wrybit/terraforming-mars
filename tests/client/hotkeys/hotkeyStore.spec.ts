@@ -1,5 +1,4 @@
 import {expect} from 'chai';
-import {defaultKeys, findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
 import {actionForKeys, duplicateBindings, exportHotkeys, importHotkeys, keysOf, resetBindings, setBinding} from '@/client/hotkeys/hotkeyStore';
 
 describe('hotkeyStore', () => {
@@ -8,36 +7,34 @@ describe('hotkeyStore', () => {
   });
 
   it('finds the action of a key', () => {
-    expect(actionForKeys(['E'])).to.equal('tab-projects');
-    expect(actionForKeys(['='])).to.equal('setup-menu');
+    expect(actionForKeys(['KeyE'])).to.equal('tab-projects');
+    expect(actionForKeys(['Backquote'])).to.equal('setup-menu');
     expect(actionForKeys(['Mod', 'Enter'])).to.equal('create-game');
   });
 
   it('keeps fixed keys fixed', () => {
-    setBinding('confirm', ['X']);
+    setBinding('confirm', ['KeyX']);
     expect(keysOf('confirm')).to.deep.equal(['Enter']);
   });
 
   it('reports keys assigned twice', () => {
     expect(duplicateBindings().size).to.equal(0);
-    setBinding('tab-projects', ['Q']);
+    setBinding('tab-projects', ['KeyQ']);
     expect(Array.from(duplicateBindings()).sort()).to.deep.equal(['tab-hand', 'tab-projects']);
   });
 
-  it('places the tab keys by position: Y and Z swap between QWERTZ and QWERTY', () => {
-    const sell = findHotkeyAction('tab-sell')!;
-    expect(defaultKeys(sell, 'de')).to.deep.equal(['Z']);
-    expect(defaultKeys(sell, 'en')).to.deep.equal(['Y']);
-    expect(defaultKeys(findHotkeyAction('log-search')!, 'de')).to.deep.equal(['-']);
-    expect(defaultKeys(findHotkeyAction('log-search')!, 'en')).to.deep.equal(['/']);
+  it('binds single keys by position and combinations by character', () => {
+    expect(keysOf('tab-sell')).to.deep.equal(['KeyY']);
+    expect(keysOf('setup-menu')).to.deep.equal(['Backquote']);
+    expect(keysOf('undo')).to.deep.equal(['Mod', 'Z']);
   });
 
   it('exports and imports the bindings', () => {
-    setBinding('tab-projects', ['Ö']);
+    setBinding('tab-projects', ['Semicolon']);
     const text = exportHotkeys();
     resetBindings();
     expect(importHotkeys(text)).to.be.greaterThan(0);
-    expect(keysOf('tab-projects')).to.deep.equal(['Ö']);
+    expect(keysOf('tab-projects')).to.deep.equal(['Semicolon']);
     expect(() => importHotkeys('{}')).to.throw();
   });
 });

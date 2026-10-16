@@ -1,6 +1,7 @@
 // Which shortcuts lie on a key of the drawn keyboard (shortcut dialog): colors the key by group and links key and
 // row on hover. Reads the current bindings, so the keyboard follows every change at once.
-import {FIXED_HOTKEYS, HOTKEY_ACTIONS, HotkeyGroup, PICK_DIGITS, isActionShown} from '@/client/hotkeys/hotkeyActions';
+import {FIXED_HOTKEYS, HOTKEY_ACTIONS, HotkeyGroup, PICK_CODES, isActionShown} from '@/client/hotkeys/hotkeyActions';
+import {codeLabel} from '@/client/hotkeys/hotkeyKeyLabels';
 import {KeyboardKey} from '@/client/hotkeys/hotkeyKeyboardLayouts';
 import {keysOf} from '@/client/hotkeys/hotkeyStore';
 import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
@@ -21,7 +22,7 @@ export type KeyUse = {
  */
 export function allKeyUses(expansions?: ReadonlyArray<string>): Array<KeyUse & {keys: ReadonlyArray<string>}> {
   const uses: Array<KeyUse & {keys: ReadonlyArray<string>}> = HOTKEY_ACTIONS.filter((action) => isActionShown(action, expansions)).map((action) => {
-    const keys: ReadonlyArray<string> = action.id === 'pick' ? PICK_DIGITS : keysOf(action.id);
+    const keys: ReadonlyArray<string> = action.id === 'pick' ? PICK_CODES : keysOf(action.id);
     return {
       id: action.id,
       group: action.group,
@@ -40,9 +41,17 @@ export function allKeyUses(expansions?: ReadonlyArray<string>): Array<KeyUse & {
   return uses;
 }
 
+/** Character a drawn key shows on this device (real layout where the browser tells it) */
+export function drawnCharacter(key: KeyboardKey): string | undefined {
+  return (key.code !== undefined ? codeLabel(key.code) : undefined) ?? key.value;
+}
+
+// Single keys match the position, combinations the character, the help its "?" (Shift character of the key)
 export function keyUses(key: KeyboardKey, expansions?: ReadonlyArray<string>): Array<KeyUse> {
-  if (key.value === undefined && key.shiftValue === undefined) {
+  if (key.code === undefined) {
     return [];
   }
-  return allKeyUses(expansions).filter((use) => use.keys.some((value) => value === key.value || value === key.shiftValue));
+  const character = drawnCharacter(key);
+  return allKeyUses(expansions).filter((use) => use.keys.some((value) =>
+    use.usesMod ? value === character : value === key.code || (value === '?' && key.shiftValue === '?')));
 }

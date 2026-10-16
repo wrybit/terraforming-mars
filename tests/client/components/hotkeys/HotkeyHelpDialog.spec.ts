@@ -48,7 +48,7 @@ describe('HotkeyHelpDialog', () => {
   it('cannot finish editing while a key is assigned twice', async () => {
     const wrapper = mountDialog();
     await wrapper.find('[data-test="hotkey-edit"]').trigger('click');
-    setBinding('tab-projects', ['A']);
+    setBinding('tab-projects', ['KeyA']);
     await wrapper.vm.$nextTick();
     const done = wrapper.find('[data-test="hotkey-done"]');
     expect(done.attributes('disabled')).to.not.equal(undefined);
