@@ -7,7 +7,7 @@ import {findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
 describe('HotkeyRow', () => {
   it('shows the key and the label', () => {
     const wrapper = mount(HotkeyRow, {...globalConfig, props: {row: findHotkeyAction('tab-projects')!, editing: false, capturing: false, duplicate: false}});
-    expect(wrapper.find('kbd').text()).to.equal('J');
+    expect(wrapper.find('kbd').text()).to.equal('E');
     expect(wrapper.text()).to.include('Projects');
   });
 

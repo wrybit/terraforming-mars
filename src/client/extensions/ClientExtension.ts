@@ -14,6 +14,8 @@ export type ExtensionShortcut = {
   key: string,
   /** English text for the help page */
   label: string,
+  /** Shorter English text on the drawn keyboard of the shortcut dialog */
+  short?: string,
 };
 
 export type ClientExtension = {

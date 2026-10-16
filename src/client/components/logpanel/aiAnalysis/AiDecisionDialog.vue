@@ -96,7 +96,7 @@
             :title="$t('Next AI decision') + ' (↓)'" :aria-label="$t('Next AI decision')" @click="step(1)">↓</button>
         </div>
         <button v-if="canRate && ownRating !== undefined" type="button" class="btn btn-tone-danger" data-test="ai-rating-remove" :disabled="saving" @click="save(undefined)" v-i18n>Remove rating</button>
-        <button v-if="canRate" type="button" class="btn btn-tone-success" data-test="ai-rating-save" :disabled="rating === undefined || saving" :title="$t('Save') + ' (Ctrl/⌘ + Enter)'" @click="save(rating)" v-i18n>Save</button>
+        <button v-if="canRate" type="button" class="btn btn-tone-success" data-test="ai-rating-save" :disabled="rating === undefined || saving" @click="save(rating)"><span v-i18n>Save</span><HotkeyKeys :fixed="['Enter']"/></button>
       </template>
     </DialogFrame>
   </SidebarModal>
@@ -106,6 +106,7 @@
 import {computed, nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import SeatIcon from '@/client/components/create/SeatIcon.vue';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogActionRow from '@/client/components/logpanel/LogActionRow.vue';
@@ -217,11 +218,16 @@ function choose(choice: AiFeedbackRating, from: 'full' | 'compact' = 'full'): vo
 }
 
 // Typing must not trigger game shortcuts (I, F, A/S/D …); Escape still closes the dialog
+// Saving a rating is binding, so it is Enter like every binding step (confirmHotkeys.ts); also from the fields.
+// Shift + Enter keeps a new line in the comment.
+function savesWithEnter(event: KeyboardEvent): boolean {
+  return event.key === 'Enter' && !(event.shiftKey && event.target instanceof HTMLTextAreaElement);
+}
+
 function keepKeysInField(event: KeyboardEvent): void {
   const field = event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement ? event.target : undefined;
   const steps = (event.key === 'ArrowUp' || event.key === 'ArrowDown') && field?.value === '';
-  // The one-line field saves with Enter alone
-  const saves = event.key === 'Enter' && (event.ctrlKey || event.metaKey || event.target instanceof HTMLInputElement);
+  const saves = savesWithEnter(event);
   if (event.key !== 'Escape' && !steps && !saves) {
     event.stopPropagation();
   }
@@ -239,9 +245,7 @@ function onKeydown(event: KeyboardEvent): void {
   if (dialog.value === undefined) {
     return;
   }
-  // Ctrl/Cmd + Enter saves, also from the comment field
-  const compactField = event.target instanceof HTMLInputElement && event.target.type === 'text';
-  if (event.key === 'Enter' && (event.ctrlKey || event.metaKey || compactField) && canRate.value && rating.value !== undefined && !saving.value) {
+  if (savesWithEnter(event) && canRate.value && rating.value !== undefined && !saving.value) {
     event.preventDefault();
     void save(rating.value);
     return;
@@ -251,6 +255,7 @@ function onKeydown(event: KeyboardEvent): void {
   }
   // In the comment field the arrows move the cursor once something is typed; an empty field lets them step
   const target = event.target;
+  const compactField = target instanceof HTMLInputElement && target.type === 'text';
   if (target instanceof HTMLSelectElement || (target instanceof HTMLInputElement && !compactField) ||
     ((target instanceof HTMLTextAreaElement || compactField) && (target as HTMLInputElement).value !== '')) {
     return;

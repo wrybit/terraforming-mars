@@ -2,7 +2,7 @@
   <!-- Floats over Mars instead of a text block above the page: the game end is the event, not a paragraph -->
   <div class="game-over-notice" role="status">
     <div class="game-over-notice__title" v-i18n>This game is over!</div>
-    <a class="btn btn-submit btn-rounded game-over-notice__link" :href="resultsUrl" data-hotkey="confirm"><span v-i18n>Go to game results</span><HotkeyKeys action="confirm"/></a>
+    <a class="btn btn-submit btn-rounded game-over-notice__link" :href="resultsUrl" data-hotkey="proceed"><span v-i18n>Go to game results</span><HotkeyKeys action="proceed"/></a>
     <div v-if="redirecting" class="game-over-notice__hint" v-i18n>You will be taken to the results in a moment</div>
   </div>
 </template>

@@ -1009,5 +1009,15 @@
   "Starts by itself once nobody plays": "Почнеться само, коли ніхто не грає",
   "Checking the new commits…": "Перевірка нових комітів…",
   "Building the new version…": "Збирання нової версії…",
-  "Approve on the Mac:": "Схвалити на Mac:"
+  "Approve on the Mac:": "Схвалити на Mac:",
+  "Binding – costs or ends": "Остаточно – витрачає або завершує",
+  "Continue – everything else": "Далі – усе інше",
+  "Binding": "Остаточно",
+  "Continue": "Далі",
+  "Menu": "Меню",
+  "Log": "Журнал",
+  "Tab": "Вкладка",
+  "Always there": "Завжди є",
+  "End the turn": "Кінець ходу",
+  "Depending on the situation": "Залежно від ситуації"
 }

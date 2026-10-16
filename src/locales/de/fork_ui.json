@@ -639,5 +639,13 @@
   "Starts by itself once nobody plays": "Startet von selbst, sobald niemand spielt",
   "Checking the new commits…": "Prüfe die neuen Commits…",
   "Building the new version…": "Baue die neue Version…",
-  "Approve on the Mac:": "Auf dem Mac freigeben:"
+  "Approve on the Mac:": "Auf dem Mac freigeben:",
+  "Binding – costs or ends": "Verbindlich – kostet / beendet",
+  "Continue – everything else": "Weiter – alles andere",
+  "Binding": "Verbindlich",
+  "Continue": "Weiter",
+  "Menu": "Menü",
+  "Always there": "Immer da",
+  "End the turn": "Zug beenden",
+  "Depending on the situation": "Je nach Lage"
 }

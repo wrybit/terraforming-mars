@@ -8,7 +8,7 @@
       <SelectPlayerRow v-else :player="playerView.players.find((otherPlayer) => otherPlayer.color === player)"/>
     </label>
     <TabPanelFooterSlot>
-    <AppButton hotkey="confirm" v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
+    <AppButton hotkey="proceed" v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
     </TabPanelFooterSlot>
   </div>
 </template>

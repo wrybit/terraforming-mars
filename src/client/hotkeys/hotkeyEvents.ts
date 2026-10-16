@@ -1,6 +1,8 @@
 // Translates a key press into the key list of hotkeyActions.ts and checks it against an action.
 import {HotkeyKeys} from '@/client/hotkeys/hotkeyActions';
 import {combo, keysOf} from '@/client/hotkeys/hotkeyStore';
+import {characterAt} from '@/client/hotkeys/hotkeyKeyboardLayouts';
+import {getPreferences} from '@/client/utils/PreferencesManager';
 
 const MODIFIER_KEYS = ['Meta', 'Control', 'Shift', 'Alt', 'AltGraph', 'CapsLock'];
 
@@ -16,7 +18,12 @@ export function keysOfEvent(event: KeyboardEvent): HotkeyKeys | undefined {
   if (event.metaKey || event.ctrlKey) {
     keys.push('Mod');
   }
-  keys.push(event.key.length === 1 ? event.key.toUpperCase() : event.key);
+  // Dead keys (´ and ^ on German keyboards) only say "Dead": the layout tells which character lies at the position
+  const key = event.key === 'Dead' ? characterAt(event.code, getPreferences().lang) : event.key;
+  if (key === undefined) {
+    return undefined;
+  }
+  keys.push(key.length === 1 ? key.toUpperCase() : key);
   return keys;
 }
 

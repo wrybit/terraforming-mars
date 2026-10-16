@@ -1091,5 +1091,15 @@
   "Starts by itself once nobody plays": "아무도 플레이하지 않으면 자동 시작",
   "Checking the new commits…": "새 커밋 확인 중…",
   "Building the new version…": "새 버전 빌드 중…",
-  "Approve on the Mac:": "Mac에서 승인:"
+  "Approve on the Mac:": "Mac에서 승인:",
+  "Binding – costs or ends": "확정 – 비용 또는 종료",
+  "Continue – everything else": "계속 – 그 밖의 모든 것",
+  "Binding": "확정",
+  "Continue": "계속",
+  "Menu": "메뉴",
+  "Log": "기록",
+  "Tab": "탭",
+  "Always there": "항상 표시",
+  "End the turn": "턴 종료",
+  "Depending on the situation": "상황에 따라"
 }

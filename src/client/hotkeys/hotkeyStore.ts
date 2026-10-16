@@ -1,11 +1,14 @@
-// Current key bindings and the "show keys in the game" switch. Both only live on this device (localStorage), so the
-// help dialog can export and import the bindings as JSON to move them to another device.
+// Own key bindings and the "show keys in the game" switch. Both only live on this device (localStorage), so the
+// help dialog can export and import the bindings as JSON to move them to another device. Only keys that differ from
+// the default are stored: defaults follow the keyboard layout of the language and later changes of the defaults.
 import {reactive} from 'vue';
 import {safeLocalStorage} from '@/client/utils/SafeLocalStorage';
-import {FIXED_HOTKEYS, HOTKEY_ACTIONS, HotkeyKeys, defaultBindings, findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
+import {getPreferences} from '@/client/utils/PreferencesManager';
+import {FIXED_HOTKEYS, HOTKEY_ACTIONS, HotkeyKeys, defaultKeys, findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
 
 const STORAGE_KEY = 'hotkeys';
-const EXPORT_VERSION = 1;
+// Version 2: tab keys side by side by position; bindings of version 1 (old defaults stored in full) are dropped
+const EXPORT_VERSION = 2;
 
 type StoredHotkeys = {
   version: number;
@@ -14,12 +17,34 @@ type StoredHotkeys = {
 };
 
 export const hotkeyState = reactive({
-  bindings: defaultBindings(),
+  /** Own keys of the player, by action id; actions without an entry use their default */
+  bindings: {} as Record<string, HotkeyKeys>,
   showHints: true,
 });
 
+function language(): string {
+  return getPreferences().lang;
+}
+
 function isKeyList(value: unknown): value is Array<string> {
   return Array.isArray(value) && value.every((key) => typeof key === 'string');
+}
+
+export function combo(keys: HotkeyKeys): string {
+  return keys.join('+');
+}
+
+function defaultOf(id: string): HotkeyKeys {
+  const action = findHotkeyAction(id);
+  return action !== undefined ? defaultKeys(action, language()) : [];
+}
+
+function storeBinding(id: string, keys: HotkeyKeys): void {
+  if (combo(keys) === combo(defaultOf(id))) {
+    delete hotkeyState.bindings[id];
+  } else {
+    hotkeyState.bindings[id] = keys;
+  }
 }
 
 // Only known, editable actions are taken over; unknown ids (older or newer versions) are ignored
@@ -28,7 +53,7 @@ function applyBindings(source: Record<string, unknown>): number {
   for (const [id, keys] of Object.entries(source)) {
     const action = findHotkeyAction(id);
     if (action !== undefined && action.locked !== true && isKeyList(keys)) {
-      hotkeyState.bindings[id] = keys;
+      storeBinding(id, keys);
       count++;
     }
   }
@@ -42,7 +67,7 @@ export function loadHotkeys(): void {
   }
   try {
     const stored = JSON.parse(raw) as Partial<StoredHotkeys>;
-    if (stored.hotkeys !== undefined && typeof stored.hotkeys === 'object') {
+    if (stored.version === EXPORT_VERSION && stored.hotkeys !== undefined && typeof stored.hotkeys === 'object') {
       applyBindings(stored.hotkeys);
     }
     if (typeof stored.showHints === 'boolean') {
@@ -64,29 +89,28 @@ export function keysOf(id: string): HotkeyKeys {
     return fixed;
   }
   const action = findHotkeyAction(id);
-  if (action?.locked === true) {
+  if (action === undefined) {
+    return [];
+  }
+  if (action.locked === true) {
     return action.keys;
   }
-  return hotkeyState.bindings[id] ?? action?.keys ?? [];
+  return hotkeyState.bindings[id] ?? defaultKeys(action, language());
 }
 
 export function setBinding(id: string, keys: HotkeyKeys): void {
-  hotkeyState.bindings[id] = keys;
+  storeBinding(id, keys);
   saveHotkeys();
 }
 
 export function resetBindings(): void {
-  hotkeyState.bindings = defaultBindings();
+  hotkeyState.bindings = {};
   saveHotkeys();
 }
 
 export function setShowHints(show: boolean): void {
   hotkeyState.showHints = show;
   saveHotkeys();
-}
-
-export function combo(keys: HotkeyKeys): string {
-  return keys.join('+');
 }
 
 /** Ids of editable actions that share their keys with another action; empty bindings never collide */
@@ -113,8 +137,15 @@ export function duplicateBindings(): Set<string> {
   return duplicates;
 }
 
+/** All editable shortcuts with their current keys, so an import on another device gives exactly these keys */
 export function exportHotkeys(): string {
-  return JSON.stringify({version: EXPORT_VERSION, hotkeys: hotkeyState.bindings}, null, 2);
+  const hotkeys: Record<string, HotkeyKeys> = {};
+  for (const action of HOTKEY_ACTIONS) {
+    if (action.locked !== true) {
+      hotkeys[action.id] = keysOf(action.id);
+    }
+  }
+  return JSON.stringify({version: EXPORT_VERSION, hotkeys}, null, 2);
 }
 
 /** Takes over the bindings of an export; returns how many were read, throws on text that is no export */

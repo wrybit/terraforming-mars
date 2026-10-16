@@ -1028,5 +1028,15 @@
   "Starts by itself once nobody plays": "Magától indul, ha senki sem játszik",
   "Checking the new commits…": "Új commitok ellenőrzése…",
   "Building the new version…": "Új verzió készítése…",
-  "Approve on the Mac:": "Jóváhagyás a Macen:"
+  "Approve on the Mac:": "Jóváhagyás a Macen:",
+  "Binding – costs or ends": "Kötelező – költ vagy befejez",
+  "Continue – everything else": "Tovább – minden más",
+  "Binding": "Kötelező",
+  "Continue": "Tovább",
+  "Menu": "Menü",
+  "Log": "Napló",
+  "Tab": "Fül",
+  "Always there": "Mindig elérhető",
+  "End the turn": "Kör befejezése",
+  "Depending on the situation": "Helyzettől függően"
 }

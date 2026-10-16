@@ -220,7 +220,11 @@ html.tm-hotkeys .hotkey-item-number {
   gap: 2px;
 }
 
-.hotkey-list .hotkey-list__title {
+.hotkey-list .hotkey-list__title,
+.hotkey-list .hotkey-list__subtitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin: 0 0 6px;
   color: #d9b45a;
   font-size: 12px;
@@ -229,10 +233,22 @@ html.tm-hotkeys .hotkey-item-number {
   text-transform: uppercase;
 }
 
+.hotkey-list .hotkey-list__subtitle {
+  margin: 12px 0 4px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
 .hotkey-list__tabs {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2px 16px;
+  gap: 0 16px;
+}
+
+.hotkey-list__tab-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .hotkey-row {
@@ -301,10 +317,16 @@ html.tm-hotkeys .hotkey-item-number {
 }
 
 // ---- Drawn laptop keyboard (HotkeyKeyboard.vue) ----
-// Keys with a shortcut take the color of their group, like the group titles of the list
+// Keys with a shortcut take the color of their group, like the group titles of the list; pass on and end
+// generation keep their green and red
 @hotkey-group-general: #d9b45a;
 @hotkey-group-selection: #4fc39a;
 @hotkey-group-tabs: #9b98ff;
+@hotkey-group-context: #6aa7e8;
+@hotkey-group-expansion: #e3a061;
+@hotkey-group-success: #3dff6e;
+@hotkey-group-danger: #ff6a45;
+@hotkey-group-turn-end: #c9ccd8;
 
 .hotkey-dialog__body {
   display: flex;
@@ -332,9 +354,10 @@ html.tm-hotkeys .hotkey-item-number {
   position: relative;
   flex: 1 1 0;
   min-width: 0;
-  height: 30px;
+  height: 36px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
@@ -350,6 +373,19 @@ html.tm-hotkeys .hotkey-item-number {
     font-size: 8px;
     opacity: 0.85;
   }
+}
+
+// Short label of the shortcut under the key's character
+.hotkey-keyboard__use {
+  max-width: 100%;
+  margin-top: 3px;
+  padding: 0 1px;
+  overflow: hidden;
+  font: 500 7.5px/1 Ubuntu, sans-serif;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.9;
 }
 
 .hotkey-keyboard__row--function .hotkey-keyboard__key,
@@ -389,6 +425,36 @@ html.tm-hotkeys .hotkey-item-number {
   color: #fff;
 }
 
+.hotkey-keyboard__key--tabs-default {
+  background: mix(@hotkey-group-tabs, #2a2c36, 40%);
+  border-bottom-color: mix(@hotkey-group-tabs, #111218, 20%);
+  color: #fff;
+}
+
+.hotkey-keyboard__key--tabs-context {
+  background: mix(@hotkey-group-context, #2a2c36, 38%);
+  border-bottom-color: mix(@hotkey-group-context, #111218, 20%);
+  color: #fff;
+}
+
+.hotkey-keyboard__key--tabs-expansion {
+  background: mix(@hotkey-group-expansion, #2a2c36, 35%);
+  border-bottom-color: mix(@hotkey-group-expansion, #111218, 20%);
+  color: #fff;
+}
+
+.hotkey-keyboard__key--success {
+  background: mix(@hotkey-group-success, #2a2c36, 25%);
+  border-bottom-color: mix(@hotkey-group-success, #111218, 20%);
+  color: #fff;
+}
+
+.hotkey-keyboard__key--danger {
+  background: mix(@hotkey-group-danger, #2a2c36, 32%);
+  border-bottom-color: mix(@hotkey-group-danger, #111218, 20%);
+  color: #fff;
+}
+
 .hotkey-keyboard__key--mod {
   background: #3a3c48;
   color: #d6d8e0;
@@ -414,18 +480,62 @@ html.tm-hotkeys .hotkey-item-number {
   }
 }
 
-// Group titles of the list in the key colors, so key and row belong together visibly
-.hotkey-list__group:nth-child(1) > .hotkey-list__title {
+// Group titles of the list in the key colors with a small swatch, so key and row belong together visibly
+.hotkey-list .hotkey-list__title--general {
   color: @hotkey-group-general;
+
+  .hotkey-list__swatch {
+    background: mix(@hotkey-group-general, #2a2c36, 35%);
+  }
 }
 
-.hotkey-list__column > .hotkey-list__group:nth-child(2) > .hotkey-list__title {
+.hotkey-list .hotkey-list__title--selection {
   color: @hotkey-group-selection;
+
+  .hotkey-list__swatch {
+    background: mix(@hotkey-group-selection, #2a2c36, 32%);
+  }
 }
 
-.hotkey-list > .hotkey-list__group > .hotkey-list__title {
+.hotkey-list .hotkey-list__title--tabs-default {
   color: @hotkey-group-tabs;
+
+  .hotkey-list__swatch {
+    background: mix(@hotkey-group-tabs, #2a2c36, 40%);
+  }
 }
+
+.hotkey-list .hotkey-list__title--tabs-context {
+  color: @hotkey-group-context;
+
+  .hotkey-list__swatch {
+    background: mix(@hotkey-group-context, #2a2c36, 38%);
+  }
+}
+
+.hotkey-list .hotkey-list__title--tabs-expansion {
+  color: @hotkey-group-expansion;
+
+  .hotkey-list__swatch {
+    background: mix(@hotkey-group-expansion, #2a2c36, 35%);
+  }
+}
+
+.hotkey-list .hotkey-list__title--tabs-turn-end {
+  color: @hotkey-group-turn-end;
+
+  .hotkey-list__swatch {
+    background: linear-gradient(90deg, mix(@hotkey-group-success, #2a2c36, 25%) 50%, mix(@hotkey-group-danger, #2a2c36, 32%) 50%);
+  }
+}
+
+.hotkey-list__swatch {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+}
+
 
 .hotkey-row--highlighted {
   background: rgba(255, 255, 255, 0.08);
@@ -435,5 +545,31 @@ html.tm-hotkeys .hotkey-item-number {
 @media (prefers-reduced-motion: reduce) {
   .hotkey-keyboard__key {
     transition: none;
+  }
+}
+
+// Wrong key: Enter on a Space button or the other way round (hotkeyDispatcher.ts) – the button shakes, its cap blinks
+@keyframes hotkey-wrong-key-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+@keyframes hotkey-wrong-key-blink {
+  0%, 100% { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12); }
+  50% { box-shadow: 0 0 0 2px #fff, 0 0 10px rgba(255, 255, 255, 0.6); }
+}
+
+.hotkey-wrong-key {
+  animation: hotkey-wrong-key-shake 0.4s ease;
+
+  .hotkey-key {
+    animation: hotkey-wrong-key-blink 0.4s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotkey-wrong-key {
+    animation: none;
   }
 }

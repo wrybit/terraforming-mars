@@ -1210,5 +1210,15 @@
   "Starts by itself once nobody plays": "誰もプレイしていないときに自動で開始",
   "Checking the new commits…": "新しいコミットを確認中…",
   "Building the new version…": "新しいバージョンをビルド中…",
-  "Approve on the Mac:": "Mac で承認："
+  "Approve on the Mac:": "Mac で承認：",
+  "Binding – costs or ends": "確定 – 支払い・終了",
+  "Continue – everything else": "続行 – その他すべて",
+  "Binding": "確定",
+  "Continue": "続行",
+  "Menu": "メニュー",
+  "Log": "ログ",
+  "Tab": "タブ",
+  "Always there": "常に表示",
+  "End the turn": "ターン終了",
+  "Depending on the situation": "状況次第"
 }

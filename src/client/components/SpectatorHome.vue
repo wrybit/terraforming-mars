@@ -47,7 +47,7 @@
     </HomeColumns>
 
     <WaitingFor v-show="false" v-if="game.phase !== 'end'" :playerView="spectator" :waitingfor="undefined"/>
-    <HotkeyHelpDialog :open="keyboardShortcutOpened" @close="keyboardShortcutOpened = false"/>
+    <HotkeyHelpDialog :open="keyboardShortcutOpened" :expansions="hotkeyExpansions" @close="keyboardShortcutOpened = false"/>
   </div>
 </template>
 
@@ -65,6 +65,7 @@ import Sidebar from '@/client/components/Sidebar.vue';
 import WaitingFor from '@/client/components/WaitingFor.vue';
 import PlayersOverview from '@/client/components/overview/PlayersOverview.vue';
 import HotkeyHelpDialog from '@/client/components/hotkeys/HotkeyHelpDialog.vue';
+import {gameExpansions} from '@/client/hotkeys/hotkeyActions';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
 
 export default defineComponent({
@@ -77,6 +78,10 @@ export default defineComponent({
     },
   },
   computed: {
+    // Only the tabs of this game's expansions are listed in the shortcut dialog
+    hotkeyExpansions(): Array<string> {
+      return gameExpansions(this.game.gameOptions.expansions);
+    },
     game(): GameModel {
       return this.spectator.game;
     },

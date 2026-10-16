@@ -1205,5 +1205,15 @@
   "Starts by itself once nobody plays": "Starter av seg selv når ingen spiller",
   "Checking the new commits…": "Sjekker de nye commitene…",
   "Building the new version…": "Bygger den nye versjonen…",
-  "Approve on the Mac:": "Godkjenn på Mac-en:"
+  "Approve on the Mac:": "Godkjenn på Mac-en:",
+  "Binding – costs or ends": "Bindende – koster eller avslutter",
+  "Continue – everything else": "Fortsett – alt annet",
+  "Binding": "Bindende",
+  "Continue": "Fortsett",
+  "Menu": "Meny",
+  "Log": "Logg",
+  "Tab": "Fane",
+  "Always there": "Alltid der",
+  "End the turn": "Avslutt turen",
+  "Depending on the situation": "Avhengig av situasjonen"
 }

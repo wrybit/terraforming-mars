@@ -14,7 +14,7 @@
     <TabPanelFooterSlot>
     <div v-if="showsave === true" class="nofloat">
         <!-- Disabled until a resource is selected -->
-        <AppButton hotkey="confirm" @click="saveData" :title="playerinput.buttonLabel" :disabled="unit === undefined" />
+        <AppButton hotkey="proceed" @click="saveData" :title="playerinput.buttonLabel" :disabled="unit === undefined" />
     </div>
     </TabPanelFooterSlot>
   </div>

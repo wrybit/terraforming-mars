@@ -29,9 +29,9 @@
             <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(player.id) ? 'Copied!' : 'Copy URL'" @click="copyUrl(player.id)"/>
             <!-- The AI plays by itself: its page only lets you watch it (the server refuses input there) -->
             <!-- Watching the AI is secondary: the same quiet button as Copy URL; playing is the main action -->
-            <!-- Enter opens the first human player's game (hotkeyDispatcher.ts) -->
+            <!-- Space opens the first human player's game (hotkeyDispatcher.ts) -->
             <a class="btn btn-rounded" :class="player.aiLevel !== undefined ? 'btn-tone-quiet' : 'btn-primary'" :href="getHref(player.id)"
-              :data-hotkey="player.aiLevel === undefined ? 'confirm' : undefined"><span v-i18n>{{ player.aiLevel !== undefined ? 'Watch' : 'Play' }}</span><HotkeyKeys v-if="player.aiLevel === undefined" action="confirm"/></a>
+              :data-hotkey="player.aiLevel === undefined ? 'proceed' : undefined"><span v-i18n>{{ player.aiLevel !== undefined ? 'Watch' : 'Play' }}</span><HotkeyKeys v-if="player.aiLevel === undefined" action="proceed"/></a>
           </div>
           <div class="game-home-link game-home-link--spectator">
             <span class="game-home-order"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>

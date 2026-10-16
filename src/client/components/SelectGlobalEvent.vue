@@ -7,7 +7,7 @@
         </label>
         <TabPanelFooterSlot>
         <div v-if="showsave === true" class="nofloat">
-          <AppButton hotkey="confirm" :disabled="selected === undefined" type="submit" @click="saveData" title="OK" />
+          <AppButton hotkey="proceed" :disabled="selected === undefined" type="submit" @click="saveData" title="OK" />
         </div>
         </TabPanelFooterSlot>
     </div>

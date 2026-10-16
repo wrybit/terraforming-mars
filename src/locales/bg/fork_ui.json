@@ -1744,5 +1744,15 @@
   "Starts by itself once nobody plays": "Започва само, щом никой не играе",
   "Checking the new commits…": "Проверка на новите къмити…",
   "Building the new version…": "Компилиране на новата версия…",
-  "Approve on the Mac:": "Одобрете на Mac:"
+  "Approve on the Mac:": "Одобрете на Mac:",
+  "Binding – costs or ends": "Окончателно – струва или приключва",
+  "Continue – everything else": "Напред – всичко друго",
+  "Binding": "Окончателно",
+  "Continue": "Напред",
+  "Menu": "Меню",
+  "Log": "Дневник",
+  "Tab": "Раздел",
+  "Always there": "Винаги налични",
+  "End the turn": "Край на хода",
+  "Depending on the situation": "Според ситуацията"
 }

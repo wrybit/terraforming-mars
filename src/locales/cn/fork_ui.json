@@ -1781,5 +1781,15 @@
   "Starts by itself once nobody plays": "无人游戏时自动开始",
   "Checking the new commits…": "正在检查新提交…",
   "Building the new version…": "正在构建新版本…",
-  "Approve on the Mac:": "在 Mac 上批准："
+  "Approve on the Mac:": "在 Mac 上批准：",
+  "Binding – costs or ends": "确定 – 花费或结束",
+  "Continue – everything else": "继续 – 其他一切",
+  "Binding": "确定",
+  "Continue": "继续",
+  "Menu": "菜单",
+  "Log": "日志",
+  "Tab": "标签",
+  "Always there": "始终可用",
+  "End the turn": "结束回合",
+  "Depending on the situation": "视情况而定"
 }

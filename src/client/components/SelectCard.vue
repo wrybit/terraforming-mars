@@ -80,7 +80,7 @@
               <AppButton hotkey="confirm" :disabled="true" type="submit" :title="$t('Buy')" class="btn-tone-success" />
               <AppButton hotkey="cancel" type="submit" @click="saveData" :title="$t('Discard')" class="btn-tone-danger" />
             </template>
-            <AppButton hotkey="confirm" v-else :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
+            <AppButton :hotkey="labelConfirmHotkey(playerinput.buttonLabel)" v-else :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
               :class="{'btn-tone-success': isOptionalToManyCards}" />
             <AppButton hotkey="cancel" :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t(skipLabel)"
               class="btn-tone-danger" />
@@ -125,6 +125,7 @@ import {Warning} from '@/common/cards/Warning';
 import {choiceBlockClass, choiceBlockStyle} from '@/client/components/choiceBlock';
 import {currentDraftPicks} from '@/client/utils/draftedCards';
 import {keepDraftCardOrder} from '@/client/utils/draftCardOrder';
+import {labelConfirmHotkey} from '@/client/hotkeys/confirmHotkeys';
 
 type Owner = {
   name: string;
@@ -206,6 +207,8 @@ export default defineComponent({
     },
   },
   methods: {
+    // Enter for buying, discarding, selling …, Space for routine choices (confirmHotkeys.ts)
+    labelConfirmHotkey,
     choiceBlockClass,
     choiceBlockStyle,
     cardsSelected(): number {

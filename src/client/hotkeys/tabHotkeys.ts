@@ -17,7 +17,8 @@ const TAB_HOTKEYS: Readonly<Record<string, string>> = {
   'Send a delegate in an area (3 M€)': 'tab-delegate',
   'Send a delegate in an area (5 M€)': 'tab-delegate',
   'Send a delegate in an area (from lobby)': 'tab-delegate',
-  'Use CEO once per game action': 'tab-ceo',
+  // The CEO action shares the tab and key of the card actions
+  'Use CEO once per game action': 'tab-actions',
   'End Turn': 'tab-pass',
   'Pass for this generation': 'tab-end',
   'Undo last action': 'undo',

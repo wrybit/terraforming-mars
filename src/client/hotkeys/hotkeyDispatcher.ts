@@ -7,6 +7,8 @@ import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
 import {hotkeyState, actionForKeys} from '@/client/hotkeys/hotkeyStore';
 import {keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
 import {activeHotkeyGroup, hotkeyItems, isVisible, refreshItemNumbers} from '@/client/hotkeys/hotkeyItems';
+import {PICK_DIGITS} from '@/client/hotkeys/hotkeyActions';
+import {ConfirmHotkey} from '@/client/hotkeys/confirmHotkeys';
 
 // Open dialogs and overlays handle their own keys (Esc closes them); shortcuts of the page behind must not fire
 const OVERLAY_SELECTOR = [
@@ -42,6 +44,43 @@ function confirmTarget(scope: Document | Element, id: string): HTMLElement | und
   const group = activeHotkeyGroup(scope);
   const footer = group?.querySelector('.or-tab-footer') ?? undefined;
   return (footer !== undefined ? hotkeyTarget(footer, id) : undefined) ?? (group !== undefined ? hotkeyTarget(group, id) : undefined) ?? hotkeyTarget(scope, id);
+}
+
+const WRONG_KEY_CLASS = 'hotkey-wrong-key';
+const WRONG_KEY_DURATION = 450;
+
+// Enter on a Space button (or the other way round) sends nothing: the button shakes and its cap blinks
+function signalWrongKey(button: HTMLElement): void {
+  button.classList.remove(WRONG_KEY_CLASS);
+  // Restart the animation when the wrong key is pressed again right away
+  void button.offsetWidth;
+  button.classList.add(WRONG_KEY_CLASS);
+  window.setTimeout(() => button.classList.remove(WRONG_KEY_CLASS), WRONG_KEY_DURATION);
+}
+
+function submit(scope: Document | Element, id: ConfirmHotkey): boolean {
+  const button = confirmTarget(scope, id);
+  if (button !== undefined) {
+    button.click();
+    return true;
+  }
+  const other = confirmTarget(scope, id === 'confirm' ? 'proceed' : 'confirm');
+  if (other !== undefined) {
+    signalWrongKey(other);
+    return true;
+  }
+  return false;
+}
+
+// A focused button or link reacts to Enter and Space by itself; tabs and selectable items do not count, otherwise
+// a click on a tab or card would take the keys away from the button that sends the answer
+function handlesKeyItself(target: EventTarget | null): boolean {
+  if (target instanceof HTMLElement && (target.getAttribute('role') === 'tab' || target.closest('[data-hotkey-group] label') !== null)) {
+    return false;
+  }
+  // Check boxes and radio buttons elsewhere (settings, create game) keep Space for switching
+  const toggle = target instanceof HTMLInputElement && (target.type === 'checkbox' || target.type === 'radio');
+  return toggle || target instanceof HTMLButtonElement || target instanceof HTMLAnchorElement;
 }
 
 function cycleTab(direction: 1 | -1): boolean {
@@ -101,15 +140,11 @@ export function onHotkey(event: KeyboardEvent): void {
   const overlay = openOverlay();
   const plain = keys.length === 1;
   let handled = false;
-  if (plain && event.key === 'Enter') {
-    // A focused button or link reacts to Enter by itself
-    const target = event.target;
-    if (target instanceof HTMLButtonElement || target instanceof HTMLAnchorElement) {
+  if (plain && (event.key === 'Enter' || event.key === ' ')) {
+    if (handlesKeyItself(event.target)) {
       return;
     }
-    const button = confirmTarget(overlay ?? document, 'confirm');
-    button?.click();
-    handled = button !== undefined;
+    handled = submit(overlay ?? document, event.key === 'Enter' ? 'confirm' : 'proceed');
   } else if (overlay !== undefined) {
     // Esc and everything else belongs to the dialog
     return;
@@ -117,8 +152,8 @@ export function onHotkey(event: KeyboardEvent): void {
     const button = confirmTarget(document, 'cancel');
     button?.click();
     handled = button !== undefined;
-  } else if (plain && /^[1-9]$/.test(event.key)) {
-    handled = pickItem(Number(event.key) - 1);
+  } else if (plain && PICK_DIGITS.includes(event.key)) {
+    handled = pickItem(PICK_DIGITS.indexOf(event.key));
   } else {
     const id = actionForKeys(keys);
     if (id !== undefined && !HANDLED_ELSEWHERE.includes(id)) {

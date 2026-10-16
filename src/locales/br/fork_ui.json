@@ -1969,5 +1969,14 @@
   "Starts by itself once nobody plays": "Começa sozinha quando ninguém estiver jogando",
   "Checking the new commits…": "Verificando os novos commits…",
   "Building the new version…": "Gerando a nova versão…",
-  "Approve on the Mac:": "Aprovar no Mac:"
+  "Approve on the Mac:": "Aprovar no Mac:",
+  "Binding – costs or ends": "Definitivo – custa ou encerra",
+  "Continue – everything else": "Continuar – todo o resto",
+  "Binding": "Definitivo",
+  "Continue": "Continuar",
+  "Log": "Registro",
+  "Tab": "Aba",
+  "Always there": "Sempre presentes",
+  "End the turn": "Encerrar o turno",
+  "Depending on the situation": "Conforme a situação"
 }

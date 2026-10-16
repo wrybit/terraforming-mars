@@ -1,15 +1,16 @@
-// Digits 1 … 9 choose the selectable items (cards, option tiles, players, colonies …) of the active group.
+// Digits 1 … 9 and 0 (the tenth) choose the selectable items (cards, option tiles, players, colonies …) of the active group.
 // A group is an element marked with data-hotkey-group (the action box of OrOptions / WaitingForTabs, the columns
 // of the initial selection); when several are visible
 // (initial selection: corporation, preludes, cards side by side) the one with data-hotkey-group-active="true" wins.
 // Items are labels with an enabled radio button or check box, in reading order.
+import {PICK_DIGITS} from '@/client/hotkeys/hotkeyActions';
 
 const GROUP_SELECTOR = '[data-hotkey-group]';
 const ITEM_SELECTOR = 'label';
 // Key cap with the digit, appended to the item by refreshItemNumbers (the items' ::before/::after already draw the
 // selection highlight and check mark)
 export const ITEM_NUMBER_CLASS = 'hotkey-item-number';
-const MAX_ITEMS = 9;
+const MAX_ITEMS = PICK_DIGITS.length;
 
 export function isVisible(element: Element): boolean {
   return element instanceof HTMLElement && element.getClientRects().length > 0 &&
@@ -57,7 +58,7 @@ export function refreshItemNumbers(show: boolean): void {
     }
   }
   items.forEach((item, index) => {
-    const number = String(index + 1);
+    const number = PICK_DIGITS[index];
     let cap = Array.from(item.children).find((child) => child.classList.contains(ITEM_NUMBER_CLASS));
     if (cap === undefined) {
       cap = document.createElement('kbd');

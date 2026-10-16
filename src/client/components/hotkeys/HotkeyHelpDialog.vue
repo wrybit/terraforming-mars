@@ -10,8 +10,8 @@
         </button>
         <button v-else type="button" :class="['btn', 'hotkey-dialog__button', blocked ? 'hotkey-dialog__button--blocked' : 'hotkey-dialog__button--cta']"
           :disabled="blocked" :title="blocked ? $t('Resolve the keys assigned twice first') : undefined"
-          data-hotkey="confirm" data-test="hotkey-done" @click="finishEditing">
-          <span v-i18n>Done</span><HotkeyKeys action="confirm" always/>
+          data-hotkey="proceed" data-test="hotkey-done" @click="finishEditing">
+          <span v-i18n>Done</span><HotkeyKeys action="proceed" always/>
         </button>
         <button type="button" :class="['btn', 'hotkey-dialog__button', editing ? 'btn-tone-quiet' : 'hotkey-dialog__button--cta']"
           :aria-label="$t('Close')" data-test="hotkey-close" @click="requestClose">
@@ -19,9 +19,9 @@
         </button>
       </div>
       <div class="dialog-frame-body hotkey-dialog__body">
-        <HotkeyKeyboard :language="language" :editing="editing" :highlighted="highlighted" :pressed="pressed" :modArmed="modArmed"
+        <HotkeyKeyboard :language="language" :expansions="expansions" :editing="editing" :highlighted="highlighted" :pressed="pressed" :modArmed="modArmed"
           @hover="hoveredKey = $event" @press="pressVirtualKey"/>
-        <HotkeyList :editing="editing" :capturing="capturing" :duplicates="duplicates" :highlighted="highlighted"
+        <HotkeyList :expansions="expansions" :editing="editing" :capturing="capturing" :duplicates="duplicates" :highlighted="highlighted"
           @capture="capturing = $event" @hover="hoveredRow = $event"/>
       </div>
       <div class="dialog-frame-foot hotkey-dialog__foot">
@@ -64,21 +64,23 @@ import {HotkeyKeys as KeyList} from '@/client/hotkeys/hotkeyActions';
 import {KeyboardKey, isStack, keyboardLayout} from '@/client/hotkeys/hotkeyKeyboardLayouts';
 import {keyUses} from '@/client/hotkeys/hotkeyKeyUses';
 import {getPreferences} from '@/client/utils/PreferencesManager';
-import {findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
+import {PICK_DIGITS, findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
 import {duplicateBindings, exportHotkeys, hotkeyState, importHotkeys, resetBindings, setBinding, setShowHints} from '@/client/hotkeys/hotkeyStore';
-import {isMac, keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
+import {isMac, keyCapLabel, keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 // Arrows of the import/export icons, the same as on the "Create game" page (CreateGameForm.vue)
 const IMPORT_ARROW = 'M5.44 2.7L11.75 13.63M12.33 10.89L11.75 13.63L9.09 12.77';
 const EXPORT_ARROW = 'M12.25 13.63L18.56 2.7M15.9 3.56L18.56 2.7L19.15 5.44';
 // Keys that keep their fixed meaning and cannot be given to another action
-const RESERVED_KEYS = ['Enter', 'Escape', 'Tab', '?', 'ArrowLeft', 'ArrowRight', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const RESERVED_KEYS = ['Enter', ' ', 'Escape', 'Tab', '?', 'ArrowLeft', 'ArrowRight', ...PICK_DIGITS];
 const NOTE_DURATION = 2500;
 const PRESS_DURATION = 160;
 
 const props = defineProps<{
   open: boolean;
+  /** Expansions of the game: only their tabs are listed (undefined: all) */
+  expansions?: ReadonlyArray<string>;
 }>();
 
 const emit = defineEmits<{
@@ -108,7 +110,7 @@ const highlighted = computed(() => {
     ids.add(capturing.value);
   }
   if (hoveredKey.value !== undefined) {
-    keyUses(hoveredKey.value).forEach((use) => ids.add(use.id));
+    keyUses(hoveredKey.value, props.expansions).forEach((use) => ids.add(use.id));
   }
   return ids;
 });
@@ -255,7 +257,7 @@ function onCaptureKey(event: KeyboardEvent): void {
 /** Gives the keys to the action being edited, unless they are fixed ones */
 function assign(id: string, keys: KeyList, plainKey: string): void {
   if (keys.length === 1 && RESERVED_KEYS.includes(plainKey)) {
-    showNote(translateTextWithParams('"${0}" is a fixed key.', [plainKey]), true);
+    showNote(translateTextWithParams('"${0}" is a fixed key.', [keyCapLabel(plainKey)]), true);
     return;
   }
   setBinding(id, keys);
@@ -283,7 +285,7 @@ function pressVirtualKey(key: KeyboardKey): void {
     assign(capturing.value, modArmed.value ? ['Mod', key.value] : [key.value], key.value);
     return;
   }
-  const editable = keyUses(key).find((use) => findHotkeyAction(use.id)?.locked !== true && findHotkeyAction(use.id) !== undefined);
+  const editable = keyUses(key, props.expansions).find((use) => findHotkeyAction(use.id)?.locked !== true && findHotkeyAction(use.id) !== undefined);
   if (editable !== undefined) {
     capturing.value = editable.id;
   }

@@ -1456,5 +1456,14 @@
   "Starts by itself once nobody plays": "Start vanzelf zodra niemand speelt",
   "Checking the new commits…": "Nieuwe commits controleren…",
   "Building the new version…": "Nieuwe versie bouwen…",
-  "Approve on the Mac:": "Goedkeuren op de Mac:"
+  "Approve on the Mac:": "Goedkeuren op de Mac:",
+  "Binding – costs or ends": "Bindend – kost of beëindigt",
+  "Continue – everything else": "Doorgaan – al het andere",
+  "Binding": "Bindend",
+  "Continue": "Doorgaan",
+  "Log": "Logboek",
+  "Tab": "Tabblad",
+  "Always there": "Altijd aanwezig",
+  "End the turn": "Beurt beëindigen",
+  "Depending on the situation": "Afhankelijk van de situatie"
 }

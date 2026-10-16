@@ -95,7 +95,7 @@
       </HomeColumns>
     </div>
 
-    <HotkeyHelpDialog :open="keyboardShortcutOpened" @close="keyboardShortcutOpened = false"/>
+    <HotkeyHelpDialog :open="keyboardShortcutOpened" :expansions="hotkeyExpansions" @close="keyboardShortcutOpened = false"/>
   </div>
 </template>
 
@@ -123,6 +123,7 @@ import HandCardsTab from '@/client/components/HandCardsTab.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
 import TopBar from '@/client/components/TopBar.vue';
 import HotkeyHelpDialog from '@/client/components/hotkeys/HotkeyHelpDialog.vue';
+import {gameExpansions} from '@/client/hotkeys/hotkeyActions';
 import {GameModel} from '@/common/models/GameModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {HomeMixin} from '@/client/mixins/HomeMixin';
@@ -161,6 +162,10 @@ export default defineComponent({
     };
   },
   computed: {
+    // Only the tabs of this game's expansions are listed in the shortcut dialog
+    hotkeyExpansions(): Array<string> {
+      return gameExpansions(this.game.gameOptions.expansions);
+    },
     // Game board collapsed in the start phase (shared state, setupBoardCollapsed.ts)
     boardCollapsed(): boolean {
       return setupBoardCollapsed.value;

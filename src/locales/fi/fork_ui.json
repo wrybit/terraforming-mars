@@ -856,5 +856,15 @@
   "Starts by itself once nobody plays": "Alkaa itsestään, kun kukaan ei pelaa",
   "Checking the new commits…": "Tarkistetaan uusia committeja…",
   "Building the new version…": "Kootaan uutta versiota…",
-  "Approve on the Mac:": "Hyväksy Macilla:"
+  "Approve on the Mac:": "Hyväksy Macilla:",
+  "Binding – costs or ends": "Sitova – maksaa tai päättää",
+  "Continue – everything else": "Jatka – kaikki muu",
+  "Binding": "Sitova",
+  "Continue": "Jatka",
+  "Menu": "Valikko",
+  "Log": "Loki",
+  "Tab": "Välilehti",
+  "Always there": "Aina näkyvissä",
+  "End the turn": "Lopeta vuoro",
+  "Depending on the situation": "Tilanteen mukaan"
 }

@@ -1624,5 +1624,14 @@
   "Starts by itself once nobody plays": "Ruszy sama, gdy nikt nie gra",
   "Checking the new commits…": "Sprawdzanie nowych commitów…",
   "Building the new version…": "Budowanie nowej wersji…",
-  "Approve on the Mac:": "Zatwierdź na Macu:"
+  "Approve on the Mac:": "Zatwierdź na Macu:",
+  "Binding – costs or ends": "Wiążące – kosztuje lub kończy",
+  "Continue – everything else": "Dalej – wszystko inne",
+  "Binding": "Wiążące",
+  "Continue": "Dalej",
+  "Log": "Dziennik",
+  "Tab": "Karta",
+  "Always there": "Zawsze dostępne",
+  "End the turn": "Koniec tury",
+  "Depending on the situation": "Zależnie od sytuacji"
 }

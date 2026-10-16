@@ -146,7 +146,7 @@
       <!-- In a tab box (e.g. simple decision in WaitingForTabs) the button sits in the footer -->
       <TabPanelFooterSlot v-if="!asTabs && showOwnSaveButton()">
         <div class="wf-action or-options-save">
-          <AppButton hotkey="confirm" :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid || awaitingPlayer" @click="saveData" />
+          <AppButton hotkey="proceed" :title="$t(selectedOption.buttonLabel)" type="submit" size="normal" :disabled="!childValid || awaitingPlayer" @click="saveData" />
         </div>
       </TabPanelFooterSlot>
 
@@ -157,7 +157,7 @@
         <ActionStepChips v-if="turnStep !== undefined" :step="turnStep"/>
         <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabToneClass('or-tab-save--', selectedOption)]">
           <!-- Disabled while the selected option has no valid selection yet (e.g. no card chosen) -->
-          <AppButton hotkey="confirm" :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid || awaitingCeo" @click="saveData" />
+          <AppButton :hotkey="tabConfirmHotkey(tabHotkey(selectedOption.title, selectedOption))" :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid || awaitingCeo" @click="saveData" />
         </div>
       </div>
       <!-- Tab with a single centered button (raise temperature …): nothing has happened yet, Cancel just leaves the tab.
@@ -202,6 +202,7 @@ import CardIntroBlock from '@/client/components/CardIntroBlock.vue';
 import ChoiceOptionTile from '@/client/components/ChoiceOptionTile.vue';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {tabHotkey} from '@/client/hotkeys/tabHotkeys';
+import {tabConfirmHotkey} from '@/client/hotkeys/confirmHotkeys';
 import CancelActionButton from '@/client/components/CancelActionButton.vue';
 import {inputSourceCard, optionSourceCard} from '@/client/components/inputSourceCard';
 import {CardName} from '@/common/cards/CardName';
@@ -557,6 +558,8 @@ export default defineComponent({
     tabIconLabel,
     tabDisplayOrder,
     tabButtonLabel,
+    // Enter for tabs that spend or end something, Space for the others (confirmHotkeys.ts)
+    tabConfirmHotkey,
     tabHighlighted,
     isEndTab,
     tabButtonCentered,
