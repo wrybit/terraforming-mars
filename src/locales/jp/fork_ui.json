@@ -1221,5 +1221,7 @@
   "Always there": "常に表示",
   "End the turn": "ターン終了",
   "Depending on the situation": "状況次第",
-  "The Alt. Venus Board does not extend to the end of the Venus track on Amazonis Planitia.": "Amazonis Planitiaでは、代替金星ボードは金星トラックの終わりまで届きません。"
+  "The Alt. Venus Board does not extend to the end of the Venus track on Amazonis Planitia.": "Amazonis Planitiaでは、代替金星ボードは金星トラックの終わりまで届きません。",
+  "Prelude 2 without Prelude will only include its project cards, not its preludes.": "プレリュードなしのプレリュード2には、プロジェクトカードのみが含まれ、プレリュードカードは含まれません。",
+  "Delta Project requires the Prelude expansion.": "Delta Projectにはプレリュード拡張が必要です。"
 }
