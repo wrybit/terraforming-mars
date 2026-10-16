@@ -39,6 +39,8 @@ export interface SerializedPlayer extends DeprecatedFields{
   deltaProject?: DeltaProjectPlayerModel;
   draftedCards: Array<CardName>;
   draftHand: Array<CardName>,
+  /** Research phase: cards offered and not yet chosen (fork, so a restart does not draw again) */
+  researchOffer?: Array<CardName>,
   draftOrder?: Array<CardName>,
   energy: number;
   energyProduction: number;

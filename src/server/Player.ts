@@ -147,6 +147,7 @@ export class Player implements IPlayer {
   public draftOrder: Array<CardName> = [];
   public cardCost: number = constants.CARD_COST;
   public needsToDraft?: boolean;
+  public researchOffer: Array<IProjectCard> | undefined = undefined;
 
   public timer: Timer = Timer.newInstance();
   public autopass = false;
@@ -665,8 +666,11 @@ export class Player implements IPlayer {
     return total;
   }
 
-  public runResearchPhase(): void {
-    if (!this.game.gameOptions.draftVariant || this.game.isSoloMode()) {
+  public runResearchPhase(offer?: Array<IProjectCard>): void {
+    if (offer !== undefined) {
+      // Neustart mitten in der Forschungsphase: dasselbe Angebot wie vorher, nichts neu ziehen
+      this.draftedCards = offer;
+    } else if (!this.game.gameOptions.draftVariant || this.game.isSoloMode()) {
       this.draftedCards = newStandardDraft(this.game).draw(this);
     }
 
@@ -678,6 +682,8 @@ export class Player implements IPlayer {
     }
 
     const cards = copyAndClear(this.draftedCards);
+    // Dasselbe Array: auch ein Kartentausch (Underworld) landet im Speicherstand
+    this.researchOffer = cards;
 
     const chooseCardsToBuy = () => {
       // TODO(kberg): Using .execute to rely on directly calling setWaitingFor is not great.
@@ -692,6 +698,7 @@ export class Player implements IPlayer {
       const saved = action.cb;
       action.cb = ((response) => {
         saved(response);
+        this.researchOffer = undefined;
         this.game.playerIsFinishedWithResearchPhase(this);
         return undefined;
       });
@@ -1489,9 +1496,9 @@ export class Player implements IPlayer {
     this.game.drainQueue(() => {
       const game = this.game;
 
-      if (this.actionsTakenThisRound === 0 || game.gameOptions.undoOption) {
-        game.save();
-      }
+      // Fork: vor jeder Aktion speichern, nicht nur vor der ersten des Zuges – ein Server-Update
+      // setzt sonst alle Spieler an den Zuganfang zurueck (Undo braucht dieselben Speicherpunkte)
+      game.save();
       // if (saveBeforeTakingAction) game.save();
 
 
@@ -1858,6 +1865,7 @@ export class Player implements IPlayer {
       ceoCardsInHand: Array.from(this.ceoCardsInHand).map(toName),
       playedCards: this.playedCards.serialize(),
       draftedCards: this.draftedCards.map(toName),
+      researchOffer: this.researchOffer?.map(toName),
       cardCost: this.cardCost,
       needsToDraft: this.needsToDraft,
       cardDiscount: this.colonies.cardDiscount,
@@ -1985,6 +1993,7 @@ export class Player implements IPlayer {
     player.ceoCardsInHand = new Set(ceosFromJSON(d.ceoCardsInHand));
     player.playedCards.deserialize(d.playedCards);
     player.draftedCards = cardsFromJSON(d.draftedCards);
+    player.researchOffer = d.researchOffer === undefined ? undefined : cardsFromJSON(d.researchOffer);
     player.autopass = d.autoPass ?? false;
     player.preservationProgram = d.preservationProgram ?? false;
     // TODO(kberg): remove ?? 0 by 2026-11-01

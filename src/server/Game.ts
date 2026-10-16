@@ -712,6 +712,10 @@ export class Game implements IGame, Logger {
           p.playCorporationCard(p.pickedCorporationCard);
         }
       }
+    } else {
+      // Fork: die Startauswahl gleich sichern – nach einem Neustart waehlen nur die uebrigen Spieler
+      // (gotoInitialResearchPhase fragt nur, wer noch keine Corporation hat)
+      this.save();
     }
   }
 
@@ -771,6 +775,23 @@ export class Game implements IGame, Logger {
     if (this.players.length === 1 && this.gameOptions.coloniesExtension) {
       this.players[0].production.add(Resource.MEGACREDITS, -2);
       this.defer(new RemoveColonyFromGame(this.players[0]));
+    }
+  }
+
+  /**
+   * Restart mid research phase (deserialize): who already bought keeps the cards, the others get the same
+   * offer as before. Saves without an offer (made before anyone drew) start the phase over as before.
+   */
+  public resumeResearchPhase(): void {
+    const started = this.players.some((player) => player.researchOffer !== undefined || this.researchedPlayers.has(player.id));
+    if (!started) {
+      this.gotoResearchPhase();
+      return;
+    }
+    for (const player of this.players) {
+      if (!this.researchedPlayers.has(player.id)) {
+        player.runResearchPhase(player.researchOffer);
+      }
     }
   }
 
@@ -1065,7 +1086,10 @@ export class Game implements IGame, Logger {
   public playerIsFinishedWithResearchPhase(player: IPlayer): void {
     this.deferredActions.runAllFor(player, () => {
       this.researchedPlayers.add(player.id);
-      if (this.researchedPlayers.size === this.players.length) {
+      if (this.researchedPlayers.size < this.players.length) {
+        // Fork: gekaufte Karten sofort sichern – nach einem Neustart setzt resumeResearchPhase hier fort
+        this.save();
+      } else {
         this.researchedPlayers.clear();
         this.phase = Phase.ACTION;
         this.passedPlayers.clear();
@@ -1866,7 +1890,7 @@ export class Game implements IGame, Logger {
     } else if (game.phase === Phase.DRAFTING) {
       newStandardDraft(game).restoreDraft();
     } else if (game.phase === Phase.RESEARCH) {
-      game.gotoResearchPhase();
+      game.resumeResearchPhase();
     } else if (game.phase === Phase.PRODUCTION) {
       if (game.gameIsOver() && game.isDoneWithFinalProduction()) {
         game.takeNextFinalGreeneryAction();

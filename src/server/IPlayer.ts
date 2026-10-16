@@ -327,7 +327,10 @@ export interface IPlayer {
   runProductionPhase(): void;
   finishProductionPhase(): void;
 
-  runResearchPhase(): void;
+  /** Cards offered in the research phase and not yet chosen; kept in saves for a restart mid-phase */
+  researchOffer: Array<IProjectCard> | undefined;
+  /** offer: cards already offered before a restart (resumeResearchPhase) instead of drawing new ones */
+  runResearchPhase(offer?: Array<IProjectCard>): void;
   getCardCost(card: IProjectCard): number;
 
   /** The number of resources on this card for this player, or 0 if the player does not have this card. */
