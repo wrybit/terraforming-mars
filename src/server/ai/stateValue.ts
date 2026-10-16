@@ -42,6 +42,8 @@ const EFFECT_CARD_VALUE_PER_GENERATION = 1;
 const OPPONENT_WEIGHT = 0.5;
 // Without this, adding a microbe was worth nothing and the AI passed instead.
 const RESOURCE_ON_CARD_VALUE = 0.8;
+// Generations counted as the opening for valueModelOpening (aiTuning.ts).
+const OPENING_GENERATIONS = 4;
 
 /**
  * Game-phase numbers frozen at decision time. Copies that run into the next generation must
@@ -444,7 +446,9 @@ export function relativeValue(player: IPlayer, frozen: ValuationContext): number
   // Bonus steps left one step away for an opponent (bonusRace.ts).
   const bonusThreat = tuning.bonusRace > 0 ? openBonusThreat(player, context) : 0;
   const handMade = own - weight * (opponentAverage + spotThreat + tuning.bonusRace * bonusThreat) + closer - tuning.terraformBrake * stepsRaised(player, frozen);
-  return tuning.valueModel > 0 ? blendLearnedValue(player, handMade, tuning.valueModel, context.victoryPoint) : handMade;
+  // Opening: the learned model underprices M€ production, so its share can be lower there (aiTuning.ts).
+  const share = context.generation <= OPENING_GENERATIONS ? tuning.valueModel * tuning.valueModelOpening : tuning.valueModel;
+  return share > 0 ? blendLearnedValue(player, handMade, share, context.victoryPoint) : handMade;
 }
 
 /**

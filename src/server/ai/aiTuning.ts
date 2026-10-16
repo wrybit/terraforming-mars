@@ -183,6 +183,11 @@ export type AiTuning = {
    * valuation only, 1 = model only. The model's expected final VP margin is priced like VP now (stateValue.ts).
    */
   valueModel: number,
+  /**
+   * Factor on valueModel in the opening (generations 1–4): the learned model prices M€ production there far below
+   * the hand-made valuation (0.6 VP per unit), so the AI may neglect income early. 1 = same share as later.
+   */
+  valueModelOpening: number,
   /** 1: drawn cards kept for free in the action phase (Business Contacts …) chosen by the full card valuation (cardSelection.ts). */
   keepValuation: number,
   /** 1: cards to discard from hand chosen as the least valuable by the full card valuation (cardSelection.ts). */
@@ -295,6 +300,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 91 (1200 mirrored 1v1 games): valueModel25 +3.48 VP (z +4.81; base +2.80, venus +4.16), Mac 85 s vs 70 s
   // (+15 s for +3.5 VP) – adopted; valueModel50 −3.58 (z −3.81): more model than that hurts.
   valueModel: 0.25,
+  valueModelOpening: 1,
   // Round 91: keepValued +1.06 VP (z +1.63) – adopted, fixes the analysis-log error (Business Contacts by statistics).
   keepValuation: 1,
   // Rated human game (2026-10-16): Mars University discarded Birds; Jens' discard order is a rule (discardPriority.ts).
@@ -740,6 +746,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   valueModel15: {valueModel: 0.15},
   valueModel35: {valueModel: 0.35},
   noValueModel: {valueModel: 0},
+  openingModel0: {valueModelOpening: 0},
+  openingModel50: {valueModelOpening: 0.5},
   // Analysis log (2026-10-16): Business Contacts in generation 10 kept two cards by statistics only.
   keepValued: {keepValuation: 1},
   // Rated human game (2026-10-16): Mars University discarded Birds in generation 13 (quick rule keeps VP cards first).
