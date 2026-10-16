@@ -1,11 +1,16 @@
 import {expect} from 'chai';
 import {afterEach, beforeEach, vi} from 'vitest';
-import {scheduleLayoutJob} from '@/client/utils/layoutBatch';
+import type {scheduleLayoutJob as ScheduleLayoutJob} from '@/client/utils/layoutBatch';
 
 describe('layoutBatch', () => {
-  let frameCallback: (time: number) => void | undefined;
+  let frameCallback: ((time: number) => void) | undefined;
+  let scheduleLayoutJob: typeof ScheduleLayoutJob;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    // Tests share one module registry (isolate: false): other components may have left a pending
+    // frame in layoutBatch's module state. Load a fresh copy so this test controls the frame.
+    vi.resetModules();
+    ({scheduleLayoutJob} = await import('@/client/utils/layoutBatch'));
     frameCallback = undefined;
     vi.stubGlobal('requestAnimationFrame', (callback: (time: number) => void) => {
       frameCallback = callback;
