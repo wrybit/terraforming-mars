@@ -6,7 +6,7 @@ import {cardPayment} from '../../src/server/ai/greedyPayment';
 import {Miner} from '../../src/server/awards/Miner';
 import {ImmigrantCity} from '../../src/server/cards/base/ImmigrantCity';
 
-// Last generation, funded Miner 9 : 10 – steel spent on a card loses it (human game, lost by 2 VP).
+// Last generation, funded Miner 8 : 7 – steel spent on a card loses the lead (human game: lost 9 : 10, game by 2 VP).
 function closeMinerRace() {
   const [game, player, opponent] = testGame(2);
   game.generation = 12;
@@ -16,16 +16,16 @@ function closeMinerRace() {
   game.fundAward(opponent, new Miner());
   player.steel = 2;
   player.titanium = 6;
-  opponent.steel = 10;
+  opponent.steel = 7;
   player.megaCredits = 20;
-  return player;
+  return {player, opponent};
 }
 
 describe('AI keeps steel for a close stock award', () => {
   afterEach(() => clearPlayerTunings());
 
   it('pays with M€ and keeps the steel the award counts', () => {
-    const player = closeMinerRace();
+    const {player} = closeMinerRace();
     setPlayerTuning(player.id, 'keepAwardStock');
     const payment = cardPayment(player, new ImmigrantCity());
     expect(payment.steel).eq(0);
@@ -33,13 +33,21 @@ describe('AI keeps steel for a close stock award', () => {
   });
 
   it('spends the steel without the rule', () => {
-    const player = closeMinerRace();
+    const {player} = closeMinerRace();
+    const payment = cardPayment(player, new ImmigrantCity());
+    expect(payment.steel).eq(2);
+  });
+
+  it('keeps nothing when the award is lost anyway', () => {
+    const {player, opponent} = closeMinerRace();
+    setPlayerTuning(player.id, 'keepAwardStock');
+    opponent.steel = 12;
     const payment = cardPayment(player, new ImmigrantCity());
     expect(payment.steel).eq(2);
   });
 
   it('falls back to the steel when M€ does not cover the cost', () => {
-    const player = closeMinerRace();
+    const {player} = closeMinerRace();
     setPlayerTuning(player.id, 'keepAwardStock');
     player.megaCredits = 9;
     const payment = cardPayment(player, new ImmigrantCity());

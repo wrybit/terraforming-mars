@@ -701,6 +701,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human games (2026-10-15): hand 14–24 cards, 13 sold at the end – buy only cards worth clearly more than 3 M€.
   buyStrict: {buyMargin: -1},
   buyStricter: {buyMargin: 1},
+  buyStrictest: {buyMargin: 3},
 };
 
 export function isTuningVariant(name: string): boolean {
