@@ -1642,5 +1642,6 @@
   "for": "za",
   "Scroll through the cards": "Przewijaj karty",
   "Scroll": "Przewiń",
-  "Action tabs": "Karty akcji"
+  "Action tabs": "Karty akcji",
+  "${0} commits": "Commity: ${0}"
 }

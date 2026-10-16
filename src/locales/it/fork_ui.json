@@ -2086,5 +2086,6 @@
   "for": "per",
   "Scroll through the cards": "Scorrere le carte",
   "Scroll": "Scorri",
-  "Action tabs": "Schede azione"
+  "Action tabs": "Schede azione",
+  "${0} commits": "${0} commit"
 }

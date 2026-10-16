@@ -1047,5 +1047,6 @@
   "for": "összesen",
   "Scroll through the cards": "Kártyák görgetése",
   "Scroll": "Görgetés",
-  "Action tabs": "Akciófülek"
+  "Action tabs": "Akciófülek",
+  "${0} commits": "${0} commit"
 }

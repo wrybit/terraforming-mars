@@ -1028,5 +1028,7 @@
   "for": "за",
   "Scroll through the cards": "Гортати карти",
   "Scroll": "Гортати",
-  "Action tabs": "Вкладки дій"
+  "Action tabs": "Вкладки дій",
+  "1 commit": "1 коміт",
+  "${0} commits": "Комітів: ${0}"
 }

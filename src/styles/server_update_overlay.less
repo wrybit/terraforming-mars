@@ -127,6 +127,11 @@
   margin: 0;
   padding: 6px 12px;
   list-style: none;
+  // Eine Spalte so breit wie der längste Commit, mittig in der Box: wenige kurze Commits sitzen zentriert,
+  // Hashes bleiben trotzdem untereinander; lange Zeilen füllen die Breite und kürzen mit "…"
+  display: grid;
+  grid-template-columns: minmax(0, max-content);
+  justify-content: center;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.04);

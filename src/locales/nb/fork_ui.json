@@ -1223,5 +1223,6 @@
   "Standard Mode (:tag:mars:): play 1 more generation.": "Standardmodus (:tag:mars:): spill 1 generasjon til.",
   "Scroll through the cards": "Bla gjennom kortene",
   "Scroll": "Bla",
-  "Action tabs": "Handlingsfaner"
+  "Action tabs": "Handlingsfaner",
+  "${0} commits": "${0} commiter"
 }

@@ -875,5 +875,6 @@
   "for": "yhteensä",
   "Scroll through the cards": "Selaa kortteja",
   "Scroll": "Selaa",
-  "Action tabs": "Toimintovälilehdet"
+  "Action tabs": "Toimintovälilehdet",
+  "${0} commits": "${0} committia"
 }

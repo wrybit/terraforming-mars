@@ -656,5 +656,7 @@
   "for": "für",
   "Scroll through the cards": "Durch die Karten blättern",
   "Scroll": "Blättern",
-  "Action tabs": "Aktions-Tabs"
+  "Action tabs": "Aktions-Tabs",
+  "1 commit": "1 Commit",
+  "${0} commits": "${0} Commits"
 }

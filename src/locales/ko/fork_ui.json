@@ -1110,5 +1110,7 @@
   "for": "총",
   "Scroll through the cards": "카드 넘기기",
   "Scroll": "스크롤",
-  "Action tabs": "행동 탭"
+  "Action tabs": "행동 탭",
+  "1 commit": "커밋 1개",
+  "${0} commits": "커밋 ${0}개"
 }

@@ -1800,5 +1800,7 @@
   "for": "共",
   "Scroll through the cards": "浏览卡牌",
   "Scroll": "滚动",
-  "Action tabs": "行动标签"
+  "Action tabs": "行动标签",
+  "1 commit": "1 个提交",
+  "${0} commits": "${0} 个提交"
 }

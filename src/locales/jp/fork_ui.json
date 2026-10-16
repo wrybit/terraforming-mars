@@ -1229,5 +1229,7 @@
   "for": "計",
   "Scroll through the cards": "カードをスクロール",
   "Scroll": "スクロール",
-  "Action tabs": "アクションタブ"
+  "Action tabs": "アクションタブ",
+  "1 commit": "1件のコミット",
+  "${0} commits": "${0}件のコミット"
 }

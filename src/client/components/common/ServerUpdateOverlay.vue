@@ -28,7 +28,13 @@
       </template>
       <!-- What the update brings: one line per commit, cut with "…"; more than three scroll inside the box -->
       <div v-if="commits.length > 0" class="server-update-overlay__commits">
-        <div class="server-update-overlay__commits-label" v-i18n>Changes in this update</div>
+        <!-- Anzahl vorneweg, damit man sofort sieht, wie groß das Update ist -->
+        <div class="server-update-overlay__commits-label">
+          <span v-if="commits.length === 1" v-i18n>1 commit</span>
+          <span v-else :key="commits.length" v-i18n="[String(commits.length)]">${0} commits</span>
+          <span aria-hidden="true"> · </span>
+          <span v-i18n>Changes in this update</span>
+        </div>
         <ul class="server-update-overlay__commit-list">
           <li v-for="commit in commits" :key="commit.hash" class="server-update-overlay__commit" :title="commit.subject">
             <span class="server-update-overlay__commit-hash">{{ commit.hash }}</span>

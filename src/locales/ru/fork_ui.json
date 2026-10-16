@@ -1686,5 +1686,7 @@
   "for": "за",
   "Scroll through the cards": "Листать карты",
   "Scroll": "Листать",
-  "Action tabs": "Вкладки действий"
+  "Action tabs": "Вкладки действий",
+  "1 commit": "1 коммит",
+  "${0} commits": "Коммитов: ${0}"
 }
