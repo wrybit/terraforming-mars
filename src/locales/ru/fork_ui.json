@@ -1682,5 +1682,6 @@
   "Prelude 2 without Prelude will only include its project cards, not its preludes.": "Прелюдия 2 без Прелюдии включает только свои карты проектов, но не прелюдии.",
   "Delta Project requires the Prelude expansion.": "Delta Project требует дополнения Прелюдия.",
   "Changes by board": "Изменения по картам",
-  "Standard Mode (:tag:mars:): play 1 more generation.": "Стандартный режим (:tag:mars:): вы играете на 1 поколение больше."
+  "Standard Mode (:tag:mars:): play 1 more generation.": "Стандартный режим (:tag:mars:): вы играете на 1 поколение больше.",
+  "for": "за"
 }

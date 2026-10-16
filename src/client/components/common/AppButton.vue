@@ -1,7 +1,9 @@
 <template>
   <button @click="$emit('click')" class="btn" :class="outerClass" :disabled="isDisabled" :data-hotkey="hotkey" v-i18n>
     <span v-if="hasIcon" class="icon" :class="iconClass" data-test="icon"></span>
-    <span v-else>{{ buttonText }}</span>
+    <span v-else-if="counts.length === 0">{{ buttonText }}</span>
+    <!-- Text and counters on one line ("Buy [3] for [9]", buttonCount.ts) -->
+    <span v-else class="btn-counted__label">{{ buttonText }}<ButtonCount v-for="(part, index) in counts" :key="index" :part="part"/></span>
     <HotkeyKeys v-if="hotkey !== undefined" :action="hotkey"/>
   </button>
 </template>
@@ -13,10 +15,12 @@ import {vueRoot} from '@/client/components/vueRoot';
 import {Message} from '@/common/logs/Message';
 import {translateText, translateMessage} from '@/client/directives/i18n';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
+import ButtonCount from '@/client/components/common/ButtonCount.vue';
+import {ButtonCountPart} from '@/client/components/common/buttonCount';
 
 export default defineComponent({
   name: 'AppButton',
-  components: {HotkeyKeys},
+  components: {HotkeyKeys, ButtonCount},
   emits: ['click'],
   props: {
     // Action id of a keyboard shortcut (hotkeyActions.ts): shows its key cap and lets the key press the button
@@ -31,6 +35,11 @@ export default defineComponent({
     disabled: {
       type: Boolean,
       default: false,
+    },
+    // Counters after the text: what is counted (cards, M€, a resource) is shown by its shape, not only by a number
+    counts: {
+      type: Array as () => ReadonlyArray<ButtonCountPart>,
+      default: () => [],
     },
     align: {
       type: String,
@@ -101,6 +110,7 @@ export default defineComponent({
         'float-right': this.align === 'right',
 
         'btn-rounded': this.rounded === true,
+        'btn-counted': this.counts.length > 0,
 
         // loading
         'loading': this.isDisabledDueToServerBusy,

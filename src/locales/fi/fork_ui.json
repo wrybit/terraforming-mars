@@ -871,5 +871,6 @@
   "Prelude 2 without Prelude will only include its project cards, not its preludes.": "Prelude 2 ilman Preludea sisältää vain sen projektikortit, ei sen preludeja.",
   "Delta Project requires the Prelude expansion.": "Delta Project vaatii Prelude-laajennuksen.",
   "Changes by board": "Muutokset pelilaudoittain",
-  "Standard Mode (:tag:mars:): play 1 more generation.": "Perustila (:tag:mars:): pelaa 1 sukupolvi enemmän."
+  "Standard Mode (:tag:mars:): play 1 more generation.": "Perustila (:tag:mars:): pelaa 1 sukupolvi enemmän.",
+  "for": "yhteensä"
 }

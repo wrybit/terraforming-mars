@@ -110,6 +110,28 @@ describe('SelectCard', () => {
     expect((wrapper.vm as any).cards).to.have.length(3);
   });
 
+  // The confirm button counts the chosen cards and, when buying, shows the total price
+  it('shows chosen cards and the total price in the buy button', async () => {
+    const wrapper = mountSelection(3, [], 'Buy');
+    (wrapper.props('playerView') as any).thisPlayer.cardCost = 3;
+    (wrapper.vm as any).cards = [{name: 'Ants'}, {name: 'Birds'}];
+    await wrapper.vm.$nextTick();
+    expect((wrapper.vm as any).buttonCounts()).to.deep.eq([
+      {kind: 'card', value: 2},
+      {kind: 'megacredits', value: 6, gain: undefined, word: 'for'},
+    ]);
+  });
+
+  it('shows the income when selling patents', async () => {
+    const wrapper = mountSelection(3, []);
+    (wrapper.vm as any).cards = [{name: 'Ants'}];
+    await wrapper.vm.$nextTick();
+    expect((wrapper.vm as any).buttonCounts()).to.deep.eq([
+      {kind: 'card', value: 1},
+      {kind: 'megacredits', value: 1, gain: true, word: 'for'},
+    ]);
+  });
+
   it('never offers select all when buying cards', () => {
     const wrapper = mountSelection(3, [], 'Buy');
     expect(wrapper.find('.select-card-toolbar__select-all').exists()).is.false;

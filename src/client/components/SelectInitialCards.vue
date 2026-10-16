@@ -49,7 +49,7 @@
         :status="warning ?? 'Ready to start'"
         :statusReady="valid && warning === undefined">
         <!-- :key=warning is a way of validing that the state of the button should change. If the warning changes, or disappears, that's a signal that the button might change. -->
-        <AppButton hotkey="confirm" :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel" class="select-initial-cards-start"/>
+        <AppButton hotkey="confirm" :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel" :counts="startCounts()" class="select-initial-cards-start"/>
       </SetupSummary>
     </div>
   </div>
@@ -63,6 +63,7 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import {getCard, getCardOrThrow} from '@/client/cards/ClientCardManifest';
 import {CardName} from '@/common/cards/CardName';
 import * as constants from '@/common/constants';
+import {ButtonCountPart, cardCount} from '@/client/components/common/buttonCount';
 import {PlayerInputModel, SelectCardModel, SelectInitialCardsModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import SelectCard from '@/client/components/SelectCard.vue';
@@ -268,6 +269,10 @@ export default defineComponent({
         return 0;
       }
       return corporation?.cardCost ?? constants.CARD_COST;
+    },
+    // Counter in the start button: chosen project cards and their total price
+    startCounts(): Array<ButtonCountPart> {
+      return this.selectedCards.length === 0 ? [] : cardCount(this.selectedCards.length, {perCard: this.cardCost()});
     },
     saveIfConfirmed() {
       const projectCards = this.selectedCards.filter((name) => getCard(name)?.type !== CardType.PRELUDE);

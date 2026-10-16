@@ -2082,5 +2082,6 @@
   "Prelude 2 without Prelude will only include its project cards, not its preludes.": "Prelude 2 senza Prelude include solo le sue carte progetto, non i suoi preludi.",
   "Delta Project requires the Prelude expansion.": "Delta Project richiede l'espansione Prelude.",
   "Changes by board": "Modifiche per tabellone",
-  "Standard Mode (:tag:mars:): play 1 more generation.": "Modalità standard (:tag:mars:): gioca 1 generazione in più."
+  "Standard Mode (:tag:mars:): play 1 more generation.": "Modalità standard (:tag:mars:): gioca 1 generazione in più.",
+  "for": "per"
 }

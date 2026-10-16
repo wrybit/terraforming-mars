@@ -13,7 +13,7 @@
     </div>
     <TabPanelFooterSlot>
       <div v-if="showsave === true" class="amount-select__actions">
-        <AppButton hotkey="proceed" type="submit" @click="saveData" :title="buttonTitle" />
+        <AppButton hotkey="proceed" type="submit" @click="saveData" :title="buttonTitle" :counts="buttonCounts" />
       </div>
     </TabPanelFooterSlot>
   </div>
@@ -31,6 +31,7 @@ import {SelectAmountResponse} from '@/common/inputs/InputResponse';
 import {CardName} from '@/common/cards/CardName';
 import {inputSourceCard} from '@/client/components/inputSourceCard';
 import {AmountConversion, amountConversion} from '@/client/components/amount/amountConversion';
+import {ButtonCountPart, resourceCountKind} from '@/client/components/common/buttonCount';
 
 export default defineComponent({
   name: 'SelectAmount',
@@ -81,9 +82,19 @@ export default defineComponent({
     conversion(): AmountConversion | undefined {
       return amountConversion(this.playerinput.title, this.sourceCard);
     },
-    // The button names action and amount ("Decrease 5")
+    // Known conversion: what is spent, as a resource counter in the button ("Spend energy" with an energy badge)
+    buttonCounts(): Array<ButtonCountPart> {
+      const from = this.conversion?.from;
+      const kind = from === undefined ? undefined : resourceCountKind(from.resource);
+      if (from === undefined || kind === undefined) {
+        return [];
+      }
+      return [{kind, value: this.amount * from.perStep}];
+    },
+    // The button names action and amount ("Decrease 5"); with a counter the counter shows the amount
     buttonTitle(): string {
-      return this.$t(this.playerinput.buttonLabel || 'Confirm') + ' ' + this.amount;
+      const label = this.$t(this.playerinput.buttonLabel || 'Confirm');
+      return this.buttonCounts.length > 0 ? label : label + ' ' + this.amount;
     },
   },
   methods: {

@@ -80,7 +80,7 @@
               <AppButton hotkey="confirm" :disabled="true" type="submit" :title="$t('Buy')" class="btn-tone-success" />
               <AppButton hotkey="cancel" type="submit" @click="saveData" :title="$t('Discard')" class="btn-tone-danger" />
             </template>
-            <AppButton :hotkey="labelConfirmHotkey(playerinput.buttonLabel)" v-else :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="buttonLabel()"
+            <AppButton :hotkey="labelConfirmHotkey(playerinput.buttonLabel)" v-else :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="playerinput.buttonLabel" :counts="buttonCounts()"
               :class="{'btn-tone-success': isOptionalToManyCards}" />
             <AppButton hotkey="cancel" :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t(skipLabel)"
               class="btn-tone-danger" />
@@ -111,7 +111,8 @@ import {translateTextWithParams} from '@/client/directives/i18n';
 import {allCardsInHand} from '@/client/utils/handCards';
 import {Color} from '@/common/Color';
 import {Message} from '@/common/logs/Message';
-import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
+import {ButtonCountPart, cardCount} from '@/client/components/common/buttonCount';
+import * as constants from '@/common/constants';
 import {CardOrderStorage} from '@/client/utils/CardOrderStorage';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import Card from '@/client/components/card/Card.vue';
@@ -339,18 +340,21 @@ export default defineComponent({
       }
       return cardOwnerGroups(cards, (card) => this.owners.get(card.name), this.playerView.players, this.playerView.thisPlayer?.color);
     },
-    buttonLabel(): string | Message {
-      // Never "Buy 0": without a selection only the action, the number only counts chosen cards
-      if (this.selectOnlyOneCard || this.cardsSelected() === 0) {
-        return this.playerinput.buttonLabel;
+    // Counters in the confirm button: chosen cards, when buying with the total price, when selling with the income.
+    // Never "Buy 0": without a selection only the action, the counter only counts chosen cards
+    buttonCounts(): Array<ButtonCountPart> {
+      const count = this.cardsSelected();
+      if (this.selectOnlyOneCard || count === 0) {
+        return [];
       }
-      return {
-        message: this.playerinput.buttonLabel + ' ${0}',
-        data: [{
-          type: LogMessageDataType.RAW_STRING,
-          value: String(this.cardsSelected()),
-        }],
-      };
+      switch (this.playerinput.buttonLabel) {
+      case 'Buy':
+        return cardCount(count, {perCard: this.playerView.thisPlayer?.cardCost ?? constants.CARD_COST});
+      case 'Sell':
+        return cardCount(count, {perCard: 1, gain: true});
+      default:
+        return cardCount(count);
+      }
     },
     robotCard(card: CardModel): CardModel | undefined {
       return this.playerView.thisPlayer.selfReplicatingRobotsCards?.find((r) => r.name === card.name);

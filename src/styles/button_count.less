@@ -1,0 +1,105 @@
+// Counters inside buttons (ButtonCount.vue): the shape shows what is counted.
+// Cards: black card with white number. M€: the M€ graphic with the number in it.
+// Other resources: number and icon as one badge – shared frame, surface in the resource's colour.
+
+@button-count-gap: 8px;
+@button-count-font: 15px/1 Prototype, sans-serif;
+@button-count-frame: rgba(0, 0, 0, 0.8);
+
+// Text, counters and key cap on one line
+.btn.btn-counted {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: @button-count-gap;
+}
+
+.btn-counted__label {
+  display: inline-flex;
+  align-items: center;
+  gap: @button-count-gap;
+}
+
+// Connecting word ("for") quieter than the action
+.button-count__word {
+  opacity: 0.7;
+  font-size: 0.85em;
+}
+
+// Card: format 5:7 like a game card
+.button-count--card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+  background: #000;
+  color: #fff;
+  font: @button-count-font;
+}
+
+// M€: the game graphic with a black number (like resource_icon--megacredit-value)
+.button-count--megacredits {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 2px;
+  background: url("assets/resources/megacredit.png") center / contain no-repeat;
+  color: #000;
+  font: @button-count-font;
+}
+
+// Income: "+" in front of the graphic, not inside it – the number would get too small
+.button-count__plus {
+  margin-right: -(@button-count-gap - 4px);
+  font: 16px/1 Prototype, sans-serif;
+}
+
+.button-count--resource {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  overflow: hidden;
+  border: 1px solid @button-count-frame;
+  border-radius: 4px;
+  background: var(--button-count-colour);
+}
+
+.button-count__value {
+  padding: 0 8px 0 9px;
+  color: #fff;
+  font: @button-count-font;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+.button-count__icon {
+  width: 24px;
+  height: 24px;
+  border-left: 1px solid rgba(0, 0, 0, 0.35);
+  background: center / cover no-repeat;
+}
+
+// Colour (taken from the icon, darkened for the white number) and icon per resource
+@button-count-resources:
+  steel #7a4c36 "steel",
+  titanium #5e5a40 "titanium",
+  plants #3f7f22 "plant",
+  energy #7d3f7b "power",
+  heat #c9531a "heat",
+  microbe #5f7a1c "microbe",
+  floater #9a7f2a "floater";
+
+each(@button-count-resources, {
+  @kind: extract(@value, 1);
+  @icon: extract(@value, 3);
+  .button-count--@{kind} {
+    --button-count-colour: extract(@value, 2);
+  }
+  .button-count--@{kind} .button-count__icon {
+    background-image: url("assets/resources/@{icon}.png");
+  }
+});

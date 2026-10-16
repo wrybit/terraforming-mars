@@ -1470,5 +1470,6 @@
   "Prelude 2 without Prelude will only include its project cards, not its preludes.": "Prelude 2 zonder Prelude bevat alleen de projectkaarten, niet de preludes.",
   "Delta Project requires the Prelude expansion.": "Delta Project vereist de uitbreiding Prelude.",
   "Changes by board": "Wijzigingen per speelbord",
-  "Standard Mode (:tag:mars:): play 1 more generation.": "Standaardmodus (:tag:mars:): speel 1 generatie extra."
+  "Standard Mode (:tag:mars:): play 1 more generation.": "Standaardmodus (:tag:mars:): speel 1 generatie extra.",
+  "for": "voor"
 }

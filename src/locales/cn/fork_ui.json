@@ -1796,5 +1796,6 @@
   "Prelude 2 without Prelude will only include its project cards, not its preludes.": "未启用前奏时，前奏 2 只包含其项目卡，不包含其前奏卡。",
   "Delta Project requires the Prelude expansion.": "Delta Project 需要前奏扩展。",
   "Changes by board": "各地图的变化",
-  "Standard Mode (:tag:mars:): play 1 more generation.": "标准模式（:tag:mars:）：多进行 1 个时代。"
+  "Standard Mode (:tag:mars:): play 1 more generation.": "标准模式（:tag:mars:）：多进行 1 个时代。",
+  "for": "共"
 }
