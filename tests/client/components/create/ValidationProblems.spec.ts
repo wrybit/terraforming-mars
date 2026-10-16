@@ -38,15 +38,15 @@ describe('ValidationProblems', () => {
     expect(wrapper.find('a').exists()).is.false;
   });
 
-  it('marks errors and warnings with icons, errors first', () => {
-    const wrapper = mount(ValidationErrorsPopup, {
+  it('shows errors and warnings in separate boxes, errors first', () => {
+    const wrapper = mount(ValidationProblems, {
       ...globalConfig,
       props: {errors: {...NO_ERRORS, soloWithoutCorporateEra: true, notEnoughCorporations: 4}},
     });
-    const icons = wrapper.findAll('.create-game-validation-icon');
-    expect(icons).has.length(2);
-    expect(icons[0].attributes('title')).eq('Error');
-    expect(icons[1].attributes('title')).eq('Warning');
+    const boxes = wrapper.findAll('.create-game-validation-box');
+    expect(boxes).has.length(2);
+    expect(boxes[0].classes()).to.include('create-game-validation-box--error');
+    expect(boxes[1].classes()).to.include('create-game-validation-box--warning');
   });
 
   it('links to the wiki for more details', () => {
