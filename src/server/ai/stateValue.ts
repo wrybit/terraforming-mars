@@ -18,7 +18,7 @@ import {moneySwingShare} from './stockAward';
 import {openBonusValue} from './bonusRace';
 import {expectedAttackLoss} from './attackExposure';
 import {collectorRate} from './collectorRate';
-import {firstMilestoneBonus, incomeFactor, openingTerraformBrake} from './phasePlan';
+import {firstMilestoneBonus, incomeFactor, openingBrakeCost} from './phasePlan';
 import {bgaExpectedMargin} from './bgaValueModel';
 import {awardScoreWithHand} from './awardHandOutlook';
 
@@ -62,6 +62,9 @@ export type ValuationContext = {
   handOwner?: PlayerId,
   /** Global steps left at decision time (for the tempo term). */
   stepsLeft?: number,
+  /** Greeneries of the deciding player and oxygen level at decision time (phasePlan.ts opening brake). */
+  ownGreeneries?: number,
+  oxygen?: number,
   /** Tempo: production phases shrink as the copy raises global parameters (aiTuning.ts tempoAware). */
   tempo?: boolean,
   /** Share of future income counted now (aiTuning.ts productionDiscount); default PRODUCTION_DISCOUNT. */
@@ -167,6 +170,8 @@ export function valuationContext(game: IGame, player?: IPlayer): ValuationContex
     temperatureMaxed: isTemperatureMaxed(game),
     awardConfidence: awardConfidence(terraformingProgress(game)),
     stepsLeft: stepsLeft(game),
+    ownGreeneries: player === undefined ? undefined : game.board.getGreeneries(player).length,
+    oxygen: game.getOxygenLevel(),
   };
 }
 
@@ -449,7 +454,7 @@ export function relativeValue(player: IPlayer, frozen: ValuationContext): number
   // Bonus steps left one step away for an opponent (bonusRace.ts).
   const bonusThreat = tuning.bonusRace > 0 ? openBonusThreat(player, context) : 0;
   const handMade = own - weight * (opponentAverage + spotThreat + tuning.bonusRace * bonusThreat) + closer -
-    (tuning.terraformBrake + openingTerraformBrake(player, frozen.generation, frozen.remaining)) * stepsRaised(player, frozen);
+    tuning.terraformBrake * stepsRaised(player, frozen) - openingBrakeCost(player, frozen, stepsRaised(player, frozen));
   // Opening: the learned model underprices M€ production, so its share can be lower there (aiTuning.ts).
   const share = context.generation <= OPENING_GENERATIONS ? tuning.valueModel * tuning.valueModelOpening : tuning.valueModel;
   return share > 0 ? blendLearnedValue(player, handMade, share, context.victoryPoint) : handMade;

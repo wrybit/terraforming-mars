@@ -1,6 +1,7 @@
 import {IPlayer} from '../IPlayer';
 import {MAX_MILESTONES} from '../../common/constants';
 import {tuningOf} from './aiTuning';
+import {milestoneProgressBonus} from './phasePlan';
 
 // Expected VP from milestones not yet claimed. Without it the AI only saw a milestone once it
 // could claim it; in a test game the human claimed all three (15 VP) while the AI never got
@@ -32,6 +33,8 @@ export function milestoneRacePoints(player: IPlayer): number {
     return 0;
   }
   const potentials: Array<number> = [];
+  // phasePlan: aim for one milestone in the first third (cities, greeneries, building tags count towards it).
+  const progressShare = tuningOf(player).milestoneProgressShare + milestoneProgressBonus(player);
   for (const milestone of game.milestones) {
     if (game.claimedMilestones.some((claimed) => claimed.milestone.name === milestone.name)) {
       continue;
@@ -44,7 +47,7 @@ export function milestoneRacePoints(player: IPlayer): number {
     const own = progress(player);
     const bestOpponent = Math.max(0, ...player.opponents.map(progress));
     const lead = own >= bestOpponent ? 1 : BEHIND_FACTOR;
-    potentials.push(5 * tuningOf(player).milestoneProgressShare * own * own * lead + nearClaimPoints(player, milestone.getScore(player), threshold, own >= bestOpponent));
+    potentials.push(5 * progressShare * own * own * lead + nearClaimPoints(player, milestone.getScore(player), threshold, own >= bestOpponent));
   }
   // Only as many milestones as slots are left can still be won. Summing all of them made
   // claiming the last slot look like a loss: in a test game the AI had Gardener ready for three

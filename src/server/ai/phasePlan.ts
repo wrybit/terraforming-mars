@@ -12,6 +12,8 @@ import {remainingProductionPhases} from './gameProgress';
  */
 export type GamePhase = 1 | 2 | 3;
 
+export type OpeningContext = {generation: number, remaining: number, ownGreeneries?: number, oxygen?: number};
+
 /** Share of the game played: elapsed generations over elapsed plus remaining ones. */
 export function phaseProgress(generation: number, remaining: number): number {
   const elapsed = Math.max(0, generation - 1);
@@ -40,10 +42,29 @@ export function incomeFactor(player: IPlayer, generation: number, remaining: num
   return progress < 2 / 3 ? 1 + strength * (2 / 3 - progress) * 3 : 1;
 }
 
-/** M€ each global step raised costs in phase 1 (terraform later, income first). */
-export function openingTerraformBrake(player: IPlayer, generation: number, remaining: number): number {
+/**
+ * M€ the steps raised cost in phase 1 (terraform later, income first). Oxygen from the first FREE_GREENERIES own
+ * greeneries is exempt: Gardener needs them, and with them a milestone in the first third.
+ */
+export function openingBrakeCost(player: IPlayer, frozen: OpeningContext, raised: number): number {
   const strength = tuningOf(player).phasePlan;
-  return strength > 0 && gamePhase(generation, remaining) === 1 ? OPENING_BRAKE_PER_STRENGTH * strength : 0;
+  if (strength <= 0 || raised <= 0 || gamePhase(frozen.generation, frozen.remaining) !== 1) {
+    return 0;
+  }
+  const exempt = frozen.ownGreeneries === undefined || frozen.oxygen === undefined ? 0 : Math.min(
+    Math.max(0, player.game.getOxygenLevel() - frozen.oxygen),
+    Math.max(0, Math.min(FREE_GREENERIES, player.game.board.getGreeneries(player).length) - Math.min(FREE_GREENERIES, frozen.ownGreeneries)));
+  return OPENING_BRAKE_PER_STRENGTH * strength * Math.max(0, raised - exempt);
+}
+
+/** Extra share of milestone progress (milestoneRace.ts) in phases 1 and 2 while the player holds no milestone. */
+export function milestoneProgressBonus(player: IPlayer): number {
+  const strength = tuningOf(player).phasePlan;
+  if (strength <= 0 || currentPhase(player.game, player) === 3) {
+    return 0;
+  }
+  const claimed = player.game.claimedMilestones.some((milestone) => milestone.player.id === player.id);
+  return claimed ? 0 : MILESTONE_PROGRESS_PER_STRENGTH * strength;
 }
 
 /** Extra VP for holding at least one milestone, while decisions fall in phase 1 or 2. */
@@ -63,5 +84,8 @@ export function blockingShare(player: IPlayer): number {
 }
 
 const OPENING_BRAKE_PER_STRENGTH = 2;
+// Gardener: 3 greeneries.
+const FREE_GREENERIES = 3;
+const MILESTONE_PROGRESS_PER_STRENGTH = 0.3;
 const FIRST_MILESTONE_BONUS_PER_STRENGTH = 2;
 const BLOCKING_SHARE_PER_STRENGTH = 0.5;
