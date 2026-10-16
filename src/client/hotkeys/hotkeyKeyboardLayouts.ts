@@ -16,6 +16,8 @@ export type KeyboardKey = {
   mod?: boolean;
   /** Function row and the arrows up/down: half the height */
   half?: boolean;
+  /** German Enter spans two rows: the upper and the lower part are drawn as one key */
+  enterPart?: 'top' | 'bottom';
 };
 
 /** A key or a column of two half keys stacked (arrow up over arrow down) */
@@ -54,7 +56,7 @@ function arrows(): KeyboardRow {
 }
 
 function bottomRow(mac: boolean): KeyboardRow {
-  const space: KeyboardKey = {id: 'Space', code: 'Space', label: '', value: ' ', width: 5};
+  const space: KeyboardKey = {id: 'Space', code: 'Space', label: '␣', value: ' ', width: 5};
   if (mac) {
     return [
       {id: 'Fn', label: 'fn'}, {id: 'Control', label: 'ctrl'}, {id: 'Alt', label: '⌥'},
@@ -74,8 +76,8 @@ function qwertz(mac: boolean): ReadonlyArray<KeyboardRow> {
   return [
     FUNCTION_ROW,
     numberRow(['!', '"', '§', '$', '%', '&', '/', '(', ')', '='], symbol('Circumflex', 'Backquote', '^', '°'), [symbol('ß', 'Minus', 'ß', '?'), symbol('Acute', 'Equal', '´', '`')]),
-    [{id: 'Tab', code: 'Tab', label: '⇥', value: 'Tab', width: 1.5}, ...letters('QWERTZUIOP', true), symbol('Ü', 'BracketLeft', 'Ü'), symbol('Plus', 'BracketRight', '+', '*'), {id: 'Enter', code: 'Enter', label: '↵', value: 'Enter', width: 1.5}],
-    [{id: 'CapsLock', label: '⇪', width: 1.8}, ...letters('ASDFGHJKL'), symbol('Ö', 'Semicolon', 'Ö'), symbol('Ä', 'Quote', 'Ä'), symbol('Hash', 'Backslash', '#', '\''), {id: 'EnterLower', code: 'Enter', label: '', value: 'Enter', width: 1.2}],
+    [{id: 'Tab', code: 'Tab', label: '⇥', value: 'Tab', width: 1.5}, ...letters('QWERTZUIOP', true), symbol('Ü', 'BracketLeft', 'Ü'), symbol('Plus', 'BracketRight', '+', '*'), {id: 'Enter', code: 'Enter', label: '↵', value: 'Enter', width: 1.5, enterPart: 'top'}],
+    [{id: 'CapsLock', label: '⇪', width: 1.8}, ...letters('ASDFGHJKL'), symbol('Ö', 'Semicolon', 'Ö'), symbol('Ä', 'Quote', 'Ä'), symbol('Hash', 'Backslash', '#', '\''), {id: 'EnterLower', code: 'Enter', label: '', value: 'Enter', width: 1.2, enterPart: 'bottom'}],
     [{id: 'Shift', label: '⇧', width: 1.3}, symbol('Less', 'IntlBackslash', '<', '>'), ...letters('YXCVBNM', true), symbol(',', 'Comma', ',', ';'), symbol('.', 'Period', '.', ':'), symbol('Minus', 'Slash', '-', '_'), {id: 'ShiftRight', label: '⇧', width: 2.3}],
     bottomRow(mac),
   ];

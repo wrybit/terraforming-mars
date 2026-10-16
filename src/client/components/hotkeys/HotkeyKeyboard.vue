@@ -60,7 +60,7 @@ function keyLabel(key: KeyboardKey): string {
   if (key.label === 'Ctrl') {
     return translateText('Ctrl');
   }
-  return key.value !== undefined && key.value.length === 1 ? drawnCharacter(key) ?? key.label : key.label;
+  return key.value !== undefined && key.value.trim().length === 1 ? drawnCharacter(key) ?? key.label : key.label;
 }
 
 // The Shift character is only known for the drawn layout: left out where the real keyboard differs
@@ -93,6 +93,7 @@ function keyClass(key: KeyboardKey): Array<string | Record<string, boolean>> {
   const lit = uses.some((use) => props.highlighted.has(use.id)) || (key.mod === true && highlightedUsesMod.value);
   return ['hotkey-keyboard__key', group !== undefined ? 'hotkey-keyboard__key--' + group : '', {
     'hotkey-keyboard__key--half': key.half === true,
+    ['hotkey-keyboard__key--enter-' + key.enterPart]: key.enterPart !== undefined,
     'hotkey-keyboard__key--mod': key.mod === true,
     'hotkey-keyboard__key--lit': lit,
     'hotkey-keyboard__key--pressed': props.pressed.has(key.id) || (key.mod === true && props.modArmed),

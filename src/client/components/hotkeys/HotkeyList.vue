@@ -57,7 +57,7 @@ defineEmits<{
   (event: 'hover', id: string | undefined): void;
 }>();
 
-// Keys of installed extensions (e.g. B for feedback) are listed as fixed general shortcuts
+// Keys of installed extensions (e.g. O for feedback) are listed as fixed general shortcuts
 const extensionRows = computed<Array<HotkeyAction>>(() => CLIENT_EXTENSIONS.flatMap((extension) => (extension.shortcuts ?? []).map((shortcut) => ({
   id: 'extension-' + extension.name + '-' + shortcut.key,
   group: 'general' as HotkeyGroup,

@@ -392,6 +392,21 @@ html.tm-hotkeys .hotkey-item-number {
   opacity: 0.9;
 }
 
+// German Enter over two rows: the upper part reaches down over the row gap, the lower part has no edge on top, so
+// both read as one key (not as a second key beside Ä / #)
+.hotkey-keyboard__key--enter-top {
+  height: 40px;
+  margin-bottom: -4px;
+  border-bottom: 0;
+  border-radius: 5px 5px 0 0;
+}
+
+.hotkey-keyboard__key--enter-bottom {
+  border-top: 0;
+  border-radius: 0 0 5px 5px;
+  box-shadow: none;
+}
+
 .hotkey-keyboard__row--function .hotkey-keyboard__key,
 .hotkey-keyboard__key--half {
   height: 14px;
