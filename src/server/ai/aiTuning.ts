@@ -1,5 +1,6 @@
 import {IPlayer} from '../IPlayer';
 import {STRATEGY_STYLES} from './strategyStyles';
+import type {StyleFocus} from './styleFocus';
 
 // Adjustable AI parameters, so that two variants can play against each other in the same test
 // game (A/B seats in AI test batches). The server always plays the baseline.
@@ -204,6 +205,8 @@ export type AiTuning = {
   drawPriority: number,
   /** Weight of the community tier list consensus in card values (tierListPrior.ts, cardPriors.ts); 0 = off. */
   tierListWeight: number,
+  /** Strategy focus of a style: extra VP for cards, TR, production, tiles, milestones (styleFocus.ts); undefined = none. */
+  styleFocus?: StyleFocus,
   /** 1: drawn cards kept for free in the action phase (Business Contacts …) chosen by the full card valuation (cardSelection.ts). */
   keepValuation: number,
   /** 1: cards to discard from hand chosen as the least valuable by the full card valuation (cardSelection.ts). */

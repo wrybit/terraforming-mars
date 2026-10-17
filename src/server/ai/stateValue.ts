@@ -20,6 +20,7 @@ import {expectedAttackLoss} from './attackExposure';
 import {collectorRate} from './collectorRate';
 import {firstMilestoneBonus, incomeFactor, openingBrakeCost} from './phasePlan';
 import {ACTION_DRAW_FACTOR, drawnCardValue} from './drawPriority';
+import {styleFocusValue} from './styleFocus';
 import {bgaExpectedMargin} from './bgaValueModel';
 import {awardScoreWithHand} from './awardHandOutlook';
 
@@ -464,7 +465,9 @@ export function relativeValue(player: IPlayer, frozen: ValuationContext): number
     tuning.terraformBrake * stepsRaised(player, frozen) - openingBrakeCost(player, frozen, stepsRaised(player, frozen));
   // Opening: the learned model underprices M€ production, so its share can be lower there (aiTuning.ts).
   const share = context.generation <= OPENING_GENERATIONS ? tuning.valueModel * tuning.valueModelOpening : tuning.valueModel;
-  return share > 0 ? blendLearnedValue(player, handMade, share, context.victoryPoint) : handMade;
+  const blended = share > 0 ? blendLearnedValue(player, handMade, share, context.victoryPoint) : handMade;
+  // Strategy style: the own obsession on top (styleFocus.ts), outside the model blend so it is not diluted.
+  return blended + styleFocusValue(player, context.victoryPoint);
 }
 
 /**
