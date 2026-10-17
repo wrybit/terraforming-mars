@@ -270,7 +270,8 @@ export const BASELINE_TUNING: AiTuning = {
   opponentWeightTwoPlayers: 1,
   // Round 36 (bundle2, 600 mirrored deals): cardPriorWeight 2 with awardSwing 0.3 +1.96 VP (z +4.73).
   cardPriorWeight: 2,
-  draftPriorWeight: 0,
+  // Round 98 (1200 mirrored 1v1 games): draftPriorStrong (BGA two-player draft preferences) +1.75 VP (z +2.63) – adopted.
+  draftPriorWeight: 2,
   corporationPriorWeight: 0,
   plantProductionValue: 2,
   laterSamples: 2,
@@ -780,6 +781,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noDrawPriority: {drawPriority: 0},
   drawPriority3: {drawPriority: 3},
   drawPriority6: {drawPriority: 6},
+  draftPrior3: {draftPriorWeight: 3},
   // Analysis log (2026-10-16): Business Contacts in generation 10 kept two cards by statistics only.
   keepValued: {keepValuation: 1},
   // Rated human game (2026-10-16): Mars University discarded Birds in generation 13 (quick rule keeps VP cards first).
