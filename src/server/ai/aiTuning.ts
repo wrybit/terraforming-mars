@@ -225,7 +225,9 @@ export const BASELINE_TUNING: AiTuning = {
   // Night runs E+F: with production valued at 0.9, fewer cards win (z +4.75, +3.60): -1 and 9/4.
   // Round 30 (bundle1, 600 mirrored deals): margin -3 and hand 12/5 together with productionDiscount
   // 1.05 and 16 second-step candidates +1.30 VP per deal (z +3.09) – each part alone was only slightly positive.
-  buyMargin: -3,
+  // Round 103 (1200 mirrored 1v1 games): buyStricter (+1) +1.43 VP (z +2.06), buyStrict (−1) +0.93 – adopted: the hand
+  // filled with weak cards (20 in hand in gen 9 vs humans) and cities were bought instead of playing them.
+  buyMargin: 1,
   handTargetEarly: 12,
   handTargetLate: 5,
   researchReserveEarly: 0,
@@ -768,6 +770,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   buyStrict: {buyMargin: -1},
   buyStricter: {buyMargin: 1},
   buyStrictest: {buyMargin: 3},
+  buyMargin2: {buyMargin: 2},
+  buyLoose: {buyMargin: -3},
   // ML stage 2 (learned final VP margin from about 43,000 BGA two-player games, certain VP 1 : 1, AUC 0.80):
   // blend the model's win chance into the hand-made valuation.
   valueModel25: {valueModel: 0.25},
