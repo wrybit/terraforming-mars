@@ -6,7 +6,7 @@ import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximum
 export type ParameterBonus = {
   at: number;
   percent: number;
-  kind: 'heat' | 'ocean' | 'temperature' | 'card' | 'tr';
+  kind: 'heat' | 'ocean' | 'temperature' | 'plant' | 'card' | 'colony' | 'tr';
   title: string;
 };
 
@@ -36,6 +36,38 @@ type BarSpec = Omit<ParameterBar, 'percent' | 'done' | 'bonuses' | 'steps'> & {
   bonuses: ReadonlyArray<Omit<ParameterBonus, 'percent'>>;
 };
 
+type BonusSpec = Omit<ParameterBonus, 'percent'>;
+type TrackBonuses = {temperature: ReadonlyArray<BonusSpec>, oxygen: ReadonlyArray<BonusSpec>, venus: ReadonlyArray<BonusSpec>};
+
+// Bonuses printed on the tracks, per map (mirrors src/server/boards/GlobalParameterTracks.ts)
+const HEAT_1: BonusSpec = {at: c.TEMPERATURE_BONUS_FOR_HEAT_1, kind: 'heat', title: 'Heat'};
+const HEAT_2: BonusSpec = {at: c.TEMPERATURE_BONUS_FOR_HEAT_2, kind: 'heat', title: 'Heat'};
+const OCEAN: BonusSpec = {at: c.TEMPERATURE_FOR_OCEAN_BONUS, kind: 'ocean', title: 'Ocean'};
+const VENUS_CARD: BonusSpec = {at: c.VENUS_LEVEL_FOR_CARD_BONUS, kind: 'card', title: 'Cards'};
+
+const STANDARD_BONUSES: TrackBonuses = {
+  temperature: [HEAT_1, HEAT_2, OCEAN],
+  oxygen: [{at: c.OXYGEN_LEVEL_FOR_TEMPERATURE_BONUS, kind: 'temperature', title: 'Temperature'}],
+  venus: [VENUS_CARD, {at: c.VENUS_LEVEL_FOR_TR_BONUS, kind: 'tr', title: 'Terraform Rating'}],
+};
+
+const AMAZONIS_BONUSES: TrackBonuses = {
+  temperature: [HEAT_1, HEAT_2, {at: c.TEMPERATURE_BONUS_FOR_PLANT, kind: 'plant', title: 'Plants'}, OCEAN],
+  oxygen: [
+    {at: c.OXYGEN_LEVEL_FOR_AMAZONIS_CARD_BONUS, kind: 'card', title: 'Cards'},
+    {at: c.OXYGEN_LEVEL_FOR_AMAZONIS_TEMPERATURE_BONUS, kind: 'temperature', title: 'Temperature'},
+  ],
+  venus: [
+    VENUS_CARD,
+    {at: c.VENUS_LEVEL_FOR_AMAZONIS_COLONY_BONUS, kind: 'colony', title: 'Colony'},
+    {at: c.VENUS_LEVEL_FOR_AMAZONIS_TR_BONUS, kind: 'tr', title: 'Terraform Rating'},
+  ],
+};
+
+function trackBonuses(boardName: BoardName): TrackBonuses {
+  return boardName === BoardName.AMAZONIS_PLANITIA ? AMAZONIS_BONUSES : STANDARD_BONUSES;
+}
+
 function toPercent(value: number, min: number, max: number): number {
   return Math.round((value - min) / (max - min) * 1000) / 10;
 }
@@ -52,21 +84,19 @@ function build(spec: BarSpec): ParameterBar {
 
 /* Bars for temperature, oxygen, oceans and (with Venus) the Venus scale, in board order. */
 export function parameterBars(levels: Levels): Array<ParameterBar> {
-  const max = getGlobalParameterMaximums(levels.boardName ?? BoardName.THARSIS);
+  const boardName = levels.boardName ?? BoardName.THARSIS;
+  const max = getGlobalParameterMaximums(boardName);
+  const bonuses = trackBonuses(boardName);
   const specs: Array<BarSpec> = [
     {
       key: 'temperature', label: 'Temperature', icon: 'assets/global-parameters/temperature.png',
       min: c.MIN_TEMPERATURE, max: max.temperature, step: 2, value: levels.temperature, text: levels.temperature + ' °C',
-      bonuses: [
-        {at: c.TEMPERATURE_BONUS_FOR_HEAT_1, kind: 'heat', title: 'Heat'},
-        {at: c.TEMPERATURE_BONUS_FOR_HEAT_2, kind: 'heat', title: 'Heat'},
-        {at: c.TEMPERATURE_FOR_OCEAN_BONUS, kind: 'ocean', title: 'Ocean'},
-      ],
+      bonuses: bonuses.temperature,
     },
     {
       key: 'oxygen', label: 'Oxygen', icon: 'assets/global-parameters/oxygen.png',
       min: c.MIN_OXYGEN_LEVEL, max: max.oxygen, step: 1, value: levels.oxygen, text: levels.oxygen + ' %',
-      bonuses: [{at: c.OXYGEN_LEVEL_FOR_TEMPERATURE_BONUS, kind: 'temperature', title: 'Temperature'}],
+      bonuses: bonuses.oxygen,
     },
     {
       key: 'oceans', label: 'Oceans', icon: 'assets/tiles/ocean.png',
@@ -79,10 +109,7 @@ export function parameterBars(levels: Levels): Array<ParameterBar> {
       key: 'venus', label: 'Venus', icon: 'assets/global-parameters/venus.png',
       min: c.MIN_VENUS_SCALE, max: max.venus, step: 2, value: levels.venus,
       steps: (c.MAX_VENUS_SCALE - c.MIN_VENUS_SCALE) / 2 + Math.max(max.venus - c.MAX_VENUS_SCALE, 0), text: levels.venus + ' %',
-      bonuses: [
-        {at: c.VENUS_LEVEL_FOR_CARD_BONUS, kind: 'card', title: 'Cards'},
-        {at: c.VENUS_LEVEL_FOR_TR_BONUS, kind: 'tr', title: 'Terraform Rating'},
-      ],
+      bonuses: bonuses.venus,
     });
   }
   return specs.map(build);

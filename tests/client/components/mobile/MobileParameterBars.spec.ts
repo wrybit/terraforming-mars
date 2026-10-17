@@ -37,4 +37,15 @@ describe('MobileParameterBars', () => {
     // Venus: 15 steps of 2 % up to 30 %, then 3 steps of 1 %
     expect(bars[3].steps).to.eq(18);
   });
+  it('shows the track bonuses of the map', () => {
+    const kinds = (boardName?: BoardName) => parameterBars({temperature: -30, oxygen: 0, oceans: 0, venus: 0, boardName})
+      .map((bar) => bar.bonuses.map((bonus) => bonus.kind + '@' + bonus.at));
+    expect(kinds()).to.deep.eq([['heat@-24', 'heat@-20', 'ocean@0'], ['temperature@8'], [], ['card@8', 'tr@16']]);
+    expect(kinds(BoardName.AMAZONIS_PLANITIA)).to.deep.eq([
+      ['heat@-24', 'heat@-20', 'plant@-12', 'ocean@0'],
+      ['card@7', 'temperature@11'],
+      [],
+      ['card@8', 'colony@16', 'tr@22'],
+    ]);
+  });
 });
