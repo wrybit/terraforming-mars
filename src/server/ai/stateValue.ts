@@ -19,6 +19,7 @@ import {openBonusValue} from './bonusRace';
 import {expectedAttackLoss} from './attackExposure';
 import {collectorRate} from './collectorRate';
 import {firstMilestoneBonus, incomeFactor, openingBrakeCost} from './phasePlan';
+import {ACTION_DRAW_FACTOR, drawnCardValue} from './drawPriority';
 import {bgaExpectedMargin} from './bgaValueModel';
 import {awardScoreWithHand} from './awardHandOutlook';
 
@@ -321,7 +322,7 @@ function collectedPointsPerGeneration(card: {victoryPoints?: unknown}): number {
 }
 
 /** Value of a card in hand whose own value is unknown (drawn in a copy, opponents' cards). */
-function unknownCardValue(player: IPlayer, context: ValuationContext): number {
+export function unknownCardValue(player: IPlayer, context: ValuationContext): number {
   if (tuningOf(player).drawCardModel === 0) {
     return HAND_CARD_VALUE;
   }
@@ -347,8 +348,11 @@ function cardsDrawnByAction(card: ICard): number {
 
 /** What an action card brings per generation it stays in play. */
 function actionValuePerGeneration(card: ICard, player: IPlayer, context: ValuationContext): number {
-  const drawn = tuningOf(player).drawCardModel > 0 ? cardsDrawnByAction(card) : 0;
-  const value = Math.max(ACTION_CARD_VALUE_PER_GENERATION, drawn * unknownCardValue(player, context));
+  const tuning = tuningOf(player);
+  const drawn = tuning.drawCardModel > 0 || tuning.drawPriority > 0 ? cardsDrawnByAction(card) : 0;
+  // drawPriority (Jens' rule): a card drawn every generation is worth the rule value, more than one drawn once.
+  const perCard = tuning.drawPriority > 0 ? drawnCardValue(player, context.remaining) * ACTION_DRAW_FACTOR : unknownCardValue(player, context);
+  const value = Math.max(ACTION_CARD_VALUE_PER_GENERATION, drawn * perCard);
   // energySupply: an action that spends energy is only worth what the energy production can feed (energySupply.ts).
   return tuningOf(player).energySupply > 0 ? value * energySupplyRatio(player, card, context.remaining) : value;
 }
@@ -357,7 +361,10 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
   const accumulator = tuningOf(player).accumulatorValue;
   let value = 0;
   // drawCardModel 2: cards drawn by tag effects count like production (cardIncome.ts).
-  const drawIncome = (card: ICard) => tuningOf(player).drawCardModel >= 2 ? effectDrawsPerGeneration(card, player) * unknownCardValue(player, context) : 0;
+  // drawPriority: cards drawn by tag effects (Mars University, Olympus Conference, Point Luna) count too.
+  const drawIncome = (card: ICard) => tuningOf(player).drawPriority > 0 ?
+    effectDrawsPerGeneration(card, player) * drawnCardValue(player, context.remaining) :
+    tuningOf(player).drawCardModel >= 2 ? effectDrawsPerGeneration(card, player) * unknownCardValue(player, context) : 0;
   for (const card of player.playedCards) {
     if (card.type === CardType.ACTIVE) {
       const own = isIActionCard(card) ? actionValuePerGeneration(card, player, context) : EFFECT_CARD_VALUE_PER_GENERATION;

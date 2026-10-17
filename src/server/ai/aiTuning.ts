@@ -199,6 +199,8 @@ export type AiTuning = {
   phaseMilestone: number,
   /** > 0: corporation and prelude pair are also played together; this share of the extra value counts (openingSynergy.ts). */
   openingSynergy: number,
+  /** M€ a drawn card is worth early (drawPriority.ts, Jens' rule); action draws count 1.25 ×; 0 = off. */
+  drawPriority: number,
   /** 1: drawn cards kept for free in the action phase (Business Contacts …) chosen by the full card valuation (cardSelection.ts). */
   keepValuation: number,
   /** 1: cards to discard from hand chosen as the least valuable by the full card valuation (cardSelection.ts). */
@@ -319,6 +321,8 @@ export const BASELINE_TUNING: AiTuning = {
   phaseBrake: 1,
   phaseMilestone: 1,
   openingSynergy: 0,
+  // Jens' rule (2026-10-17): card-drawing cards are a priority, action draws most.
+  drawPriority: 4,
   // Round 91: keepValued +1.06 VP (z +1.63) – adopted, fixes the analysis-log error (Business Contacts by statistics).
   keepValuation: 1,
   // Rated human game (2026-10-16): Mars University discarded Birds; Jens' discard order is a rule (discardPriority.ts).
@@ -773,6 +777,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   phaseIncomeOnly: {phasePlan: 1, phaseBrake: 0, phaseMilestone: 0},
   phaseNoBrake: {phasePlan: 1, phaseBrake: 0},
   noPhasePlan: {phasePlan: 0},
+  noDrawPriority: {drawPriority: 0},
+  drawPriority3: {drawPriority: 3},
+  drawPriority6: {drawPriority: 6},
   // Analysis log (2026-10-16): Business Contacts in generation 10 kept two cards by statistics only.
   keepValued: {keepValuation: 1},
   // Rated human game (2026-10-16): Mars University discarded Birds in generation 13 (quick rule keeps VP cards first).
@@ -813,6 +820,11 @@ export function setPlayerTuning(playerId: string, variant: string): void {
 export function clearPlayerTunings(): void {
   variantByPlayer.clear();
   tuningCache.clear();
+}
+
+/** Short key of the tuning a player uses, for caches that must not mix values of different tunings. */
+export function tuningKey(player: IPlayer): string {
+  return `${variantByPlayer.get(player.id) ?? player.aiLevel ?? ''}|${player.game.players.length === 2}`;
 }
 
 export function tuningOf(player: IPlayer): AiTuning {

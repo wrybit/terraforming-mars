@@ -37,8 +37,10 @@ describe('AI card income', () => {
     // Science tags played so far and in hand: the conference keeps drawing.
     player.playedCards.push(new OlympusConference(), new Research(), new TechnologyDemonstration(), new MarsUniversity());
     const context = valuationContext(game, player);
+    // The baseline counts draw effects already (drawPriority); without it they count as flat effect value.
+    setPlayerTuning(player.id, 'noDrawPriority');
     const flat = playerValue(player, context);
-    setPlayerTuning(player.id, 'cardIncome');
+    setPlayerTuning(player.id, 'baseline');
     expect(playerValue(player, context)).is.greaterThan(flat);
   });
 });
