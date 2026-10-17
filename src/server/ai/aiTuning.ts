@@ -193,6 +193,10 @@ export type AiTuning = {
    * then strong cards. 0 = off; production counts 1 + strength in the first third, steps cost 2 × strength M€ there.
    */
   phasePlan: number,
+  /** Factors on the three parts of phasePlan (income, opening terraform brake, milestone target); 1 = as set. */
+  phaseIncome: number,
+  phaseBrake: number,
+  phaseMilestone: number,
   /** > 0: corporation and prelude pair are also played together; this share of the extra value counts (openingSynergy.ts). */
   openingSynergy: number,
   /** 1: drawn cards kept for free in the action phase (Business Contacts …) chosen by the full card valuation (cardSelection.ts). */
@@ -308,7 +312,12 @@ export const BASELINE_TUNING: AiTuning = {
   // (+15 s for +3.5 VP) – adopted; valueModel50 −3.58 (z −3.81): more model than that hurts.
   valueModel: 0.25,
   valueModelOpening: 1,
-  phasePlan: 0,
+  // Round 95 (1200 mirrored 1v1 games, Jens' three-phase plan as a rule): phase05 +0.84 VP (z +1.05) – adopted;
+  // phase1 −2.46, phase2 −7.34: stronger plans played fewer cards and claimed fewer milestones.
+  phasePlan: 0.5,
+  phaseIncome: 1,
+  phaseBrake: 1,
+  phaseMilestone: 1,
   openingSynergy: 0,
   // Round 91: keepValued +1.06 VP (z +1.63) – adopted, fixes the analysis-log error (Business Contacts by statistics).
   keepValuation: 1,
@@ -761,6 +770,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   phase1: {phasePlan: 1},
   phase2: {phasePlan: 2},
   openingSynergy: {openingSynergy: 1},
+  phaseIncomeOnly: {phasePlan: 1, phaseBrake: 0, phaseMilestone: 0},
+  phaseNoBrake: {phasePlan: 1, phaseBrake: 0},
+  noPhasePlan: {phasePlan: 0},
   // Analysis log (2026-10-16): Business Contacts in generation 10 kept two cards by statistics only.
   keepValued: {keepValuation: 1},
   // Rated human game (2026-10-16): Mars University discarded Birds in generation 13 (quick rule keeps VP cards first).

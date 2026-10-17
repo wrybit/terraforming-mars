@@ -31,7 +31,7 @@ export function currentPhase(game: IGame, player?: IPlayer): GamePhase {
 
 /** Factor on production value: 1 + strength in phase 1, fading to 1 through phase 2. */
 export function incomeFactor(player: IPlayer, generation: number, remaining: number): number {
-  const strength = tuningOf(player).phasePlan;
+  const strength = tuningOf(player).phasePlan * tuningOf(player).phaseIncome;
   if (strength <= 0) {
     return 1;
   }
@@ -48,7 +48,7 @@ export function incomeFactor(player: IPlayer, generation: number, remaining: num
  * milestone for the first third; from scratch three greeneries that early are rarely a good goal.
  */
 export function openingBrakeCost(player: IPlayer, frozen: OpeningContext, raised: number): number {
-  const strength = tuningOf(player).phasePlan;
+  const strength = tuningOf(player).phasePlan * tuningOf(player).phaseBrake;
   if (strength <= 0 || raised <= 0 || gamePhase(frozen.generation, frozen.remaining) !== 1) {
     return 0;
   }
@@ -60,7 +60,7 @@ export function openingBrakeCost(player: IPlayer, frozen: OpeningContext, raised
 
 /** Extra share of milestone progress (milestoneRace.ts) in phases 1 and 2 while the player holds no milestone. */
 export function milestoneProgressBonus(player: IPlayer): number {
-  const strength = tuningOf(player).phasePlan;
+  const strength = tuningOf(player).phasePlan * tuningOf(player).phaseMilestone;
   if (strength <= 0 || currentPhase(player.game, player) === 3) {
     return 0;
   }
@@ -70,7 +70,7 @@ export function milestoneProgressBonus(player: IPlayer): number {
 
 /** Extra VP for holding at least one milestone, while decisions fall in phase 1 or 2. */
 export function firstMilestoneBonus(player: IPlayer, generation: number, remaining: number): number {
-  const strength = tuningOf(player).phasePlan;
+  const strength = tuningOf(player).phasePlan * tuningOf(player).phaseMilestone;
   if (strength <= 0 || gamePhase(generation, remaining) === 3) {
     return 0;
   }
