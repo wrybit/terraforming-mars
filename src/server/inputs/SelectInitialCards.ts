@@ -173,20 +173,23 @@ export class SelectInitialCards extends OptionsInput<undefined> {
     if (input.responses.length !== this.options.length) {
       throw new InputError('Incorrect options provided');
     }
-    // The sub-selections add cards to the hands one by one. If a later one fails, the earlier ones must be
-    // undone: otherwise a second attempt would add two more preludes and another CEO on top.
-    const cardsInHand = [...player.cardsInHand];
-    const preludeCardsInHand = [...player.preludeCardsInHand];
-    const ceoCardsInHand = new Set(player.ceoCardsInHand);
+    // Each response is processed individually. This provides a rollback on failure,
+    // preventing a bad state with extra cards in hand, good for cheating.
+    const saved = {
+      cards: [...player.cardsInHand],
+      preludeCards: [...player.preludeCardsInHand],
+      ceoCards: new Set(player.ceoCardsInHand),
+    };
+
     try {
       for (let i = 0; i < input.responses.length; i++) {
         player.defer(this.options[i].process(input.responses[i], player));
       }
       return this.cb(undefined);
     } catch (error) {
-      player.cardsInHand = cardsInHand;
-      player.preludeCardsInHand = preludeCardsInHand;
-      player.ceoCardsInHand = ceoCardsInHand;
+      player.cardsInHand = saved.cards;
+      player.preludeCardsInHand = saved.preludeCards;
+      player.ceoCardsInHand = saved.ceoCards;
       throw error;
     }
   }
