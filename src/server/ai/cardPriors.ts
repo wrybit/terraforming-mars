@@ -1,6 +1,7 @@
 import {CardName} from '../../common/cards/CardName';
 import statistics from './data/bgaCardStatistics.json';
 import draftStatistics from './data/bgaTwoPlayerDraft.json';
+import {tierListScore} from './tierListPrior';
 
 // Prior card strength from Board Game Arena top players (RuneDK93 dataset). WAP is the placement score above the Elo expectation.
 
@@ -45,9 +46,11 @@ export function draftPrior(name: CardName, generation: number): number {
 
 /**
  * Multiplier for a card's estimated value: 1 + weight × WAP (weight 3: ≈ 0.4 … 1.5; aiTuning.ts
- * cardPriorWeight) + draftWeight × 0.1 × draft preference (aiTuning.ts draftPriorWeight).
+ * cardPriorWeight) + draftWeight × 0.1 × draft preference (aiTuning.ts draftPriorWeight) + tierWeight × 0.1 × tier list score.
  */
-export function cardPriorFactor(name: CardName, weight = 3, draftWeight = 0, generation = 1): number {
+export function cardPriorFactor(name: CardName, weight = 3, draftWeight = 0, generation = 1, tierWeight = 0): number {
   const draft = draftWeight > 0 ? draftWeight * 0.1 * draftPrior(name, generation) : 0;
-  return Math.max(0.2, 1 + weight * cardPrior(name) + draft);
+  // Community tier lists (tierListPrior.ts): tierWeight × 0.1 × consensus score (aiTuning.ts tierListWeight).
+  const tier = tierWeight > 0 ? tierWeight * 0.1 * tierListScore(name) : 0;
+  return Math.max(0.2, 1 + weight * cardPrior(name) + draft + tier);
 }

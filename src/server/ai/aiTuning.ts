@@ -201,6 +201,8 @@ export type AiTuning = {
   openingSynergy: number,
   /** M€ a drawn card is worth early (drawPriority.ts, Jens' rule); action draws count 1.25 ×; 0 = off. */
   drawPriority: number,
+  /** Weight of the community tier list consensus in card values (tierListPrior.ts, cardPriors.ts); 0 = off. */
+  tierListWeight: number,
   /** 1: drawn cards kept for free in the action phase (Business Contacts …) chosen by the full card valuation (cardSelection.ts). */
   keepValuation: number,
   /** 1: cards to discard from hand chosen as the least valuable by the full card valuation (cardSelection.ts). */
@@ -324,6 +326,7 @@ export const BASELINE_TUNING: AiTuning = {
   openingSynergy: 0,
   // Jens' rule (2026-10-17): card-drawing cards are a priority, action draws most.
   drawPriority: 4,
+  tierListWeight: 0,
   // Round 91: keepValued +1.06 VP (z +1.63) – adopted, fixes the analysis-log error (Business Contacts by statistics).
   keepValuation: 1,
   // Rated human game (2026-10-16): Mars University discarded Birds; Jens' discard order is a rule (discardPriority.ts).
@@ -782,6 +785,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   drawPriority3: {drawPriority: 3},
   drawPriority6: {drawPriority: 6},
   draftPrior3: {draftPriorWeight: 3},
+  tierList1: {tierListWeight: 1},
+  tierList2: {tierListWeight: 2},
   // Analysis log (2026-10-16): Business Contacts in generation 10 kept two cards by statistics only.
   keepValued: {keepValuation: 1},
   // Rated human game (2026-10-16): Mars University discarded Birds in generation 13 (quick rule keeps VP cards first).
