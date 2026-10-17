@@ -1,4 +1,5 @@
 import {IPlayer} from '../IPlayer';
+import {STRATEGY_STYLES} from './strategyStyles';
 
 // Adjustable AI parameters, so that two variants can play against each other in the same test
 // game (A/B seats in AI test batches). The server always plays the baseline.
@@ -787,6 +788,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   draftPrior3: {draftPriorWeight: 3},
   tierList1: {tierListWeight: 1},
   tierList2: {tierListWeight: 2},
+  // Strategy styles as sparring partners (strategyStyles.ts).
+  ...STRATEGY_STYLES,
   // Analysis log (2026-10-16): Business Contacts in generation 10 kept two cards by statistics only.
   keepValued: {keepValuation: 1},
   // Rated human game (2026-10-16): Mars University discarded Birds in generation 13 (quick rule keeps VP cards first).
