@@ -12,8 +12,8 @@ function focus(values: Partial<StyleFocus>): StyleFocus {
 
 export const STRATEGY_STYLES: Record<string, Partial<AiTuning>> = {
   // Card engine: draws and plays as many cards as possible, builds income first, terraforms late.
-  styleCards: {styleFocus: focus({playedCard: 0.6, handCard: 0.2}), drawPriority: 7, tierListWeight: 2, buyMargin: -5,
-    handTargetEarly: 16, phasePlan: 1},
+  // Buys like the baseline: rounds 103–105 showed that loose buying only fills the hand with dead weight.
+  styleCards: {styleFocus: focus({playedCard: 0.6}), drawPriority: 7, phasePlan: 1},
   // Terraformer: raises the global parameters as fast as possible and ends the game early.
   styleTerraform: {styleFocus: focus({terraformRating: 0.7}), terraformBrake: -4, phasePlan: 0, closer: 1.5},
   // Economist: production of every kind above all, points come from the money later.
