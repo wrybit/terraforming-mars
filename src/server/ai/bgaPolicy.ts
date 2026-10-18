@@ -5,6 +5,7 @@ import {Resource} from '../../common/Resource';
 import {CardName} from '../../common/cards/CardName';
 import {Tree, treeScore} from './treeEnsemble';
 import {tuningOf} from './aiTuning';
+import {isSimulating} from './simulationSandbox';
 import draftModel from './data/bgaPolicyDraft.json';
 import buyModel from './data/bgaPolicyBuy.json';
 import playModel from './data/bgaPolicyPlay.json';
@@ -132,8 +133,10 @@ export function policyScore(kind: PolicyKind, features: ReadonlyArray<number>): 
  * centred model score). Off (weight 0) returns the values unchanged.
  */
 export function withPolicyPreference(player: IPlayer, cards: ReadonlyArray<ICard>, valueOf: (name: CardName) => number, kind: PolicyKind): (name: CardName) => number {
-  const weight = tuningOf(player).policyWeight;
-  if (weight <= 0) {
+  const tuning = tuningOf(player);
+  const weight = tuning.policyWeight;
+  // Inside simulations the preference costs time on every simulated draft and buy (round 111: +70 % per game)
+  if (weight <= 0 || (tuning.policyInSimulation === 0 && isSimulating())) {
     return valueOf;
   }
   const preferences = policyPreferences(player, cards, kind);

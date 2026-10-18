@@ -29,6 +29,7 @@ describe('AI learned card policy', () => {
     expect(preferences.size).to.eq(3);
     expect([...preferences.values()].reduce((sum, value) => sum + value, 0)).to.be.closeTo(0, 1e-9);
     const flat = (_name: CardName) => 10;
+    setPlayerTuning(player.id, 'noPolicy');
     expect(withPolicyPreference(player, cards, flat, 'draft')(CardName.COMET)).to.eq(10);
     setPlayerTuning(player.id, 'policy6');
     const preferred = withPolicyPreference(player, cards, flat, 'draft');
