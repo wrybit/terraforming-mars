@@ -11,6 +11,7 @@ import {awardNames} from '@/common/ma/AwardName';
 import {getAward, getMilestone} from '@/client/MilestoneAwardManifest';
 import {BONUS_IDS, POLICY_IDS} from '@/common/turmoil/Types';
 import {CardListModel, ResourceOption, TagOption, TypeOption} from '@/client/components/cardlist/CardListModel';
+import {hasAsteriskRule} from '@/client/cards/hasAsteriskRule';
 
 // All entries of the card list (cards, global events, colonies, milestones, awards, agendas)
 // in one shape. All go through the same filter check – so results and match counts on the filters agree.
@@ -28,7 +29,7 @@ export type CardListEntry = {
 };
 
 export type FilterGroup = 'types' | 'tags' | 'expansions' | 'resources';
-export type FilterState = Pick<CardListModel, 'types' | 'tags' | 'expansions' | 'resources' | 'vps' | 'costMin' | 'costMax'>;
+export type FilterState = Pick<CardListModel, 'types' | 'tags' | 'expansions' | 'resources' | 'vps' | 'asteriskRules' | 'costMin' | 'costMax'>;
 
 const LISTED_CARD_TYPES: ReadonlyArray<CardType> = [
   CardType.AUTOMATED, CardType.ACTIVE, CardType.EVENT, CardType.PRELUDE,
@@ -93,6 +94,9 @@ export function passesFilters(entry: CardListEntry, state: FilterState, ignore?:
     return false;
   }
   if (state.vps === 2 && card.victoryPoints !== undefined) {
+    return false;
+  }
+  if (state.asteriskRules !== 0 && hasAsteriskRule(card) !== (state.asteriskRules === 1)) {
     return false;
   }
   return true;

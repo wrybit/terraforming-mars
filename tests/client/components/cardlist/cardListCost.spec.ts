@@ -11,7 +11,7 @@ describe('card list cost range', () => {
   }
   function state(costMin: number | undefined, costMax: number | undefined): FilterState {
     const {types, tags, expansions, resources} = hashToModel('');
-    return {types, tags, expansions, resources, vps: 0, costMin, costMax};
+    return {types, tags, expansions, resources, vps: 0, asteriskRules: 0, costMin, costMax};
   }
 
   it('keeps cards inside the range and drops the rest', () => {

@@ -20,6 +20,7 @@ export type CardListModel = {
   showMetadata: boolean;
   tallCards: boolean;
   vps: number; // 0: all, 1: VPs, 2: no vps
+  asteriskRules: number; // 0: all, 1: with a "*" rule, 2: without
   // Price range in M€; undefined = no limit on this side
   costMin: number | undefined;
   costMax: number | undefined;
@@ -171,6 +172,7 @@ export function hashToModel(windowLocationHash: string): CardListModel {
     searchIndex: SearchIndex.create(),
     namesOnly: true,
     vps: 0,
+    asteriskRules: 0,
     sortOrder: 'a',
     showMetadata: true,
     tallCards: false,

@@ -880,5 +880,6 @@
   "(costs / ends)": "(maksaa / päättää)",
   "(normal steps)": "(tavalliset vaiheet)",
   "Cancel / discard": "Peruuta / Hylkää",
-  "Close / no": "Sulje / Ei"
+  "Close / no": "Sulje / Ei",
+  "Special rule (*)": "Erikoissääntö (*)"
 }

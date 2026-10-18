@@ -65,6 +65,10 @@
               <h3 v-i18n>Victory points</h3>
               <SegmentedControl :options="vpOptions" v-model="vps"/>
             </div>
+            <div class="card-list-more-row">
+              <h3 v-i18n>Special rule (*)</h3>
+              <SegmentedControl :options="asteriskRuleOptions" v-model="asteriskRules"/>
+            </div>
             <CardListFilterGroup title="Card resources" variant="icons" :options="resourceOptions" :selection="resources" :counts="resourceCounts"
               @toggle="toggle('resources', $event)" @reset="reset('resources')"/>
             <div class="card-list-more-row">
@@ -221,7 +225,7 @@ const CARD_SECTIONS: ReadonlyArray<{title: string, types: ReadonlyArray<CardType
 type CardSection = {title: string, names: Array<CardName>, parts: Array<SectionPart>, boxSize: CardBoxSize};
 
 // One active filter as a removable chip in the summary
-type ActiveFilter = FilterOption & {group: FilterGroup | 'vps' | 'cost'};
+type ActiveFilter = FilterOption & {group: FilterGroup | 'vps' | 'asteriskRules' | 'cost'};
 
 const FILTER_GROUP_OPTIONS: Record<FilterGroup, ReadonlyArray<FilterOption>> = {
   types: TYPE_OPTIONS,
@@ -231,6 +235,8 @@ const FILTER_GROUP_OPTIONS: Record<FilterGroup, ReadonlyArray<FilterOption>> = {
 };
 
 const VP_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 0, label: 'all'}, {value: 1, label: '+VPs'}, {value: 2, label: '-VPs'}];
+// Same pattern as the VP filter: with or without a "*" special rule
+const ASTERISK_RULE_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 0, label: 'all'}, {value: 1, label: '+*'}, {value: 2, label: '-*'}];
 const SORT_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'a', label: 'A-Z'}, {value: '1', label: '0-9'}];
 const SEARCH_SCOPE_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 'name', label: 'Card title'}, {value: 'text', label: 'Full text'}];
 
@@ -327,6 +333,9 @@ export default defineComponent({
     vpOptions(): typeof VP_OPTIONS {
       return VP_OPTIONS;
     },
+    asteriskRuleOptions(): typeof ASTERISK_RULE_OPTIONS {
+      return ASTERISK_RULE_OPTIONS;
+    },
     sortOptions(): typeof SORT_OPTIONS {
       return SORT_OPTIONS;
     },
@@ -347,7 +356,7 @@ export default defineComponent({
     filterState(): FilterState {
       return {
         types: this.types, tags: this.tags, expansions: this.expansions, resources: this.resources,
-        vps: this.vps, costMin: this.costMin, costMax: this.costMax,
+        vps: this.vps, asteriskRules: this.asteriskRules, costMin: this.costMin, costMax: this.costMax,
       };
     },
     // Entries matching the search text – basis for results and hit counts
@@ -393,6 +402,9 @@ export default defineComponent({
       }
       if (this.vps !== 0) {
         active.push({group: 'vps', key: String(this.vps), label: this.vps === 1 ? '+VPs' : '-VPs'});
+      }
+      if (this.asteriskRules !== 0) {
+        active.push({group: 'asteriskRules', key: String(this.asteriskRules), label: this.asteriskRules === 1 ? '+*' : '-*'});
       }
       return active;
     },
@@ -479,6 +491,8 @@ export default defineComponent({
     removeFilter(filter: ActiveFilter): void {
       if (filter.group === 'vps') {
         this.vps = 0;
+      } else if (filter.group === 'asteriskRules') {
+        this.asteriskRules = 0;
       } else if (filter.group === 'cost') {
         this.resetCost();
       } else {
@@ -488,6 +502,7 @@ export default defineComponent({
     resetAll(): void {
       (Object.keys(FILTER_GROUP_OPTIONS) as Array<FilterGroup>).forEach((group) => this.reset(group));
       this.vps = 0;
+      this.asteriskRules = 0;
       this.resetCost();
       this.filterText = '';
     },

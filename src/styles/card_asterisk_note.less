@@ -1,25 +1,32 @@
 // "*" rule of a card text, set apart below the effect text with its key words highlighted
-// (CardDescription.vue, texts in src/client/cards/asteriskNotes.ts)
+// (CardDescription.vue, texts in src/client/cards/asteriskNotes.ts).
+// Colors from the M€ coin (assets/resources/megacredit.png): coin yellow with its black outline,
+// so the note uses the card's own palette instead of a new accent color.
+@note-coin-yellow: #f8e61f;
+@note-coin-outline: #000;
+// Darker coin yellow for the key words: stands out on the light note without an outline
+@note-coin-yellow-dark: #ecc417;
 .card-description-split {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  // Dense cards have no spare height: keep the note as compact as the plain text
+  gap: 2px;
 }
 
 .card-asterisk-note {
   display: flex;
-  gap: 3px;
-  padding: 2px 4px;
-  border-left: 2px solid #d8892a;
+  gap: 2px;
+  padding: 1px 3px;
+  border-left: 2px solid @note-coin-yellow;
   border-radius: 0 3px 3px 0;
-  background: rgba(216, 137, 42, 0.12);
+  background: fade(@note-coin-yellow, 22%);
   text-align: left;
 
   mark {
-    padding: 0 2px;
+    padding: 0 1px;
     border-radius: 2px;
-    background: #f6c46a;
-    color: #2a1a08;
+    background: @note-coin-yellow-dark;
+    color: @note-coin-outline;
     font-weight: 600;
     // Keeps the highlight intact across a line break
     box-decoration-break: clone;
@@ -28,6 +35,16 @@
 }
 
 .card-asterisk-note-star {
-  color: #c0661a;
+  color: @note-coin-outline;
   font-weight: 800;
+}
+
+// Set by CardDescription.vue when the text would run out of the card; beats .card-container .card-description
+.card-container .card-description.card-description-compact {
+  font-size: 10px;
+  line-height: 11px;
+}
+.card-container .card-description.card-description-compact-more {
+  font-size: 9px;
+  line-height: 10px;
 }
