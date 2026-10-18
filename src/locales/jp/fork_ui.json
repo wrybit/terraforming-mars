@@ -1236,5 +1236,9 @@
   "(normal steps)": "（通常の手順）",
   "Cancel / discard": "キャンセル / 捨てる",
   "Close / no": "閉じる / いいえ",
-  "Special rule (*)": "特殊ルール (*)"
+  "Special rule (*)": "特殊ルール (*)",
+  "${0} sold ${1}": "${0}が${1}を売却",
+  "Only you can see this line in the log": "このログの行はあなただけに見えます",
+  "AI insight: click to reveal": "AI情報：クリックで表示",
+  "Click to hide again": "もう一度クリックで隠す"
 }

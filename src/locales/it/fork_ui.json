@@ -2092,5 +2092,9 @@
   "(normal steps)": "(passi normali)",
   "Cancel / discard": "Annulla / Scarta",
   "Close / no": "Chiudi / No",
-  "Special rule (*)": "Regola speciale (*)"
+  "Special rule (*)": "Regola speciale (*)",
+  "${0} sold ${1}": "${0} ha venduto ${1}",
+  "Only you can see this line in the log": "Solo tu vedi questa riga del registro",
+  "AI insight: click to reveal": "Info IA: clicca per mostrare",
+  "Click to hide again": "Clicca per nascondere di nuovo"
 }

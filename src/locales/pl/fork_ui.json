@@ -1648,5 +1648,9 @@
   "(normal steps)": "(zwykłe kroki)",
   "Cancel / discard": "Anuluj / Odrzuć",
   "Close / no": "Zamknij / Nie",
-  "Special rule (*)": "Zasada specjalna (*)"
+  "Special rule (*)": "Zasada specjalna (*)",
+  "${0} sold ${1}": "${0} sprzedaje: ${1}",
+  "Only you can see this line in the log": "Tylko ty widzisz ten wiersz dziennika",
+  "AI insight: click to reveal": "Informacja SI: kliknij, aby odkryć",
+  "Click to hide again": "Kliknij, aby ponownie ukryć"
 }

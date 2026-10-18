@@ -881,5 +881,9 @@
   "(normal steps)": "(tavalliset vaiheet)",
   "Cancel / discard": "Peruuta / Hylkää",
   "Close / no": "Sulje / Ei",
-  "Special rule (*)": "Erikoissääntö (*)"
+  "Special rule (*)": "Erikoissääntö (*)",
+  "${0} sold ${1}": "${0} myi ${1}",
+  "Only you can see this line in the log": "Vain sinä näet tämän lokirivin",
+  "AI insight: click to reveal": "Tekoälyn tieto: napsauta näyttääksesi",
+  "Click to hide again": "Napsauta piilottaaksesi uudelleen"
 }

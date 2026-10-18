@@ -51,7 +51,7 @@
             <!-- Analysis game: hovering an AI row shows rating buttons behind its text (touch: double-tap; key I) -->
             <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel"
               :follows="row.follows === true" :class="{'log-row--ai-rateable': isRateable(section, row)}"
-              @click="messageClicked(row.message, undefined, section, row)"
+              @click="messageClicked(row.message, undefined, section, row, $event)"
               @mouseenter="messageHovered(row.message, $event); rowHovered(section, row, $event)" @mouseleave="rowLeft($event)" @spaceClicked="$emit('spaceClicked', $event)"/>
             <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"
               :class="{'log-row--ai-rateable': isRateable(section, row)}"
@@ -137,6 +137,7 @@ const RATE_BAR_NAME_VISIBLE = 20;
 import {aiColorsOf, AiLogTarget, aiTargetOfRow, decisionSummaries} from '@/client/components/logpanel/aiAnalysis/aiLogTarget';
 import {aiFeedbackState, loadAiFeedback, openAiDecision, ratingsOf} from '@/client/components/logpanel/aiAnalysis/aiFeedbackState';
 import {aiInsightsShown} from '@/client/components/logpanel/aiAnalysis/aiInsightVisibility';
+import {isSpoiler, isSpoilerHidden, toggleSpoiler} from '@/client/components/logpanel/aiAnalysis/aiSpoilers';
 import {withViewerNamed} from '@/client/components/logpanel/logViewerName';
 import {AiFeedbackEntry} from '@/common/ai/AiFeedback';
 import {isTypingTarget} from '@/client/utils/typingTarget';
@@ -310,7 +311,21 @@ export default defineComponent({
     canHover(): boolean {
       return window.matchMedia('(hover: hover)').matches;
     },
-    messageClicked(message: LogMessage, action?: LogAction, section?: GenerationLog, row?: LogRow) {
+    messageClicked(message: LogMessage, action?: LogAction, section?: GenerationLog, row?: LogRow, event?: MouseEvent) {
+      // AI line of an analysis game: a click reveals the spoiler, the next one hides it again (aiSpoilers.ts)
+      if (isSpoiler(message)) {
+        const hidden = toggleSpoiler(message);
+        if (hidden) {
+          this.messageUnhovered();
+          this.hideRateBar();
+        } else if (event !== undefined) {
+          this.messageHovered(message, event, action);
+          if (section !== undefined && row !== undefined) {
+            this.rowHovered(section, row, event);
+          }
+        }
+        return;
+      }
       // Touch in an analysis game: an AI row waits a moment for a second tap (rating) before opening its cards
       const target = section === undefined || row === undefined || this.canHover() ? undefined : this.aiTargetOf(section, row);
       if (target !== undefined) {
@@ -445,7 +460,9 @@ export default defineComponent({
       return target === undefined ? [] : ratingsOf(target.messageId);
     },
     rowHovered(section: GenerationLog, row: LogRow, event: MouseEvent): void {
-      const target = this.aiTargetOf(section, row);
+      // Rating a line nobody can read yet makes no sense: no rating bar on a hidden spoiler
+      const hiddenSpoiler = row.type === 'message' && isSpoilerHidden(row.message);
+      const target = hiddenSpoiler ? undefined : this.aiTargetOf(section, row);
       const element = event.currentTarget instanceof HTMLElement ? event.currentTarget : undefined;
       this.internals.hoveredAiTarget = target;
       this.internals.hoveredAiRow = target === undefined ? undefined : element;
@@ -542,6 +559,11 @@ export default defineComponent({
       }
     },
     messageHovered(message: LogMessage, event: MouseEvent, action?: LogAction) {
+      // A hidden spoiler gives nothing away, not even its cards in the preview
+      if (isSpoilerHidden(message)) {
+        this.messageUnhovered();
+        return;
+      }
       // Lines with many cards have no hover preview (it would overflow the window), only click
       if (this.zoomCarousel || !this.canHover()) {
         return;

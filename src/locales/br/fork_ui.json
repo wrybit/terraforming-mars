@@ -1992,5 +1992,9 @@
   "(normal steps)": "(passos normais)",
   "Cancel / discard": "Cancelar / Descartar",
   "Close / no": "Fechar / Não",
-  "Special rule (*)": "Regra especial (*)"
+  "Special rule (*)": "Regra especial (*)",
+  "${0} sold ${1}": "${0} vendeu ${1}",
+  "Only you can see this line in the log": "Só você vê esta linha do registro",
+  "AI insight: click to reveal": "Info da IA: clique para revelar",
+  "Click to hide again": "Clique para ocultar de novo"
 }

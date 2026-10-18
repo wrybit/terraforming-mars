@@ -1,13 +1,20 @@
 <template>
    <!-- log-line--<colour>: text and hover in the colour of the player the line is about (log.less) -->
    <li v-if="message !== undefined && message.data !== undefined && message.message !== undefined"
-     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--expandable': expandable, 'log-line--ai-insight': message.aiInsight !== undefined, 'log-line--discard': isDiscard, 'log-line--follows': follows}]"
+     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--expandable': expandable, 'log-line--ai-insight': message.aiInsight !== undefined, 'log-line--discard': isDiscard, 'log-line--follows': follows, 'log-line--spoiler': spoiler, 'log-line--spoiler-hidden': spoilerHidden}]"
+     :title="spoilerTitle"
      @click.prevent="$emit('click')">
     <span v-if="(message.type ?? LogMessageType.DEFAULT) === LogMessageType.DEFAULT" :title="when" v-html="icon"></span>
     <!-- Consequence of the row above (same player): indented, the arrow points back to it -->
     <span v-if="follows" class="log-follows-arrow" aria-hidden="true">↳</span>
     <!-- Analysis game: a private line of an AI player, normally hidden from the others (after the time icon, which the log hides) -->
     <span v-if="message.aiInsight !== undefined" class="log-ai-insight" :title="$t('Visible because this is an analysis game')"><SeatIcon kind="ai" :size="14"/></span>
+    <!-- Own private line (e.g. cards drawn or discarded): the others don't see it -->
+    <span v-else-if="message.playerId !== undefined" class="log-private" :title="$t('Only you can see this line in the log')">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+    </span>
+    <!-- The content as one inline box: an AI line of an analysis game blurs it as a spoiler (aiSpoilers.ts) -->
+    <span class="log-line-content">
     <template v-for="(data, idx) of entries" :key="idx">
       <span class="log-plain-text" v-if="typeof(data) === 'string'">{{ data }}</span>
       <span v-else>
@@ -38,6 +45,7 @@
         <span v-else v-i18n>{{ data.value }}</span>
       </span>
     </template>
+    </span>
    </li>
 </template>
 
@@ -62,6 +70,7 @@ import {needsModalPreview} from '@/client/components/logpanel/logMessageContent'
 import {cardTypeToCss, partySlug} from '@/client/components/logpanel/logCardType';
 import SeatIcon from '@/client/components/create/SeatIcon.vue';
 import LogSpaceChip from '@/client/components/logpanel/LogSpaceChip.vue';
+import {isSpoiler, isSpoilerHidden} from '@/client/components/logpanel/aiAnalysis/aiSpoilers';
 
 const DISCARD_MESSAGES = new Set([
   '${0} discarded ${1}',
@@ -153,6 +162,18 @@ export default defineComponent({
     // Lines about discarded cards: their card names show in red (log.less)
     isDiscard(): boolean {
       return DISCARD_MESSAGES.has(this.message.message);
+    },
+    spoiler(): boolean {
+      return isSpoiler(this.message);
+    },
+    spoilerHidden(): boolean {
+      return isSpoilerHidden(this.message);
+    },
+    spoilerTitle(): string | undefined {
+      if (!this.spoiler) {
+        return undefined;
+      }
+      return this.$t(this.spoilerHidden ? 'AI insight: click to reveal' : 'Click to hide again');
     },
     lineColor(): Color | undefined {
       const player = this.message.data?.find((datum) => datum.type === LogMessageDataType.PLAYER);

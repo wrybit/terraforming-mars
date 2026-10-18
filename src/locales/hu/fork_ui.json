@@ -1053,5 +1053,9 @@
   "(normal steps)": "(szokásos lépések)",
   "Cancel / discard": "Mégse / Eldob",
   "Close / no": "Bezár / Nem",
-  "Special rule (*)": "Különleges szabály (*)"
+  "Special rule (*)": "Különleges szabály (*)",
+  "${0} sold ${1}": "${0} eladta: ${1}",
+  "Only you can see this line in the log": "Ezt a naplósort csak te látod",
+  "AI insight: click to reveal": "MI-infó: kattints a felfedéshez",
+  "Click to hide again": "Kattints újra az elrejtéshez"
 }

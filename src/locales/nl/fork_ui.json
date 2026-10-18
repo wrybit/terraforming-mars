@@ -1479,5 +1479,9 @@
   "(normal steps)": "(gewone stappen)",
   "Cancel / discard": "Annuleren / Afleggen",
   "Close / no": "Sluiten / Nee",
-  "Special rule (*)": "Speciale regel (*)"
+  "Special rule (*)": "Speciale regel (*)",
+  "${0} sold ${1}": "${0} heeft ${1} verkocht",
+  "Only you can see this line in the log": "Alleen jij ziet deze regel in het logboek",
+  "AI insight: click to reveal": "AI-info: klik om te tonen",
+  "Click to hide again": "Klik om weer te verbergen"
 }

@@ -8,6 +8,7 @@ import {LogMessageType} from '@/common/logs/LogMessageType';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {CardName} from '@/common/cards/CardName';
 import {PreferencesManager} from '@/client/utils/PreferencesManager';
+import {toggleSpoiler} from '@/client/components/logpanel/aiAnalysis/aiSpoilers';
 
 describe('LogMessageComponent', () => {
   it('mounts without errors', () => {
@@ -139,5 +140,24 @@ describe('LogMessageComponent', () => {
     const link = wrapper.find('a.log-results-link');
     expect(link.text()).eq('g123');
     expect(link.attributes('href')).eq('the-end?id=' + viewModel.id);
+  });
+
+  it('marks an own private line as visible only to the reader', () => {
+    const message = new LogMessage(LogMessageType.DEFAULT, 'Test message', [], 'p-own' as LogMessage['playerId']);
+    const wrapper = shallowMount(LogMessageComponent, {...globalConfig, props: {message, viewModel: fakeViewModel()}});
+    expect(wrapper.find('.log-private').exists()).is.true;
+  });
+
+  it('blurs an AI line of an analysis game until clicked, a second click hides it again', async () => {
+    const message: LogMessage = {...new LogMessage(LogMessageType.DEFAULT, 'Test message', []), id: 'spoiler-test', aiInsight: 'red'};
+    const wrapper = shallowMount(LogMessageComponent, {...globalConfig, props: {message, viewModel: fakeViewModel()}});
+    expect(wrapper.find('.log-private').exists()).is.false;
+    expect(wrapper.find('li').classes()).to.include('log-line--spoiler-hidden');
+    toggleSpoiler(message);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('li').classes()).not.to.include('log-line--spoiler-hidden');
+    toggleSpoiler(message);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('li').classes()).to.include('log-line--spoiler-hidden');
   });
 });

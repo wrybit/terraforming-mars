@@ -1122,6 +1122,35 @@ each(@players, {
   color: #b3b2ff;
 }
 
+// Own private line: same slot and size as the AI marker, quieter colour (it is only a hint)
+.log-private {
+  display: inline-flex;
+  vertical-align: -2px;
+  margin-right: 4px;
+  color: #8b90a3;
+  cursor: help;
+}
+
+// Analysis game: AI lines are spoilers – a blurred block like in Discord or Telegram until clicked.
+// Marker, arrow and time icon stay sharp so it is clear what is hidden there.
+.log-panel li.log-line--spoiler {
+  cursor: pointer;
+}
+
+.log-panel li.log-line--spoiler-hidden .log-line-content {
+  filter: blur(5px);
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  user-select: none;
+  transition: filter 0.15s ease;
+}
+
+.log-panel li.log-line--spoiler-hidden:hover .log-line-content {
+  background: rgba(255, 255, 255, 0.18);
+}
+
 // Ratings right below their row: closer to it than the next row is (law of proximity)
 .log-ai-ratings {
   display: flex;

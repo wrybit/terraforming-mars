@@ -1693,5 +1693,9 @@
   "(normal steps)": "(обычные шаги)",
   "Cancel / discard": "Отмена / Сбросить",
   "Close / no": "Закрыть / Нет",
-  "Special rule (*)": "Особое правило (*)"
+  "Special rule (*)": "Особое правило (*)",
+  "${0} sold ${1}": "${0} продал ${1}",
+  "Only you can see this line in the log": "Эту строку журнала видите только вы",
+  "AI insight: click to reveal": "Данные ИИ: нажмите, чтобы показать",
+  "Click to hide again": "Нажмите, чтобы снова скрыть"
 }
