@@ -106,3 +106,11 @@ html.theme-dune .card-corporation-box {
   background: linear-gradient(to bottom right, #e7d8b8, #d6c098, #e8dcc2, #d2bb92);
   border-color: #6b5640;
 }
+
+/* Place names on Arrakis (Legends.ts): dark halo, so the white text reads on sand, rock and ice */
+html.theme-dune .board-caption {
+  paint-order: stroke;
+  stroke: #2a1c12;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}

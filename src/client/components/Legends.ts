@@ -6,8 +6,8 @@ export type Key = {
   text: [string, string] | [string],
   line?: {from: [number, number], to: [number, number]},
   secondRowX?: number,
-  // Long one-row names run away from the space towards the rim
-  anchor?: 'start' | 'end',
+  // Alignment of one-row names that change their length with the language
+  anchor?: 'start' | 'middle' | 'end',
   // The text is a translation key (Arrakis: the Dune theme names the places in every language)
   translated?: true,
 };
@@ -31,17 +31,19 @@ export const LEGENDS: Record<BoardName, ReadonlyArray<Key>> = {
   ],
   [BoardName.HOLLANDIA]: [],
   [BoardName.AMAZONIS_PLANITIA]: [],
-  // The volcanic spaces play like the Tharsis volcanoes, so they use the Tharsis keys (src/themes/dune/names/<lang>.json)
+  // The volcanic spaces play like the Tharsis volcanoes, so they use the Tharsis keys (src/themes/dune/names/<lang>.json).
+  // Centred just below the space, between its bonus icons and those of the next row: the rings leave no margin
+  // for long names in every language, so no lines out to the rim.
   [BoardName.ARRAKIS]: [
-    // Space 06, Observatory mountain
-    {text: ['Tharsis Tholus'], translated: true, anchor: 'end', position: [300, 92], line: {from: [2, -3], to: [74, 34]}},
+    // Space 05, Observatory mountain
+    {text: ['Tharsis Tholus'], translated: true, anchor: 'middle', position: [325, 155]},
     // Space 12, Rim wall west
-    {text: ['Pavonis Mons'], translated: true, anchor: 'start', position: [480, 136], line: {from: [-2, -3], to: [-81, 31]}},
+    {text: ['Pavonis Mons'], translated: true, anchor: 'middle', position: [399, 196]},
     // Space 19, Arrakeen (reserved like Noctis City)
-    {text: ['Noctis City'], translated: true, anchor: 'start', position: [500, 182], line: {from: [-2, -3], to: [-77, 26]}},
+    {text: ['Noctis City'], translated: true, anchor: 'middle', position: [423, 237]},
     // Space 23, Mount Idaho
-    {text: ['Ascraeus Mons'], translated: true, anchor: 'end', position: [128, 214], line: {from: [2, -3], to: [124, 35]}},
+    {text: ['Ascraeus Mons'], translated: true, anchor: 'middle', position: [252, 278]},
     // Space 36, Shield wall
-    {text: ['Arsia Mons'], translated: true, anchor: 'start', position: [524, 344], line: {from: [2, -8], to: [-52, -54]}},
+    {text: ['Arsia Mons'], translated: true, anchor: 'middle', position: [472, 319]},
   ],
 };
