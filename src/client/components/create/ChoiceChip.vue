@@ -3,9 +3,9 @@
     role="button"
     tabindex="0"
     class="create-game-chip"
-    :class="{'create-game-chip--selected': selected, 'create-game-chip--locked': locked}"
+    :class="{'create-game-chip--selected': selected, 'create-game-chip--locked': locked, 'create-game-chip--unavailable': unavailable}"
     :aria-pressed="selected"
-    :aria-disabled="locked"
+    :aria-disabled="locked || unavailable"
     :title="tooltip ?? translatedLabel"
     @click="select()"
     @keydown.enter.prevent="select()"
@@ -54,6 +54,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    // Not playable with the current settings (e.g. an expansion the Dune theme has no texts for): greyed, clicking does nothing
+    unavailable: {
+      type: Boolean,
+      default: false,
+    },
     // Hover text instead of the label, e.g. why the tile was selected along with another one
     tooltip: {
       type: String,
@@ -67,7 +72,7 @@ export default defineComponent({
   },
   methods: {
     select() {
-      if (!this.locked) {
+      if (!this.locked && !this.unavailable) {
         this.$emit('select');
       }
     },

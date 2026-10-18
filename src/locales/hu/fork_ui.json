@@ -1057,5 +1057,9 @@
   "${0} sold ${1}": "${0} eladta: ${1}",
   "Only you can see this line in the log": "Ezt a naplósort csak te látod",
   "AI insight: click to reveal": "MI-infó: kattints a felfedéshez",
-  "Click to hide again": "Kattints újra az elrejtéshez"
+  "Click to hide again": "Kattints újra az elrejtéshez",
+  "Theme": "Téma",
+  "Dune": "Dűne",
+  "arrakis": "Arrakis",
+  "Not available with the Dune theme": "A Dűne témával nem érhető el"
 }

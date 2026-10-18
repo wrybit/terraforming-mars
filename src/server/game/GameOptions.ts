@@ -7,6 +7,7 @@ import {RandomMAOptionType} from '../../common/ma/RandomMAOptionType';
 import {AgendaStyle} from '../../common/turmoil/Types';
 import {Expansion} from '../../common/cards/GameModule';
 import {EscapeVelocityOptions} from '../../common/game/NewGameConfig';
+import {DEFAULT_THEME, Theme} from '../../common/theme/Theme';
 
 export type GameOptions = {
   boardName: BoardName;
@@ -76,6 +77,8 @@ export type GameOptions = {
   altVenusBoard: boolean;
   escapeVelocity?: EscapeVelocityOptions;
   twoCorpsVariant: boolean;
+  /** What the game looks like (common/theme/Theme.ts); never changes the rules */
+  theme: Theme;
 }
 
 export const DEFAULT_GAME_OPTIONS: GameOptions = {
@@ -148,4 +151,5 @@ export const DEFAULT_GAME_OPTIONS: GameOptions = {
   undoOption: false,
   venusNextExtension: false,
   twoCorpsVariant: false,
+  theme: DEFAULT_THEME,
 };

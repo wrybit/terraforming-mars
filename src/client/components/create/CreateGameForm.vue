@@ -55,7 +55,8 @@
                     :label="tile.choice?.label ?? 'Base game'" :iconClass="tile.choice?.iconClass ?? 'expansion-icon-base'"
                     :selected="tile.choice === undefined || expansions[tile.choice.expansion]" :locked="tile.choice === undefined"
                     :href="tile.choice?.info ? wikiUrls[tile.choice.expansion] : undefined"
-                    :tooltip="tile.choice === undefined ? undefined : requiredByTooltip(tile.choice.expansion, expansions)"
+                    :unavailable="tile.choice !== undefined && !expansionAvailable(tile.choice.expansion)"
+                    :tooltip="tile.choice === undefined ? undefined : expansionTooltip(tile.choice.expansion)"
                     @select="tile.choice !== undefined && toggleExpansion(tile.choice.expansion)">
                     <template #detail>
                       <span v-for="(part, index) in contentLine(tile, group.highlight, expansionGrouping !== 'source')" :key="index"
@@ -105,6 +106,15 @@
         <Teleport :to="columnTarget('board')">
           <section class="create-game-card" :style="cardStyle('board')">
             <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
+            <!-- Theme first: it decides which boards and expansions exist (common/theme/Theme.ts) -->
+            <div class="create-game-subhead" v-i18n>Theme</div>
+            <SegmentedControl class="create-game-segmented--equal" v-model="theme" :options="THEME_OPTIONS"/>
+            <div v-if="theme === 'dune'" class="create-game-chip-grid create-game-theme-board">
+              <ChoiceChip :label="DUNE_BOARD" capitalized selected locked>
+                <template #icon><span :class="getBoardColorClass(DUNE_BOARD)"></span></template>
+              </ChoiceChip>
+            </div>
+            <template v-else>
             <!-- Chance first: with a random board the board chips below only show the pool it draws from -->
             <div class="create-game-subhead" v-i18n>Random</div>
             <OptionRow label="Random board">
@@ -126,6 +136,7 @@
                   </ChoiceChip>
                 </div>
               </CollapsibleSection>
+            </template>
             </template>
             <!-- Exactly the board the game gets (same board seed); a cloned game brings its own board -->
             <CreateGameBoardPreview v-if="!seededGame" :config="boardPreviewConfig" :isRandom="randomBoard || shuffleMapOption" :showBoardName="randomBoard"
@@ -400,6 +411,7 @@ import {ColumnCount, currentColumnCount, placementOf, SettingsCard, watchColumnC
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {describeFailure, failureFromResponse, failureOf, fetchOrFail, RequestFailedError} from '@/client/utils/requestFailure';
 import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
+import {DUNE_BOARD, Theme, themeAllowsExpansion} from '@/common/theme/Theme';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
@@ -546,7 +558,7 @@ export default defineComponent({
       saveExpansionGrouping(value);
     },
     board(value: BoardNameType) {
-      if (!this.isRandomBoard(value)) {
+      if (!this.isRandomBoard(value) && value !== DUNE_BOARD) {
         this.lastFixedBoard = value as BoardName;
       }
     },
@@ -720,6 +732,7 @@ export default defineComponent({
           penaltyVPPerPeriod: this.escapeVelocityPenalty,
         } : undefined,
         twoCorpsVariant: this.twoCorpsVariant,
+        theme: this.theme,
         startingCeos: this.startingCeos,
         startingPreludes: this.startingPreludes,
       };
@@ -821,6 +834,33 @@ export default defineComponent({
     },
     RANDOM_BOARD_OPTIONS(): typeof RANDOM_BOARD_OPTIONS {
       return RANDOM_BOARD_OPTIONS;
+    },
+    // The theme is stored as the board itself: Arrakis means Dune. So saved settings, files and share links
+    // carry it without a field of their own.
+    theme: {
+      get(): Theme {
+        return this.board === DUNE_BOARD ? 'dune' : 'mars';
+      },
+      set(value: Theme) {
+        if (value === 'dune') {
+          this.board = DUNE_BOARD;
+          // Arrakis follows the geography of the planet; shuffled bonuses would lose it
+          this.shuffleMapOption = false;
+          for (const expansion of Object.keys(this.expansions) as Array<Expansion>) {
+            if (!themeAllowsExpansion('dune', expansion)) {
+              this.expansions[expansion] = false;
+            }
+          }
+        } else {
+          this.board = this.lastFixedBoard;
+        }
+      },
+    },
+    THEME_OPTIONS(): ReadonlyArray<SegmentOption> {
+      return [{value: 'mars', label: 'Mars'}, {value: 'dune', label: 'Dune'}];
+    },
+    DUNE_BOARD(): BoardName {
+      return DUNE_BOARD;
     },
     // "Random board" is stored as the board value itself (RandomBoardOption), like before
     randomBoard: {
@@ -995,6 +1035,9 @@ export default defineComponent({
     },
     // Switching an expansion on also switches on what part of it needs (expansionDependencies.ts)
     setExpansion(expansion: Expansion, value: boolean) {
+      if (value && !this.expansionAvailable(expansion)) {
+        return;
+      }
       this.expansions[expansion] = value;
       if (value) {
         for (const required of requirementsOf(expansion)) {
@@ -1011,6 +1054,15 @@ export default defineComponent({
     },
     contentLine(tile: ExpansionTile, highlight: ContentKey | TraitKey | undefined, withSource: boolean): Array<ContentLinePart> {
       return contentLine(tile, highlight, withSource);
+    },
+    expansionAvailable(expansion: Expansion): boolean {
+      return themeAllowsExpansion(this.theme, expansion);
+    },
+    expansionTooltip(expansion: Expansion): string | undefined {
+      if (!this.expansionAvailable(expansion)) {
+        return translateText('Not available with the Dune theme');
+      }
+      return requiredByTooltip(expansion, this.expansions);
     },
     requiredByTooltip(expansion: Expansion, selected: Record<Expansion, boolean>): string | undefined {
       return requiredByTooltip(expansion, selected);

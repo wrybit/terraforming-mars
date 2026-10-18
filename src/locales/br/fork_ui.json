@@ -1996,5 +1996,9 @@
   "${0} sold ${1}": "${0} vendeu ${1}",
   "Only you can see this line in the log": "Só você vê esta linha do registro",
   "AI insight: click to reveal": "Info da IA: clique para revelar",
-  "Click to hide again": "Clique para ocultar de novo"
+  "Click to hide again": "Clique para ocultar de novo",
+  "Theme": "Tema",
+  "Dune": "Duna",
+  "arrakis": "Arrakis",
+  "Not available with the Dune theme": "Indisponível com o tema Duna"
 }

@@ -157,6 +157,8 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
     [BoardName.TERRA_CIMMERIA_NOVA]: ['Planetologist', 'Architect', 'Coastguard', 'C. Forester', 'Fundraiser'],
     [BoardName.HOLLANDIA]: [],
     [BoardName.AMAZONIS_PLANITIA]: ['Terran', 'Landshaper', 'Merchant3', 'Sponsor', 'Lobbyist'],
+    // Dune theme: the Tharsis milestones under Dune names (theme texts only)
+    [BoardName.ARRAKIS]: ['Terraformer', 'Mayor', 'Gardener', 'Builder', 'Planner'],
   },
   expansions: {
     venus: ['Hoverlord'],

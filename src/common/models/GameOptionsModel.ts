@@ -1,3 +1,4 @@
+import {Theme} from '../theme/Theme';
 import {BoardName} from '../boards/BoardName';
 import {RandomMAOptionType} from '../ma/RandomMAOptionType';
 import {AgendaStyle} from '../turmoil/Types';
@@ -34,6 +35,7 @@ export type GameOptionsModel = {
   requiresMoonTrackCompletion: boolean,
   requiresVenusTrackCompletion: boolean,
   twoCorpsVariant: boolean,
+  theme: Theme,
   undoOption: boolean,
 
   // These are only supplied for the JSON, and

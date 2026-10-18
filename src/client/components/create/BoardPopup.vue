@@ -57,6 +57,8 @@ const WIKI_ANCHORS: Record<BoardNameType, string> = {
   [BoardName.TERRA_CIMMERIA_NOVA]: 'terra-cimmeria-nova',
   [BoardName.HOLLANDIA]: 'hollandia',
   [BoardName.AMAZONIS_PLANITIA]: 'amazonis-planitia',
+  // Dune theme board, no wiki page
+  [BoardName.ARRAKIS]: '',
   [RandomBoardOption.OFFICIAL]: '',
   [RandomBoardOption.ALL]: '',
 };

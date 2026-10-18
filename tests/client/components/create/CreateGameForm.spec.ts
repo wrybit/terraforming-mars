@@ -185,6 +185,28 @@ describe('CreateGameForm', () => {
     expect(vm.board).eq(BoardName.ELYSIUM);
   });
 
+  it('Dune theme plays on Arrakis with the covered expansions only; Mars restores the chosen board', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const vm = wrapper.vm as any;
+    vm.board = BoardName.ELYSIUM;
+    vm.setExpansion('venus', true);
+    vm.setExpansion('prelude', true);
+    await nextTick();
+    vm.theme = 'dune';
+    expect(vm.board).eq(BoardName.ARRAKIS);
+    expect(vm.expansions.venus).eq(false);
+    expect(vm.expansions.prelude).eq(true);
+    expect(vm.newGameConfig.theme).eq('dune');
+    // Locked while Dune is chosen
+    vm.toggleExpansion('colonies');
+    expect(vm.expansions.colonies).eq(false);
+    vm.theme = 'mars';
+    expect(vm.board).eq(BoardName.ELYSIUM);
+    expect(vm.newGameConfig.theme).eq('mars');
+  });
+
   it('prefers settings from the link hash over saved settings', async () => {
     createGameSettingsStorage.save(createNewGameConfig());
     const model = defaultCreateGameModel();

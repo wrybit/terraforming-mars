@@ -9,7 +9,8 @@ import {Random, SeededRandom} from '../../common/utils/Random';
 
 /** Boards the board option draws from: one fixed board, or the pool of a random option. */
 export function boardCandidates(board: BoardNameType): Array<BoardName> {
-  const allBoards = Object.values(BoardName);
+  // Arrakis belongs to the Dune theme and is never drawn at random
+  const allBoards = Object.values(BoardName).filter((name) => name !== BoardName.ARRAKIS);
   if (board === RandomBoardOption.ALL) {
     return allBoards;
   }

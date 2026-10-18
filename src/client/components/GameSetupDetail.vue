@@ -54,6 +54,7 @@ const BOARD_TONE: Record<BoardName, string> = {
   [BoardName.TERRA_CIMMERIA]: 'board-terra-cimmeria',
   [BoardName.HOLLANDIA]: 'board-hollandia',
   [BoardName.AMAZONIS_PLANITIA]: 'board-amazonis',
+  [BoardName.ARRAKIS]: 'board-arrakis',
 };
 
 // Existing translations end with a colon ("Board: ") – tile labels drop it

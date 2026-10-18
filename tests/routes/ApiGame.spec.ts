@@ -97,6 +97,7 @@ describe('ApiGame', () => {
           'solarPhaseOption': false,
           'soloTR': false,
           'twoCorpsVariant': false,
+          'theme': 'mars',
           'undoOption': false,
 
           'aresHazards': true,

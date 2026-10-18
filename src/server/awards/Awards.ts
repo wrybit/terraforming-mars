@@ -133,6 +133,8 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
     [BoardName.TERRA_CIMMERIA_NOVA]: ['Electrician', 'Founder', 'Mogul', 'A. Zoologist', 'Forecaster'],
     [BoardName.HOLLANDIA]: [],
     [BoardName.AMAZONIS_PLANITIA]: ['Collector', 'Innovator', 'Constructor', 'Manufacturer', 'Physicist'],
+    // Dune theme: the Tharsis awards under Dune names (theme texts only)
+    [BoardName.ARRAKIS]: ['Landlord', 'Scientist', 'Banker', 'Thermalist', 'Miner'],
   },
   expansions: {
     venus: ['Venuphile'],

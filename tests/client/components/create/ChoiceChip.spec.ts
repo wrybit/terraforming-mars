@@ -31,4 +31,12 @@ describe('ChoiceChip', () => {
     expect(wrapper.classes()).includes('create-game-chip--locked');
     expect(wrapper.attributes('aria-disabled')).eq('true');
   });
+
+  it('an unavailable chip (not with the theme) ignores clicks', async () => {
+    const wrapper = mount(ChoiceChip, {...globalConfig, props: {label: 'Venus Next', unavailable: true}});
+    await wrapper.trigger('click');
+    expect(wrapper.emitted('select')).is.undefined;
+    expect(wrapper.classes()).includes('create-game-chip--unavailable');
+    expect(wrapper.attributes('aria-disabled')).eq('true');
+  });
 });

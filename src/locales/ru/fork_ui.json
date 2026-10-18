@@ -1697,5 +1697,9 @@
   "${0} sold ${1}": "${0} продал ${1}",
   "Only you can see this line in the log": "Эту строку журнала видите только вы",
   "AI insight: click to reveal": "Данные ИИ: нажмите, чтобы показать",
-  "Click to hide again": "Нажмите, чтобы снова скрыть"
+  "Click to hide again": "Нажмите, чтобы снова скрыть",
+  "Theme": "Тема",
+  "Dune": "Дюна",
+  "arrakis": "Арракис",
+  "Not available with the Dune theme": "Недоступно с темой «Дюна»"
 }

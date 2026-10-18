@@ -13,4 +13,6 @@ export enum BoardName {
   AMAZONIS = 'amazonis p.',
   TERRA_CIMMERIA = 't. cimmeria',
   HOLLANDIA = 'Hollandia',
+  // Board of the Dune theme only (common/theme/Theme.ts): never offered on its own or as a random board
+  ARRAKIS = 'arrakis',
 }

@@ -1,6 +1,8 @@
 export const SpaceName = {
   GANYMEDE_COLONY: 'c01',
   NOCTIS_CITY: '31',
+  // Reserved capital space of the Arrakis board (Dune theme), the counterpart of Noctis City
+  ARRAKEEN: '19',
   PHOBOS_SPACE_HAVEN: 'c02',
   LUNA_METROPOLIS: 'c70',
   DAWN_CITY: 'c71',

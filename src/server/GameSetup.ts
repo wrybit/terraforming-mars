@@ -8,6 +8,7 @@ import {SpaceType} from '../common/boards/SpaceType';
 import {SerializedBoard} from './boards/SerializedBoard';
 import {HellasBoard} from './boards/HellasBoard';
 import {TharsisBoard} from './boards/TharsisBoard';
+import {ArrakisBoard} from './boards/ArrakisBoard';
 import {IPlayer} from './IPlayer';
 import {Player} from './Player';
 import {TileType} from '../common/TileType';
@@ -50,6 +51,7 @@ const boards: Record<BoardName, BoardFactory> = {
   [BoardName.VASTITAS_BOREALIS]: VastitasBorealisBoard,
   [BoardName.HOLLANDIA]: HollandiaBoard,
   [BoardName.AMAZONIS_PLANITIA]: AmazonisPlanitiaBoard,
+  [BoardName.ARRAKIS]: ArrakisBoard,
 } satisfies Record<BoardName, BoardFactory>;
 
 export class GameSetup {

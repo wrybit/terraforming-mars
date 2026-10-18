@@ -8,6 +8,7 @@ import {RandomMAOptionType} from '../ma/RandomMAOptionType';
 import {AgendaStyle} from '../turmoil/Types';
 import {GameId} from '../Types';
 import {Expansion} from '../cards/GameModule';
+import {Theme} from '../theme/Theme';
 
 export type BoardNameType = BoardName | RandomBoardOption;
 
@@ -85,6 +86,8 @@ export type NewGameConfig = {
   altVenusBoard: boolean;
   escapeVelocity: EscapeVelocityOptions | undefined;
   twoCorpsVariant: boolean;
+  /** Missing from older clients and saved settings: then 'mars' */
+  theme?: Theme;
   customCeos: ReadonlyArray<CardName>;
   startingCeos: number;
   startingPreludes: number;

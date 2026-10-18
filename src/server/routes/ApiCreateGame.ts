@@ -1,4 +1,5 @@
 import {aiUnsupportedReasons} from '../../common/ai/aiSupport';
+import {DEFAULT_THEME, THEMES, isTheme, themeConflicts} from '../../common/theme/Theme';
 import {aiPlayerName, isAiLevel} from '../../common/ai/AiLevel';
 import * as responses from '../server/responses';
 import {Handler} from './Handler';
@@ -132,6 +133,7 @@ export class ApiCreateGame extends Handler {
       starWarsExpansion: gameReq.expansions.starwars,
       turmoilExtension: gameReq.expansions.turmoil,
       twoCorpsVariant: gameReq.twoCorpsVariant,
+      theme: gameReq.theme ?? DEFAULT_THEME,
       underworldExpansion: gameReq.expansions.underworld,
       deltaProjectExpansion: gameReq.expansions.deltaProject,
       undoOption: gameReq.undoOption,
@@ -177,6 +179,14 @@ export class ApiCreateGame extends Handler {
       this.validateCustomLists(gameReq);
       if (gameReq.escapeVelocity !== undefined && hasNegativeEscapeVelocityOption(gameReq.escapeVelocity)) {
         throw RouteError.badRequest('Escape Velocity values cannot be negative.');
+      }
+      // Same rule as the create-game form (common/theme/Theme.ts): Dune only on Arrakis with the expansions it has texts for
+      if (gameReq.theme !== undefined && !isTheme(gameReq.theme)) {
+        throw RouteError.badRequest(`Unknown theme "${String(gameReq.theme)}" (known: ${THEMES.join(', ')})`);
+      }
+      const themeErrors = themeConflicts(gameReq.theme ?? DEFAULT_THEME, gameReq.board, gameReq.expansions);
+      if (themeErrors.length > 0) {
+        throw RouteError.badRequest(themeErrors.join(' '));
       }
       // Same rule as the create-game form (common/ai/aiSupport.ts): no AI players with settings it cannot handle
       const aiBlockers = aiUnsupportedReasons({expansions: gameReq.expansions, twoCorpsVariant: gameReq.twoCorpsVariant});

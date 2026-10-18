@@ -885,5 +885,9 @@
   "${0} sold ${1}": "${0} myi ${1}",
   "Only you can see this line in the log": "Vain sinä näet tämän lokirivin",
   "AI insight: click to reveal": "Tekoälyn tieto: napsauta näyttääksesi",
-  "Click to hide again": "Napsauta piilottaaksesi uudelleen"
+  "Click to hide again": "Napsauta piilottaaksesi uudelleen",
+  "Theme": "Teema",
+  "Dune": "Dyyni",
+  "arrakis": "Arrakis",
+  "Not available with the Dune theme": "Ei käytettävissä Dyyni-teeman kanssa"
 }

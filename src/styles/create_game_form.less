@@ -86,6 +86,10 @@
 .create-game-arabia-terra,
 .create-game-terra-cimmeria,
 .create-game-vastitas-borealis,
+.create-game-arrakis {
+  color: @board-arrakis;
+}
+
 .create-game-hollandia {
   color: #eee;
 }
@@ -253,6 +257,11 @@
 .create-game-divider {
   margin: 8px -14px;
   border-top: 1px solid @create-game-line;
+}
+
+// The only board of the Dune theme: its own group below the theme switch, spaced like the board groups of Mars
+.create-game-theme-board {
+  margin-top: @create-game-gap-group;
 }
 
 .create-game-subhead {
@@ -621,6 +630,16 @@
 
     &:hover {
       background: fade(@selection-color, @selection-tint-opacity);
+    }
+  }
+
+  // Not available with the current theme: recedes clearly, the tooltip says why
+  &--unavailable {
+    opacity: 0.35;
+    cursor: not-allowed;
+
+    &:hover {
+      background: @create-game-chip-background;
     }
   }
 
