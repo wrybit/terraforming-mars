@@ -78,6 +78,8 @@ export type AiTuning = {
   keepHandUntilEnd: number,
   /** 0..1: hand cards keep their value only while money now plus the next income can pay for them (handFunding.ts). */
   handFunding: number,
+  /** M€ per unit of the learned draft/buy preference of strong players (bgaPolicy.ts); 0 = off. */
+  policyWeight: number,
   /** Generations of income that count as money for the hand (handFunding.ts). */
   handFundingGenerations: number,
   /** 1: money in the last generation counts in steps of greeneries it can still buy (stateValue.ts). */
@@ -295,6 +297,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 107: 0.5 +1.01 (z +1.50), 1 +0.76 (z +1.16) – fixes the human-game standard project cities.
   // Round 108: 1 against 0.5 +0.99 (z +1.47), pooled with round 107 z ≈ 1.85 → 1.
   handFunding: 1,
+  policyWeight: 0,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
   handFundingGenerations: 0,
   endgameMoney: 1,
@@ -788,6 +791,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   fundingTwoGenerations: {handFundingGenerations: 2},
   fundingHalfGeneration: {handFundingGenerations: 0.5},
   fundingOneGeneration: {handFundingGenerations: 1},
+  // Imitation of strong BGA players in draft and buying (bgaPolicy.ts)
+  policy3: {policyWeight: 3},
+  policy6: {policyWeight: 6},
+  policy12: {policyWeight: 12},
   noHandFunding: {handFunding: 0},
   buyLoose: {buyMargin: -3},
   // ML stage 2 (learned final VP margin from about 43,000 BGA two-player games, certain VP 1 : 1, AUC 0.80):

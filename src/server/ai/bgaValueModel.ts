@@ -2,6 +2,7 @@ import {IPlayer} from '../IPlayer';
 import {Tag} from '../../common/cards/Tag';
 import {Resource} from '../../common/Resource';
 import modelData from './data/bgaValueModel.json';
+import {Tree, treeScore} from './treeEnsemble';
 
 // Learned position value for two-player games: a gradient-boosted tree model (LightGBM) trained on about
 // 43,000 two-player games from Board Game Arena estimates the final VP margin from a position. VP that are already
@@ -9,7 +10,6 @@ import modelData from './data/bgaValueModel.json';
 // (production, resources, hand, cards in play, tags, global parameters), with more own production or resources
 // never worse. Trees and feature order come from data/bgaValueModel.json (exported by the private test system).
 
-type Tree = {f: Array<number>, t: Array<number>, l: Array<number>, r: Array<number>, v: Array<number>};
 type ModelData = {features: Array<string>, surePoints: Array<number>, trees: Array<Tree>};
 const MODEL = modelData as unknown as ModelData;
 
@@ -75,15 +75,7 @@ export function bgaFeatures(player: IPlayer, opponent: IPlayer): Array<number> {
 
 /** Raw model score for a feature vector: VP the final margin is expected to differ from the certain VP margin. */
 export function bgaScore(features: ReadonlyArray<number>): number {
-  let total = 0;
-  for (const tree of MODEL.trees) {
-    let node = 0;
-    while (node >= 0) {
-      node = features[tree.f[node]] <= tree.t[node] ? tree.l[node] : tree.r[node];
-    }
-    total += tree.v[-node - 1];
-  }
-  return total;
+  return treeScore(MODEL.trees, features);
 }
 
 /** Expected final VP margin for a feature vector: certain VP margin plus the trees' estimate of what follows. */

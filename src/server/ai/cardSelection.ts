@@ -24,6 +24,7 @@ import {draftReceiver, receiverValues} from './draftDenial';
 import {cardsForMilestone} from './milestoneBuying';
 import {openingSynergy} from './openingSynergy';
 import {withOpeningFit} from './cardFit';
+import {withPolicyPreference} from './bgaPolicy';
 
 // Opening choice (corporation + preludes + cards) and card buying / drafting.
 
@@ -260,7 +261,10 @@ export function chooseCardsToDiscard(input: SelectCard<ICard>, player: IPlayer):
 
 export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): InputResponse {
   const candidates = input.cards.filter((_card, index) => input.config.enabled?.[index] !== false);
-  const {valueOf, timingOf} = valuesOf(player, candidates, input.config.min !== input.config.max);
+  const values = valuesOf(player, candidates, input.config.min !== input.config.max);
+  const timingOf = values.timingOf;
+  // Learned preference of strong human players (bgaPolicy.ts), off in the baseline
+  const valueOf = withPolicyPreference(player, candidates, values.valueOf, input.config.min === input.config.max ? 'draft' : 'buy');
   const sorted = [...candidates].sort((a, b) => valueOf(b.name) - valueOf(a.name));
   if (input.config.min === input.config.max) {
     // Draft: the count is fixed. Own value plus part of what the card would be worth to the
