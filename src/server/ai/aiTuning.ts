@@ -295,7 +295,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 107: 0.5 +1.01 (z +1.50), 1 +0.76 (z +1.16) – fixes the human-game standard project cities.
   // Round 108: 1 against 0.5 +0.99 (z +1.47), pooled with round 107 z ≈ 1.85 → 1.
   handFunding: 1,
-  handFundingGenerations: 1,
+  // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
+  handFundingGenerations: 0,
   endgameMoney: 1,
   // Round 66: 0.6 together with the measured collector rates (collectorRates).
   // Rounds 67–69: collectorRate04 +0.43/+0.91/+0.37 (pooled z ≈ 1.33) – lowered to 0.4.
@@ -785,6 +786,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   handFundingHalf: {handFunding: 0.5},
   fundingNow: {handFundingGenerations: 0},
   fundingTwoGenerations: {handFundingGenerations: 2},
+  fundingHalfGeneration: {handFundingGenerations: 0.5},
+  fundingOneGeneration: {handFundingGenerations: 1},
   noHandFunding: {handFunding: 0},
   buyLoose: {buyMargin: -3},
   // ML stage 2 (learned final VP margin from about 43,000 BGA two-player games, certain VP 1 : 1, AUC 0.80):
