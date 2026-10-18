@@ -224,5 +224,10 @@
   "The shield generator of ${0} holds 2 Sardaukar in the war field": "Le générateur de bouclier de ${0} maintient 2 Sardaukar sur le champ de bataille",
   "Moving now": "En mouvement",
   "chooses the distance": "choisit la distance",
-  "${0} space(s): to ${1}": "${0} case(s) : jusqu'à ${1}"
+  "${0} space(s): to ${1}": "${0} case(s) : jusqu'à ${1}",
+  "Effect: A bribe costs you 6 M€ instead of 10.": "Effet : Un pot-de-vin vous coûte 6 Solari au lieu de 10.",
+  "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "Effet : Quand l'une de vos tuiles devient le champ de bataille, 2 Sardaukar la défendent gratuitement.",
+  "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Effet : Quand le ver traverse une case adjacente à l'une de vos tuiles, gagnez 2 épice.",
+  "Effect: When you buy at the bazaar, you pay 3 M€ less.": "Effet : Quand vous achetez au bazar, vous payez 3 Solari de moins.",
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Effet : Vos contrats CHOAM sont sans frais. Quand d'autres joueurs concluent un contrat, gagnez 1 Solari."
 }

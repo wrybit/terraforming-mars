@@ -212,7 +212,6 @@
   "Gain 2 Sardaukar for the war field.": "Gana 2 sardaukar para el campo de guerra.",
   "When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "Cuando una de tus losetas se convierte en el campo de guerra, 2 sardaukar la defienden gratis.",
   "war field": "campo de guerra",
-  "2 Sardaukar": "2 sardaukar",
   "Raise your TR 2 steps. Draw 2 cards.": "Aumenta tu influencia 2 niveles. Roba 2 cartas.",
   "Increase your heat production and your M€ production 1 step each.": "Aumenta tu producción de agua y tu producción de solaris 1 nivel cada una.",
   "Swap ${0} for ${1}": "Cambiar ${0} por ${1}",
@@ -226,5 +225,10 @@
   "The shield generator of ${0} holds 2 Sardaukar in the war field": "El generador de escudo de ${0} mantiene 2 sardaukar en el campo de guerra",
   "Moving now": "En movimiento",
   "chooses the distance": "elige la distancia",
-  "${0} space(s): to ${1}": "${0} casilla(s): hasta ${1}"
+  "${0} space(s): to ${1}": "${0} casilla(s): hasta ${1}",
+  "Effect: A bribe costs you 6 M€ instead of 10.": "Efecto: Un soborno te cuesta 6 solaris en lugar de 10.",
+  "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "Efecto: Cuando una de tus losetas se convierte en el campo de guerra, 2 sardaukar la defienden gratis.",
+  "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Efecto: Cuando el gusano cruza una casilla adyacente a una de tus losetas, gana 2 especia.",
+  "Effect: When you buy at the bazaar, you pay 3 M€ less.": "Efecto: Cuando compras en el bazar, pagas 3 solaris menos.",
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Efecto: Tus contratos de la CHOAM no tienen comisión. Cuando otros jugadores cierran un contrato, gana 1 solari."
 }

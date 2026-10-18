@@ -225,5 +225,10 @@
   "The shield generator of ${0} holds 2 Sardaukar in the war field": "Il generatore di scudo di ${0} tiene 2 Sardaukar nel campo di guerra",
   "Moving now": "In movimento",
   "chooses the distance": "sceglie la distanza",
-  "${0} space(s): to ${1}": "${0} spazio/i: fino a ${1}"
+  "${0} space(s): to ${1}": "${0} spazio/i: fino a ${1}",
+  "Effect: A bribe costs you 6 M€ instead of 10.": "Effetto: Una bustarella ti costa 6 solari invece di 10.",
+  "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "Effetto: Quando una tua tessera diventa il campo di guerra, 2 Sardaukar la difendono gratis.",
+  "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Effetto: Quando il verme attraversa uno spazio adiacente a una tua tessera, ottieni 2 spezia.",
+  "Effect: When you buy at the bazaar, you pay 3 M€ less.": "Effetto: Quando acquisti al bazar, paghi 3 solari in meno.",
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Effetto: I tuoi contratti CHOAM non hanno commissioni. Quando altri giocatori concludono un contratto, ottieni 1 solari."
 }

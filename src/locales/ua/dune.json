@@ -228,5 +228,10 @@
   "The shield generator of ${0} holds 2 Sardaukar in the war field": "Генератор щита ${0} утримує 2 сардаукари на полі війни",
   "Moving now": "Рухається зараз",
   "chooses the distance": "обирає відстань",
-  "${0} space(s): to ${1}": "${0} кл.: до ${1}"
+  "${0} space(s): to ${1}": "${0} кл.: до ${1}",
+  "Effect: A bribe costs you 6 M€ instead of 10.": "Ефект: Хабар коштує вам 6 соларіїв замість 10.",
+  "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "Ефект: Коли один із ваших тайлів стає полем війни, 2 сардаукари безкоштовно його захищають.",
+  "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Ефект: Коли черв'як перетинає клітинку поруч з одним із ваших тайлів, отримайте 2 прянощі.",
+  "Effect: When you buy at the bazaar, you pay 3 M€ less.": "Ефект: Купуючи на базарі, ви платите на 3 соларії менше.",
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Ефект: Ваші контракти CHOAM без збору. Коли інші гравці укладають контракт, отримайте 1 соларій."
 }

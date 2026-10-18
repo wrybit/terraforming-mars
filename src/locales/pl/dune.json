@@ -212,7 +212,7 @@
   "Gain 2 Sardaukar for the war field.": "Zyskaj 2 sardaukarów na pole wojny.",
   "When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "Gdy jeden z twoich kafelków staje się polem wojny, 2 sardaukarów broni go za darmo.",
   "war field": "pole wojny",
-  "2 Sardaukar": "2 sardaukarów",
+  "2 Sardaukar": "2 Sardaukarów",
   "Raise your TR 2 steps. Draw 2 cards.": "Zwiększ Wpływ o 2 poziomy. Dobierz 2 karty.",
   "Increase your heat production and your M€ production 1 step each.": "Zwiększ produkcję wody i produkcję solarów o 1 poziom każdą.",
   "Swap ${0} for ${1}": "Wymień ${0} na ${1}",
@@ -226,5 +226,10 @@
   "The shield generator of ${0} holds 2 Sardaukar in the war field": "Generator tarczy gracza ${0} utrzymuje 2 sardaukarów na polu wojny",
   "Moving now": "Teraz w ruchu",
   "chooses the distance": "wybiera odległość",
-  "${0} space(s): to ${1}": "${0} pole(-a): do ${1}"
+  "${0} space(s): to ${1}": "${0} pole(-a): do ${1}",
+  "Effect: A bribe costs you 6 M€ instead of 10.": "Efekt trwały: Łapówka kosztuje cię 6 solarów zamiast 10.",
+  "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "Efekt trwały: Gdy jeden z twoich kafelków staje się polem wojny, 2 sardaukarów broni go za darmo.",
+  "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Efekt trwały: Gdy czerw przechodzi przez pole obok jednego z twoich kafelków, zyskaj 2 przyprawy.",
+  "Effect: When you buy at the bazaar, you pay 3 M€ less.": "Efekt trwały: Kupując na bazarze, płacisz o 3 solary mniej.",
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Efekt trwały: Twoje kontrakty CHOAM nie wymagają opłaty. Gdy inni gracze zawierają kontrakt, zyskaj 1 solara."
 }

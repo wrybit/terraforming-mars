@@ -214,7 +214,7 @@
   "Gain 2 Sardaukar for the war field.": "戦場用のサーダカーを2人得る。",
   "When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "あなたのタイルが戦場になったとき、サーダカー2人が無料で守る。",
   "war field": "戦場",
-  "2 Sardaukar": "サーダカー2",
+  "2 Sardaukar": "サーダカー2体",
   "Raise your TR 2 steps. Draw 2 cards.": "影響力を2段階上げる。カードを2枚引く。",
   "Increase your heat production and your M€ production 1 step each.": "水生産とソラリ生産をそれぞれ1段階上げる。",
   "Swap ${0} for ${1}": "${0}を${1}と交換",
@@ -228,5 +228,10 @@
   "The shield generator of ${0} holds 2 Sardaukar in the war field": "${0}のシールド発生装置が戦場にサーダカー2人を配置",
   "Moving now": "移動中",
   "chooses the distance": "が距離を決めます",
-  "${0} space(s): to ${1}": "${0}マス：${1}まで"
+  "${0} space(s): to ${1}": "${0}マス：${1}まで",
+  "Effect: A bribe costs you 6 M€ instead of 10.": "効果：賄賂のコストが10ではなく6ソラリになる。",
+  "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "効果：あなたのタイルが戦場になったとき、サーダカー2人が無料で守る。",
+  "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "効果：砂虫があなたのタイルに隣接するマスを通過するたび、スパイス2を得る。",
+  "Effect: When you buy at the bazaar, you pay 3 M€ less.": "効果：バザールで購入するとき、3ソラリ安く支払う。",
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "効果：あなたのCHOAM契約は手数料がかからない。他のプレイヤーが契約を成立させるたび、1ソラリを得る。"
 }

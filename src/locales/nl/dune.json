@@ -221,5 +221,10 @@
   "The shield generator of ${0} holds 2 Sardaukar in the war field": "De schildgenerator van ${0} houdt 2 Sardaukar op het oorlogsveld",
   "Moving now": "Beweegt nu",
   "chooses the distance": "kiest de afstand",
-  "${0} space(s): to ${1}": "${0} veld(en): tot ${1}"
+  "${0} space(s): to ${1}": "${0} veld(en): tot ${1}",
+  "Effect: A bribe costs you 6 M€ instead of 10.": "EFFECT: Een omkoping kost je 6 Solari in plaats van 10.",
+  "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "EFFECT: Als een van jouw tegels het oorlogsveld wordt, verdedigen 2 Sardaukar hem gratis.",
+  "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "EFFECT: Als de worm een veld naast een van jouw tegels passeert, krijg je 2 Spice.",
+  "Effect: When you buy at the bazaar, you pay 3 M€ less.": "EFFECT: Als je op de bazaar koopt, betaal je 3 Solari minder.",
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "EFFECT: Je CHOAM-contracten kosten geen vergoeding. Als andere spelers een contract sluiten, krijg je 1 Solari."
 }
