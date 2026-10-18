@@ -1949,6 +1949,36 @@ html.tm-mobile {
       background: @mb-surface-raised;
     }
 
+    // Standalone payment (SelectPayment, e.g. a card action) brings its own button inside the form. Next to the
+    // balance block it ran off the screen and the edge-to-edge form covered "Back". So the button gets its own row
+    // right of "Back", like the buttons of the other inputs; only the balance block keeps the raised surface.
+    // The form box spans the "Back" area, so it lets clicks through and only its parts take them.
+    .payments_form:has(> .payments_save) {
+      flex-wrap: wrap;
+      row-gap: 10px;
+      padding: 0;
+      border-top: 0;
+      background: transparent;
+      pointer-events: none;
+
+      > * {
+        pointer-events: auto;
+      }
+
+      .payments_prices {
+        flex: 1 0 100%;
+        box-sizing: border-box;
+        padding: 12px;
+        border-top: 1px solid @mb-line;
+        background: @mb-surface-raised;
+      }
+
+      .payments_save {
+        flex: 1 0 calc(100% - @mb-footer-left - 12px);
+        margin: 0 12px 0 @mb-footer-left;
+      }
+    }
+
     // Balance block (payments.less) a little tighter so all columns fit the phone width
     .payments_prices {
       flex-wrap: nowrap;
@@ -2018,6 +2048,21 @@ html.tm-mobile {
 
     .payments_balance--single .payments_total {
       min-width: 0;
+    }
+
+    // Narrowest phones (320 px): with two currencies the "Left over" column ran off the screen
+    @media (max-width: 359px) {
+      .payments_balance {
+        column-gap: 3px;
+      }
+
+      .payments_field .payments_input.form-input {
+        width: 52px !important;
+      }
+
+      .payments_total {
+        min-width: 0;
+      }
     }
 
     .payments_type_smallicon {

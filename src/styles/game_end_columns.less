@@ -23,7 +23,6 @@
 @game-end-log-min-height: 220px; // generation tabs, search and a few log lines; the log takes all room above that
 @game-end-fixed-chart-height: 160px; // window-high layout: lower charts by default, so the board keeps room
 @game-end-solo-image-max-height: 34vh;
-@game-end-details-min-height: 140px; // victory point details stay usable in low windows
 @game-end-header-height: 40px; // height of the menu button (PageToolbar), the other header elements follow it
 @game-end-winner-font-size: 26px;
 // Total points: largest number on the page, on its own dark surface
@@ -462,8 +461,7 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
   // Drag handles like in the game view (resize_handle.less); not in the touch layout (mobile.less has its own column flow)
   html:not(.tm-mobile) #game-end {
     // Page as high as the window, like the game view (player_home_fixed.less): the page does not scroll,
-    // the victory point details and the log scroll inside their cards. If the window is too low for the
-    // minimum heights, the content runs over and the page scrolls as before.
+    // each column scrolls on its own when its content is higher, and the log scrolls inside its card.
     box-sizing: border-box;
     height: 100vh;
     display: flex;
@@ -483,7 +481,12 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
     .game-end-columns__side {
       min-height: 0;
 
-      // Cards keep their size; only the victory point details and the log give way (flex basis 0 below)
+      // Content higher than the window: the column scrolls on its own instead of running out of the window,
+      // so the page itself never scrolls and the other column stays in place
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      // Cards keep their size; only the log gives way (flex basis 0 below)
       > * {
         flex-shrink: 0;
       }
@@ -516,18 +519,16 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
       padding-bottom: 4px;
     }
 
-    // Victory point details: fill the rest of the left column and scroll inside the card
+    // Victory point details: card reaches down to the bottom of the left column, but never shrinks below its
+    // content. A scroll box of its own came out a few lines high with many players in a low window (6 players on
+    // a laptop: 70 px for 930 px of details); now the left column scrolls as a whole instead (one scroll, no nesting)
     .game-end-box--fill {
-      flex: 1 1 0;
-      min-height: @game-end-details-min-height;
+      flex: 1 0 auto;
       display: flex;
       flex-direction: column;
     }
 
     .game-end-details {
-      flex: 1 1 0;
-      min-height: 0;
-      overflow-y: auto;
       align-content: start;
     }
 
