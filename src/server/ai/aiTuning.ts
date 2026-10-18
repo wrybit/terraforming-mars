@@ -771,6 +771,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   buyStricter: {buyMargin: 1},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
+  buyMargin5: {buyMargin: 5},
   buyLoose: {buyMargin: -3},
   // ML stage 2 (learned final VP margin from about 43,000 BGA two-player games, certain VP 1 : 1, AUC 0.80):
   // blend the model's win chance into the hand-made valuation.
