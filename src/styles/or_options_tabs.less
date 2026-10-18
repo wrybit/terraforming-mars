@@ -386,21 +386,30 @@ html.tm-mobile .mb-screen--turn:has(> .mb-task-head) .or-tab-panel-title {
 }
 
 // Triggering card at the top of the box (CardIntroBlock.vue): scaled down so the selection below stays visible
-@card-intro-zoom: 0.55;
+@card-intro-scale: 0.55;
 
 .card-intro {
   align-items: flex-start;
   margin-bottom: 16px;
 }
 
+// Transform, not zoom: WebKit (iOS) keeps zoomed text at 9 px or more, the card texts then overlap.
+// SourceCardThumbnail.vue sizes the outer box to the scaled card, since a transform does not change the layout.
 .card-intro-card {
   flex: none;
-  zoom: @card-intro-zoom;
 
   // The card brings margins meant for card rows; here it stands alone
   .card-container {
     margin: 0;
   }
+}
+
+.card-intro-card__scaled {
+  // Own formatting context: the card's negative margins (shrunk cards, mobile) count into the measured size
+  display: flow-root;
+  width: max-content;
+  transform: scale(@card-intro-scale);
+  transform-origin: top left;
 }
 
 .card-intro-name {
