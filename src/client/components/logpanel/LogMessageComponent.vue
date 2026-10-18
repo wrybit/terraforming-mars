@@ -101,6 +101,9 @@ export default defineComponent({
       default: false,
     },
   },
+  // Declared so the parent's @click is only this event and not also a native listener on the <li>:
+  // in production builds (comments stripped) the <li> is the single root and would get both, firing twice
+  emits: ['click', 'spaceClicked'],
   methods: {
     partySlug,
     cardToHtml(data: LogMessageData & {type: LogMessageDataType.CARD, value: CardName}) {
