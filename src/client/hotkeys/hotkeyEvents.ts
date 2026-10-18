@@ -81,5 +81,12 @@ export function keyCapLabel(key: string): string {
   if (key === 'Mod') {
     return isMac() ? '⌘' : 'Ctrl';
   }
+  // Alt and Ctrl as their own modifier (not ⌘): the Mac symbols ⌥ and ⌃ (drawn as ^, see HotkeyKeys.vue)
+  if (key === 'Alt') {
+    return isMac() ? '⌥' : 'Alt';
+  }
+  if (key === 'Control') {
+    return isMac() ? '^' : 'Ctrl';
+  }
   return KEY_LABELS[key] ?? (key.length > 1 ? codeLabel(key) ?? key : key);
 }

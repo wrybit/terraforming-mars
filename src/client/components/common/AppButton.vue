@@ -4,7 +4,7 @@
     <span v-else-if="counts.length === 0">{{ buttonText }}</span>
     <!-- Text and counters on one line ("Buy [3] for [9]", buttonCount.ts) -->
     <span v-else class="btn-counted__label">{{ buttonText }}<ButtonCount v-for="(part, index) in counts" :key="index" :part="part"/></span>
-    <HotkeyKeys v-if="hotkey !== undefined" :action="hotkey"/>
+    <HotkeyKeys v-if="hotkey !== undefined || fixedHotkey !== undefined" :action="hotkey" :fixed="fixedHotkey"/>
   </button>
 </template>
 
@@ -15,6 +15,7 @@ import {vueRoot} from '@/client/components/vueRoot';
 import {Message} from '@/common/logs/Message';
 import {translateText, translateMessage} from '@/client/directives/i18n';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
+import {HotkeyKeys as HotkeyKeyList} from '@/client/hotkeys/hotkeyActions';
 import ButtonCount from '@/client/components/common/ButtonCount.vue';
 import {ButtonCountPart} from '@/client/components/common/buttonCount';
 
@@ -26,6 +27,11 @@ export default defineComponent({
     // Action id of a keyboard shortcut (hotkeyActions.ts): shows its key cap and lets the key press the button
     hotkey: {
       type: String,
+      required: false,
+    },
+    // Fixed keys shown as caps when the page handles the key itself (e.g. Ctrl + number on the game created page)
+    fixedHotkey: {
+      type: Array as () => HotkeyKeyList,
       required: false,
     },
     title: {

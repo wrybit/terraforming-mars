@@ -26,12 +26,12 @@
               <strong>{{ player.name }}</strong>
               <code>{{ getUrl(player.id) }}</code>
             </div>
-            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(player.id) ? 'Copied!' : 'Copy URL'" @click="copyUrl(player.id)"/>
+            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(player.id) ? 'Copied!' : 'Copy URL'" :fixedHotkey="copyKeys(index)" @click="copyUrl(player.id)"/>
             <!-- The AI plays by itself: its page only lets you watch it (the server refuses input there) -->
             <!-- Watching the AI is secondary: the same quiet button as Copy URL; playing is the main action -->
-            <!-- Space opens only the first human player's game (hotkeyDispatcher.ts): one key, one target -->
+            <!-- Every row has its own number: Alt + number opens the link, Ctrl + number copies it (onLinkKey) -->
             <a class="btn btn-rounded" :class="player.aiLevel !== undefined ? 'btn-tone-quiet' : 'btn-primary'" :href="getHref(player.id)"
-              :data-hotkey="player.color === proceedPlayerColor ? 'proceed' : undefined"><span v-i18n>{{ player.aiLevel !== undefined ? 'Watch' : 'Play' }}</span><HotkeyKeys v-if="player.color === proceedPlayerColor" action="proceed"/></a>
+              ><span v-i18n>{{ player.aiLevel !== undefined ? 'Watch' : 'Play' }}</span><HotkeyKeys :fixed="openKeys(index)"/></a>
           </div>
           <div class="game-home-link game-home-link--spectator">
             <span class="game-home-order"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
@@ -39,8 +39,8 @@
               <strong v-i18n>Spectator</strong>
               <code>{{ getUrl(game.spectatorId) }}</code>
             </div>
-            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(game.spectatorId) ? 'Copied!' : 'Copy URL'" @click="copyUrl(game.spectatorId)"/>
-            <a class="btn btn-rounded btn-tone-quiet" :href="getHref(game.spectatorId)" v-i18n>Watch</a>
+            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(game.spectatorId) ? 'Copied!' : 'Copy URL'" :fixedHotkey="copyKeys(game.players.length)" @click="copyUrl(game.spectatorId)"/>
+            <a class="btn btn-rounded btn-tone-quiet" :href="getHref(game.spectatorId)"><span v-i18n>Watch</span><HotkeyKeys :fixed="openKeys(game.players.length)"/></a>
           </div>
         </div>
       </section>
@@ -59,6 +59,10 @@ import {defineComponent} from 'vue';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import AppButton from '@/client/components/common/AppButton.vue';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
+import {HotkeyKeys as HotkeyKeyList, PICK_CODES, PICK_DIGITS} from '@/client/hotkeys/hotkeyActions';
+import {codeOfEvent} from '@/client/hotkeys/hotkeyEvents';
+import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
+import {isTypingTarget} from '@/client/utils/typingTarget';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import MarsHomeLink from '@/client/components/common/MarsHomeLink.vue';
 import {playerColorClass} from '@/common/utils/utils';
@@ -112,9 +116,9 @@ export default defineComponent({
     gameId(): string {
       return this.game !== undefined ? this.game.id.toString() : 'n/a';
     },
-    // The hotkey "proceed" (Space) may only belong to one button, otherwise it is ambiguous
-    proceedPlayerColor(): Color | undefined {
-      return this.game.players.find((player) => player.aiLevel === undefined)?.color;
+    // Links in the order of the rows: the players, then the spectator – row n has the number n
+    linkIds(): Array<ParticipantId> {
+      return [...this.game.players.map((player) => player.id), this.game.spectatorId];
     },
   },
   methods: {
@@ -129,6 +133,31 @@ export default defineComponent({
         return `${index + 1}th`;
       } else {
         return 'n/a';
+      }
+    },
+    openKeys(index: number): HotkeyKeyList {
+      return index < PICK_DIGITS.length ? ['Alt', PICK_DIGITS[index]] : [];
+    },
+    copyKeys(index: number): HotkeyKeyList {
+      return index < PICK_DIGITS.length ? ['Control', PICK_DIGITS[index]] : [];
+    },
+    // Alt + number opens the link of that row, Ctrl + number copies it. By position (Digit1 …): on a Mac Alt + 1
+    // types a special character, the position stays the same
+    onLinkKey(event: KeyboardEvent): void {
+      if (!hotkeysAvailable.value || event.repeat || event.metaKey || event.shiftKey || isTypingTarget(event.target)) {
+        return;
+      }
+      const code = codeOfEvent(event);
+      const index = code === undefined ? -1 : PICK_CODES.indexOf(code);
+      const id = this.linkIds[index];
+      if (id === undefined || event.altKey === event.ctrlKey) {
+        return;
+      }
+      event.preventDefault();
+      if (event.ctrlKey) {
+        this.copyUrl(id);
+      } else {
+        window.location.href = this.getHref(id);
       }
     },
     setCopiedIdToDefault() {
@@ -160,6 +189,7 @@ export default defineComponent({
     },
   },
   mounted() {
+    window.addEventListener('keydown', this.onLinkKey);
     // Reset the copied player id after 3 seconds to hide the "copied" message
     setInterval(this.setCopiedIdToDefault, 3000);
     document.title = shortDocumentTitle([$t('Game created'), this.game.name]);
@@ -177,6 +207,7 @@ export default defineComponent({
     }
   },
   beforeUnmount() {
+    window.removeEventListener('keydown', this.onLinkKey);
     document
       .querySelector('meta[name="viewport"]')
       ?.setAttribute('content', this.previousViewport);
