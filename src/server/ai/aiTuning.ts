@@ -78,6 +78,8 @@ export type AiTuning = {
   keepHandUntilEnd: number,
   /** 0..1: hand cards keep their value only while money now plus the next income can pay for them (handFunding.ts). */
   handFunding: number,
+  /** Generations of income that count as money for the hand (handFunding.ts). */
+  handFundingGenerations: number,
   /** 1: money in the last generation counts in steps of greeneries it can still buy (stateValue.ts). */
   endgameMoney: number,
   /** Share of a VP per generation an action card that collects its own VP resource is worth (Birds, Tardigrades), 0 = flat action value. */
@@ -291,7 +293,9 @@ export const BASELINE_TUNING: AiTuning = {
   awardSwing: 0.3,
   keepHandUntilEnd: 1,
   // Round 107: 0.5 +1.01 (z +1.50), 1 +0.76 (z +1.16) – fixes the human-game standard project cities.
-  handFunding: 0.5,
+  // Round 108: 1 against 0.5 +0.99 (z +1.47), pooled with round 107 z ≈ 1.85 → 1.
+  handFunding: 1,
+  handFundingGenerations: 1,
   endgameMoney: 1,
   // Round 66: 0.6 together with the measured collector rates (collectorRates).
   // Rounds 67–69: collectorRate04 +0.43/+0.91/+0.37 (pooled z ≈ 1.33) – lowered to 0.4.
@@ -779,6 +783,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Standard projects instead of hand cards (human games): hand cards need money to be worth anything.
   handFunding: {handFunding: 1},
   handFundingHalf: {handFunding: 0.5},
+  fundingNow: {handFundingGenerations: 0},
+  fundingTwoGenerations: {handFundingGenerations: 2},
   noHandFunding: {handFunding: 0},
   buyLoose: {buyMargin: -3},
   // ML stage 2 (learned final VP margin from about 43,000 BGA two-player games, certain VP 1 : 1, AUC 0.80):

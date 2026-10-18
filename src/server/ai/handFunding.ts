@@ -8,15 +8,12 @@ import {tuningOf} from './aiTuning';
 // game into standard projects). Here a hand card keeps its value only while the money to play it is in sight:
 // money now plus the next income. Cards beyond that count like an unknown card.
 
-/** Generations of income that count as money for the hand. */
-const FUNDING_GENERATIONS = 1;
-
 /** Money the player can spend on hand cards soon: M€, steel and titanium now plus the next income (steel and
  * titanium pay only for some cards – a deliberate simplification). */
 export function handBudget(player: IPlayer): number {
   const income = Math.max(0, player.production.megacredits + player.terraformRating);
   return player.megaCredits + player.steel * player.getSteelValue() + player.titanium * player.getTitaniumValue() +
-    income * FUNDING_GENERATIONS;
+    income * tuningOf(player).handFundingGenerations;
 }
 
 /**
