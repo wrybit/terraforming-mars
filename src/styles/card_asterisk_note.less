@@ -1,5 +1,5 @@
 // "*" rule of a card text, set apart below the effect text with its key words highlighted
-// (CardDescription.vue, texts in src/client/cards/asteriskNotes.ts).
+// (CardDescription.vue, texts in src/client/cards/cardTextMarkup.ts).
 // Colors from the M€ coin (assets/resources/megacredit.png): coin yellow with its black outline,
 // so the note uses the card's own palette instead of a new accent color.
 @note-coin-yellow: #f8e61f;
@@ -47,4 +47,10 @@
 .card-container .card-description.card-description-compact-more {
   font-size: 9px;
   line-height: 10px;
+}
+
+// Who among the other players is hit: the red of the "any player" icon outline (.red-outline, cards.less)
+.card-text-opponent {
+  color: #c33;
+  font-weight: 600;
 }

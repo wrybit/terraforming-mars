@@ -1,4 +1,4 @@
-import {shallowMount} from '@vue/test-utils';
+import {mount, shallowMount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import CardDescription from '@/client/components/card/CardDescription.vue';
@@ -16,7 +16,7 @@ describe('CardDescription', () => {
   });
 
   it('shows the asterisk rule as a separate note with highlighted words', () => {
-    const wrapper = shallowMount(CardDescription, {
+    const wrapper = mount(CardDescription, {
       ...globalConfig,
       props: {
         item: 'Oxygen must be 4% or less. Place this tile NEXT TO NO OTHER TILE. Increase your M€ production 1 step.',

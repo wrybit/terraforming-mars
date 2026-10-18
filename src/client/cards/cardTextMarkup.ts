@@ -1,8 +1,9 @@
-// Card texts whose "*" rule is shown as a separate, highlighted note (format: splitAsteriskNote.ts).
+// Card texts with markup the plain upstream text cannot carry (format: parseCardTextMarkup.ts):
+// the "*" rule as a separate, highlighted note and, in red, who among the other players is hit.
 // Keyed by the card's original English text, so the card files stay untouched for upstream merges:
 // when upstream rewords a text, its entry no longer matches and the card falls back to the plain
-// text. tests/client/cards/asteriskNotes.spec.ts reports such stale entries.
-export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
+// text. tests/client/cards/cardTextMarkup.spec.ts reports such stale entries.
+export const CARD_TEXT_MARKUP: Readonly<Record<string, string>> = {
   // Mangrove
   'Requires +4 C or warmer. Place a greenery tile ON AN AREA RESERVED FOR OCEAN and raise oxygen 1 step. Disregard normal placement restrictions for this.':
     'Requires +4 C or warmer. Raise oxygen 1 step. Disregard normal placement restrictions for this.<note>Place a greenery tile <b>on an area reserved for ocean</b>.</note>',
@@ -41,7 +42,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Action: Gain 1 plant, or add 2 microbes <b>to another card</b>.</note>',
   // Flooding
   'Place an ocean tile. IF THERE ARE TILES ADJACENT TO THIS OCEAN TILE, YOU MAY REMOVE 4 M€ FROM THE OWNER OF ONE OF THOSE TILES.':
-    'Place an ocean tile.<note>If there are tiles <b>adjacent to this ocean tile</b>, you may remove 4 M€ from the owner of one of those tiles.</note>',
+    'Place an ocean tile.<note>If there are tiles <b>adjacent to this ocean tile</b>, you may remove 4 M€ <opp>from the owner</opp> of one of those tiles.</note>',
   // Ganymede Colony
   'Place a city tile ON THE RESERVED AREA.':
     '<note>Place a city tile <b>on the reserved area</b>.</note>',
@@ -104,7 +105,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     'Action: Spend any amount of energy to draw the same number of cards.<note><b>Take 1 into hand</b> and discard the rest.</note>',
   // Law Suit
   'Steal 3 M€ from a player that REMOVED YOUR RESOURCES OR DECREASED YOUR PRODUCTION this generation. Place this card face down in THAT PLAYER\'S EVENT PILE.':
-    'Place this card face down in that player\'s event pile.<note>Steal 3 M€ from a player that <b>removed your resources or decreased your production</b> this generation.</note>',
+    'Place this card face down in that player\'s event pile.<note>Steal 3 M€ <opp>from a player</opp> that <b>removed your resources or decreased your production</b> this generation.</note>',
   // Stanford Torus
   'Place a city tile IN SPACE, outside and separate from the planet.':
     '<note>Place a city tile <b>in space</b>, outside and separate from the planet.</note>',
@@ -137,7 +138,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Effect: When you play a card with a <b>basic cost</b> of 20 M€ or more, increase your M€ production 1 step.</note>',
   // Deimos Down:promo
   'Raise temperature 3 steps and gain 4 steel. Place this tile ADJACENT TO no city tile. Remove up to 6 plants from any player.':
-    'Raise temperature 3 steps and gain 4 steel. Remove up to 6 plants from any player.<note>Place this tile <b>adjacent to no city tile</b>.</note>',
+    'Raise temperature 3 steps and gain 4 steel. Remove up to 6 plants <opp>from any player</opp>.<note>Place this tile <b>adjacent to no city tile</b>.</note>',
   // Great Dam:promo
   'Requires 4 ocean tiles. Increase your energy production 2 steps. Place this tile ADJACENT TO an ocean tile.':
     'Requires 4 ocean tiles. Increase your energy production 2 steps.<note>Place this tile <b>adjacent to an ocean tile</b>.</note>',
@@ -200,7 +201,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Action: Increase your energy production 1 step <b>if you have no energy resources</b>, or spend 3 M€ to draw a building card.</note>',
   // Mons Insurance
   'You start with 48 M€. Increase your M€ production 4 steps. ALL OPPONENTS DECREASE THEIR M€ production 2 STEPS. THIS DOES NOT TRIGGER THE EFFECT BELOW.':
-    'You start with 48 M€. Increase your M€ production 4 steps.<note>All opponents decrease their M€ production 2 steps. This <b>does not trigger the effect below</b>.</note>',
+    'You start with 48 M€. Increase your M€ production 4 steps.<note><opp>All opponents</opp> decrease their M€ production 2 steps. This <b>does not trigger the effect below</b>.</note>',
   // Splice
   'Effect: When a microbe tag is played, incl. this, THAT PLAYER gains 2 M€, or adds a microbe to THAT card, and you gain 2 M€.':
     '<note>Effect: When a microbe tag is played, incl. this, <b>that player</b> gains 2 M€, or adds a microbe to <b>that card</b>, and you gain 2 M€.</note>',
@@ -353,7 +354,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Action: Add 1 asteroid <b>to any card</b>.</note>',
   // Recession
   'EACH OPPONENT loses 5 M€ and decreases their M€ production 1 step. You gain 10 M€.':
-    'You gain 10 M€.<note><b>Each opponent</b> loses 5 M€ and decreases their M€ production 1 step.</note>',
+    'You gain 10 M€.<note><opp>Each opponent</opp> loses 5 M€ and decreases their M€ production 1 step.</note>',
   // Rise To Power
   'Increase your M€ production 3 steps and place 3 delegates. YOU MAY PLACE THEM IN SEPARATE PARTIES.':
     'Increase your M€ production 3 steps and place 3 delegates.<note>You may place them <b>in separate parties</b>.</note>',
@@ -395,7 +396,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     'Requires 1 science tag. Increase your plant production 1 step. Place this tile which grants an adjacency bonus of 1 plant and 1 microbe.<note>Add up to 2 microbes <b>to any card</b>.</note>',
   // Deimos Down:ares
   'Raise temperature 3 steps and gain 4 steel. Place this tile ADJACENT TO no city tile. It provides adjacency bonus of 1 asteroid and 1 steel. Remove up to 6 plants from any player.':
-    'Raise temperature 3 steps and gain 4 steel. The tile provides an adjacency bonus of 1 asteroid and 1 steel. Remove up to 6 plants from any player.<note>Place this tile <b>adjacent to no city tile</b>.</note>',
+    'Raise temperature 3 steps and gain 4 steel. The tile provides an adjacency bonus of 1 asteroid and 1 steel. Remove up to 6 plants <opp>from any player</opp>.<note>Place this tile <b>adjacent to no city tile</b>.</note>',
   // Desperate Measures
   'Place a bronze cube on a dust storm tile and raise oxygen 1 step, or place a bronze cube on an erosion tile and raise the temperature 1 step. The hazard tile with the bronze cube cannot be removed.':
     'Place a bronze cube on a dust storm tile and raise oxygen 1 step, or place a bronze cube on an erosion tile and raise the temperature 1 step.<note>The hazard tile with the bronze cube <b>cannot be removed</b>.</note>',
@@ -440,7 +441,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     'Spend 2 titanium.<note>Place this tile <b>on the reserved area</b>.</note>',
   // Ancient Shipyards
   'Action: Steal 2 M€ from each player and add a resource cube here.':
-    '<note>Action: Steal 2 M€ <b>from each player</b> and add a resource cube here.</note>',
+    '<note>Action: Steal 2 M€ <opp>from each player</opp> and add a resource cube here.</note>',
   // Lunar Observation Post
   'Action: Add 1 data resource to ANY card':
     '<note>Action: Add 1 data resource <b>to any card</b>.</note>',
@@ -452,7 +453,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Action: Spend 2X M€ to gain X titanium <b>[max 8 M€]</b>, or spend X titanium to gain 4X M€ <b>[max 4 titanium]</b>.</note>',
   // Road Piracy
   'Requires 3 logistic rate. Steal up to 6 steel or 4 titanium from other players. (Resources may be stolen from more than 1 opponent.)':
-    'Requires 3 logistic rate. Steal up to 6 steel or 4 titanium from other players.<note>Resources may be stolen <b>from more than 1 opponent</b>.</note>',
+    'Requires 3 logistic rate. Steal up to 6 steel or 4 titanium <opp>from other players</opp>.<note>Resources may be stolen <b>from more than 1 opponent</b>.</note>',
   // Lunar Mine Urbanization
   'Requires you have 1 mine tile. Increase your M€ production 1 step. Raise the habitat rate 1 step. Remove 1 of your mine tiles (does not affect the mining rate.) Place this special tile there, regardless of placement rules. Gain placement bonuses as usual. This tile counts both as a habitat and a mine tile.':
     'Requires you have 1 mine tile. Increase your M€ production 1 step. Raise the habitat rate 1 step.<note>Remove 1 of your mine tiles (does not affect the mining rate). Place this special tile <b>there</b>, regardless of placement rules. Gain placement bonuses as usual. This tile counts <b>both as a habitat and a mine tile</b>.</note>',
@@ -461,13 +462,13 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     'Requires that Unity are ruling or that you have 2 delegates there. Increase all colony tile tracks 1 step.<note>Increase each colony tile track 1 step <b>if you have a colony on that colony tile</b>.</note>',
   // An Offer You Can't Refuse
   'Exchange a NON-NEUTRAL opponent delegate with one of your own from the reserve. This exchange may not change the party leader. You may then move your delegate to another party.':
-    '<note>Exchange a <b>non-neutral</b> opponent delegate with one of your own from the reserve. This exchange may not change the party leader. You may then move your delegate to another party.</note>',
+    '<note>Exchange a <b>non-neutral</b> <opp>opponent</opp> delegate with one of your own from the reserve. This exchange may not change the party leader. You may then move your delegate to another party.</note>',
   // Hostile Takeover
   'Requires a habitat rate of 2 or higher, and a mining rate of 4 or higher. Add your player marker to a habitat tile and a mining tile owned by any opponent. Those now also count as yours. Increase your M€ production 2 steps.':
-    'Requires a habitat rate of 2 or higher, and a mining rate of 4 or higher. Increase your M€ production 2 steps.<note>Add your player marker to a habitat tile and a mining tile <b>owned by any opponent</b>. Those now also count as yours.</note>',
+    'Requires a habitat rate of 2 or higher, and a mining rate of 4 or higher. Increase your M€ production 2 steps.<note>Add your player marker to a habitat tile and a mining tile <b>owned by</b> <opp>any opponent</opp>. Those now also count as yours.</note>',
   // Syndicate Pirate Raids
   'ALL OPPONENTS CANNOT RETRIEVE THEIR TRADE FLEETS THIS GENERATION':
-    '<note><b>All opponents</b> cannot retrieve their trade fleets this generation.</note>',
+    '<note><opp>All opponents</opp> <b>cannot retrieve</b> their trade fleets this generation.</note>',
   // Luna Senate
   'Requires that you have 3 Moon tags. Increase your M€ production 1 step per Moon tag your OPPONENTS have.':
     'Requires that you have 3 Moon tags.<note>Increase your M€ production 1 step per Moon tag <b>your opponents</b> have.</note>',
@@ -485,7 +486,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Action: Add 1 science resource <b>to any card</b>, <b>except those giving 2 or more VP per 1 science resource</b>.</note>',
   // The Darkside of The Moon Syndicate
   'Effect: When you place a tile on The Moon, steal 2 M€ from opponents for each of their tiles next to yours.':
-    '<note>Effect: When you place a tile on The Moon, steal 2 M€ from opponents <b>for each of their tiles next to yours</b>.</note>',
+    '<note>Effect: When you place a tile on The Moon, steal 2 M€ <opp>from opponents</opp> <b>for each of their tiles next to yours</b>.</note>',
   // The Grand Luna Capital Group
   'Effect: When you place a habitat tile, gain 2 M€ for each adjacent habitat tile.':
     '<note>Effect: When you place a habitat tile, gain 2 M€ for each <b>adjacent habitat tile</b>.</note>',
@@ -542,7 +543,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Add 5 data <b>to any card</b>.</note>',
   // Solar Storm
   'Every player loses 2 plants. Remove up to 3 data from any player. Raise your heat production 1 step. Raise the temperature 1 step.':
-    'Remove up to 3 data from any player. Raise your heat production 1 step. Raise the temperature 1 step.<note><b>Every player</b> loses 2 plants.</note>',
+    'Remove up to 3 data <opp>from any player</opp>. Raise your heat production 1 step. Raise the temperature 1 step.<note><opp>Every player</opp> <b>loses 2 plants</b>.</note>',
   // Space Relay
   'Effect: Whenever you play a card with a Jovian tag, including this, draw a card.':
     '<note>Effect: Whenever you play a card with a Jovian tag, <b>including this</b>, draw a card.</note>',
@@ -593,7 +594,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Effect: After you play a card <b>with a microbe tag</b>, increase your M€ production 1 step.</note>',
   // Coordinated Raid
   'Requires at least 1 colony in play. Send one of your unused Trade Fleets to any colony tile. Collect the trade bonus and colony bonus for every colony on this tile. Other players do not get their colony bonuses from this action.':
-    'Requires at least 1 colony in play. Send one of your unused Trade Fleets to any colony tile.<note>Collect the trade bonus and <b>the colony bonus for every colony</b> on this tile. <b>Other players do not get</b> their colony bonuses from this action.</note>',
+    'Requires at least 1 colony in play. Send one of your unused Trade Fleets to any colony tile.<note>Collect the trade bonus and <b>the colony bonus for every colony</b> on this tile. <opp>Other players</opp> <b>do not get</b> their colony bonuses from this action.</note>',
   // Venera Base
   'Requires Unity is ruling or that you have 2 delegates there. Raise your M€ production 3 steps and place a city tile ON THE RESERVED AREA.':
     'Requires Unity is ruling or that you have 2 delegates there. Raise your M€ production 3 steps.<note>Place a city tile <b>on the reserved area</b>.</note>',
@@ -608,7 +609,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Effect: When playing a power card, <b>the standard project power plant, or the Kelvinist ruling policy action</b>, pay 3 M€ less.</note>',
   // Public Sponsored Grant
   'Requires Scientists are ruling or that you have 2 delegates there. All players lose 2M€. Choose a tag (NOT CITY, ? OR PLANETARY TRACK) and draw 2 cards with that tag.':
-    'Requires Scientists are ruling or that you have 2 delegates there. All players lose 2 M€.<note>Choose a tag (<b>not city, ? or planetary track</b>) and draw 2 cards with that tag.</note>',
+    'Requires Scientists are ruling or that you have 2 delegates there. <opp>All players</opp> lose 2 M€.<note>Choose a tag (<b>not city, ? or planetary track</b>) and draw 2 cards with that tag.</note>',
   // Controlled Bloom
   'Requires 3 oceans. Add 3 microbes to ANY card. Gain 3 plants.':
     'Requires 3 oceans. Gain 3 plants.<note>Add 3 microbes <b>to any card</b>.</note>',
@@ -665,10 +666,10 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     'Once per game, draw 10-X awards (min. 1), where X is the current generation number.<note>You may put one into the game and <b>fund it for free</b>.</note>',
   // Bjorn
   'Once per game, steal X+2 M€ from each player that has more M€ than you, where X is the current generation number.':
-    '<note>Once per game, steal X+2 M€ from each player <b>that has more M€ than you</b>, where X is the current generation number.</note>',
+    '<note>Once per game, steal X+2 M€ <opp>from each player</opp> <b>that has more M€ than you</b>, where X is the current generation number.</note>',
   // Caesar
   'Once per game, place X hazard tiles where X is the current generation number. Each opponent loses 1 unit of production of their choice, or 2 units if there are 6 or more hazard tiles.':
-    'Once per game, place X hazard tiles where X is the current generation number.<note>Each opponent loses 1 unit of production of their choice, <b>or 2 units if there are 6 or more hazard tiles</b>.</note>',
+    'Once per game, place X hazard tiles where X is the current generation number.<note><opp>Each opponent</opp> loses 1 unit of production of their choice, <b>or 2 units if there are 6 or more hazard tiles</b>.</note>',
   // Clarke
   'Once per game, increase your plant and heat production 1 step each. Gain plants and heat equal to your production +4.':
     'Once per game, increase your plant and heat production 1 step each.<note>Gain plants and heat <b>equal to your production +4</b>.</note>',
@@ -692,7 +693,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Once per game, decrease <b>each of your productions</b> 1 step to gain 4 of that resource.</note>',
   // Huan
   'ALL OPPONENTS CANNOT TRADE NEXT GENERATION. Gain 1 Trade Fleet.':
-    'Gain 1 Trade Fleet.<note>All opponents <b>cannot trade next generation</b>.</note>',
+    'Gain 1 Trade Fleet.<note><opp>All opponents</opp> <b>cannot trade next generation</b>.</note>',
   // Ingrid
   'When you take an action that places a tile on Mars THIS GENERATION, draw a card.':
     '<note>When you take an action <b>this generation</b> that places a tile <b>on Mars</b>, draw a card.</note>',
@@ -743,7 +744,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     'Requires Venus 6%. Raise Venus 1 step.<note>Add <b>2 floaters</b> to any card.</note>',
   // Forest Moon (VI)
   'Requires any 4 greeneries on Mars. Decrease any energy production 2 steps. Add an animal to any card.':
-    'Requires any 4 greeneries on Mars. Decrease any energy production 2 steps.<note>Add <b>an animal</b> to any card.</note>',
+    'Requires any 4 greeneries on Mars. Decrease <opp>any</opp> energy production 2 steps.<note>Add <b>an animal</b> to any card.</note>',
   // Rey ... Skywalker?! (IX)
   'Raise your M€ production 4 steps. Place a bronze cube on an empty unreserved space on Mars. No tile or token may be placed on that space for the rest of the game.':
     'Raise your M€ production 4 steps.<note>Place a bronze cube on an <b>empty unreserved space on Mars</b>. <b>No tile or token</b> may be placed on that space for the rest of the game.</note>',
@@ -758,7 +759,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     'Increase your steel production 1 step.<note>Place a city <b>in a non-reserved space with your excavation marker</b>, ignoring other placement restrictions.</note>',
   // Subnautic Pirates
   'Requires you have 1 corruption and 1 underground token. Steal up to 7 M€ from a player that HAS A TILE NEXT TO AN OCEAN.':
-    'Requires you have 1 corruption and 1 underground token.<note>Steal up to 7 M€ from a player that <b>has a tile next to an ocean</b>.</note>',
+    'Requires you have 1 corruption and 1 underground token.<note>Steal up to 7 M€ <opp>from a player</opp> that <b>has a tile next to an ocean</b>.</note>',
   // Labor Trafficking
   'Effect: The first standard project action you take each generation, except selling patents, costs 6 M€ less.':
     '<note>Effect: The <b>first</b> standard project action you take each generation, <b>except selling patents</b>, costs 6 M€ less.</note>',
@@ -794,7 +795,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Effect: When blocking damage from other players, you can use fighters here <b>as if they were corruption resources</b>. You cannot use them for score bribing or collusion.</note>',
   // Space Privateers
   'Action: Steal up to 1 M€ per fighter here, from EACH OTHER player. For each player that blocks this, remove 1 fighter from here.':
-    '<note>Action: Steal up to 1 M€ per fighter here <b>from each other player</b>. For each player that blocks this, remove 1 fighter from here.</note>',
+    '<note>Action: Steal up to 1 M€ per fighter here <opp>from each other player</opp>. For each player that blocks this, remove 1 fighter from here.</note>',
   // Personal Spacecruiser
   'Gain 1 corruption. Put 1 fighter on ANY card.':
     'Gain 1 corruption.<note>Put 1 fighter on <b>any card</b>.</note>',
@@ -815,25 +816,25 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Excavate 1 underground resource <b>on any space reserved for an ocean</b>. Then, place an ocean tile there, if possible.</note>',
   // Corporate Theft
   'Action: Pay 5 M€ to steal ANY 1 resource from another player. If it is a card resource, you may put it on a suitable card.':
-    '<note>Action: Pay 5 M€ to steal <b>any 1 resource</b> from another player. If it is a card resource, you may put it on a suitable card.</note>',
+    '<note>Action: Pay 5 M€ to steal <b>any 1 resource</b> <opp>from another player</opp>. If it is a card resource, you may put it on a suitable card.</note>',
   // Underground Research Center
   'Requires you have 4 underground tokens. Excavate an underground resource. Choose a tag that is not the wild tag or clone tag. Draw a card with that tag.':
     'Requires you have 4 underground tokens. Excavate an underground resource.<note>Choose a tag <b>that is not the wild tag or clone tag</b>. Draw a card with that tag.</note>',
   // Price Wars
   'Requires 2 corruption. Until the end of this generation, your steel and titanium are worth 1 more M€ each, and steel and titanium for other players is worth 1 M€ less.':
-    'Requires 2 corruption.<note><b>Until the end of this generation</b>, your steel and titanium are worth 1 more M€ each, and steel and titanium <b>for other players</b> is worth 1 M€ less.</note>',
+    'Requires 2 corruption.<note><b>Until the end of this generation</b>, your steel and titanium are worth 1 more M€ each, and steel and titanium <opp>for other players</opp> is worth 1 M€ less.</note>',
   // Anti-trust Crackdown
   'Requires that you have no more than 0 corruption. ALL players lose 2 corruption each.':
-    'Requires that you have no more than 0 corruption.<note><b>All players</b> lose 2 corruption each.</note>',
+    'Requires that you have no more than 0 corruption.<note><opp>All players</opp> lose 2 corruption each.</note>',
   // Monopoly
   'Requires 2 corruption. Choose a standard resource type. Steal up to 2 units of that resource from EACH OTHER player.':
-    'Requires 2 corruption.<note>Choose a <b>standard resource</b> type. Steal up to 2 units of that resource <b>from each other player</b>.</note>',
+    'Requires 2 corruption.<note>Choose a <b>standard resource</b> type. Steal up to 2 units of that resource <opp>from each other player</opp>.</note>',
   // Staged Protests
   'Requires 1 corruption. Gain 1 corruption. Until the end of this generation, milestones and awards cost +8 M€.':
     'Requires 1 corruption. Gain 1 corruption.<note><b>Until the end of this generation</b>, milestones and awards cost +8 M€.</note>',
   // Plant Tax
   'ALL players lose 2 plants. Players can block this with corruption. Gain 1 corruption.':
-    'Gain 1 corruption.<note><b>All players</b> lose 2 plants. Players can block this with corruption.</note>',
+    'Gain 1 corruption.<note><opp>All players</opp> lose 2 plants. Players can block this with corruption.</note>',
   // Induced Tremor
   'You may discard 1 underground resource of your choice from the board. Then excavate an underground resource.':
     'Excavate an underground resource.<note>Before that, you may discard 1 underground resource <b>of your choice from the board</b>.</note>',
@@ -854,7 +855,7 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
     '<note>Effect: At the end of each production phase, add 1 data here <b>for each other player</b> that has 7 or more cards in their hand.</note>',
   // Investigative Journalism
   'Action: Spend 5 M€ and remove 1 corruption from ANOTHER player with more corruption than you to add 1 journalism resource on this card.':
-    '<note>Action: Spend 5 M€ and remove 1 corruption <b>from another player with more corruption than you</b> to add 1 journalism resource on this card.</note>',
+    '<note>Action: Spend 5 M€ and remove 1 corruption <opp>from another player with more corruption than you</opp> to add 1 journalism resource on this card.</note>',
   // Guerilla Ecologists
   'Requires 1 corruption. Spend 4 plants to place a greenery tile IGNORING ADJACENCY RESTRICTIONS.':
     'Requires 1 corruption.<note>Spend 4 plants to place a greenery tile <b>ignoring adjacency restrictions</b>.</note>',
@@ -909,4 +910,142 @@ export const ASTERISK_NOTES: Readonly<Record<string, string>> = {
   // Cloud Vortex Outpost
   'Action: Remove 1 floater from THIS card to add 1 floater to ANOTHER card':
     '<note>Action: Remove 1 floater <b>from this card</b> to add 1 floater <b>to another card</b>.</note>',
+  // Ants
+  'Action: Remove 1 microbe from any card to add 1 to this card.':
+    'Action: Remove 1 microbe <opp>from any card</opp> to add 1 to this card.',
+  // Asteroid
+  'Raise temperature 1 step and gain 2 titanium. Remove up to 3 plants from any player.':
+    'Raise temperature 1 step and gain 2 titanium. Remove up to 3 plants <opp>from any player</opp>.',
+  // Big Asteroid
+  'Raise temperature 2 steps and gain 4 titanium. Remove up to 4 plants from any player.':
+    'Raise temperature 2 steps and gain 4 titanium. Remove up to 4 plants <opp>from any player</opp>.',
+  // Biomass Combustors
+  'Requires 6% oxygen. Decrease any plant production 1 step and increase your energy production 2 steps.':
+    'Requires 6% oxygen. Decrease <opp>any</opp> plant production 1 step and increase your energy production 2 steps.',
+  // Birds
+  '(Requires 13% oxygen. Decrease any plant production 2 steps.)':
+    '(Requires 13% oxygen. Decrease <opp>any</opp> plant production 2 steps.)',
+  // Cloud Seeding
+  'Requires 3 ocean tiles. Decrease your M€ production 1 step and any heat production 1 step. Increase your plant production 2 steps.':
+    'Requires 3 ocean tiles. Decrease your M€ production 1 step and <opp>any</opp> heat production 1 step. Increase your plant production 2 steps.',
+  // Comet
+  'Raise temperature 1 step and place an ocean tile. Remove up to 3 plants from any player.':
+    'Raise temperature 1 step and place an ocean tile. Remove up to 3 plants <opp>from any player</opp>.',
+  // Deimos Down
+  'Raise temperature 3 steps and gain 4 steel. Remove up to 8 plants from any player.':
+    'Raise temperature 3 steps and gain 4 steel. Remove up to 8 plants <opp>from any player</opp>.',
+  // Fish
+  'Requires +2 C° or warmer. Decrease any plant production 1 step.':
+    'Requires +2 C° or warmer. Decrease <opp>any</opp> plant production 1 step.',
+  // Giant Ice Asteroid
+  'Raise temperature 2 steps and place 2 ocean tiles. Remove up to 6 plants from any player.':
+    'Raise temperature 2 steps and place 2 ocean tiles. Remove up to 6 plants <opp>from any player</opp>.',
+  // Heat Trappers
+  'Decrease any heat production 2 steps and increase your energy production 1 step.':
+    'Decrease <opp>any</opp> heat production 2 steps and increase your energy production 1 step.',
+  // Herbivores
+  'Requires 8% oxygen. +1 animal to this card. -1 any plant production':
+    'Requires 8% oxygen. +1 animal to this card. -1 <opp>any</opp> plant production',
+  // Mining Expedition
+  'Raise oxygen 1 step. Remove 2 plants from any player. Gain 2 steel.':
+    'Raise oxygen 1 step. Remove 2 plants <opp>from any player</opp>. Gain 2 steel.',
+  // Predators
+  'Action: Remove 1 animal from any card and add it to this card.':
+    'Action: Remove 1 animal <opp>from any card</opp> and add it to this card.',
+  // Small Animals
+  'Requires 6% oxygen. Decrease any plant production 1 step.':
+    'Requires 6% oxygen. Decrease <opp>any</opp> plant production 1 step.',
+  // Asteroid Mining Consortium
+  'Requires that you have titanium production. Decrease any titanium production 1 step and increase your own 1 step.':
+    'Requires that you have titanium production. Decrease <opp>any</opp> titanium production 1 step and increase your own 1 step.',
+  // Energy Tapping
+  'Decrease any energy production 1 step and increase your own 1 step.':
+    'Decrease <opp>any</opp> energy production 1 step and increase your own 1 step.',
+  // Great Escarpment Consortium
+  'Requires that you have steel production. Decrease any steel production 1 step and increase your own 1 step.':
+    'Requires that you have steel production. Decrease <opp>any</opp> steel production 1 step and increase your own 1 step.',
+  // Hackers
+  'Decrease your energy production 1 step and any M€ production 2 steps. Increase your M€ production 2 steps.':
+    'Decrease your energy production 1 step and <opp>any</opp> M€ production 2 steps. Increase your M€ production 2 steps.',
+  // Hired Raiders
+  'Steal up to 2 steel, or 3 M€ from any player.':
+    'Steal up to 2 steel, or 3 M€ <opp>from any player</opp>.',
+  // Power Supply Consortium
+  'Requires 2 power tags. Decrease any energy production 1 step and increase your own 1 step.':
+    'Requires 2 power tags. Decrease <opp>any</opp> energy production 1 step and increase your own 1 step.',
+  // Sabotage
+  'Remove up to 3 titanium from any player, or 4 steel, or 7 M€.':
+    'Remove up to 3 titanium <opp>from any player</opp>, or 4 steel, or 7 M€.',
+  // Virus
+  'Remove up to 2 animals or 5 plants from any player.':
+    'Remove up to 2 animals or 5 plants <opp>from any player</opp>.',
+  // Small Asteroid
+  'Increase temperature 1 step. Remove up to 2 plants from any player.':
+    'Increase temperature 1 step. Remove up to 2 plants <opp>from any player</opp>.',
+  // Vermin
+  'Each player, including you, gets -1 VP per city they have IF THERE ARE AT LEAST 10 ANIMALS HERE.':
+    '<opp>Each player</opp>, including you, gets -1 VP per city they have if there are at least 10 animals here.',
+  // Comet for Venus
+  'Raise Venus 1 step. Remove up to 4M€ from any player WITH A VENUS TAG IN PLAY.':
+    'Raise Venus 1 step. Remove up to 4 M€ <opp>from any player with a Venus tag in play</opp>.',
+  // Air Raid
+  'Requires that you lose 1 floater. Steal 5 M€ from any player.':
+    'Requires that you lose 1 floater. Steal 5 M€ <opp>from any player</opp>.',
+  // Impactor Swarm
+  'Requires 2 Jovian tags. Gain 12 heat. Remove up to 2 plants from any player.':
+    'Requires 2 Jovian tags. Gain 12 heat. Remove up to 2 plants <opp>from any player</opp>.',
+  // Sub-zero Salt Fish
+  'Requires -6 C. Decrease any plant production 1 step.':
+    'Requires -6 C. Decrease <opp>any</opp> plant production 1 step.',
+  // Special Permit
+  'Requires that Greens are ruling or that you have 2 delegates there. Steal 4 plants from any player.':
+    'Requires that Greens are ruling or that you have 2 delegates there. Steal 4 plants <opp>from any player</opp>.',
+  // Aerial Lenses
+  'Requires that Kelvinists are ruling or that you have 2 delegates there. Remove up to 2 plants from any player. Increase your heat production 2 steps.':
+    'Requires that Kelvinists are ruling or that you have 2 delegates there. Remove up to 2 plants <opp>from any player</opp>. Increase your heat production 2 steps.',
+  // Banned Delegate
+  'Requires that you are Chairman. Remove any NON-LEADER delegate.':
+    'Requires that you are Chairman. Remove <opp>any non-leader delegate</opp>.',
+  // Metallic Asteroid
+  'Raise temperature 1 step and gain 1 titanium. Remove up to 4 plants from any player. Place this tile which grants an ADJACENCY BONUS of 1 titanium.':
+    'Raise temperature 1 step and gain 1 titanium. Remove up to 4 plants <opp>from any player</opp>. Place this tile which grants an adjacency bonus of 1 titanium.',
+  // Revolting Colonists
+  'Requires 4 habitat rate. All players pay 3M€ for each habitat tile they own.':
+    'Requires 4 habitat rate. <opp>All players</opp> pay 3M€ for each habitat tile they own.',
+  // Cosmic Radiation
+  'Requires 4 mining rate. All players pay 4M€ for each mining tile they own.':
+    'Requires 4 mining rate. <opp>All players</opp> pay 4M€ for each mining tile they own.',
+  // The Darkside of The Moon Syndicate
+  'Action: Spend 1 titanium to add 1 syndicate fleet on this card OR remove 1 syndicate fleet from this card to steal 2 M€ from every opponent.':
+    'Action: Spend 1 titanium to add 1 syndicate fleet on this card or remove 1 syndicate fleet from this card to steal 2 M€ <opp>from every opponent</opp>.',
+  // Clone Troopers (II)
+  '(Action: Add one Clone Trooper to this card OR remove one Clone Trooper from this card to steal one standard resource from any player.)':
+    '(Action: Add one Clone Trooper to this card or remove one Clone Trooper from this card to steal one standard resource <opp>from any player</opp>.)',
+  // Deepnuking
+  'Excavate 2 underground resources. Remove up to 3 plants from any player.':
+    'Excavate 2 underground resources. Remove up to 3 plants <opp>from any player</opp>.',
+  // Reckless Detonation
+  'Requires 2 corruption. Excavate an underground resource. Remove up to 3 steel or 2 titanium from any player.':
+    'Requires 2 corruption. Excavate an underground resource. Remove up to 3 steel or 2 titanium <opp>from any player</opp>.',
+  // Fabricated Scandal
+  'Gain 1 corruption. The players with the highest TR lose 1 TR. Then the players with the lowest TR gain 1 TR, if possible.':
+    'Gain 1 corruption. <opp>The players with the highest TR</opp> lose 1 TR. Then the players with the lowest TR gain 1 TR, if possible.',
+  // Earthquake Machine
+  'Requires 2 science tags. Decrease any plant production 1 step.':
+    'Requires 2 science tags. Decrease <opp>any</opp> plant production 1 step.',
+  // Infrastructure Overload
+  'Gain 1 corruption. Reduce any energy production 2 steps.':
+    'Gain 1 corruption. Reduce <opp>any</opp> energy production 2 steps.',
+  // Hackers:u
+  'Requires 2 corruption. Decrease any M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.':
+    'Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.',
+  // Mercenary Squad
+  'Requires 1 corruption. Remove up to 2 resources from ANY card':
+    'Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>',
+  // Media Frenzy
+  'Remove up to 1 corruption from another player. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.':
+    'Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.',
+  // Hired Raiders:u
+  'Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, from any player.':
+    'Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.',
 };

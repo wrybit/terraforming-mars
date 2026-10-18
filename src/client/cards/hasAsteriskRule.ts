@@ -1,6 +1,6 @@
 import {ClientCard} from '@/common/cards/ClientCard';
 
-// A "*" in the icon row marks a special rule in the card text (shown as a note, see asteriskNotes.ts)
+// A "*" in the icon row marks a special rule in the card text (shown as a note, see cardTextMarkup.ts)
 function containsAsterisk(component: unknown): boolean {
   if (Array.isArray(component)) {
     return component.some(containsAsterisk);

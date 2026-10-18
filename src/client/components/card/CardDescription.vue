@@ -1,11 +1,11 @@
 <template>
-  <!-- Split variant is already translated: tm-has-i18n keeps a v-i18n of a parent from translating (and trimming) it again -->
-  <div v-if="split === undefined" class="card-description" :class="alignClasses">(<span v-i18n>{{ description }}</span>)</div>
+  <!-- Marked-up variant is already translated: tm-has-i18n keeps a v-i18n of a parent from translating (and trimming) it again -->
+  <div v-if="parts === undefined" class="card-description" :class="alignClasses">(<span v-i18n>{{ description }}</span>)</div>
   <div v-else class="card-description card-description-split" :class="[alignClasses, compactClass]" tm-has-i18n="true">
-    <div v-if="split.main !== ''">({{ split.main }})</div>
-    <div v-if="split.note !== undefined" class="card-asterisk-note">
+    <div v-if="parts.main.length > 0">(<CardTextSegments :segments="parts.main"/>)</div>
+    <div v-if="parts.note !== undefined" class="card-asterisk-note">
       <span class="card-asterisk-note-star">*</span>
-      <span><template v-for="(segment, index) in split.note" :key="index"><mark v-if="segment.emphasis">{{ segment.text }}</mark><template v-else>{{ segment.text }}</template></template></span>
+      <CardTextSegments :segments="parts.note"/>
     </div>
   </div>
 </template>
@@ -15,14 +15,18 @@
 import {defineComponent, nextTick, PropType} from 'vue';
 import {isDescription} from '@/common/cards/render/CardRenderDescription';
 import {translateText} from '@/client/directives/i18n';
-import {ASTERISK_NOTES} from '@/client/cards/asteriskNotes';
-import {SplitDescription, splitAsteriskNote} from '@/client/cards/splitAsteriskNote';
+import {CARD_TEXT_MARKUP} from '@/client/cards/cardTextMarkup';
+import {CardTextParts, parseCardTextMarkup} from '@/client/cards/parseCardTextMarkup';
+import CardTextSegments from '@/client/components/card/CardTextSegments.vue';
 
 // Steps of a smaller type when main text and note do not fit into the card (dense cards in long languages)
 const COMPACT_CLASSES = ['', 'card-description-compact', 'card-description-compact-more'];
 
 export default defineComponent({
   name: 'CardDescription',
+  components: {
+    CardTextSegments,
+  },
   data() {
     return {
       compactLevel: 0,
@@ -41,7 +45,7 @@ export default defineComponent({
     // Measured instead of guessed, because it depends on the language and the card.
     async fitIntoCard(): Promise<void> {
       this.compactLevel = 0;
-      if (this.split === undefined) {
+      if (this.parts === undefined) {
         return;
       }
       await nextTick();
@@ -88,10 +92,10 @@ export default defineComponent({
     compactClass(): string {
       return COMPACT_CLASSES[this.compactLevel];
     },
-    // Texts with a "*" rule: main text and highlighted note, already translated
-    split(): SplitDescription | undefined {
-      const restructured = ASTERISK_NOTES[this.description.replace(/\s+/g, ' ').trim()];
-      return restructured === undefined ? undefined : splitAsteriskNote(translateText(restructured));
+    // Marked-up texts ("*" rule note, opponent words): segments, already translated
+    parts(): CardTextParts | undefined {
+      const markedUp = CARD_TEXT_MARKUP[this.description.replace(/\s+/g, ' ').trim()];
+      return markedUp === undefined ? undefined : parseCardTextMarkup(translateText(markedUp));
     },
   },
 });
