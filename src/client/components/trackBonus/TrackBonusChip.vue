@@ -6,8 +6,8 @@
       <b v-if="hasCount">{{ bonus.count }}</b>
       <template v-for="(icon, index) in bonus.icons" :key="index">
         <i v-if="index > 0" class="track-bonus-chip__or">/</i>
-        <span v-if="bonus.production" class="track-bonus-chip__production"><img :src="'assets/' + icon" alt=""></span>
-        <img v-else :src="'assets/' + icon" alt="">
+        <span v-if="bonus.production" class="track-bonus-chip__production"><img :src="themedAsset('assets/' + icon)" alt=""></span>
+        <img v-else :src="themedAsset('assets/' + icon)" alt="">
       </template>
     </template>
   </span>
@@ -16,9 +16,13 @@
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {TrackBonus, TrackBonusKind} from './trackBonus';
+import {themedAsset} from '@/client/theme/themeDisplay';
 
 export default defineComponent({
   name: 'TrackBonusChip',
+  methods: {
+    themedAsset,
+  },
   props: {
     bonus: {
       type: Object as PropType<TrackBonus>,

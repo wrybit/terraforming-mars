@@ -58,3 +58,46 @@ html.theme-dune .board-space-tile--nuclear_zone {
 html.theme-dune .board-space-tile--restricted_area {
   background: url(graphics/special-restricted-area.svg) center / contain no-repeat;
 }
+
+/* Cards as in the Dune mockup: parchment instead of silver, dark ink frame, earthy title bands */
+html.theme-dune .filterDiv {
+  background: linear-gradient(to bottom right, #f6ecd6, #e4d2ae 35%, #efe4cc 60%, #dcc8a2);
+  border-color: #2a1c12;
+  box-shadow: 0 0 0 2px #2a1c12, 0 2px 6px rgba(0, 0, 0, 0.55);
+}
+
+html.theme-dune .card-title .background-color-automated,
+html.theme-dune .background-color-automated {
+  background: linear-gradient(-60deg, #436c23 10%, #5a8c33, #436c23 90%);
+  color: #fff8ea;
+}
+
+html.theme-dune .card-title .background-color-active,
+html.theme-dune .background-color-active {
+  background: linear-gradient(-60deg, #275e83 10%, #3a7fae, #275e83 90%);
+  color: #fff8ea;
+}
+
+html.theme-dune .card-title .background-color-events,
+html.theme-dune .background-color-events {
+  background: linear-gradient(-60deg, #8c3522 10%, #b24b32, #8c3522 90%);
+  color: #fff8ea;
+}
+
+html.theme-dune .card-title .background-color-prelude,
+html.theme-dune .background-color-prelude {
+  background: linear-gradient(-60deg, #833f66 10%, #a75988, #833f66 90%);
+  color: #fff8ea;
+}
+
+/* Requirement plate: sand instead of the Mars yellow; maximum requirements in rust red */
+html.theme-dune .card-requirements {
+  background: linear-gradient(90deg, #c9b089 0%, #e0cca7 45%, #e0cca7 55%, #c9b089 100%);
+  color: #2a1c12;
+}
+
+/* Effect box of the Houses: darker parchment instead of the grey metal */
+html.theme-dune .card-corporation-box {
+  background: linear-gradient(to bottom right, #e7d8b8, #d6c098, #e8dcc2, #d2bb92);
+  border-color: #6b5640;
+}

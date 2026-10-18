@@ -21,6 +21,8 @@ export type ThemeTerms = {
   exact?: Record<string, string>,
   /** Names (keys of names/<lang>.json) that also appear inside texts, e.g. places named in card texts */
   namesInTexts?: ReadonlyArray<string>,
+  /** Other keys showing the same name, e.g. the short label of a board space: key → name key */
+  aliases?: Record<string, string>,
 };
 
 /** English key (card, corporation, milestone, award or place name) → themed name in this language */
@@ -128,10 +130,16 @@ export function writeThemeTexts(localesFolder: string, themesFolder: string, out
     };
     const englishRules = compileRules(termsOf('en').rules);
     fs.mkdirSync(path.join(outputFolder, theme, 'texts'), {recursive: true});
-    const namesInTexts = readJson<ThemeTerms>(path.join(folder, 'terms', '_all.json'), {rules: []}).namesInTexts ?? [];
+    const shared = readJson<ThemeTerms>(path.join(folder, 'terms', '_all.json'), {rules: []});
+    const namesInTexts = shared.namesInTexts ?? [];
     for (const lang of languages) {
       const terms = termsOf(lang);
       const names = readJson<ThemeNames>(path.join(folder, 'names', `${lang}.json`), {});
+      for (const [alias, key] of Object.entries(shared.aliases ?? {})) {
+        if (names[key] !== undefined) {
+          names[alias] = names[key];
+        }
+      }
       // A named place keeps its Mars name in most translations; inside texts it becomes the theme's name too
       const nameRules: Array<TermRule> = namesInTexts
         .filter((name) => names[name] !== undefined)

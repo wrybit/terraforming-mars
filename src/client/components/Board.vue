@@ -31,6 +31,11 @@
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('venus')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('venus') : undefined">{{ lvl.strValue }}</div>
             </div>
 
+            <!-- Arrakis: the Dune symbols at the scale ends, in the place of the Mars labels O2 and t°C (cut out of the board picture) -->
+            <template v-if="boardName === BoardName.ARRAKIS">
+              <img class="board-scale-symbol" style="left: 158px; top: 503px" :src="themedAsset('assets/global-parameters/oxygen.png')" alt="">
+              <img class="board-scale-symbol" style="left: 405px; top: 501px" :src="themedAsset('assets/global-parameters/temperature.png')" alt="">
+            </template>
             <div class="global-numbers-oceans" v-flash="flashKeys.globalParameter('oceans')">
               <span v-if="oceans_count === globalParameterMaximums.oceans">
                 <img width="26" src="assets/misc/circle-checkmark.png" class="board-ocean-checkmark" :alt="$t('Completed!')">
@@ -368,7 +373,7 @@ import {isLargeBoard, marsFrame} from '@/client/components/mobile/mobileBoardZoo
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
-import {temperatureText} from '@/client/theme/themeDisplay';
+import {temperatureText, themedAsset} from '@/client/theme/themeDisplay';
 
 class GlobalParamLevel {
   constructor(public value: number, public isActive: boolean, public strValue: string) {
@@ -431,6 +436,7 @@ export default defineComponent({
     MarsScaleBonuses,
   },
   methods: {
+    themedAsset,
     hasSpace(spaceId: SpaceId): boolean {
       return spacesById(this.spaces).has(spaceId);
     },

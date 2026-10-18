@@ -83,6 +83,7 @@ import {getAward, getMilestone} from '@/client/MilestoneAwardManifest';
 import MilestoneAwardIcon from '@/client/components/milestoneAwardTable/MilestoneAwardIcon.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {AWARD_ICONS, IconPart, MILESTONE_ICONS} from '@/client/components/milestoneAwardTable/milestoneAwardIcons';
+import {themedGoalIcon} from '@/client/theme/themeDisplay';
 import {scoreRanks} from '@/client/components/milestoneAwardTable/scoreRanks';
 import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
 import {glassTooltip} from '@/client/directives/GlassTooltip';
@@ -216,10 +217,10 @@ export default defineComponent({
     },
     markHorizontalScroll,
     milestoneIcon(milestone: ClaimedMilestoneModel): ReadonlyArray<IconPart> {
-      return MILESTONE_ICONS[milestone.name] ?? [];
+      return themedGoalIcon(milestone.name, MILESTONE_ICONS[milestone.name] ?? []);
     },
     awardIcon(award: FundedAwardModel): ReadonlyArray<IconPart> {
-      return AWARD_ICONS[award.name] ?? [];
+      return themedGoalIcon(award.name, AWARD_ICONS[award.name] ?? []);
     },
     milestoneDescription(milestone: ClaimedMilestoneModel): string {
       return getMilestone(milestone.name)?.description ?? '';

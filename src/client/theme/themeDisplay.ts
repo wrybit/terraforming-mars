@@ -43,3 +43,15 @@ export function cardScene(cardName: string, tags: ReadonlyArray<string>): string
   const file = scenes[cardName] ?? `scene-${tags.find((tag) => SCENE_TAGS.includes(tag)) ?? 'none'}`;
   return `assets/themes/dune/graphics/${file}.svg`;
 }
+
+// Milestone and award symbols of the Dune theme where the Dune version shows something else than Mars
+// (the Dune mockup's goals page): asset paths below assets/ without extension, as in milestoneAwardIcons.ts
+const DUNE_GOAL_ICONS: Readonly<Record<string, ReadonlyArray<{asset: string}>>> = {
+  'Landlord': [{asset: 'tiles/city'}, {asset: 'tiles/greenery'}, {asset: 'tiles/special'}],
+  'Scientist': [{asset: 'tags/science'}],
+};
+
+/** Symbol parts of a milestone or award in the active theme (the given Mars parts unless the theme has its own). */
+export function themedGoalIcon<Part extends {asset: string}>(name: string, parts: ReadonlyArray<Part>): ReadonlyArray<Part | {asset: string}> {
+  return activeTheme() === 'dune' ? DUNE_GOAL_ICONS[name] ?? parts : parts;
+}

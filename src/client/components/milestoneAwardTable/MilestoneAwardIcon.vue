@@ -16,6 +16,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {IconPart} from '@/client/components/milestoneAwardTable/milestoneAwardIcons';
+import {themedAsset} from '@/client/theme/themeDisplay';
 
 export default defineComponent({
   name: 'MilestoneAwardIcon',
@@ -39,7 +40,7 @@ export default defineComponent({
   },
   methods: {
     imagePath(part: IconPart): string {
-      return `assets/${part.asset}.png`;
+      return themedAsset(`assets/${part.asset}.png`);
     },
   },
 });

@@ -5,6 +5,8 @@
 # Why: the board lays its hexes over assets/board/mars-planet*.png. Arrakis takes exactly the same place, so the
 # pictures have the same size and the planet circle sits where Mars sits; the hexes then line up with the map.
 # Never edit the PNGs by hand – change this script and run it again: python3 scripts/make-dune-planet.py
+import colorsys
+import math
 import os
 from PIL import Image, ImageChops, ImageDraw
 
@@ -42,11 +44,55 @@ def sphere(size: int) -> Image.Image:
     return planet
 
 
+# Scale rings around the planet: oxygen (left) becomes the green vegetation scale, temperature (right) the blue water
+# storage. Hue of every ring pixel is replaced, brightness and saturation stay, so the scale steps keep their look.
+OXYGEN_HUE = 95 / 360
+WATER_HUE = 205 / 360
+SPICE_HUE = 22 / 360
+# The Mars labels "O2" and "t°C" below the scale ends (Board.vue shows the Dune symbols there instead): boxes in the
+# 620 × 600 pictures, scaled for the others
+MARS_LABELS = [(176, 530, 205, 557), (420, 524, 455, 559)]
+
+
+def recolor_rings(picture: Image.Image, left: int, top: int, size: int) -> None:
+    centre_x, centre_y, radius = left + size / 2, top + size / 2, size / 2
+    pixels = picture.load()
+    width, height = picture.size
+    for y in range(height):
+        for x in range(width):
+            red, green, blue, alpha = pixels[x, y]
+            if alpha == 0:
+                continue
+            distance = math.hypot(x - centre_x, y - centre_y)
+            # Only the side rings: the top arc (Venus) and the ocean marker below the planet keep their colours
+            if distance < radius + 6 or distance > radius + 80 or y < centre_y - radius * 0.86:
+                continue
+            hue, lightness, saturation = colorsys.rgb_to_hls(red / 255, green / 255, blue / 255)
+            target = OXYGEN_HUE if x < centre_x else WATER_HUE
+            if y > centre_y and abs(x - centre_x) < radius * 0.45:
+                # The ocean marker below the planet becomes a spice field (orange)
+                target = SPICE_HUE
+            new_red, new_green, new_blue = colorsys.hls_to_rgb(target, lightness, max(saturation, 0.35))
+            pixels[x, y] = (round(new_red * 255), round(new_green * 255), round(new_blue * 255), alpha)
+
+
+def erase_labels(picture: Image.Image) -> None:
+    scale_x, scale_y = picture.size[0] / 620, picture.size[1] / 600
+    draw = ImageDraw.Draw(picture)
+    for x0, y0, x1, y1 in MARS_LABELS:
+        draw.rectangle((x0 * scale_x, y0 * scale_y, x1 * scale_x, y1 * scale_y), fill=(0, 0, 0, 0))
+
+
 for mars_path, planet_path, dune_path in TARGETS:
     mars = Image.open(os.path.join(ROOT, mars_path)).convert('RGBA')
     left, top, right, bottom = Image.open(os.path.join(ROOT, planet_path)).split()[3].getbbox()
     size = max(right - left, bottom - top)
-    canvas = mars.copy() if mars_path != planet_path else Image.new('RGBA', mars.size, (0, 0, 0, 0))
+    if mars_path != planet_path:
+        canvas = mars.copy()
+        recolor_rings(canvas, left, top, size)
+        erase_labels(canvas)
+    else:
+        canvas = Image.new('RGBA', mars.size, (0, 0, 0, 0))
     canvas.alpha_composite(sphere(size), (left, top))
     canvas.save(os.path.join(ROOT, dune_path), optimize=True)
     print(dune_path, mars.size, (left, top, size))

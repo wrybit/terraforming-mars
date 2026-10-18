@@ -1,6 +1,19 @@
 {
   "rules": [
-    ["\\$\\{(\\d)\\} ?°C", "${$1} %", "case"]
+    [
+      "\\$\\{(\\d)\\} ?°C",
+      "${$1} %",
+      "case"
+    ]
   ],
-  "namesInTexts": ["Tharsis Tholus", "Ascraeus Mons", "Pavonis Mons", "Arsia Mons"]
+  "namesInTexts": [
+    "Tharsis Tholus",
+    "Ascraeus Mons",
+    "Pavonis Mons",
+    "Arsia Mons"
+  ],
+  "aliases": {
+    "Phobos": "Phobos Space Haven",
+    "Ganymede": "Ganymede Colony"
+  }
 }

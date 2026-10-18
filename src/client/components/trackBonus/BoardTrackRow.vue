@@ -9,7 +9,7 @@
     <div class="board-track-row__body">
       <div :class="['board-track-row__track', {'board-track-row__track--long': cells.length > 12}]">
         <span v-for="(cell, index) in cells" :key="index" :class="cellClasses(cell)">
-          <img v-if="cell.icon !== undefined" :src="'assets/' + cell.icon" alt="">
+          <img v-if="cell.icon !== undefined" :src="themedAsset('assets/' + cell.icon)" alt="">
           <template v-else>{{ cell.label }}</template>
         </span>
       </div>
@@ -27,6 +27,7 @@ import {defineComponent, PropType} from 'vue';
 import TrackLane from './TrackLane.vue';
 import {LaneEntry} from './trackBonus';
 import {TrackCell} from './trackCell';
+import {themedAsset} from '@/client/theme/themeDisplay';
 
 export default defineComponent({
   name: 'BoardTrackRow',
@@ -46,6 +47,7 @@ export default defineComponent({
     },
   },
   methods: {
+    themedAsset,
     cellClasses(cell: TrackCell): Array<string> {
       const classes = ['board-track-row__cell'];
       if (cell.state !== undefined) {

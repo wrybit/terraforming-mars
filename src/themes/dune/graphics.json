@@ -49,5 +49,7 @@
   "board/mars-clean.png": "arrakis-clean.png",
   "board/mars-without-venus-clean.png": "arrakis-without-venus-clean.png",
   "board/mars-large.png": "arrakis-large.png",
-  "board/mars-large-without-venus.png": "arrakis-large-without-venus.png"
+  "board/mars-large-without-venus.png": "arrakis-large-without-venus.png",
+  "hex_green.png": "graphics/tile-planting.svg",
+  "tiles/empty.png": "graphics/tile-empty.svg"
 }
