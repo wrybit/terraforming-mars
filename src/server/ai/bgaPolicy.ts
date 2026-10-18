@@ -7,6 +7,7 @@ import {Tree, treeScore} from './treeEnsemble';
 import {tuningOf} from './aiTuning';
 import draftModel from './data/bgaPolicyDraft.json';
 import buyModel from './data/bgaPolicyBuy.json';
+import playModel from './data/bgaPolicyPlay.json';
 
 // Learned card choice (imitation of strong players): LightGBM models trained on about 54,000 two-player games
 // from Board Game Arena (Tharsis, preludes, draft; both players Elo 600+) rank the offered cards the way those
@@ -14,10 +15,12 @@ import buyModel from './data/bgaPolicyBuy.json';
 // position before the decision (own, opponent, difference) plus the card's own properties.
 
 type PolicyModel = {features: Array<string>, cardIds: Record<string, number>, trees: Array<Tree>};
-export type PolicyKind = 'draft' | 'buy';
+export type PolicyKind = 'draft' | 'buy' | 'play';
 const MODELS: Record<PolicyKind, PolicyModel> = {
   draft: draftModel as unknown as PolicyModel,
   buy: buyModel as unknown as PolicyModel,
+  // Which hand card strong players play next (candidates: hand cards they played sooner or later)
+  play: playModel as unknown as PolicyModel,
 };
 
 const TRACKERS: Record<string, (player: IPlayer) => number> = {
@@ -135,4 +138,18 @@ export function withPolicyPreference(player: IPlayer, cards: ReadonlyArray<ICard
   }
   const preferences = policyPreferences(player, cards, kind);
   return (name) => valueOf(name) + weight * (preferences.get(name) ?? 0);
+}
+
+/**
+ * Play order of strong players: preference (M€ per unit, aiTuning.ts playPolicyWeight) for each hand card that
+ * can be played now, centred on these cards, so only the order among card plays changes on average.
+ */
+export function playPreferences(player: IPlayer, playable: ReadonlySet<CardName>): Map<CardName, number> {
+  const weight = tuningOf(player).playPolicyWeight;
+  const cards = player.cardsInHand.filter((card) => playable.has(card.name));
+  if (weight <= 0 || cards.length < 2) {
+    return new Map();
+  }
+  const preferences = policyPreferences(player, cards, 'play');
+  return new Map([...preferences].map(([name, preference]) => [name, weight * preference]));
 }

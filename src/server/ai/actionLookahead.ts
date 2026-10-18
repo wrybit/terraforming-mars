@@ -20,6 +20,7 @@ import {describeResponse} from './decisionLabels';
 import {tuningOf} from './aiTuning';
 import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
 import {triggerOrderAdjustments} from './triggerOrder';
+import {playPreferences} from './bgaPolicy';
 import {sellToAffordResponses} from './sellToAfford';
 import {lastGenerationSaleResponses} from './lastGenerationSale';
 import {isSimulating} from './simulationSandbox';
@@ -463,6 +464,24 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
       for (const {candidate, outcome} of tried) {
         const name = playedHandCard(candidate.response, player);
         outcome.value += name === undefined ? 0 : adjustments.get(name) ?? 0;
+      }
+    }
+  }
+
+  // Play order of strong players (learned from BGA games): which of the playable hand cards goes first.
+  if (tuning.playPolicyWeight > 0) {
+    const playable = new Set<CardName>();
+    for (const {candidate} of tried) {
+      const name = playedHandCard(candidate.response, player);
+      if (name !== undefined) {
+        playable.add(name);
+      }
+    }
+    const preferences = playPreferences(player, playable);
+    if (preferences.size > 0) {
+      for (const {candidate, outcome} of tried) {
+        const name = playedHandCard(candidate.response, player);
+        outcome.value += name === undefined ? 0 : preferences.get(name) ?? 0;
       }
     }
   }
