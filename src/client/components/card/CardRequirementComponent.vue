@@ -33,6 +33,7 @@ import {defineComponent} from 'vue';
 import {CardRequirementDescriptor, requirementType} from '@/common/cards/CardRequirementDescriptor';
 import {RequirementType} from '@/common/cards/RequirementType';
 import {range} from '@/common/utils/utils';
+import {temperatureUnit, temperatureValue} from '@/client/theme/themeDisplay';
 import CardParty from '@/client/components/card/CardParty.vue';
 import {PartyName} from '@/common/turmoil/PartyName';
 
@@ -62,6 +63,8 @@ export default defineComponent({
     amount(): string | number {
       switch (this.type) {
       case RequirementType.TEMPERATURE:
+        // Dune shows the water storage in percent instead of °C
+        return temperatureValue(this.count);
       case RequirementType.OXYGEN:
       case RequirementType.VENUS:
       case RequirementType.HABITAT_RATE:
@@ -86,7 +89,7 @@ export default defineComponent({
       case RequirementType.VENUS:
         return '%';
       case RequirementType.TEMPERATURE:
-        return '°C';
+        return temperatureUnit();
       }
       return '';
     },

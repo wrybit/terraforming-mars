@@ -49,6 +49,11 @@ let translated: Set<string> | undefined;
 // players' update every 3 s during the research phase) fills the console with the same lines
 const reportedMissing = new Set<string>();
 export function translateText(englishText: string): string {
+  // A game in another theme (e.g. Dune) has its own wording for many texts, already in the current language
+  const themed = window._themeTranslations?.[normalizeText(englishText)];
+  if (themed !== undefined) {
+    return themed;
+  }
   const lang = getPreferences().lang;
   const translations: {[key: string]: string} | undefined = (window as any)._translations;
   if (translations === undefined) {

@@ -6,6 +6,8 @@ import child_process from 'child_process';
 import path from 'path';
 import * as constants from '../common/constants';
 import {localeDirectories} from './make_extensions';
+import {writeThemeTexts} from './themeTexts';
+import {writeThemeCss} from './themeCss';
 
 function mkdirQuietly(path: string) {
   if (!fs.existsSync(path)) {
@@ -183,4 +185,7 @@ mkdirQuietly('src/genfiles');
 writeBuildMetadata();
 writeRecentCommits();
 generateTranslations();
+writeThemeTexts('assets/locales', 'src/themes', 'assets/themes');
+// After make:css (npm run make:static): the themed copies of the picture rules
+writeThemeCss('build/styles.css', 'src/themes', 'assets/themes');
 writeTranslations();

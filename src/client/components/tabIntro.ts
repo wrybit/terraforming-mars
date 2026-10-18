@@ -1,4 +1,5 @@
 import {Message} from '@/common/logs/Message';
+import {temperatureValue} from '@/client/theme/themeDisplay';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
@@ -118,6 +119,6 @@ function temperatureHint(currentTemperature: number, maxTemperature: number): st
   const next = Math.min(currentTemperature + TEMPERATURE_STEP, maxTemperature);
   return {
     message: 'Temperature rises from ${0} °C to ${1} °C',
-    data: rawValues(currentTemperature, next),
+    data: rawValues(temperatureValue(currentTemperature), temperatureValue(next)),
   };
 }

@@ -368,6 +368,7 @@ import {isLargeBoard, marsFrame} from '@/client/components/mobile/mobileBoardZoo
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
+import {temperatureText} from '@/client/theme/themeDisplay';
 
 class GlobalParamLevel {
   constructor(public value: number, public isActive: boolean, public strValue: string) {
@@ -481,7 +482,7 @@ export default defineComponent({
         }
       }
       for (let value = endValue; value >= startValue; value -= step) {
-        strValue = (targetParameter === 'temperature' && value > 0) ? '+'+value : value.toString();
+        strValue = targetParameter === 'temperature' ? temperatureText(value, true).replace(/ \S+$/, '') : value.toString();
         values.push(
           new GlobalParamLevel(value, value === curValue, strValue),
         );

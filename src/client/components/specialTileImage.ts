@@ -3,6 +3,7 @@ import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {CardName} from '@/common/cards/CardName';
 import {TileType} from '@/common/TileType';
 import {getCard} from '@/client/cards/ClientCardManifest';
+import {themedAsset} from '@/client/theme/themeDisplay';
 
 // Image of a special tile for the explanation of a space selection (tabIntro.ts, TabIntroBlock.vue):
 // brown special hexagon with the card's symbol on it – as on the cards themselves (cards_v2.less).
@@ -47,10 +48,10 @@ const PLAIN_TILES: Readonly<Partial<Record<TileType, string>>> = {
 export function tileImage(tile: TileType): TileImage {
   const plain = PLAIN_TILES[tile];
   if (plain !== undefined) {
-    return {base: plain};
+    return {base: themedAsset(plain)};
   }
   const symbol = SYMBOLS[tile];
-  return {base: SPECIAL_TILE_BASE, symbol: symbol === undefined ? undefined : SYMBOL_DIRECTORY + symbol};
+  return {base: themedAsset(SPECIAL_TILE_BASE), symbol: symbol === undefined ? undefined : themedAsset(SYMBOL_DIRECTORY + symbol)};
 }
 
 // Volcanic spaces (Lava Flows, Lava Tube Settlement): the title names the four volcanoes, not a card

@@ -1,3 +1,4 @@
+import {temperatureText, themedAsset} from '@/client/theme/themeDisplay';
 import * as c from '@/common/constants';
 import {BoardName} from '@/common/boards/BoardName';
 import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
@@ -89,17 +90,17 @@ export function parameterBars(levels: Levels): Array<ParameterBar> {
   const bonuses = trackBonuses(boardName);
   const specs: Array<BarSpec> = [
     {
-      key: 'temperature', label: 'Temperature', icon: 'assets/global-parameters/temperature.png',
-      min: c.MIN_TEMPERATURE, max: max.temperature, step: 2, value: levels.temperature, text: levels.temperature + ' °C',
+      key: 'temperature', label: 'Temperature', icon: themedAsset('assets/global-parameters/temperature.png'),
+      min: c.MIN_TEMPERATURE, max: max.temperature, step: 2, value: levels.temperature, text: temperatureText(levels.temperature),
       bonuses: bonuses.temperature,
     },
     {
-      key: 'oxygen', label: 'Oxygen', icon: 'assets/global-parameters/oxygen.png',
+      key: 'oxygen', label: 'Oxygen', icon: themedAsset('assets/global-parameters/oxygen.png'),
       min: c.MIN_OXYGEN_LEVEL, max: max.oxygen, step: 1, value: levels.oxygen, text: levels.oxygen + ' %',
       bonuses: bonuses.oxygen,
     },
     {
-      key: 'oceans', label: 'Oceans', icon: 'assets/tiles/ocean.png',
+      key: 'oceans', label: 'Oceans', icon: themedAsset('assets/tiles/ocean.png'),
       min: 0, max: max.oceans, step: 1, value: levels.oceans, text: levels.oceans + '/' + max.oceans,
       bonuses: [],
     },

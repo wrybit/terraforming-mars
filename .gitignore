@@ -19,6 +19,9 @@ pid
 .eslintcache
 tsconfig*.tsbuildinfo
 assets/locales
+# Theme texts, generated from src/themes by npm run make:json
+/assets/themes/*/texts/
+/assets/themes/*/theme.css
 
 # Local Packages
 node_modules/

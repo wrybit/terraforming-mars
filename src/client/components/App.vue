@@ -101,6 +101,7 @@ const StartScreenFooter = defineAsyncComponent(() => import(/* webpackChunkName:
 const OnlinePlayers = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/OnlinePlayers.vue'));
 const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreen.vue'));
 import {$t, setTranslationContext, translateTextWithParams} from '@/client/directives/i18n';
+import {applyTheme} from '@/client/theme/applyTheme';
 import {paths} from '@/common/app/paths';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
@@ -295,6 +296,11 @@ export default defineComponent({
 
       fetchOrFail(url)
         .then((resp) => resp.json())
+        // Theme texts first, so the game never shows up in the Mars wording for a moment
+        .then(async (model: ViewModel) => {
+          await applyTheme(model.game.gameOptions.theme);
+          return model;
+        })
         .then((model: ViewModel) => {
           // Polled updates come from other players' moves (own moves arrive via WaitingFor.updatePlayerView)
           ingestView(model, 'remote');

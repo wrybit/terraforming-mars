@@ -1,3 +1,4 @@
+import {temperatureUnit} from '@/client/theme/themeDisplay';
 import {Message} from '@/common/logs/Message';
 import {isNoEffect} from '@/client/components/selectPlayerResource';
 
@@ -23,7 +24,7 @@ type GainPattern = {
 const STEPS = '(\\d+|an?|one) steps?';
 
 const GAIN_PATTERNS: ReadonlyArray<GainPattern> = [
-  {kind: 'temperature', pattern: new RegExp(`\\b(?:raise|increase) (?:the )?temperature ${STEPS}`, 'i'), label: (steps) => `+${2 * steps} °C`},
+  {kind: 'temperature', pattern: new RegExp(`\\b(?:raise|increase) (?:the )?temperature ${STEPS}`, 'i'), label: (steps) => `+${2 * steps} ${temperatureUnit()}`},
   {kind: 'oxygen', pattern: new RegExp(`\\b(?:raise|increase) (?:the )?oxygen(?: level)? ${STEPS}`, 'i'), label: (steps) => `+${steps} %`},
   {kind: 'venus', pattern: new RegExp(`\\b(?:raise|increase) (?:the )?Venus(?: scale)? ${STEPS}`, 'i'), label: (steps) => `+${2 * steps} %`},
   {kind: 'tr', pattern: new RegExp(`\\b(?:raise|increase) (?:your )?(?:terraform rating|TR) ${STEPS}`, 'i'), label: (steps) => `+${steps}`},

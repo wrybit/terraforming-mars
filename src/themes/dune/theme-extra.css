@@ -1,0 +1,60 @@
+/* Hand-written part of the Dune theme stylesheet, appended to the generated copies (src/tools/themeCss.ts).
+   Only for pictures the generator cannot swap: board tiles come from the sprite assets/board_icons.png, and the
+   special tiles are drawn as symbol + hexagon, while the Dune pictures are complete tiles. Paths relative to
+   assets/themes/dune/. */
+html.theme-dune .board-space-tile--city,
+html.theme-dune .board-space-tile--capital {
+  background: url(graphics/tile-sietch.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--capital {
+  background-image: url(graphics/special-carthag.svg);
+}
+
+html.theme-dune .board-space-tile--greenery {
+  background: url(graphics/tile-planting.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--ocean {
+  background: url(graphics/tile-spicefield.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--commercial_district {
+  background: url(graphics/special-bazaar.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--ecological_zone {
+  background: url(graphics/special-kynes-basin.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--industrial_center {
+  background: url(graphics/special-smugglers-market.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--lava_flows {
+  background: url(graphics/special-blasted-rock.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--mining_area {
+  background: url(graphics/special-mining-area.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--mining_rights {
+  background: url(graphics/special-mining-rights.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--mohole_area {
+  background: url(graphics/special-deep-borehole.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--natural_preserve {
+  background: url(graphics/special-worm-domain.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--nuclear_zone {
+  background: url(graphics/special-atomic-crater.svg) center / contain no-repeat;
+}
+
+html.theme-dune .board-space-tile--restricted_area {
+  background: url(graphics/special-restricted-area.svg) center / contain no-repeat;
+}
