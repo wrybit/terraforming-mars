@@ -1,3 +1,5 @@
+import {BoardName} from '@/common/boards/BoardName';
+
 /* Mars without the scale ring: section of the board (.board-cont, px at zoom 1) with the planet and room on both
    sides for the columns of outer spaces. Start screen (mobileFit.ts) and large Mars (BoardZoomModal) show
    the same section so proportions and position of the outer spaces match. */
@@ -5,18 +7,33 @@ export const MARS_CROP = {left: 14, top: 62, width: 606, height: 486};
 /* Mars with the scale ring: section of the board (.board-cont, px at zoom 1) with the ring, its bonus chips and room on
    both sides for the columns of special spaces off Mars (Board.vue, outerSpaces.ts) – wider than the board itself. */
 export const RING_FRAME = {left: -36, top: -22, width: 740, height: 622};
+/* The same two sections for the larger map (Amazonis Planitia, .board-cont--large 740 × 680 px): same margins around
+   its bigger planet (PLANET_BOUNDS_LARGE) and its bigger board. */
+export const MARS_CROP_LARGE = {left: 15, top: 66, width: 706, height: 586};
+export const RING_FRAME_LARGE = {left: -36, top: -22, width: 860, height: 702};
 
 export type MarsFrame = {left: number, top: number, width: number, height: number};
 
 /* Visible section of the Mars board: the planet alone without ring (mobile view without Venus) or the ring
    with the outer space columns. Tab, large Mars and game end show the same section so nothing jumps. */
-export function marsFrame(cropped: boolean): MarsFrame {
+export function marsFrame(cropped: boolean, large = false): MarsFrame {
+  if (large) {
+    return cropped ? MARS_CROP_LARGE : RING_FRAME_LARGE;
+  }
   return cropped ? MARS_CROP : RING_FRAME;
+}
+
+/* Maps with the larger board (Board.vue, board-cont--large). */
+export function isLargeBoard(boardName: BoardName | undefined): boolean {
+  return boardName === BoardName.AMAZONIS_PLANITIA;
 }
 /* The planet alone (mars-planet.png without transparent edge), px at zoom 1 relative to .board-cont: board previews without scales and outer spaces. */
 export const PLANET_BOUNDS = {left: 93, top: 86, width: 449, height: 449};
+/* The same for the larger map (Amazonis Planitia, .board-cont--large, mars-planet-large.png): a bigger planet. */
+export const PLANET_BOUNDS_LARGE = {left: 94, top: 90, width: 549, height: 549};
 /* Center of the planet relative to the top left corner of the board (.board-cont), px at zoom 1. */
 export const PLANET_CENTER = {x: 316, y: 310};
+export const PLANET_CENTER_LARGE = {x: 368, y: 364};
 // Room for status bar, header and zoom bar of the large Mars
 const CHROME_HEIGHT = 170;
 const SIDE_MARGIN = 16;

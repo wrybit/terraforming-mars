@@ -544,6 +544,11 @@ html.tm-mobile {
   .board-zoom-content .board-without-venus {
     background-image: url(./assets/board/mars-planet.png);
 
+    // Larger map (Amazonis Planitia): its own, bigger planet
+    &.board-cont--large {
+      background-image: url(./assets/board/mars-planet-large.png);
+    }
+
     // Scales around the board replace the bars (MobileParameterBars)
     .global-numbers {
       display: none;
@@ -2330,6 +2335,10 @@ html.tm-mobile {
 
     .board-without-venus {
       background-image: url(./assets/board/mars-planet.png);
+
+      &.board-cont--large {
+        background-image: url(./assets/board/mars-planet-large.png);
+      }
     }
   }
 

@@ -26,7 +26,7 @@ import {closeOtherOverlays, registerOverlay} from '@/client/utils/overlayCoordin
 import {animateBoardZoom} from '@/client/components/board/boardZoomAnimation';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {mobileLayout} from '@/client/utils/mobileLayout';
-import {DEFAULT_ZOOM_RATIO, MarsFrame, MAX_ZOOM_RATIO, PLANET_CENTER, steppedZoomRatio, wholePlanetZoom} from '@/client/components/mobile/mobileBoardZoom';
+import {DEFAULT_ZOOM_RATIO, MarsFrame, MAX_ZOOM_RATIO, PLANET_CENTER, PLANET_CENTER_LARGE, steppedZoomRatio, wholePlanetZoom} from '@/client/components/mobile/mobileBoardZoom';
 import {attachPinchZoom} from '@/client/components/board/boardPinchZoom';
 import MobileZoomControls from '@/client/components/mobile/MobileZoomControls.vue';
 
@@ -177,8 +177,10 @@ function centerPlanet() {
     return;
   }
   const rect = board.getBoundingClientRect();
-  element.scrollLeft += rect.left + PLANET_CENTER.x * zoomFactor.value - element.clientWidth / 2;
-  element.scrollTop += rect.top + PLANET_CENTER.y * zoomFactor.value - (element.clientHeight - CONTROLS_HEIGHT) / 2;
+  // The larger map (Amazonis Planitia) has its planet center elsewhere
+  const center = board.classList.contains('board-cont--large') ? PLANET_CENTER_LARGE : PLANET_CENTER;
+  element.scrollLeft += rect.left + center.x * zoomFactor.value - element.clientWidth / 2;
+  element.scrollTop += rect.top + center.y * zoomFactor.value - (element.clientHeight - CONTROLS_HEIGHT) / 2;
 }
 
 // Set zoom to `value`; the point (`x`, `y`) in the window stays in place

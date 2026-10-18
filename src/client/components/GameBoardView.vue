@@ -77,7 +77,7 @@ import PlacementBanner from '@/client/components/board/PlacementBanner.vue';
 import {describePlacement, PlacementDescription} from '@/client/components/board/placementDescription';
 import OuterSpaceCorners from '@/client/components/board/OuterSpaceCorners.vue';
 import {mobileLayout} from '@/client/utils/mobileLayout';
-import {MarsFrame, marsFrame} from '@/client/components/mobile/mobileBoardZoom';
+import {MarsFrame, isLargeBoard, marsFrame} from '@/client/components/mobile/mobileBoardZoom';
 import {marsBoardProps} from '@/client/components/board/marsBoardProps';
 import {isBoardControlClick} from '@/client/components/board/boardZoomClick';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
@@ -153,7 +153,7 @@ export default defineComponent({
     },
     // Large Mars shows the section of the mobile tab (planet without ring when there is no Venus, else ring with columns)
     marsZoomFrame(): MarsFrame {
-      return marsFrame(this.mobileLayout && !this.game.gameOptions.expansions.venus);
+      return marsFrame(this.mobileLayout && !this.game.gameOptions.expansions.venus, isLargeBoard(this.game.gameOptions.boardName));
     },
     // Same props for the board in the column and in the enlargement modal
     boardProps() {

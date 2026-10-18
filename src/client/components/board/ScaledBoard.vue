@@ -14,7 +14,7 @@ import {BoardName} from '@/common/boards/BoardName';
 import {Expansion} from '@/common/cards/GameModule';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import Board from '@/client/components/Board.vue';
-import {PLANET_BOUNDS} from '@/client/components/mobile/mobileBoardZoom';
+import {PLANET_BOUNDS, PLANET_BOUNDS_LARGE, isLargeBoard} from '@/client/components/mobile/mobileBoardZoom';
 
 // Empty game board outside the game (statistics, "Create game"), scaled to the width of its container
 export default defineComponent({
@@ -41,16 +41,20 @@ export default defineComponent({
     };
   },
   computed: {
+    // Section of the planet alone; the larger map has a bigger planet (Board.vue, isLargeBoard)
+    planetBounds(): typeof PLANET_BOUNDS {
+      return isLargeBoard(this.boardName) ? PLANET_BOUNDS_LARGE : PLANET_BOUNDS;
+    },
     contentStyle(): Record<string, string | number> {
       if (!this.planetOnly) {
         return {zoom: this.scale};
       }
       return {
         'zoom': this.scale,
-        '--planet-left': PLANET_BOUNDS.left + 'px',
-        '--planet-top': PLANET_BOUNDS.top + 'px',
-        'width': PLANET_BOUNDS.width + 'px',
-        'height': PLANET_BOUNDS.height + 'px',
+        '--planet-left': this.planetBounds.left + 'px',
+        '--planet-top': this.planetBounds.top + 'px',
+        'width': this.planetBounds.width + 'px',
+        'height': this.planetBounds.height + 'px',
       };
     },
   },
@@ -85,7 +89,7 @@ export default defineComponent({
     // The overhang is added on both sides, so the planet stays centered.
     planetWidthWithCaptions(scaled: HTMLElement | undefined): number {
       if (scaled === undefined) {
-        return PLANET_BOUNDS.width;
+        return this.planetBounds.width;
       }
       const section = scaled.getBoundingClientRect();
       let overhang = 0;
@@ -95,7 +99,7 @@ export default defineComponent({
           overhang = Math.max(overhang, section.left - rect.left, rect.right - section.right);
         }
       });
-      return PLANET_BOUNDS.width + 2 * Math.ceil(overhang);
+      return this.planetBounds.width + 2 * Math.ceil(overhang);
     },
     fitToWidth(): void {
       const available = (this.$refs.root as HTMLElement).clientWidth;
@@ -103,7 +107,7 @@ export default defineComponent({
         this.scale = 1;
         return;
       }
-      const planetLimit = this.planetOnly ? this.maxPlanetShare * available / PLANET_BOUNDS.width : Infinity;
+      const planetLimit = this.planetOnly ? this.maxPlanetShare * available / this.planetBounds.width : Infinity;
       this.scale = Math.min(this.maxScale, available / this.naturalWidth, planetLimit);
     },
   },

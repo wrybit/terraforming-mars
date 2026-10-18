@@ -364,7 +364,7 @@ import {BoardName} from '@/common/boards/BoardName';
 import {LEGENDS} from '@/client/components/Legends';
 import {Expansion} from '@/common/cards/GameModule';
 import {OuterGroup, outerGroups} from '@/client/components/board/outerSpaces';
-import {marsFrame} from '@/client/components/mobile/mobileBoardZoom';
+import {isLargeBoard, marsFrame} from '@/client/components/mobile/mobileBoardZoom';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
@@ -515,7 +515,7 @@ export default defineComponent({
     },
     // The larger map needs a bigger board container.
     isLargeBoard(): boolean {
-      return this.boardName === BoardName.AMAZONIS_PLANITIA;
+      return isLargeBoard(this.boardName);
     },
     BoardName(): typeof BoardName {
       return BoardName;
@@ -525,7 +525,7 @@ export default defineComponent({
     },
     // Section the outer space columns sit in: the same as the tab and the large Mars show (mobileFit.ts, BoardZoomModal)
     outerFrameStyle(): Record<string, string> {
-      const frame = marsFrame(mobileLayout.value && !this.expansions.venus);
+      const frame = marsFrame(mobileLayout.value && !this.expansions.venus, this.isLargeBoard);
       return {
         '--board-frame-left': frame.left + 'px',
         '--board-frame-top': frame.top + 'px',

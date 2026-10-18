@@ -243,7 +243,7 @@ import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
 import {marsBoardProps} from '@/client/components/board/marsBoardProps';
 import {isBoardControlClick} from '@/client/components/board/boardZoomClick';
 import {ZoomBoard} from '@/client/components/board/placementZoom';
-import {MarsFrame, marsFrame} from '@/client/components/mobile/mobileBoardZoom';
+import {MarsFrame, isLargeBoard, marsFrame} from '@/client/components/mobile/mobileBoardZoom';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import MarsHomeLink from '@/client/components/common/MarsHomeLink.vue';
@@ -295,7 +295,7 @@ export default defineComponent({
     },
     // Large Mars shows the same section as in the game (mobileBoardZoom.ts)
     marsZoomFrame(): MarsFrame {
-      return marsFrame(mobileLayout.value && !this.game.gameOptions.expansions.venus);
+      return marsFrame(mobileLayout.value && !this.game.gameOptions.expansions.venus, isLargeBoard(this.game.gameOptions.boardName));
     },
     game(): GameModel {
       return this.participant.game;

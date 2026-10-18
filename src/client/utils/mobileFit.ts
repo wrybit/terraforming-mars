@@ -6,7 +6,7 @@
  * are set, no nodes are moved – otherwise Vue would get confused when updating.
  */
 
-import {MARS_CROP, RING_FRAME} from '@/client/components/mobile/mobileBoardZoom';
+import {MARS_CROP, MARS_CROP_LARGE, RING_FRAME, RING_FRAME_LARGE} from '@/client/components/mobile/mobileBoardZoom';
 import {choiceBlockColumns, choiceBlockColumnsPortrait, choiceBlockFillsWidth} from '@/client/components/choiceBlock';
 
 /* Visible area of an element in its own px (before scaling). */
@@ -115,6 +115,9 @@ export function boardMaxHeight(width: number, height: number): number {
 }
 
 const RULES: ReadonlyArray<FitRule> = [
+  // Larger map (Amazonis Planitia): same sections around its bigger planet and board; before the general rules (first match wins)
+  {selector: '.mb-screen--mars .board-tabs-mars > .board-cont--large.board-without-venus, #game-end .board-cont--large.board-without-venus', crop: MARS_CROP_LARGE},
+  {selector: '.mb-screen--mars .board-tabs-mars > .board-cont--large, #game-end .board-cont--large', crop: RING_FRAME_LARGE},
   {selector: '.mb-screen--mars .board-tabs-mars > .board-cont.board-without-venus, #game-end .board-cont.board-without-venus', crop: MARS_CROP},
   // With ring: the section includes the outer space columns beside the board (marsFrame, Board.vue)
   {selector: '.mb-screen--mars .board-tabs-mars > .board-cont, #game-end .board-cont', crop: RING_FRAME},
