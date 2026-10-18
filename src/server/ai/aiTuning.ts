@@ -304,7 +304,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 111: 3 +2.29 (z +3.78; base +3.41, venus +1.17), 6 +1.35, 12 −0.03.
   policyWeight: 3,
   policyInSimulation: 1,
-  playPolicyWeight: 0,
+  // Round 112: 3 +1.43 (z +2.35; base +1.10, venus +1.76), 6 +1.41 (z +2.00).
+  playPolicyWeight: 3,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
   handFundingGenerations: 0,
   endgameMoney: 1,
@@ -813,6 +814,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   play3: {playPolicyWeight: 3},
   play6: {playPolicyWeight: 6},
   play12: {playPolicyWeight: 12},
+  noPlayPolicy: {playPolicyWeight: 0},
   noHandFunding: {handFunding: 0},
   buyLoose: {buyMargin: -3},
   // ML stage 2 (learned final VP margin from about 43,000 BGA two-player games, certain VP 1 : 1, AUC 0.80):

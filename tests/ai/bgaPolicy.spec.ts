@@ -40,6 +40,7 @@ describe('AI learned card policy', () => {
     const [, player] = testGame(2);
     player.cardsInHand.push(new Research(), new Comet(), new SpaceElevator());
     const playable = new Set([CardName.RESEARCH, CardName.COMET]);
+    setPlayerTuning(player.id, 'noPlayPolicy');
     expect(playPreferences(player, playable).size).to.eq(0);
     setPlayerTuning(player.id, 'play6');
     const preferences = playPreferences(player, playable);
