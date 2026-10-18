@@ -803,6 +803,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   policy6: {policyWeight: 6},
   policy12: {policyWeight: 12},
   noPolicy: {policyWeight: 0},
+  // Card buying as in round 102 (before buyMargin 1 and hand funding): checks whether the later steps only win
+  // against each other (mirror games end with fewer cards and VP since round 103)
+  buyingAsRound102: {buyMargin: -3, handFunding: 0},
   policy2: {policyWeight: 2},
   policy4: {policyWeight: 4},
   policyRealOnly: {policyInSimulation: 0},
