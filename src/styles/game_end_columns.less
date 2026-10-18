@@ -483,8 +483,7 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
 
       // Content higher than the window: the column scrolls on its own instead of running out of the window,
       // so the page itself never scrolls and the other column stays in place
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow: hidden auto;
 
       // Cards keep their size; only the log gives way (flex basis 0 below)
       > * {
