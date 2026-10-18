@@ -11,7 +11,8 @@
     <span v-if="message.aiInsight !== undefined" class="log-ai-insight" :title="$t('Visible because this is an analysis game')"><SeatIcon kind="ai" :size="14"/></span>
     <!-- Own private line (e.g. cards drawn or discarded): the others don't see it -->
     <span v-else-if="message.playerId !== undefined" class="log-private" :title="$t('Only you can see this line in the log')">
-      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      <!-- Filled with cut-outs like the meeple and robot (SeatIcon.vue), so both markers read as one family -->
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 4.5C6.2 4.5 1.9 10.6 1.3 11.5a.9.9 0 0 0 0 1c.6.9 4.9 7 10.7 7s10.1-6.1 10.7-7a.9.9 0 0 0 0-1C22.1 10.6 17.8 4.5 12 4.5zM12 7.8a4.2 4.2 0 1 0 0 8.4 4.2 4.2 0 0 0 0-8.4z"/><circle cx="12" cy="12" r="1.9"/></svg>
     </span>
     <!-- The content as one inline box: an AI line of an analysis game blurs it as a spoiler (aiSpoilers.ts) -->
     <span class="log-line-content">
