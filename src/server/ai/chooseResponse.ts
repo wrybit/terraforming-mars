@@ -17,8 +17,9 @@ import {isSimulating} from './simulationSandbox';
 import {OrOptions} from '../inputs/OrOptions';
 import {WORLD_GOVERNMENT_TITLE, chooseWorldGovernment} from './worldGovernmentChoice';
 import {tuningOf} from './aiTuning';
-import {chooseBazaarWare} from './bazaarChoice';
+import {chooseBazaarWare, chooseWormDistance} from './duneChoices';
 import {BAZAAR_TITLE} from '../dune/Bazaar';
+import {WORM_TITLE} from '../dune/Worm';
 import {clearFollowUpPlan, plannedFollowUp} from './followUpPlan';
 
 // Entry point of the rule-based AI (stage 1): which answer to give for the current input.
@@ -81,9 +82,16 @@ function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputRespo
       return response;
     }
   }
-  // Dune expansion: buying at the bazaar of Arrakeen, each ware tried on a game copy (bazaarChoice.ts)
+  // Dune expansion: buying at the bazaar of Arrakeen, each ware tried on a game copy (duneChoices.ts)
   if (input instanceof OrOptions && input.title === BAZAAR_TITLE && !isSimulating()) {
     const response = chooseBazaarWare(input, player);
+    if (response !== undefined) {
+      return response;
+    }
+  }
+  // Dune expansion: how far the worm moves (the weakest player decides)
+  if (input instanceof OrOptions && input.title === WORM_TITLE && !isSimulating()) {
+    const response = chooseWormDistance(input, player);
     if (response !== undefined) {
       return response;
     }

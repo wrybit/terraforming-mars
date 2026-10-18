@@ -1,0 +1,81 @@
+<template>
+  <!-- Shai-Hulud (Dune module C): where the worm lies, its last move and what it does to the spaces it crosses -->
+  <div class="dune-worm" data-test="dune-worm">
+    <dl class="dune-worm__facts">
+      <div class="dune-worm__fact">
+        <dt>{{ $t('Position') }}</dt>
+        <dd><b>{{ coordinate(worm.spaceId) }}</b></dd>
+      </div>
+      <div v-if="worm.chooser !== undefined" class="dune-worm__fact">
+        <dt>{{ $t('Moving now') }}</dt>
+        <dd><span class="dune-worm__die">{{ worm.roll }}</span> <span class="dune-worm__arrow">{{ arrow(worm.roll ?? 0) }}</span>
+          <PlayerChip :color="worm.chooser" :players="players"/> {{ $t('chooses the distance') }}</dd>
+      </div>
+      <div v-else-if="worm.roll !== undefined" class="dune-worm__fact">
+        <dt>{{ $t('Last move') }}</dt>
+        <dd><span class="dune-worm__die">{{ worm.roll }}</span> <span class="dune-worm__arrow">{{ arrow(worm.roll) }}</span>
+          <span v-if="worm.path.length > 0">{{ worm.path.map(coordinate).join(' → ') }}</span>
+          <span v-else>{{ $t('blocked') }}</span></dd>
+      </div>
+      <div class="dune-worm__fact">
+        <dt>{{ $t('Next move') }}</dt>
+        <dd>{{ $t('end of generation, the player with the least TR chooses 1–3 spaces') }}</dd>
+      </div>
+    </dl>
+    <ul class="dune-worm__effects">
+      <li v-for="effect in EFFECTS" :key="effect.tile">
+        <img class="dune-worm__tile" :src="graphic(effect.tile)" alt="">
+        <span>{{ $t(effect.text) }}</span>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script lang="ts">
+import {defineComponent, PropType} from 'vue';
+import {WormModel} from '@/common/dune/DuneModel';
+import {PublicPlayerModel} from '@/common/models/PlayerModel';
+import {arrakisCoordinate} from '@/common/dune/arrakisCoordinates';
+import {duneGraphic} from './duneGraphic';
+import PlayerChip from './PlayerChip.vue';
+
+// Die 1 top right … 6 top left, clockwise (server/dune/Worm.ts)
+const ARROWS = ['', '↗', '→', '↘', '↙', '←', '↖'];
+
+const EFFECTS = [
+  {tile: 'tile-small-spicefield', text: 'Spice field: +1 spice for each adjacent tile of a player'},
+  {tile: 'tile-small-sietch', text: 'City: worm riders, the owner gains 1 spice and 2 heat'},
+  {tile: 'tile-small-planting', text: 'Greenery: trampled, the owner loses 3 plants'},
+  {tile: 'tile-small-special', text: 'Special tile: damaged, the owner loses 3 M€'},
+  {tile: 'special-worm-domain', text: 'Natural Preserve: the worm stops, the owner gains 1 TR'},
+];
+
+export default defineComponent({
+  name: 'WormPanel',
+  components: {PlayerChip},
+  props: {
+    worm: {
+      type: Object as PropType<WormModel>,
+      required: true,
+    },
+    players: {
+      type: Array as PropType<ReadonlyArray<PublicPlayerModel>>,
+      required: true,
+    },
+  },
+  computed: {
+    EFFECTS(): typeof EFFECTS {
+      return EFFECTS;
+    },
+  },
+  methods: {
+    graphic: duneGraphic,
+    coordinate(spaceId: string): string {
+      return arrakisCoordinate(spaceId);
+    },
+    arrow(roll: number): string {
+      return ARROWS[roll] ?? '';
+    },
+  },
+});
+</script>

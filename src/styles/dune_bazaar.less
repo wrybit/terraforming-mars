@@ -1,15 +1,14 @@
-// Board tab "Bazaar" of the Dune expansion (components/dune/BazaarBoard.vue)
+// Bazaar of the Dune expansion (components/dune/BazaarBoard.vue), after the bazaar board of the mockup:
+// a framed board, the price change above each slot, wares as small parchment cards.
 @bazaar-spice: #e0662a;
 @bazaar-sand: #e4d2ae;
 @bazaar-ink: #2a1c12;
+@bazaar-frame: #c97a3a;
 
 .dune-bazaar {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 14px;
-  height: 100%;
-  box-sizing: border-box;
+  gap: 12px;
 }
 
 .dune-bazaar__slots {
@@ -17,58 +16,102 @@
   // Always five slots in one row: the order left (newest, dearest) to right (oldest, cheapest) is the rule itself
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
+  margin: 0;
+  padding: 12px;
+  list-style: none;
+  border: 2px solid @bazaar-frame;
+  border-radius: 12px;
+  background: linear-gradient(to bottom, #3a2818, #2a1c12);
 
   @media only screen and (max-width: 600px) {
     gap: 6px;
+    padding: 8px;
   }
-  margin: 0;
-  padding: 0;
-  list-style: none;
+}
+
+.dune-bazaar__place {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dune-bazaar__change {
+  text-align: center;
+  font-weight: bold;
+  font-size: 13px;
+  color: @bazaar-sand;
 }
 
 .dune-bazaar__slot {
+  position: relative;
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  min-height: 150px;
-  padding: 8px 6px 10px;
-
-  @media only screen and (max-width: 600px) {
-    min-height: 120px;
-    padding: 6px 3px 8px;
-  }
-  border-radius: 10px;
+  gap: 5px;
+  padding: 6px 6px 8px;
+  border-radius: 8px;
   background: linear-gradient(to bottom right, #f6ecd6, @bazaar-sand 45%, #dcc8a2);
   box-shadow: 0 0 0 2px @bazaar-ink, 0 2px 6px rgba(0, 0, 0, 0.5);
   color: @bazaar-ink;
   text-align: center;
+
+  @media only screen and (max-width: 600px) {
+    padding: 4px 3px 6px;
+  }
 }
 
 .dune-bazaar__slot--empty {
   justify-content: center;
+  min-height: 56px;
   background: transparent;
   box-shadow: none;
   border: 2px dashed fade(@bazaar-sand, 45%);
   color: fade(@bazaar-sand, 70%);
+  font-size: 12px;
 }
 
-.dune-bazaar__change {
-  align-self: stretch;
-  padding: 2px 0;
-  border-radius: 6px;
-  background: fade(@bazaar-ink, 85%);
-  color: @bazaar-sand;
-  font-weight: bold;
-  font-size: 13px;
-}
+// Price coin in the corner like the cost of a project card
+.dune-bazaar__price {
+  position: absolute;
+  top: -10px;
+  left: -8px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
 
-.dune-bazaar__slot--empty .dune-bazaar__change {
-  background: transparent;
-  color: inherit;
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  b {
+    position: relative;
+    font-family: Prototype, sans-serif;
+    font-size: 15px;
+    color: @bazaar-ink;
+  }
+
+  // Schmaler Slot: kleinere Münze, damit der Name lesbar bleibt
+  @media only screen and (max-width: 600px) {
+    top: -8px;
+    left: -6px;
+    width: 26px;
+    height: 26px;
+
+    b {
+      font-size: 12px;
+    }
+  }
 }
 
 .dune-bazaar__name {
+  min-height: 2.4em;
+  padding: 0 4px 0 18px;
   font-weight: bold;
   font-size: 12px;
   line-height: 1.2;
@@ -76,15 +119,24 @@
   overflow-wrap: break-word;
 
   @media only screen and (max-width: 600px) {
+    // Name unter die Münze schieben statt daneben
+    padding: 14px 0 0;
     font-size: 10px;
   }
+}
+
+.dune-bazaar__scene {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
 .dune-bazaar__goods {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 4px 8px;
+  gap: 2px 8px;
 }
 
 .dune-bazaar__good {
@@ -92,21 +144,6 @@
   align-items: center;
   gap: 2px;
   font-size: 14px;
-
-  img {
-    width: 22px;
-    height: 22px;
-  }
-}
-
-.dune-bazaar__price {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: auto;
-  font-family: Prototype, sans-serif;
-  font-size: 20px;
-  color: @bazaar-spice;
 
   img {
     width: 22px;
@@ -137,5 +174,6 @@
 }
 
 .dune-bazaar__hint {
-  opacity: 0.75;
+  font-size: 12px;
+  color: #b9ad97;
 }

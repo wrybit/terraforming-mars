@@ -37,8 +37,8 @@
     <template #delta>
       <DeltaBoard :players="players" :viewerColor="viewerColor"/>
     </template>
-    <template #bazaar>
-      <BazaarBoard v-if="game.dune?.bazaar" :bazaar="game.dune.bazaar" :players="players"/>
+    <template #dune>
+      <DuneBoard v-if="game.dune" :dune="game.dune" :players="players" :viewerColor="viewerColor"/>
     </template>
   </BoardTabs>
 
@@ -86,7 +86,7 @@ import {isBoardControlClick} from '@/client/components/board/boardZoomClick';
 import {isBoardPlacementActive} from '@/client/components/board/boardPlacementActive';
 import {ZoomBoard, notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
 import DeltaBoard from '@/client/components/delta/DeltaBoard.vue';
-import BazaarBoard from '@/client/components/dune/BazaarBoard.vue';
+import DuneBoard from '@/client/components/dune/DuneBoard.vue';
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
@@ -138,7 +138,7 @@ export default defineComponent({
     BoardZoomModal,
     PlacementBanner,
     DeltaBoard,
-    BazaarBoard,
+    DuneBoard,
     Milestones,
     Awards,
     MilestoneAwardTable,

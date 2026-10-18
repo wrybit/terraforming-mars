@@ -22,6 +22,10 @@ export type SpaceModel = {
   cathedral?: true; // Absent or true
   nomads?: true; // Absent or true
   coOwner?: Color;
+  /** Dune expansion: the worm Shai-Hulud lies here (nothing may be placed) */
+  worm?: true;
+  /** Dune expansion: the war field of this generation's Kanly */
+  warField?: true;
 
   undergroundResource?: UndergroundResourceToken;
   excavator?: Color;

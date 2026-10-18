@@ -24,6 +24,8 @@ import {ICeoCard} from './cards/ceos/ICeoCard';
 import {PRELUDE2_CARD_MANIFEST} from './cards/prelude2/Prelude2CardManifest';
 import {STAR_WARS_CARD_MANIFEST} from './cards/starwars/StarwarsCardManifest';
 import {UNDERWORLD_CARD_MANIFEST} from './cards/underworld/UnderworldCardManifest';
+import {DUNE_CARD_MANIFEST} from './cards/dune/DuneCardManifest';
+import {duneCardInPlay} from '../common/dune/DuneModule';
 
 /**
  * Returns the cards available to a game based on its `GameOptions`.
@@ -77,6 +79,11 @@ export class GameCards {
 
   public getProjectCards() {
     const cards = this.getCards<IProjectCard>('projectCards');
+    // Dune expansion: the cards of its modules in play (common/dune/DuneModule.ts)
+    const duneModules = this.gameOptions.duneModules ?? [];
+    if (duneModules.length > 0) {
+      cards.push(...this.instantiate(DUNE_CARD_MANIFEST.projectCards).filter((card) => duneCardInPlay(card.name, duneModules)));
+    }
     this.addCustomCards(cards, this.gameOptions.includedCards);
     return cards.filter(isIProjectCard);
   }

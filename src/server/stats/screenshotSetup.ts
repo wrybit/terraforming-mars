@@ -35,7 +35,7 @@ export function withScreenshotSetup(details: StatsGameDetails, corporations: Rea
   const cards = [...corporations, ...details.players.flatMap((player) => player.cards)];
   for (const card of cards) {
     const module = moduleOf(card);
-    if (module !== undefined && module !== 'base') {
+    if (module !== undefined && module !== 'base' && module !== 'dune') {
       expansions.add(module);
     }
   }

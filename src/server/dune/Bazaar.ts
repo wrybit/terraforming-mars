@@ -8,6 +8,7 @@ import {inplaceShuffle} from '../utils/shuffle';
 import {OrOptions} from '../inputs/OrOptions';
 import {SelectOption} from '../inputs/SelectOption';
 import {message} from '../logs/MessageBuilder';
+import {CardName} from '../../common/cards/CardName';
 import {BazaarModel} from '../../common/dune/DuneModel';
 import {
   BAZAAR_SLOT_PRICE_CHANGE, BAZAAR_WARES, BazaarGood, bazaarPrice, bazaarWare, bazaarWareCount,
@@ -28,7 +29,7 @@ export type BazaarData = {
   buyers: Array<PlayerId>,
 };
 
-/** Title of the choice; the AI recognises the bazaar by it (ai/bazaarChoice.ts) */
+/** Title of the choice; the AI recognises the bazaar by it (ai/duneChoices.ts) */
 export const BAZAAR_TITLE = 'Bazaar of Arrakeen: buy one ware';
 
 export function initializeBazaar(rng: Random): BazaarData {
@@ -74,11 +75,6 @@ export function buyingOrder(game: IGame): Array<IPlayer> {
   });
 }
 
-export function priceFor(player: IPlayer, data: BazaarData, slot: number): number | undefined {
-  const name = data.slots[slot];
-  return name === null || name === undefined ? undefined : bazaarPrice(bazaarWare(name), slot, ownsBazaarTile(player));
-}
-
 const GOOD_RESOURCE: Partial<Record<BazaarGood, Resource>> = {
   steel: Resource.STEEL,
   titanium: Resource.TITANIUM,
@@ -86,6 +82,45 @@ const GOOD_RESOURCE: Partial<Record<BazaarGood, Resource>> = {
   energy: Resource.ENERGY,
   heat: Resource.HEAT,
 };
+
+/** Bazaar Concession card: 3 M€ off every purchase */
+export const CONCESSION_DISCOUNT = 3;
+
+export function priceFor(player: IPlayer, data: BazaarData, slot: number): number | undefined {
+  const name = data.slots[slot];
+  if (name === null || name === undefined) {
+    return undefined;
+  }
+  const concession = player.tableau.has(CardName.BAZAAR_CONCESSION) ? CONCESSION_DISCOUNT : 0;
+  return Math.max(0, bazaarPrice(bazaarWare(name), slot, ownsBazaarTile(player)) - concession);
+}
+
+function payOut(player: IPlayer, name: string): void {
+  for (const [good, amount] of Object.entries(bazaarWare(name).content) as Array<[BazaarGood, number]>) {
+    const resource = GOOD_RESOURCE[good];
+    if (resource !== undefined) {
+      player.stock.add(resource, amount, {log: true});
+    } else if (good === 'cards') {
+      player.drawCard(amount);
+    } else {
+      player.increaseTerraformRating(amount, {log: true});
+    }
+  }
+}
+
+/** Caravan Master card: the ware in `slot` for free, if one lies there */
+export function takeFreeWare(player: IPlayer, slot: number): void {
+  const data = player.game.duneData?.bazaar;
+  const name = data?.slots[slot];
+  if (data === undefined || name === null || name === undefined) {
+    return;
+  }
+  data.slots[slot] = null;
+  data.discard.push(name);
+  player.game.log('${0} took ${1} from the bazaar', (b) => b.player(player).string(name));
+  payOut(player, name);
+}
+
 
 export function buyWare(player: IPlayer, data: BazaarData, slot: number): void {
   const name = data.slots[slot];
@@ -97,16 +132,7 @@ export function buyWare(player: IPlayer, data: BazaarData, slot: number): void {
   data.slots[slot] = null;
   data.discard.push(name);
   player.game.log('${0} bought ${1} at the bazaar for ${2} M€', (b) => b.player(player).string(name).number(price));
-  for (const [good, amount] of Object.entries(bazaarWare(name).content) as Array<[BazaarGood, number]>) {
-    const resource = GOOD_RESOURCE[good];
-    if (resource !== undefined) {
-      player.stock.add(resource, amount, {log: true});
-    } else if (good === 'cards') {
-      player.drawCard(amount);
-    } else {
-      player.increaseTerraformRating(amount, {log: true});
-    }
-  }
+  payOut(player, name);
 }
 
 /** The choice for one buyer; undefined when no ware lies out or none is affordable */

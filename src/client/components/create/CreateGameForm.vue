@@ -77,8 +77,10 @@
             <!-- Dune expansion: its modules change the rules, each on its own (common/dune/DuneModule.ts); only with Dune -->
             <CollapsibleSection v-if="theme === 'dune'" variant="subhead" title="Dune expansion" :collapsible="false" storageKey="duneExpansions" defaultOpen>
               <div class="create-game-chip-grid create-game-expansion-grid">
-                <ChoiceChip label="Bazaar of Arrakeen" iconClass="expansion-icon-dune-bazaar" :selected="duneBazaar" @select="duneBazaar = !duneBazaar">
-                  <template #detail><span v-i18n>32 wares · bazaar phase</span></template>
+                <ChoiceChip v-for="module in PLAYABLE_DUNE_MODULES" :key="module" :label="DUNE_MODULE_LABEL[module]"
+                  :selected="$data[DUNE_MODULE_FIELD[module]]" @select="toggleDuneModule(module)">
+                  <template #icon><img class="create-game-expansion-icon" :src="'assets/themes/dune/graphics/' + DUNE_MODULE_ICON[module] + '.svg'" alt=""></template>
+                  <template #detail><span v-i18n>{{ DUNE_MODULE_DETAIL[module] }}</span></template>
                 </ChoiceChip>
               </div>
             </CollapsibleSection>
@@ -426,6 +428,8 @@ import {describeFailure, failureFromResponse, failureOf, fetchOrFail, RequestFai
 import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import {DUNE_BOARD, Theme, themeAllowsExpansion} from '@/common/theme/Theme';
 import {activeTheme, applyTheme} from '@/client/theme/applyTheme';
+import {DuneModule} from '@/common/dune/DuneModule';
+import {DUNE_MODULE_DETAIL, DUNE_MODULE_FIELD, DUNE_MODULE_ICON, DUNE_MODULE_LABEL, PLAYABLE_DUNE_MODULES, chosenDuneModules} from './duneModuleFields';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
@@ -756,7 +760,7 @@ export default defineComponent({
         } : undefined,
         twoCorpsVariant: this.twoCorpsVariant,
         theme: this.theme,
-        duneModules: this.theme === 'dune' && this.duneBazaar ? ['bazaar'] : [],
+        duneModules: this.theme === 'dune' ? chosenDuneModules(this) : [],
         startingCeos: this.startingCeos,
         startingPreludes: this.startingPreludes,
       };
@@ -880,6 +884,21 @@ export default defineComponent({
         }
       },
     },
+    PLAYABLE_DUNE_MODULES(): ReadonlyArray<DuneModule> {
+      return PLAYABLE_DUNE_MODULES;
+    },
+    DUNE_MODULE_LABEL(): typeof DUNE_MODULE_LABEL {
+      return DUNE_MODULE_LABEL;
+    },
+    DUNE_MODULE_FIELD(): typeof DUNE_MODULE_FIELD {
+      return DUNE_MODULE_FIELD;
+    },
+    DUNE_MODULE_DETAIL(): typeof DUNE_MODULE_DETAIL {
+      return DUNE_MODULE_DETAIL;
+    },
+    DUNE_MODULE_ICON(): typeof DUNE_MODULE_ICON {
+      return DUNE_MODULE_ICON;
+    },
     THEME_OPTIONS(): ReadonlyArray<SegmentOption> {
       // Names, not words: the Dune texts would turn "Mars" into "Arrakis"
       return [{value: 'mars', label: 'Mars', raw: true}, {value: 'dune', label: 'Dune', raw: true}];
@@ -976,6 +995,10 @@ export default defineComponent({
       replaceSettingsHash(this.currentSettingsHash);
       await applyTheme(theme);
       vueRoot(this).remountCreateGameForm();
+    },
+    toggleDuneModule(module: DuneModule) {
+      const field = DUNE_MODULE_FIELD[module];
+      this[field] = !this[field];
     },
     restoreSettingsFromLink(): boolean {
       try {

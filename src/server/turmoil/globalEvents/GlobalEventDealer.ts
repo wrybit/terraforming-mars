@@ -73,6 +73,7 @@ export class GlobalEventDealer {
       starwars: gameOptions.starWarsExpansion,
       underworld: gameOptions.underworldExpansion,
       deltaProject: gameOptions.deltaProjectExpansion,
+      dune: false,
     };
 
     for (const manifest of ALL_MODULE_MANIFESTS) {

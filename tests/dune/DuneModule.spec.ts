@@ -3,7 +3,7 @@ import {duneModuleConflicts, PLAYABLE_DUNE_MODULES} from '../../src/common/dune/
 import {testGame} from '../TestGame';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {OrOptions} from '../../src/server/inputs/OrOptions';
-import {chooseBazaarWare} from '../../src/server/ai/bazaarChoice';
+import {chooseBazaarWare} from '../../src/server/ai/duneChoices';
 import {cast} from '../../src/common/utils/utils';
 
 describe('Dune expansion modules', () => {

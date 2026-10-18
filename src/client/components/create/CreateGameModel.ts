@@ -63,5 +63,10 @@ export type CreateGameModel = {
   twoCorpsVariant: boolean;
   /** Dune expansion module A (common/dune/DuneModule.ts); only sent with the Dune theme */
   duneBazaar: boolean;
+  duneWorm: boolean;
+  duneKanly: boolean;
+  duneSchemes: boolean;
+  duneChoam: boolean;
+  duneSmuggling: boolean;
   undoOption: boolean;
 }

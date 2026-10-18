@@ -1,4 +1,5 @@
 import {canCancelAction} from '../actionStart';
+import {ArrakisBoard} from '../boards/ArrakisBoard';
 import {DuneExpansion} from '../dune/DuneExpansion';
 import {CardModel} from '../../common/models/CardModel';
 import {Color} from '../../common/Color';
@@ -120,7 +121,8 @@ export class Server {
       dealtCeoCards: cardsToModel(player, player.dealtCeoCards),
       dealtProjectCards: cardsToModel(player, player.dealtProjectCards),
       draftedCards: cardsToModel(player, player.draftedCards, {showCalculatedCost: true}),
-      game: this.getGameModel(player.game),
+      // The Dune expansion shows a player their own secret agendas (House schemes)
+      game: {...this.getGameModel(player.game), dune: DuneExpansion.model(player.game, player)},
       id: player.id,
       color: player.color,
       runId: runId,
@@ -407,6 +409,12 @@ export class Server {
       }
       if (space.cube !== undefined) {
         model.cube = space.cube;
+      }
+      if (board instanceof ArrakisBoard && board.wormSpaceId === space.id) {
+        model.worm = true;
+      }
+      if (board instanceof ArrakisBoard && board.warFieldSpaceId === space.id) {
+        model.warField = true;
       }
       const color = this.getColor(space);
       if (color !== undefined) {

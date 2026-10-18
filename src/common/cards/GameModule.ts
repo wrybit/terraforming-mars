@@ -19,10 +19,12 @@ export const EXPANSIONS = [
 export const GAME_MODULES = [
   'base',
   ...EXPANSIONS,
+  // Cards of the Dune expansion (common/dune/DuneModule.ts): switched on by its modules, not as an expansion
+  'dune',
 ] as const;
 export type GameModule = typeof GAME_MODULES[number];
 
-export type Expansion = Exclude<GameModule, 'base'>;
+export type Expansion = typeof EXPANSIONS[number];
 
 export const MODULE_NAMES = {
   base: 'Base',
@@ -41,6 +43,7 @@ export const MODULE_NAMES = {
   starwars: 'Star Wars',
   underworld: 'Underworld',
   deltaProject: 'Delta Project',
+  dune: 'Dune expansion',
 } satisfies Record<GameModule, string>;
 
 export const DEFAULT_EXPANSIONS = {

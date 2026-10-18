@@ -19,6 +19,7 @@ export const RULEBOOK_URLS: Record<GameModule, string> = {
   starwars: `${WIKI}/StarWars`,
   underworld: `${WIKI}/Underworld`,
   deltaProject: `${WIKI}/Delta-Project`,
+  dune: `${WIKI}/Rulebooks`,
 };
 
 export const WIKI_URLS = {

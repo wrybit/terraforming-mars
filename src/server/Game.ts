@@ -72,7 +72,7 @@ import {GlobalParameterMaximums} from '../common/boards/GlobalParameterMaximums'
 import {MarsBoard} from './boards/MarsBoard';
 import {UnderworldData} from './underworld/UnderworldData';
 import {UnderworldExpansion} from './underworld/UnderworldExpansion';
-import {DuneData, DuneExpansion} from './dune/DuneExpansion';
+import {DuneData, DuneExpansion, DuneResume} from './dune/DuneExpansion';
 import {SendDelegateToArea} from './deferredActions/SendDelegateToArea';
 import {BuildColony} from './deferredActions/BuildColony';
 import {newInitialDraft, newPreludeDraft, newCEOsDraft, newStandardDraft} from './Draft';
@@ -395,7 +395,8 @@ export class Game implements IGame, Logger {
       game.moonData = MoonExpansion.initialize(gameOptions, rng);
     }
 
-    game.duneData = DuneExpansion.initialize(gameOptions.duneModules, rng);
+    game.duneData = DuneExpansion.initialize(gameOptions.duneModules, players, rng);
+    DuneExpansion.attach(game);
 
     if (gameOptions.pathfindersExpansion) {
       game.pathfindersData = PathfindersExpansion.initialize(game);
@@ -844,6 +845,11 @@ export class Game implements IGame, Logger {
   }
 
   private postProductionPhase(): void {
+    // Dune expansion: its end-of-generation steps (Shai-Hulud …) come right after production
+    this.drainQueue(() => DuneExpansion.endOfGeneration(this, () => this.afterProduction()));
+  }
+
+  private afterProduction(): void {
     this.drainQueue(() => {
       if (this.gameIsOver()) {
         this.log('Final greenery placement', (b) => b.forNotice());
@@ -1223,6 +1229,11 @@ export class Game implements IGame, Logger {
     this.updatePlayerVPForTheGeneration();
     this.updateGlobalsForTheGeneration();
     this.gotoEndGame();
+  }
+
+  /** Continuations for the Dune expansion after a reload (dune/DuneExpansion.ts) */
+  private duneResume(): DuneResume {
+    return {startActions: () => this.startActionsForPlayer(this.first), afterProduction: () => this.afterProduction()};
   }
 
   private startActionsForPlayer(player: IPlayer): void {
@@ -1834,6 +1845,7 @@ export class Game implements IGame, Logger {
       game.underworldData = d.underworldData;
     }
     game.duneData = d.duneData;
+    DuneExpansion.attach(game);
     game.passedPlayers = new Set<PlayerId>(d.passedPlayers);
     game.donePlayers = new Set<PlayerId>(d.donePlayers);
     game.researchedPlayers = new Set<PlayerId>(d.researchedPlayers);
@@ -1887,13 +1899,15 @@ export class Game implements IGame, Logger {
       newStandardDraft(game).restoreDraft();
     } else if (game.phase === Phase.RESEARCH) {
       game.resumeResearchPhase();
+    } else if (game.phase === Phase.PRODUCTION && DuneExpansion.resume(game, game.duneResume())) {
+      // Dune expansion: an end-of-generation step waits for a player
     } else if (game.phase === Phase.PRODUCTION) {
       if (game.gameIsOver() && game.isDoneWithFinalProduction()) {
         game.takeNextFinalGreeneryAction();
       }
     } else if (game.phase === Phase.END) {
       // There's nowhere that we need to go for end game.
-    } else if (!DuneExpansion.resume(game, () => game.startActionsForPlayer(game.first))) {
+    } else if (!DuneExpansion.resume(game, game.duneResume())) {
       // We should be in ACTION phase, let's prompt the active player for actions
       game.activePlayer.takeAction(/* saveBeforeTakingAction */ false);
     }

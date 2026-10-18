@@ -1081,4 +1081,22 @@ export enum CardName {
   STANDARD_TECHNOLOGY_UNDERWORLD = 'Standard Technology:u',
   HACKERS_UNDERWORLD = 'Hackers:u',
   HIRED_RAIDERS_UNDERWORLD = 'Hired Raiders:u',
+
+  // Dune expansion (fork, common/dune/DuneModule.ts)
+  BAZAAR_CONCESSION = 'Bazaar Concession',
+  CARAVAN_MASTER = 'Caravan Master',
+  MENTAT_CALCULATION = 'Mentat Calculation',
+  TLEILAXU_SPY = 'Tleilaxu Spy',
+  THUMPER = 'Thumper',
+  WORM_RIDER = 'Worm Rider',
+  DUNE_STABILISER = 'Dune Stabiliser',
+  CHOAM_DIRECTORATE = 'CHOAM Directorate',
+  GUILD_BANK = 'Guild Bank',
+  SMUGGLER_NETWORK = 'Smuggler Network',
+  FRIENDS_OF_ESMAR_TUEK = 'Friends of Esmar Tuek',
+  SARDAUKAR_RAID = 'Sardaukar Raid',
+  SARDAUKAR_MERCENARIES = 'Sardaukar Mercenaries',
+  SHIELD_GENERATOR = 'Shield Generator',
+  WATER_OF_LIFE = 'Water of Life',
+  STILLSUIT_FACTORY = 'Stillsuit Factory',
 }

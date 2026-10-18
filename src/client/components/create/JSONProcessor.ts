@@ -1,4 +1,5 @@
 import * as json_constants from '@/client/components/create/json';
+import {DUNE_MODULE_FIELD} from './duneModuleFields';
 import {Expansion} from '@/common/cards/GameModule';
 import {JSONObject, JSONValue} from '../../../common/Types';
 import {CreateGameModel} from './CreateGameModel';
@@ -66,7 +67,10 @@ export class JSONProcessor {
 
     // Dune expansion: the config lists the modules, the form has one switch per module
     if (Array.isArray(json.duneModules)) {
-      json.duneBazaar = (json.duneModules as Array<unknown>).includes('bazaar');
+      const modules = json.duneModules as Array<unknown>;
+      for (const [module, field] of Object.entries(DUNE_MODULE_FIELD)) {
+        json[field] = modules.includes(module);
+      }
     }
 
     function set<T>(field: string): Array<T> {

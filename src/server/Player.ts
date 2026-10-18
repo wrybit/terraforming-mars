@@ -63,6 +63,7 @@ import {CeoExtension} from './CeoExtension';
 import {ICeoCard, isCeoCard} from './cards/ceos/ICeoCard';
 import {message} from './logs/MessageBuilder';
 import {calculateVictoryPoints} from './game/calculateVictoryPoints';
+import {DuneExpansion} from './dune/DuneExpansion';
 import {VictoryPointsBreakdown} from '../common/game/VictoryPointsBreakdown';
 import {Supercapacitors} from './cards/promo/Supercapacitors';
 import {CanAffordOptions, CardAction, IPlayer} from './IPlayer';
@@ -1705,6 +1706,12 @@ export class Player implements IPlayer {
         .filter((award: IAward) => this.game.hasBeenFunded(award) === false)
         .map((award: IAward) => this.fundAward(award));
       action.options.push(remainingAwards);
+    }
+
+    // Dune expansion: actions of its modules (dune/DuneExpansion.ts)
+    const duneActions = DuneExpansion.actions(this);
+    if (duneActions !== undefined) {
+      action.options.push(duneActions);
     }
 
     // Standard Projects

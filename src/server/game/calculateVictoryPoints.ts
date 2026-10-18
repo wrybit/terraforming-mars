@@ -1,4 +1,5 @@
 import {Phase} from '../../common/Phase';
+import {DuneExpansion} from '../dune/DuneExpansion';
 import {IPlayer} from '../IPlayer';
 import {Board} from '../boards/Board';
 import {MoonExpansion} from '../moon/MoonExpansion';
@@ -77,6 +78,7 @@ export function calculateVictoryPoints(player: IPlayer) {
   MoonExpansion.calculateVictoryPoints(player, builder);
   PathfindersExpansion.calculateVictoryPoints(player, builder);
   DeltaProjectExpansion.calculateVictoryPoints(player, builder);
+  DuneExpansion.calculateVictoryPoints(player, builder);
 
   // Underworld Score Bribing
   if (player.game.gameOptions.underworldExpansion === true) {

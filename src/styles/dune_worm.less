@@ -1,0 +1,25 @@
+// Dune expansion, Shai-Hulud: the worm marker on its space (BoardSpace.vue) – the worm domain picture in a sand ring,
+// so it stands out on rock, sand and on a tile it lies on
+.board-space-worm {
+  position: absolute;
+  inset: 18%;
+  z-index: 3;
+  border-radius: 50%;
+  background: #f1e2c2 url(./assets/themes/dune/graphics/special-worm-domain.svg) center / 82% no-repeat;
+  box-shadow: 0 0 0 2px #2a1c12, 0 0 8px 2px rgba(224, 102, 42, 0.85);
+  pointer-events: none;
+}
+
+// Kanly: the war field of this generation – Sardaukar badge in the corner, so the tile under it stays readable
+.board-space-war-field {
+  position: absolute;
+  right: 4%;
+  top: 4%;
+  z-index: 4;
+  width: 42%;
+  height: 42%;
+  border-radius: 50%;
+  background: #8c3522 url(./assets/themes/dune/graphics/res-sardaukar.svg) center / 70% no-repeat;
+  box-shadow: 0 0 0 2px #f1e2c2, 0 0 8px 2px rgba(140, 53, 34, 0.9);
+  pointer-events: none;
+}

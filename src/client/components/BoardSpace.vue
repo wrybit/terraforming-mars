@@ -21,6 +21,9 @@
         <div class='board-cube--nomad'></div>
       </template>
       <BoardSpaceCube v-if="space.cube !== undefined" :cube="space.cube"/>
+      <!-- Dune expansion: the worm marker (nothing may be placed under it) -->
+      <div v-if="space.worm === true" class="board-space-worm" :title="$t('Shai-Hulud: nothing may be placed here')"></div>
+      <div v-if="space.warField === true" class="board-space-war-field" :title="$t('War field of the Kanly')"></div>
       <UndergroundToken v-if="claimedToken !== undefined" :token="claimedToken" location="board"/>
       <div v-if="space.excavator !== undefined" class="underground-excavator" :class="'underground-excavator--' + space.excavator"></div>
       <div v-if="space.spaceType === SpaceType.DEFLECTION_ZONE" class="board-space-type-deflection-zone"></div>

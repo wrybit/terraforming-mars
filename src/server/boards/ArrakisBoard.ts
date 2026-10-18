@@ -5,6 +5,8 @@ import {BoardBuilder} from './BoardBuilder';
 import {Random} from '../../common/utils/Random';
 import {GameOptions} from '../game/GameOptions';
 import {MarsBoard} from './MarsBoard';
+import {CanAffordOptions, IPlayer} from '../IPlayer';
+import {SpaceId} from '../../common/Types';
 
 /**
  * Arrakis, the board of the Dune theme. Same rules and the same totals as Tharsis (61 spaces, 12 oceans,
@@ -48,7 +50,20 @@ export class ArrakisBoard extends MarsBoard {
     return new ArrakisBoard(spaces);
   }
 
+  /** Dune expansion, Shai-Hulud: the space under the worm takes no tile (dune/DuneExpansion.ts sets it) */
+  public wormSpaceId: SpaceId | undefined = undefined;
+  /** Dune expansion, Kanly: the war field of this generation, shown on the board */
+  public warFieldSpaceId: SpaceId | undefined = undefined;
+
   public constructor(spaces: ReadonlyArray<Space>) {
     super(spaces, SpaceName.ARRAKEEN);
+  }
+
+  public override getAvailableSpacesOnLand(player: IPlayer, canAffordOptions?: CanAffordOptions, subjectToHazardAdjacency: boolean = true): ReadonlyArray<Space> {
+    return super.getAvailableSpacesOnLand(player, canAffordOptions, subjectToHazardAdjacency).filter((space) => space.id !== this.wormSpaceId);
+  }
+
+  public override getAvailableSpacesForOcean(player: IPlayer): ReadonlyArray<Space> {
+    return super.getAvailableSpacesForOcean(player).filter((space) => space.id !== this.wormSpaceId);
   }
 }

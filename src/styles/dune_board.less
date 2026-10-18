@@ -1,0 +1,354 @@
+// Board tab "Dune" (components/dune/DuneBoard.vue): one section per module. Sections are further apart than the parts
+// inside a section (law of proximity), and a thin line separates them.
+.dune-board {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 16px;
+  box-sizing: border-box;
+  height: 100%;
+  overflow-y: auto;
+  color: #e9e1d2;
+}
+
+.dune-board__section + .dune-board__section {
+  padding-top: 20px;
+  border-top: 1px solid rgba(228, 210, 174, 0.18);
+}
+
+.dune-board__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #f1e2c2;
+}
+
+.dune-board__icon {
+  width: 26px;
+  height: 26px;
+}
+
+// Shai-Hulud
+.dune-worm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.dune-worm__facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 12px;
+  margin: 0;
+}
+
+.dune-worm__fact {
+  display: contents;
+
+  dt {
+    color: #b9ad97;
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.dune-worm__die {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: #f1e2c2;
+  color: #2a1c12;
+  font-weight: bold;
+}
+
+.dune-worm__arrow {
+  font-size: 16px;
+  color: #e0662a;
+}
+
+.dune-worm__effects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.dune-worm__tile {
+  width: 26px;
+  height: 26px;
+  flex: none;
+}
+
+.dune-board__hint {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #b9ad97;
+}
+
+.dune-player-chip {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+// Kanly
+.dune-kanly {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.dune-kanly__battle,
+.dune-kanly__garrisons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.dune-kanly__battle--none {
+  color: #b9ad97;
+}
+
+.dune-kanly__label {
+  color: #b9ad97;
+}
+
+.dune-kanly__troops {
+  display: contents;
+}
+
+.dune-kanly__troop {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+// Smuggling: track 0–5, the penalty steps tinted
+.dune-smuggling__track {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dune-smuggling__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 74px;
+  padding: 6px 2px;
+  border-radius: 8px;
+  background: rgba(228, 210, 174, 0.1);
+  border: 1px solid rgba(228, 210, 174, 0.2);
+}
+
+.dune-smuggling__step--penalty {
+  background: rgba(140, 53, 34, 0.35);
+  border-color: rgba(178, 75, 50, 0.6);
+}
+
+.dune-smuggling__level {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.dune-smuggling__penalty {
+  min-height: 14px;
+  font-size: 11px;
+  color: #f0b8a6;
+}
+
+.dune-smuggling__markers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3px;
+}
+
+.dune-smuggling__marker {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+}
+
+// CHOAM
+.dune-choam__offers {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dune-choam__offer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.dune-choam__goods {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+
+  img {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.dune-choam__arrow {
+  color: #e0662a;
+}
+
+.dune-choam__empty {
+  margin: 0;
+  font-size: 13px;
+  color: #b9ad97;
+}
+
+// House schemes
+.dune-schemes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.dune-schemes__own {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.dune-schemes__agenda {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: linear-gradient(to bottom right, #f6ecd6, #e4d2ae);
+  color: #2a1c12;
+  box-sizing: border-box;
+}
+
+.dune-schemes__icon {
+  width: 30px;
+  height: 30px;
+}
+
+.dune-schemes__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dune-schemes__levels {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dune-schemes__level {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 38px;
+  padding: 2px 4px;
+  border-radius: 6px;
+  background: rgba(42, 28, 18, 0.12);
+  font-size: 11px;
+
+  b {
+    font-size: 11px;
+  }
+
+  &:nth-child(1) {
+    border: 1px solid #436c23;
+  }
+
+  &:nth-child(2) {
+    border: 1px solid #c97a3a;
+  }
+
+  &:nth-child(3) {
+    border: 1px solid #8c3522;
+  }
+}
+
+// Levels coloured like the agenda cards of the mockup: easy green, medium orange, hard red; reached ones solid
+.dune-schemes__level--reached {
+  color: #fff8ea;
+
+  &:nth-child(1) {
+    background: #436c23;
+  }
+
+  &:nth-child(2) {
+    background: #c97a3a;
+  }
+
+  &:nth-child(3) {
+    background: #8c3522;
+  }
+}
+
+.dune-schemes__others {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+
+.dune-schemes__other {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media only screen and (max-width: 600px) {
+  .dune-schemes__agenda {
+    grid-template-columns: 26px minmax(0, 1fr);
+  }
+
+  .dune-schemes__levels {
+    grid-column: 1 / -1;
+  }
+}
