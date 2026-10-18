@@ -19,6 +19,11 @@ html.theme-dune .board-space-tile--ocean {
   background: url(graphics/tile-spicefield.svg) center / contain no-repeat;
 }
 
+/* Spice field counter below the planet: number in the orange of the spice field tile */
+html.theme-dune .global-numbers-oceans {
+  color: #e0662a;
+}
+
 html.theme-dune .board-space-tile--commercial_district {
   background: url(graphics/special-bazaar.svg) center / contain no-repeat;
 }
