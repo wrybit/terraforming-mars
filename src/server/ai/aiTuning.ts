@@ -290,7 +290,8 @@ export const BASELINE_TUNING: AiTuning = {
   // (30 VP swing), the AI opponent in batches does not chase awards like that.
   awardSwing: 0.3,
   keepHandUntilEnd: 1,
-  handFunding: 0,
+  // Round 107: 0.5 +1.01 (z +1.50), 1 +0.76 (z +1.16) – fixes the human-game standard project cities.
+  handFunding: 0.5,
   endgameMoney: 1,
   // Round 66: 0.6 together with the measured collector rates (collectorRates).
   // Rounds 67–69: collectorRate04 +0.43/+0.91/+0.37 (pooled z ≈ 1.33) – lowered to 0.4.
@@ -778,6 +779,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Standard projects instead of hand cards (human games): hand cards need money to be worth anything.
   handFunding: {handFunding: 1},
   handFundingHalf: {handFunding: 0.5},
+  noHandFunding: {handFunding: 0},
   buyLoose: {buyMargin: -3},
   // ML stage 2 (learned final VP margin from about 43,000 BGA two-player games, certain VP 1 : 1, AUC 0.80):
   // blend the model's win chance into the hand-made valuation.

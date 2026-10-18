@@ -20,8 +20,8 @@ describe('AI hand funding', () => {
     return fundedHandValue(player, values, 2);
   }
 
-  it('keeps the full value without the rule', () => {
-    expect(handValue(0, 'baseline')).to.eq(35);
+  it('keeps the full value with the rule off', () => {
+    expect(handValue(0, 'noHandFunding')).to.eq(35);
   });
 
   it('counts unaffordable cards like unknown cards', () => {
