@@ -45,7 +45,7 @@ def sphere(size: int) -> Image.Image:
 
 
 # Scale rings around the planet: oxygen (left) becomes the green vegetation scale, temperature (right) the blue water
-# storage. Hue of every ring pixel is replaced, brightness and saturation stay, so the scale steps keep their look.
+# storage, the Venus arc on top is removed. Hue of every ring pixel is replaced, brightness and saturation stay, so the scale steps keep their look.
 OXYGEN_HUE = 95 / 360
 WATER_HUE = 205 / 360
 SPICE_HUE = 22 / 360
@@ -64,10 +64,20 @@ def recolor_rings(picture: Image.Image, left: int, top: int, size: int) -> None:
             if alpha == 0:
                 continue
             distance = math.hypot(x - centre_x, y - centre_y)
-            # Only the side rings: the top arc (Venus) and the ocean marker below the planet keep their colours
-            if distance < radius + 6 or distance > radius + 80 or y < centre_y - radius * 0.86:
+            if distance < radius + 6 or distance > radius + 80:
+                continue
+            # Arrakis has no Venus: the top arc goes completely (Jens), not even faded
+            if y < centre_y - radius * 0.83:
+                pixels[x, y] = (0, 0, 0, 0)
                 continue
             hue, lightness, saturation = colorsys.rgb_to_hls(red / 255, green / 255, blue / 255)
+            # The pale ends of the Venus arc reach down next to the side rings
+            # (the faded Venus arc of the pictures without Venus is semi-transparent, the side rings are opaque)
+            pale = lightness > 0.6 or (saturation < 0.3 and lightness > 0.45)
+            # (the white label at the top end of the oxygen ring stays)
+            if y < centre_y - radius * 0.7 and (alpha < 120 or (pale and x > centre_x - radius * 0.82)):
+                pixels[x, y] = (0, 0, 0, 0)
+                continue
             target = OXYGEN_HUE if x < centre_x else WATER_HUE
             if y > centre_y and abs(x - centre_x) < radius * 0.45:
                 # The ocean marker below the planet becomes a spice field (orange)
