@@ -1163,5 +1163,7 @@
       "sziklás fennsík"
     ]
   ],
-  "exact": {}
+  "exact": {
+    "Space": "Liga"
+  }
 }

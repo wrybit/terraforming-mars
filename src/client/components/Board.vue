@@ -33,8 +33,8 @@
 
             <!-- Arrakis: the Dune symbols at the scale ends, in the place of the Mars labels O2 and t°C (cut out of the board picture) -->
             <template v-if="boardName === BoardName.ARRAKIS">
-              <img class="board-scale-symbol" style="left: 158px; top: 503px" :src="themedAsset('assets/global-parameters/oxygen.png')" alt="">
-              <img class="board-scale-symbol" style="left: 405px; top: 501px" :src="themedAsset('assets/global-parameters/temperature.png')" alt="">
+              <img class="board-scale-symbol" style="left: 182px; top: 510px" :src="themedAsset('assets/global-parameters/oxygen.png')" alt="">
+              <img class="board-scale-symbol" style="left: 421px; top: 508px" :src="themedAsset('assets/global-parameters/temperature.png')" alt="">
             </template>
             <div class="global-numbers-oceans" v-flash="flashKeys.globalParameter('oceans')">
               <span v-if="oceans_count === globalParameterMaximums.oceans">
@@ -88,9 +88,9 @@
 
             <svg id="board_legend" height="550" width="630" class="board-legend">
               <g v-for="(key, idx) of LEGENDS[boardName]" :key="idx" :transform="`translate(${key.position[0]}, ${key.position[1]})`">
-                <text class="board-caption">
-                  <tspan y="0">{{key.text[0]}}</tspan>
-                  <tspan :x="key.secondRowX || 0" y="1.1em">{{key.text[1]}}</tspan>
+                <text class="board-caption" :text-anchor="key.anchor">
+                  <tspan y="0">{{key.translated ? $t(key.text[0]) : key.text[0]}}</tspan>
+                  <tspan v-if="key.text[1] !== undefined" :x="key.secondRowX || 0" y="1.1em">{{key.text[1]}}</tspan>
                 </text>
                 <template v-if="key.line !== undefined">
                   <line :x1="key.line.from[0]" :y1="key.line.from[1]" :x2="key.line.to[0]" :y2="key.line.to[1]" class="board-line"/>

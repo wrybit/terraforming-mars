@@ -183,5 +183,7 @@
       "meteor"
     ]
   ],
-  "exact": {}
+  "exact": {
+    "Space": "Guild"
+  }
 }

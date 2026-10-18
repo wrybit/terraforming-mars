@@ -679,5 +679,7 @@
       "météore"
     ]
   ],
-  "exact": {}
+  "exact": {
+    "Space": "Guilde"
+  }
 }

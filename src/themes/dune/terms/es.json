@@ -95,5 +95,7 @@
     ["~asteroides", "meteoritos"],
     ["~asteroide", "meteorito"]
   ],
-  "exact": {}
+  "exact": {
+    "Space": "Cofradía"
+  }
 }

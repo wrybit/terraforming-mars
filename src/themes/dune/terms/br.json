@@ -119,5 +119,7 @@
     ["~asteroides", "meteoritos"],
     ["~asteroide", "meteorito"]
   ],
-  "exact": {}
+  "exact": {
+    "Space": "Guilda"
+  }
 }
