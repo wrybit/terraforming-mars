@@ -3,7 +3,9 @@
     <div v-if="isPrelude" class="prelude-label" v-i18n>prelude</div>
     <div v-if="isCorporation" class="corporation-label" v-i18n>corporation</div>
     <div v-if="isCeo" class="ceo-label">CEO</div>
-    <CardCorporationLogo v-if="isCorporation" :title="title"/>
+    <!-- Dune theme: the Houses have no logos, the House name stands in their place -->
+    <div v-if="isCorporation && showsHouseName" class="card-title card-house-name" v-i18n>{{ title }}</div>
+    <CardCorporationLogo v-else-if="isCorporation" :title="title"/>
     <div v-else ref="title" class="card-title" :class="backgroundColorClass">{{ titleWithoutSuffix }}</div>
   </div>
 </template>
@@ -15,6 +17,7 @@ import {CardType} from '@/common/cards/CardType';
 import CardCorporationLogo from '@/client/components/card/CardCorporationLogo.vue';
 import {CardName} from '@/common/cards/CardName';
 import {fitTextWhenReady} from '@/client/utils/textFit';
+import {activeTheme} from '@/client/theme/applyTheme';
 
 type Refs = {
   // Only rendered for non-corporation cards (corporations show a logo instead).
@@ -58,6 +61,9 @@ export default defineComponent({
     },
   },
   computed: {
+    showsHouseName(): boolean {
+      return activeTheme() === 'dune';
+    },
     backgroundColorClass(): string | undefined {
       switch (this.type) {
       case CardType.AUTOMATED:

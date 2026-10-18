@@ -1,95 +1,380 @@
 {
   "rules": [
-    ["~Terraforming Mars", "Terraforming Dune"],
-    ["~Terraformwert(?:ung)?(?: \\(TW\\))?", "Landsraad-Einfluss"],
-    ["~TW", "Einfluss", "case"],
-    ["(?<![\\p{L}])M€", "Solari"],
-    ["~MegaCredits", "Solari"],
-    ["/ 2 ?°C", "/ 2 %"],
-    ["(?<![\\p{N}])([-−+]?\\d+) ?°C", "$T1 %"],
-    ["~Die Temperatur", "Der Wasserspeicher", "case"],
-    ["~die Temperatur", "den Wasserspeicher"],
-    ["~(eine|jede) Temperatur", "$1n Wasserspeicher"],
-    ["(?<![\\p{L}])Temperatur", "Wasserspeicher"],
-    ["~Der Sauerstoff(?:gehalt)?", "Die Vegetation", "case"],
-    ["~(?:den|der) Sauerstoff(?:gehalt)?", "die Vegetation"],
-    ["~des Sauerstoff(?:gehalt)?s", "der Vegetation"],
-    ["~einen Sauerstoffgehalt", "eine Vegetation"],
-    ["(?<![\\p{L}])Sauerstoff(?:gehalt|s?gehalt)?-", "Vegetations-"],
-    ["(?<![\\p{L}])Sauerstoff(?:s?gehalt)?(?=anforderung)", "Vegetations"],
-    ["~Sauerstoff(?:s?gehalt)?", "Vegetation"],
-    ["(?<![\\p{L}])Pflanzen-(?=\\p{L})", "Vegetations-"],
-    ["(?<![\\p{L}])Pflanzen(?=\\p{Ll})", "Vegetations"],
-    ["~Pflanzen?", "Vegetation"],
-    ["(?<![\\p{L}])Pflanzen-", "Vegetations-"],
-    ["(?<![\\p{L}])Energie", "Feuchte"],
-    ["(?<![\\p{L}])Wärme", "Wasser"],
-    ["(?<![\\p{L}])Stahl", "Plastahl"],
-    ["~Titanproduktion", "Spice-Produktion"],
-    ["~Titanbonus", "Spice-Bonus"],
-    ["~Titanressourcen?", "Spice-Ressourcen"],
-    ["(?<![\\p{L}])Titan(?!ia)", "Spice"],
-    ["~Noctis City|Stadt Noctis", "Arrakeen"],
-    ["(?<![\\p{L}])Vulkanfelder(?!\\p{L})", "Hochfelsen"],
-    ["(?<![\\p{L}])Vulkanfeld(?!\\p{L})", "Hochfels"],
-    ["(?<![\\p{L}])(\\d+|mehr) Ozeanplättchen", "$1 Spicefelder"],
-    ["(?<![\\p{L}])Ozean-?[Pp]lättchen", "Spicefeld"],
-    ["~einen Ozean", "ein Spicefeld"],
-    ["~den Ozean", "das Spicefeld"],
-    ["~jeden platzierten Ozean", "jedes platzierte Spicefeld"],
-    ["~Ozeanen", "Spicefeldern"],
-    ["~Ozeane", "Spicefelder"],
-    ["~Ozeans", "Spicefelds"],
-    ["(?<![\\p{L}])Ozean-?(?=\\p{L})", "Spicefeld-"],
-    ["~Ozean", "Spicefeld"],
-    ["(?<![\\p{L}])Ozean-", "Spicefeld-"],
-    ["(?<![\\p{L}])Stadt-?[Pp]lättchen", "Sietch-Plättchen"],
-    ["~die Stadt", "den Sietch"],
-    ["~(eine|jede) Stadt", "$1n Sietch"],
-    ["~einer Stadt", "einem Sietch"],
-    ["~(eigene|beliebige) Stadt", "$1n Sietch"],
-    ["~der Stadt", "des Sietches"],
-    ["~Städten", "Sietchen"],
-    ["~Städte", "Sietche"],
-    ["(?<![\\p{L}])Städte-", "Sietch-"],
-    ["(?<![\\p{L}])Stadt-?(?=\\p{L})", "Sietch-"],
-    ["~Stadt", "Sietch"],
-    ["(?<![\\p{L}])Stadt-", "Sietch-"],
-    ["(?<![\\p{L}])Grünflächen-?[Pp]l(?:ä|ät)t+chen", "Pflanzdünen-Plättchen"],
-    ["(?<![\\p{L}])Grünflächen", "Pflanzdünen"],
-    ["(?<![\\p{L}])Grünfläche", "Pflanzdüne"],
-    ["~einen Konzern", "ein Haus"],
-    ["~welchen Konzern", "welches Haus"],
-    ["~den Konzern", "das Haus"],
-    ["~Konzerns", "Hauses"],
-    ["~Konzernen", "Häusern"],
-    ["~Konzerne", "Häuser"],
-    ["(?<![\\p{L}])Konzern-?(?!Ära)(?=\\p{L})", "Haus"],
-    ["~Konzern", "Haus"],
-    ["~(?:auf|von) dem Mars", "auf Arrakis"],
-    ["~zum Mars", "nach Arrakis"],
-    ["~vom Mars", "von Arrakis"],
-    ["~(?:den|der|des) Mars", "Arrakis"],
-    ["~Mars", "Arrakis"],
-    ["(?<![\\p{L}])Mars-", "Arrakis-"],
-    ["(?<![\\p{L}])Weltraum(?=-?(?:symbol|karte|ereignis))", "Gilde"],
-    ["(?<![\\p{L}])Erd(?:e)?(?=-)", "Imperium"],
-    ["(?<![\\p{L}])Erd(?:e)?(?=symbol)", "Imperium"],
-    ["~Erde", "Imperium"],
-    ["(?<![\\p{L}])Jupiter", "Außenwelt"],
-    ["(?<![\\p{L}])Wissenschafts", "Wissens"],
-    ["~Wissenschaft", "Wissen"],
-    ["~eine Mikrobe", "ein Sandplankton"],
-    ["(?<![\\p{L}])Mikroben?", "Sandplankton"],
-    ["~ein Tier", "eine Kreatur"],
-    ["~Tieren?", "Kreaturen"],
-    ["(?<![\\p{L}])Tier(?=-|symbol|karte|ressource)", "Kreatur"],
-    ["~Tier", "Kreatur"],
-    ["~Jäger[sn]?", "Sardaukar"],
-    ["(?<![\\p{L}])Jäger-", "Sardaukar-"],
-    ["~Asteroiden", "Meteoriten"],
-    ["(?<![\\p{L}])Asteroid(?=-)", "Meteoriten"],
-    ["~Asteroid", "Meteorit"]
+    [
+      "~Terraforming Mars",
+      "Terraforming Dune"
+    ],
+    [
+      "~Terraformwert(?:ung)?(?: \\(TW\\))?",
+      "Landsraad-Einfluss"
+    ],
+    [
+      "~TW",
+      "Einfluss",
+      "case"
+    ],
+    [
+      "(?<![\\p{L}])M€",
+      "Solari"
+    ],
+    [
+      "~MegaCredits",
+      "Solari"
+    ],
+    [
+      "~um (\\d+) ?°C",
+      "um $1 %"
+    ],
+    [
+      "~oder wärmer",
+      "oder mehr"
+    ],
+    [
+      "~oder kälter",
+      "oder weniger"
+    ],
+    [
+      "/ 2 ?°C",
+      "/ 2 %"
+    ],
+    [
+      "(?<![\\p{N}])([-−+]?\\d+) ?°C",
+      "$T1 %"
+    ],
+    [
+      "~Die Temperatur",
+      "Der Wasserspeicher",
+      "case"
+    ],
+    [
+      "~die Temperatur",
+      "den Wasserspeicher"
+    ],
+    [
+      "~(eine|jede) Temperatur",
+      "$1n Wasserspeicher"
+    ],
+    [
+      "(?<![\\p{L}])Temperatur",
+      "Wasserspeicher"
+    ],
+    [
+      "~Der Sauerstoff(?:gehalt)?",
+      "Die Vegetation",
+      "case"
+    ],
+    [
+      "~(?:den|der) Sauerstoff(?:gehalt)?",
+      "die Vegetation"
+    ],
+    [
+      "~des Sauerstoff(?:gehalt)?s",
+      "der Vegetation"
+    ],
+    [
+      "~einen Sauerstoffgehalt",
+      "eine Vegetation"
+    ],
+    [
+      "(?<![\\p{L}])Sauerstoff(?:gehalt|s?gehalt)?-",
+      "Vegetations-"
+    ],
+    [
+      "(?<![\\p{L}])Sauerstoff(?:s?gehalt)?(?=anforderung)",
+      "Vegetations"
+    ],
+    [
+      "~Sauerstoff(?:s?gehalt)?",
+      "Vegetation"
+    ],
+    [
+      "(?<![\\p{L}])Pflanzen-(?=\\p{L})",
+      "Vegetations-"
+    ],
+    [
+      "(?<![\\p{L}])Pflanzen(?=\\p{Ll})",
+      "Vegetations"
+    ],
+    [
+      "~Pflanzen?",
+      "Vegetation"
+    ],
+    [
+      "(?<![\\p{L}])Pflanzen-",
+      "Vegetations-"
+    ],
+    [
+      "(?<![\\p{L}])Energie",
+      "Feuchte"
+    ],
+    [
+      "(?<![\\p{L}])Wärme",
+      "Wasser"
+    ],
+    [
+      "(?<![\\p{L}])Stahl",
+      "Plastahl"
+    ],
+    [
+      "~Titanproduktion",
+      "Spice-Produktion"
+    ],
+    [
+      "~Titanbonus",
+      "Spice-Bonus"
+    ],
+    [
+      "~Titanressourcen?",
+      "Spice-Ressourcen"
+    ],
+    [
+      "(?<![\\p{L}])Titan(?!ia)",
+      "Spice"
+    ],
+    [
+      "~Noctis City|Stadt Noctis",
+      "Arrakeen"
+    ],
+    [
+      "(?<![\\p{L}])Vulkanfelder(?!\\p{L})",
+      "Hochfelsen"
+    ],
+    [
+      "(?<![\\p{L}])Vulkanfeld(?!\\p{L})",
+      "Hochfels"
+    ],
+    [
+      "(?<![\\p{L}])(\\d+|mehr) Ozeanplättchen",
+      "$1 Spicefelder"
+    ],
+    [
+      "(?<![\\p{L}])Ozean-?[Pp]lättchen",
+      "Spicefeld"
+    ],
+    [
+      "~einen Ozean",
+      "ein Spicefeld"
+    ],
+    [
+      "~den Ozean",
+      "das Spicefeld"
+    ],
+    [
+      "~jeden platzierten Ozean",
+      "jedes platzierte Spicefeld"
+    ],
+    [
+      "~Ozeanen",
+      "Spicefeldern"
+    ],
+    [
+      "~Ozeane",
+      "Spicefelder"
+    ],
+    [
+      "~Ozeans",
+      "Spicefelds"
+    ],
+    [
+      "(?<![\\p{L}])Ozean-?(?=\\p{L})",
+      "Spicefeld-"
+    ],
+    [
+      "~Ozean",
+      "Spicefeld"
+    ],
+    [
+      "(?<![\\p{L}])Ozean-",
+      "Spicefeld-"
+    ],
+    [
+      "(?<![\\p{L}])Stadt-?[Pp]lättchen",
+      "Sietch-Plättchen"
+    ],
+    [
+      "~die Stadt",
+      "den Sietch"
+    ],
+    [
+      "~(eine|jede) Stadt",
+      "$1n Sietch"
+    ],
+    [
+      "~einer Stadt",
+      "einem Sietch"
+    ],
+    [
+      "~(eigene|beliebige) Stadt",
+      "$1n Sietch"
+    ],
+    [
+      "~der Stadt",
+      "des Sietches"
+    ],
+    [
+      "~Städten",
+      "Sietchen"
+    ],
+    [
+      "~Städte",
+      "Sietche"
+    ],
+    [
+      "(?<![\\p{L}])Städte-",
+      "Sietch-"
+    ],
+    [
+      "(?<![\\p{L}])Stadt-?(?=\\p{L})",
+      "Sietch-"
+    ],
+    [
+      "~Stadt",
+      "Sietch"
+    ],
+    [
+      "(?<![\\p{L}])Stadt-",
+      "Sietch-"
+    ],
+    [
+      "(?<![\\p{L}])Grünflächen-?[Pp]l(?:ä|ät)t+chen",
+      "Pflanzdünen-Plättchen"
+    ],
+    [
+      "(?<![\\p{L}])Grünflächen",
+      "Pflanzdünen"
+    ],
+    [
+      "(?<![\\p{L}])Grünfläche",
+      "Pflanzdüne"
+    ],
+    [
+      "~einen Konzern",
+      "ein Haus"
+    ],
+    [
+      "~welchen Konzern",
+      "welches Haus"
+    ],
+    [
+      "~den Konzern",
+      "das Haus"
+    ],
+    [
+      "~Konzerns",
+      "Hauses"
+    ],
+    [
+      "~Konzernen",
+      "Häusern"
+    ],
+    [
+      "~Konzerne",
+      "Häuser"
+    ],
+    [
+      "(?<![\\p{L}])Konzern-?(?!Ära)(?=\\p{L})",
+      "Haus"
+    ],
+    [
+      "~Konzern",
+      "Haus"
+    ],
+    [
+      "~(?:auf|von) dem Mars",
+      "auf Arrakis"
+    ],
+    [
+      "~zum Mars",
+      "nach Arrakis"
+    ],
+    [
+      "~vom Mars",
+      "von Arrakis"
+    ],
+    [
+      "~(?:den|der|des) Mars",
+      "Arrakis"
+    ],
+    [
+      "~Mars",
+      "Arrakis"
+    ],
+    [
+      "(?<![\\p{L}])Mars-",
+      "Arrakis-"
+    ],
+    [
+      "(?<![\\p{L}])Weltraum(?=-?(?:symbol|karte|ereignis))",
+      "Gilde"
+    ],
+    [
+      "(?<![\\p{L}])Erd(?:e)?(?=-)",
+      "Imperium"
+    ],
+    [
+      "(?<![\\p{L}])Erd(?:e)?(?=symbol)",
+      "Imperium"
+    ],
+    [
+      "~Erde",
+      "Imperium"
+    ],
+    [
+      "(?<![\\p{L}])Jupiter",
+      "Außenwelt"
+    ],
+    [
+      "(?<![\\p{L}])Wissenschafts",
+      "Wissens"
+    ],
+    [
+      "~Wissenschaft",
+      "Wissen"
+    ],
+    [
+      "~eine Mikrobe",
+      "ein Sandplankton"
+    ],
+    [
+      "(?<![\\p{L}])Mikroben?",
+      "Sandplankton"
+    ],
+    [
+      "~ein Tier",
+      "eine Kreatur"
+    ],
+    [
+      "~Tieren?",
+      "Kreaturen"
+    ],
+    [
+      "(?<![\\p{L}])Tier(?=-|symbol|karte|ressource)",
+      "Kreatur"
+    ],
+    [
+      "~Tier",
+      "Kreatur"
+    ],
+    [
+      "~Jäger[sn]?",
+      "Sardaukar"
+    ],
+    [
+      "(?<![\\p{L}])Jäger-",
+      "Sardaukar-"
+    ],
+    [
+      "~Asteroiden",
+      "Meteoriten"
+    ],
+    [
+      "(?<![\\p{L}])Asteroid(?=-)",
+      "Meteoriten"
+    ],
+    [
+      "~Asteroid",
+      "Meteorit"
+    ]
   ],
   "exact": {}
 }

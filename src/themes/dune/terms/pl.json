@@ -1,0 +1,595 @@
+{
+  "rules": [
+    [
+      "~Terraforming Mars",
+      "Terraforming Dune"
+    ],
+    [
+      "~Terraformacj(a|i|ę|ą) Marsa",
+      "Terraformacj$1 Diuny"
+    ],
+    [
+      "~(?:Wskaźnika|Współczynnika) Terraformacji(?: \\(WT\\))?(?! Wenus)",
+      "Wpływu w Landsraadzie"
+    ],
+    [
+      "~(?:Wskaźnikiem|Współczynnikiem) Terraformacji(?: \\(WT\\))?(?! Wenus)",
+      "Wpływem w Landsraadzie"
+    ],
+    [
+      "~(?:Wskaźniku|Współczynniku) Terraformacji(?: \\(WT\\))?(?! Wenus)",
+      "Wpływie w Landsraadzie"
+    ],
+    [
+      "~(?:Wskaźnik|Współczynnik) Terraformacji(?: \\(WT\\))?(?! Wenus)",
+      "Wpływ w Landsraadzie"
+    ],
+    [
+      "~(najniższym|najwyższym|niższym|wyższym|swoim|twoim|jego) WT",
+      "$1 Wpływem",
+      "case"
+    ],
+    [
+      "~(tyle|poziom|poziomów|twojego|swojego|jego|otrzymywania|otrzymania|bez|ani|podniesienia|zwiększenia|Aktualizacja) WT(?! Wenus)",
+      "$1 Wpływu",
+      "case"
+    ],
+    [
+      "~(\\d+|n|N|X|\\$\\{\\d\\}) WT",
+      "$1 pkt Wpływu",
+      "case"
+    ],
+    [
+      "~WT(?! Wenus)",
+      "Wpływ",
+      "case"
+    ],
+    [
+      "~Megakredyty? \\(M€\\)",
+      "Solari"
+    ],
+    [
+      "~megakredyt(?:y|ów|)",
+      "solari"
+    ],
+    [
+      "(?<![\\p{L}])M€",
+      "Solari"
+    ],
+    [
+      "/ 2 ?°C",
+      "/ 2 %"
+    ],
+    [
+      "~o (\\d+) ?°C",
+      "o $1 %"
+    ],
+    [
+      "±(\\d+) ?°C",
+      "±$1 %"
+    ],
+    [
+      "(?<![\\p{N}])([-−+]?\\d+) ?°C",
+      "$T1 %"
+    ],
+    [
+      "~temperatura",
+      "rezerwa wody"
+    ],
+    [
+      "~temperaturę",
+      "rezerwę wody"
+    ],
+    [
+      "~temperatury",
+      "rezerwy wody"
+    ],
+    [
+      "~temperaturą",
+      "rezerwą wody"
+    ],
+    [
+      "~temperaturze",
+      "rezerwie wody"
+    ],
+    [
+      "~tlenu",
+      "roślinności"
+    ],
+    [
+      "~tlenem",
+      "roślinnością"
+    ],
+    [
+      "~tlen",
+      "roślinność"
+    ],
+    [
+      "~stal(i|ą)?",
+      "plastal$1"
+    ],
+    [
+      "~tytanu",
+      "przyprawy"
+    ],
+    [
+      "~tytanem",
+      "przyprawą"
+    ],
+    [
+      "~twój tytan",
+      "twoja przyprawa"
+    ],
+    [
+      "~a plastal i tytan",
+      "a plastal i przyprawa"
+    ],
+    [
+      "~Tytan",
+      "Przyprawa",
+      "case"
+    ],
+    [
+      "~tytan",
+      "przyprawę"
+    ],
+    [
+      "~energii",
+      "wilgoci"
+    ],
+    [
+      "~energię",
+      "wilgoć"
+    ],
+    [
+      "~energią",
+      "wilgocią"
+    ],
+    [
+      "~energia",
+      "wilgoć"
+    ],
+    [
+      "~ciepła",
+      "wody"
+    ],
+    [
+      "~ciepłem",
+      "wodą"
+    ],
+    [
+      "~Ciepło",
+      "Woda",
+      "case"
+    ],
+    [
+      "~ciepło",
+      "wodę"
+    ],
+    [
+      "~(?:obszar|kafelek) oceanu",
+      "złoże przyprawy"
+    ],
+    [
+      "~(?:obszaru|kafelka) oceanu",
+      "złoża przyprawy"
+    ],
+    [
+      "~(?:obszarze|kafelku) oceanu",
+      "złożu przyprawy"
+    ],
+    [
+      "~(?:obszarem|kafelkiem) oceanu",
+      "złożem przyprawy"
+    ],
+    [
+      "~(?:obszary|kafelki) ocean(?:u|ów)",
+      "złoża przyprawy"
+    ],
+    [
+      "~(?:obszarów|kafelków) ocean(?:u|ów)",
+      "złóż przyprawy"
+    ],
+    [
+      "~(?:obszarami|kafelkami) ocean(?:u|ów)",
+      "złożami przyprawy"
+    ],
+    [
+      "~(?:obszarach|kafelkach) ocean(?:u|ów)",
+      "złożach przyprawy"
+    ],
+    [
+      "~oceanu",
+      "złoża przyprawy"
+    ],
+    [
+      "~oceanów",
+      "złóż przyprawy"
+    ],
+    [
+      "~oceanami",
+      "złożami przyprawy"
+    ],
+    [
+      "~oceanach",
+      "złożach przyprawy"
+    ],
+    [
+      "~oceanem",
+      "złożem przyprawy"
+    ],
+    [
+      "~oceanie",
+      "złożu przyprawy"
+    ],
+    [
+      "~oceany",
+      "złoża przyprawy"
+    ],
+    [
+      "~ocean",
+      "złoże przyprawy"
+    ],
+    [
+      "~(sw|tw)ój (\\p{L}+)y złoże",
+      "$1oje $2e złoże"
+    ],
+    [
+      "~(każd|dowoln|posiadan|umieszczon|początkow|now|kolejn|jedyn|wybran|bonusow|dodatkow|pierwsz|drug)y ((?:\\p{L}+e )?)złoże",
+      "$1e $2złoże"
+    ],
+    [
+      "~(każd|dowoln|posiadan|umieszczon|początkow|now|kolejn|jedyn|wybran|bonusow|dodatkow|pierwsz|drug)y ((?:\\p{L}+e )?)złoże",
+      "$1e $2złoże"
+    ],
+    [
+      "~(sąsiedn|ostatn)i złoże",
+      "$1ie złoże"
+    ],
+    [
+      "~z (złoż\\p{L}*)",
+      "ze $1"
+    ],
+    [
+      "~(sw|tw)ój złoże",
+      "$1oje złoże"
+    ],
+    [
+      "~jeden złoże",
+      "jedno złoże"
+    ],
+    [
+      "~ten złoże",
+      "to złoże"
+    ],
+    [
+      "~Miasto Noctis|Noctis City",
+      "Arrakin"
+    ],
+    [
+      "~([2-4]|dwa|trzy|cztery|wszystkie|twoje|swoje|inne) miasta",
+      "$1 sicze"
+    ],
+    [
+      "~umieszczać miasta",
+      "umieszczać sicze"
+    ],
+    [
+      "~zostanie umieszczone dowolne miasto",
+      "zostanie umieszczona dowolna sicz"
+    ],
+    [
+      "~zostanie umieszczone miasto",
+      "zostanie umieszczona sicz"
+    ],
+    [
+      "~(\\p{L}+)e (\\p{L}+)e miasto",
+      "$1ą $2ą sicz",
+      "case"
+    ],
+    [
+      "~(\\p{L}+)e miasto",
+      "$1ą sicz",
+      "case"
+    ],
+    [
+      "^Miasta$",
+      "Sicze",
+      "case"
+    ],
+    [
+      "~lądują miasta",
+      "lądują sicze"
+    ],
+    [
+      "~jedno miasto",
+      "jedną sicz"
+    ],
+    [
+      "~(\\p{L}+)ego miasta",
+      "$1ej siczy"
+    ],
+    [
+      "~(sw|tw)oim miastem",
+      "$1oją siczą"
+    ],
+    [
+      "~(\\p{L}+)ym miastem",
+      "$1ą siczą"
+    ],
+    [
+      "~miastami",
+      "siczami"
+    ],
+    [
+      "~miastach",
+      "siczach"
+    ],
+    [
+      "~miastem",
+      "siczą"
+    ],
+    [
+      "~mieście",
+      "siczy"
+    ],
+    [
+      "~miast",
+      "siczy"
+    ],
+    [
+      "~miasta",
+      "siczy"
+    ],
+    [
+      "~miasto",
+      "sicz"
+    ],
+    [
+      "~siczy (\\p{L}+)ego",
+      "siczy $1ej"
+    ],
+    [
+      "~(obszary|obszarów|obszarami|obszarach|kafelki|kafelków|kafelkami|kafelkach|pola|pól) zieleni",
+      "$1 obsadzonych wydm"
+    ],
+    [
+      "~(obszar|obszaru|obszarze|obszarem|kafelek|kafelka|kafelku|kafelkiem) zieleni",
+      "$1 obsadzonej wydmy"
+    ],
+    [
+      "~zieleni",
+      "obsadzonych wydm"
+    ],
+    [
+      "~Zieleń",
+      "Obsadzona wydma",
+      "case"
+    ],
+    [
+      "~ZIELEŃ",
+      "OBSADZONA WYDMA",
+      "case"
+    ],
+    [
+      "~zieleń",
+      "obsadzoną wydmę"
+    ],
+    [
+      "~(\\$\\{\\d\\}|\\d+|dużo|mało|lista|Draft|Selekcja|nazwy|Bez) korporacji",
+      "$1 rodów"
+    ],
+    [
+      "~na korporacji",
+      "na rodzie"
+    ],
+    [
+      "~(?<!Era )korporacji",
+      "rodu"
+    ],
+    [
+      "~korporacją",
+      "rodem"
+    ],
+    [
+      "~korporacjami",
+      "rodami"
+    ],
+    [
+      "~korporację",
+      "ród"
+    ],
+    [
+      "~korporacje",
+      "rody"
+    ],
+    [
+      "~korporacja",
+      "ród"
+    ],
+    [
+      "~(sw|tw)ojej rodu",
+      "$1ojego rodu"
+    ],
+    [
+      "~(?<!Teraz )(?:Mars|Marsa|Marsie|Marsem)(?! First)",
+      "Arrakis",
+      "case"
+    ],
+    [
+      "~MARSA|MARSIE",
+      "ARRAKIS",
+      "case"
+    ],
+    [
+      "~(?<!w )Przestrzeni Kosmicznej",
+      "Gildii"
+    ],
+    [
+      "~Przestrzeń Kosmiczna",
+      "Gildia"
+    ],
+    [
+      "~(kart[aęy]?|wydarzeni[ea]|wydarzeń) kosmiczn(?:a|ą|ej|e|ych|ego)",
+      "$1 Gildii"
+    ],
+    [
+      "~(?<!Nową )(?:Ziemi|Ziemia|Ziemię|Ziemią)",
+      "Imperium",
+      "case"
+    ],
+    [
+      "~ZIEMI",
+      "IMPERIUM",
+      "case"
+    ],
+    [
+      "~Jowisza",
+      "Świata Zewnętrznego"
+    ],
+    [
+      "~Jowiszu",
+      "Świecie Zewnętrznym"
+    ],
+    [
+      "~Jowisz",
+      "Świat Zewnętrzny"
+    ],
+    [
+      "~nauki",
+      "wiedzy"
+    ],
+    [
+      "~nauką",
+      "wiedzą"
+    ],
+    [
+      "~naukę",
+      "wiedzę"
+    ],
+    [
+      "~nauka",
+      "wiedza"
+    ],
+    [
+      "~([2-4]|\\$\\{\\d\\}) mikroby",
+      "$1 jednostki planktonu piaskowego"
+    ],
+    [
+      "~(\\d+) mikrobów",
+      "$1 jednostek planktonu piaskowego"
+    ],
+    [
+      "~1 mikrob",
+      "1 jednostkę planktonu piaskowego"
+    ],
+    [
+      "~(dodaj|umieść|usuń|wydaj) mikroba",
+      "$1 jednostkę planktonu piaskowego"
+    ],
+    [
+      "~mikrobów|mikroba",
+      "planktonu piaskowego"
+    ],
+    [
+      "~mikrobami",
+      "planktonem piaskowym"
+    ],
+    [
+      "~mikroby|mikrob",
+      "plankton piaskowy"
+    ],
+    [
+      "~zwierząt",
+      "stworzeń"
+    ],
+    [
+      "~zwierzętami",
+      "stworzeniami"
+    ],
+    [
+      "~zwierzętach",
+      "stworzeniach"
+    ],
+    [
+      "~zwierzęta",
+      "stworzenia"
+    ],
+    [
+      "~zwierzęciem",
+      "stworzeniem"
+    ],
+    [
+      "~zwierzęcia",
+      "stworzenia"
+    ],
+    [
+      "~zwierzę",
+      "stworzenie"
+    ],
+    [
+      "~(za|na) każdy myśliwiec",
+      "$1 każdego sardaukara"
+    ],
+    [
+      "~myśliwców|myśliwce",
+      "sardaukarów"
+    ],
+    [
+      "~myśliwcami",
+      "sardaukarami"
+    ],
+    [
+      "~myśliwca",
+      "sardaukara"
+    ],
+    [
+      "~Myśliwiec",
+      "Sardaukar",
+      "case"
+    ],
+    [
+      "~myśliwiec",
+      "sardaukara"
+    ],
+    [
+      "~1 asteroidy",
+      "1 meteorytu"
+    ],
+    [
+      "~asteroid",
+      "meteorytów"
+    ],
+    [
+      "~asteroidę",
+      "meteoryt"
+    ],
+    [
+      "~asteroidami",
+      "meteorytami"
+    ],
+    [
+      "~asteroidzie",
+      "meteorycie"
+    ],
+    [
+      "~asteroidy",
+      "meteoryty"
+    ],
+    [
+      "~asteroida",
+      "meteoryt"
+    ],
+    [
+      "~(obszarze|obszarach|obszarami|obszar|obszary|obszarów|polu|polach|pola|pole|pól) wulkaniczn\\p{L}*",
+      "$1 wysokich skał"
+    ]
+  ],
+  "exact": {
+    "Titan": "Tytan",
+    "1 titanium and 1 plant": "1 przyprawa i 1 roślina",
+    "titaniumandplant": "1 przyprawa i 1 roślina",
+    "1 titanium / 2 °C": "1 przyprawa / 2 %",
+    "titanium1pertemp": "1 przyprawa / 2 %"
+  }
+}

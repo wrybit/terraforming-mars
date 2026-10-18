@@ -1,45 +1,187 @@
 {
   "rules": [
-    ["~Terraforming Mars", "Terraforming Dune"],
-    ["~terraform(?:ing)? rating", "Landsraad influence"],
-    ["~TR", "influence", "case"],
-    ["(?<![\\p{L}])MegaCredits(?: \\(M€\\)| \\[M€\\])?", "Solari"],
-    ["~megacredits?", "solari"],
-    ["(?<![\\p{L}])M€", "Solari"],
-    ["/ 2 ?°C", "/ 2 %"],
-    ["(?<![\\p{N}])([-−+]?\\d+) ?°? ?C(?![\\p{L}])", "$T1 %", "case"],
-    ["~steel", "plasteel"],
-    ["~titanium", "spice"],
-    ["~oxygen", "vegetation"],
-    ["~temperature", "water storage"],
-    ["~plants?", "vegetation"],
-    ["~power (tags?)", "moisture $1"],
-    ["~energy", "moisture"],
-    ["~heat", "water"],
-    ["~an ocean", "a spice field"],
-    ["~ocean tiles|oceans", "spice fields"],
-    ["~ocean tile|ocean", "spice field"],
-    ["~cities", "sietches"],
-    ["~city", "sietch"],
-    ["~a greenery", "a planted dune"],
-    ["~greeneries", "planted dunes"],
-    ["~greenery", "planted dune"],
-    ["~corporations", "houses"],
-    ["~corporation", "house"],
-    ["~Noctis City", "Arrakeen"],
-    ["~volcanic areas", "high rocks"],
-    ["~volcanic area", "high rock"],
-    ["~Mars", "Arrakis"],
-    ["~space (tags?|cards?|events?)", "Guild $1"],
-    ["~Earth", "Imperium"],
-    ["~Jovian", "outer world"],
-    ["~science", "knowledge"],
-    ["~microbes?", "sand plankton"],
-    ["~animals", "creatures"],
-    ["~animal", "creature"],
-    ["~fighters?", "Sardaukar"],
-    ["~asteroids", "meteors"],
-    ["~asteroid", "meteor"]
+    [
+      "~Terraforming Mars",
+      "Terraforming Dune"
+    ],
+    [
+      "~terraform(?:ing)? rating",
+      "Landsraad influence"
+    ],
+    [
+      "~TR",
+      "influence",
+      "case"
+    ],
+    [
+      "(?<![\\p{L}])MegaCredits(?: \\(M€\\)| \\[M€\\])?",
+      "Solari"
+    ],
+    [
+      "~megacredits?",
+      "solari"
+    ],
+    [
+      "(?<![\\p{L}])M€",
+      "Solari"
+    ],
+    [
+      "~by (\\d+) ?°C",
+      "by $1 %"
+    ],
+    [
+      "~or warmer",
+      "or more"
+    ],
+    [
+      "~or colder",
+      "or less"
+    ],
+    [
+      "~requires ([-−+]?\\d+) ?°? ?C°?(?![\\p{L}])",
+      "requires water storage $T1 %"
+    ],
+    [
+      "~it must be ([-−+]?\\d+) ?°? ?C°?(?![\\p{L}])",
+      "water storage must be $T1 %"
+    ],
+    [
+      "/ 2 ?°C",
+      "/ 2 %"
+    ],
+    [
+      "(?<![\\p{N}])([-−+]?\\d+) ?°? ?C(?![\\p{L}])",
+      "$T1 %",
+      "case"
+    ],
+    [
+      "~steel",
+      "plasteel"
+    ],
+    [
+      "~titanium",
+      "spice"
+    ],
+    [
+      "~oxygen",
+      "vegetation"
+    ],
+    [
+      "~temperature",
+      "water storage"
+    ],
+    [
+      "~plants?",
+      "vegetation"
+    ],
+    [
+      "~power (tags?)",
+      "moisture $1"
+    ],
+    [
+      "~energy",
+      "moisture"
+    ],
+    [
+      "~heat",
+      "water"
+    ],
+    [
+      "~an ocean",
+      "a spice field"
+    ],
+    [
+      "~ocean tiles|oceans",
+      "spice fields"
+    ],
+    [
+      "~ocean tile|ocean",
+      "spice field"
+    ],
+    [
+      "~cities",
+      "sietches"
+    ],
+    [
+      "~city",
+      "sietch"
+    ],
+    [
+      "~a greenery",
+      "a planted dune"
+    ],
+    [
+      "~greeneries",
+      "planted dunes"
+    ],
+    [
+      "~greenery",
+      "planted dune"
+    ],
+    [
+      "~corporations",
+      "houses"
+    ],
+    [
+      "~corporation",
+      "house"
+    ],
+    [
+      "~Noctis City",
+      "Arrakeen"
+    ],
+    [
+      "~volcanic areas",
+      "high rocks"
+    ],
+    [
+      "~volcanic area",
+      "high rock"
+    ],
+    [
+      "~Mars",
+      "Arrakis"
+    ],
+    [
+      "~space (tags?|cards?|events?)",
+      "Guild $1"
+    ],
+    [
+      "~Earth",
+      "Imperium"
+    ],
+    [
+      "~Jovian",
+      "outer world"
+    ],
+    [
+      "~science",
+      "knowledge"
+    ],
+    [
+      "~microbes?",
+      "sand plankton"
+    ],
+    [
+      "~animals",
+      "creatures"
+    ],
+    [
+      "~animal",
+      "creature"
+    ],
+    [
+      "~fighters?",
+      "Sardaukar"
+    ],
+    [
+      "~asteroids",
+      "meteors"
+    ],
+    [
+      "~asteroid",
+      "meteor"
+    ]
   ],
   "exact": {}
 }

@@ -1,0 +1,459 @@
+{
+  "rules": [
+    [
+      "~Terraforming Mars",
+      "Terraforming Dune"
+    ],
+    [
+      "~terraform(?:ing)?s?-?(?:verdi|vurdering)(en)?(?: \\(TR\\))?",
+      "Landsraad-innflytelse$1"
+    ],
+    [
+      "~TR-en",
+      "innflytelsen",
+      "case"
+    ],
+    [
+      "~TR",
+      "innflytelse",
+      "case"
+    ],
+    [
+      "~megacredits? \\(M€\\)",
+      "Solari"
+    ],
+    [
+      "~megacredits?",
+      "Solari"
+    ],
+    [
+      "(\\p{N})M€",
+      "$1 Solari"
+    ],
+    [
+      "(?<![\\p{L}])M€",
+      "Solari"
+    ],
+    [
+      "(?<=°C? )eller (?:varmere|høyere)",
+      "eller mer"
+    ],
+    [
+      "(?<=°C? )eller (?:kaldere|lavere)",
+      "eller mindre"
+    ],
+    [
+      "(/|med|±) ?(\\d+) ?°C?(?![\\p{L}])",
+      "$1 $2 %"
+    ],
+    [
+      "(?<![\\p{N}])([-−+]?\\d+) ?°C?(?![\\p{L}])",
+      "$T1 %"
+    ],
+    [
+      "(?<![\\p{N}])([-−+]?\\d+) ?C°",
+      "$T1 %"
+    ],
+    [
+      "~temperaturene",
+      "vannreservene"
+    ],
+    [
+      "~temperaturen",
+      "vannreserven"
+    ],
+    [
+      "(?<![\\p{L}])temperatur",
+      "vannreserve"
+    ],
+    [
+      "(?<![\\p{L}])oksygen-?n?ivå",
+      "vegetasjonsnivå"
+    ],
+    [
+      "~oksygenet",
+      "vegetasjonen"
+    ],
+    [
+      "(?<![\\p{L}])oksygen(?=krav)",
+      "vegetasjons"
+    ],
+    [
+      "(?<![\\p{L}])oksygen",
+      "vegetasjon"
+    ],
+    [
+      "~plantene",
+      "vegetasjonen"
+    ],
+    [
+      "(?<![\\p{L}])plante(-?)(?=\\p{L})(?!r)",
+      "vegetasjons$1"
+    ],
+    [
+      "(?<![\\p{L}])plante-(?![\\p{L}])",
+      "vegetasjons-"
+    ],
+    [
+      "~plante\\(r\\)|planter|plante",
+      "vegetasjon"
+    ],
+    [
+      "~energien",
+      "fukten"
+    ],
+    [
+      "(?<![\\p{L}])energi",
+      "fukt"
+    ],
+    [
+      "~varmen",
+      "vannet"
+    ],
+    [
+      "(?<![\\p{L}])varme(?=produksjon|symbol|ressurs|-)",
+      "vann"
+    ],
+    [
+      "~varme",
+      "vann"
+    ],
+    [
+      "(?<![\\p{L}])stål",
+      "plaststål"
+    ],
+    [
+      "~TITAN",
+      "KRYDDER",
+      "case"
+    ],
+    [
+      "(?<=med )Titan|Titan(?=-bonus)",
+      "Krydder",
+      "case"
+    ],
+    [
+      "~titanet",
+      "krydderet",
+      "case"
+    ],
+    [
+      "~Titanet",
+      "Krydderet",
+      "case"
+    ],
+    [
+      "~titan",
+      "krydder",
+      "case"
+    ],
+    [
+      "(?<![\\p{L}])titan(?=\\p{L}|-)",
+      "krydder",
+      "case"
+    ],
+    [
+      "~Noctis[ -]by|Noctis City",
+      "Arrakeen"
+    ],
+    [
+      "~vulkanske områder",
+      "klippeområder"
+    ],
+    [
+      "~vulkansk område",
+      "klippeområde"
+    ],
+    [
+      "~HAV",
+      "KRYDDERFELT",
+      "case"
+    ],
+    [
+      "~en hav-?brikke",
+      "et krydderfelt"
+    ],
+    [
+      "~hver hav-?brikke",
+      "hvert krydderfelt"
+    ],
+    [
+      "~denne hav-?brikken",
+      "dette krydderfeltet"
+    ],
+    [
+      "~hav-?brikken|havet",
+      "krydderfeltet"
+    ],
+    [
+      "~hav-?brikkene|havene",
+      "krydderfeltene"
+    ],
+    [
+      "~hav-?brikker?",
+      "krydderfelt"
+    ],
+    [
+      "~hav-?områdene",
+      "krydderfeltene"
+    ],
+    [
+      "~hav-?området",
+      "krydderfeltet"
+    ],
+    [
+      "~hav-?områder?",
+      "krydderfelt"
+    ],
+    [
+      "~en osean-?brikke",
+      "et krydderfelt"
+    ],
+    [
+      "~osean-?brikke|osean",
+      "krydderfelt"
+    ],
+    [
+      "(?<![\\p{L}])hav(-?)(?=område|krav|bonus|plassering)",
+      "krydderfelt$1"
+    ],
+    [
+      "~hav",
+      "krydderfelt"
+    ],
+    [
+      "(?<![\\p{L}])hav-(?![\\p{L}])",
+      "krydderfelt-"
+    ],
+    [
+      "~BY",
+      "SIETCH",
+      "case"
+    ],
+    [
+      "~by-?brikkene|byene",
+      "sietchene"
+    ],
+    [
+      "~by-?brikker|byer",
+      "sietcher"
+    ],
+    [
+      "~by-?brikken|byen",
+      "sietchen"
+    ],
+    [
+      "~by-?brikke",
+      "sietch"
+    ],
+    [
+      "(?<![\\p{L}])by-?(?=symbol|eier)",
+      "sietch-"
+    ],
+    [
+      "(?<![\\p{L}])by-(?![\\p{L}])",
+      "sietch-"
+    ],
+    [
+      "~by",
+      "sietch"
+    ],
+    [
+      "~ett skog(?:område|brikke)",
+      "én plantedyne"
+    ],
+    [
+      "~et (\\p{L}+e )?skog(?:område|brikke)",
+      "en $1plantedyne"
+    ],
+    [
+      "~hvert skog(?:område|brikke)",
+      "hver plantedyne"
+    ],
+    [
+      "~ditt skog(?:område|brikke)",
+      "din plantedyne"
+    ],
+    [
+      "~sitt skog(?:område|brikke)",
+      "sin plantedyne"
+    ],
+    [
+      "~dette skog(?:område|brikke)",
+      "denne plantedyne"
+    ],
+    [
+      "~skog(?:området|brikken)",
+      "plantedynen"
+    ],
+    [
+      "~skog(?:områdene|brikkene)",
+      "plantedynene"
+    ],
+    [
+      "~skog(?:områder|brikker)",
+      "plantedyner"
+    ],
+    [
+      "~skog(?:område|brikke)",
+      "plantedyne"
+    ],
+    [
+      "(?<![\\p{L}])skog(?:område|brikke)",
+      "plantedyne"
+    ],
+    [
+      "~(nybegynner-|start)?konsernenes",
+      "$1husenes"
+    ],
+    [
+      "~(nybegynner-|start)?konsernene",
+      "$1husene"
+    ],
+    [
+      "~(nybegynner-|start)?konsernets",
+      "$1husets"
+    ],
+    [
+      "~(nybegynner-|start)?konsernet",
+      "$1huset"
+    ],
+    [
+      "(?<![\\p{L}])(nybegynner-|start|celestic-)?konsern(?!sjef)",
+      "$1hus"
+    ],
+    [
+      "~marsisk(e?)",
+      "arrakisk$1"
+    ],
+    [
+      "~(?<!:)mars(?!:)",
+      "Arrakis"
+    ],
+    [
+      "(?<![\\p{L}:])mars-?(?=\\p{L})(?!bot)",
+      "Arrakis-"
+    ],
+    [
+      "(?<![\\p{L}:])mars-",
+      "Arrakis-"
+    ],
+    [
+      "(?<![\\p{L}])(?:verdens)?rom-?(?=symbol|kort|hendelse)",
+      "Laug-"
+    ],
+    [
+      "(?<![\\p{L}])jord(?:en)?-?(?=symbol|kort)",
+      "Imperium-"
+    ],
+    [
+      "(?<![\\p{L}])jord(?:en)?-(?![\\p{L}])",
+      "Imperium-"
+    ],
+    [
+      "~Jorden",
+      "Imperiet",
+      "case"
+    ],
+    [
+      "([a-zæøå0-9]+ )Jupiter-?(?=symbol|kort)",
+      "$1ytterverden-",
+      "case"
+    ],
+    [
+      "([a-zæøå0-9]+ )Jupiter",
+      "$1ytterverden",
+      "case"
+    ],
+    [
+      "(?<![\\p{L}])jupiter-?(?=symbol|kort)",
+      "ytterverden-"
+    ],
+    [
+      "(?<![\\p{L}])jupiter-(?![\\p{L}])",
+      "ytterverden-"
+    ],
+    [
+      "~jupiter",
+      "ytterverden"
+    ],
+    [
+      "(?<![\\p{L}])vitenskap(?!el)",
+      "kunnskap"
+    ],
+    [
+      "~en mikrobe",
+      "et sandplankton"
+    ],
+    [
+      "~mikroben|mikrobene",
+      "sandplanktonet"
+    ],
+    [
+      "(?<![\\p{L}])mikrob(?:er|e)",
+      "sandplankton"
+    ],
+    [
+      "~DYR",
+      "SKAPNINGER",
+      "case"
+    ],
+    [
+      "~(?:et|ett) dyr",
+      "en skapning"
+    ],
+    [
+      "~1 dyr",
+      "1 skapning"
+    ],
+    [
+      "~dyret",
+      "skapningen"
+    ],
+    [
+      "~dyrene",
+      "skapningene"
+    ],
+    [
+      "(?<![\\p{L}])dyre?(-?)(?=symbol|kort|ressurs|merke)",
+      "skapnings$1"
+    ],
+    [
+      "(?<![\\p{L}])dyre?-(?![\\p{L}])",
+      "skapnings-"
+    ],
+    [
+      "~dyr",
+      "skapninger"
+    ],
+    [
+      "~jagerfly(?:et|ene)?",
+      "Sardaukar"
+    ],
+    [
+      "(?<![\\p{L}])jagerfly(?=\\p{L})",
+      "Sardaukar-"
+    ],
+    [
+      "~asteroidene",
+      "meteorene"
+    ],
+    [
+      "~asteroiden",
+      "meteoren"
+    ],
+    [
+      "~asteroider",
+      "meteorer"
+    ],
+    [
+      "(?<![\\p{L}-])asteroide(?=\\p{L})",
+      "meteor"
+    ],
+    [
+      "(?<![\\p{L}-])asteroide",
+      "meteor"
+    ]
+  ],
+  "exact": {}
+}

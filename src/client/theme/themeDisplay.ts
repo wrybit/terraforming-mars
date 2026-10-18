@@ -1,5 +1,6 @@
 import {activeTheme} from '@/client/theme/applyTheme';
 import duneGraphics from '@/themes/dune/graphics.json';
+import duneCardScenes from '@/themes/dune/card-scenes.json';
 
 // Values and pictures as the active theme shows them. The game always counts in Mars units; only the display changes.
 
@@ -28,4 +29,17 @@ export function temperatureText(celsius: number, signed = false): string {
   const value = temperatureValue(celsius);
   const sign = signed && value > 0 && activeTheme() !== 'dune' ? '+' : '';
   return `${sign}${value} ${temperatureUnit()}`;
+}
+
+// Scenes with a picture of their own (the first matching tag decides, as in the Dune mockup); the rest get the plain desert
+const SCENE_TAGS: ReadonlyArray<string> = ['plant', 'power', 'space', 'earth', 'jovian', 'microbe', 'animal', 'building', 'science', 'city'];
+
+/** Picture behind a card in the Dune theme, undefined on Mars (cards there have none). */
+export function cardScene(cardName: string, tags: ReadonlyArray<string>): string | undefined {
+  if (activeTheme() !== 'dune') {
+    return undefined;
+  }
+  const scenes: Readonly<Record<string, string>> = duneCardScenes;
+  const file = scenes[cardName] ?? `scene-${tags.find((tag) => SCENE_TAGS.includes(tag)) ?? 'none'}`;
+  return `assets/themes/dune/graphics/${file}.svg`;
 }

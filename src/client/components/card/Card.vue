@@ -1,5 +1,7 @@
 <template>
   <div class="card-container filterDiv hover-hide-res" :class="cardClasses">
+      <!-- Dune theme: a scene of Arrakis fades in behind the lower part of the card -->
+      <span v-if="sceneUrl !== undefined" class="card-scene" :style="{backgroundImage: `url(${sceneUrl})`}" aria-hidden="true"></span>
       <!-- Action used this generation: the player's cube lies on the card like at the table, seen from above,
            at a random angle per card -->
       <span v-if="showPlayerCube" class="card-player-cube"><PlayerCube :color="cubeColor" view="top" :size="22" :spin="cubeSpin"/></span>
@@ -38,6 +40,7 @@ import CardTags from './CardTags.vue';
 import CardVictoryPoints from './CardVictoryPoints.vue';
 import CardContent from './CardContent.vue';
 import CardHelp from './CardHelp.vue';
+import {cardScene} from '@/client/theme/themeDisplay';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {CardType} from '@/common/cards/CardType';
 import {CardMetadata} from '@/common/cards/CardMetadata';
@@ -100,6 +103,9 @@ export default defineComponent({
     };
   },
   computed: {
+    sceneUrl(): string | undefined {
+      return this.isCorporationCard ? undefined : cardScene(this.card.name, this.tags);
+    },
     cardInstance(): ClientCard {
       return getCardOrThrow(this.card.name);
     },

@@ -19,6 +19,8 @@ export type ThemeTerms = {
   rules: ReadonlyArray<TermRule>,
   /** Whole texts that read better rewritten than swapped: English key → text */
   exact?: Record<string, string>,
+  /** Names (keys of names/<lang>.json) that also appear inside texts, e.g. places named in card texts */
+  namesInTexts?: ReadonlyArray<string>,
 };
 
 /** English key (card, corporation, milestone, award or place name) → themed name in this language */
@@ -118,13 +120,23 @@ export function writeThemeTexts(localesFolder: string, themesFolder: string, out
     if (!fs.statSync(folder).isDirectory()) {
       continue;
     }
-    const termsOf = (lang: string) => readJson<ThemeTerms>(path.join(folder, 'terms', `${lang}.json`), {rules: []});
+    // _all.json: rules for every language after its own ones (e.g. units next to placeholders)
+    const common = readJson<ThemeTerms>(path.join(folder, 'terms', '_all.json'), {rules: []}).rules;
+    const termsOf = (lang: string) => {
+      const terms = readJson<ThemeTerms>(path.join(folder, 'terms', `${lang}.json`), {rules: []});
+      return {...terms, rules: [...terms.rules, ...common]};
+    };
     const englishRules = compileRules(termsOf('en').rules);
     fs.mkdirSync(path.join(outputFolder, theme, 'texts'), {recursive: true});
+    const namesInTexts = readJson<ThemeTerms>(path.join(folder, 'terms', '_all.json'), {rules: []}).namesInTexts ?? [];
     for (const lang of languages) {
       const terms = termsOf(lang);
       const names = readJson<ThemeNames>(path.join(folder, 'names', `${lang}.json`), {});
-      const texts = themeTexts(keys, translationsByLanguage.get(lang) ?? {}, compileRules(terms.rules), englishRules,
+      // A named place keeps its Mars name in most translations; inside texts it becomes the theme's name too
+      const nameRules: Array<TermRule> = namesInTexts
+        .filter((name) => names[name] !== undefined)
+        .map((name) => [name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), names[name], 'case']);
+      const texts = themeTexts(keys, translationsByLanguage.get(lang) ?? {}, compileRules([...nameRules, ...terms.rules]), englishRules,
         names, terms.exact ?? {}, lang === 'en');
       fs.writeFileSync(path.join(outputFolder, theme, 'texts', `${lang}.json`), JSON.stringify(texts));
     }

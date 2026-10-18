@@ -1,0 +1,367 @@
+{
+  "rules": [
+    [
+      "~Terraforming Mars",
+      "Terraforming Dune"
+    ],
+    [
+      "~terraform(?:ing)?(?:niveau|waardering)(?: \\(TN\\))?",
+      "Landsraad-invloed"
+    ],
+    [
+      "~TN",
+      "invloed",
+      "case"
+    ],
+    [
+      "~megacredits? \\(M€\\)",
+      "Solari"
+    ],
+    [
+      "~megacredits?",
+      "Solari"
+    ],
+    [
+      "(\\p{N})M€",
+      "$1 Solari"
+    ],
+    [
+      "(?<![\\p{L}])M€",
+      "Solari"
+    ],
+    [
+      "(/|met|±) ?(\\d+) ?°C",
+      "$1 $2 %"
+    ],
+    [
+      "(?<=°C )(of|en) (?:warmer|hoger)",
+      "$1 meer"
+    ],
+    [
+      "(?<=°C )(of|en) (?:kouder|lager)",
+      "$1 minder"
+    ],
+    [
+      "(?<![\\p{N}])([-−+]?\\d+) ?°C",
+      "$T1 %"
+    ],
+    [
+      "(?<![\\p{L}])temperatuur",
+      "watervoorraad"
+    ],
+    [
+      "~het zuurstof(?:gehalte|niveau)",
+      "de vegetatiegraad"
+    ],
+    [
+      "(?<![\\p{L}])zuurstof(?:gehalte|niveau)s?",
+      "vegetatiegraad"
+    ],
+    [
+      "(?<![\\p{L}])zuurstof",
+      "vegetatie"
+    ],
+    [
+      "(?<![\\p{L}])plant(?:en)?(-?)(?=productie|label|kaart|grondstof|tag|symbool)",
+      "vegetatie$1"
+    ],
+    [
+      "(?<![\\p{L}])plant(?:en)?-(?![\\p{L}])",
+      "vegetatie-"
+    ],
+    [
+      "~plant\\(en\\)|planten|plant",
+      "vegetatie"
+    ],
+    [
+      "~de energie(?![\\p{L}-])",
+      "het vocht"
+    ],
+    [
+      "~alle energie(?![\\p{L}-])",
+      "al het vocht"
+    ],
+    [
+      "~alle warmte(?![\\p{L}-])",
+      "al het water"
+    ],
+    [
+      "(?<![\\p{L}])(?<!-)energiecentrale",
+      "windval"
+    ],
+    [
+      "(?<![\\p{L}])energie",
+      "vocht"
+    ],
+    [
+      "~de meeste warmte",
+      "het meeste water"
+    ],
+    [
+      "~de warmte(?![\\p{L}-])",
+      "het water"
+    ],
+    [
+      "(?<![\\p{L}])warmte",
+      "water"
+    ],
+    [
+      "(?<![\\p{L}])staal",
+      "plastaal"
+    ],
+    [
+      "~het titanium",
+      "de spice"
+    ],
+    [
+      "(?<![\\p{L}])titanium",
+      "spice"
+    ],
+    [
+      "~titaan",
+      "spice"
+    ],
+    [
+      "~Noctis[ -]stad|Noctis City",
+      "Arrakeen"
+    ],
+    [
+      "~vulkanische gebieden",
+      "rotsgebieden"
+    ],
+    [
+      "~vulkanisch(?:e)? gebied",
+      "rotsgebied"
+    ],
+    [
+      "~de (eerste|tweede|laatste|volgende) oceaan(?:-?tegel)?(?![\\p{L}-])",
+      "het $1 spiceveld"
+    ],
+    [
+      "~de oceaan(?:-?tegel)?(?![\\p{L}-])",
+      "het spiceveld"
+    ],
+    [
+      "~deze oceaan(?:-?tegel)?(?![\\p{L}-])",
+      "dit spiceveld"
+    ],
+    [
+      "~die oceaan(?:-?tegel)?(?![\\p{L}-])",
+      "dat spiceveld"
+    ],
+    [
+      "~welke oceaan(?:-?tegel)?(?![\\p{L}-])",
+      "welk spiceveld"
+    ],
+    [
+      "~(elk|ieder)e (?:(bestaand|aangrenzend|geplaatst|nieuw)e )?oceaan(?:-?tegel)?(?![\\p{L}-])",
+      "$1 $2 spiceveld"
+    ],
+    [
+      "~(een|per|geen) (bestaand|aangrenzend|geplaatst|nieuw)e oceaan(?:-?tegel)?(?![\\p{L}-])",
+      "$1 $2 spiceveld"
+    ],
+    [
+      "~oceaan-?tegels|oceanen",
+      "spicevelden"
+    ],
+    [
+      "(?<![\\p{L}])oceaan-?tegel",
+      "spiceveld"
+    ],
+    [
+      "(?<![\\p{L}])oceaan(?=\\p{L})(?!stad|boerderij|reservaat)",
+      "spiceveld"
+    ],
+    [
+      "~oceaan",
+      "spiceveld"
+    ],
+    [
+      "(?<=bonus)oceaan(?![\\p{L}])",
+      "spiceveld"
+    ],
+    [
+      "(?<![\\p{L}])oceaan-",
+      "spiceveld-"
+    ],
+    [
+      "~stads?-?tegels|steden",
+      "sietches"
+    ],
+    [
+      "(?<![\\p{L}])stads?-?tegel",
+      "sietch"
+    ],
+    [
+      "(?<![\\p{L}])stads(?=label|eigenaar|project|-)",
+      "sietch"
+    ],
+    [
+      "~stad",
+      "sietch"
+    ],
+    [
+      "~groen-?tegels",
+      "plantduinen"
+    ],
+    [
+      "(?<![\\p{L}])groen-?tegel",
+      "plantduin"
+    ],
+    [
+      "~de corporatie(?![\\p{L}-])",
+      "het huis"
+    ],
+    [
+      "~deze corporatie(?![\\p{L}-])",
+      "dit huis"
+    ],
+    [
+      "~die corporatie(?![\\p{L}-])",
+      "dat huis"
+    ],
+    [
+      "~welke corporatie(?![\\p{L}-])",
+      "welk huis"
+    ],
+    [
+      "~elke corporatie(?![\\p{L}-])",
+      "elk huis"
+    ],
+    [
+      "~(beginners|start)corporaties",
+      "$1huizen"
+    ],
+    [
+      "~(beginners|start)corporatie",
+      "$1huis"
+    ],
+    [
+      "~corporaties",
+      "huizen"
+    ],
+    [
+      "(?<![\\p{L}])corporatie(?=\\p{L}|-)(?!tijdperk)",
+      "huis"
+    ],
+    [
+      "~(?<!Hyperloop )corporatie",
+      "huis"
+    ],
+    [
+      "~martiaanse",
+      "Arrakische"
+    ],
+    [
+      "~martiaans",
+      "Arrakisch"
+    ],
+    [
+      "~(?<!:)mars(?!:)",
+      "Arrakis"
+    ],
+    [
+      "(?<![\\p{L}:])mars-?(?=\\p{L})(?!bot|ep)",
+      "Arrakis-"
+    ],
+    [
+      "(?<![\\p{L}:])mars-",
+      "Arrakis-"
+    ],
+    [
+      "(?<![\\p{L}])ruimte-?(?=label|kaart|evenement|gebeurtenis)",
+      "Gilde-"
+    ],
+    [
+      "~de aarde",
+      "het Imperium"
+    ],
+    [
+      "(?<![\\p{L}])aarde-?(?=label|kaart|spoor)",
+      "Imperium-"
+    ],
+    [
+      "(?<![\\p{L}])aarde-",
+      "Imperium-"
+    ],
+    [
+      "~aarde",
+      "Imperium"
+    ],
+    [
+      "([a-z0-9]+ )Jupiter",
+      "$1buitenwereld",
+      "case"
+    ],
+    [
+      "(?<![\\p{L}])jupiter(-?)(?=label|kaart|spoor)",
+      "buitenwereld$1"
+    ],
+    [
+      "(?<![\\p{L}])jupiter-",
+      "buitenwereld-"
+    ],
+    [
+      "~jupiter",
+      "buitenwereld"
+    ],
+    [
+      "(?<![\\p{L}])wetenschaps(?=-|label|grondstof|kaart|symbool)",
+      "kennis"
+    ],
+    [
+      "~wetenschap",
+      "kennis"
+    ],
+    [
+      "~de microbe(?![\\p{L}-])",
+      "het zandplankton"
+    ],
+    [
+      "(?<![\\p{L}])microbe[ns]?",
+      "zandplankton"
+    ],
+    [
+      "(?<![\\p{L}])dier(?:en)?(-?)(?=label|kaart|grondstof|tag)",
+      "wezen$1"
+    ],
+    [
+      "(?<![\\p{L}])dier(?:en)?-",
+      "wezen-"
+    ],
+    [
+      "~dierlijke(?= en)",
+      "wezen-"
+    ],
+    [
+      "~dieren",
+      "wezens"
+    ],
+    [
+      "~dier",
+      "wezen"
+    ],
+    [
+      "~jagers?",
+      "Sardaukar"
+    ],
+    [
+      "(?<![\\p{L}])jager(?=grondstof)",
+      "Sardaukar-"
+    ],
+    [
+      "~astero[iï]den",
+      "meteoren"
+    ],
+    [
+      "(?<![\\p{L}])astero[iï]de(?=\\p{L}|-)",
+      "meteoor"
+    ],
+    [
+      "~astero[iï]de",
+      "meteoor"
+    ]
+  ],
+  "exact": {}
+}

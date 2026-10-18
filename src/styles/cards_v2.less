@@ -12,6 +12,22 @@
 }
 
 .card-container {
+  // Dune theme (Card.vue): scene behind the lower card, faded so the icons and texts stay readable
+  .card-scene {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 55%;
+    border-radius: inherit;
+    background-position: center bottom;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.4;
+    mask-image: linear-gradient(to top, #000 45%, transparent);
+    pointer-events: none;
+  }
+
   // Player cube on a used action card (Card.vue): top left next to the cost, low enough to stay inside the
   // card at any angle; above the content, never catches clicks
   .card-player-cube {
@@ -2760,6 +2776,21 @@
   }
 }
 /* fixes */
+.card-title .card-house-name {
+  // Dune theme: House name in the place of the corporation logo, between the HOUSE label and the content
+  position: absolute;
+  top: 36px;
+  left: 0;
+  height: auto;
+  padding: 0 12px;
+  box-sizing: border-box;
+  font-size: 18px;
+  line-height: 21px;
+  white-space: normal;
+  letter-spacing: 0.04em;
+  border-radius: 0;
+}
+
 .card-nirgal-enterprises .card-title {
   height: 60px !important;
 }

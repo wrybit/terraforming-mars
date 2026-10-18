@@ -1,0 +1,6 @@
+{
+  "rules": [
+    ["\\$\\{(\\d)\\} ?°C", "${$1} %", "case"]
+  ],
+  "namesInTexts": ["Tharsis Tholus", "Ascraeus Mons", "Pavonis Mons", "Arsia Mons"]
+}

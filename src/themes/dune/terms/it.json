@@ -1,0 +1,947 @@
+{
+  "rules": [
+    [
+      "~Terraforming Mars",
+      "Terraforming Dune"
+    ],
+    [
+      "~il tasso di terraformazione(?: \\(TT\\))? più alto",
+      "l'influenza nel Landsraad più alta"
+    ],
+    [
+      "~il tuo tasso di terraformazione(?: \\(TT\\))?",
+      "la tua influenza nel Landsraad"
+    ],
+    [
+      "~il suo tasso di terraformazione(?: \\(TT\\))?",
+      "la sua influenza nel Landsraad"
+    ],
+    [
+      "~il loro tasso di terraformazione(?: \\(TT\\))?",
+      "la loro influenza nel Landsraad"
+    ],
+    [
+      "~un tasso di terraformazione(?: \\(TT\\))?",
+      "un'influenza nel Landsraad"
+    ],
+    [
+      "~del tasso di terraformazione(?: \\(TT\\))?(?! di Venere)",
+      "dell'influenza nel Landsraad"
+    ],
+    [
+      "~il tasso di terraformazione(?: \\(TT\\))?(?! di Venere)",
+      "l'influenza nel Landsraad"
+    ],
+    [
+      "~tasso di terraformazione(?: \\(TT\\))?(?! di Venere)",
+      "influenza nel Landsraad"
+    ],
+    [
+      "~[Ii]l TT più alto",
+      "l'influenza più alta",
+      "case"
+    ],
+    [
+      "~[Ii]l TT più basso",
+      "l'influenza più bassa",
+      "case"
+    ],
+    [
+      "~TT più alto",
+      "influenza più alta",
+      "case"
+    ],
+    [
+      "~TT più basso",
+      "influenza più bassa",
+      "case"
+    ],
+    [
+      "~[Ii]l tuo TT",
+      "la tua influenza",
+      "case"
+    ],
+    [
+      "~[Ii]l suo TT",
+      "la sua influenza",
+      "case"
+    ],
+    [
+      "~[Ii]l loro TT",
+      "la loro influenza",
+      "case"
+    ],
+    [
+      "~[Dd]el TT",
+      "dell'influenza",
+      "case"
+    ],
+    [
+      "~[Aa]l TT",
+      "all'influenza",
+      "case"
+    ],
+    [
+      "~[Ii]l TT",
+      "l'influenza",
+      "case"
+    ],
+    [
+      "~[Uu]n TT",
+      "un'influenza",
+      "case"
+    ],
+    [
+      "~[Qq]uel TT",
+      "quell'influenza",
+      "case"
+    ],
+    [
+      "~TT",
+      "influenza",
+      "case"
+    ],
+    [
+      "(?<=\\d)M€",
+      " Solari"
+    ],
+    [
+      "(?<![\\p{L}])M€",
+      "Solari"
+    ],
+    [
+      "~megacredit[io](?: \\(M€\\))?",
+      "Solari"
+    ],
+    [
+      "±(\\d+) ?°C",
+      "±$1 %"
+    ],
+    [
+      "/ 2 ?°C",
+      "/ 2 %"
+    ],
+    [
+      "(?<![\\p{N}])([-−+]?\\d+) ?°C",
+      "$T1 %"
+    ],
+    [
+      "~dell['’]Acciaio",
+      "del Plastacciaio",
+      "case"
+    ],
+    [
+      "~dell['’]acciaio",
+      "del plastacciaio"
+    ],
+    [
+      "~all['’]Acciaio",
+      "al Plastacciaio",
+      "case"
+    ],
+    [
+      "~all['’]acciaio",
+      "al plastacciaio"
+    ],
+    [
+      "~l['’]Acciaio",
+      "il Plastacciaio",
+      "case"
+    ],
+    [
+      "~l['’]acciaio",
+      "il plastacciaio"
+    ],
+    [
+      "~ed Acciaio",
+      "e Plastacciaio",
+      "case"
+    ],
+    [
+      "~ed acciaio",
+      "e plastacciaio"
+    ],
+    [
+      "~acciai",
+      "plastacciai"
+    ],
+    [
+      "~acciaio",
+      "plastacciaio"
+    ],
+    [
+      "~il Titanio",
+      "la Spezia",
+      "case"
+    ],
+    [
+      "~il titanio",
+      "la spezia"
+    ],
+    [
+      "~del Titanio",
+      "della Spezia",
+      "case"
+    ],
+    [
+      "~del titanio",
+      "della spezia"
+    ],
+    [
+      "~al Titanio",
+      "alla Spezia",
+      "case"
+    ],
+    [
+      "~al titanio",
+      "alla spezia"
+    ],
+    [
+      "~dal Titanio",
+      "dalla Spezia",
+      "case"
+    ],
+    [
+      "~dal titanio",
+      "dalla spezia"
+    ],
+    [
+      "~un Titanio",
+      "una Spezia",
+      "case"
+    ],
+    [
+      "~un titanio",
+      "una spezia"
+    ],
+    [
+      "~titanio",
+      "spezia"
+    ],
+    [
+      "~vegetazioni",
+      "dune coltivate"
+    ],
+    [
+      "~vegetazione",
+      "duna coltivata"
+    ],
+    [
+      "~dell['’]Ossigeno",
+      "della Vegetazione",
+      "case"
+    ],
+    [
+      "~dell['’]ossigeno",
+      "della vegetazione"
+    ],
+    [
+      "~all['’]Ossigeno",
+      "alla Vegetazione",
+      "case"
+    ],
+    [
+      "~all['’]ossigeno",
+      "alla vegetazione"
+    ],
+    [
+      "~l['’]Ossigeno",
+      "la Vegetazione",
+      "case"
+    ],
+    [
+      "~l['’]ossigeno",
+      "la vegetazione"
+    ],
+    [
+      "~d['’]Ossigeno",
+      "di Vegetazione",
+      "case"
+    ],
+    [
+      "~d['’]ossigeno",
+      "di vegetazione"
+    ],
+    [
+      "~ossigeno",
+      "vegetazione"
+    ],
+    [
+      "~temperature",
+      "riserve d'acqua"
+    ],
+    [
+      "~temperatura",
+      "riserva d'acqua"
+    ],
+    [
+      "~le Tue piante",
+      "la tua Vegetazione",
+      "case"
+    ],
+    [
+      "~le tue piante",
+      "la tua vegetazione"
+    ],
+    [
+      "~le Sue piante",
+      "la sua Vegetazione",
+      "case"
+    ],
+    [
+      "~le sue piante",
+      "la sua vegetazione"
+    ],
+    [
+      "~le loro piante",
+      "la loro vegetazione"
+    ],
+    [
+      "~le Piante",
+      "la Vegetazione",
+      "case"
+    ],
+    [
+      "~le piante",
+      "la vegetazione"
+    ],
+    [
+      "~delle Piante",
+      "della Vegetazione",
+      "case"
+    ],
+    [
+      "~delle piante",
+      "della vegetazione"
+    ],
+    [
+      "~alle Piante",
+      "alla Vegetazione",
+      "case"
+    ],
+    [
+      "~alle piante",
+      "alla vegetazione"
+    ],
+    [
+      "~dalle Piante",
+      "dalla Vegetazione",
+      "case"
+    ],
+    [
+      "~dalle piante",
+      "dalla vegetazione"
+    ],
+    [
+      "~piante|pianta",
+      "vegetazione"
+    ],
+    [
+      "~ed Energia",
+      "e Umidità",
+      "case"
+    ],
+    [
+      "~ed energia",
+      "e umidità"
+    ],
+    [
+      "~energia",
+      "umidità"
+    ],
+    [
+      "~(simbol[oi]|cart[ae]) Potenza",
+      "$1 Umidità",
+      "case"
+    ],
+    [
+      "~(simbol[oi]|cart[ae]) potenza",
+      "$1 umidità"
+    ],
+    [
+      "~il Calore",
+      "l'Acqua",
+      "case"
+    ],
+    [
+      "~il calore",
+      "l'acqua"
+    ],
+    [
+      "~del Calore",
+      "dell'Acqua",
+      "case"
+    ],
+    [
+      "~del calore",
+      "dell'acqua"
+    ],
+    [
+      "~al Calore",
+      "all'Acqua",
+      "case"
+    ],
+    [
+      "~al calore",
+      "all'acqua"
+    ],
+    [
+      "~dal Calore",
+      "dall'Acqua",
+      "case"
+    ],
+    [
+      "~dal calore",
+      "dall'acqua"
+    ],
+    [
+      "~di Calore",
+      "di Acqua",
+      "case"
+    ],
+    [
+      "~di calore",
+      "d'acqua"
+    ],
+    [
+      "~calore Posseduto",
+      "Acqua posseduta",
+      "case"
+    ],
+    [
+      "~calore posseduto",
+      "acqua posseduta"
+    ],
+    [
+      "~calore",
+      "acqua"
+    ],
+    [
+      "~gli Oceani",
+      "i Campi di spezia",
+      "case"
+    ],
+    [
+      "~gli oceani",
+      "i campi di spezia"
+    ],
+    [
+      "~degli Oceani",
+      "dei Campi di spezia",
+      "case"
+    ],
+    [
+      "~degli oceani",
+      "dei campi di spezia"
+    ],
+    [
+      "~agli Oceani",
+      "ai Campi di spezia",
+      "case"
+    ],
+    [
+      "~agli oceani",
+      "ai campi di spezia"
+    ],
+    [
+      "~sugli Oceani",
+      "sui Campi di spezia",
+      "case"
+    ],
+    [
+      "~sugli oceani",
+      "sui campi di spezia"
+    ],
+    [
+      "~dell['’]Oceano",
+      "del Campo di spezia",
+      "case"
+    ],
+    [
+      "~dell['’]oceano",
+      "del campo di spezia"
+    ],
+    [
+      "~all['’]Oceano",
+      "al Campo di spezia",
+      "case"
+    ],
+    [
+      "~all['’]oceano",
+      "al campo di spezia"
+    ],
+    [
+      "~sull['’]Oceano",
+      "sul Campo di spezia",
+      "case"
+    ],
+    [
+      "~sull['’]oceano",
+      "sul campo di spezia"
+    ],
+    [
+      "~l['’]Oceano",
+      "il Campo di spezia",
+      "case"
+    ],
+    [
+      "~l['’]oceano",
+      "il campo di spezia"
+    ],
+    [
+      "~oceani",
+      "campi di spezia"
+    ],
+    [
+      "~oceano",
+      "campo di spezia"
+    ],
+    [
+      "~Città di Noctis|Noctis City",
+      "Arrakeen"
+    ],
+    [
+      "~(tessere?) Città",
+      "$1 Sietch",
+      "case"
+    ],
+    [
+      "~(tessere?) città",
+      "$1 sietch"
+    ],
+    [
+      "~un['’]Altra città",
+      "un altro Sietch",
+      "case"
+    ],
+    [
+      "~un['’]altra città",
+      "un altro sietch"
+    ],
+    [
+      "~una Città",
+      "un Sietch",
+      "case"
+    ],
+    [
+      "~una città",
+      "un sietch"
+    ],
+    [
+      "~la Tua città",
+      "il tuo Sietch",
+      "case"
+    ],
+    [
+      "~la tua città",
+      "il tuo sietch"
+    ],
+    [
+      "~la Sua città",
+      "il suo Sietch",
+      "case"
+    ],
+    [
+      "~la sua città",
+      "il suo sietch"
+    ],
+    [
+      "~le Tue città",
+      "i tuoi Sietch",
+      "case"
+    ],
+    [
+      "~le tue città",
+      "i tuoi sietch"
+    ],
+    [
+      "~le Sue città",
+      "i suoi Sietch",
+      "case"
+    ],
+    [
+      "~le sue città",
+      "i suoi sietch"
+    ],
+    [
+      "~della Città",
+      "del Sietch",
+      "case"
+    ],
+    [
+      "~della città",
+      "del sietch"
+    ],
+    [
+      "~alla Città",
+      "al Sietch",
+      "case"
+    ],
+    [
+      "~alla città",
+      "al sietch"
+    ],
+    [
+      "~dalla Città",
+      "dal Sietch",
+      "case"
+    ],
+    [
+      "~dalla città",
+      "dal sietch"
+    ],
+    [
+      "~nella Città",
+      "nel Sietch",
+      "case"
+    ],
+    [
+      "~nella città",
+      "nel sietch"
+    ],
+    [
+      "~sulla Città",
+      "sul Sietch",
+      "case"
+    ],
+    [
+      "~sulla città",
+      "sul sietch"
+    ],
+    [
+      "~la Città",
+      "il Sietch",
+      "case"
+    ],
+    [
+      "~la città",
+      "il sietch"
+    ],
+    [
+      "~delle Città",
+      "dei Sietch",
+      "case"
+    ],
+    [
+      "~delle città",
+      "dei sietch"
+    ],
+    [
+      "~alle Città",
+      "ai Sietch",
+      "case"
+    ],
+    [
+      "~alle città",
+      "ai sietch"
+    ],
+    [
+      "~dalle Città",
+      "dai Sietch",
+      "case"
+    ],
+    [
+      "~dalle città",
+      "dai sietch"
+    ],
+    [
+      "~nelle Città",
+      "nei Sietch",
+      "case"
+    ],
+    [
+      "~nelle città",
+      "nei sietch"
+    ],
+    [
+      "~sulle Città",
+      "sui Sietch",
+      "case"
+    ],
+    [
+      "~sulle città",
+      "sui sietch"
+    ],
+    [
+      "~le Città",
+      "i Sietch",
+      "case"
+    ],
+    [
+      "~le città",
+      "i sietch"
+    ],
+    [
+      "~altre Città",
+      "altri Sietch",
+      "case"
+    ],
+    [
+      "~altre città",
+      "altri sietch"
+    ],
+    [
+      "~tua Città",
+      "tuo Sietch",
+      "case"
+    ],
+    [
+      "~tua città",
+      "tuo sietch"
+    ],
+    [
+      "~sua Città",
+      "suo Sietch",
+      "case"
+    ],
+    [
+      "~sua città",
+      "suo sietch"
+    ],
+    [
+      "~tue Città",
+      "tuoi Sietch",
+      "case"
+    ],
+    [
+      "~tue città",
+      "tuoi sietch"
+    ],
+    [
+      "~sue Città",
+      "suoi Sietch",
+      "case"
+    ],
+    [
+      "~sue città",
+      "suoi sietch"
+    ],
+    [
+      "~nessuna Città",
+      "nessun Sietch",
+      "case"
+    ],
+    [
+      "~nessuna città",
+      "nessun sietch"
+    ],
+    [
+      "~questa Città",
+      "questo Sietch",
+      "case"
+    ],
+    [
+      "~questa città",
+      "questo sietch"
+    ],
+    [
+      "~quella Città",
+      "quel Sietch",
+      "case"
+    ],
+    [
+      "~quella città",
+      "quel sietch"
+    ],
+    [
+      "~città",
+      "sietch"
+    ],
+    [
+      "(?<![\\p{L}])(?<!Era delle |era delle )corporazioni(?![\\p{L}])",
+      "casate"
+    ],
+    [
+      "~corporazione",
+      "casata"
+    ],
+    [
+      "~Marte",
+      "Arrakis"
+    ],
+    [
+      "~un['’]area vulcanica",
+      "un'area di alture rocciose"
+    ],
+    [
+      "~aree vulcaniche",
+      "aree di alture rocciose"
+    ],
+    [
+      "~area vulcanica",
+      "area di alture rocciose"
+    ],
+    [
+      "~(simbol[oi]|cart[ae]|event[oi]) spazio",
+      "$1 Gilda"
+    ],
+    [
+      "~(simbol[oi]|cart[ae]) terra",
+      "$1 Imperium"
+    ],
+    [
+      "~Terra",
+      "Imperium",
+      "case"
+    ],
+    [
+      "~gioviani|gioviane|gioviana|gioviano",
+      "mondo esterno"
+    ],
+    [
+      "~scienza",
+      "sapere"
+    ],
+    [
+      "~microbi|microbo",
+      "plancton della sabbia"
+    ],
+    [
+      "~un Animale",
+      "una Creatura",
+      "case"
+    ],
+    [
+      "~un animale",
+      "una creatura"
+    ],
+    [
+      "~nessun Animale",
+      "nessuna Creatura",
+      "case"
+    ],
+    [
+      "~nessun animale",
+      "nessuna creatura"
+    ],
+    [
+      "~dell['’]Animale",
+      "della Creatura",
+      "case"
+    ],
+    [
+      "~dell['’]animale",
+      "della creatura"
+    ],
+    [
+      "~l['’]Animale",
+      "la Creatura",
+      "case"
+    ],
+    [
+      "~l['’]animale",
+      "la creatura"
+    ],
+    [
+      "~gli Animali",
+      "le Creature",
+      "case"
+    ],
+    [
+      "~gli animali",
+      "le creature"
+    ],
+    [
+      "~degli Animali",
+      "delle Creature",
+      "case"
+    ],
+    [
+      "~degli animali",
+      "delle creature"
+    ],
+    [
+      "~agli Animali",
+      "alle Creature",
+      "case"
+    ],
+    [
+      "~agli animali",
+      "alle creature"
+    ],
+    [
+      "~animali",
+      "creature"
+    ],
+    [
+      "~animale",
+      "creatura"
+    ],
+    [
+      "~caccia",
+      "Sardaukar"
+    ],
+    [
+      "~dell['’]Asteroide",
+      "del Meteorite",
+      "case"
+    ],
+    [
+      "~dell['’]asteroide",
+      "del meteorite"
+    ],
+    [
+      "~all['’]Asteroide",
+      "al Meteorite",
+      "case"
+    ],
+    [
+      "~all['’]asteroide",
+      "al meteorite"
+    ],
+    [
+      "~l['’]Asteroide",
+      "il Meteorite",
+      "case"
+    ],
+    [
+      "~l['’]asteroide",
+      "il meteorite"
+    ],
+    [
+      "~gli Asteroidi",
+      "i Meteoriti",
+      "case"
+    ],
+    [
+      "~gli asteroidi",
+      "i meteoriti"
+    ],
+    [
+      "~degli Asteroidi",
+      "dei Meteoriti",
+      "case"
+    ],
+    [
+      "~degli asteroidi",
+      "dei meteoriti"
+    ],
+    [
+      "~agli Asteroidi",
+      "ai Meteoriti",
+      "case"
+    ],
+    [
+      "~agli asteroidi",
+      "ai meteoriti"
+    ],
+    [
+      "~sugli Asteroidi",
+      "sui Meteoriti",
+      "case"
+    ],
+    [
+      "~sugli asteroidi",
+      "sui meteoriti"
+    ],
+    [
+      "~asteroidi",
+      "meteoriti"
+    ],
+    [
+      "~asteroide",
+      "meteorite"
+    ]
+  ],
+  "exact": {}
+}
