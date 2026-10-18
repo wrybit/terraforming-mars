@@ -434,5 +434,12 @@
   "Requires 6 ocean tiles.": "条件：海洋タイル6枚以上.",
   "(Action: Use a standard project that you've already used this generation, with its cost reduced by 8 M€.)": "（アクション：今世代に既に使用した標準プロジェクトを、コスト8 M€減で使用.）",
   "(Action: Pay 1 corruption to gain either 5 steel, 3 titanium, 4 plants or 8 heat.)": "（アクション：1汚職を支払い、5建材、3チタン、4植物、8温熱のいずれかを獲得.）",
-  "(Effect: You may place cities adjacent to other cities. You must always place cities adjacent to your tiles or excavation markers, if possible.)": "（効果：他の都市に隣接して都市を配置できる. 可能なら常に自分のタイルか採掘マーカーに隣接して都市を配置しなければならない.）"
+  "(Effect: You may place cities adjacent to other cities. You must always place cities adjacent to your tiles or excavation markers, if possible.)": "（効果：他の都市に隣接して都市を配置できる. 可能なら常に自分のタイルか採掘マーカーに隣接して都市を配置しなければならない.）",
+  "Requires +4 C or warmer. Raise oxygen 1 step. Disregard normal placement restrictions for this.<note>Place a greenery tile <b>on an area reserved for ocean</b>.</note>": "条件：温度+4℃以上. 酸素+1. 配置条件を無視する.<note><b>海洋予定地</b>に緑地タイルを配置.</note>",
+  "Oxygen must be 4% or less. Increase your M€ production 1 step.<note>Place this tile <b>next to no other tile</b>.</note>": "条件：酸素4%以下. MC産出+1.<note><b>他タイルに隣接しないように</b>特殊タイルを配置.</note>",
+  "<note>Place a city tile <b>next to no other tile</b>.</note>": "<note><b>他タイルに隣接しないように</b>都市タイルを配置.</note>",
+  "Place an ocean tile.<note>Gain 3 plants, or add 3 microbes or 2 animals <b>to another card</b>.</note>": "海洋1枚配置.<note>3植物を獲得、または<b>別のカード</b>に3微生物か2動物を追加.</note>",
+  "Decrease your energy production 1 step and increase your M€ production 3 steps. Disregard normal placement restrictions for this.<note>Place a city tile <b>on the reserved area</b>.</note>": "電力産出-1し、MC産出+3. 配置条件を無視する.<note><b>予定地「ノクティス市」</b>へ都市タイルを配置.</note>",
+  "<note>Action: Spend 1 energy to gain 1 M€ for each city tile <b>on Mars</b>.</note>": "<note>アクション：1電力支払う. <b>火星上の</b>都市タイルの数分、1MC獲得.</note>",
+  "Decrease your energy production 1 step and increase your M€ production 2 steps.<note>Place a city tile <b>adjacent to at least 2 other city tiles</b>.</note>": "電力産出-1し、MC産出+2.<note><b>他の都市タイル2枚以上に隣接するように</b>都市タイルを配置.</note>"
 }

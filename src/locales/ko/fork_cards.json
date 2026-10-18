@@ -726,5 +726,12 @@
   "Requires 6 ocean tiles.": "조건: 해양 타일 6장 이상.",
   "(Action: Use a standard project that you've already used this generation, with its cost reduced by 8 M€.)": "(행동: 이번 세대에 이미 사용한 일반 프로젝트를 비용 8 M€ 할인하여 사용.)",
   "(Action: Pay 1 corruption to gain either 5 steel, 3 titanium, 4 plants or 8 heat.)": "(행동: 부패 1을 지불해서 강철 자원 5개, 티타늄 자원 3개, 식물 자원 4개, 열 자원 8개 중 하나 획득.)",
-  "(Effect: You may place cities adjacent to other cities. You must always place cities adjacent to your tiles or excavation markers, if possible.)": "(효과: 도시를 다른 도시에 인접하게 배치할 수 있음. 가능하면 도시는 항상 자신의 타일이나 탐색 마커에 인접하게 배치해야 함.)"
+  "(Effect: You may place cities adjacent to other cities. You must always place cities adjacent to your tiles or excavation markers, if possible.)": "(효과: 도시를 다른 도시에 인접하게 배치할 수 있음. 가능하면 도시는 항상 자신의 타일이나 탐색 마커에 인접하게 배치해야 함.)",
+  "Requires +4 C or warmer. Raise oxygen 1 step. Disregard normal placement restrictions for this.<note>Place a greenery tile <b>on an area reserved for ocean</b>.</note>": "조건: 기온 +4℃ 이상. 산소 농도 1% 상승. 배치 제한 무시.<note><b>빈 해양 전용 구역</b> 한 곳에 녹지 타일 1장 배치.</note>",
+  "Oxygen must be 4% or less. Increase your M€ production 1 step.<note>Place this tile <b>next to no other tile</b>.</note>": "조건: 산소 농도 4% 이하. 메가크레딧 생산력 1 증가.<note><b>다른 타일과 인접하지 않은</b> 빈 구역 한 곳에 타일 배치.</note>",
+  "<note>Place a city tile <b>next to no other tile</b>.</note>": "<note><b>다른 타일과 인접하지 않은</b> 빈 구역 한 곳에 도시 타일 1장 배치.</note>",
+  "Place an ocean tile.<note>Gain 3 plants, or add 3 microbes or 2 animals <b>to another card</b>.</note>": "해양 타일 1장 배치.<note>식물 자원 3개 획득 또는 미생물 자원 3개나 동물 자원 2개를 <b>자신의 다른 카드</b> 1장에 추가.</note>",
+  "Decrease your energy production 1 step and increase your M€ production 3 steps. Disregard normal placement restrictions for this.<note>Place a city tile <b>on the reserved area</b>.</note>": "에너지 생산력 1 감소. 메가크레딧 생산력 3 증가. 배치 제한 무시.<note><b>녹티스 시티 전용 구역</b>에 도시 타일 1장 배치.</note>",
+  "<note>Action: Spend 1 energy to gain 1 M€ for each city tile <b>on Mars</b>.</note>": "<note>행동: 에너지 자원 1개 소비해서 <b>화성에 배치된</b> 아무 도시 타일 1장당 1 M€ 획득.</note>",
+  "Decrease your energy production 1 step and increase your M€ production 2 steps.<note>Place a city tile <b>adjacent to at least 2 other city tiles</b>.</note>": "에너지 생산력 1 감소. 메가크레딧 생산력 2 증가.<note><b>아무 도시 타일 2장 이상과 인접한</b> 빈 구역 한 곳에 도시 타일 1장 배치.</note>"
 }

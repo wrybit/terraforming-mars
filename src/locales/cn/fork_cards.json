@@ -851,5 +851,12 @@
   "Requires 6 ocean tiles.": "需要 6 个海洋板块。",
   "(Action: Use a standard project that you've already used this generation, with its cost reduced by 8 M€.)": "（行动：使用一个你本时代已使用过的标准项目，其费用减少 8 M€。）",
   "(Action: Pay 1 corruption to gain either 5 steel, 3 titanium, 4 plants or 8 heat.)": "（行动：支付 1 腐败，获得 5 钢、3 钛、4 植物或 8 热能中的一项。）",
-  "(Effect: You may place cities adjacent to other cities. You must always place cities adjacent to your tiles or excavation markers, if possible.)": "（效果：你可以将城市放置在与其他城市相邻的位置。若可能，你必须始终将城市放置在与你的板块或挖掘标记相邻的位置。）"
+  "(Effect: You may place cities adjacent to other cities. You must always place cities adjacent to your tiles or excavation markers, if possible.)": "（效果：你可以将城市放置在与其他城市相邻的位置。若可能，你必须始终将城市放置在与你的板块或挖掘标记相邻的位置。）",
+  "Requires +4 C or warmer. Raise oxygen 1 step. Disregard normal placement restrictions for this.<note>Place a greenery tile <b>on an area reserved for ocean</b>.</note>": "需要火星温度至少+4度。提升氧气1级。无视基础放置条件。<note>放置一个森林板块<b>在原本用于放置海洋板块的地方</b>。</note>",
+  "Oxygen must be 4% or less. Increase your M€ production 1 step.<note>Place this tile <b>next to no other tile</b>.</note>": "氧气浓度不能高于4%。提升你的M€产量1级。<note>放置此板块到<b>不与已有板块相邻</b>的格子。</note>",
+  "<note>Place a city tile <b>next to no other tile</b>.</note>": "<note>放置一个城市，<b>不能和任何其他板块相邻</b>。</note>",
+  "Place an ocean tile.<note>Gain 3 plants, or add 3 microbes or 2 animals <b>to another card</b>.</note>": "放置一个海洋板块。<note>获得3个植物资源，或者放置3个微生物资源或2个动物资源<b>到另一张卡</b>。</note>",
+  "Decrease your energy production 1 step and increase your M€ production 3 steps. Disregard normal placement restrictions for this.<note>Place a city tile <b>on the reserved area</b>.</note>": "降低你的电力产量1级，提升你的M€产量3级。无视基础放置条件。<note>放置一个城市板块<b>到预留区域</b>。</note>",
+  "<note>Action: Spend 1 energy to gain 1 M€ for each city tile <b>on Mars</b>.</note>": "<note>行动：花费1电力，<b>火星上</b>每有1个城市，你获得1 M€。</note>",
+  "Decrease your energy production 1 step and increase your M€ production 2 steps.<note>Place a city tile <b>adjacent to at least 2 other city tiles</b>.</note>": "降低你的电力产量1级并增加你的M€产量2级。<note>放置1个城市板块<b>在相邻至少2个城市的区域</b>。</note>"
 }

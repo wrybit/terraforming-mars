@@ -1061,5 +1061,12 @@
   "(Action: Use a standard project that you've already used this generation, with its cost reduced by 8 M€.)": "(Ação: use um projeto-padrão que você já usou nesta geração, com custo reduzido em 8 M€.)",
   "(Action: Pay 1 corruption to gain either 5 steel, 3 titanium, 4 plants or 8 heat.)": "(Ação: pague 1 corrupção para ganhar 5 aços, 3 titânios, 4 plantas ou 8 de calor.)",
   "(Effect: You may place cities adjacent to other cities. You must always place cities adjacent to your tiles or excavation markers, if possible.)": "(Efeito: você pode colocar cidades adjacentes a outras cidades. Você deve sempre colocar cidades adjacentes aos seus tiles ou marcadores de escavação, se possível.)",
-  "Sinus Iridum Road Network": "Rede Rodoviária de Sinus Iridum"
+  "Sinus Iridum Road Network": "Rede Rodoviária de Sinus Iridum",
+  "Requires +4 C or warmer. Raise oxygen 1 step. Disregard normal placement restrictions for this.<note>Place a greenery tile <b>on an area reserved for ocean</b>.</note>": "Requer +4°C ou mais. Aumente o oxigênio em 1 nível. Ignore as restrições normais de colocação.<note>Coloque 1 tile de vegetação <b>em uma área reservada para oceano</b>.</note>",
+  "Oxygen must be 4% or less. Increase your M€ production 1 step.<note>Place this tile <b>next to no other tile</b>.</note>": "O nível de oxigênio deve estar em 4% ou menos. Aumente sua produção de M€ 1 nível.<note>Coloque este tile <b>sem encostar em nenhum outro tile</b>.</note>",
+  "<note>Place a city tile <b>next to no other tile</b>.</note>": "<note>Coloque um tile de cidade <b>sem encostar em nenhum outro tile</b>.</note>",
+  "Place an ocean tile.<note>Gain 3 plants, or add 3 microbes or 2 animals <b>to another card</b>.</note>": "Coloque um tile de oceano.<note>Ganhe 3 plantas, ou adicione 3 micróbios ou 2 animais <b>a outra carta</b>.</note>",
+  "Decrease your energy production 1 step and increase your M€ production 3 steps. Disregard normal placement restrictions for this.<note>Place a city tile <b>on the reserved area</b>.</note>": "Diminua sua produção de energia em 1 nível e aumente sua produção de M€ 3 níveis. Ignore as restrições normais de colocação.<note>Coloque um tile de cidade <b>na área reservada</b>.</note>",
+  "<note>Action: Spend 1 energy to gain 1 M€ for each city tile <b>on Mars</b>.</note>": "<note>Ação: gaste 1 de energia para ganhar 1 M€ por cada tile de cidade <b>em Marte</b>.</note>",
+  "Decrease your energy production 1 step and increase your M€ production 2 steps.<note>Place a city tile <b>adjacent to at least 2 other city tiles</b>.</note>": "Diminua sua produção de energia 1 nível e aumente sua produção de M€ em 2.<note>Coloque um tile de cidade <b>adjacente a pelo menos 2 outros tiles de cidade</b>.</note>"
 }

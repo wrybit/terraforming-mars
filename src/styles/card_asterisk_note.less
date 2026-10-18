@@ -1,0 +1,33 @@
+// "*" rule of a card text, set apart below the effect text with its key words highlighted
+// (CardDescription.vue, texts in src/client/cards/asteriskNotes.ts)
+.card-description-split {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-asterisk-note {
+  display: flex;
+  gap: 3px;
+  padding: 2px 4px;
+  border-left: 2px solid #d8892a;
+  border-radius: 0 3px 3px 0;
+  background: rgba(216, 137, 42, 0.12);
+  text-align: left;
+
+  mark {
+    padding: 0 2px;
+    border-radius: 2px;
+    background: #f6c46a;
+    color: #2a1a08;
+    font-weight: 600;
+    // Keeps the highlight intact across a line break
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+}
+
+.card-asterisk-note-star {
+  color: #c0661a;
+  font-weight: 800;
+}
