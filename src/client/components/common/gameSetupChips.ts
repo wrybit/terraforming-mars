@@ -1,4 +1,5 @@
 import {Expansion} from '@/common/cards/GameModule';
+import {DUNE_MODULE_LABEL} from '@/common/dune/DuneModule';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_EXPANSIONS, SeatIconKind} from '@/client/components/create/createGameChoices';
 import {defaultCreateGameModel} from '@/client/components/create/defaultCreateGameModel';
@@ -127,7 +128,10 @@ export function optionChips(options: GameSetupOptions, isActive: (expansion: Exp
     [multiplayer && random && options.includeFanMA, translateText('Include fan Milestones/Awards'), 'milestones'],
     [options.customCardPool, translateText('Card pool'), 'cardPool'],
   ];
-  return candidates.filter(([shown]) => shown).map(([, label, group, icon]) => ({
+  // Dune expansion modules right after the expansions: they change the rules like an expansion
+  const duneModules: Array<[boolean, string, GameSetupGroupKey, string?]> = (options.duneModules ?? [])
+    .map((module) => [true, translateText(DUNE_MODULE_LABEL[module]), 'expansions']);
+  return [...duneModules, ...candidates].filter(([shown]) => shown).map(([, label, group, icon]) => ({
     key: label,
     label,
     group,

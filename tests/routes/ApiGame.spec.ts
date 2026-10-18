@@ -98,6 +98,7 @@ describe('ApiGame', () => {
           'soloTR': false,
           'twoCorpsVariant': false,
           'theme': 'mars',
+          'duneModules': [],
           'undoOption': false,
 
           'aresHazards': true,

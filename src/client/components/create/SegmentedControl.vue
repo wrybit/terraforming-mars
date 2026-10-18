@@ -12,6 +12,7 @@
       @click="$emit('update:modelValue', option.value)">
       <!-- With a symbol the label only names the button for screen readers -->
       <SeatIcon v-if="option.icon !== undefined" :kind="option.icon" :size="20"/>
+      <span v-else-if="option.raw">{{ option.label }}</span>
       <span v-else v-i18n>{{ option.label }}</span>
     </button>
   </div>

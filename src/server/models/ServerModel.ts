@@ -1,4 +1,5 @@
 import {canCancelAction} from '../actionStart';
+import {DuneExpansion} from '../dune/DuneExpansion';
 import {CardModel} from '../../common/models/CardModel';
 import {Color} from '../../common/Color';
 import {IGame} from '../IGame';
@@ -90,6 +91,7 @@ export class Server {
       oxygenLevel: game.getOxygenLevel(),
       passedPlayers: game.getPassedPlayers(),
       pathfinders: createPathfindersModel(game),
+      dune: DuneExpansion.model(game),
       phase: game.phase,
       spaces: this.getSpaces(game.board, game.gagarinBase, game.stJosephCathedrals, game.nomadSpace),
       spectatorId: game.spectatorId,
@@ -484,6 +486,8 @@ export class Server {
       requiresVenusTrackCompletion: options.requiresVenusTrackCompletion,
       twoCorpsVariant: options.twoCorpsVariant,
       theme: options.theme,
+      // Saved games from before the Dune expansion have no list
+      duneModules: options.duneModules ?? [],
       undoOption: options.undoOption,
 
       // These are only supplied for the JSON, and

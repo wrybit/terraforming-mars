@@ -1,4 +1,5 @@
 import {Theme} from '../theme/Theme';
+import {DuneModule} from '../dune/DuneModule';
 import {BoardName} from '../boards/BoardName';
 import {RandomMAOptionType} from '../ma/RandomMAOptionType';
 import {AgendaStyle} from '../turmoil/Types';
@@ -36,6 +37,7 @@ export type GameOptionsModel = {
   requiresVenusTrackCompletion: boolean,
   twoCorpsVariant: boolean,
   theme: Theme,
+  duneModules: ReadonlyArray<DuneModule>,
   undoOption: boolean,
 
   // These are only supplied for the JSON, and

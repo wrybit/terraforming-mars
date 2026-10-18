@@ -1,4 +1,5 @@
 import {AgendaStyle} from '../turmoil/Types';
+import {DuneModule} from '../dune/DuneModule';
 import {RandomMAOptionType} from '../ma/RandomMAOptionType';
 import {GameOptionsModel} from '../models/GameOptionsModel';
 import {NewGameConfig} from './NewGameConfig';
@@ -22,6 +23,8 @@ export type GameSetupOptions = {
   startingPreludes: number | undefined;
   startingCeos: number | undefined;
   twoCorpsVariant: boolean;
+  /** Dune expansion modules (common/dune/DuneModule.ts) */
+  duneModules?: ReadonlyArray<DuneModule>;
   draftVariant: boolean;
   initialDraftVariant: boolean;
   preludeDraftVariant: boolean;
@@ -73,6 +76,7 @@ export function setupOptionsFromConfig(config: NewGameConfig): GameSetupOptions 
     startingPreludes: config.startingPreludes,
     startingCeos: config.startingCeos,
     twoCorpsVariant: config.twoCorpsVariant,
+    duneModules: config.duneModules ?? [],
     draftVariant: config.draftVariant,
     initialDraftVariant: config.initialDraft,
     preludeDraftVariant: config.preludeDraftVariant,
@@ -108,6 +112,7 @@ export function setupOptionsFromGame(options: GameOptionsModel): GameSetupOption
     startingPreludes: options.startingPreludes,
     startingCeos: options.startingCeos,
     twoCorpsVariant: options.twoCorpsVariant === true,
+    duneModules: options.duneModules ?? [],
     draftVariant: options.draftVariant === true,
     initialDraftVariant: options.initialDraftVariant === true,
     preludeDraftVariant: options.preludeDraftVariant === true,

@@ -64,6 +64,11 @@ export class JSONProcessor {
       json.escapeVelocityThreshold = options.thresholdMinutes;
     }
 
+    // Dune expansion: the config lists the modules, the form has one switch per module
+    if (Array.isArray(json.duneModules)) {
+      json.duneBazaar = (json.duneModules as Array<unknown>).includes('bazaar');
+    }
+
     function set<T>(field: string): Array<T> {
       return cast(json[field] ?? [], Array) as Array<T>;
     }
@@ -116,6 +121,7 @@ export class JSONProcessor {
       json_constants.OLD_CUSTOM_CORPORATIONS,
       ...Object.values(oldExpansionFields),
       'escapeVelocity',
+      'duneModules',
       'players',
       'solarPhaseOption',
       'constants'];

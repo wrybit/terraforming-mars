@@ -25,6 +25,13 @@
         <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings"/>
       </div>
     </header>
+    <!-- Theme above everything: it decides which boards and expansions exist (common/theme/Theme.ts) -->
+    <section class="create-game-card create-game-theme-bar" data-test="create-game-theme-bar">
+      <div class="create-game-theme-bar__group">
+        <h2 class="create-game-theme-bar__title" v-i18n>Theme</h2>
+        <SegmentedControl class="create-game-segmented--equal create-game-theme-bar__switch" v-model="theme" :options="THEME_OPTIONS"/>
+      </div>
+    </section>
     <div class="create-game-layout">
       <main class="create-game-settings">
         <!-- Fixed columns per window width (createGameColumns.ts), so cards never jump while settings change.
@@ -67,6 +74,14 @@
                 </div>
               </CollapsibleSection>
             </template>
+            <!-- Dune expansion: its modules change the rules, each on its own (common/dune/DuneModule.ts); only with Dune -->
+            <CollapsibleSection v-if="theme === 'dune'" variant="subhead" title="Dune expansion" :collapsible="false" storageKey="duneExpansions" defaultOpen>
+              <div class="create-game-chip-grid create-game-expansion-grid">
+                <ChoiceChip label="Bazaar of Arrakeen" iconClass="expansion-icon-dune-bazaar" :selected="duneBazaar" @select="duneBazaar = !duneBazaar">
+                  <template #detail><span v-i18n>32 wares · bazaar phase</span></template>
+                </ChoiceChip>
+              </div>
+            </CollapsibleSection>
           </section>
         </Teleport>
         <!-- Only once an expansion with options is on (less is more); v-if on the Teleport, see Milestones & Awards -->
@@ -106,9 +121,6 @@
         <Teleport :to="columnTarget('board')">
           <section class="create-game-card" :style="cardStyle('board')">
             <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
-            <!-- Theme first: it decides which boards and expansions exist (common/theme/Theme.ts) -->
-            <div class="create-game-subhead" v-i18n>Theme</div>
-            <SegmentedControl class="create-game-segmented--equal" v-model="theme" :options="THEME_OPTIONS"/>
             <div v-if="theme === 'dune'" class="create-game-chip-grid create-game-theme-board">
               <ChoiceChip :label="DUNE_BOARD" capitalized selected locked>
                 <template #icon><span :class="getBoardColorClass(DUNE_BOARD)"></span></template>
@@ -215,7 +227,8 @@
         </Teleport>
         <!-- Own card: has nothing to do with the board (only with several players, solo has none).
              v-if on the Teleport, not on the card: a card switched on later inside a Teleport did not appear -->
-        <Teleport v-if="playersCount > 1" :to="columnTarget('milestones')">
+        <!-- Dune plays the milestones and awards of Arrakis; the random Mars sets have no Dune names -->
+        <Teleport v-if="playersCount > 1 && theme !== 'dune'" :to="columnTarget('milestones')">
           <section class="create-game-card" :style="cardStyle('milestones')">
             <CollapsibleSection title="Milestones & Awards" storageKey="milestones" :changed="milestonesNote">
               <template #actions><InfoLink :href="wikiUrls.randomMilestonesAndAwards"/></template>
@@ -412,6 +425,7 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {describeFailure, failureFromResponse, failureOf, fetchOrFail, RequestFailedError} from '@/client/utils/requestFailure';
 import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import {DUNE_BOARD, Theme, themeAllowsExpansion} from '@/common/theme/Theme';
+import {activeTheme, applyTheme} from '@/client/theme/applyTheme';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
@@ -595,6 +609,10 @@ export default defineComponent({
         this.preludeToggled = true;
       }
     },
+    // The theme's texts and pictures replace the Mars ones everywhere, the board preview included
+    theme(value: Theme) {
+      this.$nextTick(() => this.switchTheme(value));
+    },
     currentSettingsHash(hash: string) {
       if (this.settingsLinkReady && !this.uploading) {
         replaceSettingsHash(hash);
@@ -634,6 +652,8 @@ export default defineComponent({
       if (!this.uploading) {
         replaceSettingsHash(this.currentSettingsHash);
       }
+      // Restored settings with the other theme (link, last settings): show the form in that theme
+      this.switchTheme(this.theme);
     });
 
     // Set the viewport width to width=device-width on the create game form so mobile browsers use their actual CSS viewport width.
@@ -672,8 +692,11 @@ export default defineComponent({
      *
      * serializeSettings finishes the players and the escape velocity values, and checks the cloned game.
      */
+    // With Dune only the expansions it covers exist at all (not greyed out); groups left empty go
     expansionGroups(): Array<ExpansionGroup> {
-      return groupExpansions(this.expansionGrouping);
+      return groupExpansions(this.expansionGrouping)
+        .map((group) => ({...group, tiles: group.tiles.filter((tile) => tile.choice === undefined || this.expansionAvailable(tile.choice.expansion))}))
+        .filter((group) => group.tiles.length > 0);
     },
     // Fixed board: its name; random board: the drawn one as soon as the preview knows it
     summaryBoard(): BoardName | undefined {
@@ -716,7 +739,7 @@ export default defineComponent({
         initialDraft: this.initialDraft,
         preludeDraftVariant: this.preludeDraftVariant ?? false,
         ceosDraftVariant: this.ceosDraftVariant ?? false,
-        randomMA: this.randomMA,
+        randomMA: this.theme === 'dune' ? RandomMAOptionType.NONE : this.randomMA,
         shuffleMapOption: this.shuffleMapOption,
         randomFirstPlayer: this.randomFirstPlayer,
         requiresVenusTrackCompletion: this.requiresVenusTrackCompletion,
@@ -733,6 +756,7 @@ export default defineComponent({
         } : undefined,
         twoCorpsVariant: this.twoCorpsVariant,
         theme: this.theme,
+        duneModules: this.theme === 'dune' && this.duneBazaar ? ['bazaar'] : [],
         startingCeos: this.startingCeos,
         startingPreludes: this.startingPreludes,
       };
@@ -857,7 +881,8 @@ export default defineComponent({
       },
     },
     THEME_OPTIONS(): ReadonlyArray<SegmentOption> {
-      return [{value: 'mars', label: 'Mars'}, {value: 'dune', label: 'Dune'}];
+      // Names, not words: the Dune texts would turn "Mars" into "Arrakis"
+      return [{value: 'mars', label: 'Mars', raw: true}, {value: 'dune', label: 'Dune', raw: true}];
     },
     DUNE_BOARD(): BoardName {
       return DUNE_BOARD;
@@ -942,6 +967,16 @@ export default defineComponent({
     },
     collapseEnter,
     collapseLeave,
+    // v-i18n translates once when rendered, so a fresh form shows the new wording. The link in the address
+    // bar carries every setting, the new form restores itself from it (restoreSettingsFromLink).
+    async switchTheme(theme: Theme) {
+      if (activeTheme() === theme) {
+        return;
+      }
+      replaceSettingsHash(this.currentSettingsHash);
+      await applyTheme(theme);
+      vueRoot(this).remountCreateGameForm();
+    },
     restoreSettingsFromLink(): boolean {
       try {
         const settings = readSettingsFromHash(window.location.hash);

@@ -61,5 +61,7 @@ export type CreateGameModel = {
   startingCorporations: number;
   startingPreludes: number;
   twoCorpsVariant: boolean;
+  /** Dune expansion module A (common/dune/DuneModule.ts); only sent with the Dune theme */
+  duneBazaar: boolean;
   undoOption: boolean;
 }

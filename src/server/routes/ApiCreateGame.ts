@@ -1,5 +1,6 @@
 import {aiUnsupportedReasons} from '../../common/ai/aiSupport';
 import {DEFAULT_THEME, THEMES, isTheme, themeConflicts} from '../../common/theme/Theme';
+import {duneModuleConflicts} from '../../common/dune/DuneModule';
 import {aiPlayerName, isAiLevel} from '../../common/ai/AiLevel';
 import * as responses from '../server/responses';
 import {Handler} from './Handler';
@@ -134,6 +135,7 @@ export class ApiCreateGame extends Handler {
       turmoilExtension: gameReq.expansions.turmoil,
       twoCorpsVariant: gameReq.twoCorpsVariant,
       theme: gameReq.theme ?? DEFAULT_THEME,
+      duneModules: gameReq.duneModules ?? [],
       underworldExpansion: gameReq.expansions.underworld,
       deltaProjectExpansion: gameReq.expansions.deltaProject,
       undoOption: gameReq.undoOption,
@@ -187,6 +189,10 @@ export class ApiCreateGame extends Handler {
       const themeErrors = themeConflicts(gameReq.theme ?? DEFAULT_THEME, gameReq.board, gameReq.expansions);
       if (themeErrors.length > 0) {
         throw RouteError.badRequest(themeErrors.join(' '));
+      }
+      const duneErrors = duneModuleConflicts(gameReq.theme ?? DEFAULT_THEME, gameReq.duneModules);
+      if (duneErrors.length > 0) {
+        throw RouteError.badRequest(duneErrors.join(' '));
       }
       // Same rule as the create-game form (common/ai/aiSupport.ts): no AI players with settings it cannot handle
       const aiBlockers = aiUnsupportedReasons({expansions: gameReq.expansions, twoCorpsVariant: gameReq.twoCorpsVariant});

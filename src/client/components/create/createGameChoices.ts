@@ -18,6 +18,8 @@ export type SegmentOption = {
   icon?: SeatIconKind;
   /** Shown but not selectable, e.g. a seat taken by the other kind of player. */
   disabled?: boolean;
+  /** Shown as written, never translated (proper names such as the themes) */
+  raw?: boolean;
 };
 
 export type ExpansionChoice = {

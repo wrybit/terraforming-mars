@@ -72,6 +72,7 @@ import {GlobalParameterMaximums} from '../common/boards/GlobalParameterMaximums'
 import {MarsBoard} from './boards/MarsBoard';
 import {UnderworldData} from './underworld/UnderworldData';
 import {UnderworldExpansion} from './underworld/UnderworldExpansion';
+import {DuneData, DuneExpansion} from './dune/DuneExpansion';
 import {SendDelegateToArea} from './deferredActions/SendDelegateToArea';
 import {BuildColony} from './deferredActions/BuildColony';
 import {newInitialDraft, newPreludeDraft, newCEOsDraft, newStandardDraft} from './Draft';
@@ -166,6 +167,7 @@ export class Game implements IGame, Logger {
   public moonData: MoonData | undefined;
   public pathfindersData: PathfindersData | undefined;
   public underworldData: UnderworldData = UnderworldExpansion.initializeGameWithoutUnderworld();
+  public duneData: DuneData | undefined = undefined;
   public inTurmoil: boolean = false;
 
   // Card-specific data
@@ -393,6 +395,8 @@ export class Game implements IGame, Logger {
       game.moonData = MoonExpansion.initialize(gameOptions, rng);
     }
 
+    game.duneData = DuneExpansion.initialize(gameOptions.duneModules, rng);
+
     if (gameOptions.pathfindersExpansion) {
       game.pathfindersData = PathfindersExpansion.initialize(game);
     }
@@ -538,6 +542,7 @@ export class Game implements IGame, Logger {
       temperature: this.temperature,
       tradeEmbargo: this.tradeEmbargo,
       underworldData: this.underworldData,
+      duneData: this.duneData,
       undoCount: this.undoCount,
       venusScaleLevel: this.venusScaleLevel,
       verminInEffect: this.verminInEffect,
@@ -1100,7 +1105,8 @@ export class Game implements IGame, Logger {
         this.passedPlayers.clear();
         this.potentiallyChangeFirstPlayer();
 
-        this.startActionsForPlayer(this.first);
+        // Dune expansion: the bazaar phase lies between research and the actions
+        DuneExpansion.beforeActionPhase(this, () => this.startActionsForPlayer(this.first));
       }
     });
   }
@@ -1219,7 +1225,7 @@ export class Game implements IGame, Logger {
     this.gotoEndGame();
   }
 
-  private startActionsForPlayer(player: IPlayer) {
+  private startActionsForPlayer(player: IPlayer): void {
     this.activePlayer = player;
     player.actionsTakenThisGame++;
     player.actionsTakenThisRound = 0;
@@ -1827,6 +1833,7 @@ export class Game implements IGame, Logger {
     if (d.underworldData !== undefined) {
       game.underworldData = d.underworldData;
     }
+    game.duneData = d.duneData;
     game.passedPlayers = new Set<PlayerId>(d.passedPlayers);
     game.donePlayers = new Set<PlayerId>(d.donePlayers);
     game.researchedPlayers = new Set<PlayerId>(d.researchedPlayers);
@@ -1886,7 +1893,7 @@ export class Game implements IGame, Logger {
       }
     } else if (game.phase === Phase.END) {
       // There's nowhere that we need to go for end game.
-    } else {
+    } else if (!DuneExpansion.resume(game, () => game.startActionsForPlayer(game.first))) {
       // We should be in ACTION phase, let's prompt the active player for actions
       game.activePlayer.takeAction(/* saveBeforeTakingAction */ false);
     }

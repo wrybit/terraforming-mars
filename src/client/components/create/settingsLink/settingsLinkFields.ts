@@ -38,6 +38,7 @@ export const BOOLEAN_FIELDS: ReadonlyArray<BooleanModelField> = [
   'twoCorpsVariant',
   'escapeVelocityMode',
   'aiAnalysis',
+  'duneBazaar',
 ];
 
 export const NUMBER_FIELDS: ReadonlyArray<NumberModelField> = [

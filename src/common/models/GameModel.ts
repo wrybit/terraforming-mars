@@ -1,4 +1,5 @@
 import {GameOptionsModel} from './GameOptionsModel';
+import {DuneModel} from '../dune/DuneModel';
 import {ColonyModel} from './ColonyModel';
 import {Color} from '../Color';
 import {TurmoilModel} from './TurmoilModel';
@@ -50,6 +51,8 @@ export type GameModel = {
   oxygenLevel: number;
   passedPlayers: ReadonlyArray<Color>;
   pathfinders: PathfindersModel | undefined;
+  /** Dune expansion modules of this game (common/dune/DuneModule.ts) */
+  dune: DuneModel | undefined;
   phase: Phase;
   spaces: ReadonlyArray<SpaceModel>;
   spectatorId: SpectatorId;

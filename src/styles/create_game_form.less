@@ -259,10 +259,48 @@
   border-top: 1px solid @create-game-line;
 }
 
-// The only board of the Dune theme: its own group below the theme switch, spaced like the board groups of Mars
+// The only board of the Dune theme: alone in the board card, above the preview
 .create-game-theme-board {
-  margin-top: @create-game-gap-group;
+  margin-bottom: @create-game-gap-group;
 }
+
+// Dune expansion modules in the expansion list (CreateGameForm.vue): the special tile of the module
+.expansion-icon-dune-bazaar {
+  background-image: url(./assets/themes/dune/graphics/special-bazaar.svg);
+}
+
+// Theme bar above all cards (Jens): the theme decides boards and expansions, so it comes first.
+// Same side edges as the card layout below; its top padding is the gap between bar and cards.
+.create-game-theme-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: @create-game-gap-inner @create-game-gap-column * 2;
+  margin: @page-content-edge @page-content-edge 0;
+  margin-bottom: 0;
+
+  @media only screen and (max-width: @page-content-narrow) {
+    margin: @page-content-edge-narrow @page-content-edge-narrow 0;
+  }
+}
+
+.create-game-theme-bar__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: @create-game-gap-inner 14px;
+}
+
+.create-game-theme-bar__title {
+  margin: 0;
+  font-size: 18px;
+}
+
+.create-game-theme-bar__switch {
+  width: 320px;
+  max-width: 100%;
+}
+
 
 .create-game-subhead {
   display: flex;

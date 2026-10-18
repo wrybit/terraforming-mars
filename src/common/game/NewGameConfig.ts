@@ -9,6 +9,7 @@ import {AgendaStyle} from '../turmoil/Types';
 import {GameId} from '../Types';
 import {Expansion} from '../cards/GameModule';
 import {Theme} from '../theme/Theme';
+import {DuneModule} from '../dune/DuneModule';
 
 export type BoardNameType = BoardName | RandomBoardOption;
 
@@ -88,6 +89,8 @@ export type NewGameConfig = {
   twoCorpsVariant: boolean;
   /** Missing from older clients and saved settings: then 'mars' */
   theme?: Theme;
+  /** Modules of the Dune expansion; missing = none */
+  duneModules?: ReadonlyArray<DuneModule>;
   customCeos: ReadonlyArray<CardName>;
   startingCeos: number;
   startingPreludes: number;

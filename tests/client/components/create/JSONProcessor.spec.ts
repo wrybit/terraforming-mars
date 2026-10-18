@@ -155,6 +155,7 @@ const TEMPLATE_EXPECTED: CreateGameModel = {
   escapeVelocityPeriod: 2,
   escapeVelocityPenalty: 1,
   twoCorpsVariant: false,
+  duneBazaar: false,
   customCeos: [],
   startingCeos: 3,
   startingPreludes: 4,

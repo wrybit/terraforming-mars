@@ -1,0 +1,141 @@
+// Board tab "Bazaar" of the Dune expansion (components/dune/BazaarBoard.vue)
+@bazaar-spice: #e0662a;
+@bazaar-sand: #e4d2ae;
+@bazaar-ink: #2a1c12;
+
+.dune-bazaar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.dune-bazaar__slots {
+  display: grid;
+  // Always five slots in one row: the order left (newest, dearest) to right (oldest, cheapest) is the rule itself
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+
+  @media only screen and (max-width: 600px) {
+    gap: 6px;
+  }
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dune-bazaar__slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 150px;
+  padding: 8px 6px 10px;
+
+  @media only screen and (max-width: 600px) {
+    min-height: 120px;
+    padding: 6px 3px 8px;
+  }
+  border-radius: 10px;
+  background: linear-gradient(to bottom right, #f6ecd6, @bazaar-sand 45%, #dcc8a2);
+  box-shadow: 0 0 0 2px @bazaar-ink, 0 2px 6px rgba(0, 0, 0, 0.5);
+  color: @bazaar-ink;
+  text-align: center;
+}
+
+.dune-bazaar__slot--empty {
+  justify-content: center;
+  background: transparent;
+  box-shadow: none;
+  border: 2px dashed fade(@bazaar-sand, 45%);
+  color: fade(@bazaar-sand, 70%);
+}
+
+.dune-bazaar__change {
+  align-self: stretch;
+  padding: 2px 0;
+  border-radius: 6px;
+  background: fade(@bazaar-ink, 85%);
+  color: @bazaar-sand;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.dune-bazaar__slot--empty .dune-bazaar__change {
+  background: transparent;
+  color: inherit;
+}
+
+.dune-bazaar__name {
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 1.2;
+  hyphens: auto;
+  overflow-wrap: break-word;
+
+  @media only screen and (max-width: 600px) {
+    font-size: 10px;
+  }
+}
+
+.dune-bazaar__goods {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 8px;
+}
+
+.dune-bazaar__good {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 14px;
+
+  img {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.dune-bazaar__price {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto;
+  font-family: Prototype, sans-serif;
+  font-size: 20px;
+  color: @bazaar-spice;
+
+  img {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.dune-bazaar__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #d9d4c9;
+}
+
+.dune-bazaar__buyers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.dune-bazaar__buyer {
+  padding: 1px 8px;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.dune-bazaar__hint {
+  opacity: 0.75;
+}

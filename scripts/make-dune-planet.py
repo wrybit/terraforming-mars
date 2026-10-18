@@ -106,3 +106,8 @@ for mars_path, planet_path, dune_path in TARGETS:
     canvas.alpha_composite(sphere(size), (left, top))
     canvas.save(os.path.join(ROOT, dune_path), optimize=True)
     print(dune_path, mars.size, (left, top, size))
+
+# Small planet for the page heads (MarsHomeLink.vue) instead of assets/stats/mars.png
+ICON_SIZE = 128
+sphere(ICON_SIZE).save(os.path.join(ROOT, 'assets/themes/dune/arrakis-icon.png'), optimize=True)
+print('assets/themes/dune/arrakis-icon.png', ICON_SIZE)

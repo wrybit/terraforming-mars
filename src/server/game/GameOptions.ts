@@ -8,6 +8,7 @@ import {AgendaStyle} from '../../common/turmoil/Types';
 import {Expansion} from '../../common/cards/GameModule';
 import {EscapeVelocityOptions} from '../../common/game/NewGameConfig';
 import {DEFAULT_THEME, Theme} from '../../common/theme/Theme';
+import {DuneModule} from '../../common/dune/DuneModule';
 
 export type GameOptions = {
   boardName: BoardName;
@@ -79,6 +80,8 @@ export type GameOptions = {
   twoCorpsVariant: boolean;
   /** What the game looks like (common/theme/Theme.ts); never changes the rules */
   theme: Theme;
+  /** Modules of the Dune expansion (common/dune/DuneModule.ts); only with the Dune theme */
+  duneModules: ReadonlyArray<DuneModule>;
 }
 
 export const DEFAULT_GAME_OPTIONS: GameOptions = {
@@ -152,4 +155,5 @@ export const DEFAULT_GAME_OPTIONS: GameOptions = {
   venusNextExtension: false,
   twoCorpsVariant: false,
   theme: DEFAULT_THEME,
+  duneModules: [],
 };

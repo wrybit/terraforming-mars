@@ -17,6 +17,8 @@ import {isSimulating} from './simulationSandbox';
 import {OrOptions} from '../inputs/OrOptions';
 import {WORLD_GOVERNMENT_TITLE, chooseWorldGovernment} from './worldGovernmentChoice';
 import {tuningOf} from './aiTuning';
+import {chooseBazaarWare} from './bazaarChoice';
+import {BAZAAR_TITLE} from '../dune/Bazaar';
 import {clearFollowUpPlan, plannedFollowUp} from './followUpPlan';
 
 // Entry point of the rule-based AI (stage 1): which answer to give for the current input.
@@ -75,6 +77,13 @@ function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputRespo
   // World Government terraforming (Venus Next): each option tried on a game copy (worldGovernmentChoice.ts).
   if (input instanceof OrOptions && input.title === WORLD_GOVERNMENT_TITLE && tuningOf(player).worldGovernment > 0 && !isSimulating()) {
     const response = chooseWorldGovernment(input, player);
+    if (response !== undefined) {
+      return response;
+    }
+  }
+  // Dune expansion: buying at the bazaar of Arrakeen, each ware tried on a game copy (bazaarChoice.ts)
+  if (input instanceof OrOptions && input.title === BAZAAR_TITLE && !isSimulating()) {
+    const response = chooseBazaarWare(input, player);
     if (response !== undefined) {
       return response;
     }

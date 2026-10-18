@@ -33,6 +33,7 @@ import {Tile} from './Tile';
 import {Logger} from './logs/Logger';
 import {GlobalParameter} from '../common/GlobalParameter';
 import {UnderworldData} from './underworld/UnderworldData';
+import {DuneData} from './dune/DuneExpansion';
 import {OrOptions} from './inputs/OrOptions';
 import {IStandardProjectCard} from './cards/IStandardProjectCard';
 import {GlobalParameterTracks} from '@/server/boards/GlobalParameterTracks';
@@ -92,6 +93,8 @@ export interface IGame extends Logger {
   moonData: MoonData | undefined;
   pathfindersData: PathfindersData | undefined;
   underworldData: UnderworldData;
+  /** Modules of the Dune expansion (dune/DuneExpansion.ts); undefined without them */
+  duneData: DuneData | undefined;
 
   // Card-specific data
 

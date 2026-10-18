@@ -9,7 +9,7 @@ import {PLANETARY_TRACKS} from '@/common/pathfinders/PlanetaryTracks';
 import {PathfindersModel} from '@/common/models/PathfindersModel';
 import {Color} from '@/common/Color';
 
-export type BoardTabId = 'mars' | 'moon' | 'colonies' | 'turmoil' | 'paths' | 'delta';
+export type BoardTabId = 'mars' | 'moon' | 'colonies' | 'turmoil' | 'paths' | 'delta' | 'bazaar';
 
 // Tone = suffix of the or-tab tone classes (or_tab_tones.less); Turmoil shares the teal of the colonies
 export const BOARD_TAB_TONE: Record<BoardTabId, string> = {
@@ -19,6 +19,7 @@ export const BOARD_TAB_TONE: Record<BoardTabId, string> = {
   turmoil: 'colonies',
   paths: 'paths',
   delta: 'delta',
+  bazaar: 'bazaar',
 };
 
 export const BOARD_TAB_LABEL: Record<BoardTabId, string> = {
@@ -28,6 +29,7 @@ export const BOARD_TAB_LABEL: Record<BoardTabId, string> = {
   turmoil: 'Turmoil',
   paths: 'Planets',
   delta: 'Delta',
+  bazaar: 'Bazaar',
 };
 
 export function boardTabs(game: GameModel): Array<BoardTabId> {
@@ -46,6 +48,9 @@ export function boardTabs(game: GameModel): Array<BoardTabId> {
   }
   if (game.gameOptions.expansions.deltaProject) {
     tabs.push('delta');
+  }
+  if (game.dune?.bazaar !== undefined) {
+    tabs.push('bazaar');
   }
   return tabs;
 }
@@ -126,5 +131,10 @@ export function boardTabTracks(game: GameModel, players: ReadonlyArray<PublicPla
   case 'delta':
     return [{color: '#f4f5f8', step: 0, total: 12, bonus: [11, 12],
       markers: players.map((player) => ({at: player.deltaProject?.position ?? 0, color: player.color}))}];
+  case 'bazaar': {
+    // How many of the five slots hold a ware
+    const slots = game.dune?.bazaar?.slots ?? [];
+    return [{color: '#e0662a', step: slots.filter((slot) => slot.ware !== undefined).length, total: slots.length, bonus: []}];
+  }
   }
 }

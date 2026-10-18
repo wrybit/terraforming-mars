@@ -23,8 +23,10 @@
     </section>
     <div class="main-container">
       <StartScreen v-if="screen === 'start-screen'"/>
+      <!-- Key: a theme switch renders the form anew in the theme's wording (CreateGameForm.switchTheme) -->
       <CreateGameForm
         v-else-if="screen === 'create-game-form'"
+        :key="createGameFormKey"
       />
       <GameHome
         v-else-if="screen === 'game-home' && game !== undefined"
@@ -165,6 +167,8 @@ export type MainAppData = {
     componentsVisibility: {[x: string]: boolean};
     game: SimpleGameModel | undefined;
     login: string | undefined;
+    /** Changes when the create-game form must render anew (theme switch) */
+    createGameFormKey: number;
 }
 
 // NOTE: this simplistic truncation to the last segment might cause issues if
@@ -179,6 +183,7 @@ export default defineComponent({
   data(): MainAppData {
     return {
       screen: 'empty',
+      createGameFormKey: 0,
       isServerSideRequestInProgress: false,
       componentsVisibility: {
         'milestones': true,
@@ -249,6 +254,10 @@ export default defineComponent({
       const id = new URLSearchParams(window.location.search).get('id') ?? '';
       const report = await describeGameLoadFailure(id, err);
       this.showAlert(report.title, {text: report.text}, report.leadsToStartPage ? () => window.location.assign('./') : undefined);
+    },
+    /** Renders the create-game form anew; it restores its settings from the link in the address bar */
+    remountCreateGameForm(): void {
+      this.createGameFormKey++;
     },
     /** message: englischer Schluessel (wird uebersetzt) oder {text}: fertig uebersetzter Text mit Details */
     showAlert(title: string, message: string | {text: string}, cb: () => void = () => {}): void {
