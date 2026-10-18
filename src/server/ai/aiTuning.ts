@@ -76,6 +76,8 @@ export type AiTuning = {
   awardSwing: number,
   /** 1: hand cards keep a small value in the expected last generation until Mars is terraformed (no selling them off). */
   keepHandUntilEnd: number,
+  /** 0..1: hand cards keep their value only while money now plus the next income can pay for them (handFunding.ts). */
+  handFunding: number,
   /** 1: money in the last generation counts in steps of greeneries it can still buy (stateValue.ts). */
   endgameMoney: number,
   /** Share of a VP per generation an action card that collects its own VP resource is worth (Birds, Tardigrades), 0 = flat action value. */
@@ -288,6 +290,7 @@ export const BASELINE_TUNING: AiTuning = {
   // (30 VP swing), the AI opponent in batches does not chase awards like that.
   awardSwing: 0.3,
   keepHandUntilEnd: 1,
+  handFunding: 0,
   endgameMoney: 1,
   // Round 66: 0.6 together with the measured collector rates (collectorRates).
   // Rounds 67–69: collectorRate04 +0.43/+0.91/+0.37 (pooled z ≈ 1.33) – lowered to 0.4.
@@ -772,6 +775,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},
+  // Standard projects instead of hand cards (human games): hand cards need money to be worth anything.
+  handFunding: {handFunding: 1},
+  handFundingHalf: {handFunding: 0.5},
   buyLoose: {buyMargin: -3},
   // ML stage 2 (learned final VP margin from about 43,000 BGA two-player games, certain VP 1 : 1, AUC 0.80):
   // blend the model's win chance into the hand-made valuation.

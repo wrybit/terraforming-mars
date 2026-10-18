@@ -23,6 +23,7 @@ import {ACTION_DRAW_FACTOR, drawnCardValue} from './drawPriority';
 import {styleFocusValue} from './styleFocus';
 import {bgaExpectedMargin} from './bgaValueModel';
 import {awardScoreWithHand} from './awardHandOutlook';
+import {fundedHandValue} from './handFunding';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -419,7 +420,7 @@ function handValue(player: IPlayer, context: ValuationContext): number {
   }
   const values = context.handValues;
   const unknown = unknownCardValue(player, context);
-  return player.cardsInHand.reduce((sum, card) => sum + (values.get(card.name) ?? unknown), 0);
+  return fundedHandValue(player, player.cardsInHand.map((card) => ({card, value: values.get(card.name) ?? unknown})), unknown);
 }
 
 /** Absolute value of one player's position. */
