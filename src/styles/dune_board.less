@@ -31,70 +31,17 @@
   height: 26px;
 }
 
-// Shai-Hulud
+// Shai-Hulud: the trail map centred, the effects below
 .dune-worm {
   display: flex;
   flex-direction: column;
-  // Map with facts and the list of effects are two groups: more space between them than inside them
+  align-items: center;
   gap: 24px;
   font-size: 13px;
 }
 
-// The trail map and the facts belong together: side by side, the facts below the map when it is narrow
-.dune-worm__overview {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 20px;
-
-  .dune-worm__facts {
-    flex: 1 1 240px;
-  }
-}
-
-.dune-worm__facts {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: 4px 12px;
-  margin: 0;
-}
-
-.dune-worm__fact {
-  display: contents;
-
-  dt {
-    color: #b9ad97;
-  }
-
-  dd {
-    margin: 0;
-  }
-}
-
-.dune-worm__die {
-  display: inline-grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 5px;
-  background: #f1e2c2;
-  color: #2a1c12;
-  font-weight: bold;
-}
-
-.dune-worm__arrow {
-  font-size: 16px;
-  color: #e0662a;
-}
-
-// The rolled direction was blocked: says why the arrow differs from the die
-.dune-worm__turned {
-  font-size: 12px;
-  font-style: italic;
-  opacity: 0.8;
-}
-
 .dune-worm__effects {
+  align-self: stretch;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 6px 16px;

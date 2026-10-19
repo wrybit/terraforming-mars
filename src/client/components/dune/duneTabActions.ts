@@ -1,8 +1,8 @@
 import {DuneBoardTabId} from '@/client/components/boardTabs/boardTabs';
 import {DuneMoveStep} from './duneMoves';
 import {
-  BLACK_MARKET_TITLE, BRIBE_TITLE, CHOAM_ACCEPT_TITLE, CHOAM_OFFER_TITLE, JOIN_KANLY_TITLE, LEVY_TITLE, OPEN_KANLY_TITLE,
-  RECRUIT_TITLE, SCHEMES_TITLE, SMUGGLE_SPICE_TITLE, WORM_TITLE,
+  BLACK_MARKET_TITLE, BRIBE_TITLE, CHOAM_ACCEPT_TITLE, CHOAM_OFFER_TITLE, JOIN_KANLY_TITLE, OPEN_KANLY_TITLE,
+  RECRUIT_TITLE, SCHEMES_TITLE, SMUGGLE_SPICE_TITLE,
 } from '@/common/dune/duneActionTitles';
 
 // Buttons of the module tabs: which move each one opens in its tab (titles of server/dune/*.ts) and why it may be
@@ -21,10 +21,8 @@ export type DuneTabAction = {
 export const DUNE_TAB_ACTIONS: Readonly<Record<DuneBoardTabId, ReadonlyArray<DuneTabAction>>> = {
   // The wares themselves are the buttons (BazaarBoard.vue)
   bazaar: [],
-  worm: [
-    {label: 'Choose the distance', path: [{title: WORM_TITLE}], unavailable: 'At the end of the generation, for the player with the least TR'},
-    {label: 'Pay the levy', path: [{title: LEVY_TITLE}], unavailable: 'Only when the worm crosses one of your tiles'},
-  ],
+  // Distance and levy are inputs of their own at the end of the generation, no buttons needed
+  worm: [],
   kanly: [
     {label: 'Recruit Sardaukar', path: [{title: RECRUIT_TITLE}], unavailable: 'Not your turn, or not enough to pay'},
     {label: 'Open Kanly', path: [{title: OPEN_KANLY_TITLE}], unavailable: 'Needs a Sardaukar in your garrison and an opponent tile; one battle per generation'},

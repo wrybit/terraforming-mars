@@ -7,7 +7,7 @@
     </section>
     <section v-if="tab === 'worm' && dune.worm" class="dune-board__section">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('special-worm-domain')" alt="">{{ $t('Shai-Hulud') }}</h3>
-      <WormPanel :worm="dune.worm" :players="players"/>
+      <WormPanel :worm="dune.worm"/>
     </section>
     <section v-if="tab === 'kanly' && dune.kanly" class="dune-board__section">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('res-sardaukar')" alt="">{{ $t('Kanly') }}</h3>

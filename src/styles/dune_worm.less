@@ -133,10 +133,11 @@
 }
 
 // Small map of Arrakis with the worm's way (WormTrail.vue, in the Shai-Hulud tab)
+// Stretched across the tab and centred by its margins: a definite width, so the map's height follows it
 .worm-trail {
-  flex: 0 1 420px;
-  min-width: 0;
-  margin: 0;
+  align-self: stretch;
+  max-width: 460px;
+  margin: 0 auto;
 }
 
 .worm-trail__map {
