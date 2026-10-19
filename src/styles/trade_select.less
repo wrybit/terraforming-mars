@@ -18,6 +18,20 @@
   width: 100%;
 }
 
+// Without a converter (CHOAM offer) no choice block stretches the box (choice_block.less): the same column fill for
+// the trade itself, so the offer sits in the middle between tabs and footer too (Jens, 19 Oct 2026)
+html:not(.tm-mobile) .or-tab-panel:has(.trade-select) {
+  display: flex;
+  flex-direction: column;
+
+  :has(.trade-select),
+  .trade-select {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 // The converter's choice block must not take the free space for itself (its auto margins would push the sides up)
 html:not(.tm-mobile) .or-tab-panel .trade-select .trade-select__amounts.choice-block {
   margin: 0 auto;
