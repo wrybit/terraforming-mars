@@ -260,7 +260,6 @@
   "No offer of another player you can pay": "Brak oferty innego gracza, którą możesz opłacić",
   "Not your turn, or no spice and Solari to move it": "Nie twoja tura lub brak przyprawy i Solari",
   "Not your turn, or not 2 of one resource": "Nie twoja tura lub brak 2 jednostek jednego zasobu",
-  "Only with suspicion above 0 and enough Solari": "Tylko przy podejrzeniu powyżej 0 i wystarczającej liczbie Solari",
   "Keep ${0}": "Zachowaj ${0}",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Kliknij pole, na które ruszy czerw. Każdy kafelek na drodze zostanie trafiony.",
   "Tile of": "Kafelek gracza",
@@ -311,5 +310,13 @@
   "At game end only the highest level reached counts": "Na koniec gry liczy się tylko najwyższy osiągnięty poziom",
   "The others never see your agendas": "Inni nigdy nie widzą twoich planów",
   "Your agendas": "Twoje plany",
-  "Start: the worm starts at random on one of these spaces:": "Start: czerw zaczyna losowo na jednym z tych pól:"
+  "Start: the worm starts at random on one of these spaces:": "Start: czerw zaczyna losowo na jednym z tych pól:",
+  "No suspicion: nothing to bribe": "Brak podejrzeń: nie ma kogo przekupić",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "Za mało solarów na łapówkę: kosztuje ${0}, masz ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "Przerzut przyprawy: do 5 przyprawy po 5 solarów za sztukę",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Czarny rynek: za podwójną wartość (6 solarów za 1 przyprawę)",
+  "Every deal raises the suspicion by 1": "Każda transakcja podnosi podejrzenie o 1",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Łapówka (10 solarów, właściciel Targu przemytników 7) obniża je o 1",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Koniec pokolenia: 0 i 1 są darmowe, od 2 traci się Wpływ, a znacznik wraca na 0",
+  "At 4 all trading stops until a bribe lowers it": "Przy 4 cały handel stoi, dopóki łapówka nie obniży podejrzenia"
 }

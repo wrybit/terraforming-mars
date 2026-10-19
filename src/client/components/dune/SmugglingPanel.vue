@@ -6,7 +6,9 @@
         <span class="dune-smuggling__level">{{ level }}</span>
         <span class="dune-smuggling__penalty">{{ penalty(level) > 0 ? '−' + penalty(level) : '' }}</span>
         <span class="dune-smuggling__markers">
-          <span v-for="entry in at(level)" :key="entry.color" :class="['dune-smuggling__marker', 'player_bg_color_' + entry.color]" :title="name(entry.color)"></span>
+          <!-- Each player's marker as the acrylic cube of their colour, as everywhere on the board -->
+          <BoardCube v-for="entry in at(level)" :key="entry.color" class="dune-smuggling__marker" :color="entry.color"
+            view="slight" :size="16" :spinSeed="'suspicion-' + entry.color" :title="name(entry.color)"/>
         </span>
       </li>
     </ol>
@@ -19,11 +21,13 @@ import {defineComponent, PropType} from 'vue';
 import {MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '@/common/dune/DuneModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Color} from '@/common/Color';
+import BoardCube from '@/client/components/common/BoardCube.vue';
 
 const LEVELS = Array.from({length: MAX_SUSPICION + 1}, (_, level) => level);
 
 export default defineComponent({
   name: 'SmugglingPanel',
+  components: {BoardCube},
   props: {
     smuggling: {
       type: Object as PropType<SmugglingModel>,

@@ -261,7 +261,6 @@
   "No offer of another player you can pay": "Ei toisen pelaajan tarjousta, jonka voit maksaa",
   "Not your turn, or no spice and Solari to move it": "Ei vuorosi, tai ei maustetta ja solaria siirtoon",
   "Not your turn, or not 2 of one resource": "Ei vuorosi, tai ei 2 samaa resurssia",
-  "Only with suspicion above 0 and enough Solari": "Vain kun epäily on yli 0 ja solaria riittää",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Napsauta ruutua, johon mato liikkuu. Jokainen reitin laatta osuu.",
   "Tile of": "Laatan omistaja",
   "After sending": "Lähettämisen jälkeen",
@@ -311,5 +310,13 @@
   "At game end only the highest level reached counts": "Pelin lopussa lasketaan vain korkein saavutettu taso",
   "The others never see your agendas": "Muut eivät koskaan näe agendojasi",
   "Your agendas": "Agendasi",
-  "Start: the worm starts at random on one of these spaces:": "Alku: mato aloittaa satunnaisesti jostakin näistä ruuduista:"
+  "Start: the worm starts at random on one of these spaces:": "Alku: mato aloittaa satunnaisesti jostakin näistä ruuduista:",
+  "No suspicion: nothing to bribe": "Ei epäilyä: ei lahjottavaa",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "Liian vähän solaria lahjontaan: se maksaa ${0}, sinulla on ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "Kuljeta maustetta: enintään 5 maustetta 5 solarilla kappale",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Musta pörssi: kaksinkertaisella arvolla (6 solaria yhdestä mausteesta)",
+  "Every deal raises the suspicion by 1": "Jokainen kauppa nostaa epäilyä 1:llä",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Lahjus (10 solaria, salakuljettajien torin omistajalle 7) laskee sitä 1:llä",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Sukupolven lopussa: 0 ja 1 ovat ilmaisia, 2:sta alkaen menetetään arvovaltaa ja merkki palaa nollaan",
+  "At 4 all trading stops until a bribe lowers it": "Tasolla 4 kaikki kauppa on seis, kunnes lahjus laskee epäilyä"
 }

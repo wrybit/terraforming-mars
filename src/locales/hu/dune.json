@@ -261,7 +261,6 @@
   "No offer of another player you can pay": "Nincs más játékostól olyan ajánlat, amit ki tudsz fizetni",
   "Not your turn, or no spice and Solari to move it": "Nem te következel, vagy nincs fűszered és solarid hozzá",
   "Not your turn, or not 2 of one resource": "Nem te következel, vagy nincs 2 egy erőforrásból",
-  "Only with suspicion above 0 and enough Solari": "Csak 0 feletti gyanúval és elég solarival",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Kattints arra a mezőre, ahová a féreg halad. Minden útba eső lapka sérül.",
   "Tile of": "Lapka tulajdonosa",
   "After sending": "Küldés után",
@@ -311,5 +310,13 @@
   "At game end only the highest level reached counts": "A játék végén csak az elért legmagasabb szint számít",
   "The others never see your agendas": "A többiek sosem látják a terveidet",
   "Your agendas": "A terveid",
-  "Start: the worm starts at random on one of these spaces:": "Kezdés: a féreg véletlenszerűen az egyik mezőn indul:"
+  "Start: the worm starts at random on one of these spaces:": "Kezdés: a féreg véletlenszerűen az egyik mezőn indul:",
+  "No suspicion: nothing to bribe": "Nincs gyanú: nincs kit megvesztegetni",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "Kevés a solari a vesztegetéshez: ${0} kell, neked ${1} van",
+  "Move spice: up to 5 titanium for 5 M€ each": "Fűszer szállítása: legfeljebb 5 fűszer egyenként 5 solariért",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Feketepiac: dupla értéken (1 fűszer 6 solariért)",
+  "Every deal raises the suspicion by 1": "Minden üzlet 1-gyel növeli a gyanút",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "A vesztegetés (10 solari, a Csempészpiac tulajdonosának 7) 1-gyel csökkenti",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "A generáció végén: a 0 és az 1 ingyenes, 2-től befolyás vész el, és a jelző visszaesik 0-ra",
+  "At 4 all trading stops until a bribe lowers it": "4-nél minden kereskedés szünetel, amíg vesztegetés nem csökkenti a gyanút"
 }

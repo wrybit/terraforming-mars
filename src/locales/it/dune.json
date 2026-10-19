@@ -259,7 +259,6 @@
   "No offer of another player you can pay": "Nessuna offerta di un altro giocatore che puoi pagare",
   "Not your turn, or no spice and Solari to move it": "Non è il tuo turno o non hai spezia e Solari per spostarla",
   "Not your turn, or not 2 of one resource": "Non è il tuo turno o non hai 2 di una risorsa",
-  "Only with suspicion above 0 and enough Solari": "Solo con sospetto sopra 0 e abbastanza Solari",
   "Keep ${0}": "Tieni ${0}",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Clicca sulla casella in cui si sposta il verme. Ogni tessera attraversata viene colpita.",
   "Tile of": "Tessera di",
@@ -310,5 +309,13 @@
   "At game end only the highest level reached counts": "A fine partita conta solo il livello più alto raggiunto",
   "The others never see your agendas": "Gli altri non vedono mai le tue agende",
   "Your agendas": "Le tue agende",
-  "Start: the worm starts at random on one of these spaces:": "Inizio: il verme parte a caso da una di queste caselle:"
+  "Start: the worm starts at random on one of these spaces:": "Inizio: il verme parte a caso da una di queste caselle:",
+  "No suspicion: nothing to bribe": "Nessun sospetto: niente da corrompere",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "Solari insufficienti per corrompere: costa ${0}, ne hai ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "Spostare spezia: fino a 5 spezia per 5 solari ciascuna",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Mercato nero: al doppio del valore (6 solari per 1 spezia)",
+  "Every deal raises the suspicion by 1": "Ogni scambio aumenta il sospetto di 1",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Una bustarella (10 solari, 7 per il proprietario del Mercato dei contrabbandieri) lo riduce di 1",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fine generazione: 0 e 1 sono gratuiti, da 2 in su si perde influenza e il segnalino torna a 0",
+  "At 4 all trading stops until a bribe lowers it": "A 4 ogni scambio è fermo finché una bustarella non abbassa il sospetto"
 }

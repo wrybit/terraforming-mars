@@ -263,7 +263,6 @@
   "No offer of another player you can pay": "Немає пропозиції іншого гравця, яку ви можете оплатити",
   "Not your turn, or no spice and Solari to move it": "Не ваш хід або немає прянощів і соларі для перевезення",
   "Not your turn, or not 2 of one resource": "Не ваш хід або немає 2 одиниць одного ресурсу",
-  "Only with suspicion above 0 and enough Solari": "Лише при підозрі понад 0 і достатній кількості соларі",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Натисни на клітинку, куди повзе черв. Кожен тайл на шляху буде зачеплено.",
   "Tile of": "Тайл гравця",
   "After sending": "Після відправлення",
@@ -313,5 +312,13 @@
   "At game end only the highest level reached counts": "Наприкінці гри враховується лише найвищий досягнутий рівень",
   "The others never see your agendas": "Інші ніколи не бачать твоїх задумів",
   "Your agendas": "Твої задуми",
-  "Start: the worm starts at random on one of these spaces:": "Старт: черв починає випадково на одному з цих полів:"
+  "Start: the worm starts at random on one of these spaces:": "Старт: черв починає випадково на одному з цих полів:",
+  "No suspicion: nothing to bribe": "Немає підозри: нема кого підкуповувати",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "Замало соларіїв для хабара: коштує ${0}, у тебе ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "Перевезти прянощі: до 5 прянощів по 5 соларіїв за одиницю",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Чорний ринок: за подвійною ціною (6 соларіїв за 1 прянощі)",
+  "Every deal raises the suspicion by 1": "Кожна угода підвищує підозру на 1",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Хабар (10 соларіїв, власнику Ринку контрабандистів 7) знижує її на 1",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Кінець покоління: 0 і 1 безкоштовні, від 2 втрачається вплив, і маркер повертається на 0",
+  "At 4 all trading stops until a bribe lowers it": "На 4 вся торгівля зупиняється, доки хабар не знизить підозру"
 }

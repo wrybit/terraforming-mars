@@ -260,7 +260,6 @@
   "No offer of another player you can pay": "Ninguna oferta de otro jugador que puedas pagar",
   "Not your turn, or no spice and Solari to move it": "No es tu turno o no tienes especia ni solaris para moverla",
   "Not your turn, or not 2 of one resource": "No es tu turno o no tienes 2 de un recurso",
-  "Only with suspicion above 0 and enough Solari": "Solo con sospecha mayor que 0 y suficientes solaris",
   "Keep ${0}": "Conservar ${0}",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Haz clic en la casilla a la que se mueve el gusano. Cada loseta que cruza resulta afectada.",
   "Tile of": "Loseta de",
@@ -311,5 +310,13 @@
   "At game end only the highest level reached counts": "Al final de la partida solo cuenta el nivel más alto alcanzado",
   "The others never see your agendas": "Los demás nunca ven tus agendas",
   "Your agendas": "Tus agendas",
-  "Start: the worm starts at random on one of these spaces:": "Inicio: el gusano empieza al azar en una de estas casillas:"
+  "Start: the worm starts at random on one of these spaces:": "Inicio: el gusano empieza al azar en una de estas casillas:",
+  "No suspicion: nothing to bribe": "Sin sospecha: no hay nada que sobornar",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "Faltan solaris para sobornar: cuesta ${0}, tienes ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "Mover especia: hasta 5 especia por 5 solaris cada una",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Mercado negro: al doble de su valor (6 solaris por 1 especia)",
+  "Every deal raises the suspicion by 1": "Cada trato aumenta la sospecha en 1",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Un soborno (10 solaris, 7 para el propietario del Mercado de contrabandistas) la reduce en 1",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fin de la generación: 0 y 1 son gratis; a partir de 2 se pierde influencia y el marcador vuelve a 0",
+  "At 4 all trading stops until a bribe lowers it": "Con 4 se cierra todo comercio hasta que un soborno baje la sospecha"
 }

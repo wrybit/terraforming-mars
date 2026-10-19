@@ -209,5 +209,5 @@ export function chargeSuspicion(game: IGame, data: SmugglingData): void {
 }
 
 export function smugglingModel(game: IGame, data: SmugglingData): SmugglingModel {
-  return {suspicion: game.players.map((player) => ({color: player.color, level: suspicionOf(data, player)}))};
+  return {suspicion: game.players.map((player) => ({color: player.color, level: suspicionOf(data, player), bribeCost: bribeCost(player)}))};
 }

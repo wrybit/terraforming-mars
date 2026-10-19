@@ -11,7 +11,7 @@
         :aria-checked="mode.id === chosen" :disabled="indexOf(mode.id) === -1"
         @click="chosen = mode.id">{{ $t(mode.label) }}</button>
     </div>
-    <p v-if="unavailableReason !== undefined" class="smuggle-input__reason">{{ $t(unavailableReason) }}</p>
+    <p v-if="unavailableReason !== undefined" class="smuggle-input__reason">{{ unavailableReason }}</p>
 
     <SelectTrade v-if="chosen === 'smuggle' && tradeInput !== undefined" ref="trade" :key="'trade'"
       :playerView="playerView" :playerinput="tradeInput" :onsave="answer('smuggle')" :showsave="false" :showtitle="false"/>
@@ -26,6 +26,9 @@
       <SelectPayment v-else ref="payment" :playerView="playerView" :playerinput="bribeInput"
         :onsave="answer('bribe')" :showsave="false" :showtitle="false"/>
     </template>
+
+    <!-- The rules as a short list below everything, like on the other Dune tabs -->
+    <DuneRuleCards class="smuggle-input__rules" :rules="SMUGGLING_RULES"/>
 
     <TabPanelFooterSlot v-if="showsave">
       <div class="amount-select__actions">
@@ -45,6 +48,8 @@ import SelectPayment from '@/client/components/SelectPayment.vue';
 import AmountSideTile from '@/client/components/amount/AmountSideTile.vue';
 import {AmountSide} from '@/client/components/amount/amountConversion';
 import SmugglingPanel from './SmugglingPanel.vue';
+import DuneRuleCards from './DuneRuleCards.vue';
+import {SMUGGLING_RULES} from './duneRules';
 import {duneGraphic} from './duneGraphic';
 import {OrOptionsModel, PlayerInputModel, SelectPaymentModel, SelectTradeModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
@@ -52,6 +57,7 @@ import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
 import {MAX_SUSPICION, SmugglingModel} from '@/common/dune/DuneModel';
 import {Payment} from '@/common/inputs/Payment';
 import {Resource} from '@/common/Resource';
+import {translateText} from '@/client/directives/i18n';
 
 type Mode = 'smuggle' | 'bribe';
 
@@ -67,7 +73,7 @@ const SOLARI: AmountSide = {kind: 'stock', resource: Resource.MEGACREDITS, perSt
 
 export default defineComponent({
   name: 'SmuggleInput',
-  components: {AppButton, TabPanelFooterSlot, SelectTrade, SelectPayment, AmountSideTile, SmugglingPanel},
+  components: {AppButton, TabPanelFooterSlot, SelectTrade, SelectPayment, AmountSideTile, SmugglingPanel, DuneRuleCards},
   props: {
     playerView: {
       type: Object as PropType<PlayerViewModel>,
@@ -102,6 +108,9 @@ export default defineComponent({
     SOLARI(): AmountSide {
       return SOLARI;
     },
+    SMUGGLING_RULES(): typeof SMUGGLING_RULES {
+      return SMUGGLING_RULES;
+    },
     smuggling(): SmugglingModel | undefined {
       return this.playerView.game.dune?.smuggling;
     },
@@ -123,13 +132,20 @@ export default defineComponent({
     paysInSolari(): boolean {
       return this.bribeInput !== undefined && this.solari >= this.bribeInput.amount;
     },
-    // Why the other move is greyed out
+    ownBribeCost(): number | undefined {
+      return this.smuggling?.suspicion.find((entry) => entry.color === this.playerView.thisPlayer.color)?.bribeCost;
+    },
+    // Why the other move is greyed out, translated; for the bribe with what is missing (Jens, 19 Oct 2026)
     unavailableReason(): string | undefined {
       if (this.tradeInput === undefined) {
-        return this.ownSuspicion >= MAX_SUSPICION ? 'Suspicion 4: smuggling is closed until a bribe lowers it' : 'Nothing worth trading';
+        return translateText(this.ownSuspicion >= MAX_SUSPICION ? 'Suspicion 4: smuggling is closed until a bribe lowers it' : 'Nothing worth trading');
       }
       if (this.bribeInput === undefined) {
-        return 'Only with suspicion above 0 and enough Solari';
+        if (this.ownSuspicion < 1) {
+          return translateText('No suspicion: nothing to bribe');
+        }
+        return this.ownBribeCost === undefined ? undefined : translateText('Too few M€ to bribe: it costs ${0}, you have ${1}')
+          .replace('${0}', String(this.ownBribeCost)).replace('${1}', String(this.solari));
       }
       return undefined;
     },

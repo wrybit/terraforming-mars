@@ -260,7 +260,6 @@
   "No offer of another player you can pay": "Nenhuma oferta de outro jogador que você possa pagar",
   "Not your turn, or no spice and Solari to move it": "Não é sua vez ou não tem especiaria e solaris para movê-la",
   "Not your turn, or not 2 of one resource": "Não é sua vez ou não tem 2 de um recurso",
-  "Only with suspicion above 0 and enough Solari": "Só com suspeita acima de 0 e solaris suficientes",
   "Keep ${0}": "Manter ${0}",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Clique no espaço para onde o verme vai. Cada peça no caminho é atingida.",
   "Tile of": "Peça de",
@@ -311,5 +310,13 @@
   "At game end only the highest level reached counts": "No fim do jogo, só conta o nível mais alto alcançado",
   "The others never see your agendas": "Os outros nunca veem suas agendas",
   "Your agendas": "Suas agendas",
-  "Start: the worm starts at random on one of these spaces:": "Início: o verme começa ao acaso em um destes espaços:"
+  "Start: the worm starts at random on one of these spaces:": "Início: o verme começa ao acaso em um destes espaços:",
+  "No suspicion: nothing to bribe": "Sem suspeita: nada a subornar",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "Solaris insuficientes para subornar: custa ${0}, você tem ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "Mover especiaria: até 5 especiaria por 5 solaris cada",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Mercado negro: pelo dobro do valor (6 solaris por 1 especiaria)",
+  "Every deal raises the suspicion by 1": "Cada troca aumenta a suspeita em 1",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Um suborno (10 solaris, 7 para o dono do Mercado dos Contrabandistas) a reduz em 1",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fim da geração: 0 e 1 são grátis; a partir de 2, perde-se influência e o marcador volta a 0",
+  "At 4 all trading stops until a bribe lowers it": "Em 4 todo comércio para até que um suborno reduza a suspeita"
 }

@@ -258,7 +258,6 @@
   "No offer of another player you can pay": "Kein Angebot eines anderen Spielers, das du bezahlen kannst",
   "Not your turn, or no spice and Solari to move it": "Du bist nicht am Zug oder hast kein Spice und keine Solari dafür",
   "Not your turn, or not 2 of one resource": "Du bist nicht am Zug oder hast von keiner Ressource 2",
-  "Only with suspicion above 0 and enough Solari": "Nur mit Verdacht über 0 und genug Solari",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Klicke auf das Feld, zu dem der Wurm zieht. Jedes Plättchen auf dem Weg wird getroffen.",
   "Tile of": "Plättchen von",
   "After sending": "Nach dem Entsenden",
@@ -308,5 +307,13 @@
   "At game end only the highest level reached counts": "Bei Spielende zählt nur die höchste erreichte Stufe",
   "The others never see your agendas": "Die anderen sehen deine Agenden nie",
   "Your agendas": "Deine Agenden",
-  "Start: the worm starts at random on one of these spaces:": "Start: Der Wurm beginnt zufällig auf einem dieser Felder:"
+  "Start: the worm starts at random on one of these spaces:": "Start: Der Wurm beginnt zufällig auf einem dieser Felder:",
+  "No suspicion: nothing to bribe": "Kein Verdacht: nichts zu bestechen",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "Zu wenig Solari zum Bestechen: es kostet ${0}, du hast ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "Spice verschieben: bis zu 5 Spice für je 5 Solari",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Schwarzmarkt: zum doppelten Wert (6 Solari für 1 Spice)",
+  "Every deal raises the suspicion by 1": "Jeder Handel erhöht den Verdacht um 1",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Eine Bestechung (10 Solari, Besitzer des Schmugglermarkts 7) senkt ihn um 1",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Ende der Generation: 0 und 1 sind kostenlos, ab 2 geht Einfluss verloren und der Marker fällt auf 0 zurück",
+  "At 4 all trading stops until a bribe lowers it": "Bei 4 ruht jeder Handel, bis eine Bestechung den Verdacht senkt"
 }

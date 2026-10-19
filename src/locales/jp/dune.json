@@ -263,7 +263,6 @@
   "No offer of another player you can pay": "支払える他プレイヤーの取引がありません",
   "Not your turn, or no spice and Solari to move it": "手番ではないか、運ぶスパイスとソラリがありません",
   "Not your turn, or not 2 of one resource": "手番ではないか、同じ資源が2つありません",
-  "Only with suspicion above 0 and enough Solari": "疑惑が0より大きく、ソラリが足りるときだけ",
   "Click the space the worm moves to. Every tile it crosses is hit.": "ワームが移動するマスをクリックしてください。通過するタイルはすべて影響を受けます。",
   "Tile of": "タイルの持ち主",
   "After sending": "派遣後",
@@ -313,5 +312,13 @@
   "At game end only the highest level reached counts": "ゲーム終了時は到達した最高段階のみが得点",
   "The others never see your agendas": "他のプレイヤーにはあなたの計略は見えません",
   "Your agendas": "あなたの計略",
-  "Start: the worm starts at random on one of these spaces:": "開始：サンドワームは次のマスのどれかからランダムに始まる："
+  "Start: the worm starts at random on one of these spaces:": "開始：サンドワームは次のマスのどれかからランダムに始まる：",
+  "No suspicion: nothing to bribe": "疑いなし：買収の必要はありません",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "買収するソラリが足りません：${0}必要、所持${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "スパイス輸送：スパイス最大5を1つにつき5ソラリで",
+  "Black market: at double worth (6 M€ for 1 titanium)": "闇市場：2倍の価値で（スパイス1つに6ソラリ）",
+  "Every deal raises the suspicion by 1": "取引のたびに疑惑が1上がる",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "賄賂（10ソラリ、密輸業者の市場の所有者は7）で疑惑が1下がる",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "世代の終わり：0と1は無料。2以上で影響力を失い、マーカーは0に戻る",
+  "At 4 all trading stops until a bribe lowers it": "疑惑4では賄賂で下げるまですべての取引が止まる"
 }

@@ -263,7 +263,6 @@
   "No offer of another player you can pay": "지불 가능한 다른 플레이어의 제안 없음",
   "Not your turn, or no spice and Solari to move it": "당신의 차례가 아니거나 운반할 스파이스와 솔라리가 없음",
   "Not your turn, or not 2 of one resource": "당신의 차례가 아니거나 한 자원이 2개 없음",
-  "Only with suspicion above 0 and enough Solari": "의심이 0보다 크고 솔라리가 충분할 때만",
   "Click the space the worm moves to. Every tile it crosses is hit.": "벌레가 이동할 칸을 클릭하세요. 지나가는 모든 타일이 피해를 입습니다.",
   "Tile of": "타일 소유자",
   "After sending": "파견 후",
@@ -313,5 +312,13 @@
   "At game end only the highest level reached counts": "게임 종료 시 달성한 가장 높은 단계만 계산",
   "The others never see your agendas": "다른 플레이어는 당신의 의제를 볼 수 없습니다",
   "Your agendas": "나의 의제",
-  "Start: the worm starts at random on one of these spaces:": "시작: 웜은 다음 칸 중 하나에서 무작위로 시작합니다:"
+  "Start: the worm starts at random on one of these spaces:": "시작: 웜은 다음 칸 중 하나에서 무작위로 시작합니다:",
+  "No suspicion: nothing to bribe": "의심 없음: 매수할 필요 없음",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "매수할 솔라리가 부족합니다: ${0} 필요, 보유 ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "스파이스 운송: 스파이스 최대 5개를 개당 5 솔라리에",
+  "Black market: at double worth (6 M€ for 1 titanium)": "암시장: 두 배 가치로 (스파이스 1개에 6 솔라리)",
+  "Every deal raises the suspicion by 1": "거래할 때마다 의심이 1 오름",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "뇌물(10 솔라리, 밀수꾼 시장 소유자는 7)로 의심이 1 내려감",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "세대 종료: 0과 1은 무료, 2 이상이면 영향력을 잃고 마커가 0으로 돌아감",
+  "At 4 all trading stops until a bribe lowers it": "의심 4에서는 뇌물로 낮출 때까지 모든 거래가 막힘"
 }

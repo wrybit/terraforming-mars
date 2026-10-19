@@ -31,3 +31,12 @@ export const SCHEMES_RULES: ReadonlyArray<DuneRule> = [
   {sign: 'payout', text: 'At game end only the highest level reached counts'},
   {sign: 'hidden', text: 'The others never see your agendas'},
 ];
+
+export const SMUGGLING_RULES: ReadonlyArray<DuneRule> = [
+  {picture: 'special-smugglers-market', text: 'Move spice: up to 5 titanium for 5 M€ each'},
+  {picture: 'coin', text: 'Black market: at double worth (6 M€ for 1 titanium)'},
+  {sign: 'levels', text: 'Every deal raises the suspicion by 1'},
+  {sign: 'shield', text: 'A bribe (10 M€, Industrial Center owner 7) lowers it by 1'},
+  {sign: 'flag', text: 'End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0'},
+  {sign: 'hidden', text: 'At 4 all trading stops until a bribe lowers it'},
+];

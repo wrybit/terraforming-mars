@@ -70,7 +70,8 @@ export function suspicionPenalty(level: number): number {
 }
 
 export type SmugglingModel = {
-  suspicion: ReadonlyArray<{color: Color, level: number}>,
+  /** Every player's level and what a bribe costs them (cards and the smugglers' market lower it) */
+  suspicion: ReadonlyArray<{color: Color, level: number, bribeCost: number}>,
 };
 
 export type ChoamOfferModel = {

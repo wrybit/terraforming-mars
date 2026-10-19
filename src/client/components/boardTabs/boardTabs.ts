@@ -162,7 +162,7 @@ export function boardTabTracks(game: GameModel, players: ReadonlyArray<PublicPla
 // counts in the player colours – so the tab tells what happens in it without opening it
 export type BoardTabInfo = {
   icon: string,
-  /** Player whose tile it is (Kanly war field): a small square in the colour before the text */
+  /** Player whose tile it is (Kanly war field): their cube before the text */
   owner?: Color,
   text?: string,
   /** Short text that is translated (e.g. "No battle") */

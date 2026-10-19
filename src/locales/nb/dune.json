@@ -261,7 +261,6 @@
   "No offer of another player you can pay": "Ingen tilbud fra en annen spiller du kan betale",
   "Not your turn, or no spice and Solari to move it": "Ikke din tur, eller ikke krydder og solari til å flytte det",
   "Not your turn, or not 2 of one resource": "Ikke din tur, eller ikke 2 av én ressurs",
-  "Only with suspicion above 0 and enough Solari": "Bare med mistanke over 0 og nok solari",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Klikk på feltet ormen flytter til. Hver brikke den krysser blir truffet.",
   "Tile of": "Brikke til",
   "After sending": "Etter utsendelsen",
@@ -309,5 +308,13 @@
   "At game end only the highest level reached counts": "Ved spillets slutt teller bare det høyeste nivået som er nådd",
   "The others never see your agendas": "De andre ser aldri agendaene dine",
   "Your agendas": "Dine agendaer",
-  "Start: the worm starts at random on one of these spaces:": "Start: ormen starter tilfeldig på ett av disse feltene:"
+  "Start: the worm starts at random on one of these spaces:": "Start: ormen starter tilfeldig på ett av disse feltene:",
+  "No suspicion: nothing to bribe": "Ingen mistanke: ingenting å bestikke",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "For lite solari til å bestikke: det koster ${0}, du har ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "Flytt krydder: opptil 5 krydder for 5 solari hver",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Svartebørs: til dobbel verdi (6 solari for 1 krydder)",
+  "Every deal raises the suspicion by 1": "Hver handel øker mistanken med 1",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "En bestikkelse (10 solari, eieren av Smuglermarkedet 7) senker den med 1",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Slutten av generasjonen: 0 og 1 er gratis, fra 2 og oppover tapes innflytelse og markøren går tilbake til 0",
+  "At 4 all trading stops until a bribe lowers it": "På 4 stopper all handel til en bestikkelse senker mistanken"
 }

@@ -258,7 +258,6 @@
   "No offer of another player you can pay": "Aucune offre d'un autre joueur que vous pouvez payer",
   "Not your turn, or no spice and Solari to move it": "Pas votre tour, ou ni épice ni Solari pour la déplacer",
   "Not your turn, or not 2 of one resource": "Pas votre tour, ou pas 2 d'une même ressource",
-  "Only with suspicion above 0 and enough Solari": "Seulement avec un soupçon supérieur à 0 et assez de Solari",
   "Keep ${0}": "Garder ${0}",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Clique sur la case où va le ver. Chaque tuile traversée est touchée.",
   "Tile of": "Tuile de",
@@ -309,5 +308,13 @@
   "At game end only the highest level reached counts": "En fin de partie, seul le plus haut niveau atteint compte",
   "The others never see your agendas": "Les autres ne voient jamais vos agendas",
   "Your agendas": "Vos agendas",
-  "Start: the worm starts at random on one of these spaces:": "Départ : le ver commence au hasard sur l'une de ces cases :"
+  "Start: the worm starts at random on one of these spaces:": "Départ : le ver commence au hasard sur l'une de ces cases :",
+  "No suspicion: nothing to bribe": "Aucun soupçon : rien à soudoyer",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "Pas assez de Solari pour soudoyer : il en faut ${0}, vous en avez ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "Écouler de l’épice : jusqu’à 5 épice pour 5 Solari chacune",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Marché noir : au double de la valeur (6 Solari pour 1 épice)",
+  "Every deal raises the suspicion by 1": "Chaque échange augmente les soupçons de 1",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Un pot-de-vin (10 Solari, 7 pour le propriétaire du Marché des contrebandiers) les réduit de 1",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fin de génération : 0 et 1 sont gratuits ; à partir de 2, de l’influence est perdue et le marqueur revient à 0",
+  "At 4 all trading stops until a bribe lowers it": "À 4, tout échange est bloqué jusqu’à ce qu’un pot-de-vin réduise les soupçons"
 }

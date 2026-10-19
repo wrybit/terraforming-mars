@@ -255,7 +255,6 @@
   "No offer of another player you can pay": "Geen aanbod van een andere speler dat je kunt betalen",
   "Not your turn, or no spice and Solari to move it": "Niet jouw beurt, of geen specie en Solari om die te verschuiven",
   "Not your turn, or not 2 of one resource": "Niet jouw beurt, of geen 2 van één grondstof",
-  "Only with suspicion above 0 and enough Solari": "Alleen met verdenking boven 0 en genoeg Solari",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Klik op het veld waar de worm naartoe gaat. Elke tegel op de weg wordt geraakt.",
   "Tile of": "Tegel van",
   "After sending": "Na het sturen",
@@ -305,5 +304,13 @@
   "At game end only the highest level reached counts": "Aan het einde van het spel telt alleen het hoogst bereikte niveau",
   "The others never see your agendas": "De anderen zien jouw agenda’s nooit",
   "Your agendas": "Jouw agenda’s",
-  "Start: the worm starts at random on one of these spaces:": "Start: de worm begint willekeurig op een van deze velden:"
+  "Start: the worm starts at random on one of these spaces:": "Start: de worm begint willekeurig op een van deze velden:",
+  "No suspicion: nothing to bribe": "Geen verdenking: niets om om te kopen",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "Te weinig Solari om om te kopen: het kost ${0}, je hebt ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "Spice verplaatsen: tot 5 Spice voor elk 5 Solari",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Zwarte markt: voor dubbele waarde (6 Solari voor 1 Spice)",
+  "Every deal raises the suspicion by 1": "Elke ruil verhoogt de verdenking met 1",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Een omkoping (10 Solari, eigenaar van de Smokkelaarsmarkt 7) verlaagt die met 1",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Einde van de generatie: 0 en 1 zijn gratis, vanaf 2 gaat invloed verloren en valt de marker terug naar 0",
+  "At 4 all trading stops until a bribe lowers it": "Bij 4 ligt alle handel stil tot een omkoping de verdenking verlaagt"
 }

@@ -263,7 +263,6 @@
   "No offer of another player you can pay": "Нет предложения другого игрока, которое вы можете оплатить",
   "Not your turn, or no spice and Solari to move it": "Не ваш ход или нет пряности и солари для перевозки",
   "Not your turn, or not 2 of one resource": "Не ваш ход или нет 2 единиц одного ресурса",
-  "Only with suspicion above 0 and enough Solari": "Только при подозрении выше 0 и достатке солари",
   "Keep ${0}": "Оставить ${0}",
   "Click the space the worm moves to. Every tile it crosses is hit.": "Нажми на клетку, куда ползёт червь. Каждый тайл на пути будет задет.",
   "Tile of": "Тайл игрока",
@@ -314,5 +313,13 @@
   "At game end only the highest level reached counts": "В конце игры учитывается только наивысший достигнутый уровень",
   "The others never see your agendas": "Другие никогда не видят ваши замыслы",
   "Your agendas": "Ваши замыслы",
-  "Start: the worm starts at random on one of these spaces:": "Старт: червь появляется случайно на одной из этих клеток:"
+  "Start: the worm starts at random on one of these spaces:": "Старт: червь появляется случайно на одной из этих клеток:",
+  "No suspicion: nothing to bribe": "Нет подозрений: подкупать некого",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "Мало соляриев для подкупа: нужно ${0}, у вас ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "Перевезти пряность: до 5 пряности по 5 соляриев за единицу",
+  "Black market: at double worth (6 M€ for 1 titanium)": "Чёрный рынок: по двойной цене (6 соляриев за 1 пряность)",
+  "Every deal raises the suspicion by 1": "Каждая сделка повышает подозрение на 1",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Взятка (10 соляриев, владельцу Рынка контрабандистов 7) снижает его на 1",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Конец поколения: 0 и 1 бесплатны, начиная с 2 теряется влияние, и маркер возвращается на 0",
+  "At 4 all trading stops until a bribe lowers it": "На 4 любая торговля закрыта, пока взятка не снизит подозрение"
 }

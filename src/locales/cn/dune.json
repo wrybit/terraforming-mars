@@ -263,7 +263,6 @@
   "No offer of another player you can pay": "没有你付得起的其他玩家报价",
   "Not your turn, or no spice and Solari to move it": "不是你的回合，或没有香料和索拉里来转运",
   "Not your turn, or not 2 of one resource": "不是你的回合，或没有同一资源 2 个",
-  "Only with suspicion above 0 and enough Solari": "仅当嫌疑高于 0 且索拉里足够时",
   "Keep ${0}": "保留 ${0}",
   "Click the space the worm moves to. Every tile it crosses is hit.": "点击沙虫要移动到的格子。途经的每个板块都会受到影响。",
   "Tile of": "板块所有者",
@@ -314,5 +313,13 @@
   "At game end only the highest level reached counts": "游戏结束时只计算达到的最高等级",
   "The others never see your agendas": "其他人永远看不到你的议程",
   "Your agendas": "你的议程",
-  "Start: the worm starts at random on one of these spaces:": "开始：沙虫随机出现在以下格子之一："
+  "Start: the worm starts at random on one of these spaces:": "开始：沙虫随机出现在以下格子之一：",
+  "No suspicion: nothing to bribe": "没有嫌疑：无需贿赂",
+  "Too few M€ to bribe: it costs ${0}, you have ${1}": "索拉里不足，无法贿赂：需要 ${0}，你有 ${1}",
+  "Move spice: up to 5 titanium for 5 M€ each": "运送香料：最多 5 香料，每份 5 索拉里",
+  "Black market: at double worth (6 M€ for 1 titanium)": "黑市：按双倍价值（6 索拉里换 1 香料）",
+  "Every deal raises the suspicion by 1": "每次交易嫌疑 +1",
+  "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "贿赂（10 索拉里，走私者市场拥有者 7）使嫌疑 -1",
+  "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "世代结束时：0 和 1 免费；嫌疑达到 2 起会失去影响力，标记随后归零",
+  "At 4 all trading stops until a bribe lowers it": "嫌疑为 4 时停止一切交易，直到贿赂降低嫌疑"
 }
