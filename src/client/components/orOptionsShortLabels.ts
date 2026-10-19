@@ -23,6 +23,10 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   'Send a delegate in an area (5 M€)': 'Delegate (5 M€)',
   'Send a delegate in an area (from lobby)': 'Delegate (lobby)',
   'Use CEO once per game action': 'CEO action',
+  // Dune expansion: moves with their own tab (common/dune/duneActionTitles.ts)
+  'CHOAM: make an offer': 'CHOAM offer',
+  'Smuggling: move spice': 'Move spice',
+  'Smuggling: black market (2 for 1)': 'Black market',
   'Undo last action': 'Undo',
   // Initial selection (SelectInitialCards, titles from common/inputs/SelectInitialCards.ts)
   'Select corporation': 'Corporation',
@@ -82,6 +86,9 @@ const EXPANSION_TAB_TONES: Readonly<Record<string, OptionTone>> = {
   'Send a delegate in an area (3 M€)': 'colonies',
   'Send a delegate in an area (5 M€)': 'colonies',
   'Send a delegate in an area (from lobby)': 'colonies',
+  'CHOAM: make an offer': 'dune',
+  'Smuggling: move spice': 'dune',
+  'Smuggling: black market (2 for 1)': 'dune',
 };
 
 // Custom button texts for individual options in the action menu (server delivers e.g. only "Pass");
@@ -163,7 +170,7 @@ export function tabButtonCentered(option: PlayerInputModel): boolean {
 
 // Tab color of an action: fixed tones by title, otherwise for a content-free option the tile its button
 // announces (e.g. Tharsis Republic "Place a city tile" -> gray like the city tab that follows)
-export type OptionTone = TabButtonTone | PreviewTile | 'colonies' | 'gold';
+export type OptionTone = TabButtonTone | PreviewTile | 'colonies' | 'gold' | 'dune';
 
 // Spending money on the board: milestone, award, standard projects, selling patents – dark yellow tabs
 // (or_tab_tones.less: gold)

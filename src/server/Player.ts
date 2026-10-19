@@ -1708,7 +1708,8 @@ export class Player implements IPlayer {
       action.options.push(remainingAwards);
     }
 
-    // Dune expansion: actions of its modules (dune/DuneExpansion.ts)
+    // Dune expansion: actions with a tab of their own, then the other actions of its modules (dune/DuneExpansion.ts)
+    action.options.push(...DuneExpansion.tabActions(this));
     const duneActions = DuneExpansion.actions(this);
     if (duneActions !== undefined) {
       action.options.push(duneActions);

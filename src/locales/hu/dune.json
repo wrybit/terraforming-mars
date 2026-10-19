@@ -285,5 +285,9 @@
   "Send ${0} Sardaukar": "${0} szardaukar küldése",
   "Shai-Hulud lies here": "Itt van Shai-Hulud",
   "Open offers": "Nyitott ajánlatok",
-  "Send": "Küldés"
+  "Send": "Küldés",
+  "You give": "Odaadod",
+  "You offer": "Felajánlod",
+  "You want in return": "Cserébe kéred",
+  "CHOAM offer": "CHOAM-ajánlat"
 }

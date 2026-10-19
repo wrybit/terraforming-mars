@@ -288,5 +288,9 @@
   "Send ${0} Sardaukar": "Отправить ${0} сардаукаров",
   "Shai-Hulud lies here": "Здесь Шай-Хулуд",
   "Open offers": "Открытые предложения",
-  "Send": "Отправить"
+  "Send": "Отправить",
+  "You give": "Ты отдаёшь",
+  "You offer": "Ты предлагаешь",
+  "You want in return": "Ты хочешь взамен",
+  "CHOAM offer": "Предложение CHOAM"
 }

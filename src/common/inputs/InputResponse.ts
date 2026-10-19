@@ -9,6 +9,7 @@ import {Units} from '../Units';
 import {twoWayDifference} from '../utils/utils';
 import {AresGlobalParametersResponse} from './AresGlobalParametersResponse';
 import {Payment} from './Payment';
+import {Resource} from '../Resource';
 
 function matches(response: any, fields: Array<string>) {
   return twoWayDifference(Object.keys(response), fields).length === 0;
@@ -209,6 +210,18 @@ export function isDeltaProjectInputResponse(response: InputResponse): response i
   return response.type === 'deltaProject' && matches(response, ['type', 'amount']);
 }
 
+export interface SelectTradeResponse {
+  type: 'trade',
+  give: Resource,
+  giveAmount: number,
+  get: Resource,
+  getAmount: number,
+}
+
+export function isSelectTradeResponse(response: InputResponse): response is SelectTradeResponse {
+  return response.type === 'trade' && matches(response, ['type', 'give', 'giveAmount', 'get', 'getAmount']);
+}
+
 export type InputResponse =
   AndOptionsResponse |
   OrOptionsResponse |
@@ -230,4 +243,5 @@ export type InputResponse =
   SelectPolicyResponse |
   SelectResourceResponse |
   SelectResourcesResponse |
-  SelectClaimedUndergroundTokenResponse;
+  SelectClaimedUndergroundTokenResponse |
+  SelectTradeResponse;

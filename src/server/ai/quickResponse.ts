@@ -14,6 +14,8 @@ import {SelectProductionToLose} from '../inputs/SelectProductionToLose';
 import {SelectResource} from '../inputs/SelectResource';
 import {SelectResources} from '../inputs/SelectResources';
 import {UndoActionOption} from '../inputs/UndoActionOption';
+import {SelectTrade} from '../inputs/SelectTrade';
+import {quickTradeResponse} from './tradeResponse';
 import {Units} from '../../common/Units';
 import {PRODUCTION_MINIMUMS} from '../../common/constants';
 import {randomResponse} from './randomResponse';
@@ -118,6 +120,9 @@ export function quickResponse(input: PlayerInput, player: IPlayer): InputRespons
   }
   if (input instanceof SelectAmount) {
     return {type: 'amount', amount: input.max};
+  }
+  if (input instanceof SelectTrade) {
+    return quickTradeResponse(input);
   }
   if (input instanceof SelectPayment) {
     return {type: 'payment', payment: greedyPayment(player, input.amount, input.paymentOptions)};

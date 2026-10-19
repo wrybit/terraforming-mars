@@ -173,6 +173,8 @@ import {waitingStatusText} from '@/client/utils/waitingStatusText';
 import {requestPlacementZoom} from '@/client/components/board/placementZoom';
 import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
 import {CarouselState, observeCardCarousel, scrollCarouselTo} from '@/client/components/mobile/cardCarousel';
+import {actionTabRequest, requestedTabIndex} from '@/client/components/actionTabRequest';
+import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 
 // Cleanup function of the observers (space selection, carousel); there is only one player view per page
 let stopObserving: (() => void) | undefined;
@@ -351,6 +353,10 @@ export default defineComponent({
     waitingPlayers(): Array<PublicPlayerModel> {
       return playersToWaitFor(this.playerView);
     },
+    // Time of the last request to open an action from outside the menu (actionTabRequest.ts, e.g. a Dune module tab)
+    tabRequestAt(): number {
+      return actionTabRequest.at;
+    },
     isActionMenu(): boolean {
       return isActionMenuInput(this.playerView.waitingFor);
     },
@@ -397,6 +403,17 @@ export default defineComponent({
   },
 
   watch: {
+    // A button elsewhere asks for an action of the menu: open it as the task (only opens it, never submits)
+    tabRequestAt(): void {
+      if (!this.isActionMenu) {
+        return;
+      }
+      const menu = this.playerView.waitingFor as OrOptionsModel;
+      const index = requestedTabIndex(displayedOptionIndices(menu).map((original) => menu.options[original]));
+      if (index !== -1) {
+        this.startTask(index);
+      }
+    },
     // Server update: the view stays mounted (upstream b669327). The turn starts fresh like on mount;
     // what the reader is looking at (players segment, card zoom, setup step) stays.
     playerView(playerView: PlayerViewModel): void {

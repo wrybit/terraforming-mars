@@ -222,6 +222,7 @@ import CeoActionSection from '@/client/components/CeoActionSection.vue';
 import CardListSection from '@/client/components/CardListSection.vue';
 import {ACTION_CARDS_TITLE, ceoCardState, isActionCardsOption, isCeoActionOption, ownCeoCards} from '@/client/utils/ceoActions';
 import {actionCardVisibility, inactiveActionCards, InactiveActionCards} from '@/client/utils/inactiveActionCards';
+import {actionTabRequest, requestedTabIndex} from '@/client/components/actionTabRequest';
 
 let unique = 0;
 
@@ -322,6 +323,10 @@ export default defineComponent({
     };
   },
   computed: {
+    // Time of the last request to open a tab from outside the menu (actionTabRequest.ts, e.g. a Dune module tab)
+    tabRequestAt(): number {
+      return actionTabRequest.at;
+    },
     // Computed so a learner mode change shows or hides options without a page refresh
     originalIndices(): Array<number> {
       return displayedOptionIndices(this.playerinput);
@@ -453,6 +458,15 @@ export default defineComponent({
     },
   },
   watch: {
+    // Only a new request opens the tab (never on mount), and nothing is submitted (actionTabRequest.ts)
+    tabRequestAt() {
+      const index = this.asTabs ? requestedTabIndex(this.displayedOptions) : -1;
+      if (index === -1) {
+        return;
+      }
+      this.selectOptionTab(this.displayedOptions[index]);
+      this.$nextTick(() => (this.$el as HTMLElement | undefined)?.scrollIntoView?.({block: 'nearest', behavior: 'smooth'}));
+    },
     displayedOptions(newOptions: Array<PlayerInputModel>) {
       // Learner mode can hide the selected option.
       if (!newOptions.includes(this.selectedOption)) {

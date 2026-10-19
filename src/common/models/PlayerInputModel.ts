@@ -13,6 +13,7 @@ import {Units} from '../Units';
 import {ClaimedToken} from '../underworld/UnderworldPlayerData';
 import {CardName} from '../cards/CardName';
 import {TileType} from '../TileType';
+import {Resource} from '../Resource';
 
 export type BaseInputModel = {
   title: string | Message;
@@ -116,6 +117,31 @@ export type SelectAmountModel = BaseInputModel & {
   maxByDefault: boolean;
 }
 
+/** One resource that may be given in a trade (SelectTradeModel) and how much of it at most */
+export type TradeGiveOption = {
+  resource: Resource;
+  max: number;
+}
+
+/** Fixed exchange rate of a trade: `give` of the given resource for every `get` of the received one */
+export type TradeRate = {
+  give: number;
+  get: number;
+}
+
+/**
+ * A trade in one input (Dune expansion: CHOAM offer, black market, moving spice): which resource and how much
+ * the player gives, which resource and how much they get. With a rate only whole multiples of it are allowed.
+ */
+export type SelectTradeModel = BaseInputModel & {
+  type: 'trade';
+  give: ReadonlyArray<TradeGiveOption>;
+  get: ReadonlyArray<Resource>;
+  /** Most the player may ask for (without a rate) */
+  maxGet: number;
+  rate?: TradeRate;
+}
+
 export type DeltaProjectInputModel = BaseInputModel & {
   type: 'deltaProject';
   validSteps: ReadonlyArray<number>;
@@ -185,4 +211,5 @@ export type PlayerInputModel =
   SelectResourceModel |
   SelectResourcesModel |
   SelectClaimedUndergroundTokenModel |
-  DeltaProjectInputModel;
+  DeltaProjectInputModel |
+  SelectTradeModel;

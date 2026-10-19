@@ -288,5 +288,9 @@
   "Send ${0} Sardaukar": "派遣 ${0} 名萨督卡",
   "Shai-Hulud lies here": "夏胡露在这里",
   "Open offers": "公开报价",
-  "Send": "派遣"
+  "Send": "派遣",
+  "You give": "你给出",
+  "You offer": "你提供",
+  "You want in return": "你想换取",
+  "CHOAM offer": "CHOAM报价"
 }

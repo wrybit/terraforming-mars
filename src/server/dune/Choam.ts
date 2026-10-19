@@ -5,7 +5,7 @@ import {PlayerId} from '../../common/Types';
 import {ALL_RESOURCES, Resource} from '../../common/Resource';
 import {OrOptions} from '../inputs/OrOptions';
 import {SelectOption} from '../inputs/SelectOption';
-import {SelectAmount} from '../inputs/SelectAmount';
+import {SelectTrade} from '../inputs/SelectTrade';
 import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
 import {ChoamModel} from '../../common/dune/DuneModel';
@@ -44,25 +44,27 @@ export function maxOffers(player: IPlayer): number {
   return player.tableau.has(CardName.GUILD_BANK) ? 2 : 1;
 }
 
-function offerInput(player: IPlayer, data: ChoamData): OrOptions | undefined {
+/**
+ * Making an offer: one trade input with both sides (what leaves the stock, what is wished in return), its own tab
+ * of the action menu (Jens, 19 Oct 2026). Undefined while the player may not make another offer.
+ */
+export function offerInput(player: IPlayer, data: ChoamData): SelectTrade | undefined {
   if (data.offers.filter((offer) => offer.seller === player.id).length >= maxOffers(player)) {
     return undefined;
   }
-  const giveOptions = ALL_RESOURCES.filter((give) => player.stock.get(give) >= 1).map((give) => {
-    const most = Math.min(MAX_CHOAM_AMOUNT, player.stock.get(give));
-    const wantOptions = ALL_RESOURCES.filter((want) => want !== give).map((want) =>
-      new SelectAmount(message('Want ${0}: how many?', (b) => b.string(RESOURCE_LABEL[want])), 'Next', 1, MAX_CHOAM_AMOUNT, false)
-        .andThen((wantAmount) => new SelectAmount(message('Offer ${0}: how many?', (b) => b.string(RESOURCE_LABEL[give])), 'Offer', 1, most, false)
-          .andThen((giveAmount) => {
-            player.stock.deduct(give, giveAmount, {log: true});
-            data.offers.push({seller: player.id, give, giveAmount, want, wantAmount});
-            player.game.log('${0} offers ${1} ${2} for ${3} ${4} at the CHOAM exchange', (b) => b.player(player)
-              .number(giveAmount).string(RESOURCE_LABEL[give]).number(wantAmount).string(RESOURCE_LABEL[want]));
-            return undefined;
-          })));
-    return new OrOptions(...wantOptions).setTitle(message('Offer ${0}, wish:', (b) => b.string(RESOURCE_LABEL[give])));
+  const give = ALL_RESOURCES
+    .filter((resource) => player.stock.get(resource) >= 1)
+    .map((resource) => ({resource, max: Math.min(MAX_CHOAM_AMOUNT, player.stock.get(resource))}));
+  if (give.length === 0) {
+    return undefined;
+  }
+  return new SelectTrade(CHOAM_OFFER_TITLE, 'Offer', give, ALL_RESOURCES, MAX_CHOAM_AMOUNT).andThen((trade) => {
+    player.stock.deduct(trade.give, trade.giveAmount, {log: true});
+    data.offers.push({seller: player.id, give: trade.give, giveAmount: trade.giveAmount, want: trade.get, wantAmount: trade.getAmount});
+    player.game.log('${0} offers ${1} ${2} for ${3} ${4} at the CHOAM exchange', (b) => b.player(player)
+      .number(trade.giveAmount).string(RESOURCE_LABEL[trade.give]).number(trade.getAmount).string(RESOURCE_LABEL[trade.get]));
+    return undefined;
   });
-  return giveOptions.length === 0 ? undefined : new OrOptions(...giveOptions).setTitle(CHOAM_OFFER_TITLE);
 }
 
 /** Whether `player` can pay for the offer plus the fee */
@@ -106,14 +108,16 @@ function acceptInputs(player: IPlayer, data: ChoamData): Array<SelectOption> {
       }));
 }
 
-/** CHOAM actions of the action menu; the AI only accepts offers (each one valued on a game copy) */
+/** CHOAM actions of the Dune group of the action menu; the AI only accepts offers (each one valued on a game copy) */
 export function choamActions(player: IPlayer, data: ChoamData): Array<PlayerInput> {
   const accepts = acceptInputs(player, data);
-  const actions: Array<PlayerInput | undefined> = [
-    accepts.length === 0 ? undefined : new OrOptions(...accepts).setTitle(CHOAM_ACCEPT_TITLE),
-    player.aiLevel === undefined ? offerInput(player, data) : undefined,
-  ];
-  return actions.filter((input): input is PlayerInput => input !== undefined);
+  return accepts.length === 0 ? [] : [new OrOptions(...accepts).setTitle(CHOAM_ACCEPT_TITLE)];
+}
+
+/** CHOAM actions with their own tab in the action menu: making an offer (not for the AI) */
+export function choamTabActions(player: IPlayer, data: ChoamData): Array<PlayerInput> {
+  const offer = player.aiLevel === undefined ? offerInput(player, data) : undefined;
+  return offer === undefined ? [] : [offer];
 }
 
 /** End of generation: offers nobody accepted go back, without a fee */

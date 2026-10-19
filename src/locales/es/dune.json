@@ -285,5 +285,9 @@
   "Send ${0} Sardaukar": "Enviar ${0} Sardaukar",
   "Shai-Hulud lies here": "Aquí está Shai-Hulud",
   "Open offers": "Ofertas abiertas",
-  "Send": "Enviar"
+  "Send": "Enviar",
+  "You give": "Das",
+  "You offer": "Ofreces",
+  "You want in return": "Quieres a cambio",
+  "CHOAM offer": "Oferta CHOAM"
 }

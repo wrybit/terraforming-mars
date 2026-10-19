@@ -285,5 +285,9 @@
   "Send ${0} Sardaukar": "Lähetä ${0} sardaukaria",
   "Shai-Hulud lies here": "Shai-Hulud on tässä",
   "Open offers": "Avoimet tarjoukset",
-  "Send": "Lähetä"
+  "Send": "Lähetä",
+  "You give": "Annat",
+  "You offer": "Tarjoat",
+  "You want in return": "Haluat vastineeksi",
+  "CHOAM offer": "CHOAM-tarjous"
 }

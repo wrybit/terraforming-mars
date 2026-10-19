@@ -279,5 +279,9 @@
   "Send ${0} Sardaukar": "${0} Sardaukar sturen",
   "Shai-Hulud lies here": "Hier ligt Shai-Hulud",
   "Open offers": "Open aanbiedingen",
-  "Send": "Sturen"
+  "Send": "Sturen",
+  "You give": "Je geeft",
+  "You offer": "Je biedt",
+  "You want in return": "Je wilt ervoor",
+  "CHOAM offer": "CHOAM-aanbod"
 }

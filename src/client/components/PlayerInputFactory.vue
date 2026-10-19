@@ -34,6 +34,7 @@ import SelectResource from '@/client/components/SelectResource.vue';
 import SelectResources from '@/client/components/SelectResources.vue';
 import SelectClaimedUndergroundToken from '@/client/components/SelectClaimedUndergroundToken.vue';
 import DeltaProjectInput from '@/client/components/delta/DeltaProjectInput.vue';
+import SelectTrade from '@/client/components/SelectTrade.vue';
 import {duneInputComponent} from '@/client/components/dune/duneInputs';
 
 // Shared contract every input component must satisfy. `playerinput` and
@@ -74,6 +75,7 @@ const inputComponents = {
   'resources': SelectResources,
   'claimedUndergroundToken': SelectClaimedUndergroundToken,
   'deltaProject': DeltaProjectInput,
+  'trade': SelectTrade,
 } satisfies InputComponentRegistry;
 
 export default defineComponent({

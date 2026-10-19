@@ -1,0 +1,128 @@
+// Trade in one input (SelectTrade.vue, Dune: CHOAM offer, black market, moving spice): two groups of resource tiles
+// (give | get) with the exchange sign between them, the amounts below, the summary above the button. The tiles look
+// like the resource choice (resource_options.less); within a group they sit closer than the groups to each other.
+@import (reference) "./selection_highlight.less";
+@import (reference) "./resource_options.less";
+
+@trade-tile-gap: 6px;
+@trade-group-gap: 28px;
+
+.trade-select {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.trade-select__sides {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 24px @trade-group-gap;
+  margin-bottom: 20px;
+}
+
+// Each side a framed group, so give and get read as two units
+.trade-select__side {
+  display: flex;
+  flex: 1 1 300px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 420px;
+  padding: 12px 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.trade-select__slider {
+  width: 100%;
+}
+
+.trade-select__label {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+}
+
+.trade-select__resources {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: @trade-tile-gap;
+}
+
+.trade-select__resource {
+  &:extend(.resource-option all);
+  width: 52px;
+  gap: 4px;
+  padding: 8px 2px 6px;
+  color: inherit;
+  font: inherit;
+
+  .resource_icon {
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    background-size: contain;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+    transform: none;
+  }
+}
+
+.trade-select__resource--selected {
+  .selection-highlight();
+}
+
+.trade-select__stock {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.trade-select__summary-arrow {
+  font-size: 26px;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.trade-select__summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 18px;
+  font-size: 22px;
+  font-weight: 700;
+
+  > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .resource_icon {
+    width: 30px;
+    height: 30px;
+    margin: 0;
+    background-size: contain;
+  }
+}
+
+// Phone: the two stock tiles of the converter share the width instead of growing past the box
+@container (max-width: 760px) {
+  .trade-select .amount-converter {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .trade-select .amount-converter__middle,
+  .trade-select .amount-side {
+    min-width: 0;
+  }
+}

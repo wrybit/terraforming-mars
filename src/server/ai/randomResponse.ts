@@ -17,6 +17,8 @@ import {SelectResources} from '../inputs/SelectResources';
 import {SelectColony} from '../inputs/SelectColony';
 import {SelectParty} from '../inputs/SelectParty';
 import {SelectDelegate} from '../inputs/SelectDelegate';
+import {SelectTrade} from '../inputs/SelectTrade';
+import {randomTradeResponse} from './tradeResponse';
 import {ICard} from '../cards/ICard';
 import {isICorporationCard} from '../cards/corporation/ICorporationCard';
 import {IProjectCard} from '../cards/IProjectCard';
@@ -164,6 +166,9 @@ export function randomResponse(input: PlayerInput, player: IPlayer, random: Rand
   if (input instanceof SelectDelegate) {
     const delegate = pickOne(random, input.players);
     return {type: 'delegate', player: typeof delegate === 'string' ? delegate : delegate.color};
+  }
+  if (input instanceof SelectTrade) {
+    return randomTradeResponse(input, random);
   }
   throw new UnsupportedInputError(`Unsupported input type: ${input.type}`);
 }

@@ -6,6 +6,7 @@ import {OrOptions} from '../../src/server/inputs/OrOptions';
 import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {SelectSpace} from '../../src/server/inputs/SelectSpace';
 import {SelectAmount} from '../../src/server/inputs/SelectAmount';
+import {SelectTrade} from '../../src/server/inputs/SelectTrade';
 import {PlayerInput} from '../../src/server/PlayerInput';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {Resource} from '../../src/common/Resource';
@@ -21,6 +22,11 @@ import {formatMessage} from '../TestingUtils';
 
 function duneActions(player: TestPlayer): OrOptions {
   return cast(DuneExpansion.actions(player), OrOptions);
+}
+
+// Actions with their own tab in the action menu (CHOAM offer, moving spice, black market)
+function tabActions(player: TestPlayer): OrOptions {
+  return new OrOptions(...DuneExpansion.tabActions(player));
 }
 
 function titleOf(input: PlayerInput): string {
@@ -95,9 +101,11 @@ describe('Dune modules B, D, E, F', () => {
   describe('Smuggling (E)', () => {
     it('moves spice for 5 M€ each and raises the suspicion', () => {
       player1.titanium = 6;
-      const move = cast(option(duneActions(player1), 'Smuggling: move spice'), OrOptions);
-      expect(move.options).has.length(5);
-      pick(move.options[4]);
+      const move = cast(option(tabActions(player1), 'Smuggling: move spice'), SelectTrade);
+      expect(move.give).deep.eq([{resource: Resource.TITANIUM, max: 5}]);
+      // Only whole multiples of the rate: 1 spice for 5 M€
+      expect(() => move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 2, get: Resource.MEGACREDITS, getAmount: 5})).to.throw();
+      move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 5, get: Resource.MEGACREDITS, getAmount: 25});
       expect(player1.titanium).eq(1);
       expect(player1.megaCredits).eq(25);
       expect(suspicionOf(game.duneData!.smuggling!, player1)).eq(1);
@@ -105,11 +113,10 @@ describe('Dune modules B, D, E, F', () => {
 
     it('trades 2 for 1 on the black market', () => {
       player1.heat = 9;
-      const market = cast(option(duneActions(player1), 'Smuggling: black market'), OrOptions);
-      const give = cast(option(market, 'Give heat'), OrOptions);
-      const get = cast(option(give, 'Get plants'), SelectAmount);
-      expect(get.max).eq(4);
-      get.cb(4);
+      const market = cast(option(tabActions(player1), 'Smuggling: black market'), SelectTrade);
+      expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 10, get: Resource.PLANTS, getAmount: 5})).to.throw();
+      expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.HEAT, getAmount: 4})).to.throw();
+      market.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.PLANTS, getAmount: 4});
       expect([player1.heat, player1.plants]).deep.eq([1, 4]);
     });
 
@@ -130,8 +137,7 @@ describe('Dune modules B, D, E, F', () => {
       game.duneData!.smuggling!.suspicion[player1.id] = 5;
       player1.titanium = 5;
       player1.megaCredits = 0;
-      const titles = duneActions(player1).options.map(titleOf);
-      expect(titles.some((title) => title.startsWith('Smuggling'))).is.false;
+      expect(DuneExpansion.tabActions(player1).map(titleOf).some((title) => title.startsWith('Smuggling'))).is.false;
     });
   });
 
@@ -140,10 +146,11 @@ describe('Dune modules B, D, E, F', () => {
       const choam = game.duneData!.choam!;
       player1.heat = 5;
       player1.megaCredits = 3;
-      const offer = cast(option(duneActions(player1), 'CHOAM: make an offer'), OrOptions);
-      const want = cast(option(cast(option(offer, 'Offer heat'), OrOptions), 'Want titanium'), SelectAmount);
-      const give = cast(want.cb(2), SelectAmount);
-      give.cb(3);
+      const offer = cast(option(tabActions(player1), 'CHOAM: make an offer'), SelectTrade);
+      // At most the stock and at most 10 on each side
+      expect(() => offer.process({type: 'trade', give: Resource.HEAT, giveAmount: 6, get: Resource.TITANIUM, getAmount: 2})).to.throw();
+      expect(() => offer.process({type: 'trade', give: Resource.HEAT, giveAmount: 3, get: Resource.TITANIUM, getAmount: 11})).to.throw();
+      offer.process({type: 'trade', give: Resource.HEAT, giveAmount: 3, get: Resource.TITANIUM, getAmount: 2});
       expect(player1.heat).eq(2);
       expect(choam.offers).deep.eq([{seller: player1.id, give: Resource.HEAT, giveAmount: 3, want: Resource.TITANIUM, wantAmount: 2}]);
 

@@ -19,4 +19,5 @@ export type PlayerInputType =
     'resource' |
     'resources' |
     'claimedUndergroundToken' |
-    'deltaProject';
+    'deltaProject' |
+    'trade';

@@ -287,5 +287,9 @@
   "Send ${0} Sardaukar": "사다우카 ${0}명 파견",
   "Shai-Hulud lies here": "샤이-훌루드가 여기 있음",
   "Open offers": "열린 제안",
-  "Send": "파견"
+  "Send": "파견",
+  "You give": "내주는 것",
+  "You offer": "제안하는 것",
+  "You want in return": "대가로 원하는 것",
+  "CHOAM offer": "CHOAM 제안"
 }

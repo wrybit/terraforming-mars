@@ -4,13 +4,11 @@ import {IPlayer} from '../IPlayer';
 import {PlayerId} from '../../common/Types';
 import {ALL_RESOURCES, Resource} from '../../common/Resource';
 import {TileType} from '../../common/TileType';
-import {OrOptions} from '../inputs/OrOptions';
 import {SelectOption} from '../inputs/SelectOption';
-import {SelectAmount} from '../inputs/SelectAmount';
+import {SelectTrade} from '../inputs/SelectTrade';
 import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
 import {MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '../../common/dune/DuneModel';
-import {RESOURCE_LABEL} from './resourceLabels';
 import {CardName} from '../../common/cards/CardName';
 
 // Module E – Smuggling & suspicion (claude/dune-erweiterung-konzept.md). Trading past the Empire pays more, but every
@@ -29,6 +27,8 @@ export const SPICE_PRICE = 5;
 export const MAX_SPICE_PER_DEAL = 5;
 export const BRIBE_COST = 10;
 export const BRIBE_COST_WITH_MARKET = 7;
+/** Black market: this many of one resource for 1 of another */
+export const BLACK_MARKET_RATE = 2;
 
 export function initializeSmuggling(): SmugglingData {
   return {suspicion: {}};
@@ -80,47 +80,43 @@ function raise(player: IPlayer, data: SmugglingData): void {
   data.suspicion[player.id] = Math.min(MAX_SUSPICION, suspicionOf(data, player) + 1);
 }
 
-function moveSpiceInput(player: IPlayer, data: SmugglingData, onlyMost: boolean): OrOptions | undefined {
+/** Moving spice: titanium for M€ at the smuggling price, as a trade with a fixed rate (its own action tab) */
+function moveSpiceInput(player: IPlayer, data: SmugglingData): SelectTrade | undefined {
   const most = Math.min(MAX_SPICE_PER_DEAL, player.titanium);
   if (suspicionOf(data, player) >= MAX_SUSPICION || most < 1) {
     return undefined;
   }
-  const options: Array<SelectOption> = [];
-  for (let amount = onlyMost ? most : 1; amount <= most; amount++) {
-    options.push(new SelectOption(message('Move ${0} titanium for ${1} M€', (b) => b.number(amount).number(amount * SPICE_PRICE)), 'Smuggle')
-      .andThen(() => {
-        player.stock.deduct(Resource.TITANIUM, amount, {log: true});
-        player.stock.add(Resource.MEGACREDITS, amount * SPICE_PRICE, {log: true});
-        raise(player, data);
-        player.game.log('${0} smuggled spice past the Empire', (b) => b.player(player));
-        return undefined;
-      }));
-  }
-  return new OrOptions(...options).setTitle(SMUGGLE_SPICE_TITLE);
+  return new SelectTrade(SMUGGLE_SPICE_TITLE, 'Smuggle', [{resource: Resource.TITANIUM, max: most}], [Resource.MEGACREDITS],
+    most * SPICE_PRICE, {give: 1, get: SPICE_PRICE})
+    .andThen((trade) => {
+      player.stock.deduct(Resource.TITANIUM, trade.giveAmount, {log: true});
+      player.stock.add(Resource.MEGACREDITS, trade.getAmount, {log: true});
+      raise(player, data);
+      player.game.log('${0} smuggled spice past the Empire', (b) => b.player(player));
+      return undefined;
+    });
 }
 
-function blackMarketInput(player: IPlayer, data: SmugglingData): OrOptions | undefined {
+/** Black market: 2 of one resource for 1 of another, any number of times in one go, as a trade (its own action tab) */
+function blackMarketInput(player: IPlayer, data: SmugglingData): SelectTrade | undefined {
   if (suspicionOf(data, player) >= MAX_SUSPICION) {
     return undefined;
   }
-  const giveOptions: Array<OrOptions> = [];
-  for (const give of ALL_RESOURCES) {
-    const pairs = Math.floor(player.stock.get(give) / 2);
-    if (pairs < 1) {
-      continue;
-    }
-    const getOptions = ALL_RESOURCES.filter((get) => get !== give).map((get) =>
-      new SelectAmount(message('Get ${0} (2 ${1} each)', (b) => b.string(RESOURCE_LABEL[get]).string(RESOURCE_LABEL[give])), 'Trade', 1, pairs, true)
-        .andThen((amount) => {
-          player.stock.deduct(give, amount * 2, {log: true});
-          player.stock.add(get, amount, {log: true});
-          raise(player, data);
-          player.game.log('${0} traded on the black market', (b) => b.player(player));
-          return undefined;
-        }));
-    giveOptions.push(new OrOptions(...getOptions).setTitle(message('Give ${0}', (b) => b.string(RESOURCE_LABEL[give]))));
+  const give = ALL_RESOURCES
+    .filter((resource) => player.stock.get(resource) >= BLACK_MARKET_RATE)
+    .map((resource) => ({resource, max: player.stock.get(resource)}));
+  if (give.length === 0) {
+    return undefined;
   }
-  return giveOptions.length === 0 ? undefined : new OrOptions(...giveOptions).setTitle(BLACK_MARKET_TITLE);
+  const mostUnits = Math.max(...give.map((option) => Math.floor(option.max / BLACK_MARKET_RATE)));
+  return new SelectTrade(BLACK_MARKET_TITLE, 'Trade', give, ALL_RESOURCES, mostUnits, {give: BLACK_MARKET_RATE, get: 1})
+    .andThen((trade) => {
+      player.stock.deduct(trade.give, trade.giveAmount, {log: true});
+      player.stock.add(trade.get, trade.getAmount, {log: true});
+      raise(player, data);
+      player.game.log('${0} traded on the black market', (b) => b.player(player));
+      return undefined;
+    });
 }
 
 function bribeInput(player: IPlayer, data: SmugglingData): SelectOption | undefined {
@@ -136,13 +132,23 @@ function bribeInput(player: IPlayer, data: SmugglingData): SelectOption | undefi
   });
 }
 
-/** Smuggling actions of the action menu. The AI only smuggles while it stays below a penalty, and bribes from 3 on. */
+/**
+ * Smuggling actions of the Dune group of the action menu: bribing. The AI bribes from 3 on.
+ * Moving spice and the black market have their own tabs (smugglingTabActions).
+ */
 export function smugglingActions(player: IPlayer, data: SmugglingData): Array<PlayerInput> {
+  const isAi = player.aiLevel !== undefined;
+  const bribe = !isAi || suspicionOf(data, player) >= 3 ? bribeInput(player, data) : undefined;
+  return bribe === undefined ? [] : [bribe];
+}
+
+/** Smuggling actions with their own tab in the action menu. The AI only moves spice while it stays below a penalty. */
+export function smugglingTabActions(player: IPlayer, data: SmugglingData): Array<PlayerInput> {
   const isAi = player.aiLevel !== undefined;
   const level = suspicionOf(data, player);
   const actions: Array<PlayerInput | undefined> = isAi ?
-    [level <= 1 ? moveSpiceInput(player, data, true) : undefined, level >= 3 ? bribeInput(player, data) : undefined] :
-    [moveSpiceInput(player, data, false), blackMarketInput(player, data), bribeInput(player, data)];
+    [level <= 1 ? moveSpiceInput(player, data) : undefined] :
+    [moveSpiceInput(player, data), blackMarketInput(player, data)];
   return actions.filter((input): input is PlayerInput => input !== undefined);
 }
 

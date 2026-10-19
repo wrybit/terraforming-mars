@@ -12,8 +12,8 @@ import {BazaarData, bazaarModel, buyAction, buyInput, initializeBazaar, slideAnd
 import {WORM_START, WormData, distanceInput, rollWorm, wormChooser, wormModel} from './Worm';
 import {levyInput} from './WormLevy';
 import {KanlyData, initializeKanly, kanlyActions, kanlyModel, resolveBattle} from './Kanly';
-import {SmugglingData, chargeSuspicion, initializeSmuggling, smugglingActions, smugglingModel} from './Smuggling';
-import {ChoamData, choamActions, choamModel, initializeChoam, returnOffers} from './Choam';
+import {SmugglingData, chargeSuspicion, initializeSmuggling, smugglingActions, smugglingModel, smugglingTabActions} from './Smuggling';
+import {ChoamData, choamActions, choamModel, choamTabActions, initializeChoam, returnOffers} from './Choam';
 import {SchemesData, initializeSchemes, reductionStep, schemesModel, schemesVictoryPoints} from './Schemes';
 
 // Dune expansion (common/dune/DuneModule.ts): the state of the modules of a game and their hooks into the
@@ -232,6 +232,21 @@ export class DuneExpansion {
       return undefined;
     }
     return new OrOptions(...options).setTitle(DUNE_ACTIONS_TITLE);
+  }
+
+  /**
+   * Module actions that need room for their input – CHOAM offer, moving spice, black market – as options of their own
+   * in the action menu, so the client shows each as an action tab (Jens, 19 Oct 2026)
+   */
+  public static tabActions(player: IPlayer): Array<PlayerInput> {
+    const data = player.game.duneData;
+    if (data === undefined) {
+      return [];
+    }
+    return [
+      ...(data.choam === undefined ? [] : choamTabActions(player, data.choam)),
+      ...(data.smuggling === undefined ? [] : smugglingTabActions(player, data.smuggling)),
+    ];
   }
 
   /** Victory points of the modules (House schemes) */
