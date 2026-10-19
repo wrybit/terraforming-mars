@@ -96,8 +96,9 @@ html.theme-dune .background-color-prelude {
   color: #fff8ea;
 }
 
-/* Requirement plate (variant B of the requirement study): a parchment sign below the title that never wraps:
-   symbols, value, then one MIN or MAX mark per plate (arrow up green, arrow down red), all on one axis. */
+/* Requirement chip (variant A of the requirement study, Jens 19 Oct 2026): the whole chip in green (minimum) or
+   rust red (maximum), never wrapping: symbols, then an arrow in front of the value, then a MIN or MAX label.
+   The chip is lower than the symbols, so every symbol sticks out above and below by the same amount. */
 html.theme-dune .card-requirements {
   flex: none;
   align-self: center;
@@ -105,32 +106,54 @@ html.theme-dune .card-requirements {
   width: auto;
   max-width: none;
   box-sizing: border-box;
-  height: 26px;
+  height: 24px;
+  margin-top: 6px;
+  margin-bottom: 6px;
   line-height: normal;
   padding: 0 4px 0 2px;
   white-space: nowrap;
-  background: linear-gradient(#efe2c6, #e3d0aa);
-  border: 2px solid #8a6a40;
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 35%);
-  color: #1d140c;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(#5f9435, #3f6b20);
+  box-shadow: 0 2px 0 rgb(0 0 0 / 25%), inset 0 1px 0 rgb(255 255 255 / 30%);
+  color: #fff;
+}
+
+html.theme-dune .card-requirements.card-requirements-max {
+  background: linear-gradient(#c6492f, #8f2c1b);
 }
 
 html.theme-dune .card-requirements .card-requirement .card-item-container {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 2px;
-  height: 22px;
+  gap: 3px;
+  height: 24px;
   margin: 0 1px;
-  font: 700 14px Ubuntu, sans-serif;
+  font: 700 15px Ubuntu, sans-serif;
   white-space: nowrap;
 }
 
-/* Symbols first, then the value; a little smaller so the plate stays as low as the Mars bar */
+/* Symbols first and a little larger than the chip, sticking out evenly; then the arrow and the value */
 html.theme-dune .card-requirements .card-item-container > div {
   order: -1;
-  zoom: 0.8;
+  margin-top: -5px;
+  margin-bottom: -5px;
+}
+
+html.theme-dune .card-requirements .card-item-container::before {
+  content: "▲";
+  font-size: 10px;
+  opacity: 0.9;
+}
+
+html.theme-dune .card-requirements-max .card-item-container::before {
+  content: "▼";
+}
+
+/* No value (tag requirements: only symbols) – no arrow; the MIN/MAX label says it once for the whole chip */
+html.theme-dune .card-requirements .card-item-container:not(:has(> span:not(:empty, .card-requirement-max-label)))::before {
+  content: none;
 }
 
 html.theme-dune .card-requirements .card-requirement-max-label {
@@ -138,20 +161,19 @@ html.theme-dune .card-requirements .card-requirement-max-label {
 }
 
 html.theme-dune .card-requirements::after {
-  content: "▲ MIN";
+  content: "MIN";
   order: 1;
-  margin-left: 3px;
-  padding: 3px 3px 2px;
-  border-radius: 3px;
-  background: #4f7d2b;
+  margin-left: 5px;
+  padding: 3px 4px 2px;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 22%);
   color: #fff;
   font: 8px Michroma, sans-serif;
   line-height: 1;
 }
 
 html.theme-dune .card-requirements.card-requirements-max::after {
-  content: "▼ MAX";
-  background: #b03a26;
+  content: "MAX";
 }
 
 /* Effect box of the Houses: darker parchment instead of the grey metal */
