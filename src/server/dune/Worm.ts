@@ -15,6 +15,7 @@ import {PendingLevy, takeLevy} from './WormLevy';
 import {arrakisCoordinate} from '../../common/dune/arrakisCoordinates';
 import {CardName} from '../../common/cards/CardName';
 import {Random} from '../../common/utils/Random';
+import {WORM_START_SPACES} from '../../common/dune/wormStartSpaces';
 
 // Module C – Shai-Hulud (claude/dune-erweiterung-konzept.md): a worm marker wanders over Arrakis. At the end of
 // every generation a die gives the direction, the weakest player (least TR) chooses 1–3 spaces, and every space the
@@ -47,11 +48,8 @@ export type WormData = {
 /** A start space in the deep desert of the south (G3); the tests use it as a fixed starting point */
 export const WORM_START: SpaceId = '48' as SpaceId;
 
-/**
- * Where the worm may start, chosen at random: E5, F4, F5, G3, G4, H3, H4 (Jens, 19 Oct 2026). Some lie behind the worm
- * border – the worm leaves its nest from there and never comes back.
- */
-export const WORM_START_SPACES: ReadonlyArray<SpaceId> = ['33', '41', '42', '48', '49', '55', '56'] as Array<SpaceId>;
+// Where the worm may start: common/dune/wormStartSpaces.ts (the Shai-Hulud tab lists the same spaces as a rule)
+export {WORM_START_SPACES};
 
 export function wormStart(rng: Random): SpaceId {
   return WORM_START_SPACES[rng.nextInt(WORM_START_SPACES.length)];
