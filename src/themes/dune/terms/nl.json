@@ -364,6 +364,7 @@
     ]
   ],
   "exact": {
-    "Space": "Gilde"
+    "Space": "Gilde",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Heb een Landsraad-invloed van 35."
   }
 }

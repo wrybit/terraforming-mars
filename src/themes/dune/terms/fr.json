@@ -680,6 +680,7 @@
     ]
   ],
   "exact": {
-    "Space": "Guilde"
+    "Space": "Guilde",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Avoir une influence au Landsraad d'au moins 35."
   }
 }

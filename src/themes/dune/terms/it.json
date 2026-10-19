@@ -944,6 +944,7 @@
     ]
   ],
   "exact": {
-    "Space": "Gilda"
+    "Space": "Gilda",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Richiede che tu abbia un'influenza nel Landsraad pari almeno a 35"
   }
 }

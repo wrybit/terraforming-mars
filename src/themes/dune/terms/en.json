@@ -184,6 +184,7 @@
     ]
   ],
   "exact": {
-    "Space": "Guild"
+    "Space": "Guild",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Have a Landsraad influence of 35."
   }
 }

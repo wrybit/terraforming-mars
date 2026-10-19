@@ -1164,6 +1164,7 @@
     ]
   ],
   "exact": {
-    "Space": "Liga"
+    "Space": "Liga",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Legyen 35 Landsraad-befolyásod."
   }
 }

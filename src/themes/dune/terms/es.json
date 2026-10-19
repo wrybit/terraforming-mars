@@ -96,6 +96,7 @@
     ["~asteroide", "meteorito"]
   ],
   "exact": {
-    "Space": "Cofradía"
+    "Space": "Cofradía",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Poseer como mínimo 35 de influencia."
   }
 }

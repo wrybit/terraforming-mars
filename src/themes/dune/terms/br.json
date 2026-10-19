@@ -120,6 +120,7 @@
     ["~asteroide", "meteorito"]
   ],
   "exact": {
-    "Space": "Guilda"
+    "Space": "Guilda",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Ter uma influência no Landsraad de no mínimo 35."
   }
 }

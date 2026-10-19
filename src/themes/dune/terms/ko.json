@@ -925,6 +925,7 @@
     ]
   ],
   "exact": {
-    "Space": "길드"
+    "Space": "길드",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "란즈라드 영향력이 35 이상."
   }
 }

@@ -269,6 +269,7 @@
   "exact": {
     "Space": "Kilta",
     "Not enough starting M€ for these cards": "Aloitussolarit eivät riitä näihin kortteihin",
-    "Not enough M€ left after preludes": "Solarit eivät riitä alkusoittojen jälkeen"
+    "Not enough M€ left after preludes": "Solarit eivät riitä alkusoittojen jälkeen",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Landsraad-arvovalta vähintään 35."
   }
 }

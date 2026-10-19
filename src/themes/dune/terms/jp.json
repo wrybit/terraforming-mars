@@ -34,6 +34,7 @@
     ["小惑星", "隕石"]
   ],
   "exact": {
-    "Space": "ギルド"
+    "Space": "ギルド",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "影響力35以上"
   }
 }

@@ -583,6 +583,7 @@
     ]
   ],
   "exact": {
-    "Space": "Гилдия"
+    "Space": "Гилдия",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Имайте влияние в Ландсраада от поне 35"
   }
 }

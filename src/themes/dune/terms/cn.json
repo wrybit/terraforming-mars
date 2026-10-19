@@ -46,6 +46,7 @@
     ["小行星", "陨石"]
   ],
   "exact": {
-    "Space": "公会"
+    "Space": "公会",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "影响力得分达到35"
   }
 }

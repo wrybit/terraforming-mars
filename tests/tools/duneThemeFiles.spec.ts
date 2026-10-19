@@ -3,6 +3,10 @@ import fs from 'fs';
 import path from 'path';
 import {compileRules, ThemeTerms} from '../../src/tools/themeTexts';
 import {CardName} from '../../src/common/cards/CardName';
+import {ALL_MODULE_MANIFESTS} from '../../src/server/cards/AllManifests';
+import {CardManifest} from '../../src/server/cards/ModuleManifest';
+import {DUNE_EXPANSIONS, themeAllowsExpansion} from '../../src/common/theme/Theme';
+import {asArray} from '../../src/common/utils/utils';
 
 // The Dune theme files of every language must match: the same names, rules that compile, and names of real cards
 const FOLDER = path.resolve('src/themes/dune');
@@ -28,5 +32,25 @@ describe('Dune theme files', () => {
       'Tharsis Tholus', 'Ascraeus Mons', 'Pavonis Mons', 'Arsia Mons'];
     const unknown = Object.keys(english).filter((key) => !key.includes(':') && !cards.has(key) && !nonCards.includes(key));
     expect(unknown).deep.eq([]);
+  });
+
+  it('names every card a Dune game can deal, with a story line', () => {
+    // Project cards, houses and preludes of the base game and the covered expansions, without those needing Venus, Colonies or Turmoil
+    const modules = ['base', ...DUNE_EXPANSIONS];
+    const dealt = ALL_MODULE_MANIFESTS
+      .filter((manifest) => modules.includes(manifest.module))
+      .flatMap((manifest) => [manifest.projectCards, manifest.corporationCards, manifest.preludeCards].flatMap((cards) => CardManifest.entries(cards)))
+      .filter(([, spec]) => asArray(spec.compatibility ?? []).every((expansion) => themeAllowsExpansion('dune', expansion)))
+      .map(([name]) => name);
+    expect(dealt.length).to.be.greaterThan(250);
+    expect(dealt.filter((name) => english[name] === undefined || english[`flavor:${name}`] === undefined)).deep.eq([]);
+  });
+
+  it('never mentions Turmoil in the Landsraad Voice milestone', () => {
+    // Dune has no Turmoil, so the milestone drops the "(or 26 with Turmoil.)" of Terraformer in every language
+    for (const lang of LANGUAGES) {
+      const terms: ThemeTerms = read(`terms/${lang}.json`);
+      expect(terms.exact?.['Have a terraform rating of 35 (or 26 with Turmoil.)'], lang).to.match(/35/);
+    }
   });
 });

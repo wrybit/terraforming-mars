@@ -377,6 +377,7 @@
     ]
   ],
   "exact": {
-    "Space": "Gilde"
+    "Space": "Gilde",
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Mindestens 35 als eigener Landsraad-Einfluss."
   }
 }
