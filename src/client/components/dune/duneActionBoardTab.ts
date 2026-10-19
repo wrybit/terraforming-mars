@@ -1,6 +1,6 @@
 import {DUNE_BOARD_TABS, DuneBoardTabId} from '@/client/components/boardTabs/boardTabs';
 import {DUNE_TAB_ACTIONS} from './duneTabActions';
-import {BAZAAR_ACTION_TITLE, KANLY_SEND_TITLE, LEVY_TITLE, WORM_TITLE} from '@/common/dune/duneActionTitles';
+import {BAZAAR_ACTION_TITLE, KANLY_SEND_TITLE, LEVY_TITLE, SCHEMES_TITLE, WORM_TITLE} from '@/common/dune/duneActionTitles';
 
 // Which Dune board tab (top right) belongs to an action tab of the menu: opening "Move spice" also opens the
 // Smuggling board, "Make an offer" the CHOAM board … (Jens, 19 Oct 2026). Built from the buttons of the module tabs
@@ -11,6 +11,7 @@ const EXTRA_TITLES: ReadonlyArray<[string, DuneBoardTabId]> = [
   [WORM_TITLE, 'worm'],
   [LEVY_TITLE, 'worm'],
   [KANLY_SEND_TITLE, 'kanly'],
+  [SCHEMES_TITLE, 'schemes'],
 ];
 
 const BOARD_TAB_BY_TITLE: ReadonlyMap<string, DuneBoardTabId> = new Map([
