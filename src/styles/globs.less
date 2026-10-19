@@ -18,11 +18,15 @@
     box-shadow: 0 0px 0px 2px @grey_900, 0px 0 0px 6px #bb8760, 0 0 2px 8px #000;
     z-index: 1;
   }
-  // Arrakis (Board.vue): Dune symbol at the end of each scale, where the Mars picture has its labels
-  .board-scale-symbol {
+  // Arrakis (Board.vue): spice field tile in front of the ocean count, at its left edge
+  .global-numbers-oceans__tile {
     position: absolute;
-    width: 24px;
-    height: 24px;
+    right: 100%;
+    top: 50%;
+    width: 30px;
+    height: 35px;
+    margin-right: 6px;
+    transform: translateY(-50%);
     pointer-events: none;
   }
 

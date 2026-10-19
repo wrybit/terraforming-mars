@@ -40,6 +40,26 @@ export function ringSector(from: number, to: number, inner: number, outer: numbe
   ].join(' ');
 }
 
+/** Arc of the circle as an open SVG path, drawn clockwise from `from` to `to` (for text along the scale) */
+export function arcPath(from: number, to: number, radius: number): string {
+  const large = to - from > 180 ? 1 : 0;
+  return `M ${point(from, radius)} A ${radius} ${radius} 0 ${large} 1 ${point(to, radius)}`;
+}
+
+/** Centre of a symbol on the circle at an angle */
+export function pointAt(angle: number, radius: number = SCALE_RADIUS): {x: number, y: number} {
+  const radians = angle * Math.PI / 180;
+  return {x: SCALE_CENTRE_X + radius * Math.cos(radians), y: SCALE_CENTRE_Y + radius * Math.sin(radians)};
+}
+
+// Symbol and name of each scale continue the band beyond its top end, on the same circle:
+// vegetation goes on clockwise (upper left), the water storage counter-clockwise (upper right); the text always
+// runs clockwise, so it stays upright
+export const SCALE_LABELS = {
+  vegetation: {symbolAngle: 225, text: {from: 230, to: 262, anchor: 'start'}},
+  water: {symbolAngle: -47, text: {from: -84, to: -52, anchor: 'end'}},
+} as const;
+
 export type ScaleStep = {path: string, index: number};
 
 /** One sector per value, bounded halfway to its neighbours (the ends reach as far out as the first step is wide) */

@@ -33,14 +33,9 @@
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('venus')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('venus') : undefined">{{ lvl.strValue }}</div>
             </div>
 
-            <!-- Arrakis: the Dune symbols at the scale ends, in the place of the Mars labels O2 and t°C (cut out of the board picture) -->
-            <template v-if="boardName === BoardName.ARRAKIS">
-              <img class="board-scale-symbol" style="left: 182px; top: 510px" :src="themedAsset('assets/global-parameters/oxygen.png')" alt="">
-              <img class="board-scale-symbol" style="left: 421px; top: 508px" :src="themedAsset('assets/global-parameters/temperature.png')" alt="">
-              <!-- Spice fields count below the planet: the spice field tile itself (as placed on the board) where Mars shows its ocean marker (scripts/make-dune-planet.py erases that) -->
-              <img class="board-scale-symbol board-scale-symbol--spicefield" style="left: 305px; top: 563px; width: 30px; height: 35px" src="assets/themes/dune/graphics/tile-spicefield.svg" alt="">
-            </template>
             <div class="global-numbers-oceans" v-flash="flashKeys.globalParameter('oceans')">
+              <!-- Arrakis: the spice field tile in front of the count; inside the count, so it moves with it in every board layout -->
+              <img v-if="boardName === BoardName.ARRAKIS" class="global-numbers-oceans__tile" src="assets/themes/dune/graphics/tile-spicefield.svg" alt="">
               <span v-if="oceans_count === globalParameterMaximums.oceans">
                 <img width="26" src="assets/misc/circle-checkmark.png" class="board-ocean-checkmark" :alt="$t('Completed!')">
               </span>
