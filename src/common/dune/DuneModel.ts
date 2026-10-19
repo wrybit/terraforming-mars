@@ -8,6 +8,8 @@ export type BazaarSlotModel = {
   ware: string | undefined,
   /** Price in this slot before a player's own discount */
   price: number,
+  /** Empty slot: the player who took its ware this generation */
+  takenBy?: Color,
 };
 
 export type BazaarModel = {

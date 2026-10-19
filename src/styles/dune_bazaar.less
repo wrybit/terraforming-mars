@@ -151,6 +151,23 @@
   }
 }
 
+// Taken this generation: the player's cube and name in the empty slot, the frame in a firmer sand
+.dune-bazaar__slot--taken {
+  flex-direction: column;
+  gap: 6px;
+  border-color: fade(@bazaar-sand, 70%);
+  color: @bazaar-sand;
+}
+
+.dune-bazaar__taker {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .dune-bazaar__footer {
   display: flex;
   flex-direction: column;

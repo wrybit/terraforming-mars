@@ -13,6 +13,7 @@ import {SelectOption} from '../inputs/SelectOption';
 import {message} from '../logs/MessageBuilder';
 import {CardName} from '../../common/cards/CardName';
 import {BazaarModel} from '../../common/dune/DuneModel';
+import {Color} from '../../common/Color';
 import {
   BAZAAR_SLOT_PRICE_CHANGE, BAZAAR_WARES, BazaarGood, bazaarPrice, bazaarWare, bazaarWareCount,
 } from '../../common/dune/bazaarWares';
@@ -34,6 +35,8 @@ export type BazaarData = {
   buyers: Array<PlayerId>,
   /** Players who bought a ware this generation (missing in games saved before buying became an action) */
   bought?: Array<PlayerId>,
+  /** Who took the ware of each slot this generation (bought or for free); shown in the empty slot until the slide */
+  takenBy?: Array<PlayerId | null>,
 };
 
 /** Title of the choice of the former bazaar phase; the AI recognises it by this (ai/duneChoices.ts) */
@@ -62,6 +65,8 @@ function drawWare(data: BazaarData, rng: Random): string | undefined {
 
 /** Steps 1 and 2: slide right, then always one new ware on the left and refill up to the player count */
 export function slideAndRefill(data: BazaarData, playerCount: number, rng: Random): void {
+  // A new generation: the empty slots no longer tell who took their ware
+  data.takenBy = undefined;
   const pushedOut = data.slots[data.slots.length - 1];
   if (pushedOut !== null && pushedOut !== undefined) {
     data.discard.push(pushedOut);
@@ -109,6 +114,13 @@ function payOut(player: IPlayer, name: string): void {
   }
 }
 
+// The slot shows who took its ware (Jens, 19 Oct 2026)
+function markTaken(data: BazaarData, slot: number, player: IPlayer): void {
+  const takenBy = data.takenBy ?? data.slots.map(() => null);
+  takenBy[slot] = player.id;
+  data.takenBy = takenBy;
+}
+
 /** Caravan Master card: the ware in `slot` for free, if one lies there */
 export function takeFreeWare(player: IPlayer, slot: number): void {
   const data = player.game.duneData?.bazaar;
@@ -117,6 +129,7 @@ export function takeFreeWare(player: IPlayer, slot: number): void {
     return;
   }
   data.slots[slot] = null;
+  markTaken(data, slot, player);
   data.discard.push(name);
   player.game.log('${0} took ${1} from the bazaar', (b) => b.player(player).string(name));
   payOut(player, name);
@@ -136,6 +149,7 @@ export function buyWare(player: IPlayer, data: BazaarData, slot: number, payment
     player.stock.deduct(Resource.MEGACREDITS, price);
   }
   data.slots[slot] = null;
+  markTaken(data, slot, player);
   data.discard.push(name);
   data.bought = [...(data.bought ?? []), player.id];
   player.game.log('${0} bought ${1} at the bazaar for ${2} M€', (b) => b.player(player).string(name).number(price));
@@ -196,11 +210,16 @@ export function bazaarTabActions(player: IPlayer, data: BazaarData): Array<Selec
   return actions;
 }
 
+function takenByColor(game: IGame, id: PlayerId | null | undefined): Color | undefined {
+  return id === null || id === undefined ? undefined : game.getPlayerById(id).color;
+}
+
 export function bazaarModel(game: IGame, data: BazaarData): BazaarModel {
   return {
     slots: data.slots.map((name, slot) => ({
       ware: name ?? undefined,
       price: name === null ? 0 : bazaarPrice(bazaarWare(name), slot),
+      takenBy: takenByColor(game, data.takenBy?.[slot]),
     })),
     buyers: data.buyers.map((id) => game.getPlayerById(id).color),
     bought: (data.bought ?? []).map((id) => game.getPlayerById(id).color),

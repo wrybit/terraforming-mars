@@ -7,7 +7,7 @@ import {OrOptions} from '../../src/server/inputs/OrOptions';
 import {Phase} from '../../src/common/Phase';
 import {TileType} from '../../src/common/TileType';
 import {BoardName} from '../../src/common/boards/BoardName';
-import {BAZAAR_TITLE, BazaarData, buyWare, slideAndRefill} from '../../src/server/dune/Bazaar';
+import {BAZAAR_TITLE, BazaarData, bazaarModel, buyWare, slideAndRefill} from '../../src/server/dune/Bazaar';
 import {SelectPayment} from '../../src/server/inputs/SelectPayment';
 import {Payment} from '../../src/common/inputs/Payment';
 import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
@@ -117,6 +117,16 @@ describe('Bazaar of Arrakeen (Dune module A)', () => {
     expect(player1.heat).eq(24);
     expect(bazaar.slots).deep.eq([null, 'Cistern of Tabr', null, null, null]);
     expect(bazaar.discard).deep.eq(['Bene Gesserit Dossier', 'Water Rings']);
+  });
+
+  it('shows in the empty slot who took its ware, until the wares slide on', () => {
+    const bazaar = bazaarOf(game);
+    bazaar.slots = ['Bene Gesserit Dossier', 'Cistern of Tabr', null, null, null];
+    buyWare(player1, bazaar, 1);
+    const slots = () => bazaarModel(game, bazaar).slots.map((slot) => slot.takenBy);
+    expect(slots()).deep.eq([undefined, player1.color, undefined, undefined, undefined]);
+    slideAndRefill(bazaar, game.players.length, game.rng);
+    expect(slots().every((color) => color === undefined)).is.true;
   });
 
   it('lays out new wares after research and goes straight to the action phase', () => {

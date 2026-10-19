@@ -14,6 +14,11 @@
           @click="buyable(slot.ware) && buy(slot.ware)">
           <BazaarWareCard :ware="slot.ware" :price="slot.price"/>
         </component>
+        <!-- Taken this generation: the player's cube and name where the ware lay (Jens, 19 Oct 2026) -->
+        <div v-else-if="slot.takenBy !== undefined" class="dune-bazaar__slot dune-bazaar__slot--empty dune-bazaar__slot--taken" data-test="dune-bazaar-taken">
+          <BoardCube :color="slot.takenBy" view="slight" :size="18"/>
+          <span class="dune-bazaar__taker">{{ playerName(slot.takenBy) }}</span>
+        </div>
         <div v-else class="dune-bazaar__slot dune-bazaar__slot--empty">{{ $t('Empty') }}</div>
       </li>
     </ol>
@@ -21,10 +26,6 @@
       <span v-if="bazaar.buyers.length > 0" class="dune-bazaar__buyers">
         {{ $t('Buying order') }}:
         <span v-for="color in bazaar.buyers" :key="color" :class="['dune-bazaar__buyer', 'player_bg_color_' + color]">{{ playerName(color) }}</span>
-      </span>
-      <span v-if="bought.length > 0" class="dune-bazaar__buyers">
-        {{ $t('Bought this generation') }}:
-        <span v-for="color in bought" :key="color" :class="['dune-bazaar__buyer', 'player_bg_color_' + color]">{{ playerName(color) }}</span>
       </span>
     </div>
     <!-- The rules as a short list instead of a block of text -->
@@ -42,6 +43,7 @@ import {vueRoot} from '@/client/components/vueRoot';
 import {closeMove, DuneMoveStep, isMoveOffered, openMove} from './duneMoves';
 import DuneRuleCards from './DuneRuleCards.vue';
 import BazaarWareCard from './BazaarWareCard.vue';
+import BoardCube from '@/client/components/common/BoardCube.vue';
 import {BAZAAR_RULES} from './duneRules';
 import {BAZAAR_BUY_TITLE, BAZAAR_WARE_TITLE} from '@/common/dune/duneActionTitles';
 import {requestActionTab} from '@/client/components/actionTabRequest';
@@ -58,7 +60,7 @@ function wareMove(ware: string): Array<DuneMoveStep> {
 
 export default defineComponent({
   name: 'BazaarBoard',
-  components: {DuneRuleCards, BazaarWareCard},
+  components: {DuneRuleCards, BazaarWareCard, BoardCube},
   props: {
     bazaar: {
       type: Object as PropType<BazaarModel>,
@@ -72,10 +74,6 @@ export default defineComponent({
   computed: {
     BAZAAR_RULES(): typeof BAZAAR_RULES {
       return BAZAAR_RULES;
-    },
-    // Games saved before buying became an action have no list
-    bought(): ReadonlyArray<Color> {
-      return this.bazaar.bought ?? [];
     },
   },
   methods: {
