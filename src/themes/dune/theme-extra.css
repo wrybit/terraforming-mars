@@ -851,5 +851,6 @@ html.theme-dune .card-container .card-content .card-plate.card-plate.card-plate-
    harvesters go there, not oceans (frame from scripts/make-spice-hex.py) */
 html.theme-dune .board-space-type-ocean {
   background: url(graphics/hex-spice.png) no-repeat;
-  background-color: rgba(224, 102, 42, 0.28);
+  /* Dark rust inside, bright spice frame around it: on the orange planet only light against dark reads */
+  background-color: rgba(120, 38, 8, 0.55);
 }
