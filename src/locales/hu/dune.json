@@ -240,5 +240,12 @@
   "The worm spares this greenery.": "A féreg megkíméli ezt a beültetett dűnét.",
   "Place a greenery tile. The worm spares this greenery.": "Helyezz le egy beültetett dűnét. A féreg megkíméli ezt a beültetett dűnét.",
   "Medium": "Közepes",
-  "No finished Dune games yet.": "Még nincs befejezett Dűne-játszma."
+  "No finished Dune games yet.": "Még nincs befejezett Dűne-játszma.",
+  "Based on: ${0}": "Minta: ${0}",
+  "Claim: ${0} Solari": "Megszerzés: ${0} Solari",
+  "${0} victory points": "${0} győzelmi pont",
+  "At most ${0} per game": "játszmánként legfeljebb ${0}",
+  "Fund: ${0} Solari": "Finanszírozás: ${0} Solari",
+  "1st place: ${0} victory points": "1. hely: ${0} győzelmi pont",
+  "2nd place: ${0} victory points": "2. hely: ${0} győzelmi pont"
 }

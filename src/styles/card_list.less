@@ -1020,3 +1020,39 @@
 .expansion-icon-dune {
   background-image: url(./assets/themes/dune/arrakis-icon.png);
 }
+
+// Dune theme: milestones and awards as on the mockup's goals page (CardListDuneGoals.vue): rules as chips, then an even
+// grid of goal cards. Chips closer to their cards than the cards to the next section (proximity)
+.card-list-dune-goals {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-list-dune-goals__rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    margin: 0;
+    padding: 5px 12px;
+    border: 1px solid @create-game-line;
+    border-radius: 999px;
+    background: @create-game-surface;
+    font-size: 13px;
+  }
+}
+
+.card-list-dune-goals__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+
+  .dune-goal-card {
+    min-width: 0;
+  }
+}

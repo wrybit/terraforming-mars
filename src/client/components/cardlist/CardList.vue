@@ -118,11 +118,11 @@
         </CardListSection>
 
         <CardListSection v-show="visibleMilestoneNames.length > 0" title="Milestones" :count="visibleMilestoneNames.length" :parts="partsFor('milestones', visibleMilestoneNames.length)">
-          <div class="player_home_colony_cont">
+          <!-- Dune theme: goal cards with the rules, as on the mockup's goals page, instead of the Mars board tiles -->
+          <CardListDuneGoals v-if="theme === 'dune'" kind="milestones" :names="visibleMilestoneNames"/>
+          <div v-else class="player_home_colony_cont">
             <div class="player_home_colony" v-for="milestoneName in visibleMilestoneNames" :key="milestoneName" v-memo="[milestoneName]">
-              <!-- Dune theme: goal card as in the game (DuneGoalCard.vue) instead of the Mars board tile -->
-              <DuneGoalCard v-if="theme === 'dune'" kind="milestones" :name="milestoneName"/>
-              <div v-else class="milestones"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
+              <div class="milestones"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
                 <Milestone :milestone="milestoneModel(milestoneName)" :showDescription="true"/>
               </div>
             </div>
@@ -130,10 +130,10 @@
         </CardListSection>
 
         <CardListSection v-show="visibleAwardNames.length > 0" title="Awards" :count="visibleAwardNames.length" :parts="partsFor('awards', visibleAwardNames.length)">
-          <div class="player_home_colony_cont">
+          <CardListDuneGoals v-if="theme === 'dune'" kind="awards" :names="visibleAwardNames"/>
+          <div v-else class="player_home_colony_cont">
             <div class="player_home_colony" v-for="awardName in visibleAwardNames" :key="awardName" v-memo="[awardName]">
-              <DuneGoalCard v-if="theme === 'dune'" kind="awards" :name="awardName"/>
-              <div v-else class="awards"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
+              <div class="awards"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
                 <Award :award="awardModel(awardName)" :showDescription="true"/>
               </div>
             </div>
@@ -208,11 +208,11 @@ import CardListSectionRail, {RailSection} from '@/client/components/cardlist/Car
 import {activeSectionIndex} from '@/client/components/cardlist/sectionRail';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import ThemeSwitch from '@/client/components/common/ThemeSwitch.vue';
-import DuneGoalCard from '@/client/components/DuneGoalCard.vue';
+import CardListDuneGoals from '@/client/components/cardlist/CardListDuneGoals.vue';
 import {activeTheme} from '@/client/theme/applyTheme';
 import {Theme} from '@/common/theme/Theme';
 import {GAME_MODULES} from '@/common/cards/GameModule';
-import {defaultExpansions, themeEntries, themeExpansionOptions, themeResourceOptions, themeTagOptions, themeTypeOptions} from '@/client/components/cardlist/cardListTheme';
+import {defaultExpansions, themeEntries, themeGoalOrder, themeExpansionOptions, themeResourceOptions, themeTagOptions, themeTypeOptions} from '@/client/components/cardlist/cardListTheme';
 import {textFitMetrics} from '@/client/utils/textFit';
 import {prefersReducedMotion} from '@/client/utils/motion';
 
@@ -266,7 +266,7 @@ export default defineComponent({
   name: 'CardList',
   components: {
     ThemeSwitch,
-    DuneGoalCard,
+    CardListDuneGoals,
     PageTitle,
     CardListCardGrid,
     CardListCostRange,
@@ -480,10 +480,10 @@ export default defineComponent({
       return [...OFFICIAL_COLONY_NAMES, ...COMMUNITY_COLONY_NAMES, ...PATHFINDERS_COLONY_NAMES].filter((name) => this.isVisible('colonyTiles', name));
     },
     visibleMilestoneNames(): Array<MilestoneName> {
-      return milestoneNames.toSorted().filter((name) => this.isVisible('milestones', name));
+      return themeGoalOrder(milestoneNames, this.theme).filter((name) => this.isVisible('milestones', name));
     },
     visibleAwardNames(): Array<AwardName> {
-      return awardNames.toSorted().filter((name) => this.isVisible('awards', name));
+      return themeGoalOrder(awardNames, this.theme).filter((name) => this.isVisible('awards', name));
     },
     visibleAgendaIds(): Array<PolicyId | BonusId> {
       const ids = (POLICY_IDS as ReadonlyArray<PolicyId | BonusId>).concat(BONUS_IDS);

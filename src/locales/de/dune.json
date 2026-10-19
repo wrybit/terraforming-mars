@@ -238,5 +238,12 @@
   "The worm spares this greenery.": "Der Wurm verschont diese Pflanzdüne.",
   "Place a greenery tile. The worm spares this greenery.": "Lege eine Pflanzdüne. Der Wurm verschont diese Pflanzdüne.",
   "Medium": "Mittel",
-  "No finished Dune games yet.": "Noch keine beendeten Dune-Partien."
+  "No finished Dune games yet.": "Noch keine beendeten Dune-Partien.",
+  "Based on: ${0}": "Vorbild: ${0}",
+  "Claim: ${0} Solari": "Beanspruchen: ${0} Solari",
+  "${0} victory points": "${0} Siegpunkte",
+  "At most ${0} per game": "höchstens ${0} pro Partie",
+  "Fund: ${0} Solari": "Finanzieren: ${0} Solari",
+  "1st place: ${0} victory points": "1. Platz: ${0} Siegpunkte",
+  "2nd place: ${0} victory points": "2. Platz: ${0} Siegpunkte"
 }

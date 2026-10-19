@@ -240,5 +240,12 @@
   "The worm spares this greenery.": "Ormen skåner denne beplantede dynen.",
   "Place a greenery tile. The worm spares this greenery.": "Legg ut en beplantet dyne. Ormen skåner denne beplantede dynen.",
   "Medium": "Middels",
-  "No finished Dune games yet.": "Ingen fullførte Dune-spill ennå."
+  "No finished Dune games yet.": "Ingen fullførte Dune-spill ennå.",
+  "Based on: ${0}": "Forbilde: ${0}",
+  "Claim: ${0} Solari": "Gjøre krav: ${0} Solari",
+  "${0} victory points": "${0} seierspoeng",
+  "At most ${0} per game": "høyst ${0} per spill",
+  "Fund: ${0} Solari": "Finansiere: ${0} Solari",
+  "1st place: ${0} victory points": "1. plass: ${0} seierspoeng",
+  "2nd place: ${0} victory points": "2. plass: ${0} seierspoeng"
 }

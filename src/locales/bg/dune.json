@@ -242,5 +242,12 @@
   "The worm spares this greenery.": "Червеят пощадява тази засадена дюна.",
   "Place a greenery tile. The worm spares this greenery.": "Поставете засадена дюна. Червеят пощадява тази засадена дюна.",
   "Medium": "Среден",
-  "No finished Dune games yet.": "Все още няма завършени игри „Дюн“."
+  "No finished Dune games yet.": "Все още няма завършени игри „Дюн“.",
+  "Based on: ${0}": "Прототип: ${0}",
+  "Claim: ${0} Solari": "Заявяване: ${0} Солари",
+  "${0} victory points": "${0} победни точки",
+  "At most ${0} per game": "най-много ${0} на игра",
+  "Fund: ${0} Solari": "Финансиране: ${0} Солари",
+  "1st place: ${0} victory points": "1-во място: ${0} победни точки",
+  "2nd place: ${0} victory points": "2-ро място: ${0} победни точки"
 }

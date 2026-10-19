@@ -242,5 +242,12 @@
   "The worm spares this greenery.": "Червь щадит эту засаженную дюну.",
   "Place a greenery tile. The worm spares this greenery.": "Разместите засаженную дюну. Червь щадит эту засаженную дюну.",
   "Medium": "Средний",
-  "No finished Dune games yet.": "Пока нет завершённых партий «Дюны»."
+  "No finished Dune games yet.": "Пока нет завершённых партий «Дюны».",
+  "Based on: ${0}": "Прообраз: ${0}",
+  "Claim: ${0} Solari": "Заявить: ${0} солари",
+  "${0} victory points": "${0} победных очков",
+  "At most ${0} per game": "не более ${0} за партию",
+  "Fund: ${0} Solari": "Финансировать: ${0} солари",
+  "1st place: ${0} victory points": "1-е место: ${0} победных очков",
+  "2nd place: ${0} victory points": "2-е место: ${0} победных очка"
 }

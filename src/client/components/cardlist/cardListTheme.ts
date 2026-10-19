@@ -3,6 +3,7 @@ import {CardType} from '@/common/cards/CardType';
 import {DUNE_AWARDS, DUNE_EXPANSIONS, DUNE_MILESTONES, Theme, themeAllowsExpansion} from '@/common/theme/Theme';
 import {CardListEntry, filterResource, filterTags} from '@/client/components/cardlist/cardListEntries';
 import {ClientCard} from '@/common/cards/ClientCard';
+import {MilestoneAwardKind} from '@/client/components/milestoneAwardChoice';
 import {EXPANSION_OPTIONS, FilterOption, RESOURCE_OPTIONS, TAG_OPTIONS, TYPE_OPTIONS} from '@/client/components/cardlist/cardListOptions';
 import {ResourceOption, TagOption, TypeOption} from '@/client/components/cardlist/CardListModel';
 
@@ -72,4 +73,41 @@ export function themeResourceOptions(theme: Theme, entries: ReadonlyArray<CardLi
 /** Expansion filter a page in `theme` starts with: everything, the Dune expansion only in the Dune theme. */
 export function defaultExpansions(theme: Theme, modules: ReadonlyArray<GameModule>): Record<GameModule, boolean> {
   return Object.fromEntries(modules.map((module) => [module, module !== 'dune' || theme === 'dune'])) as Record<GameModule, boolean>;
+}
+
+/** A rule of milestones or awards as a chip above the Dune goal cards: English text with its numbers. */
+export type GoalRule = {text: string, params: Array<string>};
+
+// The rules of the game (claim 8, fund 8/14/20, 5/2 points, at most 3) in the words of the mockup's goals page
+export const DUNE_GOAL_RULES: Readonly<Record<MilestoneAwardKind, ReadonlyArray<GoalRule>>> = {
+  milestones: [
+    {text: 'Claim: ${0} Solari', params: ['8']},
+    {text: '${0} victory points', params: ['5']},
+    {text: 'At most ${0} per game', params: ['3']},
+  ],
+  awards: [
+    {text: 'Fund: ${0} Solari', params: ['8 / 14 / 20']},
+    {text: '1st place: ${0} victory points', params: ['5']},
+    {text: '2nd place: ${0} victory points', params: ['2']},
+    {text: 'At most ${0} per game', params: ['3']},
+  ],
+};
+
+// Order of the goals as on the mockup's goals page (Naib, Planetologist, Landsraad Voice, Builder, Mentat …)
+const DUNE_GOAL_ORDER: ReadonlyArray<string> = [
+  'Mayor', 'Gardener', 'Terraformer', 'Builder', 'Planner',
+  'Landlord', 'Banker', 'Scientist', 'Thermalist', 'Miner',
+];
+
+/** Goals in the order the theme shows them: Dune as on the mockup, Mars alphabetical as before. */
+export function themeGoalOrder<T extends string>(names: ReadonlyArray<T>, theme: Theme): Array<T> {
+  const sorted = names.toSorted();
+  if (theme !== 'dune') {
+    return sorted;
+  }
+  const rank = (name: string) => {
+    const index = DUNE_GOAL_ORDER.indexOf(name);
+    return index < 0 ? DUNE_GOAL_ORDER.length : index;
+  };
+  return sorted.sort((first, second) => rank(first) - rank(second));
 }

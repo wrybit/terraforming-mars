@@ -240,5 +240,12 @@
   "The worm spares this greenery.": "Mato säästää tämän istutusdyynin.",
   "Place a greenery tile. The worm spares this greenery.": "Aseta istutusdyyni. Mato säästää tämän istutusdyynin.",
   "Medium": "Keskitaso",
-  "No finished Dune games yet.": "Ei vielä päättyneitä Dyyni-pelejä."
+  "No finished Dune games yet.": "Ei vielä päättyneitä Dyyni-pelejä.",
+  "Based on: ${0}": "Esikuva: ${0}",
+  "Claim: ${0} Solari": "Lunastus: ${0} Solaria",
+  "${0} victory points": "${0} voittopistettä",
+  "At most ${0} per game": "enintään ${0} pelissä",
+  "Fund: ${0} Solari": "Rahoitus: ${0} Solaria",
+  "1st place: ${0} victory points": "1. sija: ${0} voittopistettä",
+  "2nd place: ${0} victory points": "2. sija: ${0} voittopistettä"
 }

@@ -242,5 +242,12 @@
   "The worm spares this greenery.": "砂虫はこの植林砂丘を踏み荒らさない。",
   "Place a greenery tile. The worm spares this greenery.": "植林砂丘を1つ置く。砂虫はこの植林砂丘を踏み荒らさない。",
   "Medium": "普通",
-  "No finished Dune games yet.": "終了したデューンのゲームはまだありません。"
+  "No finished Dune games yet.": "終了したデューンのゲームはまだありません。",
+  "Based on: ${0}": "元になった目標：${0}",
+  "Claim: ${0} Solari": "達成：${0} ソラリ",
+  "${0} victory points": "${0} 勝利点",
+  "At most ${0} per game": "1ゲームにつき最大 ${0} 個",
+  "Fund: ${0} Solari": "資金提供：${0} ソラリ",
+  "1st place: ${0} victory points": "1位：${0} 勝利点",
+  "2nd place: ${0} victory points": "2位：${0} 勝利点"
 }

@@ -235,5 +235,12 @@
   "The worm spares this greenery.": "De worm spaart deze beplante duin.",
   "Place a greenery tile. The worm spares this greenery.": "Leg een beplante duin. De worm spaart deze beplante duin.",
   "Medium": "Gemiddeld",
-  "No finished Dune games yet.": "Nog geen afgeronde Dune-spellen."
+  "No finished Dune games yet.": "Nog geen afgeronde Dune-spellen.",
+  "Based on: ${0}": "Voorbeeld: ${0}",
+  "Claim: ${0} Solari": "Claimen: ${0} Solari",
+  "${0} victory points": "${0} overwinningspunten",
+  "At most ${0} per game": "hoogstens ${0} per spel",
+  "Fund: ${0} Solari": "Financieren: ${0} Solari",
+  "1st place: ${0} victory points": "1e plaats: ${0} overwinningspunten",
+  "2nd place: ${0} victory points": "2e plaats: ${0} overwinningspunten"
 }

@@ -239,5 +239,12 @@
   "The worm spares this greenery.": "Il verme risparmia questa duna piantumata.",
   "Place a greenery tile. The worm spares this greenery.": "Piazza una duna piantumata. Il verme risparmia questa duna piantumata.",
   "Medium": "Medio",
-  "No finished Dune games yet.": "Ancora nessuna partita Dune conclusa."
+  "No finished Dune games yet.": "Ancora nessuna partita Dune conclusa.",
+  "Based on: ${0}": "Modello: ${0}",
+  "Claim: ${0} Solari": "Rivendicare: ${0} Solari",
+  "${0} victory points": "${0} punti vittoria",
+  "At most ${0} per game": "al massimo ${0} per partita",
+  "Fund: ${0} Solari": "Finanziare: ${0} Solari",
+  "1st place: ${0} victory points": "1° posto: ${0} punti vittoria",
+  "2nd place: ${0} victory points": "2° posto: ${0} punti vittoria"
 }
