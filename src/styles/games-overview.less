@@ -238,6 +238,18 @@
   }
 }
 
+// Theme of the game (Mars / Arrakis): the planet stands left of both lines (game and date), so it reads as one
+// label with them; the picture itself comes inline from themePlanets.ts
+.games-overview-planet {
+  float: left;
+  width: 24px;
+  height: 24px;
+  margin: 4px 8px 0 0;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+}
+
 .games-overview-date {
   color: @games-overview-dim;
   font-size: 12px;

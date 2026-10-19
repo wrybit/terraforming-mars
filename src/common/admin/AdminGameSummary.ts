@@ -1,5 +1,6 @@
 import {Color} from '../Color';
 import {LANGUAGE} from '../constants';
+import {Theme} from '../theme/Theme';
 
 // Contract between admin API (server) and admin overview (client): both sides read and write exactly this shape.
 
@@ -40,6 +41,8 @@ export type AdminGameSummary = {
   resultUrl?: string;
   /** Project cards played by all players together (local games only) – tells barely started games apart. */
   playedCardCount?: number;
+  /** Theme the game is played in; missing means Mars (imports, games stored before themes existed). */
+  theme?: Theme;
   players: Array<AdminPlayerSummary>;
 };
 

@@ -8,7 +8,6 @@
         :class="['theme-switch__surface', 'theme-switch__surface--' + option.theme, {'theme-switch__surface--shown': option.theme === theme}]"
         :style="{backgroundImage: `url(${option.planet})`}"></span>
     </span>
-    <!-- Names, not words: the Dune texts would turn "Mars" into "Arrakis" -->
     <button v-for="option in OPTIONS" :key="option.theme" type="button" role="radio"
       :class="['theme-switch__option', 'theme-switch__option--' + option.theme, {'theme-switch__option--selected': option.theme === theme}]"
       :aria-checked="option.theme === theme" @click="pick(option.theme)">{{ option.label }}</button>
@@ -21,13 +20,10 @@ import {Theme} from '@/common/theme/Theme';
 import {activeTheme} from '@/client/theme/applyTheme';
 import {chooseTheme} from '@/client/theme/themeChoice';
 import {prefersReducedMotion} from '@/client/utils/motion';
+import {THEME_PLANETS, ThemePlanet} from '@/client/theme/themePlanets';
 
-// Pictures set here, not in theme_switch.less: the Dune stylesheet (src/tools/themeCss.ts) swaps every Mars picture
-// of the game's styles for Arrakis, which would turn this Mars into Arrakis as well
-const OPTIONS: ReadonlyArray<{theme: Theme, label: string, planet: string}> = [
-  {theme: 'mars', label: 'Mars', planet: 'assets/board/mars-planet.png'},
-  {theme: 'dune', label: 'Dune', planet: 'assets/themes/dune/arrakis-planet.png'},
-];
+// Mars left, Dune right (themePlanets.ts: names and pictures)
+const OPTIONS: ReadonlyArray<ThemePlanet> = [THEME_PLANETS.mars, THEME_PLANETS.dune];
 
 // Length of the planet roll (theme_switch.less @theme-switch-motion): the page is rendered anew in the other theme
 // only afterwards, otherwise the new page would cut the roll off

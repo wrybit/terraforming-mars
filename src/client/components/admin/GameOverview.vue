@@ -6,6 +6,9 @@
       <span :class="summary.isFinished ? 'status-finished' : 'status-running'" :title="$t(summary.isFinished ? 'Finished' : 'Running')"></span>
     </td>
     <td class="games-overview-game">
+      <!-- Mars or Dune at a glance: the planet in front of the game, its name in the tooltip -->
+      <span class="games-overview-planet" :class="'games-overview-planet--' + planet.theme" :style="{backgroundImage: `url(${planet.planet})`}"
+        role="img" :aria-label="planet.label" :title="planet.label" data-test="game-theme"></span>
       <a v-if="summary.screenshotUrl !== undefined" :href="summary.screenshotUrl" target="_blank" class="games-overview-source" v-i18n :title="$t('Saved screenshot of the result page')">Screenshot</a>
       <!-- Target is the results page stored here: the external server deletes the game soon -->
       <a v-else-if="summary.importedParticipantId !== undefined" :href="importedResultUrl" target="_blank" class="games-overview-source" v-i18n :title="$t('Result page saved on this server')">Imported</a>
@@ -49,6 +52,8 @@ import {LANGUAGES} from '@/common/constants';
 import {translateText} from '@/client/directives/i18n';
 import DeleteGameButton from '@/client/components/admin/DeleteGameButton.vue';
 import LanguageFlag from '@/client/components/LanguageFlag.vue';
+import {THEME_PLANETS, ThemePlanet} from '@/client/theme/themePlanets';
+import {DEFAULT_THEME} from '@/common/theme/Theme';
 
 export default defineComponent({
   name: 'GameOverview',
@@ -72,6 +77,9 @@ export default defineComponent({
     },
   },
   computed: {
+    planet(): ThemePlanet {
+      return THEME_PLANETS[this.summary.theme ?? DEFAULT_THEME];
+    },
     importedResultUrl(): string {
       return `${paths.THE_END}?id=${this.summary.importedParticipantId}`;
     },
