@@ -67,7 +67,7 @@ html.theme-dune .board-space-tile--restricted_area {
 /* Cards as in the Dune mockup: parchment instead of silver, dark ink frame, earthy title bands. Only the image, not the
    background shorthand: the log draws these gradients as a thin stripe (log.less background-size) and must keep it. */
 html.theme-dune .filterDiv {
-  background: linear-gradient(to bottom right, #f6ecd6, #e4d2ae 35%, #efe4cc 60%, #dcc8a2);
+  background: linear-gradient(to bottom right, #fbf6ea, #f1e6cf 35%, #f7efdf 60%, #ebdcbd);
   border-color: #2a1c12;
   box-shadow: 0 0 0 2px #2a1c12, 0 2px 6px rgba(0, 0, 0, 0.55);
 }
@@ -470,4 +470,10 @@ html.theme-dune .card-container .card-points-big {
 html.theme-dune .card-container .card-points-normal {
   align-items: center;
   font-size: 24px;
+}
+
+/* More contrast for the card text (Jens 19 Oct 2026): a lighter parchment (above) and the scene of Arrakis behind
+   the lower half of the card only faint, so the description stays dark on light */
+html.theme-dune .card-container .card-scene {
+  opacity: 0.22;
 }
