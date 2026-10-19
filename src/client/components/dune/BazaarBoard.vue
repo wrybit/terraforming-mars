@@ -32,7 +32,7 @@
         {{ $t('Bought this generation') }}:
         <span v-for="color in bought" :key="color" :class="['dune-bazaar__buyer', 'player_bg_color_' + color]">{{ playerName(color) }}</span>
       </span>
-      <span class="dune-bazaar__hint">{{ $t('Buying a ware is an action: tap it, then confirm. At most one ware per player and generation. The owner of the Commercial District pays 2 Solari less.') }}</span>
+      <span class="dune-bazaar__hint">{{ $t('32 wares, each 10 % below its card value. Every generation a new one comes in on the left; the others slide right and get cheaper – whatever drops out on the right is gone. Buying is an action (tap, then confirm), at most one ware per player and generation: it pays out at once and goes to the discard pile. The owner of the Commercial District pays 2 Solari less.') }}</span>
     </div>
   </div>
 </template>

@@ -16,7 +16,7 @@ export type DuneModuleSwitches = Record<DuneModuleField, boolean>;
 
 /** Detail line of the module chip (English, translated on display) */
 export const DUNE_MODULE_DETAIL: Record<DuneModule, string> = {
-  bazaar: '32 wares · bazaar phase',
+  bazaar: '32 wares · a new one each generation',
   worm: 'Worm marker · end of generation',
   kanly: 'Sardaukar · one battle per generation',
   schemes: '24 secret agendas · 3/5/8 VP',
