@@ -18,7 +18,7 @@
 import {ref, watch} from 'vue';
 import {Theme} from '@/common/theme/Theme';
 import {activeTheme} from '@/client/theme/applyTheme';
-import {chooseTheme} from '@/client/theme/themeChoice';
+import {chooseTheme, chosenTheme} from '@/client/theme/themeChoice';
 import {prefersReducedMotion} from '@/client/utils/motion';
 import {THEME_PLANETS, ThemePlanet} from '@/client/theme/themePlanets';
 
@@ -34,8 +34,9 @@ const emit = defineEmits<{
   (event: 'switch', theme: Theme): void;
 }>();
 
-// Theme the bar shows: the one in effect, or already the picked one while its planet rolls in
-const theme = ref<Theme>(activeTheme());
+// Theme the bar shows: the picked one from the start – the page may still show the old theme for a moment while
+// the new one loads (after a switch the page is built anew); starting from that would roll the planet back and forth
+const theme = ref<Theme>(chosenTheme());
 watch(activeTheme, (value) => theme.value = value);
 
 async function pick(value: Theme): Promise<void> {
