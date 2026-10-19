@@ -501,12 +501,19 @@ html.tm-mobile {
       padding: 6px 6px 36px;
     }
 
+    // Up to the edge of the box with the padding inside the scrolling area (board_tabs.less); only the Moon leaves
+    // room for the tile view switch
     .board-tabs-view {
-      inset: 6px 6px 36px;
+      padding: 6px;
+    }
+
+    .board-tabs-view:has(> .dune-board) {
+      padding: 0;
     }
 
     // Box inset already leaves the tile view switch out: less room around the Moon, still centred
-    .board-tabs-view--moon {
+    .board-tabs-view.board-tabs-view--moon {
+      inset: 6px 6px 36px;
       padding: 32px 0;
     }
 

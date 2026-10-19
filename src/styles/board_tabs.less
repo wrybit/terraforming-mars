@@ -118,9 +118,25 @@
 }
 
 .board-tabs-view {
+  // Fills the whole box and scrolls up to its edge; the padding sits inside the scrolling area, so no empty strip
+  // stays above and below the content while scrolling (Jens, 19 Oct 2026). The rounded corners clip the content.
   position: absolute;
-  inset: @board-tab-padding;
+  inset: 0;
+  padding: @board-tab-padding;
+  border-radius: inherit;
   overflow: auto;
+}
+
+// A Dune module scrolls by itself with its own padding (dune_board.less): no second padding around it
+.board-tabs-view:has(> .dune-board) {
+  padding: 0;
+}
+
+// The Moon is scaled into the box and never scrolls; it keeps its gap to the edge and the room for the tile view
+// switch as before
+.board-tabs-view.board-tabs-view--moon {
+  inset: @board-tab-padding;
+  border-radius: 0;
 }
 
 // Room below Mars for the tile view switch (the ocean counter must stay free)
