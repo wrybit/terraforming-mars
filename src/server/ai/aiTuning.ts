@@ -837,6 +837,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noDrawPriority: {drawPriority: 0},
   drawPriority3: {drawPriority: 3},
   drawPriority6: {drawPriority: 6},
+  drawPriority8: {drawPriority: 8},
   draftPrior3: {draftPriorWeight: 3},
   tierList1: {tierListWeight: 1},
   tierList2: {tierListWeight: 2},
