@@ -100,7 +100,7 @@ import TurmoilBoard from '@/client/components/turmoil/TurmoilBoard.vue';
 import MoonBoard from '@/client/components/moon/MoonBoard.vue';
 import PlanetsBoard from '@/client/components/pathfinders/PlanetsBoard.vue';
 import {TileView} from './board/TileView';
-import {scrollToSpace} from '@/client/utils/boardScroll';
+import {highlightBoardSpace} from '@/client/utils/highlightBoardSpace';
 
 export default defineComponent({
   name: 'GameBoardView',
@@ -212,25 +212,7 @@ export default defineComponent({
       this.openBoardZoom(board);
     },
     highlightSpace(spaceId: SpaceId) {
-      scrollToSpace(spaceId);
-
-      const regions = ['main_board', 'moon_board', 'moon_board_outer_spaces'];
-      for (const region of regions) {
-        const board = document.getElementById(region);
-        if (board !== null) {
-          const array = board.getElementsByClassName('board-log-highlight');
-          for (let i = 0, length = array.length; i < length; i++) {
-            const element = array[i] as HTMLElement;
-            if (element.getAttribute('data_log_highlight_id') === spaceId) {
-              element.classList.add('highlight');
-              setTimeout(() => {
-                element.classList.remove('highlight');
-              }, 3000);
-              return;
-            }
-          }
-        }
-      }
+      highlightBoardSpace(spaceId);
     },
   },
 });

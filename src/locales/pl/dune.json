@@ -324,5 +324,6 @@
   "Accept (action): first come, first served": "Przyjęcie (akcja): kto pierwszy, ten lepszy",
   "On a deal both pay 1 Solari to the bank": "Przy transakcji obaj płacą bankowi 1 solari",
   "Withdraw (action): the goods come back, no fee": "Wycofanie (akcja): towary wracają, bez opłaty",
-  "End of generation: offers nobody took return without a fee": "Koniec pokolenia: nieprzyjęte oferty wracają bez opłaty"
+  "End of generation: offers nobody took return without a fee": "Koniec pokolenia: nieprzyjęte oferty wracają bez opłaty",
+  "Show on Arrakis": "Pokaż na Arrakis"
 }

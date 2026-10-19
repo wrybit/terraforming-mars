@@ -1,8 +1,8 @@
 <template>
   <!-- Kanly war field (Kanly tab and the input that sends Sardaukar): always a tile on the left – the one at stake with
        its owner's cube, or an empty one while there is no battle – and beside it what goes on: the place and its owner,
-       every player's Sardaukar on the field as cubes of their colour, and who holds the tile at the end of the
-       generation as things stand. With "added" (slider of the send input) the own new Sardaukar show lighter and count
+       every player's Sardaukar on the field as cubes of their colour; who holds the tile shows by the numbers and the
+       outlined row, without a line of its own (Jens, 19 Oct 2026). With "added" (slider of the send input) the own new Sardaukar show lighter and count
        in the forecast. -->
   <div :class="['kanly-battle', {'kanly-battle--none': forecast === undefined || battle === undefined}]" data-test="kanly-battle">
     <ArrakisHex v-if="battle !== undefined" class="kanly-battle__hex" :spaceId="battle.spaceId" :space="space"/>
@@ -13,7 +13,10 @@
     <div v-if="forecast !== undefined && battle !== undefined" class="kanly-battle__body">
       <div class="kanly-battle__place">
         <span class="kanly-battle__eyebrow">{{ $t('War field') }}</span>
-        <span class="kanly-battle__name">{{ placeName }} <span class="kanly-battle__coordinate">{{ coordinate }}</span></span>
+        <span class="kanly-battle__name">{{ placeName }}
+          <!-- The coordinate leads to the planet: Arrakis tab, the space blinks -->
+          <button type="button" class="kanly-battle__coordinate" :title="$t('Show on Arrakis')" @click="showOnArrakis(battle.spaceId)">{{ coordinate }}</button>
+        </span>
         <span v-if="forecast.owner !== undefined" class="kanly-battle__owner">
           {{ $t('Tile of') }} <PlayerChip :color="forecast.owner" :players="players"/>
         </span>
@@ -38,10 +41,6 @@
         </li>
       </ul>
 
-      <p :class="['kanly-battle__verdict', {'kanly-battle__verdict--change': forecast.changes}]">
-        <span v-if="added > 0" class="kanly-battle__eyebrow">{{ $t('After sending') }}</span>
-        <span>{{ verdict[0] }}<PlayerChip v-if="forecast.holder !== undefined" :color="forecast.holder" :players="players"/>{{ verdict[1] }}</span>
-      </p>
       <!-- The move that fits the state (Kanly tab: send Sardaukar) -->
       <slot></slot>
     </div>
@@ -57,6 +56,7 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
+import {showOnArrakis} from './showOnArrakis';
 import {Color} from '@/common/Color';
 import {KanlyModel} from '@/common/dune/DuneModel';
 import {SpaceModel} from '@/common/models/SpaceModel';
@@ -131,14 +131,9 @@ export default defineComponent({
     icon(): string {
       return duneGraphic(SARDAUKAR_ICON);
     },
-    // Text around the holder's chip: "${0} takes the tile …" split at the player
-    verdict(): [string, string] {
-      const key = this.forecast?.changes === true ? '${0} takes the tile at the end of the generation' : '${0} keeps the tile at the end of the generation';
-      const [before, after] = translateText(key).split('${0}');
-      return [before ?? '', after ?? ''];
-    },
   },
   methods: {
+    showOnArrakis,
     roleLabel(force: KanlyForce): string {
       if (force.owner) {
         return 'Defends';

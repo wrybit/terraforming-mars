@@ -8,13 +8,16 @@
       <KanlyMoveButton v-else-if="!kanly.foughtThisGeneration" :title="OPEN_KANLY_TITLE" label="Open Kanly" :cost="OPEN_KANLY_COST"/>
     </KanlyBattleCard>
     <DuneMovePanel tab="kanly"/>
-    <div class="dune-kanly__garrisons">
-      <span class="dune-kanly__label">{{ $t('Garrison') }}</span>
-      <span v-for="entry in kanly.garrisons" :key="entry.color" class="dune-kanly__troop">
-        <PlayerChip :color="entry.color" :players="players"/>
-        <img :src="graphic('res-sardaukar')" alt=""><b>{{ entry.sardaukar }}</b>
-      </span>
-    </div>
+    <!-- Every player's garrison as a card of its own; the cards share the width (Jens, 19 Oct 2026) -->
+    <section class="dune-kanly__garrisons">
+      <h4 class="dune-kanly__label">{{ $t('Garrison') }}</h4>
+      <ul class="dune-kanly__troops">
+        <li v-for="entry in kanly.garrisons" :key="entry.color" class="dune-kanly__troop">
+          <PlayerChip :color="entry.color" :players="players"/>
+          <span class="dune-kanly__strength"><img :src="graphic('res-sardaukar')" alt=""><b>{{ entry.sardaukar }}</b></span>
+        </li>
+      </ul>
+    </section>
     <DuneRuleCards :rules="KANLY_RULES"/>
   </div>
 </template>

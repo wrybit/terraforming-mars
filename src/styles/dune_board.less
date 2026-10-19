@@ -85,8 +85,7 @@
   font-size: 13px;
 }
 
-.dune-kanly__battle,
-.dune-kanly__garrisons {
+.dune-kanly__battle {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -97,22 +96,58 @@
   color: #b9ad97;
 }
 
+// Garrisons as their own group below the war field card and as wide as it: title close above, cards side by side
+.dune-kanly__garrisons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 680px;
+  margin-top: 10px;
+}
+
 .dune-kanly__label {
-  color: #b9ad97;
+  margin: 0;
+  font-size: 11px;
+  font-weight: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #cbb994;
 }
 
 .dune-kanly__troops {
-  display: contents;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .dune-kanly__troop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(228, 210, 174, 0.22);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.dune-kanly__strength {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 
   img {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
+  }
+
+  b {
+    font-size: 22px;
+    line-height: 1;
   }
 }
 

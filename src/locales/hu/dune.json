@@ -324,5 +324,6 @@
   "Accept (action): first come, first served": "Elfogadás (akció): aki kapja, marja",
   "On a deal both pay 1 Solari to the bank": "Üzletkötéskor mindketten 1 solarit fizetnek a banknak",
   "Withdraw (action): the goods come back, no fee": "Visszavonás (akció): az áru visszajön, díj nélkül",
-  "End of generation: offers nobody took return without a fee": "Generáció vége: az el nem fogadott ajánlatok díj nélkül visszatérnek"
+  "End of generation: offers nobody took return without a fee": "Generáció vége: az el nem fogadott ajánlatok díj nélkül visszatérnek",
+  "Show on Arrakis": "Megmutatás az Arrakison"
 }

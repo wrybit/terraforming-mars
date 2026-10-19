@@ -326,5 +326,6 @@
   "Accept (action): first come, first served": "Прийняти (дія): хто перший, той і отримав",
   "On a deal both pay 1 Solari to the bank": "Під час угоди обидва платять банку 1 соларі",
   "Withdraw (action): the goods come back, no fee": "Відкликати (дія): товари повертаються, без збору",
-  "End of generation: offers nobody took return without a fee": "Кінець покоління: неприйняті пропозиції повертаються без збору"
+  "End of generation: offers nobody took return without a fee": "Кінець покоління: неприйняті пропозиції повертаються без збору",
+  "Show on Arrakis": "Показати на Арракісі"
 }

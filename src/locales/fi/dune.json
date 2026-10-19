@@ -324,5 +324,6 @@
   "Accept (action): first come, first served": "Hyväksy (toiminto): nopein voittaa",
   "On a deal both pay 1 Solari to the bank": "Kaupan syntyessä molemmat maksavat pankille 1 solarin",
   "Withdraw (action): the goods come back, no fee": "Peru (toiminto): tavarat palaavat, ei maksua",
-  "End of generation: offers nobody took return without a fee": "Sukupolven loppu: ottamattomat tarjoukset palaavat ilman maksua"
+  "End of generation: offers nobody took return without a fee": "Sukupolven loppu: ottamattomat tarjoukset palaavat ilman maksua",
+  "Show on Arrakis": "Näytä Arrakisilla"
 }

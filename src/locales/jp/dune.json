@@ -326,5 +326,6 @@
   "Accept (action): first come, first served": "受け入れ（アクション）：早い者勝ち",
   "On a deal both pay 1 Solari to the bank": "取引成立時、双方が銀行に1ソラリを払う",
   "Withdraw (action): the goods come back, no fee": "取り下げ（アクション）：品物は戻り、手数料なし",
-  "End of generation: offers nobody took return without a fee": "世代終了：誰も受けなかったオファーは手数料なしで戻る"
+  "End of generation: offers nobody took return without a fee": "世代終了：誰も受けなかったオファーは手数料なしで戻る",
+  "Show on Arrakis": "アラキスで表示"
 }

@@ -327,5 +327,6 @@
   "Accept (action): first come, first served": "Приемане (действие): който пръв дойде",
   "On a deal both pay 1 Solari to the bank": "При сделка двамата плащат по 1 солари на банката",
   "Withdraw (action): the goods come back, no fee": "Оттегляне (действие): стоките се връщат, без такса",
-  "End of generation: offers nobody took return without a fee": "Край на поколението: неприетите оферти се връщат без такса"
+  "End of generation: offers nobody took return without a fee": "Край на поколението: неприетите оферти се връщат без такса",
+  "Show on Arrakis": "Покажи на Аракис"
 }

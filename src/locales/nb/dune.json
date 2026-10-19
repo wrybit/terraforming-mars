@@ -322,5 +322,6 @@
   "Accept (action): first come, first served": "Godta (handling): førstemann til mølla",
   "On a deal both pay 1 Solari to the bank": "Ved en handel betaler begge 1 solari til banken",
   "Withdraw (action): the goods come back, no fee": "Trekk tilbake (handling): varene kommer tilbake, uten gebyr",
-  "End of generation: offers nobody took return without a fee": "Slutt på generasjonen: tilbud ingen tok, kommer tilbake uten gebyr"
+  "End of generation: offers nobody took return without a fee": "Slutt på generasjonen: tilbud ingen tok, kommer tilbake uten gebyr",
+  "Show on Arrakis": "Vis på Arrakis"
 }

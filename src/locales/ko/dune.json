@@ -326,5 +326,6 @@
   "Accept (action): first come, first served": "수락(행동): 먼저 오는 사람이 가져갑니다",
   "On a deal both pay 1 Solari to the bank": "거래가 성사되면 둘 다 은행에 솔라리 1을 냅니다",
   "Withdraw (action): the goods come back, no fee": "철회(행동): 물품이 돌아오고 수수료는 없습니다",
-  "End of generation: offers nobody took return without a fee": "세대 종료: 아무도 받지 않은 제안은 수수료 없이 돌아옵니다"
+  "End of generation: offers nobody took return without a fee": "세대 종료: 아무도 받지 않은 제안은 수수료 없이 돌아옵니다",
+  "Show on Arrakis": "아라키스에서 보기"
 }

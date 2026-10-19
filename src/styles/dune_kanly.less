@@ -86,14 +86,23 @@
   font-weight: 600;
 }
 
+// The coordinate is a link to the planet (showOnArrakis.ts): a small button that lights up on hover
 .kanly-battle__coordinate {
   margin-left: 4px;
   padding: 1px 6px;
+  border: 1px solid transparent;
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.35);
   font-family: Prototype, sans-serif;
   font-size: 13px;
   color: #cbb994;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    border-color: #e8a85a;
+    color: #ffd9b0;
+  }
 }
 
 .kanly-battle__owner {
@@ -176,22 +185,6 @@
   margin-left: 3px;
   font-size: 13px;
   color: #8fd67a;
-}
-
-.kanly-battle__verdict {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  margin: 0;
-  font-size: 14px;
-
-  .dune-player-chip {
-    margin: 0 4px;
-  }
-}
-
-.kanly-battle__verdict--change {
-  color: #ffcf8a;
 }
 
 // In the send input: the card above the slider, both centered
