@@ -318,5 +318,11 @@
   "Every deal raises the suspicion by 1": "Każda transakcja podnosi podejrzenie o 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Łapówka (10 solarów, właściciel Targu przemytników 7) obniża je o 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Koniec pokolenia: 0 i 1 są darmowe, od 2 traci się Wpływ, a znacznik wraca na 0",
-  "At 4 all trading stops until a bribe lowers it": "Przy 4 cały handel stoi, dopóki łapówka nie obniży podejrzenia"
+  "At 4 all trading stops until a bribe lowers it": "Przy 4 cały handel stoi, dopóki łapówka nie obniży podejrzenia",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Oferta (akcja): towary opuszczają twój zapas, w zamian życzenie do 30",
+  "At most 1 open offer per player (Guild Bank: 2)": "Najwyżej 1 otwarta oferta na gracza (Bank Gildii: 2)",
+  "Accept (action): first come, first served": "Przyjęcie (akcja): kto pierwszy, ten lepszy",
+  "On a deal both pay 1 Solari to the bank": "Przy transakcji obaj płacą bankowi 1 solari",
+  "Withdraw (action): the goods come back, no fee": "Wycofanie (akcja): towary wracają, bez opłaty",
+  "End of generation: offers nobody took return without a fee": "Koniec pokolenia: nieprzyjęte oferty wracają bez opłaty"
 }

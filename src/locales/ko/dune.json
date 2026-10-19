@@ -320,5 +320,11 @@
   "Every deal raises the suspicion by 1": "거래할 때마다 의심이 1 오름",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "뇌물(10 솔라리, 밀수꾼 시장 소유자는 7)로 의심이 1 내려감",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "세대 종료: 0과 1은 무료, 2 이상이면 영향력을 잃고 마커가 0으로 돌아감",
-  "At 4 all trading stops until a bribe lowers it": "의심 4에서는 뇌물로 낮출 때까지 모든 거래가 막힘"
+  "At 4 all trading stops until a bribe lowers it": "의심 4에서는 뇌물로 낮출 때까지 모든 거래가 막힘",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "제안(행동): 물품이 비축에서 나가고, 대가로 최대 30까지 원하는 것을 적습니다",
+  "At most 1 open offer per player (Guild Bank: 2)": "플레이어당 열린 제안은 최대 1개 (길드 은행: 2)",
+  "Accept (action): first come, first served": "수락(행동): 먼저 오는 사람이 가져갑니다",
+  "On a deal both pay 1 Solari to the bank": "거래가 성사되면 둘 다 은행에 솔라리 1을 냅니다",
+  "Withdraw (action): the goods come back, no fee": "철회(행동): 물품이 돌아오고 수수료는 없습니다",
+  "End of generation: offers nobody took return without a fee": "세대 종료: 아무도 받지 않은 제안은 수수료 없이 돌아옵니다"
 }

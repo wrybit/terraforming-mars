@@ -321,5 +321,11 @@
   "Every deal raises the suspicion by 1": "每次交易嫌疑 +1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "贿赂（10 索拉里，走私者市场拥有者 7）使嫌疑 -1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "世代结束时：0 和 1 免费；嫌疑达到 2 起会失去影响力，标记随后归零",
-  "At 4 all trading stops until a bribe lowers it": "嫌疑为 4 时停止一切交易，直到贿赂降低嫌疑"
+  "At 4 all trading stops until a bribe lowers it": "嫌疑为 4 时停止一切交易，直到贿赂降低嫌疑",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "报价（行动）：货物离开你的库存，并提出最多 30 的回报愿望",
+  "At most 1 open offer per player (Guild Bank: 2)": "每位玩家最多 1 个未成交报价（公会银行：2）",
+  "Accept (action): first come, first served": "接受（行动）：先到先得",
+  "On a deal both pay 1 Solari to the bank": "成交时双方各向银行支付 1 索拉里",
+  "Withdraw (action): the goods come back, no fee": "撤回（行动）：货物返还，无手续费",
+  "End of generation: offers nobody took return without a fee": "世代结束：无人接受的报价无费退回"
 }

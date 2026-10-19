@@ -318,5 +318,11 @@
   "Every deal raises the suspicion by 1": "Minden üzlet 1-gyel növeli a gyanút",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "A vesztegetés (10 solari, a Csempészpiac tulajdonosának 7) 1-gyel csökkenti",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "A generáció végén: a 0 és az 1 ingyenes, 2-től befolyás vész el, és a jelző visszaesik 0-ra",
-  "At 4 all trading stops until a bribe lowers it": "4-nél minden kereskedés szünetel, amíg vesztegetés nem csökkenti a gyanút"
+  "At 4 all trading stops until a bribe lowers it": "4-nél minden kereskedés szünetel, amíg vesztegetés nem csökkenti a gyanút",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Ajánlat (akció): az áru elhagyja a készleted, cserébe legfeljebb 30-as kívánsággal",
+  "At most 1 open offer per player (Guild Bank: 2)": "Játékosonként legfeljebb 1 nyitott ajánlat (Céhbank: 2)",
+  "Accept (action): first come, first served": "Elfogadás (akció): aki kapja, marja",
+  "On a deal both pay 1 Solari to the bank": "Üzletkötéskor mindketten 1 solarit fizetnek a banknak",
+  "Withdraw (action): the goods come back, no fee": "Visszavonás (akció): az áru visszajön, díj nélkül",
+  "End of generation: offers nobody took return without a fee": "Generáció vége: az el nem fogadott ajánlatok díj nélkül visszatérnek"
 }

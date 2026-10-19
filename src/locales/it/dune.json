@@ -317,5 +317,11 @@
   "Every deal raises the suspicion by 1": "Ogni scambio aumenta il sospetto di 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Una bustarella (10 solari, 7 per il proprietario del Mercato dei contrabbandieri) lo riduce di 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fine generazione: 0 e 1 sono gratuiti, da 2 in su si perde influenza e il segnalino torna a 0",
-  "At 4 all trading stops until a bribe lowers it": "A 4 ogni scambio è fermo finché una bustarella non abbassa il sospetto"
+  "At 4 all trading stops until a bribe lowers it": "A 4 ogni scambio è fermo finché una bustarella non abbassa il sospetto",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Offrire (azione): le merci lasciano la tua scorta, con un desiderio fino a 30 in cambio",
+  "At most 1 open offer per player (Guild Bank: 2)": "Al massimo 1 offerta aperta per giocatore (Banca della Gilda: 2)",
+  "Accept (action): first come, first served": "Accettare (azione): chi prima arriva, meglio alloggia",
+  "On a deal both pay 1 Solari to the bank": "Alla conclusione entrambi pagano 1 solari alla banca",
+  "Withdraw (action): the goods come back, no fee": "Ritirare (azione): le merci tornano, senza tassa",
+  "End of generation: offers nobody took return without a fee": "Fine generazione: le offerte non prese tornano senza tassa"
 }

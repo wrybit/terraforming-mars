@@ -318,5 +318,11 @@
   "Every deal raises the suspicion by 1": "Cada troca aumenta a suspeita em 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Um suborno (10 solaris, 7 para o dono do Mercado dos Contrabandistas) a reduz em 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fim da geração: 0 e 1 são grátis; a partir de 2, perde-se influência e o marcador volta a 0",
-  "At 4 all trading stops until a bribe lowers it": "Em 4 todo comércio para até que um suborno reduza a suspeita"
+  "At 4 all trading stops until a bribe lowers it": "Em 4 todo comércio para até que um suborno reduza a suspeita",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Oferecer (ação): os bens saem do seu estoque, com um desejo de até 30 em troca",
+  "At most 1 open offer per player (Guild Bank: 2)": "No máximo 1 oferta aberta por jogador (Banco da Guilda: 2)",
+  "Accept (action): first come, first served": "Aceitar (ação): quem chega primeiro leva",
+  "On a deal both pay 1 Solari to the bank": "No fechamento, ambos pagam 1 solari ao banco",
+  "Withdraw (action): the goods come back, no fee": "Retirar (ação): os bens voltam, sem taxa",
+  "End of generation: offers nobody took return without a fee": "Fim da geração: ofertas não aceitas voltam sem taxa"
 }

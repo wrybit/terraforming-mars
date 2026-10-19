@@ -1,26 +1,44 @@
 <template>
   <!-- Rules of a Dune module as a short list (picture + one line) instead of a block of text, so they read at a glance.
-       A rule shows either a Dune picture (duneGraphic) or one of the drawn signs below. -->
-  <ul class="dune-rules" data-test="dune-rules">
-    <li v-for="rule in rules" :key="rule.text" class="dune-rules__card">
-      <span class="dune-rules__icon">
-        <img v-if="rule.picture !== undefined" :src="graphic(rule.picture)" alt="">
-        <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path :d="SIGNS[rule.sign ?? 'tap']"/></svg>
-      </span>
-      <span class="dune-rules__text">{{ $t(rule.text) }}</span>
-    </li>
-  </ul>
+       A rule shows either a Dune picture (duneGraphic) or one of the drawn signs below. Folded away behind a "Rules"
+       button on the right by default; a tap opens them and the button goes (Jens, 19 Oct 2026). -->
+  <div class="dune-rules-block">
+    <button v-if="!expanded" type="button" class="dune-rules__toggle" data-test="dune-rules-toggle" @click="expand">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="BOOK"/></svg>{{ $t('Rules') }}
+    </button>
+    <ul v-else class="dune-rules" data-test="dune-rules">
+      <li v-for="rule in rules" :key="rule.text" class="dune-rules__card">
+        <span class="dune-rules__icon">
+          <img v-if="rule.picture !== undefined" :src="graphic(rule.picture)" alt="">
+          <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path :d="SIGNS[rule.sign ?? 'tap']"/></svg>
+        </span>
+        <span class="dune-rules__text">{{ $t(rule.text) + (rule.detail === undefined ? '' : ' ' + rule.detail) }}</span>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script setup lang="ts">
+import {computed} from 'vue';
 import {duneGraphic} from './duneGraphic';
 import {DuneRule, DuneRuleSign} from './duneRules';
+import {expandedRules} from './duneRulesExpanded';
 
-defineProps<{
+const props = defineProps<{
   rules: ReadonlyArray<DuneRule>;
 }>();
 
 const graphic = duneGraphic;
+
+// Open stays open while the page lives (switching tabs, server updates); a reload folds everything away again
+const ruleKey = computed(() => props.rules[0]?.text ?? '');
+const expanded = computed(() => expandedRules.has(ruleKey.value));
+function expand(): void {
+  expandedRules.add(ruleKey.value);
+}
+
+// Sign of the "Rules" button: an open book
+const BOOK = 'M3 5c3-1 6-1 9 1v14c-3-2-6-2-9-1zM21 5c-3-1-6-1-9 1v14c3-2 6-2 9-1z';
 
 // Simple line signs, drawn with the stroke of the card (dune_rules.less)
 const SIGNS: Record<DuneRuleSign, string> = {

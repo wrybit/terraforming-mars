@@ -321,5 +321,11 @@
   "Every deal raises the suspicion by 1": "Всяка сделка вдига подозрението с 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Подкуп (10 солари, за притежателя на Пазара на контрабандистите 7) го сваля с 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Край на поколението: 0 и 1 са безплатни, от 2 нагоре се губи влияние и маркерът се връща на 0",
-  "At 4 all trading stops until a bribe lowers it": "При 4 всяка търговия спира, докато подкуп не свали подозрението"
+  "At 4 all trading stops until a bribe lowers it": "При 4 всяка търговия спира, докато подкуп не свали подозрението",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Оферта (действие): стоките напускат запаса ти, срещу желание до 30",
+  "At most 1 open offer per player (Guild Bank: 2)": "Най-много 1 отворена оферта на играч (Банка на Гилдията: 2)",
+  "Accept (action): first come, first served": "Приемане (действие): който пръв дойде",
+  "On a deal both pay 1 Solari to the bank": "При сделка двамата плащат по 1 солари на банката",
+  "Withdraw (action): the goods come back, no fee": "Оттегляне (действие): стоките се връщат, без такса",
+  "End of generation: offers nobody took return without a fee": "Край на поколението: неприетите оферти се връщат без такса"
 }

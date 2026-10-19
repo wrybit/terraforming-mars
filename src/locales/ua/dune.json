@@ -320,5 +320,11 @@
   "Every deal raises the suspicion by 1": "Кожна угода підвищує підозру на 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Хабар (10 соларіїв, власнику Ринку контрабандистів 7) знижує її на 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Кінець покоління: 0 і 1 безкоштовні, від 2 втрачається вплив, і маркер повертається на 0",
-  "At 4 all trading stops until a bribe lowers it": "На 4 вся торгівля зупиняється, доки хабар не знизить підозру"
+  "At 4 all trading stops until a bribe lowers it": "На 4 вся торгівля зупиняється, доки хабар не знизить підозру",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Запропонувати (дія): товари залишають запас, натомість бажання до 30",
+  "At most 1 open offer per player (Guild Bank: 2)": "Щонайбільше 1 відкрита пропозиція на гравця (Банк Гільдії: 2)",
+  "Accept (action): first come, first served": "Прийняти (дія): хто перший, той і отримав",
+  "On a deal both pay 1 Solari to the bank": "Під час угоди обидва платять банку 1 соларі",
+  "Withdraw (action): the goods come back, no fee": "Відкликати (дія): товари повертаються, без збору",
+  "End of generation: offers nobody took return without a fee": "Кінець покоління: неприйняті пропозиції повертаються без збору"
 }

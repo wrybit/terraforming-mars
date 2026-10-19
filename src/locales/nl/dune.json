@@ -312,5 +312,11 @@
   "Every deal raises the suspicion by 1": "Elke ruil verhoogt de verdenking met 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Een omkoping (10 Solari, eigenaar van de Smokkelaarsmarkt 7) verlaagt die met 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Einde van de generatie: 0 en 1 zijn gratis, vanaf 2 gaat invloed verloren en valt de marker terug naar 0",
-  "At 4 all trading stops until a bribe lowers it": "Bij 4 ligt alle handel stil tot een omkoping de verdenking verlaagt"
+  "At 4 all trading stops until a bribe lowers it": "Bij 4 ligt alle handel stil tot een omkoping de verdenking verlaagt",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Aanbieden (actie): goederen verlaten je voorraad, met een wens tot 30 terug",
+  "At most 1 open offer per player (Guild Bank: 2)": "Hoogstens 1 open aanbod per speler (Gildebank: 2)",
+  "Accept (action): first come, first served": "Accepteren (actie): wie het eerst komt, het eerst maalt",
+  "On a deal both pay 1 Solari to the bank": "Bij een deal betalen beiden 1 solari aan de bank",
+  "Withdraw (action): the goods come back, no fee": "Intrekken (actie): de goederen komen terug, zonder kosten",
+  "End of generation: offers nobody took return without a fee": "Einde generatie: aanbiedingen die niemand nam, komen zonder kosten terug"
 }

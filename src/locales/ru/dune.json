@@ -321,5 +321,11 @@
   "Every deal raises the suspicion by 1": "Каждая сделка повышает подозрение на 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Взятка (10 соляриев, владельцу Рынка контрабандистов 7) снижает его на 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Конец поколения: 0 и 1 бесплатны, начиная с 2 теряется влияние, и маркер возвращается на 0",
-  "At 4 all trading stops until a bribe lowers it": "На 4 любая торговля закрыта, пока взятка не снизит подозрение"
+  "At 4 all trading stops until a bribe lowers it": "На 4 любая торговля закрыта, пока взятка не снизит подозрение",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Предложить (действие): товары уходят из запаса, взамен желание до 30",
+  "At most 1 open offer per player (Guild Bank: 2)": "Не более 1 открытого предложения на игрока (Банк Гильдии: 2)",
+  "Accept (action): first come, first served": "Принять (действие): кто первый, тот и получил",
+  "On a deal both pay 1 Solari to the bank": "При сделке оба платят банку 1 солари",
+  "Withdraw (action): the goods come back, no fee": "Отозвать (действие): товары возвращаются, без сбора",
+  "End of generation: offers nobody took return without a fee": "Конец поколения: невостребованные предложения возвращаются без сбора"
 }

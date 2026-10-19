@@ -26,7 +26,7 @@
           </div>
         </li>
       </ul>
-      <p class="choam-input__rules">{{ $t('Offer (action): goods leave your stock with a wish. Accept (action): first come, first served; both pay 1 M€. Offers nobody took return at the end of the generation.') }}</p>
+      <DuneRuleCards :rules="CHOAM_RULES"/>
       </div>
     </section>
 
@@ -50,6 +50,8 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import SelectTrade from '@/client/components/SelectTrade.vue';
 import PlayerChip from './PlayerChip.vue';
+import DuneRuleCards from './DuneRuleCards.vue';
+import {CHOAM_RULES} from './duneRules';
 import {duneGraphic} from './duneGraphic';
 import {OrOptionsModel, SelectTradeModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
@@ -93,7 +95,7 @@ type PlayerLine = {color: Color, own: boolean, offers: Array<OfferLine>};
 
 export default defineComponent({
   name: 'ChoamInput',
-  components: {AppButton, TabPanelFooterSlot, SelectTrade, PlayerChip},
+  components: {AppButton, TabPanelFooterSlot, SelectTrade, PlayerChip, DuneRuleCards},
   props: {
     playerView: {
       type: Object as PropType<PlayerViewModel>,
@@ -117,6 +119,9 @@ export default defineComponent({
     },
   },
   computed: {
+    CHOAM_RULES(): typeof CHOAM_RULES {
+      return CHOAM_RULES;
+    },
     choam(): ChoamModel | undefined {
       return this.playerView.game.dune?.choam;
     },

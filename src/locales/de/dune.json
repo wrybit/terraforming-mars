@@ -315,5 +315,11 @@
   "Every deal raises the suspicion by 1": "Jeder Handel erhöht den Verdacht um 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Eine Bestechung (10 Solari, Besitzer des Schmugglermarkts 7) senkt ihn um 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Ende der Generation: 0 und 1 sind kostenlos, ab 2 geht Einfluss verloren und der Marker fällt auf 0 zurück",
-  "At 4 all trading stops until a bribe lowers it": "Bei 4 ruht jeder Handel, bis eine Bestechung den Verdacht senkt"
+  "At 4 all trading stops until a bribe lowers it": "Bei 4 ruht jeder Handel, bis eine Bestechung den Verdacht senkt",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Anbieten (Aktion): Waren verlassen deinen Vorrat, dazu ein Wunsch von bis zu 30",
+  "At most 1 open offer per player (Guild Bank: 2)": "Höchstens 1 offenes Angebot je Spieler (Gildenbank: 2)",
+  "Accept (action): first come, first served": "Annehmen (Aktion): Wer zuerst kommt, mahlt zuerst",
+  "On a deal both pay 1 Solari to the bank": "Bei einem Abschluss zahlen beide 1 Solari an die Bank",
+  "Withdraw (action): the goods come back, no fee": "Zurückziehen (Aktion): Die Ware kommt zurück, ohne Gebühr",
+  "End of generation: offers nobody took return without a fee": "Ende der Generation: Angebote, die niemand nahm, kehren ohne Gebühr zurück"
 }

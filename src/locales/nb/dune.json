@@ -316,5 +316,11 @@
   "Every deal raises the suspicion by 1": "Hver handel øker mistanken med 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "En bestikkelse (10 solari, eieren av Smuglermarkedet 7) senker den med 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Slutten av generasjonen: 0 og 1 er gratis, fra 2 og oppover tapes innflytelse og markøren går tilbake til 0",
-  "At 4 all trading stops until a bribe lowers it": "På 4 stopper all handel til en bestikkelse senker mistanken"
+  "At 4 all trading stops until a bribe lowers it": "På 4 stopper all handel til en bestikkelse senker mistanken",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Tilby (handling): varene forlater lageret ditt, med et ønske på opptil 30 tilbake",
+  "At most 1 open offer per player (Guild Bank: 2)": "Høyst 1 åpent tilbud per spiller (Laugsbanken: 2)",
+  "Accept (action): first come, first served": "Godta (handling): førstemann til mølla",
+  "On a deal both pay 1 Solari to the bank": "Ved en handel betaler begge 1 solari til banken",
+  "Withdraw (action): the goods come back, no fee": "Trekk tilbake (handling): varene kommer tilbake, uten gebyr",
+  "End of generation: offers nobody took return without a fee": "Slutt på generasjonen: tilbud ingen tok, kommer tilbake uten gebyr"
 }

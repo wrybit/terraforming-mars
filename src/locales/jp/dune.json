@@ -320,5 +320,11 @@
   "Every deal raises the suspicion by 1": "取引のたびに疑惑が1上がる",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "賄賂（10ソラリ、密輸業者の市場の所有者は7）で疑惑が1下がる",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "世代の終わり：0と1は無料。2以上で影響力を失い、マーカーは0に戻る",
-  "At 4 all trading stops until a bribe lowers it": "疑惑4では賄賂で下げるまですべての取引が止まる"
+  "At 4 all trading stops until a bribe lowers it": "疑惑4では賄賂で下げるまですべての取引が止まる",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "オファー（アクション）：品物が在庫から出て、見返りに最大30の希望を出す",
+  "At most 1 open offer per player (Guild Bank: 2)": "プレイヤーごとに公開オファーは最大1つ（ギルド銀行：2）",
+  "Accept (action): first come, first served": "受け入れ（アクション）：早い者勝ち",
+  "On a deal both pay 1 Solari to the bank": "取引成立時、双方が銀行に1ソラリを払う",
+  "Withdraw (action): the goods come back, no fee": "取り下げ（アクション）：品物は戻り、手数料なし",
+  "End of generation: offers nobody took return without a fee": "世代終了：誰も受けなかったオファーは手数料なしで戻る"
 }

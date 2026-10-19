@@ -316,5 +316,11 @@
   "Every deal raises the suspicion by 1": "Chaque échange augmente les soupçons de 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Un pot-de-vin (10 Solari, 7 pour le propriétaire du Marché des contrebandiers) les réduit de 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fin de génération : 0 et 1 sont gratuits ; à partir de 2, de l’influence est perdue et le marqueur revient à 0",
-  "At 4 all trading stops until a bribe lowers it": "À 4, tout échange est bloqué jusqu’à ce qu’un pot-de-vin réduise les soupçons"
+  "At 4 all trading stops until a bribe lowers it": "À 4, tout échange est bloqué jusqu’à ce qu’un pot-de-vin réduise les soupçons",
+  "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Offrir (action) : les biens quittent ton stock, avec un souhait jusqu'à 30 en retour",
+  "At most 1 open offer per player (Guild Bank: 2)": "Au plus 1 offre ouverte par joueur (Banque de la Guilde : 2)",
+  "Accept (action): first come, first served": "Accepter (action) : premier arrivé, premier servi",
+  "On a deal both pay 1 Solari to the bank": "À la conclusion, les deux paient 1 Solari à la banque",
+  "Withdraw (action): the goods come back, no fee": "Retirer (action) : les biens reviennent, sans frais",
+  "End of generation: offers nobody took return without a fee": "Fin de génération : les offres non prises reviennent sans frais"
 }

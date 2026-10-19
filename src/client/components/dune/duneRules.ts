@@ -1,9 +1,13 @@
+import {WORM_START_SPACES} from '@/common/dune/wormStartSpaces';
+import {arrakisCoordinate} from '@/common/dune/arrakisCoordinates';
+
 // Rules of the Dune modules as a short list (DuneRuleCards.vue). English texts, translated on display.
 
 export type DuneRuleSign = 'enter' | 'slide' | 'leave' | 'tap' | 'payout' | 'battle' | 'flag' | 'shield' | 'levels' | 'keep' | 'hidden';
 
-/** One rule: a Dune picture (assets/themes/dune/graphics) or a drawn sign, and one short line */
-export type DuneRule = {picture?: string, sign?: DuneRuleSign, text: string};
+/** One rule: a Dune picture (assets/themes/dune/graphics) or a drawn sign, and one short line; `detail` follows the
+ *  translated line untranslated (e.g. coordinates) */
+export type DuneRule = {picture?: string, sign?: DuneRuleSign, text: string, detail?: string};
 
 export const BAZAAR_RULES: ReadonlyArray<DuneRule> = [
   {picture: 'special-bazaar', text: '32 wares, each 10 % below its card value'},
@@ -39,4 +43,25 @@ export const SMUGGLING_RULES: ReadonlyArray<DuneRule> = [
   {sign: 'shield', text: 'A bribe (10 M€, Industrial Center owner 7) lowers it by 1'},
   {sign: 'flag', text: 'End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0'},
   {sign: 'hidden', text: 'At 4 all trading stops until a bribe lowers it'},
+];
+
+// Shai-Hulud: where the worm starts (Jens, 19 Oct 2026) and what it does to the spaces it crosses
+export const WORM_RULES: ReadonlyArray<DuneRule> = [
+  {picture: 'token-worm', text: 'Start: the worm starts at random on one of these spaces:',
+    detail: WORM_START_SPACES.map((spaceId) => arrakisCoordinate(spaceId)).join(', ')},
+  {picture: 'tile-small-spicefield', text: 'Spice field: +1 spice for each adjacent tile of a player'},
+  {picture: 'tile-small-sietch', text: 'City: worm riders, the owner gains 1 spice and 2 heat'},
+  {picture: 'tile-small-planting', text: 'Greenery: trampled, the owner loses 3 plants'},
+  {picture: 'tile-small-special', text: 'Special tile: damaged, the owner loses 3 M€'},
+  {picture: 'special-worm-domain', text: 'Natural Preserve: the worm stops, the owner gains 1 TR'},
+];
+
+// CHOAM contracts (Jens, 19 Oct 2026: as a short list like the other modules)
+export const CHOAM_RULES: ReadonlyArray<DuneRule> = [
+  {picture: 'coin', text: 'Offer (action): goods leave your stock, with a wish of up to 30 in return'},
+  {sign: 'keep', text: 'At most 1 open offer per player (Guild Bank: 2)'},
+  {sign: 'tap', text: 'Accept (action): first come, first served'},
+  {sign: 'payout', text: 'On a deal both pay 1 Solari to the bank'},
+  {sign: 'leave', text: 'Withdraw (action): the goods come back, no fee'},
+  {sign: 'enter', text: 'End of generation: offers nobody took return without a fee'},
 ];
