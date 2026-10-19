@@ -4,6 +4,7 @@
 @import (reference) "./variables.less";
 @import (reference) "./hand_cards_panel.less";
 @import (reference) "./trade_select.less";
+@import (reference) "./dune_frame.less";
 
 html:not(.tm-mobile) .or-tab-panel:has(.choam-input) {
   display: flex;
@@ -45,9 +46,8 @@ html:not(.tm-mobile) .or-tab-panel:has(.choam-input) {
   max-width: calc(2 * @trade-side-max-width + @trade-group-gap);
 }
 
-// Heading with its line like the sections of the hand cards tab
+// Heading in the caption style of the hand cards tab, without the line: the framed box below carries the structure
 .choam-input__heading {
-  .section-title-with-line();
   margin: 0;
 }
 
@@ -56,9 +56,7 @@ html:not(.tm-mobile) .or-tab-panel:has(.choam-input) {
   flex-direction: column;
   gap: 10px;
   padding: 12px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  background: rgba(12, 14, 20, 0.45);
+  .dune-frame();
 }
 
 .choam-input__lines {

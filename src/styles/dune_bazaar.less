@@ -3,7 +3,7 @@
 @bazaar-spice: #e0662a;
 @bazaar-sand: #e4d2ae;
 @bazaar-ink: #2a1c12;
-@bazaar-frame: #c97a3a;
+@import (reference) "./dune_frame.less";
 
 .dune-bazaar {
   display: flex;
@@ -24,9 +24,7 @@
   margin: 0;
   padding: 12px;
   list-style: none;
-  border: 2px solid @bazaar-frame;
-  border-radius: 12px;
-  background: linear-gradient(to bottom, #3a2818, #2a1c12);
+  .dune-frame-focus();
 
   @media only screen and (max-width: 600px) {
     gap: 6px;

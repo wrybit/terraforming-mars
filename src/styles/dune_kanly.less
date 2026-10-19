@@ -1,5 +1,8 @@
 // Kanly war field (KanlyBattleCard.vue): the tile on the left, beside it place and owner, everybody's Sardaukar as
 // rows and the forecast. Rows sit closer together than the blocks (law of proximity).
+@import (reference) "./variables.less";
+@import (reference) "./dune_frame.less";
+
 .kanly-battle {
   display: flex;
   align-items: flex-start;
@@ -8,9 +11,7 @@
   max-width: 680px;
   padding: 16px 18px;
   box-sizing: border-box;
-  border: 1px solid rgba(232, 168, 90, 0.45);
-  border-radius: 12px;
-  background: rgba(42, 28, 18, 0.6);
+  .dune-frame();
   color: #f1e2c2;
 }
 
@@ -237,6 +238,21 @@
   align-items: center;
   gap: 6px;
   margin-top: 8px;
+}
+
+// Phone without a battle: the text is centred, so the button below it too
+@media (max-width: 600px) {
+  .kanly-battle--none .kanly-move-button {
+    align-self: center;
+  }
+}
+
+// The move looks like every other button of the app (.btn in common.less), not like the module buttons
+.kanly-battle .kanly-move-button:not(:disabled) {
+  border-color: @border_action;
+  background: @bg_action;
+  color: @text_action;
+  font-weight: normal;
 }
 
 .kanly-move-button__cost {

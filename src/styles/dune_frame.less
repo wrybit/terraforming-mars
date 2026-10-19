@@ -1,0 +1,21 @@
+// Shared frame of the Dune module boxes (Kanly war field, bazaar board, CHOAM market), after the smuggling box and the
+// mockup "Dune-Tabs im Schmuggel-Stil" (Jens, 19 Oct 2026): a dark fill, lifted only by the copper edge and a shadow
+// on its outline. Mixins only, imported by reference.
+@dune-frame-edge: #c9793a;
+@dune-frame-fill: #2a160b;
+@dune-frame-radius: 16px;
+@dune-frame-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+
+.dune-frame() {
+  border: 1.5px solid @dune-frame-edge;
+  border-radius: @dune-frame-radius;
+  background: @dune-frame-fill;
+  box-shadow: @dune-frame-shadow, 0 0 16px fade(#e8913f, 12%);
+}
+
+// Brighter edge and glow: draws the eye to what lies inside (the bazaar's ware cards)
+.dune-frame-focus() {
+  .dune-frame();
+  border-color: #eda055;
+  box-shadow: @dune-frame-shadow, 0 0 22px fade(#f0a050, 32%);
+}
