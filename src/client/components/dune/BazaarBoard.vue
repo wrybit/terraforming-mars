@@ -32,8 +32,9 @@
         {{ $t('Bought this generation') }}:
         <span v-for="color in bought" :key="color" :class="['dune-bazaar__buyer', 'player_bg_color_' + color]">{{ playerName(color) }}</span>
       </span>
-      <span class="dune-bazaar__hint">{{ $t('32 wares, each 10 % below its card value. Every generation a new one comes in on the left; the others slide right and get cheaper – whatever drops out on the right is gone. Buying is an action (tap, then confirm), at most one ware per player and generation: it pays out at once and goes to the discard pile. The owner of the Commercial District pays 2 Solari less.') }}</span>
     </div>
+    <!-- The rules as short cards instead of a block of text -->
+    <DuneRuleCards :rules="BAZAAR_RULES"/>
   </div>
 </template>
 
@@ -47,6 +48,8 @@ import {themedAsset} from '@/client/theme/themeDisplay';
 import {duneGraphic} from './duneGraphic';
 import {vueRoot} from '@/client/components/vueRoot';
 import {DuneMoveStep, isMoveOffered, openMove} from './duneMoves';
+import DuneRuleCards from './DuneRuleCards.vue';
+import {BAZAAR_RULES} from './duneRules';
 import {BAZAAR_WARE_TITLE} from '@/common/dune/duneActionTitles';
 
 // Path to the purchase of a ware: found in the action menu as well as in the bazaar round
@@ -78,6 +81,7 @@ const GOOD_DISPLAY: Record<BazaarGood, {icon: string, label: string}> = {
 
 export default defineComponent({
   name: 'BazaarBoard',
+  components: {DuneRuleCards},
   props: {
     bazaar: {
       type: Object as PropType<BazaarModel>,
@@ -89,6 +93,9 @@ export default defineComponent({
     },
   },
   computed: {
+    BAZAAR_RULES(): typeof BAZAAR_RULES {
+      return BAZAAR_RULES;
+    },
     coinIcon(): string {
       return themedAsset('assets/resources/megacredit.png');
     },
