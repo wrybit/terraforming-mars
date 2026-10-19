@@ -2629,21 +2629,31 @@
       filter: drop-shadow(0px 0px 1px black);
       color: #000;
     }
+    // Discount (CardCost.vue, Jens 19 Oct 2026, Mars and Dune): the printed cost shrinks and fades, the chevron sits
+    // over both edges, the cost after discounts (.card-old-cost, the historical name) is the large coin overlapping it.
+    // Dune swaps the coin picture for Solari in its theme.css.
+    .card-cost:has(~ .card-old-cost) {
+      transform: scale(0.62);
+      transform-origin: left center;
+      filter: grayscale(70%) brightness(1.1) drop-shadow(0px 0px 1px black);
+      opacity: 0.85;
+    }
     .card-cost-transition {
       position: absolute;
-      background-image: url(./assets/misc/cost-transition-arrow.png);
-      width: 14px;
-      height: 21px;
-      left: 9px;
-      top: 40px;
-      z-index: 2;
+      width: 12px;
+      height: 14px;
+      left: 23px;
+      top: 18px;
+      z-index: 3;
     }
     .card-old-cost {
-      transform: scale(0.6);
-      filter: grayscale(60%);
-      left: -8px;
-      top: 45px;
       position: absolute;
+      top: 0;
+      left: 27px;
+    }
+    // Four tags overlap each other so the discounted cost keeps a clear gap to them; up to three tags have room
+    &:has(.card-old-cost) .card-tags:has(> .card-tag:nth-child(4)) > .card-tag {
+      margin-left: -7px;
     }
     .card-help-icon {
       font-family: Prototype, sans-serif;

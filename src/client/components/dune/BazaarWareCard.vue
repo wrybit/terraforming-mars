@@ -1,11 +1,11 @@
 <template>
   <!-- Face of a ware: price coin in the corner like the cost of a project card, name, picture and goods. The frame
        (.dune-bazaar__slot) comes from the caller: a button on the bazaar board, a plain card in the purchase tab.
-       With a discount (slot, bazaar tile, cards) the own price follows below the arrow, as on a project card
-       (CardCost.vue, same "hide discount" preference) – Jens, 19 Oct 2026 -->
+       With a discount (slot, bazaar tile, cards) the printed price shrinks and fades and the own price follows beside it
+       after the chevron, as on a project card (CardCost.vue, same "hide discount" preference) – Jens, 19 Oct 2026 -->
   <span :class="['dune-bazaar__price', {'dune-bazaar__price--printed': showsDiscount}]"><img :src="coinIcon" alt=""><b>{{ price }}</b></span>
   <template v-if="showsDiscount">
-    <span class="dune-bazaar__price-arrow" aria-hidden="true"></span>
+    <DiscountChevron class="dune-bazaar__price-arrow"/>
     <span class="dune-bazaar__price dune-bazaar__price--own"><img :src="coinIcon" alt=""><b>{{ newPrice }}</b></span>
   </template>
   <span class="dune-bazaar__name">{{ $t(ware) }}</span>
@@ -21,6 +21,7 @@
 import {computed} from 'vue';
 import {themedAsset} from '@/client/theme/themeDisplay';
 import {getPreferences} from '@/client/utils/PreferencesManager';
+import DiscountChevron from '@/client/components/common/DiscountChevron.vue';
 import {wareGoods, wareScene} from './bazaarWareDisplay';
 
 const props = defineProps<{
