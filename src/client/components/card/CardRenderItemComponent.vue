@@ -80,6 +80,15 @@ export default defineComponent({
       // golden background
       if (this.item.isPlate) {
         classes.push('card-plate');
+        // The kind of plate, so a theme can tell awards/milestones, standard projects and requirements apart
+        const plateText = this.item.text ?? '';
+        if (/award|milestone/i.test(plateText)) {
+          classes.push('card-plate--goals');
+        } else if (/standard project/i.test(plateText)) {
+          classes.push('card-plate--standard-projects');
+        } else if (/requirement/i.test(plateText)) {
+          classes.push('card-plate--requirements');
+        }
         if (this.item.size === Size.SMALL) {
           classes.push('card-plate--narrow');
         }
