@@ -20,8 +20,11 @@
         <PlayerChip :color="force.color" :players="players"/>
         <span class="kanly-battle__role">{{ $t(roleLabel(force)) }}</span>
         <span class="kanly-battle__troops" :aria-label="String(force.sardaukar + force.added)">
-          <img v-for="index in shownIcons(force.sardaukar)" :key="'on-' + index" class="kanly-battle__icon" :src="icon" alt="">
-          <img v-for="index in addedIcons(force)" :key="'add-' + index" class="kanly-battle__icon kanly-battle__icon--added" :src="icon" alt="">
+          <!-- One cube in the player's colour per Sardaukar on the field, as in the mockup -->
+          <BoardCube v-for="index in shownIcons(force.sardaukar)" :key="'on-' + index" class="kanly-battle__cube"
+            :color="force.color" view="slight" :size="CUBE_SIZE" :spinSeed="force.color + index"/>
+          <BoardCube v-for="index in addedIcons(force)" :key="'add-' + index" class="kanly-battle__cube kanly-battle__cube--added"
+            :color="force.color" view="slight" :size="CUBE_SIZE" :spinSeed="force.color + 'added' + index"/>
           <span v-if="force.sardaukar + force.added === 0" class="kanly-battle__none">–</span>
         </span>
         <span class="kanly-battle__count">
@@ -47,16 +50,18 @@ import {tileTypeToString} from '@/common/TileType';
 import {ARRAKIS_PLACE_NAMES, arrakisCoordinate} from '@/common/dune/arrakisCoordinates';
 import {translateText} from '@/client/directives/i18n';
 import ArrakisHex from './ArrakisHex.vue';
+import BoardCube from '@/client/components/common/BoardCube.vue';
 import PlayerChip from './PlayerChip.vue';
-import {duneGraphic} from './duneGraphic';
-import {KanlyForce, KanlyForecast, SARDAUKAR_ICON, kanlyForecast} from './kanlyForecast';
+import {KanlyForce, KanlyForecast, kanlyForecast} from './kanlyForecast';
 
-// More Sardaukar than this show as icons up to the limit; the number beside always tells the whole
+// More Sardaukar than this show as cubes up to the limit; the number beside always tells the whole
 const MAXIMUM_ICONS = 6;
+// Edge of a Sardaukar cube in px: larger than on the board, the cubes are the content of the row
+const CUBE_SIZE = 20;
 
 export default defineComponent({
   name: 'KanlyBattleCard',
-  components: {ArrakisHex, PlayerChip},
+  components: {ArrakisHex, BoardCube, PlayerChip},
   props: {
     kanly: {
       type: Object as PropType<KanlyModel>,
@@ -103,8 +108,8 @@ export default defineComponent({
       const tile = this.space?.tileType;
       return tile === undefined ? '' : translateText(tileTypeToString[tile]);
     },
-    icon(): string {
-      return duneGraphic(SARDAUKAR_ICON);
+    CUBE_SIZE(): number {
+      return CUBE_SIZE;
     },
     // Text around the holder's chip: "${0} takes the tile …" split at the player
     verdict(): [string, string] {
