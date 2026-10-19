@@ -12,6 +12,8 @@ import {DUNE_CARD_MODULE} from '../../src/common/dune/DuneModule';
 import {OrOptions} from '../../src/server/inputs/OrOptions';
 import {cast} from '../../src/common/utils/utils';
 import {finishGeneration, formatMessage} from '../TestingUtils';
+import {statsGameTheme} from '../../src/common/stats/statsBoardKey';
+import {StatsGameDetails} from '../../src/common/stats/StatsGame';
 
 // RULE (applies to every change of the Dune theme or expansion): Mars must not break.
 // A game without the Dune theme and without Dune modules has to behave exactly like before Dune existed:
@@ -52,6 +54,15 @@ describe('Mars is unaffected by Dune', () => {
     const model = Server.getPlayerModel(player1);
     expect(model.game.dune).is.undefined;
     expect(model.game.spaces.some((space) => space.worm || space.warField)).is.false;
+  });
+
+  it('counts every non-Arrakis game as Mars in the statistics (Mars side of the theme switch)', () => {
+    for (const boardName of [BoardName.THARSIS, BoardName.HELLAS, BoardName.ELYSIUM]) {
+      expect(statsGameTheme({boardName} as StatsGameDetails)).eq('mars');
+    }
+    // Older games without a known board stay with Mars as well
+    expect(statsGameTheme(undefined)).eq('mars');
+    expect(statsGameTheme({boardName: BoardName.ARRAKIS} as StatsGameDetails)).eq('dune');
   });
 
   it('goes from one generation to the next without waiting for Dune steps', () => {

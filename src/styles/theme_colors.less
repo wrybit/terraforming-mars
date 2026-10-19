@@ -1,0 +1,25 @@
+// UI colors the Dune theme tints (Jens): the dark glass surfaces turn a very dark brown, the texts a light sand.
+// As CSS variables, so the theme class on <html> (applyTheme.ts) switches them without a second stylesheet.
+// The Mars values are exactly the former colors: a Mars page looks as before.
+
+@ui-text: var(--ui-text);
+@ui-text-soft: var(--ui-text-soft);
+@ui-text-dim: var(--ui-text-dim);
+
+:root {
+  --ui-surface-rgb: 42, 43, 48; // #2a2b30, tab boxes and cards (or_options_tabs.less)
+  --ui-surface-strong-rgb: 34, 37, 47; // #22252f, sheets and sticky bars (create_game_form.less)
+  --ui-text-main: rgb(221, 221, 221); // @text_main
+  --ui-text: #fff;
+  --ui-text-soft: #eee;
+  --ui-text-dim: rgba(238, 238, 238, 0.62);
+}
+
+html.theme-dune {
+  --ui-surface-rgb: 44, 35, 28;
+  --ui-surface-strong-rgb: 38, 30, 24;
+  --ui-text-main: #e6d5b5;
+  --ui-text: #f3e6cc;
+  --ui-text-soft: #ecdcbd;
+  --ui-text-dim: rgba(236, 220, 189, 0.72);
+}

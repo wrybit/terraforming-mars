@@ -23,10 +23,10 @@
     </section>
     <div class="main-container">
       <StartScreen v-if="screen === 'start-screen'"/>
-      <!-- Key: a theme switch renders the form anew in the theme's wording (CreateGameForm.switchTheme) -->
+      <!-- Key: a theme switch renders the form anew in the theme's wording (ThemeSwitch.vue, CreateGameForm.switchTheme) -->
       <CreateGameForm
         v-else-if="screen === 'create-game-form'"
-        :key="createGameFormKey"
+        :key="createGameFormKey + '-' + themeKey"
       />
       <GameHome
         v-else-if="screen === 'game-home' && game !== undefined"
@@ -56,8 +56,9 @@
       <GamesOverview
         v-else-if="screen === 'games-overview'"
       />
-      <CardList v-else-if="screen === 'cards'"/>
-      <StatsPage v-else-if="screen === 'stats'"/>
+      <!-- Key: the Mars/Dune switch renders the page anew in the theme's wording (ThemeSwitch.vue) -->
+      <CardList v-else-if="screen === 'cards'" :key="'cards-' + themeKey"/>
+      <StatsPage v-else-if="screen === 'stats'" :key="'stats-' + themeKey"/>
       <AdminHome v-else-if="screen === 'admin-settings'"/>
       <AdminRaw v-else-if="screen === 'admin-raw'"/>
       <AdminDashboard v-else-if="screen === 'admin-dashboard'"/>
@@ -103,7 +104,8 @@ const StartScreenFooter = defineAsyncComponent(() => import(/* webpackChunkName:
 const OnlinePlayers = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/OnlinePlayers.vue'));
 const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreen.vue'));
 import {$t, setTranslationContext, translateTextWithParams} from '@/client/directives/i18n';
-import {applyTheme} from '@/client/theme/applyTheme';
+import {activeTheme, applyTheme} from '@/client/theme/applyTheme';
+import {applyChosenTheme} from '@/client/theme/themeChoice';
 import {paths} from '@/common/app/paths';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
@@ -229,6 +231,9 @@ export default defineComponent({
     LoginHome,
   },
   computed: {
+    themeKey(): string {
+      return activeTheme();
+    },
     hasBackground(): boolean {
       return SCREENS_WITH_BACKGROUND.includes(this.screen);
     },
@@ -409,10 +414,10 @@ export default defineComponent({
       app.screen = 'games-overview';
     } else if (currentPathname === paths.NEW_GAME) {
       app.screen = 'create-game-form';
-    } else if (currentPathname === paths.CARDS) {
-      app.screen = 'cards';
-    } else if (currentPathname === paths.STATS) {
-      app.screen = 'stats';
+    } else if (currentPathname === paths.CARDS || currentPathname === paths.STATS) {
+      // Both pages carry the Mars/Dune switch: they open in the theme picked last (themeChoice.ts), texts loaded first
+      const screen = currentPathname === paths.CARDS ? 'cards' : 'stats';
+      applyChosenTheme().finally(() => app.screen = screen);
     } else if (currentPathname === paths.HELP) {
       app.screen = 'help';
     } else if (currentPathname === paths.SPECTATOR) {

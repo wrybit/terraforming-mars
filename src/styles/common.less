@@ -6,6 +6,7 @@
 @import "./fonts_ubuntu.less";
 @import "./fonts_prototype.less";
 @import "./mixins.less";
+@import "./theme_colors.less";
 
 html,
 body,
@@ -104,7 +105,7 @@ a:active {
 
 body {
   background: @bg_main;
-  color: @text_main;
+  color: var(--ui-text-main, @text_main); // theme_colors.less: sand in the Dune theme
   font-family: @font_family_main;
   font-size: @font_size_big;
 }
@@ -235,6 +236,7 @@ each(@players, {
 @import "./markdown.less";
 @import "./card_list.less";
 @import "./stats.less";
+@import "./theme_switch.less";
 @import "./moon.less";
 @import "./pathfinders.less";
 @import "./language_flag.less";

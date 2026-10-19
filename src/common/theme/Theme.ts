@@ -1,5 +1,7 @@
 import {BoardName} from '../boards/BoardName';
 import {Expansion} from '../cards/GameModule';
+import {MilestoneName} from '../ma/MilestoneName';
+import {AwardName} from '../ma/AwardName';
 
 // Theme of a game: only what is shown changes (texts, icons, board picture), never the rules.
 // "dune" plays exactly like Terraforming Mars; card names, costs, tags and values stay the same internally,
@@ -18,6 +20,12 @@ export const DUNE_EXPANSIONS: ReadonlyArray<Expansion> = ['corpera', 'prelude', 
 
 /** The only board of the Dune theme; the Mars theme never uses it. */
 export const DUNE_BOARD = BoardName.ARRAKIS;
+
+/** Milestones of the Dune theme: the Tharsis ones under Dune names (theme texts only). Arrakis offers them. */
+export const DUNE_MILESTONES: ReadonlyArray<MilestoneName> = ['Terraformer', 'Mayor', 'Gardener', 'Builder', 'Planner'];
+
+/** Awards of the Dune theme: the Tharsis ones under Dune names (theme texts only). Arrakis offers them. */
+export const DUNE_AWARDS: ReadonlyArray<AwardName> = ['Landlord', 'Scientist', 'Banker', 'Thermalist', 'Miner'];
 
 /** True when `expansion` can be played with `theme`. */
 export function themeAllowsExpansion(theme: Theme, expansion: Expansion): boolean {

@@ -15,9 +15,9 @@
 @create-game-radius: 10px;
 @create-game-radius-small: 8px;
 @create-game-line: rgba(255, 255, 255, 0.14);
-@create-game-dim: rgba(238, 238, 238, 0.62);
+@create-game-dim: @ui-text-dim; // theme_colors.less
 @create-game-surface: @or-tabs-view-panel-background; // same surface as the tab boxes in the game
-@create-game-surface-strong: fade(#22252f, 85%);
+@create-game-surface-strong: ~"rgba(var(--ui-surface-strong-rgb), 0.85)"; // theme_colors.less
 @create-game-chip-background: rgba(255, 255, 255, 0.05);
 @create-game-chip-hover: rgba(255, 255, 255, 0.1);
 @create-game-control-height: 36px;
@@ -33,7 +33,7 @@
 .create-game {
   // Hidden tooltips of the info links stick out on the right; clip instead of hidden, so sticky keeps working
   overflow-x: clip;
-  color: #eee;
+  color: @ui-text-soft;
   font-size: 16px;
   line-height: 1.35;
 
@@ -91,7 +91,7 @@
 }
 
 .create-game-hollandia {
-  color: #eee;
+  color: @ui-text-soft;
 }
 
 .create-game-random {
@@ -119,7 +119,7 @@
   width: auto;
   min-width: @toolbar-button-size;
   padding: 0 12px;
-  color: #eee;
+  color: @ui-text-soft;
   font-size: 17px;
 }
 
@@ -264,39 +264,6 @@
   margin-bottom: @create-game-gap-group;
 }
 
-// Theme bar above all cards (Jens): the theme decides boards and expansions, so it comes first.
-// Same side edges as the card layout below; its top padding is the gap between bar and cards.
-.create-game-theme-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: @create-game-gap-inner @create-game-gap-column * 2;
-  margin: @page-content-edge @page-content-edge 0;
-  margin-bottom: 0;
-
-  @media only screen and (max-width: @page-content-narrow) {
-    margin: @page-content-edge-narrow @page-content-edge-narrow 0;
-  }
-}
-
-.create-game-theme-bar__group {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: @create-game-gap-inner 14px;
-}
-
-.create-game-theme-bar__title {
-  margin: 0;
-  font-size: 18px;
-}
-
-.create-game-theme-bar__switch {
-  width: 320px;
-  max-width: 100%;
-}
-
-
 .create-game-subhead {
   display: flex;
   align-items: center;
@@ -393,7 +360,7 @@
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 6px;
   background: @create-game-chip-background;
-  color: #eee;
+  color: @ui-text-soft;
   font-size: 13px;
   letter-spacing: normal;
   text-transform: none;
@@ -692,7 +659,7 @@
       height: 16px;
       border-radius: 0 @create-game-radius-small 0 6px;
       background: lighten(@selection-color, 12%);
-      color: #fff;
+      color: @ui-text;
       font-size: 11px;
       font-weight: bold;
     }
@@ -813,7 +780,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.3);
-  color: #eee;
+  color: @ui-text-soft;
 }
 
 // Switch: a real checkbox, just drawn differently
@@ -879,7 +846,7 @@
     cursor: pointer;
 
     &:hover:not(:disabled) {
-      color: #fff;
+      color: @ui-text;
     }
 
     &:disabled {
@@ -893,7 +860,7 @@
   min-width: 26px;
   text-align: center;
   font-weight: 700;
-  color: #eee;
+  color: @ui-text-soft;
 }
 
 .create-game-segmented {
@@ -916,13 +883,13 @@
     cursor: pointer;
 
     &:hover {
-      color: #fff;
+      color: @ui-text;
     }
   }
 
   .create-game-segmented--selected {
     background: @bg_action;
-    color: #fff;
+    color: @ui-text;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
   }
 
@@ -995,7 +962,7 @@
   }
 
   &.create-game-segmented--selected .seat-icon {
-    color: #fff;
+    color: @ui-text;
   }
 
   &:disabled {
@@ -1179,7 +1146,7 @@ each(@players, {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.3);
-  color: #fff;
+  color: @ui-text;
   font-size: 17px;
 
   &::placeholder {
@@ -1310,7 +1277,7 @@ each(@players, {
   border-radius: 999px;
   background: @create-game-chip-background;
   font-size: 14px;
-  color: #eee;
+  color: @ui-text-soft;
 
   .create-game-expansion-icon {
     .create-game-icon-size(16px);
@@ -1318,7 +1285,7 @@ each(@players, {
 
   // White like the chip text: the icon is part of the label here, not a hint
   .seat-icon {
-    color: #fff;
+    color: @ui-text;
   }
 }
 
@@ -1349,7 +1316,7 @@ a.create-game-summary-chip {
 
 a.create-game-summary-chip:hover {
   border-color: rgba(255, 255, 255, 0.3);
-  color: #fff;
+  color: @ui-text;
 }
 
 .create-game-create-row {

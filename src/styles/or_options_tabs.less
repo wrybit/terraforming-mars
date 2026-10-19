@@ -11,7 +11,8 @@
 // Subtle outline for inactive tabs
 @or-tab-inactive-border: rgba(255, 255, 255, 0.12);
 // "View only" tabs (hand cards, game log): grey instead of blue – nothing can be done there, only viewed
-@or-tabs-view-panel-background: fade(#2a2b30, @frosted-surface-opacity);
+// Color from theme_colors.less (Dune tints it brown), same glass opacity as before
+@or-tabs-view-panel-background: ~"rgba(var(--ui-surface-rgb), @{frosted-surface-opacity})";
 @or-tabs-view-border: #4b4d55;
 @or-tabs-view-accent: #8d909c;
 @or-tabs-gap: 4px; // Badge sticks out 4px to the right – fits exactly into the gap to the neighbour

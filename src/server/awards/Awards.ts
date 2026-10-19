@@ -59,6 +59,7 @@ import {AwardName} from '../../common/ma/AwardName';
 import {MAManifest} from '../ma/MAManifest';
 import {Suburbian} from './modular/Suburbian';
 import {Blacksmith} from './Blacksmith';
+import {DUNE_AWARDS} from '../../common/theme/Theme';
 
 export const awardManifest: MAManifest<AwardName, IAward> = {
   all: {
@@ -134,7 +135,7 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
     [BoardName.HOLLANDIA]: [],
     [BoardName.AMAZONIS_PLANITIA]: ['Collector', 'Innovator', 'Constructor', 'Manufacturer', 'Physicist'],
     // Dune theme: the Tharsis awards under Dune names (theme texts only)
-    [BoardName.ARRAKIS]: ['Landlord', 'Scientist', 'Banker', 'Thermalist', 'Miner'],
+    [BoardName.ARRAKIS]: [...DUNE_AWARDS],
   },
   expansions: {
     venus: ['Venuphile'],

@@ -18,6 +18,8 @@
         </button>
       </div>
     </header>
+    <!-- Mars/Dune switch, shared with create game and statistics: Dune shows only what a Dune game can hold -->
+    <div class="theme-switch-row"><ThemeSwitch @switch="startTheme"/></div>
 
     <div class="card-list-scrim" :class="{'card-list-scrim--open': filtersOpen}" @click="filtersOpen = false"></div>
 
@@ -118,7 +120,9 @@
         <CardListSection v-show="visibleMilestoneNames.length > 0" title="Milestones" :count="visibleMilestoneNames.length" :parts="partsFor('milestones', visibleMilestoneNames.length)">
           <div class="player_home_colony_cont">
             <div class="player_home_colony" v-for="milestoneName in visibleMilestoneNames" :key="milestoneName" v-memo="[milestoneName]">
-              <div class="milestones"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
+              <!-- Dune theme: goal card as in the game (DuneGoalCard.vue) instead of the Mars board tile -->
+              <DuneGoalCard v-if="theme === 'dune'" kind="milestones" :name="milestoneName"/>
+              <div v-else class="milestones"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
                 <Milestone :milestone="milestoneModel(milestoneName)" :showDescription="true"/>
               </div>
             </div>
@@ -128,7 +132,8 @@
         <CardListSection v-show="visibleAwardNames.length > 0" title="Awards" :count="visibleAwardNames.length" :parts="partsFor('awards', visibleAwardNames.length)">
           <div class="player_home_colony_cont">
             <div class="player_home_colony" v-for="awardName in visibleAwardNames" :key="awardName" v-memo="[awardName]">
-              <div class="awards"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
+              <DuneGoalCard v-if="theme === 'dune'" kind="awards" :name="awardName"/>
+              <div v-else class="awards"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
                 <Award :award="awardModel(awardName)" :showDescription="true"/>
               </div>
             </div>
@@ -182,7 +187,7 @@ import {FundedAwardModel} from '@/common/models/FundedAwardModel';
 import {TypeOption, CardListModel, hashToModel, modelToHash} from '@/client/components/cardlist/CardListModel';
 import {BonusId, BONUS_IDS, PolicyId, POLICY_IDS} from '@/common/turmoil/Types';
 import {buildEntries, CardListEntry, countOptions, FilterGroup, FilterState, hasCostRange, highestCost, passesFilters} from '@/client/components/cardlist/cardListEntries';
-import {CardBoxSize, EXPANSION_OPTIONS, FilterOption, optionKeys, RESOURCE_OPTIONS, SectionPart, TAG_OPTIONS, TYPE_COLOR_CLASSES, TYPE_OPTIONS, typeLabel} from '@/client/components/cardlist/cardListOptions';
+import {CardBoxSize, FilterOption, optionKeys, SectionPart, TYPE_COLOR_CLASSES, typeLabel} from '@/client/components/cardlist/cardListOptions';
 import {markedOptions, resetOptions, toggleOption} from '@/client/components/cardlist/filterSelection';
 import {clearSearchHighlight, highlightSearch} from '@/client/components/cardlist/searchHighlight';
 import {SegmentOption} from '@/client/components/create/createGameChoices';
@@ -202,6 +207,12 @@ import LoadingPlate from '@/client/components/common/LoadingPlate.vue';
 import CardListSectionRail, {RailSection} from '@/client/components/cardlist/CardListSectionRail.vue';
 import {activeSectionIndex} from '@/client/components/cardlist/sectionRail';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
+import ThemeSwitch from '@/client/components/common/ThemeSwitch.vue';
+import DuneGoalCard from '@/client/components/DuneGoalCard.vue';
+import {activeTheme} from '@/client/theme/applyTheme';
+import {Theme} from '@/common/theme/Theme';
+import {GAME_MODULES} from '@/common/cards/GameModule';
+import {defaultExpansions, themeEntries, themeExpansionOptions, themeResourceOptions, themeTagOptions, themeTypeOptions} from '@/client/components/cardlist/cardListTheme';
 import {textFitMetrics} from '@/client/utils/textFit';
 import {prefersReducedMotion} from '@/client/utils/motion';
 
@@ -227,12 +238,17 @@ type CardSection = {title: string, names: Array<CardName>, parts: Array<SectionP
 // One active filter as a removable chip in the summary
 type ActiveFilter = FilterOption & {group: FilterGroup | 'vps' | 'asteriskRules' | 'cost'};
 
-const FILTER_GROUP_OPTIONS: Record<FilterGroup, ReadonlyArray<FilterOption>> = {
-  types: TYPE_OPTIONS,
-  tags: TAG_OPTIONS,
-  expansions: EXPANSION_OPTIONS,
-  resources: RESOURCE_OPTIONS,
-};
+const FILTER_GROUPS: ReadonlyArray<FilterGroup> = ['types', 'tags', 'expansions', 'resources'];
+
+// Options of each filter group in a theme: Dune has fewer card types and expansions (cardListTheme.ts)
+function filterGroupOptions(theme: Theme, entries: ReadonlyArray<CardListEntry>): Record<FilterGroup, ReadonlyArray<FilterOption>> {
+  return {
+    types: themeTypeOptions(theme),
+    tags: themeTagOptions(theme, entries),
+    expansions: themeExpansionOptions(theme),
+    resources: themeResourceOptions(theme, entries),
+  };
+}
 
 const VP_OPTIONS: ReadonlyArray<SegmentOption> = [{value: 0, label: 'all'}, {value: 1, label: '+VPs'}, {value: 2, label: '-VPs'}];
 // Same pattern as the VP filter: with or without a "*" special rule
@@ -249,6 +265,8 @@ const HIGHLIGHT_DELAY_MS = 120;
 export default defineComponent({
   name: 'CardList',
   components: {
+    ThemeSwitch,
+    DuneGoalCard,
     PageTitle,
     CardListCardGrid,
     CardListCostRange,
@@ -265,10 +283,14 @@ export default defineComponent({
     CardListSectionRail,
   },
   data() {
+    // The page is rendered anew when the theme changes (App.vue key), so it is fixed for one page
+    const theme = activeTheme();
     return {
-      ...hashToModel(window.location.hash),
+      theme,
+      ...hashToModel(window.location.hash, theme),
       // Build all entries once; markRaw because they never change and are large
-      entries: markRaw(buildEntries()) as ReadonlyArray<CardListEntry>,
+      entries: markRaw(themeEntries(buildEntries(), theme)) as ReadonlyArray<CardListEntry>,
+      hashTimer: undefined as ReturnType<typeof setTimeout> | undefined,
       showScrollTop: false,
       // Mobile: filters as a bottom sheet
       filtersOpen: false,
@@ -312,23 +334,28 @@ export default defineComponent({
     window.removeEventListener('scroll', this.handleScroll);
     window.removeEventListener('resize', this.fitMoreFilters);
     clearTimeout(this.highlightTimer);
+    // The page is rendered anew on a theme change: the old one must stop writing its filters into the address
+    clearTimeout(this.hashTimer);
     clearSearchHighlight();
   },
   computed: {
     typedRefs(): Refs {
       return this.$refs as unknown as Refs;
     },
-    typeOptions(): typeof TYPE_OPTIONS {
-      return TYPE_OPTIONS;
+    groupOptions(): Record<FilterGroup, ReadonlyArray<FilterOption>> {
+      return filterGroupOptions(this.theme, this.entries);
     },
-    tagOptions(): typeof TAG_OPTIONS {
-      return TAG_OPTIONS;
+    typeOptions(): ReadonlyArray<FilterOption> {
+      return this.groupOptions.types;
     },
-    expansionOptions(): typeof EXPANSION_OPTIONS {
-      return EXPANSION_OPTIONS;
+    tagOptions(): ReadonlyArray<FilterOption> {
+      return this.groupOptions.tags;
     },
-    resourceOptions(): typeof RESOURCE_OPTIONS {
-      return RESOURCE_OPTIONS;
+    expansionOptions(): ReadonlyArray<FilterOption> {
+      return this.groupOptions.expansions;
+    },
+    resourceOptions(): ReadonlyArray<FilterOption> {
+      return this.groupOptions.resources;
     },
     vpOptions(): typeof VP_OPTIONS {
       return VP_OPTIONS;
@@ -392,8 +419,8 @@ export default defineComponent({
     },
     activeFilters(): Array<ActiveFilter> {
       const active: Array<ActiveFilter> = [];
-      for (const group of Object.keys(FILTER_GROUP_OPTIONS) as Array<FilterGroup>) {
-        const options = FILTER_GROUP_OPTIONS[group];
+      for (const group of FILTER_GROUPS) {
+        const options = this.groupOptions[group];
         const marked = markedOptions(this[group] as Record<string, boolean>, optionKeys(options));
         options.filter((option) => marked.includes(option.key)).forEach((option) => active.push({...option, group}));
       }
@@ -468,7 +495,7 @@ export default defineComponent({
   },
   methods: {
     delayedSetLocationHash(delayms: number = 200) {
-      setTimeout(() => {
+      this.hashTimer = setTimeout(() => {
         const changed = this.setLocationHash();
         this.delayedSetLocationHash(changed ? 10 : 100);
       }, delayms);
@@ -483,10 +510,10 @@ export default defineComponent({
       return this[group] as Record<string, boolean>;
     },
     toggle(group: FilterGroup, key: string): void {
-      toggleOption(this.selectionOf(group), optionKeys(FILTER_GROUP_OPTIONS[group]), key);
+      toggleOption(this.selectionOf(group), optionKeys(this.groupOptions[group]), key);
     },
     reset(group: FilterGroup): void {
-      resetOptions(this.selectionOf(group), optionKeys(FILTER_GROUP_OPTIONS[group]));
+      resetOptions(this.selectionOf(group), optionKeys(this.groupOptions[group]));
     },
     removeFilter(filter: ActiveFilter): void {
       if (filter.group === 'vps') {
@@ -500,11 +527,17 @@ export default defineComponent({
       }
     },
     resetAll(): void {
-      (Object.keys(FILTER_GROUP_OPTIONS) as Array<FilterGroup>).forEach((group) => this.reset(group));
+      FILTER_GROUPS.forEach((group) => this.reset(group));
       this.vps = 0;
       this.asteriskRules = 0;
       this.resetCost();
       this.filterText = '';
+    },
+    // Before the switch renders the page in the other theme: the expansion filter starts anew there,
+    // otherwise Dune would take over the Mars filter without the Dune expansion
+    startTheme(theme: Theme): void {
+      this.expansions = defaultExpansions(theme, GAME_MODULES);
+      this.setLocationHash();
     },
     resetCost(): void {
       this.costMin = undefined;

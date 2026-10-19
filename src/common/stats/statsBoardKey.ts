@@ -1,5 +1,6 @@
 import {BoardName} from '../boards/BoardName';
 import {StatsGameDetails} from './StatsGame';
+import {DUNE_BOARD, Theme} from '../theme/Theme';
 
 // Contract between stats API and stats page: under which board name a game counts in the statistics.
 
@@ -14,4 +15,9 @@ export function statsBoardKey(details: StatsGameDetails | undefined): StatsBoard
   }
   // A shuffled Tharsis is a different game than a normal Tharsis: mixing both would distort the board's numbers
   return details.shuffledBoard === true ? RANDOM_BOARD : details.boardName;
+}
+
+/** Theme a game counts under in the statistics: Arrakis is Dune; everything else, also a game whose board is unknown, Mars. */
+export function statsGameTheme(details: StatsGameDetails | undefined): Theme {
+  return details?.boardName === DUNE_BOARD ? 'dune' : 'mars';
 }

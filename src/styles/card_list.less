@@ -23,7 +23,7 @@
 .card-list {
   --card-list-header: @card-list-header-height;
 
-  color: #eee;
+  color: @ui-text-soft;
   font-size: 14px;
   line-height: 1.35;
 
@@ -140,7 +140,7 @@
   border: 1px solid @create-game-line;
   border-radius: @create-game-radius-small;
   background: rgba(0, 0, 0, 0.3);
-  color: #fff;
+  color: @ui-text;
   font-size: 15px;
 
   &::placeholder {
@@ -195,7 +195,7 @@
   cursor: pointer;
 
   &:hover {
-    color: #fff;
+    color: @ui-text;
     background: @create-game-chip-hover;
   }
 }
@@ -261,7 +261,7 @@
   cursor: pointer;
 
   &:hover {
-    color: #fff;
+    color: @ui-text;
   }
 }
 
@@ -275,7 +275,7 @@
 // Same tile as in "Create game", selection in 20 % purple with a checkmark flag
 .card-list-chip {
   .create-game-chip();
-  color: #eee;
+  color: @ui-text-soft;
   font: inherit;
   text-align: left;
 
@@ -505,7 +505,7 @@
     border: 0;
     border-radius: 50%;
     background: @create-game-chip-hover;
-    color: #fff;
+    color: @ui-text;
     font-size: 11px;
     line-height: 1;
     cursor: pointer;
@@ -707,7 +707,7 @@
   padding: 0 6px;
   border: 0;
   background: none;
-  color: #fff;
+  color: @ui-text;
   cursor: pointer;
 }
 
@@ -769,7 +769,7 @@
   border: 0;
   border-radius: @create-game-radius;
   background: @bg_action;
-  color: #fff;
+  color: @ui-text;
   font-size: 24px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
   cursor: pointer;
@@ -872,7 +872,7 @@
     gap: 6px;
     width: auto;
     padding: 0 12px 0 10px;
-    color: #fff;
+    color: @ui-text;
     font-size: 15px;
     font-weight: bold;
   }
@@ -904,6 +904,11 @@
   .card-list-layout {
     display: block;
     padding: 12px;
+  }
+
+  // Mars/Dune switch on the same side edges as the content below it
+  .card-list .theme-switch-row {
+    margin: 12px 12px 0;
   }
 
   .card-list-filters {
@@ -1009,4 +1014,9 @@
   .card-list-section-body .player_home_colony {
     zoom: @card-list-phone-card-zoom;
   }
+}
+
+// Dune expansion as a filter in the card list (Dune theme only): the planet of the theme, as on the Mars/Dune switch
+.expansion-icon-dune {
+  background-image: url(./assets/themes/dune/arrakis-icon.png);
 }

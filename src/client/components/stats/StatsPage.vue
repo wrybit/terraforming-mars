@@ -13,6 +13,8 @@
         </button>
       </div>
     </header>
+    <!-- Mars/Dune switch, shared with create game and card list: each theme counts its own games -->
+    <div class="theme-switch-row"><ThemeSwitch/></div>
 
     <div class="card-list-scrim" :class="{'card-list-scrim--open': filtersOpen}" @click="filtersOpen = false"></div>
 
@@ -65,7 +67,7 @@
 
         <StatsSkeleton v-if="status === 'loading'" :overview="view.type === 'tab' && view.tab === 'overview'"/>
         <p v-else-if="status === 'error'" class="stats-card stats-note"><span v-i18n>Could not load the statistics.</span> {{ failureText }}</p>
-        <p v-else-if="games.length === 0" class="stats-card stats-note" v-i18n>No finished games yet.</p>
+        <p v-else-if="themeGames.length === 0" class="stats-card stats-note">{{ $t(theme === 'dune' ? 'No finished Dune games yet.' : 'No finished games yet.') }}</p>
         <template v-else>
           <StatsTopView v-if="view.type === 'top'" :key="`top:${view.kind}`" :kind="view.kind" :results="results"/>
           <StatsEntityDetail v-else-if="view.type === 'detail'" :key="`${view.kind}:${view.name}`" :kind="view.kind" :name="view.name" :results="results"/>
@@ -110,12 +112,18 @@ import {parseStatsView, STATS_TABS, statsHref, StatsTab, StatsView, tabOfView} f
 import {allPlayerResults, playerColors, playerNames, StatsPlayerResult} from './statsResults';
 import {boardLabel, formatDate} from './statsLabels';
 import StatsCardZoom from './StatsCardZoom.vue';
+import ThemeSwitch from '@/client/components/common/ThemeSwitch.vue';
+import {activeTheme} from '@/client/theme/applyTheme';
+import {Theme} from '@/common/theme/Theme';
+import {statsGameTheme} from '@/common/stats/statsBoardKey';
 import {CARD_ZOOM_KEY, StatsCardZoomRequest} from './statsCardZoom';
 
 // Below this width narrower charts (same breakpoint as the card list's filter sheet)
 const NARROW_WIDTH = 900;
 
 type DataModel = {
+  theme: Theme;
+  /** All finished games as loaded; the page shows those of the chosen theme (themeGames). */
   games: Array<StatsGame>;
   status: 'loading' | 'error' | 'done';
   failureText: string;
@@ -130,7 +138,7 @@ type DataModel = {
 // Structure, filters and tiles as in the card list, so it feels like part of the app.
 export default defineComponent({
   name: 'StatsPage',
-  components: {CardListFilterGroup, PageTitle, PageToolbar, StatsOverview, StatsSkeleton, StatsGamesView, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsTopView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
+  components: {ThemeSwitch, CardListFilterGroup, PageTitle, PageToolbar, StatsOverview, StatsSkeleton, StatsGamesView, StatsPlayersView, StatsRecordsView, StatsCombinationsView, StatsTopView, StatsEntityList, StatsEntityDetail, StatsCardZoom},
   provide() {
     // Player color the same everywhere: the color someone played most often
     return {
@@ -141,6 +149,8 @@ export default defineComponent({
   },
   data(): DataModel {
     return {
+      // The page is rendered anew when the theme changes (App.vue key), so it is fixed for one page
+      theme: activeTheme(),
       games: [],
       status: 'loading',
       failureText: '',
@@ -174,11 +184,15 @@ export default defineComponent({
     window.removeEventListener('resize', this.updateChartWidth);
   },
   computed: {
+    // Mars and Dune keep their own statistics: a Dune game played on Arrakis says nothing about Tharsis and back
+    themeGames(): Array<StatsGame> {
+      return this.games.filter((game) => statsGameTheme(game.details) === this.theme);
+    },
     groups(): Array<StatsFilterGroup> {
-      return filterGroups(this.games);
+      return filterGroups(this.themeGames);
     },
     filteredGames(): Array<StatsGame> {
-      return filterGames(this.games, this.filters);
+      return filterGames(this.themeGames, this.filters);
     },
     results(): Array<StatsPlayerResult> {
       return allPlayerResults(this.filteredGames);
@@ -187,7 +201,7 @@ export default defineComponent({
       return playerNames(this.filteredGames);
     },
     colors(): Map<string, Color> {
-      return playerColors(this.games);
+      return playerColors(this.themeGames);
     },
     activeFilters(): number {
       return activeFilterCount(this.filters);
@@ -213,17 +227,17 @@ export default defineComponent({
       return this.tabHref('overview');
     },
     headerInfo(): string {
-      const last = this.games[this.games.length - 1];
-      return last === undefined ? '' : translateTextWithParams('${0} games · last on ${1}', [String(this.games.length), formatDate(last.summary.createdTimeMs)]);
+      const last = this.themeGames[this.themeGames.length - 1];
+      return last === undefined ? '' : translateTextWithParams('${0} games · last on ${1}', [String(this.themeGames.length), formatDate(last.summary.createdTimeMs)]);
     },
     ofTotalText(): string {
-      return translateTextWithParams('of ${0} games', [String(this.games.length)]);
+      return translateTextWithParams('of ${0} games', [String(this.themeGames.length)]);
     },
     showResultsText(): string {
       return translateTextWithParams('Show ${0} games', [String(this.filteredGames.length)]);
     },
     generationRange(): {min: number, max: number} | undefined {
-      const generations = this.games.map((game) => game.summary.generation).filter((generation) => generation > 0);
+      const generations = this.themeGames.map((game) => game.summary.generation).filter((generation) => generation > 0);
       if (generations.length === 0 || Math.min(...generations) === Math.max(...generations)) {
         return undefined;
       }
@@ -244,7 +258,7 @@ export default defineComponent({
       }
     },
     countsOf(group: StatsFilterGroup): Map<string, number> {
-      return optionCounts(this.games, this.filters, group);
+      return optionCounts(this.themeGames, this.filters, group);
     },
     toggle(group: StatsFilterGroup, key: string): void {
       toggleOption(this.filters.selections[group.key], optionKeys(group.options), key);

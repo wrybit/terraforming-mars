@@ -1,0 +1,145 @@
+// Mars/Dune switch (ThemeSwitch.vue): one bar, centered under the page header, the same on create game, statistics and
+// card list. The planet of the chosen theme fills its half of the bar up to the middle (Mars left, Arrakis right),
+// cut off by the bar's edges; the chosen name sits black on the planet. Switching rolls the planet to the other side,
+// turning it from Mars into Arrakis (or back) on the way.
+
+@theme-switch-width: 360px;
+@theme-switch-height: 48px;
+// Planet much larger than the bar: only a slice shows, its curved edge reaches exactly the middle of the bar
+@theme-switch-planet: 240px;
+// Planet within its picture (assets/board/mars-planet.png, assets/themes/dune/arrakis-planet.png: 620 × 600 px)
+@theme-switch-picture-planet: 448;
+@theme-switch-roll: 115deg;
+// Even roll: speeds up and slows down like a ball, so the way from one side to the other stays visible
+@theme-switch-duration: 0.8s; // ThemeSwitch.vue ROLL_MS
+@theme-switch-motion: @theme-switch-duration cubic-bezier(0.65, 0, 0.35, 1);
+
+// Each name in the font of its world: Mars like the card titles of the game (Prototype), Dune like its card titles (Michroma).
+// Michroma is declared here as well, because the Dune theme stylesheet (which brings it) is not loaded while Mars is shown.
+@font-face {
+  font-family: 'Michroma';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./assets/themes/dune/fonts/michroma-latin-400-normal.woff2) format('woff2');
+}
+
+// Row around the bar: centered, same distance to the header as the content below has to it
+.theme-switch-row {
+  display: flex;
+  justify-content: center;
+  margin: @page-content-edge @page-content-edge 0;
+
+  @media only screen and (max-width: @page-content-narrow) {
+    margin: @page-content-edge-narrow @page-content-edge-narrow 0;
+  }
+}
+
+.theme-switch {
+  .frosted-surface();
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: @theme-switch-width;
+  max-width: 100%;
+  height: @theme-switch-height;
+  overflow: hidden;
+  border: 1px solid @create-game-line;
+  border-radius: (@theme-switch-height / 2);
+  background: @create-game-surface;
+}
+
+.theme-switch__planet {
+  position: absolute;
+  top: 50%;
+  // Mars side: the curved edge ends in the middle of the bar
+  left: calc(50% - @theme-switch-planet);
+  width: @theme-switch-planet;
+  height: @theme-switch-planet;
+  margin-top: -(@theme-switch-planet / 2);
+  overflow: hidden;
+  border-radius: 50%;
+  // Soft shadow on the curved edge, so the planet stands out against the bar
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  transition: transform @theme-switch-motion;
+}
+
+// Dune side: rolled one planet width to the right, so its curved edge ends in the middle from the other side.
+// Rolling that far turns a ball by about a third (width / circumference × 360°)
+.theme-switch__planet--dune {
+  transform: translateX(@theme-switch-planet) rotate(@theme-switch-roll);
+}
+
+// The two surfaces lie on top of each other and cross-fade while the planet rolls
+.theme-switch__surface {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-size: (@theme-switch-planet * 620 / @theme-switch-picture-planet) (@theme-switch-planet * 600 / @theme-switch-picture-planet);
+  background-position: -(@theme-switch-planet * 93 / @theme-switch-picture-planet) -(@theme-switch-planet * 86 / @theme-switch-picture-planet);
+  opacity: 0;
+  // Evenly over the whole roll: halfway across the bar the planet is half Mars, half Arrakis
+  transition: opacity @theme-switch-duration linear;
+}
+
+// Pictures: ThemeSwitch.vue. Arrakis is turned back by the roll, so it stands upright once the planet has arrived
+// on the Dune side
+.theme-switch__surface--dune {
+  transform: rotate(-@theme-switch-roll);
+}
+
+.theme-switch__surface--shown {
+  opacity: 1;
+}
+
+// Whole half of the bar is the button (Fitts): easy to hit on the phone
+.theme-switch__option {
+  position: relative;
+  border: 0;
+  background: none;
+  color: @create-game-dim;
+  font-size: 15px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  // The name turns black only once the planet has rolled in under it
+  transition: color 0.3s ease 0.3s, text-shadow 0.3s ease 0.3s;
+
+  &:hover,
+  &:focus-visible {
+    color: @ui-text;
+  }
+
+  &:focus-visible {
+    outline: 2px solid fade(#fff, 60%);
+    outline-offset: -6px;
+    border-radius: (@theme-switch-height / 2);
+  }
+}
+
+.theme-switch__option--mars {
+  font-family: Prototype, 'Ubuntu', sans-serif;
+  font-size: 19px;
+}
+
+.theme-switch__option--dune {
+  font-family: 'Michroma', 'Ubuntu', sans-serif;
+  font-size: 14px;
+}
+
+// Black on the planet; a faint light halo keeps it readable on the darker spots of the surface
+.theme-switch__option--selected,
+.theme-switch__option--selected:hover {
+  color: #000;
+  text-shadow: 0 0 6px rgba(255, 230, 200, 0.55);
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch__planet,
+  .theme-switch__surface,
+  .theme-switch__option {
+    transition: none;
+  }
+}

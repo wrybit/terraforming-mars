@@ -70,6 +70,7 @@ import {Tycoon10} from './modular/Tycoon10';
 import {Trader} from './modular/Trader';
 import {Tactician4} from './modular/Tactician4';
 import {Briber} from './Briber';
+import {DUNE_MILESTONES} from '../../common/theme/Theme';
 
 export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
   all: {
@@ -158,7 +159,7 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
     [BoardName.HOLLANDIA]: [],
     [BoardName.AMAZONIS_PLANITIA]: ['Terran', 'Landshaper', 'Merchant3', 'Sponsor', 'Lobbyist'],
     // Dune theme: the Tharsis milestones under Dune names (theme texts only)
-    [BoardName.ARRAKIS]: ['Terraformer', 'Mayor', 'Gardener', 'Builder', 'Planner'],
+    [BoardName.ARRAKIS]: [...DUNE_MILESTONES],
   },
   expansions: {
     venus: ['Hoverlord'],

@@ -89,7 +89,7 @@
   color: @create-game-dim;
 
   &:hover {
-    color: #fff;
+    color: @ui-text;
   }
 }
 
@@ -113,7 +113,7 @@
     white-space: nowrap;
 
     &:hover {
-      color: #fff;
+      color: @ui-text;
     }
   }
 }
@@ -126,7 +126,7 @@
   border: 1px solid @create-game-line;
   border-radius: @create-game-radius-small;
   background: rgba(0, 0, 0, 0.3);
-  color: #eee;
+  color: @ui-text-soft;
   font: inherit;
 
   &:focus {
@@ -216,13 +216,13 @@
   min-width: 84px;
   padding: 6px 10px;
   border-radius: @create-game-radius-small;
-  color: #fff;
+  color: @ui-text;
   text-decoration: none;
 }
 
 // White instead of gold: gold stays reserved for best values
 .stats-win-number {
-  color: #fff;
+  color: @ui-text;
   font-size: 26px;
   font-weight: bold;
   line-height: 1.1;
@@ -249,7 +249,7 @@
 
   dd {
     margin: 0;
-    color: #eee;
+    color: @ui-text-soft;
     font-weight: bold;
     text-align: right;
     font-variant-numeric: tabular-nums;
@@ -286,12 +286,12 @@
     user-select: none;
 
     &:hover {
-      color: #fff;
+      color: @ui-text;
     }
   }
 
   th.stats-table-sorted {
-    color: #fff;
+    color: @ui-text;
 
     &::after {
       content: " ▼";
@@ -339,7 +339,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #fff;
+  color: @ui-text;
   font-weight: 500;
   text-decoration: none;
 
@@ -358,7 +358,7 @@
   display: inline-block;
   padding: 1px 8px;
   border-radius: 6px;
-  color: #fff;
+  color: @ui-text;
   font-size: 12px;
   font-weight: 500;
   text-decoration: none;
@@ -442,7 +442,7 @@
   display: block;
   padding: 0;
   overflow: hidden;
-  color: #eee;
+  color: @ui-text-soft;
   text-decoration: none;
 
   &:hover {
@@ -470,7 +470,7 @@
   justify-content: space-between;
   align-items: baseline;
   padding: 10px 14px;
-  color: #fff;
+  color: @ui-text;
 
   strong {
     font-size: 18px;

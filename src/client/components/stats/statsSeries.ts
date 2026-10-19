@@ -1,3 +1,4 @@
+import {activeTheme} from '@/client/theme/applyTheme';
 import {StatsGame, StatsGlobals} from '@/common/stats/StatsGame';
 import {average, StatsPlayerResult} from './statsResults';
 
@@ -33,10 +34,15 @@ export const GLOBAL_PARAMETERS: ReadonlyArray<{key: keyof StatsGlobals, label: s
   {key: 'venus', label: 'Venus', color: 'yellow'},
 ];
 
+// Colors as the Dune theme shows the parameters: water storage blue, vegetation green, spice fields orange like the spice
+const DUNE_GLOBAL_COLORS: Partial<Record<keyof StatsGlobals, string>> = {temperature: 'blue', oceans: 'orange'};
+
 /** Avg. progress of the global parameters in percent per generation. */
 export function averageGlobalsByGeneration(games: ReadonlyArray<StatsGame>): Array<{key: keyof StatsGlobals, label: string, color: string, values: Array<number | undefined>}> {
+  const dune = activeTheme() === 'dune';
   return GLOBAL_PARAMETERS.map((parameter) => ({
     ...parameter,
+    color: dune ? DUNE_GLOBAL_COLORS[parameter.key] ?? parameter.color : parameter.color,
     values: averageByGeneration(games.flatMap((game) => {
       const values = game.details?.globalsByGeneration?.[parameter.key];
       return values === undefined ? [] : [values];

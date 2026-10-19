@@ -25,13 +25,9 @@
         <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings"/>
       </div>
     </header>
-    <!-- Theme above everything: it decides which boards and expansions exist (common/theme/Theme.ts) -->
-    <section class="create-game-card create-game-theme-bar" data-test="create-game-theme-bar">
-      <div class="create-game-theme-bar__group">
-        <h2 class="create-game-theme-bar__title" v-i18n>Theme</h2>
-        <SegmentedControl class="create-game-segmented--equal create-game-theme-bar__switch" v-model="theme" :options="THEME_OPTIONS"/>
-      </div>
-    </section>
+    <!-- Theme above everything: it decides which boards and expansions exist (common/theme/Theme.ts).
+         Same switch as on statistics and card list; the form follows it through its own theme (board) -->
+    <div class="theme-switch-row"><ThemeSwitch @switch="switchFromBar"/></div>
     <div class="create-game-layout">
       <main class="create-game-settings">
         <!-- Fixed columns per window width (createGameColumns.ts), so cards never jump while settings change.
@@ -428,6 +424,8 @@ import {describeFailure, failureFromResponse, failureOf, fetchOrFail, RequestFai
 import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import {DUNE_BOARD, Theme, themeAllowsExpansion} from '@/common/theme/Theme';
 import {activeTheme, applyTheme} from '@/client/theme/applyTheme';
+import {chosenTheme, rememberTheme} from '@/client/theme/themeChoice';
+import ThemeSwitch from '@/client/components/common/ThemeSwitch.vue';
 import {DuneModule} from '@/common/dune/DuneModule';
 import {DUNE_MODULE_DETAIL, DUNE_MODULE_FIELD, DUNE_MODULE_ICON, DUNE_MODULE_LABEL, PLAYABLE_DUNE_MODULES, chosenDuneModules} from './duneModuleFields';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
@@ -545,6 +543,7 @@ export default defineComponent({
     };
   },
   components: {
+    ThemeSwitch,
     GameSetupChips,
     AppButton,
     CollapsibleSection,
@@ -640,6 +639,11 @@ export default defineComponent({
     // A shared link takes precedence over the most recently used settings.
     if (!this.restoreSettingsFromLink()) {
       this.restoreLastSettings();
+      // Without a link the theme last picked with the switch (here, on statistics or card list) wins over the last settings
+      const chosen = chosenTheme();
+      if (this.theme !== chosen) {
+        this.theme = chosen;
+      }
     }
   },
   mounted() {
@@ -899,10 +903,6 @@ export default defineComponent({
     DUNE_MODULE_ICON(): typeof DUNE_MODULE_ICON {
       return DUNE_MODULE_ICON;
     },
-    THEME_OPTIONS(): ReadonlyArray<SegmentOption> {
-      // Names, not words: the Dune texts would turn "Mars" into "Arrakis"
-      return [{value: 'mars', label: 'Mars', raw: true}, {value: 'dune', label: 'Dune', raw: true}];
-    },
     DUNE_BOARD(): BoardName {
       return DUNE_BOARD;
     },
@@ -989,12 +989,20 @@ export default defineComponent({
     // v-i18n translates once when rendered, so a fresh form shows the new wording. The link in the address
     // bar carries every setting, the new form restores itself from it (restoreSettingsFromLink).
     async switchTheme(theme: Theme) {
+      // The form's theme is the choice of the shared switch (statistics and card list follow it)
+      rememberTheme(theme);
       if (activeTheme() === theme) {
         return;
       }
       replaceSettingsHash(this.currentSettingsHash);
       await applyTheme(theme);
       vueRoot(this).remountCreateGameForm();
+    },
+    // The shared switch shows the theme itself; the page is then rendered anew (App.vue key) and restores
+    // these settings from the address, so they go there before
+    switchFromBar(theme: Theme) {
+      this.theme = theme;
+      replaceSettingsHash(this.currentSettingsHash);
     },
     toggleDuneModule(module: DuneModule) {
       const field = DUNE_MODULE_FIELD[module];

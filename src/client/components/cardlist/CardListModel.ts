@@ -3,6 +3,8 @@ import {CardType} from '@/common/cards/CardType';
 import {GameModule, GAME_MODULES} from '@/common/cards/GameModule';
 import {SearchIndex} from '@/client/components/cardlist/SearchIndex';
 import {CardResource} from '@/common/CardResource';
+import {Theme} from '@/common/theme/Theme';
+import {defaultExpansions} from '@/client/components/cardlist/cardListTheme';
 
 export type TypeOption = CardType | 'colonyTiles' | 'globalEvents' | 'milestones' | 'awards' | 'agendas';
 export type TagOption = Tag | 'none';
@@ -84,29 +86,11 @@ const TAG_ABBREVIATIONS = {
   [Tag.CRIME]: 'h',
 } satisfies Record<TagOption, string>;
 
-export function hashToModel(windowLocationHash: string): CardListModel {
+export function hashToModel(windowLocationHash: string, theme: Theme = 'mars'): CardListModel {
   const model: CardListModel = {
     filterText: '',
-    expansions: {
-      base: true,
-      corpera: true,
-      prelude: true,
-      prelude2: true,
-      venus: true,
-      colonies: true,
-      turmoil: true,
-      community: true,
-      ares: true,
-      moon: true,
-      promo: true,
-      pathfinders: true,
-      ceo: true,
-      starwars: true,
-      underworld: true,
-      deltaProject: true,
-      // Cards of the Dune expansion only when asked for: the card list shows the Mars game
-      dune: false,
-    },
+    // Everything; the cards of the Dune expansion only in the Dune theme (cardListTheme.ts)
+    expansions: defaultExpansions(theme, GAME_MODULES),
     types: {
       event: true,
       active: true,
