@@ -37,7 +37,7 @@ export const DUNE_TAB_ACTIONS: Readonly<Record<DuneBoardTabId, ReadonlyArray<Dun
   ],
   smuggling: [
     {label: 'Move spice', path: [{title: SMUGGLE_SPICE_TITLE}], unavailable: 'Not your turn, or no spice and Solari to move it', actionTab: true},
-    {label: 'Black market', path: [{title: BLACK_MARKET_TITLE}], unavailable: 'Not your turn, or not 2 of one resource', actionTab: true},
+    {label: 'Black market', path: [{title: BLACK_MARKET_TITLE}], unavailable: 'Not your turn, or nothing worth trading', actionTab: true},
     {label: 'Bribe', path: [{title: BRIBE_TITLE}], unavailable: 'Only with suspicion above 0 and enough Solari'},
   ],
 };

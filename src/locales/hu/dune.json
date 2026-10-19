@@ -287,5 +287,8 @@
   "You give": "Odaadod",
   "You offer": "Felajánlod",
   "You want in return": "Cserébe kéred",
-  "CHOAM offer": "CHOAM-ajánlat"
+  "CHOAM offer": "CHOAM-ajánlat",
+  "Smuggling: black market (double worth)": "Csempészet: feketepiac (dupla érték)",
+  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.": "Fűszer szállítása: legfeljebb 5 fűszer egyenként 5 solariért. Feketepiac: dupla értéken (1 fűszer 6 solariért). Mindegyik 1-gyel növeli a gyanút; a vesztegetés (10 solari, a Csempészpiac tulajdonosának 7) csökkenti. A generáció végén: 3-tól befolyás vész el.",
+  "Not your turn, or nothing worth trading": "Nem te jössz, vagy nincs mit cserélni"
 }

@@ -2,6 +2,7 @@ import {Message} from '../../common/logs/Message';
 import {BasePlayerInput} from '../PlayerInput';
 import {InputResponse, isSelectTradeResponse} from '../../common/inputs/InputResponse';
 import {SelectTradeModel, TradeGiveOption, TradeRate} from '../../common/models/PlayerInputModel';
+import {TradePricing, tradeRate} from '../../common/inputs/tradeRate';
 import {Resource} from '../../common/Resource';
 import {InputError} from './InputError';
 
@@ -16,7 +17,8 @@ export type Trade = {
 /**
  * A whole trade in one input: the resource and amount the player gives, the resource and amount they get
  * (Dune expansion: CHOAM offer, black market, moving spice). Replaces chains of nested choices, so the client can
- * show both sides at once. With a rate the amounts must be whole multiples of it.
+ * show both sides at once. A priced trade (fixed rate, or worth per resource) only allows whole multiples of the
+ * rate of its pair (common/inputs/tradeRate.ts).
  */
 export class SelectTrade extends BasePlayerInput<Trade> {
   constructor(
@@ -25,7 +27,7 @@ export class SelectTrade extends BasePlayerInput<Trade> {
     public give: ReadonlyArray<TradeGiveOption>,
     public get: ReadonlyArray<Resource>,
     public maxGet: number,
-    public rate?: TradeRate,
+    public pricing: TradePricing = {},
   ) {
     super('trade', title);
     this.buttonLabel = buttonLabel;
@@ -39,7 +41,9 @@ export class SelectTrade extends BasePlayerInput<Trade> {
       give: this.give,
       get: this.get,
       maxGet: this.maxGet,
-      rate: this.rate,
+      rate: this.pricing.rate,
+      values: this.pricing.values,
+      factor: this.pricing.factor,
     };
   }
 
@@ -65,9 +69,10 @@ export class SelectTrade extends BasePlayerInput<Trade> {
     if (input.getAmount > this.maxGet) {
       throw new InputError('Amount to get too high (max ' + String(this.maxGet) + ')');
     }
-    if (this.rate !== undefined) {
-      const units = input.giveAmount / this.rate.give;
-      if (!Number.isInteger(units) || input.getAmount !== units * this.rate.get) {
+    const rate = tradeRate(this.pricing, input.give, input.get);
+    if (rate !== undefined) {
+      const units = input.giveAmount / rate.give;
+      if (!Number.isInteger(units) || input.getAmount !== units * rate.get) {
         throw new InputError('Amounts do not match the exchange rate');
       }
     }

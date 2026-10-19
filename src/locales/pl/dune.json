@@ -287,5 +287,8 @@
   "You give": "Dajesz",
   "You offer": "Oferujesz",
   "You want in return": "Chcesz w zamian",
-  "CHOAM offer": "Oferta CHOAM"
+  "CHOAM offer": "Oferta CHOAM",
+  "Smuggling: black market (double worth)": "Przemyt: czarny rynek (podwójna wartość)",
+  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.": "Przerzut przyprawy: do 5 przyprawy po 5 solarów za sztukę. Czarny rynek: za podwójną wartość (6 solarów za 1 przyprawę). Każde podnosi podejrzenie o 1; łapówka (10 solarów, właściciel Targu przemytników 7) je obniża. Koniec pokolenia: od 3 traci się Wpływ.",
+  "Not your turn, or nothing worth trading": "Nie twoja tura lub nie masz nic do wymiany"
 }

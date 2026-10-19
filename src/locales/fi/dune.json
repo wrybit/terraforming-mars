@@ -287,5 +287,8 @@
   "You give": "Annat",
   "You offer": "Tarjoat",
   "You want in return": "Haluat vastineeksi",
-  "CHOAM offer": "CHOAM-tarjous"
+  "CHOAM offer": "CHOAM-tarjous",
+  "Smuggling: black market (double worth)": "Salakuljetus: musta pörssi (kaksinkertainen arvo)",
+  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.": "Kuljeta maustetta: enintään 5 maustetta 5 solarilla kappale. Musta pörssi: kaksinkertaisella arvolla (6 solaria yhdestä mausteesta). Kumpikin nostaa epäilyä 1:llä; lahjus (10 solaria, salakuljettajien torin omistajalle 7) laskee sitä. Sukupolven lopussa: 3:sta alkaen menetetään arvovaltaa.",
+  "Not your turn, or nothing worth trading": "Ei sinun vuorosi, tai ei mitään vaihdettavaa"
 }

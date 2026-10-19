@@ -137,9 +137,14 @@ export type SelectTradeModel = BaseInputModel & {
   type: 'trade';
   give: ReadonlyArray<TradeGiveOption>;
   get: ReadonlyArray<Resource>;
-  /** Most the player may ask for (without a rate) */
+  /** Most the player may ask for */
   maxGet: number;
+  /** Fixed rate for every pair (common/inputs/tradeRate.ts) */
   rate?: TradeRate;
+  /** Worth of one unit per resource: the rate follows from the pair (common/inputs/tradeRate.ts) */
+  values?: Partial<Record<Resource, number>>;
+  /** With values: the given side is worth this many times the received one */
+  factor?: number;
 }
 
 export type DeltaProjectInputModel = BaseInputModel & {

@@ -6,6 +6,8 @@ import {ALL_RESOURCES, Resource} from '../../common/Resource';
 import {TileType} from '../../common/TileType';
 import {SelectOption} from '../inputs/SelectOption';
 import {SelectTrade} from '../inputs/SelectTrade';
+import {tradeRate} from '../../common/inputs/tradeRate';
+import {BAZAAR_GOOD_VALUE} from '../../common/dune/bazaarWares';
 import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
 import {MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '../../common/dune/DuneModel';
@@ -14,7 +16,7 @@ import {CardName} from '../../common/cards/CardName';
 // Module E – Smuggling & suspicion (claude/dune-erweiterung-konzept.md). Trading past the Empire pays more, but every
 // deal makes you more suspicious, and high suspicion costs TR (Landsraad influence). All actions any number of times:
 // - Move spice: up to 5 titanium, 5 M€ each instead of its worth of 3. Suspicion +1.
-// - Black market: any 2 resources for 1 of another kind, any amount in one action. Suspicion +1.
+// - Black market: any resource for another at double its worth (value table), any amount in one action. Suspicion +1.
 // - Bribe: 10 M€ (owner of the Smugglers' market tile – Industrial Center – 7), suspicion −1.
 // Checked only at the end of the generation: level 3 −1 TR, 4 −2, 5 −3. The marker stays; level 5 blocks smuggling.
 
@@ -27,8 +29,19 @@ export const SPICE_PRICE = 5;
 export const MAX_SPICE_PER_DEAL = 5;
 export const BRIBE_COST = 10;
 export const BRIBE_COST_WITH_MARKET = 7;
-/** Black market: this many of one resource for 1 of another */
-export const BLACK_MARKET_RATE = 2;
+/** Black market: what is given is worth this many times what is received */
+export const BLACK_MARKET_FACTOR = 2;
+/** No upper limit on what the black market pays out (the stock limits it) */
+const NO_LIMIT = 9999;
+/** Worth of one unit on the black market: the value table of the Dune expansion (M€ 1, steel 2, titanium 3 …) */
+export const BLACK_MARKET_VALUES: Record<Resource, number> = {
+  megacredits: 1,
+  steel: BAZAAR_GOOD_VALUE.steel,
+  titanium: BAZAAR_GOOD_VALUE.titanium,
+  plants: BAZAAR_GOOD_VALUE.plants,
+  energy: BAZAAR_GOOD_VALUE.energy,
+  heat: BAZAAR_GOOD_VALUE.heat,
+};
 
 export function initializeSmuggling(): SmugglingData {
   return {suspicion: {}};
@@ -87,7 +100,7 @@ function moveSpiceInput(player: IPlayer, data: SmugglingData): SelectTrade | und
     return undefined;
   }
   return new SelectTrade(SMUGGLE_SPICE_TITLE, 'Smuggle', [{resource: Resource.TITANIUM, max: most}], [Resource.MEGACREDITS],
-    most * SPICE_PRICE, {give: 1, get: SPICE_PRICE})
+    most * SPICE_PRICE, {rate: {give: 1, get: SPICE_PRICE}})
     .andThen((trade) => {
       player.stock.deduct(Resource.TITANIUM, trade.giveAmount, {log: true});
       player.stock.add(Resource.MEGACREDITS, trade.getAmount, {log: true});
@@ -97,19 +110,25 @@ function moveSpiceInput(player: IPlayer, data: SmugglingData): SelectTrade | und
     });
 }
 
-/** Black market: 2 of one resource for 1 of another, any number of times in one go, as a trade (its own action tab) */
+/**
+ * Black market: any resource for another at double its worth (value table of the Dune expansion: 6 M€ for 1 spice,
+ * 2 spice for 3 M€ – Jens, 19 Oct 2026), any number of times in one go, as a trade (its own action tab)
+ */
 function blackMarketInput(player: IPlayer, data: SmugglingData): SelectTrade | undefined {
   if (suspicionOf(data, player) >= MAX_SUSPICION) {
     return undefined;
   }
+  const pricing = {values: BLACK_MARKET_VALUES, factor: BLACK_MARKET_FACTOR};
+  // Only what pays for at least one unit of some other resource
   const give = ALL_RESOURCES
-    .filter((resource) => player.stock.get(resource) >= BLACK_MARKET_RATE)
+    .filter((resource) => ALL_RESOURCES.some((get) => get !== resource &&
+      player.stock.get(resource) >= (tradeRate(pricing, resource, get)?.give ?? Infinity)))
     .map((resource) => ({resource, max: player.stock.get(resource)}));
   if (give.length === 0) {
     return undefined;
   }
-  const mostUnits = Math.max(...give.map((option) => Math.floor(option.max / BLACK_MARKET_RATE)));
-  return new SelectTrade(BLACK_MARKET_TITLE, 'Trade', give, ALL_RESOURCES, mostUnits, {give: BLACK_MARKET_RATE, get: 1})
+  // Only the stock and the rate of each pair limit the amounts, not the received side
+  return new SelectTrade(BLACK_MARKET_TITLE, 'Trade', give, ALL_RESOURCES, NO_LIMIT, pricing)
     .andThen((trade) => {
       player.stock.deduct(trade.give, trade.giveAmount, {log: true});
       player.stock.add(trade.get, trade.getAmount, {log: true});

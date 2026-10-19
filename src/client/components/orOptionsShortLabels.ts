@@ -26,7 +26,7 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   // Dune expansion: moves with their own tab (common/dune/duneActionTitles.ts)
   'CHOAM: make an offer': 'CHOAM offer',
   'Smuggling: move spice': 'Move spice',
-  'Smuggling: black market (2 for 1)': 'Black market',
+  'Smuggling: black market (double worth)': 'Black market',
   'Undo last action': 'Undo',
   // Initial selection (SelectInitialCards, titles from common/inputs/SelectInitialCards.ts)
   'Select corporation': 'Corporation',
@@ -88,7 +88,7 @@ const EXPANSION_TAB_TONES: Readonly<Record<string, OptionTone>> = {
   'Send a delegate in an area (from lobby)': 'colonies',
   'CHOAM: make an offer': 'dune',
   'Smuggling: move spice': 'dune',
-  'Smuggling: black market (2 for 1)': 'dune',
+  'Smuggling: black market (double worth)': 'dune',
 };
 
 // Custom button texts for individual options in the action menu (server delivers e.g. only "Pass");

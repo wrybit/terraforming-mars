@@ -289,5 +289,8 @@
   "You give": "渡すもの",
   "You offer": "差し出すもの",
   "You want in return": "見返りに欲しいもの",
-  "CHOAM offer": "CHOAM取引"
+  "CHOAM offer": "CHOAM取引",
+  "Smuggling: black market (double worth)": "密輸：闇市場（2倍の価値）",
+  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.": "スパイス輸送：スパイス最大5を1つにつき5ソラリで。闇市場：2倍の価値で（スパイス1つに6ソラリ）。いずれも疑惑が1上がり、賄賂（10ソラリ、密輸業者の市場の所有者は7）で下げられます。世代の終わり：3以上で影響力を失います。",
+  "Not your turn, or nothing worth trading": "あなたの手番ではないか、交換できるものがありません"
 }

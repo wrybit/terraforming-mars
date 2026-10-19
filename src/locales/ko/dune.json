@@ -289,5 +289,8 @@
   "You give": "내주는 것",
   "You offer": "제안하는 것",
   "You want in return": "대가로 원하는 것",
-  "CHOAM offer": "CHOAM 제안"
+  "CHOAM offer": "CHOAM 제안",
+  "Smuggling: black market (double worth)": "밀수: 암시장 (두 배 가치)",
+  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.": "스파이스 운송: 스파이스 최대 5개를 개당 5 솔라리에. 암시장: 두 배 가치로 (스파이스 1개에 6 솔라리). 매번 의심이 1 오르며, 뇌물(10 솔라리, 밀수꾼 시장 소유자는 7)로 낮출 수 있습니다. 세대 종료: 3 이상이면 영향력을 잃습니다.",
+  "Not your turn, or nothing worth trading": "당신의 차례가 아니거나 교환할 것이 없습니다"
 }

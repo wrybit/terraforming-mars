@@ -24,5 +24,5 @@ export const CHOAM_OFFER_TITLE = 'CHOAM: make an offer';
 export const CHOAM_ACCEPT_TITLE = 'CHOAM: accept a contract';
 
 export const SMUGGLE_SPICE_TITLE = 'Smuggling: move spice';
-export const BLACK_MARKET_TITLE = 'Smuggling: black market (2 for 1)';
+export const BLACK_MARKET_TITLE = 'Smuggling: black market (double worth)';
 export const BRIBE_TITLE = 'Bribe the officials: ${0} M€, suspicion −1';

@@ -290,5 +290,8 @@
   "You give": "Даваш",
   "You offer": "Предлагаш",
   "You want in return": "Искаш в замяна",
-  "CHOAM offer": "Оферта CHOAM"
+  "CHOAM offer": "Оферта CHOAM",
+  "Smuggling: black market (double worth)": "Контрабанда: черен пазар (двойна стойност)",
+  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.": "Пренасяне на подправка: до 5 подправка по 5 солари всяка. Черен пазар: на двойна стойност (6 солари за 1 подправка). Всяко действие вдига подозрението с 1; подкуп (10 солари, за притежателя на Пазара на контрабандистите 7) го сваля. Край на поколението: от 3 нагоре се губи влияние.",
+  "Not your turn, or nothing worth trading": "Не е твой ход или нямаш какво да размениш"
 }

@@ -120,6 +120,14 @@ describe('Dune modules B, D, E, F', () => {
       expect([player1.heat, player1.plants]).deep.eq([1, 4]);
     });
 
+    it('prices the black market by worth: 6 M€ for 1 spice, never 2', () => {
+      player1.megaCredits = 13;
+      const market = cast(option(tabActions(player1), 'Smuggling: black market'), SelectTrade);
+      expect(() => market.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 2, get: Resource.TITANIUM, getAmount: 1})).to.throw();
+      market.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 12, get: Resource.TITANIUM, getAmount: 2});
+      expect([player1.megaCredits, player1.titanium]).deep.eq([1, 2]);
+    });
+
     it('costs TR from suspicion 3 at the end of the generation; bribing lowers it', () => {
       expect([0, 1, 2, 3, 4, 5].map(suspicionPenalty)).deep.eq([0, 0, 0, 1, 2, 3]);
       const smuggling = game.duneData!.smuggling!;

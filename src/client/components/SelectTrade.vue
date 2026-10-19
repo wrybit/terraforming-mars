@@ -25,9 +25,9 @@
       <section class="trade-select__side" data-test="trade-get">
         <h4 class="trade-select__label">{{ $t(hasRate ? 'You get' : 'You want in return') }}</h4>
         <div class="trade-select__resources">
-          <button v-for="resource in playerinput.get" :key="resource" type="button" :disabled="resource === give"
+          <button v-for="resource in playerinput.get" :key="resource" type="button" :disabled="!receivable(give, resource)"
             :class="['trade-select__resource', {'trade-select__resource--selected': resource === get}]"
-            :title="$t(resourceName(resource))" @click="get = resource">
+            :title="$t(resourceName(resource))" @click="chooseGet(resource)">
             <i :class="'resource_icon resource_icon--' + resource"></i>
             <span class="trade-select__stock">{{ stockOf(resource) }}</span>
           </button>
@@ -61,9 +61,10 @@ import AmountConverter from '@/client/components/amount/AmountConverter.vue';
 import AmountSlider from '@/client/components/amount/AmountSlider.vue';
 import {AmountConversion} from '@/client/components/amount/amountConversion';
 import {resourceSnapshot} from '@/client/components/selectPlayerResource';
-import {SelectTradeModel, TradeGiveOption} from '@/common/models/PlayerInputModel';
+import {SelectTradeModel, TradeGiveOption, TradeRate} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {SelectTradeResponse} from '@/common/inputs/InputResponse';
+import {isPricedTrade, tradeRate} from '@/common/inputs/tradeRate';
 import {Resource} from '@/common/Resource';
 
 // Names of the resources (translated; the Dune theme swaps them for its own words)
@@ -105,10 +106,14 @@ export default defineComponent({
     },
   },
   data() {
-    // Start with the largest stock to give and the first other resource to get
-    const options = this.playerinput.give;
+    // Start with the largest stock that buys something, and the first resource it buys
+    const input = this.playerinput;
+    const buys = (give: TradeGiveOption, get: Resource) => get !== give.resource &&
+      (tradeRate(input, give.resource, get)?.give ?? 1) <= give.max;
+    const usable = input.give.filter((option) => input.get.some((get) => buys(option, get)));
+    const options = usable.length > 0 ? usable : input.give;
     const largest = options.reduce((best, option) => option.max > best.max ? option : best, options[0]);
-    const get = this.playerinput.get.find((resource) => resource !== largest.resource) ?? this.playerinput.get[0];
+    const get = input.get.find((resource) => buys(largest, resource)) ?? input.get[0];
     return {
       give: largest.resource,
       get,
@@ -120,8 +125,13 @@ export default defineComponent({
     };
   },
   computed: {
+    // Priced trade (fixed rate or worth per resource): one slider for both sides
     hasRate(): boolean {
-      return this.playerinput.rate !== undefined;
+      return isPricedTrade(this.playerinput);
+    },
+    // Rate of the chosen pair (black market: from the worth of both resources)
+    pairRate(): TradeRate | undefined {
+      return tradeRate(this.playerinput, this.give, this.get);
     },
     giveOption(): TradeGiveOption {
       return this.playerinput.give.find((option) => option.resource === this.give) ?? this.playerinput.give[0];
@@ -130,14 +140,14 @@ export default defineComponent({
       return this.giveOption.max;
     },
     maxUnits(): number {
-      const rate = this.playerinput.rate;
+      const rate = this.pairRate;
       if (rate === undefined) {
         return 1;
       }
       return Math.max(1, Math.min(Math.floor(this.giveMax / rate.give), Math.floor(this.playerinput.maxGet / rate.get)));
     },
     conversion(): AmountConversion | undefined {
-      const rate = this.playerinput.rate;
+      const rate = this.pairRate;
       if (rate === undefined) {
         return undefined;
       }
@@ -147,11 +157,11 @@ export default defineComponent({
       };
     },
     finalGive(): number {
-      const rate = this.playerinput.rate;
+      const rate = this.pairRate;
       return rate === undefined ? this.giveAmount : this.units * rate.give;
     },
     finalGet(): number {
-      const rate = this.playerinput.rate;
+      const rate = this.pairRate;
       return rate === undefined ? this.getAmount : this.units * rate.get;
     },
   },
@@ -159,17 +169,34 @@ export default defineComponent({
     resourceName(resource: Resource): string {
       return RESOURCE_NAMES[resource];
     },
+    // Can `give` buy at least one unit of `get`? Never the same resource; a priced trade needs enough for its rate
+    receivable(give: Resource, get: Resource): boolean {
+      if (get === give) {
+        return false;
+      }
+      const option = this.playerinput.give.find((candidate) => candidate.resource === give);
+      const rate = tradeRate(this.playerinput, give, get);
+      return option !== undefined && (rate === undefined || rate.give <= option.max);
+    },
     stockOf(resource: Resource): number {
       return resourceSnapshot(this.playerView.thisPlayer, resource).stock;
     },
     // A new resource to give: the other side must differ, the amounts stay within the new limits
     chooseGive(resource: Resource): void {
       this.give = resource;
-      if (this.get === resource) {
-        this.get = this.playerinput.get.find((other) => other !== resource) ?? this.get;
+      if (!this.receivable(resource, this.get)) {
+        this.get = this.playerinput.get.find((other) => this.receivable(resource, other)) ?? this.get;
       }
+      this.clampAmounts();
+    },
+    chooseGet(resource: Resource): void {
+      this.get = resource;
+      this.clampAmounts();
+    },
+    // A new pair has a new rate and limit: keep the amounts inside it
+    clampAmounts(): void {
       this.giveAmount = Math.min(this.giveAmount, this.giveMax);
-      this.units = Math.min(this.units, this.maxUnits);
+      this.units = Math.max(1, Math.min(this.units, this.maxUnits));
     },
     saveData(): void {
       this.onsave({type: 'trade', give: this.give, giveAmount: this.finalGive, get: this.get, getAmount: this.finalGet});

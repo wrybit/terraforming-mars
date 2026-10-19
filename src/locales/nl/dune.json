@@ -281,5 +281,8 @@
   "You give": "Je geeft",
   "You offer": "Je biedt",
   "You want in return": "Je wilt ervoor",
-  "CHOAM offer": "CHOAM-aanbod"
+  "CHOAM offer": "CHOAM-aanbod",
+  "Smuggling: black market (double worth)": "Smokkel: zwarte markt (dubbele waarde)",
+  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.": "Spice verplaatsen: tot 5 Spice voor elk 5 Solari. Zwarte markt: voor dubbele waarde (6 Solari voor 1 Spice). Elk verhoogt de verdenking met 1; een omkoping (10 Solari, eigenaar van de Smokkelaarsmarkt 7) verlaagt die. Einde van de generatie: vanaf 3 gaat invloed verloren.",
+  "Not your turn, or nothing worth trading": "Niet jouw beurt, of niets om te ruilen"
 }

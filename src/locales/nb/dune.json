@@ -285,5 +285,8 @@
   "You give": "Du gir",
   "You offer": "Du tilbyr",
   "You want in return": "Du vil ha i bytte",
-  "CHOAM offer": "CHOAM-tilbud"
+  "CHOAM offer": "CHOAM-tilbud",
+  "Smuggling: black market (double worth)": "Smugling: svartebørs (dobbel verdi)",
+  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.": "Flytt krydder: opptil 5 krydder for 5 solari hver. Svartebørs: til dobbel verdi (6 solari for 1 krydder). Hver øker mistanken med 1; en bestikkelse (10 solari, eieren av Smuglermarkedet 7) senker den. Slutten av generasjonen: fra 3 og oppover tapes innflytelse.",
+  "Not your turn, or nothing worth trading": "Ikke din tur, eller ingenting å bytte"
 }

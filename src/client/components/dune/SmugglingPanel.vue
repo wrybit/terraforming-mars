@@ -10,7 +10,7 @@
         </span>
       </li>
     </ol>
-    <p class="dune-board__hint">{{ $t('Move spice: up to 5 titanium for 5 M€ each. Black market: 2 for 1. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.') }}</p>
+    <p class="dune-board__hint">{{ $t('Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.') }}</p>
   </div>
 </template>
 
