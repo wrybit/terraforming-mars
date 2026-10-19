@@ -88,7 +88,13 @@ export class GameCards {
     return cards.filter(isIProjectCard);
   }
   public getStandardProjects() {
-    return this.getCards<IStandardProjectCard>('standardProjects');
+    const cards = this.getCards<IStandardProjectCard>('standardProjects');
+    // Dune expansion: standard projects of its modules in play (common/dune/DuneModule.ts)
+    const duneModules = this.gameOptions.duneModules ?? [];
+    if (duneModules.length > 0) {
+      cards.push(...this.instantiate(DUNE_CARD_MANIFEST.standardProjects).filter((card) => duneCardInPlay(card.name, duneModules)));
+    }
+    return cards;
   }
   public getCorporationCards(): Array<ICorporationCard> {
     return this.getCustomCards<ICorporationCard>(this.gameOptions.customCorporationsList) ??

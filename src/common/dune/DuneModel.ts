@@ -12,8 +12,10 @@ export type BazaarSlotModel = {
 
 export type BazaarModel = {
   slots: ReadonlyArray<BazaarSlotModel>,
-  /** Players still to buy in this bazaar phase, in buying order */
+  /** Players still to buy in a bazaar phase of the former rules (only games saved back then) */
   buyers: ReadonlyArray<Color>,
+  /** Players who bought a ware this generation (buying is an action, at most once per generation) */
+  bought: ReadonlyArray<Color>,
   deckSize: number,
 };
 

@@ -218,6 +218,7 @@ import {choiceBlockStyle} from '@/client/components/choiceBlock';
 import {CardModel} from '@/common/models/CardModel';
 import {SelectCardModel} from '@/common/models/PlayerInputModel';
 import {Message} from '@/common/logs/Message';
+import {duneActionRequest, requestedOptionIndex} from '@/client/components/dune/duneActions';
 import CeoActionSection from '@/client/components/CeoActionSection.vue';
 import CardListSection from '@/client/components/CardListSection.vue';
 import {ACTION_CARDS_TITLE, ceoCardState, isActionCardsOption, isCeoActionOption, ownCeoCards} from '@/client/utils/ceoActions';
@@ -322,6 +323,10 @@ export default defineComponent({
     };
   },
   computed: {
+    // Dune modules: time of the last request of a module tab (dune/duneActions.ts)
+    duneRequestAt(): number {
+      return duneActionRequest.at;
+    },
     // Computed so a learner mode change shows or hides options without a page refresh
     originalIndices(): Array<number> {
       return displayedOptionIndices(this.playerinput);
@@ -452,7 +457,13 @@ export default defineComponent({
       return this.inActionsGroup && this.selectedIdx === this.ceoIdx && this.selectedCeo === undefined;
     },
   },
+  mounted() {
+    this.applyDuneRequest();
+  },
   watch: {
+    duneRequestAt() {
+      this.applyDuneRequest();
+    },
     displayedOptions(newOptions: Array<PlayerInputModel>) {
       // Learner mode can hide the selected option.
       if (!newOptions.includes(this.selectedOption)) {
@@ -507,6 +518,20 @@ export default defineComponent({
     selectPlayerTile(option: PlayerInputModel, color: ColorWithNeutral) {
       this.selectedOption = option;
       this.selectedPlayer = color;
+    },
+    // Dune modules: a module tab asked for an option of this menu (dune/duneActions.ts); select it and show it
+    applyDuneRequest() {
+      const index = requestedOptionIndex(this.displayedOptions);
+      if (index === -1) {
+        return;
+      }
+      const option = this.displayedOptions[index];
+      if (this.asTabs) {
+        this.selectOptionTab(option);
+      } else {
+        this.selectedOption = option;
+      }
+      this.$nextTick(() => (this.$el as HTMLElement | undefined)?.scrollIntoView?.({block: 'nearest', behavior: 'smooth'}));
     },
     selectOptionTab(option: PlayerInputModel) {
       this.handTabActive = false;

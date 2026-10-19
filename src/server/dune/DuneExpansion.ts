@@ -1,4 +1,5 @@
 import {IGame} from '../IGame';
+import {DUNE_ACTIONS_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
 import {PlayerInput} from '../PlayerInput';
 import {OrOptions} from '../inputs/OrOptions';
@@ -7,7 +8,7 @@ import {DuneModule} from '../../common/dune/DuneModule';
 import {DuneModel} from '../../common/dune/DuneModel';
 import {ArrakisBoard} from '../boards/ArrakisBoard';
 import {VictoryPointsBreakdownBuilder} from '../game/VictoryPointsBreakdownBuilder';
-import {BazaarData, bazaarModel, buyInput, buyingOrder, initializeBazaar, slideAndRefill} from './Bazaar';
+import {BazaarData, bazaarModel, buyAction, buyInput, initializeBazaar, slideAndRefill} from './Bazaar';
 import {WORM_START, WormData, distanceInput, rollWorm, wormChooser, wormModel} from './Worm';
 import {levyInput} from './WormLevy';
 import {KanlyData, initializeKanly, kanlyActions, kanlyModel, resolveBattle} from './Kanly';
@@ -134,21 +135,17 @@ export class DuneExpansion {
     }
   }
 
-  /** Between research and the first action of a generation: the bazaar phase. `then` starts the action phase. */
+  /** Between research and the first action of a generation: the bazaar lays out new wares. `then` starts the action phase. */
   public static beforeActionPhase(game: IGame, then: () => void): void {
     const bazaar = game.duneData?.bazaar;
-    if (bazaar === undefined) {
-      then();
-      return;
+    if (bazaar !== undefined) {
+      slideAndRefill(bazaar, game.players.length, game.rng);
+      bazaar.bought = [];
+      if (bazaar.slots.some((ware) => ware !== null)) {
+        game.log('The bazaar of Arrakeen opens');
+      }
     }
-    slideAndRefill(bazaar, game.players.length, game.rng);
-    if (bazaar.slots.every((ware) => ware === null)) {
-      then();
-      return;
-    }
-    game.log('The bazaar of Arrakeen opens');
-    bazaar.buyers = buyingOrder(game).map((player) => player.id);
-    DuneExpansion.nextBuyer(game, bazaar, then);
+    then();
   }
 
   /** After production: the end-of-generation steps of the modules, one after another. Then `then`. */
@@ -224,7 +221,9 @@ export class DuneExpansion {
     if (data === undefined) {
       return undefined;
     }
+    const bazaarBuy = data.bazaar === undefined ? undefined : buyAction(player, data.bazaar);
     const options: Array<PlayerInput> = [
+      ...(bazaarBuy === undefined ? [] : [bazaarBuy]),
       ...(data.kanly === undefined ? [] : kanlyActions(player, data.kanly)),
       ...(data.smuggling === undefined ? [] : smugglingActions(player, data.smuggling)),
       ...(data.choam === undefined ? [] : choamActions(player, data.choam)),
@@ -232,7 +231,7 @@ export class DuneExpansion {
     if (options.length === 0) {
       return undefined;
     }
-    return new OrOptions(...options).setTitle('Dune expansion actions');
+    return new OrOptions(...options).setTitle(DUNE_ACTIONS_TITLE);
   }
 
   /** Victory points of the modules (House schemes) */

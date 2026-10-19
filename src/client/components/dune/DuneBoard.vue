@@ -25,6 +25,8 @@
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('special-smugglers-market')" alt="">{{ $t('Smuggling & suspicion') }}</h3>
       <SmugglingPanel :smuggling="dune.smuggling" :players="players"/>
     </section>
+    <!-- The moves of this module open in the action menu (duneTabActions.ts) -->
+    <DuneActionButtons :actions="tabActions"/>
   </div>
 </template>
 
@@ -41,10 +43,12 @@ import SchemesPanel from './SchemesPanel.vue';
 import ChoamPanel from './ChoamPanel.vue';
 import SmugglingPanel from './SmugglingPanel.vue';
 import {duneGraphic} from './duneGraphic';
+import DuneActionButtons from './DuneActionButtons.vue';
+import {DUNE_TAB_ACTIONS, DuneTabAction} from './duneTabActions';
 
 export default defineComponent({
   name: 'DuneBoard',
-  components: {BazaarBoard, WormPanel, KanlyPanel, SchemesPanel, ChoamPanel, SmugglingPanel},
+  components: {BazaarBoard, WormPanel, KanlyPanel, SchemesPanel, ChoamPanel, SmugglingPanel, DuneActionButtons},
   props: {
     dune: {
       type: Object as PropType<DuneModel>,
@@ -61,6 +65,11 @@ export default defineComponent({
     viewerColor: {
       type: String as PropType<Color | undefined>,
       default: undefined,
+    },
+  },
+  computed: {
+    tabActions(): ReadonlyArray<DuneTabAction> {
+      return DUNE_TAB_ACTIONS[this.tab];
     },
   },
   methods: {

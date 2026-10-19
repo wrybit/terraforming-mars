@@ -1,4 +1,5 @@
 import {IPlayer} from '../IPlayer';
+import {LEVY_TITLE} from '../../common/dune/duneActionTitles';
 import {PlayerId} from '../../common/Types';
 import {Resource} from '../../common/Resource';
 import {OrOptions} from '../inputs/OrOptions';
@@ -14,7 +15,7 @@ import {RESOURCE_LABEL} from './resourceLabels';
 export const LEVY_UNITS = 3;
 export const LEVY_FALLBACK_WORTH = 4;
 
-export const LEVY_TITLE = 'Shai-Hulud: pay resources worth ${0}';
+export {LEVY_TITLE};
 
 /** A levy the player still has to pay with other resources, worth `owed` */
 export type PendingLevy = {

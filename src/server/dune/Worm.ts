@@ -1,4 +1,5 @@
 import {IGame} from '../IGame';
+import {WORM_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
 import {Space} from '../boards/Space';
 import {Board} from '../boards/Board';
@@ -41,7 +42,7 @@ export type WormData = {
 /** Start in the deep desert south of the polar sink: G3 (G4, as wished, lies behind the worm border like E5). */
 export const WORM_START: SpaceId = '48' as SpaceId;
 
-export const WORM_TITLE = 'Shai-Hulud: how far does the worm move?';
+export {WORM_TITLE};
 
 /** Clockwise index of getAdjacentSpacesClockwise (0 top left … 5 left) for a die roll (1 top right … 6 top left) */
 export function directionIndex(roll: number): number {

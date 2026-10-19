@@ -1,4 +1,5 @@
 import {IGame} from '../IGame';
+import {BAZAAR_ACTION_TITLE, BAZAAR_WARE_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
 import {PlayerId} from '../../common/Types';
 import {Resource} from '../../common/Resource';
@@ -16,8 +17,9 @@ import {
 
 // Module A – Bazaar of Arrakeen (claude/dune-erweiterung-konzept.md). Each generation, right after research:
 // 1. the wares slide one slot to the right (cheaper); a ware pushed out on the right is discarded,
-// 2. new wares are laid out from the left until there are one fewer than players,
-// 3. bazaar phase: the player with the least influence (TR) buys first, each buys at most 1 ware or passes.
+// 2. new wares are laid out from the left until there are one fewer than players.
+// During the action phase, buying a ware is an action (Jens, 19 Oct 2026: tap the ware in the bazaar tab); each
+// player buys at most 1 ware per generation. The owner of the bazaar tile pays less.
 // A bought ware pays out at once and goes to the discard pile; nothing is kept for later.
 
 export type BazaarData = {
@@ -25,20 +27,23 @@ export type BazaarData = {
   discard: Array<string>,
   /** Ware names from left (newest, dearest) to right (oldest, cheapest); null = empty */
   slots: Array<string | null>,
-  /** Players still to buy in the running bazaar phase; empty outside it */
+  /** Players still to buy in a bazaar phase of the former rules; only games saved back then have any */
   buyers: Array<PlayerId>,
+  /** Players who bought a ware this generation (missing in games saved before buying became an action) */
+  bought?: Array<PlayerId>,
 };
 
-/** Title of the choice; the AI recognises the bazaar by it (ai/duneChoices.ts) */
+/** Title of the choice of the former bazaar phase; the AI recognises it by this (ai/duneChoices.ts) */
 export const BAZAAR_TITLE = 'Bazaar of Arrakeen: buy one ware';
+export {BAZAAR_ACTION_TITLE};
 
 export function initializeBazaar(rng: Random): BazaarData {
   const deck = BAZAAR_WARES.map((ware) => ware.name);
   inplaceShuffle(deck, rng);
-  return {deck, discard: [], slots: BAZAAR_SLOT_PRICE_CHANGE.map(() => null), buyers: []};
+  return {deck, discard: [], slots: BAZAAR_SLOT_PRICE_CHANGE.map(() => null), buyers: [], bought: []};
 }
 
-/** The owner of the Bazaar special tile (Commercial District) buys first and pays less */
+/** The owner of the Bazaar special tile (Commercial District) pays less */
 export function ownsBazaarTile(player: IPlayer): boolean {
   return player.game.board.spaces.some((space) => space.tile?.tileType === TileType.COMMERCIAL_DISTRICT && space.player?.id === player.id);
 }
@@ -65,14 +70,6 @@ export function slideAndRefill(data: BazaarData, playerCount: number, rng: Rando
       data.slots[slot] = drawWare(data, rng) ?? null;
     }
   }
-}
-
-/** Buying order: the tile owner first, then the least influence first; ties in turn order */
-export function buyingOrder(game: IGame): Array<IPlayer> {
-  return [...game.playersInGenerationOrder].sort((a, b) => {
-    const tile = Number(ownsBazaarTile(b)) - Number(ownsBazaarTile(a));
-    return tile !== 0 ? tile : a.terraformRating - b.terraformRating;
-  });
 }
 
 const GOOD_RESOURCE: Partial<Record<BazaarGood, Resource>> = {
@@ -131,24 +128,31 @@ export function buyWare(player: IPlayer, data: BazaarData, slot: number): void {
   player.stock.deduct(Resource.MEGACREDITS, price);
   data.slots[slot] = null;
   data.discard.push(name);
+  data.bought = [...(data.bought ?? []), player.id];
   player.game.log('${0} bought ${1} at the bazaar for ${2} M€', (b) => b.player(player).string(name).number(price));
   payOut(player, name);
 }
 
-/** The choice for one buyer; undefined when no ware lies out or none is affordable */
-export function buyInput(player: IPlayer, data: BazaarData): OrOptions | undefined {
+/** One option per ware the player can afford */
+function wareOptions(player: IPlayer, data: BazaarData): Array<SelectOption> {
   const options: Array<SelectOption> = [];
   data.slots.forEach((name, slot) => {
     const price = priceFor(player, data, slot);
     if (name === null || price === undefined || price > player.megaCredits) {
       return;
     }
-    options.push(new SelectOption(message('${0} for ${1} M€', (b) => b.string(name).number(price)), 'Buy')
+    options.push(new SelectOption(message(BAZAAR_WARE_TITLE, (b) => b.string(name).number(price)), 'Buy')
       .andThen(() => {
         buyWare(player, data, slot);
         return undefined;
       }));
   });
+  return options;
+}
+
+/** The choice of the former bazaar phase (games saved back then); undefined when nothing is affordable */
+export function buyInput(player: IPlayer, data: BazaarData): OrOptions | undefined {
+  const options = wareOptions(player, data);
   if (options.length === 0) {
     return undefined;
   }
@@ -159,6 +163,15 @@ export function buyInput(player: IPlayer, data: BazaarData): OrOptions | undefin
   return new OrOptions(...options).setTitle(BAZAAR_TITLE);
 }
 
+/** The bazaar action of the action menu; undefined when the player already bought this generation or cannot pay */
+export function buyAction(player: IPlayer, data: BazaarData): OrOptions | undefined {
+  if ((data.bought ?? []).includes(player.id)) {
+    return undefined;
+  }
+  const options = wareOptions(player, data);
+  return options.length === 0 ? undefined : new OrOptions(...options).setTitle(BAZAAR_ACTION_TITLE);
+}
+
 export function bazaarModel(game: IGame, data: BazaarData): BazaarModel {
   return {
     slots: data.slots.map((name, slot) => ({
@@ -166,6 +179,7 @@ export function bazaarModel(game: IGame, data: BazaarData): BazaarModel {
       price: name === null ? 0 : bazaarPrice(bazaarWare(name), slot),
     })),
     buyers: data.buyers.map((id) => game.getPlayerById(id).color),
+    bought: (data.bought ?? []).map((id) => game.getPlayerById(id).color),
     deckSize: data.deck.length,
   };
 }

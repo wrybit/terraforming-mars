@@ -1,4 +1,5 @@
 import {IGame} from '../IGame';
+import {SCHEMES_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
 import {Board} from '../boards/Board';
 import {Space} from '../boards/Space';
@@ -32,7 +33,7 @@ export type SchemesData = {
   deck: Array<string>,
 };
 
-export const SCHEMES_TITLE = 'House schemes: which agenda do you keep?';
+export {SCHEMES_TITLE};
 
 export function initializeSchemes(players: ReadonlyArray<IPlayer>, rng: Random): SchemesData {
   const deck = SCHEME_AGENDAS.map((agenda) => agenda.name);

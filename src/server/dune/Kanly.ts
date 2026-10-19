@@ -1,4 +1,5 @@
 import {IGame} from '../IGame';
+import {JOIN_KANLY_TITLE, OPEN_KANLY_TITLE, RECRUIT_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
 import {Space} from '../boards/Space';
 import {Board} from '../boards/Board';
@@ -88,7 +89,7 @@ function recruitInput(player: IPlayer, data: KanlyData): OrOptions | undefined {
         }));
     }
   }
-  return options.length === 0 ? undefined : new OrOptions(...options).setTitle('Recruit Sardaukar');
+  return options.length === 0 ? undefined : new OrOptions(...options).setTitle(RECRUIT_TITLE);
 }
 
 /** Sardaukar Mercenaries card: Sardaukar straight into the garrison */
@@ -118,7 +119,7 @@ function openInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
   if (targets.length === 0) {
     return undefined;
   }
-  return new SelectSpace('Open Kanly: choose the war field', targets).andThen((space) => {
+  return new SelectSpace(OPEN_KANLY_TITLE, targets).andThen((space) => {
     data.battle = {spaceId: space.id, opener: player.id, troops: {}};
     data.foughtThisGeneration = true;
     if (player.game.board instanceof ArrakisBoard) {
@@ -143,7 +144,7 @@ function joinInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
   if (data.battle === undefined || garrison < 1) {
     return undefined;
   }
-  return new SelectAmount('Send Sardaukar to the war field', 'Send', 1, garrison, true).andThen((amount) => {
+  return new SelectAmount(JOIN_KANLY_TITLE, 'Send', 1, garrison, true).andThen((amount) => {
     sendTroops(player, data, amount);
     player.game.log('${0} sent ${1} Sardaukar to the war field', (b) => b.player(player).number(amount));
     return undefined;

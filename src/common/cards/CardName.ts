@@ -1099,4 +1099,5 @@ export enum CardName {
   SHIELD_GENERATOR = 'Shield Generator',
   WATER_OF_LIFE = 'Water of Life',
   STILLSUIT_FACTORY = 'Stillsuit Factory',
+  RECRUIT_SARDAUKAR_STANDARD_PROJECT = 'Recruit Sardaukar',
 }

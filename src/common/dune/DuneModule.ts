@@ -52,6 +52,7 @@ export const DUNE_CARD_MODULE: Readonly<Record<string, DuneModule | 'any'>> = {
   'Sardaukar Raid': 'smuggling',
   'Sardaukar Mercenaries': 'kanly',
   'Shield Generator': 'kanly',
+  'Recruit Sardaukar': 'kanly',
   'Water of Life': 'any',
   'Stillsuit Factory': 'any',
 };

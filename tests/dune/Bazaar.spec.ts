@@ -7,7 +7,8 @@ import {OrOptions} from '../../src/server/inputs/OrOptions';
 import {Phase} from '../../src/common/Phase';
 import {TileType} from '../../src/common/TileType';
 import {BoardName} from '../../src/common/boards/BoardName';
-import {BAZAAR_TITLE, BazaarData, buyingOrder, buyWare, slideAndRefill} from '../../src/server/dune/Bazaar';
+import {BAZAAR_ACTION_TITLE, BAZAAR_TITLE, BazaarData, buyWare, slideAndRefill} from '../../src/server/dune/Bazaar';
+import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
 import {BAZAAR_WARES, bazaarBasePrice, bazaarPrice, bazaarWare, bazaarWareCount} from '../../src/common/dune/bazaarWares';
 import {cast} from '../../src/common/utils/utils';
 import {doWait} from '../TestingUtils';
@@ -20,11 +21,13 @@ function bazaarOf(game: IGame): BazaarData {
   return bazaar;
 }
 
-function buy(player: TestPlayer, index: number) {
-  doWait(player, OrOptions, (options) => {
-    expect(options.title).eq(BAZAAR_TITLE);
-    options.process({type: 'or', index, response: {type: 'option'}}, player);
-  });
+/** The bazaar action inside the Dune actions of the action menu; undefined when it is not offered */
+function bazaarAction(player: TestPlayer): OrOptions | undefined {
+  const actions = DuneExpansion.actions(player);
+  if (actions === undefined) {
+    return undefined;
+  }
+  return cast(actions, OrOptions).options.find((option): option is OrOptions => option instanceof OrOptions && option.title === BAZAAR_ACTION_TITLE);
 }
 
 describe('Bazaar of Arrakeen (Dune module A)', () => {
@@ -83,14 +86,13 @@ describe('Bazaar of Arrakeen (Dune module A)', () => {
     expect(bazaar.discard).deep.eq(['Seed Bales']);
   });
 
-  it('lets the least influence buy first, the bazaar tile owner before everyone', () => {
-    player1.setTerraformRating(25);
-    player2.setTerraformRating(20);
-    player3.setTerraformRating(22);
-    expect(buyingOrder(game).map((player) => player.name)).deep.eq(['player2', 'player3', 'player1']);
+  it('makes the bazaar tile owner pay less', () => {
+    const bazaar = bazaarOf(game);
+    bazaar.slots = ['Bene Gesserit Dossier', null, null, null, null];
     const space = game.board.getAvailableSpacesOnLand(player1)[0];
     game.simpleAddTile(player1, space, {tileType: TileType.COMMERCIAL_DISTRICT});
-    expect(buyingOrder(game)[0]).eq(player1);
+    buyWare(player1, bazaar, 0);
+    expect(player1.megaCredits).eq(100 - bazaarPrice(bazaarWare('Bene Gesserit Dossier'), 0, true));
   });
 
   it('pays out a ware at once', () => {
@@ -108,47 +110,46 @@ describe('Bazaar of Arrakeen (Dune module A)', () => {
     expect(bazaar.discard).deep.eq(['Bene Gesserit Dossier', 'Water Rings']);
   });
 
-  it('runs between research and the action phase, one ware per player', () => {
-    player1.setTerraformRating(22);
-    player2.setTerraformRating(20);
-    player3.setTerraformRating(21);
+  it('lays out new wares after research and goes straight to the action phase', () => {
     for (const player of [player1, player2, player3]) {
       game.playerIsFinishedWithResearchPhase(player);
     }
     const bazaar = bazaarOf(game);
-    expect(bazaar.buyers).deep.eq([player2.id, player3.id, player1.id]);
-    expect(player1.getWaitingFor()).is.undefined;
-    const ware = bazaar.slots[0];
-    buy(player2, 0);
-    expect(bazaar.discard).deep.eq([ware]);
-    // "Buy nothing" is always the last choice
-    const choices = cast(player3.getWaitingFor(), OrOptions);
-    buy(player3, choices.options.length - 1);
-    buy(player1, 0);
+    expect(bazaar.slots.filter((ware) => ware !== null)).has.length(2);
     expect(bazaar.buyers).is.empty;
     expect(game.phase).eq(Phase.ACTION);
     expect(game.activePlayer).eq(game.first);
   });
 
-  it('skips a player who cannot afford any ware', () => {
-    player2.megaCredits = 0;
-    player2.setTerraformRating(10);
-    for (const player of [player1, player2, player3]) {
-      game.playerIsFinishedWithResearchPhase(player);
-    }
-    expect(player2.getWaitingFor()).is.undefined;
-    expect(bazaarOf(game).buyers[0]).not.eq(player2.id);
+  it('offers buying a ware as an action, once per generation', () => {
+    const bazaar = bazaarOf(game);
+    bazaar.slots = ['Bene Gesserit Dossier', 'Cistern of Tabr', null, null, null];
+    const action = bazaarAction(player1);
+    expect(action?.options).has.length(2);
+    action?.process({type: 'or', index: 1, response: {type: 'option'}}, player1);
+    expect(bazaar.slots).deep.eq(['Bene Gesserit Dossier', null, null, null, null]);
+    expect(bazaarAction(player1)).is.undefined;
+    expect(bazaarAction(player2)?.options).has.length(1);
+    // A new generation lifts the limit
+    DuneExpansion.beforeActionPhase(game, () => {});
+    expect(bazaarAction(player1)).is.not.undefined;
   });
 
-  it('continues the bazaar after a reload', () => {
+  it('offers no bazaar action without an affordable ware', () => {
+    bazaarOf(game).slots = ['Bene Gesserit Dossier', null, null, null, null];
+    player2.megaCredits = 0;
+    expect(bazaarAction(player2)).is.undefined;
+  });
+
+  it('continues a bazaar phase of the former rules after a reload', () => {
     // Generation 1 without corporations reloads into the corporation choice (test games skip it)
     game.generation = 2;
     for (const player of [player1, player2, player3]) {
       game.playerIsFinishedWithResearchPhase(player);
     }
-    const buyer = bazaarOf(game).buyers[0];
+    const bazaar = bazaarOf(game);
+    bazaar.buyers = [player2.id];
     const restored = Game.deserialize(JSON.parse(JSON.stringify(game.serialize())));
-    expect(restored.duneData?.bazaar?.buyers[0]).eq(buyer);
-    expect(cast(restored.getPlayerById(buyer).getWaitingFor(), OrOptions).title).eq(BAZAAR_TITLE);
+    expect(cast(restored.getPlayerById(player2.id).getWaitingFor(), OrOptions).title).eq(BAZAAR_TITLE);
   });
 });

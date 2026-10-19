@@ -153,6 +153,8 @@ import SetupTurnOrder from '@/client/components/SetupTurnOrder.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
 import WaitingFor from '@/client/components/WaitingFor.vue';
+import {duneActionRequest, requestedOptionIndex} from '@/client/components/dune/duneActions';
+import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 import MobileTurnSheet from '@/client/components/mobile/MobileTurnSheet.vue';
 import MobileCardZoom from '@/client/components/mobile/MobileCardZoom.vue';
 import MobileTurnButton from '@/client/components/mobile/MobileTurnButton.vue';
@@ -313,6 +315,10 @@ export default defineComponent({
     game(): GameModel {
       return this.playerView.game;
     },
+    // Dune modules: time of the last request of a module tab (dune/duneActions.ts)
+    duneRequestAt(): number {
+      return duneActionRequest.at;
+    },
     thisPlayer(): PublicPlayerModel {
       return this.playerView.thisPlayer;
     },
@@ -397,6 +403,24 @@ export default defineComponent({
   },
 
   watch: {
+    // Dune modules: a button in a module tab opens the matching action as a task (the menu selects it itself)
+    duneRequestAt(): void {
+      const input = this.playerView.waitingFor;
+      if (input === undefined) {
+        return;
+      }
+      if (!this.isActionMenu) {
+        this.sheetOpen = false;
+        this.go('turn');
+        return;
+      }
+      const menu = input as OrOptionsModel;
+      const displayed = displayedOptionIndices(menu).map((index) => menu.options[index]);
+      const index = requestedOptionIndex(displayed);
+      if (index !== -1) {
+        this.startTask(index);
+      }
+    },
     // Server update: the view stays mounted (upstream b669327). The turn starts fresh like on mount;
     // what the reader is looking at (players segment, card zoom, setup step) stays.
     playerView(playerView: PlayerViewModel): void {

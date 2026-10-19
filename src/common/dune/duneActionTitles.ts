@@ -1,0 +1,25 @@
+// Titles of the choices of the Dune modules. The server sets them (server/dune/*.ts), the module tabs of the client
+// find the moves by them (client/components/dune/duneTabActions.ts) – one place, so both sides stay in step.
+// English, translated on display.
+
+export const DUNE_ACTIONS_TITLE = 'Dune expansion actions';
+
+export const BAZAAR_ACTION_TITLE = 'Bazaar: buy a ware';
+/** Title of each ware of the bazaar action; the ware name is its first value */
+export const BAZAAR_WARE_TITLE = '${0} for ${1} M€';
+
+export const WORM_TITLE = 'Shai-Hulud: how far does the worm move?';
+export const LEVY_TITLE = 'Shai-Hulud: pay resources worth ${0}';
+
+export const RECRUIT_TITLE = 'Recruit Sardaukar';
+export const OPEN_KANLY_TITLE = 'Open Kanly: choose the war field';
+export const JOIN_KANLY_TITLE = 'Send Sardaukar to the war field';
+
+export const SCHEMES_TITLE = 'House schemes: which agenda do you keep?';
+
+export const CHOAM_OFFER_TITLE = 'CHOAM: make an offer';
+export const CHOAM_ACCEPT_TITLE = 'CHOAM: accept a contract';
+
+export const SMUGGLE_SPICE_TITLE = 'Smuggling: move spice';
+export const BLACK_MARKET_TITLE = 'Smuggling: black market (2 for 1)';
+export const BRIBE_TITLE = 'Bribe the officials: ${0} M€, suspicion −1';

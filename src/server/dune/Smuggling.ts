@@ -1,4 +1,5 @@
 import {IGame} from '../IGame';
+import {BLACK_MARKET_TITLE, BRIBE_TITLE, SMUGGLE_SPICE_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
 import {PlayerId} from '../../common/Types';
 import {ALL_RESOURCES, Resource} from '../../common/Resource';
@@ -95,7 +96,7 @@ function moveSpiceInput(player: IPlayer, data: SmugglingData, onlyMost: boolean)
         return undefined;
       }));
   }
-  return new OrOptions(...options).setTitle('Smuggling: move spice');
+  return new OrOptions(...options).setTitle(SMUGGLE_SPICE_TITLE);
 }
 
 function blackMarketInput(player: IPlayer, data: SmugglingData): OrOptions | undefined {
@@ -119,7 +120,7 @@ function blackMarketInput(player: IPlayer, data: SmugglingData): OrOptions | und
         }));
     giveOptions.push(new OrOptions(...getOptions).setTitle(message('Give ${0}', (b) => b.string(RESOURCE_LABEL[give]))));
   }
-  return giveOptions.length === 0 ? undefined : new OrOptions(...giveOptions).setTitle('Smuggling: black market (2 for 1)');
+  return giveOptions.length === 0 ? undefined : new OrOptions(...giveOptions).setTitle(BLACK_MARKET_TITLE);
 }
 
 function bribeInput(player: IPlayer, data: SmugglingData): SelectOption | undefined {
@@ -127,7 +128,7 @@ function bribeInput(player: IPlayer, data: SmugglingData): SelectOption | undefi
   if (suspicionOf(data, player) < 1 || player.megaCredits < cost) {
     return undefined;
   }
-  return new SelectOption(message('Bribe the officials: ${0} M€, suspicion −1', (b) => b.number(cost)), 'Bribe').andThen(() => {
+  return new SelectOption(message(BRIBE_TITLE, (b) => b.number(cost)), 'Bribe').andThen(() => {
     player.stock.deduct(Resource.MEGACREDITS, cost, {log: true});
     data.suspicion[player.id] = suspicionOf(data, player) - 1;
     player.game.log('${0} bribed the officials', (b) => b.player(player));

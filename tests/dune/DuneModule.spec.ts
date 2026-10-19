@@ -4,6 +4,7 @@ import {testGame} from '../TestGame';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {OrOptions} from '../../src/server/inputs/OrOptions';
 import {chooseBazaarWare} from '../../src/server/ai/duneChoices';
+import {buyInput} from '../../src/server/dune/Bazaar';
 import {cast} from '../../src/common/utils/utils';
 
 describe('Dune expansion modules', () => {
@@ -15,15 +16,15 @@ describe('Dune expansion modules', () => {
     expect(duneModuleConflicts('dune', ['bazaar', 'unknown'])).has.length(1);
   });
 
-  it('the AI answers the bazaar with one of its choices', () => {
-    const [game, player1, player2] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS, duneModules: ['bazaar']});
-    game.generation = 2;
+  it('the AI answers a bazaar phase of the former rules with one of its choices', () => {
+    const [game, player1] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS, duneModules: ['bazaar']});
     player1.megaCredits = 60;
-    player2.megaCredits = 60;
-    player1.setTerraformRating(19);
-    game.playerIsFinishedWithResearchPhase(player1);
-    game.playerIsFinishedWithResearchPhase(player2);
-    const input = cast(player1.getWaitingFor(), OrOptions);
+    const bazaar = game.duneData?.bazaar;
+    if (bazaar === undefined) {
+      throw new Error('no bazaar');
+    }
+    bazaar.slots = ['Bene Gesserit Dossier', 'Cistern of Tabr', null, null, null];
+    const input = cast(buyInput(player1, bazaar), OrOptions);
     const response = chooseBazaarWare(input, player1);
     expect(response?.type).eq('or');
   });

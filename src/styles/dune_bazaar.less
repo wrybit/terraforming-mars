@@ -177,3 +177,19 @@
   font-size: 12px;
   color: #b9ad97;
 }
+
+// A ware the player can buy right now: a button (BazaarBoard.vue); a tap selects it in the action menu
+button.dune-bazaar__slot {
+  border: 0;
+  font: inherit;
+}
+
+.dune-bazaar__slot--buyable {
+  cursor: pointer;
+  box-shadow: 0 0 0 2px @bazaar-ink, 0 0 0 4px #e8a85a, 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition: transform 0.12s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}

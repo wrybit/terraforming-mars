@@ -16,6 +16,7 @@ import {SardaukarMercenaries} from './SardaukarMercenaries';
 import {ShieldGenerator} from './ShieldGenerator';
 import {WaterOfLife} from './WaterOfLife';
 import {StillsuitFactory} from './StillsuitFactory';
+import {RecruitSardaukarStandardProject} from './RecruitSardaukarStandardProject';
 
 // Cards of the Dune expansion. Not an expansion of its own: GameCards adds them when the matching module is on
 // (DUNE_CARD_MODULES in dune/DuneExpansion.ts).
@@ -38,5 +39,8 @@ export const DUNE_CARD_MANIFEST = new ModuleManifest({
     [CardName.SHIELD_GENERATOR]: {Factory: ShieldGenerator},
     [CardName.WATER_OF_LIFE]: {Factory: WaterOfLife},
     [CardName.STILLSUIT_FACTORY]: {Factory: StillsuitFactory},
+  },
+  standardProjects: {
+    [CardName.RECRUIT_SARDAUKAR_STANDARD_PROJECT]: {Factory: RecruitSardaukarStandardProject},
   },
 });

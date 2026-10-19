@@ -7,7 +7,10 @@
            coin in the corner, a scene and its goods -->
       <li v-for="(slot, index) in bazaar.slots" :key="index" class="dune-bazaar__place" :data-test="'dune-bazaar-slot-' + index">
         <span class="dune-bazaar__change">{{ priceChange(index) }}</span>
-        <div v-if="slot.ware !== undefined" class="dune-bazaar__slot">
+        <!-- Buying is an action: a tap on an affordable ware selects it in the action menu (duneActions.ts) -->
+        <component :is="buyable(slot.ware) ? 'button' : 'div'" v-if="slot.ware !== undefined" :type="buyable(slot.ware) ? 'button' : undefined"
+          :class="['dune-bazaar__slot', {'dune-bazaar__slot--buyable': buyable(slot.ware)}]" :title="buyable(slot.ware) ? $t('Buy this ware') : undefined"
+          @click="buyable(slot.ware) && buy(slot.ware)">
           <span class="dune-bazaar__price"><img :src="coinIcon" alt=""><b>{{ slot.price }}</b></span>
           <span class="dune-bazaar__name">{{ $t(slot.ware) }}</span>
           <img class="dune-bazaar__scene" :src="scene(slot.ware)" alt="">
@@ -16,7 +19,7 @@
               <b>{{ good.amount }}</b><img :src="good.icon" :alt="$t(good.label)" :title="$t(good.label)">
             </span>
           </span>
-        </div>
+        </component>
         <div v-else class="dune-bazaar__slot dune-bazaar__slot--empty">{{ $t('Empty') }}</div>
       </li>
     </ol>
@@ -25,7 +28,11 @@
         {{ $t('Buying order') }}:
         <span v-for="color in bazaar.buyers" :key="color" :class="['dune-bazaar__buyer', 'player_bg_color_' + color]">{{ playerName(color) }}</span>
       </span>
-      <span class="dune-bazaar__hint">{{ $t('Each generation after research the lowest TR buys first, at most one ware each. The owner of the Commercial District buys first and pays 2 M€ less.') }}</span>
+      <span v-if="bought.length > 0" class="dune-bazaar__buyers">
+        {{ $t('Bought this generation') }}:
+        <span v-for="color in bought" :key="color" :class="['dune-bazaar__buyer', 'player_bg_color_' + color]">{{ playerName(color) }}</span>
+      </span>
+      <span class="dune-bazaar__hint">{{ $t('Buying a ware is an action: tap it, then confirm. At most one ware per player and generation. The owner of the Commercial District pays 2 Solari less.') }}</span>
     </div>
   </div>
 </template>
@@ -38,6 +45,9 @@ import {Color} from '@/common/Color';
 import {BAZAAR_SLOT_PRICE_CHANGE, BazaarGood, bazaarWare} from '@/common/dune/bazaarWares';
 import {themedAsset} from '@/client/theme/themeDisplay';
 import {duneGraphic} from './duneGraphic';
+import {vueRoot} from '@/client/components/vueRoot';
+import {isOffered, requestDuneAction} from './duneActions';
+import {BAZAAR_ACTION_TITLE, BAZAAR_WARE_TITLE} from '@/common/dune/duneActionTitles';
 
 // Picture and name of each good; the Dune theme swaps the pictures (src/themes/dune/graphics.json)
 // Picture of a ware after its first good, as in the mockup (data/bazaar-wares.js)
@@ -77,6 +87,10 @@ export default defineComponent({
     coinIcon(): string {
       return themedAsset('assets/resources/megacredit.png');
     },
+    // Games saved before buying became an action have no list
+    bought(): ReadonlyArray<Color> {
+      return this.bazaar.bought ?? [];
+    },
   },
   methods: {
     priceChange(slot: number): string {
@@ -90,6 +104,13 @@ export default defineComponent({
     scene(ware: string): string {
       const first = Object.keys(bazaarWare(ware).content)[0] as BazaarGood;
       return duneGraphic(GOOD_SCENE[first]);
+    },
+    // Whether the action menu offers this ware right now
+    buyable(ware: string): boolean {
+      return isOffered(vueRoot(this).playerView?.waitingFor, {title: BAZAAR_WARE_TITLE, value: ware});
+    },
+    buy(ware: string): void {
+      requestDuneAction([{title: BAZAAR_ACTION_TITLE}, {title: BAZAAR_WARE_TITLE, value: ware}]);
     },
     playerName(color: Color): string {
       return this.players.find((player) => player.color === color)?.name ?? color;

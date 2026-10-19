@@ -1,4 +1,5 @@
 import {IGame} from '../IGame';
+import {CHOAM_ACCEPT_TITLE, CHOAM_OFFER_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
 import {PlayerId} from '../../common/Types';
 import {ALL_RESOURCES, Resource} from '../../common/Resource';
@@ -61,7 +62,7 @@ function offerInput(player: IPlayer, data: ChoamData): OrOptions | undefined {
           })));
     return new OrOptions(...wantOptions).setTitle(message('Offer ${0}, wish:', (b) => b.string(RESOURCE_LABEL[give])));
   });
-  return giveOptions.length === 0 ? undefined : new OrOptions(...giveOptions).setTitle('CHOAM: make an offer');
+  return giveOptions.length === 0 ? undefined : new OrOptions(...giveOptions).setTitle(CHOAM_OFFER_TITLE);
 }
 
 /** Whether `player` can pay for the offer plus the fee */
@@ -109,7 +110,7 @@ function acceptInputs(player: IPlayer, data: ChoamData): Array<SelectOption> {
 export function choamActions(player: IPlayer, data: ChoamData): Array<PlayerInput> {
   const accepts = acceptInputs(player, data);
   const actions: Array<PlayerInput | undefined> = [
-    accepts.length === 0 ? undefined : new OrOptions(...accepts).setTitle('CHOAM: accept a contract'),
+    accepts.length === 0 ? undefined : new OrOptions(...accepts).setTitle(CHOAM_ACCEPT_TITLE),
     player.aiLevel === undefined ? offerInput(player, data) : undefined,
   ];
   return actions.filter((input): input is PlayerInput => input !== undefined);
