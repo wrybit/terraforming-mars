@@ -22,7 +22,8 @@
         <div v-else class="dune-bazaar__slot dune-bazaar__slot--empty">{{ $t('Empty') }}</div>
       </li>
     </ol>
-    <div class="dune-bazaar__footer">
+    <!-- Only games of the former rules still have a buying order; otherwise no line, so the rules sit close below -->
+    <div v-if="bazaar.buyers.length > 0" class="dune-bazaar__footer">
       <span v-if="bazaar.buyers.length > 0" class="dune-bazaar__buyers">
         {{ $t('Buying order') }}:
         <span v-for="color in bazaar.buyers" :key="color" :class="['dune-bazaar__buyer', 'player_bg_color_' + color]">{{ playerName(color) }}</span>
