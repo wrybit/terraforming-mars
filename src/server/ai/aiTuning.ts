@@ -86,6 +86,8 @@ export type AiTuning = {
   policyModelSet: number,
   /** M€ per unit of the learned play order of strong players among playable hand cards (bgaPolicy.ts); 0 = off. */
   playPolicyWeight: number,
+  /** Share of a hand card's value counted per step its unmet needs (tags, energy) come closer (handReadiness.ts); 0 = off. */
+  needsPursuit: number,
   /** Generations of income that count as money for the hand (handFunding.ts). */
   handFundingGenerations: number,
   /** 1: money in the last generation counts in steps of greeneries it can still buy (stateValue.ts). */
@@ -309,6 +311,7 @@ export const BASELINE_TUNING: AiTuning = {
   policyModelSet: 0,
   // Round 112: 3 +1.43 (z +2.35; base +1.10, venus +1.76), 6 +1.41 (z +2.00).
   playPolicyWeight: 3,
+  needsPursuit: 0,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
   handFundingGenerations: 0,
   endgameMoney: 1,
@@ -822,6 +825,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   beforeImitation: {policyWeight: 0, playPolicyWeight: 0},
   // Self-play step 1: draft/buy models trained on BGA plus our own winners (round 118)
   policyMixed: {policyModelSet: 1},
+  // Unfulfilled hand synergies as goals: moves that bring needed tags/energy count part of the unlocked card's value
+  needsPursuit05: {needsPursuit: 0.5},
+  needsPursuit1: {needsPursuit: 1},
+  // Draft/buy: cards that bring the tags or energy a strong hand card still needs (enablerValue.ts)
+  enabler05: {enablerWeight: 0.5},
   play2: {playPolicyWeight: 2},
   noHandFunding: {handFunding: 0},
   buyLoose: {buyMargin: -3},

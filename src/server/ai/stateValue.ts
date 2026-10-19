@@ -24,6 +24,7 @@ import {styleFocusValue} from './styleFocus';
 import {bgaExpectedMargin} from './bgaValueModel';
 import {awardScoreWithHand} from './awardHandOutlook';
 import {fundedHandValue} from './handFunding';
+import {handReadiness} from './handReadiness';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -78,6 +79,8 @@ export type ValuationContext = {
   awardActionSwing?: number,
   /** Award leads are projected to the game end by each player's pace so far (aiTuning.ts awardTiming). */
   awardTiming?: boolean,
+  /** Readiness of the hand cards of `handOwner` at decision time (handReadiness.ts, aiTuning.ts needsPursuit). */
+  handReadiness?: ReadonlyMap<CardName, number>,
 };
 
 // Hand outlook (aiTuning.ts awardHandOutlook): a lead of this many points from own hand cards lets an award count
@@ -420,7 +423,30 @@ function handValue(player: IPlayer, context: ValuationContext): number {
   }
   const values = context.handValues;
   const unknown = unknownCardValue(player, context);
-  return fundedHandValue(player, player.cardsInHand.map((card) => ({card, value: values.get(card.name) ?? unknown})), unknown);
+  const funded = fundedHandValue(player, player.cardsInHand.map((card) => ({card, value: values.get(card.name) ?? unknown})), unknown);
+  return funded + needsPursuitValue(player, context, values);
+}
+
+/**
+ * needsPursuit: a share of a hand card's value for every step its unmet needs (tags, energy) came closer since the
+ * decision (handReadiness.ts), so moves that unlock strong hand cards count for them.
+ */
+function needsPursuitValue(player: IPlayer, context: ValuationContext, values: ReadonlyMap<CardName, number>): number {
+  const weight = tuningOf(player).needsPursuit;
+  const reference = context.handReadiness;
+  if (weight <= 0 || reference === undefined) {
+    return 0;
+  }
+  let value = 0;
+  for (const card of player.cardsInHand) {
+    const before = reference.get(card.name);
+    const cardValue = Math.max(0, values.get(card.name) ?? 0);
+    if (before === undefined || before >= 1 || cardValue === 0) {
+      continue;
+    }
+    value += weight * cardValue * (handReadiness(player, card, context.remaining) - before);
+  }
+  return value;
 }
 
 /** Absolute value of one player's position. */
