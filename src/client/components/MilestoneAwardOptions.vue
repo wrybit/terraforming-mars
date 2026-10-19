@@ -6,7 +6,9 @@
     <label v-for="option in options" :key="optionName(option)"
       :class="['ma-block', 'ma-option', {'ma-option--selected': option === selected}]">
       <input type="radio" class="ma-option-input" :name="groupName" :checked="option === selected" @change="$emit('select', option)">
-      <div :class="['ma-name', milestoneAwardImageClass(optionName(option))]">
+      <!-- Dune theme: goal card of the mockup; Mars: the board tile -->
+      <DuneGoalCard v-if="isDune" :kind="kind" :name="optionName(option)"/>
+      <div v-else :class="['ma-name', milestoneAwardImageClass(optionName(option))]">
         <span>{{ $t(optionName(option)) }}</span>
       </div>
     </label>
@@ -14,10 +16,12 @@
 </template>
 
 <script setup lang="ts">
-import {onBeforeUnmount, onMounted} from 'vue';
+import {computed, onBeforeUnmount, onMounted} from 'vue';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {MilestoneAwardKind, milestoneAwardImageClass, milestoneAwardOptionName} from '@/client/components/milestoneAwardChoice';
 import CardZoomBar from '@/client/components/cardfilter/CardZoomBar.vue';
+import DuneGoalCard from '@/client/components/DuneGoalCard.vue';
+import {activeTheme} from '@/client/theme/applyTheme';
 import {choiceBlockStyle} from '@/client/components/choiceBlock';
 import {focusMilestonesAwards} from '@/client/components/logpanel/milestonesAwardsFocus';
 
@@ -33,6 +37,7 @@ defineEmits<{
 }>();
 
 const optionName = milestoneAwardOptionName;
+const isDune = computed(() => activeTheme() === 'dune');
 
 // The log box shows the milestones & awards table while choosing (milestonesAwardsFocus.ts)
 let releaseFocus: (() => void) | undefined;

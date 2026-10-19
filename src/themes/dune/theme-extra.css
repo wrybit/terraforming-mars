@@ -151,6 +151,31 @@ html.theme-dune .track-bonus-chip__production img {
   height: calc(var(--track-bonus-chip, 24px) * 0.6);
 }
 
+/* Water storage symbol: the Mars thermometer is a slim picture in slim boxes (14px wide); the Dune symbol is square,
+   so in those boxes it shrank to a speck. Square boxes like the vegetation symbol instead. */
+html.theme-dune .temperature-tile,
+html.theme-dune .card-container .card-temperature-global-requirement {
+  width: 46px;
+  background-size: 46px;
+  background-position: center;
+}
+
+html.theme-dune .card-container .card-temperature--req {
+  width: 30px;
+  background-size: 30px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+html.theme-dune .choice-option-gain--temperature {
+  width: auto;
+}
+
+/* Standard projects: flat title band as in the mockup instead of the Mars arch (cards.less) */
+html.theme-dune .card-title-standard-project .background-color-standard-project {
+  border-radius: 16px 16px 0 0 !important;
+}
+
 /* Phone parameter bars (MobileParameterBars.vue) in the colours of the Arrakis scales: water blue, vegetation green,
    spice fields orange – the Mars heat and oxygen gradients would contradict the symbols in front of them */
 html.theme-dune .mb-param--temperature .mb-param-fill {

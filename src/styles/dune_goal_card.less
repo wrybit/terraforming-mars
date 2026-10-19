@@ -1,0 +1,50 @@
+// Goal card of the Dune theme (DuneGoalCard.vue), as on the goals page of the mockup: parchment, frame in the colour of
+// the kind (milestones gold, awards blue), name in the display font, symbols on a lighter strip, the goal below.
+// Same size as the Mars tile and zoomed with it in the choice block.
+@dune-goal-ink: #2a1c12;
+
+.dune-goal-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 230px;
+  max-width: 100%;
+  min-height: 150px;
+  padding: 12px 14px 14px;
+  border: 3px solid #c08a2e;
+  border-radius: 10px;
+  background: #f1e5cc;
+  color: @dune-goal-ink;
+  text-align: left;
+  zoom: var(--choice-zoom, 1);
+
+  &--awards {
+    border-color: #2f74b5;
+  }
+}
+
+.dune-goal-card__name {
+  margin: 0;
+  font-family: Michroma, Ubuntu, sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dune-goal-card__icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  border-radius: 6px;
+  background: #e4d4b2;
+}
+
+.dune-goal-card__goal {
+  margin: 0;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1.3;
+}
