@@ -8,7 +8,8 @@
     <div class="amount-converter__middle">
       <div class="amount-rate">
         {{ conversion.from.perStep }} <img v-if="conversion.from.kind === 'figure'" class="amount-rate__icon" :src="conversion.from.icon" alt=""><i v-else :class="iconClass(conversion.from)"></i>
-        <span class="amount-rate__arrow">→</span>
+        <!-- Rate as a ratio (2 : 1), the icons name both sides (Jens, 19 Oct 2026) -->
+        <span class="amount-rate__arrow">:</span>
         {{ conversion.to.perStep }} <img v-if="conversion.to.kind === 'figure'" class="amount-rate__icon" :src="conversion.to.icon" alt=""><i v-else :class="iconClass(conversion.to)"></i>
       </div>
       <AmountSlider :modelValue="modelValue" :min="min" :max="max" @update:modelValue="$emit('update:modelValue', $event)"/>

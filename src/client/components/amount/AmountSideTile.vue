@@ -1,6 +1,7 @@
 <template>
-  <!-- One side of an amount conversion (AmountConverter.vue): label, icon and value before → after, change below.
-       Three rows, so label, values and change line up with the slider in the middle (subgrid, amount_slider.less) -->
+  <!-- One side of an amount conversion (AmountConverter.vue): label, icon with the change large (−4 / +2), the stock
+       before → after small below – the change is what the slider moves (Jens, 19 Oct 2026).
+       Three rows, so label, change and stock line up with the slider in the middle (subgrid, amount_slider.less) -->
   <div class="amount-side">
     <div class="amount-side__label">{{ $t(label) }}</div>
     <div class="amount-side__main">
@@ -8,13 +9,11 @@
         <img v-if="side.kind === 'figure'" class="amount-side__figure" :src="side.icon" alt="">
         <i v-else :class="iconClass"></i>
       </span>
-      <span class="amount-side__values">
-        <span>{{ format(before) }}</span>
-        <span class="amount-side__arrow">→</span>
-        <span :class="'amount-side__after--' + direction">{{ format(after) }}</span>
-      </span>
+      <span :class="['amount-side__values', 'amount-side__after--' + direction]">{{ (direction === 'loss' ? '−' : '+') + change }}</span>
     </div>
-    <span :class="['amount-side__change', 'amount-side__change--' + direction]">{{ (direction === 'loss' ? '−' : '+') + change }}</span>
+    <span class="amount-side__change">
+      {{ format(before) }}<span class="amount-side__arrow">→</span><span :class="'amount-side__change--' + direction">{{ format(after) }}</span>
+    </span>
   </div>
 </template>
 
