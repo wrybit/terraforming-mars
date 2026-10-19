@@ -2,6 +2,10 @@
   <button v-if="isCard" type="button" class="stats-asset stats-asset--card" :title="$t('Show card')" @click="showCard">
     <Card :card="{name: cardName}"/>
   </button>
+  <!-- Dune theme: milestones and awards as the goal cards of the game (DuneGoalCard.vue), not as Mars board tiles -->
+  <div v-else-if="isDune && (kind === 'milestone' || kind === 'award')" class="stats-asset stats-asset--tile">
+    <DuneGoalCard :kind="kind === 'milestone' ? 'milestones' : 'awards'" :name="name"/>
+  </div>
   <div v-else-if="kind === 'milestone'" class="stats-asset stats-asset--tile">
     <div class="milestones"><Milestone :milestone="{name: milestoneName, playerName: undefined, color: undefined, scores: []}" :showScores="false" :showDescription="true"/></div>
   </div>
@@ -18,6 +22,8 @@ import {AwardName} from '@/common/ma/AwardName';
 import Card from '@/client/components/card/Card.vue';
 import Milestone from '@/client/components/Milestone.vue';
 import Award from '@/client/components/Award.vue';
+import DuneGoalCard from '@/client/components/DuneGoalCard.vue';
+import {activeTheme} from '@/client/theme/applyTheme';
 import {StatsKind} from './statsKinds';
 import {CARD_ZOOM_KEY, OpenCardZoom} from './statsCardZoom';
 
@@ -25,7 +31,7 @@ import {CARD_ZOOM_KEY, OpenCardZoom} from './statsCardZoom';
 // Cards open the large view on click (pageable through "siblings").
 export default defineComponent({
   name: 'StatsEntityAsset',
-  components: {Card, Milestone, Award},
+  components: {Card, Milestone, Award, DuneGoalCard},
   inject: {
     openCardZoom: {from: CARD_ZOOM_KEY, default: () => () => {}},
   },
@@ -35,6 +41,9 @@ export default defineComponent({
     siblings: {type: Array as PropType<ReadonlyArray<string>>, required: false},
   },
   computed: {
+    isDune(): boolean {
+      return activeTheme() === 'dune';
+    },
     isCard(): boolean {
       return this.kind === 'card' || this.kind === 'prelude' || this.kind === 'corporation';
     },
