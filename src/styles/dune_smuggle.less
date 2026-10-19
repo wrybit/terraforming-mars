@@ -2,6 +2,8 @@
 // Track and switch belong together (smaller gap), the move below is its own group (Jens, 19 Oct 2026).
 @import (reference) "./variables.less";
 
+@smuggle-edge: #b0652e;
+
 html:not(.tm-mobile) .or-tab-panel:has(.smuggle-input) {
   display: flex;
   flex-direction: column;
@@ -55,50 +57,130 @@ html:not(.tm-mobile) .or-tab-panel:has(.smuggle-input) {
   margin-top: 10px;
 }
 
-// Smuggle | Bribe as one pill switch, like the tile view switch of the board (TileViewToggle.vue)
+// The chosen move in its own warm box (variant A "Glut & Gewürz" of the mockup, Jens, 19 Oct 2026)
+.smuggle-input__move {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  // Room for the upper half of the switch, which sits on the top edge
+  margin-top: 30px;
+  padding: 36px 16px 16px;
+  border: 1px solid @smuggle-edge;
+  border-radius: 14px;
+  background: linear-gradient(#3c2214, #2a170e);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+// Smuggle | Bribe as one pill switch, centred on the top edge of the box
 .smuggle-input__modes {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: inline-flex;
-  align-self: center;
-  padding: 3px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px;
+  border: 1px solid @smuggle-edge;
   border-radius: 999px;
-  background: rgba(12, 14, 20, 0.6);
+  background: #1c100a;
+  white-space: nowrap;
 }
 
 .smuggle-input__mode {
-  min-width: 120px;
-  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 130px;
+  height: 36px;
   padding: 0 18px;
   border: 0;
   border-radius: 999px;
   background: none;
-  color: #c9ccd4;
+  color: #e6cfa6;
   font: inherit;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
 
-  &:hover:not(:disabled) {
+  &:hover {
     color: #fff;
   }
 
-  &:disabled {
-    opacity: 0.35;
-    cursor: default;
+  // Not possible right now: still selectable, the box then says why
+  &--blocked {
+    opacity: 0.55;
   }
 
   &--on,
   &--on:hover {
-    background: @bg_action;
-    color: #fff;
+    background: linear-gradient(#f0a24a, #c8701e);
+    color: #2b1608;
+    box-shadow: 0 2px 8px fade(#e0822f, 40%);
+    opacity: 1;
   }
 }
 
-.smuggle-input__reason {
-  margin: -6px 0 0;
-  font-size: 13px;
-  opacity: 0.7;
-  text-align: center;
+// The bribe price as a Solari coin with the number on it
+.smuggle-input__coin {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  b {
+    position: relative;
+    font-size: 12px;
+    color: #3a2408;
+  }
+}
+
+// Both moves in the same grid cell: the box is as high as the larger one, the chosen one is centred in it
+.smuggle-input__stage {
+  // !important: the generic centring rule of the tab panels (choice_block.less) turns every wrapper of a choice block
+  // into a flex column, in the sheet as well as on the desktop; as flex the panes collapse to zero width
+  display: grid !important;
+}
+
+.smuggle-input__pane {
+  grid-area: 1 / 1;
+  align-self: center;
+  min-width: 0;
+
+  &--hidden {
+    visibility: hidden;
+  }
+}
+
+// On the phone the trade is a long column; there the box follows the chosen move instead of staying as high as the trade
+// (!important against the same generic flex rule as on the stage)
+html.tm-mobile .smuggle-input__pane--hidden {
+  display: none !important;
+}
+
+// Why a move is not possible, in the middle of the box
+.smuggle-input__closed {
+  display: grid;
+  place-items: center;
+  min-height: 140px;
+
+  span {
+    padding: 10px 18px;
+    border: 1px solid #c9542b;
+    border-radius: 12px;
+    background: rgba(28, 16, 10, 0.9);
+    color: #ffd9b0;
+    font-weight: 700;
+    text-align: center;
+  }
 }
 
 // Bribe: Solari and suspicion before → after, side by side like the two ends of a conversion
@@ -123,5 +205,10 @@ html:not(.tm-mobile) .or-tab-panel:has(.smuggle-input) {
 
   .smuggle-input__mode {
     min-width: 0;
+    padding: 0 12px;
+  }
+
+  .smuggle-input__move {
+    padding: 34px 10px 12px;
   }
 }

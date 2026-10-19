@@ -5,27 +5,46 @@
   <div class="smuggle-input" data-test="smuggle-input">
     <SmugglingPanel v-if="smuggling !== undefined" :smuggling="smuggling" :players="playerView.players" :compact="true"/>
 
-    <div class="smuggle-input__modes" role="radiogroup">
-      <button v-for="mode in MODES" :key="mode.id" type="button" role="radio"
-        :class="['smuggle-input__mode', {'smuggle-input__mode--on': mode.id === chosen}]"
-        :aria-checked="mode.id === chosen" :disabled="indexOf(mode.id) === -1"
-        @click="chosen = mode.id">{{ $t(mode.label) }}</button>
-    </div>
-    <p v-if="unavailableReason !== undefined" class="smuggle-input__reason">{{ unavailableReason }}</p>
-
-    <SelectTrade v-if="chosen === 'smuggle' && tradeInput !== undefined" ref="trade" :key="'trade'"
-      :playerView="playerView" :playerinput="tradeInput" :onsave="answer('smuggle')" :showsave="false" :showtitle="false"/>
-
-    <template v-if="chosen === 'bribe' && bribeInput !== undefined">
-      <!-- Paid in Solari: what goes and what the suspicion becomes, like any other conversion -->
-      <div v-if="paysInSolari" class="smuggle-input__bribe" data-test="smuggle-bribe">
-        <AmountSideTile :side="SOLARI" :before="solari" :after="solari - bribeInput.amount" :change="bribeInput.amount" direction="loss"/>
-        <AmountSideTile :side="suspicionSide" :before="ownSuspicion" :after="ownSuspicion - 1" :change="1" direction="loss"/>
+    <!-- The chosen move in its own box; the switch sits on its top edge, so box and switch read as one (Jens, 19 Oct 2026).
+         A move that is not possible can still be chosen: the box then says why, instead of a line under the switch. -->
+    <section :class="['smuggle-input__move', {'smuggle-input__move--closed': indexOf(chosen) === -1}]">
+      <div class="smuggle-input__modes" role="radiogroup">
+        <button v-for="mode in MODES" :key="mode.id" type="button" role="radio"
+          :class="['smuggle-input__mode', {'smuggle-input__mode--on': mode.id === chosen, 'smuggle-input__mode--blocked': indexOf(mode.id) === -1}]"
+          :aria-checked="mode.id === chosen" @click="chosen = mode.id">
+          {{ $t(mode.label) }}
+          <!-- The bribe carries its price as a Solari coin -->
+          <span v-if="mode.id === 'bribe' && ownBribeCost !== undefined" class="smuggle-input__coin">
+            <img :src="COIN_ICON" alt=""><b>{{ ownBribeCost }}</b>
+          </span>
+        </button>
       </div>
-      <!-- Other means of payment (heat for Helion …): the usual payment form -->
-      <SelectPayment v-else ref="payment" :playerView="playerView" :playerinput="bribeInput"
-        :onsave="answer('bribe')" :showsave="false" :showtitle="false"/>
-    </template>
+
+      <!-- Both moves stacked in the same place, only the chosen one visible: the box keeps the height of the larger one,
+           so switching does not make the rules below jump (Jens, 19 Oct 2026) -->
+      <div class="smuggle-input__stage">
+        <div v-for="mode in MODES" :key="mode.id"
+          :class="['smuggle-input__pane', {'smuggle-input__pane--hidden': mode.id !== chosen}]" :aria-hidden="mode.id !== chosen">
+          <div v-if="closedReason(mode.id) !== undefined" class="smuggle-input__closed" data-test="smuggle-closed">
+            <span>{{ closedReason(mode.id) }}</span>
+          </div>
+
+          <SelectTrade v-else-if="mode.id === 'smuggle' && tradeInput !== undefined" ref="trade"
+            :playerView="playerView" :playerinput="tradeInput" :onsave="answer('smuggle')" :showsave="false" :showtitle="false"/>
+
+          <template v-else-if="mode.id === 'bribe' && bribeInput !== undefined">
+            <!-- Paid in Solari: what goes and what the suspicion becomes, like any other conversion -->
+            <div v-if="paysInSolari" class="smuggle-input__bribe" data-test="smuggle-bribe">
+              <AmountSideTile :side="SOLARI" :before="solari" :after="solari - bribeInput.amount" :change="bribeInput.amount" direction="loss"/>
+              <AmountSideTile :side="suspicionSide" :before="ownSuspicion" :after="ownSuspicion - 1" :change="1" direction="loss"/>
+            </div>
+            <!-- Other means of payment (heat for Helion …): the usual payment form -->
+            <SelectPayment v-else ref="payment" :playerView="playerView" :playerinput="bribeInput"
+              :onsave="answer('bribe')" :showsave="false" :showtitle="false"/>
+          </template>
+        </div>
+      </div>
+    </section>
 
     <!-- The rules as a short list below everything, like on the other Dune tabs -->
     <DuneRuleCards class="smuggle-input__rules" :rules="SMUGGLING_RULES"/>
@@ -135,35 +154,43 @@ export default defineComponent({
     ownBribeCost(): number | undefined {
       return this.smuggling?.suspicion.find((entry) => entry.color === this.playerView.thisPlayer.color)?.bribeCost;
     },
-    // Why the other move is greyed out, translated; for the bribe with what is missing (Jens, 19 Oct 2026)
-    unavailableReason(): string | undefined {
-      if (this.tradeInput === undefined) {
-        return translateText(this.ownSuspicion >= MAX_SUSPICION ? 'Suspicion 4: smuggling is closed until a bribe lowers it' : 'Nothing worth trading');
-      }
-      if (this.bribeInput === undefined) {
-        if (this.ownSuspicion < 1) {
-          return translateText('No suspicion: nothing to bribe');
-        }
-        return this.ownBribeCost === undefined ? undefined : translateText('Too few M€ to bribe: it costs ${0}, you have ${1}')
-          .replace('${0}', String(this.ownBribeCost)).replace('${1}', String(this.solari));
-      }
-      return undefined;
+    COIN_ICON(): string {
+      return duneGraphic('coin');
     },
   },
   methods: {
+    // Why a move is not possible, shown inside the box; for the bribe with what is missing (Jens, 19 Oct 2026)
+    closedReason(mode: Mode): string | undefined {
+      if (this.indexOf(mode) !== -1) {
+        return undefined;
+      }
+      if (mode === 'smuggle') {
+        return translateText(this.ownSuspicion >= MAX_SUSPICION ? 'Suspicion 4: smuggling is closed until a bribe lowers it' : 'Nothing worth trading');
+      }
+      if (this.ownSuspicion < 1) {
+        return translateText('No suspicion: nothing to bribe');
+      }
+      return this.ownBribeCost === undefined ? undefined : translateText('Too few M€ to bribe: it costs ${0}, you have ${1}')
+        .replace('${0}', String(this.ownBribeCost)).replace('${1}', String(this.solari));
+    },
     indexOf(mode: Mode): number {
       return this.playerinput.options.findIndex((option) => option.type === MODE_TYPE[mode]);
     },
     answer(mode: Mode): (response: InputResponse) => void {
       return (response) => this.onsave({type: 'or', index: this.indexOf(mode), response});
     },
+    // The forms sit inside the v-for of the panes, so Vue hands their refs over as arrays
+    formRef(name: 'trade' | 'payment'): {saveData: () => void} | undefined {
+      const ref = this.$refs[name] as {saveData: () => void} | Array<{saveData: () => void}> | undefined;
+      return Array.isArray(ref) ? ref[0] : ref;
+    },
     saveData(): void {
       if (this.chosen === 'smuggle') {
-        (this.$refs.trade as {saveData: () => void} | undefined)?.saveData();
+        this.formRef('trade')?.saveData();
       } else if (this.paysInSolari && this.bribeInput !== undefined) {
         this.answer('bribe')({type: 'payment', payment: Payment.of({megacredits: this.bribeInput.amount})});
       } else {
-        (this.$refs.payment as {saveData: () => void} | undefined)?.saveData();
+        this.formRef('payment')?.saveData();
       }
     },
   },

@@ -40,28 +40,6 @@
   font-size: 13px;
 }
 
-.dune-worm__effects {
-  align-self: stretch;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 6px 16px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-}
-
-.dune-worm__tile {
-  width: 26px;
-  height: 26px;
-  flex: none;
-}
-
 .dune-board__hint {
   margin: 10px 0 0;
   font-size: 12px;
@@ -139,27 +117,44 @@
   border: 1px solid rgba(228, 210, 174, 0.2);
 }
 
-// The suspicion rises like the heat of the desert: sand, ochre, spice orange, burnt orange, deep red
-.dune-smuggling-step(@colour) {
-  background: fade(@colour, 26%);
-  border-color: fade(@colour, 70%);
+// The suspicion rises like the heat of the desert: dark warm fills, edges from sand to deep red (variant A, Jens, 19 Oct 2026)
+.dune-smuggling-step(@fill, @edge) {
+  background: @fill;
+  border-color: @edge;
 }
 
-.dune-smuggling__step--0 { .dune-smuggling-step(#cbb994); }
-.dune-smuggling__step--1 { .dune-smuggling-step(#d6aa4a); }
-.dune-smuggling__step--2 { .dune-smuggling-step(#e0822f); }
-.dune-smuggling__step--3 { .dune-smuggling-step(#c9542b); }
-.dune-smuggling__step--4 { .dune-smuggling-step(#a8302a); }
+.dune-smuggling__step--0 { .dune-smuggling-step(#4a3a2a, #a28a68); }
+.dune-smuggling__step--1 { .dune-smuggling-step(#5a4220, #c99a3a); }
+.dune-smuggling__step--2 { .dune-smuggling-step(#6a3a18, #e0822f); }
+.dune-smuggling__step--3 { .dune-smuggling-step(#6a2a16, #d2582b); }
+.dune-smuggling__step--4 { .dune-smuggling-step(#5e1c16, #b8322a); }
 
 .dune-smuggling__level {
   font-size: 18px;
   font-weight: bold;
 }
 
+// The loss at the end of the generation with the influence icon; 0 and 1 are free
 .dune-smuggling__penalty {
-  min-height: 14px;
-  font-size: 11px;
-  color: #f0b8a6;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ff9f8a;
+
+  &--free {
+    font-size: 12px;
+    font-weight: normal;
+    color: inherit;
+    opacity: 0.65;
+  }
+}
+
+.dune-smuggling__penalty-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .dune-smuggling__markers {
