@@ -164,7 +164,7 @@ export default defineComponent({
   computed: {
     // Only the tabs of this game's expansions are listed in the shortcut dialog
     hotkeyExpansions(): Array<string> {
-      return gameExpansions(this.game.gameOptions.expansions);
+      return gameExpansions(this.game.gameOptions.expansions, this.game.dune !== undefined);
     },
     // Game board collapsed in the start phase (shared state, setupBoardCollapsed.ts)
     boardCollapsed(): boolean {

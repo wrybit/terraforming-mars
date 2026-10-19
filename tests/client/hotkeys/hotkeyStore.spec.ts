@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {actionForKeys, duplicateBindings, exportHotkeys, importHotkeys, keysOf, resetBindings, setBinding} from '@/client/hotkeys/hotkeyStore';
+import {actionForKeys, actionsForKeys, duplicateBindings, exportHotkeys, importHotkeys, keysOf, resetBindings, setBinding} from '@/client/hotkeys/hotkeyStore';
 
 describe('hotkeyStore', () => {
   afterEach(() => {
@@ -21,6 +21,17 @@ describe('hotkeyStore', () => {
     expect(duplicateBindings().size).to.equal(0);
     setBinding('tab-projects', ['KeyQ']);
     expect(Array.from(duplicateBindings()).sort()).to.deep.equal(['tab-hand', 'tab-projects']);
+  });
+
+  it('lets Dune share the keys of the other expansions, but not with each other or the base tabs', () => {
+    // Dune never meets Moon or Colonies in one game: both tabs on K, the dispatcher tries them in turn
+    expect(actionsForKeys(['KeyK'])).to.deep.equal(['board-moon', 'board-bazaar']);
+    expect(actionsForKeys(['KeyH'])).to.deep.equal(['tab-trade', 'tab-smuggling']);
+    expect(duplicateBindings().size).to.equal(0);
+    setBinding('board-worm', ['KeyK']);
+    expect(Array.from(duplicateBindings()).sort()).to.deep.equal(['board-bazaar', 'board-worm']);
+    setBinding('board-worm', ['KeyE']);
+    expect(Array.from(duplicateBindings()).sort()).to.deep.equal(['board-worm', 'tab-projects']);
   });
 
   it('binds single keys by position and combinations by character', () => {

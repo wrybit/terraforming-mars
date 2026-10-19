@@ -3,7 +3,7 @@
 // the default are stored, so later changes of the defaults reach every player.
 import {reactive} from 'vue';
 import {safeLocalStorage} from '@/client/utils/SafeLocalStorage';
-import {FIXED_HOTKEYS, HOTKEY_ACTIONS, HotkeyKeys, findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
+import {FIXED_HOTKEYS, HOTKEY_ACTIONS, HotkeyAction, HotkeyKeys, canMeet, findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
 
 const STORAGE_KEY = 'hotkeys';
 // Version 3: single keys are positions (KeyboardEvent.code); bindings of older versions (characters) are dropped
@@ -108,9 +108,12 @@ export function setShowHints(show: boolean): void {
   saveHotkeys();
 }
 
-/** Ids of editable actions that share their keys with another action; empty bindings never collide */
+/**
+ * Ids of editable actions that share their keys with another action; empty bindings never collide, nor do two
+ * shortcuts that never meet in one game (canMeet: Dune reuses the keys of the other expansions)
+ */
 export function duplicateBindings(): Set<string> {
-  const seen = new Map<string, string>();
+  const seen = new Map<string, Array<HotkeyAction>>();
   const duplicates = new Set<string>();
   for (const action of HOTKEY_ACTIONS) {
     if (action.locked === true) {
@@ -121,13 +124,12 @@ export function duplicateBindings(): Set<string> {
       continue;
     }
     const key = combo(keys);
-    const other = seen.get(key);
-    if (other === undefined) {
-      seen.set(key, action.id);
-    } else {
-      duplicates.add(other);
+    const others = seen.get(key) ?? [];
+    for (const other of others.filter((candidate) => canMeet(candidate, action))) {
+      duplicates.add(other.id);
       duplicates.add(action.id);
     }
+    seen.set(key, [...others, action]);
   }
   return duplicates;
 }
@@ -156,10 +158,18 @@ export function importHotkeys(text: string): number {
 
 /** Action whose editable or fixed binding matches the keys, undefined if none */
 export function actionForKeys(keys: HotkeyKeys): string | undefined {
+  return actionsForKeys(keys)[0];
+}
+
+/**
+ * Every action on these keys, in list order: Dune shares keys with the other expansions (canMeet), so the
+ * dispatcher tries them in turn and the one whose tab exists in this game takes the key
+ */
+export function actionsForKeys(keys: HotkeyKeys): Array<string> {
   const wanted = combo(keys);
-  const editable = HOTKEY_ACTIONS.find((action) => action.locked !== true && combo(keysOf(action.id)) === wanted);
-  if (editable !== undefined) {
-    return editable.id;
+  const editable = HOTKEY_ACTIONS.filter((action) => action.locked !== true && combo(keysOf(action.id)) === wanted).map((action) => action.id);
+  if (editable.length > 0) {
+    return editable;
   }
-  return Object.keys(FIXED_HOTKEYS).find((id) => combo(FIXED_HOTKEYS[id]) === wanted);
+  return Object.keys(FIXED_HOTKEYS).filter((id) => combo(FIXED_HOTKEYS[id]) === wanted);
 }

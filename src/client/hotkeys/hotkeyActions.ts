@@ -14,7 +14,13 @@ export type HotkeyKeys = ReadonlyArray<string>;
 export type HotkeyGroup = 'general' | 'selection' | 'tabs' | 'tabs-default' | 'tabs-turn-end' | 'tabs-context' | 'tabs-expansion' | 'board';
 
 /** Expansion a tab only exists with; its shortcut is only listed in games with it */
-export type HotkeyExpansion = 'turmoil' | 'colonies' | 'moon' | 'pathfinders' | 'deltaProject';
+export type HotkeyExpansion = 'turmoil' | 'colonies' | 'moon' | 'pathfinders' | 'deltaProject' | 'dune';
+
+/**
+ * Dune is played on its own (Arrakis, no other expansion): its tabs take the keys of the other expansions again
+ * (Jens, 19 Oct 2026). Two such shortcuts never meet in one game, so the same key is no conflict.
+ */
+export const STANDALONE_EXPANSION: HotkeyExpansion = 'dune';
 
 export type HotkeyAction = {
   id: string;
@@ -61,6 +67,9 @@ export const HOTKEY_ACTIONS: ReadonlyArray<HotkeyAction> = [
   {id: 'tab-temperature', group: 'tabs-context', label: 'Temperature', keys: ['KeyF']},
   {id: 'tab-delegate', group: 'tabs-expansion', label: 'Delegate', keys: ['KeyG'], expansion: 'turmoil'},
   {id: 'tab-trade', group: 'tabs-expansion', label: 'Trade', keys: ['KeyH'], expansion: 'colonies'},
+  // Dune action tabs continue the context row like Delegate and Trade (Jens, 19 Oct 2026)
+  {id: 'tab-choam', group: 'tabs-expansion', label: 'CHOAM', keys: ['KeyG'], expansion: 'dune'},
+  {id: 'tab-smuggling', group: 'tabs-expansion', label: 'Smuggling', keys: ['KeyH'], expansion: 'dune'},
   // Board tabs above the right column, in their order on the right-hand home row; the view of Mars / Moon below
   {id: 'board-mars', group: 'board', label: 'Mars', keys: ['KeyJ']},
   {id: 'board-moon', group: 'board', label: 'Moon', keys: ['KeyK'], expansion: 'moon'},
@@ -68,6 +77,11 @@ export const HOTKEY_ACTIONS: ReadonlyArray<HotkeyAction> = [
   {id: 'board-turmoil', group: 'board', label: 'Turmoil', keys: ['Semicolon'], expansion: 'turmoil'},
   {id: 'board-paths', group: 'board', label: 'Planets', keys: ['Quote'], expansion: 'pathfinders'},
   {id: 'board-delta', group: 'board', label: 'Delta', keys: ['Backslash'], expansion: 'deltaProject'},
+  // Dune module tabs (boardTabs.ts DUNE_BOARD_TABS) right after Arrakis on the same row
+  {id: 'board-bazaar', group: 'board', label: 'Bazaar', keys: ['KeyK'], expansion: 'dune'},
+  {id: 'board-worm', group: 'board', label: 'Shai-Hulud', keys: ['KeyL'], expansion: 'dune'},
+  {id: 'board-kanly', group: 'board', label: 'Kanly', keys: ['Semicolon'], expansion: 'dune'},
+  {id: 'board-schemes', group: 'board', label: 'Schemes', keys: ['Quote'], expansion: 'dune'},
   {id: 'board-view-previous', group: 'board', label: 'Previous board view', short: 'Board view', keys: ['KeyN']},
   {id: 'board-view-next', group: 'board', label: 'Next board view', short: 'Board view', keys: ['KeyM']},
 ];
@@ -92,7 +106,16 @@ export function isActionShown(action: HotkeyAction, expansions?: ReadonlyArray<s
   return action.expansion === undefined || expansions === undefined || expansions.includes(action.expansion);
 }
 
-/** Expansions switched on in a game, for the shortcut dialog */
-export function gameExpansions(expansions: Readonly<Record<string, boolean>>): Array<string> {
-  return Object.keys(expansions).filter((expansion) => expansions[expansion]);
+/** Expansions switched on in a game, for the shortcut dialog; Dune comes by its modules, not as an expansion flag */
+export function gameExpansions(expansions: Readonly<Record<string, boolean>>, hasDune = false): Array<string> {
+  const switchedOn = Object.keys(expansions).filter((expansion) => expansions[expansion] && expansion !== STANDALONE_EXPANSION);
+  return hasDune ? [...switchedOn, STANDALONE_EXPANSION] : switchedOn;
+}
+
+/** Whether two shortcuts can be needed in the same game; the stand-alone expansion never meets another one */
+export function canMeet(first: HotkeyAction, second: HotkeyAction): boolean {
+  if (first.expansion === undefined || second.expansion === undefined) {
+    return true;
+  }
+  return (first.expansion === STANDALONE_EXPANSION) === (second.expansion === STANDALONE_EXPANSION);
 }

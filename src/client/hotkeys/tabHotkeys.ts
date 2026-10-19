@@ -1,6 +1,7 @@
 // Shortcut of a tab of the action menu, from the (English) title of its input; undefined for tabs without one
 import {Message} from '@/common/logs/Message';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
+import {CHOAM_TITLE, SMUGGLE_TITLE} from '@/common/dune/duneActionTitles';
 
 const TAB_HOTKEYS: Readonly<Record<string, string>> = {
   'Play project card': 'tab-projects',
@@ -17,6 +18,9 @@ const TAB_HOTKEYS: Readonly<Record<string, string>> = {
   'Send a delegate in an area (3 M€)': 'tab-delegate',
   'Send a delegate in an area (5 M€)': 'tab-delegate',
   'Send a delegate in an area (from lobby)': 'tab-delegate',
+  // Dune action tabs (SmuggleInput.vue, ChoamInput.vue) on the keys of Delegate and Trade (hotkeyActions.ts)
+  [CHOAM_TITLE]: 'tab-choam',
+  [SMUGGLE_TITLE]: 'tab-smuggling',
   // The CEO action shares the tab and key of the card actions
   'Use CEO once per game action': 'tab-actions',
   'End Turn': 'tab-pass',

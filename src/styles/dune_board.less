@@ -9,6 +9,16 @@
   height: 100%;
   overflow-y: auto;
   color: #e9e1d2;
+
+  // Content centred in the height of the box, with the rules open or closed (Jens, 19 Oct 2026). Auto margins
+  // instead of justify-content: when the content is taller than the box they fall to 0 and it scrolls from the top.
+  > :first-child {
+    margin-top: auto;
+  }
+
+  > :last-child {
+    margin-bottom: auto;
+  }
 }
 
 .dune-board__section + .dune-board__section {

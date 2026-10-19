@@ -4,7 +4,7 @@
 import {watch} from 'vue';
 import {isTypingTarget} from '@/client/utils/typingTarget';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
-import {hotkeyState, actionForKeys} from '@/client/hotkeys/hotkeyStore';
+import {hotkeyState, actionsForKeys} from '@/client/hotkeys/hotkeyStore';
 import {keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
 import {activeHotkeyGroup, hotkeyItems, isVisible, refreshItemNumbers} from '@/client/hotkeys/hotkeyItems';
 import {PICK_CODES} from '@/client/hotkeys/hotkeyActions';
@@ -258,9 +258,15 @@ export function onHotkey(event: KeyboardEvent): void {
   } else if (plain && PICK_CODES.includes(key)) {
     handled = pickItem(PICK_CODES.indexOf(key));
   } else {
-    const id = actionForKeys(keys);
-    if (id !== undefined && !HANDLED_ELSEWHERE.includes(id)) {
-      handled = runAction(id);
+    // Shared keys (Dune and the other expansions): the first action that finds its target takes the key
+    for (const id of actionsForKeys(keys)) {
+      if (HANDLED_ELSEWHERE.includes(id)) {
+        break;
+      }
+      if (runAction(id)) {
+        handled = true;
+        break;
+      }
     }
   }
   if (handled) {
