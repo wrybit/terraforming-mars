@@ -35,8 +35,8 @@
             <template v-if="boardName === BoardName.ARRAKIS">
               <img class="board-scale-symbol" style="left: 182px; top: 510px" :src="themedAsset('assets/global-parameters/oxygen.png')" alt="">
               <img class="board-scale-symbol" style="left: 421px; top: 508px" :src="themedAsset('assets/global-parameters/temperature.png')" alt="">
-              <!-- Spice fields count below the planet: the spice field tile where Mars shows its ocean marker (scripts/make-dune-planet.py erases that) -->
-              <img class="board-scale-symbol board-scale-symbol--spicefield" style="left: 307px; top: 567px; width: 28px; height: 28px" src="assets/themes/dune/graphics/tile-small-spicefield.svg" alt="">
+              <!-- Spice fields count below the planet: the spice field tile itself (as placed on the board) where Mars shows its ocean marker (scripts/make-dune-planet.py erases that) -->
+              <img class="board-scale-symbol board-scale-symbol--spicefield" style="left: 305px; top: 563px; width: 30px; height: 35px" src="assets/themes/dune/graphics/tile-spicefield.svg" alt="">
             </template>
             <div class="global-numbers-oceans" v-flash="flashKeys.globalParameter('oceans')">
               <span v-if="oceans_count === globalParameterMaximums.oceans">
