@@ -13,6 +13,7 @@
         <thead>
           <tr>
             <!-- Classes as on the cells: same width and alignment, the label stays above its content -->
+            <th class="games-overview-theme"></th>
             <th class="games-overview-status"></th>
             <th class="games-overview-game" v-i18n>Game</th>
             <th class="games-overview-generation" v-i18n>Gen</th>
@@ -132,7 +133,7 @@ export default defineComponent({
       if (table === null || table === undefined || head === null || head === undefined || scroll.clientWidth === 0) {
         return;
       }
-      const fixedWidth = ['status', 'game', 'generation', 'actions']
+      const fixedWidth = ['theme', 'status', 'game', 'generation', 'actions']
         .map((name) => head.querySelector<HTMLElement>('.games-overview-' + name)?.offsetWidth ?? 0)
         .reduce((sum, width) => sum + width, 0);
       // Labels of all columns, also the dropped ones, measured as text in the font of the head

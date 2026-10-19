@@ -1,14 +1,16 @@
 <template>
-  <!-- One game of the admin overview: eleven fixed columns (players 1–6, AI 1–5), chips with name and points,
+  <!-- One game of the admin overview: theme, then eleven fixed columns (players 1–6, AI 1–5), chips with name and points,
        winner with a trophy -->
   <tr class="games-overview-row" :class="{'games-overview-row--imported': summary.source === 'imported'}">
+    <!-- Mars or Dune at a glance: the planet with its name on it, like the Mars/Dune switch -->
+    <td class="games-overview-theme">
+      <span class="games-overview-planet" :class="'games-overview-planet--' + planet.theme" :style="{backgroundImage: `url(${planet.planet})`}"
+        data-test="game-theme">{{ planet.label }}</span>
+    </td>
     <td class="games-overview-status">
       <span :class="summary.isFinished ? 'status-finished' : 'status-running'" :title="$t(summary.isFinished ? 'Finished' : 'Running')"></span>
     </td>
     <td class="games-overview-game">
-      <!-- Mars or Dune at a glance: the planet in front of the game, its name in the tooltip -->
-      <span class="games-overview-planet" :class="'games-overview-planet--' + planet.theme" :style="{backgroundImage: `url(${planet.planet})`}"
-        role="img" :aria-label="planet.label" :title="planet.label" data-test="game-theme"></span>
       <a v-if="summary.screenshotUrl !== undefined" :href="summary.screenshotUrl" target="_blank" class="games-overview-source" v-i18n :title="$t('Saved screenshot of the result page')">Screenshot</a>
       <!-- Target is the results page stored here: the external server deletes the game soon -->
       <a v-else-if="summary.importedParticipantId !== undefined" :href="importedResultUrl" target="_blank" class="games-overview-source" v-i18n :title="$t('Result page saved on this server')">Imported</a>

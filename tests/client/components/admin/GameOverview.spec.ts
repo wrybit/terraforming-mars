@@ -32,17 +32,17 @@ describe('GameOverview', () => {
 
   it('theme: Mars planet for games without a theme, Arrakis for Dune games', () => {
     const mars = mountRow().get('[data-test=game-theme]');
-    expect(mars.attributes('title')).eq('Mars');
+    expect(mars.text()).eq('Mars');
     expect(mars.attributes('style')).contains('mars-planet.png');
     const dune = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'), props: {summary: {...summary, theme: 'dune'}, columns: PLAYER_COLUMNS}}).get('[data-test=game-theme]');
-    expect(dune.attributes('title')).eq('Dune');
+    expect(dune.text()).eq('Dune');
     expect(dune.attributes('style')).contains('arrakis-planet.png');
   });
 
   it('one cell per column, empty where the player did not play', () => {
     const cells = mountRow().findAll('td').map((cell) => cell.text());
-    // Status, game, generation, spectators/result, players 1–6, AI 1–5, delete
-    expect(cells.slice(4, 15)).deep.eq(['Jens🏆76 VP', 'Daniel66 VP', '', '', '', '', '', '', '', '', '']);
+    // Theme, status, game, generation, spectators/result, players 1–6, AI 1–5, delete
+    expect(cells.slice(5, 16)).deep.eq(['Jens🏆76 VP', 'Daniel66 VP', '', '', '', '', '', '', '', '', '']);
   });
 
   it('finished: shows the result instead of watching; running: watch as spectator', () => {

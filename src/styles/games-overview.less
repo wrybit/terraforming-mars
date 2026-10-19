@@ -238,16 +238,34 @@
   }
 }
 
-// Theme of the game (Mars / Arrakis): the planet stands left of both lines (game and date), so it reads as one
-// label with them; the picture itself comes inline from themePlanets.ts
+// Theme of the game: the planet with its name on it, black and in the font of its world like the Mars/Dune switch
+// (theme_switch.less); the picture itself comes inline from themePlanets.ts
+.games-overview-table .games-overview-theme {
+  width: 48px;
+}
+
 .games-overview-planet {
-  float: left;
-  width: 24px;
-  height: 24px;
-  margin: 4px 8px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0 auto;
   border-radius: 50%;
   background-size: cover;
   background-position: center;
+  color: #000;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.6);
+}
+
+.games-overview-planet--mars {
+  font-family: Prototype, 'Ubuntu', sans-serif;
+  font-size: 12px;
+}
+
+.games-overview-planet--dune {
+  font-family: 'Michroma', 'Ubuntu', sans-serif;
+  font-size: 9px;
 }
 
 .games-overview-date {
