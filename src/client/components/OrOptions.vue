@@ -12,7 +12,10 @@
       <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
       <!-- Display order via tabDisplayOrder (pass/end at the end); idx stays the index in displayedOptions.
            The CEO action has no tab of its own: it is part of the "Actions" tab (ceoActions.ts) -->
+      <!-- A tab only on request (bazaar purchase, onRequestTabs.ts) stays in the DOM – the phone selects it by its
+           data-option-index – but is visible only while it is the open tab -->
       <button v-for="idx in visibleTabOrder" :key="idx"
+        v-show="tabShown(idx)"
         :data-option-index="idx"
         type="button"
         role="tab"
@@ -47,6 +50,8 @@
       <!-- Explanation where there would otherwise be just a button (tabIntro.ts): image, what happens, hint -->
       <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :playerView="playerView" :card="selectedCard"/>
       <CardIntroBlock v-else-if="asTabs && !handTabActive && selectedCard !== undefined && selectedOption !== undefined" :card="selectedCard" :title="fullTabTitle(selectedOption.title)"/>
+      <!-- Bazaar purchase (Dune): the ware and what it brings, before → after -->
+      <BazaarPurchaseIntro v-if="asTabs && !handTabActive && bazaarPurchaseTitle !== undefined" :title="bazaarPurchaseTitle" :player="playerView.thisPlayer"/>
       <!-- Pass: explanation of what happens (centered with the button, or-tab-panel--end) -->
       <p v-if="asTabs && !handTabActive && selectedOption !== undefined && endTabHint(selectedOption.title) !== undefined" class="or-tab-end-hint">
         {{ $t(endTabHint(selectedOption.title)!) }}
@@ -153,7 +158,9 @@
       <!-- Tab mode: sticky footer at the bottom of the box (tabPanelFooter.ts); payment areas hook in via Teleport -->
       <div v-if="asTabs" v-show="!handTabActive" :id="footerId" class="or-tab-footer">
         <!-- Cancel an action that is still only a plan: left in the footer (cancelAction.ts) -->
-        <CancelActionButton/>
+        <CancelActionButton v-if="!onRequestSelected"/>
+        <!-- Tab only on request (bazaar purchase): nothing has happened yet, Cancel closes the tab -->
+        <AppButton v-else hotkey="cancel" class="cancel-action-button cancel-action-button--leave-tab" :title="$t('Cancel')" @click="handTabActive = true"/>
         <ActionStepChips v-if="turnStep !== undefined" :step="turnStep"/>
         <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabToneClass('or-tab-save--', selectedOption)]">
           <!-- Disabled while the selected option has no valid selection yet (e.g. no card chosen) -->
@@ -223,6 +230,9 @@ import CardListSection from '@/client/components/CardListSection.vue';
 import {ACTION_CARDS_TITLE, ceoCardState, isActionCardsOption, isCeoActionOption, ownCeoCards} from '@/client/utils/ceoActions';
 import {actionCardVisibility, inactiveActionCards, InactiveActionCards} from '@/client/utils/inactiveActionCards';
 import {actionTabRequest, requestedTabIndex} from '@/client/components/actionTabRequest';
+import {isOnRequestTab} from '@/client/components/onRequestTabs';
+import BazaarPurchaseIntro from '@/client/components/dune/BazaarPurchaseIntro.vue';
+import {BAZAAR_BUY_TITLE} from '@/common/dune/duneActionTitles';
 import {titleKey} from '@/client/components/orOptionsShortLabels';
 import {duneBoardTabOf} from '@/client/components/dune/duneActionBoardTab';
 import {boardTabState, selectBoardTab} from '@/client/components/boardTabs/boardTabState';
@@ -276,6 +286,7 @@ export default defineComponent({
     CancelActionButton,
     CeoActionSection,
     CardListSection,
+    BazaarPurchaseIntro,
   },
   setup() {
     const asTabs = inject<boolean>(OR_OPTIONS_AS_TABS, false);
@@ -459,6 +470,15 @@ export default defineComponent({
       const order = tabDisplayOrder(this.displayedOptions.map((option) => option.title));
       return this.actionsGrouped && this.actionsIdx !== -1 ? order.filter((idx) => idx !== this.ceoIdx) : order;
     },
+    // Title of the open bazaar purchase (Dune), with ware and price as its values
+    bazaarPurchaseTitle(): Message | undefined {
+      const title = this.selectedOption?.title;
+      return title !== undefined && typeof title !== 'string' && title.message === BAZAAR_BUY_TITLE ? title : undefined;
+    },
+    // Open tab is one shown only on request (bazaar purchase, onRequestTabs.ts)
+    onRequestSelected(): boolean {
+      return this.asTabs && !this.handTabActive && this.selectedOption !== undefined && isOnRequestTab(this.selectedOption.title);
+    },
     // CEO action selected but no CEO card chosen yet: button disabled
     awaitingCeo(): boolean {
       return this.inActionsGroup && this.selectedIdx === this.ceoIdx && this.selectedCeo === undefined;
@@ -555,6 +575,10 @@ export default defineComponent({
     },
     tabActive(idx: number): boolean {
       return this.actionsGrouped && idx === this.groupTabIdx ? this.inActionsGroup : this.selectedIdx === idx;
+    },
+    // A tab only on request is visible while it is open; all others always
+    tabShown(idx: number): boolean {
+      return !isOnRequestTab(this.displayedOptions[idx].title) || (!this.handTabActive && this.tabActive(idx));
     },
     // "Actions" tab counts usable action cards plus usable CEOs
     tabCount(idx: number): number | undefined {

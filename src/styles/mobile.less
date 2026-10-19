@@ -1536,6 +1536,10 @@ html.tm-mobile {
     color: @mb-muted;
     font-size: 14px;
     white-space: nowrap;
+    // A long full title (bazaar purchase) is cut off itself instead of squeezing the short title to nothing
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .mb-icon-button {
@@ -1891,6 +1895,11 @@ html.tm-mobile {
     .mb-task-sub {
       color: rgba(255, 255, 255, 0.85);
     }
+  }
+
+  // Cancel that only leaves a tab shown on request (bazaar purchase, OrOptions.vue): "Back" of the task bar does the same
+  .mb-home--turn .mb-screen--turn .or-tab-footer > .cancel-action-button--leave-tab {
+    display: none !important;
   }
 
   // Confirm/pay of the input (tabPanelFooter.ts) sit in the task bar to the right of "Back"

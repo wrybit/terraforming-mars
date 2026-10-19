@@ -291,6 +291,7 @@
   "You want in return": "Ти хочеш натомість",
   "CHOAM offer": "Пропозиція CHOAM",
   "Smuggling: black market (double worth)": "Контрабанда: чорний ринок (подвійна ціна)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.": "Перевезти прянощі: до 5 прянощів по 5 соларіїв за одиницю. Чорний ринок: за подвійною ціною (6 соларіїв за 1 прянощі). Кожна дія підвищує підозру на 1; хабар (10 соларіїв, власнику Ринку контрабандистів 7) її знижує. Кінець покоління: від 3 втрачається вплив.",
-  "Not your turn, or nothing worth trading": "Не твій хід або нічого обміняти"
+  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Перевезти прянощі: до 5 прянощів по 5 соларіїв за одиницю. Чорний ринок: за подвійною ціною (6 соларіїв за 1 прянощі). Кожна дія підвищує підозру на 1; хабар (10 соларіїв, власнику Ринку контрабандистів 7) її знижує. Кінець покоління: 0 і 1 безкоштовні, від 2 втрачається вплив, і маркер повертається на 0.",
+  "Not your turn, or nothing worth trading": "Не твій хід або нічого обміняти",
+  "Bazaar: buy ${0} for ${1} M€": "Базар: купити ${0} за ${1} M€"
 }

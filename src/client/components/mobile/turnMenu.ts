@@ -11,6 +11,7 @@ import {warningDescription} from '@/client/components/warningDescriptions';
 import {tabIntro, TabIntro} from '@/client/components/tabIntro';
 import {placementActionLabel} from '@/client/components/spaceTilePreview';
 import {PLAY_CARD_KEY} from '@/client/utils/playableCards';
+import {isOnRequestTab} from '@/client/components/onRequestTabs';
 
 /*
  * Turn menu of the mobile view (bottom sheet), built from the same action menu as the desktop tabs.
@@ -70,6 +71,8 @@ export type TurnMenu = {
   // Skip the second action (only possible after the first action)
   skip: TurnMenuTile | undefined;
   pass: TurnMenuTile | undefined;
+  // Tabs only on request (bazaar purchase, onRequestTabs.ts): no tile in the sheet, but openable as a task
+  onRequest: Array<TurnMenuTile>;
 };
 
 type TileLook = {glyph: GlyphName, glyphTone: TurnTileGlyphTone};
@@ -139,19 +142,20 @@ export function buildTurnMenu(input: OrOptionsModel): TurnMenu {
   const displayed = displayedOptionIndices(input).map((index) => input.options[index]);
   const order = tabDisplayOrder(displayed.map((option) => option.title));
   const tiles = order.map((index) => ({option: displayed[index], tile: toTile(displayed[index], index)}));
-  const regular = tiles.filter(({option}) => !isEndTab(option.title));
+  const regular = tiles.filter(({option}) => !isEndTab(option.title) && !isOnRequestTab(option.title));
   const end = tiles.filter(({option}) => isEndTab(option.title));
   return {
     available: regular.filter(({option}) => tabHighlighted(option.title)).map(({tile}) => tile),
     actions: regular.filter(({option}) => !tabHighlighted(option.title)).map(({tile}) => tile),
     skip: end.find(({option}) => titleKey(option.title) === END_TURN)?.tile,
     pass: end.find(({option}) => titleKey(option.title) !== END_TURN)?.tile,
+    onRequest: tiles.filter(({option}) => isOnRequestTab(option.title)).map(({tile}) => tile),
   };
 }
 
 /* Tile for option `index`, regardless of which sheet section it is in. */
 export function findTurnMenuTile(menu: TurnMenu | undefined, index: number): TurnMenuTile | undefined {
-  return menu === undefined ? undefined : [...menu.available, ...menu.actions, menu.skip, menu.pass].find((tile) => tile?.index === index);
+  return menu === undefined ? undefined : [...menu.available, ...menu.actions, menu.skip, menu.pass, ...menu.onRequest].find((tile) => tile?.index === index);
 }
 
 const TAB_SELECTOR = '.wf-options--tabs > .or-tabs > .or-tab[data-option-index]';

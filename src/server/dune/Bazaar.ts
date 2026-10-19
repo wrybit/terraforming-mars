@@ -1,5 +1,7 @@
 import {IGame} from '../IGame';
-import {BAZAAR_ACTION_TITLE, BAZAAR_WARE_TITLE} from '../../common/dune/duneActionTitles';
+import {BAZAAR_ACTION_TITLE, BAZAAR_BUY_TITLE, BAZAAR_WARE_TITLE} from '../../common/dune/duneActionTitles';
+import {SelectPayment} from '../inputs/SelectPayment';
+import {Payment} from '../../common/inputs/Payment';
 import {IPlayer} from '../IPlayer';
 import {PlayerId} from '../../common/Types';
 import {Resource} from '../../common/Resource';
@@ -121,13 +123,18 @@ export function takeFreeWare(player: IPlayer, slot: number): void {
 }
 
 
-export function buyWare(player: IPlayer, data: BazaarData, slot: number): void {
+/** Buys the ware in `slot`; with a payment (heat for Helion …) from it, otherwise in M€ */
+export function buyWare(player: IPlayer, data: BazaarData, slot: number, payment?: Payment): void {
   const name = data.slots[slot];
   const price = priceFor(player, data, slot);
   if (name === null || name === undefined || price === undefined) {
     throw new Error(`No ware in bazaar slot ${slot}`);
   }
-  player.stock.deduct(Resource.MEGACREDITS, price);
+  if (payment !== undefined) {
+    player.pay(payment);
+  } else {
+    player.stock.deduct(Resource.MEGACREDITS, price);
+  }
   data.slots[slot] = null;
   data.discard.push(name);
   data.bought = [...(data.bought ?? []), player.id];
@@ -165,13 +172,28 @@ export function buyInput(player: IPlayer, data: BazaarData): OrOptions | undefin
   return new OrOptions(...options).setTitle(BAZAAR_TITLE);
 }
 
-/** The bazaar action of the action menu; undefined when the player already bought this generation or cannot pay */
-export function buyAction(player: IPlayer, data: BazaarData): OrOptions | undefined {
+/**
+ * The bazaar actions of the action menu: one payment per affordable ware, each its own option. The client shows such
+ * a tab only after a tap on its ware in the bazaar, with the usual payment box (before/after, cancel) – Jens,
+ * 19 Oct 2026. None when the player already bought this generation.
+ */
+export function bazaarTabActions(player: IPlayer, data: BazaarData): Array<SelectPayment> {
   if ((data.bought ?? []).includes(player.id)) {
-    return undefined;
+    return [];
   }
-  const options = wareOptions(player, data);
-  return options.length === 0 ? undefined : new OrOptions(...options).setTitle(BAZAAR_ACTION_TITLE);
+  const actions: Array<SelectPayment> = [];
+  data.slots.forEach((name, slot) => {
+    const price = priceFor(player, data, slot);
+    if (name === null || price === undefined || !player.canAfford(price)) {
+      return;
+    }
+    actions.push(new SelectPayment(message(BAZAAR_BUY_TITLE, (b) => b.string(name).number(price)), price, {})
+      .andThen((payment) => {
+        buyWare(player, data, slot, payment);
+        return undefined;
+      }));
+  });
+  return actions;
 }
 
 export function bazaarModel(game: IGame, data: BazaarData): BazaarModel {

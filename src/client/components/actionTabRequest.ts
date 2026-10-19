@@ -10,12 +10,19 @@ import {titleKey} from '@/client/components/orOptionsShortLabels';
 
 export const actionTabRequest = reactive({
   title: undefined as string | undefined,
+  // Value inside the title that tells options of the same title apart (e.g. the ware of a bazaar purchase)
+  value: undefined as string | undefined,
   at: 0,
 });
 
-export function requestActionTab(title: string): void {
+export function requestActionTab(title: string, value?: string): void {
   actionTabRequest.title = title;
+  actionTabRequest.value = value;
   actionTabRequest.at = Date.now();
+}
+
+function hasValue(title: string | Message, value: string): boolean {
+  return typeof title !== 'string' && title.data.some((entry) => String(entry.value) === value);
 }
 
 /** Index of the requested option among `options`, or -1 */
@@ -24,5 +31,7 @@ export function requestedTabIndex(options: ReadonlyArray<PlayerInputModel>): num
   if (wanted === undefined) {
     return -1;
   }
-  return options.findIndex((option) => titleKey(option.title as string | Message) === wanted);
+  const value = actionTabRequest.value;
+  return options.findIndex((option) => titleKey(option.title as string | Message) === wanted &&
+    (value === undefined || hasValue(option.title as string | Message, value)));
 }

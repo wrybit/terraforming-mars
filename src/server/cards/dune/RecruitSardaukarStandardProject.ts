@@ -4,6 +4,7 @@ import {CardRenderer} from '../render/CardRenderer';
 import {StandardProjectCard} from '../StandardProjectCard';
 import {addSardaukar, SARDAUKAR_PRICES} from '../../dune/Kanly';
 import {Resource} from '../../../common/Resource';
+import {CardResource} from '../../../common/CardResource';
 
 /** Price in M€ of one Sardaukar (dune/Kanly.ts) */
 const MEGACREDIT_PRICE = SARDAUKAR_PRICES.find(([resource]) => resource === Resource.MEGACREDITS)?.[1] ?? 12;
@@ -19,7 +20,8 @@ export class RecruitSardaukarStandardProject extends StandardProjectCard {
         cardNumber: 'SP-K',
         renderData: CardRenderer.builder((b) =>
           b.standardProject(`Spend ${MEGACREDIT_PRICE} Solari to recruit 1 Sardaukar for the war field.`, (eb) => {
-            eb.megacredits(MEGACREDIT_PRICE).startAction.text('1 Sardaukar');
+            // Sardaukar icon like the goods of the other standard projects (Dune theme: fighter → Sardaukar)
+            eb.megacredits(MEGACREDIT_PRICE).startAction.resource(CardResource.FIGHTER);
           }),
         ),
       },

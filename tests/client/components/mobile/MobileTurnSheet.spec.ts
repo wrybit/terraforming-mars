@@ -15,6 +15,7 @@ describe('MobileTurnSheet', () => {
     available: [tile(0, 'Claim a milestone', 'highlight')],
     actions: [tile(1, 'Play project card'), tile(2, 'Standard projects')],
     skip: undefined,
+    onRequest: [],
     pass: tile(3, 'Pass for this generation', 'danger', {intro: undefined, title: 'Pass for this generation', hint: 'You will not take any more actions this generation.', button: 'End round', action: 'submit'}),
   };
 
@@ -49,7 +50,7 @@ describe('MobileTurnSheet', () => {
 
 describe('MobileTurnSheet turn end', () => {
   it('asks inside the drawer before passing and confirms from there', async () => {
-    const menu: TurnMenu = {available: [], actions: [], skip: undefined, pass: tile(3, 'Pass for this generation', 'danger', {intro: undefined, title: 'Pass for this generation', hint: 'Hint', button: 'End round', action: 'submit'})};
+    const menu: TurnMenu = {available: [], actions: [], skip: undefined, onRequest: [], pass: tile(3, 'Pass for this generation', 'danger', {intro: undefined, title: 'Pass for this generation', hint: 'Hint', button: 'End round', action: 'submit'})};
     const wrapper = mount(MobileTurnSheet, {...globalConfig, props: {menu, title: 'Take your first action', actionNumber: 1, actionsPerTurn: 2}});
     await wrapper.find('.mb-tile--pass').trigger('click');
     expect(wrapper.emitted('select')).to.be.undefined;

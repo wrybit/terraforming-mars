@@ -7,6 +7,11 @@ export const DUNE_ACTIONS_TITLE = 'Dune expansion actions';
 export const BAZAAR_ACTION_TITLE = 'Bazaar: buy a ware';
 /** Title of each ware of the bazaar action; the ware name is its first value */
 export const BAZAAR_WARE_TITLE = '${0} for ${1} M€';
+/**
+ * Purchase of one ware as its own action tab, shown only after a tap on that ware in the bazaar (Jens, 19 Oct 2026);
+ * the ware name is its first value, so the tap finds its tab (actionTabRequest.ts)
+ */
+export const BAZAAR_BUY_TITLE = 'Bazaar: buy ${0} for ${1} M€';
 
 export const WORM_TITLE = 'Shai-Hulud: how far does the worm move?';
 export const LEVY_TITLE = 'Shai-Hulud: pay resources worth ${0}';

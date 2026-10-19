@@ -7,7 +7,9 @@ import {OrOptions} from '../../src/server/inputs/OrOptions';
 import {Phase} from '../../src/common/Phase';
 import {TileType} from '../../src/common/TileType';
 import {BoardName} from '../../src/common/boards/BoardName';
-import {BAZAAR_ACTION_TITLE, BAZAAR_TITLE, BazaarData, buyWare, slideAndRefill} from '../../src/server/dune/Bazaar';
+import {BAZAAR_TITLE, BazaarData, buyWare, slideAndRefill} from '../../src/server/dune/Bazaar';
+import {SelectPayment} from '../../src/server/inputs/SelectPayment';
+import {Payment} from '../../src/common/inputs/Payment';
 import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
 import {BAZAAR_WARES, bazaarBasePrice, bazaarPrice, bazaarWare, bazaarWareCount} from '../../src/common/dune/bazaarWares';
 import {cast} from '../../src/common/utils/utils';
@@ -21,13 +23,9 @@ function bazaarOf(game: IGame): BazaarData {
   return bazaar;
 }
 
-/** The bazaar action inside the Dune actions of the action menu; undefined when it is not offered */
-function bazaarAction(player: TestPlayer): OrOptions | undefined {
-  const actions = DuneExpansion.actions(player);
-  if (actions === undefined) {
-    return undefined;
-  }
-  return cast(actions, OrOptions).options.find((option): option is OrOptions => option instanceof OrOptions && option.title === BAZAAR_ACTION_TITLE);
+/** The bazaar purchases among the action tabs of the action menu: one payment per affordable ware */
+function bazaarActions(player: TestPlayer): Array<SelectPayment> {
+  return DuneExpansion.tabActions(player).filter((option): option is SelectPayment => option instanceof SelectPayment);
 }
 
 describe('Bazaar of Arrakeen (Dune module A)', () => {
@@ -135,21 +133,24 @@ describe('Bazaar of Arrakeen (Dune module A)', () => {
   it('offers buying a ware as an action, once per generation', () => {
     const bazaar = bazaarOf(game);
     bazaar.slots = ['Bene Gesserit Dossier', 'Cistern of Tabr', null, null, null];
-    const action = bazaarAction(player1);
-    expect(action?.options).has.length(2);
-    action?.process({type: 'or', index: 1, response: {type: 'option'}}, player1);
+    const actions = bazaarActions(player1);
+    expect(actions).has.length(2);
+    const price = bazaarPrice(bazaarWare('Cistern of Tabr'), 1);
+    expect(actions[1].amount).eq(price);
+    actions[1].process({type: 'payment', payment: Payment.of({megacredits: price})}, player1);
+    expect(player1.megaCredits).eq(100 - price);
     expect(bazaar.slots).deep.eq(['Bene Gesserit Dossier', null, null, null, null]);
-    expect(bazaarAction(player1)).is.undefined;
-    expect(bazaarAction(player2)?.options).has.length(1);
+    expect(bazaarActions(player1)).is.empty;
+    expect(bazaarActions(player2)).has.length(1);
     // A new generation lifts the limit
     DuneExpansion.beforeActionPhase(game, () => {});
-    expect(bazaarAction(player1)).is.not.undefined;
+    expect(bazaarActions(player1)).is.not.empty;
   });
 
   it('offers no bazaar action without an affordable ware', () => {
     bazaarOf(game).slots = ['Bene Gesserit Dossier', null, null, null, null];
     player2.megaCredits = 0;
-    expect(bazaarAction(player2)).is.undefined;
+    expect(bazaarActions(player2)).is.empty;
   });
 
   it('continues a bazaar phase of the former rules after a reload', () => {

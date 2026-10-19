@@ -178,7 +178,7 @@
   color: #b9ad97;
 }
 
-// A ware the player can buy right now: a button (BazaarBoard.vue); a tap selects it in the action menu
+// A ware the player can buy right now: a button (BazaarBoard.vue); a tap opens its purchase as an action tab
 button.dune-bazaar__slot {
   border: 0;
   font: inherit;
@@ -192,4 +192,22 @@ button.dune-bazaar__slot {
   &:hover {
     transform: translateY(-2px);
   }
+}
+
+// A ware that can't be bought now (not your turn, already bought, too dear): greyed out like unplayable cards
+// (cards.less .card-unavailable) – Jens, 19 Oct 2026
+.dune-bazaar__slot--unavailable {
+  &:extend(.card-unavailable all);
+}
+
+
+// Bazaar purchase tab (BazaarPurchaseIntro.vue): the tile already names the ware and price, so the payment's own
+// title below it would only repeat them
+.or-tab-panel:has(.dune-bazaar-purchase) .payments_title {
+  display: none;
+}
+
+// The tile grows with what is paid ➜ gained (a ware has up to three goods), so the icons never stick out of it
+.dune-bazaar-purchase > .choice-option {
+  min-width: max-content;
 }

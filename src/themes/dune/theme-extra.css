@@ -859,3 +859,11 @@ html.theme-dune .board-space-type-ocean {
   /* Dark rust inside, bright spice frame around it: on the orange planet only light against dark reads */
   background-color: rgba(120, 38, 8, 0.55);
 }
+
+/* Sardaukar anwerben (Standardprojekt): das Sardaukar-Symbol so groß wie die Ergebnisse der anderen
+   Standardprojekte (Produktionskasten, Plättchen), nicht nur so klein wie die Solari-Münze davor – Jens, 19.10.2026 */
+.card-standard-project .card-resource-fighter {
+  width: 46px;
+  height: 46px;
+  background-size: contain;
+}

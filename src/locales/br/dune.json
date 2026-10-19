@@ -289,6 +289,7 @@
   "You want in return": "Você quer em troca",
   "CHOAM offer": "Oferta CHOAM",
   "Smuggling: black market (double worth)": "Contrabando: mercado negro (valor dobrado)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.": "Mover especiaria: até 5 especiaria por 5 solaris cada. Mercado negro: pelo dobro do valor (6 solaris por 1 especiaria). Cada um aumenta a suspeita em 1; um suborno (10 solaris, 7 para o dono do Mercado dos Contrabandistas) a reduz. Fim da geração: a partir de 3, perde-se influência.",
-  "Not your turn, or nothing worth trading": "Não é sua vez ou não há nada para trocar"
+  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Mover especiaria: até 5 especiaria por 5 solaris cada. Mercado negro: pelo dobro do valor (6 solaris por 1 especiaria). Cada um aumenta a suspeita em 1; um suborno (10 solaris, 7 para o dono do Mercado dos Contrabandistas) a reduz. Fim da geração: 0 e 1 são grátis; a partir de 2, perde-se influência e o marcador volta a 0.",
+  "Not your turn, or nothing worth trading": "Não é sua vez ou não há nada para trocar",
+  "Bazaar: buy ${0} for ${1} M€": "Bazar: comprar ${0} por ${1} M€"
 }

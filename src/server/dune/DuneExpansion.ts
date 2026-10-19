@@ -8,7 +8,7 @@ import {DuneModule} from '../../common/dune/DuneModule';
 import {DuneModel} from '../../common/dune/DuneModel';
 import {ArrakisBoard} from '../boards/ArrakisBoard';
 import {VictoryPointsBreakdownBuilder} from '../game/VictoryPointsBreakdownBuilder';
-import {BazaarData, bazaarModel, buyAction, buyInput, initializeBazaar, slideAndRefill} from './Bazaar';
+import {BazaarData, bazaarModel, bazaarTabActions, buyInput, initializeBazaar, slideAndRefill} from './Bazaar';
 import {WORM_START, WormData, distanceInput, rollWorm, wormChooser, wormModel} from './Worm';
 import {levyInput} from './WormLevy';
 import {KanlyData, initializeKanly, kanlyActions, kanlyModel, resolveBattle} from './Kanly';
@@ -221,9 +221,7 @@ export class DuneExpansion {
     if (data === undefined) {
       return undefined;
     }
-    const bazaarBuy = data.bazaar === undefined ? undefined : buyAction(player, data.bazaar);
     const options: Array<PlayerInput> = [
-      ...(bazaarBuy === undefined ? [] : [bazaarBuy]),
       ...(data.kanly === undefined ? [] : kanlyActions(player, data.kanly)),
       ...(data.smuggling === undefined ? [] : smugglingActions(player, data.smuggling)),
       ...(data.choam === undefined ? [] : choamActions(player, data.choam)),
@@ -235,8 +233,8 @@ export class DuneExpansion {
   }
 
   /**
-   * Module actions that need room for their input – CHOAM offer, moving spice, black market – as options of their own
-   * in the action menu, so the client shows each as an action tab (Jens, 19 Oct 2026)
+   * Module actions that need room for their input – CHOAM offer, smuggling, buying a bazaar ware – as options of their
+   * own in the action menu, so the client shows each as an action tab (Jens, 19 Oct 2026)
    */
   public static tabActions(player: IPlayer): Array<PlayerInput> {
     const data = player.game.duneData;
@@ -246,6 +244,7 @@ export class DuneExpansion {
     return [
       ...(data.choam === undefined ? [] : choamTabActions(player, data.choam)),
       ...(data.smuggling === undefined ? [] : smugglingTabActions(player, data.smuggling)),
+      ...(data.bazaar === undefined ? [] : bazaarTabActions(player, data.bazaar)),
     ];
   }
 
