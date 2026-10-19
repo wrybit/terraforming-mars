@@ -9,11 +9,11 @@
     <!-- The trail map grows into the free height of the box (dune_board.less) -->
     <section v-if="tab === 'worm' && dune.worm" class="dune-board__section dune-board__section--fill">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('special-worm-domain')" alt="">{{ $t('Shai-Hulud') }}</h3>
-      <WormPanel :worm="dune.worm"/>
+      <WormPanel :worm="dune.worm" :board="dune.board"/>
     </section>
     <section v-if="tab === 'kanly' && dune.kanly" class="dune-board__section">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('res-sardaukar')" alt="">{{ $t('Kanly') }}</h3>
-      <KanlyPanel :kanly="dune.kanly" :players="players" :spaces="spaces"/>
+      <KanlyPanel :kanly="dune.kanly" :players="players" :spaces="spaces" :board="dune.board"/>
     </section>
     <section v-if="tab === 'schemes' && dune.schemes" class="dune-board__section dune-board__section--fill">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('res-advisor')" alt="">{{ $t('House schemes') }}</h3>

@@ -6,7 +6,7 @@
     <p class="worm-move__hint">{{ $t('Click the space the worm moves to. Every tile it crosses is hit.') }}</p>
     <div class="worm-map" :style="{width: stageWidth + 'px', height: stageHeight + 'px'}">
       <div class="worm-map__board" :style="{width: box.width + 'px', height: box.height + 'px', transform: 'scale(' + scale + ')'}">
-        <ArrakisHex v-for="cell in cells" :key="cell.id" :spaceId="cell.id" :space="cell.space"
+        <ArrakisHex v-for="cell in cells" :key="cell.id" :spaceId="cell.id" :space="cell.space" :board="playerView.game.gameOptions.boardName"
           :class="['worm-map__cell', {
             'worm-map__cell--context': cell.role === 'context',
             'worm-map__cell--way': onChosenWay(cell.id),
@@ -39,6 +39,7 @@ import {InputResponse} from '@/common/inputs/InputResponse';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import {Message} from '@/common/logs/Message';
 import {arrakisNeighbours, arrakisSpacePosition} from '@/common/dune/arrakisCoordinates';
+import {ArrakisLayout, arrakisLayout} from '@/common/dune/arrakisLayout';
 import ArrakisHex from './ArrakisHex.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
@@ -88,6 +89,10 @@ export default defineComponent({
     };
   },
   computed: {
+    // The game's Arrakis board (standard or large)
+    layout(): ArrakisLayout {
+      return arrakisLayout(this.playerView.game.gameOptions.boardName);
+    },
     wormSpace(): string | undefined {
       return this.playerView.game.dune?.worm?.spaceId;
     },
@@ -108,7 +113,7 @@ export default defineComponent({
       for (let step = 0; step < RINGS; step++) {
         const next: Array<string> = [];
         for (const id of ring) {
-          for (const neighbour of arrakisNeighbours(id)) {
+          for (const neighbour of arrakisNeighbours(this.layout, id)) {
             if (!shown.has(neighbour)) {
               shown.add(neighbour);
               next.push(neighbour);
@@ -121,7 +126,7 @@ export default defineComponent({
       const spaces = this.playerView.game.spaces;
       const cells: Array<Cell> = [];
       for (const id of shown) {
-        const position = arrakisSpacePosition(id);
+        const position = arrakisSpacePosition(this.layout, id);
         if (position !== undefined) {
           const role = id === worm ? 'worm' : way.has(id) ? 'way' : 'context';
           cells.push({id, ...position, role, space: spaces.find((space) => space.id === id)});
@@ -140,7 +145,7 @@ export default defineComponent({
     targets(): Array<Target> {
       return this.ways.map((way, index) => {
         const end = way.length > 0 ? way[way.length - 1] : this.wormSpace;
-        const position = end === undefined ? undefined : arrakisSpacePosition(end);
+        const position = end === undefined ? undefined : arrakisSpacePosition(this.layout, end);
         return {x: (position?.x ?? 0) - this.box.left, y: (position?.y ?? 0) - this.box.top, distance: way.length || index + 1};
       });
     },

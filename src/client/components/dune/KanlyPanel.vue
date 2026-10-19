@@ -3,7 +3,7 @@
        and the rules as a short list below -->
   <div class="dune-kanly" data-test="dune-kanly">
     <!-- The moves sit on the war field card, their input opens right below it (Jens, 19 Oct 2026) -->
-    <KanlyBattleCard :kanly="kanly" :players="players" :spaces="spaces">
+    <KanlyBattleCard :kanly="kanly" :players="players" :spaces="spaces" :board="board">
       <KanlyMoveButton v-if="kanly.battle !== undefined" :title="JOIN_KANLY_TITLE" label="Send Sardaukar"/>
       <KanlyMoveButton v-else-if="!kanly.foughtThisGeneration" :title="OPEN_KANLY_TITLE" label="Open Kanly" :cost="OPEN_KANLY_COST"/>
     </KanlyBattleCard>
@@ -29,6 +29,7 @@ import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import PlayerChip from './PlayerChip.vue';
 import KanlyBattleCard from './KanlyBattleCard.vue';
+import {BoardName} from '@/common/boards/BoardName';
 import DuneRuleCards from './DuneRuleCards.vue';
 import DuneMovePanel from './DuneMovePanel.vue';
 import KanlyMoveButton from './KanlyMoveButton.vue';
@@ -52,6 +53,11 @@ export default defineComponent({
     spaces: {
       type: Array as PropType<ReadonlyArray<SpaceModel>>,
       required: true,
+    },
+    /** The game's Arrakis board (standard or large): names its spaces and gives their terrain */
+    board: {
+      type: String as PropType<BoardName>,
+      default: BoardName.ARRAKIS,
     },
   },
   computed: {

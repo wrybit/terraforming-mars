@@ -9,7 +9,8 @@
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {SpaceModel} from '@/common/models/SpaceModel';
-import {ARRAKIS_ZONES} from '@/common/dune/arrakisTerrain';
+import {BoardName} from '@/common/boards/BoardName';
+import {arrakisLayout} from '@/common/dune/arrakisLayout';
 import BoardSpace from '@/client/components/BoardSpace.vue';
 
 export default defineComponent({
@@ -24,10 +25,15 @@ export default defineComponent({
       type: Object as PropType<SpaceModel | undefined>,
       default: undefined,
     },
+    /** The game's Arrakis board (standard or large): names its spaces and gives their terrain */
+    board: {
+      type: String as PropType<BoardName>,
+      default: BoardName.ARRAKIS,
+    },
   },
   computed: {
     zone(): string {
-      return ARRAKIS_ZONES[this.spaceId] ?? 'erg';
+      return arrakisLayout(this.board).zones[this.spaceId] ?? 'erg';
     },
   },
 });

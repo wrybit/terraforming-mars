@@ -1,6 +1,6 @@
 import {BoardName} from '../boards/BoardName';
 import {StatsGameDetails} from './StatsGame';
-import {DUNE_BOARD, Theme} from '../theme/Theme';
+import {Theme, isDuneBoard} from '../theme/Theme';
 
 // Contract between stats API and stats page: under which board name a game counts in the statistics.
 
@@ -19,5 +19,5 @@ export function statsBoardKey(details: StatsGameDetails | undefined): StatsBoard
 
 /** Theme a game counts under in the statistics: Arrakis is Dune; everything else, also a game whose board is unknown, Mars. */
 export function statsGameTheme(details: StatsGameDetails | undefined): Theme {
-  return details?.boardName === DUNE_BOARD ? 'dune' : 'mars';
+  return isDuneBoard(details?.boardName) ? 'dune' : 'mars';
 }

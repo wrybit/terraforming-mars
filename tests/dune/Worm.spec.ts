@@ -14,6 +14,7 @@ import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {formatMessage} from '../TestingUtils';
 import {cast} from '../../src/common/utils/utils';
 import {arrakisCoordinate} from '../../src/common/dune/arrakisCoordinates';
+import {ARRAKIS_LARGE_LAYOUT, ARRAKIS_LAYOUT} from '../../src/common/dune/arrakisLayout';
 import {finishGeneration, setOxygenLevel} from '../TestingUtils';
 
 function wormOf(game: IGame): WormData {
@@ -34,7 +35,7 @@ describe('Shai-Hulud (Dune module C)', () => {
   });
 
   it('starts on one of the southern spaces E5, F4, F5, G3, G4, H3, H4, picked at random', () => {
-    expect(WORM_START_SPACES.map(arrakisCoordinate)).deep.eq(['E5', 'F4', 'F5', 'G3', 'G4', 'H3', 'H4']);
+    expect(WORM_START_SPACES.map((id) => arrakisCoordinate(ARRAKIS_LAYOUT, id))).deep.eq(['E5', 'F4', 'F5', 'G3', 'G4', 'H3', 'H4']);
     expect(WORM_START_SPACES).includes(wormOf(game).spaceId);
     expect(BEHIND_WORM_BORDER).not.includes(WORM_START);
     expect(ARRAKIS_ZONES[WORM_START]).eq('erg');
@@ -240,4 +241,35 @@ describe('Shai-Hulud (Dune module C)', () => {
     }
     expect(wormOf(game).chooser).is.not.undefined;
   }
+});
+
+// The large Arrakis (six spaces a side): its own terrain, start spaces and worm border (common/dune/arrakisLayout.ts)
+describe('Shai-Hulud on the large Arrakis', () => {
+  let game: IGame;
+
+  beforeEach(() => {
+    [game] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS_LARGE, duneModules: ['worm']});
+  });
+
+  it('starts on a start space of the large board', () => {
+    expect(ARRAKIS_LARGE_LAYOUT.wormStartSpaces).includes(wormOf(game).spaceId);
+  });
+
+  it('can leave every start space', () => {
+    for (const start of ARRAKIS_LARGE_LAYOUT.wormStartSpaces) {
+      expect(ARRAKIS_LARGE_LAYOUT.zones[start], start).not.eq('rock');
+      expect([1, 2, 3, 4, 5, 6].some((roll) => wormDirection(game.board, start, roll) !== undefined), start).is.true;
+    }
+  });
+
+  it('never enters rock or the polar sink of the large board', () => {
+    for (const space of game.board.spaces.filter((s) => ARRAKIS_LARGE_LAYOUT.zones[s.id] !== undefined)) {
+      for (let roll = 1; roll <= 6; roll++) {
+        for (const crossed of wormPath(game.board, space.id, wormDirection(game.board, space.id, roll), 3)) {
+          expect(ARRAKIS_LARGE_LAYOUT.zones[crossed.id]).not.eq('rock');
+          expect(ARRAKIS_LARGE_LAYOUT.behindWormBorder).not.includes(crossed.id);
+        }
+      }
+    }
+  });
 });

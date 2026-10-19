@@ -9,6 +9,7 @@ import {PLANETARY_TRACKS} from '@/common/pathfinders/PlanetaryTracks';
 import {PathfindersModel} from '@/common/models/PathfindersModel';
 import {Color} from '@/common/Color';
 import {arrakisCoordinate} from '@/common/dune/arrakisCoordinates';
+import {arrakisLayout} from '@/common/dune/arrakisLayout';
 import {duneGraphic} from '@/client/components/dune/duneGraphic';
 
 // The Dune expansion gets one tab per module of this game (common/dune/DuneModule.ts), in the order of the concept
@@ -179,7 +180,7 @@ export function boardTabInfo(game: GameModel, id: BoardTabId): BoardTabInfo | un
   switch (id) {
   case 'worm': {
     const worm = dune?.worm;
-    return worm === undefined ? undefined : {icon: duneGraphic('special-worm-domain'), text: arrakisCoordinate(worm.spaceId), title: 'Shai-Hulud lies here'};
+    return worm === undefined ? undefined : {icon: duneGraphic('special-worm-domain'), text: arrakisCoordinate(arrakisLayout(dune?.board), worm.spaceId), title: 'Shai-Hulud lies here'};
   }
   case 'kanly': {
     const kanly = dune?.kanly;
@@ -189,7 +190,7 @@ export function boardTabInfo(game: GameModel, id: BoardTabId): BoardTabInfo | un
     // Whether there is a battle, for which space, whose tile it is and who sends how many (Jens, 19 Oct 2026)
     const battle = kanly.battle;
     if (battle !== undefined) {
-      return {icon: duneGraphic('res-sardaukar'), owner: battle.owner, text: arrakisCoordinate(battle.spaceId), title: 'War field',
+      return {icon: duneGraphic('res-sardaukar'), owner: battle.owner, text: arrakisCoordinate(arrakisLayout(dune?.board), battle.spaceId), title: 'War field',
         counts: battle.troops.map((entry) => ({color: entry.color, value: entry.sardaukar}))};
     }
     return {icon: duneGraphic('res-sardaukar'), label: 'No battle', title: 'No battle'};

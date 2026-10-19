@@ -1,69 +1,64 @@
-// Coordinates of Arrakis spaces as in the mockup (like chess, "E4"): rows A–I from the top, the number counts the
-// spaces of the row from the left. Space ids start at 03 and run row by row (ArrakisBoard.ts).
-const ROW_LENGTHS: ReadonlyArray<number> = [5, 6, 7, 8, 9, 8, 7, 6, 5];
+import {ArrakisLayout} from './arrakisLayout';
 
-export function arrakisCoordinate(spaceId: string): string {
+// Coordinates of Arrakis spaces as in the mockup (like chess, "E4"): rows from A at the top, the number counts the
+// spaces of the row from the left. Space ids start at 03 and run row by row (ArrakisBoard.ts, ArrakisLargeBoard.ts).
+// Every function takes the layout of the game's board (arrakisLayout.ts).
+
+/** Row and place in the row of a space; undefined for spaces off the board */
+function rowAndIndex(layout: ArrakisLayout, spaceId: string): {row: number, index: number} | undefined {
   let index = Number(spaceId) - 3;
-  for (let row = 0; row < ROW_LENGTHS.length; row++) {
-    if (index < ROW_LENGTHS[row]) {
-      return String.fromCharCode(65 + row) + String(index + 1);
+  for (let row = 0; row < layout.rowLengths.length; row++) {
+    if (index >= 0 && index < layout.rowLengths[row]) {
+      return {row, index};
     }
-    index -= ROW_LENGTHS[row];
-  }
-  return spaceId;
-}
-
-/** Row letter (A–I) of an Arrakis space; undefined for spaces off the board */
-export function arrakisRow(spaceId: string): string | undefined {
-  const coordinate = arrakisCoordinate(spaceId);
-  return coordinate === spaceId ? undefined : coordinate.charAt(0);
-}
-
-// Place of a space on the drawn board (board_items_positions.less, standard maps): each row 41px below the last, each
-// space 49px right of the last, each row indented half a space for every row it is away from the middle row.
-const FIRST_SPACE = {x: 104, y: 34};
-const SPACE_STEP = 49;
-const ROW_STEP = 41;
-const MIDDLE_ROW = 4;
-
-/** Top left of an Arrakis space on the board in px; undefined for spaces off the board */
-export function arrakisSpacePosition(spaceId: string): {x: number, y: number} | undefined {
-  let index = Number(spaceId) - 3;
-  for (let row = 0; row < ROW_LENGTHS.length; row++) {
-    if (index < ROW_LENGTHS[row]) {
-      const indent = (MIDDLE_ROW - Math.abs(row - MIDDLE_ROW)) * SPACE_STEP / 2;
-      return {x: FIRST_SPACE.x - indent + index * SPACE_STEP, y: FIRST_SPACE.y + row * ROW_STEP};
-    }
-    index -= ROW_LENGTHS[row];
+    index -= layout.rowLengths[row];
   }
   return undefined;
 }
 
-/** Ids of all Arrakis spaces on the board, row by row from the top ("03" … "63") */
-export const ARRAKIS_SPACE_IDS: ReadonlyArray<string> = Array.from({length: ROW_LENGTHS.reduce((sum, length) => sum + length, 0)},
-  (_value, index) => String(index + 3).padStart(2, '0'));
+export function arrakisCoordinate(layout: ArrakisLayout, spaceId: string): string {
+  const place = rowAndIndex(layout, spaceId);
+  return place === undefined ? spaceId : String.fromCharCode(65 + place.row) + String(place.index + 1);
+}
+
+/** Row letter of an Arrakis space; undefined for spaces off the board */
+export function arrakisRow(layout: ArrakisLayout, spaceId: string): string | undefined {
+  const place = rowAndIndex(layout, spaceId);
+  return place === undefined ? undefined : String.fromCharCode(65 + place.row);
+}
+
+// Place of a space on the drawn board (board_items_positions.less, standard and large maps): each row 41px below the
+// last, each space 49px right of the last, each row indented half a space for every row it is away from the middle row.
+const FIRST_LEFT = 6;
+const FIRST_TOP = 34;
+const SPACE_STEP = 49;
+const ROW_STEP = 41;
+
+/** Top left of an Arrakis space on the board in px; undefined for spaces off the board */
+export function arrakisSpacePosition(layout: ArrakisLayout, spaceId: string): {x: number, y: number} | undefined {
+  const place = rowAndIndex(layout, spaceId);
+  if (place === undefined) {
+    return undefined;
+  }
+  const middleRow = (layout.rowLengths.length - 1) / 2;
+  const indent = Math.abs(place.row - middleRow) * SPACE_STEP / 2;
+  return {x: FIRST_LEFT + indent + place.index * SPACE_STEP, y: FIRST_TOP + place.row * ROW_STEP};
+}
+
+/** Ids of all spaces of the board, row by row from the top ("03" …) */
+export function arrakisSpaceIds(layout: ArrakisLayout): Array<string> {
+  const count = layout.rowLengths.reduce((sum, length) => sum + length, 0);
+  return Array.from({length: count}, (_value, index) => String(index + 3).padStart(2, '0'));
+}
 
 /** Ids of the spaces around an Arrakis space (neighbours are one space step apart on the drawn board) */
-export function arrakisNeighbours(spaceId: string): Array<string> {
-  const center = arrakisSpacePosition(spaceId);
+export function arrakisNeighbours(layout: ArrakisLayout, spaceId: string): Array<string> {
+  const center = arrakisSpacePosition(layout, spaceId);
   if (center === undefined) {
     return [];
   }
-  const neighbours: Array<string> = [];
-  for (const id of ARRAKIS_SPACE_IDS) {
-    const position = arrakisSpacePosition(id);
-    if (id !== spaceId && position !== undefined && Math.hypot(position.x - center.x, position.y - center.y) < SPACE_STEP + 2) {
-      neighbours.push(id);
-    }
-  }
-  return neighbours;
+  return arrakisSpaceIds(layout).filter((id) => {
+    const position = arrakisSpacePosition(layout, id);
+    return id !== spaceId && position !== undefined && Math.hypot(position.x - center.x, position.y - center.y) < SPACE_STEP + 2;
+  });
 }
-
-/** Spaces with a place name on the board (translation keys of the Dune theme, client Legends.ts) */
-export const ARRAKIS_PLACE_NAMES: Readonly<Record<string, string>> = {
-  '05': 'Tharsis Tholus',
-  '12': 'Pavonis Mons',
-  '19': 'Noctis City',
-  '23': 'Ascraeus Mons',
-  '36': 'Arsia Mons',
-};

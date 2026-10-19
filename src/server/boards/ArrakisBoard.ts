@@ -7,6 +7,7 @@ import {GameOptions} from '../game/GameOptions';
 import {MarsBoard} from './MarsBoard';
 import {CanAffordOptions, IPlayer} from '../IPlayer';
 import {SpaceId} from '../../common/Types';
+import {ARRAKIS_LAYOUT, ArrakisLayout} from '../../common/dune/arrakisLayout';
 
 /**
  * Arrakis, the board of the Dune theme. Same rules and the same totals as Tharsis (61 spaces, 12 oceans,
@@ -55,8 +56,12 @@ export class ArrakisBoard extends MarsBoard {
   /** Dune expansion, Kanly: the war field of this generation, shown on the board */
   public warFieldSpaceId: SpaceId | undefined = undefined;
 
-  public constructor(spaces: ReadonlyArray<Space>) {
-    super(spaces, SpaceName.ARRAKEEN);
+  /** Shape and terrain of this board (the large Arrakis has its own, ArrakisLargeBoard.ts) */
+  public readonly layout: ArrakisLayout;
+
+  public constructor(spaces: ReadonlyArray<Space>, arrakeen: SpaceId = SpaceName.ARRAKEEN, layout: ArrakisLayout = ARRAKIS_LAYOUT) {
+    super(spaces, arrakeen);
+    this.layout = layout;
   }
 
   public override getAvailableSpacesOnLand(player: IPlayer, canAffordOptions?: CanAffordOptions, subjectToHazardAdjacency: boolean = true): ReadonlyArray<Space> {

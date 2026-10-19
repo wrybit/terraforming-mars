@@ -1,4 +1,5 @@
 import {BoardName} from '../../common/boards/BoardName';
+import {isArrakisBoard} from '../../common/dune/arrakisLayout';
 import {RandomBoardOption} from '../../common/boards/RandomBoardOption';
 import {BoardNameType} from '../../common/game/NewGameConfig';
 import {Random, SeededRandom} from '../../common/utils/Random';
@@ -10,7 +11,8 @@ import {Random, SeededRandom} from '../../common/utils/Random';
 /** Boards the board option draws from: one fixed board, or the pool of a random option. */
 export function boardCandidates(board: BoardNameType): Array<BoardName> {
   // Arrakis belongs to the Dune theme and is never drawn at random
-  const allBoards = Object.values(BoardName).filter((name) => name !== BoardName.ARRAKIS);
+  // The Arrakis boards belong to the Dune theme only
+  const allBoards = Object.values(BoardName).filter((name) => !isArrakisBoard(name));
   if (board === RandomBoardOption.ALL) {
     return allBoards;
   }

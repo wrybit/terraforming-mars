@@ -15,6 +15,7 @@ import {SelectOption} from '../inputs/SelectOption';
 import {SelectPlayer} from '../inputs/SelectPlayer';
 import {message} from '../logs/MessageBuilder';
 import {arrakisRow} from '../../common/dune/arrakisCoordinates';
+import {arrakisLayout} from '../../common/dune/arrakisLayout';
 import {SCHEME_AGENDAS, SCHEME_REDUCTION_TR, SchemeMeasure, schemeAgenda, schemeLevel, schemePoints} from '../../common/dune/schemeAgendas';
 import {SchemeModel} from '../../common/dune/DuneModel';
 
@@ -96,7 +97,7 @@ export function schemeValue(player: IPlayer, measure: SchemeMeasure): number {
     return board.spaces.filter((space) => isSpecialTile(space) &&
       board.getAdjacentSpaces(space).some((adjacent) => adjacent.player?.id === player.id && Board.hasRealTile(adjacent))).length;
   case 'rowsWithOwnTile':
-    return new Set(ownTiles(player).map((space) => arrakisRow(space.id)).filter((row) => row !== undefined)).size;
+    return new Set(ownTiles(player).map((space) => arrakisRow(arrakisLayout(player.game.gameOptions.boardName), space.id)).filter((row) => row !== undefined)).size;
   case 'titaniumProduction':
     return player.production.get(Resource.TITANIUM);
   case 'steelProduction':

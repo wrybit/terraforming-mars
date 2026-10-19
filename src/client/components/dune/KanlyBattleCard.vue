@@ -5,7 +5,7 @@
        outlined row, without a line of its own (Jens, 19 Oct 2026). With "added" (slider of the send input) the own new Sardaukar show lighter and count
        in the forecast. -->
   <div :class="['kanly-battle', {'kanly-battle--none': forecast === undefined || battle === undefined}]" data-test="kanly-battle">
-    <ArrakisHex v-if="battle !== undefined" class="kanly-battle__hex" :spaceId="battle.spaceId" :space="space"/>
+    <ArrakisHex v-if="battle !== undefined" class="kanly-battle__hex" :spaceId="battle.spaceId" :space="space" :board="board"/>
     <div v-else class="kanly-battle__hex kanly-battle__hex--empty arrakis-hex arrakis-hex--erg">
       <img :src="icon" alt="">
     </div>
@@ -62,7 +62,9 @@ import {KanlyModel} from '@/common/dune/DuneModel';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {tileTypeToString} from '@/common/TileType';
-import {ARRAKIS_PLACE_NAMES, arrakisCoordinate} from '@/common/dune/arrakisCoordinates';
+import {arrakisCoordinate} from '@/common/dune/arrakisCoordinates';
+import {arrakisLayout} from '@/common/dune/arrakisLayout';
+import {BoardName} from '@/common/boards/BoardName';
 import {translateText} from '@/client/directives/i18n';
 import ArrakisHex from './ArrakisHex.vue';
 import BoardCube from '@/client/components/common/BoardCube.vue';
@@ -100,6 +102,11 @@ export default defineComponent({
       type: String as PropType<Color | undefined>,
       default: undefined,
     },
+    /** The game's Arrakis board (standard or large): names its spaces and gives their terrain */
+    board: {
+      type: String as PropType<BoardName>,
+      default: BoardName.ARRAKIS,
+    },
   },
   computed: {
     battle(): KanlyModel['battle'] {
@@ -113,11 +120,11 @@ export default defineComponent({
       return this.spaces.find((space) => space.id === this.battle?.spaceId);
     },
     coordinate(): string {
-      return this.battle === undefined ? '' : arrakisCoordinate(this.battle.spaceId);
+      return this.battle === undefined ? '' : arrakisCoordinate(arrakisLayout(this.board), this.battle.spaceId);
     },
     // Place name of the board, otherwise what lies there ("City")
     placeName(): string {
-      const named = this.battle === undefined ? undefined : ARRAKIS_PLACE_NAMES[this.battle.spaceId];
+      const named = this.battle === undefined ? undefined : arrakisLayout(this.board).placeNames[this.battle.spaceId];
       if (named !== undefined) {
         return translateText(named);
       }

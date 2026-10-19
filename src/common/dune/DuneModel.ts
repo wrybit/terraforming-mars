@@ -1,4 +1,5 @@
 import {Color} from '../Color';
+import {BoardName} from '../boards/BoardName';
 import {Resource} from '../Resource';
 
 // What the client gets of the Dune expansion (server/dune/DuneExpansion.ts); only the modules of this game.
@@ -104,6 +105,8 @@ export type SchemeModel = {
 };
 
 export type DuneModel = {
+  /** The Arrakis board of the game: its layout names spaces and draws the mini maps (common/dune/arrakisLayout.ts) */
+  board: BoardName,
   bazaar?: BazaarModel,
   worm?: WormModel,
   kanly?: KanlyModel,

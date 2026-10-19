@@ -1,4 +1,6 @@
 import {BoardName} from '@/common/boards/BoardName';
+import {ARRAKIS_LARGE_LAYOUT, ARRAKIS_LAYOUT, ArrakisLayout} from '@/common/dune/arrakisLayout';
+import {arrakisSpacePosition} from '@/common/dune/arrakisCoordinates';
 
 export type Key = {
   position: [number, number],
@@ -11,6 +13,17 @@ export type Key = {
   // The text is a translation key (Arrakis: the Dune theme names the places in every language)
   translated?: true,
 };
+
+// Arrakis: the volcanic spaces play like the Tharsis volcanoes, so they use the Tharsis keys (src/themes/dune/names/<lang>.json).
+// Centred just below the space, between its bonus icons and those of the next row: the rings leave no margin for long
+// names in every language, so no lines out to the rim. The legend layer sits 123 / 121 px off the space positions.
+const LEGEND_OFFSET = {x: 123, y: 121};
+function arrakisLegends(layout: ArrakisLayout): ReadonlyArray<Key> {
+  return Object.entries(layout.placeNames).map(([spaceId, name]) => {
+    const position = arrakisSpacePosition(layout, spaceId) ?? {x: 0, y: 0};
+    return {text: [name], translated: true, anchor: 'middle', position: [position.x + LEGEND_OFFSET.x, position.y + LEGEND_OFFSET.y]};
+  });
+}
 
 export const LEGENDS: Record<BoardName, ReadonlyArray<Key>> = {
   [BoardName.THARSIS]: [],
@@ -31,19 +44,6 @@ export const LEGENDS: Record<BoardName, ReadonlyArray<Key>> = {
   ],
   [BoardName.HOLLANDIA]: [],
   [BoardName.AMAZONIS_PLANITIA]: [],
-  // The volcanic spaces play like the Tharsis volcanoes, so they use the Tharsis keys (src/themes/dune/names/<lang>.json).
-  // Centred just below the space, between its bonus icons and those of the next row: the rings leave no margin
-  // for long names in every language, so no lines out to the rim.
-  [BoardName.ARRAKIS]: [
-    // Space 05, Observatory mountain
-    {text: ['Tharsis Tholus'], translated: true, anchor: 'middle', position: [325, 155]},
-    // Space 12, Rim wall west
-    {text: ['Pavonis Mons'], translated: true, anchor: 'middle', position: [399, 196]},
-    // Space 19, Arrakeen (reserved like Noctis City)
-    {text: ['Noctis City'], translated: true, anchor: 'middle', position: [423, 237]},
-    // Space 23, Mount Idaho
-    {text: ['Ascraeus Mons'], translated: true, anchor: 'middle', position: [252, 278]},
-    // Space 36, Shield wall
-    {text: ['Arsia Mons'], translated: true, anchor: 'middle', position: [472, 319]},
-  ],
+  [BoardName.ARRAKIS]: arrakisLegends(ARRAKIS_LAYOUT),
+  [BoardName.ARRAKIS_LARGE]: arrakisLegends(ARRAKIS_LARGE_LAYOUT),
 };

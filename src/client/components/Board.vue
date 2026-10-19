@@ -17,7 +17,7 @@
 
         <div class="global-numbers" :class="{'global-numbers--large': isLargeBoard}">
             <!-- Arrakis: the scales as vectors (the Dune board picture is only the planet, scripts/make-dune-planet.py) -->
-            <ArrakisScales v-if="boardName === BoardName.ARRAKIS"/>
+            <ArrakisScales v-if="isArrakis"/>
             <div class="global-numbers-temperature">
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('temperature')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('temperature') : undefined">{{ lvl.strValue }}</div>
             </div>
@@ -35,7 +35,7 @@
 
             <div class="global-numbers-oceans" v-flash="flashKeys.globalParameter('oceans')">
               <!-- Arrakis: the spice field tile in front of the count; inside the count, so it moves with it in every board layout -->
-              <img v-if="boardName === BoardName.ARRAKIS" class="global-numbers-oceans__tile" src="assets/themes/dune/graphics/tile-spicefield.svg" alt="">
+              <img v-if="isArrakis" class="global-numbers-oceans__tile" src="assets/themes/dune/graphics/tile-spicefield.svg" alt="">
               <span v-if="oceans_count === globalParameterMaximums.oceans">
                 <img width="26" src="assets/misc/circle-checkmark.png" class="board-ocean-checkmark" :alt="$t('Completed!')">
               </span>
@@ -365,6 +365,7 @@ import {SpaceType} from '@/common/boards/SpaceType';
 import {SpaceId} from '@/common/Types';
 import {spacesById} from '@/client/utils/spacesById';
 import {TileView} from '@/client/components/board/TileView';
+import {isArrakisBoard} from '@/common/dune/arrakisLayout';
 import {BoardName} from '@/common/boards/BoardName';
 import {LEGENDS} from '@/client/components/Legends';
 import {Expansion} from '@/common/cards/GameModule';
@@ -524,6 +525,10 @@ export default defineComponent({
     // The larger map needs a bigger board container.
     isLargeBoard(): boolean {
       return isLargeBoard(this.boardName);
+    },
+    // Both Arrakis boards of the Dune theme (common/dune/arrakisLayout.ts)
+    isArrakis(): boolean {
+      return isArrakisBoard(this.boardName);
     },
     BoardName(): typeof BoardName {
       return BoardName;

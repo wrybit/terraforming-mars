@@ -1,4 +1,5 @@
 import {From} from './logs/From';
+import {arrakisLayout} from '../common/dune/arrakisLayout';
 import * as constants from '../common/constants';
 import {venusLevelAfterSteps, venusStepsBetween} from './venusNext/venusScale';
 import {BeginnerCorporation} from './cards/corporation/BeginnerCorporation';
@@ -395,7 +396,7 @@ export class Game implements IGame, Logger {
       game.moonData = MoonExpansion.initialize(gameOptions, rng);
     }
 
-    game.duneData = DuneExpansion.initialize(gameOptions.duneModules, players, rng);
+    game.duneData = DuneExpansion.initialize(gameOptions.duneModules, players, rng, arrakisLayout(gameOptions.boardName));
     DuneExpansion.attach(game);
 
     if (gameOptions.pathfindersExpansion) {

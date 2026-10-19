@@ -7,6 +7,7 @@ import {Random} from '../../common/utils/Random';
 import {DuneModule} from '../../common/dune/DuneModule';
 import {DuneModel} from '../../common/dune/DuneModel';
 import {ArrakisBoard} from '../boards/ArrakisBoard';
+import {ARRAKIS_LAYOUT, ArrakisLayout, arrakisLayout} from '../../common/dune/arrakisLayout';
 import {VictoryPointsBreakdownBuilder} from '../game/VictoryPointsBreakdownBuilder';
 import {BazaarData, bazaarModel, bazaarTabActions, buyInput, initializeBazaar, slideAndRefill} from './Bazaar';
 import {WormData, distanceInput, rollWorm, wormChooser, wormModel, wormStart} from './Worm';
@@ -101,7 +102,8 @@ function askLevies(game: IGame, worm: WormData, next: () => void): void {
 }
 
 export class DuneExpansion {
-  public static initialize(modules: ReadonlyArray<DuneModule> | undefined, players: ReadonlyArray<IPlayer>, rng: Random): DuneData | undefined {
+  public static initialize(modules: ReadonlyArray<DuneModule> | undefined, players: ReadonlyArray<IPlayer>, rng: Random,
+    layout: ArrakisLayout = ARRAKIS_LAYOUT): DuneData | undefined {
     if (modules === undefined || modules.length === 0) {
       return undefined;
     }
@@ -110,7 +112,7 @@ export class DuneExpansion {
       data.bazaar = initializeBazaar(rng);
     }
     if (modules.includes('worm')) {
-      data.worm = {spaceId: wormStart(rng), path: []};
+      data.worm = {spaceId: wormStart(rng, layout), path: []};
     }
     if (modules.includes('kanly')) {
       data.kanly = initializeKanly();
@@ -262,6 +264,7 @@ export class DuneExpansion {
       return undefined;
     }
     return {
+      board: arrakisLayout(game.gameOptions.boardName).board,
       bazaar: data.bazaar === undefined ? undefined : bazaarModel(game, data.bazaar, viewer),
       worm: data.worm === undefined ? undefined : wormModel(game, data.worm),
       kanly: data.kanly === undefined ? undefined : kanlyModel(game, data.kanly),

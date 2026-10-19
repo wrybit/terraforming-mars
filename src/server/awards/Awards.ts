@@ -136,6 +136,7 @@ export const awardManifest: MAManifest<AwardName, IAward> = {
     [BoardName.AMAZONIS_PLANITIA]: ['Collector', 'Innovator', 'Constructor', 'Manufacturer', 'Physicist'],
     // Dune theme: the Tharsis awards under Dune names (theme texts only)
     [BoardName.ARRAKIS]: [...DUNE_AWARDS],
+    [BoardName.ARRAKIS_LARGE]: [...DUNE_AWARDS],
   },
   expansions: {
     venus: ['Venuphile'],

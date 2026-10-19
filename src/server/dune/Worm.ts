@@ -9,13 +9,14 @@ import {TileType} from '../../common/TileType';
 import {OrOptions} from '../inputs/OrOptions';
 import {SelectOption} from '../inputs/SelectOption';
 import {message} from '../logs/MessageBuilder';
-import {ARRAKIS_ZONES, BEHIND_WORM_BORDER} from '../../common/dune/arrakisTerrain';
 import {WormModel} from '../../common/dune/DuneModel';
 import {PendingLevy, takeLevy} from './WormLevy';
 import {arrakisCoordinate} from '../../common/dune/arrakisCoordinates';
 import {CardName} from '../../common/cards/CardName';
 import {Random} from '../../common/utils/Random';
 import {WORM_START_SPACES} from '../../common/dune/wormStartSpaces';
+import {ARRAKIS_LAYOUT, ArrakisLayout} from '../../common/dune/arrakisLayout';
+import {ArrakisBoard} from '../boards/ArrakisBoard';
 
 // Module C – Shai-Hulud (claude/dune-erweiterung-konzept.md): a worm marker wanders over Arrakis. At the end of
 // every generation a die gives the direction, the weakest player (least TR) chooses 1–3 spaces, and every space the
@@ -51,8 +52,13 @@ export const WORM_START: SpaceId = '48' as SpaceId;
 // Where the worm may start: common/dune/wormStartSpaces.ts (the Shai-Hulud tab lists the same spaces as a rule)
 export {WORM_START_SPACES};
 
-export function wormStart(rng: Random): SpaceId {
-  return WORM_START_SPACES[rng.nextInt(WORM_START_SPACES.length)];
+export function wormStart(rng: Random, layout: ArrakisLayout = ARRAKIS_LAYOUT): SpaceId {
+  return layout.wormStartSpaces[rng.nextInt(layout.wormStartSpaces.length)];
+}
+
+/** Terrain of the board the worm moves on: the standard or the large Arrakis */
+function layoutOf(board: Board): ArrakisLayout {
+  return board instanceof ArrakisBoard ? board.layout : ARRAKIS_LAYOUT;
 }
 
 export {WORM_TITLE};
@@ -77,12 +83,13 @@ export function wormChooser(game: IGame): IPlayer {
   return order.reduce((weakest, player) => (player.terraformRating <= weakest.terraformRating ? player : weakest), order[0]);
 }
 
-function stopsWorm(space: Space | undefined): boolean {
+function stopsWorm(board: Board, space: Space | undefined): boolean {
   if (space === undefined) {
     return true;
   }
-  const zone = ARRAKIS_ZONES[space.id];
-  return zone === 'rock' || zone === 'city' || BEHIND_WORM_BORDER.includes(space.id);
+  const layout = layoutOf(board);
+  const zone = layout.zones[space.id];
+  return zone === 'rock' || zone === 'city' || layout.behindWormBorder.includes(space.id);
 }
 
 /** Heading for a die roll: the rolled direction, or the next free one clockwise when it is blocked; undefined when boxed in */
@@ -90,7 +97,7 @@ export function wormDirection(board: Board, from: SpaceId, roll: number): number
   const neighbours = board.getAdjacentSpacesClockwise(board.getSpaceOrThrow(from));
   for (let turn = 0; turn < neighbours.length; turn++) {
     const direction = (directionIndex(roll) + turn) % neighbours.length;
-    if (!stopsWorm(neighbours[direction])) {
+    if (!stopsWorm(board, neighbours[direction])) {
       return direction;
     }
   }
@@ -106,7 +113,7 @@ export function wormPath(board: Board, from: SpaceId, direction: number | undefi
   let current = board.getSpaceOrThrow(from);
   for (let step = 0; step < distance; step++) {
     const next = board.getAdjacentSpacesClockwise(current)[direction];
-    if (next === undefined || stopsWorm(next)) {
+    if (next === undefined || stopsWorm(board, next)) {
       break;
     }
     path.push(next);
@@ -224,7 +231,7 @@ export function distanceInput(game: IGame, worm: WormData): OrOptions {
   const options = wormChoices(game, worm).map(({distance, path}) => {
     // Label with the space the worm ends on, so the chooser sees where it goes
     const end = path.length === 0 ? worm.spaceId : path[path.length - 1].id;
-    return new SelectOption(message('${0} space(s): to ${1}', (b) => b.number(path.length).rawString(arrakisCoordinate(end))), 'Move')
+    return new SelectOption(message('${0} space(s): to ${1}', (b) => b.number(path.length).rawString(arrakisCoordinate(layoutOf(game.board), end))), 'Move')
       .andThen(() => {
         moveWorm(game, worm, distance);
         return undefined;

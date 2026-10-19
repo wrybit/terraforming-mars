@@ -1,4 +1,4 @@
-import {WORM_START_SPACES} from '@/common/dune/wormStartSpaces';
+import {ArrakisLayout} from '@/common/dune/arrakisLayout';
 import {arrakisCoordinate} from '@/common/dune/arrakisCoordinates';
 
 // Rules of the Dune modules as a short list (DuneRuleCards.vue). English texts, translated on display.
@@ -45,16 +45,23 @@ export const SMUGGLING_RULES: ReadonlyArray<DuneRule> = [
   {sign: 'hidden', text: 'At 4 all trading stops until a bribe lowers it'},
 ];
 
-// Shai-Hulud: where the worm starts (Jens, 19 Oct 2026) and what it does to the spaces it crosses
-export const WORM_RULES: ReadonlyArray<DuneRule> = [
-  {picture: 'token-worm', text: 'Start: the worm starts at random on one of these spaces:',
-    detail: WORM_START_SPACES.map((spaceId) => arrakisCoordinate(spaceId)).join(', ')},
+// Shai-Hulud: what the worm does to the spaces it crosses
+const WORM_EFFECT_RULES: ReadonlyArray<DuneRule> = [
   {picture: 'tile-small-spicefield', text: 'Spice field: +1 spice for each adjacent tile of a player'},
   {picture: 'tile-small-sietch', text: 'City: worm riders, the owner gains 1 spice and 2 heat'},
   {picture: 'tile-small-planting', text: 'Greenery: trampled, the owner loses 3 plants'},
   {picture: 'tile-small-special', text: 'Special tile: damaged, the owner loses 3 M€'},
   {picture: 'special-worm-domain', text: 'Natural Preserve: the worm stops, the owner gains 1 TR'},
 ];
+
+// Shai-Hulud: where the worm starts on the game's board (Jens, 19 Oct 2026) and what it does to the spaces it crosses
+export function wormRules(layout: ArrakisLayout): ReadonlyArray<DuneRule> {
+  return [
+    {picture: 'token-worm', text: 'Start: the worm starts at random on one of these spaces:',
+      detail: layout.wormStartSpaces.map((spaceId) => arrakisCoordinate(layout, spaceId)).join(', ')},
+    ...WORM_EFFECT_RULES,
+  ];
+}
 
 // CHOAM contracts (Jens, 19 Oct 2026: as a short list like the other modules)
 export const CHOAM_RULES: ReadonlyArray<DuneRule> = [

@@ -15,4 +15,6 @@ export enum BoardName {
   HOLLANDIA = 'Hollandia',
   // Board of the Dune theme only (common/theme/Theme.ts): never offered on its own or as a random board
   ARRAKIS = 'arrakis',
+  // The larger Arrakis (six spaces a side like Amazonis Planitia), also Dune theme only (common/dune/arrakisLayout.ts)
+  ARRAKIS_LARGE = 'arrakis large',
 }

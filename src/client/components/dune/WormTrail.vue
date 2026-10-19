@@ -28,8 +28,9 @@
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {WormTrailModel} from '@/common/dune/DuneModel';
-import {ARRAKIS_SPACE_IDS, arrakisCoordinate, arrakisSpacePosition} from '@/common/dune/arrakisCoordinates';
-import {ARRAKIS_ZONES} from '@/common/dune/arrakisTerrain';
+import {arrakisCoordinate, arrakisSpaceIds, arrakisSpacePosition} from '@/common/dune/arrakisCoordinates';
+import {ArrakisLayout, arrakisLayout} from '@/common/dune/arrakisLayout';
+import {BoardName} from '@/common/boards/BoardName';
 import {duneGraphic} from './duneGraphic';
 
 // Size of a space on the drawn board (board.less @board-space-width/-height); the map uses board pixels
@@ -53,13 +54,13 @@ type Cell = {id: string, zone: string, points: string};
 type Line = {index: number, points: string, opacity: number};
 type Stop = Point & {spaceId: string, label: string, title: string, width: number};
 
-function center(spaceId: string): Point {
-  const position = arrakisSpacePosition(spaceId) ?? {x: 0, y: 0};
+function center(layout: ArrakisLayout, spaceId: string): Point {
+  const position = arrakisSpacePosition(layout, spaceId) ?? {x: 0, y: 0};
   return {x: position.x + SPACE_WIDTH / 2, y: position.y + SPACE_HEIGHT / 2};
 }
 
-function hexPoints(spaceId: string): string {
-  const {x, y} = center(spaceId);
+function hexPoints(layout: ArrakisLayout, spaceId: string): string {
+  const {x, y} = center(layout, spaceId);
   const halfWidth = SPACE_WIDTH / 2 - HEX_GAP;
   const halfHeight = SPACE_HEIGHT / 2 - HEX_GAP;
   return [[0, -halfHeight], [halfWidth, -halfHeight / 2], [halfWidth, halfHeight / 2], [0, halfHeight], [-halfWidth, halfHeight / 2], [-halfWidth, -halfHeight / 2]]
@@ -73,8 +74,16 @@ export default defineComponent({
       type: Object as PropType<WormTrailModel>,
       required: true,
     },
+    /** The game's Arrakis board (standard or large) */
+    board: {
+      type: String as PropType<BoardName>,
+      default: BoardName.ARRAKIS,
+    },
   },
   computed: {
+    layout(): ArrakisLayout {
+      return arrakisLayout(this.board);
+    },
     WORM_SIZE(): number {
       return WORM_SIZE;
     },
@@ -85,10 +94,10 @@ export default defineComponent({
       return duneGraphic('token-worm');
     },
     cells(): Array<Cell> {
-      return ARRAKIS_SPACE_IDS.map((id) => ({id, zone: ARRAKIS_ZONES[id] ?? 'erg', points: hexPoints(id)}));
+      return arrakisSpaceIds(this.layout).map((id) => ({id, zone: this.layout.zones[id] ?? 'erg', points: hexPoints(this.layout, id)}));
     },
     viewBox(): string {
-      const positions = ARRAKIS_SPACE_IDS.map((id) => arrakisSpacePosition(id) ?? {x: 0, y: 0});
+      const positions = arrakisSpaceIds(this.layout).map((id) => arrakisSpacePosition(this.layout, id) ?? {x: 0, y: 0});
       const left = Math.min(...positions.map((position) => position.x)) - MARGIN;
       const top = Math.min(...positions.map((position) => position.y)) - MARGIN;
       const right = Math.max(...positions.map((position) => position.x)) + SPACE_WIDTH + MARGIN;
@@ -110,10 +119,10 @@ export default defineComponent({
       return last === 0 ? this.trail.start : this.endOf(last - 1);
     },
     start(): Point {
-      return center(this.trail.start);
+      return center(this.layout, this.trail.start);
     },
     now(): Point {
-      return center(this.nowSpace);
+      return center(this.layout, this.nowSpace);
     },
     lines(): Array<Line> {
       const count = this.trail.moves.length;
@@ -121,7 +130,7 @@ export default defineComponent({
         .map((move, index) => ({
           index,
           points: [this.origins[index], ...move.path].map((id) => {
-            const point = center(id);
+            const point = center(this.layout, id);
             return `${point.x},${point.y}`;
           }).join(' '),
           opacity: count <= 1 ? 1 : OLDEST_OPACITY + (1 - OLDEST_OPACITY) * index / (count - 1),
@@ -137,12 +146,12 @@ export default defineComponent({
       });
       return [...generations.entries()].map(([spaceId, list]) => {
         const label = list.join(', ');
-        const point = center(spaceId);
+        const point = center(this.layout, spaceId);
         const offset = spaceId === this.nowSpace ? NOW_OFFSET : 0;
         return {
           spaceId,
           label,
-          title: `${arrakisCoordinate(spaceId)}: ${label}`,
+          title: `${arrakisCoordinate(this.layout, spaceId)}: ${label}`,
           width: STOP_PADDING + DIGIT_WIDTH * label.length,
           x: point.x + offset,
           y: point.y - offset,

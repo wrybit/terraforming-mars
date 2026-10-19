@@ -5,7 +5,8 @@
     <div v-if="showtitle === true" class="amount-select__title">{{ $t(playerinput.title) }}</div>
     <!-- Dune Kanly: what the Sardaukar are sent into – tile, owner, everybody's forces and the forecast with this amount -->
     <KanlyBattleCard v-if="kanly !== undefined" class="amount-select__context" :kanly="kanly" :players="playerView.players"
-      :spaces="playerView.game.spaces" :viewer="playerView.thisPlayer.color" :added="amount"/>
+      :spaces="playerView.game.spaces" :viewer="playerView.thisPlayer.color" :added="amount"
+      :board="playerView.game.gameOptions.boardName"/>
     <!-- As a choice block: centered in the tab box like other decisions (choice_block.less) -->
     <div v-if="conversion !== undefined" class="choice-block choice-block--natural">
       <AmountConverter v-model="amount" :conversion="conversion"

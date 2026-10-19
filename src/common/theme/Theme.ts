@@ -2,6 +2,7 @@ import {BoardName} from '../boards/BoardName';
 import {Expansion} from '../cards/GameModule';
 import {MilestoneName} from '../ma/MilestoneName';
 import {AwardName} from '../ma/AwardName';
+import {ARRAKIS_BOARDS, isArrakisBoard} from '../dune/arrakisLayout';
 
 // Theme of a game: only what is shown changes (texts, icons, board picture), never the rules.
 // "dune" plays exactly like Terraforming Mars; card names, costs, tags and values stay the same internally,
@@ -18,8 +19,15 @@ export function isTheme(value: unknown): value is Theme {
 /** Expansions the Dune theme has texts and pictures for; all others are locked while Dune is chosen. */
 export const DUNE_EXPANSIONS: ReadonlyArray<Expansion> = ['corpera', 'prelude', 'prelude2'];
 
-/** The only board of the Dune theme; the Mars theme never uses it. */
+/** The standard board of the Dune theme; the Mars theme never uses it. The Dune theme also offers the large Arrakis. */
 export const DUNE_BOARD = BoardName.ARRAKIS;
+
+/** Boards of the Dune theme, the standard one first (common/dune/arrakisLayout.ts) */
+export const DUNE_BOARDS: ReadonlyArray<BoardName> = ARRAKIS_BOARDS;
+
+export function isDuneBoard(board: string | undefined): boolean {
+  return isArrakisBoard(board);
+}
 
 /** Milestones of the Dune theme: the Tharsis ones under Dune names (theme texts only). Arrakis offers them. */
 export const DUNE_MILESTONES: ReadonlyArray<MilestoneName> = ['Terraformer', 'Mayor', 'Gardener', 'Builder', 'Planner'];
@@ -34,7 +42,7 @@ export function themeAllowsExpansion(theme: Theme, expansion: Expansion): boolea
 
 /** True when `board` (a board or a random board option) can be played with `theme`. */
 export function themeAllowsBoard(theme: Theme, board: string): boolean {
-  return theme === 'dune' ? board === DUNE_BOARD : board !== DUNE_BOARD;
+  return theme === 'dune' ? isDuneBoard(board) : !isDuneBoard(board);
 }
 
 /** Reasons a new game's settings do not fit its theme (English, translated on display); empty when they fit. */

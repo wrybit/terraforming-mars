@@ -124,9 +124,11 @@
         <Teleport :to="columnTarget('board')">
           <section class="create-game-card" :style="cardStyle('board')">
             <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
+            <!-- Dune: the standard and the large Arrakis (common/dune/arrakisLayout.ts) -->
             <div v-if="theme === 'dune'" class="create-game-chip-grid create-game-theme-board">
-              <ChoiceChip :label="DUNE_BOARD" capitalized selected locked>
-                <template #icon><span :class="getBoardColorClass(DUNE_BOARD)"></span></template>
+              <ChoiceChip v-for="boardName in DUNE_BOARDS" :key="boardName" :label="boardName" capitalized :selected="board === boardName"
+                @select="board = boardName">
+                <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
               </ChoiceChip>
             </div>
             <template v-else>
@@ -427,7 +429,7 @@ import {ColumnCount, currentColumnCount, placementOf, SettingsCard, watchColumnC
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {describeFailure, failureFromResponse, failureOf, fetchOrFail, RequestFailedError} from '@/client/utils/requestFailure';
 import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
-import {DUNE_BOARD, Theme, themeAllowsExpansion} from '@/common/theme/Theme';
+import {DUNE_BOARD, DUNE_BOARDS, Theme, isDuneBoard, themeAllowsExpansion} from '@/common/theme/Theme';
 import {activeTheme, applyTheme} from '@/client/theme/applyTheme';
 import {chosenTheme, rememberTheme} from '@/client/theme/themeChoice';
 import ThemeSwitch from '@/client/components/common/ThemeSwitch.vue';
@@ -580,7 +582,7 @@ export default defineComponent({
       saveExpansionGrouping(value);
     },
     board(value: BoardNameType) {
-      if (!this.isRandomBoard(value) && value !== DUNE_BOARD) {
+      if (!this.isRandomBoard(value) && !isDuneBoard(value)) {
         this.lastFixedBoard = value as BoardName;
       }
     },
@@ -876,11 +878,13 @@ export default defineComponent({
     // carry it without a field of their own.
     theme: {
       get(): Theme {
-        return this.board === DUNE_BOARD ? 'dune' : 'mars';
+        return isDuneBoard(this.board) ? 'dune' : 'mars';
       },
       set(value: Theme) {
         if (value === 'dune') {
-          this.board = DUNE_BOARD;
+          if (!isDuneBoard(this.board)) {
+            this.board = DUNE_BOARD;
+          }
           // Arrakis follows the geography of the planet; shuffled bonuses would lose it
           this.shuffleMapOption = false;
           for (const expansion of Object.keys(this.expansions) as Array<Expansion>) {
@@ -911,8 +915,8 @@ export default defineComponent({
     DUNE_MODULE_ICON(): typeof DUNE_MODULE_ICON {
       return DUNE_MODULE_ICON;
     },
-    DUNE_BOARD(): BoardName {
-      return DUNE_BOARD;
+    DUNE_BOARDS(): ReadonlyArray<BoardName> {
+      return DUNE_BOARDS;
     },
     // "Random board" is stored as the board value itself (RandomBoardOption), like before
     randomBoard: {
