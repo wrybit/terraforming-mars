@@ -14,6 +14,8 @@
     <!-- Optional banner on top (what is being placed, PlacementBanner.vue); the board is fitted below it -->
     <div v-if="visible && !closing" class="board-zoom-banner" ref="banner"><slot name="banner"></slot></div>
     <!-- Outside the scrolling background so close and the zoom bar stay put while panning -->
+    <!-- Optional controls at the bottom (tile view switch, TileViewToggle.vue); the board is fitted above them -->
+    <div v-if="visible && !closing && $slots.controls" class="board-zoom-controls" ref="controls"><slot name="controls"></slot></div>
     <button v-if="visible" type="button" class="board-zoom-close" :aria-label="$t('Close')" @click.stop="$emit('close')">✕</button>
     <!-- Mobile view: zoom bar at the bottom (pinch and double tap work as well) -->
     <MobileZoomControls v-if="visible && mobileLayout" :percent="zoomPercent" @zoom="zoomAtCenter" @fit="fitWholePlanet"/>
@@ -35,6 +37,9 @@ const VIEWPORT_MARGIN = 24;
 // Distance of the banner from the window top (board_zoom_modal.less) and down to the board
 const BANNER_TOP = 16;
 const BANNER_GAP = 12;
+// Distance of the bottom controls from the window bottom (board_zoom_modal.less) and up to the board
+const CONTROLS_BOTTOM = 16;
+const CONTROLS_GAP = 12;
 // Mobile: room the stage keeps free on top anyway for ✕ (mobile.less .board-zoom-stage padding-top)
 const MOBILE_STAGE_TOP = 56;
 
@@ -66,6 +71,9 @@ const banner = ref<HTMLElement | undefined>(undefined);
 // Height of the banner incl. its distances, 0 without banner
 const bannerZone = ref(0);
 let bannerObserver: ResizeObserver | undefined;
+const controls = ref<HTMLElement | undefined>(undefined);
+// Height of the bottom controls incl. their distances, 0 without controls
+const controlsZone = ref(0);
 // Unzoomed size of the content; measured once at zoom 1 because zoomed dimensions are browser-dependent
 let naturalSize: {width: number, height: number} | undefined;
 
@@ -80,7 +88,7 @@ function fitToViewport() {
     return;
   }
   const availableWidth = window.innerWidth - 2 * VIEWPORT_MARGIN;
-  const availableHeight = window.innerHeight - 2 * VIEWPORT_MARGIN - bannerZone.value;
+  const availableHeight = window.innerHeight - 2 * VIEWPORT_MARGIN - bannerZone.value - controlsZone.value;
   zoomFactor.value = Math.min(availableWidth / naturalSize.width, availableHeight / naturalSize.height);
 }
 
@@ -110,10 +118,10 @@ const contentStyle = computed(() => props.frame !== undefined ? {
 let stopPinch: (() => void) | undefined;
 // Desktop: the board is centred in the area below the banner; mobile: the stage starts below it
 const backdropStyle = computed(() => {
-  if (bannerZone.value === 0) {
-    return {};
+  if (mobileLayout.value) {
+    return bannerZone.value === 0 ? {} : {'--board-zoom-stage-top': Math.max(MOBILE_STAGE_TOP, bannerZone.value) + 'px'};
   }
-  return mobileLayout.value ? {'--board-zoom-stage-top': Math.max(MOBILE_STAGE_TOP, bannerZone.value) + 'px'} : {paddingTop: bannerZone.value + 'px'};
+  return {paddingTop: bannerZone.value + 'px', paddingBottom: controlsZone.value + 'px'};
 });
 
 // Banner height decides how much room the board has: measured on every change (rules wrap, language)
@@ -125,6 +133,17 @@ function measureBanner() {
   if (zone !== bannerZone.value) {
     bannerZone.value = zone;
     onResize();
+  }
+}
+
+// Controls keep their size (one row): measured once per opening. Mobile: they sit on the zoom bar, so only their
+// own height and the gap count (mobile.less)
+function measureControls() {
+  const height = controls.value?.offsetHeight ?? 0;
+  if (height === 0) {
+    controlsZone.value = 0;
+  } else {
+    controlsZone.value = mobileLayout.value ? height + CONTROLS_GAP : CONTROLS_BOTTOM + height + CONTROLS_GAP;
   }
 }
 
@@ -147,7 +166,7 @@ function wholeBoardZoom(): number {
   if (naturalSize.width === 0 || naturalSize.height === 0) {
     return 1;
   }
-  return Math.min((window.innerWidth - 2 * VIEWPORT_MARGIN) / naturalSize.width, (window.innerHeight - CONTROLS_HEIGHT - 2 * VIEWPORT_MARGIN - mobileBannerExtra()) / naturalSize.height);
+  return Math.min((window.innerWidth - 2 * VIEWPORT_MARGIN) / naturalSize.width, (window.innerHeight - CONTROLS_HEIGHT - 2 * VIEWPORT_MARGIN - mobileBannerExtra() - controlsZone.value) / naturalSize.height);
 }
 
 // Mobile: what the banner covers beyond the room the stage keeps free on top anyway
@@ -156,7 +175,7 @@ function mobileBannerExtra(): number {
 }
 
 function mobileWholeZoom(): number {
-  return props.frame === undefined ? wholeBoardZoom() : wholePlanetZoom(window.innerWidth, window.innerHeight - mobileBannerExtra(), props.frame);
+  return props.frame === undefined ? wholeBoardZoom() : wholePlanetZoom(window.innerWidth, window.innerHeight - mobileBannerExtra() - controlsZone.value, props.frame);
 }
 
 function fitMobile() {
@@ -180,7 +199,7 @@ function centerPlanet() {
   // The larger map (Amazonis Planitia) has its planet center elsewhere
   const center = board.classList.contains('board-cont--large') ? PLANET_CENTER_LARGE : PLANET_CENTER;
   element.scrollLeft += rect.left + center.x * zoomFactor.value - element.clientWidth / 2;
-  element.scrollTop += rect.top + center.y * zoomFactor.value - (element.clientHeight - CONTROLS_HEIGHT) / 2;
+  element.scrollTop += rect.top + center.y * zoomFactor.value - (element.clientHeight - CONTROLS_HEIGHT - controlsZone.value) / 2;
 }
 
 // Set zoom to `value`; the point (`x`, `y`) in the window stays in place
@@ -203,7 +222,7 @@ function setZoom(value: number, x: number, y: number) {
 // − and +: in 25 % steps (100–300 %), around the centre of the visible area
 function zoomAtCenter(factor: number) {
   const ratio = steppedZoomRatio(zoomFactor.value / wholeZoom.value, factor > 1 ? 1 : -1);
-  setZoom(wholeZoom.value * ratio, window.innerWidth / 2, (window.innerHeight - CONTROLS_HEIGHT) / 2);
+  setZoom(wholeZoom.value * ratio, window.innerWidth / 2, (window.innerHeight - CONTROLS_HEIGHT - controlsZone.value) / 2);
 }
 
 async function fitWholePlanet() {
@@ -251,6 +270,7 @@ async function show() {
   closing.value = false;
   visible.value = true;
   await nextTick();
+  measureControls();
   observeBanner();
   if (mobileLayout.value) {
     fitMobile();
@@ -284,20 +304,18 @@ async function hide() {
   stopPinch?.();
   stopPinch = undefined;
   bannerZone.value = 0;
+  controlsZone.value = 0;
   visible.value = false;
   emit('hidden');
 }
 
-// Clicks on controls in the board (e.g. "tiles on/off") should not close the modal
+// Click on the background closes the modal (the tile view switch sits outside the backdrop)
 function onBackdropClick(event: MouseEvent) {
   // On mobile only ✕ closes: swiping and zooming on the background should not collapse Mars
   if (mobileLayout.value) {
     return;
   }
   const target = event.target as HTMLElement | null;
-  if (target !== null && target.closest('.hide-tile-button') !== null) {
-    return;
-  }
   // During a space selection placing happens in the board; only the background shrinks it
   if (target !== null && target.closest('.board-zoom-content') !== null && isBoardPlacementActive()) {
     return;

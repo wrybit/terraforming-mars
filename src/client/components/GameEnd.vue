@@ -210,6 +210,9 @@
           <!-- Outside the scaled part: the zoom would also scale the full-screen view -->
           <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" :frame="zoomBoard === 'mars' ? marsZoomFrame : undefined"
               @close="boardZoomOpen = false">
+            <template #controls>
+              <TileViewToggle :tileView="tileView" @toggleTileView="cycleTileView()"/>
+            </template>
             <MoonBoard v-if="zoomBoard === 'moon' && game.moon !== undefined" :model="game.moon" :tileView="tileView" ring/>
             <Board v-else v-bind="boardProps" @toggleTileView="cycleTileView()"/>
           </BoardZoomModal>
@@ -240,6 +243,7 @@ import {GameModel} from '@/common/models/GameModel';
 import {PublicPlayerModel, ViewModel} from '@/common/models/PlayerModel';
 import Board from '@/client/components/Board.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
+import TileViewToggle from '@/client/components/boardTabs/TileViewToggle.vue';
 import {marsBoardProps} from '@/client/components/board/marsBoardProps';
 import {isBoardControlClick} from '@/client/components/board/boardZoomClick';
 import {ZoomBoard} from '@/client/components/board/placementZoom';
@@ -431,6 +435,7 @@ export default defineComponent({
   components: {
     Board,
     BoardZoomModal,
+    TileViewToggle,
     PageToolbar,
     MarsHomeLink,
     LogPanel,

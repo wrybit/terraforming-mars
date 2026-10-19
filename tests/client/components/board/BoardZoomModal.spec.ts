@@ -8,7 +8,7 @@ describe('BoardZoomModal', () => {
     return mount(BoardZoomModal, {
       ...globalConfig,
       props: {open},
-      slots: {default: '<div class="board-cont"><div class="hide-tile-button">tiles</div></div>'},
+      slots: {default: '<div class="board-cont"></div>', controls: '<button class="tile-toggle">tiles</button>'},
       attachTo: document.body,
     });
   }
@@ -19,10 +19,11 @@ describe('BoardZoomModal', () => {
     expect(document.querySelector('.board-zoom-backdrop')).to.be.null;
   });
 
-  it('closes on backdrop click, but not on the tile toggle', async () => {
+  it('closes on backdrop click, but not on the tile toggle below the board', async () => {
     const wrapper = mountModal(true);
     await flushPromises();
-    (document.querySelector('.hide-tile-button') as HTMLElement).click();
+    expect(document.querySelector('.board-zoom-controls .tile-toggle')).not.to.be.null;
+    (document.querySelector('.tile-toggle') as HTMLElement).click();
     expect(wrapper.emitted('close')).to.be.undefined;
     (document.querySelector('.board-zoom-backdrop') as HTMLElement).click();
     expect(wrapper.emitted('close')).to.have.length(1);

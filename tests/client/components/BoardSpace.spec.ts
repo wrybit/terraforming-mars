@@ -38,6 +38,24 @@ describe('BoardSpace', () => {
     expect(wrapper.find('[data-test="tile"]').classes()).to.contain('board-hidden-tile');
   });
 
+  it('keeps the tile and adds the coordinate in the coordinates view', async () => {
+    const wrapper = mount(BoardSpace, {
+      ...globalConfig,
+      props: {
+        space: {
+          id: 'm01',
+          bonus: [],
+          spaceType: SpaceType.LAND,
+          a9: 'B2',
+        },
+        tileView: 'coords',
+      },
+    });
+
+    expect(wrapper.find('[data-test="tile"]').classes()).to.not.contain('board-hidden-tile');
+    expect(wrapper.find('.board-space-coords').text()).to.eq('B2');
+  });
+
   it('renders a neutral player cube instead of a space bonus', async () => {
     const wrapper = mount(BoardSpace, {
       ...globalConfig,
