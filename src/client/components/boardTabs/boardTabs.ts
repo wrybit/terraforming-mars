@@ -162,7 +162,13 @@ export function boardTabTracks(game: GameModel, players: ReadonlyArray<PublicPla
 // counts in the player colours – so the tab tells what happens in it without opening it
 export type BoardTabInfo = {
   icon: string,
+  /** Player whose tile it is (Kanly war field): a small square in the colour before the text */
+  owner?: Color,
   text?: string,
+  /** Short text that is translated (e.g. "No battle") */
+  label?: string,
+  /** Levels reached per own agenda (0 none … 3 hard), shown as points in the level colour */
+  levels?: ReadonlyArray<number>,
   counts?: ReadonlyArray<{color: Color, value: number}>,
   /** Tooltip, translation key */
   title: string,
@@ -180,18 +186,20 @@ export function boardTabInfo(game: GameModel, id: BoardTabId): BoardTabInfo | un
     if (kanly === undefined) {
       return undefined;
     }
+    // Whether there is a battle, for which space, whose tile it is and who sends how many (Jens, 19 Oct 2026)
     const battle = kanly.battle;
     if (battle !== undefined) {
-      return {icon: duneGraphic('res-sardaukar'), text: arrakisCoordinate(battle.spaceId), title: 'War field',
+      return {icon: duneGraphic('res-sardaukar'), owner: battle.owner, text: arrakisCoordinate(battle.spaceId), title: 'War field',
         counts: battle.troops.map((entry) => ({color: entry.color, value: entry.sardaukar}))};
     }
-    return {icon: duneGraphic('res-sardaukar'), title: 'Garrison',
-      counts: kanly.garrisons.map((entry) => ({color: entry.color, value: entry.sardaukar}))};
+    return {icon: duneGraphic('res-sardaukar'), label: 'No battle', title: 'No battle'};
   }
   case 'schemes': {
     const schemes = dune?.schemes;
-    return schemes === undefined ? undefined : {icon: duneGraphic('res-advisor'), title: 'Agendas',
-      counts: schemes.players.map((entry) => ({color: entry.color, value: entry.count}))};
+    // The own agendas with the level reached so far: everybody holds agendas, so the others' counts say nothing
+    const own = schemes?.players.find((entry) => entry.agendas !== undefined);
+    return schemes === undefined ? undefined : {icon: duneGraphic('res-advisor'), title: 'Your agendas',
+      levels: own?.agendas?.map((agenda) => agenda.level)};
   }
   default:
     return undefined;

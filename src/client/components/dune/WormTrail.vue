@@ -16,7 +16,7 @@
     </svg>
     <figcaption class="worm-trail__legend">
       <span class="worm-trail__key"><span class="worm-trail__key-start"></span>{{ $t('Starting space') }}</span>
-      <span class="worm-trail__key"><span class="worm-trail__key-stop">1</span>{{ $t('Stop at the end of the generation') }}</span>
+      <span class="worm-trail__key"><span class="worm-trail__key-stop">x</span>{{ $t('Stop at the end of the generation') }}</span>
     </figcaption>
   </figure>
 </template>

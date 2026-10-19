@@ -8,11 +8,12 @@ import {TileType} from '../../src/common/TileType';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {Space} from '../../src/server/boards/Space';
 import {ARRAKIS_ZONES, BEHIND_WORM_BORDER} from '../../src/common/dune/arrakisTerrain';
-import {WORM_START, WORM_TITLE, WormData, crossSpace, directionIndex, distanceInput, maxWormDistance, moveWorm, wormChoices, wormChooser, wormDirection, wormModel, wormPath} from '../../src/server/dune/Worm';
+import {WORM_START, WORM_START_SPACES, WORM_TITLE, WormData, crossSpace, directionIndex, distanceInput, maxWormDistance, moveWorm, wormChoices, wormChooser, wormDirection, wormModel, wormPath} from '../../src/server/dune/Worm';
 import {LEVY_TITLE, PendingLevy, levyInput} from '../../src/server/dune/WormLevy';
 import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {formatMessage} from '../TestingUtils';
 import {cast} from '../../src/common/utils/utils';
+import {arrakisCoordinate} from '../../src/common/dune/arrakisCoordinates';
 import {finishGeneration, setOxygenLevel} from '../TestingUtils';
 
 function wormOf(game: IGame): WormData {
@@ -32,10 +33,18 @@ describe('Shai-Hulud (Dune module C)', () => {
     [game, player1, player2] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS, duneModules: ['worm']});
   });
 
-  it('starts on G3 outside the worm border', () => {
-    expect(wormOf(game).spaceId).eq(WORM_START);
+  it('starts on one of the southern spaces E5, F4, F5, G3, G4, H3, H4, picked at random', () => {
+    expect(WORM_START_SPACES.map(arrakisCoordinate)).deep.eq(['E5', 'F4', 'F5', 'G3', 'G4', 'H3', 'H4']);
+    expect(WORM_START_SPACES).includes(wormOf(game).spaceId);
     expect(BEHIND_WORM_BORDER).not.includes(WORM_START);
     expect(ARRAKIS_ZONES[WORM_START]).eq('erg');
+  });
+
+  it('can leave every start space', () => {
+    for (const start of WORM_START_SPACES) {
+      expect(ARRAKIS_ZONES[start] ?? 'erg', start).not.eq('rock');
+      expect([1, 2, 3, 4, 5, 6].some((roll) => wormDirection(game.board, start, roll) !== undefined), start).is.true;
+    }
   });
 
   it('maps the die clockwise from top right', () => {
@@ -194,6 +203,7 @@ describe('Shai-Hulud (Dune module C)', () => {
   it('records its trail: every move with its generation, from the starting space on', () => {
     game.generation = 3;
     const worm = wormOf(game);
+    worm.spaceId = WORM_START;
     expect(wormModel(game, worm).trail).deep.eq({start: WORM_START, moves: []});
     worm.direction = wormDirection(game.board, worm.spaceId, 1);
     const expected = wormPath(game.board, worm.spaceId, worm.direction, 2).map((space) => space.id);

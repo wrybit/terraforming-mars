@@ -1,9 +1,10 @@
 <template>
-  <!-- House schemes (Dune module B): the own secret agendas with progress; of the others only how many they hold -->
+  <!-- House schemes (Dune module B): the own secret agendas with progress, the rules as a short list below. Every player
+       holds agendas, so the others are not listed; after the game everybody's are shown, then with the player's name -->
   <div class="dune-schemes" data-test="dune-schemes">
     <template v-for="entry in schemes.players" :key="entry.color">
       <div v-if="entry.agendas !== undefined" class="dune-schemes__own">
-        <PlayerChip :color="entry.color" :players="players"/>
+        <PlayerChip v-if="owned.length > 1" :color="entry.color" :players="players"/>
         <!-- Agenda cards as in the mockup: name, goal with the current value, then the three levels as coloured bars -->
         <div class="dune-schemes__cards">
           <article v-for="agenda in entry.agendas" :key="agenda.name" class="dune-schemes__agenda">
@@ -24,12 +25,7 @@
         </div>
       </div>
     </template>
-    <div class="dune-schemes__others">
-      <span v-for="entry in hidden" :key="entry.color" class="dune-schemes__other">
-        <PlayerChip :color="entry.color" :players="players"/> <span>{{ entry.count }} × {{ $t('secret agenda') }}</span>
-      </span>
-    </div>
-    <p class="dune-board__hint">{{ $t(schemes.reduced ? 'Everybody holds one agenda. At game end only the highest level reached counts.' : 'Once a player reaches 35 TR, everybody keeps one of their two agendas. At game end only the highest level reached counts.') }}</p>
+    <DuneRuleCards :rules="SCHEMES_RULES"/>
   </div>
 </template>
 
@@ -39,6 +35,8 @@ import {SchemeModel} from '@/common/dune/DuneModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {SCHEME_LEVEL_POINTS, SchemeAgenda, schemeAgenda} from '@/common/dune/schemeAgendas';
 import PlayerChip from './PlayerChip.vue';
+import DuneRuleCards from './DuneRuleCards.vue';
+import {SCHEMES_RULES} from './duneRules';
 import {duneGraphic} from './duneGraphic';
 
 // The three levels of every agenda (SCHEME_LEVEL_POINTS 3 / 5 / 8 VP), named as on the mockup cards
@@ -47,7 +45,7 @@ const LEVEL_LABELS = ['Easy', 'Medium', 'Hard'] as const;
 
 export default defineComponent({
   name: 'SchemesPanel',
-  components: {PlayerChip},
+  components: {PlayerChip, DuneRuleCards},
   props: {
     schemes: {
       type: Object as PropType<SchemeModel>,
@@ -68,8 +66,12 @@ export default defineComponent({
     LEVEL_LABELS(): typeof LEVEL_LABELS {
       return LEVEL_LABELS;
     },
-    hidden() {
-      return this.schemes.players.filter((entry) => entry.agendas === undefined);
+    SCHEMES_RULES(): typeof SCHEMES_RULES {
+      return SCHEMES_RULES;
+    },
+    // Players whose agendas the viewer sees: the own ones, everybody's after the game
+    owned() {
+      return this.schemes.players.filter((entry) => entry.agendas !== undefined);
     },
   },
   methods: {

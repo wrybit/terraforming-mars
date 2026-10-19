@@ -1,12 +1,12 @@
-// Kanly war field (KanlyBattleCard.vue): tile and owner on top, everybody's Sardaukar as rows, the forecast below.
-// Rows sit closer together than the three blocks (law of proximity).
+// Kanly war field (KanlyBattleCard.vue): the tile on the left, beside it place and owner, everybody's Sardaukar as
+// rows and the forecast. Rows sit closer together than the blocks (law of proximity).
 .kanly-battle {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  align-items: flex-start;
+  gap: 22px;
   width: 100%;
-  max-width: 520px;
-  padding: 14px 16px;
+  max-width: 680px;
+  padding: 16px 18px;
   box-sizing: border-box;
   border: 1px solid rgba(232, 168, 90, 0.45);
   border-radius: 12px;
@@ -14,21 +14,56 @@
   color: #f1e2c2;
 }
 
-.kanly-battle__field {
-  display: flex;
+// No battle: the empty tile and the line beside it centred to each other
+.kanly-battle--none {
   align-items: center;
-  gap: 14px;
 }
 
 .kanly-battle__hex {
   flex: none;
   transform: scale(1.6);
-  margin: 14px 20px;
+  transform-origin: top left;
+  // Room for the scaled tile (46 × 51 px at 1.6)
+  margin: 0 28px 31px 0;
 
   // The card says it is the war field: the tile and its owner's cube stay visible instead of the marker
   .board-space-war-field {
     display: none;
   }
+}
+
+.kanly-battle--none .kanly-battle__hex {
+  transform-origin: center;
+  margin: 15px 14px;
+}
+
+// While there is no battle: a faint sand tile with the Sardaukar badge
+.kanly-battle__hex--empty {
+  display: grid;
+  place-items: center;
+  opacity: 0.55;
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.kanly-battle__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.kanly-battle--none .kanly-battle__body {
+  gap: 4px;
+}
+
+.kanly-battle__idle {
+  font-size: 13px;
+  color: #cbb994;
 }
 
 .kanly-battle__place {
@@ -165,6 +200,26 @@
 
 // Phone: role under the name, icons and count in the second line
 @media (max-width: 600px) {
+  // Tile above, everything else below in full width
+  .kanly-battle {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .kanly-battle__hex {
+    transform-origin: top center;
+    margin: 0 0 31px;
+  }
+
+  .kanly-battle__body {
+    align-self: stretch;
+  }
+
+  .kanly-battle--none .kanly-battle__body {
+    align-items: center;
+    text-align: center;
+  }
+
   .kanly-battle__force {
     grid-template-columns: 1fr auto;
     gap: 4px 10px;

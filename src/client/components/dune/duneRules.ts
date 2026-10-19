@@ -1,6 +1,6 @@
-// Rules of the Dune modules as short cards (DuneRuleCards.vue). English texts, translated on display.
+// Rules of the Dune modules as a short list (DuneRuleCards.vue). English texts, translated on display.
 
-export type DuneRuleSign = 'enter' | 'slide' | 'leave' | 'tap' | 'payout';
+export type DuneRuleSign = 'enter' | 'slide' | 'leave' | 'tap' | 'payout' | 'battle' | 'flag' | 'shield' | 'levels' | 'keep' | 'hidden';
 
 /** One rule: a Dune picture (assets/themes/dune/graphics) or a drawn sign, and one short line */
 export type DuneRule = {picture?: string, sign?: DuneRuleSign, text: string};
@@ -13,4 +13,21 @@ export const BAZAAR_RULES: ReadonlyArray<DuneRule> = [
   {sign: 'tap', text: 'Buying is an action: one ware per player and generation'},
   {sign: 'payout', text: 'Bought: pays out at once, then to the discard pile'},
   {picture: 'coin', text: 'The owner of the Commercial District pays 2 Solari less'},
+];
+
+export const KANLY_RULES: ReadonlyArray<DuneRule> = [
+  {picture: 'res-sardaukar', text: 'Recruit: 12 M€, 4 titanium, 6 steel, 5 heat or 6 energy per Sardaukar'},
+  {sign: 'tap', text: 'At most 2 Sardaukar per action'},
+  {picture: 'coin', text: 'Opening a Kanly costs 8 M€ and sends at least 1 Sardaukar'},
+  {sign: 'battle', text: 'One battle per generation, on an opponent tile'},
+  {sign: 'flag', text: 'End of generation: most Sardaukar on the war field take the tile'},
+  {sign: 'shield', text: 'A tie keeps the tile with its owner'},
+];
+
+export const SCHEMES_RULES: ReadonlyArray<DuneRule> = [
+  {picture: 'res-advisor', text: 'Everybody draws two secret agendas'},
+  {sign: 'levels', text: 'Three levels per agenda: easy, medium, hard'},
+  {sign: 'keep', text: 'Once a player reaches 35 TR, everybody keeps one of the two'},
+  {sign: 'payout', text: 'At game end only the highest level reached counts'},
+  {sign: 'hidden', text: 'The others never see your agendas'},
 ];

@@ -9,7 +9,7 @@ import {DuneModel} from '../../common/dune/DuneModel';
 import {ArrakisBoard} from '../boards/ArrakisBoard';
 import {VictoryPointsBreakdownBuilder} from '../game/VictoryPointsBreakdownBuilder';
 import {BazaarData, bazaarModel, bazaarTabActions, buyInput, initializeBazaar, slideAndRefill} from './Bazaar';
-import {WORM_START, WormData, distanceInput, rollWorm, wormChooser, wormModel} from './Worm';
+import {WormData, distanceInput, rollWorm, wormChooser, wormModel, wormStart} from './Worm';
 import {levyInput} from './WormLevy';
 import {KanlyData, initializeKanly, kanlyActions, kanlyModel, resolveBattle} from './Kanly';
 import {SmugglingData, chargeSuspicion, initializeSmuggling, smugglingActions, smugglingModel, smugglingTabActions} from './Smuggling';
@@ -110,7 +110,7 @@ export class DuneExpansion {
       data.bazaar = initializeBazaar(rng);
     }
     if (modules.includes('worm')) {
-      data.worm = {spaceId: WORM_START, path: []};
+      data.worm = {spaceId: wormStart(rng), path: []};
     }
     if (modules.includes('kanly')) {
       data.kanly = initializeKanly();

@@ -27,7 +27,7 @@
         <span v-for="color in bought" :key="color" :class="['dune-bazaar__buyer', 'player_bg_color_' + color]">{{ playerName(color) }}</span>
       </span>
     </div>
-    <!-- The rules as short cards instead of a block of text -->
+    <!-- The rules as a short list instead of a block of text -->
     <DuneRuleCards :rules="BAZAAR_RULES"/>
   </div>
 </template>

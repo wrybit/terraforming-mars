@@ -50,6 +50,9 @@ export const SARDAUKAR_PRICES: ReadonlyArray<[Resource, number]> = [
 
 export const MAX_RECRUITS_PER_ACTION = 2;
 
+/** Opening a Kanly costs M€ (Solari) on top of the Sardaukar (Jens, 19 Oct 2026) */
+export const OPEN_KANLY_COST = 8;
+
 export function initializeKanly(): KanlyData {
   return {garrison: {}, foughtThisGeneration: false};
 }
@@ -113,7 +116,7 @@ function sendTroops(player: IPlayer, data: KanlyData, amount: number): void {
 
 function openInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
   const garrison = garrisonOf(data, player);
-  if (data.battle !== undefined || data.foughtThisGeneration || garrison < 1) {
+  if (data.battle !== undefined || data.foughtThisGeneration || garrison < 1 || player.megaCredits < OPEN_KANLY_COST) {
     return undefined;
   }
   const targets = battleTargets(player.game, player);
@@ -121,6 +124,7 @@ function openInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
     return undefined;
   }
   return new SelectSpace(OPEN_KANLY_TITLE, targets).andThen((space) => {
+    player.stock.deduct(Resource.MEGACREDITS, OPEN_KANLY_COST, {log: true});
     data.battle = {spaceId: space.id, opener: player.id, troops: {}};
     data.foughtThisGeneration = true;
     if (player.game.board instanceof ArrakisBoard) {

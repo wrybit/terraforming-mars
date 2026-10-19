@@ -1,10 +1,16 @@
 <template>
-  <!-- Kanly war field (Kanly tab and the input that sends Sardaukar): which tile is at stake and whose it is, every
-       player's Sardaukar on the field, and who holds the tile at the end of the generation as things stand.
-       With "added" (slider of the send input) the own new Sardaukar show as a lighter part and count in the forecast. -->
-  <div v-if="forecast !== undefined && battle !== undefined" class="kanly-battle" data-test="kanly-battle">
-    <div class="kanly-battle__field">
-      <ArrakisHex class="kanly-battle__hex" :spaceId="battle.spaceId" :space="space"/>
+  <!-- Kanly war field (Kanly tab and the input that sends Sardaukar): always a tile on the left – the one at stake with
+       its owner's cube, or an empty one while there is no battle – and beside it what goes on: the place and its owner,
+       every player's Sardaukar on the field as cubes of their colour, and who holds the tile at the end of the
+       generation as things stand. With "added" (slider of the send input) the own new Sardaukar show lighter and count
+       in the forecast. -->
+  <div :class="['kanly-battle', {'kanly-battle--none': forecast === undefined || battle === undefined}]" data-test="kanly-battle">
+    <ArrakisHex v-if="battle !== undefined" class="kanly-battle__hex" :spaceId="battle.spaceId" :space="space"/>
+    <div v-else class="kanly-battle__hex kanly-battle__hex--empty arrakis-hex arrakis-hex--erg">
+      <img :src="icon" alt="">
+    </div>
+
+    <div v-if="forecast !== undefined && battle !== undefined" class="kanly-battle__body">
       <div class="kanly-battle__place">
         <span class="kanly-battle__eyebrow">{{ $t('War field') }}</span>
         <span class="kanly-battle__name">{{ placeName }} <span class="kanly-battle__coordinate">{{ coordinate }}</span></span>
@@ -12,31 +18,36 @@
           {{ $t('Tile of') }} <PlayerChip :color="forecast.owner" :players="players"/>
         </span>
       </div>
+
+      <ul class="kanly-battle__forces">
+        <li v-for="force in forecast.forces" :key="force.color"
+          :class="['kanly-battle__force', {'kanly-battle__force--holder': force.color === forecast.holder}]">
+          <PlayerChip :color="force.color" :players="players"/>
+          <span class="kanly-battle__role">{{ $t(roleLabel(force)) }}</span>
+          <span class="kanly-battle__troops" :aria-label="String(force.sardaukar + force.added)">
+            <!-- One cube in the player's colour per Sardaukar on the field, as in the mockup -->
+            <BoardCube v-for="index in shownIcons(force.sardaukar)" :key="'on-' + index" class="kanly-battle__cube"
+              :color="force.color" view="slight" :size="CUBE_SIZE" :spinSeed="force.color + index"/>
+            <BoardCube v-for="index in addedIcons(force)" :key="'add-' + index" class="kanly-battle__cube kanly-battle__cube--added"
+              :color="force.color" view="slight" :size="CUBE_SIZE" :spinSeed="force.color + 'added' + index"/>
+            <span v-if="force.sardaukar + force.added === 0" class="kanly-battle__none">–</span>
+          </span>
+          <span class="kanly-battle__count">
+            {{ force.sardaukar + force.added }}<span v-if="force.added > 0" class="kanly-battle__plus">+{{ force.added }}</span>
+          </span>
+        </li>
+      </ul>
+
+      <p :class="['kanly-battle__verdict', {'kanly-battle__verdict--change': forecast.changes}]">
+        <span v-if="added > 0" class="kanly-battle__eyebrow">{{ $t('After sending') }}</span>
+        <span>{{ verdict[0] }}<PlayerChip v-if="forecast.holder !== undefined" :color="forecast.holder" :players="players"/>{{ verdict[1] }}</span>
+      </p>
     </div>
-
-    <ul class="kanly-battle__forces">
-      <li v-for="force in forecast.forces" :key="force.color"
-        :class="['kanly-battle__force', {'kanly-battle__force--holder': force.color === forecast.holder}]">
-        <PlayerChip :color="force.color" :players="players"/>
-        <span class="kanly-battle__role">{{ $t(roleLabel(force)) }}</span>
-        <span class="kanly-battle__troops" :aria-label="String(force.sardaukar + force.added)">
-          <!-- One cube in the player's colour per Sardaukar on the field, as in the mockup -->
-          <BoardCube v-for="index in shownIcons(force.sardaukar)" :key="'on-' + index" class="kanly-battle__cube"
-            :color="force.color" view="slight" :size="CUBE_SIZE" :spinSeed="force.color + index"/>
-          <BoardCube v-for="index in addedIcons(force)" :key="'add-' + index" class="kanly-battle__cube kanly-battle__cube--added"
-            :color="force.color" view="slight" :size="CUBE_SIZE" :spinSeed="force.color + 'added' + index"/>
-          <span v-if="force.sardaukar + force.added === 0" class="kanly-battle__none">–</span>
-        </span>
-        <span class="kanly-battle__count">
-          {{ force.sardaukar + force.added }}<span v-if="force.added > 0" class="kanly-battle__plus">+{{ force.added }}</span>
-        </span>
-      </li>
-    </ul>
-
-    <p :class="['kanly-battle__verdict', {'kanly-battle__verdict--change': forecast.changes}]">
-      <span v-if="added > 0" class="kanly-battle__eyebrow">{{ $t('After sending') }}</span>
-      <span>{{ verdict[0] }}<PlayerChip v-if="forecast.holder !== undefined" :color="forecast.holder" :players="players"/>{{ verdict[1] }}</span>
-    </p>
+    <div v-else class="kanly-battle__body">
+      <span class="kanly-battle__eyebrow">{{ $t('War field') }}</span>
+      <span class="kanly-battle__name">{{ $t('No battle') }}</span>
+      <span class="kanly-battle__idle">{{ $t(kanly.foughtThisGeneration ? 'The battle of this generation is over' : 'No war field yet – the first to open one picks the target') }}</span>
+    </div>
   </div>
 </template>
 
@@ -52,7 +63,8 @@ import {translateText} from '@/client/directives/i18n';
 import ArrakisHex from './ArrakisHex.vue';
 import BoardCube from '@/client/components/common/BoardCube.vue';
 import PlayerChip from './PlayerChip.vue';
-import {KanlyForce, KanlyForecast, kanlyForecast} from './kanlyForecast';
+import {KanlyForce, KanlyForecast, SARDAUKAR_ICON, kanlyForecast} from './kanlyForecast';
+import {duneGraphic} from './duneGraphic';
 
 // More Sardaukar than this show as cubes up to the limit; the number beside always tells the whole
 const MAXIMUM_ICONS = 6;
@@ -110,6 +122,10 @@ export default defineComponent({
     },
     CUBE_SIZE(): number {
       return CUBE_SIZE;
+    },
+    // Sardaukar badge on the empty tile while there is no battle
+    icon(): string {
+      return duneGraphic(SARDAUKAR_ICON);
     },
     // Text around the holder's chip: "${0} takes the tile …" split at the player
     verdict(): [string, string] {

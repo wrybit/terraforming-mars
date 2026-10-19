@@ -303,6 +303,37 @@
   font-family: Prototype, sans-serif;
 }
 
+// Owner of the Kanly war field: a small square in the player colour before the coordinate
+.board-tab-info__owner {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+}
+
+.board-tab-info__label {
+  white-space: nowrap;
+}
+
+// Own agenda: points of the level reached in the colour of that level (as the bars in the schemes tab)
+.board-tab-info__level {
+  min-width: 14px;
+  padding: 1px 3px;
+  border-radius: 7px;
+  box-sizing: border-box;
+  font-family: Prototype, sans-serif;
+  font-size: 10px;
+  text-align: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+// The colours come from the level bars of the schemes tab (dune_board.less), so both stay the same
+.board-tab-info__level--1:extend(.dune-schemes__level--easy) {}
+.board-tab-info__level--2:extend(.dune-schemes__level--medium) {}
+.board-tab-info__level--3:extend(.dune-schemes__level--hard) {}
+
 .board-tab-info__count {
   min-width: 14px;
   padding: 1px 3px;
