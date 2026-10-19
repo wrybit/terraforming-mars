@@ -292,6 +292,9 @@ html.theme-dune .card-title:not(.is-corporation):not(.card-house-name) {
   height: auto;
   /* The outer box clips the band: without this its arch would cut the corners of the flat band */
   border-radius: 0;
+  /* The whole band visible: the Mars offset (3px padding here, -6px margin on the band) clipped its top,
+     which put the name off the middle of what is seen */
+  padding-top: 0;
 }
 
 html.theme-dune .card-title > .card-title:not(.card-house-name) {
@@ -301,7 +304,10 @@ html.theme-dune .card-title > .card-title:not(.card-house-name) {
   box-sizing: border-box;
   height: auto;
   min-height: calc(2 * 1.35em + 8px);
-  padding: 4px 8px;
+  margin-top: 0;
+  /* Name always in the middle of the band (Jens): Michroma's capitals sit 0.75px below the middle of the line
+     box at 10px, so 1.5px less padding on top than below */
+  padding: 3.25px 8px 4.75px;
   border-radius: 0;
   font-family: 'Michroma', 'Ubuntu', sans-serif;
   font-weight: normal;
