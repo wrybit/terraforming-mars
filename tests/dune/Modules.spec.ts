@@ -136,21 +136,28 @@ describe('Dune modules B, D, E, F', () => {
       expect(() => market.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 1, get: Resource.MEGACREDITS, getAmount: 5})).to.throw();
     });
 
-    it('costs TR from suspicion 3 at the end of the generation; bribing lowers it', () => {
-      expect([0, 1, 2, 3, 4, 5].map(suspicionPenalty)).deep.eq([0, 0, 0, 1, 2, 3]);
+    it('costs TR from suspicion 2 at the end of the generation and resets the marker; 1 stays', () => {
+      expect([0, 1, 2, 3, 4].map(suspicionPenalty)).deep.eq([0, 0, 1, 2, 3]);
+      const smuggling = game.duneData!.smuggling!;
+      smuggling.suspicion[player1.id] = 3;
+      smuggling.suspicion[player2.id] = 1;
+      const tr = [player1.terraformRating, player2.terraformRating];
+      chargeSuspicion(game, smuggling);
+      expect([player1.terraformRating, player2.terraformRating]).deep.eq([tr[0] - 2, tr[1]]);
+      expect([suspicionOf(smuggling, player1), suspicionOf(smuggling, player2)]).deep.eq([0, 1]);
+    });
+
+    it('lowers the suspicion by bribing', () => {
       const smuggling = game.duneData!.smuggling!;
       smuggling.suspicion[player1.id] = 4;
-      const tr = player1.terraformRating;
-      chargeSuspicion(game, smuggling);
-      expect(player1.terraformRating).eq(tr - 2);
       player1.megaCredits = 10;
       pick(option(duneActions(player1), 'Bribe the officials'));
       expect(suspicionOf(smuggling, player1)).eq(3);
       expect(player1.megaCredits).eq(0);
     });
 
-    it('blocks smuggling at suspicion 5', () => {
-      game.duneData!.smuggling!.suspicion[player1.id] = 5;
+    it('blocks smuggling at suspicion 4, the top of the track', () => {
+      game.duneData!.smuggling!.suspicion[player1.id] = 4;
       player1.titanium = 5;
       player1.megaCredits = 0;
       expect(DuneExpansion.tabActions(player1).map(titleOf).some((title) => title.startsWith('Smuggling'))).is.false;

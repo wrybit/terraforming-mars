@@ -10,7 +10,7 @@ import {tradeRate} from '../../common/inputs/tradeRate';
 import {BAZAAR_GOOD_VALUE} from '../../common/dune/bazaarWares';
 import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
-import {MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '../../common/dune/DuneModel';
+import {COSTLY_SUSPICION, MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '../../common/dune/DuneModel';
 import {CardName} from '../../common/cards/CardName';
 
 // Module E – Smuggling & suspicion (claude/dune-erweiterung-konzept.md). Trading past the Empire pays more, but every
@@ -18,7 +18,8 @@ import {CardName} from '../../common/cards/CardName';
 // - Move spice: up to 5 titanium, 5 M€ each instead of its worth of 3. Suspicion +1.
 // - Black market: any resource for another at double its worth (value table), any amount in one action. Suspicion +1.
 // - Bribe: 10 M€ (owner of the Smugglers' market tile – Industrial Center – 7), suspicion −1.
-// Checked only at the end of the generation: level 3 −1 TR, 4 −2, 5 −3. The marker stays; level 5 blocks smuggling.
+// Checked only at the end of the generation: 0 and 1 free, level 2 −1 TR, 3 −2, 4 −3; whoever pays drops back to 0.
+// Level 4 (top) blocks smuggling. (Jens, 19 Oct 2026)
 
 export type SmugglingData = {
   suspicion: Record<PlayerId, number>,
@@ -161,20 +162,21 @@ export function smugglingActions(player: IPlayer, data: SmugglingData): Array<Pl
 /** Smuggling with its own tab in the action menu. The AI only moves spice while it stays below a penalty. */
 export function smugglingTabActions(player: IPlayer, data: SmugglingData): Array<PlayerInput> {
   const isAi = player.aiLevel !== undefined;
-  if (isAi && suspicionOf(data, player) > 1) {
+  if (isAi && suspicionOf(data, player) + 1 >= COSTLY_SUSPICION) {
     return [];
   }
   const input = smuggleInput(player, data, isAi);
   return input === undefined ? [] : [input];
 }
 
-/** End of generation: suspicion 3 and more costs TR; the marker stays */
+/** End of generation: suspicion 2 and more costs TR (Landsraad influence), then the marker drops back to 0 */
 export function chargeSuspicion(game: IGame, data: SmugglingData): void {
   for (const player of game.players) {
     const penalty = suspicionPenalty(suspicionOf(data, player));
     if (penalty > 0) {
       game.log('The Empire suspects ${0}: −${1} TR', (b) => b.player(player).number(penalty));
       player.decreaseTerraformRating(penalty, {log: true});
+      data.suspicion[player.id] = 0;
     }
   }
 }

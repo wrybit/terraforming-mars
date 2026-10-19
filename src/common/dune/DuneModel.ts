@@ -55,11 +55,14 @@ export type KanlyModel = {
   foughtThisGeneration: boolean,
 };
 
-/** Top of the suspicion track (module E); levels from 3 on cost TR at the end of the generation */
-export const MAX_SUSPICION = 5;
-export const COSTLY_SUSPICION = 3;
+/**
+ * Top of the suspicion track (module E): 0–4; levels from 2 on cost TR at the end of the generation, after which the
+ * marker drops back to 0 (Jens, 19 Oct 2026)
+ */
+export const MAX_SUSPICION = 4;
+export const COSTLY_SUSPICION = 2;
 
-/** TR lost at the end of the generation for a suspicion level: 3 → 1, 4 → 2, 5 → 3 */
+/** TR lost at the end of the generation for a suspicion level: 0 and 1 free, 2 → 1, 3 → 2, 4 → 3 */
 export function suspicionPenalty(level: number): number {
   return Math.max(0, level - COSTLY_SUSPICION + 1);
 }

@@ -288,6 +288,6 @@
   "CHOAM offer": "Offre CHOAM",
   "Smuggling: black market (double worth)": "Contrebande : marché noir (valeur double)",
   "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Écouler de l'épice : jusqu'à 5 épice pour 5 Solari chacune. Marché noir : au double de la valeur (6 Solari pour 1 épice). Chaque action augmente les soupçons de 1 ; un pot-de-vin (10 Solari, 7 pour le propriétaire du Marché des contrebandiers) les réduit. Fin de génération : 0 et 1 sont gratuits ; à partir de 2, de l'influence est perdue et le marqueur revient à 0.",
-  "Not your turn, or nothing worth trading": "Pas ton tour, ou rien à échanger",
+  "Not your turn, nothing to trade, or suspicion 4: bribe first": "Pas ton tour, rien à échanger ou soupçons à 4 : soudoie d'abord",
   "Bazaar: buy ${0} for ${1} M€": "Bazar : acheter ${0} pour ${1} M€"
 }

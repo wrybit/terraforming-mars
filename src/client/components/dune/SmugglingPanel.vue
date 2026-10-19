@@ -1,5 +1,5 @@
 <template>
-  <!-- Smuggling & suspicion (Dune module E): the suspicion track 0–5 with every player's marker -->
+  <!-- Smuggling & suspicion (Dune module E): the suspicion track 0–4 with every player's marker -->
   <div class="dune-smuggling" data-test="dune-smuggling">
     <ol class="dune-smuggling__track">
       <li v-for="level in LEVELS" :key="level" :class="['dune-smuggling__step', {'dune-smuggling__step--penalty': penalty(level) > 0}]">
@@ -10,7 +10,7 @@
         </span>
       </li>
     </ol>
-    <p class="dune-board__hint">{{ $t('Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: from 3 on, TR is lost.') }}</p>
+    <p class="dune-board__hint">{{ $t('Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.') }}</p>
   </div>
 </template>
 

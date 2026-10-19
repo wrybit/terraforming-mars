@@ -293,6 +293,6 @@
   "CHOAM offer": "CHOAM报价",
   "Smuggling: black market (double worth)": "走私：黑市（双倍价值）",
   "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "运送香料：最多 5 香料，每份 5 索拉里。黑市：按双倍价值（6 索拉里换 1 香料）。每次都会使嫌疑 +1；贿赂（10 索拉里，走私者市场拥有者 7）可降低嫌疑。世代结束时：0 和 1 免费；嫌疑达到 2 起会失去影响力，标记随后归零。",
-  "Not your turn, or nothing worth trading": "不是你的回合，或没有可交换的资源",
+  "Not your turn, nothing to trade, or suspicion 4: bribe first": "不是你的回合、没有可交换的资源，或嫌疑为 4：先行贿",
   "Bazaar: buy ${0} for ${1} M€": "集市：以 ${1} M€ 购买 ${0}"
 }

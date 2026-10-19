@@ -287,6 +287,6 @@
   "CHOAM offer": "CHOAM-Angebot",
   "Smuggling: black market (double worth)": "Schmuggel: Schwarzmarkt (doppelter Wert)",
   "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Spice verschieben: bis zu 5 Spice für je 5 Solari. Schwarzmarkt: zum doppelten Wert (6 Solari für 1 Spice). Jedes erhöht den Verdacht um 1; eine Bestechung (10 Solari, Besitzer des Schmugglermarkts 7) senkt ihn. Ende der Generation: 0 und 1 sind kostenlos, ab 2 geht Einfluss verloren und der Marker fällt auf 0 zurück.",
-  "Not your turn, or nothing worth trading": "Nicht dein Zug, oder nichts zum Tauschen",
+  "Not your turn, nothing to trade, or suspicion 4: bribe first": "Nicht dein Zug, nichts zum Tauschen oder Verdacht 4: erst bestechen",
   "Bazaar: buy ${0} for ${1} M€": "Basar: ${0} für ${1} M€ kaufen"
 }

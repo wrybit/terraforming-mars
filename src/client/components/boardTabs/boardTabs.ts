@@ -157,7 +157,7 @@ export function boardTabTracks(game: GameModel, players: ReadonlyArray<PublicPla
     return slots.length === 0 ? [] : [{color: DUNE_TAB_COLOR, step: slots.filter((slot) => slot.ware !== undefined).length, total: slots.length, bonus: []}];
   }
   case 'smuggling': {
-    // Suspicion track 0–5: player colours at their level, the costly levels (3+) marked
+    // Suspicion track 0–4: player colours at their level, the costly levels (2+) marked
     const suspicion = game.dune?.smuggling?.suspicion ?? [];
     return suspicion.length === 0 ? [] : [{color: DUNE_TAB_COLOR, step: 0, total: MAX_SUSPICION,
       bonus: Array.from({length: MAX_SUSPICION - COSTLY_SUSPICION + 1}, (_, index) => COSTLY_SUSPICION + index),
