@@ -1,3 +1,4 @@
+import {ref} from 'vue';
 import {Theme} from '@/common/theme/Theme';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 
@@ -10,10 +11,11 @@ declare global {
 
 // The theme of the open game (common/theme/Theme.ts). Only what is shown changes: the class on <html> swaps
 // icons and pictures (assets/themes/<theme>/theme.css), the theme texts replace the Mars wording.
-let active: Theme = 'mars';
+// Reactive, so views that depend on the theme (e.g. the app background) follow a switch without a reload
+const active = ref<Theme>('mars');
 
 export function activeTheme(): Theme {
-  return active;
+  return active.value;
 }
 
 function ensureStylesheet(theme: Theme): void {
@@ -31,7 +33,7 @@ function ensureStylesheet(theme: Theme): void {
 /** Switches texts and pictures to the theme of the game; resolves once its texts are loaded. */
 export async function applyTheme(theme: Theme | undefined): Promise<void> {
   const wanted: Theme = theme ?? 'mars';
-  if (wanted === active) {
+  if (wanted === active.value) {
     return;
   }
   if (wanted === 'mars') {
@@ -48,5 +50,5 @@ export async function applyTheme(theme: Theme | undefined): Promise<void> {
     }
   }
   document.documentElement.classList.toggle('theme-dune', wanted === 'dune');
-  active = wanted;
+  active.value = wanted;
 }

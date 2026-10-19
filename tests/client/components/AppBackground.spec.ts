@@ -3,6 +3,7 @@ import {expect} from 'chai';
 import {globalConfig} from '@tests/client/components/getLocalVue';
 import AppBackground from '@/client/components/AppBackground.vue';
 import {BACKGROUND_WIDTHS} from '@/client/components/appBackgroundVariants';
+import {BACKGROUND_CREDITS, backgroundFallback, backgroundSources} from '@/client/components/appBackground';
 
 describe('AppBackground', () => {
   it('offers portrait before landscape, each as AVIF, WebP and JPEG', () => {
@@ -16,14 +17,14 @@ describe('AppBackground', () => {
 
   it('falls back to JPEG', () => {
     const wrapper = mount(AppBackground, {...globalConfig});
-    expect(wrapper.find('img').attributes('src')).eq('assets/background/milky-way-landscape-1920.jpg');
+    expect(wrapper.find('img').attributes('src')).eq('assets/background/mars/milky-way-landscape-1920.jpg');
   });
 
   it('lists every generated width in the srcset', () => {
     const wrapper = mount(AppBackground, {...globalConfig});
     const landscape = wrapper.findAll('source')[3].attributes('srcset') ?? '';
     for (const width of BACKGROUND_WIDTHS.landscape) {
-      expect(landscape).contains(`assets/background/milky-way-landscape-${width}.avif ${width}w`);
+      expect(landscape).contains(`assets/background/mars/milky-way-landscape-${width}.avif ${width}w`);
     }
   });
 
@@ -32,6 +33,12 @@ describe('AppBackground', () => {
     const credit = wrapper.find('.app-background-credit');
     expect(credit.text().replace(/\s+/g, ' ')).eq('Background photo: Milky Way · ESO · S. Brunier · CC BY 4.0');
     expect(credit.attributes('href')).eq('https://www.eso.org/public/images/eso0932a/');
+  });
+
+  it('has its own picture for the Dune theme, without a credit', () => {
+    expect(backgroundFallback('dune')).eq('assets/background/dune/desert-universe-landscape-1920.jpg');
+    expect(backgroundSources('dune')[0].srcset).contains('assets/background/dune/desert-universe-portrait-540.avif 540w');
+    expect(BACKGROUND_CREDITS.dune).is.undefined;
   });
 
   it('hides the credit when the corner is taken', () => {

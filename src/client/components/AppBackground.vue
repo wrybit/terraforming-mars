@@ -1,4 +1,4 @@
-<!-- App background (Milky Way panorama by ESO) behind start page, game views, results, card list and stats.
+<!-- App background of the active theme (Mars: Milky Way panorama by ESO, Dune: night over the dunes) behind start page, game views, results, card list and stats.
      A <picture> instead of a CSS background, because only srcset lets the browser pick the file that fits
      the window and pixel density; the variants come from scripts/make-backgrounds.py.
      The credit is required by the licence (CC BY 4.0). It sits at the top right of the page, not of the
@@ -17,11 +17,13 @@
       <img class="app-background__image" :src="fallback" alt="" decoding="async" fetchpriority="high">
     </picture>
   </div>
-  <a v-if="showCredit" class="app-background-credit" :class="{'app-background-credit--always': always}" :href="credit.url" target="_blank" rel="noopener"><span class="app-background-credit__text"><template v-for="(part, index) in credit.parts" :key="part"><span class="app-background-credit__part">{{ $t(part) }}</span><template v-if="index < credit.parts.length - 1"> · </template></template></span></a>
+  <a v-if="showCredit && credit !== undefined" class="app-background-credit" :class="{'app-background-credit--always': always}" :href="credit.url" target="_blank" rel="noopener"><span class="app-background-credit__text"><template v-for="(part, index) in credit.parts" :key="part"><span class="app-background-credit__part">{{ $t(part) }}</span><template v-if="index < credit.parts.length - 1"> · </template></template></span></a>
 </template>
 
 <script setup lang="ts">
-import {BACKGROUND_CREDIT, backgroundFallback, backgroundSources} from '@/client/components/appBackground';
+import {computed} from 'vue';
+import {BACKGROUND_CREDITS, backgroundFallback, backgroundSources} from '@/client/components/appBackground';
+import {activeTheme} from '@/client/theme/applyTheme';
 
 defineProps<{
   // Start page: shows the image even with the setting "Remove background image"
@@ -30,7 +32,8 @@ defineProps<{
   showCredit?: boolean,
 }>();
 
-const sources = backgroundSources();
-const fallback = backgroundFallback();
-const credit = BACKGROUND_CREDIT;
+// Follows the theme: the create-game form switches it, a game sets it (applyTheme.ts keeps it reactive)
+const sources = computed(() => backgroundSources(activeTheme()));
+const fallback = computed(() => backgroundFallback(activeTheme()));
+const credit = computed(() => BACKGROUND_CREDITS[activeTheme()]);
 </script>

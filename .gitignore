@@ -38,3 +38,7 @@ node_modules/
 _data/
 # Pictures of the optional extensions, copied by npm run make:extensions
 /assets/extensions/
+
+# Originals of the app backgrounds are private; only the variants of scripts/make-backgrounds.py are public
+assets/background/mars/eso0932a.jpg
+assets/background/dune/desert-univers.png
