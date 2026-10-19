@@ -147,9 +147,11 @@ describe('Dune modules B, D, E, F', () => {
       player1.heat = 5;
       player1.megaCredits = 3;
       const offer = cast(option(tabActions(player1), 'CHOAM: make an offer'), SelectTrade);
-      // At most the stock and at most 10 on each side
+      // At most the whole stock, at most 30 in return
       expect(() => offer.process({type: 'trade', give: Resource.HEAT, giveAmount: 6, get: Resource.TITANIUM, getAmount: 2})).to.throw();
-      expect(() => offer.process({type: 'trade', give: Resource.HEAT, giveAmount: 3, get: Resource.TITANIUM, getAmount: 11})).to.throw();
+      expect(() => offer.process({type: 'trade', give: Resource.HEAT, giveAmount: 3, get: Resource.TITANIUM, getAmount: 31})).to.throw();
+      expect(offer.give.find((option) => option.resource === Resource.HEAT)?.max).eq(5);
+      expect(offer.maxGet).eq(30);
       offer.process({type: 'trade', give: Resource.HEAT, giveAmount: 3, get: Resource.TITANIUM, getAmount: 2});
       expect(player1.heat).eq(2);
       expect(choam.offers).deep.eq([{seller: player1.id, give: Resource.HEAT, giveAmount: 3, want: Resource.TITANIUM, wantAmount: 2}]);

@@ -9,7 +9,18 @@
 
 .trade-select {
   container-type: inline-size;
+  // The tab box stretches it between the tabs and the footer: sides, amounts and summary sit together as one block
+  // vertically in the middle of that space (Jens, 19 Oct 2026)
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
   width: 100%;
+}
+
+// The converter's choice block must not take the free space for itself (its auto margins would push the sides up)
+html:not(.tm-mobile) .or-tab-panel .trade-select .trade-select__amounts.choice-block {
+  margin: 0 auto;
 }
 
 .trade-select__sides {
@@ -18,7 +29,6 @@
   align-items: flex-start;
   justify-content: center;
   gap: 24px @trade-group-gap;
-  margin-bottom: 20px;
 }
 
 // Each side a framed group, so give and get read as two units
@@ -97,7 +107,6 @@
   align-items: center;
   justify-content: center;
   gap: 14px;
-  margin-top: 18px;
   font-size: 22px;
   font-weight: 700;
 

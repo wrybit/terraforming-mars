@@ -14,7 +14,8 @@ import {CardName} from '../../common/cards/CardName';
 
 // Module D – CHOAM contracts (claude/dune-erweiterung-konzept.md): open trade between players, every step a normal action.
 // 1. Offer: the offered goods leave the tableau and lie on the own place of the CHOAM exchange, together with the
-//    wish (kind and amount 1–10). At most 1 open offer per player.
+//    wish (kind and amount up to 30; the offer itself up to the whole stock – Jens, 19 Oct 2026). At most 1 open
+//    offer per player.
 // 2. Accept: another player takes the offer in their own turn – whoever comes first gets the deal.
 // 3. Only then both pay 1 M€ to the bank.
 // 4. Nobody accepts: the goods go back to the offerer at the end of the generation, without a fee.
@@ -33,7 +34,8 @@ export type ChoamData = {
 };
 
 export const CHOAM_FEE = 1;
-export const MAX_CHOAM_AMOUNT = 10;
+/** Most that can be wished for in return */
+export const MAX_CHOAM_WISH = 30;
 
 export function initializeChoam(): ChoamData {
   return {offers: []};
@@ -54,11 +56,11 @@ export function offerInput(player: IPlayer, data: ChoamData): SelectTrade | unde
   }
   const give = ALL_RESOURCES
     .filter((resource) => player.stock.get(resource) >= 1)
-    .map((resource) => ({resource, max: Math.min(MAX_CHOAM_AMOUNT, player.stock.get(resource))}));
+    .map((resource) => ({resource, max: player.stock.get(resource)}));
   if (give.length === 0) {
     return undefined;
   }
-  return new SelectTrade(CHOAM_OFFER_TITLE, 'Offer', give, ALL_RESOURCES, MAX_CHOAM_AMOUNT).andThen((trade) => {
+  return new SelectTrade(CHOAM_OFFER_TITLE, 'Offer', give, ALL_RESOURCES, MAX_CHOAM_WISH).andThen((trade) => {
     player.stock.deduct(trade.give, trade.giveAmount, {log: true});
     data.offers.push({seller: player.id, give: trade.give, giveAmount: trade.giveAmount, want: trade.get, wantAmount: trade.getAmount});
     player.game.log('${0} offers ${1} ${2} for ${3} ${4} at the CHOAM exchange', (b) => b.player(player)
