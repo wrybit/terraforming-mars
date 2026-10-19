@@ -131,3 +131,90 @@
   display: flex;
   justify-content: flex-end;
 }
+
+// Small map of Arrakis with the worm's way (WormTrail.vue, in the Shai-Hulud tab)
+.worm-trail {
+  flex: 0 1 420px;
+  min-width: 0;
+  margin: 0;
+}
+
+.worm-trail__map {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.worm-trail__hex {
+  opacity: 0.75;
+}
+
+.worm-trail__line {
+  fill: none;
+  stroke: @worm-way;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.worm-trail__start {
+  fill: #f1e2c2;
+  stroke: @worm-way;
+  stroke-width: 3;
+}
+
+.worm-trail__worm {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.6));
+}
+
+.worm-trail__stop {
+  rect {
+    fill: #f1e2c2;
+    stroke: @worm-way;
+    stroke-width: 2;
+  }
+
+  text {
+    fill: #2b1a10;
+    font-size: 12px;
+    font-weight: bold;
+  }
+}
+
+.worm-trail__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 16px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #b9ad97;
+}
+
+.worm-trail__key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.worm-trail__key-start {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f1e2c2;
+  box-shadow: 0 0 0 2px @worm-way;
+}
+
+.worm-trail__key-stop {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 16px;
+  border: 2px solid @worm-way;
+  border-radius: 8px;
+  background: #f1e2c2;
+  color: #2b1a10;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 1;
+}

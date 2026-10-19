@@ -20,10 +20,15 @@
   }
 }
 
-// Terrain colours of the Arrakis zones (common/dune/arrakisTerrain.ts)
-.arrakis-hex--rock { background: #6b4a32; }
-.arrakis-hex--erg { background: #c99a5b; }
-.arrakis-hex--basin { background: #a8743f; }
-.arrakis-hex--spicefield { background: #d9822b; }
-.arrakis-hex--city { background: #8a6d4c; }
-.arrakis-hex--ice { background: #cfd8dc; }
+// Terrain colours of the Arrakis zones (common/dune/arrakisTerrain.ts): one list for the hexes of the map pieces
+// (ArrakisHex.vue, background) and the small map of the worm trail (WormTrail.vue, SVG fill)
+.arrakis-zone(@zone, @colour) {
+  .arrakis-hex--@{zone} { background: @colour; }
+  .arrakis-zone--@{zone} { fill: @colour; }
+}
+.arrakis-zone(rock, #6b4a32);
+.arrakis-zone(erg, #c99a5b);
+.arrakis-zone(basin, #a8743f);
+.arrakis-zone(spicefield, #d9822b);
+.arrakis-zone(city, #8a6d4c);
+.arrakis-zone(ice, #cfd8dc);

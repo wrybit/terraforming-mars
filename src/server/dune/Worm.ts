@@ -37,6 +37,10 @@ export type WormData = {
   levies?: Array<PendingLevy>,
   /** Greeneries placed by Dune Stabiliser: the worm spares them */
   spared?: Array<SpaceId>,
+  /** Where the recorded trail begins: the start space, or the space of the first move recorded (older games) */
+  trailStart?: SpaceId,
+  /** Every move so far, oldest first: the generation it ended and the spaces crossed (empty when blocked) */
+  trail?: Array<{generation: number, path: Array<SpaceId>}>,
 };
 
 /** Start in the deep desert south of the polar sink: G3 (G4, as wished, lies behind the worm border like E5). */
@@ -181,6 +185,9 @@ export function moveWorm(game: IGame, worm: WormData, distance: number): void {
   }
   worm.levies = levies.length > 0 ? levies : undefined;
   worm.path = path.map((space) => space.id);
+  // Games saved before the trail was recorded start it at the space this move leaves
+  worm.trailStart ??= worm.spaceId;
+  worm.trail = [...(worm.trail ?? []), {generation: game.generation, path: worm.path}];
   if (path.length > 0) {
     worm.spaceId = path[path.length - 1].id;
   }
@@ -225,6 +232,7 @@ export function wormModel(game: IGame, worm: WormData): WormModel {
     direction: worm.direction,
     turned: worm.roll !== undefined && worm.direction !== undefined && worm.direction !== directionIndex(worm.roll),
     path: worm.path,
+    trail: {start: worm.trailStart ?? worm.spaceId, moves: worm.trail ?? []},
     chooser: worm.chooser === undefined ? undefined : game.getPlayerById(worm.chooser as IPlayer['id']).color,
     // In the order of the options of distanceInput, so the client can show them on a piece of the map
     choices: worm.chooser === undefined ? undefined : wormChoices(game, worm).map(({path}) => path.map((space) => space.id)),

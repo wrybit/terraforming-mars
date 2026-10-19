@@ -8,7 +8,7 @@ import {TileType} from '../../src/common/TileType';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {Space} from '../../src/server/boards/Space';
 import {ARRAKIS_ZONES, BEHIND_WORM_BORDER} from '../../src/common/dune/arrakisTerrain';
-import {WORM_START, WORM_TITLE, WormData, crossSpace, directionIndex, distanceInput, maxWormDistance, wormChoices, wormChooser, wormDirection, wormPath} from '../../src/server/dune/Worm';
+import {WORM_START, WORM_TITLE, WormData, crossSpace, directionIndex, distanceInput, maxWormDistance, moveWorm, wormChoices, wormChooser, wormDirection, wormModel, wormPath} from '../../src/server/dune/Worm';
 import {LEVY_TITLE, PendingLevy, levyInput} from '../../src/server/dune/WormLevy';
 import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {formatMessage} from '../TestingUtils';
@@ -189,6 +189,24 @@ describe('Shai-Hulud (Dune module C)', () => {
       }
     });
     expect(distanceInput(game, worm).options).has.length(choices.length);
+  });
+
+  it('records its trail: every move with its generation, from the starting space on', () => {
+    game.generation = 3;
+    const worm = wormOf(game);
+    expect(wormModel(game, worm).trail).deep.eq({start: WORM_START, moves: []});
+    worm.direction = wormDirection(game.board, worm.spaceId, 1);
+    const expected = wormPath(game.board, worm.spaceId, worm.direction, 2).map((space) => space.id);
+    moveWorm(game, worm, 2);
+    game.generation = 4;
+    moveWorm(game, worm, 1);
+    const trail = wormModel(game, worm).trail;
+    expect(trail.start).eq(WORM_START);
+    expect(trail.moves.map((move) => move.generation)).deep.eq([3, 4]);
+    expect(trail.moves[0].path).deep.eq(expected);
+    // The trail survives a reload
+    const restored = Game.deserialize(JSON.parse(JSON.stringify(game.serialize())));
+    expect(restored.duneData?.worm?.trail).deep.eq(worm.trail);
   });
 
   it('asks again after a reload', () => {

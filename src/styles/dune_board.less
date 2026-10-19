@@ -35,8 +35,21 @@
 .dune-worm {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  // Map with facts and the list of effects are two groups: more space between them than inside them
+  gap: 24px;
   font-size: 13px;
+}
+
+// The trail map and the facts belong together: side by side, the facts below the map when it is narrow
+.dune-worm__overview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+
+  .dune-worm__facts {
+    flex: 1 1 240px;
+  }
 }
 
 .dune-worm__facts {

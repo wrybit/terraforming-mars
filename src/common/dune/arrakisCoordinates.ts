@@ -39,16 +39,18 @@ export function arrakisSpacePosition(spaceId: string): {x: number, y: number} | 
   return undefined;
 }
 
+/** Ids of all Arrakis spaces on the board, row by row from the top ("03" … "63") */
+export const ARRAKIS_SPACE_IDS: ReadonlyArray<string> = Array.from({length: ROW_LENGTHS.reduce((sum, length) => sum + length, 0)},
+  (_value, index) => String(index + 3).padStart(2, '0'));
+
 /** Ids of the spaces around an Arrakis space (neighbours are one space step apart on the drawn board) */
 export function arrakisNeighbours(spaceId: string): Array<string> {
   const center = arrakisSpacePosition(spaceId);
   if (center === undefined) {
     return [];
   }
-  const total = ROW_LENGTHS.reduce((sum, length) => sum + length, 0);
   const neighbours: Array<string> = [];
-  for (let number = 3; number < 3 + total; number++) {
-    const id = String(number).padStart(2, '0');
+  for (const id of ARRAKIS_SPACE_IDS) {
     const position = arrakisSpacePosition(id);
     if (id !== spaceId && position !== undefined && Math.hypot(position.x - center.x, position.y - center.y) < SPACE_STEP + 2) {
       neighbours.push(id);

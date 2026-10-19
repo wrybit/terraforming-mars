@@ -17,7 +17,7 @@ describe('Mars client is unaffected by Dune', () => {
   });
 
   it('shows one tab per Dune module of a Dune game, only for the modules in play', () => {
-    const game = fakeGameModel({dune: {worm: {spaceId: '48', roll: undefined, direction: undefined, turned: false, path: [], chooser: undefined}}});
+    const game = fakeGameModel({dune: {worm: {spaceId: '48', roll: undefined, direction: undefined, turned: false, path: [], trail: {start: '48', moves: []}, chooser: undefined}}});
     expect(boardTabs(game)).deep.eq(['mars', 'worm']);
   });
 

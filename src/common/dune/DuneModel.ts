@@ -19,6 +19,11 @@ export type BazaarModel = {
   deckSize: number,
 };
 
+/** One move of the worm: the generation it ended and the spaces crossed (empty when the worm was blocked) */
+export type WormMoveModel = {generation: number, path: ReadonlyArray<string>};
+
+export type WormTrailModel = {start: string, moves: ReadonlyArray<WormMoveModel>};
+
 export type WormModel = {
   spaceId: string,
   /** Die of the last move (1 top right … 6 top left, clockwise) */
@@ -29,6 +34,8 @@ export type WormModel = {
   turned: boolean,
   /** Spaces crossed by the last move */
   path: ReadonlyArray<string>,
+  /** Where the worm has been: the space it began on and every move since, oldest first */
+  trail: WormTrailModel,
   /** Player choosing the distance right now */
   chooser: Color | undefined,
   /** While a player chooses: the spaces crossed by each choice, in the order of the options (server/dune/Worm.ts) */
