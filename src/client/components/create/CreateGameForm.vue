@@ -72,6 +72,11 @@
             </template>
             <!-- Dune expansion: its modules change the rules, each on its own (common/dune/DuneModule.ts); only with Dune -->
             <CollapsibleSection v-if="theme === 'dune'" variant="subhead" title="Dune expansion" :collapsible="false" storageKey="duneExpansions" defaultOpen>
+              <!-- Same small button as for the official expansions: all modules on, or all off once everything is on -->
+              <template #actions>
+                <button type="button" class="create-game-small-button"
+                  @click="setDuneModules(!allDuneModulesSelected)">{{ $t(allDuneModulesSelected ? 'Deselect all' : 'Select all') }}</button>
+              </template>
               <div class="create-game-chip-grid create-game-expansion-grid">
                 <ChoiceChip v-for="module in PLAYABLE_DUNE_MODULES" :key="module" :label="DUNE_MODULE_LABEL[module]"
                   :selected="$data[DUNE_MODULE_FIELD[module]]" @select="toggleDuneModule(module)">
@@ -888,6 +893,9 @@ export default defineComponent({
         }
       },
     },
+    allDuneModulesSelected(): boolean {
+      return PLAYABLE_DUNE_MODULES.every((module) => this.$data[DUNE_MODULE_FIELD[module]]);
+    },
     PLAYABLE_DUNE_MODULES(): ReadonlyArray<DuneModule> {
       return PLAYABLE_DUNE_MODULES;
     },
@@ -1007,6 +1015,11 @@ export default defineComponent({
     toggleDuneModule(module: DuneModule) {
       const field = DUNE_MODULE_FIELD[module];
       this[field] = !this[field];
+    },
+    setDuneModules(selected: boolean) {
+      for (const module of PLAYABLE_DUNE_MODULES) {
+        this[DUNE_MODULE_FIELD[module]] = selected;
+      }
     },
     restoreSettingsFromLink(): boolean {
       try {
