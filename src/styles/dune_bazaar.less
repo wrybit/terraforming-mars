@@ -6,9 +6,11 @@
 @import (reference) "./dune_frame.less";
 
 .dune-bazaar {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: 0;
 
   // The rules right below the board (the gap above is enough), so the tab fits without scrolling
   > .dune-rules {
@@ -73,6 +75,26 @@
   border: 2px dashed fade(@bazaar-sand, 45%);
   color: fade(@bazaar-sand, 70%);
   font-size: 12px;
+}
+
+// Desktop: the wares are upright cards of a fixed size (5 : 7 like a project card); the whole board grows with the box
+// and keeps that proportion (DuneFitBox.vue, Jens 19 Oct 2026). The picture takes the extra height.
+html:not(.tm-mobile) .dune-bazaar {
+  .dune-bazaar__slots {
+    grid-template-columns: repeat(5, 140px);
+  }
+
+  .dune-bazaar__slot {
+    flex: none;
+    aspect-ratio: 5 / 7;
+    box-sizing: border-box;
+  }
+
+  .dune-bazaar__scene {
+    flex: 1 1 0;
+    min-height: 0;
+    aspect-ratio: auto;
+  }
 }
 
 // Price coin in the corner like the cost of a project card

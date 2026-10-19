@@ -2,26 +2,28 @@
   <!-- Board tab "Bazaar" (Dune module A): the five slots from the newest (dearest) to the oldest (cheapest).
        A ware slides one slot right each generation; one fewer ware than players lies out. -->
   <div class="dune-bazaar" data-test="dune-bazaar">
-    <ol class="dune-bazaar__slots">
-      <!-- Like the bazaar board of the mockup: the price change above each slot, the ware as a small card with its price
-           coin in the corner, a scene and its goods -->
-      <li v-for="(slot, index) in bazaar.slots" :key="index" class="dune-bazaar__place" :data-test="'dune-bazaar-slot-' + index">
-        <span class="dune-bazaar__change">{{ priceChange(index) }}</span>
-        <!-- Buying is an action: a tap on an affordable ware opens its purchase as an action tab (payment with
-             before/after and cancel); a ware that can't be bought now is greyed out (Jens, 19 Oct 2026) -->
-        <component :is="buyable(slot.ware) ? 'button' : 'div'" v-if="slot.ware !== undefined" :type="buyable(slot.ware) ? 'button' : undefined"
-          :class="['dune-bazaar__slot', buyable(slot.ware) ? 'dune-bazaar__slot--buyable' : 'dune-bazaar__slot--unavailable']" :title="buyable(slot.ware) ? $t('Buy this ware') : undefined"
-          @click="buyable(slot.ware) && buy(slot.ware)">
-          <BazaarWareCard :ware="slot.ware" :price="slot.basePrice ?? slot.price" :newPrice="slot.ownPrice ?? slot.price"/>
-        </component>
-        <!-- Taken this generation: the player's cube and name where the ware lay (Jens, 19 Oct 2026) -->
-        <div v-else-if="slot.takenBy !== undefined" class="dune-bazaar__slot dune-bazaar__slot--empty dune-bazaar__slot--taken" data-test="dune-bazaar-taken">
-          <BoardCube :color="slot.takenBy" view="slight" :size="18"/>
-          <span class="dune-bazaar__taker">{{ playerName(slot.takenBy) }}</span>
-        </div>
-        <div v-else class="dune-bazaar__slot dune-bazaar__slot--empty">{{ $t('Empty') }}</div>
-      </li>
-    </ol>
+    <DuneFitBox>
+      <ol class="dune-bazaar__slots">
+        <!-- Like the bazaar board of the mockup: the price change above each slot, the ware as a small card with its price
+             coin in the corner, a scene and its goods -->
+        <li v-for="(slot, index) in bazaar.slots" :key="index" class="dune-bazaar__place" :data-test="'dune-bazaar-slot-' + index">
+          <span class="dune-bazaar__change">{{ priceChange(index) }}</span>
+          <!-- Buying is an action: a tap on an affordable ware opens its purchase as an action tab (payment with
+               before/after and cancel); a ware that can't be bought now is greyed out (Jens, 19 Oct 2026) -->
+          <component :is="buyable(slot.ware) ? 'button' : 'div'" v-if="slot.ware !== undefined" :type="buyable(slot.ware) ? 'button' : undefined"
+            :class="['dune-bazaar__slot', buyable(slot.ware) ? 'dune-bazaar__slot--buyable' : 'dune-bazaar__slot--unavailable']" :title="buyable(slot.ware) ? $t('Buy this ware') : undefined"
+            @click="buyable(slot.ware) && buy(slot.ware)">
+            <BazaarWareCard :ware="slot.ware" :price="slot.basePrice ?? slot.price" :newPrice="slot.ownPrice ?? slot.price"/>
+          </component>
+          <!-- Taken this generation: the player's cube and name where the ware lay (Jens, 19 Oct 2026) -->
+          <div v-else-if="slot.takenBy !== undefined" class="dune-bazaar__slot dune-bazaar__slot--empty dune-bazaar__slot--taken" data-test="dune-bazaar-taken">
+            <BoardCube :color="slot.takenBy" view="slight" :size="18"/>
+            <span class="dune-bazaar__taker">{{ playerName(slot.takenBy) }}</span>
+          </div>
+          <div v-else class="dune-bazaar__slot dune-bazaar__slot--empty">{{ $t('Empty') }}</div>
+        </li>
+      </ol>
+    </DuneFitBox>
     <!-- Only games of the former rules still have a buying order; otherwise no line, so the rules sit close below -->
     <div v-if="bazaar.buyers.length > 0" class="dune-bazaar__footer">
       <span v-if="bazaar.buyers.length > 0" class="dune-bazaar__buyers">
@@ -44,6 +46,7 @@ import {vueRoot} from '@/client/components/vueRoot';
 import {closeMove, DuneMoveStep, isMoveOffered, openMove} from './duneMoves';
 import DuneRuleCards from './DuneRuleCards.vue';
 import BazaarWareCard from './BazaarWareCard.vue';
+import DuneFitBox from './DuneFitBox.vue';
 import BoardCube from '@/client/components/common/BoardCube.vue';
 import {BAZAAR_RULES} from './duneRules';
 import {BAZAAR_BUY_TITLE, BAZAAR_WARE_TITLE} from '@/common/dune/duneActionTitles';
@@ -61,7 +64,7 @@ function wareMove(ware: string): Array<DuneMoveStep> {
 
 export default defineComponent({
   name: 'BazaarBoard',
-  components: {DuneRuleCards, BazaarWareCard, BoardCube},
+  components: {DuneRuleCards, BazaarWareCard, BoardCube, DuneFitBox},
   props: {
     bazaar: {
       type: Object as PropType<BazaarModel>,

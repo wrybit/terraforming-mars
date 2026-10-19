@@ -50,6 +50,25 @@
   min-height: 0;
 }
 
+// Free room of a Dune tab, filled by its content scaled as a whole (DuneFitBox.vue): centred in both directions
+.dune-fit {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+}
+
+.dune-fit__content {
+  flex: none;
+}
+
+// Mobile view: no scaling (DuneFitBox.vue), the content keeps its own fluid layout across the full width
+html.tm-mobile .dune-fit {
+  display: block;
+}
+
 // Shai-Hulud: the trail map centred, the effects below
 .dune-worm {
   flex: 1 1 auto;
@@ -102,7 +121,6 @@
   flex-direction: column;
   gap: 6px;
   width: 100%;
-  max-width: 680px;
   margin-top: 10px;
 }
 
@@ -228,10 +246,23 @@
 
 // House schemes
 .dune-schemes {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 0;
   font-size: 13px;
+}
+
+// Desktop: the agenda cards have a fixed card size and grow together in the free room (DuneFitBox.vue), centred
+html:not(.tm-mobile) .dune-schemes__cards {
+  display: flex;
+  justify-content: center;
+  width: auto;
+
+  .dune-schemes__agenda {
+    width: 240px;
+  }
 }
 
 .dune-schemes__own {

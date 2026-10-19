@@ -1,7 +1,8 @@
 <template>
   <!-- One board tab per Dune module (boardTabs.ts DUNE_BOARD_TABS): shows the section of the module of this tab -->
   <div class="dune-board" data-test="dune-board">
-    <section v-if="tab === 'bazaar' && dune.bazaar" class="dune-board__section">
+    <!-- Bazaar and schemes: their cards grow into the free room of the box, keeping their proportions (DuneFitBox.vue) -->
+    <section v-if="tab === 'bazaar' && dune.bazaar" class="dune-board__section dune-board__section--fill">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('special-bazaar')" alt="">{{ $t('Bazaar of Arrakeen') }}</h3>
       <BazaarBoard :bazaar="dune.bazaar" :players="players"/>
     </section>
@@ -14,7 +15,7 @@
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('res-sardaukar')" alt="">{{ $t('Kanly') }}</h3>
       <KanlyPanel :kanly="dune.kanly" :players="players" :spaces="spaces"/>
     </section>
-    <section v-if="tab === 'schemes' && dune.schemes" class="dune-board__section">
+    <section v-if="tab === 'schemes' && dune.schemes" class="dune-board__section dune-board__section--fill">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('res-advisor')" alt="">{{ $t('House schemes') }}</h3>
       <SchemesPanel :schemes="dune.schemes" :players="players"/>
     </section>
