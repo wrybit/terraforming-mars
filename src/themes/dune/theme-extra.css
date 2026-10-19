@@ -176,10 +176,13 @@ html.theme-dune .card-requirements.card-requirements-max::after {
   content: "MAX";
 }
 
-/* Effect box of the Houses: darker parchment instead of the grey metal */
-html.theme-dune .card-corporation-box {
-  background: linear-gradient(to bottom right, #e7d8b8, #d6c098, #e8dcc2, #d2bb92);
-  border-color: #6b5640;
+/* Effect box of the Houses: a slightly darker parchment, sunk in with an inner shadow like the production box,
+   instead of the grey metal with its black outline */
+html.theme-dune .card-container .card-corporation-box {
+  border: 0;
+  border-radius: 10px;
+  background: #efe2c6;
+  box-shadow: inset 0 2px 6px rgb(60 40 20 / 35%);
 }
 
 /* Bonus symbols: the Dune symbols are drawn shapes on a dark board, not bright full squares like the Mars pictures,
@@ -552,14 +555,50 @@ html.theme-dune .card-container .card-content .card-asterisk-note-star {
   font-weight: 700;
 }
 
-/* Labels: house name and the small labels in Michroma */
+/* House cards like the project cards: the name on a flat title band under the row of tags (it ran into the tags),
+   the content moved down below the band */
 html.theme-dune .card-container .card-title.card-house-name {
-  font-size: 16px;
+  top: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 8px;
+  background: #4a3422;
+  color: #fff4e0;
+  font-size: 13px;
+  line-height: 1.15;
+  text-align: center;
+  letter-spacing: 0.06em;
 }
 
+html.theme-dune .card-container .card-content.card-content-corporation {
+  top: 0;
+  height: 256px !important;
+}
+
+/* The expansion mark of a house sits under the band instead of on its edge */
+html.theme-dune .card-container .card-corporation-expansion {
+  top: 80px;
+  right: 8px;
+  left: auto;
+}
+
+/* Small labels in Michroma on flat umber tabs: HOUSE above the card, EFFECT/ACTION above a box */
 html.theme-dune .card-container .corporation-label,
 html.theme-dune .card-container .card-corporation-label {
   font: 8px Michroma, sans-serif !important;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  background: #4a3422;
+  color: #f4ead2;
+  box-shadow: none;
+}
+
+html.theme-dune .card-container .corporation-label {
+  border-radius: 6px 6px 0 0;
+}
+
+html.theme-dune .card-container .card-corporation-label {
+  border-radius: 0 0 8px 8px;
 }
