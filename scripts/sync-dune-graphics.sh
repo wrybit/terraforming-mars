@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Copies the Dune pictures from the mockup into the game (assets/themes/dune/graphics).
+# Copies the Dune pictures from the mockup into the game (assets/themes/dune/graphics) and the globe of Arrakis
+# (assets/themes/dune/source/arrakis-globe.png).
 #
 # Why: the mockup (tm.baiz.org/terraforming-dune, folder _outputs/terraforming-dune) is where the pictures are drawn;
 # its generator (tools/export-graphics.py) writes them to assets/graphics/*.svg. The game uses the same files under
@@ -41,3 +42,11 @@ for file in "$TARGET"/*.svg; do
 done
 
 echo "$added new, $changed changed"
+
+# The globe of Arrakis (board planet, scripts/make-dune-planet.py builds the board pictures from it). The original has
+# 3000 px; 1500 px are plenty for the largest board picture and keep the repository small.
+GLOBE="$MOCKUP/assets/graphics/arrakis-globe.png"
+if [ -f "$GLOBE" ]; then
+  sips -Z 1500 "$GLOBE" --out "$TARGET/../source/arrakis-globe.png" > /dev/null
+  echo "globe:   source/arrakis-globe.png (run python3 scripts/make-dune-planet.py)"
+fi

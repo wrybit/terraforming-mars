@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-# Builds the planet pictures of the Dune theme (assets/themes/dune/arrakis-planet*.png) from the square map
-# assets/themes/dune/source/arrakis-map.jpg (planet circle inscribed in the square). Needs only Pillow.
+# Builds the planet pictures of the Dune theme (assets/themes/dune/arrakis-planet*.png) from the globe of the mockup
+# assets/themes/dune/source/arrakis-globe.png (cut-out sphere, square; copied by scripts/sync-dune-graphics.sh).
+# Needs only Pillow.
 #
 # Why: the board lays its hexes over assets/board/mars-planet*.png. Arrakis takes exactly the same place, so the
 # pictures have the same size and the planet circle sits where Mars sits; the hexes then line up with the map.
 # Never edit the PNGs by hand – change this script and run it again: python3 scripts/make-dune-planet.py
 import os
-from PIL import Image, ImageChops, ImageDraw
+from PIL import Image
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
-SOURCE = os.path.join(ROOT, 'assets/themes/dune/source/arrakis-map.jpg')
-SUPERSAMPLE = 4
+SOURCE = os.path.join(ROOT, 'assets/themes/dune/source/arrakis-globe.png')
 
 # Mars picture, the planet-only picture that gives the planet circle (its alpha box), Dune picture to write.
 TARGETS = [
@@ -23,22 +23,9 @@ TARGETS = [
 ]
 
 
-def limb_darkening(distance: int) -> int:
-    # distance 0 (centre) … 255 (rim) → brightness; the outer 45 % darken softly, so the map reads as a sphere
-    relative = distance / 255
-    dark = max(0.0, (relative - 0.55) / 0.45) ** 1.6
-    return round(255 * (1 - 0.45 * dark))
-
-
 def sphere(size: int) -> Image.Image:
-    planet = Image.open(SOURCE).convert('RGB').resize((size, size), Image.LANCZOS)
-    shade = Image.radial_gradient('L').resize((size, size), Image.BICUBIC).point(limb_darkening)
-    planet = ImageChops.multiply(planet, Image.merge('RGB', (shade, shade, shade)))
-    # Round cut-out, drawn larger and scaled down for a smooth edge
-    mask = Image.new('L', (size * SUPERSAMPLE, size * SUPERSAMPLE), 0)
-    ImageDraw.Draw(mask).ellipse((0, 0, size * SUPERSAMPLE - 1, size * SUPERSAMPLE - 1), fill=255)
-    planet.putalpha(mask.resize((size, size), Image.LANCZOS))
-    return planet
+    # The globe is already a cut-out sphere with a darker rim (drawn in the mockup); only scaled here
+    return Image.open(SOURCE).convert('RGBA').resize((size, size), Image.LANCZOS)
 
 
 # The board pictures of Mars carry the scale rings; Arrakis draws its scales as vectors (ArrakisScales.vue), sharp at
