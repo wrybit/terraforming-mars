@@ -194,8 +194,6 @@
   "Look at all agendas of another player. Gain 2 M€.": "Bekijk alle agenda's van een andere speler. Krijg 2 Solari.",
   "This generation you choose how far the worm moves (1–3 spaces).": "Deze generatie bepaal jij hoe ver de worm zich verplaatst (1–3 velden).",
   "When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Als de worm een veld naast een van jouw tegels passeert, krijg je 2 Spice.",
-  "The worm spares your greeneries.": "De worm spaart je beplante duinen.",
-  "Place a greenery tile. The worm spares your greeneries.": "Leg een beplante duin. De worm spaart je beplante duinen.",
   "Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Je CHOAM-contracten kosten geen vergoeding. Als andere spelers een contract sluiten, krijg je 1 Solari.",
   "You may have 2 open offers at the CHOAM exchange.": "Je mag 2 open aanbiedingen op de CHOAM-beurs hebben.",
   "Increase your M€ production 1 step. You may have 2 open offers at the CHOAM exchange.": "Verhoog je Solari-productie 1 stap. Je mag 2 open aanbiedingen op de CHOAM-beurs hebben.",
@@ -226,5 +224,15 @@
   "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "EFFECT: Als een van jouw tegels het oorlogsveld wordt, verdedigen 2 Sardaukar hem gratis.",
   "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "EFFECT: Als de worm een veld naast een van jouw tegels passeert, krijg je 2 Spice.",
   "Effect: When you buy at the bazaar, you pay 3 M€ less.": "EFFECT: Als je op de bazaar koopt, betaal je 3 Solari minder.",
-  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "EFFECT: Je CHOAM-contracten kosten geen vergoeding. Als andere spelers een contract sluiten, krijg je 1 Solari."
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "EFFECT: Je CHOAM-contracten kosten geen vergoeding. Als andere spelers een contract sluiten, krijg je 1 Solari.",
+  "Schemes": "Intriges",
+  "Smuggling": "Smokkel",
+  "turned": "gedraaid",
+  "Rock in the way: the worm turns clockwise to the next free direction": "Rots in de weg: de worm draait met de klok mee naar de volgende vrije richting",
+  "Rock blocks the way: Shai-Hulud turns clockwise": "Rots verspert de weg: Shai-Hulud draait met de klok mee",
+  "Shai-Hulud spares the stabilised greenery of ${0}": "Shai-Hulud spaart de gestabiliseerde beplante duin van ${0}",
+  "Shai-Hulud: pay resources worth ${0}": "Shai-Hulud: betaal grondstoffen ter waarde van ${0}",
+  "The worm spares this greenery.": "De worm spaart deze beplante duin.",
+  "Place a greenery tile. The worm spares this greenery.": "Leg een beplante duin. De worm spaart deze beplante duin.",
+  "Medium": "Gemiddeld"
 }

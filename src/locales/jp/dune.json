@@ -199,8 +199,6 @@
   "This generation you choose how far the worm moves (1–3 spaces).": "この世代、砂虫の移動距離をあなたが決める（1–3マス）。",
   "When the worm crosses a space next to one of your tiles, gain 2 titanium.": "砂虫があなたのタイルに隣接するマスを通過するたび、スパイス2を得る。",
   "worm": "砂虫",
-  "The worm spares your greeneries.": "砂虫はあなたの植林砂丘を踏み荒らさない。",
-  "Place a greenery tile. The worm spares your greeneries.": "植林砂丘を1つ置く。砂虫はあなたの植林砂丘を踏み荒らさない。",
   "Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "あなたのCHOAM契約は手数料がかからない。他のプレイヤーが契約を成立させるたび、1ソラリを得る。",
   "contract": "契約",
   "You may have 2 open offers at the CHOAM exchange.": "CHOAM取引所に申し出を2つまで出しておける。",
@@ -233,5 +231,15 @@
   "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "効果：あなたのタイルが戦場になったとき、サーダカー2人が無料で守る。",
   "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "効果：砂虫があなたのタイルに隣接するマスを通過するたび、スパイス2を得る。",
   "Effect: When you buy at the bazaar, you pay 3 M€ less.": "効果：バザールで購入するとき、3ソラリ安く支払う。",
-  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "効果：あなたのCHOAM契約は手数料がかからない。他のプレイヤーが契約を成立させるたび、1ソラリを得る。"
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "効果：あなたのCHOAM契約は手数料がかからない。他のプレイヤーが契約を成立させるたび、1ソラリを得る。",
+  "Schemes": "陰謀",
+  "Smuggling": "密輸",
+  "turned": "方向転換",
+  "Rock in the way: the worm turns clockwise to the next free direction": "岩が道をふさぐ：砂虫は時計回りに次の空いている方向へ向きを変える",
+  "Rock blocks the way: Shai-Hulud turns clockwise": "岩が道をふさぐ：シャイー・フルードは時計回りに向きを変える",
+  "Shai-Hulud spares the stabilised greenery of ${0}": "シャイー・フルードは${0}の固めた植林砂丘を見逃す",
+  "Shai-Hulud: pay resources worth ${0}": "シャイー・フルード：価値${0}分の資源を支払う",
+  "The worm spares this greenery.": "砂虫はこの植林砂丘を踏み荒らさない。",
+  "Place a greenery tile. The worm spares this greenery.": "植林砂丘を1つ置く。砂虫はこの植林砂丘を踏み荒らさない。",
+  "Medium": "普通"
 }

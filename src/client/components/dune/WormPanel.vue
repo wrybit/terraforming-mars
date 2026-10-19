@@ -8,18 +8,20 @@
       </div>
       <div v-if="worm.chooser !== undefined" class="dune-worm__fact">
         <dt>{{ $t('Moving now') }}</dt>
-        <dd><span class="dune-worm__die">{{ worm.roll }}</span> <span class="dune-worm__arrow">{{ arrow(worm.roll ?? 0) }}</span>
+        <dd><span class="dune-worm__die">{{ worm.roll }}</span> <span class="dune-worm__arrow">{{ arrow(worm.direction) }}</span>
+          <span v-if="worm.turned" class="dune-worm__turned">{{ $t('turned') }}</span>
           <PlayerChip :color="worm.chooser" :players="players"/> {{ $t('chooses the distance') }}</dd>
       </div>
       <div v-else-if="worm.roll !== undefined" class="dune-worm__fact">
         <dt>{{ $t('Last move') }}</dt>
-        <dd><span class="dune-worm__die">{{ worm.roll }}</span> <span class="dune-worm__arrow">{{ arrow(worm.roll) }}</span>
+        <dd><span class="dune-worm__die">{{ worm.roll }}</span> <span class="dune-worm__arrow">{{ arrow(worm.direction) }}</span>
+          <span v-if="worm.turned" class="dune-worm__turned">{{ $t('turned') }}</span>
           <span v-if="worm.path.length > 0">{{ worm.path.map(coordinate).join(' → ') }}</span>
           <span v-else>{{ $t('blocked') }}</span></dd>
       </div>
       <div class="dune-worm__fact">
         <dt>{{ $t('Next move') }}</dt>
-        <dd>{{ $t('end of generation, the player with the least TR chooses 1–3 spaces') }}</dd>
+        <dd>{{ $t('end of generation, the player with the least TR chooses 1–3 spaces') }}<br>{{ $t('Rock in the way: the worm turns clockwise to the next free direction') }}</dd>
       </div>
     </dl>
     <ul class="dune-worm__effects">
@@ -39,8 +41,8 @@ import {arrakisCoordinate} from '@/common/dune/arrakisCoordinates';
 import {duneGraphic} from './duneGraphic';
 import PlayerChip from './PlayerChip.vue';
 
-// Die 1 top right … 6 top left, clockwise (server/dune/Worm.ts)
-const ARROWS = ['', '↗', '→', '↘', '↙', '←', '↖'];
+// Heading index of the move, clockwise from top left (server/dune/Worm.ts wormDirection)
+const ARROWS = ['↖', '↗', '→', '↘', '↙', '←'];
 
 const EFFECTS = [
   {tile: 'tile-small-spicefield', text: 'Spice field: +1 spice for each adjacent tile of a player'},
@@ -73,8 +75,8 @@ export default defineComponent({
     coordinate(spaceId: string): string {
       return arrakisCoordinate(spaceId);
     },
-    arrow(roll: number): string {
-      return ARROWS[roll] ?? '';
+    arrow(direction: number | undefined): string {
+      return direction === undefined ? '' : ARROWS[direction];
     },
   },
 });

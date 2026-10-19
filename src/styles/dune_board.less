@@ -74,6 +74,13 @@
   color: #e0662a;
 }
 
+// The rolled direction was blocked: says why the arrow differs from the die
+.dune-worm__turned {
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.8;
+}
+
 .dune-worm__effects {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -255,79 +262,104 @@
   gap: 8px;
 }
 
-.dune-schemes__agenda {
+.dune-schemes__cards {
   display: grid;
-  grid-template-columns: 30px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 4px 10px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+  gap: 10px;
   width: 100%;
-  padding: 8px 10px;
-  border-radius: 8px;
+}
+
+// Agenda card of the mockup: parchment with a violet frame (secret), levels as full-width bars
+.dune-schemes__agenda {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 12px 14px;
+  border: 3px solid #8a6bbf;
+  border-radius: 12px;
   background: linear-gradient(to bottom right, #f6ecd6, #e4d2ae);
   color: #2a1c12;
   box-sizing: border-box;
 }
 
-.dune-schemes__icon {
-  width: 30px;
-  height: 30px;
+.dune-schemes__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.dune-schemes__text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.dune-schemes__icon {
+  flex: none;
+  width: 34px;
+  height: 34px;
+}
+
+.dune-schemes__name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dune-schemes__goal {
+  margin: 0;
+  font-size: 13px;
 }
 
 .dune-schemes__levels {
   display: flex;
-  gap: 4px;
+  flex-direction: column;
+  gap: 5px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+// Easy green, medium orange, hard red; reached levels get a frame and a tick
 .dune-schemes__level {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
-  min-width: 38px;
-  padding: 2px 4px;
-  border-radius: 6px;
-  background: rgba(42, 28, 18, 0.12);
+  gap: 8px;
+  padding: 4px 6px 4px 10px;
+  border-radius: 5px;
+  color: #fff8ea;
   font-size: 11px;
-
-  b {
-    font-size: 11px;
-  }
-
-  &:nth-child(1) {
-    border: 1px solid #436c23;
-  }
-
-  &:nth-child(2) {
-    border: 1px solid #c97a3a;
-  }
-
-  &:nth-child(3) {
-    border: 1px solid #8c3522;
-  }
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-// Levels coloured like the agenda cards of the mockup: easy green, medium orange, hard red; reached ones solid
+.dune-schemes__level--easy {
+  background: #3f8a34;
+}
+
+.dune-schemes__level--medium {
+  background: #d08a1e;
+}
+
+.dune-schemes__level--hard {
+  background: #b23a26;
+}
+
+.dune-schemes__target {
+  font-size: 15px;
+}
+
+.dune-schemes__points {
+  padding: 1px 7px;
+  border-radius: 10px;
+  background: #fff8ea;
+  color: #2a1c12;
+  font-size: 11px;
+}
+
 .dune-schemes__level--reached {
-  color: #fff8ea;
+  box-shadow: inset 0 0 0 2px #fff8ea;
 
-  &:nth-child(1) {
-    background: #436c23;
-  }
-
-  &:nth-child(2) {
-    background: #c97a3a;
-  }
-
-  &:nth-child(3) {
-    background: #8c3522;
+  .dune-schemes__level-name::before {
+    content: '✓ ';
   }
 }
 
@@ -341,14 +373,4 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-}
-
-@media only screen and (max-width: 600px) {
-  .dune-schemes__agenda {
-    grid-template-columns: 26px minmax(0, 1fr);
-  }
-
-  .dune-schemes__levels {
-    grid-column: 1 / -1;
-  }
 }

@@ -21,6 +21,10 @@ export type WormModel = {
   spaceId: string,
   /** Die of the last move (1 top right … 6 top left, clockwise) */
   roll: number | undefined,
+  /** Heading of that move (0 top left … 5 left, clockwise); differs from the die when rock made the worm turn */
+  direction: number | undefined,
+  /** The rolled direction was blocked, the worm turned clockwise */
+  turned: boolean,
   /** Spaces crossed by the last move */
   path: ReadonlyArray<string>,
   /** Player choosing the distance right now */
@@ -39,6 +43,15 @@ export type KanlyModel = {
   } | undefined,
   foughtThisGeneration: boolean,
 };
+
+/** Top of the suspicion track (module E); levels from 3 on cost TR at the end of the generation */
+export const MAX_SUSPICION = 5;
+export const COSTLY_SUSPICION = 3;
+
+/** TR lost at the end of the generation for a suspicion level: 3 → 1, 4 → 2, 5 → 3 */
+export function suspicionPenalty(level: number): number {
+  return Math.max(0, level - COSTLY_SUSPICION + 1);
+}
 
 export type SmugglingModel = {
   suspicion: ReadonlyArray<{color: Color, level: number}>,

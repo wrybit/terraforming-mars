@@ -64,7 +64,8 @@ html.theme-dune .board-space-tile--restricted_area {
   background: url(graphics/special-restricted-area.svg) center / contain no-repeat;
 }
 
-/* Cards as in the Dune mockup: parchment instead of silver, dark ink frame, earthy title bands */
+/* Cards as in the Dune mockup: parchment instead of silver, dark ink frame, earthy title bands. Only the image, not the
+   background shorthand: the log draws these gradients as a thin stripe (log.less background-size) and must keep it. */
 html.theme-dune .filterDiv {
   background: linear-gradient(to bottom right, #f6ecd6, #e4d2ae 35%, #efe4cc 60%, #dcc8a2);
   border-color: #2a1c12;
@@ -73,25 +74,25 @@ html.theme-dune .filterDiv {
 
 html.theme-dune .card-title .background-color-automated,
 html.theme-dune .background-color-automated {
-  background: linear-gradient(-60deg, #436c23 10%, #5a8c33, #436c23 90%);
+  background-image: linear-gradient(-60deg, #436c23 10%, #5a8c33, #436c23 90%);
   color: #fff8ea;
 }
 
 html.theme-dune .card-title .background-color-active,
 html.theme-dune .background-color-active {
-  background: linear-gradient(-60deg, #275e83 10%, #3a7fae, #275e83 90%);
+  background-image: linear-gradient(-60deg, #275e83 10%, #3a7fae, #275e83 90%);
   color: #fff8ea;
 }
 
 html.theme-dune .card-title .background-color-events,
 html.theme-dune .background-color-events {
-  background: linear-gradient(-60deg, #8c3522 10%, #b24b32, #8c3522 90%);
+  background-image: linear-gradient(-60deg, #8c3522 10%, #b24b32, #8c3522 90%);
   color: #fff8ea;
 }
 
 html.theme-dune .card-title .background-color-prelude,
 html.theme-dune .background-color-prelude {
-  background: linear-gradient(-60deg, #833f66 10%, #a75988, #833f66 90%);
+  background-image: linear-gradient(-60deg, #833f66 10%, #a75988, #833f66 90%);
   color: #fff8ea;
 }
 
@@ -105,6 +106,49 @@ html.theme-dune .card-requirements {
 html.theme-dune .card-corporation-box {
   background: linear-gradient(to bottom right, #e7d8b8, #d6c098, #e8dcc2, #d2bb92);
   border-color: #6b5640;
+}
+
+/* Bonus symbols: the Dune symbols are drawn shapes on a dark board, not bright full squares like the Mars pictures,
+   so at the Mars size they read far too small. Larger on the spaces (still two side by side in a hex) … */
+html.theme-dune i.board-space-bonus {
+  width: 20px;
+  height: 20px;
+  background-size: 20px;
+}
+
+html.theme-dune i.board-space-bonus.board-space-bonus--card {
+  height: 25px;
+}
+
+html.theme-dune i.board-space-bonus.board-space-bonus-pos--only {
+  margin: 12px 0 0 12px;
+}
+
+html.theme-dune i.board-space-bonus.board-space-bonus-pos--1 {
+  margin: 12px 0 0 2px;
+}
+
+html.theme-dune i.board-space-bonus.board-space-bonus-pos--2 {
+  margin: 12px 0 0 22px;
+}
+
+html.theme-dune i.board-space-bonus.board-space-bonus-pos--3 {
+  margin: 22px 0 0 12px;
+}
+
+/* … and larger chips, filled further, on the tracks around the planet */
+html.theme-dune .mars-scale-bonus {
+  --track-bonus-chip: 30px;
+}
+
+html.theme-dune .track-bonus-chip img {
+  width: calc(var(--track-bonus-chip, 24px) * 0.72);
+  height: calc(var(--track-bonus-chip, 24px) * 0.72);
+}
+
+html.theme-dune .track-bonus-chip__production img {
+  width: calc(var(--track-bonus-chip, 24px) * 0.6);
+  height: calc(var(--track-bonus-chip, 24px) * 0.6);
 }
 
 /* Place names on Arrakis (Legends.ts): dark halo, so the white text reads on sand, rock and ice */
@@ -135,10 +179,37 @@ html.theme-dune .board-caption {
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-html.theme-dune .card-title > .card-title {
+/* Title band as in the mockup (.band): flat, always two lines high, one fixed size, long names wrap instead of
+   shrinking – every card starts its content at the same height. The Mars band is arched and shrinks to fit. */
+html.theme-dune .card-title:not(.is-corporation):not(.card-house-name) {
+  height: auto;
+  /* The outer box clips the band: without this its arch would cut the corners of the flat band */
+  border-radius: 0;
+}
+
+html.theme-dune .card-title > .card-title:not(.card-house-name) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: auto;
+  min-height: calc(2 * 1.35em + 8px);
+  padding: 4px 8px;
+  border-radius: 0;
   font-family: 'Michroma', 'Ubuntu', sans-serif;
   font-weight: normal;
-  letter-spacing: 0.04em;
+  /* Beats the inline size the Mars fitting may have left on a reused card */
+  font-size: 10px !important;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+html.theme-dune .card-house-name {
+  font-family: 'Michroma', 'Ubuntu', sans-serif;
+  font-weight: normal;
 }
 
 html.theme-dune .dune-board__title {

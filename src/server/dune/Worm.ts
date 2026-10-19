@@ -10,30 +10,36 @@ import {SelectOption} from '../inputs/SelectOption';
 import {message} from '../logs/MessageBuilder';
 import {ARRAKIS_ZONES, BEHIND_WORM_BORDER} from '../../common/dune/arrakisTerrain';
 import {WormModel} from '../../common/dune/DuneModel';
-import {BAZAAR_GOOD_VALUE} from '../../common/dune/bazaarWares';
+import {PendingLevy, takeLevy} from './WormLevy';
 import {arrakisCoordinate} from '../../common/dune/arrakisCoordinates';
 import {CardName} from '../../common/cards/CardName';
 
 // Module C – Shai-Hulud (claude/dune-erweiterung-konzept.md): a worm marker wanders over Arrakis. At the end of
 // every generation a die gives the direction, the weakest player (least TR) chooses 1–3 spaces, and every space the
 // worm crosses – the last one included – takes effect. Rock, the worm border around the polar sink and the edge of
-// the board stop it in front of the space. Nothing may be placed on the space under the worm.
+// the board stop it in front of the space. If the rolled direction is blocked right away, the worm turns clockwise to
+// the next free direction (otherwise it would stay put most generations). Nothing may be placed on the space under the worm.
 
 export type WormData = {
   spaceId: SpaceId,
   /** Die of the running or last move (1 top right … 6 top left, clockwise) */
   roll?: number,
+  /** Heading of that move after turning away from blocked spaces (index of getAdjacentSpacesClockwise) */
+  direction?: number,
   /** Spaces crossed by the last move */
   path: Array<SpaceId>,
   /** Player choosing the distance right now; set while the game waits (reload resumes) */
   chooser?: string,
   /** Thumper card: this player chooses the distance this generation */
   thumper?: string,
+  /** Levies of the last move that players still pay with resources of their choice (WormLevy.ts) */
+  levies?: Array<PendingLevy>,
+  /** Greeneries placed by Dune Stabiliser: the worm spares them */
+  spared?: Array<SpaceId>,
 };
 
-/** The concept starts on E5, the middle of the board, but E5 (polar sink) lies behind the worm border: the worm
- *  starts on the next desert space west of it, E4 (Wind pass). */
-export const WORM_START: SpaceId = '32' as SpaceId;
+/** Start in the deep desert south of the polar sink: G3 (G4, as wished, lies behind the worm border like E5). */
+export const WORM_START: SpaceId = '48' as SpaceId;
 
 export const WORM_TITLE = 'Shai-Hulud: how far does the worm move?';
 
@@ -65,12 +71,27 @@ function stopsWorm(space: Space | undefined): boolean {
   return zone === 'rock' || zone === 'city' || BEHIND_WORM_BORDER.includes(space.id);
 }
 
-/** Spaces the worm would cross with `distance`, in order (fewer when something stops it) */
-export function wormPath(board: Board, from: SpaceId, roll: number, distance: number): Array<Space> {
+/** Heading for a die roll: the rolled direction, or the next free one clockwise when it is blocked; undefined when boxed in */
+export function wormDirection(board: Board, from: SpaceId, roll: number): number | undefined {
+  const neighbours = board.getAdjacentSpacesClockwise(board.getSpaceOrThrow(from));
+  for (let turn = 0; turn < neighbours.length; turn++) {
+    const direction = (directionIndex(roll) + turn) % neighbours.length;
+    if (!stopsWorm(neighbours[direction])) {
+      return direction;
+    }
+  }
+  return undefined;
+}
+
+/** Spaces the worm crosses heading `direction` for `distance` (fewer when something stops it) */
+export function wormPath(board: Board, from: SpaceId, direction: number | undefined, distance: number): Array<Space> {
   const path: Array<Space> = [];
+  if (direction === undefined) {
+    return path;
+  }
   let current = board.getSpaceOrThrow(from);
   for (let step = 0; step < distance; step++) {
-    const next = board.getAdjacentSpacesClockwise(current)[directionIndex(roll)];
+    const next = board.getAdjacentSpacesClockwise(current)[direction];
     if (next === undefined || stopsWorm(next)) {
       break;
     }
@@ -84,38 +105,8 @@ export function wormPath(board: Board, from: SpaceId, roll: number, distance: nu
   return path;
 }
 
-// Order in which a player who cannot pay a levy gives other resources (cheapest units first)
-const FALLBACK: ReadonlyArray<[Resource, number]> = [
-  [Resource.HEAT, BAZAAR_GOOD_VALUE.heat],
-  [Resource.ENERGY, BAZAAR_GOOD_VALUE.energy],
-  [Resource.PLANTS, BAZAAR_GOOD_VALUE.plants],
-  [Resource.MEGACREDITS, 1],
-  [Resource.STEEL, BAZAAR_GOOD_VALUE.steel],
-  [Resource.TITANIUM, BAZAAR_GOOD_VALUE.titanium],
-];
-
-/** A levy of 3 units; whoever cannot pay it gives resources worth 4 instead (value table of module A), as far as they go */
-export function payLevy(player: IPlayer, resource: Resource): void {
-  const levy = 3;
-  if (player.stock.get(resource) >= levy) {
-    player.stock.deduct(resource, levy, {log: true});
-    return;
-  }
-  let owed = 4;
-  for (const [fallback, value] of FALLBACK) {
-    const units = Math.min(player.stock.get(fallback), Math.ceil(owed / value));
-    if (units > 0) {
-      player.stock.deduct(fallback, units, {log: true});
-      owed -= units * value;
-    }
-    if (owed <= 0) {
-      break;
-    }
-  }
-}
-
-/** Effect of one crossed space */
-export function crossSpace(game: IGame, space: Space): void {
+/** Effect of one crossed space; returns the levy its owner still has to pay with resources of their choice */
+export function crossSpace(game: IGame, space: Space, spared: ReadonlyArray<SpaceId> = []): PendingLevy | undefined {
   // Worm Rider card: 2 titanium for every crossed space next to one of the owner's tiles
   for (const player of game.players) {
     if (player.tableau.has(CardName.WORM_RIDER) &&
@@ -125,7 +116,7 @@ export function crossSpace(game: IGame, space: Space): void {
   }
   const tile = space.tile;
   if (tile === undefined) {
-    return;
+    return undefined;
   }
   const owner = space.player;
   if (tile.tileType === TileType.OCEAN) {
@@ -141,37 +132,53 @@ export function crossSpace(game: IGame, space: Space): void {
       }
     }
     game.log('Spice blow at ${0}', (b) => b.space(space));
-    return;
+    return undefined;
   }
   if (owner === undefined) {
-    return;
+    return undefined;
   }
   if (Board.isCitySpace(space)) {
     game.log('Worm riders of ${0} ride Shai-Hulud', (b) => b.player(owner));
     owner.stock.add(Resource.TITANIUM, 1, {log: true});
     owner.stock.add(Resource.HEAT, 2, {log: true});
   } else if (Board.isGreenerySpace(space)) {
-    // Dune Stabiliser card: the worm spares the owner's greeneries
-    if (owner.tableau.has(CardName.DUNE_STABILISER)) {
-      return;
+    // Dune Stabiliser card: the worm spares the greenery placed by it
+    if (spared.includes(space.id)) {
+      game.log('Shai-Hulud spares the stabilised greenery of ${0}', (b) => b.player(owner));
+      return undefined;
     }
     game.log('Shai-Hulud tramples a greenery of ${0}', (b) => b.player(owner));
-    payLevy(owner, Resource.PLANTS);
+    return takeLevy(owner, Resource.PLANTS);
   } else if (tile.tileType === TileType.NATURAL_PRESERVE) {
     owner.increaseTerraformRating(1, {log: true});
   } else {
     game.log('Shai-Hulud damages a special tile of ${0}', (b) => b.player(owner));
-    payLevy(owner, Resource.MEGACREDITS);
+    return takeLevy(owner, Resource.MEGACREDITS);
+  }
+  return undefined;
+}
+
+/** Rolls the die for this generation's move and fixes the heading (turning away from blocked spaces) */
+export function rollWorm(game: IGame, worm: WormData): void {
+  worm.roll = game.rng.nextInt(6) + 1;
+  worm.direction = wormDirection(game.board, worm.spaceId, worm.roll);
+  game.log('Shai-Hulud stirs: the die shows ${0}', (b) => b.number(worm.roll ?? 1));
+  if (worm.direction !== undefined && worm.direction !== directionIndex(worm.roll)) {
+    game.log('Rock blocks the way: Shai-Hulud turns clockwise');
   }
 }
 
 export function moveWorm(game: IGame, worm: WormData, distance: number): void {
-  const roll = worm.roll ?? 1;
-  const path = wormPath(game.board, worm.spaceId, roll, distance);
+  const path = wormPath(game.board, worm.spaceId, worm.direction, distance);
   game.log('Shai-Hulud moves ${0} space(s)', (b) => b.number(path.length));
+  const levies: Array<PendingLevy> = [];
   for (const space of path) {
-    crossSpace(game, space);
+    const levy = crossSpace(game, space, worm.spared);
+    if (levy !== undefined) {
+      levies.push(levy);
+    }
   }
+  worm.levies = levies.length > 0 ? levies : undefined;
   worm.path = path.map((space) => space.id);
   if (path.length > 0) {
     worm.spaceId = path[path.length - 1].id;
@@ -185,7 +192,7 @@ export function distanceInput(game: IGame, worm: WormData): OrOptions {
   const options: Array<SelectOption> = [];
   for (let distance = 1; distance <= max; distance++) {
     // Label with the space the worm ends on (it may stop earlier), so the chooser sees where it goes
-    const path = wormPath(game.board, worm.spaceId, worm.roll ?? 1, distance);
+    const path = wormPath(game.board, worm.spaceId, worm.direction, distance);
     const end = path.length === 0 ? worm.spaceId : path[path.length - 1].id;
     options.push(new SelectOption(message('${0} space(s): to ${1}', (b) => b.number(distance).rawString(arrakisCoordinate(end))), 'Move')
       .andThen(() => {
@@ -201,6 +208,8 @@ export function wormModel(game: IGame, worm: WormData): WormModel {
   return {
     spaceId: worm.spaceId,
     roll: worm.roll,
+    direction: worm.direction,
+    turned: worm.roll !== undefined && worm.direction !== undefined && worm.direction !== directionIndex(worm.roll),
     path: worm.path,
     chooser: worm.chooser === undefined ? undefined : game.getPlayerById(worm.chooser as IPlayer['id']).color,
   };

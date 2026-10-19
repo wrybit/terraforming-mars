@@ -4,18 +4,23 @@
     <template v-for="entry in schemes.players" :key="entry.color">
       <div v-if="entry.agendas !== undefined" class="dune-schemes__own">
         <PlayerChip :color="entry.color" :players="players"/>
-        <div v-for="agenda in entry.agendas" :key="agenda.name" class="dune-schemes__agenda">
-          <img class="dune-schemes__icon" :src="graphic(definition(agenda.name).icon)" alt="">
-          <div class="dune-schemes__text">
-            <b>{{ $t(agenda.name) }}</b>
-            <span>{{ $t(definition(agenda.name).goal) }}: <b>{{ agenda.value }}</b></span>
-          </div>
-          <ol class="dune-schemes__levels">
-            <li v-for="(target, index) in definition(agenda.name).targets" :key="index"
-              :class="['dune-schemes__level', {'dune-schemes__level--reached': agenda.level > index}]">
-              <span>{{ target }}</span><b>{{ POINTS[index] }} {{ $t('VP') }}</b>
-            </li>
-          </ol>
+        <!-- Agenda cards as in the mockup: name, goal with the current value, then the three levels as coloured bars -->
+        <div class="dune-schemes__cards">
+          <article v-for="agenda in entry.agendas" :key="agenda.name" class="dune-schemes__agenda">
+            <header class="dune-schemes__head">
+              <img class="dune-schemes__icon" :src="graphic(definition(agenda.name).icon)" alt="">
+              <h4 class="dune-schemes__name">{{ $t(agenda.name) }}</h4>
+            </header>
+            <p class="dune-schemes__goal">{{ $t(definition(agenda.name).goal) }}: <b>{{ agenda.value }}</b></p>
+            <ol class="dune-schemes__levels">
+              <li v-for="(target, index) in definition(agenda.name).targets" :key="index"
+                :class="['dune-schemes__level', 'dune-schemes__level--' + LEVELS[index], {'dune-schemes__level--reached': agenda.level > index}]">
+                <span class="dune-schemes__level-name">{{ $t(LEVEL_LABELS[index]) }}</span>
+                <span class="dune-schemes__target">{{ target }}</span>
+                <span class="dune-schemes__points">{{ POINTS[index] }} {{ $t('VP') }}</span>
+              </li>
+            </ol>
+          </article>
         </div>
       </div>
     </template>
@@ -36,6 +41,10 @@ import {SCHEME_LEVEL_POINTS, SchemeAgenda, schemeAgenda} from '@/common/dune/sch
 import PlayerChip from './PlayerChip.vue';
 import {duneGraphic} from './duneGraphic';
 
+// The three levels of every agenda (SCHEME_LEVEL_POINTS 3 / 5 / 8 VP), named as on the mockup cards
+const LEVELS = ['easy', 'medium', 'hard'] as const;
+const LEVEL_LABELS = ['Easy', 'Medium', 'Hard'] as const;
+
 export default defineComponent({
   name: 'SchemesPanel',
   components: {PlayerChip},
@@ -52,6 +61,12 @@ export default defineComponent({
   computed: {
     POINTS(): ReadonlyArray<number> {
       return SCHEME_LEVEL_POINTS;
+    },
+    LEVELS(): typeof LEVELS {
+      return LEVELS;
+    },
+    LEVEL_LABELS(): typeof LEVEL_LABELS {
+      return LEVEL_LABELS;
     },
     hidden() {
       return this.schemes.players.filter((entry) => entry.agendas === undefined);

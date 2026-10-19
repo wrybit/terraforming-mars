@@ -54,7 +54,8 @@ export default defineComponent({
     // from its length. Corporations show a logo instead of a title element, so
     // nothing to fit.
     fitTitle(): void {
-      if (this.isCorporation) {
+      // Dune theme: one fixed size, long titles wrap (theme-extra.css), so there is nothing to fit
+      if (this.isCorporation || activeTheme() === 'dune') {
         return;
       }
       fitTextWhenReady(this.typedRefs.title, 'card-title');

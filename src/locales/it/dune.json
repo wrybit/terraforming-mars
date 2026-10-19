@@ -197,8 +197,6 @@
   "This generation you choose how far the worm moves (1–3 spaces).": "In questa generazione scegli di quanto avanza il verme (1–3 spazi).",
   "When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Quando il verme attraversa uno spazio adiacente a una tua tessera, ottieni 2 spezia.",
   "worm": "verme",
-  "The worm spares your greeneries.": "Il verme risparmia le tue dune piantumate.",
-  "Place a greenery tile. The worm spares your greeneries.": "Piazza una duna piantumata. Il verme risparmia le tue dune piantumate.",
   "Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "I tuoi contratti CHOAM non hanno commissioni. Quando altri giocatori concludono un contratto, ottieni 1 solari.",
   "contract": "contratto",
   "You may have 2 open offers at the CHOAM exchange.": "Puoi avere 2 offerte aperte alla borsa CHOAM.",
@@ -230,5 +228,15 @@
   "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "Effetto: Quando una tua tessera diventa il campo di guerra, 2 Sardaukar la difendono gratis.",
   "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Effetto: Quando il verme attraversa uno spazio adiacente a una tua tessera, ottieni 2 spezia.",
   "Effect: When you buy at the bazaar, you pay 3 M€ less.": "Effetto: Quando acquisti al bazar, paghi 3 solari in meno.",
-  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Effetto: I tuoi contratti CHOAM non hanno commissioni. Quando altri giocatori concludono un contratto, ottieni 1 solari."
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Effetto: I tuoi contratti CHOAM non hanno commissioni. Quando altri giocatori concludono un contratto, ottieni 1 solari.",
+  "Schemes": "Intrighi",
+  "Smuggling": "Contrabbando",
+  "turned": "deviato",
+  "Rock in the way: the worm turns clockwise to the next free direction": "Roccia sul percorso: il verme gira in senso orario verso la prossima direzione libera",
+  "Rock blocks the way: Shai-Hulud turns clockwise": "Una roccia blocca la strada: Shai-Hulud gira in senso orario",
+  "Shai-Hulud spares the stabilised greenery of ${0}": "Shai-Hulud risparmia la duna piantumata stabilizzata di ${0}",
+  "Shai-Hulud: pay resources worth ${0}": "Shai-Hulud: paga risorse per un valore di ${0}",
+  "The worm spares this greenery.": "Il verme risparmia questa duna piantumata.",
+  "Place a greenery tile. The worm spares this greenery.": "Piazza una duna piantumata. Il verme risparmia questa duna piantumata.",
+  "Medium": "Medio"
 }

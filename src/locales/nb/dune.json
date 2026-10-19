@@ -197,8 +197,6 @@
   "This generation you choose how far the worm moves (1–3 spaces).": "Denne generasjonen velger du hvor langt ormen flytter seg (1–3 felt).",
   "When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Når ormen krysser et felt ved siden av en av brikkene dine, får du 2 krydder.",
   "worm": "orm",
-  "The worm spares your greeneries.": "Ormen skåner de beplantede dynene dine.",
-  "Place a greenery tile. The worm spares your greeneries.": "Legg ut en beplantet dyne. Ormen skåner de beplantede dynene dine.",
   "Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "CHOAM-kontraktene dine koster ingen avgift. Når andre spillere inngår en kontrakt, får du 1 solari.",
   "contract": "kontrakt",
   "You may have 2 open offers at the CHOAM exchange.": "Du kan ha 2 åpne tilbud på CHOAM-børsen.",
@@ -231,5 +229,15 @@
   "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "Effekt: Når en av brikkene dine blir krigsfeltet, forsvarer 2 sardaukarer den gratis.",
   "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Effekt: Når ormen krysser et felt ved siden av en av brikkene dine, får du 2 krydder.",
   "Effect: When you buy at the bazaar, you pay 3 M€ less.": "Effekt: Når du kjøper på basaren, betaler du 3 solari mindre.",
-  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Effekt: CHOAM-kontraktene dine koster ingen avgift. Når andre spillere inngår en kontrakt, får du 1 solari."
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Effekt: CHOAM-kontraktene dine koster ingen avgift. Når andre spillere inngår en kontrakt, får du 1 solari.",
+  "Schemes": "Renker",
+  "Smuggling": "Smugling",
+  "turned": "snudde",
+  "Rock in the way: the worm turns clockwise to the next free direction": "Fjell i veien: ormen svinger med klokken til neste ledige retning",
+  "Rock blocks the way: Shai-Hulud turns clockwise": "Fjell sperrer veien: Shai-Hulud svinger med klokken",
+  "Shai-Hulud spares the stabilised greenery of ${0}": "Shai-Hulud skåner den stabiliserte beplantede dynen til ${0}",
+  "Shai-Hulud: pay resources worth ${0}": "Shai-Hulud: betal ressurser verdt ${0}",
+  "The worm spares this greenery.": "Ormen skåner denne beplantede dynen.",
+  "Place a greenery tile. The worm spares this greenery.": "Legg ut en beplantet dyne. Ormen skåner denne beplantede dynen.",
+  "Medium": "Middels"
 }

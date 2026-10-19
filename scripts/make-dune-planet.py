@@ -48,10 +48,12 @@ def sphere(size: int) -> Image.Image:
 # storage, the Venus arc on top is removed. Hue of every ring pixel is replaced, brightness and saturation stay, so the scale steps keep their look.
 OXYGEN_HUE = 95 / 360
 WATER_HUE = 205 / 360
-SPICE_HUE = 22 / 360
 # The Mars labels "O2" and "t°C" below the scale ends (Board.vue shows the Dune symbols there instead): boxes in the
 # 620 × 600 pictures, scaled for the others
 MARS_LABELS = [(176, 530, 205, 557), (420, 524, 455, 559)]
+# The Mars ocean marker below the planet (left of the ocean count): erased, Board.vue puts the spice field tile there.
+# Boxes per picture size (the large pictures have their own layout, so no scaling)
+OCEAN_MARKERS = {(620, 600): (271, 541, 298, 572), (740, 680): (314, 650, 341, 681)}
 
 
 def recolor_rings(picture: Image.Image, left: int, top: int, size: int) -> None:
@@ -79,9 +81,6 @@ def recolor_rings(picture: Image.Image, left: int, top: int, size: int) -> None:
                 pixels[x, y] = (0, 0, 0, 0)
                 continue
             target = OXYGEN_HUE if x < centre_x else WATER_HUE
-            if y > centre_y and abs(x - centre_x) < radius * 0.45:
-                # The ocean marker below the planet becomes a spice field (orange)
-                target = SPICE_HUE
             new_red, new_green, new_blue = colorsys.hls_to_rgb(target, lightness, max(saturation, 0.35))
             pixels[x, y] = (round(new_red * 255), round(new_green * 255), round(new_blue * 255), alpha)
 
@@ -91,6 +90,9 @@ def erase_labels(picture: Image.Image) -> None:
     draw = ImageDraw.Draw(picture)
     for x0, y0, x1, y1 in MARS_LABELS:
         draw.rectangle((x0 * scale_x, y0 * scale_y, x1 * scale_x, y1 * scale_y), fill=(0, 0, 0, 0))
+    marker = OCEAN_MARKERS.get(picture.size)
+    if marker is not None:
+        draw.rectangle(marker, fill=(0, 0, 0, 0))
 
 
 for mars_path, planet_path, dune_path in TARGETS:

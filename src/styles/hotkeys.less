@@ -665,4 +665,7 @@ html.tm-hotkeys .hotkey-item-number {
   align-items: center;
   justify-content: center;
   gap: 6px;
+  // Many tabs in a narrow column: the name shortens (ellipsis) instead of spilling into the next tab
+  max-width: 100%;
+  min-width: 0;
 }

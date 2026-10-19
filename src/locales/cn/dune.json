@@ -199,8 +199,6 @@
   "This generation you choose how far the worm moves (1–3 spaces).": "本世代由你决定沙虫移动多远（1–3 格）。",
   "When the worm crosses a space next to one of your tiles, gain 2 titanium.": "沙虫经过与你的板块相邻的格子时，获得 2 香料。",
   "worm": "沙虫",
-  "The worm spares your greeneries.": "沙虫不会践踏你的植被沙丘。",
-  "Place a greenery tile. The worm spares your greeneries.": "放置一个植被沙丘。沙虫不会践踏你的植被沙丘。",
   "Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "你的宇联公司合同免手续费。其他玩家达成合同时，你获得 1 索拉里。",
   "contract": "合同",
   "You may have 2 open offers at the CHOAM exchange.": "你可以在宇联公司交易所同时挂出 2 个报价。",
@@ -233,5 +231,15 @@
   "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "效果： 你的板块成为战场时，2 名萨多卡免费守卫它。",
   "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "效果： 沙虫经过与你的板块相邻的格子时，获得 2 香料。",
   "Effect: When you buy at the bazaar, you pay 3 M€ less.": "效果： 你在集市购买时少付 3 索拉里。",
-  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "效果： 你的宇联公司合同免手续费。其他玩家达成合同时，你获得 1 索拉里。"
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "效果： 你的宇联公司合同免手续费。其他玩家达成合同时，你获得 1 索拉里。",
+  "Schemes": "阴谋",
+  "Smuggling": "走私",
+  "turned": "已转向",
+  "Rock in the way: the worm turns clockwise to the next free direction": "岩石挡路：沙虫顺时针转向下一个空闲方向",
+  "Rock blocks the way: Shai-Hulud turns clockwise": "岩石挡路：夏胡露顺时针转向",
+  "Shai-Hulud spares the stabilised greenery of ${0}": "夏胡露放过了${0}的固定植被沙丘",
+  "Shai-Hulud: pay resources worth ${0}": "夏胡露：支付价值${0}的资源",
+  "The worm spares this greenery.": "沙虫不会践踏这片植被沙丘。",
+  "Place a greenery tile. The worm spares this greenery.": "放置一个植被沙丘。沙虫不会践踏这片植被沙丘。",
+  "Medium": "中等"
 }

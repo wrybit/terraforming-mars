@@ -8,7 +8,10 @@ import {TileType} from '../../src/common/TileType';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {Space} from '../../src/server/boards/Space';
 import {ARRAKIS_ZONES, BEHIND_WORM_BORDER} from '../../src/common/dune/arrakisTerrain';
-import {WORM_START, WORM_TITLE, WormData, crossSpace, directionIndex, maxWormDistance, wormChooser, wormPath} from '../../src/server/dune/Worm';
+import {WORM_START, WORM_TITLE, WormData, crossSpace, directionIndex, maxWormDistance, wormChooser, wormDirection, wormPath} from '../../src/server/dune/Worm';
+import {LEVY_TITLE, PendingLevy, levyInput} from '../../src/server/dune/WormLevy';
+import {SelectOption} from '../../src/server/inputs/SelectOption';
+import {formatMessage} from '../TestingUtils';
 import {cast} from '../../src/common/utils/utils';
 import {finishGeneration, setOxygenLevel} from '../TestingUtils';
 
@@ -29,7 +32,7 @@ describe('Shai-Hulud (Dune module C)', () => {
     [game, player1, player2] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS, duneModules: ['worm']});
   });
 
-  it('starts on E4 outside the worm border', () => {
+  it('starts on G3 outside the worm border', () => {
     expect(wormOf(game).spaceId).eq(WORM_START);
     expect(BEHIND_WORM_BORDER).not.includes(WORM_START);
     expect(ARRAKIS_ZONES[WORM_START]).eq('erg');
@@ -45,11 +48,29 @@ describe('Shai-Hulud (Dune module C)', () => {
         continue;
       }
       for (let roll = 1; roll <= 6; roll++) {
-        for (const crossed of wormPath(game.board, space.id, roll, 3)) {
+        for (const crossed of wormPath(game.board, space.id, wormDirection(game.board, space.id, roll), 3)) {
           expect(ARRAKIS_ZONES[crossed.id]).not.eq('rock');
           expect(BEHIND_WORM_BORDER).not.includes(crossed.id);
         }
       }
+    }
+  });
+
+  it('turns clockwise when the rolled direction is blocked', () => {
+    const free = [0, 1, 2, 3, 4, 5].filter((direction) => wormPath(game.board, WORM_START, direction, 1).length > 0);
+    expect(free.length).lessThan(6);
+    for (let roll = 1; roll <= 6; roll++) {
+      const direction = wormDirection(game.board, WORM_START, roll);
+      expect(free).includes(direction);
+      expect(wormPath(game.board, WORM_START, direction, 1)).has.length(1);
+    }
+    // Free rolls keep their direction, blocked ones take the next free one clockwise
+    for (let roll = 1; roll <= 6; roll++) {
+      let expected = directionIndex(roll);
+      while (!free.includes(expected)) {
+        expected = (expected + 1) % 6;
+      }
+      expect(wormDirection(game.board, WORM_START, roll)).eq(expected);
     }
   });
 
@@ -84,15 +105,51 @@ describe('Shai-Hulud (Dune module C)', () => {
     const greenery = game.board.getAvailableSpacesForGreenery(player2)[0];
     game.addGreenery(player2, greenery);
     player2.plants = 5;
-    crossSpace(game, greenery);
+    expect(crossSpace(game, greenery)).is.undefined;
     expect(player2.plants).eq(2);
-    // Cannot pay 3 plants: resources worth 4 instead, cheapest first
+    // Cannot pay 3 plants: the player owes resources worth 4 and chooses them
     player2.plants = 1;
     player2.heat = 2;
     player2.megaCredits = 10;
-    crossSpace(game, greenery);
-    expect([player2.heat, player2.plants, player2.megaCredits]).deep.eq([0, 0, 9]);
+    const levy = crossSpace(game, greenery);
+    expect(levy).deep.eq({player: player2.id, owed: 4});
+    payWith(levy!, 'heat');
+    expect(levy!.owed).eq(2);
+    // Then the remaining worth 2: plants (1) and M€
+    expect(player2.heat).eq(0);
   });
+
+  it('lets the player choose what pays the levy', () => {
+    player2.steel = 1;
+    player2.megaCredits = 1;
+    const levy: PendingLevy = {player: player2.id, owed: 4};
+    const input = cast(levyInput(player2, levy), OrOptions);
+    expect(typeof input.title === 'string' ? input.title : input.title.message).eq(LEVY_TITLE);
+    expect(input.options).has.length(2);
+    // 1 steel is worth 2, then 2 are left: only M€ remains
+    const next = cast(input.options[1], SelectOption).cb(undefined);
+    expect(player2.steel).eq(0);
+    expect(levy.owed).eq(2);
+    expect(cast(next, OrOptions).options).has.length(1);
+  });
+
+  it('owes nothing when the player has nothing', () => {
+    const greenery = game.board.getAvailableSpacesForGreenery(player2)[0];
+    game.addGreenery(player2, greenery);
+    player2.megaCredits = 0;
+    player2.steel = 0;
+    player2.titanium = 0;
+    player2.plants = 0;
+    player2.energy = 0;
+    player2.heat = 0;
+    expect(crossSpace(game, greenery)).is.undefined;
+  });
+
+  function payWith(levy: PendingLevy, label: string) {
+    const input = cast(levyInput(player2, levy), OrOptions);
+    const index = input.options.findIndex((option) => formatMessage(option.title).includes(label));
+    cast(input.options[index], SelectOption).cb(undefined);
+  }
 
   it('takes the special tile levy in M€', () => {
     const space = game.board.getAvailableSpacesOnLand(player1)[0];
@@ -109,9 +166,8 @@ describe('Shai-Hulud (Dune module C)', () => {
     expect(input.title).eq(WORM_TITLE);
     expect(input.options).has.length(3);
     const worm = wormOf(game);
-    const expected = wormPath(game.board, worm.spaceId, worm.roll ?? 1, 3);
-    input.process({type: 'or', index: 2, response: {type: 'option'}}, player2);
-    player2.popWaitingFor();
+    const expected = wormPath(game.board, worm.spaceId, worm.direction, 3);
+    player2.process({type: 'or', index: 2, response: {type: 'option'}});
     if (expected.length > 0) {
       const end = expected[expected.length - 1].id;
       expect(wormOf(game).spaceId).eq(end);

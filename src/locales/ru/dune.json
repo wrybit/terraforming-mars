@@ -199,8 +199,6 @@
   "This generation you choose how far the worm moves (1–3 spaces).": "В этом поколении вы выбираете, как далеко переместится червь (1–3 клетки).",
   "When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Когда червь пересекает клетку рядом с одним из ваших тайлов, получите 2 пряности.",
   "worm": "червь",
-  "The worm spares your greeneries.": "Червь щадит ваши засаженные дюны.",
-  "Place a greenery tile. The worm spares your greeneries.": "Разместите засаженную дюну. Червь щадит ваши засаженные дюны.",
   "Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Ваши контракты CHOAM не требуют сбора. Когда другие игроки заключают контракт, получите 1 солярий.",
   "contract": "контракт",
   "You may have 2 open offers at the CHOAM exchange.": "Вы можете иметь 2 открытых предложения на бирже CHOAM.",
@@ -233,5 +231,15 @@
   "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "Свойство: Когда один из ваших тайлов становится полем войны, его бесплатно защищают 2 сардаукара.",
   "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Свойство: Когда червь пересекает клетку рядом с одним из ваших тайлов, получите 2 пряности.",
   "Effect: When you buy at the bazaar, you pay 3 M€ less.": "Свойство: Покупая на базаре, вы платите на 3 солярия меньше.",
-  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Свойство: Ваши контракты CHOAM не требуют сбора. Когда другие игроки заключают контракт, получите 1 солярий."
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Свойство: Ваши контракты CHOAM не требуют сбора. Когда другие игроки заключают контракт, получите 1 солярий.",
+  "Schemes": "Интриги",
+  "Smuggling": "Контрабанда",
+  "turned": "повернул",
+  "Rock in the way: the worm turns clockwise to the next free direction": "Скала на пути: червь поворачивает по часовой стрелке к следующему свободному направлению",
+  "Rock blocks the way: Shai-Hulud turns clockwise": "Скала преграждает путь: Шаи-Хулуд поворачивает по часовой стрелке",
+  "Shai-Hulud spares the stabilised greenery of ${0}": "Шаи-Хулуд щадит укреплённую засаженную дюну игрока ${0}",
+  "Shai-Hulud: pay resources worth ${0}": "Шаи-Хулуд: заплатите ресурсами на сумму ${0}",
+  "The worm spares this greenery.": "Червь щадит эту засаженную дюну.",
+  "Place a greenery tile. The worm spares this greenery.": "Разместите засаженную дюну. Червь щадит эту засаженную дюну.",
+  "Medium": "Средний"
 }

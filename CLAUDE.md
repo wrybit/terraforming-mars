@@ -2,6 +2,17 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## IMPORTANT: Dune must never break Mars
+
+The Dune theme and the Dune expansion (branch `dune`: `src/*/dune/`, theme `dune`, board Arrakis) sit on top of the
+regular game. Every Dune change must leave a Mars game exactly as it was:
+
+- Gate all Dune behaviour on the game's theme / `duneModules`; a game without them never touches Dune code paths.
+- `tests/dune/MarsUnaffected.spec.ts` guards this (no Dune data, cards, actions, board markers or extra waits in a Mars
+  game). It must stay green; if it fails, fix the change – never weaken the test. Extend it whenever Dune hooks into a
+  new place of the game.
+- Before finishing a Dune change, also look at a Mars game in the browser (phone and desktop width).
+
 ## Build & Development Commands
 
 ```bash

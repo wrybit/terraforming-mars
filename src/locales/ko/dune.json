@@ -199,8 +199,6 @@
   "This generation you choose how far the worm moves (1–3 spaces).": "이번 세대에는 모래벌레가 얼마나 이동할지 직접 정합니다(1–3칸).",
   "When the worm crosses a space next to one of your tiles, gain 2 titanium.": "모래벌레가 자신의 타일에 인접한 칸을 지나갈 때마다 스파이스 2를 얻습니다.",
   "worm": "모래벌레",
-  "The worm spares your greeneries.": "모래벌레는 당신의 식재 사구를 짓밟지 않습니다.",
-  "Place a greenery tile. The worm spares your greeneries.": "식재 사구를 하나 놓습니다. 모래벌레는 당신의 식재 사구를 짓밟지 않습니다.",
   "Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "자신의 CHOAM 계약에는 수수료가 없습니다. 다른 플레이어가 계약을 성사시키면 1 솔라리를 얻습니다.",
   "contract": "계약",
   "You may have 2 open offers at the CHOAM exchange.": "CHOAM 거래소에 제안을 2개까지 걸어 둘 수 있습니다.",
@@ -233,5 +231,15 @@
   "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "지속 효과: 자신의 타일이 전장이 되면 사다우카 2명이 무료로 방어합니다.",
   "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "지속 효과: 모래벌레가 자신의 타일에 인접한 칸을 지나갈 때마다 스파이스 2를 얻습니다.",
   "Effect: When you buy at the bazaar, you pay 3 M€ less.": "지속 효과: 시장에서 구매할 때 3 솔라리를 덜 냅니다.",
-  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "지속 효과: 자신의 CHOAM 계약에는 수수료가 없습니다. 다른 플레이어가 계약을 성사시키면 1 솔라리를 얻습니다."
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "지속 효과: 자신의 CHOAM 계약에는 수수료가 없습니다. 다른 플레이어가 계약을 성사시키면 1 솔라리를 얻습니다.",
+  "Schemes": "음모",
+  "Smuggling": "밀수",
+  "turned": "방향 전환",
+  "Rock in the way: the worm turns clockwise to the next free direction": "바위가 길을 막으면: 모래벌레는 시계 방향으로 다음 빈 방향으로 돕니다",
+  "Rock blocks the way: Shai-Hulud turns clockwise": "바위가 길을 막았습니다: 샤이 훌루드가 시계 방향으로 돕니다",
+  "Shai-Hulud spares the stabilised greenery of ${0}": "샤이 훌루드가 ${0}의 고정된 식재 사구를 지나칩니다",
+  "Shai-Hulud: pay resources worth ${0}": "샤이 훌루드: 가치 ${0}만큼의 자원을 지불하세요",
+  "The worm spares this greenery.": "모래벌레는 이 식재 사구를 짓밟지 않습니다.",
+  "Place a greenery tile. The worm spares this greenery.": "식재 사구를 하나 놓습니다. 모래벌레는 이 식재 사구를 짓밟지 않습니다.",
+  "Medium": "보통"
 }

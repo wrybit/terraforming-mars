@@ -37,8 +37,9 @@
     <template #delta>
       <DeltaBoard :players="players" :viewerColor="viewerColor"/>
     </template>
-    <template #dune>
-      <DuneBoard v-if="game.dune" :dune="game.dune" :players="players" :viewerColor="viewerColor"/>
+    <!-- Dune expansion: one tab per module of this game -->
+    <template v-for="tab in duneTabs" :key="tab" #[tab]>
+      <DuneBoard v-if="game.dune" :dune="game.dune" :tab="tab" :players="players" :viewerColor="viewerColor"/>
     </template>
   </BoardTabs>
 
@@ -74,6 +75,7 @@ import {SpaceId} from '@/common/Types';
 import {Color} from '@/common/Color';
 import Board from '@/client/components/Board.vue';
 import BoardTabs from '@/client/components/boardTabs/BoardTabs.vue';
+import {DUNE_BOARD_TABS, DuneBoardTabId} from '@/client/components/boardTabs/boardTabs';
 import ColoniesBoard from '@/client/components/colonies/ColoniesBoard.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
 import PlacementBanner from '@/client/components/board/PlacementBanner.vue';
@@ -147,6 +149,9 @@ export default defineComponent({
     PlanetsBoard,
   },
   computed: {
+    duneTabs(): ReadonlyArray<DuneBoardTabId> {
+      return DUNE_BOARD_TABS;
+    },
     // Only during a space selection on the board shown large (not when Mars is merely enlarged for viewing)
     placementDescription(): PlacementDescription | undefined {
       const input = placementZoom.input;

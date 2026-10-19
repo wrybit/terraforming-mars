@@ -8,7 +8,8 @@ import {DuneModel} from '../../common/dune/DuneModel';
 import {ArrakisBoard} from '../boards/ArrakisBoard';
 import {VictoryPointsBreakdownBuilder} from '../game/VictoryPointsBreakdownBuilder';
 import {BazaarData, bazaarModel, buyInput, buyingOrder, initializeBazaar, slideAndRefill} from './Bazaar';
-import {WORM_START, WormData, distanceInput, wormChooser, wormModel} from './Worm';
+import {WORM_START, WormData, distanceInput, rollWorm, wormChooser, wormModel} from './Worm';
+import {levyInput} from './WormLevy';
 import {KanlyData, initializeKanly, kanlyActions, kanlyModel, resolveBattle} from './Kanly';
 import {SmugglingData, chargeSuspicion, initializeSmuggling, smugglingActions, smugglingModel} from './Smuggling';
 import {ChoamData, choamActions, choamModel, initializeChoam, returnOffers} from './Choam';
@@ -68,14 +69,34 @@ function wormStep(game: IGame, data: DuneData, next: () => void): void {
     next();
     return;
   }
+  // Saved while players still paid levies of the move: only those are left
+  if (worm.levies !== undefined) {
+    askLevies(game, worm, next);
+    return;
+  }
   if (worm.chooser === undefined) {
-    worm.roll = game.rng.nextInt(6) + 1;
+    rollWorm(game, worm);
     worm.chooser = worm.thumper ?? wormChooser(game).id;
-    game.log('Shai-Hulud stirs: the die shows ${0}', (b) => b.number(worm.roll ?? 1));
   }
   const chooser = game.getPlayerById(worm.chooser as IPlayer['id']);
   game.save();
-  chooser.setWaitingFor(distanceInput(game, worm), () => game.drainQueue(next));
+  chooser.setWaitingFor(distanceInput(game, worm), () => game.drainQueue(() => askLevies(game, worm, next)));
+}
+
+/** Players who could not pay a levy in kind choose, one after another, what they give instead */
+function askLevies(game: IGame, worm: WormData, next: () => void): void {
+  const levy = worm.levies?.[0];
+  if (levy === undefined) {
+    worm.levies = undefined;
+    next();
+    return;
+  }
+  const player = game.getPlayerById(levy.player);
+  game.save();
+  player.setWaitingFor(levyInput(player, levy), () => {
+    worm.levies?.shift();
+    askLevies(game, worm, next);
+  });
 }
 
 export class DuneExpansion {

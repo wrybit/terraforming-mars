@@ -197,8 +197,6 @@
   "This generation you choose how far the worm moves (1–3 spaces).": "Ebben a generációban te döntöd el, milyen messzire mozog a féreg (1–3 mező).",
   "When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Amikor a féreg áthalad egy lapkáddal szomszédos mezőn, kapsz 2 fűszert.",
   "worm": "féreg",
-  "The worm spares your greeneries.": "A féreg megkíméli a beültetett dűnéidet.",
-  "Place a greenery tile. The worm spares your greeneries.": "Helyezz le egy beültetett dűnét. A féreg megkíméli a beültetett dűnéidet.",
   "Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "A CHOAM-szerződéseidért nem kell díjat fizetned. Ha más játékosok szerződést kötnek, kapsz 1 solarit.",
   "contract": "szerződés",
   "You may have 2 open offers at the CHOAM exchange.": "Egyszerre 2 nyitott ajánlatod lehet a CHOAM-tőzsdén.",
@@ -231,5 +229,15 @@
   "Effect: When one of your tiles becomes the war field, 2 Sardaukar defend it for free.": "Hatás: Ha valamelyik lapkád hadszíntérré válik, 2 sardaukar ingyen megvédi.",
   "Effect: When the worm crosses a space next to one of your tiles, gain 2 titanium.": "Hatás: Amikor a féreg áthalad egy lapkáddal szomszédos mezőn, kapsz 2 fűszert.",
   "Effect: When you buy at the bazaar, you pay 3 M€ less.": "Hatás: Ha a bazárban vásárolsz, 3 solarival kevesebbet fizetsz.",
-  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Hatás: A CHOAM-szerződéseidért nem kell díjat fizetned. Ha más játékosok szerződést kötnek, kapsz 1 solarit."
+  "Effect: Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.": "Hatás: A CHOAM-szerződéseidért nem kell díjat fizetned. Ha más játékosok szerződést kötnek, kapsz 1 solarit.",
+  "Schemes": "Cselszövés",
+  "Smuggling": "Csempészet",
+  "turned": "elfordult",
+  "Rock in the way: the worm turns clockwise to the next free direction": "Szikla az úton: a féreg az óramutató járásával megegyezően a következő szabad irányba fordul",
+  "Rock blocks the way: Shai-Hulud turns clockwise": "Szikla zárja el az utat: Shai-Hulud az óramutató járásával megegyezően fordul",
+  "Shai-Hulud spares the stabilised greenery of ${0}": "Shai-Hulud megkíméli ${0} megszilárdított beültetett dűnéjét",
+  "Shai-Hulud: pay resources worth ${0}": "Shai-Hulud: fizess ${0} értékű nyersanyagot",
+  "The worm spares this greenery.": "A féreg megkíméli ezt a beültetett dűnét.",
+  "Place a greenery tile. The worm spares this greenery.": "Helyezz le egy beültetett dűnét. A féreg megkíméli ezt a beültetett dűnét.",
+  "Medium": "Közepes"
 }

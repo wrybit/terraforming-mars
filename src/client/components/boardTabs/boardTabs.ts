@@ -8,8 +8,15 @@ import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximum
 import {PLANETARY_TRACKS} from '@/common/pathfinders/PlanetaryTracks';
 import {PathfindersModel} from '@/common/models/PathfindersModel';
 import {Color} from '@/common/Color';
+import {COSTLY_SUSPICION, MAX_SUSPICION} from '@/common/dune/DuneModel';
 
-export type BoardTabId = 'mars' | 'moon' | 'colonies' | 'turmoil' | 'paths' | 'delta' | 'dune';
+// The Dune expansion gets one tab per module of this game (common/dune/DuneModule.ts), in the order of the concept
+export const DUNE_BOARD_TABS = ['bazaar', 'worm', 'kanly', 'schemes', 'choam', 'smuggling'] as const;
+export type DuneBoardTabId = typeof DUNE_BOARD_TABS[number];
+export type BoardTabId = 'mars' | 'moon' | 'colonies' | 'turmoil' | 'paths' | 'delta' | DuneBoardTabId;
+
+// Spice orange: all Dune module tabs share one tone, so they read as one family
+const DUNE_TAB_COLOR = '#e0662a';
 
 // Tone = suffix of the or-tab tone classes (or_tab_tones.less); Turmoil shares the teal of the colonies
 export const BOARD_TAB_TONE: Record<BoardTabId, string> = {
@@ -19,7 +26,12 @@ export const BOARD_TAB_TONE: Record<BoardTabId, string> = {
   turmoil: 'colonies',
   paths: 'paths',
   delta: 'delta',
-  dune: 'bazaar',
+  bazaar: 'bazaar',
+  worm: 'bazaar',
+  kanly: 'bazaar',
+  schemes: 'bazaar',
+  choam: 'bazaar',
+  smuggling: 'bazaar',
 };
 
 export const BOARD_TAB_LABEL: Record<BoardTabId, string> = {
@@ -29,7 +41,12 @@ export const BOARD_TAB_LABEL: Record<BoardTabId, string> = {
   turmoil: 'Turmoil',
   paths: 'Planets',
   delta: 'Delta',
-  dune: 'Dune',
+  bazaar: 'Bazaar',
+  worm: 'Shai-Hulud',
+  kanly: 'Kanly',
+  schemes: 'Schemes',
+  choam: 'CHOAM',
+  smuggling: 'Smuggling',
 };
 
 export function boardTabs(game: GameModel): Array<BoardTabId> {
@@ -49,8 +66,9 @@ export function boardTabs(game: GameModel): Array<BoardTabId> {
   if (game.gameOptions.expansions.deltaProject) {
     tabs.push('delta');
   }
-  if (game.dune !== undefined) {
-    tabs.push('dune');
+  const dune = game.dune;
+  if (dune !== undefined) {
+    tabs.push(...DUNE_BOARD_TABS.filter((tab) => dune[tab] !== undefined));
   }
   return tabs;
 }
@@ -131,10 +149,20 @@ export function boardTabTracks(game: GameModel, players: ReadonlyArray<PublicPla
   case 'delta':
     return [{color: '#f4f5f8', step: 0, total: 12, bonus: [11, 12],
       markers: players.map((player) => ({at: player.deltaProject?.position ?? 0, color: player.color}))}];
-  case 'dune': {
-    // Bazaar: how many of the five slots hold a ware
+  case 'bazaar': {
+    // How many of the five slots hold a ware
     const slots = game.dune?.bazaar?.slots ?? [];
-    return slots.length === 0 ? [] : [{color: '#e0662a', step: slots.filter((slot) => slot.ware !== undefined).length, total: slots.length, bonus: []}];
+    return slots.length === 0 ? [] : [{color: DUNE_TAB_COLOR, step: slots.filter((slot) => slot.ware !== undefined).length, total: slots.length, bonus: []}];
   }
+  case 'smuggling': {
+    // Suspicion track 0–5: player colours at their level, the costly levels (3+) marked
+    const suspicion = game.dune?.smuggling?.suspicion ?? [];
+    return suspicion.length === 0 ? [] : [{color: DUNE_TAB_COLOR, step: 0, total: MAX_SUSPICION,
+      bonus: Array.from({length: MAX_SUSPICION - COSTLY_SUSPICION + 1}, (_, index) => COSTLY_SUSPICION + index),
+      markers: suspicion.map((entry) => ({at: entry.level, color: entry.color}))}];
+  }
+  default:
+    // Shai-Hulud, Kanly, schemes and CHOAM have no track worth a line
+    return [];
   }
 }

@@ -104,16 +104,22 @@ describe('Dune expansion cards (E01–E16)', () => {
     expect(player1.titanium).eq(2);
   });
 
-  it('E07 Dune Stabiliser: the worm spares own greeneries', () => {
+  it('E07 Dune Stabiliser: the worm spares this greenery, not the others', () => {
     const card = new DuneStabiliser();
     card.play(player1);
     runAllActions(game);
     const input = cast(player1.popWaitingFor(), SelectSpace);
-    input.cb(input.spaces[0]);
-    player1.playedCards.push(card);
+    const stabilised = input.spaces[0];
+    input.cb(stabilised);
+    const worm = game.duneData!.worm!;
+    expect(worm.spared).deep.eq([stabilised.id]);
     player1.plants = 5;
-    crossSpace(game, input.spaces[0]);
+    crossSpace(game, stabilised, worm.spared);
     expect(player1.plants).eq(5);
+    const other = game.board.getAvailableSpacesForGreenery(player1).find((space) => space.id !== stabilised.id)!;
+    game.addGreenery(player1, other);
+    crossSpace(game, other, worm.spared);
+    expect(player1.plants).eq(2);
   });
 
   it('E08 CHOAM Directorate and E09 Guild Bank', () => {

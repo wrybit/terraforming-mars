@@ -16,11 +16,11 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
-import {SmugglingModel} from '@/common/dune/DuneModel';
+import {MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '@/common/dune/DuneModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Color} from '@/common/Color';
 
-const LEVELS = [0, 1, 2, 3, 4, 5];
+const LEVELS = Array.from({length: MAX_SUSPICION + 1}, (_, level) => level);
 
 export default defineComponent({
   name: 'SmugglingPanel',
@@ -40,9 +40,8 @@ export default defineComponent({
     },
   },
   methods: {
-    // Same rule as server/dune/Smuggling.ts suspicionPenalty
     penalty(level: number): number {
-      return Math.max(0, level - 2);
+      return suspicionPenalty(level);
     },
     at(level: number) {
       return this.smuggling.suspicion.filter((entry) => entry.level === level);

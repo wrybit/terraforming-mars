@@ -8,7 +8,7 @@ import {SelectOption} from '../inputs/SelectOption';
 import {SelectAmount} from '../inputs/SelectAmount';
 import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
-import {SmugglingModel} from '../../common/dune/DuneModel';
+import {MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '../../common/dune/DuneModel';
 import {RESOURCE_LABEL} from './resourceLabels';
 import {CardName} from '../../common/cards/CardName';
 
@@ -23,7 +23,7 @@ export type SmugglingData = {
   suspicion: Record<PlayerId, number>,
 };
 
-export const MAX_SUSPICION = 5;
+export {MAX_SUSPICION};
 export const SPICE_PRICE = 5;
 export const MAX_SPICE_PER_DEAL = 5;
 export const BRIBE_COST = 10;
@@ -38,9 +38,7 @@ export function suspicionOf(data: SmugglingData, player: IPlayer): number {
 }
 
 /** TR lost at the end of a generation for a suspicion level */
-export function suspicionPenalty(level: number): number {
-  return Math.max(0, level - 2);
-}
+export {suspicionPenalty};
 
 export function ownsSmugglersMarket(player: IPlayer): boolean {
   return player.game.board.spaces.some((space) => space.tile?.tileType === TileType.INDUSTRIAL_CENTER && space.player?.id === player.id);
