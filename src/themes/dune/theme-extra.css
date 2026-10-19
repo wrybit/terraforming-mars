@@ -279,6 +279,14 @@ html.theme-dune .mb-param--oceans .mb-param-fill {
   background: #e0662a;
 }
 
+/* Arrakis tab: the board box starts with room for the Mars scale above the planet (board.less, margin 85px), but
+   the arcs here reach only up to their labels – 41 board px stay empty. Pulled up by that much, the space above the
+   arc labels equals the space below the spice field counter and the tile view switch (Jens, 19 Oct 2026). The margin
+   scales with the board zoom; the fitting (rightColumnFit.ts) measures it like the rest of the board. */
+html.theme-dune .player-home-columns__mars .board-tabs-mars .board-cont {
+  margin-top: -41px;
+}
+
 /* Place names on Arrakis (Legends.ts): dark halo, so the white text reads on sand, rock and ice */
 html.theme-dune .board-caption {
   paint-order: stroke;
