@@ -815,6 +815,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   play6: {playPolicyWeight: 6},
   play12: {playPolicyWeight: 12},
   noPlayPolicy: {playPolicyWeight: 0},
+  // Control: the AI before the imitation steps of rounds 111/112 (measures their total gain)
+  beforeImitation: {policyWeight: 0, playPolicyWeight: 0},
+  play2: {playPolicyWeight: 2},
   noHandFunding: {handFunding: 0},
   buyLoose: {buyMargin: -3},
   // ML stage 2 (learned final VP margin from about 43,000 BGA two-player games, certain VP 1 : 1, AUC 0.80):
