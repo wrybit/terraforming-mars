@@ -422,8 +422,8 @@ html.theme-dune .card-production-box .card-plus {
   filter: brightness(0) invert(0.95);
 }
 
-/* Victory points (variant C): a tab in the lower right corner of the card in the umber of the frame, the number in
-   gold, a small vertical "SP" in front – part of the card instead of a bevelled plate stuck on it */
+/* Victory points (variant C): a tab in the lower right corner of the card, flat gold with a dark number (Jens: another
+   colour than the umber production box), a small vertical "SP" in front – part of the card, no bevelled plate */
 html.theme-dune .card-container .card-points {
   right: 0;
   bottom: 0;
@@ -434,9 +434,9 @@ html.theme-dune .card-container .card-points {
   padding: 0 12px 0 24px;
   border: 0;
   border-radius: 16px 0 16px 0;
-  background: #4a3422;
+  background: linear-gradient(#e8b13a, #c38a1d);
   box-shadow: none;
-  color: #f2c230;
+  color: #2a1806;
   font-family: Prototype, sans-serif;
   text-shadow: none;
 }
@@ -448,7 +448,7 @@ html.theme-dune .card-container .card-points::before {
   left: 8px;
   transform: translateY(-50%) rotate(180deg);
   writing-mode: vertical-rl;
-  color: #e3d0aa;
+  color: #5a3a10;
   font: 8px Michroma, sans-serif;
   letter-spacing: 0.08em;
   line-height: 1;
