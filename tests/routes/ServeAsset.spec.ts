@@ -81,6 +81,15 @@ describe('ServeAsset', () => {
     expect(res.content).eq('data: build/styles.css.gz');
   });
 
+  it('theme stylesheet in the theme colours, compressed like styles.css', async () => {
+    instance = new ServeAsset(undefined, false, fileApi);
+    scaffolding.url = '/assets/themes/dune/styles.css';
+    scaffolding.req.headers['accept-encoding'] = 'br, gzip';
+    await scaffolding.get(instance, res);
+    expect(res.content).eq('data: assets/themes/dune/styles.css.br');
+    expect(res.headers.get('Content-Type')).eq('text/css');
+  });
+
   it('styles.css: uncached', async () => {
     instance = new ServeAsset(undefined, false, fileApi);
     // Primes the cache.

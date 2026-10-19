@@ -22,6 +22,7 @@ assets/locales
 # Theme texts, generated from src/themes by npm run make:json
 /assets/themes/*/texts/
 /assets/themes/*/theme.css
+/assets/themes/*/styles.css*
 
 # Local Packages
 node_modules/

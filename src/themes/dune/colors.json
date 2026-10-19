@@ -1,0 +1,68 @@
+{
+  "families": [
+    {
+      "name": "App accent (the violet of buttons, active tabs, counters) -> spice orange, light tints -> sand",
+      "hue": [
+        228,
+        252
+      ],
+      "saturation": [
+        0.35,
+        1
+      ],
+      "lightness": [
+        0.08,
+        0.99
+      ],
+      "toHue": 30,
+      "lightnessFactor": 0.8,
+      "keepLightAbove": 0.75
+    },
+    {
+      "name": "Cool greys and blue-grey surfaces (glass, panels, borders, badges) -> Arrakis rock browns",
+      "hue": [
+        195,
+        262
+      ],
+      "saturation": [
+        0,
+        0.35
+      ],
+      "lightness": [
+        0.03,
+        0.75
+      ],
+      "toHue": 28,
+      "toSaturation": 0.22
+    },
+    {
+      "name": "Neutral dark greys -> warm brown",
+      "hue": [
+        0,
+        360
+      ],
+      "saturation": [
+        0,
+        0.04
+      ],
+      "lightness": [
+        0.06,
+        0.36
+      ],
+      "toHue": 28,
+      "toSaturation": 0.14
+    }
+  ],
+  "text": {
+    "minLightness": 0.8,
+    "maxSaturation": 0.12,
+    "to": "#efdfbf"
+  },
+  "keepSelectors": [
+    "tone-success",
+    "tone-danger",
+    "theme-switch",
+    "player_",
+    "background-color-"
+  ]
+}

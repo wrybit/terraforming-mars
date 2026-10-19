@@ -5,7 +5,9 @@
 // styles are themed automatically. The client loads the file only for games in that theme (client/theme/applyTheme.ts).
 import fs from 'fs';
 import path from 'path';
+import zlib from 'zlib';
 import postcss, {AtRule, Container, Declaration, Root, Rule} from 'postcss';
+import {recolorStylesheet, ThemeColors} from './themeColors';
 
 const URL_PATTERN = /url\((['"]?)(?:\.?\/)?assets\/([^'")]+)\1\)/g;
 
@@ -97,5 +99,16 @@ export function writeThemeCss(stylesFile: string, themesFolder: string, outputFo
     const extraFile = path.join(themesFolder, theme, 'theme-extra.css');
     const extra = fs.existsSync(extraFile) ? fs.readFileSync(extraFile, 'utf8') : '';
     fs.writeFileSync(path.join(outputFolder, theme, 'theme.css'), themeCss(css, theme, graphics) + extra);
+    // Theme colours (themeColors.ts): the whole stylesheet recoloured, it stands in for the game's while the theme is shown
+    const colorsFile = path.join(themesFolder, theme, 'colors.json');
+    if (fs.existsSync(colorsFile)) {
+      const colors = JSON.parse(fs.readFileSync(colorsFile, 'utf8')) as ThemeColors;
+      const stylesheet = recolorStylesheet(css, colors);
+      const stylesFile = path.join(outputFolder, theme, 'styles.css');
+      fs.writeFileSync(stylesFile, stylesheet);
+      // Compressed copies as for the game's stylesheet (ServeAsset.ts serves them to browsers that accept them)
+      fs.writeFileSync(stylesFile + '.gz', zlib.gzipSync(stylesheet));
+      fs.writeFileSync(stylesFile + '.br', zlib.brotliCompressSync(stylesheet, {params: {[zlib.constants.BROTLI_PARAM_QUALITY]: 9}}));
+    }
   }
 }

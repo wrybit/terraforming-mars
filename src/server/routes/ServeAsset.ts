@@ -204,6 +204,16 @@ export class ServeAsset extends Handler {
       if (/^assets\/themes\/[a-z]+\/theme\.css$/.test(urlPath)) {
         return {file: urlPath};
       }
+      // Game stylesheet in the theme's colours (src/tools/themeColors.ts): as large as styles.css, so compressed like it
+      if (/^assets\/themes\/[a-z]+\/styles\.css$/.test(urlPath)) {
+        if (encodings.has('br') && this.fileApi.existsSync(urlPath + '.br')) {
+          return {file: urlPath + '.br', encoding: 'br'};
+        }
+        if (encodings.has('gzip') && this.fileApi.existsSync(urlPath + '.gz')) {
+          return {file: urlPath + '.gz', encoding: 'gzip'};
+        }
+        return {file: urlPath};
+      }
 
       if (urlPath.endsWith('.png') || urlPath.endsWith('.jpg') || urlPath.endsWith('.webp') || urlPath.endsWith('.avif') || urlPath.endsWith('.json') || urlPath.endsWith('.svg') || urlPath.endsWith('.woff2')) {
         const assetsRoot = path.resolve('./assets');
