@@ -52,5 +52,8 @@
   "board/mars-large.png": "arrakis-large.png",
   "board/mars-large-without-venus.png": "arrakis-large-without-venus.png",
   "hex_green.png": "graphics/tile-planting.svg",
-  "tiles/empty.png": "graphics/tile-empty.svg"
+  "tiles/empty.png": "graphics/tile-empty.svg",
+  "expansion_icons/expansion_icon_corporateEra.png": "graphics/houses-era-mark.svg",
+  "expansion_icons/expansion_icon_prelude.png": "graphics/prelude-mark.svg",
+  "expansion_icons/expansion_icon_prelude2.png": "graphics/prelude2-mark.svg"
 }
