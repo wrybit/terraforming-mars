@@ -17,7 +17,8 @@ import {
 
 // Module A – Bazaar of Arrakeen (claude/dune-erweiterung-konzept.md). Each generation, right after research:
 // 1. the wares slide one slot to the right (cheaper); a ware pushed out on the right is discarded,
-// 2. new wares are laid out from the left until there are one fewer than players.
+// 2. a new ware is laid out on the free left slot every generation (Jens, 19 Oct 2026: unsold wares must not block the
+//    bazaar), then more from the left until there are at least one fewer than players.
 // During the action phase, buying a ware is an action (Jens, 19 Oct 2026: tap the ware in the bazaar tab); each
 // player buys at most 1 ware per generation. The owner of the bazaar tile pays less.
 // A bought ware pays out at once and goes to the discard pile; nothing is kept for later.
@@ -57,13 +58,14 @@ function drawWare(data: BazaarData, rng: Random): string | undefined {
   return data.deck.shift();
 }
 
-/** Steps 1 and 2: slide right, then refill from the left */
+/** Steps 1 and 2: slide right, then always one new ware on the left and refill up to the player count */
 export function slideAndRefill(data: BazaarData, playerCount: number, rng: Random): void {
   const pushedOut = data.slots[data.slots.length - 1];
   if (pushedOut !== null && pushedOut !== undefined) {
     data.discard.push(pushedOut);
   }
   data.slots = [null, ...data.slots.slice(0, data.slots.length - 1)];
+  data.slots[0] = drawWare(data, rng) ?? null;
   const wanted = bazaarWareCount(playerCount);
   for (let slot = 0; slot < data.slots.length && data.slots.filter((ware) => ware !== null).length < wanted; slot++) {
     if (data.slots[slot] === null) {

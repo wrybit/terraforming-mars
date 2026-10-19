@@ -69,14 +69,25 @@ describe('Bazaar of Arrakeen (Dune module A)', () => {
     slideAndRefill(bazaar, 3, game.rng);
     expect(bazaar.slots.slice(0, 2).every((ware) => ware !== null)).is.true;
     const [first, second] = bazaar.slots;
-    // Nobody bought: the same two wares, one slot further right and cheaper
+    // Nobody bought: the same two wares, one slot further right and cheaper, and still one new ware on the left
     slideAndRefill(bazaar, 3, game.rng);
-    expect(bazaar.slots).deep.eq([null, first, second, null, null]);
-    // One bought: one new ware on the left
+    const third = bazaar.slots[0];
+    expect(third).is.not.null;
+    expect(bazaar.slots.slice(1)).deep.eq([first, second, null, null]);
+    // One bought: again one new ware on the left
     bazaar.slots[1] = null;
     slideAndRefill(bazaar, 3, game.rng);
     expect(bazaar.slots[0]).is.not.null;
     expect(bazaar.slots[3]).eq(second);
+  });
+
+  it('lays out a new ware every generation, even when a ware is left unsold', () => {
+    const bazaar = bazaarOf(game);
+    slideAndRefill(bazaar, 2, game.rng);
+    expect(bazaar.slots.filter((ware) => ware !== null)).has.length(1);
+    slideAndRefill(bazaar, 2, game.rng);
+    expect(bazaar.slots.filter((ware) => ware !== null)).has.length(2);
+    expect(bazaar.slots[0]).is.not.null;
   });
 
   it('discards the ware pushed out on the right', () => {
