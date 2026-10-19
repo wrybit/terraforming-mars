@@ -12,6 +12,8 @@ import {Tree, treeScore} from './treeEnsemble';
 
 type ModelData = {features: Array<string>, surePoints: Array<number>, trees: Array<Tree>};
 const MODEL = modelData as unknown as ModelData;
+/** Feature names in the order of bgaFeatures (self-play data: our own games recorded in the same format). */
+export const BGA_VALUE_FEATURES: ReadonlyArray<string> = MODEL.features;
 
 type PlayerFeature = (player: IPlayer, points: ReturnType<IPlayer['getVictoryPoints']>) => number;
 const TAGS: Record<string, Tag> = {
