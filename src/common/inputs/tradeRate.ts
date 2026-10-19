@@ -1,5 +1,5 @@
 import {Resource} from '../Resource';
-import {TradeRate} from '../models/PlayerInputModel';
+import {TradePairRate, TradeRate} from '../models/PlayerInputModel';
 
 // Exchange rate of a trade (SelectTrade), shared by server (checks the answer) and client (shows and builds it), so
 // both always compute the same amounts.
@@ -12,7 +12,18 @@ export type TradePricing = {
   values?: Partial<Record<Resource, number>>,
   /** With values: the given side is worth this many times the received one (black market: 2) */
   factor?: number,
+  /** Pairs with their own rate and limit (smuggling: 1 spice for 5 M€, at most 5) */
+  pairs?: ReadonlyArray<TradePairRate>,
 };
+
+function pairOf(pricing: TradePricing, give: Resource, get: Resource): TradePairRate | undefined {
+  return pricing.pairs?.find((pair) => pair.give === give && pair.get === get);
+}
+
+/** Most of `give` this pair allows (its own limit), or undefined: only the stock limits it */
+export function pairGiveLimit(pricing: TradePricing, give: Resource, get: Resource): number | undefined {
+  return pairOf(pricing, give, get)?.maxGive;
+}
 
 function greatestCommonDivisor(a: number, b: number): number {
   return b === 0 ? a : greatestCommonDivisor(b, a % b);
@@ -24,6 +35,10 @@ function greatestCommonDivisor(a: number, b: number): number {
  * Undefined for a free trade (CHOAM offer) or a resource without a worth.
  */
 export function tradeRate(pricing: TradePricing, give: Resource, get: Resource): TradeRate | undefined {
+  const pair = pairOf(pricing, give, get);
+  if (pair !== undefined) {
+    return pair.rate;
+  }
   if (pricing.rate !== undefined) {
     return pricing.rate;
   }

@@ -101,10 +101,10 @@ describe('Dune modules B, D, E, F', () => {
   describe('Smuggling (E)', () => {
     it('moves spice for 5 M€ each and raises the suspicion', () => {
       player1.titanium = 6;
-      const move = cast(option(tabActions(player1), 'Smuggling: move spice'), SelectTrade);
-      expect(move.give).deep.eq([{resource: Resource.TITANIUM, max: 5}]);
-      // Only whole multiples of the rate: 1 spice for 5 M€
+      const move = cast(option(tabActions(player1), 'Smuggling'), SelectTrade);
+      // Only whole multiples of the rate: 1 spice for 5 M€, at most 5 spice per deal
       expect(() => move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 2, get: Resource.MEGACREDITS, getAmount: 5})).to.throw();
+      expect(() => move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 6, get: Resource.MEGACREDITS, getAmount: 30})).to.throw();
       move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 5, get: Resource.MEGACREDITS, getAmount: 25});
       expect(player1.titanium).eq(1);
       expect(player1.megaCredits).eq(25);
@@ -113,7 +113,7 @@ describe('Dune modules B, D, E, F', () => {
 
     it('trades 2 for 1 on the black market', () => {
       player1.heat = 9;
-      const market = cast(option(tabActions(player1), 'Smuggling: black market'), SelectTrade);
+      const market = cast(option(tabActions(player1), 'Smuggling'), SelectTrade);
       expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 10, get: Resource.PLANTS, getAmount: 5})).to.throw();
       expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.HEAT, getAmount: 4})).to.throw();
       market.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.PLANTS, getAmount: 4});
@@ -122,7 +122,7 @@ describe('Dune modules B, D, E, F', () => {
 
     it('prices the black market by worth: 6 M€ for 1 spice, never 2', () => {
       player1.megaCredits = 13;
-      const market = cast(option(tabActions(player1), 'Smuggling: black market'), SelectTrade);
+      const market = cast(option(tabActions(player1), 'Smuggling'), SelectTrade);
       expect(() => market.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 2, get: Resource.TITANIUM, getAmount: 1})).to.throw();
       market.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 12, get: Resource.TITANIUM, getAmount: 2});
       expect([player1.megaCredits, player1.titanium]).deep.eq([1, 2]);

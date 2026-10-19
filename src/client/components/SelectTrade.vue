@@ -1,13 +1,14 @@
 <template>
   <!-- A whole trade in one view (Dune: CHOAM offer, black market, moving spice): what you give on the left, what you
        get on the right, each as resource tiles with the own stock; the amounts below. With a fixed rate one slider moves
-       both sides (AmountConverter, before → after like other conversions); without a rate (CHOAM) one slider per side.
-       The summary above the button repeats the deal. -->
+       both sides (AmountConverter, before → after like other conversions); without a rate (CHOAM) one slider per side
+       and the summary above the button repeats the deal. A priced trade without a choice (moving spice) shows only the
+       converter: it already says what goes and what comes (Jens, 19 Oct 2026). -->
   <div class="trade-select">
     <div v-if="showtitle === true" class="amount-select__title">{{ $t(playerinput.title) }}</div>
     <!-- Two groups side by side (stacked when narrow): each with its label, its resources and – without a rate – its
          amount, so everything of one side belongs together (law of proximity) -->
-    <div class="trade-select__sides">
+    <div v-if="!hasRate || playerinput.give.length > 1 || playerinput.get.length > 1" class="trade-select__sides">
       <section class="trade-select__side" data-test="trade-give">
         <h4 class="trade-select__label">{{ $t(hasRate ? 'You give' : 'You offer') }}</h4>
         <div class="trade-select__resources">
@@ -40,7 +41,7 @@
     <div v-if="conversion !== undefined" class="choice-block choice-block--natural trade-select__amounts">
       <AmountConverter v-model="units" :conversion="conversion" :min="1" :max="maxUnits" :player="playerView.thisPlayer"/>
     </div>
-    <div class="trade-select__summary" data-test="trade-summary">
+    <div v-if="conversion === undefined" class="trade-select__summary" data-test="trade-summary">
       <span>{{ finalGive }} <i :class="'resource_icon resource_icon--' + give"></i></span>
       <span class="trade-select__summary-arrow" aria-hidden="true">⇄</span>
       <span>{{ finalGet }} <i :class="'resource_icon resource_icon--' + get"></i></span>
@@ -64,7 +65,7 @@ import {resourceSnapshot} from '@/client/components/selectPlayerResource';
 import {SelectTradeModel, TradeGiveOption, TradeRate} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {SelectTradeResponse} from '@/common/inputs/InputResponse';
-import {isPricedTrade, tradeRate} from '@/common/inputs/tradeRate';
+import {isPricedTrade, pairGiveLimit, tradeRate} from '@/common/inputs/tradeRate';
 import {Resource} from '@/common/Resource';
 
 // Names of the resources (translated; the Dune theme swaps them for its own words)
@@ -136,8 +137,9 @@ export default defineComponent({
     giveOption(): TradeGiveOption {
       return this.playerinput.give.find((option) => option.resource === this.give) ?? this.playerinput.give[0];
     },
+    // Most to give for the chosen pair: the stock, or less when the pair has its own limit (5 spice to smuggle)
     giveMax(): number {
-      return this.giveOption.max;
+      return Math.min(this.giveOption.max, pairGiveLimit(this.playerinput, this.give, this.get) ?? Infinity);
     },
     maxUnits(): number {
       const rate = this.pairRate;
@@ -176,7 +178,8 @@ export default defineComponent({
       }
       const option = this.playerinput.give.find((candidate) => candidate.resource === give);
       const rate = tradeRate(this.playerinput, give, get);
-      return option !== undefined && (rate === undefined || rate.give <= option.max);
+      const limit = Math.min(option?.max ?? 0, pairGiveLimit(this.playerinput, give, get) ?? Infinity);
+      return option !== undefined && (rate === undefined || rate.give <= limit);
     },
     stockOf(resource: Resource): number {
       return resourceSnapshot(this.playerView.thisPlayer, resource).stock;

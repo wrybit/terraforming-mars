@@ -23,6 +23,9 @@ export const SCHEMES_TITLE = 'House schemes: which agenda do you keep?';
 export const CHOAM_OFFER_TITLE = 'CHOAM: make an offer';
 export const CHOAM_ACCEPT_TITLE = 'CHOAM: accept a contract';
 
-export const SMUGGLE_SPICE_TITLE = 'Smuggling: move spice';
-export const BLACK_MARKET_TITLE = 'Smuggling: black market (double worth)';
+/** Moving spice and the black market in one trade, one action tab named like the module (Jens, 19 Oct 2026) */
+export const SMUGGLE_TITLE = 'Smuggling';
+/** Former separate moves, now the one smuggling trade */
+export const SMUGGLE_SPICE_TITLE = SMUGGLE_TITLE;
+export const BLACK_MARKET_TITLE = SMUGGLE_TITLE;
 export const BRIBE_TITLE = 'Bribe the officials: ${0} M€, suspicion −1';

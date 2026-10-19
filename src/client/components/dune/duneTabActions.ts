@@ -1,8 +1,8 @@
 import {DuneBoardTabId} from '@/client/components/boardTabs/boardTabs';
 import {DuneMoveStep} from './duneMoves';
 import {
-  BLACK_MARKET_TITLE, BRIBE_TITLE, CHOAM_ACCEPT_TITLE, CHOAM_OFFER_TITLE, JOIN_KANLY_TITLE, OPEN_KANLY_TITLE,
-  RECRUIT_TITLE, SCHEMES_TITLE, SMUGGLE_SPICE_TITLE,
+  BRIBE_TITLE, CHOAM_ACCEPT_TITLE, CHOAM_OFFER_TITLE, JOIN_KANLY_TITLE, OPEN_KANLY_TITLE,
+  RECRUIT_TITLE, SCHEMES_TITLE, SMUGGLE_TITLE,
 } from '@/common/dune/duneActionTitles';
 
 // Buttons of the module tabs: which move each one opens in its tab (titles of server/dune/*.ts) and why it may be
@@ -36,8 +36,8 @@ export const DUNE_TAB_ACTIONS: Readonly<Record<DuneBoardTabId, ReadonlyArray<Dun
     {label: 'Accept a contract', path: [{title: CHOAM_ACCEPT_TITLE}], unavailable: 'No offer of another player you can pay'},
   ],
   smuggling: [
-    {label: 'Move spice', path: [{title: SMUGGLE_SPICE_TITLE}], unavailable: 'Not your turn, or no spice and Solari to move it', actionTab: true},
-    {label: 'Black market', path: [{title: BLACK_MARKET_TITLE}], unavailable: 'Not your turn, or nothing worth trading', actionTab: true},
+    // Moving spice and the black market are one trade (Jens, 19 Oct 2026)
+    {label: 'Smuggle', path: [{title: SMUGGLE_TITLE}], unavailable: 'Not your turn, or nothing worth trading', actionTab: true},
     {label: 'Bribe', path: [{title: BRIBE_TITLE}], unavailable: 'Only with suspicion above 0 and enough Solari'},
   ],
 };

@@ -1,6 +1,6 @@
 import {SelectTradeResponse} from '../../common/inputs/InputResponse';
 import {SelectTrade, tradeUnits} from '../inputs/SelectTrade';
-import {tradeRate} from '../../common/inputs/tradeRate';
+import {pairGiveLimit, tradeRate} from '../../common/inputs/tradeRate';
 import {Resource} from '../../common/Resource';
 import {RandomSource, integerBetween, pickOne} from './randomChoice';
 
@@ -15,7 +15,7 @@ function receivable(input: SelectTrade, giveIndex: number): Array<Resource> {
       return false;
     }
     const rate = tradeRate(input.pricing, give.resource, resource);
-    return rate === undefined || tradeUnits(give, input.maxGet, rate) >= 1;
+    return rate === undefined || tradeUnits(give, input.maxGet, rate, pairGiveLimit(input.pricing, give.resource, resource)) >= 1;
   });
 }
 
@@ -36,7 +36,7 @@ export function randomTradeResponse(input: SelectTrade, random: RandomSource): S
   const get = pickOne(random, receivable(input, giveIndex));
   const rate = tradeRate(input.pricing, give.resource, get);
   if (rate !== undefined) {
-    return response(input, giveIndex, get, integerBetween(random, 1, tradeUnits(give, input.maxGet, rate)));
+    return response(input, giveIndex, get, integerBetween(random, 1, tradeUnits(give, input.maxGet, rate, pairGiveLimit(input.pricing, give.resource, get))));
   }
   return response(input, giveIndex, get, integerBetween(random, 1, give.max), integerBetween(random, 1, input.maxGet));
 }
@@ -49,7 +49,7 @@ export function quickTradeResponse(input: SelectTrade): SelectTradeResponse {
   const get = receivable(input, giveIndex)[0];
   const rate = tradeRate(input.pricing, give.resource, get);
   if (rate !== undefined) {
-    return response(input, giveIndex, get, tradeUnits(give, input.maxGet, rate));
+    return response(input, giveIndex, get, tradeUnits(give, input.maxGet, rate, pairGiveLimit(input.pricing, give.resource, get)));
   }
   return response(input, giveIndex, get, 1, 1);
 }

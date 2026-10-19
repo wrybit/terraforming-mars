@@ -129,6 +129,15 @@ export type TradeRate = {
   get: number;
 }
 
+/** Own rate for one pair of a trade, e.g. moving spice: 1 spice for 5 M€, at most 5 spice */
+export type TradePairRate = {
+  give: Resource;
+  get: Resource;
+  rate: TradeRate;
+  /** Most of `give` for this pair */
+  maxGive?: number;
+}
+
 /**
  * A trade in one input (Dune expansion: CHOAM offer, black market, moving spice): which resource and how much
  * the player gives, which resource and how much they get. With a rate only whole multiples of it are allowed.
@@ -145,6 +154,8 @@ export type SelectTradeModel = BaseInputModel & {
   values?: Partial<Record<Resource, number>>;
   /** With values: the given side is worth this many times the received one */
   factor?: number;
+  /** Pairs with their own rate (and limit) instead of the one from the values */
+  pairs?: ReadonlyArray<TradePairRate>;
 }
 
 export type DeltaProjectInputModel = BaseInputModel & {

@@ -1,5 +1,5 @@
 import {IGame} from '../IGame';
-import {BLACK_MARKET_TITLE, BRIBE_TITLE, SMUGGLE_SPICE_TITLE} from '../../common/dune/duneActionTitles';
+import {BRIBE_TITLE, SMUGGLE_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
 import {PlayerId} from '../../common/Types';
 import {ALL_RESOURCES, Resource} from '../../common/Resource';
@@ -31,8 +31,10 @@ export const BRIBE_COST = 10;
 export const BRIBE_COST_WITH_MARKET = 7;
 /** Black market: what is given is worth this many times what is received */
 export const BLACK_MARKET_FACTOR = 2;
-/** No upper limit on what the black market pays out (the stock limits it) */
+/** No upper limit on what smuggling pays out (the stock limits it) */
 const NO_LIMIT = 9999;
+/** Moving spice: its own rate, better than the black market, and at most 5 spice per deal */
+const SPICE_PAIR = {give: Resource.TITANIUM, get: Resource.MEGACREDITS, rate: {give: 1, get: SPICE_PRICE}, maxGive: MAX_SPICE_PER_DEAL};
 /** Worth of one unit on the black market: the value table of the Dune expansion (M€ 1, steel 2, titanium 3 …) */
 export const BLACK_MARKET_VALUES: Record<Resource, number> = {
   megacredits: 1,
@@ -93,47 +95,38 @@ function raise(player: IPlayer, data: SmugglingData): void {
   data.suspicion[player.id] = Math.min(MAX_SUSPICION, suspicionOf(data, player) + 1);
 }
 
-/** Moving spice: titanium for M€ at the smuggling price, as a trade with a fixed rate (its own action tab) */
-function moveSpiceInput(player: IPlayer, data: SmugglingData): SelectTrade | undefined {
-  const most = Math.min(MAX_SPICE_PER_DEAL, player.titanium);
-  if (suspicionOf(data, player) >= MAX_SUSPICION || most < 1) {
-    return undefined;
-  }
-  return new SelectTrade(SMUGGLE_SPICE_TITLE, 'Smuggle', [{resource: Resource.TITANIUM, max: most}], [Resource.MEGACREDITS],
-    most * SPICE_PRICE, {rate: {give: 1, get: SPICE_PRICE}})
-    .andThen((trade) => {
-      player.stock.deduct(Resource.TITANIUM, trade.giveAmount, {log: true});
-      player.stock.add(Resource.MEGACREDITS, trade.getAmount, {log: true});
-      raise(player, data);
-      player.game.log('${0} smuggled spice past the Empire', (b) => b.player(player));
-      return undefined;
-    });
-}
-
 /**
- * Black market: any resource for another at double its worth (value table of the Dune expansion: 6 M€ for 1 spice,
- * 2 spice for 3 M€ – Jens, 19 Oct 2026), any number of times in one go, as a trade (its own action tab)
+ * Smuggling in one trade, its own action tab (Jens, 19 Oct 2026): moving spice (1 titanium for 5 M€, up to 5 per deal)
+ * and the black market (any resource for another at double its worth, value table: 6 M€ for 1 spice …).
+ * The AI only moves spice (`onlySpice`).
  */
-function blackMarketInput(player: IPlayer, data: SmugglingData): SelectTrade | undefined {
+function smuggleInput(player: IPlayer, data: SmugglingData, onlySpice: boolean): SelectTrade | undefined {
   if (suspicionOf(data, player) >= MAX_SUSPICION) {
     return undefined;
   }
-  const pricing = {values: BLACK_MARKET_VALUES, factor: BLACK_MARKET_FACTOR};
+  const pricing = onlySpice ?
+    {pairs: [SPICE_PAIR]} :
+    {values: BLACK_MARKET_VALUES, factor: BLACK_MARKET_FACTOR, pairs: [SPICE_PAIR]};
+  const getOptions = onlySpice ? [Resource.MEGACREDITS] : ALL_RESOURCES;
   // Only what pays for at least one unit of some other resource
-  const give = ALL_RESOURCES
-    .filter((resource) => ALL_RESOURCES.some((get) => get !== resource &&
+  const give = (onlySpice ? [Resource.TITANIUM] : ALL_RESOURCES)
+    .filter((resource) => getOptions.some((get) => get !== resource &&
       player.stock.get(resource) >= (tradeRate(pricing, resource, get)?.give ?? Infinity)))
     .map((resource) => ({resource, max: player.stock.get(resource)}));
   if (give.length === 0) {
     return undefined;
   }
-  // Only the stock and the rate of each pair limit the amounts, not the received side
-  return new SelectTrade(BLACK_MARKET_TITLE, 'Trade', give, ALL_RESOURCES, NO_LIMIT, pricing)
+  // Only the stock and the rate (and limit) of each pair limit the amounts, not the received side
+  return new SelectTrade(SMUGGLE_TITLE, 'Smuggle', give, getOptions, NO_LIMIT, pricing)
     .andThen((trade) => {
       player.stock.deduct(trade.give, trade.giveAmount, {log: true});
       player.stock.add(trade.get, trade.getAmount, {log: true});
       raise(player, data);
-      player.game.log('${0} traded on the black market', (b) => b.player(player));
+      if (trade.give === Resource.TITANIUM && trade.get === Resource.MEGACREDITS) {
+        player.game.log('${0} smuggled spice past the Empire', (b) => b.player(player));
+      } else {
+        player.game.log('${0} traded on the black market', (b) => b.player(player));
+      }
       return undefined;
     });
 }
@@ -153,7 +146,7 @@ function bribeInput(player: IPlayer, data: SmugglingData): SelectOption | undefi
 
 /**
  * Smuggling actions of the Dune group of the action menu: bribing. The AI bribes from 3 on.
- * Moving spice and the black market have their own tabs (smugglingTabActions).
+ * Moving spice and the black market are one trade with its own tab (smugglingTabActions).
  */
 export function smugglingActions(player: IPlayer, data: SmugglingData): Array<PlayerInput> {
   const isAi = player.aiLevel !== undefined;
@@ -161,14 +154,14 @@ export function smugglingActions(player: IPlayer, data: SmugglingData): Array<Pl
   return bribe === undefined ? [] : [bribe];
 }
 
-/** Smuggling actions with their own tab in the action menu. The AI only moves spice while it stays below a penalty. */
+/** Smuggling with its own tab in the action menu. The AI only moves spice while it stays below a penalty. */
 export function smugglingTabActions(player: IPlayer, data: SmugglingData): Array<PlayerInput> {
   const isAi = player.aiLevel !== undefined;
-  const level = suspicionOf(data, player);
-  const actions: Array<PlayerInput | undefined> = isAi ?
-    [level <= 1 ? moveSpiceInput(player, data) : undefined] :
-    [moveSpiceInput(player, data), blackMarketInput(player, data)];
-  return actions.filter((input): input is PlayerInput => input !== undefined);
+  if (isAi && suspicionOf(data, player) > 1) {
+    return [];
+  }
+  const input = smuggleInput(player, data, isAi);
+  return input === undefined ? [] : [input];
 }
 
 /** End of generation: suspicion 3 and more costs TR; the marker stays */

@@ -2,7 +2,7 @@ import {Message} from '../../common/logs/Message';
 import {BasePlayerInput} from '../PlayerInput';
 import {InputResponse, isSelectTradeResponse} from '../../common/inputs/InputResponse';
 import {SelectTradeModel, TradeGiveOption, TradeRate} from '../../common/models/PlayerInputModel';
-import {TradePricing, tradeRate} from '../../common/inputs/tradeRate';
+import {TradePricing, pairGiveLimit, tradeRate} from '../../common/inputs/tradeRate';
 import {Resource} from '../../common/Resource';
 import {InputError} from './InputError';
 
@@ -44,6 +44,7 @@ export class SelectTrade extends BasePlayerInput<Trade> {
       rate: this.pricing.rate,
       values: this.pricing.values,
       factor: this.pricing.factor,
+      pairs: this.pricing.pairs,
     };
   }
 
@@ -63,8 +64,9 @@ export class SelectTrade extends BasePlayerInput<Trade> {
         throw new InputError('Amounts must be whole numbers of at least 1');
       }
     }
-    if (input.giveAmount > give.max) {
-      throw new InputError('Amount to give too high (max ' + String(give.max) + ')');
+    const limit = Math.min(give.max, pairGiveLimit(this.pricing, input.give, input.get) ?? Infinity);
+    if (input.giveAmount > limit) {
+      throw new InputError('Amount to give too high (max ' + String(limit) + ')');
     }
     if (input.getAmount > this.maxGet) {
       throw new InputError('Amount to get too high (max ' + String(this.maxGet) + ')');
@@ -80,7 +82,7 @@ export class SelectTrade extends BasePlayerInput<Trade> {
   }
 }
 
-/** Largest number of whole rate units possible when giving `option` */
-export function tradeUnits(option: TradeGiveOption, maxGet: number, rate: TradeRate): number {
-  return Math.min(Math.floor(option.max / rate.give), Math.floor(maxGet / rate.get));
+/** Largest number of whole rate units possible when giving `option` (with the own limit of the pair, if any) */
+export function tradeUnits(option: TradeGiveOption, maxGet: number, rate: TradeRate, limit = Infinity): number {
+  return Math.min(Math.floor(Math.min(option.max, limit) / rate.give), Math.floor(maxGet / rate.get));
 }
