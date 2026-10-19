@@ -12,8 +12,8 @@ import {arrakisCoordinate} from '@/common/dune/arrakisCoordinates';
 import {duneGraphic} from '@/client/components/dune/duneGraphic';
 
 // The Dune expansion gets one tab per module of this game (common/dune/DuneModule.ts), in the order of the concept
-// Smuggling has no board tab: its track lives in its action tab (SmuggleInput.vue, Jens 19 Oct 2026)
-export const DUNE_BOARD_TABS = ['bazaar', 'worm', 'kanly', 'schemes', 'choam'] as const;
+// Smuggling and CHOAM have no board tab: they live in their action tabs (SmuggleInput.vue, ChoamInput.vue; Jens 19 Oct 2026)
+export const DUNE_BOARD_TABS = ['bazaar', 'worm', 'kanly', 'schemes'] as const;
 export type DuneBoardTabId = typeof DUNE_BOARD_TABS[number];
 export type BoardTabId = 'mars' | 'moon' | 'colonies' | 'turmoil' | 'paths' | 'delta' | DuneBoardTabId;
 
@@ -32,7 +32,6 @@ export const BOARD_TAB_TONE: Record<BoardTabId, string> = {
   worm: 'bazaar',
   kanly: 'bazaar',
   schemes: 'bazaar',
-  choam: 'bazaar',
 };
 
 export const BOARD_TAB_LABEL: Record<BoardTabId, string> = {
@@ -46,7 +45,6 @@ export const BOARD_TAB_LABEL: Record<BoardTabId, string> = {
   worm: 'Shai-Hulud',
   kanly: 'Kanly',
   schemes: 'Schemes',
-  choam: 'CHOAM',
 };
 
 export function boardTabs(game: GameModel): Array<BoardTabId> {
@@ -155,7 +153,7 @@ export function boardTabTracks(game: GameModel, players: ReadonlyArray<PublicPla
     return slots.length === 0 ? [] : [{color: DUNE_TAB_COLOR, step: slots.filter((slot) => slot.ware !== undefined).length, total: slots.length, bonus: []}];
   }
   default:
-    // Shai-Hulud, Kanly, schemes and CHOAM have no track worth a line
+    // Shai-Hulud, Kanly and schemes have no track worth a line
     return [];
   }
 }
@@ -194,10 +192,6 @@ export function boardTabInfo(game: GameModel, id: BoardTabId): BoardTabInfo | un
     const schemes = dune?.schemes;
     return schemes === undefined ? undefined : {icon: duneGraphic('res-advisor'), title: 'Agendas',
       counts: schemes.players.map((entry) => ({color: entry.color, value: entry.count}))};
-  }
-  case 'choam': {
-    const choam = dune?.choam;
-    return choam === undefined ? undefined : {icon: duneGraphic('coin'), text: String(choam.offers.length), title: 'Open offers'};
   }
   default:
     return undefined;

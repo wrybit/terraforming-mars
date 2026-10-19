@@ -27,6 +27,13 @@ export const SCHEMES_TITLE = 'House schemes: which agenda do you keep?';
 
 export const CHOAM_OFFER_TITLE = 'CHOAM: make an offer';
 export const CHOAM_ACCEPT_TITLE = 'CHOAM: accept a contract';
+/**
+ * The CHOAM tab of the action menu (Jens, 19 Oct 2026): every player's offers, making one's own, accepting the others'.
+ * Its accept and withdraw choices carry the offer's place in the list of open offers as first value.
+ */
+export const CHOAM_TITLE = 'CHOAM contracts';
+export const CHOAM_ACCEPT_OFFER_TITLE = 'CHOAM: accept offer ${0}';
+export const CHOAM_WITHDRAW_TITLE = 'CHOAM: withdraw offer ${0}';
 
 /** Moving spice and the black market in one trade, one action tab named like the module (Jens, 19 Oct 2026) */
 export const SMUGGLE_TITLE = 'Smuggling';

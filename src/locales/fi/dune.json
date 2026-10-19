@@ -294,5 +294,13 @@
   "Bazaar: buy ${0} for ${1} M€": "Basaari: osta ${0} hintaan ${1} M€",
   "Suspicion": "Epäily",
   "Suspicion 4: smuggling is closed until a bribe lowers it": "Epäily 4: salakuljetus on suljettu, kunnes lahjus laskee sitä",
-  "Nothing worth trading": "Ei mitään vaihdettavaa"
+  "Nothing worth trading": "Ei mitään vaihdettavaa",
+  "No offer at the moment": "Ei tarjousta juuri nyt",
+  "Accept": "Hyväksy",
+  "Withdraw": "Peru",
+  "CHOAM: accept offer ${0}": "CHOAM: hyväksy tarjous ${0}",
+  "CHOAM: withdraw offer ${0}": "CHOAM: peru tarjous ${0}",
+  "${0} withdrew the CHOAM offer": "${0} perui CHOAM-tarjouksen",
+  "No offer yet – make one below": "Ei vielä tarjousta – tee se alla",
+  "Your offer": "Tarjouksesi"
 }

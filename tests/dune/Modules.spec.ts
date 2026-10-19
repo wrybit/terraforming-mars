@@ -12,9 +12,9 @@ import {BoardName} from '../../src/common/boards/BoardName';
 import {Resource} from '../../src/common/Resource';
 import {TileType} from '../../src/common/TileType';
 import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
-import {battleTargets, garrisonOf, resolveBattle} from '../../src/server/dune/Kanly';
+import {battleTargets, garrisonOf, resolveBattle, OPEN_KANLY_COST} from '../../src/server/dune/Kanly';
 import {chargeSuspicion, suspicionOf, suspicionPenalty} from '../../src/server/dune/Smuggling';
-import {acceptOffer, returnOffers} from '../../src/server/dune/Choam';
+import {returnOffers} from '../../src/server/dune/Choam';
 import {SCHEMES_TITLE, agendaPoints, reductionStep, schemeValue, schemesVictoryPoints} from '../../src/server/dune/Schemes';
 import {SCHEME_AGENDAS, schemeAgenda} from '../../src/common/dune/schemeAgendas';
 import {cast} from '../../src/common/utils/utils';
@@ -52,6 +52,11 @@ function smuggleTrade(player: TestPlayer): SelectTrade {
   return cast(smugglingTab(player).options.find((candidate) => candidate instanceof SelectTrade), SelectTrade);
 }
 
+/** The CHOAM tab: making an offer, accepting and withdrawing */
+function choamTab(player: TestPlayer): OrOptions {
+  return cast(option(tabActions(player), 'CHOAM contracts'), OrOptions);
+}
+
 function pick(input: PlayerInput): void {
   cast(input, SelectOption).cb(undefined);
 }
@@ -82,8 +87,13 @@ describe('Dune modules B, D, E, F', () => {
       expect(battleTargets(game, player1)).includes(space);
       expect(battleTargets(game, player2)).not.includes(space);
       kanly.garrison[player1.id] = 3;
+      // Opening costs 8 M€: with less there is no such action
+      player1.megaCredits = OPEN_KANLY_COST - 1;
+      expect(DuneExpansion.actions(player1)).is.undefined;
+      player1.megaCredits = OPEN_KANLY_COST;
       const open = cast(option(duneActions(player1), 'Open Kanly'), SelectSpace);
       const amount = cast(open.cb(space), SelectAmount);
+      expect(player1.megaCredits).eq(0);
       amount.cb(2);
       expect(kanly.battle?.troops[player1.id]).eq(2);
       // Only one battle per generation
@@ -200,7 +210,7 @@ describe('Dune modules B, D, E, F', () => {
       const choam = game.duneData!.choam!;
       player1.heat = 5;
       player1.megaCredits = 3;
-      const offer = cast(option(tabActions(player1), 'CHOAM: make an offer'), SelectTrade);
+      const offer = cast(option(choamTab(player1), 'CHOAM: make an offer'), SelectTrade);
       // At most the whole stock, at most 30 in return
       expect(() => offer.process({type: 'trade', give: Resource.HEAT, giveAmount: 6, get: Resource.TITANIUM, getAmount: 2})).to.throw();
       expect(() => offer.process({type: 'trade', give: Resource.HEAT, giveAmount: 3, get: Resource.TITANIUM, getAmount: 31})).to.throw();
@@ -212,13 +222,26 @@ describe('Dune modules B, D, E, F', () => {
 
       player2.titanium = 2;
       player2.megaCredits = 1;
-      acceptOffer(game, choam, player2, choam.offers[0]);
+      // The other player accepts in the same tab; the offerer may withdraw instead
+      expect(choamTab(player1).options.map(titleOf)).deep.eq(['CHOAM: withdraw offer 0']);
+      cast(option(choamTab(player2), 'CHOAM: accept offer 0'), SelectOption).cb(undefined);
       expect([player2.heat, player2.titanium, player2.megaCredits]).deep.eq([3, 0, 0]);
       expect([player1.titanium, player1.megaCredits]).deep.eq([2, 2]);
 
       choam.offers.push({seller: player1.id, give: Resource.STEEL, giveAmount: 2, want: Resource.PLANTS, wantAmount: 1});
       returnOffers(game, choam);
       expect(player1.steel).eq(2);
+      expect(choam.offers).deep.eq([]);
+    });
+
+    it('withdraws an own offer without a fee', () => {
+      const choam = game.duneData!.choam!;
+      player1.steel = 4;
+      player1.megaCredits = 2;
+      cast(option(choamTab(player1), 'CHOAM: make an offer'), SelectTrade)
+        .process({type: 'trade', give: Resource.STEEL, giveAmount: 4, get: Resource.PLANTS, getAmount: 3});
+      cast(option(choamTab(player1), 'CHOAM: withdraw offer 0'), SelectOption).cb(undefined);
+      expect([player1.steel, player1.megaCredits]).deep.eq([4, 2]);
       expect(choam.offers).deep.eq([]);
     });
   });

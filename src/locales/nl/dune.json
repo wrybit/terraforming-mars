@@ -288,5 +288,13 @@
   "Bazaar: buy ${0} for ${1} M€": "Bazaar: ${0} kopen voor ${1} M€",
   "Suspicion": "Verdenking",
   "Suspicion 4: smuggling is closed until a bribe lowers it": "Verdenking 4: smokkelen is dicht tot een omkoping haar verlaagt",
-  "Nothing worth trading": "Niets om te ruilen"
+  "Nothing worth trading": "Niets om te ruilen",
+  "No offer at the moment": "Op dit moment geen aanbod",
+  "Accept": "Accepteren",
+  "Withdraw": "Intrekken",
+  "CHOAM: accept offer ${0}": "CHOAM: aanbod ${0} accepteren",
+  "CHOAM: withdraw offer ${0}": "CHOAM: aanbod ${0} intrekken",
+  "${0} withdrew the CHOAM offer": "${0} heeft het CHOAM-aanbod ingetrokken",
+  "No offer yet – make one below": "Nog geen aanbod – plaats er hieronder een",
+  "Your offer": "Jouw aanbod"
 }

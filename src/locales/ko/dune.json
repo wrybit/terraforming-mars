@@ -296,5 +296,13 @@
   "Bazaar: buy ${0} for ${1} M€": "시장: ${0}을(를) ${1} M€에 구매",
   "Suspicion": "의심",
   "Suspicion 4: smuggling is closed until a bribe lowers it": "의심 4: 뇌물로 낮출 때까지 밀수가 막힙니다",
-  "Nothing worth trading": "교환할 것이 없습니다"
+  "Nothing worth trading": "교환할 것이 없습니다",
+  "No offer at the moment": "현재 제안 없음",
+  "Accept": "수락",
+  "Withdraw": "철회",
+  "CHOAM: accept offer ${0}": "CHOAM: 제안 ${0} 수락",
+  "CHOAM: withdraw offer ${0}": "CHOAM: 제안 ${0} 철회",
+  "${0} withdrew the CHOAM offer": "${0}이(가) CHOAM 제안을 철회했습니다",
+  "No offer yet – make one below": "아직 제안 없음 – 아래에서 등록",
+  "Your offer": "내 제안"
 }

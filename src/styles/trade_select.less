@@ -6,6 +6,8 @@
 
 @trade-tile-gap: 6px;
 @trade-group-gap: 28px;
+// Widest a side of the trade gets (CHOAM tab: its sections are as wide as both sides, dune_choam.less)
+@trade-side-max-width: 420px;
 
 .trade-select {
   container-type: inline-size;
@@ -52,7 +54,7 @@ html:not(.tm-mobile) .or-tab-panel .trade-select .trade-select__amounts.choice-b
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  max-width: 420px;
+  max-width: @trade-side-max-width;
   padding: 12px 12px 14px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;

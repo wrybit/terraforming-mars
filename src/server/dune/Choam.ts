@@ -1,5 +1,5 @@
 import {IGame} from '../IGame';
-import {CHOAM_ACCEPT_TITLE, CHOAM_OFFER_TITLE} from '../../common/dune/duneActionTitles';
+import {CHOAM_ACCEPT_OFFER_TITLE, CHOAM_ACCEPT_TITLE, CHOAM_OFFER_TITLE, CHOAM_TITLE, CHOAM_WITHDRAW_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
 import {PlayerId} from '../../common/Types';
 import {ALL_RESOURCES, Resource} from '../../common/Resource';
@@ -19,6 +19,8 @@ import {CardName} from '../../common/cards/CardName';
 // 2. Accept: another player takes the offer in their own turn – whoever comes first gets the deal.
 // 3. Only then both pay 1 M€ to the bank.
 // 4. Nobody accepts: the goods go back to the offerer at the end of the generation, without a fee.
+// 5. Withdraw: the offerer takes an open offer back as an action, without a fee (Jens, 19 Oct 2026: the own line of
+//    the CHOAM tab needs a move of its own).
 
 export type ChoamOffer = {
   seller: PlayerId,
@@ -110,16 +112,51 @@ function acceptInputs(player: IPlayer, data: ChoamData): Array<SelectOption> {
       }));
 }
 
-/** CHOAM actions of the Dune group of the action menu; the AI only accepts offers (each one valued on a game copy) */
+/** CHOAM actions of the Dune group of the action menu: only the AI accepts offers there (each valued on a game copy) */
 export function choamActions(player: IPlayer, data: ChoamData): Array<PlayerInput> {
+  if (player.aiLevel === undefined) {
+    return [];
+  }
   const accepts = acceptInputs(player, data);
   return accepts.length === 0 ? [] : [new OrOptions(...accepts).setTitle(CHOAM_ACCEPT_TITLE)];
 }
 
-/** CHOAM actions with their own tab in the action menu: making an offer (not for the AI) */
+/** Withdraw an own open offer: the goods come back, no fee */
+export function withdrawOffer(player: IPlayer, data: ChoamData, offer: ChoamOffer): void {
+  data.offers.splice(data.offers.indexOf(offer), 1);
+  player.stock.add(offer.give, offer.giveAmount, {log: true});
+  player.game.log('${0} withdrew the CHOAM offer', (b) => b.player(player));
+}
+
+/**
+ * The CHOAM tab of the action menu for a player (Jens, 19 Oct 2026): making an offer, accepting each offer of another
+ * player that can be paid, withdrawing each own offer. The client shows them as one list with a line per player
+ * (ChoamInput.vue); accept and withdraw name the offer by its place in the list. Not for the AI.
+ */
 export function choamTabActions(player: IPlayer, data: ChoamData): Array<PlayerInput> {
-  const offer = player.aiLevel === undefined ? offerInput(player, data) : undefined;
-  return offer === undefined ? [] : [offer];
+  if (player.aiLevel !== undefined) {
+    return [];
+  }
+  const game = player.game;
+  const choices: Array<PlayerInput> = [];
+  const offer = offerInput(player, data);
+  if (offer !== undefined) {
+    choices.push(offer);
+  }
+  data.offers.forEach((open, index) => {
+    if (open.seller === player.id) {
+      choices.push(new SelectOption(message(CHOAM_WITHDRAW_TITLE, (b) => b.number(index)), 'Withdraw').andThen(() => {
+        withdrawOffer(player, data, open);
+        return undefined;
+      }));
+    } else if (canAccept(player, open)) {
+      choices.push(new SelectOption(message(CHOAM_ACCEPT_OFFER_TITLE, (b) => b.number(index)), 'Accept').andThen(() => {
+        acceptOffer(game, data, player, open);
+        return undefined;
+      }));
+    }
+  });
+  return choices.length === 0 ? [] : [new OrOptions(...choices).setTitle(CHOAM_TITLE)];
 }
 
 /** End of generation: offers nobody accepted go back, without a fee */

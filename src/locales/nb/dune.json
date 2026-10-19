@@ -292,5 +292,13 @@
   "Bazaar: buy ${0} for ${1} M€": "Basar: kjøp ${0} for ${1} M€",
   "Suspicion": "Mistanke",
   "Suspicion 4: smuggling is closed until a bribe lowers it": "Mistanke 4: smugling er stengt til en bestikkelse senker den",
-  "Nothing worth trading": "Ingenting å bytte"
+  "Nothing worth trading": "Ingenting å bytte",
+  "No offer at the moment": "Ingen tilbud akkurat nå",
+  "Accept": "Godta",
+  "Withdraw": "Trekk tilbake",
+  "CHOAM: accept offer ${0}": "CHOAM: godta tilbud ${0}",
+  "CHOAM: withdraw offer ${0}": "CHOAM: trekk tilbake tilbud ${0}",
+  "${0} withdrew the CHOAM offer": "${0} trakk tilbake CHOAM-tilbudet",
+  "No offer yet – make one below": "Ingen tilbud ennå – lag et nedenfor",
+  "Your offer": "Ditt tilbud"
 }

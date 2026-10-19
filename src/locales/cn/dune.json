@@ -297,5 +297,13 @@
   "Bazaar: buy ${0} for ${1} M€": "集市：以 ${1} M€ 购买 ${0}",
   "Suspicion": "嫌疑",
   "Suspicion 4: smuggling is closed until a bribe lowers it": "嫌疑 4：走私关闭，直到行贿降低嫌疑",
-  "Nothing worth trading": "没有可交换的资源"
+  "Nothing worth trading": "没有可交换的资源",
+  "No offer at the moment": "目前没有报价",
+  "Accept": "接受",
+  "Withdraw": "撤回",
+  "CHOAM: accept offer ${0}": "CHOAM：接受报价 ${0}",
+  "CHOAM: withdraw offer ${0}": "CHOAM：撤回报价 ${0}",
+  "${0} withdrew the CHOAM offer": "${0} 撤回了 CHOAM 报价",
+  "No offer yet – make one below": "尚无报价 – 在下方发布",
+  "Your offer": "你的报价"
 }

@@ -24,7 +24,7 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   'Send a delegate in an area (from lobby)': 'Delegate (lobby)',
   'Use CEO once per game action': 'CEO action',
   // Dune expansion: moves with their own tab (common/dune/duneActionTitles.ts)
-  'CHOAM: make an offer': 'CHOAM offer',
+  'CHOAM contracts': 'CHOAM',
   'Bazaar: buy ${0} for ${1} M€': 'Bazaar',
   'Undo last action': 'Undo',
   // Initial selection (SelectInitialCards, titles from common/inputs/SelectInitialCards.ts)
@@ -85,7 +85,7 @@ const EXPANSION_TAB_TONES: Readonly<Record<string, OptionTone>> = {
   'Send a delegate in an area (3 M€)': 'colonies',
   'Send a delegate in an area (5 M€)': 'colonies',
   'Send a delegate in an area (from lobby)': 'colonies',
-  'CHOAM: make an offer': 'dune',
+  'CHOAM contracts': 'dune',
   'Smuggling': 'dune',
   'Bazaar: buy ${0} for ${1} M€': 'dune',
 };

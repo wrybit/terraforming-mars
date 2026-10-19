@@ -296,5 +296,13 @@
   "Bazaar: buy ${0} for ${1} M€": "Базар: купити ${0} за ${1} M€",
   "Suspicion": "Підозра",
   "Suspicion 4: smuggling is closed until a bribe lowers it": "Підозра 4: контрабанду закрито, доки хабар її не знизить",
-  "Nothing worth trading": "Нічого обміняти"
+  "Nothing worth trading": "Нічого обміняти",
+  "No offer at the moment": "Наразі немає пропозиції",
+  "Accept": "Прийняти",
+  "Withdraw": "Відкликати",
+  "CHOAM: accept offer ${0}": "CHOAM: прийняти пропозицію ${0}",
+  "CHOAM: withdraw offer ${0}": "CHOAM: відкликати пропозицію ${0}",
+  "${0} withdrew the CHOAM offer": "${0} відкликав пропозицію CHOAM",
+  "No offer yet – make one below": "Ще немає пропозиції – створи нижче",
+  "Your offer": "Твоя пропозиція"
 }

@@ -296,5 +296,13 @@
   "Bazaar: buy ${0} for ${1} M€": "バザール：${0}を${1} M€で買う",
   "Suspicion": "疑惑",
   "Suspicion 4: smuggling is closed until a bribe lowers it": "疑惑4：賄賂で下げるまで密輸はできません",
-  "Nothing worth trading": "交換できるものがありません"
+  "Nothing worth trading": "交換できるものがありません",
+  "No offer at the moment": "現在オファーなし",
+  "Accept": "受け入れる",
+  "Withdraw": "取り下げる",
+  "CHOAM: accept offer ${0}": "CHOAM：オファー${0}を受け入れる",
+  "CHOAM: withdraw offer ${0}": "CHOAM：オファー${0}を取り下げる",
+  "${0} withdrew the CHOAM offer": "${0}がCHOAMのオファーを取り下げた",
+  "No offer yet – make one below": "まだオファーなし – 下で出す",
+  "Your offer": "あなたのオファー"
 }

@@ -294,5 +294,13 @@
   "Bazaar: buy ${0} for ${1} M€": "Bazar: comprar ${0} por ${1} M€",
   "Suspicion": "Suspeita",
   "Suspicion 4: smuggling is closed until a bribe lowers it": "Suspeita 4: contrabando fechado até que um suborno a reduza",
-  "Nothing worth trading": "Nada para trocar"
+  "Nothing worth trading": "Nada para trocar",
+  "No offer at the moment": "Nenhuma oferta no momento",
+  "Accept": "Aceitar",
+  "Withdraw": "Retirar",
+  "CHOAM: accept offer ${0}": "CHOAM: aceitar a oferta ${0}",
+  "CHOAM: withdraw offer ${0}": "CHOAM: retirar a oferta ${0}",
+  "${0} withdrew the CHOAM offer": "${0} retirou a oferta CHOAM",
+  "No offer yet – make one below": "Ainda sem oferta – crie abaixo",
+  "Your offer": "Sua oferta"
 }

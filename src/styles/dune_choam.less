@@ -1,0 +1,154 @@
+// CHOAM tab of the action menu (ChoamInput.vue): the market with one line per player on top, the own new offer
+// below. Each line is its own group (divider between lines, small gaps inside); market and new offer are two
+// surfaces with a larger gap (law of proximity).
+@import (reference) "./variables.less";
+@import (reference) "./hand_cards_panel.less";
+@import (reference) "./trade_select.less";
+
+html:not(.tm-mobile) .or-tab-panel:has(.choam-input) {
+  display: flex;
+  flex-direction: column;
+
+  .choam-input {
+    flex: 1 0 auto;
+  }
+
+  // The trade fills the box on its own elsewhere (trade_select.less); here the whole block is centred instead, so the
+  // heading "Your offer" stays right above its boxes
+  .choam-input :has(.trade-select),
+  .choam-input .trade-select {
+    flex: 0 0 auto;
+  }
+}
+
+.choam-input {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  width: 100%;
+
+  // The trade inside does not stretch on its own here: the tab already centres the whole block
+  .trade-select {
+    flex: 0 0 auto;
+  }
+}
+
+// Both sections exactly as wide as the two boxes of the trade side by side (trade_select.less)
+.choam-input__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: calc(2 * @trade-side-max-width + @trade-group-gap);
+}
+
+// Heading with its line like the sections of the hand cards tab
+.choam-input__heading {
+  .section-title-with-line();
+  margin: 0;
+}
+
+.choam-input__market {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(12, 14, 20, 0.45);
+}
+
+.choam-input__lines {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.choam-input__line {
+  display: grid;
+  grid-template-columns: minmax(90px, max-content) 1fr;
+  align-items: center;
+  column-gap: 14px;
+  padding: 8px 0;
+
+  & + & {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .dune-player-chip {
+    justify-self: start;
+  }
+}
+
+.choam-input__offers {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.choam-input__none {
+  font-size: 14px;
+  color: #b9ad97;
+  font-style: italic;
+}
+
+.choam-input__offer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+
+  // The move sits at the end of the line, so all buttons form one column
+  .choam-input__move {
+    margin-left: auto;
+  }
+}
+
+.choam-input__goods {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  img {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+.choam-input__arrow {
+  color: #e0662a;
+  font-size: 18px;
+}
+
+// Withdrawing the own offer is the quiet move, accepting the loud one
+.choam-input .btn.choam-input__move--withdraw:not(:disabled) {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: none;
+  color: #e6e1d6;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+.choam-input__rules {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #b9ad97;
+}
+
+// Phone: the chip above its offers, so goods and button keep the full width
+@container (max-width: 420px) {
+  .choam-input__line {
+    grid-template-columns: 1fr;
+    row-gap: 6px;
+  }
+}

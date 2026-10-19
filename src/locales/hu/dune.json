@@ -294,5 +294,13 @@
   "Bazaar: buy ${0} for ${1} M€": "Bazár: ${0} megvétele ${1} M€-ért",
   "Suspicion": "Gyanú",
   "Suspicion 4: smuggling is closed until a bribe lowers it": "Gyanú 4: a csempészet zárva, amíg egy vesztegetés nem csökkenti",
-  "Nothing worth trading": "Nincs mit cserélni"
+  "Nothing worth trading": "Nincs mit cserélni",
+  "No offer at the moment": "Jelenleg nincs ajánlat",
+  "Accept": "Elfogadás",
+  "Withdraw": "Visszavonás",
+  "CHOAM: accept offer ${0}": "CHOAM: ${0}. ajánlat elfogadása",
+  "CHOAM: withdraw offer ${0}": "CHOAM: ${0}. ajánlat visszavonása",
+  "${0} withdrew the CHOAM offer": "${0} visszavonta a CHOAM-ajánlatot",
+  "No offer yet – make one below": "Még nincs ajánlat – lent adhatsz",
+  "Your offer": "Az ajánlatod"
 }
