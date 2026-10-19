@@ -233,3 +233,37 @@ button.dune-bazaar__slot {
 .dune-bazaar-purchase > .choice-option {
   min-width: max-content;
 }
+
+// Discount on a ware (BazaarWareCard.vue): arrow and a smaller coin with the own price below the printed one, like a
+// discounted project card (CardCost.vue, cards_v2.less)
+.dune-bazaar__price-arrow {
+  position: absolute;
+  top: 20px;
+  left: 1px;
+  z-index: 3;
+  width: 14px;
+  height: 21px;
+  background: url(./assets/misc/cost-transition-arrow.png) no-repeat center / contain;
+}
+
+.dune-bazaar__price.dune-bazaar__price--own {
+  top: 36px;
+  left: -5px;
+  width: 28px;
+  height: 28px;
+
+  b {
+    font-size: 13px;
+  }
+
+  @media only screen and (max-width: 600px) {
+    top: 30px;
+    left: -4px;
+    width: 22px;
+    height: 22px;
+
+    b {
+      font-size: 11px;
+    }
+  }
+}

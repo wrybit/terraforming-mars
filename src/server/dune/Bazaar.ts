@@ -15,7 +15,7 @@ import {CardName} from '../../common/cards/CardName';
 import {BazaarModel} from '../../common/dune/DuneModel';
 import {Color} from '../../common/Color';
 import {
-  BAZAAR_SLOT_PRICE_CHANGE, BAZAAR_WARES, BazaarGood, bazaarPrice, bazaarWare, bazaarWareCount,
+  BAZAAR_SLOT_PRICE_CHANGE, BAZAAR_WARES, BazaarGood, bazaarBasePrice, bazaarPrice, bazaarWare, bazaarWareCount,
 } from '../../common/dune/bazaarWares';
 
 // Module A – Bazaar of Arrakeen (claude/dune-erweiterung-konzept.md). Each generation, right after research:
@@ -214,13 +214,18 @@ function takenByColor(game: IGame, id: PlayerId | null | undefined): Color | und
   return id === null || id === undefined ? undefined : game.getPlayerById(id).color;
 }
 
-export function bazaarModel(game: IGame, data: BazaarData): BazaarModel {
+export function bazaarModel(game: IGame, data: BazaarData, viewer?: IPlayer): BazaarModel {
   return {
-    slots: data.slots.map((name, slot) => ({
-      ware: name ?? undefined,
-      price: name === null ? 0 : bazaarPrice(bazaarWare(name), slot),
-      takenBy: takenByColor(game, data.takenBy?.[slot]),
-    })),
+    slots: data.slots.map((name, slot) => {
+      const price = name === null ? 0 : bazaarPrice(bazaarWare(name), slot);
+      return {
+        ware: name ?? undefined,
+        price,
+        basePrice: name === null ? undefined : bazaarBasePrice(bazaarWare(name)),
+        ownPrice: name === null ? undefined : (viewer === undefined ? price : priceFor(viewer, data, slot)),
+        takenBy: takenByColor(game, data.takenBy?.[slot]),
+      };
+    }),
     buyers: data.buyers.map((id) => game.getPlayerById(id).color),
     bought: (data.bought ?? []).map((id) => game.getPlayerById(id).color),
     deckSize: data.deck.length,

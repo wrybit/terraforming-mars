@@ -8,6 +8,13 @@ export type BazaarSlotModel = {
   ware: string | undefined,
   /** Price in this slot before a player's own discount */
   price: number,
+  /** Printed price of the ware (its card value less 10 %), before the slot and any discount */
+  basePrice?: number,
+  /**
+   * What the viewer pays here: slot plus own discounts (bazaar tile, Bazaar Concession). Shown like a discounted
+   * project card, printed price → own price (Jens, 19 Oct 2026); spectators see the slot price.
+   */
+  ownPrice?: number,
   /** Empty slot: the player who took its ware this generation */
   takenBy?: Color,
 };

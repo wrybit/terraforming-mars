@@ -12,7 +12,7 @@
         <component :is="buyable(slot.ware) ? 'button' : 'div'" v-if="slot.ware !== undefined" :type="buyable(slot.ware) ? 'button' : undefined"
           :class="['dune-bazaar__slot', buyable(slot.ware) ? 'dune-bazaar__slot--buyable' : 'dune-bazaar__slot--unavailable']" :title="buyable(slot.ware) ? $t('Buy this ware') : undefined"
           @click="buyable(slot.ware) && buy(slot.ware)">
-          <BazaarWareCard :ware="slot.ware" :price="slot.price"/>
+          <BazaarWareCard :ware="slot.ware" :price="slot.basePrice ?? slot.price" :newPrice="slot.ownPrice ?? slot.price"/>
         </component>
         <!-- Taken this generation: the player's cube and name where the ware lay (Jens, 19 Oct 2026) -->
         <div v-else-if="slot.takenBy !== undefined" class="dune-bazaar__slot dune-bazaar__slot--empty dune-bazaar__slot--taken" data-test="dune-bazaar-taken">

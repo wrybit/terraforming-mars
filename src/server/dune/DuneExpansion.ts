@@ -262,7 +262,7 @@ export class DuneExpansion {
       return undefined;
     }
     return {
-      bazaar: data.bazaar === undefined ? undefined : bazaarModel(game, data.bazaar),
+      bazaar: data.bazaar === undefined ? undefined : bazaarModel(game, data.bazaar, viewer),
       worm: data.worm === undefined ? undefined : wormModel(game, data.worm),
       kanly: data.kanly === undefined ? undefined : kanlyModel(game, data.kanly),
       smuggling: data.smuggling === undefined ? undefined : smugglingModel(game, data.smuggling),

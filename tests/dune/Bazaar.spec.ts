@@ -104,6 +104,19 @@ describe('Bazaar of Arrakeen (Dune module A)', () => {
     expect(player1.megaCredits).eq(100 - bazaarPrice(bazaarWare('Bene Gesserit Dossier'), 0, true));
   });
 
+  it('shows each player the printed price and the own price with slot and discounts', () => {
+    const bazaar = bazaarOf(game);
+    bazaar.slots = ['Bene Gesserit Dossier', null, 'Bene Gesserit Dossier', null, null];
+    const space = game.board.getAvailableSpacesOnLand(player1)[0];
+    game.simpleAddTile(player1, space, {tileType: TileType.COMMERCIAL_DISTRICT});
+    const ware = bazaarWare('Bene Gesserit Dossier');
+    const own = bazaarModel(game, bazaar, player1).slots[2];
+    expect([own.basePrice, own.ownPrice]).deep.eq([bazaarBasePrice(ware), bazaarPrice(ware, 2, true)]);
+    // Others and spectators: the slot price
+    expect(bazaarModel(game, bazaar, player2).slots[2].ownPrice).eq(bazaarPrice(ware, 2));
+    expect(bazaarModel(game, bazaar).slots[0].ownPrice).eq(bazaarPrice(ware, 0));
+  });
+
   it('pays out a ware at once', () => {
     const bazaar = bazaarOf(game);
     bazaar.slots = ['Bene Gesserit Dossier', 'Cistern of Tabr', null, null, 'Water Rings'];
