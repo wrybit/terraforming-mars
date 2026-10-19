@@ -52,8 +52,9 @@ export function initializeSmuggling(): SmugglingData {
   return {suspicion: {}};
 }
 
+/** Level on the track; games from before the track ended at 4 may hold a 5, which counts as the top (4) */
 export function suspicionOf(data: SmugglingData, player: IPlayer): number {
-  return data.suspicion[player.id] ?? 0;
+  return Math.min(MAX_SUSPICION, data.suspicion[player.id] ?? 0);
 }
 
 /** TR lost at the end of a generation for a suspicion level */

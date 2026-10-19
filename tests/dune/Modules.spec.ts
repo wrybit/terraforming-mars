@@ -178,6 +178,16 @@ describe('Dune modules B, D, E, F', () => {
       expect(smugglingTab(player1).options.map((input) => input.type)).deep.eq(['payment']);
     });
 
+    it('treats a 5 from the former track as the top and lowers it to 3 with a bribe', () => {
+      const smuggling = game.duneData!.smuggling!;
+      smuggling.suspicion[player1.id] = 5;
+      player1.megaCredits = 10;
+      expect(suspicionOf(smuggling, player1)).eq(4);
+      const bribe = cast(option(smugglingTab(player1), 'Bribe the officials'), SelectPayment);
+      bribe.process({type: 'payment', payment: Payment.of({megacredits: 10})}, player1);
+      expect(suspicionOf(smuggling, player1)).eq(3);
+    });
+
     it('has no smuggling tab without anything to do', () => {
       game.duneData!.smuggling!.suspicion[player1.id] = 4;
       player1.megaCredits = 0;
