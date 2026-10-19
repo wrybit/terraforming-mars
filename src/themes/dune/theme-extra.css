@@ -306,3 +306,17 @@ html.theme-dune .card-tile.tile-size--L {
   height: 64px;
   background-size: contain;
 }
+
+/* Prelude cards: the prelude mark of the mockup in the place of the cost coin instead of the pink Mars word */
+html.theme-dune .card-title .prelude-label {
+  top: 0;
+  left: -10px;
+  width: 50px;
+  height: 50px;
+  font-size: 0;
+  color: transparent;
+  background: url(graphics/prelude-mark.svg) center / contain no-repeat;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
