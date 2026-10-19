@@ -42,11 +42,15 @@
         <span v-if="added > 0" class="kanly-battle__eyebrow">{{ $t('After sending') }}</span>
         <span>{{ verdict[0] }}<PlayerChip v-if="forecast.holder !== undefined" :color="forecast.holder" :players="players"/>{{ verdict[1] }}</span>
       </p>
+      <!-- The move that fits the state (Kanly tab: send Sardaukar) -->
+      <slot></slot>
     </div>
     <div v-else class="kanly-battle__body">
       <span class="kanly-battle__eyebrow">{{ $t('War field') }}</span>
       <span class="kanly-battle__name">{{ $t('No battle') }}</span>
       <span class="kanly-battle__idle">{{ $t(kanly.foughtThisGeneration ? 'The battle of this generation is over' : 'No war field yet – the first to open one picks the target') }}</span>
+      <!-- Kanly tab: open the Kanly -->
+      <slot></slot>
     </div>
   </div>
 </template>

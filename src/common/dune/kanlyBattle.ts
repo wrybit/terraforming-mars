@@ -1,6 +1,9 @@
 // Kanly (Dune module F): who holds the war field at the end of the generation. One rule for server (resolveBattle in
 // server/dune/Kanly.ts) and client (the forecast in the Kanly tab and when sending Sardaukar), so both say the same.
 
+/** Opening a Kanly costs M€ (Solari) on top of the Sardaukar (Jens, 19 Oct 2026); the client shows it on the button */
+export const OPEN_KANLY_COST = 8;
+
 export type BattleForce<K> = {key: K, sardaukar: number};
 
 /**

@@ -229,3 +229,26 @@
     grid-column: 1;
   }
 }
+
+// Move button on the war field card (KanlyMoveButton.vue): below the text, the cost in brackets with the coin
+.kanly-battle .kanly-move-button {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.kanly-move-button__cost {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 600;
+
+  .resource_icon {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    background-size: contain;
+  }
+}

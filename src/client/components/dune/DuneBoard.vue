@@ -19,7 +19,8 @@
     </section>
     <!-- The moves of this module are made right here (duneTabActions.ts, duneMoves.ts) -->
     <DuneActionButtons :tab="tab" :actions="tabActions"/>
-    <DuneMovePanel :tab="tab"/>
+    <!-- Kanly opens its moves right below the war field card (KanlyPanel.vue) -->
+    <DuneMovePanel v-if="tab !== 'kanly'" :tab="tab"/>
   </div>
 </template>
 

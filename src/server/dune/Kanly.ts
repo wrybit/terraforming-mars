@@ -1,6 +1,6 @@
 import {IGame} from '../IGame';
 import {JOIN_KANLY_TITLE, KANLY_SEND_BUTTON, KANLY_SEND_TITLE, OPEN_KANLY_TITLE, RECRUIT_TITLE} from '../../common/dune/duneActionTitles';
-import {battleWinner} from '../../common/dune/kanlyBattle';
+import {battleWinner, OPEN_KANLY_COST} from '../../common/dune/kanlyBattle';
 import {IPlayer} from '../IPlayer';
 import {Space} from '../boards/Space';
 import {Board} from '../boards/Board';
@@ -50,8 +50,7 @@ export const SARDAUKAR_PRICES: ReadonlyArray<[Resource, number]> = [
 
 export const MAX_RECRUITS_PER_ACTION = 2;
 
-/** Opening a Kanly costs M€ (Solari) on top of the Sardaukar (Jens, 19 Oct 2026) */
-export const OPEN_KANLY_COST = 8;
+export {OPEN_KANLY_COST};
 
 export function initializeKanly(): KanlyData {
   return {garrison: {}, foughtThisGeneration: false};
