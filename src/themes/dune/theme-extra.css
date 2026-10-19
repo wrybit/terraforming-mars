@@ -96,10 +96,65 @@ html.theme-dune .background-color-prelude {
   color: #fff8ea;
 }
 
-/* Requirement plate: sand instead of the Mars yellow; maximum requirements in rust red */
+/* Requirement plate (variant B of the requirement study): a parchment sign that never wraps: symbols, value,
+   then one MIN or MAX mark per plate (arrow up green, arrow down red). Card.vue moves it into the top row, right of
+   the cost coin and on one axis with coin and tags, whenever the row has room; otherwise it stays in the content. */
 html.theme-dune .card-requirements {
-  background: linear-gradient(90deg, #c9b089 0%, #e0cca7 45%, #e0cca7 55%, #c9b089 100%);
-  color: #2a1c12;
+  flex: none;
+  align-self: center;
+  align-items: center;
+  width: auto;
+  max-width: none;
+  height: 28px;
+  line-height: normal;
+  padding: 0 4px 0 2px;
+  white-space: nowrap;
+  background: linear-gradient(#efe2c6, #e3d0aa);
+  border: 2px solid #8a6a40;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 35%);
+  color: #1d140c;
+}
+
+html.theme-dune .card-requirements.card-requirements--top {
+  margin: 0 auto 0 4px;
+}
+
+html.theme-dune .card-requirements .card-requirement .card-item-container {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+  margin: 0 1px;
+  font: 700 15px Ubuntu, sans-serif;
+  white-space: nowrap;
+}
+
+/* Symbols first, then the value */
+html.theme-dune .card-requirements .card-item-container > div {
+  order: -1;
+}
+
+html.theme-dune .card-requirements .card-requirement-max-label {
+  display: none;
+}
+
+html.theme-dune .card-requirements::after {
+  content: "▲ MIN";
+  order: 1;
+  margin-left: 3px;
+  padding: 3px 3px 2px;
+  border-radius: 3px;
+  background: #4f7d2b;
+  color: #fff;
+  font: 8px Michroma, sans-serif;
+  line-height: 1;
+}
+
+html.theme-dune .card-requirements.card-requirements-max::after {
+  content: "▼ MAX";
+  background: #b03a26;
 }
 
 /* Effect box of the Houses: darker parchment instead of the grey metal */
