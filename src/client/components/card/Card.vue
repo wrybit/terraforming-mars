@@ -149,6 +149,8 @@ export default defineComponent({
     cardClasses(): string {
       const classes = [];
       classes.push('card-' + this.card.name.toLowerCase().replaceAll(' ', '-'));
+      // Expansion of the card, so themes can mark it (Dune: the prelude mark with 1 or 2)
+      classes.push('card-module-' + this.cardExpansion);
 
       // Used action with the player cube: the card stays in color and fully visible – the cube shows the state like at
       // the table. A grey filter on the card would also grey out the cube (a parent's filter applies to all children).
