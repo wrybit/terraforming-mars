@@ -188,19 +188,32 @@ export function moveWorm(game: IGame, worm: WormData, distance: number): void {
   worm.thumper = undefined;
 }
 
-export function distanceInput(game: IGame, worm: WormData): OrOptions {
+/**
+ * The distances worth choosing: each one ends on a new space (at the rim or before rock the worm stops early, so longer
+ * distances would only repeat the last move). At least one entry, also when the worm cannot move at all.
+ */
+export function wormChoices(game: IGame, worm: WormData): Array<{distance: number, path: Array<Space>}> {
+  const choices: Array<{distance: number, path: Array<Space>}> = [];
   const max = maxWormDistance(game);
-  const options: Array<SelectOption> = [];
   for (let distance = 1; distance <= max; distance++) {
-    // Label with the space the worm ends on (it may stop earlier), so the chooser sees where it goes
     const path = wormPath(game.board, worm.spaceId, worm.direction, distance);
+    if (choices.length === 0 || path.length > choices[choices.length - 1].path.length) {
+      choices.push({distance, path});
+    }
+  }
+  return choices;
+}
+
+export function distanceInput(game: IGame, worm: WormData): OrOptions {
+  const options = wormChoices(game, worm).map(({distance, path}) => {
+    // Label with the space the worm ends on, so the chooser sees where it goes
     const end = path.length === 0 ? worm.spaceId : path[path.length - 1].id;
-    options.push(new SelectOption(message('${0} space(s): to ${1}', (b) => b.number(distance).rawString(arrakisCoordinate(end))), 'Move')
+    return new SelectOption(message('${0} space(s): to ${1}', (b) => b.number(path.length).rawString(arrakisCoordinate(end))), 'Move')
       .andThen(() => {
         moveWorm(game, worm, distance);
         return undefined;
-      }));
-  }
+      });
+  });
   // Plain title: the AI recognises the choice by it (ai/duneChoices.ts); the die shows on the Dune tab
   return new OrOptions(...options).setTitle(WORM_TITLE);
 }
@@ -213,5 +226,7 @@ export function wormModel(game: IGame, worm: WormData): WormModel {
     turned: worm.roll !== undefined && worm.direction !== undefined && worm.direction !== directionIndex(worm.roll),
     path: worm.path,
     chooser: worm.chooser === undefined ? undefined : game.getPlayerById(worm.chooser as IPlayer['id']).color,
+    // In the order of the options of distanceInput, so the client can show them on a piece of the map
+    choices: worm.chooser === undefined ? undefined : wormChoices(game, worm).map(({path}) => path.map((space) => space.id)),
   };
 }

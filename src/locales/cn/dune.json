@@ -275,5 +275,18 @@
   "Not your turn, or no spice and Solari to move it": "不是你的回合，或没有香料和索拉里来转运",
   "Not your turn, or not 2 of one resource": "不是你的回合，或没有同一资源 2 个",
   "Only with suspicion above 0 and enough Solari": "仅当嫌疑高于 0 且索拉里足够时",
-  "Keep ${0}": "保留 ${0}"
+  "Keep ${0}": "保留 ${0}",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "点击沙虫要移动到的格子。途经的每个板块都会受到影响。",
+  "Tile of": "板块所有者",
+  "After sending": "派遣之后",
+  "${0} takes the tile at the end of the generation": "${0} 在世代结束时夺取该板块",
+  "${0} keeps the tile at the end of the generation": "${0} 在世代结束时保住该板块",
+  "Defends": "防守",
+  "Opened the Kanly": "发起了血仇",
+  "Attacks": "进攻",
+  "Not involved": "未参与",
+  "Send ${0} Sardaukar": "派遣 ${0} 名萨督卡",
+  "Shai-Hulud lies here": "夏胡露在这里",
+  "Open offers": "公开报价",
+  "Send": "派遣"
 }

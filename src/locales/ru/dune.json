@@ -275,5 +275,18 @@
   "Not your turn, or no spice and Solari to move it": "Не ваш ход или нет пряности и солари для перевозки",
   "Not your turn, or not 2 of one resource": "Не ваш ход или нет 2 единиц одного ресурса",
   "Only with suspicion above 0 and enough Solari": "Только при подозрении выше 0 и достатке солари",
-  "Keep ${0}": "Оставить ${0}"
+  "Keep ${0}": "Оставить ${0}",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "Нажми на клетку, куда ползёт червь. Каждый тайл на пути будет задет.",
+  "Tile of": "Тайл игрока",
+  "After sending": "После отправки",
+  "${0} takes the tile at the end of the generation": "${0} забирает тайл в конце поколения",
+  "${0} keeps the tile at the end of the generation": "${0} сохраняет тайл в конце поколения",
+  "Defends": "защищает",
+  "Opened the Kanly": "объявил Канли",
+  "Attacks": "атакует",
+  "Not involved": "не участвует",
+  "Send ${0} Sardaukar": "Отправить ${0} сардаукаров",
+  "Shai-Hulud lies here": "Здесь Шай-Хулуд",
+  "Open offers": "Открытые предложения",
+  "Send": "Отправить"
 }

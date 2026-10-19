@@ -8,7 +8,7 @@ import {TileType} from '../../src/common/TileType';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {Space} from '../../src/server/boards/Space';
 import {ARRAKIS_ZONES, BEHIND_WORM_BORDER} from '../../src/common/dune/arrakisTerrain';
-import {WORM_START, WORM_TITLE, WormData, crossSpace, directionIndex, maxWormDistance, wormChooser, wormDirection, wormPath} from '../../src/server/dune/Worm';
+import {WORM_START, WORM_TITLE, WormData, crossSpace, directionIndex, distanceInput, maxWormDistance, wormChoices, wormChooser, wormDirection, wormPath} from '../../src/server/dune/Worm';
 import {LEVY_TITLE, PendingLevy, levyInput} from '../../src/server/dune/WormLevy';
 import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {formatMessage} from '../TestingUtils';
@@ -164,16 +164,31 @@ describe('Shai-Hulud (Dune module C)', () => {
     finishGenerationWithWorm();
     const input = cast(player2.getWaitingFor(), OrOptions);
     expect(input.title).eq(WORM_TITLE);
-    expect(input.options).has.length(3);
     const worm = wormOf(game);
+    // One option per distance that ends on a new space (rim or rock may stop the worm early)
+    const choices = wormChoices(game, worm);
+    expect(input.options).has.length(choices.length);
     const expected = wormPath(game.board, worm.spaceId, worm.direction, 3);
-    player2.process({type: 'or', index: 2, response: {type: 'option'}});
+    player2.process({type: 'or', index: choices.length - 1, response: {type: 'option'}});
     if (expected.length > 0) {
       const end = expected[expected.length - 1].id;
       expect(wormOf(game).spaceId).eq(end);
       expect(game.board.getAvailableSpacesOnLand(player1).map((space) => space.id)).not.includes(end);
       expect(game.board.getAvailableSpacesForOcean(player1).map((space) => space.id)).not.includes(end);
     }
+  });
+
+  it('offers each end space once: longer distances that stop at the same space are left out', () => {
+    const worm = wormOf(game);
+    worm.direction = wormDirection(game.board, worm.spaceId, 1);
+    const choices = wormChoices(game, worm);
+    expect(choices.length).is.greaterThan(0);
+    choices.forEach((choice, index) => {
+      if (index > 0) {
+        expect(choice.path.length).is.greaterThan(choices[index - 1].path.length);
+      }
+    });
+    expect(distanceInput(game, worm).options).has.length(choices.length);
   });
 
   it('asks again after a reload', () => {

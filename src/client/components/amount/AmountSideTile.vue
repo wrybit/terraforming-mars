@@ -4,7 +4,10 @@
   <div class="amount-side">
     <div class="amount-side__label">{{ $t(label) }}</div>
     <div class="amount-side__main">
-      <span :class="['amount-side__icon', {'amount-side__icon--production': side.kind === 'production'}]"><i :class="iconClass"></i></span>
+      <span :class="['amount-side__icon', {'amount-side__icon--production': side.kind === 'production'}]">
+        <img v-if="side.kind === 'figure'" class="amount-side__figure" :src="side.icon" alt="">
+        <i v-else :class="iconClass"></i>
+      </span>
       <span class="amount-side__values">
         <span>{{ format(before) }}</span>
         <span class="amount-side__arrow">→</span>
@@ -30,15 +33,20 @@ const props = defineProps<{
 
 const label = computed(() => {
   switch (props.side.kind) {
+  case 'figure': return props.side.label;
   case 'production': return 'Production';
   case 'card': return 'On card';
   default: return 'Stock';
   }
 });
 
-const iconClass = computed(() => props.side.kind === 'card' ?
-  ['card-resource', cardResourceCSS[props.side.resource]] :
-  ['resource_icon', 'resource_icon--' + props.side.resource]);
+const iconClass = computed(() => {
+  const side = props.side;
+  if (side.kind === 'figure') {
+    return [];
+  }
+  return side.kind === 'card' ? ['card-resource', cardResourceCSS[side.resource]] : ['resource_icon', 'resource_icon--' + side.resource];
+});
 
 // Production with sign as in the players table (+2, 0, -1)
 function format(value: number): string {

@@ -272,5 +272,18 @@
   "No offer of another player you can pay": "Ei toisen pelaajan tarjousta, jonka voit maksaa",
   "Not your turn, or no spice and Solari to move it": "Ei vuorosi, tai ei maustetta ja solaria siirtoon",
   "Not your turn, or not 2 of one resource": "Ei vuorosi, tai ei 2 samaa resurssia",
-  "Only with suspicion above 0 and enough Solari": "Vain kun epäily on yli 0 ja solaria riittää"
+  "Only with suspicion above 0 and enough Solari": "Vain kun epäily on yli 0 ja solaria riittää",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "Napsauta ruutua, johon mato liikkuu. Jokainen reitin laatta osuu.",
+  "Tile of": "Laatan omistaja",
+  "After sending": "Lähettämisen jälkeen",
+  "${0} takes the tile at the end of the generation": "${0} vie laatan sukupolven lopussa",
+  "${0} keeps the tile at the end of the generation": "${0} pitää laatan sukupolven lopussa",
+  "Defends": "puolustaa",
+  "Opened the Kanly": "avasi Kanlyn",
+  "Attacks": "hyökkää",
+  "Not involved": "ei mukana",
+  "Send ${0} Sardaukar": "Lähetä ${0} sardaukaria",
+  "Shai-Hulud lies here": "Shai-Hulud on tässä",
+  "Open offers": "Avoimet tarjoukset",
+  "Send": "Lähetä"
 }

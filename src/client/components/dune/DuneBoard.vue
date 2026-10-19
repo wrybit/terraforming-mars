@@ -11,7 +11,7 @@
     </section>
     <section v-if="tab === 'kanly' && dune.kanly" class="dune-board__section">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('res-sardaukar')" alt="">{{ $t('Kanly') }}</h3>
-      <KanlyPanel :kanly="dune.kanly" :players="players"/>
+      <KanlyPanel :kanly="dune.kanly" :players="players" :spaces="spaces"/>
     </section>
     <section v-if="tab === 'schemes' && dune.schemes" class="dune-board__section">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('res-advisor')" alt="">{{ $t('House schemes') }}</h3>
@@ -36,6 +36,7 @@ import {defineComponent, PropType} from 'vue';
 import {DuneModel} from '@/common/dune/DuneModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Color} from '@/common/Color';
+import {SpaceModel} from '@/common/models/SpaceModel';
 import {DuneBoardTabId} from '@/client/components/boardTabs/boardTabs';
 import BazaarBoard from './BazaarBoard.vue';
 import WormPanel from './WormPanel.vue';
@@ -62,6 +63,10 @@ export default defineComponent({
     },
     players: {
       type: Array as PropType<ReadonlyArray<PublicPlayerModel>>,
+      required: true,
+    },
+    spaces: {
+      type: Array as PropType<ReadonlyArray<SpaceModel>>,
       required: true,
     },
     viewerColor: {

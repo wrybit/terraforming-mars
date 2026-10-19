@@ -266,5 +266,18 @@
   "No offer of another player you can pay": "Geen aanbod van een andere speler dat je kunt betalen",
   "Not your turn, or no spice and Solari to move it": "Niet jouw beurt, of geen specie en Solari om die te verschuiven",
   "Not your turn, or not 2 of one resource": "Niet jouw beurt, of geen 2 van één grondstof",
-  "Only with suspicion above 0 and enough Solari": "Alleen met verdenking boven 0 en genoeg Solari"
+  "Only with suspicion above 0 and enough Solari": "Alleen met verdenking boven 0 en genoeg Solari",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "Klik op het veld waar de worm naartoe gaat. Elke tegel op de weg wordt geraakt.",
+  "Tile of": "Tegel van",
+  "After sending": "Na het sturen",
+  "${0} takes the tile at the end of the generation": "${0} neemt de tegel aan het einde van de generatie",
+  "${0} keeps the tile at the end of the generation": "${0} houdt de tegel aan het einde van de generatie",
+  "Defends": "verdedigt",
+  "Opened the Kanly": "opende de Kanly",
+  "Attacks": "valt aan",
+  "Not involved": "niet betrokken",
+  "Send ${0} Sardaukar": "${0} Sardaukar sturen",
+  "Shai-Hulud lies here": "Hier ligt Shai-Hulud",
+  "Open offers": "Open aanbiedingen",
+  "Send": "Sturen"
 }

@@ -274,5 +274,18 @@
   "No offer of another player you can pay": "Немає пропозиції іншого гравця, яку ви можете оплатити",
   "Not your turn, or no spice and Solari to move it": "Не ваш хід або немає прянощів і соларі для перевезення",
   "Not your turn, or not 2 of one resource": "Не ваш хід або немає 2 одиниць одного ресурсу",
-  "Only with suspicion above 0 and enough Solari": "Лише при підозрі понад 0 і достатній кількості соларі"
+  "Only with suspicion above 0 and enough Solari": "Лише при підозрі понад 0 і достатній кількості соларі",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "Натисни на клітинку, куди повзе черв. Кожен тайл на шляху буде зачеплено.",
+  "Tile of": "Тайл гравця",
+  "After sending": "Після відправлення",
+  "${0} takes the tile at the end of the generation": "${0} забирає тайл наприкінці покоління",
+  "${0} keeps the tile at the end of the generation": "${0} зберігає тайл наприкінці покоління",
+  "Defends": "захищає",
+  "Opened the Kanly": "оголосив Канлі",
+  "Attacks": "атакує",
+  "Not involved": "не бере участі",
+  "Send ${0} Sardaukar": "Відправити ${0} сардаукарів",
+  "Shai-Hulud lies here": "Тут Шай-Хулуд",
+  "Open offers": "Відкриті пропозиції",
+  "Send": "Відправити"
 }

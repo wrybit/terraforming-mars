@@ -272,5 +272,16 @@
   "No offer of another player you can pay": "Ingen tilbud fra en annen spiller du kan betale",
   "Not your turn, or no spice and Solari to move it": "Ikke din tur, eller ikke krydder og solari til å flytte det",
   "Not your turn, or not 2 of one resource": "Ikke din tur, eller ikke 2 av én ressurs",
-  "Only with suspicion above 0 and enough Solari": "Bare med mistanke over 0 og nok solari"
+  "Only with suspicion above 0 and enough Solari": "Bare med mistanke over 0 og nok solari",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "Klikk på feltet ormen flytter til. Hver brikke den krysser blir truffet.",
+  "Tile of": "Brikke til",
+  "After sending": "Etter utsendelsen",
+  "${0} takes the tile at the end of the generation": "${0} tar brikken ved slutten av generasjonen",
+  "${0} keeps the tile at the end of the generation": "${0} beholder brikken ved slutten av generasjonen",
+  "Defends": "forsvarer",
+  "Opened the Kanly": "åpnet Kanly",
+  "Attacks": "angriper",
+  "Not involved": "ikke med",
+  "Shai-Hulud lies here": "Her ligger Shai-Hulud",
+  "Open offers": "Åpne tilbud"
 }

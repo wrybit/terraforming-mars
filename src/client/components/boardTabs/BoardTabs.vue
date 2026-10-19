@@ -13,6 +13,7 @@
         <span class="board-tab-head"><span class="board-tab-name">{{ $t(label(tab)) }}</span><HotkeyKeys :action="'board-' + tab"/></span>
         <!-- The active tab drops its short info: the board itself shows it, the others get the room -->
         <BoardTabLines v-if="tab !== active" :tracks="tracks(tab)"/>
+        <BoardTabInfo v-if="tab !== active && info(tab) !== undefined" :info="info(tab)!"/>
       </button>
     </div>
     <div v-docked-tab ref="panel" :class="['or-tab-panel', 'board-tabs-panel', 'board-tabs-panel--' + active, 'or-tab-panel--tone-' + tone(active), {'board-tabs-panel--single': tabs.length < 2}]" role="tabpanel">
@@ -38,9 +39,10 @@ import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {vDockedTab} from '@/client/directives/DockedTab';
 import {TileView} from '@/client/components/board/TileView';
 import BoardTabLines from './BoardTabLines.vue';
+import BoardTabInfo from './BoardTabInfo.vue';
 import TileViewToggle from './TileViewToggle.vue';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
-import {BOARD_TAB_LABEL, BOARD_TAB_TONE, BoardTabId, BoardTabTrack, boardTabTracks, boardTabs} from './boardTabs';
+import {BOARD_TAB_LABEL, BOARD_TAB_TONE, BoardTabId, BoardTabInfo as BoardTabInfoModel, BoardTabTrack, boardTabInfo, boardTabTracks, boardTabs} from './boardTabs';
 import {boardTabState, selectBoardTab} from './boardTabState';
 import {observeBoardTabFit} from './boardTabFit';
 import {RING_BOARD_SIZE} from '@/client/components/moon/moonRing';
@@ -54,7 +56,7 @@ let stopFit: (() => void) | undefined;
 
 export default defineComponent({
   name: 'BoardTabs',
-  components: {BoardTabLines, TileViewToggle, HotkeyKeys},
+  components: {BoardTabLines, BoardTabInfo, TileViewToggle, HotkeyKeys},
   directives: {dockedTab: vDockedTab},
   props: {
     game: {
@@ -111,6 +113,9 @@ export default defineComponent({
     },
     label(tab: BoardTabId): string {
       return BOARD_TAB_LABEL[tab];
+    },
+    info(tab: BoardTabId): BoardTabInfoModel | undefined {
+      return boardTabInfo(this.game, tab);
     },
     tracks(tab: BoardTabId): Array<BoardTabTrack> {
       return boardTabTracks(this.game, this.players, tab);

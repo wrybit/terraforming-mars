@@ -39,7 +39,7 @@
     </template>
     <!-- Dune expansion: one tab per module of this game -->
     <template v-for="tab in duneTabs" :key="tab" #[tab]>
-      <DuneBoard v-if="game.dune" :dune="game.dune" :tab="tab" :players="players" :viewerColor="viewerColor"/>
+      <DuneBoard v-if="game.dune" :dune="game.dune" :tab="tab" :players="players" :spaces="game.spaces" :viewerColor="viewerColor"/>
     </template>
   </BoardTabs>
 

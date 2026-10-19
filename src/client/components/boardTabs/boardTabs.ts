@@ -9,6 +9,8 @@ import {PLANETARY_TRACKS} from '@/common/pathfinders/PlanetaryTracks';
 import {PathfindersModel} from '@/common/models/PathfindersModel';
 import {Color} from '@/common/Color';
 import {COSTLY_SUSPICION, MAX_SUSPICION} from '@/common/dune/DuneModel';
+import {arrakisCoordinate} from '@/common/dune/arrakisCoordinates';
+import {duneGraphic} from '@/client/components/dune/duneGraphic';
 
 // The Dune expansion gets one tab per module of this game (common/dune/DuneModule.ts), in the order of the concept
 export const DUNE_BOARD_TABS = ['bazaar', 'worm', 'kanly', 'schemes', 'choam', 'smuggling'] as const;
@@ -164,5 +166,49 @@ export function boardTabTracks(game: GameModel, players: ReadonlyArray<PublicPla
   default:
     // Shai-Hulud, Kanly, schemes and CHOAM have no track worth a line
     return [];
+  }
+}
+
+// Short info of a Dune module tab beside the lines: a picture, a short text (a coordinate, a number) and small player
+// counts in the player colours – so the tab tells what happens in it without opening it
+export type BoardTabInfo = {
+  icon: string,
+  text?: string,
+  counts?: ReadonlyArray<{color: Color, value: number}>,
+  /** Tooltip, translation key */
+  title: string,
+};
+
+export function boardTabInfo(game: GameModel, id: BoardTabId): BoardTabInfo | undefined {
+  const dune = game.dune;
+  switch (id) {
+  case 'worm': {
+    const worm = dune?.worm;
+    return worm === undefined ? undefined : {icon: duneGraphic('special-worm-domain'), text: arrakisCoordinate(worm.spaceId), title: 'Shai-Hulud lies here'};
+  }
+  case 'kanly': {
+    const kanly = dune?.kanly;
+    if (kanly === undefined) {
+      return undefined;
+    }
+    const battle = kanly.battle;
+    if (battle !== undefined) {
+      return {icon: duneGraphic('res-sardaukar'), text: arrakisCoordinate(battle.spaceId), title: 'War field',
+        counts: battle.troops.map((entry) => ({color: entry.color, value: entry.sardaukar}))};
+    }
+    return {icon: duneGraphic('res-sardaukar'), title: 'Garrison',
+      counts: kanly.garrisons.map((entry) => ({color: entry.color, value: entry.sardaukar}))};
+  }
+  case 'schemes': {
+    const schemes = dune?.schemes;
+    return schemes === undefined ? undefined : {icon: duneGraphic('res-advisor'), title: 'Agendas',
+      counts: schemes.players.map((entry) => ({color: entry.color, value: entry.count}))};
+  }
+  case 'choam': {
+    const choam = dune?.choam;
+    return choam === undefined ? undefined : {icon: duneGraphic('coin'), text: String(choam.offers.length), title: 'Open offers'};
+  }
+  default:
+    return undefined;
   }
 }

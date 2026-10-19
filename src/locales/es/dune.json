@@ -272,5 +272,18 @@
   "Not your turn, or no spice and Solari to move it": "No es tu turno o no tienes especia ni solaris para moverla",
   "Not your turn, or not 2 of one resource": "No es tu turno o no tienes 2 de un recurso",
   "Only with suspicion above 0 and enough Solari": "Solo con sospecha mayor que 0 y suficientes solaris",
-  "Keep ${0}": "Conservar ${0}"
+  "Keep ${0}": "Conservar ${0}",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "Haz clic en la casilla a la que se mueve el gusano. Cada loseta que cruza resulta afectada.",
+  "Tile of": "Loseta de",
+  "After sending": "Tras el envío",
+  "${0} takes the tile at the end of the generation": "${0} se queda con la loseta al final de la generación",
+  "${0} keeps the tile at the end of the generation": "${0} conserva la loseta al final de la generación",
+  "Defends": "defiende",
+  "Opened the Kanly": "abrió el Kanly",
+  "Attacks": "ataca",
+  "Not involved": "no participa",
+  "Send ${0} Sardaukar": "Enviar ${0} Sardaukar",
+  "Shai-Hulud lies here": "Aquí está Shai-Hulud",
+  "Open offers": "Ofertas abiertas",
+  "Send": "Enviar"
 }

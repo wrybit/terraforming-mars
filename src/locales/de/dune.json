@@ -269,5 +269,18 @@
   "No offer of another player you can pay": "Kein Angebot eines anderen Spielers, das du bezahlen kannst",
   "Not your turn, or no spice and Solari to move it": "Du bist nicht am Zug oder hast kein Spice und keine Solari dafür",
   "Not your turn, or not 2 of one resource": "Du bist nicht am Zug oder hast von keiner Ressource 2",
-  "Only with suspicion above 0 and enough Solari": "Nur mit Verdacht über 0 und genug Solari"
+  "Only with suspicion above 0 and enough Solari": "Nur mit Verdacht über 0 und genug Solari",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "Klicke auf das Feld, zu dem der Wurm zieht. Jedes Plättchen auf dem Weg wird getroffen.",
+  "Tile of": "Plättchen von",
+  "After sending": "Nach dem Entsenden",
+  "${0} takes the tile at the end of the generation": "${0} nimmt das Plättchen am Ende der Generation",
+  "${0} keeps the tile at the end of the generation": "${0} behält das Plättchen am Ende der Generation",
+  "Defends": "verteidigt",
+  "Opened the Kanly": "hat Kanly eröffnet",
+  "Attacks": "greift an",
+  "Not involved": "nicht beteiligt",
+  "Send ${0} Sardaukar": "${0} Sardaukar entsenden",
+  "Shai-Hulud lies here": "Hier liegt Shai-Hulud",
+  "Open offers": "Offene Angebote",
+  "Send": "Entsenden"
 }

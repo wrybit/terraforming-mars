@@ -1,5 +1,6 @@
 import {IGame} from '../IGame';
-import {JOIN_KANLY_TITLE, OPEN_KANLY_TITLE, RECRUIT_TITLE} from '../../common/dune/duneActionTitles';
+import {JOIN_KANLY_TITLE, KANLY_SEND_BUTTON, KANLY_SEND_TITLE, OPEN_KANLY_TITLE, RECRUIT_TITLE} from '../../common/dune/duneActionTitles';
+import {battleWinner} from '../../common/dune/kanlyBattle';
 import {IPlayer} from '../IPlayer';
 import {Space} from '../boards/Space';
 import {Board} from '../boards/Board';
@@ -132,7 +133,7 @@ function openInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
       player.game.log('The shield generator of ${0} holds 2 Sardaukar in the war field', (b) => b.player(owner));
     }
     player.game.log('${0} declares Kanly on ${1}', (b) => b.player(player).space(space));
-    return new SelectAmount('Sardaukar to send to the war field', 'Send', 1, garrison, true).andThen((amount) => {
+    return new SelectAmount(KANLY_SEND_TITLE, KANLY_SEND_BUTTON, 1, garrison, true).andThen((amount) => {
       sendTroops(player, data, amount);
       return undefined;
     });
@@ -144,7 +145,7 @@ function joinInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
   if (data.battle === undefined || garrison < 1) {
     return undefined;
   }
-  return new SelectAmount(JOIN_KANLY_TITLE, 'Send', 1, garrison, true).andThen((amount) => {
+  return new SelectAmount(JOIN_KANLY_TITLE, KANLY_SEND_BUTTON, 1, garrison, true).andThen((amount) => {
     sendTroops(player, data, amount);
     player.game.log('${0} sent ${1} Sardaukar to the war field', (b) => b.player(player).number(amount));
     return undefined;
@@ -170,23 +171,10 @@ export function resolveBattle(game: IGame, data: KanlyData): void {
   if (owner === undefined || space.tile === undefined) {
     return;
   }
-  const ownerTroops = battle.troops[owner.id] ?? 0;
-  let winner: IPlayer | undefined;
-  let most = ownerTroops;
-  let tie = false;
-  for (const [playerId, troops] of Object.entries(battle.troops) as Array<[PlayerId, number]>) {
-    if (playerId === owner.id) {
-      continue;
-    }
-    if (troops > most) {
-      winner = game.getPlayerById(playerId);
-      most = troops;
-      tie = false;
-    } else if (troops === most && winner !== undefined) {
-      tie = true;
-    }
-  }
-  if (winner === undefined || tie) {
+  const forces = (Object.entries(battle.troops) as Array<[PlayerId, number]>).map(([key, sardaukar]) => ({key, sardaukar}));
+  const winnerId = battleWinner(owner.id, forces);
+  const winner = winnerId === undefined ? undefined : game.getPlayerById(winnerId);
+  if (winner === undefined) {
     game.log('${0} holds ${1} in the Kanly', (b) => b.player(owner).space(space));
     return;
   }

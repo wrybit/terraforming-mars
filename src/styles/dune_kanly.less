@@ -1,0 +1,172 @@
+// Kanly war field (KanlyBattleCard.vue): tile and owner on top, everybody's Sardaukar as rows, the forecast below.
+// Rows sit closer together than the three blocks (law of proximity).
+.kanly-battle {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 520px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  border: 1px solid rgba(232, 168, 90, 0.45);
+  border-radius: 12px;
+  background: rgba(42, 28, 18, 0.6);
+  color: #f1e2c2;
+}
+
+.kanly-battle__field {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.kanly-battle__hex {
+  flex: none;
+  transform: scale(1.3);
+  margin: 6px 8px;
+}
+
+.kanly-battle__place {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.kanly-battle__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #cbb994;
+}
+
+.kanly-battle__name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.kanly-battle__coordinate {
+  margin-left: 4px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  font-family: Prototype, sans-serif;
+  font-size: 13px;
+  color: #cbb994;
+}
+
+.kanly-battle__owner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #cbb994;
+}
+
+.kanly-battle__forces {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kanly-battle__force {
+  display: grid;
+  grid-template-columns: minmax(0, 7.5em) minmax(0, 8.5em) 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+
+  .dune-player-chip {
+    justify-self: start;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// Who would hold the tile now: framed like a selected tile
+.kanly-battle__force--holder {
+  box-shadow: inset 0 0 0 2px #e8a85a;
+  background: rgba(224, 102, 42, 0.18);
+}
+
+.kanly-battle__role {
+  font-size: 12px;
+  color: #cbb994;
+}
+
+.kanly-battle__troops {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 24px;
+}
+
+.kanly-battle__icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+}
+
+// About to be sent: lighter and outlined, so it reads as "not yet there"
+.kanly-battle__icon--added {
+  opacity: 0.6;
+  outline: 2px dashed #8fd67a;
+  outline-offset: -2px;
+}
+
+.kanly-battle__none {
+  color: #8f8473;
+}
+
+.kanly-battle__count {
+  font-family: Prototype, sans-serif;
+  font-size: 20px;
+  min-width: 2.2em;
+  text-align: right;
+}
+
+.kanly-battle__plus {
+  margin-left: 3px;
+  font-size: 13px;
+  color: #8fd67a;
+}
+
+.kanly-battle__verdict {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+  font-size: 14px;
+
+  .dune-player-chip {
+    margin: 0 4px;
+  }
+}
+
+.kanly-battle__verdict--change {
+  color: #ffcf8a;
+}
+
+// In the send input: the card above the slider, both centered
+.amount-select__context {
+  margin: 0 auto 18px;
+}
+
+// Phone: role under the name, icons and count in the second line
+@media (max-width: 600px) {
+  .kanly-battle__force {
+    grid-template-columns: 1fr auto;
+    gap: 4px 10px;
+  }
+
+  .kanly-battle__troops {
+    grid-column: 1;
+  }
+}

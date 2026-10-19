@@ -7,9 +7,9 @@
       :change="modelValue * conversion.from.perStep" direction="loss"/>
     <div class="amount-converter__middle">
       <div class="amount-rate">
-        {{ conversion.from.perStep }} <i :class="iconClass(conversion.from)"></i>
+        {{ conversion.from.perStep }} <img v-if="conversion.from.kind === 'figure'" class="amount-rate__icon" :src="conversion.from.icon" alt=""><i v-else :class="iconClass(conversion.from)"></i>
         <span class="amount-rate__arrow">→</span>
-        {{ conversion.to.perStep }} <i :class="iconClass(conversion.to)"></i>
+        {{ conversion.to.perStep }} <img v-if="conversion.to.kind === 'figure'" class="amount-rate__icon" :src="conversion.to.icon" alt=""><i v-else :class="iconClass(conversion.to)"></i>
       </div>
       <AmountSlider :modelValue="modelValue" :min="min" :max="max" @update:modelValue="$emit('update:modelValue', $event)"/>
     </div>
@@ -45,6 +45,9 @@ const fromBefore = computed(() => amountSideValue(props.conversion.from, props.p
 const toBefore = computed(() => amountSideValue(props.conversion.to, props.player, props.sourceCard));
 
 function iconClass(side: AmountSide): Array<string> {
+  if (side.kind === 'figure') {
+    return [];
+  }
   return side.kind === 'card' ?
     ['amount-rate__icon', 'card-resource', cardResourceCSS[side.resource]] :
     ['amount-rate__icon', 'resource_icon', 'resource_icon--' + side.resource];

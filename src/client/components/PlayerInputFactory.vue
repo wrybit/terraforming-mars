@@ -34,6 +34,7 @@ import SelectResource from '@/client/components/SelectResource.vue';
 import SelectResources from '@/client/components/SelectResources.vue';
 import SelectClaimedUndergroundToken from '@/client/components/SelectClaimedUndergroundToken.vue';
 import DeltaProjectInput from '@/client/components/delta/DeltaProjectInput.vue';
+import {duneInputComponent} from '@/client/components/dune/duneInputs';
 
 // Shared contract every input component must satisfy. `playerinput` and
 // `onsave` are narrowed to the discriminated variant whose `type` matches K.
@@ -114,7 +115,8 @@ export default defineComponent({
     },
     resolvedComponent(): Component {
       const input = this.playerinput;
-      return inputComponents[input.type];
+      // Dune: some module choices come with their own picture (dune/duneInputs.ts)
+      return duneInputComponent(input, this.playerView) ?? inputComponents[input.type];
     },
   },
 });

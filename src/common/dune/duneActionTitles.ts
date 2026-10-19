@@ -14,6 +14,9 @@ export const LEVY_TITLE = 'Shai-Hulud: pay resources worth ${0}';
 export const RECRUIT_TITLE = 'Recruit Sardaukar';
 export const OPEN_KANLY_TITLE = 'Open Kanly: choose the war field';
 export const JOIN_KANLY_TITLE = 'Send Sardaukar to the war field';
+/** Amount right after opening the Kanly: how many Sardaukar march out first */
+export const KANLY_SEND_TITLE = 'Sardaukar to send to the war field';
+export const KANLY_SEND_BUTTON = 'Send';
 
 export const SCHEMES_TITLE = 'House schemes: which agenda do you keep?';
 

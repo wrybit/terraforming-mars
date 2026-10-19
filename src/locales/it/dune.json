@@ -271,5 +271,18 @@
   "Not your turn, or no spice and Solari to move it": "Non è il tuo turno o non hai spezia e Solari per spostarla",
   "Not your turn, or not 2 of one resource": "Non è il tuo turno o non hai 2 di una risorsa",
   "Only with suspicion above 0 and enough Solari": "Solo con sospetto sopra 0 e abbastanza Solari",
-  "Keep ${0}": "Tieni ${0}"
+  "Keep ${0}": "Tieni ${0}",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "Clicca sulla casella in cui si sposta il verme. Ogni tessera attraversata viene colpita.",
+  "Tile of": "Tessera di",
+  "After sending": "Dopo l'invio",
+  "${0} takes the tile at the end of the generation": "${0} prende la tessera alla fine della generazione",
+  "${0} keeps the tile at the end of the generation": "${0} mantiene la tessera alla fine della generazione",
+  "Defends": "difende",
+  "Opened the Kanly": "ha aperto il Kanly",
+  "Attacks": "attacca",
+  "Not involved": "non coinvolto",
+  "Send ${0} Sardaukar": "Invia ${0} Sardaukar",
+  "Shai-Hulud lies here": "Qui si trova Shai-Hulud",
+  "Open offers": "Offerte aperte",
+  "Send": "Invia"
 }

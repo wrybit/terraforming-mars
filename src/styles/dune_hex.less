@@ -1,0 +1,29 @@
+// One Arrakis space outside the board (ArrakisHex.vue): terrain colour as a hex, the space from the board on top
+.arrakis-hex {
+  position: relative;
+  width: 46px;
+  height: 51px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: #c99a5b;
+
+  // The space keeps its look from the board but sits in the hex instead of at its board position
+  .board-space.board-space {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    cursor: default;
+  }
+
+  // Empty spaces: the terrain colour instead of the white hex of Mars
+  .board-space-type-land {
+    background: none;
+  }
+}
+
+// Terrain colours of the Arrakis zones (common/dune/arrakisTerrain.ts)
+.arrakis-hex--rock { background: #6b4a32; }
+.arrakis-hex--erg { background: #c99a5b; }
+.arrakis-hex--basin { background: #a8743f; }
+.arrakis-hex--spicefield { background: #d9822b; }
+.arrakis-hex--city { background: #8a6d4c; }
+.arrakis-hex--ice { background: #cfd8dc; }

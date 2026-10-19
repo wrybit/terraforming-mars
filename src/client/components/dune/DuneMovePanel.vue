@@ -35,6 +35,7 @@ import {DuneBoardTabId} from '@/client/components/boardTabs/boardTabs';
 import {vueRoot} from '@/client/components/vueRoot';
 import ChoiceOptionTile from '@/client/components/ChoiceOptionTile.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
+import {duneInputComponent} from './duneInputs';
 import {closeMove, inputAt, movePath, openDuneMove, optionsOf, sendMove, wrapResponse} from './duneMoves';
 
 type Level = {depth: number, input: PlayerInputModel, options: ReadonlyArray<PlayerInputModel>};
@@ -78,9 +79,16 @@ export default defineComponent({
     target(): PlayerInputModel | undefined {
       return this.chain === undefined || this.waitingFor === undefined ? undefined : inputAt(this.waitingFor, this.chain);
     },
+    // The move has its own picture (e.g. the worm's way on the map): shown whole instead of as tiles
+    ownInput(): boolean {
+      return this.target !== undefined && this.playerView !== undefined && duneInputComponent(this.target, this.playerView) !== undefined;
+    },
     // Choices from the move down to the first unchosen one
     levels(): Array<Level> {
       const levels: Array<Level> = [];
+      if (this.ownInput) {
+        return levels;
+      }
       let node = this.target;
       for (let depth = 0; node !== undefined && node.type === 'or'; depth++) {
         levels.push({depth, input: node, options: optionsOf(node)});
@@ -91,6 +99,9 @@ export default defineComponent({
     },
     // Last step: the chosen input that is no further choice
     leaf(): PlayerInputModel | undefined {
+      if (this.ownInput) {
+        return this.target;
+      }
       const node = this.target === undefined ? undefined : inputAt(this.target, this.chosen);
       return node === undefined || node.type === 'or' ? undefined : node;
     },

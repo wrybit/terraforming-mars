@@ -16,7 +16,7 @@ describe('amountConversion', () => {
 
   it('reads parameterised titles by their key', () => {
     const voltaic = amountConversion({message: 'Select up to ${0} steel to convert to titanium', data: []}, undefined);
-    expect(voltaic?.to.resource).eq(Resource.TITANIUM);
+    expect(voltaic?.to).deep.eq({kind: 'stock', resource: Resource.TITANIUM, perStep: 1});
   });
 
   it('takes stock, production or resources on the triggering card', () => {

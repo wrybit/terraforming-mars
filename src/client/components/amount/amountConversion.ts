@@ -9,12 +9,16 @@ import {resourceSnapshot, titleText} from '@/client/components/selectPlayerResou
 // and by how much per step of the slider
 export type AmountSide =
   | {kind: 'stock' | 'production', resource: Resource, perStep: number}
-  | {kind: 'card', resource: CardResource, perStep: number};
+  | {kind: 'card', resource: CardResource, perStep: number}
+  // Anything else with a picture (e.g. Dune Sardaukar in garrison and war field): label, picture and value come along
+  | {kind: 'figure', label: string, icon: string, perStep: number, before: number};
 
 // What one slider step converts: source (loses) and target (gains)
 export type AmountConversion = {
   from: AmountSide,
   to: AmountSide,
+  /** Button text with the amount as ${0} ("Send ${0} Sardaukar"); otherwise the input's label plus the amount */
+  buttonLabel?: string,
 };
 
 type ConversionRule = {
@@ -55,6 +59,9 @@ export function amountConversion(title: string | Message, sourceCard: CardName |
 
 // Current value of a side for the player: stock or production, or resources on the triggering card
 export function amountSideValue(side: AmountSide, player: PublicPlayerModel, sourceCard: CardName | undefined): number {
+  if (side.kind === 'figure') {
+    return side.before;
+  }
   if (side.kind === 'card') {
     return player.tableau.find((card) => card.name === sourceCard)?.resources ?? 0;
   }

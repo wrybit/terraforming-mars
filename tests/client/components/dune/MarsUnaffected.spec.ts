@@ -1,5 +1,8 @@
 import {expect} from 'chai';
-import {boardTabs, DUNE_BOARD_TABS} from '@/client/components/boardTabs/boardTabs';
+import {boardTabInfo, boardTabs, DUNE_BOARD_TABS} from '@/client/components/boardTabs/boardTabs';
+import {duneInputComponent} from '@/client/components/dune/duneInputs';
+import {WORM_TITLE} from '@/common/dune/duneActionTitles';
+import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {fakeGameModel} from '../testHelpers';
 import {OrOptionsModel} from '@/common/models/PlayerInputModel';
 import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
@@ -23,5 +26,15 @@ describe('Mars client is unaffected by Dune', () => {
     const menu = {type: 'or', title: 'Take your first action', buttonLabel: 'OK',
       options: titles.map((title) => ({type: 'option', title, buttonLabel: 'OK'}))} as unknown as OrOptionsModel;
     expect(displayedOptionIndices(menu)).deep.eq([0, 1, 2, 3, 4]);
+  });
+
+  it('gives the Mars tabs no module info and Mars inputs no Dune picture', () => {
+    const game = fakeGameModel();
+    for (const tab of boardTabs(game)) {
+      expect(boardTabInfo(game, tab)).is.undefined;
+    }
+    const view = {game} as unknown as PlayerViewModel;
+    const worm = {type: 'or', title: WORM_TITLE, buttonLabel: 'OK', options: []} as unknown as OrOptionsModel;
+    expect(duneInputComponent(worm, view)).is.undefined;
   });
 });

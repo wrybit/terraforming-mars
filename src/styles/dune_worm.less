@@ -2,11 +2,11 @@
 // so it stands out on rock, sand and on a tile it lies on
 .board-space-worm {
   position: absolute;
-  inset: 18%;
-  z-index: 3;
-  border-radius: 50%;
-  background: #f1e2c2 url(./assets/themes/dune/graphics/special-worm-domain.svg) center / 82% no-repeat;
-  box-shadow: 0 0 0 2px #2a1c12, 0 0 8px 2px rgba(224, 102, 42, 0.85);
+  inset: 6%;
+  z-index: 5;
+  // The maw from above as a round token lying on top of the tile (scripts/make-worm-token.py)
+  background: url(./assets/themes/dune/graphics/token-worm.svg) center / contain no-repeat;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.6));
   pointer-events: none;
 }
 
@@ -23,4 +23,111 @@
   background: #8c3522 url(./assets/themes/dune/graphics/res-sardaukar.svg) center / 70% no-repeat;
   box-shadow: 0 0 0 2px #f1e2c2, 0 0 8px 2px rgba(140, 53, 34, 0.9);
   pointer-events: none;
+}
+
+// Choosing the worm's distance (WormMoveInput.vue): a piece of Arrakis, the terrain as coloured hexes under the tiles
+@worm-way: #e0662a;
+
+.worm-move {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.worm-move__hint,
+.worm-move__chosen {
+  margin: 0;
+  text-align: center;
+  color: #cbb994;
+}
+
+.worm-move__chosen {
+  min-height: 1.3em;
+  font-weight: 600;
+  color: #f1e2c2;
+}
+
+.worm-map {
+  position: relative;
+  margin: 0 auto;
+}
+
+.worm-map__board {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+}
+
+.worm-map .worm-map__cell {
+  position: absolute;
+}
+
+// Around the way: only for orientation
+.worm-map__cell--context {
+  opacity: 0.35;
+}
+
+// The chosen way glows in spice orange
+.worm-map__cell--way::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: fade(@worm-way, 45%);
+  box-shadow: inset 0 0 0 3px @worm-way;
+  pointer-events: none;
+}
+
+// End spaces: a ring with the distance, the whole space is the click target
+// Two classes: the hotkey rule for labels (hotkeys.less, label:has(> …)) would make it relative
+.worm-map .worm-map__target {
+  position: absolute;
+  z-index: 6;
+  width: 46px;
+  height: 51px;
+  display: grid;
+  // Badge at the top of the space, so tile and cube below stay visible
+  place-items: start center;
+  cursor: pointer;
+}
+
+.worm-map__distance {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  border-radius: 50%;
+  border: 1.5px solid #f1e2c2;
+  background: rgba(42, 28, 18, 0.85);
+  color: #f1e2c2;
+  font-family: Prototype, sans-serif;
+  font-size: 10px;
+  line-height: 1;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+  transition: transform 0.15s ease;
+}
+
+// The distance badge already is the number key (1 = one space …): no second key cap on the map
+.worm-map .worm-map__target .hotkey-item-number {
+  display: none;
+}
+
+.worm-map__target:hover .worm-map__distance {
+  transform: scale(1.15);
+}
+
+.worm-map__target--chosen .worm-map__distance {
+  border-color: #fff8ea;
+  background: @worm-way;
+  color: #fff8ea;
+  transform: scale(1.2);
+  box-shadow: 0 0 10px 2px fade(@worm-way, 80%);
+}
+
+.worm-move__actions {
+  display: flex;
+  justify-content: flex-end;
 }

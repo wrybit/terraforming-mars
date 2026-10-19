@@ -272,5 +272,18 @@
   "Not your turn, or no spice and Solari to move it": "Nie twoja tura lub brak przyprawy i Solari",
   "Not your turn, or not 2 of one resource": "Nie twoja tura lub brak 2 jednostek jednego zasobu",
   "Only with suspicion above 0 and enough Solari": "Tylko przy podejrzeniu powyżej 0 i wystarczającej liczbie Solari",
-  "Keep ${0}": "Zachowaj ${0}"
+  "Keep ${0}": "Zachowaj ${0}",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "Kliknij pole, na które ruszy czerw. Każdy kafelek na drodze zostanie trafiony.",
+  "Tile of": "Kafelek gracza",
+  "After sending": "Po wysłaniu",
+  "${0} takes the tile at the end of the generation": "${0} przejmuje kafelek na koniec pokolenia",
+  "${0} keeps the tile at the end of the generation": "${0} zatrzymuje kafelek na koniec pokolenia",
+  "Defends": "broni",
+  "Opened the Kanly": "otworzył Kanly",
+  "Attacks": "atakuje",
+  "Not involved": "nie uczestniczy",
+  "Send ${0} Sardaukar": "Wyślij ${0} Sardaukarów",
+  "Shai-Hulud lies here": "Tu leży Shai-Hulud",
+  "Open offers": "Otwarte oferty",
+  "Send": "Wyślij"
 }

@@ -17,7 +17,10 @@
     width: var(--sprite-cell);
     height: var(--sprite-cell);
     transform: translate(-50%, -50%);
-    background-image: var(--sprite-image);
+    // The sheet as a plain path here, not from the component's --sprite-image: a url() inside a custom property
+    // resolves against the stylesheet that uses it, and the Dune theme serves its recoloured copy from
+    // assets/themes/dune/ – only a path written in the stylesheet gets rewritten for it (tools/themeColors.ts)
+    background-image: url(./assets/player-cube/sprite.webp);
     background-repeat: no-repeat;
     background-size: calc(var(--sprite-cell) * var(--sprite-columns)) calc(var(--sprite-cell) * var(--sprite-rows));
     background-position: calc(var(--sprite-cell) * var(--sprite-column) * -1) calc(var(--sprite-cell) * var(--sprite-row) * -1);

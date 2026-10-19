@@ -274,5 +274,18 @@
   "No offer of another player you can pay": "支払える他プレイヤーの取引がありません",
   "Not your turn, or no spice and Solari to move it": "手番ではないか、運ぶスパイスとソラリがありません",
   "Not your turn, or not 2 of one resource": "手番ではないか、同じ資源が2つありません",
-  "Only with suspicion above 0 and enough Solari": "疑惑が0より大きく、ソラリが足りるときだけ"
+  "Only with suspicion above 0 and enough Solari": "疑惑が0より大きく、ソラリが足りるときだけ",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "ワームが移動するマスをクリックしてください。通過するタイルはすべて影響を受けます。",
+  "Tile of": "タイルの持ち主",
+  "After sending": "派遣後",
+  "${0} takes the tile at the end of the generation": "${0} が世代終了時にタイルを奪う",
+  "${0} keeps the tile at the end of the generation": "${0} が世代終了時にタイルを守る",
+  "Defends": "防衛",
+  "Opened the Kanly": "カンリーを宣言",
+  "Attacks": "攻撃",
+  "Not involved": "不参加",
+  "Send ${0} Sardaukar": "サーダカーを${0}体派遣",
+  "Shai-Hulud lies here": "シャイ＝フルードはここ",
+  "Open offers": "公開中のオファー",
+  "Send": "派遣"
 }

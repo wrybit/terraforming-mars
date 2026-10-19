@@ -31,6 +31,8 @@ export type WormModel = {
   path: ReadonlyArray<string>,
   /** Player choosing the distance right now */
   chooser: Color | undefined,
+  /** While a player chooses: the spaces crossed by each choice, in the order of the options (server/dune/Worm.ts) */
+  choices?: ReadonlyArray<ReadonlyArray<string>>,
 };
 
 export type PlayerCount = {color: Color, sardaukar: number};

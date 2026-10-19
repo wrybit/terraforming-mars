@@ -274,5 +274,18 @@
   "No offer of another player you can pay": "지불 가능한 다른 플레이어의 제안 없음",
   "Not your turn, or no spice and Solari to move it": "당신의 차례가 아니거나 운반할 스파이스와 솔라리가 없음",
   "Not your turn, or not 2 of one resource": "당신의 차례가 아니거나 한 자원이 2개 없음",
-  "Only with suspicion above 0 and enough Solari": "의심이 0보다 크고 솔라리가 충분할 때만"
+  "Only with suspicion above 0 and enough Solari": "의심이 0보다 크고 솔라리가 충분할 때만",
+  "Click the space the worm moves to. Every tile it crosses is hit.": "벌레가 이동할 칸을 클릭하세요. 지나가는 모든 타일이 피해를 입습니다.",
+  "Tile of": "타일 소유자",
+  "After sending": "파견 후",
+  "${0} takes the tile at the end of the generation": "${0}이(가) 세대 종료 시 타일을 차지합니다",
+  "${0} keeps the tile at the end of the generation": "${0}이(가) 세대 종료 시 타일을 지킵니다",
+  "Defends": "방어",
+  "Opened the Kanly": "칸리를 선포함",
+  "Attacks": "공격",
+  "Not involved": "불참",
+  "Send ${0} Sardaukar": "사다우카 ${0}명 파견",
+  "Shai-Hulud lies here": "샤이-훌루드가 여기 있음",
+  "Open offers": "열린 제안",
+  "Send": "파견"
 }
