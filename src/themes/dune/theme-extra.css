@@ -176,15 +176,6 @@ html.theme-dune .card-requirements.card-requirements-max::after {
   content: "MAX";
 }
 
-/* Effect box of the Houses: a slightly darker parchment, sunk in with an inner shadow like the production box,
-   instead of the grey metal with its black outline */
-html.theme-dune .card-container .card-corporation-box {
-  border: 0;
-  border-radius: 10px;
-  background: #efe2c6;
-  box-shadow: inset 0 2px 6px rgb(60 40 20 / 35%);
-}
-
 /* Bonus symbols: the Dune symbols are drawn shapes on a dark board, not bright full squares like the Mars pictures,
    so they get their own size. The bonus box spans the whole hex and centres its symbols both ways,
    whatever their number (two side by side, a third one wraps into a centred second row). */
@@ -558,52 +549,198 @@ html.theme-dune .card-container .card-content .card-asterisk-note-star {
   font-weight: 700;
 }
 
-/* House cards like the project cards: the name on a flat title band under the row of tags (it ran into the tags),
-   the content moved down below the band */
+/* House cards (variant H2 "head band", Jens 19 Oct 2026): the coloured band in the colour of the House is the head
+   of the card – name on the left, the tags hang over the top and the side edge like on every other card.
+   The hanging label HOUSE is gone. The colours follow the banners of the Houses (books, films, mockup). */
+html.theme-dune .card-container {
+  --house-colour: #4a3422;
+}
+
+html.theme-dune .card-container.card-tharsis-republic {
+  --house-colour: #24594d; /* Atreides: green and black of Caladan (dark green) */
+}
+
+html.theme-dune .card-container.card-mining-guild {
+  --house-colour: #8a2418; /* Harkonnen: red */
+}
+
+html.theme-dune .card-container.card-teractor {
+  --house-colour: #9c6d14; /* Corrino: imperial gold of the lion */
+}
+
+html.theme-dune .card-container.card-thorgate {
+  --house-colour: #5a3a7c; /* Vernius: purple with the copper helix */
+}
+
+html.theme-dune .card-container.card-phobolog {
+  --house-colour: #4a5f7c; /* Richese: steel blue of the technocrats */
+}
+
+html.theme-dune .card-container.card-interplanetary-cinematics {
+  --house-colour: #6b3420; /* Moritani (Grumman): rust brown */
+}
+
+html.theme-dune .card-container.card-point-luna {
+  --house-colour: #4f7326; /* Ecaz: moss green of the fogwood forests */
+}
+
+html.theme-dune .card-container.card-spire {
+  --house-colour: #5c2a46; /* Fenring: dark wine of the court */
+}
+
+html.theme-dune .card-container.card-cheung-shing-mars {
+  --house-colour: #5c7c8a; /* Hagal: grey blue of the quartz */
+}
+
+html.theme-dune .card-container.card-valley-trust {
+  --house-colour: #3c4a5e; /* Thorvald: slate */
+}
+
+html.theme-dune .card-container.card-vitor {
+  --house-colour: #1f5670; /* Ginaz: deep sea blue of the archipelago */
+}
+
+html.theme-dune .card-container.card-credicor {
+  --house-colour: #7a6416; /* CHOAM: yellow of the CHOAM banner (darkened) */
+}
+
+html.theme-dune .card-container.card-inventrix {
+  --house-colour: #355e45; /* Bene Tleilax: dark green */
+}
+
+html.theme-dune .card-container.card-united-nations-mars-initiative {
+  --house-colour: #33333f; /* Bene Gesserit: black */
+}
+
+html.theme-dune .card-container.card-saturn-systems {
+  --house-colour: #2c4f72; /* Spacing Guild: blue */
+}
+
+html.theme-dune .card-container.card-ecoline {
+  --house-colour: #9a5a22; /* Sietch Tabr: ochre */
+}
+
+html.theme-dune .card-container.card-helion {
+  --house-colour: #2d6f86; /* Sietch Habbanya: water blue */
+}
+
+html.theme-dune .card-container.card-nirgal-enterprises {
+  --house-colour: #7a5a2a; /* Sietch Tuono: sand brown */
+}
+
+html.theme-dune .card-container.card-beginner-corporation {
+  --house-colour: #6b5640; /* Free Smugglers: umber */
+}
+
+html.theme-dune .card-container.card-robinson-industries {
+  --house-colour: #3a6f8f; /* Water Sellers: water blue */
+}
+
+html.theme-dune .card-container.card-palladin-shipping {
+  --house-colour: #3f5f7a; /* Ice Freighters: ice blue */
+}
+
+html.theme-dune .card-container.card-sagitta-frontier-services {
+  --house-colour: #8a6a4a; /* Pyon Cooperative: clay */
+}
+
+html.theme-dune .card-container.card-ecotec {
+  --house-colour: #4f7d4a; /* Kynes Planetologists: leaf green */
+}
+
+html.theme-dune .card-container .corporation-label {
+  display: none;
+}
+
 html.theme-dune .card-container .card-title.card-house-name {
-  top: 44px;
+  top: 16px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 30px;
-  padding: 0 8px;
-  background: #4a3422;
+  justify-content: flex-start;
+  height: 44px !important;
+  padding: 0 56px 0 14px;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(var(--house-colour), color-mix(in srgb, var(--house-colour) 78%, black));
   color: #fff4e0;
-  font-size: 13px;
-  line-height: 1.15;
-  text-align: center;
+  font-size: 11px;
+  line-height: 1.25;
+  text-align: left;
+  text-shadow: 0 1px 1px rgb(0 0 0 / 35%);
   letter-spacing: 0.06em;
 }
 
-html.theme-dune .card-container .card-content.card-content-corporation {
-  top: 0;
-  height: 256px !important;
+/* Sietch Tuono keeps the height of the Mars logo row (60 px) otherwise */
+html.theme-dune .card-container.card-nirgal-enterprises .card-title.is-corporation {
+  height: 40px !important;
 }
 
-/* The expansion mark of a house sits under the band instead of on its edge */
+/* Room for the tags on the right: one, two or three tags */
+html.theme-dune .card-container:has(.card-tags .card-tag:nth-child(2)) .card-title.card-house-name {
+  padding-right: 100px;
+}
+
+html.theme-dune .card-container:has(.card-tags .card-tag:nth-child(3)) .card-title.card-house-name {
+  padding-right: 142px;
+}
+
+/* The tags lie on top of the band */
+html.theme-dune .card-container:has(.card-house-name) .card-tags {
+  position: relative;
+  z-index: 3;
+}
+
+/* The band is lower than before: the content moves up and gains the height, the card keeps its size */
+html.theme-dune .card-container .card-content.card-content-corporation {
+  margin-top: -16px;
+  height: 272px !important;
+}
+
+/* The expansion mark of a house sits under the band */
 html.theme-dune .card-container .card-corporation-expansion {
-  top: 80px;
+  top: 66px;
   right: 8px;
   left: auto;
 }
 
-/* Small labels in Michroma on flat umber tabs: HOUSE above the card, EFFECT/ACTION above a box */
-html.theme-dune .card-container .corporation-label,
-html.theme-dune .card-container .card-corporation-label {
-  font: 8px Michroma, sans-serif !important;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  background: #4a3422;
-  color: #f4ead2;
+/* Effect box of the Houses: no tab and no sunk box – a clear heading over the full width, the word between two
+   lines, below it the effect on the parchment */
+html.theme-dune .card-container .card-corporation-box {
+  margin: 8px -10px 4px;
+  padding: 22px 6px 4px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   box-shadow: none;
 }
 
-html.theme-dune .card-container .corporation-label {
-  border-radius: 6px 6px 0 0;
+html.theme-dune .card-container .card-corporation-label {
+  position: absolute;
+  top: 2px;
+  right: -7px;
+  left: -7px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  height: 14px;
+  margin: 0;
+  padding: 0 10px;
+  transform: none;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: #4a3422;
+  font: 9px Michroma, sans-serif !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-html.theme-dune .card-container .card-corporation-label {
-  border-radius: 0 0 8px 8px;
+html.theme-dune .card-container .card-corporation-label::before,
+html.theme-dune .card-container .card-corporation-label::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: #4a3422;
 }
 
 /* Resource counter (variant C3, smaller): a light sand tab in the lower left corner, the counterpart of the gold
