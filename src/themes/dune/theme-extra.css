@@ -407,3 +407,67 @@ html.theme-dune .card-title .prelude-label {
   border-radius: 0;
   box-shadow: none;
 }
+
+/* Production box (variant 1 of the study, Jens 19 Oct 2026): a flat umber tile with a fine light inner line instead
+   of the textured box with its bevel; plus and minus in sand white so they read on the dark tile */
+html.theme-dune .card-production-box {
+  background: #5a3d26 !important;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1.5px rgb(255 230 190 / 35%) !important;
+  color: #fff4e0;
+}
+
+html.theme-dune .card-production-box .card-minus,
+html.theme-dune .card-production-box .card-plus {
+  filter: brightness(0) invert(0.95);
+}
+
+/* Victory points (variant C): a tab in the lower right corner of the card in the umber of the frame, the number in
+   gold, a small vertical "SP" in front – part of the card instead of a bevelled plate stuck on it */
+html.theme-dune .card-container .card-points {
+  right: 0;
+  bottom: 0;
+  width: auto;
+  min-width: 74px;
+  height: 46px;
+  line-height: 46px;
+  padding: 0 12px 0 24px;
+  border: 0;
+  border-radius: 16px 0 16px 0;
+  background: #4a3422;
+  box-shadow: none;
+  color: #f2c230;
+  font-family: Prototype, sans-serif;
+  text-shadow: none;
+}
+
+html.theme-dune .card-container .card-points::before {
+  content: "VP";
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  color: #e3d0aa;
+  font: 8px Michroma, sans-serif;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+/* The short word for victory points in the language of the page (main.ts sets html lang) */
+html.theme-dune[lang="de"] .card-container .card-points::before {
+  content: "SP";
+}
+
+html.theme-dune:is([lang="fr"], [lang="es"], [lang="it"], [lang|="pt"]) .card-container .card-points::before {
+  content: "PV";
+}
+
+html.theme-dune .card-container .card-points-big {
+  font-size: 30px;
+}
+
+html.theme-dune .card-container .card-points-normal {
+  align-items: center;
+  font-size: 24px;
+}
