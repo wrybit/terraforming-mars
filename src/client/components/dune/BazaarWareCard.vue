@@ -3,7 +3,7 @@
        (.dune-bazaar__slot) comes from the caller: a button on the bazaar board, a plain card in the purchase tab.
        With a discount (slot, bazaar tile, cards) the own price follows below the arrow, as on a project card
        (CardCost.vue, same "hide discount" preference) – Jens, 19 Oct 2026 -->
-  <span class="dune-bazaar__price"><img :src="coinIcon" alt=""><b>{{ price }}</b></span>
+  <span :class="['dune-bazaar__price', {'dune-bazaar__price--printed': showsDiscount}]"><img :src="coinIcon" alt=""><b>{{ price }}</b></span>
   <template v-if="showsDiscount">
     <span class="dune-bazaar__price-arrow" aria-hidden="true"></span>
     <span class="dune-bazaar__price dune-bazaar__price--own"><img :src="coinIcon" alt=""><b>{{ newPrice }}</b></span>

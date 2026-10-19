@@ -236,45 +236,57 @@ button.dune-bazaar__slot {
 
 // Discount on a ware (BazaarWareCard.vue) exactly like a discounted project card (CardCost.vue, cards_v2.less
 // .card-cost-transition / .card-old-cost), in the proportions of the smaller ware coin (34 instead of 50 px):
-// the arrow below the printed price, the own price as a smaller greyish coin under it (Jens, 19 Oct 2026)
+// the arrow below the printed price, the own price under it. What counts stands out: the printed price pale, the own
+// price in full colour, the arrow between them clearly visible (Jens, 19 Oct 2026)
+.dune-bazaar__price.dune-bazaar__price--printed {
+  filter: grayscale(70%) brightness(1.1);
+  opacity: 0.85;
+}
+
 .dune-bazaar__price-arrow {
   position: absolute;
-  top: 19px;
-  left: 4px;
-  z-index: 2;
-  width: 10px;
-  height: 14px;
+  top: 17px;
+  left: 2px;
+  z-index: 3;
+  width: 14px;
+  height: 18px;
   background: url(./assets/misc/cost-transition-arrow.png) no-repeat center / contain;
+  filter: drop-shadow(0 0 1px #2b1a10) drop-shadow(0 0 1px #2b1a10);
 }
 
 .dune-bazaar__price.dune-bazaar__price--own {
-  top: 26px;
+  z-index: 2;
+  top: 22px;
   left: -5px;
-  width: 26px;
-  height: 26px;
-  filter: grayscale(60%);
+  width: 28px;
+  height: 28px;
 
   b {
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 
 @media only screen and (max-width: 600px) {
   .dune-bazaar__price-arrow {
-    top: 15px;
-    left: 3px;
-    width: 8px;
-    height: 11px;
+    top: 13px;
+    left: 2px;
+    width: 10px;
+    height: 13px;
   }
 
   .dune-bazaar__price.dune-bazaar__price--own {
-    top: 20px;
+    top: 17px;
     left: -4px;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
 
     b {
       font-size: 10px;
     }
   }
+}
+
+// With the second coin the price column is taller: the name keeps clear of both coins
+.dune-bazaar__slot:has(.dune-bazaar__price--own) .dune-bazaar__name {
+  padding-left: 22px;
 }
