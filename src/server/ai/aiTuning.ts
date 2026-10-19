@@ -82,6 +82,8 @@ export type AiTuning = {
   policyWeight: number,
   /** 1: the learned preference also steers decisions inside simulations; 0: only real decisions (faster). */
   policyInSimulation: number,
+  /** Learned draft/buy models: 0 = BGA only, 1 = BGA plus winners of our own test games (bgaPolicy.ts). */
+  policyModelSet: number,
   /** M€ per unit of the learned play order of strong players among playable hand cards (bgaPolicy.ts); 0 = off. */
   playPolicyWeight: number,
   /** Generations of income that count as money for the hand (handFunding.ts). */
@@ -304,6 +306,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 111: 3 +2.29 (z +3.78; base +3.41, venus +1.17), 6 +1.35, 12 −0.03.
   policyWeight: 3,
   policyInSimulation: 1,
+  policyModelSet: 0,
   // Round 112: 3 +1.43 (z +2.35; base +1.10, venus +1.76), 6 +1.41 (z +2.00).
   playPolicyWeight: 3,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
@@ -817,6 +820,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noPlayPolicy: {playPolicyWeight: 0},
   // Control: the AI before the imitation steps of rounds 111/112 (measures their total gain)
   beforeImitation: {policyWeight: 0, playPolicyWeight: 0},
+  // Self-play step 1: draft/buy models trained on BGA plus our own winners (round 118)
+  policyMixed: {policyModelSet: 1},
   play2: {playPolicyWeight: 2},
   noHandFunding: {handFunding: 0},
   buyLoose: {buyMargin: -3},
