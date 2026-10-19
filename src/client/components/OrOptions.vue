@@ -218,6 +218,7 @@ import {optionTargetPlayer} from '@/client/components/playerTargetOption';
 import {Color, ColorWithNeutral} from '@/common/Color';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {milestoneAwardKind, MilestoneAwardKind} from '@/client/components/milestoneAwardChoice';
+import {isUncountedTab} from '@/client/components/uncountedTabs';
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 import {allCardsInHand} from '@/client/utils/handCards';
@@ -583,6 +584,10 @@ export default defineComponent({
     },
     // "Actions" tab counts usable action cards plus usable CEOs
     tabCount(idx: number): number | undefined {
+      // Trade tabs always offer something: a count there says nothing (Jens, 19 Oct 2026)
+      if (isUncountedTab(this.displayedOptions[idx].title)) {
+        return undefined;
+      }
       if (!(this.actionsGrouped && idx === this.groupTabIdx)) {
         return this.availableCount(this.displayedOptions[idx]);
       }

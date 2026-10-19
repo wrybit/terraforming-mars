@@ -4,6 +4,7 @@ import {nextTick} from 'vue';
 import {Message} from '@/common/logs/Message';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {inputAvailableCount} from '@/client/components/inputAvailableCount';
+import {isUncountedTab} from '@/client/components/uncountedTabs';
 import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
 import {endTabHint, fullTabTitle, isEndTab, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOrder, tabHighlighted, titleKey} from '@/client/components/orOptionsShortLabels';
@@ -99,6 +100,8 @@ function toTile(option: PlayerInputModel, index: number): TurnMenuTile {
   const look: TileLook = TILE_LOOKS[key] ?? DEFAULT_LOOK;
   const label = shortTabLabel(option.title);
   const count = inputAvailableCount(option);
+  // No badge on the trade tabs (uncountedTabs.ts); the detail line still goes by the real count
+  const badge = isUncountedTab(option.title) ? undefined : count;
   const buttonTone = tabButtonTone(option.title);
   return {
     index,
@@ -106,11 +109,11 @@ function toTile(option: PlayerInputModel, index: number): TurnMenuTile {
     label,
     // Actions without selection (greenery, temperature): the full title says what happens
     detail: count === undefined && titleKey(label) !== key ? fullTabTitle(option.title) : undefined,
-    count,
+    count: badge,
     glyph: look.glyph,
     glyphTone: look.glyphTone,
     tone: buttonTone ?? (tabHighlighted(option.title) ? 'highlight' : undefined),
-    empty: count === 0,
+    empty: badge === 0,
     confirmation: quickConfirmation(option),
   };
 }
