@@ -256,8 +256,13 @@ html.theme-dune .background-color-standard-project {
   color: #fff8ea;
 }
 
+/* The band starts on the card frame (6 px above the parchment): cut it to the inside of the frame with the round
+   corners of the parchment (frame radius 20 px minus 4 px border), so it neither covers the frame nor the selection
+   outline */
 html.theme-dune .card-container.card-standard-project .card-title-standard-project .background-color-standard-project {
   border-radius: 0 !important;
+  clip-path: inset(6px 0 0 0 round 16px 16px 0 0);
+  padding-top: 6px;
 }
 
 /* Phone parameter bars (MobileParameterBars.vue) in the colours of the Arrakis scales: water blue, vegetation green,
