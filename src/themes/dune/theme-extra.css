@@ -151,6 +151,20 @@ html.theme-dune .track-bonus-chip__production img {
   height: calc(var(--track-bonus-chip, 24px) * 0.6);
 }
 
+/* Phone parameter bars (MobileParameterBars.vue) in the colours of the Arrakis scales: water blue, vegetation green,
+   spice fields orange – the Mars heat and oxygen gradients would contradict the symbols in front of them */
+html.theme-dune .mb-param--temperature .mb-param-fill {
+  background: linear-gradient(var(--bar-direction), #2b6aa3, #5aa5e0);
+}
+
+html.theme-dune .mb-param--oxygen .mb-param-fill {
+  background: linear-gradient(var(--bar-direction), #3c7d2f, #79c060);
+}
+
+html.theme-dune .mb-param--oceans .mb-param-fill {
+  background: #e0662a;
+}
+
 /* Place names on Arrakis (Legends.ts): dark halo, so the white text reads on sand, rock and ice */
 html.theme-dune .board-caption {
   paint-order: stroke;

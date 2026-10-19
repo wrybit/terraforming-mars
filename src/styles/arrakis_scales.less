@@ -1,0 +1,29 @@
+// Scales around Arrakis (ArrakisScales.vue): drawn at the static position of .global-numbers, i.e. in the same
+// coordinates as the markers, and behind them
+.arrakis-scales {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.arrakis-scales__step {
+  stroke: rgba(20, 12, 6, 0.55);
+  stroke-width: 1;
+}
+
+// Vegetation green and water blue like the scale symbols; every other step a shade lighter, so the steps read
+.arrakis-scales__track--vegetation .arrakis-scales__step {
+  fill: #3c7d2f;
+
+  &.arrakis-scales__step--odd {
+    fill: #46903a;
+  }
+}
+
+.arrakis-scales__track--water .arrakis-scales__step {
+  fill: #2b6aa3;
+
+  &.arrakis-scales__step--odd {
+    fill: #3479b6;
+  }
+}

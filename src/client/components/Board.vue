@@ -16,6 +16,8 @@
         </div>
 
         <div class="global-numbers" :class="{'global-numbers--large': isLargeBoard}">
+            <!-- Arrakis: the scales as vectors (the Dune board picture is only the planet, scripts/make-dune-planet.py) -->
+            <ArrakisScales v-if="boardName === BoardName.ARRAKIS"/>
             <div class="global-numbers-temperature">
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('temperature')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('temperature') : undefined">{{ lvl.strValue }}</div>
             </div>
@@ -361,6 +363,7 @@ import * as constants from '@/common/constants';
 import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
 import BoardSpace from '@/client/components/BoardSpace.vue';
 import MarsScaleBonuses from '@/client/components/board/MarsScaleBonuses.vue';
+import ArrakisScales from '@/client/components/board/ArrakisScales.vue';
 import {AresData} from '@/common/ares/AresData';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import {SpaceType} from '@/common/boards/SpaceType';
@@ -434,6 +437,7 @@ export default defineComponent({
     flash: vFlash,
   },
   components: {
+    ArrakisScales,
     BoardSpace,
     MarsScaleBonuses,
   },
