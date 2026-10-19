@@ -136,7 +136,8 @@ html.theme-dune i.board-space-bonus {
 
 /* The card symbol is upright (70 × 100): a taller box, the whole card visible */
 html.theme-dune i.board-space-bonus.board-space-bonus--card {
-  height: 25px;
+  width: 15px;
+  height: 21px;
 }
 
 /* Three symbols: two on top, one centred below */
