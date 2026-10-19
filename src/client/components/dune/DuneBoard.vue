@@ -5,7 +5,8 @@
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('special-bazaar')" alt="">{{ $t('Bazaar of Arrakeen') }}</h3>
       <BazaarBoard :bazaar="dune.bazaar" :players="players"/>
     </section>
-    <section v-if="tab === 'worm' && dune.worm" class="dune-board__section">
+    <!-- The trail map grows into the free height of the box (dune_board.less) -->
+    <section v-if="tab === 'worm' && dune.worm" class="dune-board__section dune-board__section--fill">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('special-worm-domain')" alt="">{{ $t('Shai-Hulud') }}</h3>
       <WormPanel :worm="dune.worm"/>
     </section>

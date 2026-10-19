@@ -41,12 +41,23 @@
   height: 26px;
 }
 
+// A section whose picture takes all the room the box has (Shai-Hulud, Jens 19 Oct 2026): title, legend and the rules
+// button keep their size, the map fills the rest in width and height and shrinks with the box
+.dune-board__section--fill {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 // Shai-Hulud: the trail map centred, the effects below
 .dune-worm {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 24px;
+  min-height: 0;
   font-size: 13px;
 }
 
