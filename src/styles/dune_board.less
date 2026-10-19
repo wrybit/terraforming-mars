@@ -422,3 +422,95 @@
   line-height: 1.3;
   color: #8f8473;
 }
+
+// The button of the move open below it
+.dune-actions__button--open {
+  box-shadow: 0 0 0 2px #f1e2c2;
+}
+
+// Move opened in the module tab (DuneMovePanel.vue): tiles of the app (choice-options), confirm like in the action menu
+.dune-move {
+  margin-top: 12px;
+  padding: 12px 14px 14px;
+  border: 1px solid rgba(232, 168, 90, 0.55);
+  border-radius: 10px;
+  background: rgba(42, 28, 18, 0.55);
+}
+
+.dune-move__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dune-move__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f1e2c2;
+}
+
+.dune-move__close {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 240, 210, 0.25);
+  border-radius: 50%;
+  background: transparent;
+  color: #f1e2c2;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 240, 210, 0.12);
+  }
+}
+
+.dune-move__level + .dune-move__level {
+  margin-top: 10px;
+}
+
+.dune-move__subtitle {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #cbb994;
+}
+
+.dune-move__confirm,
+.dune-move__input {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+// Phone: two tiles per row, so a choice of six stays short
+@media (max-width: 600px) {
+  .dune-move__tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .dune-move__tiles .choice-option {
+    width: auto;
+    min-height: 0;
+    padding: 10px 8px;
+    font-size: 14px;
+  }
+
+  // Values table inside the half-width tile
+  .dune-move__tiles .choice-option-value {
+    padding: 4px 8px 6px;
+    font-size: 16px;
+  }
+
+  .dune-move__tiles .choice-option-table {
+    gap: 3px 8px;
+  }
+
+  .dune-move__tiles .choice-option-row-icon {
+    width: 18px;
+    height: 18px;
+  }
+}

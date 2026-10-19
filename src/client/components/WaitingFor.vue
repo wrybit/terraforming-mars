@@ -61,6 +61,7 @@ import {spaceWithSkip} from '@/client/components/spaceWithSkip';
 import {ingestView} from '@/client/utils/changeTracker';
 import {describeFailure, failureFromResponse, RequestFailedError, RequestFailure} from '@/client/utils/requestFailure';
 import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
+import {registerMoveSender} from '@/client/components/dune/duneMoves';
 
 let ui_update_timeout_id: number | undefined;
 let otherPlayersTimer: number | undefined;
@@ -81,6 +82,9 @@ const TURN_SEQUENCE = '◑◒◐◓';
 function isDesktopBrowser(): boolean {
   return !/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
+
+// Dune modules: the module tabs send their moves through the save of the own input (dune/duneMoves.ts)
+let unregisterMoveSender: (() => void) | undefined;
 
 type DataModel = {
   playersWaitingFor: Array<Color>,
@@ -367,9 +371,12 @@ export default defineComponent({
   },
   mounted() {
     this.start();
+    unregisterMoveSender = registerMoveSender((response) => this.onsave(response));
   },
   beforeUnmount() {
     this.stop();
+    unregisterMoveSender?.();
+    unregisterMoveSender = undefined;
   },
   computed: {
     // Action menu (OrOptions) and start selection build their own tabs; everything else goes into WaitingForTabs

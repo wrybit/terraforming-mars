@@ -46,8 +46,13 @@ import {BAZAAR_SLOT_PRICE_CHANGE, BazaarGood, bazaarWare} from '@/common/dune/ba
 import {themedAsset} from '@/client/theme/themeDisplay';
 import {duneGraphic} from './duneGraphic';
 import {vueRoot} from '@/client/components/vueRoot';
-import {isOffered, requestDuneAction} from './duneActions';
-import {BAZAAR_ACTION_TITLE, BAZAAR_WARE_TITLE} from '@/common/dune/duneActionTitles';
+import {DuneMoveStep, isMoveOffered, openMove} from './duneMoves';
+import {BAZAAR_WARE_TITLE} from '@/common/dune/duneActionTitles';
+
+// Path to the purchase of a ware: found in the action menu as well as in the bazaar round
+function wareMove(ware: string): Array<DuneMoveStep> {
+  return [{title: BAZAAR_WARE_TITLE, value: ware}];
+}
 
 // Picture and name of each good; the Dune theme swaps the pictures (src/themes/dune/graphics.json)
 // Picture of a ware after its first good, as in the mockup (data/bazaar-wares.js)
@@ -105,12 +110,13 @@ export default defineComponent({
       const first = Object.keys(bazaarWare(ware).content)[0] as BazaarGood;
       return duneGraphic(GOOD_SCENE[first]);
     },
-    // Whether the action menu offers this ware right now
+    // Whether the waiting input offers this ware right now (action or bazaar round)
     buyable(ware: string): boolean {
-      return isOffered(vueRoot(this).playerView?.waitingFor, {title: BAZAAR_WARE_TITLE, value: ware});
+      return isMoveOffered(vueRoot(this).playerView?.waitingFor, wareMove(ware));
     },
+    // Opens the purchase below the bazaar (DuneMovePanel.vue); confirmed there
     buy(ware: string): void {
-      requestDuneAction([{title: BAZAAR_ACTION_TITLE}, {title: BAZAAR_WARE_TITLE, value: ware}]);
+      openMove('bazaar', wareMove(ware));
     },
     playerName(color: Color): string {
       return this.players.find((player) => player.color === color)?.name ?? color;

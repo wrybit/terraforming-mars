@@ -1,17 +1,17 @@
 import {DuneBoardTabId} from '@/client/components/boardTabs/boardTabs';
-import {DuneActionStep} from './duneActions';
+import {DuneMoveStep} from './duneMoves';
 import {
   BLACK_MARKET_TITLE, BRIBE_TITLE, CHOAM_ACCEPT_TITLE, CHOAM_OFFER_TITLE, JOIN_KANLY_TITLE, LEVY_TITLE, OPEN_KANLY_TITLE,
   RECRUIT_TITLE, SCHEMES_TITLE, SMUGGLE_SPICE_TITLE, WORM_TITLE,
 } from '@/common/dune/duneActionTitles';
 
-// Buttons of the module tabs: what each one opens in the action menu (titles of server/dune/*.ts) and why it may be
+// Buttons of the module tabs: which move each one opens in its tab (titles of server/dune/*.ts) and why it may be
 // greyed out. English texts, translated on display.
 
 export type DuneTabAction = {
   label: string,
-  /** Path in the action menu below the Dune group; the last step decides whether the button is enabled */
-  path: ReadonlyArray<DuneActionStep>,
+  /** Path to the move in the waiting input (duneMoves.ts); enabled while it is offered */
+  path: ReadonlyArray<DuneMoveStep>,
   /** Shown under a greyed-out button */
   unavailable: string,
 };

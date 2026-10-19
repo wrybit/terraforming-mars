@@ -1,6 +1,8 @@
 import {expect} from 'chai';
 import {boardTabs, DUNE_BOARD_TABS} from '@/client/components/boardTabs/boardTabs';
 import {fakeGameModel} from '../testHelpers';
+import {OrOptionsModel} from '@/common/models/PlayerInputModel';
+import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 
 // RULE (CLAUDE.md "Dune must never break Mars"): the client of a Mars game shows nothing of Dune.
 describe('Mars client is unaffected by Dune', () => {
@@ -14,5 +16,12 @@ describe('Mars client is unaffected by Dune', () => {
   it('shows one tab per Dune module of a Dune game, only for the modules in play', () => {
     const game = fakeGameModel({dune: {worm: {spaceId: '48', roll: undefined, direction: undefined, turned: false, path: [], chooser: undefined}}});
     expect(boardTabs(game)).deep.eq(['mars', 'worm']);
+  });
+
+  it('keeps every entry of a Mars action menu (only the Dune module group leaves the menu)', () => {
+    const titles = ['Play project card', 'Standard projects', 'Fund an award', 'Sell patents', 'Pass for this generation'];
+    const menu = {type: 'or', title: 'Take your first action', buttonLabel: 'OK',
+      options: titles.map((title) => ({type: 'option', title, buttonLabel: 'OK'}))} as unknown as OrOptionsModel;
+    expect(displayedOptionIndices(menu)).deep.eq([0, 1, 2, 3, 4]);
   });
 });
