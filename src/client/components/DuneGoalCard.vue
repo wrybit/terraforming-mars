@@ -7,6 +7,7 @@
       <MilestoneAwardIcon :parts="parts"/>
     </div>
     <p v-if="description !== ''" class="dune-goal-card__goal">{{ $t(description) }}</p>
+    <p v-if="flavor !== undefined" class="dune-goal-card__flavor">{{ flavor }}</p>
   </div>
 </template>
 
@@ -29,6 +30,9 @@ const parts = computed((): ReadonlyArray<IconPart> => {
   const mars = props.kind === 'milestones' ? MILESTONE_ICONS[props.name as MilestoneName] : AWARD_ICONS[props.name as AwardName];
   return themedGoalIcon(props.name, mars ?? []) as ReadonlyArray<IconPart>;
 });
+
+// Story line of the goal from the theme texts (src/themes/dune/names: "flavor:<goal>"), as on the mockup cards
+const flavor = computed((): string | undefined => window._themeTranslations?.['flavor:' + props.name]);
 
 const description = computed((): string => {
   const goal = props.kind === 'milestones' ? getMilestone(props.name as MilestoneName) : getAward(props.name as AwardName);
