@@ -128,6 +128,14 @@ describe('Dune modules B, D, E, F', () => {
       expect([player1.megaCredits, player1.titanium]).deep.eq([1, 2]);
     });
 
+    it('always offers spice, even without any, but refuses to give it', () => {
+      player1.megaCredits = 13;
+      player1.titanium = 0;
+      const market = cast(option(tabActions(player1), 'Smuggling'), SelectTrade);
+      expect(market.give.find((give) => give.resource === Resource.TITANIUM)?.max).eq(0);
+      expect(() => market.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 1, get: Resource.MEGACREDITS, getAmount: 5})).to.throw();
+    });
+
     it('costs TR from suspicion 3 at the end of the generation; bribing lowers it', () => {
       expect([0, 1, 2, 3, 4, 5].map(suspicionPenalty)).deep.eq([0, 0, 0, 1, 2, 3]);
       const smuggling = game.duneData!.smuggling!;

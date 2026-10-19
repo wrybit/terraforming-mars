@@ -223,6 +223,13 @@ import CardListSection from '@/client/components/CardListSection.vue';
 import {ACTION_CARDS_TITLE, ceoCardState, isActionCardsOption, isCeoActionOption, ownCeoCards} from '@/client/utils/ceoActions';
 import {actionCardVisibility, inactiveActionCards, InactiveActionCards} from '@/client/utils/inactiveActionCards';
 import {actionTabRequest, requestedTabIndex} from '@/client/components/actionTabRequest';
+import {titleKey} from '@/client/components/orOptionsShortLabels';
+import {duneBoardTabOf} from '@/client/components/dune/duneActionBoardTab';
+import {boardTabState, selectBoardTab} from '@/client/components/boardTabs/boardTabState';
+import {DuneBoardTabId} from '@/client/components/boardTabs/boardTabs';
+
+// Board tab the action menu opened by itself for a Dune move (one action menu at a time)
+let autoBoardTab: DuneBoardTabId | undefined;
 
 let unique = 0;
 
@@ -479,6 +486,15 @@ export default defineComponent({
       }
       // New child input: valid until it reports otherwise
       this.childValid = true;
+      // A Dune move opens its module board top right too (Smuggling for "Move spice" …); phone: same tab click.
+      // Leaving it for a Mars action brings Mars back, unless the board was switched by hand meanwhile.
+      const boardTab = this.asTabs && this.selectedOption !== undefined ? duneBoardTabOf(titleKey(this.selectedOption.title as string | Message)) : undefined;
+      if (boardTab !== undefined) {
+        selectBoardTab(boardTab);
+      } else if (autoBoardTab !== undefined && boardTabState.active === autoBoardTab) {
+        selectBoardTab('mars');
+      }
+      autoBoardTab = boardTab;
       // Clicking the option can shift elements on the page.
       // This preserves the location of the option button the user just clicked by
       // tracking where it was on the screen, where it moved, and then repositioning it.

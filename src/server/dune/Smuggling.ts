@@ -108,14 +108,18 @@ function smuggleInput(player: IPlayer, data: SmugglingData, onlySpice: boolean):
     {pairs: [SPICE_PAIR]} :
     {values: BLACK_MARKET_VALUES, factor: BLACK_MARKET_FACTOR, pairs: [SPICE_PAIR]};
   const getOptions = onlySpice ? [Resource.MEGACREDITS] : ALL_RESOURCES;
-  // Only what pays for at least one unit of some other resource
-  const give = (onlySpice ? [Resource.TITANIUM] : ALL_RESOURCES)
-    .filter((resource) => getOptions.some((get) => get !== resource &&
-      player.stock.get(resource) >= (tradeRate(pricing, resource, get)?.give ?? Infinity)))
-    .map((resource) => ({resource, max: player.stock.get(resource)}));
-  if (give.length === 0) {
+  // What pays for at least one unit of some other resource
+  const affords = (resource: Resource) => getOptions.some((get) => get !== resource &&
+    player.stock.get(resource) >= (tradeRate(pricing, resource, get)?.give ?? Infinity));
+  const resources = onlySpice ? [Resource.TITANIUM] : ALL_RESOURCES;
+  if (!resources.some(affords)) {
     return undefined;
   }
+  // Spice is always offered, with too little greyed out (client) and refused by the stock limit (SelectTrade):
+  // otherwise moving spice seems to be missing (Jens, 19 Oct 2026)
+  const give = resources
+    .filter((resource) => affords(resource) || resource === Resource.TITANIUM)
+    .map((resource) => ({resource, max: player.stock.get(resource)}));
   // Only the stock and the rate (and limit) of each pair limit the amounts, not the received side
   return new SelectTrade(SMUGGLE_TITLE, 'Smuggle', give, getOptions, NO_LIMIT, pricing)
     .andThen((trade) => {

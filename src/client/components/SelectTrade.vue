@@ -12,7 +12,7 @@
       <section class="trade-select__side" data-test="trade-give">
         <h4 class="trade-select__label">{{ $t(hasRate ? 'You give' : 'You offer') }}</h4>
         <div class="trade-select__resources">
-          <button v-for="option in playerinput.give" :key="option.resource" type="button"
+          <button v-for="option in playerinput.give" :key="option.resource" type="button" :disabled="!givable(option.resource)"
             :class="['trade-select__resource', {'trade-select__resource--selected': option.resource === give}]"
             :title="$t(resourceName(option.resource))" @click="chooseGive(option.resource)">
             <i :class="'resource_icon resource_icon--' + option.resource"></i>
@@ -180,6 +180,10 @@ export default defineComponent({
       const rate = tradeRate(this.playerinput, give, get);
       const limit = Math.min(option?.max ?? 0, pairGiveLimit(this.playerinput, give, get) ?? Infinity);
       return option !== undefined && (rate === undefined || rate.give <= limit);
+    },
+    // Can `give` buy anything at all? Not: shown greyed out (smuggling always lists spice, even without any)
+    givable(give: Resource): boolean {
+      return this.playerinput.get.some((get) => this.receivable(give, get));
     },
     stockOf(resource: Resource): number {
       return resourceSnapshot(this.playerView.thisPlayer, resource).stock;
