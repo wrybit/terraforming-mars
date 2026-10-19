@@ -111,29 +111,32 @@ html.theme-dune .card-corporation-box {
 /* Bonus symbols: the Dune symbols are drawn shapes on a dark board, not bright full squares like the Mars pictures,
    so at the Mars size they read far too small. Larger on the spaces (still two side by side in a hex) … */
 html.theme-dune i.board-space-bonus {
-  width: 20px;
-  height: 20px;
-  background-size: 20px;
+  width: 18px;
+  height: 18px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
+/* The card symbol is upright (70 × 100): a taller box, the whole card visible */
 html.theme-dune i.board-space-bonus.board-space-bonus--card {
   height: 25px;
 }
 
 html.theme-dune i.board-space-bonus.board-space-bonus-pos--only {
-  margin: 12px 0 0 12px;
+  margin: 13px 0 0 13px;
 }
 
 html.theme-dune i.board-space-bonus.board-space-bonus-pos--1 {
-  margin: 12px 0 0 2px;
+  margin: 13px 0 0 3px;
 }
 
 html.theme-dune i.board-space-bonus.board-space-bonus-pos--2 {
-  margin: 12px 0 0 22px;
+  margin: 13px 0 0 23px;
 }
 
 html.theme-dune i.board-space-bonus.board-space-bonus-pos--3 {
-  margin: 22px 0 0 12px;
+  margin: 22px 0 0 13px;
 }
 
 /* … and larger chips, filled further, on the tracks around the planet */
