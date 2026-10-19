@@ -433,12 +433,12 @@ html.theme-dune .card-container .card-points {
   right: 0;
   bottom: 0;
   width: auto;
-  min-width: 74px;
-  height: 46px;
-  line-height: 46px;
-  padding: 0 12px 0 24px;
+  min-width: 58px;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 10px 0 19px;
   border: 0;
-  border-radius: 16px 0 16px 0;
+  border-radius: 12px 0 16px 0;
   background: linear-gradient(#e8b13a, #c38a1d);
   box-shadow: none;
   color: #2a1806;
@@ -450,11 +450,11 @@ html.theme-dune .card-container .card-points::before {
   content: "VP";
   position: absolute;
   top: 50%;
-  left: 8px;
+  left: 6px;
   transform: translateY(-50%) rotate(180deg);
   writing-mode: vertical-rl;
   color: #5a3a10;
-  font: 8px Michroma, sans-serif;
+  font: 7px Michroma, sans-serif;
   letter-spacing: 0.08em;
   line-height: 1;
 }
@@ -500,14 +500,18 @@ html.theme-dune .card-container .card-cost {
   font-size: 26px;
 }
 
+/* Victory points smaller than the cost (Jens 19 Oct 2026): 22 px, a fraction with a symbol 17 px, the symbol scaled down */
 html.theme-dune .card-container .card-points-big {
-  font-size: 26px;
+  font-size: 22px;
 }
 
-/* A fraction with a symbol needs room: number M */
 html.theme-dune .card-container .card-points-normal,
 html.theme-dune .card-container .card-points-normal > div {
-  font-size: 20px;
+  font-size: 17px;
+}
+
+html.theme-dune .card-container .card-points :is([class*="card-resource"], [class*="card-tile"], [class*="card-tag"]) {
+  zoom: 0.8;
 }
 
 /* Number M: amounts in front of symbols, the signs, the resource counter */
@@ -541,8 +545,7 @@ html.theme-dune .card-container .card-content .card-text-size--M.card-text-upper
 
 /* Emphasis: rules like "1 VP per …" and notes, 11 bold without capitals (was 9 to 14 px in capitals) */
 html.theme-dune .card-container .card-content .card-text-size--XS.card-text-uppercase,
-html.theme-dune .card-container .card-content .card-text-size--S.card-text-uppercase,
-html.theme-dune .card-container .card-content .card-plate {
+html.theme-dune .card-container .card-content .card-text-size--S.card-text-uppercase {
   font-size: 11px !important;
   font-weight: 700;
   text-transform: none !important;
@@ -601,4 +604,57 @@ html.theme-dune .card-container .corporation-label {
 
 html.theme-dune .card-container .card-corporation-label {
   border-radius: 0 0 8px 8px;
+}
+
+/* Resource counter (variant C3, smaller): a light sand tab in the lower left corner, the counterpart of the gold
+   victory point tab on the right; dark number, the resource symbol a little smaller */
+html.theme-dune .card-container .card-resources-counter {
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: auto !important;
+  height: 32px;
+  padding: 0 10px 0 9px;
+  border: 0 !important;
+  border-radius: 0 12px 0 16px;
+  background: #e3cfa6 !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 55%), inset -1px 0 0 rgb(90 61 38 / 18%) !important;
+  line-height: 1 !important;
+}
+
+html.theme-dune .card-container .card-resources-counter .card-resources-counter-number {
+  color: #3a2716;
+  font-size: 16px !important;
+  line-height: 1;
+}
+
+html.theme-dune .card-container .card-resources-counter .card-resource {
+  zoom: 0.8;
+  margin: 0;
+}
+
+/* Plate "global requirements", "standard projects", "awards and milestones" (variant P2): a flat gold label in the
+   colour of the coins, framed by a fine darker line and a light top edge, the words in Michroma like the titles;
+   it may wrap to two lines so its row never gets wider than the card */
+html.theme-dune .card-container .card-content .card-plate.card-plate {
+  box-sizing: border-box;
+  width: max-content !important;
+  min-width: 0 !important;
+  max-width: 126px;
+  padding: 5px 8px 4px !important;
+  border-radius: 6px !important;
+  background: linear-gradient(#f2c65a, #d79a28) !important;
+  box-shadow: inset 0 0 0 1px rgb(90 58 16 / 45%), inset 0 1px 0 rgb(255 255 255 / 45%) !important;
+  color: #3a2306 !important;
+  font-family: Michroma, sans-serif !important;
+  font-size: 8px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-shadow: none !important;
+  text-transform: uppercase !important;
+  white-space: normal !important;
 }
