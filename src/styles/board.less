@@ -403,27 +403,23 @@
     }
   }
 
-  // Coordinates view: the whole hex lightly covered, the coordinate in its middle (tile faded below)
+  // Coordinates view: a small label at the upper edge of the hex (the owner cube sits low); tile, cube and bonus stay fully visible,
+  // so you can still judge (and talk about) a placement
   .board-space-coords {
     position: absolute;
-    inset: 0;
-    z-index: 2;
-    display: grid;
-    place-items: center;
-    padding: 0;
-    font-size: 12px;
+    left: 50%;
+    top: 3px;
+    z-index: 6; // above tiles, cubes and the legend lines
+    transform: translateX(-50%);
+    padding: 0 4px;
+    border-radius: 6px;
+    font-size: 9px;
     font-weight: bold;
-    color: #14161c;
-    background-color: rgba(255, 255, 255, 0.55);
-    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  }
-
-  &:has(> .board-space-coords) > [data-test="tile"] {
-    opacity: 0.4;
-  }
-
-  &:has(> .board-space-coords) .board-cube {
-    display: none;
+    line-height: 12px;
+    white-space: nowrap;
+    color: #fff;
+    background-color: rgba(10, 12, 18, 0.78);
+    pointer-events: none;
   }
 
   .board-space-bonuses {

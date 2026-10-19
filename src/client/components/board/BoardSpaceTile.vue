@@ -10,7 +10,7 @@ import {defineComponent} from 'vue';
 import {SpaceType} from '@/common/boards/SpaceType';
 import {TileType, tileTypeToString} from '@/common/TileType';
 import {SpaceHighlight, SpaceModel} from '@/common/models/SpaceModel';
-import {TileView} from '@/client/components/board/TileView';
+import {TileView, showsTiles} from '@/client/components/board/TileView';
 import AdjacencyBonus from '@/client/components/AdjacencyBonus.vue';
 
 const tileTypeToCssClass: Record<TileType, string> = {
@@ -173,7 +173,7 @@ export default defineComponent({
           }
         }
       }
-      if (this.tileView !== 'show') {
+      if (!showsTiles(this.tileView)) {
         css += ' board-hidden-tile';
       }
       return css;

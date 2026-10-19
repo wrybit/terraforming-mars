@@ -50,6 +50,9 @@
     <template #banner>
       <PlacementBanner v-if="placementDescription !== undefined" :description="placementDescription"/>
     </template>
+    <template #controls>
+      <TileViewToggle :tileView="tileView" @toggleTileView="$emit('toggleTileView')"/>
+    </template>
     <MoonBoard v-if="zoomBoard === 'moon' && game.moon" :model="game.moon" :tileView="tileView" ring/>
     <Board
       v-else
@@ -78,6 +81,7 @@ import BoardTabs from '@/client/components/boardTabs/BoardTabs.vue';
 import {DUNE_BOARD_TABS, DuneBoardTabId} from '@/client/components/boardTabs/boardTabs';
 import ColoniesBoard from '@/client/components/colonies/ColoniesBoard.vue';
 import BoardZoomModal from '@/client/components/board/BoardZoomModal.vue';
+import TileViewToggle from '@/client/components/boardTabs/TileViewToggle.vue';
 import PlacementBanner from '@/client/components/board/PlacementBanner.vue';
 import {describePlacement, PlacementDescription} from '@/client/components/board/placementDescription';
 import OuterSpaceCorners from '@/client/components/board/OuterSpaceCorners.vue';
@@ -138,6 +142,7 @@ export default defineComponent({
     BoardTabs,
     ColoniesBoard,
     BoardZoomModal,
+    TileViewToggle,
     PlacementBanner,
     DeltaBoard,
     DuneBoard,

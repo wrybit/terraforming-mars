@@ -8,7 +8,7 @@
     <div class="board-space-text" v-if="text" v-i18n>{{ text }}</div>
     <Bonus :bonus="space.bonus" v-if="showBonus"/>
     <div v-if="tileView === 'coords' && space.a9 !== undefined" class="board-space-coords">{{ space.a9 }}</div>
-    <template v-if="tileView === 'show'">
+    <template v-if="showTiles">
       <BoardCube v-if="space.color !== undefined" class="board-cube" :color="space.color" :spinSeed="space.id"/>
       <template v-if="space.gagarin !== undefined">
         <div v-if="space.gagarin === 0" class='gagarin'></div>
@@ -40,7 +40,7 @@ import BoardCube from '@/client/components/common/BoardCube.vue';
 import BoardSpaceTile from '@/client/components/board/BoardSpaceTile.vue';
 import BoardSpaceCube from '@/client/components/board/BoardSpaceCube.vue';
 import UndergroundToken from '@/client/components/underworld/UndergroundToken.vue';
-import {TileView} from '@/client/components/board/TileView';
+import {TileView, showsTiles} from '@/client/components/board/TileView';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import {ClaimedToken} from '@/common/underworld/UnderworldPlayerData';
 import {SpaceType} from '@/common/boards/SpaceType';
@@ -84,12 +84,11 @@ export default defineComponent({
       css += ' board-space-selectable';
       return css;
     },
+    showTiles(): boolean {
+      return showsTiles(this.tileView);
+    },
     showBonus(): boolean {
-      // Coordinates view: only the coordinate in the middle of the hex
-      if (this.tileView === 'coords') {
-        return false;
-      }
-      if (this.tileView === 'hide') {
+      if (!this.showTiles) {
         return true;
       }
       return this.space.tileType === undefined && this.space.cube === undefined;
