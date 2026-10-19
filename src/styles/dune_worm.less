@@ -150,12 +150,27 @@
   opacity: 0.75;
 }
 
+// Way of the worm: an orange glow below, white dots on top
+.worm-trail__glow,
 .worm-trail__line {
   fill: none;
-  stroke: @worm-way;
-  stroke-width: 5;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.worm-trail__glow {
+  stroke: @worm-way;
+  stroke-width: 18;
+  opacity: 0.8;
+  filter: blur(3px);
+}
+
+.worm-trail__line {
+  stroke: #fff8ea;
+  stroke-width: 9;
+  // Zero-length dashes with round caps: dots
+  stroke-dasharray: 0 16;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.7));
 }
 
 .worm-trail__start {
