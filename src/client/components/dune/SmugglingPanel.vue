@@ -10,7 +10,7 @@
         </span>
       </li>
     </ol>
-    <p class="dune-board__hint">{{ $t('Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.') }}</p>
+    <p v-if="!compact" class="dune-board__hint">{{ $t('Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.') }}</p>
   </div>
 </template>
 
@@ -32,6 +32,11 @@ export default defineComponent({
     players: {
       type: Array as PropType<ReadonlyArray<PublicPlayerModel>>,
       required: true,
+    },
+    // Without the rules text (smuggling tab of the action menu, SmuggleInput.vue)
+    compact: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

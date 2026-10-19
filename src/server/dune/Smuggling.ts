@@ -6,6 +6,8 @@ import {ALL_RESOURCES, Resource} from '../../common/Resource';
 import {TileType} from '../../common/TileType';
 import {SelectOption} from '../inputs/SelectOption';
 import {SelectTrade} from '../inputs/SelectTrade';
+import {SelectPayment} from '../inputs/SelectPayment';
+import {OrOptions} from '../inputs/OrOptions';
 import {tradeRate} from '../../common/inputs/tradeRate';
 import {BAZAAR_GOOD_VALUE} from '../../common/dune/bazaarWares';
 import {PlayerInput} from '../PlayerInput';
@@ -136,37 +138,61 @@ function smuggleInput(player: IPlayer, data: SmugglingData, onlySpice: boolean):
     });
 }
 
-function bribeInput(player: IPlayer, data: SmugglingData): SelectOption | undefined {
+/** Bribe for the AI: a plain choice in the Dune group of the action menu */
+function bribeOption(player: IPlayer, data: SmugglingData): SelectOption | undefined {
   const cost = bribeCost(player);
   if (suspicionOf(data, player) < 1 || player.megaCredits < cost) {
     return undefined;
   }
   return new SelectOption(message(BRIBE_TITLE, (b) => b.number(cost)), 'Bribe').andThen(() => {
     player.stock.deduct(Resource.MEGACREDITS, cost, {log: true});
-    data.suspicion[player.id] = suspicionOf(data, player) - 1;
-    player.game.log('${0} bribed the officials', (b) => b.player(player));
+    bribed(player, data);
     return undefined;
   });
 }
 
-/**
- * Smuggling actions of the Dune group of the action menu: bribing. The AI bribes from 3 on.
- * Moving spice and the black market are one trade with its own tab (smugglingTabActions).
- */
+/** Bribe in the smuggling tab: paid like any cost, with the usual payment box (before → after) */
+function bribePayment(player: IPlayer, data: SmugglingData): SelectPayment | undefined {
+  const cost = bribeCost(player);
+  if (suspicionOf(data, player) < 1 || !player.canAfford(cost)) {
+    return undefined;
+  }
+  return new SelectPayment(message(BRIBE_TITLE, (b) => b.number(cost)), cost, {}).andThen((payment) => {
+    player.pay(payment);
+    bribed(player, data);
+    return undefined;
+  });
+}
+
+function bribed(player: IPlayer, data: SmugglingData): void {
+  data.suspicion[player.id] = suspicionOf(data, player) - 1;
+  player.game.log('${0} bribed the officials', (b) => b.player(player));
+}
+
+/** Smuggling actions of the Dune group of the action menu: only the AI bribes there (from 3 on) */
 export function smugglingActions(player: IPlayer, data: SmugglingData): Array<PlayerInput> {
-  const isAi = player.aiLevel !== undefined;
-  const bribe = !isAi || suspicionOf(data, player) >= 3 ? bribeInput(player, data) : undefined;
+  if (player.aiLevel === undefined || suspicionOf(data, player) < 3) {
+    return [];
+  }
+  const bribe = bribeOption(player, data);
   return bribe === undefined ? [] : [bribe];
 }
 
-/** Smuggling with its own tab in the action menu. The AI only moves spice while it stays below a penalty. */
+/**
+ * Smuggling with its own tab in the action menu. A player gets one tab with the trade and the bribe (Jens, 19 Oct
+ * 2026); at the top of the track (4) only the bribe. The AI only moves spice while it stays below a penalty.
+ */
 export function smugglingTabActions(player: IPlayer, data: SmugglingData): Array<PlayerInput> {
-  const isAi = player.aiLevel !== undefined;
-  if (isAi && suspicionOf(data, player) + 1 >= COSTLY_SUSPICION) {
-    return [];
+  if (player.aiLevel !== undefined) {
+    if (suspicionOf(data, player) + 1 >= COSTLY_SUSPICION) {
+      return [];
+    }
+    const input = smuggleInput(player, data, true);
+    return input === undefined ? [] : [input];
   }
-  const input = smuggleInput(player, data, isAi);
-  return input === undefined ? [] : [input];
+  const choices = [smuggleInput(player, data, false), bribePayment(player, data)]
+    .filter((input): input is SelectTrade | SelectPayment => input !== undefined);
+  return choices.length === 0 ? [] : [new OrOptions(...choices).setTitle(SMUGGLE_TITLE)];
 }
 
 /** End of generation: suspicion 2 and more costs TR (Landsraad influence), then the marker drops back to 0 */

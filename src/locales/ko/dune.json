@@ -293,5 +293,8 @@
   "Smuggling: black market (double worth)": "밀수: 암시장 (두 배 가치)",
   "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "스파이스 운송: 스파이스 최대 5개를 개당 5 솔라리에. 암시장: 두 배 가치로 (스파이스 1개에 6 솔라리). 매번 의심이 1 오르며, 뇌물(10 솔라리, 밀수꾼 시장 소유자는 7)로 낮출 수 있습니다. 세대 종료: 0과 1은 무료이며, 2 이상이면 영향력을 잃고 마커가 0으로 돌아갑니다.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "당신의 차례가 아니거나, 교환할 것이 없거나, 의심 4: 먼저 뇌물을 주세요",
-  "Bazaar: buy ${0} for ${1} M€": "시장: ${0}을(를) ${1} M€에 구매"
+  "Bazaar: buy ${0} for ${1} M€": "시장: ${0}을(를) ${1} M€에 구매",
+  "Suspicion": "의심",
+  "Suspicion 4: smuggling is closed until a bribe lowers it": "의심 4: 뇌물로 낮출 때까지 밀수가 막힙니다",
+  "Nothing worth trading": "교환할 것이 없습니다"
 }

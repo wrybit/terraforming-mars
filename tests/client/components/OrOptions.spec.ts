@@ -350,6 +350,9 @@ describe('OrOptions', () => {
     expect(vm.showChildSaveButton(asComplete<PlayerInputModel>({type: 'card', min: 0, max: 5}))).to.be.true;
     expect(vm.showChildSaveButton(asComplete<PlayerInputModel>({type: 'card', min: 1, max: 1}))).to.be.false;
     expect(vm.showChildSaveButton(asComplete<PlayerInputModel>({type: 'option'}))).to.be.false;
+    // Dune smuggling tab: its button follows the chosen move (dune/duneInputs.ts)
+    expect(vm.showChildSaveButton(asComplete<PlayerInputModel>({type: 'or', title: 'Smuggling'}))).to.be.true;
+    expect(vm.showChildSaveButton(asComplete<PlayerInputModel>({type: 'or', title: 'Standard projects'}))).to.be.false;
   });
 
   it('child save button label includes card count', () => {

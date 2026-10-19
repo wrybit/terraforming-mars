@@ -18,6 +18,8 @@ import {acceptOffer, returnOffers} from '../../src/server/dune/Choam';
 import {SCHEMES_TITLE, agendaPoints, reductionStep, schemeValue, schemesVictoryPoints} from '../../src/server/dune/Schemes';
 import {SCHEME_AGENDAS, schemeAgenda} from '../../src/common/dune/schemeAgendas';
 import {cast} from '../../src/common/utils/utils';
+import {SelectPayment} from '../../src/server/inputs/SelectPayment';
+import {Payment} from '../../src/common/inputs/Payment';
 import {formatMessage} from '../TestingUtils';
 
 function duneActions(player: TestPlayer): OrOptions {
@@ -39,6 +41,15 @@ function option(input: OrOptions, prefix: string): PlayerInput {
     throw new Error(`no option ${prefix} in ${input.options.map(titleOf).join(' | ')}`);
   }
   return found;
+}
+
+/** The smuggling tab: one choice with the trade and the bribe */
+function smugglingTab(player: TestPlayer): OrOptions {
+  return cast(option(tabActions(player), 'Smuggling'), OrOptions);
+}
+
+function smuggleTrade(player: TestPlayer): SelectTrade {
+  return cast(smugglingTab(player).options.find((candidate) => candidate instanceof SelectTrade), SelectTrade);
 }
 
 function pick(input: PlayerInput): void {
@@ -101,7 +112,7 @@ describe('Dune modules B, D, E, F', () => {
   describe('Smuggling (E)', () => {
     it('moves spice for 5 M€ each and raises the suspicion', () => {
       player1.titanium = 6;
-      const move = cast(option(tabActions(player1), 'Smuggling'), SelectTrade);
+      const move = smuggleTrade(player1);
       // Only whole multiples of the rate: 1 spice for 5 M€, at most 5 spice per deal
       expect(() => move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 2, get: Resource.MEGACREDITS, getAmount: 5})).to.throw();
       expect(() => move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 6, get: Resource.MEGACREDITS, getAmount: 30})).to.throw();
@@ -113,7 +124,7 @@ describe('Dune modules B, D, E, F', () => {
 
     it('trades 2 for 1 on the black market', () => {
       player1.heat = 9;
-      const market = cast(option(tabActions(player1), 'Smuggling'), SelectTrade);
+      const market = smuggleTrade(player1);
       expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 10, get: Resource.PLANTS, getAmount: 5})).to.throw();
       expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.HEAT, getAmount: 4})).to.throw();
       market.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.PLANTS, getAmount: 4});
@@ -122,7 +133,7 @@ describe('Dune modules B, D, E, F', () => {
 
     it('prices the black market by worth: 6 M€ for 1 spice, never 2', () => {
       player1.megaCredits = 13;
-      const market = cast(option(tabActions(player1), 'Smuggling'), SelectTrade);
+      const market = smuggleTrade(player1);
       expect(() => market.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 2, get: Resource.TITANIUM, getAmount: 1})).to.throw();
       market.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 12, get: Resource.TITANIUM, getAmount: 2});
       expect([player1.megaCredits, player1.titanium]).deep.eq([1, 2]);
@@ -131,7 +142,7 @@ describe('Dune modules B, D, E, F', () => {
     it('always offers spice, even without any, but refuses to give it', () => {
       player1.megaCredits = 13;
       player1.titanium = 0;
-      const market = cast(option(tabActions(player1), 'Smuggling'), SelectTrade);
+      const market = smuggleTrade(player1);
       expect(market.give.find((give) => give.resource === Resource.TITANIUM)?.max).eq(0);
       expect(() => market.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 1, get: Resource.MEGACREDITS, getAmount: 5})).to.throw();
     });
@@ -147,18 +158,28 @@ describe('Dune modules B, D, E, F', () => {
       expect([suspicionOf(smuggling, player1), suspicionOf(smuggling, player2)]).deep.eq([0, 1]);
     });
 
-    it('lowers the suspicion by bribing', () => {
+    it('lowers the suspicion by a bribe paid in the smuggling tab', () => {
       const smuggling = game.duneData!.smuggling!;
-      smuggling.suspicion[player1.id] = 4;
+      smuggling.suspicion[player1.id] = 3;
       player1.megaCredits = 10;
-      pick(option(duneActions(player1), 'Bribe the officials'));
-      expect(suspicionOf(smuggling, player1)).eq(3);
+      const bribe = cast(option(smugglingTab(player1), 'Bribe the officials'), SelectPayment);
+      expect(bribe.amount).eq(10);
+      bribe.process({type: 'payment', payment: Payment.of({megacredits: 10})}, player1);
+      expect(suspicionOf(smuggling, player1)).eq(2);
       expect(player1.megaCredits).eq(0);
+      // Not in the Dune group of the action menu any more
+      expect(DuneExpansion.actions(player1)).is.undefined;
     });
 
-    it('blocks smuggling at suspicion 4, the top of the track', () => {
+    it('offers only the bribe at suspicion 4, the top of the track', () => {
       game.duneData!.smuggling!.suspicion[player1.id] = 4;
       player1.titanium = 5;
+      player1.megaCredits = 10;
+      expect(smugglingTab(player1).options.map((input) => input.type)).deep.eq(['payment']);
+    });
+
+    it('has no smuggling tab without anything to do', () => {
+      game.duneData!.smuggling!.suspicion[player1.id] = 4;
       player1.megaCredits = 0;
       expect(DuneExpansion.tabActions(player1).map(titleOf).some((title) => title.startsWith('Smuggling'))).is.false;
     });

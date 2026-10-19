@@ -291,5 +291,8 @@
   "Smuggling: black market (double worth)": "Csempészet: feketepiac (dupla érték)",
   "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Fűszer szállítása: legfeljebb 5 fűszer egyenként 5 solariért. Feketepiac: dupla értéken (1 fűszer 6 solariért). Mindegyik 1-gyel növeli a gyanút; a vesztegetés (10 solari, a Csempészpiac tulajdonosának 7) csökkenti. A generáció végén: a 0 és az 1 ingyenes, 2-től befolyás vész el, és a jelző visszaesik 0-ra.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Nem te jössz, nincs mit cserélni, vagy a gyanú 4: előbb vesztegess",
-  "Bazaar: buy ${0} for ${1} M€": "Bazár: ${0} megvétele ${1} M€-ért"
+  "Bazaar: buy ${0} for ${1} M€": "Bazár: ${0} megvétele ${1} M€-ért",
+  "Suspicion": "Gyanú",
+  "Suspicion 4: smuggling is closed until a bribe lowers it": "Gyanú 4: a csempészet zárva, amíg egy vesztegetés nem csökkenti",
+  "Nothing worth trading": "Nincs mit cserélni"
 }

@@ -285,5 +285,8 @@
   "Smuggling: black market (double worth)": "Smokkel: zwarte markt (dubbele waarde)",
   "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Spice verplaatsen: tot 5 Spice voor elk 5 Solari. Zwarte markt: voor dubbele waarde (6 Solari voor 1 Spice). Elk verhoogt de verdenking met 1; een omkoping (10 Solari, eigenaar van de Smokkelaarsmarkt 7) verlaagt die. Einde van de generatie: 0 en 1 zijn gratis, vanaf 2 gaat invloed verloren en valt de marker terug naar 0.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Niet jouw beurt, niets om te ruilen of verdenking 4: eerst omkopen",
-  "Bazaar: buy ${0} for ${1} M€": "Bazaar: ${0} kopen voor ${1} M€"
+  "Bazaar: buy ${0} for ${1} M€": "Bazaar: ${0} kopen voor ${1} M€",
+  "Suspicion": "Verdenking",
+  "Suspicion 4: smuggling is closed until a bribe lowers it": "Verdenking 4: smokkelen is dicht tot een omkoping haar verlaagt",
+  "Nothing worth trading": "Niets om te ruilen"
 }

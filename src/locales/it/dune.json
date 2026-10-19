@@ -290,5 +290,8 @@
   "Smuggling: black market (double worth)": "Contrabbando: mercato nero (valore doppio)",
   "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Spostare spezia: fino a 5 spezia per 5 solari ciascuna. Mercato nero: al doppio del valore (6 solari per 1 spezia). Ognuno aumenta il sospetto di 1; una bustarella (10 solari, 7 per il proprietario del Mercato dei contrabbandieri) lo riduce. Fine generazione: 0 e 1 sono gratuiti, da 2 in su si perde influenza e il segnalino torna a 0.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Non è il tuo turno, nulla da scambiare o sospetto 4: prima corrompi",
-  "Bazaar: buy ${0} for ${1} M€": "Bazar: compra ${0} per ${1} M€"
+  "Bazaar: buy ${0} for ${1} M€": "Bazar: compra ${0} per ${1} M€",
+  "Suspicion": "Sospetto",
+  "Suspicion 4: smuggling is closed until a bribe lowers it": "Sospetto 4: contrabbando chiuso finché una bustarella non lo riduce",
+  "Nothing worth trading": "Nulla da scambiare"
 }

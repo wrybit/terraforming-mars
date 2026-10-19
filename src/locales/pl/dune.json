@@ -291,5 +291,8 @@
   "Smuggling: black market (double worth)": "Przemyt: czarny rynek (podwójna wartość)",
   "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Przerzut przyprawy: do 5 przyprawy po 5 solarów za sztukę. Czarny rynek: za podwójną wartość (6 solarów za 1 przyprawę). Każde podnosi podejrzenie o 1; łapówka (10 solarów, właściciel Targu przemytników 7) je obniża. Koniec pokolenia: 0 i 1 są darmowe, od 2 traci się Wpływ, a znacznik wraca na 0.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Nie twoja tura, nic do wymiany lub podejrzenie 4: najpierw łapówka",
-  "Bazaar: buy ${0} for ${1} M€": "Bazar: kup ${0} za ${1} M€"
+  "Bazaar: buy ${0} for ${1} M€": "Bazar: kup ${0} za ${1} M€",
+  "Suspicion": "Podejrzenie",
+  "Suspicion 4: smuggling is closed until a bribe lowers it": "Podejrzenie 4: przemyt zamknięty, dopóki łapówka go nie obniży",
+  "Nothing worth trading": "Nic do wymiany"
 }

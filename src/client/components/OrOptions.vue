@@ -235,6 +235,7 @@ import BazaarPurchaseIntro from '@/client/components/dune/BazaarPurchaseIntro.vu
 import {BAZAAR_BUY_TITLE} from '@/common/dune/duneActionTitles';
 import {titleKey} from '@/client/components/orOptionsShortLabels';
 import {duneBoardTabOf} from '@/client/components/dune/duneActionBoardTab';
+import {duneInputHasOwnButton} from '@/client/components/dune/duneInputs';
 import {boardTabState, selectBoardTab} from '@/client/components/boardTabs/boardTabState';
 import {DuneBoardTabId} from '@/client/components/boardTabs/boardTabs';
 
@@ -685,7 +686,8 @@ export default defineComponent({
       return INLINE_INPUT_TYPES.includes(option.type);
     },
     showChildSaveButton(option: PlayerInputModel): boolean {
-      return option.type === 'card' && !(option.max === 1 && option.min === 1);
+      // Dune: the smuggling tab names its button after the chosen move (dune/duneInputs.ts)
+      return (option.type === 'card' && !(option.max === 1 && option.min === 1)) || duneInputHasOwnButton(option);
     },
     saveData() {
       // CEO from the "Actions" tab: answer the CEO action directly with the chosen card
