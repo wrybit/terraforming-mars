@@ -463,17 +463,101 @@ html.theme-dune:is([lang="fr"], [lang="es"], [lang="it"], [lang|="pt"]) .card-co
   content: "PV";
 }
 
-html.theme-dune .card-container .card-points-big {
-  font-size: 30px;
-}
-
 html.theme-dune .card-container .card-points-normal {
   align-items: center;
-  font-size: 24px;
 }
 
 /* More contrast for the card text (Jens 19 Oct 2026): a lighter parchment (above) and the scene of Arrakis behind
    the lower half of the card only faint, so the description stays dark on light */
 html.theme-dune .card-container .card-scene {
   opacity: 0.22;
+}
+
+/* Type scale of the cards (Jens 19 Oct 2026, study "Schriften auf Karten"): three fonts with fixed roles instead of
+   35 combinations. Michroma for titles and small labels, Ubuntu for every text and number in a few sizes:
+   number L 26, number M 20 (amounts and the signs − + / : = *), number S 15 (inside coins and chips),
+   word 16 bold (words in the picture row), text 11 regular, emphasis 11 bold. No capitals outside Michroma. */
+html.theme-dune .card-container .card-content,
+html.theme-dune .card-container .card-content * {
+  font-family: Ubuntu, sans-serif;
+}
+
+/* Number L: cost and victory points */
+html.theme-dune .card-container .card-cost,
+html.theme-dune .card-container .card-old-cost,
+html.theme-dune .card-container .card-points,
+html.theme-dune .card-container .card-points * {
+  font-family: Ubuntu, sans-serif !important;
+  font-weight: 700;
+}
+
+html.theme-dune .card-container .card-cost {
+  font-size: 26px;
+}
+
+html.theme-dune .card-container .card-points-big {
+  font-size: 26px;
+}
+
+/* A fraction with a symbol needs room: number M */
+html.theme-dune .card-container .card-points-normal,
+html.theme-dune .card-container .card-points-normal > div {
+  font-size: 20px;
+}
+
+/* Number M: amounts in front of symbols, the signs, the resource counter */
+html.theme-dune .card-container .card-content .card-res-amount,
+html.theme-dune .card-container .card-content .card-special.card-asterix,
+html.theme-dune .card-container .card-content .card-special.card-slash,
+html.theme-dune .card-container .card-content .card-special.card-equals,
+html.theme-dune .card-container .card-content .card-special.card-colon,
+html.theme-dune .card-container .card-resources-counter-number {
+  font-family: Ubuntu, sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700;
+}
+
+/* Number S: inside a coin */
+html.theme-dune .card-container .card-content .card-resource.card-resource-money {
+  font-family: Ubuntu, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 700;
+}
+
+/* Word: words in the picture row ("OR", "Bribe :", "War field : 2 Sardaukar"), no capitals */
+html.theme-dune .card-container .card-content .card-special.card-or,
+html.theme-dune .card-container .card-content .card-text-size--S.card-text-bold,
+html.theme-dune .card-container .card-content .card-text-size--M.card-text-bold,
+html.theme-dune .card-container .card-content .card-text-size--M.card-text-uppercase {
+  font-size: 16px !important;
+  font-weight: 700;
+  text-transform: none !important;
+}
+
+/* Emphasis: rules like "1 VP per …" and notes, 11 bold without capitals (was 9 to 14 px in capitals) */
+html.theme-dune .card-container .card-content .card-text-size--XS.card-text-uppercase,
+html.theme-dune .card-container .card-content .card-text-size--S.card-text-uppercase,
+html.theme-dune .card-container .card-content .card-plate {
+  font-size: 11px !important;
+  font-weight: 700;
+  text-transform: none !important;
+  line-height: 1.35;
+}
+
+html.theme-dune .card-container .card-content mark,
+html.theme-dune .card-container .card-content .card-text-opponent,
+html.theme-dune .card-container .card-content .card-asterisk-note-star {
+  font-weight: 700;
+}
+
+/* Labels: house name and the small labels in Michroma */
+html.theme-dune .card-container .card-title.card-house-name {
+  font-size: 16px;
+}
+
+html.theme-dune .card-container .corporation-label,
+html.theme-dune .card-container .card-corporation-label {
+  font: 8px Michroma, sans-serif !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
