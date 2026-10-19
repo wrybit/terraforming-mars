@@ -28,11 +28,17 @@
 }
 
 // ---------- Converter: one axis ----------
+@amount-side-width: 220px;
+@amount-middle-max-width: 420px;
+@amount-column-gap: 28px;
+// The converter at its widest: blocks above it line up with this width (smuggling tab, dune_smuggle.less)
+@amount-converter-max-width: (2 * @amount-side-width + @amount-middle-max-width + 2 * @amount-column-gap);
+
 .amount-converter {
   display: grid;
-  grid-template-columns: 220px minmax(280px, 420px) 220px;
+  grid-template-columns: @amount-side-width minmax(280px, @amount-middle-max-width) @amount-side-width;
   grid-template-rows: auto 52px auto;
-  column-gap: 28px;
+  column-gap: @amount-column-gap;
 }
 
 .amount-side,

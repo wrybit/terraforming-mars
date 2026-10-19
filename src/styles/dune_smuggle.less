@@ -9,32 +9,51 @@ html:not(.tm-mobile) .or-tab-panel:has(.smuggle-input) {
   .smuggle-input {
     flex: 1 0 auto;
   }
+
+  // The generic tab rules let a choice block fill the free height; here the block stays compact, centred as a whole
+  .smuggle-input :has(.choice-block),
+  .smuggle-input .trade-select {
+    flex: 0 0 auto;
+  }
 }
 
 .smuggle-input {
   container-type: inline-size;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: 14px;
+  // Track, switch and trade as one block, close together and all as wide as the converter below (Jens, 19 Oct 2026)
+  gap: 12px;
   width: 100%;
+  max-width: @amount-converter-max-width;
+  margin: 0 auto;
 
   .dune-smuggling {
     width: 100%;
-    max-width: 560px;
   }
 
   // The trade inside does not stretch on its own here: the tab already centres the whole block
   .trade-select {
     flex: 0 0 auto;
-    margin-top: 10px;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  // Give and get share the full width of the block
+  .trade-select__side {
+    max-width: none;
+  }
+
+  .amount-converter {
+    justify-content: space-between;
+    width: 100%;
   }
 }
 
 // Smuggle | Bribe as one pill switch, like the tile view switch of the board (TileViewToggle.vue)
 .smuggle-input__modes {
   display: inline-flex;
+  align-self: center;
   padding: 3px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;

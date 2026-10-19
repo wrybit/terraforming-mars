@@ -117,7 +117,7 @@
   }
 }
 
-// Smuggling: track 0–4 (DuneModel.ts MAX_SUSPICION), the penalty steps tinted
+// Smuggling: track 0–4 (DuneModel.ts MAX_SUSPICION), each step tinted warmer than the one before
 .dune-smuggling__track {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -139,10 +139,17 @@
   border: 1px solid rgba(228, 210, 174, 0.2);
 }
 
-.dune-smuggling__step--penalty {
-  background: rgba(140, 53, 34, 0.35);
-  border-color: rgba(178, 75, 50, 0.6);
+// The suspicion rises like the heat of the desert: sand, ochre, spice orange, burnt orange, deep red
+.dune-smuggling-step(@colour) {
+  background: fade(@colour, 26%);
+  border-color: fade(@colour, 70%);
 }
+
+.dune-smuggling__step--0 { .dune-smuggling-step(#cbb994); }
+.dune-smuggling__step--1 { .dune-smuggling-step(#d6aa4a); }
+.dune-smuggling__step--2 { .dune-smuggling-step(#e0822f); }
+.dune-smuggling__step--3 { .dune-smuggling-step(#c9542b); }
+.dune-smuggling__step--4 { .dune-smuggling-step(#a8302a); }
 
 .dune-smuggling__level {
   font-size: 18px;

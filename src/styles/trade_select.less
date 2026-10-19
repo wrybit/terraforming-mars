@@ -22,7 +22,8 @@
 
 // Without a converter (CHOAM offer) no choice block stretches the box (choice_block.less): the same column fill for
 // the trade itself, so the offer sits in the middle between tabs and footer too (Jens, 19 Oct 2026)
-html:not(.tm-mobile) .or-tab-panel:has(.trade-select) {
+// (The smuggling tab centres its whole block itself, dune_smuggle.less)
+html:not(.tm-mobile) .or-tab-panel:has(.trade-select):not(:has(.smuggle-input)) {
   display: flex;
   flex-direction: column;
 

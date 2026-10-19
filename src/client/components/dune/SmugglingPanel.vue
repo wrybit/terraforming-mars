@@ -2,7 +2,7 @@
   <!-- Smuggling & suspicion (Dune module E): the suspicion track 0–4 with every player's marker -->
   <div class="dune-smuggling" data-test="dune-smuggling">
     <ol class="dune-smuggling__track">
-      <li v-for="level in LEVELS" :key="level" :class="['dune-smuggling__step', {'dune-smuggling__step--penalty': penalty(level) > 0}]">
+      <li v-for="level in LEVELS" :key="level" :class="['dune-smuggling__step', 'dune-smuggling__step--' + level]">
         <span class="dune-smuggling__level">{{ level }}</span>
         <span class="dune-smuggling__penalty">{{ penalty(level) > 0 ? '−' + penalty(level) : '' }}</span>
         <span class="dune-smuggling__markers">
