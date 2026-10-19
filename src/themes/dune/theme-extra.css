@@ -267,3 +267,42 @@ html.theme-dune .dune-board__title {
   letter-spacing: 0.08em;
   color: #eaa05b;
 }
+
+/* Tiles on cards: the Dune tile pictures are complete hexagons (132 × 152). Mars stretches its pictures to fixed boxes
+   and lays the special symbol over a separate hexagon; here every tile keeps its shape (contain), the special tile
+   shows only its own complete picture, and the boxes are a little larger so the tiles read next to the other symbols. */
+html.theme-dune .card-tile {
+  background-size: contain;
+  background-position: center;
+}
+
+html.theme-dune .card-tile.card-tile-canvas {
+  background-image: none;
+}
+
+html.theme-dune .card-tile-symbol {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+html.theme-dune .card-tile.tile-size--S {
+  width: 34px;
+  height: 39px;
+  background-size: contain;
+}
+
+html.theme-dune .card-tile.tile-size--M,
+html.theme-dune .card-tile.card-tile-canvas,
+html.theme-dune .card-tile.card-tile-capital,
+html.theme-dune .card-tile-canvas .card-tile-symbol {
+  width: 48px;
+  height: 55px;
+  background-size: contain;
+}
+
+html.theme-dune .card-tile.tile-size--L {
+  width: 56px;
+  height: 64px;
+  background-size: contain;
+}
