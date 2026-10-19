@@ -39,25 +39,43 @@ function mainStylesheet(): HTMLLinkElement | null {
   return document.querySelector<HTMLLinkElement>('link[rel="stylesheet"][href="styles.css"]');
 }
 
+// Switches a stylesheet on or off without throwing it away: the disabled attribute of a <link> drops the parsed sheet,
+// and switching it back on loads and parses it anew – for a few frames the page has no styles at all (on the theme
+// switch the planet flashed in the wrong half). The sheet's own flag keeps it ready.
+function setStylesheetEnabled(link: HTMLLinkElement, enabled: boolean): void {
+  if (link.sheet !== null) {
+    link.sheet.disabled = !enabled;
+  } else {
+    link.disabled = !enabled;
+  }
+}
+
+function isStylesheetEnabled(link: HTMLLinkElement): boolean {
+  return link.sheet !== null ? !link.sheet.disabled : !link.disabled;
+}
+
 /** Shows the stylesheet of the theme (or the game's own); resolves once it is loaded, so nothing flashes in Mars colours. */
 function useColors(theme: Theme): Promise<void> {
   const main = mainStylesheet();
-  for (const link of document.querySelectorAll<HTMLLinkElement>('link[data-theme-colors]')) {
-    link.disabled = link.dataset.themeColors !== theme;
-  }
+  const others = Array.from(document.querySelectorAll<HTMLLinkElement>('link[data-theme-colors]'));
   // Without the game's stylesheet (tests) there is nothing to stand in for
   if (main === null || !RECOLORED_THEMES.includes(theme)) {
+    // The game's own first, then the theme's off: there is always one complete stylesheet in effect
     if (main !== null) {
-      main.disabled = false;
+      setStylesheetEnabled(main, true);
     }
+    others.forEach((link) => setStylesheetEnabled(link, false));
     return Promise.resolve();
   }
-  const existing = document.querySelector<HTMLLinkElement>(`link[data-theme-colors="${theme}"]`);
-  if (existing !== null) {
-    main.disabled = existing.sheet !== null;
+  const existing = others.find((link) => link.dataset.themeColors === theme);
+  if (existing !== undefined && existing.sheet !== null) {
+    setStylesheetEnabled(existing, true);
+    others.filter((link) => link !== existing).forEach((link) => setStylesheetEnabled(link, false));
+    setStylesheetEnabled(main, false);
     return Promise.resolve();
   }
-  const link = document.createElement('link');
+  others.forEach((link) => setStylesheetEnabled(link, false));
+  const link = existing ?? document.createElement('link');
   link.rel = 'stylesheet';
   link.dataset.themeColors = theme;
   link.href = `assets/themes/${theme}/styles.css`;
@@ -65,13 +83,17 @@ function useColors(theme: Theme): Promise<void> {
     // The game's stylesheet goes off only once the theme's is there; until then (or on a load error) Mars colours.
     // A slow load never holds up the switch: the colours follow when they arrive
     link.onload = () => {
-      main.disabled = !link.disabled;
+      setStylesheetEnabled(main, !isStylesheetEnabled(link));
       resolve();
     };
     link.onerror = () => resolve();
     setTimeout(resolve, STYLESHEET_WAIT_MS);
-    // Right after the game's stylesheet: theme.css (pictures) still comes later and wins
-    main.after(link);
+    if (existing === undefined) {
+      // Right after the game's stylesheet: theme.css (pictures) still comes later and wins
+      main.after(link);
+    } else {
+      setStylesheetEnabled(link, true);
+    }
   });
 }
 

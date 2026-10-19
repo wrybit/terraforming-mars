@@ -37,6 +37,27 @@ describe('applyTheme colours', () => {
     expect(dune?.disabled).is.true;
   });
 
+  it('switches loaded sheets by their own flag, never by the disabled attribute (that would reload them unstyled)', async () => {
+    vi.useFakeTimers();
+    const mainSheet = {disabled: false};
+    Object.defineProperty(main, 'sheet', {get: () => mainSheet});
+    const switching = applyTheme('dune');
+    const dune = document.querySelector<HTMLLinkElement>('link[data-theme-colors="dune"]')!;
+    const duneSheet = {disabled: false};
+    Object.defineProperty(dune, 'sheet', {get: () => duneSheet});
+    dune.dispatchEvent(new Event('load'));
+    await vi.runAllTimersAsync();
+    await switching;
+    expect([mainSheet.disabled, duneSheet.disabled]).deep.eq([true, false]);
+
+    await applyTheme('mars');
+    expect([mainSheet.disabled, duneSheet.disabled]).deep.eq([false, true]);
+    expect(main.hasAttribute('disabled') || dune.hasAttribute('disabled')).is.false;
+
+    await applyTheme('dune');
+    expect([mainSheet.disabled, duneSheet.disabled]).deep.eq([true, false]);
+  });
+
   it('keeps the Mars colours when the Dune stylesheet does not arrive', async () => {
     vi.useFakeTimers();
     const switching = applyTheme('dune');
