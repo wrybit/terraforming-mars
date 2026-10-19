@@ -96,16 +96,16 @@ html.theme-dune .background-color-prelude {
   color: #fff8ea;
 }
 
-/* Requirement plate (variant B of the requirement study): a parchment sign that never wraps: symbols, value,
-   then one MIN or MAX mark per plate (arrow up green, arrow down red). Card.vue moves it into the top row, right of
-   the cost coin and on one axis with coin and tags, whenever the row has room; otherwise it stays in the content. */
+/* Requirement plate (variant B of the requirement study): a parchment sign below the title that never wraps:
+   symbols, value, then one MIN or MAX mark per plate (arrow up green, arrow down red), all on one axis. */
 html.theme-dune .card-requirements {
   flex: none;
   align-self: center;
   align-items: center;
   width: auto;
   max-width: none;
-  height: 28px;
+  box-sizing: border-box;
+  height: 26px;
   line-height: normal;
   padding: 0 4px 0 2px;
   white-space: nowrap;
@@ -116,24 +116,21 @@ html.theme-dune .card-requirements {
   color: #1d140c;
 }
 
-html.theme-dune .card-requirements.card-requirements--top {
-  margin: 0 auto 0 4px;
-}
-
 html.theme-dune .card-requirements .card-requirement .card-item-container {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   gap: 2px;
-  height: 24px;
+  height: 22px;
   margin: 0 1px;
-  font: 700 15px Ubuntu, sans-serif;
+  font: 700 14px Ubuntu, sans-serif;
   white-space: nowrap;
 }
 
-/* Symbols first, then the value */
+/* Symbols first, then the value; a little smaller so the plate stays as low as the Mars bar */
 html.theme-dune .card-requirements .card-item-container > div {
   order: -1;
+  zoom: 0.8;
 }
 
 html.theme-dune .card-requirements .card-requirement-max-label {
@@ -235,9 +232,16 @@ html.theme-dune .choice-option-gain--temperature {
   width: auto;
 }
 
-/* Standard projects: flat title band as in the mockup instead of the Mars arch (cards.less) */
-html.theme-dune .card-title-standard-project .background-color-standard-project {
-  border-radius: 16px 16px 0 0 !important;
+/* Standard projects: the same flat title band as every other Dune card, in the umber of the card frame with light
+   text, instead of the grey Mars arch (cards.less); a parchment strip stays above it like on the project cards */
+html.theme-dune .card-title .background-color-standard-project,
+html.theme-dune .background-color-standard-project {
+  background-image: linear-gradient(-60deg, #4a3422 10%, #6b4c30, #4a3422 90%);
+  color: #fff8ea;
+}
+
+html.theme-dune .card-container.card-standard-project .card-title-standard-project .background-color-standard-project {
+  border-radius: 0 !important;
 }
 
 /* Phone parameter bars (MobileParameterBars.vue) in the colours of the Arrakis scales: water blue, vegetation green,

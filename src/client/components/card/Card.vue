@@ -8,15 +8,13 @@
       <div class="card-content-wrapper" v-i18n @mouseover="hovering = true" @mouseleave="hovering = false">
           <div v-if="!isStandardProject" class="card-cost-and-tags">
               <CardCost :amount="cost" :newCost="reducedCost" />
-              <!-- Dune theme: the requirement sits in the top row, on one axis with cost and tags -->
-              <CardRequirementsComponent v-if="topRequirements !== undefined" class="card-requirements--top" :requirements="topRequirements"/>
               <CardHelp v-if="helpText !== undefined" :name="card.name" :helpText="helpText" :hovering="hovering" />
               <CardTags :tags="tags" />
           </div>
           <CardTitle :title="card.name" :type="cardType"/>
           <CardContent
               :metadata="cardMetadata"
-              :requirements="topRequirements === undefined ? cardRequirements : undefined"
+              :requirements="cardRequirements"
               :isCorporation="isCorporationCard"
               :bottomPadding="bottomPadding" />
       </div>
@@ -42,8 +40,6 @@ import CardTags from './CardTags.vue';
 import CardVictoryPoints from './CardVictoryPoints.vue';
 import CardContent from './CardContent.vue';
 import CardHelp from './CardHelp.vue';
-import CardRequirementsComponent from './CardRequirementsComponent.vue';
-import {activeTheme} from '@/client/theme/applyTheme';
 import {cardScene} from '@/client/theme/themeDisplay';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {CardType} from '@/common/cards/CardType';
@@ -70,7 +66,6 @@ export default defineComponent({
     CardExpansion,
     CardTags,
     CardContent,
-    CardRequirementsComponent,
     CardVictoryPoints,
   },
   props: {
@@ -184,19 +179,6 @@ export default defineComponent({
     },
     cardRequirements(): ReadonlyArray<CardRequirementDescriptor> | undefined {
       return this.cardInstance.requirements;
-    },
-    // Requirements shown in the top row (Dune theme only), when the row has room next to coin and tags;
-    // otherwise, and always on Mars, they stay in the card content
-    topRequirements(): ReadonlyArray<CardRequirementDescriptor> | undefined {
-      const requirements = this.cardRequirements;
-      if (activeTheme() !== 'dune' || this.isStandardProject || requirements === undefined || requirements.length === 0) {
-        return undefined;
-      }
-      const tagCount = this.tags.length;
-      if (tagCount > 2 || tagCount + requirements.length > 3) {
-        return undefined;
-      }
-      return requirements;
     },
     resourceAmount(): number {
       return this.card.resources || this.robotCard?.resources || 0;
