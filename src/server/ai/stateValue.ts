@@ -337,7 +337,7 @@ export function unknownCardValue(player: IPlayer, context: ValuationContext): nu
 }
 
 /** Cards an action draws per use (AI Central 2, Development Center 1 …), 0 for other actions. */
-function cardsDrawnByAction(card: ICard): number {
+export function cardsDrawnByAction(card: ICard): number {
   const drawCard = (card as {actionBehavior?: {drawCard?: number | {count: unknown, pay?: boolean, keep?: number}}}).actionBehavior?.drawCard;
   if (drawCard === undefined) {
     return 0;

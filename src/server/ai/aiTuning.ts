@@ -88,6 +88,8 @@ export type AiTuning = {
   playPolicyWeight: number,
   /** Share of a hand card's value counted per step its unmet needs (tags, energy) come closer (handReadiness.ts); 0 = off. */
   needsPursuit: number,
+  /** Extra draft/buy/play value of draw engines: draws per generation × drawn card value × remaining generations × this (drawEngineBoost.ts). */
+  drawEngineBoost: number,
   /** Generations of income that count as money for the hand (handFunding.ts). */
   handFundingGenerations: number,
   /** 1: money in the last generation counts in steps of greeneries it can still buy (stateValue.ts). */
@@ -312,6 +314,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 112: 3 +1.43 (z +2.35; base +1.10, venus +1.76), 6 +1.41 (z +2.00).
   playPolicyWeight: 3,
   needsPursuit: 0,
+  drawEngineBoost: 0,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
   handFundingGenerations: 0,
   endgameMoney: 1,
@@ -828,6 +831,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Unfulfilled hand synergies as goals: moves that bring needed tags/energy count part of the unlocked card's value
   needsPursuit05: {needsPursuit: 0.5},
   needsPursuit1: {needsPursuit: 1},
+  drawEngine05: {drawEngineBoost: 0.5},
+  drawEngine1: {drawEngineBoost: 1},
+  drawEngine1Pursuit: {drawEngineBoost: 1, needsPursuit: 0.5},
   // Draft/buy: cards that bring the tags or energy a strong hand card still needs (enablerValue.ts)
   enabler05: {enablerWeight: 0.5},
   play2: {playPolicyWeight: 2},
