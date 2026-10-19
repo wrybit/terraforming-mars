@@ -18,10 +18,10 @@ describe('DuneGoalCard', () => {
     expect(wrapper.findAll('.dune-goal-card__symbol')).length(3);
   });
 
-  it('names the Mars goal it stands for', () => {
+  it('joins spice and plasteel with a plus and names no Mars model', () => {
     const wrapper = mount(DuneGoalCard, {...globalConfig, props: {kind: 'awards', name: 'Miner'}});
-    expect(wrapper.find('.dune-goal-card__model').text()).eq('Based on: Miner');
     expect(wrapper.find('.dune-goal-card__plus').exists()).is.true;
+    expect(wrapper.text()).not.contains('Based on');
   });
 
   it('falls back to the table symbol for goals without a strip', () => {
