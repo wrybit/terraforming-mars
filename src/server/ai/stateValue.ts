@@ -25,6 +25,7 @@ import {bgaExpectedMargin} from './bgaValueModel';
 import {awardScoreWithHand} from './awardHandOutlook';
 import {fundedHandValue} from './handFunding';
 import {handReadiness} from './handReadiness';
+import {measuredDrawRate} from './measuredDrawRate';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -372,9 +373,13 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
   let value = 0;
   // drawCardModel 2: cards drawn by tag effects count like production (cardIncome.ts).
   // drawPriority: cards drawn by tag effects (Mars University, Olympus Conference, Point Luna) count too.
-  const drawIncome = (card: ICard) => tuningOf(player).drawPriority > 0 ?
+  const ruleDrawIncome = (card: ICard) => tuningOf(player).drawPriority > 0 ?
     effectDrawsPerGeneration(card, player) * drawnCardValue(player, context.remaining) :
     tuningOf(player).drawCardModel >= 2 ? effectDrawsPerGeneration(card, player) * unknownCardValue(player, context) : 0;
+  // measuredDrawRates: draw engines the card reading misses or undervalues count what humans drew with them.
+  const drawIncome = (card: ICard) => tuningOf(player).measuredDrawRates > 0 ?
+    Math.max(ruleDrawIncome(card), measuredDrawRate(card.name) * drawnCardValue(player, context.remaining)) :
+    ruleDrawIncome(card);
   for (const card of player.playedCards) {
     if (card.type === CardType.ACTIVE) {
       const own = isIActionCard(card) ? actionValuePerGeneration(card, player, context) : EFFECT_CARD_VALUE_PER_GENERATION;
