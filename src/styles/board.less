@@ -410,22 +410,23 @@
     }
   }
 
-  // Coordinates view: a small label at the upper edge of the hex (the owner cube sits low); tile, cube and bonus stay fully visible,
-  // so you can still judge (and talk about) a placement
+  // Coordinates view: the whole hex under dark frosted glass with the coordinate in white in its middle; tile, cube and
+  // bonus shine through blurred, so the label reads on every space (Jens, 20 Oct 2026, like the first version, but dark)
   .board-space-coords {
     position: absolute;
-    left: 50%;
-    top: 3px;
+    inset: 0;
     z-index: 6; // above tiles, cubes and the legend lines
-    transform: translateX(-50%);
-    padding: 0 4px;
-    border-radius: 6px;
-    font-size: 9px;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
     font-weight: bold;
-    line-height: 12px;
     white-space: nowrap;
     color: #fff;
-    background-color: rgba(10, 12, 18, 0.78);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    background-color: rgba(12, 12, 16, 0.68);
+    backdrop-filter: blur(3px) saturate(1.2);
+    -webkit-backdrop-filter: blur(3px) saturate(1.2);
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     pointer-events: none;
   }
 
