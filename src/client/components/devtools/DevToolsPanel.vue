@@ -208,7 +208,8 @@ export default defineComponent({
       values: valuesOf(this.game),
       generation: this.game.generation,
       setup: {boardName: this.game.gameOptions.boardName, theme: this.game.gameOptions.theme},
-      color: (this.players[0]?.color ?? 'red') as Color,
+      // The own player first: changes and questions are mostly meant for the one testing
+      color: (this.players.some((player) => player.color === this.viewerColor) ? this.viewerColor : this.players[0]?.color ?? 'red') as Color,
       stock: {} as Partial<Units>,
       production: {} as Partial<Units>,
       stats: {terraformRating: 0, victoryPoints: 0, cardDiscount: 0},
