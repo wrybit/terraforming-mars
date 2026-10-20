@@ -7,30 +7,8 @@
       <template v-for="entry in schemes.players" :key="entry.color">
         <div v-if="entry.agendas !== undefined" class="dune-schemes__own">
           <PlayerChip v-if="owned.length > 1" :color="entry.color" :players="players"/>
-          <!-- Agenda cards in card proportions, variant D5 of the mockup (Jens, 20 Oct 2026): violet head with name and
-               what is counted (secret agenda), sand body with the current value as the eye-catcher, the three levels as
-               a rising stair with the VP as gold coins; levels not reached yet are pale -->
           <div class="dune-schemes__cards">
-            <article v-for="agenda in entry.agendas" :key="agenda.name" class="dune-schemes__agenda">
-              <header class="dune-schemes__head">
-                <h4 class="dune-schemes__name">{{ $t(agenda.name) }}</h4>
-                <p class="dune-schemes__goal">{{ $t(definition(agenda.name).goal) }}</p>
-              </header>
-              <div class="dune-schemes__body">
-                <div class="dune-schemes__value" data-test="dune-schemes-value">
-                  <img class="dune-schemes__icon" :src="graphic(definition(agenda.name).icon)" alt="">
-                  <b>{{ agenda.value }}</b>
-                </div>
-                <ol class="dune-schemes__levels">
-                  <li v-for="(target, index) in definition(agenda.name).targets" :key="index"
-                    :class="['dune-schemes__level', 'dune-schemes__level--' + LEVELS[index], {'dune-schemes__level--reached': agenda.level > index}]">
-                    <span class="dune-schemes__points" :title="POINTS[index] + ' ' + $t('VP')">{{ POINTS[index] }}</span>
-                    <span class="dune-schemes__target">{{ target }}</span>
-                    <span class="dune-schemes__level-name">{{ $t(LEVEL_LABELS[index]) }}</span>
-                  </li>
-                </ol>
-              </div>
-            </article>
+            <SchemeAgendaCard v-for="agenda in entry.agendas" :key="agenda.name" :agenda="agenda"/>
           </div>
         </div>
       </template>
@@ -43,20 +21,15 @@
 import {defineComponent, PropType} from 'vue';
 import {SchemeModel} from '@/common/dune/DuneModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
-import {SCHEME_LEVEL_POINTS, SchemeAgenda, schemeAgenda} from '@/common/dune/schemeAgendas';
 import PlayerChip from './PlayerChip.vue';
+import SchemeAgendaCard from './SchemeAgendaCard.vue';
 import DuneRuleCards from './DuneRuleCards.vue';
 import DuneFitBox from './DuneFitBox.vue';
 import {SCHEMES_RULES} from './duneRules';
-import {duneGraphic} from './duneGraphic';
-
-// The three levels of every agenda (SCHEME_LEVEL_POINTS 3 / 5 / 8 VP), named as on the mockup cards
-const LEVELS = ['easy', 'medium', 'hard'] as const;
-const LEVEL_LABELS = ['Easy', 'Medium', 'Hard'] as const;
 
 export default defineComponent({
   name: 'SchemesPanel',
-  components: {PlayerChip, DuneRuleCards, DuneFitBox},
+  components: {PlayerChip, SchemeAgendaCard, DuneRuleCards, DuneFitBox},
   props: {
     schemes: {
       type: Object as PropType<SchemeModel>,
@@ -68,27 +41,12 @@ export default defineComponent({
     },
   },
   computed: {
-    POINTS(): ReadonlyArray<number> {
-      return SCHEME_LEVEL_POINTS;
-    },
-    LEVELS(): typeof LEVELS {
-      return LEVELS;
-    },
-    LEVEL_LABELS(): typeof LEVEL_LABELS {
-      return LEVEL_LABELS;
-    },
     SCHEMES_RULES(): typeof SCHEMES_RULES {
       return SCHEMES_RULES;
     },
     // Players whose agendas the viewer sees: the own ones, everybody's after the game
     owned() {
       return this.schemes.players.filter((entry) => entry.agendas !== undefined);
-    },
-  },
-  methods: {
-    graphic: duneGraphic,
-    definition(name: string): SchemeAgenda {
-      return schemeAgenda(name);
     },
   },
 });

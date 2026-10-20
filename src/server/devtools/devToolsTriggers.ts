@@ -22,6 +22,7 @@ import {RouteError} from '../routes/RouteError';
 import {DEVTOOLS_TRIGGER_LABELS, DevToolsTrigger, DevToolsTriggerAction} from '../../common/devtools/devToolsAction';
 import {WormData, distanceInput, rollWorm} from '../dune/Worm';
 import {levyInput} from '../dune/WormLevy';
+import {keepInput} from '../dune/Schemes';
 import {
   addResourceInput, discardInput, draftInput, moveResourceInput, removeResourceInput, resourceChoiceInput, takeResourceInput,
 } from './devToolsCardTriggers';
@@ -183,6 +184,8 @@ function input(game: IGame, player: IPlayer, trigger: DevToolsTrigger): PlayerIn
     return awardInput(game, player);
   case 'worm':
     throw new Error('The worm is asked separately');
+  case 'schemes':
+    throw new Error('The agenda choice is asked separately');
   }
 }
 
@@ -222,6 +225,24 @@ export function applyTrigger(game: IGame, player: IPlayer, action: DevToolsTrigg
     // The chooser makes the game send the distances: only then the move tab with its map appears (dune/duneInputs.ts)
     worm.chooser = player.id;
     ask(game, player, distanceInput(game, worm), (resume) => askLevies(game, worm, resume));
+    return;
+  }
+  if (action.trigger === 'schemes') {
+    const schemes = game.duneData?.schemes;
+    if (schemes === undefined) {
+      throw RouteError.badRequest('This game has no House schemes');
+    }
+    // The choice when a House reached 35 on the Landsraad track: with only one agenda the player draws a second
+    const agendas = schemes.agendas[player.id] ?? [];
+    const drawn = agendas.length < 2 ? schemes.deck.shift() : undefined;
+    if (drawn !== undefined) {
+      schemes.agendas[player.id] = [...agendas, drawn];
+      game.log('🛠 DevTools: ${0} draws a second agenda', (b) => b.player(player));
+    }
+    if ((schemes.agendas[player.id] ?? []).length < 2) {
+      throw RouteError.badRequest('No second agenda left to draw');
+    }
+    ask(game, player, keepInput(player, schemes), (resume) => resume());
     return;
   }
   // Built before anything is put aside: a question that cannot be asked fails without touching the turn

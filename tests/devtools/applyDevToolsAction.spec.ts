@@ -186,6 +186,20 @@ describe('applyDevToolsAction', () => {
     expect(start).is.a('string');
   });
 
+  it('asks which of two agendas to keep, drawing a second one when needed', () => {
+    const [game, player] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS_61, duneModules: ['schemes']});
+    const schemes = game.duneData?.schemes;
+    if (schemes === undefined) {
+      throw new Error('no schemes');
+    }
+    schemes.agendas[player.id] = (schemes.agendas[player.id] ?? []).slice(0, 1);
+    applyDevToolsAction(game, {type: 'trigger', color: player.color, trigger: 'schemes'});
+    expect(schemes.agendas[player.id]).has.length(2);
+    const second = schemes.agendas[player.id]?.[1];
+    player.process({type: 'or', index: 1, response: {type: 'option'}});
+    expect(schemes.agendas[player.id]).deep.eq([second]);
+  });
+
   it('asks every card and player question with a real dialog', () => {
     const expected: Array<[DevToolsTrigger, string]> = [
       ['specialTile', 'or'], ['resources', 'resources'], ['player', 'player'], ['discard', 'card'], ['draft', 'card'],

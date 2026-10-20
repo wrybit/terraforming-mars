@@ -55,7 +55,7 @@ export const DEVTOOLS_TRIGGERS = [
   'city', 'ocean', 'greenery', 'specialTile',
   'pay', 'overpay', 'convert', 'resources', 'player',
   'discard', 'draft', 'addResource', 'removeResource', 'resourceChoice', 'moveResource', 'takeResource',
-  'milestone', 'award', 'worm',
+  'milestone', 'award', 'worm', 'schemes',
 ] as const;
 export type DevToolsTrigger = typeof DEVTOOLS_TRIGGERS[number];
 
@@ -80,6 +80,7 @@ export const DEVTOOLS_TRIGGER_LABELS: Readonly<Record<DevToolsTrigger, string>> 
   milestone: 'Claim a milestone for free',
   award: 'Fund an award for free',
   worm: 'Move the worm',
+  schemes: 'Keep one of two agendas',
 };
 
 /** The questions in the panel, grouped by what they are about (group titles are translation keys) */
@@ -87,7 +88,7 @@ export const DEVTOOLS_TRIGGER_GROUPS: ReadonlyArray<{label: string, triggers: Re
   {label: 'Board tiles', triggers: ['city', 'ocean', 'greenery', 'specialTile']},
   {label: 'Resources', triggers: ['pay', 'overpay', 'convert', 'resources']},
   {label: 'Cards', triggers: ['discard', 'draft', 'addResource', 'removeResource', 'resourceChoice', 'moveResource', 'takeResource']},
-  {label: 'Other', triggers: ['player', 'milestone', 'award', 'worm']},
+  {label: 'Other', triggers: ['player', 'milestone', 'award', 'worm', 'schemes']},
 ];
 
 export type DevToolsTriggerAction = {

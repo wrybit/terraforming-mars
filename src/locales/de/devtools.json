@@ -45,5 +45,7 @@
   "Select space for special tile": "Wähle ein Feld für das Sonderplättchen",
   "Select card to remove 1 resource": "Wähle eine Karte, von der 1 Ressource entfernt wird",
   "Steel value": "Wert von Stahl",
-  "Titanium value": "Wert von Titan"
+  "Titanium value": "Wert von Titan",
+  "Keep one of two agendas": "Eine von zwei Agenden behalten",
+  "🛠 DevTools: ${0} draws a second agenda": "🛠 DevTools: ${0} zieht eine zweite Agenda"
 }

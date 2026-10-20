@@ -297,6 +297,8 @@ export default defineComponent({
         label: group.label,
         triggers: group.triggers
           .filter((key) => key !== 'worm' || this.game.dune?.worm !== undefined)
+          // The agenda choice only with House schemes (Dune expansion)
+          .filter((key) => key !== 'schemes' || this.game.dune?.schemes !== undefined)
           .map((key) => ({key, label: DEVTOOLS_TRIGGER_LABELS[key]})),
       }));
     },
