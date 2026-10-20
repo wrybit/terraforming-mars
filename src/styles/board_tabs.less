@@ -27,6 +27,12 @@
   letter-spacing: 0.02em;
 }
 
+// Inactive tabs: the names on one line across all tabs, whatever lies below them (track lines, the bazaar bar, a
+// short info or nothing). Centring would push a tab with a lower second row further down (Jens, 20 Oct 2026)
+.or-tab.board-tab:not(.or-tab--active) {
+  justify-content: flex-start;
+}
+
 .board-tab-name {
   max-width: 100%;
   overflow: hidden;
