@@ -860,6 +860,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noDrawRules: {drawPriority: 0, ownDrawnCardValue: 0, drawEngineBoost: 0},
   cardIncome1: {measuredCardIncome: 1},
   cardIncomeTraits: {measuredCardIncome: 0.5, playerTraitValues: 1},
+  // Card understanding fix in one piece (card-understanding audit): measured income of lasting effects and actions,
+  // measured draw rates, lasting player traits.
+  cardFix: {measuredCardIncome: 1, measuredDrawRates: 1, playerTraitValues: 1},
+  cardFixHalf: {measuredCardIncome: 0.5, measuredDrawRates: 1, playerTraitValues: 1},
   // Draft/buy: cards that bring the tags or energy a strong hand card still needs (enablerValue.ts)
   enabler05: {enablerWeight: 0.5},
   play2: {playPolicyWeight: 2},
