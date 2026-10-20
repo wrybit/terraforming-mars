@@ -19,6 +19,7 @@ describe('AI draw engine boost', () => {
 
   it('is off without the rule and grows with the remaining generations', () => {
     const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'noOwnCardValueEngine');
     expect(drawEngineBonus(new AICentral(), player, 8)).to.eq(0);
     setPlayerTuning(player.id, 'drawEngine1');
     const early = drawEngineBonus(new AICentral(), player, 8);

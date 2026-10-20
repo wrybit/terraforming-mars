@@ -323,8 +323,9 @@ export const BASELINE_TUNING: AiTuning = {
   playPolicyWeight: 3,
   // Round 122 check: without draw engine boost and needs pursuit +1.24 VP (z +1.96), cards played equal – reverted.
   needsPursuit: 0,
-  drawEngineBoost: 0,
-  ownDrawnCardValue: 0,
+  // Round 123: own drawn cards 2–4 M€ plus half draw engine boost – cards drawn +1.2 (z +3.2), played +0.7 (z +2.4), VP ±0.
+  drawEngineBoost: 0.5,
+  ownDrawnCardValue: 1,
   measuredDrawRates: 0,
   playerTraitValues: 0,
   measuredCardIncome: 0,
@@ -855,6 +856,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   measuredDrawsOwnValue: {measuredDrawRates: 1, ownDrawnCardValue: 1},
   playerTraits: {playerTraitValues: 1},
   cardIncome05: {measuredCardIncome: 0.5},
+  noOwnCardValueEngine: {ownDrawnCardValue: 0, drawEngineBoost: 0},
+  noDrawRules: {drawPriority: 0, ownDrawnCardValue: 0, drawEngineBoost: 0},
   cardIncome1: {measuredCardIncome: 1},
   cardIncomeTraits: {measuredCardIncome: 0.5, playerTraitValues: 1},
   // Draft/buy: cards that bring the tags or energy a strong hand card still needs (enablerValue.ts)
