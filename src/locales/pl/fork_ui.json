@@ -1035,6 +1035,11 @@
   "${0} reused ${1} action via ${2}": "${0} ponownie używa akcji ${1} dzięki ${2}",
   "${0} gained a Jovian tag from the Delta Project": "${0} otrzymuje symbol Jowisza z Delta Project",
   "${0} gained a :tag:jovian: Jovian tag from the Delta Project": "${0} otrzymuje :tag:jovian: symbol Jowisza z Delta Project",
+  "${0} gained ${1}${2} because of ${3}": "${0} otrzymuje ${1}${2} z powodu ${3}",
+  "${0} lost ${1}${2}": "${0} traci ${1}${2}",
+  "${0} lost ${1}${2} because of ${3}": "${0} traci ${1}${2} z powodu ${3}",
+  "${0} removed a:cr:science: from ${1} to draw a card": "${0} usuwa 1:cr:science: z ${1}, aby dobrać kartę",
+  "${0} stole ${1}${2} from the neutral player": "${0} kradnie ${1}${2} neutralnemu graczowi",
   "No available colony tiles for ${0} to choose from": "Brak dostępnych kafli kolonii do wyboru dla ${0}",
   "${0} gained 2 Science tags": "${0} otrzymuje 2 symbole Nauki",
   "Remove plants from the neutral oppponent": "Usuń roślinność neutralnego przeciwnika",
@@ -1655,10 +1660,5 @@
   "${0} sold ${1}": "${0} sprzedaje: ${1}",
   "Only you can see this line in the log": "Tylko ty widzisz ten wiersz dziennika",
   "AI insight: click to reveal": "Informacja SI: kliknij, aby odkryć",
-  "Click to hide again": "Kliknij, aby ponownie ukryć",
-  "${0} gained ${1}${2} because of ${3}": "${0} otrzymuje ${1}${2} z powodu ${3}",
-  "${0} lost ${1}${2}": "${0} traci ${1}${2}",
-  "${0} lost ${1}${2} because of ${3}": "${0} traci ${1}${2} z powodu ${3}",
-  "${0} removed a:cr:science: from ${1} to draw a card": "${0} usuwa 1:cr:science: z ${1}, aby dobrać kartę",
-  "${0} stole ${1}${2} from the neutral player": "${0} kradnie ${1}${2} neutralnemu graczowi"
+  "Click to hide again": "Kliknij, aby ponownie ukryć"
 }

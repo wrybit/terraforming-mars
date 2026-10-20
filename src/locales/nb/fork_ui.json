@@ -602,6 +602,7 @@
   "${0} reused ${1} action via ${2}": "${0} gjenbrukte handlingen til ${1} via ${2}",
   "${0} gained a Jovian tag from the Delta Project": "${0} fikk et Jupiter-symbol fra Delta Project",
   "${0} gained a :tag:jovian: Jovian tag from the Delta Project": "${0} fikk et :tag:jovian: Jupiter-symbol fra Delta Project",
+  "${0} removed a:cr:science: from ${1} to draw a card": "${0} fjernet 1:cr:science: fra ${1} for å trekke et kort",
   "No available colony tiles for ${0} to choose from": "Ingen tilgjengelige koloniplater for ${0} å velge mellom",
   "${0} gained 2 Science tags": "${0} fikk 2 vitenskapssymboler",
   "Remove plants from the neutral oppponent": "Fjern planter fra den nøytrale motstanderen",
@@ -1236,6 +1237,5 @@
   "${0} sold ${1}": "${0} solgte ${1}",
   "Only you can see this line in the log": "Bare du ser denne linjen i loggen",
   "AI insight: click to reveal": "AI-info: klikk for å vise",
-  "Click to hide again": "Klikk for å skjule igjen",
-  "${0} removed a:cr:science: from ${1} to draw a card": "${0} fjernet 1:cr:science: fra ${1} for å trekke et kort"
+  "Click to hide again": "Klikk for å skjule igjen"
 }

@@ -873,6 +873,11 @@
   "${0} reused ${1} action via ${2}": "${0} hergebruikte de actie van ${1} via ${2}",
   "${0} gained a Jovian tag from the Delta Project": "${0} kreeg een Jupiterlabel van het Delta Project",
   "${0} gained a :tag:jovian: Jovian tag from the Delta Project": "${0} kreeg een :tag:jovian: Jupiterlabel van het Delta Project",
+  "${0} gained ${1}${2} because of ${3}": "${0} ontving ${1}${2} door ${3}",
+  "${0} lost ${1}${2}": "${0} verloor ${1}${2}",
+  "${0} lost ${1}${2} because of ${3}": "${0} verloor ${1}${2} door ${3}",
+  "${0} removed a:cr:science: from ${1} to draw a card": "${0} verwijderde 1:cr:science: van ${1} om een kaart te trekken",
+  "${0} stole ${1}${2} from the neutral player": "${0} stal ${1}${2} van de neutrale speler",
   "No available colony tiles for ${0} to choose from": "Geen beschikbare kolonietegels waaruit ${0} kan kiezen",
   "${0} gained 2 Science tags": "${0} kreeg 2 wetenschapslabels",
   "Remove plants from the neutral oppponent": "Verwijder planten van de neutrale tegenstander",
@@ -1486,10 +1491,5 @@
   "${0} sold ${1}": "${0} heeft ${1} verkocht",
   "Only you can see this line in the log": "Alleen jij ziet deze regel in het logboek",
   "AI insight: click to reveal": "AI-info: klik om te tonen",
-  "Click to hide again": "Klik om weer te verbergen",
-  "${0} gained ${1}${2} because of ${3}": "${0} ontving ${1}${2} door ${3}",
-  "${0} lost ${1}${2}": "${0} verloor ${1}${2}",
-  "${0} lost ${1}${2} because of ${3}": "${0} verloor ${1}${2} door ${3}",
-  "${0} removed a:cr:science: from ${1} to draw a card": "${0} verwijderde 1:cr:science: van ${1} om een kaart te trekken",
-  "${0} stole ${1}${2} from the neutral player": "${0} stal ${1}${2} van de neutrale speler"
+  "Click to hide again": "Klik om weer te verbergen"
 }
