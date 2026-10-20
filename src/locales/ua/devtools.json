@@ -30,5 +30,20 @@
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: рейтинг, очки, мітки та знижки гравця ${0} встановлено",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: покоління встановлено на ${0}",
   "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: у гравця ${0} запитано: ${1}",
-  "Pay with four currencies": "Оплатити чотирма валютами"
+  "Pay with four currencies": "Оплатити чотирма валютами",
+  "Place a special tile": "Викласти особливий тайл",
+  "Choose resources freely": "Вибрати ресурси довільно",
+  "Choose a player": "Вибрати гравця",
+  "Discard cards": "Скинути карти",
+  "Draft round": "Раунд драфту",
+  "Add a resource to a card": "Покласти ресурс на карту",
+  "Remove a resource from a card": "Зняти ресурс з карти",
+  "Decide what to do with resources": "Вирішити, що робити з ресурсами",
+  "Move resources to another card": "Перекласти ресурси на іншу карту",
+  "Take resources from another card": "Взяти ресурси з іншої карти",
+  "Select cards to discard": "Виберіть карти для скидання",
+  "Select 3 resources of any kind": "Виберіть 3 будь-які ресурси",
+  "Select a special tile": "Виберіть особливий тайл",
+  "Select space for special tile": "Виберіть клітинку для особливого тайла",
+  "Select card to remove 1 resource": "Виберіть карту, з якої зняти 1 ресурс"
 }

@@ -96,8 +96,13 @@
       </datalist>
 
       <h4 class="devtools__group-title">{{ $t('Ask now') }}</h4>
-      <div class="devtools-triggers">
-        <button v-for="trigger in triggers" :key="trigger.key" type="button" class="btn devtools-button" @click="sendTrigger(trigger.key)">{{ $t(trigger.label) }}</button>
+      <div class="devtools-trigger-groups">
+        <div v-for="group in triggerGroups" :key="group.label" class="devtools-trigger-group">
+          <span class="devtools-field__name">{{ $t(group.label) }}</span>
+          <div class="devtools-triggers">
+            <button v-for="trigger in group.triggers" :key="trigger.key" type="button" class="btn devtools-button" @click="sendTrigger(trigger.key)">{{ $t(trigger.label) }}</button>
+          </div>
+        </div>
       </div>
     </div>
     <p v-if="error !== ''" class="devtools__error">{{ error }}</p>
@@ -118,7 +123,7 @@ import {Units} from '@/common/Units';
 import {isPlayerId} from '@/common/Types';
 import * as constants from '@/common/constants';
 import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
-import {DevToolsAction, DevToolsPlayerAction, DevToolsTrigger, DEVTOOLS_TRIGGERS, DEVTOOLS_TRIGGER_LABELS, DEVTOOLS_UNIT_KEYS,
+import {DevToolsAction, DevToolsPlayerAction, DevToolsTrigger, DEVTOOLS_TRIGGER_GROUPS, DEVTOOLS_TRIGGER_LABELS, DEVTOOLS_UNIT_KEYS,
   PLANET_SPACE_TYPES} from '@/common/devtools/devToolsAction';
 import {getCards} from '@/client/cards/ClientCardManifest';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
@@ -275,10 +280,13 @@ export default defineComponent({
       return TAG_LIST;
     },
     // The worm only where the game has one (Dune expansion)
-    triggers(): Array<{key: DevToolsTrigger, label: string}> {
-      return DEVTOOLS_TRIGGERS
-        .filter((key) => key !== 'worm' || this.game.dune?.worm !== undefined)
-        .map((key) => ({key, label: DEVTOOLS_TRIGGER_LABELS[key]}));
+    triggerGroups(): Array<{label: string, triggers: Array<{key: DevToolsTrigger, label: string}>}> {
+      return DEVTOOLS_TRIGGER_GROUPS.map((group) => ({
+        label: group.label,
+        triggers: group.triggers
+          .filter((key) => key !== 'worm' || this.game.dune?.worm !== undefined)
+          .map((key) => ({key, label: DEVTOOLS_TRIGGER_LABELS[key]})),
+      }));
     },
     resourcesKey(): string {
       return 'resources-' + this.color;

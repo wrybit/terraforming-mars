@@ -29,5 +29,20 @@
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: pelaajan ${0} luokitus, pisteet, tunnisteet ja alennukset asetettu",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: sukupolvi asetettu arvoon ${0}",
   "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: pelaajalta ${0} kysytään: ${1}",
-  "Pay with four currencies": "Maksa neljällä valuutalla"
+  "Pay with four currencies": "Maksa neljällä valuutalla",
+  "Place a special tile": "Aseta erikoislaatta",
+  "Choose resources freely": "Valitse resurssit vapaasti",
+  "Choose a player": "Valitse pelaaja",
+  "Discard cards": "Hylkää kortteja",
+  "Draft round": "Draft-kierros",
+  "Add a resource to a card": "Lisää resurssi kortille",
+  "Remove a resource from a card": "Poista resurssi kortilta",
+  "Decide what to do with resources": "Päätä, mitä resursseille tehdään",
+  "Move resources to another card": "Siirrä resursseja toiselle kortille",
+  "Take resources from another card": "Ota resursseja toiselta kortilta",
+  "Select cards to discard": "Valitse hylättävät kortit",
+  "Select 3 resources of any kind": "Valitse 3 mitä tahansa resurssia",
+  "Select a special tile": "Valitse erikoislaatta",
+  "Select space for special tile": "Valitse ruutu erikoislaatalle",
+  "Select card to remove 1 resource": "Valitse kortti, jolta poistetaan 1 resurssi"
 }

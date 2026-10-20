@@ -29,5 +29,20 @@
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: vurdering, poeng, merker og rabatter for ${0} satt",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: generasjon satt til ${0}",
   "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} blir spurt: ${1}",
-  "Pay with four currencies": "Betal med fire valutaer"
+  "Pay with four currencies": "Betal med fire valutaer",
+  "Place a special tile": "Legg en spesialbrikke",
+  "Choose resources freely": "Velg ressurser fritt",
+  "Choose a player": "Velg en spiller",
+  "Discard cards": "Kast kort",
+  "Draft round": "Draftrunde",
+  "Add a resource to a card": "Legg en ressurs på et kort",
+  "Remove a resource from a card": "Ta en ressurs fra et kort",
+  "Decide what to do with resources": "Bestem hva som skjer med ressursene",
+  "Move resources to another card": "Flytt ressurser til et annet kort",
+  "Take resources from another card": "Hent ressurser fra et annet kort",
+  "Select cards to discard": "Velg kort å kaste",
+  "Select 3 resources of any kind": "Velg 3 valgfrie ressurser",
+  "Select a special tile": "Velg en spesialbrikke",
+  "Select space for special tile": "Velg et felt for spesialbrikken",
+  "Select card to remove 1 resource": "Velg et kort å ta 1 ressurs fra"
 }

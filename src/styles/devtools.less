@@ -98,6 +98,18 @@ html.tm-mobile .devtools-card-row {
   }
 }
 
+.devtools-trigger-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.devtools-trigger-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .devtools-triggers {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -332,7 +344,8 @@ html.tm-mobile .devtools {
 // Buttons of one height in the raster: long texts wrap inside the button, every cell of a row grows with the longest
 .devtools-triggers .devtools-button {
   height: auto;
-  min-height: 36px;
+  // Room for two lines everywhere: all groups share one button height
+  min-height: 48px;
   padding: 6px 10px;
   line-height: 1.25;
   white-space: normal;

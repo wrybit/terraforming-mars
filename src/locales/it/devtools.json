@@ -29,5 +29,20 @@
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: grado, punti, simboli e sconti di ${0} impostati",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: generazione impostata a ${0}",
   "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: a ${0} viene chiesto: ${1}",
-  "Pay with four currencies": "Paga con quattro valute"
+  "Pay with four currencies": "Paga con quattro valute",
+  "Place a special tile": "Posa una tessera speciale",
+  "Choose resources freely": "Scegli risorse liberamente",
+  "Choose a player": "Scegli un giocatore",
+  "Discard cards": "Scarta carte",
+  "Draft round": "Turno di draft",
+  "Add a resource to a card": "Aggiungi una risorsa a una carta",
+  "Remove a resource from a card": "Togli una risorsa da una carta",
+  "Decide what to do with resources": "Decidi cosa fare con le risorse",
+  "Move resources to another card": "Sposta risorse su un’altra carta",
+  "Take resources from another card": "Prendi risorse da un’altra carta",
+  "Select cards to discard": "Scegli le carte da scartare",
+  "Select 3 resources of any kind": "Scegli 3 risorse qualsiasi",
+  "Select a special tile": "Scegli una tessera speciale",
+  "Select space for special tile": "Scegli uno spazio per la tessera speciale",
+  "Select card to remove 1 resource": "Scegli una carta da cui togliere 1 risorsa"
 }

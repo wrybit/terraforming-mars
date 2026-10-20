@@ -377,7 +377,7 @@ export interface IPlayer {
   getWaitingFor(): PlayerInput | undefined;
   setWaitingFor(input: PlayerInput, cb?: () => void): void;
   setWaitingForSafely(input: PlayerInput, cb?: () => void): void;
-  interruptWaitingFor(input: PlayerInput, after: (resume: () => void) => void): void;
+  interruptWaitingFor(start: (resume: () => void) => void): void;
   clearWaitingFor(): void;
   serialize(): SerializedPlayer;
 

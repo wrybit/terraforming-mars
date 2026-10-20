@@ -1809,20 +1809,20 @@ export class Player implements IPlayer {
    * This was only built for the Philares/Final Greenery case. Might not work elsewhere.
    */
   /**
-   * DevTools (devtools/devToolsTriggers.ts): asks `input` right now, in front of whatever the player is asked already.
-   * `after` gets a resume function that puts the earlier question back, so the interrupted turn goes on as it was.
+   * DevTools (devtools/devToolsTriggers.ts): puts aside whatever the player is asked now and runs `start`, which asks
+   * its own questions (one or a chain). Its `resume` puts the earlier question back, so the turn goes on as it was.
    */
-  public interruptWaitingFor(input: PlayerInput, after: (resume: () => void) => void): void {
+  public interruptWaitingFor(start: (resume: () => void) => void): void {
     const previous = this.waitingFor;
     const previousCb = this.waitingForCb;
     this.waitingFor = undefined;
     this.waitingForCb = undefined;
-    this.setWaitingFor(input, () => after(() => {
+    start(() => {
       if (previous !== undefined && previousCb !== undefined && this.waitingFor === undefined) {
         this.waitingFor = previous;
         this.waitingForCb = previousCb;
       }
-    }));
+    });
   }
 
   public setWaitingForSafely(input: PlayerInput, cb: () => void = () => {}): void {

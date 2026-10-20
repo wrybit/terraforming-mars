@@ -30,5 +30,20 @@
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 開発ツール: ${0} の評価、得点、タグ、割引を設定",
   "🛠 DevTools: generation set to ${0}": "🛠 開発ツール: 世代を ${0} に設定",
   "🛠 DevTools: ${0} is asked: ${1}": "🛠 開発ツール: ${0} への質問: ${1}",
-  "Pay with four currencies": "4種類の通貨で支払う"
+  "Pay with four currencies": "4種類の通貨で支払う",
+  "Place a special tile": "特殊タイルを置く",
+  "Choose resources freely": "資源を自由に選ぶ",
+  "Choose a player": "プレイヤーを選ぶ",
+  "Discard cards": "カードを捨てる",
+  "Draft round": "ドラフトラウンド",
+  "Add a resource to a card": "カードに資源を置く",
+  "Remove a resource from a card": "カードから資源を取り除く",
+  "Decide what to do with resources": "資源の使い道を決める",
+  "Move resources to another card": "資源を別のカードに移す",
+  "Take resources from another card": "別のカードから資源を取る",
+  "Select cards to discard": "捨てるカードを選んでください",
+  "Select 3 resources of any kind": "好きな資源を3つ選んでください",
+  "Select a special tile": "特殊タイルを選んでください",
+  "Select space for special tile": "特殊タイルを置くマスを選んでください",
+  "Select card to remove 1 resource": "資源を1つ取り除くカードを選んでください"
 }

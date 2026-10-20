@@ -30,5 +30,20 @@
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: рейтингът, точките, символите и отстъпките на ${0} са зададени",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: поколението е зададено на ${0}",
   "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} е попитан: ${1}",
-  "Pay with four currencies": "Плати с четири валути"
+  "Pay with four currencies": "Плати с четири валути",
+  "Place a special tile": "Постави специална плочка",
+  "Choose resources freely": "Избери ресурси свободно",
+  "Choose a player": "Избери играч",
+  "Discard cards": "Изхвърли карти",
+  "Draft round": "Рунд драфт",
+  "Add a resource to a card": "Сложи ресурс на карта",
+  "Remove a resource from a card": "Махни ресурс от карта",
+  "Decide what to do with resources": "Реши какво да правиш с ресурсите",
+  "Move resources to another card": "Премести ресурси на друга карта",
+  "Take resources from another card": "Вземи ресурси от друга карта",
+  "Select cards to discard": "Избери карти за изхвърляне",
+  "Select 3 resources of any kind": "Избери 3 произволни ресурса",
+  "Select a special tile": "Избери специална плочка",
+  "Select space for special tile": "Избери поле за специалната плочка",
+  "Select card to remove 1 resource": "Избери карта, от която да махнеш 1 ресурс"
 }

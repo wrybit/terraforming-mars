@@ -30,5 +30,20 @@
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 开发工具：已设置 ${0} 的评分、分数、标志与折扣",
   "🛠 DevTools: generation set to ${0}": "🛠 开发工具：世代设为 ${0}",
   "🛠 DevTools: ${0} is asked: ${1}": "🛠 开发工具：询问 ${0}：${1}",
-  "Pay with four currencies": "用四种货币支付"
+  "Pay with four currencies": "用四种货币支付",
+  "Place a special tile": "放置特殊板块",
+  "Choose resources freely": "自由选择资源",
+  "Choose a player": "选择玩家",
+  "Discard cards": "弃牌",
+  "Draft round": "轮抽回合",
+  "Add a resource to a card": "在卡牌上添加资源",
+  "Remove a resource from a card": "从卡牌上移除资源",
+  "Decide what to do with resources": "决定如何使用资源",
+  "Move resources to another card": "把资源移到另一张卡牌",
+  "Take resources from another card": "从另一张卡牌拿取资源",
+  "Select cards to discard": "选择要弃掉的卡牌",
+  "Select 3 resources of any kind": "选择任意 3 个资源",
+  "Select a special tile": "选择一个特殊板块",
+  "Select space for special tile": "为特殊板块选择位置",
+  "Select card to remove 1 resource": "选择要移除 1 个资源的卡牌"
 }

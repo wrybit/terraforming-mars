@@ -29,5 +29,20 @@
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: waardering, punten, symbolen en kortingen van ${0} ingesteld",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: generatie op ${0} gezet",
   "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} wordt gevraagd: ${1}",
-  "Pay with four currencies": "Betalen met vier valuta"
+  "Pay with four currencies": "Betalen met vier valuta",
+  "Place a special tile": "Speciale tegel leggen",
+  "Choose resources freely": "Grondstoffen vrij kiezen",
+  "Choose a player": "Speler kiezen",
+  "Discard cards": "Kaarten afleggen",
+  "Draft round": "Draftronde",
+  "Add a resource to a card": "Grondstof op een kaart leggen",
+  "Remove a resource from a card": "Grondstof van een kaart nemen",
+  "Decide what to do with resources": "Beslissen wat er met grondstoffen gebeurt",
+  "Move resources to another card": "Grondstoffen naar een andere kaart verplaatsen",
+  "Take resources from another card": "Grondstoffen van een andere kaart halen",
+  "Select cards to discard": "Kies kaarten om af te leggen",
+  "Select 3 resources of any kind": "Kies 3 willekeurige grondstoffen",
+  "Select a special tile": "Kies een speciale tegel",
+  "Select space for special tile": "Kies een vak voor de speciale tegel",
+  "Select card to remove 1 resource": "Kies een kaart om 1 grondstof van te nemen"
 }

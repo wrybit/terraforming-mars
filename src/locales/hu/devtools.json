@@ -29,5 +29,20 @@
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: ${0} pontszintje, pontjai, címkéi és kedvezményei beállítva",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: generáció beállítva: ${0}",
   "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} kérdést kap: ${1}",
-  "Pay with four currencies": "Fizetés négy pénznemmel"
+  "Pay with four currencies": "Fizetés négy pénznemmel",
+  "Place a special tile": "Különleges lapka lerakása",
+  "Choose resources freely": "Nyersanyagok szabad választása",
+  "Choose a player": "Játékos választása",
+  "Discard cards": "Kártyák eldobása",
+  "Draft round": "Draft kör",
+  "Add a resource to a card": "Nyersanyag kártyára tétele",
+  "Remove a resource from a card": "Nyersanyag levétele kártyáról",
+  "Decide what to do with resources": "Döntés a nyersanyagokról",
+  "Move resources to another card": "Nyersanyagok áthelyezése másik kártyára",
+  "Take resources from another card": "Nyersanyagok elvétele másik kártyáról",
+  "Select cards to discard": "Válaszd ki az eldobandó kártyákat",
+  "Select 3 resources of any kind": "Válassz 3 tetszőleges nyersanyagot",
+  "Select a special tile": "Válassz különleges lapkát",
+  "Select space for special tile": "Válassz mezőt a különleges lapkának",
+  "Select card to remove 1 resource": "Válassz kártyát, amelyről 1 nyersanyag lekerül"
 }

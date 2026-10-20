@@ -7,7 +7,7 @@ import {SpaceType} from '../../src/common/boards/SpaceType';
 import {TileType} from '../../src/common/TileType';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {Board} from '../../src/server/boards/Board';
-import {PLANET_SPACE_TYPES} from '../../src/common/devtools/devToolsAction';
+import {DevToolsTrigger, PLANET_SPACE_TYPES} from '../../src/common/devtools/devToolsAction';
 import {Tag} from '../../src/common/cards/Tag';
 import {Research} from '../../src/server/cards/base/Research';
 import {Game} from '../../src/server/Game';
@@ -175,6 +175,29 @@ describe('applyDevToolsAction', () => {
     expect(worm.trail?.length ?? 0).eq(1);
     expect(worm.path).is.not.undefined;
     expect(start).is.a('string');
+  });
+
+  it('asks every card and player question with a real dialog', () => {
+    const expected: Array<[DevToolsTrigger, string]> = [
+      ['specialTile', 'or'], ['resources', 'resources'], ['player', 'player'], ['discard', 'card'], ['draft', 'card'],
+      ['addResource', 'card'], ['removeResource', 'card'], ['resourceChoice', 'or'], ['moveResource', 'card'], ['takeResource', 'card'],
+    ];
+    for (const [trigger, type] of expected) {
+      const [game, player] = testGame(2);
+      applyDevToolsAction(game, {type: 'trigger', color: player.color, trigger});
+      expect(player.getWaitingFor()?.type, trigger).eq(type);
+    }
+  });
+
+  it('places a special tile in two steps', () => {
+    const [game, player] = testGame(2);
+    applyDevToolsAction(game, {type: 'trigger', color: player.color, trigger: 'specialTile'});
+    player.process({type: 'or', index: 0, response: {type: 'option'}});
+    const select = player.getWaitingFor() as SelectSpace;
+    expect(select).instanceOf(SelectSpace);
+    const space = select.spaces[0];
+    player.process({type: 'space', spaceId: space.id});
+    expect(space.tile?.tileType).eq(TileType.NATURAL_PRESERVE);
   });
 
   it('sets resources and production of one player as absolute values', () => {

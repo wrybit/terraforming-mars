@@ -45,7 +45,12 @@ export type DevToolsPlayerAction = {
 };
 
 /** Situations of the game asked of a player right now, on top of what he is asked anyway (devtools/devToolsTriggers.ts) */
-export const DEVTOOLS_TRIGGERS = ['city', 'ocean', 'greenery', 'pay', 'overpay', 'convert', 'milestone', 'award', 'worm'] as const;
+export const DEVTOOLS_TRIGGERS = [
+  'city', 'ocean', 'greenery', 'specialTile',
+  'pay', 'overpay', 'convert', 'resources', 'player',
+  'discard', 'draft', 'addResource', 'removeResource', 'resourceChoice', 'moveResource', 'takeResource',
+  'milestone', 'award', 'worm',
+] as const;
 export type DevToolsTrigger = typeof DEVTOOLS_TRIGGERS[number];
 
 /** Button text in the panel and wording of the log line (both translated, themed by the theme texts) */
@@ -53,13 +58,31 @@ export const DEVTOOLS_TRIGGER_LABELS: Readonly<Record<DevToolsTrigger, string>> 
   city: 'Place a city',
   ocean: 'Place an ocean',
   greenery: 'Place a greenery',
+  specialTile: 'Place a special tile',
   pay: 'Pay with four currencies',
   overpay: 'Pay too much',
   convert: 'Convert energy to heat',
+  resources: 'Choose resources freely',
+  player: 'Choose a player',
+  discard: 'Discard cards',
+  draft: 'Draft round',
+  addResource: 'Add a resource to a card',
+  removeResource: 'Remove a resource from a card',
+  resourceChoice: 'Decide what to do with resources',
+  moveResource: 'Move resources to another card',
+  takeResource: 'Take resources from another card',
   milestone: 'Claim a milestone for free',
   award: 'Fund an award for free',
   worm: 'Move the worm',
 };
+
+/** The questions in the panel, grouped by what they are about (group titles are translation keys) */
+export const DEVTOOLS_TRIGGER_GROUPS: ReadonlyArray<{label: string, triggers: ReadonlyArray<DevToolsTrigger>}> = [
+  {label: 'Board tiles', triggers: ['city', 'ocean', 'greenery', 'specialTile']},
+  {label: 'Resources', triggers: ['pay', 'overpay', 'convert', 'resources']},
+  {label: 'Cards', triggers: ['discard', 'draft', 'addResource', 'removeResource', 'resourceChoice', 'moveResource', 'takeResource']},
+  {label: 'Other', triggers: ['player', 'milestone', 'award', 'worm']},
+];
 
 export type DevToolsTriggerAction = {
   type: 'trigger',

@@ -30,5 +30,20 @@
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: рейтинг, очки, метки и скидки игрока ${0} установлены",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: поколение установлено на ${0}",
   "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: у игрока ${0} запрошено: ${1}",
-  "Pay with four currencies": "Оплатить четырьмя валютами"
+  "Pay with four currencies": "Оплатить четырьмя валютами",
+  "Place a special tile": "Выложить особый тайл",
+  "Choose resources freely": "Выбрать ресурсы свободно",
+  "Choose a player": "Выбрать игрока",
+  "Discard cards": "Сбросить карты",
+  "Draft round": "Раунд драфта",
+  "Add a resource to a card": "Положить ресурс на карту",
+  "Remove a resource from a card": "Снять ресурс с карты",
+  "Decide what to do with resources": "Решить, что делать с ресурсами",
+  "Move resources to another card": "Переложить ресурсы на другую карту",
+  "Take resources from another card": "Взять ресурсы с другой карты",
+  "Select cards to discard": "Выберите карты для сброса",
+  "Select 3 resources of any kind": "Выберите 3 любых ресурса",
+  "Select a special tile": "Выберите особый тайл",
+  "Select space for special tile": "Выберите клетку для особого тайла",
+  "Select card to remove 1 resource": "Выберите карту, с которой снять 1 ресурс"
 }
