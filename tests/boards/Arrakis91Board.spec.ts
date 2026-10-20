@@ -19,9 +19,8 @@ function totals(board: MarsBoard) {
     steel: count(SpaceBonus.STEEL),
     titanium: count(SpaceBonus.TITANIUM),
     cards: count(SpaceBonus.DRAW_CARD),
-    plants: count(SpaceBonus.PLANT),
-    heat: count(SpaceBonus.HEAT),
-    energy: count(SpaceBonus.ENERGY),
+    // Plant-like bonuses change kind with the terrain under them (scripts/arrakisGeography.ts), their sum grows
+    plantLike: count(SpaceBonus.PLANT) + count(SpaceBonus.HEAT) + count(SpaceBonus.ENERGY),
   };
 }
 

@@ -5,6 +5,7 @@ import {Space} from './Space';
 import {SpaceId} from '../../common/Types';
 import {Arrakis61Board} from './Arrakis61Board';
 import {ARRAKIS_91_ARRAKEEN, ARRAKIS_91_ROWS} from './arrakis91Spaces';
+import {buildArrakisRows} from './arrakisRows';
 import {ARRAKIS_91_LAYOUT} from '../../common/dune/arrakisLayout';
 import {arrakisCoordinate, arrakisSpaceIds} from '../../common/dune/arrakisCoordinates';
 
@@ -20,19 +21,7 @@ export class Arrakis91Board extends Arrakis61Board {
 
   public static override newInstance(gameOptions: GameOptions, rng: Random): Arrakis91Board {
     const builder = new BoardBuilder(gameOptions, rng, ARRAKIS_91_LAYOUT.rowLengths);
-    let spaceNumber = 3;
-    for (const row of ARRAKIS_91_ROWS) {
-      builder.row((r) => {
-        for (const space of row) {
-          r[space.kind](...space.bonus);
-          // Arrakeen stays where it is when the bonuses are shuffled, like Noctis City
-          if (spaceNumber === Number(ARRAKIS_91_ARRAKEEN)) {
-            r.doNotShuffleLastSpace();
-          }
-          spaceNumber++;
-        }
-      });
-    }
+    buildArrakisRows(builder, ARRAKIS_91_ROWS, ARRAKIS_91_ARRAKEEN);
     return new Arrakis91Board(builder.build());
   }
 

@@ -1,8 +1,10 @@
-// Builds the large Arrakis board (six spaces a side, 91 spaces like Amazonis Planitia) from the standard Arrakis board.
-// Why: the large board must keep the geography of the standard one – rock where the mountains are, spice fields in the
-// open erg, plants around the basins and the polar sink. So every space of the large board takes over from the
-// standard space at the same place on the planet; the bonus totals grow with the number of spaces (91 / 61).
-// Never edit the generated files by hand – change this script or the standard board and run:
+// Builds the large Arrakis board (six spaces a side, 91 spaces like Amazonis Planitia) from the standard Arrakis board
+// and the map.
+// Why: the large board must keep the design of the standard one, so every space takes over the bonus of the standard
+// space at the same place on the planet; the totals grow with the number of spaces (91 / 61). What lies on a space –
+// rock, ice, basin, spice field, the named mountains – comes from the map under the large space itself
+// (scripts/arrakisGeography.ts), so both boards match the planet. Never edit the generated files by hand – run, after
+// scripts/measure-arrakis-globe.py and scripts/make-arrakis-61.ts:
 //   npx tsx scripts/make-arrakis-91.ts
 // Writes src/common/dune/arrakis91Terrain.ts and src/server/boards/arrakis91Spaces.ts.
 import * as fs from 'fs';
@@ -13,8 +15,10 @@ import {SeededRandom} from '../src/common/utils/Random';
 import {SpaceType} from '../src/common/boards/SpaceType';
 import {SpaceBonus} from '../src/common/boards/SpaceBonus';
 import {SpaceName} from '../src/common/boards/SpaceName';
-import {ARRAKIS_ZONES, ArrakisZone, BEHIND_WORM_BORDER} from '../src/common/dune/arrakisTerrain';
+import {ArrakisZone, BEHIND_WORM_BORDER} from '../src/common/dune/arrakisTerrain';
 import {WORM_START_SPACES} from '../src/common/dune/wormStartSpaces';
+import {ARRAKIS_91_ROWS} from '../src/server/boards/arrakis91Spaces';
+import {bonusForZone, chooseSpiceFields, landZone, loadMeasures} from './arrakisGeography';
 
 const ROOT = path.join(__dirname, '..');
 // Both boards: each space 49 px right of the last, each row 41 px below (board_items_positions.less); the planet
@@ -51,42 +55,35 @@ const nearestStandard = (cell: Cell) => standardCells.reduce((best, other) => di
 const nearestLarge = (cell: Cell, free: (cell: Cell) => boolean = () => true) =>
   largeCells.filter(free).reduce((best, other) => distance(cell, other) < distance(cell, best) ? other : best);
 const source = new Map(largeCells.map((cell) => [cell.id, nearestStandard(cell)]));
+const measures = loadMeasures('91');
+const isRock = (cell: Cell) => landZone(measures[cell.id]) === 'rock';
 
-// Fixed places first: Arrakeen and the four volcanic mountains each on the large space nearest to theirs
+// Fixed places first: Arrakeen and the four volcanic mountains each on the large space nearest to theirs, the
+// mountains on rock
 const taken = new Set<string>();
-const claim = (standard: Cell) => {
-  const cell = nearestLarge(standard, (c) => !taken.has(c.id));
+const claim = (standard: Cell, fits: (cell: Cell) => boolean = () => true) => {
+  const cell = nearestLarge(standard, (c) => !taken.has(c.id) && fits(c));
   taken.add(cell.id);
   return cell;
 };
 const arrakeen = claim(standardCells.find((cell) => cell.id === SpaceName.ARRAKEEN)!);
 const volcanic = new Map<string, string>();
 for (const cell of standardCells.filter((c) => standardSpace(c.id).volcanic === true)) {
-  volcanic.set(claim(cell).id, cell.id);
+  volcanic.set(claim(cell, isRock).id, cell.id);
 }
 
-// Oceans (spice fields): first the large space nearest to every standard one, then the closest others of their regions
+// The worm's nest: polar sink and start spaces at the places of the standard ones
+const behindBorder = largeCells.filter((cell) => BEHIND_WORM_BORDER.includes(source.get(cell.id)!.id)).map((cell) => cell.id);
+const wormStart = largeCells.filter((cell) => (WORM_START_SPACES as ReadonlyArray<string>).includes(source.get(cell.id)!.id)).map((cell) => cell.id);
+
+// Oceans (spice fields): where the map shows spice, as many as the standard board has, grown
 const standardOceans = standardCells.filter((cell) => standardSpace(cell.id).spaceType === SpaceType.OCEAN);
 const oceanTarget = Math.round(standardOceans.length * GROWTH);
-const oceans = new Set<string>();
-for (const cell of standardOceans) {
-  const large = claim(cell);
-  oceans.add(large.id);
-}
-const oceanCandidates = largeCells
-  .filter((cell) => !taken.has(cell.id) && standardSpace(source.get(cell.id)!.id).spaceType === SpaceType.OCEAN)
-  .sort((a, b) => distance(a, source.get(a.id)!) - distance(b, source.get(b.id)!));
-for (const cell of oceanCandidates.slice(0, oceanTarget - oceans.size)) {
-  oceans.add(cell.id);
-  taken.add(cell.id);
-}
-// Still short: the free spaces closest to a standard spice field
+const previousOceans = new Set(ARRAKIS_91_ROWS.flat().map((space, index) => space.kind === 'ocean' ? String(index + 3).padStart(2, '0') : '').filter((id) => id !== ''));
+const oceans = chooseSpiceFields(measures, oceanTarget, new Set([...taken, ...behindBorder, ...wormStart]), previousOceans);
+oceans.forEach((id) => taken.add(id));
 const closestTo = (targets: ReadonlyArray<Cell>) => (a: Cell, b: Cell) =>
   Math.min(...targets.map((t) => distance(a, t))) - Math.min(...targets.map((t) => distance(b, t)));
-for (const cell of largeCells.filter((c) => !taken.has(c.id)).sort(closestTo(standardOceans)).slice(0, Math.max(0, oceanTarget - oceans.size))) {
-  oceans.add(cell.id);
-  taken.add(cell.id);
-}
 
 // Bonuses: every standard space hands its bonus to the large space nearest to it; then copies go to the other spaces
 // of its region, closest first, until each bonus reaches its grown total. Fixed places keep the bonus of their place.
@@ -137,15 +134,22 @@ for (const bonus of standardTotals.keys()) {
     add(empty.shift()!.id, [bonus]);
   }
 }
+// Plant-like bonuses count as one group (their kind follows the terrain below): grow the group as a whole, rounding
+// each kind on its own can leave it one short
+const PLANT_LIKE = [SpaceBonus.PLANT, SpaceBonus.HEAT, SpaceBonus.ENERGY];
+const plantLike = (map: Map<SpaceBonus, number>) => PLANT_LIKE.reduce((sum, b) => sum + (map.get(b) ?? 0), 0);
+const plantHomes = standardCells.filter((cell) => standardSpace(cell.id).bonus.some((b) => PLANT_LIKE.includes(b)));
+const emptyForPlants = largeCells.filter((cell) => bonuses.get(cell.id)!.length === 0 && cell.id !== arrakeen.id).sort(closestTo(plantHomes));
+while (plantLike(counts) < Math.round(plantLike(standardTotals) * GROWTH) && emptyForPlants.length > 0) {
+  add(emptyForPlants.shift()!.id, [SpaceBonus.PLANT]);
+}
 
-// Terrain: the zone of the standard space at the same place; spice fields only on oceans, the city only on Arrakeen
+// Terrain after the map; spice fields on the oceans, the city on Arrakeen. Plant-like bonuses follow the terrain.
 const zones: Record<string, ArrakisZone> = {};
 for (const cell of largeCells) {
-  const zone = ARRAKIS_ZONES[source.get(cell.id)!.id] ?? 'erg';
-  zones[cell.id] = oceans.has(cell.id) ? 'spicefield' : cell.id === arrakeen.id ? 'city' : zone === 'spicefield' || zone === 'city' ? 'erg' : zone;
+  zones[cell.id] = oceans.has(cell.id) ? 'spicefield' : cell.id === arrakeen.id ? 'city' : landZone(measures[cell.id]);
+  bonuses.set(cell.id, bonusForZone(bonuses.get(cell.id)!, zones[cell.id]));
 }
-const behindBorder = largeCells.filter((cell) => BEHIND_WORM_BORDER.includes(source.get(cell.id)!.id)).map((cell) => cell.id);
-const wormStart = largeCells.filter((cell) => (WORM_START_SPACES as ReadonlyArray<string>).includes(source.get(cell.id)!.id)).map((cell) => cell.id);
 const placeNames: Record<string, string> = {};
 volcanic.forEach((standardId, largeId) => {
   const name = {'05': 'Tharsis Tholus', '12': 'Pavonis Mons', '23': 'Ascraeus Mons', '36': 'Arsia Mons'}[standardId];
@@ -168,10 +172,9 @@ const spaceLines = LARGE.rowLengths.map((_, row) => '  [' + largeCells.filter((c
 fs.writeFileSync(path.join(ROOT, 'src/server/boards/arrakis91Spaces.ts'), `// GENERATED by scripts/make-arrakis-91.ts from the standard Arrakis board – do not edit by hand.
 // The large Arrakis board row by row (6 to 11 spaces, ids 03 to 93 in reading order), read by Arrakis91Board.ts.
 import {SpaceBonus} from '../../common/boards/SpaceBonus';
+import {ArrakisSpaceDefinition} from './arrakisRows';
 
-export type Arrakis91Space = {kind: 'ocean' | 'land' | 'volcanic', bonus: Array<SpaceBonus>};
-
-export const ARRAKIS_91_ROWS: ReadonlyArray<ReadonlyArray<Arrakis91Space>> = [
+export const ARRAKIS_91_ROWS: ReadonlyArray<ReadonlyArray<ArrakisSpaceDefinition>> = [
 ${spaceLines.join('\n')}
 ];
 
