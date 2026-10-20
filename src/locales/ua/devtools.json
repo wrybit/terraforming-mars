@@ -1,17 +1,11 @@
 {
   "DevTools": "Інструменти розробника",
-  "View (only for you)": "Перегляд (лише для тебе)",
-  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "Підміняє значення лише в цьому браузері: гра не змінюється, ніхто інший цього не бачить, запису в журналі немає.",
-  "Intervention (for everyone, in the log)": "Втручання (для всіх, у журналі)",
-  "Changes the game for all players; every change is written to the game log.": "Змінює гру для всіх гравців; кожна зміна записується в журнал гри.",
   "MegaCredits": "Мегакредити",
   "Fill planet": "Заповнити планету",
   "Resources and production": "Ресурси та виробництво",
-  "Set values": "Задати значення",
   "Search project card": "Знайти карту проєкту",
   "Into the hand": "У руку",
   "Into play (without effect)": "У гру (без ефекту)",
-  "Reset view": "Скинути перегляд",
   "The change failed: ${0}": "Зміна не вдалася: ${0}",
   "🛠 DevTools: temperature set to ${0}": "🛠 DevTools: температуру встановлено на ${0}",
   "🛠 DevTools: oxygen set to ${0}": "🛠 DevTools: кисень встановлено на ${0}",
@@ -19,5 +13,9 @@
   "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 DevTools: планету заповнено на ${0} % (викладено тайлів: ${1}, прибрано: ${2})",
   "🛠 DevTools: resources and production of ${0} set": "🛠 DevTools: ресурси та виробництво гравця ${0} встановлено",
   "🛠 DevTools: ${0} got ${1} into the hand": "🛠 DevTools: ${0} отримує ${1} у руку",
-  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} отримує ${1} у гру без ефекту"
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} отримує ${1} у гру без ефекту",
+  "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "Змінює гру для всіх гравців і записує кожну зміну в журнал гри. Кожна зміна надсилається сама через секунду після останнього дотику.",
+  "🛠 DevTools: oceans set to ${0}": "🛠 DevTools: океани встановлено на ${0}",
+  "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 DevTools: поле змінено на ${0} (не підійшло тайлів: ${1})",
+  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: тему змінено на ${0}"
 }

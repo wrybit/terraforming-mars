@@ -1,15 +1,9 @@
 {
-  "View (only for you)": "Ansicht (nur bei dir)",
-  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "Täuscht Werte nur in diesem Browser vor: Das Spiel bleibt, wie es ist, niemand sonst sieht es, kein Log-Eintrag.",
-  "Intervention (for everyone, in the log)": "Eingriff (für alle, im Log)",
-  "Changes the game for all players; every change is written to the game log.": "Ändert das Spiel für alle Spieler; jede Änderung steht im Spiel-Log.",
   "Fill planet": "Planet füllen",
   "Resources and production": "Ressourcen und Produktion",
-  "Set values": "Werte setzen",
   "Search project card": "Projektkarte suchen",
   "Into the hand": "Auf die Hand",
   "Into play (without effect)": "Ins Spiel (ohne Wirkung)",
-  "Reset view": "Ansicht zurücksetzen",
   "The change failed: ${0}": "Die Änderung ist fehlgeschlagen: ${0}",
   "🛠 DevTools: temperature set to ${0}": "🛠 DevTools: Temperatur auf ${0} gesetzt",
   "🛠 DevTools: oxygen set to ${0}": "🛠 DevTools: Sauerstoff auf ${0} gesetzt",
@@ -17,5 +11,9 @@
   "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 DevTools: Planet zu ${0} % gefüllt (${1} Plättchen gelegt, ${2} entfernt)",
   "🛠 DevTools: resources and production of ${0} set": "🛠 DevTools: Ressourcen und Produktion von ${0} gesetzt",
   "🛠 DevTools: ${0} got ${1} into the hand": "🛠 DevTools: ${0} bekommt ${1} auf die Hand",
-  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} bekommt ${1} ins Spiel, ohne Wirkung"
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} bekommt ${1} ins Spiel, ohne Wirkung",
+  "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "Ändert das Spiel für alle Spieler und schreibt jede Änderung ins Spiel-Log. Jede Änderung wird eine Sekunde nach der letzten Berührung von selbst gesendet.",
+  "🛠 DevTools: oceans set to ${0}": "🛠 DevTools: Ozeane auf ${0} gesetzt",
+  "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 DevTools: Spielbrett auf ${0} umgestellt (${1} Plättchen passten nicht)",
+  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: Thema auf ${0} umgestellt"
 }

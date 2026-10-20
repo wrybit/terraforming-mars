@@ -23,7 +23,7 @@ function remember(on: boolean): void {
   }
 }
 
-export function remembered(): boolean {
+function remembered(): boolean {
   try {
     return localStorage.getItem(STORAGE_KEY) === '1';
   } catch {

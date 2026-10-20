@@ -35,18 +35,22 @@
       <!-- Touch devices (phone, tablet) get the mobile view, see mobileLayout.ts -->
       <MobilePlayerHome
         v-else-if="screen === 'player-home' && playerView !== undefined && isMobileLayout"
+        :key="'mobile-player-' + gameViewKey"
         :player-view="playerView"
       />
       <PlayerHome
         v-else-if="screen === 'player-home' && playerView !== undefined"
+        :key="'player-' + gameViewKey"
         :player-view="playerView"
       />
       <MobileSpectatorHome
         v-else-if="screen === 'spectator-home' && spectator !== undefined && isMobileLayout"
+        :key="'mobile-spectator-' + gameViewKey"
         :spectator="spectator"
       />
       <SpectatorHome
         v-else-if="screen === 'spectator-home' && spectator !== undefined"
+        :key="'spectator-' + gameViewKey"
         :spectator="spectator"
       />
       <GameEnd
@@ -128,7 +132,6 @@ import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
 import {setDocumentTitle} from '../utils/documentTitle';
 import {ingestView} from '@/client/utils/changeTracker';
 import {installDevToolsConsole} from '@/client/devtools/devToolsState';
-import {applyDevToolsView} from '@/client/devtools/devToolsView';
 import {fetchOrFail} from '@/client/utils/requestFailure';
 import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
 
@@ -251,6 +254,11 @@ export default defineComponent({
     participant(): ViewModel | undefined {
       return this.playerView ?? this.spectator;
     },
+    // Theme and board decide the build of the whole game view (scales, planet, tabs): when either changes in a running
+    // game (DevTools), the view is built anew instead of mixing parts of the old one into the new
+    gameViewKey(): string {
+      return this.themeKey + '-' + (this.participant?.game.gameOptions.boardName ?? '');
+    },
     componentExtensions(): ReadonlyArray<ClientExtension> {
       return CLIENT_EXTENSIONS.filter((extension) => extension.component !== undefined);
     },
@@ -314,8 +322,6 @@ export default defineComponent({
         .then((resp) => resp.json())
         // Theme texts first, so the game never shows up in the Mars wording for a moment
         .then(async (model: ViewModel) => {
-          // DevTools view mode: pretended values (also board and theme) before anything is shown
-          applyDevToolsView(model);
           await applyTheme(model.game.gameOptions.theme);
           return model;
         })

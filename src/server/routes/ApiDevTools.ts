@@ -33,9 +33,13 @@ export class ApiDevTools extends Handler {
     if (game === undefined) {
       throw RouteError.notFound('game not found');
     }
-    applyDevToolsAction(game, request.action);
+    const result = applyDevToolsAction(game, request.action);
+    // A new board builds the game anew: it takes the place of the old one for all players
+    if (result !== game) {
+      await ctx.gameLoader.add(result);
+    }
     // The log line raised the game age: every open page reloads the game
-    game.save();
+    result.save();
     responses.writeJson(res, ctx, {ok: true});
   }
 }

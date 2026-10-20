@@ -1,16 +1,10 @@
 {
-  "View (only for you)": "Nézet (csak neked)",
-  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "Csak ebben a böngészőben színlel értékeket: a játék változatlan marad, más nem látja, nincs naplóbejegyzés.",
-  "Intervention (for everyone, in the log)": "Beavatkozás (mindenkinek, a naplóban)",
-  "Changes the game for all players; every change is written to the game log.": "Minden játékos számára megváltoztatja a játékot; minden változás bekerül a játéknaplóba.",
   "MegaCredits": "Megakredit",
   "Fill planet": "Bolygó feltöltése",
   "Resources and production": "Nyersanyagok és termelés",
-  "Set values": "Értékek beállítása",
   "Search project card": "Projektkártya keresése",
   "Into the hand": "Kézbe",
   "Into play (without effect)": "Játékba (hatás nélkül)",
-  "Reset view": "Nézet visszaállítása",
   "The change failed: ${0}": "A módosítás nem sikerült: ${0}",
   "🛠 DevTools: temperature set to ${0}": "🛠 DevTools: hőmérséklet beállítva: ${0}",
   "🛠 DevTools: oxygen set to ${0}": "🛠 DevTools: oxigén beállítva: ${0}",
@@ -18,5 +12,9 @@
   "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 DevTools: bolygó feltöltve ${0} %-ra (${1} lapka lerakva, ${2} eltávolítva)",
   "🛠 DevTools: resources and production of ${0} set": "🛠 DevTools: ${0} nyersanyagai és termelése beállítva",
   "🛠 DevTools: ${0} got ${1} into the hand": "🛠 DevTools: ${0} kézbe kapja: ${1}",
-  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} játékba kapja hatás nélkül: ${1}"
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} játékba kapja hatás nélkül: ${1}",
+  "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "Minden játékos számára megváltoztatja a játékot, és minden változást beír a játéknaplóba. Minden változás magától elküldésre kerül egy másodperccel az utolsó érintés után.",
+  "🛠 DevTools: oceans set to ${0}": "🛠 DevTools: óceánok beállítva: ${0}",
+  "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 DevTools: játéktábla átállítva: ${0} (${1} lapka nem fért el)",
+  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: téma átállítva: ${0}"
 }

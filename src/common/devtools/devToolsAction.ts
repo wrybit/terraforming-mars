@@ -4,6 +4,9 @@ import {Color} from '../Color';
 import {PlayerId} from '../Types';
 import {CardName} from '../cards/CardName';
 import {Units} from '../Units';
+import {BoardName} from '../boards/BoardName';
+import {SpaceType} from '../boards/SpaceType';
+import {Theme, isTheme} from '../theme/Theme';
 
 /** Global parameters set directly, without rewards or terraform rating */
 export type DevToolsGlobalsAction = {
@@ -14,12 +17,26 @@ export type DevToolsGlobalsAction = {
 };
 
 /**
- * Fills the planet: `share` from 0 to 1 of all ocean spaces get an ocean, the same share of the free land spaces
- * a greenery or city (two greeneries per city, owners in turn). Turning it back removes only tiles placed this way.
+ * Fills the planet: `share` from 0 to 1 of the maximum oceans, the same share of the land spaces taken (greeneries,
+ * cities and now and then a special tile, by the normal placement rules). At 1 no space of the planet stays free.
+ * Turning it back removes only tiles placed this way.
  */
 export type DevToolsTerraformAction = {
   type: 'terraform',
   share: number,
+};
+
+/** Number of oceans (spice fields in the Dune theme), placed on or taken from the ocean spaces */
+export type DevToolsOceansAction = {
+  type: 'oceans',
+  count: number,
+};
+
+/** Board and theme of the running game; the game is built anew from its save with the new board */
+export type DevToolsSetupAction = {
+  type: 'setup',
+  boardName?: BoardName,
+  theme?: Theme,
 };
 
 /** Resources and production of one player, as absolute values */
@@ -38,7 +55,11 @@ export type DevToolsCardAction = {
   to: 'hand' | 'tableau',
 };
 
-export type DevToolsAction = DevToolsGlobalsAction | DevToolsTerraformAction | DevToolsResourcesAction | DevToolsCardAction;
+export type DevToolsAction = DevToolsGlobalsAction | DevToolsTerraformAction | DevToolsOceansAction | DevToolsSetupAction |
+  DevToolsResourcesAction | DevToolsCardAction;
+
+/** Spaces that make up the planet: the fill slider counts them on both sides (client panel and server) */
+export const PLANET_SPACE_TYPES: ReadonlyArray<SpaceType> = [SpaceType.LAND, SpaceType.OCEAN, SpaceType.COVE];
 
 /** The page sends its own player id: it names the game, and the log says through whose view the admin acted */
 export type DevToolsRequest = {
@@ -70,6 +91,11 @@ export function isDevToolsAction(value: unknown): value is DevToolsAction {
     return isOptionalNumber(action.temperature) && isOptionalNumber(action.oxygen) && isOptionalNumber(action.venus);
   case 'terraform':
     return typeof action.share === 'number' && action.share >= 0 && action.share <= 1;
+  case 'oceans':
+    return typeof action.count === 'number' && Number.isInteger(action.count) && action.count >= 0;
+  case 'setup':
+    return (action.boardName === undefined || (Object.values(BoardName) as Array<unknown>).includes(action.boardName)) &&
+      (action.theme === undefined || isTheme(action.theme));
   case 'resources':
     return typeof action.color === 'string' && isUnits(action.stock) && isUnits(action.production);
   case 'card':

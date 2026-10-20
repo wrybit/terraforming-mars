@@ -9,125 +9,240 @@
   border-radius: inherit;
 }
 
-// Two cards side by side: the view one third, the intervention two thirds (Jens, 20 Oct 2026). Small gaps inside a
-// group, larger ones between groups and cards, so what belongs together reads as one.
+// Controls in the look of the game's own fields: the search field of the log (log.less .log-filter-field) and the
+// price slider of the card list (card_list.less). The same colours, so the Dune theme recolours them as well.
+@devtools-field-border: #3a3f55;
+@devtools-field-border-focus: #5a6080;
+@devtools-field-background: rgba(0, 0, 0, 0.25);
+@devtools-track: rgba(255, 255, 255, 0.16);
+@devtools-thumb: 18px;
+@devtools-field-height: 32px;
+// Inside a group smaller than between groups: what belongs together reads as one (Gestalt, proximity)
+@devtools-gap-inside: 8px;
+@devtools-gap-groups: 20px;
+
+// Three groups: parameters, resources, card. Side by side where there is room, below each other on the phone
 .devtools {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-areas:
+    "head head"
+    "globals resources"
+    "card resources"
+    "error error";
   align-items: start;
-  gap: 16px;
-  padding: 12px;
+  gap: @devtools-gap-groups 28px;
+  padding: 14px 16px 18px;
   box-sizing: border-box;
+  color: #eee;
   text-align: left;
+}
+
+.devtools__head {
+  grid-area: head;
+}
+
+.devtools__group--globals {
+  grid-area: globals;
+}
+
+.devtools__group--resources {
+  grid-area: resources;
+}
+
+.devtools__group--card {
+  grid-area: card;
 }
 
 html.tm-mobile .devtools {
   grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "head" "globals" "resources" "card" "error";
 }
 
-// The intervention has room for two columns of groups: parameters and card left, resources right
-.devtools-card__columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 6px 24px;
-}
-
-.devtools-card__column {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.devtools-card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px 14px;
-  border: 1px solid rgb(255 255 255 / 14%);
-  border-radius: 10px;
-  background: rgb(0 0 0 / 28%);
-}
-
-// The intervention changes the game for everyone: marked in warning orange
-.devtools-card--live {
-  border-color: rgb(240 138 44 / 55%);
-}
-
-.devtools-card__title {
+.devtools__title {
   margin: 0;
-  font-size: 15px;
+  font-size: 16px;
 }
 
-.devtools-card__note {
-  margin: 0 0 6px;
+.devtools__note {
+  margin: 4px 0 0;
   font-size: 12px;
-  opacity: 0.75;
+  opacity: 0.7;
 }
 
-.devtools-card__group {
-  margin: 12px 0 0;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  opacity: 0.85;
-}
-
-.devtools-slider {
-  display: grid;
-  grid-template-columns: 9em 1fr 3.5em;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-}
-
-.devtools-slider__value {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-.devtools-row {
+.devtools__group {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 8px;
-  margin-top: 4px;
+  flex-direction: column;
+  gap: @devtools-gap-inside;
+  min-width: 0;
+}
+
+.devtools__group-title {
+  margin: 0;
+  color: #a4a9b6;
+  font: 600 11px/14px system-ui, sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.devtools__error {
+  grid-area: error;
+  margin: 0;
+  color: #ff8a7a;
+  font-size: 12px;
+}
+
+.devtools-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: @devtools-gap-inside;
 }
 
 .devtools-field {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
+  min-width: 0;
+}
+
+.devtools-field__name {
   font-size: 12px;
+  opacity: 0.75;
+}
+
+.devtools-input,
+.devtools-select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: @devtools-field-height;
+  padding: 0 10px;
+  border: 1px solid @devtools-field-border;
+  border-radius: 7px;
+  background-color: @devtools-field-background;
+  color: #eee;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+
+  &:focus {
+    border-color: @devtools-field-border-focus;
+  }
+}
+
+// Own arrow instead of the system one, so the box looks the same in every browser
+.devtools-select {
+  padding-right: 28px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a4a9b6' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  cursor: pointer;
+
+  option {
+    background: #1d2030;
+    color: #eee;
+  }
+}
+
+.devtools-input[type="number"] {
+  padding: 0 6px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.devtools-slider {
+  display: grid;
+  grid-template-columns: 8.5em minmax(0, 1fr) 3.6em;
+  align-items: center;
+  gap: 10px;
+  min-height: 28px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.devtools-slider__value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  transition: opacity 0.2s;
+}
+
+// Waiting to send: the number dims until the change is on the server
+.devtools-slider--pending .devtools-slider__value,
+.devtools-grid--pending .devtools-input {
+  opacity: 0.55;
+}
+
+// Track with the filled part in the action colour, thumb with a white ring like the price slider of the card list
+.devtools-range {
+  --devtools-fill: 0%;
+  width: 100%;
+  height: @devtools-thumb;
+  margin: 0;
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+
+  &::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(to right, @bg_action var(--devtools-fill), @devtools-track var(--devtools-fill));
+  }
+
+  &::-webkit-slider-thumb {
+    width: @devtools-thumb;
+    height: @devtools-thumb;
+    margin-top: (4px - @devtools-thumb) / 2;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: @bg_action;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    appearance: none;
+  }
+
+  &::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: @devtools-track;
+  }
+
+  &::-moz-range-progress {
+    height: 4px;
+    border-radius: 2px;
+    background: @bg_action;
+  }
+
+  &::-moz-range-thumb {
+    box-sizing: border-box;
+    width: @devtools-thumb;
+    height: @devtools-thumb;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: @bg_action;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  &:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid @highlight-gold;
+    outline-offset: 2px;
+  }
 }
 
 .devtools-grid {
   display: grid;
-  grid-template-columns: 1fr 5em 5em;
+  grid-template-columns: minmax(0, 1fr) 5.5em 5.5em;
   align-items: center;
-  gap: 4px 8px;
+  gap: 6px @devtools-gap-inside;
   font-size: 13px;
 }
 
 .devtools-grid__head {
+  color: #a4a9b6;
   font-size: 11px;
+  text-align: right;
   text-transform: uppercase;
-  opacity: 0.7;
-}
-
-.devtools-grid__input,
-.devtools-search {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 3px 6px;
 }
 
 .devtools-button {
-  align-self: flex-start;
-  margin-top: 4px;
-}
-
-.devtools-error {
-  margin: 4px 0 0;
-  color: #ff8a7a;
-  font-size: 12px;
+  margin: 0;
 }

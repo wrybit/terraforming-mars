@@ -1,16 +1,10 @@
 {
-  "View (only for you)": "Vista (solo per te)",
-  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "Simula valori solo in questo browser: la partita resta com'è, nessun altro lo vede, nessuna voce nel registro.",
-  "Intervention (for everyone, in the log)": "Intervento (per tutti, nel registro)",
-  "Changes the game for all players; every change is written to the game log.": "Modifica la partita per tutti i giocatori; ogni modifica viene scritta nel registro di gioco.",
   "MegaCredits": "Megacrediti",
   "Fill planet": "Riempi il pianeta",
   "Resources and production": "Risorse e produzione",
-  "Set values": "Imposta valori",
   "Search project card": "Cerca carta progetto",
   "Into the hand": "In mano",
   "Into play (without effect)": "In gioco (senza effetto)",
-  "Reset view": "Reimposta vista",
   "The change failed: ${0}": "La modifica non è riuscita: ${0}",
   "🛠 DevTools: temperature set to ${0}": "🛠 DevTools: temperatura impostata a ${0}",
   "🛠 DevTools: oxygen set to ${0}": "🛠 DevTools: ossigeno impostato a ${0}",
@@ -18,5 +12,9 @@
   "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 DevTools: pianeta riempito al ${0} % (${1} tessere posate, ${2} rimosse)",
   "🛠 DevTools: resources and production of ${0} set": "🛠 DevTools: risorse e produzione di ${0} impostate",
   "🛠 DevTools: ${0} got ${1} into the hand": "🛠 DevTools: ${0} riceve ${1} in mano",
-  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} riceve ${1} in gioco, senza effetto"
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} riceve ${1} in gioco, senza effetto",
+  "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "Modifica la partita per tutti i giocatori e scrive ogni modifica nel registro. Ogni modifica viene inviata da sola un secondo dopo l'ultimo tocco.",
+  "🛠 DevTools: oceans set to ${0}": "🛠 DevTools: oceani impostati a ${0}",
+  "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 DevTools: tabellone cambiato in ${0} (${1} tessere non entravano)",
+  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: tema cambiato in ${0}"
 }

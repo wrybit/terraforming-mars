@@ -1,17 +1,11 @@
 {
   "DevTools": "开发工具",
-  "View (only for you)": "视图（仅自己可见）",
-  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "仅在此浏览器中模拟数值：游戏本身不变，其他人看不到，也不写入日志。",
-  "Intervention (for everyone, in the log)": "干预（对所有人生效，记入日志）",
-  "Changes the game for all players; every change is written to the game log.": "为所有玩家修改游戏；每项修改都会写入游戏日志。",
   "MegaCredits": "百万信用",
   "Fill planet": "填充星球",
   "Resources and production": "资源与产能",
-  "Set values": "设置数值",
   "Search project card": "搜索项目卡",
   "Into the hand": "加入手牌",
   "Into play (without effect)": "直接打出（无效果）",
-  "Reset view": "重置视图",
   "The change failed: ${0}": "修改失败：${0}",
   "🛠 DevTools: temperature set to ${0}": "🛠 开发工具：温度设为 ${0}",
   "🛠 DevTools: oxygen set to ${0}": "🛠 开发工具：氧气设为 ${0}",
@@ -19,5 +13,9 @@
   "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 开发工具：星球填充到 ${0}%（放置 ${1} 个板块，移除 ${2} 个）",
   "🛠 DevTools: resources and production of ${0} set": "🛠 开发工具：已设置 ${0} 的资源与产能",
   "🛠 DevTools: ${0} got ${1} into the hand": "🛠 开发工具：${0} 获得 ${1} 加入手牌",
-  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 开发工具：${0} 直接打出 ${1}，无效果"
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 开发工具：${0} 直接打出 ${1}，无效果",
+  "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "为所有玩家修改游戏，并将每项修改写入游戏日志。每项修改会在最后一次操作一秒后自动发送。",
+  "🛠 DevTools: oceans set to ${0}": "🛠 开发工具：海洋设为 ${0}",
+  "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 开发工具：版图改为 ${0}（${1} 个板块无法放置）",
+  "🛠 DevTools: theme changed to ${0}": "🛠 开发工具：主题改为 ${0}"
 }

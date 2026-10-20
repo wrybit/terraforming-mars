@@ -56,7 +56,6 @@ import {setFaviconStatus, setFaviconTurnFrame} from '@/client/utils/favicon';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
 import {CANCEL_ACTION} from '@/client/components/cancelAction';
 import WaitingForTabs from '@/client/components/WaitingForTabs.vue';
-import {applyDevToolsView} from '@/client/devtools/devToolsView';
 import {isChoiceMenu} from '@/client/components/choiceMenu';
 import {spaceWithSkip} from '@/client/components/spaceWithSkip';
 import {ingestView} from '@/client/utils/changeTracker';
@@ -255,7 +254,6 @@ export default defineComponent({
     updatePlayerView(playerView: PlayerViewModel | undefined) {
       const root = vueRoot(this);
       if (playerView !== undefined) {
-        applyDevToolsView(playerView);
         // Answer to the own input: becomes the new baseline, own changes don't blink
         ingestView(playerView, 'own');
       }

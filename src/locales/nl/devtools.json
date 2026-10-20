@@ -1,16 +1,10 @@
 {
-  "View (only for you)": "Weergave (alleen voor jou)",
-  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "Doet waarden alleen in deze browser na: het spel blijft zoals het is, niemand anders ziet het, geen logregel.",
-  "Intervention (for everyone, in the log)": "Ingreep (voor iedereen, in het log)",
-  "Changes the game for all players; every change is written to the game log.": "Wijzigt het spel voor alle spelers; elke wijziging komt in het spellog.",
   "MegaCredits": "Megacredits",
   "Fill planet": "Planeet vullen",
   "Resources and production": "Grondstoffen en productie",
-  "Set values": "Waarden instellen",
   "Search project card": "Projectkaart zoeken",
   "Into the hand": "In de hand",
   "Into play (without effect)": "In het spel (zonder effect)",
-  "Reset view": "Weergave herstellen",
   "The change failed: ${0}": "De wijziging is mislukt: ${0}",
   "🛠 DevTools: temperature set to ${0}": "🛠 DevTools: temperatuur op ${0} gezet",
   "🛠 DevTools: oxygen set to ${0}": "🛠 DevTools: zuurstof op ${0} gezet",
@@ -18,5 +12,9 @@
   "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 DevTools: planeet voor ${0} % gevuld (${1} tegels gelegd, ${2} verwijderd)",
   "🛠 DevTools: resources and production of ${0} set": "🛠 DevTools: grondstoffen en productie van ${0} ingesteld",
   "🛠 DevTools: ${0} got ${1} into the hand": "🛠 DevTools: ${0} krijgt ${1} in de hand",
-  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} krijgt ${1} in het spel, zonder effect"
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} krijgt ${1} in het spel, zonder effect",
+  "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "Wijzigt het spel voor alle spelers en schrijft elke wijziging in het spellog. Elke wijziging wordt vanzelf verstuurd, een seconde na de laatste aanraking.",
+  "🛠 DevTools: oceans set to ${0}": "🛠 DevTools: oceanen op ${0} gezet",
+  "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 DevTools: bord veranderd in ${0} (${1} tegels pasten niet)",
+  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: thema veranderd in ${0}"
 }

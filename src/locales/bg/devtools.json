@@ -1,17 +1,11 @@
 {
   "DevTools": "Инструменти за разработчици",
-  "View (only for you)": "Изглед (само за теб)",
-  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "Симулира стойности само в този браузър: играта остава същата, никой друг не го вижда, няма запис в дневника.",
-  "Intervention (for everyone, in the log)": "Намеса (за всички, в дневника)",
-  "Changes the game for all players; every change is written to the game log.": "Променя играта за всички играчи; всяка промяна се записва в дневника на играта.",
   "MegaCredits": "Мегакредити",
   "Fill planet": "Запълни планетата",
   "Resources and production": "Ресурси и производство",
-  "Set values": "Задай стойности",
   "Search project card": "Търси проектна карта",
   "Into the hand": "В ръката",
   "Into play (without effect)": "В игра (без ефект)",
-  "Reset view": "Нулирай изгледа",
   "The change failed: ${0}": "Промяната не успя: ${0}",
   "🛠 DevTools: temperature set to ${0}": "🛠 DevTools: температурата е зададена на ${0}",
   "🛠 DevTools: oxygen set to ${0}": "🛠 DevTools: кислородът е зададен на ${0}",
@@ -19,5 +13,9 @@
   "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 DevTools: планетата е запълнена на ${0} % (${1} плочки поставени, ${2} премахнати)",
   "🛠 DevTools: resources and production of ${0} set": "🛠 DevTools: ресурсите и производството на ${0} са зададени",
   "🛠 DevTools: ${0} got ${1} into the hand": "🛠 DevTools: ${0} получава ${1} в ръката",
-  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} получава ${1} в игра, без ефект"
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} получава ${1} в игра, без ефект",
+  "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "Променя играта за всички играчи и записва всяка промяна в дневника. Всяка промяна се изпраща сама една секунда след последното докосване.",
+  "🛠 DevTools: oceans set to ${0}": "🛠 DevTools: океаните са зададени на ${0}",
+  "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 DevTools: игралното поле е сменено на ${0} (${1} плочки не пасваха)",
+  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: темата е сменена на ${0}"
 }

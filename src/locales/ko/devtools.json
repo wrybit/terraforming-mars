@@ -1,17 +1,11 @@
 {
   "DevTools": "개발 도구",
-  "View (only for you)": "보기 (나만)",
-  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "이 브라우저에서만 값을 흉내 냅니다. 게임은 그대로이고, 다른 사람은 보지 못하며, 로그도 남지 않습니다.",
-  "Intervention (for everyone, in the log)": "개입 (모두에게, 로그에 기록)",
-  "Changes the game for all players; every change is written to the game log.": "모든 플레이어의 게임을 바꿉니다. 모든 변경은 게임 로그에 기록됩니다.",
   "MegaCredits": "메가크레딧",
   "Fill planet": "행성 채우기",
   "Resources and production": "자원과 생산",
-  "Set values": "값 설정",
   "Search project card": "프로젝트 카드 검색",
   "Into the hand": "손으로",
   "Into play (without effect)": "플레이 (효과 없음)",
-  "Reset view": "보기 초기화",
   "The change failed: ${0}": "변경에 실패했습니다: ${0}",
   "🛠 DevTools: temperature set to ${0}": "🛠 개발 도구: 온도를 ${0}(으)로 설정",
   "🛠 DevTools: oxygen set to ${0}": "🛠 개발 도구: 산소를 ${0}(으)로 설정",
@@ -19,5 +13,9 @@
   "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 개발 도구: 행성을 ${0}% 채움 (타일 ${1}개 배치, ${2}개 제거)",
   "🛠 DevTools: resources and production of ${0} set": "🛠 개발 도구: ${0}의 자원과 생산 설정",
   "🛠 DevTools: ${0} got ${1} into the hand": "🛠 개발 도구: ${0}이(가) ${1}을(를) 손에 받음",
-  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 개발 도구: ${0}이(가) ${1}을(를) 효과 없이 플레이함"
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 개발 도구: ${0}이(가) ${1}을(를) 효과 없이 플레이함",
+  "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "모든 플레이어의 게임을 바꾸고 모든 변경을 게임 로그에 기록합니다. 각 변경은 마지막 조작 1초 뒤에 자동으로 전송됩니다.",
+  "🛠 DevTools: oceans set to ${0}": "🛠 개발 도구: 바다를 ${0}(으)로 설정",
+  "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 개발 도구: 보드를 ${0}(으)로 변경 (타일 ${1}개는 맞지 않음)",
+  "🛠 DevTools: theme changed to ${0}": "🛠 개발 도구: 테마를 ${0}(으)로 변경"
 }
