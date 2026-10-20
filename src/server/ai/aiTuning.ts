@@ -313,8 +313,9 @@ export const BASELINE_TUNING: AiTuning = {
   policyModelSet: 0,
   // Round 112: 3 +1.43 (z +2.35; base +1.10, venus +1.76), 6 +1.41 (z +2.00).
   playPolicyWeight: 3,
-  needsPursuit: 0,
-  drawEngineBoost: 0,
+  // Round 121: draw engine boost with needs pursuit adopted by the card-throughput rule (cards played +0.7, z +1.95; VP −0.2, z −0.3).
+  needsPursuit: 0.5,
+  drawEngineBoost: 1,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
   handFundingGenerations: 0,
   endgameMoney: 1,
@@ -834,6 +835,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   drawEngine05: {drawEngineBoost: 0.5},
   drawEngine1: {drawEngineBoost: 1},
   drawEngine1Pursuit: {drawEngineBoost: 1, needsPursuit: 0.5},
+  drawEngine2: {drawEngineBoost: 2},
+  noDrawEngine: {drawEngineBoost: 0, needsPursuit: 0},
   // Draft/buy: cards that bring the tags or energy a strong hand card still needs (enablerValue.ts)
   enabler05: {enablerWeight: 0.5},
   play2: {playPolicyWeight: 2},

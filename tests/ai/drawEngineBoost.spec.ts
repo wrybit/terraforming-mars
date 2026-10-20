@@ -17,8 +17,9 @@ describe('AI draw engine boost', () => {
     expect(drawsPerGeneration(new PowerPlant(), player)).to.eq(0);
   });
 
-  it('is off in the baseline and grows with the remaining generations', () => {
+  it('is off without the rule and grows with the remaining generations', () => {
     const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'noDrawEngine');
     expect(drawEngineBonus(new AICentral(), player, 8)).to.eq(0);
     setPlayerTuning(player.id, 'drawEngine1');
     const early = drawEngineBonus(new AICentral(), player, 8);
