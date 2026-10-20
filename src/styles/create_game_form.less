@@ -1300,6 +1300,11 @@ a.create-game-summary-chip:hover {
   color: #fff;
 }
 
+// Floating Create button of the one-column layout (shown only there, see narrower below)
+.create-game-create-float {
+  display: none;
+}
+
 .create-game-create-row {
   display: flex;
   align-items: center;
@@ -1424,9 +1429,41 @@ a.create-game-summary-chip:hover {
     background: none; // no own surface needed: it is part of the card again
   }
 
-  // Create card at the end of the page; until it gets there it sticks to the bottom edge (see above)
+  // Create card at the end of the page, not sticky: with summary and warnings it would cover half the screen.
+  // Only the button follows along (.create-game-create-float) until the card comes into view.
   .create-game-create-card {
     order: 1;
+    position: static;
+
+    &--stuck {
+      box-shadow: none;
+    }
+  }
+
+  // The card is no longer sticky: the warnings may take their full height
+  .create-game-validation {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .create-game-create-float {
+    .frosted-surface();
+    display: flex;
+    position: fixed;
+    right: @create-game-page-padding;
+    bottom: calc(@create-game-create-bottom + env(safe-area-inset-bottom, 0px));
+    left: @create-game-page-padding;
+    z-index: 5;
+    padding: 10px;
+    border: 1px solid @create-game-line;
+    border-radius: @create-game-radius;
+    background: @create-game-surface-strong;
+    box-shadow: .create-game-float-shadow(-1)[@shadow], 0 0 0 1px rgba(255, 255, 255, 0.06);
+
+    .create-game-create {
+      flex: 1;
+      margin: 0;
+    }
   }
 
   .create-game-segmented button {
