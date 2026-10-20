@@ -26,6 +26,7 @@ import {awardScoreWithHand} from './awardHandOutlook';
 import {fundedHandValue} from './handFunding';
 import {handReadiness} from './handReadiness';
 import {measuredDrawRate} from './measuredDrawRate';
+import {heatAsMoney, plantFactor, steelFactor, titaniumFactor} from './playerTraits';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -200,16 +201,16 @@ function contextFor(game: IGame, context: ValuationContext): ValuationContext {
 /** M€ value of one generation of production (before the discount). */
 function productionPerGeneration(player: IPlayer, context: ValuationContext): number {
   const production = player.production;
-  const heatFactor = context.temperatureMaxed ? 0.2 : 0.8;
   const tuning = tuningOf(player);
+  const heatFactor = heatAsMoney(player, context.temperatureMaxed ? 0.2 : 0.8);
   // energyPlan: only the energy something uses counts as energy, the surplus as heat (energyPlan.ts).
   const energy = tuning.energyPlan > 0 ?
     energyUse(player) :
     {used: production.energy, surplus: 0};
   return production.megacredits * 1 +
-    production.steel * 1.6 +
-    production.titanium * 2.5 +
-    production.plants * tuning.plantProductionValue +
+    production.steel * 1.6 * steelFactor(player) +
+    production.titanium * 2.5 * titaniumFactor(player) +
+    production.plants * tuning.plantProductionValue * plantFactor(player) +
     energy.used * tuning.energyProductionValue + // energy mostly ends up as heat
     energy.surplus * heatFactor +
     production.heat * heatFactor;
@@ -302,14 +303,14 @@ function energyResourceValue(player: IPlayer, context: ValuationContext): number
 }
 
 function resourceValue(player: IPlayer, context: ValuationContext): number {
-  const heatValue = context.temperatureMaxed ? 0 : 0.9;
+  const heatValue = heatAsMoney(player, context.temperatureMaxed ? 0 : 0.9);
   const money = context.remaining > 0 ? 1 : MONEY_VALUE_IN_LAST_GENERATION;
   const megaCredits = Math.min(player.megaCredits, MONEY_RESERVE) + Math.max(0, player.megaCredits - MONEY_RESERVE) * EXCESS_MONEY_VALUE;
   const moneyValue = context.remaining === 0 && tuningOf(player).endgameMoney > 0 ? lastGenerationMoneyValue(player, context) : megaCredits * money;
   return moneyValue +
     player.steel * player.getSteelValue() * 0.8 * money +
     player.titanium * player.getTitaniumValue() * 0.8 * money +
-    player.plants * 1.5 +
+    player.plants * 1.5 * plantFactor(player) +
     player.heat * heatValue +
     player.energy * energyResourceValue(player, context);
 }
