@@ -7,7 +7,7 @@
       <path v-for="track in tracks" :id="pathId(track.key)" :key="track.key" :d="track.textPath"/>
     </defs>
     <g v-for="track in tracks" :key="track.key" :class="['arrakis-scales__track', 'arrakis-scales__track--' + track.key]">
-      <path v-for="step in track.steps" :key="step.index" :d="step.path" class="arrakis-scales__step" :fill="scaleColour(track.key, step.share)"/>
+      <path v-for="step in track.steps" :key="step.index" :d="step.path" class="arrakis-scales__step" :style="{fill: scaleColour(track.key, step.share)}"/>
       <!-- White outline around the whole band, as on the Mars board -->
       <path class="arrakis-scales__outline" :d="track.outline"/>
       <image class="arrakis-scales__symbol" :href="track.symbol" :x="track.symbolAt.x - SYMBOL / 2" :y="track.symbolAt.y - SYMBOL / 2" :width="SYMBOL" :height="SYMBOL"/>

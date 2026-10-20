@@ -104,17 +104,17 @@ export function scaleOutline(geometry: ScaleGeometry, angles: ReadonlyArray<numb
 }
 
 /**
- * Colour of a step: a gradient from the low to the high end instead of alternating shades (Jens, 20 Oct 2026) –
- * vegetation from sand with a breath of green to full green, the water store from very light to deep blue
+ * Colour of a step: a gradient from the low to the high end instead of alternating shades (Jens, 20 Oct 2026). Both
+ * bands start in the sand of the planet and turn into what the parameter makes of it: vegetation green, water blue.
  */
+const ARRAKIS_SAND = '#d39a5c';
 export const SCALE_COLOURS: Readonly<Record<'vegetation' | 'water', readonly [string, string]>> = {
-  vegetation: ['#d9c99a', '#2f8a2c'],
-  water: ['#d4ecfb', '#123f7a'],
+  vegetation: [ARRAKIS_SAND, '#2f8a2c'],
+  water: [ARRAKIS_SAND, '#1d5fae'],
 };
 
+// Mixed in OKLab: from sand to blue a plain RGB mix passes through grey, OKLab keeps the middle steps clear
 export function scaleColour(track: 'vegetation' | 'water', share: number): string {
   const [low, high] = SCALE_COLOURS[track];
-  const channel = (hex: string, at: number) => parseInt(hex.slice(1 + at * 2, 3 + at * 2), 16);
-  const mixed = [0, 1, 2].map((at) => Math.round(channel(low, at) + (channel(high, at) - channel(low, at)) * share));
-  return '#' + mixed.map((value) => value.toString(16).padStart(2, '0')).join('');
+  return `color-mix(in oklab, ${high} ${Math.round(share * 100)}%, ${low})`;
 }
