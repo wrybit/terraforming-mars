@@ -41,10 +41,10 @@ describe('PlayersTable', () => {
 
   it('keeps score width fixed and drops hidden sections from the grid', async () => {
     const wrapper = mountTable();
-    expect(wrapper.vm.template).to.contain('repeat(4, 34px)');
+    expect(wrapper.vm.template).to.contain('repeat(4, 40px)');
     wrapper.vm.toggleSection('score');
     await wrapper.vm.$nextTick();
-    expect(wrapper.vm.template).not.to.contain('repeat(4, 34px)');
+    expect(wrapper.vm.template).not.to.contain('repeat(4, 40px)');
     // Card count always stays
     expect(wrapper.vm.template.endsWith('12px 48px')).to.be.true;
   });

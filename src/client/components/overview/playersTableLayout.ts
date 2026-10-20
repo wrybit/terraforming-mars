@@ -79,8 +79,9 @@ const DIVIDER_WIDTH = 12;
 const TAG_GROUP_GAP = 6;
 const PLAYED_CARDS_WIDTH = 48;
 const GOODS_MIN_WIDTH = 70;
-const TAG_MIN_WIDTH = 23;
-const SCORE_WIDTH = 34;
+// Tags and score sit in boxes like the resources (players_table.less): room for a box and a gap to the next one
+const TAG_MIN_WIDTH = 30;
+const SCORE_WIDTH = 40;
 export const GOODS_COUNT = 6;
 export const SCORE_COUNT = 4;
 

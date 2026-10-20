@@ -16,9 +16,9 @@
         <div class="players-table-divider"></div>
         <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
           <div v-if="groupIndex > 0"></div>
-          <div class="players-table-cell" v-for="tag in group" :key="tag" :data-test="'tag-' + tag">
+          <div :class="['players-table-cell', {'players-table-cell--discounted': tagDetail(tag).discount > 0}]" v-for="tag in group" :key="tag" :data-test="'tag-' + tag">
             <span :class="tagCounterClasses(tag)" v-flash-count="flashKeys.playerTag(player.color, tag)"><span v-if="protectedTags.includes(tag)" class="players-table-protection shield_icon" :data-test="'protection-' + tag"></span>{{ tagDetail(tag).count || '·' }}<PlayerTagSubstitution v-if="tagDetail(tag).substitution !== undefined" :tag="tagDetail(tag).substitution!" :data-test="'substitution-' + tag"/></span>
-            <span v-if="tagDetail(tag).discount > 0" class="players-table-discount" :data-test="'discount-' + tag" :title="$t('Discount')">{{ tagDetail(tag).discount }}</span>
+            <span v-if="tagDetail(tag).discount > 0" class="players-table-discount" :data-test="'discount-' + tag" :title="$t('Discount')">-{{ tagDetail(tag).discount }}</span>
             <PointsPerTag :points="tagDetail(tag)"/>
           </div>
         </template>
@@ -28,9 +28,9 @@
         <div class="players-table-divider"></div>
         <div class="players-table-cell"><span class="players-table-counter" data-test="vp" v-flash-count="flashKeys.playerCounter(player.color, 'victoryPoints')">{{ victoryPoints }}</span></div>
         <div class="players-table-cell"><span class="players-table-counter" data-test="tr" v-flash-count="flashKeys.playerCounter(player.color, 'terraformRating')">{{ player.terraformRating }}</span></div>
-        <div class="players-table-cell">
+        <div :class="['players-table-cell', {'players-table-cell--discounted': handDiscount !== ''}]">
           <span class="players-table-counter" data-test="hand" v-flash-count="flashKeys.playerCounter(player.color, 'cardsInHand')">{{ player.cardsInHandNbr ?? 0 }}</span>
-          <span v-if="handDiscount !== ''" :class="['players-table-discount', {'players-table-discount--wide': handDiscount.length > 1}]" data-test="discount-all" :title="handDiscountTitle">{{ handDiscount.replace('*', '') }}<b v-if="handDiscount.endsWith('*')" class="players-table-discount-mark">*</b></span>
+          <span v-if="handDiscount !== ''" class="players-table-discount" data-test="discount-all" :title="handDiscountTitle">{{ handDiscount.replace('*', '') }}<b v-if="handDiscount.endsWith('*')" class="players-table-discount-mark">*</b></span>
         </div>
         <div class="players-table-cell">
           <span :class="['players-table-counter', {'players-table-counter--zero': player.availableBlueCardActionCount === 0}]" data-test="actions">{{ player.availableBlueCardActionCount }}</span>
