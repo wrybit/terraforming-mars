@@ -92,6 +92,8 @@ export type AiTuning = {
   drawEngineBoost: number,
   /** 1: an unknown card in the own hand (drawn in the move search) is worth the drawn-card value 2–4 M€ instead of 2 (stateValue.ts). */
   ownDrawnCardValue: number,
+  /** 1: draw engines in play count at least the draws per generation measured in human games (measuredDrawRate.ts). */
+  measuredDrawRates: number,
   /** Generations of income that count as money for the hand (handFunding.ts). */
   handFundingGenerations: number,
   /** 1: money in the last generation counts in steps of greeneries it can still buy (stateValue.ts). */
@@ -319,6 +321,7 @@ export const BASELINE_TUNING: AiTuning = {
   needsPursuit: 0,
   drawEngineBoost: 0,
   ownDrawnCardValue: 0,
+  measuredDrawRates: 0,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
   handFundingGenerations: 0,
   endgameMoney: 1,
@@ -842,6 +845,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noDrawEngine: {drawEngineBoost: 0, needsPursuit: 0},
   ownCardValue: {ownDrawnCardValue: 1},
   ownCardValueEngine: {ownDrawnCardValue: 1, drawEngineBoost: 0.5},
+  measuredDraws: {measuredDrawRates: 1},
+  measuredDrawsOwnValue: {measuredDrawRates: 1, ownDrawnCardValue: 1},
   // Draft/buy: cards that bring the tags or energy a strong hand card still needs (enablerValue.ts)
   enabler05: {enablerWeight: 0.5},
   play2: {playPolicyWeight: 2},
