@@ -39,6 +39,27 @@
     margin: 524px 0 0 286px;
   }
 
+  // Arrakis (Jens, 20 Oct 2026): tile and count together centred below the planet. The Mars boards keep their
+  // places. Planet centre in the coordinates of .global-numbers (margin 16px): 317.5 − 16 on the standard picture
+  // (mars-planet.png), 368.5 − 16 on the large one (mars-planet-large.png)
+  .global-numbers-oceans.global-numbers-oceans--arrakis {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 301.5px;
+    transform: translateX(-50%);
+
+    .global-numbers-oceans__tile {
+      position: static;
+      margin: 0;
+      transform: none;
+    }
+  }
+
+  &.global-numbers--large .global-numbers-oceans.global-numbers-oceans--arrakis {
+    margin-left: 352.5px;
+  }
+
   .global-ares-erosions-icon {
     background: url(./assets/erosion.png) no-repeat;
     position: absolute;
