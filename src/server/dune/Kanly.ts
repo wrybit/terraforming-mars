@@ -1,12 +1,10 @@
 import {IGame} from '../IGame';
 import {JOIN_KANLY_TITLE, KANLY_SEND_BUTTON, KANLY_SEND_TITLE, OPEN_KANLY_TITLE, RECRUIT_TITLE} from '../../common/dune/duneActionTitles';
-import {battleWinner, OPEN_KANLY_COST} from '../../common/dune/kanlyBattle';
+import {battleWinner, isKanlyTargetTile, OPEN_KANLY_COST} from '../../common/dune/kanlyBattle';
 import {IPlayer} from '../IPlayer';
 import {Space} from '../boards/Space';
-import {Board} from '../boards/Board';
 import {PlayerId, SpaceId} from '../../common/Types';
 import {Resource} from '../../common/Resource';
-import {TileType} from '../../common/TileType';
 import {OrOptions} from '../inputs/OrOptions';
 import {SelectOption} from '../inputs/SelectOption';
 import {SelectSpace} from '../inputs/SelectSpace';
@@ -68,10 +66,7 @@ export function battleTargets(game: IGame, attacker: IPlayer): Array<Space> {
     if (tile === undefined || space.player === undefined || space.player.id === attacker.id) {
       return false;
     }
-    if (tile.tileType === TileType.OCEAN || tile.tileType === TileType.NATURAL_PRESERVE) {
-      return false;
-    }
-    return Board.hasRealTile(space);
+    return isKanlyTargetTile(tile.tileType);
   });
 }
 

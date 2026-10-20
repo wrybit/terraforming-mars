@@ -1,6 +1,5 @@
 // Kanly war field (KanlyBattleCard.vue): the tile on the left, beside it place and owner, everybody's Sardaukar as
 // rows and the forecast. Rows sit closer together than the blocks (law of proximity).
-@import (reference) "./variables.less";
 @import (reference) "./dune_frame.less";
 
 .kanly-battle {
@@ -223,40 +222,32 @@
   }
 }
 
-// Move button on the war field card (KanlyMoveButton.vue): below the text, the cost in brackets with the coin
-.kanly-battle .kanly-move-button {
+// Move on the war field card (KanlyMoveButton.vue): a normal app button (AppButton, .btn) below the text, the cost as
+// the M€ coin inside it (button_count.less); the reason it is off sits right below the button (law of proximity)
+.kanly-move {
   align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
   margin-top: 8px;
 }
 
-// Phone without a battle: the text is centred, so the button below it too
+.kanly-move__reason {
+  font-size: 12px;
+  color: #cbb994;
+}
+
+// Its input is open below the card: ringed like the open module buttons
+.kanly-move-button--open {
+  box-shadow: 0 0 0 2px #f1e2c2;
+}
+
+// Phone without a battle: the text is centred, so the button and its reason too
 @media (max-width: 600px) {
-  .kanly-battle--none .kanly-move-button {
+  .kanly-battle--none .kanly-move {
     align-self: center;
-  }
-}
-
-// The move looks like every other button of the app (.btn in common.less), not like the module buttons
-.kanly-battle .kanly-move-button:not(:disabled) {
-  border-color: @border_action;
-  background: @bg_action;
-  color: @text_action;
-  font-weight: normal;
-}
-
-.kanly-move-button__cost {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-weight: 600;
-
-  .resource_icon {
-    width: 18px;
-    height: 18px;
-    margin: 0;
-    background-size: contain;
+    align-items: center;
+    text-align: center;
   }
 }

@@ -328,5 +328,9 @@
   "On a deal both pay 1 Solari to the bank": "При сделке оба платят банку 1 солари",
   "Withdraw (action): the goods come back, no fee": "Отозвать (действие): товары возвращаются, без сбора",
   "End of generation: offers nobody took return without a fee": "Конец поколения: невостребованные предложения возвращаются без сбора",
-  "Show on Arrakis": "Показать на Арракисе"
+  "Show on Arrakis": "Показать на Арракисе",
+  "No Sardaukar in your garrison": "В твоём гарнизоне нет сардаукаров",
+  "Only during your action": "Только во время твоего действия",
+  "Not enough M€": "Недостаточно M€",
+  "No target: no opponent has a greenery, city or special tile": "Нет цели: ни у одного соперника нет озеленения, города или особого тайла"
 }

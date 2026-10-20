@@ -325,5 +325,9 @@
   "On a deal both pay 1 Solari to the bank": "Kaupan syntyessä molemmat maksavat pankille 1 solarin",
   "Withdraw (action): the goods come back, no fee": "Peru (toiminto): tavarat palaavat, ei maksua",
   "End of generation: offers nobody took return without a fee": "Sukupolven loppu: ottamattomat tarjoukset palaavat ilman maksua",
-  "Show on Arrakis": "Näytä Arrakisilla"
+  "Show on Arrakis": "Näytä Arrakisilla",
+  "No Sardaukar in your garrison": "Varuskunnassasi ei ole sardaukareita",
+  "Only during your action": "Vain oman toimintosi aikana",
+  "Not enough M€": "Liian vähän M€",
+  "No target: no opponent has a greenery, city or special tile": "Ei kohdetta: kenelläkään vastustajalla ei ole viheraluetta, kaupunkia tai erikoislaattaa"
 }

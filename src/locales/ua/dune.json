@@ -327,5 +327,9 @@
   "On a deal both pay 1 Solari to the bank": "Під час угоди обидва платять банку 1 соларі",
   "Withdraw (action): the goods come back, no fee": "Відкликати (дія): товари повертаються, без збору",
   "End of generation: offers nobody took return without a fee": "Кінець покоління: неприйняті пропозиції повертаються без збору",
-  "Show on Arrakis": "Показати на Арракісі"
+  "Show on Arrakis": "Показати на Арракісі",
+  "No Sardaukar in your garrison": "У твоєму гарнізоні немає сардаукарів",
+  "Only during your action": "Лише під час твоєї дії",
+  "Not enough M€": "Недостатньо M€",
+  "No target: no opponent has a greenery, city or special tile": "Немає цілі: жоден суперник не має озеленення, міста чи особливої плитки"
 }

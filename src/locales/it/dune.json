@@ -324,5 +324,9 @@
   "On a deal both pay 1 Solari to the bank": "Alla conclusione entrambi pagano 1 solari alla banca",
   "Withdraw (action): the goods come back, no fee": "Ritirare (azione): le merci tornano, senza tassa",
   "End of generation: offers nobody took return without a fee": "Fine generazione: le offerte non prese tornano senza tassa",
-  "Show on Arrakis": "Mostra su Arrakis"
+  "Show on Arrakis": "Mostra su Arrakis",
+  "No Sardaukar in your garrison": "Nessun Sardaukar nella tua guarnigione",
+  "Only during your action": "Solo durante la tua azione",
+  "Not enough M€": "M€ insufficienti",
+  "No target: no opponent has a greenery, city or special tile": "Nessun bersaglio: nessun avversario ha una foresta, una città o una tessera speciale"
 }

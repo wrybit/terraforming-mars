@@ -328,5 +328,9 @@
   "On a deal both pay 1 Solari to the bank": "成交时双方各向银行支付 1 索拉里",
   "Withdraw (action): the goods come back, no fee": "撤回（行动）：货物返还，无手续费",
   "End of generation: offers nobody took return without a fee": "世代结束：无人接受的报价无费退回",
-  "Show on Arrakis": "在厄拉科斯上显示"
+  "Show on Arrakis": "在厄拉科斯上显示",
+  "No Sardaukar in your garrison": "你的驻军中没有萨督卡",
+  "Only during your action": "仅在你的行动期间",
+  "Not enough M€": "M€不足",
+  "No target: no opponent has a greenery, city or special tile": "没有目标：没有对手拥有绿地、城市或特殊板块"
 }

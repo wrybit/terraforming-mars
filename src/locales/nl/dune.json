@@ -319,5 +319,9 @@
   "On a deal both pay 1 Solari to the bank": "Bij een deal betalen beiden 1 solari aan de bank",
   "Withdraw (action): the goods come back, no fee": "Intrekken (actie): de goederen komen terug, zonder kosten",
   "End of generation: offers nobody took return without a fee": "Einde generatie: aanbiedingen die niemand nam, komen zonder kosten terug",
-  "Show on Arrakis": "Toon op Arrakis"
+  "Show on Arrakis": "Toon op Arrakis",
+  "No Sardaukar in your garrison": "Geen Sardaukar in je garnizoen",
+  "Only during your action": "Alleen tijdens je actie",
+  "Not enough M€": "Te weinig M€",
+  "No target: no opponent has a greenery, city or special tile": "Geen doel: geen tegenstander heeft een groengebied, stad of speciale tegel"
 }
