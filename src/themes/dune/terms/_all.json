@@ -15,5 +15,8 @@
   "aliases": {
     "Phobos": "Phobos Space Haven",
     "Ganymede": "Ganymede Colony"
-  }
+  },
+  "keys": [
+    "M€"
+  ]
 }

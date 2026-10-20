@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import fs from 'fs';
 import path from 'path';
-import {compileRules, ThemeTerms} from '../../src/tools/themeTexts';
+import {applyRules, compileRules, ThemeTerms} from '../../src/tools/themeTexts';
 import {CardName} from '../../src/common/cards/CardName';
 import {ALL_MODULE_MANIFESTS} from '../../src/server/cards/AllManifests';
 import {CardManifest} from '../../src/server/cards/ModuleManifest';
@@ -25,6 +25,19 @@ describe('Dune theme files', () => {
       expect(() => compileRules(terms.rules)).not.to.throw();
     });
   }
+
+  // "M€" shown as an English value (log lines) must become the theme's currency in every language, never stay M€
+  it('swaps the extra English keys in every language', () => {
+    const shared: ThemeTerms = read('terms/_all.json');
+    expect(shared.keys).to.include('M€');
+    for (const lang of LANGUAGES) {
+      const terms: ThemeTerms = read(`terms/${lang}.json`);
+      const rules = compileRules([...terms.rules, ...shared.rules]);
+      for (const key of shared.keys ?? []) {
+        expect(applyRules(key, rules), `${lang}: ${key}`).not.to.contain('M€');
+      }
+    }
+  });
 
   it('names cards that exist', () => {
     const cards = new Set<string>(Object.values(CardName));

@@ -23,6 +23,11 @@ export type ThemeTerms = {
   namesInTexts?: ReadonlyArray<string>,
   /** Other keys showing the same name, e.g. the short label of a board space: key → name key */
   aliases?: Record<string, string>,
+  /**
+   * English texts no language translates but the game still shows, e.g. "M€" as a value in log lines
+   * ("Peter lost 5 M€", server/player/StockBase.ts): without them as keys the theme could not swap their terms
+   */
+  keys?: ReadonlyArray<string>,
 };
 
 /** English key (card, corporation, milestone, award or place name) → themed name in this language */
@@ -132,6 +137,7 @@ export function writeThemeTexts(localesFolder: string, themesFolder: string, out
     fs.mkdirSync(path.join(outputFolder, theme, 'texts'), {recursive: true});
     const shared = readJson<ThemeTerms>(path.join(folder, 'terms', '_all.json'), {rules: []});
     const namesInTexts = shared.namesInTexts ?? [];
+    const themeKeys = [...new Set([...keys, ...(shared.keys ?? [])])];
     for (const lang of languages) {
       const terms = termsOf(lang);
       const names = readJson<ThemeNames>(path.join(folder, 'names', `${lang}.json`), {});
@@ -144,7 +150,9 @@ export function writeThemeTexts(localesFolder: string, themesFolder: string, out
       const nameRules: Array<TermRule> = namesInTexts
         .filter((name) => names[name] !== undefined)
         .map((name) => [name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), names[name], 'case']);
-      const texts = themeTexts(keys, translationsByLanguage.get(lang) ?? {}, compileRules([...nameRules, ...terms.rules]), englishRules,
+      // The extra keys read the same in every language, so each language's own rules apply to them
+      const translations = {...Object.fromEntries((shared.keys ?? []).map((key) => [key, key])), ...translationsByLanguage.get(lang)};
+      const texts = themeTexts(themeKeys, translations, compileRules([...nameRules, ...terms.rules]), englishRules,
         names, terms.exact ?? {}, lang === 'en');
       fs.writeFileSync(path.join(outputFolder, theme, 'texts', `${lang}.json`), JSON.stringify(texts));
     }
