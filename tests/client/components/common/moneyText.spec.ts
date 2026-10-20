@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {splitMoney} from '@/client/components/common/moneyText';
+import {moneyWithoutCurrency, splitMoney} from '@/client/components/common/moneyText';
 
 describe('moneyText', () => {
   it('turns a bracketed amount into a coin', () => {
@@ -23,5 +23,10 @@ describe('moneyText', () => {
     expect(splitMoney('Sell your steel for 3M€ each.', ['M€'])).deep.eq([
       {kind: 'text', text: 'Sell your steel for '}, {kind: 'coin', value: 3}, {kind: 'text', text: ' each.'},
     ]);
+  });
+
+  it('writes the amount without currency for tab titles', () => {
+    expect(moneyWithoutCurrency('Award (14 M€)')).eq('Award (14)');
+    expect(moneyWithoutCurrency('Standard')).eq('Standard');
   });
 });

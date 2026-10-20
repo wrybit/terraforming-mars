@@ -46,3 +46,11 @@ export function currencyNames(): Array<string> {
 export function moneyParts(text: string): Array<MoneyTextPart> {
   return splitMoney(text, currencyNames());
 }
+
+/**
+ * The same label as plain text without the currency, for places too small for a coin: "Award (14 M€)" → "Award (14)"
+ * (OrOptions tab titles, Jens 20 Oct 2026)
+ */
+export function moneyWithoutCurrency(text: string): string {
+  return moneyParts(text).map((part) => part.kind === 'text' ? part.text : `(${part.value})`).join('');
+}
