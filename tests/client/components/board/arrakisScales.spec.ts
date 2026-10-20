@@ -34,13 +34,13 @@ describe('arrakisScales', () => {
 
   it('turns symbol and name of the standard board up with its scales, the names meeting at the top', () => {
     const vegetation = scaleLabels(STANDARD_SCALES).vegetation;
-    expect(vegetation.symbolAngle).closeTo(229.4, 0.001);
-    expect(vegetation.text.from).closeTo(234.4, 0.001);
-    expect(vegetation.text.to).closeTo(266.4, 0.001);
+    expect(vegetation.symbolAngle).closeTo(230.4, 0.001);
+    expect(vegetation.text.from).closeTo(236.9, 0.001);
+    expect(vegetation.text.to).closeTo(268.5, 0.001);
     const water = scaleLabels(STANDARD_SCALES).water;
-    expect(water.symbolAngle).closeTo(-54, 0.001);
-    expect(water.text.from).closeTo(-91, 0.001);
-    expect(water.text.to).closeTo(-59, 0.001);
+    expect(water.symbolAngle).closeTo(-55, 0.001);
+    expect(water.text.from).closeTo(-91.9, 0.001);
+    expect(water.text.to).closeTo(-61.5, 0.001);
   });
 
   it('draws one closed step per value', () => {

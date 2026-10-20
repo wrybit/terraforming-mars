@@ -1,3 +1,4 @@
+import {hasAmazonisTracks} from '../common/boards/GlobalParameterMaximums';
 import {From} from './logs/From';
 import {arrakisLayout} from '../common/dune/arrakisLayout';
 import * as constants from '../common/constants';
@@ -641,7 +642,7 @@ export class Game implements IGame, Logger {
         lastGeneration += 2;
       }
     }
-    if (!options.soloTR && options.boardName === BoardName.AMAZONIS_PLANITIA) {
+    if (!options.soloTR && hasAmazonisTracks(options.boardName)) {
       lastGeneration += 1;
     }
     return lastGeneration;

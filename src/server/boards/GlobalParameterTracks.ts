@@ -1,3 +1,4 @@
+import {hasAmazonisTracks} from '../../common/boards/GlobalParameterMaximums';
 import * as constants from '@/common/constants';
 import {BoardName} from '@/common/boards/BoardName';
 import {IPlayer} from '@/server/IPlayer';
@@ -77,7 +78,7 @@ const AMAZONIS_PLANITIA: GlobalParameterTracks = {
 };
 
 export function getGlobalParameterTracks(boardName: BoardName): GlobalParameterTracks {
-  if (boardName === BoardName.AMAZONIS_PLANITIA) {
+  if (hasAmazonisTracks(boardName)) {
     return AMAZONIS_PLANITIA;
   } else {
     return STANDARD;

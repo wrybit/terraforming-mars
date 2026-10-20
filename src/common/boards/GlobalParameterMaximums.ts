@@ -25,8 +25,16 @@ const AMAZONIS_PLANITIA_MAXIMUMS: GlobalParameterMaximums = {
   venus: constants.MAX_VENUS_SCALE_AMAZONIS,
 };
 
+/**
+ * Boards with the longer tracks and track bonuses of Amazonis Planitia: the large Arrakis has as many spaces, so its
+ * game lasts as long (Jens, 20 Oct 2026). Every place that knows the Amazonis tracks asks this, not the board name.
+ */
+export function hasAmazonisTracks(boardName: BoardName | undefined): boolean {
+  return boardName === BoardName.AMAZONIS_PLANITIA || boardName === BoardName.ARRAKIS_91;
+}
+
 export function getGlobalParameterMaximums(boardName: BoardName): Readonly<GlobalParameterMaximums> {
-  if (boardName === BoardName.AMAZONIS_PLANITIA) {
+  if (hasAmazonisTracks(boardName)) {
     return AMAZONIS_PLANITIA_MAXIMUMS;
   }
   return STANDARD_MAXIMUMS;

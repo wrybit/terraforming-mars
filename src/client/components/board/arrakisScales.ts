@@ -23,16 +23,16 @@ export const STANDARD_SCALES: ScaleGeometry = {
   waterAngles: [48.6, 43.3, 38.6, 33.6, 28.7, 23.6, 18.7, 13.6, 8.8, 3.8, -1.3, -6.2, -11.1, -16.3, -21.1, -26.2, -31.3, -36.3, -41.1, -46.4],
 };
 
-/** Large board: globs.less @oxygen-vals-arrakis-91 and @temperature-vals-arrakis-91 – the large Arrakis keeps the
- *  standard maximums (14 % vegetation, +8 °C), starts its scales further out than Amazonis Planitia, so the spice
- *  fields fit between their low ends (arrakisSpiceFields.ts), and lets them reach further up with longer steps;
- *  turned up by as much more again, for at least two spice cells of room on each side of the row */
+/** Large board: globs.less @oxygen-vals-arrakis-91 and @temperature-vals-arrakis-91 – the large Arrakis has the
+ *  tracks of Amazonis Planitia (18 % vegetation, +14 °C, common/boards/GlobalParameterMaximums.ts hasAmazonisTracks),
+ *  on the same arcs as before: they start further out than on Amazonis Planitia, so the spice fields fit between their
+ *  low ends (arrakisSpiceFields.ts), and reach as high as the labels allow, so the steps are shorter */
 export const LARGE_SCALES: ScaleGeometry = {
   centreX: 353,
   centreY: 351.2,
   radius: 313.9,
-  vegetationAngles: [126.9, 133.8, 140.8, 147.7, 154.6, 161.6, 168.5, 175.4, 182.3, 189.3, 196.2, 203.1, 210.1, 217, 223.9],
-  waterAngles: [54, 48.9, 43.8, 38.7, 33.6, 28.5, 23.4, 18.3, 13.2, 8.1, 2.9, -2.2, -7.3, -12.4, -17.5, -22.6, -27.7, -32.8, -37.9, -43],
+  vegetationAngles: [126.5, 131.9, 137.3, 142.7, 148.1, 153.4, 158.8, 164.2, 169.6, 175, 180.4, 185.8, 191.2, 196.6, 201.9, 207.3, 212.7, 218.1, 223.5],
+  waterAngles: [54, 49.6, 45.2, 40.8, 36.4, 32, 27.5, 23.1, 18.7, 14.3, 9.9, 5.5, 1.1, -3.3, -7.7, -12.1, -16.5, -21, -25.4, -29.8, -34.2, -38.6, -43],
 };
 
 /** Width of the band; the 26px markers sit inside it */
@@ -78,8 +78,8 @@ export function scaleLabels(geometry: ScaleGeometry): {vegetation: ScaleLabel, w
   const vegetationEnd = geometry.vegetationAngles[geometry.vegetationAngles.length - 1];
   const waterEnd = geometry.waterAngles[geometry.waterAngles.length - 1];
   return {
-    vegetation: {symbolAngle: vegetationEnd + 8.5, text: {from: vegetationEnd + 13.5, to: vegetationEnd + 45.5, anchor: 'start'}},
-    water: {symbolAngle: waterEnd - 7.6, text: {from: waterEnd - 44.6, to: waterEnd - 12.6, anchor: 'end'}},
+    vegetation: {symbolAngle: vegetationEnd + 9.5, text: {from: vegetationEnd + 16, to: vegetationEnd + 47.6, anchor: 'start'}},
+    water: {symbolAngle: waterEnd - 8.6, text: {from: waterEnd - 45.5, to: waterEnd - 15.1, anchor: 'end'}},
   };
 }
 

@@ -1,6 +1,8 @@
 import {BONUS_ICON, TrackBonus} from '@/client/components/trackBonus/trackBonus';
 import {ScaleGeometry} from './arrakisScales';
-import {MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MAX_VENUS_SCALE} from '@/common/constants';
+import {OXYGEN_LEVEL_FOR_AMAZONIS_CARD_BONUS, OXYGEN_LEVEL_FOR_AMAZONIS_TEMPERATURE_BONUS, TEMPERATURE_BONUS_FOR_PLANT} from '@/common/constants';
+import {GlobalParameterMaximums, getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
+import {BoardName} from '@/common/boards/BoardName';
 
 // Bonuses on the Mars scales as track chips outside the scale (mockup with-extensions), instead of the icons
 // printed on the board picture (assets/board/mars-clean.png has none). Positions in the coordinates of
@@ -20,6 +22,16 @@ const SCALE_BONUSES: ReadonlyArray<ScaleBonus> = [
   {scale: 'venus', value: 16, cell: [20, 301], bonus: {icons: [BONUS_ICON.tr]}},
 ];
 
+// Tracks of Amazonis Planitia (server/boards/GlobalParameterTracks.ts): plants at −12 °C, a card at 7 % oxygen, the
+// temperature step at 11 % instead of 8 %. Only the large Arrakis draws them as chips (Amazonis has them printed), so
+// they take their place from its marker circle; Venus is not part of the Dune theme.
+const AMAZONIS_SCALE_BONUSES: ReadonlyArray<ScaleBonus> = [
+  ...SCALE_BONUSES.filter((entry) => entry.scale === 'temperature'),
+  {scale: 'temperature', value: TEMPERATURE_BONUS_FOR_PLANT, cell: [0, 0], bonus: {icons: [BONUS_ICON.plant]}},
+  {scale: 'oxygen', value: OXYGEN_LEVEL_FOR_AMAZONIS_CARD_BONUS, cell: [0, 0], bonus: {icons: [BONUS_ICON.card]}},
+  {scale: 'oxygen', value: OXYGEN_LEVEL_FOR_AMAZONIS_TEMPERATURE_BONUS, cell: [0, 0], bonus: {icons: [BONUS_ICON.temperature]}},
+];
+
 // Scale cell size (globs.less .global-numbers-value), planet centre in .global-numbers coordinates,
 // gap between connector end and cell edge (like the track chips elsewhere)
 const CELL = 26;
@@ -30,7 +42,7 @@ export type ScaleBonusPin = {
   key: string;
   bonus: TrackBonus;
   done: boolean;
-  // The whole scale is at its top (standard maximums: only Arrakis asks, and it keeps them): Arrakis then drops the chip
+  // The whole scale is at its top (the maximums of the board): Arrakis then drops the chip
   scaleComplete: boolean;
   // Tip of the connector (next to the cell) and the direction from there to the cell in degrees
   top: number;
@@ -51,10 +63,11 @@ function cellCentre(entry: ScaleBonus, geometry: ScaleGeometry | undefined): {x:
     planetX: geometry.centreX, planetY: geometry.centreY};
 }
 
-const SCALE_MAXIMUM: Readonly<Record<MarsScale, number>> = {temperature: MAX_TEMPERATURE, oxygen: MAX_OXYGEN_LEVEL, venus: MAX_VENUS_SCALE};
-
-export function scaleBonusPins(values: Partial<Record<MarsScale, number>>, geometry?: ScaleGeometry): Array<ScaleBonusPin> {
-  return SCALE_BONUSES.filter((entry) => values[entry.scale] !== undefined).map((entry) => {
+/** amazonis: the board has the tracks of Amazonis Planitia (GlobalParameterMaximums.ts hasAmazonisTracks) */
+export function scaleBonusPins(values: Partial<Record<MarsScale, number>>, geometry?: ScaleGeometry, amazonis: boolean = false,
+  maximums: Readonly<GlobalParameterMaximums> = getGlobalParameterMaximums(BoardName.THARSIS)): Array<ScaleBonusPin> {
+  const scaleMaximum: Readonly<Record<MarsScale, number>> = {temperature: maximums.temperature, oxygen: maximums.oxygen, venus: maximums.venus};
+  return (amazonis ? AMAZONIS_SCALE_BONUSES : SCALE_BONUSES).filter((entry) => values[entry.scale] !== undefined).map((entry) => {
     const {x: centerX, y: centerY, planetX, planetY} = cellCentre(entry, geometry);
     const dx = centerX - planetX;
     const dy = centerY - planetY;
@@ -64,7 +77,7 @@ export function scaleBonusPins(values: Partial<Record<MarsScale, number>>, geome
       key: entry.scale + entry.value,
       bonus: entry.bonus,
       done: (values[entry.scale] ?? 0) >= entry.value,
-      scaleComplete: (values[entry.scale] ?? 0) >= SCALE_MAXIMUM[entry.scale],
+      scaleComplete: (values[entry.scale] ?? 0) >= scaleMaximum[entry.scale],
       top: centerY + dy / length * distance,
       left: centerX + dx / length * distance,
       angle: Math.atan2(-dy, -dx) * 180 / Math.PI,

@@ -9,6 +9,7 @@ import {MarsBoard} from './MarsBoard';
 import {CanAffordOptions, IPlayer} from '../IPlayer';
 import {SpaceId} from '../../common/Types';
 import {ARRAKIS_LAYOUT, ArrakisLayout} from '../../common/dune/arrakisLayout';
+import {GlobalParameterMaximums, getGlobalParameterMaximums} from '../../common/boards/GlobalParameterMaximums';
 
 /**
  * Arrakis, the board of the Dune theme. Same rules and the same totals as Tharsis (61 spaces, 12 oceans,
@@ -33,8 +34,9 @@ export class Arrakis61Board extends MarsBoard {
   /** Shape and terrain of this board (the large Arrakis has its own, Arrakis91Board.ts) */
   public readonly layout: ArrakisLayout;
 
-  public constructor(spaces: ReadonlyArray<Space>, arrakeen: SpaceId = SpaceName.ARRAKEEN, layout: ArrakisLayout = ARRAKIS_LAYOUT) {
-    super(spaces, arrakeen);
+  public constructor(spaces: ReadonlyArray<Space>, arrakeen: SpaceId = SpaceName.ARRAKEEN, layout: ArrakisLayout = ARRAKIS_LAYOUT,
+    max: Readonly<GlobalParameterMaximums> = getGlobalParameterMaximums(layout.board)) {
+    super(spaces, arrakeen, max);
     this.layout = layout;
   }
 

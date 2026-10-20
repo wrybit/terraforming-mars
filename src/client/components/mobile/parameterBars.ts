@@ -1,7 +1,7 @@
 import {temperatureText, themedAsset} from '@/client/theme/themeDisplay';
 import * as c from '@/common/constants';
 import {BoardName} from '@/common/boards/BoardName';
-import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
+import {getGlobalParameterMaximums, hasAmazonisTracks} from '@/common/boards/GlobalParameterMaximums';
 
 /* Bonus threshold on a parameter bar. */
 export type ParameterBonus = {
@@ -66,7 +66,7 @@ const AMAZONIS_BONUSES: TrackBonuses = {
 };
 
 function trackBonuses(boardName: BoardName): TrackBonuses {
-  return boardName === BoardName.AMAZONIS_PLANITIA ? AMAZONIS_BONUSES : STANDARD_BONUSES;
+  return hasAmazonisTracks(boardName) ? AMAZONIS_BONUSES : STANDARD_BONUSES;
 }
 
 function toPercent(value: number, min: number, max: number): number {

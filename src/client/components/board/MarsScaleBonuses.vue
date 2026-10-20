@@ -19,6 +19,7 @@ import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
 import TrackBonusChip from '@/client/components/trackBonus/TrackBonusChip.vue';
 import {ScaleBonusPin, scaleBonusPins} from './marsScaleBonuses';
 import {ScaleGeometry} from './arrakisScales';
+import {GlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
 
 const props = defineProps<{
   temperature: number;
@@ -29,6 +30,9 @@ const props = defineProps<{
   geometry?: ScaleGeometry;
   // Arrakis: a full scale shows only its check, its chips go (Jens, 20 Oct 2026)
   hideComplete?: boolean;
+  // Large Arrakis: the tracks of Amazonis Planitia with their bonuses (GlobalParameterMaximums.ts hasAmazonisTracks)
+  amazonis?: boolean;
+  maximums?: Readonly<GlobalParameterMaximums>;
 }>();
 
 // The board is zoomed (rightColumnFit.ts, zoom view): undo that for the chips so they keep their size
@@ -57,7 +61,8 @@ onMounted(() => {
 
 onBeforeUnmount(() => observer?.disconnect());
 
-const pins = computed(() => scaleBonusPins({temperature: props.temperature, oxygen: props.oxygen, venus: props.venus}, props.geometry)
+const pins = computed(() => scaleBonusPins({temperature: props.temperature, oxygen: props.oxygen, venus: props.venus}, props.geometry,
+  props.amazonis === true, props.maximums)
   .filter((pin) => props.hideComplete !== true || !pin.scaleComplete));
 
 // Placed like the scale cells (margins in .global-numbers), then turned so the connector points at the cell
