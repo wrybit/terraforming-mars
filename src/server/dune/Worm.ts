@@ -16,7 +16,7 @@ import {CardName} from '../../common/cards/CardName';
 import {Random} from '../../common/utils/Random';
 import {WORM_START_SPACES} from '../../common/dune/wormStartSpaces';
 import {ARRAKIS_LAYOUT, ArrakisLayout} from '../../common/dune/arrakisLayout';
-import {ArrakisBoard} from '../boards/ArrakisBoard';
+import {Arrakis61Board} from '../boards/Arrakis61Board';
 
 // Module C – Shai-Hulud (claude/dune-erweiterung-konzept.md): a worm marker wanders over Arrakis. At the end of
 // every generation a die gives the direction, the weakest player (least TR) chooses 1–3 spaces, and every space the
@@ -58,7 +58,7 @@ export function wormStart(rng: Random, layout: ArrakisLayout = ARRAKIS_LAYOUT): 
 
 /** Terrain of the board the worm moves on: the standard or the large Arrakis */
 function layoutOf(board: Board): ArrakisLayout {
-  return board instanceof ArrakisBoard ? board.layout : ARRAKIS_LAYOUT;
+  return board instanceof Arrakis61Board ? board.layout : ARRAKIS_LAYOUT;
 }
 
 export {WORM_TITLE};

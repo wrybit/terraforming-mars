@@ -8,6 +8,11 @@ import {TileType} from '../../src/common/TileType';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {Board} from '../../src/server/boards/Board';
 import {PLANET_SPACE_TYPES} from '../../src/common/devtools/devToolsAction';
+import {Tag} from '../../src/common/cards/Tag';
+import {Research} from '../../src/server/cards/base/Research';
+import {Game} from '../../src/server/Game';
+import {SelectOption} from '../../src/server/inputs/SelectOption';
+import {SelectSpace} from '../../src/server/inputs/SelectSpace';
 
 function lastLog(game: ReturnType<typeof testGame>[0]): string {
   return game.gameLog[game.gameLog.length - 1].message;
@@ -81,9 +86,9 @@ describe('applyDevToolsAction', () => {
     const [game, player] = testGame(2);
     const space = game.board.getAvailableSpacesOnLand(player)[0];
     game.simpleAddTile(player, space, {tileType: TileType.GREENERY});
-    const rebuilt = applyDevToolsAction(game, {type: 'setup', boardName: BoardName.ARRAKIS, theme: 'dune'});
+    const rebuilt = applyDevToolsAction(game, {type: 'setup', boardName: BoardName.ARRAKIS_61, theme: 'dune'});
     expect(rebuilt).not.eq(game);
-    expect(rebuilt.gameOptions.boardName).eq(BoardName.ARRAKIS);
+    expect(rebuilt.gameOptions.boardName).eq(BoardName.ARRAKIS_61);
     expect(rebuilt.gameOptions.theme).eq('dune');
     expect(rebuilt.id).eq(game.id);
     expect(rebuilt.gameLog.slice(-2).map((entry) => entry.message)).deep.eq([
@@ -93,7 +98,53 @@ describe('applyDevToolsAction', () => {
       expect(moved.tile?.tileType).eq(TileType.GREENERY);
     }
     // Nothing to change: the same game
-    expect(applyDevToolsAction(rebuilt, {type: 'setup', boardName: BoardName.ARRAKIS})).eq(rebuilt);
+    expect(applyDevToolsAction(rebuilt, {type: 'setup', boardName: BoardName.ARRAKIS_61})).eq(rebuilt);
+  });
+
+  it('sets rating, points, tags and discounts of a player as the bars show them', () => {
+    const [game, player] = testGame(2);
+    applyDevToolsAction(game, {type: 'player', color: player.color, terraformRating: 33, tags: {[Tag.SCIENCE]: 4},
+      tagDiscounts: {[Tag.SCIENCE]: 2}, cardDiscount: 1});
+    expect(player.terraformRating).eq(33);
+    expect(player.tags.count(Tag.SCIENCE, 'raw')).eq(4);
+    expect(player.tags.countAllTags()[Tag.SCIENCE]).eq(4);
+    // A science card costs 3 less: 1 for every card, 2 for its science tag
+    const card = new Research();
+    expect(player.getCardCost(card)).eq(card.cost - 3);
+    applyDevToolsAction(game, {type: 'player', color: player.color, victoryPoints: 50});
+    expect(player.getVictoryPoints().total).eq(50);
+    // Kept through a save
+    const restored = Game.deserialize(game.serialize()).getPlayerById(player.id);
+    expect(restored.tags.count(Tag.SCIENCE, 'raw')).eq(4);
+    expect(restored.getVictoryPoints().total).eq(50);
+  });
+
+  it('sets the generation', () => {
+    const [game] = testGame(2);
+    applyDevToolsAction(game, {type: 'globals', generation: 7});
+    expect(game.generation).eq(7);
+  });
+
+  it('asks a placement right now and then returns to the earlier question', () => {
+    const [game, player] = testGame(2);
+    const earlier = new SelectOption('Earlier question');
+    player.setWaitingFor(earlier);
+    applyDevToolsAction(game, {type: 'trigger', color: player.color, trigger: 'city'});
+    const asked = player.getWaitingFor();
+    expect(asked).instanceOf(SelectSpace);
+    const space = (asked as SelectSpace).spaces[0];
+    player.process({type: 'space', spaceId: space.id});
+    expect(space.tile?.tileType).eq(TileType.CITY);
+    expect(player.getWaitingFor()).eq(earlier);
+  });
+
+  it('claims a milestone for free', () => {
+    const [game, player] = testGame(2);
+    player.megaCredits = 0;
+    applyDevToolsAction(game, {type: 'trigger', color: player.color, trigger: 'milestone'});
+    player.process({type: 'or', index: 0, response: {type: 'option'}});
+    expect(game.claimedMilestones.map((claim) => claim.player)).deep.eq([player]);
+    expect(player.megaCredits).eq(0);
   });
 
   it('sets resources and production of one player as absolute values', () => {

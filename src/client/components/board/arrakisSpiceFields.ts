@@ -18,7 +18,7 @@ export type SpiceRow = {centreX: number, apexY: number, arcRadius: number, scale
 /**
  * Standard board: a flat arc just below the planet, where the count was – flatter than the planet circle, so it does
  * not run into the low ends of the scales. The large board ends its section right below the planet: the row hugs the
- * planet on the circle of the scales, in the gap between their low ends (globs.less @oxygen-vals-arrakis-large starts
+ * planet on the circle of the scales, in the gap between their low ends (globs.less @oxygen-vals-arrakis-91 starts
  * the scales far enough out for it, Jens 20 Oct 2026).
  */
 export function spiceRow(large: boolean): SpiceRow {

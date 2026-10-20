@@ -444,7 +444,7 @@
     }
   }
 
-  @oxygen-vals-arrakis-large:
+  @oxygen-vals-arrakis-91:
     0 126.9deg,
     1 133.8deg,
     2 140.8deg,
@@ -461,7 +461,7 @@
     13 217deg,
     14 223.9deg;
 
-  @temperature-vals-arrakis-large:
+  @temperature-vals-arrakis-91:
     -30 54deg,
     -28 48.9deg,
     -26 43.8deg,
@@ -485,10 +485,10 @@
 
   &.global-numbers--large.global-numbers--arrakis {
     .global-numbers-oxygen {
-      each(@oxygen-vals-arrakis-large, .(@v) { .pin-at-angle(@v, @dial-cx-large, @dial-cy-large, @dial-r-large, 180deg); });
+      each(@oxygen-vals-arrakis-91, .(@v) { .pin-at-angle(@v, @dial-cx-large, @dial-cy-large, @dial-r-large, 180deg); });
     }
     .global-numbers-temperature {
-      each(@temperature-vals-arrakis-large, .(@v) { .pin-at-angle(@v, @dial-cx-large, @dial-cy-large, @dial-r-large, 0deg); });
+      each(@temperature-vals-arrakis-91, .(@v) { .pin-at-angle(@v, @dial-cx-large, @dial-cy-large, @dial-r-large, 0deg); });
     }
   }
 

@@ -8,8 +8,8 @@ import {SpaceType} from '../common/boards/SpaceType';
 import {SerializedBoard} from './boards/SerializedBoard';
 import {HellasBoard} from './boards/HellasBoard';
 import {TharsisBoard} from './boards/TharsisBoard';
-import {ArrakisBoard} from './boards/ArrakisBoard';
-import {ArrakisLargeBoard} from './boards/ArrakisLargeBoard';
+import {Arrakis61Board} from './boards/Arrakis61Board';
+import {Arrakis91Board} from './boards/Arrakis91Board';
 import {IPlayer} from './IPlayer';
 import {Player} from './Player';
 import {TileType} from '../common/TileType';
@@ -33,6 +33,9 @@ type BoardFactory = (new (spaces: ReadonlyArray<Space>) => MarsBoard) & {newInst
 const BOARD_RENAMES = new Map<string, BoardName>([
   ['vastitas borealis novus', BoardName.VASTITAS_BOREALIS_NOVA],
   ['terra cimmeria novus', BoardName.TERRA_CIMMERIA_NOVA],
+  // Saved before the Arrakis boards were named after their spaces (20 Oct 2026)
+  ['arrakis', BoardName.ARRAKIS_61],
+  ['arrakis large', BoardName.ARRAKIS_91],
 ]);
 
 export function normalizeBoardName(name: string): BoardName {
@@ -52,8 +55,8 @@ const boards: Record<BoardName, BoardFactory> = {
   [BoardName.VASTITAS_BOREALIS]: VastitasBorealisBoard,
   [BoardName.HOLLANDIA]: HollandiaBoard,
   [BoardName.AMAZONIS_PLANITIA]: AmazonisPlanitiaBoard,
-  [BoardName.ARRAKIS]: ArrakisBoard,
-  [BoardName.ARRAKIS_LARGE]: ArrakisLargeBoard,
+  [BoardName.ARRAKIS_61]: Arrakis61Board,
+  [BoardName.ARRAKIS_91]: Arrakis91Board,
 } satisfies Record<BoardName, BoardFactory>;
 
 export class GameSetup {

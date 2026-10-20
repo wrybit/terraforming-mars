@@ -9,6 +9,8 @@
   border-radius: inherit;
 }
 
+@import (reference) "./board_tabs.less";
+
 // Controls in the look of the game's own fields: the search field of the log (log.less .log-filter-field) and the
 // price slider of the card list (card_list.less). The same colours, so the Dune theme recolours them as well.
 @devtools-field-border: #3a3f55;
@@ -24,11 +26,10 @@
 // Three groups: parameters, resources, card. Side by side where there is room, below each other on the phone
 .devtools {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   grid-template-areas:
     "head head"
-    "globals resources"
-    "card resources"
+    "globals player"
     "error error";
   align-items: start;
   gap: @devtools-gap-groups 28px;
@@ -46,17 +47,66 @@
   grid-area: globals;
 }
 
-.devtools__group--resources {
-  grid-area: resources;
+.devtools__group--player {
+  grid-area: player;
 }
 
-.devtools__group--card {
-  grid-area: card;
+// Everything of one player: values and tags side by side, below each other on the phone
+.devtools-player {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: @devtools-gap-groups 24px;
+}
+
+html.tm-mobile .devtools-player {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.devtools-players {
+  .segmented-toggle();
+  flex-wrap: wrap;
+  align-self: flex-start;
+  box-shadow: none;
+}
+
+.devtools-players__option {
+  .segmented-toggle-option();
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  font-size: 13px;
+}
+
+.devtools-players__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.devtools-card-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: @devtools-gap-inside;
+}
+
+html.tm-mobile .devtools-card-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  > .devtools-input {
+    grid-column: 1 / -1;
+  }
+}
+
+.devtools-triggers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: @devtools-gap-inside;
 }
 
 html.tm-mobile .devtools {
   grid-template-columns: minmax(0, 1fr);
-  grid-template-areas: "head" "globals" "resources" "card" "error";
+  grid-template-areas: "head" "globals" "player" "error";
 }
 
 .devtools__title {
@@ -192,7 +242,8 @@ html.tm-mobile .devtools {
   &::-webkit-slider-thumb {
     width: @devtools-thumb;
     height: @devtools-thumb;
-    margin-top: (4px - @devtools-thumb) / 2;
+    // Centred on the 4px track: the thumb hangs half its overhang above it
+    margin-top: ((4px - @devtools-thumb) / 2);
     border: 2px solid #fff;
     border-radius: 50%;
     background: @bg_action;
@@ -236,6 +287,30 @@ html.tm-mobile .devtools {
   font-size: 13px;
 }
 
+.devtools-grid--single {
+  grid-template-columns: minmax(0, 1fr) 5.5em;
+}
+
+.devtools-grid__name--tag {
+  display: flex;
+  text-transform: capitalize;
+  align-items: center;
+  gap: 6px;
+
+  // The tag symbol of the player bars, at the size of the text
+  .tag-count {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    background-size: contain;
+  }
+}
+
+.devtools-input--short {
+  width: 5.5em;
+}
+
 .devtools-grid__head {
   color: #a4a9b6;
   font-size: 11px;
@@ -245,4 +320,5 @@ html.tm-mobile .devtools {
 
 .devtools-button {
   margin: 0;
+  white-space: normal;
 }

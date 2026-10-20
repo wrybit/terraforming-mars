@@ -20,7 +20,7 @@ export function isTheme(value: unknown): value is Theme {
 export const DUNE_EXPANSIONS: ReadonlyArray<Expansion> = ['corpera', 'prelude', 'prelude2'];
 
 /** The standard board of the Dune theme; the Mars theme never uses it. The Dune theme also offers the large Arrakis. */
-export const DUNE_BOARD = BoardName.ARRAKIS;
+export const DUNE_BOARD = BoardName.ARRAKIS_61;
 
 /** Boards of the Dune theme, the standard one first (common/dune/arrakisLayout.ts) */
 export const DUNE_BOARDS: ReadonlyArray<BoardName> = ARRAKIS_BOARDS;

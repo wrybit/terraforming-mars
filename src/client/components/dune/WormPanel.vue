@@ -28,7 +28,7 @@ export default defineComponent({
     /** The game's Arrakis board (standard or large) */
     board: {
       type: String as PropType<BoardName>,
-      default: BoardName.ARRAKIS,
+      default: BoardName.ARRAKIS_61,
     },
   },
   computed: {

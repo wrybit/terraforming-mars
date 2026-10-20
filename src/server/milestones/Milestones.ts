@@ -159,8 +159,8 @@ export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
     [BoardName.HOLLANDIA]: [],
     [BoardName.AMAZONIS_PLANITIA]: ['Terran', 'Landshaper', 'Merchant3', 'Sponsor', 'Lobbyist'],
     // Dune theme: the Tharsis milestones under Dune names (theme texts only)
-    [BoardName.ARRAKIS]: [...DUNE_MILESTONES],
-    [BoardName.ARRAKIS_LARGE]: [...DUNE_MILESTONES],
+    [BoardName.ARRAKIS_61]: [...DUNE_MILESTONES],
+    [BoardName.ARRAKIS_91]: [...DUNE_MILESTONES],
   },
   expansions: {
     venus: ['Hoverlord'],

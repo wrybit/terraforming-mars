@@ -1,7 +1,7 @@
 <template>
   <!-- Lies over the box of the action tabs while the DevTools tab is open: the open input below stays as it is -->
   <div v-if="devToolsState.enabled && devToolsState.open" class="devtools-overlay">
-    <DevToolsPanel :game="playerView.game" :players="playerView.players"/>
+    <DevToolsPanel :game="playerView.game" :players="playerView.players" :viewerColor="playerView.thisPlayer.color"/>
   </div>
 </template>
 

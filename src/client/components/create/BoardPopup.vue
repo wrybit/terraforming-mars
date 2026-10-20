@@ -58,8 +58,8 @@ const WIKI_ANCHORS: Record<BoardNameType, string> = {
   [BoardName.HOLLANDIA]: 'hollandia',
   [BoardName.AMAZONIS_PLANITIA]: 'amazonis-planitia',
   // Dune theme board, no wiki page
-  [BoardName.ARRAKIS]: '',
-  [BoardName.ARRAKIS_LARGE]: '',
+  [BoardName.ARRAKIS_61]: '',
+  [BoardName.ARRAKIS_91]: '',
   [RandomBoardOption.OFFICIAL]: '',
   [RandomBoardOption.ALL]: '',
 };

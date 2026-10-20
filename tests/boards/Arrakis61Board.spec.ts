@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {DEFAULT_GAME_OPTIONS} from '../../src/server/game/GameOptions';
-import {ArrakisBoard} from '../../src/server/boards/ArrakisBoard';
+import {Arrakis61Board} from '../../src/server/boards/Arrakis61Board';
 import {TharsisBoard} from '../../src/server/boards/TharsisBoard';
 import {MarsBoard} from '../../src/server/boards/MarsBoard';
 import {SeededRandom} from '../../src/common/utils/Random';
@@ -24,8 +24,8 @@ function totals(board: MarsBoard) {
   };
 }
 
-describe('ArrakisBoard', () => {
-  const arrakis = ArrakisBoard.newInstance(DEFAULT_GAME_OPTIONS, new SeededRandom(0));
+describe('Arrakis61Board', () => {
+  const arrakis = Arrakis61Board.newInstance(DEFAULT_GAME_OPTIONS, new SeededRandom(0));
   const tharsis = TharsisBoard.newInstance(DEFAULT_GAME_OPTIONS, new SeededRandom(0));
 
   it('has the same totals as Tharsis', () => {

@@ -13,10 +13,10 @@ import {ARRAKIS_LAYOUT, ArrakisLayout} from '../../common/dune/arrakisLayout';
  * Arrakis, the board of the Dune theme. Same rules and the same totals as Tharsis (61 spaces, 12 oceans,
  * 4 volcanic areas, one reserved capital space, 11 steel, 4 titanium, 6 cards, 38 plant bonuses), only arranged
  * along the geography of Arrakis. Plant bonuses on rock, ice and spice fields became heat ("water") or energy
- * ("moisture") 1:1, because nothing grows there. Tests compare the totals with Tharsis (tests/boards/ArrakisBoard.spec.ts).
+ * ("moisture") 1:1, because nothing grows there. Tests compare the totals with Tharsis (tests/boards/Arrakis61Board.spec.ts).
  */
-export class ArrakisBoard extends MarsBoard {
-  public static newInstance(gameOptions: GameOptions, rng: Random): ArrakisBoard {
+export class Arrakis61Board extends MarsBoard {
+  public static newInstance(gameOptions: GameOptions, rng: Random): Arrakis61Board {
     const builder = new BoardBuilder(gameOptions, rng);
 
     const PLANT = SpaceBonus.PLANT;
@@ -48,7 +48,7 @@ export class ArrakisBoard extends MarsBoard {
     builder.row((r) => r.land().ocean(HEAT, HEAT).ocean(HEAT).land(ENERGY).land(TITANIUM));
 
     const spaces = builder.build();
-    return new ArrakisBoard(spaces);
+    return new Arrakis61Board(spaces);
   }
 
   /** Dune expansion, Shai-Hulud: the space under the worm takes no tile (dune/DuneExpansion.ts sets it) */
@@ -56,7 +56,7 @@ export class ArrakisBoard extends MarsBoard {
   /** Dune expansion, Kanly: the war field of this generation, shown on the board */
   public warFieldSpaceId: SpaceId | undefined = undefined;
 
-  /** Shape and terrain of this board (the large Arrakis has its own, ArrakisLargeBoard.ts) */
+  /** Shape and terrain of this board (the large Arrakis has its own, Arrakis91Board.ts) */
   public readonly layout: ArrakisLayout;
 
   public constructor(spaces: ReadonlyArray<Space>, arrakeen: SpaceId = SpaceName.ARRAKEEN, layout: ArrakisLayout = ARRAKIS_LAYOUT) {

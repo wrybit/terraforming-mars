@@ -16,5 +16,17 @@
   "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "Endrer spillet for alle spillere og skriver hver endring i spilloggen. Hver endring sendes av seg selv ett sekund etter siste berøring.",
   "🛠 DevTools: oceans set to ${0}": "🛠 DevTools: hav satt til ${0}",
   "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 DevTools: brett byttet til ${0} (${1} brikker passet ikke)",
-  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: tema byttet til ${0}"
+  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: tema byttet til ${0}",
+  "Rating and points": "Vurdering og poeng",
+  "Tags and discounts": "Merker og rabatter",
+  "Extra discount": "Ekstra rabatt",
+  "Ask now": "Spør nå",
+  "Pay too much": "Betal for mye",
+  "Convert energy to heat": "Gjør energi om til varme",
+  "Claim a milestone for free": "Gjør krav på en milepæl gratis",
+  "Move the worm": "Flytt ormen",
+  "Pay for DevTools test": "Betaling for DevTools-test",
+  "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: vurdering, poeng, merker og rabatter for ${0} satt",
+  "🛠 DevTools: generation set to ${0}": "🛠 DevTools: generasjon satt til ${0}",
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} blir spurt: ${1}"
 }

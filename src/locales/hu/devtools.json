@@ -16,5 +16,17 @@
   "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "Minden játékos számára megváltoztatja a játékot, és minden változást beír a játéknaplóba. Minden változás magától elküldésre kerül egy másodperccel az utolsó érintés után.",
   "🛠 DevTools: oceans set to ${0}": "🛠 DevTools: óceánok beállítva: ${0}",
   "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 DevTools: játéktábla átállítva: ${0} (${1} lapka nem fért el)",
-  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: téma átállítva: ${0}"
+  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: téma átállítva: ${0}",
+  "Rating and points": "Pontszint és pontok",
+  "Tags and discounts": "Címkék és kedvezmények",
+  "Extra discount": "Extra kedvezmény",
+  "Ask now": "Kérdezés most",
+  "Pay too much": "Túlfizetés",
+  "Convert energy to heat": "Energia átalakítása hővé",
+  "Claim a milestone for free": "Mérföldkő ingyenes megszerzése",
+  "Move the worm": "Féreg mozgatása",
+  "Pay for DevTools test": "Fizetés DevTools-teszthez",
+  "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: ${0} pontszintje, pontjai, címkéi és kedvezményei beállítva",
+  "🛠 DevTools: generation set to ${0}": "🛠 DevTools: generáció beállítva: ${0}",
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} kérdést kap: ${1}"
 }

@@ -1,5 +1,5 @@
 import {canCancelAction} from '../actionStart';
-import {ArrakisBoard} from '../boards/ArrakisBoard';
+import {Arrakis61Board} from '../boards/Arrakis61Board';
 import {DuneExpansion} from '../dune/DuneExpansion';
 import {CardModel} from '../../common/models/CardModel';
 import {Color} from '../../common/Color';
@@ -247,7 +247,9 @@ export class Server {
       alliedParty: player.alliedParty,
       availableBlueCardActionCount: player.getPlayableActionCards().length,
       cardCost: player.cardCost,
-      cardDiscount: player.colonies.cardDiscount,
+      // DevTools discount for every card shows with the real one (overview/playerTagDetails.ts)
+      cardDiscount: player.colonies.cardDiscount + player.devTools.cardDiscount,
+      devToolsTagDiscounts: player.devTools.tagDiscounts,
       cardsInHandNbr: player.cardsInHand.length,
       citiesCount: game.board.getCities(player).length,
       coloniesCount: player.getColoniesCount(),
@@ -410,10 +412,10 @@ export class Server {
       if (space.cube !== undefined) {
         model.cube = space.cube;
       }
-      if (board instanceof ArrakisBoard && board.wormSpaceId === space.id) {
+      if (board instanceof Arrakis61Board && board.wormSpaceId === space.id) {
         model.worm = true;
       }
-      if (board instanceof ArrakisBoard && board.warFieldSpaceId === space.id) {
+      if (board instanceof Arrakis61Board && board.warFieldSpaceId === space.id) {
         model.warField = true;
       }
       const color = this.getColor(space);

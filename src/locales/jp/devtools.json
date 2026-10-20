@@ -17,5 +17,17 @@
   "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "全プレイヤーのゲームを変更し、すべての変更をゲームログに記録します。各変更は最後の操作の1秒後に自動で送信されます。",
   "🛠 DevTools: oceans set to ${0}": "🛠 開発ツール: 海洋を ${0} に設定",
   "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 開発ツール: ボードを ${0} に変更（${1} 枚のタイルが合わず）",
-  "🛠 DevTools: theme changed to ${0}": "🛠 開発ツール: テーマを ${0} に変更"
+  "🛠 DevTools: theme changed to ${0}": "🛠 開発ツール: テーマを ${0} に変更",
+  "Rating and points": "評価と得点",
+  "Tags and discounts": "タグと割引",
+  "Extra discount": "追加割引",
+  "Ask now": "今すぐ尋ねる",
+  "Pay too much": "払いすぎる",
+  "Convert energy to heat": "エネルギーを熱に変換",
+  "Claim a milestone for free": "マイルストーンを無料で獲得",
+  "Move the worm": "ワームを動かす",
+  "Pay for DevTools test": "開発ツールのテスト支払い",
+  "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 開発ツール: ${0} の評価、得点、タグ、割引を設定",
+  "🛠 DevTools: generation set to ${0}": "🛠 開発ツール: 世代を ${0} に設定",
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 開発ツール: ${0} への質問: ${1}"
 }

@@ -1,7 +1,7 @@
 import {ArrakisLayout} from './arrakisLayout';
 
 // Coordinates of Arrakis spaces as in the mockup (like chess, "E4"): rows from A at the top, the number counts the
-// spaces of the row from the left. Space ids start at 03 and run row by row (ArrakisBoard.ts, ArrakisLargeBoard.ts).
+// spaces of the row from the left. Space ids start at 03 and run row by row (Arrakis61Board.ts, Arrakis91Board.ts).
 // Every function takes the layout of the game's board (arrakisLayout.ts).
 
 /** Row and place in the row of a space; undefined for spaces off the board */

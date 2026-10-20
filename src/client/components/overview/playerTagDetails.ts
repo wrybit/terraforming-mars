@@ -122,6 +122,14 @@ export function buildTagDetails(player: PublicPlayerModel, playerView: ViewModel
     asterisk: false,
   };
 
+  // DevTools discounts per tag (common/devtools/devToolsAction.ts) show like those of discount cards
+  for (const [tag, amount] of Object.entries(player.devToolsTagDiscounts ?? {}) as Array<[Tag, number | undefined]>) {
+    const detail = details[tag];
+    if (detail !== undefined && amount !== undefined) {
+      detail.discount += amount;
+    }
+  }
+
   // For each card
   for (const card of player.tableau) {
     // Calculate discount

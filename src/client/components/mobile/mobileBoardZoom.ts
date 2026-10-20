@@ -25,7 +25,7 @@ export function marsFrame(cropped: boolean, large = false): MarsFrame {
 
 /* Maps with the larger board (Board.vue, board-cont--large). */
 export function isLargeBoard(boardName: BoardName | undefined): boolean {
-  return boardName === BoardName.AMAZONIS_PLANITIA || boardName === BoardName.ARRAKIS_LARGE;
+  return boardName === BoardName.AMAZONIS_PLANITIA || boardName === BoardName.ARRAKIS_91;
 }
 /* The planet alone (mars-planet.png without transparent edge), px at zoom 1 relative to .board-cont: board previews without scales and outer spaces. */
 export const PLANET_BOUNDS = {left: 93, top: 86, width: 449, height: 449};

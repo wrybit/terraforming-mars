@@ -17,5 +17,17 @@
   "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "为所有玩家修改游戏，并将每项修改写入游戏日志。每项修改会在最后一次操作一秒后自动发送。",
   "🛠 DevTools: oceans set to ${0}": "🛠 开发工具：海洋设为 ${0}",
   "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 开发工具：版图改为 ${0}（${1} 个板块无法放置）",
-  "🛠 DevTools: theme changed to ${0}": "🛠 开发工具：主题改为 ${0}"
+  "🛠 DevTools: theme changed to ${0}": "🛠 开发工具：主题改为 ${0}",
+  "Rating and points": "评分与分数",
+  "Tags and discounts": "标志与折扣",
+  "Extra discount": "额外折扣",
+  "Ask now": "立即询问",
+  "Pay too much": "多付",
+  "Convert energy to heat": "将能量转换为热量",
+  "Claim a milestone for free": "免费达成里程碑",
+  "Move the worm": "移动沙虫",
+  "Pay for DevTools test": "为开发工具测试付款",
+  "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 开发工具：已设置 ${0} 的评分、分数、标志与折扣",
+  "🛠 DevTools: generation set to ${0}": "🛠 开发工具：世代设为 ${0}",
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 开发工具：询问 ${0}：${1}"
 }

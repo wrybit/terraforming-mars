@@ -195,7 +195,7 @@ describe('CreateGameForm', () => {
     vm.setExpansion('prelude', true);
     await nextTick();
     vm.theme = 'dune';
-    expect(vm.board).eq(BoardName.ARRAKIS);
+    expect(vm.board).eq(BoardName.ARRAKIS_61);
     expect(vm.expansions.venus).eq(false);
     expect(vm.expansions.prelude).eq(true);
     expect(vm.newGameConfig.theme).eq('dune');

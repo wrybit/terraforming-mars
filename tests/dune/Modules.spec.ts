@@ -67,7 +67,7 @@ describe('Dune modules B, D, E, F', () => {
   let player2: TestPlayer;
 
   beforeEach(() => {
-    [game, player1, player2] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS, duneModules: ['kanly', 'smuggling', 'choam', 'schemes']});
+    [game, player1, player2] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS_61, duneModules: ['kanly', 'smuggling', 'choam', 'schemes']});
   });
 
   describe('Kanly (F)', () => {

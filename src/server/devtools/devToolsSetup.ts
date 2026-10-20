@@ -63,10 +63,10 @@ export function switchSetup(game: IGame, action: DevToolsSetupAction): IGame {
   }
   const rebuilt = Game.deserialize(serialized);
   if (boardChanged) {
-    rebuilt.log('🛠 DevTools: board changed to ${0} (${1} tiles did not fit)', (b) => b.string(options.boardName).number(dropped));
+    rebuilt.log('🛠 DevTools: board changed to ${0} (${1} tiles did not fit)', (b) => b.rawString(options.boardName).number(dropped));
   }
   if (themeChanged) {
-    rebuilt.log('🛠 DevTools: theme changed to ${0}', (b) => b.string(options.theme));
+    rebuilt.log('🛠 DevTools: theme changed to ${0}', (b) => b.rawString(options.theme));
   }
   return rebuilt;
 }

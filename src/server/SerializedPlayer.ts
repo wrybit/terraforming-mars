@@ -9,6 +9,7 @@ import {GlobalParameter} from '../common/GlobalParameter';
 import {DiscordId} from './server/auth/discord';
 import {UnderworldPlayerData} from '../common/underworld/UnderworldPlayerData';
 import {DeltaProjectPlayerModel} from '../common/models/DeltaProjectPlayerModel';
+import {DevToolsPlayerState} from '../common/devtools/devToolsAction';
 
 interface DeprecatedFields {
 }
@@ -26,6 +27,8 @@ export interface SerializedPlayer extends DeprecatedFields{
   canUsePlantsAsMegaCredits: boolean;
   cardCost: number;
   cardDiscount: number;
+  /** Only in games changed by the DevTools */
+  devTools?: DevToolsPlayerState;
   cardsInHand: Array<CardName>;
   ceoCardsInHand: Array<CardName>;
   colonyTradeDiscount: number;

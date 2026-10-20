@@ -28,8 +28,8 @@ describe('arrakisScales', () => {
     expect(LARGE_SCALES.centreX).eq(lessNumber(less, 'dial-cx-large'));
     expect(LARGE_SCALES.centreY).eq(lessNumber(less, 'dial-cy-large'));
     expect(LARGE_SCALES.radius).eq(lessNumber(less, 'dial-r-large'));
-    expect(LARGE_SCALES.vegetationAngles).deep.eq(lessAngles(less, 'oxygen-vals-arrakis-large'));
-    expect(LARGE_SCALES.waterAngles).deep.eq(lessAngles(less, 'temperature-vals-arrakis-large'));
+    expect(LARGE_SCALES.vegetationAngles).deep.eq(lessAngles(less, 'oxygen-vals-arrakis-91'));
+    expect(LARGE_SCALES.waterAngles).deep.eq(lessAngles(less, 'temperature-vals-arrakis-91'));
   });
 
   it('turns symbol and name of the standard board up with its scales, the names meeting at the top', () => {

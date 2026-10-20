@@ -62,7 +62,7 @@ describe('Mars is unaffected by Dune', () => {
     }
     // Older games without a known board stay with Mars as well
     expect(statsGameTheme(undefined)).eq('mars');
-    expect(statsGameTheme({boardName: BoardName.ARRAKIS} as StatsGameDetails)).eq('dune');
+    expect(statsGameTheme({boardName: BoardName.ARRAKIS_61} as StatsGameDetails)).eq('dune');
   });
 
   it('goes from one generation to the next without waiting for Dune steps', () => {

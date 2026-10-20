@@ -17,7 +17,7 @@ describe('Dune expansion modules', () => {
   });
 
   it('the AI answers a bazaar phase of the former rules with one of its choices', () => {
-    const [game, player1] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS, duneModules: ['bazaar']});
+    const [game, player1] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS_61, duneModules: ['bazaar']});
     player1.megaCredits = 60;
     const bazaar = game.duneData?.bazaar;
     if (bazaar === undefined) {

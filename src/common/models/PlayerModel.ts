@@ -48,6 +48,8 @@ export type PublicPlayerModel = {
   availableBlueCardActionCount: number;
   cardCost: number;
   cardDiscount: number;
+  /** DevTools discounts per tag (common/devtools/devToolsAction.ts); empty in normal games */
+  devToolsTagDiscounts?: Partial<Record<Tag, number>>;
   cardsInHandNbr: number;
   citiesCount: number;
   coloniesCount: number;

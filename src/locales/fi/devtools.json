@@ -16,5 +16,17 @@
   "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "Muuttaa peliä kaikille pelaajille ja kirjaa jokaisen muutoksen pelilokiin. Jokainen muutos lähtee itsestään sekunti viimeisen kosketuksen jälkeen.",
   "🛠 DevTools: oceans set to ${0}": "🛠 DevTools: meret asetettu arvoon ${0}",
   "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 DevTools: pelilauta vaihdettu: ${0} (${1} laattaa ei sopinut)",
-  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: teema vaihdettu: ${0}"
+  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: teema vaihdettu: ${0}",
+  "Rating and points": "Luokitus ja pisteet",
+  "Tags and discounts": "Tunnisteet ja alennukset",
+  "Extra discount": "Lisäalennus",
+  "Ask now": "Kysy nyt",
+  "Pay too much": "Maksa liikaa",
+  "Convert energy to heat": "Muunna energia lämmöksi",
+  "Claim a milestone for free": "Lunasta virstanpylväs ilmaiseksi",
+  "Move the worm": "Liikuta matoa",
+  "Pay for DevTools test": "Maksu DevTools-testiin",
+  "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: pelaajan ${0} luokitus, pisteet, tunnisteet ja alennukset asetettu",
+  "🛠 DevTools: generation set to ${0}": "🛠 DevTools: sukupolvi asetettu arvoon ${0}",
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: pelaajalta ${0} kysytään: ${1}"
 }

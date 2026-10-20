@@ -21,4 +21,8 @@ export function applyGlobals(game: IGame, action: DevToolsGlobalsAction): void {
   if (game.getVenusScaleLevel() !== before.venus) {
     game.log('🛠 DevTools: Venus set to ${0}', (b) => b.number(game.getVenusScaleLevel()));
   }
+  if (action.generation !== undefined && Math.max(1, Math.round(action.generation)) !== game.generation) {
+    game.generation = Math.max(1, Math.round(action.generation));
+    game.log('🛠 DevTools: generation set to ${0}', (b) => b.number(game.generation));
+  }
 }

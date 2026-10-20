@@ -7,6 +7,7 @@ import {Units} from '../Units';
 import {BoardName} from '../boards/BoardName';
 import {SpaceType} from '../boards/SpaceType';
 import {Theme, isTheme} from '../theme/Theme';
+import {Tag} from '../cards/Tag';
 
 /** Global parameters set directly, without rewards or terraform rating */
 export type DevToolsGlobalsAction = {
@@ -14,6 +15,55 @@ export type DevToolsGlobalsAction = {
   temperature?: number,
   oxygen?: number,
   venus?: number,
+  generation?: number,
+};
+
+/**
+ * What the DevTools give a player beyond the rules (server Player.devTools): extra tags count like printed ones,
+ * the discounts lower every card cost, the points add to the score. Shown in the player bars like real ones.
+ */
+export type DevToolsPlayerState = {
+  extraTags: Partial<Record<Tag, number>>,
+  tagDiscounts: Partial<Record<Tag, number>>,
+  cardDiscount: number,
+  victoryPoints: number,
+};
+
+export function emptyDevToolsPlayerState(): DevToolsPlayerState {
+  return {extraTags: {}, tagDiscounts: {}, cardDiscount: 0, victoryPoints: 0};
+}
+
+/** Values of one player as they should be shown: tags and points are totals, the server works out the difference */
+export type DevToolsPlayerAction = {
+  type: 'player',
+  color: Color,
+  terraformRating?: number,
+  victoryPoints?: number,
+  tags?: Partial<Record<Tag, number>>,
+  tagDiscounts?: Partial<Record<Tag, number>>,
+  cardDiscount?: number,
+};
+
+/** Situations of the game asked of a player right now, on top of what he is asked anyway (devtools/devToolsTriggers.ts) */
+export const DEVTOOLS_TRIGGERS = ['city', 'ocean', 'greenery', 'overpay', 'convert', 'milestone', 'award', 'worm'] as const;
+export type DevToolsTrigger = typeof DEVTOOLS_TRIGGERS[number];
+
+/** Button text in the panel and wording of the log line (both translated, themed by the theme texts) */
+export const DEVTOOLS_TRIGGER_LABELS: Readonly<Record<DevToolsTrigger, string>> = {
+  city: 'Place a city',
+  ocean: 'Place an ocean',
+  greenery: 'Place a greenery',
+  overpay: 'Pay too much',
+  convert: 'Convert energy to heat',
+  milestone: 'Claim a milestone for free',
+  award: 'Fund an award for free',
+  worm: 'Move the worm',
+};
+
+export type DevToolsTriggerAction = {
+  type: 'trigger',
+  color: Color,
+  trigger: DevToolsTrigger,
 };
 
 /**
@@ -56,7 +106,7 @@ export type DevToolsCardAction = {
 };
 
 export type DevToolsAction = DevToolsGlobalsAction | DevToolsTerraformAction | DevToolsOceansAction | DevToolsSetupAction |
-  DevToolsResourcesAction | DevToolsCardAction;
+  DevToolsResourcesAction | DevToolsCardAction | DevToolsPlayerAction | DevToolsTriggerAction;
 
 /** Spaces that make up the planet: the fill slider counts them on both sides (client panel and server) */
 export const PLANET_SPACE_TYPES: ReadonlyArray<SpaceType> = [SpaceType.LAND, SpaceType.OCEAN, SpaceType.COVE];
@@ -71,6 +121,17 @@ export const DEVTOOLS_UNIT_KEYS = ['megacredits', 'steel', 'titanium', 'plants',
 
 function isOptionalNumber(value: unknown): boolean {
   return value === undefined || (typeof value === 'number' && Number.isFinite(value));
+}
+
+function isTagNumbers(value: unknown): boolean {
+  if (value === undefined) {
+    return true;
+  }
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  return Object.entries(value).every(([key, amount]) => (Object.values(Tag) as Array<string>).includes(key) &&
+    typeof amount === 'number' && Number.isInteger(amount));
 }
 
 function isUnits(value: unknown): value is Partial<Units> {
@@ -88,7 +149,13 @@ export function isDevToolsAction(value: unknown): value is DevToolsAction {
   const action = value as Record<string, unknown>;
   switch (action.type) {
   case 'globals':
-    return isOptionalNumber(action.temperature) && isOptionalNumber(action.oxygen) && isOptionalNumber(action.venus);
+    return isOptionalNumber(action.temperature) && isOptionalNumber(action.oxygen) && isOptionalNumber(action.venus) &&
+      isOptionalNumber(action.generation);
+  case 'player':
+    return typeof action.color === 'string' && isOptionalNumber(action.terraformRating) && isOptionalNumber(action.victoryPoints) &&
+      isOptionalNumber(action.cardDiscount) && isTagNumbers(action.tags) && isTagNumbers(action.tagDiscounts);
+  case 'trigger':
+    return typeof action.color === 'string' && (DEVTOOLS_TRIGGERS as ReadonlyArray<unknown>).includes(action.trigger);
   case 'terraform':
     return typeof action.share === 'number' && action.share >= 0 && action.share <= 1;
   case 'oceans':

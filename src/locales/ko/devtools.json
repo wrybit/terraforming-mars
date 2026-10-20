@@ -17,5 +17,17 @@
   "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "모든 플레이어의 게임을 바꾸고 모든 변경을 게임 로그에 기록합니다. 각 변경은 마지막 조작 1초 뒤에 자동으로 전송됩니다.",
   "🛠 DevTools: oceans set to ${0}": "🛠 개발 도구: 바다를 ${0}(으)로 설정",
   "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 개발 도구: 보드를 ${0}(으)로 변경 (타일 ${1}개는 맞지 않음)",
-  "🛠 DevTools: theme changed to ${0}": "🛠 개발 도구: 테마를 ${0}(으)로 변경"
+  "🛠 DevTools: theme changed to ${0}": "🛠 개발 도구: 테마를 ${0}(으)로 변경",
+  "Rating and points": "등급과 점수",
+  "Tags and discounts": "태그와 할인",
+  "Extra discount": "추가 할인",
+  "Ask now": "지금 묻기",
+  "Pay too much": "초과 지불",
+  "Convert energy to heat": "에너지를 열로 변환",
+  "Claim a milestone for free": "이정표 무료 달성",
+  "Move the worm": "모래벌레 이동",
+  "Pay for DevTools test": "개발 도구 테스트 지불",
+  "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 개발 도구: ${0}의 등급, 점수, 태그, 할인 설정",
+  "🛠 DevTools: generation set to ${0}": "🛠 개발 도구: 세대를 ${0}(으)로 설정",
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 개발 도구: ${0}에게 질문: ${1}"
 }

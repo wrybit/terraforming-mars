@@ -13,7 +13,7 @@
         <label class="devtools-field">
           <span class="devtools-field__name">{{ $t('Board') }}</span>
           <select class="devtools-select" v-model="setup.boardName" @change="scheduleSetup">
-            <option v-for="board in boards" :key="board" :value="board">{{ board }}</option>
+            <option v-for="board in boards" :key="board" :value="board">{{ $t(board) }}</option>
           </select>
         </label>
         <label class="devtools-field">
@@ -23,6 +23,10 @@
           </select>
         </label>
       </div>
+      <label :class="['devtools-slider', {'devtools-slider--pending': isPending('generation')}]">
+        <span class="devtools-slider__name">{{ $t('Generation') }}</span>
+        <input type="number" min="1" class="devtools-input devtools-input--short" v-model.number="generation" @input="scheduleGeneration">
+      </label>
       <label v-for="slider in sliders" :key="slider.key" :class="['devtools-slider', {'devtools-slider--pending': isPending(slider.key)}]">
         <span class="devtools-slider__name">{{ $t(slider.label) }}</span>
         <input type="range" class="devtools-range" :min="slider.min" :max="slider.max" :step="slider.step"
@@ -31,35 +35,69 @@
       </label>
     </div>
 
-    <div class="devtools__group devtools__group--resources">
-      <h4 class="devtools__group-title">{{ $t('Resources and production') }}</h4>
-      <label class="devtools-field">
-        <span class="devtools-field__name">{{ $t('Player') }}</span>
-        <select class="devtools-select" v-model="color" @change="loadPlayerValues">
-          <option v-for="player in players" :key="player.color" :value="player.color">{{ player.name }}</option>
-        </select>
-      </label>
-      <div :class="['devtools-grid', {'devtools-grid--pending': isPending(resourcesKey)}]">
-        <span></span>
-        <span class="devtools-grid__head">{{ $t('Stock') }}</span>
-        <span class="devtools-grid__head">{{ $t('Production') }}</span>
-        <template v-for="unit in units" :key="unit.key">
-          <span class="devtools-grid__name">{{ $t(unit.label) }}</span>
-          <input type="number" class="devtools-input" v-model.number="stock[unit.key]" @input="scheduleResources">
-          <input type="number" class="devtools-input" v-model.number="production[unit.key]" @input="scheduleResources">
-        </template>
+    <div class="devtools__group devtools__group--player">
+      <!-- One player for everything below: values, cards and the questions asked right now -->
+      <div class="devtools-players" role="radiogroup" :aria-label="$t('Player')">
+        <button v-for="player in players" :key="player.color" type="button" role="radio" :aria-checked="player.color === color"
+          :class="['devtools-players__option', {'devtools-players__option--on': player.color === color}]" @click="choosePlayer(player.color)">
+          <span :class="['devtools-players__dot', 'player_bg_color_' + player.color]"></span>{{ player.name }}
+        </button>
       </div>
-    </div>
 
-    <div class="devtools__group devtools__group--card">
+      <div class="devtools-player">
+        <div class="devtools__group">
+          <h4 class="devtools__group-title">{{ $t('Rating and points') }}</h4>
+          <div :class="['devtools-grid', 'devtools-grid--single', {'devtools-grid--pending': isPending(playerKey)}]">
+            <span class="devtools-grid__name">{{ $t('Terraform Rating') }}</span>
+            <input type="number" class="devtools-input" v-model.number="stats.terraformRating" @input="schedulePlayer('terraformRating')">
+            <span class="devtools-grid__name">{{ $t('Victory Points') }}</span>
+            <input type="number" class="devtools-input" v-model.number="stats.victoryPoints" @input="schedulePlayer('victoryPoints')">
+          </div>
+
+          <h4 class="devtools__group-title">{{ $t('Resources and production') }}</h4>
+          <div :class="['devtools-grid', {'devtools-grid--pending': isPending(resourcesKey)}]">
+            <span></span>
+            <span class="devtools-grid__head">{{ $t('Stock') }}</span>
+            <span class="devtools-grid__head">{{ $t('Production') }}</span>
+            <template v-for="unit in units" :key="unit.key">
+              <span class="devtools-grid__name">{{ $t(unit.label) }}</span>
+              <input type="number" class="devtools-input" v-model.number="stock[unit.key]" @input="scheduleResources">
+              <input type="number" class="devtools-input" v-model.number="production[unit.key]" @input="scheduleResources">
+            </template>
+          </div>
+        </div>
+
+        <div class="devtools__group">
+          <h4 class="devtools__group-title">{{ $t('Tags and discounts') }}</h4>
+          <div :class="['devtools-grid', {'devtools-grid--pending': isPending(playerKey)}]">
+            <span></span>
+            <span class="devtools-grid__head">{{ $t('Tags') }}</span>
+            <span class="devtools-grid__head">{{ $t('Extra discount') }}</span>
+            <span class="devtools-grid__name">{{ $t('All cards') }}</span>
+            <span></span>
+            <input type="number" min="0" class="devtools-input" v-model.number="stats.cardDiscount" @input="schedulePlayer('cardDiscount')">
+            <template v-for="tag in tagList" :key="tag">
+              <span class="devtools-grid__name devtools-grid__name--tag"><Tag :tag="tag" size="small"/>{{ $t(tag) }}</span>
+              <input type="number" min="0" class="devtools-input" v-model.number="tags[tag]" @input="schedulePlayer('tags')">
+              <input type="number" min="0" class="devtools-input" v-model.number="tagDiscounts[tag]" @input="schedulePlayer('tagDiscounts')">
+            </template>
+          </div>
+        </div>
+      </div>
+
       <h4 class="devtools__group-title">{{ $t('Card') }}</h4>
-      <input class="devtools-input" :list="listId" v-model="cardSearch" :placeholder="$t('Search project card')">
+      <div class="devtools-card-row">
+        <input class="devtools-input" :list="listId" v-model="cardSearch" :placeholder="$t('Search project card')">
+        <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('hand')">{{ $t('Into the hand') }}</button>
+        <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('tableau')">{{ $t('Into play (without effect)') }}</button>
+      </div>
       <datalist :id="listId">
         <option v-for="card in cardOptions" :key="card.name" :value="card.label"></option>
       </datalist>
-      <div class="devtools-pair">
-        <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('hand')">{{ $t('Into the hand') }}</button>
-        <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('tableau')">{{ $t('Into play (without effect)') }}</button>
+
+      <h4 class="devtools__group-title">{{ $t('Ask now') }}</h4>
+      <div class="devtools-triggers">
+        <button v-for="trigger in triggers" :key="trigger.key" type="button" class="btn devtools-button" @click="sendTrigger(trigger.key)">{{ $t(trigger.label) }}</button>
       </div>
     </div>
     <p v-if="error !== ''" class="devtools__error">{{ error }}</p>
@@ -75,22 +113,28 @@ import {BoardName} from '@/common/boards/BoardName';
 import {THEMES, Theme} from '@/common/theme/Theme';
 import {CardName} from '@/common/cards/CardName';
 import {CardType} from '@/common/cards/CardType';
+import {ALL_TAGS, Tag as TagName} from '@/common/cards/Tag';
 import {Units} from '@/common/Units';
 import {isPlayerId} from '@/common/Types';
 import * as constants from '@/common/constants';
 import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
-import {DevToolsAction, DEVTOOLS_UNIT_KEYS, PLANET_SPACE_TYPES} from '@/common/devtools/devToolsAction';
+import {DevToolsAction, DevToolsPlayerAction, DevToolsTrigger, DEVTOOLS_TRIGGERS, DEVTOOLS_TRIGGER_LABELS, DEVTOOLS_UNIT_KEYS,
+  PLANET_SPACE_TYPES} from '@/common/devtools/devToolsAction';
 import {getCards} from '@/client/cards/ClientCardManifest';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {vueRoot} from '@/client/components/vueRoot';
+import Tag from '@/client/components/Tag.vue';
 import {sendDevToolsAction} from '@/client/devtools/devToolsApi';
 import {KeyedDebounce} from '@/client/devtools/devToolsDebounce';
+import {closeDevTools} from '@/client/devtools/devToolsState';
 import {temperatureText} from '@/client/theme/themeDisplay';
 
 type UnitKey = typeof DEVTOOLS_UNIT_KEYS[number];
 type SliderKey = 'fill' | 'oceans' | 'temperature' | 'oxygen' | 'venus';
 type Slider = {key: SliderKey, label: string, min: number, max: number, step: number};
 type Values = Record<SliderKey, number>;
+type PlayerField = 'terraformRating' | 'victoryPoints' | 'cardDiscount' | 'tags' | 'tagDiscounts';
+type TagNumbers = Partial<Record<TagName, number>>;
 
 const UNITS: ReadonlyArray<{key: UnitKey, label: string, stock: keyof PublicPlayerModel, production: keyof PublicPlayerModel}> = [
   {key: 'megacredits', label: 'MegaCredits', stock: 'megacredits', production: 'megacreditProduction'},
@@ -100,8 +144,11 @@ const UNITS: ReadonlyArray<{key: UnitKey, label: string, stock: keyof PublicPlay
   {key: 'energy', label: 'Energy', stock: 'energy', production: 'energyProduction'},
   {key: 'heat', label: 'Heat', stock: 'heat', production: 'heatProduction'},
 ];
+// Clone tags only stand in for another tag while a card is played: nothing to count
+const TAG_LIST: ReadonlyArray<TagName> = ALL_TAGS.filter((tag) => tag !== TagName.CLONE);
 const PROJECT_TYPES: ReadonlyArray<CardType> = [CardType.AUTOMATED, CardType.ACTIVE, CardType.EVENT];
 const SETUP_KEY = 'setup';
+const GENERATION_KEY = 'generation';
 let instances = 0;
 
 // What the game shows now, in the units of the sliders
@@ -131,6 +178,9 @@ function actionFor(key: SliderKey, value: number): DevToolsAction {
 
 export default defineComponent({
   name: 'DevToolsPanel',
+  components: {
+    Tag,
+  },
   props: {
     game: {
       type: Object as PropType<GameModel>,
@@ -140,16 +190,27 @@ export default defineComponent({
       type: Array as PropType<ReadonlyArray<PublicPlayerModel>>,
       required: true,
     },
+    // Colour of the player whose page this is: a question asked of him shows below, so the DevTools step aside
+    viewerColor: {
+      type: String as PropType<Color>,
+      required: true,
+    },
   },
   data() {
     instances++;
     return {
       listId: 'devtools-cards-' + instances,
       values: valuesOf(this.game),
+      generation: this.game.generation,
       setup: {boardName: this.game.gameOptions.boardName, theme: this.game.gameOptions.theme},
       color: (this.players[0]?.color ?? 'red') as Color,
       stock: {} as Partial<Units>,
       production: {} as Partial<Units>,
+      stats: {terraformRating: 0, victoryPoints: 0, cardDiscount: 0},
+      tags: {} as TagNumbers,
+      tagDiscounts: {} as TagNumbers,
+      // Fields of the player changed since the last send: only those go to the server (points follow from tags)
+      changedFields: new Set<PlayerField>(),
       cardSearch: '',
       error: '',
       // Counter only: makes the pending marks follow the timers (the debounce itself is not reactive)
@@ -174,14 +235,15 @@ export default defineComponent({
           this.values[key] = current[key];
         }
       }
+      if (!this.debounce.isPending(GENERATION_KEY)) {
+        this.generation = this.game.generation;
+      }
       if (!this.debounce.isPending(SETUP_KEY)) {
         this.setup = {boardName: this.game.gameOptions.boardName, theme: this.game.gameOptions.theme};
       }
     },
     players() {
-      if (!this.debounce.isPending(this.resourcesKey)) {
-        this.loadPlayerValues();
-      }
+      this.loadPlayerValues();
     },
   },
   computed: {
@@ -209,12 +271,26 @@ export default defineComponent({
     units() {
       return UNITS;
     },
+    tagList(): ReadonlyArray<TagName> {
+      return TAG_LIST;
+    },
+    // The worm only where the game has one (Dune expansion)
+    triggers(): Array<{key: DevToolsTrigger, label: string}> {
+      return DEVTOOLS_TRIGGERS
+        .filter((key) => key !== 'worm' || this.game.dune?.worm !== undefined)
+        .map((key) => ({key, label: DEVTOOLS_TRIGGER_LABELS[key]}));
+    },
     resourcesKey(): string {
       return 'resources-' + this.color;
     },
-    // Translated names, so the search works in the language of the page
+    playerKey(): string {
+      return 'player-' + this.color;
+    },
+    // Names in the wording of the theme (translateText reads the theme texts first), so the search works in the
+    // language and theme of the page. Cards of the Dune expansion only where the game is shown as Dune
     cardOptions(): Array<{name: CardName, label: string}> {
-      return getCards((card) => PROJECT_TYPES.includes(card.type))
+      const dune = this.game.gameOptions.theme === 'dune';
+      return getCards((card) => PROJECT_TYPES.includes(card.type) && (dune || card.module !== 'dune'))
         .map((card) => ({name: card.name, label: translateText(card.name)}))
         .sort((a, b) => a.label.localeCompare(b.label));
     },
@@ -250,6 +326,9 @@ export default defineComponent({
     scheduleSlider(key: SliderKey): void {
       this.schedule(key, () => void this.send(actionFor(key, this.values[key])));
     },
+    scheduleGeneration(): void {
+      this.schedule(GENERATION_KEY, () => void this.send({type: 'globals', generation: this.generation}));
+    },
     scheduleSetup(): void {
       this.schedule(SETUP_KEY, () => void this.send({type: 'setup', ...this.setup}));
     },
@@ -260,19 +339,56 @@ export default defineComponent({
       const production = {...this.production};
       this.schedule(this.resourcesKey, () => void this.send({type: 'resources', color, stock, production}));
     },
+    schedulePlayer(field: PlayerField): void {
+      this.changedFields.add(field);
+      const action: DevToolsPlayerAction = {type: 'player', color: this.color};
+      for (const changed of this.changedFields) {
+        switch (changed) {
+        case 'tags':
+          action.tags = {...this.tags};
+          break;
+        case 'tagDiscounts':
+          action.tagDiscounts = {...this.tagDiscounts};
+          break;
+        default:
+          action[changed] = this.stats[changed];
+        }
+      }
+      this.schedule(this.playerKey, () => {
+        this.changedFields.clear();
+        void this.send(action);
+      });
+    },
+    choosePlayer(color: Color): void {
+      // Changes of the player before are sent at once, so they cannot end up with the next one
+      this.debounce.flushAll();
+      this.color = color;
+      this.loadPlayerValues();
+    },
     loadPlayerValues(): void {
       const player = this.players.find((candidate) => candidate.color === this.color);
       if (player === undefined) {
         return;
       }
-      const stock: Partial<Units> = {};
-      const production: Partial<Units> = {};
-      for (const unit of UNITS) {
-        stock[unit.key] = Number(player[unit.stock]);
-        production[unit.key] = Number(player[unit.production]);
+      if (!this.debounce.isPending(this.resourcesKey)) {
+        const stock: Partial<Units> = {};
+        const production: Partial<Units> = {};
+        for (const unit of UNITS) {
+          stock[unit.key] = Number(player[unit.stock]);
+          production[unit.key] = Number(player[unit.production]);
+        }
+        this.stock = stock;
+        this.production = production;
       }
-      this.stock = stock;
-      this.production = production;
+      if (!this.debounce.isPending(this.playerKey)) {
+        this.stats = {
+          terraformRating: player.terraformRating,
+          victoryPoints: player.victoryPointsBreakdown.total,
+          cardDiscount: player.cardDiscount,
+        };
+        this.tags = Object.fromEntries(TAG_LIST.map((tag) => [tag, player.tags[tag] ?? 0]));
+        this.tagDiscounts = Object.fromEntries(TAG_LIST.map((tag) => [tag, player.devToolsTagDiscounts?.[tag] ?? 0]));
+      }
     },
     async send(action: DevToolsAction): Promise<void> {
       const playerId = new URLSearchParams(window.location.search).get('id') ?? '';
@@ -290,6 +406,12 @@ export default defineComponent({
     sendCard(to: 'hand' | 'tableau'): void {
       if (this.chosenCard !== undefined) {
         void this.send({type: 'card', color: this.color, card: this.chosenCard, to});
+      }
+    },
+    async sendTrigger(trigger: DevToolsTrigger): Promise<void> {
+      await this.send({type: 'trigger', color: this.color, trigger});
+      if (this.error === '' && this.color === this.viewerColor) {
+        closeDevTools();
       }
     },
   },

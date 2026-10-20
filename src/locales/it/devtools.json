@@ -16,5 +16,17 @@
   "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "Modifica la partita per tutti i giocatori e scrive ogni modifica nel registro. Ogni modifica viene inviata da sola un secondo dopo l'ultimo tocco.",
   "🛠 DevTools: oceans set to ${0}": "🛠 DevTools: oceani impostati a ${0}",
   "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 DevTools: tabellone cambiato in ${0} (${1} tessere non entravano)",
-  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: tema cambiato in ${0}"
+  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: tema cambiato in ${0}",
+  "Rating and points": "Grado e punti",
+  "Tags and discounts": "Simboli e sconti",
+  "Extra discount": "Sconto extra",
+  "Ask now": "Chiedi ora",
+  "Pay too much": "Paga troppo",
+  "Convert energy to heat": "Converti energia in calore",
+  "Claim a milestone for free": "Rivendica un traguardo gratis",
+  "Move the worm": "Muovi il verme",
+  "Pay for DevTools test": "Paga per il test DevTools",
+  "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: grado, punti, simboli e sconti di ${0} impostati",
+  "🛠 DevTools: generation set to ${0}": "🛠 DevTools: generazione impostata a ${0}",
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: a ${0} viene chiesto: ${1}"
 }

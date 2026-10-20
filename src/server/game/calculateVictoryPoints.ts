@@ -34,6 +34,11 @@ export function calculateVictoryPoints(player: IPlayer) {
     negativeVP -= cities;
   }
 
+  // DevTools: points set beyond the rules (devtools/devToolsPlayer.ts)
+  if (player.devTools.victoryPoints !== 0) {
+    builder.setVictoryPoints('victoryPoints', player.devTools.victoryPoints);
+  }
+
   // Victory points from TR
   builder.setVictoryPoints('terraformRating', player.terraformRating);
 

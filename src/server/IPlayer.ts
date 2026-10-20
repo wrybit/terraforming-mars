@@ -37,6 +37,7 @@ import {PlayedCards} from './cards/PlayedCards';
 import {From} from './logs/From';
 import {Tag} from '../common/cards/Tag';
 import {SelectStandardProjectToPlay} from './inputs/SelectStandardProjectToPlay';
+import {DevToolsPlayerState} from '../common/devtools/devToolsAction';
 
 /**
  * Represents additional costs a player must pay to execute an action.
@@ -74,6 +75,7 @@ export interface IPlayer {
   readonly game: IGame;
   tags: Tags;
   colonies: Colonies;
+  devTools: DevToolsPlayerState;
   readonly production: Production;
   readonly stock: Stock;
   readonly terraformRating: number;
@@ -375,6 +377,7 @@ export interface IPlayer {
   getWaitingFor(): PlayerInput | undefined;
   setWaitingFor(input: PlayerInput, cb?: () => void): void;
   setWaitingForSafely(input: PlayerInput, cb?: () => void): void;
+  interruptWaitingFor(input: PlayerInput, after: (resume: () => void) => void): void;
   clearWaitingFor(): void;
   serialize(): SerializedPlayer;
 

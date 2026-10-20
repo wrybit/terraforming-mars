@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {KanlyModel} from '@/common/dune/DuneModel';
 import {battleWinner} from '@/common/dune/kanlyBattle';
 import {arrakisCoordinate, arrakisNeighbours, arrakisSpacePosition} from '@/common/dune/arrakisCoordinates';
-import {ARRAKIS_LARGE_LAYOUT, ARRAKIS_LAYOUT} from '@/common/dune/arrakisLayout';
+import {ARRAKIS_91_LAYOUT, ARRAKIS_LAYOUT} from '@/common/dune/arrakisLayout';
 import {kanlyForecast, kanlySendConversion} from '@/client/components/dune/kanlyForecast';
 import {KANLY_SEND_TITLE} from '@/common/dune/duneActionTitles';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
@@ -60,15 +60,15 @@ describe('Arrakis geometry', () => {
 
   // The drawn large map rounds the half spaces (129 / 374 px in board_items_positions.less .board--large)
   it('places the large board like the drawn large map', () => {
-    expect(arrakisSpacePosition(ARRAKIS_LARGE_LAYOUT, '03')).deep.eq({x: 128.5, y: 34});
-    expect(arrakisSpacePosition(ARRAKIS_LARGE_LAYOUT, '43')).deep.eq({x: 6, y: 239});
-    expect(arrakisSpacePosition(ARRAKIS_LARGE_LAYOUT, '93')).deep.eq({x: 373.5, y: 444});
-    expect(arrakisCoordinate(ARRAKIS_LARGE_LAYOUT, '93')).eq('K6');
+    expect(arrakisSpacePosition(ARRAKIS_91_LAYOUT, '03')).deep.eq({x: 128.5, y: 34});
+    expect(arrakisSpacePosition(ARRAKIS_91_LAYOUT, '43')).deep.eq({x: 6, y: 239});
+    expect(arrakisSpacePosition(ARRAKIS_91_LAYOUT, '93')).deep.eq({x: 373.5, y: 444});
+    expect(arrakisCoordinate(ARRAKIS_91_LAYOUT, '93')).eq('K6');
   });
 
   it('finds six neighbours inside and fewer at the rim', () => {
     expect(arrakisNeighbours(ARRAKIS_LAYOUT, '32').sort()).deep.eq(['23', '24', '31', '33', '40', '41']);
     expect(arrakisNeighbours(ARRAKIS_LAYOUT, '03').sort()).deep.eq(['04', '08', '09']);
-    expect(arrakisNeighbours(ARRAKIS_LARGE_LAYOUT, '03').sort()).deep.eq(['04', '09', '10']);
+    expect(arrakisNeighbours(ARRAKIS_91_LAYOUT, '03').sort()).deep.eq(['04', '09', '10']);
   });
 });

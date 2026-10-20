@@ -84,6 +84,7 @@ import {AlliedParty} from '../common/turmoil/Types';
 import {PlayedCards} from './cards/PlayedCards';
 import {From} from './logs/From';
 import {SelectStandardProjectToPlay} from './inputs/SelectStandardProjectToPlay';
+import {DevToolsPlayerState, emptyDevToolsPlayerState} from '../common/devtools/devToolsAction';
 
 const THROW_STATE_ERRORS = Boolean(process.env.THROW_STATE_ERRORS);
 const DEFAULT_GLOBAL_PARAMETER_STEPS = {
@@ -105,6 +106,8 @@ export class Player implements IPlayer {
   public game: IGame;
   public tags: Tags;
   public colonies: Colonies;
+  /** What the DevTools gave this player beyond the rules (devtools/devToolsPlayer.ts); empty in every normal game */
+  public devTools: DevToolsPlayerState = emptyDevToolsPlayerState();
   public readonly production: Production;
   public readonly stock: Stock;
   public readonly opponents: ReadonlyArray<IPlayer> = [];
@@ -734,6 +737,11 @@ export class Player implements IPlayer {
   public getCardCost(card: IProjectCard): number {
     let cost = card.cost;
     cost -= this.colonies.cardDiscount;
+    // DevTools: a discount for every card, and one per tag of the card (each tag once, like the discount cards)
+    cost -= this.devTools.cardDiscount;
+    for (const tag of new Set(card.tags)) {
+      cost -= this.devTools.tagDiscounts[tag] ?? 0;
+    }
 
     for (const playedCard of this.tableau) {
       cost -= playedCard.getCardDiscount?.(this, card) ?? 0;
@@ -1800,6 +1808,23 @@ export class Player implements IPlayer {
    *
    * This was only built for the Philares/Final Greenery case. Might not work elsewhere.
    */
+  /**
+   * DevTools (devtools/devToolsTriggers.ts): asks `input` right now, in front of whatever the player is asked already.
+   * `after` gets a resume function that puts the earlier question back, so the interrupted turn goes on as it was.
+   */
+  public interruptWaitingFor(input: PlayerInput, after: (resume: () => void) => void): void {
+    const previous = this.waitingFor;
+    const previousCb = this.waitingForCb;
+    this.waitingFor = undefined;
+    this.waitingForCb = undefined;
+    this.setWaitingFor(input, () => after(() => {
+      if (previous !== undefined && previousCb !== undefined && this.waitingFor === undefined) {
+        this.waitingFor = previous;
+        this.waitingForCb = previousCb;
+      }
+    }));
+  }
+
   public setWaitingForSafely(input: PlayerInput, cb: () => void = () => {}): void {
     if (this.waitingFor === undefined) {
       this.setWaitingFor(input, cb);
@@ -1877,6 +1902,7 @@ export class Player implements IPlayer {
       cardCost: this.cardCost,
       needsToDraft: this.needsToDraft,
       cardDiscount: this.colonies.cardDiscount,
+      devTools: this.devTools,
       // Colonies
       fleetSize: this.colonies.getFleetSize(),
       tradesThisGeneration: this.colonies.usedTradeFleets,
@@ -1942,6 +1968,7 @@ export class Player implements IPlayer {
     player.canUseTitaniumAsMegacredits = d.canUseTitaniumAsMegacredits;
     player.cardCost = d.cardCost;
     player.colonies.cardDiscount = d.cardDiscount;
+    player.devTools = {...emptyDevToolsPlayerState(), ...d.devTools};
     player.colonies.tradeDiscount = d.colonyTradeDiscount;
     player.colonies.tradeOffset = d.colonyTradeOffset;
     player.colonies.setFleetSize(d.fleetSize);

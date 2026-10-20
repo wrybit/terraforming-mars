@@ -12,7 +12,7 @@ import {SelectAmount} from '../inputs/SelectAmount';
 import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
 import {KanlyModel} from '../../common/dune/DuneModel';
-import {ArrakisBoard} from '../boards/ArrakisBoard';
+import {Arrakis61Board} from '../boards/Arrakis61Board';
 import {CardName} from '../../common/cards/CardName';
 import {RESOURCE_LABEL} from './resourceLabels';
 
@@ -121,7 +121,7 @@ function openInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
     player.stock.deduct(Resource.MEGACREDITS, OPEN_KANLY_COST, {log: true});
     data.battle = {spaceId: space.id, opener: player.id, troops: {}};
     data.foughtThisGeneration = true;
-    if (player.game.board instanceof ArrakisBoard) {
+    if (player.game.board instanceof Arrakis61Board) {
       player.game.board.warFieldSpaceId = space.id;
     }
     // Shield Generator card: 2 Sardaukar defend the owner's tile for free

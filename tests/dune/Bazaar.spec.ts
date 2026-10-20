@@ -35,7 +35,7 @@ describe('Bazaar of Arrakeen (Dune module A)', () => {
   let player3: TestPlayer;
 
   beforeEach(() => {
-    [game, player1, player2, player3] = testGame(3, {theme: 'dune', boardName: BoardName.ARRAKIS, duneModules: ['bazaar']});
+    [game, player1, player2, player3] = testGame(3, {theme: 'dune', boardName: BoardName.ARRAKIS_61, duneModules: ['bazaar']});
     for (const player of [player1, player2, player3]) {
       player.megaCredits = 100;
     }
@@ -57,7 +57,7 @@ describe('Bazaar of Arrakeen (Dune module A)', () => {
   });
 
   it('is not part of a game without the module', () => {
-    const [plain] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS});
+    const [plain] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS_61});
     expect(plain.duneData).is.undefined;
   });
 

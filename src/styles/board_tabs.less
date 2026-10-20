@@ -155,12 +155,8 @@
   display: none;
 }
 
-.tile-view-toggle {
-  position: absolute;
-  left: 50%;
-  bottom: 8px;
-  z-index: 5;
-  transform: translateX(-50%);
+// Pill switch of a few options (board tile view, DevTools player choice in devtools.less): one look for both
+.segmented-toggle() {
   display: inline-flex;
   padding: 2px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -169,7 +165,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
 }
 
-.tile-view-toggle__option {
+.segmented-toggle-option() {
   height: 22px;
   padding: 0 10px;
   border: 0;
@@ -190,6 +186,19 @@
     background: @bg_action;
     color: #fff;
   }
+}
+
+.tile-view-toggle {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  z-index: 5;
+  transform: translateX(-50%);
+  .segmented-toggle();
+}
+
+.tile-view-toggle__option {
+  .segmented-toggle-option();
 }
 
 // Moon tab: the ring board scaled to the box (boardTabFit.ts), centred vertically and horizontally;

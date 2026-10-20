@@ -6,6 +6,8 @@ import {RouteError} from '../routes/RouteError';
 import {applyGlobals} from './devToolsGlobals';
 import {applyOceans, applyTerraform} from './devToolsTerraform';
 import {switchSetup} from './devToolsSetup';
+import {applyPlayer} from './devToolsPlayer';
+import {applyTrigger} from './devToolsTriggers';
 import {applyResources} from './devToolsResources';
 import {applyCard} from './devToolsCards';
 
@@ -36,6 +38,12 @@ export function applyDevToolsAction(game: IGame, action: DevToolsAction): IGame 
     break;
   case 'card':
     applyCard(playerOf(game, action.color), action);
+    break;
+  case 'player':
+    applyPlayer(playerOf(game, action.color), action);
+    break;
+  case 'trigger':
+    applyTrigger(game, playerOf(game, action.color), action);
     break;
   }
   return game;

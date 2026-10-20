@@ -16,5 +16,17 @@
   "Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.": "Wijzigt het spel voor alle spelers en schrijft elke wijziging in het spellog. Elke wijziging wordt vanzelf verstuurd, een seconde na de laatste aanraking.",
   "🛠 DevTools: oceans set to ${0}": "🛠 DevTools: oceanen op ${0} gezet",
   "🛠 DevTools: board changed to ${0} (${1} tiles did not fit)": "🛠 DevTools: bord veranderd in ${0} (${1} tegels pasten niet)",
-  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: thema veranderd in ${0}"
+  "🛠 DevTools: theme changed to ${0}": "🛠 DevTools: thema veranderd in ${0}",
+  "Rating and points": "Waardering en punten",
+  "Tags and discounts": "Symbolen en kortingen",
+  "Extra discount": "Extra korting",
+  "Ask now": "Nu vragen",
+  "Pay too much": "Te veel betalen",
+  "Convert energy to heat": "Energie omzetten in warmte",
+  "Claim a milestone for free": "Mijlpaal gratis claimen",
+  "Move the worm": "Worm verplaatsen",
+  "Pay for DevTools test": "Betalen voor DevTools-test",
+  "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: waardering, punten, symbolen en kortingen van ${0} ingesteld",
+  "🛠 DevTools: generation set to ${0}": "🛠 DevTools: generatie op ${0} gezet",
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} wordt gevraagd: ${1}"
 }

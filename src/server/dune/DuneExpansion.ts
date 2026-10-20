@@ -6,7 +6,7 @@ import {OrOptions} from '../inputs/OrOptions';
 import {Random} from '../../common/utils/Random';
 import {DuneModule} from '../../common/dune/DuneModule';
 import {DuneModel} from '../../common/dune/DuneModel';
-import {ArrakisBoard} from '../boards/ArrakisBoard';
+import {Arrakis61Board} from '../boards/Arrakis61Board';
 import {ARRAKIS_LAYOUT, ArrakisLayout, arrakisLayout} from '../../common/dune/arrakisLayout';
 import {VictoryPointsBreakdownBuilder} from '../game/VictoryPointsBreakdownBuilder';
 import {BazaarData, bazaarModel, bazaarTabActions, buyInput, initializeBazaar, slideAndRefill} from './Bazaar';
@@ -133,7 +133,7 @@ export class DuneExpansion {
 
   /** After creating or loading a game: tell the board where the worm lies (nothing may be placed there) */
   public static attach(game: IGame): void {
-    if (game.board instanceof ArrakisBoard) {
+    if (game.board instanceof Arrakis61Board) {
       game.board.wormSpaceId = game.duneData?.worm?.spaceId;
       game.board.warFieldSpaceId = game.duneData?.kanly?.battle?.spaceId;
     }

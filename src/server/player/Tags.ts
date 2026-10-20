@@ -66,7 +66,7 @@ export class Tags {
       }
       counts[tag] = this.count(tag, 'raw');
     }
-    counts[Tag.EVENT] = this.player.getPlayedEventsCount();
+    counts[Tag.EVENT] = this.player.getPlayedEventsCount() + (this.player.devTools.extraTags[Tag.EVENT] ?? 0);
     return counts;
   }
 
@@ -78,6 +78,8 @@ export class Tags {
     const includeTagSubstitutions = (mode === 'default' || mode === 'milestone');
 
     let tagCount = this.rawCount(tag, includeEvents);
+    // Tags the DevTools added (devtools/devToolsPlayer.ts) count like printed ones
+    tagCount += this.player.devTools.extraTags[tag] ?? 0;
 
     // Leavitt Station, Underworld
     if (tag === Tag.SCIENCE) {

@@ -41,7 +41,7 @@ describe('Dune expansion cards (E01–E16)', () => {
   let player2: TestPlayer;
 
   beforeEach(() => {
-    [game, player1, player2] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS, duneModules: [...DUNE_MODULES]});
+    [game, player1, player2] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS_61, duneModules: [...DUNE_MODULES]});
   });
 
   it('come into the deck only with their module', () => {

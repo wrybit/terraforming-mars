@@ -1,5 +1,5 @@
 import {BoardName} from '@/common/boards/BoardName';
-import {ARRAKIS_LARGE_LAYOUT, ARRAKIS_LAYOUT, ArrakisLayout} from '@/common/dune/arrakisLayout';
+import {ARRAKIS_91_LAYOUT, ARRAKIS_LAYOUT, ArrakisLayout} from '@/common/dune/arrakisLayout';
 import {arrakisSpacePosition} from '@/common/dune/arrakisCoordinates';
 
 export type Key = {
@@ -44,6 +44,6 @@ export const LEGENDS: Record<BoardName, ReadonlyArray<Key>> = {
   ],
   [BoardName.HOLLANDIA]: [],
   [BoardName.AMAZONIS_PLANITIA]: [],
-  [BoardName.ARRAKIS]: arrakisLegends(ARRAKIS_LAYOUT),
-  [BoardName.ARRAKIS_LARGE]: arrakisLegends(ARRAKIS_LARGE_LAYOUT),
+  [BoardName.ARRAKIS_61]: arrakisLegends(ARRAKIS_LAYOUT),
+  [BoardName.ARRAKIS_91]: arrakisLegends(ARRAKIS_91_LAYOUT),
 };
