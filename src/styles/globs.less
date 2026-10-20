@@ -392,46 +392,47 @@
   // occupy on the standard track: @venus-arc-*-large are the fitted angles of 0 and 30, and each
   // value's angle is interpolated from its position in @venus-vals-large. Rotation = angle - 270.1deg.
   // The large Arrakis (Jens, 20 Oct 2026): its scales start further out than the Amazonis ones, so the spice fields fit
-  // between their low ends at full size (arrakisSpiceFields.ts). Same tops (14 % vegetation at 194deg, +8 °C at
-  // -23.3deg), the steps evenly spread from there down (contract with arrakisScales.ts LARGE_SCALES).
+  // between their low ends at full size (arrakisSpiceFields.ts), and reach further up, closer together at the top, so
+  // every step is a little longer: both span 97deg, mirrored about the vertical axis (contract with arrakisScales.ts
+  // LARGE_SCALES).
   @oxygen-vals-arrakis-large:
     0 117deg,
-    1 122.5deg,
-    2 128deg,
-    3 133.5deg,
-    4 139deg,
-    5 144.5deg,
-    6 150deg,
-    7 155.5deg,
-    8 161deg,
-    9 166.5deg,
-    10 172deg,
-    11 177.5deg,
-    12 183deg,
-    13 188.5deg,
-    14 194deg;
+    1 123.9deg,
+    2 130.9deg,
+    3 137.8deg,
+    4 144.7deg,
+    5 151.6deg,
+    6 158.6deg,
+    7 165.5deg,
+    8 172.4deg,
+    9 179.4deg,
+    10 186.3deg,
+    11 193.2deg,
+    12 200.1deg,
+    13 207.1deg,
+    14 214deg;
 
   @temperature-vals-arrakis-large:
     -30 63deg,
-    -28 58.5deg,
-    -26 53.9deg,
-    -24 49.4deg,
-    -22 44.8deg,
-    -20 40.3deg,
-    -18 35.7deg,
-    -16 31.2deg,
-    -14 26.7deg,
-    -12 22.1deg,
-    -10 17.6deg,
-    -8 13deg,
-    -6 8.5deg,
-    -4 4deg,
-    -2 -0.6deg,
-    0 -5.1deg,
-    2 -9.7deg,
-    4 -14.2deg,
-    6 -18.8deg,
-    8 -23.3deg;
+    -28 57.9deg,
+    -26 52.8deg,
+    -24 47.7deg,
+    -22 42.6deg,
+    -20 37.5deg,
+    -18 32.4deg,
+    -16 27.3deg,
+    -14 22.2deg,
+    -12 17.1deg,
+    -10 11.9deg,
+    -8 6.8deg,
+    -6 1.7deg,
+    -4 -3.4deg,
+    -2 -8.5deg,
+    0 -13.6deg,
+    2 -18.7deg,
+    4 -23.8deg,
+    6 -28.9deg,
+    8 -34deg;
 
   &.global-numbers--large.global-numbers--arrakis {
     .global-numbers-oxygen {
