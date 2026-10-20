@@ -54,6 +54,8 @@ describe('PaymentUnit', () => {
     expect(minusBtn).to.not.be.undefined;
     expect(plusBtn).to.not.be.undefined;
     expect(targetBtn.text()).to.eq('8');
+    // M€ row: the value as the coin of the button counters
+    expect(targetBtn.find('.button-count--megacredits').exists()).is.true;
 
     await minusBtn!.vm.$emit('click');
     expect(wrapper.emitted('minus')).to.not.be.undefined;
