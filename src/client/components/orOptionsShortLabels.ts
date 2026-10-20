@@ -169,7 +169,7 @@ export function tabButtonCentered(option: PlayerInputModel): boolean {
 
 // Tab color of an action: fixed tones by title, otherwise for a content-free option the tile its button
 // announces (e.g. Tharsis Republic "Place a city tile" -> gray like the city tab that follows)
-export type OptionTone = TabButtonTone | PreviewTile | 'colonies' | 'gold' | 'dune';
+export type OptionTone = TabButtonTone | PreviewTile | 'colonies' | 'gold' | 'dune' | 'temperature' | 'oxygen';
 
 // Spending money on the board: milestone, award, standard projects, selling patents – dark yellow tabs
 // (or_tab_tones.less: gold)
@@ -180,9 +180,16 @@ const GOLD_TAB_TONES: Readonly<Record<string, OptionTone>> = {
   'Sell patents': 'gold',
 };
 
+// World Government terraforming (Game.ts): one tab per parameter. Colored only in the Dune theme
+// (or_tab_tones.less: water store blue, vegetation green); on Mars they stay neutral as before
+const PARAMETER_TAB_TONES: Readonly<Record<string, OptionTone>> = {
+  'Increase temperature': 'temperature',
+  'Increase oxygen': 'oxygen',
+};
+
 export function optionTone(option: PlayerInputModel): OptionTone | undefined {
   const key = titleKey(option.title);
-  const tone = tabButtonTone(option.title) ?? EXPANSION_TAB_TONES[key] ?? GOLD_TAB_TONES[key];
+  const tone = tabButtonTone(option.title) ?? EXPANSION_TAB_TONES[key] ?? GOLD_TAB_TONES[key] ?? PARAMETER_TAB_TONES[key];
   if (tone !== undefined || option.type !== 'option') {
     return tone;
   }

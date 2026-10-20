@@ -1897,6 +1897,19 @@ html.tm-mobile {
     background: @mb-heat;
   }
 
+  // Dune theme: raising the temperature fills the water store – its tile and task header water blue (Jens, 20 Oct 2026)
+  &.theme-dune {
+    .mb-tile-icon--heat {
+      --mb-tile-tone: #5aa9f0;
+    }
+
+    .mb-tile--heat,
+    .mb-task-head--heat {
+      background: #1f5f9e;
+      border-color: #1f5f9e;
+    }
+  }
+
   .mb-task-head--success,
   .mb-task-head--heat {
     .mb-task-sub {

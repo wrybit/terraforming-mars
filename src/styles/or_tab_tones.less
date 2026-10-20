@@ -36,9 +36,8 @@
   @or-tab-tone-panel: fade(mix(@color, @or-tab-tone-base, 22%), @frosted-surface-opacity);
 }
 
-each(@or-tab-tones, {
-  @tone: extract(@value, 1);
-  @color: extract(@value, 2);
+// Rules of one tone: tab, box, banner and centred button. A mixin, so a theme can give a tone another color (below)
+.or-tab-tone(@tone, @color) {
   .or-tab-tone-panel(@color);
   @panel: @or-tab-tone-panel;
 
@@ -82,7 +81,25 @@ each(@or-tab-tones, {
     .button-tone(@color, lighten(@color, 8%));
     color: contrast(@color, @or-tab-tone-base, #fff) !important;
   }
+}
+
+each(@or-tab-tones, {
+  .or-tab-tone(extract(@value, 1), extract(@value, 2));
 });
+
+// Dune theme (Jens, 20 Oct 2026): the tones follow what the Mars parameter stands for on Arrakis – raising the
+// temperature fills the water store (water blue), oxygen is the vegetation (green), ocean tiles are spice fields
+// (spice orange). Temperature and oxygen of the World Government (orOptionsShortLabels.ts) only get a color here.
+@or-tab-tone-dune-water: #2f86d6;
+@or-tab-tone-dune-vegetation: #3f9d45;
+@or-tab-tone-dune-spice: #e0662a;
+
+html.theme-dune {
+  .or-tab-tone(heat, @or-tab-tone-dune-water);
+  .or-tab-tone(temperature, @or-tab-tone-dune-water);
+  .or-tab-tone(oxygen, @or-tab-tone-dune-vegetation);
+  .or-tab-tone(ocean, @or-tab-tone-dune-spice);
+}
 
 // In the red box (end round) the red warning would be barely readable – white there
 .or-tab-panel--tone-danger .card-warning {
