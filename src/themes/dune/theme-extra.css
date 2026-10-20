@@ -886,3 +886,21 @@ html.theme-dune .board-space-type-ocean {
   height: 46px;
   background-size: contain;
 }
+
+/* Coin with a number (ButtonCount, MoneyText, trade rates, overpayment): the raised medallion of the Dune coin
+   (graphics/coin.svg, variant B, Jens 20 Oct 2026) carries a dark brown, slightly embossed number at half the coin's
+   size, so two digits sit inside the field instead of touching its edge */
+html.theme-dune .button-count--megacredits {
+  color: #5a3606;
+  font-size: 14px;
+  letter-spacing: -0.04em;
+  text-shadow: 0 1px 0 rgba(255, 250, 230, 0.75), 0 -1px 0 rgba(90, 54, 6, 0.3);
+}
+
+html.theme-dune .trade-select__rate .button-count--megacredits {
+  font-size: 12px;
+}
+
+html.theme-dune .overpayment-dialog__coin.button-count--megacredits {
+  font-size: 22px;
+}
