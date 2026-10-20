@@ -906,10 +906,10 @@ html.theme-dune .overpayment-dialog__coin.button-count--megacredits {
 }
 
 /* Empty spaces on Arrakis: a fine hex with a light veil instead of the white Mars hex (assets/hex_white.png).
-   Taken from the planet colour preview (Jens 20 Oct 2026): thin outline, 12 % sand-white fill, so the map shows
+   Taken from the planet colour preview (Jens 20 Oct 2026): outline about 1.5 px at normal zoom (inner half of a 3.5 stroke), 12 % sand-white fill, so the map shows
    through and the hexes still read on the dark mountains. Only on the board itself – the terrain hexes of the
    map pieces (ArrakisHex.vue) keep their zone colour; volcanic spaces keep their Mars marking. */
 html.theme-dune .board > .board-space > .board-space-type-land:not(.board-space-type-land-volcanic) {
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 51'%3E%3Cpolygon points='23,0 46,12.75 46,38.25 23,51 0,38.25 0,12.75' fill='rgba(255,248,234,0.12)' stroke='rgba(255,248,234,0.55)' stroke-width='1'/%3E%3C/svg%3E") no-repeat;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 51'%3E%3Cpolygon points='23,0 46,12.75 46,38.25 23,51 0,38.25 0,12.75' fill='rgba(255,248,234,0.12)' stroke='rgba(255,248,234,0.6)' stroke-width='3.5'/%3E%3C/svg%3E") no-repeat;
   background-size: 100% 100%;
 }
