@@ -6,8 +6,9 @@
 
     <!-- Key figure first: how much is lost and for what -->
     <div class="overpayment-dialog__hero">
+      <!-- "+" in the coin colour, the amount inside the coin like every money counter (ButtonCount, Jens 20 Oct 2026) -->
       <span class="overpayment-dialog__excess" data-test="excess">
-        +{{ excess }}<i class="resource_icon resource_icon--megacredits"></i>
+        +<span class="button-count button-count--megacredits overpayment-dialog__coin">{{ excess }}</span>
       </span>
       <span class="overpayment-dialog__hero-text">
         <span class="overpayment-dialog__hero-label" v-i18n>too much</span>
@@ -57,7 +58,7 @@
       <button type="button" class="btn btn-tone-success overpayment-dialog__accept" data-test="accept" data-hotkey="confirm" @click="emit('accept')">
         <span v-i18n>Yes, pay anyway</span>
         <span class="overpayment-dialog__accept-excess" data-test="accept-excess">
-          <span class="overpayment-dialog__accept-figure"><span class="overpayment-dialog__accept-value">+{{ excess }}</span><i class="resource_icon resource_icon--megacredits"></i></span>
+          <span class="overpayment-dialog__accept-figure">+<span class="button-count button-count--megacredits">{{ excess }}</span></span>
         </span>
         <HotkeyKeys action="confirm"/>
       </button>

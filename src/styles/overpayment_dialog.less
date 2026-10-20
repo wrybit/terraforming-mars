@@ -42,11 +42,13 @@
   gap: 6px;
   color: @overpayment-excess;
   font: 600 40px/1 Prototype, sans-serif;
+}
 
-  .resource_icon {
-    width: 36px;
-    height: 36px;
-  }
+// The large coin of the key figure: the button counter coin (button_count.less), scaled up
+.overpayment-dialog__coin.button-count {
+  min-width: 44px;
+  height: 44px;
+  font-size: 22px;
 }
 
 .overpayment-dialog__hero-text {
@@ -217,17 +219,13 @@ each(@overpayment-tones, {
   align-items: center;
   gap: 3px;
   filter: drop-shadow(0 1px 1px fade(#000, 60%));
-
-  .resource_icon {
-    width: 18px;
-    height: 18px;
-  }
-}
-
-// Black outline like the one around the M€ icon; the stroke sits behind the fill so the digit keeps its weight
-.overpayment-dialog__accept-value {
   -webkit-text-stroke: 1.5px fade(#000, 55%);
   paint-order: stroke fill;
+
+  // The coin keeps its own black number without the outline of the "+"
+  .button-count {
+    -webkit-text-stroke: 0;
+  }
 }
 
 // Phone: both answers side by side instead of stacked (one decision, one row);
