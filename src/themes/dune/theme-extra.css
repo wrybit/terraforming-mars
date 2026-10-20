@@ -96,8 +96,8 @@ html.theme-dune .background-color-prelude {
   color: #fff8ea;
 }
 
-/* Requirement chip (variant A of the requirement study, Jens 19 Oct 2026): the whole chip in green (minimum) or
-   rust red (maximum), never wrapping: symbols, then an arrow in front of the value, then a MIN or MAX label.
+/* Requirement chip (variant A of the requirement study, Jens 19 Oct 2026): the whole chip in sun yellow with dark
+   text (minimum; green looked as if already reached, Jens 20 Oct 2026, variant B) or rust red (maximum), never wrapping: symbols, then an arrow in front of the value, then a MIN or MAX label.
    The chip is lower than the symbols, so every symbol sticks out above and below by the same amount. */
 html.theme-dune .card-requirements {
   flex: none;
@@ -114,13 +114,14 @@ html.theme-dune .card-requirements {
   white-space: nowrap;
   border: 0;
   border-radius: 12px;
-  background: linear-gradient(#5f9435, #3f6b20);
+  background: linear-gradient(#f6d368, #d9a127);
   box-shadow: 0 2px 0 rgb(0 0 0 / 25%), inset 0 1px 0 rgb(255 255 255 / 30%);
-  color: #fff;
+  color: #3b2408;
 }
 
 html.theme-dune .card-requirements.card-requirements-max {
   background: linear-gradient(#c6492f, #8f2c1b);
+  color: #fff;
 }
 
 html.theme-dune .card-requirements .card-requirement .card-item-container {
@@ -166,14 +167,16 @@ html.theme-dune .card-requirements::after {
   margin-left: 5px;
   padding: 3px 4px 2px;
   border-radius: 6px;
-  background: rgb(255 255 255 / 22%);
-  color: #fff;
+  background: rgb(59 36 8 / 16%);
+  color: #3b2408;
   font: 8px Michroma, sans-serif;
   line-height: 1;
 }
 
 html.theme-dune .card-requirements.card-requirements-max::after {
   content: "MAX";
+  background: rgb(255 255 255 / 22%);
+  color: #fff;
 }
 
 /* Bonus symbols: the Dune symbols are drawn shapes on a dark board, not bright full squares like the Mars pictures,
