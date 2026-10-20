@@ -250,6 +250,7 @@ export class Server {
       // DevTools discount for every card shows with the real one (overview/playerTagDetails.ts)
       cardDiscount: player.colonies.cardDiscount + player.devTools.cardDiscount,
       devToolsTagDiscounts: player.devTools.tagDiscounts,
+      devToolsProtectedHabitats: player.devTools.protectedHabitats,
       cardsInHandNbr: player.cardsInHand.length,
       citiesCount: game.board.getCities(player).length,
       coloniesCount: player.getColoniesCount(),

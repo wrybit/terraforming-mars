@@ -45,5 +45,7 @@
   "Select 3 resources of any kind": "Избери 3 произволни ресурса",
   "Select a special tile": "Избери специална плочка",
   "Select space for special tile": "Избери поле за специалната плочка",
-  "Select card to remove 1 resource": "Избери карта, от която да махнеш 1 ресурс"
+  "Select card to remove 1 resource": "Избери карта, от която да махнеш 1 ресурс",
+  "Steel value": "Стойност на стоманата",
+  "Titanium value": "Стойност на титана"
 }

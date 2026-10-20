@@ -45,5 +45,7 @@
   "Select 3 resources of any kind": "Виберіть 3 будь-які ресурси",
   "Select a special tile": "Виберіть особливий тайл",
   "Select space for special tile": "Виберіть клітинку для особливого тайла",
-  "Select card to remove 1 resource": "Виберіть карту, з якої зняти 1 ресурс"
+  "Select card to remove 1 resource": "Виберіть карту, з якої зняти 1 ресурс",
+  "Steel value": "Цінність сталі",
+  "Titanium value": "Цінність титану"
 }

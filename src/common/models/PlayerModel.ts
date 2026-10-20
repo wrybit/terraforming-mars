@@ -50,6 +50,8 @@ export type PublicPlayerModel = {
   cardDiscount: number;
   /** DevTools discounts per tag (common/devtools/devToolsAction.ts); empty in normal games */
   devToolsTagDiscounts?: Partial<Record<Tag, number>>;
+  /** DevTools: plants protected beyond the cards */
+  devToolsProtectedHabitats?: boolean;
   cardsInHandNbr: number;
   citiesCount: number;
   coloniesCount: number;

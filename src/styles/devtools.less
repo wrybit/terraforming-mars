@@ -301,6 +301,44 @@ html.tm-mobile .devtools {
   font-size: 13px;
 }
 
+// On/off switch, as wide as a number field so it lines up with the column of values
+.devtools-switch {
+  position: relative;
+  justify-self: end;
+  width: 42px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid @devtools-field-border;
+  border-radius: 999px;
+  background: @devtools-field-background;
+  cursor: pointer;
+
+  &--on {
+    border-color: @bg_action;
+    background: @bg_action;
+  }
+}
+
+.devtools-switch__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.15s;
+
+  .devtools-switch--on & {
+    left: 20px;
+  }
+}
+
+// A second heading in a group starts a new block: more room above it than between its rows
+.devtools__group > .devtools__group-title:not(:first-child) {
+  margin-top: 12px;
+}
+
 .devtools-grid--single {
   grid-template-columns: minmax(0, 1fr) 5.5em;
 }

@@ -307,6 +307,11 @@ export class Player implements IPlayer {
     this.titaniumValue++;
   }
 
+  /** DevTools (devtools/devToolsPlayer.ts): the value set directly, never below 1 */
+  public setTitaniumValue(value: number): void {
+    this.titaniumValue = Math.max(1, Math.round(value));
+  }
+
   public decreaseTitaniumValue(): void {
     if (this.titaniumValue > 0) {
       this.titaniumValue--;
@@ -327,6 +332,11 @@ export class Player implements IPlayer {
 
   public increaseSteelValue(): void {
     this.steelValue++;
+  }
+
+  /** DevTools (devtools/devToolsPlayer.ts): the value set directly, never below 1 */
+  public setSteelValue(value: number): void {
+    this.steelValue = Math.max(1, Math.round(value));
   }
 
   public decreaseSteelValue(): void {
@@ -398,7 +408,7 @@ export class Player implements IPlayer {
   }
 
   public plantsAreProtected(): boolean {
-    return this.withinDeflectionZone ||
+    return this.withinDeflectionZone || this.devTools.protectedHabitats ||
       this.playedCards.has(CardName.PROTECTED_HABITATS) ||
       this.playedCards.has(CardName.ASTEROID_DEFLECTION_SYSTEM);
   }

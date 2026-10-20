@@ -45,5 +45,7 @@
   "Select 3 resources of any kind": "好きな資源を3つ選んでください",
   "Select a special tile": "特殊タイルを選んでください",
   "Select space for special tile": "特殊タイルを置くマスを選んでください",
-  "Select card to remove 1 resource": "資源を1つ取り除くカードを選んでください"
+  "Select card to remove 1 resource": "資源を1つ取り除くカードを選んでください",
+  "Steel value": "鋼鉄の価値",
+  "Titanium value": "チタンの価値"
 }

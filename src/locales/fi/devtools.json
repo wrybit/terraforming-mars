@@ -44,5 +44,7 @@
   "Select 3 resources of any kind": "Valitse 3 mitä tahansa resurssia",
   "Select a special tile": "Valitse erikoislaatta",
   "Select space for special tile": "Valitse ruutu erikoislaatalle",
-  "Select card to remove 1 resource": "Valitse kortti, jolta poistetaan 1 resurssi"
+  "Select card to remove 1 resource": "Valitse kortti, jolta poistetaan 1 resurssi",
+  "Steel value": "Teräksen arvo",
+  "Titanium value": "Titaanin arvo"
 }

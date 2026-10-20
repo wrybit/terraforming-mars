@@ -43,5 +43,7 @@
   "Select 3 resources of any kind": "Wähle 3 beliebige Ressourcen",
   "Select a special tile": "Wähle ein Sonderplättchen",
   "Select space for special tile": "Wähle ein Feld für das Sonderplättchen",
-  "Select card to remove 1 resource": "Wähle eine Karte, von der 1 Ressource entfernt wird"
+  "Select card to remove 1 resource": "Wähle eine Karte, von der 1 Ressource entfernt wird",
+  "Steel value": "Wert von Stahl",
+  "Titanium value": "Wert von Titan"
 }

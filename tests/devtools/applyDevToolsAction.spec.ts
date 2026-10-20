@@ -120,6 +120,15 @@ describe('applyDevToolsAction', () => {
     expect(restored.getVictoryPoints().total).eq(50);
   });
 
+  it('protects the plants and sets the worth of steel and titanium', () => {
+    const [game, player] = testGame(2);
+    expect(player.plantsAreProtected()).is.false;
+    applyDevToolsAction(game, {type: 'player', color: player.color, protectedHabitats: true, steelValue: 4, titaniumValue: 5});
+    expect(player.plantsAreProtected()).is.true;
+    expect(player.getSteelValue()).eq(4);
+    expect(player.getTitaniumValue()).eq(5);
+  });
+
   it('sets the generation', () => {
     const [game] = testGame(2);
     applyDevToolsAction(game, {type: 'globals', generation: 7});

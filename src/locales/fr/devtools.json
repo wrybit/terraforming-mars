@@ -44,5 +44,7 @@
   "Select 3 resources of any kind": "Choisissez 3 ressources au choix",
   "Select a special tile": "Choisissez une tuile spéciale",
   "Select space for special tile": "Choisissez un emplacement pour la tuile spéciale",
-  "Select card to remove 1 resource": "Choisissez une carte dont retirer 1 ressource"
+  "Select card to remove 1 resource": "Choisissez une carte dont retirer 1 ressource",
+  "Steel value": "Valeur de l’acier",
+  "Titanium value": "Valeur du titane"
 }

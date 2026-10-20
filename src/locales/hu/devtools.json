@@ -44,5 +44,7 @@
   "Select 3 resources of any kind": "Válassz 3 tetszőleges nyersanyagot",
   "Select a special tile": "Válassz különleges lapkát",
   "Select space for special tile": "Válassz mezőt a különleges lapkának",
-  "Select card to remove 1 resource": "Válassz kártyát, amelyről 1 nyersanyag lekerül"
+  "Select card to remove 1 resource": "Válassz kártyát, amelyről 1 nyersanyag lekerül",
+  "Steel value": "Acél értéke",
+  "Titanium value": "Titán értéke"
 }

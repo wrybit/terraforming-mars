@@ -212,10 +212,12 @@ export interface IPlayer {
   setup(game: IGame): void;
 
   getTitaniumValue(): number;
+  setTitaniumValue(value: number): void;
   increaseTitaniumValue(): void;
   decreaseTitaniumValue(): void;
   getSelfReplicatingRobotsTargetCards(): Array<IProjectCard>;
   getSteelValue(): number;
+  setSteelValue(value: number): void;
   increaseSteelValue(): void;
   decreaseSteelValue(): void;
   increaseTerraformRating(steps?: number, opts?: {log?: boolean, from?: From}): void;

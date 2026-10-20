@@ -52,6 +52,16 @@
             <input type="number" class="devtools-input" v-model.number="stats.terraformRating" @input="schedulePlayer('terraformRating')">
             <span class="devtools-grid__name">{{ $t('Victory Points') }}</span>
             <input type="number" class="devtools-input" v-model.number="stats.victoryPoints" @input="schedulePlayer('victoryPoints')">
+            <span class="devtools-grid__name">{{ $t('Steel value') }}</span>
+            <input type="number" min="1" class="devtools-input" v-model.number="stats.steelValue" @input="schedulePlayer('steelValue')">
+            <span class="devtools-grid__name">{{ $t('Titanium value') }}</span>
+            <input type="number" min="1" class="devtools-input" v-model.number="stats.titaniumValue" @input="schedulePlayer('titaniumValue')">
+            <!-- Switch as a button: a checkbox in a label gets the option numbering of the action box -->
+            <span class="devtools-grid__name">{{ $t('Protected Habitats') }}</span>
+            <button type="button" role="switch" :aria-checked="stats.protectedHabitats"
+              :class="['devtools-switch', {'devtools-switch--on': stats.protectedHabitats}]" @click="toggleProtectedHabitats">
+              <span class="devtools-switch__knob"></span>
+            </button>
           </div>
 
           <h4 class="devtools__group-title">{{ $t('Resources and production') }}</h4>
@@ -138,7 +148,8 @@ type UnitKey = typeof DEVTOOLS_UNIT_KEYS[number];
 type SliderKey = 'fill' | 'oceans' | 'temperature' | 'oxygen' | 'venus';
 type Slider = {key: SliderKey, label: string, min: number, max: number, step: number};
 type Values = Record<SliderKey, number>;
-type PlayerField = 'terraformRating' | 'victoryPoints' | 'cardDiscount' | 'tags' | 'tagDiscounts';
+type PlayerField = 'terraformRating' | 'victoryPoints' | 'cardDiscount' | 'steelValue' | 'titaniumValue' | 'protectedHabitats' |
+  'tags' | 'tagDiscounts';
 type TagNumbers = Partial<Record<TagName, number>>;
 
 const UNITS: ReadonlyArray<{key: UnitKey, label: string, stock: keyof PublicPlayerModel, production: keyof PublicPlayerModel}> = [
@@ -212,7 +223,7 @@ export default defineComponent({
       color: (this.players.some((player) => player.color === this.viewerColor) ? this.viewerColor : this.players[0]?.color ?? 'red') as Color,
       stock: {} as Partial<Units>,
       production: {} as Partial<Units>,
-      stats: {terraformRating: 0, victoryPoints: 0, cardDiscount: 0},
+      stats: {terraformRating: 0, victoryPoints: 0, cardDiscount: 0, steelValue: 2, titaniumValue: 3, protectedHabitats: false},
       tags: {} as TagNumbers,
       tagDiscounts: {} as TagNumbers,
       // Fields of the player changed since the last send: only those go to the server (points follow from tags)
@@ -359,6 +370,9 @@ export default defineComponent({
         case 'tagDiscounts':
           action.tagDiscounts = {...this.tagDiscounts};
           break;
+        case 'protectedHabitats':
+          action.protectedHabitats = this.stats.protectedHabitats;
+          break;
         default:
           action[changed] = this.stats[changed];
         }
@@ -367,6 +381,10 @@ export default defineComponent({
         this.changedFields.clear();
         void this.send(action);
       });
+    },
+    toggleProtectedHabitats(): void {
+      this.stats.protectedHabitats = !this.stats.protectedHabitats;
+      this.schedulePlayer('protectedHabitats');
     },
     choosePlayer(color: Color): void {
       // Changes of the player before are sent at once, so they cannot end up with the next one
@@ -394,6 +412,9 @@ export default defineComponent({
           terraformRating: player.terraformRating,
           victoryPoints: player.victoryPointsBreakdown.total,
           cardDiscount: player.cardDiscount,
+          steelValue: player.steelValue,
+          titaniumValue: player.titaniumValue,
+          protectedHabitats: player.devToolsProtectedHabitats ?? false,
         };
         this.tags = Object.fromEntries(TAG_LIST.map((tag) => [tag, player.tags[tag] ?? 0]));
         this.tagDiscounts = Object.fromEntries(TAG_LIST.map((tag) => [tag, player.devToolsTagDiscounts?.[tag] ?? 0]));

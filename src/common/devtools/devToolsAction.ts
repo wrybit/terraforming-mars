@@ -27,10 +27,12 @@ export type DevToolsPlayerState = {
   tagDiscounts: Partial<Record<Tag, number>>,
   cardDiscount: number,
   victoryPoints: number,
+  /** Plants are protected like with the card Protected Habitats */
+  protectedHabitats: boolean,
 };
 
 export function emptyDevToolsPlayerState(): DevToolsPlayerState {
-  return {extraTags: {}, tagDiscounts: {}, cardDiscount: 0, victoryPoints: 0};
+  return {extraTags: {}, tagDiscounts: {}, cardDiscount: 0, victoryPoints: 0, protectedHabitats: false};
 }
 
 /** Values of one player as they should be shown: tags and points are totals, the server works out the difference */
@@ -42,6 +44,10 @@ export type DevToolsPlayerAction = {
   tags?: Partial<Record<Tag, number>>,
   tagDiscounts?: Partial<Record<Tag, number>>,
   cardDiscount?: number,
+  protectedHabitats?: boolean,
+  /** M€ one steel (plasteel) and one titanium (spice) is worth when paying */
+  steelValue?: number,
+  titaniumValue?: number,
 };
 
 /** Situations of the game asked of a player right now, on top of what he is asked anyway (devtools/devToolsTriggers.ts) */
@@ -177,7 +183,9 @@ export function isDevToolsAction(value: unknown): value is DevToolsAction {
       isOptionalNumber(action.generation);
   case 'player':
     return typeof action.color === 'string' && isOptionalNumber(action.terraformRating) && isOptionalNumber(action.victoryPoints) &&
-      isOptionalNumber(action.cardDiscount) && isTagNumbers(action.tags) && isTagNumbers(action.tagDiscounts);
+      isOptionalNumber(action.cardDiscount) && isTagNumbers(action.tags) && isTagNumbers(action.tagDiscounts) &&
+      (action.protectedHabitats === undefined || typeof action.protectedHabitats === 'boolean') &&
+      isOptionalNumber(action.steelValue) && isOptionalNumber(action.titaniumValue);
   case 'trigger':
     return typeof action.color === 'string' && (DEVTOOLS_TRIGGERS as ReadonlyArray<unknown>).includes(action.trigger);
   case 'terraform':

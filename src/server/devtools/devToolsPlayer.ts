@@ -34,6 +34,15 @@ export function applyPlayer(player: IPlayer, action: DevToolsPlayerAction): void
   if (action.cardDiscount !== undefined) {
     state.cardDiscount = Math.max(0, action.cardDiscount - player.colonies.cardDiscount);
   }
+  if (action.protectedHabitats !== undefined) {
+    state.protectedHabitats = action.protectedHabitats;
+  }
+  if (action.steelValue !== undefined) {
+    player.setSteelValue(action.steelValue);
+  }
+  if (action.titaniumValue !== undefined) {
+    player.setTitaniumValue(action.titaniumValue);
+  }
   // Last, after rating and tags: those change the points as well
   if (action.victoryPoints !== undefined) {
     const withoutDevTools = player.getVictoryPoints().total - state.victoryPoints;
