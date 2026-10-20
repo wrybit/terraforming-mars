@@ -1240,5 +1240,6 @@
   "${0} sold ${1}": "${0}が${1}を売却",
   "Only you can see this line in the log": "このログの行はあなただけに見えます",
   "AI insight: click to reveal": "AI情報：クリックで表示",
-  "Click to hide again": "もう一度クリックで隠す"
+  "Click to hide again": "もう一度クリックで隠す",
+  "Delta": "デルタ"
 }

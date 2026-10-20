@@ -1774,5 +1774,6 @@
   "${0} sold ${1}": "${0} продава ${1}",
   "Only you can see this line in the log": "Само ти виждаш този ред в дневника",
   "AI insight: click to reveal": "Информация за ИИ: кликни, за да покажеш",
-  "Click to hide again": "Кликни отново, за да скриеш"
+  "Click to hide again": "Кликни отново, за да скриеш",
+  "Delta": "Делта"
 }
