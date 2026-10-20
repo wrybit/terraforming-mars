@@ -10,6 +10,7 @@ describe('AI player traits', () => {
 
   it('is neutral without the rule', () => {
     const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'noCardFix');
     player.increaseSteelValue();
     expect(steelFactor(player)).to.eq(1);
   });

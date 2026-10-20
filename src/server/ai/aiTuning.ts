@@ -330,11 +330,13 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 123: own drawn cards 2–4 M€ plus half draw engine boost – cards drawn +1.2 (z +3.2), played +0.7 (z +2.4), VP ±0.
   drawEngineBoost: 0.5,
   ownDrawnCardValue: 1,
-  measuredDrawRates: 0,
-  playerTraitValues: 0,
-  measuredCardIncome: 0,
+  // Round 125: card understanding parts adopted – measured effect/discount income (+1.3 VP, z +1.7; cards played +1.7,
+  // z +4.3), measured draw rates (+0.9, z +1.4) and player traits (±0) as fixes; actions stay out (round 124: −8 VP).
+  measuredDrawRates: 1,
+  playerTraitValues: 1,
+  measuredCardIncome: 1,
   liveOutlook: 0,
-  measuredActionWeight: 1,
+  measuredActionWeight: 0,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
   handFundingGenerations: 0,
   endgameMoney: 1,
@@ -874,6 +876,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   liveOutlook1: {liveOutlook: 1},
   // Round 124: cardFix lost 8 VP; split into its parts (effects only, draw rates, player traits).
   cardEffects: {measuredCardIncome: 1, measuredActionWeight: 0},
+  cardActions025: {measuredActionWeight: 0.25},
+  cardActions05: {measuredActionWeight: 0.5},
+  noCardFix: {measuredCardIncome: 0, measuredDrawRates: 0, playerTraitValues: 0},
   // Draft/buy: cards that bring the tags or energy a strong hand card still needs (enablerValue.ts)
   enabler05: {enablerWeight: 0.5},
   play2: {playPolicyWeight: 2},

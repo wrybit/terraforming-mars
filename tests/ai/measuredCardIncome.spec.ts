@@ -10,8 +10,9 @@ import {Resource} from '../../src/common/Resource';
 describe('AI measured card income', () => {
   afterEach(() => clearPlayerTunings());
 
-  it('is off in the baseline', () => {
+  it('is off without the rule', () => {
     const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'noCardFix');
     expect(measuredCardIncome(player, new EarthCatapult(), 8)).to.eq(0);
   });
 
@@ -23,9 +24,9 @@ describe('AI measured card income', () => {
 
   it('counts an energy action only as far as energy production feeds it', () => {
     const [, player] = testGame(2);
-    setPlayerTuning(player.id, 'cardIncome1');
+    setPlayerTuning(player.id, 'cardActions05');
     expect(measuredCardIncome(player, new Ironworks(), 8)).to.eq(0);
     player.production.add(Resource.ENERGY, 4);
-    expect(measuredCardIncome(player, new Ironworks(), 8)).to.be.greaterThan(5);
+    expect(measuredCardIncome(player, new Ironworks(), 8)).to.be.greaterThan(2);
   });
 });
