@@ -13,6 +13,13 @@
   height: 560px;
 }
 
+// Large Arrakis: the planet picture shows only the planet (no printed hexes like the Mars pictures), so the grid of
+// the large map must sit in its middle. The planet centre is 368.5 / 364.5 px in the 740 × 680 picture, the grid of
+// the large map centres at 367 / 349.5 px: moved down and a little to the right (Jens, 20 Oct 2026)
+.board--arrakis-large {
+  transform: translate(1.5px, 15px);
+}
+
 .board-cont {
   display: inline-block;
   vertical-align: top;

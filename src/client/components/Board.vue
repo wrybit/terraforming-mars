@@ -76,7 +76,8 @@
             </div>
         </div>
 
-        <div class="board" :class="{'board--large': isLargeBoard}" id="main_board">
+        <!-- The large Arrakis centres its grid on the planet picture (board.less .board--arrakis-large) -->
+        <div class="board" :class="{'board--large': isLargeBoard, 'board--arrakis-large': isLargeBoard && isArrakis}" id="main_board">
             <BoardSpace
               v-for="curSpace in allSpacesOnMars"
               :key="curSpace.id"
