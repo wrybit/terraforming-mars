@@ -96,6 +96,8 @@ export type AiTuning = {
   measuredDrawRates: number,
   /** 1: lasting player traits count in the position value – steel/titanium value also for production, heat as M€, plants per greenery (playerTraits.ts). */
   playerTraitValues: number,
+  /** Weight of the measured M€ per generation of cards with lasting effects or actions instead of the flat value (measuredCardIncome.ts). */
+  measuredCardIncome: number,
   /** Generations of income that count as money for the hand (handFunding.ts). */
   handFundingGenerations: number,
   /** 1: money in the last generation counts in steps of greeneries it can still buy (stateValue.ts). */
@@ -325,6 +327,7 @@ export const BASELINE_TUNING: AiTuning = {
   ownDrawnCardValue: 0,
   measuredDrawRates: 0,
   playerTraitValues: 0,
+  measuredCardIncome: 0,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
   handFundingGenerations: 0,
   endgameMoney: 1,
@@ -851,6 +854,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   measuredDraws: {measuredDrawRates: 1},
   measuredDrawsOwnValue: {measuredDrawRates: 1, ownDrawnCardValue: 1},
   playerTraits: {playerTraitValues: 1},
+  cardIncome05: {measuredCardIncome: 0.5},
+  cardIncome1: {measuredCardIncome: 1},
+  cardIncomeTraits: {measuredCardIncome: 0.5, playerTraitValues: 1},
   // Draft/buy: cards that bring the tags or energy a strong hand card still needs (enablerValue.ts)
   enabler05: {enablerWeight: 0.5},
   play2: {playPolicyWeight: 2},

@@ -27,6 +27,7 @@ import {fundedHandValue} from './handFunding';
 import {handReadiness} from './handReadiness';
 import {measuredDrawRate} from './measuredDrawRate';
 import {heatAsMoney, plantFactor, steelFactor, titaniumFactor} from './playerTraits';
+import {measuredCardIncome} from './measuredCardIncome';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -384,14 +385,17 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
   for (const card of player.playedCards) {
     if (card.type === CardType.ACTIVE) {
       const own = isIActionCard(card) ? actionValuePerGeneration(card, player, context) : EFFECT_CARD_VALUE_PER_GENERATION;
-      const flat = Math.max(own, drawIncome(card));
+      // measuredCardIncome: effects and actions count what they were measured to bring, not only the flat value.
+      const flat = Math.max(own, drawIncome(card), measuredCardIncome(player, card, context.remaining));
       // A human player's collectors scored 20+ VP in long games; a flat 1.5 M€ per generation missed that.
       // collectorRates: the measured resources per generation of this card instead of one (collectorRate.ts).
       const rate = tuningOf(player).collectorRates > 0 ? collectorRate(card.name) : 1;
       const collected = accumulator > 0 ? accumulator * rate * collectedPointsPerGeneration(card) * context.victoryPoint : 0;
       value += Math.max(flat, collected) * context.remaining;
     } else if (card.type === CardType.CORPORATION) {
-      value += drawIncome(card) * context.remaining;
+      value += Math.max(drawIncome(card), measuredCardIncome(player, card, context.remaining)) * context.remaining;
+    } else if (card.type === CardType.PRELUDE) {
+      value += measuredCardIncome(player, card, context.remaining) * context.remaining;
     }
     // Resources on cards (microbes, animals, science …) pay off later: VP, money, actions.
     value += card.resourceCount * RESOURCE_ON_CARD_VALUE;
