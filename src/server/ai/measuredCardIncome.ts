@@ -23,6 +23,6 @@ export function measuredCardIncome(player: IPlayer, card: ICard, remaining: numb
   if (weight <= 0 || income === undefined) {
     return 0;
   }
-  const action = Math.max(0, income.action ?? 0) * energySupplyRatio(player, card, Math.max(1, remaining));
+  const action = Math.max(0, income.action ?? 0) * tuningOf(player).measuredActionWeight * energySupplyRatio(player, card, Math.max(1, remaining));
   return weight * (Math.max(0, income.effect ?? 0) + action);
 }
