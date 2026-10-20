@@ -9,6 +9,8 @@ import {isSimulating} from './simulationSandbox';
 import draftModel from './data/bgaPolicyDraft.json';
 import buyModel from './data/bgaPolicyBuy.json';
 import playModel from './data/bgaPolicyPlay.json';
+import draftMixedModel from './data/bgaPolicyDraftMixed.json';
+import buyMixedModel from './data/bgaPolicyBuyMixed.json';
 
 // Learned card choice (imitation of strong players): LightGBM models trained on about 54,000 two-player games
 // from Board Game Arena (Tharsis, preludes, draft; both players Elo 600+) rank the offered cards the way those
@@ -23,6 +25,17 @@ const MODELS: Record<PolicyKind, PolicyModel> = {
   // Which hand card strong players play next (candidates: hand cards they played sooner or later)
   play: playModel as unknown as PolicyModel,
 };
+// Self-play step 1: same features, trained on BGA decisions plus the winners' decisions of our own test games
+// (aiTuning.ts policyModelSet 1). The play order keeps the BGA model.
+const MIXED_MODELS: Record<PolicyKind, PolicyModel> = {
+  draft: draftMixedModel as unknown as PolicyModel,
+  buy: buyMixedModel as unknown as PolicyModel,
+  play: playModel as unknown as PolicyModel,
+};
+
+function modelFor(player: IPlayer | undefined, kind: PolicyKind): PolicyModel {
+  return player !== undefined && tuningOf(player).policyModelSet === 1 ? MIXED_MODELS[kind] : MODELS[kind];
+}
 
 const TRACKERS: Record<string, (player: IPlayer) => number> = {
   mc: (player) => player.megaCredits,
@@ -112,7 +125,7 @@ export function policyPreferences(player: IPlayer, cards: ReadonlyArray<ICard>, 
   if (player.game.players.length !== 2 || cards.length === 0) {
     return result;
   }
-  const model = MODELS[kind];
+  const model = modelFor(player, kind);
   const position = positionFeatures(player);
   const scores = cards.map((card) => {
     const values = {...position, ...cardFeatures(card, player, position, model.cardIds, cards.length)};
@@ -124,8 +137,8 @@ export function policyPreferences(player: IPlayer, cards: ReadonlyArray<ICard>, 
 }
 
 /** Raw model score of a feature vector (contract test against the training export). */
-export function policyScore(kind: PolicyKind, features: ReadonlyArray<number>): number {
-  return treeScore(MODELS[kind].trees, features);
+export function policyScore(kind: PolicyKind, features: ReadonlyArray<number>, mixed = false): number {
+  return treeScore((mixed ? MIXED_MODELS : MODELS)[kind].trees, features);
 }
 
 /**

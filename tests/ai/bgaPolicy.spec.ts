@@ -5,6 +5,8 @@ import {playPreferences, policyPreferences, policyScore, withPolicyPreference} f
 import draftModel from '../../src/server/ai/data/bgaPolicyDraft.json';
 import buyModel from '../../src/server/ai/data/bgaPolicyBuy.json';
 import playModel from '../../src/server/ai/data/bgaPolicyPlay.json';
+import draftMixedModel from '../../src/server/ai/data/bgaPolicyDraftMixed.json';
+import buyMixedModel from '../../src/server/ai/data/bgaPolicyBuyMixed.json';
 import {Research} from '../../src/server/cards/base/Research';
 import {Comet} from '../../src/server/cards/base/Comet';
 import {SpaceElevator} from '../../src/server/cards/base/SpaceElevator';
@@ -18,6 +20,14 @@ describe('AI learned card policy', () => {
     it(`scores the ${kind} export samples like LightGBM`, () => {
       for (const sample of model.samples) {
         expect(policyScore(kind, sample.features)).to.be.closeTo(sample.raw, 1e-4);
+      }
+    });
+  }
+
+  for (const [kind, model] of [['draft', draftMixedModel], ['buy', buyMixedModel]] as const) {
+    it(`scores the mixed ${kind} export samples like LightGBM`, () => {
+      for (const sample of model.samples) {
+        expect(policyScore(kind, sample.features, true)).to.be.closeTo(sample.raw, 1e-4);
       }
     });
   }
@@ -40,6 +50,7 @@ describe('AI learned card policy', () => {
     const [, player] = testGame(2);
     player.cardsInHand.push(new Research(), new Comet(), new SpaceElevator());
     const playable = new Set([CardName.RESEARCH, CardName.COMET]);
+    setPlayerTuning(player.id, 'noPlayPolicy');
     expect(playPreferences(player, playable).size).to.eq(0);
     setPlayerTuning(player.id, 'play6');
     const preferences = playPreferences(player, playable);

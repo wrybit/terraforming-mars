@@ -401,12 +401,17 @@
         <section ref="createCard" class="create-game-card create-game-create-card" :class="{'create-game-create-card--stuck': createCardStuck}">
           <!-- Same chips as the game list of the statistics (gameSetupChips.ts) -->
           <GameSetupChips :chips="summaryChips"/>
-          <div class="create-game-create-row">
+          <div ref="createRow" class="create-game-create-row">
             <AppButton hotkey="create-game" class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors"/>
           </div>
           <ValidationProblems v-if="hasValidationProblems" :errors="validationErrors"/>
         </section>
       </aside>
+      <!-- One column (phone): the Create card stays at the end of the page; only the button follows along at the
+           bottom edge until the card's own button comes into view – summary and warnings would cover the settings -->
+      <div v-if="createButtonBelow" class="create-game-create-float">
+        <AppButton class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors"/>
+      </div>
     </div>
 
   </div>
@@ -423,6 +428,7 @@ import {CardName} from '@/common/cards/CardName';
 import CustomCardListCard from '@/client/components/create/CustomCardListCard.vue';
 import CreateGameBoardPreview from '@/client/components/create/CreateGameBoardPreview.vue';
 import {observeStickyBottom} from '@/client/components/create/stickyBottomObserver';
+import {observeBelowViewport} from '@/client/components/create/belowViewportObserver';
 import CollapsibleSection from '@/client/components/create/CollapsibleSection.vue';
 import {cardPoolChanged, expansionOptionsChanged, milestonesChanged} from '@/client/components/create/changedFromDefault';
 import {ColumnCount, currentColumnCount, placementOf, SettingsCard, watchColumnCount} from '@/client/components/create/createGameColumns';
@@ -505,6 +511,8 @@ type FormModel = {
   drawnBoard: BoardName | undefined;
   /** Create card sticks to the bottom edge (stickyBottomObserver.ts) */
   createCardStuck: boolean;
+  /** The Create card's button lies below the visible area (belowViewportObserver.ts); one column shows the floating button then */
+  createButtonBelow: boolean;
   /** Player list scrolled: its cards slide under the fixed head, which then casts a shadow */
   playerListScrolled: boolean;
   /** Settings columns for the window width (createGameColumns.ts) */
@@ -513,6 +521,7 @@ type FormModel = {
   columnsMounted: boolean;
   stopColumnWatch: () => void;
   stopStickyObserver: () => void;
+  stopBelowObserver: () => void;
 };
 
 // Distance of the sticky Create card to the bottom edge; same value as bottom in create_game_form.less
@@ -542,11 +551,13 @@ export default defineComponent({
       boardSeed: Math.random(),
       drawnBoard: undefined,
       createCardStuck: false,
+      createButtonBelow: false,
       playerListScrolled: false,
       columnCount: currentColumnCount(),
       columnsMounted: false,
       stopColumnWatch: () => {},
       stopStickyObserver: () => {},
+      stopBelowObserver: () => {},
     };
   },
   components: {
@@ -658,6 +669,10 @@ export default defineComponent({
     this.stopStickyObserver = observeStickyBottom(this.$refs.createCard as HTMLElement, CREATE_CARD_BOTTOM_PX, (stuck) => {
       this.createCardStuck = stuck;
     });
+    // The floating button covers the bottom edge: the card's button only counts as visible above it
+    this.stopBelowObserver = observeBelowViewport(this.$refs.createRow as HTMLElement, CREATE_CARD_BOTTOM_PX, (below) => {
+      this.createButtonBelow = below;
+    });
     this.columnsMounted = true;
     this.stopColumnWatch = watchColumnCount((columnCount) => {
       this.columnCount = columnCount;
@@ -686,6 +701,7 @@ export default defineComponent({
   },
   beforeUnmount() {
     this.stopStickyObserver();
+    this.stopBelowObserver();
     this.stopColumnWatch();
     document
       .querySelector('meta[name="viewport"]')

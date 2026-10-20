@@ -21,6 +21,7 @@ import {tuningOf} from './aiTuning';
 import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
 import {triggerOrderAdjustments} from './triggerOrder';
 import {playPreferences} from './bgaPolicy';
+import {handReadinessMap} from './handReadiness';
 import {sellToAffordResponses} from './sellToAfford';
 import {lastGenerationSaleResponses} from './lastGenerationSale';
 import {isSimulating} from './simulationSandbox';
@@ -330,7 +331,9 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
   const snapshot = playerView(player);
   // Cards kept in hand count with their value when played later, so a card that grows with
   // the tableau is not wasted now.
-  const context = {...valuationContext(player.game, player), handValues: handCardValues(player), handOwner: player.id};
+  const baseContext = valuationContext(player.game, player);
+  const context = {...baseContext, handValues: handCardValues(player), handOwner: player.id,
+    handReadiness: tuningOf(player).needsPursuit > 0 ? handReadinessMap(player, baseContext.remaining) : undefined};
   const outOfTime = () => performance.now() - start > budget;
 
   const tried: Array<{candidate: Candidate, outcome: Outcome}> = [];

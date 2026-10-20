@@ -82,8 +82,16 @@ export type AiTuning = {
   policyWeight: number,
   /** 1: the learned preference also steers decisions inside simulations; 0: only real decisions (faster). */
   policyInSimulation: number,
+  /** Learned draft/buy models: 0 = BGA only, 1 = BGA plus winners of our own test games (bgaPolicy.ts). */
+  policyModelSet: number,
   /** M€ per unit of the learned play order of strong players among playable hand cards (bgaPolicy.ts); 0 = off. */
   playPolicyWeight: number,
+  /** Share of a hand card's value counted per step its unmet needs (tags, energy) come closer (handReadiness.ts); 0 = off. */
+  needsPursuit: number,
+  /** Extra draft/buy/play value of draw engines: draws per generation × drawn card value × remaining generations × this (drawEngineBoost.ts). */
+  drawEngineBoost: number,
+  /** 1: an unknown card in the own hand (drawn in the move search) is worth the drawn-card value 2–4 M€ instead of 2 (stateValue.ts). */
+  ownDrawnCardValue: number,
   /** Generations of income that count as money for the hand (handFunding.ts). */
   handFundingGenerations: number,
   /** 1: money in the last generation counts in steps of greeneries it can still buy (stateValue.ts). */
@@ -304,7 +312,13 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 111: 3 +2.29 (z +3.78; base +3.41, venus +1.17), 6 +1.35, 12 −0.03.
   policyWeight: 3,
   policyInSimulation: 1,
-  playPolicyWeight: 0,
+  policyModelSet: 0,
+  // Round 112: 3 +1.43 (z +2.35; base +1.10, venus +1.76), 6 +1.41 (z +2.00).
+  playPolicyWeight: 3,
+  // Round 122 check: without draw engine boost and needs pursuit +1.24 VP (z +1.96), cards played equal – reverted.
+  needsPursuit: 0,
+  drawEngineBoost: 0,
+  ownDrawnCardValue: 0,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
   handFundingGenerations: 0,
   endgameMoney: 1,
@@ -813,6 +827,24 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   play3: {playPolicyWeight: 3},
   play6: {playPolicyWeight: 6},
   play12: {playPolicyWeight: 12},
+  noPlayPolicy: {playPolicyWeight: 0},
+  // Control: the AI before the imitation steps of rounds 111/112 (measures their total gain)
+  beforeImitation: {policyWeight: 0, playPolicyWeight: 0},
+  // Self-play step 1: draft/buy models trained on BGA plus our own winners (round 118)
+  policyMixed: {policyModelSet: 1},
+  // Unfulfilled hand synergies as goals: moves that bring needed tags/energy count part of the unlocked card's value
+  needsPursuit05: {needsPursuit: 0.5},
+  needsPursuit1: {needsPursuit: 1},
+  drawEngine05: {drawEngineBoost: 0.5},
+  drawEngine1: {drawEngineBoost: 1},
+  drawEngine1Pursuit: {drawEngineBoost: 1, needsPursuit: 0.5},
+  drawEngine2: {drawEngineBoost: 2},
+  noDrawEngine: {drawEngineBoost: 0, needsPursuit: 0},
+  ownCardValue: {ownDrawnCardValue: 1},
+  ownCardValueEngine: {ownDrawnCardValue: 1, drawEngineBoost: 0.5},
+  // Draft/buy: cards that bring the tags or energy a strong hand card still needs (enablerValue.ts)
+  enabler05: {enablerWeight: 0.5},
+  play2: {playPolicyWeight: 2},
   noHandFunding: {handFunding: 0},
   buyLoose: {buyMargin: -3},
   // ML stage 2 (learned final VP margin from about 43,000 BGA two-player games, certain VP 1 : 1, AUC 0.80):
@@ -835,6 +867,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noDrawPriority: {drawPriority: 0},
   drawPriority3: {drawPriority: 3},
   drawPriority6: {drawPriority: 6},
+  drawPriority8: {drawPriority: 8},
   draftPrior3: {draftPriorWeight: 3},
   tierList1: {tierListWeight: 1},
   tierList2: {tierListWeight: 2},

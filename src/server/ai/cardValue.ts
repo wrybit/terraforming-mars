@@ -14,6 +14,7 @@ import {flowFit} from './cardFit';
 import {drawChoiceBonus} from './drawChoice';
 import {energySupplyRatio} from './energySupply';
 import {closingWindowFactor, requirementOutlook} from './requirementOutlook';
+import {drawEngineBonus} from './drawEngineBoost';
 import {pickSome} from './randomChoice';
 import {engineValue} from './engineValue';
 import {isSimulating} from './simulationSandbox';
@@ -161,7 +162,8 @@ function nowValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context:
   const gain = gainInCopy(snapshot, player, card, context, 0);
   // drawPriority (Jens' rule): cards drawn on play are worth more than plain cards in hand (drawPriority.ts).
   const drawBonus = immediateDrawBonus(card, player, context.remaining, unknownCardValue(player, context));
-  const raw = gain === undefined ? 0 : (gain + engine + drawChoiceBonus(card, player) + drawBonus) * priorFactor(card, player) - costOf(card, player);
+  const engineDraws = drawEngineBonus(card, player, context.remaining);
+  const raw = gain === undefined ? 0 : (gain + engine + drawChoiceBonus(card, player) + drawBonus + engineDraws) * priorFactor(card, player) - costOf(card, player);
   return raw > 0 ? raw * outlookOf(card, player) * energyFactor(card, player, context) * (isBlockedNow(card, player) ? BLOCKED_NOW_FACTOR : 1) : raw;
 }
 
@@ -209,7 +211,8 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
   }
   // Drawn later, the cards have fewer generations left to be played: the draw rule favours playing them now.
   const drawBonus = immediateDrawBonus(card, player, laterContext.remaining, unknownCardValue(player, laterContext));
-  const raw = (total / samples + drawChoiceBonus(card, player) + drawBonus) * priorFactor(card, player) - costOf(card, player);
+  const engineDraws = drawEngineBonus(card, player, laterContext.remaining);
+  const raw = (total / samples + drawChoiceBonus(card, player) + drawBonus + engineDraws) * priorFactor(card, player) - costOf(card, player);
   // A window that closes before the card would be played (at most 5 % oxygen …).
   const window = tuningOf(player).closingWindow > 0 && raw > 0 && isIProjectCard(card) ? closingWindowFactor(card, player, delay) : 1;
   return raw * outlookOf(card, player) * LATER_DISCOUNT * window * energyFactor(card, player, context) * (isBlockedNow(card, player) ? BLOCKED_LATER_FACTOR : 1);

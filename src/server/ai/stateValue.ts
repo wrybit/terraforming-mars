@@ -24,6 +24,7 @@ import {styleFocusValue} from './styleFocus';
 import {bgaExpectedMargin} from './bgaValueModel';
 import {awardScoreWithHand} from './awardHandOutlook';
 import {fundedHandValue} from './handFunding';
+import {handReadiness} from './handReadiness';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -78,6 +79,8 @@ export type ValuationContext = {
   awardActionSwing?: number,
   /** Award leads are projected to the game end by each player's pace so far (aiTuning.ts awardTiming). */
   awardTiming?: boolean,
+  /** Readiness of the hand cards of `handOwner` at decision time (handReadiness.ts, aiTuning.ts needsPursuit). */
+  handReadiness?: ReadonlyMap<CardName, number>,
 };
 
 // Hand outlook (aiTuning.ts awardHandOutlook): a lead of this many points from own hand cards lets an award count
@@ -325,6 +328,11 @@ function collectedPointsPerGeneration(card: {victoryPoints?: unknown}): number {
 
 /** Value of a card in hand whose own value is unknown (drawn in a copy, opponents' cards). */
 export function unknownCardValue(player: IPlayer, context: ValuationContext): number {
+  // ownDrawnCardValue: a card the player draws itself (Restricted Area, AI Central …) counted only 2 M€, less than a
+  // bought card costs, so draw actions rarely won; opponents' unknown cards keep 2 M€ (drawCards raised both and lost).
+  if (tuningOf(player).ownDrawnCardValue > 0 && context.handOwner === player.id) {
+    return drawnCardValue(player, context.remaining);
+  }
   if (tuningOf(player).drawCardModel === 0) {
     return HAND_CARD_VALUE;
   }
@@ -334,7 +342,7 @@ export function unknownCardValue(player: IPlayer, context: ValuationContext): nu
 }
 
 /** Cards an action draws per use (AI Central 2, Development Center 1 …), 0 for other actions. */
-function cardsDrawnByAction(card: ICard): number {
+export function cardsDrawnByAction(card: ICard): number {
   const drawCard = (card as {actionBehavior?: {drawCard?: number | {count: unknown, pay?: boolean, keep?: number}}}).actionBehavior?.drawCard;
   if (drawCard === undefined) {
     return 0;
@@ -420,7 +428,30 @@ function handValue(player: IPlayer, context: ValuationContext): number {
   }
   const values = context.handValues;
   const unknown = unknownCardValue(player, context);
-  return fundedHandValue(player, player.cardsInHand.map((card) => ({card, value: values.get(card.name) ?? unknown})), unknown);
+  const funded = fundedHandValue(player, player.cardsInHand.map((card) => ({card, value: values.get(card.name) ?? unknown})), unknown);
+  return funded + needsPursuitValue(player, context, values);
+}
+
+/**
+ * needsPursuit: a share of a hand card's value for every step its unmet needs (tags, energy) came closer since the
+ * decision (handReadiness.ts), so moves that unlock strong hand cards count for them.
+ */
+function needsPursuitValue(player: IPlayer, context: ValuationContext, values: ReadonlyMap<CardName, number>): number {
+  const weight = tuningOf(player).needsPursuit;
+  const reference = context.handReadiness;
+  if (weight <= 0 || reference === undefined) {
+    return 0;
+  }
+  let value = 0;
+  for (const card of player.cardsInHand) {
+    const before = reference.get(card.name);
+    const cardValue = Math.max(0, values.get(card.name) ?? 0);
+    if (before === undefined || before >= 1 || cardValue === 0) {
+      continue;
+    }
+    value += weight * cardValue * (handReadiness(player, card, context.remaining) - before);
+  }
+  return value;
 }
 
 /** Absolute value of one player's position. */
