@@ -20,8 +20,8 @@ describe('arrakisScales', () => {
     expect(STANDARD_SCALES.centreX).eq(lessNumber(less, 'dial-cx'));
     expect(STANDARD_SCALES.centreY).eq(lessNumber(less, 'dial-cy'));
     expect(STANDARD_SCALES.radius).eq(lessNumber(less, 'dial-r'));
-    expect(STANDARD_SCALES.vegetationAngles).deep.eq(lessAngles(less, 'oxygen-vals'));
-    expect(STANDARD_SCALES.waterAngles).deep.eq(lessAngles(less, 'temperature-vals'));
+    expect(STANDARD_SCALES.vegetationAngles).deep.eq(lessAngles(less, 'oxygen-vals-arrakis'));
+    expect(STANDARD_SCALES.waterAngles).deep.eq(lessAngles(less, 'temperature-vals-arrakis'));
   });
 
   it('uses the large circle and its own marker angles for the large Arrakis', () => {
@@ -32,12 +32,15 @@ describe('arrakisScales', () => {
     expect(LARGE_SCALES.waterAngles).deep.eq(lessAngles(less, 'temperature-vals-arrakis-large'));
   });
 
-  it('keeps symbol and name of the standard board where they were', () => {
-    expect(scaleLabels(STANDARD_SCALES).vegetation).deep.eq({symbolAngle: 225, text: {from: 230, to: 262, anchor: 'start'}});
+  it('turns symbol and name of the standard board up with its scales, the names meeting at the top', () => {
+    const vegetation = scaleLabels(STANDARD_SCALES).vegetation;
+    expect(vegetation.symbolAngle).closeTo(229.4, 0.001);
+    expect(vegetation.text.from).closeTo(234.4, 0.001);
+    expect(vegetation.text.to).closeTo(266.4, 0.001);
     const water = scaleLabels(STANDARD_SCALES).water;
-    expect(water.symbolAngle).closeTo(-47, 0.001);
-    expect(water.text.from).closeTo(-84, 0.001);
-    expect(water.text.to).closeTo(-52, 0.001);
+    expect(water.symbolAngle).closeTo(-54, 0.001);
+    expect(water.text.from).closeTo(-91, 0.001);
+    expect(water.text.to).closeTo(-59, 0.001);
   });
 
   it('draws one closed step per value', () => {

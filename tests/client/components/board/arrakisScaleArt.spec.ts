@@ -54,8 +54,14 @@ describe('arrakisScaleArt', () => {
   it('starts the large Arrakis scales far enough out for the spice fields between their low ends', () => {
     const vegetation = bandBounds(LARGE_SCALES.vegetationAngles).from;
     const water = bandBounds(LARGE_SCALES.waterAngles).from;
-    // The row needs about 245 board px on the circle of the scales (arrakisSpiceFields.ts)
-    expect((vegetation - water) * Math.PI / 180 * LARGE_SCALES.radius).greaterThan(260);
+    // The row needs about 240 board px on the circle of the scales (arrakisSpiceFields.ts), plus room on both sides
+    expect((vegetation - water) * Math.PI / 180 * LARGE_SCALES.radius).greaterThan(300);
+  });
+
+  it('starts both scales of both boards at the same height, so the spice row sits in the middle', () => {
+    for (const geometry of [STANDARD_SCALES, LARGE_SCALES]) {
+      expect(bandBounds(geometry.vegetationAngles).from).closeTo(180 - bandBounds(geometry.waterAngles).from, 0.15);
+    }
   });
 });
 

@@ -24,7 +24,7 @@
 
             <!-- Scale bonuses as chips outside the scales (the board picture has none of its own) -->
             <MarsScaleBonuses :temperature="temperature" :oxygen="oxygen_level" :venus="expansions.venus ? venusScaleLevel : undefined"
-              :geometry="isArrakis && isLargeBoard ? LARGE_SCALES : undefined" :hideComplete="isArrakis"/>
+              :geometry="arrakisGeometry" :hideComplete="isArrakis"/>
 
             <div class="global-numbers-oxygen">
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('oxygen')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('oxygen') : undefined">{{ lvl.strValue }}</div>
@@ -374,7 +374,7 @@ import {SpaceId} from '@/common/Types';
 import {spacesById} from '@/client/utils/spacesById';
 import {TileView} from '@/client/components/board/TileView';
 import {isArrakisBoard} from '@/common/dune/arrakisLayout';
-import {LARGE_SCALES, ScaleGeometry} from '@/client/components/board/arrakisScales';
+import {LARGE_SCALES, STANDARD_SCALES, ScaleGeometry} from '@/client/components/board/arrakisScales';
 import {BoardName} from '@/common/boards/BoardName';
 import {LEGENDS} from '@/client/components/Legends';
 import {Expansion} from '@/common/cards/GameModule';
@@ -545,8 +545,12 @@ export default defineComponent({
     isArrakis(): boolean {
       return isArrakisBoard(this.boardName);
     },
-    LARGE_SCALES(): ScaleGeometry {
-      return LARGE_SCALES;
+    // Arrakis turns its scales further up than Mars (arrakisScales.ts): the bonus chips follow its circle
+    arrakisGeometry(): ScaleGeometry | undefined {
+      if (!this.isArrakis) {
+        return undefined;
+      }
+      return this.isLargeBoard ? LARGE_SCALES : STANDARD_SCALES;
     },
     spiceFlashStyle(): Record<string, string> {
       const box = spiceRowBox(this.isLargeBoard, this.globalParameterMaximums.oceans);

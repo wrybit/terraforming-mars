@@ -7,7 +7,8 @@ export const CELL_WIDTH = 17.32;
 export const CELL_GAP = 2.89;
 export const ICON_SIZE = 23.09;
 export const GROUP_GAP = 6.49;
-export const COUNT_WIDTH = 30.31;
+// As wide as the tile on the other side (the count "6/9" is about that wide): the gaps to both scales look the same
+export const COUNT_WIDTH = ICON_SIZE;
 export const BAR_HEIGHT = 17.32;
 export const CHECK_HEX = 21.65;
 

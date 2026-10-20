@@ -13,24 +13,26 @@ export type ScaleGeometry = {
   waterAngles: ReadonlyArray<number>,
 };
 
-/** Standard board: globs.less @oxygen-vals and @temperature-vals (−30 … +8 °C) */
+/** Standard board: globs.less @oxygen-vals-arrakis and @temperature-vals-arrakis (−30 … +8 °C): the Mars arcs turned
+ *  further up, so the spice row below the planet has room, both starting at the same height (Jens, 20 Oct 2026) */
 export const STANDARD_SCALES: ScaleGeometry = {
   centreX: 300,
   centreY: 300.2,
   radius: 267.4,
-  vegetationAngles: [127.3, 133.2, 139.9, 146.5, 152.5, 159, 165.3, 171.9, 178.3, 184.8, 191.1, 197.5, 203.9, 210.2, 216.5],
-  waterAngles: [55.6, 50.3, 45.6, 40.6, 35.7, 30.6, 25.7, 20.6, 15.8, 10.8, 5.7, 0.8, -4.1, -9.3, -14.1, -19.2, -24.3, -29.3, -34.1, -39.4],
+  vegetationAngles: [131.7, 137.6, 144.3, 150.9, 156.9, 163.4, 169.7, 176.3, 182.7, 189.2, 195.5, 201.9, 208.3, 214.6, 220.9],
+  waterAngles: [48.6, 43.3, 38.6, 33.6, 28.7, 23.6, 18.7, 13.6, 8.8, 3.8, -1.3, -6.2, -11.1, -16.3, -21.1, -26.2, -31.3, -36.3, -41.1, -46.4],
 };
 
 /** Large board: globs.less @oxygen-vals-arrakis-large and @temperature-vals-arrakis-large – the large Arrakis keeps the
  *  standard maximums (14 % vegetation, +8 °C), starts its scales further out than Amazonis Planitia, so the spice
- *  fields fit between their low ends (arrakisSpiceFields.ts), and lets them reach further up with longer steps */
+ *  fields fit between their low ends (arrakisSpiceFields.ts), and lets them reach further up with longer steps;
+ *  turned up by as much more again, for at least two spice cells of room on each side of the row */
 export const LARGE_SCALES: ScaleGeometry = {
   centreX: 353,
   centreY: 351.2,
   radius: 313.9,
-  vegetationAngles: [117, 123.9, 130.9, 137.8, 144.7, 151.6, 158.6, 165.5, 172.4, 179.4, 186.3, 193.2, 200.1, 207.1, 214],
-  waterAngles: [63, 57.9, 52.8, 47.7, 42.6, 37.5, 32.4, 27.3, 22.2, 17.1, 11.9, 6.8, 1.7, -3.4, -8.5, -13.6, -18.7, -23.8, -28.9, -34],
+  vegetationAngles: [126.9, 133.8, 140.8, 147.7, 154.6, 161.6, 168.5, 175.4, 182.3, 189.3, 196.2, 203.1, 210.1, 217, 223.9],
+  waterAngles: [54, 48.9, 43.8, 38.7, 33.6, 28.5, 23.4, 18.3, 13.2, 8.1, 2.9, -2.2, -7.3, -12.4, -17.5, -22.6, -27.7, -32.8, -37.9, -43],
 };
 
 /** Width of the band; the 26px markers sit inside it */

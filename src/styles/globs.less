@@ -391,48 +391,97 @@
   // track has 19 values instead of 16. They are packed, equally spaced, into the arc that 0..30
   // occupy on the standard track: @venus-arc-*-large are the fitted angles of 0 and 30, and each
   // value's angle is interpolated from its position in @venus-vals-large. Rotation = angle - 270.1deg.
-  // The large Arrakis (Jens, 20 Oct 2026): its scales start further out than the Amazonis ones, so the spice fields fit
-  // between their low ends at full size (arrakisSpiceFields.ts), and reach further up, closer together at the top, so
-  // every step is a little longer: both span 97deg, mirrored about the vertical axis (contract with arrakisScales.ts
-  // LARGE_SCALES).
+  // Arrakis (Jens, 20 Oct 2026): scale, symbol and name turned further up around the planet than on Mars, so the spice
+  // row below has room – at least two spice cells between it and each scale – and the gap between the names at the top
+  // shrinks. Both scales start at the same height, mirrored about the vertical axis, so the row sits in the middle
+  // between them. Standard board: the Mars arcs turned up (water storage 7deg, vegetation 4.4deg). Large board: both
+  // scales span 97deg (longer steps than Amazonis). Contract with arrakisScales.ts STANDARD_SCALES and LARGE_SCALES.
+  @oxygen-vals-arrakis:
+    0 131.7deg,
+    1 137.6deg,
+    2 144.3deg,
+    3 150.9deg,
+    4 156.9deg,
+    5 163.4deg,
+    6 169.7deg,
+    7 176.3deg,
+    8 182.7deg,
+    9 189.2deg,
+    10 195.5deg,
+    11 201.9deg,
+    12 208.3deg,
+    13 214.6deg,
+    14 220.9deg;
+
+  @temperature-vals-arrakis:
+    -30 48.6deg,
+    -28 43.3deg,
+    -26 38.6deg,
+    -24 33.6deg,
+    -22 28.7deg,
+    -20 23.6deg,
+    -18 18.7deg,
+    -16 13.6deg,
+    -14 8.8deg,
+    -12 3.8deg,
+    -10 -1.3deg,
+    -8 -6.2deg,
+    -6 -11.1deg,
+    -4 -16.3deg,
+    -2 -21.1deg,
+    0 -26.2deg,
+    2 -31.3deg,
+    4 -36.3deg,
+    6 -41.1deg,
+    8 -46.4deg;
+
+  &.global-numbers--arrakis {
+    .global-numbers-oxygen {
+      each(@oxygen-vals-arrakis, .(@v) { .pin-at-angle(@v, @dial-cx, @dial-cy, @dial-r, 180.6deg); });
+    }
+    .global-numbers-temperature {
+      each(@temperature-vals-arrakis, .(@v) { .pin-at-angle(@v, @dial-cx, @dial-cy, @dial-r, -0.6deg); });
+    }
+  }
+
   @oxygen-vals-arrakis-large:
-    0 117deg,
-    1 123.9deg,
-    2 130.9deg,
-    3 137.8deg,
-    4 144.7deg,
-    5 151.6deg,
-    6 158.6deg,
-    7 165.5deg,
-    8 172.4deg,
-    9 179.4deg,
-    10 186.3deg,
-    11 193.2deg,
-    12 200.1deg,
-    13 207.1deg,
-    14 214deg;
+    0 126.9deg,
+    1 133.8deg,
+    2 140.8deg,
+    3 147.7deg,
+    4 154.6deg,
+    5 161.6deg,
+    6 168.5deg,
+    7 175.4deg,
+    8 182.3deg,
+    9 189.3deg,
+    10 196.2deg,
+    11 203.1deg,
+    12 210.1deg,
+    13 217deg,
+    14 223.9deg;
 
   @temperature-vals-arrakis-large:
-    -30 63deg,
-    -28 57.9deg,
-    -26 52.8deg,
-    -24 47.7deg,
-    -22 42.6deg,
-    -20 37.5deg,
-    -18 32.4deg,
-    -16 27.3deg,
-    -14 22.2deg,
-    -12 17.1deg,
-    -10 11.9deg,
-    -8 6.8deg,
-    -6 1.7deg,
-    -4 -3.4deg,
-    -2 -8.5deg,
-    0 -13.6deg,
-    2 -18.7deg,
-    4 -23.8deg,
-    6 -28.9deg,
-    8 -34deg;
+    -30 54deg,
+    -28 48.9deg,
+    -26 43.8deg,
+    -24 38.7deg,
+    -22 33.6deg,
+    -20 28.5deg,
+    -18 23.4deg,
+    -16 18.3deg,
+    -14 13.2deg,
+    -12 8.1deg,
+    -10 2.9deg,
+    -8 -2.2deg,
+    -6 -7.3deg,
+    -4 -12.4deg,
+    -2 -17.5deg,
+    0 -22.6deg,
+    2 -27.7deg,
+    4 -32.8deg,
+    6 -37.9deg,
+    8 -43deg;
 
   &.global-numbers--large.global-numbers--arrakis {
     .global-numbers-oxygen {

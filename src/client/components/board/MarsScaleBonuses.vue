@@ -25,7 +25,7 @@ const props = defineProps<{
   oxygen: number;
   // Undefined without Venus
   venus: number | undefined;
-  // The large Arrakis: its markers sit on the bigger circle of the large map
+  // Arrakis: its markers sit on its own circle and angles (arrakisScales.ts), the large one on the bigger circle
   geometry?: ScaleGeometry;
   // Arrakis: a full scale shows only its check, its chips go (Jens, 20 Oct 2026)
   hideComplete?: boolean;
