@@ -284,7 +284,6 @@
   "You want in return": "見返りに欲しいもの",
   "CHOAM offer": "CHOAM取引",
   "Smuggling: black market (double worth)": "密輸：闇市場（2倍の価値）",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "スパイス輸送：スパイス最大5を1つにつき5ソラリで。闇市場：2倍の価値で（スパイス1つに6ソラリ）。いずれも疑惑が1上がり、賄賂（10ソラリ、密輸業者の市場の所有者は7）で下げられます。世代の終わり：0と1は無料。2以上で影響力を失い、マーカーは0に戻ります。",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "あなたの手番ではない、交換できるものがない、または疑惑が4：先に賄賂を",
   "Bazaar: buy ${0} for ${1} M€": "バザール：${0}を${1} M€で買う",
   "Suspicion": "疑惑",
@@ -315,8 +314,6 @@
   "Start: the worm starts at random on one of these spaces:": "開始：サンドワームは次のマスのどれかからランダムに始まる：",
   "No suspicion: nothing to bribe": "疑いなし：買収の必要はありません",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "買収するソラリが足りません：${0}必要、所持${1}",
-  "Move spice: up to 5 titanium for 5 M€ each": "スパイス輸送：スパイス最大5を1つにつき5ソラリで",
-  "Black market: at double worth (6 M€ for 1 titanium)": "闇市場：2倍の価値で（スパイス1つに6ソラリ）",
   "Every deal raises the suspicion by 1": "取引のたびに疑惑が1上がる",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "賄賂（10ソラリ、密輸業者の市場の所有者は7）で疑惑が1下がる",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "世代の終わり：0と1は無料。2以上で影響力を失い、マーカーは0に戻る",
@@ -332,5 +329,10 @@
   "Only during your action": "自分のアクション中のみ",
   "Not enough M€": "M€が足りません",
   "No target: no opponent has a greenery, city or special tile": "対象なし：緑地・都市・特殊タイルを持つ対戦相手がいません",
-  "All ${0} spice fields": "スパイス原 ${0} か所すべて"
+  "All ${0} spice fields": "スパイス原 ${0} か所すべて",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "スパイス輸送：1回の取引でスパイス最大5を現在のスパイス相場で",
+  "Exchange: the rates change every generation – sell high, buy low": "取引所：相場は世代ごとに変わる――高く売り、安く買う",
+  "fixed": "固定",
+  "The smugglers set new rates": "密輸業者が新しい相場を決めた",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "スパイス輸送：1回の取引でスパイス最大5を現在のスパイス相場で。取引所：相場は世代ごとに変わる――高く売り、安く買う。いずれも疑惑が1上がり、賄賂（10ソラリ、密輸業者の市場の所有者は7）で下げられます。世代の終わり：0と1は無料。2以上で影響力を失い、マーカーは0に戻ります。"
 }

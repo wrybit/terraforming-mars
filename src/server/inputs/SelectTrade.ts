@@ -44,6 +44,7 @@ export class SelectTrade extends BasePlayerInput<Trade> {
       rate: this.pricing.rate,
       values: this.pricing.values,
       factor: this.pricing.factor,
+      buyValues: this.pricing.buyValues,
       pairs: this.pricing.pairs,
     };
   }

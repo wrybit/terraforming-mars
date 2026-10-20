@@ -285,7 +285,6 @@
   "You want in return": "Искаш в замяна",
   "CHOAM offer": "Оферта CHOAM",
   "Smuggling: black market (double worth)": "Контрабанда: черен пазар (двойна стойност)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Пренасяне на подправка: до 5 подправка по 5 солари всяка. Черен пазар: на двойна стойност (6 солари за 1 подправка). Всяко действие вдига подозрението с 1; подкуп (10 солари, за притежателя на Пазара на контрабандистите 7) го сваля. Край на поколението: 0 и 1 са безплатни, от 2 нагоре се губи влияние и маркерът се връща на 0.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Не е твой ход, нямаш какво да размениш или подозрението е 4: първо подкупи",
   "Bazaar: buy ${0} for ${1} M€": "Базар: купи ${0} за ${1} M€",
   "Suspicion": "Подозрение",
@@ -316,8 +315,6 @@
   "Start: the worm starts at random on one of these spaces:": "Старт: червеят започва случайно на едно от тези полета:",
   "No suspicion: nothing to bribe": "Няма подозрение: няма кого да подкупиш",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "Малко солари за подкуп: струва ${0}, имаш ${1}",
-  "Move spice: up to 5 titanium for 5 M€ each": "Пренасяне на подправка: до 5 подправка по 5 солари всяка",
-  "Black market: at double worth (6 M€ for 1 titanium)": "Черен пазар: на двойна стойност (6 солари за 1 подправка)",
   "Every deal raises the suspicion by 1": "Всяка сделка вдига подозрението с 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Подкуп (10 солари, за притежателя на Пазара на контрабандистите 7) го сваля с 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Край на поколението: 0 и 1 са безплатни, от 2 нагоре се губи влияние и маркерът се връща на 0",
@@ -333,5 +330,10 @@
   "Only during your action": "Само по време на твоето действие",
   "Not enough M€": "Недостатъчно M€",
   "No target: no opponent has a greenery, city or special tile": "Няма цел: никой противник няма озеленяване, град или специална плочка",
-  "All ${0} spice fields": "Всички ${0} полета с подправка"
+  "All ${0} spice fields": "Всички ${0} полета с подправка",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "Пренасяне на подправка: до 5 подправка на сделка по текущия курс на подправката",
+  "Exchange: the rates change every generation – sell high, buy low": "Борса: курсовете се менят всяко поколение – продавай скъпо, купувай евтино",
+  "fixed": "фиксиран",
+  "The smugglers set new rates": "Контрабандистите определят нови курсове",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Пренасяне на подправка: до 5 подправка на сделка по текущия курс на подправката. Борса: курсовете се менят всяко поколение – продавай скъпо, купувай евтино. Всяко действие вдига подозрението с 1; подкуп (10 солари, за притежателя на Пазара на контрабандистите 7) го сваля. Край на поколението: 0 и 1 са безплатни, от 2 нагоре се губи влияние и маркерът се връща на 0."
 }

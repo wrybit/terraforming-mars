@@ -280,7 +280,6 @@
   "You want in return": "Du vil ha i bytte",
   "CHOAM offer": "CHOAM-tilbud",
   "Smuggling: black market (double worth)": "Smugling: svartebørs (dobbel verdi)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Flytt krydder: opptil 5 krydder for 5 solari hver. Svartebørs: til dobbel verdi (6 solari for 1 krydder). Hver øker mistanken med 1; en bestikkelse (10 solari, eieren av Smuglermarkedet 7) senker den. Slutten av generasjonen: 0 og 1 er gratis, fra 2 og oppover tapes innflytelse og markøren går tilbake til 0.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Ikke din tur, ingenting å bytte eller mistanke 4: bestikk først",
   "Bazaar: buy ${0} for ${1} M€": "Basar: kjøp ${0} for ${1} M€",
   "Suspicion": "Mistanke",
@@ -311,8 +310,6 @@
   "Start: the worm starts at random on one of these spaces:": "Start: ormen starter tilfeldig på ett av disse feltene:",
   "No suspicion: nothing to bribe": "Ingen mistanke: ingenting å bestikke",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "For lite solari til å bestikke: det koster ${0}, du har ${1}",
-  "Move spice: up to 5 titanium for 5 M€ each": "Flytt krydder: opptil 5 krydder for 5 solari hver",
-  "Black market: at double worth (6 M€ for 1 titanium)": "Svartebørs: til dobbel verdi (6 solari for 1 krydder)",
   "Every deal raises the suspicion by 1": "Hver handel øker mistanken med 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "En bestikkelse (10 solari, eieren av Smuglermarkedet 7) senker den med 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Slutten av generasjonen: 0 og 1 er gratis, fra 2 og oppover tapes innflytelse og markøren går tilbake til 0",
@@ -328,5 +325,10 @@
   "Only during your action": "Bare under handlingen din",
   "Not enough M€": "For lite M€",
   "No target: no opponent has a greenery, city or special tile": "Ikke noe mål: ingen motspiller har grøntområde, by eller spesialbrikke",
-  "All ${0} spice fields": "Alle ${0} krydderfelt"
+  "All ${0} spice fields": "Alle ${0} krydderfelt",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "Flytt krydder: opptil 5 krydder per avtale til gjeldende krydderkurs",
+  "Exchange: the rates change every generation – sell high, buy low": "Børs: kursene endres hver generasjon – selg dyrt, kjøp billig",
+  "fixed": "fast",
+  "The smugglers set new rates": "Smuglerne setter nye kurser",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Flytt krydder: opptil 5 krydder per avtale til gjeldende krydderkurs. Børs: kursene endres hver generasjon – selg dyrt, kjøp billig. Hver øker mistanken med 1; en bestikkelse (10 solari, eieren av Smuglermarkedet 7) senker den. Slutten av generasjonen: 0 og 1 er gratis, fra 2 og oppover tapes innflytelse og markøren går tilbake til 0."
 }

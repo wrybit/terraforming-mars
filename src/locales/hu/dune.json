@@ -282,7 +282,6 @@
   "You want in return": "Cserébe kéred",
   "CHOAM offer": "CHOAM-ajánlat",
   "Smuggling: black market (double worth)": "Csempészet: feketepiac (dupla érték)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Fűszer szállítása: legfeljebb 5 fűszer egyenként 5 solariért. Feketepiac: dupla értéken (1 fűszer 6 solariért). Mindegyik 1-gyel növeli a gyanút; a vesztegetés (10 solari, a Csempészpiac tulajdonosának 7) csökkenti. A generáció végén: a 0 és az 1 ingyenes, 2-től befolyás vész el, és a jelző visszaesik 0-ra.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Nem te jössz, nincs mit cserélni, vagy a gyanú 4: előbb vesztegess",
   "Bazaar: buy ${0} for ${1} M€": "Bazár: ${0} megvétele ${1} M€-ért",
   "Suspicion": "Gyanú",
@@ -313,8 +312,6 @@
   "Start: the worm starts at random on one of these spaces:": "Kezdés: a féreg véletlenszerűen az egyik mezőn indul:",
   "No suspicion: nothing to bribe": "Nincs gyanú: nincs kit megvesztegetni",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "Kevés a solari a vesztegetéshez: ${0} kell, neked ${1} van",
-  "Move spice: up to 5 titanium for 5 M€ each": "Fűszer szállítása: legfeljebb 5 fűszer egyenként 5 solariért",
-  "Black market: at double worth (6 M€ for 1 titanium)": "Feketepiac: dupla értéken (1 fűszer 6 solariért)",
   "Every deal raises the suspicion by 1": "Minden üzlet 1-gyel növeli a gyanút",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "A vesztegetés (10 solari, a Csempészpiac tulajdonosának 7) 1-gyel csökkenti",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "A generáció végén: a 0 és az 1 ingyenes, 2-től befolyás vész el, és a jelző visszaesik 0-ra",
@@ -330,5 +327,10 @@
   "Only during your action": "Csak a saját akciód alatt",
   "Not enough M€": "Nincs elég M€",
   "No target: no opponent has a greenery, city or special tile": "Nincs célpont: egyik ellenfélnek sincs zöldterülete, városa vagy különleges lapkája",
-  "All ${0} spice fields": "Mind a ${0} fűszermező"
+  "All ${0} spice fields": "Mind a ${0} fűszermező",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "Fűszer szállítása: üzletenként legfeljebb 5 fűszer az aktuális fűszerárfolyamon",
+  "Exchange: the rates change every generation – sell high, buy low": "Tőzsde: az árfolyamok minden generációban változnak – drágán adj el, olcsón vegyél",
+  "fixed": "fix",
+  "The smugglers set new rates": "A csempészek új árfolyamokat szabnak",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Fűszer szállítása: üzletenként legfeljebb 5 fűszer az aktuális fűszerárfolyamon. Tőzsde: az árfolyamok minden generációban változnak – drágán adj el, olcsón vegyél. Mindegyik 1-gyel növeli a gyanút; a vesztegetés (10 solari, a Csempészpiac tulajdonosának 7) csökkenti. A generáció végén: a 0 és az 1 ingyenes, 2-től befolyás vész el, és a jelző visszaesik 0-ra."
 }

@@ -13,7 +13,7 @@ import {BazaarData, bazaarModel, bazaarTabActions, buyInput, initializeBazaar, s
 import {WormData, distanceInput, rollWorm, wormChooser, wormModel, wormStart} from './Worm';
 import {levyInput} from './WormLevy';
 import {KanlyData, initializeKanly, kanlyActions, kanlyModel, resolveBattle} from './Kanly';
-import {SmugglingData, chargeSuspicion, initializeSmuggling, smugglingActions, smugglingModel, smugglingTabActions} from './Smuggling';
+import {SmugglingData, chargeSuspicion, initializeSmuggling, moveExchange, smugglingActions, smugglingModel, smugglingTabActions} from './Smuggling';
 import {ChoamData, choamActions, choamModel, choamTabActions, initializeChoam, returnOffers} from './Choam';
 import {SchemesData, initializeSchemes, reductionStep, schemesModel, schemesVictoryPoints} from './Schemes';
 
@@ -54,6 +54,8 @@ const GENERATION_END_STEPS: ReadonlyArray<GenerationEndStep> = [
   (game, data, next) => {
     if (data.smuggling !== undefined) {
       chargeSuspicion(game, data.smuggling);
+      // The exchange sets the rates of the next generation
+      moveExchange(game, data.smuggling);
     }
     next();
   },

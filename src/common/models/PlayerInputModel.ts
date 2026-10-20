@@ -154,6 +154,8 @@ export type SelectTradeModel = BaseInputModel & {
   values?: Partial<Record<Resource, number>>;
   /** With values: the given side is worth this many times the received one */
   factor?: number;
+  /** Price of one received unit per resource (smuggling exchange); `values` is then what one given unit brings */
+  buyValues?: Partial<Record<Resource, number>>;
   /** Pairs with their own rate (and limit) instead of the one from the values */
   pairs?: ReadonlyArray<TradePairRate>;
 }

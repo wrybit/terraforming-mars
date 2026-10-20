@@ -281,7 +281,6 @@
   "You want in return": "Vuoi in cambio",
   "CHOAM offer": "Offerta CHOAM",
   "Smuggling: black market (double worth)": "Contrabbando: mercato nero (valore doppio)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Spostare spezia: fino a 5 spezia per 5 solari ciascuna. Mercato nero: al doppio del valore (6 solari per 1 spezia). Ognuno aumenta il sospetto di 1; una bustarella (10 solari, 7 per il proprietario del Mercato dei contrabbandieri) lo riduce. Fine generazione: 0 e 1 sono gratuiti, da 2 in su si perde influenza e il segnalino torna a 0.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Non è il tuo turno, nulla da scambiare o sospetto 4: prima corrompi",
   "Bazaar: buy ${0} for ${1} M€": "Bazar: compra ${0} per ${1} M€",
   "Suspicion": "Sospetto",
@@ -312,8 +311,6 @@
   "Start: the worm starts at random on one of these spaces:": "Inizio: il verme parte a caso da una di queste caselle:",
   "No suspicion: nothing to bribe": "Nessun sospetto: niente da corrompere",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "Solari insufficienti per corrompere: costa ${0}, ne hai ${1}",
-  "Move spice: up to 5 titanium for 5 M€ each": "Spostare spezia: fino a 5 spezia per 5 solari ciascuna",
-  "Black market: at double worth (6 M€ for 1 titanium)": "Mercato nero: al doppio del valore (6 solari per 1 spezia)",
   "Every deal raises the suspicion by 1": "Ogni scambio aumenta il sospetto di 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Una bustarella (10 solari, 7 per il proprietario del Mercato dei contrabbandieri) lo riduce di 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fine generazione: 0 e 1 sono gratuiti, da 2 in su si perde influenza e il segnalino torna a 0",
@@ -329,5 +326,10 @@
   "Only during your action": "Solo durante la tua azione",
   "Not enough M€": "M€ insufficienti",
   "No target: no opponent has a greenery, city or special tile": "Nessun bersaglio: nessun avversario ha una foresta, una città o una tessera speciale",
-  "All ${0} spice fields": "Tutti i ${0} campi di spezia"
+  "All ${0} spice fields": "Tutti i ${0} campi di spezia",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "Spostare spezia: fino a 5 spezia per affare al cambio attuale della spezia",
+  "Exchange: the rates change every generation – sell high, buy low": "Borsa: i cambi variano a ogni generazione – vendi caro, compra a poco",
+  "fixed": "fisso",
+  "The smugglers set new rates": "I contrabbandieri fissano nuovi cambi",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Spostare spezia: fino a 5 spezia per affare al cambio attuale della spezia. Borsa: i cambi variano a ogni generazione – vendi caro, compra a poco. Ognuno aumenta il sospetto di 1; una bustarella (10 solari, 7 per il proprietario del Mercato dei contrabbandieri) lo riduce. Fine generazione: 0 e 1 sono gratuiti, da 2 in su si perde influenza e il segnalino torna a 0."
 }

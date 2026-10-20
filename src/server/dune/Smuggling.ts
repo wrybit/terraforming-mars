@@ -9,7 +9,8 @@ import {SelectTrade} from '../inputs/SelectTrade';
 import {SelectPayment} from '../inputs/SelectPayment';
 import {OrOptions} from '../inputs/OrOptions';
 import {tradeRate} from '../../common/inputs/tradeRate';
-import {BAZAAR_GOOD_VALUE} from '../../common/dune/bazaarWares';
+import {NORMAL_BUY, NORMAL_SELL} from '../../common/dune/smugglingExchange';
+import {ExchangeData, advanceExchange, currentRates, initializeExchange} from './SmugglingExchange';
 import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
 import {COSTLY_SUSPICION, MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '../../common/dune/DuneModel';
@@ -17,39 +18,50 @@ import {CardName} from '../../common/cards/CardName';
 
 // Module E – Smuggling & suspicion (claude/dune-erweiterung-konzept.md). Trading past the Empire pays more, but every
 // deal makes you more suspicious, and high suspicion costs TR (Landsraad influence). All actions any number of times:
-// - Move spice: up to 5 titanium, 5 M€ each instead of its worth of 3. Suspicion +1.
-// - Black market: any resource for another at double its worth (value table), any amount in one action. Suspicion +1.
+// - Move spice: up to 5 titanium for M€ at the exchange rate (normally 5 each). Suspicion +1.
+// - Black market: any resource for another at the exchange rates – what the smugglers pay for the given one, what they
+//   ask for the received one (SmugglingExchange.ts, rates move every generation). Suspicion +1.
 // - Bribe: 10 M€ (owner of the Smugglers' market tile – Industrial Center – 7), suspicion −1.
 // Checked only at the end of the generation: 0 and 1 free, level 2 −1 TR, 3 −2, 4 −3; whoever pays drops back to 0.
 // Level 4 (top) blocks smuggling. (Jens, 19 Oct 2026)
 
 export type SmugglingData = {
   suspicion: Record<PlayerId, number>,
+  /** Rates of the exchange; games from before the exchange get it on first use */
+  exchange?: ExchangeData,
 };
 
 export {MAX_SUSPICION};
-export const SPICE_PRICE = 5;
 export const MAX_SPICE_PER_DEAL = 5;
 export const BRIBE_COST = 10;
 export const BRIBE_COST_WITH_MARKET = 7;
-/** Black market: what is given is worth this many times what is received */
-export const BLACK_MARKET_FACTOR = 2;
 /** No upper limit on what smuggling pays out (the stock limits it) */
 const NO_LIMIT = 9999;
-/** Moving spice: its own rate, better than the black market, and at most 5 spice per deal */
-const SPICE_PAIR = {give: Resource.TITANIUM, get: Resource.MEGACREDITS, rate: {give: 1, get: SPICE_PRICE}, maxGive: MAX_SPICE_PER_DEAL};
-/** Worth of one unit on the black market: the value table of the Dune expansion (M€ 1, steel 2, titanium 3 …) */
-export const BLACK_MARKET_VALUES: Record<Resource, number> = {
-  megacredits: 1,
-  steel: BAZAAR_GOOD_VALUE.steel,
-  titanium: BAZAAR_GOOD_VALUE.titanium,
-  plants: BAZAAR_GOOD_VALUE.plants,
-  energy: BAZAAR_GOOD_VALUE.energy,
-  heat: BAZAAR_GOOD_VALUE.heat,
-};
 
 export function initializeSmuggling(): SmugglingData {
-  return {suspicion: {}};
+  return {suspicion: {}, exchange: initializeExchange()};
+}
+
+/** The exchange of the game; added on first use to games from before it */
+export function exchangeOf(data: SmugglingData): ExchangeData {
+  data.exchange ??= initializeExchange();
+  return data.exchange;
+}
+
+/** Prices of the current generation: what one given unit brings (sell) and what one received unit costs (buy) */
+function currentPricing(data: SmugglingData) {
+  const exchange = exchangeOf(data);
+  const sell = currentRates(exchange.sell);
+  const buy = currentRates(exchange.buy);
+  // Moving spice is the same deal at the exchange rate, only limited to 5 spice
+  const spicePair = {give: Resource.TITANIUM, get: Resource.MEGACREDITS, rate: {give: 1, get: sell.titanium}, maxGive: MAX_SPICE_PER_DEAL};
+  return {values: {...sell}, buyValues: {...buy}, spicePair};
+}
+
+/** End of a generation: the exchange sets the rates of the next one */
+export function moveExchange(game: IGame, data: SmugglingData): void {
+  advanceExchange(exchangeOf(data), game.rng);
+  game.log('The smugglers set new rates');
 }
 
 /** Level on the track; games from before the track ended at 4 may hold a 5, which counts as the top (4) */
@@ -100,17 +112,16 @@ function raise(player: IPlayer, data: SmugglingData): void {
 }
 
 /**
- * Smuggling in one trade, its own action tab (Jens, 19 Oct 2026): moving spice (1 titanium for 5 M€, up to 5 per deal)
- * and the black market (any resource for another at double its worth, value table: 6 M€ for 1 spice …).
+ * Smuggling in one trade, its own action tab (Jens, 19 Oct 2026): moving spice (titanium for M€, up to 5 per deal)
+ * and the black market (any resource for another), both at the rates of the exchange of this generation.
  * The AI only moves spice (`onlySpice`).
  */
 function smuggleInput(player: IPlayer, data: SmugglingData, onlySpice: boolean): SelectTrade | undefined {
   if (suspicionOf(data, player) >= MAX_SUSPICION) {
     return undefined;
   }
-  const pricing = onlySpice ?
-    {pairs: [SPICE_PAIR]} :
-    {values: BLACK_MARKET_VALUES, factor: BLACK_MARKET_FACTOR, pairs: [SPICE_PAIR]};
+  const {values, buyValues, spicePair} = currentPricing(data);
+  const pricing = onlySpice ? {pairs: [spicePair]} : {values, buyValues, pairs: [spicePair]};
   const getOptions = onlySpice ? [Resource.MEGACREDITS] : ALL_RESOURCES;
   // What pays for at least one unit of some other resource
   const affords = (resource: Resource) => getOptions.some((get) => get !== resource &&
@@ -209,5 +220,12 @@ export function chargeSuspicion(game: IGame, data: SmugglingData): void {
 }
 
 export function smugglingModel(game: IGame, data: SmugglingData): SmugglingModel {
-  return {suspicion: game.players.map((player) => ({color: player.color, level: suspicionOf(data, player), bribeCost: bribeCost(player)}))};
+  const exchange = exchangeOf(data);
+  return {
+    suspicion: game.players.map((player) => ({color: player.color, level: suspicionOf(data, player), bribeCost: bribeCost(player)})),
+    exchange: {
+      sell: {normal: {...NORMAL_SELL}, history: exchange.sell},
+      buy: {normal: {...NORMAL_BUY}, history: exchange.buy},
+    },
+  };
 }

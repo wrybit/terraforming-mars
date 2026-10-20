@@ -282,7 +282,6 @@
   "You want in return": "Quieres a cambio",
   "CHOAM offer": "Oferta CHOAM",
   "Smuggling: black market (double worth)": "Contrabando: mercado negro (doble valor)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Mover especia: hasta 5 especia por 5 solaris cada una. Mercado negro: al doble de su valor (6 solaris por 1 especia). Cada uno aumenta la sospecha en 1; un soborno (10 solaris, 7 para el propietario del Mercado de contrabandistas) la reduce. Fin de la generación: 0 y 1 son gratis; a partir de 2 se pierde influencia y el marcador vuelve a 0.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "No es tu turno, no tienes nada que cambiar o sospecha 4: soborna primero",
   "Bazaar: buy ${0} for ${1} M€": "Bazar: comprar ${0} por ${1} M€",
   "Suspicion": "Sospecha",
@@ -313,8 +312,6 @@
   "Start: the worm starts at random on one of these spaces:": "Inicio: el gusano empieza al azar en una de estas casillas:",
   "No suspicion: nothing to bribe": "Sin sospecha: no hay nada que sobornar",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "Faltan solaris para sobornar: cuesta ${0}, tienes ${1}",
-  "Move spice: up to 5 titanium for 5 M€ each": "Mover especia: hasta 5 especia por 5 solaris cada una",
-  "Black market: at double worth (6 M€ for 1 titanium)": "Mercado negro: al doble de su valor (6 solaris por 1 especia)",
   "Every deal raises the suspicion by 1": "Cada trato aumenta la sospecha en 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Un soborno (10 solaris, 7 para el propietario del Mercado de contrabandistas) la reduce en 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fin de la generación: 0 y 1 son gratis; a partir de 2 se pierde influencia y el marcador vuelve a 0",
@@ -330,5 +327,10 @@
   "Only during your action": "Solo durante tu acción",
   "Not enough M€": "No hay suficientes M€",
   "No target: no opponent has a greenery, city or special tile": "Sin objetivo: ningún rival tiene vegetación, ciudad o loseta especial",
-  "All ${0} spice fields": "Los ${0} campos de especia"
+  "All ${0} spice fields": "Los ${0} campos de especia",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "Mover especia: hasta 5 especia por trato al precio actual de la especia",
+  "Exchange: the rates change every generation – sell high, buy low": "Bolsa: los precios cambian cada generación – vende caro, compra barato",
+  "fixed": "fijo",
+  "The smugglers set new rates": "Los contrabandistas fijan nuevos precios",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Mover especia: hasta 5 especia por trato al precio actual de la especia. Bolsa: los precios cambian cada generación – vende caro, compra barato. Cada uno aumenta la sospecha en 1; un soborno (10 solaris, 7 para el propietario del Mercado de contrabandistas) la reduce. Fin de la generación: 0 y 1 son gratis; a partir de 2 se pierde influencia y el marcador vuelve a 0."
 }

@@ -285,7 +285,6 @@
   "You want in return": "你想换取",
   "CHOAM offer": "CHOAM报价",
   "Smuggling: black market (double worth)": "走私：黑市（双倍价值）",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "运送香料：最多 5 香料，每份 5 索拉里。黑市：按双倍价值（6 索拉里换 1 香料）。每次都会使嫌疑 +1；贿赂（10 索拉里，走私者市场拥有者 7）可降低嫌疑。世代结束时：0 和 1 免费；嫌疑达到 2 起会失去影响力，标记随后归零。",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "不是你的回合、没有可交换的资源，或嫌疑为 4：先行贿",
   "Bazaar: buy ${0} for ${1} M€": "集市：以 ${1} M€ 购买 ${0}",
   "Suspicion": "嫌疑",
@@ -316,8 +315,6 @@
   "Start: the worm starts at random on one of these spaces:": "开始：沙虫随机出现在以下格子之一：",
   "No suspicion: nothing to bribe": "没有嫌疑：无需贿赂",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "索拉里不足，无法贿赂：需要 ${0}，你有 ${1}",
-  "Move spice: up to 5 titanium for 5 M€ each": "运送香料：最多 5 香料，每份 5 索拉里",
-  "Black market: at double worth (6 M€ for 1 titanium)": "黑市：按双倍价值（6 索拉里换 1 香料）",
   "Every deal raises the suspicion by 1": "每次交易嫌疑 +1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "贿赂（10 索拉里，走私者市场拥有者 7）使嫌疑 -1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "世代结束时：0 和 1 免费；嫌疑达到 2 起会失去影响力，标记随后归零",
@@ -333,5 +330,10 @@
   "Only during your action": "仅在你的行动期间",
   "Not enough M€": "M€不足",
   "No target: no opponent has a greenery, city or special tile": "没有目标：没有对手拥有绿地、城市或特殊板块",
-  "All ${0} spice fields": "全部 ${0} 块香料田"
+  "All ${0} spice fields": "全部 ${0} 块香料田",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "运送香料：每笔交易最多 5 香料，按当前香料汇率",
+  "Exchange: the rates change every generation – sell high, buy low": "交易所：汇率每世代变化——高卖低买",
+  "fixed": "固定",
+  "The smugglers set new rates": "走私者设定了新汇率",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "运送香料：每笔交易最多 5 香料，按当前香料汇率。交易所：汇率每世代变化——高卖低买。每次都会使嫌疑 +1；贿赂（10 索拉里，走私者市场拥有者 7）可降低嫌疑。世代结束时：0 和 1 免费；嫌疑达到 2 起会失去影响力，标记随后归零。"
 }

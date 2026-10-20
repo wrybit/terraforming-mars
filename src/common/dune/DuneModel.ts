@@ -1,3 +1,4 @@
+import {ExchangeModel} from './smugglingExchange';
 import {Color} from '../Color';
 import {BoardName} from '../boards/BoardName';
 import {Resource} from '../Resource';
@@ -81,6 +82,8 @@ export function suspicionPenalty(level: number): number {
 export type SmugglingModel = {
   /** Every player's level and what a bribe costs them (cards and the smugglers' market lower it) */
   suspicion: ReadonlyArray<{color: Color, level: number, bribeCost: number}>,
+  /** Rates of the exchange, every generation so far (common/dune/smugglingExchange.ts) */
+  exchange: ExchangeModel,
 };
 
 export type ChoamOfferModel = {

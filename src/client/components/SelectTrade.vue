@@ -4,20 +4,28 @@
        both sides (AmountConverter, before → after like other conversions); without a rate (CHOAM) one slider per side
        and the summary above the button repeats the deal. A priced trade without a choice (moving spice) shows only the
        converter: it already says what goes and what comes (Jens, 19 Oct 2026). -->
-  <div class="trade-select">
+  <!-- Smuggling: above the tiles of each side the exchange (ExchangeChart), below each tile its rate (Jens, 20 Oct 2026) -->
+  <div :class="['trade-select', {'trade-select--exchange': exchange !== undefined}]">
     <div v-if="showtitle === true" class="amount-select__title">{{ $t(playerinput.title) }}</div>
     <!-- Two groups side by side (stacked when narrow): each with its label, its resources and – without a rate – its
          amount, so everything of one side belongs together (law of proximity) -->
     <div v-if="!hasRate || playerinput.give.length > 1 || playerinput.get.length > 1" class="trade-select__sides">
       <section class="trade-select__side" data-test="trade-give">
         <h4 class="trade-select__label">{{ $t(hasRate ? 'You give' : 'You offer') }}</h4>
-        <div class="trade-select__resources">
-          <button v-for="option in playerinput.give" :key="option.resource" type="button" :disabled="!givable(option.resource)"
-            :class="['trade-select__resource', {'trade-select__resource--selected': option.resource === give}]"
-            :title="$t(resourceName(option.resource))" @click="chooseGive(option.resource)">
-            <i :class="'resource_icon resource_icon--' + option.resource"></i>
-            <span class="trade-select__stock">{{ stockOf(option.resource) }}</span>
-          </button>
+        <div :class="{'trade-select__exchange': exchange !== undefined}">
+          <ExchangeChart v-if="exchange !== undefined" :resources="giveResources" :board="exchange.sell" :higherIsGood="true" :generation="generation"/>
+          <div class="trade-select__resources">
+            <button v-for="option in playerinput.give" :key="option.resource" type="button" :disabled="!givable(option.resource)"
+              :class="['trade-select__resource', {'trade-select__resource--selected': option.resource === give}]"
+              :title="$t(resourceName(option.resource))" @click="chooseGive(option.resource)">
+              <i :class="'resource_icon resource_icon--' + option.resource"></i>
+              <span class="trade-select__stock">{{ stockOf(option.resource) }}</span>
+              <span v-if="exchange !== undefined" class="trade-select__rate">
+                <span class="button-count button-count--megacredits">{{ rateOf(option.resource, true).price }}</span>
+                <span :class="'trade-select__change trade-select__change--' + rateOf(option.resource, true).mood">{{ rateOf(option.resource, true).change }}</span>
+              </span>
+            </button>
+          </div>
         </div>
         <div v-if="!hasRate" class="amount-slider-plain trade-select__slider">
           <AmountSlider v-model="giveAmount" :min="1" :max="giveMax"/>
@@ -25,13 +33,20 @@
       </section>
       <section class="trade-select__side" data-test="trade-get">
         <h4 class="trade-select__label">{{ $t(hasRate ? 'You get' : 'You want in return') }}</h4>
-        <div class="trade-select__resources">
-          <button v-for="resource in playerinput.get" :key="resource" type="button" :disabled="!receivable(give, resource)"
-            :class="['trade-select__resource', {'trade-select__resource--selected': resource === get}]"
-            :title="$t(resourceName(resource))" @click="chooseGet(resource)">
-            <i :class="'resource_icon resource_icon--' + resource"></i>
-            <span class="trade-select__stock">{{ stockOf(resource) }}</span>
-          </button>
+        <div :class="{'trade-select__exchange': exchange !== undefined}">
+          <ExchangeChart v-if="exchange !== undefined" :resources="playerinput.get" :board="exchange.buy" :higherIsGood="false" :generation="generation"/>
+          <div class="trade-select__resources">
+            <button v-for="resource in playerinput.get" :key="resource" type="button" :disabled="!receivable(give, resource)"
+              :class="['trade-select__resource', {'trade-select__resource--selected': resource === get}]"
+              :title="$t(resourceName(resource))" @click="chooseGet(resource)">
+              <i :class="'resource_icon resource_icon--' + resource"></i>
+              <span class="trade-select__stock">{{ stockOf(resource) }}</span>
+              <span v-if="exchange !== undefined" class="trade-select__rate">
+                <span class="button-count button-count--megacredits">{{ rateOf(resource, false).price }}</span>
+                <span :class="'trade-select__change trade-select__change--' + rateOf(resource, false).mood">{{ rateOf(resource, false).change }}</span>
+              </span>
+            </button>
+          </div>
         </div>
         <div v-if="!hasRate" class="amount-slider-plain trade-select__slider">
           <AmountSlider v-model="getAmount" :min="1" :max="playerinput.maxGet"/>
@@ -67,6 +82,10 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {SelectTradeResponse} from '@/common/inputs/InputResponse';
 import {isPricedTrade, pairGiveLimit, tradeRate} from '@/common/inputs/tradeRate';
 import {Resource} from '@/common/Resource';
+import {ExchangeModel} from '@/common/dune/smugglingExchange';
+import ExchangeChart from '@/client/components/dune/ExchangeChart.vue';
+import {Mood, rateChange} from '@/client/components/dune/exchangeChart';
+import {translateText} from '@/client/directives/i18n';
 
 // Names of the resources (translated; the Dune theme swaps them for its own words)
 const RESOURCE_NAMES: Readonly<Record<Resource, string>> = {
@@ -84,6 +103,7 @@ export default defineComponent({
     AppButton,
     AmountConverter,
     AmountSlider,
+    ExchangeChart,
     TabPanelFooterSlot,
   },
   props: {
@@ -104,6 +124,11 @@ export default defineComponent({
     },
     showtitle: {
       type: Boolean,
+    },
+    // Smuggling: the exchange with the rates of both sides and their history (only there)
+    exchange: {
+      type: Object as () => ExchangeModel | undefined,
+      default: undefined,
     },
   },
   data() {
@@ -126,6 +151,12 @@ export default defineComponent({
     };
   },
   computed: {
+    giveResources(): ReadonlyArray<Resource> {
+      return this.playerinput.give.map((option) => option.resource);
+    },
+    generation(): number {
+      return this.playerView.game.generation;
+    },
     // Priced trade (fixed rate or worth per resource): one slider for both sides
     hasRate(): boolean {
       return isPricedTrade(this.playerinput);
@@ -168,6 +199,20 @@ export default defineComponent({
     },
   },
   methods: {
+    // Rate of a tile on the exchange: price in Solari and the change to the generation before (Solari: fixed)
+    rateOf(resource: Resource, selling: boolean): {price: number, change: string, mood: Mood} {
+      const board = selling ? this.exchange?.sell : this.exchange?.buy;
+      if (board === undefined) {
+        return {price: 1, change: '', mood: 'normal'};
+      }
+      const price = board.history[board.history.length - 1][resource];
+      if (resource === Resource.MEGACREDITS) {
+        return {price, change: translateText('fixed'), mood: 'normal'};
+      }
+      const {delta, mood} = rateChange(board, resource, selling);
+      const change = delta > 0 ? '▲' + delta : delta < 0 ? '▼' + (-delta) : '–';
+      return {price, change, mood};
+    },
     resourceName(resource: Resource): string {
       return RESOURCE_NAMES[resource];
     },

@@ -1,0 +1,211 @@
+// Smuggling exchange in the trade (ExchangeChart.vue, SelectTrade.vue with an exchange): above the resource tiles the
+// history of the rates, subtle – thin white lines and small white points; green or red only where a rate is better or
+// worse for the player than normal. Below each tile its rate as a coin and the change (Jens, 20 Oct 2026).
+// Only under .trade-select--exchange, so CHOAM and Mars trades stay as they are.
+@exchange-good: #49c24a;
+@exchange-bad: #e0503c;
+@exchange-line: #fff8ea;
+@exchange-muted: #a8916f;
+// Room in front of the columns for the generation; the tiles below keep the same room, so columns and tiles align
+@exchange-label-width: 32px;
+
+// The sides measure their own width for the tile size below
+.trade-select--exchange .trade-select__side {
+  container-type: inline-size;
+}
+
+// Narrower sides (phone, two sides next to each other): narrower tiles instead of wrapping under the chart
+@container (max-width: 390px) {
+  .trade-select--exchange .trade-select__exchange {
+    --exchange-tile: 44px;
+    --exchange-gap: 4px;
+  }
+}
+
+@container (max-width: 330px) {
+  .trade-select--exchange .trade-select__exchange {
+    --exchange-tile: 38px;
+    --exchange-gap: 3px;
+
+    .trade-select__resource .resource_icon {
+      width: 26px;
+      height: 26px;
+    }
+  }
+}
+
+.trade-select__exchange {
+  --exchange-tile: 52px;
+  --exchange-gap: 6px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  // No wrapping under the chart; the same room in front as the generations above
+  .trade-select__resources {
+    flex-wrap: nowrap;
+    gap: var(--exchange-gap);
+    padding-left: @exchange-label-width;
+  }
+
+  .trade-select__resource {
+    width: var(--exchange-tile);
+  }
+}
+
+.exchange-chart {
+  display: flex;
+}
+
+.exchange-chart__generations {
+  position: relative;
+  flex: none;
+  width: @exchange-label-width;
+}
+
+// Generation in front with a short tick, not running through the chart
+.exchange-chart__generation {
+  position: absolute;
+  right: 2px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  transform: translateY(-50%);
+  color: @exchange-muted;
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+
+  &::after {
+    content: '';
+    width: 6px;
+    height: 1.5px;
+    background: currentColor;
+  }
+}
+
+.exchange-chart__generation--now {
+  color: #fff3dc;
+  font-weight: bold;
+}
+
+// Older generations fade out towards the top
+.exchange-chart__columns {
+  display: flex;
+  gap: var(--exchange-gap);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.15), #000 75%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.15), #000 75%);
+}
+
+.exchange-chart__column {
+  position: relative;
+  width: var(--exchange-tile);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.exchange-chart__plot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.exchange-chart__normal {
+  stroke: rgba(255, 240, 210, 0.35);
+  stroke-dasharray: 3 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.exchange-chart__area {
+  fill-opacity: 0.22;
+}
+
+.exchange-chart__area--good {
+  fill: @exchange-good;
+}
+
+.exchange-chart__area--bad {
+  fill: @exchange-bad;
+}
+
+.exchange-chart__line {
+  fill: none;
+  stroke: @exchange-line;
+  stroke-opacity: 0.55;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+// Older points small and white; off normal with a coloured halo
+.exchange-chart__point {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: @exchange-line;
+  transform: translate(-50%, -50%);
+}
+
+.exchange-chart__point--good {
+  box-shadow: 0 0 0 3px fade(@exchange-good, 30%);
+}
+
+.exchange-chart__point--bad {
+  box-shadow: 0 0 0 3px fade(@exchange-bad, 30%);
+}
+
+// The current rate: larger, in its mood colour
+.exchange-chart__point--current {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid #2a160b;
+
+  &.exchange-chart__point--good {
+    background: @exchange-good;
+    box-shadow: 0 0 0 4px fade(@exchange-good, 28%);
+  }
+
+  &.exchange-chart__point--bad {
+    background: @exchange-bad;
+    box-shadow: 0 0 0 4px fade(@exchange-bad, 28%);
+  }
+}
+
+// Rate under each tile: the coin with the rate, the change to the last generation below it
+.trade-select__rate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  margin-top: 2px;
+
+  .button-count--megacredits {
+    min-width: 24px;
+    height: 24px;
+    font-size: 13px;
+  }
+}
+
+.trade-select__change {
+  max-width: 100%;
+  overflow: hidden;
+  color: @exchange-muted;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trade-select__change--good {
+  color: #7fe07a;
+}
+
+.trade-select__change--bad {
+  color: #ff7a68;
+}

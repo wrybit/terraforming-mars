@@ -282,7 +282,6 @@
   "You want in return": "Chcesz w zamian",
   "CHOAM offer": "Oferta CHOAM",
   "Smuggling: black market (double worth)": "Przemyt: czarny rynek (podwójna wartość)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Przerzut przyprawy: do 5 przyprawy po 5 solarów za sztukę. Czarny rynek: za podwójną wartość (6 solarów za 1 przyprawę). Każde podnosi podejrzenie o 1; łapówka (10 solarów, właściciel Targu przemytników 7) je obniża. Koniec pokolenia: 0 i 1 są darmowe, od 2 traci się Wpływ, a znacznik wraca na 0.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Nie twoja tura, nic do wymiany lub podejrzenie 4: najpierw łapówka",
   "Bazaar: buy ${0} for ${1} M€": "Bazar: kup ${0} za ${1} M€",
   "Suspicion": "Podejrzenie",
@@ -313,8 +312,6 @@
   "Start: the worm starts at random on one of these spaces:": "Start: czerw zaczyna losowo na jednym z tych pól:",
   "No suspicion: nothing to bribe": "Brak podejrzeń: nie ma kogo przekupić",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "Za mało solarów na łapówkę: kosztuje ${0}, masz ${1}",
-  "Move spice: up to 5 titanium for 5 M€ each": "Przerzut przyprawy: do 5 przyprawy po 5 solarów za sztukę",
-  "Black market: at double worth (6 M€ for 1 titanium)": "Czarny rynek: za podwójną wartość (6 solarów za 1 przyprawę)",
   "Every deal raises the suspicion by 1": "Każda transakcja podnosi podejrzenie o 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Łapówka (10 solarów, właściciel Targu przemytników 7) obniża je o 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Koniec pokolenia: 0 i 1 są darmowe, od 2 traci się Wpływ, a znacznik wraca na 0",
@@ -330,5 +327,10 @@
   "Only during your action": "Tylko podczas twojej akcji",
   "Not enough M€": "Za mało M€",
   "No target: no opponent has a greenery, city or special tile": "Brak celu: żaden przeciwnik nie ma terenu zielonego, miasta ani specjalnego kafelka",
-  "All ${0} spice fields": "Wszystkie ${0} pól przyprawy"
+  "All ${0} spice fields": "Wszystkie ${0} pól przyprawy",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "Przerzut przyprawy: do 5 przyprawy na transakcję po bieżącym kursie przyprawy",
+  "Exchange: the rates change every generation – sell high, buy low": "Giełda: kursy zmieniają się co pokolenie – sprzedawaj drogo, kupuj tanio",
+  "fixed": "stały",
+  "The smugglers set new rates": "Przemytnicy ustalają nowe kursy",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Przerzut przyprawy: do 5 przyprawy na transakcję po bieżącym kursie przyprawy. Giełda: kursy zmieniają się co pokolenie – sprzedawaj drogo, kupuj tanio. Każde podnosi podejrzenie o 1; łapówka (10 solarów, właściciel Targu przemytników 7) je obniża. Koniec pokolenia: 0 i 1 są darmowe, od 2 traci się Wpływ, a znacznik wraca na 0."
 }

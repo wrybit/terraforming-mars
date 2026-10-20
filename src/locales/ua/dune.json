@@ -284,7 +284,6 @@
   "You want in return": "Ти хочеш натомість",
   "CHOAM offer": "Пропозиція CHOAM",
   "Smuggling: black market (double worth)": "Контрабанда: чорний ринок (подвійна ціна)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Перевезти прянощі: до 5 прянощів по 5 соларіїв за одиницю. Чорний ринок: за подвійною ціною (6 соларіїв за 1 прянощі). Кожна дія підвищує підозру на 1; хабар (10 соларіїв, власнику Ринку контрабандистів 7) її знижує. Кінець покоління: 0 і 1 безкоштовні, від 2 втрачається вплив, і маркер повертається на 0.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Не твій хід, нічого обміняти або підозра 4: спершу дай хабар",
   "Bazaar: buy ${0} for ${1} M€": "Базар: купити ${0} за ${1} M€",
   "Suspicion": "Підозра",
@@ -315,8 +314,6 @@
   "Start: the worm starts at random on one of these spaces:": "Старт: черв починає випадково на одному з цих полів:",
   "No suspicion: nothing to bribe": "Немає підозри: нема кого підкуповувати",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "Замало соларіїв для хабара: коштує ${0}, у тебе ${1}",
-  "Move spice: up to 5 titanium for 5 M€ each": "Перевезти прянощі: до 5 прянощів по 5 соларіїв за одиницю",
-  "Black market: at double worth (6 M€ for 1 titanium)": "Чорний ринок: за подвійною ціною (6 соларіїв за 1 прянощі)",
   "Every deal raises the suspicion by 1": "Кожна угода підвищує підозру на 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Хабар (10 соларіїв, власнику Ринку контрабандистів 7) знижує її на 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Кінець покоління: 0 і 1 безкоштовні, від 2 втрачається вплив, і маркер повертається на 0",
@@ -332,5 +329,10 @@
   "Only during your action": "Лише під час твоєї дії",
   "Not enough M€": "Недостатньо M€",
   "No target: no opponent has a greenery, city or special tile": "Немає цілі: жоден суперник не має озеленення, міста чи особливої плитки",
-  "All ${0} spice fields": "Усі ${0} полів прянощів"
+  "All ${0} spice fields": "Усі ${0} полів прянощів",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "Перевезти прянощі: до 5 прянощів за угоду за поточним курсом прянощів",
+  "Exchange: the rates change every generation – sell high, buy low": "Біржа: курси змінюються кожне покоління – продавай дорого, купуй дешево",
+  "fixed": "фікс.",
+  "The smugglers set new rates": "Контрабандисти встановлюють нові курси",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Перевезти прянощі: до 5 прянощів за угоду за поточним курсом прянощів. Біржа: курси змінюються кожне покоління – продавай дорого, купуй дешево. Кожна дія підвищує підозру на 1; хабар (10 соларіїв, власнику Ринку контрабандистів 7) її знижує. Кінець покоління: 0 і 1 безкоштовні, від 2 втрачається вплив, і маркер повертається на 0."
 }

@@ -28,7 +28,7 @@
           </div>
 
           <SelectTrade v-else-if="mode.id === 'smuggle' && tradeInput !== undefined" ref="trade"
-            :playerView="playerView" :playerinput="tradeInput" :onsave="answer('smuggle')" :showsave="false" :showtitle="false"/>
+            :playerView="playerView" :playerinput="tradeInput" :onsave="answer('smuggle')" :showsave="false" :showtitle="false" :exchange="smuggling?.exchange"/>
 
           <template v-else-if="mode.id === 'bribe' && bribeInput !== undefined">
             <!-- Paid in Solari: what goes and what the suspicion becomes, like any other conversion -->

@@ -13,7 +13,7 @@ import {Resource} from '../../src/common/Resource';
 import {TileType} from '../../src/common/TileType';
 import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
 import {battleTargets, garrisonOf, resolveBattle, OPEN_KANLY_COST} from '../../src/server/dune/Kanly';
-import {chargeSuspicion, suspicionOf, suspicionPenalty} from '../../src/server/dune/Smuggling';
+import {chargeSuspicion, exchangeOf, moveExchange, suspicionOf, suspicionPenalty} from '../../src/server/dune/Smuggling';
 import {returnOffers} from '../../src/server/dune/Choam';
 import {SCHEMES_TITLE, agendaPoints, reductionStep, schemeValue, schemesVictoryPoints} from '../../src/server/dune/Schemes';
 import {SCHEME_AGENDAS, schemeAgenda} from '../../src/common/dune/schemeAgendas';
@@ -147,6 +147,25 @@ describe('Dune modules B, D, E, F', () => {
       expect(() => market.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 2, get: Resource.TITANIUM, getAmount: 1})).to.throw();
       market.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 12, get: Resource.TITANIUM, getAmount: 2});
       expect([player1.megaCredits, player1.titanium]).deep.eq([1, 2]);
+    });
+
+    it('trades at the rates of the current generation: what the given one brings, what the received one costs', () => {
+      const exchange = exchangeOf(game.duneData!.smuggling!);
+      exchange.sell.push({...exchange.sell[0], heat: 2});
+      exchange.buy.push({...exchange.buy[0], plants: 2});
+      player1.heat = 3;
+      const market = smuggleTrade(player1);
+      expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 2, get: Resource.PLANTS, getAmount: 1})).to.throw();
+      market.process({type: 'trade', give: Resource.HEAT, giveAmount: 3, get: Resource.PLANTS, getAmount: 3});
+      expect([player1.heat, player1.plants]).deep.eq([0, 3]);
+    });
+
+    it('sets new rates at the end of a generation and keeps every generation for the graph', () => {
+      const smuggling = game.duneData!.smuggling!;
+      moveExchange(game, smuggling);
+      moveExchange(game, smuggling);
+      expect(exchangeOf(smuggling).sell).has.length(3);
+      expect(exchangeOf(smuggling).buy).has.length(3);
     });
 
     it('always offers spice, even without any, but refuses to give it', () => {

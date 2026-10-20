@@ -12,6 +12,11 @@ export type TradePricing = {
   values?: Partial<Record<Resource, number>>,
   /** With values: the given side is worth this many times the received one (black market: 2) */
   factor?: number,
+  /**
+   * Price of one received unit per resource (smuggling exchange: the buy board); `values` then is what one given unit
+   * brings (the sell board) and `factor` is not used
+   */
+  buyValues?: Partial<Record<Resource, number>>,
   /** Pairs with their own rate and limit (smuggling: 1 spice for 5 M€, at most 5) */
   pairs?: ReadonlyArray<TradePairRate>,
 };
@@ -43,11 +48,11 @@ export function tradeRate(pricing: TradePricing, give: Resource, get: Resource):
     return pricing.rate;
   }
   const giveWorth = pricing.values?.[give];
-  const getWorth = pricing.values?.[get];
+  const getWorth = pricing.buyValues !== undefined ? pricing.buyValues[get] : pricing.values?.[get];
   if (giveWorth === undefined || getWorth === undefined) {
     return undefined;
   }
-  const giveUnits = (pricing.factor ?? 1) * getWorth;
+  const giveUnits = (pricing.buyValues !== undefined ? 1 : (pricing.factor ?? 1)) * getWorth;
   const getUnits = giveWorth;
   const divisor = greatestCommonDivisor(giveUnits, getUnits);
   return {give: giveUnits / divisor, get: getUnits / divisor};

@@ -284,7 +284,6 @@
   "You want in return": "대가로 원하는 것",
   "CHOAM offer": "CHOAM 제안",
   "Smuggling: black market (double worth)": "밀수: 암시장 (두 배 가치)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "스파이스 운송: 스파이스 최대 5개를 개당 5 솔라리에. 암시장: 두 배 가치로 (스파이스 1개에 6 솔라리). 매번 의심이 1 오르며, 뇌물(10 솔라리, 밀수꾼 시장 소유자는 7)로 낮출 수 있습니다. 세대 종료: 0과 1은 무료이며, 2 이상이면 영향력을 잃고 마커가 0으로 돌아갑니다.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "당신의 차례가 아니거나, 교환할 것이 없거나, 의심 4: 먼저 뇌물을 주세요",
   "Bazaar: buy ${0} for ${1} M€": "시장: ${0}을(를) ${1} M€에 구매",
   "Suspicion": "의심",
@@ -315,8 +314,6 @@
   "Start: the worm starts at random on one of these spaces:": "시작: 웜은 다음 칸 중 하나에서 무작위로 시작합니다:",
   "No suspicion: nothing to bribe": "의심 없음: 매수할 필요 없음",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "매수할 솔라리가 부족합니다: ${0} 필요, 보유 ${1}",
-  "Move spice: up to 5 titanium for 5 M€ each": "스파이스 운송: 스파이스 최대 5개를 개당 5 솔라리에",
-  "Black market: at double worth (6 M€ for 1 titanium)": "암시장: 두 배 가치로 (스파이스 1개에 6 솔라리)",
   "Every deal raises the suspicion by 1": "거래할 때마다 의심이 1 오름",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "뇌물(10 솔라리, 밀수꾼 시장 소유자는 7)로 의심이 1 내려감",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "세대 종료: 0과 1은 무료, 2 이상이면 영향력을 잃고 마커가 0으로 돌아감",
@@ -332,5 +329,10 @@
   "Only during your action": "내 행동 중에만",
   "Not enough M€": "M€가 부족합니다",
   "No target: no opponent has a greenery, city or special tile": "대상 없음: 녹지, 도시 또는 특수 타일을 가진 상대가 없습니다",
-  "All ${0} spice fields": "스파이스 평원 ${0}개 모두"
+  "All ${0} spice fields": "스파이스 평원 ${0}개 모두",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "스파이스 운송: 거래당 스파이스 최대 5개, 현재 스파이스 시세로",
+  "Exchange: the rates change every generation – sell high, buy low": "거래소: 시세는 세대마다 바뀝니다 – 비싸게 팔고 싸게 사세요",
+  "fixed": "고정",
+  "The smugglers set new rates": "밀수꾼들이 새 시세를 정합니다",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "스파이스 운송: 거래당 스파이스 최대 5개, 현재 스파이스 시세로. 거래소: 시세는 세대마다 바뀝니다 – 비싸게 팔고 싸게 사세요. 매번 의심이 1 오르며, 뇌물(10 솔라리, 밀수꾼 시장 소유자는 7)로 낮출 수 있습니다. 세대 종료: 0과 1은 무료이며, 2 이상이면 영향력을 잃고 마커가 0으로 돌아갑니다."
 }

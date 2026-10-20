@@ -280,7 +280,6 @@
   "You want in return": "Tu veux en échange",
   "CHOAM offer": "Offre CHOAM",
   "Smuggling: black market (double worth)": "Contrebande : marché noir (valeur double)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Écouler de l'épice : jusqu'à 5 épice pour 5 Solari chacune. Marché noir : au double de la valeur (6 Solari pour 1 épice). Chaque action augmente les soupçons de 1 ; un pot-de-vin (10 Solari, 7 pour le propriétaire du Marché des contrebandiers) les réduit. Fin de génération : 0 et 1 sont gratuits ; à partir de 2, de l'influence est perdue et le marqueur revient à 0.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Pas ton tour, rien à échanger ou soupçons à 4 : soudoie d'abord",
   "Bazaar: buy ${0} for ${1} M€": "Bazar : acheter ${0} pour ${1} M€",
   "Suspicion": "Soupçons",
@@ -311,8 +310,6 @@
   "Start: the worm starts at random on one of these spaces:": "Départ : le ver commence au hasard sur l'une de ces cases :",
   "No suspicion: nothing to bribe": "Aucun soupçon : rien à soudoyer",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "Pas assez de Solari pour soudoyer : il en faut ${0}, vous en avez ${1}",
-  "Move spice: up to 5 titanium for 5 M€ each": "Écouler de l’épice : jusqu’à 5 épice pour 5 Solari chacune",
-  "Black market: at double worth (6 M€ for 1 titanium)": "Marché noir : au double de la valeur (6 Solari pour 1 épice)",
   "Every deal raises the suspicion by 1": "Chaque échange augmente les soupçons de 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Un pot-de-vin (10 Solari, 7 pour le propriétaire du Marché des contrebandiers) les réduit de 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fin de génération : 0 et 1 sont gratuits ; à partir de 2, de l’influence est perdue et le marqueur revient à 0",
@@ -328,5 +325,10 @@
   "Only during your action": "Seulement pendant ton action",
   "Not enough M€": "Pas assez de M€",
   "No target: no opponent has a greenery, city or special tile": "Aucune cible : aucun adversaire n'a de forêt, de cité ou de tuile spéciale",
-  "All ${0} spice fields": "Les ${0} champs d'épice"
+  "All ${0} spice fields": "Les ${0} champs d'épice",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "Écouler de l’épice : jusqu’à 5 épice par affaire au cours actuel de l’épice",
+  "Exchange: the rates change every generation – sell high, buy low": "Bourse : les cours changent à chaque génération – vendre cher, acheter bon marché",
+  "fixed": "fixe",
+  "The smugglers set new rates": "Les contrebandiers fixent de nouveaux cours",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Écouler de l’épice : jusqu’à 5 épice par affaire au cours actuel de l’épice. Bourse : les cours changent à chaque génération – vendre cher, acheter bon marché. Chaque action augmente les soupçons de 1 ; un pot-de-vin (10 Solari, 7 pour le propriétaire du Marché des contrebandiers) les réduit. Fin de génération : 0 et 1 sont gratuits ; à partir de 2, de l'influence est perdue et le marqueur revient à 0."
 }

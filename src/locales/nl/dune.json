@@ -276,7 +276,6 @@
   "You want in return": "Je wilt ervoor",
   "CHOAM offer": "CHOAM-aanbod",
   "Smuggling: black market (double worth)": "Smokkel: zwarte markt (dubbele waarde)",
-  "Move spice: up to 5 titanium for 5 M€ each. Black market: at double worth (6 M€ for 1 titanium). Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Spice verplaatsen: tot 5 Spice voor elk 5 Solari. Zwarte markt: voor dubbele waarde (6 Solari voor 1 Spice). Elk verhoogt de verdenking met 1; een omkoping (10 Solari, eigenaar van de Smokkelaarsmarkt 7) verlaagt die. Einde van de generatie: 0 en 1 zijn gratis, vanaf 2 gaat invloed verloren en valt de marker terug naar 0.",
   "Not your turn, nothing to trade, or suspicion 4: bribe first": "Niet jouw beurt, niets om te ruilen of verdenking 4: eerst omkopen",
   "Bazaar: buy ${0} for ${1} M€": "Bazaar: ${0} kopen voor ${1} M€",
   "Suspicion": "Verdenking",
@@ -307,8 +306,6 @@
   "Start: the worm starts at random on one of these spaces:": "Start: de worm begint willekeurig op een van deze velden:",
   "No suspicion: nothing to bribe": "Geen verdenking: niets om om te kopen",
   "Too few M€ to bribe: it costs ${0}, you have ${1}": "Te weinig Solari om om te kopen: het kost ${0}, je hebt ${1}",
-  "Move spice: up to 5 titanium for 5 M€ each": "Spice verplaatsen: tot 5 Spice voor elk 5 Solari",
-  "Black market: at double worth (6 M€ for 1 titanium)": "Zwarte markt: voor dubbele waarde (6 Solari voor 1 Spice)",
   "Every deal raises the suspicion by 1": "Elke ruil verhoogt de verdenking met 1",
   "A bribe (10 M€, Industrial Center owner 7) lowers it by 1": "Een omkoping (10 Solari, eigenaar van de Smokkelaarsmarkt 7) verlaagt die met 1",
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Einde van de generatie: 0 en 1 zijn gratis, vanaf 2 gaat invloed verloren en valt de marker terug naar 0",
@@ -324,5 +321,10 @@
   "Only during your action": "Alleen tijdens je actie",
   "Not enough M€": "Te weinig M€",
   "No target: no opponent has a greenery, city or special tile": "Geen doel: geen tegenstander heeft een groengebied, stad of speciale tegel",
-  "All ${0} spice fields": "Alle ${0} spicevelden"
+  "All ${0} spice fields": "Alle ${0} spicevelden",
+  "Move spice: up to 5 titanium per deal at the current spice rate": "Spice verplaatsen: tot 5 Spice per deal tegen de huidige Spice-koers",
+  "Exchange: the rates change every generation – sell high, buy low": "Beurs: de koersen veranderen elke generatie – duur verkopen, goedkoop kopen",
+  "fixed": "vast",
+  "The smugglers set new rates": "De smokkelaars stellen nieuwe koersen vast",
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Spice verplaatsen: tot 5 Spice per deal tegen de huidige Spice-koers. Beurs: de koersen veranderen elke generatie – duur verkopen, goedkoop kopen. Elk verhoogt de verdenking met 1; een omkoping (10 Solari, eigenaar van de Smokkelaarsmarkt 7) verlaagt die. Einde van de generatie: 0 en 1 zijn gratis, vanaf 2 gaat invloed verloren en valt de marker terug naar 0."
 }
