@@ -28,6 +28,7 @@ import {handReadiness} from './handReadiness';
 import {measuredDrawRate} from './measuredDrawRate';
 import {heatAsMoney, plantFactor, steelFactor, titaniumFactor} from './playerTraits';
 import {measuredCardIncome} from './measuredCardIncome';
+import {outlookChange} from './liveOutlook';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -82,6 +83,8 @@ export type ValuationContext = {
   awardActionSwing?: number,
   /** Award leads are projected to the game end by each player's pace so far (aiTuning.ts awardTiming). */
   awardTiming?: boolean,
+  /** Requirement outlook of the hand cards of `handOwner` at decision time (liveOutlook.ts). */
+  handOutlook?: ReadonlyMap<CardName, number>,
   /** Readiness of the hand cards of `handOwner` at decision time (handReadiness.ts, aiTuning.ts needsPursuit). */
   handReadiness?: ReadonlyMap<CardName, number>,
 };
@@ -438,7 +441,12 @@ function handValue(player: IPlayer, context: ValuationContext): number {
   }
   const values = context.handValues;
   const unknown = unknownCardValue(player, context);
-  const funded = fundedHandValue(player, player.cardsInHand.map((card) => ({card, value: values.get(card.name) ?? unknown})), unknown);
+  // liveOutlook: a move that brings a hand card's requirement closer raises its value (liveOutlook.ts).
+  const valueOf = (name: CardName) => {
+    const value = values.get(name);
+    return value === undefined ? unknown : value * outlookChange(player, name, context.handOutlook);
+  };
+  const funded = fundedHandValue(player, player.cardsInHand.map((card) => ({card, value: valueOf(card.name)})), unknown);
   return funded + needsPursuitValue(player, context, values);
 }
 
