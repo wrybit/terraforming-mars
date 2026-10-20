@@ -28,5 +28,6 @@
   "Pay for DevTools test": "Betaling for DevTools-test",
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: vurdering, poeng, merker og rabatter for ${0} satt",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: generasjon satt til ${0}",
-  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} blir spurt: ${1}"
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} blir spurt: ${1}",
+  "Pay with four currencies": "Betal med fire valutaer"
 }

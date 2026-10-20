@@ -101,6 +101,8 @@ html.tm-mobile .devtools-card-row {
 .devtools-triggers {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  // Every row as high as the highest one: the raster stays even when a text wraps
+  grid-auto-rows: 1fr;
   gap: @devtools-gap-inside;
 }
 
@@ -320,5 +322,13 @@ html.tm-mobile .devtools {
 
 .devtools-button {
   margin: 0;
+}
+
+// Buttons of one height in the raster: long texts wrap inside the button, every cell of a row grows with the longest
+.devtools-triggers .devtools-button {
+  height: auto;
+  min-height: 36px;
+  padding: 6px 10px;
+  line-height: 1.25;
   white-space: normal;
 }

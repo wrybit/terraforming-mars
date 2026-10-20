@@ -45,7 +45,7 @@ export type DevToolsPlayerAction = {
 };
 
 /** Situations of the game asked of a player right now, on top of what he is asked anyway (devtools/devToolsTriggers.ts) */
-export const DEVTOOLS_TRIGGERS = ['city', 'ocean', 'greenery', 'overpay', 'convert', 'milestone', 'award', 'worm'] as const;
+export const DEVTOOLS_TRIGGERS = ['city', 'ocean', 'greenery', 'pay', 'overpay', 'convert', 'milestone', 'award', 'worm'] as const;
 export type DevToolsTrigger = typeof DEVTOOLS_TRIGGERS[number];
 
 /** Button text in the panel and wording of the log line (both translated, themed by the theme texts) */
@@ -53,6 +53,7 @@ export const DEVTOOLS_TRIGGER_LABELS: Readonly<Record<DevToolsTrigger, string>> 
   city: 'Place a city',
   ocean: 'Place an ocean',
   greenery: 'Place a greenery',
+  pay: 'Pay with four currencies',
   overpay: 'Pay too much',
   convert: 'Convert energy to heat',
   milestone: 'Claim a milestone for free',

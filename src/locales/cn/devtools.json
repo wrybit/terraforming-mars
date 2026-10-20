@@ -29,5 +29,6 @@
   "Pay for DevTools test": "为开发工具测试付款",
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 开发工具：已设置 ${0} 的评分、分数、标志与折扣",
   "🛠 DevTools: generation set to ${0}": "🛠 开发工具：世代设为 ${0}",
-  "🛠 DevTools: ${0} is asked: ${1}": "🛠 开发工具：询问 ${0}：${1}"
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 开发工具：询问 ${0}：${1}",
+  "Pay with four currencies": "用四种货币支付"
 }

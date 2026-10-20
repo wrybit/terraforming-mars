@@ -17,8 +17,31 @@ import {DEVTOOLS_TRIGGER_LABELS, DevToolsTrigger, DevToolsTriggerAction} from '.
 import {WormData, distanceInput, rollWorm} from '../dune/Worm';
 import {levyInput} from '../dune/WormLevy';
 
-// A price the player can pay in several ways, so paying too much (steel, titanium, heat) can be tried
-const OVERPAY_AMOUNT = 7;
+// A price that needs more than one currency: M€, steel, titanium and heat all get a row in the payment form
+const PAY_AMOUNT = 12;
+const PAYMENT_OPTIONS = {steel: true, titanium: true, heat: true};
+
+// The form only shows currencies the player has: missing ones are topped up, in the log like every DevTools change
+function atLeast(player: IPlayer, resource: Resource, amount: number): void {
+  const missing = amount - player.stock.get(resource);
+  if (missing > 0) {
+    player.stock.add(resource, missing, {log: true});
+  }
+}
+
+function paymentInput(player: IPlayer, amount: number): SelectPayment {
+  return new SelectPayment('Pay for DevTools test', amount, PAYMENT_OPTIONS).andThen((payment) => {
+    player.pay(payment);
+    return undefined;
+  });
+}
+
+// Two titanium for a price just above one: the split pays too much and the form asks for confirmation right away
+function overpayInput(player: IPlayer): SelectPayment {
+  const rate = player.getTitaniumValue();
+  atLeast(player, Resource.TITANIUM, 2);
+  return paymentInput(player, rate + 1).setPreset({titanium: 2});
+}
 
 function noSpace(): never {
   throw RouteError.badRequest('Nothing to place: no space is free for this tile');
@@ -76,12 +99,13 @@ function input(game: IGame, player: IPlayer, trigger: DevToolsTrigger): PlayerIn
     return placement(new PlaceOceanTile(player).execute());
   case 'greenery':
     return placement(new PlaceGreeneryTile(player).execute());
+  case 'pay':
+    atLeast(player, Resource.STEEL, 2);
+    atLeast(player, Resource.TITANIUM, 2);
+    atLeast(player, Resource.HEAT, 3);
+    return paymentInput(player, PAY_AMOUNT);
   case 'overpay':
-    return new SelectPayment('Pay for DevTools test', OVERPAY_AMOUNT, {steel: true, titanium: true, heat: true})
-      .andThen((payment) => {
-        player.pay(payment);
-        return undefined;
-      });
+    return overpayInput(player);
   case 'convert':
     // The title is a known conversion (client amount/amountConversion.ts): the dialog shows energy turning into heat
     return new SelectAmount('Select amount of energy to convert to heat', 'OK', 0, player.energy, true)
@@ -108,6 +132,8 @@ export function applyTrigger(game: IGame, player: IPlayer, action: DevToolsTrigg
     }
     // A move like at the end of a generation: the die, the chosen distance, then the levies on the way
     rollWorm(game, worm);
+    // The chooser makes the game send the distances: only then the move tab with its map appears (dune/duneInputs.ts)
+    worm.chooser = player.id;
     player.interruptWaitingFor(distanceInput(game, worm), (resume) => game.deferredActions.runAll(() => askLevies(game, worm, resume)));
     return;
   }

@@ -147,6 +147,7 @@
 </template>
 
 <script lang="ts">
+import {replaceCleanup} from '@/client/utils/instanceCleanup';
 import {isDraftRepick} from '@/client/utils/draftedCards';
 import {defineComponent, markRaw} from 'vue';
 import {GameModel} from '@/common/models/GameModel';
@@ -189,7 +190,8 @@ import {actionTabRequest, requestedTabIndex} from '@/client/components/actionTab
 import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 
 // Cleanup function of the observers (space selection, carousel); there is only one player view per page
-let stopObserving: (() => void) | undefined;
+// Root observers per instance (utils/instanceCleanup.ts), so a view built anew keeps its own
+const ROOT_OBSERVER = 'root';
 
 // Visible footer area of the input (Confirm, Pay); fixed at the bottom, the content needs that much space below it
 const FOOTER_SELECTOR = '.mb-screen--turn .or-tab-footer, .mb-screen--turn .setup-summary';
@@ -447,8 +449,7 @@ export default defineComponent({
     this.$nextTick(() => this.refreshInputTitle());
   },
   beforeUnmount() {
-    stopObserving?.();
-    stopObserving = undefined;
+    replaceCleanup(this, ROOT_OBSERVER);
   },
   methods: {
     closeDevTools(): void {
@@ -647,8 +648,7 @@ export default defineComponent({
     },
     // Function ref: called with the element, or with null on removal
     trackRoot(element: unknown) {
-      stopObserving?.();
-      stopObserving = undefined;
+      replaceCleanup(this, ROOT_OBSERVER);
       if (!(element instanceof HTMLElement)) {
         return;
       }
@@ -664,10 +664,10 @@ export default defineComponent({
           this.carousel = state;
         }
       });
-      stopObserving = () => {
+      replaceCleanup(this, ROOT_OBSERVER, () => {
         placement.disconnect();
         stopCarousel();
-      };
+      });
     },
   },
 });

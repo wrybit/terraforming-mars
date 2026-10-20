@@ -6,7 +6,7 @@ import {AresData} from '../ares/AresData';
 import {Message} from '../logs/Message';
 import {PartyName} from '../turmoil/PartyName';
 import {SpaceId} from '../Types';
-import {PaymentOptions} from '../inputs/Payment';
+import {Payment, PaymentOptions} from '../inputs/Payment';
 import {GlobalEventName} from '../turmoil/globalEvents/GlobalEventName';
 import {Warning} from '../cards/Warning';
 import {Units} from '../Units';
@@ -86,6 +86,8 @@ export type SelectPaymentModel = BaseInputModel & {
   kuiperAsteroids: number;
   spireScience: number;
   reserveUnits: Readonly<Units> | undefined; // Built to support the Merchant milestone.
+  /** DevTools only: the split the form starts with; one that pays too much opens the confirmation right away */
+  preset?: Partial<Payment>;
 
   floaters: 0,
   microbes: 0,

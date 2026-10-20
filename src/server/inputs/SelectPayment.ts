@@ -18,6 +18,14 @@ export class SelectPayment extends BasePlayerInput<Payment> {
     this.buttonLabel = 'Pay'; // no input button
   }
 
+  /** DevTools (devtools/devToolsTriggers.ts): the split the form starts with instead of its own suggestion */
+  public preset: Partial<Payment> | undefined = undefined;
+
+  public setPreset(preset: Partial<Payment>): this {
+    this.preset = preset;
+    return this;
+  }
+
   public toModel(player: IPlayer): SelectPaymentModel {
     return {
       title: this.title,
@@ -34,6 +42,7 @@ export class SelectPayment extends BasePlayerInput<Payment> {
       kuiperAsteroids: player.getSpendable('kuiperAsteroids'),
       spireScience: player.getSpendable('spireScience'),
       reserveUnits: this.reserveUnits,
+      preset: this.preset,
 
       floaters: 0,
       microbes: 0,

@@ -9,6 +9,7 @@
       :ledger="ledger"
       :showsave="showsave"
       :buttonLabel="playerinput.buttonLabel"
+      :preset="playerinput.preset"
       @change="(p) => payment = p"
       @save="doSave"/>
   </section>

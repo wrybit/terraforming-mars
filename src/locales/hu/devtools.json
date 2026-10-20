@@ -28,5 +28,6 @@
   "Pay for DevTools test": "Fizetés DevTools-teszthez",
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: ${0} pontszintje, pontjai, címkéi és kedvezményei beállítva",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: generáció beállítva: ${0}",
-  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} kérdést kap: ${1}"
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} kérdést kap: ${1}",
+  "Pay with four currencies": "Fizetés négy pénznemmel"
 }

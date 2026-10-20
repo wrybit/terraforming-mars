@@ -218,12 +218,30 @@ export function marsCardTarget(column: HTMLElement, block: HTMLElement): RowResi
 // Starts fitting and returns a cleanup function
 export function observeRightColumnFit(column: HTMLElement): () => void {
   let frame: number | undefined;
+  // The board's own size changes without the column changing (a scale or the spice row appears, a game update draws
+  // it anew): Mars then has to be fitted again, otherwise it keeps the old zoom and runs under the milestones.
+  // fit() itself ends on the same size every time, so this settles after one round.
+  let observedBoard: Element | null = null;
+  const boardObserver = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(() => schedule());
+  const watchBoard = () => {
+    const board = column.querySelector('.board-cont');
+    if (board !== observedBoard) {
+      if (observedBoard !== null) {
+        boardObserver?.unobserve(observedBoard);
+      }
+      if (board !== null) {
+        boardObserver?.observe(board);
+      }
+      observedBoard = board;
+    }
+  };
   // Recompute at most once per frame (resize fires in rapid succession)
   const schedule = () => {
     if (frame === undefined) {
       frame = requestAnimationFrame(() => {
         frame = undefined;
         fit(column);
+        watchBoard();
       });
     }
   };
@@ -249,6 +267,7 @@ export function observeRightColumnFit(column: HTMLElement): () => void {
   return () => {
     window.removeEventListener('resize', schedule);
     resizeObserver?.disconnect();
+    boardObserver?.disconnect();
     if (frame !== undefined) {
       cancelAnimationFrame(frame);
     }

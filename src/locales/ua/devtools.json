@@ -29,5 +29,6 @@
   "Pay for DevTools test": "Оплата для тесту DevTools",
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: рейтинг, очки, мітки та знижки гравця ${0} встановлено",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: покоління встановлено на ${0}",
-  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: у гравця ${0} запитано: ${1}"
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: у гравця ${0} запитано: ${1}",
+  "Pay with four currencies": "Оплатити чотирма валютами"
 }

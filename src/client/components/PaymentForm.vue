@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {defineComponent, PropType} from 'vue';
 import {Payment} from '@/common/inputs/Payment';
 import {SpendableResource} from '@/common/inputs/Spendable';
 import {getPreferences} from '@/client/utils/PreferencesManager';
@@ -172,14 +172,27 @@ export default defineComponent({
       type: String,
       required: false,
     },
+    // DevTools: the split to start with (SelectPaymentModel.preset)
+    preset: {
+      type: Object as PropType<Partial<Payment>>,
+      required: false,
+    },
   },
   emits: ['save', 'change'],
   data(): DataModel {
     return {
-      payment: computeDefaultPayment(this.cost, this.order, this.ledger, /* reserveMegacredits=*/ false),
+      payment: this.preset !== undefined ?
+        {...Payment.EMPTY, ...this.preset} :
+        computeDefaultPayment(this.cost, this.order, this.ledger, /* reserveMegacredits=*/ false),
       warning: undefined,
       overpaymentOpen: false,
     };
+  },
+  mounted() {
+    // DevTools: a preset that pays too much shows the confirmation at once (devtools/devToolsTriggers.ts 'overpay')
+    if (this.preset !== undefined && this.totalSpent() > this.cost) {
+      this.overpaymentOpen = true;
+    }
   },
   computed: {
     descriptions(): Record<SpendableResource, string> {

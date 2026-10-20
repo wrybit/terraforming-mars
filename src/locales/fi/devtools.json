@@ -28,5 +28,6 @@
   "Pay for DevTools test": "Maksu DevTools-testiin",
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: pelaajan ${0} luokitus, pisteet, tunnisteet ja alennukset asetettu",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: sukupolvi asetettu arvoon ${0}",
-  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: pelaajalta ${0} kysytään: ${1}"
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: pelaajalta ${0} kysytään: ${1}",
+  "Pay with four currencies": "Maksa neljällä valuutalla"
 }

@@ -13,6 +13,7 @@ import {Research} from '../../src/server/cards/base/Research';
 import {Game} from '../../src/server/Game';
 import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {SelectSpace} from '../../src/server/inputs/SelectSpace';
+import {SelectPayment} from '../../src/server/inputs/SelectPayment';
 
 function lastLog(game: ReturnType<typeof testGame>[0]): string {
   return game.gameLog[game.gameLog.length - 1].message;
@@ -145,6 +146,35 @@ describe('applyDevToolsAction', () => {
     player.process({type: 'or', index: 0, response: {type: 'option'}});
     expect(game.claimedMilestones.map((claim) => claim.player)).deep.eq([player]);
     expect(player.megaCredits).eq(0);
+  });
+
+  it('asks a payment that pays too much, and one with four currencies', () => {
+    const [game, player] = testGame(2);
+    applyDevToolsAction(game, {type: 'trigger', color: player.color, trigger: 'overpay'});
+    const overpay = player.getWaitingFor() as SelectPayment;
+    expect(overpay.preset).deep.eq({titanium: 2});
+    expect(2 * player.getTitaniumValue()).greaterThan(overpay.amount);
+    expect(player.titanium).gte(2);
+    applyDevToolsAction(game, {type: 'trigger', color: player.color, trigger: 'pay'});
+    expect(player.getWaitingFor()).instanceOf(SelectPayment);
+    expect([player.steel, player.titanium, player.heat].every((amount) => amount > 0)).is.true;
+  });
+
+  it('asks the worm move with its distances and moves the worm', () => {
+    const [game, player] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS_61, duneModules: ['worm']});
+    const worm = game.duneData?.worm;
+    if (worm === undefined) {
+      throw new Error('no worm');
+    }
+    const start = worm.spaceId;
+    applyDevToolsAction(game, {type: 'trigger', color: player.color, trigger: 'worm'});
+    // The distances go to the client only with a chooser: they open the move tab
+    expect(worm.chooser).eq(player.id);
+    player.process({type: 'or', index: 0, response: {type: 'option'}});
+    expect(worm.chooser).is.undefined;
+    expect(worm.trail?.length ?? 0).eq(1);
+    expect(worm.path).is.not.undefined;
+    expect(start).is.a('string');
   });
 
   it('sets resources and production of one player as absolute values', () => {

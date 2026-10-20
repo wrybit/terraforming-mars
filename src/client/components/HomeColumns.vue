@@ -22,9 +22,11 @@ import {observeBoardColumn} from '@/client/utils/boardColumnPosition';
 import {observeRightColumnFit} from '@/client/utils/rightColumnFit';
 import {PLAYER_HOME_SPLIT} from '@/client/utils/columnResize';
 import ColumnResizeHandle from '@/client/components/ColumnResizeHandle.vue';
+import {replaceCleanup} from '@/client/utils/instanceCleanup';
 
-// Cleanup function of the column observer (position for the modal, space usage); there is only one game view per page
-let stopObservingBoardColumn: (() => void) | undefined;
+// Column observer (position for the modal, space usage) per view (utils/instanceCleanup.ts): a shared handle let an
+// old view stop the observer of the new one, Mars then kept a stale zoom and overlapped the milestones
+const OBSERVER = 'board-column';
 
 function observeBoardColumnFully(column: HTMLElement): () => void {
   const stopPosition = observeBoardColumn(column);
@@ -53,13 +55,11 @@ export default defineComponent({
     },
   },
   beforeUnmount() {
-    stopObservingBoardColumn?.();
-    stopObservingBoardColumn = undefined;
+    replaceCleanup(this, OBSERVER);
   },
   methods: {
     trackBoardColumn(element: unknown) {
-      stopObservingBoardColumn?.();
-      stopObservingBoardColumn = element instanceof HTMLElement ? observeBoardColumnFully(element) : undefined;
+      replaceCleanup(this, OBSERVER, element instanceof HTMLElement ? observeBoardColumnFully(element) : undefined);
     },
   },
 });

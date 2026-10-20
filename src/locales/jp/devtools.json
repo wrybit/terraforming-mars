@@ -29,5 +29,6 @@
   "Pay for DevTools test": "開発ツールのテスト支払い",
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 開発ツール: ${0} の評価、得点、タグ、割引を設定",
   "🛠 DevTools: generation set to ${0}": "🛠 開発ツール: 世代を ${0} に設定",
-  "🛠 DevTools: ${0} is asked: ${1}": "🛠 開発ツール: ${0} への質問: ${1}"
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 開発ツール: ${0} への質問: ${1}",
+  "Pay with four currencies": "4種類の通貨で支払う"
 }

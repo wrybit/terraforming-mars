@@ -45,6 +45,7 @@ import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {BOARD_TAB_LABEL, BOARD_TAB_TONE, BoardTabId, BoardTabInfo as BoardTabInfoModel, BoardTabTrack, boardTabInfo, boardTabTracks, boardTabs} from './boardTabs';
 import {boardTabState, selectBoardTab} from './boardTabState';
 import {observeBoardTabFit} from './boardTabFit';
+import {replaceCleanup} from '@/client/utils/instanceCleanup';
 import {RING_BOARD_SIZE} from '@/client/components/moon/moonRing';
 
 // Room around the Moon ring for the bonus chips outside the band, plus the vertical padding of the view
@@ -52,7 +53,8 @@ import {RING_BOARD_SIZE} from '@/client/components/moon/moonRing';
 const MOON_FIT_MARGIN = 16;
 const MOON_FIT_TOGGLE = 64;
 
-let stopFit: (() => void) | undefined;
+// Fit observer per instance (utils/instanceCleanup.ts), so a view built anew keeps its own
+const FIT = 'board-tab-fit';
 
 export default defineComponent({
   name: 'BoardTabs',
@@ -86,18 +88,16 @@ export default defineComponent({
     },
   },
   mounted() {
-    stopFit = observeBoardTabFit(this.$refs.panel as HTMLElement);
+    replaceCleanup(this, FIT, observeBoardTabFit(this.$refs.panel as HTMLElement));
   },
   beforeUnmount() {
-    stopFit?.();
-    stopFit = undefined;
+    replaceCleanup(this, FIT);
   },
   watch: {
     // A view only gets a size once it is shown: refit on every switch
     active() {
       this.$nextTick(() => {
-        stopFit?.();
-        stopFit = observeBoardTabFit(this.$refs.panel as HTMLElement);
+        replaceCleanup(this, FIT, observeBoardTabFit(this.$refs.panel as HTMLElement));
       });
     },
   },

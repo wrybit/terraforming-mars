@@ -32,6 +32,7 @@
 <script lang="ts">
 /* global RequestInit */
 
+import {replaceCleanup} from '@/client/utils/instanceCleanup';
 import {defineComponent} from 'vue';
 import * as constants from '@/common/constants';
 import raw_settings from '@/genfiles/settings.json';
@@ -84,7 +85,8 @@ function isDesktopBrowser(): boolean {
 }
 
 // Dune modules: the module tabs send their moves through the save of the own input (dune/duneMoves.ts)
-let unregisterMoveSender: (() => void) | undefined;
+// Move sender per instance (utils/instanceCleanup.ts): a view built anew must not lose it to the old one's unmount
+const MOVE_SENDER = 'move-sender';
 
 type DataModel = {
   playersWaitingFor: Array<Color>,
@@ -371,12 +373,11 @@ export default defineComponent({
   },
   mounted() {
     this.start();
-    unregisterMoveSender = registerMoveSender((response) => this.onsave(response));
+    replaceCleanup(this, MOVE_SENDER, registerMoveSender((response) => this.onsave(response)));
   },
   beforeUnmount() {
     this.stop();
-    unregisterMoveSender?.();
-    unregisterMoveSender = undefined;
+    replaceCleanup(this, MOVE_SENDER);
   },
   computed: {
     // Action menu (OrOptions) and start selection build their own tabs; everything else goes into WaitingForTabs

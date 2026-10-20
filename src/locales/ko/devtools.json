@@ -29,5 +29,6 @@
   "Pay for DevTools test": "개발 도구 테스트 지불",
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 개발 도구: ${0}의 등급, 점수, 태그, 할인 설정",
   "🛠 DevTools: generation set to ${0}": "🛠 개발 도구: 세대를 ${0}(으)로 설정",
-  "🛠 DevTools: ${0} is asked: ${1}": "🛠 개발 도구: ${0}에게 질문: ${1}"
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 개발 도구: ${0}에게 질문: ${1}",
+  "Pay with four currencies": "네 가지 통화로 지불"
 }

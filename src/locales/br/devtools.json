@@ -28,5 +28,6 @@
   "Pay for DevTools test": "Pagar pelo teste do DevTools",
   "🛠 DevTools: rating, points, tags and discounts of ${0} set": "🛠 DevTools: classificação, pontos, símbolos e descontos de ${0} definidos",
   "🛠 DevTools: generation set to ${0}": "🛠 DevTools: geração definida para ${0}",
-  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} é perguntado: ${1}"
+  "🛠 DevTools: ${0} is asked: ${1}": "🛠 DevTools: ${0} é perguntado: ${1}",
+  "Pay with four currencies": "Pagar com quatro moedas"
 }
