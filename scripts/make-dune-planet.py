@@ -15,11 +15,11 @@ SOURCE = os.path.join(ROOT, 'assets/themes/dune/source/arrakis-globe.png')
 # Mars picture, the planet-only picture that gives the planet circle (its alpha box), Dune picture to write.
 TARGETS = [
     ('assets/board/mars-planet.png', 'assets/board/mars-planet.png', 'assets/themes/dune/arrakis-planet.png'),
-    ('assets/board/mars-planet-large.png', 'assets/board/mars-planet-large.png', 'assets/themes/dune/arrakis-planet-large.png'),
+    ('assets/board/mars-planet-large.png', 'assets/board/mars-planet-large.png', 'assets/themes/dune/arrakis-planet-91.png'),
     ('assets/board/mars-clean.png', 'assets/board/mars-planet.png', 'assets/themes/dune/arrakis-clean.png'),
     ('assets/board/mars-without-venus-clean.png', 'assets/board/mars-planet.png', 'assets/themes/dune/arrakis-without-venus-clean.png'),
-    ('assets/board/mars-large.png', 'assets/board/mars-planet-large.png', 'assets/themes/dune/arrakis-large.png'),
-    ('assets/board/mars-large-without-venus.png', 'assets/board/mars-planet-large.png', 'assets/themes/dune/arrakis-large-without-venus.png'),
+    ('assets/board/mars-large.png', 'assets/board/mars-planet-large.png', 'assets/themes/dune/arrakis-91.png'),
+    ('assets/board/mars-large-without-venus.png', 'assets/board/mars-planet-large.png', 'assets/themes/dune/arrakis-91-without-venus.png'),
 ]
 
 
