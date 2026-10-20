@@ -514,10 +514,13 @@
   "Select how to pay for placement bonus temperature": "배치 보너스 기온 상승 비용 지불 방법 선택",
   "Select how to pay for building a colony": "개척기지 건설 비용 지불 방법 선택",
   "${0} added ${1} ${2} to ${3} from ${4}": "${0}이(가) ${4}에서 ${3}에 ${2} ${1}개를 추가했습니다",
+  "${0} added ${1}${2} to ${3} from ${4}": "${0}이(가) ${4}에서 ${3}에 ${1}${2}를 추가했습니다",
   "${0} raised the temperature ${1} step(s)": "${0}이(가) 기온을 ${1}단계 올렸습니다",
   "${0} spend ${1} energy to advance on the Delta Project track": "${0}이(가) 에너지 자원 ${1}개를 소비해 Delta Project 트랙에서 전진했습니다",
+  "${0} spent ${1}:r:energy: to advance on the Delta Project track": "${0}이(가) ${1}:r:energy:를 소비해 Delta Project 트랙에서 전진했습니다",
   "${0} reused ${1} action via ${2}": "${0}이(가) ${2}을(를) 통해 ${1}의 행동을 재사용했습니다",
   "${0} gained a Jovian tag from the Delta Project": "${0}이(가) Delta Project에서 목성 태그를 얻었습니다",
+  "${0} gained a :tag:jovian: Jovian tag from the Delta Project": "${0}이(가) Delta Project에서 :tag:jovian: 목성 태그를 얻었습니다",
   "No available colony tiles for ${0} to choose from": "${0}이(가) 선택할 수 있는 위성 타일이 없습니다",
   "${0} gained 2 Science tags": "${0}이(가) 과학 태그 2개를 얻었습니다",
   "Remove plants from the neutral oppponent": "중립 상대의 식물 제거",
@@ -1122,5 +1125,10 @@
   "Only you can see this line in the log": "이 로그 줄은 나만 볼 수 있습니다",
   "AI insight: click to reveal": "AI 정보: 클릭하여 보기",
   "Click to hide again": "다시 클릭하여 숨기기",
-  "Delta": "델타"
+  "Delta": "델타",
+  "${0} gained ${1}${2} because of ${3}": "${0}이(가) ${3} 때문에 ${1}${2}를 얻었습니다",
+  "${0} lost ${1}${2}": "${0}이(가) ${1}${2}를 잃었습니다",
+  "${0} lost ${1}${2} because of ${3}": "${0}이(가) ${3} 때문에 ${1}${2}를 잃었습니다",
+  "${0} removed a:cr:science: from ${1} to draw a card": "${0}이(가) ${1}에서 1:cr:science:를 제거하여 카드를 1장 뽑았습니다",
+  "${0} stole ${1}${2} from the neutral player": "${0}이(가) 중립 플레이어에게서 ${1}${2}를 훔쳤습니다"
 }

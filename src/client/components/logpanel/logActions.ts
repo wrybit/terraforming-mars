@@ -78,6 +78,9 @@ const STARTERS: Record<string, LogActionKind> = {
   '${0} fizzled. ${1} gains 15 M€.': 'fizzled',
   '${0} spent ${1} energy to trade with ${2}': 'trade',
   '${0} spent ${1} titanium to trade with ${2}': 'trade',
+  // Since upstream 2cab7b413 the resource is an icon shortcode; the old keys stay for saved games
+  '${0} spent ${1}:r:energy: to trade with ${2}': 'trade',
+  '${0} spent ${1}:r:titanium: to trade with ${2}': 'trade',
   '${0} spent ${1} M€ to trade with ${2}': 'trade',
   '${0} spent 1 floater to trade with ${1}': 'trade',
   '${0} spent ${1} data from ${2} to trade with ${3}': 'trade',
@@ -104,13 +107,14 @@ const TURMOIL = new Set([
 // Lines that only announce what follows as its own message ("drew 1 card(s)", "gained 3 heat"): they join the action row
 const TRIGGERS = new Set([
   '${0} removed a resource from ${1} to draw a card',
+  '${0} removed a:cr:science: from ${1} to draw a card',
   '${0} automatically removed 3 data from ${1} to draw a card.',
   '${0} gained ${1} trade bonus',
 ]);
 
 // Resource words of the log (lower case, without a plural "(s)") -> icon
 const RESOURCES: Record<string, string> = {
-  'm€': 'megacredit', 'plant': 'plant', 'plants': 'plant', 'steel': 'steel', 'titanium': 'titanium', 'energy': 'power', 'heat': 'heat',
+  'm€': 'megacredit', 'megacredits': 'megacredit', 'plant': 'plant', 'plants': 'plant', 'steel': 'steel', 'titanium': 'titanium', 'energy': 'power', 'heat': 'heat',
   'animal': 'animal', 'animals': 'animal', 'microbe': 'microbe', 'microbes': 'microbe', 'floater': 'floater', 'floaters': 'floater',
   'science': 'science', 'asteroid': 'asteroid', 'asteroids': 'asteroid', 'fighter': 'fighter', 'data': 'data', 'camp': 'camp',
 };
@@ -173,6 +177,12 @@ function effect(fields: LogEffect): LogEffect {
   return Object.fromEntries(Object.entries(fields).filter(([, field]) => field !== undefined)) as LogEffect;
 }
 
+// RESOURCE / PRODUCTION / CARD_RESOURCE datum (upstream 2cab7b413): the icon and whether it is production
+function resourceDatum(message: LogMessage, index: number): {name: string | undefined, production: boolean} {
+  const datum = message.data[index];
+  return {name: resource(value(message, index)), production: datum?.type === LogMessageDataType.PRODUCTION};
+}
+
 function withResource(name: string | undefined, fields: Omit<LogEffect, 'resource'>): LogEffect | undefined {
   return name === undefined ? undefined : effect({...fields, resource: name});
 }
@@ -198,7 +208,20 @@ export function effectsOf(message: LogMessage): Array<PlayerEffect> {
   case '${3} stole ${1} ${2} production from ${0}':
     // The victim is ${0}; the thief's gain follows as its own message
     return one(withResource(resource(value(message, 2)), {amount: -n, production: true}), playerAt(message, 0));
+  case '${0} gained ${1}${2}':
+  case '${0} gained ${1}${2} because of ${3}':
+  case '${0} lost ${1}${2}':
+  case '${0} lost ${1}${2} because of ${3}': {
+    const {name, production} = resourceDatum(message, 2);
+    const sign = template.startsWith('${0} lost') ? -1 : 1;
+    const cause = template.endsWith('because of ${3}') ? causeAt(message, 3) : undefined;
+    return one(withResource(name, {amount: sign * n, ...(production ? {production} : {}), ...(cause !== undefined ? {cause} : {})}));
+  }
   case '${3} stole ${1} ${2} from ${0}': {
+    if (message.data[2]?.type === LogMessageDataType.PRODUCTION) {
+      // Stolen production: the victim is ${0}; the thief's gain follows as its own message
+      return one(withResource(resource(value(message, 2)), {amount: -n, production: true}), playerAt(message, 0));
+    }
     // No separate message for the thief: the victim loses, the thief gains
     const stolen = resource(value(message, 2));
     return [...one(withResource(stolen, {amount: -n}), playerAt(message, 0)), ...one(withResource(stolen, {amount: n}), playerAt(message, 3))];
@@ -211,6 +234,8 @@ export function effectsOf(message: LogMessage): Array<PlayerEffect> {
     return one(withResource(resource(value(message, 2)), {amount: -n, cause: causeAt(message, 3)}));
   case '${0} gained 2 ${1} from ${2}':
     return one(withResource(resource(value(message, 1)), {amount: 2, cause: causeAt(message, 2)}));
+  case '${0} gained 2:r:plants: from ${1}':
+    return one(effect({resource: 'plant', amount: 2, cause: causeAt(message, 1)}));
   case '${0} gained ${1} M€ from ${2} ocean(s)':
     return one(effect({resource: 'megacredit', amount: n, cause: 'adjacent oceans'}));
   case '${0} received ${1} M€ from ${2} owner (${3})':
@@ -259,6 +284,7 @@ export function effectsOf(message: LogMessage): Array<PlayerEffect> {
     return one(effect({resource: 'mining-rate', amount: -n}));
   case '${0} lowered the logistic rate ${1} step(s)':
     return one(effect({resource: 'logistic-rate', amount: -n}));
+  case '${0} added ${1}${2} to ${3}':
   case '${0} added ${1} ${2} to ${3}':
     return one(withResource(resource(value(message, 2)), {amount: n, card: cardAt(message, 3)}));
   case '${0} ${1} ${2} card(s)':

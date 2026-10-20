@@ -866,10 +866,13 @@
   "Select how to pay for placement bonus temperature": "Kies hoe je de plaatsingsbonus temperatuur betaalt",
   "Select how to pay for building a colony": "Kies hoe je het bouwen van een kolonie betaalt",
   "${0} added ${1} ${2} to ${3} from ${4}": "${0} voegde ${1} ${2} toe aan ${3} van ${4}",
+  "${0} added ${1}${2} to ${3} from ${4}": "${0} voegde ${1}${2} toe aan ${3} van ${4}",
   "${0} raised the temperature ${1} step(s)": "${0} verhoogde de temperatuur met ${1} stap(pen)",
   "${0} spend ${1} energy to advance on the Delta Project track": "${0} besteedt ${1} energie om op het Delta Project-spoor vooruit te gaan",
+  "${0} spent ${1}:r:energy: to advance on the Delta Project track": "${0} besteedt ${1}:r:energy: om op het Delta Project-spoor vooruit te gaan",
   "${0} reused ${1} action via ${2}": "${0} hergebruikte de actie van ${1} via ${2}",
   "${0} gained a Jovian tag from the Delta Project": "${0} kreeg een Jupiterlabel van het Delta Project",
+  "${0} gained a :tag:jovian: Jovian tag from the Delta Project": "${0} kreeg een :tag:jovian: Jupiterlabel van het Delta Project",
   "No available colony tiles for ${0} to choose from": "Geen beschikbare kolonietegels waaruit ${0} kan kiezen",
   "${0} gained 2 Science tags": "${0} kreeg 2 wetenschapslabels",
   "Remove plants from the neutral oppponent": "Verwijder planten van de neutrale tegenstander",
@@ -1483,5 +1486,10 @@
   "${0} sold ${1}": "${0} heeft ${1} verkocht",
   "Only you can see this line in the log": "Alleen jij ziet deze regel in het logboek",
   "AI insight: click to reveal": "AI-info: klik om te tonen",
-  "Click to hide again": "Klik om weer te verbergen"
+  "Click to hide again": "Klik om weer te verbergen",
+  "${0} gained ${1}${2} because of ${3}": "${0} ontving ${1}${2} door ${3}",
+  "${0} lost ${1}${2}": "${0} verloor ${1}${2}",
+  "${0} lost ${1}${2} because of ${3}": "${0} verloor ${1}${2} door ${3}",
+  "${0} removed a:cr:science: from ${1} to draw a card": "${0} verwijderde 1:cr:science: van ${1} om een kaart te trekken",
+  "${0} stole ${1}${2} from the neutral player": "${0} stal ${1}${2} van de neutrale speler"
 }

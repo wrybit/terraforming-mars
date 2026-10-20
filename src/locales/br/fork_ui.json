@@ -1278,10 +1278,13 @@
   "Select how to pay for placement bonus temperature": "Escolha como pagar o bônus de colocação de temperatura",
   "Select how to pay for building a colony": "Escolha como pagar a construção de uma colônia",
   "${0} added ${1} ${2} to ${3} from ${4}": "${0} adicionou ${1} ${2} a ${3} a partir de ${4}",
+  "${0} added ${1}${2} to ${3} from ${4}": "${0} adicionou ${1}${2} a ${3} a partir de ${4}",
   "${0} raised the temperature ${1} step(s)": "${0} aumentou a temperatura em ${1} nível(is)",
   "${0} spend ${1} energy to advance on the Delta Project track": "${0} gastou ${1} de energia para avançar na trilha do Delta Project",
+  "${0} spent ${1}:r:energy: to advance on the Delta Project track": "${0} gastou ${1}:r:energy: para avançar na trilha do Delta Project",
   "${0} reused ${1} action via ${2}": "${0} reutilizou a ação de ${1} via ${2}",
   "${0} gained a Jovian tag from the Delta Project": "${0} ganhou um símbolo joviano do Delta Project",
+  "${0} gained a :tag:jovian: Jovian tag from the Delta Project": "${0} ganhou um :tag:jovian: símbolo joviano do Delta Project",
   "No available colony tiles for ${0} to choose from": "Nenhum tile de colônia disponível para ${0} escolher",
   "${0} gained 2 Science tags": "${0} ganhou 2 símbolos de ciência",
   "Remove plants from the neutral oppponent": "Remova plantas do oponente neutro",
@@ -1996,5 +1999,13 @@
   "${0} sold ${1}": "${0} vendeu ${1}",
   "Only you can see this line in the log": "Só você vê esta linha do registro",
   "AI insight: click to reveal": "Info da IA: clique para revelar",
-  "Click to hide again": "Clique para ocultar de novo"
+  "Click to hide again": "Clique para ocultar de novo",
+  "${0} gained ${1}${2} because of ${3}": "${0} ganhou ${1}${2} por causa de ${3}",
+  "${0} gained +1:p:heat::p:energy:": "${0} ganhou +1:p:heat::p:energy:",
+  "${0} lost ${1}${2}": "${0} perdeu ${1}${2}",
+  "${0} lost ${1}${2} because of ${3}": "${0} perdeu ${1}${2} por causa de ${3}",
+  "${0} removed a:cr:science: from ${1} to draw a card": "${0} removeu 1:cr:science: de ${1} para comprar uma carta",
+  "${0} sold ${1}:r:steel:": "${0} vendeu ${1}:r:steel:",
+  "${0} spent 6:r:heat: to raise temperature 1 step": "${0} gastou 6:r:heat: para aumentar a temperatura em 1 nível",
+  "${0} stole ${1}${2} from the neutral player": "${0} roubou ${1}${2} do jogador neutro"
 }

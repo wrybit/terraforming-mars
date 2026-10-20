@@ -38,6 +38,31 @@ describe('logActions', () => {
     expect(row.indexes).deep.eq([0, 1, 2]);
   });
 
+  it('reads resource icon data (upstream 2cab7b413) like the older text data', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
+      message('${0} gained ${1}${2}', player('red'), raw('2'), typed(LogMessageDataType.PRODUCTION, 'plants')),
+      message('${0} gained ${1}${2}', player('red'), raw('1'), typed(LogMessageDataType.RESOURCE, 'plants')),
+      message('${0} lost ${1}${2} because of ${3}', player('green'), raw('3'), typed(LogMessageDataType.RESOURCE, 'megacredits'), player('red')),
+      message('${0} added ${1}${2} to ${3}', player('red'), raw('1'), typed(LogMessageDataType.CARD_RESOURCE, 'Microbe'), card(CardName.TARDIGRADES)),
+    ]);
+    const action = actionAt(rows, 0);
+    expect(action.effects).deep.eq([
+      {resource: 'plant', amount: 2, production: true},
+      {resource: 'plant', amount: 1},
+      {resource: 'microbe', amount: 1, card: CardName.TARDIGRADES},
+    ]);
+    expect(action.others).deep.eq([{player: 'green', effects: [{resource: 'megacredit', amount: -3}]}]);
+  });
+
+  it('treats a stolen production icon as the victim losing production only', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
+      message('${3} stole ${1} ${2} from ${0}', player('green'), raw('1'), typed(LogMessageDataType.PRODUCTION, 'megacredits'), player('red')),
+    ]);
+    expect(actionAt(rows, 0).others).deep.eq([{player: 'green', effects: [{resource: 'megacredit', amount: -1, production: true}]}]);
+  });
+
   it('puts effects on other players into their own group', () => {
     const rows = groupLogMessages([
       message('${0} played ${1}', player('blue'), card(CardName.BIG_ASTEROID)),
