@@ -290,23 +290,32 @@ html:not(.tm-mobile) .dune-schemes__cards {
   }
 }
 
-// Agenda card: parchment with a violet frame (secret). On the desktop in the proportions of a project card
-// (63 × 88 mm); on the phone both cards side by side are narrower, so there they are simply as high as each other.
-// The levels sit at the bottom edge, the value box takes the room in between.
+// Agenda card, variant D5 of the mockup (Jens, 20 Oct 2026): violet head (secret agenda), warm sand body. On the
+// desktop in the proportions of a project card (63 × 88 mm); on the phone both cards side by side are narrower, so there
+// they are simply as high as each other. The stair sits at the bottom edge, the value box above it.
 @scheme-card-width: 230px;
 @scheme-card-gap: 14px;
+@scheme-violet: #8a6bbf;
+// Off-white on purpose: the Dune theme turns plain #fff into sand (make:json), on violet and the steps it stays white
+@scheme-white: #fffdf8;
 
 .dune-schemes__agenda {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 12px 12px 14px;
-  border: 3px solid #8a6bbf;
+  overflow: hidden;
+  border: 3px solid @scheme-violet;
   border-radius: 12px;
-  background: linear-gradient(to bottom right, #f6ecd6, #e4d2ae);
+  background: linear-gradient(170deg, #fbf0da, #efd8ad);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
   color: #2a1c12;
   box-sizing: border-box;
   text-align: center;
+}
+
+.dune-schemes__head {
+  padding: 10px 10px 9px;
+  background: linear-gradient(#9b7ed0, #7a5cb3);
+  color: @scheme-white;
 }
 
 .dune-schemes__name {
@@ -320,24 +329,32 @@ html:not(.tm-mobile) .dune-schemes__cards {
 
 // What is counted: balanced lines, so no word stays alone in a line
 .dune-schemes__goal {
-  margin: 0;
-  font-size: 13px;
+  margin: 4px 0 0;
+  font-size: 12.5px;
   line-height: 1.3;
+  color: #efe6ff;
   text-wrap: balance;
 }
 
-// The current value is the focus of the card: icon and large number in a dark box
+// Value and stair; the stair needs room above it for the coins (law of proximity: value and stair are two groups)
+.dune-schemes__body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 12px;
+}
+
+// The current value is the focus of the card: icon and large number on a light plate
 .dune-schemes__value {
-  flex: 1 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  background: #2a1c12;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45);
-  color: #fff8ea;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 8px rgba(90, 60, 20, 0.15);
 
   b {
     font-family: Prototype, sans-serif;
@@ -353,32 +370,52 @@ html:not(.tm-mobile) .dune-schemes__cards {
   height: 40px;
 }
 
+// The three levels as a rising stair: easy lowest, hard highest
 .dune-schemes__levels {
-  // The card centres its texts; the bars read from the left like a table row
-  text-align: left;
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  align-items: flex-end;
+  gap: 6px;
+  flex: 1 0 96px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-// Easy green, medium orange, hard red; reached levels get a frame and a tick
 .dune-schemes__level {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  position: relative;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 4px 6px 4px 10px;
-  border-radius: 5px;
-  color: #fff8ea;
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  justify-content: flex-end;
+  gap: 2px;
+  // Room at the top for the coin, so it never covers the target on the lowest step
+  min-height: 64px;
+  padding: 18px 0 6px;
+  border-radius: 8px 8px 4px 4px;
+  color: @scheme-white;
+  box-sizing: border-box;
+
+  &:nth-child(1) {
+    height: 55%;
+  }
+
+  &:nth-child(2) {
+    height: 77%;
+  }
+
+  &:nth-child(3) {
+    height: 100%;
+  }
+
+  // Not reached yet: pale, so the stair shows how far the player got
+  &:not(.dune-schemes__level--reached) {
+    filter: saturate(0.35) brightness(1.25);
+    opacity: 0.75;
+  }
 }
 
+// Easy green, medium orange, hard red (also used by the agenda line of the board tab, board_tabs.less)
 .dune-schemes__level--easy {
   background: #3f8a34;
 }
@@ -392,25 +429,31 @@ html:not(.tm-mobile) .dune-schemes__cards {
 }
 
 .dune-schemes__target {
-  font-size: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1;
 }
 
+.dune-schemes__level-name {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+// The VP of a level as a gold coin on top of its step
 .dune-schemes__points {
-  padding: 1px 7px;
-  border-radius: 10px;
-  background: #fff8ea;
-  color: #2a1c12;
-  font-size: 11px;
+  position: absolute;
+  top: -14px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(#ffe9a8, #e8b33c);
+  box-shadow: 0 0 0 2px #b8821c, 0 2px 4px rgba(0, 0, 0, 0.3);
+  color: #5a3a06;
+  font-size: 12px;
+  font-weight: bold;
 }
-
-.dune-schemes__level--reached {
-  box-shadow: inset 0 0 0 2px #fff8ea;
-
-  .dune-schemes__level-name::before {
-    content: '✓ ';
-  }
-}
-
 
 // Buttons of a module tab (DuneActionButtons.vue): the moves of the module, opened in the action menu.
 // Within a button and its reason the gap is small, between the buttons larger (law of proximity).
