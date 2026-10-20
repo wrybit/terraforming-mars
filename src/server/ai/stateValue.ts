@@ -328,6 +328,11 @@ function collectedPointsPerGeneration(card: {victoryPoints?: unknown}): number {
 
 /** Value of a card in hand whose own value is unknown (drawn in a copy, opponents' cards). */
 export function unknownCardValue(player: IPlayer, context: ValuationContext): number {
+  // ownDrawnCardValue: a card the player draws itself (Restricted Area, AI Central …) counted only 2 M€, less than a
+  // bought card costs, so draw actions rarely won; opponents' unknown cards keep 2 M€ (drawCards raised both and lost).
+  if (tuningOf(player).ownDrawnCardValue > 0 && context.handOwner === player.id) {
+    return drawnCardValue(player, context.remaining);
+  }
   if (tuningOf(player).drawCardModel === 0) {
     return HAND_CARD_VALUE;
   }
