@@ -299,13 +299,18 @@ html.tm-mobile .devtools {
   align-items: center;
   gap: 6px;
 
-  // The tag symbol of the player bars, at the size of the text
+  // The tag symbol of the player bars, at the size of the text. The picture brings its own golden ring: no outline,
+  // no white disc behind it and no offset of the bars (player_home.less .tag-count), only a soft drop shadow
   .tag-count {
     flex: none;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     margin: 0;
-    background-size: contain;
+    border-radius: 50%;
+    background-color: transparent;
+    background-size: 100% 100%;
+    background-position: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
   }
 }
 
