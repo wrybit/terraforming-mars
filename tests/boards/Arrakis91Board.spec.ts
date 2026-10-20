@@ -6,7 +6,8 @@ import {SeededRandom} from '../../src/common/utils/Random';
 import {SpaceBonus} from '../../src/common/boards/SpaceBonus';
 import {SpaceType} from '../../src/common/boards/SpaceType';
 import {ARRAKIS_91_LAYOUT} from '../../src/common/dune/arrakisLayout';
-import {arrakisSpaceIds} from '../../src/common/dune/arrakisCoordinates';
+import {arrakisCoordinate, arrakisSpaceIds} from '../../src/common/dune/arrakisCoordinates';
+import {wormDirection, wormPath} from '../../src/server/dune/Worm';
 import {MarsBoard} from '../../src/server/boards/MarsBoard';
 
 // The large Arrakis grows the standard one by 91 / 61 spaces: every total grows with it (scripts/make-arrakis-91.ts)
@@ -50,5 +51,19 @@ describe('Arrakis91Board', () => {
   it('labels its spaces A1 … K6', () => {
     expect(large.A9['03' as never]).eq('A1');
     expect(large.A9['93' as never]).eq('K6');
+  });
+
+  // Jens, 20 Oct 2026: the centre band of the large board, not the spaces of the standard one
+  it('lets the worm start in the centre band, on land it can leave in every direction', () => {
+    const labels = ARRAKIS_91_LAYOUT.wormStartSpaces.map((id) => arrakisCoordinate(ARRAKIS_91_LAYOUT, id));
+    expect(labels).deep.eq(['F4', 'F5', 'F6', 'F7', 'G5', 'G6', 'H4', 'H5', 'H6', 'I3', 'I4', 'I5', 'J3', 'J4', 'J5']);
+    const board = Arrakis91Board.newInstance(DEFAULT_GAME_OPTIONS, new SeededRandom(0));
+    for (const id of ARRAKIS_91_LAYOUT.wormStartSpaces) {
+      expect(board.getSpaceOrThrow(id).spaceType, id).eq(SpaceType.LAND);
+      for (let roll = 1; roll <= 6; roll++) {
+        const direction = wormDirection(board, id, roll);
+        expect(wormPath(board, id, direction, 1).length, id + ' roll ' + roll).eq(1);
+      }
+    }
   });
 });

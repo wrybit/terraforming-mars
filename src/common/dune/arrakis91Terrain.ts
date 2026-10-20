@@ -101,7 +101,7 @@ export const ARRAKIS_91_ZONES: Readonly<Record<string, ArrakisZone>> = {
 export const ARRAKIS_91_BEHIND_WORM_BORDER: ReadonlyArray<string> = ['48', '49', '58', '59', '68'];
 
 /** Where the worm may start, chosen at random */
-export const ARRAKIS_91_WORM_START_SPACES: ReadonlyArray<string> = ['48', '58', '59', '67', '68', '75', '76', '77', '83', '84', '85'];
+export const ARRAKIS_91_WORM_START_SPACES: ReadonlyArray<string> = ['46', '47', '48', '49', '58', '59', '67', '68', '69', '75', '76', '77', '83', '84', '85'];
 
 /** Spaces with a place name on the board (translation keys of the Dune theme) */
 export const ARRAKIS_91_PLACE_NAMES: Readonly<Record<string, string>> = {
