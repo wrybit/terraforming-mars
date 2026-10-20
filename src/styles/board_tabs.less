@@ -345,9 +345,17 @@
 }
 
 // The colours come from the level bars of the schemes tab (dune_board.less), so both stay the same
-.board-tab-info__level--1:extend(.dune-schemes__level--easy) {}
-.board-tab-info__level--2:extend(.dune-schemes__level--medium) {}
-.board-tab-info__level--3:extend(.dune-schemes__level--hard) {}
+.board-tab-info__level--1 {
+  &:extend(.dune-schemes__level--easy);
+}
+
+.board-tab-info__level--2 {
+  &:extend(.dune-schemes__level--medium);
+}
+
+.board-tab-info__level--3 {
+  &:extend(.dune-schemes__level--hard);
+}
 
 .board-tab-info__count {
   min-width: 14px;

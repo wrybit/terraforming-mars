@@ -1,6 +1,7 @@
 import {Color} from '../Color';
 import {BoardName} from '../boards/BoardName';
 import {Resource} from '../Resource';
+import {SpaceId} from '../Types';
 
 // What the client gets of the Dune expansion (server/dune/DuneExpansion.ts); only the modules of this game.
 
@@ -57,7 +58,7 @@ export type PlayerCount = {color: Color, sardaukar: number};
 export type KanlyModel = {
   garrisons: ReadonlyArray<PlayerCount>,
   battle: {
-    spaceId: string,
+    spaceId: SpaceId,
     owner: Color | undefined,
     opener: Color,
     troops: ReadonlyArray<PlayerCount>,

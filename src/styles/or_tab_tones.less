@@ -94,11 +94,13 @@ each(@or-tab-tones, {
 @or-tab-tone-dune-vegetation: #3f9d45;
 @or-tab-tone-dune-spice: #e0662a;
 
+@or-tab-tones-dune: heat @or-tab-tone-dune-water, temperature @or-tab-tone-dune-water,
+  oxygen @or-tab-tone-dune-vegetation, ocean @or-tab-tone-dune-spice;
+
 html.theme-dune {
-  .or-tab-tone(heat, @or-tab-tone-dune-water);
-  .or-tab-tone(temperature, @or-tab-tone-dune-water);
-  .or-tab-tone(oxygen, @or-tab-tone-dune-vegetation);
-  .or-tab-tone(ocean, @or-tab-tone-dune-spice);
+  each(@or-tab-tones-dune, {
+    .or-tab-tone(extract(@value, 1), extract(@value, 2));
+  });
 }
 
 // In the red box (end round) the red warning would be barely readable – white there

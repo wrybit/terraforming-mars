@@ -26,9 +26,9 @@
   .arrakis-hex--@{zone} { background: @colour; }
   .arrakis-zone--@{zone} { fill: @colour; }
 }
-.arrakis-zone(rock, #6b4a32);
-.arrakis-zone(erg, #c99a5b);
-.arrakis-zone(basin, #a8743f);
-.arrakis-zone(spicefield, #d9822b);
-.arrakis-zone(city, #8a6d4c);
-.arrakis-zone(ice, #cfd8dc);
+// Zone and colour as a list, applied in a loop like the tab tones (or_tab_tones.less)
+@arrakis-zones: rock #6b4a32, erg #c99a5b, basin #a8743f, spicefield #d9822b, city #8a6d4c, ice #cfd8dc;
+
+each(@arrakis-zones, {
+  .arrakis-zone(extract(@value, 1), extract(@value, 2));
+});
