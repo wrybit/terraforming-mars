@@ -28,6 +28,7 @@ import {ApiIPs} from '../routes/ApiIPs';
 import {ApiLogout} from '../routes/ApiLogout';
 import {ApiAdminLogout} from '../routes/ApiAdminLogout';
 import {ApiAdminSession} from '../routes/ApiAdminSession';
+import {ApiDevTools} from '../routes/ApiDevTools';
 import {ApiMetrics} from '../routes/ApiMetrics';
 import {ApiPlayer} from '../routes/ApiPlayer';
 import {ApiProfile} from '../routes/ApiProfile';
@@ -124,6 +125,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_ADMIN_UPDATE, ApiAdminUpdate.INSTANCE],
     [paths.API_CLONEABLEGAME, ApiCloneableGame.INSTANCE],
     [paths.API_CREATEGAME, ApiCreateGame.INSTANCE],
+    [paths.API_DEVTOOLS, ApiDevTools.INSTANCE],
     [paths.API_GAME, ApiGame.INSTANCE],
     [paths.API_GAME_DELETION, ApiGameDeletion.INSTANCE],
     [paths.API_GAME_HISTORY, ApiGameHistory.INSTANCE],

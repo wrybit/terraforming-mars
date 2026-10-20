@@ -16,6 +16,7 @@ export const paths = {
   API_BOARD_PREVIEW: 'api/boardpreview',
   API_CLONEABLEGAME: 'api/cloneablegame',
   API_CREATEGAME: 'api/creategame',
+  API_DEVTOOLS: 'api/devtools',
   API_GAME: 'api/game',
   API_GAME_DELETION: 'api/game/deletion',
   API_GAME_HISTORY: 'api/game/history',

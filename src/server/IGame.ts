@@ -95,6 +95,10 @@ export interface IGame extends Logger {
   underworldData: UnderworldData;
   /** Modules of the Dune expansion (dune/DuneExpansion.ts); undefined without them */
   duneData: DuneData | undefined;
+  /** Spaces whose tiles the DevTools placed (devtools/devToolsTerraform.ts): only these are taken away again */
+  devToolsTiles: Array<SpaceId>;
+  /** DevTools only: sets global parameters directly, without rewards, terraform rating or events */
+  setGlobalParametersForDevTools(values: {temperature?: number, oxygen?: number, venus?: number}): void;
 
   // Card-specific data
 

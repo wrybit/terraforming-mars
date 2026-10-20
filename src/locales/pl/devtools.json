@@ -1,0 +1,22 @@
+{
+  "View (only for you)": "Podgląd (tylko dla ciebie)",
+  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "Pozoruje wartości tylko w tej przeglądarce: gra pozostaje bez zmian, nikt inny tego nie widzi, brak wpisu w dzienniku.",
+  "Intervention (for everyone, in the log)": "Ingerencja (dla wszystkich, w dzienniku)",
+  "Changes the game for all players; every change is written to the game log.": "Zmienia grę dla wszystkich graczy; każda zmiana trafia do dziennika gry.",
+  "MegaCredits": "Megakredyty",
+  "Fill planet": "Wypełnij planetę",
+  "Resources and production": "Zasoby i produkcja",
+  "Set values": "Ustaw wartości",
+  "Search project card": "Szukaj karty projektu",
+  "Into the hand": "Na rękę",
+  "Into play (without effect)": "Do gry (bez efektu)",
+  "Reset view": "Resetuj podgląd",
+  "The change failed: ${0}": "Zmiana nie powiodła się: ${0}",
+  "🛠 DevTools: temperature set to ${0}": "🛠 DevTools: temperatura ustawiona na ${0}",
+  "🛠 DevTools: oxygen set to ${0}": "🛠 DevTools: tlen ustawiony na ${0}",
+  "🛠 DevTools: Venus set to ${0}": "🛠 DevTools: Wenus ustawiona na ${0}",
+  "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 DevTools: planeta wypełniona w ${0} % (położono ${1} kafelków, usunięto ${2})",
+  "🛠 DevTools: resources and production of ${0} set": "🛠 DevTools: ustawiono zasoby i produkcję gracza ${0}",
+  "🛠 DevTools: ${0} got ${1} into the hand": "🛠 DevTools: ${0} dostaje ${1} na rękę",
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} dostaje ${1} do gry, bez efektu"
+}

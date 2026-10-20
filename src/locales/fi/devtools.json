@@ -1,0 +1,22 @@
+{
+  "View (only for you)": "Näkymä (vain sinulle)",
+  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "Esittää arvoja vain tässä selaimessa: peli pysyy ennallaan, kukaan muu ei näe sitä, ei lokimerkintää.",
+  "Intervention (for everyone, in the log)": "Väliintulo (kaikille, lokissa)",
+  "Changes the game for all players; every change is written to the game log.": "Muuttaa peliä kaikille pelaajille; jokainen muutos kirjataan pelilokiin.",
+  "MegaCredits": "Megakrediitit",
+  "Fill planet": "Täytä planeetta",
+  "Resources and production": "Resurssit ja tuotanto",
+  "Set values": "Aseta arvot",
+  "Search project card": "Etsi projektikortti",
+  "Into the hand": "Käteen",
+  "Into play (without effect)": "Peliin (ilman vaikutusta)",
+  "Reset view": "Palauta näkymä",
+  "The change failed: ${0}": "Muutos epäonnistui: ${0}",
+  "🛠 DevTools: temperature set to ${0}": "🛠 DevTools: lämpötila asetettu arvoon ${0}",
+  "🛠 DevTools: oxygen set to ${0}": "🛠 DevTools: happi asetettu arvoon ${0}",
+  "🛠 DevTools: Venus set to ${0}": "🛠 DevTools: Venus asetettu arvoon ${0}",
+  "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 DevTools: planeetta täytetty ${0} %:iin (${1} laattaa lisätty, ${2} poistettu)",
+  "🛠 DevTools: resources and production of ${0} set": "🛠 DevTools: pelaajan ${0} resurssit ja tuotanto asetettu",
+  "🛠 DevTools: ${0} got ${1} into the hand": "🛠 DevTools: ${0} saa kortin ${1} käteen",
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} saa kortin ${1} peliin ilman vaikutusta"
+}

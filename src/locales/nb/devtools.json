@@ -1,0 +1,22 @@
+{
+  "View (only for you)": "Visning (bare for deg)",
+  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "Later som verdier bare i denne nettleseren: spillet forblir som det er, ingen andre ser det, ingen logglinje.",
+  "Intervention (for everyone, in the log)": "Inngrep (for alle, i loggen)",
+  "Changes the game for all players; every change is written to the game log.": "Endrer spillet for alle spillere; hver endring skrives i spilloggen.",
+  "MegaCredits": "Megakreditter",
+  "Fill planet": "Fyll planeten",
+  "Resources and production": "Ressurser og produksjon",
+  "Set values": "Sett verdier",
+  "Search project card": "Søk etter prosjektkort",
+  "Into the hand": "På hånden",
+  "Into play (without effect)": "I spill (uten effekt)",
+  "Reset view": "Tilbakestill visning",
+  "The change failed: ${0}": "Endringen mislyktes: ${0}",
+  "🛠 DevTools: temperature set to ${0}": "🛠 DevTools: temperatur satt til ${0}",
+  "🛠 DevTools: oxygen set to ${0}": "🛠 DevTools: oksygen satt til ${0}",
+  "🛠 DevTools: Venus set to ${0}": "🛠 DevTools: Venus satt til ${0}",
+  "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 DevTools: planeten fylt til ${0} % (${1} brikker lagt, ${2} fjernet)",
+  "🛠 DevTools: resources and production of ${0} set": "🛠 DevTools: ressurser og produksjon for ${0} satt",
+  "🛠 DevTools: ${0} got ${1} into the hand": "🛠 DevTools: ${0} får ${1} på hånden",
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} får ${1} i spill, uten effekt"
+}

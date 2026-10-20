@@ -127,6 +127,8 @@ import {serverUpdatePhase, startServerStatusPolling} from '@/client/utils/server
 import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
 import {setDocumentTitle} from '../utils/documentTitle';
 import {ingestView} from '@/client/utils/changeTracker';
+import {installDevToolsConsole} from '@/client/devtools/devToolsState';
+import {applyDevToolsView} from '@/client/devtools/devToolsView';
 import {fetchOrFail} from '@/client/utils/requestFailure';
 import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
 
@@ -312,6 +314,8 @@ export default defineComponent({
         .then((resp) => resp.json())
         // Theme texts first, so the game never shows up in the Mars wording for a moment
         .then(async (model: ViewModel) => {
+          // DevTools view mode: pretended values (also board and theme) before anything is shown
+          applyDevToolsView(model);
           await applyTheme(model.game.gameOptions.theme);
           return model;
         })
@@ -367,6 +371,7 @@ export default defineComponent({
     initMobileLayout();
     // Keyboard shortcuts: own keys from this device, then the listener and the key caps (hotkeyDispatcher.ts)
     loadHotkeys();
+    installDevToolsConsole();
     startHotkeyAvailability();
     startKeyLabelDetection();
     installHotkeys();

@@ -169,6 +169,7 @@ export class Game implements IGame, Logger {
   public pathfindersData: PathfindersData | undefined;
   public underworldData: UnderworldData = UnderworldExpansion.initializeGameWithoutUnderworld();
   public duneData: DuneData | undefined = undefined;
+  public devToolsTiles: Array<SpaceId> = [];
   public inTurmoil: boolean = false;
 
   // Card-specific data
@@ -545,6 +546,7 @@ export class Game implements IGame, Logger {
       tradeEmbargo: this.tradeEmbargo,
       underworldData: this.underworldData,
       duneData: this.duneData,
+      devToolsTiles: this.devToolsTiles,
       undoCount: this.undoCount,
       venusScaleLevel: this.venusScaleLevel,
       verminInEffect: this.verminInEffect,
@@ -1372,6 +1374,20 @@ export class Game implements IGame, Logger {
     return this.temperature;
   }
 
+  // Within the limits of the board; temperature and Venus keep their steps of two
+  public setGlobalParametersForDevTools(values: {temperature?: number, oxygen?: number, venus?: number}): void {
+    const step = (value: number, min: number, max: number, size: number) => Math.min(max, Math.max(min, min + Math.round((value - min) / size) * size));
+    if (values.temperature !== undefined) {
+      this.temperature = step(values.temperature, constants.MIN_TEMPERATURE, this.max.temperature, 2);
+    }
+    if (values.oxygen !== undefined) {
+      this.oxygenLevel = step(values.oxygen, constants.MIN_OXYGEN_LEVEL, this.max.oxygen, 1);
+    }
+    if (values.venus !== undefined) {
+      this.venusScaleLevel = step(values.venus, constants.MIN_VENUS_SCALE, this.max.venus, values.venus > 30 ? 1 : 2);
+    }
+  }
+
   public getGeneration(): number {
     return this.generation;
   }
@@ -1846,6 +1862,7 @@ export class Game implements IGame, Logger {
       game.underworldData = d.underworldData;
     }
     game.duneData = d.duneData;
+    game.devToolsTiles = d.devToolsTiles ?? [];
     DuneExpansion.attach(game);
     game.passedPlayers = new Set<PlayerId>(d.passedPlayers);
     game.donePlayers = new Set<PlayerId>(d.donePlayers);

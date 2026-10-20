@@ -1,0 +1,23 @@
+{
+  "DevTools": "Инструменты разработчика",
+  "View (only for you)": "Просмотр (только для вас)",
+  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "Подменяет значения только в этом браузере: игра не меняется, никто другой этого не видит, записи в журнале нет.",
+  "Intervention (for everyone, in the log)": "Вмешательство (для всех, в журнале)",
+  "Changes the game for all players; every change is written to the game log.": "Изменяет игру для всех игроков; каждое изменение записывается в журнал.",
+  "MegaCredits": "Мегакредиты",
+  "Fill planet": "Заполнить планету",
+  "Resources and production": "Ресурсы и производство",
+  "Set values": "Установить значения",
+  "Search project card": "Найти карту проекта",
+  "Into the hand": "В руку",
+  "Into play (without effect)": "В игру (без эффекта)",
+  "Reset view": "Сбросить просмотр",
+  "The change failed: ${0}": "Изменение не удалось: ${0}",
+  "🛠 DevTools: temperature set to ${0}": "🛠 DevTools: температура установлена на ${0}",
+  "🛠 DevTools: oxygen set to ${0}": "🛠 DevTools: кислород установлен на ${0}",
+  "🛠 DevTools: Venus set to ${0}": "🛠 DevTools: Венера установлена на ${0}",
+  "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 DevTools: планета заполнена на ${0} % (выложено тайлов: ${1}, убрано: ${2})",
+  "🛠 DevTools: resources and production of ${0} set": "🛠 DevTools: ресурсы и производство игрока ${0} установлены",
+  "🛠 DevTools: ${0} got ${1} into the hand": "🛠 DevTools: ${0} получает ${1} в руку",
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 DevTools: ${0} получает ${1} в игру без эффекта"
+}

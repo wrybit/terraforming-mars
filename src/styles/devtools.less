@@ -1,0 +1,106 @@
+// DevTools tab (DevToolsPanel.vue): two cards side by side (view, intervention), each with its groups. Small gaps inside
+// a group, larger ones between groups and cards, so what belongs together reads as one.
+.devtools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 12px;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.devtools-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 10px;
+  background: rgb(0 0 0 / 28%);
+}
+
+// The intervention changes the game for everyone: marked in warning orange
+.devtools-card--live {
+  border-color: rgb(240 138 44 / 55%);
+}
+
+.devtools-card__title {
+  margin: 0;
+  font-size: 15px;
+}
+
+.devtools-card__note {
+  margin: 0 0 6px;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.devtools-card__group {
+  margin: 12px 0 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+.devtools-slider {
+  display: grid;
+  grid-template-columns: 9em 1fr 3.5em;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.devtools-slider__value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.devtools-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.devtools-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+}
+
+.devtools-grid {
+  display: grid;
+  grid-template-columns: 1fr 5em 5em;
+  align-items: center;
+  gap: 4px 8px;
+  font-size: 13px;
+}
+
+.devtools-grid__head {
+  font-size: 11px;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.devtools-grid__input,
+.devtools-search {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 3px 6px;
+}
+
+.devtools-button {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.devtools-error {
+  margin: 4px 0 0;
+  color: #ff8a7a;
+  font-size: 12px;
+}

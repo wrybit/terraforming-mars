@@ -1,0 +1,23 @@
+{
+  "DevTools": "開発ツール",
+  "View (only for you)": "表示（自分だけ）",
+  "Pretends values in this browser only: the game stays as it is, nobody else sees it, no log line.": "このブラウザ内でだけ値を仮に表示します。ゲームは変わらず、他の人には見えず、ログにも残りません。",
+  "Intervention (for everyone, in the log)": "介入（全員に反映、ログに記録）",
+  "Changes the game for all players; every change is written to the game log.": "全プレイヤーのゲームを変更します。すべての変更はゲームログに記録されます。",
+  "MegaCredits": "メガクレジット",
+  "Fill planet": "惑星を埋める",
+  "Resources and production": "資源と生産",
+  "Set values": "値を設定",
+  "Search project card": "プロジェクトカードを検索",
+  "Into the hand": "手札へ",
+  "Into play (without effect)": "プレイ（効果なし）",
+  "Reset view": "表示をリセット",
+  "The change failed: ${0}": "変更に失敗しました: ${0}",
+  "🛠 DevTools: temperature set to ${0}": "🛠 開発ツール: 温度を ${0} に設定",
+  "🛠 DevTools: oxygen set to ${0}": "🛠 開発ツール: 酸素を ${0} に設定",
+  "🛠 DevTools: Venus set to ${0}": "🛠 開発ツール: 金星を ${0} に設定",
+  "🛠 DevTools: planet filled to ${0} % (${1} tiles placed, ${2} removed)": "🛠 開発ツール: 惑星を ${0}% 埋めました（タイル ${1} 枚配置、${2} 枚除去）",
+  "🛠 DevTools: resources and production of ${0} set": "🛠 開発ツール: ${0} の資源と生産を設定",
+  "🛠 DevTools: ${0} got ${1} into the hand": "🛠 開発ツール: ${0} が ${1} を手札に得る",
+  "🛠 DevTools: ${0} got ${1} into play without its effect": "🛠 開発ツール: ${0} が ${1} を効果なしでプレイ"
+}
