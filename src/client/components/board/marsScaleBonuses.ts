@@ -1,5 +1,6 @@
 import {BONUS_ICON, TrackBonus} from '@/client/components/trackBonus/trackBonus';
 import {ScaleGeometry} from './arrakisScales';
+import {MAX_OXYGEN_LEVEL, MAX_TEMPERATURE, MAX_VENUS_SCALE} from '@/common/constants';
 
 // Bonuses on the Mars scales as track chips outside the scale (mockup with-extensions), instead of the icons
 // printed on the board picture (assets/board/mars-clean.png has none). Positions in the coordinates of
@@ -29,6 +30,8 @@ export type ScaleBonusPin = {
   key: string;
   bonus: TrackBonus;
   done: boolean;
+  // The whole scale is at its top (standard maximums: only Arrakis asks, and it keeps them): Arrakis then drops the chip
+  scaleComplete: boolean;
   // Tip of the connector (next to the cell) and the direction from there to the cell in degrees
   top: number;
   left: number;
@@ -48,6 +51,8 @@ function cellCentre(entry: ScaleBonus, geometry: ScaleGeometry | undefined): {x:
     planetX: geometry.centreX, planetY: geometry.centreY};
 }
 
+const SCALE_MAXIMUM: Readonly<Record<MarsScale, number>> = {temperature: MAX_TEMPERATURE, oxygen: MAX_OXYGEN_LEVEL, venus: MAX_VENUS_SCALE};
+
 export function scaleBonusPins(values: Partial<Record<MarsScale, number>>, geometry?: ScaleGeometry): Array<ScaleBonusPin> {
   return SCALE_BONUSES.filter((entry) => values[entry.scale] !== undefined).map((entry) => {
     const {x: centerX, y: centerY, planetX, planetY} = cellCentre(entry, geometry);
@@ -59,6 +64,7 @@ export function scaleBonusPins(values: Partial<Record<MarsScale, number>>, geome
       key: entry.scale + entry.value,
       bonus: entry.bonus,
       done: (values[entry.scale] ?? 0) >= entry.value,
+      scaleComplete: (values[entry.scale] ?? 0) >= SCALE_MAXIMUM[entry.scale],
       top: centerY + dy / length * distance,
       left: centerX + dx / length * distance,
       angle: Math.atan2(-dy, -dx) * 180 / Math.PI,

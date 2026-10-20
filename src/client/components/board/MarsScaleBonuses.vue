@@ -27,6 +27,8 @@ const props = defineProps<{
   venus: number | undefined;
   // The large Arrakis: its markers sit on the bigger circle of the large map
   geometry?: ScaleGeometry;
+  // Arrakis: a full scale shows only its check, its chips go (Jens, 20 Oct 2026)
+  hideComplete?: boolean;
 }>();
 
 // The board is zoomed (rightColumnFit.ts, zoom view): undo that for the chips so they keep their size
@@ -55,7 +57,8 @@ onMounted(() => {
 
 onBeforeUnmount(() => observer?.disconnect());
 
-const pins = computed(() => scaleBonusPins({temperature: props.temperature, oxygen: props.oxygen, venus: props.venus}, props.geometry));
+const pins = computed(() => scaleBonusPins({temperature: props.temperature, oxygen: props.oxygen, venus: props.venus}, props.geometry)
+  .filter((pin) => props.hideComplete !== true || !pin.scaleComplete));
 
 // Placed like the scale cells (margins in .global-numbers), then turned so the connector points at the cell
 function pinStyle(pin: ScaleBonusPin): Record<string, string> {

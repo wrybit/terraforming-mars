@@ -329,5 +329,6 @@
   "No Sardaukar in your garrison": "Nincs szardaukar a helyőrségedben",
   "Only during your action": "Csak a saját akciód alatt",
   "Not enough M€": "Nincs elég M€",
-  "No target: no opponent has a greenery, city or special tile": "Nincs célpont: egyik ellenfélnek sincs zöldterülete, városa vagy különleges lapkája"
+  "No target: no opponent has a greenery, city or special tile": "Nincs célpont: egyik ellenfélnek sincs zöldterülete, városa vagy különleges lapkája",
+  "All ${0} spice fields": "Mind a ${0} fűszermező"
 }

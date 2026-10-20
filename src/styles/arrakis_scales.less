@@ -1,39 +1,264 @@
-// Scales around Arrakis (ArrakisScales.vue): drawn at the static position of .global-numbers, i.e. in the same
-// coordinates as the markers, and behind them
+// Scales around Arrakis (ArrakisScales.vue) and the spice fields below it (ArrakisSpiceFields.vue), design E6 · Oase+:
+// drawn at the static position of .global-numbers, i.e. in the same coordinates as the markers, and behind them
 .arrakis-scales {
   position: absolute;
   overflow: visible;
   pointer-events: none;
 }
 
-// Fill per step from arrakisScales.ts (gradient along the band); fine dark lines keep the steps apart
-.arrakis-scales__step {
-  stroke: rgba(20, 12, 6, 0.35);
-  stroke-width: 0.75;
+// Gradient pieces along the band (arrakisScaleArt.ts gradientPieces): colour and width come with each piece
+.arrakis-scales__piece {
+  fill: none;
 }
 
-// White outline around each band like the scales of the Mars board (Jens, 20 Oct 2026)
-.arrakis-scales__outline {
+.arrakis-scales__piece--ghost {
+  stroke-opacity: 0.16;
+}
+
+// Glass band under everything: the light tone of the band, barely there
+.arrakis-scales__glass {
+  fill: none;
+  stroke-opacity: 0.1;
+}
+
+.arrakis-scales__edge {
+  fill: none;
+  stroke-opacity: 0.55;
+  stroke-width: 0.72;
+}
+
+.arrakis-scales__edge--outer {
+  stroke-dasharray: 2.2 4.3;
+}
+
+// A full band: solid white edges
+.arrakis-scales__edge--full {
+  stroke: #fff;
+  stroke-opacity: 0.9;
+  stroke-width: 1;
+}
+
+.arrakis-scales__halo {
+  fill: none;
+  stroke-opacity: 0.35;
+  stroke-width: 42.1px;
+}
+
+// Slow shine through a full band: a short dash that runs once along the arc and fades at both ends
+.arrakis-scales__shine {
   fill: none;
   stroke: #fff;
-  stroke-width: 1.5;
+  stroke-opacity: 0.35;
+  stroke-dasharray: 0.12 1;
+  animation: arrakis-sweep 4.5s ease-in-out infinite;
+}
+
+.arrakis-scales__dot {
+  fill: rgb(255 255 255 / 44%);
+}
+
+.arrakis-scales__dot--reached {
+  fill: #fff;
+}
+
+// Numbers inside the band, next to the fill (not under it)
+.arrakis-scales__number,
+.arrakis-scales__value {
+  font-family: Prototype, sans-serif;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.arrakis-scales__number {
+  font-size: 11px;
+  fill: rgb(255 255 255 / 66%);
+  paint-order: stroke;
+  stroke: #0a0603;
+  stroke-width: 1.8px;
+}
+
+.arrakis-scales__number--reached {
+  fill: #fff;
+}
+
+// Current value as a capsule on the arc
+.arrakis-scales__capsule {
+  fill: rgb(7 5 10 / 91%);
+  stroke-width: 1.73px;
+}
+
+.arrakis-scales__value {
+  font-size: 14px;
+  fill: #fff;
+}
+
+.arrakis-scales__check {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.9px;
+  stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.arrakis-scales__check--shadow {
+  stroke: rgb(10 6 3 / 55%);
+  stroke-width: 5.8px;
 }
 
 // Name of the scale along the circle, in the light tone of its band
 .arrakis-scales__name {
   font-family: Prototype, sans-serif;
   font-size: 15px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.72px;
   paint-order: stroke;
-  stroke: rgba(10, 6, 3, 0.8);
+  stroke: #0a0603;
   stroke-width: 3px;
 }
 
 .arrakis-scales__track--vegetation .arrakis-scales__name {
-  fill: #9fd884;
+  fill: #a6e392;
 }
 
 .arrakis-scales__track--water .arrakis-scales__name {
-  fill: #8cc4f0;
+  fill: #9fd2ff;
+}
+
+// Animations; each element gets its own duration and phase inline (arrakisMotion.ts desync)
+.arrakis-scales__pulse {
+  animation: arrakis-pulse 2.2s ease-in-out infinite;
+}
+
+.arrakis-scales__breathe {
+  animation: arrakis-breathe 2.4s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.arrakis-spice__blink {
+  animation: arrakis-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes arrakis-pulse {
+  50% { opacity: 0.55; }
+}
+
+@keyframes arrakis-breathe {
+  50% { transform: scale(1.12); }
+}
+
+@keyframes arrakis-blink {
+  0%, 100% { opacity: 0.25; }
+  40% { opacity: 1; }
+}
+
+@keyframes arrakis-sweep {
+  0% { stroke-dashoffset: 0; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { stroke-dashoffset: -1; opacity: 0; }
+}
+
+// Spice fields: filled cells in the orange of the spice field tile, open ones dashed, the next one blinking
+.arrakis-spice__cell {
+  stroke: #ffe2b8;
+  stroke-width: 0.94px;
+}
+
+.arrakis-spice__cell--check {
+  stroke-width: 1.3px;
+}
+
+.arrakis-spice__cell--open {
+  fill: rgb(26 16 10 / 80%);
+  stroke: #f08a2c;
+  stroke-opacity: 0.45;
+  stroke-dasharray: 2.16 2.16;
+}
+
+.arrakis-spice__cell--next {
+  stroke-opacity: 1;
+  stroke-dasharray: none;
+}
+
+.arrakis-spice__tick {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.31px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.arrakis-spice__count {
+  font-family: Prototype, sans-serif;
+  font-size: 15.15px;
+  fill: #f08a2c;
+  text-anchor: middle;
+  dominant-baseline: central;
+  paint-order: stroke;
+  stroke: #0a0603;
+  stroke-width: 2.16px;
+}
+
+.arrakis-spice__max {
+  font-size: 10.1px;
+  fill: rgb(240 138 44 / 60%);
+}
+
+// All placed: one loaded bar along the arc, without highlights (Jens, 20 Oct 2026)
+.arrakis-spice__glow,
+.arrakis-spice__rim,
+.arrakis-spice__bar {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.arrakis-spice__glow {
+  stroke: #f08a2c;
+  stroke-opacity: 0.35;
+}
+
+.arrakis-spice__rim {
+  stroke: #ffe2b8;
+}
+
+.arrakis-spice__bar {
+  stroke: #e0702a;
+}
+
+.arrakis-spice__done {
+  font-family: Prototype, sans-serif;
+  font-size: 9.38px;
+  letter-spacing: 1.44px;
+  fill: #3a1606;
+}
+
+// The markers of Board.vue stay under the drawn scales, invisible: the change flash still rings at the current value.
+// Two classes: stronger than the white numbers of the Dune theme (html.theme-dune .global-numbers-temperature …)
+.global-numbers.global-numbers--arrakis {
+  .global-numbers-temperature .global-numbers-value,
+  .global-numbers-oxygen .global-numbers-value {
+    color: transparent;
+    text-shadow: none;
+    box-shadow: none;
+  }
+}
+
+// Box over the spice row that only carries the change flash of the spice fields (Board.vue)
+.global-numbers-oceans-flash {
+  position: absolute;
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrakis-scales__pulse,
+  .arrakis-scales__breathe,
+  .arrakis-spice__blink {
+    animation: none;
+  }
+
+  // Without motion the shine would stand still as a white dash
+  .arrakis-scales__shine {
+    display: none;
+  }
 }

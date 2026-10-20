@@ -329,5 +329,6 @@
   "No Sardaukar in your garrison": "Varuskunnassasi ei ole sardaukareita",
   "Only during your action": "Vain oman toimintosi aikana",
   "Not enough M€": "Liian vähän M€",
-  "No target: no opponent has a greenery, city or special tile": "Ei kohdetta: kenelläkään vastustajalla ei ole viheraluetta, kaupunkia tai erikoislaattaa"
+  "No target: no opponent has a greenery, city or special tile": "Ei kohdetta: kenelläkään vastustajalla ei ole viheraluetta, kaupunkia tai erikoislaattaa",
+  "All ${0} spice fields": "Kaikki ${0} maustekenttää"
 }

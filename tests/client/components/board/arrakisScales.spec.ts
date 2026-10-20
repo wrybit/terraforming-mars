@@ -24,12 +24,12 @@ describe('arrakisScales', () => {
     expect(STANDARD_SCALES.waterAngles).deep.eq(lessAngles(less, 'temperature-vals'));
   });
 
-  it('uses the large circle and the first marker angles of the large map for the large Arrakis', () => {
+  it('uses the large circle and its own marker angles for the large Arrakis', () => {
     expect(LARGE_SCALES.centreX).eq(lessNumber(less, 'dial-cx-large'));
     expect(LARGE_SCALES.centreY).eq(lessNumber(less, 'dial-cy-large'));
     expect(LARGE_SCALES.radius).eq(lessNumber(less, 'dial-r-large'));
-    expect(LARGE_SCALES.vegetationAngles).deep.eq(lessAngles(less, 'oxygen-vals-large').slice(0, STANDARD_SCALES.vegetationAngles.length));
-    expect(LARGE_SCALES.waterAngles).deep.eq(lessAngles(less, 'temperature-vals-large').slice(0, STANDARD_SCALES.waterAngles.length));
+    expect(LARGE_SCALES.vegetationAngles).deep.eq(lessAngles(less, 'oxygen-vals-arrakis-large'));
+    expect(LARGE_SCALES.waterAngles).deep.eq(lessAngles(less, 'temperature-vals-arrakis-large'));
   });
 
   it('keeps symbol and name of the standard board where they were', () => {

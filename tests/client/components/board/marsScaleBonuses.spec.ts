@@ -9,6 +9,11 @@ describe('marsScaleBonuses', () => {
     expect(pins.filter((pin) => pin.done).map((pin) => pin.key)).deep.eq(['temperature-24', 'venus8']);
   });
 
+  it('marks the chips of a scale at its top', () => {
+    const pins = scaleBonusPins({temperature: 8, oxygen: 13, venus: undefined});
+    expect(pins.filter((pin) => pin.scaleComplete).map((pin) => pin.key)).deep.eq(['temperature-24', 'temperature-20', 'temperature0']);
+  });
+
   it('leaves out Venus without the expansion and puts chips outside the scale', () => {
     const pins = scaleBonusPins({temperature: -30, oxygen: 0, venus: undefined});
     expect(pins.some((pin) => pin.key.startsWith('venus'))).is.false;

@@ -22,14 +22,15 @@ export const STANDARD_SCALES: ScaleGeometry = {
   waterAngles: [55.6, 50.3, 45.6, 40.6, 35.7, 30.6, 25.7, 20.6, 15.8, 10.8, 5.7, 0.8, -4.1, -9.3, -14.1, -19.2, -24.3, -29.3, -34.1, -39.4],
 };
 
-/** Large board: the first values of globs.less @oxygen-vals-large and @temperature-vals-large – the large Arrakis keeps
- *  the standard maximums (14 % vegetation, +8 °C), only Amazonis Planitia runs further */
+/** Large board: globs.less @oxygen-vals-arrakis-large and @temperature-vals-arrakis-large – the large Arrakis keeps the
+ *  standard maximums (14 % vegetation, +8 °C) and starts its scales further out than Amazonis Planitia, so the spice
+ *  fields fit between their low ends (arrakisSpiceFields.ts) */
 export const LARGE_SCALES: ScaleGeometry = {
   centreX: 353,
   centreY: 351.2,
   radius: 313.9,
-  vegetationAngles: [110, 116.1, 122, 128, 134, 140.1, 145.9, 152.1, 158, 164, 169.9, 176, 182, 188.1, 194],
-  waterAngles: [70.1, 65.1, 60.2, 55.2, 50.4, 45.5, 40.5, 35.6, 30.6, 25.8, 20.9, 16, 11, 6.2, 1.2, -3.7, -8.6, -13.5, -18.4, -23.3],
+  vegetationAngles: [117, 122.5, 128, 133.5, 139, 144.5, 150, 155.5, 161, 166.5, 172, 177.5, 183, 188.5, 194],
+  waterAngles: [63, 58.5, 53.9, 49.4, 44.8, 40.3, 35.7, 31.2, 26.7, 22.1, 17.6, 13, 8.5, 4, -0.6, -5.1, -9.7, -14.2, -18.8, -23.3],
 };
 
 /** Width of the band; the 26px markers sit inside it */

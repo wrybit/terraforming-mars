@@ -15,16 +15,16 @@
           </div>
         </div>
 
-        <div class="global-numbers" :class="{'global-numbers--large': isLargeBoard}">
+        <div class="global-numbers" :class="{'global-numbers--large': isLargeBoard, 'global-numbers--arrakis': isArrakis}">
             <!-- Arrakis: the scales as vectors (the Dune board picture is only the planet, scripts/make-dune-planet.py) -->
-            <ArrakisScales v-if="isArrakis" :large="isLargeBoard"/>
+            <ArrakisScales v-if="isArrakis" :large="isLargeBoard" :vegetation="arrakisScaleValues('oxygen')" :water="arrakisScaleValues('temperature')"/>
             <div class="global-numbers-temperature">
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('temperature')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('temperature') : undefined">{{ lvl.strValue }}</div>
             </div>
 
             <!-- Scale bonuses as chips outside the scales (the board picture has none of its own) -->
             <MarsScaleBonuses :temperature="temperature" :oxygen="oxygen_level" :venus="expansions.venus ? venusScaleLevel : undefined"
-              :geometry="isArrakis && isLargeBoard ? LARGE_SCALES : undefined"/>
+              :geometry="isArrakis && isLargeBoard ? LARGE_SCALES : undefined" :hideComplete="isArrakis"/>
 
             <div class="global-numbers-oxygen">
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('oxygen')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('oxygen') : undefined">{{ lvl.strValue }}</div>
@@ -34,9 +34,12 @@
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('venus')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('venus') : undefined">{{ lvl.strValue }}</div>
             </div>
 
-            <div class="global-numbers-oceans" :class="{'global-numbers-oceans--arrakis': isArrakis}" v-flash="flashKeys.globalParameter('oceans')">
-              <!-- Arrakis: the spice field tile in front of the count; inside the count, so it moves with it in every board layout -->
-              <img v-if="isArrakis" class="global-numbers-oceans__tile" src="assets/themes/dune/graphics/tile-spicefield.svg" alt="">
+            <!-- Arrakis: spice fields as cells on an arc below the planet; the empty box over them carries the change flash -->
+            <template v-if="isArrakis">
+              <ArrakisSpiceFields :large="isLargeBoard" :count="oceans_count" :fields="globalParameterMaximums.oceans"/>
+              <div class="global-numbers-oceans-flash" :style="spiceFlashStyle" v-flash="flashKeys.globalParameter('oceans')"></div>
+            </template>
+            <div v-else class="global-numbers-oceans" v-flash="flashKeys.globalParameter('oceans')">
               <span v-if="oceans_count === globalParameterMaximums.oceans">
                 <img width="26" src="assets/misc/circle-checkmark.png" class="board-ocean-checkmark" :alt="$t('Completed!')">
               </span>
@@ -361,6 +364,9 @@ import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximum
 import BoardSpace from '@/client/components/BoardSpace.vue';
 import MarsScaleBonuses from '@/client/components/board/MarsScaleBonuses.vue';
 import ArrakisScales from '@/client/components/board/ArrakisScales.vue';
+import {ScaleValues} from '@/client/components/board/arrakisScaleArt';
+import ArrakisSpiceFields from '@/client/components/board/ArrakisSpiceFields.vue';
+import {spiceRowBox} from '@/client/components/board/arrakisSpiceFields';
 import {AresData} from '@/common/ares/AresData';
 import {SpaceModel} from '@/common/models/SpaceModel';
 import {SpaceType} from '@/common/boards/SpaceType';
@@ -437,6 +443,7 @@ export default defineComponent({
   },
   components: {
     ArrakisScales,
+    ArrakisSpiceFields,
     BoardSpace,
     MarsScaleBonuses,
   },
@@ -500,6 +507,11 @@ export default defineComponent({
       }
       return values;
     },
+    // Value and texts of a scale for the drawn Arrakis scales: from the lowest value up, the same texts as the markers
+    arrakisScaleValues(parameter: 'oxygen' | 'temperature'): ScaleValues {
+      const levels = this.getValuesForParameter(parameter).slice().reverse();
+      return {level: Math.max(0, levels.findIndex((level) => level.isActive)), labels: levels.map((level) => level.strValue)};
+    },
     getScaleCSS(paramLevel: GlobalParamLevel): string {
       let css = 'global-numbers-value val-' + paramLevel.value + ' ';
       if (paramLevel.isActive) {
@@ -535,6 +547,10 @@ export default defineComponent({
     },
     LARGE_SCALES(): ScaleGeometry {
       return LARGE_SCALES;
+    },
+    spiceFlashStyle(): Record<string, string> {
+      const box = spiceRowBox(this.isLargeBoard, this.globalParameterMaximums.oceans);
+      return {marginLeft: box.left + 'px', marginTop: box.top + 'px', width: box.width + 'px', height: box.height + 'px'};
     },
     BoardName(): typeof BoardName {
       return BoardName;

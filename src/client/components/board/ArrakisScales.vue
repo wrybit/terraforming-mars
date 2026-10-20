@@ -1,16 +1,61 @@
 <template>
-  <!-- Arrakis: vegetation (left) and water storage (right) as sharp vector bands behind the markers (arrakisScales.ts),
-       each with its symbol and name continuing the band beyond its top end -->
+  <!-- Arrakis: vegetation (left) and water storage (right) as animated vector bands, design E6 · Oase+
+       (arrakisScaleArt.ts); symbol and name continue each band beyond its top end. The markers of Board.vue stay in
+       place underneath (transparent), so the change flash still rings at the current value. -->
   <!-- Big enough for the large circle (centre 353, radius 314 + band): nothing is cut off -->
   <svg class="arrakis-scales" width="720" height="720" viewBox="0 0 720 720" aria-hidden="true">
     <defs>
+      <filter :id="glowId" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="2.16" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
       <path v-for="track in tracks" :id="pathId(track.key)" :key="track.key" :d="track.textPath"/>
     </defs>
-    <g v-for="track in tracks" :key="track.key" :class="['arrakis-scales__track', 'arrakis-scales__track--' + track.key]">
-      <path v-for="step in track.steps" :key="step.index" :d="step.path" class="arrakis-scales__step" :style="{fill: scaleColour(track.key, step.share)}"/>
-      <!-- White outline around the whole band, as on the Mars board -->
-      <path class="arrakis-scales__outline" :d="track.outline"/>
-      <image class="arrakis-scales__symbol" :href="track.symbol" :x="track.symbolAt.x - SYMBOL / 2" :y="track.symbolAt.y - SYMBOL / 2" :width="SYMBOL" :height="SYMBOL"/>
+    <g v-for="track in tracks" :key="track.key" :class="['arrakis-scales__track', 'arrakis-scales__track--' + track.key, {'arrakis-scales__track--full': track.art.full}]">
+      <template v-if="track.art.full">
+        <!-- Loaded: halo, the whole band in its gradient, solid white edges, a slow shine and the check in the middle -->
+        <path class="arrakis-scales__halo arrakis-scales__pulse" :style="motion(track.key + '-halo', 2.2)" :d="track.art.band" :stroke="track.glow" :filter="glowUrl"/>
+        <g :filter="glowUrl">
+          <path v-for="(piece, index) in track.art.fill" :key="'fill' + index" class="arrakis-scales__piece" :d="piece.path"
+            :stroke="scaleColour(track.key, piece.share)" :stroke-width="FULL_WIDTH"/>
+        </g>
+        <path class="arrakis-scales__edge arrakis-scales__edge--full" :d="track.art.innerEdge"/>
+        <path class="arrakis-scales__edge arrakis-scales__edge--full" :d="track.art.outerEdge"/>
+        <path class="arrakis-scales__shine" :style="motion(track.key + '-sweep', 4.5)" pathLength="1" :d="track.art.band" :stroke-width="FULL_WIDTH"/>
+      </template>
+      <template v-else>
+        <!-- Glass band, the faint path of the whole gradient, edges, step dots and numbers -->
+        <path class="arrakis-scales__glass" :d="track.art.band" :stroke="track.glow" :stroke-width="SCALE_BAND"/>
+        <path v-for="(piece, index) in track.art.ghost" :key="'ghost' + index" class="arrakis-scales__piece arrakis-scales__piece--ghost" :d="piece.path"
+          :stroke="scaleColour(track.key, piece.share)" :stroke-width="GHOST_WIDTH"/>
+        <path class="arrakis-scales__edge" :d="track.art.innerEdge" :stroke="track.glow"/>
+        <path class="arrakis-scales__edge arrakis-scales__edge--outer" :d="track.art.outerEdge" :stroke="track.glow"/>
+        <circle v-for="(dot, index) in track.art.dots" :key="'dot' + index" :class="['arrakis-scales__dot', {'arrakis-scales__dot--reached': dot.reached}]"
+          :cx="dot.x" :cy="dot.y" :r="dot.reached ? 2.2 : 1.3"/>
+        <text v-for="(mark, index) in track.art.numbers" :key="'number' + index" :class="['arrakis-scales__number', {'arrakis-scales__number--reached': mark.reached}]"
+          :x="mark.x" :y="mark.y" :transform="`rotate(${mark.rotation} ${mark.x} ${mark.y})`">{{ mark.text }}</text>
+        <g :filter="glowUrl">
+          <path v-for="(piece, index) in track.art.fill" :key="'fill' + index" class="arrakis-scales__piece" :d="piece.path"
+            :stroke="scaleColour(track.key, piece.share)" :stroke-width="FILL_WIDTH"/>
+        </g>
+      </template>
+      <!-- Particles from the sand to the value, each with its own size, path, pace, colour and blink -->
+      <circle v-for="(flow, index) in particlesOf(track)" :key="'particle' + index" :r="flow.particle.radius" :fill="whiteTo(track.glow, flow.particle.colourShare)">
+        <animateMotion :dur="seconds(flow.particle.travel)" :begin="seconds(-flow.particle.travelBegin)" repeatCount="indefinite" :path="flow.path"/>
+        <animate attributeName="opacity" values=".15;1;.15" :dur="seconds(flow.particle.blink)" :begin="seconds(-flow.particle.blinkBegin)" repeatCount="indefinite"/>
+      </circle>
+      <g v-if="track.art.check !== undefined" class="arrakis-scales__breathe" :style="motion(track.key + '-check', 2.4)">
+        <path class="arrakis-scales__check arrakis-scales__check--shadow" :d="checkPath(track.art.check)"/>
+        <path class="arrakis-scales__check" :d="checkPath(track.art.check)" :filter="glowUrl"/>
+      </g>
+      <g v-if="track.art.capsule !== undefined" :transform="`rotate(${track.art.capsule.rotation} ${track.art.capsule.x} ${track.art.capsule.y})`">
+        <g class="arrakis-scales__breathe" :style="motion(track.key + '-capsule', 2.4)">
+          <rect class="arrakis-scales__capsule" :x="track.art.capsule.x - 18" :y="track.art.capsule.y - 11.55" width="36" height="23.1" rx="11.55"
+            :stroke="scaleColour(track.key, track.art.capsule.share)" :filter="glowUrl"/>
+          <text class="arrakis-scales__value" :x="track.art.capsule.x" :y="track.art.capsule.y">{{ track.art.capsule.text }}</text>
+        </g>
+      </g>
+      <image class="arrakis-scales__symbol" :href="track.symbol" :x="track.symbolAt.x - SYMBOL / 2" :y="track.symbolAt.y - SYMBOL / 2" :width="SYMBOL" :height="SYMBOL" :filter="glowUrl"/>
       <text class="arrakis-scales__name">
         <textPath :href="'#' + pathId(track.key)" :startOffset="track.anchor === 'end' ? '100%' : '0%'" :text-anchor="track.anchor" dominant-baseline="central">{{ $t(track.label) }}</textPath>
       </text>
@@ -19,15 +64,18 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
-import {LARGE_SCALES, STANDARD_SCALES, ScaleGeometry, ScaleStep, arcPath, pointAt, scaleColour, scaleLabels, scaleOutline, scaleSteps} from './arrakisScales';
+import {defineComponent, PropType} from 'vue';
+import {LARGE_SCALES, SCALE_BAND, STANDARD_SCALES, ScaleGeometry, arcPath, pointAt, scaleColour, scaleLabels} from './arrakisScales';
+import {FILL_WIDTH, FULL_WIDTH, FlowPath, GHOST_WIDTH, SCALE_GLOW, ScaleArt, ScaleKey, ScaleValues, scaleArt} from './arrakisScaleArt';
+import {MotionStyle, desync, whiteTo} from './arrakisMotion';
 import {themedAsset} from '@/client/theme/themeDisplay';
+import {prefersReducedMotion} from '@/client/utils/motion';
 
 type Track = {
-  key: 'vegetation' | 'water',
+  key: ScaleKey,
   label: string,
-  steps: Array<ScaleStep>,
-  outline: string,
+  art: ScaleArt,
+  glow: string,
   symbol: string,
   symbolAt: {x: number, y: number},
   textPath: string,
@@ -36,6 +84,9 @@ type Track = {
 
 // Size of the scale symbols in board pixels
 const SYMBOL = 32;
+// Ids of the filter and text paths per instance: the board is drawn twice (column and zoom view), and a reference to
+// an id inside a hidden copy would draw nothing
+let instances = 0;
 
 export default defineComponent({
   name: 'ArrakisScales',
@@ -45,6 +96,18 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    vegetation: {
+      type: Object as PropType<ScaleValues>,
+      required: true,
+    },
+    water: {
+      type: Object as PropType<ScaleValues>,
+      required: true,
+    },
+  },
+  data() {
+    instances++;
+    return {uid: instances};
   },
   computed: {
     geometry(): ScaleGeometry {
@@ -53,24 +116,61 @@ export default defineComponent({
     SYMBOL(): number {
       return SYMBOL;
     },
+    SCALE_BAND(): number {
+      return SCALE_BAND;
+    },
+    FILL_WIDTH(): number {
+      return FILL_WIDTH;
+    },
+    FULL_WIDTH(): number {
+      return FULL_WIDTH;
+    },
+    GHOST_WIDTH(): number {
+      return GHOST_WIDTH;
+    },
+    glowId(): string {
+      return 'arrakis-scales-glow-' + this.uid;
+    },
+    glowUrl(): string {
+      return `url(#${this.glowId})`;
+    },
+    // Reduced motion: no moving particles (the CSS animations stop in arrakis_scales.less)
+    still(): boolean {
+      return prefersReducedMotion();
+    },
     tracks(): Array<Track> {
       // The theme turns "Oxygen" and "Temperature" into vegetation and water storage
       const geometry = this.geometry;
       const {vegetation, water} = scaleLabels(geometry);
       return [
-        {key: 'vegetation', label: 'Oxygen', steps: scaleSteps(geometry, geometry.vegetationAngles), outline: scaleOutline(geometry, geometry.vegetationAngles),
-          symbol: themedAsset('assets/global-parameters/oxygen.png'), symbolAt: pointAt(geometry, vegetation.symbolAngle),
+        {key: 'vegetation', label: 'Oxygen', art: scaleArt(geometry, 'vegetation', geometry.vegetationAngles, this.vegetation.level, this.vegetation.labels),
+          glow: SCALE_GLOW.vegetation, symbol: themedAsset('assets/global-parameters/oxygen.png'), symbolAt: pointAt(geometry, vegetation.symbolAngle),
           textPath: arcPath(geometry, vegetation.text.from, vegetation.text.to), anchor: vegetation.text.anchor},
-        {key: 'water', label: 'Temperature', steps: scaleSteps(geometry, geometry.waterAngles), outline: scaleOutline(geometry, geometry.waterAngles),
-          symbol: themedAsset('assets/global-parameters/temperature.png'), symbolAt: pointAt(geometry, water.symbolAngle),
+        {key: 'water', label: 'Temperature', art: scaleArt(geometry, 'water', geometry.waterAngles, this.water.level, this.water.labels),
+          glow: SCALE_GLOW.water, symbol: themedAsset('assets/global-parameters/temperature.png'), symbolAt: pointAt(geometry, water.symbolAngle),
           textPath: arcPath(geometry, water.text.from, water.text.to), anchor: water.text.anchor},
       ];
     },
   },
   methods: {
     scaleColour,
+    whiteTo,
     pathId(key: string): string {
-      return 'arrakis-scale-name-' + key;
+      return `arrakis-scale-name-${key}-${this.uid}`;
+    },
+    motion(key: string, baseSeconds: number): MotionStyle {
+      return desync(key, baseSeconds);
+    },
+    seconds(value: number): string {
+      return value.toFixed(2) + 's';
+    },
+    particlesOf(track: Track): ReadonlyArray<FlowPath> {
+      return this.still ? [] : track.art.flow;
+    },
+    // Check mark, 6.5 board px wide on each side of its centre
+    checkPath(at: {x: number, y: number}): string {
+      const size = 6.5;
+      return `M ${(at.x - size).toFixed(2)} ${at.y.toFixed(2)} l ${(size * 0.7).toFixed(2)} ${(size * 0.7).toFixed(2)} l ${(size * 1.3).toFixed(2)} ${(-size * 1.4).toFixed(2)}`;
     },
   },
 });

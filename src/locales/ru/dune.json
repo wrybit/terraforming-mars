@@ -332,5 +332,6 @@
   "No Sardaukar in your garrison": "В твоём гарнизоне нет сардаукаров",
   "Only during your action": "Только во время твоего действия",
   "Not enough M€": "Недостаточно M€",
-  "No target: no opponent has a greenery, city or special tile": "Нет цели: ни у одного соперника нет озеленения, города или особого тайла"
+  "No target: no opponent has a greenery, city or special tile": "Нет цели: ни у одного соперника нет озеленения, города или особого тайла",
+  "All ${0} spice fields": "Все ${0} полей пряности"
 }

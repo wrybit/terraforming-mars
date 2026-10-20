@@ -331,5 +331,6 @@
   "No Sardaukar in your garrison": "주둔군에 사다우카가 없습니다",
   "Only during your action": "내 행동 중에만",
   "Not enough M€": "M€가 부족합니다",
-  "No target: no opponent has a greenery, city or special tile": "대상 없음: 녹지, 도시 또는 특수 타일을 가진 상대가 없습니다"
+  "No target: no opponent has a greenery, city or special tile": "대상 없음: 녹지, 도시 또는 특수 타일을 가진 상대가 없습니다",
+  "All ${0} spice fields": "스파이스 평원 ${0}개 모두"
 }
