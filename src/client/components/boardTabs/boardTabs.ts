@@ -11,14 +11,12 @@ import {Color} from '@/common/Color';
 import {arrakisCoordinate} from '@/common/dune/arrakisCoordinates';
 import {arrakisLayout} from '@/common/dune/arrakisLayout';
 import {duneGraphic} from '@/client/components/dune/duneGraphic';
-import {devToolsState} from '@/client/devtools/devToolsState';
 
 // The Dune expansion gets one tab per module of this game (common/dune/DuneModule.ts), in the order of the concept
 // Smuggling and CHOAM have no board tab: they live in their action tabs (SmuggleInput.vue, ChoamInput.vue; Jens 19 Oct 2026)
 export const DUNE_BOARD_TABS = ['bazaar', 'worm', 'kanly', 'schemes'] as const;
 export type DuneBoardTabId = typeof DUNE_BOARD_TABS[number];
-// devtools: only after tmDev.on() with the admin login (client/devtools/devToolsState.ts), always last
-export type BoardTabId = 'mars' | 'moon' | 'colonies' | 'turmoil' | 'paths' | 'delta' | DuneBoardTabId | 'devtools';
+export type BoardTabId = 'mars' | 'moon' | 'colonies' | 'turmoil' | 'paths' | 'delta' | DuneBoardTabId;
 
 // Spice orange: all Dune module tabs share one tone, so they read as one family
 const DUNE_TAB_COLOR = '#e0662a';
@@ -35,7 +33,6 @@ export const BOARD_TAB_TONE: Record<BoardTabId, string> = {
   worm: 'bazaar',
   kanly: 'bazaar',
   schemes: 'bazaar',
-  devtools: 'delta',
 };
 
 export const BOARD_TAB_LABEL: Record<BoardTabId, string> = {
@@ -49,7 +46,6 @@ export const BOARD_TAB_LABEL: Record<BoardTabId, string> = {
   worm: 'Shai-Hulud',
   kanly: 'Kanly',
   schemes: 'Schemes',
-  devtools: 'DevTools',
 };
 
 export function boardTabs(game: GameModel): Array<BoardTabId> {
@@ -72,9 +68,6 @@ export function boardTabs(game: GameModel): Array<BoardTabId> {
   const dune = game.dune;
   if (dune !== undefined) {
     tabs.push(...DUNE_BOARD_TABS.filter((tab) => dune[tab] !== undefined));
-  }
-  if (devToolsState.enabled) {
-    tabs.push('devtools');
   }
   return tabs;
 }

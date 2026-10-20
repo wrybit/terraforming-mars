@@ -81,10 +81,12 @@
                Otherwise they are the first tab there above the input (isHandInInputTabs), and this block is dropped. -->
           <div class="player_home_block player_home_block--hand" v-if="hasHandPanelContent && !isHandInInputTabs(playerView)" id="shortkey-hand">
             <div class="or-tabs" role="tablist">
-              <HandCardsTab :count="cardsInHandCount" :active="true"/>
+              <HandCardsTab :count="cardsInHandCount" :active="!devTools.open" @select="closeDevTools"/>
+              <DevToolsTab/>
               <WaitingForPlayersTab :playerView="playerView"/>
             </div>
-            <div v-docked-tab class="or-tab-panel or-tab-panel--view" role="tabpanel">
+            <div v-docked-tab :class="['or-tab-panel', 'or-tab-panel--view', {'or-tab-panel--devtools': devTools.open}]" role="tabpanel">
+              <DevToolsOverlay :playerView="playerView"/>
               <HandCardsPanel :playerView="playerView"/>
             </div>
           </div>
@@ -120,6 +122,9 @@ import DynamicTitle from '@/client/components/common/DynamicTitle.vue';
 import GameOverNotice from '@/client/components/gameend/GameOverNotice.vue';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
+import DevToolsTab from '@/client/components/devtools/DevToolsTab.vue';
+import DevToolsOverlay from '@/client/components/devtools/DevToolsOverlay.vue';
+import {closeDevTools, devToolsState} from '@/client/devtools/devToolsState';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';
 import TopBar from '@/client/components/TopBar.vue';
 import HotkeyHelpDialog from '@/client/components/hotkeys/HotkeyHelpDialog.vue';
@@ -162,6 +167,9 @@ export default defineComponent({
     };
   },
   computed: {
+    devTools(): typeof devToolsState {
+      return devToolsState;
+    },
     // Only the tabs of this game's expansions are listed in the shortcut dialog
     hotkeyExpansions(): Array<string> {
       return gameExpansions(this.game.gameOptions.expansions, this.game.dune !== undefined);
@@ -209,6 +217,8 @@ export default defineComponent({
     LogPanel,
     HandCardsPanel,
     HandCardsTab,
+    DevToolsTab,
+    DevToolsOverlay,
     WaitingForPlayersTab,
     TopBar,
     GameBoardView,
@@ -220,6 +230,7 @@ export default defineComponent({
     HotkeyHelpDialog,
   },
   methods: {
+    closeDevTools,
     showsDraftedCardsBlock,
     isHandInInputTabs,
     isPlayerActing(playerView: PlayerViewModel) : boolean {

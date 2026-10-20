@@ -4,20 +4,22 @@
        The action menu (OrOptions) builds its own tabs, see orOptionsLayout.ts. -->
   <div class="wf-options wf-options--tabs">
     <div class="or-tabs" role="tablist">
-      <HandCardsTab :count="handCards.length + dealtCount" :active="handTabActive" @select="handTabActive = true"/>
+      <HandCardsTab :count="handCards.length + dealtCount" :active="handTabActive && !devToolsState.open" @select="handTabActive = true; closeDevTools()"/>
       <button type="button" role="tab"
         :title="$t(fullTabTitle(tabSource.title))"
-        :aria-selected="!handTabActive"
-        :class="['or-tab', {'or-tab--active': !handTabActive}, tone !== undefined ? 'or-tab--tone-' + tone : '']"
-        @click="handTabActive = false">
+        :aria-selected="!handTabActive && !devToolsState.open"
+        :class="['or-tab', {'or-tab--active': !handTabActive && !devToolsState.open}, tone !== undefined ? 'or-tab--tone-' + tone : '']"
+        @click="handTabActive = false; closeDevTools()">
         <span class="or-tab-title">{{ $t(inputTabLabel(tabSource)) }}</span>
         <span v-if="count !== undefined" class="or-tab-count">{{ count }}</span>
       </button>
+      <DevToolsTab/>
       <!-- Choice can still be changed (e.g. draft) while others are choosing: same red status tab as without an input -->
       <WaitingForPlayersTab v-if="playerinput.optional === true" :playerView="playerView"/>
     </div>
 
-    <div v-docked-tab data-hotkey-group :class="['or-tab-panel', handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
+    <div v-docked-tab data-hotkey-group :class="['or-tab-panel', {'or-tab-panel--devtools': devToolsState.open}, handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
+      <DevToolsOverlay :playerView="playerView"/>
       <!-- Initial draft with an empty hand: only the dealt cards, without the empty hand area above them -->
       <HandCardsPanel v-if="handTabActive && (handCards.length > 0 || dealtCount === 0)" :playerView="playerView"/>
       <!-- Initial draft: the dealt corporations/preludes belong to the own cards -->
@@ -61,6 +63,9 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {OrOptionsModel, PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {InputResponse} from '@/common/inputs/InputResponse';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
+import DevToolsTab from '@/client/components/devtools/DevToolsTab.vue';
+import DevToolsOverlay from '@/client/components/devtools/DevToolsOverlay.vue';
+import {closeDevTools, devToolsState} from '@/client/devtools/devToolsState';
 import CancelActionButton from '@/client/components/CancelActionButton.vue';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import WaitingForPlayersTab from '@/client/components/WaitingForPlayersTab.vue';

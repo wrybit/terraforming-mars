@@ -9,12 +9,14 @@
     <!-- Action menu: tabs with short label and count of available entries; empty tabs are dimmed but clickable -->
     <div v-if="asTabs" v-tab-icon-labels class="or-tabs" role="tablist" data-hotkey-tabs>
       <!-- Hand cards always as the first tab (view only); the first real action stays preselected -->
-      <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
+      <HandCardsTab :count="handCards.length" :active="handTabActive && !devTools.open" @select="selectHandTab"/>
+      <DevToolsTab v-if="devToolsAfterIndex === undefined"/>
       <!-- Display order via tabDisplayOrder (pass/end at the end); idx stays the index in displayedOptions.
            The CEO action has no tab of its own: it is part of the "Actions" tab (ceoActions.ts) -->
       <!-- A tab only on request (bazaar purchase, onRequestTabs.ts) stays in the DOM – the phone selects it by its
            data-option-index – but is visible only while it is the open tab -->
-      <button v-for="idx in visibleTabOrder" :key="idx"
+      <template v-for="idx in visibleTabOrder" :key="idx">
+      <button
         v-show="tabShown(idx)"
         :data-option-index="idx"
         type="button"
@@ -24,7 +26,7 @@
         :aria-selected="tabActive(idx)"
         :data-hotkey="tabHotkey(tabTitle(idx), displayedOptions[idx])"
         :class="['or-tab', {
-          'or-tab--active': !handTabActive && tabActive(idx),
+          'or-tab--active': !handTabActive && !devTools.open && tabActive(idx),
           'or-tab--empty': tabCount(idx) === 0,
           'or-tab--icon': tabIcon(tabTitle(idx)) !== undefined,
           'or-tab--highlight': tabHighlighted(tabTitle(idx)),
@@ -39,10 +41,14 @@
         <HotkeyKeys v-if="tabHotkey(tabTitle(idx), displayedOptions[idx]) !== undefined" :action="tabHotkey(tabTitle(idx), displayedOptions[idx])"/>
         <span v-if="tabCount(idx) !== undefined" class="or-tab-count">{{ tabCount(idx) }}</span>
       </button>
+      <!-- DevTools (admins, tmDev.on()): after the last action tab, before the tabs at the right end -->
+      <DevToolsTab v-if="idx === devToolsAfterIndex"/>
+      </template>
     </div>
 
     <!-- In tab mode this container is the box attached to the active tab (content + save) -->
-    <div v-docked-tab :data-hotkey-group="asTabs ? '' : undefined" :class="[{'or-tab-panel': asTabs, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
+    <div v-docked-tab :data-hotkey-group="asTabs ? '' : undefined" :class="[{'or-tab-panel': asTabs, 'or-tab-panel--devtools': asTabs && devTools.open, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
+      <DevToolsOverlay v-if="asTabs" :playerView="playerView"/>
       <HandCardsPanel v-if="asTabs && handTabActive" :playerView="playerView"/>
       <div v-if="asTabs && !handTabActive && showtitle && sourceCard === undefined && turnStep === undefined" class="or-tab-intro or-tab-question">
         <div class="or-tab-intro-title">{{ $t(playerinput.title) }}</div>
@@ -201,6 +207,9 @@ import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import HandCardsTab from '@/client/components/HandCardsTab.vue';
+import DevToolsTab from '@/client/components/devtools/DevToolsTab.vue';
+import DevToolsOverlay from '@/client/components/devtools/DevToolsOverlay.vue';
+import {closeDevTools, devToolsState} from '@/client/devtools/devToolsState';
 import MilestoneAwardOptions from '@/client/components/MilestoneAwardOptions.vue';
 import PartyOptions from '@/client/components/turmoil/PartyOptions.vue';
 import {PartyChoiceOption, partyChoice} from '@/client/components/turmoil/partyChoice';
@@ -281,6 +290,8 @@ export default defineComponent({
     OrOptionsTabIcon,
     HandCardsPanel,
     HandCardsTab,
+    DevToolsTab,
+    DevToolsOverlay,
     MilestoneAwardOptions,
     PartyOptions,
     PlayerOptionTile,
@@ -345,6 +356,14 @@ export default defineComponent({
     };
   },
   computed: {
+    devTools(): typeof devToolsState {
+      return devToolsState;
+    },
+    // Last visible action tab that is not one of the tabs at the right end: the DevTools tab follows it
+    devToolsAfterIndex(): number | undefined {
+      const indexes = this.visibleTabOrder.filter((idx: number) => this.tabShown(idx) && !isEndTab(this.tabTitle(idx)));
+      return indexes.length > 0 ? indexes[indexes.length - 1] : undefined;
+    },
     // Time of the last request to open a tab from outside the menu (actionTabRequest.ts, e.g. a Dune module tab)
     tabRequestAt(): number {
       return actionTabRequest.at;
@@ -562,8 +581,13 @@ export default defineComponent({
       this.selectedOption = option;
       this.selectedPlayer = color;
     },
+    selectHandTab(): void {
+      this.handTabActive = true;
+      closeDevTools();
+    },
     selectOptionTab(option: PlayerInputModel) {
       this.handTabActive = false;
+      closeDevTools();
       // Back to the "Actions" tab with a CEO already chosen: keep that choice
       if (this.inActionsGroup && this.displayedOptions.indexOf(option) === this.groupTabIdx) {
         return;

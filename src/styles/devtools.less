@@ -1,14 +1,41 @@
-// DevTools tab (DevToolsPanel.vue): two cards side by side (view, intervention), each with its groups. Small gaps inside
-// a group, larger ones between groups and cards, so what belongs together reads as one.
+// DevTools tab in the action tabs (DevToolsTab.vue): while it is open, the other content of the box is only hidden,
+// not removed, so a started input (chosen cards, scroll position) stays as it was. Sticky toolbars of the hand
+// would otherwise lie over an overlay; hiding them is the robust way.
+.or-tab-panel--devtools > :not(.devtools-overlay) {
+  display: none !important;
+}
+
+.devtools-overlay {
+  border-radius: inherit;
+}
+
+// Two cards side by side: the view one third, the intervention two thirds (Jens, 20 Oct 2026). Small gaps inside a
+// group, larger ones between groups and cards, so what belongs together reads as one.
 .devtools {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  align-items: start;
   gap: 16px;
   padding: 12px;
-  height: 100%;
-  overflow-y: auto;
   box-sizing: border-box;
   text-align: left;
+}
+
+html.tm-mobile .devtools {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+// The intervention has room for two columns of groups: parameters and card left, resources right
+.devtools-card__columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 6px 24px;
+}
+
+.devtools-card__column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .devtools-card {

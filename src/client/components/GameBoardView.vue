@@ -41,10 +41,6 @@
     <template v-for="tab in duneTabs" :key="tab" #[tab]>
       <DuneBoard v-if="game.dune" :dune="game.dune" :tab="tab" :players="players" :spaces="game.spaces" :viewerColor="viewerColor"/>
     </template>
-    <!-- DevTools: loaded only once switched on (tmDev.on() with the admin login) -->
-    <template #devtools>
-      <DevToolsPanel :game="game" :players="players"/>
-    </template>
   </BoardTabs>
 
   <!-- Second board instance for viewing only. The IDs in it (main_board etc.) then exist twice;
@@ -74,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import {defineAsyncComponent, defineComponent, PropType} from 'vue';
+import {defineComponent, PropType} from 'vue';
 
 import {GameModel} from '@/common/models/GameModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
@@ -97,8 +93,6 @@ import {isBoardPlacementActive} from '@/client/components/board/boardPlacementAc
 import {ZoomBoard, notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
 import DeltaBoard from '@/client/components/delta/DeltaBoard.vue';
 import DuneBoard from '@/client/components/dune/DuneBoard.vue';
-// Own chunk: normal players never load the DevTools code
-const DevToolsPanel = defineAsyncComponent(() => import('@/client/components/devtools/DevToolsPanel.vue'));
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
@@ -143,7 +137,6 @@ export default defineComponent({
     };
   },
   components: {
-    DevToolsPanel,
     OuterSpaceCorners,
     Board,
     BoardTabs,

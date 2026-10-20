@@ -36,7 +36,15 @@
             </div>
           </div>
         </div>
-        <HandCardsPanel :playerView="playerView" hideUndergroundTokens/>
+        <!-- DevTools on the phone: same tab pair as on desktop, but above the hand (there is no action tab bar here) -->
+        <div v-if="devTools.enabled" class="or-tabs mb-devtools-tabs" role="tablist">
+          <HandCardsTab :count="cardsInHandCount" :active="!devTools.open" @select="closeDevTools"/>
+          <DevToolsTab/>
+        </div>
+        <div :class="{'or-tab-panel--devtools': devTools.enabled && devTools.open}">
+          <DevToolsOverlay :playerView="playerView"/>
+          <HandCardsPanel :playerView="playerView" hideUndergroundTokens/>
+        </div>
       </section>
 
       <!-- From three players on, the tables scroll horizontally beneath sticky icon columns (mobile.less) -->
@@ -149,6 +157,10 @@ import {HomeMixin} from '@/client/mixins/HomeMixin';
 import UndergroundTokens from '@/client/components/underworld/UndergroundTokens.vue';
 import Card from '@/client/components/card/Card.vue';
 import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
+import HandCardsTab from '@/client/components/HandCardsTab.vue';
+import DevToolsTab from '@/client/components/devtools/DevToolsTab.vue';
+import DevToolsOverlay from '@/client/components/devtools/DevToolsOverlay.vue';
+import {closeDevTools, devToolsState} from '@/client/devtools/devToolsState';
 import SetupTurnOrder from '@/client/components/SetupTurnOrder.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import PlayerSetupView from '@/client/components/PlayerSetupView.vue';
@@ -298,6 +310,9 @@ export default defineComponent({
     UndergroundTokens,
     Card,
     HandCardsPanel,
+    HandCardsTab,
+    DevToolsTab,
+    DevToolsOverlay,
     SetupTurnOrder,
     LogPanel,
     PlayerSetupView,
@@ -312,6 +327,9 @@ export default defineComponent({
     PlayerTimer,
   },
   computed: {
+    devTools(): typeof devToolsState {
+      return devToolsState;
+    },
     game(): GameModel {
       return this.playerView.game;
     },
@@ -433,6 +451,9 @@ export default defineComponent({
     stopObserving = undefined;
   },
   methods: {
+    closeDevTools(): void {
+      closeDevTools();
+    },
     markHorizontalScroll,
     signed(value: number): string {
       return value >= 0 ? '+' + value : String(value);

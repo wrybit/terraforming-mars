@@ -4,7 +4,9 @@ import {reactive} from 'vue';
 import {paths} from '@/common/app/paths';
 import {AdminSessionStatus} from '@/common/admin/adminLogin';
 
-export const devToolsState = reactive({enabled: false});
+// open: the DevTools tab is the shown one in the action tabs (DevToolsTab.vue); kept here, so it stays open while
+// the action menu is drawn anew after a change
+export const devToolsState = reactive({enabled: false, open: false});
 
 // Remembered on this device, so the tab survives a reload; checked against the admin login on every page load
 const STORAGE_KEY = 'tm-devtools';
@@ -52,7 +54,16 @@ export async function enableDevTools(): Promise<boolean> {
 
 export function disableDevTools(): void {
   devToolsState.enabled = false;
+  devToolsState.open = false;
   remember(false);
+}
+
+export function openDevTools(): void {
+  devToolsState.open = true;
+}
+
+export function closeDevTools(): void {
+  devToolsState.open = false;
 }
 
 declare global {

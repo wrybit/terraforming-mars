@@ -30,7 +30,8 @@
     <section class="devtools-card devtools-card--live">
       <h3 class="devtools-card__title">{{ $t('Intervention (for everyone, in the log)') }}</h3>
       <p class="devtools-card__note">{{ $t('Changes the game for all players; every change is written to the game log.') }}</p>
-
+      <div class="devtools-card__columns">
+      <div class="devtools-card__column">
       <h4 class="devtools-card__group">{{ $t('Global parameters') }}</h4>
       <label class="devtools-slider">
         <span class="devtools-slider__name">{{ $t('Fill planet') }}</span>
@@ -43,6 +44,18 @@
         <b class="devtools-slider__value">{{ shown(slider.key, slider.value) }}</b>
       </label>
 
+      <h4 class="devtools-card__group">{{ $t('Card') }}</h4>
+      <input class="devtools-search" :list="listId" v-model="cardSearch" :placeholder="$t('Search project card')">
+      <datalist :id="listId">
+        <option v-for="card in cardOptions" :key="card.name" :value="card.label"></option>
+      </datalist>
+      <div class="devtools-row">
+        <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('hand')">{{ $t('Into the hand') }}</button>
+        <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('tableau')">{{ $t('Into play (without effect)') }}</button>
+      </div>
+      </div>
+
+      <div class="devtools-card__column">
       <h4 class="devtools-card__group">{{ $t('Resources and production') }}</h4>
       <label class="devtools-field">
         <span>{{ $t('Player') }}</span>
@@ -61,15 +74,7 @@
         </template>
       </div>
       <button type="button" class="btn btn-primary devtools-button" @click="send({type: 'resources', color, stock, production})">{{ $t('Set values') }}</button>
-
-      <h4 class="devtools-card__group">{{ $t('Card') }}</h4>
-      <input class="devtools-search" :list="listId" v-model="cardSearch" :placeholder="$t('Search project card')">
-      <datalist :id="listId">
-        <option v-for="card in cardOptions" :key="card.name" :value="card.label"></option>
-      </datalist>
-      <div class="devtools-row">
-        <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('hand')">{{ $t('Into the hand') }}</button>
-        <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('tableau')">{{ $t('Into play (without effect)') }}</button>
+      </div>
       </div>
       <p v-if="error !== ''" class="devtools-error">{{ error }}</p>
     </section>
@@ -129,7 +134,7 @@ export default defineComponent({
     instances++;
     return {
       listId: 'devtools-cards-' + instances,
-      fillPercent: 0,
+      fillPercent: this.currentFill(),
       color: (this.players[0]?.color ?? 'red') as Color,
       stock: {} as Partial<Units>,
       production: {} as Partial<Units>,
@@ -139,6 +144,15 @@ export default defineComponent({
   },
   created() {
     this.loadPlayerValues();
+  },
+  watch: {
+    // After every change the game is loaded anew: sliders and fields show what it is now
+    'game.oceans'() {
+      this.fillPercent = this.currentFill();
+    },
+    players() {
+      this.loadPlayerValues();
+    },
   },
   computed: {
     maximums() {
@@ -186,6 +200,11 @@ export default defineComponent({
     },
   },
   methods: {
+    // Current filling of the planet, measured by its oceans (spice fields), on the 5 % steps of the slider
+    currentFill(): number {
+      const maximum = getGlobalParameterMaximums(this.game.gameOptions.boardName).oceans;
+      return maximum > 0 ? Math.round(this.game.oceans / maximum * 20) * 5 : 0;
+    },
     // Temperature as the board shows it (water storage from 0 in the Dune theme)
     shown(key: string, value: number): string {
       return key === 'temperature' ? temperatureText(value) : String(value);
