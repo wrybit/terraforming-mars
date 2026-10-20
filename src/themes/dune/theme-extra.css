@@ -48,8 +48,9 @@ html.theme-dune .board-space-tile--mining_rights {
   background: url(graphics/special-mining-rights.svg) center / contain no-repeat;
 }
 
+/* Card 142 is the oasis in the Dune theme (Jens: "Oase statt Tiefenbohrloch"): tile and card show the same picture */
 html.theme-dune .board-space-tile--mohole_area {
-  background: url(graphics/special-deep-borehole.svg) center / contain no-repeat;
+  background: url(graphics/special-oasis.svg) center / contain no-repeat;
 }
 
 html.theme-dune .board-space-tile--natural_preserve {

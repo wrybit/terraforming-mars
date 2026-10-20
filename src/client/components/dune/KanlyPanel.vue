@@ -13,7 +13,11 @@
     <section class="dune-kanly__garrisons">
       <h4 class="dune-kanly__label">{{ $t('Garrison') }}</h4>
       <ul class="dune-kanly__troops">
-        <li v-for="entry in kanly.garrisons" :key="entry.color" class="dune-kanly__troop">
+        <!-- The own garrison opens the standard projects, where Sardaukar are recruited (Jens, 20 Oct 2026) -->
+        <li v-for="entry in kanly.garrisons" :key="entry.color"
+          :class="['dune-kanly__troop', {'dune-kanly__troop--own': entry.color === ownColor}]"
+          v-bind="entry.color === ownColor ? {role: 'button', tabindex: 0, title: $t(RECRUIT_TITLE)} : {}"
+          @click="entry.color === ownColor && openRecruiting()" @keydown.enter="entry.color === ownColor && openRecruiting()">
           <PlayerChip :color="entry.color" :players="players"/>
           <span class="dune-kanly__strength"><img :src="graphic('res-sardaukar')" alt=""><b>{{ entry.sardaukar }}</b></span>
         </li>
@@ -33,6 +37,11 @@ import KanlyBattleCard from './KanlyBattleCard.vue';
 import {BoardName} from '@/common/boards/BoardName';
 import DuneRuleCards from './DuneRuleCards.vue';
 import DuneMovePanel from './DuneMovePanel.vue';
+import {requestActionTab} from '@/client/components/actionTabRequest';
+import {RECRUIT_TITLE} from '@/common/dune/duneActionTitles';
+
+// Title of the standard projects tab (server Player.getStandardProjectOption): recruiting is one of them
+const STANDARD_PROJECTS_TITLE = 'Standard projects';
 import KanlyMoveButton from './KanlyMoveButton.vue';
 import {JOIN_KANLY_TITLE, OPEN_KANLY_TITLE} from '@/common/dune/duneActionTitles';
 import {isKanlyTargetTile, OPEN_KANLY_COST} from '@/common/dune/kanlyBattle';
@@ -64,6 +73,9 @@ export default defineComponent({
     },
   },
   computed: {
+    RECRUIT_TITLE(): string {
+      return RECRUIT_TITLE;
+    },
     KANLY_RULES(): typeof KANLY_RULES {
       return KANLY_RULES;
     },
@@ -104,6 +116,9 @@ export default defineComponent({
     },
   },
   methods: {
+    openRecruiting(): void {
+      requestActionTab(STANDARD_PROJECTS_TITLE);
+    },
     graphic: duneGraphic,
   },
 });

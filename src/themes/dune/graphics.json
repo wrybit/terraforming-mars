@@ -38,7 +38,7 @@
   "tiles/special_tile_icons/restricted_area.png": "graphics/special-restricted-area.svg",
   "tiles/special_tile_icons/nuclear_zone.png": "graphics/special-atomic-crater.svg",
   "tiles/special_tile_icons/natural_preserve.png": "graphics/special-worm-domain.svg",
-  "tiles/special_tile_icons/mohole_area.png": "graphics/special-deep-borehole.svg",
+  "tiles/special_tile_icons/mohole_area.png": "graphics/special-oasis.svg",
   "tiles/special_tile_icons/lava_flows.png": "graphics/special-blasted-rock.svg",
   "tiles/special_tile_icons/industrial_center.png": "graphics/special-smugglers-market.svg",
   "tiles/special_tile_icons/ecological_zone.png": "graphics/special-kynes-basin.svg",
