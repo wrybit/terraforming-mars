@@ -18,12 +18,15 @@
 import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
 import TrackBonusChip from '@/client/components/trackBonus/TrackBonusChip.vue';
 import {ScaleBonusPin, scaleBonusPins} from './marsScaleBonuses';
+import {ScaleGeometry} from './arrakisScales';
 
 const props = defineProps<{
   temperature: number;
   oxygen: number;
   // Undefined without Venus
   venus: number | undefined;
+  // The large Arrakis: its markers sit on the bigger circle of the large map
+  geometry?: ScaleGeometry;
 }>();
 
 // The board is zoomed (rightColumnFit.ts, zoom view): undo that for the chips so they keep their size
@@ -52,7 +55,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => observer?.disconnect());
 
-const pins = computed(() => scaleBonusPins({temperature: props.temperature, oxygen: props.oxygen, venus: props.venus}));
+const pins = computed(() => scaleBonusPins({temperature: props.temperature, oxygen: props.oxygen, venus: props.venus}, props.geometry));
 
 // Placed like the scale cells (margins in .global-numbers), then turned so the connector points at the cell
 function pinStyle(pin: ScaleBonusPin): Record<string, string> {

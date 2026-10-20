@@ -1,7 +1,8 @@
 <template>
   <!-- Arrakis: vegetation (left) and water storage (right) as sharp vector bands behind the markers (arrakisScales.ts),
        each with its symbol and name continuing the band beyond its top end -->
-  <svg class="arrakis-scales" width="600" height="600" viewBox="0 0 600 600" aria-hidden="true">
+  <!-- Big enough for the large circle (centre 353, radius 314 + band): nothing is cut off -->
+  <svg class="arrakis-scales" width="720" height="720" viewBox="0 0 720 720" aria-hidden="true">
     <defs>
       <path v-for="track in tracks" :id="pathId(track.key)" :key="track.key" :d="track.textPath"/>
     </defs>
@@ -17,11 +18,11 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {SCALE_LABELS, SCALE_RADIUS, ScaleStep, VEGETATION_ANGLES, WATER_ANGLES, arcPath, pointAt, scaleSteps} from './arrakisScales';
+import {LARGE_SCALES, STANDARD_SCALES, ScaleGeometry, ScaleStep, arcPath, pointAt, scaleLabels, scaleSteps} from './arrakisScales';
 import {themedAsset} from '@/client/theme/themeDisplay';
 
 type Track = {
-  key: keyof typeof SCALE_LABELS,
+  key: 'vegetation' | 'water',
   label: string,
   steps: Array<ScaleStep>,
   symbol: string,
@@ -35,21 +36,31 @@ const SYMBOL = 32;
 
 export default defineComponent({
   name: 'ArrakisScales',
+  props: {
+    // The large Arrakis pins its markers on the bigger circle of the large map (globs.less .global-numbers--large)
+    large: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
+    geometry(): ScaleGeometry {
+      return this.large ? LARGE_SCALES : STANDARD_SCALES;
+    },
     SYMBOL(): number {
       return SYMBOL;
     },
     tracks(): Array<Track> {
       // The theme turns "Oxygen" and "Temperature" into vegetation and water storage
-      const vegetation = SCALE_LABELS.vegetation;
-      const water = SCALE_LABELS.water;
+      const geometry = this.geometry;
+      const {vegetation, water} = scaleLabels(geometry);
       return [
-        {key: 'vegetation', label: 'Oxygen', steps: scaleSteps(VEGETATION_ANGLES),
-          symbol: themedAsset('assets/global-parameters/oxygen.png'), symbolAt: pointAt(vegetation.symbolAngle),
-          textPath: arcPath(vegetation.text.from, vegetation.text.to, SCALE_RADIUS), anchor: vegetation.text.anchor},
-        {key: 'water', label: 'Temperature', steps: scaleSteps(WATER_ANGLES),
-          symbol: themedAsset('assets/global-parameters/temperature.png'), symbolAt: pointAt(water.symbolAngle),
-          textPath: arcPath(water.text.from, water.text.to, SCALE_RADIUS), anchor: water.text.anchor},
+        {key: 'vegetation', label: 'Oxygen', steps: scaleSteps(geometry, geometry.vegetationAngles),
+          symbol: themedAsset('assets/global-parameters/oxygen.png'), symbolAt: pointAt(geometry, vegetation.symbolAngle),
+          textPath: arcPath(geometry, vegetation.text.from, vegetation.text.to), anchor: vegetation.text.anchor},
+        {key: 'water', label: 'Temperature', steps: scaleSteps(geometry, geometry.waterAngles),
+          symbol: themedAsset('assets/global-parameters/temperature.png'), symbolAt: pointAt(geometry, water.symbolAngle),
+          textPath: arcPath(geometry, water.text.from, water.text.to), anchor: water.text.anchor},
       ];
     },
   },

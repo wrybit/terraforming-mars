@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import fs from 'fs';
 import path from 'path';
-import {SCALE_CENTRE_X, SCALE_CENTRE_Y, SCALE_RADIUS, VEGETATION_ANGLES, WATER_ANGLES, scaleSteps} from '@/client/components/board/arrakisScales';
+import {LARGE_SCALES, STANDARD_SCALES, scaleLabels, scaleSteps} from '@/client/components/board/arrakisScales';
 
 // The vector scales of Arrakis lie behind the markers that globs.less pins: both must use the same circle and angles
 function lessAngles(less: string, list: string): Array<number> {
@@ -17,16 +17,32 @@ describe('arrakisScales', () => {
   const less = fs.readFileSync(path.resolve(__dirname, '../../../../src/styles/globs.less'), 'utf8');
 
   it('uses the circle and the marker angles of globs.less', () => {
-    expect(SCALE_CENTRE_X).eq(lessNumber(less, 'dial-cx'));
-    expect(SCALE_CENTRE_Y).eq(lessNumber(less, 'dial-cy'));
-    expect(SCALE_RADIUS).eq(lessNumber(less, 'dial-r'));
-    expect(VEGETATION_ANGLES).deep.eq(lessAngles(less, 'oxygen-vals'));
-    expect(WATER_ANGLES).deep.eq(lessAngles(less, 'temperature-vals'));
+    expect(STANDARD_SCALES.centreX).eq(lessNumber(less, 'dial-cx'));
+    expect(STANDARD_SCALES.centreY).eq(lessNumber(less, 'dial-cy'));
+    expect(STANDARD_SCALES.radius).eq(lessNumber(less, 'dial-r'));
+    expect(STANDARD_SCALES.vegetationAngles).deep.eq(lessAngles(less, 'oxygen-vals'));
+    expect(STANDARD_SCALES.waterAngles).deep.eq(lessAngles(less, 'temperature-vals'));
+  });
+
+  it('uses the large circle and the first marker angles of the large map for the large Arrakis', () => {
+    expect(LARGE_SCALES.centreX).eq(lessNumber(less, 'dial-cx-large'));
+    expect(LARGE_SCALES.centreY).eq(lessNumber(less, 'dial-cy-large'));
+    expect(LARGE_SCALES.radius).eq(lessNumber(less, 'dial-r-large'));
+    expect(LARGE_SCALES.vegetationAngles).deep.eq(lessAngles(less, 'oxygen-vals-large').slice(0, STANDARD_SCALES.vegetationAngles.length));
+    expect(LARGE_SCALES.waterAngles).deep.eq(lessAngles(less, 'temperature-vals-large').slice(0, STANDARD_SCALES.waterAngles.length));
+  });
+
+  it('keeps symbol and name of the standard board where they were', () => {
+    expect(scaleLabels(STANDARD_SCALES).vegetation).deep.eq({symbolAngle: 225, text: {from: 230, to: 262, anchor: 'start'}});
+    const water = scaleLabels(STANDARD_SCALES).water;
+    expect(water.symbolAngle).closeTo(-47, 0.001);
+    expect(water.text.from).closeTo(-84, 0.001);
+    expect(water.text.to).closeTo(-52, 0.001);
   });
 
   it('draws one closed step per value', () => {
-    const steps = scaleSteps(VEGETATION_ANGLES);
-    expect(steps).has.length(VEGETATION_ANGLES.length);
+    const steps = scaleSteps(STANDARD_SCALES, STANDARD_SCALES.vegetationAngles);
+    expect(steps).has.length(STANDARD_SCALES.vegetationAngles.length);
     expect(steps.every((step) => step.path.startsWith('M') && step.path.endsWith('Z'))).is.true;
   });
 });

@@ -1,4 +1,5 @@
 import {BONUS_ICON, TrackBonus} from '@/client/components/trackBonus/trackBonus';
+import {ScaleGeometry} from './arrakisScales';
 
 // Bonuses on the Mars scales as track chips outside the scale (mockup with-extensions), instead of the icons
 // printed on the board picture (assets/board/mars-clean.png has none). Positions in the coordinates of
@@ -34,12 +35,24 @@ export type ScaleBonusPin = {
   angle: number;
 };
 
-export function scaleBonusPins(values: Partial<Record<MarsScale, number>>): Array<ScaleBonusPin> {
+/** Centre of a scale cell: printed above for the standard circle; on the large Arrakis taken from its marker circle
+ *  (the same rules, only the bigger dial of the large map, arrakisScales.ts LARGE_SCALES) */
+function cellCentre(entry: ScaleBonus, geometry: ScaleGeometry | undefined): {x: number, y: number, planetX: number, planetY: number} {
+  if (geometry === undefined || entry.scale === 'venus') {
+    return {x: entry.cell[1] + CELL / 2, y: entry.cell[0] + CELL / 2, planetX: PLANET_CENTER[0], planetY: PLANET_CENTER[1]};
+  }
+  // Temperature runs from −30 °C in steps of 2, oxygen from 0 % in steps of 1
+  const angle = entry.scale === 'temperature' ? geometry.waterAngles[(entry.value + 30) / 2] : geometry.vegetationAngles[entry.value];
+  const radians = angle * Math.PI / 180;
+  return {x: geometry.centreX + geometry.radius * Math.cos(radians), y: geometry.centreY + geometry.radius * Math.sin(radians),
+    planetX: geometry.centreX, planetY: geometry.centreY};
+}
+
+export function scaleBonusPins(values: Partial<Record<MarsScale, number>>, geometry?: ScaleGeometry): Array<ScaleBonusPin> {
   return SCALE_BONUSES.filter((entry) => values[entry.scale] !== undefined).map((entry) => {
-    const centerX = entry.cell[1] + CELL / 2;
-    const centerY = entry.cell[0] + CELL / 2;
-    const dx = centerX - PLANET_CENTER[0];
-    const dy = centerY - PLANET_CENTER[1];
+    const {x: centerX, y: centerY, planetX, planetY} = cellCentre(entry, geometry);
+    const dx = centerX - planetX;
+    const dy = centerY - planetY;
     const length = Math.hypot(dx, dy);
     const distance = CELL / 2 + GAP;
     return {
