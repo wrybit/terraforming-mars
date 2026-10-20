@@ -15,7 +15,7 @@
     <div v-if="visible && !closing" class="board-zoom-banner" ref="banner"><slot name="banner"></slot></div>
     <!-- Outside the scrolling background so close and the zoom bar stay put while panning -->
     <!-- Optional controls at the bottom (tile view switch, TileViewToggle.vue); the board is fitted above them -->
-    <div v-if="visible && !closing && $slots.controls" class="board-zoom-controls" ref="controls"><slot name="controls"></slot></div>
+    <div v-if="visible && !closing && $slots.controls" class="board-zoom-controls" ref="controls" :style="{'--board-zoom-controls-shift': controlsShift + 'px'}"><slot name="controls"></slot></div>
     <button v-if="visible" type="button" class="board-zoom-close" :aria-label="$t('Close')" @click.stop="$emit('close')">✕</button>
     <!-- Mobile view: zoom bar at the bottom (pinch and double tap work as well) -->
     <MobileZoomControls v-if="visible && mobileLayout" :percent="zoomPercent" @zoom="zoomAtCenter" @fit="fitWholePlanet"/>
@@ -92,12 +92,29 @@ function fitToViewport() {
   zoomFactor.value = Math.min(availableWidth / naturalSize.width, availableHeight / naturalSize.height);
 }
 
+// Desktop: the switch below the board sits under the middle of the planet, not of the window – the board section
+// is wider on the side of its scales and outer spaces (Jens, 20 Oct 2026). Measured on the hex spaces, after the
+// flight animation (its transform would distort the measurement).
+const controlsShift = ref(0);
+function alignControls() {
+  const spaces = Array.from(content.value?.querySelectorAll('.board .board-space') ?? [])
+    .map((space) => space.getBoundingClientRect())
+    .filter((rect) => rect.width > 0);
+  if (mobileLayout.value || spaces.length === 0) {
+    controlsShift.value = 0;
+    return;
+  }
+  const centre = (Math.min(...spaces.map((rect) => rect.left)) + Math.max(...spaces.map((rect) => rect.right))) / 2;
+  controlsShift.value = Math.round(centre - window.innerWidth / 2);
+}
+
 // Window resized: desktop refits the board, mobile keeps the chosen zoom (only 100 % is recomputed)
 function onResize() {
   if (mobileLayout.value) {
     wholeZoom.value = mobileWholeZoom();
   } else {
     fitToViewport();
+    nextTick(alignControls);
   }
 }
 
@@ -288,6 +305,7 @@ async function show() {
   }
   props.origin?.classList.add('board-zoom-origin--hidden');
   await runAnimation('open');
+  alignControls();
 }
 
 async function hide() {

@@ -287,6 +287,14 @@ html.theme-dune .player-home-columns__mars .board-tabs-mars .board-cont {
   margin-top: -41px;
 }
 
+/* Numbers on the scales: the bands run from light to dark (arrakisScales.ts), so the numbers get a dark halo and read
+   on the pale sand and ice blue as well as on the deep green and blue ends (Jens, 20 Oct 2026) */
+html.theme-dune .global-numbers-temperature .global-numbers-value,
+html.theme-dune .global-numbers-oxygen .global-numbers-value {
+  color: #fff;
+  text-shadow: 0 0 2px rgba(20, 12, 6, 0.95), 0 0 4px rgba(20, 12, 6, 0.75);
+}
+
 /* Place names on Arrakis (Legends.ts): dark halo, so the white text reads on sand, rock and ice */
 html.theme-dune .board-caption {
   paint-order: stroke;

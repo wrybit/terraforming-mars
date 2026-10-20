@@ -80,7 +80,8 @@ export function scaleLabels(geometry: ScaleGeometry): {vegetation: ScaleLabel, w
   };
 }
 
-export type ScaleStep = {path: string, index: number};
+/** share: 0 at the lowest value, 1 at the top – the band runs through its colours along it (scaleColour) */
+export type ScaleStep = {path: string, index: number, share: number};
 
 /** One sector per value, bounded halfway to its neighbours (the ends reach as far out as the first step is wide) */
 export function scaleSteps(geometry: ScaleGeometry, angles: ReadonlyArray<number>): Array<ScaleStep> {
@@ -89,6 +90,31 @@ export function scaleSteps(geometry: ScaleGeometry, angles: ReadonlyArray<number
   return angles.map((angle, index) => {
     const before = index > 0 ? (angles[index - 1] + angle) / 2 : angle - (angles[1] - angle) / 2;
     const after = index < angles.length - 1 ? (angle + angles[index + 1]) / 2 : angle + (angle - angles[index - 1]) / 2;
-    return {path: ringSector(geometry, before, after, inner, outer), index};
+    return {path: ringSector(geometry, before, after, inner, outer), index, share: angles.length > 1 ? index / (angles.length - 1) : 0};
   });
+}
+
+/** The whole band as one sector, for the white outline around it (like the scales of the Mars board) */
+export function scaleOutline(geometry: ScaleGeometry, angles: ReadonlyArray<number>): string {
+  const first = angles[0];
+  const last = angles[angles.length - 1];
+  const from = first - (angles[1] - first) / 2;
+  const to = last + (last - angles[angles.length - 2]) / 2;
+  return ringSector(geometry, Math.min(from, to), Math.max(from, to), geometry.radius - SCALE_BAND / 2, geometry.radius + SCALE_BAND / 2);
+}
+
+/**
+ * Colour of a step: a gradient from the low to the high end instead of alternating shades (Jens, 20 Oct 2026) –
+ * vegetation from sand with a breath of green to full green, the water store from very light to deep blue
+ */
+export const SCALE_COLOURS: Readonly<Record<'vegetation' | 'water', readonly [string, string]>> = {
+  vegetation: ['#d9c99a', '#2f8a2c'],
+  water: ['#d4ecfb', '#123f7a'],
+};
+
+export function scaleColour(track: 'vegetation' | 'water', share: number): string {
+  const [low, high] = SCALE_COLOURS[track];
+  const channel = (hex: string, at: number) => parseInt(hex.slice(1 + at * 2, 3 + at * 2), 16);
+  const mixed = [0, 1, 2].map((at) => Math.round(channel(low, at) + (channel(high, at) - channel(low, at)) * share));
+  return '#' + mixed.map((value) => value.toString(16).padStart(2, '0')).join('');
 }

@@ -7,7 +7,9 @@
       <path v-for="track in tracks" :id="pathId(track.key)" :key="track.key" :d="track.textPath"/>
     </defs>
     <g v-for="track in tracks" :key="track.key" :class="['arrakis-scales__track', 'arrakis-scales__track--' + track.key]">
-      <path v-for="step in track.steps" :key="step.index" :d="step.path" :class="['arrakis-scales__step', {'arrakis-scales__step--odd': step.index % 2 === 1}]"/>
+      <path v-for="step in track.steps" :key="step.index" :d="step.path" class="arrakis-scales__step" :fill="scaleColour(track.key, step.share)"/>
+      <!-- White outline around the whole band, as on the Mars board -->
+      <path class="arrakis-scales__outline" :d="track.outline"/>
       <image class="arrakis-scales__symbol" :href="track.symbol" :x="track.symbolAt.x - SYMBOL / 2" :y="track.symbolAt.y - SYMBOL / 2" :width="SYMBOL" :height="SYMBOL"/>
       <text class="arrakis-scales__name">
         <textPath :href="'#' + pathId(track.key)" :startOffset="track.anchor === 'end' ? '100%' : '0%'" :text-anchor="track.anchor" dominant-baseline="central">{{ $t(track.label) }}</textPath>
@@ -18,13 +20,14 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {LARGE_SCALES, STANDARD_SCALES, ScaleGeometry, ScaleStep, arcPath, pointAt, scaleLabels, scaleSteps} from './arrakisScales';
+import {LARGE_SCALES, STANDARD_SCALES, ScaleGeometry, ScaleStep, arcPath, pointAt, scaleColour, scaleLabels, scaleOutline, scaleSteps} from './arrakisScales';
 import {themedAsset} from '@/client/theme/themeDisplay';
 
 type Track = {
   key: 'vegetation' | 'water',
   label: string,
   steps: Array<ScaleStep>,
+  outline: string,
   symbol: string,
   symbolAt: {x: number, y: number},
   textPath: string,
@@ -55,16 +58,17 @@ export default defineComponent({
       const geometry = this.geometry;
       const {vegetation, water} = scaleLabels(geometry);
       return [
-        {key: 'vegetation', label: 'Oxygen', steps: scaleSteps(geometry, geometry.vegetationAngles),
+        {key: 'vegetation', label: 'Oxygen', steps: scaleSteps(geometry, geometry.vegetationAngles), outline: scaleOutline(geometry, geometry.vegetationAngles),
           symbol: themedAsset('assets/global-parameters/oxygen.png'), symbolAt: pointAt(geometry, vegetation.symbolAngle),
           textPath: arcPath(geometry, vegetation.text.from, vegetation.text.to), anchor: vegetation.text.anchor},
-        {key: 'water', label: 'Temperature', steps: scaleSteps(geometry, geometry.waterAngles),
+        {key: 'water', label: 'Temperature', steps: scaleSteps(geometry, geometry.waterAngles), outline: scaleOutline(geometry, geometry.waterAngles),
           symbol: themedAsset('assets/global-parameters/temperature.png'), symbolAt: pointAt(geometry, water.symbolAngle),
           textPath: arcPath(geometry, water.text.from, water.text.to), anchor: water.text.anchor},
       ];
     },
   },
   methods: {
+    scaleColour,
     pathId(key: string): string {
       return 'arrakis-scale-name-' + key;
     },

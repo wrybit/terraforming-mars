@@ -6,26 +6,18 @@
   pointer-events: none;
 }
 
+// Fill per step from arrakisScales.ts (gradient along the band); fine dark lines keep the steps apart
 .arrakis-scales__step {
-  stroke: rgba(20, 12, 6, 0.55);
-  stroke-width: 1;
+  stroke: rgba(20, 12, 6, 0.35);
+  stroke-width: 0.75;
 }
 
-// Vegetation green and water blue like the scale symbols; every other step a shade lighter, so the steps read
-.arrakis-scales__track--vegetation .arrakis-scales__step {
-  fill: #3c7d2f;
-
-  &.arrakis-scales__step--odd {
-    fill: #46903a;
-  }
-}
-
-.arrakis-scales__track--water .arrakis-scales__step {
-  fill: #2b6aa3;
-
-  &.arrakis-scales__step--odd {
-    fill: #3479b6;
-  }
+// White outline around each band like the scales of the Mars board (Jens, 20 Oct 2026)
+.arrakis-scales__outline {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
 }
 
 // Name of the scale along the circle, in the light tone of its band

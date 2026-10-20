@@ -67,7 +67,7 @@
   z-index: 1101; // above the backdrop like the close button
   bottom: 16px; // CONTROLS_BOTTOM in BoardZoomModal.vue
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(calc(-50% + var(--board-zoom-controls-shift, 0px)));
 
   .tile-view-toggle {
     position: static;
