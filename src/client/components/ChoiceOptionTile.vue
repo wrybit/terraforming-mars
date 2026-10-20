@@ -24,7 +24,7 @@
         </span>
       </template>
     </span>
-    <span>{{ $t(title) }}</span>
+    <span><MoneyText :text="$t(title)"/></span>
     <!-- Own values of every affected resource: stock and production, the changed one before → after -->
     <div v-if="cardCount !== undefined || changes.length > 0" class="choice-option-value">
       <!-- Same table as for standard resources: icon | on card | victory points of the card, so a
@@ -71,6 +71,7 @@ import {cardResourceCount, cardResourceEffect} from '@/client/components/cardRes
 import {cardResourceCSS} from '@/client/components/common/cardResources';
 import {resultGains} from '@/client/components/choiceResultGains';
 import {cardResourcePoints} from '@/client/components/cardResourcePoints';
+import MoneyText from '@/client/components/common/MoneyText.vue';
 
 const props = defineProps<{
   title: string | Message;

@@ -4,8 +4,8 @@
     <!-- Tile in the turn menu as in the mockup: icon, short label, below it what the action offers -->
     <span v-if="!compact" :class="['mb-tile-icon', 'mb-tile-icon--' + tile.glyphTone]"><MobileGlyph :name="tile.glyph"/></span>
     <span class="mb-tile-text">
-      <span class="mb-tile-label">{{ $t(tile.label) }}</span>
-      <span v-if="tile.detail !== undefined && !compact" class="mb-tile-sub">{{ $t(tile.detail) }}</span>
+      <span class="mb-tile-label"><MoneyText :text="$t(tile.label)"/></span>
+      <span v-if="tile.detail !== undefined && !compact" class="mb-tile-sub"><MoneyText :text="$t(tile.detail)"/></span>
     </span>
     <!-- Counter like on the desktop tab (selectable cards, projects …) -->
     <span v-if="tile.count !== undefined && !compact" class="mb-tile-count">{{ tile.count }}</span>
@@ -15,6 +15,7 @@
 <script setup lang="ts">
 import {TurnMenuTile} from '@/client/components/mobile/turnMenu';
 import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
+import MoneyText from '@/client/components/common/MoneyText.vue';
 
 withDefaults(defineProps<{
   tile: TurnMenuTile;

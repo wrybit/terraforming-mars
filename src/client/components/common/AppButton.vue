@@ -1,6 +1,8 @@
 <template>
   <button @click="$emit('click')" class="btn" :class="outerClass" :disabled="isDisabled" :data-hotkey="hotkey" v-i18n>
     <span v-if="hasIcon" class="icon" :class="iconClass" data-test="icon"></span>
+    <!-- Amounts of money in the label become coins like the counters ("Pay [10]", moneyText.ts) -->
+    <span v-else-if="counts.length === 0 && hasMoney"><MoneyText :text="buttonText"/></span>
     <span v-else-if="counts.length === 0">{{ buttonText }}</span>
     <!-- Text and counters on one line ("Buy [3] for [9]", buttonCount.ts) -->
     <span v-else class="btn-counted__label">{{ buttonText }}<ButtonCount v-for="(part, index) in counts" :key="index" :part="part"/></span>
@@ -17,11 +19,13 @@ import {translateText, translateMessage} from '@/client/directives/i18n';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {HotkeyKeys as HotkeyKeyList} from '@/client/hotkeys/hotkeyActions';
 import ButtonCount from '@/client/components/common/ButtonCount.vue';
+import MoneyText from '@/client/components/common/MoneyText.vue';
+import {moneyParts} from '@/client/components/common/moneyText';
 import {ButtonCountPart} from '@/client/components/common/buttonCount';
 
 export default defineComponent({
   name: 'AppButton',
-  components: {HotkeyKeys, ButtonCount},
+  components: {HotkeyKeys, ButtonCount, MoneyText},
   emits: ['click'],
   props: {
     // Action id of a keyboard shortcut (hotkeyActions.ts): shows its key cap and lets the key press the button
@@ -129,6 +133,9 @@ export default defineComponent({
         'icon-plus': this.type === 'plus',
         'icon-minus': this.type === 'minus',
       };
+    },
+    hasMoney(): boolean {
+      return moneyParts(this.buttonText).some((part) => part.kind === 'coin');
     },
     buttonText(): string {
       if (typeof this.title === 'string') {

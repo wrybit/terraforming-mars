@@ -13,10 +13,8 @@
           :class="['smuggle-input__mode', {'smuggle-input__mode--on': mode.id === chosen, 'smuggle-input__mode--blocked': indexOf(mode.id) === -1}]"
           :aria-checked="mode.id === chosen" @click="chosen = mode.id">
           {{ $t(mode.label) }}
-          <!-- The bribe carries its price as a Solari coin -->
-          <span v-if="mode.id === 'bribe' && ownBribeCost !== undefined" class="smuggle-input__coin">
-            <img :src="COIN_ICON" alt=""><b>{{ ownBribeCost }}</b>
-          </span>
+          <!-- The bribe carries its price as the coin of every button counter (ButtonCount.vue, button_count.less) -->
+          <span v-if="mode.id === 'bribe' && ownBribeCost !== undefined" class="button-count button-count--megacredits">{{ ownBribeCost }}</span>
         </button>
       </div>
 
@@ -153,9 +151,6 @@ export default defineComponent({
     },
     ownBribeCost(): number | undefined {
       return this.smuggling?.suspicion.find((entry) => entry.color === this.playerView.thisPlayer.color)?.bribeCost;
-    },
-    COIN_ICON(): string {
-      return duneGraphic('coin');
     },
   },
   methods: {

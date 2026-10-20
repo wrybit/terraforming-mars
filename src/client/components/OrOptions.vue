@@ -35,7 +35,7 @@
           <OrOptionsTabIcon :icon="tabIcon(tabTitle(idx))!"/>
           <span class="or-tab-icon-label">{{ $t(tabIconLabel(tabIcon(tabTitle(idx))!)) }}</span>
         </template>
-        <span v-else class="or-tab-title">{{ $t(shortTabLabel(tabTitle(idx))) }}</span>
+        <span v-else class="or-tab-title"><MoneyText :text="$t(shortTabLabel(tabTitle(idx)))"/></span>
         <HotkeyKeys v-if="tabHotkey(tabTitle(idx), displayedOptions[idx]) !== undefined" :action="tabHotkey(tabTitle(idx), displayedOptions[idx])"/>
         <span v-if="tabCount(idx) !== undefined" class="or-tab-count">{{ tabCount(idx) }}</span>
       </button>
@@ -235,6 +235,7 @@ import {isOnRequestTab} from '@/client/components/onRequestTabs';
 import BazaarPurchaseIntro from '@/client/components/dune/BazaarPurchaseIntro.vue';
 import {BAZAAR_BUY_TITLE} from '@/common/dune/duneActionTitles';
 import {titleKey} from '@/client/components/orOptionsShortLabels';
+import MoneyText from '@/client/components/common/MoneyText.vue';
 import {duneBoardTabOf} from '@/client/components/dune/duneActionBoardTab';
 import {duneInputHasOwnButton} from '@/client/components/dune/duneInputs';
 import {boardTabState, selectBoardTab} from '@/client/components/boardTabs/boardTabState';
@@ -276,6 +277,7 @@ export default defineComponent({
     TabPanelFooterSlot,
     TabIntroBlock,
     AppButton,
+    MoneyText,
     OrOptionsTabIcon,
     HandCardsPanel,
     HandCardsTab,
