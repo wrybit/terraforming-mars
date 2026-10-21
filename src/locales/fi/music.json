@@ -14,5 +14,8 @@
   "Mute": "Mykistä",
   "Unmute": "Poista mykistys",
   "Start track": "Aloituskappale",
-  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Pelit alkavat aloituskappaleella; sen ryhmä on kuuntelijoiden oletus. Napsauta aaltomuotoa hypätäksesi."
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Pelit alkavat aloituskappaleella; sen ryhmä on kuuntelijoiden oletus. Napsauta aaltomuotoa hypätäksesi.",
+  "Playlist": "Soittolista",
+  "Show playlist": "Näytä soittolista",
+  "Back to the player": "Takaisin soittimeen"
 }

@@ -13,5 +13,7 @@
   "Mute": "Silenciar",
   "Unmute": "Ativar som",
   "Start track": "Faixa inicial",
-  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "As partidas começam com a faixa inicial; o grupo dela é o padrão para os ouvintes. Clique na forma de onda para pular."
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "As partidas começam com a faixa inicial; o grupo dela é o padrão para os ouvintes. Clique na forma de onda para pular.",
+  "Show playlist": "Mostrar playlist",
+  "Back to the player": "Voltar ao player"
 }

@@ -13,5 +13,8 @@
   "Mute": "Demp",
   "Unmute": "Slå på lyd",
   "Start track": "Startspor",
-  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Spill starter med startsporet; gruppen er standard for lytterne. Klikk på bølgeformen for å hoppe."
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Spill starter med startsporet; gruppen er standard for lytterne. Klikk på bølgeformen for å hoppe.",
+  "Playlist": "Spilleliste",
+  "Show playlist": "Vis spilleliste",
+  "Back to the player": "Tilbake til spilleren"
 }

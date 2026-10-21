@@ -254,6 +254,13 @@ export function playMusic(): void {
   startPlaying();
 }
 
+/** Plays the chosen track from its start (playlist in MusicPlaylist.vue) */
+export function playTrack(track: MusicTrack): void {
+  safeLocalStorage.setItem(STOPPED_KEY, '0');
+  load(track);
+  startPlaying();
+}
+
 export function stopMusic(): void {
   safeLocalStorage.setItem(STOPPED_KEY, '1');
   element().pause();

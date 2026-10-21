@@ -14,5 +14,8 @@
   "Mute": "Без звук",
   "Unmute": "Включи звука",
   "Start track": "Начална песен",
-  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Игрите започват с началната песен; нейната група е по подразбиране за слушателите. Щракнете върху вълната, за да прескочите."
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Игрите започват с началната песен; нейната група е по подразбиране за слушателите. Щракнете върху вълната, за да прескочите.",
+  "Playlist": "Плейлист",
+  "Show playlist": "Покажи плейлиста",
+  "Back to the player": "Назад към плейъра"
 }

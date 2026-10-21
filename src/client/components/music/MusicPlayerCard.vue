@@ -1,7 +1,12 @@
 <template>
   <!-- Background music of the game (gameMusic.ts) as its own card under the setup menu (GameMenu.vue):
-       current track with credit, group choice, play/pause, next track, waveform to jump, volume and mute -->
+       current track with credit, group choice, play/pause, next track, waveform to jump, volume and mute;
+       the arrow at the top slides in the playlist (MusicPlaylist.vue) -->
   <section class="game-menu-panel music-card" :aria-label="$t('Music')">
+    <!-- Two panes side by side: player and playlist; the playlist slides in, the card takes the height of the shown pane -->
+    <div class="music-card__viewport" :style="{height: height === undefined ? undefined : height + 'px'}">
+    <div :class="['music-card__panes', {'music-card__panes--list': showList}]">
+    <div ref="player" class="music-card__pane" :inert="showList">
     <div class="music-card__head">
       <span class="music-card__note"><MusicIcon name="note"/></span>
       <div class="music-card__meta">
@@ -10,6 +15,9 @@
           {{ track.author }} · <a :href="licenseUrl" target="_blank" rel="noopener">{{ track.license }}</a>
         </span>
       </div>
+      <button type="button" class="music-card__open" :aria-label="$t('Show playlist')" @click="openList">
+        <MusicIcon name="chevron-right"/>
+      </button>
     </div>
 
     <!-- Group choice and the two buttons in one row; volume with mute over the full width at the bottom -->
@@ -39,6 +47,13 @@
       <input type="range" min="0" max="1" step="0.05" :value="music.volume" :aria-label="$t('Volume')" :disabled="music.muted"
         :style="{'--music-volume': Math.round(music.volume * 100) + '%'}" @input="setVolume">
     </div>
+    </div>
+
+    <div ref="list" class="music-card__pane" :inert="!showList">
+      <MusicPlaylist @back="closeList" @chosen="closeList"/>
+    </div>
+    </div>
+    </div>
   </section>
 </template>
 
@@ -51,12 +66,29 @@ import {MUSIC_CHOICES, MusicChoice, chooseMusicGroup, gameMusic, musicPlaylist, 
 const CHOICE_LABELS: Readonly<Record<MusicChoice, string>> = {'all': 'All tracks', '8-bit': '8-bit', 'modern': 'Modern'};
 import MusicWaveform from '@/client/components/music/MusicWaveform.vue';
 import MusicIcon from '@/client/components/music/MusicIcon.vue';
+import MusicPlaylist from '@/client/components/music/MusicPlaylist.vue';
 
 export default defineComponent({
   name: 'MusicPlayerCard',
-  components: {MusicWaveform, MusicIcon},
+  components: {MusicWaveform, MusicIcon, MusicPlaylist},
   data() {
-    return {music: gameMusic, choices: MUSIC_CHOICES};
+    return {
+      music: gameMusic,
+      choices: MUSIC_CHOICES,
+      showList: false,
+      // Height of the shown pane: animated by CSS when the panes swap or a pane changes its height
+      height: undefined as number | undefined,
+      resizeObserver: undefined as ResizeObserver | undefined,
+    };
+  },
+  mounted() {
+    this.resizeObserver = new ResizeObserver(() => this.measure());
+    this.resizeObserver.observe(this.$refs.player as HTMLElement);
+    this.resizeObserver.observe(this.$refs.list as HTMLElement);
+    this.measure();
+  },
+  beforeUnmount() {
+    this.resizeObserver?.disconnect();
   },
   computed: {
     playlist(): Array<MusicTrack> {
@@ -77,6 +109,26 @@ export default defineComponent({
     },
   },
   methods: {
+    measure(): void {
+      const pane = (this.showList ? this.$refs.list : this.$refs.player) as HTMLElement | undefined;
+      this.height = pane?.offsetHeight;
+    },
+    openList(): void {
+      this.showList = true;
+      this.$nextTick(() => {
+        this.measure();
+        // The current track in the middle of the list, without moving the page
+        const list = (this.$refs.list as HTMLElement).querySelector<HTMLElement>('.music-list__tracks');
+        const current = list?.querySelector<HTMLElement>('.music-list__item--current');
+        if (list !== null && list !== undefined && current !== null && current !== undefined) {
+          list.scrollTop = current.offsetTop - (list.clientHeight - current.offsetHeight) / 2;
+        }
+      });
+    },
+    closeList(): void {
+      this.showList = false;
+      this.$nextTick(() => this.measure());
+    },
     choiceLabel(choice: MusicChoice): string {
       return CHOICE_LABELS[choice];
     },

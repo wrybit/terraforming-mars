@@ -227,18 +227,26 @@ function onKey(event: KeyboardEvent) {
   }
 }
 
+// Scrolling inside the menu (e.g. the playlist of the music card) moves no button: the menu stays open
+function onScroll(event: Event) {
+  if (event.target instanceof Node && dropdown.value?.contains(event.target)) {
+    return;
+  }
+  closeMenu();
+}
+
 // The button moves with scrolling and resizing; closing is simpler than following it
 function listen(active: boolean) {
   if (active) {
     document.addEventListener('pointerdown', onDocumentPointer, true);
     document.addEventListener('keydown', onKey);
     window.addEventListener('resize', closeMenu);
-    window.addEventListener('scroll', closeMenu, true);
+    window.addEventListener('scroll', onScroll, true);
   } else {
     document.removeEventListener('pointerdown', onDocumentPointer, true);
     document.removeEventListener('keydown', onKey);
     window.removeEventListener('resize', closeMenu);
-    window.removeEventListener('scroll', closeMenu, true);
+    window.removeEventListener('scroll', onScroll, true);
   }
 }
 

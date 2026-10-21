@@ -14,5 +14,8 @@
   "Mute": "Вимкнути звук",
   "Unmute": "Увімкнути звук",
   "Start track": "Стартовий трек",
-  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Партії починаються зі стартового треку; його група обрана для слухачів за замовчуванням. Клацніть по хвилі, щоб перейти."
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Партії починаються зі стартового треку; його група обрана для слухачів за замовчуванням. Клацніть по хвилі, щоб перейти.",
+  "Playlist": "Плейлист",
+  "Show playlist": "Показати плейлист",
+  "Back to the player": "Назад до плеєра"
 }

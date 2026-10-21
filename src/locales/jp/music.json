@@ -14,5 +14,8 @@
   "Mute": "ミュート",
   "Unmute": "ミュート解除",
   "Start track": "開始曲",
-  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "ゲームは開始曲で始まり、その曲のグループが既定のグループになります。波形をクリックするとその位置へ移動します。"
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "ゲームは開始曲で始まり、その曲のグループが既定のグループになります。波形をクリックするとその位置へ移動します。",
+  "Playlist": "プレイリスト",
+  "Show playlist": "プレイリストを表示",
+  "Back to the player": "プレーヤーに戻る"
 }

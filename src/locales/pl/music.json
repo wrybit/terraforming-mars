@@ -14,5 +14,8 @@
   "Mute": "Wycisz",
   "Unmute": "Włącz dźwięk",
   "Start track": "Utwór startowy",
-  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Gry zaczynają się od utworu startowego; jego grupa jest domyślna dla słuchaczy. Kliknij wykres fali, aby przeskoczyć."
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Gry zaczynają się od utworu startowego; jego grupa jest domyślna dla słuchaczy. Kliknij wykres fali, aby przeskoczyć.",
+  "Playlist": "Playlista",
+  "Show playlist": "Pokaż playlistę",
+  "Back to the player": "Wróć do odtwarzacza"
 }

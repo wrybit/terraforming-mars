@@ -12,5 +12,8 @@
   "Mute": "Stumm",
   "Unmute": "Ton an",
   "Start track": "Startsong",
-  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Partien starten mit dem Startsong, seine Gruppe ist für die Zuhörer voreingestellt. Ein Klick auf die Wellenform springt dorthin."
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Partien starten mit dem Startsong, seine Gruppe ist für die Zuhörer voreingestellt. Ein Klick auf die Wellenform springt dorthin.",
+  "Playlist": "Wiedergabeliste",
+  "Show playlist": "Wiedergabeliste zeigen",
+  "Back to the player": "Zurück zum Player"
 }
