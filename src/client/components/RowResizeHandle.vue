@@ -16,7 +16,7 @@ import {defineComponent, PropType} from 'vue';
 import {vProximityHandle} from '@/client/directives/ProximityHandle';
 import {KEYBOARD_ROW_STEP, RowResizeTarget, clampHeight, startRowResize} from '@/client/utils/rowResize';
 import {loadStoredNumber, saveStoredNumber} from '@/client/utils/layoutStorage';
-import {playersCardTarget} from '@/client/utils/playersCardFit';
+import {observePlayersCardWidth, playersCardTarget} from '@/client/utils/playersCardFit';
 import {marsCardTarget} from '@/client/utils/rightColumnFit';
 import {boardTarget, chartTarget, observeBoardFit, tableTarget} from '@/client/utils/gameEndResize';
 import {tween} from '@/client/utils/tween';
@@ -48,6 +48,8 @@ const KINDS: Record<RowResizeKind, KindSetup> = {
       const table = inside(card, '.players-table');
       return table === undefined ? undefined : playersCardTarget(card, table);
     },
+    // The default (largest) height follows the natural height, which follows the width
+    observe: observePlayersCardWidth,
   },
   'mars': {
     storageKey: 'player_home_mars_height',
@@ -129,9 +131,11 @@ export default defineComponent({
       if (getComputedStyle(this.$el).display === 'none') {
         return;
       }
+      const target = this.target();
       const stored = loadStoredNumber(KINDS[this.kind].storageKey);
-      if (stored !== undefined) {
-        this.target()?.apply(stored);
+      const height = stored ?? target?.defaultHeight?.();
+      if (height !== undefined) {
+        target?.apply(height);
       }
     },
     save(height: number | undefined) {
@@ -153,12 +157,16 @@ export default defineComponent({
       this.stopAnimation?.();
       this.save(undefined);
       const start = target.current();
-      target.apply(undefined);
-      const end = target.current();
-      target.apply(start);
+      const fixedDefault = target.defaultHeight?.();
+      let end = fixedDefault;
+      if (end === undefined) {
+        target.apply(undefined);
+        end = target.current();
+        target.apply(start);
+      }
       this.stopAnimation = tween(start, end, (height) => target.apply(height), () => {
         this.stopAnimation = undefined;
-        target.apply(undefined);
+        target.apply(fixedDefault);
       });
     },
     // Up arrow moves the handle up, the card gets smaller
