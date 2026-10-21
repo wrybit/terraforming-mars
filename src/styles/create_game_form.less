@@ -264,10 +264,15 @@
   margin-bottom: @create-game-gap-group;
 }
 
-// Facts of a Dune board in its chip: picture and number tight together, clearly more room between the facts
+// Facts of a board in its chip: picture and number tight together, clearly more room between the facts
 // (instead of the " · " of other detail lines, which sticks to the number inside the flex box)
 .create-game-chip-detail > .create-game-board-fact + .create-game-board-fact {
   margin-left: 10px;
+
+  // Phone: two board chips side by side, the α badge beside it – a little tighter, still clearly more than inside
+  html.tm-mobile & {
+    margin-left: 6px;
+  }
 
   &::before {
     content: none;
@@ -283,6 +288,15 @@
   img {
     width: 13px;
     height: 13px;
+  }
+
+  html.tm-mobile & {
+    gap: 2px;
+
+    img {
+      width: 12px;
+      height: 12px;
+    }
   }
 }
 

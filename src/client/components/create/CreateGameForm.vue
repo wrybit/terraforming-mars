@@ -129,9 +129,9 @@
               <ChoiceChip v-for="boardName in DUNE_BOARDS" :key="boardName" :label="boardName" capitalized :selected="board === boardName"
                 @select="board = boardName">
                 <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
-                <!-- What tells the two boards apart (duneBoardFacts.ts) -->
+                <!-- What tells the boards apart (boardFacts.ts) -->
                 <template #detail>
-                  <span v-for="fact in duneBoardFacts(boardName)" :key="fact.picture" class="create-game-board-fact" :title="fact.label">
+                  <span v-for="fact in boardFactsOf(boardName)" :key="fact.picture" class="create-game-board-fact" :title="fact.label">
                     <img :src="fact.picture" alt="">{{ fact.value }}
                   </span>
                 </template>
@@ -155,6 +155,11 @@
                     :label="boardName" capitalized :selected="board === boardName"
                     @select="board = boardName">
                     <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
+                    <template #detail>
+                      <span v-for="fact in boardFactsOf(boardName)" :key="fact.picture" class="create-game-board-fact" :title="fact.label">
+                        <img :src="fact.picture" alt="">{{ fact.value }}
+                      </span>
+                    </template>
                     <span v-if="ALPHA_BOARDS.includes(boardName)" class="create-game-alpha" :title="$t('Alpha — work in progress')">α</span>
                   </ChoiceChip>
                 </div>
@@ -433,7 +438,7 @@ import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
 import {CardName} from '@/common/cards/CardName';
 import CustomCardListCard from '@/client/components/create/CustomCardListCard.vue';
 import CreateGameBoardPreview from '@/client/components/create/CreateGameBoardPreview.vue';
-import {DuneBoardFact, duneBoardFactItems} from '@/client/components/create/duneBoardFacts';
+import {BoardFact, boardFactItems} from '@/client/components/create/boardFacts';
 import {observeStickyBottom} from '@/client/components/create/stickyBottomObserver';
 import {observeBelowViewport} from '@/client/components/create/belowViewportObserver';
 import CollapsibleSection from '@/client/components/create/CollapsibleSection.vue';
@@ -1300,9 +1305,9 @@ export default defineComponent({
         this.moonStandardProjectVariant1 = false;
       }
     },
-    // Detail line of a Dune board chip: spice fields and the steps of both tracks, each a small picture with a number
-    duneBoardFacts(boardName: BoardName): Array<DuneBoardFact> {
-      return duneBoardFactItems(boardName);
+    // Detail line of a board chip: oceans and the steps of both tracks, each a small picture with a number
+    boardFactsOf(boardName: BoardName): Array<BoardFact> {
+      return boardFactItems(boardName, this.theme === 'dune' ? 'dune' : 'mars');
     },
     getBoardColorClass(boardName: BoardName | BoardNameType): string {
       return boardColorClass(boardName);
