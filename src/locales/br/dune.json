@@ -343,5 +343,10 @@
   "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "Distância: a trilha de vegetação em três partes – quanto mais dunas plantadas, menor o movimento (3, 2, 1 espaços)",
   "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "Obstáculos (rocha, cidades, borda polar, beirada): o verme ricocheteia como uma bola na parede – ricochetear não gasta passo",
   "No gain or loss for anyone on this way.": "Neste caminho ninguém ganha nem perde nada.",
-  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Cada oponente com suspeita 3 ou mais</opp> perde 1 de influência. Ganhe 4 solaris."
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Cada oponente com suspeita 3 ou mais</opp> perde 1 de influência. Ganhe 4 solaris.",
+  "Choose one of your agendas and one from the deck.": "Escolha uma das suas agendas e uma do baralho.",
+  "Top of the agenda deck": "Topo do baralho de agendas",
+  "Swap agendas": "Trocar agendas",
+  "Tleilaxu Spy: agendas of ${0}": "Espião Tleilaxu: agendas de ${0}",
+  "holds these agendas:": "tem estas agendas:"
 }

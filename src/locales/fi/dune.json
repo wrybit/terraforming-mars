@@ -343,5 +343,10 @@
   "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "Matka: kasvillisuusasteikko kolmessa osassa – mitä enemmän istutusdyynejä, sitä lyhyempi liike (3, 2, 1 ruutua)",
   "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "Esteet (kallio, kaupungit, napa-alueen raja, reuna): mato kimpoaa kuin pallo seinästä – kimpoaminen ei kuluta askelta",
   "No gain or loss for anyone on this way.": "Tällä reitillä kukaan ei voita eikä menetä mitään.",
-  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Jokainen vastustaja, jonka epäily on 3 tai enemmän,</opp> menettää 1 arvovaltaa. Saat 4 solaria."
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Jokainen vastustaja, jonka epäily on 3 tai enemmän,</opp> menettää 1 arvovaltaa. Saat 4 solaria.",
+  "Choose one of your agendas and one from the deck.": "Valitse yksi omista agendoistasi ja yksi pakasta.",
+  "Top of the agenda deck": "Agendapakan päällimmäiset",
+  "Swap agendas": "Vaihda agendat",
+  "Tleilaxu Spy: agendas of ${0}": "Tleilaxu-vakooja: pelaajan ${0} agendat",
+  "holds these agendas:": "pitää näitä agendoja:"
 }

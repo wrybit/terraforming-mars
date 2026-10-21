@@ -343,5 +343,10 @@
   "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "Távolság: a növényzetsáv három szakaszban – minél több a beültetett dűne, annál rövidebb a lépés (3, 2, 1 mező)",
   "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "Akadályok (szikla, városok, sarki határ, pálya széle): a féreg visszapattan, mint labda a falról – a visszapattanás nem kerül lépésbe",
   "No gain or loss for anyone on this way.": "Ezen az úton senki sem nyer és nem veszít semmit.",
-  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Minden legalább 3 gyanúval rendelkező ellenfél</opp> 1 befolyást veszít. Kapsz 4 solarit."
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Minden legalább 3 gyanúval rendelkező ellenfél</opp> 1 befolyást veszít. Kapsz 4 solarit.",
+  "Choose one of your agendas and one from the deck.": "Válassz egyet a saját terveid közül és egyet a pakliból.",
+  "Top of the agenda deck": "A tervpakli teteje",
+  "Swap agendas": "Tervek cseréje",
+  "Tleilaxu Spy: agendas of ${0}": "Tleilaxu kém: ${0} tervei",
+  "holds these agendas:": "ezeket a terveket tartja:"
 }

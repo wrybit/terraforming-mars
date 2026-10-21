@@ -25,6 +25,8 @@ import {ShieldGenerator} from '../../src/server/cards/dune/ShieldGenerator';
 import {WaterOfLife} from '../../src/server/cards/dune/WaterOfLife';
 import {StillsuitFactory} from '../../src/server/cards/dune/StillsuitFactory';
 import {priceFor} from '../../src/server/dune/Bazaar';
+import {schemesModel} from '../../src/server/dune/Schemes';
+import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {bribeCost, suspicionOf} from '../../src/server/dune/Smuggling';
 import {garrisonOf} from '../../src/server/dune/Kanly';
 import {acceptOffer, feeOf, maxOffers} from '../../src/server/dune/Choam';
@@ -75,7 +77,11 @@ describe('Dune expansion cards (E01–E16)', () => {
     const [mine] = schemes.agendas[player1.id];
     const top = schemes.deck[0];
     const input = cast(new MentatCalculation().play(player1), OrOptions);
+    // While choosing, only player 1 sees the top 3 (as cards in MentatSwapInput.vue)
+    expect(schemesModel(game, schemes, player1).look?.agendas.map((agenda) => agenda.name)).deep.eq(schemes.deck.slice(0, 3));
+    expect(schemesModel(game, schemes, player2).look).is.undefined;
     input.process({type: 'or', index: 0, response: {type: 'option'}}, player1);
+    expect(schemesModel(game, schemes, player1).look).is.undefined;
     expect(schemes.agendas[player1.id]).includes(top);
     expect(schemes.agendas[player1.id]).not.includes(mine);
     expect(schemes.deck).includes(mine);
@@ -84,10 +90,19 @@ describe('Dune expansion cards (E01–E16)', () => {
   it('E04 Tleilaxu Spy: a private log line per agenda', () => {
     const input = cast(new TleilaxuSpy().play(player1), SelectPlayer);
     const before = game.gameLog.length;
-    input.cb(player2);
+    const view = cast(input.cb(player2), SelectOption);
     const lines = game.gameLog.slice(before);
     expect(lines).has.length(2);
     expect(lines.every((line) => line.playerId === player1.id)).is.true;
+    // Then a tab with player 2's agenda cards, only for the spy, until closed
+    const schemes = game.duneData!.schemes!;
+    const look = schemesModel(game, schemes, player1).look;
+    expect(look?.kind).eq('spy');
+    expect(look?.target).eq(player2.color);
+    expect(look?.agendas.map((agenda) => agenda.name)).deep.eq(schemes.agendas[player2.id]);
+    expect(schemesModel(game, schemes, player2).look).is.undefined;
+    view.cb(undefined);
+    expect(schemesModel(game, schemes, player1).look).is.undefined;
   });
 
   it('E05 Thumper: the player chooses the distance this generation', () => {

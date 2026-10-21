@@ -343,5 +343,10 @@
   "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "Zasięg: tor roślinności w trzech odcinkach – im więcej obsadzonych wydm, tym krótszy ruch (3, 2, 1 pola)",
   "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "Przeszkody (skała, miasta, granica polarna, krawędź): czerw odbija się jak piłka od ściany – odbicie nie kosztuje kroku",
   "No gain or loss for anyone on this way.": "Na tej drodze nikt nic nie zyskuje ani nie traci.",
-  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Każdy przeciwnik z podejrzeniem 3 lub więcej</opp> traci 1 Wpływu. Zyskaj 4 solary."
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Każdy przeciwnik z podejrzeniem 3 lub więcej</opp> traci 1 Wpływu. Zyskaj 4 solary.",
+  "Choose one of your agendas and one from the deck.": "Wybierz jedną ze swoich agend i jedną ze stosu.",
+  "Top of the agenda deck": "Wierzch stosu agend",
+  "Swap agendas": "Zamień agendy",
+  "Tleilaxu Spy: agendas of ${0}": "Szpieg Tleilaxu: agendy gracza ${0}",
+  "holds these agendas:": "ma te agendy:"
 }

@@ -341,5 +341,10 @@
   "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "Avstand: vegetasjonsskalaen i tre deler – jo flere beplantede dyner, desto kortere flytt (3, 2, 1 felt)",
   "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "Hindringer (fjell, byer, polgrensen, kanten): ormen preller av som en kule mot en vegg – å prelle av koster ikke noe steg",
   "No gain or loss for anyone on this way.": "På denne veien vinner eller taper ingen noe.",
-  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Hver motstander med mistanke 3 eller mer</opp> mister 1 innflytelse. Få 4 solari."
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Hver motstander med mistanke 3 eller mer</opp> mister 1 innflytelse. Få 4 solari.",
+  "Choose one of your agendas and one from the deck.": "Velg en av agendaene dine og en fra bunken.",
+  "Top of the agenda deck": "Øverst i agendabunken",
+  "Swap agendas": "Bytt agendaer",
+  "Tleilaxu Spy: agendas of ${0}": "Tleilaxu-spion: agendaene til ${0}",
+  "holds these agendas:": "har disse agendaene:"
 }

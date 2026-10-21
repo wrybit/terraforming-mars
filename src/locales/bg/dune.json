@@ -346,5 +346,10 @@
   "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "Разстояние: скалата на растителността в три части – колкото повече засадени дюни, толкова по-къс ходът (3, 2, 1 полета)",
   "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "Препятствия (скала, градове, полярна граница, ръб): червеят отскача като топка от стена – отскокът не струва ход",
   "No gain or loss for anyone on this way.": "По този път никой не печели и не губи нищо.",
-  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Всеки противник с подозрение 3 или повече</opp> губи 1 влияние. Получете 4 солари."
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Всеки противник с подозрение 3 или повече</opp> губи 1 влияние. Получете 4 солари.",
+  "Choose one of your agendas and one from the deck.": "Избери един от своите замисли и един от тестето.",
+  "Top of the agenda deck": "Най-горе в тестето със замисли",
+  "Swap agendas": "Размени замислите",
+  "Tleilaxu Spy: agendas of ${0}": "Тлейлаксу шпионин: замислите на ${0}",
+  "holds these agendas:": "държи тези замисли:"
 }

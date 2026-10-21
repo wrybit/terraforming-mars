@@ -106,6 +106,15 @@ export type SchemeModel = {
     /** Only the viewer's own agendas, and everybody's after the game */
     agendas: ReadonlyArray<{name: string, value: number, level: number}> | undefined,
   }>,
+  /**
+   * Only for the viewer, while a card lets them look at agendas: Mentat Calculation – the top 3 of the deck with the
+   * values they would count for the viewer; Tleilaxu Spy – the agendas of `target` with that player's values
+   */
+  look?: {
+    kind: 'mentat' | 'spy',
+    target?: Color,
+    agendas: ReadonlyArray<{name: string, value: number, level: number}>,
+  },
 };
 
 export type DuneModel = {
