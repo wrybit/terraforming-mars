@@ -570,15 +570,19 @@ html.theme-dune .card-container.card-scroll-area .card-content {
   max-height: none !important;
   margin: 0 !important;
   padding: 0 !important;
-  overflow-x: hidden;
-  overflow-y: auto !important;
+  /* Only content longer than its box scrolls (CardScrollbar.vue sets card-content-scrolls): a scroll container that
+     cannot scroll would still take the wheel and the page would not scroll over the card (Jens 21 Oct 2026) */
+  overflow: hidden !important;
   scrollbar-width: none;
-  overscroll-behavior: contain;
   /* German words are long and the column is narrow: hyphenate instead of large gaps (needs html lang, main.ts) */
   hyphens: auto;
   hyphenate-limit-chars: 8 4 3;
   overflow-wrap: break-word;
   mask-image: linear-gradient(to bottom, transparent 0, #000 var(--card-fade-top, 0px), #000 calc(100% - var(--card-fade-bottom, 0px)), transparent 100%);
+}
+
+html.theme-dune .card-container.card-scroll-area .card-content.card-content-scrolls {
+  overflow-y: auto !important;
 }
 
 html.theme-dune .card-container.card-scroll-area .card-content::-webkit-scrollbar {

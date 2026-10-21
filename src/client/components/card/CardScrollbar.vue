@@ -61,6 +61,7 @@ export default defineComponent({
     },
     release(content: HTMLElement | undefined): void {
       content?.removeEventListener('scroll', this.onScroll);
+      content?.classList.remove('card-content-scrolls');
       this.resizeObserver?.disconnect();
       this.resizeObserver = undefined;
     },
@@ -78,6 +79,8 @@ export default defineComponent({
       }
       const trackHeight = (this.$el as HTMLElement).offsetHeight;
       this.state = cardScrollState({top: content.scrollTop, height: content.scrollHeight, visible: content.clientHeight}, trackHeight);
+      // Only then the content is a scroll container; otherwise the wheel scrolls the page (theme-extra.css)
+      content.classList.toggle('card-content-scrolls', this.state.scrolls);
       content.style.setProperty('--card-fade-top', this.state.fadeTop + 'px');
       content.style.setProperty('--card-fade-bottom', this.state.fadeBottom + 'px');
     },
