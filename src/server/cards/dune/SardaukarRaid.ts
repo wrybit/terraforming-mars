@@ -3,7 +3,7 @@ import {Card} from '../Card';
 import {CardType} from '../../../common/cards/CardType';
 import {CardName} from '../../../common/cards/CardName';
 import {CardRenderer} from '../render/CardRenderer';
-import {Size} from '../../../common/cards/render/Size';
+import {all} from '../Options';
 import {IPlayer} from '../../IPlayer';
 import {PlayerInput} from '../../PlayerInput';
 import {raid} from '../../dune/Smuggling';
@@ -23,8 +23,9 @@ export class SardaukarRaid extends Card implements IProjectCard {
       metadata: {
         cardNumber: 'E12',
         renderData: CardRenderer.builder((b) => {
-          b.text('Opponents with suspicion 3 or more lose 1 TR.', {size: Size.SMALL}).br;
-          b.megacredits(4);
+          // Icons like the other cards that hit opponents (Jens 21 Oct 2026): −1 influence of the others with a red
+          // outline, then the 4 Solari you gain; who is hit says the description in red (cardTextMarkup.ts)
+          b.minus().tr(1, {all}).nbsp.megacredits(4);
         }),
         description: 'Every opponent with suspicion 3 or more loses 1 TR. Gain 4 M€.',
       },

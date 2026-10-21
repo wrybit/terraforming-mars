@@ -342,7 +342,8 @@
   "Worm path (max.)": "ワームの進路（最大）",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "植林砂丘 ${0}/${1}：ワームは最大${2}マス進む",
   "Rock blocks the way: Shai-Hulud bounces off": "岩が道をふさぐ：シャイー・フルードは跳ね返る",
-  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "距離：植生トラックは3区間 ― 植林砂丘が多いほど移動は短くなる（3・2・1マス）",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "障害物（岩・都市・極地の境界・盤の端）：ワームは壁に当たった球のように跳ね返る ― 跳ね返りで歩数は減らない",
-  "No gain or loss for anyone on this way.": "この経路では誰も得も損もしません。"
+  "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "距離：植生トラックは3区間 ― 植林砂丘が多いほど移動は短くなる（3・2・1マス）",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "障害物（岩・都市・極地の境界・盤の端）：ワームは壁に当たった球のように跳ね返る ― 跳ね返りで歩数は減らない",
+  "No gain or loss for anyone on this way.": "この経路では誰も得も損もしません。",
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>疑惑が3以上の対戦相手は</opp>それぞれ影響力を1失う。4ソラリを得る。"
 }

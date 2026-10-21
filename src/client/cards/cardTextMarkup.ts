@@ -4,6 +4,9 @@
 // when upstream rewords a text, its entry no longer matches and the card falls back to the plain
 // text. tests/client/cards/cardTextMarkup.spec.ts reports such stale entries.
 export const CARD_TEXT_MARKUP: Readonly<Record<string, string>> = {
+  // Sardaukar Raid (Dune): the opponents hit in red
+  'Every opponent with suspicion 3 or more loses 1 TR. Gain 4 M€.':
+    '<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.',
   // Mangrove
   'Requires +4 C or warmer. Place a greenery tile ON AN AREA RESERVED FOR OCEAN and raise oxygen 1 step. Disregard normal placement restrictions for this.':
     'Requires +4 C or warmer. Raise oxygen 1 step. Disregard normal placement restrictions for this.<note>Place a greenery tile <b>on an area reserved for ocean</b>.</note>',

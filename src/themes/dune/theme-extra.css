@@ -741,6 +741,16 @@ html.theme-dune .card-container .card-content .card-x {
   text-shadow: 0 0 2px #fffdf8, 0 0 2px #fffdf8;
 }
 
+/* Shield Generator: the tile that becomes the war field shows the war field marker (graphics/war-field.svg) */
+html.theme-dune .card-container.card-shield-generator .card-content .card-effect-box-content:first-child .card-tile {
+  width: 40px !important;
+  height: 40px !important;
+  border: 0 !important;
+  background: url(graphics/war-field.svg) center / contain no-repeat !important;
+  box-shadow: none !important;
+  clip-path: none !important;
+}
+
 /* Expansion marks on the cards (Jens 21 Oct 2026): the marks of the card list filter instead of the coloured Mars
    dots, always bottom left – next to the resource counter where a card has one (Card.vue measures its width) */
 html.theme-dune .card-container .card-corporation-expansion,

@@ -3,7 +3,7 @@ import {Card} from '../Card';
 import {CardType} from '../../../common/cards/CardType';
 import {CardName} from '../../../common/cards/CardName';
 import {CardRenderer} from '../render/CardRenderer';
-import {Size} from '../../../common/cards/render/Size';
+import {CardResource} from '../../../common/CardResource';
 import {IPlayer} from '../../IPlayer';
 import {PlayerInput} from '../../PlayerInput';
 import {addSardaukar} from '../../dune/Kanly';
@@ -20,8 +20,10 @@ export class SardaukarMercenaries extends Card implements IProjectCard {
       metadata: {
         cardNumber: 'E13',
         renderData: CardRenderer.builder((b) => {
-          b.text('Gain 2 Sardaukar for the war field.', {size: Size.SMALL});
+          // 2 Sardaukar as icons (Jens 21 Oct 2026); the description says what they are for
+          b.resource(CardResource.FIGHTER, 2);
         }),
+        description: 'Gain 2 Sardaukar for the war field.',
       },
     });
   }

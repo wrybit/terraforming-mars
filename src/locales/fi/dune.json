@@ -340,7 +340,8 @@
   "Worm path (max.)": "Madon reitti (enint.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0}/${1} istutusdyyniä: mato liikkuu enintään ${2} ruutua",
   "Rock blocks the way: Shai-Hulud bounces off": "Kallio tukkii tien: Shai-Hulud kimpoaa",
-  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Matka: kasvillisuusasteikko kolmessa osassa – mitä enemmän istutusdyynejä, sitä lyhyempi liike (3, 2, 1 ruutua)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Esteet (kallio, kaupungit, napa-alueen raja, reuna): mato kimpoaa kuin pallo seinästä – kimpoaminen ei kuluta askelta",
-  "No gain or loss for anyone on this way.": "Tällä reitillä kukaan ei voita eikä menetä mitään."
+  "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "Matka: kasvillisuusasteikko kolmessa osassa – mitä enemmän istutusdyynejä, sitä lyhyempi liike (3, 2, 1 ruutua)",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "Esteet (kallio, kaupungit, napa-alueen raja, reuna): mato kimpoaa kuin pallo seinästä – kimpoaminen ei kuluta askelta",
+  "No gain or loss for anyone on this way.": "Tällä reitillä kukaan ei voita eikä menetä mitään.",
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Jokainen vastustaja, jonka epäily on 3 tai enemmän,</opp> menettää 1 arvovaltaa. Saat 4 solaria."
 }

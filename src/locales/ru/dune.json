@@ -343,7 +343,8 @@
   "Worm path (max.)": "Путь червя (макс.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} из ${1} засаженных дюн: червь проходит до ${2} кл.",
   "Rock blocks the way: Shai-Hulud bounces off": "Скала преграждает путь: Шаи-Хулуд отскакивает",
-  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Дальность: шкала растительности из трёх частей – чем больше засаженных дюн, тем короче ход (3, 2, 1 кл.)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Препятствия (скала, города, полярная граница, край): червь отскакивает, как мяч от стены, – отскок не стоит шага",
-  "No gain or loss for anyone on this way.": "На этом пути никто ничего не получает и не теряет."
+  "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "Дальность: шкала растительности из трёх частей – чем больше засаженных дюн, тем короче ход (3, 2, 1 кл.)",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "Препятствия (скала, города, полярная граница, край): червь отскакивает, как мяч от стены, – отскок не стоит шага",
+  "No gain or loss for anyone on this way.": "На этом пути никто ничего не получает и не теряет.",
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Каждый соперник с подозрением 3 и выше</opp> теряет 1 влияние. Получите 4 солярия."
 }

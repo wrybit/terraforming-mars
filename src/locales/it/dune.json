@@ -339,7 +339,8 @@
   "Worm path (max.)": "Percorso del verme (max.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} di ${1} dune piantumate: il verme si sposta fino a ${2} spazio/i",
   "Rock blocks the way: Shai-Hulud bounces off": "Una roccia blocca la strada: Shai-Hulud rimbalza",
-  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Distanza: il tracciato della vegetazione in tre sezioni – più dune piantumate, più breve lo spostamento (3, 2, 1 spazi)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Ostacoli (roccia, città, confine polare, bordo): il verme rimbalza come una palla sul muro – rimbalzare non costa passi",
-  "No gain or loss for anyone on this way.": "Su questo percorso nessuno guadagna né perde nulla."
+  "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "Distanza: il tracciato della vegetazione in tre sezioni – più dune piantumate, più breve lo spostamento (3, 2, 1 spazi)",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "Ostacoli (roccia, città, confine polare, bordo): il verme rimbalza come una palla sul muro – rimbalzare non costa passi",
+  "No gain or loss for anyone on this way.": "Su questo percorso nessuno guadagna né perde nulla.",
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Ogni avversario con sospetto 3 o più</opp> perde 1 influenza. Ottieni 4 solari."
 }

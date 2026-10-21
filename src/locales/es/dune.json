@@ -340,7 +340,8 @@
   "Worm path (max.)": "Camino del gusano (máx.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} de ${1} dunas plantadas: el gusano se mueve hasta ${2} casilla(s)",
   "Rock blocks the way: Shai-Hulud bounces off": "Una roca bloquea el camino: Shai-Hulud rebota",
-  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Distancia: el marcador de vegetación en tres tramos; cuantas más dunas plantadas, más corto el movimiento (3, 2, 1 casillas)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Obstáculos (roca, ciudades, borde polar, límite del tablero): el gusano rebota como una bola contra la pared; rebotar no cuesta paso",
-  "No gain or loss for anyone on this way.": "En este camino nadie gana ni pierde nada."
+  "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "Distancia: el marcador de vegetación en tres tramos; cuantas más dunas plantadas, más corto el movimiento (3, 2, 1 casillas)",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "Obstáculos (roca, ciudades, borde polar, límite del tablero): el gusano rebota como una bola contra la pared; rebotar no cuesta paso",
+  "No gain or loss for anyone on this way.": "En este camino nadie gana ni pierde nada.",
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Cada rival con sospecha 3 o más</opp> pierde 1 de influencia. Gana 4 solaris."
 }
