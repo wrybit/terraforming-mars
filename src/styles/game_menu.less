@@ -241,6 +241,15 @@ html.tm-mobile .game-menu:not(.game-menu--large) {
 
 // Menu entries that are links: the global link states (common.less, spectre) would underline them on hover/click
 // and grey out visited pages – here every entry looks the same, only the background shows hover and focus
+.game-menu-item--switch {
+  cursor: pointer;
+
+  // The switch sits at the right end of the row
+  .toggle-switch-track {
+    margin-left: auto;
+  }
+}
+
 a.game-menu-item {
   &:link,
   &:visited,
@@ -291,7 +300,9 @@ a.game-menu-item {
 }
 
 // Keyboard outline of the shortcut entry, drawn like the outline icons above
-.game-menu-keyboard-icon {
+// Line icons drawn in the menu itself (keyboard, DevTools)
+.game-menu-keyboard-icon,
+.game-menu-devtools-icon {
   width: 24px;
   height: 24px;
   fill: none;
