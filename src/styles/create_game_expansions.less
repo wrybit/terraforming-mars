@@ -83,9 +83,10 @@
   font-weight: 600;
 }
 
-// Phone: one tile per row, so the content line stays readable
+// Phone: one tile per row, so the content line stays readable (also the Dune boards with their facts line)
 @media only screen and (max-width: @card-list-phone) {
-  .create-game-chip-grid.create-game-expansion-grid {
+  .create-game-chip-grid.create-game-expansion-grid,
+  .create-game-chip-grid.create-game-theme-board {
     grid-template-columns: minmax(0, 1fr);
   }
 

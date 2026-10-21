@@ -264,6 +264,28 @@
   margin-bottom: @create-game-gap-group;
 }
 
+// Facts of a Dune board in its chip: picture and number tight together, clearly more room between the facts
+// (instead of the " · " of other detail lines, which sticks to the number inside the flex box)
+.create-game-chip-detail > .create-game-board-fact + .create-game-board-fact {
+  margin-left: 10px;
+
+  &::before {
+    content: none;
+  }
+}
+
+.create-game-board-fact {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  vertical-align: middle;
+
+  img {
+    width: 13px;
+    height: 13px;
+  }
+}
+
 .create-game-subhead {
   display: flex;
   align-items: center;

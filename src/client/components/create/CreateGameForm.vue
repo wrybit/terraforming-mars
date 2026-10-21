@@ -129,6 +129,12 @@
               <ChoiceChip v-for="boardName in DUNE_BOARDS" :key="boardName" :label="boardName" capitalized :selected="board === boardName"
                 @select="board = boardName">
                 <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
+                <!-- What tells the two boards apart (duneBoardFacts.ts) -->
+                <template #detail>
+                  <span v-for="fact in duneBoardFacts(boardName)" :key="fact.picture" class="create-game-board-fact" :title="fact.label">
+                    <img :src="fact.picture" alt="">{{ fact.value }}
+                  </span>
+                </template>
               </ChoiceChip>
             </div>
             <template v-else>
@@ -427,6 +433,7 @@ import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
 import {CardName} from '@/common/cards/CardName';
 import CustomCardListCard from '@/client/components/create/CustomCardListCard.vue';
 import CreateGameBoardPreview from '@/client/components/create/CreateGameBoardPreview.vue';
+import {DuneBoardFact, duneBoardFactItems} from '@/client/components/create/duneBoardFacts';
 import {observeStickyBottom} from '@/client/components/create/stickyBottomObserver';
 import {observeBelowViewport} from '@/client/components/create/belowViewportObserver';
 import CollapsibleSection from '@/client/components/create/CollapsibleSection.vue';
@@ -1292,6 +1299,10 @@ export default defineComponent({
         this.moonStandardProjectVariant = false;
         this.moonStandardProjectVariant1 = false;
       }
+    },
+    // Detail line of a Dune board chip: spice fields and the steps of both tracks, each a small picture with a number
+    duneBoardFacts(boardName: BoardName): Array<DuneBoardFact> {
+      return duneBoardFactItems(boardName);
     },
     getBoardColorClass(boardName: BoardName | BoardNameType): string {
       return boardColorClass(boardName);
