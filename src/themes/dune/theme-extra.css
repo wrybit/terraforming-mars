@@ -462,7 +462,8 @@ html.theme-dune .card-container .card-points {
   border: 0;
   border-radius: 12px 0 16px 0;
   background: linear-gradient(#e8b13a, #c38a1d);
-  box-shadow: none;
+  /* Lies on top of the card: a soft shadow up and to the left onto the content behind it (Jens 21 Oct 2026) */
+  box-shadow: -3px -3px 8px rgb(42 24 6 / 35%), inset 0 1px 0 rgb(255 255 255 / 45%);
   color: #2a1806;
   font-family: Prototype, sans-serif;
   text-shadow: none;
@@ -1251,7 +1252,8 @@ html.theme-dune .card-container .card-resources-counter {
   border: 0 !important;
   border-radius: 0 12px 0 16px;
   background: #e3cfa6 !important;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 55%), inset -1px 0 0 rgb(90 61 38 / 18%) !important;
+  /* Lies on top of the card like the victory points: a soft shadow up and to the right (Jens 21 Oct 2026) */
+  box-shadow: 3px -3px 8px rgb(42 24 6 / 35%), inset 0 1px 0 rgb(255 255 255 / 55%) !important;
   line-height: 1 !important;
 }
 

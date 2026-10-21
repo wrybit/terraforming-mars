@@ -15,7 +15,7 @@ export class SardaukarMercenaries extends Card implements IProjectCard {
       type: CardType.EVENT,
       name: CardName.SARDAUKAR_MERCENARIES,
       tags: [],
-      cost: 10,
+      cost: 21,
 
       metadata: {
         cardNumber: 'E13',

@@ -82,6 +82,10 @@ export default defineComponent({
     mainClass(): string {
       let css = 'board-space board-space-' + this.space?.id.toString();
       css += ' board-space-selectable';
+      // Dune Kanly: the whole space of the war field gets a red outline (dune_worm.less)
+      if (this.space?.warField === true) {
+        css += ' board-space--war-field';
+      }
       return css;
     },
     showTiles(): boolean {
