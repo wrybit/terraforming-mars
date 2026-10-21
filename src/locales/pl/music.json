@@ -1,0 +1,13 @@
+{
+  "Music": "Muzyka",
+  "Background music": "Muzyka w tle",
+  "Pause": "Pauza",
+  "Modern": "Nowoczesna",
+  "Stop music": "Zatrzymaj muzykę",
+  "Play music": "Odtwórz muzykę",
+  "Next track": "Następny utwór",
+  "Volume": "Głośność",
+  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Po otwarciu gry startuje jeden z aktywnych utworów jej motywu. Kliknij wykres fali, aby przeskoczyć.",
+  "Cannot load the music settings.": "Nie można wczytać ustawień muzyki.",
+  "Cannot save the music settings.": "Nie można zapisać ustawień muzyki."
+}

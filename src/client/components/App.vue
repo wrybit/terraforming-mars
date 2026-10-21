@@ -65,6 +65,7 @@
       <StatsPage v-else-if="screen === 'stats'" :key="'stats-' + themeKey"/>
       <AdminHome v-else-if="screen === 'admin-settings'"/>
       <AdminRaw v-else-if="screen === 'admin-raw'"/>
+      <AdminMusic v-else-if="screen === 'admin-music'"/>
       <AdminDashboard v-else-if="screen === 'admin-dashboard'"/>
       <LoginHome v-else-if="screen === 'login-home'"/>
       <HelpOverlay v-else-if="screen === 'help'"/>
@@ -90,6 +91,7 @@ import * as constants from '@/common/constants';
 
 const AdminHome = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminHome.vue'));
 const AdminRaw = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminRaw.vue'));
+const AdminMusic = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminMusic.vue'));
 const AdminDashboard = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminDashboard.vue'));
 const CardList = defineAsyncComponent(() => import(/* webpackChunkName: "card-list" */ '@/client/components/cardlist/CardList.vue'));
 const CreateGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "create-game" */ '@/client/components/create/CreateGameForm.vue'));
@@ -109,7 +111,9 @@ const OnlinePlayers = defineAsyncComponent(() => import(/* webpackChunkName: "st
 const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreen.vue'));
 import {$t, setTranslationContext, translateTextWithParams} from '@/client/directives/i18n';
 import {activeTheme, applyTheme} from '@/client/theme/applyTheme';
+import {enterGameMusic} from '@/client/music/gameMusic';
 import {applyChosenTheme} from '@/client/theme/themeChoice';
+import {Theme} from '@/common/theme/Theme';
 import {paths} from '@/common/app/paths';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
@@ -138,6 +142,7 @@ import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
 
 type Screen = 'admin-settings' |
             'admin-raw' |
+            'admin-music' |
             'admin-dashboard' |
             'create-game-form' |
             'cards' |
@@ -232,12 +237,18 @@ export default defineComponent({
     HelpOverlay,
     AdminHome,
     AdminRaw,
+    AdminMusic,
     AdminDashboard,
     LoginHome,
   },
   computed: {
     themeKey(): string {
       return activeTheme();
+    },
+    // Background music (gameMusic.ts) plays while a game is open, in the tracks of its theme
+    gameMusicTheme(): Theme | undefined {
+      const inGame = this.screen === 'player-home' || this.screen === 'spectator-home';
+      return inGame && this.participant !== undefined ? activeTheme() : undefined;
     },
     hasBackground(): boolean {
       return SCREENS_WITH_BACKGROUND.includes(this.screen);
@@ -382,6 +393,11 @@ export default defineComponent({
     startKeyLabelDetection();
     installHotkeys();
   },
+  watch: {
+    gameMusicTheme(theme: Theme | undefined) {
+      enterGameMusic(theme);
+    },
+  },
   mounted() {
     setDocumentTitle();
     // Game pages send their id, so the server knows somebody is playing (no automatic update then)
@@ -437,6 +453,8 @@ export default defineComponent({
       app.screen = 'admin-settings';
     } else if (currentPathname === paths.ADMIN_RAW) {
       app.screen = 'admin-raw';
+    } else if (currentPathname === paths.ADMIN_MUSIC) {
+      app.screen = 'admin-music';
     } else if (currentPathname === paths.ADMIN || currentPathname === paths.ADMIN_DASHBOARD) {
       // The admin always opens on the dashboard (/admin and the menu entry)
       app.screen = 'admin-dashboard';

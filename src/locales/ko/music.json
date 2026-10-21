@@ -1,0 +1,13 @@
+{
+  "Music": "음악",
+  "Background music": "배경 음악",
+  "Pause": "일시정지",
+  "Modern": "모던",
+  "Stop music": "음악 정지",
+  "Play music": "음악 재생",
+  "Next track": "다음 곡",
+  "Volume": "음량",
+  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "게임을 열면 해당 테마의 활성 곡 중 하나가 재생됩니다. 파형을 클릭하면 그 위치로 이동합니다.",
+  "Cannot load the music settings.": "음악 설정을 불러올 수 없습니다.",
+  "Cannot save the music settings.": "음악 설정을 저장할 수 없습니다."
+}

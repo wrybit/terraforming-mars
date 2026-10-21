@@ -1,0 +1,304 @@
+// Background music: waveform (MusicWaveform.vue), card under the setup menu (MusicPlayerCard.vue),
+// admin page (AdminMusic.vue). Accent = the action colour, held in a custom property: the theme recolouring
+// (src/tools/themeColors.ts) catches it there in every use (colour, fill, gradients of the range inputs).
+
+@music-bar: rgba(255, 255, 255, 0.28);
+@music-control: 30px;
+@music-thumb: 14px;
+
+.music-waveform,
+.music-player,
+.admin-music {
+  --music-accent: @bg_action;
+}
+
+.music-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.music-waveform {
+  display: block;
+  height: 36px;
+  cursor: pointer;
+  border-radius: 6px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+}
+
+.music-waveform__bar {
+  fill: @music-bar;
+  transition: fill 0.15s;
+
+  &--played {
+    fill: var(--music-accent);
+  }
+}
+
+.music-waveform:hover .music-waveform__bar:not(.music-waveform__bar--played) {
+  fill: rgba(255, 255, 255, 0.42);
+}
+
+// Round buttons of both players
+.music-control() {
+  width: @music-control;
+  height: @music-control;
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .music-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+// --- Card under the setup menu ---
+
+.music-player {
+  gap: 10px;
+}
+
+.music-player__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.music-player__note {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--music-accent);
+}
+
+.music-player__meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.music-player__title {
+  overflow: hidden;
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.music-player__credit {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.music-player__controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.music-player__button {
+  .music-control();
+}
+
+.music-player__volume {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px; // volume is its own group: more space than between the two buttons
+  color: rgba(255, 255, 255, 0.7);
+
+  input {
+    --music-volume: 35%;
+    flex: 1;
+    min-width: 0;
+    height: @music-thumb;
+    margin: 0;
+    background: transparent;
+    appearance: none;
+    cursor: pointer;
+
+    &::-webkit-slider-runnable-track {
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(to right, var(--music-accent) var(--music-volume), rgba(255, 255, 255, 0.18) var(--music-volume));
+    }
+
+    &::-webkit-slider-thumb {
+      width: @music-thumb;
+      height: @music-thumb;
+      margin-top: ((4px - @music-thumb) / 2);
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: var(--music-accent);
+      appearance: none;
+    }
+
+    &::-moz-range-track {
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    &::-moz-range-progress {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--music-accent);
+    }
+
+    &::-moz-range-thumb {
+      width: (@music-thumb - 4px);
+      height: (@music-thumb - 4px);
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: var(--music-accent);
+    }
+  }
+}
+
+// --- Admin page ---
+
+.admin-music__count {
+  margin-left: auto;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.admin-music__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 18px; // between the groups: more than between the tracks
+}
+
+.admin-music__group-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  h3 {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+.admin-music__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-music__track {
+  display: grid;
+  grid-template-columns: @music-control minmax(200px, 340px) minmax(0, 1fr) 84px auto;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  transition: opacity 0.2s;
+
+  &--off {
+    opacity: 0.5;
+  }
+}
+
+.admin-music__play {
+  .music-control();
+}
+
+.admin-music__meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-music__title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.admin-music__credit {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+
+  a {
+    color: inherit;
+  }
+}
+
+.admin-music__time {
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+// Narrow: title and switch on top, waveform and time below over the full width
+.admin-music-stacked() {
+  grid-template-columns: @music-control minmax(0, 1fr) auto;
+  grid-template-areas: 'play meta switch' 'wave wave time';
+
+  .admin-music__play { grid-area: play; }
+  .admin-music__meta { grid-area: meta; }
+  .admin-music__switch { grid-area: switch; }
+  .admin-music__wave { grid-area: wave; }
+  .admin-music__time { grid-area: time; }
+}
+
+html.tm-mobile .admin-music__track {
+  .admin-music-stacked();
+}
+
+@media (max-width: 760px) {
+  .admin-music__track {
+    .admin-music-stacked();
+  }
+}

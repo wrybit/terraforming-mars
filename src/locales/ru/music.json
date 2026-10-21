@@ -1,0 +1,13 @@
+{
+  "Music": "Музыка",
+  "Background music": "Фоновая музыка",
+  "Pause": "Пауза",
+  "Modern": "Современная",
+  "Stop music": "Остановить музыку",
+  "Play music": "Включить музыку",
+  "Next track": "Следующий трек",
+  "Volume": "Громкость",
+  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "При открытии партии запускается один из активных треков её темы. Щёлкните по волне, чтобы перейти.",
+  "Cannot load the music settings.": "Не удалось загрузить настройки музыки.",
+  "Cannot save the music settings.": "Не удалось сохранить настройки музыки."
+}

@@ -1,0 +1,12 @@
+{
+  "Music": "Zene",
+  "Background music": "Háttérzene",
+  "Pause": "Szünet",
+  "Stop music": "Zene leállítása",
+  "Play music": "Zene lejátszása",
+  "Next track": "Következő szám",
+  "Volume": "Hangerő",
+  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Egy játék megnyitásakor elindul a témája egyik aktív száma. Kattints a hullámformára az ugráshoz.",
+  "Cannot load the music settings.": "A zenebeállítások nem tölthetők be.",
+  "Cannot save the music settings.": "A zenebeállítások nem menthetők."
+}

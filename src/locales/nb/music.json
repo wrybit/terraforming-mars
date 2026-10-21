@@ -1,0 +1,12 @@
+{
+  "Music": "Musikk",
+  "Background music": "Bakgrunnsmusikk",
+  "Modern": "Moderne",
+  "Stop music": "Stopp musikk",
+  "Play music": "Spill musikk",
+  "Next track": "Neste spor",
+  "Volume": "Volum",
+  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Når et spill åpnes, starter et av de aktive sporene i temaet. Klikk på bølgeformen for å hoppe.",
+  "Cannot load the music settings.": "Kan ikke laste musikkinnstillingene.",
+  "Cannot save the music settings.": "Kan ikke lagre musikkinnstillingene."
+}

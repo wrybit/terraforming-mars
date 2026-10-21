@@ -86,6 +86,9 @@
           </div>
           </div>
 
+          <!-- Background music of the game (gameMusic.ts): own card under the settings box, only in a game whose theme has tracks (also the mobile view, which has no context) -->
+          <MusicPlayerCard v-if="musicAvailable"/>
+
           <!-- Navigation box: the main pages of the start page (siteLinks.ts), always in a new tab so a running game stays open;
                after the admin login also the admin area -->
           <nav v-if="navigationLinks.length > 0" class="game-menu-panel game-menu-items" role="menu">
@@ -125,6 +128,8 @@
 
 <script setup lang="ts">
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
+import MusicPlayerCard from '@/client/components/music/MusicPlayerCard.vue';
+import {musicAvailable} from '@/client/music/gameMusic';
 import {hotkeyHelpOpen} from '@/client/hotkeys/hotkeyHelpState';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
 import {computed, defineAsyncComponent, inject, onBeforeUnmount, onMounted, ref} from 'vue';
