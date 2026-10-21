@@ -116,6 +116,38 @@ export const MUSIC_TRACKS: ReadonlyArray<MusicTrack> = [
     id: 'sirens-in-darkness', title: 'Sirens in Darkness', author: 'cynicmusic', license: 'CC0',
     source: 'https://opengameart.org/content/sirens-in-darkness', download: FILES + '012_Sirens_in_Darkness.mp3', theme: 'dune', group: 'modern',
   },
+  {
+    id: 'curse-of-the-scarab', title: 'Curse of the Scarab', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1600014', download: INCOMPETECH + 'mp3-royaltyfree/Curse%20of%20the%20Scarab.mp3', theme: 'dune', group: 'modern',
+  },
+  {
+    id: 'halls-of-the-undead', title: 'Halls of the Undead', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1100355', download: INCOMPETECH + 'mp3-royaltyfree/Halls%20of%20the%20Undead.mp3', theme: 'dune', group: 'modern',
+  },
+  {
+    id: 'controlled-chaos', title: 'Controlled Chaos', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1200059', download: INCOMPETECH + 'mp3-royaltyfree/Controlled%20Chaos.mp3', theme: 'dune', group: 'modern',
+  },
+  {
+    id: 'inner-sanctum', title: 'Inner Sanctum', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1100196', download: INCOMPETECH + 'mp3-royaltyfree/Inner%20Sanctum.mp3', theme: 'dune', group: 'modern',
+  },
+  {
+    id: 'thunder-dreams', title: 'Thunder Dreams', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1200063', download: INCOMPETECH + 'mp3-royaltyfree/Thunder%20Dreams.mp3', theme: 'dune', group: 'modern',
+  },
+  {
+    id: 'mystic-force', title: 'Mystic Force', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1500060', download: INCOMPETECH + 'mp3-royaltyfree/Mystic%20Force.mp3', theme: 'dune', group: 'modern',
+  },
+  {
+    id: 'grey-land', title: 'Grey Land', author: 'Alexandr Zhelanov', license: 'CC BY 3.0',
+    source: 'https://opengameart.org/content/post-apocalypse-more-music-inside', download: FILES + 'Grey%20land.mp3', theme: 'dune', group: 'modern',
+  },
+  {
+    id: 'metal-echoes', title: 'Metal Echos', author: 'Alexandr Zhelanov', license: 'CC BY 3.0',
+    source: 'https://opengameart.org/content/north-wind-more-music-inside', download: FILES + '11.Metal%20Echos.mp3', theme: 'dune', group: 'modern',
+  },
 ];
 
 /** Address of a track's audio file */
