@@ -102,25 +102,11 @@ html.tm-mobile .devtools-player {
   border-radius: 50%;
 }
 
+// Search slot, both buttons stacked below it: the long label ("Ins Spiel (ohne Wirkung)") fits on one line
 .devtools-card-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr);
   gap: @devtools-gap-inside;
-}
-
-html.tm-mobile .devtools-card-row {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-
-  > .devtools-input {
-    grid-column: 1 / -1;
-  }
-
-  // Long labels ("Ins Spiel (ohne Wirkung)") wrap instead of running out of the half-width button
-  > button {
-    min-width: 0;
-    white-space: normal;
-    line-height: 1.2;
-  }
 }
 
 .devtools-trigger-groups {

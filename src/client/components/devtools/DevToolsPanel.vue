@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <!-- Box 2: one player, chosen at the top; values | tags | questions side by side, the card below -->
+    <!-- Box 2: one player, chosen at the top; values and card | tags | questions side by side -->
     <div class="devtools__box devtools__group devtools__group--player">
       <!-- One player for everything below: values, cards and the questions asked right now -->
       <div class="devtools-players" role="radiogroup" :aria-label="$t('Player')">
@@ -79,6 +79,16 @@
               <input type="number" class="devtools-input" v-model.number="production[unit.key]" @input="scheduleResources">
             </template>
           </div>
+
+          <h4 class="devtools__group-title">{{ $t('Card') }}</h4>
+          <div class="devtools-card-row">
+            <input class="devtools-input" :list="listId" v-model="cardSearch" :placeholder="$t('Search project card')">
+            <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('hand')">{{ $t('Into the hand') }}</button>
+            <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('tableau')">{{ $t('Into play (without effect)') }}</button>
+          </div>
+          <datalist :id="listId">
+            <option v-for="card in cardOptions" :key="card.name" :value="card.label"></option>
+          </datalist>
         </div>
 
         <div class="devtools__group">
@@ -110,16 +120,6 @@
           </div>
         </div>
       </div>
-
-      <h4 class="devtools__group-title">{{ $t('Card') }}</h4>
-      <div class="devtools-card-row">
-        <input class="devtools-input" :list="listId" v-model="cardSearch" :placeholder="$t('Search project card')">
-        <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('hand')">{{ $t('Into the hand') }}</button>
-        <button type="button" class="btn devtools-button" :disabled="chosenCard === undefined" @click="sendCard('tableau')">{{ $t('Into play (without effect)') }}</button>
-      </div>
-      <datalist :id="listId">
-        <option v-for="card in cardOptions" :key="card.name" :value="card.label"></option>
-      </datalist>
     </div>
     <p v-if="error !== ''" class="devtools__error">{{ error }}</p>
   </section>
