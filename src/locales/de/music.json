@@ -5,11 +5,12 @@
   "Play music": "Musik abspielen",
   "Next track": "Nächster Titel",
   "Volume": "Lautstärke",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Beim Öffnen einer Partie startet einer der aktiven Titel ihres Themas. Ein Klick auf die Wellenform springt dorthin.",
   "Cannot load the music settings.": "Die Musik-Einstellungen lassen sich nicht laden.",
   "Cannot save the music settings.": "Die Musik-Einstellungen lassen sich nicht speichern.",
   "Tracks": "Titel",
   "All tracks": "Alle Titel",
   "Mute": "Stumm",
-  "Unmute": "Ton an"
+  "Unmute": "Ton an",
+  "Start track": "Startsong",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Partien starten mit dem Startsong, seine Gruppe ist für die Zuhörer voreingestellt. Ein Klick auf die Wellenform springt dorthin."
 }

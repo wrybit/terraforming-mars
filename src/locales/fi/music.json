@@ -7,11 +7,12 @@
   "Play music": "Soita musiikkia",
   "Next track": "Seuraava kappale",
   "Volume": "Äänenvoimakkuus",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Pelin avautuessa alkaa soida jokin sen teeman aktiivisista kappaleista. Napsauta aaltomuotoa hypätäksesi.",
   "Cannot load the music settings.": "Musiikkiasetuksia ei voi ladata.",
   "Cannot save the music settings.": "Musiikkiasetuksia ei voi tallentaa.",
   "Tracks": "Kappaleet",
   "All tracks": "Kaikki kappaleet",
   "Mute": "Mykistä",
-  "Unmute": "Poista mykistys"
+  "Unmute": "Poista mykistys",
+  "Start track": "Aloituskappale",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Pelit alkavat aloituskappaleella; sen ryhmä on kuuntelijoiden oletus. Napsauta aaltomuotoa hypätäksesi."
 }

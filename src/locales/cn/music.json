@@ -7,11 +7,12 @@
   "Play music": "播放音乐",
   "Next track": "下一首",
   "Volume": "音量",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "打开对局时会播放该主题的一首已启用曲目。点击波形可跳转。",
   "Cannot load the music settings.": "无法加载音乐设置。",
   "Cannot save the music settings.": "无法保存音乐设置。",
   "Tracks": "曲目",
   "All tracks": "全部曲目",
   "Mute": "静音",
-  "Unmute": "取消静音"
+  "Unmute": "取消静音",
+  "Start track": "起始曲目",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "对局以起始曲目开始；其分组是听众的默认分组。点击波形可跳转。"
 }

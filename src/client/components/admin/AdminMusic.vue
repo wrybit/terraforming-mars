@@ -7,7 +7,7 @@
           <h2 v-i18n>Background music</h2>
           <span class="admin-music__count">{{ enabledCount }} / {{ tracks.length }} <span v-i18n>active</span></span>
         </header>
-        <p class="games-overview-note" v-i18n>One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.</p>
+        <p class="games-overview-note" v-i18n>Games start with the start track; its group is the default for the listeners. Click the waveform to jump.</p>
         <p v-if="error !== ''" class="games-overview-note games-overview-note--error">{{ error }}</p>
 
         <section v-for="group in groups" :key="group.name" class="admin-music__group">
@@ -32,8 +32,12 @@
               <MusicWaveform class="admin-music__wave" :peaks="waveform(track).peaks" :duration="waveform(track).duration"
                 :progress="progressOf(track)" :label="track.title" @seek="seek(track, $event)"/>
               <span class="admin-music__time">{{ timeOf(track) }}</span>
-              <ToggleSwitch class="admin-music__switch" :modelValue="isEnabled(track.id)" :label="$t('Active')"
-                @update:modelValue="setEnabled(track.id, $event)"/>
+              <div class="admin-music__switch">
+                <!-- Start track of new games; its group is the listeners' default group -->
+                <button type="button" :class="['admin-music__start', {'admin-music__start--on': start === track.id}]"
+                  :aria-pressed="start === track.id" @click="setStart(track.id)" v-i18n>Start track</button>
+                <ToggleSwitch :modelValue="isEnabled(track.id)" :label="$t('Active')" @update:modelValue="setEnabled(track.id, $event)"/>
+              </div>
             </li>
           </ul>
         </section>
@@ -63,6 +67,7 @@ export default defineComponent({
     return {
       tracks: MUSIC_TRACKS,
       enabled: [] as Array<string>,
+      start: '',
       error: '',
       // Preview of this page only: one track at a time, separate from the music in a game
       audio: undefined as HTMLAudioElement | undefined,
@@ -82,7 +87,7 @@ export default defineComponent({
   async mounted() {
     try {
       const response = await fetch(paths.API_MUSIC, {cache: 'no-store'});
-      this.enabled = ((await response.json()) as MusicState).enabled;
+      this.apply((await response.json()) as MusicState);
     } catch {
       this.error = this.$t('Cannot load the music settings.');
     }
@@ -155,15 +160,24 @@ export default defineComponent({
       this.position = audio.currentTime;
       audio.play().catch(() => {});
     },
-    async setEnabled(id: string, enabled: boolean): Promise<void> {
-      const update: MusicSwitch = {id, enabled};
+    apply(state: MusicState): void {
+      this.enabled = state.enabled;
+      this.start = state.start;
+    },
+    setEnabled(id: string, enabled: boolean): Promise<void> {
+      return this.save({id, enabled});
+    },
+    setStart(id: string): Promise<void> {
+      return this.save({start: id});
+    },
+    async save(update: MusicSwitch): Promise<void> {
       this.error = '';
       try {
         const response = await fetch(paths.API_ADMIN_MUSIC, {method: 'POST', body: JSON.stringify(update)});
         if (!response.ok) {
           throw new Error(await response.text());
         }
-        this.enabled = ((await response.json()) as MusicState).enabled;
+        this.apply((await response.json()) as MusicState);
       } catch (error) {
         this.error = this.$t('Cannot save the music settings.') + (error instanceof Error && error.message !== '' ? ' ' + error.message : '');
       }

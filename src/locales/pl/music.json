@@ -7,11 +7,12 @@
   "Play music": "Odtwórz muzykę",
   "Next track": "Następny utwór",
   "Volume": "Głośność",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Po otwarciu gry startuje jeden z aktywnych utworów jej motywu. Kliknij wykres fali, aby przeskoczyć.",
   "Cannot load the music settings.": "Nie można wczytać ustawień muzyki.",
   "Cannot save the music settings.": "Nie można zapisać ustawień muzyki.",
   "Tracks": "Utwory",
   "All tracks": "Wszystkie utwory",
   "Mute": "Wycisz",
-  "Unmute": "Włącz dźwięk"
+  "Unmute": "Włącz dźwięk",
+  "Start track": "Utwór startowy",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Gry zaczynają się od utworu startowego; jego grupa jest domyślna dla słuchaczy. Kliknij wykres fali, aby przeskoczyć."
 }

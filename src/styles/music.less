@@ -313,6 +313,24 @@
   }
 }
 
+.admin-music__switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+// Start track: quiet pill, lit for the chosen one
+.admin-music__start {
+  .segmented-toggle-option();
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  &--on,
+  &--on:hover {
+    border-color: transparent;
+    background: var(--music-accent);
+  }
+}
+
 .admin-music__time {
   font-variant-numeric: tabular-nums;
   font-size: 12px;
@@ -323,7 +341,9 @@
 // Narrow: title and switch on top, waveform and time below over the full width
 .admin-music-stacked() {
   grid-template-columns: @music-control minmax(0, 1fr) auto;
-  grid-template-areas: 'play meta switch' 'wave wave time';
+  grid-template-areas: 'play meta meta' 'wave wave time' 'switch switch switch';
+
+  .admin-music__switch { justify-content: flex-end; }
 
   .admin-music__play { grid-area: play; }
   .admin-music__meta { grid-area: meta; }

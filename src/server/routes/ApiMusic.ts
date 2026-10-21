@@ -14,7 +14,7 @@ export class ApiMusic extends Handler {
   }
 
   public override get(_req: Request, res: Response, ctx: Context): Promise<void> {
-    const state: MusicState = {enabled: this.store.enabled()};
+    const state: MusicState = this.store.state();
     responses.writeJson(res, ctx, state);
     return Promise.resolve();
   }

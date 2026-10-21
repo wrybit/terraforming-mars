@@ -6,11 +6,12 @@
   "Play music": "Zene lejátszása",
   "Next track": "Következő szám",
   "Volume": "Hangerő",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Egy játék megnyitásakor elindul a témája egyik aktív száma. Kattints a hullámformára az ugráshoz.",
   "Cannot load the music settings.": "A zenebeállítások nem tölthetők be.",
   "Cannot save the music settings.": "A zenebeállítások nem menthetők.",
   "Tracks": "Számok",
   "All tracks": "Minden szám",
   "Mute": "Némítás",
-  "Unmute": "Némítás feloldása"
+  "Unmute": "Némítás feloldása",
+  "Start track": "Kezdő szám",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "A játékok a kezdő számmal indulnak; a csoportja az alapértelmezett a hallgatóknak. Kattints a hullámformára az ugráshoz."
 }

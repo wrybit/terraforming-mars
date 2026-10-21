@@ -7,11 +7,12 @@
   "Play music": "Включить музыку",
   "Next track": "Следующий трек",
   "Volume": "Громкость",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "При открытии партии запускается один из активных треков её темы. Щёлкните по волне, чтобы перейти.",
   "Cannot load the music settings.": "Не удалось загрузить настройки музыки.",
   "Cannot save the music settings.": "Не удалось сохранить настройки музыки.",
   "Tracks": "Треки",
   "All tracks": "Все треки",
   "Mute": "Без звука",
-  "Unmute": "Включить звук"
+  "Unmute": "Включить звук",
+  "Start track": "Стартовый трек",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Партии начинаются со стартового трека; его группа выбрана для слушателей по умолчанию. Щёлкните по волне, чтобы перейти."
 }

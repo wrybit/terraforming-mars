@@ -5,11 +5,12 @@
   "Stop music": "Arrêter la musique",
   "Play music": "Lancer la musique",
   "Next track": "Morceau suivant",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "À l'ouverture d'une partie, l'un des morceaux actifs de son thème démarre. Cliquez sur la forme d'onde pour y sauter.",
   "Cannot load the music settings.": "Impossible de charger les réglages de musique.",
   "Cannot save the music settings.": "Impossible d'enregistrer les réglages de musique.",
   "Tracks": "Morceaux",
   "All tracks": "Tous les morceaux",
   "Mute": "Couper le son",
-  "Unmute": "Rétablir le son"
+  "Unmute": "Rétablir le son",
+  "Start track": "Morceau de départ",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Les parties commencent par le morceau de départ ; son groupe est le groupe par défaut des auditeurs. Cliquez sur la forme d'onde pour y sauter."
 }

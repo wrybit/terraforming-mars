@@ -6,11 +6,12 @@
   "Stop music": "Parar música",
   "Play music": "Tocar música",
   "Next track": "Próxima faixa",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Ao abrir uma partida, uma das faixas ativas do tema começa. Clique na forma de onda para pular.",
   "Cannot load the music settings.": "Não foi possível carregar as configurações de música.",
   "Cannot save the music settings.": "Não foi possível salvar as configurações de música.",
   "Tracks": "Faixas",
   "All tracks": "Todas as faixas",
   "Mute": "Silenciar",
-  "Unmute": "Ativar som"
+  "Unmute": "Ativar som",
+  "Start track": "Faixa inicial",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "As partidas começam com a faixa inicial; o grupo dela é o padrão para os ouvintes. Clique na forma de onda para pular."
 }

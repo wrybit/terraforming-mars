@@ -7,11 +7,12 @@
   "Play music": "Reproducir música",
   "Next track": "Siguiente pista",
   "Volume": "Volumen",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Al abrir una partida suena una de las pistas activas de su tema. Haz clic en la forma de onda para saltar.",
   "Cannot load the music settings.": "No se pueden cargar los ajustes de música.",
   "Cannot save the music settings.": "No se pueden guardar los ajustes de música.",
   "Tracks": "Pistas",
   "All tracks": "Todas las pistas",
   "Mute": "Silenciar",
-  "Unmute": "Activar sonido"
+  "Unmute": "Activar sonido",
+  "Start track": "Pista inicial",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Las partidas empiezan con la pista inicial; su grupo es el predeterminado para los oyentes. Haz clic en la forma de onda para saltar."
 }

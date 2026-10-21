@@ -2,7 +2,7 @@ import {computed, reactive} from 'vue';
 import {paths} from '@/common/app/paths';
 import {Theme} from '@/common/theme/Theme';
 import {MUSIC_GROUPS, MUSIC_TRACKS, MusicGroup, MusicTrack, musicFile} from '@/common/music/musicTracks';
-import {MusicState} from '@/common/music/musicState';
+import {DEFAULT_START_TRACK, MusicState} from '@/common/music/musicState';
 import {safeLocalStorage} from '@/client/utils/SafeLocalStorage';
 
 // Background music of the game (one player for the whole app): starts when a game of a theme with tracks is
@@ -19,9 +19,8 @@ const CHOICE_KEY = 'tm-music-group';
 const MUTED_KEY = 'tm-music-muted';
 const STOPPED_KEY = 'tm-music-stopped';
 const DEFAULT_VOLUME = 0.5;
+// Group shown until the server tells the start track; then the start track's group, unless the listener chose one
 const DEFAULT_CHOICE: MusicChoice = 'modern';
-/** First track when a game is entered (if it is on and in the chosen group) */
-const START_TRACK = 'ancient-ruins';
 
 export const gameMusic = reactive({
   /** Tracks of the current game's theme that the admin left on; empty outside a game */
@@ -49,12 +48,18 @@ export const musicPlaylist = computed<Array<MusicTrack>>(() => {
 let audio: HTMLAudioElement | undefined;
 let upcoming: {track: MusicTrack, element: HTMLAudioElement} | undefined;
 let spare: HTMLAudioElement | undefined;
-let enabledIds: Promise<Array<string>> | undefined;
+let serverState: Promise<MusicState> | undefined;
+/** Track a game starts with (admin page) */
+let startTrack = DEFAULT_START_TRACK;
 let waitingForGesture = false;
 
-function readChoice(): MusicChoice {
+function storedChoice(): MusicChoice | undefined {
   const stored = safeLocalStorage.getItem(CHOICE_KEY);
-  return MUSIC_CHOICES.find((choice) => choice === stored) ?? DEFAULT_CHOICE;
+  return MUSIC_CHOICES.find((choice) => choice === stored);
+}
+
+function readChoice(): MusicChoice {
+  return storedChoice() ?? DEFAULT_CHOICE;
 }
 
 function readVolume(): number {
@@ -124,12 +129,11 @@ function prepareUpcoming(): void {
   upcoming = {track, element: player};
 }
 
-function loadEnabled(): Promise<Array<string>> {
-  enabledIds ??= fetch(paths.API_MUSIC)
-    .then((response) => response.ok ? response.json() as Promise<MusicState> : {enabled: []})
-    .then((state) => state.enabled)
-    .catch(() => []);
-  return enabledIds;
+function loadState(): Promise<MusicState> {
+  serverState ??= fetch(paths.API_MUSIC)
+    .then((response) => response.ok ? response.json() as Promise<MusicState> : {enabled: [], start: DEFAULT_START_TRACK})
+    .catch(() => ({enabled: [], start: DEFAULT_START_TRACK}));
+  return serverState;
 }
 
 // Shuffle without repeats: every track of the playlist plays once in random order, then all count as unplayed
@@ -153,7 +157,7 @@ function randomTrack(exclude?: MusicTrack): MusicTrack | undefined {
 }
 
 function firstTrack(): MusicTrack | undefined {
-  return musicPlaylist.value.find((track) => track.id === START_TRACK) ?? randomTrack();
+  return musicPlaylist.value.find((track) => track.id === startTrack) ?? randomTrack();
 }
 
 function startPlaying(): void {
@@ -203,8 +207,14 @@ export async function enterGameMusic(theme: Theme | undefined): Promise<void> {
     leaveGameMusic();
     return;
   }
-  const enabled = await loadEnabled();
-  gameMusic.available = MUSIC_TRACKS.filter((track) => track.theme === theme && enabled.includes(track.id));
+  const state = await loadState();
+  startTrack = state.start;
+  gameMusic.available = MUSIC_TRACKS.filter((track) => track.theme === theme && state.enabled.includes(track.id));
+  // Without an own choice the listener hears the group of the start track
+  const start = gameMusic.available.find((track) => track.id === startTrack);
+  if (storedChoice() === undefined && start !== undefined) {
+    gameMusic.choice = start.group;
+  }
   if (gameMusic.current !== undefined && musicPlaylist.value.includes(gameMusic.current)) {
     return;
   }

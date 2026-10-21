@@ -7,11 +7,12 @@
   "Play music": "Пусни музиката",
   "Next track": "Следваща песен",
   "Volume": "Сила на звука",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "При отваряне на игра започва една от активните песни на темата ѝ. Щракнете върху вълната, за да прескочите.",
   "Cannot load the music settings.": "Настройките за музика не могат да се заредят.",
   "Cannot save the music settings.": "Настройките за музика не могат да се запазят.",
   "Tracks": "Песни",
   "All tracks": "Всички песни",
   "Mute": "Без звук",
-  "Unmute": "Включи звука"
+  "Unmute": "Включи звука",
+  "Start track": "Начална песен",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Игрите започват с началната песен; нейната група е по подразбиране за слушателите. Щракнете върху вълната, за да прескочите."
 }

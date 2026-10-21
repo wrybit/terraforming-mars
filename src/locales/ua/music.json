@@ -7,11 +7,12 @@
   "Play music": "Увімкнути музику",
   "Next track": "Наступний трек",
   "Volume": "Гучність",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Під час відкриття партії запускається один з активних треків її теми. Клацніть по хвилі, щоб перейти.",
   "Cannot load the music settings.": "Не вдалося завантажити налаштування музики.",
   "Cannot save the music settings.": "Не вдалося зберегти налаштування музики.",
   "Tracks": "Треки",
   "All tracks": "Усі треки",
   "Mute": "Вимкнути звук",
-  "Unmute": "Увімкнути звук"
+  "Unmute": "Увімкнути звук",
+  "Start track": "Стартовий трек",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Партії починаються зі стартового треку; його група обрана для слухачів за замовчуванням. Клацніть по хвилі, щоб перейти."
 }

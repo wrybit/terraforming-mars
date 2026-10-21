@@ -8,7 +8,7 @@ import {readBody} from './readBody';
 import {MusicSettingsStore} from '../admin/musicSettingsStore';
 import {MusicState, MusicSwitch} from '../../common/music/musicState';
 
-/** Admin page "Music": switches one background track on or off (takes effect at once). */
+/** Admin page "Music": switches one background track on or off, or chooses the start track (takes effect at once). */
 export class ApiAdminMusic extends Handler {
   public static readonly INSTANCE = new ApiAdminMusic();
   constructor(private readonly store: MusicSettingsStore = MusicSettingsStore.getInstance()) {
@@ -22,14 +22,20 @@ export class ApiAdminMusic extends Handler {
     } catch {
       throw RouteError.badRequest('invalid music switch');
     }
-    if (typeof update?.id !== 'string' || typeof update?.enabled !== 'boolean') {
+    if (typeof update !== 'object' || update === null) {
       throw RouteError.badRequest('invalid music switch');
     }
-    const enabled = this.store.setEnabled(update.id, update.enabled);
-    if (enabled === undefined) {
-      throw RouteError.badRequest('unknown track ' + update.id);
+    let state: MusicState | undefined;
+    if ('start' in update && typeof update.start === 'string') {
+      state = this.store.setStart(update.start);
+    } else if ('id' in update && typeof update.id === 'string' && typeof update.enabled === 'boolean') {
+      state = this.store.setEnabled(update.id, update.enabled);
+    } else {
+      throw RouteError.badRequest('invalid music switch');
     }
-    const state: MusicState = {enabled};
+    if (state === undefined) {
+      throw RouteError.badRequest('unknown track');
+    }
     responses.writeJson(res, ctx, state);
   }
 }

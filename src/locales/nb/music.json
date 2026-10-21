@@ -6,11 +6,12 @@
   "Play music": "Spill musikk",
   "Next track": "Neste spor",
   "Volume": "Volum",
-  "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Når et spill åpnes, starter et av de aktive sporene i temaet. Klikk på bølgeformen for å hoppe.",
   "Cannot load the music settings.": "Kan ikke laste musikkinnstillingene.",
   "Cannot save the music settings.": "Kan ikke lagre musikkinnstillingene.",
   "Tracks": "Spor",
   "All tracks": "Alle spor",
   "Mute": "Demp",
-  "Unmute": "Slå på lyd"
+  "Unmute": "Slå på lyd",
+  "Start track": "Startspor",
+  "Games start with the start track; its group is the default for the listeners. Click the waveform to jump.": "Spill starter med startsporet; gruppen er standard for lytterne. Klikk på bølgeformen for å hoppe."
 }
