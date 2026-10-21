@@ -101,7 +101,8 @@ html.theme-dune .background-color-prelude {
 
 /* Requirement chip (variant A of the requirement study, Jens 19 Oct 2026): the whole chip in sun yellow with dark
    text (minimum; green looked as if already reached, Jens 20 Oct 2026, variant B) or rust red (maximum), never wrapping: symbols, then an arrow in front of the value, then a MIN or MAX label.
-   The chip is lower than the symbols, so every symbol sticks out above and below by the same amount. */
+   The chip is as tall as its symbols plus 3 px, so no symbol sticks out (Jens 21 Oct 2026; before, the symbols stuck
+   out above and below and looked cut off). */
 html.theme-dune .card-requirements {
   flex: none;
   align-self: center;
@@ -109,14 +110,14 @@ html.theme-dune .card-requirements {
   width: auto;
   max-width: none;
   box-sizing: border-box;
-  height: 24px;
-  margin-top: 6px;
-  margin-bottom: 6px;
+  height: 40px;
+  margin-top: 4px;
+  margin-bottom: 4px;
   line-height: normal;
-  padding: 0 4px 0 2px;
+  padding: 0 8px 0 5px;
   white-space: nowrap;
   border: 0;
-  border-radius: 12px;
+  border-radius: 20px;
   background: linear-gradient(#f6d368, #d9a127);
   box-shadow: 0 2px 0 rgb(0 0 0 / 25%), inset 0 1px 0 rgb(255 255 255 / 30%);
   color: #3b2408;
@@ -132,17 +133,15 @@ html.theme-dune .card-requirements .card-requirement .card-item-container {
   flex-wrap: nowrap;
   align-items: center;
   gap: 3px;
-  height: 24px;
+  height: 40px;
   margin: 0 1px;
   font: 700 15px Ubuntu, sans-serif;
   white-space: nowrap;
 }
 
-/* Symbols first and a little larger than the chip, sticking out evenly; then the arrow and the value */
+/* Symbols first, then the arrow and the value */
 html.theme-dune .card-requirements .card-item-container > div {
   order: -1;
-  margin-top: -5px;
-  margin-bottom: -5px;
 }
 
 html.theme-dune .card-requirements .card-item-container::before {
@@ -651,8 +650,9 @@ html.theme-dune .card-scrollbar-dragging .card-scrollbar-thumb {
 }
 
 /* Even gaps between icons (Jens 21 Oct 2026): the boxes of the Mars sprites differ in width and the Dune pictures fill
-   them differently, so each box is as wide as its picture, the picture scaled to the height, with equal margins */
-html.theme-dune .card-container .card-content :is(.card-global-requirement, .card-tile.card-tr) {
+   them differently, so each box is as wide as its picture, the picture scaled to the height, with equal margins.
+   Only in the icon rows: the requirement plate and the victory point tab have their own smaller sizes. */
+html.theme-dune .card-container .card-content .card-rows :is(.card-global-requirement, .card-tile.card-tr) {
   height: 44px !important;
   margin: 0 5px !important;
   background-position: center !important;
@@ -660,20 +660,20 @@ html.theme-dune .card-container .card-content :is(.card-global-requirement, .car
   background-size: auto 100% !important;
 }
 
-html.theme-dune .card-container .card-content :is(.card-ocean-global-requirement, .card-venus-global-requirement) {
+html.theme-dune .card-container .card-content .card-rows :is(.card-ocean-global-requirement, .card-venus-global-requirement) {
   width: 40px !important;
 }
 
-html.theme-dune .card-container .card-content :is(.card-oxygen-global-requirement, .card-temperature-global-requirement) {
+html.theme-dune .card-container .card-content .card-rows :is(.card-oxygen-global-requirement, .card-temperature-global-requirement) {
   width: 22px !important;
   background-size: auto 50px !important;
 }
 
-html.theme-dune .card-container .card-content .card-tile.card-tr {
+html.theme-dune .card-container .card-content .card-rows .card-tile.card-tr {
   width: 44px !important;
 }
 
-html.theme-dune .card-container .card-content .card-resource.card-card {
+html.theme-dune .card-container .card-content .card-rows .card-resource.card-card {
   width: 30px !important;
   margin: 0 5px !important;
   background-position: center !important;
@@ -754,6 +754,7 @@ html.theme-dune .card-container .card-content .card-project-requirements {
 }
 
 html.theme-dune .card-container .card-content .card-project-requirements .card-requirements {
+  height: auto;
   width: auto !important;
   max-width: none !important;
   padding: 3px 12px !important;
@@ -897,7 +898,7 @@ html.theme-dune .card-container .card-points-normal > div {
   font-size: 17px;
 }
 
-html.theme-dune .card-container .card-points :is([class*="card-resource"], [class*="card-tile"], [class*="card-tag"]) {
+html.theme-dune .card-container .card-points :is([class*="card-resource"], [class*="card-tile"], [class*="card-tag"], .card-global-requirement) {
   zoom: 0.8;
 }
 
