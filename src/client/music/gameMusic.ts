@@ -21,7 +21,7 @@ const STOPPED_KEY = 'tm-music-stopped';
 const DEFAULT_VOLUME = 0.5;
 const DEFAULT_CHOICE: MusicChoice = 'modern';
 /** First track when a game is entered (if it is on and in the chosen group) */
-const START_TRACK = 'spacial-harvest';
+const START_TRACK = 'ancient-ruins';
 
 export const gameMusic = reactive({
   /** Tracks of the current game's theme that the admin left on; empty outside a game */
