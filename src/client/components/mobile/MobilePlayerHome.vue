@@ -38,8 +38,8 @@
         </div>
         <!-- DevTools on the phone: same tab pair as on desktop, but above the hand (there is no action tab bar here) -->
         <div v-if="devTools.enabled" class="or-tabs mb-devtools-tabs" role="tablist">
-          <HandCardsTab :count="cardsInHandCount" :active="!devTools.open" @select="closeDevTools"/>
           <DevToolsTab/>
+          <HandCardsTab :count="cardsInHandCount" :active="!devTools.open" @select="closeDevTools"/>
         </div>
         <div :class="{'or-tab-panel--devtools': devTools.enabled && devTools.open}">
           <DevToolsOverlay :playerView="playerView"/>

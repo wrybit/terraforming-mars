@@ -81,8 +81,8 @@
                Otherwise they are the first tab there above the input (isHandInInputTabs), and this block is dropped. -->
           <div class="player_home_block player_home_block--hand" v-if="hasHandPanelContent && !isHandInInputTabs(playerView)" id="shortkey-hand">
             <div class="or-tabs" role="tablist">
-              <HandCardsTab :count="cardsInHandCount" :active="!devTools.open" @select="closeDevTools"/>
               <DevToolsTab/>
+              <HandCardsTab :count="cardsInHandCount" :active="!devTools.open" @select="closeDevTools"/>
               <WaitingForPlayersTab :playerView="playerView"/>
             </div>
             <div v-docked-tab :class="['or-tab-panel', 'or-tab-panel--view', {'or-tab-panel--devtools': devTools.open}]" role="tabpanel">

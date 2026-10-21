@@ -4,6 +4,7 @@
        The action menu (OrOptions) builds its own tabs, see orOptionsLayout.ts. -->
   <div class="wf-options wf-options--tabs">
     <div class="or-tabs" role="tablist">
+      <DevToolsTab/>
       <HandCardsTab :count="handCards.length + dealtCount" :active="handTabActive && !devToolsState.open" @select="handTabActive = true; closeDevTools()"/>
       <button type="button" role="tab"
         :title="$t(fullTabTitle(tabSource.title))"
@@ -13,7 +14,6 @@
         <span class="or-tab-title">{{ $t(inputTabLabel(tabSource)) }}</span>
         <span v-if="count !== undefined" class="or-tab-count">{{ count }}</span>
       </button>
-      <DevToolsTab/>
       <!-- Choice can still be changed (e.g. draft) while others are choosing: same red status tab as without an input -->
       <WaitingForPlayersTab v-if="playerinput.optional === true" :playerView="playerView"/>
     </div>

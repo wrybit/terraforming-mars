@@ -8,9 +8,9 @@
 
     <!-- Action menu: tabs with short label and count of available entries; empty tabs are dimmed but clickable -->
     <div v-if="asTabs" v-tab-icon-labels class="or-tabs" role="tablist" data-hotkey-tabs>
-      <!-- Hand cards always as the first tab (view only); the first real action stays preselected -->
+      <!-- DevTools (admins) at the very front, then the hand cards (view only); the first real action stays preselected -->
+      <DevToolsTab/>
       <HandCardsTab :count="handCards.length" :active="handTabActive && !devTools.open" @select="selectHandTab"/>
-      <DevToolsTab v-if="devToolsAfterIndex === undefined"/>
       <!-- Display order via tabDisplayOrder (pass/end at the end); idx stays the index in displayedOptions.
            The CEO action has no tab of its own: it is part of the "Actions" tab (ceoActions.ts) -->
       <!-- A tab only on request (bazaar purchase, onRequestTabs.ts) stays in the DOM – the phone selects it by its
@@ -41,8 +41,6 @@
         <HotkeyKeys v-if="tabHotkey(tabTitle(idx), displayedOptions[idx]) !== undefined" :action="tabHotkey(tabTitle(idx), displayedOptions[idx])"/>
         <span v-if="tabCount(idx) !== undefined" class="or-tab-count">{{ tabCount(idx) }}</span>
       </button>
-      <!-- DevTools (admins, tmDev.on()): after the last action tab, before the tabs at the right end -->
-      <DevToolsTab v-if="idx === devToolsAfterIndex"/>
       </template>
     </div>
 
@@ -358,11 +356,6 @@ export default defineComponent({
   computed: {
     devTools(): typeof devToolsState {
       return devToolsState;
-    },
-    // Last visible action tab that is not one of the tabs at the right end: the DevTools tab follows it
-    devToolsAfterIndex(): number | undefined {
-      const indexes = this.visibleTabOrder.filter((idx: number) => this.tabShown(idx) && !isEndTab(this.tabTitle(idx)));
-      return indexes.length > 0 ? indexes[indexes.length - 1] : undefined;
     },
     // Time of the last request to open a tab from outside the menu (actionTabRequest.ts, e.g. a Dune module tab)
     tabRequestAt(): number {

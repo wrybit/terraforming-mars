@@ -129,22 +129,23 @@ html.tm-mobile .devtools-player {
   gap: @devtools-gap-inside;
 }
 
-// DevTools tab in black: a tool, not part of the game (Jens, 21 Oct 2026)
+// DevTools tab in dark violet, first in the tab bar: a tool, not part of the game (Jens, 21 Oct 2026).
+// Violet above hue 262 stays out of the Dune recolouring (src/themes/dune/colors.json), so it looks the same there.
 .or-tab.or-tab--devtools,
 .or-tab.or-tab--devtools.or-tab--active {
-  background: #050506;
-  border-color: #000;
-  color: #f2f2f2;
+  background: #2c1846;
+  border-color: #452a68;
+  color: #f2ecfa;
 }
 
 .or-tab.or-tab--devtools:not(.or-tab--active) {
   opacity: 0.85;
 }
 
-// The panel below the black tab is black too; doubled class against the tones of the action tabs (or_tab_tones.less)
+// The panel below the tab in the same violet, darker; doubled class against the tones of the action tabs (or_tab_tones.less)
 html .or-tab-panel.or-tab-panel--devtools.or-tab-panel--devtools {
-  border-color: #000;
-  background: #0b0b0d;
+  border-color: #452a68;
+  background: #1a0f2a;
 }
 
 .devtools__title {
