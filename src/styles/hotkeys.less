@@ -116,9 +116,14 @@ html.tm-hotkeys .select-space-zoom-button:has(> .hotkey-keys) {
   }
 }
 
-// Setup menu button: cap after "Setup"
+// Setup menu button: cap after "Setup", close to the word and to the right edge – the cap sits as far
+// from the right border as from the top and bottom, so the button doesn't look padded on one side
 .game-menu-button > .hotkey-keys {
-  margin-left: 6px;
+  margin-left: -2px;
+}
+
+html.tm-hotkeys .game-menu-button:has(> .hotkey-keys) {
+  padding-right: 2px;
 }
 
 // Yes/no of the space confirmation: text and cap side by side
