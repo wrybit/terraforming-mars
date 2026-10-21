@@ -10,20 +10,52 @@
   pointer-events: none;
 }
 
-// Kanly: the war field of this generation – the war field marker (red disc, crossed crysknives, as in the mockup)
-// centered on the space like the worm marker
+// Kanly: the war field of this generation (Jens 21 Oct 2026) – the war field marker (red disc, crossed crysknives,
+// graphics/war-field.svg) large in the upper half of the space, with a shadow on the tile, under the owner's cube
+// (z-index 3); the whole hex outlined in red on its inside, pulsing softly
 .board-space-war-field {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 36%;
   transform: translate(-50%, -50%);
-  z-index: 4;
-  width: 42%;
-  height: 42%;
-  border-radius: 50%;
+  z-index: 2;
+  width: 62%;
+  height: 62%;
   background: url(./assets/themes/dune/graphics/war-field.svg) center / contain no-repeat;
-  box-shadow: 0 0 8px 2px rgba(140, 53, 34, 0.9);
+  filter: drop-shadow(0 3px 3px rgba(20, 8, 2, 0.65));
   pointer-events: none;
+}
+
+// The outline follows the hex: an SVG polygon stretched to the space, its stroke drawn inside the edge
+@war-field-hex: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='50,0 100,25 100,75 50,100 0,75 0,25' fill='none' stroke='%23c0301c' stroke-width='9' vector-effect='non-scaling-stroke' stroke-linejoin='round'/%3E%3C/svg%3E";
+@war-field-glow: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='50,0 100,25 100,75 50,100 0,75 0,25' fill='none' stroke='%23ff5a3c' stroke-width='18' vector-effect='non-scaling-stroke' stroke-linejoin='round'/%3E%3C/svg%3E";
+
+.board-space--war-field::before,
+.board-space--war-field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: url(@war-field-hex) center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.board-space--war-field::after {
+  background-image: url(@war-field-glow);
+  opacity: 0.15;
+  animation: war-field-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes war-field-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .board-space--war-field::after {
+    animation: none;
+  }
 }
 
 // Choosing the worm's distance (WormMoveInput.vue): a piece of Arrakis, the terrain as coloured hexes under the tiles
