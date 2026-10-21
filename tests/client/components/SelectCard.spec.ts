@@ -103,7 +103,8 @@ describe('SelectCard', () => {
 
   it('offers select all when every card may be chosen, and selects them all', async () => {
     const wrapper = mountSelection(3, []);
-    const selectAll = wrapper.findComponent('.select-card-toolbar__select-all' as any);
+    // @vue/test-utils 2.5 types a selector lookup as DOMWrapper; the toolbar button is a component
+    const selectAll = wrapper.findComponent('.select-card-toolbar__select-all' as any) as any;
     expect(selectAll.exists()).is.true;
     selectAll.vm.$emit('click');
     await wrapper.vm.$nextTick();

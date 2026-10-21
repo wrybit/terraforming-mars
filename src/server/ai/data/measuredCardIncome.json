@@ -1,0 +1,476 @@
+{
+ "Ants": {
+  "action": 0.05
+ },
+ "Aquifer Pumping": {
+  "action": 12.45
+ },
+ "Arctic Algae": {
+  "effect": 0.43
+ },
+ "Birds": {
+  "action": 6.56
+ },
+ "Decomposers": {
+  "effect": 2.37
+ },
+ "Ecological Zone": {
+  "effect": -2
+ },
+ "Equatorial Magnetizer": {
+  "action": 4.4
+ },
+ "Extreme-Cold Fungus": {
+  "action": 1.13
+ },
+ "Fish": {
+  "action": 6.78
+ },
+ "GHG Producing Bacteria": {
+  "action": 14.72
+ },
+ "Herbivores": {
+  "effect": 1.45
+ },
+ "Immigrant City": {
+  "effect": 2.78
+ },
+ "Ironworks": {
+  "action": 12.28
+ },
+ "Livestock": {
+  "action": 7.11
+ },
+ "Martian Rails": {
+  "action": 0
+ },
+ "Nitrite Reducing Bacteria": {
+  "action": 13.27
+ },
+ "Optimal Aerobraking": {
+  "effect": 1.07
+ },
+ "Ore Processor": {
+  "action": 12.26
+ },
+ "Pets": {
+  "effect": 2.06
+ },
+ "Predators": {
+  "action": 0
+ },
+ "Regolith Eaters": {
+  "action": 12.3
+ },
+ "Research Outpost": {
+  "effect": 3.17
+ },
+ "Rover Construction": {
+  "effect": 0.79
+ },
+ "Search For Life": {
+  "action": 0
+ },
+ "Shuttles": {
+  "effect": 1.6
+ },
+ "Small Animals": {
+  "action": 2.89
+ },
+ "Space Mirrors": {
+  "action": 4.29
+ },
+ "Steelworks": {
+  "action": 12.19
+ },
+ "Symbiotic Fungus": {
+  "action": 0.16
+ },
+ "Underground Detonations": {
+  "action": 12.17
+ },
+ "Water Import From Europa": {
+  "action": 12.18
+ },
+ "Water Splitting Plant": {
+  "action": 10.99
+ },
+ "CrediCor": {
+  "effect": 0.81
+ },
+ "Interplanetary Cinematics": {
+  "effect": 0.71
+ },
+ "Mining Guild": {
+  "effect": 2.25
+ },
+ "Tharsis Republic": {
+  "effect": 1.66
+ },
+ "ThorGate": {
+  "effect": 1.21
+ },
+ "United Nations Mars Initiative": {
+  "action": 13.18
+ },
+ "AI Central": {
+  "action": 7.58
+ },
+ "Anti-Gravity Technology": {
+  "effect": 4.3
+ },
+ "Business Network": {
+  "action": 0
+ },
+ "Caretaker Contract": {
+  "action": 7.71
+ },
+ "Development Center": {
+  "action": 2.7
+ },
+ "Earth Catapult": {
+  "effect": 4.24
+ },
+ "Earth Office": {
+  "effect": 2.06
+ },
+ "Electro Catapult": {
+  "action": 4.31
+ },
+ "Industrial Center": {
+  "action": 10.89
+ },
+ "Inventors' Guild": {
+  "action": 0
+ },
+ "Mars University": {
+  "effect": 1.35
+ },
+ "Mass Converter": {
+  "effect": 2.63
+ },
+ "Media Group": {
+  "effect": 1.55
+ },
+ "Olympus Conference": {
+  "effect": 2.92
+ },
+ "Physics Complex": {
+  "action": 9.13
+ },
+ "Power Infrastructure": {
+  "action": 0.17
+ },
+ "Quantum Extractor": {
+  "effect": 1.71
+ },
+ "Restricted Area": {
+  "action": 1.05
+ },
+ "Security Fleet": {
+  "action": 5.31
+ },
+ "Space Elevator": {
+  "action": 2.2
+ },
+ "Space Station": {
+  "effect": 1.97
+ },
+ "Standard Technology": {
+  "effect": 0.63
+ },
+ "Tardigrades": {
+  "action": 1.85
+ },
+ "Viral Enhancers": {
+  "effect": 1.73
+ },
+ "Saturn Systems": {
+  "effect": 2.54
+ },
+ "Teractor": {
+  "effect": 1
+ },
+ "Penguins": {
+  "action": 6.53
+ },
+ "Self-replicating Robots": {
+  "effect": 0.19,
+  "action": 0
+ },
+ "Orbital Cleanup": {
+  "action": 0.45
+ },
+ "Hi-Tech Lab": {
+  "action": 0
+ },
+ "Energy Market": {
+  "action": 0
+ },
+ "Asteroid Hollowing": {
+  "action": 11.93
+ },
+ "Asteroid Rights": {
+  "action": 3.6
+ },
+ "Comet Aiming": {
+  "action": 19.55
+ },
+ "Cutting Edge Technology": {
+  "effect": 2.31
+ },
+ "Directed Impactors": {
+  "action": 12.1
+ },
+ "Meltworks": {
+  "action": 0.84
+ },
+ "Mohole Lake": {
+  "action": 0.53
+ },
+ "Topsoil Contract": {
+  "effect": 1.13
+ },
+ "Asteroid Deflection System": {
+  "action": 0
+ },
+ "Sub-Crust Measurements": {
+  "action": 2.82
+ },
+ "Meat Industry": {
+  "effect": 0.56
+ },
+ "Advertising": {
+  "effect": 5.4
+ },
+ "Saturn Surfing": {
+  "action": 1.19
+ },
+ "Bio Printing Facility": {
+  "action": 1.64
+ },
+ "Floyd Continuum": {
+  "action": 0
+ },
+ "St. Joseph of Cupertino Mission": {
+  "action": 2.88
+ },
+ "Carbon Nanosystems": {
+  "effect": 0.98
+ },
+ "Homeostasis Bureau": {
+  "effect": 0.38
+ },
+ "Mars Nomads": {
+  "action": 2.39
+ },
+ "Neptunian Power Consultants": {
+  "effect": 1.96
+ },
+ "Red Ships": {
+  "action": 0
+ },
+ "Solar Logistics": {
+  "effect": 2.84
+ },
+ "Teslaract": {
+  "action": 13.81
+ },
+ "Directed Heat Usage": {
+  "action": 1.17
+ },
+ "Icy Impactors": {
+  "action": 19.52
+ },
+ "Hospitals": {
+  "effect": 0.33,
+  "action": 0
+ },
+ "Vermin": {
+  "effect": 0.92,
+  "action": 0.6
+ },
+ "Weather Balloons": {
+  "action": 0.01
+ },
+ "Arcadian Communities": {
+  "action": 0
+ },
+ "AstroDrill": {
+  "action": 5.54
+ },
+ "Factorum": {
+  "action": 0
+ },
+ "Pharmacy Union": {
+  "effect": 4.36
+ },
+ "Philares": {
+  "effect": 0.01
+ },
+ "Recyclon": {
+  "effect": 6.94
+ },
+ "Splice": {
+  "effect": 1.16
+ },
+ "Tycho Magnetics": {
+  "action": 0
+ },
+ "Kuiper Cooperative": {
+  "action": 1.61
+ },
+ "PolderTECH Dutch": {
+  "effect": 0.62
+ },
+ "Albedo Plants": {
+  "effect": 1.62
+ },
+ "Aerial Mappers": {
+  "action": 2.34
+ },
+ "Deuterium Export": {
+  "action": 10.64
+ },
+ "Dirigibles": {
+  "action": 0.83
+ },
+ "Extractor Balloons": {
+  "action": 13.98
+ },
+ "Extremophiles": {
+  "action": 3.7
+ },
+ "Floating Habs": {
+  "action": 1.24
+ },
+ "Forced Precipitation": {
+  "action": 13.84
+ },
+ "Jet Stream Microscrappers": {
+  "action": 13.79
+ },
+ "Local Shading": {
+  "action": 10.69
+ },
+ "Maxwell Base": {
+  "action": 0.6
+ },
+ "Rotator Impacts": {
+  "action": 14.49
+ },
+ "Stratopolis": {
+  "action": 5.77
+ },
+ "Stratospheric Birds": {
+  "action": 6.95
+ },
+ "Sulphur-Eating Bacteria": {
+  "action": 0.6
+ },
+ "Thermophiles": {
+  "action": 13.83
+ },
+ "Venusian Animals": {
+  "effect": 5.47
+ },
+ "Venusian Insects": {
+  "action": 2.8
+ },
+ "Venus Magnetizer": {
+  "action": 4.2
+ },
+ "Venus Waystation": {
+  "effect": 1.18
+ },
+ "Celestic": {
+  "action": 3.41
+ },
+ "Manutech": {
+  "effect": 2.62
+ },
+ "Viron": {},
+ "Psychrophiles": {
+  "action": 0.65
+ },
+ "Cheung Shing MARS": {
+  "effect": 1.27
+ },
+ "Point Luna": {
+  "effect": 5.72
+ },
+ "Robinson Industries": {
+  "action": 0
+ },
+ "Valley Trust": {
+  "effect": 0.84
+ },
+ "Vitor": {
+  "effect": 1.38
+ },
+ "Eccentric Sponsor": {
+  "effect": 0.09
+ },
+ "Ceres Tech Market": {
+  "action": 0
+ },
+ "Cloud Tourism": {
+  "action": 3.7
+ },
+ "Floating Refinery": {
+  "action": 2.93
+ },
+ "Venus Orbital Survey": {
+  "action": 0.57
+ },
+ "Venus Shuttles": {
+  "action": 4.71
+ },
+ "Palladin Shipping": {
+  "effect": 0.54,
+  "action": 10.3
+ },
+ "Sagitta Frontier Services": {
+  "effect": 1.33
+ },
+ "EcoTec": {
+  "effect": 0.69
+ },
+ "Spire": {
+  "effect": 1.03
+ },
+ "Applied Science": {
+  "action": 1.88
+ },
+ "Board of Directors": {
+  "action": 0
+ },
+ "Floating Trade Hub": {
+  "action": 1.35
+ },
+ "Focused Organization": {
+  "action": 0
+ },
+ "Main Belt Asteroids": {
+  "effect": 0.62,
+  "action": 5.17
+ },
+ "Soil Bacteria": {
+  "effect": 1.84
+ },
+ "Space Lanes": {
+  "effect": 2.36
+ },
+ "Suitable Infrastructure": {
+  "effect": 0.48
+ },
+ "Terraforming Deal": {
+  "effect": 0.9
+ },
+ "Venus Contract": {
+  "effect": 1.24
+ },
+ "World Government Advisor": {
+  "action": 0
+ }
+}

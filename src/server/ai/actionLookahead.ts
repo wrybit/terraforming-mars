@@ -22,6 +22,7 @@ import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
 import {triggerOrderAdjustments} from './triggerOrder';
 import {playPreferences} from './bgaPolicy';
 import {handReadinessMap} from './handReadiness';
+import {handOutlookMap} from './liveOutlook';
 import {sellToAffordResponses} from './sellToAfford';
 import {lastGenerationSaleResponses} from './lastGenerationSale';
 import {isSimulating} from './simulationSandbox';
@@ -333,7 +334,8 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
   // the tableau is not wasted now.
   const baseContext = valuationContext(player.game, player);
   const context = {...baseContext, handValues: handCardValues(player), handOwner: player.id,
-    handReadiness: tuningOf(player).needsPursuit > 0 ? handReadinessMap(player, baseContext.remaining) : undefined};
+    handReadiness: tuningOf(player).needsPursuit > 0 ? handReadinessMap(player, baseContext.remaining) : undefined,
+    handOutlook: handOutlookMap(player)};
   const outOfTime = () => performance.now() - start > budget;
 
   const tried: Array<{candidate: Candidate, outcome: Outcome}> = [];

@@ -87,7 +87,10 @@ function outlookOf(descriptor: CardRequirementDescriptor, player: IPlayer, card:
     const fromHand = player.cardsInHand.filter((handCard) => handCard !== card && handCard.tags.includes(tag)).length;
     const perGeneration = tuningOf(player).tagRateModel > 0 ? tagsPerGeneration(tag, player) : TAGS_PER_GENERATION;
     const expected = fromHand * 0.7 + remaining * perGeneration;
-    return missing <= expected ? Math.max(0.15, 0.85 - 0.15 * missing) : 0.05;
+    // Outlook per missing tag (aiTuning.ts tagOutlookBase/-Step): in self-play the AI met 87 % of the tag requirements
+    // of the cards it bought, so the default was pessimistic and kept it from buying cards with distant requirements.
+    const tuning = tuningOf(player);
+    return missing <= expected ? Math.max(0.15, tuning.tagOutlookBase - tuning.tagOutlookStep * missing) : 0.05;
   }
   if (descriptor.production !== undefined) {
     // Production can be bought (e.g. power plant), but it costs extra.

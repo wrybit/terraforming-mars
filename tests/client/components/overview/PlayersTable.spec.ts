@@ -5,7 +5,7 @@ import PlayersTable from '@/client/components/overview/PlayersTable.vue';
 import {Tag} from '@/common/cards/Tag';
 import {Color} from '@/common/Color';
 import {Resource} from '@/common/Resource';
-import {columnTemplate, fitToWidth, minimumWidth} from '@/client/components/overview/playersTableLayout';
+import {fitPlayersTable, lineWidth, threeLinesWidth, twoLinesWidth, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
 import {emptyTags, fakePublicPlayerModel, fakeViewModel} from '../testHelpers';
 
 function mountTable() {
@@ -24,10 +24,12 @@ function mountTable() {
   });
 }
 
-describe('PlayersTable', () => {
-  // Stored toggle state must not carry over from one test to the next
-  beforeEach(() => localStorage.removeItem('players_table_sections'));
+const TAG_COLUMNS: TagColumnGroups = [
+  [Tag.BUILDING, Tag.SPACE, Tag.SCIENCE, Tag.POWER, Tag.EARTH, Tag.JOVIAN, Tag.PLANT, Tag.MICROBE, Tag.ANIMAL, Tag.CITY],
+  [Tag.EVENT, Tag.WILD],
+];
 
+describe('PlayersTable', () => {
   it('shows only tags that at least one player has', () => {
     const table = mountTable().vm;
     expect(table.tagColumns.flat()).to.deep.eq([Tag.BUILDING, Tag.SPACE]);
@@ -39,33 +41,40 @@ describe('PlayersTable', () => {
     expect(table.productionLeadersByColor).to.deep.eq({red: [Resource.HEAT]});
   });
 
-  it('keeps score width fixed and drops hidden sections from the grid', async () => {
-    const wrapper = mountTable();
-    expect(wrapper.vm.template).to.contain('repeat(4, 40px)');
-    wrapper.vm.toggleSection('score');
-    await wrapper.vm.$nextTick();
-    expect(wrapper.vm.template).not.to.contain('repeat(4, 40px)');
-    // Card count always stays
-    expect(wrapper.vm.template.endsWith('12px 48px')).to.be.true;
+  it('keeps the classic size while the width is unknown', () => {
+    expect(fitPlayersTable(0, TAG_COLUMNS)).to.deep.eq({mode: 'line', scale: 1, showCorporation: true, extraGap: 0});
   });
 
-  it('widens a resource column for a box that needs more room', () => {
-    const all = {goods: true, tags: false, score: false};
-    const template = columnTemplate(all, [], 196, [0, 90, 0, 0, 0, 0]);
-    // 90px box plus 8px inset; the other resource columns keep the standard minimum
-    expect(template).to.contain('minmax(70px, 1fr) minmax(98px, 1fr) minmax(70px, 1fr)');
-    expect(minimumWidth(all, [], 196, [0, 90, 0, 0, 0, 0])).eq(minimumWidth(all, [], 196) + 28);
+  it('goes from one line over two and three lines to cards as the table gets narrower', () => {
+    const wide = fitPlayersTable(1800, TAG_COLUMNS);
+    expect(wide.mode).to.eq('line');
+    expect(wide.showCorporation).to.be.true;
+    // Standard width: everything in one line, the corporation gives way first
+    const standard = fitPlayersTable(1000, TAG_COLUMNS);
+    expect(standard.mode).to.eq('line');
+    expect(standard.showCorporation).to.be.false;
+    expect(fitPlayersTable(800, TAG_COLUMNS).mode).to.eq('two-lines');
+    expect(fitPlayersTable(600, TAG_COLUMNS).mode).to.eq('three-lines');
+    expect(fitPlayersTable(380, TAG_COLUMNS).mode).to.eq('cards');
   });
 
-  it('drops tags first, then scoring, when the column is too narrow', () => {
-    const all = {goods: true, tags: true, score: true};
-    const tagColumns = [[Tag.BUILDING, Tag.SPACE, Tag.SCIENCE, Tag.EARTH, Tag.PLANT], [Tag.EVENT]];
-    expect(fitToWidth(all, tagColumns, 1178).autoHidden).to.deep.eq([]);
-    expect(fitToWidth(all, tagColumns, 900).autoHidden).to.deep.eq(['tags']);
-    expect(fitToWidth(all, tagColumns, 780).autoHidden).to.deep.eq(['tags', 'score']);
-    // Most recently enabled symbols stay, scoring gives way instead
-    expect(fitToWidth(all, tagColumns, 900, 'tags').autoHidden).to.deep.eq(['score']);
-    // Unknown width (table invisible) leaves everything as is
-    expect(fitToWidth(all, tagColumns, 0).visibility).to.deep.eq(all);
+  it('never needs more width than there is', () => {
+    for (let width = 300; width <= 2000; width += 10) {
+      const fit = fitPlayersTable(width, TAG_COLUMNS);
+      const needed = fit.mode === 'line' ? lineWidth(fit.scale, TAG_COLUMNS, fit.showCorporation, false) :
+        fit.mode === 'two-lines' ? twoLinesWidth(fit.scale, TAG_COLUMNS) :
+          fit.mode === 'three-lines' ? threeLinesWidth(fit.scale, TAG_COLUMNS) : 0;
+      expect(needed, `width ${width} (${fit.mode})`).to.be.at.most(width);
+    }
+  });
+
+  it('grows the numbers before it shows the corporation, and the gaps last', () => {
+    const atFullSize = fitPlayersTable(1600, TAG_COLUMNS);
+    expect(atFullSize.scale).to.be.at.least(1);
+    expect(atFullSize.showCorporation).to.be.true;
+    expect(atFullSize.extraGap).to.eq(0);
+    const veryWide = fitPlayersTable(2400, TAG_COLUMNS);
+    expect(veryWide.scale).to.eq(1.25);
+    expect(veryWide.extraGap).to.be.greaterThan(0);
   });
 });

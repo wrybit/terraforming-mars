@@ -1,14 +1,9 @@
-// Player list as a table (PlayersTable.vue) – only visible in the two-column layout (player_home_columns.less).
-// Header row with icons once at the top, below it one row per player in a muted player colour:
-//   Name | Resources (stock large, production small) | Tags | Score | played cards
-// PlayersTable sets the column grid as --players-table-columns (playersTableLayout.ts).
+// Player list as a table (PlayersTable.vue): name | goods | tags | score with played cards.
+// Arrangement and size come from playersTableLayout.ts as a class (players-table--line, --two-lines,
+// --three-lines, --cards) and CSS variables (--players-table-scale, column templates, gaps).
+// Every size below is a size at scale 1 multiplied by @s, so the whole table grows and shrinks together.
 
-@players-table-row-height: 48px;
-@players-table-own-row-height: 56px;
-// Escape Velocity: third line (clock) under name and corporation
-@players-table-escape-velocity-row-height: 66px;
-@players-table-escape-velocity-own-row-height: 74px;
-@players-table-head-height: 34px;
+@s: var(--players-table-scale, 1);
 @players-table-row-gap: 4px;
 // Own row set slightly apart from the others
 @players-table-own-row-offset: 5px;
@@ -25,6 +20,9 @@
 @players-table-production-border: #9c6b3f;
 @players-table-production-leader: #8f5a2a;
 @players-table-production-leader-border: #f0b070;
+@players-table-gold: #f2b62a;
+// Left edge of the content in rows without a name column (colour bar plus room for the starting player shield)
+@players-table-inset: 20px;
 
 // Outside the two-column layout the classic bar remains
 .players-table {
@@ -41,9 +39,9 @@
 .players-table-row {
   position: relative;
   display: grid;
-  grid-template-columns: var(--players-table-columns);
   align-items: center;
-  height: @players-table-row-height;
+  column-gap: var(--players-table-section-gap);
+  min-height: calc(48px * @s);
   border-radius: @players-table-radius;
   // Blur the galaxy background behind the rows so it doesn't shine through harshly
   backdrop-filter: blur(@players-table-blur);
@@ -52,23 +50,253 @@
 .players-table-head {
   // Above the player rows, otherwise they cover the tooltips of the header icons (each row is its own layer due to blur)
   z-index: 2;
-  height: @players-table-head-height;
+  min-height: calc(34px * @s);
   background: rgba(0, 0, 0, 0.5);
 
-  // Icons scaled down (zoom, because the icons use different background sizes)
+  // Icons scaled with the table (zoom, because the sprites use different background sizes)
   .resource_icon {
-    zoom: 0.75;
+    zoom: calc(0.75 * @s);
   }
 
   .tag-count {
-    zoom: 0.6;
-  }
-
-  .tag-type-main {
-    zoom: 0.55;
+    zoom: calc(0.6 * @s);
   }
 }
 
+.players-table-menu {
+  grid-area: name;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.players-table-head-label {
+  font-size: calc(11px * @s);
+  color: #aab;
+}
+
+// ---------- Sections ----------
+.players-table-section {
+  position: relative;
+  display: grid;
+  align-items: center;
+  column-gap: var(--players-table-cell-gap);
+  min-width: 0;
+}
+
+.players-table-section--goods {
+  grid-area: goods;
+  grid-template-columns: var(--players-table-goods-columns);
+}
+
+.players-table-section--tags {
+  grid-area: tags;
+  grid-template-columns: var(--players-table-tag-columns);
+}
+
+.players-table-section--score {
+  grid-area: score;
+  grid-template-columns: var(--players-table-score-columns);
+}
+
+.players-table-identity {
+  grid-area: name;
+}
+
+.players-table-cell {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+// Icons inside the cells: only where the table has no column heads (three lines, cards)
+.players-table-cell-icon {
+  display: none !important;
+}
+
+// ---------- Arrangement: one line ----------
+.players-table--line {
+  .players-table-row {
+    grid-template-columns: var(--players-table-name-width) auto auto auto;
+    grid-template-areas: "name goods tags score";
+    justify-content: start;
+  }
+
+  // Separator between the sections: continuous across all rows (bridges the row gaps)
+  .players-table-section::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--players-table-section-gap) / -2);
+    top: -(@players-table-row-gap / 2);
+    bottom: -(@players-table-row-gap / 2);
+    width: 1px;
+    background: @players-table-divider-color;
+  }
+
+  // Sections as tall as the row content; the separator reaches through the row padding into the gap
+  .players-table-section {
+    align-self: stretch;
+  }
+
+  .players-table-row--player .players-table-section::before {
+    top: calc(-7px * @s - @players-table-row-gap / 2);
+    bottom: calc(-7px * @s - @players-table-row-gap / 2);
+  }
+
+  .players-table-head .players-table-section::before {
+    top: 0;
+    bottom: calc(-4px * @s - @players-table-row-gap / 2);
+  }
+
+  .players-table-rows .players-table-row:last-child .players-table-section::before {
+    bottom: 0;
+  }
+
+  // The played cards get their own separator inside the score section
+  .players-table-section--score > :last-child::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--players-table-cell-gap) / -2 - 2px);
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: @players-table-divider-color;
+  }
+}
+
+// ---------- Arrangement: two lines (name + score above goods + tags) ----------
+// Name and score share the first line (name left, score right); goods and tags below line up with the header
+.players-table--two-lines {
+  .players-table-row {
+    grid-template-columns: auto auto;
+    grid-template-areas: "name name" "goods tags";
+    justify-content: start;
+    row-gap: calc(6px * @s);
+    padding: calc(6px * @s) 8px calc(8px * @s) @players-table-inset;
+  }
+
+  .players-table-head {
+    grid-template-areas: "name name" "goods tags";
+    padding-block: calc(4px * @s);
+
+    .players-table-menu {
+      padding-left: 0;
+    }
+  }
+
+  .players-table-section--score {
+    grid-area: name;
+    justify-self: end;
+  }
+
+  .players-table-identity {
+    max-width: 60%;
+  }
+}
+
+// ---------- Arrangement: three lines (name + score | goods | tags), icons inside the cells ----------
+.players-table--three-lines,
+.players-table--cards {
+  .players-table-row {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "name" "goods" "tags";
+    row-gap: calc(8px * @s);
+    padding: calc(8px * @s) 10px calc(10px * @s) @players-table-inset;
+  }
+
+  .players-table-head {
+    min-height: 0;
+    padding: 4px 0;
+    background: transparent;
+
+    .players-table-menu {
+      padding-left: 0;
+    }
+  }
+
+  .players-table-cell-icon {
+    display: block !important;
+  }
+
+  // Tags fill an even grid here: the gap between the tag groups would leave a hole
+  .players-table-tag-gap {
+    display: none;
+  }
+
+  .players-table-identity {
+    padding-left: 0;
+  }
+}
+
+.players-table--three-lines {
+  .players-table-section--score {
+    grid-area: name;
+    justify-self: end;
+  }
+
+  .players-table-identity {
+    max-width: 55%;
+  }
+
+  // Icon above the number: 13 tags in one row stay narrow
+  .players-table-cell > .players-table-counter {
+    flex-direction: column;
+    gap: calc(2px * @s);
+    height: calc(48px * @s);
+  }
+}
+
+// Cards (phone): one card per player below each other, score on its own line, goods 3 × 2, tags in rows of 7
+.players-table--cards {
+  .players-table-row {
+    grid-template-areas: "name" "score" "goods" "tags";
+  }
+
+  .players-table-section--goods,
+  .players-table-section--tags {
+    row-gap: calc(6px * @s);
+  }
+
+  .players-table-section--score {
+    justify-self: start;
+  }
+
+  .players-table-rows {
+    gap: 10px;
+  }
+}
+
+// Two lines, three lines, cards: the score as chips with their icon, played cards with the word
+.players-table--two-lines,
+.players-table--three-lines,
+.players-table--cards {
+  .players-table-section--score {
+    grid-template-columns: repeat(5, auto);
+  }
+
+  .players-table-section--score .players-table-counter {
+    flex-direction: row !important;
+    gap: calc(5px * @s);
+    width: auto;
+    max-width: none;
+    height: calc(30px * @s);
+    padding: 0 calc(8px * @s);
+  }
+
+  .players-table-played-label {
+    display: inline;
+  }
+
+  // The score chips carry their icon (in two lines the tags and goods keep the column heads)
+  .players-table-section--score .players-table-cell-icon {
+    display: inline-block !important;
+  }
+}
+
+// ---------- Rows ----------
 .players-table-row--player {
   cursor: pointer;
 
@@ -89,6 +317,10 @@
   }
 }
 
+.players-table--line .players-table-row--player {
+  padding-block: calc(7px * @s);
+}
+
 each(@players, {
   @c: ~"player_@{value}";
   .players-table-row--@{value} {
@@ -105,7 +337,6 @@ each(@players, {
 });
 
 .players-table-row--me {
-  height: @players-table-own-row-height;
   margin-block: @players-table-own-row-offset;
   box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
 
@@ -115,118 +346,6 @@ each(@players, {
 
   &:last-child {
     margin-bottom: 0;
-  }
-}
-
-.players-table-cell {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  min-width: 0;
-}
-
-// Separator between the sections: continuous across all rows (bridges the row gaps)
-.players-table-divider {
-  position: relative;
-  align-self: stretch;
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    width: 1px;
-    top: -(@players-table-row-gap / 2);
-    bottom: -(@players-table-row-gap / 2);
-    background: @players-table-divider-color;
-  }
-}
-
-.players-table-head .players-table-divider::after {
-  top: 0;
-}
-
-.players-table-rows .players-table-row:last-child .players-table-divider::after {
-  bottom: 0;
-}
-
-.players-table-head-label {
-  font-size: 11px;
-  color: #aab;
-}
-
-// Toggle at the front of the header
-.players-table-toggles {
-  display: flex;
-  gap: 4px;
-  padding-left: 10px;
-}
-
-.players-table-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  width: 30px;
-  height: 26px;
-  padding: 0;
-  // Border instead of shadow/outline: follows the rounding exactly, also when dashed
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 5px;
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.14);
-
-  // Switched on, but hidden for lack of space
-  &.players-table-toggle--squeezed {
-    border-style: dashed;
-    border-color: rgba(255, 255, 255, 0.6);
-  }
-
-  &[aria-pressed="false"] {
-    background: transparent;
-    border-color: rgba(255, 255, 255, 0.15);
-
-    > span {
-      opacity: 0.3;
-      filter: grayscale(1);
-    }
-  }
-}
-
-// Own icons at a fixed pixel size: the sprite classes of the player bar have offset margins
-// and would only fit via zoom with odd factors (blurry, shifted)
-@players-table-toggle-icon-size: 18px;
-
-.players-table-toggle-icon {
-  display: block;
-  width: @players-table-toggle-icon-size;
-  height: @players-table-toggle-icon-size;
-  background: center / contain no-repeat;
-}
-
-.players-table-toggle-icon--megacredit {
-  background-image: url(./assets/resources/megacredit.png);
-}
-
-.players-table-toggle-icon--building {
-  border-radius: 50%;
-  background-image: url(./assets/tags/building.png);
-  background-size: 112%; // Image has a light rim that would otherwise remain as a ring
-}
-
-// Victory points as in the game: golden shield with "VP"
-.players-table-toggle-icon--vp {
-  width: @players-table-toggle-icon-size + 4px;
-  border-radius: 3px;
-  background: linear-gradient(#cc8b00, #805700, #805700);
-  font: 11px/@players-table-toggle-icon-size Prototype, sans-serif;
-  color: #000;
-  text-align: center;
-  text-shadow: 0 0 3px darkorange;
-
-  &::before {
-    content: "VP";
   }
 }
 
@@ -246,12 +365,22 @@ each(@players, {
   text-align: center;
 }
 
+.players-table--two-lines,
+.players-table--three-lines,
+.players-table--cards {
+  .players-table-first-player {
+    top: calc(8px * @s);
+    transform: none;
+  }
+}
+
+// ---------- Name cell (PlayerIdentity.vue, shared with the milestone table) ----------
 // Taking their turn: only dot and time, without the word "active"
 .players-table-identity--acting .player-action-status {
   display: none;
 }
 
-// Name cell: row 1 name + status, row 2 corporation
+// Row 1 name + status, row 2 corporation
 .players-table-identity {
   display: flex;
   flex-direction: column;
@@ -363,42 +492,83 @@ each(@players, {
   text-overflow: ellipsis;
 }
 
-// Resource box: stock large, production small in the brown box, value per unit as a coin at the corner.
-// Two right-aligned slots: the production slot is as wide as the widest plaque of the column
-// (goodsBoxWidths.ts), so stock numbers and production plaques each end on one line across all rows
+// In the player table the name scales with the table; the corporation only shows once the numbers are at full size
+.players-table {
+  .players-table-name {
+    font-size: max(13px, calc(19px * @s));
+  }
+
+  .players-table-identity--me .players-table-name {
+    font-size: max(14px, calc(22px * @s));
+  }
+
+  .players-table-corporation {
+    font-size: max(11px, calc(13px * @s));
+  }
+
+  .player-action-status-container {
+    font-size: max(11px, calc(13px * @s));
+  }
+}
+
+.players-table--compact-name {
+  .players-table-corporation {
+    display: none;
+  }
+
+  // Narrow name column: the status plaque goes below the name instead of squeezing it
+  .players-table-identity-line {
+    flex-wrap: wrap;
+    row-gap: 3px;
+  }
+
+  .players-table-identity {
+    padding-left: 20px;
+  }
+}
+
+// Several corporations (Merger): gold plus between the names (PlayerIdentity.vue)
+.players-table-corporation__plus {
+  margin: 0 4px;
+  color: #f2c14e;
+  font-weight: 700;
+}
+
+// ---------- Goods ----------
+// Resource box: stock large, production small in the brown box, value per unit as a gold chip at the corner.
+// Stock and production each end on one line across all rows (fixed production slot)
 .players-table-goods {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--players-table-production-width, auto);
-  place-items: center end;
-  gap: 6px;
-  // Width capped: stock and production stay together even when the column gets wider.
-  // Never narrower than the content: shield + stock + production stay inside the box; the column grows to
-  // fit (PlayersTable: goodsBoxWidths, max-width set per column so all boxes of a column match)
-  width: calc(100% - 8px);
-  min-width: max-content;
-  max-width: 78px;
-  height: 34px;
-  padding: 0 6px 0 9px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: calc(5px * @s);
+  box-sizing: border-box;
+  width: 100%;
+  // Goods boxes are a little taller than the tag boxes: the stock is what you look at
+  height: calc(38px * @s);
+  padding: 0 calc(5px * @s) 0 calc(6px * @s);
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.3);
   font-family: Prototype, sans-serif;
 }
 
-.players-table-row--me .players-table-goods {
-  height: 40px;
+.players-table-goods .resource_icon {
+  flex: none;
+  margin: 0 auto 0 0;
+  zoom: calc(0.6 * @s);
 }
 
 .players-table-goods-stock {
   display: inline-flex; // Room for the shield before the number (protected stock)
   align-items: center;
   gap: 3px;
-  font-size: 20px;
+  font-size: calc(21px * @s);
   color: #fff;
 }
 
 .players-table-row--me .players-table-goods-stock {
-  font-size: 23px;
+  font-size: calc(23px * @s);
 }
 
 .players-table-goods--empty .players-table-goods-stock {
@@ -406,9 +576,13 @@ each(@players, {
 }
 
 .players-table-goods-production {
-  font-size: 13px;
+  flex: none;
+  box-sizing: border-box;
+  min-width: calc(24px * @s);
+  font-size: calc(13px * @s);
   line-height: 1;
-  padding: 3px 4px 2px;
+  text-align: center;
+  padding: calc(3px * @s) calc(3px * @s) calc(2px * @s);
   border-radius: 3px;
   color: #fff;
   background: @players-table-production;
@@ -426,45 +600,32 @@ each(@players, {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
-// Coin plaque: value per unit (resource box)
-.players-table-goods-value {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 17px;
-  height: 17px;
-  line-height: 18px;
-  text-align: center;
-  font-family: Prototype, sans-serif;
-  font-size: 11px;
-  color: #000;
-  background: url(./assets/resources/megacredit.png) center / contain no-repeat;
-}
-
-// Discount (tags, hand cards): a gold pill with the minus centred over the top edge of its box, the box itself framed
-// in gold (Jens, 20 Oct 2026) – a coin with a bare number read like a plus
-@players-table-discount-gold: #f2b62a;
-
+// Gold chip (value per unit of a resource, discount): always at the top right of its box, never over the number
+.players-table-goods-value,
 .players-table-discount {
   position: absolute;
-  top: -9px;
-  left: 50%;
+  top: 0;
+  right: 0;
   z-index: 1;
-  transform: translateX(-50%);
-  height: 16px;
-  padding: 0 6px;
-  border-radius: 8px;
+  transform: translate(35%, -55%);
+  box-sizing: border-box;
+  min-width: calc(17px * @s);
+  height: max(14px, calc(17px * @s));
+  padding: 0 calc(5px * @s);
+  border-radius: 999px;
   font-family: Prototype, sans-serif;
-  font-size: 11px;
-  line-height: 17px;
+  font-size: max(10px, calc(11px * @s));
+  line-height: max(15px, calc(18px * @s));
+  text-align: center;
   white-space: nowrap;
   color: #3b2408;
   background: linear-gradient(#f6d368, #d9a127);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.55);
 }
 
+// Discounted box framed in gold (tags, hand cards)
 .players-table-cell--discounted .players-table-counter {
-  box-shadow: inset 0 0 0 2px @players-table-discount-gold;
+  box-shadow: inset 0 0 0 2px @players-table-gold;
 }
 
 // The Prototype font draws '*' as a dot – the mark uses a plain font so it reads as an asterisk
@@ -492,8 +653,8 @@ each(@players, {
 .players-table-protection {
   flex: none;
   position: static;
-  width: 18px;
-  height: 18px;
+  width: calc(18px * @s);
+  height: calc(18px * @s);
   background: linear-gradient(135deg, #d6f7b4 0%, #7ad048 40%, #3c9a24 75%, #1f6512 100%);
   filter: none; // shield_icon inverts the graphic, here the gradient decides the colour
   mask: url(./assets/misc/shield-icon.png) center / contain no-repeat;
@@ -506,43 +667,44 @@ each(@players, {
 }
 
 .players-table-counter .players-table-protection {
-  width: 15px;
-  height: 15px;
+  width: calc(15px * @s);
+  height: calc(15px * @s);
 }
 
-.players-table-row--me .players-table-protection {
-  width: 20px;
-  height: 20px;
-}
-
-// Counters (tags, score): deliberately small and quieter than the resources, each in a box like the resources
+// ---------- Tags and score ----------
+// Counters: each in a box like the resources, the box as wide as its column
 .players-table-counter {
   font-family: Prototype, sans-serif;
-  font-size: 15px;
+  font-size: calc(16px * @s);
   color: @players-table-counter-color;
 }
 
 .players-table-cell > .players-table-counter {
+  position: relative;
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  gap: calc(4px * @s);
   box-sizing: border-box;
-  // As wide as the column allows up to 34 px (squeezed tag columns, playersTableLayout.ts TAG_MIN_WIDTH), a gap left
-  width: calc(100% - 6px);
-  min-width: 24px;
-  max-width: 34px;
-  height: 34px;
-  padding: 0 3px;
+  width: 100%;
+  height: calc(34px * @s);
+  padding: 0 2px;
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.3);
 }
 
 .players-table-row--me .players-table-counter {
-  font-size: 16px;
+  font-size: calc(17px * @s);
 }
 
 .players-table-counter--zero {
   color: @players-table-dim;
+}
+
+// Tag icon inside the cell (Tag.vue sprite)
+.players-table-counter > .tag-count {
+  flex: none;
+  zoom: calc(0.5 * @s);
 }
 
 // Points per tag (PointsPerTag.vue) as a small plaque at the bottom right
@@ -563,15 +725,10 @@ each(@players, {
 }
 
 // Tag substitution (PlayerTagSubstitution.vue, e.g. Earth Embassy) as a small round badge at the bottom left
-// of the counter, so it stays next to the number in wide (transposed mobile) cells too
-.players-table-cell .players-table-counter {
-  position: relative;
-}
-
 .players-table-cell .player-tag-substitution {
   position: absolute;
   bottom: -5px;
-  left: -12px;
+  left: -6px;
 }
 
 .players-table-cell .player-tag-substitution-icon {
@@ -584,14 +741,60 @@ each(@players, {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
 }
 
+// Score icons (ScoreIcon.vue): the pictures of the classic bar, so a theme swaps them as well
+.players-table-score-icon {
+  display: inline-block;
+  flex: none;
+  width: calc(22px * @s);
+  height: calc(22px * @s);
+  background: center / contain no-repeat;
+}
+
+.players-table-score-icon--vp {
+  width: calc(26px * @s);
+  height: calc(18px * @s);
+  border-radius: 3px;
+  background: linear-gradient(#cc8b00, #805700, #805700);
+  font: calc(12px * @s) / calc(18px * @s) Prototype, sans-serif;
+  color: #000;
+  text-align: center;
+  text-shadow: 0 0 3px darkorange;
+
+  &::before {
+    content: "VP";
+  }
+}
+
+.players-table-score-icon--tr {
+  background-image: url(./assets/resources/tr.png);
+}
+
+.players-table-score-icon--hand {
+  background-image: url(./assets/sidebar/preferences_cards.png);
+}
+
+// Actions on active cards: only the red action arrow of the cards
+.players-table-score-icon--actions {
+  width: calc(24px * @s);
+  height: calc(14px * @s);
+  background-image: url(./assets/misc/arrow.png);
+}
+
+// Played cards: square badge; the word only where the table has no column heads
 .players-table-played {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(5px * @s);
+  min-width: calc(32px * @s);
+  height: calc(32px * @s);
+  padding: 0 calc(7px * @s);
   font-family: Prototype, sans-serif;
-  font-size: 14px;
+  font-size: calc(16px * @s);
   color: #fff;
   background: @bg_action;
   border: 0;
-  border-radius: 10px;
-  padding: 3px 9px;
+  border-radius: calc(7px * @s);
   cursor: pointer;
 
   &:hover {
@@ -599,25 +802,27 @@ each(@players, {
   }
 }
 
-// Several corporations (Merger): gold plus between the names (PlayerIdentity.vue)
-.players-table-corporation__plus {
-  margin: 0 4px;
-  color: #f2c14e;
-  font-weight: 700;
+.players-table-played-label {
+  display: none;
+  font-size: calc(12px * @s);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-// Escape Velocity: taller rows for the clock line (wider name column: playersTableLayout.ts)
-.players-table--escape-velocity {
-  .players-table-row--player {
-    height: @players-table-escape-velocity-row-height;
-  }
-
-  .players-table-row--me {
-    height: @players-table-escape-velocity-own-row-height;
-  }
+// Header icons of the score
+.players-table-head .players-table-score-icon {
+  width: calc(24px * @s);
+  height: calc(24px * @s);
 }
 
-// Escape Velocity: short bar of used against allowed thinking time, time and penalty next to it (EscapeVelocityClock.vue)
+.players-table-head .players-table-score-icon--vp {
+  width: calc(28px * @s);
+  height: calc(20px * @s);
+  line-height: calc(20px * @s);
+}
+
+// ---------- Escape Velocity ----------
+// Short bar of used against allowed thinking time, time and penalty next to it (EscapeVelocityClock.vue)
 .escape-velocity-clock {
   display: flex;
   align-items: center;
@@ -662,7 +867,6 @@ each(@players, {
   font-size: 11px;
   font-weight: 700;
 }
-
 
 // Phone/tablet player columns are narrow: bar across the column, time and penalty below it, without the limit
 html.tm-mobile .escape-velocity-clock {
