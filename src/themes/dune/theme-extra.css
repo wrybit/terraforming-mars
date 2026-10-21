@@ -751,6 +751,17 @@ html.theme-dune .card-container.card-shield-generator .card-content .card-effect
   clip-path: none !important;
 }
 
+/* Cards whose effect starts from "a card" (play a card : −1 Solari, action → look at the top card) show the card on
+   Dune instead of the empty space Mars leaves there (Jens 21 Oct 2026, so these cards match the others) */
+html.theme-dune .card-container:is(.card-research-outpost, .card-earth-catapult, .card-anti-gravity-technology) .card-effect-box-row > .card-effect-box-content:first-child .card-special:empty,
+html.theme-dune .card-container:is(.card-inventors\'-guild, .card-business-network) .card-effect-box-row > .card-effect-box-content:last-child .card-special:empty {
+  display: block;
+  width: 30px;
+  height: 40px;
+  margin: 0 4px;
+  background: url(graphics/res-card.svg) center / contain no-repeat;
+}
+
 /* Expansion marks on the cards (Jens 21 Oct 2026): the marks of the card list filter instead of the coloured Mars
    dots, always bottom left – next to the resource counter where a card has one (Card.vue measures its width) */
 html.theme-dune .card-container .card-corporation-expansion,
@@ -1011,10 +1022,15 @@ html.theme-dune .card-container .card-content .card-text-size--S.card-text-upper
 /* A sentence in the picture rows (small texts, bold or not: Thumper, Mentat Calculation, Caravan Master) reads like
    the description, 13 px regular, not larger (Jens 21 Oct 2026); only the M words beside icons stay 16 px bold. The
    rows are zoomed, so their zoom is divided out. */
-html.theme-dune .card-container .card-content .card-rows :is(.card-text-size--XS, .card-text-size--S):not(.card-text-uppercase, .card-plate) {
+html.theme-dune .card-container .card-content .card-rows :is(.card-text-size--XS, .card-text-size--S):not(.card-plate) {
   font-size: calc(13px / var(--card-row-zoom, 1.2)) !important;
   font-weight: 400;
   line-height: 1.28;
+}
+
+/* Rules in capitals on Mars ("ACTION: …", "1 VP per …") stay bold, at the same size */
+html.theme-dune .card-container .card-content .card-rows :is(.card-text-size--XS, .card-text-size--S).card-text-uppercase {
+  font-weight: 700;
 }
 
 html.theme-dune .card-container .card-content mark,
