@@ -47,5 +47,7 @@
   "Select space for special tile": "Выберите клетку для особого тайла",
   "Select card to remove 1 resource": "Выберите карту, с которой снять 1 ресурс",
   "Steel value": "Ценность стали",
-  "Titanium value": "Ценность титана"
+  "Titanium value": "Ценность титана",
+  "Keep one of two agendas": "Оставить один из двух замыслов",
+  "🛠 DevTools: ${0} draws a second agenda": "🛠 DevTools: ${0} берёт второй замысел"
 }

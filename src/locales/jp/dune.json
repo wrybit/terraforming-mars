@@ -334,5 +334,8 @@
   "Exchange: the rates change every generation – sell high, buy low": "取引所：相場は世代ごとに変わる――高く売り、安く買う",
   "fixed": "固定",
   "The smugglers set new rates": "密輸業者が新しい相場を決めた",
-  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "スパイス輸送：1回の取引でスパイス最大5を現在のスパイス相場で。取引所：相場は世代ごとに変わる――高く売り、安く買う。いずれも疑惑が1上がり、賄賂（10ソラリ、密輸業者の市場の所有者は7）で下げられます。世代の終わり：0と1は無料。2以上で影響力を失い、マーカーは0に戻ります。"
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "スパイス輸送：1回の取引でスパイス最大5を現在のスパイス相場で。取引所：相場は世代ごとに変わる――高く売り、安く買う。いずれも疑惑が1上がり、賄賂（10ソラリ、密輸業者の市場の所有者は7）で下げられます。世代の終わり：0と1は無料。2以上で影響力を失い、マーカーは0に戻ります。",
+  "has passed 35 on the Landsraad track.": "がランドスラードの軌道で35を超えました。",
+  "have passed 35 on the Landsraad track.": "がランドスラードの軌道で35を超えました。",
+  "Choose the agenda you keep:": "残す計略を選んでください："
 }

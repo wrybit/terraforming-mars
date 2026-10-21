@@ -332,5 +332,8 @@
   "Exchange: the rates change every generation – sell high, buy low": "Pörssi: kurssit muuttuvat joka sukupolvi – myy kalliilla, osta halvalla",
   "fixed": "kiinteä",
   "The smugglers set new rates": "Salakuljettajat asettavat uudet kurssit",
-  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Kuljeta maustetta: enintään 5 maustetta kaupassa mausteen nykyisellä kurssilla. Pörssi: kurssit muuttuvat joka sukupolvi – myy kalliilla, osta halvalla. Kumpikin nostaa epäilyä 1:llä; lahjus (10 solaria, salakuljettajien torin omistajalle 7) laskee sitä. Sukupolven lopussa: 0 ja 1 ovat ilmaisia, 2:sta alkaen menetetään arvovaltaa ja merkki palaa nollaan."
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Kuljeta maustetta: enintään 5 maustetta kaupassa mausteen nykyisellä kurssilla. Pörssi: kurssit muuttuvat joka sukupolvi – myy kalliilla, osta halvalla. Kumpikin nostaa epäilyä 1:llä; lahjus (10 solaria, salakuljettajien torin omistajalle 7) laskee sitä. Sukupolven lopussa: 0 ja 1 ovat ilmaisia, 2:sta alkaen menetetään arvovaltaa ja merkki palaa nollaan.",
+  "has passed 35 on the Landsraad track.": "on ylittänyt 35 Landsraadin radalla.",
+  "have passed 35 on the Landsraad track.": "ovat ylittäneet 35 Landsraadin radalla.",
+  "Choose the agenda you keep:": "Valitse agenda, jonka pidät:"
 }

@@ -5,9 +5,9 @@
   <div class="schemes-keep" data-test="schemes-keep">
     <p class="schemes-keep__reason">
       <PlayerChip v-for="player in reachedBy" :key="player.color" :color="player.color" :players="playerView.players"/>
-      <span>{{ $t(reachedBy.length > 1 ? 'have reached 35 or more on the Landsraad track.' : 'has reached 35 or more on the Landsraad track.') }}</span>
+      <span>{{ $t(reachedBy.length > 1 ? 'have passed 35 on the Landsraad track.' : 'has passed 35 on the Landsraad track.') }}</span>
     </p>
-    <p class="schemes-keep__hint">{{ $t('Every House with two agendas now keeps only one, the other is discarded. Choose the agenda you keep.') }}</p>
+    <p class="schemes-keep__hint">{{ $t('Choose the agenda you keep:') }}</p>
     <div class="dune-schemes__cards schemes-keep__cards">
       <label v-for="(agenda, index) in agendas" :key="agenda.name"
         :class="['schemes-keep__choice', {'schemes-keep__choice--chosen': chosen === index}]" :data-test="'schemes-keep-' + index">

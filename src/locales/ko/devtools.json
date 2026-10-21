@@ -47,5 +47,7 @@
   "Select space for special tile": "특수 타일을 놓을 칸을 선택하세요",
   "Select card to remove 1 resource": "자원 1개를 제거할 카드를 선택하세요",
   "Steel value": "강철 가치",
-  "Titanium value": "티타늄 가치"
+  "Titanium value": "티타늄 가치",
+  "Keep one of two agendas": "두 의제 중 하나 유지",
+  "🛠 DevTools: ${0} draws a second agenda": "🛠 DevTools: ${0}이(가) 두 번째 의제를 뽑습니다"
 }

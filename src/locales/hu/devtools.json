@@ -46,5 +46,7 @@
   "Select space for special tile": "Válassz mezőt a különleges lapkának",
   "Select card to remove 1 resource": "Válassz kártyát, amelyről 1 nyersanyag lekerül",
   "Steel value": "Acél értéke",
-  "Titanium value": "Titán értéke"
+  "Titanium value": "Titán értéke",
+  "Keep one of two agendas": "Két terv közül egy megtartása",
+  "🛠 DevTools: ${0} draws a second agenda": "🛠 DevTools: ${0} húz egy második tervet"
 }

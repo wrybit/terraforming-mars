@@ -46,5 +46,7 @@
   "Select space for special tile": "Escolha um espaço para a peça especial",
   "Select card to remove 1 resource": "Escolha uma carta para remover 1 recurso",
   "Steel value": "Valor do aço",
-  "Titanium value": "Valor do titânio"
+  "Titanium value": "Valor do titânio",
+  "Keep one of two agendas": "Manter uma de duas agendas",
+  "🛠 DevTools: ${0} draws a second agenda": "🛠 DevTools: ${0} compra uma segunda agenda"
 }

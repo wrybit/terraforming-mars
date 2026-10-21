@@ -608,9 +608,12 @@ html:not(.tm-mobile) .dune-schemes__cards {
 
 // House schemes, which agenda to keep (SchemesKeepInput.vue): who reached 35 on the Landsraad track, the rule in one
 // line, then both agenda cards to click; the chosen one glows like a chosen option
+// Fills the panel below its title, the group (reason, request, cards) sits in its middle both ways (Jens, 21 Oct 2026)
 .schemes-keep {
+  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 10px;
   padding: 8px 0 20px;
@@ -630,11 +633,9 @@ html:not(.tm-mobile) .dune-schemes__cards {
 }
 
 .schemes-keep__hint {
-  max-width: 520px;
   margin: 0 0 14px;
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
-  opacity: 0.8;
 }
 
 .schemes-keep__choice {

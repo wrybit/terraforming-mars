@@ -47,5 +47,7 @@
   "Select space for special tile": "为特殊板块选择位置",
   "Select card to remove 1 resource": "选择要移除 1 个资源的卡牌",
   "Steel value": "钢材价值",
-  "Titanium value": "钛价值"
+  "Titanium value": "钛价值",
+  "Keep one of two agendas": "保留两项议程中的一项",
+  "🛠 DevTools: ${0} draws a second agenda": "🛠 DevTools：${0} 抽取第二项议程"
 }

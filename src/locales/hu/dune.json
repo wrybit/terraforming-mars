@@ -332,5 +332,8 @@
   "Exchange: the rates change every generation – sell high, buy low": "Tőzsde: az árfolyamok minden generációban változnak – drágán adj el, olcsón vegyél",
   "fixed": "fix",
   "The smugglers set new rates": "A csempészek új árfolyamokat szabnak",
-  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Fűszer szállítása: üzletenként legfeljebb 5 fűszer az aktuális fűszerárfolyamon. Tőzsde: az árfolyamok minden generációban változnak – drágán adj el, olcsón vegyél. Mindegyik 1-gyel növeli a gyanút; a vesztegetés (10 solari, a Csempészpiac tulajdonosának 7) csökkenti. A generáció végén: a 0 és az 1 ingyenes, 2-től befolyás vész el, és a jelző visszaesik 0-ra."
+  "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Fűszer szállítása: üzletenként legfeljebb 5 fűszer az aktuális fűszerárfolyamon. Tőzsde: az árfolyamok minden generációban változnak – drágán adj el, olcsón vegyél. Mindegyik 1-gyel növeli a gyanút; a vesztegetés (10 solari, a Csempészpiac tulajdonosának 7) csökkenti. A generáció végén: a 0 és az 1 ingyenes, 2-től befolyás vész el, és a jelző visszaesik 0-ra.",
+  "has passed 35 on the Landsraad track.": "túllépte a 35-öt a Landsraad-sávon.",
+  "have passed 35 on the Landsraad track.": "túllépték a 35-öt a Landsraad-sávon.",
+  "Choose the agenda you keep:": "Válaszd ki a tervet, amelyet megtartasz:"
 }

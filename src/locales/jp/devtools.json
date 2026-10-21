@@ -47,5 +47,7 @@
   "Select space for special tile": "特殊タイルを置くマスを選んでください",
   "Select card to remove 1 resource": "資源を1つ取り除くカードを選んでください",
   "Steel value": "鋼鉄の価値",
-  "Titanium value": "チタンの価値"
+  "Titanium value": "チタンの価値",
+  "Keep one of two agendas": "2つの計略から1つを残す",
+  "🛠 DevTools: ${0} draws a second agenda": "🛠 DevTools：${0} が2つ目の計略を引きます"
 }

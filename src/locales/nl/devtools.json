@@ -46,5 +46,7 @@
   "Select space for special tile": "Kies een vak voor de speciale tegel",
   "Select card to remove 1 resource": "Kies een kaart om 1 grondstof van te nemen",
   "Steel value": "Waarde van staal",
-  "Titanium value": "Waarde van titanium"
+  "Titanium value": "Waarde van titanium",
+  "Keep one of two agendas": "Eén van twee agenda’s houden",
+  "🛠 DevTools: ${0} draws a second agenda": "🛠 DevTools: ${0} trekt een tweede agenda"
 }
