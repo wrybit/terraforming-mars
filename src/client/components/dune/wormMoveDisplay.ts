@@ -101,11 +101,12 @@ export type BounceGlyph = {line: string, head: string};
 
 // Bounce glyph (Jens, 21 Oct 2026: variant B – a soft bend, filled head, centred in the disc, both legs equally long)
 const GLYPH_BOX = 16;
-const GLYPH_LEG = 6.5;
-const GLYPH_BEND = 2.4;
+// Both legs equally long, measured from the corner to the start and to the tip of the head
+const GLYPH_LEG = 8;
+const GLYPH_BEND = 1.8;
 const GLYPH_U_GAP = 5;
-const HEAD_LENGTH = 3.6;
-const HEAD_HALF = 2.4;
+const HEAD_LENGTH = 3.4;
+const HEAD_HALF = 2.6;
 
 const round = (value: number) => Math.round(value * 100) / 100;
 
@@ -124,13 +125,15 @@ export function bounceGlyph(turn: number): BounceGlyph {
   const across = {x: -out.y, y: out.x};
   const base = {x: tip.x - HEAD_LENGTH * out.x, y: tip.y - HEAD_LENGTH * out.y};
   const corners = [{x: base.x + across.x * HEAD_HALF, y: base.y + across.y * HEAD_HALF}, {x: base.x - across.x * HEAD_HALF, y: base.y - across.y * HEAD_HALF}];
-  const all = [start, tip, ...corners, ...(back ? [{x: GLYPH_U_GAP / 2, y: 0}] : [{x: 0, y: 0}])];
+  // Centred on the outline of the legs (start, corner, tip), so the bend sits in the middle of the disc
+  const all = [start, tip, back ? {x: GLYPH_U_GAP / 2, y: 0} : {x: 0, y: 0}];
   const shift = {
     x: GLYPH_BOX / 2 - (Math.min(...all.map((point) => point.x)) + Math.max(...all.map((point) => point.x))) / 2,
     y: GLYPH_BOX / 2 - (Math.min(...all.map((point) => point.y)) + Math.max(...all.map((point) => point.y))) / 2,
   };
   const at = (point: Point) => `${round(point.x + shift.x)} ${round(point.y + shift.y)}`;
-  const lineEnd = {x: base.x + out.x * 0.8, y: base.y + out.y * 0.8};
+  // The shaft runs into the head, so the outgoing leg reads as long as the incoming one
+  const lineEnd = {x: base.x + out.x * 1.6, y: base.y + out.y * 1.6};
   const line = back ?
     `M${at(start)}H${round(shift.x)}A${GLYPH_U_GAP / 2} ${GLYPH_U_GAP / 2} 0 0 0 ${at({x: 0, y: -GLYPH_U_GAP / 2})}H${round(lineEnd.x + shift.x)}` :
     `M${at(start)}L${at({x: -GLYPH_BEND, y: 0})}Q${at({x: 0, y: 0})} ${at({x: GLYPH_BEND * out.x, y: GLYPH_BEND * out.y})}L${at(lineEnd)}`;
