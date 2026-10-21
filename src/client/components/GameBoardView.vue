@@ -42,6 +42,8 @@
       <DuneBoard v-if="game.dune" :dune="game.dune" :tab="tab" :players="players" :spaces="game.spaces" :viewerColor="viewerColor"/>
     </template>
   </BoardTabs>
+  <!-- Dune: a move that chooses a space (opening a Kanly) runs on the enlarged planet, outside the tabs -->
+  <DuneSpaceMove v-if="game.dune"/>
 
   <!-- Second board instance for viewing only. The IDs in it (main_board etc.) then exist twice;
        getElementById returns the first occurrence though, and the modal is attached at the end of body -->
@@ -93,6 +95,7 @@ import {isBoardPlacementActive} from '@/client/components/board/boardPlacementAc
 import {ZoomBoard, notifyZoomBoardHidden, notifyZoomBoardRendered, placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
 import DeltaBoard from '@/client/components/delta/DeltaBoard.vue';
 import DuneBoard from '@/client/components/dune/DuneBoard.vue';
+import DuneSpaceMove from '@/client/components/dune/DuneSpaceMove.vue';
 import Milestones from '@/client/components/Milestones.vue';
 import Awards from '@/client/components/Awards.vue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
@@ -146,6 +149,7 @@ export default defineComponent({
     PlacementBanner,
     DeltaBoard,
     DuneBoard,
+    DuneSpaceMove,
     Milestones,
     Awards,
     MilestoneAwardTable,

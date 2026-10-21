@@ -12,7 +12,7 @@
     </div>
     <!-- Transition to the large board deliberately via a button: automatic expanding feels disruptive.
          The top line says what is being placed, below it the next step – so it's clear what happens after the click -->
-    <div v-if="zoomBoard !== undefined" class="select-space-zoom">
+    <div v-if="zoomBoard !== undefined && !autoEnlarge" class="select-space-zoom">
       <button type="button" class="btn btn-submit btn-rounded select-space-zoom-button" data-hotkey="proceed" @click="enlargeBoard">
         <span class="select-space-zoom-action">{{ placementAction }}</span>
         <span v-if="zoomBoard === 'moon'" class="select-space-zoom-next-step" v-i18n>Show the Moon enlarged and choose a space</span>
@@ -79,6 +79,11 @@ export default defineComponent({
     showtitle: {
       type: Boolean,
       required: true,
+    },
+    // Enlarge the board at once instead of offering the button (Dune Kanly: choosing the war field, Jens 21 Oct 2026)
+    autoEnlarge: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {
@@ -289,6 +294,9 @@ export default defineComponent({
       this.zoomBoard = 'mars';
     } else if (bound.some((tile) => tile.closest(MOON_REGION_SELECTOR) !== null)) {
       this.zoomBoard = 'moon';
+    }
+    if (this.autoEnlarge) {
+      this.enlargeBoard();
     }
   },
 });

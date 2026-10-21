@@ -1,7 +1,9 @@
 <template>
   <!-- The move opened in this module tab (duneMoves.ts): choices as tiles level by level, the last step with the input
        of the app (confirm button, amount stepper, space on the board). Takes the hotkeys while open (Enter confirms). -->
-  <div v-if="target !== undefined" class="dune-move" data-test="dune-move" data-hotkey-group data-hotkey-group-active="true">
+  <!-- A move that ends on a space (opening a Kanly: the war field) runs on the enlarged planet instead
+       (DuneSpaceMove.vue, Jens 21 Oct 2026) -->
+  <div v-if="target !== undefined && target.type !== 'space'" class="dune-move" data-test="dune-move" data-hotkey-group data-hotkey-group-active="true">
     <div class="dune-move__head">
       <span class="dune-move__title">{{ $t(target.title) }}</span>
       <button type="button" class="dune-move__close" :aria-label="$t('Close')" :title="$t('Close')" @click="close">✕</button>
