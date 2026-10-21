@@ -56,6 +56,8 @@ const MIN_SCALE = 0.6;
 const MAX_SCALE = 1.25;
 // Below this the three-line arrangement gets too small – cards take over
 const MIN_THREE_LINES_SCALE = 0.75;
+// The corporation line may cost this much of the size
+const CORPORATION_SCALE_TOLERANCE = 0.05;
 // Wider than this the gaps stop growing (px per cell gap)
 const MAX_EXTRA_GAP = 10;
 
@@ -128,9 +130,12 @@ export function fitPlayersTable(available: number, tagColumns: TagColumnGroups, 
   }
   const compact = largestScale((scale) => lineWidth(scale, tagColumns, false, escapeVelocity), available, MIN_SCALE);
   if (compact !== undefined) {
-    // Room left at this size: rather show the corporation than leave the space empty
-    const showCorporation = lineWidth(compact, tagColumns, true, escapeVelocity) <= available;
-    return {mode: 'line', scale: compact, showCorporation, extraGap: 0};
+    // The corporation is worth a slightly smaller size (up to 5 %) – rather that than no corporation
+    const withCorporationSmaller = largestScale((scale) => lineWidth(scale, tagColumns, true, escapeVelocity), available, Math.max(MIN_SCALE, compact - CORPORATION_SCALE_TOLERANCE));
+    if (withCorporationSmaller !== undefined) {
+      return {mode: 'line', scale: withCorporationSmaller, showCorporation: true, extraGap: 0};
+    }
+    return {mode: 'line', scale: compact, showCorporation: false, extraGap: 0};
   }
   const twoLines = largestScale((scale) => twoLinesWidth(scale, tagColumns), available, MIN_SCALE);
   const threeLines = largestScale((scale) => threeLinesWidth(scale, tagColumns), available, MIN_THREE_LINES_SCALE);

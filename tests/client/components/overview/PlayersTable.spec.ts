@@ -66,11 +66,11 @@ describe('PlayersTable', () => {
     }
   });
 
-  it('shows the corporation as soon as it fits at the chosen size, never leaving the room empty', () => {
+  it('shows the corporation when it costs at most 5 % of the size', () => {
     for (let width = 900; width <= 1500; width += 10) {
       const fit = fitPlayersTable(width, TAG_COLUMNS);
-      if (fit.mode === 'line') {
-        expect(fit.showCorporation, `width ${width}`).to.eq(lineWidth(fit.scale, TAG_COLUMNS, true, false) <= width);
+      if (fit.mode === 'line' && !fit.showCorporation) {
+        expect(lineWidth(fit.scale - 0.05, TAG_COLUMNS, true, false), `width ${width}`).to.be.greaterThan(width);
       }
     }
   });
