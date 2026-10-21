@@ -16,8 +16,18 @@
             'worm-map__cell--way': onChosenWay(cell.id),
           }]"
           :style="{left: (cell.x - box.left) + 'px', top: (cell.y - box.top) + 'px'}"/>
-        <!-- Rolled heading: a white disc with an arrow on the edge of the worm's space it leaves through (Jens, 21 Oct 2026) -->
-        <span v-if="heading !== undefined" class="worm-map__heading" aria-hidden="true"
+        <!-- Effect of every space with a tile as a chip, on its own layer so it stays readable on the faded spaces -->
+        <WormEffectChip v-for="effect in effects" :key="'chip-' + effect.id" :chip="effect.chip"
+          :class="['worm-map__chip', {'worm-map__chip--on-way': onChosenWay(effect.id)}]"
+          :style="{left: effect.x + 'px', top: effect.y + 'px'}"/>
+        <!-- The chosen way as a line, so the corners of a bounce read at a glance -->
+        <svg v-if="wayLine !== ''" class="worm-map__line" :width="box.width" :height="box.height" aria-hidden="true">
+          <polyline class="worm-map__line-glow" :points="wayLine"/>
+          <polyline class="worm-map__line-dash" :points="wayLine"/>
+        </svg>
+        <!-- Heading: a white disc with an arrow on the edge the worm leaves through – at the start and after every
+             bounce, along the longest way (Jens, 21 Oct 2026) -->
+        <span v-for="(heading, index) in headings" :key="'heading-' + index" class="worm-map__heading" aria-hidden="true"
           :style="{left: heading.x + 'px', top: heading.y + 'px'}">
           <svg viewBox="0 0 16 16" :style="{transform: 'rotate(' + heading.angle + 'deg)'}"><path d="M3 8h9M8 3.5 12.5 8 8 12.5"/></svg>
         </span>
@@ -31,7 +41,15 @@
         </label>
       </div>
     </div>
+    <WormVegetationBar :vegetation="playerView.game.oxygenLevel" :maximum="maximumVegetation"/>
     <p class="worm-move__chosen">{{ chosen === undefined ? '' : $t(optionTitle(chosen)) }}</p>
+    <!-- What the chosen way does, summed up per player -->
+    <div v-if="outcome.length > 0" class="worm-move__outcome">
+      <span v-for="row in outcome" :key="row.color" class="worm-move__outcome-player">
+        <PlayerCube :color="row.color" :size="14"/>
+        <WormEffectChip v-for="(chip, index) in row.chips" :key="index" :chip="chip"/>
+      </span>
+    </div>
     <TabPanelFooterSlot>
       <div v-if="showsave" class="worm-move__actions">
         <AppButton hotkey="proceed" size="big" :disabled="chosen === undefined" :title="$t(buttonLabel)" @click="save"/>
@@ -50,6 +68,12 @@ import {Message} from '@/common/logs/Message';
 import {arrakisNeighbours, arrakisSpacePosition} from '@/common/dune/arrakisCoordinates';
 import {ArrakisLayout, arrakisLayout} from '@/common/dune/arrakisLayout';
 import ArrakisHex from './ArrakisHex.vue';
+import WormEffectChip from './WormEffectChip.vue';
+import WormVegetationBar from './WormVegetationBar.vue';
+import PlayerCube from '@/client/components/common/PlayerCube.vue';
+import {WormChip, Heading, wormEffect, wormHeadings, wormOutcome} from './wormMoveDisplay';
+import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
+import {Color} from '@/common/Color';
 import AppButton from '@/client/components/common/AppButton.vue';
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 
@@ -60,8 +84,12 @@ const SPACE_HEIGHT = 51;
 const MAXIMUM_SCALE = 2.4;
 // …and never taller than this, so the button stays in view
 const MAXIMUM_HEIGHT = 380;
+// …and shrinks with the tab, so hint, vegetation track and result stay in view, but not below this
+const MINIMUM_HEIGHT = 200;
 // Rings of neighbours around the worm: as far as it can move at most
 const RINGS = 3;
+// Effect chip: its middle in the lower part of the space, below cube and tile picture
+const CHIP_Y = 40;
 
 type Cell = {id: string, x: number, y: number, role: 'worm' | 'way' | 'context', space: SpaceModel | undefined};
 type Target = {x: number, y: number, distance: number};
@@ -70,7 +98,7 @@ let observer: ResizeObserver | undefined;
 
 export default defineComponent({
   name: 'WormMoveInput',
-  components: {ArrakisHex, AppButton, TabPanelFooterSlot},
+  components: {ArrakisHex, AppButton, TabPanelFooterSlot, WormEffectChip, WormVegetationBar, PlayerCube},
   props: {
     playerView: {
       type: Object as PropType<PlayerViewModel>,
@@ -95,6 +123,7 @@ export default defineComponent({
     return {
       chosen: undefined as number | undefined,
       width: 600,
+      height: MAXIMUM_HEIGHT,
     };
   },
   computed: {
@@ -158,26 +187,38 @@ export default defineComponent({
         return {x: (position?.x ?? 0) - this.box.left, y: (position?.y ?? 0) - this.box.top, distance: way.length || index + 1};
       });
     },
-    // Middle of the edge between the worm's space and the first space of its way. Every option runs the same heading,
-    // so the first step of the first option is enough; blocked (no way) shows nothing
-    heading(): {x: number, y: number, angle: number} | undefined {
-      const worm = this.wormSpace;
-      const first = this.ways.find((way) => way.length > 0)?.[0];
-      const from = worm === undefined ? undefined : arrakisSpacePosition(this.layout, worm);
-      const to = first === undefined ? undefined : arrakisSpacePosition(this.layout, first);
-      if (from === undefined || to === undefined) {
-        return undefined;
+    spaceById(): Map<string, SpaceModel> {
+      return new Map(this.playerView.game.spaces.map((space) => [space.id, space]));
+    },
+    // Effect chip on every shown space with a tile (not under the worm), in the lower part of the hex
+    effects(): Array<{id: string, x: number, y: number, chip: WormChip}> {
+      const list: Array<{id: string, x: number, y: number, chip: WormChip}> = [];
+      for (const cell of this.cells) {
+        const effect = cell.role === 'worm' ? undefined : this.effectOf(cell.id);
+        if (effect !== undefined) {
+          list.push({id: cell.id, x: cell.x - this.box.left + SPACE_WIDTH / 2, y: cell.y - this.box.top + CHIP_Y, chip: effect.chip});
+        }
       }
-      const dx = to.x - from.x;
-      const dy = to.y - from.y;
-      return {
-        x: from.x - this.box.left + SPACE_WIDTH / 2 + dx / 2,
-        y: from.y - this.box.top + SPACE_HEIGHT / 2 + dy / 2,
-        angle: Math.atan2(dy, dx) * 180 / Math.PI,
-      };
+      return list;
+    },
+    wayLine(): string {
+      const way = this.chosen === undefined ? [] : this.ways[this.chosen] ?? [];
+      return way.length === 0 ? '' : this.centers([this.wormSpace ?? '', ...way]).map((point) => point.x + ',' + point.y).join(' ');
+    },
+    // Along the longest way: the shorter ones are its beginnings
+    headings(): Array<Heading> {
+      const longest = this.ways[this.ways.length - 1] ?? [];
+      return longest.length === 0 ? [] : wormHeadings(this.centers([this.wormSpace ?? '', ...longest]));
+    },
+    outcome(): Array<{color: Color, chips: Array<WormChip>}> {
+      const way = this.chosen === undefined ? [] : this.ways[this.chosen] ?? [];
+      return wormOutcome(way.map((id) => this.effectOf(id)));
+    },
+    maximumVegetation(): number {
+      return getGlobalParameterMaximums(this.playerView.game.gameOptions.boardName).oxygen;
     },
     scale(): number {
-      return Math.min(MAXIMUM_SCALE, this.width / Math.max(1, this.box.width), MAXIMUM_HEIGHT / Math.max(1, this.box.height));
+      return Math.min(MAXIMUM_SCALE, this.width / Math.max(1, this.box.width), this.height / Math.max(1, this.box.height));
     },
     stageWidth(): number {
       return Math.round(this.box.width * this.scale);
@@ -190,19 +231,57 @@ export default defineComponent({
       return option?.buttonLabel ?? 'Move';
     },
   },
+  watch: {
+    // The result line comes and goes with the choice: measure again once it is drawn
+    chosen() {
+      this.$nextTick(() => this.measure());
+    },
+  },
   mounted() {
     const root = this.$refs.root as HTMLElement;
-    this.width = root.clientWidth || this.width;
-    observer = new ResizeObserver(() => {
-      this.width = root.clientWidth || this.width;
-    });
+    this.$nextTick(() => this.measure());
+    observer = new ResizeObserver(() => this.measure());
     observer.observe(root);
+    if (root.parentElement !== null) {
+      observer.observe(root.parentElement);
+    }
   },
   beforeUnmount() {
     observer?.disconnect();
     observer = undefined;
   },
   methods: {
+    measure(): void {
+      const root = this.$refs.root as HTMLElement | undefined;
+      if (root === undefined) {
+        return;
+      }
+      this.width = root.clientWidth || this.width;
+      // Room from the top of this box down to the footer of the tab (it sits inside the scrolling tab) minus
+      // everything but the map: the map takes what is left. The children, not the box: it fills the tab
+      const panel = root.parentElement;
+      const map = root.querySelector<HTMLElement>('.worm-map');
+      if (panel !== null && map !== null) {
+        const footer = panel.querySelector<HTMLElement>('.or-tab-footer');
+        const bottom = (footer ?? panel).getBoundingClientRect()[footer === null ? 'bottom' : 'top'];
+        const children = [...root.children].filter((child): child is HTMLElement => child instanceof HTMLElement && child.offsetParent !== null);
+        const gap = parseFloat(getComputedStyle(root).rowGap) || 0;
+        const others = children.filter((child) => child !== map).reduce((sum, child) => sum + child.offsetHeight, 0) + gap * children.length;
+        const room = Math.floor(bottom - root.getBoundingClientRect().top - others);
+        this.height = Math.max(MINIMUM_HEIGHT, Math.min(MAXIMUM_HEIGHT, room));
+      }
+    },
+    effectOf(id: string) {
+      const space = this.spaceById.get(id);
+      return space === undefined ? undefined : wormEffect(space, arrakisNeighbours(this.layout, id).map((neighbour) => this.spaceById.get(neighbour)));
+    },
+    // Centres of spaces in the coordinates of the map piece
+    centers(ids: ReadonlyArray<string>): Array<{x: number, y: number}> {
+      return ids.map((id) => {
+        const position = arrakisSpacePosition(this.layout, id) ?? {x: 0, y: 0};
+        return {x: position.x - this.box.left + SPACE_WIDTH / 2, y: position.y - this.box.top + SPACE_HEIGHT / 2};
+      });
+    },
     onChosenWay(id: string): boolean {
       return this.chosen !== undefined && (this.ways[this.chosen] ?? []).includes(id);
     },

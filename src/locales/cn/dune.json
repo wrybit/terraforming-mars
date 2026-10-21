@@ -339,5 +339,10 @@
   "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "运送香料：每笔交易最多 5 香料，按当前香料汇率。交易所：汇率每世代变化——高卖低买。每次都会使嫌疑 +1；贿赂（10 索拉里，走私者市场拥有者 7）可降低嫌疑。世代结束时：0 和 1 免费；嫌疑达到 2 起会失去影响力，标记随后归零。",
   "has passed 35 on the Landsraad track.": "在兰兹拉德轨道上超过了35。",
   "have passed 35 on the Landsraad track.": "在兰兹拉德轨道上超过了35。",
-  "Choose the agenda you keep:": "选择你要保留的议程："
+  "Choose the agenda you keep:": "选择你要保留的议程：",
+  "Move distance": "移动距离",
+  "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0}/${1} 植被沙丘：沙虫最多移动 ${2} 格",
+  "Rock blocks the way: Shai-Hulud bounces off": "岩石挡路：夏胡露反弹",
+  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "距离：植被轨道分为三段——植被沙丘越多，移动越短（3、2、1 格）",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "障碍（岩石、城市、极地边界、棋盘边缘）：沙虫像球撞墙一样反弹——反弹不消耗步数"
 }

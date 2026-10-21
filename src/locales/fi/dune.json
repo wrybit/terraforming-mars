@@ -336,5 +336,10 @@
   "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Kuljeta maustetta: enintään 5 maustetta kaupassa mausteen nykyisellä kurssilla. Pörssi: kurssit muuttuvat joka sukupolvi – myy kalliilla, osta halvalla. Kumpikin nostaa epäilyä 1:llä; lahjus (10 solaria, salakuljettajien torin omistajalle 7) laskee sitä. Sukupolven lopussa: 0 ja 1 ovat ilmaisia, 2:sta alkaen menetetään arvovaltaa ja merkki palaa nollaan.",
   "has passed 35 on the Landsraad track.": "on ylittänyt 35 Landsraadin radalla.",
   "have passed 35 on the Landsraad track.": "ovat ylittäneet 35 Landsraadin radalla.",
-  "Choose the agenda you keep:": "Valitse agenda, jonka pidät:"
+  "Choose the agenda you keep:": "Valitse agenda, jonka pidät:",
+  "Move distance": "Liikematka",
+  "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0}/${1} istutusdyyniä: mato liikkuu enintään ${2} ruutua",
+  "Rock blocks the way: Shai-Hulud bounces off": "Kallio tukkii tien: Shai-Hulud kimpoaa",
+  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Matka: kasvillisuusasteikko kolmessa osassa – mitä enemmän istutusdyynejä, sitä lyhyempi liike (3, 2, 1 ruutua)",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Esteet (kallio, kaupungit, napa-alueen raja, reuna): mato kimpoaa kuin pallo seinästä – kimpoaminen ei kuluta askelta"
 }

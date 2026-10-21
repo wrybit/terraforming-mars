@@ -59,6 +59,9 @@ export function wormRules(layout: ArrakisLayout): ReadonlyArray<DuneRule> {
   return [
     {picture: 'token-worm', text: 'Start: the worm starts at random on one of these spaces:',
       detail: layout.wormStartSpaces.map((spaceId) => arrakisCoordinate(layout, spaceId)).join(', ')},
+    // How far and how it moves (common/dune/wormDistance.ts, server/dune/Worm.ts; Jens, 21 Oct 2026)
+    {picture: 'par-vegetation', text: 'Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)'},
+    {sign: 'slide', text: 'Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step'},
     ...WORM_EFFECT_RULES,
   ];
 }

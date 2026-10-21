@@ -338,5 +338,10 @@
   "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "스파이스 운송: 거래당 스파이스 최대 5개, 현재 스파이스 시세로. 거래소: 시세는 세대마다 바뀝니다 – 비싸게 팔고 싸게 사세요. 매번 의심이 1 오르며, 뇌물(10 솔라리, 밀수꾼 시장 소유자는 7)로 낮출 수 있습니다. 세대 종료: 0과 1은 무료이며, 2 이상이면 영향력을 잃고 마커가 0으로 돌아갑니다.",
   "has passed 35 on the Landsraad track.": "이(가) 란즈라드 트랙에서 35를 넘었습니다.",
   "have passed 35 on the Landsraad track.": "이(가) 란즈라드 트랙에서 35를 넘었습니다.",
-  "Choose the agenda you keep:": "유지할 의제를 선택하세요:"
+  "Choose the agenda you keep:": "유지할 의제를 선택하세요:",
+  "Move distance": "이동 거리",
+  "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "식재 사구 ${0}/${1}: 모래벌레는 최대 ${2}칸 이동합니다",
+  "Rock blocks the way: Shai-Hulud bounces off": "바위가 길을 막았습니다: 샤이 훌루드가 튕겨 나갑니다",
+  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "거리: 식생 트랙은 세 구간 – 식재 사구가 많을수록 이동이 짧아집니다(3, 2, 1칸)",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "장애물(바위, 도시, 극지 경계, 가장자리): 모래벌레는 벽에 맞은 공처럼 튕겨 나갑니다 – 튕겨도 걸음을 쓰지 않습니다"
 }

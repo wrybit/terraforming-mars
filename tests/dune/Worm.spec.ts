@@ -8,7 +8,7 @@ import {TileType} from '../../src/common/TileType';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {Space} from '../../src/server/boards/Space';
 import {ARRAKIS_ZONES, BEHIND_WORM_BORDER} from '../../src/common/dune/arrakisTerrain';
-import {WORM_START, WORM_START_SPACES, WORM_TITLE, WormData, crossSpace, directionIndex, distanceInput, maxWormDistance, moveWorm, wormChoices, wormChooser, wormDirection, wormModel, wormPath} from '../../src/server/dune/Worm';
+import {WORM_START, WORM_START_SPACES, WORM_TITLE, WormData, bouncedDirection, crossSpace, directionIndex, distanceInput, maxWormDistance, moveWorm, wormChoices, wormChooser, wormDirection, wormModel, wormPath} from '../../src/server/dune/Worm';
 import {LEVY_TITLE, PendingLevy, levyInput} from '../../src/server/dune/WormLevy';
 import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {formatMessage} from '../TestingUtils';
@@ -24,6 +24,7 @@ function wormOf(game: IGame): WormData {
   }
   return worm;
 }
+import {wormDistanceSections} from '../../src/common/dune/wormDistance';
 
 describe('Shai-Hulud (Dune module C)', () => {
   let game: IGame;
@@ -66,28 +67,76 @@ describe('Shai-Hulud (Dune module C)', () => {
     }
   });
 
-  it('turns clockwise when the rolled direction is blocked', () => {
-    const free = [0, 1, 2, 3, 4, 5].filter((direction) => wormPath(game.board, WORM_START, direction, 1).length > 0);
+  it('bounces off when the rolled direction is blocked', () => {
+    const start = game.board.getSpaceOrThrow(WORM_START);
+    const neighbours = game.board.getAdjacentSpacesClockwise(start);
+    const free = [0, 1, 2, 3, 4, 5].filter((direction) => wormPath(game.board, WORM_START, direction, 1)[0]?.id === neighbours[direction]?.id);
     expect(free.length).lessThan(6);
     for (let roll = 1; roll <= 6; roll++) {
       const direction = wormDirection(game.board, WORM_START, roll);
       expect(free).includes(direction);
-      expect(wormPath(game.board, WORM_START, direction, 1)).has.length(1);
-    }
-    // Free rolls keep their direction, blocked ones take the next free one clockwise
-    for (let roll = 1; roll <= 6; roll++) {
+      // Free rolls keep their direction, blocked ones take the mirrored one
       let expected = directionIndex(roll);
       while (!free.includes(expected)) {
-        expected = (expected + 1) % 6;
+        expected = bouncedDirection(game.board, start, expected);
       }
-      expect(wormDirection(game.board, WORM_START, roll)).eq(expected);
+      expect(direction).eq(expected);
     }
   });
 
-  it('moves less on a greener Arrakis', () => {
+  it('mirrors at a wall: slanted walls turn it by 120°, a single obstacle ahead sends it back', () => {
+    const board = game.board;
+    for (const space of board.spaces) {
+      if (ARRAKIS_ZONES[space.id] === undefined) {
+        continue;
+      }
+      const neighbours = board.getAdjacentSpacesClockwise(space);
+      const blocked = (direction: number) => {
+        const neighbour = neighbours[direction];
+        return neighbour === undefined || ARRAKIS_ZONES[neighbour.id] === 'rock' || ARRAKIS_ZONES[neighbour.id] === 'city' || BEHIND_WORM_BORDER.includes(neighbour.id);
+      };
+      for (let direction = 0; direction < 6; direction++) {
+        const left = blocked((direction + 5) % 6);
+        const right = blocked((direction + 1) % 6);
+        const expected = left && !right ? (direction + 2) % 6 : right && !left ? (direction + 4) % 6 : (direction + 3) % 6;
+        expect(bouncedDirection(board, space, direction), space.id + ' ' + direction).eq(expected);
+      }
+    }
+  });
+
+  it('goes round corners: bouncing costs no step', () => {
+    let bent = 0;
+    for (const space of game.board.spaces) {
+      if (ARRAKIS_ZONES[space.id] === undefined) {
+        continue;
+      }
+      for (let roll = 1; roll <= 6; roll++) {
+        const path = wormPath(game.board, space.id, wormDirection(game.board, space.id, roll), 3);
+        // Every step goes to a neighbour of the space before
+        [space, ...path].slice(0, -1).forEach((from, index) => {
+          expect(game.board.getAdjacentSpaces(from).map((adjacent) => adjacent.id)).includes(path[index].id);
+        });
+        const headings = [space, ...path].slice(0, -1).map((from, index) => game.board.getAdjacentSpacesClockwise(from).findIndex((adjacent) => adjacent?.id === path[index].id));
+        if (path.length === 3 && new Set(headings).size > 1) {
+          bent++;
+        }
+      }
+    }
+    expect(bent).is.greaterThan(0);
+  });
+
+  it('moves less on a greener Arrakis: the vegetation track in three sections, filled from the right', () => {
+    expect(wormDistanceSections(14)).deep.eq([5, 5, 4]);
+    expect(wormDistanceSections(18)).deep.eq([6, 6, 6]);
     expect(maxWormDistance(game)).eq(3);
+    setOxygenLevel(game, 3);
+    expect(maxWormDistance(game)).eq(3);
+    setOxygenLevel(game, 4);
+    expect(maxWormDistance(game)).eq(2);
     setOxygenLevel(game, 8);
     expect(maxWormDistance(game)).eq(2);
+    setOxygenLevel(game, 9);
+    expect(maxWormDistance(game)).eq(1);
     setOxygenLevel(game, game.max.oxygen);
     expect(maxWormDistance(game)).eq(1);
   });

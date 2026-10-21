@@ -17,18 +17,21 @@ import {Random} from '../../common/utils/Random';
 import {WORM_START_SPACES} from '../../common/dune/wormStartSpaces';
 import {ARRAKIS_LAYOUT, ArrakisLayout} from '../../common/dune/arrakisLayout';
 import {Arrakis61Board} from '../boards/Arrakis61Board';
+import {wormDistanceFor} from '../../common/dune/wormDistance';
+import {SPICE_BLOW_MAX, WORM_DOMAIN_TR, WORM_RIDER_SPICE, WORM_RIDER_WATER, wormEffectKind} from '../../common/dune/wormEffects';
 
 // Module C – Shai-Hulud (claude/dune-erweiterung-konzept.md): a worm marker wanders over Arrakis. At the end of
 // every generation a die gives the direction, the weakest player (least TR) chooses 1–3 spaces, and every space the
 // worm crosses – the last one included – takes effect. Rock, the worm border around the polar sink and the edge of
-// the board stop it in front of the space. If the rolled direction is blocked right away, the worm turns clockwise to
-// the next free direction (otherwise it would stay put most generations). Nothing may be placed on the space under the worm.
+// the board bounce it off like a ball off a wall (angle of incidence = angle of reflection, Jens 21 Oct 2026): a slanted
+// wall turns it by 120°, a single obstacle straight ahead sends it back. Bouncing costs no step, so the move goes round
+// corners; also a blocked rolled direction bounces right away. Nothing may be placed on the space under the worm.
 
 export type WormData = {
   spaceId: SpaceId,
   /** Die of the running or last move (1 top right … 6 top left, clockwise) */
   roll?: number,
-  /** Heading of that move after turning away from blocked spaces (index of getAdjacentSpacesClockwise) */
+  /** Heading of the first step of that move after bouncing off blocked spaces (index of getAdjacentSpacesClockwise) */
   direction?: number,
   /** Spaces crossed by the last move */
   path: Array<SpaceId>,
@@ -68,13 +71,9 @@ export function directionIndex(roll: number): number {
   return roll % 6;
 }
 
-/** The greener Arrakis, the weaker the worm: from 8 % vegetation at most 2 spaces, at full vegetation 1 */
+/** The greener Arrakis, the weaker the worm: the vegetation track in three sections (common/dune/wormDistance.ts) */
 export function maxWormDistance(game: IGame): number {
-  const vegetation = game.getOxygenLevel();
-  if (vegetation >= game.max.oxygen) {
-    return 1;
-  }
-  return vegetation >= 8 ? 2 : 3;
+  return wormDistanceFor(game.getOxygenLevel(), game.max.oxygen);
 }
 
 /** The weakest player chooses the distance: least TR, on a tie the later one in turn order */
@@ -92,28 +91,71 @@ function stopsWorm(board: Board, space: Space | undefined): boolean {
   return zone === 'rock' || zone === 'city' || layout.behindWormBorder.includes(space.id);
 }
 
-/** Heading for a die roll: the rolled direction, or the next free one clockwise when it is blocked; undefined when boxed in */
-export function wormDirection(board: Board, from: SpaceId, roll: number): number | undefined {
-  const neighbours = board.getAdjacentSpacesClockwise(board.getSpaceOrThrow(from));
-  for (let turn = 0; turn < neighbours.length; turn++) {
-    const direction = (directionIndex(roll) + turn) % neighbours.length;
-    if (!stopsWorm(board, neighbours[direction])) {
-      return direction;
+// Each of the six headings is mirrored at most once per step
+const MAX_BOUNCES = 6;
+
+/**
+ * New heading after hitting a blocked space: mirrored at the wall the blocked spaces form. Blocked ahead and on the
+ * left (counter-clockwise) side → the wall runs slanted, the worm leaves 120° clockwise; ahead and right → 120°
+ * counter-clockwise; a single obstacle ahead (or a corner) → straight back.
+ */
+export function bouncedDirection(board: Board, at: Space, direction: number): number {
+  const neighbours = board.getAdjacentSpacesClockwise(at);
+  const left = stopsWorm(board, neighbours[(direction + 5) % 6]);
+  const right = stopsWorm(board, neighbours[(direction + 1) % 6]);
+  if (left && !right) {
+    return (direction + 2) % 6;
+  }
+  if (right && !left) {
+    return (direction + 4) % 6;
+  }
+  return (direction + 3) % 6;
+}
+
+/** Heading of the next step from `at`: `direction`, or where the worm bounces to; undefined when boxed in */
+function freeDirection(board: Board, at: Space, direction: number): number | undefined {
+  const neighbours = board.getAdjacentSpacesClockwise(at);
+  const tried = new Set<number>();
+  let heading = direction;
+  while (tried.size < MAX_BOUNCES && !tried.has(heading)) {
+    if (!stopsWorm(board, neighbours[heading])) {
+      return heading;
+    }
+    tried.add(heading);
+    heading = bouncedDirection(board, at, heading);
+  }
+  // In a nook the mirrored headings can all be blocked: then the next free one clockwise, so the worm never sticks
+  // while a way out exists
+  for (let turn = 1; turn < 6; turn++) {
+    const clockwise = (direction + turn) % 6;
+    if (!stopsWorm(board, neighbours[clockwise])) {
+      return clockwise;
     }
   }
   return undefined;
 }
 
-/** Spaces the worm crosses heading `direction` for `distance` (fewer when something stops it) */
+/** Heading of the first step for a die roll: the rolled direction, or where it bounces to; undefined when boxed in */
+export function wormDirection(board: Board, from: SpaceId, roll: number): number | undefined {
+  return freeDirection(board, board.getSpaceOrThrow(from), directionIndex(roll));
+}
+
+/** Spaces the worm crosses heading `direction` for `distance`, bouncing off blocked spaces (fewer when boxed in) */
 export function wormPath(board: Board, from: SpaceId, direction: number | undefined, distance: number): Array<Space> {
   const path: Array<Space> = [];
   if (direction === undefined) {
     return path;
   }
   let current = board.getSpaceOrThrow(from);
+  let heading = direction;
   for (let step = 0; step < distance; step++) {
-    const next = board.getAdjacentSpacesClockwise(current)[direction];
-    if (next === undefined || stopsWorm(board, next)) {
+    const free = freeDirection(board, current, heading);
+    if (free === undefined) {
+      break;
+    }
+    heading = free;
+    const next = board.getAdjacentSpacesClockwise(current)[heading];
+    if (next === undefined) {
       break;
     }
     path.push(next);
@@ -135,16 +177,13 @@ export function crossSpace(game: IGame, space: Space, spared: ReadonlyArray<Spac
       player.stock.add(Resource.TITANIUM, 2, {log: true});
     }
   }
-  const tile = space.tile;
-  if (tile === undefined) {
-    return undefined;
-  }
   const owner = space.player;
-  if (tile.tileType === TileType.OCEAN) {
-    // Spice blow: +1 spice for each adjacent tile of a player, at most 6 in total
+  switch (wormEffectKind(space.tile?.tileType, owner !== undefined)) {
+  case 'spice-blow': {
+    // Spice blow: +1 spice for each adjacent tile of a player, at most SPICE_BLOW_MAX in total
     let given = 0;
     for (const adjacent of game.board.getAdjacentSpaces(space)) {
-      if (given >= 6) {
+      if (given >= SPICE_BLOW_MAX) {
         break;
       }
       if (adjacent.player !== undefined && Board.hasRealTile(adjacent)) {
@@ -155,14 +194,17 @@ export function crossSpace(game: IGame, space: Space, spared: ReadonlyArray<Spac
     game.log('Spice blow at ${0}', (b) => b.space(space));
     return undefined;
   }
-  if (owner === undefined) {
+  case 'worm-riders':
+    if (owner !== undefined) {
+      game.log('Worm riders of ${0} ride Shai-Hulud', (b) => b.player(owner));
+      owner.stock.add(Resource.TITANIUM, WORM_RIDER_SPICE, {log: true});
+      owner.stock.add(Resource.HEAT, WORM_RIDER_WATER, {log: true});
+    }
     return undefined;
-  }
-  if (Board.isCitySpace(space)) {
-    game.log('Worm riders of ${0} ride Shai-Hulud', (b) => b.player(owner));
-    owner.stock.add(Resource.TITANIUM, 1, {log: true});
-    owner.stock.add(Resource.HEAT, 2, {log: true});
-  } else if (Board.isGreenerySpace(space)) {
+  case 'trampled':
+    if (owner === undefined) {
+      return undefined;
+    }
     // Dune Stabiliser card: the worm spares the greenery placed by it
     if (spared.includes(space.id)) {
       game.log('Shai-Hulud spares the stabilised greenery of ${0}', (b) => b.player(owner));
@@ -170,22 +212,27 @@ export function crossSpace(game: IGame, space: Space, spared: ReadonlyArray<Spac
     }
     game.log('Shai-Hulud tramples a greenery of ${0}', (b) => b.player(owner));
     return takeLevy(owner, Resource.PLANTS);
-  } else if (tile.tileType === TileType.NATURAL_PRESERVE) {
-    owner.increaseTerraformRating(1, {log: true});
-  } else {
+  case 'domain':
+    owner?.increaseTerraformRating(WORM_DOMAIN_TR, {log: true});
+    return undefined;
+  case 'damaged':
+    if (owner === undefined) {
+      return undefined;
+    }
     game.log('Shai-Hulud damages a special tile of ${0}', (b) => b.player(owner));
     return takeLevy(owner, Resource.MEGACREDITS);
+  case 'none':
+    return undefined;
   }
-  return undefined;
 }
 
-/** Rolls the die for this generation's move and fixes the heading (turning away from blocked spaces) */
+/** Rolls the die for this generation's move and fixes the heading of the first step (bouncing off blocked spaces) */
 export function rollWorm(game: IGame, worm: WormData): void {
   worm.roll = game.rng.nextInt(6) + 1;
   worm.direction = wormDirection(game.board, worm.spaceId, worm.roll);
   game.log('Shai-Hulud stirs: the die shows ${0}', (b) => b.number(worm.roll ?? 1));
   if (worm.direction !== undefined && worm.direction !== directionIndex(worm.roll)) {
-    game.log('Rock blocks the way: Shai-Hulud turns clockwise');
+    game.log('Rock blocks the way: Shai-Hulud bounces off');
   }
 }
 

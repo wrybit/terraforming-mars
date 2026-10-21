@@ -335,5 +335,10 @@
   "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Spostare spezia: fino a 5 spezia per affare al cambio attuale della spezia. Borsa: i cambi variano a ogni generazione – vendi caro, compra a poco. Ognuno aumenta il sospetto di 1; una bustarella (10 solari, 7 per il proprietario del Mercato dei contrabbandieri) lo riduce. Fine generazione: 0 e 1 sono gratuiti, da 2 in su si perde influenza e il segnalino torna a 0.",
   "has passed 35 on the Landsraad track.": "ha superato 35 sul tracciato del Landsraad.",
   "have passed 35 on the Landsraad track.": "hanno superato 35 sul tracciato del Landsraad.",
-  "Choose the agenda you keep:": "Scegli l’agenda che tieni:"
+  "Choose the agenda you keep:": "Scegli l’agenda che tieni:",
+  "Move distance": "Distanza",
+  "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} di ${1} dune piantumate: il verme si sposta fino a ${2} spazio/i",
+  "Rock blocks the way: Shai-Hulud bounces off": "Una roccia blocca la strada: Shai-Hulud rimbalza",
+  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Distanza: il tracciato della vegetazione in tre sezioni – più dune piantumate, più breve lo spostamento (3, 2, 1 spazi)",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Ostacoli (roccia, città, confine polare, bordo): il verme rimbalza come una palla sul muro – rimbalzare non costa passi"
 }

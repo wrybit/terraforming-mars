@@ -336,5 +336,10 @@
   "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Mover especia: hasta 5 especia por trato al precio actual de la especia. Bolsa: los precios cambian cada generación – vende caro, compra barato. Cada uno aumenta la sospecha en 1; un soborno (10 solaris, 7 para el propietario del Mercado de contrabandistas) la reduce. Fin de la generación: 0 y 1 son gratis; a partir de 2 se pierde influencia y el marcador vuelve a 0.",
   "has passed 35 on the Landsraad track.": "ha superado 35 en el marcador del Landsraad.",
   "have passed 35 on the Landsraad track.": "han superado 35 en el marcador del Landsraad.",
-  "Choose the agenda you keep:": "Elige la agenda que conservas:"
+  "Choose the agenda you keep:": "Elige la agenda que conservas:",
+  "Move distance": "Distancia",
+  "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} de ${1} dunas plantadas: el gusano se mueve hasta ${2} casilla(s)",
+  "Rock blocks the way: Shai-Hulud bounces off": "Una roca bloquea el camino: Shai-Hulud rebota",
+  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Distancia: el marcador de vegetación en tres tramos; cuantas más dunas plantadas, más corto el movimiento (3, 2, 1 casillas)",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Obstáculos (roca, ciudades, borde polar, límite del tablero): el gusano rebota como una bola contra la pared; rebotar no cuesta paso"
 }

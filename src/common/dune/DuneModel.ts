@@ -40,9 +40,9 @@ export type WormModel = {
   spaceId: string,
   /** Die of the last move (1 top right … 6 top left, clockwise) */
   roll: number | undefined,
-  /** Heading of that move (0 top left … 5 left, clockwise); differs from the die when rock made the worm turn */
+  /** Heading of the first step of that move (0 top left … 5 left, clockwise); differs from the die when it bounced */
   direction: number | undefined,
-  /** The rolled direction was blocked, the worm turned clockwise */
+  /** The rolled direction was blocked, the worm bounced off right away */
   turned: boolean,
   /** Spaces crossed by the last move */
   path: ReadonlyArray<string>,

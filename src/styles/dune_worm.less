@@ -27,6 +27,7 @@
 
 // Choosing the worm's distance (WormMoveInput.vue): a piece of Arrakis, the terrain as coloured hexes under the tiles
 @worm-way: #e0662a;
+@worm-hint: #cbb994;
 
 .worm-move {
   display: flex;
@@ -40,7 +41,7 @@
 .worm-move__chosen {
   margin: 0;
   text-align: center;
-  color: #cbb994;
+  color: @worm-hint;
 }
 
 // Running-text size like the other hints in the tab panel (schemes-keep__hint), not the large panel font
@@ -101,7 +102,7 @@ html:not(.tm-mobile) .worm-move__chosen {
 // light and dark sand alike. Only the SVG turns, so the shadow always falls downward
 .worm-map__heading {
   position: absolute;
-  z-index: 5;
+  z-index: 7;
   width: 15px;
   height: 15px;
   box-sizing: border-box;
@@ -123,6 +124,207 @@ html:not(.tm-mobile) .worm-move__chosen {
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+}
+
+// Effect of the worm on a space (WormEffectChip.vue): gain green, loss red, spice blow gold
+@worm-gain: #7cc36a;
+@worm-loss: #e5655a;
+@worm-neutral: #e2b04a;
+
+.worm-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  padding: 2px 5px;
+  border-radius: 7px;
+  border: 1px solid currentColor;
+  background: rgba(24, 15, 9, 0.9);
+  font-family: Prototype, sans-serif;
+  font-size: 12px;
+  line-height: 1;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+
+  img {
+    width: 13px;
+    height: 13px;
+  }
+}
+
+.worm-chip__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+
+  & + & {
+    margin-left: 2px;
+  }
+}
+
+.worm-chip--gain { color: @worm-gain; }
+.worm-chip--loss { color: @worm-loss; }
+.worm-chip--neutral { color: @worm-neutral; }
+
+// On the map: board pixels, scaled up with the piece; its own layer above the faded spaces
+.worm-map .worm-map__chip {
+  position: absolute;
+  z-index: 4;
+  transform: translate(-50%, -50%);
+  gap: 1px;
+  padding: 1px 3px;
+  border-width: 0.75px;
+  border-radius: 6px;
+  font-size: 7.5px;
+
+  img {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+.worm-map__chip--on-way {
+  background: #1a0f08;
+  box-shadow: 0 0 0 1px rgba(255, 248, 234, 0.85), 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+// The chosen way: a dotted light line on an orange glow, like the trail in the Shai-Hulud tab
+.worm-map__line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.worm-map__line-glow,
+.worm-map__line-dash {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.worm-map__line-glow {
+  stroke: fade(@worm-way, 75%);
+  stroke-width: 5;
+}
+
+.worm-map__line-dash {
+  stroke: #fff3df;
+  stroke-width: 1.6;
+  stroke-dasharray: 2 3;
+}
+
+// Vegetation track (WormVegetationBar.vue): small gaps inside a group, clearly larger ones between the three groups
+.worm-vegetation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.worm-vegetation__track {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+}
+
+.worm-vegetation__label {
+  align-self: flex-start;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  margin-right: -6px;
+  color: @worm-hint;
+  font-size: 14px;
+}
+
+.worm-vegetation__section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.worm-vegetation__distance {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  color: #8c765a;
+  font-family: Prototype, sans-serif;
+  font-size: 13px;
+}
+
+// The active distance in a ring like the chosen distance on the map
+.worm-vegetation__section--active .worm-vegetation__distance {
+  border: 1.5px solid #fff8ea;
+  background: @worm-way;
+  color: #fff8ea;
+  box-shadow: 0 0 8px 1px fade(@worm-way, 70%);
+}
+
+.worm-vegetation__hexes {
+  display: flex;
+  gap: 2px;
+}
+
+.worm-vegetation__hex {
+  position: relative;
+  width: 22px;
+  height: 25px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: #4a3524;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 1.5px;
+    clip-path: inherit;
+    background: #2c1f15;
+  }
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// First free step from the right: where the next greenery goes
+.worm-vegetation__hex--front {
+  background: @worm-way;
+}
+
+.worm-vegetation__caption {
+  margin: 0;
+  color: @worm-hint;
+  font-size: 13px;
+  text-align: center;
+}
+
+html.tm-mobile {
+  .worm-vegetation__track { gap: 10px; }
+  .worm-vegetation__label { font-size: 12px; margin-right: -2px; }
+  .worm-vegetation__hex { width: 15px; height: 17px; }
+  .worm-vegetation__hexes { gap: 1.5px; }
+}
+
+// Result of the chosen way: one group per player (cube and chips), groups farther apart than their chips
+.worm-move__outcome {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+}
+
+.worm-move__outcome-player {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 // End spaces: a ring with the distance, the whole space is the click target

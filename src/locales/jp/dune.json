@@ -338,5 +338,10 @@
   "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "スパイス輸送：1回の取引でスパイス最大5を現在のスパイス相場で。取引所：相場は世代ごとに変わる――高く売り、安く買う。いずれも疑惑が1上がり、賄賂（10ソラリ、密輸業者の市場の所有者は7）で下げられます。世代の終わり：0と1は無料。2以上で影響力を失い、マーカーは0に戻ります。",
   "has passed 35 on the Landsraad track.": "がランドスラードの軌道で35を超えました。",
   "have passed 35 on the Landsraad track.": "がランドスラードの軌道で35を超えました。",
-  "Choose the agenda you keep:": "残す計略を選んでください："
+  "Choose the agenda you keep:": "残す計略を選んでください：",
+  "Move distance": "移動距離",
+  "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "植林砂丘 ${0}/${1}：ワームは最大${2}マス進む",
+  "Rock blocks the way: Shai-Hulud bounces off": "岩が道をふさぐ：シャイー・フルードは跳ね返る",
+  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "距離：植生トラックは3区間 ― 植林砂丘が多いほど移動は短くなる（3・2・1マス）",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "障害物（岩・都市・極地の境界・盤の端）：ワームは壁に当たった球のように跳ね返る ― 跳ね返りで歩数は減らない"
 }

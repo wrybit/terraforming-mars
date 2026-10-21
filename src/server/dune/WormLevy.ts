@@ -8,11 +8,12 @@ import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
 import {BAZAAR_GOOD_VALUE} from '../../common/dune/bazaarWares';
 import {RESOURCE_LABEL} from './resourceLabels';
+import {WORM_LEVY_UNITS} from '../../common/dune/wormEffects';
 
 // Levies of Shai-Hulud (module C): a trampled greenery costs 3 plants, a damaged special tile 3 M€.
 // Whoever cannot pay the 3 units gives resources worth 4 instead (value table of module A) and chooses which.
 
-export const LEVY_UNITS = 3;
+export const LEVY_UNITS = WORM_LEVY_UNITS;
 export const LEVY_FALLBACK_WORTH = 4;
 
 export {LEVY_TITLE};

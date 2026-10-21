@@ -336,5 +336,10 @@
   "Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.": "Mover especiaria: até 5 especiaria por negócio à cotação atual da especiaria. Bolsa: as cotações mudam a cada geração – venda caro, compre barato. Cada um aumenta a suspeita em 1; um suborno (10 solaris, 7 para o dono do Mercado dos Contrabandistas) a reduz. Fim da geração: 0 e 1 são grátis; a partir de 2, perde-se influência e o marcador volta a 0.",
   "has passed 35 on the Landsraad track.": "passou de 35 na trilha do Landsraad.",
   "have passed 35 on the Landsraad track.": "passaram de 35 na trilha do Landsraad.",
-  "Choose the agenda you keep:": "Escolha a agenda que você mantém:"
+  "Choose the agenda you keep:": "Escolha a agenda que você mantém:",
+  "Move distance": "Distância",
+  "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} de ${1} dunas plantadas: o verme anda até ${2} espaço(s)",
+  "Rock blocks the way: Shai-Hulud bounces off": "Uma rocha bloqueia o caminho: Shai-Hulud ricocheteia",
+  "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Distância: a trilha de vegetação em três partes – quanto mais dunas plantadas, menor o movimento (3, 2, 1 espaços)",
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Obstáculos (rocha, cidades, borda polar, beirada): o verme ricocheteia como uma bola na parede – ricochetear não gasta passo"
 }
