@@ -165,12 +165,26 @@
     padding: calc(6px * @s) 8px calc(8px * @s) @players-table-inset;
   }
 
+  // Head in one line: burger only (label and hotkey hidden) in front of the first goods icon
   .players-table-head {
-    grid-template-areas: "name name" "goods tags";
+    grid-template-areas: "goods tags";
     padding-block: calc(4px * @s);
+  }
 
-    .players-table-menu {
-      padding-left: 0;
+  .players-table-menu--inline {
+    grid-area: auto;
+    padding-left: 0;
+    margin-right: calc(4px * @s);
+
+    // .game-menu doubled: beats the hotkey padding (hotkeys.less)
+    .game-menu .game-menu-button {
+      gap: 0;
+      padding: 0 6px;
+    }
+
+    .game-menu-button-label,
+    .hotkey-keys {
+      display: none;
     }
   }
 
