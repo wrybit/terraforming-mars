@@ -28,11 +28,24 @@ import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/comp
 import {playerGoods} from '@/client/components/overview/playerGoods';
 import {NameWidths, PlayersTableFit, PlayersTableRowModel, TagColumnGroups, fitPlayersTable, tableVariables} from '@/client/components/overview/playersTableLayout';
 
+// Status plaque with a running clock ("● 12:34:56") at scale 1
+const STATUS_PLAQUE_WIDTH = 92;
+let measuringCanvas: HTMLCanvasElement | undefined;
+
+// Width of a name in the table font at scale 1 (own row: 22px), with a generous estimate where canvas isn't available
+function nameTextWidth(name: string): number {
+  measuringCanvas ??= typeof document !== 'undefined' ? document.createElement('canvas') : undefined;
+  const context = measuringCanvas?.getContext?.('2d');
+  if (!context) {
+    return name.length * 13;
+  }
+  context.font = '22px Prototype, sans-serif';
+  return Math.ceil(context.measureText(name).width) + 4;
+}
+
 type DataModel = {
   // Width of the table; 0 while it is invisible or not yet measured
   availableWidth: number;
-  // Widest name and status plaque at scale 1 – the name column never shortens a name
-  nameWidths: NameWidths;
   resizeObserver: ResizeObserver | undefined;
 };
 
@@ -57,7 +70,6 @@ export default defineComponent({
     return {
       availableWidth: 0,
       resizeObserver: undefined,
-      nameWidths: {name: 0, status: 0},
     };
   },
   // Watch the width: arrangement and size of the table follow it (never scrolls sideways)
@@ -71,11 +83,6 @@ export default defineComponent({
       this.availableWidth = Math.floor(entries[0].contentRect.width * zoom);
     });
     this.resizeObserver.observe(this.$el);
-    this.measureNames();
-  },
-  // Names, status and timer change their width (ticking clock, passed): measure again after every render
-  updated() {
-    this.measureNames();
   },
   beforeUnmount() {
     this.resizeObserver?.disconnect();
@@ -110,6 +117,11 @@ export default defineComponent({
       }
       return groups.filter((group) => group.length > 0);
     },
+    // Widest name and status plaque at scale 1, computed from the names alone – never measured in the page,
+    // so the size can't feed back into itself (a measured width changes the scale, which changes the width …)
+    nameWidths(): NameWidths {
+      return {name: Math.max(0, ...this.rows.map((row) => nameTextWidth(row.player.name))), status: STATUS_PLAQUE_WIDTH};
+    },
     fit(): PlayersTableFit {
       return fitPlayersTable(this.availableWidth, this.tagColumns, this.escapeVelocity, this.nameWidths);
     },
@@ -142,19 +154,6 @@ export default defineComponent({
         }
       });
       return leaders;
-    },
-  },
-  methods: {
-    // Widths at scale 1 (measured width divided by the current scale); only assigned on a real change,
-    // otherwise every render would trigger the next one. Rounded up to whole px so the ticking clock doesn't jitter
-    measureNames() {
-      const scale = this.fit.scale;
-      const widest = (selector: string) => Math.max(0, ...Array.from((this.$el as HTMLElement).querySelectorAll<HTMLElement>(selector), (element) => element.scrollWidth));
-      const name = Math.ceil(widest('.players-table-name') / scale);
-      const status = Math.ceil(widest('.players-table-identity-line .player-action-status-container') / scale);
-      if (Math.abs(name - this.nameWidths.name) > 2 || Math.abs(status - this.nameWidths.status) > 2) {
-        this.nameWidths = {name, status};
-      }
     },
   },
 });
