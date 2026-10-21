@@ -49,10 +49,8 @@ describe('PlayersTable', () => {
     const wide = fitPlayersTable(1800, TAG_COLUMNS);
     expect(wide.mode).to.eq('line');
     expect(wide.showCorporation).to.be.true;
-    // Standard width: everything in one line, the corporation gives way first
-    const standard = fitPlayersTable(1000, TAG_COLUMNS);
-    expect(standard.mode).to.eq('line');
-    expect(standard.showCorporation).to.be.false;
+    // Standard width: everything in one line
+    expect(fitPlayersTable(1000, TAG_COLUMNS).mode).to.eq('line');
     expect(fitPlayersTable(800, TAG_COLUMNS).mode).to.eq('two-lines');
     expect(fitPlayersTable(600, TAG_COLUMNS).mode).to.eq('three-lines');
     expect(fitPlayersTable(380, TAG_COLUMNS).mode).to.eq('cards');
@@ -65,6 +63,15 @@ describe('PlayersTable', () => {
         fit.mode === 'two-lines' ? twoLinesWidth(fit.scale, TAG_COLUMNS) :
           fit.mode === 'three-lines' ? threeLinesWidth(fit.scale, TAG_COLUMNS) : 0;
       expect(needed, `width ${width} (${fit.mode})`).to.be.at.most(width);
+    }
+  });
+
+  it('shows the corporation as soon as it fits at the chosen size, never leaving the room empty', () => {
+    for (let width = 900; width <= 1500; width += 10) {
+      const fit = fitPlayersTable(width, TAG_COLUMNS);
+      if (fit.mode === 'line') {
+        expect(fit.showCorporation, `width ${width}`).to.eq(lineWidth(fit.scale, TAG_COLUMNS, true, false) <= width);
+      }
     }
   });
 

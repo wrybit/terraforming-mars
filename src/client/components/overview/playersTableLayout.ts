@@ -128,7 +128,9 @@ export function fitPlayersTable(available: number, tagColumns: TagColumnGroups, 
   }
   const compact = largestScale((scale) => lineWidth(scale, tagColumns, false, escapeVelocity), available, MIN_SCALE);
   if (compact !== undefined) {
-    return {mode: 'line', scale: compact, showCorporation: false, extraGap: 0};
+    // Room left at this size: rather show the corporation than leave the space empty
+    const showCorporation = lineWidth(compact, tagColumns, true, escapeVelocity) <= available;
+    return {mode: 'line', scale: compact, showCorporation, extraGap: 0};
   }
   const twoLines = largestScale((scale) => twoLinesWidth(scale, tagColumns), available, MIN_SCALE);
   const threeLines = largestScale((scale) => threeLinesWidth(scale, tagColumns), available, MIN_THREE_LINES_SCALE);
@@ -150,7 +152,7 @@ export function goodsTemplate(fit: PlayersTableFit): string {
   if (fit.mode === 'three-lines') {
     return `repeat(${GOODS_COUNT}, minmax(0, 1fr))`;
   }
-  return `repeat(${GOODS_COUNT}, ${Math.round(GOODS_WIDTH * fit.scale)}px)`;
+  return `repeat(${GOODS_COUNT}, minmax(${Math.round(GOODS_WIDTH * fit.scale)}px, 1fr))`;
 }
 
 export function tagsTemplate(fit: PlayersTableFit, tagColumns: TagColumnGroups): string {
@@ -160,16 +162,27 @@ export function tagsTemplate(fit: PlayersTableFit, tagColumns: TagColumnGroups):
   if (fit.mode === 'three-lines') {
     return `repeat(${tagCount(tagColumns)}, minmax(0, 1fr))`;
   }
-  const cell = `${Math.round(TAG_WIDTH * fit.scale)}px`;
+  const cell = `minmax(${Math.round(TAG_WIDTH * fit.scale)}px, 1fr)`;
   return tagColumns.map((group) => `repeat(${group.length}, ${cell})`).join(` ${TAG_GROUP_GAP}px `);
 }
 
 export function scoreTemplate(fit: PlayersTableFit): string {
-  return `repeat(${SCORE_COUNT}, ${Math.round(SCORE_WIDTH * fit.scale)}px) ${Math.round(PLAYED_CARDS_WIDTH * fit.scale)}px`;
+  return `repeat(${SCORE_COUNT}, minmax(${Math.round(SCORE_WIDTH * fit.scale)}px, 1fr)) minmax(${Math.round(PLAYED_CARDS_WIDTH * fit.scale)}px, 1fr)`;
+}
+
+// Rows of one and two lines: the sections share the width in proportion to what they need, so leftover
+// space widens every box a little instead of collecting as a gap at the end of the row
+function sectionWeights(fit: PlayersTableFit, tagColumns: TagColumnGroups): {goods: number, tags: number, score: number} {
+  return {
+    goods: Math.round(goodsWidth(fit.scale, false)),
+    tags: Math.round(tagsWidth(fit.scale, tagColumns)),
+    score: Math.round(scoreWidth(fit.scale)),
+  };
 }
 
 // CSS variables of the table (players_table.less)
 export function tableVariables(fit: PlayersTableFit, tagColumns: TagColumnGroups, escapeVelocity: boolean): Record<string, string> {
+  const weights = sectionWeights(fit, tagColumns);
   return {
     '--players-table-scale': String(fit.scale),
     '--players-table-name-width': `${nameColumnWidth(fit.scale, fit.showCorporation, escapeVelocity)}px`,
@@ -178,5 +191,7 @@ export function tableVariables(fit: PlayersTableFit, tagColumns: TagColumnGroups
     '--players-table-goods-columns': goodsTemplate(fit),
     '--players-table-tag-columns': tagsTemplate(fit, tagColumns),
     '--players-table-score-columns': scoreTemplate(fit),
+    '--players-table-line-columns': `${nameColumnWidth(fit.scale, fit.showCorporation, escapeVelocity)}px minmax(0, ${weights.goods}fr) minmax(0, ${weights.tags}fr) minmax(0, ${weights.score}fr)`,
+    '--players-table-two-lines-columns': `minmax(0, ${weights.goods}fr) minmax(0, ${weights.tags}fr)`,
   };
 }
