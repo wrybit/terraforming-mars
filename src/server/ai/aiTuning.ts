@@ -918,6 +918,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noPhasePlan: {phasePlan: 0},
   noDrawPriority: {drawPriority: 0},
   drawPriority3: {drawPriority: 3},
+  // Round 129: re-test with own drawn cards valued by drawPriority (ownDrawnCardValue, round 123).
+  drawPriority5: {drawPriority: 5},
   drawPriority6: {drawPriority: 6},
   drawPriority8: {drawPriority: 8},
   draftPrior3: {draftPriorWeight: 3},
