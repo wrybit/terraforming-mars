@@ -75,7 +75,7 @@ export type Heading = Point & {angle: number};
  * What the worm bounced off: the centre of the blocked space (marked on its hex) and the edge it hit (marked as a bar
  * when that space is not on the map piece, e.g. the board edge)
  */
-export type Wall = {obstacle: Point, x1: number, y1: number, x2: number, y2: number};
+export type Wall = {obstacle: Point, x1: number, y1: number, x2: number, y2: number, atStart: boolean};
 
 // From the centre of a space to the centre of its neighbour, in board pixels (46 × 51 spaces), by heading index
 // (0 top left … 5 left, clockwise like getAdjacentSpacesClockwise)
@@ -94,12 +94,12 @@ function sameHeading(first: Point, second: Point): boolean {
   return Math.round(angleOf(first) / 60) === Math.round(angleOf(second) / 60);
 }
 
-function wallAt(center: Point, towards: Point): Wall {
+function wallAt(center: Point, towards: Point, atStart: boolean): Wall {
   const length = Math.hypot(towards.x, towards.y) || 1;
   const middle = {x: center.x + towards.x / 2, y: center.y + towards.y / 2};
   const across = {x: -towards.y / length * WALL_HALF, y: towards.x / length * WALL_HALF};
   return {obstacle: {x: center.x + towards.x, y: center.y + towards.y},
-    x1: middle.x - across.x, y1: middle.y - across.y, x2: middle.x + across.x, y2: middle.y + across.y};
+    x1: middle.x - across.x, y1: middle.y - across.y, x2: middle.x + across.x, y2: middle.y + across.y, atStart};
 }
 
 // Two discs on the same edge (a bounce straight back crosses it twice): this far apart along the edge
@@ -120,12 +120,12 @@ export function wormBounceMarks(points: ReadonlyArray<Point>, rolledDirection: n
   }
   const rolled = rolledDirection === undefined ? undefined : NEIGHBOUR_OFFSETS[rolledDirection];
   if (rolled !== undefined && !sameHeading(rolled, steps[0])) {
-    walls.push(wallAt(points[0], rolled));
+    walls.push(wallAt(points[0], rolled, true));
   }
   steps.forEach((step, index) => {
     const from = points[index];
     if (index > 0 && !sameHeading(steps[index - 1], step)) {
-      walls.push(wallAt(from, steps[index - 1]));
+      walls.push(wallAt(from, steps[index - 1], false));
     }
     const heading = {x: from.x + step.x / 2, y: from.y + step.y / 2, angle: angleOf(step)};
     const shared = headings.find((other) => Math.abs(other.x - heading.x) < 1 && Math.abs(other.y - heading.y) < 1);

@@ -26,11 +26,11 @@
             <polyline class="worm-map__line-glow" :points="wayLine"/>
             <polyline class="worm-map__line-dash" :points="wayLine"/>
           </template>
-          <!-- What the worm bounces off: the blocked hex outlined in orange; off the map piece (board edge) a bar on
-               the edge it hits (Jens, 21 Oct 2026) -->
+          <!-- What the worm bounces off, only where it is turned: the blocked hex outlined in orange; on the way at the
+               board edge (no hex) a bar on the edge it hits. At the start only a blocked hex, not the edge (Jens, 21 Oct 2026) -->
           <template v-for="(wall, index) in marks.walls" :key="'wall-' + index">
             <polygon v-if="shownAt(wall.obstacle)" class="worm-map__obstacle" :points="obstacleOutline(wall.obstacle)"/>
-            <line v-else class="worm-map__wall" :x1="wall.x1" :y1="wall.y1" :x2="wall.x2" :y2="wall.y2"/>
+            <line v-else-if="!wall.atStart" class="worm-map__wall" :x1="wall.x1" :y1="wall.y1" :x2="wall.x2" :y2="wall.y2"/>
           </template>
         </svg>
         <!-- Heading: a white disc with an arrow on every edge the worm crosses (worm → 1 → 2 → 3), along the longest
