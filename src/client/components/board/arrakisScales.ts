@@ -71,15 +71,39 @@ export function pointAt(geometry: ScaleGeometry, angle: number, radius: number =
 
 // Symbol and name of each scale continue the band beyond its top end, on the same circle: vegetation goes on clockwise
 // (upper left), the water storage counter-clockwise (upper right); the text always runs clockwise, so it stays upright.
-// Measured from the last marker of the scale, so they follow the band on both boards.
+// Measured in board pixels along the circle from the end of the band, so the gaps are the same on both boards and on
+// both sides (design B · eng, Jens, 21 Oct 2026).
 export type ScaleLabel = {symbolAngle: number, text: {from: number, to: number, anchor: 'start' | 'end'}};
 
-export function scaleLabels(geometry: ScaleGeometry): {vegetation: ScaleLabel, water: ScaleLabel} {
-  const vegetationEnd = geometry.vegetationAngles[geometry.vegetationAngles.length - 1];
-  const waterEnd = geometry.waterAngles[geometry.waterAngles.length - 1];
+/** Distance from the end of the band to the centre of the symbol */
+export const LABEL_SYMBOL_DISTANCE = 21;
+/** Distance from the end of the band to the near end of the name */
+export const LABEL_TEXT_DISTANCE = 41;
+/** Length of the arc the name runs along (room for the longest translation) */
+export const LABEL_TEXT_LENGTH = 150;
+
+/** Angle where the band ends: half a step beyond its last marker, like the outline (scaleOutline) */
+function bandEnd(angles: ReadonlyArray<number>): number {
+  const last = angles[angles.length - 1];
+  return last + (last - angles[angles.length - 2]) / 2;
+}
+
+function label(geometry: ScaleGeometry, angles: ReadonlyArray<number>, direction: 1 | -1): ScaleLabel {
+  const degrees = (pixels: number) => direction * pixels / geometry.radius * 180 / Math.PI;
+  const end = bandEnd(angles);
+  const near = end + degrees(LABEL_TEXT_DISTANCE);
+  const far = end + degrees(LABEL_TEXT_DISTANCE + LABEL_TEXT_LENGTH);
   return {
-    vegetation: {symbolAngle: vegetationEnd + 9.5, text: {from: vegetationEnd + 16, to: vegetationEnd + 47.6, anchor: 'start'}},
-    water: {symbolAngle: waterEnd - 8.6, text: {from: waterEnd - 45.5, to: waterEnd - 15.1, anchor: 'end'}},
+    symbolAngle: end + degrees(LABEL_SYMBOL_DISTANCE),
+    // The text runs clockwise: it starts at the band on the vegetation side and ends at the band on the water side
+    text: direction === 1 ? {from: near, to: far, anchor: 'start'} : {from: far, to: near, anchor: 'end'},
+  };
+}
+
+export function scaleLabels(geometry: ScaleGeometry): {vegetation: ScaleLabel, water: ScaleLabel} {
+  return {
+    vegetation: label(geometry, geometry.vegetationAngles, 1),
+    water: label(geometry, geometry.waterAngles, -1),
   };
 }
 

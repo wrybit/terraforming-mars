@@ -34,14 +34,28 @@ describe('arrakisScales', () => {
 
   it('turns symbol and name of the standard board up with its scales, the names meeting at the top', () => {
     const vegetation = scaleLabels(STANDARD_SCALES).vegetation;
-    expect(vegetation.symbolAngle).closeTo(230.4, 0.001);
-    expect(vegetation.text.from).closeTo(236.9, 0.001);
-    expect(vegetation.text.to).closeTo(268.5, 0.001);
+    expect(vegetation.symbolAngle).closeTo(228.55, 0.01);
+    expect(vegetation.text.from).closeTo(232.84, 0.01);
+    expect(vegetation.text.to).closeTo(264.98, 0.01);
     const water = scaleLabels(STANDARD_SCALES).water;
-    expect(water.symbolAngle).closeTo(-55, 0.001);
-    expect(water.text.from).closeTo(-91.9, 0.001);
-    expect(water.text.to).closeTo(-61.5, 0.001);
+    expect(water.symbolAngle).closeTo(-53.55, 0.01);
+    expect(water.text.from).closeTo(-89.98, 0.01);
+    expect(water.text.to).closeTo(-57.84, 0.01);
   });
+
+  // Gaps in board pixels from the end of the band, the same on both boards and both sides (design B · eng)
+  for (const [name, geometry] of [['standard', STANDARD_SCALES], ['large', LARGE_SCALES]] as const) {
+    it(`keeps the same pixel gaps between band, symbol and name on the ${name} board`, () => {
+      const pixels = (degrees: number) => Math.abs(degrees) * Math.PI / 180 * geometry.radius;
+      const {vegetation, water} = scaleLabels(geometry);
+      const vegetationEnd = 2 * geometry.vegetationAngles.at(-1)! - (geometry.vegetationAngles.at(-1)! + geometry.vegetationAngles.at(-2)!) / 2;
+      const waterEnd = 2 * geometry.waterAngles.at(-1)! - (geometry.waterAngles.at(-1)! + geometry.waterAngles.at(-2)!) / 2;
+      expect(pixels(vegetation.symbolAngle - vegetationEnd)).closeTo(21, 0.01);
+      expect(pixels(water.symbolAngle - waterEnd)).closeTo(21, 0.01);
+      expect(pixels(vegetation.text.from - vegetationEnd)).closeTo(41, 0.01);
+      expect(pixels(water.text.to - waterEnd)).closeTo(41, 0.01);
+    });
+  }
 
   it('draws one closed step per value', () => {
     const steps = scaleSteps(STANDARD_SCALES, STANDARD_SCALES.vegetationAngles);
