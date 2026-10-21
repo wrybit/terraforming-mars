@@ -829,6 +829,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Human games (2026-10-15): hand 14–24 cards, 13 sold at the end – buy only cards worth clearly more than 3 M€.
   buyStrict: {buyMargin: -1},
   buyStricter: {buyMargin: 1},
+  // Round 131: humans spend ~660 M€ on 57 project cards, the AI ~400 M€ on 34 with the same income (moneyBottleneck.py).
+  buyMargin0: {buyMargin: 0},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},
