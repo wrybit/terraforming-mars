@@ -125,6 +125,12 @@ html:not(.tm-mobile) .worm-move__chosen {
   }
 }
 
+// Disc of a bounce: on the orange bar, framed in orange so it reads as part of it
+.worm-map .worm-map__heading--bounce {
+  z-index: 8;
+  border: 1.5px solid @worm-way;
+}
+
 // Effect of the worm on a space (WormEffectChip.vue): gain green, loss red, spice blow gold
 @worm-gain: #7cc36a;
 @worm-loss: #e5655a;
@@ -214,14 +220,6 @@ html:not(.tm-mobile) .worm-move__chosen {
   stroke: @worm-way;
   stroke-width: 4;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
-}
-
-.worm-map__obstacle {
-  fill: fade(@worm-way, 22%);
-  stroke: @worm-way;
-  stroke-width: 3;
-  stroke-linejoin: round;
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
 }
 

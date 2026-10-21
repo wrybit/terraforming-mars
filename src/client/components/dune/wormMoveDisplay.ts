@@ -72,10 +72,11 @@ export function wormOutcome(effects: ReadonlyArray<{gains: Array<Gain>} | undefi
 export type Point = {x: number, y: number};
 export type Heading = Point & {angle: number};
 /**
- * What the worm bounced off: the centre of the blocked space (marked on its hex) and the edge it hit (marked as a bar
- * when that space is not on the map piece, e.g. the board edge)
+ * What the worm bounced off: the side of the blocked space it hit (a bar on that edge, just inside the blocked space),
+ * the centre of that space, and where the bounce disc sits with its glyph (`path`, already in the heading it came in)
  */
-export type Wall = {obstacle: Point, x1: number, y1: number, x2: number, y2: number, atStart: boolean};
+export type Wall = {obstacle: Point, x1: number, y1: number, x2: number, y2: number, atStart: boolean,
+  disc: Point & {angle: number, path: string}};
 
 // From the centre of a space to the centre of its neighbour, in board pixels (46 × 51 spaces), by heading index
 // (0 top left … 5 left, clockwise like getAdjacentSpacesClockwise)
@@ -83,7 +84,9 @@ const NEIGHBOUR_OFFSETS: ReadonlyArray<Point> = [
   {x: -23, y: -38.25}, {x: 23, y: -38.25}, {x: 46, y: 0}, {x: 23, y: 38.25}, {x: -23, y: 38.25}, {x: -46, y: 0},
 ];
 // Half the length of a wall line (a hex edge is about 26 px)
-const WALL_HALF = 13;
+const WALL_HALF = 12;
+// The bar sits this far inside the blocked space, so it reads as that space's side
+const WALL_INSIDE = 1.5;
 
 function angleOf(vector: Point): number {
   return Math.atan2(vector.y, vector.x) * 180 / Math.PI;
@@ -94,12 +97,33 @@ function sameHeading(first: Point, second: Point): boolean {
   return Math.round(angleOf(first) / 60) === Math.round(angleOf(second) / 60);
 }
 
-function wallAt(center: Point, towards: Point, atStart: boolean): Wall {
+/**
+ * Glyph of a bounce in a 16 × 16 box, coming in from the left towards the wall on the right: straight back as a
+ * U-turn, otherwise a bend into the new heading (`turn`: new heading minus old one, in degrees)
+ */
+export function bounceGlyph(turn: number): string {
+  const normalized = ((turn % 360) + 540) % 360 - 180;
+  if (Math.abs(Math.abs(normalized) - 180) < 30) {
+    return 'M2 10.5H9.5a2.5 2.5 0 0 0 0-5H4M6.5 3 4 5.5 6.5 8';
+  }
+  const radians = normalized * Math.PI / 180;
+  const end = {x: 11 + 6.5 * Math.cos(radians), y: 8 + 6.5 * Math.sin(radians)};
+  const head = (offset: number) => {
+    const angle = radians + offset * Math.PI / 180;
+    return `${(end.x + 3.5 * Math.cos(angle)).toFixed(2)} ${(end.y + 3.5 * Math.sin(angle)).toFixed(2)}`;
+  };
+  return `M2 8H11L${end.x.toFixed(2)} ${end.y.toFixed(2)}M${head(150)} ${end.x.toFixed(2)} ${end.y.toFixed(2)} ${head(-150)}`;
+}
+
+function wallAt(center: Point, towards: Point, leaving: Point, atStart: boolean): Wall {
   const length = Math.hypot(towards.x, towards.y) || 1;
-  const middle = {x: center.x + towards.x / 2, y: center.y + towards.y / 2};
-  const across = {x: -towards.y / length * WALL_HALF, y: towards.x / length * WALL_HALF};
+  const unit = {x: towards.x / length, y: towards.y / length};
+  const middle = {x: center.x + towards.x / 2 + unit.x * WALL_INSIDE, y: center.y + towards.y / 2 + unit.y * WALL_INSIDE};
+  const across = {x: -unit.y * WALL_HALF, y: unit.x * WALL_HALF};
+  const angle = angleOf(towards);
   return {obstacle: {x: center.x + towards.x, y: center.y + towards.y},
-    x1: middle.x - across.x, y1: middle.y - across.y, x2: middle.x + across.x, y2: middle.y + across.y, atStart};
+    x1: middle.x - across.x, y1: middle.y - across.y, x2: middle.x + across.x, y2: middle.y + across.y, atStart,
+    disc: {x: middle.x, y: middle.y, angle, path: bounceGlyph(angleOf(leaving) - angle)}};
 }
 
 // Two discs on the same edge (a bounce straight back crosses it twice): this far apart along the edge
@@ -109,7 +133,7 @@ const SHARED_EDGE_SHIFT = 9;
  * Marks along the way (centres of the worm's space and the spaces crossed), Jens 21 Oct 2026:
  * - a disc with the heading on every edge the worm crosses: worm → 1, 1 → 2, 2 → 3
  * - the wall it bounced off: at the start when the rolled heading was blocked, and wherever it changes heading
- *   (the space ahead in its old heading)
+ *   (the side of the space ahead in its old heading), with a bounce disc on that side
  */
 export function wormBounceMarks(points: ReadonlyArray<Point>, rolledDirection: number | undefined): {headings: Array<Heading>, walls: Array<Wall>} {
   const headings: Array<Heading> = [];
@@ -120,12 +144,12 @@ export function wormBounceMarks(points: ReadonlyArray<Point>, rolledDirection: n
   }
   const rolled = rolledDirection === undefined ? undefined : NEIGHBOUR_OFFSETS[rolledDirection];
   if (rolled !== undefined && !sameHeading(rolled, steps[0])) {
-    walls.push(wallAt(points[0], rolled, true));
+    walls.push(wallAt(points[0], rolled, steps[0], true));
   }
   steps.forEach((step, index) => {
     const from = points[index];
     if (index > 0 && !sameHeading(steps[index - 1], step)) {
-      walls.push(wallAt(from, steps[index - 1], false));
+      walls.push(wallAt(from, steps[index - 1], step, false));
     }
     const heading = {x: from.x + step.x / 2, y: from.y + step.y / 2, angle: angleOf(step)};
     const shared = headings.find((other) => Math.abs(other.x - heading.x) < 1 && Math.abs(other.y - heading.y) < 1);

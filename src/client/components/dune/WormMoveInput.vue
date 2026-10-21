@@ -26,15 +26,18 @@
             <polyline class="worm-map__line-glow" :points="wayLine"/>
             <polyline class="worm-map__line-dash" :points="wayLine"/>
           </template>
-          <!-- What the worm bounces off, only where it is turned: the blocked hex outlined in orange; on the way at the
-               board edge (no hex) a bar on the edge it hits. At the start only a blocked hex, not the edge (Jens, 21 Oct 2026) -->
-          <template v-for="(wall, index) in marks.walls" :key="'wall-' + index">
-            <polygon v-if="shownAt(wall.obstacle)" class="worm-map__obstacle" :points="obstacleOutline(wall.obstacle)"/>
-            <line v-else-if="!wall.atStart" class="worm-map__wall" :x1="wall.x1" :y1="wall.y1" :x2="wall.x2" :y2="wall.y2"/>
-          </template>
+          <!-- What the worm bounces off, only where it is turned: an orange bar on the side of the blocked space it hits.
+               At the start only when that space is on the map piece, not at the board edge (Jens, 21 Oct 2026) -->
+          <line v-for="(wall, index) in shownWalls" :key="'wall-' + index" class="worm-map__wall"
+            :x1="wall.x1" :y1="wall.y1" :x2="wall.x2" :y2="wall.y2"/>
         </svg>
         <!-- Heading: a white disc with an arrow on every edge the worm crosses (worm → 1 → 2 → 3), along the longest
              way (Jens, 21 Oct 2026) -->
+        <!-- On the bar of every bounce: a disc with the bounce itself (in and turned away) -->
+        <span v-for="(wall, index) in shownWalls" :key="'bounce-' + index" class="worm-map__heading worm-map__heading--bounce" aria-hidden="true"
+          :style="{left: wall.disc.x + 'px', top: wall.disc.y + 'px'}">
+          <svg viewBox="0 0 16 16" :style="{transform: 'rotate(' + wall.disc.angle + 'deg)'}"><path :d="wall.disc.path"/></svg>
+        </span>
         <span v-for="(heading, index) in marks.headings" :key="'heading-' + index" class="worm-map__heading" aria-hidden="true"
           :style="{left: heading.x + 'px', top: heading.y + 'px'}">
           <svg viewBox="0 0 16 16" :style="{transform: 'rotate(' + heading.angle + 'deg)'}"><path d="M3 8h9M8 3.5 12.5 8 8 12.5"/></svg>
@@ -99,8 +102,6 @@ const MINIMUM_HEIGHT = 200;
 const RINGS = 3;
 // Effect chip: its middle in the lower part of the space, below cube and tile picture
 const CHIP_Y = 40;
-// Outline of a space the worm bounces off: this far inside the hex
-const OBSTACLE_INSET = 2.5;
 
 type Cell = {id: string, x: number, y: number, role: 'worm' | 'way' | 'context', space: SpaceModel | undefined};
 type Target = {x: number, y: number, distance: number};
@@ -224,6 +225,9 @@ export default defineComponent({
       const rolled = worm?.roll === undefined ? undefined : worm.roll % 6;
       return longest.length === 0 ? {headings: [], walls: []} : wormBounceMarks(this.centers([this.wormSpace ?? '', ...longest]), rolled);
     },
+    shownWalls(): Array<Wall> {
+      return this.marks.walls.filter((wall) => !wall.atStart || this.shownAt(wall.obstacle));
+    },
     outcome(): Array<{color: Color, chips: Array<WormChip>}> {
       const way = this.chosen === undefined ? [] : this.ways[this.chosen] ?? [];
       return wormOutcome(way.map((id) => this.effectOf(id)));
@@ -300,13 +304,6 @@ export default defineComponent({
     shownAt(point: {x: number, y: number}): boolean {
       return this.cells.some((cell) => Math.abs(cell.x - this.box.left + SPACE_WIDTH / 2 - point.x) < 3 &&
         Math.abs(cell.y - this.box.top + SPACE_HEIGHT / 2 - point.y) < 3);
-    },
-    // Hex outline around a centre, slightly inside the space so it stays clear of the neighbours
-    obstacleOutline(center: {x: number, y: number}): string {
-      const halfWidth = SPACE_WIDTH / 2 - OBSTACLE_INSET;
-      const halfHeight = SPACE_HEIGHT / 2 - OBSTACLE_INSET;
-      return [[0, -halfHeight], [halfWidth, -halfHeight / 2], [halfWidth, halfHeight / 2], [0, halfHeight], [-halfWidth, halfHeight / 2], [-halfWidth, -halfHeight / 2]]
-        .map(([dx, dy]) => `${center.x + dx},${center.y + dy}`).join(' ');
     },
     onChosenWay(id: string): boolean {
       return this.chosen !== undefined && (this.ways[this.chosen] ?? []).includes(id);

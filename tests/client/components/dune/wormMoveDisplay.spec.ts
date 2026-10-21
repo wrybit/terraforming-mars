@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {wormBounceMarks, wormEffect, wormOutcome} from '@/client/components/dune/wormMoveDisplay';
+import {bounceGlyph, wormBounceMarks, wormEffect, wormOutcome} from '@/client/components/dune/wormMoveDisplay';
 import {TileType} from '@/common/TileType';
 import {SpaceType} from '@/common/boards/SpaceType';
 import {SpaceModel} from '@/common/models/SpaceModel';
@@ -22,7 +22,7 @@ describe('Worm move display', () => {
   it('bounces straight back: the wall beyond, the two discs of the shared edge side by side', () => {
     const marks = wormBounceMarks([at(0), at(46), at(0), at(-46)], 2);
     expect(marks.walls).has.length(1);
-    expect(marks.walls[0].x1).closeTo(69, 0.01);
+    expect(marks.walls[0].x1).closeTo(70.5, 0.01);
     expect(marks.walls[0].obstacle).deep.eq({x: 92, y: 0});
     expect(marks.headings).has.length(3);
     const [out, back] = marks.headings;
@@ -36,9 +36,16 @@ describe('Worm move display', () => {
     // Rolled right (2), left the space to the left
     const marks = wormBounceMarks([at(0), at(-46)], 2);
     expect(marks.walls).has.length(1);
-    expect(marks.walls[0].x1).closeTo(23, 0.01);
+    expect(marks.walls[0].x1).closeTo(24.5, 0.01);
     expect(marks.headings).has.length(1);
     expect(Math.abs(marks.headings[0].angle)).eq(180);
+  });
+
+  it('draws a bounce straight back as a U-turn and a slanted one as a bend', () => {
+    expect(bounceGlyph(180)).contains('a2.5');
+    expect(bounceGlyph(-180)).eq(bounceGlyph(180));
+    expect(bounceGlyph(120)).not.contains('a2.5');
+    expect(bounceGlyph(120)).not.eq(bounceGlyph(-120));
   });
 
   it('describes what the worm does to a tile', () => {
