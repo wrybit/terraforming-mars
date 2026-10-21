@@ -7,7 +7,7 @@ import {MARS_HEIGHT_ATTRIBUTE} from '@/client/utils/rightColumnFit';
 describe('RowResizeHandle', () => {
   beforeEach(() => {
     localStorage.removeItem('player_home_mars_height');
-    localStorage.removeItem('player_home_players_height');
+    localStorage.removeItem('player_home_players_size');
   });
 
   it('renders a horizontal separator', () => {

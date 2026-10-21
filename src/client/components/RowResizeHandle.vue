@@ -40,7 +40,9 @@ const BOARD_ZOOM_SELECTOR = '.game-end-board-zoom';
 
 const KINDS: Record<RowResizeKind, KindSetup> = {
   'players': {
-    storageKey: 'player_home_players_height',
+    // New key since the size can grow beyond the natural height (21 Oct 2026): old heights meant "at most natural"
+    // and would keep everyone below the new default, the largest size
+    storageKey: 'player_home_players_size',
     // Without players PlayersOverview renders nothing; then there is no card to resize
     target(card) {
       const table = inside(card, '.players-table');

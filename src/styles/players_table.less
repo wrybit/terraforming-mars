@@ -4,8 +4,9 @@
 // Every size below is a size at scale 1 multiplied by @s, so the whole table grows and shrinks together.
 
 @s: var(--players-table-scale, 1);
-// Numbers and their boxes: also grow with the boost the drag handle requests (home_cards.less, playersCardFit.ts),
-// but only as far as the goods boxes have room (--players-table-boost-room, playersTableLayout.ts); widths stay
+// Numbers, their boxes, icons and row heights: also grow with the boost the drag handle requests (home_cards.less,
+// playersCardFit.ts), but only as far as the goods boxes have room (--players-table-boost-room, playersTableLayout.ts);
+// widths stay
 @b: calc(@s * clamp(1, var(--players-table-boost-request, 1), var(--players-table-boost-room, 1)));
 @players-table-row-gap: 4px;
 // Own row set slightly apart from the others
@@ -49,7 +50,7 @@
   display: grid;
   align-items: center;
   column-gap: var(--players-table-section-gap);
-  min-height: calc(48px * @s);
+  min-height: calc(48px * @b);
   border-radius: @players-table-radius;
   // Blur the galaxy background behind the rows so it doesn't shine through harshly
   backdrop-filter: blur(@players-table-blur);
@@ -58,16 +59,16 @@
 .players-table-head {
   // Above the player rows, otherwise they cover the tooltips of the header icons (each row is its own layer due to blur)
   z-index: 2;
-  min-height: calc(34px * @s);
+  min-height: calc(34px * @b);
   background: rgba(0, 0, 0, 0.5);
 
   // Icons scaled with the table (zoom, because the sprites use different background sizes)
   .resource_icon {
-    zoom: calc(0.75 * @s);
+    zoom: calc(0.75 * @b);
   }
 
   .tag-count {
-    zoom: calc(0.6 * @s);
+    zoom: calc(0.6 * @b);
   }
 }
 
@@ -170,13 +171,13 @@
     grid-template-columns: var(--players-table-two-lines-columns);
     grid-template-areas: "name name" "goods tags";
     row-gap: calc(6px * @s);
-    padding: calc(6px * @s) 8px calc(8px * @s) @players-table-inset;
+    padding: calc(6px * @b) 8px calc(8px * @b) @players-table-inset;
   }
 
   // Head in one line: burger only (label and hotkey hidden) in front of the first goods icon
   .players-table-head {
     grid-template-areas: "goods tags";
-    padding-block: calc(4px * @s);
+    padding-block: calc(4px * @b);
   }
 
   // Outside the grid: flush with the left edge of the rows, in the inset in front of the first goods column
@@ -218,7 +219,7 @@
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "name" "goods" "tags";
     row-gap: calc(8px * @s);
-    padding: calc(8px * @s) 10px calc(10px * @s) @players-table-inset;
+    padding: calc(8px * @b) 10px calc(10px * @b) @players-table-inset;
   }
 
   .players-table-head {
@@ -334,7 +335,7 @@
 }
 
 .players-table--line .players-table-row--player {
-  padding-block: calc(7px * @s);
+  padding-block: calc(7px * @b);
 }
 
 each(@players, {
@@ -573,7 +574,7 @@ each(@players, {
 .players-table-goods .resource_icon {
   flex: none;
   margin: 0 auto 0 0;
-  zoom: calc(0.6 * @s);
+  zoom: calc(0.6 * @b);
 }
 
 .players-table-goods-stock {
@@ -670,8 +671,8 @@ each(@players, {
 .players-table-protection {
   flex: none;
   position: static;
-  width: calc(18px * @s);
-  height: calc(18px * @s);
+  width: calc(18px * @b);
+  height: calc(18px * @b);
   background: linear-gradient(135deg, #d6f7b4 0%, #7ad048 40%, #3c9a24 75%, #1f6512 100%);
   filter: none; // shield_icon inverts the graphic, here the gradient decides the colour
   mask: url(./assets/misc/shield-icon.png) center / contain no-repeat;
@@ -684,8 +685,8 @@ each(@players, {
 }
 
 .players-table-counter .players-table-protection {
-  width: calc(15px * @s);
-  height: calc(15px * @s);
+  width: calc(15px * @b);
+  height: calc(15px * @b);
 }
 
 // ---------- Tags and score ----------
@@ -721,7 +722,7 @@ each(@players, {
 // Tag icon inside the cell (Tag.vue sprite)
 .players-table-counter > .tag-count {
   flex: none;
-  zoom: calc(0.5 * @s);
+  zoom: calc(0.5 * @b);
 }
 
 // Points per tag (PointsPerTag.vue) as a small plaque at the bottom right
@@ -762,14 +763,14 @@ each(@players, {
 .players-table-score-icon {
   display: inline-block;
   flex: none;
-  width: calc(22px * @s);
-  height: calc(22px * @s);
+  width: calc(22px * @b);
+  height: calc(22px * @b);
   background: center / contain no-repeat;
 }
 
 .players-table-score-icon--vp {
-  width: calc(26px * @s);
-  height: calc(18px * @s);
+  width: calc(26px * @b);
+  height: calc(18px * @b);
   border-radius: 3px;
   background: linear-gradient(#cc8b00, #805700, #805700);
   font: calc(12px * @s) / calc(18px * @s) Prototype, sans-serif;
@@ -792,8 +793,8 @@ each(@players, {
 
 // Actions on active cards: only the red action arrow of the cards
 .players-table-score-icon--actions {
-  width: calc(24px * @s);
-  height: calc(14px * @s);
+  width: calc(24px * @b);
+  height: calc(14px * @b);
   background-image: url(./assets/misc/arrow.png);
 }
 
@@ -828,14 +829,14 @@ each(@players, {
 
 // Header icons of the score
 .players-table-head .players-table-score-icon {
-  width: calc(24px * @s);
-  height: calc(24px * @s);
+  width: calc(24px * @b);
+  height: calc(24px * @b);
 }
 
 .players-table-head .players-table-score-icon--vp {
-  width: calc(28px * @s);
-  height: calc(20px * @s);
-  line-height: calc(20px * @s);
+  width: calc(28px * @b);
+  height: calc(20px * @b);
+  line-height: calc(20px * @b);
 }
 
 // ---------- Escape Velocity ----------
