@@ -588,6 +588,21 @@ html.theme-dune input:checked + .filterDiv.card-container::after {
   transition: background-position 0.28s ease, opacity 0.28s ease;
 }
 
+/* Everything on the card except the scene lies above that layer: cost coin, tags, counters and victory points
+   reach over the frame, and the light edge must not cross them (Jens 21 Oct 2026). Only positioned parts take a
+   z-index; the selection tint (cards.less ::before) and the player cube stay on top. */
+html.theme-dune .filterDiv.card-container > :not(.card-scene, .card-player-cube) {
+  z-index: 5;
+}
+
+html.theme-dune .filterDiv.card-container::before {
+  z-index: 6;
+}
+
+html.theme-dune .filterDiv.card-container > .card-player-cube {
+  z-index: 7;
+}
+
 /* Hover like collectible cards: the card lifts and tilts back a little, the shadow deepens, the sheen slides up.
    Only with a real pointer (on touch :hover sticks after a tap) and not on cards that cannot be chosen. The
    settings "small cards" and "magnify cards" (preferences.less) scale the card with transform too, so their scale
