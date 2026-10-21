@@ -9,5 +9,7 @@
   "Volume": "音量",
   "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "ゲームを開くと、そのテーマの有効な曲のいずれかが再生されます。波形をクリックするとその位置へ移動します。",
   "Cannot load the music settings.": "音楽設定を読み込めません。",
-  "Cannot save the music settings.": "音楽設定を保存できません。"
+  "Cannot save the music settings.": "音楽設定を保存できません。",
+  "Tracks": "曲",
+  "All tracks": "すべての曲"
 }

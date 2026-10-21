@@ -9,5 +9,7 @@
   "Volume": "Volumen",
   "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Al abrir una partida suena una de las pistas activas de su tema. Haz clic en la forma de onda para saltar.",
   "Cannot load the music settings.": "No se pueden cargar los ajustes de música.",
-  "Cannot save the music settings.": "No se pueden guardar los ajustes de música."
+  "Cannot save the music settings.": "No se pueden guardar los ajustes de música.",
+  "Tracks": "Pistas",
+  "All tracks": "Todas las pistas"
 }

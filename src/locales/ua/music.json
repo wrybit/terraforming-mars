@@ -9,5 +9,7 @@
   "Volume": "Гучність",
   "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Під час відкриття партії запускається один з активних треків її теми. Клацніть по хвилі, щоб перейти.",
   "Cannot load the music settings.": "Не вдалося завантажити налаштування музики.",
-  "Cannot save the music settings.": "Не вдалося зберегти налаштування музики."
+  "Cannot save the music settings.": "Не вдалося зберегти налаштування музики.",
+  "Tracks": "Треки",
+  "All tracks": "Усі треки"
 }

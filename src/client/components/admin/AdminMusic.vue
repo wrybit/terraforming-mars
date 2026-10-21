@@ -25,7 +25,7 @@
                 <span class="admin-music__credit">
                   {{ track.author }} ·
                   <a :href="licenseUrl(track)" target="_blank" rel="noopener">{{ track.license }}</a> ·
-                  <a :href="track.source" target="_blank" rel="noopener">OpenGameArt</a> ·
+                  <a :href="track.source" target="_blank" rel="noopener">{{ sourceName(track) }}</a> ·
                   <span class="admin-music__theme">{{ track.theme }}</span>
                 </span>
               </div>
@@ -96,6 +96,10 @@ export default defineComponent({
     },
     waveform(track: MusicTrack): Waveform {
       return MUSIC_WAVEFORMS[track.id] ?? NO_WAVEFORM;
+    },
+    // Host of the source page as its name, e.g. "opengameart.org", "incompetech.com"
+    sourceName(track: MusicTrack): string {
+      return new URL(track.source).hostname.replace(/^www\./, '');
     },
     licenseUrl(track: MusicTrack): string {
       return MUSIC_LICENSE_URLS[track.license];

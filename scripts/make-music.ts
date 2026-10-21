@@ -14,12 +14,9 @@ const BARS = 120;
 // Mono samples per second for the measurement: plenty for peaks, small in memory
 const MEASURE_RATE = 4000;
 
-async function download(url: string, target: string): Promise<void> {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`${url}: ${response.status}`);
-  }
-  writeFileSync(target, Buffer.from(await response.arrayBuffer()));
+// curl instead of fetch: some hosts (incompetech) time out for Node's fetch but answer curl
+function download(url: string, target: string): void {
+  execFileSync('curl', ['-sSfL', '--retry', '3', '-A', 'Mozilla/5.0', '-o', target, url]);
 }
 
 function convert(source: string, target: string): void {
@@ -59,7 +56,7 @@ async function main(): Promise<void> {
       const target = musicFile(track.id);
       if (!existsSync(target)) {
         const original = path.join(work, track.id + path.extname(new URL(track.download).pathname));
-        await download(track.download, original);
+        download(track.download, original);
         convert(original, target);
         console.log('made', target);
       }

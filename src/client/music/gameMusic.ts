@@ -1,22 +1,28 @@
 import {computed, reactive} from 'vue';
 import {paths} from '@/common/app/paths';
 import {Theme} from '@/common/theme/Theme';
-import {MUSIC_TRACKS, MusicTrack, musicFile} from '@/common/music/musicTracks';
+import {MUSIC_GROUPS, MUSIC_TRACKS, MusicGroup, MusicTrack, musicFile} from '@/common/music/musicTracks';
 import {MusicState} from '@/common/music/musicState';
 import {safeLocalStorage} from '@/client/utils/SafeLocalStorage';
 
 // Background music of the game (one player for the whole app): starts when a game of a theme with tracks is
 // entered (App.vue), is steered from the card under the setup menu (MusicPlayerCard.vue). Browsers only play
 // sound after the first interaction: until then the start waits for the first click or key.
-// Remembered per browser: the volume, and whether the player stopped the music (then it stays off).
+// Remembered per browser: the volume, the chosen group, and whether the player stopped the music (then it stays off).
+
+/** Group the player listens to (MusicPlayerCard.vue): one of the groups or all tracks */
+export type MusicChoice = 'all' | MusicGroup;
+export const MUSIC_CHOICES: ReadonlyArray<MusicChoice> = ['all', ...MUSIC_GROUPS];
 
 const VOLUME_KEY = 'tm-music-volume';
+const CHOICE_KEY = 'tm-music-group';
 const STOPPED_KEY = 'tm-music-stopped';
-const DEFAULT_VOLUME = 0.35;
+const DEFAULT_VOLUME = 0.5;
 
 export const gameMusic = reactive({
   /** Tracks of the current game's theme that the admin left on; empty outside a game */
-  playlist: [] as Array<MusicTrack>,
+  available: [] as Array<MusicTrack>,
+  choice: readChoice(),
   current: undefined as MusicTrack | undefined,
   playing: false,
   /** Seconds played and length of the current track (for the waveform) */
@@ -25,11 +31,22 @@ export const gameMusic = reactive({
   volume: readVolume(),
 });
 
-export const musicAvailable = computed(() => gameMusic.playlist.length > 0);
+export const musicAvailable = computed(() => gameMusic.available.length > 0);
+
+/** Tracks of the chosen group; all available ones when the group has none (e.g. all switched off) */
+export const musicPlaylist = computed<Array<MusicTrack>>(() => {
+  const chosen = gameMusic.available.filter((track) => gameMusic.choice === 'all' || track.group === gameMusic.choice);
+  return chosen.length > 0 ? chosen : gameMusic.available;
+});
 
 let audio: HTMLAudioElement | undefined;
 let enabledIds: Promise<Array<string>> | undefined;
 let waitingForGesture = false;
+
+function readChoice(): MusicChoice {
+  const stored = safeLocalStorage.getItem(CHOICE_KEY);
+  return MUSIC_CHOICES.find((choice) => choice === stored) ?? 'all';
+}
 
 function readVolume(): number {
   const stored = Number(safeLocalStorage.getItem(VOLUME_KEY));
@@ -63,8 +80,8 @@ function loadEnabled(): Promise<Array<string>> {
 }
 
 function randomTrack(exclude?: MusicTrack): MusicTrack | undefined {
-  const choices = gameMusic.playlist.filter((track) => track !== exclude);
-  const pool = choices.length > 0 ? choices : gameMusic.playlist;
+  const choices = musicPlaylist.value.filter((track) => track !== exclude);
+  const pool = choices.length > 0 ? choices : musicPlaylist.value;
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
@@ -103,8 +120,8 @@ export async function enterGameMusic(theme: Theme | undefined): Promise<void> {
     return;
   }
   const enabled = await loadEnabled();
-  gameMusic.playlist = MUSIC_TRACKS.filter((track) => track.theme === theme && enabled.includes(track.id));
-  if (gameMusic.current !== undefined && gameMusic.playlist.includes(gameMusic.current)) {
+  gameMusic.available = MUSIC_TRACKS.filter((track) => track.theme === theme && enabled.includes(track.id));
+  if (gameMusic.current !== undefined && musicPlaylist.value.includes(gameMusic.current)) {
     return;
   }
   const track = randomTrack();
@@ -126,7 +143,7 @@ function autoplayAllowed(): boolean {
 
 export function leaveGameMusic(): void {
   audio?.pause();
-  gameMusic.playlist = [];
+  gameMusic.available = [];
   gameMusic.current = undefined;
 }
 
@@ -171,5 +188,14 @@ export function seekMusic(share: number): void {
   if (gameMusic.duration > 0) {
     player.currentTime = share * gameMusic.duration;
     gameMusic.position = player.currentTime;
+  }
+}
+
+/** Listens to another group; a track outside it gives way to one of the group (playing on if it played) */
+export function chooseMusicGroup(choice: MusicChoice): void {
+  gameMusic.choice = choice;
+  safeLocalStorage.setItem(CHOICE_KEY, choice);
+  if (gameMusic.current !== undefined && !musicPlaylist.value.includes(gameMusic.current)) {
+    next();
   }
 }

@@ -7,7 +7,7 @@
 @music-thumb: 14px;
 
 .music-waveform,
-.music-player,
+.music-card,
 .admin-music {
   --music-accent: @bg_action;
 }
@@ -80,17 +80,17 @@
 
 // --- Card under the setup menu ---
 
-.music-player {
+.music-card {
   gap: 10px;
 }
 
-.music-player__head {
+.music-card__head {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.music-player__note {
+.music-card__note {
   width: 26px;
   height: 26px;
   flex: none;
@@ -99,21 +99,21 @@
   color: var(--music-accent);
 }
 
-.music-player__meta {
+.music-card__meta {
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
 
-.music-player__title {
+.music-card__title {
   overflow: hidden;
   font-size: 13px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.music-player__credit {
+.music-card__credit {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.6);
 
@@ -127,17 +127,27 @@
   }
 }
 
-.music-player__controls {
+.music-card__groups {
+  .segmented-toggle();
+  align-self: flex-start;
+  box-shadow: none;
+}
+
+.music-card__group {
+  .segmented-toggle-option();
+}
+
+.music-card__controls {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.music-player__button {
+.music-card__button {
   .music-control();
 }
 
-.music-player__volume {
+.music-card__volume {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -147,7 +157,7 @@
   color: rgba(255, 255, 255, 0.7);
 
   input {
-    --music-volume: 35%;
+    --music-volume: 50%;
     flex: 1;
     min-width: 0;
     height: @music-thumb;

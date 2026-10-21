@@ -1,6 +1,6 @@
 import {Theme} from '../theme/Theme';
 
-// Background music of the game: free tracks only (CC0 or CC BY), credited in the admin page and in the player.
+// Background music of the game: free tracks only (CC0 or CC BY), at least 3 minutes each, credited in the admin page and in the player.
 // The audio files are made by scripts/make-music.ts from `download` (assets/music/<id>.mp3); it also measures
 // the waveform (musicWaveforms.ts). New track: add it here, run `npx tsx scripts/make-music.ts`.
 
@@ -33,55 +33,52 @@ export const MUSIC_LICENSE_URLS: Readonly<Record<MusicLicense, string>> = {
 };
 
 const FILES = 'https://opengameart.org/sites/default/files/';
+const INCOMPETECH = 'https://incompetech.com/music/royalty-free/';
 
 export const MUSIC_TRACKS: ReadonlyArray<MusicTrack> = [
-  {
-    id: 'dune-style', title: 'Egyptian Style / Dune Style', author: 'Spring Spring', license: 'CC BY 4.0',
-    source: 'https://opengameart.org/content/egyptian-styledune-style', download: FILES + 'Egyptian%20Style%2CDune%20Style_0.ogg', theme: 'dune', group: '8-bit',
-  },
-  {
-    id: 'dissonant-desert', title: 'Desert Theme (Dissonant Desert)', author: 'Jarewills', license: 'CC0',
-    source: 'https://opengameart.org/content/desert-theme-2', download: FILES + 'dissonant_dessert.mp3', theme: 'dune', group: '8-bit',
-  },
-  {
-    id: 'caravan', title: 'Desert Theme (Caravan)', author: 'yd', license: 'CC0',
-    source: 'https://opengameart.org/content/desert-theme', download: FILES + 'caravan.ogg.ogg', theme: 'dune', group: '8-bit',
-  },
-  {
-    id: 'desert-waltz', title: 'Desert Waltz (5/4 Synth)', author: 'Arold Valda', license: 'CC BY 4.0',
-    source: 'https://opengameart.org/content/desert-waltz-54-synth', download: FILES + 'desert_waltz.flac', theme: 'dune', group: '8-bit',
-  },
-  {
-    id: 'watch-the-sand', title: 'Watch The Sand', author: 'SpringySpringo', license: 'CC0',
-    source: 'https://opengameart.org/node/141391', download: FILES + 'watch_the_sand_0.mp3', theme: 'dune', group: '8-bit',
-  },
-  {
-    id: 'lost-in-the-desert', title: 'Lost In the Desert', author: 'Eldritch Grim', license: 'CC0',
-    source: 'https://opengameart.org/content/lost-in-the-desert', download: FILES + 'lost_in_the_desert.mp3', theme: 'dune', group: '8-bit',
-  },
   {
     id: 'stasis-chamber', title: 'Dreams in a Stasis Chamber', author: 'Tomasz Kucza (Magnesus)', license: 'CC BY 3.0',
     source: 'https://opengameart.org/content/dreams-in-a-stasis-chamber', download: FILES + 'Dreams-In-A-Stasis-Chamber-by-Tomasz-Kucza.mp3', theme: 'dune', group: '8-bit',
   },
   {
-    id: 'sector', title: 'Sector (Dark Sci-Fi Audio Pack)', author: 'SRG774', license: 'CC0',
-    source: 'https://opengameart.org/node/188336', download: FILES + 'sector_0.ogg', theme: 'dune', group: '8-bit',
+    id: 'desert-of-lost-souls', title: 'Desert of Lost Souls', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1800001', download: INCOMPETECH + 'mp3-royaltyfree/Desert%20of%20Lost%20Souls.mp3', theme: 'dune', group: '8-bit',
   },
   {
-    id: 'desert-of-dreams', title: 'Caryil – The Desert of Dreams (Remix)', author: 'glitchart, Tausdei, Insydnis', license: 'CC BY 3.0',
-    source: 'https://opengameart.org/node/167037', download: FILES + 'caryil_the_desert_of_dreams_chill_jungle_ambient_mix_0.ogg', theme: 'dune', group: '8-bit',
+    id: 'cyborg-ninja', title: 'Cyborg Ninja', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1600008', download: INCOMPETECH + 'mp3-royaltyfree/Cyborg%20Ninja.mp3', theme: 'dune', group: '8-bit',
   },
   {
-    id: 'telos-roam', title: 'Telosroam1 (Desert BGM)', author: 'Tozan', license: 'CC0',
-    source: 'https://opengameart.org/node/71054', download: FILES + 'telosroam1.ogg', theme: 'dune', group: '8-bit',
+    id: 'airship-serenity', title: 'Airship Serenity', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1600046', download: INCOMPETECH + 'mp3-royaltyfree/Airship%20Serenity.mp3', theme: 'dune', group: '8-bit',
+  },
+  {
+    id: 'dungeon-level', title: '8bit Dungeon Level', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1200066', download: INCOMPETECH + 'mp3-royaltyfree/8bit%20Dungeon%20Level.mp3', theme: 'dune', group: '8-bit',
+  },
+  {
+    id: 'video-dungeon-crawl', title: 'Video Dungeon Crawl', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1200064', download: INCOMPETECH + 'mp3-royaltyfree/Video%20Dungeon%20Crawl.mp3', theme: 'dune', group: '8-bit',
+  },
+  {
+    id: 'level-up', title: 'Level Up', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1500023', download: INCOMPETECH + 'mp3-royaltyfree/Level%20Up.mp3', theme: 'dune', group: '8-bit',
+  },
+  {
+    id: 'bit-quest', title: 'Bit Quest', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1500073', download: INCOMPETECH + 'mp3-royaltyfree/Bit%20Quest.mp3', theme: 'dune', group: '8-bit',
+  },
+  {
+    id: 'reformat', title: 'Reformat', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1500020', download: INCOMPETECH + 'mp3-royaltyfree/Reformat.mp3', theme: 'dune', group: '8-bit',
+  },
+  {
+    id: 'itty-bitty', title: 'Itty Bitty 8 Bit', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1100764', download: INCOMPETECH + 'mp3-royaltyfree/Itty%20Bitty%208%20Bit.mp3', theme: 'dune', group: '8-bit',
   },
   {
     id: 'night-in-the-desert', title: 'Night in the Desert (Remix)', author: 'glitchart, Tausdei, Hitctrl', license: 'CC BY 3.0',
     source: 'https://opengameart.org/content/night-in-the-desert-remixed-tausdei-vs-hitctrl', download: FILES + 'nightinthedesertmix.ogg', theme: 'dune', group: 'modern',
-  },
-  {
-    id: 'eternal-sands', title: 'Holy Sword & The Eternal Sands (Remix)', author: 'glitchart, Tausdei, Hitctrl', license: 'CC BY 3.0',
-    source: 'https://opengameart.org/content/holy-sword-chill-jungle-ambient-the-eternal-sands-caryil-the-desert-of-dreams-tausdei-vs', download: FILES + 'holy_sword_remixed2.ogg', theme: 'dune', group: 'modern',
   },
   {
     id: 'futuristic-ambient-1', title: 'Futuristic Ambient 1', author: 'Alexandr Zhelanov', license: 'CC BY 4.0',
@@ -96,14 +93,6 @@ export const MUSIC_TRACKS: ReadonlyArray<MusicTrack> = [
     source: 'https://opengameart.org/content/futuristic-ambient', download: FILES + 'Futuristic_ambient_3.ogg', theme: 'dune', group: 'modern',
   },
   {
-    id: 'intrigue', title: 'Intrigue', author: 'Alexandr Zhelanov', license: 'CC BY 4.0',
-    source: 'https://opengameart.org/node/150307', download: FILES + 'intrigue.wav', theme: 'dune', group: 'modern',
-  },
-  {
-    id: 'darkness-march', title: 'Darkness March', author: 'Alexandr Zhelanov', license: 'CC BY 4.0',
-    source: 'https://opengameart.org/node/83150', download: FILES + 'Darkness%20March.ogg', theme: 'dune', group: 'modern',
-  },
-  {
     id: 'space-ambient', title: 'Space Ambient', author: 'Osmic', license: 'CC BY 3.0',
     source: 'https://opengameart.org/content/space-ambient', download: FILES + 'ville_seppanen-1_g.mp3', theme: 'dune', group: 'modern',
   },
@@ -112,8 +101,20 @@ export const MUSIC_TRACKS: ReadonlyArray<MusicTrack> = [
     source: 'https://opengameart.org/node/184290', download: FILES + 'cosmicdustmix.ogg', theme: 'dune', group: 'modern',
   },
   {
-    id: 'galactic-temple', title: 'Galactic Temple', author: 'yd', license: 'CC0',
-    source: 'https://opengameart.org/content/galactic-temple', download: FILES + 'GalacticTemple.ogg', theme: 'dune', group: 'modern',
+    id: 'ibn-al-noor', title: 'Ibn Al-Noor', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1100706', download: INCOMPETECH + 'mp3-royaltyfree/Ibn%20Al-Noor.mp3', theme: 'dune', group: 'modern',
+  },
+  {
+    id: 'mirage', title: 'Mirage', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1100877', download: INCOMPETECH + 'mp3-royaltyfree/Mirage.mp3', theme: 'dune', group: 'modern',
+  },
+  {
+    id: 'finding-the-balance', title: 'Finding the Balance', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1100708', download: INCOMPETECH + 'mp3-royaltyfree/Finding%20the%20Balance.mp3', theme: 'dune', group: 'modern',
+  },
+  {
+    id: 'spacial-harvest', title: 'Spacial Harvest', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1100653', download: INCOMPETECH + 'mp3-royaltyfree/Spacial%20Harvest.mp3', theme: 'dune', group: 'modern',
   },
 ];
 

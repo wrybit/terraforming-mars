@@ -9,5 +9,7 @@
   "Volume": "음량",
   "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "게임을 열면 해당 테마의 활성 곡 중 하나가 재생됩니다. 파형을 클릭하면 그 위치로 이동합니다.",
   "Cannot load the music settings.": "음악 설정을 불러올 수 없습니다.",
-  "Cannot save the music settings.": "음악 설정을 저장할 수 없습니다."
+  "Cannot save the music settings.": "음악 설정을 저장할 수 없습니다.",
+  "Tracks": "곡",
+  "All tracks": "모든 곡"
 }

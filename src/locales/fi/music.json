@@ -9,5 +9,7 @@
   "Volume": "Äänenvoimakkuus",
   "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Pelin avautuessa alkaa soida jokin sen teeman aktiivisista kappaleista. Napsauta aaltomuotoa hypätäksesi.",
   "Cannot load the music settings.": "Musiikkiasetuksia ei voi ladata.",
-  "Cannot save the music settings.": "Musiikkiasetuksia ei voi tallentaa."
+  "Cannot save the music settings.": "Musiikkiasetuksia ei voi tallentaa.",
+  "Tracks": "Kappaleet",
+  "All tracks": "Kaikki kappaleet"
 }

@@ -9,5 +9,7 @@
   "Volume": "Сила на звука",
   "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "При отваряне на игра започва една от активните песни на темата ѝ. Щракнете върху вълната, за да прескочите.",
   "Cannot load the music settings.": "Настройките за музика не могат да се заредят.",
-  "Cannot save the music settings.": "Настройките за музика не могат да се запазят."
+  "Cannot save the music settings.": "Настройките за музика не могат да се запазят.",
+  "Tracks": "Песни",
+  "All tracks": "Всички песни"
 }

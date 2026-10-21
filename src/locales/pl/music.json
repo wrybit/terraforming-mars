@@ -9,5 +9,7 @@
   "Volume": "Głośność",
   "One of the active tracks starts when a game of its theme is opened. Click the waveform to jump.": "Po otwarciu gry startuje jeden z aktywnych utworów jej motywu. Kliknij wykres fali, aby przeskoczyć.",
   "Cannot load the music settings.": "Nie można wczytać ustawień muzyki.",
-  "Cannot save the music settings.": "Nie można zapisać ustawień muzyki."
+  "Cannot save the music settings.": "Nie można zapisać ustawień muzyki.",
+  "Tracks": "Utwory",
+  "All tracks": "Wszystkie utwory"
 }
