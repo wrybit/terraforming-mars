@@ -687,8 +687,9 @@ html.theme-dune .card-container .card-content .card-row > .card-item-container {
 }
 
 /* A rule text next to an icon group ("1 VP per second creature" beside a box) keeps at least 120 px; where the row
-   has no room for that, the text moves to a line of its own instead of shrinking to one word per line */
-html.theme-dune .card-container .card-content .card-row {
+   has no room for that, the text moves to a line of its own instead of shrinking to one word per line. Only such rows
+   wrap: a row of icons stays one line (Card.vue makes it smaller where needed), or "−" and its amount part. */
+html.theme-dune .card-container .card-content .card-row:has(> .card-item-container > [class*="card-text-size"]) {
   flex-wrap: wrap;
   justify-content: center;
   row-gap: 4px;
