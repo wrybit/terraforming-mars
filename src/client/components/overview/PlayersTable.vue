@@ -26,11 +26,13 @@ import PlayersTableHeader from '@/client/components/overview/PlayersTableHeader.
 import PlayersTableRow from '@/client/components/overview/PlayersTableRow.vue';
 import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/components/overview/playerTagDetails';
 import {playerGoods} from '@/client/components/overview/playerGoods';
-import {PlayersTableFit, PlayersTableRowModel, TagColumnGroups, fitPlayersTable, tableVariables} from '@/client/components/overview/playersTableLayout';
+import {NameWidths, PlayersTableFit, PlayersTableRowModel, TagColumnGroups, fitPlayersTable, tableVariables} from '@/client/components/overview/playersTableLayout';
 
 type DataModel = {
   // Width of the table; 0 while it is invisible or not yet measured
   availableWidth: number;
+  // Widest name and status plaque at scale 1 – the name column never shortens a name
+  nameWidths: NameWidths;
   resizeObserver: ResizeObserver | undefined;
 };
 
@@ -55,6 +57,7 @@ export default defineComponent({
     return {
       availableWidth: 0,
       resizeObserver: undefined,
+      nameWidths: {name: 0, status: 0},
     };
   },
   // Watch the width: arrangement and size of the table follow it (never scrolls sideways)
@@ -68,6 +71,11 @@ export default defineComponent({
       this.availableWidth = Math.floor(entries[0].contentRect.width * zoom);
     });
     this.resizeObserver.observe(this.$el);
+    this.measureNames();
+  },
+  // Names, status and timer change their width (ticking clock, passed): measure again after every render
+  updated() {
+    this.measureNames();
   },
   beforeUnmount() {
     this.resizeObserver?.disconnect();
@@ -103,7 +111,7 @@ export default defineComponent({
       return groups.filter((group) => group.length > 0);
     },
     fit(): PlayersTableFit {
-      return fitPlayersTable(this.availableWidth, this.tagColumns, this.escapeVelocity);
+      return fitPlayersTable(this.availableWidth, this.tagColumns, this.escapeVelocity, this.nameWidths);
     },
     tableClasses(): Array<string> {
       const classes = ['players-table', 'players-table--' + this.fit.mode];
@@ -116,7 +124,7 @@ export default defineComponent({
       return classes;
     },
     variables(): Record<string, string> {
-      return tableVariables(this.fit, this.tagColumns, this.escapeVelocity);
+      return tableVariables(this.fit, this.tagColumns, this.escapeVelocity, this.nameWidths);
     },
     // Per resource the player with the sole highest production; nobody on a tie
     productionLeadersByColor(): Partial<Record<Color, Array<Resource>>> {
@@ -134,6 +142,19 @@ export default defineComponent({
         }
       });
       return leaders;
+    },
+  },
+  methods: {
+    // Widths at scale 1 (measured width divided by the current scale); only assigned on a real change,
+    // otherwise every render would trigger the next one. Rounded up to whole px so the ticking clock doesn't jitter
+    measureNames() {
+      const scale = this.fit.scale;
+      const widest = (selector: string) => Math.max(0, ...Array.from((this.$el as HTMLElement).querySelectorAll<HTMLElement>(selector), (element) => element.scrollWidth));
+      const name = Math.ceil(widest('.players-table-name') / scale);
+      const status = Math.ceil(widest('.players-table-identity-line .player-action-status-container') / scale);
+      if (Math.abs(name - this.nameWidths.name) > 2 || Math.abs(status - this.nameWidths.status) > 2) {
+        this.nameWidths = {name, status};
+      }
     },
   },
 });
