@@ -1,8 +1,9 @@
 import {expect} from 'chai';
+import {vi} from 'vitest';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {Resource} from '@/common/Resource';
 import {flashAreaOf, flashKeys} from '@/client/utils/changeFlashKeys';
-import {changeToneOf, ingestView, isChangePending, markChangeAnnounced, markChangeSeen, resetChangeTracker, unannouncedChanges} from '@/client/utils/changeTracker';
+import {changeToneOf, ignoreChangesFor, ingestView, isChangePending, markChangeAnnounced, markChangeSeen, resetChangeTracker, unannouncedChanges} from '@/client/utils/changeTracker';
 import {fakeGameModel, fakePublicPlayerModel, fakeViewModel} from '../components/testHelpers';
 
 function view(megacredits: number, temperature = -30, generation = 1): ViewModel {
@@ -34,6 +35,21 @@ describe('changeTracker', () => {
     expect(isChangePending(megacreditsKey)).is.true;
     expect(isChangePending(temperatureKey)).is.true;
     expect(isChangePending(flashKeys.playerStock('red', Resource.STEEL))).is.false;
+  });
+
+  it('changes set by hand (DevTools) do not blink, later changes do again', () => {
+    const now = Date.now();
+    const clock = vi.spyOn(Date, 'now').mockReturnValue(now);
+    ingestView(view(10), 'remote');
+    ignoreChangesFor(3000);
+    ingestView(view(50, -20), 'remote');
+    ingestView(view(60, -20), 'remote');
+    expect(isChangePending(megacreditsKey)).is.false;
+    expect(isChangePending(temperatureKey)).is.false;
+    clock.mockReturnValue(now + 3001);
+    ingestView(view(48, -20), 'remote');
+    expect(isChangePending(megacreditsKey)).is.true;
+    clock.mockRestore();
   });
 
   it('own moves do not blink but become the new baseline', () => {

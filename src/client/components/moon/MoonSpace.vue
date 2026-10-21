@@ -1,5 +1,5 @@
 <template>
-  <div :class="mainClass" :data_space_id="space.id" v-flash="flashKeys.moonSpace(space.id)">
+  <div :class="mainClass" :data_space_id="space.id" v-flash="flashKeys.moonSpace(space.id)" data-flash-shape="hex">
     <BoardSpaceTile
       :space="space"
       :aresExtension="false"

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="space !== undefined" :class="mainClass" :data_space_id="space.id" v-flash="flashKeys.marsSpace(space.id)">
+  <div v-if="space !== undefined" :class="mainClass" :data_space_id="space.id" v-flash="flashKeys.marsSpace(space.id)" data-flash-shape="hex">
     <BoardSpaceTile
       :space="space"
       :aresExtension="aresExtension"
