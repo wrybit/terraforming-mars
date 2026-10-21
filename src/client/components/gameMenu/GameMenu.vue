@@ -91,8 +91,7 @@
           <!-- Background music of the game (gameMusic.ts): own card under the settings box, only in a game whose theme has tracks (also the mobile view, which has no context) -->
           <MusicPlayerCard v-if="musicAvailable"/>
 
-          <!-- Navigation box: the main pages of the start page (siteLinks.ts), always in a new tab so a running game stays open;
-               after the admin login also the admin area -->
+          <!-- Navigation box: the main pages of the start page (siteLinks.ts), always in a new tab so a running game stays open -->
           <nav v-if="navigationLinks.length > 0" class="game-menu-panel game-menu-items" role="menu">
             <a v-for="link in navigationLinks" :key="link.label" :href="link.href" target="_blank" rel="noopener"
               role="menuitem" class="game-menu-item" @click="closeMenu">
@@ -101,6 +100,25 @@
               <span v-i18n>{{ link.label }}</span>
             </a>
           </nav>
+
+          <!-- Admin box, only after the admin login: the admin area and the DevTools switch (devToolsState.ts) -->
+          <div v-if="isAdmin" class="game-menu-panel game-menu-items" role="menu">
+            <a v-if="showAdminLink" :href="ADMIN_LINK.href" target="_blank" rel="noopener" role="menuitem" class="game-menu-item" @click="closeMenu">
+              <span class="game-menu-item-icon"><MobileGlyph :name="ADMIN_LINK.icon" :strokeWidth="2"/></span>
+              <span v-i18n>{{ ADMIN_LINK.label }}</span>
+            </a>
+            <!-- Same markup as ToggleSwitch.vue, so its styles apply; the whole row switches -->
+            <label role="menuitemcheckbox" :aria-checked="devToolsState.enabled" class="game-menu-item game-menu-item--switch">
+              <span class="game-menu-item-icon">
+                <svg class="game-menu-devtools-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8.5 7L3.5 12l5 5M15.5 7l5 5-5 5M13.5 5l-3 14"/>
+                </svg>
+              </span>
+              <span v-i18n>DevTools</span>
+              <input type="checkbox" class="toggle-switch-input" :checked="devToolsState.enabled" @change="toggleDevTools">
+              <span class="toggle-switch-track" aria-hidden="true"><span class="toggle-switch-thumb"></span></span>
+            </label>
+          </div>
 
           <!-- Legal notice: always reachable from every page and during a game, since the menu exists everywhere -->
           <div class="game-menu-panel game-menu-notice">
@@ -149,6 +167,7 @@ import {LANGUAGE} from '@/common/constants';
 import {translateText} from '@/client/directives/i18n';
 import {ADMIN_LINK, ADMIN_PAGES, SITE_LINKS, START_PAGE_LINK} from '@/client/components/startScreen/siteLinks';
 import {checkAdminLoginOnce, isAdmin} from '@/client/components/admin/adminSession';
+import {devToolsState, disableDevTools, enableDevTools} from '@/client/devtools/devToolsState';
 import {GAME_MENU_CONTEXT} from '@/client/components/gameMenu/gameMenuContext';
 import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
 import {ExtensionMenuItem} from '@/client/extensions/ClientExtension';
@@ -183,11 +202,19 @@ const mainLinks = [
   ...(currentPage === '' ? [] : [START_PAGE_LINK]),
   ...SITE_LINKS.filter((link) => link.inMenu && link.href !== currentPage),
 ];
-// The admin entry also on the start page (which has no navigation box otherwise), but not inside the admin area
-const navigationLinks = computed(() => [
-  ...(props.navigation ? mainLinks : []),
-  ...(isAdmin.value && !ADMIN_PAGES.includes(currentPage) ? [ADMIN_LINK] : []),
-]);
+const navigationLinks = computed(() => props.navigation ? mainLinks : []);
+// The admin entry in its own box (also on the start page), but not inside the admin area itself
+const showAdminLink = !ADMIN_PAGES.includes(currentPage);
+
+async function toggleDevTools(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (input.checked) {
+    // The server checks the login; without it the switch falls back
+    input.checked = await enableDevTools();
+  } else {
+    disableDevTools();
+  }
+}
 onMounted(() => void checkAdminLoginOnce());
 
 const injected = inject(GAME_MENU_CONTEXT, undefined);
