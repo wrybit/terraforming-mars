@@ -164,6 +164,8 @@ html:not(.tm-mobile) .worm-move__chosen {
 .worm-chip--gain { color: @worm-gain; }
 .worm-chip--loss { color: @worm-loss; }
 .worm-chip--neutral { color: @worm-neutral; }
+// Spice blow without a player tile next to it: nobody gains
+.worm-chip--empty { color: #8c765a; }
 
 // On the map: board pixels, scaled up with the piece; its own layer above the faded spaces
 .worm-map .worm-map__chip {
@@ -209,6 +211,13 @@ html:not(.tm-mobile) .worm-move__chosen {
   stroke-width: 5;
 }
 
+.worm-map__wall {
+  stroke: @worm-way;
+  stroke-width: 4;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+}
+
 .worm-map__line-dash {
   stroke: #fff3df;
   stroke-width: 1.6;
@@ -229,15 +238,25 @@ html:not(.tm-mobile) .worm-move__chosen {
   gap: 18px;
 }
 
+// Same rows as a section: distance (24 px) and hexes, the same gap between them
+.worm-vegetation__labels {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  margin-right: -6px;
+}
+
 .worm-vegetation__label {
-  align-self: flex-start;
-  height: 24px;
   display: flex;
   align-items: center;
-  margin-right: -6px;
   color: @worm-hint;
   font-size: 14px;
+  white-space: nowrap;
 }
+
+.worm-vegetation__label--distance { height: 24px; }
+.worm-vegetation__label--track { height: 25px; }
 
 .worm-vegetation__section {
   display: flex;
@@ -306,11 +325,15 @@ html:not(.tm-mobile) .worm-move__chosen {
   text-align: center;
 }
 
+// Phone: up to 18 steps (Arrakis 91) and the row labels still fit 390 px; the gap between the groups stays a
+// multiple of the gap inside
 html.tm-mobile {
-  .worm-vegetation__track { gap: 10px; }
-  .worm-vegetation__label { font-size: 12px; margin-right: -2px; }
-  .worm-vegetation__hex { width: 15px; height: 17px; }
-  .worm-vegetation__hexes { gap: 1.5px; }
+  .worm-vegetation__track { gap: 8px; }
+  .worm-vegetation__labels { margin-right: -2px; }
+  .worm-vegetation__label { font-size: 11px; }
+  .worm-vegetation__label--track { height: 14px; }
+  .worm-vegetation__hex { width: 12px; height: 14px; }
+  .worm-vegetation__hexes { gap: 1px; }
 }
 
 // Result of the chosen way: one group per player (cube and chips), groups farther apart than their chips
@@ -319,6 +342,12 @@ html.tm-mobile {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px 20px;
+}
+
+.worm-move__outcome--none {
+  margin: 0;
+  color: @worm-hint;
+  font-size: 14px;
 }
 
 .worm-move__outcome-player {

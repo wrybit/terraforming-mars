@@ -340,9 +340,10 @@
   "has passed 35 on the Landsraad track.": "превысил 35 на шкале Ландсраада.",
   "have passed 35 on the Landsraad track.": "превысили 35 на шкале Ландсраада.",
   "Choose the agenda you keep:": "Выберите замысел, который оставляете:",
-  "Move distance": "Дальность хода",
+  "Worm path (max.)": "Путь червя (макс.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} из ${1} засаженных дюн: червь проходит до ${2} кл.",
   "Rock blocks the way: Shai-Hulud bounces off": "Скала преграждает путь: Шаи-Хулуд отскакивает",
   "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Дальность: шкала растительности из трёх частей – чем больше засаженных дюн, тем короче ход (3, 2, 1 кл.)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Препятствия (скала, города, полярная граница, край): червь отскакивает, как мяч от стены, – отскок не стоит шага"
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Препятствия (скала, города, полярная граница, край): червь отскакивает, как мяч от стены, – отскок не стоит шага",
+  "No gain or loss for anyone on this way.": "На этом пути никто ничего не получает и не теряет."
 }

@@ -4,7 +4,11 @@
        hex from the right is outlined, its group gives the distance (Jens, 21 Oct 2026). -->
   <div class="worm-vegetation" data-test="worm-vegetation">
     <div class="worm-vegetation__track">
-      <span class="worm-vegetation__label">{{ $t('Move distance') }}</span>
+      <!-- Row labels: the distances above, the vegetation track below ('Oxygen' reads Vegetation in the Dune theme) -->
+      <span class="worm-vegetation__labels">
+        <span class="worm-vegetation__label worm-vegetation__label--distance">{{ $t('Worm path (max.)') }}</span>
+        <span class="worm-vegetation__label worm-vegetation__label--track">{{ $t('Oxygen') }}</span>
+      </span>
       <div v-for="section in sections" :key="section.distance"
         :class="['worm-vegetation__section', {'worm-vegetation__section--active': section.distance === distance}]">
         <span class="worm-vegetation__distance">{{ section.distance }}</span>

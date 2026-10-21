@@ -335,9 +335,10 @@
   "has passed 35 on the Landsraad track.": "a dépassé 35 sur la piste du Landsraad.",
   "have passed 35 on the Landsraad track.": "ont dépassé 35 sur la piste du Landsraad.",
   "Choose the agenda you keep:": "Choisissez l’agenda que vous gardez :",
-  "Move distance": "Distance",
+  "Worm path (max.)": "Trajet du ver (max.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} dunes plantées sur ${1} : le ver avance jusqu'à ${2} case(s)",
   "Rock blocks the way: Shai-Hulud bounces off": "Un rocher barre la route : Shai-Hulud rebondit",
   "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Distance : la piste de végétation en trois parties – plus il y a de dunes plantées, plus le déplacement est court (3, 2, 1 cases)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Obstacles (rocher, villes, frontière polaire, bord) : le ver rebondit comme une bille sur un mur – rebondir ne coûte aucun pas"
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Obstacles (rocher, villes, frontière polaire, bord) : le ver rebondit comme une bille sur un mur – rebondir ne coûte aucun pas",
+  "No gain or loss for anyone on this way.": "Sur ce chemin, personne ne gagne ni ne perd rien."
 }

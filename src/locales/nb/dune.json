@@ -335,9 +335,10 @@
   "has passed 35 on the Landsraad track.": "har passert 35 på Landsraad-sporet.",
   "have passed 35 on the Landsraad track.": "har passert 35 på Landsraad-sporet.",
   "Choose the agenda you keep:": "Velg agendaen du beholder:",
-  "Move distance": "Forflytning",
+  "Worm path (max.)": "Ormens vei (maks.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} av ${1} beplantede dyner: ormen flytter opptil ${2} felt",
   "Rock blocks the way: Shai-Hulud bounces off": "Fjell sperrer veien: Shai-Hulud preller av",
   "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Avstand: vegetasjonsskalaen i tre deler – jo flere beplantede dyner, desto kortere flytt (3, 2, 1 felt)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Hindringer (fjell, byer, polgrensen, kanten): ormen preller av som en kule mot en vegg – å prelle av koster ikke noe steg"
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Hindringer (fjell, byer, polgrensen, kanten): ormen preller av som en kule mot en vegg – å prelle av koster ikke noe steg",
+  "No gain or loss for anyone on this way.": "På denne veien vinner eller taper ingen noe."
 }

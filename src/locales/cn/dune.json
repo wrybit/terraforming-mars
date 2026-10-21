@@ -340,9 +340,10 @@
   "has passed 35 on the Landsraad track.": "在兰兹拉德轨道上超过了35。",
   "have passed 35 on the Landsraad track.": "在兰兹拉德轨道上超过了35。",
   "Choose the agenda you keep:": "选择你要保留的议程：",
-  "Move distance": "移动距离",
+  "Worm path (max.)": "沙虫路程（最多）",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0}/${1} 植被沙丘：沙虫最多移动 ${2} 格",
   "Rock blocks the way: Shai-Hulud bounces off": "岩石挡路：夏胡露反弹",
   "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "距离：植被轨道分为三段——植被沙丘越多，移动越短（3、2、1 格）",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "障碍（岩石、城市、极地边界、棋盘边缘）：沙虫像球撞墙一样反弹——反弹不消耗步数"
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "障碍（岩石、城市、极地边界、棋盘边缘）：沙虫像球撞墙一样反弹——反弹不消耗步数",
+  "No gain or loss for anyone on this way.": "这条路线上没有任何人得失。"
 }

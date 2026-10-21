@@ -337,9 +337,10 @@
   "has passed 35 on the Landsraad track.": "túllépte a 35-öt a Landsraad-sávon.",
   "have passed 35 on the Landsraad track.": "túllépték a 35-öt a Landsraad-sávon.",
   "Choose the agenda you keep:": "Válaszd ki a tervet, amelyet megtartasz:",
-  "Move distance": "Lépéstáv",
+  "Worm path (max.)": "Féregút (max.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0}/${1} beültetett dűne: a féreg legfeljebb ${2} mezőt halad",
   "Rock blocks the way: Shai-Hulud bounces off": "Szikla zárja el az utat: Shai-Hulud visszapattan",
   "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Távolság: a növényzetsáv három szakaszban – minél több a beültetett dűne, annál rövidebb a lépés (3, 2, 1 mező)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Akadályok (szikla, városok, sarki határ, pálya széle): a féreg visszapattan, mint labda a falról – a visszapattanás nem kerül lépésbe"
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Akadályok (szikla, városok, sarki határ, pálya széle): a féreg visszapattan, mint labda a falról – a visszapattanás nem kerül lépésbe",
+  "No gain or loss for anyone on this way.": "Ezen az úton senki sem nyer és nem veszít semmit."
 }

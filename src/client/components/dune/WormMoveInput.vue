@@ -21,13 +21,18 @@
           :class="['worm-map__chip', {'worm-map__chip--on-way': onChosenWay(effect.id)}]"
           :style="{left: effect.x + 'px', top: effect.y + 'px'}"/>
         <!-- The chosen way as a line, so the corners of a bounce read at a glance -->
-        <svg v-if="wayLine !== ''" class="worm-map__line" :width="box.width" :height="box.height" aria-hidden="true">
-          <polyline class="worm-map__line-glow" :points="wayLine"/>
-          <polyline class="worm-map__line-dash" :points="wayLine"/>
+        <svg v-if="wayLine !== '' || marks.walls.length > 0" class="worm-map__line" :width="box.width" :height="box.height" aria-hidden="true">
+          <template v-if="wayLine !== ''">
+            <polyline class="worm-map__line-glow" :points="wayLine"/>
+            <polyline class="worm-map__line-dash" :points="wayLine"/>
+          </template>
+          <!-- Walls the worm bounces off: an orange bar on the edge it hits -->
+          <line v-for="(wall, index) in marks.walls" :key="'wall-' + index" class="worm-map__wall"
+            :x1="wall.x1" :y1="wall.y1" :x2="wall.x2" :y2="wall.y2"/>
         </svg>
         <!-- Heading: a white disc with an arrow on the edge the worm leaves through – at the start and after every
              bounce, along the longest way (Jens, 21 Oct 2026) -->
-        <span v-for="(heading, index) in headings" :key="'heading-' + index" class="worm-map__heading" aria-hidden="true"
+        <span v-for="(heading, index) in marks.headings" :key="'heading-' + index" class="worm-map__heading" aria-hidden="true"
           :style="{left: heading.x + 'px', top: heading.y + 'px'}">
           <svg viewBox="0 0 16 16" :style="{transform: 'rotate(' + heading.angle + 'deg)'}"><path d="M3 8h9M8 3.5 12.5 8 8 12.5"/></svg>
         </span>
@@ -44,7 +49,8 @@
     <WormVegetationBar :vegetation="playerView.game.oxygenLevel" :maximum="maximumVegetation"/>
     <p class="worm-move__chosen">{{ chosen === undefined ? '' : $t(optionTitle(chosen)) }}</p>
     <!-- What the chosen way does, summed up per player -->
-    <div v-if="outcome.length > 0" class="worm-move__outcome">
+    <p v-if="chosen !== undefined && outcome.length === 0" class="worm-move__outcome worm-move__outcome--none">{{ $t('No gain or loss for anyone on this way.') }}</p>
+    <div v-else-if="outcome.length > 0" class="worm-move__outcome">
       <span v-for="row in outcome" :key="row.color" class="worm-move__outcome-player">
         <PlayerCube :color="row.color" :size="14"/>
         <WormEffectChip v-for="(chip, index) in row.chips" :key="index" :chip="chip"/>
@@ -71,7 +77,7 @@ import ArrakisHex from './ArrakisHex.vue';
 import WormEffectChip from './WormEffectChip.vue';
 import WormVegetationBar from './WormVegetationBar.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
-import {WormChip, Heading, wormEffect, wormHeadings, wormOutcome} from './wormMoveDisplay';
+import {Heading, Wall, WormChip, wormBounceMarks, wormEffect, wormOutcome} from './wormMoveDisplay';
 import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
 import {Color} from '@/common/Color';
 import AppButton from '@/client/components/common/AppButton.vue';
@@ -205,10 +211,13 @@ export default defineComponent({
       const way = this.chosen === undefined ? [] : this.ways[this.chosen] ?? [];
       return way.length === 0 ? '' : this.centers([this.wormSpace ?? '', ...way]).map((point) => point.x + ',' + point.y).join(' ');
     },
-    // Along the longest way: the shorter ones are its beginnings
-    headings(): Array<Heading> {
+    // Along the longest way: the shorter ones are its beginnings. The rolled heading shows where the worm bounced
+    // off right at the start
+    marks(): {headings: Array<Heading>, walls: Array<Wall>} {
+      const worm = this.playerView.game.dune?.worm;
       const longest = this.ways[this.ways.length - 1] ?? [];
-      return longest.length === 0 ? [] : wormHeadings(this.centers([this.wormSpace ?? '', ...longest]));
+      const rolled = worm?.roll === undefined ? undefined : worm.roll % 6;
+      return longest.length === 0 ? {headings: [], walls: []} : wormBounceMarks(this.centers([this.wormSpace ?? '', ...longest]), rolled);
     },
     outcome(): Array<{color: Color, chips: Array<WormChip>}> {
       const way = this.chosen === undefined ? [] : this.ways[this.chosen] ?? [];

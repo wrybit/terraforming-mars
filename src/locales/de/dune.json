@@ -334,9 +334,10 @@
   "has passed 35 on the Landsraad track.": "hat auf der Landsraad-Leiste 35 überschritten.",
   "have passed 35 on the Landsraad track.": "haben auf der Landsraad-Leiste 35 überschritten.",
   "Choose the agenda you keep:": "Wähle die Agenda, die du behältst:",
-  "Move distance": "Zugdistanz",
+  "Worm path (max.)": "Wurmweg (max.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} von ${1} Pflanzdünen: der Wurm zieht bis zu ${2} Feld(er)",
   "Rock blocks the way: Shai-Hulud bounces off": "Fels versperrt den Weg: Shai-Hulud prallt ab",
   "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Distanz: die Vegetationsleiste in drei Abschnitten – je mehr Pflanzdünen, desto kürzer der Zug (3, 2, 1 Felder)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Hindernisse (Fels, Städte, Polgrenze, Rand): der Wurm prallt ab wie eine Kugel an der Wand – Abprallen kostet keinen Schritt"
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Hindernisse (Fels, Städte, Polgrenze, Rand): der Wurm prallt ab wie eine Kugel an der Wand – Abprallen kostet keinen Schritt",
+  "No gain or loss for anyone on this way.": "Auf diesem Weg gibt es für niemanden Bonus oder Malus."
 }

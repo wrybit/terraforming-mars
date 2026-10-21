@@ -331,9 +331,10 @@
   "has passed 35 on the Landsraad track.": "heeft op het Landsraad-spoor 35 overschreden.",
   "have passed 35 on the Landsraad track.": "hebben op het Landsraad-spoor 35 overschreden.",
   "Choose the agenda you keep:": "Kies de agenda die je houdt:",
-  "Move distance": "Afstand",
+  "Worm path (max.)": "Wormpad (max.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} van ${1} beplante duinen: de worm gaat tot ${2} veld(en)",
   "Rock blocks the way: Shai-Hulud bounces off": "Rots verspert de weg: Shai-Hulud kaatst terug",
   "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Afstand: het vegetatiespoor in drie delen – hoe meer beplante duinen, hoe korter de zet (3, 2, 1 velden)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Obstakels (rots, steden, poolgrens, rand): de worm kaatst terug als een bal tegen een muur – terugkaatsen kost geen stap"
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Obstakels (rots, steden, poolgrens, rand): de worm kaatst terug als een bal tegen een muur – terugkaatsen kost geen stap",
+  "No gain or loss for anyone on this way.": "Op deze weg wint of verliest niemand iets."
 }

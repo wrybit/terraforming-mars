@@ -1,7 +1,7 @@
 <template>
   <!-- Effect of the worm as a chip: amounts with the resource picture, green gain, red loss, gold for the spice blow
-       (every adjacent player tile gets one, so "×N"). On the map and in the result line (WormMoveInput.vue). -->
-  <span :class="['worm-chip', 'worm-chip--' + chip.tone]">
+       (every adjacent player tile gets one, so "×N"; ×0 greyed: no one gains). On the map and in the result line (WormMoveInput.vue). -->
+  <span :class="['worm-chip', 'worm-chip--' + chip.tone, {'worm-chip--empty': chip.times === 0}]">
     <span v-for="(item, index) in chip.items" :key="index" class="worm-chip__item">
       {{ (item.amount > 0 ? '+' : '−') + Math.abs(item.amount) }}<img :src="picture(item.resource)" alt="">
     </span>

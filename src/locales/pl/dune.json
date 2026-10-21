@@ -337,9 +337,10 @@
   "has passed 35 on the Landsraad track.": "przekroczył 35 na torze Landsraadu.",
   "have passed 35 on the Landsraad track.": "przekroczyli 35 na torze Landsraadu.",
   "Choose the agenda you keep:": "Wybierz plan, który zachowujesz:",
-  "Move distance": "Zasięg ruchu",
+  "Worm path (max.)": "Droga czerwia (maks.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0} z ${1} obsadzonych wydm: czerw rusza o maks. ${2} pole(-a)",
   "Rock blocks the way: Shai-Hulud bounces off": "Skała blokuje drogę: Shai-Hulud odbija się",
   "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Zasięg: tor roślinności w trzech odcinkach – im więcej obsadzonych wydm, tym krótszy ruch (3, 2, 1 pola)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Przeszkody (skała, miasta, granica polarna, krawędź): czerw odbija się jak piłka od ściany – odbicie nie kosztuje kroku"
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Przeszkody (skała, miasta, granica polarna, krawędź): czerw odbija się jak piłka od ściany – odbicie nie kosztuje kroku",
+  "No gain or loss for anyone on this way.": "Na tej drodze nikt nic nie zyskuje ani nie traci."
 }

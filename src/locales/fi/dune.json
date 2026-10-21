@@ -337,9 +337,10 @@
   "has passed 35 on the Landsraad track.": "on ylittänyt 35 Landsraadin radalla.",
   "have passed 35 on the Landsraad track.": "ovat ylittäneet 35 Landsraadin radalla.",
   "Choose the agenda you keep:": "Valitse agenda, jonka pidät:",
-  "Move distance": "Liikematka",
+  "Worm path (max.)": "Madon reitti (enint.)",
   "${0} of ${1} greeneries: the worm moves up to ${2} space(s)": "${0}/${1} istutusdyyniä: mato liikkuu enintään ${2} ruutua",
   "Rock blocks the way: Shai-Hulud bounces off": "Kallio tukkii tien: Shai-Hulud kimpoaa",
   "Distance: the vegetation track in three sections \u2013 the more greeneries, the shorter the move (3, 2, 1 spaces)": "Matka: kasvillisuusasteikko kolmessa osassa – mitä enemmän istutusdyynejä, sitä lyhyempi liike (3, 2, 1 ruutua)",
-  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Esteet (kallio, kaupungit, napa-alueen raja, reuna): mato kimpoaa kuin pallo seinästä – kimpoaminen ei kuluta askelta"
+  "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall \u2013 bouncing costs no step": "Esteet (kallio, kaupungit, napa-alueen raja, reuna): mato kimpoaa kuin pallo seinästä – kimpoaminen ei kuluta askelta",
+  "No gain or loss for anyone on this way.": "Tällä reitillä kukaan ei voita eikä menetä mitään."
 }
