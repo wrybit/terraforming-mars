@@ -101,8 +101,11 @@ export type BounceGlyph = {line: string, head: string};
 
 // Bounce glyph (Jens, 21 Oct 2026: variant B – a soft bend, filled head, centred in the disc, both legs equally long)
 const GLYPH_BOX = 16;
-// Both legs equally long, measured from the corner to the start and to the tip of the head
+// Legs from the corner to the start and to the tip of the head. The head makes the outgoing leg look shorter, so
+// it gets more length at a sharp bend; at a slight bend (60°) the incoming leg is shortened instead (Jens, 21 Oct 2026)
 const GLYPH_LEG = 8;
+const GLYPH_LEGS_SHARP = {in: 7, out: 9.5};
+const GLYPH_LEGS_SLIGHT = {in: 6, out: 8};
 const GLYPH_BEND = 1.8;
 const GLYPH_U_GAP = 5;
 const HEAD_LENGTH = 3.4;
@@ -120,8 +123,9 @@ export function bounceGlyph(turn: number): BounceGlyph {
   const radians = normalized * Math.PI / 180;
   const out = back ? {x: -1, y: 0} : {x: Math.cos(radians), y: Math.sin(radians)};
   // Corner of the bend at the origin; the shape is moved into the middle of the box afterwards
-  const start = back ? {x: -GLYPH_LEG, y: GLYPH_U_GAP / 2} : {x: -GLYPH_LEG, y: 0};
-  const tip = back ? {x: -GLYPH_LEG, y: -GLYPH_U_GAP / 2} : {x: GLYPH_LEG * out.x, y: GLYPH_LEG * out.y};
+  const legs = Math.abs(normalized) >= 90 ? GLYPH_LEGS_SHARP : GLYPH_LEGS_SLIGHT;
+  const start = back ? {x: -GLYPH_LEG, y: GLYPH_U_GAP / 2} : {x: -legs.in, y: 0};
+  const tip = back ? {x: -GLYPH_LEG, y: -GLYPH_U_GAP / 2} : {x: legs.out * out.x, y: legs.out * out.y};
   const across = {x: -out.y, y: out.x};
   const base = {x: tip.x - HEAD_LENGTH * out.x, y: tip.y - HEAD_LENGTH * out.y};
   const corners = [{x: base.x + across.x * HEAD_HALF, y: base.y + across.y * HEAD_HALF}, {x: base.x - across.x * HEAD_HALF, y: base.y - across.y * HEAD_HALF}];
