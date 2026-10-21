@@ -4,6 +4,8 @@ import {Card} from '../Card';
 import {CardType} from '../../../common/cards/CardType';
 import {CardName} from '../../../common/cards/CardName';
 import {CardRenderer} from '../render/CardRenderer';
+import {Size} from '../../../common/cards/render/Size';
+import {CardResource} from '../../../common/CardResource';
 
 // Dune expansion, card E14 (mockup data/extension-cards.js)
 export class ShieldGenerator extends Card implements IProjectCard {
@@ -17,7 +19,8 @@ export class ShieldGenerator extends Card implements IProjectCard {
       metadata: {
         cardNumber: 'E14',
         renderData: CardRenderer.builder((b) => {
-          b.effect('When one of your tiles becomes the war field, 2 Sardaukar defend it for free.', (eb) => eb.text('war field').startEffect.text('2 Sardaukar'));
+          // Icons instead of words (Jens 21 Oct 2026): your tile on the war field, defended by 2 Sardaukar
+          b.effect('When one of your tiles becomes the war field, 2 Sardaukar defend it for free.', (eb) => eb.emptyTile('normal', {size: Size.SMALL}).startEffect.resource(CardResource.FIGHTER, 2));
         }),
       },
     });

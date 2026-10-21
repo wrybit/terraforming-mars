@@ -6,6 +6,7 @@ import {Size} from '@/common/cards/render/Size';
 
 const or = {type: CardRenderSymbolType.OR, size: Size.SMALL, is: 'symbol'} as ItemType;
 const space = {type: CardRenderSymbolType.NBSP, size: Size.MEDIUM, is: 'symbol'} as ItemType;
+const arrow = {type: CardRenderSymbolType.ARROW, size: Size.MEDIUM, is: 'symbol'} as ItemType;
 const plants = 'plants' as ItemType;
 const microbes = 'microbes' as ItemType;
 const animals = 'animals' as ItemType;
@@ -22,6 +23,10 @@ describe('alternativeRows', () => {
   it('drops the spaces around OR, the slash brings its own gap', () => {
     expect(joinAlternativeRows([[plants, space, or, space, microbes], [or, space, animals]])).deep.eq([[plants, or, microbes, or, animals]]);
     expect(joinAlternativeRows([[plants, space, microbes]])).deep.eq([[plants, space, microbes]]);
+  });
+
+  it('keeps two actions on two rows, the slash at the end of the first', () => {
+    expect(joinAlternativeRows([[arrow, microbes, space, or], [microbes, arrow, plants]])).deep.eq([[arrow, microbes, or], [microbes, arrow, plants]]);
   });
 
   it('keeps rows without OR at their seam apart', () => {

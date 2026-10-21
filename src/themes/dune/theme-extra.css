@@ -696,10 +696,49 @@ html.theme-dune .card-container .card-content .card-row:has(> .card-item-contain
 }
 
 html.theme-dune .card-container .card-content .card-row > .card-item-container:has(> [class*="card-text-size"]) {
-  flex: 1 1 120px;
+  flex: 0 1 auto;
   justify-content: center;
-  min-width: 120px;
+  /* Short words ("steal", "next card") keep their own width and stay next to their icons */
+  min-width: min(120px, max-content);
   text-align: center;
+}
+
+/* Pictures for cards that only have text (Jens 21 Oct 2026): the worm on the Thumper, the protection shield of the
+   player overview on Protected Habitats (as a mask with its green gradient, players_table.less) */
+html.theme-dune .card-container:is(.card-thumper, .card-protected-habitats, .card-invention-contest, .card-business-contacts) .card-content > .card-rows:last-of-type::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px auto 0;
+  background: url(graphics/token-worm.svg) center / contain no-repeat;
+}
+
+/* Look at the top cards, keep some, discard the others: the cards drawn (scripts/make-card-choice.py) */
+html.theme-dune .card-container.card-invention-contest .card-content > .card-rows:last-of-type::after {
+  width: 127px;
+  height: 58px;
+  background-image: url(graphics/cards-keep-1-of-3.svg);
+}
+
+html.theme-dune .card-container.card-business-contacts .card-content > .card-rows:last-of-type::after {
+  width: 169px;
+  height: 58px;
+  background-image: url(graphics/cards-keep-2-of-4.svg);
+}
+
+html.theme-dune .card-container.card-protected-habitats .card-content > .card-rows:last-of-type::after {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #d6f7b4 0%, #7ad048 40%, #3c9a24 75%, #1f6512 100%);
+  mask: url(../../misc/shield-icon.png) center / contain no-repeat;
+}
+
+/* Every cross on a card ("cancelled", "ignore") in the red of the theme with a light halo (Jens 21 Oct 2026) */
+html.theme-dune .card-container .card-content .card-x {
+  color: #b51616 !important;
+  font-weight: 700;
+  text-shadow: 0 0 2px #fffdf8, 0 0 2px #fffdf8;
 }
 
 /* Expansion marks on the cards (Jens 21 Oct 2026): the marks of the card list filter instead of the coloured Mars
@@ -946,13 +985,18 @@ html.theme-dune .card-container .card-content .card-special.card-or::before {
   font: 700 20px Ubuntu, sans-serif;
 }
 
-/* Emphasis: rules like "1 VP per …" and notes, 11 bold without capitals (was 9 to 14 px in capitals) */
+/* Emphasis: rules like "1 VP per …" and notes, 11 bold without capitals (was 9 to 14 px in capitals); the somewhat
+   larger S texts ("next card", "Opponents may not remove …") in the text size (Jens 21 Oct 2026) */
 html.theme-dune .card-container .card-content .card-text-size--XS.card-text-uppercase,
 html.theme-dune .card-container .card-content .card-text-size--S.card-text-uppercase {
   font-size: 11px !important;
   font-weight: 700;
   text-transform: none !important;
   line-height: 1.35;
+}
+
+html.theme-dune .card-container .card-content .card-text-size--S.card-text-uppercase {
+  font-size: 13px !important;
 }
 
 html.theme-dune .card-container .card-content mark,
@@ -1249,6 +1293,10 @@ html.theme-dune .card-container .card-content .card-plate.card-plate.card-plate-
 }
 
 html.theme-dune .card-container .card-content .card-plate.card-plate.card-plate--requirements {
+  /* Narrower, two lines, so ": ± 2" fits next to it (Jens 21 Oct 2026); words in capitals are not hyphenated */
+  max-width: 108px;
+  hyphens: manual;
+  padding: 4px 6px 3px !important;
   background: linear-gradient(#857869, #5f554b) !important;
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 22%), inset 0 -1px 0 rgb(0 0 0 / 25%) !important;
   color: #f4ead2 !important;
