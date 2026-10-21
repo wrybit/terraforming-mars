@@ -237,7 +237,9 @@ function placeDropdown() {
   }
   // Fixed below the button, left edges aligned (button sits at the top left of its card)
   const box = button.getBoundingClientRect();
-  dropdownPosition.value = {left: `${box.left}px`, top: `${box.bottom + DROPDOWN_OFFSET}px`};
+  // At most down to the window's bottom edge: longer menus (music card, admin box) scroll inside
+  const top = box.bottom + DROPDOWN_OFFSET;
+  dropdownPosition.value = {left: `${box.left}px`, top: `${top}px`, maxHeight: `calc(100dvh - ${top + DROPDOWN_OFFSET}px)`};
 }
 
 function onDocumentPointer(event: Event) {

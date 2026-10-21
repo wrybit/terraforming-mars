@@ -90,6 +90,8 @@ html.tm-mobile .game-menu:not(.game-menu--large) {
 // Gap between the boxes larger than the sections inside a box (law of proximity).
 .game-menu-dropdown {
   position: fixed;
+  overflow-y: auto;
+  overscroll-behavior: contain; // scrolling the menu never scrolls the page behind it
   z-index: 3000; // above the columns and their overlays, below the dialogs (sidebar_modal.less)
   box-sizing: border-box;
   width: @game-menu-dropdown-width;
