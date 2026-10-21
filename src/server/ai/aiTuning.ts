@@ -260,7 +260,8 @@ export const BASELINE_TUNING: AiTuning = {
   // 1.05 and 16 second-step candidates +1.30 VP per deal (z +3.09) – each part alone was only slightly positive.
   // Round 103 (1200 mirrored 1v1 games): buyStricter (+1) +1.43 VP (z +2.06), buyStrict (−1) +0.93 – adopted: the hand
   // filled with weak cards (20 in hand in gen 9 vs humans) and cities were bought instead of playing them.
-  buyMargin: 1,
+  // Round 131 (card-throughput rule): buyStrict (−1) cards played +1.25 (z +3.69), VP +0.04 – adopted.
+  buyMargin: -1,
   handTargetEarly: 12,
   handTargetLate: 5,
   researchReserveEarly: 0,
@@ -831,6 +832,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   buyStricter: {buyMargin: 1},
   // Round 131: humans spend ~660 M€ on 57 project cards, the AI ~400 M€ on 34 with the same income (moneyBottleneck.py).
   buyMargin0: {buyMargin: 0},
+  // Round 132: check of round 131's adoption (back to 1) and one step further.
+  buyMargin1: {buyMargin: 1},
+  buyMarginMinus2: {buyMargin: -2},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},
