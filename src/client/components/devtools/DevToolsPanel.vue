@@ -7,8 +7,10 @@
       <p class="devtools__note">{{ $t('Changes the game for all players and writes every change into the game log. Each change is sent by itself one second after the last touch.') }}</p>
     </header>
 
-    <div class="devtools__group devtools__group--globals">
+    <!-- Box 1, full width: what is the same for everybody; its controls in columns, so it stays short -->
+    <div class="devtools__box devtools__group devtools__group--globals">
       <h4 class="devtools__group-title">{{ $t('Global parameters') }}</h4>
+      <div class="devtools-globals">
       <div class="devtools-pair">
         <label class="devtools-field">
           <span class="devtools-field__name">{{ $t('Board') }}</span>
@@ -33,9 +35,11 @@
           :style="{'--devtools-fill': fillOf(slider)}" v-model.number="values[slider.key]" @input="scheduleSlider(slider.key)">
         <b class="devtools-slider__value">{{ shown(slider.key, values[slider.key]) }}</b>
       </label>
+      </div>
     </div>
 
-    <div class="devtools__group devtools__group--player">
+    <!-- Box 2: one player, chosen at the top; values | tags | questions side by side, the card below -->
+    <div class="devtools__box devtools__group devtools__group--player">
       <!-- One player for everything below: values, cards and the questions asked right now -->
       <div class="devtools-players" role="radiogroup" :aria-label="$t('Player')">
         <button v-for="player in players" :key="player.color" type="button" role="radio" :aria-checked="player.color === color"
@@ -93,6 +97,18 @@
             </template>
           </div>
         </div>
+
+        <div class="devtools__group">
+          <h4 class="devtools__group-title">{{ $t('Ask now') }}</h4>
+          <div class="devtools-trigger-groups">
+            <div v-for="group in triggerGroups" :key="group.label" class="devtools-trigger-group">
+              <span class="devtools-field__name">{{ $t(group.label) }}</span>
+              <div class="devtools-triggers">
+                <button v-for="trigger in group.triggers" :key="trigger.key" type="button" class="btn devtools-button" @click="sendTrigger(trigger.key)">{{ $t(trigger.label) }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <h4 class="devtools__group-title">{{ $t('Card') }}</h4>
@@ -104,16 +120,6 @@
       <datalist :id="listId">
         <option v-for="card in cardOptions" :key="card.name" :value="card.label"></option>
       </datalist>
-
-      <h4 class="devtools__group-title">{{ $t('Ask now') }}</h4>
-      <div class="devtools-trigger-groups">
-        <div v-for="group in triggerGroups" :key="group.label" class="devtools-trigger-group">
-          <span class="devtools-field__name">{{ $t(group.label) }}</span>
-          <div class="devtools-triggers">
-            <button v-for="trigger in group.triggers" :key="trigger.key" type="button" class="btn devtools-button" @click="sendTrigger(trigger.key)">{{ $t(trigger.label) }}</button>
-          </div>
-        </div>
-      </div>
     </div>
     <p v-if="error !== ''" class="devtools__error">{{ error }}</p>
   </section>

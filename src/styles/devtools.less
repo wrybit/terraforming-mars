@@ -18,19 +18,21 @@
 @devtools-field-background: rgba(0, 0, 0, 0.25);
 @devtools-track: rgba(255, 255, 255, 0.16);
 @devtools-thumb: 18px;
-@devtools-field-height: 32px;
+@devtools-field-height: 28px;
 // Inside a group smaller than between groups: what belongs together reads as one (Gestalt, proximity)
-@devtools-gap-inside: 8px;
+@devtools-gap-inside: 6px;
 @devtools-gap-groups: 20px;
 
-// Three groups: parameters, resources, card. Side by side where there is room, below each other on the phone
+// Two boxes below each other (Jens, 21 Oct 2026): the global parameters across the whole width, then the player with
+// his values in three columns – balanced, so the tab needs little scrolling
 .devtools {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
-    "head head"
-    "globals player"
-    "error error";
+    "head"
+    "globals"
+    "player"
+    "error";
   align-items: start;
   gap: @devtools-gap-groups 28px;
   padding: 14px 16px 18px;
@@ -51,10 +53,26 @@
   grid-area: player;
 }
 
-// Everything of one player: values and tags side by side, below each other on the phone
+// A box of its own per part: a dark surface with a fine edge, so the two parts read as two groups
+.devtools__box {
+  padding: 14px 16px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+// Global parameters in columns: board and theme, generation, the sliders – as many columns as fit
+.devtools-globals {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  align-items: center;
+  gap: @devtools-gap-inside 32px;
+}
+
+// Everything of one player: values | tags | questions side by side, below each other on the phone
 .devtools-player {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: @devtools-gap-groups 24px;
 }
 
@@ -96,12 +114,21 @@ html.tm-mobile .devtools-card-row {
   > .devtools-input {
     grid-column: 1 / -1;
   }
+
+  // Long labels ("Ins Spiel (ohne Wirkung)") wrap instead of running out of the half-width button
+  > button {
+    min-width: 0;
+    white-space: normal;
+    line-height: 1.2;
+  }
 }
 
 .devtools-trigger-groups {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  // Third column of the player box: the kinds of questions stacked, each with its buttons below
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 14px 20px;
 }
 
 .devtools-trigger-group {
@@ -112,15 +139,26 @@ html.tm-mobile .devtools-card-row {
 
 .devtools-triggers {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  // Every row as high as the highest one: the raster stays even when a text wraps
-  grid-auto-rows: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: @devtools-gap-inside;
 }
 
-html.tm-mobile .devtools {
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-areas: "head" "globals" "player" "error";
+// DevTools tab in black: a tool, not part of the game (Jens, 21 Oct 2026)
+.or-tab.or-tab--devtools,
+.or-tab.or-tab--devtools.or-tab--active {
+  background: #050506;
+  border-color: #000;
+  color: #f2f2f2;
+}
+
+.or-tab.or-tab--devtools:not(.or-tab--active) {
+  opacity: 0.85;
+}
+
+// The panel below the black tab is black too; doubled class against the tones of the action tabs (or_tab_tones.less)
+html .or-tab-panel.or-tab-panel--devtools.or-tab-panel--devtools {
+  border-color: #000;
+  background: #0b0b0d;
 }
 
 .devtools__title {
@@ -382,9 +420,9 @@ html.tm-mobile .devtools {
 // Buttons of one height in the raster: long texts wrap inside the button, every cell of a row grows with the longest
 .devtools-triggers .devtools-button {
   height: auto;
-  // Room for two lines everywhere: all groups share one button height
-  min-height: 48px;
-  padding: 6px 10px;
-  line-height: 1.25;
+  min-height: 32px;
+  padding: 5px 10px;
+  font-size: 13px;
+  line-height: 1.2;
   white-space: normal;
 }
