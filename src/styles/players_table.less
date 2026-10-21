@@ -171,10 +171,13 @@
     padding-block: calc(4px * @s);
   }
 
+  // Outside the grid: flush with the left edge of the rows, in the inset in front of the first goods column
   .players-table-menu--inline {
-    grid-area: auto;
+    position: absolute;
+    top: 50%;
+    left: 0;
     padding-left: 0;
-    margin-right: calc(4px * @s);
+    transform: translateY(-50%);
 
     // .game-menu doubled: beats the hotkey padding (hotkeys.less)
     .game-menu .game-menu-button {
