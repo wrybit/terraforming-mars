@@ -676,3 +676,98 @@ html:not(.tm-mobile) .dune-schemes__cards {
   display: flex;
   justify-content: flex-end;
 }
+
+// Mentat Calculation (MentatSwapInput.vue): own agendas above, the top 3 of the deck below, arrows between them.
+// Clicks on a card above and one below choose what is swapped; the cards are buttons like the keep choice.
+.mentat-swap {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0 20px;
+}
+
+.mentat-swap__group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.mentat-swap__label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #cbb994;
+}
+
+// Both rows fit the tab without scrolling: the cards a bit smaller than in the schemes tab, side by side, wrapping
+// on a narrow screen
+@mentat-card-zoom: 0.66;
+
+// The intro of the tab (card picture, card name, question) would push the lower row out of sight; the two row labels
+// say the same
+.or-tab-panel:has(> .mentat-swap) > .or-tab-intro {
+  display: none;
+}
+
+.mentat-swap .mentat-swap__cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: @scheme-card-gap;
+  width: auto;
+  max-width: none;
+}
+
+.mentat-swap__choice {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  zoom: @mentat-card-zoom;
+
+  .dune-schemes__agenda {
+    width: @scheme-card-width;
+    max-width: none;
+    aspect-ratio: 63 / 88;
+  }
+}
+
+// The own agenda that goes glows red, the new one green (Jens, 21 Oct 2026)
+.mentat-swap__choice--out {
+  box-shadow: 0 0 0 4px #d9483b, 0 0 28px rgba(217, 72, 59, 0.75);
+}
+
+.mentat-swap__choice--in {
+  box-shadow: 0 0 0 4px #4fbf67, 0 0 28px rgba(79, 191, 103, 0.75);
+}
+
+.mentat-swap__arrows {
+  font-size: 34px;
+  line-height: 1;
+  color: rgba(216, 195, 165, 0.35);
+  transition: color 0.15s ease;
+}
+
+.mentat-swap__arrows--ready {
+  color: #f0a040;
+}
+
+.mentat-swap__actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+// Card name and request in one line above the rows (the tab intro is hidden for this choice)
+.mentat-swap__hint {
+  margin-bottom: 4px;
+}

@@ -24,6 +24,13 @@ export const KANLY_SEND_TITLE = 'Sardaukar to send to the war field';
 export const KANLY_SEND_BUTTON = 'Send';
 
 export const SCHEMES_TITLE = 'House schemes: which agenda do you keep?';
+/** Mentat Calculation card: swap one own agenda for one of the top 3 (MentatSwapInput.vue shows them as cards) */
+export const MENTAT_TITLE = 'Mentat Calculation: swap an agenda?';
+/** Each swap choice; the own agenda is its first value, the new one its second */
+export const MENTAT_SWAP_TITLE = 'Swap ${0} for ${1}';
+export const MENTAT_KEEP_TITLE = 'Keep my agendas';
+/** Tleilaxu Spy card: the other player's agendas as cards (SpyAgendasInput.vue); the player is the first value */
+export const SPY_VIEW_TITLE = 'Tleilaxu Spy: agendas of ${0}';
 
 export const CHOAM_OFFER_TITLE = 'CHOAM: make an offer';
 export const CHOAM_ACCEPT_TITLE = 'CHOAM: accept a contract';

@@ -345,5 +345,10 @@
   "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "Дальність: шкала рослинності з трьох частин – що більше засаджених дюн, то коротший хід (3, 2, 1 кл.)",
   "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "Перешкоди (скеля, міста, полярна межа, край): черв'як відскакує, як м'яч від стіни, – відскок не коштує кроку",
   "No gain or loss for anyone on this way.": "На цьому шляху ніхто нічого не отримує й не втрачає.",
-  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Кожен суперник із підозрою 3 і більше</opp> втрачає 1 вплив. Отримайте 4 соларії."
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Кожен суперник із підозрою 3 і більше</opp> втрачає 1 вплив. Отримайте 4 соларії.",
+  "Choose one of your agendas and one from the deck.": "Вибери один зі своїх планів і один з колоди.",
+  "Top of the agenda deck": "Верх колоди планів",
+  "Swap agendas": "Обміняти плани",
+  "Tleilaxu Spy: agendas of ${0}": "Тлейлаксуанський шпигун: плани ${0}",
+  "holds these agendas:": "тримає ці плани:"
 }

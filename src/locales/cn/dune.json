@@ -346,5 +346,10 @@
   "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "距离：植被轨道分为三段——植被沙丘越多，移动越短（3、2、1 格）",
   "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "障碍（岩石、城市、极地边界、棋盘边缘）：沙虫像球撞墙一样反弹——反弹不消耗步数",
   "No gain or loss for anyone on this way.": "这条路线上没有任何人得失。",
-  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>每名嫌疑达到 3 或以上的对手</opp>失去 1 影响力。获得 4 索拉里。"
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>每名嫌疑达到 3 或以上的对手</opp>失去 1 影响力。获得 4 索拉里。",
+  "Choose one of your agendas and one from the deck.": "选择一项你的议程和一项牌堆中的议程。",
+  "Top of the agenda deck": "议程牌堆顶部",
+  "Swap agendas": "交换议程",
+  "Tleilaxu Spy: agendas of ${0}": "特莱拉克苏间谍：${0}的议程",
+  "holds these agendas:": "持有这些议程："
 }

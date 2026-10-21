@@ -1,5 +1,5 @@
 import {IGame} from '../IGame';
-import {SCHEMES_TITLE} from '../../common/dune/duneActionTitles';
+import {MENTAT_KEEP_TITLE, MENTAT_SWAP_TITLE, MENTAT_TITLE, SCHEMES_TITLE, SPY_VIEW_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
 import {Board} from '../boards/Board';
 import {Space} from '../boards/Space';
@@ -32,7 +32,20 @@ export type SchemesData = {
   choosers: Array<PlayerId>,
   /** Agendas nobody holds (Mentat Calculation looks at the top 3) */
   deck: Array<string>,
+  /** Who is looking at agendas right now (Mentat Calculation, Tleilaxu Spy): only they get them in the model */
+  looks?: Record<PlayerId, SchemeLook>,
 };
+
+export type SchemeLook = {kind: 'mentat'} | {kind: 'spy', target: PlayerId};
+
+function setLook(data: SchemesData, player: IPlayer, look: SchemeLook | undefined): void {
+  data.looks ??= {};
+  if (look === undefined) {
+    delete data.looks[player.id];
+  } else {
+    data.looks[player.id] = look;
+  }
+}
 
 export {SCHEMES_TITLE};
 
@@ -197,10 +210,13 @@ export function mentatInput(player: IPlayer): OrOptions | undefined {
   }
   const own = data.agendas[player.id] ?? [];
   const top = data.deck.slice(0, 3);
+  // The top 3 reach the viewer's model while they choose (MentatSwapInput.vue shows them as cards)
+  setLook(data, player, {kind: 'mentat'});
   const options: Array<SelectOption> = [];
   for (const mine of own) {
     for (const other of top) {
-      options.push(new SelectOption(message('Swap ${0} for ${1}', (b) => b.string(mine).string(other)), 'Swap').andThen(() => {
+      options.push(new SelectOption(message(MENTAT_SWAP_TITLE, (b) => b.string(mine).string(other)), 'Swap agendas').andThen(() => {
+        setLook(data, player, undefined);
         data.agendas[player.id] = own.map((name) => (name === mine ? other : name));
         data.deck.splice(data.deck.indexOf(other), 1);
         data.deck.push(mine);
@@ -209,8 +225,11 @@ export function mentatInput(player: IPlayer): OrOptions | undefined {
       }));
     }
   }
-  options.push(new SelectOption('Keep my agendas', 'Keep'));
-  return new OrOptions(...options).setTitle('Mentat Calculation: swap an agenda?');
+  options.push(new SelectOption(MENTAT_KEEP_TITLE, 'Keep').andThen(() => {
+    setLook(data, player, undefined);
+    return undefined;
+  }));
+  return new OrOptions(...options).setTitle(MENTAT_TITLE);
 }
 
 /** Tleilaxu Spy card: the agendas of another player, shown only to the spy (private log line) */
@@ -224,14 +243,42 @@ export function spyInput(player: IPlayer): SelectPlayer | undefined {
     for (const name of data.agendas[target.id] ?? []) {
       player.game.log('${0} holds the agenda ${1}', (b) => b.player(target).string(name), {reservedFor: player});
     }
-    return undefined;
+    // Then a tab with that player's agenda cards (SpyAgendasInput.vue), until the spy closes it (Jens, 21 Oct 2026)
+    setLook(data, player, {kind: 'spy', target: target.id});
+    return new SelectOption(message(SPY_VIEW_TITLE, (b) => b.player(target)), 'Done').andThen(() => {
+      setLook(data, player, undefined);
+      return undefined;
+    });
   });
 }
 
 /** The own agendas are secret: others only see how many a player holds, until the game ends */
+function agendaProgress(player: IPlayer, name: string): {name: string, value: number, level: number} {
+  const agenda = schemeAgenda(name);
+  const value = schemeValue(player, agenda.measure);
+  return {name, value, level: schemeLevel(agenda, value)};
+}
+
+// What the viewer looks at through a card (SchemeModel.look), or undefined
+function lookModel(game: IGame, data: SchemesData, viewer: IPlayer | undefined): SchemeModel['look'] {
+  const look = viewer === undefined ? undefined : data.looks?.[viewer.id];
+  if (look === undefined || viewer === undefined) {
+    return undefined;
+  }
+  if (look.kind === 'mentat') {
+    return {kind: 'mentat', agendas: data.deck.slice(0, 3).map((name) => agendaProgress(viewer, name))};
+  }
+  const target = game.players.find((player) => player.id === look.target);
+  if (target === undefined) {
+    return undefined;
+  }
+  return {kind: 'spy', target: target.color, agendas: (data.agendas[target.id] ?? []).map((name) => agendaProgress(target, name))};
+}
+
 export function schemesModel(game: IGame, data: SchemesData, viewer: IPlayer | undefined): SchemeModel {
   const revealed = game.phase === Phase.END;
   return {
+    look: lookModel(game, data, viewer),
     reduced: data.reduced,
     players: game.players.map((player) => {
       const names = data.agendas[player.id] ?? [];
@@ -239,11 +286,7 @@ export function schemesModel(game: IGame, data: SchemesData, viewer: IPlayer | u
       return {
         color: player.color,
         count: names.length,
-        agendas: visible ? names.map((name) => {
-          const agenda = schemeAgenda(name);
-          const value = schemeValue(player, agenda.measure);
-          return {name, value, level: schemeLevel(agenda, value)};
-        }) : undefined,
+        agendas: visible ? names.map((name) => agendaProgress(player, name)) : undefined,
       };
     }),
   };

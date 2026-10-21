@@ -345,5 +345,10 @@
   "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "距離：植生トラックは3区間 ― 植林砂丘が多いほど移動は短くなる（3・2・1マス）",
   "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "障害物（岩・都市・極地の境界・盤の端）：ワームは壁に当たった球のように跳ね返る ― 跳ね返りで歩数は減らない",
   "No gain or loss for anyone on this way.": "この経路では誰も得も損もしません。",
-  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>疑惑が3以上の対戦相手は</opp>それぞれ影響力を1失う。4ソラリを得る。"
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>疑惑が3以上の対戦相手は</opp>それぞれ影響力を1失う。4ソラリを得る。",
+  "Choose one of your agendas and one from the deck.": "自分のアジェンダを1つと山札のアジェンダを1つ選んでください。",
+  "Top of the agenda deck": "アジェンダ山札の上",
+  "Swap agendas": "アジェンダを交換",
+  "Tleilaxu Spy: agendas of ${0}": "トレイラクスのスパイ：${0}のアジェンダ",
+  "holds these agendas:": "が持つアジェンダ："
 }

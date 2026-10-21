@@ -345,5 +345,10 @@
   "Distance: the vegetation track in three sections – the more greeneries, the shorter the move (3, 2, 1 spaces)": "거리: 식생 트랙은 세 구간 – 식재 사구가 많을수록 이동이 짧아집니다(3, 2, 1칸)",
   "Obstacles (rock, cities, polar border, board edge): the worm bounces off like a ball off a wall – bouncing costs no step": "장애물(바위, 도시, 극지 경계, 가장자리): 모래벌레는 벽에 맞은 공처럼 튕겨 나갑니다 – 튕겨도 걸음을 쓰지 않습니다",
   "No gain or loss for anyone on this way.": "이 경로에서는 아무도 얻거나 잃지 않습니다.",
-  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>의심이 3 이상인 상대는</opp> 각각 영향력 1을 잃습니다. 4 솔라리를 얻습니다."
+  "<opp>Every opponent with suspicion 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>의심이 3 이상인 상대는</opp> 각각 영향력 1을 잃습니다. 4 솔라리를 얻습니다.",
+  "Choose one of your agendas and one from the deck.": "내 안건 하나와 덱의 안건 하나를 고르세요.",
+  "Top of the agenda deck": "안건 덱 맨 위",
+  "Swap agendas": "안건 교환",
+  "Tleilaxu Spy: agendas of ${0}": "틀레이락스 첩자: ${0}의 안건",
+  "holds these agendas:": "이(가) 가진 안건:"
 }
