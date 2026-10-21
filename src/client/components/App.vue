@@ -76,7 +76,8 @@
       <StartScreenFooter v-if="hasStartScreenFooter"/>
       <!-- Start page: how many are playing right now, in the middle of the footer -->
       <OnlinePlayers v-if="screen === 'start-screen'"/>
-      <FanProjectNotice/>
+      <!-- Key: the notice names the Dune rights holders in the Dune theme, so it renders anew with the switch -->
+      <FanProjectNotice :key="'notice-' + themeKey"/>
     </footer>
   </div>
 </template>

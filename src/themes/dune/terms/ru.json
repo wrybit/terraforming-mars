@@ -770,6 +770,7 @@
   ],
   "exact": {
     "Space": "Гильдия",
-    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Ваше влияние в Ландсрааде должно быть не менее 35."
+    "Have a terraform rating of 35 (or 26 with Turmoil.)": "Ваше влияние в Ландсрааде должно быть не менее 35.",
+    "Not affiliated with FryxGames, Asmodee Digital or Steam in any way.": "Не аффилировано с FryxGames, Asmodee Digital, Steam или правообладателями «Дюны» (Herbert Properties LLC, Legendary Entertainment)."
   }
 }
