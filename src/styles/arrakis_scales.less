@@ -6,6 +6,23 @@
   pointer-events: none;
 }
 
+// Particle layer (ArrakisParticles.vue) right after its SVG: same static position and the same 720 px board space
+.arrakis-particles {
+  position: absolute;
+  width: 720px;
+  height: 720px;
+  pointer-events: none;
+}
+
+// Every dot starts at the top left corner; its Web Animation moves it along the path. Hidden until it runs.
+.arrakis-particles__dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  opacity: 0;
+}
+
 // Gradient pieces along the band (arrakisScaleArt.ts gradientPieces): colour and width come with each piece
 .arrakis-scales__piece {
   fill: none;

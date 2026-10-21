@@ -19,11 +19,6 @@
       <path class="arrakis-spice__glow arrakis-scales__pulse" :style="motion('spice-glow', 2.2)" :d="barPath" :stroke-width="(BAR_HEIGHT + 8.66) * row.scale" :filter="glowUrl"/>
       <path class="arrakis-spice__rim" :d="barPath" :stroke-width="(BAR_HEIGHT + 2.16) * row.scale"/>
       <path class="arrakis-spice__bar" :d="barPath" :stroke-width="BAR_HEIGHT * row.scale"/>
-      <!-- Particles stream from left to right through the full bar, each with its own pace and blink -->
-      <circle v-for="(flow, index) in barParticles" :key="'particle' + index" :r="flow.radius" :fill="whiteTo('#ffd08a', flow.colourShare)">
-        <animateMotion :dur="seconds(flow.travel)" :begin="seconds(-flow.travelBegin)" repeatCount="indefinite" :path="flow.path"/>
-        <animate attributeName="opacity" values=".1;1;.1" :dur="seconds(flow.blink)" :begin="seconds(-flow.blinkBegin)" repeatCount="indefinite"/>
-      </circle>
       <text class="arrakis-spice__done" :style="{fontSize: 9.38 * row.scale + 'px', letterSpacing: 1.44 * row.scale + 'px'}"><textPath :href="'#' + textPathId" startOffset="50%" text-anchor="middle" dominant-baseline="central">{{ doneText }}</textPath></text>
       <g :transform="at(layout.check)">
         <g class="arrakis-scales__breathe" :style="motion('spice-check', 2.4)">
@@ -34,14 +29,7 @@
     </template>
     <template v-else>
       <g v-for="(cell, index) in cells" :key="'cell' + index" :transform="at(cell.distance)">
-        <template v-if="cell.filled">
-          <path class="arrakis-spice__cell" :d="hexagon(CELL_WIDTH)" :fill="gradientUrl" :filter="glowUrl"/>
-          <!-- Sparks rise from every filled cell, each on its own clock -->
-          <circle v-for="(spark, sparkIndex) in sparksOf(cell)" :key="'spark' + sparkIndex" :cx="spark.dx" cy="0" :r="spark.radius" :fill="whiteTo('#ffb35c', spark.colourShare)">
-            <animate attributeName="cy" :values="'0;' + (-spark.rise).toFixed(2)" :dur="seconds(spark.duration)" :begin="seconds(-spark.riseBegin)" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0;1;0" :dur="seconds(spark.duration)" :begin="seconds(-spark.fadeBegin)" repeatCount="indefinite"/>
-          </circle>
-        </template>
+        <path v-if="cell.filled" class="arrakis-spice__cell" :d="hexagon(CELL_WIDTH)" :fill="gradientUrl" :filter="glowUrl"/>
         <!-- The next open field blinks softly: that is where it goes on -->
         <path v-else :class="['arrakis-spice__cell', 'arrakis-spice__cell--open', {'arrakis-spice__cell--next arrakis-spice__blink': cell.next}]"
           :style="cell.next ? motion('spice-next', 1.6) : undefined" :d="hexagon(CELL_WIDTH)"/>
@@ -49,6 +37,9 @@
       <text class="arrakis-spice__count" :transform="at(layout.count)" x="0" y="0.72">{{ count }}<tspan class="arrakis-spice__max">/{{ fields }}</tspan></text>
     </template>
   </svg>
+  <!-- Full bar: particles stream from left to right, each with its own pace and blink. Otherwise sparks rise from every
+       filled cell, each on its own clock. -->
+  <ArrakisParticles :particles="particles"/>
 </template>
 
 <script lang="ts">
@@ -57,6 +48,7 @@ import {BAR_HEIGHT, CELL_WIDTH, CHECK_HEX, ICON_SIZE, SpiceLayout, SpiceRow, hex
 import {MotionStyle, desync, seededRandom, whiteTo} from './arrakisMotion';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import {prefersReducedMotion} from '@/client/utils/motion';
+import ArrakisParticles, {ParticleFlow} from './ArrakisParticles.vue';
 
 type Cell = {distance: number, filled: boolean, next: boolean, index: number};
 type Spark = {dx: number, radius: number, colourShare: number, rise: number, duration: number, riseBegin: number, fadeBegin: number};
@@ -68,6 +60,9 @@ let instances = 0;
 
 export default defineComponent({
   name: 'ArrakisSpiceFields',
+  components: {
+    ArrakisParticles,
+  },
   props: {
     large: {
       type: Boolean,
@@ -177,6 +172,20 @@ export default defineComponent({
         return {path: spiceArc(this.row, from, to, offset), radius, colourShare, travel, travelBegin: random() * travel, blink, blinkBegin: random() * blink};
       });
     },
+    // Bar particles when complete, otherwise the sparks: each spark rises straight up in its cell (the cell's arc transform)
+    particles(): Array<ParticleFlow> {
+      if (this.still) {
+        return [];
+      }
+      if (this.complete) {
+        return this.barParticles.map((flow): ParticleFlow => ({path: flow.path, radius: flow.radius, colour: whiteTo('#ffd08a', flow.colourShare),
+          travel: flow.travel, travelBegin: flow.travelBegin, blink: flow.blink, blinkBegin: flow.blinkBegin, opacity: [0.1, 1, 0.1]}));
+      }
+      return this.cells.flatMap((cell) => this.sparks[cell.index].map((spark): ParticleFlow => ({
+        path: `M ${spark.dx.toFixed(2)} 0 L ${spark.dx.toFixed(2)} ${(-spark.rise).toFixed(2)}`, transform: this.at(cell.distance),
+        radius: spark.radius, colour: whiteTo('#ffb35c', spark.colourShare),
+        travel: spark.duration, travelBegin: spark.riseBegin, blink: spark.duration, blinkBegin: spark.fadeBegin, opacity: [0, 1, 0]})));
+    },
   },
   methods: {
     hexagon,
@@ -186,12 +195,6 @@ export default defineComponent({
     },
     motion(key: string, baseSeconds: number): MotionStyle {
       return desync(key, baseSeconds);
-    },
-    seconds(value: number): string {
-      return value.toFixed(2) + 's';
-    },
-    sparksOf(cell: Cell): ReadonlyArray<Spark> {
-      return this.still ? [] : this.sparks[cell.index];
     },
   },
 });

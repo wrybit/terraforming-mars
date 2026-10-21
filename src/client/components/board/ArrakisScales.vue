@@ -39,11 +39,6 @@
             :stroke="scaleColour(track.key, piece.share)" :stroke-width="FILL_WIDTH"/>
         </g>
       </template>
-      <!-- Particles from the sand to the value, each with its own size, path, pace, colour and blink -->
-      <circle v-for="(flow, index) in particlesOf(track)" :key="'particle' + index" :r="flow.particle.radius" :fill="whiteTo(track.glow, flow.particle.colourShare)">
-        <animateMotion :dur="seconds(flow.particle.travel)" :begin="seconds(-flow.particle.travelBegin)" repeatCount="indefinite" :path="flow.path"/>
-        <animate attributeName="opacity" values=".15;1;.15" :dur="seconds(flow.particle.blink)" :begin="seconds(-flow.particle.blinkBegin)" repeatCount="indefinite"/>
-      </circle>
       <g v-if="track.art.check !== undefined" class="arrakis-scales__breathe" :style="motion(track.key + '-check', 2.4)">
         <path class="arrakis-scales__check arrakis-scales__check--shadow" :d="checkPath(track.art.check)"/>
         <path class="arrakis-scales__check" :d="checkPath(track.art.check)" :filter="glowUrl"/>
@@ -62,6 +57,8 @@
       </text>
     </g>
   </svg>
+  <!-- Particles from the sand to the value, each with its own size, path, pace, colour and blink -->
+  <ArrakisParticles :particles="particles"/>
 </template>
 
 <script lang="ts">
@@ -71,6 +68,7 @@ import {FILL_WIDTH, FULL_WIDTH, FlowPath, GHOST_WIDTH, SCALE_GLOW, ScaleArt, Sca
 import {MotionStyle, desync, whiteTo} from './arrakisMotion';
 import {themedAsset} from '@/client/theme/themeDisplay';
 import {prefersReducedMotion} from '@/client/utils/motion';
+import ArrakisParticles, {ParticleFlow} from './ArrakisParticles.vue';
 
 type Track = {
   key: ScaleKey,
@@ -93,6 +91,9 @@ let instances = 0;
 
 export default defineComponent({
   name: 'ArrakisScales',
+  components: {
+    ArrakisParticles,
+  },
   props: {
     // The large Arrakis pins its markers on the bigger circle of the large map (globs.less .global-numbers--large)
     large: {
@@ -154,6 +155,17 @@ export default defineComponent({
           textPath: arcPath(geometry, water.text.from, water.text.to), anchor: water.text.anchor},
       ];
     },
+    // Particles of both bands for the particle layer
+    particles(): Array<ParticleFlow> {
+      if (this.still) {
+        return [];
+      }
+      return this.tracks.flatMap((track) => track.art.flow.map((flow: FlowPath): ParticleFlow => ({
+        path: flow.path, radius: flow.particle.radius, colour: whiteTo(track.glow, flow.particle.colourShare),
+        travel: flow.particle.travel, travelBegin: flow.particle.travelBegin, blink: flow.particle.blink, blinkBegin: flow.particle.blinkBegin,
+        opacity: [0.15, 1, 0.15],
+      })));
+    },
   },
   methods: {
     scaleColour,
@@ -163,12 +175,6 @@ export default defineComponent({
     },
     motion(key: string, baseSeconds: number): MotionStyle {
       return desync(key, baseSeconds);
-    },
-    seconds(value: number): string {
-      return value.toFixed(2) + 's';
-    },
-    particlesOf(track: Track): ReadonlyArray<FlowPath> {
-      return this.still ? [] : track.art.flow;
     },
     // Check mark, 6.5 board px wide on each side of its centre
     checkPath(at: {x: number, y: number}): string {
