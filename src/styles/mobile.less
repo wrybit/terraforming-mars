@@ -687,11 +687,6 @@ html.tm-mobile {
         }
       }
     }
-
-    // Player table: the color bar of the dissolved rows would otherwise sit at the table edge
-    .mb-screen--players .players-table-row::before {
-      display: none;
-    }
   }
 
   // ---------- Global parameters as bars ----------
@@ -926,104 +921,32 @@ html.tm-mobile {
     }
   }
 
-  // Tablet landscape: player list as a horizontal table like in the two-column layout (players_table.less), columns fitted to the width
-  @media @mb-landscape {
-    .mb-screen--players .players-overview .players-table {
-      display: block;
-    }
+  // Player list as the table of the two-column layout (players_table.less); it arranges itself for the width
+  // (one line, two or three lines, cards on the phone) and never scrolls sideways
+  .mb-screen--players .players-overview .players-table {
+    display: block;
   }
 
   // Phone and tablet portrait: player table rotated
   @media @mb-portrait {
-    // Player header (PlayerIdentity.vue) identical in player and milestone table:
-    // name, status, corporation stacked and centered
-    // The second selector beats the general cell rule of the player table (.players-table-row > *),
-    // otherwise the name there would sit 4 px higher than in the milestone table
-    .mb-screen--players .players-table-identity,
-    .mb-screen--players .players-overview .players-table-row > .players-table-identity {
+    // Player header (PlayerIdentity.vue) of the rotated milestone table: name, status, corporation stacked and centered
+    .mb-screen--players .mb-ma .players-table-identity {
       justify-content: flex-start; // Columns side by side: names at one height instead of centered per column
       padding: 8px 4px;
       border-radius: 10px 10px 0 0;
       text-align: center;
     }
 
-    .mb-screen--players .players-table-identity-line {
+    .mb-screen--players .mb-ma .players-table-identity-line {
       flex-direction: column;
       align-items: center;
       gap: 4px;
     }
 
-    .mb-screen--players .players-table-corporation {
+    .mb-screen--players .mb-ma .players-table-corporation {
       white-space: normal;
       overflow-wrap: anywhere;
     }
-
-    .mb-screen--players .players-overview {
-      // Axes rotated: players as columns (name on top), values stacked, icons in the first column.
-      // Header and player rows dissolve, their cells fill the grid column by column
-      // (cells per row: --players-table-cell-count from PlayersTable)
-      .players-table {
-        display: grid !important;
-        grid-template-rows: repeat(var(--players-table-cell-count), auto);
-        grid-template-columns: @mb-players-icon-column;
-        grid-auto-columns: minmax(0, 1fr);
-        grid-auto-flow: column;
-        column-gap: @mb-players-column-gap;
-        max-width: 100%;
-      }
-
-      .players-table-rows,
-      .players-table-row {
-        display: contents;
-      }
-
-      .players-table-divider,
-      .players-table-first-player {
-        display: none;
-      }
-
-      .players-table-row > * {
-        min-width: 0;
-        min-height: 40px;
-        padding: 4px 2px;
-        box-sizing: border-box;
-      }
-
-      // Section toggles stacked at the top of the icon column
-      .players-table-toggles {
-        flex-direction: column;
-        align-items: center;
-        padding-left: 0;
-      }
-
-      .players-table-cell {
-        justify-content: center;
-      }
-
-      .players-table-row--player > :last-child {
-        border-radius: 0 0 10px 10px;
-      }
-
-      // Separation resources | scoring | tags | cards: line above the first cell of each further section,
-      // identical in all columns (icon column too) so the rows stay aligned – as with milestones
-      .players-table-divider ~ .players-table-divider + * {
-        border-top: 2px solid rgba(255, 255, 255, 0.3);
-      }
-    }
-
-    // Player color per column (the rows are dissolved and no longer carry a background)
-    each(@players, {
-      @c: ~"player_@{value}";
-      .mb-screen--players .players-table-row--@{value} > * {
-        background: fade(@@c, 30%);
-      }
-
-      .mb-screen--players .players-table-row--@{value}.players-table-row--me > * {
-        background: fade(@@c, 55%);
-      }
-
-      // Milestones & awards (rotated): player colors per column come from .ma-table-transposed()
-    });
 
     // ---------- Many players: scroll horizontally ----------
     // From three players on the tables scroll horizontally; the icon columns stay in front (sticky),
@@ -1041,36 +964,23 @@ html.tm-mobile {
         --mb-players-visible: 4;
       }
 
-      .players-overview .players-table,
+      // Fixed cost column: "auto" would collapse to zero in the scrolling grid
       .mb-ma .ma-table {
         overflow-x: auto;
         overscroll-behavior-x: contain;
         scroll-snap-type: x mandatory;
         .scrollbar-hidden();
-      }
-
-      // .players-overview: beats the base rule of the rotated player table.
-      // Snapping: after swiping, the first visible player column starts right behind the icons
-      .players-overview .players-table {
-        grid-auto-columns: calc((100% - @mb-players-icon-column) / var(--mb-players-visible) - @mb-players-column-gap);
-        scroll-padding-left: @mb-players-icon-column + @mb-players-column-gap;
-      }
-
-      // Fixed cost column: "auto" would collapse to zero in the scrolling grid
-      .mb-ma .ma-table {
         grid-template-columns: @mb-players-icon-column @mb-ma-cost-column;
         grid-auto-columns: calc((100% - @mb-players-icon-column - @mb-ma-cost-column - @mb-players-column-gap) / var(--mb-players-visible) - @mb-players-column-gap);
         scroll-padding-left: @mb-players-icon-column + @mb-ma-cost-column + 2 * @mb-players-column-gap;
       }
 
-      .players-table-row--player > .players-table-identity,
       .mb-ma .ma-table-name {
         scroll-snap-align: start;
       }
 
-      // Icon column of the player table (header row) or icons and cost of the milestone table.
+      // Icons and cost of the milestone table.
       // Negative margin: the surface also covers the column gap to its right
-      .players-overview .players-table-row.players-table-head > *,
       .mb-ma .ma-table-row.ma-table-head > *,
       .mb-ma .ma-table-row.ma-table-status > * {
         position: sticky;
@@ -1086,7 +996,6 @@ html.tm-mobile {
 
       // Only once players lie underneath (scrolled horizontally, horizontalScroll.ts): dark frosted glass,
       // so icons and player values don't run into each other
-      .mb-scrolled-x .players-table-row.players-table-head > *,
       .mb-scrolled-x .ma-table-row.ma-table-head > *,
       .mb-scrolled-x .ma-table-row.ma-table-status > * {
         background-color: rgba(13, 15, 20, 0.82);
@@ -1095,7 +1004,6 @@ html.tm-mobile {
       }
 
       // Edge towards the player area: only on the outermost icon column
-      .mb-scrolled-x .players-table-row.players-table-head > *,
       .mb-scrolled-x .ma-table-row.ma-table-status > * {
         box-shadow: 6px 0 10px -6px rgba(0, 0, 0, 0.7);
       }

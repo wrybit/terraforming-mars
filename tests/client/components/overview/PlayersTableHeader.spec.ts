@@ -3,33 +3,29 @@ import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import PlayersTableHeader from '@/client/components/overview/PlayersTableHeader.vue';
 import {Tag} from '@/common/cards/Tag';
+import {PlayersTableMode} from '@/client/components/overview/playersTableLayout';
+
+const tagColumns = [[Tag.BUILDING, Tag.SPACE], [Tag.EVENT]];
+const mountHeader = (mode: PlayersTableMode) => shallowMount(PlayersTableHeader, {...globalConfig, props: {mode, tagColumns}});
 
 describe('PlayersTableHeader', () => {
-  it('emits the section to toggle', async () => {
-    const wrapper = shallowMount(PlayersTableHeader, {
-      ...globalConfig,
-      props: {
-        visibility: {goods: true, tags: true, score: true},
-        tagColumns: [[Tag.BUILDING, Tag.SPACE], [Tag.EVENT]],
-      },
-    });
-    await wrapper.find('[data-test="toggle-tags"]').trigger('click');
-    expect(wrapper.emitted('toggle')).to.deep.eq([['tags']]);
+  it('shows a column head per visible tag and the score icons in one line', () => {
+    const header = mountHeader('line');
+    expect(header.findAll('[data-test^="tag-head-"]')).to.have.length(3);
+    expect(header.findAllComponents({name: 'ScoreIcon'})).to.have.length(4);
   });
 
-  it('shows a column head per visible tag and none when tags are hidden', () => {
-    const tagColumns = [[Tag.BUILDING, Tag.SPACE], [Tag.EVENT]];
-    const shown = shallowMount(PlayersTableHeader, {
-      ...globalConfig,
-      props: {visibility: {goods: true, tags: true, score: true}, tagColumns},
-    });
-    expect(shown.findAll('[data-test^="tag-head-"]')).to.have.length(3);
+  it('keeps the tag heads above the second line but leaves the score to the chips', () => {
+    const header = mountHeader('two-lines');
+    expect(header.findAll('[data-test^="tag-head-"]')).to.have.length(3);
+    expect(header.findAllComponents({name: 'ScoreIcon'})).to.have.length(0);
+  });
 
-    const hidden = shallowMount(PlayersTableHeader, {
-      ...globalConfig,
-      props: {visibility: {goods: true, tags: false, score: true}, tagColumns},
-    });
-    expect(hidden.findAll('[data-test^="tag-head-"]')).to.have.length(0);
-    expect(hidden.find('[data-test="toggle-tags"]').attributes('aria-pressed')).to.eq('false');
+  it('shows only the game menu where the cells carry their own icons', () => {
+    for (const mode of ['three-lines', 'cards'] as const) {
+      const header = mountHeader(mode);
+      expect(header.findAll('[data-test^="tag-head-"]')).to.have.length(0);
+      expect(header.findComponent({name: 'GameMenu'}).exists()).to.be.true;
+    }
   });
 });

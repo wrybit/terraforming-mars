@@ -24,7 +24,8 @@ describe('AI draw priority', () => {
   for (const card of [new AICentral(), new DevelopmentCenter(), new Research()]) {
     it(`values ${card.name} higher with the rule`, () => {
       // Margin below the full bonus: the later value samples random future tableaus.
-      expect(value(card, 'baseline')).to.be.greaterThan(value(card, 'noDrawPriority') + 1);
+      // Since round 123 own drawn cards count 2–4 M€ in hand; the draw rule is compared on its own here.
+      expect(value(card, 'noOwnCardValueEngine')).to.be.greaterThan(value(card, 'noDrawRules') + 1);
     });
   }
 });

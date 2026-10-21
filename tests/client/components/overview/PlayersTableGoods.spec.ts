@@ -25,16 +25,6 @@ describe('PlayersTableGoods', () => {
     expect(wrapper.find('[data-test="production"]').text()).to.eq('+17');
   });
 
-  it('gives every box of a column the same width and production slot', () => {
-    const wrapper = shallowMount(PlayersTableGoods, {
-      ...globalConfig,
-      props: {color: 'red', good: good({count: 3, production: 1}), boxWidth: 96, productionWidth: 30},
-    });
-    const style = wrapper.find('.players-table-goods').attributes('style') ?? '';
-    expect(style).to.include('width: 96px');
-    expect(style).to.include('--players-table-production-width: 30px');
-  });
-
   it('highlights the production leader', () => {
     const wrapper = shallowMount(PlayersTableGoods, {
       ...globalConfig,

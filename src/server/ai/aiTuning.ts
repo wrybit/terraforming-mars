@@ -94,6 +94,19 @@ export type AiTuning = {
   ownDrawnCardValue: number,
   /** 1: draw engines in play count at least the draws per generation measured in human games (measuredDrawRate.ts). */
   measuredDrawRates: number,
+  /** 1: lasting player traits count in the position value – steel/titanium value also for production, heat as M€, plants per greenery (playerTraits.ts). */
+  playerTraitValues: number,
+  /** Weight of the measured M€ per generation of cards with lasting effects or actions instead of the flat value (measuredCardIncome.ts). */
+  measuredCardIncome: number,
+  /** Hand card values in the move search follow the current requirement outlook instead of the frozen one (liveOutlook.ts). */
+  liveOutlook: number,
+  /** Share of the measured action income that counts (measuredCardIncome.ts); round 124: full actions overvalued. */
+  measuredActionWeight: number,
+  /** Upper limit of the measured action income per generation in M€ (measuredCardIncome.ts); the measurement assumed full stocks. */
+  measuredActionCap: number,
+  /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
+  tagOutlookBase: number,
+  tagOutlookStep: number,
   /** Generations of income that count as money for the hand (handFunding.ts). */
   handFundingGenerations: number,
   /** 1: money in the last generation counts in steps of greeneries it can still buy (stateValue.ts). */
@@ -319,9 +332,19 @@ export const BASELINE_TUNING: AiTuning = {
   playPolicyWeight: 3,
   // Round 122 check: without draw engine boost and needs pursuit +1.24 VP (z +1.96), cards played equal – reverted.
   needsPursuit: 0,
-  drawEngineBoost: 0,
-  ownDrawnCardValue: 0,
-  measuredDrawRates: 0,
+  // Round 123: own drawn cards 2–4 M€ plus half draw engine boost – cards drawn +1.2 (z +3.2), played +0.7 (z +2.4), VP ±0.
+  drawEngineBoost: 0.5,
+  ownDrawnCardValue: 1,
+  // Round 125: card understanding parts adopted – measured effect/discount income (+1.3 VP, z +1.7; cards played +1.7,
+  // z +4.3), measured draw rates (+0.9, z +1.4) and player traits (±0) as fixes; actions stay out (round 124: −8 VP).
+  measuredDrawRates: 1,
+  playerTraitValues: 1,
+  measuredCardIncome: 1,
+  liveOutlook: 0,
+  measuredActionWeight: 0,
+  measuredActionCap: 99,
+  tagOutlookBase: 0.85,
+  tagOutlookStep: 0.15,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
   handFundingGenerations: 0,
   endgameMoney: 1,
@@ -847,6 +870,30 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   ownCardValueEngine: {ownDrawnCardValue: 1, drawEngineBoost: 0.5},
   measuredDraws: {measuredDrawRates: 1},
   measuredDrawsOwnValue: {measuredDrawRates: 1, ownDrawnCardValue: 1},
+  playerTraits: {playerTraitValues: 1},
+  cardIncome05: {measuredCardIncome: 0.5},
+  noOwnCardValueEngine: {ownDrawnCardValue: 0, drawEngineBoost: 0},
+  noDrawRules: {drawPriority: 0, ownDrawnCardValue: 0, drawEngineBoost: 0},
+  cardIncome1: {measuredCardIncome: 1},
+  cardIncomeTraits: {measuredCardIncome: 0.5, playerTraitValues: 1},
+  // Card understanding fix in one piece (card-understanding audit): measured income of lasting effects and actions,
+  // measured draw rates, lasting player traits.
+  cardFix: {measuredCardIncome: 1, measuredDrawRates: 1, playerTraitValues: 1},
+  cardFixHalf: {measuredCardIncome: 0.5, measuredDrawRates: 1, playerTraitValues: 1},
+  liveOutlook05: {liveOutlook: 0.5},
+  liveOutlook1: {liveOutlook: 1},
+  // Round 124: cardFix lost 8 VP; split into its parts (effects only, draw rates, player traits).
+  cardEffects: {measuredCardIncome: 1, measuredActionWeight: 0},
+  cardActions025: {measuredActionWeight: 0.25},
+  cardActions05: {measuredActionWeight: 0.5},
+  // Round 128: actions measured with full stocks (Comet Aiming ~20 M€ per generation); cap them at a realistic yield.
+  cardActionsCap2: {measuredActionWeight: 1, measuredActionCap: 2},
+  cardActionsCap3: {measuredActionWeight: 1, measuredActionCap: 3},
+  cardActionsCap5: {measuredActionWeight: 1, measuredActionCap: 5},
+  noCardFix: {measuredCardIncome: 0, measuredDrawRates: 0, playerTraitValues: 0},
+  tagOutlookMild: {tagOutlookBase: 0.95, tagOutlookStep: 0.08},
+  tagOutlookOptimistic: {tagOutlookBase: 1, tagOutlookStep: 0.05},
+  tagOutlookMildLive: {tagOutlookBase: 0.95, tagOutlookStep: 0.08, liveOutlook: 0.5},
   // Draft/buy: cards that bring the tags or energy a strong hand card still needs (enablerValue.ts)
   enabler05: {enablerWeight: 0.5},
   play2: {playPolicyWeight: 2},
@@ -871,6 +918,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noPhasePlan: {phasePlan: 0},
   noDrawPriority: {drawPriority: 0},
   drawPriority3: {drawPriority: 3},
+  // Round 129: re-test with own drawn cards valued by drawPriority (ownDrawnCardValue, round 123).
+  drawPriority5: {drawPriority: 5},
   drawPriority6: {drawPriority: 6},
   drawPriority8: {drawPriority: 8},
   draftPrior3: {draftPriorWeight: 3},

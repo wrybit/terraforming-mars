@@ -17,7 +17,7 @@
     <!-- The content as one inline box: an AI line of an analysis game blurs it as a spoiler (aiSpoilers.ts) -->
     <span class="log-line-content">
     <template v-for="(data, idx) of entries" :key="idx">
-      <span class="log-plain-text" v-if="typeof(data) === 'string'">{{ data }}</span>
+      <span class="log-plain-text" v-if="typeof(data) === 'string'" v-html="inlineMarkdown(data)"></span>
       <span v-else>
         <span v-if="data.type === undefined || data.value === undefined"></span>
         <span v-else-if="data.type === LogMessageDataType.PLAYER" class="log-player" :class="'player_bg_color_' + data.value"> {{ getPlayerName(data.value) }} </span>
@@ -42,7 +42,11 @@
 
         <!-- Game id at the end of the game: link to the results page -->
         <a v-else-if="data.type === LogMessageDataType.RAW_STRING && resultsLink !== undefined" :href="resultsLink" class="log-results-link" @click.stop>{{ data.value }}</a>
+        <span v-else-if="data.type === LogMessageDataType.RESOURCE" v-html="inlineMarkdown(`:r:${data.value}:`)"></span>
+        <span v-else-if="data.type === LogMessageDataType.PRODUCTION" v-html="inlineMarkdown(`:p:${data.value}:`)"></span>
+        <span v-else-if="data.type === LogMessageDataType.CARD_RESOURCE" v-html="inlineMarkdown(`:cr:${cardResourceName(data.value)}:`)"></span>
         <span v-else-if="data.type === LogMessageDataType.RAW_STRING">{{ data.value }}</span>
+        <span v-else-if="data.type === LogMessageDataType.STRING" v-html="inlineMarkdown($t(data.value))"></span>
         <span v-else v-i18n>{{ data.value }}</span>
       </span>
     </template>
@@ -67,6 +71,8 @@ import {undergroundResourceTokenDescription} from '@/common/underworld/Undergrou
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {range} from '@/common/utils/utils';
+import {renderMarkdown} from '@/client/markdown/markdown';
+import {CardResource} from '@/common/CardResource';
 import {needsModalPreview} from '@/client/components/logpanel/logMessageContent';
 import {cardTypeToCss, partySlug} from '@/client/components/logpanel/logCardType';
 import SeatIcon from '@/client/components/create/SeatIcon.vue';
@@ -106,6 +112,13 @@ export default defineComponent({
   // in production builds (comments stripped) the <li> is the single root and would get both, firing twice
   emits: ['click', 'spaceClicked'],
   methods: {
+    inlineMarkdown(text: string): string {
+      return renderMarkdown(text, {inline: true, translate: false});
+    },
+    // Matches the card-resource-* CSS classes, e.g. Syndicate Fleet -> syndicate-fleet.
+    cardResourceName(resource: CardResource): string {
+      return resource.toLowerCase().replaceAll(' ', '-');
+    },
     partySlug,
     cardToHtml(data: LogMessageData & {type: LogMessageDataType.CARD, value: CardName}) {
       return this.innerCardToHtml(data.value, data.attrs);

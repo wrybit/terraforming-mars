@@ -1,7 +1,7 @@
 <template>
-  <div :class="['players-table', {'players-table--escape-velocity': escapeVelocity}]" :style="{'--players-table-columns': template, '--players-table-cell-count': cellCount}">
-    <!-- Player list as a table (only visible in the two-column layout, see players_table.less) -->
-    <PlayersTableHeader :visibility="effectiveVisibility" :sectionOrder="sectionOrder" :autoHidden="fitted.autoHidden" :tagColumns="tagColumns" @toggle="toggleSection"/>
+  <div :class="tableClasses" :style="variables">
+    <!-- Player list as a table; arrangement and size follow the available width (playersTableLayout.ts) -->
+    <PlayersTableHeader :mode="fit.mode" :tagColumns="tagColumns"/>
     <div class="players-table-rows">
       <PlayersTableRow v-for="row in rows" :key="row.player.color"
         :player="row.player"
@@ -9,13 +9,9 @@
         :firstForGen="row.firstForGen"
         :actionLabel="row.actionLabel"
         :playerIndex="row.playerIndex"
-        :visibility="effectiveVisibility"
-        :sectionOrder="sectionOrder"
         :tagColumns="tagColumns"
         :tagDetails="tagDetailsByColor[row.player.color]"
-        :productionLeaders="productionLeadersByColor[row.player.color] ?? []"
-        :goodsBoxWidths="goodsWidths.box"
-        :goodsProductionWidths="goodsWidths.production"/>
+        :productionLeaders="productionLeadersByColor[row.player.color] ?? []"/>
     </div>
   </div>
 </template>
@@ -30,22 +26,12 @@ import PlayersTableHeader from '@/client/components/overview/PlayersTableHeader.
 import PlayersTableRow from '@/client/components/overview/PlayersTableRow.vue';
 import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/components/overview/playerTagDetails';
 import {playerGoods} from '@/client/components/overview/playerGoods';
-import {GoodsColumnWidths, emptyGoodsColumnWidths, measureGoodsColumnWidths, sameGoodsColumnWidths} from '@/client/components/overview/goodsBoxWidths';
-import {mobileLandscape, mobileLayout} from '@/client/utils/mobileLayout';
-import {
-  DESKTOP_SECTION_ORDER, GOODS_COUNT, MOBILE_SECTION_ORDER, SCORE_COUNT, PlayersTableRowModel, SectionVisibility, TableSection, TagColumnGroups,
-  FittedVisibility, columnTemplate, fitToWidth, nameColumnWidth, loadPreferredSection, loadSectionVisibility, savePreferredSection, saveSectionVisibility,
-} from '@/client/components/overview/playersTableLayout';
+import {PlayersTableFit, PlayersTableRowModel, TagColumnGroups, fitPlayersTable, tableVariables} from '@/client/components/overview/playersTableLayout';
 
 type DataModel = {
-  visibility: SectionVisibility;
-  // Most recently enabled section – stays visible longest when space is short
-  preferredSection: TableSection | undefined;
   // Width of the table; 0 while it is invisible or not yet measured
   availableWidth: number;
   resizeObserver: ResizeObserver | undefined;
-  // Content and production slot width per resource column (goodsBoxWidths.ts); 0 = not measured
-  goodsWidths: GoodsColumnWidths;
 };
 
 export default defineComponent({
@@ -67,47 +53,29 @@ export default defineComponent({
   },
   data(): DataModel {
     return {
-      visibility: loadSectionVisibility(),
-      preferredSection: loadPreferredSection(),
       availableWidth: 0,
       resizeObserver: undefined,
-      goodsWidths: emptyGoodsColumnWidths(GOODS_COUNT),
     };
   },
-  // Watch the column width: in narrow windows sections drop out automatically instead of being clipped
+  // Watch the width: arrangement and size of the table follow it (never scrolls sideways)
   mounted() {
     if (typeof ResizeObserver === 'undefined') {
       return;
     }
     this.resizeObserver = new ResizeObserver((entries) => {
-      // Scaled down via the drag handle (playersCardFit.ts) the table must keep its columns: measure in unscaled px,
-      // otherwise the zoom would make room for sections that don't fit at full size
+      // Scaled down via the drag handle (playersCardFit.ts) the table keeps its arrangement: measure in unscaled px
       const zoom = parseFloat(getComputedStyle(this.$el).getPropertyValue(PLAYERS_TABLE_ZOOM_VARIABLE)) || 1;
       this.availableWidth = Math.floor(entries[0].contentRect.width * zoom);
-      // A table that was hidden (mobile tab) has measured zero widths: measure again once it shows
-      this.updateGoodsBoxWidths();
     });
     this.resizeObserver.observe(this.$el);
-    this.updateGoodsBoxWidths();
-  },
-  // New values (e.g. a shield or +10 production) can widen a box: measure again after every render
-  updated() {
-    this.updateGoodsBoxWidths();
   },
   beforeUnmount() {
     this.resizeObserver?.disconnect();
   },
   computed: {
-    // Escape Velocity: rows get a third line (clock) and a wider name column (players_table.less)
+    // Escape Velocity: rows get a clock line and a wider name column
     escapeVelocity(): boolean {
       return this.playerView.game.gameOptions.escapeVelocity !== undefined;
-    },
-    nameWidth(): number {
-      return nameColumnWidth(this.escapeVelocity);
-    },
-    // Mobile view except tablet landscape transposes the table (players as columns, mobile.less @mb-portrait)
-    transposed(): boolean {
-      return mobileLayout.value && !mobileLandscape.value;
     },
     // Computed once per player color; every row has an entry
     tagDetailsByColor(): Record<string, TagDetails> {
@@ -134,27 +102,21 @@ export default defineComponent({
       }
       return groups.filter((group) => group.length > 0);
     },
-    // The tags section is dropped if there is not a single tag column; what's too wide drops out by priority
-    fitted(): FittedVisibility {
-      const wanted = {...this.visibility, tags: this.visibility.tags && this.tagColumns.length > 0};
-      // The transposed table (mobile.less) grows downward, so no section has to give way for lack of space
-      return fitToWidth(wanted, this.tagColumns, this.transposed ? 0 : this.availableWidth, this.preferredSection, this.nameWidth, this.goodsWidths.box);
+    fit(): PlayersTableFit {
+      return fitPlayersTable(this.availableWidth, this.tagColumns, this.escapeVelocity);
     },
-    effectiveVisibility(): SectionVisibility {
-      return this.fitted.visibility;
+    tableClasses(): Array<string> {
+      const classes = ['players-table', 'players-table--' + this.fit.mode];
+      if (!this.fit.showCorporation) {
+        classes.push('players-table--compact-name');
+      }
+      if (this.escapeVelocity) {
+        classes.push('players-table--escape-velocity');
+      }
+      return classes;
     },
-    // Cells per row without separators (name, goods, tags incl. group gaps, scoring, cards);
-    // the mobile view uses this to transpose the table (mobile.less: players as columns)
-    sectionOrder(): ReadonlyArray<TableSection> {
-      return this.transposed ? MOBILE_SECTION_ORDER : DESKTOP_SECTION_ORDER;
-    },
-    cellCount(): number {
-      const visibility = this.effectiveVisibility;
-      const tagCells = this.tagColumns.reduce((sum, group) => sum + group.length, 0) + Math.max(0, this.tagColumns.length - 1);
-      return 1 + (visibility.goods ? GOODS_COUNT : 0) + (visibility.tags ? tagCells : 0) + (visibility.score ? SCORE_COUNT : 0) + 1;
-    },
-    template(): string {
-      return columnTemplate(this.effectiveVisibility, this.tagColumns, this.nameWidth, this.goodsWidths.box);
+    variables(): Record<string, string> {
+      return tableVariables(this.fit, this.tagColumns, this.escapeVelocity);
     },
     // Per resource the player with the sole highest production; nobody on a tie
     productionLeadersByColor(): Partial<Record<Color, Array<Resource>>> {
@@ -172,30 +134,6 @@ export default defineComponent({
         }
       });
       return leaders;
-    },
-  },
-  methods: {
-    // Only assigned on a real change, otherwise every render would trigger the next one
-    updateGoodsBoxWidths() {
-      // Transposed (mobile) the players are the columns: the boxes are laid out differently there
-      const widths = measureGoodsColumnWidths(this.$el, GOODS_COUNT, this.transposed);
-      if (widths !== undefined && !sameGoodsColumnWidths(widths, this.goodsWidths)) {
-        this.goodsWidths = widths;
-      }
-    },
-    // A section hidden only for lack of space gets preferred (another one makes room) instead of being turned off
-    toggleSection(section: TableSection) {
-      if (this.fitted.autoHidden.includes(section)) {
-        this.preferredSection = section;
-      } else {
-        const turnedOn = !this.visibility[section];
-        this.visibility = {...this.visibility, [section]: turnedOn};
-        saveSectionVisibility(this.visibility);
-        if (turnedOn) {
-          this.preferredSection = section;
-        }
-      }
-      savePreferredSection(this.preferredSection);
     },
   },
 });

@@ -26,6 +26,9 @@ import {awardScoreWithHand} from './awardHandOutlook';
 import {fundedHandValue} from './handFunding';
 import {handReadiness} from './handReadiness';
 import {measuredDrawRate} from './measuredDrawRate';
+import {heatAsMoney, plantFactor, steelFactor, titaniumFactor} from './playerTraits';
+import {measuredCardIncome} from './measuredCardIncome';
+import {outlookChange} from './liveOutlook';
 
 // Values a player's whole position in M€ equivalents. The AI compares these values between
 // copies of the game in which different moves were made. Weights tuned in AI test batches.
@@ -80,6 +83,8 @@ export type ValuationContext = {
   awardActionSwing?: number,
   /** Award leads are projected to the game end by each player's pace so far (aiTuning.ts awardTiming). */
   awardTiming?: boolean,
+  /** Requirement outlook of the hand cards of `handOwner` at decision time (liveOutlook.ts). */
+  handOutlook?: ReadonlyMap<CardName, number>,
   /** Readiness of the hand cards of `handOwner` at decision time (handReadiness.ts, aiTuning.ts needsPursuit). */
   handReadiness?: ReadonlyMap<CardName, number>,
 };
@@ -200,16 +205,16 @@ function contextFor(game: IGame, context: ValuationContext): ValuationContext {
 /** M€ value of one generation of production (before the discount). */
 function productionPerGeneration(player: IPlayer, context: ValuationContext): number {
   const production = player.production;
-  const heatFactor = context.temperatureMaxed ? 0.2 : 0.8;
   const tuning = tuningOf(player);
+  const heatFactor = heatAsMoney(player, context.temperatureMaxed ? 0.2 : 0.8);
   // energyPlan: only the energy something uses counts as energy, the surplus as heat (energyPlan.ts).
   const energy = tuning.energyPlan > 0 ?
     energyUse(player) :
     {used: production.energy, surplus: 0};
   return production.megacredits * 1 +
-    production.steel * 1.6 +
-    production.titanium * 2.5 +
-    production.plants * tuning.plantProductionValue +
+    production.steel * 1.6 * steelFactor(player) +
+    production.titanium * 2.5 * titaniumFactor(player) +
+    production.plants * tuning.plantProductionValue * plantFactor(player) +
     energy.used * tuning.energyProductionValue + // energy mostly ends up as heat
     energy.surplus * heatFactor +
     production.heat * heatFactor;
@@ -302,14 +307,14 @@ function energyResourceValue(player: IPlayer, context: ValuationContext): number
 }
 
 function resourceValue(player: IPlayer, context: ValuationContext): number {
-  const heatValue = context.temperatureMaxed ? 0 : 0.9;
+  const heatValue = heatAsMoney(player, context.temperatureMaxed ? 0 : 0.9);
   const money = context.remaining > 0 ? 1 : MONEY_VALUE_IN_LAST_GENERATION;
   const megaCredits = Math.min(player.megaCredits, MONEY_RESERVE) + Math.max(0, player.megaCredits - MONEY_RESERVE) * EXCESS_MONEY_VALUE;
   const moneyValue = context.remaining === 0 && tuningOf(player).endgameMoney > 0 ? lastGenerationMoneyValue(player, context) : megaCredits * money;
   return moneyValue +
     player.steel * player.getSteelValue() * 0.8 * money +
     player.titanium * player.getTitaniumValue() * 0.8 * money +
-    player.plants * 1.5 +
+    player.plants * 1.5 * plantFactor(player) +
     player.heat * heatValue +
     player.energy * energyResourceValue(player, context);
 }
@@ -383,14 +388,17 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
   for (const card of player.playedCards) {
     if (card.type === CardType.ACTIVE) {
       const own = isIActionCard(card) ? actionValuePerGeneration(card, player, context) : EFFECT_CARD_VALUE_PER_GENERATION;
-      const flat = Math.max(own, drawIncome(card));
+      // measuredCardIncome: effects and actions count what they were measured to bring, not only the flat value.
+      const flat = Math.max(own, drawIncome(card), measuredCardIncome(player, card, context.remaining));
       // A human player's collectors scored 20+ VP in long games; a flat 1.5 M€ per generation missed that.
       // collectorRates: the measured resources per generation of this card instead of one (collectorRate.ts).
       const rate = tuningOf(player).collectorRates > 0 ? collectorRate(card.name) : 1;
       const collected = accumulator > 0 ? accumulator * rate * collectedPointsPerGeneration(card) * context.victoryPoint : 0;
       value += Math.max(flat, collected) * context.remaining;
     } else if (card.type === CardType.CORPORATION) {
-      value += drawIncome(card) * context.remaining;
+      value += Math.max(drawIncome(card), measuredCardIncome(player, card, context.remaining)) * context.remaining;
+    } else if (card.type === CardType.PRELUDE) {
+      value += measuredCardIncome(player, card, context.remaining) * context.remaining;
     }
     // Resources on cards (microbes, animals, science …) pay off later: VP, money, actions.
     value += card.resourceCount * RESOURCE_ON_CARD_VALUE;
@@ -433,7 +441,12 @@ function handValue(player: IPlayer, context: ValuationContext): number {
   }
   const values = context.handValues;
   const unknown = unknownCardValue(player, context);
-  const funded = fundedHandValue(player, player.cardsInHand.map((card) => ({card, value: values.get(card.name) ?? unknown})), unknown);
+  // liveOutlook: a move that brings a hand card's requirement closer raises its value (liveOutlook.ts).
+  const valueOf = (name: CardName) => {
+    const value = values.get(name);
+    return value === undefined ? unknown : value * outlookChange(player, name, context.handOutlook);
+  };
+  const funded = fundedHandValue(player, player.cardsInHand.map((card) => ({card, value: valueOf(card.name)})), unknown);
   return funded + needsPursuitValue(player, context, values);
 }
 

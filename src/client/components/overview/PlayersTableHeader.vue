@@ -1,111 +1,64 @@
 <template>
   <div class="players-table-row players-table-head">
-    <!-- Toggles in front, level with the icons: show and hide goods / tags / scoring.
-         Before them the game menu (only in the player view, GameMenu.vue) -->
-    <div class="players-table-toggles">
-      <GameMenu/>
-      <button v-for="section in sections" :key="section.key" type="button"
-        :class="['players-table-toggle', {'players-table-toggle--squeezed': autoHidden.includes(section.key)}]"
-        :aria-pressed="visibility[section.key] ? 'true' : 'false'"
-        :aria-label="$t(section.label)"
-        v-glass-tooltip="autoHidden.includes(section.key) ? $t(section.label) + ': ' + $t('Not enough space') : $t(section.label)"
-        :data-test="'toggle-' + section.key"
-        @click="$emit('toggle', section.key)">
-        <span :class="['players-table-toggle-icon', 'players-table-toggle-icon--' + section.icon]"></span>
-      </button>
-    </div>
+    <!-- Game menu in front (only in the player view, GameMenu.vue) -->
+    <div class="players-table-menu"><GameMenu/></div>
 
-    <!-- Section order from PlayersTable (desktop: goods, tags, scoring; mobile: goods, scoring, tags) -->
-    <template v-for="section in sectionOrder" :key="section">
-      <template v-if="section === 'goods' && visibility.goods">
-        <div class="players-table-divider"></div>
+    <!-- Column heads only where the cells have no icon of their own (one and two lines) -->
+    <template v-if="mode === 'line' || mode === 'two-lines'">
+      <div class="players-table-section players-table-section--goods">
         <div class="players-table-cell" v-for="type in resources" :key="type">
           <span :class="'resource_icon resource_icon--' + type"></span>
         </div>
-      </template>
+      </div>
 
-      <template v-if="section === 'tags' && visibility.tags">
-        <div class="players-table-divider"></div>
+      <div class="players-table-section players-table-section--tags">
         <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
-          <div v-if="groupIndex > 0"></div>
+          <div v-if="groupIndex > 0" class="players-table-tag-gap"></div>
           <div class="players-table-cell" v-for="tag in group" :key="tag" :data-test="'tag-head-' + tag">
             <Tag :tag="(tag as CardTag)" size="big" type="secondary"/>
           </div>
         </template>
-      </template>
+      </div>
 
-      <template v-if="section === 'score' && visibility.score">
-        <div class="players-table-divider"></div>
-        <div class="players-table-cell"><div class="tag-count tag-vp tag-type-main tooltip tooltip-bottom" :data-tooltip="$t('Victory Points')"></div></div>
-        <div class="players-table-cell"><div class="tag-count tag-tr tag-type-main tooltip tooltip-bottom" :data-tooltip="$t('Terraform Rating')"></div></div>
-        <div class="players-table-cell"><div class="tag-count tag-cards tag-type-main tooltip tooltip-bottom" :data-tooltip="$t('Cards in hand')"></div></div>
-        <div class="players-table-cell">
-          <div class="tag-count tag-action-card tooltip tooltip-bottom" :data-tooltip="$t('The number of available actions on active cards')">
-            <div class="blue-stripe"></div>
-            <div class="red-arrow"></div>
-          </div>
-        </div>
-      </template>
+      <!-- Two lines: the score has its icons in the chips next to the name -->
+      <div v-if="mode === 'line'" class="players-table-section players-table-section--score">
+        <div class="players-table-cell"><ScoreIcon kind="vp"/></div>
+        <div class="players-table-cell"><ScoreIcon kind="tr"/></div>
+        <div class="players-table-cell"><ScoreIcon kind="hand"/></div>
+        <div class="players-table-cell"><ScoreIcon kind="actions"/></div>
+        <div class="players-table-cell players-table-head-label" v-i18n>Cards</div>
+      </div>
     </template>
-
-    <div class="players-table-divider"></div>
-    <div class="players-table-cell players-table-head-label" v-i18n>Cards</div>
   </div>
 </template>
 
 <script lang="ts">
-import {glassTooltip} from '@/client/directives/GlassTooltip';
 import {defineComponent} from 'vue';
 import Tag from '@/client/components/Tag.vue';
 import GameMenu from '@/client/components/gameMenu/GameMenu.vue';
+import ScoreIcon from '@/client/components/overview/ScoreIcon.vue';
 import {Tag as CardTag} from '@/common/cards/Tag';
 import {ALL_RESOURCES} from '@/common/Resource';
-import {DESKTOP_SECTION_ORDER, SectionVisibility, TableSection, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
-
-type SectionToggle = {key: TableSection; label: string; icon: 'megacredit' | 'building' | 'vp'};
-
-// Icon per toggle: typical symbol of the section
-const SECTION_TOGGLES: Array<SectionToggle> = [
-  {key: 'goods', label: 'Goods', icon: 'megacredit'},
-  {key: 'tags', label: 'Tags', icon: 'building'},
-  {key: 'score', label: 'Scoring', icon: 'vp'},
-];
+import {PlayersTableMode, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
 
 export default defineComponent({
   name: 'PlayersTableHeader',
   components: {
     Tag,
     GameMenu,
-  },
-  directives: {
-    glassTooltip,
+    ScoreIcon,
   },
   props: {
-    visibility: {
-      type: Object as () => SectionVisibility,
-      required: true,
-    },
-    // Section order (playersTableLayout.ts: sectionOrder)
-    sectionOrder: {
-      type: Array as () => ReadonlyArray<TableSection>,
-      default: () => DESKTOP_SECTION_ORDER,
+    mode: {
+      type: String as () => PlayersTableMode,
+      default: 'line',
     },
     tagColumns: {
       type: Array as () => TagColumnGroups,
       required: true,
     },
-    // Sections hidden for lack of space: toggle dashed, a click brings them back
-    autoHidden: {
-      type: Array as () => Array<TableSection>,
-      default: () => [],
-    },
   },
-  emits: ['toggle'],
   computed: {
-    // Toggles in the same order as the sections (mobile: goods, scoring, tags)
-    sections(): Array<SectionToggle> {
-      return this.sectionOrder.flatMap((key) => SECTION_TOGGLES.filter((toggle) => toggle.key === key));
-    },
     resources(): typeof ALL_RESOURCES {
       return ALL_RESOURCES;
     },
