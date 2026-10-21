@@ -11,5 +11,7 @@
   "Cannot load the music settings.": "无法加载音乐设置。",
   "Cannot save the music settings.": "无法保存音乐设置。",
   "Tracks": "曲目",
-  "All tracks": "全部曲目"
+  "All tracks": "全部曲目",
+  "Mute": "静音",
+  "Unmute": "取消静音"
 }

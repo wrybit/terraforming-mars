@@ -11,5 +11,7 @@
   "Cannot load the music settings.": "No se pueden cargar los ajustes de música.",
   "Cannot save the music settings.": "No se pueden guardar los ajustes de música.",
   "Tracks": "Pistas",
-  "All tracks": "Todas las pistas"
+  "All tracks": "Todas las pistas",
+  "Mute": "Silenciar",
+  "Unmute": "Activar sonido"
 }

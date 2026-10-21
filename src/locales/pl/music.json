@@ -11,5 +11,7 @@
   "Cannot load the music settings.": "Nie można wczytać ustawień muzyki.",
   "Cannot save the music settings.": "Nie można zapisać ustawień muzyki.",
   "Tracks": "Utwory",
-  "All tracks": "Wszystkie utwory"
+  "All tracks": "Wszystkie utwory",
+  "Mute": "Wycisz",
+  "Unmute": "Włącz dźwięk"
 }

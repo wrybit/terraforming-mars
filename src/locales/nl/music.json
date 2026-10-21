@@ -9,5 +9,7 @@
   "Cannot load the music settings.": "Kan de muziekinstellingen niet laden.",
   "Cannot save the music settings.": "Kan de muziekinstellingen niet opslaan.",
   "Tracks": "Nummers",
-  "All tracks": "Alle nummers"
+  "All tracks": "Alle nummers",
+  "Mute": "Dempen",
+  "Unmute": "Dempen opheffen"
 }

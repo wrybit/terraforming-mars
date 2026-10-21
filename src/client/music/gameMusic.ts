@@ -8,7 +8,7 @@ import {safeLocalStorage} from '@/client/utils/SafeLocalStorage';
 // Background music of the game (one player for the whole app): starts when a game of a theme with tracks is
 // entered (App.vue), is steered from the card under the setup menu (MusicPlayerCard.vue). Browsers only play
 // sound after the first interaction: until then the start waits for the first click or key.
-// Remembered per browser: the volume, the chosen group, and whether the player stopped the music (then it stays off).
+// Remembered per browser: the volume, mute, the chosen group, and whether the player stopped the music (then it stays off).
 
 /** Group the player listens to (MusicPlayerCard.vue): one of the groups or all tracks */
 export type MusicChoice = 'all' | MusicGroup;
@@ -16,6 +16,7 @@ export const MUSIC_CHOICES: ReadonlyArray<MusicChoice> = ['all', ...MUSIC_GROUPS
 
 const VOLUME_KEY = 'tm-music-volume';
 const CHOICE_KEY = 'tm-music-group';
+const MUTED_KEY = 'tm-music-muted';
 const STOPPED_KEY = 'tm-music-stopped';
 const DEFAULT_VOLUME = 0.5;
 
@@ -29,6 +30,7 @@ export const gameMusic = reactive({
   position: 0,
   duration: 0,
   volume: readVolume(),
+  muted: safeLocalStorage.getItem(MUTED_KEY) === '1',
 });
 
 export const musicAvailable = computed(() => gameMusic.available.length > 0);
@@ -58,6 +60,7 @@ function element(): HTMLAudioElement {
     audio = new Audio();
     audio.preload = 'auto';
     audio.volume = gameMusic.volume;
+    audio.muted = gameMusic.muted;
     audio.addEventListener('timeupdate', () => {
       gameMusic.position = audio?.currentTime ?? 0;
     });
@@ -180,6 +183,13 @@ export function setMusicVolume(volume: number): void {
   gameMusic.volume = Math.min(1, Math.max(0, volume));
   element().volume = gameMusic.volume;
   safeLocalStorage.setItem(VOLUME_KEY, String(gameMusic.volume));
+}
+
+/** Silences the music without stopping it (remembered per browser) */
+export function setMusicMuted(muted: boolean): void {
+  gameMusic.muted = muted;
+  element().muted = muted;
+  safeLocalStorage.setItem(MUTED_KEY, muted ? '1' : '0');
 }
 
 /** Jumps to a share (0..1) of the current track */

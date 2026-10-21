@@ -9,5 +9,7 @@
   "Cannot load the music settings.": "Die Musik-Einstellungen lassen sich nicht laden.",
   "Cannot save the music settings.": "Die Musik-Einstellungen lassen sich nicht speichern.",
   "Tracks": "Titel",
-  "All tracks": "Alle Titel"
+  "All tracks": "Alle Titel",
+  "Mute": "Stumm",
+  "Unmute": "Ton an"
 }

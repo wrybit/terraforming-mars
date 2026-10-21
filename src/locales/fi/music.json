@@ -11,5 +11,7 @@
   "Cannot load the music settings.": "Musiikkiasetuksia ei voi ladata.",
   "Cannot save the music settings.": "Musiikkiasetuksia ei voi tallentaa.",
   "Tracks": "Kappaleet",
-  "All tracks": "Kaikki kappaleet"
+  "All tracks": "Kaikki kappaleet",
+  "Mute": "Mykistä",
+  "Unmute": "Poista mykistys"
 }

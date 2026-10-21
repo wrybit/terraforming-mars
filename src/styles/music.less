@@ -127,9 +127,16 @@
   }
 }
 
+.music-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .music-card__groups {
   .segmented-toggle();
-  align-self: flex-start;
+  min-width: 0;
   box-shadow: none;
 }
 
@@ -137,9 +144,8 @@
   .segmented-toggle-option();
 }
 
-.music-card__controls {
+.music-card__buttons {
   display: flex;
-  align-items: center;
   gap: 6px;
 }
 
@@ -148,13 +154,14 @@
 }
 
 .music-card__volume {
-  flex: 1;
-  min-width: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-left: 8px; // volume is its own group: more space than between the two buttons
+  gap: 8px;
   color: rgba(255, 255, 255, 0.7);
+
+  input:disabled {
+    opacity: 0.35;
+  }
 
   input {
     --music-volume: 50%;
@@ -201,6 +208,28 @@
       border-radius: 50%;
       background: var(--music-accent);
     }
+  }
+}
+
+// Speaker as mute switch: plain icon, no round frame (it belongs to the slider, not to the buttons above)
+.music-card__mute {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover {
+    color: #fff;
+  }
+
+  &[aria-pressed="true"] {
+    color: var(--music-accent);
   }
 }
 

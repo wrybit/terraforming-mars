@@ -11,5 +11,7 @@
   "Cannot load the music settings.": "音楽設定を読み込めません。",
   "Cannot save the music settings.": "音楽設定を保存できません。",
   "Tracks": "曲",
-  "All tracks": "すべての曲"
+  "All tracks": "すべての曲",
+  "Mute": "ミュート",
+  "Unmute": "ミュート解除"
 }

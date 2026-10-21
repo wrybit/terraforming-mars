@@ -9,5 +9,7 @@
   "Cannot load the music settings.": "Impossible de charger les réglages de musique.",
   "Cannot save the music settings.": "Impossible d'enregistrer les réglages de musique.",
   "Tracks": "Morceaux",
-  "All tracks": "Tous les morceaux"
+  "All tracks": "Tous les morceaux",
+  "Mute": "Couper le son",
+  "Unmute": "Rétablir le son"
 }

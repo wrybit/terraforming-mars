@@ -10,5 +10,7 @@
   "Cannot load the music settings.": "Impossibile caricare le impostazioni della musica.",
   "Cannot save the music settings.": "Impossibile salvare le impostazioni della musica.",
   "Tracks": "Brani",
-  "All tracks": "Tutti i brani"
+  "All tracks": "Tutti i brani",
+  "Mute": "Disattiva audio",
+  "Unmute": "Riattiva audio"
 }

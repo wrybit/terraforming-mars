@@ -10,5 +10,7 @@
   "Cannot load the music settings.": "Kan ikke laste musikkinnstillingene.",
   "Cannot save the music settings.": "Kan ikke lagre musikkinnstillingene.",
   "Tracks": "Spor",
-  "All tracks": "Alle spor"
+  "All tracks": "Alle spor",
+  "Mute": "Demp",
+  "Unmute": "Slå på lyd"
 }

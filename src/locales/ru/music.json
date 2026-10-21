@@ -11,5 +11,7 @@
   "Cannot load the music settings.": "Не удалось загрузить настройки музыки.",
   "Cannot save the music settings.": "Не удалось сохранить настройки музыки.",
   "Tracks": "Треки",
-  "All tracks": "Все треки"
+  "All tracks": "Все треки",
+  "Mute": "Без звука",
+  "Unmute": "Включить звук"
 }

@@ -10,5 +10,7 @@
   "Cannot load the music settings.": "A zenebeállítások nem tölthetők be.",
   "Cannot save the music settings.": "A zenebeállítások nem menthetők.",
   "Tracks": "Számok",
-  "All tracks": "Minden szám"
+  "All tracks": "Minden szám",
+  "Mute": "Némítás",
+  "Unmute": "Némítás feloldása"
 }
