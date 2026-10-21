@@ -84,8 +84,6 @@ const NEIGHBOUR_OFFSETS: ReadonlyArray<Point> = [
 ];
 // Half the length of a wall line (a hex edge is about 26 px)
 const WALL_HALF = 13;
-// A bounce disc sits inside the space it bounced in, this share of the way towards the wall
-const BOUNCE_DISC_SHARE = 0.28;
 
 function angleOf(vector: Point): number {
   return Math.atan2(vector.y, vector.x) * 180 / Math.PI;
@@ -104,11 +102,14 @@ function wallAt(center: Point, towards: Point): Wall {
     x1: middle.x - across.x, y1: middle.y - across.y, x2: middle.x + across.x, y2: middle.y + across.y};
 }
 
+// Two discs on the same edge (a bounce straight back crosses it twice): this far apart along the edge
+const SHARED_EDGE_SHIFT = 9;
+
 /**
- * Where the worm changes heading along its way (centres of the worm's space and the spaces crossed):
- * - a disc on the edge it leaves its own space through, and the wall there when the rolled heading was blocked
- * - at every bounce the wall it hit (the edge of the space in its old heading) and a disc just inside that space
- *   with the new heading, so a bounce straight back does not hide the disc of the way out (Jens, 21 Oct 2026)
+ * Marks along the way (centres of the worm's space and the spaces crossed), Jens 21 Oct 2026:
+ * - a disc with the heading on every edge the worm crosses: worm → 1, 1 → 2, 2 → 3
+ * - the wall it bounced off: at the start when the rolled heading was blocked, and wherever it changes heading
+ *   (the space ahead in its old heading)
  */
 export function wormBounceMarks(points: ReadonlyArray<Point>, rolledDirection: number | undefined): {headings: Array<Heading>, walls: Array<Wall>} {
   const headings: Array<Heading> = [];
@@ -117,19 +118,27 @@ export function wormBounceMarks(points: ReadonlyArray<Point>, rolledDirection: n
   if (steps.length === 0) {
     return {headings, walls};
   }
-  const start = points[0];
-  headings.push({x: start.x + steps[0].x / 2, y: start.y + steps[0].y / 2, angle: angleOf(steps[0])});
   const rolled = rolledDirection === undefined ? undefined : NEIGHBOUR_OFFSETS[rolledDirection];
   if (rolled !== undefined && !sameHeading(rolled, steps[0])) {
-    walls.push(wallAt(start, rolled));
+    walls.push(wallAt(points[0], rolled));
   }
-  for (let index = 1; index < steps.length; index++) {
-    const before = steps[index - 1];
-    if (!sameHeading(before, steps[index])) {
-      const at = points[index];
-      walls.push(wallAt(at, before));
-      headings.push({x: at.x + before.x * BOUNCE_DISC_SHARE, y: at.y + before.y * BOUNCE_DISC_SHARE, angle: angleOf(steps[index])});
+  steps.forEach((step, index) => {
+    const from = points[index];
+    if (index > 0 && !sameHeading(steps[index - 1], step)) {
+      walls.push(wallAt(from, steps[index - 1]));
     }
-  }
+    const heading = {x: from.x + step.x / 2, y: from.y + step.y / 2, angle: angleOf(step)};
+    const shared = headings.find((other) => Math.abs(other.x - heading.x) < 1 && Math.abs(other.y - heading.y) < 1);
+    if (shared !== undefined) {
+      // Side by side along the edge instead of on top of each other
+      const length = Math.hypot(step.x, step.y) || 1;
+      const along = {x: -step.y / length * SHARED_EDGE_SHIFT, y: step.x / length * SHARED_EDGE_SHIFT};
+      shared.x -= along.x;
+      shared.y -= along.y;
+      heading.x += along.x;
+      heading.y += along.y;
+    }
+    headings.push(heading);
+  });
   return {headings, walls};
 }

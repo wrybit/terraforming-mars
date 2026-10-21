@@ -33,8 +33,8 @@
             <line v-else class="worm-map__wall" :x1="wall.x1" :y1="wall.y1" :x2="wall.x2" :y2="wall.y2"/>
           </template>
         </svg>
-        <!-- Heading: a white disc with an arrow on the edge the worm leaves through – at the start and after every
-             bounce, along the longest way (Jens, 21 Oct 2026) -->
+        <!-- Heading: a white disc with an arrow on every edge the worm crosses (worm → 1 → 2 → 3), along the longest
+             way (Jens, 21 Oct 2026) -->
         <span v-for="(heading, index) in marks.headings" :key="'heading-' + index" class="worm-map__heading" aria-hidden="true"
           :style="{left: heading.x + 'px', top: heading.y + 'px'}">
           <svg viewBox="0 0 16 16" :style="{transform: 'rotate(' + heading.angle + 'deg)'}"><path d="M3 8h9M8 3.5 12.5 8 8 12.5"/></svg>
