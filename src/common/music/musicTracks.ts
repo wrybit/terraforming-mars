@@ -37,14 +37,6 @@ const INCOMPETECH = 'https://incompetech.com/music/royalty-free/';
 
 export const MUSIC_TRACKS: ReadonlyArray<MusicTrack> = [
   {
-    id: 'stasis-chamber', title: 'Dreams in a Stasis Chamber', author: 'Tomasz Kucza (Magnesus)', license: 'CC BY 3.0',
-    source: 'https://opengameart.org/content/dreams-in-a-stasis-chamber', download: FILES + 'Dreams-In-A-Stasis-Chamber-by-Tomasz-Kucza.mp3', theme: 'dune', group: '8-bit',
-  },
-  {
-    id: 'desert-of-lost-souls', title: 'Desert of Lost Souls', author: 'Kevin MacLeod', license: 'CC BY 4.0',
-    source: INCOMPETECH + 'index.html?isrc=USUAN1800001', download: INCOMPETECH + 'mp3-royaltyfree/Desert%20of%20Lost%20Souls.mp3', theme: 'dune', group: '8-bit',
-  },
-  {
     id: 'cyborg-ninja', title: 'Cyborg Ninja', author: 'Kevin MacLeod', license: 'CC BY 4.0',
     source: INCOMPETECH + 'index.html?isrc=USUAN1600008', download: INCOMPETECH + 'mp3-royaltyfree/Cyborg%20Ninja.mp3', theme: 'dune', group: '8-bit',
   },
@@ -61,20 +53,28 @@ export const MUSIC_TRACKS: ReadonlyArray<MusicTrack> = [
     source: INCOMPETECH + 'index.html?isrc=USUAN1200064', download: INCOMPETECH + 'mp3-royaltyfree/Video%20Dungeon%20Crawl.mp3', theme: 'dune', group: '8-bit',
   },
   {
-    id: 'level-up', title: 'Level Up', author: 'Kevin MacLeod', license: 'CC BY 4.0',
-    source: INCOMPETECH + 'index.html?isrc=USUAN1500023', download: INCOMPETECH + 'mp3-royaltyfree/Level%20Up.mp3', theme: 'dune', group: '8-bit',
+    id: 'ancient-ruins', title: 'Ancient Ruins', author: 'tcarisland', license: 'CC BY 4.0',
+    source: 'https://opengameart.org/content/ancient-ruins-1', download: FILES + 'ancient_ruins.mp3', theme: 'dune', group: '8-bit',
   },
   {
-    id: 'bit-quest', title: 'Bit Quest', author: 'Kevin MacLeod', license: 'CC BY 4.0',
-    source: INCOMPETECH + 'index.html?isrc=USUAN1500073', download: INCOMPETECH + 'mp3-royaltyfree/Bit%20Quest.mp3', theme: 'dune', group: '8-bit',
+    id: 'sirens-in-darkness', title: 'Sirens in Darkness', author: 'cynicmusic', license: 'CC0',
+    source: 'https://opengameart.org/content/sirens-in-darkness', download: FILES + '012_Sirens_in_Darkness.mp3', theme: 'dune', group: '8-bit',
   },
   {
-    id: 'reformat', title: 'Reformat', author: 'Kevin MacLeod', license: 'CC BY 4.0',
-    source: INCOMPETECH + 'index.html?isrc=USUAN1500020', download: INCOMPETECH + 'mp3-royaltyfree/Reformat.mp3', theme: 'dune', group: '8-bit',
+    id: 'slow-melancholic', title: 'Slow Melancholic Theme (C64 Style)', author: 'skrjablin', license: 'CC0',
+    source: 'https://opengameart.org/content/slow-melancholic-theme-c64-style', download: FILES + 'slow_melancholic_theme_c64_style_long_version_with_refrain.ogg', theme: 'dune', group: '8-bit',
   },
   {
-    id: 'itty-bitty', title: 'Itty Bitty 8 Bit', author: 'Kevin MacLeod', license: 'CC BY 4.0',
-    source: INCOMPETECH + 'index.html?isrc=USUAN1100764', download: INCOMPETECH + 'mp3-royaltyfree/Itty%20Bitty%208%20Bit.mp3', theme: 'dune', group: '8-bit',
+    id: 'beep-beep-beep', title: 'Beep Beep Beep Level Music (C64)', author: 'skrjablin', license: 'CC0',
+    source: 'https://opengameart.org/content/beep-beep-beep-level-music-c64-chiptune', download: FILES + 'beep_beep_beep_level_music.mp3', theme: 'dune', group: '8-bit',
+  },
+  {
+    id: 'subsidised', title: 'SubSidised', author: 'Yubatake', license: 'CC BY 4.0',
+    source: 'https://opengameart.org/content/subsidised', download: FILES + 'SubSidised.ogg', theme: 'dune', group: '8-bit',
+  },
+  {
+    id: 'quasi-medieval-suite', title: 'Quasi Medieval Suite (C64)', author: 'skrjablin', license: 'CC0',
+    source: 'https://opengameart.org/content/6-genuinely-c64-soundtracks-released-as-public-domain-may-2017', download: FILES + 'quasi_medieval_suite.ogg', theme: 'dune', group: '8-bit',
   },
   {
     id: 'night-in-the-desert', title: 'Night in the Desert (Remix)', author: 'glitchart, Tausdei, Hitctrl', license: 'CC BY 3.0',
