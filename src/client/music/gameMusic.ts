@@ -209,3 +209,27 @@ export function chooseMusicGroup(choice: MusicChoice): void {
     next();
   }
 }
+
+/**
+ * What the setup button shows (MusicStateIcon.vue): playing → equalizer, muted → mute icon, paused (a track was
+ * played and is held) → pause icon, stopped (nothing played yet, or no music in this game) → the usual burger.
+ */
+export type MusicIndicator = 'playing' | 'muted' | 'paused' | 'stopped';
+
+export const musicIndicator = computed<MusicIndicator>(() => {
+  if (!musicAvailable.value || gameMusic.current === undefined) {
+    return 'stopped';
+  }
+  if (gameMusic.playing) {
+    return gameMusic.muted ? 'muted' : 'playing';
+  }
+  return gameMusic.position > 0 ? 'paused' : 'stopped';
+});
+
+/** Share played of the current track (0..1) for the progress frame of the setup button; undefined without a track */
+export const musicProgress = computed<number | undefined>(() => {
+  if (musicIndicator.value === 'stopped' || gameMusic.duration <= 0) {
+    return undefined;
+  }
+  return Math.min(1, gameMusic.position / gameMusic.duration);
+});

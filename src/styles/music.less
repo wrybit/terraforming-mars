@@ -341,3 +341,79 @@ html.tm-mobile .admin-music__track {
     .admin-music-stacked();
   }
 }
+
+// --- Setup button (GameMenu.vue, MusicStateIcon.vue): music state in place of the burger, progress in the frame ---
+
+.music-state {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  color: var(--music-accent);
+}
+
+// Equalizer: three bars bouncing out of step
+.music-state--playing {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+
+  i {
+    flex: 1;
+    height: 30%;
+    border-radius: 1px;
+    background: currentColor;
+    animation: music-equalizer 0.9s ease-in-out infinite;
+
+    &:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: -0.6s;
+    }
+  }
+}
+
+@keyframes music-equalizer {
+  0%,
+  100% {
+    height: 25%;
+  }
+
+  50% {
+    height: 100%;
+  }
+}
+
+// The frame fills clockwise with the track; the inner fill stays the button's own (padding-box)
+@property --music-progress {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+.game-menu-button--music {
+  --music-accent: @bg_action;
+  border-color: transparent;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.14)) padding-box,
+    linear-gradient(#1b1d26, #1b1d26) padding-box,
+    conic-gradient(var(--music-accent) var(--music-progress), rgba(255, 255, 255, 0.35) var(--music-progress)) border-box;
+  transition: --music-progress 0.25s linear;
+
+  &:hover,
+  &.game-menu-button--open {
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.24)) padding-box,
+      linear-gradient(#1b1d26, #1b1d26) padding-box,
+      conic-gradient(var(--music-accent) var(--music-progress), rgba(255, 255, 255, 0.35) var(--music-progress)) border-box;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-state--playing i {
+    animation: none;
+    height: 70%;
+  }
+}

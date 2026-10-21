@@ -2,11 +2,13 @@
   <!-- Menu button (game_menu.less) at the top left of every page: language, help and settings everywhere;
        in the game (context from PlayerHome) also the own player, piles, game info and colonies. -->
   <span ref="root" :class="['game-menu', {'game-menu--large': large}]">
-    <button type="button" :class="['game-menu-button', {'game-menu-button--open': menuOpen}]"
+    <!-- With background music the burger shows its state and the frame fills with the track's progress (MusicStateIcon.vue) -->
+    <button type="button" :class="['game-menu-button', {'game-menu-button--open': menuOpen, 'game-menu-button--music': musicProgress !== undefined}]"
+      :style="musicProgress === undefined ? undefined : {'--music-progress': Math.round(musicProgress * 360) + 'deg'}"
       :aria-expanded="menuOpen ? 'true' : 'false'" aria-haspopup="menu" :aria-label="buttonLabel" data-test="game-menu-button"
       :data-hotkey="context ? 'setup-menu' : undefined"
       @click.stop="toggleMenu">
-      <span class="game-menu-burger" aria-hidden="true"><i></i><i></i><i></i></span>
+      <MusicStateIcon :state="musicIndicator"/>
       <span class="game-menu-button-label">{{ buttonLabel }}</span>
       <!-- Shortcut only in the game: the start page has none -->
       <HotkeyKeys v-if="context" action="setup-menu"/>
@@ -129,7 +131,8 @@
 <script setup lang="ts">
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import MusicPlayerCard from '@/client/components/music/MusicPlayerCard.vue';
-import {musicAvailable} from '@/client/music/gameMusic';
+import MusicStateIcon from '@/client/components/music/MusicStateIcon.vue';
+import {musicAvailable, musicIndicator, musicProgress} from '@/client/music/gameMusic';
 import {hotkeyHelpOpen} from '@/client/hotkeys/hotkeyHelpState';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
 import {computed, defineAsyncComponent, inject, onBeforeUnmount, onMounted, ref} from 'vue';
