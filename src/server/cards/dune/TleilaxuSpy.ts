@@ -16,8 +16,8 @@ export class TleilaxuSpy extends Card implements IProjectCard {
       type: CardType.EVENT,
       name: CardName.TLEILAXU_SPY,
       tags: [Tag.EARTH],
-      // 10 + 3 to buy = 13 in all: seeing another House's agendas is strong (Jens, 21 Oct 2026; was 6)
-      cost: 10,
+      // Seeing another House's agendas is strong: 13 (Jens, 21 Oct 2026; was 6)
+      cost: 13,
       behavior: {
         stock: {megacredits: 2},
       },
