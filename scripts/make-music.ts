@@ -20,9 +20,12 @@ function download(url: string, target: string): void {
 }
 
 function convert(source: string, target: string): void {
-  // loudnorm: the tracks come from different authors and are very differently loud
+  // Silence at the start and the end cut away (the end via areverse), so the tracks follow each other without a
+  // pause; -50 dB keeps the natural fade-out of the last notes. loudnorm: the tracks come from different authors
+  // and are very differently loud
+  const trim = 'silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.05';
   execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', source, '-vn', '-ac', '2', '-ar', '44100',
-    '-af', 'loudnorm=I=-18:TP=-1.5:LRA=11', '-c:a', 'libmp3lame', '-b:a', '112k', target]);
+    '-af', `${trim},areverse,${trim},areverse,loudnorm=I=-18:TP=-1.5:LRA=11`, '-c:a', 'libmp3lame', '-b:a', '112k', target]);
 }
 
 function measure(file: string): {duration: number, peaks: Array<number>} {

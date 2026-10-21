@@ -19,6 +19,9 @@ const CHOICE_KEY = 'tm-music-group';
 const MUTED_KEY = 'tm-music-muted';
 const STOPPED_KEY = 'tm-music-stopped';
 const DEFAULT_VOLUME = 0.5;
+const DEFAULT_CHOICE: MusicChoice = 'modern';
+/** First track when a game is entered (if it is on and in the chosen group) */
+const START_TRACK = 'spacial-harvest';
 
 export const gameMusic = reactive({
   /** Tracks of the current game's theme that the admin left on; empty outside a game */
@@ -41,13 +44,17 @@ export const musicPlaylist = computed<Array<MusicTrack>>(() => {
   return chosen.length > 0 ? chosen : gameMusic.available;
 });
 
+// Two players take turns: the current one plays, the other already loads the next track, so the next one starts
+// without a gap when the current one ends (endless music, one track after the other)
 let audio: HTMLAudioElement | undefined;
+let upcoming: {track: MusicTrack, element: HTMLAudioElement} | undefined;
+let spare: HTMLAudioElement | undefined;
 let enabledIds: Promise<Array<string>> | undefined;
 let waitingForGesture = false;
 
 function readChoice(): MusicChoice {
   const stored = safeLocalStorage.getItem(CHOICE_KEY);
-  return MUSIC_CHOICES.find((choice) => choice === stored) ?? 'all';
+  return MUSIC_CHOICES.find((choice) => choice === stored) ?? DEFAULT_CHOICE;
 }
 
 function readVolume(): number {
@@ -55,23 +62,66 @@ function readVolume(): number {
   return safeLocalStorage.getItem(VOLUME_KEY) !== null && Number.isFinite(stored) ? Math.min(1, Math.max(0, stored)) : DEFAULT_VOLUME;
 }
 
+function readDuration(player: HTMLAudioElement): number {
+  return Number.isFinite(player.duration) ? player.duration : 0;
+}
+
+// A player reports only while it is the current one: the loading one must not touch the state
+function createPlayer(): HTMLAudioElement {
+  const player = new Audio();
+  player.preload = 'auto';
+  player.volume = gameMusic.volume;
+  player.muted = gameMusic.muted;
+  player.addEventListener('timeupdate', () => {
+    if (player === audio) {
+      gameMusic.position = player.currentTime;
+    }
+  });
+  player.addEventListener('loadedmetadata', () => {
+    if (player === audio) {
+      gameMusic.duration = readDuration(player);
+    }
+  });
+  player.addEventListener('ended', () => {
+    if (player === audio) {
+      next(true);
+    }
+  });
+  player.addEventListener('play', () => {
+    if (player === audio) {
+      gameMusic.playing = true;
+    }
+  });
+  player.addEventListener('pause', () => {
+    if (player === audio) {
+      gameMusic.playing = false;
+    }
+  });
+  return player;
+}
+
 function element(): HTMLAudioElement {
-  if (audio === undefined) {
-    audio = new Audio();
-    audio.preload = 'auto';
-    audio.volume = gameMusic.volume;
-    audio.muted = gameMusic.muted;
-    audio.addEventListener('timeupdate', () => {
-      gameMusic.position = audio?.currentTime ?? 0;
-    });
-    audio.addEventListener('loadedmetadata', () => {
-      gameMusic.duration = Number.isFinite(audio?.duration) ? (audio?.duration ?? 0) : 0;
-    });
-    audio.addEventListener('ended', () => next(true));
-    audio.addEventListener('play', () => gameMusic.playing = true);
-    audio.addEventListener('pause', () => gameMusic.playing = false);
-  }
+  audio ??= createPlayer();
   return audio;
+}
+
+function allPlayers(): Array<HTMLAudioElement> {
+  return [audio, upcoming?.element, spare].filter((player): player is HTMLAudioElement => player !== undefined);
+}
+
+/** Starts loading the track after the current one in the other player */
+function prepareUpcoming(): void {
+  const track = randomTrack(gameMusic.current);
+  if (track === undefined || track === gameMusic.current) {
+    upcoming = undefined;
+    return;
+  }
+  const player = upcoming?.element ?? spare ?? createPlayer();
+  spare = undefined;
+  if (upcoming?.track !== track) {
+    player.src = musicFile(track.id);
+  }
+  upcoming = {track, element: player};
 }
 
 function loadEnabled(): Promise<Array<string>> {
@@ -82,10 +132,28 @@ function loadEnabled(): Promise<Array<string>> {
   return enabledIds;
 }
 
+// Shuffle without repeats: every track of the playlist plays once in random order, then all count as unplayed
+// again; the one that just played never comes twice in a row
+const played = new Set<string>();
+
 function randomTrack(exclude?: MusicTrack): MusicTrack | undefined {
-  const choices = musicPlaylist.value.filter((track) => track !== exclude);
-  const pool = choices.length > 0 ? choices : musicPlaylist.value;
-  return pool[Math.floor(Math.random() * pool.length)];
+  const others = musicPlaylist.value.filter((track) => track !== exclude);
+  if (others.length === 0) {
+    return musicPlaylist.value[0];
+  }
+  let unplayed = others.filter((track) => !played.has(track.id));
+  if (unplayed.length === 0) {
+    played.clear();
+    if (exclude !== undefined) {
+      played.add(exclude.id);
+    }
+    unplayed = others;
+  }
+  return unplayed[Math.floor(Math.random() * unplayed.length)];
+}
+
+function firstTrack(): MusicTrack | undefined {
+  return musicPlaylist.value.find((track) => track.id === START_TRACK) ?? randomTrack();
 }
 
 function startPlaying(): void {
@@ -109,11 +177,24 @@ function startPlaying(): void {
 }
 
 function load(track: MusicTrack): void {
+  if (upcoming?.track === track) {
+    // Already loaded in the other player: swap, the old one becomes the spare for the track after
+    const previous = audio;
+    previous?.pause();
+    audio = upcoming.element;
+    upcoming = undefined;
+    spare = previous;
+  } else {
+    element().src = musicFile(track.id);
+  }
   const player = element();
+  player.currentTime = 0;
   gameMusic.current = track;
+  played.add(track.id);
   gameMusic.position = 0;
-  gameMusic.duration = 0;
-  player.src = musicFile(track.id);
+  gameMusic.duration = readDuration(player);
+  gameMusic.playing = !player.paused;
+  prepareUpcoming();
 }
 
 /** A game was entered (or left: undefined): plays a random track of its theme, unless the player stopped the music. */
@@ -127,7 +208,7 @@ export async function enterGameMusic(theme: Theme | undefined): Promise<void> {
   if (gameMusic.current !== undefined && musicPlaylist.value.includes(gameMusic.current)) {
     return;
   }
-  const track = randomTrack();
+  const track = firstTrack();
   if (track === undefined) {
     leaveGameMusic();
     return;
@@ -145,7 +226,8 @@ function autoplayAllowed(): boolean {
 }
 
 export function leaveGameMusic(): void {
-  audio?.pause();
+  allPlayers().forEach((player) => player.pause());
+  upcoming = undefined;
   gameMusic.available = [];
   gameMusic.current = undefined;
 }
@@ -153,7 +235,7 @@ export function leaveGameMusic(): void {
 export function playMusic(): void {
   safeLocalStorage.setItem(STOPPED_KEY, '0');
   if (gameMusic.current === undefined) {
-    const track = randomTrack();
+    const track = firstTrack();
     if (track === undefined) {
       return;
     }
@@ -169,7 +251,7 @@ export function stopMusic(): void {
 
 /** Next track (another one than the current); plays on when music was playing (or the last track just ended) */
 export function next(keepPlaying: boolean = gameMusic.playing): void {
-  const track = randomTrack(gameMusic.current);
+  const track = upcoming?.track ?? randomTrack(gameMusic.current);
   if (track === undefined) {
     return;
   }
@@ -181,14 +263,14 @@ export function next(keepPlaying: boolean = gameMusic.playing): void {
 
 export function setMusicVolume(volume: number): void {
   gameMusic.volume = Math.min(1, Math.max(0, volume));
-  element().volume = gameMusic.volume;
+  allPlayers().forEach((player) => player.volume = gameMusic.volume);
   safeLocalStorage.setItem(VOLUME_KEY, String(gameMusic.volume));
 }
 
 /** Silences the music without stopping it (remembered per browser) */
 export function setMusicMuted(muted: boolean): void {
   gameMusic.muted = muted;
-  element().muted = muted;
+  allPlayers().forEach((player) => player.muted = muted);
   safeLocalStorage.setItem(MUTED_KEY, muted ? '1' : '0');
 }
 
@@ -206,7 +288,11 @@ export function chooseMusicGroup(choice: MusicChoice): void {
   gameMusic.choice = choice;
   safeLocalStorage.setItem(CHOICE_KEY, choice);
   if (gameMusic.current !== undefined && !musicPlaylist.value.includes(gameMusic.current)) {
+    upcoming = undefined;
     next();
+  } else if (gameMusic.current !== undefined) {
+    // The prepared track may lie outside the new group
+    prepareUpcoming();
   }
 }
 
