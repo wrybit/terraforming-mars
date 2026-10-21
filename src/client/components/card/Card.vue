@@ -22,14 +22,17 @@
       <CardResourceCounter v-if="hasResourceType" :amount="resourceAmount" :type="resourceType" />
       <CardVictoryPoints v-if="cardMetadata.victoryPoints" :victoryPoints="cardMetadata.victoryPoints" />
       <CardExtraContent :card="card" />
+      <CardScrollbar v-if="scrollContent !== undefined" :content="scrollContent" />
       <slot></slot>
   </div>
 </template>
 
 <script lang="ts">
 
-import {defineComponent, nextTick} from 'vue';
-import {CARD_ROW_ZOOM, CardScrollSpace, cardScrollSpace, fittingRowZoom} from './cardFit';
+import {defineComponent, markRaw, nextTick} from 'vue';
+import {CARD_ROW_ZOOM, fittingRowZoom} from './cardFit';
+import {CARD_SCROLL_AREAS, cardScrollKind, cardScrollStyle} from './cardScrollArea';
+import CardScrollbar from './CardScrollbar.vue';
 import {activeTheme} from '@/client/theme/applyTheme';
 import {Theme} from '@/common/theme/Theme';
 
@@ -70,6 +73,7 @@ export default defineComponent({
     CardTags,
     CardContent,
     CardVictoryPoints,
+    CardScrollbar,
   },
   props: {
     card: {
@@ -103,10 +107,13 @@ export default defineComponent({
       hovering: false,
       // Fixed per card instance: the cube keeps its angle while the card is shown
       cubeSpin: Math.round(Math.random() * 360),
-      // Dune cards: zoom of the icon rows, less than CARD_ROW_ZOOM where the widest row would not fit (cardFit.ts)
-      rowZoom: CARD_ROW_ZOOM,
-      // Dune cards too full for their large icons and text: the scroll area of the content (cardFit.ts)
-      scrollSpace: undefined as CardScrollSpace | undefined,
+      // Dune cards: zoom of the icon rows, less where the widest row would not fit (cardFit.ts); undefined: the
+      // theme's own zoom
+      rowZoom: undefined as number | undefined,
+      // Dune cards: content box and scrollbar of the scroll area (cardScrollArea.ts), as CSS custom properties
+      scrollStyle: undefined as Record<string, string> | undefined,
+      // Dune cards: the scrolling content, for the scrollbar (CardScrollbar.vue)
+      scrollContent: undefined as HTMLElement | undefined,
       // Each fitting run gets a number; a newer run stops an older one that is still waiting for the DOM
       fitRun: 0,
       resizeObserver: undefined as ResizeObserver | undefined,
@@ -147,30 +154,58 @@ export default defineComponent({
     },
   },
   methods: {
-    // Dune cards show their icons and text larger (theme-extra.css). A row too wide for the card gets a smaller
-    // zoom; where the content does not fit above the scene strip, it scrolls inside the card, with room below the last
-    // line. On Mars nothing changes.
+    // Dune cards have a fixed size; their content scrolls in a box per kind of card (cardScrollArea.ts) and shows its
+    // icons larger, smaller where the widest row would not fit the box. On Mars nothing changes.
     async fitIntoCard(): Promise<void> {
       const run = ++this.fitRun;
-      this.rowZoom = CARD_ROW_ZOOM;
-      this.scrollSpace = undefined;
+      this.rowZoom = undefined;
       if (this.theme !== 'dune') {
+        this.scrollStyle = undefined;
+        this.scrollContent = undefined;
         return;
       }
+      await nextTick();
+      const card = this.$el as HTMLElement;
+      const content = card.querySelector<HTMLElement>('.card-content');
+      if (run !== this.fitRun || content === null || card.offsetHeight === 0) {
+        return;
+      }
+      const area = CARD_SCROLL_AREAS[cardScrollKind({
+        isHouse: this.isCorporationCard,
+        isStandardProject: this.isStandardProject,
+        hasBottomTab: this.cardMetadata.victoryPoints !== undefined || this.hasResourceType,
+      })];
+      const style = cardScrollStyle(area, {
+        width: card.offsetWidth,
+        height: card.offsetHeight,
+        ...this.parentOffset(content, card),
+        frameTop: card.clientTop,
+        frameLeft: card.clientLeft,
+      });
+      // The expansion mark sits bottom left, next to the resource counter where there is one (theme-extra.css)
+      const counter = card.querySelector<HTMLElement>('.card-resources-counter');
+      if (counter !== null) {
+        style['--card-counter-right'] = Math.round(counter.offsetLeft + counter.offsetWidth) + 'px';
+      }
+      this.scrollStyle = style;
+      // Raw: a reactive proxy of a DOM element breaks its methods (addEventListener)
+      this.scrollContent = markRaw(content);
       await nextTick();
       if (run !== this.fitRun) {
         return;
       }
-      const card = this.$el as HTMLElement;
-      // House cards keep their icons at 100 % (theme-extra.css)
-      if (!this.isCorporationCard) {
-        this.rowZoom = fittingRowZoom(card);
-        await nextTick();
-        if (run !== this.fitRun) {
-          return;
-        }
+      // House cards keep their icons at 100 % at most (theme-extra.css)
+      this.rowZoom = fittingRowZoom(card, this.isCorporationCard ? 1 : CARD_ROW_ZOOM);
+    },
+    /** Offset of the content's positioning parent from the outer edge of the card, in card pixels */
+    parentOffset(content: HTMLElement, card: HTMLElement): {parentTop: number, parentLeft: number} {
+      let parentTop = card.clientTop;
+      let parentLeft = card.clientLeft;
+      for (let element = content.offsetParent as HTMLElement | null; element !== null && element !== card; element = element.offsetParent as HTMLElement | null) {
+        parentTop += element.offsetTop;
+        parentLeft += element.offsetLeft;
       }
-      this.scrollSpace = cardScrollSpace(card);
+      return {parentTop, parentLeft};
     },
   },
   computed: {
@@ -178,13 +213,9 @@ export default defineComponent({
       return activeTheme();
     },
     fitStyle(): Record<string, string> | undefined {
-      const style: Record<string, string> = {};
-      if (this.rowZoom !== CARD_ROW_ZOOM) {
+      const style: Record<string, string> = {...this.scrollStyle};
+      if (this.rowZoom !== undefined) {
         style['--card-row-zoom'] = String(this.rowZoom);
-      }
-      if (this.scrollSpace !== undefined) {
-        style['--card-content-height'] = this.scrollSpace.contentHeight + 'px';
-        style['--card-scroll-space'] = this.scrollSpace.bottomSpace + 'px';
       }
       return Object.keys(style).length > 0 ? style : undefined;
     },
@@ -251,8 +282,8 @@ export default defineComponent({
       if (this.isStandardProject) {
         classes.push('card-standard-project');
       }
-      if (this.scrollSpace !== undefined) {
-        classes.push('card-scrolls');
+      if (this.scrollStyle !== undefined) {
+        classes.push('card-scroll-area');
       }
       // Cards no longer grow taller on hover (formerly with experimental_ui) – otherwise the grid jumps
       if (this.autoTall) {

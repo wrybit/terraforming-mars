@@ -508,10 +508,6 @@ html.theme-dune .card-container .card-scene {
   mask-image: linear-gradient(to top, #000 55%, transparent);
 }
 
-html.theme-dune .card-container .card-content:not(.card-content-corporation) {
-  padding: 4px 6px 0;
-}
-
 /* House cards keep their icons at 100 %: their effect boxes have a fixed layout that would reach past the frame */
 html.theme-dune .card-container .card-content:not(.card-content-corporation) .card-rows {
   /* 1.2, less on cards with a row too wide for it (Card.vue fitIntoCard, cardFit.ts CARD_ROW_ZOOM). The width is
@@ -547,16 +543,235 @@ html.theme-dune .card-container .card-content:not(.card-content-corporation) .ca
   box-sizing: border-box;
 }
 
-/* Cards too full for the large icons and text (Card.vue fitIntoCard, cardFit.ts, Jens 21 Oct 2026): the content
-   scrolls inside the card instead of shrinking. Below the last line there is as much room as the scene strip or the
-   victory point tab take, so every line can be scrolled up to where it reads on the plain parchment. */
-html.theme-dune .card-container.card-scrolls .card-content {
+/* Fixed card size and a scroll area per kind of card (Jens 21 Oct 2026, card editor
+   _outputs/dune-card-box/karten-scrollbereich.html): all cards 250 px wide, as tall as a playing card (63 × 88 mm,
+   1 : 1.397), standard projects 250 × 165. The content lies in a box per kind of card (cardScrollArea.ts, set by
+   Card.vue as custom properties) and scrolls there, with its own scrollbar (CardScrollbar.vue) and a fade only at an
+   edge with hidden content. !important: house cards and standard projects set their content size themselves. */
+html.theme-dune .filterDiv.card-container {
+  /* Outer size including the 4 px frame, as measured in the editor */
   box-sizing: border-box;
-  height: var(--card-content-height);
-  padding-bottom: var(--card-scroll-space);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(90, 61, 38, 0.55) transparent;
+  width: 250px;
+  height: 349px;
+}
+
+html.theme-dune .filterDiv.card-container.card-standard-project {
+  width: 250px;
+  height: 165px;
+}
+
+html.theme-dune .card-container.card-scroll-area .card-content {
+  position: absolute !important;
+  top: var(--card-content-top) !important;
+  left: var(--card-content-left) !important;
+  box-sizing: border-box !important;
+  width: var(--card-content-width) !important;
+  height: var(--card-content-height) !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden;
+  overflow-y: auto !important;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+  /* German words are long and the column is narrow: hyphenate instead of large gaps (needs html lang, main.ts) */
+  hyphens: auto;
+  hyphenate-limit-chars: 8 4 3;
+  overflow-wrap: break-word;
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--card-fade-top, 0px), #000 calc(100% - var(--card-fade-bottom, 0px)), transparent 100%);
+}
+
+html.theme-dune .card-container.card-scroll-area .card-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Text over the whole width of the box, 12 px from its sides */
+html.theme-dune .card-container.card-scroll-area .card-content .card-description {
+  max-width: none !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  padding-right: 12px !important;
+  padding-left: 12px !important;
+}
+
+html.theme-dune .card-container.card-scroll-area .card-content > .card-description {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* House cards: icons at 100 % at most, smaller where a row would not fit (Card.vue fitIntoCard) */
+html.theme-dune .card-container .card-content.card-content-corporation .card-rows {
+  zoom: var(--card-row-zoom, 1);
+  max-width: calc(100% / var(--card-row-zoom, 1));
+}
+
+html.theme-dune .card-container .card-content.card-content-corporation .card-rows .card-description {
+  zoom: calc(1 / var(--card-row-zoom, 1));
+}
+
+/* The scrollbar: along the right side of the scroll box, above the sheen and the selection tint, visible while the
+   pointer is over the card, while it is dragged or for a moment after the content scrolled (touch) */
+html.theme-dune .filterDiv.card-container > .card-scrollbar {
+  position: absolute;
+  top: var(--card-scrollbar-top);
+  left: var(--card-scrollbar-left);
+  width: 6px;
+  height: var(--card-scrollbar-height);
+  border-radius: 99px;
+  background: rgba(90, 61, 38, 0.18);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  cursor: default;
+  z-index: 8;
+}
+
+html.theme-dune .filterDiv.card-container > .card-scrollbar.card-scrollbar-idle {
+  visibility: hidden;
+}
+
+html.theme-dune .filterDiv.card-container:hover > .card-scrollbar,
+html.theme-dune .filterDiv.card-container > .card-scrollbar:is(.card-scrollbar-active, .card-scrollbar-dragging) {
+  opacity: 1;
+}
+
+html.theme-dune .card-scrollbar-thumb {
+  position: absolute;
+  right: 0;
+  left: 0;
+  border-radius: 99px;
+  background: rgba(90, 61, 38, 0.66);
+  cursor: grab;
+  touch-action: none;
+}
+
+html.theme-dune .card-scrollbar-thumb:hover,
+html.theme-dune .card-scrollbar-dragging .card-scrollbar-thumb {
+  background: rgba(90, 61, 38, 0.85);
+}
+
+/* Even gaps between icons (Jens 21 Oct 2026): the boxes of the Mars sprites differ in width and the Dune pictures fill
+   them differently, so each box is as wide as its picture, the picture scaled to the height, with equal margins */
+html.theme-dune .card-container .card-content :is(.card-global-requirement, .card-tile.card-tr) {
+  height: 44px !important;
+  margin: 0 5px !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: auto 100% !important;
+}
+
+html.theme-dune .card-container .card-content :is(.card-ocean-global-requirement, .card-venus-global-requirement) {
+  width: 40px !important;
+}
+
+html.theme-dune .card-container .card-content :is(.card-oxygen-global-requirement, .card-temperature-global-requirement) {
+  width: 22px !important;
+  background-size: auto 50px !important;
+}
+
+html.theme-dune .card-container .card-content .card-tile.card-tr {
+  width: 44px !important;
+}
+
+html.theme-dune .card-container .card-content .card-resource.card-card {
+  width: 30px !important;
+  margin: 0 5px !important;
+  background-position: center !important;
+  background-size: auto 40px !important;
+}
+
+/* Between groups of the same row no extra margin, or the gap there would be twice as large */
+html.theme-dune .card-container .card-content .card-row > .card-item-container {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* A rule text next to an icon group ("1 VP per second creature" beside a box) keeps at least 120 px; where the row
+   has no room for that, the text moves to a line of its own instead of shrinking to one word per line */
+html.theme-dune .card-container .card-content .card-row {
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 4px;
+}
+
+html.theme-dune .card-container .card-content .card-row > .card-item-container:has(> [class*="card-text-size"]) {
+  flex: 1 1 120px;
+  justify-content: center;
+  min-width: 120px;
+  text-align: center;
+}
+
+/* Expansion marks on the cards (Jens 21 Oct 2026): the marks of the card list filter instead of the coloured Mars
+   dots, always bottom left – next to the resource counter where a card has one (Card.vue measures its width) */
+html.theme-dune .card-container .card-corporation-expansion,
+html.theme-dune .card-container .project-icon-expansion-container,
+html.theme-dune .card-container .resource-card-icon-expansion-container {
+  position: absolute;
+  inset: auto auto 6px 6px !important;
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+}
+
+html.theme-dune .card-container .resource-card-icon-expansion-container {
+  left: calc(var(--card-counter-right, 80px) + 4px) !important;
+}
+
+html.theme-dune .card-container :is(.corpera-icon, .prelude-icon, .prelude2-icon, .dune-icon)::after {
+  content: "" !important;
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 0;
+  border-radius: 50%;
+  background: url(graphics/houses-era-mark.svg) center / contain no-repeat !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  transform: none;
+}
+
+html.theme-dune .card-container .prelude-icon::after {
+  background-image: url(graphics/prelude-mark.svg) !important;
+}
+
+html.theme-dune .card-container .prelude2-icon::after {
+  background-image: url(graphics/prelude2-mark.svg) !important;
+}
+
+html.theme-dune .card-container .dune-icon::after {
+  background-image: url(arrakis-icon.png) !important;
+}
+
+/* "Ignore global requirements" (Jens 21 Oct 2026, variant C): a smaller plate as wide as its text, the red cross in
+   its middle (on Mars the cross sits at a fixed 61 px, which only fits the English text) */
+html.theme-dune .card-container .card-content .card-project-requirements {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content !important;
+  margin: 0 auto !important;
+}
+
+html.theme-dune .card-container .card-content .card-project-requirements .card-requirements {
+  width: auto !important;
+  max-width: none !important;
+  padding: 3px 12px !important;
+  font-size: 10.5px !important;
+  line-height: 15px !important;
+}
+
+html.theme-dune .card-container .card-content .card-project-requirements .card-x {
+  top: 50% !important;
+  left: 50% !important;
+  margin: 0 !important;
+  transform: translate(-50%, -55%);
+  color: #b51616 !important;
+  font-size: 40px !important;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 0 2px #fffdf8, 0 0 2px #fffdf8;
+  z-index: 2;
 }
 
 /* CardDescription.vue makes a text with a rule note smaller when it would run out of the card
@@ -713,6 +928,11 @@ html.theme-dune .card-container .card-content .card-text-size--M.card-text-upper
   font-size: 16px !important;
   font-weight: 700;
   text-transform: none !important;
+}
+
+/* "OR" between alternatives in the normal text size (Jens 21 Oct 2026); the row zoom is divided out */
+html.theme-dune .card-container .card-content .card-special.card-or {
+  font-size: calc(13px / var(--card-row-zoom, 1.2)) !important;
 }
 
 /* Emphasis: rules like "1 VP per …" and notes, 11 bold without capitals (was 9 to 14 px in capitals) */
