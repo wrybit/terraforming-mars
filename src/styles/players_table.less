@@ -153,17 +153,6 @@
   .players-table-rows .players-table-row:last-child .players-table-section::before {
     bottom: 0;
   }
-
-  // The played cards get their own separator inside the score section
-  .players-table-section--score > :last-child::before {
-    content: "";
-    position: absolute;
-    left: calc(var(--players-table-cell-gap) / -2 - 2px);
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: @players-table-divider-color;
-  }
 }
 
 // ---------- Arrangement: two lines (name + score above goods + tags) ----------
@@ -494,6 +483,16 @@ each(@players, {
 
 // In the player table the name scales with the table; the corporation only shows once the numbers are at full size
 .players-table {
+  // The name column is as wide as the longest name (playersTableLayout.ts): names are never shortened
+  .players-table-name,
+  .players-table-name-text {
+    flex: none;
+  }
+
+  .players-table-name-text {
+    overflow: visible;
+  }
+
   .players-table-name {
     font-size: max(13px, calc(19px * @s));
   }

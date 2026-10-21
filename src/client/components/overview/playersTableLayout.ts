@@ -77,17 +77,29 @@ function scoreWidth(scale: number): number {
   return cellsWidth(SCORE_COUNT, SCORE_WIDTH, scale) + CELL_GAP + Math.round(PLAYED_CARDS_WIDTH * scale);
 }
 
-export function nameColumnWidth(scale: number, showCorporation: boolean, escapeVelocity: boolean): number {
+// Widest player name and widest status plaque at scale 1, measured in the table (PlayersTable.vue).
+// The name is never shortened: with the corporation, name and status share one line; without it the
+// status goes below the name.
+export type NameWidths = {name: number, status: number};
+const NO_NAMES: NameWidths = {name: 0, status: 0};
+// Left padding of the name cell plus the gap between name and status
+const NAME_CELL_PADDING = 28;
+const NAME_STATUS_GAP = 8;
+
+export function nameColumnWidth(scale: number, showCorporation: boolean, escapeVelocity: boolean, names: NameWidths = NO_NAMES): number {
   if (escapeVelocity) {
     return Math.round(ESCAPE_VELOCITY_NAME_WIDTH * Math.max(scale, 0.85));
   }
+  if (showCorporation) {
+    return Math.max(Math.round(NAME_WIDTH * scale), Math.ceil((names.name + NAME_STATUS_GAP + names.status) * scale) + NAME_CELL_PADDING);
+  }
   // Never narrower than the game menu button in the header above it
-  return showCorporation ? Math.round(NAME_WIDTH * scale) : Math.max(MIN_COMPACT_NAME_WIDTH, Math.round(COMPACT_NAME_WIDTH * scale));
+  return Math.max(MIN_COMPACT_NAME_WIDTH, Math.round(COMPACT_NAME_WIDTH * scale), Math.ceil(Math.max(names.name, names.status) * scale) + NAME_CELL_PADDING);
 }
 
 // Width an arrangement needs at the given scale (without extra gaps)
-export function lineWidth(scale: number, tagColumns: TagColumnGroups, showCorporation: boolean, escapeVelocity: boolean): number {
-  return ROW_FRAME + nameColumnWidth(scale, showCorporation, escapeVelocity) + 3 * SECTION_GAP + goodsWidth(scale, false) + tagsWidth(scale, tagColumns) + scoreWidth(scale);
+export function lineWidth(scale: number, tagColumns: TagColumnGroups, showCorporation: boolean, escapeVelocity: boolean, names: NameWidths = NO_NAMES): number {
+  return ROW_FRAME + nameColumnWidth(scale, showCorporation, escapeVelocity, names) + 3 * SECTION_GAP + goodsWidth(scale, false) + tagsWidth(scale, tagColumns) + scoreWidth(scale);
 }
 
 export function twoLinesWidth(scale: number, tagColumns: TagColumnGroups): number {
@@ -117,21 +129,21 @@ function extraGap(available: number, needed: number, scale: number, tagColumns: 
   return Math.min(MAX_EXTRA_GAP, Math.max(0, available - needed) / (cellGapCount + 3 * 2.5));
 }
 
-export function fitPlayersTable(available: number, tagColumns: TagColumnGroups, escapeVelocity: boolean = false): PlayersTableFit {
+export function fitPlayersTable(available: number, tagColumns: TagColumnGroups, escapeVelocity: boolean = false, names: NameWidths = NO_NAMES): PlayersTableFit {
   // Not measured yet (table hidden): the classic size
   if (available <= 0) {
     return {mode: 'line', scale: 1, showCorporation: true, extraGap: 0};
   }
   // One line: the numbers grow first; the corporation comes in only once they are at full size
-  const withCorporation = largestScale((scale) => lineWidth(scale, tagColumns, true, escapeVelocity), available, 1);
+  const withCorporation = largestScale((scale) => lineWidth(scale, tagColumns, true, escapeVelocity, names), available, 1);
   if (withCorporation !== undefined) {
-    const gap = extraGap(available, lineWidth(withCorporation, tagColumns, true, escapeVelocity), withCorporation, tagColumns);
+    const gap = extraGap(available, lineWidth(withCorporation, tagColumns, true, escapeVelocity, names), withCorporation, tagColumns);
     return {mode: 'line', scale: withCorporation, showCorporation: true, extraGap: gap};
   }
-  const compact = largestScale((scale) => lineWidth(scale, tagColumns, false, escapeVelocity), available, MIN_SCALE);
+  const compact = largestScale((scale) => lineWidth(scale, tagColumns, false, escapeVelocity, names), available, MIN_SCALE);
   if (compact !== undefined) {
     // The corporation is worth a slightly smaller size (up to 5 %) – rather that than no corporation
-    const withCorporationSmaller = largestScale((scale) => lineWidth(scale, tagColumns, true, escapeVelocity), available, Math.max(MIN_SCALE, compact - CORPORATION_SCALE_TOLERANCE));
+    const withCorporationSmaller = largestScale((scale) => lineWidth(scale, tagColumns, true, escapeVelocity, names), available, Math.max(MIN_SCALE, compact - CORPORATION_SCALE_TOLERANCE));
     if (withCorporationSmaller !== undefined) {
       return {mode: 'line', scale: withCorporationSmaller, showCorporation: true, extraGap: 0};
     }
@@ -186,17 +198,17 @@ function sectionWeights(fit: PlayersTableFit, tagColumns: TagColumnGroups): {goo
 }
 
 // CSS variables of the table (players_table.less)
-export function tableVariables(fit: PlayersTableFit, tagColumns: TagColumnGroups, escapeVelocity: boolean): Record<string, string> {
+export function tableVariables(fit: PlayersTableFit, tagColumns: TagColumnGroups, escapeVelocity: boolean, names: NameWidths = NO_NAMES): Record<string, string> {
   const weights = sectionWeights(fit, tagColumns);
   return {
     '--players-table-scale': String(fit.scale),
-    '--players-table-name-width': `${nameColumnWidth(fit.scale, fit.showCorporation, escapeVelocity)}px`,
+    '--players-table-name-width': `${nameColumnWidth(fit.scale, fit.showCorporation, escapeVelocity, names)}px`,
     '--players-table-cell-gap': `${CELL_GAP + fit.extraGap}px`,
     '--players-table-section-gap': `${SECTION_GAP + fit.extraGap * 2.5}px`,
     '--players-table-goods-columns': goodsTemplate(fit),
     '--players-table-tag-columns': tagsTemplate(fit, tagColumns),
     '--players-table-score-columns': scoreTemplate(fit),
-    '--players-table-line-columns': `${nameColumnWidth(fit.scale, fit.showCorporation, escapeVelocity)}px minmax(0, ${weights.goods}fr) minmax(0, ${weights.tags}fr) minmax(0, ${weights.score}fr)`,
+    '--players-table-line-columns': `${nameColumnWidth(fit.scale, fit.showCorporation, escapeVelocity, names)}px minmax(0, ${weights.goods}fr) minmax(0, ${weights.tags}fr) minmax(0, ${weights.score}fr)`,
     '--players-table-two-lines-columns': `minmax(0, ${weights.goods}fr) minmax(0, ${weights.tags}fr)`,
   };
 }
