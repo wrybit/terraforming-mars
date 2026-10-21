@@ -4,6 +4,9 @@
 // Every size below is a size at scale 1 multiplied by @s, so the whole table grows and shrinks together.
 
 @s: var(--players-table-scale, 1);
+// Numbers and their boxes: also grow with the boost the drag handle requests (home_cards.less, playersCardFit.ts),
+// but only as far as the goods boxes have room (--players-table-boost-room, playersTableLayout.ts); widths stay
+@b: calc(@s * clamp(1, var(--players-table-boost-request, 1), var(--players-table-boost-room, 1)));
 @players-table-row-gap: 4px;
 // Own row set slightly apart from the others
 @players-table-own-row-offset: 5px;
@@ -256,7 +259,7 @@
   .players-table-cell > .players-table-counter {
     flex-direction: column;
     gap: calc(2px * @s);
-    height: calc(48px * @s);
+    height: calc(48px * @b);
   }
 }
 
@@ -295,7 +298,7 @@
     gap: calc(5px * @s);
     width: auto;
     max-width: none;
-    height: calc(30px * @s);
+    height: calc(30px * @b);
     padding: 0 calc(8px * @s);
   }
 
@@ -560,7 +563,7 @@ each(@players, {
   box-sizing: border-box;
   width: 100%;
   // Goods boxes are a little taller than the tag boxes: the stock is what you look at
-  height: calc(38px * @s);
+  height: calc(38px * @b);
   padding: 0 calc(5px * @s) 0 calc(6px * @s);
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.3);
@@ -577,12 +580,12 @@ each(@players, {
   display: inline-flex; // Room for the shield before the number (protected stock)
   align-items: center;
   gap: 3px;
-  font-size: calc(21px * @s);
+  font-size: calc(21px * @b);
   color: #fff;
 }
 
 .players-table-row--me .players-table-goods-stock {
-  font-size: calc(23px * @s);
+  font-size: calc(23px * @b);
 }
 
 .players-table-goods--empty .players-table-goods-stock {
@@ -592,8 +595,8 @@ each(@players, {
 .players-table-goods-production {
   flex: none;
   box-sizing: border-box;
-  min-width: calc(24px * @s);
-  font-size: calc(13px * @s);
+  min-width: calc(24px * @b);
+  font-size: calc(13px * @b);
   line-height: 1;
   text-align: center;
   padding: calc(3px * @s) calc(3px * @s) calc(2px * @s);
@@ -689,7 +692,7 @@ each(@players, {
 // Counters: each in a box like the resources, the box as wide as its column
 .players-table-counter {
   font-family: Prototype, sans-serif;
-  font-size: calc(16px * @s);
+  font-size: calc(16px * @b);
   color: @players-table-counter-color;
 }
 
@@ -701,14 +704,14 @@ each(@players, {
   gap: calc(4px * @s);
   box-sizing: border-box;
   width: 100%;
-  height: calc(34px * @s);
+  height: calc(34px * @b);
   padding: 0 2px;
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.3);
 }
 
 .players-table-row--me .players-table-counter {
-  font-size: calc(17px * @s);
+  font-size: calc(17px * @b);
 }
 
 .players-table-counter--zero {
@@ -800,11 +803,11 @@ each(@players, {
   align-items: center;
   justify-content: center;
   gap: calc(5px * @s);
-  min-width: calc(32px * @s);
-  height: calc(32px * @s);
+  min-width: calc(32px * @b);
+  height: calc(32px * @b);
   padding: 0 calc(7px * @s);
   font-family: Prototype, sans-serif;
-  font-size: calc(16px * @s);
+  font-size: calc(16px * @b);
   color: #fff;
   background: @bg_action;
   border: 0;
