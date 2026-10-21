@@ -4,6 +4,7 @@ import {Theme} from '@/common/theme/Theme';
 import {MUSIC_GROUPS, MUSIC_TRACKS, MusicGroup, MusicTrack, musicFile} from '@/common/music/musicTracks';
 import {DEFAULT_START_TRACK, MusicState} from '@/common/music/musicState';
 import {safeLocalStorage} from '@/client/utils/SafeLocalStorage';
+import {applyVolume, rampVolume, setShare} from '@/client/music/volumeFade';
 
 // Background music of the game (one player for the whole app): starts when a game of a theme with tracks is
 // entered (App.vue), is steered from the card under the setup menu (MusicPlayerCard.vue). Browsers only play
@@ -52,6 +53,9 @@ let serverState: Promise<MusicState> | undefined;
 /** Track a game starts with (admin page) */
 let startTrack = DEFAULT_START_TRACK;
 let waitingForGesture = false;
+// Crossfade between two tracks: the next one fades in while the current one fades out
+const CROSSFADE_MS = 2000;
+let crossfading = false;
 
 function storedChoice(): MusicChoice | undefined {
   const stored = safeLocalStorage.getItem(CHOICE_KEY);
@@ -75,11 +79,20 @@ function readDuration(player: HTMLAudioElement): number {
 function createPlayer(): HTMLAudioElement {
   const player = new Audio();
   player.preload = 'auto';
-  player.volume = gameMusic.volume;
+  setShare(player, 1, gameMusic.volume);
   player.muted = gameMusic.muted;
   player.addEventListener('timeupdate', () => {
-    if (player === audio) {
-      gameMusic.position = player.currentTime;
+    if (player !== audio) {
+      return;
+    }
+    gameMusic.position = player.currentTime;
+    // Two seconds before the end the next track starts to fade in
+    const remaining = readDuration(player) - player.currentTime;
+    if (!crossfading && !player.paused && readDuration(player) > 0 && remaining <= CROSSFADE_MS / 1000) {
+      const track = upcoming?.track ?? randomTrack(gameMusic.current);
+      if (track !== undefined && track !== gameMusic.current) {
+        crossfadeTo(track);
+      }
     }
   });
   player.addEventListener('loadedmetadata', () => {
@@ -88,7 +101,8 @@ function createPlayer(): HTMLAudioElement {
     }
   });
   player.addEventListener('ended', () => {
-    if (player === audio) {
+    // Normally the crossfade has moved on already; this is the fallback (e.g. a single track in the playlist)
+    if (player === audio && !crossfading) {
       next(true);
     }
   });
@@ -192,12 +206,43 @@ function load(track: MusicTrack): void {
     element().src = musicFile(track.id);
   }
   const player = element();
+  setShare(player, 1, gameMusic.volume);
   player.currentTime = 0;
   gameMusic.current = track;
   played.add(track.id);
   gameMusic.position = 0;
   gameMusic.duration = readDuration(player);
   gameMusic.playing = !player.paused;
+  prepareUpcoming();
+}
+
+/** Changes to the track while one plays: the new one fades in over two seconds, the old one fades out */
+function crossfadeTo(track: MusicTrack): void {
+  const previous = audio;
+  let player: HTMLAudioElement;
+  if (upcoming?.track === track) {
+    player = upcoming.element;
+    upcoming = undefined;
+  } else {
+    player = createPlayer();
+    player.src = musicFile(track.id);
+  }
+  audio = player;
+  crossfading = true;
+  setShare(player, 0, gameMusic.volume);
+  player.currentTime = 0;
+  gameMusic.current = track;
+  played.add(track.id);
+  gameMusic.position = 0;
+  gameMusic.duration = readDuration(player);
+  player.play().then(() => gameMusic.playing = true).catch(() => {});
+  rampVolume(player, 1, CROSSFADE_MS, () => gameMusic.volume, () => crossfading = false);
+  if (previous !== undefined) {
+    rampVolume(previous, 0, CROSSFADE_MS, () => gameMusic.volume, () => {
+      previous.pause();
+      spare = previous;
+    });
+  }
   prepareUpcoming();
 }
 
@@ -254,22 +299,30 @@ export function playMusic(): void {
   startPlaying();
 }
 
-/** Plays the chosen track from its start (playlist in MusicPlaylist.vue) */
+/** Plays the chosen track from its start (playlist in MusicPlaylist.vue); crossfades when music plays */
 export function playTrack(track: MusicTrack): void {
   safeLocalStorage.setItem(STOPPED_KEY, '0');
+  if (gameMusic.playing && track !== gameMusic.current) {
+    crossfadeTo(track);
+    return;
+  }
   load(track);
   startPlaying();
 }
 
 export function stopMusic(): void {
   safeLocalStorage.setItem(STOPPED_KEY, '1');
-  element().pause();
+  allPlayers().forEach((player) => player.pause());
 }
 
 /** Next track (another one than the current); plays on when music was playing (or the last track just ended) */
 export function next(keepPlaying: boolean = gameMusic.playing): void {
   const track = upcoming?.track ?? randomTrack(gameMusic.current);
   if (track === undefined) {
+    return;
+  }
+  if (keepPlaying && gameMusic.playing && track !== gameMusic.current) {
+    crossfadeTo(track);
     return;
   }
   load(track);
@@ -280,7 +333,7 @@ export function next(keepPlaying: boolean = gameMusic.playing): void {
 
 export function setMusicVolume(volume: number): void {
   gameMusic.volume = Math.min(1, Math.max(0, volume));
-  allPlayers().forEach((player) => player.volume = gameMusic.volume);
+  allPlayers().forEach((player) => applyVolume(player, gameMusic.volume));
   safeLocalStorage.setItem(VOLUME_KEY, String(gameMusic.volume));
 }
 

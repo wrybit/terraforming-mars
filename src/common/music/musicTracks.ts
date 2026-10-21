@@ -129,10 +129,6 @@ export const MUSIC_TRACKS: ReadonlyArray<MusicTrack> = [
     source: INCOMPETECH + 'index.html?isrc=USUAN1200059', download: INCOMPETECH + 'mp3-royaltyfree/Controlled%20Chaos.mp3', theme: 'dune', group: 'modern',
   },
   {
-    id: 'inner-sanctum', title: 'Inner Sanctum', author: 'Kevin MacLeod', license: 'CC BY 4.0',
-    source: INCOMPETECH + 'index.html?isrc=USUAN1100196', download: INCOMPETECH + 'mp3-royaltyfree/Inner%20Sanctum.mp3', theme: 'dune', group: 'modern',
-  },
-  {
     id: 'thunder-dreams', title: 'Thunder Dreams', author: 'Kevin MacLeod', license: 'CC BY 4.0',
     source: INCOMPETECH + 'index.html?isrc=USUAN1200063', download: INCOMPETECH + 'mp3-royaltyfree/Thunder%20Dreams.mp3', theme: 'dune', group: 'modern',
   },
@@ -145,8 +141,12 @@ export const MUSIC_TRACKS: ReadonlyArray<MusicTrack> = [
     source: 'https://opengameart.org/content/post-apocalypse-more-music-inside', download: FILES + 'Grey%20land.mp3', theme: 'dune', group: 'modern',
   },
   {
-    id: 'metal-echoes', title: 'Metal Echos', author: 'Alexandr Zhelanov', license: 'CC BY 3.0',
-    source: 'https://opengameart.org/content/north-wind-more-music-inside', download: FILES + '11.Metal%20Echos.mp3', theme: 'dune', group: 'modern',
+    id: 'thunderbird', title: 'Thunderbird', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1600017', download: INCOMPETECH + 'mp3-royaltyfree/Thunderbird.mp3', theme: 'dune', group: 'modern',
+  },
+  {
+    id: 'arid-foothills', title: 'Arid Foothills', author: 'Kevin MacLeod', license: 'CC BY 4.0',
+    source: INCOMPETECH + 'index.html?isrc=USUAN1100437', download: INCOMPETECH + 'mp3-royaltyfree/Arid%20Foothills.mp3', theme: 'dune', group: 'modern',
   },
 ];
 
