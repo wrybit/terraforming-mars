@@ -389,8 +389,9 @@ export const BASELINE_TUNING: AiTuning = {
   phaseBrake: 1,
   phaseMilestone: 1,
   openingSynergy: 0,
-  // Jens' rule (2026-10-17): card-drawing cards are a priority, action draws most.
-  drawPriority: 4,
+  // Jens' rule (2026-10-17): card-drawing cards are a priority, action draws most. Round 129: 8 instead of 4 – cards
+  // played +0.73 (z +2.39), drawn +1.0 (z +2.93), VP −0.31 (z −0.48): adopted by the card-throughput rule.
+  drawPriority: 8,
   tierListWeight: 0,
   // Round 91: keepValued +1.06 VP (z +1.63) – adopted, fixes the analysis-log error (Business Contacts by statistics).
   keepValuation: 1,
@@ -922,6 +923,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   drawPriority5: {drawPriority: 5},
   drawPriority6: {drawPriority: 6},
   drawPriority8: {drawPriority: 8},
+  // Round 130: check of round 129's adoption (back to 4) and one step further.
+  drawPriority4: {drawPriority: 4},
+  drawPriority10: {drawPriority: 10},
   draftPrior3: {draftPriorWeight: 3},
   tierList1: {tierListWeight: 1},
   tierList2: {tierListWeight: 2},
