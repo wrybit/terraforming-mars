@@ -21,11 +21,9 @@ describe('PlayersTableHeader', () => {
     expect(header.findAllComponents({name: 'ScoreIcon'})).to.have.length(0);
   });
 
-  it('puts the game menu in front of the first goods icon in two lines, not on a line of its own', () => {
-    const header = mountHeader('two-lines');
-    const firstGoods = header.find('.players-table-section--goods .players-table-cell');
-    expect(firstGoods.find('.players-table-menu--inline').exists()).to.be.true;
-    expect(header.findAllComponents({name: 'GameMenu'})).to.have.length(1);
+  it('marks the game menu as inline in two lines only, so it does not need a line of its own', () => {
+    expect(mountHeader('two-lines').find('.players-table-menu--inline').exists()).to.be.true;
+    expect(mountHeader('line').find('.players-table-menu--inline').exists()).to.be.false;
   });
 
   it('shows only the game menu where the cells carry their own icons', () => {
