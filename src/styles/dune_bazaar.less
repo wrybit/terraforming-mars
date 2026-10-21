@@ -4,6 +4,8 @@
 @bazaar-sand: #e4d2ae;
 @bazaar-ink: #2a1c12;
 @import (reference) "./dune_frame.less";
+@import (reference) "./selection_highlight.less";
+@import (reference) "./mixins.less";
 
 .dune-bazaar {
   flex: 1 1 auto;
@@ -252,6 +254,74 @@ button.dune-bazaar__slot {
 // The tile grows with what is paid ➜ gained (a ware has up to three goods), so the icons never stick out of it
 .dune-bazaar-purchase > .choice-option {
   min-width: max-content;
+}
+
+// The ware whose purchase tab is open: selected like a chosen card (selection_highlight.less), on the board
+.dune-bazaar__slot--selected {
+  .selection-highlight();
+
+  &::after {
+    .selection-tab();
+  }
+}
+
+// Purchase tab: small heading, then the ware as on the board beside what it brings (BazaarPurchaseIntro.vue)
+.dune-bazaar-purchase-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+// Heading, card and tile as one group in the middle of the box, horizontally and vertically (Jens, 21 Oct 2026).
+// The tab panel stretches every ancestor of a choice block into a column (choice_block.less): the intro fills the
+// height and centres its content, the row stays a row
+html:not(.tm-mobile) .or-tab-panel .dune-bazaar-purchase-intro {
+  justify-content: center;
+}
+
+// One class more than the panel rule (:has(.choice-block):not(…)), which would win otherwise
+html:not(.tm-mobile) .or-tab-panel .dune-bazaar-purchase-intro .dune-bazaar-purchase-intro__row {
+  flex: 0 0 auto;
+  flex-direction: row;
+}
+
+.dune-bazaar-purchase-intro__title {
+  margin: 0;
+  .section-caption();
+}
+
+// Phone: the task header above already names the purchase
+html.tm-mobile .dune-bazaar-purchase-intro__title {
+  display: none;
+}
+
+.dune-bazaar-purchase-intro__row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.dune-bazaar-purchase-intro__card {
+  flex: none;
+  width: 150px;
+}
+
+// Phone: card above the tile
+html.tm-mobile .dune-bazaar-purchase-intro__row {
+  flex-wrap: wrap;
+}
+
+// Beside the card, not below it: the tile keeps its own width and no centring margin of a choice block in a tab
+// (choice_block.less), the group above is centred as a whole
+html:not(.tm-mobile) .or-tab-panel .dune-bazaar-purchase-intro__row > .choice-block.dune-bazaar-purchase,
+.dune-bazaar-purchase-intro__row > .choice-block.dune-bazaar-purchase {
+  padding: 0;
+  flex: 0 1 auto;
+  width: auto;
+  margin: 0;
 }
 
 // Discount on a ware (BazaarWareCard.vue) like on a project card (CardCost.vue, cards_v2.less): the printed price small

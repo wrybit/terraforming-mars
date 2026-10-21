@@ -11,7 +11,8 @@
           <!-- Buying is an action: a tap on an affordable ware opens its purchase as an action tab (payment with
                before/after and cancel); a ware that can't be bought now is greyed out (Jens, 19 Oct 2026) -->
           <component :is="buyable(slot.ware) ? 'button' : 'div'" v-if="slot.ware !== undefined" :type="buyable(slot.ware) ? 'button' : undefined"
-            :class="['dune-bazaar__slot', buyable(slot.ware) ? 'dune-bazaar__slot--buyable' : 'dune-bazaar__slot--unavailable']" :title="buyable(slot.ware) ? $t('Buy this ware') : undefined"
+            :class="['dune-bazaar__slot', buyable(slot.ware) ? 'dune-bazaar__slot--buyable' : 'dune-bazaar__slot--unavailable',
+              {'dune-bazaar__slot--selected': selectedWare === slot.ware}]" :title="buyable(slot.ware) ? $t('Buy this ware') : undefined"
             @click="buyable(slot.ware) && buy(slot.ware)">
             <BazaarWareCard :ware="slot.ware" :price="slot.basePrice ?? slot.price" :newPrice="slot.ownPrice ?? slot.price"/>
           </component>
@@ -46,6 +47,7 @@ import {vueRoot} from '@/client/components/vueRoot';
 import {closeMove, DuneMoveStep, isMoveOffered, openMove} from './duneMoves';
 import DuneRuleCards from './DuneRuleCards.vue';
 import BazaarWareCard from './BazaarWareCard.vue';
+import {bazaarPurchase} from './bazaarPurchase';
 import DuneFitBox from './DuneFitBox.vue';
 import BoardCube from '@/client/components/common/BoardCube.vue';
 import {BAZAAR_RULES} from './duneRules';
@@ -76,6 +78,10 @@ export default defineComponent({
     },
   },
   computed: {
+    // The ware whose purchase tab is open: selected like a chosen card (bazaarPurchase.ts)
+    selectedWare(): string | undefined {
+      return bazaarPurchase.ware;
+    },
     BAZAAR_RULES(): typeof BAZAAR_RULES {
       return BAZAAR_RULES;
     },

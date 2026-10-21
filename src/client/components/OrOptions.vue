@@ -57,7 +57,8 @@
       <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :playerView="playerView" :card="selectedCard"/>
       <CardIntroBlock v-else-if="asTabs && !handTabActive && selectedCard !== undefined && selectedOption !== undefined" :card="selectedCard" :title="fullTabTitle(selectedOption.title)"/>
       <!-- Bazaar purchase (Dune): the ware and what it brings, before → after -->
-      <BazaarPurchaseIntro v-if="asTabs && !handTabActive && bazaarPurchaseTitle !== undefined" :title="bazaarPurchaseTitle" :player="playerView.thisPlayer"/>
+      <BazaarPurchaseIntro v-if="asTabs && !handTabActive && bazaarPurchaseTitle !== undefined" :title="bazaarPurchaseTitle" :player="playerView.thisPlayer"
+        :bazaar="playerView.game.dune?.bazaar"/>
       <!-- Pass: explanation of what happens (centered with the button, or-tab-panel--end) -->
       <p v-if="asTabs && !handTabActive && selectedOption !== undefined && endTabHint(selectedOption.title) !== undefined" class="or-tab-end-hint">
         {{ $t(endTabHint(selectedOption.title)!) }}
