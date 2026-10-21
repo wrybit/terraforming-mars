@@ -103,6 +103,8 @@ export class Player implements IPlayer {
   public aiLevel: AiLevel | undefined = undefined;
   protected waitingFor?: PlayerInput;
   protected waitingForCb?: () => void;
+  // Action menu currently offered (takeAction): rebuilt from current values when the DevTools change them
+  private actionMenu: PlayerInput | undefined;
   public game: IGame;
   public tags: Tags;
   public colonies: Colonies;
@@ -1616,7 +1618,8 @@ export class Player implements IPlayer {
 
       // Starting point for "Cancel" (actionStart.ts): kept before the action menu is shown
       rememberActionStart(this);
-      this.setWaitingFor(this.getActions(), this.runWhenEmpty(() => {
+      this.actionMenu = this.getActions();
+      this.setWaitingFor(this.actionMenu, this.runWhenEmpty(() => {
         this.incrementActionsTaken();
         this.takeAction();
       }));
@@ -1787,6 +1790,18 @@ export class Player implements IPlayer {
 
   public getWaitingFor(): PlayerInput | undefined {
     return this.waitingFor;
+  }
+
+  /**
+   * Values changed outside a move (DevTools): the open action menu was built from the old ones (e.g. which standard
+   * projects are affordable) – offer it anew. Other inputs stay, they belong to a move in progress.
+   */
+  public refreshActionMenu(): void {
+    if (this.waitingFor === undefined || this.waitingFor !== this.actionMenu) {
+      return;
+    }
+    this.actionMenu = this.getActions();
+    this.waitingFor = this.actionMenu;
   }
 
   public setWaitingFor(input: PlayerInput, cb: () => void = () => {}): void {

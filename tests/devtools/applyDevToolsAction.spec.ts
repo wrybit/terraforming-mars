@@ -223,6 +223,25 @@ describe('applyDevToolsAction', () => {
     expect(space.tile?.tileType).eq(TileType.NATURAL_PRESERVE);
   });
 
+  it('rebuilds the open action menu so new values can be used right away', () => {
+    const [game, player] = testGame(2);
+    player.megaCredits = 0;
+    player.takeAction();
+    const before = player.getWaitingFor();
+    applyDevToolsAction(game, {type: 'resources', color: player.color, stock: {megacredits: 100}, production: {}});
+    const after = player.getWaitingFor();
+    expect(after).is.not.undefined;
+    expect(after).not.eq(before);
+  });
+
+  it('leaves an input of a move in progress alone', () => {
+    const [game, player] = testGame(2);
+    const input = new SelectOption('Test');
+    player.setWaitingFor(input);
+    applyDevToolsAction(game, {type: 'resources', color: player.color, stock: {megacredits: 100}, production: {}});
+    expect(player.getWaitingFor()).eq(input);
+  });
+
   it('sets resources and production of one player as absolute values', () => {
     const [game, player] = testGame(2);
     applyDevToolsAction(game, {type: 'resources', color: player.color, stock: {megacredits: 50, plants: 7}, production: {heat: 3, megacredits: -9}});

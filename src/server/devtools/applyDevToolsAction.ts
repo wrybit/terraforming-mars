@@ -46,5 +46,7 @@ export function applyDevToolsAction(game: IGame, action: DevToolsAction): IGame 
     applyTrigger(game, playerOf(game, action.color), action);
     break;
   }
+  // Changed values count right away: the action menu offers what the new values allow (e.g. 100 Solari → projects)
+  game.players.forEach((player) => player.refreshActionMenu());
   return game;
 }

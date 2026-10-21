@@ -377,6 +377,8 @@ export interface IPlayer {
   getActions(): OrOptions;
   process(input: InputResponse): void;
   getWaitingFor(): PlayerInput | undefined;
+  /** Rebuilds the open action menu from the current values (after DevTools changes) */
+  refreshActionMenu(): void;
   setWaitingFor(input: PlayerInput, cb?: () => void): void;
   setWaitingForSafely(input: PlayerInput, cb?: () => void): void;
   interruptWaitingFor(start: (resume: () => void) => void): void;
