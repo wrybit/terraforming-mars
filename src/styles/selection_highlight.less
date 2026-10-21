@@ -11,14 +11,21 @@
 // Glow deliberately tight: it should mark the selection, not outshine the neighbors
 @selection-glow-rest: 0 0 10px 4px fade(@selection-color, 70%);
 
+// The pulse fades the tint layer (::before) with its strong glow in and out: an opacity animation runs on the
+// compositor, while the box-shadow animation used before repainted the card every frame and slowed scrolling
+// down to 60 fps (Jens, 21 Oct 2026). The tint breathes along between 12 % and 20 %.
+@selection-pulse-low: 0.6;
+@selection-glow-calm: 0 0 0 @selection-outline-width @selection-color, 0 0 6px 2px fade(@selection-color, 55%);
+@selection-glow-strong: 0 0 0 @selection-outline-width @selection-color, 0 0 14px 6px fade(@selection-color, 85%);
+
 @keyframes selection-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 @selection-outline-width @selection-color, 0 0 6px 2px fade(@selection-color, 55%);
+    opacity: @selection-pulse-low;
   }
 
   50% {
-    box-shadow: 0 0 0 @selection-outline-width @selection-color, 0 0 14px 6px fade(@selection-color, 85%);
+    opacity: 1;
   }
 }
 
@@ -47,15 +54,22 @@
 
 // The element needs position: relative (for the tint as ::before)
 .selection-highlight() {
-  box-shadow: 0 0 0 @selection-outline-width @selection-color, @selection-glow-rest;
-  animation: selection-pulse @selection-pulse-period ease-in-out infinite;
+  box-shadow: @selection-glow-calm;
 
   &::before {
     .selection-tint();
+    box-shadow: @selection-glow-strong;
+    animation: selection-pulse @selection-pulse-period ease-in-out infinite;
   }
 
+  // Without motion: border and resting glow stand still, the tint stays at full strength
   @media (prefers-reduced-motion: reduce) {
-    animation: none;
+    box-shadow: 0 0 0 @selection-outline-width @selection-color, @selection-glow-rest;
+
+    &::before {
+      box-shadow: none;
+      animation: none;
+    }
   }
 }
 
