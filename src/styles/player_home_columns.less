@@ -67,8 +67,11 @@
     min-width: 0;
 
     // Player list as a table (players_table.less) instead of the classic bars
+    // Column flex: a height from the drag handle (playersCardFit.ts) reaches the table, whose rows then stretch
+    // evenly (1fr rows, players_table.less)
     .players-overview {
-      display: block;
+      display: flex;
+      flex-direction: column;
       max-width: 100%;
 
       > .player-info {
@@ -76,7 +79,13 @@
       }
 
       .players-table {
-        display: block;
+        display: flex;
+        flex: 1 1 auto;
+        flex-direction: column;
+      }
+
+      .players-table-rows {
+        flex: 1 1 auto;
       }
     }
   }

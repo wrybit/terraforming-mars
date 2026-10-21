@@ -11,6 +11,8 @@ export interface RowResizeTarget {
   limits(): HeightLimits;
   // Fixed height in px, or undefined for the default layout
   apply(height: number | undefined): void;
+  // Optional: height used when the player has not chosen one (otherwise the default layout, apply(undefined))
+  defaultHeight?(): number;
 }
 
 // Step size for the arrow keys on the handle in px

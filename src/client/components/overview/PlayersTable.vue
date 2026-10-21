@@ -60,6 +60,8 @@ function goodsTextWidth(good: PlayerGood): number {
 type DataModel = {
   // Width of the table; 0 while it is invisible or not yet measured
   availableWidth: number;
+  // Boost the drag handle requests (home_cards.less, playersCardFit.ts): the name block grows with it and needs room
+  boost: number;
   resizeObserver: ResizeObserver | undefined;
 };
 
@@ -83,6 +85,7 @@ export default defineComponent({
   data(): DataModel {
     return {
       availableWidth: 0,
+      boost: 1,
       resizeObserver: undefined,
     };
   },
@@ -96,6 +99,8 @@ export default defineComponent({
       // Sizes above 1 only boost numbers and boxes, the table itself is not zoomed then
       const zoom = Math.min(1, parseFloat(getComputedStyle(this.$el).getPropertyValue(PLAYERS_TABLE_ZOOM_VARIABLE)) || 1);
       this.availableWidth = Math.floor(entries[0].contentRect.width * zoom);
+      // Comes from the handle, not from the layout: a changed boost changes the height, which calls this again – no loop
+      this.boost = Math.max(1, parseFloat(getComputedStyle(this.$el).getPropertyValue('--players-table-boost-request')) || 1);
     });
     this.resizeObserver.observe(this.$el);
   },
@@ -135,7 +140,9 @@ export default defineComponent({
     // Widest name and status plaque at scale 1, computed from the names alone – never measured in the page,
     // so the size can't feed back into itself (a measured width changes the scale, which changes the width …)
     nameWidths(): NameWidths {
-      return {name: Math.max(0, ...this.rows.map((row) => textWidth(row.player.name, 22) + 4)), status: STATUS_PLAQUE_WIDTH};
+      const name = Math.max(0, ...this.rows.map((row) => textWidth(row.player.name, 22) + 4));
+      // Name, status and corporation grow with the boost (players_table.less @c), so the column needs that much more
+      return {name: Math.ceil(name * this.boost), status: Math.ceil(STATUS_PLAQUE_WIDTH * this.boost)};
     },
     // Widest goods box content at scale 1 from the values (not measured, see nameWidths): how far the boost may go
     goodsContentWidth(): number {
