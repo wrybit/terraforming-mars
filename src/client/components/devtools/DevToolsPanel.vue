@@ -148,7 +148,11 @@ import Tag from '@/client/components/Tag.vue';
 import {sendDevToolsAction} from '@/client/devtools/devToolsApi';
 import {KeyedDebounce} from '@/client/devtools/devToolsDebounce';
 import {closeDevTools} from '@/client/devtools/devToolsState';
+import {ignoreChangesFor} from '@/client/utils/changeTracker';
 import {temperatureText} from '@/client/theme/themeDisplay';
+
+// How long after a DevTools change the views take it over without blinking (changeTracker.ts)
+const DEVTOOLS_SILENT_MS = 4000;
 
 type UnitKey = typeof DEVTOOLS_UNIT_KEYS[number];
 type SliderKey = 'fill' | 'oceans' | 'temperature' | 'oxygen' | 'venus';
@@ -435,7 +439,11 @@ export default defineComponent({
       }
       this.error = '';
       try {
+        // Values set by hand should not blink (Jens, 21 Oct 2026): playing with them would light up the whole screen.
+        // Window covers the request, a poll in between and the reload below
+        ignoreChangesFor(DEVTOOLS_SILENT_MS);
         await sendDevToolsAction(playerId, action);
+        ignoreChangesFor(DEVTOOLS_SILENT_MS);
         vueRoot(this).updatePlayer();
       } catch (e) {
         this.error = translateTextWithParams('The change failed: ${0}', [String(e instanceof Error ? e.message : e)]);
