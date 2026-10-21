@@ -173,7 +173,8 @@ export default defineComponent({
       const area = CARD_SCROLL_AREAS[cardScrollKind({
         isHouse: this.isCorporationCard,
         isStandardProject: this.isStandardProject,
-        hasBottomTab: this.cardMetadata.victoryPoints !== undefined || this.hasResourceType,
+        // Only the victory point tab reaches up to the scrollbar; the resource counter sits bottom left (Jens)
+        hasVictoryPoints: this.cardMetadata.victoryPoints !== undefined,
       })];
       const style = cardScrollStyle(area, {
         width: card.offsetWidth,

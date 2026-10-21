@@ -3,14 +3,14 @@ import {CARD_FADE_LENGTH, CARD_SCROLL_AREAS, cardScrollKind, cardScrollState, ca
 
 describe('cardScrollArea', () => {
   it('picks the scroll area by the kind of card', () => {
-    expect(cardScrollKind({isHouse: true, isStandardProject: false, hasBottomTab: true})).eq('house');
-    expect(cardScrollKind({isHouse: false, isStandardProject: true, hasBottomTab: false})).eq('standardProject');
-    expect(cardScrollKind({isHouse: false, isStandardProject: false, hasBottomTab: true})).eq('projectWithTab');
-    expect(cardScrollKind({isHouse: false, isStandardProject: false, hasBottomTab: false})).eq('project');
+    expect(cardScrollKind({isHouse: true, isStandardProject: false, hasVictoryPoints: true})).eq('house');
+    expect(cardScrollKind({isHouse: false, isStandardProject: true, hasVictoryPoints: false})).eq('standardProject');
+    expect(cardScrollKind({isHouse: false, isStandardProject: false, hasVictoryPoints: true})).eq('projectWithPoints');
+    expect(cardScrollKind({isHouse: false, isStandardProject: false, hasVictoryPoints: false})).eq('project');
   });
 
   it('places the content box and the scrollbar relative to their positioning parents', () => {
-    const style = cardScrollStyle(CARD_SCROLL_AREAS.projectWithTab, {width: 250, height: 349, parentTop: 4, parentLeft: 4, frameTop: 4, frameLeft: 4});
+    const style = cardScrollStyle(CARD_SCROLL_AREAS.projectWithPoints, {width: 250, height: 349, parentTop: 4, parentLeft: 4, frameTop: 4, frameLeft: 4});
     expect(style).deep.eq({
       '--card-content-top': '74px',
       '--card-content-left': '0px',

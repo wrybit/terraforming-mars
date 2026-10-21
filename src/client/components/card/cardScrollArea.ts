@@ -4,7 +4,7 @@
 // along the scroll box, which keeps clear of the victory point tab.
 
 /** Kinds of cards with their own scroll area */
-export type CardScrollKind = 'project' | 'projectWithTab' | 'house' | 'standardProject';
+export type CardScrollKind = 'project' | 'projectWithPoints' | 'house' | 'standardProject';
 
 /** Distances from the outer edge of the card, in card pixels */
 export type CardScrollArea = {
@@ -20,12 +20,12 @@ export type CardScrollArea = {
 
 const SIDES = 4;
 const BOTTOM = 16;
-// The victory point tab and the resource counter sit on the bottom edge: the scrollbar ends above them
+// The victory point tab sits on the bottom right edge: the scrollbar ends above it
 const ABOVE_TAB = 44;
 
 export const CARD_SCROLL_AREAS: Readonly<Record<CardScrollKind, CardScrollArea>> = {
   project: {contentTop: 78, contentBottom: BOTTOM, boxTop: 78, boxBottom: BOTTOM, sides: SIDES},
-  projectWithTab: {contentTop: 78, contentBottom: BOTTOM, boxTop: 78, boxBottom: ABOVE_TAB, sides: SIDES},
+  projectWithPoints: {contentTop: 78, contentBottom: BOTTOM, boxTop: 78, boxBottom: ABOVE_TAB, sides: SIDES},
   house: {contentTop: 53, contentBottom: BOTTOM, boxTop: 53, boxBottom: BOTTOM, sides: SIDES},
   standardProject: {contentTop: 38, contentBottom: BOTTOM, boxTop: 38, boxBottom: BOTTOM, sides: SIDES},
 };
@@ -38,14 +38,14 @@ export const CARD_FADE_LENGTH = 20;
 /** The thumb never gets shorter than this, so it can still be grabbed */
 const MIN_THUMB = 18;
 
-export function cardScrollKind(card: {isHouse: boolean, isStandardProject: boolean, hasBottomTab: boolean}): CardScrollKind {
+export function cardScrollKind(card: {isHouse: boolean, isStandardProject: boolean, hasVictoryPoints: boolean}): CardScrollKind {
   if (card.isHouse) {
     return 'house';
   }
   if (card.isStandardProject) {
     return 'standardProject';
   }
-  return card.hasBottomTab ? 'projectWithTab' : 'project';
+  return card.hasVictoryPoints ? 'projectWithPoints' : 'project';
 }
 
 /** Size of the card and where the content's positioning parent and the card's padding box start, in card pixels */
