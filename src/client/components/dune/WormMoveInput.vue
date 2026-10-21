@@ -12,6 +12,11 @@
             'worm-map__cell--way': onChosenWay(cell.id),
           }]"
           :style="{left: (cell.x - box.left) + 'px', top: (cell.y - box.top) + 'px'}"/>
+        <!-- Rolled heading: a white disc with an arrow on the edge of the worm's space it leaves through (Jens, 21 Oct 2026) -->
+        <span v-if="heading !== undefined" class="worm-map__heading" aria-hidden="true"
+          :style="{left: heading.x + 'px', top: heading.y + 'px'}">
+          <svg viewBox="0 0 16 16" :style="{transform: 'rotate(' + heading.angle + 'deg)'}"><path d="M3 8h9M8 3.5 12.5 8 8 12.5"/></svg>
+        </span>
         <!-- Targets on top, as labels with a radio: number keys and screen readers work like for every choice -->
         <label v-for="(target, index) in targets" :key="'target-' + index"
           :class="['worm-map__target', {'worm-map__target--chosen': chosen === index}]"
@@ -148,6 +153,24 @@ export default defineComponent({
         const position = end === undefined ? undefined : arrakisSpacePosition(this.layout, end);
         return {x: (position?.x ?? 0) - this.box.left, y: (position?.y ?? 0) - this.box.top, distance: way.length || index + 1};
       });
+    },
+    // Middle of the edge between the worm's space and the first space of its way. Every option runs the same heading,
+    // so the first step of the first option is enough; blocked (no way) shows nothing
+    heading(): {x: number, y: number, angle: number} | undefined {
+      const worm = this.wormSpace;
+      const first = this.ways.find((way) => way.length > 0)?.[0];
+      const from = worm === undefined ? undefined : arrakisSpacePosition(this.layout, worm);
+      const to = first === undefined ? undefined : arrakisSpacePosition(this.layout, first);
+      if (from === undefined || to === undefined) {
+        return undefined;
+      }
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      return {
+        x: from.x - this.box.left + SPACE_WIDTH / 2 + dx / 2,
+        y: from.y - this.box.top + SPACE_HEIGHT / 2 + dy / 2,
+        angle: Math.atan2(dy, dx) * 180 / Math.PI,
+      };
     },
     scale(): number {
       return Math.min(MAXIMUM_SCALE, this.width / Math.max(1, this.box.width), MAXIMUM_HEIGHT / Math.max(1, this.box.height));

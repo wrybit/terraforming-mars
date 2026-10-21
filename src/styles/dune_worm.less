@@ -80,6 +80,34 @@
   pointer-events: none;
 }
 
+// Rolled heading on the edge of the worm's space: white with a black arrow, thin outline and shadow, so it stands on
+// light and dark sand alike. Only the SVG turns, so the shadow always falls downward
+.worm-map__heading {
+  position: absolute;
+  z-index: 5;
+  width: 15px;
+  height: 15px;
+  box-sizing: border-box;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 0.75px solid #000;
+  background: #fff;
+  box-shadow: 0 1px 2.5px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+
+  svg {
+    width: 11px;
+    height: 11px;
+    fill: none;
+    stroke: #000;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
 // End spaces: a ring with the distance, the whole space is the click target
 // Two classes: the hotkey rule for labels (hotkeys.less, label:has(> …)) would make it relative
 .worm-map .worm-map__target {
