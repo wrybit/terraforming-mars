@@ -1433,7 +1433,9 @@ a.create-game-summary-chip:hover {
   // Only the button follows along (.create-game-create-float) until the card comes into view.
   .create-game-create-card {
     order: 1;
-    position: static;
+    // Not sticky, but still positioned: the frosted blur layer (::before, absolute, inset 0) must stay
+    // inside the card – with position: static it spanned the whole page and blurred everything.
+    position: relative;
 
     &--stuck {
       box-shadow: none;
