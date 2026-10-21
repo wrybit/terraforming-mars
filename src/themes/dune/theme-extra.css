@@ -70,7 +70,9 @@ html.theme-dune .board-space-tile--restricted_area {
 html.theme-dune .filterDiv {
   background: linear-gradient(to bottom right, #fbf6ea, #f1e6cf 35%, #f7efdf 60%, #ebdcbd);
   border-color: #2a1c12;
-  box-shadow: 0 0 0 2px #2a1c12, 0 2px 6px rgba(0, 0, 0, 0.55);
+  /* Design v3a (Jens 21 Oct 2026): only the 4 px ink frame and a soft shadow below, no extra ring; the light edge
+     at the bottom is drawn by ::after (card readability section below) */
+  box-shadow: 0 10px 18px -8px rgba(0, 0, 0, 0.7);
 }
 
 html.theme-dune .card-title .background-color-automated,
@@ -493,10 +495,144 @@ html.theme-dune .card-container .card-points-normal {
   align-items: center;
 }
 
-/* More contrast for the card text (Jens 19 Oct 2026): a lighter parchment (above) and the scene of Arrakis behind
-   the lower half of the card only faint, so the description stays dark on light */
+/* Card readability, design v3a (Jens 21 Oct 2026, HTML dummy _outputs/dune-card-dummy/karten-v3a.html):
+   - the scene of Arrakis only as a strip along the bottom edge, stronger than before, cut to the inner radius of the
+     frame (20 px outside − 4 px frame) so the background no longer shows in the lower corners
+   - description 13 px in dark umber, the icon rows a fifth larger, less padding so both fit
+   - a 1 px light edge inside the bottom of the frame, a sheen and a lift with a slight tilt on hover
+   - the selection keeps its orange frame and glow, without the check tab above the card */
 html.theme-dune .card-container .card-scene {
-  opacity: 0.22;
+  height: 22%;
+  opacity: 0.55;
+  border-radius: 0 0 16px 16px;
+  mask-image: linear-gradient(to top, #000 55%, transparent);
+}
+
+html.theme-dune .card-container .card-content:not(.card-content-corporation) {
+  padding: 4px 6px 0;
+}
+
+/* House cards keep their icons at 100 %: their effect boxes have a fixed layout that would reach past the frame */
+html.theme-dune .card-container .card-content:not(.card-content-corporation) .card-rows {
+  /* 1.2, less on cards with a row too wide for it (Card.vue fitIntoCard, cardFit.ts CARD_ROW_ZOOM). The width is
+     taken before the zoom: divided by it, the rows stay as wide as the content. */
+  zoom: var(--card-row-zoom, 1.2);
+  max-width: calc(100% / var(--card-row-zoom, 1.2));
+  margin: 3px auto 0;
+}
+
+html.theme-dune .card-container .card-content .card-description {
+  margin-top: 4px;
+}
+
+html.theme-dune .card-container .card-description,
+html.theme-dune .card-container .card-description * {
+  font-size: 13px;
+  line-height: 1.28;
+}
+
+html.theme-dune .card-container .card-description {
+  color: #241608;
+}
+
+/* A description inside an icon row (effect boxes) would be zoomed with the icons: the inverse zoom
+   keeps it at 13 px. */
+html.theme-dune .card-container .card-content:not(.card-content-corporation) .card-rows .card-description {
+  zoom: calc(1 / var(--card-row-zoom, 1.2));
+}
+
+/* Effect boxes have a fixed width on Mars (cards_v2.less); zoomed they would reach past the frame */
+html.theme-dune .card-container .card-content:not(.card-content-corporation) .card-rows .card-effect-box {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Cards too full for the large icons and text (Card.vue fitIntoCard, cardFit.ts, Jens 21 Oct 2026): the content
+   scrolls inside the card instead of shrinking. Below the last line there is as much room as the scene strip or the
+   victory point tab take, so every line can be scrolled up to where it reads on the plain parchment. */
+html.theme-dune .card-container.card-scrolls .card-content {
+  box-sizing: border-box;
+  height: var(--card-content-height);
+  padding-bottom: var(--card-scroll-space);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 61, 38, 0.55) transparent;
+}
+
+/* CardDescription.vue makes a text with a rule note smaller when it would run out of the card
+   (card_asterisk_note.less). Dune cards scroll instead, so their text keeps its size. */
+html.theme-dune .card-container .card-description:is(.card-description-compact, .card-description-compact-more),
+html.theme-dune .card-container .card-description:is(.card-description-compact, .card-description-compact-more) * {
+  font-size: 13px;
+  line-height: 1.28;
+}
+
+/* Sheen and light edge in one layer above the card face (also over the scene strip). It replaces the check tab of
+   the selection (cards.less), so every property of the tab is set again. The sheen is a gradient 1.72 times the card
+   height that slides up on hover: background-position 86 % puts its top 36 % above the card, 48 % only 20 %. */
+html.theme-dune .filterDiv.card-container::after,
+html.theme-dune input:checked + .filterDiv.card-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background: linear-gradient(35deg, rgba(60, 35, 15, 0.08) 0%, rgba(60, 35, 15, 0.05) 51.5%, rgba(255, 253, 248, 0.28) 54%, rgba(255, 253, 248, 0.16) 100%) 0 86% / 100% 172% no-repeat;
+  box-shadow: inset 0 2px 0 rgba(255, 253, 248, 0.8), inset 0 -1px 0 rgba(255, 253, 248, 0.95), inset 0 -2px 0 rgba(120, 80, 40, 0.28);
+  opacity: 0.6;
+  color: transparent;
+  pointer-events: none;
+  z-index: 4;
+  transition: background-position 0.28s ease, opacity 0.28s ease;
+}
+
+/* Hover like collectible cards: the card lifts and tilts back a little, the shadow deepens, the sheen slides up.
+   Only with a real pointer (on touch :hover sticks after a tap) and not on cards that cannot be chosen. The
+   settings "small cards" and "magnify cards" (preferences.less) scale the card with transform too, so their scale
+   is part of the tilted transform. */
+@media (hover: hover) and (pointer: fine) {
+  html.theme-dune .filterDiv.card-container {
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+  }
+
+  html.theme-dune .filterDiv.card-container:not(.card-unavailable, .card-life-found):hover {
+    transform: perspective(600px) translate3d(0, -2px, 14px) rotateX(4deg);
+    box-shadow: 0 18px 22px -8px rgba(0, 0, 0, 0.75);
+  }
+
+  html.theme-dune .preferences_small_cards .filterDiv.card-container:not(.card-unavailable, .card-life-found):hover {
+    transform: perspective(600px) translate3d(0, -2px, 14px) rotateX(4deg) scale(0.8);
+  }
+
+  html.theme-dune .preferences_magnify_cards .filterDiv.card-container:not(.card-unavailable, .card-life-found):hover {
+    transform: perspective(600px) translate3d(0, -2px, 14px) rotateX(4deg) scale(1.2);
+  }
+
+  html.theme-dune .preferences_small_cards.preferences_magnify_cards .filterDiv.card-container:not(.card-unavailable, .card-life-found):hover {
+    transform: perspective(600px) translate3d(0, -2px, 14px) rotateX(4deg) scale(0.95);
+  }
+
+  html.theme-dune :is(.sortable-dragging, .sortable-placeholder) .filterDiv.card-container:hover {
+    transform: none;
+  }
+
+  html.theme-dune .filterDiv.card-container:not(.card-unavailable, .card-life-found):hover::after {
+    background-position: 0 48%;
+    opacity: 1;
+  }
+
+  html.theme-dune .filterDiv.card-container:not(.card-unavailable, .card-life-found):active {
+    filter: brightness(0.92) contrast(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-dune .filterDiv.card-container,
+  html.theme-dune .filterDiv.card-container::after {
+    transition: none;
+  }
 }
 
 /* Type scale of the cards (Jens 19 Oct 2026, study "Schriften auf Karten"): three fonts with fixed roles instead of

@@ -18,6 +18,7 @@ import {translateText} from '@/client/directives/i18n';
 import {CARD_TEXT_MARKUP} from '@/client/cards/cardTextMarkup';
 import {CardTextParts, parseCardTextMarkup} from '@/client/cards/parseCardTextMarkup';
 import CardTextSegments from '@/client/components/card/CardTextSegments.vue';
+import {contentOverflowsCard} from '@/client/components/card/cardFit';
 
 // Steps of a smaller type when main text and note do not fit into the card (dense cards in long languages)
 const COMPACT_CLASSES = ['', 'card-description-compact', 'card-description-compact-more'];
@@ -60,12 +61,7 @@ export default defineComponent({
       if (element === undefined || card === null || card === undefined) {
         return false;
       }
-      const cardBottom = card.getBoundingClientRect().bottom;
-      // The lowest content counts, not only this text: a note in an effect box pushes the rows below it down
-      const contentBottom = Math.max(...Array.from(card.querySelectorAll('.card-content .card-description, .card-content .card-row'))
-        .map((content) => content.getBoundingClientRect().bottom));
-      // Hidden cards measure 0: nothing to fit
-      return cardBottom > 0 && contentBottom > cardBottom - 4;
+      return contentOverflowsCard(card);
     },
   },
   props: {

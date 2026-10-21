@@ -1,5 +1,5 @@
 <template>
-  <div class="card-container filterDiv hover-hide-res" :class="cardClasses">
+  <div class="card-container filterDiv hover-hide-res" :class="cardClasses" :style="fitStyle">
       <!-- Dune theme: a scene of Arrakis fades in behind the lower part of the card -->
       <span v-if="sceneUrl !== undefined" class="card-scene" :style="{backgroundImage: `url(${sceneUrl})`}" aria-hidden="true"></span>
       <!-- Action used this generation: the player's cube lies on the card like at the table, seen from above,
@@ -28,7 +28,10 @@
 
 <script lang="ts">
 
-import {defineComponent} from 'vue';
+import {defineComponent, nextTick} from 'vue';
+import {CARD_ROW_ZOOM, CardScrollSpace, cardScrollSpace, fittingRowZoom} from './cardFit';
+import {activeTheme} from '@/client/theme/applyTheme';
+import {Theme} from '@/common/theme/Theme';
 
 import {CardModel} from '@/common/models/CardModel';
 import CardTitle from './CardTitle.vue';
@@ -100,9 +103,91 @@ export default defineComponent({
       hovering: false,
       // Fixed per card instance: the cube keeps its angle while the card is shown
       cubeSpin: Math.round(Math.random() * 360),
+      // Dune cards: zoom of the icon rows, less than CARD_ROW_ZOOM where the widest row would not fit (cardFit.ts)
+      rowZoom: CARD_ROW_ZOOM,
+      // Dune cards too full for their large icons and text: the scroll area of the content (cardFit.ts)
+      scrollSpace: undefined as CardScrollSpace | undefined,
+      // Each fitting run gets a number; a newer run stops an older one that is still waiting for the DOM
+      fitRun: 0,
+      resizeObserver: undefined as ResizeObserver | undefined,
+      measuredSize: '',
     };
   },
+  mounted() {
+    // The card's own size changes when it becomes visible (tabs, setup columns) or is zoomed: fit again then.
+    // Fitting changes only the content, never the card's size, so this cannot loop.
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => {
+        const box = (this.$el as HTMLElement).getBoundingClientRect();
+        const size = `${Math.round(box.width)}x${Math.round(box.height)}`;
+        if (size !== this.measuredSize) {
+          this.measuredSize = size;
+          this.fitIntoCard();
+        }
+      });
+      this.resizeObserver.observe(this.$el as HTMLElement);
+    }
+    // The theme stylesheet and the fonts load after the first cards: measure again once they are there
+    const themeStylesheet = document.getElementById('theme-stylesheet-dune') as HTMLLinkElement | null;
+    if (themeStylesheet !== null && themeStylesheet.sheet === null) {
+      themeStylesheet.addEventListener('load', () => this.fitIntoCard(), {once: true});
+    }
+    document.fonts?.ready.then(() => this.fitIntoCard());
+    this.fitIntoCard();
+  },
+  beforeUnmount() {
+    this.resizeObserver?.disconnect();
+  },
+  watch: {
+    theme() {
+      this.fitIntoCard();
+    },
+    'card.name'() {
+      this.fitIntoCard();
+    },
+  },
+  methods: {
+    // Dune cards show their icons and text larger (theme-extra.css). A row too wide for the card gets a smaller
+    // zoom; where the content does not fit above the scene strip, it scrolls inside the card, with room below the last
+    // line. On Mars nothing changes.
+    async fitIntoCard(): Promise<void> {
+      const run = ++this.fitRun;
+      this.rowZoom = CARD_ROW_ZOOM;
+      this.scrollSpace = undefined;
+      if (this.theme !== 'dune') {
+        return;
+      }
+      await nextTick();
+      if (run !== this.fitRun) {
+        return;
+      }
+      const card = this.$el as HTMLElement;
+      // House cards keep their icons at 100 % (theme-extra.css)
+      if (!this.isCorporationCard) {
+        this.rowZoom = fittingRowZoom(card);
+        await nextTick();
+        if (run !== this.fitRun) {
+          return;
+        }
+      }
+      this.scrollSpace = cardScrollSpace(card);
+    },
+  },
   computed: {
+    theme(): Theme {
+      return activeTheme();
+    },
+    fitStyle(): Record<string, string> | undefined {
+      const style: Record<string, string> = {};
+      if (this.rowZoom !== CARD_ROW_ZOOM) {
+        style['--card-row-zoom'] = String(this.rowZoom);
+      }
+      if (this.scrollSpace !== undefined) {
+        style['--card-content-height'] = this.scrollSpace.contentHeight + 'px';
+        style['--card-scroll-space'] = this.scrollSpace.bottomSpace + 'px';
+      }
+      return Object.keys(style).length > 0 ? style : undefined;
+    },
     sceneUrl(): string | undefined {
       return this.isCorporationCard ? undefined : cardScene(this.card.name, this.tags);
     },
@@ -165,6 +250,9 @@ export default defineComponent({
 
       if (this.isStandardProject) {
         classes.push('card-standard-project');
+      }
+      if (this.scrollSpace !== undefined) {
+        classes.push('card-scrolls');
       }
       // Cards no longer grow taller on hover (formerly with experimental_ui) – otherwise the grid jumps
       if (this.autoTall) {
