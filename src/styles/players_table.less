@@ -29,10 +29,15 @@
   display: none;
 }
 
+// Grid with 1fr rows: every player row is as high as the highest one (e.g. one name with its time wrapped below)
 .players-table-rows {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: 1fr;
   gap: @players-table-row-gap;
+  // Spacer track around the own row (rowTracks in playersTableLayout.ts): together with the two gaps beside it
+  // the own row stands the offset further away than the others
+  --players-table-own-row-spacer: max(0px, @players-table-own-row-offset - @players-table-row-gap);
   margin-top: @players-table-row-gap;
 }
 
@@ -270,8 +275,10 @@
     justify-self: start;
   }
 
+  // The wide gap between the cards alone already sets the own card apart (two gaps around the spacer)
   .players-table-rows {
     gap: 10px;
+    --players-table-own-row-spacer: 0px;
   }
 }
 
@@ -343,16 +350,7 @@ each(@players, {
 });
 
 .players-table-row--me {
-  margin-block: @players-table-own-row-offset;
   box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
-
-  &:first-child {
-    margin-top: 0;
-  }
-
-  &:last-child {
-    margin-bottom: 0;
-  }
 }
 
 // Starting player: white shield with a bold "1" in the colour bar

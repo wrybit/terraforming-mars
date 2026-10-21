@@ -5,7 +5,7 @@ import PlayersTable from '@/client/components/overview/PlayersTable.vue';
 import {Tag} from '@/common/cards/Tag';
 import {Color} from '@/common/Color';
 import {Resource} from '@/common/Resource';
-import {fitPlayersTable, lineWidth, threeLinesWidth, twoLinesWidth, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
+import {fitPlayersTable, lineWidth, rowTracks, threeLinesWidth, twoLinesWidth, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
 import {emptyTags, fakePublicPlayerModel, fakeViewModel} from '../testHelpers';
 
 function mountTable() {
@@ -30,6 +30,13 @@ const TAG_COLUMNS: TagColumnGroups = [
 ];
 
 describe('PlayersTable', () => {
+  it('gives every player an equal 1fr track and keeps the own row apart with spacer tracks', () => {
+    const spacer = 'var(--players-table-own-row-spacer)';
+    expect(rowTracks([false, true, false])).to.deep.eq({template: `1fr ${spacer} 1fr ${spacer} 1fr`, lines: [1, 3, 5]});
+    expect(rowTracks([false, false, true])).to.deep.eq({template: `1fr 1fr ${spacer} 1fr`, lines: [1, 2, 4]});
+    expect(rowTracks([false, false])).to.deep.eq({template: '1fr 1fr', lines: [1, 2]});
+  });
+
   it('shows only tags that at least one player has', () => {
     const table = mountTable().vm;
     expect(table.tagColumns.flat()).to.deep.eq([Tag.BUILDING, Tag.SPACE]);

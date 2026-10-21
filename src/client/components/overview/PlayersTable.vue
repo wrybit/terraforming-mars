@@ -2,8 +2,9 @@
   <div :class="tableClasses" :style="variables">
     <!-- Player list as a table; arrangement and size follow the available width (playersTableLayout.ts) -->
     <PlayersTableHeader :mode="fit.mode" :tagColumns="tagColumns"/>
-    <div class="players-table-rows">
-      <PlayersTableRow v-for="row in rows" :key="row.player.color"
+    <div class="players-table-rows" :style="{gridTemplateRows: tracks.template}">
+      <PlayersTableRow v-for="(row, index) in rows" :key="row.player.color"
+        :style="{gridRow: String(tracks.lines[index])}"
         :player="row.player"
         :playerView="playerView"
         :firstForGen="row.firstForGen"
@@ -26,7 +27,7 @@ import PlayersTableHeader from '@/client/components/overview/PlayersTableHeader.
 import PlayersTableRow from '@/client/components/overview/PlayersTableRow.vue';
 import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/components/overview/playerTagDetails';
 import {playerGoods} from '@/client/components/overview/playerGoods';
-import {NameWidths, PlayersTableFit, PlayersTableRowModel, TagColumnGroups, fitPlayersTable, tableVariables} from '@/client/components/overview/playersTableLayout';
+import {NameWidths, PlayersTableFit, PlayersTableRowModel, RowTracks, TagColumnGroups, fitPlayersTable, rowTracks, tableVariables} from '@/client/components/overview/playersTableLayout';
 
 // Status plaque with a running clock ("● 12:34:56") at scale 1
 const STATUS_PLAQUE_WIDTH = 92;
@@ -134,6 +135,9 @@ export default defineComponent({
         classes.push('players-table--escape-velocity');
       }
       return classes;
+    },
+    tracks(): RowTracks {
+      return rowTracks(this.rows.map((row) => row.player.color === this.playerView.thisPlayer?.color));
     },
     variables(): Record<string, string> {
       return tableVariables(this.fit, this.tagColumns, this.escapeVelocity, this.nameWidths);
