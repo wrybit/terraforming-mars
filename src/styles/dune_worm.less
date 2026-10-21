@@ -129,6 +129,21 @@ html:not(.tm-mobile) .worm-move__chosen {
 .worm-map .worm-map__heading--bounce {
   z-index: 8;
   border: 1.5px solid @worm-way;
+
+  // A little larger than the heading discs: the bend needs the room
+  width: 20px;
+  height: 20px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2;
+  }
+}
+
+.worm-map__heading-head {
+  fill: #000;
+  stroke-width: 1;
 }
 
 // Effect of the worm on a space (WormEffectChip.vue): gain green, loss red, spice blow gold

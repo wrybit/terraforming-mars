@@ -28,6 +28,7 @@ describe('Worm move display', () => {
     const [out, back] = marks.headings;
     expect(out.x).closeTo(23, 0.01);
     expect(back.x).closeTo(23, 0.01);
+    expect(marks.walls[0].disc.glyph).deep.eq(bounceGlyph(180));
     expect(Math.abs(out.y - back.y)).closeTo(18, 0.01);
     expect(Math.abs(back.angle)).eq(180);
   });
@@ -42,10 +43,16 @@ describe('Worm move display', () => {
   });
 
   it('draws a bounce straight back as a U-turn and a slanted one as a bend', () => {
-    expect(bounceGlyph(180)).contains('a2.5');
-    expect(bounceGlyph(-180)).eq(bounceGlyph(180));
-    expect(bounceGlyph(120)).not.contains('a2.5');
-    expect(bounceGlyph(120)).not.eq(bounceGlyph(-120));
+    expect(bounceGlyph(180).line).contains('A');
+    expect(bounceGlyph(-180)).deep.eq(bounceGlyph(180));
+    expect(bounceGlyph(120).line).contains('Q');
+    expect(bounceGlyph(120)).not.deep.eq(bounceGlyph(-120));
+    // Inside the 16 × 16 box for every case
+    for (const turn of [180, 120, -120, 60]) {
+      const numbers = (bounceGlyph(turn).line + bounceGlyph(turn).head).replace(/A[^0-9-]*[0-9.]+ [0-9.]+ 0 0 0 /, ' ').match(/-?[0-9.]+/g)?.map(Number) ?? [];
+      expect(Math.min(...numbers), String(turn)).is.greaterThan(0);
+      expect(Math.max(...numbers), String(turn)).is.lessThan(16);
+    }
   });
 
   it('describes what the worm does to a tile', () => {

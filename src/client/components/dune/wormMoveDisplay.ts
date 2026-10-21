@@ -76,7 +76,7 @@ export type Heading = Point & {angle: number};
  * the centre of that space, and where the bounce disc sits with its glyph (`path`, already in the heading it came in)
  */
 export type Wall = {obstacle: Point, x1: number, y1: number, x2: number, y2: number, atStart: boolean,
-  disc: Point & {angle: number, path: string}};
+  disc: Point & {angle: number, glyph: BounceGlyph}};
 
 // From the centre of a space to the centre of its neighbour, in board pixels (46 × 51 spaces), by heading index
 // (0 top left … 5 left, clockwise like getAdjacentSpacesClockwise)
@@ -97,22 +97,44 @@ function sameHeading(first: Point, second: Point): boolean {
   return Math.round(angleOf(first) / 60) === Math.round(angleOf(second) / 60);
 }
 
+export type BounceGlyph = {line: string, head: string};
+
+// Bounce glyph (Jens, 21 Oct 2026: variant B – a soft bend, filled head, centred in the disc, both legs equally long)
+const GLYPH_BOX = 16;
+const GLYPH_LEG = 6.5;
+const GLYPH_BEND = 2.4;
+const GLYPH_U_GAP = 5;
+const HEAD_LENGTH = 3.6;
+const HEAD_HALF = 2.4;
+
+const round = (value: number) => Math.round(value * 100) / 100;
+
 /**
- * Glyph of a bounce in a 16 × 16 box, coming in from the left towards the wall on the right: straight back as a
- * U-turn, otherwise a bend into the new heading (`turn`: new heading minus old one, in degrees)
+ * Glyph of a bounce in a 16 × 16 box, coming in from the left (the disc is turned into the old heading): straight
+ * back as a U-turn, otherwise a bend into the new heading (`turn`: new heading minus old one, in degrees)
  */
-export function bounceGlyph(turn: number): string {
+export function bounceGlyph(turn: number): BounceGlyph {
   const normalized = ((turn % 360) + 540) % 360 - 180;
-  if (Math.abs(Math.abs(normalized) - 180) < 30) {
-    return 'M2 10.5H9.5a2.5 2.5 0 0 0 0-5H4M6.5 3 4 5.5 6.5 8';
-  }
+  const back = Math.abs(Math.abs(normalized) - 180) < 30;
   const radians = normalized * Math.PI / 180;
-  const end = {x: 11 + 6.5 * Math.cos(radians), y: 8 + 6.5 * Math.sin(radians)};
-  const head = (offset: number) => {
-    const angle = radians + offset * Math.PI / 180;
-    return `${(end.x + 3.5 * Math.cos(angle)).toFixed(2)} ${(end.y + 3.5 * Math.sin(angle)).toFixed(2)}`;
+  const out = back ? {x: -1, y: 0} : {x: Math.cos(radians), y: Math.sin(radians)};
+  // Corner of the bend at the origin; the shape is moved into the middle of the box afterwards
+  const start = back ? {x: -GLYPH_LEG, y: GLYPH_U_GAP / 2} : {x: -GLYPH_LEG, y: 0};
+  const tip = back ? {x: -GLYPH_LEG, y: -GLYPH_U_GAP / 2} : {x: GLYPH_LEG * out.x, y: GLYPH_LEG * out.y};
+  const across = {x: -out.y, y: out.x};
+  const base = {x: tip.x - HEAD_LENGTH * out.x, y: tip.y - HEAD_LENGTH * out.y};
+  const corners = [{x: base.x + across.x * HEAD_HALF, y: base.y + across.y * HEAD_HALF}, {x: base.x - across.x * HEAD_HALF, y: base.y - across.y * HEAD_HALF}];
+  const all = [start, tip, ...corners, ...(back ? [{x: GLYPH_U_GAP / 2, y: 0}] : [{x: 0, y: 0}])];
+  const shift = {
+    x: GLYPH_BOX / 2 - (Math.min(...all.map((point) => point.x)) + Math.max(...all.map((point) => point.x))) / 2,
+    y: GLYPH_BOX / 2 - (Math.min(...all.map((point) => point.y)) + Math.max(...all.map((point) => point.y))) / 2,
   };
-  return `M2 8H11L${end.x.toFixed(2)} ${end.y.toFixed(2)}M${head(150)} ${end.x.toFixed(2)} ${end.y.toFixed(2)} ${head(-150)}`;
+  const at = (point: Point) => `${round(point.x + shift.x)} ${round(point.y + shift.y)}`;
+  const lineEnd = {x: base.x + out.x * 0.8, y: base.y + out.y * 0.8};
+  const line = back ?
+    `M${at(start)}H${round(shift.x)}A${GLYPH_U_GAP / 2} ${GLYPH_U_GAP / 2} 0 0 0 ${at({x: 0, y: -GLYPH_U_GAP / 2})}H${round(lineEnd.x + shift.x)}` :
+    `M${at(start)}L${at({x: -GLYPH_BEND, y: 0})}Q${at({x: 0, y: 0})} ${at({x: GLYPH_BEND * out.x, y: GLYPH_BEND * out.y})}L${at(lineEnd)}`;
+  return {line, head: `M${at(tip)}L${at(corners[0])}L${at(corners[1])}Z`};
 }
 
 function wallAt(center: Point, towards: Point, leaving: Point, atStart: boolean): Wall {
@@ -123,7 +145,7 @@ function wallAt(center: Point, towards: Point, leaving: Point, atStart: boolean)
   const angle = angleOf(towards);
   return {obstacle: {x: center.x + towards.x, y: center.y + towards.y},
     x1: middle.x - across.x, y1: middle.y - across.y, x2: middle.x + across.x, y2: middle.y + across.y, atStart,
-    disc: {x: middle.x, y: middle.y, angle, path: bounceGlyph(angleOf(leaving) - angle)}};
+    disc: {x: middle.x, y: middle.y, angle, glyph: bounceGlyph(angleOf(leaving) - angle)}};
 }
 
 // Two discs on the same edge (a bounce straight back crosses it twice): this far apart along the edge

@@ -36,7 +36,9 @@
         <!-- On the bar of every bounce: a disc with the bounce itself (in and turned away) -->
         <span v-for="(wall, index) in shownWalls" :key="'bounce-' + index" class="worm-map__heading worm-map__heading--bounce" aria-hidden="true"
           :style="{left: wall.disc.x + 'px', top: wall.disc.y + 'px'}">
-          <svg viewBox="0 0 16 16" :style="{transform: 'rotate(' + wall.disc.angle + 'deg)'}"><path :d="wall.disc.path"/></svg>
+          <svg viewBox="0 0 16 16" :style="{transform: 'rotate(' + wall.disc.angle + 'deg)'}">
+            <path :d="wall.disc.glyph.line"/><path class="worm-map__heading-head" :d="wall.disc.glyph.head"/>
+          </svg>
         </span>
         <span v-for="(heading, index) in marks.headings" :key="'heading-' + index" class="worm-map__heading" aria-hidden="true"
           :style="{left: heading.x + 'px', top: heading.y + 'px'}">
