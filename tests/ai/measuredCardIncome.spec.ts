@@ -29,4 +29,11 @@ describe('AI measured card income', () => {
     player.production.add(Resource.ENERGY, 4);
     expect(measuredCardIncome(player, new Ironworks(), 8)).to.be.greaterThan(2);
   });
+
+  it('caps the measured action income at a realistic yield', () => {
+    const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'cardActionsCap2');
+    player.production.add(Resource.ENERGY, 6);
+    expect(measuredCardIncome(player, new Ironworks(), 8)).to.be.at.most(2);
+  });
 });

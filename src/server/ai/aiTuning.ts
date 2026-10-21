@@ -102,6 +102,8 @@ export type AiTuning = {
   liveOutlook: number,
   /** Share of the measured action income that counts (measuredCardIncome.ts); round 124: full actions overvalued. */
   measuredActionWeight: number,
+  /** Upper limit of the measured action income per generation in M€ (measuredCardIncome.ts); the measurement assumed full stocks. */
+  measuredActionCap: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
   tagOutlookBase: number,
   tagOutlookStep: number,
@@ -340,6 +342,7 @@ export const BASELINE_TUNING: AiTuning = {
   measuredCardIncome: 1,
   liveOutlook: 0,
   measuredActionWeight: 0,
+  measuredActionCap: 99,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
@@ -883,6 +886,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   cardEffects: {measuredCardIncome: 1, measuredActionWeight: 0},
   cardActions025: {measuredActionWeight: 0.25},
   cardActions05: {measuredActionWeight: 0.5},
+  // Round 128: actions measured with full stocks (Comet Aiming ~20 M€ per generation); cap them at a realistic yield.
+  cardActionsCap2: {measuredActionWeight: 1, measuredActionCap: 2},
+  cardActionsCap3: {measuredActionWeight: 1, measuredActionCap: 3},
+  cardActionsCap5: {measuredActionWeight: 1, measuredActionCap: 5},
   noCardFix: {measuredCardIncome: 0, measuredDrawRates: 0, playerTraitValues: 0},
   tagOutlookMild: {tagOutlookBase: 0.95, tagOutlookStep: 0.08},
   tagOutlookOptimistic: {tagOutlookBase: 1, tagOutlookStep: 0.05},
