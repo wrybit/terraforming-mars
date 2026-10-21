@@ -963,7 +963,6 @@ html.theme-dune .card-container .card-content .card-resource.card-resource-money
 
 /* Word: words in the picture row ("OR", "Bribe :", "War field : 2 Sardaukar"), no capitals */
 html.theme-dune .card-container .card-content .card-special.card-or,
-html.theme-dune .card-container .card-content .card-text-size--S.card-text-bold,
 html.theme-dune .card-container .card-content .card-text-size--M.card-text-bold,
 html.theme-dune .card-container .card-content .card-text-size--M.card-text-uppercase {
   font-size: 16px !important;
@@ -997,6 +996,15 @@ html.theme-dune .card-container .card-content .card-text-size--S.card-text-upper
 
 html.theme-dune .card-container .card-content .card-text-size--S.card-text-uppercase {
   font-size: 13px !important;
+}
+
+/* A sentence in the picture rows (small texts, bold or not: Thumper, Mentat Calculation, Caravan Master) reads like
+   the description, 13 px regular, not larger (Jens 21 Oct 2026); only the M words beside icons stay 16 px bold. The
+   rows are zoomed, so their zoom is divided out. */
+html.theme-dune .card-container .card-content .card-rows :is(.card-text-size--XS, .card-text-size--S):not(.card-text-uppercase, .card-plate) {
+  font-size: calc(13px / var(--card-row-zoom, 1.2)) !important;
+  font-weight: 400;
+  line-height: 1.28;
 }
 
 html.theme-dune .card-container .card-content mark,
