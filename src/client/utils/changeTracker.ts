@@ -29,13 +29,14 @@ type PendingChange = {
 
 let baseline: Baseline | undefined;
 const pending = new Map<string, PendingChange>();
-// The next view takes over its changes without blinking (e.g. values set by hand in the DevTools)
-let silentNextView = false;
+// Until then views take over their changes without blinking (e.g. values set by hand in the DevTools)
+let silentUntil = 0;
 
-// Changes the viewer makes deliberately (DevTools) should not light up the screen: the next view becomes the
-// new baseline without anything blinking
-export function ignoreNextChanges(): void {
-  silentNextView = true;
+// Changes the viewer makes deliberately (DevTools) should not light up the screen: views arriving within this time
+// become the new baseline without anything blinking. A time window instead of "the next view", because a poll may
+// arrive before the view the DevTools ask for.
+export function ignoreChangesFor(milliseconds: number): void {
+  silentUntil = Math.max(silentUntil, Date.now() + milliseconds);
 }
 
 export function ingestView(view: ViewModel, source: ChangeSource): void {
@@ -43,8 +44,7 @@ export function ingestView(view: ViewModel, source: ChangeSource): void {
   const snapshot = changeSnapshot(view);
   baseline = {participantId: view.id, generation: view.game.generation, snapshot, activeColor: view.players.find((player) => player.isActive)?.color};
 
-  if (silentNextView) {
-    silentNextView = false;
+  if (Date.now() < silentUntil) {
     return;
   }
   // First view after loading (or another game): nothing to compare with
@@ -110,5 +110,5 @@ export function markChangeAnnounced(key: string, tabId: string): void {
 export function resetChangeTracker(): void {
   baseline = undefined;
   pending.clear();
-  silentNextView = false;
+  silentUntil = 0;
 }
