@@ -4,6 +4,8 @@
 // (played cards modal in the players overview, column_overlay.less).
 
 @home-card-padding: 10px;
+// Same value as MAX_PLAYERS_TABLE_BOOST in playersCardFit.ts
+@players-table-max-boost: 1.2;
 
 .home-card(@border; @background) {
   border: 1px solid @border;
@@ -15,11 +17,13 @@
 @media only screen and (min-width: @player-home-columns-min-width) {
   .player-home-columns__main .players-overview {
     .home-card(@or-tabs-border; @or-tabs-panel-background);
-    // A height set via the drag handle scales the table down (playersCardFit.ts)
+    // Size from the drag handle (playersCardFit.ts): below 1 the table zooms down, above 1 numbers and boxes grow
+    // (boost, players_table.less: only as far as the boxes have room); without a size of the player's own the largest one
     overflow: hidden;
 
     .players-table {
-      zoom: var(--players-table-zoom, 1);
+      zoom: min(1, var(--players-table-zoom, @players-table-max-boost));
+      --players-table-boost-request: var(--players-table-zoom, @players-table-max-boost);
     }
   }
 
