@@ -26,22 +26,35 @@ import {Resource} from '@/common/Resource';
 import PlayersTableHeader from '@/client/components/overview/PlayersTableHeader.vue';
 import PlayersTableRow from '@/client/components/overview/PlayersTableRow.vue';
 import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/components/overview/playerTagDetails';
-import {playerGoods} from '@/client/components/overview/playerGoods';
+import {PlayerGood, playerGoods} from '@/client/components/overview/playerGoods';
 import {NameWidths, PlayersTableFit, PlayersTableRowModel, RowTracks, TagColumnGroups, fitPlayersTable, rowTracks, tableVariables} from '@/client/components/overview/playersTableLayout';
 
 // Status plaque with a running clock ("● 12:34:56") at scale 1
 const STATUS_PLAQUE_WIDTH = 92;
 let measuringCanvas: HTMLCanvasElement | undefined;
 
-// Width of a name in the table font at scale 1 (own row: 22px), with a generous estimate where canvas isn't available
-function nameTextWidth(name: string): number {
+// Width of a text in the table font at the given size (scale 1), with a generous estimate where canvas isn't available
+function textWidth(text: string, fontSize: number): number {
   measuringCanvas ??= typeof document !== 'undefined' ? document.createElement('canvas') : undefined;
   const context = measuringCanvas?.getContext?.('2d');
   if (!context) {
-    return name.length * 13;
+    return text.length * fontSize * 0.6;
   }
-  context.font = '22px Prototype, sans-serif';
-  return Math.ceil(context.measureText(name).width) + 4;
+  context.font = `${fontSize}px Prototype, sans-serif`;
+  return Math.ceil(context.measureText(text).width);
+}
+
+// Contents of a goods box at scale 1 (players_table.less): stock (own row 23px), gap 5, production plaque
+// (13px, at least 24px wide), paddings 11, 2px for rounding; the shield only on protected stock
+const STOCK_FONT_SIZE = 23;
+const PRODUCTION_FONT_SIZE = 13;
+const PRODUCTION_MIN_WIDTH = 24;
+const GOODS_BOX_EXTRA = 5 + 11 + 2;
+const PROTECTION_SHIELD_WIDTH = 19;
+function goodsTextWidth(good: PlayerGood): number {
+  const productionText = good.production > 0 ? `+${good.production}` : String(good.production);
+  const shield = good.resourceProtection === 'off' ? 0 : PROTECTION_SHIELD_WIDTH;
+  return textWidth(String(good.count), STOCK_FONT_SIZE) + Math.max(PRODUCTION_MIN_WIDTH, textWidth(productionText, PRODUCTION_FONT_SIZE) + 6) + GOODS_BOX_EXTRA + shield;
 }
 
 type DataModel = {
@@ -79,8 +92,9 @@ export default defineComponent({
       return;
     }
     this.resizeObserver = new ResizeObserver((entries) => {
-      // Scaled down via the drag handle (playersCardFit.ts) the table keeps its arrangement: measure in unscaled px
-      const zoom = parseFloat(getComputedStyle(this.$el).getPropertyValue(PLAYERS_TABLE_ZOOM_VARIABLE)) || 1;
+      // Scaled down via the drag handle (playersCardFit.ts) the table keeps its arrangement: measure in unscaled px.
+      // Sizes above 1 only boost numbers and boxes, the table itself is not zoomed then
+      const zoom = Math.min(1, parseFloat(getComputedStyle(this.$el).getPropertyValue(PLAYERS_TABLE_ZOOM_VARIABLE)) || 1);
       this.availableWidth = Math.floor(entries[0].contentRect.width * zoom);
     });
     this.resizeObserver.observe(this.$el);
@@ -121,7 +135,11 @@ export default defineComponent({
     // Widest name and status plaque at scale 1, computed from the names alone – never measured in the page,
     // so the size can't feed back into itself (a measured width changes the scale, which changes the width …)
     nameWidths(): NameWidths {
-      return {name: Math.max(0, ...this.rows.map((row) => nameTextWidth(row.player.name))), status: STATUS_PLAQUE_WIDTH};
+      return {name: Math.max(0, ...this.rows.map((row) => textWidth(row.player.name, 22) + 4)), status: STATUS_PLAQUE_WIDTH};
+    },
+    // Widest goods box content at scale 1 from the values (not measured, see nameWidths): how far the boost may go
+    goodsContentWidth(): number {
+      return Math.max(0, ...this.rows.flatMap((row) => playerGoods(row.player).map(goodsTextWidth)));
     },
     fit(): PlayersTableFit {
       return fitPlayersTable(this.availableWidth, this.tagColumns, this.escapeVelocity, this.nameWidths);
@@ -140,7 +158,7 @@ export default defineComponent({
       return rowTracks(this.rows.map((row) => row.player.color === this.playerView.thisPlayer?.color));
     },
     variables(): Record<string, string> {
-      return tableVariables(this.fit, this.tagColumns, this.escapeVelocity, this.nameWidths);
+      return tableVariables(this.fit, this.tagColumns, this.escapeVelocity, this.nameWidths, this.availableWidth, this.goodsContentWidth);
     },
     // Per resource the player with the sole highest production; nobody on a tie
     productionLeadersByColor(): Partial<Record<Color, Array<Resource>>> {

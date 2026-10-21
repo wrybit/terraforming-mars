@@ -5,7 +5,7 @@ import PlayersTable from '@/client/components/overview/PlayersTable.vue';
 import {Tag} from '@/common/cards/Tag';
 import {Color} from '@/common/Color';
 import {Resource} from '@/common/Resource';
-import {fitPlayersTable, lineWidth, rowTracks, threeLinesWidth, twoLinesWidth, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
+import {boostRoom, fitPlayersTable, lineWidth, rowTracks, threeLinesWidth, twoLinesWidth, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
 import {emptyTags, fakePublicPlayerModel, fakeViewModel} from '../testHelpers';
 
 function mountTable() {
@@ -35,6 +35,15 @@ describe('PlayersTable', () => {
     expect(rowTracks([false, true, false])).to.deep.eq({template: `1fr ${spacer} 1fr ${spacer} 1fr`, lines: [1, 3, 5]});
     expect(rowTracks([false, false, true])).to.deep.eq({template: `1fr 1fr ${spacer} 1fr`, lines: [1, 2, 4]});
     expect(rowTracks([false, false])).to.deep.eq({template: '1fr 1fr', lines: [1, 2]});
+  });
+
+  it('lets the numbers grow only as far as the widest goods content fits its box', () => {
+    const fit = fitPlayersTable(1100, TAG_COLUMNS);
+    // Short values leave room, a long stock with a long production none
+    expect(boostRoom(fit, 1100, TAG_COLUMNS, false, undefined, 50)).to.be.greaterThan(1.1);
+    expect(boostRoom(fit, 1100, TAG_COLUMNS, false, undefined, 200)).to.eq(1);
+    // Never below 1 and nothing while the width is unknown
+    expect(boostRoom(fitPlayersTable(0, TAG_COLUMNS), 0, TAG_COLUMNS, false)).to.eq(1);
   });
 
   it('shows only tags that at least one player has', () => {

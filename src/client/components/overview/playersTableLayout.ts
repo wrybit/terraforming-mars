@@ -197,10 +197,43 @@ function sectionWeights(fit: PlayersTableFit, tagColumns: TagColumnGroups): {goo
   };
 }
 
+// Resource icon inside the goods box (three lines, cards) at scale 1, with its gap
+const GOODS_ICON_ROOM = GOODS_WITH_ICON_WIDTH - GOODS_WIDTH;
+
+// How far numbers and boxes may grow with the boost of the drag handle (playersCardFit.ts) before the widest goods
+// content (goodsContent at scale 1, computed from the values in PlayersTable.vue) no longer fits its box: the goods
+// cell the grid actually gives, over what the content needs at the current scale.
+// Depends on width and values only – the boost never changes a width, so nothing feeds back.
+export function boostRoom(fit: PlayersTableFit, available: number, tagColumns: TagColumnGroups, escapeVelocity: boolean, names: NameWidths = NO_NAMES, goodsContent: number = GOODS_WIDTH): number {
+  if (available <= 0) {
+    return 1;
+  }
+  const cellGap = CELL_GAP + fit.extraGap;
+  const goodsCell = (sectionWidth: number) => (sectionWidth - (GOODS_COUNT - 1) * cellGap) / GOODS_COUNT;
+  let cell: number;
+  let needed = (goodsContent + GOODS_ICON_ROOM) * fit.scale;
+  if (fit.mode === 'line' || fit.mode === 'two-lines') {
+    const sectionGap = SECTION_GAP + fit.extraGap * 2.5;
+    const weights = sectionWeights(fit, tagColumns);
+    const line = fit.mode === 'line';
+    const fixed = line ? ROW_FRAME + nameColumnWidth(fit.scale, fit.showCorporation, escapeVelocity, names) + 3 * sectionGap : ROW_FRAME + sectionGap;
+    const total = weights.goods + weights.tags + (line ? weights.score : 0);
+    cell = goodsCell((available - fixed) * weights.goods / total);
+    needed = goodsContent * fit.scale;
+  } else if (fit.mode === 'three-lines') {
+    cell = goodsCell(available - ROW_FRAME);
+  } else {
+    // Cards: goods 3 × 2
+    cell = (available - ROW_FRAME - 2 * cellGap) / 3;
+  }
+  return Math.max(1, Math.floor(cell / needed * 100) / 100);
+}
+
 // CSS variables of the table (players_table.less)
-export function tableVariables(fit: PlayersTableFit, tagColumns: TagColumnGroups, escapeVelocity: boolean, names: NameWidths = NO_NAMES): Record<string, string> {
+export function tableVariables(fit: PlayersTableFit, tagColumns: TagColumnGroups, escapeVelocity: boolean, names: NameWidths = NO_NAMES, available: number = 0, goodsContent: number = GOODS_WIDTH): Record<string, string> {
   const weights = sectionWeights(fit, tagColumns);
   return {
+    '--players-table-boost-room': String(boostRoom(fit, available, tagColumns, escapeVelocity, names, goodsContent)),
     '--players-table-scale': String(fit.scale),
     '--players-table-name-width': `${nameColumnWidth(fit.scale, fit.showCorporation, escapeVelocity, names)}px`,
     '--players-table-cell-gap': `${CELL_GAP + fit.extraGap}px`,
