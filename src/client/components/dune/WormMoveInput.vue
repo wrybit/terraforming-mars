@@ -3,7 +3,11 @@
        their owners' cubes; the spaces the worm can end on carry the distance and are chosen by a click (or the number
        key). The chosen way glows, the button confirms. Server: wormChoices (server/dune/Worm.ts). -->
   <div ref="root" class="worm-move" data-test="worm-move">
-    <p class="worm-move__hint">{{ $t('Click the space the worm moves to. Every tile it crosses is hit.') }}</p>
+    <!-- Two sentences, one line each (Jens, 21 Oct 2026) -->
+    <p class="worm-move__hint">
+      <span class="worm-move__hint-line">{{ $t('Click the space the worm moves to.') }}</span>
+      <span class="worm-move__hint-line">{{ $t('Every tile it crosses is hit.') }}</span>
+    </p>
     <div class="worm-map" :style="{width: stageWidth + 'px', height: stageHeight + 'px'}">
       <div class="worm-map__board" :style="{width: box.width + 'px', height: box.height + 'px', transform: 'scale(' + scale + ')'}">
         <ArrakisHex v-for="cell in cells" :key="cell.id" :spaceId="cell.id" :space="cell.space" :board="playerView.game.gameOptions.boardName"

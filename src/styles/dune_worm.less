@@ -43,6 +43,23 @@
   color: #cbb994;
 }
 
+// Running-text size like the other hints in the tab panel (schemes-keep__hint), not the large panel font
+html:not(.tm-mobile) .worm-move__hint,
+html:not(.tm-mobile) .worm-move__chosen {
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.worm-move__hint-line {
+  display: block;
+}
+
+// Hint and map as one block in the middle of the tab, vertically as well (Jens, 21 Oct 2026)
+.or-tab-panel > .worm-move {
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
 .worm-move__chosen {
   min-height: 1.3em;
   font-weight: 600;
