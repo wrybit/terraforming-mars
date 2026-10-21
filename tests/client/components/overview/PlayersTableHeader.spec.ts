@@ -21,6 +21,13 @@ describe('PlayersTableHeader', () => {
     expect(header.findAllComponents({name: 'ScoreIcon'})).to.have.length(0);
   });
 
+  it('puts the game menu in front of the first goods icon in two lines, not on a line of its own', () => {
+    const header = mountHeader('two-lines');
+    const firstGoods = header.find('.players-table-section--goods .players-table-cell');
+    expect(firstGoods.find('.players-table-menu--inline').exists()).to.be.true;
+    expect(header.findAllComponents({name: 'GameMenu'})).to.have.length(1);
+  });
+
   it('shows only the game menu where the cells carry their own icons', () => {
     for (const mode of ['three-lines', 'cards'] as const) {
       const header = mountHeader(mode);
