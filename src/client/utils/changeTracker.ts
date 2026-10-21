@@ -29,12 +29,24 @@ type PendingChange = {
 
 let baseline: Baseline | undefined;
 const pending = new Map<string, PendingChange>();
+// The next view takes over its changes without blinking (e.g. values set by hand in the DevTools)
+let silentNextView = false;
+
+// Changes the viewer makes deliberately (DevTools) should not light up the screen: the next view becomes the
+// new baseline without anything blinking
+export function ignoreNextChanges(): void {
+  silentNextView = true;
+}
 
 export function ingestView(view: ViewModel, source: ChangeSource): void {
   const previous = baseline;
   const snapshot = changeSnapshot(view);
   baseline = {participantId: view.id, generation: view.game.generation, snapshot, activeColor: view.players.find((player) => player.isActive)?.color};
 
+  if (silentNextView) {
+    silentNextView = false;
+    return;
+  }
   // First view after loading (or another game): nothing to compare with
   if (previous === undefined || previous.participantId !== view.id) {
     pending.clear();
@@ -98,4 +110,5 @@ export function markChangeAnnounced(key: string, tabId: string): void {
 export function resetChangeTracker(): void {
   baseline = undefined;
   pending.clear();
+  silentNextView = false;
 }

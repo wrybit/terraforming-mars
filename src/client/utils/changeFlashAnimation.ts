@@ -51,9 +51,53 @@ function placeRing(element: HTMLElement, ring: HTMLElement, rect: DOMRect): void
   document.body.appendChild(ring);
 }
 
+// Board spaces are hexagons (data-flash-shape="hex", BoardSpace.vue, MoonSpace.vue): their ring is a hexagon
+// growing outwards instead of a circle. Pointy top like the space's clip-path (board.less).
+const HEX_POINTS = '50,0 100,25 100,75 50,100 0,75 0,25';
+const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
+
+function hexRipple(tone: FlashTone, delayMs: number, rect: DOMRect): void {
+  const ring = document.createElementNS(SVG_NAMESPACE, 'svg');
+  ring.setAttribute('class', 'change-flash-ripple');
+  ring.setAttribute('viewBox', '0 0 100 100');
+  ring.setAttribute('preserveAspectRatio', 'none');
+  const hexagon = document.createElementNS(SVG_NAMESPACE, 'polygon');
+  hexagon.setAttribute('points', HEX_POINTS);
+  hexagon.setAttribute('fill', 'none');
+  hexagon.setAttribute('stroke', toneColor(tone, 0.9));
+  hexagon.setAttribute('stroke-width', '3');
+  // The line stays 3px thick while the hexagon grows
+  hexagon.setAttribute('vector-effect', 'non-scaling-stroke');
+  ring.appendChild(hexagon);
+  Object.assign(ring.style, {
+    position: 'absolute',
+    left: `${rect.left + window.scrollX}px`,
+    top: `${rect.top + window.scrollY}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+    overflow: 'visible',
+    pointerEvents: 'none',
+    zIndex: '10000',
+    filter: `drop-shadow(0 0 6px ${toneColor(tone, 0.6)})`,
+  });
+  document.body.appendChild(ring);
+  // Same outward travel as the round ring, in px of the larger side
+  const grown = 1 + (2 * RIPPLE_SPREAD_PX) / Math.max(rect.width, rect.height);
+  const animation = ring.animate([
+    {transform: 'scale(1)', opacity: 1},
+    {transform: `scale(${grown})`, opacity: 0},
+  ], {duration: PULSE_MS, delay: delayMs, iterations: PULSES, easing: 'ease-out', fill: 'backwards'});
+  animation.onfinish = () => ring.remove();
+  animation.oncancel = () => ring.remove();
+}
+
 function ripple(element: HTMLElement, tone: FlashTone, delayMs: number): void {
   const rect = element.getBoundingClientRect();
   if (rect.width === 0 && rect.height === 0) {
+    return;
+  }
+  if (element.dataset.flashShape === 'hex') {
+    hexRipple(tone, delayMs, rect);
     return;
   }
   const ring = document.createElement('div');
