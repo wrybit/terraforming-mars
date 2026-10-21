@@ -38,7 +38,6 @@ function mountRow(options: {showOtherPlayersVP: boolean, setVisibilityState?: (k
       actionLabel: options.actionLabel ?? 'passed',
       firstForGen: options.firstForGen ?? false,
       playerIndex: 0,
-      visibility: {goods: true, tags: true, score: true},
       tagColumns: [[Tag.BUILDING, Tag.SCIENCE, Tag.EARTH]],
       tagDetails: buildTagDetails(other, playerView),
     },
@@ -52,7 +51,7 @@ describe('PlayersTableRow', () => {
     expect(wrapper.find('[data-test="tr"]').text()).to.eq('24');
     expect(wrapper.find('[data-test="hand"]').text()).to.eq('10');
     expect(wrapper.find('[data-test="tag-building"]').text()).to.eq('8');
-    expect(wrapper.find('[data-test="played-cards"]').text()).to.eq('2');
+    expect(wrapper.find('[data-test="played-cards-count"]').text()).to.eq('2');
   });
 
   it('shows a tag substitution marker (Earth Embassy)', () => {

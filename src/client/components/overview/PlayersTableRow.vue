@@ -5,43 +5,36 @@
     <span v-if="firstForGen && playerView.players.length > 1" class="players-table-first-player" :title="$t('First player')" data-test="first-player">1</span>
     <PlayerIdentity :player="player" :playerView="playerView" :actionLabel="actionLabel" :highlighted="isThisPlayer"/>
 
-    <!-- Section order from PlayersTable (desktop: goods, tags, scoring; mobile: goods, scoring, tags) -->
-    <template v-for="section in sectionOrder" :key="section">
-      <template v-if="section === 'goods' && visibility.goods">
-        <div class="players-table-divider"></div>
-        <PlayersTableGoods v-for="(good, index) in goods" :key="good.type" :good="good" :color="player.color" :isProductionLeader="productionLeaders.includes(good.type)" :boxWidth="goodsBoxWidths[index] ?? 0" :productionWidth="goodsProductionWidths[index] ?? 0"/>
-      </template>
+    <div class="players-table-section players-table-section--goods">
+      <PlayersTableGoods v-for="good in goods" :key="good.type" :good="good" :color="player.color" :isProductionLeader="productionLeaders.includes(good.type)"/>
+    </div>
 
-      <template v-if="section === 'tags' && visibility.tags">
-        <div class="players-table-divider"></div>
-        <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
-          <div v-if="groupIndex > 0"></div>
-          <div :class="['players-table-cell', {'players-table-cell--discounted': tagDetail(tag).discount > 0}]" v-for="tag in group" :key="tag" :data-test="'tag-' + tag">
-            <span :class="tagCounterClasses(tag)" v-flash-count="flashKeys.playerTag(player.color, tag)"><span v-if="protectedTags.includes(tag)" class="players-table-protection shield_icon" :data-test="'protection-' + tag"></span>{{ tagDetail(tag).count || '·' }}<PlayerTagSubstitution v-if="tagDetail(tag).substitution !== undefined" :tag="tagDetail(tag).substitution!" :data-test="'substitution-' + tag"/></span>
-            <span v-if="tagDetail(tag).discount > 0" class="players-table-discount" :data-test="'discount-' + tag" :title="$t('Discount')">-{{ tagDetail(tag).discount }}</span>
-            <PointsPerTag :points="tagDetail(tag)"/>
-          </div>
-        </template>
-      </template>
-
-      <template v-if="section === 'score' && visibility.score">
-        <div class="players-table-divider"></div>
-        <div class="players-table-cell"><span class="players-table-counter" data-test="vp" v-flash-count="flashKeys.playerCounter(player.color, 'victoryPoints')">{{ victoryPoints }}</span></div>
-        <div class="players-table-cell"><span class="players-table-counter" data-test="tr" v-flash-count="flashKeys.playerCounter(player.color, 'terraformRating')">{{ player.terraformRating }}</span></div>
-        <div :class="['players-table-cell', {'players-table-cell--discounted': handDiscount !== ''}]">
-          <span class="players-table-counter" data-test="hand" v-flash-count="flashKeys.playerCounter(player.color, 'cardsInHand')">{{ player.cardsInHandNbr ?? 0 }}</span>
-          <span v-if="handDiscount !== ''" class="players-table-discount" data-test="discount-all" :title="handDiscountTitle">{{ handDiscount.replace('*', '') }}<b v-if="handDiscount.endsWith('*')" class="players-table-discount-mark">*</b></span>
-        </div>
-        <div class="players-table-cell">
-          <span :class="['players-table-counter', {'players-table-counter--zero': player.availableBlueCardActionCount === 0}]" data-test="actions">{{ player.availableBlueCardActionCount }}</span>
+    <div class="players-table-section players-table-section--tags">
+      <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
+        <div v-if="groupIndex > 0" class="players-table-tag-gap"></div>
+        <div :class="['players-table-cell', {'players-table-cell--discounted': tagDetail(tag).discount > 0}]" v-for="tag in group" :key="tag" :data-test="'tag-' + tag">
+          <!-- Own icon only where the table has no column heads (three lines, cards) -->
+          <span :class="tagCounterClasses(tag)" v-flash-count="flashKeys.playerTag(player.color, tag)"><Tag class="players-table-cell-icon" :tag="(tag as CardTag)" size="big" type="secondary"/><span v-if="protectedTags.includes(tag)" class="players-table-protection shield_icon" :data-test="'protection-' + tag"></span>{{ tagDetail(tag).count || '·' }}<PlayerTagSubstitution v-if="tagDetail(tag).substitution !== undefined" :tag="tagDetail(tag).substitution!" :data-test="'substitution-' + tag"/></span>
+          <span v-if="tagDetail(tag).discount > 0" class="players-table-discount" :data-test="'discount-' + tag" :title="$t('Discount')">-{{ tagDetail(tag).discount }}</span>
+          <PointsPerTag :points="tagDetail(tag)"/>
         </div>
       </template>
-    </template>
+    </div>
 
-    <div class="players-table-divider"></div>
-    <div class="players-table-cell">
-      <!-- No own click handler: the click bubbles up to the row; the button stays for keyboard use -->
-      <button type="button" class="players-table-played" :aria-label="$t('Played cards')" data-test="played-cards" v-flash-count="flashKeys.playerCounter(player.color, 'playedCards')">{{ player.tableau.length }}</button>
+    <div class="players-table-section players-table-section--score">
+      <div class="players-table-cell"><span class="players-table-counter" data-test="vp" v-flash-count="flashKeys.playerCounter(player.color, 'victoryPoints')"><ScoreIcon class="players-table-cell-icon" kind="vp"/>{{ victoryPoints }}</span></div>
+      <div class="players-table-cell"><span class="players-table-counter" data-test="tr" v-flash-count="flashKeys.playerCounter(player.color, 'terraformRating')"><ScoreIcon class="players-table-cell-icon" kind="tr"/>{{ player.terraformRating }}</span></div>
+      <div :class="['players-table-cell', {'players-table-cell--discounted': handDiscount !== ''}]">
+        <span class="players-table-counter" data-test="hand" v-flash-count="flashKeys.playerCounter(player.color, 'cardsInHand')"><ScoreIcon class="players-table-cell-icon" kind="hand"/>{{ player.cardsInHandNbr ?? 0 }}</span>
+        <span v-if="handDiscount !== ''" class="players-table-discount" data-test="discount-all" :title="handDiscountTitle">{{ handDiscount.replace('*', '') }}<b v-if="handDiscount.endsWith('*')" class="players-table-discount-mark">*</b></span>
+      </div>
+      <div class="players-table-cell">
+        <span :class="['players-table-counter', {'players-table-counter--zero': player.availableBlueCardActionCount === 0}]" data-test="actions"><ScoreIcon class="players-table-cell-icon" kind="actions"/>{{ player.availableBlueCardActionCount }}</span>
+      </div>
+      <div class="players-table-cell">
+        <!-- No own click handler: the click bubbles up to the row; the button stays for keyboard use -->
+        <button type="button" class="players-table-played" :aria-label="$t('Played cards')" data-test="played-cards" v-flash-count="flashKeys.playerCounter(player.color, 'playedCards')"><span class="players-table-played-label" v-i18n>Cards</span><span data-test="played-cards-count">{{ player.tableau.length }}</span></button>
+      </div>
     </div>
   </div>
 </template>
@@ -50,15 +43,18 @@
 import {defineComponent} from 'vue';
 import {ViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Resource} from '@/common/Resource';
+import {Tag as CardTag} from '@/common/cards/Tag';
 import {ActionLabel} from '@/client/components/overview/ActionLabel';
+import Tag from '@/client/components/Tag.vue';
 import PlayerIdentity from '@/client/components/overview/PlayerIdentity.vue';
 import PlayersTableGoods from '@/client/components/overview/PlayersTableGoods.vue';
 import PointsPerTag from '@/client/components/overview/PointsPerTag.vue';
 import PlayerTagSubstitution from '@/client/components/overview/PlayerTagSubstitution.vue';
+import ScoreIcon from '@/client/components/overview/ScoreIcon.vue';
 import {PlayerGood, playerGoods} from '@/client/components/overview/playerGoods';
 import {protectedTagsOf} from '@/client/components/overview/protectedTags';
 import {InterfaceTagsType, TagDetail, TagDetails, handDiscountLabel, isVictoryPointCountHidden} from '@/client/components/overview/playerTagDetails';
-import {DESKTOP_SECTION_ORDER, SectionVisibility, TableSection, TagColumnGroups} from '@/client/components/overview/playersTableLayout';
+import {TagColumnGroups} from '@/client/components/overview/playersTableLayout';
 import {togglePlayerCards} from '@/client/components/overview/playerCardsToggle';
 import {vueRoot} from '@/client/components/vueRoot';
 import {vFlashCount} from '@/client/directives/ChangeFlashCount';
@@ -70,10 +66,12 @@ export default defineComponent({
     flashCount: vFlashCount,
   },
   components: {
+    Tag,
     PlayerIdentity,
     PlayersTableGoods,
     PointsPerTag,
     PlayerTagSubstitution,
+    ScoreIcon,
   },
   props: {
     player: {
@@ -96,15 +94,6 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    visibility: {
-      type: Object as () => SectionVisibility,
-      required: true,
-    },
-    // Section order (playersTableLayout.ts: sectionOrder)
-    sectionOrder: {
-      type: Array as () => ReadonlyArray<TableSection>,
-      default: () => DESKTOP_SECTION_ORDER,
-    },
     tagColumns: {
       type: Array as () => TagColumnGroups,
       required: true,
@@ -116,16 +105,6 @@ export default defineComponent({
     // Goods where this player alone has the highest production
     productionLeaders: {
       type: Array as () => Array<Resource>,
-      default: () => [],
-    },
-    // Content width per resource column (PlayersTable: goodsWidths); 0 = not measured
-    goodsBoxWidths: {
-      type: Array as () => ReadonlyArray<number>,
-      default: () => [],
-    },
-    // Production slot width per resource column (PlayersTable: goodsWidths); 0 = as wide as the plaque
-    goodsProductionWidths: {
-      type: Array as () => ReadonlyArray<number>,
       default: () => [],
     },
   },

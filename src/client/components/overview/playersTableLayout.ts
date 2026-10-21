@@ -1,19 +1,11 @@
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {ActionLabel} from '@/client/components/overview/ActionLabel';
 import {InterfaceTagsType} from '@/client/components/overview/playerTagDetails';
-import {GOODS_BOX_INSET} from '@/client/components/overview/goodsBoxWidths';
 
-// Player list as a table in the two-column layout: sections, stored toggles and column grid.
-// All rows (header and players) use the same grid so the columns line up.
-
-export const TABLE_SECTIONS = ['goods', 'tags', 'score'] as const;
-export type TableSection = typeof TABLE_SECTIONS[number];
-export type SectionVisibility = Record<TableSection, boolean>;
-
-// Order of the sections: on desktop tags before the score (columns by width), on mobile the score
-// before the many tag rows, so VP and TR are visible without scrolling
-export const DESKTOP_SECTION_ORDER: ReadonlyArray<TableSection> = ['goods', 'tags', 'score'];
-export const MOBILE_SECTION_ORDER: ReadonlyArray<TableSection> = ['goods', 'score', 'tags'];
+// Player list as a table: always all sections (goods, tags, score), arranged and scaled to the available width.
+// Wide: one line per player. Narrower: name + score above goods + tags. Narrower still: goods and tags
+// each on their own line with the icon inside the cells. Phone: cards below each other.
+// The table never scrolls sideways – when an arrangement doesn't fit legibly, the next one takes over.
 
 // One table row: player plus what PlayersOverview already computes for the classic bar
 export type PlayersTableRowModel = {
@@ -26,138 +18,165 @@ export type PlayersTableRowModel = {
 // Visible tag columns in groups (main tags | special tags), separated by a gap as in the classic bar
 export type TagColumnGroups = Array<Array<InterfaceTagsType>>;
 
-const STORAGE_KEY = 'players_table_sections';
-const PREFERRED_STORAGE_KEY = 'players_table_preferred';
-const DEFAULT_VISIBILITY: SectionVisibility = {goods: true, tags: true, score: true};
+export type PlayersTableMode = 'line' | 'two-lines' | 'three-lines' | 'cards';
 
-// Toggle state survives reloading; if storage is missing (private window), simply everything is on
-export function loadSectionVisibility(): SectionVisibility {
-  try {
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}');
-    return {...DEFAULT_VISIBILITY, ...stored};
-  } catch {
-    return {...DEFAULT_VISIBILITY};
-  }
-}
-
-export function saveSectionVisibility(visibility: SectionVisibility): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(visibility));
-  } catch {
-    // Without storage the setting only lasts until reload
-  }
-}
-
-// Section switched on last: is dropped last when space runs short (the last click wins)
-export function loadPreferredSection(): TableSection | undefined {
-  try {
-    const stored = localStorage.getItem(PREFERRED_STORAGE_KEY);
-    return TABLE_SECTIONS.find((section) => section === stored);
-  } catch {
-    return undefined;
-  }
-}
-
-export function savePreferredSection(section: TableSection | undefined): void {
-  try {
-    if (section === undefined) {
-      localStorage.removeItem(PREFERRED_STORAGE_KEY);
-    } else {
-      localStorage.setItem(PREFERRED_STORAGE_KEY, section);
-    }
-  } catch {
-    // Without storage the setting only lasts until reload
-  }
-}
-
-// Widths: name fixed, score fixed, only resources and tags share the free space.
-// Divider columns are wider than the gaps within a section (law of proximity).
-const NAME_WIDTH = 196;
-// Escape Velocity adds a clock line with bar, time and VP penalty below the corporation – it needs more room
-const ESCAPE_VELOCITY_NAME_WIDTH = 252;
-const DIVIDER_WIDTH = 12;
-const TAG_GROUP_GAP = 6;
-const PLAYED_CARDS_WIDTH = 48;
-const GOODS_MIN_WIDTH = 70;
-// Tags and score sit in boxes like the resources (players_table.less): room for a box and a gap to the next one
-const TAG_MIN_WIDTH = 30;
-const SCORE_WIDTH = 40;
-export const GOODS_COUNT = 6;
-export const SCORE_COUNT = 4;
-
-const px = (value: number) => `${value}px`;
-
-export function nameColumnWidth(escapeVelocity: boolean): number {
-  return escapeVelocity ? ESCAPE_VELOCITY_NAME_WIDTH : NAME_WIDTH;
-}
-
-// Minimum per resource column: wider where a box needs more room than the standard (goodsBoxWidths.ts)
-function goodsMinWidths(goodsBoxWidths: ReadonlyArray<number>): Array<number> {
-  return Array.from({length: GOODS_COUNT}, (_, index) => {
-    const boxWidth = goodsBoxWidths[index] ?? 0;
-    return boxWidth > 0 ? Math.max(GOODS_MIN_WIDTH, boxWidth + GOODS_BOX_INSET) : GOODS_MIN_WIDTH;
-  });
-}
-
-export function columnTemplate(visibility: SectionVisibility, tagColumns: TagColumnGroups, nameWidth: number = NAME_WIDTH, goodsBoxWidths: ReadonlyArray<number> = []): string {
-  const divider = px(DIVIDER_WIDTH);
-  const tracks = [px(nameWidth)];
-  if (visibility.goods) {
-    tracks.push(divider, goodsMinWidths(goodsBoxWidths).map((width) => `minmax(${px(width)}, 1fr)`).join(' '));
-  }
-  if (visibility.tags && tagColumns.length > 0) {
-    tracks.push(divider, tagColumns.map((group) => `repeat(${group.length}, minmax(${px(TAG_MIN_WIDTH)}, 1fr))`).join(` ${px(TAG_GROUP_GAP)} `));
-  }
-  if (visibility.score) {
-    tracks.push(divider, `repeat(${SCORE_COUNT}, ${px(SCORE_WIDTH)})`);
-  }
-  // Card count always visible, with its own divider
-  tracks.push(divider, px(PLAYED_CARDS_WIDTH));
-  return tracks.join(' ');
-}
-
-// Minimum width of the grid – same measures as columnTemplate
-export function minimumWidth(visibility: SectionVisibility, tagColumns: TagColumnGroups, nameWidth: number = NAME_WIDTH, goodsBoxWidths: ReadonlyArray<number> = []): number {
-  let width = nameWidth + DIVIDER_WIDTH + PLAYED_CARDS_WIDTH;
-  if (visibility.goods) {
-    width += DIVIDER_WIDTH + goodsMinWidths(goodsBoxWidths).reduce((sum, columnWidth) => sum + columnWidth, 0);
-  }
-  if (visibility.tags && tagColumns.length > 0) {
-    const tagCount = tagColumns.reduce((sum, group) => sum + group.length, 0);
-    width += DIVIDER_WIDTH + tagCount * TAG_MIN_WIDTH + (tagColumns.length - 1) * TAG_GROUP_GAP;
-  }
-  if (visibility.score) {
-    width += DIVIDER_WIDTH + SCORE_COUNT * SCORE_WIDTH;
-  }
-  return width;
-}
-
-// Order in which sections drop out when the column is too narrow: resources matter most and stay longest
-const AUTO_HIDE_ORDER: Array<TableSection> = ['tags', 'score', 'goods'];
-
-export type FittedVisibility = {
-  visibility: SectionVisibility;
-  // Sections hidden only for lack of space
-  autoHidden: Array<TableSection>;
+export type PlayersTableFit = {
+  mode: PlayersTableMode;
+  // Factor for fonts, icons and cells (1 = the size of the classic table)
+  scale: number;
+  // Corporation line under the name; only once the numbers are at full size
+  showCorporation: boolean;
+  // Extra gap between cells once everything is at its largest (px); sections get 2.5 times as much
+  extraGap: number;
 };
 
-// Adapts the desired visibility to the available width; unknown width (0) changes nothing.
-// The preferred (last switched on) section is dropped last.
-export function fitToWidth(wanted: SectionVisibility, tagColumns: TagColumnGroups, availableWidth: number, preferred?: TableSection, nameWidth: number = NAME_WIDTH, goodsBoxWidths: ReadonlyArray<number> = []): FittedVisibility {
-  const visibility = {...wanted};
-  const autoHidden: Array<TableSection> = [];
-  if (availableWidth <= 0) {
-    return {visibility, autoHidden};
+// Measures at scale 1
+const NAME_WIDTH = 196;
+const COMPACT_NAME_WIDTH = 140;
+const MIN_COMPACT_NAME_WIDTH = 124;
+// Escape Velocity adds a clock line under the name – it always needs the wide column
+const ESCAPE_VELOCITY_NAME_WIDTH = 252;
+// Room for a three-digit stock ("250") plus the production plaque
+const GOODS_WIDTH = 80;
+// With the resource icon inside the box (three lines, cards)
+const GOODS_WITH_ICON_WIDTH = 100;
+const TAG_WIDTH = 36;
+const SCORE_WIDTH = 38;
+const PLAYED_CARDS_WIDTH = 48;
+const CELL_GAP = 4;
+// Between sections clearly more than between cells (law of proximity)
+const SECTION_GAP = 14;
+const TAG_GROUP_GAP = 6;
+// Colour bar, paddings and border of a row
+const ROW_FRAME = 30;
+const GOODS_COUNT = 6;
+const SCORE_COUNT = 4;
+
+const MIN_SCALE = 0.6;
+const MAX_SCALE = 1.25;
+// Below this the three-line arrangement gets too small – cards take over
+const MIN_THREE_LINES_SCALE = 0.75;
+// Wider than this the gaps stop growing (px per cell gap)
+const MAX_EXTRA_GAP = 10;
+
+const tagCount = (tagColumns: TagColumnGroups) => tagColumns.reduce((sum, group) => sum + group.length, 0);
+const groupGaps = (tagColumns: TagColumnGroups) => Math.max(0, tagColumns.length - 1) * TAG_GROUP_GAP;
+const cellsWidth = (count: number, cellWidth: number, scale: number) => count * Math.round(cellWidth * scale) + Math.max(0, count - 1) * CELL_GAP;
+
+function goodsWidth(scale: number, withIcon: boolean): number {
+  return cellsWidth(GOODS_COUNT, withIcon ? GOODS_WITH_ICON_WIDTH : GOODS_WIDTH, scale);
+}
+
+function tagsWidth(scale: number, tagColumns: TagColumnGroups): number {
+  return cellsWidth(tagCount(tagColumns), TAG_WIDTH, scale) + groupGaps(tagColumns);
+}
+
+function scoreWidth(scale: number): number {
+  return cellsWidth(SCORE_COUNT, SCORE_WIDTH, scale) + CELL_GAP + Math.round(PLAYED_CARDS_WIDTH * scale);
+}
+
+export function nameColumnWidth(scale: number, showCorporation: boolean, escapeVelocity: boolean): number {
+  if (escapeVelocity) {
+    return Math.round(ESCAPE_VELOCITY_NAME_WIDTH * Math.max(scale, 0.85));
   }
-  const order = [...AUTO_HIDE_ORDER.filter((section) => section !== preferred), ...(preferred ? [preferred] : [])];
-  for (const section of order) {
-    if (minimumWidth(visibility, tagColumns, nameWidth, goodsBoxWidths) <= availableWidth) {
-      break;
-    }
-    if (visibility[section]) {
-      visibility[section] = false;
-      autoHidden.push(section);
+  // Never narrower than the game menu button in the header above it
+  return showCorporation ? Math.round(NAME_WIDTH * scale) : Math.max(MIN_COMPACT_NAME_WIDTH, Math.round(COMPACT_NAME_WIDTH * scale));
+}
+
+// Width an arrangement needs at the given scale (without extra gaps)
+export function lineWidth(scale: number, tagColumns: TagColumnGroups, showCorporation: boolean, escapeVelocity: boolean): number {
+  return ROW_FRAME + nameColumnWidth(scale, showCorporation, escapeVelocity) + 3 * SECTION_GAP + goodsWidth(scale, false) + tagsWidth(scale, tagColumns) + scoreWidth(scale);
+}
+
+export function twoLinesWidth(scale: number, tagColumns: TagColumnGroups): number {
+  return ROW_FRAME + goodsWidth(scale, false) + SECTION_GAP + tagsWidth(scale, tagColumns);
+}
+
+export function threeLinesWidth(scale: number, tagColumns: TagColumnGroups): number {
+  return ROW_FRAME + Math.max(goodsWidth(scale, true), cellsWidth(tagCount(tagColumns), TAG_WIDTH, scale));
+}
+
+// Largest scale (in 1 % steps) at which the arrangement fits; undefined if not even the minimum does
+function largestScale(widthAt: (scale: number) => number, available: number, minimum: number): number | undefined {
+  for (let percent = Math.round(MAX_SCALE * 100); percent >= Math.round(minimum * 100); percent--) {
+    if (widthAt(percent / 100) <= available) {
+      return percent / 100;
     }
   }
-  return {visibility, autoHidden};
+  return undefined;
+}
+
+// Space left over at the largest scale goes into the gaps
+function extraGap(available: number, needed: number, scale: number, tagColumns: TagColumnGroups): number {
+  if (scale < MAX_SCALE) {
+    return 0;
+  }
+  const cellGapCount = (GOODS_COUNT - 1) + Math.max(0, tagCount(tagColumns) - 1) + SCORE_COUNT;
+  return Math.min(MAX_EXTRA_GAP, Math.max(0, available - needed) / (cellGapCount + 3 * 2.5));
+}
+
+export function fitPlayersTable(available: number, tagColumns: TagColumnGroups, escapeVelocity: boolean = false): PlayersTableFit {
+  // Not measured yet (table hidden): the classic size
+  if (available <= 0) {
+    return {mode: 'line', scale: 1, showCorporation: true, extraGap: 0};
+  }
+  // One line: the numbers grow first; the corporation comes in only once they are at full size
+  const withCorporation = largestScale((scale) => lineWidth(scale, tagColumns, true, escapeVelocity), available, 1);
+  if (withCorporation !== undefined) {
+    const gap = extraGap(available, lineWidth(withCorporation, tagColumns, true, escapeVelocity), withCorporation, tagColumns);
+    return {mode: 'line', scale: withCorporation, showCorporation: true, extraGap: gap};
+  }
+  const compact = largestScale((scale) => lineWidth(scale, tagColumns, false, escapeVelocity), available, MIN_SCALE);
+  if (compact !== undefined) {
+    return {mode: 'line', scale: compact, showCorporation: false, extraGap: 0};
+  }
+  const twoLines = largestScale((scale) => twoLinesWidth(scale, tagColumns), available, MIN_SCALE);
+  const threeLines = largestScale((scale) => threeLinesWidth(scale, tagColumns), available, MIN_THREE_LINES_SCALE);
+  // Two lines only while they are not much smaller than three lines would be
+  if (twoLines !== undefined && (twoLines >= 0.72 || threeLines === undefined || twoLines >= threeLines - 0.1)) {
+    return {mode: 'two-lines', scale: twoLines, showCorporation: true, extraGap: 0};
+  }
+  if (threeLines !== undefined) {
+    return {mode: 'three-lines', scale: Math.min(threeLines, 1.1), showCorporation: true, extraGap: 0};
+  }
+  return {mode: 'cards', scale: Math.min(1, Math.max(0.78, available / 430)), showCorporation: true, extraGap: 0};
+}
+
+// Column templates of the sections – identical for the header and every row so the columns line up
+export function goodsTemplate(fit: PlayersTableFit): string {
+  if (fit.mode === 'cards') {
+    return 'repeat(3, minmax(0, 1fr))';
+  }
+  if (fit.mode === 'three-lines') {
+    return `repeat(${GOODS_COUNT}, minmax(0, 1fr))`;
+  }
+  return `repeat(${GOODS_COUNT}, ${Math.round(GOODS_WIDTH * fit.scale)}px)`;
+}
+
+export function tagsTemplate(fit: PlayersTableFit, tagColumns: TagColumnGroups): string {
+  if (fit.mode === 'cards') {
+    return 'repeat(7, minmax(0, 1fr))';
+  }
+  if (fit.mode === 'three-lines') {
+    return `repeat(${tagCount(tagColumns)}, minmax(0, 1fr))`;
+  }
+  const cell = `${Math.round(TAG_WIDTH * fit.scale)}px`;
+  return tagColumns.map((group) => `repeat(${group.length}, ${cell})`).join(` ${TAG_GROUP_GAP}px `);
+}
+
+export function scoreTemplate(fit: PlayersTableFit): string {
+  return `repeat(${SCORE_COUNT}, ${Math.round(SCORE_WIDTH * fit.scale)}px) ${Math.round(PLAYED_CARDS_WIDTH * fit.scale)}px`;
+}
+
+// CSS variables of the table (players_table.less)
+export function tableVariables(fit: PlayersTableFit, tagColumns: TagColumnGroups, escapeVelocity: boolean): Record<string, string> {
+  return {
+    '--players-table-scale': String(fit.scale),
+    '--players-table-name-width': `${nameColumnWidth(fit.scale, fit.showCorporation, escapeVelocity)}px`,
+    '--players-table-cell-gap': `${CELL_GAP + fit.extraGap}px`,
+    '--players-table-section-gap': `${SECTION_GAP + fit.extraGap * 2.5}px`,
+    '--players-table-goods-columns': goodsTemplate(fit),
+    '--players-table-tag-columns': tagsTemplate(fit, tagColumns),
+    '--players-table-score-columns': scoreTemplate(fit),
+  };
 }
