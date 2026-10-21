@@ -33,7 +33,8 @@ describe('cardFit', () => {
     const element = card(200);
     expect(fittingRowZoom(element)).eq(CARD_ROW_ZOOM);
     expect(fittingRowZoom(element, 1)).eq(1);
-    place(element.querySelector('.card-row i')!, {left: 0, top: 80, width: 480, height: 40});
+    // 240 px content box less 8 px room on each side
+    place(element.querySelector('.card-row i')!, {left: 0, top: 80, width: 448, height: 40});
     expect(fittingRowZoom(element)).eq(0.6);
   });
 });

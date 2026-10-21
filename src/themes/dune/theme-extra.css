@@ -932,9 +932,18 @@ html.theme-dune .card-container .card-content .card-text-size--M.card-text-upper
   text-transform: none !important;
 }
 
-/* "OR" between alternatives in the normal text size (Jens 21 Oct 2026); the row zoom is divided out */
+/* "OR" between alternatives as a slash like the other signs (Jens 21 Oct 2026), so alternatives fit in one row
+   (CardRenderData.vue joins their rows); the word stays in the text for screen readers */
 html.theme-dune .card-container .card-content .card-special.card-or {
-  font-size: calc(13px / var(--card-row-zoom, 1.2)) !important;
+  width: auto !important;
+  margin: 0 6px !important;
+  padding: 0 !important;
+  font-size: 0 !important;
+}
+
+html.theme-dune .card-container .card-content .card-special.card-or::before {
+  content: "/";
+  font: 700 20px Ubuntu, sans-serif;
 }
 
 /* Emphasis: rules like "1 VP per …" and notes, 11 bold without capitals (was 9 to 14 px in capitals) */

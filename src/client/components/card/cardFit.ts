@@ -18,6 +18,9 @@ export function contentOverflowsCard(card: Element): boolean {
   return box.height > 0 && lowestContent(card) > box.bottom - BOTTOM_MARGIN;
 }
 
+// Room kept free between the widest icon row and each side of the content box, so icons never touch the frame
+const ROW_SIDE_ROOM = 8;
+
 /** Zoom of the icon rows on Dune project cards (theme-extra.css --card-row-zoom); house cards keep 1 */
 export const CARD_ROW_ZOOM = 1.2;
 
@@ -45,7 +48,7 @@ export function fittingRowZoom(card: Element, full: number = CARD_ROW_ZOOM): num
     return full;
   }
   const used = Math.max(...parts.map((part) => part.right)) - Math.min(...parts.map((part) => part.left));
-  const available = right - left;
+  const available = right - left - 2 * ROW_SIDE_ROOM * scale;
   if (used <= available) {
     return full;
   }
