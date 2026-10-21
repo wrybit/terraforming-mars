@@ -25,6 +25,8 @@ describe('Worm move display', () => {
     expect(marks.walls).has.length(1);
     expect(marks.walls[0].x1).closeTo(69, 0.01);
     expect(marks.walls[0].x2).closeTo(69, 0.01);
+    // The blocked space beyond, where the bounce is marked
+    expect(marks.walls[0].obstacle).deep.eq({x: 92, y: 0});
     expect(marks.headings).has.length(2);
     expect(marks.headings[0].angle).eq(0);
     expect(Math.abs(marks.headings[1].angle)).eq(180);

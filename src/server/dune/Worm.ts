@@ -254,6 +254,10 @@ export function moveWorm(game: IGame, worm: WormData, distance: number): void {
   if (path.length > 0) {
     worm.spaceId = path[path.length - 1].id;
   }
+  // The board keeps the space free and shows the worm there: tell it at once, not only on the next load
+  if (game.board instanceof Arrakis61Board) {
+    game.board.wormSpaceId = worm.spaceId;
+  }
   worm.chooser = undefined;
   worm.thumper = undefined;
 }

@@ -71,8 +71,11 @@ export function wormOutcome(effects: ReadonlyArray<{gains: Array<Gain>} | undefi
 
 export type Point = {x: number, y: number};
 export type Heading = Point & {angle: number};
-/** A wall the worm bounced off: a short line on the edge of the space it hit */
-export type Wall = {x1: number, y1: number, x2: number, y2: number};
+/**
+ * What the worm bounced off: the centre of the blocked space (marked on its hex) and the edge it hit (marked as a bar
+ * when that space is not on the map piece, e.g. the board edge)
+ */
+export type Wall = {obstacle: Point, x1: number, y1: number, x2: number, y2: number};
 
 // From the centre of a space to the centre of its neighbour, in board pixels (46 × 51 spaces), by heading index
 // (0 top left … 5 left, clockwise like getAdjacentSpacesClockwise)
@@ -97,7 +100,8 @@ function wallAt(center: Point, towards: Point): Wall {
   const length = Math.hypot(towards.x, towards.y) || 1;
   const middle = {x: center.x + towards.x / 2, y: center.y + towards.y / 2};
   const across = {x: -towards.y / length * WALL_HALF, y: towards.x / length * WALL_HALF};
-  return {x1: middle.x - across.x, y1: middle.y - across.y, x2: middle.x + across.x, y2: middle.y + across.y};
+  return {obstacle: {x: center.x + towards.x, y: center.y + towards.y},
+    x1: middle.x - across.x, y1: middle.y - across.y, x2: middle.x + across.x, y2: middle.y + across.y};
 }
 
 /**

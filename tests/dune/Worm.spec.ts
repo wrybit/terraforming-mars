@@ -25,6 +25,7 @@ function wormOf(game: IGame): WormData {
   return worm;
 }
 import {wormDistanceSections} from '../../src/common/dune/wormDistance';
+import {Arrakis61Board} from '../../src/server/boards/Arrakis61Board';
 
 describe('Shai-Hulud (Dune module C)', () => {
   let game: IGame;
@@ -248,6 +249,13 @@ describe('Shai-Hulud (Dune module C)', () => {
       }
     });
     expect(distanceInput(game, worm).options).has.length(choices.length);
+  });
+
+  it('tells the board where it lies right after a move (marker and blocked space without a reload)', () => {
+    const worm = wormOf(game);
+    worm.direction = wormDirection(game.board, worm.spaceId, 1);
+    moveWorm(game, worm, 1);
+    expect((game.board as Arrakis61Board).wormSpaceId).eq(worm.spaceId);
   });
 
   it('records its trail: every move with its generation, from the starting space on', () => {

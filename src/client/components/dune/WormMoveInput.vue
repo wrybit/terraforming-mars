@@ -26,9 +26,12 @@
             <polyline class="worm-map__line-glow" :points="wayLine"/>
             <polyline class="worm-map__line-dash" :points="wayLine"/>
           </template>
-          <!-- Walls the worm bounces off: an orange bar on the edge it hits -->
-          <line v-for="(wall, index) in marks.walls" :key="'wall-' + index" class="worm-map__wall"
-            :x1="wall.x1" :y1="wall.y1" :x2="wall.x2" :y2="wall.y2"/>
+          <!-- What the worm bounces off: the blocked hex outlined in orange; off the map piece (board edge) a bar on
+               the edge it hits (Jens, 21 Oct 2026) -->
+          <template v-for="(wall, index) in marks.walls" :key="'wall-' + index">
+            <polygon v-if="shownAt(wall.obstacle)" class="worm-map__obstacle" :points="obstacleOutline(wall.obstacle)"/>
+            <line v-else class="worm-map__wall" :x1="wall.x1" :y1="wall.y1" :x2="wall.x2" :y2="wall.y2"/>
+          </template>
         </svg>
         <!-- Heading: a white disc with an arrow on the edge the worm leaves through – at the start and after every
              bounce, along the longest way (Jens, 21 Oct 2026) -->
@@ -96,6 +99,8 @@ const MINIMUM_HEIGHT = 200;
 const RINGS = 3;
 // Effect chip: its middle in the lower part of the space, below cube and tile picture
 const CHIP_Y = 40;
+// Outline of a space the worm bounces off: this far inside the hex
+const OBSTACLE_INSET = 2.5;
 
 type Cell = {id: string, x: number, y: number, role: 'worm' | 'way' | 'context', space: SpaceModel | undefined};
 type Target = {x: number, y: number, distance: number};
@@ -290,6 +295,18 @@ export default defineComponent({
         const position = arrakisSpacePosition(this.layout, id) ?? {x: 0, y: 0};
         return {x: position.x - this.box.left + SPACE_WIDTH / 2, y: position.y - this.box.top + SPACE_HEIGHT / 2};
       });
+    },
+    // A space of the map piece has its centre here
+    shownAt(point: {x: number, y: number}): boolean {
+      return this.cells.some((cell) => Math.abs(cell.x - this.box.left + SPACE_WIDTH / 2 - point.x) < 3 &&
+        Math.abs(cell.y - this.box.top + SPACE_HEIGHT / 2 - point.y) < 3);
+    },
+    // Hex outline around a centre, slightly inside the space so it stays clear of the neighbours
+    obstacleOutline(center: {x: number, y: number}): string {
+      const halfWidth = SPACE_WIDTH / 2 - OBSTACLE_INSET;
+      const halfHeight = SPACE_HEIGHT / 2 - OBSTACLE_INSET;
+      return [[0, -halfHeight], [halfWidth, -halfHeight / 2], [halfWidth, halfHeight / 2], [0, halfHeight], [-halfWidth, halfHeight / 2], [-halfWidth, -halfHeight / 2]]
+        .map(([dx, dy]) => `${center.x + dx},${center.y + dy}`).join(' ');
     },
     onChosenWay(id: string): boolean {
       return this.chosen !== undefined && (this.ways[this.chosen] ?? []).includes(id);
