@@ -56,6 +56,8 @@ const MIN_SCALE = 0.6;
 const MAX_SCALE = 1.25;
 // Below this the three-line arrangement gets too small – cards take over
 const MIN_THREE_LINES_SCALE = 0.75;
+// The corporation line may cost this much of the size
+const CORPORATION_SCALE_TOLERANCE = 0.05;
 // Wider than this the gaps stop growing (px per cell gap)
 const MAX_EXTRA_GAP = 10;
 
@@ -128,6 +130,11 @@ export function fitPlayersTable(available: number, tagColumns: TagColumnGroups, 
   }
   const compact = largestScale((scale) => lineWidth(scale, tagColumns, false, escapeVelocity), available, MIN_SCALE);
   if (compact !== undefined) {
+    // The corporation is worth a slightly smaller size (up to 5 %) – rather that than no corporation
+    const withCorporationSmaller = largestScale((scale) => lineWidth(scale, tagColumns, true, escapeVelocity), available, Math.max(MIN_SCALE, compact - CORPORATION_SCALE_TOLERANCE));
+    if (withCorporationSmaller !== undefined) {
+      return {mode: 'line', scale: withCorporationSmaller, showCorporation: true, extraGap: 0};
+    }
     return {mode: 'line', scale: compact, showCorporation: false, extraGap: 0};
   }
   const twoLines = largestScale((scale) => twoLinesWidth(scale, tagColumns), available, MIN_SCALE);
@@ -150,7 +157,7 @@ export function goodsTemplate(fit: PlayersTableFit): string {
   if (fit.mode === 'three-lines') {
     return `repeat(${GOODS_COUNT}, minmax(0, 1fr))`;
   }
-  return `repeat(${GOODS_COUNT}, ${Math.round(GOODS_WIDTH * fit.scale)}px)`;
+  return `repeat(${GOODS_COUNT}, minmax(${Math.round(GOODS_WIDTH * fit.scale)}px, 1fr))`;
 }
 
 export function tagsTemplate(fit: PlayersTableFit, tagColumns: TagColumnGroups): string {
@@ -160,16 +167,27 @@ export function tagsTemplate(fit: PlayersTableFit, tagColumns: TagColumnGroups):
   if (fit.mode === 'three-lines') {
     return `repeat(${tagCount(tagColumns)}, minmax(0, 1fr))`;
   }
-  const cell = `${Math.round(TAG_WIDTH * fit.scale)}px`;
+  const cell = `minmax(${Math.round(TAG_WIDTH * fit.scale)}px, 1fr)`;
   return tagColumns.map((group) => `repeat(${group.length}, ${cell})`).join(` ${TAG_GROUP_GAP}px `);
 }
 
 export function scoreTemplate(fit: PlayersTableFit): string {
-  return `repeat(${SCORE_COUNT}, ${Math.round(SCORE_WIDTH * fit.scale)}px) ${Math.round(PLAYED_CARDS_WIDTH * fit.scale)}px`;
+  return `repeat(${SCORE_COUNT}, minmax(${Math.round(SCORE_WIDTH * fit.scale)}px, 1fr)) minmax(${Math.round(PLAYED_CARDS_WIDTH * fit.scale)}px, 1fr)`;
+}
+
+// Rows of one and two lines: the sections share the width in proportion to what they need, so leftover
+// space widens every box a little instead of collecting as a gap at the end of the row
+function sectionWeights(fit: PlayersTableFit, tagColumns: TagColumnGroups): {goods: number, tags: number, score: number} {
+  return {
+    goods: Math.round(goodsWidth(fit.scale, false)),
+    tags: Math.round(tagsWidth(fit.scale, tagColumns)),
+    score: Math.round(scoreWidth(fit.scale)),
+  };
 }
 
 // CSS variables of the table (players_table.less)
 export function tableVariables(fit: PlayersTableFit, tagColumns: TagColumnGroups, escapeVelocity: boolean): Record<string, string> {
+  const weights = sectionWeights(fit, tagColumns);
   return {
     '--players-table-scale': String(fit.scale),
     '--players-table-name-width': `${nameColumnWidth(fit.scale, fit.showCorporation, escapeVelocity)}px`,
@@ -178,5 +196,7 @@ export function tableVariables(fit: PlayersTableFit, tagColumns: TagColumnGroups
     '--players-table-goods-columns': goodsTemplate(fit),
     '--players-table-tag-columns': tagsTemplate(fit, tagColumns),
     '--players-table-score-columns': scoreTemplate(fit),
+    '--players-table-line-columns': `${nameColumnWidth(fit.scale, fit.showCorporation, escapeVelocity)}px minmax(0, ${weights.goods}fr) minmax(0, ${weights.tags}fr) minmax(0, ${weights.score}fr)`,
+    '--players-table-two-lines-columns': `minmax(0, ${weights.goods}fr) minmax(0, ${weights.tags}fr)`,
   };
 }

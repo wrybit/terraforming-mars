@@ -120,9 +120,8 @@
 // ---------- Arrangement: one line ----------
 .players-table--line {
   .players-table-row {
-    grid-template-columns: var(--players-table-name-width) auto auto auto;
+    grid-template-columns: var(--players-table-line-columns);
     grid-template-areas: "name goods tags score";
-    justify-content: start;
   }
 
   // Separator between the sections: continuous across all rows (bridges the row gaps)
@@ -171,9 +170,8 @@
 // Name and score share the first line (name left, score right); goods and tags below line up with the header
 .players-table--two-lines {
   .players-table-row {
-    grid-template-columns: auto auto;
+    grid-template-columns: var(--players-table-two-lines-columns);
     grid-template-areas: "name name" "goods tags";
-    justify-content: start;
     row-gap: calc(6px * @s);
     padding: calc(6px * @s) 8px calc(8px * @s) @players-table-inset;
   }
