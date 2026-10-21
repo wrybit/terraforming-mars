@@ -160,8 +160,13 @@ function onHotkeyRelease(event: KeyboardEvent): void {
 }
 
 // N / M: the view of the board below Mars / Moon one step back or on (tiles, bonus, coordinates)
-function stepBoardView(direction: 1 | -1): boolean {
-  const toggle = Array.from(document.querySelectorAll('.tile-view-toggle')).find(isVisible);
+// Controls an open dialog keeps outside its own element (BoardZoomModal.vue: the bar below the zoomed board)
+const OVERLAY_CONTROLS_SELECTOR = '[data-overlay-controls]';
+
+function stepBoardView(direction: 1 | -1, overlay?: Element): boolean {
+  const scopes: Array<Document | Element> = overlay === undefined ? [document] :
+    [overlay, ...Array.from(document.querySelectorAll(OVERLAY_CONTROLS_SELECTOR)).filter(isVisible)];
+  const toggle = scopes.flatMap((scope) => Array.from(scope.querySelectorAll('.tile-view-toggle'))).find(isVisible);
   const options = toggle === undefined ? [] : Array.from(toggle.querySelectorAll<HTMLElement>('[role="radio"]'));
   if (options.length === 0) {
     return false;
@@ -247,8 +252,17 @@ export function onHotkey(event: KeyboardEvent): void {
     }
     handled = submit(overlay ?? document, key === 'Enter' ? 'confirm' : 'proceed');
   } else if (overlay !== undefined) {
-    // Esc and everything else belongs to the dialog
-    return;
+    // Esc and everything else belongs to the dialog – except the board view switch inside it (zoomed board,
+    // BoardZoomModal.vue): N and M step its own tile view, like on the page
+    for (const id of actionsForKeys(keys)) {
+      if (id === 'board-view-previous' || id === 'board-view-next') {
+        handled = stepBoardView(id === 'board-view-next' ? 1 : -1, overlay);
+        break;
+      }
+    }
+    if (!handled) {
+      return;
+    }
   } else if (plain && (key === 'ArrowUp' || key === 'ArrowDown')) {
     handled = scrollMainBox(key === 'ArrowDown' ? 1 : -1);
   } else if (plain && key === 'Escape') {

@@ -67,6 +67,37 @@ describe('hotkeyDispatcher', () => {
     expect(steps[1]).to.be.lessThan(0);
   });
 
+  it('steps the tile view of the zoomed board with N and M, not the one behind it', () => {
+    const toggle = (parent: HTMLElement) => {
+      const element = document.createElement('div');
+      element.className = 'tile-view-toggle';
+      const options = [0, 1, 2].map((index) => {
+        const option = document.createElement('button');
+        option.setAttribute('role', 'radio');
+        option.setAttribute('aria-checked', String(index === 0));
+        option.addEventListener('click', () => options.forEach((other) => other.setAttribute('aria-checked', String(other === option))));
+        element.appendChild(option);
+        return option;
+      });
+      parent.appendChild(element);
+      return options;
+    };
+    const page = toggle(document.body);
+    const modal = document.createElement('div');
+    modal.setAttribute('aria-modal', 'true');
+    document.body.appendChild(modal);
+    // The zoomed board keeps its bar beside the dialog element (BoardZoomModal.vue)
+    const controls = document.createElement('div');
+    controls.setAttribute('data-overlay-controls', '');
+    document.body.appendChild(controls);
+    const zoomed = toggle(controls);
+    const event = new KeyboardEvent('keydown', {key: 'm', code: 'KeyM', cancelable: true});
+    onHotkey(event);
+    expect(event.defaultPrevented).is.true;
+    expect(zoomed.map((option) => option.getAttribute('aria-checked'))).deep.eq(['false', 'true', 'false']);
+    expect(page[0].getAttribute('aria-checked')).eq('true');
+  });
+
   it('knows which steps are binding', () => {
     expect(tabConfirmHotkey('tab-pass')).to.equal('confirm');
     expect(tabConfirmHotkey('tab-actions')).to.equal('proceed');

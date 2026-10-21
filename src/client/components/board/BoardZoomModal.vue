@@ -14,8 +14,9 @@
     <!-- Optional banner on top (what is being placed, PlacementBanner.vue); the board is fitted below it -->
     <div v-if="visible && !closing" class="board-zoom-banner" ref="banner"><slot name="banner"></slot></div>
     <!-- Outside the scrolling background so close and the zoom bar stay put while panning -->
-    <!-- Optional controls at the bottom (tile view switch, TileViewToggle.vue); the board is fitted above them -->
-    <div v-if="visible && !closing && $slots.controls" class="board-zoom-controls" ref="controls" :style="{'--board-zoom-controls-shift': controlsShift + 'px'}"><slot name="controls"></slot></div>
+    <!-- Optional controls at the bottom (tile view switch, TileViewToggle.vue); the board is fitted above them.
+         data-overlay-controls: they belong to the open dialog, so its hotkeys (N / M) reach them (hotkeyDispatcher.ts) -->
+    <div v-if="visible && !closing && $slots.controls" class="board-zoom-controls" data-overlay-controls ref="controls" :style="{'--board-zoom-controls-shift': controlsShift + 'px'}"><slot name="controls"></slot></div>
     <button v-if="visible" type="button" class="board-zoom-close" :aria-label="$t('Close')" @click.stop="$emit('close')">✕</button>
     <!-- Mobile view: zoom bar at the bottom (pinch and double tap work as well) -->
     <MobileZoomControls v-if="visible && mobileLayout" :percent="zoomPercent" @zoom="zoomAtCenter" @fit="fitWholePlanet"/>
