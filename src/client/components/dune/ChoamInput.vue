@@ -28,7 +28,6 @@
           </div>
         </li>
       </ul>
-      <DuneRuleCards :rules="CHOAM_RULES"/>
       </div>
     </section>
 
@@ -37,6 +36,9 @@
       <SelectTrade ref="trade"
         :playerView="playerView" :playerinput="offerInput" :onsave="answerOffer" :showsave="false" :showtitle="false"/>
     </section>
+
+    <!-- The rules below everything behind the "Rules" button, like on the other Dune tabs (Jens 22 Oct 2026) -->
+    <DuneRuleCards class="choam-input__rules" :rules="CHOAM_RULES"/>
 
     <TabPanelFooterSlot v-if="showsave && offerInput !== undefined">
       <div class="amount-select__actions">

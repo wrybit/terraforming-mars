@@ -68,10 +68,10 @@ export function wormRules(layout: ArrakisLayout): ReadonlyArray<DuneRule> {
 
 // CHOAM contracts (Jens, 19 Oct 2026: as a short list like the other modules)
 export const CHOAM_RULES: ReadonlyArray<DuneRule> = [
-  {picture: 'coin', text: 'Offer (action): goods leave your stock, with a wish of up to 30 in return'},
+  {picture: 'choam', text: 'Offer (action): goods leave your stock, with a wish of up to 30 in return'},
   {sign: 'keep', text: 'At most 1 open offer per player (Guild Bank: 2)'},
   {sign: 'tap', text: 'Accept (action): first come, first served'},
-  {sign: 'payout', text: 'On a deal both pay 1 Solari to the bank'},
+  {picture: 'coin', text: 'On a deal both pay 1 Solari to the bank'},
   {sign: 'leave', text: 'Withdraw (action): the goods come back, no fee'},
   {sign: 'enter', text: 'End of generation: offers nobody took return without a fee'},
 ];
