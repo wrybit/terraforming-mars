@@ -375,5 +375,8 @@
   "Milestones & awards of Arrakis": "阿拉吉斯的里程碑与奖项",
   "7 milestones · 7 awards for random draws": "7个里程碑 · 7个奖项，供随机抽取",
   "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "从阿拉吉斯的目标、“阿拉吉斯的里程碑与奖项”模块以及每个启用模块的一个里程碑中抽取。",
-  "Agenda ${0} (${1})": "议程 ${0}（${1}）"
+  "Agenda ${0} (${1})": "议程 ${0}（${1}）",
+  "Theme": "主题",
+  "Dune": "沙丘",
+  "Not available with the Dune theme": "沙丘主题下不可用"
 }
