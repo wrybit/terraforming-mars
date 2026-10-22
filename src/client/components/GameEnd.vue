@@ -271,6 +271,8 @@ import {Color} from '@/common/Color';
 import {CardType} from '@/common/cards/CardType';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {GlobalParameter} from '@/common/GlobalParameter';
+import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
+import {MIN_OXYGEN_LEVEL, MIN_TEMPERATURE, MIN_VENUS_SCALE} from '@/common/constants';
 import {$t, translateTextWithParams, translateMessage} from '@/client/directives/i18n';
 import {Message} from '@/common/logs/Message';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
@@ -365,11 +367,13 @@ export default defineComponent({
         const style = GLOBAL_PARAMETER_CHART_STYLES[param];
         dataset.push({label: $t(label), color: style.color, icon: style.icon, data: getValues(param, min, max)});
       };
-      add('Temperature', GlobalParameter.TEMPERATURE, -30, 8);
-      add('Oxygen', GlobalParameter.OXYGEN, 0, 14);
-      add('Oceans', GlobalParameter.OCEANS, 0, 9);
+      // Maximums depend on the board (Amazonis Planitia goes further), else the lines pass 100%
+      const max = getGlobalParameterMaximums(this.game.gameOptions.boardName);
+      add('Temperature', GlobalParameter.TEMPERATURE, MIN_TEMPERATURE, max.temperature);
+      add('Oxygen', GlobalParameter.OXYGEN, MIN_OXYGEN_LEVEL, max.oxygen);
+      add('Oceans', GlobalParameter.OCEANS, 0, max.oceans);
       if (this.game.gameOptions.expansions.venus === true) {
-        add('Venus', GlobalParameter.VENUS, 0, 30);
+        add('Venus', GlobalParameter.VENUS, MIN_VENUS_SCALE, max.venus);
       }
       if (this.game.gameOptions.expansions.moon === true) {
         add('L. Habitat', GlobalParameter.MOON_HABITAT_RATE, 0, 8);
