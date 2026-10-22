@@ -50,9 +50,9 @@
             <div v-if="row.type === 'phase'" class="log-phase-line" aria-hidden="true"></div>
             <!-- Analysis game: hovering an AI row shows rating buttons behind its text (touch: double-tap; key I) -->
             <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel"
-              :follows="row.follows === true" :class="{'log-row--ai-rateable': isRateable(section, row)}"
-              @click="messageClicked(row.message, undefined, section, row, $event)"
-              @mouseenter="messageHovered(row.message, $event); rowHovered(section, row, $event)" @mouseleave="rowLeft($event)" @spaceClicked="$emit('spaceClicked', $event)"/>
+              :follows="row.follows === true" :action="row.action" :class="{'log-row--ai-rateable': isRateable(section, row)}"
+              @click="messageClicked(row.message, row.action, section, row, $event)"
+              @mouseenter="messageHovered(row.message, $event, row.action); rowHovered(section, row, $event)" @mouseleave="rowLeft($event)" @spaceClicked="$emit('spaceClicked', $event)"/>
             <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"
               :class="{'log-row--ai-rateable': isRateable(section, row)}"
               @click="messageClicked(row.action.lead, row.action, section, row)"

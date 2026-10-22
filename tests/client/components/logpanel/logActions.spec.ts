@@ -53,6 +53,27 @@ describe('logActions', () => {
     expect(actionAt(rows, 1).effects).deep.eq([]);
   });
 
+  it('keeps lines that set off effects (bazaar, copied production) as text and puts their effects on the right', () => {
+    const rows = groupLogMessages([
+      message('${0} bought ${1} at the bazaar for ${2} M€', player('red'), text('Title of Honour'), raw('20')),
+      message('${0} gained ${1} TR', player('red'), raw('2')),
+      message('${0} gained ${1} ${2}', player('red'), raw('8'), text('plant')),
+      message('${0} played ${1}', player('blue'), card(CardName.ALGAE)),
+      message('${0} copied ${1} production with ${2}', player('blue'), card(CardName.MEDICAL_LAB), card(CardName.ROBOTIC_WORKFORCE)),
+      message('${0} gained ${1} ${2} production', player('blue'), raw('2'), text('M€')),
+    ]);
+    expect(rows.map((row) => row.type)).deep.eq(['message', 'action', 'message']);
+    const bazaar = rows[0];
+    const copied = rows[2];
+    if (bazaar.type !== 'message' || copied.type !== 'message') {
+      throw new Error('expected text lines');
+    }
+    expect(bazaar.indexes).deep.eq([0, 1, 2]);
+    expect(bazaar.action?.effects).deep.eq([{resource: 'tr', amount: 2}, {resource: 'plant', amount: 8}]);
+    expect(copied.follows).is.true;
+    expect(copied.action?.effects).deep.eq([{resource: 'megacredit', amount: 2, production: true}]);
+  });
+
   it('reads resource icon data (upstream 2cab7b413) like the older text data', () => {
     const rows = groupLogMessages([
       message('${0} played ${1}', player('red'), card(CardName.ALGAE)),

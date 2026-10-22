@@ -1,7 +1,7 @@
 <template>
    <!-- log-line--<colour>: text and hover in the colour of the player the line is about (log.less) -->
    <li v-if="message !== undefined && message.data !== undefined && message.message !== undefined"
-     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--expandable': expandable, 'log-line--ai-insight': message.aiInsight !== undefined, 'log-line--discard': isDiscard, 'log-line--follows': follows, 'log-line--spoiler': spoiler, 'log-line--spoiler-hidden': spoilerHidden}]"
+     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--effects': hasEffects, 'log-line--expandable': expandable, 'log-line--ai-insight': message.aiInsight !== undefined, 'log-line--discard': isDiscard, 'log-line--follows': follows, 'log-line--spoiler': spoiler, 'log-line--spoiler-hidden': spoilerHidden}]"
      :title="spoilerTitle"
      @click.prevent="$emit('click')">
     <span v-if="(message.type ?? LogMessageType.DEFAULT) === LogMessageType.DEFAULT" :title="when" v-html="icon"></span>
@@ -51,6 +51,8 @@
       </span>
     </template>
     </span>
+    <!-- What this line set off (bazaar ware, copied production ...): on the right like in the action rows -->
+    <LogRowEffects v-if="hasEffects && action !== undefined" :action="action" :viewModel="viewModel" @spaceClicked="$emit('spaceClicked', $event)"/>
    </li>
 </template>
 
@@ -77,6 +79,8 @@ import {needsModalPreview} from '@/client/components/logpanel/logMessageContent'
 import {cardTypeToCss, partySlug} from '@/client/components/logpanel/logCardType';
 import SeatIcon from '@/client/components/create/SeatIcon.vue';
 import LogSpaceChip from '@/client/components/logpanel/LogSpaceChip.vue';
+import LogRowEffects from '@/client/components/logpanel/LogRowEffects.vue';
+import {LogAction} from '@/client/components/logpanel/logActions';
 import {isSpoiler, isSpoilerHidden} from '@/client/components/logpanel/aiAnalysis/aiSpoilers';
 
 const DISCARD_MESSAGES = new Set([
@@ -92,6 +96,7 @@ export default defineComponent({
   components: {
     SeatIcon,
     LogSpaceChip,
+    LogRowEffects,
   },
   props: {
     message: {
@@ -106,6 +111,11 @@ export default defineComponent({
     follows: {
       type: Boolean,
       default: false,
+    },
+    // Effects this line set off (logActions.ts EFFECT_LINES), shown on the right
+    action: {
+      type: Object as () => LogAction | undefined,
+      default: undefined,
     },
   },
   // Declared so the parent's @click is only this event and not also a native listener on the <li>:
@@ -171,6 +181,10 @@ export default defineComponent({
     },
   },
   computed: {
+    hasEffects(): boolean {
+      const action = this.action;
+      return action !== undefined && (action.effects.length + action.others.length + (action.everyone ?? []).length) > 0;
+    },
     // Player of the line = first player entry of the message (e.g. "${0} played …")
     // Many cards: opens a modal on click (see logMessageContent.ts)
     expandable(): boolean {
