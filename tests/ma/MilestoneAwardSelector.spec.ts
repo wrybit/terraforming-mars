@@ -12,6 +12,14 @@ import {GameSetup} from '../../src/server/GameSetup';
 import {SeededRandom} from '../../src/common/utils/Random';
 
 describe('MilestoneAwardSelector', () => {
+  it('Arrakis boards use their own set (Dune names), not a random draw', () => {
+    for (const boardName of [BoardName.ARRAKIS_61, BoardName.ARRAKIS_91]) {
+      const drawn = chooseMilestonesAndAwards({...DEFAULT_GAME_OPTIONS, boardName, randomMA: RandomMAOptionType.NONE});
+      expect(drawn.milestones).deep.eq(milestoneManifest.boards[boardName]);
+      expect(drawn.awards).deep.eq(awardManifest.boards[boardName]);
+    }
+  });
+
   const maximumSynergyRuns = [
     // Gardener / Landlord have synergy 6.
     {mas: [...milestoneManifest.boards[BoardName.THARSIS], ...awardManifest.boards[BoardName.THARSIS]], expected: 6},

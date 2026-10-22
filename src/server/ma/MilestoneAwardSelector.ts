@@ -80,6 +80,10 @@ export function chooseMilestonesAndAwards(gameOptions: GameOptions): DrawnMilest
     case BoardName.VASTITAS_BOREALIS:
     case BoardName.VASTITAS_BOREALIS_NOVA:
     case BoardName.AMAZONIS_PLANITIA:
+    case BoardName.ARRAKIS_61:
+    case BoardName.ARRAKIS_91:
+      // Arrakis: its own set (Tharsis set under Dune names); without these cases Dune fell through to a random draw of
+      // Mars milestones (Jens, 22 Oct 2026)
       push(milestoneManifest.boards[boardName], awardManifest.boards[gameOptions.boardName]);
       break;
     default:
