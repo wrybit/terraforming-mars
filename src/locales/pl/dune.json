@@ -360,5 +360,16 @@
   "At most 1 open offer per player (Guild Bank card: 2)": "Najwyżej 1 otwarta oferta na gracza (z kartą Bank Gildii: 2)",
   "On a deal seller and buyer each pay 1 Solari to the bank": "Przy transakcji sprzedający i kupujący płacą bankowi po 1 solari",
   "until generation ${0}": "do pok. ${0}",
-  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Oferta obowiązuje 2 pokolenia; jeśli nikt jej nie przyjmie, wraca bez opłaty"
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Oferta obowiązuje 2 pokolenia; jeśli nikt jej nie przyjmie, wraca bez opłaty",
+  "Buy 3 wares at the Bazaar of Arrakeen": "Kup 3 towary na bazarze w Arrakin",
+  "Close 2 CHOAM contracts": "Zawrzyj 2 kontrakty KHOAM",
+  "Own 2 tiles next to the worm": "Posiadaj 2 pola obok czerwia",
+  "Have 3 Sardaukar in your garrison and on the war field": "Miej 3 sardaukarów w garnizonie i na polu bitwy",
+  "Reach the medium level of one of your agendas": "Osiągnij średni poziom jednej ze swoich agend",
+  "Make 3 smuggling deals": "Zawrzyj 3 transakcje przemytnicze",
+  "Have 3 titanium production": "Miej 3 produkcji tytanu",
+  "Have the highest energy production": "Miej najwyższą produkcję energii",
+  "Milestones & awards of Arrakis": "Kamienie milowe i nagrody Arrakis",
+  "7 milestones · 7 awards for random draws": "7 kamieni milowych · 7 nagród do losowania",
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Losowane spośród celów Arrakis, modułu Kamienie milowe i nagrody Arrakis oraz jednego kamienia milowego z każdego aktywnego modułu."
 }

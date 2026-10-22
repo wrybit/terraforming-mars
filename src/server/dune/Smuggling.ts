@@ -27,6 +27,8 @@ import {CardName} from '../../common/cards/CardName';
 
 export type SmugglingData = {
   suspicion: Record<PlayerId, number>,
+  /** Smuggling deals each player made (milestone Smuggler King, dune/goals); missing in older games */
+  deals?: Record<PlayerId, number>,
   /** Rates of the exchange; games from before the exchange get it on first use */
   exchange?: ExchangeData,
 };
@@ -139,6 +141,7 @@ function smuggleInput(player: IPlayer, data: SmugglingData, onlySpice: boolean):
       player.stock.deduct(trade.give, trade.giveAmount, {log: true});
       player.stock.add(trade.get, trade.getAmount, {log: true});
       raise(player, data);
+      data.deals = {...data.deals, [player.id]: (data.deals?.[player.id] ?? 0) + 1};
       if (trade.give === Resource.TITANIUM && trade.get === Resource.MEGACREDITS) {
         player.game.log('${0} smuggled spice past the Empire', (b) => b.player(player));
       } else {

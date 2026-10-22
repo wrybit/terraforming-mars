@@ -360,5 +360,16 @@
   "At most 1 open offer per player (Guild Bank card: 2)": "No máximo 1 oferta aberta por jogador (com a carta Banco da Guilda: 2)",
   "On a deal seller and buyer each pay 1 Solari to the bank": "No fechamento, vendedor e comprador pagam cada um 1 solari ao banco",
   "until generation ${0}": "até a ger. ${0}",
-  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Uma oferta vale por 2 gerações; se ninguém a aceitar, volta sem taxa"
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Uma oferta vale por 2 gerações; se ninguém a aceitar, volta sem taxa",
+  "Buy 3 wares at the Bazaar of Arrakeen": "Compre 3 mercadorias no bazar de Arrakeen",
+  "Close 2 CHOAM contracts": "Feche 2 contratos da CHOAM",
+  "Own 2 tiles next to the worm": "Possua 2 espaços ao lado do verme",
+  "Have 3 Sardaukar in your garrison and on the war field": "Tenha 3 sardaukar na sua guarnição e no campo de guerra",
+  "Reach the medium level of one of your agendas": "Alcance o nível médio de uma das suas agendas",
+  "Make 3 smuggling deals": "Faça 3 negócios de contrabando",
+  "Have 3 titanium production": "Tenha 3 de produção de titânio",
+  "Have the highest energy production": "Tenha a maior produção de energia",
+  "Milestones & awards of Arrakis": "Marcos e prêmios de Arrakis",
+  "7 milestones · 7 awards for random draws": "7 marcos · 7 prêmios para sorteio",
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Sorteados dentre os objetivos de Arrakis, o módulo Marcos e prêmios de Arrakis e um marco de cada módulo em jogo."
 }

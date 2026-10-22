@@ -354,5 +354,16 @@
   "At most 1 open offer per player (Guild Bank card: 2)": "Hoogstens 1 open aanbod per speler (met de kaart Gildebank: 2)",
   "On a deal seller and buyer each pay 1 Solari to the bank": "Bij een deal betalen verkoper en koper elk 1 solari aan de bank",
   "until generation ${0}": "tot gen. ${0}",
-  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Een aanbod blijft 2 generaties staan; neemt niemand het, dan komt het zonder vergoeding terug"
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Een aanbod blijft 2 generaties staan; neemt niemand het, dan komt het zonder vergoeding terug",
+  "Buy 3 wares at the Bazaar of Arrakeen": "Koop 3 waren op de bazaar van Arrakeen",
+  "Close 2 CHOAM contracts": "Sluit 2 CHOAM-contracten",
+  "Own 2 tiles next to the worm": "Bezit 2 vakken naast de worm",
+  "Have 3 Sardaukar in your garrison and on the war field": "Heb 3 Sardaukar in je garnizoen en op het oorlogsveld",
+  "Reach the medium level of one of your agendas": "Bereik het middelste niveau van een van je agenda's",
+  "Make 3 smuggling deals": "Sluit 3 smokkeldeals",
+  "Have 3 titanium production": "Heb 3 titaniumproductie",
+  "Have the highest energy production": "Heb de hoogste energieproductie",
+  "Milestones & awards of Arrakis": "Mijlpalen & prijzen van Arrakis",
+  "7 milestones · 7 awards for random draws": "7 mijlpalen · 7 prijzen voor willekeurige trekking",
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Getrokken uit de doelen van Arrakis, de module Mijlpalen & prijzen van Arrakis en één mijlpaal van elke actieve module."
 }

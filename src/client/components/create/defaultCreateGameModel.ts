@@ -74,6 +74,7 @@ export function defaultCreateGameModel(): CreateGameModel {
     duneSchemes: false,
     duneChoam: false,
     duneSmuggling: false,
+    duneGoals: false,
     startingCeos: 3,
     startingPreludes: 4,
     preludeDraftVariant: undefined,

@@ -362,5 +362,16 @@
   "At most 1 open offer per player (Guild Bank card: 2)": "플레이어당 열린 제안은 최대 1개 (길드 은행 카드가 있으면 2)",
   "On a deal seller and buyer each pay 1 Solari to the bank": "거래가 성사되면 판매자와 구매자가 각각 은행에 솔라리 1을 냅니다",
   "until generation ${0}": "${0}세대까지",
-  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "제안은 2세대 동안 유지되며, 아무도 받지 않으면 수수료 없이 돌아옵니다"
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "제안은 2세대 동안 유지되며, 아무도 받지 않으면 수수료 없이 돌아옵니다",
+  "Buy 3 wares at the Bazaar of Arrakeen": "아라킨 시장에서 상품 3개 구매",
+  "Close 2 CHOAM contracts": "CHOAM 계약 2건 체결",
+  "Own 2 tiles next to the worm": "벌레 옆 타일 2개 소유",
+  "Have 3 Sardaukar in your garrison and on the war field": "주둔지와 전장에 사다우카 3명 보유",
+  "Reach the medium level of one of your agendas": "자신의 의제 하나를 중간 단계까지 달성",
+  "Make 3 smuggling deals": "밀수 거래 3회 성사",
+  "Have 3 titanium production": "티타늄 생산량 3 보유",
+  "Have the highest energy production": "가장 높은 에너지 생산량 보유",
+  "Milestones & awards of Arrakis": "아라키스의 마일스톤과 어워드",
+  "7 milestones · 7 awards for random draws": "마일스톤 7개 · 어워드 7개 (무작위 추첨용)",
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "아라키스의 목표, '아라키스의 마일스톤과 어워드' 모듈, 그리고 사용 중인 각 모듈의 마일스톤 하나에서 추첨합니다."
 }

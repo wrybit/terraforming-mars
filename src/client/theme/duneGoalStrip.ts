@@ -20,6 +20,25 @@ export const DUNE_GOAL_STRIPS: Readonly<Record<string, ReadonlyArray<GoalStripIt
   'Scientist': [{asset: 'tags/science'}],
   'Thermalist': [{asset: 'resources/heat'}],
   'Miner': [{asset: 'resources/titanium'}, {plus: true}, {asset: 'resources/steel'}],
+  // Goals module of the Dune expansion (common/dune/duneGoals.ts)
+  'Energizer': [{asset: 'resources/power', count: 6, production: true}],
+  'T. Spacefarer': [{asset: 'tags/space', count: 6}],
+  'Spice Lord': [{asset: 'resources/titanium', count: 3, production: true}],
+  'Legend': [{asset: 'tags/event', count: 5}],
+  'Ecologist': [{asset: 'tags/plant'}, {asset: 'tags/microbe'}, {asset: 'tags/animal'}],
+  'A. Zoologist': [{asset: 'resources/animal'}, {plus: true}, {asset: 'resources/microbe'}],
+  'Investor': [{asset: 'tags/earth'}],
+  'Windtrap Magnate': [{asset: 'resources/power', production: true}],
+  'Benefactor': [{asset: 'resources/tr'}],
+  'Industrialist': [{asset: 'resources/steel'}, {plus: true}, {asset: 'resources/power'}],
+  'Excentric': [{asset: 'resources/wild'}],
+  // One milestone per module
+  'Bazaar Regular': [{asset: 'tiles/special_tile_icons/commercial_district', count: 3}],
+  'Sandwalker': [{asset: 'tiles/special_tile_icons/natural_preserve', count: 2}],
+  'Sardaukar Commander': [{asset: 'resources/fighter', count: 3}],
+  'Schemer': [{asset: 'resources/director'}],
+  'CHOAM Partner': [{asset: 'dune/choam', count: 2}],
+  'Smuggler King': [{asset: 'dune/smuggler', count: 3}],
 };
 
 /** Strip of a goal; undefined for goals the mockup has no strip for (the card falls back to the table symbol). */

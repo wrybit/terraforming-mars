@@ -85,6 +85,14 @@ export const MILESTONE_ICONS: Record<MilestoneName, ReadonlyArray<IconPart>> = {
   'Tycoon10': [{asset: 'resources/card', outline: true}],
   'V. Electrician': [{asset: 'tags/power'}],
   'V. Spacefarer': [{asset: 'tags/space'}],
+  // Dune expansion (common/dune/duneGoals.ts); 'dune/…' only exist as Dune graphics (themes/dune/graphics.json)
+  'Spice Lord': [{asset: 'resources/titanium', production: true}],
+  'Bazaar Regular': [{asset: 'tiles/special_tile_icons/commercial_district'}],
+  'Sandwalker': [{asset: 'tiles/special_tile_icons/natural_preserve'}],
+  'Sardaukar Commander': [{asset: 'resources/fighter'}],
+  'Schemer': [{asset: 'resources/director'}],
+  'CHOAM Partner': [{asset: 'dune/choam'}],
+  'Smuggler King': [{asset: 'dune/smuggler'}],
 };
 
 export const AWARD_ICONS: Record<AwardName, ReadonlyArray<IconPart>> = {
@@ -145,4 +153,6 @@ export const AWARD_ICONS: Record<AwardName, ReadonlyArray<IconPart>> = {
   'Voyager': [{asset: 'tags/jovian'}],
   'Warmonger': [{asset: 'misc/minus'}],
   'Zoologist': [{asset: 'resources/animal'}],
+  // Dune expansion (common/dune/duneGoals.ts)
+  'Windtrap Magnate': [{asset: 'resources/power', production: true}],
 };

@@ -71,9 +71,24 @@ import {Trader} from './modular/Trader';
 import {Tactician4} from './modular/Tactician4';
 import {Briber} from './Briber';
 import {DUNE_MILESTONES} from '../../common/theme/Theme';
+import {SpiceLord} from '../dune/goals/SpiceLord';
+import {BazaarRegular} from '../dune/goals/BazaarRegular';
+import {Sandwalker} from '../dune/goals/Sandwalker';
+import {SardaukarCommander} from '../dune/goals/SardaukarCommander';
+import {Schemer} from '../dune/goals/Schemer';
+import {ChoamPartner} from '../dune/goals/ChoamPartner';
+import {SmugglerKing} from '../dune/goals/SmugglerKing';
 
 export const milestoneManifest: MAManifest<MilestoneName, IMilestone> = {
   all: {
+    // Dune expansion (common/dune/duneGoals.ts): only Dune games offer them
+    'Spice Lord': {Factory: SpiceLord},
+    'Bazaar Regular': {Factory: BazaarRegular},
+    'Sandwalker': {Factory: Sandwalker},
+    'Sardaukar Commander': {Factory: SardaukarCommander},
+    'Schemer': {Factory: Schemer},
+    'CHOAM Partner': {Factory: ChoamPartner},
+    'Smuggler King': {Factory: SmugglerKing},
     'Agronomist': {Factory: Agronomist},
     'Architect': {Factory: Architect},
     'Briber': {Factory: Briber, random: 'modular'},

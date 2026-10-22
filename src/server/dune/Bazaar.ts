@@ -37,6 +37,8 @@ export type BazaarData = {
   bought?: Array<PlayerId>,
   /** Who took the ware of each slot this generation (bought or for free); shown in the empty slot until the slide */
   takenBy?: Array<PlayerId | null>,
+  /** Wares each player bought in the whole game (milestone Bazaar Regular, dune/goals); missing in older games */
+  purchases?: Record<PlayerId, number>,
 };
 
 /** Title of the choice of the former bazaar phase; the AI recognises it by this (ai/duneChoices.ts) */
@@ -170,6 +172,7 @@ export function buyWare(player: IPlayer, data: BazaarData, slot: number, payment
   markTaken(data, slot, player);
   data.discard.push(name);
   data.bought = [...(data.bought ?? []), player.id];
+  data.purchases = {...data.purchases, [player.id]: (data.purchases?.[player.id] ?? 0) + 1};
   player.game.log('${0} bought ${1} at the bazaar for ${2} M€', (b) => b.player(player).string(name).number(price));
   payOut(player, name);
 }

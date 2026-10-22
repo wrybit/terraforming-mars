@@ -358,5 +358,16 @@
   "At most 1 open offer per player (Guild Bank card: 2)": "Høyst 1 åpent tilbud per spiller (med kortet Laugsbanken: 2)",
   "On a deal seller and buyer each pay 1 Solari to the bank": "Ved en handel betaler selger og kjøper 1 solari hver til banken",
   "until generation ${0}": "til gen. ${0}",
-  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Et tilbud står i 2 generasjoner; tar ingen det, kommer det tilbake uten avgift"
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Et tilbud står i 2 generasjoner; tar ingen det, kommer det tilbake uten avgift",
+  "Buy 3 wares at the Bazaar of Arrakeen": "Kjøp 3 varer på basaren i Arrakeen",
+  "Close 2 CHOAM contracts": "Inngå 2 CHOAM-kontrakter",
+  "Own 2 tiles next to the worm": "Eie 2 felt ved siden av ormen",
+  "Have 3 Sardaukar in your garrison and on the war field": "Ha 3 sardaukar i garnisonen og på krigsfeltet",
+  "Reach the medium level of one of your agendas": "Nå middels nivå på én av agendaene dine",
+  "Make 3 smuggling deals": "Gjør 3 smuglerhandler",
+  "Have 3 titanium production": "Ha 3 titanproduksjon",
+  "Have the highest energy production": "Ha høyest energiproduksjon",
+  "Milestones & awards of Arrakis": "Milepæler og utmerkelser på Arrakis",
+  "7 milestones · 7 awards for random draws": "7 milepæler · 7 utmerkelser til tilfeldig trekning",
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Trukket fra målene på Arrakis, modulen Milepæler og utmerkelser på Arrakis og én milepæl fra hver modul i spill."
 }

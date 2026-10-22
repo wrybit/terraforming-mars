@@ -362,5 +362,16 @@
   "At most 1 open offer per player (Guild Bank card: 2)": "プレイヤーごとに公開オファーは最大1つ（カード「ギルド銀行」があれば2）",
   "On a deal seller and buyer each pay 1 Solari to the bank": "取引成立時、売り手と買い手がそれぞれ銀行に1ソラリを払う",
   "until generation ${0}": "第${0}世代まで",
-  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "オファーは2世代有効。誰も受けなければ手数料なしで戻る"
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "オファーは2世代有効。誰も受けなければ手数料なしで戻る",
+  "Buy 3 wares at the Bazaar of Arrakeen": "アラキーンのバザールで商品を3つ購入する",
+  "Close 2 CHOAM contracts": "CHOAMの契約を2件結ぶ",
+  "Own 2 tiles next to the worm": "ワームの隣に2タイルを所有する",
+  "Have 3 Sardaukar in your garrison and on the war field": "駐屯地と戦場にサーダカーを合計3体置く",
+  "Reach the medium level of one of your agendas": "自分の議題の1つを中段階まで進める",
+  "Make 3 smuggling deals": "密輸取引を3回行う",
+  "Have 3 titanium production": "チタン生産を3持つ",
+  "Have the highest energy production": "エネルギー生産が最も多い",
+  "Milestones & awards of Arrakis": "アラキスのマイルストーンとアワード",
+  "7 milestones · 7 awards for random draws": "マイルストーン7つ・アワード7つ（ランダム抽選用）",
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "アラキスの目標、モジュール「アラキスのマイルストーンとアワード」、そして使用中の各モジュールのマイルストーン1つから抽選されます。"
 }

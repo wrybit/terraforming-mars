@@ -68,5 +68,6 @@ export type CreateGameModel = {
   duneSchemes: boolean;
   duneChoam: boolean;
   duneSmuggling: boolean;
+  duneGoals: boolean;
   undoOption: boolean;
 }

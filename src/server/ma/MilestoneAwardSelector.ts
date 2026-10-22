@@ -1,4 +1,5 @@
 import {awardManifest} from '../awards/Awards';
+import {DUNE_ONLY_AWARDS, DUNE_ONLY_MILESTONES, duneAwardCandidates, duneMilestoneCandidates} from '../../common/dune/duneGoals';
 import {BoardName} from '../../common/boards/BoardName';
 import {GameOptions} from '../game/GameOptions';
 import {milestoneManifest} from '../milestones/Milestones';
@@ -106,7 +107,9 @@ export function chooseMilestonesAndAwards(gameOptions: GameOptions): DrawnMilest
     break;
 
   case RandomMAOptionType.LIMITED:
-    drawnMilestonesAndAwards = getRandomMilestonesAndAwards(gameOptions, requiredQty, LIMITED_SYNERGY);
+    drawnMilestonesAndAwards = gameOptions.theme === 'dune' ?
+      drawDuneMilestonesAndAwards(gameOptions, requiredQty) :
+      getRandomMilestonesAndAwards(gameOptions, requiredQty, LIMITED_SYNERGY);
     break;
   case RandomMAOptionType.UNLIMITED:
     drawnMilestonesAndAwards = getRandomMilestonesAndAwards(gameOptions, requiredQty, UNLIMITED_SYNERGY);
@@ -116,6 +119,16 @@ export function chooseMilestonesAndAwards(gameOptions: GameOptions): DrawnMilest
   }
 
   return drawnMilestonesAndAwards;
+}
+
+// Dune draws from a small pool (duneGoals.ts): without the goals module just the board's five of each, which the
+// synergy limits may not allow together – then without the limits rather than no game
+function drawDuneMilestonesAndAwards(gameOptions: GameOptions, requiredQty: number): DrawnMilestonesAndAwards {
+  try {
+    return getRandomMilestonesAndAwards(gameOptions, requiredQty, LIMITED_SYNERGY);
+  } catch {
+    return getRandomMilestonesAndAwards(gameOptions, requiredQty, UNLIMITED_SYNERGY);
+  }
 }
 
 /** Boards with no volcanic spaces. Exported for tests. */
@@ -133,10 +146,18 @@ export const BOARDS_WITHOUT_VOLCANIC_SPACES: ReadonlyArray<BoardName> = [
  * exported for tests
  */
 export function getCandidates(gameOptions: GameOptions): [Array<MilestoneName>, Array<AwardName>] {
+  // Dune: only goals with Dune names – the board's, the goals module's and those of the modules in play (duneGoals.ts)
+  if (gameOptions.theme === 'dune') {
+    return [duneMilestoneCandidates(gameOptions.duneModules), duneAwardCandidates(gameOptions.duneModules)];
+  }
   function include<T extends string>(name: T, manifest: MAManifest<T, any>): boolean {
     // Never include deprecated MAs in random candidates.  They generally have "more official" versions that will be
     // considered for inclusion.
     if (manifest.all[name].deprecated) {
+      return false;
+    }
+    // Made for Dune: no Mars name, never in a Mars game
+    if ((DUNE_ONLY_MILESTONES as ReadonlyArray<string>).includes(name) || (DUNE_ONLY_AWARDS as ReadonlyArray<string>).includes(name)) {
       return false;
     }
 

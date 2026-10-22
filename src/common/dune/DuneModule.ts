@@ -3,7 +3,8 @@ import {Theme} from '../theme/Theme';
 // Modules of the Dune expansion (claude/dune-erweiterung-konzept.md). Unlike the theme they change the rules,
 // so each one is switched on on its own: a module can be tested – or dropped – without losing the others.
 // Only with the Dune theme. Saved games without the option have none.
-export const DUNE_MODULES = ['bazaar', 'worm', 'kanly', 'schemes', 'choam', 'smuggling'] as const;
+// goals: the milestones and awards of the mockup for random draws (common/dune/duneGoals.ts); changes no rule itself
+export const DUNE_MODULES = ['bazaar', 'worm', 'kanly', 'schemes', 'choam', 'smuggling', 'goals'] as const;
 export type DuneModule = typeof DUNE_MODULES[number];
 
 /** Modules that are built; the create-game form offers only these and the server refuses the others. */
@@ -17,6 +18,7 @@ export const DUNE_MODULE_LABEL: Record<DuneModule, string> = {
   schemes: 'House schemes',
   choam: 'CHOAM contracts',
   smuggling: 'Smuggling & suspicion',
+  goals: 'Milestones & awards of Arrakis',
 };
 
 export function isDuneModule(value: unknown): value is DuneModule {

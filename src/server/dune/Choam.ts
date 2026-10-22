@@ -36,6 +36,8 @@ export type ChoamOffer = {
 export type ChoamData = {
   /** Open offers in the order they were made */
   offers: Array<ChoamOffer>,
+  /** Contracts each player closed, as buyer or seller (milestone CHOAM Partner, dune/goals); missing in older games */
+  deals?: Record<PlayerId, number>,
 };
 
 export const CHOAM_FEE = 1;
@@ -97,6 +99,7 @@ export function acceptOffer(game: IGame, data: ChoamData, buyer: IPlayer, offer:
   // An offerer without M€ left pays no fee
   buyer.stock.deduct(Resource.MEGACREDITS, feeOf(buyer));
   seller.stock.deduct(Resource.MEGACREDITS, Math.min(seller.megaCredits, feeOf(seller)));
+  data.deals = {...data.deals, [buyer.id]: (data.deals?.[buyer.id] ?? 0) + 1, [seller.id]: (data.deals?.[seller.id] ?? 0) + 1};
   game.log('${0} accepted the CHOAM contract of ${1}', (b) => b.player(buyer).player(seller));
 }
 

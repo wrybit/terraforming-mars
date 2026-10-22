@@ -363,5 +363,16 @@
   "At most 1 open offer per player (Guild Bank card: 2)": "Не более 1 открытого предложения на игрока (с картой «Банк Гильдии»: 2)",
   "On a deal seller and buyer each pay 1 Solari to the bank": "При сделке продавец и покупатель платят банку по 1 солари",
   "until generation ${0}": "до пок. ${0}",
-  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Предложение действует 2 поколения; если его никто не принял, оно возвращается без сбора"
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Предложение действует 2 поколения; если его никто не принял, оно возвращается без сбора",
+  "Buy 3 wares at the Bazaar of Arrakeen": "Купи 3 товара на базаре Арракина",
+  "Close 2 CHOAM contracts": "Заключи 2 контракта СНОАМ",
+  "Own 2 tiles next to the worm": "Владей 2 клетками рядом с червём",
+  "Have 3 Sardaukar in your garrison and on the war field": "Имей 3 сардаукаров в гарнизоне и на поле боя",
+  "Reach the medium level of one of your agendas": "Достигни среднего уровня одной из своих повесток",
+  "Make 3 smuggling deals": "Заключи 3 контрабандные сделки",
+  "Have 3 titanium production": "Имей 3 производства титана",
+  "Have the highest energy production": "Имей наибольшее производство энергии",
+  "Milestones & awards of Arrakis": "Вехи и награды Арракиса",
+  "7 milestones · 7 awards for random draws": "7 вех · 7 наград для случайного выбора",
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Выбираются из целей Арракиса, модуля «Вехи и награды Арракиса» и по одной вехе каждого модуля в игре."
 }

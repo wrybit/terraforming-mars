@@ -363,5 +363,16 @@
   "At most 1 open offer per player (Guild Bank card: 2)": "每位玩家最多 1 个未成交报价（有公会银行卡牌：2）",
   "On a deal seller and buyer each pay 1 Solari to the bank": "成交时卖方和买方各向银行支付 1 索拉里",
   "until generation ${0}": "至第 ${0} 世代",
-  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "报价保留 2 个世代；无人接受则免费退回"
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "报价保留 2 个世代；无人接受则免费退回",
+  "Buy 3 wares at the Bazaar of Arrakeen": "在厄拉奇恩集市购买3件商品",
+  "Close 2 CHOAM contracts": "签订2份宇联公司合同",
+  "Own 2 tiles next to the worm": "拥有2个与沙虫相邻的地块",
+  "Have 3 Sardaukar in your garrison and on the war field": "在你的驻军和战场上共有3名萨多卡",
+  "Reach the medium level of one of your agendas": "将你的一项议程推进到中级",
+  "Make 3 smuggling deals": "完成3笔走私交易",
+  "Have 3 titanium production": "拥有3点钛产量",
+  "Have the highest energy production": "拥有最高的能量产量",
+  "Milestones & awards of Arrakis": "阿拉吉斯的里程碑与奖项",
+  "7 milestones · 7 awards for random draws": "7个里程碑 · 7个奖项，供随机抽取",
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "从阿拉吉斯的目标、“阿拉吉斯的里程碑与奖项”模块以及每个启用模块的一个里程碑中抽取。"
 }

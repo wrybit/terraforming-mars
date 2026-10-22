@@ -360,5 +360,16 @@
   "At most 1 open offer per player (Guild Bank card: 2)": "Enintään 1 avoin tarjous pelaajaa kohden (Kiltapankki-kortilla: 2)",
   "On a deal seller and buyer each pay 1 Solari to the bank": "Kaupan syntyessä myyjä ja ostaja maksavat kumpikin pankille 1 solarin",
   "until generation ${0}": "sukupolveen ${0} asti",
-  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Tarjous on voimassa 2 sukupolvea; jos kukaan ei ota sitä, se palaa ilman maksua"
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Tarjous on voimassa 2 sukupolvea; jos kukaan ei ota sitä, se palaa ilman maksua",
+  "Buy 3 wares at the Bazaar of Arrakeen": "Osta 3 tavaraa Arrakeenin basaarista",
+  "Close 2 CHOAM contracts": "Solmi 2 CHOAM-sopimusta",
+  "Own 2 tiles next to the worm": "Omista 2 ruutua madon vieressä",
+  "Have 3 Sardaukar in your garrison and on the war field": "Pidä 3 sardaukaria varuskunnassasi ja taistelukentällä",
+  "Reach the medium level of one of your agendas": "Saavuta yhden agendasi keskitaso",
+  "Make 3 smuggling deals": "Tee 3 salakuljetuskauppaa",
+  "Have 3 titanium production": "Omista 3 titaanituotantoa",
+  "Have the highest energy production": "Omista suurin energiatuotanto",
+  "Milestones & awards of Arrakis": "Arrakisin virstanpylväät ja palkinnot",
+  "7 milestones · 7 awards for random draws": "7 virstanpylvästä · 7 palkintoa satunnaisarvontaan",
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Arvotaan Arrakisin tavoitteista, moduulista Arrakisin virstanpylväät ja palkinnot sekä yksi virstanpylväs kustakin pelissä olevasta moduulista."
 }

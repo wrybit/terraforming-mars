@@ -161,6 +161,7 @@ const TEMPLATE_EXPECTED: CreateGameModel = {
   duneSchemes: false,
   duneChoam: false,
   duneSmuggling: false,
+  duneGoals: false,
   customCeos: [],
   startingCeos: 3,
   startingPreludes: 4,

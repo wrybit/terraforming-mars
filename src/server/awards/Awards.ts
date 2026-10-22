@@ -60,9 +60,12 @@ import {MAManifest} from '../ma/MAManifest';
 import {Suburbian} from './modular/Suburbian';
 import {Blacksmith} from './Blacksmith';
 import {DUNE_AWARDS} from '../../common/theme/Theme';
+import {WindtrapMagnate} from '../dune/goals/WindtrapMagnate';
 
 export const awardManifest: MAManifest<AwardName, IAward> = {
   all: {
+    // Dune expansion (common/dune/duneGoals.ts): only Dune games offer it
+    'Windtrap Magnate': {Factory: WindtrapMagnate},
     'A. Engineer': {Factory: AmazonisEngineer},
     'A. Manufacturer': {Factory: AManufacturer},
     'A. Zoologist': {Factory: AZoologist},

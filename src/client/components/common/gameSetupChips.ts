@@ -1,8 +1,9 @@
 import {Expansion} from '@/common/cards/GameModule';
 import {DUNE_MODULE_LABEL} from '@/common/dune/DuneModule';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
-import {FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_EXPANSIONS, SeatIconKind} from '@/client/components/create/createGameChoices';
+import {DUNE_MILESTONE_OPTIONS, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_EXPANSIONS, SeatIconKind} from '@/client/components/create/createGameChoices';
 import {defaultCreateGameModel} from '@/client/components/create/defaultCreateGameModel';
+import {activeTheme} from '@/client/theme/applyTheme';
 import {GameSetupOptions} from '@/common/game/GameSetupOptions';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {boardColorClass} from '@/client/components/create/boardColorClass';
@@ -123,7 +124,7 @@ export function optionChips(options: GameSetupOptions, isActive: (expansion: Exp
     [options.showOtherPlayersVP, translateText('Show real-time VP'), 'houseRules'],
     [options.fastModeOption, translateText('Fast mode'), 'houseRules'],
     [options.escapeVelocity, translateText('Escape Velocity'), 'houseRules', 'expansion-icon-escape-velocity'],
-    [multiplayer && random, translateText(MILESTONE_OPTIONS.find((option) => option.value === options.randomMA)?.label ?? ''), 'milestones'],
+    [multiplayer && random, translateText((activeTheme() === 'dune' ? DUNE_MILESTONE_OPTIONS : MILESTONE_OPTIONS).find((option) => option.value === options.randomMA)?.label ?? ''), 'milestones'],
     [multiplayer && random && options.modularMA, translateText('Official Random α'), 'milestones'],
     [multiplayer && random && options.includeFanMA, translateText('Include fan Milestones/Awards'), 'milestones'],
     [options.customCardPool, translateText('Card pool'), 'cardPool'],

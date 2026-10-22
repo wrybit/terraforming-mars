@@ -98,6 +98,15 @@ export const milestoneNames = [
   'Thawer',
   'Trader',
   'Tycoon10',
+
+  // Dune expansion (common/dune/duneGoals.ts)
+  'Spice Lord',
+  'Bazaar Regular',
+  'Sandwalker',
+  'Sardaukar Commander',
+  'Schemer',
+  'CHOAM Partner',
+  'Smuggler King',
 ] as const;
 
 export type MilestoneName = typeof milestoneNames[number];

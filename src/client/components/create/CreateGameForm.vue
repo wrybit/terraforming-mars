@@ -243,13 +243,18 @@
         </Teleport>
         <!-- Own card: has nothing to do with the board (only with several players, solo has none).
              v-if on the Teleport, not on the card: a card switched on later inside a Teleport did not appear -->
-        <!-- Dune plays the milestones and awards of Arrakis; the random Mars sets have no Dune names -->
-        <Teleport v-if="playersCount > 1 && theme !== 'dune'" :to="columnTarget('milestones')">
+        <!-- Dune: the set of Arrakis, or a random draw from the Dune goals only (the board's, the goals module's and
+             one milestone per module in play; common/dune/duneGoals.ts) – never the Mars ones without Dune names -->
+        <Teleport v-if="playersCount > 1" :to="columnTarget('milestones')">
           <section class="create-game-card" :style="cardStyle('milestones')">
             <CollapsibleSection title="Milestones & Awards" storageKey="milestones" :changed="milestonesNote">
               <template #actions><InfoLink :href="wikiUrls.randomMilestonesAndAwards"/></template>
-              <SegmentedControl v-model="randomMA" :options="MILESTONE_OPTIONS"/>
-              <template v-if="isRandomMAEnabled()">
+              <SegmentedControl v-if="theme === 'dune'" v-model="duneMilestones" :options="DUNE_MILESTONE_OPTIONS"/>
+              <SegmentedControl v-else v-model="randomMA" :options="MILESTONE_OPTIONS"/>
+              <div v-if="theme === 'dune' && isRandomMAEnabled()" class="create-game-note">
+                <span v-i18n>Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.</span>
+              </div>
+              <template v-if="theme !== 'dune' && isRandomMAEnabled()">
                 <OptionRow label="Official Random α" sub><SwitchInput v-model="modularMA"/></OptionRow>
                 <div v-if="modularMA" class="create-game-note">
                   <span v-i18n>The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.</span>
@@ -491,7 +496,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, ALPHA_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption, FAN_BOARDS} from './createGameChoices';
+import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, DUNE_MILESTONE_OPTIONS, ExpansionChoice, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, ALPHA_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption, FAN_BOARDS} from './createGameChoices';
 import {ExpansionGroup, ExpansionGrouping, ExpansionTile, groupExpansions, loadExpansionGrouping, saveExpansionGrouping} from './expansionGrouping';
 import {ContentLinePart, contentLine} from './expansionContentLine';
 import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
@@ -782,7 +787,8 @@ export default defineComponent({
         initialDraft: this.initialDraft,
         preludeDraftVariant: this.preludeDraftVariant ?? false,
         ceosDraftVariant: this.ceosDraftVariant ?? false,
-        randomMA: this.theme === 'dune' ? RandomMAOptionType.NONE : this.randomMA,
+        // Dune knows only the board's set or its own random draw (DUNE_MILESTONE_OPTIONS)
+        randomMA: this.theme === 'dune' && this.randomMA !== RandomMAOptionType.NONE ? RandomMAOptionType.LIMITED : this.randomMA,
         shuffleMapOption: this.shuffleMapOption,
         randomFirstPlayer: this.randomFirstPlayer,
         requiresVenusTrackCompletion: this.requiresVenusTrackCompletion,
@@ -892,6 +898,18 @@ export default defineComponent({
     },
     MILESTONE_OPTIONS(): typeof MILESTONE_OPTIONS {
       return MILESTONE_OPTIONS;
+    },
+    DUNE_MILESTONE_OPTIONS(): typeof DUNE_MILESTONE_OPTIONS {
+      return DUNE_MILESTONE_OPTIONS;
+    },
+    // Dune shows two choices; 'Random full' chosen in Mars mode counts as random here too
+    duneMilestones: {
+      get(): RandomMAOptionType {
+        return this.randomMA === RandomMAOptionType.NONE ? RandomMAOptionType.NONE : RandomMAOptionType.LIMITED;
+      },
+      set(value: RandomMAOptionType) {
+        this.randomMA = value;
+      },
     },
     AGENDA_OPTIONS(): typeof AGENDA_OPTIONS {
       return AGENDA_OPTIONS;

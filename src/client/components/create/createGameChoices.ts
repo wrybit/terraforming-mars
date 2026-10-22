@@ -106,6 +106,15 @@ export const MILESTONE_OPTIONS: ReadonlyArray<SegmentOption> = [
   {value: RandomMAOptionType.UNLIMITED, label: 'Random full'},
 ];
 
+/**
+ * Dune: the board's set or a random draw from the Dune goals only (common/dune/duneGoals.ts) – there are too few for
+ * a choice between limited and full synergy, the server limits it when it can
+ */
+export const DUNE_MILESTONE_OPTIONS: ReadonlyArray<SegmentOption> = [
+  {value: RandomMAOptionType.NONE, label: 'Board-defined'},
+  {value: RandomMAOptionType.LIMITED, label: 'Random'},
+];
+
 export const AGENDA_OPTIONS: ReadonlyArray<SegmentOption> = [
   {value: 'Random', label: 'Random'},
   {value: 'Chairman', label: 'Chairman'},

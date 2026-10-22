@@ -87,6 +87,9 @@ export const awardNames = [
   'Politician',
   'Suburbian',
   // 'Zoologist', // Most animal and microbe resources. Currently Zoologist2
+
+  // Dune expansion (common/dune/duneGoals.ts)
+  'Windtrap Magnate',
 ] as const;
 
 export type AwardName = typeof awardNames[number];

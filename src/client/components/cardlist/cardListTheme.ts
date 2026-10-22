@@ -1,6 +1,7 @@
 import {GameModule} from '@/common/cards/GameModule';
 import {CardType} from '@/common/cards/CardType';
-import {DUNE_AWARDS, DUNE_EXPANSIONS, DUNE_MILESTONES, Theme, themeAllowsExpansion} from '@/common/theme/Theme';
+import {DUNE_EXPANSIONS, Theme, themeAllowsExpansion} from '@/common/theme/Theme';
+import {ALL_DUNE_AWARDS, ALL_DUNE_MILESTONES, DUNE_ONLY_AWARDS, DUNE_ONLY_MILESTONES} from '@/common/dune/duneGoals';
 import {CardListEntry, filterResource, filterTags} from '@/client/components/cardlist/cardListEntries';
 import {ClientCard} from '@/common/cards/ClientCard';
 import {MilestoneAwardKind} from '@/client/components/milestoneAwardChoice';
@@ -26,18 +27,30 @@ function inDune(entry: CardListEntry): boolean {
   if (entry.card !== undefined && !entry.card.compatibility.every((expansion) => themeAllowsExpansion('dune', expansion))) {
     return false;
   }
+  // Arrakis', the goals module's and the modules' milestones and awards (duneGoals.ts)
   if (entry.type === 'milestones') {
-    return (DUNE_MILESTONES as ReadonlyArray<string>).includes(entry.name);
+    return (ALL_DUNE_MILESTONES as ReadonlyArray<string>).includes(entry.name);
   }
   if (entry.type === 'awards') {
-    return (DUNE_AWARDS as ReadonlyArray<string>).includes(entry.name);
+    return (ALL_DUNE_AWARDS as ReadonlyArray<string>).includes(entry.name);
+  }
+  return true;
+}
+
+// Milestones and awards made for Dune have no Mars name: never in the Mars card list
+function inMars(entry: CardListEntry): boolean {
+  if (entry.type === 'milestones') {
+    return !(DUNE_ONLY_MILESTONES as ReadonlyArray<string>).includes(entry.name);
+  }
+  if (entry.type === 'awards') {
+    return !(DUNE_ONLY_AWARDS as ReadonlyArray<string>).includes(entry.name);
   }
   return true;
 }
 
 /** Entries of the card list in `theme`; Mars keeps all of them. */
 export function themeEntries(entries: ReadonlyArray<CardListEntry>, theme: Theme): ReadonlyArray<CardListEntry> {
-  return theme === 'dune' ? entries.filter(inDune) : entries;
+  return theme === 'dune' ? entries.filter(inDune) : entries.filter(inMars);
 }
 
 /** Card types to filter by in `theme`. */
@@ -97,6 +110,11 @@ export const DUNE_GOAL_RULES: Readonly<Record<MilestoneAwardKind, ReadonlyArray<
 const DUNE_GOAL_ORDER: ReadonlyArray<string> = [
   'Mayor', 'Gardener', 'Terraformer', 'Builder', 'Planner',
   'Landlord', 'Banker', 'Scientist', 'Thermalist', 'Miner',
+  // Goals module, as on the mockup page
+  'Geologist', 'Energizer', 'T. Spacefarer', 'Spice Lord', 'Legend', 'Ecologist', 'Polar Explorer',
+  'A. Zoologist', 'Desert Settler', 'Investor', 'Windtrap Magnate', 'Benefactor', 'Industrialist', 'Excentric',
+  // One milestone per module
+  'Bazaar Regular', 'Sandwalker', 'Sardaukar Commander', 'Schemer', 'CHOAM Partner', 'Smuggler King',
 ];
 
 /** Goals in the order the theme shows them: Dune as on the mockup, Mars alphabetical as before. */

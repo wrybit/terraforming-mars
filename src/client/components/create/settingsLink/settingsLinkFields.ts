@@ -44,6 +44,8 @@ export const BOOLEAN_FIELDS: ReadonlyArray<BooleanModelField> = [
   'duneSchemes',
   'duneChoam',
   'duneSmuggling',
+  // Appended: earlier links keep their meaning
+  'duneGoals',
 ];
 
 export const NUMBER_FIELDS: ReadonlyArray<NumberModelField> = [

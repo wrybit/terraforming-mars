@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import {ALL_DUNE_AWARDS, ALL_DUNE_MILESTONES} from '../../src/common/dune/duneGoals';
 import fs from 'fs';
 import path from 'path';
 import {applyRules, compileRules, ThemeTerms} from '../../src/tools/themeTexts';
@@ -42,7 +43,8 @@ describe('Dune theme files', () => {
   it('names cards that exist', () => {
     const cards = new Set<string>(Object.values(CardName));
     const nonCards = ['Terraformer', 'Mayor', 'Gardener', 'Builder', 'Planner', 'Landlord', 'Banker', 'Scientist', 'Thermalist', 'Miner',
-      'Tharsis Tholus', 'Ascraeus Mons', 'Pavonis Mons', 'Arsia Mons'];
+      'Tharsis Tholus', 'Ascraeus Mons', 'Pavonis Mons', 'Arsia Mons',
+      ...ALL_DUNE_MILESTONES, ...ALL_DUNE_AWARDS];
     const unknown = Object.keys(english).filter((key) => !key.includes(':') && !cards.has(key) && !nonCards.includes(key));
     expect(unknown).deep.eq([]);
   });

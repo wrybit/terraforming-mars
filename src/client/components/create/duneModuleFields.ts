@@ -9,6 +9,7 @@ export const DUNE_MODULE_FIELD = {
   schemes: 'duneSchemes',
   choam: 'duneChoam',
   smuggling: 'duneSmuggling',
+  goals: 'duneGoals',
 } as const satisfies Record<DuneModule, string>;
 
 export type DuneModuleField = typeof DUNE_MODULE_FIELD[DuneModule];
@@ -22,6 +23,7 @@ export const DUNE_MODULE_DETAIL: Record<DuneModule, string> = {
   schemes: '24 secret agendas · 3/5/8 VP',
   choam: 'Trade between players',
   smuggling: 'Spice for M€ · suspicion track',
+  goals: '7 milestones · 7 awards for random draws',
 };
 
 /** Icon of the module chip (assets/themes/dune/graphics) */
@@ -32,6 +34,7 @@ export const DUNE_MODULE_ICON: Record<DuneModule, string> = {
   schemes: 'res-advisor',
   choam: 'choam',
   smuggling: 'smuggler',
+  goals: 'res-landsraad',
 };
 
 export function chosenDuneModules(switches: DuneModuleSwitches): Array<DuneModule> {
