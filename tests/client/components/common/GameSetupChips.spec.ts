@@ -19,8 +19,19 @@ describe('GameSetupChips', () => {
     const chips = [...seatChips(2, 1), boardChip('tharsis'), ...expansionChips(isActive), ...optionChips(options, isActive, 3)];
     const wrapper = mount(GameSetupChips, {...globalConfig, props: {chips, compact: true}});
     expect(wrapper.findAll('.create-game-summary-chip').map((chip) => chip.text()))
-      .deep.eq(['2 players', '1 AI', 'tharsis', 'Base game', 'Venus Next', 'Randomize board tiles', 'Draft']);
+      .deep.eq(['2 players', '1 AI', 'tharsis', '', '', 'Randomize board tiles', 'Draft']);
     expect(wrapper.classes()).to.include('create-game-summary--compact');
+  });
+
+  it('shows expansions as icons only, named by their label, and marks on/off settings with a switch', () => {
+    const options = setupOptionsFromGame(gameOptions({showTimers: true, startingCorporations: 2}));
+    const isActive = (expansion: string) => expansion === 'venus';
+    const chips = [...expansionChips(isActive), ...optionChips(options, isActive, 2)];
+    const wrapper = mount(GameSetupChips, {...globalConfig, props: {chips}});
+    const icons = wrapper.findAll('.create-game-summary-chip--icon');
+    expect(icons.map((chip) => chip.attributes('aria-label'))).deep.eq(['Base game', 'Venus Next']);
+    const toggled = wrapper.findAll('.create-game-summary-chip').filter((chip) => chip.find('.create-game-summary-toggle').exists());
+    expect(toggled.map((chip) => chip.text())).deep.eq(['Show timers']);
   });
 
   it('every switched-on setting and changed count becomes a chip', () => {

@@ -16,6 +16,10 @@ export type GameSetupChip = {
   seatIcon?: SeatIconKind;
   // Expansion icon or board hexagon in front of the label
   iconClass?: string;
+  // Expansions show only their icon, the name comes as tooltip (Jens 22 Oct 2026: the chips got too many)
+  iconOnly?: boolean;
+  // An on/off setting without an icon of its own: a small switch in front of the label marks it as such
+  toggle?: boolean;
   // Board names are lower case and get capitalized via CSS
   capitalized?: boolean;
   // Link within the statistics page (its navigation picks up data-stats-link)
@@ -86,6 +90,7 @@ export function expansionChips(isActive: (expansion: Expansion) => boolean): Arr
     key: choice.label,
     label: translateText(choice.label),
     iconClass: `create-game-expansion-icon ${choice.iconClass}`,
+    iconOnly: true,
     group: 'expansions' as const,
   }));
 }
@@ -95,8 +100,9 @@ export function expansionChips(isActive: (expansion: Expansion) => boolean): Arr
 export function optionChips(options: GameSetupOptions, isActive: (expansion: Expansion) => boolean, playerCount: number): Array<GameSetupChip> {
   const multiplayer = playerCount > 1;
   const random = options.randomMA !== RandomMAOptionType.NONE;
-  const candidates: Array<[boolean, string, GameSetupGroupKey, string?]> = [
-    // [shown, translated label, card of the create form, icon]; expansion options carry their expansion's icon, otherwise e.g. "Extreme" lacks context
+  const candidates: Array<[boolean, string, GameSetupGroupKey, string?, boolean?]> = [
+    // [shown, translated label, card of the create form, icon, is a switch (default yes)]; expansion options carry
+    // their expansion's icon, otherwise e.g. "Extreme" lacks context
     [options.shuffledBoard, translateText('Randomize board tiles'), 'board'],
     [isActive('venus') && options.altVenusBoard, translateText('Alt. Venus Board'), 'expansionOptions', 'expansion-icon-venus'],
     [isActive('venus') && multiplayer && options.requiresVenusTrackCompletion, translateText('Mandatory Venus Terraforming'), 'expansionOptions', 'expansion-icon-venus'],
@@ -106,7 +112,7 @@ export function optionChips(options: GameSetupOptions, isActive: (expansion: Exp
     [isActive('moon') && options.moonStandardProjectVariant1, translateText('Standard Project Variant #1'), 'expansionOptions', 'expansion-icon-themoon'],
     [isActive('moon') && options.moonStandardProjectVariant, translateText('Standard Project Variant #2'), 'expansionOptions', 'expansion-icon-themoon'],
     [isActive('ares') && options.aresExtremeVariant, translateText('Extreme'), 'expansionOptions', 'expansion-icon-ares'],
-    [differs(options.startingCorporations, DEFAULTS.startingCorporations), countLabel('Starting Corporations', options.startingCorporations), 'setup'],
+    [differs(options.startingCorporations, DEFAULTS.startingCorporations), countLabel('Starting Corporations', options.startingCorporations), 'setup', undefined, false],
     [isActive('prelude') && differs(options.startingPreludes, DEFAULTS.startingPreludes), countLabel('Starting Preludes', options.startingPreludes), 'setup', 'expansion-icon-prelude'],
     [isActive('ceo') && differs(options.startingCeos, DEFAULTS.startingCeos), countLabel('Starting CEOs', options.startingCeos), 'setup', 'expansion-icon-ceo'],
     [isActive('prelude') && options.twoCorpsVariant, translateText('Merger'), 'setup', 'expansion-icon-prelude'],
@@ -122,16 +128,17 @@ export function optionChips(options: GameSetupOptions, isActive: (expansion: Exp
     [options.showOtherPlayersVP, translateText('Show real-time VP'), 'houseRules'],
     [options.fastModeOption, translateText('Fast mode'), 'houseRules'],
     [options.escapeVelocity, translateText('Escape Velocity'), 'houseRules', 'expansion-icon-escape-velocity'],
-    [multiplayer && random, translateText(MILESTONE_OPTIONS.find((option) => option.value === options.randomMA)?.label ?? ''), 'milestones'],
+    [multiplayer && random, translateText(MILESTONE_OPTIONS.find((option) => option.value === options.randomMA)?.label ?? ''), 'milestones', undefined, false],
     [multiplayer && random && options.modularMA, translateText('Official Random α'), 'milestones'],
     [multiplayer && random && options.includeFanMA, translateText('Include fan Milestones/Awards'), 'milestones'],
-    [options.customCardPool, translateText('Card pool'), 'cardPool'],
+    [options.customCardPool, translateText('Card pool'), 'cardPool', undefined, false],
   ];
-  return candidates.filter(([shown]) => shown).map(([, label, group, icon]) => ({
+  return candidates.filter(([shown]) => shown).map(([, label, group, icon, isSwitch = true]) => ({
     key: label,
     label,
     group,
     iconClass: icon === undefined ? undefined : `create-game-expansion-icon ${icon}`,
+    toggle: icon === undefined && isSwitch,
   }));
 }
 

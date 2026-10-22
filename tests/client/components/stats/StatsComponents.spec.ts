@@ -143,7 +143,9 @@ describe('Stats components', () => {
 
   it('StatsGameList shows the setup of each game as chips', () => {
     const wrapper = mount(StatsGameList, {...config, props: {games}});
-    const chipTexts = (row: number) => wrapper.findAll('tbody tr')[row].findAll('.create-game-summary-chip').map((chip) => chip.text());
+    const chipTexts = (row: number) => wrapper.findAll('tbody tr')[row].findAll('.create-game-summary-chip')
+      // Expansions are icon-only chips, named by their aria-label
+      .map((chip) => chip.text() || chip.attributes('aria-label'));
     // Newest first: the screenshot game without details only knows its players
     expect(chipTexts(0)).deep.eq(['3 players']);
     expect(chipTexts(1)).deep.eq(['2 players', 'Hellas', 'Base game', 'Corporate Era', 'Prelude']);

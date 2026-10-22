@@ -1270,6 +1270,33 @@ each(@players, {
   }
 }
 
+// Expansion as icon only: a round chip around the icon, the name comes as tooltip
+.create-game-summary-chip--icon {
+  padding: 3px 7px;
+  cursor: default;
+}
+
+// On/off setting: the switch of the form (.create-game-switch, switched on) in miniature
+.create-game-summary-toggle {
+  position: relative;
+  flex: none;
+  width: 17px;
+  height: 10px;
+  border-radius: 5px;
+  background: @bg_action;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+  }
+}
+
 // Linked chip (board → its statistics page): looks like the others, a little brighter on hover
 a.create-game-summary-chip {
   text-decoration: none;
@@ -1287,6 +1314,10 @@ a.create-game-summary-chip {
     .create-game-expansion-icon {
       .create-game-icon-size(13px);
     }
+  }
+
+  .create-game-summary-chip--icon {
+    padding: 1px 5px;
   }
 
   .create-game-board-hexagon {
