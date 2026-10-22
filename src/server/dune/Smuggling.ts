@@ -76,14 +76,12 @@ export function ownsSmugglersMarket(player: IPlayer): boolean {
   return player.game.board.spaces.some((space) => space.tile?.tileType === TileType.INDUSTRIAL_CENTER && space.player?.id === player.id);
 }
 
-/** Smuggler Network card: a bribe costs 6 */
-export const BRIBE_COST_WITH_NETWORK = 6;
+/** Smuggler Network card: a bribe costs 4 less – a discount like the other discount cards (Jens 22 Oct 2026) */
+export const NETWORK_BRIBE_DISCOUNT = 4;
 
 export function bribeCost(player: IPlayer): number {
-  if (player.tableau.has(CardName.SMUGGLER_NETWORK)) {
-    return BRIBE_COST_WITH_NETWORK;
-  }
-  return ownsSmugglersMarket(player) ? BRIBE_COST_WITH_MARKET : BRIBE_COST;
+  const base = ownsSmugglersMarket(player) ? BRIBE_COST_WITH_MARKET : BRIBE_COST;
+  return Math.max(0, base - (player.tableau.has(CardName.SMUGGLER_NETWORK) ? NETWORK_BRIBE_DISCOUNT : 0));
 }
 
 /** Friends of Esmar Tuek card */

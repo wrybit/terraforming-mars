@@ -122,6 +122,24 @@ function markTaken(data: BazaarData, slot: number, player: IPlayer): void {
 }
 
 /** Caravan Master card: the ware in `slot` for free, if one lies there */
+/** Caravan Master card: the cheapest ware on display for free (the first of equal prices); nothing when none lies out */
+export function takeCheapestWare(player: IPlayer): void {
+  const data = player.game.duneData?.bazaar;
+  if (data === undefined) {
+    return;
+  }
+  let cheapest: {slot: number, price: number} | undefined;
+  data.slots.forEach((_, slot) => {
+    const price = priceFor(player, data, slot);
+    if (price !== undefined && (cheapest === undefined || price < cheapest.price)) {
+      cheapest = {slot, price};
+    }
+  });
+  if (cheapest !== undefined) {
+    takeFreeWare(player, cheapest.slot);
+  }
+}
+
 export function takeFreeWare(player: IPlayer, slot: number): void {
   const data = player.game.duneData?.bazaar;
   const name = data?.slots[slot];

@@ -124,11 +124,11 @@ function openInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
     if (player.game.board instanceof Arrakis61Board) {
       player.game.board.warFieldSpaceId = space.id;
     }
-    // Shield Generator card: 2 Sardaukar defend the owner's tile for free
+    // Shield Generator card: 1 Sardaukar defends the owner's tile for free
     const owner = space.player;
     if (owner !== undefined && owner.tableau.has(CardName.SHIELD_GENERATOR) && data.battle !== undefined) {
-      data.battle.troops[owner.id] = (data.battle.troops[owner.id] ?? 0) + 2;
-      player.game.log('The shield generator of ${0} holds 2 Sardaukar in the war field', (b) => b.player(owner));
+      data.battle.troops[owner.id] = (data.battle.troops[owner.id] ?? 0) + 1;
+      player.game.log('The shield generator of ${0} holds 1 Sardaukar in the war field', (b) => b.player(owner));
     }
     player.game.log('${0} declares Kanly on ${1}', (b) => b.player(player).space(space));
     return new SelectAmount(KANLY_SEND_TITLE, KANLY_SEND_BUTTON, 1, garrison, true).andThen((amount) => {

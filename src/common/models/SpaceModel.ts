@@ -26,6 +26,8 @@ export type SpaceModel = {
   worm?: true;
   /** Dune expansion: the war field of this generation's Kanly */
   warField?: true;
+  /** Dune expansion: a greenery of the Dune Stabiliser, spared by the worm – drawn as a special tile */
+  wormSpared?: true;
 
   undergroundResource?: UndergroundResourceToken;
   excavator?: Color;

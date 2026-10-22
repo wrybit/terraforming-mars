@@ -348,5 +348,18 @@
   "Top of the agenda deck": "Wierzch stosu agend",
   "Swap agendas": "Zamień agendy",
   "Tleilaxu Spy: agendas of ${0}": "Szpieg Tleilaxu: agendy gracza ${0}",
-  "holds these agendas:": "ma te agendy:"
+  "holds these agendas:": "ma te agendy:",
+  "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Twoje kontrakty CHOAM nie wymagają opłaty: 0 zamiast 1 solara.",
+  "When another player closes a contract, gain 1 M€.": "Gdy inny gracz zawiera kontrakt, zyskaj 1 solara.",
+  "Lower your smuggling suspicion 2 steps.": "Obniż swoje podejrzenie o przemyt o 2 poziomy.",
+  "Take the cheapest ware on display at the bazaar for free.": "Weź za darmo najtańszy wyłożony towar z bazaru.",
+  "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "Zwiększ swoją produkcję solarów o 2 poziomy. Weź za darmo najtańszy wyłożony towar z bazaru.",
+  "When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Gdy jeden z twoich kafelków staje się polem wojny, 1 sardaukar broni go za darmo.",
+  "The shield generator of ${0} holds 1 Sardaukar in the war field": "Generator tarczy gracza ${0} utrzymuje 1 sardaukara na polu wojny",
+  "A bribe costs you 4 M€ less.": "Łapówka kosztuje cię o 4 solary mniej.",
+  "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Dudnik: czerw rusza o maks. ${0} pole(-a), niezależnie od roślinności",
+  "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Efekt trwały: Twoje kontrakty CHOAM nie wymagają opłaty: 0 zamiast 1 solara.",
+  "Effect: When another player closes a contract, gain 1 M€.": "Efekt trwały: Gdy inny gracz zawiera kontrakt, zyskaj 1 solara.",
+  "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Efekt trwały: Gdy jeden z twoich kafelków staje się polem wojny, 1 sardaukar broni go za darmo.",
+  "Effect: A bribe costs you 4 M€ less.": "Efekt trwały: Łapówka kosztuje cię o 4 solary mniej."
 }

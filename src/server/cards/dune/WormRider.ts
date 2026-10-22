@@ -13,7 +13,7 @@ export class WormRider extends Card implements IProjectCard {
       name: CardName.WORM_RIDER,
       tags: [Tag.ANIMAL],
       cost: 16,
-      requirements: {oxygen: 4},
+      requirements: {oxygen: 10},
       victoryPoints: 1,
 
       metadata: {

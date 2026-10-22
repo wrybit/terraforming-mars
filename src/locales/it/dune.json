@@ -347,5 +347,18 @@
   "Top of the agenda deck": "In cima al mazzo delle agende",
   "Swap agendas": "Scambia agende",
   "Tleilaxu Spy: agendas of ${0}": "Spia Tleilaxu: agende di ${0}",
-  "holds these agendas:": "ha queste agende:"
+  "holds these agendas:": "ha queste agende:",
+  "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "I tuoi contratti CHOAM non ti costano commissioni: 0 invece di 1 solari.",
+  "When another player closes a contract, gain 1 M€.": "Quando un altro giocatore conclude un contratto, ottieni 1 solari.",
+  "Lower your smuggling suspicion 2 steps.": "Riduci il tuo sospetto di contrabbando di 2 livelli.",
+  "Take the cheapest ware on display at the bazaar for free.": "Prendi gratis la merce esposta più economica del bazar.",
+  "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "Aumenta la tua produzione di solari di 2 livelli. Prendi gratis la merce esposta più economica del bazar.",
+  "When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Quando una tua tessera diventa il campo di guerra, 1 Sardaukar la difende gratis.",
+  "The shield generator of ${0} holds 1 Sardaukar in the war field": "Il generatore di scudo di ${0} tiene 1 Sardaukar nel campo di guerra",
+  "A bribe costs you 4 M€ less.": "Una bustarella ti costa 4 solari in meno.",
+  "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Martellatore: il verme si sposta fino a ${0} spazio/i, qualunque sia la vegetazione",
+  "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Effetto: I tuoi contratti CHOAM non ti costano commissioni: 0 invece di 1 solari.",
+  "Effect: When another player closes a contract, gain 1 M€.": "Effetto: Quando un altro giocatore conclude un contratto, ottieni 1 solari.",
+  "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Effetto: Quando una tua tessera diventa il campo di guerra, 1 Sardaukar la difende gratis.",
+  "Effect: A bribe costs you 4 M€ less.": "Effetto: Una bustarella ti costa 4 solari in meno."
 }

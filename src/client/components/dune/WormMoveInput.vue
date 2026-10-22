@@ -54,7 +54,7 @@
         </label>
       </div>
     </div>
-    <WormVegetationBar :vegetation="playerView.game.oxygenLevel" :maximum="maximumVegetation"/>
+    <WormVegetationBar :vegetation="playerView.game.oxygenLevel" :maximum="maximumVegetation" :thumper="playerView.game.dune?.worm?.thumper === true"/>
     <p class="worm-move__chosen">{{ chosen === undefined ? '' : $t(optionTitle(chosen)) }}</p>
     <!-- What the chosen way does, summed up per player -->
     <p v-if="chosen !== undefined && outcome.length === 0" class="worm-move__outcome worm-move__outcome--none">{{ $t('No gain or loss for anyone on this way.') }}</p>

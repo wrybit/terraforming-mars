@@ -94,7 +94,7 @@ export class Server {
       pathfinders: createPathfindersModel(game),
       dune: DuneExpansion.model(game),
       phase: game.phase,
-      spaces: this.getSpaces(game.board, game.gagarinBase, game.stJosephCathedrals, game.nomadSpace),
+      spaces: this.getSpaces(game.board, game.gagarinBase, game.stJosephCathedrals, game.nomadSpace, game.duneData?.worm?.spared),
       spectatorId: game.spectatorId,
       step: game.lastSaveId,
       temperature: game.getTemperature(),
@@ -386,7 +386,8 @@ export class Server {
     board: Board,
     gagarin: ReadonlyArray<SpaceId> = [],
     cathedrals: ReadonlyArray<SpaceId> = [],
-    nomads: SpaceId | undefined = undefined): Array<SpaceModel> {
+    nomads: SpaceId | undefined = undefined,
+    wormSpared: ReadonlyArray<SpaceId> = []): Array<SpaceModel> {
     const noctisCitySpaceId = board.noctisCitySpaceId;
 
     return board.spaces.map((space) => {
@@ -418,6 +419,9 @@ export class Server {
       }
       if (board instanceof Arrakis61Board && board.warFieldSpaceId === space.id) {
         model.warField = true;
+      }
+      if (wormSpared.includes(space.id)) {
+        model.wormSpared = true;
       }
       const color = this.getColor(space);
       if (color !== undefined) {

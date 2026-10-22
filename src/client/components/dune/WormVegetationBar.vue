@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {wormDistanceFor, wormDistanceSections} from '@/common/dune/wormDistance';
+import {THUMPER_DISTANCE, wormDistanceFor, wormDistanceSections} from '@/common/dune/wormDistance';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import {duneGraphic} from './duneGraphic';
 
@@ -45,10 +45,16 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    /** Thumper card this generation: up to THUMPER_DISTANCE spaces, whatever the vegetation (Jens 22 Oct 2026) */
+    thumper: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     distance(): number {
-      return wormDistanceFor(this.vegetation, this.maximum);
+      const byVegetation = wormDistanceFor(this.vegetation, this.maximum);
+      return this.thumper ? Math.max(THUMPER_DISTANCE, byVegetation) : byVegetation;
     },
     sections(): Array<{distance: number, steps: Array<Step>}> {
       const free = Math.max(0, this.maximum - this.vegetation);
@@ -66,6 +72,9 @@ export default defineComponent({
       return duneGraphic('tile-planting');
     },
     caption(): string {
+      if (this.thumper) {
+        return translateTextWithParams('Thumper: the worm moves up to ${0} space(s), whatever the vegetation', [String(this.distance)]);
+      }
       return translateTextWithParams('${0} of ${1} greeneries: the worm moves up to ${2} space(s)',
         [String(Math.min(this.vegetation, this.maximum)), String(this.maximum), String(this.distance)]);
     },

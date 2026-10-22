@@ -4,7 +4,6 @@ import {Card} from '../Card';
 import {CardType} from '../../../common/cards/CardType';
 import {CardName} from '../../../common/cards/CardName';
 import {CardRenderer} from '../render/CardRenderer';
-import {Size} from '../../../common/cards/render/Size';
 import {IPlayer} from '../../IPlayer';
 import {PlayerInput} from '../../PlayerInput';
 import {PlaceGreeneryTile} from '../../deferredActions/PlaceGreeneryTile';
@@ -16,14 +15,15 @@ export class DuneStabiliser extends Card implements IProjectCard {
       type: CardType.AUTOMATED,
       name: CardName.DUNE_STABILISER,
       tags: [Tag.PLANT],
-      cost: 13,
+      // Better than a greenery for 23 (the worm spares it): 20 (Jens 22 Oct 2026; was 13)
+      cost: 20,
       requirements: {oxygen: 6},
 
       metadata: {
         cardNumber: 'E07',
         renderData: CardRenderer.builder((b) => {
-          b.greenery().br;
-          b.text('The worm spares this greenery.', {size: Size.SMALL});
+          // A special tile: the greenery in the yellow border of the special tiles (theme-extra.css)
+          b.greenery();
         }),
         description: 'Place a greenery tile. The worm spares this greenery.',
       },

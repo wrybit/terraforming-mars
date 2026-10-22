@@ -348,5 +348,18 @@
   "Top of the agenda deck": "A tervpakli teteje",
   "Swap agendas": "Tervek cseréje",
   "Tleilaxu Spy: agendas of ${0}": "Tleilaxu kém: ${0} tervei",
-  "holds these agendas:": "ezeket a terveket tartja:"
+  "holds these agendas:": "ezeket a terveket tartja:",
+  "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "A CHOAM-szerződéseidért nem fizetsz díjat: 1 helyett 0 solari.",
+  "When another player closes a contract, gain 1 M€.": "Ha egy másik játékos szerződést köt, kapsz 1 solarit.",
+  "Lower your smuggling suspicion 2 steps.": "Csökkentsd a csempészgyanúdat 2 fokkal.",
+  "Take the cheapest ware on display at the bazaar for free.": "Vedd el ingyen a bazár legolcsóbb kirakott áruját.",
+  "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "Növeld a solaritermelésedet 2 fokkal. Vedd el ingyen a bazár legolcsóbb kirakott áruját.",
+  "When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Ha valamelyik lapkád hadszíntérré válik, 1 sardaukar ingyen megvédi.",
+  "The shield generator of ${0} holds 1 Sardaukar in the war field": "${0} pajzsgenerátora 1 sardaukart tart a hadszíntéren",
+  "A bribe costs you 4 M€ less.": "A vesztegetés 4 solarival kevesebbe kerül.",
+  "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Döngölő: a féreg legfeljebb ${0} mezőt halad, a növényzettől függetlenül",
+  "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Hatás: A CHOAM-szerződéseidért nem fizetsz díjat: 1 helyett 0 solari.",
+  "Effect: When another player closes a contract, gain 1 M€.": "Hatás: Ha egy másik játékos szerződést köt, kapsz 1 solarit.",
+  "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Hatás: Ha valamelyik lapkád hadszíntérré válik, 1 sardaukar ingyen megvédi.",
+  "Effect: A bribe costs you 4 M€ less.": "Hatás: A vesztegetés 4 solarival kevesebbe kerül."
 }

@@ -13,14 +13,16 @@ export class ShieldGenerator extends Card implements IProjectCard {
     super({
       type: CardType.ACTIVE,
       name: CardName.SHIELD_GENERATOR,
-      tags: [Tag.BUILDING],
-      cost: 14,
+      // Imperium tag (earth), 1 Sardaukar, from 8 % vegetation, 16 (Jens 22 Oct 2026)
+      tags: [Tag.EARTH],
+      requirements: {oxygen: 8},
+      cost: 16,
 
       metadata: {
         cardNumber: 'E14',
         renderData: CardRenderer.builder((b) => {
-          // Icons instead of words (Jens 21 Oct 2026): your tile on the war field, defended by 2 Sardaukar
-          b.effect('When one of your tiles becomes the war field, 2 Sardaukar defend it for free.', (eb) => eb.emptyTile('normal', {size: Size.SMALL}).startEffect.resource(CardResource.FIGHTER, 2));
+          // Icons instead of words (Jens 21 Oct 2026): your tile on the war field, defended by 1 Sardaukar
+          b.effect('When one of your tiles becomes the war field, 1 Sardaukar defends it for free.', (eb) => eb.emptyTile('normal', {size: Size.SMALL}).startEffect.resource(CardResource.FIGHTER, 1));
         }),
       },
     });

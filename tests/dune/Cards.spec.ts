@@ -28,14 +28,14 @@ import {priceFor} from '../../src/server/dune/Bazaar';
 import {schemesModel} from '../../src/server/dune/Schemes';
 import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {bribeCost, suspicionOf} from '../../src/server/dune/Smuggling';
-import {garrisonOf} from '../../src/server/dune/Kanly';
+import {garrisonOf, kanlyActions} from '../../src/server/dune/Kanly';
 import {acceptOffer, feeOf, maxOffers} from '../../src/server/dune/Choam';
-import {crossSpace} from '../../src/server/dune/Worm';
+import {crossSpace, wormDistanceLimit} from '../../src/server/dune/Worm';
 import {OrOptions} from '../../src/server/inputs/OrOptions';
 import {SelectPlayer} from '../../src/server/inputs/SelectPlayer';
 import {SelectSpace} from '../../src/server/inputs/SelectSpace';
 import {cast} from '../../src/common/utils/utils';
-import {runAllActions} from '../TestingUtils';
+import {runAllActions, setOxygenLevel} from '../TestingUtils';
 
 describe('Dune expansion cards (E01–E16)', () => {
   let game: IGame;
@@ -65,11 +65,14 @@ describe('Dune expansion cards (E01–E16)', () => {
     expect(priceFor(player1, bazaar, 0)).eq(before - 3);
   });
 
-  it('E02 Caravan Master: the ware in the −6 slot for free', () => {
-    game.duneData!.bazaar!.slots = [null, null, null, null, 'Seed Bales'];
+  it('E02 Caravan Master: the cheapest ware on display for free, also when the −6 slot is empty', () => {
+    const bazaar = game.duneData!.bazaar!;
+    bazaar.slots = ['Seed Bales', null, 'Seed Bales', null, null];
     new CaravanMaster().play(player1);
     expect(player1.plants).eq(24);
     expect(player1.production.megacredits).eq(2);
+    // The −2 slot is cheaper than the +2 slot of the same ware
+    expect(bazaar.slots).deep.eq(['Seed Bales', null, null, null, null]);
   });
 
   it('E03 Mentat Calculation: swap an agenda for one of the top 3', () => {
@@ -106,8 +109,13 @@ describe('Dune expansion cards (E01–E16)', () => {
   });
 
   it('E05 Thumper: the player chooses the distance this generation', () => {
+    const worm = game.duneData!.worm!;
+    // Full vegetation: normally the worm moves only 1 space; with the Thumper 1 to 3 (where the way allows)
+    setOxygenLevel(game, game.max.oxygen);
+    expect(wormDistanceLimit(game, worm)).eq(1);
     new Thumper().play(player1);
-    expect(game.duneData!.worm!.thumper).eq(player1.id);
+    expect(worm.thumper).eq(player1.id);
+    expect(wormDistanceLimit(game, worm)).eq(3);
   });
 
   it('E06 Worm Rider: 2 titanium when the worm passes next to an own tile', () => {
@@ -154,6 +162,7 @@ describe('Dune expansion cards (E01–E16)', () => {
   it('E10–E12: bribes, suspicion and raids', () => {
     expect(bribeCost(player1)).eq(10);
     player1.playedCards.push(new SmugglerNetwork());
+    // A discount of 4 on the bribe of 10
     expect(bribeCost(player1)).eq(6);
     const smuggling = game.duneData!.smuggling!;
     smuggling.suspicion[player1.id] = 3;
@@ -171,7 +180,14 @@ describe('Dune expansion cards (E01–E16)', () => {
     const kanly = game.duneData!.kanly!;
     new SardaukarMercenaries().play(player1);
     expect(garrisonOf(kanly, player1)).eq(2);
-    expect(new ShieldGenerator().name).eq(CardName.SHIELD_GENERATOR);
+    // Shield Generator: 1 Sardaukar of player 2 holds the tile player 1 attacks
+    player2.playedCards.push(new ShieldGenerator());
+    const target = game.board.getAvailableSpacesOnLand(player2)[0];
+    game.addGreenery(player2, target);
+    player1.megaCredits = 20;
+    const open = kanlyActions(player1, kanly).find((input) => input instanceof SelectSpace) as SelectSpace;
+    open.cb(target);
+    expect(kanly.battle?.troops[player2.id]).eq(1);
   });
 
   it('E15 Water of Life and E16 Stillsuit Factory', () => {

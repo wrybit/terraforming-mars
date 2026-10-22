@@ -351,5 +351,18 @@
   "Top of the agenda deck": "Верх колоды повесток",
   "Swap agendas": "Поменять повестки",
   "Tleilaxu Spy: agendas of ${0}": "Тлейлаксуанский шпион: повестки ${0}",
-  "holds these agendas:": "держит эти повестки:"
+  "holds these agendas:": "держит эти повестки:",
+  "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Ваши контракты CHOAM не требуют сбора: 0 вместо 1 солярия.",
+  "When another player closes a contract, gain 1 M€.": "Когда другой игрок заключает контракт, получите 1 солярий.",
+  "Lower your smuggling suspicion 2 steps.": "Снизьте подозрение в контрабанде на 2 ступени.",
+  "Take the cheapest ware on display at the bazaar for free.": "Бесплатно возьмите самый дешёвый товар на базаре.",
+  "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "Увеличьте производство соляриев на 2. Бесплатно возьмите самый дешёвый товар на базаре.",
+  "When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Когда один из ваших тайлов становится полем войны, его бесплатно защищает 1 сардаукар.",
+  "The shield generator of ${0} holds 1 Sardaukar in the war field": "Генератор щита ${0} удерживает 1 сардаукара на поле войны",
+  "A bribe costs you 4 M€ less.": "Взятка обходится вам на 4 солярия дешевле.",
+  "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Колотушка: червь проходит до ${0} кл., независимо от растительности",
+  "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Свойство: Ваши контракты CHOAM не требуют сбора: 0 вместо 1 солярия.",
+  "Effect: When another player closes a contract, gain 1 M€.": "Свойство: Когда другой игрок заключает контракт, получите 1 солярий.",
+  "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Свойство: Когда один из ваших тайлов становится полем войны, его бесплатно защищает 1 сардаукар.",
+  "Effect: A bribe costs you 4 M€ less.": "Свойство: Взятка обходится вам на 4 солярия дешевле."
 }

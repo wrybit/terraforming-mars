@@ -4,6 +4,8 @@
        trade as before) with "Offer" in the footer. Replaces the CHOAM board tab top right. Two sections with a
        heading each, as wide as the two boxes of the trade, so offers and new offer read as one column. -->
   <div class="choam-input" data-test="choam-input">
+    <!-- The CHOAM sign as in the other module tabs (Jens 22 Oct 2026) -->
+    <h3 class="dune-board__title choam-input__title"><img class="dune-board__icon" :src="choamIcon" alt="">CHOAM</h3>
     <section class="choam-input__section">
       <h3 class="hand-cards-panel__title choam-input__heading">{{ $t('Open offers') }}</h3>
       <div class="choam-input__market">
@@ -119,6 +121,9 @@ export default defineComponent({
     },
   },
   computed: {
+    choamIcon(): string {
+      return duneGraphic('choam');
+    },
     CHOAM_RULES(): typeof CHOAM_RULES {
       return CHOAM_RULES;
     },

@@ -16,7 +16,8 @@ export class FriendsOfEsmarTuek extends Card implements IProjectCard {
       type: CardType.AUTOMATED,
       name: CardName.FRIENDS_OF_ESMAR_TUEK,
       tags: [Tag.EARTH],
-      cost: 7,
+      // Two bribes (2 × 10) and 3 spice: 23 (Jens 22 Oct 2026; was 7)
+      cost: 23,
       behavior: {
         stock: {titanium: 3},
       },
@@ -24,7 +25,8 @@ export class FriendsOfEsmarTuek extends Card implements IProjectCard {
       metadata: {
         cardNumber: 'E11',
         renderData: CardRenderer.builder((b) => {
-          b.text('Suspicion −2', {size: Size.SMALL}).titanium(3);
+          b.text('Lower your smuggling suspicion 2 steps.', {size: Size.SMALL}).br;
+          b.titanium(3);
         }),
         description: 'Lower your suspicion by 2. Gain 3 titanium.',
       },

@@ -13,7 +13,7 @@ export class GuildBank extends Card implements IProjectCard {
       type: CardType.AUTOMATED,
       name: CardName.GUILD_BANK,
       tags: [Tag.SPACE],
-      cost: 8,
+      cost: 13,
       behavior: {
         production: {megacredits: 1},
       },

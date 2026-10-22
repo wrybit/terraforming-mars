@@ -15,7 +15,7 @@ export class SardaukarRaid extends Card implements IProjectCard {
       type: CardType.EVENT,
       name: CardName.SARDAUKAR_RAID,
       tags: [],
-      cost: 5,
+      cost: 18,
       behavior: {
         stock: {megacredits: 4},
       },

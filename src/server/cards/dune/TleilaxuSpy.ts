@@ -18,17 +18,13 @@ export class TleilaxuSpy extends Card implements IProjectCard {
       tags: [Tag.EARTH],
       // Seeing another House's agendas is strong: 13 (Jens, 21 Oct 2026; was 6)
       cost: 13,
-      behavior: {
-        stock: {megacredits: 2},
-      },
 
       metadata: {
         cardNumber: 'E04',
         renderData: CardRenderer.builder((b) => {
-          b.text('Look at all agendas of another player.', {size: Size.SMALL}).br;
-          b.megacredits(2);
+          // Only looking, no Solari; the 2 agendas as a picture (theme-extra.css, Jens 22 Oct 2026)
+          b.text('Look at all agendas of another player.', {size: Size.SMALL});
         }),
-        description: 'Look at all agendas of another player. Gain 2 M€.',
       },
     });
   }

@@ -16,7 +16,9 @@ export class MentatCalculation extends Card implements IProjectCard {
       type: CardType.EVENT,
       name: CardName.MENTAT_CALCULATION,
       tags: [Tag.SCIENCE],
-      cost: 4,
+      // Up to about 7 VP for a better agenda: 15, from 30 influence (Jens 22 Oct 2026; was 4)
+      cost: 15,
+      requirements: {tr: 30},
 
       metadata: {
         cardNumber: 'E03',

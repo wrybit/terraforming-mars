@@ -50,6 +50,8 @@ export type WormModel = {
   trail: WormTrailModel,
   /** Player choosing the distance right now */
   chooser: Color | undefined,
+  /** The Thumper card was played this generation: the worm may move 1 to 3 spaces, whatever the vegetation */
+  thumper?: true,
   /** While a player chooses: the spaces crossed by each choice, in the order of the options (server/dune/Worm.ts) */
   choices?: ReadonlyArray<ReadonlyArray<string>>,
 };

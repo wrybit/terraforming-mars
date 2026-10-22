@@ -767,6 +767,64 @@ html.theme-dune .card-container:is(.card-inventors\'-guild, .card-business-netwo
   background: url(graphics/res-card.svg) center / contain no-repeat;
 }
 
+/* Dune pictures in place of words on the Dune cards (Jens 22 Oct 2026): the bazaar, the CHOAM sign and the worm as
+   the cause of an effect. The cards keep the word for Mars; here it is hidden and its box shows the picture. */
+html.theme-dune .card-container:is(.card-bazaar-concession, .card-choam-directorate, .card-worm-rider) .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 0 4px;
+  background: url(graphics/bazaar.svg) center / contain no-repeat;
+  font-size: 0 !important;
+  color: transparent;
+}
+
+html.theme-dune .card-container.card-choam-directorate .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
+  background-image: url(graphics/choam.svg);
+  border-radius: 50%;
+  /* The symbol has its own gold rim */
+  width: 42px;
+  height: 42px;
+}
+
+/* The second effect pays out when another player closes a contract: their CHOAM sign with the red outline of the
+   other cards that name an opponent */
+html.theme-dune .card-container.card-choam-directorate .card-content > .card-rows ~ .card-rows .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
+  box-shadow: 0 0 0 2px #fffdf8, 0 0 0 4px #c0301c;
+}
+
+html.theme-dune .card-container.card-worm-rider .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
+  background-image: url(graphics/token-worm.svg);
+}
+
+/* Dune Stabiliser: its greenery is a special tile, the planting in the yellow border of the special tiles – on the
+   card and on the board (scripts/make-dune-card-icons.py) */
+html.theme-dune .card-container.card-dune-stabiliser .card-content .card-tile {
+  background-image: url(graphics/tile-planting-special.svg) !important;
+}
+
+html.theme-dune .board-space--worm-spared .board-space-tile {
+  background-image: url(graphics/tile-planting-special.svg) !important;
+  background-size: contain !important;
+}
+
+/* Agendas as pictures above the sentence: Mentat Calculation swaps one of your 2 agendas (red) for one of the top 3
+   (green), Tleilaxu Spy looks at the 2 agendas of another player (red outline) */
+html.theme-dune .card-container:is(.card-mentat-calculation, .card-tleilaxu-spy) .card-content > .card-rows:nth-child(1 of .card-rows)::before {
+  content: "";
+  display: block;
+  width: 76px;
+  height: 85px;
+  margin: 0 auto 6px;
+  background: url(graphics/agenda-swap.svg) center / contain no-repeat;
+}
+
+html.theme-dune .card-container.card-tleilaxu-spy .card-content > .card-rows:nth-child(1 of .card-rows)::before {
+  width: 85px;
+  height: 58px;
+  background-image: url(graphics/agenda-peek.svg);
+}
+
 /* Expansion marks on the cards (Jens 21 Oct 2026): the marks of the card list filter instead of the coloured Mars
    dots, always bottom left – next to the resource counter where a card has one (Card.vue measures its width) */
 html.theme-dune .card-container .card-corporation-expansion,

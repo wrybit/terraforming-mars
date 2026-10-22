@@ -12,7 +12,8 @@ export class BazaarConcession extends Card implements IProjectCard {
       type: CardType.ACTIVE,
       name: CardName.BAZAAR_CONCESSION,
       tags: [Tag.BUILDING],
-      cost: 9,
+      // 3 Solari off up to 12 purchases: 17 (Jens 22 Oct 2026; was 9)
+      cost: 17,
 
       metadata: {
         cardNumber: 'E01',

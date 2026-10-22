@@ -12,12 +12,13 @@ export class SmugglerNetwork extends Card implements IProjectCard {
       type: CardType.ACTIVE,
       name: CardName.SMUGGLER_NETWORK,
       tags: [Tag.BUILDING],
-      cost: 10,
+      // A discount like the other discount cards: −4 per bribe, about 5 bribes = 20 (Jens 22 Oct 2026; was 10)
+      cost: 15,
 
       metadata: {
         cardNumber: 'E10',
         renderData: CardRenderer.builder((b) => {
-          b.effect('A bribe costs you 6 M€ instead of 10.', (eb) => eb.text('bribe').startEffect.megacredits(6));
+          b.effect('A bribe costs you 4 M€ less.', (eb) => eb.text('bribe').startEffect.megacredits(-4));
         }),
       },
     });

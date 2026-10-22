@@ -10,6 +10,9 @@ export function wormDistanceSections(maxVegetation: number): Array<number> {
   return [base + (rest > 0 ? 1 : 0), base + (rest > 1 ? 1 : 0), base];
 }
 
+/** Thumper card: the distance its player may choose up to, whatever the vegetation (Jens 22 Oct 2026) */
+export const THUMPER_DISTANCE = 3;
+
 /** Largest distance for a vegetation level; a full track still lets the worm move 1 space */
 export function wormDistanceFor(vegetation: number, maxVegetation: number): number {
   const free = maxVegetation - vegetation;

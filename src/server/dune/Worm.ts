@@ -17,7 +17,7 @@ import {Random} from '../../common/utils/Random';
 import {WORM_START_SPACES} from '../../common/dune/wormStartSpaces';
 import {ARRAKIS_LAYOUT, ArrakisLayout} from '../../common/dune/arrakisLayout';
 import {Arrakis61Board} from '../boards/Arrakis61Board';
-import {wormDistanceFor} from '../../common/dune/wormDistance';
+import {THUMPER_DISTANCE, wormDistanceFor} from '../../common/dune/wormDistance';
 import {SPICE_BLOW_MAX, WORM_DOMAIN_TR, WORM_RIDER_SPICE, WORM_RIDER_WATER, wormEffectKind} from '../../common/dune/wormEffects';
 
 // Module C – Shai-Hulud (claude/dune-erweiterung-konzept.md): a worm marker wanders over Arrakis. At the end of
@@ -262,13 +262,18 @@ export function moveWorm(game: IGame, worm: WormData, distance: number): void {
   worm.thumper = undefined;
 }
 
+/** Largest distance of this move: by the vegetation, or 1 to 3 with the Thumper card, whatever the vegetation (Jens 22 Oct 2026) */
+export function wormDistanceLimit(game: IGame, worm: WormData): number {
+  return worm.thumper !== undefined ? Math.max(THUMPER_DISTANCE, maxWormDistance(game)) : maxWormDistance(game);
+}
+
 /**
  * The distances worth choosing: each one ends on a new space (at the rim or before rock the worm stops early, so longer
  * distances would only repeat the last move). At least one entry, also when the worm cannot move at all.
  */
 export function wormChoices(game: IGame, worm: WormData): Array<{distance: number, path: Array<Space>}> {
   const choices: Array<{distance: number, path: Array<Space>}> = [];
-  const max = maxWormDistance(game);
+  const max = wormDistanceLimit(game, worm);
   for (let distance = 1; distance <= max; distance++) {
     const path = wormPath(game.board, worm.spaceId, worm.direction, distance);
     if (choices.length === 0 || path.length > choices[choices.length - 1].path.length) {
@@ -301,6 +306,7 @@ export function wormModel(game: IGame, worm: WormData): WormModel {
     path: worm.path,
     trail: {start: worm.trailStart ?? worm.spaceId, moves: worm.trail ?? []},
     chooser: worm.chooser === undefined ? undefined : game.getPlayerById(worm.chooser as IPlayer['id']).color,
+    ...(worm.thumper !== undefined ? {thumper: true as const} : {}),
     // In the order of the options of distanceInput, so the client can show them on a piece of the map
     choices: worm.chooser === undefined ? undefined : wormChoices(game, worm).map(({path}) => path.map((space) => space.id)),
   };

@@ -18,7 +18,10 @@ export class ChoamDirectorate extends Card implements IProjectCard {
       metadata: {
         cardNumber: 'E08',
         renderData: CardRenderer.builder((b) => {
-          b.effect('Your CHOAM contracts cost no fee. When other players close a contract, gain 1 M€.', (eb) => eb.text('contract').startEffect.megacredits(1));
+          // Two effects, each with the CHOAM sign (theme-extra.css): your own fee −1 (so 0), and 1 Solari when another
+          // player closes a contract (Jens 22 Oct 2026)
+          b.effect('Your CHOAM contracts cost you no fee: 0 instead of 1 M€.', (eb) => eb.text('CHOAM').startEffect.megacredits(-1)).br;
+          b.effect('When another player closes a contract, gain 1 M€.', (eb) => eb.text('CHOAM').startEffect.megacredits(1));
         }),
       },
     });
