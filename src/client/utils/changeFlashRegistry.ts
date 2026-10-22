@@ -1,6 +1,8 @@
 // Elements carrying v-flash, grouped by key, plus whether they are on screen right now.
 // A pending change blinks as soon as one of its elements becomes visible: immediately,
 // after switching to its tab, after scrolling to it, or when the browser tab comes back to front.
+// "On screen" also means not hidden by visibility: the Mars board stays in place under another board tab
+// (visibility: hidden, BoardTabs.vue) and still intersects – its ripples would show on top of the other board.
 import {changeToneOf, isChangePending, markChangeSeen, previousValueOf} from '@/client/utils/changeTracker';
 import {FlashTone} from '@/client/utils/changeFlashTone';
 import {scheduleEffect} from '@/client/utils/changeFlashScheduler';
@@ -26,6 +28,17 @@ function intersectionObserver(): IntersectionObserver | undefined {
   return observer;
 }
 
+// Inside the viewport and not hidden by visibility (an ancestor's visibility: hidden is inherited)
+function isShown(element: HTMLElement): boolean {
+  if (!visibleElements.has(element)) {
+    return false;
+  }
+  if (typeof element.checkVisibility === 'function') {
+    return element.checkVisibility({visibilityProperty: true});
+  }
+  return getComputedStyle(element).visibility !== 'hidden';
+}
+
 function onIntersection(entries: Array<IntersectionObserverEntry>): void {
   for (const entry of entries) {
     const element = entry.target as HTMLElement;
@@ -49,7 +62,7 @@ export function revealVisibleChanges(): void {
     if (!isChangePending(key)) {
       continue;
     }
-    const visible = Array.from(elements).filter((element) => visibleElements.has(element));
+    const visible = Array.from(elements).filter(isShown);
     if (visible.length > 0) {
       const from = parseFloat(previousValueOf(key) ?? '');
       const tone = changeToneOf(key);
@@ -57,7 +70,7 @@ export function revealVisibleChanges(): void {
       // An element standing for several changed values blinks only once
       // Elements of the same key off screen (e.g. the other layout) won't count any more: show the current value
       elements.forEach((element) => {
-        if (!visibleElements.has(element)) {
+        if (!isShown(element)) {
           releaseHeldValue(element);
         }
       });
@@ -122,5 +135,5 @@ export function hasFlashElement(key: string): boolean {
 }
 
 export function isFlashElementVisible(key: string): boolean {
-  return Array.from(elementsByKey.get(key) ?? []).some((element) => visibleElements.has(element));
+  return Array.from(elementsByKey.get(key) ?? []).some(isShown);
 }
