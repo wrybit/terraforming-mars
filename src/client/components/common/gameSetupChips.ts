@@ -7,6 +7,8 @@ import {activeTheme} from '@/client/theme/applyTheme';
 import {GameSetupOptions} from '@/common/game/GameSetupOptions';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {boardColorClass} from '@/client/components/create/boardColorClass';
+import {DUNE_MODULE_ICON} from '@/client/components/create/duneModuleFields';
+import {duneGraphic} from '@/client/components/dune/duneGraphic';
 
 // The setup of a game as chips (GameSetupChips.vue): summary above "Create game" and the game list of
 // the statistics build them with the same functions, so both show the same chips in the same order.
@@ -18,6 +20,8 @@ export type GameSetupChip = {
   seatIcon?: SeatIconKind;
   // Expansion icon or board hexagon in front of the label
   iconClass?: string;
+  // Picture in front of the label instead (Dune expansion modules: assets/themes/dune/graphics)
+  picture?: string;
   // Board names are lower case and get capitalized via CSS
   capitalized?: boolean;
   // Link within the statistics page (its navigation picks up data-stats-link)
@@ -130,14 +134,18 @@ export function optionChips(options: GameSetupOptions, isActive: (expansion: Exp
     [options.customCardPool, translateText('Card pool'), 'cardPool'],
   ];
   // Dune expansion modules right after the expansions: they change the rules like an expansion
-  const duneModules: Array<[boolean, string, GameSetupGroupKey, string?]> = (options.duneModules ?? [])
-    .map((module) => [true, translateText(DUNE_MODULE_LABEL[module]), 'expansions']);
-  return [...duneModules, ...candidates].filter(([shown]) => shown).map(([, label, group, icon]) => ({
+  // with the same picture as their tile in the create form
+  const duneModules: Array<GameSetupChip> = (options.duneModules ?? []).map((module) => {
+    const label = translateText(DUNE_MODULE_LABEL[module]);
+    return {key: label, label, group: 'expansions', picture: duneGraphic(DUNE_MODULE_ICON[module])};
+  });
+  const optionChips: Array<GameSetupChip> = candidates.filter(([shown]) => shown).map(([, label, group, icon]) => ({
     key: label,
     label,
     group,
     iconClass: icon === undefined ? undefined : `create-game-expansion-icon ${icon}`,
   }));
+  return [...duneModules, ...optionChips];
 }
 
 const DEFAULTS = defaultCreateGameModel();

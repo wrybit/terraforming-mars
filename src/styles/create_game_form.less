@@ -94,6 +94,19 @@
   color: @ui-text-soft;
 }
 
+// The large Arrakis 91: browner, and its hexagon carries a plus (Jens 22 Oct 2026) – drawn with two gradient bars
+// so it stays crisp at every hexagon size; light sand like the Dune white (#fff would be recoloured by the theme)
+.create-game-arrakis-91 {
+  color: @board-arrakis-91;
+}
+
+.create-game-board-hexagon.create-game-arrakis-91 {
+  background:
+    linear-gradient(#fffdf8, #fffdf8) center / 56% 14% no-repeat,
+    linear-gradient(#fffdf8, #fffdf8) center / 14% 50% no-repeat,
+    currentColor;
+}
+
 .create-game-random {
   color: rgb(130, 130, 130);
 }

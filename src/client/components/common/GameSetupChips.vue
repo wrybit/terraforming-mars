@@ -4,6 +4,7 @@
       class="create-game-summary-chip" :href="chip.statsHref" :data-stats-link="chip.statsHref !== undefined ? '' : undefined">
       <SeatIcon v-if="chip.seatIcon !== undefined" :kind="chip.seatIcon"/>
       <span v-if="chip.iconClass !== undefined" :class="chip.iconClass"></span>
+      <img v-else-if="chip.picture !== undefined" class="create-game-expansion-icon" :src="chip.picture" alt="">
       <span :class="{capitalized: chip.capitalized}">{{ chip.label }}</span>
     </component>
   </div>

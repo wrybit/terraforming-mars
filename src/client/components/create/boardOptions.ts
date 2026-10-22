@@ -14,7 +14,7 @@ const COLOR_CLASSES: Partial<Record<BoardName, string>> = {
   [BoardName.AMAZONIS_PLANITIA]: 'create-game-amazonis-planitia',
   [BoardName.TERRA_CIMMERIA_NOVA]: 'create-game-terra-cimmeria-nova',
   [BoardName.ARRAKIS_61]: 'create-game-arrakis',
-  [BoardName.ARRAKIS_91]: 'create-game-arrakis',
+  [BoardName.ARRAKIS_91]: 'create-game-arrakis-91',
 };
 
 /** CSS class coloring `boardName`'s hexagon, or empty for an uncolored one. */

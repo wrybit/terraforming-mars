@@ -80,7 +80,7 @@
               <div class="create-game-chip-grid create-game-expansion-grid">
                 <ChoiceChip v-for="module in PLAYABLE_DUNE_MODULES" :key="module" :label="DUNE_MODULE_LABEL[module]"
                   :selected="$data[DUNE_MODULE_FIELD[module]]" @select="toggleDuneModule(module)">
-                  <template #icon><img class="create-game-expansion-icon" :src="'assets/themes/dune/graphics/' + DUNE_MODULE_ICON[module] + '.svg'" alt=""></template>
+                  <template #icon><img class="create-game-expansion-icon" :src="duneGraphic(DUNE_MODULE_ICON[module])" alt=""></template>
                   <template #detail><span v-i18n>{{ DUNE_MODULE_DETAIL[module] }}</span></template>
                 </ChoiceChip>
               </div>
@@ -458,6 +458,7 @@ import {chosenTheme, rememberTheme} from '@/client/theme/themeChoice';
 import ThemeSwitch from '@/client/components/common/ThemeSwitch.vue';
 import {DuneModule} from '@/common/dune/DuneModule';
 import {DUNE_MODULE_DETAIL, DUNE_MODULE_FIELD, DUNE_MODULE_ICON, DUNE_MODULE_LABEL, PLAYABLE_DUNE_MODULES, chosenDuneModules} from './duneModuleFields';
+import {duneGraphic} from '@/client/components/dune/duneGraphic';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
@@ -1341,6 +1342,10 @@ export default defineComponent({
     // Detail line of a board chip: oceans and the steps of both tracks, each a small picture with a number
     boardFactsOf(boardName: BoardName): Array<BoardFact> {
       return boardFactItems(boardName, this.theme === 'dune' ? 'dune' : 'mars');
+    },
+    // Picture of a Dune module tile (the same one its setup chip shows)
+    duneGraphic(name: string): string {
+      return duneGraphic(name);
     },
     getBoardColorClass(boardName: BoardName): string {
       return boardColorClass(boardName);

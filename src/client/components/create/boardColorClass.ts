@@ -30,8 +30,9 @@ export function boardColorClass(boardName: string): string {
   case BoardName.HOLLANDIA:
     return 'create-game-board-hexagon create-game-hollandia';
   case BoardName.ARRAKIS_61:
-  case BoardName.ARRAKIS_91:
     return 'create-game-board-hexagon create-game-arrakis';
+  case BoardName.ARRAKIS_91:
+    return 'create-game-board-hexagon create-game-arrakis-91';
   default:
     return 'create-game-board-hexagon create-game-random';
   }
