@@ -1003,7 +1003,7 @@ export default defineComponent({
       return active.length > 0 ? active.join(', ') : undefined;
     },
     fanBoardNote(): string | undefined {
-      if (!FAN_BOARDS.includes(this.board)) {
+      if (!FAN_BOARDS.some((boardName) => boardName === this.board)) {
         return undefined;
       }
       // Board names are lower case; the chips capitalize them via CSS, the note the same way here
