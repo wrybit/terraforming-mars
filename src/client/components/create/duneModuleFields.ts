@@ -30,8 +30,8 @@ export const DUNE_MODULE_ICON: Record<DuneModule, string> = {
   worm: 'special-worm-domain',
   kanly: 'res-sardaukar',
   schemes: 'res-advisor',
-  choam: 'coin',
-  smuggling: 'special-smugglers-market',
+  choam: 'choam',
+  smuggling: 'smuggler',
 };
 
 export function chosenDuneModules(switches: DuneModuleSwitches): Array<DuneModule> {

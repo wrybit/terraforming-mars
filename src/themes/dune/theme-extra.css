@@ -769,7 +769,7 @@ html.theme-dune .card-container:is(.card-inventors\'-guild, .card-business-netwo
 
 /* Dune pictures in place of words on the Dune cards (Jens 22 Oct 2026): the bazaar, the CHOAM sign and the worm as
    the cause of an effect. The cards keep the word for Mars; here it is hidden and its box shows the picture. */
-html.theme-dune .card-container:is(.card-bazaar-concession, .card-choam-directorate, .card-worm-rider) .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
+html.theme-dune .card-container:is(.card-bazaar-concession, .card-choam-directorate, .card-worm-rider, .card-smuggler-network) .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
   display: block;
   width: 40px;
   height: 40px;
@@ -789,6 +789,11 @@ html.theme-dune .card-container.card-choam-directorate .card-effect-box-row > .c
 
 html.theme-dune .card-container.card-worm-rider .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
   background-image: url(graphics/token-worm.svg);
+}
+
+/* The bribe: the smuggler with a coin (Jens 22 Oct 2026, variant C) */
+html.theme-dune .card-container.card-smuggler-network .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
+  background-image: url(graphics/bribe.svg);
 }
 
 /* Dune Stabiliser: its greenery is a special tile, the planting in the yellow border of the special tiles – on the

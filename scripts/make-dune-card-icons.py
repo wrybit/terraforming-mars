@@ -2,6 +2,9 @@
 # Pictures for the Dune cards (Jens 22 Oct 2026), written to assets/themes/dune/graphics/:
 # - choam.svg: the CHOAM sign (red dome with three drips on black) in the gold rim of the tags, for the CHOAM cards and
 #   the CHOAM tab (Jens: variant A)
+# - smuggler.svg: the smuggler – a hooded figure with glowing Ibad eyes on night blue (the smugglers' market), in the
+#   gold rim of the resources: the smuggling module, its tab and suspicion (Jens: variant C)
+# - bribe.svg: the same smuggler holding up a Solari coin: the bribe (Smuggler Network)
 # - bazaar.svg: the stall of the bazaar tile as a symbol in the gold rim of the resources – it is no tile (variant B)
 # - agenda-back.svg: the back of a secret agenda (House schemes): burgundy with the eye seal, with the oriental frame
 #   of the card back res-card.svg in gold (variant A)
@@ -32,7 +35,39 @@ RIM = ('<defs><linearGradient id="rim" x1="0" y1="0" x2="0" y2="1"><stop offset=
        '<stop offset="1" stop-color="#000" stop-opacity=".32"/></radialGradient>'
        '<radialGradient id="sand" cx=".5" cy=".4" r=".75"><stop offset="0" stop-color="#f0c48a"/>'
        '<stop offset="1" stop-color="#9a6234"/></radialGradient>'
-       '<clipPath id="face"><circle cx="50" cy="50" r="37"/></clipPath></defs>')
+       '<clipPath id="face"><circle cx="50" cy="50" r="37"/></clipPath>'
+       '<radialGradient id="night" cx=".42" cy=".3" r=".85"><stop offset="0" stop-color="#5a6aa0"/>'
+       '<stop offset=".55" stop-color="#2c3770"/><stop offset="1" stop-color="#141838"/></radialGradient>'
+       '<linearGradient id="cloak" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a4a32"/>'
+       '<stop offset="1" stop-color="#2e1e14"/></linearGradient>'
+       '<radialGradient id="gold" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#fff2c0"/>'
+       '<stop offset=".6" stop-color="#f2c44c"/><stop offset="1" stop-color="#b8861c"/></radialGradient></defs>')
+
+
+def resource_frame(face: str, body: str) -> str:
+    # Rounded square of the resource symbols: dark edge, gold rim, the face, the drawing, the inner shadow
+    return (RIM + '<rect x="2" y="2" width="96" height="96" rx="18" fill="#1d140c"/>'
+            '<rect x="5.5" y="5.5" width="89" height="89" rx="15" fill="url(#rim)"/>'
+            f'<rect x="10" y="10" width="80" height="80" rx="11" fill="{face}"/>' + body
+            + '<rect x="10" y="10" width="80" height="80" rx="11" fill="url(#inner)"/>')
+
+
+def hood(dx: float = 0) -> str:
+    # Cloak with a hood, the face in shadow, two glowing blue eyes
+    return (f'<path d="M{24 + dx} 88Q{22 + dx} 48 {50 + dx} 24Q{78 + dx} 48 {76 + dx} 88Z" fill="url(#cloak)" stroke="#1d140c" '
+            'stroke-width="2.6" stroke-linejoin="round"/>'
+            f'<path d="M{36 + dx} 60Q{38 + dx} 40 {50 + dx} 36Q{62 + dx} 40 {64 + dx} 60Q{50 + dx} 68 {36 + dx} 60Z" fill="#0c0a14"/>'
+            f'<path d="M{42 + dx} 52l5 1M{53 + dx} 53l5-1" stroke="#7fb8ff" stroke-width="2.6" stroke-linecap="round"/>')
+
+
+def smuggler() -> str:
+    return resource_frame('url(#night)', hood())
+
+
+def bribe() -> str:
+    coin = ('<circle cx="70" cy="66" r="14" fill="url(#gold)" stroke="#1d140c" stroke-width="2.4"/>'
+            '<circle cx="70" cy="66" r="8.7" fill="none" stroke="#a87418" stroke-width="1.6"/>')
+    return resource_frame('url(#night)', hood(-8) + coin)
 
 
 def choam() -> str:
@@ -143,6 +178,8 @@ def special_planting() -> str:
 if __name__ == '__main__':
     write('choam.svg', 100, 100, choam(), 'CHOAM sign')
     write('bazaar.svg', 100, 100, bazaar(), 'Bazaar symbol')
+    write('smuggler.svg', 100, 100, smuggler(), 'Smuggler symbol')
+    write('bribe.svg', 100, 100, bribe(), 'Bribe symbol')
     write('agenda-back.svg', 70, 100, f'<g>{agenda_back()}</g>', 'Back of a secret agenda')
     body, width, height = agenda_swap()
     write('agenda-swap.svg', width, height, body, 'Mentat Calculation: swap one of your 2 agendas for one of the top 3')

@@ -3,6 +3,8 @@
        then the two moves as a switch – smuggle (the trade) or bribe (the price as before → after). At the top of the
        track only the bribe is left. The footer button belongs to the chosen move. -->
   <div class="smuggle-input" data-test="smuggle-input">
+    <!-- The smuggler as the sign of the tab, as large as the CHOAM sign in its tab (Jens 22 Oct 2026) -->
+    <h3 class="dune-board__title smuggle-input__title"><img class="dune-board__icon" :src="smugglerIcon" alt="">{{ $t('Smuggling') }}</h3>
     <SmugglingPanel v-if="smuggling !== undefined" :smuggling="smuggling" :players="playerView.players" :compact="true"/>
 
     <!-- The chosen move in its own box; the switch sits on its top edge, so box and switch read as one (Jens, 19 Oct 2026).
@@ -119,6 +121,9 @@ export default defineComponent({
     return {chosen: (canSmuggle ? 'smuggle' : 'bribe') as Mode};
   },
   computed: {
+    smugglerIcon(): string {
+      return duneGraphic('smuggler');
+    },
     MODES(): typeof MODES {
       return MODES;
     },
@@ -135,7 +140,7 @@ export default defineComponent({
       return this.smuggling?.suspicion.find((entry) => entry.color === this.playerView.thisPlayer.color)?.level ?? 0;
     },
     suspicionSide(): AmountSide {
-      return {kind: 'figure', label: 'Suspicion', icon: duneGraphic('special-smugglers-market'), perStep: 1, before: this.ownSuspicion};
+      return {kind: 'figure', label: 'Suspicion', icon: duneGraphic('smuggler'), perStep: 1, before: this.ownSuspicion};
     },
     tradeInput(): SelectTradeModel | undefined {
       return this.playerinput.options.find((option): option is SelectTradeModel => option.type === 'trade');
