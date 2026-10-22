@@ -92,6 +92,16 @@
   background: transparent;
 }
 
+// Upstream draws its own fixed stars layer behind the game on touch devices (player_home.less, upstream e50171598).
+// The fork's app background is already a fixed element (scrolls without repaints), so that layer would only
+// cover it with the old stars image.
+@media (hover: none) and (pointer: coarse) {
+  body #player-home::before,
+  body #spectator-home::before {
+    content: none;
+  }
+}
+
 // Page background black instead of gray: the image only covers the window, on long pages the end on black is barely noticeable
 body:has(#create-game),
 body:has(#game-home),
