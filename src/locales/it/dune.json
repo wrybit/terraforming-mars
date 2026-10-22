@@ -370,5 +370,18 @@
   "Have the highest energy production": "Abbi la produzione di energia più alta",
   "Milestones & awards of Arrakis": "Traguardi e riconoscimenti di Arrakis",
   "7 milestones · 7 awards for random draws": "7 traguardi · 7 riconoscimenti da estrarre",
-  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Estratti dagli obiettivi di Arrakis, dal modulo Traguardi e riconoscimenti di Arrakis e da un traguardo per ogni modulo in gioco."
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Estratti dagli obiettivi di Arrakis, dal modulo Traguardi e riconoscimenti di Arrakis e da un traguardo per ogni modulo in gioco.",
+  "${0} above normal": "${0} sopra il normale",
+  "${0} below normal": "${0} sotto il normale",
+  "${0} cheaper than normal": "${0} più economico del normale",
+  "${0} dearer than normal": "${0} più caro del normale",
+  "Normal rate": "Cambio normale",
+  "good": "buono",
+  "bad": "cattivo",
+  "normal": "normale",
+  "saved": "risparmiato",
+  "extra": "in più",
+  "better than normal": "meglio del normale",
+  "worse than normal": "peggio del normale",
+  "as normal": "come il normale"
 }

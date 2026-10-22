@@ -369,5 +369,18 @@
   "Have the highest energy production": "Ha høyest energiproduksjon",
   "Milestones & awards of Arrakis": "Milepæler og utmerkelser på Arrakis",
   "7 milestones · 7 awards for random draws": "7 milepæler · 7 utmerkelser til tilfeldig trekning",
-  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Trukket fra målene på Arrakis, modulen Milepæler og utmerkelser på Arrakis og én milepæl fra hver modul i spill."
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Trukket fra målene på Arrakis, modulen Milepæler og utmerkelser på Arrakis og én milepæl fra hver modul i spill.",
+  "${0} above normal": "${0} over normalt",
+  "${0} below normal": "${0} under normalt",
+  "${0} cheaper than normal": "${0} billigere enn normalt",
+  "${0} dearer than normal": "${0} dyrere enn normalt",
+  "Normal rate": "Normal kurs",
+  "good": "bra",
+  "bad": "dårlig",
+  "normal": "normalt",
+  "saved": "spart",
+  "extra": "mer",
+  "better than normal": "bedre enn normalt",
+  "worse than normal": "dårligere enn normalt",
+  "as normal": "som normalt"
 }

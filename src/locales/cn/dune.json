@@ -374,5 +374,18 @@
   "Have the highest energy production": "拥有最高的能量产量",
   "Milestones & awards of Arrakis": "阿拉吉斯的里程碑与奖项",
   "7 milestones · 7 awards for random draws": "7个里程碑 · 7个奖项，供随机抽取",
-  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "从阿拉吉斯的目标、“阿拉吉斯的里程碑与奖项”模块以及每个启用模块的一个里程碑中抽取。"
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "从阿拉吉斯的目标、“阿拉吉斯的里程碑与奖项”模块以及每个启用模块的一个里程碑中抽取。",
+  "${0} above normal": "高于正常${0}",
+  "${0} below normal": "低于正常${0}",
+  "${0} cheaper than normal": "比正常便宜${0}",
+  "${0} dearer than normal": "比正常贵${0}",
+  "Normal rate": "正常汇率",
+  "good": "好",
+  "bad": "差",
+  "normal": "正常",
+  "saved": "节省",
+  "extra": "多付",
+  "better than normal": "优于正常",
+  "worse than normal": "差于正常",
+  "as normal": "与正常相同"
 }

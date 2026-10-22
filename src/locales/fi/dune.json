@@ -371,5 +371,18 @@
   "Have the highest energy production": "Omista suurin energiatuotanto",
   "Milestones & awards of Arrakis": "Arrakisin virstanpylväät ja palkinnot",
   "7 milestones · 7 awards for random draws": "7 virstanpylvästä · 7 palkintoa satunnaisarvontaan",
-  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Arvotaan Arrakisin tavoitteista, moduulista Arrakisin virstanpylväät ja palkinnot sekä yksi virstanpylväs kustakin pelissä olevasta moduulista."
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Arvotaan Arrakisin tavoitteista, moduulista Arrakisin virstanpylväät ja palkinnot sekä yksi virstanpylväs kustakin pelissä olevasta moduulista.",
+  "${0} above normal": "${0} yli normaalin",
+  "${0} below normal": "${0} alle normaalin",
+  "${0} cheaper than normal": "${0} normaalia halvempi",
+  "${0} dearer than normal": "${0} normaalia kalliimpi",
+  "Normal rate": "Normaali kurssi",
+  "good": "hyvä",
+  "bad": "huono",
+  "normal": "normaali",
+  "saved": "säästetty",
+  "extra": "enemmän",
+  "better than normal": "normaalia parempi",
+  "worse than normal": "normaalia huonompi",
+  "as normal": "kuten normaalisti"
 }
