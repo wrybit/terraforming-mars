@@ -32,7 +32,7 @@ export type LogEffect = {
 };
 
 export type LogActionKind = 'card' | 'action' | 'standardProject' | 'milestone' | 'award' | 'pass' | 'endTurn' | 'kept' |
-  'fizzled' | 'trade' | 'delegate' | 'partyAction' | 'globalEvent' | 'turmoil';
+  'fizzled' | 'trade' | 'delegate' | 'partyAction' | 'globalEvent' | 'turmoil' | 'line';
 
 export type LogAction = {
   kind: LogActionKind,
@@ -60,7 +60,7 @@ export type LogRow =
   | {type: 'action', action: LogAction, indexes: Array<number>}
   | {type: 'research', entries: Array<{player: Color, amount: number}>, indexes: Array<number>}
   // follows: a consequence of the action row above (same player, e.g. the cards a card let them draw) – indented with ↳
-  | {type: 'message', message: LogMessage, indexes: Array<number>, follows?: boolean}
+  | {type: 'message', message: LogMessage, indexes: Array<number>, follows?: boolean, action?: LogAction}
   | {type: 'phase', indexes: Array<number>};
 
 const PLAYED_WITH_PAYMENT = '${0} played ${1} [ ${2} ]';
@@ -106,6 +106,25 @@ const TURMOIL = new Set([
   'The ruling bonus is: ${0}',
   'The ruling policy is: ${0}',
   'A neutral delegate was added to the ${0} party',
+]);
+
+// Lines that set off effects of their own but tell more than an action row could (what was copied, bought, smuggled):
+// they stay text lines, and the effects that follow join them on the right ('line' action of the message row)
+const EFFECT_LINES = new Set([
+  '${0} copied ${1} production with ${2}',
+  // Dune expansion (dune/*.ts): bazaar, smuggling, CHOAM, Kanly, Shai-Hulud
+  '${0} bought ${1} at the bazaar for ${2} M€',
+  '${0} took ${1} from the bazaar',
+  '${0} smuggled spice past the Empire',
+  '${0} traded on the black market',
+  '${0} bribed the officials',
+  '${0} accepted the CHOAM contract of ${1}',
+  '${0} recruited ${1} Sardaukar',
+  '${0} takes ${1} from ${2} in the Kanly',
+  'Worm riders of ${0} ride Shai-Hulud',
+  'Shai-Hulud tramples a greenery of ${0}',
+  'Shai-Hulud damages a special tile of ${0}',
+  'Spice blow at ${0}',
 ]);
 
 // Lines that only announce what follows as its own message ("drew 1 card(s)", "gained 3 heat"): they join the action row
@@ -546,6 +565,19 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
       current.indexes.push(index);
       return;
     }
+    // A line that sets off effects: a text line that collects the following effects on the right
+    if (EFFECT_LINES.has(template)) {
+      const action: LogAction = {kind: 'line', player: firstPlayer(message), lead: message, effects: [], others: []};
+      const follows = current !== undefined && current.action.player !== undefined && action.player === current.action.player;
+      const row: LogRow & {type: 'message'} = {type: 'message', message, indexes: [index], action};
+      if (follows) {
+        row.follows = true;
+      }
+      rows.push(row);
+      // Not a row of its own in the list, only where the following effects land (same indexes as the line)
+      current = {type: 'action', action, indexes: row.indexes};
+      return;
+    }
     // End of the game: the game id stands apart below a divider
     if (template === 'This game id was ${0}') {
       rows.push({type: 'phase', indexes: []});
@@ -560,6 +592,10 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
   });
 
   for (const row of rows) {
+    if (row.type === 'message' && row.action !== undefined) {
+      row.action.effects = mergeEffects(row.action.effects);
+      row.action.others = row.action.others.map((entry) => ({player: entry.player, effects: mergeEffects(entry.effects)}));
+    }
     if (row.type === 'action') {
       addLegacyCauses(row.action, context);
       const known = row.action.kind === 'standardProject' && row.action.card !== undefined ? STANDARD_PROJECT_PRODUCTION[row.action.card] : undefined;
