@@ -64,6 +64,17 @@
   .trade-select__resource {
     width: var(--exchange-tile);
   }
+
+  // Rate first, right under its chart column: + / − against the base price, then the value; the good and
+  // its stock below with more room, so the top number is not read as the rate (Jens, 22 Oct 2026)
+  .trade-select__rate {
+    order: -1;
+    margin-bottom: 6px;
+  }
+
+  .trade-select__change {
+    order: -1;
+  }
 }
 
 .exchange-chart {
@@ -217,7 +228,7 @@
   background-size: contain;
 }
 
-// Rate under each tile: the coin or the value in the other good, the change to the last generation below it
+// Rate of each tile: the coin or the value in the other good, with its distance from the base price (order above)
 .trade-select__rate {
   display: flex;
   flex-direction: column;

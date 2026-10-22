@@ -64,10 +64,11 @@ export function exchangeChart(resources: ReadonlyArray<Resource>, board: Exchang
   return {columns, rows};
 }
 
-/** Change of a rate to the generation before: its size and whether that is good for the player */
-export function rateChange(board: ExchangeBoardModel, resource: Resource, higherIsGood: boolean): {delta: number, mood: Mood} {
+/** Distance of the current rate from the normal rate: its size and whether that is good for the player (Jens, 22 Oct 2026:
+ *  + and − against the base price instead of arrows for the change since the last generation) */
+export function rateDeviation(board: ExchangeBoardModel, resource: Resource, higherIsGood: boolean): {delta: number, mood: Mood} {
   const history = board.history;
   const now = history[history.length - 1][resource];
-  const before = history.length > 1 ? history[history.length - 2][resource] : now;
-  return {delta: now - before, mood: moodOf(now, before, higherIsGood)};
+  const normal = board.normal[resource];
+  return {delta: now - normal, mood: moodOf(now, normal, higherIsGood)};
 }

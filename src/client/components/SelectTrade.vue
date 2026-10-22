@@ -86,7 +86,7 @@ import {ExchangeModel} from '@/common/dune/smugglingExchange';
 import ExchangeChart from '@/client/components/dune/ExchangeChart.vue';
 import TradeTileValue from '@/client/components/dune/TradeTileValue.vue';
 import {tileValue, TileValue} from '@/client/components/dune/exchangeValue';
-import {Mood, rateChange} from '@/client/components/dune/exchangeChart';
+import {Mood, rateDeviation} from '@/client/components/dune/exchangeChart';
 import {translateText} from '@/client/directives/i18n';
 
 // Names of the resources (translated; the Dune theme swaps them for its own words)
@@ -202,7 +202,7 @@ export default defineComponent({
     },
   },
   methods: {
-    // Change of a tile's rate to the generation before (Solari: fixed)
+    // Distance of a tile's rate from its base price as + / − (Solari: fixed)
     rateOf(resource: Resource, selling: boolean): {change: string, mood: Mood} {
       const board = selling ? this.exchange?.sell : this.exchange?.buy;
       if (board === undefined) {
@@ -211,8 +211,8 @@ export default defineComponent({
       if (resource === Resource.MEGACREDITS) {
         return {change: translateText('fixed'), mood: 'normal'};
       }
-      const {delta, mood} = rateChange(board, resource, selling);
-      const change = delta > 0 ? '▲' + delta : delta < 0 ? '▼' + (-delta) : '–';
+      const {delta, mood} = rateDeviation(board, resource, selling);
+      const change = delta > 0 ? '+' + delta : delta < 0 ? '−' + (-delta) : '–';
       return {change, mood};
     },
     // Value under a tile: in the good of the other side (pay with / get), Solari as the coin (Jens, 22 Oct 2026)
