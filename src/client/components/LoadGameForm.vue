@@ -50,7 +50,8 @@ export default defineComponent({
         rollbackCount,
       };
 
-      fetchOrFail(paths.LOAD_GAME, {
+      const serverId = new URLSearchParams(window.location.search).get('serverId') ?? '';
+      fetchOrFail(paths.LOAD_GAME + '?serverId=' + encodeURIComponent(serverId), {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(loadGameForm),

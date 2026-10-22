@@ -5,7 +5,6 @@ import {MockRequest, MockResponse} from './HttpMocks';
 import {RouteTestScaffolding} from './RouteTestScaffolding';
 import {statusCode} from '../../src/common/http/statusCode';
 import {NewGameConfig} from '../../src/common/game/NewGameConfig';
-import {RandomBoardOption} from '../../src/common/boards/RandomBoardOption';
 import {RandomMAOptionType} from '../../src/common/ma/RandomMAOptionType';
 import {SimpleGameModel} from '../../src/common/models/SimpleGameModel';
 import {FakeClock} from '../common/FakeClock';
@@ -40,7 +39,7 @@ function newGameConfigForTest(): NewGameConfig {
       underworld: false,
       deltaProject: false,
     },
-    board: RandomBoardOption.OFFICIAL,
+    boards: [BoardName.THARSIS],
     seed: 0,
     randomFirstPlayer: false,
     clonedGamedId: undefined,
@@ -91,28 +90,6 @@ describe('ApiCreateGame', () => {
     res = new MockResponse();
     scaffolding = new RouteTestScaffolding(req);
     apiCreateGame = new ApiCreateGame([{limit: 99999, perMs: 1}]);
-  });
-
-  it('Official random boards do not include fan maps', () => {
-    expect(ApiCreateGame.boardOptions(RandomBoardOption.OFFICIAL)).to.have.members([
-      BoardName.THARSIS, BoardName.HELLAS, BoardName.ELYSIUM,
-      BoardName.VASTITAS_BOREALIS_NOVA, BoardName.TERRA_CIMMERIA_NOVA, BoardName.UTOPIA_PLANITIA]);
-  });
-  it('Fully random boards do include fan maps', () => {
-    expect(ApiCreateGame.boardOptions(RandomBoardOption.ALL)).to.have.members([
-      BoardName.THARSIS,
-      BoardName.HELLAS,
-      BoardName.ELYSIUM,
-      BoardName.UTOPIA_PLANITIA,
-      BoardName.VASTITAS_BOREALIS_NOVA,
-      BoardName.TERRA_CIMMERIA_NOVA,
-      BoardName.ARABIA_TERRA,
-      BoardName.VASTITAS_BOREALIS,
-      BoardName.AMAZONIS,
-      BoardName.TERRA_CIMMERIA,
-      BoardName.HOLLANDIA,
-      BoardName.AMAZONIS_PLANITIA,
-    ]);
   });
 
   it('no get', async () => {

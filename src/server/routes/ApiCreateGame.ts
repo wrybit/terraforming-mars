@@ -4,8 +4,6 @@ import * as responses from '../server/responses';
 import {Handler} from './Handler';
 import {Context} from './IHandler';
 import {Database} from '../database/Database';
-import {BoardName} from '../../common/boards/BoardName';
-import {RandomBoardOption} from '../../common/boards/RandomBoardOption';
 import {Cloner} from '../database/Cloner';
 import {Game} from '../Game';
 import {GameOptions} from '../game/GameOptions';
