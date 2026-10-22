@@ -709,7 +709,7 @@ html.theme-dune .card-container .card-content .card-row > .card-item-container:h
 }
 
 /* Pictures for cards that only have text (Jens 21 Oct 2026): the worm on the Thumper, the protection shield of the
-   player overview on Protected Habitats (as a mask with its green gradient, players_table.less) */
+   player overview on Protected Habitats (graphics/protect-shield.svg, colours of players_table.less) */
 html.theme-dune .card-container:is(.card-thumper, .card-protected-habitats, .card-invention-contest, .card-business-contacts) .card-content > .card-rows:last-of-type::after {
   content: "";
   display: block;
@@ -732,11 +732,13 @@ html.theme-dune .card-container.card-business-contacts .card-content > .card-row
   background-image: url(graphics/cards-keep-2-of-4.svg);
 }
 
+/* The shield with a gold rim, larger and lower on the card, floating above it on a soft wide shadow (Jens 22 Oct 2026) */
 html.theme-dune .card-container.card-protected-habitats .card-content > .card-rows:last-of-type::after {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #d6f7b4 0%, #7ad048 40%, #3c9a24 75%, #1f6512 100%);
-  mask: url(../../misc/shield-icon.png) center / contain no-repeat;
+  width: 64px;
+  height: 68px;
+  margin-top: 26px;
+  background-image: url(graphics/protect-shield.svg);
+  filter: drop-shadow(0 12px 10px rgba(40, 22, 8, 0.5));
 }
 
 /* Every cross on a card ("cancelled", "ignore") in the red of the theme with a light halo (Jens 21 Oct 2026) */

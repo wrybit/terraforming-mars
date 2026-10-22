@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Protection shield of Protected Habitats on Dune cards: the green shield of the player overview with a gold rim -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 68" width="64" height="68">
+  <defs>
+    <linearGradient id="fill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d6f7b4"/>
+      <stop offset="0.4" stop-color="#7ad048"/>
+      <stop offset="0.75" stop-color="#3c9a24"/>
+      <stop offset="1" stop-color="#1f6512"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbe9a6"/>
+      <stop offset="0.45" stop-color="#d9a92a"/>
+      <stop offset="1" stop-color="#8a6410"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 4C40 8.5 49 10 58 10C58 33 51 52 32 64C13 52 6 33 6 10C15 10 24 8.5 32 4Z" fill="url(#fill)" stroke="url(#rim)" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M32 9.5C25.5 12.5 18 14 11 14.3C11.6 32 17 46 32 57Z" fill="#fffdf8" opacity="0.16"/>
+</svg>
