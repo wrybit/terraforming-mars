@@ -85,7 +85,10 @@ export default defineComponent({
       if (effect.label !== undefined) {
         return translateText(effect.label);
       }
-      return effect.cost ? translateText('for the trade') : '';
+      if (!effect.cost) {
+        return '';
+      }
+      return translateText(this.action.kind === 'card' ? 'paid for the card' : 'for the trade');
     },
     isActing(player: Color | undefined): boolean {
       return player !== undefined && player === this.action.player;

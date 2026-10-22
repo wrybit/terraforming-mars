@@ -1835,5 +1835,6 @@
   "${0} used the ${1} action to convert ${2}:cr:ware: into ${2}:r:mc:": "${0} използва действие ${1}, за да превърне ${2}:cr:ware: в ${2}:r:mc:",
   "All players lose 1:i:tr:.": "Всички играчи губят 1:i:tr:.",
   "Cards played by ${0} cost 1:r:mc: less this generation": "Картите, изиграни от ${0}, струват с 1:r:mc: по-малко в това поколение",
-  "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "Неутралният играч получи ${0}:r:mc: от собственика на ${1} (${2})"
+  "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "Неутралният играч получи ${0}:r:mc: от собственика на ${1} (${2})",
+  "paid for the card": "платено за картата"
 }

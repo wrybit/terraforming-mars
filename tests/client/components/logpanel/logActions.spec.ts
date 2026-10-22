@@ -38,6 +38,21 @@ describe('logActions', () => {
     expect(row.indexes).deep.eq([0, 1, 2]);
   });
 
+  it('groups a played card with its payment (upstream 973694909) as cost icons, not as text in brackets', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1} [ ${2} ]', player('red'), card(CardName.ALGAE), text('-1:r:steel: -12:r:megacredits: -2:cr:microbe:')),
+      message('${0} gained ${1} ${2}', player('red'), raw('1'), text('plant')),
+      message('${0} played ${1} [ ${2} ]', player('red'), card(CardName.BIG_ASTEROID), text('0')),
+    ]);
+    expect(rows).has.length(2);
+    expect(actionAt(rows, 0)).include({kind: 'card', card: CardName.ALGAE, player: 'red'});
+    expect(actionAt(rows, 0).effects).deep.eq([
+      {resource: 'steel', amount: -1, cost: true}, {resource: 'megacredit', amount: -12, cost: true},
+      {resource: 'microbe', amount: -2, cost: true}, {resource: 'plant', amount: 1},
+    ]);
+    expect(actionAt(rows, 1).effects).deep.eq([]);
+  });
+
   it('reads resource icon data (upstream 2cab7b413) like the older text data', () => {
     const rows = groupLogMessages([
       message('${0} played ${1}', player('red'), card(CardName.ALGAE)),

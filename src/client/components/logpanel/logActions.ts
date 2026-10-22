@@ -63,8 +63,12 @@ export type LogRow =
   | {type: 'message', message: LogMessage, indexes: Array<number>, follows?: boolean}
   | {type: 'phase', indexes: Array<number>};
 
+const PLAYED_WITH_PAYMENT = '${0} played ${1} [ ${2} ]';
+
 const STARTERS: Record<string, LogActionKind> = {
   '${0} played ${1}': 'card',
+  // Since upstream 973694909 with what was paid ("-3:r:megacredits: -1:r:steel:"): shown as cost icons on the right
+  [PLAYED_WITH_PAYMENT]: 'card',
   '${0} used ${1} action': 'action',
   '${0} took the first action of ${1} corporation': 'action',
   '${0} used ${1} standard project': 'standardProject',
@@ -383,6 +387,11 @@ function startAction(kind: LogActionKind, message: LogMessage): LogAction | unde
     action.name = value(message, 2);
     action.count = amount(message, 1);
     break;
+  case 'card':
+    if (template === PLAYED_WITH_PAYMENT) {
+      action.effects.push(...paymentEffects(value(message, 2)));
+    }
+    break;
   case 'trade': {
     action.name = firstOfType(message, LogMessageDataType.COLONY);
     // The trade fleet's fuel: energy, titanium, M€, or resources from a card
@@ -401,6 +410,19 @@ function startAction(kind: LogActionKind, message: LogMessage): LogAction | unde
     break;
   }
   return action;
+}
+
+// Payment of a played card as the server logs it (Payment.toLogString): "-3:r:megacredits: -1:cr:microbe:", "0" when free.
+// Each part becomes a cost icon; an unknown resource keeps its place as nothing rather than breaking the row.
+function paymentEffects(payment: string | undefined): Array<LogEffect> {
+  const effects: Array<LogEffect> = [];
+  for (const part of (payment ?? '').matchAll(/-(\d+):c?r:([a-z]+):/gi)) {
+    const paid = withResource(resource(part[2]), {amount: -Number(part[1]), cost: true});
+    if (paid !== undefined) {
+      effects.push(paid);
+    }
+  }
+  return effects;
 }
 
 // Base cost of what the action paid for (card or standard project), undefined when unknown

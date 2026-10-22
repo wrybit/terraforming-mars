@@ -1138,5 +1138,6 @@
   "${0} gained ${1}:r:mc: from ${2} ocean(s)": "${0}이(가) 해양 타일 ${2}개로 ${1}:r:mc:를 얻었습니다",
   "${0} spent ${1}:r:steel: and gained ${2}:r:heat:": "${0}이(가) ${1}:r:steel:를 소비하여 ${2}:r:heat:를 얻었습니다",
   "${0} sued ${1} who had 0:r:mc:.": "${0}이(가) 0:r:mc:를 가진 ${1}을(를) 고소했습니다.",
-  "All players lose 1:i:tr:.": "모든 플레이어가 1:i:tr:를 잃습니다."
+  "All players lose 1:i:tr:.": "모든 플레이어가 1:i:tr:를 잃습니다.",
+  "paid for the card": "카드 비용"
 }
