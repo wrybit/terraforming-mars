@@ -65,8 +65,8 @@ export default defineComponent({
   computed: {
     // Only the settings the board depends on; player names and the like do not reload it
     boardKey(): string {
-      const {board, boardSeed, shuffleMapOption, expansions, includedCards} = this.config;
-      return JSON.stringify({board, boardSeed, shuffleMapOption, expansions, includedCards});
+      const {boards, boardSeed, shuffleMapOption, expansions, includedCards} = this.config;
+      return JSON.stringify({boards, boardSeed, shuffleMapOption, expansions, includedCards});
     },
   },
   watch: {

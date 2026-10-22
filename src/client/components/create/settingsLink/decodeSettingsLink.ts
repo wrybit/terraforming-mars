@@ -63,6 +63,11 @@ export function decodeSettingsLink(text: string): JSONObject {
     json[field] = readCodedList(reader, 'cards').map((name) => CARD_RENAMES.get(name) ?? name);
   }
   json.customColonies = readCodedList(reader, 'colonies');
+  // Board pool of its own (appended later): replaces the single board value; JSONProcessor converts that one otherwise
+  const boards = readCodedList(reader, 'boards');
+  if (boards.length > 0) {
+    json.boards = boards;
+  }
 
   return json;
 }

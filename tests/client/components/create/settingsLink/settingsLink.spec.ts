@@ -8,6 +8,7 @@ import {CreateGameModel} from '@/client/components/create/CreateGameModel';
 import {JSONProcessor} from '@/client/components/create/JSONProcessor';
 import {BoardName} from '@/common/boards/BoardName';
 import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
+import {boardOptions} from '@/common/boards/randomBoardOptions';
 import {CardName} from '@/common/cards/CardName';
 import {EXPANSIONS} from '@/common/cards/GameModule';
 import {ColonyName} from '@/common/colonies/ColonyName';
@@ -25,7 +26,7 @@ function sampleModel(): CreateGameModel {
   model.players[2].handicap = 4;
   model.players[2].aiLevel = 'hard';
   model.expansions = {...model.expansions, corpera: true, prelude: true, venus: true, colonies: true, turmoil: true};
-  model.board = BoardName.HELLAS;
+  model.boards = [BoardName.HELLAS];
   model.startingCorporations = 4;
   model.draftVariant = true;
   model.solarPhaseOption = true;
@@ -57,7 +58,7 @@ describe('settings link', () => {
     expect(model.playersCount).eq(3);
     expect(model.players.slice(0, 3)).deep.eq(original.players.slice(0, 3));
     expect(model.expansions).deep.eq(original.expansions);
-    expect(model.board).eq(BoardName.HELLAS);
+    expect(model.boards).deep.eq([BoardName.HELLAS]);
     expect(model.startingCorporations).eq(4);
     expect(model.politicalAgendasExtension).eq('Chairman');
     expect(model.randomMA).eq(RandomMAOptionType.LIMITED);
@@ -65,6 +66,18 @@ describe('settings link', () => {
     expect(model.randomFirstPlayer).is.false;
     expect(model.draftVariant).is.true;
     expect(model.escapeVelocityMode).is.false;
+  });
+
+  it('round-trips a random board option as before and a pool picked board by board', () => {
+    const official = sampleModel();
+    official.boards = boardOptions(RandomBoardOption.OFFICIAL);
+    expect(applyLink(encodeSettingsLink(official)).model.boards).to.have.members(official.boards);
+
+    const pool = sampleModel();
+    pool.boards = [BoardName.HELLAS, BoardName.HOLLANDIA];
+    const text = encodeSettingsLink(pool);
+    expect(decodeSettingsLink(text).board).eq(RandomBoardOption.ALL);
+    expect(applyLink(text).model.boards).deep.eq([BoardName.HELLAS, BoardName.HOLLANDIA]);
   });
 
   it('round-trips card lists, colonies and escape velocity', () => {

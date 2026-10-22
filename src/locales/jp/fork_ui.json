@@ -1252,5 +1252,6 @@
   "Theme": "テーマ",
   "Dune": "デューン",
   "Not available with the Dune theme": "デューンのテーマでは使用できません",
-  "Delta": "デルタ"
+  "Delta": "デルタ",
+  "Select boards to be randomly chosen": "ランダムに選ぶボードを選択"
 }

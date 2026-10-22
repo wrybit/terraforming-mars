@@ -6,8 +6,6 @@ import * as responses from '../server/responses';
 import {Handler} from './Handler';
 import {Context} from './IHandler';
 import {Database} from '../database/Database';
-import {BoardName} from '../../common/boards/BoardName';
-import {RandomBoardOption} from '../../common/boards/RandomBoardOption';
 import {Cloner} from '../database/Cloner';
 import {Game} from '../Game';
 import {GameOptions} from '../game/GameOptions';
@@ -25,7 +23,9 @@ import {readBody} from './readBody';
 import {RouteError} from './RouteError';
 import {CEO_CARDS_DEALT_PER_PLAYER} from '../../common/constants';
 import {hasNegativeEscapeVelocityOption, sanitizeEscapeVelocityOptions} from '../../common/game/escapeVelocity';
-import {boardCandidates, boardRandom, pickBoard} from '../boards/newGameBoard';
+import {boardRandom, pickBoard} from '../boards/newGameBoard';
+import {boardPool} from '../../common/boards/boardPool';
+import {BoardName} from '../../common/boards/BoardName';
 
 function parseQuotaConfig(struct: any): QuotaConfig {
   let {limit} = struct;
@@ -75,10 +75,6 @@ export class ApiCreateGame extends Handler {
   public constructor(quotaConfigs: Array<QuotaConfig> = getQuotaConfigs()) {
     super();
     this.quotaHandlers = quotaConfigs.map((config) => new QuotaHandler(config));
-  }
-
-  public static boardOptions(board: RandomBoardOption | BoardName): Array<BoardName> {
-    return boardCandidates(board);
   }
 
   /** Game options of a request whose board is already drawn (also used by the board preview). */
@@ -186,7 +182,7 @@ export class ApiCreateGame extends Handler {
       if (gameReq.theme !== undefined && !isTheme(gameReq.theme)) {
         throw RouteError.badRequest(`Unknown theme "${String(gameReq.theme)}" (known: ${THEMES.join(', ')})`);
       }
-      const themeErrors = themeConflicts(gameReq.theme ?? DEFAULT_THEME, gameReq.board, gameReq.expansions);
+      const themeErrors = themeConflicts(gameReq.theme ?? DEFAULT_THEME, boardPool(gameReq.boards, (gameReq as {board?: unknown}).board), gameReq.expansions);
       if (themeErrors.length > 0) {
         throw RouteError.badRequest(themeErrors.join(' '));
       }
@@ -228,7 +224,7 @@ export class ApiCreateGame extends Handler {
 
       // Board drawn from the board seed of the request: the same board the preview on the page showed
       const boardRng = boardRandom(gameReq.boardSeed);
-      const gameOptions = ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq.board, boardRng));
+      const gameOptions = ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq, boardRng));
 
       let game: IGame;
       if (gameOptions.clonedGamedId !== undefined && !gameOptions.clonedGamedId.startsWith('#')) {

@@ -10,6 +10,9 @@ import {cast} from '@/common/utils/utils';
 import {CARD_RENAMES} from '@/common/cards/CardRenames';
 import {sanitizeEscapeVelocityOptions} from '@/common/game/escapeVelocity';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {BoardName} from '@/common/boards/BoardName';
+import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
+import {boardOptions} from '@/common/boards/randomBoardOptions';
 
 function safeBoolean(val: JSONValue): boolean {
   if (typeof val === 'boolean') {
@@ -113,6 +116,14 @@ export class JSONProcessor {
     // it via the watch mechanism.
     this.solarPhaseOption = safeBoolean(json.solarPhaseOption);
 
+    // Older settings have a single `board`, which may be a random option.
+    if (json.board !== undefined && json.boards === undefined) {
+      const board = json.board as BoardName | RandomBoardOption;
+      json.boards = board === RandomBoardOption.OFFICIAL || board === RandomBoardOption.ALL ?
+        boardOptions(board) :
+        [board];
+    }
+
     const ignoredFields = [
       // Instead of ignoring these fields, let them pass through to the model.
       // json_constants.CUSTOM_CORPORATIONS,
@@ -124,6 +135,7 @@ export class JSONProcessor {
       json_constants.OLD_CUSTOM_COLONIES,
       json_constants.OLD_CUSTOM_CORPORATIONS,
       ...Object.values(oldExpansionFields),
+      'board',
       'escapeVelocity',
       'duneModules',
       'players',

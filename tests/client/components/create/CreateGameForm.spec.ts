@@ -5,6 +5,8 @@ import CreateGameForm from '@/client/components/create/CreateGameForm.vue';
 import {createGameSettingsStorage} from '@/client/components/create/createGameSettingsStorage';
 import {FakeLocalStorage} from '../FakeLocalStorage';
 import {BoardName} from '@/common/boards/BoardName';
+import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
+import {boardOptions} from '@/common/boards/randomBoardOptions';
 import {DEFAULT_EXPANSIONS} from '@/common/cards/GameModule';
 import {JSONObject} from '@/common/Types';
 import {defineComponent, nextTick} from 'vue';
@@ -25,7 +27,7 @@ function createNewGameConfig(overrides: JSONObject = {}):  NewGameConfig {
       {name: 'Bob', color: 'blue', beginner: false, handicap: 0, first: true},
     ],
     expansions: DEFAULT_EXPANSIONS,
-    board: BoardName.HELLAS,
+    boards: [BoardName.HELLAS],
     draftVariant: false,
     solarPhaseOption: true,
     ...overrides,
@@ -175,14 +177,33 @@ describe('CreateGameForm', () => {
       ...globalConfig,
     });
     const vm = wrapper.vm as any;
-    vm.board = BoardName.ELYSIUM;
+    vm.selectBoard(BoardName.ELYSIUM);
     await nextTick();
+    expect(vm.boards).deep.eq([BoardName.ELYSIUM]);
     vm.randomBoard = true;
-    expect(vm.board).eq('random official');
+    expect(vm.boards).deep.eq(boardOptions(RandomBoardOption.OFFICIAL));
+    expect(vm.randomBoardScope).eq('random official');
     vm.randomBoardScope = 'random all';
-    expect(vm.board).eq('random all');
+    expect(vm.boards).deep.eq(boardOptions(RandomBoardOption.ALL));
+    await nextTick();
     vm.randomBoard = false;
-    expect(vm.board).eq(BoardName.ELYSIUM);
+    expect(vm.boards).deep.eq([BoardName.ELYSIUM]);
+  });
+
+  it('random board: chips add boards to the pool and take them out again', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const vm = wrapper.vm as any;
+    vm.randomBoard = true;
+    vm.selectBoard(BoardName.HOLLANDIA);
+    expect(vm.boards).includes(BoardName.HOLLANDIA);
+    expect(vm.randomBoardScope).eq('');
+    vm.boards = [BoardName.HELLAS, BoardName.ELYSIUM];
+    vm.selectBoard(BoardName.HELLAS);
+    // The last board left is a fixed board again
+    expect(vm.boards).deep.eq([BoardName.ELYSIUM]);
+    expect(vm.randomBoard).is.false;
   });
 
   it('Dune theme plays on Arrakis with the covered expansions only; Mars restores the chosen board', async () => {
@@ -190,12 +211,12 @@ describe('CreateGameForm', () => {
       ...globalConfig,
     });
     const vm = wrapper.vm as any;
-    vm.board = BoardName.ELYSIUM;
+    vm.selectBoard(BoardName.ELYSIUM);
     vm.setExpansion('venus', true);
     vm.setExpansion('prelude', true);
     await nextTick();
     vm.theme = 'dune';
-    expect(vm.board).eq(BoardName.ARRAKIS_61);
+    expect(vm.boards).deep.eq([BoardName.ARRAKIS_61]);
     expect(vm.expansions.venus).eq(false);
     expect(vm.expansions.prelude).eq(true);
     expect(vm.newGameConfig.theme).eq('dune');
@@ -203,7 +224,7 @@ describe('CreateGameForm', () => {
     vm.toggleExpansion('colonies');
     expect(vm.expansions.colonies).eq(false);
     vm.theme = 'mars';
-    expect(vm.board).eq(BoardName.ELYSIUM);
+    expect(vm.boards).deep.eq([BoardName.ELYSIUM]);
     expect(vm.newGameConfig.theme).eq('mars');
   });
 
@@ -212,7 +233,7 @@ describe('CreateGameForm', () => {
     const model = defaultCreateGameModel();
     model.playersCount = 3;
     model.players[0].name = 'Jens';
-    model.board = BoardName.ELYSIUM;
+    model.boards = [BoardName.ELYSIUM];
     window.history.replaceState(null, '', '/new-game' + settingsHash(model));
 
     const wrapper = shallowMount(CreateGameForm, {
@@ -224,7 +245,7 @@ describe('CreateGameForm', () => {
     const vm = wrapper.vm as any;
     expect(vm.playersCount).eq(3);
     expect(vm.players[0].name).eq('Jens');
-    expect(vm.board).eq(BoardName.ELYSIUM);
+    expect(vm.boards).deep.eq([BoardName.ELYSIUM]);
   });
 
   it('writes the current settings into the link hash', async () => {
@@ -233,7 +254,7 @@ describe('CreateGameForm', () => {
     });
     await nextTick();
     const vm = wrapper.vm as any;
-    vm.board = BoardName.HELLAS;
+    vm.boards = [BoardName.HELLAS];
     await nextTick();
 
     expect(readSettingsFromHash(window.location.hash)?.board).eq(BoardName.HELLAS);
@@ -252,10 +273,23 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).playersCount).eq(2);
     expect((wrapper.vm as any).players[0].name).eq('Alice');
     expect((wrapper.vm as any).players[1].name).eq('Bob');
-    expect((wrapper.vm as any).board).eq(BoardName.HELLAS);
+    expect((wrapper.vm as any).boards).deep.eq([BoardName.HELLAS]);
     expect((wrapper.vm as any).draftVariant).eq(false);
     expect((wrapper.vm as any).expansions.venus).eq(true);
     expect((wrapper.vm as any).solarPhaseOption).eq(true);
+  });
+
+  it('finds the import field after restoring saved settings', async () => {
+    // Restoring in created() once cached the empty pre-mount refs, so the file import failed
+    createGameSettingsStorage.save(createNewGameConfig());
+
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    await wrapper.vm.$nextTick();
+
+    expect((wrapper.vm as any).typedRefs().file).is.not.undefined;
+    expect(() => (wrapper.vm as any).uploadSettings()).not.to.throw();
   });
 
   it('shows warnings when restoring saved settings', async () => {
@@ -295,12 +329,12 @@ describe('CreateGameForm', () => {
     });
     await wrapper.vm.$nextTick();
 
-    expect((wrapper.vm as any).board).eq(BoardName.HELLAS);
+    expect((wrapper.vm as any).boards).deep.eq([BoardName.HELLAS]);
 
     (wrapper.vm as any).resetSettings();
     await wrapper.vm.$nextTick();
 
-    expect((wrapper.vm as any).board).eq(BoardName.THARSIS);
+    expect((wrapper.vm as any).boards).deep.eq([BoardName.THARSIS]);
     expect((wrapper.vm as any).draftVariant).eq(true);
     expect(createGameSettingsStorage.load()).eq(undefined);
     expect(wrapper.findAllComponents({name: 'AppButton'}).map((button) => button.props('title'))).includes('Reset');
@@ -334,12 +368,12 @@ describe('CreateGameForm', () => {
       (wrapper.vm as any).randomFirstPlayer = false;
       (wrapper.vm as any).players[0].name = 'Alice';
       (wrapper.vm as any).players[1].name = 'Bob';
-      (wrapper.vm as any).board = BoardName.ELYSIUM;
+      (wrapper.vm as any).boards = [BoardName.ELYSIUM];
 
       await (wrapper.vm as any).createGame();
 
       const savedSettings = createGameSettingsStorage.load();
-      expect(savedSettings?.board).eq(BoardName.ELYSIUM);
+      expect(savedSettings?.boards).deep.eq([BoardName.ELYSIUM]);
       expect((savedSettings?.players as Array<{name: string}>).map((player) => player.name)).deep.eq(['Alice', 'Bob']);
     } finally {
       global.fetch = originalFetch;

@@ -85,6 +85,7 @@ import {PlayedCards} from './cards/PlayedCards';
 import {From} from './logs/From';
 import {SelectStandardProjectToPlay} from './inputs/SelectStandardProjectToPlay';
 import {DevToolsPlayerState, emptyDevToolsPlayerState} from '../common/devtools/devToolsAction';
+import {Turmoil} from './turmoil/Turmoil';
 
 const THROW_STATE_ERRORS = Boolean(process.env.THROW_STATE_ERRORS);
 const DEFAULT_GLOBAL_PARAMETER_STEPS = {
@@ -260,8 +261,7 @@ export class Player implements IPlayer {
         policyId: p.policies[0].id,
       },
     };
-    const alliedPolicy = this.game.turmoil?.getPartyByName(p.name).policies.find((t) => t.id === p.policies[0].id);
-
+    const alliedPolicy = Turmoil.getTurmoil(this.game).getPartyByName(p.name).policies.find((t) => t.id === p.policies[0].id);
     alliedPolicy?.onPolicyStartForPlayer?.(this);
   }
 
@@ -900,7 +900,15 @@ export class Player implements IPlayer {
 
     if (selectedCard.type !== CardType.PROXY) {
       this.lastCardPlayed = selectedCard.name;
-      this.game.log('${0} played ${1}', (b) => b.player(this).card(selectedCard));
+      if (!selectedCard.cost) {
+        this.game.log('${0} played ${1}', (b) => b.player(this).card(selectedCard));
+      } else {
+        this.game.log('${0} played ${1} [ ${2} ]',
+          (b) => b
+            .player(this)
+            .card(selectedCard)
+            .string(Payment.toLogString(payment)));
+      }
     }
 
     // Play the card

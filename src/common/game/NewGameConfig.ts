@@ -1,6 +1,5 @@
 import {AiLevel} from '../ai/AiLevel';
 import {BoardName} from '../boards/BoardName';
-import {RandomBoardOption} from '../boards/RandomBoardOption';
 import {CardName} from '../cards/CardName';
 import {ColonyName} from '../colonies/ColonyName';
 import {Color} from '../Color';
@@ -10,8 +9,6 @@ import {GameId} from '../Types';
 import {Expansion} from '../cards/GameModule';
 import {Theme} from '../theme/Theme';
 import {DuneModule} from '../dune/DuneModule';
-
-export type BoardNameType = BoardName | RandomBoardOption;
 
 export interface NewPlayerModel {
   name: string;
@@ -40,7 +37,7 @@ export type EscapeVelocityOptions = {
 export type NewGameConfig = {
   players: Array<NewPlayerModel>;
   expansions: Record<Expansion, boolean>,
-  board: BoardNameType;
+  boards: Array<BoardName>;
   seed: number;
   /** Seed of the board (draw of a random board, shuffled bonuses); the page shows the same board as a preview. */
   boardSeed?: number;

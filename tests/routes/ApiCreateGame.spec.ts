@@ -1,11 +1,12 @@
 import {expect} from 'chai';
 import {BoardName} from '../../src/common/boards/BoardName';
+import {RandomBoardOption} from '../../src/common/boards/RandomBoardOption';
+import {boardOptions} from '../../src/common/boards/randomBoardOptions';
 import {ApiCreateGame} from '../../src/server/routes/ApiCreateGame';
 import {MockRequest, MockResponse} from './HttpMocks';
 import {RouteTestScaffolding} from './RouteTestScaffolding';
 import {statusCode} from '../../src/common/http/statusCode';
 import {NewGameConfig} from '../../src/common/game/NewGameConfig';
-import {RandomBoardOption} from '../../src/common/boards/RandomBoardOption';
 import {RandomMAOptionType} from '../../src/common/ma/RandomMAOptionType';
 import {SimpleGameModel} from '../../src/common/models/SimpleGameModel';
 import {FakeClock} from '../common/FakeClock';
@@ -40,7 +41,7 @@ function newGameConfigForTest(): NewGameConfig {
       underworld: false,
       deltaProject: false,
     },
-    board: RandomBoardOption.OFFICIAL,
+    boards: [BoardName.THARSIS],
     seed: 0,
     randomFirstPlayer: false,
     clonedGamedId: undefined,
@@ -93,28 +94,6 @@ describe('ApiCreateGame', () => {
     apiCreateGame = new ApiCreateGame([{limit: 99999, perMs: 1}]);
   });
 
-  it('Official random boards do not include fan maps', () => {
-    expect(ApiCreateGame.boardOptions(RandomBoardOption.OFFICIAL)).to.have.members([
-      BoardName.THARSIS, BoardName.HELLAS, BoardName.ELYSIUM,
-      BoardName.VASTITAS_BOREALIS_NOVA, BoardName.TERRA_CIMMERIA_NOVA, BoardName.UTOPIA_PLANITIA]);
-  });
-  it('Fully random boards do include fan maps', () => {
-    expect(ApiCreateGame.boardOptions(RandomBoardOption.ALL)).to.have.members([
-      BoardName.THARSIS,
-      BoardName.HELLAS,
-      BoardName.ELYSIUM,
-      BoardName.UTOPIA_PLANITIA,
-      BoardName.VASTITAS_BOREALIS_NOVA,
-      BoardName.TERRA_CIMMERIA_NOVA,
-      BoardName.ARABIA_TERRA,
-      BoardName.VASTITAS_BOREALIS,
-      BoardName.AMAZONIS,
-      BoardName.TERRA_CIMMERIA,
-      BoardName.HOLLANDIA,
-      BoardName.AMAZONIS_PLANITIA,
-    ]);
-  });
-
   it('no get', async () => {
     await scaffolding.get(apiCreateGame, res);
     expect(res.statusCode).eq(statusCode.notFound);
@@ -139,13 +118,20 @@ describe('ApiCreateGame', () => {
     expect(game!.players[0].name).eq('Robot');
   });
 
-  for (const [board, shuffleMapOption] of [[RandomBoardOption.ALL, true], [RandomBoardOption.OFFICIAL, false], [BoardName.HELLAS, true]] as const) {
-    it(`creates exactly the board of the preview (${board}, shuffled: ${shuffleMapOption})`, async () => {
+  // Board pools, plus the older single `board` that API clients may still send
+  const boardRequests: ReadonlyArray<[string, Partial<NewGameConfig> & {board?: string}, boolean]> = [
+    ['legacy random all', {boards: undefined, board: RandomBoardOption.ALL}, true],
+    ['pool', {boards: [BoardName.HELLAS, BoardName.ELYSIUM, BoardName.HOLLANDIA]}, false],
+    ['official pool', {boards: boardOptions(RandomBoardOption.OFFICIAL)}, false],
+    ['hellas', {boards: [BoardName.HELLAS]}, true],
+  ];
+  for (const [label, board, shuffleMapOption] of boardRequests) {
+    it(`creates exactly the board of the preview (${label}, shuffled: ${shuffleMapOption})`, async () => {
       for (const boardSeed of [0.12, 0.5, 0.987]) {
         req = new MockRequest();
         res = new MockResponse();
         scaffolding = new RouteTestScaffolding(req);
-        const config = {...newGameConfigForTest(), board, shuffleMapOption, boardSeed};
+        const config = {...newGameConfigForTest(), ...board, shuffleMapOption, boardSeed} as NewGameConfig;
         const preview = ApiBoardPreview.preview(config);
         await postConfig(config);
         const game = await scaffolding.ctx.gameLoader.getGame((JSON.parse(res.content) as SimpleGameModel).id);

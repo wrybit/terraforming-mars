@@ -24,6 +24,24 @@
   }
 }
 
+// On phones and tablets a background-attachment: fixed background repaints the whole page
+// on every scroll frame, which crawls once the page holds a few dozen cards.
+// A fixed element behind the page doesn't. Width can't tell phones apart here
+// because the game page sets a 1260px viewport.
+@media (hover: none) and (pointer: coarse) {
+  #player-home, #spectator-home {
+    background: none;
+
+    &::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(transparent, #000), url(./assets/stars.jpg);
+    }
+  }
+}
+
 .terraformed-banner {
   // Floating instead of in the flow: doesn't push the player bars down.
   // Centered over the right column (board, left edge from boardColumnPosition.ts), there is room on top there –

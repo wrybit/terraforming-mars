@@ -45,10 +45,14 @@ export function themeAllowsBoard(theme: Theme, board: string): boolean {
   return theme === 'dune' ? isDuneBoard(board) : !isDuneBoard(board);
 }
 
-/** Reasons a new game's settings do not fit its theme (English, translated on display); empty when they fit. */
-export function themeConflicts(theme: Theme, board: string | undefined, expansions: Partial<Record<Expansion, boolean>> | undefined): Array<string> {
+/** Reasons a new game's settings (board pool, expansions) do not fit its theme (English, translated on display); empty when they fit. */
+export function themeConflicts(theme: Theme, boards: ReadonlyArray<string>, expansions: Partial<Record<Expansion, boolean>> | undefined): Array<string> {
   const conflicts: Array<string> = [];
-  if (!themeAllowsBoard(theme, board ?? '')) {
+  // Board pool (upstream c1f05256e): Dune plays on exactly one Arrakis, Mars never draws one
+  const boardsFit = theme === 'dune' ?
+    boards.length === 1 && themeAllowsBoard(theme, boards[0]) :
+    boards.every((board) => themeAllowsBoard(theme, board));
+  if (!boardsFit) {
     conflicts.push(theme === 'dune' ? 'The Dune theme is played on Arrakis.' : 'Arrakis is only available with the Dune theme.');
   }
   const blocked = (Object.entries(expansions ?? {}) as Array<[Expansion, boolean]>)

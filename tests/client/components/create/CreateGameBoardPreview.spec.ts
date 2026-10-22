@@ -17,7 +17,7 @@ describe('CreateGameBoardPreview', () => {
       body = String(init.body);
       return new Response(JSON.stringify({boardName: BoardName.HELLAS, spaces: []}));
     }) as typeof fetch;
-    const config = {board: 'random official', boardSeed: 0.4, expansions: {}} as unknown as NewGameConfig;
+    const config = {boards: [BoardName.THARSIS, BoardName.HELLAS], boardSeed: 0.4, expansions: {}} as unknown as NewGameConfig;
     const wrapper = shallowMount(CreateGameBoardPreview, {
       ...globalConfig,
       props: {config, isRandom: true, showBoardName: true, boardColorClass: () => ''},

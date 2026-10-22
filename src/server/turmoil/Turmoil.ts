@@ -135,7 +135,8 @@ export class Turmoil {
     if (this.delegateReserve.has(delegate)) {
       this.delegateReserve.remove(delegate);
     } else {
-      console.log(`${delegate}/${game.id} tried to get a delegate from an empty reserve.`);
+      const name = delegate === 'NEUTRAL' ? delegate : delegate.name;
+      console.log(`${name}/${game.id} tried to get a delegate from an empty reserve.`);
       if (throwIfError) {
         throw new Error('No available delegate');
       }
@@ -288,10 +289,13 @@ export class Turmoil {
   }
 
   private executeAlliedOnPolicyEnd(player: IPlayer | undefined): void {
-    if (player?.alliedParty) {
-      const {alliedParty} = player;
-      const alliedPolicy = player.game.turmoil?.getPartyByName(alliedParty.partyName)?.policies.find((p) => p.id === alliedParty.agenda.policyId);
-      alliedPolicy?.onPolicyEndForPlayer?.(player);
+    const alliedParty = player?.alliedParty;
+    if (alliedParty) {
+      const realPolicy = Turmoil.getTurmoil(player.game).getPartyByName(alliedParty.partyName);
+      const alliedPolicy = realPolicy.policies.find((p) => p.id === alliedParty.agenda.policyId);
+      if (alliedPolicy) {
+        alliedPolicy.onPolicyEndForPlayer?.(player);
+      }
     }
   }
 
@@ -389,7 +393,13 @@ export class Turmoil {
     return partiesOrdered.find((p) => p.delegates.size === first);
   }
 
-  private applyRulingBonus(game: IGame, alliedPlayer: IPlayer | undefined): void {
+  // Called either directly during generation change, or after asking chairperson player
+  // to choose an agenda.
+  public onAgendaSelected(game: IGame): void {
+    const rulingParty = this.rulingParty;
+
+    // Ruling bonus should be chosen between global or allied party if MFA is in play
+    const alliedPlayer = game.players.find((p) => p.alliedParty !== undefined);
     if (game.turmoil && alliedPlayer) {
       const currentDominantParty = game.turmoil.dominantParty;
       const secondDominantParty = this.findSecondDominantParty(currentDominantParty);
@@ -398,16 +408,6 @@ export class Turmoil {
         alliedPlayer.setAlliedParty(secondDominantParty);
       }
     }
-  }
-
-  // Called either directly during generation change, or after asking chairperson player
-  // to choose an agenda.
-  public onAgendaSelected(game: IGame): void {
-    const rulingParty = this.rulingParty;
-
-    // Ruling bonus should be chosen between global or allied party if MFA is in play
-    const alliedPlayer = game.players.find((p) => p.alliedParty !== undefined);
-    this.applyRulingBonus(game, alliedPlayer);
 
     // Resolve Ruling Bonus
     const bonusId = PoliticalAgendas.currentAgenda(this).bonusId;
@@ -487,21 +487,6 @@ export class Turmoil {
     }
   }
 
-  /** Return the number of delegates for `delegate` in the reserve. */
-  public getAvailableDelegateCount(delegate: Delegate): number {
-    return this.delegateReserve.get(delegate);
-  }
-
-  /** List the delegates present in the reserve */
-  public getPresentPlayersInReserve(): Array<Delegate> {
-    return Array.from(new Set(this.delegateReserve));
-  }
-
-  /** Return true if `player` has delegates in reserve. */
-  public hasDelegatesInReserve(player: Delegate): boolean {
-    return this.getAvailableDelegateCount(player) > 0;
-  }
-
   /**
    * End-game victory points for `player`.
    *
@@ -521,7 +506,7 @@ export class Turmoil {
   }
 
   public getSendDelegateInput(player: IPlayer): SelectParty | undefined {
-    if (this.hasDelegatesInReserve(player)) {
+    if (this.delegateReserve.has(player)) {
       let sendDelegate;
       if (!this.usedFreeDelegateAction.has(player)) {
         sendDelegate = new SendDelegateToArea(player, 'Send a delegate in an area (from lobby)', {freeStandardAction: true});

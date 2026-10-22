@@ -21,7 +21,6 @@ export class LoadGame extends Handler {
       return id;
     }
     if (isPlayerId(id) || isSpectatorId(id)) {
-      console.log(`Finding game for player/spectator ${id}`);
       return await Database.getInstance().getGameId(id);
     }
     return undefined;
@@ -35,12 +34,10 @@ export class LoadGame extends Handler {
     if (gameId === undefined) {
       throw RouteError.notFound('Invalid game id');
     }
-    // This should probably be behind some kind of verification that prevents just
-    // anyone from rolling back a large number of steps.
     const rollbackCount = gameReq.rollbackCount;
     if (rollbackCount > 0) {
       try {
-        Database.getInstance().deleteGameNbrSaves(gameId, rollbackCount);
+        await Database.getInstance().deleteGameNbrSaves(gameId, rollbackCount);
       } catch (error) {
         console.error(error);
         throw RouteError.internalServerError();

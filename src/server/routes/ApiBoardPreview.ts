@@ -25,7 +25,7 @@ export class ApiBoardPreview extends Handler {
 
   public static preview(gameReq: NewGameConfig): BoardPreviewModel {
     const boardRng = boardRandom(gameReq.boardSeed);
-    const gameOptions = Game.resolveOptions(ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq.board, boardRng)));
+    const gameOptions = Game.resolveOptions(ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq, boardRng)));
     const board = GameSetup.newBoard(gameOptions, boardRng);
     return {boardName: gameOptions.boardName, spaces: boardSpaceModels(board)};
   }

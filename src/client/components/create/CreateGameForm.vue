@@ -126,8 +126,8 @@
             <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
             <!-- Dune: the standard and the large Arrakis (common/dune/arrakisLayout.ts) -->
             <div v-if="theme === 'dune'" class="create-game-chip-grid create-game-theme-board">
-              <ChoiceChip v-for="boardName in DUNE_BOARDS" :key="boardName" :label="boardName" capitalized :selected="board === boardName"
-                @select="board = boardName">
+              <ChoiceChip v-for="boardName in DUNE_BOARDS" :key="boardName" :label="boardName" capitalized :selected="boards[0] === boardName"
+                @select="boards = [boardName]">
                 <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
                 <!-- What tells the boards apart (boardFacts.ts) -->
                 <template #detail>
@@ -138,7 +138,7 @@
               </ChoiceChip>
             </div>
             <template v-else>
-            <!-- Chance first: with a random board the board chips below only show the pool it draws from -->
+            <!-- Chance first: with a random board the board chips below pick the pool it draws from -->
             <div class="create-game-subhead" v-i18n>Random</div>
             <OptionRow label="Random board">
               <SwitchInput v-model="randomBoard"/>
@@ -150,10 +150,10 @@
             <template v-for="group in boardGroups" :key="group.title">
               <!-- Fan-made can be closed; closed, a chosen fan board stands behind the title -->
               <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.fan" storageKey="fanBoards" :changed="group.fan ? fanBoardNote : undefined">
-                <div class="create-game-chip-grid" :class="{'create-game-chip-grid--muted': randomBoard}">
+                <div class="create-game-chip-grid">
                   <ChoiceChip v-for="boardName in group.boards" :key="boardName"
-                    :label="boardName" capitalized :selected="board === boardName"
-                    @select="board = boardName">
+                    :label="boardName" capitalized :selected="boards.includes(boardName)"
+                    @select="selectBoard(boardName)">
                     <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
                     <template #detail>
                       <span v-for="fact in boardFactsOf(boardName)" :key="fact.picture" class="create-game-board-fact" :title="fact.label">
@@ -474,7 +474,9 @@ import {GameId, JSONObject} from '@/common/Types';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import PageTitle from '@/client/components/common/PageTitle.vue';
 import {getCard} from '@/client/cards/ClientCardManifest';
-import {BoardNameType, NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
+import {NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
+import {boardOptions} from '@/common/boards/randomBoardOptions';
+import {randomOptionOf, singleBoardValue} from '@/common/boards/boardPool';
 import {vueRoot} from '@/client/components/vueRoot';
 import {showAlert} from '@/client/components/showAlert';
 import {CreateGameModel} from './CreateGameModel';
@@ -609,9 +611,9 @@ export default defineComponent({
     expansionGrouping(value: ExpansionGrouping) {
       saveExpansionGrouping(value);
     },
-    board(value: BoardNameType) {
-      if (!this.isRandomBoard(value) && !isDuneBoard(value)) {
-        this.lastFixedBoard = value as BoardName;
+    boards(value: Array<BoardName>) {
+      if (value.length === 1 && !isDuneBoard(value[0])) {
+        this.lastFixedBoard = value[0];
       }
     },
     'expansions.venus': function(value: boolean) {
@@ -748,8 +750,8 @@ export default defineComponent({
     },
     // Fixed board: its name; random board: the drawn one as soon as the preview knows it
     summaryBoard(): BoardName | undefined {
-      if (!this.isRandomBoard(this.board)) {
-        return this.board as BoardName;
+      if (this.boards.length === 1) {
+        return this.boards[0];
       }
       return this.seededGame ? undefined : this.drawnBoard;
     },
@@ -769,7 +771,7 @@ export default defineComponent({
         customPreludes: this.customPreludes,
         bannedCards: this.bannedCards,
         includedCards: this.includedCards,
-        board: this.board,
+        boards: this.boards,
         seed: this.seed,
         solarPhaseOption: this.solarPhaseOption,
         aresExtremeVariant: this.aresExtremeVariant,
@@ -830,9 +832,6 @@ export default defineComponent({
         const value = this.validationErrors[key];
         return validationDetails[key].blocking && (Array.isArray(value) ? value.length > 0 : Boolean(value));
       });
-    },
-    typedRefs(): Refs {
-      return this.$refs as Refs;
     },
     RandomBoardOption(): typeof RandomBoardOption {
       return RandomBoardOption;
@@ -924,12 +923,12 @@ export default defineComponent({
     // carry it without a field of their own.
     theme: {
       get(): Theme {
-        return isDuneBoard(this.board) ? 'dune' : 'mars';
+        return this.boards.length === 1 && isDuneBoard(this.boards[0]) ? 'dune' : 'mars';
       },
       set(value: Theme) {
         if (value === 'dune') {
-          if (!isDuneBoard(this.board)) {
-            this.board = DUNE_BOARD;
+          if (this.theme !== 'dune') {
+            this.boards = [DUNE_BOARD];
           }
           // Arrakis follows the geography of the planet; shuffled bonuses would lose it
           this.shuffleMapOption = false;
@@ -939,7 +938,7 @@ export default defineComponent({
             }
           }
         } else {
-          this.board = this.lastFixedBoard;
+          this.boards = [this.lastFixedBoard];
         }
       },
     },
@@ -964,21 +963,22 @@ export default defineComponent({
     DUNE_BOARDS(): ReadonlyArray<BoardName> {
       return DUNE_BOARDS;
     },
-    // "Random board" is stored as the board value itself (RandomBoardOption), like before
+    // "Random board": a pool of several boards (upstream c1f05256e); one board is a fixed board
     randomBoard: {
       get(): boolean {
-        return this.isRandomBoard(this.board);
+        return this.boards.length > 1;
       },
       set(value: boolean) {
-        this.board = value ? RandomBoardOption.OFFICIAL : this.lastFixedBoard;
+        this.boards = value ? boardOptions(RandomBoardOption.OFFICIAL) : [this.lastFixedBoard];
       },
     },
+    // Official/All fill the pool in one go; a pool picked chip by chip highlights neither
     randomBoardScope: {
       get(): string {
-        return this.isRandomBoard(this.board) ? this.board : RandomBoardOption.OFFICIAL;
+        return randomOptionOf(this.boards) ?? '';
       },
       set(value: string) {
-        this.board = value as RandomBoardOption;
+        this.boards = boardOptions(value as RandomBoardOption);
       },
     },
     boardGroups() {
@@ -1003,11 +1003,12 @@ export default defineComponent({
       return active.length > 0 ? active.join(', ') : undefined;
     },
     fanBoardNote(): string | undefined {
-      if (!FAN_BOARDS.some((boardName) => boardName === this.board)) {
+      const fanBoards = this.boards.filter((boardName) => FAN_BOARDS.includes(boardName));
+      if (fanBoards.length === 0) {
         return undefined;
       }
       // Board names are lower case; the chips capitalize them via CSS, the note the same way here
-      return translateText(this.board).split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      return fanBoards.map((boardName) => translateText(boardName).split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')).join(', ');
     },
     // The "Expansion options" card only has content if one of these expansions is active
     hasExpansionOptions(): boolean {
@@ -1019,13 +1020,18 @@ export default defineComponent({
       const isActive = (expansion: Expansion) => this.expansions[expansion];
       return [
         ...seatChips(this.humanPlayersCount, this.aiPlayersCount),
-        boardChip(this.summaryBoard ?? this.board),
+        boardChip(this.summaryBoard ?? singleBoardValue(this.boards)),
         ...expansionChips(isActive),
         ...optionChips(setupOptionsFromConfig(this.newGameConfig), isActive, this.playersCount),
       ];
     },
   },
   methods: {
+    // A method, not computed: created() restores settings before mount, and a computed would cache the
+    // empty pre-mount $refs for good – the file import then no longer finds its input.
+    typedRefs(): Refs {
+      return this.$refs as Refs;
+    },
     setSeatCounts(humans: number, ai: number, changed: 'humans' | 'ai') {
       // At most 6 players: the row just changed wins, the other one gives way
       const humanCount = changed === 'humans' ? humans : Math.max(1, Math.min(humans, MAX_PLAYERS - ai));
@@ -1116,7 +1122,6 @@ export default defineComponent({
     },
     applySettings(json: JSONObject): JSONProcessor {
       const component: CreateGameModel = this;
-      const refs = this.typedRefs;
       const processor = new JSONProcessor(component);
       this.uploading = true;
       try {
@@ -1128,6 +1133,8 @@ export default defineComponent({
         throw e;
       }
       nextTick(() => {
+        // Read the refs only here: when restoring from created() the form is not mounted yet
+        const refs = this.typedRefs();
         try {
           if (component.showBannedCards && refs.cardsFilter) {
             refs.cardsFilter.selected = processor.bannedCards;
@@ -1205,7 +1212,7 @@ export default defineComponent({
         boardSeed: Math.random(),
       });
       nextTick(() => {
-        const refs = this.typedRefs;
+        const refs = this.typedRefs();
         if (refs.cardsFilter) {
           refs.cardsFilter.selected = [];
         }
@@ -1226,7 +1233,7 @@ export default defineComponent({
       }
     },
     uploadSettings() {
-      const refs = this.typedRefs;
+      const refs = this.typedRefs();
       const file = refs.file.files !== null ? refs.file.files[0] : undefined;
       const reader = new FileReader();
 
@@ -1273,8 +1280,16 @@ export default defineComponent({
     isColorTaken(color: Color, index: number): boolean {
       return this.getPlayers().some((player, otherIndex) => otherIndex !== index && player.color === color);
     },
-    isRandomBoard(boardName: BoardNameType): boolean {
-      return boardName === RandomBoardOption.OFFICIAL || boardName === RandomBoardOption.ALL;
+    // Fixed board: the chip becomes the board. Random board: the chip joins or leaves the pool;
+    // the last but one leaving makes the remaining board the fixed one
+    selectBoard(boardName: BoardName) {
+      if (!this.randomBoard) {
+        this.boards = [boardName];
+      } else if (this.boards.includes(boardName)) {
+        this.boards = this.boards.filter((other) => other !== boardName);
+      } else {
+        this.boards = [...this.boards, boardName];
+      }
     },
     // Column elements by number (1-based); kept outside the reactive data, Vue only needs them as Teleport targets
     setColumnElement(column: number, element: unknown) {
@@ -1327,7 +1342,7 @@ export default defineComponent({
     boardFactsOf(boardName: BoardName): Array<BoardFact> {
       return boardFactItems(boardName, this.theme === 'dune' ? 'dune' : 'mars');
     },
-    getBoardColorClass(boardName: BoardName | BoardNameType): string {
+    getBoardColorClass(boardName: BoardName): string {
       return boardColorClass(boardName);
     },
     aiMarker(level: AiLevel): string {
