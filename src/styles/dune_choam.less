@@ -150,8 +150,20 @@ html:not(.tm-mobile) .or-tab-panel:has(.choam-input) {
   height: 52px;
 }
 
-// Rules below the offers and the new offer, like on the smuggling tab
-.choam-input__rules.dune-rules,
+// The rules below everything, no wider than the CHOAM content above them, in a 3 × 2 grid (Jens 22 Oct 2026)
 .choam-input__rules {
   margin-top: 10px;
+  align-self: center;
+  width: 100%;
+  max-width: calc(2 * @trade-side-max-width + @trade-group-gap);
+
+  .dune-rules {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container (max-width: 560px) {
+  .choam-input__rules .dune-rules {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

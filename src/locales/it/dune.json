@@ -317,9 +317,6 @@
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fine generazione: 0 e 1 sono gratuiti, da 2 in su si perde influenza e il segnalino torna a 0",
   "At 4 all trading stops until a bribe lowers it": "A 4 ogni scambio è fermo finché una bustarella non abbassa il sospetto",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Offrire (azione): le merci lasciano la tua scorta, con un desiderio fino a 30 in cambio",
-  "At most 1 open offer per player (Guild Bank: 2)": "Al massimo 1 offerta aperta per giocatore (Banca della Gilda: 2)",
-  "Accept (action): first come, first served": "Accettare (azione): chi prima arriva, meglio alloggia",
-  "On a deal both pay 1 Solari to the bank": "Alla conclusione entrambi pagano 1 solari alla banca",
   "Withdraw (action): the goods come back, no fee": "Ritirare (azione): le merci tornano, senza tassa",
   "End of generation: offers nobody took return without a fee": "Fine generazione: le offerte non prese tornano senza tassa",
   "Show on Arrakis": "Mostra su Arrakis",
@@ -358,5 +355,8 @@
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Martellatore: il verme si sposta fino a ${0} spazio/i, qualunque sia la vegetazione",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Effetto: I tuoi contratti CHOAM non ti costano commissioni: 0 invece di 1 solari.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Effetto: Quando una tua tessera diventa il campo di guerra, 1 Sardaukar la difende gratis.",
-  "Effect: A bribe costs you 4 M€ less.": "Effetto: Una bustarella ti costa 4 solari in meno."
+  "Effect: A bribe costs you 4 M€ less.": "Effetto: Una bustarella ti costa 4 solari in meno.",
+  "Accept (action): first come, first harvested": "Accettare (azione): chi prima arriva, prima raccoglie",
+  "At most 1 open offer per player (Guild Bank card: 2)": "Al massimo 1 offerta aperta per giocatore (con la carta Banca della Gilda: 2)",
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Alla conclusione venditore e acquirente pagano ciascuno 1 solari alla banca"
 }

@@ -312,9 +312,6 @@
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Einde van de generatie: 0 en 1 zijn gratis, vanaf 2 gaat invloed verloren en valt de marker terug naar 0",
   "At 4 all trading stops until a bribe lowers it": "Bij 4 ligt alle handel stil tot een omkoping de verdenking verlaagt",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Aanbieden (actie): goederen verlaten je voorraad, met een wens tot 30 terug",
-  "At most 1 open offer per player (Guild Bank: 2)": "Hoogstens 1 open aanbod per speler (Gildebank: 2)",
-  "Accept (action): first come, first served": "Accepteren (actie): wie het eerst komt, het eerst maalt",
-  "On a deal both pay 1 Solari to the bank": "Bij een deal betalen beiden 1 solari aan de bank",
   "Withdraw (action): the goods come back, no fee": "Intrekken (actie): de goederen komen terug, zonder kosten",
   "End of generation: offers nobody took return without a fee": "Einde generatie: aanbiedingen die niemand nam, komen zonder kosten terug",
   "Show on Arrakis": "Toon op Arrakis",
@@ -353,5 +350,8 @@
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Dreuner: de worm gaat tot ${0} veld(en), hoeveel vegetatie er ook is",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "EFFECT: Je CHOAM-contracten kosten je geen vergoeding: 0 in plaats van 1 Solari.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "EFFECT: Als een van jouw tegels het oorlogsveld wordt, verdedigt 1 Sardaukar hem gratis.",
-  "Effect: A bribe costs you 4 M€ less.": "EFFECT: Een omkoping kost je 4 Solari minder."
+  "Effect: A bribe costs you 4 M€ less.": "EFFECT: Een omkoping kost je 4 Solari minder.",
+  "Accept (action): first come, first harvested": "Accepteren (actie): wie het eerst komt, oogst het eerst",
+  "At most 1 open offer per player (Guild Bank card: 2)": "Hoogstens 1 open aanbod per speler (met de kaart Gildebank: 2)",
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Bij een deal betalen verkoper en koper elk 1 solari aan de bank"
 }

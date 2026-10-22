@@ -318,9 +318,6 @@
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fim da geração: 0 e 1 são grátis; a partir de 2, perde-se influência e o marcador volta a 0",
   "At 4 all trading stops until a bribe lowers it": "Em 4 todo comércio para até que um suborno reduza a suspeita",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Oferecer (ação): os bens saem do seu estoque, com um desejo de até 30 em troca",
-  "At most 1 open offer per player (Guild Bank: 2)": "No máximo 1 oferta aberta por jogador (Banco da Guilda: 2)",
-  "Accept (action): first come, first served": "Aceitar (ação): quem chega primeiro leva",
-  "On a deal both pay 1 Solari to the bank": "No fechamento, ambos pagam 1 solari ao banco",
   "Withdraw (action): the goods come back, no fee": "Retirar (ação): os bens voltam, sem taxa",
   "End of generation: offers nobody took return without a fee": "Fim da geração: ofertas não aceitas voltam sem taxa",
   "Show on Arrakis": "Mostrar em Arrakis",
@@ -359,5 +356,8 @@
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Martelador: o verme anda até ${0} espaço(s), não importa a vegetação",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Efeito: Seus contratos da CHOAM não custam taxa: 0 em vez de 1 solari.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Efeito: Quando uma de suas peças se torna o campo de guerra, 1 Sardaukar a defende de graça.",
-  "Effect: A bribe costs you 4 M€ less.": "Efeito: Um suborno custa 4 solaris a menos."
+  "Effect: A bribe costs you 4 M€ less.": "Efeito: Um suborno custa 4 solaris a menos.",
+  "Accept (action): first come, first harvested": "Aceitar (ação): quem chega primeiro colhe primeiro",
+  "At most 1 open offer per player (Guild Bank card: 2)": "No máximo 1 oferta aberta por jogador (com a carta Banco da Guilda: 2)",
+  "On a deal seller and buyer each pay 1 Solari to the bank": "No fechamento, vendedor e comprador pagam cada um 1 solari ao banco"
 }

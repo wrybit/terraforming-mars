@@ -318,9 +318,6 @@
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Fin de la generación: 0 y 1 son gratis; a partir de 2 se pierde influencia y el marcador vuelve a 0",
   "At 4 all trading stops until a bribe lowers it": "Con 4 se cierra todo comercio hasta que un soborno baje la sospecha",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Ofrecer (acción): los bienes salen de tu reserva, con un deseo de hasta 30 a cambio",
-  "At most 1 open offer per player (Guild Bank: 2)": "Como máximo 1 oferta abierta por jugador (Banco de la Cofradía: 2)",
-  "Accept (action): first come, first served": "Aceptar (acción): quien llega primero, se lo lleva",
-  "On a deal both pay 1 Solari to the bank": "Al cerrar el trato, ambos pagan 1 solari al banco",
   "Withdraw (action): the goods come back, no fee": "Retirar (acción): los bienes vuelven, sin tasa",
   "End of generation: offers nobody took return without a fee": "Fin de generación: las ofertas que nadie tomó vuelven sin tasa",
   "Show on Arrakis": "Mostrar en Arrakis",
@@ -359,5 +356,8 @@
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Martilleador: el gusano se mueve hasta ${0} casilla(s), sea cual sea la vegetación",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Efecto: Tus contratos de la CHOAM no te cuestan comisión: 0 en lugar de 1 solari.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Efecto: Cuando una de tus losetas se convierte en el campo de guerra, 1 sardaukar la defiende gratis.",
-  "Effect: A bribe costs you 4 M€ less.": "Efecto: Un soborno te cuesta 4 solaris menos."
+  "Effect: A bribe costs you 4 M€ less.": "Efecto: Un soborno te cuesta 4 solaris menos.",
+  "Accept (action): first come, first harvested": "Aceptar (acción): quien llega primero, cosecha primero",
+  "At most 1 open offer per player (Guild Bank card: 2)": "Como máximo 1 oferta abierta por jugador (con la carta Banco de la Cofradía: 2)",
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Al cerrar el trato, vendedor y comprador pagan cada uno 1 solari al banco"
 }

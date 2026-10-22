@@ -316,9 +316,6 @@
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Slutten av generasjonen: 0 og 1 er gratis, fra 2 og oppover tapes innflytelse og markøren går tilbake til 0",
   "At 4 all trading stops until a bribe lowers it": "På 4 stopper all handel til en bestikkelse senker mistanken",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Tilby (handling): varene forlater lageret ditt, med et ønske på opptil 30 tilbake",
-  "At most 1 open offer per player (Guild Bank: 2)": "Høyst 1 åpent tilbud per spiller (Laugsbanken: 2)",
-  "Accept (action): first come, first served": "Godta (handling): førstemann til mølla",
-  "On a deal both pay 1 Solari to the bank": "Ved en handel betaler begge 1 solari til banken",
   "Withdraw (action): the goods come back, no fee": "Trekk tilbake (handling): varene kommer tilbake, uten gebyr",
   "End of generation: offers nobody took return without a fee": "Slutt på generasjonen: tilbud ingen tok, kommer tilbake uten gebyr",
   "Show on Arrakis": "Vis på Arrakis",
@@ -357,5 +354,8 @@
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Dunker: ormen flytter opptil ${0} felt, uansett vegetasjon",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Effekt: CHOAM-kontraktene dine koster deg ingen avgift: 0 i stedet for 1 solari.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Effekt: Når en av brikkene dine blir krigsfeltet, forsvarer 1 sardaukar den gratis.",
-  "Effect: A bribe costs you 4 M€ less.": "Effekt: En bestikkelse koster deg 4 solari mindre."
+  "Effect: A bribe costs you 4 M€ less.": "Effekt: En bestikkelse koster deg 4 solari mindre.",
+  "Accept (action): first come, first harvested": "Godta (handling): den som kommer først, høster først",
+  "At most 1 open offer per player (Guild Bank card: 2)": "Høyst 1 åpent tilbud per spiller (med kortet Laugsbanken: 2)",
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Ved en handel betaler selger og kjøper 1 solari hver til banken"
 }

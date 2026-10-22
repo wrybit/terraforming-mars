@@ -320,9 +320,6 @@
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "세대 종료: 0과 1은 무료, 2 이상이면 영향력을 잃고 마커가 0으로 돌아감",
   "At 4 all trading stops until a bribe lowers it": "의심 4에서는 뇌물로 낮출 때까지 모든 거래가 막힘",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "제안(행동): 물품이 비축에서 나가고, 대가로 최대 30까지 원하는 것을 적습니다",
-  "At most 1 open offer per player (Guild Bank: 2)": "플레이어당 열린 제안은 최대 1개 (길드 은행: 2)",
-  "Accept (action): first come, first served": "수락(행동): 먼저 오는 사람이 가져갑니다",
-  "On a deal both pay 1 Solari to the bank": "거래가 성사되면 둘 다 은행에 솔라리 1을 냅니다",
   "Withdraw (action): the goods come back, no fee": "철회(행동): 물품이 돌아오고 수수료는 없습니다",
   "End of generation: offers nobody took return without a fee": "세대 종료: 아무도 받지 않은 제안은 수수료 없이 돌아옵니다",
   "Show on Arrakis": "아라키스에서 보기",
@@ -361,5 +358,8 @@
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "썸퍼: 식생과 관계없이 모래벌레는 최대 ${0}칸 이동합니다",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "지속 효과: 자신의 CHOAM 계약에는 수수료가 없습니다: 1 대신 0 솔라리.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "지속 효과: 자신의 타일이 전장이 되면 사다우카 1명이 무료로 방어합니다.",
-  "Effect: A bribe costs you 4 M€ less.": "지속 효과: 뇌물 비용이 4 솔라리 줄어듭니다."
+  "Effect: A bribe costs you 4 M€ less.": "지속 효과: 뇌물 비용이 4 솔라리 줄어듭니다.",
+  "Accept (action): first come, first harvested": "수락(행동): 먼저 온 사람이 먼저 수확합니다",
+  "At most 1 open offer per player (Guild Bank card: 2)": "플레이어당 열린 제안은 최대 1개 (길드 은행 카드가 있으면 2)",
+  "On a deal seller and buyer each pay 1 Solari to the bank": "거래가 성사되면 판매자와 구매자가 각각 은행에 솔라리 1을 냅니다"
 }

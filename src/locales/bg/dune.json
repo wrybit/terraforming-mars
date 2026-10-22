@@ -321,9 +321,6 @@
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Край на поколението: 0 и 1 са безплатни, от 2 нагоре се губи влияние и маркерът се връща на 0",
   "At 4 all trading stops until a bribe lowers it": "При 4 всяка търговия спира, докато подкуп не свали подозрението",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Оферта (действие): стоките напускат запаса ти, срещу желание до 30",
-  "At most 1 open offer per player (Guild Bank: 2)": "Най-много 1 отворена оферта на играч (Банка на Гилдията: 2)",
-  "Accept (action): first come, first served": "Приемане (действие): който пръв дойде",
-  "On a deal both pay 1 Solari to the bank": "При сделка двамата плащат по 1 солари на банката",
   "Withdraw (action): the goods come back, no fee": "Оттегляне (действие): стоките се връщат, без такса",
   "End of generation: offers nobody took return without a fee": "Край на поколението: неприетите оферти се връщат без такса",
   "Show on Arrakis": "Покажи на Аракис",
@@ -362,5 +359,8 @@
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Чукало: червеят се движи до ${0} поле(та), независимо от растителността",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Ефект: Вашите договори на CHOAM са без такса: 0 вместо 1 солари.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Ефект: Когато ваша плочка стане бойното поле, 1 сардаукар я защитава безплатно.",
-  "Effect: A bribe costs you 4 M€ less.": "Ефект: Подкупът ви струва с 4 солари по-малко."
+  "Effect: A bribe costs you 4 M€ less.": "Ефект: Подкупът ви струва с 4 солари по-малко.",
+  "Accept (action): first come, first harvested": "Приемане (действие): който пръв дойде, пръв жъне",
+  "At most 1 open offer per player (Guild Bank card: 2)": "Най-много 1 отворена оферта на играч (с картата Банка на Гилдията: 2)",
+  "On a deal seller and buyer each pay 1 Solari to the bank": "При сделка продавачът и купувачът плащат по 1 солари на банката"
 }

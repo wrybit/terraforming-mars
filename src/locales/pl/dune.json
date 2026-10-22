@@ -318,9 +318,6 @@
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Koniec pokolenia: 0 i 1 są darmowe, od 2 traci się Wpływ, a znacznik wraca na 0",
   "At 4 all trading stops until a bribe lowers it": "Przy 4 cały handel stoi, dopóki łapówka nie obniży podejrzenia",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Oferta (akcja): towary opuszczają twój zapas, w zamian życzenie do 30",
-  "At most 1 open offer per player (Guild Bank: 2)": "Najwyżej 1 otwarta oferta na gracza (Bank Gildii: 2)",
-  "Accept (action): first come, first served": "Przyjęcie (akcja): kto pierwszy, ten lepszy",
-  "On a deal both pay 1 Solari to the bank": "Przy transakcji obaj płacą bankowi 1 solari",
   "Withdraw (action): the goods come back, no fee": "Wycofanie (akcja): towary wracają, bez opłaty",
   "End of generation: offers nobody took return without a fee": "Koniec pokolenia: nieprzyjęte oferty wracają bez opłaty",
   "Show on Arrakis": "Pokaż na Arrakis",
@@ -359,5 +356,8 @@
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Dudnik: czerw rusza o maks. ${0} pole(-a), niezależnie od roślinności",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Efekt trwały: Twoje kontrakty CHOAM nie wymagają opłaty: 0 zamiast 1 solara.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Efekt trwały: Gdy jeden z twoich kafelków staje się polem wojny, 1 sardaukar broni go za darmo.",
-  "Effect: A bribe costs you 4 M€ less.": "Efekt trwały: Łapówka kosztuje cię o 4 solary mniej."
+  "Effect: A bribe costs you 4 M€ less.": "Efekt trwały: Łapówka kosztuje cię o 4 solary mniej.",
+  "Accept (action): first come, first harvested": "Przyjęcie (akcja): kto pierwszy, ten zbiera",
+  "At most 1 open offer per player (Guild Bank card: 2)": "Najwyżej 1 otwarta oferta na gracza (z kartą Bank Gildii: 2)",
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Przy transakcji sprzedający i kupujący płacą bankowi po 1 solari"
 }

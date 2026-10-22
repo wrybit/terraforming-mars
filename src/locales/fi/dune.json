@@ -318,9 +318,6 @@
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "Sukupolven lopussa: 0 ja 1 ovat ilmaisia, 2:sta alkaen menetetään arvovaltaa ja merkki palaa nollaan",
   "At 4 all trading stops until a bribe lowers it": "Tasolla 4 kaikki kauppa on seis, kunnes lahjus laskee epäilyä",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Tarjoa (toiminto): tavarat lähtevät varastostasi, vastineeksi toive enintään 30",
-  "At most 1 open offer per player (Guild Bank: 2)": "Enintään 1 avoin tarjous pelaajaa kohden (Kiltapankki: 2)",
-  "Accept (action): first come, first served": "Hyväksy (toiminto): nopein voittaa",
-  "On a deal both pay 1 Solari to the bank": "Kaupan syntyessä molemmat maksavat pankille 1 solarin",
   "Withdraw (action): the goods come back, no fee": "Peru (toiminto): tavarat palaavat, ei maksua",
   "End of generation: offers nobody took return without a fee": "Sukupolven loppu: ottamattomat tarjoukset palaavat ilman maksua",
   "Show on Arrakis": "Näytä Arrakisilla",
@@ -359,5 +356,8 @@
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Jyskytin: mato liikkuu enintään ${0} ruutua kasvillisuudesta riippumatta",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "VAIKUTUS: CHOAM-sopimuksistasi ei peritä maksua: 0 solaria 1:n sijaan.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "VAIKUTUS: Kun jostakin laatastasi tulee sotakenttä, 1 sardaukar puolustaa sitä ilmaiseksi.",
-  "Effect: A bribe costs you 4 M€ less.": "VAIKUTUS: Lahjus maksaa sinulle 4 solaria vähemmän."
+  "Effect: A bribe costs you 4 M€ less.": "VAIKUTUS: Lahjus maksaa sinulle 4 solaria vähemmän.",
+  "Accept (action): first come, first harvested": "Hyväksy (toiminto): ensimmäinen korjaa sadon",
+  "At most 1 open offer per player (Guild Bank card: 2)": "Enintään 1 avoin tarjous pelaajaa kohden (Kiltapankki-kortilla: 2)",
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Kaupan syntyessä myyjä ja ostaja maksavat kumpikin pankille 1 solarin"
 }

@@ -320,9 +320,6 @@
   "End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0": "世代の終わり：0と1は無料。2以上で影響力を失い、マーカーは0に戻る",
   "At 4 all trading stops until a bribe lowers it": "疑惑4では賄賂で下げるまですべての取引が止まる",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "オファー（アクション）：品物が在庫から出て、見返りに最大30の希望を出す",
-  "At most 1 open offer per player (Guild Bank: 2)": "プレイヤーごとに公開オファーは最大1つ（ギルド銀行：2）",
-  "Accept (action): first come, first served": "受け入れ（アクション）：早い者勝ち",
-  "On a deal both pay 1 Solari to the bank": "取引成立時、双方が銀行に1ソラリを払う",
   "Withdraw (action): the goods come back, no fee": "取り下げ（アクション）：品物は戻り、手数料なし",
   "End of generation: offers nobody took return without a fee": "世代終了：誰も受けなかったオファーは手数料なしで戻る",
   "Show on Arrakis": "アラキスで表示",
@@ -361,5 +358,8 @@
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "サンパー：植生に関係なく、ワームは最大${0}マス進む",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "効果：あなたのCHOAM契約は手数料がかからない：1ではなく0ソラリ。",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "効果：あなたのタイルが戦場になったとき、サーダカー1人が無料で守る。",
-  "Effect: A bribe costs you 4 M€ less.": "効果：賄賂のコストが4ソラリ安くなる。"
+  "Effect: A bribe costs you 4 M€ less.": "効果：賄賂のコストが4ソラリ安くなる。",
+  "Accept (action): first come, first harvested": "受け入れ（アクション）：先に来た者が先に収穫する",
+  "At most 1 open offer per player (Guild Bank card: 2)": "プレイヤーごとに公開オファーは最大1つ（カード「ギルド銀行」があれば2）",
+  "On a deal seller and buyer each pay 1 Solari to the bank": "取引成立時、売り手と買い手がそれぞれ銀行に1ソラリを払う"
 }
