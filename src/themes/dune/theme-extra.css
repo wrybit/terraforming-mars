@@ -242,6 +242,13 @@ html.theme-dune .card-container .card-temperature-global-requirement {
   background-position: center;
 }
 
+/* Game end table: the header squeezes the slim Mars thermometer to 9px (game_end_columns.less) – the square water
+   storage symbol gets the size of the vegetation symbol next to it */
+html.theme-dune .game_end_table thead .temperature-tile {
+  width: 30px;
+  background-size: 30px 30px;
+}
+
 html.theme-dune .card-container .card-temperature--req {
   width: 30px;
   background-size: 30px;
