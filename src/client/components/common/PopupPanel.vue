@@ -1,6 +1,6 @@
 <template>
   <div class="popup-outer" @mousedown="onMousedown" @mouseup="onMouseup" @click.self="outerOnClick">
-    <div class="popup-inner">
+    <div :class="['popup-inner', {'popup-inner--wide': size === 'wide'}]">
       <div class="popup-header">
         <slot name="header"></slot>
         <button class="close-button" @click="onclick" v-i18n>Close</button>
@@ -13,11 +13,16 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {defineComponent, PropType} from 'vue';
 
 export default defineComponent({
   name: 'PopupPanel',
   props: {
+    /** compact: sized to its content up to a readable line length (popup.less); wide: most of the screen (filter grids) */
+    size: {
+      type: String as PropType<'compact' | 'wide'>,
+      default: 'compact',
+    },
     /** True when clicking outside the panel closes it. */
     closeOnOutsideClick: {
       type: Boolean,

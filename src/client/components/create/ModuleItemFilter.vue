@@ -1,7 +1,7 @@
 <!-- Generic popup filter for grouped item selection. -->
 <template>
   <!-- Popup by default; embedded in a card of the form, the card supplies the title -->
-  <component :is="embedded ? 'div' : PopupPanel" :class="{'module-item-filter--embedded': embedded}" @close="$emit('close')">
+  <component :is="embedded ? 'div' : PopupPanel" v-bind="embedded ? {} : {size: 'wide'}" :class="{'module-item-filter--embedded': embedded}" @close="$emit('close')">
     <template v-if="!embedded" #header>
       <h2 v-i18n>{{ title }}</h2>
     </template>

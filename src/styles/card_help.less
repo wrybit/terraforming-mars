@@ -1,6 +1,19 @@
+@import (reference) "./modal_surface.less";
+
 .card-help-text {
   overflow-wrap: anywhere;
   max-width: 100%;
+
+  // Quote (e.g. the FAQ excerpt) as a quiet line in the dialog's frame colour instead of Spectre's bright bar
+  blockquote {
+    margin: 8px 0 0;
+    padding: 0 0 0 14px;
+    border-left: 2px solid @modal-border;
+  }
+
+  p {
+    margin: 0 0 10px;
+  }
 
   // Spectre puts list markers inside the text box, so wrapped lines start under the
   // marker. Hang the marker outside instead so wrapped lines align with the text.

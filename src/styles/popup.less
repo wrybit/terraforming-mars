@@ -1,47 +1,93 @@
+// PopupPanel.vue (card help, game options, board and colony filters) in the look of the other dialogs
+// (modal_surface.less): dark rounded box over a blurred backdrop. Compact by default, sized to its content up to a
+// readable line length, so the page stays visible around it; "wide" for content that needs the room (filter grids).
+@import (reference) "./modal_surface.less";
+
+// About 70 characters per line at the body's font size
+@popup-compact-width: 640px;
+@popup-wide-width: 90vw;
+@popup-header-gap: 12px;
+
 .popup-outer {
-  position: fixed; /* Fixes the overlay to the viewport */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
-  display: flex; /* Centers the popup panel */
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Ensures the overlay is on top of other content */
+  padding: @modal-screen-gap;
+  z-index: 9999; // Above column modals and boards, as before
+  .modal-backdrop();
 
   .popup-inner {
-    background-color: black;
-    padding: 0px 20px 20px; /* 0 for the top, 20 for the rest */
-    border-radius: 8px;
-    border: 2px solid white;
-    width: 90vw;
-    height: 90vh;
-    overflow: hidden auto; /* Adds scrollbar if content exceeds height */
+    .modal-surface();
+    position: relative;
+    box-sizing: border-box;
+    width: min(@popup-compact-width, 100%);
+    // The sticky header brings its own top padding, so it covers the text scrolling under it
+    padding-top: 0;
+    overflow: hidden auto;
     overscroll-behavior: contain;
-    position: relative; /* For positioning the close button */
-    color: white;
+  }
+
+  .popup-inner--wide {
+    width: min(@popup-wide-width, 100%);
+    height: @modal-max-height;
   }
 
   .popup-header {
-    margin-top: 20px; /* This makes up for the padding 0 for popup-inner */
     position: sticky;
     top: 0;
     z-index: 10;
     display: flex;
-    justify-content: space-between; /* Pushes items to opposite edges */
-    align-items: center; /* Vertically aligns items in the center (optional, but good practice) */
-    width: 100%;
-    background-color: black;
+    align-items: center;
+    gap: @popup-header-gap;
+    margin: 0 0 @popup-header-gap;
+    padding: 20px 0 @popup-header-gap;
+    border-bottom: 1px solid @modal-border;
+    background: @modal-background;
+
+    h2 {
+      margin: 0;
+      color: @modal-heading;
+      font-size: 20px;
+      line-height: 1.3;
+    }
   }
 
+  // Quiet button at the right end of the header, like the secondary buttons of the other dialogs
   .close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    border: none;
-    font-size: 20px;
+    flex: none;
+    margin-left: auto;
+    padding: 4px 12px;
+    border: 1px solid @modal-border;
+    border-radius: 6px;
+    background: transparent;
+    color: @modal-text;
+    font-size: 14px;
     cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      border-color: @modal-text;
+      color: @modal-heading;
+    }
   }
 
+  .popup-body {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+}
+
+// Phone: the dialog takes nearly the whole width, so less room at the sides keeps the lines longer
+@media only screen and (max-width: 520px) {
+  .popup-outer {
+    padding: 12px;
+
+    .popup-inner {
+      padding-right: 18px;
+      padding-left: 18px;
+    }
+  }
 }
