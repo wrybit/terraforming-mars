@@ -808,7 +808,7 @@ html.theme-dune .card-container:is(.card-mentat-calculation, .card-tleilaxu-spy)
   content: "";
   display: block;
   width: 76px;
-  height: 85px;
+  height: 90px;
   margin: 0 auto 6px;
   background: url(graphics/agenda-swap.svg) center / contain no-repeat;
 }

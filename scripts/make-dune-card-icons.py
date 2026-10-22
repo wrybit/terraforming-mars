@@ -81,9 +81,21 @@ def outline(x: float, y: float, width: float, height: float, colour: str) -> str
             f'stroke="{colour}" stroke-width="3"/>')
 
 
+def arrow(x: float, top: float, bottom: float, down: bool, colour: str) -> str:
+    # A thick vertical arrow with a filled head, pointing down or up
+    head = 7
+    if down:
+        return (f'<path d="M{x:g} {top:g}V{bottom - head:g}" stroke="{colour}" stroke-width="3.6"/>'
+                f'<path d="M{x - 5.5:g} {bottom - head - 1:g}H{x + 5.5:g}L{x:g} {bottom:g}Z" fill="{colour}"/>')
+    return (f'<path d="M{x:g} {bottom:g}V{top + head:g}" stroke="{colour}" stroke-width="3.6"/>'
+            f'<path d="M{x - 5.5:g} {top + head + 1:g}H{x + 5.5:g}L{x:g} {top:g}Z" fill="{colour}"/>')
+
+
 def agenda_swap() -> str:
+    # Your 2 agendas above, the top 3 below; the right one of yours (red) goes down, the middle one below (green)
+    # comes up – two separate arrows in the gap between the rows (Jens 22 Oct 2026)
     back = agenda_back()
-    width, height, gap, row_gap, pad = 30, 43, 7, 20, 4
+    width, height, gap, row_gap, pad = 30, 43, 7, 26, 4
     bottom_width = 3 * width + 2 * gap
     top_left = pad + (bottom_width - (2 * width + gap)) / 2
     parts = []
@@ -93,20 +105,15 @@ def agenda_swap() -> str:
         parts.append(card(back, x, top_y, width, height))
         if index == 1:
             parts.append(outline(x, top_y, width, height, GIVEN))
-            given = (x + width / 2, top_y + height + 2)
     for index in range(3):
         x = pad + index * (width + gap)
         parts.append(card(back, x, bottom_y, width, height))
-        if index == 2:
+        if index == 1:
             parts.append(outline(x, bottom_y, width, height, TAKEN))
-            taken = (x + width / 2, bottom_y - 2)
-    # Double arrow in the gap between the rows, from the given agenda to the taken one
-    (x1, y1), (x2, y2) = given, taken
-    parts.append(f'<path d="M{x1:g} {y1 + 3:g}L{x2:g} {y2 - 3:g}" stroke="{ARROW}" stroke-width="2.4"/>')
-    parts.append(f'<path d="M{x1 - 4:g} {y1 + 7:g}L{x1:g} {y1 + 1:g}L{x1 + 4:g} {y1 + 7:g}" fill="none" stroke="{ARROW}" '
-                 'stroke-width="2.4" stroke-linejoin="round"/>')
-    parts.append(f'<path d="M{x2 - 4:g} {y2 - 7:g}L{x2:g} {y2 - 1:g}L{x2 + 4:g} {y2 - 7:g}" fill="none" stroke="{ARROW}" '
-                 'stroke-width="2.4" stroke-linejoin="round"/>')
+    middle = pad + bottom_width / 2
+    gap_top, gap_bottom = top_y + height + 4, bottom_y - 4
+    parts.append(arrow(middle + 8, gap_top, gap_bottom, True, GIVEN))
+    parts.append(arrow(middle - 6, gap_top, gap_bottom, False, TAKEN))
     return ''.join(parts), pad * 2 + bottom_width, pad * 2 + 2 * height + row_gap
 
 
