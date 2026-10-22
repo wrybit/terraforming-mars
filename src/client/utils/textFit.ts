@@ -7,6 +7,7 @@
 // Fitted sizes are persisted by fontSizeCache so later visits skip the
 // (layout-forcing) measurement entirely.
 import {getCachedFontSize, setCachedFontSize} from '@/client/utils/fontSizeCache';
+import {whenFontsReady} from '@/client/utils/fontsReady';
 
 // Don't shrink past the smallest legible size.
 const MIN_FONT_SIZE = 10;
@@ -91,7 +92,7 @@ export function fitTextWhenReady(el: HTMLElement | undefined, namespace: string)
     fitText(el, namespace);
     return;
   }
-  document.fonts.ready.then(() => fitText(el, namespace));
+  void whenFontsReady().then(() => fitText(el, namespace));
 }
 
 // True when the text spills past its box in either direction. Card titles are a

@@ -11,6 +11,7 @@
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {cardScrollState, CardScrollState, scrollTopForThumb} from './cardScrollArea';
+import {cancelLayoutJob, scheduleLayoutJob} from '@/client/utils/layoutBatch';
 
 // How long the scrollbar stays visible after the content scrolled (touch screens have no hover)
 const ACTIVE_AFTER_SCROLL_MS = 900;
@@ -60,6 +61,7 @@ export default defineComponent({
       this.update();
     },
     release(content: HTMLElement | undefined): void {
+      cancelLayoutJob(this);
       content?.removeEventListener('scroll', this.onScroll);
       content?.classList.remove('card-content-scrolls');
       this.resizeObserver?.disconnect();
@@ -77,12 +79,19 @@ export default defineComponent({
       if (content === undefined) {
         return;
       }
-      const trackHeight = (this.$el as HTMLElement).offsetHeight;
-      this.state = cardScrollState({top: content.scrollTop, height: content.scrollHeight, visible: content.clientHeight}, trackHeight);
-      // Only then the content is a scroll container; otherwise the wheel scrolls the page (theme-extra.css)
-      content.classList.toggle('card-content-scrolls', this.state.scrolls);
-      content.style.setProperty('--card-fade-top', this.state.fadeTop + 'px');
-      content.style.setProperty('--card-fade-bottom', this.state.fadeBottom + 'px');
+      // Measured together with all other cards of the frame (layoutBatch.ts): one style recalculation for a whole tab
+      // of cards instead of one per card
+      scheduleLayoutJob(this, {
+        measure: () => cardScrollState({top: content.scrollTop, height: content.scrollHeight, visible: content.clientHeight},
+          (this.$el as HTMLElement).offsetHeight),
+        apply: (state) => {
+          this.state = state;
+          // Only then the content is a scroll container; otherwise the wheel scrolls the page (theme-extra.css)
+          content.classList.toggle('card-content-scrolls', state.scrolls);
+          content.style.setProperty('--card-fade-top', state.fadeTop + 'px');
+          content.style.setProperty('--card-fade-bottom', state.fadeBottom + 'px');
+        },
+      });
     },
     grab(event: PointerEvent): void {
       const content = this.content;

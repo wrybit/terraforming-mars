@@ -33,6 +33,8 @@ import {defineComponent, markRaw, nextTick} from 'vue';
 import {CARD_ROW_ZOOM, fittingRowZoom} from './cardFit';
 import {CARD_SCROLL_AREAS, cardScrollKind, cardScrollStyle} from './cardScrollArea';
 import CardScrollbar from './CardScrollbar.vue';
+import {cancelLayoutJob, scheduleLayoutJob} from '@/client/utils/layoutBatch';
+import {whenFontsReady} from '@/client/utils/fontsReady';
 import {activeTheme} from '@/client/theme/applyTheme';
 import {Theme} from '@/common/theme/Theme';
 
@@ -139,11 +141,15 @@ export default defineComponent({
     if (themeStylesheet !== null && themeStylesheet.sheet === null) {
       themeStylesheet.addEventListener('load', () => this.fitIntoCard(), {once: true});
     }
-    document.fonts?.ready.then(() => this.fitIntoCard());
+    void whenFontsReady().then(() => this.fitIntoCard());
     this.fitIntoCard();
   },
   beforeUnmount() {
     this.resizeObserver?.disconnect();
+    cancelLayoutJob(this.$el as HTMLElement);
+    if (this.scrollContent !== undefined) {
+      cancelLayoutJob(this.scrollContent);
+    }
   },
   watch: {
     theme() {
@@ -165,10 +171,46 @@ export default defineComponent({
         return;
       }
       await nextTick();
-      const card = this.$el as HTMLElement;
-      const content = card.querySelector<HTMLElement>('.card-content');
-      if (run !== this.fitRun || content === null || card.offsetHeight === 0) {
+      if (run !== this.fitRun) {
         return;
+      }
+      // Measured together with all other cards of the frame (layoutBatch.ts): measuring each card right after the
+      // previous one wrote its result recalculated the styles of the whole page once per card (a tab with 16 cards
+      // took 450 ms)
+      const card = this.$el as HTMLElement;
+      scheduleLayoutJob(card, {
+        measure: () => this.measureScrollArea(card),
+        apply: (measured) => {
+          if (run !== this.fitRun || measured === undefined) {
+            return;
+          }
+          this.scrollStyle = measured.style;
+          // Raw: a reactive proxy of a DOM element breaks its methods (addEventListener)
+          this.scrollContent = markRaw(measured.content);
+          // The row zoom is measured once the scroll area is in place (next render)
+          nextTick(() => {
+            if (run !== this.fitRun) {
+              return;
+            }
+            // Own key: a newer first round of this card must not be replaced by this older second one
+            scheduleLayoutJob(measured.content, {
+              // House cards keep their icons at 100 % at most (theme-extra.css)
+              measure: () => fittingRowZoom(card, this.isCorporationCard ? 1 : CARD_ROW_ZOOM),
+              apply: (zoom) => {
+                if (run === this.fitRun) {
+                  this.rowZoom = zoom;
+                }
+              },
+            });
+          });
+        },
+      });
+    },
+    /** Content box and scrollbar of the scroll area for this kind of card; reads the DOM only */
+    measureScrollArea(card: HTMLElement): {style: Record<string, string>, content: HTMLElement} | undefined {
+      const content = card.querySelector<HTMLElement>('.card-content');
+      if (content === null || card.offsetHeight === 0) {
+        return undefined;
       }
       const area = CARD_SCROLL_AREAS[cardScrollKind({
         isHouse: this.isCorporationCard,
@@ -188,15 +230,7 @@ export default defineComponent({
       if (counter !== null) {
         style['--card-counter-right'] = Math.round(counter.offsetLeft + counter.offsetWidth) + 'px';
       }
-      this.scrollStyle = style;
-      // Raw: a reactive proxy of a DOM element breaks its methods (addEventListener)
-      this.scrollContent = markRaw(content);
-      await nextTick();
-      if (run !== this.fitRun) {
-        return;
-      }
-      // House cards keep their icons at 100 % at most (theme-extra.css)
-      this.rowZoom = fittingRowZoom(card, this.isCorporationCard ? 1 : CARD_ROW_ZOOM);
+      return {style, content};
     },
     /** Offset of the content's positioning parent from the outer edge of the card, in card pixels */
     parentOffset(content: HTMLElement, card: HTMLElement): {parentTop: number, parentLeft: number} {

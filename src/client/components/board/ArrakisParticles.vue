@@ -42,11 +42,17 @@ export default defineComponent({
       observer: undefined as IntersectionObserver | undefined,
     };
   },
+  computed: {
+    // The parents compute a new array on every game update (same content: the particles are seeded). Restarting
+    // re-measures every path and recreates two Web Animations per dot, about 250 ms of main thread per update;
+    // only a real change of the particles needs that.
+    signature(): string {
+      return JSON.stringify(this.particles);
+    },
+  },
   watch: {
-    particles: {
-      handler() {
-        this.$nextTick(() => this.start());
-      },
+    signature() {
+      this.$nextTick(() => this.start());
     },
   },
   mounted() {
