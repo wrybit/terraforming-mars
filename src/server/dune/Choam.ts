@@ -18,7 +18,8 @@ import {CardName} from '../../common/cards/CardName';
 //    offer per player.
 // 2. Accept: another player takes the offer in their own turn – whoever comes first gets the deal.
 // 3. Only then both pay 1 M€ to the bank.
-// 4. Nobody accepts: the goods go back to the offerer at the end of the generation, without a fee.
+// 4. Nobody accepts: the goods go back to the offerer without a fee – at the end of the second generation, the one
+//    they were made in included (Jens 22 Oct 2026: one generation was too short to find a buyer).
 // 5. Withdraw: the offerer takes an open offer back as an action, without a fee (Jens, 19 Oct 2026: the own line of
 //    the CHOAM tab needs a move of its own).
 
@@ -28,6 +29,8 @@ export type ChoamOffer = {
   giveAmount: number,
   want: Resource,
   wantAmount: number,
+  /** Last generation the offer stands; at its end the goods go back. Missing in games saved before: this generation */
+  expires?: number,
 };
 
 export type ChoamData = {
@@ -36,6 +39,8 @@ export type ChoamData = {
 };
 
 export const CHOAM_FEE = 1;
+/** Generations an offer stands, the one it is made in included */
+export const CHOAM_OFFER_GENERATIONS = 2;
 /** Most that can be wished for in return */
 export const MAX_CHOAM_WISH = 30;
 
@@ -64,7 +69,8 @@ export function offerInput(player: IPlayer, data: ChoamData): SelectTrade | unde
   }
   return new SelectTrade(CHOAM_OFFER_TITLE, 'Offer', give, ALL_RESOURCES, MAX_CHOAM_WISH).andThen((trade) => {
     player.stock.deduct(trade.give, trade.giveAmount, {log: true});
-    data.offers.push({seller: player.id, give: trade.give, giveAmount: trade.giveAmount, want: trade.get, wantAmount: trade.getAmount});
+    data.offers.push({seller: player.id, give: trade.give, giveAmount: trade.giveAmount, want: trade.get, wantAmount: trade.getAmount,
+      expires: player.game.generation + CHOAM_OFFER_GENERATIONS - 1});
     player.game.log('${0} offers ${1} ${2} for ${3} ${4} at the CHOAM exchange', (b) => b.player(player)
       .number(trade.giveAmount).string(RESOURCE_LABEL[trade.give]).number(trade.getAmount).string(RESOURCE_LABEL[trade.get]));
     return undefined;
@@ -153,14 +159,15 @@ export function choamTabActions(player: IPlayer, data: ChoamData): Array<PlayerI
   return choices.length === 0 ? [] : [new OrOptions(...choices).setTitle(CHOAM_TITLE)];
 }
 
-/** End of generation: offers nobody accepted go back, without a fee */
+/** End of generation: offers nobody accepted and whose time is up go back, without a fee; the others stay */
 export function returnOffers(game: IGame, data: ChoamData): void {
-  for (const offer of data.offers) {
+  const expired = data.offers.filter((offer) => (offer.expires ?? game.generation) <= game.generation);
+  for (const offer of expired) {
     const seller = game.getPlayerById(offer.seller);
     seller.stock.add(offer.give, offer.giveAmount);
     game.log('The CHOAM exchange returns the offer of ${0}', (b) => b.player(seller));
   }
-  data.offers = [];
+  data.offers = data.offers.filter((offer) => !expired.includes(offer));
 }
 
 export function choamModel(game: IGame, data: ChoamData): ChoamModel {
@@ -171,6 +178,7 @@ export function choamModel(game: IGame, data: ChoamData): ChoamModel {
       giveAmount: offer.giveAmount,
       want: offer.want,
       wantAmount: offer.wantAmount,
+      expires: offer.expires ?? game.generation,
     })),
   };
 }

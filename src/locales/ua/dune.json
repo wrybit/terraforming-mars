@@ -321,7 +321,6 @@
   "At 4 all trading stops until a bribe lowers it": "На 4 вся торгівля зупиняється, доки хабар не знизить підозру",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Запропонувати (дія): товари залишають запас, натомість бажання до 30",
   "Withdraw (action): the goods come back, no fee": "Відкликати (дія): товари повертаються, без збору",
-  "End of generation: offers nobody took return without a fee": "Кінець покоління: неприйняті пропозиції повертаються без збору",
   "Show on Arrakis": "Показати на Арракісі",
   "No Sardaukar in your garrison": "У твоєму гарнізоні немає сардаукарів",
   "Only during your action": "Лише під час твоєї дії",
@@ -361,5 +360,7 @@
   "Effect: A bribe costs you 4 M€ less.": "Ефект: Хабар коштує вам на 4 соларії менше.",
   "Accept (action): first come, first harvested": "Прийняти (дія): хто перший прийшов, той перший збирає",
   "At most 1 open offer per player (Guild Bank card: 2)": "Щонайбільше 1 відкрита пропозиція на гравця (з картою «Банк Гільдії»: 2)",
-  "On a deal seller and buyer each pay 1 Solari to the bank": "Під час угоди продавець і покупець платять банку по 1 соларі"
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Під час угоди продавець і покупець платять банку по 1 соларі",
+  "until generation ${0}": "до пок. ${0}",
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Пропозиція діє 2 покоління; якщо її ніхто не прийняв, вона повертається без збору"
 }

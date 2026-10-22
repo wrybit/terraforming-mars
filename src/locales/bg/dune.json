@@ -322,7 +322,6 @@
   "At 4 all trading stops until a bribe lowers it": "При 4 всяка търговия спира, докато подкуп не свали подозрението",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Оферта (действие): стоките напускат запаса ти, срещу желание до 30",
   "Withdraw (action): the goods come back, no fee": "Оттегляне (действие): стоките се връщат, без такса",
-  "End of generation: offers nobody took return without a fee": "Край на поколението: неприетите оферти се връщат без такса",
   "Show on Arrakis": "Покажи на Аракис",
   "No Sardaukar in your garrison": "Няма сардаукари в гарнизона ти",
   "Only during your action": "Само по време на твоето действие",
@@ -362,5 +361,7 @@
   "Effect: A bribe costs you 4 M€ less.": "Ефект: Подкупът ви струва с 4 солари по-малко.",
   "Accept (action): first come, first harvested": "Приемане (действие): който пръв дойде, пръв жъне",
   "At most 1 open offer per player (Guild Bank card: 2)": "Най-много 1 отворена оферта на играч (с картата Банка на Гилдията: 2)",
-  "On a deal seller and buyer each pay 1 Solari to the bank": "При сделка продавачът и купувачът плащат по 1 солари на банката"
+  "On a deal seller and buyer each pay 1 Solari to the bank": "При сделка продавачът и купувачът плащат по 1 солари на банката",
+  "until generation ${0}": "до пок. ${0}",
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Офертата важи 2 поколения; ако никой не я приеме, се връща без такса"
 }

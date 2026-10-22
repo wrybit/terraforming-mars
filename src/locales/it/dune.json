@@ -318,7 +318,6 @@
   "At 4 all trading stops until a bribe lowers it": "A 4 ogni scambio è fermo finché una bustarella non abbassa il sospetto",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Offrire (azione): le merci lasciano la tua scorta, con un desiderio fino a 30 in cambio",
   "Withdraw (action): the goods come back, no fee": "Ritirare (azione): le merci tornano, senza tassa",
-  "End of generation: offers nobody took return without a fee": "Fine generazione: le offerte non prese tornano senza tassa",
   "Show on Arrakis": "Mostra su Arrakis",
   "No Sardaukar in your garrison": "Nessun Sardaukar nella tua guarnigione",
   "Only during your action": "Solo durante la tua azione",
@@ -358,5 +357,7 @@
   "Effect: A bribe costs you 4 M€ less.": "Effetto: Una bustarella ti costa 4 solari in meno.",
   "Accept (action): first come, first harvested": "Accettare (azione): chi prima arriva, prima raccoglie",
   "At most 1 open offer per player (Guild Bank card: 2)": "Al massimo 1 offerta aperta per giocatore (con la carta Banca della Gilda: 2)",
-  "On a deal seller and buyer each pay 1 Solari to the bank": "Alla conclusione venditore e acquirente pagano ciascuno 1 solari alla banca"
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Alla conclusione venditore e acquirente pagano ciascuno 1 solari alla banca",
+  "until generation ${0}": "fino alla gen. ${0}",
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Un'offerta resta 2 generazioni; se nessuno la prende, torna senza commissioni"
 }

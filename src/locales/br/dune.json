@@ -319,7 +319,6 @@
   "At 4 all trading stops until a bribe lowers it": "Em 4 todo comércio para até que um suborno reduza a suspeita",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Oferecer (ação): os bens saem do seu estoque, com um desejo de até 30 em troca",
   "Withdraw (action): the goods come back, no fee": "Retirar (ação): os bens voltam, sem taxa",
-  "End of generation: offers nobody took return without a fee": "Fim da geração: ofertas não aceitas voltam sem taxa",
   "Show on Arrakis": "Mostrar em Arrakis",
   "No Sardaukar in your garrison": "Nenhum Sardaukar na sua guarnição",
   "Only during your action": "Somente durante sua ação",
@@ -359,5 +358,7 @@
   "Effect: A bribe costs you 4 M€ less.": "Efeito: Um suborno custa 4 solaris a menos.",
   "Accept (action): first come, first harvested": "Aceitar (ação): quem chega primeiro colhe primeiro",
   "At most 1 open offer per player (Guild Bank card: 2)": "No máximo 1 oferta aberta por jogador (com a carta Banco da Guilda: 2)",
-  "On a deal seller and buyer each pay 1 Solari to the bank": "No fechamento, vendedor e comprador pagam cada um 1 solari ao banco"
+  "On a deal seller and buyer each pay 1 Solari to the bank": "No fechamento, vendedor e comprador pagam cada um 1 solari ao banco",
+  "until generation ${0}": "até a ger. ${0}",
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Uma oferta vale por 2 gerações; se ninguém a aceitar, volta sem taxa"
 }

@@ -317,7 +317,6 @@
   "At 4 all trading stops until a bribe lowers it": "På 4 stopper all handel til en bestikkelse senker mistanken",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Tilby (handling): varene forlater lageret ditt, med et ønske på opptil 30 tilbake",
   "Withdraw (action): the goods come back, no fee": "Trekk tilbake (handling): varene kommer tilbake, uten gebyr",
-  "End of generation: offers nobody took return without a fee": "Slutt på generasjonen: tilbud ingen tok, kommer tilbake uten gebyr",
   "Show on Arrakis": "Vis på Arrakis",
   "No Sardaukar in your garrison": "Ingen sardaukarer i garnisonen din",
   "Only during your action": "Bare under handlingen din",
@@ -357,5 +356,7 @@
   "Effect: A bribe costs you 4 M€ less.": "Effekt: En bestikkelse koster deg 4 solari mindre.",
   "Accept (action): first come, first harvested": "Godta (handling): den som kommer først, høster først",
   "At most 1 open offer per player (Guild Bank card: 2)": "Høyst 1 åpent tilbud per spiller (med kortet Laugsbanken: 2)",
-  "On a deal seller and buyer each pay 1 Solari to the bank": "Ved en handel betaler selger og kjøper 1 solari hver til banken"
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Ved en handel betaler selger og kjøper 1 solari hver til banken",
+  "until generation ${0}": "til gen. ${0}",
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Et tilbud står i 2 generasjoner; tar ingen det, kommer det tilbake uten avgift"
 }

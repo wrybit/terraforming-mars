@@ -313,7 +313,6 @@
   "At 4 all trading stops until a bribe lowers it": "Bij 4 ligt alle handel stil tot een omkoping de verdenking verlaagt",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Aanbieden (actie): goederen verlaten je voorraad, met een wens tot 30 terug",
   "Withdraw (action): the goods come back, no fee": "Intrekken (actie): de goederen komen terug, zonder kosten",
-  "End of generation: offers nobody took return without a fee": "Einde generatie: aanbiedingen die niemand nam, komen zonder kosten terug",
   "Show on Arrakis": "Toon op Arrakis",
   "No Sardaukar in your garrison": "Geen Sardaukar in je garnizoen",
   "Only during your action": "Alleen tijdens je actie",
@@ -353,5 +352,7 @@
   "Effect: A bribe costs you 4 M€ less.": "EFFECT: Een omkoping kost je 4 Solari minder.",
   "Accept (action): first come, first harvested": "Accepteren (actie): wie het eerst komt, oogst het eerst",
   "At most 1 open offer per player (Guild Bank card: 2)": "Hoogstens 1 open aanbod per speler (met de kaart Gildebank: 2)",
-  "On a deal seller and buyer each pay 1 Solari to the bank": "Bij een deal betalen verkoper en koper elk 1 solari aan de bank"
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Bij een deal betalen verkoper en koper elk 1 solari aan de bank",
+  "until generation ${0}": "tot gen. ${0}",
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Een aanbod blijft 2 generaties staan; neemt niemand het, dan komt het zonder vergoeding terug"
 }

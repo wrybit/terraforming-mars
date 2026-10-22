@@ -94,6 +94,8 @@ export type ChoamOfferModel = {
   giveAmount: number,
   want: Resource,
   wantAmount: number,
+  /** Last generation the offer stands (server/dune/Choam.ts CHOAM_OFFER_GENERATIONS) */
+  expires: number,
 };
 
 export type ChoamModel = {

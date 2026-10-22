@@ -113,10 +113,18 @@ html:not(.tm-mobile) .or-tab-panel:has(.choam-input) {
   align-items: center;
   gap: 4px;
 
+  // Larger goods, so the offer reads at a glance (Jens 22 Oct 2026)
   img {
-    width: 26px;
-    height: 26px;
+    width: 38px;
+    height: 38px;
   }
+}
+
+// Until when the offer stands: small and quiet next to the goods
+.choam-input__expires {
+  font-size: 13px;
+  color: #cdb999;
+  white-space: nowrap;
 }
 
 .choam-input__arrow {

@@ -322,7 +322,6 @@
   "At 4 all trading stops until a bribe lowers it": "嫌疑为 4 时停止一切交易，直到贿赂降低嫌疑",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "报价（行动）：货物离开你的库存，并提出最多 30 的回报愿望",
   "Withdraw (action): the goods come back, no fee": "撤回（行动）：货物返还，无手续费",
-  "End of generation: offers nobody took return without a fee": "世代结束：无人接受的报价无费退回",
   "Show on Arrakis": "在厄拉科斯上显示",
   "No Sardaukar in your garrison": "你的驻军中没有萨督卡",
   "Only during your action": "仅在你的行动期间",
@@ -362,5 +361,7 @@
   "Effect: A bribe costs you 4 M€ less.": "效果： 你的贿赂便宜 4 索拉里。",
   "Accept (action): first come, first harvested": "接受（行动）：先到者先收获",
   "At most 1 open offer per player (Guild Bank card: 2)": "每位玩家最多 1 个未成交报价（有公会银行卡牌：2）",
-  "On a deal seller and buyer each pay 1 Solari to the bank": "成交时卖方和买方各向银行支付 1 索拉里"
+  "On a deal seller and buyer each pay 1 Solari to the bank": "成交时卖方和买方各向银行支付 1 索拉里",
+  "until generation ${0}": "至第 ${0} 世代",
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "报价保留 2 个世代；无人接受则免费退回"
 }

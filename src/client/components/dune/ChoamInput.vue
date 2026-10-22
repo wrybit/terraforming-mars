@@ -19,6 +19,8 @@
               <span class="choam-input__goods"><b>{{ offer.giveAmount }}</b><img :src="icon(offer.give)" :alt="$t(label(offer.give))" :title="$t(label(offer.give))"></span>
               <span class="choam-input__arrow" aria-hidden="true">⇄</span>
               <span class="choam-input__goods"><b>{{ offer.wantAmount }}</b><img :src="icon(offer.want)" :alt="$t(label(offer.want))" :title="$t(label(offer.want))"></span>
+              <!-- Until when the offer stands (2 generations, Jens 22 Oct 2026) -->
+              <span class="choam-input__expires">{{ expiresLabel(offer.expires) }}</span>
               <!-- The move behind the offer; greyed out when it can't be made now (not paid for, not your turn) -->
               <AppButton size="small" :class="['choam-input__move', {'choam-input__move--withdraw': line.own}]"
                 :title="$t(line.own ? 'Withdraw' : 'Accept')"
@@ -57,6 +59,7 @@ import PlayerChip from './PlayerChip.vue';
 import DuneRuleCards from './DuneRuleCards.vue';
 import {CHOAM_RULES} from './duneRules';
 import {duneGraphic} from './duneGraphic';
+import {translateTextWithParams} from '@/client/directives/i18n';
 import {OrOptionsModel, SelectTradeModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
@@ -91,6 +94,7 @@ type OfferLine = {
   giveAmount: number,
   want: Resource,
   wantAmount: number,
+  expires: number,
   // Index of the server's choice behind the offer (accept or withdraw); -1 = not possible now
   choice: number,
 };
@@ -154,6 +158,7 @@ export default defineComponent({
               giveAmount: offer.giveAmount,
               want: offer.want,
               wantAmount: offer.wantAmount,
+              expires: offer.expires,
               choice: this.choiceIndex(isOwn ? CHOAM_WITHDRAW_TITLE : CHOAM_ACCEPT_OFFER_TITLE, offer.index),
             })),
         };
@@ -161,6 +166,9 @@ export default defineComponent({
     },
   },
   methods: {
+    expiresLabel(generation: number): string {
+      return translateTextWithParams('until generation ${0}', [String(generation)]);
+    },
     icon(resource: Resource): string {
       return duneGraphic(RESOURCE_GRAPHIC[resource]);
     },

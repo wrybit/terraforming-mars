@@ -73,5 +73,5 @@ export const CHOAM_RULES: ReadonlyArray<DuneRule> = [
   {sign: 'tap', text: 'Accept (action): first come, first harvested'},
   {picture: 'coin', text: 'On a deal seller and buyer each pay 1 Solari to the bank'},
   {sign: 'leave', text: 'Withdraw (action): the goods come back, no fee'},
-  {sign: 'enter', text: 'End of generation: offers nobody took return without a fee'},
+  {sign: 'enter', text: 'An offer stands for 2 generations; if nobody takes it, it returns without a fee'},
 ];

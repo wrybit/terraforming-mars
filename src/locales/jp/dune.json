@@ -321,7 +321,6 @@
   "At 4 all trading stops until a bribe lowers it": "疑惑4では賄賂で下げるまですべての取引が止まる",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "オファー（アクション）：品物が在庫から出て、見返りに最大30の希望を出す",
   "Withdraw (action): the goods come back, no fee": "取り下げ（アクション）：品物は戻り、手数料なし",
-  "End of generation: offers nobody took return without a fee": "世代終了：誰も受けなかったオファーは手数料なしで戻る",
   "Show on Arrakis": "アラキスで表示",
   "No Sardaukar in your garrison": "駐屯地にサーダカーがいません",
   "Only during your action": "自分のアクション中のみ",
@@ -361,5 +360,7 @@
   "Effect: A bribe costs you 4 M€ less.": "効果：賄賂のコストが4ソラリ安くなる。",
   "Accept (action): first come, first harvested": "受け入れ（アクション）：先に来た者が先に収穫する",
   "At most 1 open offer per player (Guild Bank card: 2)": "プレイヤーごとに公開オファーは最大1つ（カード「ギルド銀行」があれば2）",
-  "On a deal seller and buyer each pay 1 Solari to the bank": "取引成立時、売り手と買い手がそれぞれ銀行に1ソラリを払う"
+  "On a deal seller and buyer each pay 1 Solari to the bank": "取引成立時、売り手と買い手がそれぞれ銀行に1ソラリを払う",
+  "until generation ${0}": "第${0}世代まで",
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "オファーは2世代有効。誰も受けなければ手数料なしで戻る"
 }

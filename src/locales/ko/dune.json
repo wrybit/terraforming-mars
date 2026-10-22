@@ -321,7 +321,6 @@
   "At 4 all trading stops until a bribe lowers it": "의심 4에서는 뇌물로 낮출 때까지 모든 거래가 막힘",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "제안(행동): 물품이 비축에서 나가고, 대가로 최대 30까지 원하는 것을 적습니다",
   "Withdraw (action): the goods come back, no fee": "철회(행동): 물품이 돌아오고 수수료는 없습니다",
-  "End of generation: offers nobody took return without a fee": "세대 종료: 아무도 받지 않은 제안은 수수료 없이 돌아옵니다",
   "Show on Arrakis": "아라키스에서 보기",
   "No Sardaukar in your garrison": "주둔군에 사다우카가 없습니다",
   "Only during your action": "내 행동 중에만",
@@ -361,5 +360,7 @@
   "Effect: A bribe costs you 4 M€ less.": "지속 효과: 뇌물 비용이 4 솔라리 줄어듭니다.",
   "Accept (action): first come, first harvested": "수락(행동): 먼저 온 사람이 먼저 수확합니다",
   "At most 1 open offer per player (Guild Bank card: 2)": "플레이어당 열린 제안은 최대 1개 (길드 은행 카드가 있으면 2)",
-  "On a deal seller and buyer each pay 1 Solari to the bank": "거래가 성사되면 판매자와 구매자가 각각 은행에 솔라리 1을 냅니다"
+  "On a deal seller and buyer each pay 1 Solari to the bank": "거래가 성사되면 판매자와 구매자가 각각 은행에 솔라리 1을 냅니다",
+  "until generation ${0}": "${0}세대까지",
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "제안은 2세대 동안 유지되며, 아무도 받지 않으면 수수료 없이 돌아옵니다"
 }

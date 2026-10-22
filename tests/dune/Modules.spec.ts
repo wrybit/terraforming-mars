@@ -237,7 +237,8 @@ describe('Dune modules B, D, E, F', () => {
       expect(offer.maxGet).eq(30);
       offer.process({type: 'trade', give: Resource.HEAT, giveAmount: 3, get: Resource.TITANIUM, getAmount: 2});
       expect(player1.heat).eq(2);
-      expect(choam.offers).deep.eq([{seller: player1.id, give: Resource.HEAT, giveAmount: 3, want: Resource.TITANIUM, wantAmount: 2}]);
+      expect(choam.offers).deep.eq([{seller: player1.id, give: Resource.HEAT, giveAmount: 3, want: Resource.TITANIUM, wantAmount: 2,
+        expires: game.generation + 1}]);
 
       player2.titanium = 2;
       player2.megaCredits = 1;
@@ -247,7 +248,12 @@ describe('Dune modules B, D, E, F', () => {
       expect([player2.heat, player2.titanium, player2.megaCredits]).deep.eq([3, 0, 0]);
       expect([player1.titanium, player1.megaCredits]).deep.eq([2, 2]);
 
-      choam.offers.push({seller: player1.id, give: Resource.STEEL, giveAmount: 2, want: Resource.PLANTS, wantAmount: 1});
+      // An offer stands for 2 generations: still there at the end of the first, back at the end of the second
+      choam.offers.push({seller: player1.id, give: Resource.STEEL, giveAmount: 2, want: Resource.PLANTS, wantAmount: 1,
+        expires: game.generation + 1});
+      returnOffers(game, choam);
+      expect(choam.offers).has.length(1);
+      game.generation++;
       returnOffers(game, choam);
       expect(player1.steel).eq(2);
       expect(choam.offers).deep.eq([]);

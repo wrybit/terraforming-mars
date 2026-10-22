@@ -319,7 +319,6 @@
   "At 4 all trading stops until a bribe lowers it": "4-nél minden kereskedés szünetel, amíg vesztegetés nem csökkenti a gyanút",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Ajánlat (akció): az áru elhagyja a készleted, cserébe legfeljebb 30-as kívánsággal",
   "Withdraw (action): the goods come back, no fee": "Visszavonás (akció): az áru visszajön, díj nélkül",
-  "End of generation: offers nobody took return without a fee": "Generáció vége: az el nem fogadott ajánlatok díj nélkül visszatérnek",
   "Show on Arrakis": "Megmutatás az Arrakison",
   "No Sardaukar in your garrison": "Nincs szardaukar a helyőrségedben",
   "Only during your action": "Csak a saját akciód alatt",
@@ -359,5 +358,7 @@
   "Effect: A bribe costs you 4 M€ less.": "Hatás: A vesztegetés 4 solarival kevesebbe kerül.",
   "Accept (action): first come, first harvested": "Elfogadás (akció): aki előbb jön, előbb arat",
   "At most 1 open offer per player (Guild Bank card: 2)": "Játékosonként legfeljebb 1 nyitott ajánlat (a Céhbank kártyával: 2)",
-  "On a deal seller and buyer each pay 1 Solari to the bank": "Üzletkötéskor az eladó és a vevő is 1-1 solarit fizet a banknak"
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Üzletkötéskor az eladó és a vevő is 1-1 solarit fizet a banknak",
+  "until generation ${0}": "${0}. gen.-ig",
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Egy ajánlat 2 generációig áll; ha senki sem fogadja el, díj nélkül visszakerül"
 }

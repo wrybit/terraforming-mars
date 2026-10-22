@@ -319,7 +319,6 @@
   "At 4 all trading stops until a bribe lowers it": "Tasolla 4 kaikki kauppa on seis, kunnes lahjus laskee epäilyä",
   "Offer (action): goods leave your stock, with a wish of up to 30 in return": "Tarjoa (toiminto): tavarat lähtevät varastostasi, vastineeksi toive enintään 30",
   "Withdraw (action): the goods come back, no fee": "Peru (toiminto): tavarat palaavat, ei maksua",
-  "End of generation: offers nobody took return without a fee": "Sukupolven loppu: ottamattomat tarjoukset palaavat ilman maksua",
   "Show on Arrakis": "Näytä Arrakisilla",
   "No Sardaukar in your garrison": "Varuskunnassasi ei ole sardaukareita",
   "Only during your action": "Vain oman toimintosi aikana",
@@ -359,5 +358,7 @@
   "Effect: A bribe costs you 4 M€ less.": "VAIKUTUS: Lahjus maksaa sinulle 4 solaria vähemmän.",
   "Accept (action): first come, first harvested": "Hyväksy (toiminto): ensimmäinen korjaa sadon",
   "At most 1 open offer per player (Guild Bank card: 2)": "Enintään 1 avoin tarjous pelaajaa kohden (Kiltapankki-kortilla: 2)",
-  "On a deal seller and buyer each pay 1 Solari to the bank": "Kaupan syntyessä myyjä ja ostaja maksavat kumpikin pankille 1 solarin"
+  "On a deal seller and buyer each pay 1 Solari to the bank": "Kaupan syntyessä myyjä ja ostaja maksavat kumpikin pankille 1 solarin",
+  "until generation ${0}": "sukupolveen ${0} asti",
+  "An offer stands for 2 generations; if nobody takes it, it returns without a fee": "Tarjous on voimassa 2 sukupolvea; jos kukaan ei ota sitä, se palaa ilman maksua"
 }
