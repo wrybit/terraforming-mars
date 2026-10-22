@@ -1,5 +1,6 @@
 <template>
-  <div id="player-home" :class="{'with-turmoil': game.turmoil, 'player-home--acting': isPlayerActing(playerView), 'player-home--fixed': usesFixedLayout}">
+  <div id="player-home" :class="{'with-turmoil': game.turmoil, 'player-home--acting': isPlayerActing(playerView), 'player-home--fixed': usesFixedLayout}"
+    :style="ownCubeStyle">
     <!-- player-home--acting: red frame around the viewport while this player is taking their turn (active_player_outline.less).
          Comment deliberately inside the root, otherwise the component would have two root nodes ($el would not be an element) -->
     <TopBar :playerView="playerView" />
@@ -103,6 +104,7 @@
 
 <script lang="ts">
 import {computed, defineComponent} from 'vue';
+import {SPRITE_ROWS} from '@/client/components/common/playerCubeSprite';
 import {GAME_MENU_CONTEXT, GameMenuContext} from '@/client/components/gameMenu/gameMenuContext';
 import {vDockedTab} from '@/client/directives/DockedTab';
 
@@ -190,6 +192,11 @@ export default defineComponent({
     },
     thisPlayer(): PublicPlayerModel {
       return this.playerView.thisPlayer;
+    },
+    // Row of the own color in the player cube sheet: pictures on cards draw the viewer's cube with it
+    // (Dune: Land Claim, theme-extra.css; Jens, 22 Oct 2026)
+    ownCubeStyle(): Record<string, string> {
+      return {'--own-cube-row': String(Math.max(0, SPRITE_ROWS.indexOf(this.thisPlayer.color)))};
     },
     game(): GameModel {
       return this.playerView.game;
