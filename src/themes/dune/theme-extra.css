@@ -929,13 +929,16 @@ html.theme-dune input:checked + .filterDiv.card-container::after {
 
 /* Everything on the card except the scene lies above that layer: cost coin, tags, counters and victory points
    reach over the frame, and the light edge must not cross them (Jens 21 Oct 2026). Only positioned parts take a
-   z-index; the selection tint (cards.less ::before) and the player cube stay on top. */
+   z-index; the player cube stays on top. */
 html.theme-dune .filterDiv.card-container > :not(.card-scene, .card-player-cube) {
   z-index: 5;
 }
 
+/* Selection (cards.less ::before: tint, frame and pulsing glow) below the content: the frame runs under the cost
+   coin and the tags hanging over the edge instead of across them (Jens 22 Oct 2026). The tint still lies on the
+   card face and the scene. */
 html.theme-dune .filterDiv.card-container::before {
-  z-index: 6;
+  z-index: 3;
 }
 
 html.theme-dune .filterDiv.card-container > .card-player-cube {
