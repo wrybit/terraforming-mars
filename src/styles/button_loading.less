@@ -1,0 +1,31 @@
+// Busy button (AppButton gets .loading while the server answers; spectre.css draws a small spinner in the CTA colour
+// that is hard to see on the coloured buttons). The button is covered by dark frosted glass and a larger white
+// spinner sits on top of it (Jens 22 Oct 2026).
+@button-loading-veil: rgba(18, 12, 8, 0.68);
+@button-loading-spinner: #fffdf8;
+@button-loading-spinner-size: 26px;
+@button-loading-spinner-width: 3px;
+
+.btn.loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: @button-loading-veil;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+
+// Doubled class: stronger than spectre's colour variants of the spinner (.btn-primary.loading::after …)
+.btn.loading.loading::after {
+  z-index: 2;
+  width: @button-loading-spinner-size;
+  height: @button-loading-spinner-size;
+  margin-top: -(@button-loading-spinner-size / 2);
+  margin-left: -(@button-loading-spinner-size / 2);
+  border: @button-loading-spinner-width solid fade(@button-loading-spinner, 25%);
+  border-top-color: @button-loading-spinner;
+  animation-duration: 0.7s;
+  filter: drop-shadow(0 0 3px rgba(255, 253, 248, 0.45));
+}
