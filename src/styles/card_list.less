@@ -563,12 +563,16 @@
 
 // The first section starts level with the filter column. .card-list-section is also the class of the sections below
 // a tab's selection (hand_cards_panel.less, with a large top margin) – reset that here.
-.card-list-results > .card-list-section {
-  margin-top: 0;
+// Abstand zwischen den Sektionen per gap statt margin: ausgeblendete Sektionen (Typfilter, display: none)
+// zählen bei gap nicht mit – sonst behielt die erste sichtbare den Abstand und saß tiefer als die Filterspalte
+.card-list-results {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
-.card-list-results > .card-list-section + .card-list-section {
-  margin-top: 32px;
+.card-list-results > .card-list-section {
+  margin-top: 0;
 }
 
 // Section header: frosted-glass bar, stays put below the page header
