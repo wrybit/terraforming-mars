@@ -374,18 +374,5 @@
   "Have the highest energy production": "Имей наибольшее производство энергии",
   "Milestones & awards of Arrakis": "Вехи и награды Арракиса",
   "7 milestones · 7 awards for random draws": "7 вех · 7 наград для случайного выбора",
-  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Выбираются из целей Арракиса, модуля «Вехи и награды Арракиса» и по одной вехе каждого модуля в игре.",
-  "${0} above normal": "на ${0} выше нормы",
-  "${0} below normal": "на ${0} ниже нормы",
-  "${0} cheaper than normal": "на ${0} дешевле нормы",
-  "${0} dearer than normal": "на ${0} дороже нормы",
-  "Normal rate": "Обычный курс",
-  "good": "хорошо",
-  "bad": "плохо",
-  "normal": "обычно",
-  "saved": "сэкономлено",
-  "extra": "больше",
-  "better than normal": "лучше нормы",
-  "worse than normal": "хуже нормы",
-  "as normal": "как обычно"
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Выбираются из целей Арракиса, модуля «Вехи и награды Арракиса» и по одной вехе каждого модуля в игре."
 }

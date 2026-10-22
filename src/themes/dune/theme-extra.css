@@ -1430,7 +1430,7 @@ html.theme-dune .button-count--megacredits {
   text-shadow: 0 1px 0 rgba(255, 250, 230, 0.75), 0 -1px 0 rgba(90, 54, 6, 0.3);
 }
 
-html.theme-dune .exchange-scale--fixed .button-count--megacredits {
+html.theme-dune .trade-select__rate .button-count--megacredits {
   font-size: 12px;
 }
 
