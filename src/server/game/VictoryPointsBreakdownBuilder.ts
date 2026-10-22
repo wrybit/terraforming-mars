@@ -1,5 +1,5 @@
 import {Tag} from '../../common/cards/Tag';
-import {VictoryPointsBreakdown} from '../../common/game/VictoryPointsBreakdown';
+import {SchemeDetail, VictoryPointsBreakdown} from '../../common/game/VictoryPointsBreakdown';
 
 export type VictoryPoints = 'terraformRating' | 'milestones' | 'awards' | 'greenery' | 'city' | 'escapeVelocity' | 'moon habitat' | 'moon mine' | 'moon road' | 'planetary tracks' | 'victoryPoints';
 
@@ -19,12 +19,14 @@ export class VictoryPointsBreakdownBuilder {
     moonMines: 0,
     moonRoads: 0,
     planetaryTracks: 0,
+    schemes: 0,
     victoryPoints: 0,
     total: 0,
     detailsCards: [],
     detailsMilestones: [],
     detailsAwards: [],
     detailsPlanetaryTracks: [],
+    detailsSchemes: [],
     negativeVP: 0,
   };
 
@@ -45,7 +47,16 @@ export class VictoryPointsBreakdownBuilder {
     this.points.total += this.points.moonMines;
     this.points.total += this.points.moonRoads;
     this.points.total += this.points.planetaryTracks;
+    this.points.total += this.points.schemes;
     this.points.total += this.points.victoryPoints;
+  }
+
+  /** Dune expansion, House schemes; `detail` names the agenda (only at game end, agendas are secret before) */
+  public setSchemePoints(points: number, detail?: SchemeDetail): void {
+    this.points.schemes += points;
+    if (detail !== undefined) {
+      this.points.detailsSchemes.push(detail);
+    }
   }
 
   public setVictoryPoints(key: VictoryPoints, points: number, message?: string, messageArgs?: Array<string>) {

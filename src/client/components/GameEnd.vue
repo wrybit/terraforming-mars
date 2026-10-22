@@ -89,6 +89,7 @@
                 <th v-if="game.moon !== undefined"><div class="table-moon-habitat-tile"></div></th>
                 <th v-if="game.moon !== undefined"><div class="table-moon-mine-tile"></div></th>
                 <th v-if="game.pathfinders !== undefined"><div class="table-planetary-track"></div></th>
+                <th v-if="hasSchemes"><div class="table-schemes tooltip tooltip-top" :data-tooltip="$t('House schemes')"></div></th>
                 <th><div class="vp">VP</div></th>
                 <th v-if="game.gameOptions.escapeVelocity" class="clock-icon tooltip tooltip-top" :data-tooltip="$t('Escape Velocity penalty')">&#x23F3;</th>
                 <th class="game-end-total"><div class="game-end-total-column">Total</div></th>
@@ -122,6 +123,7 @@
                 <td v-if="game.moon !== undefined">{{ p.victoryPointsBreakdown.moonHabitats }}</td>
                 <td v-if="game.moon !== undefined">{{ p.victoryPointsBreakdown.moonMines }}</td>
                 <td v-if="game.pathfinders !== undefined"> {{ p.victoryPointsBreakdown.planetaryTracks}}</td>
+                <td v-if="hasSchemes">{{ p.victoryPointsBreakdown.schemes }}</td>
                 <td>{{ p.victoryPointsBreakdown.victoryPoints }}</td>
                 <td v-if="game.gameOptions.escapeVelocity">{{ p.victoryPointsBreakdown.escapeVelocity }}</td>
                 <td class="game-end-total">{{ p.victoryPointsBreakdown.total }}</td>
@@ -179,6 +181,12 @@
                 <div :class="detailRowClass(v.points)">
                   <div class="game-end-column-vp">{{v.points}}</div>
                   <div class="game-end-column-text" v-i18n="[v.tag]">Most tags on the ${0} track</div>
+                </div>
+              </div>
+              <div v-for="v in p.victoryPointsBreakdown.detailsSchemes ?? []" :key="v.agenda">
+                <div :class="detailRowClass(v.victoryPoint)">
+                  <div class="game-end-column-vp">{{v.victoryPoint}}</div>
+                  <div class="game-end-column-text">{{translateSchemeDetail(v)}}</div>
                 </div>
               </div>
             </div>
@@ -274,7 +282,8 @@ import {GlobalParameter} from '@/common/GlobalParameter';
 import {$t, translateTextWithParams, translateMessage} from '@/client/directives/i18n';
 import {Message} from '@/common/logs/Message';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
-import {MADetail} from '@/common/game/VictoryPointsBreakdown';
+import {MADetail, SchemeDetail} from '@/common/game/VictoryPointsBreakdown';
+import {SCHEME_LEVEL_LABELS} from '@/common/dune/schemeAgendas';
 import {AwardName} from '@/common/ma/AwardName';
 
 type PlayerContributions = {player: string, color: Color, temp: number, oxygen: number, oceans: number, venus?: number, moonHabitat?: number, moonMining?: number, moonLogistic?: number, total: number};
@@ -403,12 +412,17 @@ export default defineComponent({
         };
       });
     },
+    // Dune expansion, House schemes: agenda points get a column of their own
+    hasSchemes(): boolean {
+      return this.game.dune?.schemes !== undefined;
+    },
     // Columns of the victory point group (player to total) – for the table's group header row
     victoryPointColumnCount(): number {
       const moonColumns = this.game.moon !== undefined ? 3 : 0;
       const pathfindersColumns = this.game.pathfinders !== undefined ? 1 : 0;
       const escapeVelocityColumns = this.game.gameOptions.escapeVelocity ? 1 : 0;
-      return 8 + moonColumns + pathfindersColumns + escapeVelocityColumns;
+      const schemesColumns = this.hasSchemes ? 1 : 0;
+      return 8 + moonColumns + pathfindersColumns + escapeVelocityColumns + schemesColumns;
     },
     globalParameterColumnCount(): number {
       const venusColumns = this.game.gameOptions.expansions.venus ? 1 : 0;
@@ -499,6 +513,10 @@ export default defineComponent({
         .filter((card) => getCard(card.name)?.type === CardType.CORPORATION)
         .map((card) => card.name);
       return corporationCards.length === 0 ? [''] : corporationCards;
+    },
+    // "Agenda Dew Gatherer (Medium)": the agenda that scored and the level reached
+    translateSchemeDetail(data: SchemeDetail): string {
+      return translateTextWithParams('Agenda ${0} (${1})', [$t(data.agenda), $t(SCHEME_LEVEL_LABELS[data.level - 1])]);
     },
     translateMilestoneDetails(data: MADetail): string {
       const args = (data.messageArgs || []).map($t);

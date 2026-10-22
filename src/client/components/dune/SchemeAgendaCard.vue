@@ -27,12 +27,11 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
-import {SCHEME_LEVEL_POINTS, SchemeAgenda, schemeAgenda} from '@/common/dune/schemeAgendas';
+import {SCHEME_LEVEL_LABELS, SCHEME_LEVEL_POINTS, SchemeAgenda, schemeAgenda} from '@/common/dune/schemeAgendas';
 import {duneGraphic} from './duneGraphic';
 
 // The three levels of every agenda (SCHEME_LEVEL_POINTS 3 / 5 / 8 VP), named as on the mockup cards
 const LEVELS = ['easy', 'medium', 'hard'] as const;
-const LEVEL_LABELS = ['Easy', 'Medium', 'Hard'] as const;
 
 export type AgendaProgress = {name: string, value: number, level: number};
 
@@ -54,8 +53,8 @@ export default defineComponent({
     LEVELS(): typeof LEVELS {
       return LEVELS;
     },
-    LEVEL_LABELS(): typeof LEVEL_LABELS {
-      return LEVEL_LABELS;
+    LEVEL_LABELS(): typeof SCHEME_LEVEL_LABELS {
+      return SCHEME_LEVEL_LABELS;
     },
   },
   methods: {

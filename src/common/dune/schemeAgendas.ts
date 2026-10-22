@@ -23,6 +23,9 @@ export type SchemeAgenda = {
 
 export const SCHEME_LEVEL_POINTS: ReadonlyArray<number> = [3, 5, 8];
 
+/** Names of the three levels (translation keys), as on the agenda cards */
+export const SCHEME_LEVEL_LABELS = ['Easy', 'Medium', 'Hard'] as const;
+
 /** A player reaching this TR makes everybody give up one of their two agendas */
 export const SCHEME_REDUCTION_TR = 35;
 

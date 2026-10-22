@@ -373,5 +373,6 @@
   "Have the highest energy production": "エネルギー生産が最も多い",
   "Milestones & awards of Arrakis": "アラキスのマイルストーンとアワード",
   "7 milestones · 7 awards for random draws": "マイルストーン7つ・アワード7つ（ランダム抽選用）",
-  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "アラキスの目標、モジュール「アラキスのマイルストーンとアワード」、そして使用中の各モジュールのマイルストーン1つから抽選されます。"
+  "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "アラキスの目標、モジュール「アラキスのマイルストーンとアワード」、そして使用中の各モジュールのマイルストーン1つから抽選されます。",
+  "Agenda ${0} (${1})": "計略 ${0}（${1}）"
 }

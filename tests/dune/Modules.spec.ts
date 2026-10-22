@@ -11,6 +11,7 @@ import {PlayerInput} from '../../src/server/PlayerInput';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {Resource} from '../../src/common/Resource';
 import {TileType} from '../../src/common/TileType';
+import {Phase} from '../../src/common/Phase';
 import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
 import {battleTargets, garrisonOf, resolveBattle, OPEN_KANLY_COST} from '../../src/server/dune/Kanly';
 import {chargeSuspicion, exchangeOf, moveExchange, suspicionOf, suspicionPenalty} from '../../src/server/dune/Smuggling';
@@ -288,6 +289,20 @@ describe('Dune modules B, D, E, F', () => {
       expect(agendaPoints(player1, 'Imperial Favour')).eq(5);
       player1.production.override({megacredits: 50});
       expect(schemesVictoryPoints(player1, schemes)).eq(8);
+    });
+
+    it('shows the agenda points in an own column, naming the agenda only at game end', () => {
+      const schemes = game.duneData!.schemes!;
+      schemes.agendas[player1.id] = ['Imperial Favour', 'Treasurer'];
+      player1.setTerraformRating(57);
+      const running = player1.getVictoryPoints();
+      expect(running.schemes).eq(5);
+      expect(running.detailsSchemes).deep.eq([]);
+      expect(running.detailsCards.map((card) => card.cardName)).not.include('House schemes');
+      expect(running.total).eq(57 + 5);
+
+      game.phase = Phase.END;
+      expect(player1.getVictoryPoints().detailsSchemes).deep.eq([{agenda: 'Imperial Favour', level: 2, victoryPoint: 5}]);
     });
 
     it('makes everybody keep one agenda once a player reaches 35 TR', () => {

@@ -15,7 +15,8 @@ import {levyInput} from './WormLevy';
 import {KanlyData, initializeKanly, kanlyActions, kanlyModel, resolveBattle} from './Kanly';
 import {SmugglingData, chargeSuspicion, initializeSmuggling, moveExchange, smugglingActions, smugglingModel, smugglingTabActions} from './Smuggling';
 import {ChoamData, choamActions, choamModel, choamTabActions, initializeChoam, returnOffers} from './Choam';
-import {SchemesData, initializeSchemes, reductionStep, schemesModel, schemesVictoryPoints} from './Schemes';
+import {SchemesData, initializeSchemes, reductionStep, schemesModel, scoringAgenda} from './Schemes';
+import {Phase} from '../../common/Phase';
 
 // Dune expansion (common/dune/DuneModule.ts): the state of the modules of a game and their hooks into the
 // game flow. Game.ts and Player.ts only call in here, so upstream merges touch few lines there.
@@ -252,11 +253,15 @@ export class DuneExpansion {
     ];
   }
 
-  /** Victory points of the modules (House schemes) */
+  /** Victory points of the modules (House schemes): an own column; the agenda is named only at game end, it is secret before */
   public static calculateVictoryPoints(player: IPlayer, builder: VictoryPointsBreakdownBuilder): void {
     const schemes = player.game.duneData?.schemes;
-    if (schemes !== undefined) {
-      builder.setVictoryPoints('victoryPoints', schemesVictoryPoints(player, schemes), 'House schemes');
+    if (schemes === undefined) {
+      return;
+    }
+    const agenda = scoringAgenda(player, schemes);
+    if (agenda !== undefined) {
+      builder.setSchemePoints(agenda.victoryPoint, player.game.phase === Phase.END ? agenda : undefined);
     }
   }
 

@@ -18,6 +18,7 @@ import {arrakisRow} from '../../common/dune/arrakisCoordinates';
 import {arrakisLayout} from '../../common/dune/arrakisLayout';
 import {SCHEME_AGENDAS, SCHEME_REDUCTION_TR, SchemeMeasure, schemeAgenda, schemeLevel, schemePoints} from '../../common/dune/schemeAgendas';
 import {SchemeModel} from '../../common/dune/DuneModel';
+import {SchemeDetail} from '../../common/game/VictoryPointsBreakdown';
 
 // Module B – House schemes (claude/dune-erweiterung-konzept.md): every player gets 2 secret agendas. As soon as a player
 // reaches 35 TR (checked at the end of the generation), everybody gives one up and keeps the other.
@@ -156,9 +157,23 @@ export function agendaPoints(player: IPlayer, name: string): number {
   return schemePoints(schemeLevel(agenda, schemeValue(player, agenda.measure)));
 }
 
+/** The agenda of a player that scores: the best one still held, with its level; undefined while none reaches a level */
+export function scoringAgenda(player: IPlayer, data: SchemesData): SchemeDetail | undefined {
+  let best: SchemeDetail | undefined;
+  for (const name of data.agendas[player.id] ?? []) {
+    const agenda = schemeAgenda(name);
+    const level = schemeLevel(agenda, schemeValue(player, agenda.measure));
+    const victoryPoint = schemePoints(level);
+    if (victoryPoint > 0 && (best === undefined || victoryPoint > best.victoryPoint)) {
+      best = {agenda: name, level, victoryPoint};
+    }
+  }
+  return best;
+}
+
 /** VP of a player: the best agenda still held */
 export function schemesVictoryPoints(player: IPlayer, data: SchemesData): number {
-  return Math.max(0, ...(data.agendas[player.id] ?? []).map((name) => agendaPoints(player, name)));
+  return scoringAgenda(player, data)?.victoryPoint ?? 0;
 }
 
 /** End of generation: once a player has reached 35 TR, everybody chooses the agenda to keep. `next` when done. */
