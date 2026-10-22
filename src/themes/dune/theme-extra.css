@@ -727,8 +727,9 @@ html.theme-dune .card-container:is(.card-thumper, .card-protected-habitats, .car
 }
 
 /* Land Claim: a plain sand tile (the empty space of Arrakis) with a red player cube on it – the marker that reserves
-   the space (Jens 22 Oct 2026). The tile is the picture below the text, the cube lies on its middle as ::before
-   (the real cube from the sprite sheet of the board, red row, iso view). */
+   the space (Jens 22 Oct 2026). The tile is the picture below the text, the cube lies on it as ::before: the real
+   cube from the sprite sheet of the board, red row, seen from above and turned 30°, a little off the middle, so it
+   lies there naturally like a placed marker. */
 html.theme-dune .card-container.card-land-claim .card-content > .card-rows:last-of-type {
   position: relative;
 }
@@ -744,12 +745,12 @@ html.theme-dune .card-container.card-land-claim .card-content > .card-rows:last-
   /* Sheet: 11 columns × 9 rows of 180 px cells (playerCubeSprite.ts); a 44 px cell holds an 18 px cube */
   content: "";
   position: absolute;
-  bottom: 15px;
-  left: 50%;
+  bottom: 18px;
+  left: calc(50% + 5px);
   width: 44px;
   height: 44px;
   transform: translateX(-50%);
-  background: url(../../player-cube/sprite.webp) -440px 0 / 484px 396px no-repeat;
+  background: url(../../player-cube/sprite.webp) -132px 0 / 484px 396px no-repeat;
 }
 
 /* Look at the top cards, keep some, discard the others: the cards drawn (scripts/make-card-choice.py) */
