@@ -378,5 +378,7 @@
   "Agenda ${0} (${1})": "Замисъл ${0} (${1})",
   "Theme": "Тема",
   "Dune": "Дюн",
-  "Not available with the Dune theme": "Недостъпно с темата „Дюн“"
+  "Not available with the Dune theme": "Недостъпно с темата „Дюн“",
+  "Same line as the last move: the die is rolled again": "Същата линия като при последния ход: заровът се хвърля отново",
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Посока: зар – при същата линия като последния ход (в която и да е посока) се хвърля още веднъж"
 }

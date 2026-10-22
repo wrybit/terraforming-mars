@@ -8,7 +8,7 @@ import {TileType} from '../../src/common/TileType';
 import {BoardName} from '../../src/common/boards/BoardName';
 import {Space} from '../../src/server/boards/Space';
 import {ARRAKIS_ZONES, BEHIND_WORM_BORDER} from '../../src/common/dune/arrakisTerrain';
-import {WORM_START, WORM_START_SPACES, WORM_TITLE, WormData, bouncedDirection, crossSpace, directionIndex, distanceInput, maxWormDistance, moveWorm, wormChoices, wormChooser, wormDirection, wormModel, wormPath} from '../../src/server/dune/Worm';
+import {WORM_START, WORM_START_SPACES, WORM_TITLE, WormData, bouncedDirection, crossSpace, rollWorm, wormLine, directionIndex, distanceInput, maxWormDistance, moveWorm, wormChoices, wormChooser, wormDirection, wormModel, wormPath} from '../../src/server/dune/Worm';
 import {LEVY_TITLE, PendingLevy, levyInput} from '../../src/server/dune/WormLevy';
 import {SelectOption} from '../../src/server/inputs/SelectOption';
 import {formatMessage} from '../TestingUtils';
@@ -48,6 +48,36 @@ describe('Shai-Hulud (Dune module C)', () => {
       expect(ARRAKIS_ZONES[start] ?? 'erg', start).not.eq('rock');
       expect([1, 2, 3, 4, 5, 6].some((roll) => wormDirection(game.board, start, roll) !== undefined), start).is.true;
     }
+  });
+
+  it('rolls once more when the die points along the line of the last move', () => {
+    const worm: WormData = {spaceId: WORM_START, path: []};
+    // Rolls whose heading needs no bounce on the start space; the last move ran the opposite way of the first one
+    const free = [1, 2, 3, 4, 5, 6].filter((roll) => wormDirection(game.board, WORM_START, roll) === directionIndex(roll));
+    const [first, second] = [free[0], free.find((roll) => wormLine(directionIndex(roll)) !== wormLine(directionIndex(free[0])))!];
+    const rolls = [first - 1, second - 1];
+    game.rng.nextInt = () => rolls.shift()!;
+    worm.direction = (directionIndex(first) + 3) % 6;
+    rollWorm(game, worm);
+    expect(worm.roll).eq(second);
+    expect(worm.direction).eq(directionIndex(second));
+    expect(game.gameLog.map((message) => formatMessage(message))).includes('Same line as the last move: the die is rolled again');
+  });
+
+  it('keeps the roll when the line changes, and on the first move', () => {
+    const worm: WormData = {spaceId: WORM_START, path: []};
+    const free = [1, 2, 3, 4, 5, 6].filter((roll) => wormDirection(game.board, WORM_START, roll) === directionIndex(roll));
+    const other = free.find((roll) => wormLine(directionIndex(roll)) !== wormLine(directionIndex(free[0])))!;
+    let calls = 0;
+    game.rng.nextInt = () => {
+      calls++;
+      return free[0] - 1;
+    };
+    rollWorm(game, worm);
+    worm.direction = directionIndex(other);
+    rollWorm(game, worm);
+    expect(calls).eq(2);
+    expect(worm.roll).eq(free[0]);
   });
 
   it('maps the die clockwise from top right', () => {

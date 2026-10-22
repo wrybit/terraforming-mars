@@ -371,5 +371,7 @@
   "7 milestones · 7 awards for random draws": "7 milepæler · 7 utmerkelser til tilfeldig trekning",
   "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Trukket fra målene på Arrakis, modulen Milepæler og utmerkelser på Arrakis og én milepæl fra hver modul i spill.",
   "Theme": "Tema",
-  "Not available with the Dune theme": "Ikke tilgjengelig med Dune-temaet"
+  "Not available with the Dune theme": "Ikke tilgjengelig med Dune-temaet",
+  "Same line as the last move: the die is rolled again": "Samme linje som forrige trekk: terningen kastes på nytt",
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Retning: en terning – samme linje som forrige trekk (uansett vei) kastes én gang til"
 }

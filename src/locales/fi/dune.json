@@ -374,5 +374,7 @@
   "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Arvotaan Arrakisin tavoitteista, moduulista Arrakisin virstanpylväät ja palkinnot sekä yksi virstanpylväs kustakin pelissä olevasta moduulista.",
   "Theme": "Teema",
   "Dune": "Dyyni",
-  "Not available with the Dune theme": "Ei käytettävissä Dyyni-teeman kanssa"
+  "Not available with the Dune theme": "Ei käytettävissä Dyyni-teeman kanssa",
+  "Same line as the last move: the die is rolled again": "Sama linja kuin edellisellä siirrolla: noppaa heitetään uudelleen",
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Suunta: noppa – sama linja kuin edellisellä siirrolla (kumpaan suuntaan tahansa) heitetään kerran uudelleen"
 }

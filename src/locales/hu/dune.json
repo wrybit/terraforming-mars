@@ -375,5 +375,7 @@
   "Agenda ${0} (${1})": "Terv: ${0} (${1})",
   "Theme": "Téma",
   "Dune": "Dűne",
-  "Not available with the Dune theme": "A Dűne témával nem érhető el"
+  "Not available with the Dune theme": "A Dűne témával nem érhető el",
+  "Same line as the last move: the die is rolled again": "Ugyanaz a vonal, mint az előző lépésnél: újra kell dobni",
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Irány: kocka – ha ugyanaz a vonal jön ki, mint az előző lépésnél (bármelyik irányban), egyszer újra kell dobni"
 }

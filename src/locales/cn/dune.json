@@ -378,5 +378,7 @@
   "Agenda ${0} (${1})": "议程 ${0}（${1}）",
   "Theme": "主题",
   "Dune": "沙丘",
-  "Not available with the Dune theme": "沙丘主题下不可用"
+  "Not available with the Dune theme": "沙丘主题下不可用",
+  "Same line as the last move: the die is rolled again": "与上次移动在同一直线上：重新掷骰",
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "方向：掷骰——若与上次移动在同一直线上（无论哪个方向），重掷一次"
 }

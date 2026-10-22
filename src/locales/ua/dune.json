@@ -377,5 +377,7 @@
   "Agenda ${0} (${1})": "Задум ${0} (${1})",
   "Theme": "Тема",
   "Dune": "Дюна",
-  "Not available with the Dune theme": "Недоступно з темою «Дюна»"
+  "Not available with the Dune theme": "Недоступно з темою «Дюна»",
+  "Same line as the last move: the die is rolled again": "Та сама лінія, що й минулого ходу: кубик кидають ще раз",
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Напрямок: кубик – якщо випала та сама лінія, що минулого ходу (у будь-який бік), його кидають ще раз"
 }

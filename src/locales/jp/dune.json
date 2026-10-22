@@ -377,5 +377,7 @@
   "Agenda ${0} (${1})": "計略 ${0}（${1}）",
   "Theme": "テーマ",
   "Dune": "デューン",
-  "Not available with the Dune theme": "デューンのテーマでは使用できません"
+  "Not available with the Dune theme": "デューンのテーマでは使用できません",
+  "Same line as the last move: the die is rolled again": "前回の移動と同じ直線：ダイスを振り直す",
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "方向：ダイス ― 前回の移動と同じ直線（向きは問わない）なら1回だけ振り直す"
 }

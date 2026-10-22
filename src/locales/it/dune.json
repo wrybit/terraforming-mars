@@ -372,5 +372,7 @@
   "7 milestones · 7 awards for random draws": "7 traguardi · 7 riconoscimenti da estrarre",
   "Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.": "Estratti dagli obiettivi di Arrakis, dal modulo Traguardi e riconoscimenti di Arrakis e da un traguardo per ogni modulo in gioco.",
   "Theme": "Tema",
-  "Not available with the Dune theme": "Non disponibile con il tema Dune"
+  "Not available with the Dune theme": "Non disponibile con il tema Dune",
+  "Same line as the last move: the die is rolled again": "Stessa linea dell'ultimo movimento: si ritira il dado",
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Direzione: un dado – la stessa linea dell'ultimo movimento (in qualunque verso) si ritira una volta"
 }

@@ -60,6 +60,8 @@ const SIGNS: Record<DuneRuleSign, string> = {
   shield: 'M12 3l7 3v5c0 5-3 8-7 10c-4-2-7-5-7-10V6z',
   // Three levels: rising bars
   levels: 'M5 20v-4M12 20v-9M19 20V5',
+  // A die: rounded square with three pips on the diagonal
+  die: 'M6 4h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM8.5 8.5h.01M12 12h.01M15.5 15.5h.01',
   // One of two kept: two cards, one checked
   keep: 'M4 7h9v13H4zM11 4h9v13h-2M6 14l2 2 3-4',
   // Hidden from the others: a crossed-out eye

@@ -375,5 +375,7 @@
   "Agenda ${0} (${1})": "Plan ${0} (${1})",
   "Theme": "Motyw",
   "Dune": "Diuna",
-  "Not available with the Dune theme": "Niedostępne w motywie Diuna"
+  "Not available with the Dune theme": "Niedostępne w motywie Diuna",
+  "Same line as the last move: the die is rolled again": "Ta sama linia co przy ostatnim ruchu: rzut kostką zostaje powtórzony",
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Kierunek: kostka – ta sama linia co przy ostatnim ruchu (w dowolną stronę) oznacza jeden powtórny rzut"
 }

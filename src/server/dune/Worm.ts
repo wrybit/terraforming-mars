@@ -226,14 +226,32 @@ export function crossSpace(game: IGame, space: Space, spared: ReadonlyArray<Spac
   }
 }
 
-/** Rolls the die for this generation's move and fixes the heading of the first step (bouncing off blocked spaces) */
+/** The line a heading runs along: a heading and its opposite share it (0 and 3, 1 and 4, 2 and 5) */
+export function wormLine(direction: number): number {
+  return direction % 3;
+}
+
+/**
+ * Rolls the die for this generation's move and fixes the heading of the first step (bouncing off blocked spaces).
+ * A move along the same line as the last one (either way) is rolled once more: bouncing straight back made the worm
+ * shuttle along one line in 45 % of the moves on Arrakis 61 (fair: 33 %), with the second roll 22 % (Jens, 22 Oct 2026).
+ */
 export function rollWorm(game: IGame, worm: WormData): void {
+  const lastLine = worm.direction === undefined ? undefined : wormLine(worm.direction);
+  rollDie(game, worm);
+  if (lastLine !== undefined && worm.direction !== undefined && wormLine(worm.direction) === lastLine) {
+    game.log('Same line as the last move: the die is rolled again');
+    rollDie(game, worm);
+  }
+  if (worm.roll !== undefined && worm.direction !== undefined && worm.direction !== directionIndex(worm.roll)) {
+    game.log('Rock blocks the way: Shai-Hulud bounces off');
+  }
+}
+
+function rollDie(game: IGame, worm: WormData): void {
   worm.roll = game.rng.nextInt(6) + 1;
   worm.direction = wormDirection(game.board, worm.spaceId, worm.roll);
   game.log('Shai-Hulud stirs: the die shows ${0}', (b) => b.number(worm.roll ?? 1));
-  if (worm.direction !== undefined && worm.direction !== directionIndex(worm.roll)) {
-    game.log('Rock blocks the way: Shai-Hulud bounces off');
-  }
 }
 
 export function moveWorm(game: IGame, worm: WormData, distance: number): void {
