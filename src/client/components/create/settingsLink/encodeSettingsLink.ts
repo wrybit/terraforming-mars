@@ -4,6 +4,7 @@ import {ByteWriter} from './ByteWriter';
 import {codeTableValues, writeCodedList, writeCodedValue} from './settingsLinkCodes';
 import {BOOLEAN_FIELDS, CARD_LIST_FIELDS, ESCAPE_VELOCITY_FIELDS, NUMBER_FIELDS, PLAYER_AI_LEVEL_SHIFT, PLAYER_BEGINNER_FLAG, SETTINGS_LINK_FORMAT_VERSION} from './settingsLinkFields';
 import {AI_LEVELS} from '@/common/ai/AiLevel';
+import {randomOptionOf, singleBoardValue} from '@/common/boards/boardPool';
 
 /**
  * Packs the form settings into a short URL-safe string.
@@ -17,7 +18,8 @@ export function encodeSettingsLink(model: CreateGameModel): string {
   writer.writeFlags(BOOLEAN_FIELDS.map((field) => model[field] === true));
   writer.writeFlags(codeTableValues('expansions').map((expansion) => model.expansions[expansion as keyof typeof model.expansions] === true));
 
-  writeCodedValue(writer, 'boards', model.board);
+  // Single board value as before; a pool that is neither one board nor a random option follows at the end
+  writeCodedValue(writer, 'boards', singleBoardValue(model.boards));
   writeCodedValue(writer, 'randomMilestones', model.randomMA);
   writeCodedValue(writer, 'agendas', model.politicalAgendasExtension);
   for (const field of NUMBER_FIELDS) {
@@ -43,6 +45,8 @@ export function encodeSettingsLink(model: CreateGameModel): string {
     writeCodedList(writer, 'cards', model[field]);
   }
   writeCodedList(writer, 'colonies', model.customColonies);
+  const customPool = model.boards.length > 1 && randomOptionOf(model.boards) === undefined;
+  writeCodedList(writer, 'boards', customPool ? model.boards : []);
 
   return bytesToBase64Url(writer.toBytes());
 }

@@ -670,5 +670,6 @@
   "${0} sold ${1}": "${0} verkaufte ${1}",
   "Only you can see this line in the log": "Diese Zeile im Log siehst nur du",
   "AI insight: click to reveal": "AI-Info: zum Aufdecken klicken",
-  "Click to hide again": "Zum Verbergen erneut klicken"
+  "Click to hide again": "Zum Verbergen erneut klicken",
+  "Select boards to be randomly chosen": "Spielbretter für die Zufallsauswahl wählen"
 }

@@ -105,7 +105,7 @@
         <Teleport :to="columnTarget('board')">
           <section class="create-game-card" :style="cardStyle('board')">
             <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
-            <!-- Chance first: with a random board the board chips below only show the pool it draws from -->
+            <!-- Chance first: with a random board the board chips below pick the pool it draws from -->
             <div class="create-game-subhead" v-i18n>Random</div>
             <OptionRow label="Random board">
               <SwitchInput v-model="randomBoard"/>
@@ -117,10 +117,10 @@
             <template v-for="group in boardGroups" :key="group.title">
               <!-- Fan-made can be closed; closed, a chosen fan board stands behind the title -->
               <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.fan" storageKey="fanBoards" :changed="group.fan ? fanBoardNote : undefined">
-                <div class="create-game-chip-grid" :class="{'create-game-chip-grid--muted': randomBoard}">
+                <div class="create-game-chip-grid">
                   <ChoiceChip v-for="boardName in group.boards" :key="boardName"
-                    :label="boardName" capitalized :selected="board === boardName"
-                    @select="board = boardName">
+                    :label="boardName" capitalized :selected="boards.includes(boardName)"
+                    @select="selectBoard(boardName)">
                     <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
                     <span v-if="ALPHA_BOARDS.includes(boardName)" class="create-game-alpha" :title="$t('Alpha — work in progress')">α</span>
                   </ChoiceChip>
@@ -422,7 +422,9 @@ import {GameId, JSONObject} from '@/common/Types';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import PageTitle from '@/client/components/common/PageTitle.vue';
 import {getCard} from '@/client/cards/ClientCardManifest';
-import {BoardNameType, NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
+import {NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
+import {boardOptions} from '@/common/boards/randomBoardOptions';
+import {randomOptionOf, singleBoardValue} from '@/common/boards/boardPool';
 import {vueRoot} from '@/client/components/vueRoot';
 import {showAlert} from '@/client/components/showAlert';
 import {CreateGameModel} from './CreateGameModel';
@@ -556,9 +558,9 @@ export default defineComponent({
     expansionGrouping(value: ExpansionGrouping) {
       saveExpansionGrouping(value);
     },
-    board(value: BoardNameType) {
-      if (!this.isRandomBoard(value)) {
-        this.lastFixedBoard = value as BoardName;
+    boards(value: Array<BoardName>) {
+      if (value.length === 1) {
+        this.lastFixedBoard = value[0];
       }
     },
     'expansions.venus': function(value: boolean) {
@@ -681,8 +683,8 @@ export default defineComponent({
     },
     // Fixed board: its name; random board: the drawn one as soon as the preview knows it
     summaryBoard(): BoardName | undefined {
-      if (!this.isRandomBoard(this.board)) {
-        return this.board as BoardName;
+      if (this.boards.length === 1) {
+        return this.boards[0];
       }
       return this.seededGame ? undefined : this.drawnBoard;
     },
@@ -702,7 +704,7 @@ export default defineComponent({
         customPreludes: this.customPreludes,
         bannedCards: this.bannedCards,
         includedCards: this.includedCards,
-        board: this.board,
+        boards: this.boards,
         seed: this.seed,
         solarPhaseOption: this.solarPhaseOption,
         aresExtremeVariant: this.aresExtremeVariant,
@@ -835,21 +837,22 @@ export default defineComponent({
     RANDOM_BOARD_OPTIONS(): typeof RANDOM_BOARD_OPTIONS {
       return RANDOM_BOARD_OPTIONS;
     },
-    // "Random board" is stored as the board value itself (RandomBoardOption), like before
+    // "Random board": a pool of several boards (upstream c1f05256e); one board is a fixed board
     randomBoard: {
       get(): boolean {
-        return this.isRandomBoard(this.board);
+        return this.boards.length > 1;
       },
       set(value: boolean) {
-        this.board = value ? RandomBoardOption.OFFICIAL : this.lastFixedBoard;
+        this.boards = value ? boardOptions(RandomBoardOption.OFFICIAL) : [this.lastFixedBoard];
       },
     },
+    // Official/All fill the pool in one go; a pool picked chip by chip highlights neither
     randomBoardScope: {
       get(): string {
-        return this.isRandomBoard(this.board) ? this.board : RandomBoardOption.OFFICIAL;
+        return randomOptionOf(this.boards) ?? '';
       },
       set(value: string) {
-        this.board = value as RandomBoardOption;
+        this.boards = boardOptions(value as RandomBoardOption);
       },
     },
     boardGroups() {
@@ -874,11 +877,12 @@ export default defineComponent({
       return active.length > 0 ? active.join(', ') : undefined;
     },
     fanBoardNote(): string | undefined {
-      if (!FAN_BOARDS.includes(this.board)) {
+      const fanBoards = this.boards.filter((boardName) => FAN_BOARDS.includes(boardName));
+      if (fanBoards.length === 0) {
         return undefined;
       }
       // Board names are lower case; the chips capitalize them via CSS, the note the same way here
-      return translateText(this.board).split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      return fanBoards.map((boardName) => translateText(boardName).split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')).join(', ');
     },
     // The "Expansion options" card only has content if one of these expansions is active
     hasExpansionOptions(): boolean {
@@ -890,7 +894,7 @@ export default defineComponent({
       const isActive = (expansion: Expansion) => this.expansions[expansion];
       return [
         ...seatChips(this.humanPlayersCount, this.aiPlayersCount),
-        boardChip(this.summaryBoard ?? this.board),
+        boardChip(this.summaryBoard ?? singleBoardValue(this.boards)),
         ...expansionChips(isActive),
         ...optionChips(setupOptionsFromConfig(this.newGameConfig), isActive, this.playersCount),
       ];
@@ -1111,8 +1115,16 @@ export default defineComponent({
     isColorTaken(color: Color, index: number): boolean {
       return this.getPlayers().some((player, otherIndex) => otherIndex !== index && player.color === color);
     },
-    isRandomBoard(boardName: BoardNameType): boolean {
-      return boardName === RandomBoardOption.OFFICIAL || boardName === RandomBoardOption.ALL;
+    // Fixed board: the chip becomes the board. Random board: the chip joins or leaves the pool;
+    // the last but one leaving makes the remaining board the fixed one
+    selectBoard(boardName: BoardName) {
+      if (!this.randomBoard) {
+        this.boards = [boardName];
+      } else if (this.boards.includes(boardName)) {
+        this.boards = this.boards.filter((other) => other !== boardName);
+      } else {
+        this.boards = [...this.boards, boardName];
+      }
     },
     // Column elements by number (1-based); kept outside the reactive data, Vue only needs them as Teleport targets
     setColumnElement(column: number, element: unknown) {
@@ -1161,7 +1173,7 @@ export default defineComponent({
         this.moonStandardProjectVariant1 = false;
       }
     },
-    getBoardColorClass(boardName: BoardName | BoardNameType): string {
+    getBoardColorClass(boardName: BoardName): string {
       return boardColorClass(boardName);
     },
     aiMarker(level: AiLevel): string {

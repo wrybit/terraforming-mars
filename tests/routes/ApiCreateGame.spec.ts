@@ -1,5 +1,7 @@
 import {expect} from 'chai';
 import {BoardName} from '../../src/common/boards/BoardName';
+import {RandomBoardOption} from '../../src/common/boards/RandomBoardOption';
+import {boardOptions} from '../../src/common/boards/randomBoardOptions';
 import {ApiCreateGame} from '../../src/server/routes/ApiCreateGame';
 import {MockRequest, MockResponse} from './HttpMocks';
 import {RouteTestScaffolding} from './RouteTestScaffolding';
@@ -116,13 +118,20 @@ describe('ApiCreateGame', () => {
     expect(game!.players[0].name).eq('Robot');
   });
 
-  for (const [board, shuffleMapOption] of [[RandomBoardOption.ALL, true], [RandomBoardOption.OFFICIAL, false], [BoardName.HELLAS, true]] as const) {
-    it(`creates exactly the board of the preview (${board}, shuffled: ${shuffleMapOption})`, async () => {
+  // Board pools, plus the older single `board` that API clients may still send
+  const boardRequests: ReadonlyArray<[string, Partial<NewGameConfig> & {board?: string}, boolean]> = [
+    ['legacy random all', {boards: undefined, board: RandomBoardOption.ALL}, true],
+    ['pool', {boards: [BoardName.HELLAS, BoardName.ELYSIUM, BoardName.HOLLANDIA]}, false],
+    ['official pool', {boards: boardOptions(RandomBoardOption.OFFICIAL)}, false],
+    ['hellas', {boards: [BoardName.HELLAS]}, true],
+  ];
+  for (const [label, board, shuffleMapOption] of boardRequests) {
+    it(`creates exactly the board of the preview (${label}, shuffled: ${shuffleMapOption})`, async () => {
       for (const boardSeed of [0.12, 0.5, 0.987]) {
         req = new MockRequest();
         res = new MockResponse();
         scaffolding = new RouteTestScaffolding(req);
-        const config = {...newGameConfigForTest(), board, shuffleMapOption, boardSeed};
+        const config = {...newGameConfigForTest(), ...board, shuffleMapOption, boardSeed} as NewGameConfig;
         const preview = ApiBoardPreview.preview(config);
         await postConfig(config);
         const game = await scaffolding.ctx.gameLoader.getGame((JSON.parse(res.content) as SimpleGameModel).id);

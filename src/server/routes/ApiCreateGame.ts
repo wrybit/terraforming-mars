@@ -21,7 +21,8 @@ import {readBody} from './readBody';
 import {RouteError} from './RouteError';
 import {CEO_CARDS_DEALT_PER_PLAYER} from '../../common/constants';
 import {hasNegativeEscapeVelocityOption, sanitizeEscapeVelocityOptions} from '../../common/game/escapeVelocity';
-import {boardCandidates, boardRandom, pickBoard} from '../boards/newGameBoard';
+import {boardRandom, pickBoard} from '../boards/newGameBoard';
+import {BoardName} from '../../common/boards/BoardName';
 
 function parseQuotaConfig(struct: any): QuotaConfig {
   let {limit} = struct;
@@ -71,10 +72,6 @@ export class ApiCreateGame extends Handler {
   public constructor(quotaConfigs: Array<QuotaConfig> = getQuotaConfigs()) {
     super();
     this.quotaHandlers = quotaConfigs.map((config) => new QuotaHandler(config));
-  }
-
-  public static boardOptions(board: RandomBoardOption | BoardName): Array<BoardName> {
-    return boardCandidates(board);
   }
 
   /** Game options of a request whose board is already drawn (also used by the board preview). */
@@ -210,7 +207,7 @@ export class ApiCreateGame extends Handler {
 
       // Board drawn from the board seed of the request: the same board the preview on the page showed
       const boardRng = boardRandom(gameReq.boardSeed);
-      const gameOptions = ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq.board, boardRng));
+      const gameOptions = ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq, boardRng));
 
       let game: IGame;
       if (gameOptions.clonedGamedId !== undefined && !gameOptions.clonedGamedId.startsWith('#')) {

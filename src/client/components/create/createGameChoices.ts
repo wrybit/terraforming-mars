@@ -1,7 +1,6 @@
 import {Expansion} from '@/common/cards/GameModule';
 import {BoardName} from '@/common/boards/BoardName';
 import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
-import {BoardNameType} from '@/common/game/NewGameConfig';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 
 // Choices of the "Create game" form as data: the template renders them via v-for
@@ -52,7 +51,7 @@ export const FAN_EXPANSIONS: ReadonlyArray<ExpansionChoice> = [
 ];
 
 // Base game boards and the Kickstarter boards; "Random: Official" draws from these without the alpha boards (newGameBoard.ts)
-export const OFFICIAL_BOARDS: ReadonlyArray<BoardNameType> = [
+export const OFFICIAL_BOARDS: ReadonlyArray<BoardName> = [
   BoardName.THARSIS,
   BoardName.HELLAS,
   BoardName.ELYSIUM,
@@ -64,11 +63,11 @@ export const OFFICIAL_BOARDS: ReadonlyArray<BoardNameType> = [
 ];
 
 // Boards still in development upstream: small α after the name (upstream 36ac4f082)
-export const ALPHA_BOARDS: ReadonlyArray<BoardNameType> = [
+export const ALPHA_BOARDS: ReadonlyArray<BoardName> = [
   BoardName.AMAZONIS_PLANITIA,
 ];
 
-export const FAN_BOARDS: ReadonlyArray<BoardNameType> = [
+export const FAN_BOARDS: ReadonlyArray<BoardName> = [
   BoardName.ARABIA_TERRA,
   BoardName.AMAZONIS,
   BoardName.TERRA_CIMMERIA,

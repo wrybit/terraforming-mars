@@ -5,6 +5,8 @@ import CreateGameForm from '@/client/components/create/CreateGameForm.vue';
 import {createGameSettingsStorage} from '@/client/components/create/createGameSettingsStorage';
 import {FakeLocalStorage} from '../FakeLocalStorage';
 import {BoardName} from '@/common/boards/BoardName';
+import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
+import {boardOptions} from '@/common/boards/randomBoardOptions';
 import {DEFAULT_EXPANSIONS} from '@/common/cards/GameModule';
 import {JSONObject} from '@/common/Types';
 import {defineComponent, nextTick} from 'vue';
@@ -175,14 +177,33 @@ describe('CreateGameForm', () => {
       ...globalConfig,
     });
     const vm = wrapper.vm as any;
-    vm.board = BoardName.ELYSIUM;
+    vm.selectBoard(BoardName.ELYSIUM);
     await nextTick();
+    expect(vm.boards).deep.eq([BoardName.ELYSIUM]);
     vm.randomBoard = true;
-    expect(vm.board).eq('random official');
+    expect(vm.boards).deep.eq(boardOptions(RandomBoardOption.OFFICIAL));
+    expect(vm.randomBoardScope).eq('random official');
     vm.randomBoardScope = 'random all';
-    expect(vm.board).eq('random all');
+    expect(vm.boards).deep.eq(boardOptions(RandomBoardOption.ALL));
+    await nextTick();
     vm.randomBoard = false;
-    expect(vm.board).eq(BoardName.ELYSIUM);
+    expect(vm.boards).deep.eq([BoardName.ELYSIUM]);
+  });
+
+  it('random board: chips add boards to the pool and take them out again', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const vm = wrapper.vm as any;
+    vm.randomBoard = true;
+    vm.selectBoard(BoardName.HOLLANDIA);
+    expect(vm.boards).includes(BoardName.HOLLANDIA);
+    expect(vm.randomBoardScope).eq('');
+    vm.boards = [BoardName.HELLAS, BoardName.ELYSIUM];
+    vm.selectBoard(BoardName.HELLAS);
+    // The last board left is a fixed board again
+    expect(vm.boards).deep.eq([BoardName.ELYSIUM]);
+    expect(vm.randomBoard).is.false;
   });
 
   it('prefers settings from the link hash over saved settings', async () => {
@@ -190,7 +211,7 @@ describe('CreateGameForm', () => {
     const model = defaultCreateGameModel();
     model.playersCount = 3;
     model.players[0].name = 'Jens';
-    model.board = BoardName.ELYSIUM;
+    model.boards = [BoardName.ELYSIUM];
     window.history.replaceState(null, '', '/new-game' + settingsHash(model));
 
     const wrapper = shallowMount(CreateGameForm, {
@@ -202,7 +223,7 @@ describe('CreateGameForm', () => {
     const vm = wrapper.vm as any;
     expect(vm.playersCount).eq(3);
     expect(vm.players[0].name).eq('Jens');
-    expect(vm.board).eq(BoardName.ELYSIUM);
+    expect(vm.boards).deep.eq([BoardName.ELYSIUM]);
   });
 
   it('writes the current settings into the link hash', async () => {
@@ -211,7 +232,7 @@ describe('CreateGameForm', () => {
     });
     await nextTick();
     const vm = wrapper.vm as any;
-    vm.board = BoardName.HELLAS;
+    vm.boards = [BoardName.HELLAS];
     await nextTick();
 
     expect(readSettingsFromHash(window.location.hash)?.board).eq(BoardName.HELLAS);

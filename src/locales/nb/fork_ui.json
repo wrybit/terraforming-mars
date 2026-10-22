@@ -1237,5 +1237,6 @@
   "${0} sold ${1}": "${0} solgte ${1}",
   "Only you can see this line in the log": "Bare du ser denne linjen i loggen",
   "AI insight: click to reveal": "AI-info: klikk for å vise",
-  "Click to hide again": "Klikk for å skjule igjen"
+  "Click to hide again": "Klikk for å skjule igjen",
+  "Select boards to be randomly chosen": "Velg brett som skal trekkes tilfeldig"
 }
