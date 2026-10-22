@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {isMarked, isUnfiltered, markedOptions, resetOptions, toggleOption} from '@/client/components/cardlist/filterSelection';
+import {carrySelection, isMarked, isUnfiltered, markedOptions, resetOptions, toggleOption} from '@/client/components/cardlist/filterSelection';
 
 describe('filterSelection', () => {
   const keys = ['a', 'b', 'c'] as const;
@@ -35,5 +35,24 @@ describe('filterSelection', () => {
     expect(isUnfiltered(selection, keys)).to.be.true;
     resetOptions(selection, keys);
     expect(selection.hidden).to.be.false;
+  });
+
+  describe('carrySelection (Mars ⇄ Dune)', () => {
+    // a and b in both worlds, c only in the old one, d only in the new one
+    const from: ReadonlyArray<string> = ['a', 'b', 'c'];
+    const to: ReadonlyArray<string> = ['a', 'b', 'd'];
+    const unfiltered = {a: true, b: true, c: true, d: true};
+
+    it('keeps the options of both worlds and drops the others', () => {
+      expect(carrySelection({a: true, b: false, c: true, d: true}, from, to, unfiltered)).deep.eq({a: true, b: false, c: false, d: false});
+    });
+
+    it('starts unfiltered when nothing was restricted', () => {
+      expect(carrySelection({a: true, b: true, c: true, d: false}, from, to, unfiltered)).deep.eq(unfiltered);
+    });
+
+    it('starts unfiltered when only options of the old world were checked', () => {
+      expect(carrySelection({a: false, b: false, c: true, d: true}, from, to, unfiltered)).deep.eq(unfiltered);
+    });
   });
 });

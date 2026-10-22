@@ -37,8 +37,10 @@
             <span v-for="item in activeFilters" :key="`${item.group}:${item.key}`" class="card-list-active-chip">
               <span v-if="item.iconClass" class="card-list-icon" :class="item.iconClass"></span>
               <span v-else-if="item.colorClass" class="card-list-dot" :class="item.colorClass"></span>
-              <!-- The price section consists of numbers and is not translated -->
-              <span v-if="item.group === 'cost'">{{ item.label }}</span>
+              <!-- The price section as the two coins next to the price slider, smaller (no "M€" text, also not in Dune) -->
+              <span v-if="item.group === 'cost'" class="card-list-cost-range-values card-list-cost-range-values--chip">
+                <span class="card-list-cost-range-coin">{{ costMin ?? 0 }}</span>–<span class="card-list-cost-range-coin">{{ costMax ?? highestCost }}</span>
+              </span>
               <span v-else v-i18n>{{ item.label }}</span>
               <button type="button" :title="$t('Remove')" @click="removeFilter(item)">✕</button>
             </span>
@@ -188,7 +190,7 @@ import {TypeOption, CardListModel, hashToModel, modelToHash} from '@/client/comp
 import {BonusId, BONUS_IDS, PolicyId, POLICY_IDS} from '@/common/turmoil/Types';
 import {buildEntries, CardListEntry, countOptions, FilterGroup, FilterState, hasCostRange, highestCost, passesFilters} from '@/client/components/cardlist/cardListEntries';
 import {CardBoxSize, FilterOption, optionKeys, SectionPart, TYPE_COLOR_CLASSES, typeLabel} from '@/client/components/cardlist/cardListOptions';
-import {markedOptions, resetOptions, toggleOption} from '@/client/components/cardlist/filterSelection';
+import {carrySelection, markedOptions, resetOptions, toggleOption} from '@/client/components/cardlist/filterSelection';
 import {clearSearchHighlight, highlightSearch} from '@/client/components/cardlist/searchHighlight';
 import {SegmentOption} from '@/client/components/create/createGameChoices';
 import Colony from '@/client/components/colonies/Colony.vue';
@@ -211,8 +213,7 @@ import ThemeSwitch from '@/client/components/common/ThemeSwitch.vue';
 import CardListDuneGoals from '@/client/components/cardlist/CardListDuneGoals.vue';
 import {activeTheme} from '@/client/theme/applyTheme';
 import {Theme} from '@/common/theme/Theme';
-import {GAME_MODULES} from '@/common/cards/GameModule';
-import {defaultExpansions, themeEntries, themeGoalOrder, themeExpansionOptions, themeResourceOptions, themeTagOptions, themeTypeOptions} from '@/client/components/cardlist/cardListTheme';
+import {themeEntries, themeGoalOrder, themeExpansionOptions, themeResourceOptions, themeTagOptions, themeTypeOptions} from '@/client/components/cardlist/cardListTheme';
 import {textFitMetrics} from '@/client/utils/textFit';
 import {prefersReducedMotion} from '@/client/utils/motion';
 
@@ -425,7 +426,7 @@ export default defineComponent({
         options.filter((option) => marked.includes(option.key)).forEach((option) => active.push({...option, group}));
       }
       if (this.hasCostFilter) {
-        active.push({group: 'cost', key: 'cost', label: `${this.costMin ?? 0}–${this.costMax ?? this.highestCost} M€`});
+        active.push({group: 'cost', key: 'cost', label: `${this.costMin ?? 0}–${this.costMax ?? this.highestCost}`});
       }
       if (this.vps !== 0) {
         active.push({group: 'vps', key: String(this.vps), label: this.vps === 1 ? '+VPs' : '-VPs'});
@@ -533,10 +534,16 @@ export default defineComponent({
       this.resetCost();
       this.filterText = '';
     },
-    // Before the switch renders the page in the other theme: the expansion filter starts anew there,
-    // otherwise Dune would take over the Mars filter without the Dune expansion
+    // Before the switch renders the page in the other theme (it reads the filters from the address): the filters that
+    // fit both worlds stay, those of only one world are dropped (filterSelection.ts carrySelection)
     startTheme(theme: Theme): void {
-      this.expansions = defaultExpansions(theme, GAME_MODULES);
+      const next = filterGroupOptions(theme, themeEntries(buildEntries(), theme));
+      const unfiltered = hashToModel('', theme);
+      for (const group of FILTER_GROUPS) {
+        const selection = this.selectionOf(group);
+        Object.assign(selection, carrySelection(selection, optionKeys(this.groupOptions[group]), optionKeys(next[group]),
+          unfiltered[group] as Record<string, boolean>));
+      }
       this.setLocationHash();
     },
     resetCost(): void {

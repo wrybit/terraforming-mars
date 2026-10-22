@@ -86,6 +86,42 @@ const TAG_ABBREVIATIONS = {
   [Tag.CRIME]: 'h',
 } satisfies Record<TagOption, string>;
 
+// Like the other groups, so the resource filter survives a reload and the Mars/Dune switch (CardList.vue startTheme)
+const RESOURCE_ABBREVIATIONS = {
+  none: '0',
+  [CardResource.ANIMAL]: 'a',
+  [CardResource.MICROBE]: 'b',
+  [CardResource.FIGHTER]: 'c',
+  [CardResource.SCIENCE]: 'd',
+  [CardResource.FLOATER]: 'e',
+  [CardResource.ASTEROID]: 'f',
+  [CardResource.CAMP]: 'g',
+  [CardResource.PRESERVATION]: 'h',
+  [CardResource.DIRECTOR]: 'i',
+  [CardResource.DISEASE]: 'j',
+  [CardResource.GRAPHENE]: 'k',
+  [CardResource.HYDROELECTRIC_RESOURCE]: 'l',
+  [CardResource.RESOURCE_CUBE]: 'm',
+  [CardResource.DATA]: 'n',
+  [CardResource.SYNDICATE_FLEET]: 'o',
+  [CardResource.VENUSIAN_HABITAT]: 'p',
+  [CardResource.SPECIALIZED_ROBOT]: 'q',
+  [CardResource.SEED]: 'r',
+  [CardResource.AGENDA]: 's',
+  [CardResource.ORBITAL]: 't',
+  [CardResource.CLONE_TROOPER]: 'u',
+  [CardResource.TOOL]: 'v',
+  [CardResource.WARE]: 'w',
+  [CardResource.JOURNALISM]: 'x',
+  [CardResource.ACTIVIST]: 'y',
+  [CardResource.SUPPLY_CHAIN]: 'z',
+} satisfies Record<ResourceOption, string>;
+
+// Victory point and special rule filters: 1 = with, 2 = without; anything else = all
+function parseChoice(text: string): number {
+  return text === '1' || text === '2' ? Number(text) : 0;
+}
+
 export function hashToModel(windowLocationHash: string, theme: Theme = 'mars'): CardListModel {
   const model: CardListModel = {
     filterText: '',
@@ -196,6 +232,20 @@ export function hashToModel(windowLocationHash: string, theme: Theme = 'mars'): 
           model.tags[type] = tags.includes(abbrev);
         }
       }
+      // resources
+      if (e.startsWith('r')) {
+        const resources = e.slice(1);
+        for (const resource of <Array<ResourceOption>>Object.keys(model.resources)) {
+          model.resources[resource] = resources.includes(RESOURCE_ABBREVIATIONS[resource]);
+        }
+      }
+      // victory points, special rule (*)
+      if (e.startsWith('v')) {
+        model.vps = parseChoice(e.slice(1));
+      }
+      if (e.startsWith('a')) {
+        model.asteriskRules = parseChoice(e.slice(1));
+      }
       // Price range, e.g. "c5-20", "c-12" or "c8-"
       if (e.startsWith('c')) {
         const [low, high] = e.slice(1).split('-');
@@ -213,6 +263,9 @@ export function hashToModel(windowLocationHash: string, theme: Theme = 'mars'): 
         }
         if (metadata.includes('d')) {
           model.showMetadata = false;
+        }
+        if (metadata.includes('t')) {
+          model.tallCards = true;
         }
       }
     }
@@ -250,6 +303,9 @@ function encodeMetadata(model: CardListModel) {
   if (model.showMetadata === false) {
     text += 'd';
   }
+  if (model.tallCards === true) {
+    text += 't';
+  }
   return text;
 }
 
@@ -261,11 +317,14 @@ export function modelToHash(model: CardListModel) {
   parts.g = encode(model.tags, TAG_ABBREVIATIONS);
   parts.d = encodeMetadata(model);
   parts.c = encodeCost(model);
+  parts.r = encode(model.resources, RESOURCE_ABBREVIATIONS);
+  parts.v = model.vps === 0 ? undefined : String(model.vps);
+  parts.a = model.asteriskRules === 0 ? undefined : String(model.asteriskRules);
 
   function tostring(key: string): string {
     const content = parts[key] ?? '';
     return content === '' ? '' : `~${key}${content}`;
   }
-  const text = model.filterText + tostring('m') + tostring('t') + tostring('g') + tostring('d') + tostring('c');
+  const text = model.filterText + ['m', 't', 'g', 'r', 'v', 'a', 'd', 'c'].map(tostring).join('');
   return '#' + encodeURIComponent(text);
 }

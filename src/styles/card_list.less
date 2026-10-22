@@ -449,6 +449,19 @@
   font-weight: bold;
 }
 
+// In the price chip of the summary: the same coins, small enough for the chip height
+.card-list-cost-range-values--chip {
+  gap: 2px;
+  color: inherit;
+
+  .card-list-cost-range-coin {
+    min-width: 22px;
+    height: 22px;
+    padding: 0 3px;
+    font-size: 11px;
+  }
+}
+
 // ---------- Summary at the top of the filter column ----------
 .card-list-summary {
   display: flex;

@@ -34,3 +34,18 @@ export function toggleOption<K extends string>(selection: Selection<K>, keys: Re
     resetOptions(selection, keys);
   }
 }
+
+/**
+ * A group's selection carried over to another set of options (card list: Mars ⇄ Dune). Options of both sets keep
+ * their state, options of only one set count as not checked. If the group was not restricted, or nothing of the new
+ * set stays checked (only options of the other world were), the new set starts with `unfiltered`.
+ */
+export function carrySelection<K extends string>(selection: Selection<K>, from: ReadonlyArray<K>, to: ReadonlyArray<K>,
+  unfiltered: Selection<K>): Selection<K> {
+  if (isUnfiltered(selection, from)) {
+    return {...unfiltered};
+  }
+  const carried = Object.fromEntries((Object.keys(selection) as Array<K>)
+    .map((key) => [key, selection[key] === true && from.includes(key) && to.includes(key)])) as Selection<K>;
+  return to.some((key) => carried[key]) ? carried : {...unfiltered};
+}
