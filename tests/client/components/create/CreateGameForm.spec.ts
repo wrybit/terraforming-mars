@@ -236,6 +236,19 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).solarPhaseOption).eq(true);
   });
 
+  it('finds the import field after restoring saved settings', async () => {
+    // Restoring in created() once cached the empty pre-mount refs, so the file import failed
+    createGameSettingsStorage.save(createNewGameConfig());
+
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    await wrapper.vm.$nextTick();
+
+    expect((wrapper.vm as any).typedRefs().file).is.not.undefined;
+    expect(() => (wrapper.vm as any).uploadSettings()).not.to.throw();
+  });
+
   it('shows warnings when restoring saved settings', async () => {
     const alerts: Array<{title: string, message: string | {text: string}}> = [];
     const Root = defineComponent({

@@ -761,9 +761,6 @@ export default defineComponent({
         return validationDetails[key].blocking && (Array.isArray(value) ? value.length > 0 : Boolean(value));
       });
     },
-    typedRefs(): Refs {
-      return this.$refs as Refs;
-    },
     RandomBoardOption(): typeof RandomBoardOption {
       return RandomBoardOption;
     },
@@ -900,6 +897,11 @@ export default defineComponent({
     },
   },
   methods: {
+    // A method, not computed: created() restores settings before mount, and a computed would cache the
+    // empty pre-mount $refs for good – the file import then no longer finds its input.
+    typedRefs(): Refs {
+      return this.$refs as Refs;
+    },
     setSeatCounts(humans: number, ai: number, changed: 'humans' | 'ai') {
       // At most 6 players: the row just changed wins, the other one gives way
       const humanCount = changed === 'humans' ? humans : Math.max(1, Math.min(humans, MAX_PLAYERS - ai));
@@ -963,7 +965,6 @@ export default defineComponent({
     },
     applySettings(json: JSONObject): JSONProcessor {
       const component: CreateGameModel = this;
-      const refs = this.typedRefs;
       const processor = new JSONProcessor(component);
       this.uploading = true;
       try {
@@ -975,6 +976,8 @@ export default defineComponent({
         throw e;
       }
       nextTick(() => {
+        // Read the refs only here: when restoring from created() the form is not mounted yet
+        const refs = this.typedRefs();
         try {
           if (component.showBannedCards && refs.cardsFilter) {
             refs.cardsFilter.selected = processor.bannedCards;
@@ -1040,7 +1043,7 @@ export default defineComponent({
         boardSeed: Math.random(),
       });
       nextTick(() => {
-        const refs = this.typedRefs;
+        const refs = this.typedRefs();
         if (refs.cardsFilter) {
           refs.cardsFilter.selected = [];
         }
@@ -1061,7 +1064,7 @@ export default defineComponent({
       }
     },
     uploadSettings() {
-      const refs = this.typedRefs;
+      const refs = this.typedRefs();
       const file = refs.file.files !== null ? refs.file.files[0] : undefined;
       const reader = new FileReader();
 
